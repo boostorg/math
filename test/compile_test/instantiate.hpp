@@ -328,6 +328,11 @@ void instantiate(RealType)
    boost::math::airy_ai_zero<RealType>(i, i, oi);
    boost::math::airy_bi_zero<RealType>(i, i, oi);
 
+   boost::math::hypergeometric_1F0(v1, v2);
+   boost::math::hypergeometric_0F1(v1, v2);
+   boost::math::hypergeometric_2F0(v1, v2, v3);
+   boost::math::hypergeometric_1F1(v1, v2, v3);
+
    boost::math::expint(v1);
    boost::math::expint(i);
    boost::math::expint(i, v2);

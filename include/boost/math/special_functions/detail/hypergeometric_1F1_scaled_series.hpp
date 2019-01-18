@@ -14,7 +14,7 @@
      template <class T, class Policy>
      T hypergeometric_1F1_scaled_series(const T& a, const T& b, T z, const Policy& pol, const char* function)
      {
-        BOOST_MATH_STD_USING_CORE
+        BOOST_MATH_STD_USING
         //
         // Result is returned scaled by e^-z.
         // Whenever the terms start becoming too large, we scale by some factor e^-n
@@ -23,7 +23,7 @@
         //
         T sum(0), term(1), upper_limit(sqrt(boost::math::tools::max_value<T>())), diff;
         unsigned n = 0;
-        boost::intmax_t log_scaling_factor = 1 - boost::math::itrunc(boost::math::tools::log_max_value<T>());
+        boost::intmax_t log_scaling_factor = 1 - itrunc(boost::math::tools::log_max_value<T>());
         T scaling_factor = exp(T(log_scaling_factor));
         boost::intmax_t current_scaling = 0;
 

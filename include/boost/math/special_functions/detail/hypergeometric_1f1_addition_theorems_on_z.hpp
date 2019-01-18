@@ -41,8 +41,8 @@
         {
            T result = term * M;
            term *= a_plus_n * k / (b_plus_n * ++n);
-           ++a_plus_n;
-           ++b_plus_n;
+           a_plus_n += 1;
+           b_plus_n += 1;
            // The a_plus_n == 0 case below isn't actually correct, but doesn't matter as that term will be zero
            // anyway, we just need to not divde by zero and end up with a NaN in the result.
            T M2 = (a_plus_n == -1) ? 1 : (a_plus_n == 0) ? 0 : (M_next * b_plus_n * (1 - b_plus_n + z_) + b_plus_n * (b_plus_n - 1) * M) / (a_plus_n * z_);
@@ -80,8 +80,8 @@
            BOOST_MATH_STD_USING
            T result = term * M;
            term *= b_pochhammer * x_k_power / ++n;
-           ++b_pochhammer;
-           --b_minus_n;
+           b_pochhammer += 1;
+           b_minus_n -= 1;
            T M2 = (M_next * b_minus_n * (1 - b_minus_n - z_) + z_ * (b_minus_n - a_) * M) / (-b_minus_n * (b_minus_n - 1));
            M = M_next;
            M_next = M2;
@@ -118,7 +118,7 @@
         {
            T result = term * M;
            term *= a_pochhammer * k / (++n * z_plus_k);
-           ++a_pochhammer;
+           a_pochhammer += 1;
            T M2 = (a_pochhammer == -1) ? 1 : (a_pochhammer == 0) ? 0 : (M_next * (2 * a_pochhammer - b_ + z_) + (b_ - a_pochhammer) * M) / a_pochhammer;
            M = M_next;
            M_next = M2;
@@ -157,8 +157,8 @@
         {
            T result = term * M;
            term *= b_minus_a_plus_n * -k / (b_plus_n * ++n);
-           ++b_minus_a_plus_n;
-           ++b_plus_n;
+           b_minus_a_plus_n += 1;
+           b_plus_n += 1;
            T M2 = (b_plus_n * (b_plus_n - 1) * M + b_plus_n * (1 - b_plus_n - z_) * M_next) / (-z_ * b_minus_a_plus_n);
            M = M_next;
            M_next = M2;
@@ -200,7 +200,7 @@
         {
            T result = term * M;
            term *= b_minus_a_plus_n * k / ((z_ + k) * ++n);
-           ++b_minus_a_plus_n;
+           b_minus_a_plus_n += 1;
            T M2 = -((2 * (a_ - n) - b_ + z_) * M_next - (a_ - n) * M) / (b_ - (a_ - n));
            M = M_next;
            M_next = M2;
@@ -241,7 +241,7 @@
         {
            T result = term * M;
            term *= one_minus_b_plus_n * k / (z_ * ++n);
-           ++one_minus_b_plus_n;
+           one_minus_b_plus_n += 1;
            T M2 = -((b_ - n) * (1 - b_ + n + z_) * M_next - (a_ - n) * z_ * M) / ((b_ - n) * (b_ - n - 1));
            M = M_next;
            M_next = M2;

@@ -166,14 +166,14 @@
     if(ak == 0)
     { 
        first = 1;
-       --ak;
+       ak -= 1;
        second = 1 - z / b;
     }
     else
     {
        int scaling1(0), scaling2(0);
        first = detail::hypergeometric_1F1_imp(ak, b, z, pol, scaling1);
-       --ak;
+       ak -= 1;
        second = detail::hypergeometric_1F1_imp(ak, b, z, pol, scaling2);
        if (scaling1 != scaling2)
        {
@@ -201,7 +201,7 @@
 
     int scaling1(0), scaling2(0);
     T first = detail::hypergeometric_1F1_imp(ak, b, z, pol, scaling1);
-    ++ak;
+    ak += 1;
     T second = detail::hypergeometric_1F1_imp(ak, b, z, pol, scaling2);
     --integer_part;
     if (scaling1 != scaling2)
@@ -225,7 +225,7 @@
 
     int scaling1(0), scaling2(0);
     T first = detail::hypergeometric_1F1_imp(a, bk, z, pol, scaling1);
-    --bk;
+    bk -= 1;
     T second = detail::hypergeometric_1F1_imp(a, bk, z, pol, scaling2);
     ++integer_part;
     if (scaling1 != scaling2)
@@ -254,7 +254,8 @@
 
     int scaling1(0), scaling2(0);
     T first = detail::hypergeometric_1F1_imp(ak, bk, z, pol, scaling1);
-    --ak; --bk;
+    ak -= 1; 
+    bk -= 1;
     T second = detail::hypergeometric_1F1_imp(ak, bk, z, pol, scaling2);
     ++integer_part;
     if (scaling1 != scaling2)
@@ -284,7 +285,7 @@
      T bk = b + integer_part;
 
      T first = boost::math::detail::hypergeometric_1F1_imp(a, bk, z, pol, log_scaling);
-     --bk;
+     bk -= 1;
      int log_scaling2 = 0;
      T second = boost::math::detail::hypergeometric_1F1_imp(a, bk, z, pol, log_scaling2);
 
@@ -321,7 +322,7 @@
      //
      // Recursion from some b + N > z down to b:
      //
-     int integer_part = boost::math::itrunc(z - b) + 2;
+     int integer_part = itrunc(z - b) + 2;
 
      if (integer_part > static_cast<boost::intmax_t>(boost::math::policies::get_max_series_iterations<Policy>()))
         return boost::math::policies::raise_evaluation_error<T>(function, "1F1 arguments sit in a range with a so negative that we have no evaluation method, got a = %1%", std::numeric_limits<T>::quiet_NaN(), pol);

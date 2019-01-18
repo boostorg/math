@@ -212,6 +212,7 @@
   template <class T, class Policy>
   inline T log_pochhammer(T z, unsigned n, const Policy pol, int* s = 0)
   {
+     BOOST_MATH_STD_USING
      if (z < 0)
      {
         if (n < -z)
@@ -237,11 +238,11 @@
   template <class T, class Policy>
   inline T hypergeometric_1F1_generic_series(const T& a, const T& b, const T& z, const Policy& pol, int& log_scaling, const char* function)
   {
-     BOOST_MATH_STD_USING_CORE
+     BOOST_MATH_STD_USING
      T sum(0), term(1), upper_limit(sqrt(boost::math::tools::max_value<T>())), diff;
      T lower_limit(1 / upper_limit);
      unsigned n = 0;
-     int log_scaling_factor = boost::math::itrunc(boost::math::tools::log_max_value<T>()) - 2;
+     int log_scaling_factor = itrunc(boost::math::tools::log_max_value<T>()) - 2;
      T scaling_factor = exp(T(log_scaling_factor));
      T term_m1 = 0;
      int local_scaling = 0;

@@ -44,6 +44,7 @@ namespace boost { namespace math { namespace detail {
    template <class T, class Policy>
    T hypergeometric_1F1_divergent_fallback(const T& a, const T& b, const T& z, const Policy& pol, int& log_scaling)
    {
+      BOOST_MATH_STD_USING
       const char* function = "hypergeometric_1F1_divergent_fallback<%1%>(%1%,%1%,%1%)";
       //
       // We get here if either:
@@ -53,7 +54,7 @@ namespace boost { namespace math { namespace detail {
       if (b > 0)
       {
          T z_limit = fabs((2 * a - b) / (sqrt(fabs(a))));
-         int k = 1 + boost::math::itrunc(z - z_limit);
+         int k = 1 + itrunc(z - z_limit);
          // If k is too large we destroy all the digits in the result:
          if ((k > 0) && (k < 50))
          {
@@ -99,6 +100,7 @@ namespace boost { namespace math { namespace detail {
    template <class T>
    bool is_convergent_negative_z_series(const T& a, const T& b, const T& z)
    {
+      BOOST_MATH_STD_USING
       //
       // Generic check: we have small initial divergence and are convergent after 10 terms:
       //
@@ -156,6 +158,7 @@ namespace boost { namespace math { namespace detail {
    template <class T>
    bool hypergeometric_1F1_is_13_3_6_region(const T& a, const T& b, const T& z)
    {
+      BOOST_MATH_STD_USING
       if ((z < 0) && (fabs(10 * a / b) < 1) && (fabs(a) < 50))
       {
          if (b > 0)
@@ -184,7 +187,7 @@ namespace boost { namespace math { namespace detail {
    {
       BOOST_MATH_STD_USING // exp, fabs, sqrt
 
-         static const char* const function = "boost::math::hypergeometric_1F1<%1%,%1%,%1%>(%1%,%1%,%1%)";
+      static const char* const function = "boost::math::hypergeometric_1F1<%1%,%1%,%1%>(%1%,%1%,%1%)";
 
       if ((z == 0) || (a == 0))
          return T(1);
@@ -220,9 +223,8 @@ namespace boost { namespace math { namespace detail {
          return (1 + (z / b)) * exp(z);
       }
 
-      using std::expm1;
       if ((a == 1) && (b == 2))
-         return expm1(z) / z;
+         return boost::math::expm1(z, pol) / z;
 
       if (a == b)
          return exp(z);
@@ -236,7 +238,7 @@ namespace boost { namespace math { namespace detail {
          // a is tiny compared to b, and z < 0
          // 13.3.6 appears to be the most efficient and often the most accurate method.
          T r = boost::math::detail::hypergeometric_1F1_AS_13_3_6(b_minus_a, b, T(-z), a, pol, log_scaling);
-         int scale = boost::math::itrunc(z, pol);
+         int scale = itrunc(z, pol);
          log_scaling += scale;
          return r * exp(z - scale);
       }
@@ -408,7 +410,7 @@ namespace boost { namespace math { namespace detail {
       //
       // Actual result will be result * e^log_scaling.
       //
-      int max_scaling = boost::math::itrunc(boost::math::tools::log_max_value<T>()) - 2;
+      int max_scaling = itrunc(boost::math::tools::log_max_value<T>()) - 2;
       T max_scale_factor = exp(T(max_scaling));
 
       while (log_scaling > max_scaling)

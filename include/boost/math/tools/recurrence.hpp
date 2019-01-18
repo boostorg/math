@@ -134,9 +134,7 @@ namespace boost {
          template <class NextCoefs, class T>
          inline T apply_recurrence_relation_forward(NextCoefs& get_coefs, unsigned last_index, T first, T second, int* log_scaling = 0, T* previous = 0)
          {
-            using std::swap;
-            using std::fabs;
-            using std::exp;
+            BOOST_MATH_STD_USING
             using boost::math::tuple;
             using boost::math::get;
 
@@ -183,8 +181,7 @@ namespace boost {
          template <class T, class NextCoefs>
          inline T apply_recurrence_relation_backward(NextCoefs& get_coefs, unsigned last_index, T first, T second, int* log_scaling = 0, T* previous = 0)
          {
-            using std::swap;
-            using std::fabs;
+            BOOST_MATH_STD_USING
             using boost::math::tuple;
             using boost::math::get;
 

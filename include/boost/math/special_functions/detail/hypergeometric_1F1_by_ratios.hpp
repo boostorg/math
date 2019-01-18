@@ -85,6 +85,7 @@
      template <class T, class Policy>
      T hypergeometric_1F1_from_function_ratio_negative_b(const T& a, const T& b, const T& z, const Policy& pol, int& log_scaling)
      {
+        BOOST_MATH_STD_USING
         //
         // Get the function ratio, M(a+1, b+1, z)/M(a,b,z):
         //
@@ -105,7 +106,7 @@
         //
         if (fabs(M2) > 1)
         {
-           int s = boost::math::itrunc(log(fabs(M2)));
+           int s = itrunc(log(fabs(M2)));
            log_scaling -= s;  // M2 will be in the denominator, so subtract the scaling!
            M2 *= exp(T(-s));
         }
@@ -143,6 +144,7 @@
      template <class T, class Policy>
      T hypergeometric_1F1_from_function_ratio_negative_ab(const T& a, const T& b, const T& z, const Policy& pol, int& log_scaling)
      {
+        BOOST_MATH_STD_USING
         //
         // Get the function ratio, M(a+1, b+1, z)/M(a,b,z):
         //

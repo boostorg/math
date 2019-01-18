@@ -32,8 +32,8 @@
         {
            T result = term * boost::math::gamma_p(alpha_poch, x, pol);
            term *= delta_poch * alpha_poch / (++k * x);
-           ++delta_poch;
-           ++alpha_poch;
+           delta_poch += 1;
+           alpha_poch += 1;
            return result;
         }
         T delta_poch, alpha_poch, x, term;
@@ -59,7 +59,7 @@
         T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
         boost::math::policies::check_series_iterations<T>("boost::math::tgamma<%1%>(%1%,%1%)", max_iter, pol);
         T log_prefix = x + boost::math::lgamma(b, pol) - boost::math::lgamma(a);
-        int scale = boost::math::itrunc(log_prefix);
+        int scale = itrunc(log_prefix);
         log_scaling += scale;
         return result * exp(log_prefix - scale);
      }
@@ -67,6 +67,7 @@
      template <class T, class Policy>
      T hypergeometric_1F1_shift_on_a(T h, const T& a_local, const T& b_local, const T& x, int a_shift, const Policy& pol, int& log_scaling)
      {
+        BOOST_MATH_STD_USING
         T a = a_local + a_shift;
         if (a_shift == 0)
            return h;
@@ -190,7 +191,7 @@
               if (boost::math::tools::min_value<T>() * comparitor > h)
               {
                  // Ooops, need to rescale h:
-                 int rescale = boost::math::itrunc(log(fabs(h)));
+                 int rescale = itrunc(log(fabs(h)));
                  T scale = exp(T(-rescale));
                  h *= scale;
                  log_scaling += rescale;
@@ -204,7 +205,7 @@
      template <class T, class Policy>
      T hypergeometric_1F1_shift_on_b(T h, const T& a, const T& b_local, const T& x, int b_shift, const Policy& pol, int& log_scaling)
      {
-        using std::exp;
+        BOOST_MATH_STD_USING
 
         T b = b_local + b_shift;
         if (b_shift == 0)
@@ -235,7 +236,7 @@
               if (boost::math::tools::min_value<T>() * comparitor > h)
               {
                  // Ooops, need to rescale h:
-                 int rescale = boost::math::itrunc(log(fabs(h)));
+                 int rescale = itrunc(log(fabs(h)));
                  T scale = exp(-rescale);
                  h *= scale;
                  log_scaling += rescale;
@@ -273,13 +274,14 @@
      template <class T, class Policy>
      T hypergeometric_1F1_large_igamma(const T& a, const T& b, const T& x, const T& b_minus_a, const Policy& pol, int& log_scaling)
      {
+        BOOST_MATH_STD_USING
         //
         // We need a < b < z in order to ensure there's at least a chance of convergence,
         // we can use recurrence relations to shift forwards on a+b or just a to achieve this,
         // for decent accuracy, try to keep 2b - 1 < a < 2b < z
         //
-        int b_shift = b * 2 < x ? 0 : boost::math::itrunc(b - x / 2);
-        int a_shift = a > b - b_shift ? -boost::math::itrunc(b - b_shift - a - 1) : -boost::math::itrunc(b - b_shift - a);
+        int b_shift = b * 2 < x ? 0 : itrunc(b - x / 2);
+        int a_shift = a > b - b_shift ? -itrunc(b - b_shift - a - 1) : -itrunc(b - b_shift - a);
 
         if (a_shift < 0)
         {
@@ -307,14 +309,15 @@
      template <class T, class Policy>
      T hypergeometric_1F1_large_series(const T& a, const T& b, const T& z, const Policy& pol, int& log_scaling)
      {
+        BOOST_MATH_STD_USING
         //
         // We make a small, and b > z:
         //
         int a_shift(0), b_shift(0);
         if (a * z > b)
         {
-           a_shift = boost::math::itrunc(a);
-           b_shift = b < z ? boost::math::itrunc(b - z - 1) : 0;
+           a_shift = itrunc(a);
+           b_shift = b < z ? itrunc(b - z - 1) : 0;
         }
         //
         // If a_shift is trivially small, there's really not much point in losing
@@ -356,11 +359,12 @@
      template <class T, class Policy>
      T hypergeometric_1F1_large_13_3_6_series(const T& a, const T& b, const T& z, const Policy& pol, int& log_scaling)
      {
+        BOOST_MATH_STD_USING
         //
         // A&S 13.3.6 is good only when a ~ b, but isn't too fussy on the size of z.
         // So shift b to match a (b shifting seems to be more stable via method of ratios).
         //
-        int b_shift = boost::math::itrunc(b - a);
+        int b_shift = itrunc(b - a);
         T b_local = b - b_shift;
         T h = boost::math::detail::hypergeometric_1F1_AS_13_3_6(a, b_local, z, T(b_local - a), pol, log_scaling);
         return hypergeometric_1F1_shift_on_b(h, a, b_local, z, b_shift, pol, log_scaling);
@@ -369,6 +373,7 @@
      template <class T, class Policy>
      T hypergeometric_1F1_large_abz(const T& a, const T& b, const T& z, const Policy& pol, int& log_scaling)
      {
+        BOOST_MATH_STD_USING
         //
         // This is the selection logic to pick the "best" method.
         // We have a,b,z >> 0 and need to comute the approximate cost of each method

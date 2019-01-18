@@ -27,7 +27,7 @@
      inline T hypergeometric_1F1_asym_large_z_series(T a, const T& b, T z, const Policy& pol, int& log_scaling)
      {
         BOOST_MATH_STD_USING
-           static const char* function = "boost::math::hypergeometric_1F1_asym_large_z_series<%1%>(%1%, %1%, %1%)";
+        static const char* function = "boost::math::hypergeometric_1F1_asym_large_z_series<%1%>(%1%, %1%, %1%)";
         T prefix;
         int e, s;
         if (z < 0)
@@ -38,22 +38,22 @@
         }
         else
         {
-           e = z > INT_MAX ? INT_MAX : boost::math::itrunc(z, pol);
+           e = z > INT_MAX ? INT_MAX : itrunc(z, pol);
            log_scaling += e;
            prefix = exp(z - e);
         }
         T t = log(z) * (a - b);
-        e = boost::math::itrunc(t, pol);
+        e = itrunc(t, pol);
         log_scaling += e;
         prefix *= exp(t - e);
 
         t = boost::math::lgamma(b, &s, pol);
-        e = boost::math::itrunc(t, pol);
+        e = itrunc(t, pol);
         log_scaling += e;
         prefix *= s * exp(t - e);
 
         t = boost::math::lgamma(a, &s, pol);
-        e = boost::math::itrunc(t, pol);
+        e = itrunc(t, pol);
         log_scaling -= e;
         prefix /= s * exp(t - e);
         //
@@ -74,8 +74,8 @@
            abs_sum += fabs(sum);
            term *= a1_poch * a2_poch * z_mult;
            term /= ++k;
-           ++a1_poch;
-           ++a2_poch;
+           a1_poch += 1;
+           a2_poch += 1;
            if (fabs(sum) * boost::math::policies::get_epsilon<T, Policy>() > fabs(term))
               break;
            if(fabs(sum) / abs_sum < boost::math::policies::get_epsilon<T, Policy>())

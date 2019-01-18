@@ -19,7 +19,7 @@
      template <class Seq, class Real, class Policy, class Terminal>
      std::pair<Real, Real> hypergeometric_pFq_checked_series_impl(const Seq& aj, const Seq& bj, const Real& z, const Policy& pol, const Terminal& termination, int& log_scale)
      {
-        using std::abs;
+        BOOST_MATH_STD_USING
         Real result = 1;
         Real abs_result = 1;
         Real term = 1;
@@ -28,7 +28,7 @@
         boost::uintmax_t k = 0;
         Real upper_limit(sqrt(boost::math::tools::max_value<Real>())), diff;
         Real lower_limit(1 / upper_limit);
-        int log_scaling_factor = boost::math::itrunc(boost::math::tools::log_max_value<Real>()) - 2;
+        int log_scaling_factor = itrunc(boost::math::tools::log_max_value<Real>()) - 2;
         Real scaling_factor = exp(Real(log_scaling_factor));
         Real term_m1 = 0;
         int local_scaling = 0;
@@ -101,8 +101,8 @@
               "The number of b terms must be less than the value of BOOST_MATH_PFQ_MAX_B_TERMS (" BOOST_STRINGIZE(BOOST_MATH_PFQ_MAX_B_TERMS)  "), but got %1%.",
               Real(bj.size()), pol);
 
-        int crossover_locations[BOOST_MATH_PFQ_MAX_B_TERMS];
-        int n = 0;
+        unsigned crossover_locations[BOOST_MATH_PFQ_MAX_B_TERMS];
+        unsigned n = 0;
         for (auto bi = bj.begin(); bi != bj.end(); ++bi, ++n)
         {
            crossover_locations[n] = *bi >= 0 ? 0 : itrunc(-*bi) + 1;
@@ -266,7 +266,7 @@
      template <class Seq, class Real, class Policy>
      Real hypergeometric_pFq_checked_series_impl(const Seq& aj, const Seq& bj, const Real& z, const Policy& pol, int& log_scale)
      {
-        using std::abs;
+        BOOST_MATH_STD_USING
         iteration_terminator term(boost::math::policies::get_max_series_iterations<Policy>());
         std::pair<Real, Real> result = hypergeometric_pFq_checked_series_impl(aj, bj, z, pol, term, log_scale);
         //

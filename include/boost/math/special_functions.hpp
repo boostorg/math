@@ -44,6 +44,10 @@
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/special_functions/hermite.hpp>
 #include <boost/math/special_functions/hypot.hpp>
+#include <boost/math/special_functions/hypergeometric_1F0.hpp>
+#include <boost/math/special_functions/hypergeometric_0F1.hpp>
+#include <boost/math/special_functions/hypergeometric_2F0.hpp>
+#include <boost/math/special_functions/hypergeometric_1F1.hpp>
 #include <boost/math/special_functions/jacobi_elliptic.hpp>
 #include <boost/math/special_functions/laguerre.hpp>
 #include <boost/math/special_functions/lanczos.hpp>
