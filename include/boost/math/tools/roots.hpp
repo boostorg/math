@@ -10,6 +10,7 @@
 #pragma once
 #endif
 #include <boost/multiprecision/detail/number_base.hpp> // test for multiprecision types.
+#include <boost/type_traits/is_complex.hpp> // test for complex types
 
 #include <iostream>
 #include <utility>
