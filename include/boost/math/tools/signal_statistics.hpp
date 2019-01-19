@@ -81,7 +81,7 @@ auto hoyer_sparsity(const ForwardIterator first, const ForwardIterator last)
     {
         T l1 = 0;
         T l2 = 0;
-        T n = 0;
+        size_t n = 0;
         for (auto it = first; it != last; ++it)
         {
             l1 += *it;
@@ -95,7 +95,9 @@ auto hoyer_sparsity(const ForwardIterator first, const ForwardIterator last)
     else {
         decltype(abs(*first)) l1 = 0;
         decltype(abs(*first)) l2 = 0;
-        decltype(abs(*first)) n = 0;
+        // We wouldn't need to count the elements if it was a random access iterator,
+        // but our only constraint is that it's a forward iterator.
+        size_t n = 0;
         for (auto it = first; it != last; ++it)
         {
             decltype(abs(*first)) tmp = abs(*it);
@@ -110,7 +112,7 @@ auto hoyer_sparsity(const ForwardIterator first, const ForwardIterator last)
         }
         else
         {
-            decltype(abs(*first)) rootn = sqrt(n);
+            decltype(abs(*first)) rootn = sqrt(static_cast<decltype(abs(*first))>(n));
             return (rootn - l1/sqrt(l2) )/ (rootn - 1);
         }
     }
