@@ -8,7 +8,7 @@
 #ifndef BOOST_HYPERGEOMETRIC_1F1_LARGE_ABZ_HPP_
 #define BOOST_HYPERGEOMETRIC_1F1_LARGE_ABZ_HPP_
 
-#include <boost/math/special_functions/detail/hypergeometric_1f1_bessel.hpp>
+#include <boost/math/special_functions/detail/hypergeometric_1F1_bessel.hpp>
 #include <boost/math/special_functions/detail/hypergeometric_series.hpp>
 #include <boost/math/special_functions/gamma.hpp>
 

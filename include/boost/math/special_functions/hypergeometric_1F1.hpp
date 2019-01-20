@@ -21,8 +21,8 @@
 #include <boost/math/special_functions/detail/hypergeometric_1F1_bessel.hpp>
 #include <boost/math/special_functions/detail/hypergeometric_1F1_scaled_series.hpp>
 #include <boost/math/special_functions/detail/hypergeometric_pFq_checked_series.hpp>
-#include <boost/math/special_functions/detail/hypergeometric_1f1_addition_theorems_on_z.hpp>
-#include <boost/math/special_functions/detail/hypergeometric_1f1_large_abz.hpp>
+#include <boost/math/special_functions/detail/hypergeometric_1F1_addition_theorems_on_z.hpp>
+#include <boost/math/special_functions/detail/hypergeometric_1F1_large_abz.hpp>
 
 namespace boost { namespace math { namespace detail {
 
