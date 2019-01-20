@@ -15,6 +15,7 @@
 #include <boost/math/special_functions/bessel.hpp>
 #include <boost/math/special_functions/laguerre.hpp>
 #include <boost/math/special_functions/detail/hypergeometric_pFq_checked_series.hpp>
+#include <boost/math/special_functions/bessel_iterators.hpp>
 
 
   namespace boost { namespace math { namespace detail {
@@ -190,18 +191,34 @@
      template <class T, class Policy>
      struct hypergeometric_1F1_AS_13_3_6_series
      {
+        typedef T result_type;
+
+        enum { cache_size = 64 };
         //
-        // TODO: store and cache Bessel function evaluations via backwards recurrence.
-        //
-        // Only convergent for a ~ b ?
+        // This series is only convergent/useful for a and b approximately equal
+        // (ideally |a-b| < 1).  The series can also go divergent after a while
+        // when b < 0, which limits precision to around that of double.  In that
+        // situation we return 0 to terminate the series as otherwise the divergent 
+        // terms will destroy all the bits in our result before they do eventually
+        // converge again.  One important use case for this series is for z < 0
+        // and |a| << |b| so that either b-a == b or at least most of the digits in a
+        // are lost in the subtraction.  Note that while you can easily convince yourself 
+        // that the result should be unity when b-a == b, in fact this is not (quite) 
+        // the case for large z.
         //
         hypergeometric_1F1_AS_13_3_6_series(const T& a, const T& b, const T& z, const T& b_minus_a, const Policy& pol_)
-           : b_minus_a_minus_half(b_minus_a - 0.5f), half_z(z / 2), poch_1(2 * b_minus_a - 1), poch_2(b_minus_a - a), b_poch(b), term(1), last_result(1), sign(1), n(0), pol(pol_)
-        {}
+           : b_minus_a_minus_half(b_minus_a - 0.5f), half_z(z / 2), poch_1(2 * b_minus_a - 1), poch_2(b_minus_a - a), b_poch(b), term(1), last_result(1), sign(1), n(0), cache_offset(-cache_size), pol(pol_)
+        {
+           bessel_i_cache[cache_size - 1] = boost::math::cyl_bessel_i(b_minus_a_minus_half - 1, half_z, pol);
+           refill_cache();
+        }
         T operator()()
         {
            BOOST_MATH_STD_USING
-           T result = term * (b_minus_a_minus_half + n) * sign * boost::math::cyl_bessel_i(b_minus_a_minus_half + n, half_z, pol);
+           if(n - cache_offset >= cache_size)
+              refill_cache();
+
+           T result = term * (b_minus_a_minus_half + n) * sign * bessel_i_cache[n - cache_offset];
            ++n;
            term *= poch_1;
            poch_1 += 1;
@@ -211,19 +228,62 @@
            term /= b_poch;
            b_poch += 1;
            sign = -sign;
-           //if (n % 50)
-           //   std::cout << std::setw(5) << std::right << n << std::setw(30) << std::right << result << std::endl;
+
            if ((fabs(result) > fabs(last_result)) && (n > 100))
               return 0;  // series has gone divergent!
+
            last_result = result;
+
            return result;
         }
+
+     private:
         T b_minus_a_minus_half, half_z, poch_1, poch_2, b_poch, term, last_result;
         int sign;
-        int n;
+        int n, cache_offset;
         const Policy& pol;
+        std::array<T, cache_size> bessel_i_cache;
 
-        typedef T result_type;
+        void refill_cache()
+        {
+           BOOST_MATH_STD_USING
+           //
+           // We don't calculate a new bessel I value: instead start our iterator off
+           // with an arbitrary small value, then when we get back to the last value in the previous cache
+           // calculate the ratio and use it to renormalise all the values.  This is more efficient, but
+           // also avoids problems with I_v(x) underflowing to zero.
+           //
+           cache_offset += cache_size;
+           T last_value = bessel_i_cache.back();
+           bessel_i_backwards_iterator<T> i(b_minus_a_minus_half + cache_offset + (int)cache_size - 1, half_z, tools::min_value<T>() * (fabs(last_value) > 1 ? last_value : 32));
+
+           for (int j = cache_size - 1; j >= 0; --j, ++i)
+           {
+              bessel_i_cache[j] = *i;
+              //
+              // Depending on the value of half_z, the values stored in the cache can grow so
+              // large as to overflow, if that looks likely then we need to rescale all the
+              // existing terms (most of which will then underflow to zero).  In this situation
+              // it's likely that our series will only need 1 or 2 terms of the series but we
+              // can't be sure of that:
+              //
+              if((j < cache_size - 2) && (tools::max_value<T>() / fabs(64 * bessel_i_cache[j] / bessel_i_cache[j + 1]) < fabs(bessel_i_cache[j])))
+              {
+                 T scale = pow(fabs(bessel_i_cache[j] / bessel_i_cache[j + 1]), j + 1) * 2;
+                 if (!(boost::math::isfinite(scale)))
+                    scale = tools::max_value<T>();
+                 for (int k = j; k < cache_size; ++k)
+                    bessel_i_cache[k] /= scale;
+                 i = bessel_i_backwards_iterator<T>(b_minus_a_minus_half + cache_offset + j, half_z, bessel_i_cache[j + 1], bessel_i_cache[j]);
+              }
+           }
+           T ratio = last_value / *i;
+           for (auto j = bessel_i_cache.begin(); j != bessel_i_cache.end(); ++j)
+              *j *= ratio;
+        }
+
+        hypergeometric_1F1_AS_13_3_6_series();
+        hypergeometric_1F1_AS_13_3_6_series(const hypergeometric_1F1_AS_13_3_6_series&);
      };
 
      template <class T, class Policy>
