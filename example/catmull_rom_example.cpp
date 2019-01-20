@@ -9,6 +9,7 @@
 #include <array>
 #include <cmath>
 #include <boost/math/interpolators/catmull_rom.hpp>
+#include <boost/math/constants/constants.hpp>
 
 using std::sin;
 using std::cos;
