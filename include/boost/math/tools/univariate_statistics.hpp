@@ -8,7 +8,7 @@
 
 #include <algorithm>
 #include <iterator>
-#include <boost/type_traits.hpp>
+#include <boost/type_traits/is_complex.hpp>
 #include <boost/assert.hpp>
 #include <boost/multiprecision/detail/number_base.hpp>
 

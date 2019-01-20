@@ -8,7 +8,6 @@
 
 #include <iterator>
 #include <tuple>
-#include <boost/type_traits.hpp>
 #include <boost/assert.hpp>
 #include <boost/multiprecision/detail/number_base.hpp>
 
