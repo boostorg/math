@@ -416,10 +416,13 @@
         }
         //
         // Cost for bessel approximation is the number of recurrences required to make a ~ b,
-        // Note that recurrence relations fail for very small b:
+        // Note that recurrence relations fail for very small b.  We also have issue with large
+        // z: either overflow/numeric instability or else the series goes divergent.  We seem to be
+        // OK for z smaller than log_max_value<Quad> though, maybe we can stretch a little further
+        // but that's not clear...
         //
         cost = fabs(b - a);
-        if((b > 1) && (cost <= current_cost) && (z < tools::log_max_value<T>()))
+        if((b > 1) && (cost <= current_cost) && (z < tools::log_max_value<T>()) && (z < 11356))
         {
            current_method = method_bessel;
            current_cost = cost;

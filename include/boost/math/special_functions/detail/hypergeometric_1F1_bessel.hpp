@@ -268,7 +268,7 @@
         //
         hypergeometric_1F1_AS_13_3_8_series(const T& a, const T& b, const T& z, const T& h, const Policy& pol_)
            : C_minus_2(1), C_minus_1(-b * h), C(b * (b + 1) * h * h / 2 - (2 * h - 1) * a / 2),
-           bessel_arg(2 * sqrt(-a * z)), bessel_order(b - 1), power_term(pow(-a * z, (1 - b) / 2)), mult(z / sqrt(-a * z)),
+           bessel_arg(2 * sqrt(-a * z)), bessel_order(b - 1), power_term(std::pow(-a * z, (1 - b) / 2)), mult(z / std::sqrt(-a * z)),
            a_(a), b_(b), z_(z), h_(h), n(2), pol(pol_)
         {
         }

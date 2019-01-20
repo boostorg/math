@@ -26,7 +26,7 @@
 #include <boost/math/quadrature/exp_sinh.hpp>
 
 template <class Real, class T>
-void do_test_2F0(const T& data, const char* type_name, const char* test_name)
+void do_test_1F1(const T& data, const char* type_name, const char* test_name)
 {
    typedef Real                   value_type;
 
@@ -62,11 +62,11 @@ void test_spots1(T, const char* type_name)
 {
 #include "hypergeometric_1F1.ipp"
 
-   do_test_2F0<T>(hypergeometric_1F1, type_name, "Integer a values");
+   do_test_1F1<T>(hypergeometric_1F1, type_name, "Integer a values");
 
 #include "hypergeometric_1F1_small_random.ipp"
 
-   do_test_2F0<T>(hypergeometric_1F1_small_random, type_name, "Small random values");
+   do_test_1F1<T>(hypergeometric_1F1_small_random, type_name, "Small random values");
 }
 
 template <class T>
@@ -74,7 +74,23 @@ void test_spots2(T, const char* type_name)
 {
 #include "hypergeometric_1F1_big.ipp"
 
-   do_test_2F0<T>(hypergeometric_1F1_big, type_name, "Large random values");
+   do_test_1F1<T>(hypergeometric_1F1_big, type_name, "Large random values");
+}
+
+template <class T>
+void test_spots3(T, const char* type_name)
+{
+#include "hypergeometric_1F1_big_double_limited.ipp"
+
+   do_test_1F1<T>(hypergeometric_1F1_big_double_limited, type_name, "Large random values - double limited precision");
+}
+
+template <class T>
+void test_spots4(T, const char* type_name)
+{
+#include "hypergeometric_1F1_big_unsolved.ipp"
+
+   do_test_1F1<T>(hypergeometric_1F1_big, type_name, "Large random values - unsolved domains");
 }
 
 template <class T>
@@ -82,6 +98,11 @@ void test_spots(T z, const char* type_name)
 {
    test_spots1(z, type_name);
    test_spots2(z, type_name);
+   if (std::numeric_limits<T>::digits10 < 20)
+      test_spots3(z, type_name);
+#ifdef TEST_UNSOLVED
+   test_spots4(z, type_name);
+#endif
 }
 
 

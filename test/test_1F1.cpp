@@ -27,6 +27,50 @@ void expected_results()
    largest_type = "(long\\s+)?double";
 #endif
 
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      ".*",                          // platform
+      "cpp_bin_float_quad",          // test type(s)
+      "Integer a values",            // test data group
+      ".*", 25000, 800);             // test function
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      ".*",                          // platform
+      "cpp_bin_float_quad",          // test type(s)
+      "Large.*",                     // test data group
+      ".*", 500000, 20000);          // test function
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      ".*",                          // platform
+      "cpp_bin_float_quad",          // test type(s)
+      "Small.*",                     // test data group
+      ".*", 2000, 200);              // test function
+
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      ".*",                          // platform
+      "dec_40",                      // test type(s)
+      "Integer a values",            // test data group
+      ".*", 8000, 800);             // test function
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      ".*",                          // platform
+      "dec_40",                      // test type(s)
+      "Large.*",                     // test data group
+      ".*", 20000000L, 400000L);     // test function
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      ".*",                          // platform
+      "dec_40",                      // test type(s)
+      "Small.*",                     // test data group
+      ".*", 1000, 300);              // test function
+
 #if (LDBL_MANT_DIG < DBL_MANT_DIG * 2) && (LDBL_MANT_DIG != DBL_MANT_DIG)
    //
    // long double has only a little extra precision and errors may creep
