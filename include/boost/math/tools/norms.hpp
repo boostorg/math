@@ -190,6 +190,11 @@ auto l2_norm(ForwardIterator first, ForwardIterator last)
             l2 += (*it)*(*it);
         }
         T result = sqrt(l2);
+        // Higham, Accuracy and Stability of Numerical Algorithms,
+        // Problem 27.5 presents a different algorithm to deal with overflow.
+        // The algorithm used here takes 3 passes *if* there is overflow.
+        // Higham's algorithm is 1 pass, but more requires operations than the no oveflow case.
+        // I'm operating under the assumption that overflow is rare since the dynamic range of floating point numbers is huge.
         if (!isfinite(result))
         {
             T a = sup_norm(first, last);
