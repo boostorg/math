@@ -12,6 +12,7 @@
 #include <boost/type_index.hpp>
 #include <boost/test/included/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
+#include <boost/math/constants/constants.hpp>
 #include <boost/math/interpolators/catmull_rom.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/multiprecision/cpp_dec_float.hpp>
@@ -115,6 +116,7 @@ void test_linear()
 template<class Real>
 void test_circle()
 {
+    using boost::math::constants::pi;
     std::cout << "Testing that the Catmull-Rom spline interpolates circles correctly on type "
               << boost::typeindex::type_id<Real>().pretty_name() << "\n";
 
@@ -123,7 +125,7 @@ void test_circle()
     std::vector<std::array<Real, 2>> u(20*sizeof(Real));
     for (size_t i = 0; i < v.size(); ++i)
     {
-        Real theta = ((Real) i/ (Real) v.size())*2*M_PI;
+        Real theta = ((Real) i/ (Real) v.size())*2*pi<Real>();
         v[i] = {cos(theta), sin(theta)};
         u[i] = v[i];
     }
@@ -229,6 +231,7 @@ void test_affine_invariance()
 template<class Real>
 void test_helix()
 {
+    using boost::math::constants::pi;
     std::cout << "Testing that the Catmull-Rom spline interpolates helices correctly on type "
               << boost::typeindex::type_id<Real>().pretty_name() << "\n";
 
@@ -236,7 +239,7 @@ void test_helix()
     std::vector<std::array<Real, 3>> v(2000*sizeof(Real));
     for (size_t i = 0; i < v.size(); ++i)
     {
-        Real theta = ((Real) i/ (Real) v.size())*2*M_PI;
+        Real theta = ((Real) i/ (Real) v.size())*2*pi<Real>();
         v[i] = {cos(theta), sin(theta), theta};
     }
     catmull_rom<std::array<Real, 3>> helix(std::move(v));
