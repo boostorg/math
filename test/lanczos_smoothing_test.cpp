@@ -8,6 +8,7 @@
 
 #include <random>
 #include <boost/math/constants/constants.hpp>
+#include <boost/accumulators/statistics/sum_kahan.hpp>
 #include <boost/test/included/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/math/differentiation/lanczos_smoothing.hpp>
