@@ -1,4 +1,4 @@
-//  (C) Copyright Nick Thompson 2018.
+//  (C) Copyright Nick Thompson 2019.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -7,7 +7,6 @@
 #define BOOST_MATH_DIFFERENTIATION_LANCZOS_SMOOTHING_HPP
 #include <vector>
 #include <boost/assert.hpp>
-#include <boost/multiprecision/cpp_bin_float.hpp>
 
 namespace boost::math::differentiation {
 
@@ -276,23 +275,53 @@ public:
                              "The approximation order must be <= 2n");
             BOOST_ASSERT_MSG(approximation_order >= 2,
                              "The approximation order must be >= 2");
-            m_f = detail::interior_filter<Real>(n, approximation_order);
+
+            if constexpr (std::is_same_v<Real, float> || std::is_same_v<Real, double>)
+            {
+                auto interior = detail::interior_filter<long double>(n, approximation_order);
+                m_f.resize(interior.size());
+                for (size_t j = 0; j < interior.size(); ++j)
+                {
+                    m_f[j] = static_cast<Real>(interior[j]);
+                }
+            }
+            else
+            {
+                m_f = detail::interior_filter<Real>(n, approximation_order);
+            }
 
             m_boundary_filters.resize(n);
+            // This for loop is a natural candidate for parallelization.
+            // But does it matter? Probably not.
             for (size_t i = 0; i < n; ++i)
             {
-                // s = i - n;
-                int64_t s = static_cast<int64_t>(i) - static_cast<int64_t>(n);
-                m_boundary_filters[i] = detail::boundary_filter<Real>(n, approximation_order, s);
+                if constexpr (std::is_same_v<Real, float> || std::is_same_v<Real, double>)
+                {
+                    int64_t s = static_cast<int64_t>(i) - static_cast<int64_t>(n);
+                    auto bf = detail::boundary_filter<long double>(n, approximation_order, s);
+                    m_boundary_filters[i].resize(bf.size());
+                    for (size_t j = 0; j < bf.size(); ++j)
+                    {
+                        m_boundary_filters[i][j] = static_cast<Real>(bf[j]);
+                    }
+                }
+                else
+                {
+                    int64_t s = static_cast<int64_t>(i) - static_cast<int64_t>(n);
+                    m_boundary_filters[i] = detail::boundary_filter<Real>(n, approximation_order, s);
+                }
             }
         }
         else if constexpr (order == 2)
         {
+            // High precision isn't warranted for small p; only for large p.
+            // (The computation appears stable for large n.)
+            // But given that the filters are reusable for many vectors,
+            // it's better to do a high precision computation and then cast back,
+            // since the resulting cost is a factor of 2, and the cost of the filters not working is hours of debugging.
             if constexpr (std::is_same_v<Real, double> || std::is_same_v<Real, float>)
             {
-                std::cout << "We're using high precision!\n";
-                using boost::multiprecision::cpp_bin_float_50;
-                auto f = detail::acceleration_boundary_filter<cpp_bin_float_50>(n, approximation_order, 0);
+                auto f = detail::acceleration_boundary_filter<long double>(n, approximation_order, 0);
                 m_f.resize(n+1);
                 for (size_t i = 0; i < m_f.size(); ++i)
                 {
@@ -302,7 +331,7 @@ public:
                 for (size_t i = 0; i < n; ++i)
                 {
                     int64_t s = static_cast<int64_t>(i) - static_cast<int64_t>(n);
-                    auto bf = detail::acceleration_boundary_filter<cpp_bin_float_50>(n, approximation_order, s);
+                    auto bf = detail::acceleration_boundary_filter<long double>(n, approximation_order, s);
                     m_boundary_filters[i].resize(bf.size());
                     for (size_t j = 0; j < bf.size(); ++j)
                     {
@@ -312,7 +341,8 @@ public:
             }
             else
             {
-                std::cout << "No high precision.\n";
+                // Given that the purpose is denoising, for higher precision calculations,
+                // the default precision should be fine.
                 auto f = detail::acceleration_boundary_filter<Real>(n, approximation_order, 0);
                 m_f.resize(n+1);
                 for (size_t i = 0; i < m_f.size(); ++i)
@@ -333,13 +363,13 @@ public:
         }
     }
 
-    void reset_spacing(Real const & spacing)
+    void set_spacing(Real const & spacing)
     {
         BOOST_ASSERT_MSG(spacing > 0, "Spacing between samples must be > 0.");
         m_dt = spacing;
     }
 
-    Real spacing() const
+    Real get_spacing() const
     {
         return m_dt;
     }

@@ -27,7 +27,9 @@ namespace boost::math::differentiation {
         template<class RandomAccessContainer>
         RandomAccessContainer operator()(RandomAccessContainer const & v) const;
 
-        void reset_spacing(Real spacing);
+        void set_spacing(Real spacing);
+
+        Real get_spacing() const;
     };
 
 } // namespaces
