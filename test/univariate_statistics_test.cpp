@@ -702,8 +702,7 @@ int main()
     test_mean<long double>();
     test_mean<cpp_bin_float_50>();
 
-    test_integer_mean<uint8_t>();
-    test_integer_mean<int8_t>();
+    test_integer_mean<unsigned>();
     test_integer_mean<int>();
 
     test_complex_mean<std::complex<float>>();
@@ -715,7 +714,7 @@ int main()
     test_variance<cpp_bin_float_50>();
 
     test_integer_variance<int>();
-    test_integer_variance<uint8_t>();
+    test_integer_variance<unsigned>();
 
     test_skewness<float>();
     test_skewness<double>();
@@ -723,7 +722,7 @@ int main()
     test_skewness<cpp_bin_float_50>();
 
     test_integer_skewness<int>();
-    test_integer_skewness<uint8_t>();
+    test_integer_skewness<unsigned>();
 
     test_first_four_moments<float>();
     test_first_four_moments<double>();
@@ -737,7 +736,7 @@ int main()
     //test_kurtosis<cpp_bin_float_50>();
 
     test_integer_kurtosis<int>();
-    test_integer_kurtosis<uint8_t>();
+    test_integer_kurtosis<unsigned>();
 
     test_median<float>();
     test_median<double>();
