@@ -157,7 +157,7 @@ class discrete_legendre {
 };
 
 template <class Real>
-std::vector<Real> interior_filter(size_t n, size_t p) {
+std::vector<Real> interior_velocity_filter(size_t n, size_t p) {
     // We could make the filter length n, as f[0] = 0,
     // but that'd make the indexing awkward when applying the filter.
     std::vector<Real> f(n + 1, 0);
@@ -187,7 +187,7 @@ std::vector<Real> interior_filter(size_t n, size_t p) {
 }
 
 template <class Real>
-std::vector<Real> boundary_filter(size_t n, size_t p, int64_t s)
+std::vector<Real> boundary_velocity_filter(size_t n, size_t p, int64_t s)
 {
     std::vector<Real> f(2 * n + 1, 0);
     auto dlp = discrete_legendre<Real>(n);
@@ -223,7 +223,7 @@ std::vector<Real> boundary_filter(size_t n, size_t p, int64_t s)
 }
 
 template <class Real>
-std::vector<Real> acceleration_boundary_filter(size_t n, size_t p, int64_t s)
+std::vector<Real> acceleration_filter(size_t n, size_t p, int64_t s)
 {
     BOOST_ASSERT_MSG(p <= 2*n, "Approximation order must be <= 2*n");
     BOOST_ASSERT_MSG(p > 2, "Approximation order must be > 2");
@@ -278,7 +278,7 @@ public:
 
             if constexpr (std::is_same_v<Real, float> || std::is_same_v<Real, double>)
             {
-                auto interior = detail::interior_filter<long double>(n, approximation_order);
+                auto interior = detail::interior_velocity_filter<long double>(n, approximation_order);
                 m_f.resize(interior.size());
                 for (size_t j = 0; j < interior.size(); ++j)
                 {
@@ -287,7 +287,7 @@ public:
             }
             else
             {
-                m_f = detail::interior_filter<Real>(n, approximation_order);
+                m_f = detail::interior_velocity_filter<Real>(n, approximation_order);
             }
 
             m_boundary_filters.resize(n);
@@ -298,7 +298,7 @@ public:
                 if constexpr (std::is_same_v<Real, float> || std::is_same_v<Real, double>)
                 {
                     int64_t s = static_cast<int64_t>(i) - static_cast<int64_t>(n);
-                    auto bf = detail::boundary_filter<long double>(n, approximation_order, s);
+                    auto bf = detail::boundary_velocity_filter<long double>(n, approximation_order, s);
                     m_boundary_filters[i].resize(bf.size());
                     for (size_t j = 0; j < bf.size(); ++j)
                     {
@@ -308,7 +308,7 @@ public:
                 else
                 {
                     int64_t s = static_cast<int64_t>(i) - static_cast<int64_t>(n);
-                    m_boundary_filters[i] = detail::boundary_filter<Real>(n, approximation_order, s);
+                    m_boundary_filters[i] = detail::boundary_velocity_filter<Real>(n, approximation_order, s);
                 }
             }
         }
@@ -321,7 +321,7 @@ public:
             // since the resulting cost is a factor of 2, and the cost of the filters not working is hours of debugging.
             if constexpr (std::is_same_v<Real, double> || std::is_same_v<Real, float>)
             {
-                auto f = detail::acceleration_boundary_filter<long double>(n, approximation_order, 0);
+                auto f = detail::acceleration_filter<long double>(n, approximation_order, 0);
                 m_f.resize(n+1);
                 for (size_t i = 0; i < m_f.size(); ++i)
                 {
@@ -331,7 +331,7 @@ public:
                 for (size_t i = 0; i < n; ++i)
                 {
                     int64_t s = static_cast<int64_t>(i) - static_cast<int64_t>(n);
-                    auto bf = detail::acceleration_boundary_filter<long double>(n, approximation_order, s);
+                    auto bf = detail::acceleration_filter<long double>(n, approximation_order, s);
                     m_boundary_filters[i].resize(bf.size());
                     for (size_t j = 0; j < bf.size(); ++j)
                     {
@@ -343,7 +343,7 @@ public:
             {
                 // Given that the purpose is denoising, for higher precision calculations,
                 // the default precision should be fine.
-                auto f = detail::acceleration_boundary_filter<Real>(n, approximation_order, 0);
+                auto f = detail::acceleration_filter<Real>(n, approximation_order, 0);
                 m_f.resize(n+1);
                 for (size_t i = 0; i < m_f.size(); ++i)
                 {
@@ -353,7 +353,7 @@ public:
                 for (size_t i = 0; i < n; ++i)
                 {
                     int64_t s = static_cast<int64_t>(i) - static_cast<int64_t>(n);
-                    m_boundary_filters[i] = detail::acceleration_boundary_filter<Real>(n, approximation_order, s);
+                    m_boundary_filters[i] = detail::acceleration_filter<Real>(n, approximation_order, s);
                 }
             }
         }

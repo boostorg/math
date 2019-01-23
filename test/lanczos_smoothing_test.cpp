@@ -8,7 +8,6 @@
 
 #include <random>
 #include <boost/math/constants/constants.hpp>
-#include <boost/accumulators/statistics/sum_kahan.hpp>
 #include <boost/test/included/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/math/differentiation/lanczos_smoothing.hpp>
@@ -24,8 +23,8 @@ using boost::multiprecision::cpp_bin_float_50;
 using boost::multiprecision::cpp_bin_float_100;
 using boost::math::differentiation::discrete_lanczos_derivative;
 using boost::math::differentiation::detail::discrete_legendre;
-using boost::math::differentiation::detail::interior_filter;
-using boost::math::differentiation::detail::boundary_filter;
+using boost::math::differentiation::detail::interior_velocity_filter;
+using boost::math::differentiation::detail::boundary_velocity_filter;
 
 template<class Real>
 void test_dlp_norms()
@@ -161,7 +160,7 @@ void test_dlp_second_derivative()
 
 
 template<class Real>
-void test_interior_filter()
+void test_interior_velocity_filter()
 {
     std::cout << "Testing interior filter on type " << typeid(Real).name() << "\n";
     Real tol = std::numeric_limits<Real>::epsilon();
@@ -169,7 +168,7 @@ void test_interior_filter()
     {
         for (int p = 1; p < n; p += 2)
         {
-            auto f = interior_filter<Real>(n,p);
+            auto f = interior_velocity_filter<Real>(n,p);
             // Since we only store half the filter coefficients,
             // we need to reindex the moment sums:
             Real sum = 0;
@@ -312,7 +311,7 @@ void test_interior_lanczos()
 }
 
 template<class Real>
-void test_boundary_filters()
+void test_boundary_velocity_filters()
 {
     std::cout << "Testing boundary filters on type " << typeid(Real).name() << "\n";
     Real tol = std::numeric_limits<Real>::epsilon();
@@ -322,7 +321,7 @@ void test_boundary_filters()
         {
             for (int s = -n; s <= n; ++s)
             {
-                auto f = boundary_filter<Real>(n, p, s);
+                auto f = boundary_velocity_filter<Real>(n, p, s);
                 // Sum is zero:
                 Real sum = 0;
                 Real c = 0;
@@ -484,7 +483,7 @@ void test_acceleration_filters()
         {
             for(int64_t s = -int64_t(n); s <= 0; ++s)
             {
-                auto g = boost::math::differentiation::detail::acceleration_boundary_filter<long double>(n,p,s);
+                auto g = boost::math::differentiation::detail::acceleration_filter<long double>(n,p,s);
 
                 std::vector<Real> f(g.size());
                 for (size_t i = 0; i < g.size(); ++i)
@@ -600,16 +599,16 @@ BOOST_AUTO_TEST_CASE(lanczos_smoothing_test)
     test_dlp_derivatives<double>();
     test_dlp_next<double>();
     test_dlp_norms<cpp_bin_float_50>();
-    test_boundary_filters<double>();
-    test_boundary_filters<long double>();
-    test_boundary_filters<cpp_bin_float_50>();
+    test_boundary_velocity_filters<double>();
+    test_boundary_velocity_filters<long double>();
+    test_boundary_velocity_filters<cpp_bin_float_50>();
     test_boundary_lanczos<double>();
     test_boundary_lanczos<long double>();
     // Takes too long!
     //test_boundary_lanczos<cpp_bin_float_50>();
 
-    test_interior_filter<double>();
-    test_interior_filter<long double>();
+    test_interior_velocity_filter<double>();
+    test_interior_velocity_filter<long double>();
     test_interior_lanczos<double>();
 
     test_acceleration_filters<double>();
