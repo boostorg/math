@@ -175,7 +175,7 @@ void test_affine_invariance()
     std::vector<std::array<Real, dimension>> v(100);
     std::vector<std::array<Real, dimension>> u(100);
     std::mt19937_64 gen(438232);
-    Real inv_denom = (Real) 100/( (Real) gen.max() + (Real) 2);
+    Real inv_denom = (Real) 100/( (Real) (gen.max)() + (Real) 2);
     for(size_t j = 0; j < dimension; ++j)
     {
         v[0][j] = gen()*inv_denom;
