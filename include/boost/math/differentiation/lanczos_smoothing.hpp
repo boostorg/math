@@ -158,9 +158,6 @@ class discrete_legendre {
 
 template <class Real>
 std::vector<Real> interior_velocity_filter(size_t n, size_t p) {
-    // We could make the filter length n, as f[0] = 0,
-    // but that'd make the indexing awkward when applying the filter.
-    std::vector<Real> f(n + 1, 0);
     auto dlp = discrete_legendre<Real>(n);
     std::vector<Real> coeffs(p+1, std::numeric_limits<Real>::quiet_NaN());
     dlp.initialize_recursion(0);
@@ -171,6 +168,12 @@ std::vector<Real> interior_velocity_filter(size_t n, size_t p) {
         coeffs[l] = dlp.next_prime()/ dlp.norm_sq(l);
     }
 
+    // We could make the filter length n, as f[0] = 0,
+    // but that'd make the indexing awkward when applying the filter.
+    std::vector<Real> f(n + 1);
+    // This value should never be read, but this is the correct value *if it is read*.
+    // Hmm, should it be a nan then? I'm not gonna agonize.
+    f[0] = 0;
     for (size_t j = 1; j < f.size(); ++j)
     {
         Real arg = Real(j) / Real(n);
@@ -189,7 +192,6 @@ std::vector<Real> interior_velocity_filter(size_t n, size_t p) {
 template <class Real>
 std::vector<Real> boundary_velocity_filter(size_t n, size_t p, int64_t s)
 {
-    std::vector<Real> f(2 * n + 1, 0);
     auto dlp = discrete_legendre<Real>(n);
     Real sn = Real(s) / Real(n);
     std::vector<Real> coeffs(p+1, std::numeric_limits<Real>::quiet_NaN());
@@ -206,10 +208,10 @@ std::vector<Real> boundary_velocity_filter(size_t n, size_t p, int64_t s)
         coeffs[l] = dlp.next_prime()/ dlp.norm_sq(l);
     }
 
+    std::vector<Real> f(2*n + 1);
     for (size_t k = 0; k < f.size(); ++k)
     {
         Real j = Real(k) - Real(n);
-        f[k] = 0;
         Real arg = j/Real(n);
         dlp.initialize_recursion(arg);
         f[k] = coeffs[1]*arg;
@@ -227,25 +229,24 @@ std::vector<Real> acceleration_filter(size_t n, size_t p, int64_t s)
 {
     BOOST_ASSERT_MSG(p <= 2*n, "Approximation order must be <= 2*n");
     BOOST_ASSERT_MSG(p > 2, "Approximation order must be > 2");
-    std::vector<Real> f(2 * n + 1, 0);
+
     auto dlp = discrete_legendre<Real>(n);
     Real sn = Real(s) / Real(n);
-    std::vector<Real> coeffs(p+2, std::numeric_limits<Real>::quiet_NaN());
+    std::vector<Real> coeffs(p+1, std::numeric_limits<Real>::quiet_NaN());
     dlp.initialize_recursion(sn);
     coeffs[0] = 0;
     coeffs[1] = 0;
-    for (size_t l = 2; l < p + 2; ++l)
+    for (size_t l = 2; l < p + 1; ++l)
     {
         coeffs[l] = dlp.next_dbl_prime()/ dlp.norm_sq(l);
     }
 
+    std::vector<Real> f(2*n + 1, 0);
     for (size_t k = 0; k < f.size(); ++k)
     {
         Real j = Real(k) - Real(n);
-        f[k] = 0;
         Real arg = j/Real(n);
         dlp.initialize_recursion(arg);
-        f[k] = coeffs[1]*arg;
         for (size_t l = 2; l <= p; ++l)
         {
             f[k] += coeffs[l]*dlp.next();
