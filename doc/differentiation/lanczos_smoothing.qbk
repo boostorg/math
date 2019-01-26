@@ -127,6 +127,12 @@ The original data is in orange, the smoothing derivative in blue, and the non-sm
 (Each time series has been rescaled to fit in the same graph.)
 We can see that the smoothing derivative tracks the increase and decrease in the trend well, whereas the standard finite difference formula produces nonsense and amplifies noise.
 
+[heading Caveats]
+
+The computation of the filters is ill-conditioned for large /p/.
+In order to mitigate this problem, we have computed the filters in higher precision and cast the results to the desired type.
+However, this simply pushes the problem to larger /p/.
+In practice, this is not a problem, as large /p/ corresponds to less powerful denoising.
 
 [heading References]
 
