@@ -591,6 +591,43 @@ void test_lanczos_acceleration()
     }
 }
 
+template<class Real>
+void test_rescaling()
+{
+    std::cout << "Test rescaling on type " << typeid(Real).name() << "\n";
+    Real tol = std::numeric_limits<Real>::epsilon();
+    std::vector<Real> v(500);
+    for(size_t i = 0; i < v.size(); ++i)
+    {
+        v[i] = 7*i*i + 9*i + 6;
+    }
+    std::vector<Real> dvdt1(500);
+    std::vector<Real> dvdt2(500);
+    auto lanczos1 = discrete_lanczos_derivative(Real(1));
+    auto lanczos2 = discrete_lanczos_derivative(Real(2));
+
+    lanczos1(v, dvdt1);
+    lanczos2(v, dvdt2);
+
+    for(size_t i = 0; i < v.size(); ++i)
+    {
+        BOOST_CHECK_CLOSE_FRACTION(dvdt1[i], 2*dvdt2[i], tol);
+    }
+
+    auto lanczos3 = discrete_lanczos_derivative<Real, 2>(Real(1));
+    auto lanczos4 = discrete_lanczos_derivative<Real, 2>(Real(2));
+
+
+    std::vector<Real> dv2dt21(500);
+    std::vector<Real> dv2dt22(500);
+
+    for(size_t i = 0; i < v.size(); ++i)
+    {
+        BOOST_CHECK_CLOSE_FRACTION(dv2dt21[i], 4*dv2dt22[i], tol);
+    }
+
+}
+
 BOOST_AUTO_TEST_CASE(lanczos_smoothing_test)
 {
     test_dlp_second_derivative<double>();
@@ -618,4 +655,6 @@ BOOST_AUTO_TEST_CASE(lanczos_smoothing_test)
 
     test_lanczos_acceleration<float>();
     test_lanczos_acceleration<double>();
+
+    test_rescaling<double>();
 }
