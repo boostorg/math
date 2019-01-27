@@ -283,12 +283,16 @@ public:
                 m_f.resize(interior.size());
                 for (size_t j = 0; j < interior.size(); ++j)
                 {
-                    m_f[j] = static_cast<Real>(interior[j]);
+                    m_f[j] = static_cast<Real>(interior[j])/m_dt;
                 }
             }
             else
             {
                 m_f = detail::interior_velocity_filter<Real>(n, approximation_order);
+                for (auto & x : m_f)
+                {
+                    x /= m_dt;
+                }
             }
 
             m_boundary_filters.resize(n);
@@ -303,13 +307,17 @@ public:
                     m_boundary_filters[i].resize(bf.size());
                     for (size_t j = 0; j < bf.size(); ++j)
                     {
-                        m_boundary_filters[i][j] = static_cast<Real>(bf[j]);
+                        m_boundary_filters[i][j] = static_cast<Real>(bf[j])/m_dt;
                     }
                 }
                 else
                 {
                     int64_t s = static_cast<int64_t>(i) - static_cast<int64_t>(n);
                     m_boundary_filters[i] = detail::boundary_velocity_filter<Real>(n, approximation_order, s);
+                    for (auto & bf : m_boundary_filters[i])
+                    {
+                        bf /= m_dt;
+                    }
                 }
             }
         }
@@ -326,7 +334,7 @@ public:
                 m_f.resize(n+1);
                 for (size_t i = 0; i < m_f.size(); ++i)
                 {
-                    m_f[i] = static_cast<Real>(f[i+n]);
+                    m_f[i] = static_cast<Real>(f[i+n])/(m_dt*m_dt);
                 }
                 m_boundary_filters.resize(n);
                 for (size_t i = 0; i < n; ++i)
@@ -336,7 +344,7 @@ public:
                     m_boundary_filters[i].resize(bf.size());
                     for (size_t j = 0; j < bf.size(); ++j)
                     {
-                        m_boundary_filters[i][j] = static_cast<Real>(bf[j]);
+                        m_boundary_filters[i][j] = static_cast<Real>(bf[j])/(m_dt*m_dt);
                     }
                 }
             }
@@ -348,13 +356,17 @@ public:
                 m_f.resize(n+1);
                 for (size_t i = 0; i < m_f.size(); ++i)
                 {
-                    m_f[i] = f[i+n];
+                    m_f[i] = f[i+n]/(m_dt*m_dt);
                 }
                 m_boundary_filters.resize(n);
                 for (size_t i = 0; i < n; ++i)
                 {
                     int64_t s = static_cast<int64_t>(i) - static_cast<int64_t>(n);
                     m_boundary_filters[i] = detail::acceleration_filter<Real>(n, approximation_order, s);
+                    for (auto & bf : m_boundary_filters[i])
+                    {
+                        bf /= (m_dt*m_dt);
+                    }
                 }
             }
         }
@@ -362,12 +374,6 @@ public:
         {
             BOOST_ASSERT_MSG(false, "Derivatives of order 3 and higher are not implemented.");
         }
-    }
-
-    void set_spacing(Real const & spacing)
-    {
-        BOOST_ASSERT_MSG(spacing > 0, "Spacing between samples must be > 0.");
-        m_dt = spacing;
     }
 
     Real get_spacing() const
@@ -388,72 +394,73 @@ public:
         {
             if (i >= m_f.size() - 1 && i <= size(v) - m_f.size())
             {
-                Real dv = 0;
-                for (size_t j = 1; j < m_f.size(); ++j)
+                // The filter has length >= 1:
+                Real dvdt = m_f[1] * (v[i + 1] - v[i - 1]);
+                for (size_t j = 2; j < m_f.size(); ++j)
                 {
-                    dv += m_f[j] * (v[i + j] - v[i - j]);
+                    dvdt += m_f[j] * (v[i + j] - v[i - j]);
                 }
-                return dv / m_dt;
+                return dvdt;
             }
 
             // m_f.size() = N+1
             if (i < m_f.size() - 1)
             {
                 auto &bf = m_boundary_filters[i];
-                Real dv = 0;
-                for (size_t j = 0; j < bf.size(); ++j)
+                Real dvdt = bf[0]*v[0];
+                for (size_t j = 1; j < bf.size(); ++j)
                 {
-                    dv += bf[j] * v[j];
+                    dvdt += bf[j] * v[j];
                 }
-                return dv / m_dt;
+                return dvdt;
             }
 
             if (i > size(v) - m_f.size() && i < size(v))
             {
                 int k = size(v) - 1 - i;
                 auto &bf = m_boundary_filters[k];
-                Real dv = 0;
-                for (size_t j = 0; j < bf.size(); ++j)
+                Real dvdt = bf[0]*v[size(v)-1];
+                for (size_t j = 1; j < bf.size(); ++j)
                 {
-                    dv += bf[j] * v[size(v) - 1 - j];
+                    dvdt += bf[j] * v[size(v) - 1 - j];
                 }
-                return -dv / m_dt;
+                return -dvdt;
             }
         }
         else if constexpr (order==2)
         {
             if (i >= m_f.size() - 1 && i <= size(v) - m_f.size())
             {
-                Real d2v = m_f[0]*v[i];
+                Real d2vdt2 = m_f[0]*v[i];
                 for (size_t j = 1; j < m_f.size(); ++j)
                 {
-                    d2v += m_f[j] * (v[i + j] + v[i - j]);
+                    d2vdt2 += m_f[j] * (v[i + j] + v[i - j]);
                 }
-                return d2v / (m_dt*m_dt);
+                return d2vdt2;
             }
 
             // m_f.size() = N+1
             if (i < m_f.size() - 1)
             {
                 auto &bf = m_boundary_filters[i];
-                Real d2v = 0;
-                for (size_t j = 0; j < bf.size(); ++j)
+                Real d2vdt2 = bf[0]*v[0];
+                for (size_t j = 1; j < bf.size(); ++j)
                 {
-                    d2v += bf[j] * v[j];
+                    d2vdt2 += bf[j] * v[j];
                 }
-                return d2v / (m_dt*m_dt);
+                return d2vdt2;
             }
 
             if (i > size(v) - m_f.size() && i < size(v))
             {
                 int k = size(v) - 1 - i;
                 auto &bf = m_boundary_filters[k];
-                Real d2v = 0;
-                for (size_t j = 0; j < bf.size(); ++j)
+                Real d2vdt2 = bf[0] * v[size(v) - 1];
+                for (size_t j = 1; j < bf.size(); ++j)
                 {
-                    d2v += bf[j] * v[size(v) - 1 - j];
+                    d2vdt2 += bf[j] * v[size(v) - 1 - j];
                 }
-                return d2v / (m_dt*m_dt);
+                return d2vdt2;
             }
         }
 
@@ -477,22 +484,22 @@ public:
             for (size_t i = 0; i < m_f.size() - 1; ++i)
             {
                 auto &bf = m_boundary_filters[i];
-                Real dv = 0;
-                for (size_t j = 0; j < bf.size(); ++j)
+                Real dvdt = bf[0] * v[0];
+                for (size_t j = 1; j < bf.size(); ++j)
                 {
-                    dv += bf[j] * v[j];
+                    dvdt += bf[j] * v[j];
                 }
-                w[i] = dv / m_dt;
+                w[i] = dvdt;
             }
 
             for(size_t i = m_f.size() - 1; i <= size(v) - m_f.size(); ++i)
             {
-                Real dv = 0;
-                for (size_t j = 1; j < m_f.size(); ++j)
+                Real dvdt = m_f[1] * (v[i + 1] - v[i - 1]);
+                for (size_t j = 2; j < m_f.size(); ++j)
                 {
-                    dv += m_f[j] * (v[i + j] - v[i - j]);
+                    dvdt += m_f[j] *(v[i + j] - v[i - j]);
                 }
-                w[i] = dv / m_dt;
+                w[i] = dvdt;
             }
 
 
@@ -500,12 +507,12 @@ public:
             {
                 int k = size(v) - 1 - i;
                 auto &f = m_boundary_filters[k];
-                Real dv = 0;
-                for (size_t j = 0; j < f.size(); ++j)
+                Real dvdt = f[0] * v[size(v) - 1];;
+                for (size_t j = 1; j < f.size(); ++j)
                 {
-                    dv += f[j] * v[size(v) - 1 - j];
+                    dvdt += f[j] * v[size(v) - 1 - j];
                 }
-                w[i] = -dv / m_dt;
+                w[i] = -dvdt;
             }
         }
         else if constexpr (order==2)
@@ -514,35 +521,34 @@ public:
             for (size_t i = 0; i < m_f.size() - 1; ++i)
             {
                 auto &bf = m_boundary_filters[i];
-                Real d2v = 0;
+                Real d2vdt2 = 0;
                 for (size_t j = 0; j < bf.size(); ++j)
                 {
-                    d2v += bf[j] * v[j];
+                    d2vdt2 += bf[j] * v[j];
                 }
-                w[i] = d2v / (m_dt*m_dt);
+                w[i] = d2vdt2;
             }
 
             for (size_t i = m_f.size() - 1; i <= size(v) - m_f.size(); ++i)
             {
-                Real d2v = m_f[0]*v[i];
+                Real d2vdt2 = m_f[0]*v[i];
                 for (size_t j = 1; j < m_f.size(); ++j)
                 {
-                    d2v += m_f[j] * (v[i + j] + v[i - j]);
+                    d2vdt2 += m_f[j] * (v[i + j] + v[i - j]);
                 }
-                w[i] = d2v / (m_dt*m_dt);
+                w[i] = d2vdt2;
             }
-
 
             for (size_t i = size(v) - m_f.size() + 1; i < size(v); ++i)
             {
                 int k = size(v) - 1 - i;
                 auto &bf = m_boundary_filters[k];
-                Real d2v = 0;
-                for (size_t j = 0; j < bf.size(); ++j)
+                Real d2vdt2 = bf[0] * v[size(v) - 1];
+                for (size_t j = 1; j < bf.size(); ++j)
                 {
-                    d2v += bf[j] * v[size(v) - 1 - j];
+                    d2vdt2 += bf[j] * v[size(v) - 1 - j];
                 }
-                w[i] = d2v / (m_dt*m_dt);
+                w[i] = d2vdt2;
             }
         }
 

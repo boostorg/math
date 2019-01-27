@@ -598,10 +598,13 @@ BOOST_AUTO_TEST_CASE(lanczos_smoothing_test)
     test_dlp_evaluation<double>();
     test_dlp_derivatives<double>();
     test_dlp_next<double>();
-    test_dlp_norms<cpp_bin_float_50>();
+
+    // Takes too long!
+    //test_dlp_norms<cpp_bin_float_50>();
     test_boundary_velocity_filters<double>();
     test_boundary_velocity_filters<long double>();
-    test_boundary_velocity_filters<cpp_bin_float_50>();
+    // Takes too long!
+    //test_boundary_velocity_filters<cpp_bin_float_50>();
     test_boundary_lanczos<double>();
     test_boundary_lanczos<long double>();
     // Takes too long!

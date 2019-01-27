@@ -27,8 +27,6 @@ namespace boost::math::differentiation {
         template<class RandomAccessContainer>
         RandomAccessContainer operator()(RandomAccessContainer const & v) const;
 
-        void set_spacing(Real spacing);
-
         Real get_spacing() const;
     };
 
@@ -132,7 +130,11 @@ We can see that the smoothing derivative tracks the increase and decrease in the
 The computation of the filters is ill-conditioned for large /p/.
 In order to mitigate this problem, we have computed the filters in higher precision and cast the results to the desired type.
 However, this simply pushes the problem to larger /p/.
-In practice, this is not a problem, as large /p/ corresponds to less powerful denoising.
+In practice, this is not a problem, as large /p/ corresponds to less powerful denoising, but keep it in mind.
+
+In addition, the `-ffast-math` flag has a very large effect on the speed of these functions.
+In our benchmarks, they were 50% faster with the flag enabled, which is much larger than the usual performance increases we see by turning on this flag.
+Hence, if the default performance is not sufficient, this flag is available, though it comes with its own problems.
 
 [heading References]
 
