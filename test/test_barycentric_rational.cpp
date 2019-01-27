@@ -47,6 +47,17 @@ void test_interpolation_condition()
         Real z = interpolator(x[i]);
         BOOST_CHECK_CLOSE(z, y[i], 100*numeric_limits<Real>::epsilon());
     }
+
+    // Make sure that the move constructor does the same thing:
+    std::vector<Real> x_copy = x;
+    std::vector<Real> y_copy = y;
+    boost::math::barycentric_rational<Real> move_interpolator(std::move(x), std::move(y));
+
+    for (size_t i = 0; i < x_copy.size(); ++i)
+    {
+        Real z = move_interpolator(x_copy[i]);
+        BOOST_CHECK_CLOSE(z, y_copy[i], 100*numeric_limits<Real>::epsilon());
+    }
 }
 
 template<class Real>

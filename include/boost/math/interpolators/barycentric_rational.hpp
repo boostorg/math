@@ -36,12 +36,24 @@ class barycentric_rational
 public:
     barycentric_rational(const Real* const x, const Real* const y, size_t n, size_t approximation_order = 3);
 
+    barycentric_rational(std::vector<Real>&& x, std::vector<Real>&& y, size_t approximation_order = 3);
+
     template <class InputIterator1, class InputIterator2>
     barycentric_rational(InputIterator1 start_x, InputIterator1 end_x, InputIterator2 start_y, size_t approximation_order = 3, typename boost::disable_if_c<boost::is_integral<InputIterator2>::value>::type* = 0);
 
     Real operator()(Real x) const;
 
     Real prime(Real x) const;
+
+    std::vector<Real>&& return_x()
+    {
+        return m_imp->return_x();
+    }
+
+    std::vector<Real>&& return_y()
+    {
+        return m_imp->return_y();
+    }
 
 private:
     std::shared_ptr<detail::barycentric_rational_imp<Real>> m_imp;
@@ -53,6 +65,14 @@ barycentric_rational<Real>::barycentric_rational(const Real* const x, const Real
 {
     return;
 }
+
+template <class Real>
+barycentric_rational<Real>::barycentric_rational(std::vector<Real>&& x, std::vector<Real>&& y, size_t approximation_order):
+ m_imp(std::make_shared<detail::barycentric_rational_imp<Real>>(std::move(x), std::move(y), approximation_order))
+{
+    return;
+}
+
 
 template <class Real>
 template <class InputIterator1, class InputIterator2>
