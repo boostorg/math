@@ -310,9 +310,11 @@
 
      /****************************************************************************************************************/
      //
-     // The following are not used at present:
+     // The following are not used at present and are commented out for that reason:
      //
      /****************************************************************************************************************/
+
+#if 0
 
      template <class T, class Policy>
      struct hypergeometric_1F1_AS_13_3_8_series
@@ -446,6 +448,8 @@
 
         return result;
      }
+
+#endif
 
   } } } // namespaces
 

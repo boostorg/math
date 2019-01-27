@@ -136,7 +136,6 @@
     BOOST_MATH_STD_USING // modf, frexp, fabs, pow
 
     boost::intmax_t integer_part = 0;
-    const T bk = modf(b, &integer_part);
     T ak = modf(a, &integer_part);
     //
     // We need ak-1 positive to avoid infinite recursion below:
@@ -145,18 +144,6 @@
     {
        ak += 2;
        integer_part -= 2;
-    }
-
-    int exp_of_a = 0; frexp(a, &exp_of_a);
-    int exp_of_b = 0; frexp(b, &exp_of_b);
-
-    const bool are_fractional_parts_close_enough =
-      fabs(boost::math::float_distance(ak, bk)) <= pow(2, (std::max)(exp_of_a, exp_of_b));
-
-    if ((a < b) && (b < 0) && (are_fractional_parts_close_enough)) // TODO: has to be researched deeper
-    {
-      ak = b - 1;
-      integer_part -= (boost::math::lltrunc(ceil(b)) - 1);
     }
 
     if (-integer_part > static_cast<boost::intmax_t>(policies::get_max_series_iterations<Policy>()))

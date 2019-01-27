@@ -26,6 +26,56 @@
 
   namespace boost { namespace math { namespace detail {
 
+     //
+     // This works moderately well for a < 0, but has some very strange behaviour with
+     // strings of values of the same sign followed by a sign switch then another
+     // series all the same sign and so on.... doesn't converge smoothly either
+     // but rises and falls in wave-like behaviour.... very slow to converge...
+     //
+     template <class T, class Policy>
+     struct hypergeometric_1f1_recurrence_on_z_minus_zero_series
+     {
+        typedef T result_type;
+
+        hypergeometric_1f1_recurrence_on_z_minus_zero_series(const T& a, const T& b, const T& z, int k_, const Policy& pol)
+           : term(1), b_minus_a_plus_n(b - a), a_(a), b_(b), z_(z), n(0), k(k_)
+        {
+           M = boost::math::detail::hypergeometric_1F1_imp(a, b, z, pol);
+           M_next = boost::math::detail::hypergeometric_1F1_imp(T(a - 1), b, z, pol);
+        }
+        T operator()()
+        {
+           T result = term * M;
+           term *= b_minus_a_plus_n * k / ((z_ + k) * ++n);
+           b_minus_a_plus_n += 1;
+           T M2 = -((2 * (a_ - n) - b_ + z_) * M_next - (a_ - n) * M) / (b_ - (a_ - n));
+           M = M_next;
+           M_next = M2;
+
+           return result;
+        }
+        T term, b_minus_a_plus_n, M, M_next, a_, b_, z_;
+        int n, k;
+     };
+
+     template <class T, class Policy>
+     T hypergeometric_1f1_recurrence_on_z_minus_zero(const T& a, const T& b, const T& z, int k, const Policy& pol)
+     {
+        BOOST_MATH_STD_USING
+           BOOST_ASSERT((z + k) / z > 0.5f);
+        hypergeometric_1f1_recurrence_on_z_minus_zero_series<T, Policy> s(a, b, z, k, pol);
+        boost::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
+        T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
+        boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1f1_recurrence_on_z_plus_plus<%1%>(%1%,%1%,%1%)", max_iter, pol);
+        return result * exp(T(k)) * pow(z / (z + k), b - a);
+     }
+
+#if 0
+
+     //
+     // These are commented out as they are currently unused, but may find use in the future:
+     //
+
      template <class T, class Policy>
      struct hypergeometric_1f1_recurrence_on_z_plus_plus_series
      {
@@ -180,49 +230,6 @@
         return result * exp(T(k));
      }
      //
-     // This works moderately well for a < 0, but has some very strange behaviour with
-     // strings of values of the same sign followed by a sign switch then another
-     // series all the same sign and so on.... doesn't converge smoothly either
-     // but rises and falls in wave-like behaviour.... very slow to converge...
-     //
-     template <class T, class Policy>
-     struct hypergeometric_1f1_recurrence_on_z_minus_zero_series
-     {
-        typedef T result_type;
-
-        hypergeometric_1f1_recurrence_on_z_minus_zero_series(const T& a, const T& b, const T& z, int k_, const Policy& pol)
-           : term(1), b_minus_a_plus_n(b - a), a_(a), b_(b), z_(z), n(0), k(k_)
-        {
-           M = boost::math::detail::hypergeometric_1F1_imp(a, b, z, pol);
-           M_next = boost::math::detail::hypergeometric_1F1_imp(T(a - 1), b, z, pol);
-        }
-        T operator()()
-        {
-           T result = term * M;
-           term *= b_minus_a_plus_n * k / ((z_ + k) * ++n);
-           b_minus_a_plus_n += 1;
-           T M2 = -((2 * (a_ - n) - b_ + z_) * M_next - (a_ - n) * M) / (b_ - (a_ - n));
-           M = M_next;
-           M_next = M2;
-
-           return result;
-        }
-        T term, b_minus_a_plus_n, M, M_next, a_, b_, z_;
-        int n, k;
-     };
-
-     template <class T, class Policy>
-     T hypergeometric_1f1_recurrence_on_z_minus_zero(const T& a, const T& b, const T& z, int k, const Policy& pol)
-     {
-        BOOST_MATH_STD_USING
-           BOOST_ASSERT((z + k) / z > 0.5f);
-        hypergeometric_1f1_recurrence_on_z_minus_zero_series<T, Policy> s(a, b, z, k, pol);
-        boost::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
-        T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
-        boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1f1_recurrence_on_z_plus_plus<%1%>(%1%,%1%,%1%)", max_iter, pol);
-        return result * exp(T(k)) * pow(z / (z + k), b - a);
-     }
-     //
      // I'm unable to find any situation where this series isn't divergent and therefore 
      // is probably quite useless:
      //
@@ -262,6 +269,7 @@
         boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1f1_recurrence_on_z_plus_plus<%1%>(%1%,%1%,%1%)", max_iter, pol);
         return result * exp(T(k)) * pow((z + k) / z, 1 - b);
      }
+#endif
 
   } } } // namespaces
 
