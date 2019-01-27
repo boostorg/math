@@ -25,6 +25,9 @@ namespace boost::math::differentiation {
         Real operator()(RandomAccessContainer const & v, size_t i) const;
 
         template<class RandomAccessContainer>
+        void operator()(RandomAccessContainer const & v, RandomAccessContainer & dvdt) const;
+
+        template<class RandomAccessContainer>
         RandomAccessContainer operator()(RandomAccessContainer const & v) const;
 
         Real get_spacing() const;
@@ -58,6 +61,16 @@ The syntax is as follows:
     double d2vdt2 = lanczos(v, 18);
     // evaluate second derivative of entire vector:
     std::vector<double> d2vdt2 = lanczos(v);
+
+For memory conscious programmers, you can reuse the memory space for the derivative as follows:
+
+    std::vector<double> v(500);
+    std::vector<double> dvdt(500);
+    // . . . define spacing, create and instance of discrete_lanczos_derivative
+
+    // populate dvdt, perhaps in a loop:
+    lanczos(v, dvdt);
+
 
 If the data has variance \u03C3[super 2],
 then the variance of the computed derivative is roughly \u03C3[super 2]/p/[super 3] /n/[super -3] \u0394 /t/[super -2],

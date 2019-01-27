@@ -5,6 +5,8 @@
 
 #ifndef BOOST_MATH_DIFFERENTIATION_LANCZOS_SMOOTHING_HPP
 #define BOOST_MATH_DIFFERENTIATION_LANCZOS_SMOOTHING_HPP
+#include <cmath> // for std::abs
+#include <limits> // to nan initialize
 #include <vector>
 #include <boost/assert.hpp>
 
@@ -470,15 +472,18 @@ public:
     }
 
     template<class RandomAccessContainer>
-    RandomAccessContainer operator()(RandomAccessContainer const & v) const
+    void operator()(RandomAccessContainer const & v, RandomAccessContainer & w) const
     {
         static_assert(std::is_same_v<typename RandomAccessContainer::value_type, Real>,
                       "The type of the values in the vector provided does not match the type in the filters.");
         using std::size;
         BOOST_ASSERT_MSG(size(v) >= m_boundary_filters[0].size(),
             "Vector must be at least as long as the filter length");
+        BOOST_ASSERT_MSG(size(w) >= size(v),
+            "Output vector must at least as long as the input vector.");
+        BOOST_ASSERT_MSG(w.data() != v.data(),
+             "This transform cannot be performed in-place.");
 
-        RandomAccessContainer w(size(v));
         if constexpr (order==1)
         {
             for (size_t i = 0; i < m_f.size() - 1; ++i)
@@ -551,9 +556,25 @@ public:
                 w[i] = d2vdt2;
             }
         }
+    }
 
+    template<class RandomAccessContainer>
+    RandomAccessContainer operator()(RandomAccessContainer const & v) const
+    {
+        using std::size;
+        RandomAccessContainer w(size(v));
+        this->operator()(v, w);
         return w;
     }
+
+
+    // Don't copy; too big.
+    discrete_lanczos_derivative( const discrete_lanczos_derivative & ) = delete;
+    discrete_lanczos_derivative& operator=(const discrete_lanczos_derivative&) = delete;
+
+    // Allow moves:
+    discrete_lanczos_derivative(discrete_lanczos_derivative&&) = default;
+    discrete_lanczos_derivative& operator=(discrete_lanczos_derivative&&) = default;
 
 private:
     std::vector<Real> m_f;
