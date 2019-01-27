@@ -109,6 +109,8 @@
         }
         std::sort(crossover_locations, crossover_locations + bj.size(), std::greater<Real>());
 
+        bool terminate = false;   // Set to true if one of the a's passes through the origin and terminates the series.
+
         for (n = 0; n < bj.size(); ++n)
         {
            if (k < crossover_locations[n])
@@ -124,8 +126,19 @@
               boost::uintmax_t backstop = k;
               int s1(1), s2(1);
               term = 0;
-              for(auto ai = aj.begin(); ai != aj.end(); ++ai)
-                 term += log_pochhammer(*ai, s, pol, &s1);
+              for (auto ai = aj.begin(); ai != aj.end(); ++ai)
+              {
+                 if ((floor(*ai) == *ai) && (*ai < 0) && (-*ai <= s))
+                 {
+                    // One of the a terms has passed through zero and terminated the series:
+                    terminate = true;
+                    break;
+                 }
+                 else
+                  term += log_pochhammer(*ai, s, pol, &s1);
+              }
+              if (terminate)
+                 break;
               for(auto bi = bj.begin(); bi != bj.end(); ++bi)
                  term -= log_pochhammer(*bi, s, pol, &s2);
               term -= lgamma(Real(s + 1), pol);

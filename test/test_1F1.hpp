@@ -94,6 +94,61 @@ void test_spots4(T, const char* type_name)
 }
 
 template <class T>
+void test_spots5(T, const char* type_name)
+{
+   std::cout << "Testing special cases" << std::endl;
+   //
+   // Special cases:
+   //
+   using boost::math::hypergeometric_1F1;
+   T tol = boost::math::tools::epsilon<T>() * 200;
+   // b = 2a
+   T computed = hypergeometric_1F1(T(-12.25), T(2 * -12.25), T(6.75));
+   T expected = boost::lexical_cast<T>("22.995348157760091167706081204212893687052775606591209203948675272473773725021024450870565197330528784707135828761");
+   BOOST_CHECK_CLOSE(computed, expected, tol);
+   computed = hypergeometric_1F1(T(12.25), T(2 * 12.25), T(6.75));
+   expected = boost::lexical_cast<T>("36.47281964229300610642392880149257389834650024065756742702265701321933782423217084029882132197130099355867287657");
+   BOOST_CHECK_CLOSE(computed, expected, tol);
+   computed = hypergeometric_1F1(T(-11), T(-12), T(6.75));
+   expected = boost::lexical_cast<T>("376.3166426246459656334542608880377435064935064935064935064935064935064935064935064935064935064935064935064935064");
+   BOOST_CHECK_CLOSE(computed, expected, tol);
+   computed = hypergeometric_1F1(T(-2), T(-12), T(6.75));
+   expected = boost::lexical_cast<T>("2.470170454545454545454545454545454545454545454545454545454545454545454545454545454545454545454545454545454545");
+   BOOST_CHECK_CLOSE(computed, expected, tol);
+   computed = hypergeometric_1F1(T(-224), T(-1205), T(6.75));
+   expected = boost::lexical_cast<T>("3.497033449657595724636676193024114597507981035316405619832857546161530808157860391434240068189887198094611519953");
+   BOOST_CHECK_CLOSE(computed, expected, tol);
+   computed = hypergeometric_1F1(T(0.5), T(-1205.5), T(-6.75));
+   expected = boost::lexical_cast<T>("1.00281149043026925155096279505879868076290060374397866773878698584557482321961231721407215665017657501846692575");
+   BOOST_CHECK_CLOSE(computed, expected, tol);
+   computed = hypergeometric_1F1(T(-0.5), T(-1205.5), T(-6.75));
+   expected = boost::lexical_cast<T>("0.99719639844965644594352920596780535220516138060108955206195178371227403775248888108818326220977962797312690");
+   BOOST_CHECK_CLOSE(computed, expected, tol);
+   computed = hypergeometric_1F1(T(-12), T(16.25), T(1043.75));
+   expected = boost::lexical_cast<T>("1.26527673505477678311707565502355407505496430400394171269315320194708537626079491650410923064978320042481912e20");
+   BOOST_CHECK_CLOSE(computed, expected, tol * 3);
+   
+   computed = hypergeometric_1F1(T(3.5), T(3.5), T(36.25));
+   expected = exp(T(36.25));
+   BOOST_CHECK_CLOSE(computed, expected, tol);
+   computed = hypergeometric_1F1(T(-3.5), T(-3.5), T(36.25));
+   expected = exp(T(36.25));
+   BOOST_CHECK_CLOSE(computed, expected, tol);
+   computed = hypergeometric_1F1(T(1), T(2), T(36.25));
+   expected = expm1(T(36.25)) / T(36.25);
+   BOOST_CHECK_CLOSE(computed, expected, tol);
+   computed = hypergeometric_1F1(T(10.25), T(9.25), T(36.25));
+   expected = exp(T(36.25)) * (T(9.25) + T(36.25)) / T(9.25);
+   BOOST_CHECK_CLOSE(computed, expected, tol);
+   computed = hypergeometric_1F1(T(-10.25), T(-11.25), T(36.25));
+   expected = exp(T(36.25)) * (T(-11.25) + T(36.25)) / T(-11.25);
+   BOOST_CHECK_CLOSE(computed, expected, tol);
+   computed = hypergeometric_1F1(T(-10.25), T(-11.25), T(-36.25));
+   expected = exp(T(-36.25)) * (T(-11.25) + T(-36.25)) / T(-11.25);
+   BOOST_CHECK_CLOSE(computed, expected, tol);
+}
+
+template <class T>
 void test_spots(T z, const char* type_name)
 {
    test_spots1(z, type_name);
@@ -103,6 +158,7 @@ void test_spots(T z, const char* type_name)
 #ifdef TEST_UNSOLVED
    test_spots4(z, type_name);
 #endif
+   test_spots5(z, type_name);
 }
 
 

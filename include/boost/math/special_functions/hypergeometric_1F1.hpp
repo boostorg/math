@@ -159,6 +159,8 @@ namespace boost { namespace math { namespace detail {
    bool hypergeometric_1F1_is_13_3_6_region(const T& a, const T& b, const T& z)
    {
       BOOST_MATH_STD_USING
+      if(fabs(a) == 0.5)
+         return false;
       if ((z < 0) && (fabs(10 * a / b) < 1) && (fabs(a) < 50))
       {
          if (b > 0)
@@ -226,8 +228,6 @@ namespace boost { namespace math { namespace detail {
       if ((a == 1) && (b == 2))
          return boost::math::expm1(z, pol) / z;
 
-      if (a == b)
-         return exp(z);
       if ((b - a == b) && (fabs(z / b) < policies::get_epsilon<T, Policy>()))
          return 1;
       //
@@ -289,14 +289,6 @@ namespace boost { namespace math { namespace detail {
                return hypergeometric_1F1_checked_series_impl(a, b, z, pol, log_scaling);
             }
          }
-         // Appears to be no longer needed now we have method-of-ratios.
-         /*
-         if ((a < -1) && (b < 4 * a) && (-a < policies::get_max_series_iterations<Policy>()))  // TODO check crosover for best location
-         {
-            // Without this we get into an area where the series doesn't converge if b - a ~ b
-            return hypergeometric_1F1_backward_recurrence_for_negative_a(a, b, z, pol, function, log_scaling);
-         }
-         */
          // Let's otherwise make z positive (almost always)
          // by Kummer's transformation
          // (we also don't transform if z belongs to [-1,0])
