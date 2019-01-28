@@ -147,7 +147,7 @@ namespace boost {
                // scale each part seperately to avoid spurious overflow:
                third = (a / -c) * first + (b / -c) * second;
 
-               if ((log_scaling) && ((fabs(third) > tools::max_value<T>() / 1000) || (fabs(third) < tools::min_value<T>() * 1000)))
+               if ((log_scaling) && ((fabs(third) > tools::max_value<T>() / 100000) || (fabs(third) < tools::min_value<T>() * 100000)))
                {
                   // Rescale everything:
                   int log_scale = itrunc(log(fabs(third)));
@@ -194,7 +194,7 @@ namespace boost {
                // scale each part seperately to avoid spurious overflow:
                next = (b / -a) * second + (c / -a) * first;
 
-               if ((log_scaling) && ((fabs(next) > tools::max_value<T>() / 1000) || (fabs(next) < tools::min_value<T>() * 1000)))
+               if ((log_scaling) && ((fabs(next) > tools::max_value<T>() / 100000) || (fabs(next) < tools::min_value<T>() * 100000)))
                {
                   // Rescale everything:
                   int log_scale = itrunc(log(fabs(next)));

@@ -184,34 +184,111 @@
   {
      BOOST_MATH_STD_USING // modf, frexp, fabs, pow
      //
-     // Recursion from some b + N > z down to b:
+     // We compute 
      //
-     int integer_part = itrunc(z - b) + 2;
+     // M[a + a_shift, b + b_shift; z] 
+     //
+     // and recurse backwards on a and b down to
+     //
+     // M[a, b, z]
+     //
+     // With a + a_shift > 1 and b + b_shift > z
+     // 
+     // There are 3 distinct regions to ensure stability during the recursions:
+     //
+     // a > 0         :  stable for backwards on a
+     // a < 0, b > 0  :  stable for backwards on a and b
+     // a < 0, b < 0  :  stable for backwards on b (as long as |b| is small). 
+     // 
+     // We could simplify things by ignoring the middle region, but it's more efficient
+     // to recurse on a and b together when we can.
+     //
+     int b_shift = itrunc(z - b) + 2;
 
-     if (integer_part > static_cast<boost::intmax_t>(boost::math::policies::get_max_series_iterations<Policy>()))
-        return boost::math::policies::raise_evaluation_error<T>(function, "1F1 arguments sit in a range with a so negative that we have no evaluation method, got a = %1%", std::numeric_limits<T>::quiet_NaN(), pol);
-     //
-     // TODO: these 1F1's will be calculated via recursion on a, we should really
-     // use a single recurrence on a and then "turn the corner" and recurse on b:
-     //
-     int scaling1(0), scaling2(0);
-     T first, second;
-     first = boost::math::detail::hypergeometric_1F1_imp(a, T(b + integer_part), z, pol, scaling1);
-     --integer_part;
-     second = boost::math::detail::hypergeometric_1F1_imp(a, T(b + integer_part), z, pol, scaling2);
-     if (scaling1 != scaling2)
+     int a_shift = itrunc(-a);
+     if (a + a_shift != 0)
      {
-        second *= exp(T(scaling2 - scaling1));
+        a_shift += 2;
      }
-     log_scaling += scaling1;
 
-     boost::math::detail::hypergeometric_1F1_recurrence_small_b_coefficients<T> s(a, b, z, integer_part);
+     if (b_shift > static_cast<boost::intmax_t>(boost::math::policies::get_max_series_iterations<Policy>()))
+        return boost::math::policies::raise_evaluation_error<T>(function, "1F1 arguments sit in a range with z - b so large that we have no evaluation method, got z - b = %1%", z - b, pol);
 
-     return boost::math::tools::apply_recurrence_relation_backward(s,
-        static_cast<unsigned int>(std::abs(integer_part)),
-        first,
-        second,
-        &log_scaling);
+     if (a_shift > static_cast<boost::intmax_t>(boost::math::policies::get_max_series_iterations<Policy>()))
+        return boost::math::policies::raise_evaluation_error<T>(function, "1F1 arguments sit in a range with a so negative that we have no evaluation method, got a = %1%", a, pol);
+
+     int a_b_shift = itrunc(b + b_shift);   // The max we can shift on a and b together
+     int leading_a_shift = 3;               // Just enough to make a negative
+     if (a_b_shift > a_shift - 3)
+     {
+        a_b_shift = a_shift - 3;
+     }
+     else
+     {
+        // Need to ensure that leading_a_shift is large enough that a will reach it's target
+        // after the first 2 phases (-,0) and (-,-) are over:
+        leading_a_shift = a_shift - a_b_shift;
+     }
+     int trailing_b_shift = b_shift - a_b_shift;
+     //
+     // We could probably remove these constraints but it would greatly complexify things
+     // and we simply do not use this routine in any area where these asserts will fail:
+     //
+     BOOST_ASSERT(leading_a_shift > 1);
+     BOOST_ASSERT(a_b_shift > 1);
+
+     boost::uintmax_t max_iter = 200;
+     T first, second;
+     first = boost::math::detail::hypergeometric_1F1_imp(T(a + a_shift), T(b + b_shift), z, pol, log_scaling);
+     //
+     // It would be good to compute "second" from first and the ratio - unfortunately we are right on the cusp
+     // recursion on a switching from stable backwards to stable forwards behaviour and so this is not possible here.
+     //
+     second = boost::math::detail::hypergeometric_1F1_imp(T(a + a_shift - 1), T(b + b_shift), z, pol, log_scaling);
+
+     //
+     // Now we have [a + a_shift, b + b_shift, z] and [a + a_shift - 1, b + b_shift, z]
+     // and want to recurse until [a + a_shift - leading_a_shift, b + b_shift, z] and [a + a_shift - leadng_a_shift - 1, b + b_shift, z]
+     // which is leading_a_shift -1 steps.
+     //
+     hypergeometric_1F1_recurrence_a_coefficients<T> coef_a(a + a_shift - 1, b + b_shift, z);
+     second = boost::math::tools::apply_recurrence_relation_backward(coef_a, leading_a_shift, first, second, &log_scaling, &first);
+     //
+     // Now we need to switch to an a+b shift so that we have:
+     // [a + a_shift - leading_a_shift, b + b_shift, z] and [a + a_shift - leadng_a_shift - 1, b + b_shift - 1, z]
+     // A&S 13.4.3 gives us what we need:
+     //
+     {
+        // local a's and b's:
+        T la = a + a_shift - leading_a_shift - 1;
+        T lb = b + b_shift;
+        second = ((1 + la - lb) * second - la * first) / (1 - lb);
+     }
+     //
+     // Now apply a_b_shift - 1 recursions to get down to
+     // [a + 1, b + trailing_b_shift + 1, z] and [a, b + trailing_b_shift, z]
+     //
+     hypergeometric_1F1_recurrence_a_and_b_coefficients<T> coef_ab(a + a_shift - leading_a_shift - 1, b + b_shift - 1, z);
+     second = boost::math::tools::apply_recurrence_relation_backward(
+        coef_ab,
+        a_b_shift - 1, first, second, &log_scaling, &first);
+     //
+     // Now we need to switch to a b shift, a different application of A&S 13.4.3
+     // will get us there, we leave "second" where it is, and move "first" sideways:
+     //
+     {
+        T lb = b + trailing_b_shift + 1;
+        first = (second * (lb - 1) - a * first) / -(1 + a - lb);
+     }
+     //
+     // Finish off by applying trailing_b_shift recursions:
+     //
+     if (trailing_b_shift)
+     {
+        hypergeometric_1F1_recurrence_small_b_coefficients<T> coef_b(a, b, z, trailing_b_shift);
+        second = boost::math::tools::apply_recurrence_relation_backward(coef_b, trailing_b_shift, first, second, &log_scaling);
+     }
+     return second;
   }
 
 
