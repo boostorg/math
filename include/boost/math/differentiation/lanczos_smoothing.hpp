@@ -481,7 +481,7 @@ public:
             "Vector must be at least as long as the filter length");
         BOOST_ASSERT_MSG(size(w) >= size(v),
             "Output vector must at least as long as the input vector.");
-        BOOST_ASSERT_MSG(w.data() != v.data(),
+        BOOST_ASSERT_MSG(&w[0] != &v[0],
              "This transform cannot be performed in-place.");
 
         if constexpr (order==1)

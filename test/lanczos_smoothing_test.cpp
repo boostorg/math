@@ -7,6 +7,8 @@
 #define BOOST_TEST_MODULE lanczos_smoothing_test
 
 #include <random>
+#include <array>
+#include <boost/numeric/ublas/vector.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/test/included/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
@@ -625,7 +627,41 @@ void test_rescaling()
     {
         BOOST_CHECK_CLOSE_FRACTION(dv2dt21[i], 4*dv2dt22[i], tol);
     }
+}
 
+template<class Real>
+void test_data_representations()
+{
+    std::cout << "Test rescaling on type " << typeid(Real).name() << "\n";
+    Real tol = 150*std::numeric_limits<Real>::epsilon();
+    std::array<Real, 500> v;
+    for(size_t i = 0; i < v.size(); ++i)
+    {
+        v[i] = 9*i + 6;
+    }
+    std::array<Real, 500> dvdt;
+    auto lanczos = discrete_lanczos_derivative(Real(1));
+
+    lanczos(v, dvdt);
+
+    for(size_t i = 0; i < v.size(); ++i)
+    {
+        BOOST_CHECK_CLOSE_FRACTION(dvdt[i], 9, tol);
+    }
+
+    boost::numeric::ublas::vector<Real> w(500);
+    boost::numeric::ublas::vector<Real> dwdt(500);
+    for(size_t i = 0; i < w.size(); ++i)
+    {
+        w[i] = 9*i + 6;
+    }
+
+    lanczos(w, dwdt);
+
+    for(size_t i = 0; i < v.size(); ++i)
+    {
+        BOOST_CHECK_CLOSE_FRACTION(dwdt[i], 9, tol);
+    }
 }
 
 BOOST_AUTO_TEST_CASE(lanczos_smoothing_test)
@@ -657,4 +693,5 @@ BOOST_AUTO_TEST_CASE(lanczos_smoothing_test)
     test_lanczos_acceleration<double>();
 
     test_rescaling<double>();
+    test_data_representations<double>();
 }

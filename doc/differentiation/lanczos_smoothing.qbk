@@ -103,7 +103,7 @@ For a sinusoidal signal contaminated with AWGN, we ran a few tests showing that 
 p = n/8 gave the best results,
 for SNR = 10, p = n/7 was the best, and for SNR = 100, p = n/6 was the most reasonable choice.
 For SNR = 0.1, the method appears to be useless.
-The user is urged to use these results with caution-they have no theoretical backing and are extrapolated from a single case.
+The user is urged to use these results with caution: they have no theoretical backing and are extrapolated from a single case.
 
 The filters are (regrettably) computed at runtime-the vast number of combinations of approximation order and filter length makes the number of filters that must be stored excessive for compile-time data.
 The constructor call computes the filters.
