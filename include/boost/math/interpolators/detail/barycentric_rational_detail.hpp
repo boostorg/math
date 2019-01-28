@@ -55,8 +55,6 @@ template <class Real>
 template <class InputIterator1, class InputIterator2>
 barycentric_rational_imp<Real>::barycentric_rational_imp(InputIterator1 start_x, InputIterator1 end_x, InputIterator2 start_y, size_t approximation_order)
 {
-    using std::abs;
-
     std::ptrdiff_t n = std::distance(start_x, end_x);
 
     if (approximation_order >= (std::size_t)n)
@@ -91,7 +89,6 @@ barycentric_rational_imp<Real>::barycentric_rational_imp(InputIterator1 start_x,
 template <class Real>
 barycentric_rational_imp<Real>::barycentric_rational_imp(std::vector<Real>&& x, std::vector<Real>&& y,size_t approximation_order) : m_x{std::move(x)}, m_y{std::move(y)}
 {
-    using std::abs;
     BOOST_ASSERT_MSG(m_x.size() == m_y.size(), "There must be the same number of abscissas and ordinates.");
     BOOST_ASSERT_MSG(approximation_order < m_x.size(), "Approximation order must be < data length.");
     calculate_weights(approximation_order);
@@ -100,6 +97,7 @@ barycentric_rational_imp<Real>::barycentric_rational_imp(std::vector<Real>&& x, 
 template<class Real>
 void barycentric_rational_imp<Real>::calculate_weights(size_t approximation_order)
 {
+    using std::abs;
     int64_t n = m_x.size();
     m_w.resize(n, 0);
     for(int64_t k = 0; k < n; ++k)
