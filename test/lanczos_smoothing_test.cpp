@@ -8,6 +8,7 @@
 
 #include <random>
 #include <array>
+#include <boost/range.hpp>
 #include <boost/numeric/ublas/vector.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/test/included/unit_test.hpp>
@@ -662,6 +663,25 @@ void test_data_representations()
     {
         BOOST_CHECK_CLOSE_FRACTION(dwdt[i], 9, tol);
     }
+
+    auto v1 = boost::make_iterator_range(v.begin(), v.end());
+    auto v2 = boost::make_iterator_range(dvdt.begin(), dvdt.end());
+    lanczos(v1, v2);
+
+    for(size_t i = 0; i < v2.size(); ++i)
+    {
+        BOOST_CHECK_CLOSE_FRACTION(v2[i], 9, tol);
+    }
+
+    auto lanczos2 = discrete_lanczos_derivative<Real, 2>(Real(1));
+
+    lanczos2(v1, v2);
+
+    for(size_t i = 0; i < v2.size(); ++i)
+    {
+        BOOST_CHECK_SMALL(v2[i], tol);
+    }
+
 }
 
 BOOST_AUTO_TEST_CASE(lanczos_smoothing_test)

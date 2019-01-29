@@ -388,13 +388,13 @@ public:
     {
         static_assert(std::is_same_v<typename RandomAccessContainer::value_type, Real>,
                       "The type of the values in the vector provided does not match the type in the filters.");
-        using std::size;
-        BOOST_ASSERT_MSG(size(v) >= m_boundary_filters[0].size(),
+
+        BOOST_ASSERT_MSG(std::size(v) >= m_boundary_filters[0].size(),
             "Vector must be at least as long as the filter length");
 
         if constexpr (order==1)
         {
-            if (i >= m_f.size() - 1 && i <= size(v) - m_f.size())
+            if (i >= m_f.size() - 1 && i <= std::size(v) - m_f.size())
             {
                 // The filter has length >= 1:
                 Real dvdt = m_f[1] * (v[i + 1] - v[i - 1]);
@@ -417,21 +417,21 @@ public:
                 return dvdt;
             }
 
-            if (i > size(v) - m_f.size() && i < size(v))
+            if (i > std::size(v) - m_f.size() && i < std::size(v))
             {
-                int k = size(v) - 1 - i;
+                int k = std::size(v) - 1 - i;
                 auto &bf = m_boundary_filters[k];
-                Real dvdt = bf[0]*v[size(v)-1];
+                Real dvdt = bf[0]*v[std::size(v)-1];
                 for (size_t j = 1; j < bf.size(); ++j)
                 {
-                    dvdt += bf[j] * v[size(v) - 1 - j];
+                    dvdt += bf[j] * v[std::size(v) - 1 - j];
                 }
                 return -dvdt;
             }
         }
         else if constexpr (order==2)
         {
-            if (i >= m_f.size() - 1 && i <= size(v) - m_f.size())
+            if (i >= m_f.size() - 1 && i <= std::size(v) - m_f.size())
             {
                 Real d2vdt2 = m_f[0]*v[i];
                 for (size_t j = 1; j < m_f.size(); ++j)
@@ -453,14 +453,14 @@ public:
                 return d2vdt2;
             }
 
-            if (i > size(v) - m_f.size() && i < size(v))
+            if (i > std::size(v) - m_f.size() && i < std::size(v))
             {
-                int k = size(v) - 1 - i;
+                int k = std::size(v) - 1 - i;
                 auto &bf = m_boundary_filters[k];
-                Real d2vdt2 = bf[0] * v[size(v) - 1];
+                Real d2vdt2 = bf[0] * v[std::size(v) - 1];
                 for (size_t j = 1; j < bf.size(); ++j)
                 {
-                    d2vdt2 += bf[j] * v[size(v) - 1 - j];
+                    d2vdt2 += bf[j] * v[std::size(v) - 1 - j];
                 }
                 return d2vdt2;
             }
@@ -476,10 +476,9 @@ public:
     {
         static_assert(std::is_same_v<typename RandomAccessContainer::value_type, Real>,
                       "The type of the values in the vector provided does not match the type in the filters.");
-        using std::size;
-        BOOST_ASSERT_MSG(size(v) >= m_boundary_filters[0].size(),
+        BOOST_ASSERT_MSG(std::size(v) >= m_boundary_filters[0].size(),
             "Vector must be at least as long as the filter length");
-        BOOST_ASSERT_MSG(size(w) >= size(v),
+        BOOST_ASSERT_MSG(std::size(w) >= std::size(v),
             "Output vector must at least as long as the input vector.");
         BOOST_ASSERT_MSG(&w[0] != &v[0],
              "This transform cannot be performed in-place.");
@@ -497,7 +496,7 @@ public:
                 w[i] = dvdt;
             }
 
-            for(size_t i = m_f.size() - 1; i <= size(v) - m_f.size(); ++i)
+            for(size_t i = m_f.size() - 1; i <= std::size(v) - m_f.size(); ++i)
             {
                 Real dvdt = m_f[1] * (v[i + 1] - v[i - 1]);
                 for (size_t j = 2; j < m_f.size(); ++j)
@@ -508,14 +507,14 @@ public:
             }
 
 
-            for(size_t i = size(v) - m_f.size() + 1; i < size(v); ++i)
+            for(size_t i = std::size(v) - m_f.size() + 1; i < std::size(v); ++i)
             {
-                int k = size(v) - 1 - i;
+                int k = std::size(v) - 1 - i;
                 auto &f = m_boundary_filters[k];
-                Real dvdt = f[0] * v[size(v) - 1];;
+                Real dvdt = f[0] * v[std::size(v) - 1];;
                 for (size_t j = 1; j < f.size(); ++j)
                 {
-                    dvdt += f[j] * v[size(v) - 1 - j];
+                    dvdt += f[j] * v[std::size(v) - 1 - j];
                 }
                 w[i] = -dvdt;
             }
@@ -534,7 +533,7 @@ public:
                 w[i] = d2vdt2;
             }
 
-            for (size_t i = m_f.size() - 1; i <= size(v) - m_f.size(); ++i)
+            for (size_t i = m_f.size() - 1; i <= std::size(v) - m_f.size(); ++i)
             {
                 Real d2vdt2 = m_f[0]*v[i];
                 for (size_t j = 1; j < m_f.size(); ++j)
@@ -544,14 +543,14 @@ public:
                 w[i] = d2vdt2;
             }
 
-            for (size_t i = size(v) - m_f.size() + 1; i < size(v); ++i)
+            for (size_t i = std::size(v) - m_f.size() + 1; i < std::size(v); ++i)
             {
-                int k = size(v) - 1 - i;
+                int k = std::size(v) - 1 - i;
                 auto &bf = m_boundary_filters[k];
-                Real d2vdt2 = bf[0] * v[size(v) - 1];
+                Real d2vdt2 = bf[0] * v[std::size(v) - 1];
                 for (size_t j = 1; j < bf.size(); ++j)
                 {
-                    d2vdt2 += bf[j] * v[size(v) - 1 - j];
+                    d2vdt2 += bf[j] * v[std::size(v) - 1 - j];
                 }
                 w[i] = d2vdt2;
             }
@@ -561,8 +560,7 @@ public:
     template<class RandomAccessContainer>
     RandomAccessContainer operator()(RandomAccessContainer const & v) const
     {
-        using std::size;
-        RandomAccessContainer w(size(v));
+        RandomAccessContainer w(std::size(v));
         this->operator()(v, w);
         return w;
     }
