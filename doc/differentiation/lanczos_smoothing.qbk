@@ -149,6 +149,8 @@ In addition, the `-ffast-math` flag has a very large effect on the speed of thes
 In our benchmarks, they were 50% faster with the flag enabled, which is much larger than the usual performance increases we see by turning on this flag.
 Hence, if the default performance is not sufficient, this flag is available, though it comes with its own problems.
 
+This requires C++17 `if constexpr`.
+
 [heading References]
 
 * Corless, Robert M., and Nicolas Fillion. ['A graduate introduction to numerical methods.] AMC 10 (2013): 12.
