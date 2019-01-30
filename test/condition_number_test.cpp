@@ -44,6 +44,7 @@ template<class Real>
 void test_exponential_sum()
 {
     using std::exp;
+    using std::abs;
     Real eps = std::numeric_limits<float>::epsilon();
     for (Real x = -20; x <= -1; x += 0.5)
     {
@@ -56,6 +57,7 @@ void test_exponential_sum()
             term *= (x/n);
         }
         BOOST_CHECK_CLOSE_FRACTION(exp(x), cond.sum(), eps*cond());
+        BOOST_CHECK_CLOSE_FRACTION(exp(2*abs(x)), cond(), eps*cond());
     }
 }
 
