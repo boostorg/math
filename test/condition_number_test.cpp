@@ -41,6 +41,27 @@ void test_summation_condition_number()
 }
 
 template<class Real>
+void test_exponential_sum()
+{
+    using std::exp;
+    Real eps = std::numeric_limits<float>::epsilon();
+    for (Real x = -20; x <= -1; x += 0.5)
+    {
+        auto cond = summation_condition_number<Real>(1);
+        size_t n = 1;
+        Real term = x;
+        while(n++ < 1000)
+        {
+            cond += term;
+            term *= (x/n);
+        }
+        BOOST_CHECK_CLOSE_FRACTION(exp(x), cond.sum(), eps*cond());
+    }
+}
+
+
+
+template<class Real>
 void test_evaluation_condition_number()
 {
     using std::abs;
@@ -84,8 +105,6 @@ void test_evaluation_condition_number()
     {
         BOOST_CHECK_GE(cond, 4900);
     }
-
-
 }
 
 
@@ -97,4 +116,5 @@ BOOST_AUTO_TEST_CASE(numerical_differentiation_test)
     test_evaluation_condition_number<double>();
     test_evaluation_condition_number<long double>();
     test_evaluation_condition_number<cpp_bin_float_50>();
+    test_exponential_sum<double>();
 }
