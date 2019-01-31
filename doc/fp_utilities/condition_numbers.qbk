@@ -94,8 +94,20 @@ It is computed as follows:
     double cond = evaluation_condition_number(f, 1.125);
     // cond = 1/log(x)
 
+[heading Caveats]
 
-References:
+The condition number of function evaluation gives us a measure of how sensitive our function is to roundoff error.
+Unfortunately, evaluating the condition number requires evaluating the function and its derivative,
+and this calculation is itself inaccurate whenever the condition number of function evaluation is large.
+Sadly, this is also the regime when you are most interested in evaluating a condition number!
+
+This seems to be a fundamental problem.
+However, it should not be necessary to evaluate the condition number to high accuracy,
+valuable insights can be obtained simply by looking at the change in condition number as the function
+evolves over its domain.
+
+
+[heading References]
 
 * Gautschi, Walter. ['Orthogonal polynomials: computation and approximation] Oxford University Press on Demand, 2004.
 
