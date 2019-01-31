@@ -25,6 +25,10 @@
 #include <boost/math/special_functions/hypergeometric_1F1.hpp>
 #include <boost/math/quadrature/exp_sinh.hpp>
 
+#ifdef BOOST_MSVC
+#pragma warning(disable:4127)
+#endif
+
 template <class Real, class T>
 void do_test_1F1(const T& data, const char* type_name, const char* test_name)
 {
@@ -96,7 +100,7 @@ void test_spots4(T, const char* type_name)
 template <class T>
 void test_spots5(T, const char* type_name)
 {
-   std::cout << "Testing special cases" << std::endl;
+   std::cout << "Testing special cases for type " << type_name << std::endl;
    //
    // Special cases:
    //

@@ -237,7 +237,6 @@
      BOOST_ASSERT(leading_a_shift > 1);
      BOOST_ASSERT(a_b_shift > 1);
 
-     boost::uintmax_t max_iter = 200;
      T first, second;
      first = boost::math::detail::hypergeometric_1F1_imp(T(a + a_shift), T(b + b_shift), z, pol, log_scaling);
      //

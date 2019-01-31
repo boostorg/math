@@ -19,26 +19,46 @@
      template <class T, class Policy>
      struct hypergeometric_1F1_igamma_series
      {
+        enum{ cache_size = 64 };
+
         typedef T result_type;
         hypergeometric_1F1_igamma_series(const T& alpha, const T& delta, const T& x, const Policy& pol)
-           : delta_poch(-delta), alpha_poch(alpha), x(x), k(0), pol(pol)
+           : delta_poch(-delta), alpha_poch(alpha), x(x), k(0), cache_offset(0), pol(pol)
         {
            BOOST_MATH_STD_USING
            T log_term = log(x) * -alpha;
            log_scaling = itrunc(log_term - 3 - boost::math::tools::log_min_value<T>() / 50);
            term = exp(log_term - log_scaling);
+           refill_cache();
         }
         T operator()()
         {
-           T result = term * boost::math::gamma_p(alpha_poch, x, pol);
+           if (k - cache_offset >= cache_size)
+           {
+              cache_offset += cache_size;
+              refill_cache();
+           }
+           T result = term * gamma_cache[k - cache_offset];
            term *= delta_poch * alpha_poch / (++k * x);
            delta_poch += 1;
            alpha_poch += 1;
            return result;
         }
+        void refill_cache()
+        {
+           typedef typename lanczos::lanczos<T, Policy>::type lanczos_type;
+
+           gamma_cache[cache_size - 1] = boost::math::gamma_p(alpha_poch + cache_size - 1, x, pol);
+           for (int i = cache_size - 1; i > 0; --i)
+           {
+              gamma_cache[i - 1] = gamma_cache[i] >= 1 ? 1 : gamma_cache[i] + regularised_gamma_prefix(alpha_poch + i - 1, x, pol, lanczos_type()) / (alpha_poch + i - 1);
+           }
+        }
         T delta_poch, alpha_poch, x, term;
+        T gamma_cache[cache_size];
         int k;
         int log_scaling;
+        int cache_offset;
         Policy pol;
      };
 
