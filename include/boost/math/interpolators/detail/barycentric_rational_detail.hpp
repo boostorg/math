@@ -9,6 +9,8 @@
 #define BOOST_MATH_INTERPOLATORS_BARYCENTRIC_RATIONAL_DETAIL_HPP
 
 #include <vector>
+#include <utility> // for std::move
+#include <algorithm> // for std::is_sorted
 #include <boost/lexical_cast.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/core/demangle.hpp>
@@ -91,6 +93,7 @@ barycentric_rational_imp<Real>::barycentric_rational_imp(std::vector<Real>&& x, 
 {
     BOOST_ASSERT_MSG(m_x.size() == m_y.size(), "There must be the same number of abscissas and ordinates.");
     BOOST_ASSERT_MSG(approximation_order < m_x.size(), "Approximation order must be < data length.");
+    BOOST_ASSERT_MSG(std::is_sorted(m_x.begin(), m_x.end()), "The abscissas must be listed in increasing order x[0] < x[1] < ... < x[n-1].");
     calculate_weights(approximation_order);
 }
 
@@ -121,7 +124,8 @@ void barycentric_rational_imp<Real>::calculate_weights(size_t approximation_orde
                 }
 
                 Real diff = m_x[k] - m_x[j];
-                if (abs(diff) < std::numeric_limits<Real>::min())
+                using std::numeric_limits;
+                if (abs(diff) < (numeric_limits<Real>::min)())
                 {
                    std::string msg = std::string("Spacing between  x[")
                       + boost::lexical_cast<std::string>(k) + std::string("] and x[")
