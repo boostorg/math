@@ -248,7 +248,7 @@ namespace detail {
    }
 
    template<class F, class Real, class tag>
-   Real finite_difference_derivative(const F f, Real x, Real* error, const tag&)
+   Real finite_difference_derivative(const F, Real, Real*, const tag&)
    {
       // Always fails, but condition is template-arg-dependent so only evaluated if we get instantiated.
       BOOST_STATIC_ASSERT_MSG(sizeof(Real) == 0, "Finite difference not implemented for this order: try 1, 2, 4, 6 or 8");
