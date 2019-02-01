@@ -34,14 +34,14 @@ void test_dlp_norms()
 {
     std::cout << "Testing Discrete Legendre Polynomial norms on type " << typeid(Real).name() << "\n";
     Real tol = std::numeric_limits<Real>::epsilon();
-    auto dlp = discrete_legendre<Real>(1);
+    auto dlp = discrete_legendre<Real>(1, Real(0));
     BOOST_CHECK_CLOSE_FRACTION(dlp.norm_sq(0), 3, tol);
     BOOST_CHECK_CLOSE_FRACTION(dlp.norm_sq(1), 2, tol);
-    dlp = discrete_legendre<Real>(2);
+    dlp = discrete_legendre<Real>(2, Real(0));
     BOOST_CHECK_CLOSE_FRACTION(dlp.norm_sq(0), Real(5)/Real(2), tol);
     BOOST_CHECK_CLOSE_FRACTION(dlp.norm_sq(1), Real(5)/Real(4), tol);
     BOOST_CHECK_CLOSE_FRACTION(dlp.norm_sq(2), Real(3*3*7)/Real(pow(2,6)), 2*tol);
-    dlp = discrete_legendre<Real>(200);
+    dlp = discrete_legendre<Real>(200, Real(0));
     for(size_t r = 0; r < 10; ++r)
     {
         Real calc = dlp.norm_sq(r);
@@ -58,8 +58,8 @@ void test_dlp_evaluation()
     std::cout << "Testing evaluation of Discrete Legendre polynomials on type " << typeid(Real).name() << "\n";
     Real tol = std::numeric_limits<Real>::epsilon();
     size_t n = 25;
-    auto dlp = discrete_legendre<Real>(n);
     Real x = 0.72;
+    auto dlp = discrete_legendre<Real>(n, x);
     Real q0 = dlp(x, 0);
     BOOST_TEST(q0 == 1);
     Real q1 = dlp(x, 1);
@@ -75,7 +75,7 @@ void test_dlp_evaluation()
     // q_r(x) is even for even r, and odd for odd r:
     for (size_t n = 8; n < 22; ++n)
     {
-        dlp = discrete_legendre<Real>(n);
+        dlp = discrete_legendre<Real>(n, x);
         for(size_t r = 2; r <= n; ++r)
         {
             if (r & 1)
@@ -113,16 +113,15 @@ void test_dlp_next()
 
     for(size_t n = 2; n < 20; ++n)
     {
-        auto dlp = discrete_legendre<Real>(n);
         for(Real x = -1; x <= 1; x += 0.1)
         {
-            dlp.initialize_recursion(x);
+            auto dlp = discrete_legendre<Real>(n, x);
             for (size_t k = 2; k < n; ++k)
             {
                 BOOST_CHECK_CLOSE(dlp.next(), dlp(x, k), tol);
             }
 
-            dlp.initialize_recursion(x);
+            dlp = discrete_legendre<Real>(n, x);
             for (size_t k = 2; k < n; ++k)
             {
                 BOOST_CHECK_CLOSE(dlp.next_prime(), dlp.prime(x, k), tol);
@@ -138,8 +137,8 @@ void test_dlp_derivatives()
     std::cout << "Testing Discrete Legendre polynomial derivatives on type " << typeid(Real).name() << "\n";
     Real tol = 10*std::numeric_limits<Real>::epsilon();
     int n = 25;
-    auto dlp = discrete_legendre<Real>(n);
     Real x = 0.72;
+    auto dlp = discrete_legendre<Real>(n, x);
     Real q0p = dlp.prime(x, 0);
     BOOST_TEST(q0p == 0);
     Real q1p = dlp.prime(x, 1);
@@ -154,9 +153,8 @@ void test_dlp_second_derivative()
 {
     std::cout << "Testing Discrete Legendre polynomial derivatives on type " << typeid(Real).name() << "\n";
     int n = 25;
-    auto dlp = discrete_legendre<Real>(n);
     Real x = Real(1)/Real(3);
-    dlp.initialize_recursion(x);
+    auto dlp = discrete_legendre<Real>(n, x);
     Real q2pp = dlp.next_dbl_prime();
     BOOST_TEST(q2pp == 3);
 }
