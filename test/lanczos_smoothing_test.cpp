@@ -490,32 +490,31 @@ void test_acceleration_filters()
                     f[i] = static_cast<Real>(g[i]);
                 }
 
-                Real sum = 0;
-                Real c = 0;
-                for (auto & x : f)
-                {
-                    Real y = x - c;
-                    Real t = sum + y;
-                    c = (t - sum) - y;
-                    sum = t;
-                }
-                BOOST_CHECK_SMALL(abs(sum), 1000*eps);
+                auto cond = summation_condition_number<Real>(0);
 
-                sum = 0;
+                for (size_t i = 0; i < f.size() - 1; ++i)
+                {
+                    cond += f[i];
+                }
+                BOOST_CHECK_CLOSE_FRACTION(cond.sum(), -f[f.size()-1], cond()*eps);
+
+
+                cond = summation_condition_number<Real>(0);
+                for (size_t k = 0; k < f.size() -1; ++k)
+                {
+                    Real j = Real(k) - Real(n);
+                    cond += (j-s)*f[k];
+                }
+                Real expected = -(Real(f.size()-1)- Real(n) - s)*f[f.size()-1];
+                BOOST_CHECK_CLOSE_FRACTION(cond.sum(), expected, cond()*eps);
+
+                cond = summation_condition_number<Real>(0);
                 for (size_t k = 0; k < f.size(); ++k)
                 {
                     Real j = Real(k) - Real(n);
-                    sum += (j-s)*f[k];
+                    cond += (j-s)*(j-s)*f[k];
                 }
-                BOOST_CHECK_SMALL(sum, sqrt(eps));
-
-                sum = 0;
-                for (size_t k = 0; k < f.size(); ++k)
-                {
-                    Real j = Real(k) - Real(n);
-                    sum += (j-s)*(j-s)*f[k];
-                }
-                BOOST_CHECK_CLOSE_FRACTION(sum, 2, 4*sqrt(eps));
+                BOOST_CHECK_CLOSE_FRACTION(cond.sum(), 2, cond()*eps);
                 // See unlabelled equation in McDevitt, 2012, just after equation 26:
                 // It appears that there is an off-by-one error in that equation, since p + 1 moments don't vanish, only p.
                 // This test is itself suspect; the condition number of the moment sum is infinite.
@@ -523,18 +522,14 @@ void test_acceleration_filters()
                 // behavior of the actual filter, it's not a big deal.
                 for (size_t l = 3; l <= p; ++l)
                 {
-                    sum = 0;
-                    Real c = 0;
-                    for (size_t k = 0; k < f.size(); ++k)
+                    cond = summation_condition_number<Real>(0);
+                    for (size_t k = 0; k < f.size() - 1; ++k)
                     {
                         Real j = Real(k) - Real(n);
-                        Real term = pow((j-s), l)*f[k];
-                        Real y = term - c;
-                        Real t = sum + y;
-                        c = (t - sum) - y;
-                        sum = t;
+                        cond += pow((j-s), l)*f[k];
                     }
-                    BOOST_CHECK_SMALL(abs(sum), 500*sqrt(eps));
+                    Real expected = -pow(Real(f.size()- 1 - n -s), l)*f[f.size()-1];
+                    BOOST_CHECK_CLOSE_FRACTION(cond.sum(), expected, cond()*eps);
                 }
             }
         }
