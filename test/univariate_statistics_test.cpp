@@ -748,7 +748,6 @@ int main()
     test_median_absolute_deviation<double>();
     test_median_absolute_deviation<long double>();
     test_median_absolute_deviation<cpp_bin_float_50>();
-    test_median_absolute_deviation<int>();
 
     test_gini_coefficient<float>();
     test_gini_coefficient<double>();
