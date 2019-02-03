@@ -352,7 +352,12 @@ namespace boost { namespace math { namespace detail {
             if (a < 0)
             {
                T z_limit = fabs((2 * a - b) / (sqrt(fabs(a))));
-               if ((z < z_limit) || (a > -500))
+               //
+               // I hate these hard limits, but they're about the best we can do to try and avoid
+               // Bessel function internal failures: these will be caught and handled
+               // but up the expense of this function call:
+               //
+               if (((z < z_limit) || (a > -500)) && ((b > -500) || (b - 2 * a > 0)))
                   return detail::hypergeometric_1F1_AS_13_3_7_tricomi(a, b, z, pol, log_scaling);
             }
             else
