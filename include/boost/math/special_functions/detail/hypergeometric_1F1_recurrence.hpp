@@ -217,7 +217,7 @@
      if (a_shift > static_cast<boost::intmax_t>(boost::math::policies::get_max_series_iterations<Policy>()))
         return boost::math::policies::raise_evaluation_error<T>(function, "1F1 arguments sit in a range with a so negative that we have no evaluation method, got a = %1%", a, pol);
 
-     int a_b_shift = itrunc(b + b_shift);   // The max we can shift on a and b together
+     int a_b_shift = b < 0 ? itrunc(b + b_shift) : b_shift;   // The max we can shift on a and b together
      int leading_a_shift = 3;               // Just enough to make a negative
      if (a_b_shift > a_shift - 3)
      {
