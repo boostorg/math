@@ -31,21 +31,21 @@ void expected_results()
       ".*",                          // compiler
       ".*",                          // stdlib
       ".*",                          // platform
-      "cpp_bin_float_quad",          // test type(s)
+      "cpp_bin_float_quad|cpp_bin_float_double_extended",          // test type(s)
       "Integer a values",            // test data group
       ".*", 25000, 800);             // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
       ".*",                          // platform
-      "cpp_bin_float_quad",          // test type(s)
+      "cpp_bin_float_quad|cpp_bin_float_double_extended",          // test type(s)
       "Large.*",                     // test data group
       ".*", 500000, 20000);          // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
       ".*",                          // platform
-      "cpp_bin_float_quad",          // test type(s)
+      "cpp_bin_float_quad|cpp_bin_float_double_extended",          // test type(s)
       "Small.*",                     // test data group
       ".*", 2000, 200);              // test function
 
@@ -55,7 +55,7 @@ void expected_results()
       ".*",                          // platform
       "dec_40",                      // test type(s)
       "Integer a values",            // test data group
-      ".*", 8000, 800);             // test function
+      ".*", 12000, 800);             // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib

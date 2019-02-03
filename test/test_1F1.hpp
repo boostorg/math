@@ -101,11 +101,16 @@ template <class T>
 void test_spots5(T, const char* type_name)
 {
    std::cout << "Testing special cases for type " << type_name << std::endl;
+   BOOST_MATH_STD_USING
    //
    // Special cases:
    //
    using boost::math::hypergeometric_1F1;
    T tol = boost::math::tools::epsilon<T>() * 200;
+   if (std::numeric_limits<T>::digits > std::numeric_limits<double>::digits)
+      tol *= 2;
+   if (boost::is_class<T>::value)
+      tol *= 4;
    // b = 2a
    T computed = hypergeometric_1F1(T(-12.25), T(2 * -12.25), T(6.75));
    T expected = boost::lexical_cast<T>("22.995348157760091167706081204212893687052775606591209203948675272473773725021024450870565197330528784707135828761");
@@ -139,7 +144,7 @@ void test_spots5(T, const char* type_name)
    expected = exp(T(36.25));
    BOOST_CHECK_CLOSE(computed, expected, tol);
    computed = hypergeometric_1F1(T(1), T(2), T(36.25));
-   expected = expm1(T(36.25)) / T(36.25);
+   expected = boost::math::expm1(T(36.25)) / T(36.25);
    BOOST_CHECK_CLOSE(computed, expected, tol);
    computed = hypergeometric_1F1(T(10.25), T(9.25), T(36.25));
    expected = exp(T(36.25)) * (T(9.25) + T(36.25)) / T(9.25);
