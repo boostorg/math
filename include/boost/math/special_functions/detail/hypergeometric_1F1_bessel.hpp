@@ -37,26 +37,29 @@
         return log(boost::math::constants::e<T>() * x / (2 * v)) * v > tools::log_min_value<T>();
      }
 
-     template <class T, class Policy>
-     T tricomi_Ev(const T& v, const T& z, const Policy& pol)
+     //
+     // Returns an arbitrarily small value compared to "target" for use as a seed
+     // value for Bessel recurrences.  Note that we'd better not make it too small
+     // or underflow may occur resulting in either one of the terms in the
+     // recurrence being zero, or else the result being zero.  Using 1/epsilon
+     // as a safety factor ensures that if we do underflow to zero, all of the digits
+     // will have been cancelled out anyway:
+     //
+     template <class T>
+     T arbitrary_small_value(const T& target)
      {
-        BOOST_MATH_STD_USING
-        T result;
-        if (z == 0)
-           result = 1 / boost::math::tgamma(v + 1);
-        else if (z > 0)
-           result = boost::math::cyl_bessel_j(v, 2 * sqrt(z), pol);
-        else
-           result = boost::math::cyl_bessel_i(v, 2 * sqrt(-z), pol);
-        return result;
+        using std::fabs;
+        return (tools::min_value<T>() / tools::epsilon<T>()) * (fabs(target) > 1 ? target : 1);
      }
+
 
      template <class T, class Policy>
      struct hypergeometric_1F1_AS_13_3_7_tricomi_series
      {
-        //
-        // TODO: store and cache Bessel function evaluations via backwards recurrence.
-        //
+        typedef T result_type;
+
+        enum { cache_size = 64 };
+
         hypergeometric_1F1_AS_13_3_7_tricomi_series(const T& a, const T& b, const T& z, const Policy& pol_)
            : A_minus_2(1), A_minus_1(0), A(b / 2), mult(z / 2), term(1), b_minus_1_plus_n(b - 1),
             bessel_arg((b / 2 - a) * z),
@@ -65,7 +68,7 @@
            BOOST_MATH_STD_USING
            term /= pow(fabs(bessel_arg), b_minus_1_plus_n / 2);
            mult /= sqrt(fabs(bessel_arg));
-           if ((term == 0) || !(boost::math::isfinite)(term))
+           if ((term == 0) || !(boost::math::isfinite)(term) || (!std::numeric_limits<T>::has_infinity && (fabs(term) > tools::max_value<T>())))
            {
               term = -log(fabs(bessel_arg)) * b_minus_1_plus_n / 2;
               log_scale = itrunc(term);
@@ -74,6 +77,23 @@
            }
            else
               log_scale = 0;
+           bessel_cache[cache_size - 1] = bessel_arg > 0 ? boost::math::cyl_bessel_j(b_minus_1_plus_n - 1, 2 * sqrt(bessel_arg), pol) : boost::math::cyl_bessel_i(b_minus_1_plus_n - 1, 2 * sqrt(-bessel_arg), pol);
+#ifndef BOOST_NO_CXX17_IF_CONSTEXPR
+           if constexpr (std::numeric_limits<T>::has_infinity)
+           {
+              if (!(boost::math::isfinite)(bessel_cache[cache_size - 1]))
+                 policies::raise_evaluation_error("hypergeometric_1F1_AS_13_3_7_tricomi_series<%1%>", "Expected finite Bessel function result but got %1%", bessel_cache[cache_size - 1], pol);
+           }
+           else
+              if ((boost::math::isnan)(bessel_cache[cache_size - 1]) || (fabs(bessel_cache[cache_size - 1]) >= tools::max_value<T>()))
+                 policies::raise_evaluation_error("hypergeometric_1F1_AS_13_3_7_tricomi_series<%1%>", "Expected finite Bessel function result but got %1%", bessel_cache[cache_size - 1], pol);
+#else
+           if ((std::numeric_limits<T>::has_infinity && !(boost::math::isfinite)(bessel_cache[cache_size - 1])) 
+              || (!std::numeric_limits<T>::has_infinity && ((boost::math::isnan)(bessel_cache[cache_size - 1]) || (fabs(bessel_cache[cache_size - 1]) >= tools::max_value<T>()))))
+              policies::raise_evaluation_error("hypergeometric_1F1_AS_13_3_7_tricomi_series<%1%>", "Expected finite Bessel function result but got %1%", bessel_cache[cache_size - 1], pol);
+#endif
+           cache_offset = -cache_size;
+           refill_cache();
         }
         T operator()()
         {
@@ -82,7 +102,9 @@
            // very small (or zero) when b == 2a:
            //
            BOOST_MATH_STD_USING
-           T result = A_minus_2 * term * tricomi_Ev(b_minus_1_plus_n, bessel_arg, pol);
+           if(n - 2 - cache_offset >= cache_size)
+              refill_cache();
+           T result = A_minus_2 * term * bessel_cache[n - 2 - cache_offset];
            term *= mult;
            ++n;
            T A_next = ((b_minus_1_plus_n + 2) * A_minus_1 + two_a_minus_b * A_minus_2) / n;
@@ -93,7 +115,9 @@
 
            if (A_minus_2 != 0)
            {
-              result += A_minus_2 * term * tricomi_Ev(b_minus_1_plus_n, bessel_arg, pol);
+              if (n - 2 - cache_offset >= cache_size)
+                 refill_cache();
+              result += A_minus_2 * term * bessel_cache[n - 2 - cache_offset];
            }
            term *= mult;
            ++n;
@@ -105,11 +129,180 @@
 
            return result;
         }
-        T A_minus_2, A_minus_1, A, mult, term, b_minus_1_plus_n, bessel_arg, two_a_minus_b;
-        const Policy& pol;
-        int n, log_scale;
 
-        typedef T result_type;
+        int scale()const
+        {
+           return log_scale;
+        }
+
+     private:
+        T A_minus_2, A_minus_1, A, mult, term, b_minus_1_plus_n, bessel_arg, two_a_minus_b;
+        std::array<T, cache_size> bessel_cache;
+        const Policy& pol;
+        int n, log_scale, cache_offset;
+
+        void refill_cache()
+        {
+           BOOST_MATH_STD_USING
+           //
+           // We don't calculate a new bessel I/J value: instead start our iterator off
+           // with an arbitrary small value, then when we get back to the last value in the previous cache
+           // calculate the ratio and use it to renormalise all the new values.  This is more efficient, but
+           // also avoids problems with J_v(x) or I_v(x) underflowing to zero.
+           //
+           cache_offset += cache_size;
+           T last_value = bessel_cache.back();
+           T ratio;
+           if (bessel_arg > 0)
+           {
+              //
+              // We will be calculating Bessel J.
+              // We need a different recurrence strategy for positive and negative orders:
+              //
+              if (b_minus_1_plus_n > 0)
+              {
+                 bessel_j_backwards_iterator<T> i(b_minus_1_plus_n + (int)cache_size - 1, 2 * sqrt(bessel_arg), arbitrary_small_value(last_value));
+
+                 for (int j = cache_size - 1; j >= 0; --j, ++i)
+                 {
+                    bessel_cache[j] = *i;
+                    //
+                    // Depending on the value of bessel_arg, the values stored in the cache can grow so
+                    // large as to overflow, if that looks likely then we need to rescale all the
+                    // existing terms (most of which will then underflow to zero).  In this situation
+                    // it's likely that our series will only need 1 or 2 terms of the series but we
+                    // can't be sure of that:
+                    //
+                    if ((j < cache_size - 2) && (tools::max_value<T>() / fabs(64 * bessel_cache[j] / bessel_cache[j + 1]) < fabs(bessel_cache[j])))
+                    {
+                       T scale = pow(fabs(bessel_cache[j] / bessel_cache[j + 1]), j + 1) * 2;
+                       if (!((boost::math::isfinite)(scale)))
+                          scale = tools::max_value<T>();
+                       for (int k = j; k < cache_size; ++k)
+                          bessel_cache[k] /= scale;
+                       bessel_j_backwards_iterator<T> ti(b_minus_1_plus_n + j, 2 * sqrt(bessel_arg), bessel_cache[j + 1], bessel_cache[j]);
+                       i = ti;
+                    }
+                 }
+                 ratio = last_value / *i;
+              }
+              else
+              {
+                 //
+                 // Negative order is difficult: the J_v(x) recurrence relations are unstable
+                 // *in both directions* for v < 0, except as v -> -INF when we have
+                 // J_-v(x)  ~= -sin(pi.v)Y_v(x).
+                 // For small v what we can do is compute every other Bessel function and
+                 // then fill in the gaps using the recurrence relation.  This *is* stable
+                 // provided that v is not so negative that the above approximation holds.
+                 //
+                 bessel_cache[1] = cyl_bessel_j(b_minus_1_plus_n + 1, 2 * sqrt(bessel_arg), pol);
+                 bessel_cache[0] = (last_value + bessel_cache[1]) / (b_minus_1_plus_n / sqrt(bessel_arg));
+                 int pos = 2;
+                 while ((pos < cache_size - 1) && (b_minus_1_plus_n + pos < 0))
+                 {
+                    bessel_cache[pos + 1] = cyl_bessel_j(b_minus_1_plus_n + pos + 1, 2 * sqrt(bessel_arg), pol);
+                    bessel_cache[pos] = (bessel_cache[pos-1] + bessel_cache[pos+1]) / ((b_minus_1_plus_n + pos) / sqrt(bessel_arg));
+                    pos += 2;
+                 }
+                 if (pos < cache_size)
+                 {
+                    //
+                    // We have crossed over into the region where backward recursion is the stable direction
+                    // start from arbitrary value and recurse down to "pos" and normalise:
+                    //
+                    bessel_j_backwards_iterator<T> i2(b_minus_1_plus_n + (int)cache_size - 1, 2 * sqrt(bessel_arg), arbitrary_small_value(bessel_cache[pos-1]));
+                    for (int loc = cache_size - 1; loc >= pos; --loc)
+                       bessel_cache[loc] = *i2++;
+                    ratio = bessel_cache[pos - 1] / *i2;
+                    //
+                    // Sanity check, if we normalised to an unusually small value then it was likely
+                    // to be near a root and the calculated ratio is garbage, if so perform one
+                    // more J_v(x) evaluation at position and normalise again:
+                    //
+                    if (fabs(bessel_cache[pos] * ratio / bessel_cache[pos - 1]) > 5)
+                       ratio = cyl_bessel_j(b_minus_1_plus_n + pos, 2 * sqrt(bessel_arg), pol) / bessel_cache[pos];
+                    while (pos < cache_size)
+                       bessel_cache[pos++] *= ratio;
+                 }
+                 ratio = 1;
+              }
+           }
+           else
+           {
+              //
+              // Bessel I.
+              // We need a different recurrence strategy for positive and negative orders:
+              //
+              if (b_minus_1_plus_n > 0)
+              {
+                 bessel_i_backwards_iterator<T> i(b_minus_1_plus_n + (int)cache_size - 1, 2 * sqrt(-bessel_arg), arbitrary_small_value(last_value));
+
+                 for (int j = cache_size - 1; j >= 0; --j, ++i)
+                 {
+                    bessel_cache[j] = *i;
+                    //
+                    // Depending on the value of bessel_arg, the values stored in the cache can grow so
+                    // large as to overflow, if that looks likely then we need to rescale all the
+                    // existing terms (most of which will then underflow to zero).  In this situation
+                    // it's likely that our series will only need 1 or 2 terms of the series but we
+                    // can't be sure of that:
+                    //
+                    if ((j < cache_size - 2) && (tools::max_value<T>() / fabs(64 * bessel_cache[j] / bessel_cache[j + 1]) < fabs(bessel_cache[j])))
+                    {
+                       T scale = pow(fabs(bessel_cache[j] / bessel_cache[j + 1]), j + 1) * 2;
+                       if (!((boost::math::isfinite)(scale)))
+                          scale = tools::max_value<T>();
+                       for (int k = j; k < cache_size; ++k)
+                          bessel_cache[k] /= scale;
+                       i = bessel_i_backwards_iterator<T>(b_minus_1_plus_n + j, 2 * sqrt(-bessel_arg), bessel_cache[j + 1], bessel_cache[j]);
+                    }
+                 }
+                 ratio = last_value / *i;
+              }
+              else
+              {
+                 //
+                 // Forwards iteration is stable:
+                 //
+                 bessel_i_forwards_iterator<T> i(b_minus_1_plus_n, 2 * sqrt(-bessel_arg));
+                 int pos = 0;
+                 while ((pos < cache_size) && (b_minus_1_plus_n + pos < 0.5))
+                 {
+                    bessel_cache[pos++] = *i++;
+                 }
+                 if (pos < cache_size)
+                 {
+                    //
+                    // We have crossed over into the region where backward recursion is the stable direction
+                    // start from arbitrary value and recurse down to "pos" and normalise:
+                    //
+                    bessel_i_backwards_iterator<T> i2(b_minus_1_plus_n + (int)cache_size - 1, 2 * sqrt(-bessel_arg), arbitrary_small_value(last_value));
+                    for (int loc = cache_size - 1; loc >= pos; --loc)
+                       bessel_cache[loc] = *i2++;
+                    ratio = bessel_cache[pos - 1] / *i2;
+                    while (pos < cache_size)
+                       bessel_cache[pos++] *= ratio;
+                 }
+                 ratio = 1;
+              }
+           }
+           if(ratio != 1)
+              for (auto j = bessel_cache.begin(); j != bessel_cache.end(); ++j)
+                 *j *= ratio;
+           //
+           // Very occationally our normalisation fails because the normalisztion value
+           // is sitting right on top of a root (or very close to it).  When that happens
+           // best to calculate a fresh Bessel evaluation and normalise again.
+           //
+           if (fabs(bessel_cache[0] / last_value) > 5)
+           {
+              ratio = (bessel_arg < 0 ? cyl_bessel_i(b_minus_1_plus_n, 2 * sqrt(-bessel_arg), pol) : cyl_bessel_j(b_minus_1_plus_n, 2 * sqrt(bessel_arg), pol)) / bessel_cache[0];
+              if (ratio != 1)
+                 for (auto j = bessel_cache.begin(); j != bessel_cache.end(); ++j)
+                    *j *= ratio;
+           }
+        }
      };
 
      template <class T, class Policy>
@@ -129,6 +322,14 @@
         int prefix_sgn(0);
         bool use_logs = false;
         int scale = 0;
+        //
+        // We can actually support the b == 2a case within here, but we haven't
+        // as we appear never to get here in practice.  Which means this get out
+        // clause is a bit of defensive programming....
+        //
+        if(b == 2 * a)
+           return hypergeometric_1F1_divergent_fallback(a, b, z, pol, log_scale);
+
         try
         {
            prefix = boost::math::tgamma(b, pol);
@@ -138,7 +339,7 @@
         {
            use_logs = true;
         }
-        if (use_logs || (prefix == 0) || !(boost::math::isfinite)(prefix))
+        if (use_logs || (prefix == 0) || !(boost::math::isfinite)(prefix) || (!std::numeric_limits<T>::has_infinity && (fabs(prefix) >= tools::max_value<T>())))
         {
            use_logs = true;
            prefix = boost::math::lgamma(b, &prefix_sgn, pol) + z / 2;
@@ -146,29 +347,44 @@
            log_scale += scale;
            prefix -= scale;
         }
-        hypergeometric_1F1_AS_13_3_7_tricomi_series<T, Policy> s(a, b, z, pol);
-        log_scale += s.log_scale;
+        T result(0);
         boost::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
         bool retry = false;
-        T result(0);
+        int series_scale = 0;
         try
         {
-           result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
-           if (!(boost::math::isfinite)(result) || (result == 0))
+           hypergeometric_1F1_AS_13_3_7_tricomi_series<T, Policy> s(a, b, z, pol);
+           series_scale = s.scale();
+           log_scale += s.scale();
+           try
+           {
+              result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
+              if (!(boost::math::isfinite)(result) || (result == 0) || (!std::numeric_limits<T>::has_infinity && (fabs(result) >= tools::max_value<T>())))
+                 retry = true;
+           }
+           catch (const std::overflow_error&)
+           {
               retry = true;
+           }
+           catch (const boost::math::evaluation_error&)
+           {
+              retry = true;
+           }
         }
         catch (const std::overflow_error&)
         {
-           retry = true;
+           log_scale -= scale;
+           return hypergeometric_1F1_divergent_fallback(a, b, z, pol, log_scale);
         }
         catch (const boost::math::evaluation_error&)
         {
-           retry = true;
+           log_scale -= scale;
+           return hypergeometric_1F1_divergent_fallback(a, b, z, pol, log_scale);
         }
         if (retry)
         {
            log_scale -= scale;
-           log_scale -= s.log_scale;
+           log_scale -= series_scale;
            return hypergeometric_1F1_divergent_fallback(a, b, z, pol, log_scale);
         }
         boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1F1_AS_13_3_7<%1%>(%1%,%1%,%1%)", max_iter, pol);
@@ -255,7 +471,7 @@
            //
            cache_offset += cache_size;
            T last_value = bessel_i_cache.back();
-           bessel_i_backwards_iterator<T> i(b_minus_a_minus_half + cache_offset + (int)cache_size - 1, half_z, tools::min_value<T>() * (fabs(last_value) > 1 ? last_value : 32));
+           bessel_i_backwards_iterator<T> i(b_minus_a_minus_half + cache_offset + (int)cache_size - 1, half_z, tools::min_value<T>() * (fabs(last_value) > 1 ? last_value : 1));
 
            for (int j = cache_size - 1; j >= 0; --j, ++i)
            {
@@ -270,7 +486,7 @@
               if((j < cache_size - 2) && (tools::max_value<T>() / fabs(64 * bessel_i_cache[j] / bessel_i_cache[j + 1]) < fabs(bessel_i_cache[j])))
               {
                  T scale = pow(fabs(bessel_i_cache[j] / bessel_i_cache[j + 1]), j + 1) * 2;
-                 if (!(boost::math::isfinite(scale)))
+                 if (!((boost::math::isfinite)(scale)))
                     scale = tools::max_value<T>();
                  for (int k = j; k < cache_size; ++k)
                     bessel_i_cache[k] /= scale;
