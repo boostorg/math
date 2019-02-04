@@ -29,7 +29,7 @@ enum CP { call, put };
 
 // Assume zero annual dividend yield (q=0).
 template<typename Price,typename Sigma,typename Tau,typename Rate>
-autodiff::promote<Price,Sigma,Tau,Rate>
+promote<Price,Sigma,Tau,Rate>
     black_scholes_option_price(CP cp, double K, const Price& S, const Sigma& sigma, const Tau& tau, const Rate& r)
 {
   using namespace std;
@@ -44,10 +44,10 @@ autodiff::promote<Price,Sigma,Tau,Rate>
 int main()
 {
   const double K = 100.0; // Strike price.
-  const autodiff::variable<double,3> S(105); // Stock price.
-  const autodiff::variable<double,0,3> sigma(5); // Volatility.
-  const autodiff::variable<double,0,0,1> tau(30.0/365); // Time to expiration in years. (30 days).
-  const autodiff::variable<double,0,0,0,1> r(1.25/100); // Interest rate.
+  const auto S     = make_fvar<double,3>(105); // Stock price.
+  const auto sigma = make_fvar<double,0,3>(5); // Volatility.
+  const auto tau   = make_fvar<double,0,0,1>(30.0/365); // Time to expiration in years. (30 days).
+  const auto r     = make_fvar<double,0,0,0,1>(1.25/100); // Interest rate.
   const auto call_price = black_scholes_option_price(call, K, S, sigma, tau, r);
   const auto put_price  = black_scholes_option_price(put,  K, S, sigma, tau, r);
 

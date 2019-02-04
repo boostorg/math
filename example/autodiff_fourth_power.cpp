@@ -18,8 +18,8 @@ int main()
     using namespace boost::math::differentiation;
 
     constexpr int Order=5; // The highest order derivative to be calculated.
-    const autodiff::variable<double,Order> x(2.0); // Find derivatives at x=2.
-    const autodiff::variable<double,Order> y = fourth_power(x);
+    const autodiff_fvar<double,Order> x = make_fvar<double,Order>(2.0); // Find derivatives at x=2.
+    const autodiff_fvar<double,Order> y = fourth_power(x);
     for (int i=0 ; i<=Order ; ++i)
         std::cout << "y.derivative("<<i<<") = " << y.derivative(i) << std::endl;
     return 0;

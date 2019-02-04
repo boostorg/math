@@ -23,11 +23,11 @@ int main()
   constexpr int Nx=2; // Max order of derivative to calculate for x
   constexpr int Ny=4; // Max order of derivative to calculate for y
   constexpr int Nz=3; // Max order of derivative to calculate for z
-  using var = autodiff::variable<cpp_dec_float_100,Nw,Nx,Ny,Nz>;
-  const var w = autodiff::variable<cpp_dec_float_100,Nw>(11);
-  const var x = autodiff::variable<cpp_dec_float_100,0,Nx>(12);
-  const var y = autodiff::variable<cpp_dec_float_100,0,0,Ny>(13);
-  const var z = autodiff::variable<cpp_dec_float_100,0,0,0,Nz>(14);
+  using var = autodiff_fvar<cpp_dec_float_100,Nw,Nx,Ny,Nz>;
+  const var w = make_fvar<cpp_dec_float_100,Nw>(11);
+  const var x = make_fvar<cpp_dec_float_100,0,Nx>(12);
+  const var y = make_fvar<cpp_dec_float_100,0,0,Ny>(13);
+  const var z = make_fvar<cpp_dec_float_100,0,0,0,Nz>(14);
   const var v = f(w,x,y,z);
   // Calculated from Mathematica symbolic differentiation. See multiprecision.nb for script.
   const cpp_dec_float_100 answer("1976.31960074779771777988187529041872090812118921875499076582535951111845769110560421820940516423255314");
