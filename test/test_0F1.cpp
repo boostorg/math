@@ -22,10 +22,10 @@ void expected_results()
    }
    else
    {
-      largest_type = "long double|real_concept";
+      largest_type = "long double|real_concept|cpp_bin_float_quad|dec_40";
    }
 #else
-   largest_type = "(long\\s+)?double";
+   largest_type = "(long\\s+)?double|cpp_bin_float_quad|dec_40";
 #endif
 
    add_expected_result(
@@ -62,22 +62,31 @@ void expected_results()
 
 BOOST_AUTO_TEST_CASE( test_main )
 {
-   typedef boost::multiprecision::number<boost::multiprecision::cpp_dec_float<40> > dec_40;
    expected_results();
    BOOST_MATH_CONTROL_FP;
 
+#if !defined(TEST) || (TEST == 1)
 #ifndef BOOST_MATH_BUGGY_LARGE_FLOAT_CONSTANTS
    test_spots(0.0F, "float");
 #endif
    test_spots(0.0, "double");
+#endif
+
+#if !defined(TEST) || (TEST == 2)
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_spots(0.0L, "long double");
 #ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
    test_spots(boost::math::concepts::real_concept(0.1), "real_concept");
 #endif
 #endif
+#endif
+#if !defined(TEST) || (TEST == 3)
    test_spots(boost::multiprecision::cpp_bin_float_quad(), "cpp_bin_float_quad");
+#endif
+#if !defined(TEST) || (TEST == 4)
+   typedef boost::multiprecision::number<boost::multiprecision::cpp_dec_float<40> > dec_40;
    test_spots(dec_40(), "dec_40");
+#endif
 }
 
 

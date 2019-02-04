@@ -22,19 +22,37 @@ void expected_results()
    }
    else
    {
-      largest_type = "long double|real_concept";
+      largest_type = "long double|real_concept|cpp_bin_float_quad|dec_40";
    }
 #else
-   largest_type = "(long\\s+)?double";
+   largest_type = "(long\\s+)?double|cpp_bin_float_quad|dec_40";
 #endif
 
+   if (boost::math::policies::digits<double, boost::math::policies::policy<> >() != boost::math::policies::digits<long double, boost::math::policies::policy<> >())
+   {
+      add_expected_result(
+         ".*",                          // compiler
+         ".*",                          // stdlib
+         ".*",                          // platform
+         "double",                      // test type(s)
+         "Random non-integer a2.*",     // test data group
+         ".*", 10, 5);                  // test function
+      add_expected_result(
+         ".*",                          // compiler
+         ".*",                          // stdlib
+         ".*",                          // platform
+         "double",                      // test type(s)
+         "a1 = a2 \\+ 0\\.5",           // test data group
+         ".*", 10, 5);                  // test function
+   }
+   
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
       ".*",                          // platform
       largest_type,                  // test type(s)
       "Random non-integer a2.*",                   // test data group
-      ".*", 5000, 3000);               // test function
+      ".*", 9000, 3000);               // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
@@ -48,7 +66,7 @@ void expected_results()
       ".*",                          // platform
       largest_type,                  // test type(s)
       "a1 = a2 \\+ 0\\.5",                   // test data group
-      ".*", 700, 200);               // test function
+      ".*", 2000, 200);               // test function
 
    //
    // Finish off by printing out the compiler/stdlib/platform names,

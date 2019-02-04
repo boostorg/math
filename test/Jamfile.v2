@@ -94,7 +94,11 @@ lib compile_test_main : compile_test/main.cpp ;
 test-suite special_fun :
    [ run test_1F0.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_smart_ptr ] ] # hypergeometric_pFq_checked_series.hpp uses auto, the rest are from quadrature tests.
    [ run test_2F0.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_smart_ptr ] ]
-   [ run test_0F1.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_smart_ptr ] ]
+
+   [ run test_0F1.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_smart_ptr ] <define>TEST=1 : test_0F1_1 ]
+   [ run test_0F1.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_smart_ptr ] <define>TEST=2 : test_0F1_2 ]
+   [ run test_0F1.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_smart_ptr ] <define>TEST=3 : test_0F1_3 ]
+   [ run test_0F1.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_smart_ptr ] <define>TEST=4 : test_0F1_4 ]
 
    [ run test_1F1.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_smart_ptr ] <define>TEST=1 : test_1F1_integrals ]
    [ run test_1F1.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_smart_ptr ] <define>TEST=2 : test_1F1_float ]
