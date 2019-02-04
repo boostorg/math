@@ -51,7 +51,7 @@
            gamma_cache[cache_size - 1] = boost::math::gamma_p(alpha_poch + (int)cache_size - 1, x, pol);
            for (int i = cache_size - 1; i > 0; --i)
            {
-              gamma_cache[i - 1] = gamma_cache[i] >= 1 ? 1 : gamma_cache[i] + regularised_gamma_prefix(alpha_poch + i - 1, x, pol, lanczos_type()) / (alpha_poch + i - 1);
+              gamma_cache[i - 1] = gamma_cache[i] >= 1 ? T(1) : T(gamma_cache[i] + regularised_gamma_prefix(T(alpha_poch + i - 1), x, pol, lanczos_type()) / (alpha_poch + i - 1));
            }
         }
         T delta_poch, alpha_poch, x, term;
