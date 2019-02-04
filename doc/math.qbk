@@ -539,6 +539,7 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [include fp_utilities/fp_facets.qbk]
 [include fp_utilities/float_next.qbk]
 [include fp_utilities/float_comparison.qbk]
+[include fp_utilities/condition_numbers.qbk]
 [endmathpart]
 
 [mathpart cstdfloat..Specified-width floating-point typedefs]
@@ -669,6 +670,7 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [include quadrature/naive_monte_carlo.qbk]
 [include differentiation/numerical_differentiation.qbk]
 [include differentiation/autodiff.qbk]
+[include differentiation/lanczos_smoothing.qbk]
 [endmathpart]
 
 [include complex/complex-tr1.qbk]
