@@ -47,7 +47,9 @@
 #include <boost/math/special_functions/hypergeometric_1F0.hpp>
 #include <boost/math/special_functions/hypergeometric_0F1.hpp>
 #include <boost/math/special_functions/hypergeometric_2F0.hpp>
+#if !defined(BOOST_NO_CXX11_DECLTYPE) && !defined(BOOST_NO_CXX11_AUTO_DECLARATIONS) && !defined(BOOST_NO_CXX11_HDR_ARRAY)
 #include <boost/math/special_functions/hypergeometric_1F1.hpp>
+#endif
 #include <boost/math/special_functions/jacobi_elliptic.hpp>
 #include <boost/math/special_functions/laguerre.hpp>
 #include <boost/math/special_functions/lanczos.hpp>

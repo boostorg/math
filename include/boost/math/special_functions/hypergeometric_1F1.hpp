@@ -222,7 +222,7 @@ namespace boost { namespace math { namespace detail {
          if ((a < 0) && (a == ceil(a)))
             return detail::hypergeometric_1F1_generic_series(a, b, z, pol, log_scaling, function);
 
-         return (1 + (z / b)) * exp(z);
+         //return (b + z) * exp(z) / b;
       }
 
       if ((a == 1) && (b == 2))

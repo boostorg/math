@@ -104,7 +104,7 @@ namespace boost { namespace math { namespace detail {
             const unsigned int n = static_cast<unsigned int>(static_cast<boost::uintmax_t>(boost::math::lltrunc(-a1)));
             const unsigned int m = static_cast<unsigned int>(static_cast<boost::uintmax_t>(boost::math::lltrunc(-a2 - n)));
 
-            return (pow(z, n) * boost::math::factorial<T>(n, pol)) *
+            return (pow(z, T(n)) * boost::math::factorial<T>(n, pol)) *
                boost::math::laguerre(n, m, -(1 / z), pol);
          }
          else if ((a2 < 1) && (a1 <= a2))
@@ -113,7 +113,7 @@ namespace boost { namespace math { namespace detail {
             const unsigned int n = static_cast<unsigned int>(static_cast<boost::uintmax_t>(boost::math::lltrunc(-a2)));
             const unsigned int m = static_cast<unsigned int>(static_cast<boost::uintmax_t>(boost::math::lltrunc(-a1 - n)));
 
-            return (pow(z, n) * boost::math::factorial<T>(n, pol)) *
+            return (pow(z, T(n)) * boost::math::factorial<T>(n, pol)) *
                boost::math::laguerre(n, m, -(1 / z), pol);
          }
       }
