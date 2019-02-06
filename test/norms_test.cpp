@@ -797,7 +797,6 @@ void test_complex_sup_distance()
 
 int main()
 {
-    test_l0_pseudo_norm<uint8_t>();
     test_l0_pseudo_norm<unsigned>();
     test_l0_pseudo_norm<int>();
     test_l0_pseudo_norm<float>();
@@ -812,7 +811,6 @@ int main()
 
     test_hamming_distance<int>();
     test_hamming_distance<unsigned>();
-    test_hamming_distance<uint8_t>();
 
     test_l1_norm<float>();
     test_l1_norm<double>();
@@ -821,7 +819,6 @@ int main()
 
     test_integer_l1_norm<int>();
     test_integer_l1_norm<unsigned>();
-    test_integer_l1_norm<uint8_t>();
 
     test_complex_l1_norm<std::complex<float>>();
     test_complex_l1_norm<std::complex<double>>();
@@ -833,7 +830,6 @@ int main()
 
     test_integer_l1_distance<int>();
     test_integer_l1_distance<unsigned>();
-    test_integer_l1_distance<uint8_t>();
 
     test_complex_l1_distance<std::complex<float>>();
     test_complex_l1_distance<cpp_complex_50>();
@@ -850,14 +846,12 @@ int main()
 
     test_integer_l2_norm<int>();
     test_integer_l2_norm<unsigned>();
-    test_integer_l2_norm<uint8_t>();
 
     test_l2_distance<double>();
     test_l2_distance<cpp_bin_float_50>();
 
     test_integer_l2_distance<int>();
     test_integer_l2_distance<unsigned>();
-    test_integer_l2_distance<uint8_t>();
 
     test_complex_l2_distance<std::complex<double>>();
     test_complex_l2_distance<cpp_complex_50>();
@@ -874,7 +868,6 @@ int main()
 
     test_integer_lp<int>();
     test_integer_lp<unsigned>();
-    test_integer_lp<uint8_t>();
 
     test_lp_distance<double>();
     test_lp_distance<cpp_bin_float_50>();
@@ -884,7 +877,6 @@ int main()
 
     test_integer_lp_distance<int>();
     test_integer_lp_distance<unsigned>();
-    test_integer_lp_distance<uint8_t>();
 
     test_sup_norm<float>();
     test_sup_norm<double>();
@@ -893,7 +885,6 @@ int main()
 
     test_integer_sup_norm<int>();
     test_integer_sup_norm<unsigned>();
-    test_integer_sup_norm<uint8_t>();
 
     test_complex_sup_norm<std::complex<float>>();
     test_complex_sup_norm<std::complex<double>>();
@@ -905,7 +896,6 @@ int main()
 
     test_integer_sup_distance<int>();
     test_integer_sup_distance<unsigned>();
-    test_integer_sup_distance<uint8_t>();
 
     test_complex_sup_distance<std::complex<double>>();
     test_complex_sup_distance<cpp_complex_50>();
@@ -917,7 +907,6 @@ int main()
 
     test_integer_total_variation<uint32_t>();
     test_integer_total_variation<int>();
-    test_integer_total_variation<uint8_t>();
 
     return boost::report_errors();
 }
