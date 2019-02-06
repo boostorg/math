@@ -208,21 +208,21 @@ namespace boost { namespace math { namespace detail {
 
       const T b_minus_a = b - a;
 
-      // 0f0 (exp) case;
+      // 0f0 a == b case;
       if (b_minus_a == 0)
       {
          int scale = itrunc(z, pol);
          log_scaling += scale;
          return exp(z - scale);
       }
-
-      if ((b_minus_a == -1))
+      // Special case for b-a = -1, we don't use for small a as it throws the digits of a away and leads to large errors:
+      if ((b_minus_a == -1) /*&& (fabs(a) > 0.5)*/)
       {
-         // for negative integer a and b is reasonable to use truncated series - polynomial
-         if ((a < 0) && (a == ceil(a)))
+         // for negative small integer a it is reasonable to use truncated series - polynomial
+         if ((a < 0) && (a == ceil(a)) && (a > -50))
             return detail::hypergeometric_1F1_generic_series(a, b, z, pol, log_scaling, function);
 
-         //return (b + z) * exp(z) / b;
+         return (b + z) * exp(z) / b;
       }
 
       if ((a == 1) && (b == 2))
