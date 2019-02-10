@@ -514,7 +514,7 @@ void test_acceleration_filters()
                     Real j = Real(k) - Real(n);
                     cond += (j-s)*(j-s)*f[k];
                 }
-                BOOST_CHECK_CLOSE_FRACTION(cond.sum(), 2, 10*cond()*eps);
+                BOOST_CHECK_CLOSE_FRACTION(cond.sum(), 2, 100*cond()*eps);
                 // See unlabelled equation in McDevitt, 2012, just after equation 26:
                 // It appears that there is an off-by-one error in that equation, since p + 1 moments don't vanish, only p.
                 // This test is itself suspect; the condition number of the moment sum is infinite.
@@ -529,7 +529,7 @@ void test_acceleration_filters()
                         cond += pow((j-s), l)*f[k];
                     }
                     Real expected = -pow(Real(f.size()- 1 - n -s), l)*f[f.size()-1];
-                    BOOST_CHECK_CLOSE_FRACTION(cond.sum(), expected, 10*cond()*eps);
+                    BOOST_CHECK_CLOSE_FRACTION(cond.sum(), expected, 1000*cond()*eps);
                 }
             }
         }
