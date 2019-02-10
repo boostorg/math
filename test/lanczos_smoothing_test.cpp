@@ -16,6 +16,7 @@
 #include <boost/math/differentiation/lanczos_smoothing.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/math/special_functions/next.hpp> // for float_distance
+#include <boost/math/tools/condition_numbers.hpp>
 
 using std::abs;
 using std::pow;
@@ -28,20 +29,21 @@ using boost::math::differentiation::discrete_lanczos_derivative;
 using boost::math::differentiation::detail::discrete_legendre;
 using boost::math::differentiation::detail::interior_velocity_filter;
 using boost::math::differentiation::detail::boundary_velocity_filter;
+using boost::math::tools::summation_condition_number;
 
 template<class Real>
 void test_dlp_norms()
 {
     std::cout << "Testing Discrete Legendre Polynomial norms on type " << typeid(Real).name() << "\n";
     Real tol = std::numeric_limits<Real>::epsilon();
-    auto dlp = discrete_legendre<Real>(1);
+    auto dlp = discrete_legendre<Real>(1, Real(0));
     BOOST_CHECK_CLOSE_FRACTION(dlp.norm_sq(0), 3, tol);
     BOOST_CHECK_CLOSE_FRACTION(dlp.norm_sq(1), 2, tol);
-    dlp = discrete_legendre<Real>(2);
+    dlp = discrete_legendre<Real>(2, Real(0));
     BOOST_CHECK_CLOSE_FRACTION(dlp.norm_sq(0), Real(5)/Real(2), tol);
     BOOST_CHECK_CLOSE_FRACTION(dlp.norm_sq(1), Real(5)/Real(4), tol);
     BOOST_CHECK_CLOSE_FRACTION(dlp.norm_sq(2), Real(3*3*7)/Real(pow(2,6)), 2*tol);
-    dlp = discrete_legendre<Real>(200);
+    dlp = discrete_legendre<Real>(200, Real(0));
     for(size_t r = 0; r < 10; ++r)
     {
         Real calc = dlp.norm_sq(r);
@@ -58,8 +60,8 @@ void test_dlp_evaluation()
     std::cout << "Testing evaluation of Discrete Legendre polynomials on type " << typeid(Real).name() << "\n";
     Real tol = std::numeric_limits<Real>::epsilon();
     size_t n = 25;
-    auto dlp = discrete_legendre<Real>(n);
     Real x = 0.72;
+    auto dlp = discrete_legendre<Real>(n, x);
     Real q0 = dlp(x, 0);
     BOOST_TEST(q0 == 1);
     Real q1 = dlp(x, 1);
@@ -75,7 +77,7 @@ void test_dlp_evaluation()
     // q_r(x) is even for even r, and odd for odd r:
     for (size_t n = 8; n < 22; ++n)
     {
-        dlp = discrete_legendre<Real>(n);
+        dlp = discrete_legendre<Real>(n, x);
         for(size_t r = 2; r <= n; ++r)
         {
             if (r & 1)
@@ -113,16 +115,15 @@ void test_dlp_next()
 
     for(size_t n = 2; n < 20; ++n)
     {
-        auto dlp = discrete_legendre<Real>(n);
         for(Real x = -1; x <= 1; x += 0.1)
         {
-            dlp.initialize_recursion(x);
+            auto dlp = discrete_legendre<Real>(n, x);
             for (size_t k = 2; k < n; ++k)
             {
                 BOOST_CHECK_CLOSE(dlp.next(), dlp(x, k), tol);
             }
 
-            dlp.initialize_recursion(x);
+            dlp = discrete_legendre<Real>(n, x);
             for (size_t k = 2; k < n; ++k)
             {
                 BOOST_CHECK_CLOSE(dlp.next_prime(), dlp.prime(x, k), tol);
@@ -138,8 +139,8 @@ void test_dlp_derivatives()
     std::cout << "Testing Discrete Legendre polynomial derivatives on type " << typeid(Real).name() << "\n";
     Real tol = 10*std::numeric_limits<Real>::epsilon();
     int n = 25;
-    auto dlp = discrete_legendre<Real>(n);
     Real x = 0.72;
+    auto dlp = discrete_legendre<Real>(n, x);
     Real q0p = dlp.prime(x, 0);
     BOOST_TEST(q0p == 0);
     Real q1p = dlp.prime(x, 1);
@@ -154,9 +155,8 @@ void test_dlp_second_derivative()
 {
     std::cout << "Testing Discrete Legendre polynomial derivatives on type " << typeid(Real).name() << "\n";
     int n = 25;
-    auto dlp = discrete_legendre<Real>(n);
     Real x = Real(1)/Real(3);
-    dlp.initialize_recursion(x);
+    auto dlp = discrete_legendre<Real>(n, x);
     Real q2pp = dlp.next_dbl_prime();
     BOOST_TEST(q2pp == 3);
 }
@@ -165,6 +165,7 @@ void test_dlp_second_derivative()
 template<class Real>
 void test_interior_velocity_filter()
 {
+    using boost::math::constants::half;
     std::cout << "Testing interior filter on type " << typeid(Real).name() << "\n";
     Real tol = std::numeric_limits<Real>::epsilon();
     for(int n = 1; n < 10; ++n)
@@ -174,23 +175,22 @@ void test_interior_velocity_filter()
             auto f = interior_velocity_filter<Real>(n,p);
             // Since we only store half the filter coefficients,
             // we need to reindex the moment sums:
-            Real sum = 0;
+            auto cond = summation_condition_number<Real>(0);
             for (size_t j = 0; j < f.size(); ++j)
             {
-                sum += j*f[j];
+                cond += j*f[j];
             }
-            BOOST_CHECK_CLOSE_FRACTION(2*sum, 1, 1000*tol);
+            BOOST_CHECK_CLOSE_FRACTION(cond.sum(), half<Real>(), 2*cond()*tol);
 
             for (int l = 3; l <= p; l += 2)
             {
-                sum = 0;
-                for (size_t j = 0; j < f.size(); ++j)
+                cond = summation_condition_number<Real>(0);
+                for (size_t j = 0; j < f.size() - 1; ++j)
                 {
-                    // The condition number of this sum is infinite!
-                    // No need to get to worked up about the tolerance.
-                    sum += pow(Real(j), l)*f[j];
+                    cond += pow(Real(j), l)*f[j];
                 }
-                BOOST_CHECK_SMALL(sum, sqrt(tol)/100);
+                Real expected = -pow(Real(f.size() - 1), l)*f[f.size()-1];
+                BOOST_CHECK_CLOSE_FRACTION(expected, cond.sum(), 7*cond()*tol);
             }
             //std::cout << "(n,p) = (" << n  << "," << p << ") = {";
             //for (auto & x : f)
@@ -326,48 +326,44 @@ void test_boundary_velocity_filters()
             {
                 auto f = boundary_velocity_filter<Real>(n, p, s);
                 // Sum is zero:
-                Real sum = 0;
-                Real c = 0;
-                for (auto & x : f)
+                auto cond = summation_condition_number<Real>(0);
+                for (size_t i = 0; i < f.size() - 1; ++i)
                 {
-                    Real y = x - c;
-                    Real t = sum + y;
-                    c = (t-sum) -y;
-                    sum = t;
+                    cond += f[i];
                 }
-                BOOST_CHECK_SMALL(sum, 200*tol);
 
-                sum = 0;
-                c = 0;
+                BOOST_CHECK_CLOSE_FRACTION(cond.sum(), -f[f.size()-1], 6*cond()*tol);
+
+                cond = summation_condition_number<Real>(0);
                 for (size_t k = 0; k < f.size(); ++k)
                 {
                     Real j = Real(k) - Real(n);
                     // note the shifted index here:
-                    Real x = (j-s)*f[k];
-                    Real y = x - c;
-                    Real t = sum + y;
-                    c = (t-sum) -y;
-                    sum = t;
+                    cond += (j-s)*f[k];
                 }
-                BOOST_CHECK_CLOSE_FRACTION(sum, 1, 350*tol);
+                BOOST_CHECK_CLOSE_FRACTION(cond.sum(), 1, 6*cond()*tol);
 
 
                 for (int l = 2; l <= p; ++l)
                 {
-                    sum = 0;
-                    c = 0;
-                    for (size_t k = 0; k < f.size(); ++k)
+                    cond = summation_condition_number<Real>(0);
+                    for (size_t k = 0; k < f.size() - 1; ++k)
                     {
                         Real j = Real(k) - Real(n);
                         // The condition number of this sum is infinite!
                         // No need to get to worked up about the tolerance.
-                        Real x = pow(j-s, l)*f[k];
-                        Real y = x - c;
-                        Real t = sum + y;
-                        c = (t-sum) -y;
-                        sum = t;
+                        cond += pow(j-s, l)*f[k];
                     }
-                    BOOST_CHECK_SMALL(sum, sqrt(tol)/10);
+
+                    Real expected = -pow(Real(f.size()-1) - Real(n) - Real(s), l)*f[f.size()-1];
+                    if (expected == 0)
+                    {
+                        BOOST_CHECK_SMALL(cond.sum(), cond()*tol);
+                    }
+                    else
+                    {
+                        BOOST_CHECK_CLOSE_FRACTION(expected, cond.sum(), 200*cond()*tol);
+                    }
                 }
 
                 //std::cout << "(n,p,s) = ("<< n << ", " << p << "," << s << ") = {";
@@ -494,32 +490,31 @@ void test_acceleration_filters()
                     f[i] = static_cast<Real>(g[i]);
                 }
 
-                Real sum = 0;
-                Real c = 0;
-                for (auto & x : f)
-                {
-                    Real y = x - c;
-                    Real t = sum + y;
-                    c = (t - sum) - y;
-                    sum = t;
-                }
-                BOOST_CHECK_SMALL(abs(sum), 1000*eps);
+                auto cond = summation_condition_number<Real>(0);
 
-                sum = 0;
+                for (size_t i = 0; i < f.size() - 1; ++i)
+                {
+                    cond += f[i];
+                }
+                BOOST_CHECK_CLOSE_FRACTION(cond.sum(), -f[f.size()-1], 10*cond()*eps);
+
+
+                cond = summation_condition_number<Real>(0);
+                for (size_t k = 0; k < f.size() -1; ++k)
+                {
+                    Real j = Real(k) - Real(n);
+                    cond += (j-s)*f[k];
+                }
+                Real expected = -(Real(f.size()-1)- Real(n) - s)*f[f.size()-1];
+                BOOST_CHECK_CLOSE_FRACTION(cond.sum(), expected, 10*cond()*eps);
+
+                cond = summation_condition_number<Real>(0);
                 for (size_t k = 0; k < f.size(); ++k)
                 {
                     Real j = Real(k) - Real(n);
-                    sum += (j-s)*f[k];
+                    cond += (j-s)*(j-s)*f[k];
                 }
-                BOOST_CHECK_SMALL(sum, sqrt(eps));
-
-                sum = 0;
-                for (size_t k = 0; k < f.size(); ++k)
-                {
-                    Real j = Real(k) - Real(n);
-                    sum += (j-s)*(j-s)*f[k];
-                }
-                BOOST_CHECK_CLOSE_FRACTION(sum, 2, 4*sqrt(eps));
+                BOOST_CHECK_CLOSE_FRACTION(cond.sum(), 2, 10*cond()*eps);
                 // See unlabelled equation in McDevitt, 2012, just after equation 26:
                 // It appears that there is an off-by-one error in that equation, since p + 1 moments don't vanish, only p.
                 // This test is itself suspect; the condition number of the moment sum is infinite.
@@ -527,18 +522,14 @@ void test_acceleration_filters()
                 // behavior of the actual filter, it's not a big deal.
                 for (size_t l = 3; l <= p; ++l)
                 {
-                    sum = 0;
-                    Real c = 0;
-                    for (size_t k = 0; k < f.size(); ++k)
+                    cond = summation_condition_number<Real>(0);
+                    for (size_t k = 0; k < f.size() - 1; ++k)
                     {
                         Real j = Real(k) - Real(n);
-                        Real term = pow((j-s), l)*f[k];
-                        Real y = term - c;
-                        Real t = sum + y;
-                        c = (t - sum) - y;
-                        sum = t;
+                        cond += pow((j-s), l)*f[k];
                     }
-                    BOOST_CHECK_SMALL(abs(sum), 500*sqrt(eps));
+                    Real expected = -pow(Real(f.size()- 1 - n -s), l)*f[f.size()-1];
+                    BOOST_CHECK_CLOSE_FRACTION(cond.sum(), expected, 10*cond()*eps);
                 }
             }
         }
@@ -679,7 +670,7 @@ void test_data_representations()
 
     for(size_t i = 0; i < v2.size(); ++i)
     {
-        BOOST_CHECK_SMALL(v2[i], tol);
+        BOOST_CHECK_SMALL(v2[i], 10*tol);
     }
 
 }

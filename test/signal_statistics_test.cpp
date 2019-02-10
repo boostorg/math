@@ -296,7 +296,6 @@ int main()
     test_absolute_gini_coefficient<float>();
     test_absolute_gini_coefficient<double>();
     test_absolute_gini_coefficient<long double>();
-    test_absolute_gini_coefficient<cpp_bin_float_50>();
 
     test_hoyer_sparsity<float>();
     test_hoyer_sparsity<double>();
