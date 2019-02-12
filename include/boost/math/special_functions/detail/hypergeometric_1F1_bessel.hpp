@@ -404,6 +404,39 @@
      }
 
 
+     template <class T>
+     struct cyl_bessel_i_large_x_sum
+     {
+        typedef T result_type;
+
+        cyl_bessel_i_large_x_sum(const T& v, const T& x) : v(v), z(x), term(1), k(0) {}
+
+        T operator()()
+        {
+           T result = term;
+           ++k;
+           term *= -(4 * v * v - (2 * k - 1) * (2 * k - 1)) / (8 * k * z);
+           return result;
+        }
+        T v, z, term;
+        int k;
+     };
+
+     template <class T, class Policy>
+     T cyl_bessel_i_large_x_scaled(const T& v, const T& x, int& log_scaling, const Policy& pol)
+     {
+        BOOST_MATH_STD_USING
+           cyl_bessel_i_large_x_sum<T> s(v, x);
+        boost::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
+        T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
+        boost::math::policies::check_series_iterations<T>("boost::math::cyl_bessel_i_large_x<%1%>(%1%,%1%)", max_iter, pol);
+        int scale = boost::math::itrunc(x);
+        log_scaling += scale;
+        return result * exp(x - scale) / sqrt(boost::math::constants::two_pi<T>() * x);
+     }
+
+
+
      template <class T, class Policy>
      struct hypergeometric_1F1_AS_13_3_6_series
      {
@@ -423,9 +456,10 @@
         // the case for large z.
         //
         hypergeometric_1F1_AS_13_3_6_series(const T& a, const T& b, const T& z, const T& b_minus_a, const Policy& pol_)
-           : b_minus_a_minus_half(b_minus_a - 0.5f), half_z(z / 2), poch_1(2 * b_minus_a - 1), poch_2(b_minus_a - a), b_poch(b), term(1), last_result(1), sign(1), n(0), cache_offset(-cache_size), pol(pol_)
+           : b_minus_a(b_minus_a), half_z(z / 2), poch_1(2 * b_minus_a - 1), poch_2(b_minus_a - a), b_poch(b), term(1), last_result(1), sign(1), n(0), cache_offset(-cache_size), scale(0), pol(pol_)
         {
-           bessel_i_cache[cache_size - 1] = boost::math::cyl_bessel_i(b_minus_a_minus_half - 1, half_z, pol);
+           bessel_i_cache[cache_size - 1] = half_z > tools::log_max_value<T>() ?
+              cyl_bessel_i_large_x_scaled(b_minus_a - 1.5f, half_z, scale, pol) : boost::math::cyl_bessel_i(b_minus_a - 1.5f, half_z, pol);
            refill_cache();
         }
         T operator()()
@@ -434,10 +468,10 @@
            if(n - cache_offset >= cache_size)
               refill_cache();
 
-           T result = term * (b_minus_a_minus_half + n) * sign * bessel_i_cache[n - cache_offset];
+           T result = term * (b_minus_a - 0.5f + n) * sign * bessel_i_cache[n - cache_offset];
            ++n;
            term *= poch_1;
-           poch_1 += 1;
+           poch_1 = (n == 1) ? 2 * b_minus_a : poch_1 + 1;
            term *= poch_2;
            poch_2 += 1;
            term /= n;
@@ -453,10 +487,15 @@
            return result;
         }
 
+        int scaling()const
+        {
+           return scale;
+        }
+
      private:
-        T b_minus_a_minus_half, half_z, poch_1, poch_2, b_poch, term, last_result;
+        T b_minus_a, half_z, poch_1, poch_2, b_poch, term, last_result;
         int sign;
-        int n, cache_offset;
+        int n, cache_offset, scale;
         const Policy& pol;
         std::array<T, cache_size> bessel_i_cache;
 
@@ -471,7 +510,7 @@
            //
            cache_offset += cache_size;
            T last_value = bessel_i_cache.back();
-           bessel_i_backwards_iterator<T> i(b_minus_a_minus_half + cache_offset + (int)cache_size - 1, half_z, tools::min_value<T>() * (fabs(last_value) > 1 ? last_value : 1));
+           bessel_i_backwards_iterator<T> i(b_minus_a + cache_offset + (int)cache_size - 1.5f, half_z, tools::min_value<T>() * (fabs(last_value) > 1 ? last_value : 1));
 
            for (int j = cache_size - 1; j >= 0; --j, ++i)
            {
@@ -485,12 +524,12 @@
               //
               if((j < cache_size - 2) && (tools::max_value<T>() / fabs(64 * bessel_i_cache[j] / bessel_i_cache[j + 1]) < fabs(bessel_i_cache[j])))
               {
-                 T scale = pow(fabs(bessel_i_cache[j] / bessel_i_cache[j + 1]), j + 1) * 2;
-                 if (!((boost::math::isfinite)(scale)))
-                    scale = tools::max_value<T>();
+                 T rescale = pow(fabs(bessel_i_cache[j] / bessel_i_cache[j + 1]), j + 1) * 2;
+                 if (!((boost::math::isfinite)(rescale)))
+                    rescale = tools::max_value<T>();
                  for (int k = j; k < cache_size; ++k)
-                    bessel_i_cache[k] /= scale;
-                 i = bessel_i_backwards_iterator<T>(b_minus_a_minus_half + cache_offset + j, half_z, bessel_i_cache[j + 1], bessel_i_cache[j]);
+                    bessel_i_cache[k] /= rescale;
+                 i = bessel_i_backwards_iterator<T>(b_minus_a -0.5f + cache_offset + j, half_z, bessel_i_cache[j + 1], bessel_i_cache[j]);
               }
            }
            T ratio = last_value / *i;
@@ -520,6 +559,7 @@
         result *= boost::math::tgamma(b_minus_a - 0.5f) * pow(z / 4, -b_minus_a + 0.5f);
         int scale = itrunc(z / 2);
         log_scaling += scale;
+        log_scaling += s.scaling();
         result *= exp(z / 2 - scale);
         return result;
      }
