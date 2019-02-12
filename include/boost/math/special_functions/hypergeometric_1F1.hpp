@@ -156,6 +156,24 @@ namespace boost { namespace math { namespace detail {
    }
 
    template <class T>
+   T cyl_bessel_i_shrinkage_rate(const T& z)
+   {
+      // Approximately the ratio I_10.5(z/2) / I_9.5(z/2), this gives us an idea of how quickly
+      // the Bessel terms in A&S 13.6.4 are converging:
+      if (z < 160)
+         return 1;
+      if (z < 40)
+         return 0.75f;
+      if (z < 20)
+         return 0.5f;
+      if (z < 7)
+         return 0.25f;
+      if (z < 2)
+         return 0.1f;
+      return 0.05f;
+   }
+
+   template <class T>
    bool hypergeometric_1F1_is_13_3_6_region(const T& a, const T& b, const T& z)
    {
       BOOST_MATH_STD_USING
@@ -163,22 +181,10 @@ namespace boost { namespace math { namespace detail {
          return false;
       if ((z < 0) && (fabs(10 * a / b) < 1) && (fabs(a) < 50))
       {
-         if (b > 0)
-         {
-            // We want the first term not too divergent, and convergence by term 10:
-            if ((fabs((2 * a - 1) * (2 * a - b) / b) < 2) && (fabs((2 * a + 9) * (2 * a - b + 10) / (10 * (b + 10))) < 2))
-               // Can't have z too large, or else bessel_i will overflow:
-               if (-z / 4 < tools::log_max_value<T>())
-                  return true;
-         }
-         else
-         {
-            // We want the first term not too divergent, and convergence by term 10:
-            if ((fabs((2 * a - 1) * (2 * a - b) / b) < 2) && (fabs((2 * a + 9) * (2 * a - b + 10) / (10 * (b + 10))) < 2))
-               // Can't have z too large, or else bessel_i will overflow:
-               if (-z / 4 < tools::log_max_value<T>())
-                  return true;
-         }
+         T shrinkage = cyl_bessel_i_shrinkage_rate(z);
+         // We want the first term not too divergent, and convergence by term 10:
+         if ((fabs((2 * a - 1) * (2 * a - b) / b) < 2) && (fabs(shrinkage * (2 * a + 9) * (2 * a - b + 10) / (10 * (b + 10))) < 0.75))
+            return true;
       }
       return false;
    }
@@ -216,7 +222,7 @@ namespace boost { namespace math { namespace detail {
          return exp(z - scale);
       }
       // Special case for b-a = -1, we don't use for small a as it throws the digits of a away and leads to large errors:
-      if ((b_minus_a == -1) /*&& (fabs(a) > 0.5)*/)
+      if ((b_minus_a == -1) && (fabs(a) > 0.5))
       {
          // for negative small integer a it is reasonable to use truncated series - polynomial
          if ((a < 0) && (a == ceil(a)) && (a > -50))
