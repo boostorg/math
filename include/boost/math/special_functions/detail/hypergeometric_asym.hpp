@@ -126,6 +126,8 @@
     }
     else if (fabs((1 - (b - a) + half_digits) * (a + half_digits) / (half_digits * z)) < 0.7)
     {
+       if ((floor(b - a) == (b - a)) && (b - a < 0))
+          return false;  // Can't have a negative integer b-a.
        in_region = true;
        //
        // double check that we are not divergent at the start if a,b < 0:
