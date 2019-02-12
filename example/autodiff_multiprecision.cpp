@@ -4,7 +4,7 @@
 //           https://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/math/differentiation/autodiff.hpp>
-#include <boost/multiprecision/cpp_dec_float.hpp>
+#include <boost/multiprecision/cpp_bin_float.hpp>
 #include <iostream>
 
 template<typename T>
@@ -16,30 +16,31 @@ T f(const T& w, const T& x, const T& y, const T& z)
 
 int main()
 {
-  using cpp_dec_float_100 = boost::multiprecision::cpp_dec_float_100;
+  using cpp_bin_float_50 = boost::multiprecision::cpp_bin_float_50;
   using namespace boost::math::differentiation;
 
   constexpr int Nw=3; // Max order of derivative to calculate for w
   constexpr int Nx=2; // Max order of derivative to calculate for x
   constexpr int Ny=4; // Max order of derivative to calculate for y
   constexpr int Nz=3; // Max order of derivative to calculate for z
-  using var = autodiff_fvar<cpp_dec_float_100,Nw,Nx,Ny,Nz>;
-  const var w = make_fvar<cpp_dec_float_100,Nw>(11);
-  const var x = make_fvar<cpp_dec_float_100,0,Nx>(12);
-  const var y = make_fvar<cpp_dec_float_100,0,0,Ny>(13);
-  const var z = make_fvar<cpp_dec_float_100,0,0,0,Nz>(14);
+  using var = autodiff_fvar<cpp_bin_float_50,Nw,Nx,Ny,Nz>;
+  const var w = make_fvar<cpp_bin_float_50,Nw>(11);
+  const var x = make_fvar<cpp_bin_float_50,0,Nx>(12);
+  const var y = make_fvar<cpp_bin_float_50,0,0,Ny>(13);
+  const var z = make_fvar<cpp_bin_float_50,0,0,0,Nz>(14);
   const var v = f(w,x,y,z);
-  // Calculated from Mathematica symbolic differentiation. See multiprecision.nb for script.
-  const cpp_dec_float_100 answer("1976.31960074779771777988187529041872090812118921875499076582535951111845769110560421820940516423255314");
-  std::cout << std::setprecision(std::numeric_limits<cpp_dec_float_100>::digits10)
+  // Calculated from Mathematica symbolic differentiation.
+  const cpp_bin_float_50 answer("1976.319600747797717779881875290418720908121189218755");
+  std::cout << std::setprecision(std::numeric_limits<cpp_bin_float_50>::digits10)
     << "mathematica   : " << answer << '\n'
     << "autodiff      : " << v.derivative(Nw,Nx,Ny,Nz) << '\n'
-    << "relative error: " << std::setprecision(3) << (v.derivative(Nw,Nx,Ny,Nz)/answer-1) << std::endl;
+    << "relative error: " << std::setprecision(3) << (v.derivative(Nw,Nx,Ny,Nz)/answer-1)
+    << std::endl;
   return 0;
 }
 /*
 Output:
-mathematica   : 1976.319600747797717779881875290418720908121189218754990765825359511118457691105604218209405164232553
-autodiff      : 1976.319600747797717779881875290418720908121189218754990765825359511118457691105604218209405164232566
-relative error: 6.47e-99
+mathematica   : 1976.3196007477977177798818752904187209081211892188
+autodiff      : 1976.3196007477977177798818752904187209081211892188
+relative error: 2.67e-50
 **/

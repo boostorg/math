@@ -15,14 +15,14 @@ using namespace boost::math::differentiation;
 template<typename X>
 X phi(const X& x)
 {
-  return boost::math::constants::one_div_root_two_pi<double>()*exp(-0.5*x*x);
+  return boost::math::constants::one_div_root_two_pi<X>()*exp(-0.5*x*x);
 }
 
 // Standard normal cumulative distribution function
 template<typename X>
 X Phi(const X& x)
 {
-  return 0.5*erfc(-boost::math::constants::one_div_root_two<double>()*x);
+  return 0.5*erfc(-boost::math::constants::one_div_root_two<X>()*x);
 }
 
 enum CP { call, put };

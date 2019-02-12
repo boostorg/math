@@ -67,6 +67,7 @@ automatic differentiation] (forward mode) of mathematical functions of single an
 This implementation is based upon the [@https://en.wikipedia.org/wiki/Taylor_series Taylor series] expansion of
 an analytic function /f/ at the point ['x[sub 0]]:
 
+[/ Thanks to http://www.tlhiv.org/ltxpreview/ for LaTeX-to-SVG conversions. ]
 [/ \Large\begin{align*}
 f(x_0+\varepsilon) &= f(x_0) + f'(x_0)\varepsilon + \frac{f''(x_0)}{2!}\varepsilon^2 + \frac{f'''(x_0)}{3!}\varepsilon^3 + \cdots \\
   &= \sum_{n=0}^N\frac{f^{(n)}(x_0)}{n!}\varepsilon^n + O\left(\varepsilon^{N+1}\right).
@@ -78,20 +79,21 @@ the first-order polynomial ['x[sub 0]+\u03b5], the resulting polynomial in ['\u0
 derivatives within the coefficients. Each coefficient is equal to a derivative of its respective order, divided
 by the factorial of the order.
 
-Assume one is interested in the first /N/ derivatives of /f/ at ['x[sub 0]]. Then without any loss of precision
-to the calculation of the derivatives, all terms ['O(\u03b5[super N+1])] that include powers of ['\u03b5] greater
-than /N/ can be discarded, and under these truncation rules, /f/ provides a polynomial-to-polynomial transformation:
+Assume one is interested in calculating the first /N/ derivatives of /f/ at ['x[sub 0]]. Then without any loss of
+precision to the calculation of the derivatives, all terms ['O(\u03b5[super N+1])] that include powers of ['\u03b5]
+greater than /N/ can be discarded, and under these truncation rules, /f/ provides a polynomial-to-polynomial
+transformation:
 
 [/ \Large$$f \qquad : \qquad x_0+\varepsilon \qquad \mapsto \qquad
     \sum_{n=0}^Ny_n\varepsilon^n=\sum_{n=0}^N\frac{f^{(n)}(x_0)}{n!}\varepsilon^n.$$ ]
 [:[:[autodiff_equation polynomial_transform.svg]]]
 
-C++'s ability to overload operators and functions allows for the creation of a class `fvar` that represents
-polynomials in ['\u03b5]. Thus the same algorithm that calculates the numeric value of ['y[sub 0]=f(x[sub 0])]
-is also used to calculate the polynomial ['\u03a3[sub n]y[sub n]\u03b5[super n]=f(x[sub 0]+\u03b5)].
-The derivatives are then found from the product of the respective factorial and coefficient:
+C++'s ability to overload operators and functions allows for the creation of a class `fvar` ([_f]orward-mode autodiff
+[_var]iable) that represents polynomials in ['\u03b5]. Thus the same algorithm that calculates the numeric value of
+['y[sub 0]=f(x[sub 0])] is also used to calculate the polynomial ['\u03a3[sub n]y[sub n]\u03b5[super n]=f(x[sub
+0]+\u03b5)].  The derivatives are then found from the product of the respective factorial and coefficient:
 
-[/ \Large$$f^{(n)}(x_0)=n!y_n.$$ ]
+[/ \Large$$\frac{d^nf}{dx^n}(x_0)=n!y_n.$$ ]
 [:[:[autodiff_equation derivative_formula.svg]]]
 
 
@@ -101,11 +103,11 @@ The derivatives are then found from the product of the respective factorial and 
 
 [h3 Calculate derivatives of ['f(x)=x[super 4]] at /x/=2.]
 
-In this example, `autodiff_fvar<double,5>` is a data type that can hold a polynomial of up to degree 5,
-and `make_fvar<double,5>(2.0)` represents the polynomial 2+['\u03b5]. Internally, this is modeled by a
-`std::array<double,6>` whose elements `{2, 1, 0, 0, 0, 0}` correspond to the 6 coefficients of the polynomial upon
-initialization.  Its fourth power is a polynomial with coefficients `y = {16, 32, 24, 8, 1, 0}`.  The derivatives
-are obtained using the formula ['f[super (n)](2)=n!*y[n]].
+In this example, `autodiff_fvar<double,5>` is a data type that can hold a polynomial of up to degree 5, and
+`make_fvar<double,5>(2)` represents the polynomial 2+['\u03b5]. Internally, this is modeled by a `std::array<double,6>`
+whose elements `{2, 1, 0, 0, 0, 0}` correspond to the 6 coefficients of the polynomial upon initialization.
+Its fourth power is a polynomial with coefficients `y = {16, 32, 24, 8, 1, 0}`.  The derivatives are obtained
+using the formula ['f[super (n)](2)=n!*y[n]].
 
     #include <boost/math/differentiation/autodiff.hpp>
     #include <iostream>
@@ -154,15 +156,15 @@ Example 2: Multi-variable mixed partial derivatives with multi-precision data ty
 
 [/ \Large$\frac{\partial^{12}f}{\partial w^{3}\partial x^{2}\partial y^{4}\partial z^{3}}(11,12,13,14)$]
 [/ \Large$f(w,x,y,z)=\exp\left(w\sin\left(\frac{x\log(y)}{z}\right)+\sqrt{\frac{wz}{xy}}\right)+\frac{w^2}{\tan(z)}$]
-[h3 Calculate [autodiff_equation mixed12.svg] with a precision of about 100 decimal digits,
+[h3 Calculate [autodiff_equation mixed12.svg] with a precision of about 50 decimal digits,
 where [autodiff_equation example2f.svg].]
 
-In this example, the data type `autodiff_fvar<cpp_dec_float_100,Nw,Nx,Ny,Nz>` represents a multivariate polynomial
-in 4 independent variables, where the highest powers of each are `Nw`, `Nx`, `Ny` and `Nz`. The underlying
-arithmetic data type, aliased as `root_type`, is `boost::multiprecision::cpp_dec_float_100`. The internal data
-type is `std::array<std::array<std::array<std::array<cpp_dec_float_100,Nz+1>,Ny+1>,Nx+1>,Nw+1>`.  The `root_type`
-is always the first template parameter to `autodiff_fvar<...>` followed by the maximum derivative orders that are
-to be calculated for each independent variable.
+In this example, the data type `autodiff_fvar<cpp_bin_float_50,Nw,Nx,Ny,Nz>` represents a multivariate polynomial in
+4 independent variables, where the highest powers of each are `Nw`, `Nx`, `Ny` and `Nz`. The underlying arithmetic
+data type, aliased as `root_type`, is `boost::multiprecision::cpp_bin_float_50`. The internal data structure is
+`std::array<std::array<std::array<std::array<cpp_bin_float_50,Nz+1>,Ny+1>,Nx+1>,Nw+1>`.  The `root_type` is always
+the first template parameter to `autodiff_fvar<...>` followed by the maximum derivative orders that are to be
+calculated for each independent variable.
 
 When variables are initialized with `make_fvar<...>()`, the position of the last derivative order given in the
 template parameter pack determines which variable is taken to be independent. In other words, it determines which
@@ -170,10 +172,10 @@ of the 4 different polynomial variables ['\u03b5[sub w]], ['\u03b5[sub x]], ['\u
 are to be added to the constant term:
 
 [/ \Large\begin{align*}
-\texttt{make\_fvar<cpp\_dec\_float\_100,Nw>(11)} &= 11+\varepsilon_w \\
-\texttt{make\_fvar<cpp\_dec\_float\_100,0,Nx>(12)} &= 12+\varepsilon_x \\
-\texttt{make\_fvar<cpp\_dec\_float\_100,0,0,Ny>(13)} &= 13+\varepsilon_y \\
-\texttt{make\_fvar<cpp\_dec\_float\_100,0,0,0,Nz>(14)} &= 14+\varepsilon_z
+\texttt{make\_fvar<cpp\_bin\_float\_50,Nw>(11)} &= 11+\varepsilon_w \\
+\texttt{make\_fvar<cpp\_bin\_float\_50,0,Nx>(12)} &= 12+\varepsilon_x \\
+\texttt{make\_fvar<cpp\_bin\_float\_50,0,0,Ny>(13)} &= 13+\varepsilon_y \\
+\texttt{make\_fvar<cpp\_bin\_float\_50,0,0,0,Nz>(14)} &= 14+\varepsilon_z
 \end{align*}\]
 [:[:[autodiff_equation example2make_fvar.svg]]]
 
@@ -181,7 +183,7 @@ Instances of different types are automatically promoted to the smallest multi-va
 when they are combined (added, subtracted, multiplied, divided.)
 
     #include <boost/math/differentiation/autodiff.hpp>
-    #include <boost/multiprecision/cpp_dec_float.hpp>
+    #include <boost/multiprecision/cpp_bin_float.hpp>
     #include <iostream>
     
     template<typename T>
@@ -193,22 +195,22 @@ when they are combined (added, subtracted, multiplied, divided.)
     
     int main()
     {
-      using cpp_dec_float_100 = boost::multiprecision::cpp_dec_float_100;
+      using cpp_bin_float_50 = boost::multiprecision::cpp_bin_float_50;
       using namespace boost::math::differentiation;
     
       constexpr int Nw=3; // Max order of derivative to calculate for w
       constexpr int Nx=2; // Max order of derivative to calculate for x
       constexpr int Ny=4; // Max order of derivative to calculate for y
       constexpr int Nz=3; // Max order of derivative to calculate for z
-      using var = autodiff_fvar<cpp_dec_float_100,Nw,Nx,Ny,Nz>;
-      const var w = make_fvar<cpp_dec_float_100,Nw>(11);
-      const var x = make_fvar<cpp_dec_float_100,0,Nx>(12);
-      const var y = make_fvar<cpp_dec_float_100,0,0,Ny>(13);
-      const var z = make_fvar<cpp_dec_float_100,0,0,0,Nz>(14);
+      using var = autodiff_fvar<cpp_bin_float_50,Nw,Nx,Ny,Nz>;
+      const var w = make_fvar<cpp_bin_float_50,Nw>(11);
+      const var x = make_fvar<cpp_bin_float_50,0,Nx>(12);
+      const var y = make_fvar<cpp_bin_float_50,0,0,Ny>(13);
+      const var z = make_fvar<cpp_bin_float_50,0,0,0,Nz>(14);
       const var v = f(w,x,y,z);
       // Calculated from Mathematica symbolic differentiation. See multiprecision.nb for script.
-      const cpp_dec_float_100 answer("1976.31960074779771777988187529041872090812118921875499076582535951111845769110560421820940516423255314");
-      std::cout << std::setprecision(std::numeric_limits<cpp_dec_float_100>::digits10)
+      const cpp_bin_float_50 answer("1976.319600747797717779881875290418720908121189218755");
+      std::cout << std::setprecision(std::numeric_limits<cpp_bin_float_50>::digits10)
         << "mathematica   : " << answer << '\n'
         << "autodiff      : " << v.derivative(Nw,Nx,Ny,Nz) << '\n'
         << "relative error: " << std::setprecision(3) << (v.derivative(Nw,Nx,Ny,Nz)/answer-1) << std::endl;
@@ -216,12 +218,12 @@ when they are combined (added, subtracted, multiplied, divided.)
     }
     /*
     Output:
-    mathematica   : 1976.319600747797717779881875290418720908121189218754990765825359511118457691105604218209405164232553
-    autodiff      : 1976.319600747797717779881875290418720908121189218754990765825359511118457691105604218209405164232566
-    relative error: 6.47e-99
+    mathematica   : 1976.3196007477977177798818752904187209081211892188
+    autodiff      : 1976.3196007477977177798818752904187209081211892188
+    relative error: 2.67e-50
     */
 
-[h1 Documentation]
+[h1 Manual]
 Additional details are in the [@../differentiation/autodiff.pdf autodiff manual].
 
 [endsect]
