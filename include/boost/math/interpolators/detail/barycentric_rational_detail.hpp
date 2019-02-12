@@ -89,7 +89,7 @@ barycentric_rational_imp<Real>::barycentric_rational_imp(InputIterator1 start_x,
 }
 
 template <class Real>
-barycentric_rational_imp<Real>::barycentric_rational_imp(std::vector<Real>&& x, std::vector<Real>&& y,size_t approximation_order) : m_x{std::move(x)}, m_y{std::move(y)}
+barycentric_rational_imp<Real>::barycentric_rational_imp(std::vector<Real>&& x, std::vector<Real>&& y,size_t approximation_order) : m_x(std::move(x)), m_y(std::move(y))
 {
     BOOST_ASSERT_MSG(m_x.size() == m_y.size(), "There must be the same number of abscissas and ordinates.");
     BOOST_ASSERT_MSG(approximation_order < m_x.size(), "Approximation order must be < data length.");
