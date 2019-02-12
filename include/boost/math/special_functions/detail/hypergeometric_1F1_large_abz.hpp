@@ -442,7 +442,7 @@
         // but that's not clear...
         //
         cost = fabs(b - a);
-        if((b > 1) && (cost <= current_cost) && (z < tools::log_max_value<T>()) && (z < 11356))
+        if((b > 1) && (cost <= current_cost) && (z < tools::log_max_value<T>()) && (z < 11356) && (b - a != 0.5f))
         {
            current_method = method_bessel;
            current_cost = cost;
