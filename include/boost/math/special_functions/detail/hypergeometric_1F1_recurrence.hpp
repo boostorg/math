@@ -238,12 +238,16 @@
      BOOST_ASSERT(a_b_shift > 1);
 
      T first, second;
-     first = boost::math::detail::hypergeometric_1F1_imp(T(a + a_shift), T(b + b_shift), z, pol, log_scaling);
+     int scale1(0), scale2(0);
+     first = boost::math::detail::hypergeometric_1F1_imp(T(a + a_shift), T(b + b_shift), z, pol, scale1);
      //
      // It would be good to compute "second" from first and the ratio - unfortunately we are right on the cusp
      // recursion on a switching from stable backwards to stable forwards behaviour and so this is not possible here.
      //
-     second = boost::math::detail::hypergeometric_1F1_imp(T(a + a_shift - 1), T(b + b_shift), z, pol, log_scaling);
+     second = boost::math::detail::hypergeometric_1F1_imp(T(a + a_shift - 1), T(b + b_shift), z, pol, scale2);
+     if (scale1 != scale2)
+        second *= exp(scale2 - scale1);
+     log_scaling += scale1;
 
      //
      // Now we have [a + a_shift, b + b_shift, z] and [a + a_shift - 1, b + b_shift, z]
