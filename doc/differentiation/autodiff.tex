@@ -1012,7 +1012,7 @@ $f(x)$ & $f(0)$ & $f'(0)$ & $f''(0)$ & $f'''(0)$ \\
 Calling the autodiff-overloaded implementation of $f(x)=\sqrt x$ at the value {\tt x==0} results in the
 \nth{1} row (after the header row) of Table~\ref{sqrtnan}, as is mathematically correct. The \nth{2} row shows
 $f(x)=(\sqrt{x}+1)^2$ resulting in {\tt nan} values for $f''(0)$ and all higher order derivatives. This is due to
-the internal arithmetic in which {\tt inf} was added to {\tt -inf} during the squaring, resulting in a {\tt nan}
+the internal arithmetic in which {\tt inf} is added to {\tt -inf} during the squaring, resulting in a {\tt nan}
 value for $f''(0)$ and all higher orders. This is typical of {\tt inf} values in autodiff. Where they show up,
 they are correct, however they can quickly introduce {\tt nan} values into the computation upon the addition of
 oppositely signed {\tt inf} values, division by {\tt inf}, or multiplication by {\tt 0}. It is worth noting that
@@ -1024,7 +1024,7 @@ The resolution in this case is to manually perform the squaring in the computati
 with the \nth{3}: $f(x)=x+2\sqrt{x}+1$. Though mathematically equivalent, it allows autodiff to avoid {\tt nan}
 values since $\sqrt x$ is more ``isolated'' in the computation. That is, the {\tt inf} values that unavoidably
 show up in the derivatives of {\tt sqrt(x)} for {\tt x==0} do not have the chance to interact with other {\tt inf}
-as with the squaring.
+values as with the squaring.
 
 \subsection{Summary}
 

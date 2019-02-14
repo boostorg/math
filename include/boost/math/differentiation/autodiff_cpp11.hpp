@@ -88,7 +88,7 @@ constexpr T product(T factor, Ts... factors)
 // Can throw "std::out_of_range: array::at: __n (which is 7) >= _Nm (which is 7)"
 template<typename RealType, size_t Order>
 template<typename... Orders>
-get_type_at<RealType,sizeof...(Orders)-1> fvar<RealType,Order>::derivative(Orders... orders) const
+get_type_at<fvar<RealType,Order>,sizeof...(Orders)> fvar<RealType,Order>::derivative(Orders... orders) const
 {
     static_assert(sizeof...(Orders) <= depth, "Number of parameters to derivative(...) cannot exceed fvar::depth.");
     return at(orders...) * product(boost::math::factorial<root_type>(orders)...);

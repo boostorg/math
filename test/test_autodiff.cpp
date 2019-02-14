@@ -1237,19 +1237,19 @@ struct cos_and_sin_test
   {
     using std::cos;
     using std::sin;
-    const T eps = 100*std::numeric_limits<T>::epsilon(); // percent
+    const T eps = 200*std::numeric_limits<T>::epsilon(); // percent
     constexpr int m = 5;
     const T cx = boost::math::constants::third_pi<T>();
     const auto x = make_fvar<T,m>(cx);
     auto cos5 = cos(x);
-    BOOST_REQUIRE(cos5.derivative(0) == cos(cx));
+    BOOST_REQUIRE_CLOSE(cos5.derivative(0), cos(cx), eps);
     BOOST_REQUIRE_CLOSE(cos5.derivative(1), -sin(cx), eps);
     BOOST_REQUIRE_CLOSE(cos5.derivative(2), -cos(cx), eps);
     BOOST_REQUIRE_CLOSE(cos5.derivative(3), sin(cx), eps);
     BOOST_REQUIRE_CLOSE(cos5.derivative(4), cos(cx), eps);
     BOOST_REQUIRE_CLOSE(cos5.derivative(5), -sin(cx), eps);
     auto sin5 = sin(x);
-    BOOST_REQUIRE(sin5.derivative(0) == sin(cx));
+    BOOST_REQUIRE_CLOSE(sin5.derivative(0), sin(cx), eps);
     BOOST_REQUIRE_CLOSE(sin5.derivative(1), cos(cx), eps);
     BOOST_REQUIRE_CLOSE(sin5.derivative(2), -sin(cx), eps);
     BOOST_REQUIRE_CLOSE(sin5.derivative(3), -cos(cx), eps);
@@ -1257,9 +1257,9 @@ struct cos_and_sin_test
     BOOST_REQUIRE_CLOSE(sin5.derivative(5), cos(cx), eps);
     // Test Order = 0 for codecov
     auto cos0 = cos(make_fvar<T,0>(cx));
-    BOOST_REQUIRE(cos0.derivative(0) == cos(cx));
+    BOOST_REQUIRE_CLOSE(cos0.derivative(0), cos(cx), eps);
     auto sin0 = sin(make_fvar<T,0>(cx));
-    BOOST_REQUIRE(sin0.derivative(0) == sin(cx));
+    BOOST_REQUIRE_CLOSE(sin0.derivative(0), sin(cx), eps);
   }
 };
 
@@ -1281,7 +1281,7 @@ struct acos_test_test
     const T cx = 0.5;
     auto x = make_fvar<T,m>(cx);
     auto y = acos(x);
-    BOOST_REQUIRE(y.derivative(0) == acos(cx));
+    BOOST_REQUIRE_CLOSE(y.derivative(0), acos(cx), eps);
     BOOST_REQUIRE_CLOSE(y.derivative(1), -1/sqrt(1-cx*cx), eps);
     BOOST_REQUIRE_CLOSE(y.derivative(2), -cx/pow(1-cx*cx,1.5), eps);
     BOOST_REQUIRE_CLOSE(y.derivative(3), -(2*cx*cx+1)/pow(1-cx*cx,2.5), eps);
@@ -1334,7 +1334,7 @@ struct asin_test_test
     const T cx = 0.5;
     auto x = make_fvar<T,m>(cx);
     auto y = asin(x);
-    BOOST_REQUIRE(y.derivative(0) == asin(cx));
+    BOOST_REQUIRE_CLOSE(y.derivative(0), asin(cx), eps);
     BOOST_REQUIRE_CLOSE(y.derivative(1), 1/sqrt(1-cx*cx), eps);
     BOOST_REQUIRE_CLOSE(y.derivative(2), cx/pow(1-cx*cx,1.5), eps);
     BOOST_REQUIRE_CLOSE(y.derivative(3), (2*cx*cx+1)/pow(1-cx*cx,2.5), eps);
@@ -1559,8 +1559,8 @@ struct sinh_and_cosh_test
     auto x = make_fvar<T,m>(cx);
     auto s = sinh(x);
     auto c = cosh(x);
-    BOOST_REQUIRE(s.derivative(0) == sinh(static_cast<T>(x)));
-    BOOST_REQUIRE(c.derivative(0) == cosh(static_cast<T>(x)));
+    BOOST_REQUIRE_CLOSE(s.derivative(0), sinh(static_cast<T>(x)), eps);
+    BOOST_REQUIRE_CLOSE(c.derivative(0), cosh(static_cast<T>(x)), eps);
     for (size_t i=0 ; i<=m ; ++i)
     {
         BOOST_REQUIRE_CLOSE(s.derivative(i), static_cast<T>(i&1?c:s), eps);
