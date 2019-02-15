@@ -23,6 +23,7 @@
 #include <boost/math/special_functions/detail/hypergeometric_pFq_checked_series.hpp>
 #include <boost/math/special_functions/detail/hypergeometric_1F1_addition_theorems_on_z.hpp>
 #include <boost/math/special_functions/detail/hypergeometric_1F1_large_abz.hpp>
+#include <boost/math/special_functions/detail/hypergeometric_1F1_small_a_negative_b_by_ratio.hpp>
 
 namespace boost { namespace math { namespace detail {
 
@@ -239,14 +240,39 @@ namespace boost { namespace math { namespace detail {
       //
       // Special case for A&S 13.3.6:
       //
-      if (hypergeometric_1F1_is_13_3_6_region(a, b, z))
+      if (z < 0)
       {
-         // a is tiny compared to b, and z < 0
-         // 13.3.6 appears to be the most efficient and often the most accurate method.
-         T r = boost::math::detail::hypergeometric_1F1_AS_13_3_6(b_minus_a, b, T(-z), a, pol, log_scaling);
-         int scale = itrunc(z, pol);
-         log_scaling += scale;
-         return r * exp(z - scale);
+         if (hypergeometric_1F1_is_13_3_6_region(a, b, z))
+         {
+            // a is tiny compared to b, and z < 0
+            // 13.3.6 appears to be the most efficient and often the most accurate method.
+            T r = boost::math::detail::hypergeometric_1F1_AS_13_3_6(b_minus_a, b, T(-z), a, pol, log_scaling);
+            int scale = itrunc(z, pol);
+            log_scaling += scale;
+            return r * exp(z - scale);
+         }
+         if ((b < 0) && (fabs(a) < 1e-2))
+         {
+            //
+            // This is a tricky area, potentially we have no good method at all:
+            //
+            if (max_b_for_1F1_small_a_negative_b_by_ratio(z) < b)
+               return hypergeometric_1F1_small_a_negative_b_by_ratio(a, b, z, pol, log_scaling);
+            if ((b > -1) && (b < -0.5f))
+            {
+               // Recursion is meta-stable:
+               T first = hypergeometric_1F1_imp(a, T(b + 2), z, pol);
+               T second = hypergeometric_1F1_imp(a, T(b + 1), z, pol);
+               return tools::apply_recurrence_relation_backward(hypergeometric_1F1_recurrence_small_b_coefficients<T>(a, b, z, 1), 1, first, second);
+            }
+            //
+            // We've got nothing left but 13.3.6, even though it may be initially divergent:
+            //
+            T r = boost::math::detail::hypergeometric_1F1_AS_13_3_6(b_minus_a, b, T(-z), a, pol, log_scaling);
+            int scale = itrunc(z, pol);
+            log_scaling += scale;
+            return r * exp(z - scale);
+         }
       }
       //
       // Asymptotic expansion for large z
@@ -270,7 +296,7 @@ namespace boost { namespace math { namespace detail {
          log_scaling = saved_scale;
       }
 
-      if ((fabs(a * z / b) < 3.5) && (fabs(z * 100) < fabs(b)))
+      if ((fabs(a * z / b) < 3.5) && (fabs(z * 100) < fabs(b)) && ((fabs(a) > 1e-2) || (b < -5)))
          return detail::hypergeometric_1F1_rational(a, b, z, pol);
 
       if (z < -1)
