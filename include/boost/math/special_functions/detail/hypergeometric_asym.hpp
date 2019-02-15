@@ -13,6 +13,11 @@
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/special_functions/hypergeometric_2F0.hpp>
 
+#ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable:4127)
+#endif
+
   namespace boost { namespace math {
 
   namespace detail {
@@ -155,5 +160,9 @@
   }
 
   } } } // namespaces
+
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
 
 #endif // BOOST_MATH_HYPERGEOMETRIC_ASYM_HPP

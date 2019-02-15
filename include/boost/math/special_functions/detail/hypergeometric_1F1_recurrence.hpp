@@ -48,6 +48,7 @@
 
   private:
     const T a, b, z;
+    hypergeometric_1F1_recurrence_a_coefficients operator=(const hypergeometric_1F1_recurrence_a_coefficients&);
   };
 
   template <class T>
@@ -73,6 +74,7 @@
 
   private:
     const T a, b, z;
+    hypergeometric_1F1_recurrence_b_coefficients& operator=(const hypergeometric_1F1_recurrence_b_coefficients&);
   };
   //
   // for use when we're recursing to a small b:
@@ -100,6 +102,7 @@
      }
 
   private:
+     hypergeometric_1F1_recurrence_small_b_coefficients operator=(const hypergeometric_1F1_recurrence_small_b_coefficients&);
      const T a, b, z;
      int N;
   };
@@ -128,6 +131,7 @@
 
   private:
     const T a, b, z;
+    hypergeometric_1F1_recurrence_a_and_b_coefficients operator=(const hypergeometric_1F1_recurrence_a_and_b_coefficients&);
   };
 
   template <class T, class Policy>

@@ -141,6 +141,8 @@
         const Policy& pol;
         int n, log_scale, cache_offset;
 
+        hypergeometric_1F1_AS_13_3_7_tricomi_series operator=(const hypergeometric_1F1_AS_13_3_7_tricomi_series&);
+
         void refill_cache()
         {
            BOOST_MATH_STD_USING
@@ -539,6 +541,7 @@
 
         hypergeometric_1F1_AS_13_3_6_series();
         hypergeometric_1F1_AS_13_3_6_series(const hypergeometric_1F1_AS_13_3_6_series&);
+        hypergeometric_1F1_AS_13_3_6_series& operator=(const hypergeometric_1F1_AS_13_3_6_series&);
      };
 
      template <class T, class Policy>
