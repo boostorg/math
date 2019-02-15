@@ -9,9 +9,12 @@
 #define BOOST_MATH_INTERPOLATORS_BARYCENTRIC_RATIONAL_DETAIL_HPP
 
 #include <vector>
+#include <utility> // for std::move
+#include <algorithm> // for std::is_sorted
 #include <boost/lexical_cast.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/core/demangle.hpp>
+#include <boost/assert.hpp>
 
 namespace boost{ namespace math{ namespace detail{
 
@@ -22,6 +25,8 @@ public:
     template <class InputIterator1, class InputIterator2>
     barycentric_rational_imp(InputIterator1 start_x, InputIterator1 end_x, InputIterator2 start_y, size_t approximation_order = 3);
 
+    barycentric_rational_imp(std::vector<Real>&& x, std::vector<Real>&& y, size_t approximation_order = 3);
+
     Real operator()(Real x) const;
 
     Real prime(Real x) const;
@@ -29,14 +34,22 @@ public:
     // The barycentric weights are not really that interesting; except to the unit tests!
     Real weight(size_t i) const { return m_w[i]; }
 
+    std::vector<Real>&& return_x()
+    {
+        return std::move(m_x);
+    }
+
+    std::vector<Real>&& return_y()
+    {
+        return std::move(m_y);
+    }
+
 private:
-    // Technically, we do not need to copy over y to m_y, or x to m_x.
-    // We could simply store a pointer. However, in doing so,
-    // we'd need to make sure the user managed the lifetime of m_y,
-    // and didn't alter its data. Since we are unlikely to run out of
-    // memory for a linearly scaling algorithm, it seems best just to make a copy.
-    std::vector<Real> m_y;
+
+    void calculate_weights(size_t approximation_order);
+
     std::vector<Real> m_x;
+    std::vector<Real> m_y;
     std::vector<Real> m_w;
 };
 
@@ -44,8 +57,6 @@ template <class Real>
 template <class InputIterator1, class InputIterator2>
 barycentric_rational_imp<Real>::barycentric_rational_imp(InputIterator1 start_x, InputIterator1 end_x, InputIterator2 start_y, size_t approximation_order)
 {
-    using std::abs;
-
     std::ptrdiff_t n = std::distance(start_x, end_x);
 
     if (approximation_order >= (std::size_t)n)
@@ -53,7 +64,7 @@ barycentric_rational_imp<Real>::barycentric_rational_imp(InputIterator1 start_x,
         throw std::domain_error("Approximation order must be < data length.");
     }
 
-    // Big sad memcpy to make sure the object is easy to use.
+    // Big sad memcpy.
     m_x.resize(n);
     m_y.resize(n);
     for(unsigned i = 0; start_x != end_x; ++start_x, ++start_y, ++i)
@@ -74,7 +85,23 @@ barycentric_rational_imp<Real>::barycentric_rational_imp(InputIterator1 start_x,
         m_x[i] = *start_x;
         m_y[i] = *start_y;
     }
+    calculate_weights(approximation_order);
+}
 
+template <class Real>
+barycentric_rational_imp<Real>::barycentric_rational_imp(std::vector<Real>&& x, std::vector<Real>&& y,size_t approximation_order) : m_x(std::move(x)), m_y(std::move(y))
+{
+    BOOST_ASSERT_MSG(m_x.size() == m_y.size(), "There must be the same number of abscissas and ordinates.");
+    BOOST_ASSERT_MSG(approximation_order < m_x.size(), "Approximation order must be < data length.");
+    BOOST_ASSERT_MSG(std::is_sorted(m_x.begin(), m_x.end()), "The abscissas must be listed in increasing order x[0] < x[1] < ... < x[n-1].");
+    calculate_weights(approximation_order);
+}
+
+template<class Real>
+void barycentric_rational_imp<Real>::calculate_weights(size_t approximation_order)
+{
+    using std::abs;
+    int64_t n = m_x.size();
     m_w.resize(n, 0);
     for(int64_t k = 0; k < n; ++k)
     {
@@ -97,7 +124,8 @@ barycentric_rational_imp<Real>::barycentric_rational_imp(InputIterator1 start_x,
                 }
 
                 Real diff = m_x[k] - m_x[j];
-                if (abs(diff) < std::numeric_limits<Real>::epsilon())
+                using std::numeric_limits;
+                if (abs(diff) < (numeric_limits<Real>::min)())
                 {
                    std::string msg = std::string("Spacing between  x[")
                       + boost::lexical_cast<std::string>(k) + std::string("] and x[")
@@ -119,6 +147,7 @@ barycentric_rational_imp<Real>::barycentric_rational_imp(InputIterator1 start_x,
         }
     }
 }
+
 
 template<class Real>
 Real barycentric_rational_imp<Real>::operator()(Real x) const
