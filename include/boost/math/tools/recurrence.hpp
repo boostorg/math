@@ -45,6 +45,9 @@ namespace boost {
                   return result_type(-bn, an);
                }
 
+            private:
+               function_ratio_from_backwards_recurrence_fraction operator=(const function_ratio_from_backwards_recurrence_fraction&);
+
                Recurrence r;
                int k;
             };
@@ -132,7 +135,7 @@ namespace boost {
          // second: w(0);
          //
          template <class NextCoefs, class T>
-         inline T apply_recurrence_relation_forward(NextCoefs& get_coefs, unsigned last_index, T first, T second, int* log_scaling = 0, T* previous = 0)
+         inline T apply_recurrence_relation_forward(const NextCoefs& get_coefs, unsigned last_index, T first, T second, int* log_scaling = 0, T* previous = 0)
          {
             BOOST_MATH_STD_USING
             using boost::math::tuple;
@@ -179,7 +182,7 @@ namespace boost {
          // second: w(0);
          //
          template <class T, class NextCoefs>
-         inline T apply_recurrence_relation_backward(NextCoefs& get_coefs, unsigned last_index, T first, T second, int* log_scaling = 0, T* previous = 0)
+         inline T apply_recurrence_relation_backward(const NextCoefs& get_coefs, unsigned last_index, T first, T second, int* log_scaling = 0, T* previous = 0)
          {
             BOOST_MATH_STD_USING
             using boost::math::tuple;
