@@ -256,7 +256,16 @@ namespace boost { namespace math { namespace detail {
             //
             // This is a tricky area, potentially we have no good method at all:
             //
-            if (max_b_for_1F1_small_a_negative_b_by_ratio(z) < b)
+            if (b - ceil(b) == a)
+            {
+               // Fractional parts of a and b are genuinely equal, we might as well
+               // apply Kummer's relation and get a truncated series:
+               int scaling = itrunc(z);
+               T r = exp(z - scaling) * detail::hypergeometric_1F1_imp<T>(b_minus_a, b, -z, pol, log_scaling);
+               log_scaling += scaling;
+               return r;
+            }
+            if ((b < -1) && (max_b_for_1F1_small_a_negative_b_by_ratio(z) < b))
                return hypergeometric_1F1_small_a_negative_b_by_ratio(a, b, z, pol, log_scaling);
             if ((b > -1) && (b < -0.5f))
             {
@@ -408,7 +417,6 @@ namespace boost { namespace math { namespace detail {
          // 13.3.6 appears to be the most efficient and often the most accurate method.
          return boost::math::detail::hypergeometric_1F1_AS_13_3_6(a, b, z, b_minus_a, pol, log_scaling);
       }
-
       if ((a > 0) && (b > 0) && (a * z / b > 2))
       {
          //

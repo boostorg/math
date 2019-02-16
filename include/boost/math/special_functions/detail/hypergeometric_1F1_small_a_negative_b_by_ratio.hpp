@@ -45,13 +45,14 @@
          // We grab the ratio for M[a, b, z] / M[a, b+1, z] and use it to seed 2 initial values,
          // then recurse until b > 0, compute a reference value and normalize (Millers method).
          //
+         int iterations = boost::math::itrunc(-b, pol);
          boost::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
          T ratio = boost::math::tools::function_ratio_from_forwards_recurrence(boost::math::detail::hypergeometric_1F1_recurrence_b_coefficients<T>(a, b, z), boost::math::tools::epsilon<T>(), max_iter);
          boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1F1_small_a_negative_b_by_ratio<%1%>(%1%,%1%,%1%)", max_iter, pol);
          T first = 1;
          T second = 1 / ratio;
-         int iterations = boost::math::itrunc(-b, pol);
          int scaling1 = 0;
+         BOOST_ASSERT(b + iterations != a);
          second = boost::math::tools::apply_recurrence_relation_forward(boost::math::detail::hypergeometric_1F1_recurrence_b_coefficients<T>(a, b + 1, z), iterations, first, second, &scaling1);
          int scaling2 = 0;
          first = hypergeometric_1F1_imp(a, b + iterations + 1, z, pol, scaling2);
