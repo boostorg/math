@@ -30,8 +30,8 @@ void test_interpolation_condition()
     std::cout << "Testing interpolation condition for barycentric interpolation on type " << boost::typeindex::type_id<Real>().pretty_name()  << "\n";
     std::mt19937 gen(4);
     boost::random::uniform_real_distribution<Real> dis(0.1f, 1);
-    std::vector<Real> x(500);
-    std::vector<Real> y(500);
+    std::vector<Real> x(100);
+    std::vector<Real> y(100);
     x[0] = dis(gen);
     y[0] = dis(gen);
     for (size_t i = 1; i < x.size(); ++i)
@@ -47,6 +47,17 @@ void test_interpolation_condition()
         Real z = interpolator(x[i]);
         BOOST_CHECK_CLOSE(z, y[i], 100*numeric_limits<Real>::epsilon());
     }
+
+    // Make sure that the move constructor does the same thing:
+    std::vector<Real> x_copy = x;
+    std::vector<Real> y_copy = y;
+    boost::math::barycentric_rational<Real> move_interpolator(std::move(x), std::move(y));
+
+    for (size_t i = 0; i < x_copy.size(); ++i)
+    {
+        Real z = move_interpolator(x_copy[i]);
+        BOOST_CHECK_CLOSE(z, y_copy[i], 100*numeric_limits<Real>::epsilon());
+    }
 }
 
 template<class Real>
@@ -55,8 +66,8 @@ void test_interpolation_condition_high_order()
     std::cout << "Testing interpolation condition in high order for barycentric interpolation on type " << boost::typeindex::type_id<Real>().pretty_name()  << "\n";
     std::mt19937 gen(5);
     boost::random::uniform_real_distribution<Real> dis(0.1f, 1);
-    std::vector<Real> x(500);
-    std::vector<Real> y(500);
+    std::vector<Real> x(100);
+    std::vector<Real> y(100);
     x[0] = dis(gen);
     y[0] = dis(gen);
     for (size_t i = 1; i < x.size(); ++i)
@@ -83,8 +94,8 @@ void test_constant()
 
     std::mt19937 gen(6);
     boost::random::uniform_real_distribution<Real> dis(0.1f, 1);
-    std::vector<Real> x(500);
-    std::vector<Real> y(500);
+    std::vector<Real> x(100);
+    std::vector<Real> y(100);
     Real constant = -8;
     x[0] = dis(gen);
     y[0] = constant;
@@ -113,8 +124,8 @@ void test_constant_high_order()
 
     std::mt19937 gen(7);
     boost::random::uniform_real_distribution<Real> dis(0.1f, 1);
-    std::vector<Real> x(500);
-    std::vector<Real> y(500);
+    std::vector<Real> x(100);
+    std::vector<Real> y(100);
     Real constant = 5;
     x[0] = dis(gen);
     y[0] = constant;
@@ -144,8 +155,8 @@ void test_runge()
 
     std::mt19937 gen(8);
     boost::random::uniform_real_distribution<Real> dis(0.005f, 0.01f);
-    std::vector<Real> x(500);
-    std::vector<Real> y(500);
+    std::vector<Real> x(100);
+    std::vector<Real> y(100);
     x[0] = -2;
     y[0] = 1/(1+25*x[0]*x[0]);
     for (size_t i = 1; i < x.size(); ++i)
@@ -197,8 +208,8 @@ void test_weights()
 
     std::mt19937 gen(9);
     boost::random::uniform_real_distribution<Real> dis(0.005, 0.01);
-    std::vector<Real> x(500);
-    std::vector<Real> y(500);
+    std::vector<Real> x(100);
+    std::vector<Real> y(100);
     x[0] = -2;
     y[0] = 1/(1+25*x[0]*x[0]);
     for (size_t i = 1; i < x.size(); ++i)
@@ -244,37 +255,41 @@ void test_weights()
 
 BOOST_AUTO_TEST_CASE(barycentric_rational)
 {
+    // The tests took too long at the higher precisions.
+    // They still pass, but the CI system is starting to time out,
+    // so I figured it'd be polite to comment out the most expensive tests.
     test_weights<double>();
-    test_constant<float>();
-    test_constant<double>();
-    test_constant<long double>();
-    test_constant<cpp_bin_float_50>();
 
-    test_constant_high_order<float>();
+    test_constant<float>();
+    //test_constant<double>();
+    test_constant<long double>();
+    //test_constant<cpp_bin_float_50>();
+
+    //test_constant_high_order<float>();
     test_constant_high_order<double>();
-    test_constant_high_order<long double>();
-    test_constant_high_order<cpp_bin_float_50>();
+    //test_constant_high_order<long double>();
+    //test_constant_high_order<cpp_bin_float_50>();
 
     test_interpolation_condition<float>();
     test_interpolation_condition<double>();
-    test_interpolation_condition<long double>();
-    test_interpolation_condition<cpp_bin_float_50>();
+    //test_interpolation_condition<long double>();
+    //test_interpolation_condition<cpp_bin_float_50>();
 
-    test_interpolation_condition_high_order<float>();
+    //test_interpolation_condition_high_order<float>();
     test_interpolation_condition_high_order<double>();
-    test_interpolation_condition_high_order<long double>();
-    test_interpolation_condition_high_order<cpp_bin_float_50>();
+    //test_interpolation_condition_high_order<long double>();
+    //test_interpolation_condition_high_order<cpp_bin_float_50>();
 
     test_runge<double>();
-    test_runge<long double>();
-    test_runge<cpp_bin_float_50>();
+    //test_runge<long double>();
+    //test_runge<cpp_bin_float_50>();
 
 #ifdef BOOST_HAS_FLOAT128
-    test_interpolation_condition<boost::multiprecision::float128>();
-        test_constant<boost::multiprecision::float128>();
-        test_constant_high_order<boost::multiprecision::float128>();
-        test_interpolation_condition_high_order<boost::multiprecision::float128>();
-        test_runge<boost::multiprecision::float128>();
+    //test_interpolation_condition<boost::multiprecision::float128>();
+    //test_constant<boost::multiprecision::float128>();
+    //test_constant_high_order<boost::multiprecision::float128>();
+    //test_interpolation_condition_high_order<boost::multiprecision::float128>();
+    //test_runge<boost::multiprecision::float128>();
 #endif
 
 }

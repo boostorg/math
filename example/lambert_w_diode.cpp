@@ -9,7 +9,7 @@
   \details T. C. Banwell and A. Jayakumar,
   Exact analytical solution of current flow through diode with series resistance,
   Electron Letters, 36(4):291-2 (2000)
-  DOI:  dx.doi.org/10.1049/el:20000301 
+  DOI:  doi.org/10.1049/el:20000301 
 
   The current through a diode connected NPN bipolar junction transistor (BJT) 
   type 2N2222 (See https://en.wikipedia.org/wiki/2N2222 and 

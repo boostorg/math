@@ -236,7 +236,7 @@ void test_helix()
               << boost::typeindex::type_id<Real>().pretty_name() << "\n";
 
     Real tol = 0.001;
-    std::vector<std::array<Real, 3>> v(2000*sizeof(Real));
+    std::vector<std::array<Real, 3>> v(400*sizeof(Real));
     for (size_t i = 0; i < v.size(); ++i)
     {
         Real theta = ((Real) i/ (Real) v.size())*2*pi<Real>();
@@ -363,40 +363,19 @@ void test_data_representations()
 BOOST_AUTO_TEST_CASE(catmull_rom_test)
 {
     test_data_representations<float>();
-    test_alpha_distance<float>();
     test_alpha_distance<double>();
-    test_alpha_distance<long double>();
-    test_alpha_distance<cpp_bin_float_50>();
 
-    test_linear<float>();
     test_linear<double>();
     test_linear<long double>();
-    test_linear<cpp_bin_float_50>();
 
     test_circle<float>();
     test_circle<double>();
-    test_circle<long double>();
-    test_circle<cpp_bin_float_50>();
 
-    test_helix<float>();
     test_helix<double>();
-
-    test_affine_invariance<float, 1>();
-    test_affine_invariance<float, 2>();
-    test_affine_invariance<float, 3>();
-    test_affine_invariance<float, 4>();
 
     test_affine_invariance<double, 1>();
     test_affine_invariance<double, 2>();
     test_affine_invariance<double, 3>();
     test_affine_invariance<double, 4>();
-
-    test_affine_invariance<long double, 1>();
-    test_affine_invariance<long double, 2>();
-    test_affine_invariance<long double, 3>();
-    test_affine_invariance<long double, 4>();
-    test_affine_invariance<cpp_bin_float_50, 1>();
-    test_affine_invariance<cpp_bin_float_50, 2>();
-    test_affine_invariance<cpp_bin_float_50, 3>();
     test_affine_invariance<cpp_bin_float_50, 4>();
 }
