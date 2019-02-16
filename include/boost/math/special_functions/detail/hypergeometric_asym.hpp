@@ -47,20 +47,27 @@
            log_scaling += e;
            prefix = exp(z - e);
         }
-        T t = log(z) * (a - b);
-        e = itrunc(t, pol);
-        log_scaling += e;
-        prefix *= exp(t - e);
+        if ((fabs(a) < 10) && (fabs(b) < 10))
+        {
+           prefix *= pow(z, a) * pow(z, -b) * boost::math::tgamma(b, pol) / boost::math::tgamma(a, pol);
+        }
+        else
+        {
+           T t = log(z) * (a - b);
+           e = itrunc(t, pol);
+           log_scaling += e;
+           prefix *= exp(t - e);
 
-        t = boost::math::lgamma(b, &s, pol);
-        e = itrunc(t, pol);
-        log_scaling += e;
-        prefix *= s * exp(t - e);
+           t = boost::math::lgamma(b, &s, pol);
+           e = itrunc(t, pol);
+           log_scaling += e;
+           prefix *= s * exp(t - e);
 
-        t = boost::math::lgamma(a, &s, pol);
-        e = itrunc(t, pol);
-        log_scaling -= e;
-        prefix /= s * exp(t - e);
+           t = boost::math::lgamma(a, &s, pol);
+           e = itrunc(t, pol);
+           log_scaling -= e;
+           prefix /= s * exp(t - e);
+        }
         //
         // Checked 2F0:
         //
@@ -104,6 +111,9 @@
     BOOST_MATH_STD_USING
     int half_digits = policies::digits<T, Policy>() / 2;
     bool in_region = false;
+
+    if (fabs(a) < 0.001f)
+       return false; // Haven't been able to make this work, why not?  TODO!
 
     //
     // We use the following heuristic, if after we have had half_digits terms
