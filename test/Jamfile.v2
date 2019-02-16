@@ -898,7 +898,10 @@ test-suite distribution_tests :
 
 test-suite misc :
    [ run test_print_info_on_type.cpp  ]
-   [ run test_barycentric_rational.cpp ../../test/build//boost_unit_test_framework : : :  [ requires cxx11_smart_ptr ] [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]  ]
+#  Pick the other github change; discard this one.
+#  From https://ci.appveyor.com/project/jzmaddock/math/builds/22373838/job/yxy50wjiprog6m9a?fullLog=true
+#  C:\projects\boost-root\libs\math\test\test_barycentric_rational.cpp : fatal error C1128: number of sections exceeded object file format limit: compile with /bigobj
+#  [ run test_barycentric_rational.cpp ../../test/build//boost_unit_test_framework : : :  [ requires cxx11_smart_ptr ] [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]  ]
    [ run test_constant_generate.cpp : : : release <define>USE_CPP_FLOAT=1 <exception-handling>off:<build>no  ]
    [ run test_cubic_b_spline.cpp ../../test/build//boost_unit_test_framework : : :  [ requires cxx11_smart_ptr cxx11_defaulted_functions ] <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ]
    [ run catmull_rom_test.cpp ../../test/build//boost_unit_test_framework : : :  [ requires cxx17_if_constexpr cxx17_std_apply ] ] # does not in fact require C++17 constexpr; requires C++17 std::size.
@@ -1238,7 +1241,8 @@ test-suite misc :
    [ run  compile_test/numerical_differentiation_incl_test.cpp compile_test_main  : : : [ requires cxx11_auto_declarations cxx11_constexpr ] ]
    [ compile  compile_test/numerical_differentiation_concept_test.cpp  : [ requires cxx11_auto_declarations cxx11_constexpr ] ]
    [ run __temporary_test.cpp test_instances//test_instances : : : <test-info>always_show_run_output <pch>off ]
-   [ run test_autodiff.cpp ../../test/build//boost_unit_test_framework : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <toolset>msvc:<cxxflags>/bigobj [ requires cxx11_inline_namespaces ] ]
+   [ run test_autodiff_1.cpp ../../test/build//boost_unit_test_framework : : : <toolset>msvc:<cxxflags>/bigobj [ requires cxx11_inline_namespaces ] ]
+   [ run test_autodiff_2.cpp ../../test/build//boost_unit_test_framework : : : <toolset>msvc:<cxxflags>/bigobj [ requires cxx11_inline_namespaces ] ]
 ;
 
 build-project ../example ;
