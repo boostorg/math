@@ -409,14 +409,17 @@ depends on the previously calculated values $z_0, z_1, ..., z_{i-1}$.
 
 \subsection{General Functions}
 
-When calling standard mathematical functions such as {\tt log()}, {\tt cos()}, etc. how should these be written
-in order to support autodiff variable types? That is, how should they be written to provide accurate derivatives?
+Calling standard mathematical functions such as {\tt log()}, {\tt cos()}, etc. should return accurate higher
+order derivatives. For example, {\tt exp(x)} may be written internally as a specific \nth{14}-degree polynomial to
+approximate $e^x$ when $0<x<1$. This would mean that the \nth{15} derivative, and all higher order derivatives,
+would be 0, however we know that $\exp^{(15)}(x)=e^x$.  How should such functions whose derivatives are known be
+written to provide accurate higher order derivatives? The answer again comes back to the function's Taylor series.
 
 To simplify notation, for a given polynomial ${\bf x} = x_0 + x_1\varepsilon + x_2\varepsilon^2 +\cdots+
 x_N\varepsilon^N$ define
 
 \[
-{\bf x}_\varepsilon = x_1\varepsilon + x_2\varepsilon^2 +\cdots+ x_N\varepsilon^N = \sum_{i=1}^Nx_i\varepsilon^i
+{\bf x}_\varepsilon = x_1\varepsilon + x_2\varepsilon^2 +\cdots+ x_N\varepsilon^N = \sum_{i=1}^Nx_i\varepsilon^i.
 \]
 This allows for a concise expression of a general function $f$ of $\bf x$:
 
@@ -692,11 +695,11 @@ To apply autodiff for calculating derivatives of a given function:
 \begin{enumerate}
 \item {\tt \#include <boost/math/differentiation/autodiff.hpp>}
 \item {\tt using namespace boost::math::differentiation;}
-\item Select which function parameters will be variables of differentation (aka autodiff variables). The
+\item Select which function parameters will be variables of differentiation (aka autodiff variables). The
   non-variables are called constants. (Note that the use of the word {\it constant}\/ here is different than the
   {\tt const} C/C++ keyword. There can be {\tt const} variables of differentiation, as well as non-{\tt const}
   constants, for example, as seen below.)
-\item For each function that takes at least one variable of differentation as a parameter:
+\item For each function that takes at least one variable of differentiation as a parameter:
   \begin{enumerate}
   \item Replace the data type (e.g. {\tt double}) of each variable parameter with a generic template type.
     For best performance, make it a reference. For best practice, also make it {\tt const} if appropriate.
@@ -853,12 +856,12 @@ and the \nth{1} partial derivative with respect to variable 3 ({\tt tau}).
 \subsection{Advantages of Automatic Differentiation}
 This example also provides an opportunity to point out some of the advantages of using autodiff:
 \begin{itemize}
-\item Elimination of code redundancy. The existance of $N$ separate functions to calculate derivatives is a form
+\item Elimination of code redundancy. The existence of $N$ separate functions to calculate derivatives is a form
   of code redundancy, with all the liabilities that come with it:
   \begin{itemize}
     \item Changes to one function require $N$ additional changes to other functions. Consider how much larger
         and inter-dependent the above code base would be if a separate function were written for
-        \href{https://en.wikipedia.org/wiki/Greeks_(finance)#Formulas_for_European_option_Greeks}{each greek} value.
+        \href{https://en.wikipedia.org/wiki/Greeks_(finance)#Formulas_for_European_option_Greeks}{each Greek} value.
     \item Dependencies upon a derivative function for a different purpose will break when changes are made to
         the original function. These dependencies won't exist if such derivative functions don't exist.
     \item Code bloat, reducing conceptual integrity. Control over the evolution of code is easier/safer when
@@ -1006,7 +1009,7 @@ $f(x)$ & $f(0)$ & $f'(0)$ & $f''(0)$ & $f'''(0)$ \\
 \hline
 {\tt x+2*sqrt(x)+1} & {\tt 1} & {\tt inf} & {\tt -inf}& {\tt inf}
 \end{tabular}
-\caption{Indetermine forms in higher order derivatives. {\tt sqr(x) == x*x}.}\label{sqrtnan}
+\caption{Indeterminate forms in higher order derivatives. {\tt sqr(x) == x*x}.}\label{sqrtnan}
 \end{table}
 
 Calling the autodiff-overloaded implementation of $f(x)=\sqrt x$ at the value {\tt x==0} results in the
@@ -1056,7 +1059,7 @@ This is not an exhaustive list, and will be added to as examples are encountered
 
 \begin{thebibliography}{1}
 \bibitem{ad} \url{https://en.wikipedia.org/wiki/Automatic\_differentiation}
-\bibitem{ed} Andreas Griewank, Andrea Walther, \textit{Evaluating Derivatives}, SIAM, 2nd ed. 2008.
+\bibitem{ed} Andreas Griewank, Andrea Walther. \textit{Evaluating Derivatives}. SIAM, 2nd ed. 2008.
 \end{thebibliography}
 
 \end{document}
