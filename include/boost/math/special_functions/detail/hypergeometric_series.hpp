@@ -219,12 +219,12 @@
         {
            if(s)
             *s = (n & 1 ? -1 : 1);
-           return log_pochhammer(T(-z - n + 1), n, pol);
+           return log_pochhammer(T(-z + (1 - (int)n)), n, pol);
         }
         else
         {
            int cross = itrunc(ceil(-z));
-           return log_pochhammer(T(-z - cross + 1), cross, pol, s) + log_pochhammer(T(cross + z), n - cross, pol);
+           return log_pochhammer(T(-z + (1 - cross)), cross, pol, s) + log_pochhammer(T(cross + z), n - cross, pol);
         }
      }
      else
@@ -280,7 +280,7 @@
            return boost::math::policies::raise_evaluation_error(function, "Series did not converge, best value is %1%", sum, pol);
         ++n;
         diff = fabs(term / sum);
-     } while ((diff > boost::math::policies::get_epsilon<T, Policy>()) || (fabs(term_m1) < fabs(term)) || (small_a && b + n < fabs(z)));
+     } while ((diff > boost::math::policies::get_epsilon<T, Policy>()) || (fabs(term_m1) < fabs(term)) || (small_a && n < 10));
 
      if (b + n < 0)
      {
