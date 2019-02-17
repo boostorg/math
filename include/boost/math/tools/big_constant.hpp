@@ -78,7 +78,7 @@ inline BOOST_MATH_CONSTEXPR T make_big_value(largest_float, const char* s, mpl::
 //
 #define BOOST_MATH_HUGE_CONSTANT(T, D, x)\
    boost::math::tools::make_big_value<T>(0.0L, BOOST_STRINGIZE(x), \
-   mpl::bool_<is_floating_point<T>::value || (boost::math::tools::numeric_traits<T>::is_specialized && boost::math::tools::numeric_traits<T>::max_exponent <= boost::math::tools::numeric_traits<boost::math::tools::largest_float>::max_exponent && boost::math::tools::numeric_traits<T>::digits <= boost::math::tools::numeric_traits<boost::math::tools::largest_float>::digits)>(), \
+   boost::mpl::bool_<boost::is_floating_point<T>::value || (boost::math::tools::numeric_traits<T>::is_specialized && boost::math::tools::numeric_traits<T>::max_exponent <= boost::math::tools::numeric_traits<boost::math::tools::largest_float>::max_exponent && boost::math::tools::numeric_traits<T>::digits <= boost::math::tools::numeric_traits<boost::math::tools::largest_float>::digits)>(), \
    boost::is_constructible<const char*, T>())
 
 }}} // namespaces
