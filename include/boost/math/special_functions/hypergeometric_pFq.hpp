@@ -9,9 +9,37 @@
 #define BOOST_MATH_HYPERGEOMETRIC_PFQ_HPP
 
 #include <boost/math/special_functions/detail/hypergeometric_pFq_checked_series.hpp>
+#include <boost/chrono.hpp>
 
 namespace boost {
    namespace math {
+
+      namespace detail {
+
+         struct pFq_termination_exception : public std::runtime_error
+         {
+            pFq_termination_exception(const char* p) : std::runtime_error(p) {}
+         };
+
+         struct timed_iteration_terminator
+         {
+            timed_iteration_terminator(boost::uintmax_t i, double t) : max_iter(i), max_time(t), start_time(boost::chrono::system_clock::now()) {}
+
+            bool operator()(boost::uintmax_t iter)const
+            {
+               if (iter > max_iter)
+                  boost::throw_exception(boost::math::detail::pFq_termination_exception("pFq exceeded maximum permitted iterations."));
+               if (boost::chrono::duration<double>(boost::chrono::system_clock::now() - start_time).count() > max_time)
+                  boost::throw_exception(boost::math::detail::pFq_termination_exception("pFq exceeded maximum permitted evaluation time."));
+               return false;
+            }
+
+            boost::uintmax_t max_iter;
+            double max_time;
+            boost::chrono::system_clock::time_point start_time;
+         };
+
+      }
 
       template <class Seq, class Real, class Policy>
       inline Real hypergeometric_pFq(const Seq& aj, const Seq& bj, const Real& z, Real* pNorm, const Policy& pol)
@@ -31,8 +59,8 @@ namespace boost {
          return hypergeometric_pFq(aj, bj, z, pNorm, boost::math::policies::policy<>());
       }
 
-      template <class Seq, class Real>
-      Real hypergeometric_pFq_precision(const Seq& aj, const Seq& bj, const Real& z, unsigned digits10)
+      template <class Seq, class Real, class Policy>
+      Real hypergeometric_pFq_precision(const Seq& aj, const Seq& bj, const Real& z, unsigned digits10, double timeout, const Policy& pol)
       {
          unsigned current_precision = digits10 + 5;
 
@@ -57,7 +85,13 @@ namespace boost {
                bi->precision(current_precision);
             try
             {
-               r = hypergeometric_pFq(aa, bb, z, &norm, boost::math::policies::policy<>());
+               int scale = 0;
+               std::pair<Real, Real> rp = boost::math::detail::hypergeometric_pFq_checked_series_impl(aj, bj, z, pol, boost::math::detail::timed_iteration_terminator(boost::math::policies::get_max_series_iterations<Policy>(), timeout), scale);
+               rp.first *= exp(Real(scale));
+               rp.second *= exp(Real(scale));
+
+               r = rp.first;
+               norm = rp.second;
 
                unsigned precision_obtained = current_precision - 1 - itrunc(log10(abs(norm / r)));
                if (precision_obtained < digits10)
@@ -71,15 +105,32 @@ namespace boost {
             {
                current_precision *= 2;
             }
+            catch (const detail::pFq_termination_exception& e)
+            {
+               //
+               // Either we have exhausted the number of series iterations, or the timeout.
+               // Either way we quit now.
+               throw boost::math::evaluation_error(e.what());
+            }
          } while (true);
 
          return r;
       }
-
-      template <class Real>
-      Real hypergeometric_pFq_precision(const std::initializer_list<Real>& aj, const std::initializer_list<Real>& bj, const Real& z, unsigned digits10)
+      template <class Seq, class Real>
+      Real hypergeometric_pFq_precision(const Seq& aj, const Seq& bj, const Real& z, unsigned digits10, double timeout = 0.5)
       {
-         return hypergeometric_pFq_precision< std::initializer_list<Real>, Real>(aj, bj, z, digits10);
+         return hypergeometric_pFq_precision(aj, bj, z, digits10, timeout, boost::math::policies::policy<>());
+      }
+
+      template <class Real, class Policy>
+      Real hypergeometric_pFq_precision(const std::initializer_list<Real>& aj, const std::initializer_list<Real>& bj, const Real& z, unsigned digits10, double timeout, const Policy& pol)
+      {
+         return hypergeometric_pFq_precision< std::initializer_list<Real>, Real>(aj, bj, z, digits10, timeout, pol);
+      }
+      template <class Real>
+      Real hypergeometric_pFq_precision(const std::initializer_list<Real>& aj, const std::initializer_list<Real>& bj, const Real& z, unsigned digits10, double timeout = 0.5)
+      {
+         return hypergeometric_pFq_precision< std::initializer_list<Real>, Real>(aj, bj, z, digits10, timeout, boost::math::policies::policy<>());
       }
 
    }
