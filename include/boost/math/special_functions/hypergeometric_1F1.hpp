@@ -342,6 +342,8 @@ namespace boost { namespace math { namespace detail {
       // Check for initial divergence:
       //
       bool series_is_divergent = (a + 1) * z / (b + 1) < -1;
+      if (series_is_divergent && (a < 0) && (b < 0) && (a > -1))
+         series_is_divergent = false;   // Best off taking the series in this situation
       //
       // If series starts off non-divergent, and becomes divergent later
       // then it's because both a and b are negative, so check for later
@@ -403,7 +405,8 @@ namespace boost { namespace math { namespace detail {
             }
             else
             {
-               if (z < fabs((2 * a - b) / (sqrt(fabs(a * b)))))
+               T aa = a < 1 ? T(1) : a;
+               if (z < fabs((2 * aa - b) / (sqrt(fabs(aa * b)))))
                   return detail::hypergeometric_1F1_AS_13_3_7_tricomi(a, b, z, pol, log_scaling);
             }
          }

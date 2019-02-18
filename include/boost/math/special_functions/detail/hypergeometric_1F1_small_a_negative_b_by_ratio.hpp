@@ -41,11 +41,12 @@
       template <class T, class Policy>
       T hypergeometric_1F1_small_a_negative_b_by_ratio(const T& a, const T& b, const T& z, const Policy& pol, int& log_scaling)
       {
+         BOOST_MATH_STD_USING
          //
          // We grab the ratio for M[a, b, z] / M[a, b+1, z] and use it to seed 2 initial values,
          // then recurse until b > 0, compute a reference value and normalize (Millers method).
          //
-         int iterations = boost::math::itrunc(-b, pol);
+         int iterations = itrunc(-b, pol);
          boost::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
          T ratio = boost::math::tools::function_ratio_from_forwards_recurrence(boost::math::detail::hypergeometric_1F1_recurrence_b_coefficients<T>(a, b, z), boost::math::tools::epsilon<T>(), max_iter);
          boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1F1_small_a_negative_b_by_ratio<%1%>(%1%,%1%,%1%)", max_iter, pol);

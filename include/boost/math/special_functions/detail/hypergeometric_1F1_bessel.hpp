@@ -461,7 +461,7 @@
            : b_minus_a(b_minus_a), half_z(z / 2), poch_1(2 * b_minus_a - 1), poch_2(b_minus_a - a), b_poch(b), term(1), last_result(1), sign(1), n(0), cache_offset(-cache_size), scale(0), pol(pol_)
         {
            bessel_i_cache[cache_size - 1] = half_z > tools::log_max_value<T>() ?
-              cyl_bessel_i_large_x_scaled(b_minus_a - 1.5f, half_z, scale, pol) : boost::math::cyl_bessel_i(b_minus_a - 1.5f, half_z, pol);
+              cyl_bessel_i_large_x_scaled(T(b_minus_a - 1.5f), half_z, scale, pol) : boost::math::cyl_bessel_i(b_minus_a - 1.5f, half_z, pol);
            refill_cache();
         }
         T operator()()
@@ -473,7 +473,7 @@
            T result = term * (b_minus_a - 0.5f + n) * sign * bessel_i_cache[n - cache_offset];
            ++n;
            term *= poch_1;
-           poch_1 = (n == 1) ? 2 * b_minus_a : poch_1 + 1;
+           poch_1 = (n == 1) ? T(2 * b_minus_a) : T(poch_1 + 1);
            term *= poch_2;
            poch_2 += 1;
            term /= n;
