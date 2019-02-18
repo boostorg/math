@@ -10,7 +10,7 @@
 #include <boost/math/special_functions/fpclassify.hpp> // isnan
 #include <boost/math/special_functions/round.hpp> // iround
 #include <boost/math/special_functions/trunc.hpp> // itrunc
-#include <boost/multiprecision/cpp_bin_float.hpp>
+//#include <boost/multiprecision/cpp_bin_float.hpp>
 
 #define BOOST_TEST_MODULE test_autodiff
 #include <boost/test/included/unit_test.hpp>

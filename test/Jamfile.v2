@@ -1241,6 +1241,7 @@ test-suite misc :
    [ run test_autodiff_1.cpp ../../test/build//boost_unit_test_framework : : : <toolset>msvc:<cxxflags>/bigobj [ requires cxx11_inline_namespaces ] ]
    [ run test_autodiff_2.cpp ../../test/build//boost_unit_test_framework : : : <toolset>msvc:<cxxflags>/bigobj [ requires cxx11_inline_namespaces ] ]
    [ run test_autodiff_3.cpp ../../test/build//boost_unit_test_framework : : : <toolset>msvc:<cxxflags>/bigobj [ requires cxx11_inline_namespaces ] ]
+   [ run test_autodiff_4.cpp ../../test/build//boost_unit_test_framework : : : <toolset>msvc:<cxxflags>/bigobj [ requires cxx11_inline_namespaces ] ]
 ;
 
 build-project ../example ;
