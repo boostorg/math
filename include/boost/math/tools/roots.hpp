@@ -271,11 +271,15 @@ T newton_raphson_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_
       if(fabs(delta * 2) > fabs(delta2))
       {
          // last two steps haven't converged.
-         delta = (delta > 0) ? (result - min) / 2 : (result - max) / 2;
-         if (fabs(delta) > fabs(result))
+         T shift = (delta > 0) ? (result - min) / 2 : (result - max) / 2;
+         if ((result != 0) && (fabs(shift) > fabs(result)))
+         {
             delta = sign(delta) * result; // protect against huge jumps!
-         // reset delta2 so we don't take this branch next time round:
-         delta1 = delta;
+         }
+         else
+            delta = shift;
+         // reset delta1/2 so we don't take this branch next time round:
+         delta1 = 3 * delta;
          delta2 = 3 * delta;
       }
       guess = result;
@@ -424,12 +428,12 @@ namespace detail{
          {
             // last two steps haven't converged.
             delta = (delta > 0) ? (result - min) / 2 : (result - max) / 2;
-            if (fabs(delta) > result)
+            if ((result != 0) && (fabs(delta) > result))
                delta = sign(delta) * result; // protect against huge jumps!
             // reset delta2 so that this branch will *not* be taken on the
             // next iteration:
             delta2 = delta * 3;
-            delta1 = delta;
+            delta1 = delta * 3;
             BOOST_MATH_INSTRUMENT_VARIABLE(delta);
          }
          guess = result;
