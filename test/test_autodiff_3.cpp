@@ -200,4 +200,55 @@ BOOST_AUTO_TEST_CASE(fmod_test)
     boost::fusion::for_each(multiprecision_float_types, fmod_test_test());
 }
 
+struct round_and_trunc_test
+{
+  template<typename T>
+  void operator()(const T&) const
+  {
+    using std::round;
+    using std::trunc;
+    constexpr int m = 3;
+    constexpr float cx = 3.25;
+    auto x = make_fvar<T,m>(cx);
+    auto y = round(x);
+    BOOST_REQUIRE(y.derivative(0) == round(cx));
+    BOOST_REQUIRE(y.derivative(1) == 0.0);
+    BOOST_REQUIRE(y.derivative(2) == 0.0);
+    BOOST_REQUIRE(y.derivative(3) == 0.0);
+    y = trunc(x);
+    BOOST_REQUIRE(y.derivative(0) == trunc(cx));
+    BOOST_REQUIRE(y.derivative(1) == 0.0);
+    BOOST_REQUIRE(y.derivative(2) == 0.0);
+    BOOST_REQUIRE(y.derivative(3) == 0.0);
+  }
+};
+
+BOOST_AUTO_TEST_CASE(round_and_trunc)
+{
+    boost::fusion::for_each(bin_float_types, round_and_trunc_test());
+    boost::fusion::for_each(multiprecision_float_types, round_and_trunc_test());
+}
+
+struct iround_and_itrunc_test
+{
+  template<typename T>
+  void operator()(const T&) const
+  {
+    using namespace boost::math;
+    constexpr int m = 3;
+    constexpr float cx = 3.25;
+    auto x = make_fvar<T,m>(cx);
+    int y = iround(x);
+    BOOST_REQUIRE(y == iround(cx));
+    y = itrunc(x);
+    BOOST_REQUIRE(y == itrunc(cx));
+  }
+};
+
+BOOST_AUTO_TEST_CASE(iround_and_itrunc)
+{
+    boost::fusion::for_each(bin_float_types, iround_and_itrunc_test());
+    boost::fusion::for_each(multiprecision_float_types, iround_and_itrunc_test());
+}
+
 BOOST_AUTO_TEST_SUITE_END()
