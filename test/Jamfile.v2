@@ -918,18 +918,24 @@ test-suite distribution_tests :
 
 test-suite misc :
    [ run test_print_info_on_type.cpp  ]
-   [ run test_barycentric_rational.cpp ../../test/build//boost_unit_test_framework : : :  [ requires cxx11_smart_ptr ] [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]  ]
+   [ run test_barycentric_rational.cpp ../../test/build//boost_unit_test_framework : : :  [ requires cxx11_smart_ptr cxx11_defaulted_functions cxx11_auto_declarations cxx11_unified_initialization_syntax ] [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]  ]
    [ run test_constant_generate.cpp : : : release <define>USE_CPP_FLOAT=1 <exception-handling>off:<build>no  ]
    [ run test_cubic_b_spline.cpp ../../test/build//boost_unit_test_framework : : :  [ requires cxx11_smart_ptr cxx11_defaulted_functions ] <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ]
-   [ run catmull_rom_test.cpp ../../test/build//boost_unit_test_framework : : :  [ requires cxx17_if_constexpr ] ] # does not in fact require C++17 constexpr; requires C++17 std::size.
+   [ run catmull_rom_test.cpp ../../test/build//boost_unit_test_framework : : :  [ requires cxx17_if_constexpr cxx17_std_apply ] ] # does not in fact require C++17 constexpr; requires C++17 std::size.
+   [ run univariate_statistics_test.cpp ../../test/build//boost_unit_test_framework : : :  [ requires cxx17_if_constexpr cxx17_std_apply ] ]
+   [ run norms_test.cpp ../../test/build//boost_unit_test_framework : : :  [ requires cxx17_if_constexpr cxx17_std_apply ] ]
+   [ run signal_statistics_test.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
+   [ run bivariate_statistics_test.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
+   [ run lanczos_smoothing_test.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
+   [ run condition_number_test.cpp ../../test/build//boost_unit_test_framework : : :  [ requires cxx17_if_constexpr cxx17_std_apply ] ]
    [ run test_real_concept.cpp ../../test/build//boost_unit_test_framework  ]
    [ run test_remez.cpp pch ../../test/build//boost_unit_test_framework  ]
    [ run test_roots.cpp pch ../../test/build//boost_unit_test_framework  ]
    [ run test_root_iterations.cpp pch ../../test/build//boost_unit_test_framework : : : [ requires cxx11_hdr_tuple ]  ]
    [ run test_root_finding_concepts.cpp ../../test/build//boost_unit_test_framework  ]
    [ run test_toms748_solve.cpp pch ../../test/build//boost_unit_test_framework  ]
-   [ run  compile_test/cubic_spline_incl_test.cpp compile_test_main : : :  [ requires cxx11_smart_ptr cxx11_defaulted_functions ]  ]
-   [ run  compile_test/barycentric_rational_incl_test.cpp compile_test_main : : :  [ requires cxx11_smart_ptr cxx11_defaulted_functions ]  ]
+   [ run  compile_test/cubic_spline_incl_test.cpp compile_test_main : : :  [ requires cxx11_smart_ptr cxx11_defaulted_functions cxx11_auto_declarations ]  ]
+   [ run  compile_test/barycentric_rational_incl_test.cpp compile_test_main : : :  [ requires cxx11_smart_ptr cxx11_defaulted_functions cxx11_auto_declarations cxx11_unified_initialization_syntax ]  ]
    [ run  compile_test/compl_abs_incl_test.cpp compile_test_main  ]
    [ run  compile_test/compl_acos_incl_test.cpp compile_test_main  ]
    [ run  compile_test/compl_acosh_incl_test.cpp compile_test_main  ]
@@ -1021,7 +1027,7 @@ test-suite misc :
    [ compile  compile_test/tools_test_inc_test.cpp  ]
    [ compile  compile_test/tools_toms748_inc_test.cpp  ]
    [ compile  compile_test/cubic_spline_concept_test.cpp :  [ requires cxx11_smart_ptr cxx11_defaulted_functions ]  ]
-   [ compile  compile_test/barycentric_rational_concept_test.cpp :  [ requires cxx11_smart_ptr cxx11_defaulted_functions ]  ]
+   [ compile  compile_test/barycentric_rational_concept_test.cpp :  [ requires cxx11_smart_ptr cxx11_defaulted_functions cxx11_unified_initialization_syntax ]  ]
    [ compile  compile_test/sf_legendre_stieltjes_concept_test.cpp : [ requires cxx11_auto_declarations cxx11_defaulted_functions cxx11_lambdas ]   ]
    [ compile  compile_test/trapezoidal_concept_test.cpp : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_decltype cxx11_unified_initialization_syntax cxx11_variadic_templates ] ]
    [ run octonion_test.cpp

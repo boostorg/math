@@ -9,6 +9,7 @@
 #include <array>
 #include <cmath>
 #include <boost/math/interpolators/catmull_rom.hpp>
+#include <boost/math/constants/constants.hpp>
 
 using std::sin;
 using std::cos;
@@ -20,7 +21,7 @@ int main()
 
     // The Archimedean spiral is given by r = a*theta. We have set a = 1.
     std::vector<std::array<double, 2>> spiral_points(500);
-    double theta_max = M_PI;
+    double theta_max = boost::math::constants::pi<double>();
     for (size_t i = 0; i < spiral_points.size(); ++i)
     {
         double theta = ((double) i/ (double) spiral_points.size())*theta_max;

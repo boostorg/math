@@ -9,6 +9,9 @@
 #ifdef _MSC_VER
 #pragma once
 #endif
+#include <boost/multiprecision/detail/number_base.hpp> // test for multiprecision types.
+#include <boost/type_traits/is_complex.hpp> // test for complex types
+
 #include <iostream>
 #include <utility>
 #include <boost/config/no_tr1/cmath.hpp>
@@ -268,11 +271,15 @@ T newton_raphson_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_
       if(fabs(delta * 2) > fabs(delta2))
       {
          // last two steps haven't converged.
-         delta = (delta > 0) ? (result - min) / 2 : (result - max) / 2;
-         if (fabs(delta) > fabs(result))
+         T shift = (delta > 0) ? (result - min) / 2 : (result - max) / 2;
+         if ((result != 0) && (fabs(shift) > fabs(result)))
+         {
             delta = sign(delta) * result; // protect against huge jumps!
-         // reset delta2 so we don't take this branch next time round:
-         delta1 = delta;
+         }
+         else
+            delta = shift;
+         // reset delta1/2 so we don't take this branch next time round:
+         delta1 = 3 * delta;
          delta2 = 3 * delta;
       }
       guess = result;
@@ -421,12 +428,12 @@ namespace detail{
          {
             // last two steps haven't converged.
             delta = (delta > 0) ? (result - min) / 2 : (result - max) / 2;
-            if (fabs(delta) > result)
+            if ((result != 0) && (fabs(delta) > result))
                delta = sign(delta) * result; // protect against huge jumps!
             // reset delta2 so that this branch will *not* be taken on the
             // next iteration:
             delta2 = delta * 3;
-            delta1 = delta;
+            delta1 = delta * 3;
             BOOST_MATH_INSTRUMENT_VARIABLE(delta);
          }
          guess = result;
@@ -646,6 +653,174 @@ Complex complex_newton(F g, Complex guess, int max_iterations=std::numeric_limit
 
     return {std::numeric_limits<Real>::quiet_NaN(),
             std::numeric_limits<Real>::quiet_NaN()};
+}
+#endif
+
+
+#if !defined(BOOST_NO_CXX17_IF_CONSTEXPR)
+// https://stackoverflow.com/questions/48979861/numerically-stable-method-for-solving-quadratic-equations/50065711
+namespace detail
+{
+    template<class T>
+    inline T discriminant(T const & a, T const & b, T const & c)
+    {
+        T w = 4*a*c;
+        T e = std::fma(-c, 4*a, w);
+        T f = std::fma(b, b, -w);
+        return f + e;
+    }
+}
+
+template<class T>
+auto quadratic_roots(T const& a, T const& b, T const& c)
+{
+    using std::copysign;
+    using std::sqrt;
+    if constexpr (std::is_integral<T>::value)
+    {
+        // What I want is to write:
+        // return quadratic_roots(double(a), double(b), double(c));
+        // but that doesn't compile.
+        double nan = std::numeric_limits<double>::quiet_NaN();
+        if(a==0)
+        {
+            if (b==0 && c != 0)
+            {
+                return std::pair<double, double>(nan, nan);
+            }
+            else if (b==0 && c==0)
+            {
+                return std::pair<double, double>(0,0);
+            }
+            return std::pair<double, double>(-c/b, -c/b);
+        }
+        if (b==0)
+        {
+            double x0_sq = -double(c)/double(a);
+            if (x0_sq < 0) {
+                return std::pair<double, double>(nan, nan);
+            }
+            double x0 = sqrt(x0_sq);
+            return std::pair<double, double>(-x0,x0);
+        }
+        double discriminant = detail::discriminant(double(a), double(b), double(c));
+        if (discriminant < 0)
+        {
+            return std::pair<double, double>(nan, nan);
+        }
+        double q = -(b + copysign(sqrt(discriminant), double(b)))/T(2);
+        double x0 = q/a;
+        double x1 = c/q;
+        if (x0 < x1) {
+            return std::pair<double, double>(x0, x1);
+        }
+        return std::pair<double, double>(x1, x0);
+    }
+    else if constexpr (std::is_floating_point<T>::value)
+    {
+        T nan = std::numeric_limits<T>::quiet_NaN();
+        if(a==0)
+        {
+            if (b==0 && c != 0)
+            {
+                return std::pair<T, T>(nan, nan);
+            }
+            else if (b==0 && c==0)
+            {
+                return std::pair<T, T>(0,0);
+            }
+            return std::pair<T, T>(-c/b, -c/b);
+        }
+        if (b==0)
+        {
+            T x0_sq = -c/a;
+            if (x0_sq < 0) {
+                return std::pair<T, T>(nan, nan);
+            }
+            T x0 = sqrt(x0_sq);
+            return std::pair<T, T>(-x0,x0);
+        }
+        T discriminant = detail::discriminant(a, b, c);
+        // Is there a sane way to flush very small negative values to zero?
+        // If there is I don't know of it.
+        if (discriminant < 0)
+        {
+            return std::pair<T, T>(nan, nan);
+        }
+        T q = -(b + copysign(sqrt(discriminant), b))/T(2);
+        T x0 = q/a;
+        T x1 = c/q;
+        if (x0 < x1)
+        {
+            return std::pair<T, T>(x0, x1);
+        }
+        return std::pair<T, T>(x1, x0);
+    }
+    else if constexpr (boost::is_complex<T>::value || boost::multiprecision::number_category<T>::value == boost::multiprecision::number_kind_complex)
+    {
+        typename T::value_type nan = std::numeric_limits<typename T::value_type>::quiet_NaN();
+        if(a.real()==0 && a.imag() ==0)
+        {
+            using std::norm;
+            if (b.real()==0 && b.imag() && norm(c) != 0)
+            {
+                return std::pair<T, T>({nan, nan}, {nan, nan});
+            }
+            else if (b.real()==0 && b.imag() && c.real() ==0 && c.imag() == 0)
+            {
+                return std::pair<T, T>({0,0},{0,0});
+            }
+            return std::pair<T, T>(-c/b, -c/b);
+        }
+        if (b.real()==0 && b.imag() == 0)
+        {
+            T x0_sq = -c/a;
+            T x0 = sqrt(x0_sq);
+            return std::pair<T, T>(-x0, x0);
+        }
+        // There's no fma for complex types:
+        T discriminant = b*b - T(4)*a*c;
+        T q = -(b + sqrt(discriminant))/T(2);
+        return std::pair<T, T>(q/a, c/q);
+    }
+    else // Most likely the type is a boost.multiprecision.
+    {    //There is no fma for multiprecision, and in addition it doesn't seem to be useful, so revert to the naive computation.
+        T nan = std::numeric_limits<T>::quiet_NaN();
+        if(a==0)
+        {
+            if (b==0 && c != 0)
+            {
+                return std::pair<T, T>(nan, nan);
+            }
+            else if (b==0 && c==0)
+            {
+                return std::pair<T, T>(0,0);
+            }
+            return std::pair<T, T>(-c/b, -c/b);
+        }
+        if (b==0)
+        {
+            T x0_sq = -c/a;
+            if (x0_sq < 0) {
+                return std::pair<T, T>(nan, nan);
+            }
+            T x0 = sqrt(x0_sq);
+            return std::pair<T, T>(-x0,x0);
+        }
+        T discriminant = b*b - 4*a*c;
+        if (discriminant < 0)
+        {
+            return std::pair<T, T>(nan, nan);
+        }
+        T q = -(b + copysign(sqrt(discriminant), b))/T(2);
+        T x0 = q/a;
+        T x1 = c/q;
+        if (x0 < x1)
+        {
+            return std::pair<T, T>(x0, x1);
+        }
+        return std::pair<T, T>(x1, x0);
+    }
 }
 #endif
 

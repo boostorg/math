@@ -32,6 +32,9 @@
    template <class F, class Complex>
    Complex complex_newton(F f, Complex guess, int max_iterations = std::numeric_limits<typename Complex::value_type>::digits);
 
+   template<class T>
+   auto quadratic_roots(T const & a, T const & b, T const & c);
+
    }}} // namespaces boost::math::tools.
 
 [h4 Description]
@@ -44,6 +47,8 @@ These functions all perform iterative root-finding [*using derivatives]:
 __halley and __schroder iteration.
 
 * `complex_newton` performs Newton's method on complex-analytic functions.
+
+* `solve_quadratic` solves quadratic equations using various tricks to keep catastrophic cancellation from occurring in computation of the discriminant.
 
 
 [variablelist Parameters of the real-valued root finding functions
@@ -172,6 +177,25 @@ then which root the complex Newton's method converges to is essentially impossib
 Finally, the derivative of /f/ must be continuous at the root or else non-roots can be found; see [@https://math.stackexchange.com/questions/3017766/constructing-newton-iteration-converging-to-non-root here] for an example.
 
 An example usage of `complex_newton` is given in `examples/daubechies_coefficients.cpp`.
+
+[h4 Quadratics]
+
+To solve a quadratic /ax/[super 2] + /bx/ + /c/ = 0, we may use
+
+    auto [x0, x1] = boost::math::tools::quadratic_roots(a, b, c);
+
+If the roots are real, they are arranged so that `x0` \u2264 `x1`.
+If the roots are complex and the inputs are real, `x0` and `x1` are both `std::numeric_limits<Real>::quiet_NaN()`.
+In this case we must cast `a`, `b` and `c` to a complex type to extract the complex roots.
+If `a`, `b` and `c` are integral, then the roots are of type double.
+The routine is much faster if the fused-multiply-add instruction is available on your architecture.
+If the fma is not available, the function resorts to slow emulation.
+Finally, speed is improved if you compile for your particular architecture.
+For instance, if you compile without any architecture flags, then the `std::fma` call compiles down to `call _fma`,
+which dynamically chooses to emulate or execute the `vfmadd132sd` instruction based on the capabilities of the architecture.
+If instead, you compile with (say) `-march=native` then no dynamic choice is made:
+The `vfmadd132sd` instruction is always executed if available and emulation is used if not.
+
 
 [h4 Examples]
 

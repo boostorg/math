@@ -12,6 +12,7 @@
 #include <boost/type_index.hpp>
 #include <boost/test/included/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
+#include <boost/math/constants/constants.hpp>
 #include <boost/math/interpolators/catmull_rom.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/multiprecision/cpp_dec_float.hpp>
@@ -115,6 +116,7 @@ void test_linear()
 template<class Real>
 void test_circle()
 {
+    using boost::math::constants::pi;
     std::cout << "Testing that the Catmull-Rom spline interpolates circles correctly on type "
               << boost::typeindex::type_id<Real>().pretty_name() << "\n";
 
@@ -123,7 +125,7 @@ void test_circle()
     std::vector<std::array<Real, 2>> u(20*sizeof(Real));
     for (size_t i = 0; i < v.size(); ++i)
     {
-        Real theta = ((Real) i/ (Real) v.size())*2*M_PI;
+        Real theta = ((Real) i/ (Real) v.size())*2*pi<Real>();
         v[i] = {cos(theta), sin(theta)};
         u[i] = v[i];
     }
@@ -173,7 +175,7 @@ void test_affine_invariance()
     std::vector<std::array<Real, dimension>> v(100);
     std::vector<std::array<Real, dimension>> u(100);
     std::mt19937_64 gen(438232);
-    Real inv_denom = (Real) 100/( (Real) gen.max() + (Real) 2);
+    Real inv_denom = (Real) 100/( (Real) (gen.max)() + (Real) 2);
     for(size_t j = 0; j < dimension; ++j)
     {
         v[0][j] = gen()*inv_denom;
@@ -229,14 +231,15 @@ void test_affine_invariance()
 template<class Real>
 void test_helix()
 {
+    using boost::math::constants::pi;
     std::cout << "Testing that the Catmull-Rom spline interpolates helices correctly on type "
               << boost::typeindex::type_id<Real>().pretty_name() << "\n";
 
     Real tol = 0.001;
-    std::vector<std::array<Real, 3>> v(2000*sizeof(Real));
+    std::vector<std::array<Real, 3>> v(400*sizeof(Real));
     for (size_t i = 0; i < v.size(); ++i)
     {
-        Real theta = ((Real) i/ (Real) v.size())*2*M_PI;
+        Real theta = ((Real) i/ (Real) v.size())*2*pi<Real>();
         v[i] = {cos(theta), sin(theta), theta};
     }
     catmull_rom<std::array<Real, 3>> helix(std::move(v));
@@ -360,40 +363,19 @@ void test_data_representations()
 BOOST_AUTO_TEST_CASE(catmull_rom_test)
 {
     test_data_representations<float>();
-    test_alpha_distance<float>();
     test_alpha_distance<double>();
-    test_alpha_distance<long double>();
-    test_alpha_distance<cpp_bin_float_50>();
 
-    test_linear<float>();
     test_linear<double>();
     test_linear<long double>();
-    test_linear<cpp_bin_float_50>();
 
     test_circle<float>();
     test_circle<double>();
-    test_circle<long double>();
-    test_circle<cpp_bin_float_50>();
 
-    test_helix<float>();
     test_helix<double>();
-
-    test_affine_invariance<float, 1>();
-    test_affine_invariance<float, 2>();
-    test_affine_invariance<float, 3>();
-    test_affine_invariance<float, 4>();
 
     test_affine_invariance<double, 1>();
     test_affine_invariance<double, 2>();
     test_affine_invariance<double, 3>();
     test_affine_invariance<double, 4>();
-
-    test_affine_invariance<long double, 1>();
-    test_affine_invariance<long double, 2>();
-    test_affine_invariance<long double, 3>();
-    test_affine_invariance<long double, 4>();
-    test_affine_invariance<cpp_bin_float_50, 1>();
-    test_affine_invariance<cpp_bin_float_50, 2>();
-    test_affine_invariance<cpp_bin_float_50, 3>();
     test_affine_invariance<cpp_bin_float_50, 4>();
 }
