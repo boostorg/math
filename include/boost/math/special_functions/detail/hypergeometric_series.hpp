@@ -231,7 +231,7 @@
      {
         if(s)
          *s = 1;
-        return lgamma(z + n, pol) - lgamma(z, pol);
+        return lgamma(z + n) - lgamma(z);
      }
   }
 
