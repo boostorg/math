@@ -360,9 +360,16 @@
            log_scale += s.scale();
            try
            {
-              result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
+              T norm = 0;
+              result = 0;
+              if((a < 0) && (b < 0))
+                 result = boost::math::tools::checked_sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter, result, norm);
+              else
+                 result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter, result);
               if (!(boost::math::isfinite)(result) || (result == 0) || (!std::numeric_limits<T>::has_infinity && (fabs(result) >= tools::max_value<T>())))
                  retry = true;
+              if (norm / fabs(result) > 1 / boost::math::tools::root_epsilon<T>())
+                 retry = true;  // fatal cancellation
            }
            catch (const std::overflow_error&)
            {
@@ -394,12 +401,17 @@
         {
            int sgn = boost::math::sign(result);
            prefix += log(fabs(result));
-           prefix += log_scale;
-           log_scale = 0;
            result = sgn * prefix_sgn * exp(prefix);
         }
         else
         {
+           if ((fabs(result) > 1) && (fabs(prefix) > 1) && (tools::max_value<T>() / fabs(result) < fabs(prefix)))
+           {
+              // Overflow:
+              scale = itrunc(tools::log_max_value<T>()) - 10;
+              log_scale += scale;
+              result /= exp(scale);
+           }
            result *= prefix;
         }
         return result;
