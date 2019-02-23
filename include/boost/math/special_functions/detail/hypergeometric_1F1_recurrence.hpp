@@ -112,18 +112,18 @@
   {
     typedef boost::math::tuple<T, T, T> result_type;
 
-    hypergeometric_1F1_recurrence_a_and_b_coefficients(const T& a, const T& b, const T& z):
-    a(a), b(b), z(z)
+    hypergeometric_1F1_recurrence_a_and_b_coefficients(const T& a, const T& b, const T& z, int offset = 0):
+    a(a), b(b), z(z), offset(offset)
     {
     }
 
     result_type operator()(boost::intmax_t i) const
     {
-      const T ai = a + i;
-      const T bi = b + i;
+      const T ai = a + (offset + i);
+      const T bi = b + (offset + i);
 
-      const T an = bi * (bi - 1);
-      const T bn = bi * ((1 - bi) + z);
+      const T an = bi * (b + (offset + i - 1));
+      const T bn = bi * (z - (b + (offset + i - 1)));
       const T cn = -ai * z;
 
       return boost::math::make_tuple(an, bn, cn);
@@ -131,6 +131,7 @@
 
   private:
     const T a, b, z;
+    int offset;
     hypergeometric_1F1_recurrence_a_and_b_coefficients operator=(const hypergeometric_1F1_recurrence_a_and_b_coefficients&);
   };
 
@@ -254,6 +255,15 @@
      BOOST_ASSERT(a_b_shift + leading_a_shift + (a_b_shift == 0 ? 1 : 0) == a_shift);
      BOOST_ASSERT(a_b_shift + trailing_b_shift == b_shift);
 
+     if ((trailing_b_shift == 0) && (fabs(b) < 0.5) && a_b_shift)
+     {
+        // Better to have the final recursion on b alone, otherwise we lose precision when b is very small:
+        int diff = (std::min)(a_b_shift, 3);
+        a_b_shift -= diff;
+        leading_a_shift += diff;
+        trailing_b_shift += diff;
+     }
+
      T first, second;
      int scale1(0), scale2(0);
      first = boost::math::detail::hypergeometric_1F1_imp(T(a + a_shift), T(b + b_shift), z, pol, scale1);
@@ -293,7 +303,7 @@
         // [a + 1, b + trailing_b_shift + 1, z] and [a, b + trailing_b_shift, z]
         //
         second = boost::math::tools::apply_recurrence_relation_backward(
-           hypergeometric_1F1_recurrence_a_and_b_coefficients<T>(a + a_shift - leading_a_shift - 1, b + b_shift - 1, z),
+           hypergeometric_1F1_recurrence_a_and_b_coefficients<T>(a, b + b_shift - a_b_shift, z, a_b_shift - 1),
            a_b_shift - 1, first, second, &log_scaling, &first);
         //
         // Now we need to switch to a b shift, a different application of A&S 13.4.3
