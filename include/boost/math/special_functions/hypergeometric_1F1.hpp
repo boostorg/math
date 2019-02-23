@@ -158,7 +158,7 @@ namespace boost { namespace math { namespace detail {
    }
 
    template <class T>
-   T cyl_bessel_i_shrinkage_rate(const T& z)
+   inline T cyl_bessel_i_shrinkage_rate(const T& z)
    {
       // Approximately the ratio I_10.5(z/2) / I_9.5(z/2), this gives us an idea of how quickly
       // the Bessel terms in A&S 13.6.4 are converging:
@@ -176,7 +176,7 @@ namespace boost { namespace math { namespace detail {
    }
 
    template <class T>
-   bool hypergeometric_1F1_is_13_3_6_region(const T& a, const T& b, const T& z)
+   inline bool hypergeometric_1F1_is_13_3_6_region(const T& a, const T& b, const T& z)
    {
       BOOST_MATH_STD_USING
       if(fabs(a) == 0.5)
@@ -189,6 +189,45 @@ namespace boost { namespace math { namespace detail {
             return true;
       }
       return false;
+   }
+
+   template <class T>
+   inline bool hypergeometric_1F1_need_kummer_reflection(const T& a, const T& b, const T& z)
+   {
+      //
+      // Check to see if we should apply Kummer's relation or not:
+      //
+      if (z > 0)
+         return false;
+      if (z < -1)
+         return true;
+      //
+      // When z is small and negative, things get more complex.
+      // More often than not we do not need apply Kummer's relation and the
+      // series is convergent as is, but we do need to check:
+      //
+      if (a > 0)
+      {
+         if (b > 0)
+         {
+            return fabs((a + 10) * z / (10 * (b + 10))) < 1;  // Is the 10'th term convergent?
+         }
+         else
+         {
+            return true;  // Likely to be divergent as b crosses the origin
+         }
+      }
+      else // a < 0
+      {
+         if (b > 0)
+         {
+            return false;  // Terms start off all positive and then by the time a crosses the origin we *must* be convergent.
+         }
+         else
+         {
+            return true;  // Likely to be divergent as b crosses the origin, but hard to rationalise about!
+         }
+      }
    }
 
       
@@ -309,7 +348,7 @@ namespace boost { namespace math { namespace detail {
       if ((fabs(a * z / b) < 3.5) && (fabs(z * 100) < fabs(b)) && ((fabs(a) > 1e-2) || (b < -5)))
          return detail::hypergeometric_1F1_rational(a, b, z, pol);
 
-      if (z < -1)
+      if (hypergeometric_1F1_need_kummer_reflection(a, b, z))
       {
          if (a == 1)
             return detail::hypergeometric_1F1_pade(b, z, pol);
