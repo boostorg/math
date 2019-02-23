@@ -444,7 +444,8 @@ struct asinh_test_test
     const T cx = 1;
     auto x = make_fvar<T,m>(cx);
     auto y = asinh(x);
-    BOOST_REQUIRE(y.derivative(0) == asinh(cx));
+    //BOOST_REQUIRE(y.derivative(0) == asinh(cx)); // Fails for gcc-mingw - similar to acosh()?
+    BOOST_REQUIRE(y.derivative(0) == asinh(static_cast<T>(x)));
     BOOST_REQUIRE_CLOSE(y.derivative(1), 1/boost::math::constants::root_two<T>(), eps);
     BOOST_REQUIRE_CLOSE(y.derivative(2), -1/(2*boost::math::constants::root_two<T>()), eps);
     BOOST_REQUIRE_CLOSE(y.derivative(3), 1/(4*boost::math::constants::root_two<T>()), eps);
