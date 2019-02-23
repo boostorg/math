@@ -57,9 +57,10 @@ namespace boost { namespace math { namespace detail {
          T z_limit = fabs((2 * a - b) / (sqrt(fabs(a))));
          int k = 1 + itrunc(z - z_limit);
          // If k is too large we destroy all the digits in the result:
-         if ((k > 0) && (k < 50))
+         T convergence_at_50 = (b - a + 50) * k / (z * 50);
+         if ((k > 0) && (k < 50) && (fabs(convergence_at_50) < 1))
          {
-            return boost::math::detail::hypergeometric_1f1_recurrence_on_z_minus_zero(a, b, T(z - k), k, pol);
+            return boost::math::detail::hypergeometric_1f1_recurrence_on_z_minus_zero(a, b, T(z - k), k, pol, log_scaling);
          }
          else if (z < b)
             return hypergeometric_1F1_backward_recurrence_for_negative_a(a, b, z, pol, function, log_scaling);
@@ -105,7 +106,7 @@ namespace boost { namespace math { namespace detail {
       //
       // Generic check: we have small initial divergence and are convergent after 10 terms:
       //
-      if ((fabs(z * a / b) < 2) && (fabs(z * (a + 10) / ((b + 10) * 3628800)) < 1))
+      if ((fabs(z * a / b) < 2) && (fabs(z * (a + 10) / ((b + 10) * 10)) < 1))
       {
          // Double check for divergence when we cross the origin on a and b:
          if (a < 0)
@@ -400,7 +401,7 @@ namespace boost { namespace math { namespace detail {
                // Bessel function internal failures: these will be caught and handled
                // but up the expense of this function call:
                //
-               if (((z < z_limit) || (a > -500)) && ((b > -500) || (b - 2 * a > 0)))
+               if (((z < z_limit) || (a > -500)) && ((b > -500) || (b - 2 * a > 0)) && (z < -a))
                   return detail::hypergeometric_1F1_AS_13_3_7_tricomi(a, b, z, pol, log_scaling);
             }
             else
