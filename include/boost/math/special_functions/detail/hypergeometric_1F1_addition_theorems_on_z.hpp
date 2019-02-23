@@ -40,8 +40,12 @@
         hypergeometric_1f1_recurrence_on_z_minus_zero_series(const T& a, const T& b, const T& z, int k_, const Policy& pol)
            : term(1), b_minus_a_plus_n(b - a), a_(a), b_(b), z_(z), n(0), k(k_)
         {
-           M = boost::math::detail::hypergeometric_1F1_imp(a, b, z, pol);
-           M_next = boost::math::detail::hypergeometric_1F1_imp(T(a - 1), b, z, pol);
+           int scale1(0), scale2(0);
+           M = boost::math::detail::hypergeometric_1F1_imp(a, b, z, pol, scale1);
+           M_next = boost::math::detail::hypergeometric_1F1_imp(T(a - 1), b, z, pol, scale2);
+           if (scale1 != scale2)
+              M_next *= exp(scale2 - scale1);
+           scaling = scale1;
         }
         T operator()()
         {
@@ -54,18 +58,21 @@
 
            return result;
         }
+        int scale()const { return scaling; }
+     private:
         T term, b_minus_a_plus_n, M, M_next, a_, b_, z_;
-        int n, k;
+        int n, k, scaling;
      };
 
      template <class T, class Policy>
-     T hypergeometric_1f1_recurrence_on_z_minus_zero(const T& a, const T& b, const T& z, int k, const Policy& pol)
+     T hypergeometric_1f1_recurrence_on_z_minus_zero(const T& a, const T& b, const T& z, int k, const Policy& pol, int& log_scaling)
      {
         BOOST_MATH_STD_USING
            BOOST_ASSERT((z + k) / z > 0.5f);
         hypergeometric_1f1_recurrence_on_z_minus_zero_series<T, Policy> s(a, b, z, k, pol);
         boost::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
         T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
+        log_scaling += s.scale();
         boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1f1_recurrence_on_z_plus_plus<%1%>(%1%,%1%,%1%)", max_iter, pol);
         return result * exp(T(k)) * pow(z / (z + k), b - a);
      }
