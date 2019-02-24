@@ -213,6 +213,7 @@
   inline T log_pochhammer(T z, unsigned n, const Policy pol, int* s = 0)
   {
      BOOST_MATH_STD_USING
+#if 0
      if (z < 0)
      {
         if (n < -z)
@@ -228,10 +229,13 @@
         }
      }
      else
+#endif
      {
+        int s1, s2;
+        T r = lgamma(z + n, &s1, pol) - lgamma(z, &s2, pol);
         if(s)
-         *s = 1;
-        return lgamma(z + n) - lgamma(z);
+           *s = s1 * s2;
+        return r;
      }
   }
 
