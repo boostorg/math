@@ -21,7 +21,7 @@ void expected_results()
    }
    else
    {
-      largest_type = "long double|real_concept";
+      largest_type = "long double|real_concept|cpp_bin_float_quad|dec_40|cpp_bin_float_double_extended";
    }
 #else
    largest_type = "(long\\s+)?double";
@@ -62,7 +62,7 @@ void expected_results()
       ".*",                          // platform
       "dec_40",                      // test type(s)
       "Large.*",                     // test data group
-      ".*", 20000000L, 400000L);     // test function
+      ".*", 20000000L, 600000L);     // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
@@ -99,6 +99,13 @@ void expected_results()
       "double",                      // test type(s)
       "Large.*",                     // test data group
       ".*", 40, 20);                 // test function
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      ".*",                          // platform
+      "double",                      // test type(s)
+      "Bug.*",                     // test data group
+      ".*", 300, 50);                 // test function
 
 #endif
 
@@ -129,9 +136,16 @@ void expected_results()
       ".*",                          // compiler
       ".*",                          // stdlib
       ".*",                          // platform
+      "dec_40",                      // test type(s)
+      "Bug cases.*",                 // test data group
+      ".*", 2200000, 400000);        // test function
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      ".*",                          // platform
       largest_type,                  // test type(s)
-      "Bug cases.*",                     // test data group
-      ".*", 400000, 40000);           // test function
+      "Bug cases.*",                 // test data group
+      ".*", 1100000, 400000);        // test function
 
    //
    // Finish off by printing out the compiler/stdlib/platform names,

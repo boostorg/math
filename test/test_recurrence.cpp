@@ -20,7 +20,7 @@ template <class T>
 struct bessel_jy_recurrence
 {
    bessel_jy_recurrence(T v, T z) : v(v), z(z) {}
-   boost::math::tuple<T, T, T> operator()(int k)
+   boost::math::tuple<T, T, T> operator()(int k)const
    {
       return boost::math::tuple<T, T, T>(T(1), -2 * (v + k) / z, T(1));
    }
@@ -32,7 +32,7 @@ template <class T>
 struct bessel_ik_recurrence
 {
    bessel_ik_recurrence(T v, T z) : v(v), z(z) {}
-   boost::math::tuple<T, T, T> operator()(int k)
+   boost::math::tuple<T, T, T> operator()(int k)const
    {
       return boost::math::tuple<T, T, T>(T(1), -2 * (v + k) / z, T(-1));
    }
