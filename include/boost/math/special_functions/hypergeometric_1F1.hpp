@@ -194,6 +194,7 @@ namespace boost { namespace math { namespace detail {
    template <class T>
    inline bool hypergeometric_1F1_need_kummer_reflection(const T& a, const T& b, const T& z)
    {
+      BOOST_MATH_STD_USING
       //
       // Check to see if we should apply Kummer's relation or not:
       //
