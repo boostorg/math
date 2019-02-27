@@ -11,25 +11,18 @@
 #include <boost/type_index.hpp>
 #include <boost/test/included/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
-#include <boost/multiprecision/cpp_bin_float.hpp>
-#include <boost/multiprecision/cpp_dec_float.hpp>
 #include <boost/math/special_functions/bessel.hpp>
 #include <boost/math/special_functions/bessel_prime.hpp>
 #include <boost/math/special_functions/next.hpp>
-#include <boost/math/tools/numerical_differentiation.hpp>
+#include <boost/math/differentiation/finite_difference.hpp>
 
 using std::abs;
 using std::pow;
-using boost::math::tools::finite_difference_derivative;
-using boost::math::tools::complex_step_derivative;
+using boost::math::differentiation::finite_difference_derivative;
+using boost::math::differentiation::complex_step_derivative;
 using boost::math::cyl_bessel_j;
 using boost::math::cyl_bessel_j_prime;
 using boost::math::constants::half;
-using boost::multiprecision::cpp_dec_float_100;
-using boost::multiprecision::cpp_bin_float_50;
-using boost::multiprecision::cpp_bin_float_100;
-using boost::multiprecision::cpp_bin_float_quad;
-
 
 template<class Real, size_t order>
 void test_order(size_t points_to_test)
@@ -227,46 +220,26 @@ BOOST_AUTO_TEST_CASE(numerical_differentiation_test)
 {
     test_complex_step<float>();
     test_complex_step<double>();
-#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-    test_complex_step<long double>();
-#endif
+
     test_bessel<float>();
     test_bessel<double>();
-#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-    test_bessel<long double>();
-#endif
-    test_bessel<cpp_bin_float_50>();
+
 
     size_t points_to_test = 1000;
     test_order<float, 1>(points_to_test);
     test_order<double, 1>(points_to_test);
-#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-    test_order<long double, 1>(points_to_test);
-#endif
-    test_order<cpp_bin_float_50, 1>(points_to_test);
+
 
     test_order<float, 2>(points_to_test);
     test_order<double, 2>(points_to_test);
-#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-    test_order<long double, 2>(points_to_test);
-#endif
-    test_order<cpp_bin_float_50, 2>(points_to_test);
 
     test_order<float, 4>(points_to_test);
     test_order<double, 4>(points_to_test);
-#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-    test_order<long double, 4>(points_to_test);
-#endif
 
     test_order<float, 6>(points_to_test);
     test_order<double, 6>(points_to_test);
-#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-    test_order<long double, 6>(points_to_test);
-#endif
 
     test_order<float, 8>(points_to_test);
     test_order<double, 8>(points_to_test);
-#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-    test_order<long double, 8>(points_to_test);
-#endif
+
 }

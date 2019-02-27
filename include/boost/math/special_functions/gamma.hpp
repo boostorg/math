@@ -769,6 +769,8 @@ T full_igamma_prefix(T a, T z, const Policy& pol)
    BOOST_MATH_STD_USING
 
    T prefix;
+   if (z > tools::max_value<T>())
+      return 0;
    T alz = a * log(z);
 
    if(z >= 1)
@@ -818,6 +820,8 @@ template <class T, class Policy, class Lanczos>
 T regularised_gamma_prefix(T a, T z, const Policy& pol, const Lanczos& l)
 {
    BOOST_MATH_STD_USING
+   if (z >= tools::max_value<T>())
+      return 0;
    T agh = a + static_cast<T>(Lanczos::g()) - T(0.5);
    T prefix;
    T d = ((z - a) - static_cast<T>(Lanczos::g()) + T(0.5)) / agh;
@@ -1036,6 +1040,37 @@ T finite_half_gamma_q(T a, T x, T* p_derivative, const Policy& pol)
    return e;
 }
 //
+// Asymptotic approximation for large argument, see: https://dlmf.nist.gov/8.11#E2
+//
+template <class T>
+struct incomplete_tgamma_large_x_series
+{
+   typedef T result_type;
+   incomplete_tgamma_large_x_series(const T& a, const T& x)
+      : a_poch(a - 1), z(x), term(1) {}
+   T operator()()
+   {
+      T result = term;
+      term *= a_poch / z;
+      a_poch -= 1;
+      return result;
+   }
+   T a_poch, z, term;
+};
+
+template <class T, class Policy>
+T incomplete_tgamma_large_x(const T& a, const T& x, const Policy& pol)
+{
+   BOOST_MATH_STD_USING
+   incomplete_tgamma_large_x_series<T> s(a, x);
+   boost::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
+   T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
+   boost::math::policies::check_series_iterations<T>("boost::math::tgamma<%1%>(%1%,%1%)", max_iter, pol);
+   return result;
+}
+
+
+//
 // Main incomplete gamma entry point, handles all four incomplete gamma's:
 //
 template <class T, class Policy>
@@ -1150,6 +1185,12 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert,
    else if((x < tools::root_epsilon<T>()) && (a > 1))
    {
       eval_method = 6;
+   }
+   else if ((x > 1000) && ((a < x) || (fabs(a - 50) / x < 1)))
+   {
+      // calculate Q via asymptotic approximation:
+      invert = !invert;
+      eval_method = 7;
    }
    else if(x < 0.5)
    {
@@ -1365,7 +1406,22 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert,
          // use http://functions.wolfram.com/GammaBetaErf/GammaRegularized/06/01/05/01/01/
          result = !normalised ? pow(x, a) / (a) : pow(x, a) / boost::math::tgamma(a + 1, pol);
          result *= 1 - a * x / (a + 1);
+         if (p_derivative)
+            *p_derivative = regularised_gamma_prefix(a, x, pol, lanczos_type());
+         break;
       }
+   case 7:
+   {
+      // x is large,
+      // Compute Q:
+      result = normalised ? regularised_gamma_prefix(a, x, pol, lanczos_type()) : full_igamma_prefix(a, x, pol);
+      if (p_derivative)
+         *p_derivative = result;
+      result /= x;
+      if (result != 0)
+         result *= incomplete_tgamma_large_x(a, x, pol);
+      break;
+   }
    }
 
    if(normalised && (result > 1))

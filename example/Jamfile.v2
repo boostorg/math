@@ -140,8 +140,9 @@ test-suite examples :
    [ explicit root_finding_algorithms  ]
    [ explicit root_n_finding_algorithms  ]
 
-   [ run barycentric_interpolation_example.cpp : : : [ requires cxx11_smart_ptr ]  ]
-   [ run barycentric_interpolation_example_2.cpp : : : [ requires cxx11_smart_ptr cxx11_function_template_default_args ]  ]
+   [ run barycentric_interpolation_example.cpp : : : [ requires cxx11_smart_ptr cxx11_function_template_default_args cxx11_unified_initialization_syntax cxx11_defaulted_functions cxx11_allocator cxx11_auto_declarations cxx11_lambdas ]  ]
+   [ run barycentric_interpolation_example_2.cpp : : : [ requires cxx11_smart_ptr cxx11_function_template_default_args cxx11_unified_initialization_syntax cxx11_defaulted_functions cxx11_allocator cxx11_auto_declarations cxx11_lambdas ]  ]
    [ run cubic_b_spline_example.cpp : : : [ requires cxx11_smart_ptr cxx11_hdr_random cxx11_defaulted_functions ]  ]
    [ compile naive_monte_carlo_example.cpp : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ] ]  # requires user input, can't run it, take a long time too!
+   [ run catmull_rom_example.cpp : : : [ requires cxx17_if_constexpr cxx11_auto_declarations cxx17_std_apply ] ] # Actually the C++17 features used is std::size, not if constexpr; looks like there isn't yet a test for it.
 ;

@@ -10,10 +10,10 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 [heading Synopsis]
 
 ``
-#include <boost/math/tools/numerical_differentiation.hpp>
+#include <boost/math/differentiaton/finite_difference.hpp>
 
 
-namespace boost::math::tools {
+namespace boost { namespace math { namespace differentiation {
 
     template <class F, class Real>
     Real complex_step_derivative(const F f, Real x);
@@ -21,19 +21,19 @@ namespace boost::math::tools {
     template <class F, class Real, size_t order = 6>
     Real finite_difference_derivative(const F f, Real x, Real* error = nullptr);
 
-} // namespaces
+}}} // namespaces
 ``
 
 [heading Description]
 
-The function `finite_difference_derivative` calculates a finite-difference approximation to the derivative of of a function /f/ at point /x/.
+The function `finite_difference_derivative` calculates a finite-difference approximation to the derivative of a function /f/ at point /x/.
 A basic usage is
 
     auto f = [](double x) { return std::exp(x); };
     double x = 1.7;
     double dfdx = finite_difference_derivative(f, x);
 
-Finite differencing is complicated, as finite-difference approximations to the derivative are /infinitely/ ill-conditioned.
+Finite differencing is complicated, as differentiation is /infinitely/ ill-conditioned.
 In addition, for any function implemented in finite-precision arithmetic, the "true" derivative is /zero/ almost everywhere, and undefined at representables.
 However, some tricks allow for reasonable results to be obtained in many cases.
 

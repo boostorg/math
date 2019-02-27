@@ -23,12 +23,14 @@ see [link math_toolkit.tutorial.templ use in template code].
 * Tested - by comparison with other published sources, or separately computed at long double precision.
 * Faster - can avoid (re-)calculation at runtime.
   * If the value returned is a builtin type then it's returned by value as a `constexpr` (C++11 feature, if available).
-  * If the value is computed and cached (or constructed from a string representation and cached), then it's returned by constant reference.[br]
-This can be significant if:
-  * Functions pow, trig or log are used.
-  * Inside an inner loop.
-  * Using a high-precision UDT like __multiprecision.
-  * Compiler optimizations possible with built-in types, especially `double`, are not available.
+  * If the value is computed and cached (or constructed from a string representation and cached), then it's returned by constant reference.
+
+  This can be 
+significant if:
+    * Functions pow, trig or log are used.
+    * Inside an inner loop.
+    * Using a high-precision UDT like __multiprecision.
+    * Compiler optimizations possible with built-in types, especially `double`, are not available.
 
 [endsect] [/section:intro Introduction]
 
@@ -508,7 +510,8 @@ Some of the criteria we have used are:
 * Expensive to compute.
 * Requested by users.
 * [@http://en.wikipedia.org/wiki/Mathematical_constant Used in science and mathematics.]
-* No integer values (because so cheap to construct).[br]
+* No integer values (because so cheap to construct).
+
 (You can easily define your own if found convenient, for example: `FPT one =static_cast<FPT>(42);`).
 
 [h4 How are constants named?]

@@ -539,6 +539,7 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [include fp_utilities/fp_facets.qbk]
 [include fp_utilities/float_next.qbk]
 [include fp_utilities/float_comparison.qbk]
+[include fp_utilities/condition_numbers.qbk]
 [endmathpart]
 
 [mathpart cstdfloat..Specified-width floating-point typedefs]
@@ -551,6 +552,13 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [include distributions/dist_tutorial.qbk]
 [include distributions/dist_reference.qbk] [/includes all individual distribution.qbk files]
 [endmathpart] [/section:dist Statistical Distributions and Functions]
+
+[mathpart vector_functionals Vector Functionals]
+[include vector_functionals/univariate_statistics.qbk]
+[include vector_functionals/bivariate_statistics.qbk]
+[include vector_functionals/signal_statistics.qbk]
+[include vector_functionals/norms.qbk]
+[endmathpart] [/section:vector_functionals Vector Functionals]
 
 [mathpart special Special Functions]
 
@@ -651,6 +659,7 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [mathpart interpolation Interpolation]
 [include interpolators/cubic_b_spline.qbk]
 [include interpolators/barycentric_rational_interpolation.qbk]
+[include interpolators/catmull_rom.qbk]
 [endmathpart]
 
 [mathpart quadrature Quadrature and Differentiation]
@@ -660,6 +669,7 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [include quadrature/double_exponential.qbk]
 [include quadrature/naive_monte_carlo.qbk]
 [include differentiation/numerical_differentiation.qbk]
+[include differentiation/lanczos_smoothing.qbk]
 [endmathpart]
 
 [include complex/complex-tr1.qbk]

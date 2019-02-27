@@ -65,8 +65,6 @@ as a better approximation for very large degrees of freedom?
 
 [h4 Feature Requests]
 
-We have a request for the Lambert W function, see [@https://svn.boost.org/trac/boost/ticket/11027 #11027].
-
 The following table lists distributions that are found in other packages
 but which are not yet present here, the more frequently the distribution
 is found, the higher the priority for implementing it:
