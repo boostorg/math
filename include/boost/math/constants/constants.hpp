@@ -27,6 +27,12 @@
 #include <boost/type_traits/is_convertible.hpp>
 #include <boost/utility/declval.hpp>
 
+// There is no other way to suppress -Wpedantic warning that
+// comes from using non-standard suffix on float constants
+#if defined(BOOST_MATH_USE_FLOAT128) && defined(__GNUC__)
+# pragma GCC system_header
+#endif
+
 
 namespace boost{ namespace math
 {
