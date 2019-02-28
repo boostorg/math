@@ -624,6 +624,7 @@ install:
   - git submodule update --init libs/format
   - git submodule update --init libs/numeric
   - git submodule update --init libs/type_traits
+  - git submodule update --init libs/timer
   - git submodule update --init tools/boostdep
   - cp -r $TRAVIS_BUILD_DIR/* libs/math
   - python tools/boostdep/depinst/depinst.py math
