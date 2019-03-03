@@ -211,6 +211,7 @@ std::vector<typename Complex::value_type> daubechies_coefficients(std::vector<st
 int main()
 {
     typedef boost::multiprecision::cpp_complex<150> Complex;
+    size_t p_max = 25;
     std::ofstream fs{"daubechies_filters.hpp"};
     fs << "/*\n"
        << " * Copyright Nick Thompson, 2019\n"
@@ -228,9 +229,10 @@ int main()
        << "template <typename Real, unsigned p>\n"
        << "constexpr std::array<Real, 2*p> daubechies_scaling_filter()\n"
        << "{\n"
-       << "    static_assert(sizeof(Real) <= 16, \"Filter coefficients only computed up to 128 bits of precision.\");\n";
+       << "    static_assert(sizeof(Real) <= 16, \"Filter coefficients only computed up to 128 bits of precision.\");\n"
+       << "    static_assert(p < " << p_max << ", \"Filter coefficients only implemented up to " << p_max - 1 << ".\");\n"; 
 
-    for(size_t p = 1; p < 25; ++p) 
+    for(size_t p = 1; p < p_max; ++p) 
     {
         fs << std::hexfloat;
         auto roots = find_roots<Complex>(p);

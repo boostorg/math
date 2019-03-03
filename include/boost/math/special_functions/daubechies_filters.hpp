@@ -16,6 +16,7 @@ template <typename Real, unsigned p>
 constexpr std::array<Real, 2*p> daubechies_scaling_filter()
 {
     static_assert(sizeof(Real) <= 16, "Filter coefficients only computed up to 128 bits of precision.");
+    static_assert(p < 25, "Filter coefficients only implemented up to 24.");
     if constexpr (p == 1) {
         if constexpr (std::is_same_v<Real, float>) {
             return {0x1.6a09e6p-1f, 0x1.6a09e6p-1f};
