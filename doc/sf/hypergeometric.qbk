@@ -199,7 +199,7 @@ A&S 13.3.6 gives:
 
 Which is particularly useful for ['a [cong] b] and ['z > 0], or ['|a| << 1], and ['z < 0].
 
-Then we have Tricomi's approximation (given in simplified form in A&S 13.3.7):
+Then we have Tricomi's approximation (given in simplified form in A&S 13.3.7) [link math_toolkit.hypergeometric.hypergeometric_refs 7]:
 
 [/\large $$_1F_1(a, b; z) = \Gamma(b) e^{ \frac{1}{2} z} \sum_{n=0}^{\infty} 2^{-n}z^n A_n(a,b) E_{b-1+n}(z(\frac{b}{2}-a)) $$]
 [$../equations/hypergeometric_1f1_4.svg]
@@ -228,7 +228,7 @@ E_v(0) & = \frac{1}{\Gamma(v + 1)}
 
 This approximation is especially effective when ['a < 0] and somewhat effective when ['b < 0].
 
-For /a/ and /b/ both large and positive and somewhat similar in size then an expantion in terms of gamma functions can be used:
+For /a/ and /b/ both large and positive and somewhat similar in size then an expantion in terms of gamma functions can be used [link math_toolkit.hypergeometric.hypergeometric_refs 6]:
 
 [/\large  $$_1F_1(a, b; x) = \frac{1}{B(a, b-a)} e^x \sum_{k=0}^{\infty} \frac{(1-a)_k}{k!} \frac{\gamma(b-a+k, x)}{x^{b-a+k}} $$]
 [$../equations/hypergeometric_1f1_8.svg]
@@ -240,24 +240,69 @@ For /z/ large we have the asymptotic expansion:
 
 Which is a special case of the gamma function expansion above.
 
+In the situation where `ab/z` is reasonably small then Luke's rational approximation is used - this is too complex to document
+here, refer either to the code or the original paper [link math_toolkit.hypergeometric.hypergeometric_refs 3].
 
+The special case [sub 1]F[sub 1](1, b, -z) is treated via Luke's Pade approximation [link math_toolkit.hypergeometric.hypergeometric_refs 3].
 
+That effectively completes the "direct" methods used, the remaining areas are treated indirectly via recurrence relations.  These require
+extreme care in their use, as they often change the direction of stability, or else are not stable at all.  Sometimes this is a well defined
+and characterised change in direction: for example with /a,b and z/ all positive recurrence on /a/ via:
+
+[/\large  $$(b-a) _1F_1(a-1, b; x) + (2a-b+z) _1F_1(a, b; x) -a _1F_1(a+1, b; x) = 0 $$]
+[$../equations/hypergeometric_1f1_10.svg]
+
+abruptly changes from stable forwards recursion to stable backwards if /2a-b+z/ changes sign.  Thus recurrence on /a/, even
+when [sub 1]F[sub 1](a+N, b, z) is strictly increasing, needs careful handling as /a -> 0/.
+
+The transitory nature of the stable recurrence relations is well documented in the literature, for example [link math_toolkit.hypergeometric.hypergeometric_refs 10]
+gives many exmples, including the anomylous behaviour of recurrence on /a/ and /b/ for large /z/ as first documented by Gauchi [link math_toolkit.hypergeometric.hypergeometric_refs 12].
+Gauchi also provides the definitive reference on 3-term recurrence relations in general in [link math_toolkit.hypergeometric.hypergeometric_refs 11].
+
+Unfortunately, not all recurrence stabilities are so well defined.  For example when considering [sub 1]F[sub 1](a, -b, z) it would be convenient to use
+the continued fractions associated with the recurrence relations to calculate [sub 1]F[sub 1](a, -b, z) / [sub 1]F[sub 1](a, 1-b, z) and then normalise
+either by iterating forwards on b until b > 0 and comparison with a reference value, or by using the Wronksian:
+
+[/\large  $$_1F_1(a, b; x) \frac{d}{dx}x^{1-b}_1F_1(1+a-b, 2-b; x) - x^{1-b}_1F_1(1+a-b, 2-b; x)\frac{d}{dx}{_1F_1}(a, b; x) = (1-b)z^{-b}e^z$$]
+[$../equations/hypergeometric_1f1_11.svg]
+
+Which is of course the well known Miller's method [link math_toolkit.hypergeometric.hypergeometric_refs 12].
+
+Unfortunately, stable forwards recursion on /b/ is stable only for /|b| << |z|/, as /|b|/ increases in magnitude it passes through a region
+where recursion is unstable in both directions before eventually becomming stable in the backwards direction (at least for a while!).  This transition 
+is moderated not by a change of sign in the recurrence coefficients themselves, but by a change in the behaviour of the ['values] of [sub 1]F[sub 1] - 
+from alternating in sign when ['|b|] is small to having the same sign when /b/ is larger.  As a result the behaviour of the recurrence relations
+is almost impossible to reason about in this area, and we are left to using heuristic based approaches to "guess" which region we are in.
+
+In this implementation we use recurrence relations as follows:
+
+For /a,b,z > 0/ and large we can either:
+
+* Make /0 < a < 1/ and /b > z/ and use evaluate the defining series directly, or
+* The gamma function approximation has decent convergence and accuracy for /2b - 1 < a < 2b < z/, so we can move /a/ and /b/ into this region, or
+* We can recurse on /b/ alone so that /b-1 < a < b/ and use A&S 13.3.6 as long as /z/ is not too large.
+
+For /b < 0/ and /a/ tiny we would normally use A&S 13.3.6, but when that is non-convergent for some inputs we can use the forward recurrence relation on /b/ to
+calculate the ratio ['[sub 1]F[sub 1](a, -b, z)/[sub 1]F[sub 1](a, 1-b, z)] and then iterate forwards until /b > 0/ and compute a reference value
+and normalize (Millers Method).  In the same domain when /b/ is near -1 we can use a single backwards recursion on /b/ to compute /[sub 1]F[sub 1](a, -b, z)/
+from /[sub 1]F[sub 1](a, 2-b, z)/ and /[sub 1]F[sub 1](a, 1-b, z)/ even though technically we are recursing in the unstable direction.
 
 [endsect]
 [section:hypergeometric_refs Hypergeometric References]
 
 # Beals, Richard, and Roderick Wong. ['Special functions: a graduate text.] Vol. 126. Cambridge University Press, 2010.
 # Pearson, John W., Sheehan Olver, and Mason A. Porter. ['Numerical methods for the computation of the confluent and Gauss hypergeometric functions.] Numerical Algorithms 74.3 (2017): 821-866.
-# Luke, Yudell L. ['Algorithms for Rational Approximations for a Confluent Hypergeometric Function] II. MISSOURI UNIV KANSAS CITY DEPT OF MATHEMATICS, 1976.
+# Luke, Yudell L. ['Algorithms for Rational Approximations for a Confluent Hypergeometric Function  II.] MISSOURI UNIV KANSAS CITY DEPT OF MATHEMATICS, 1976.
 # Dereziński, Jan. ['Hypergeometric type functions and their symmetries.] Annales Henri Poincaré. Vol. 15. No. 8. Springer Basel, 2014.
 # Keith E. Muller ['Computing the confluent hypergeometric function, M(a, b, x)].  Numer. Math. 90: 179–196 (2001).
 # Carlo Morosi, Livio Pizzocchero. ['On the expansion of the Kummer function in terms of incomplete Gamma functions.]  Arch. Inequal. Appl. 2 (2004), 49-72.
 # Jose Luis Lopez, Nico M. Temme. ['Asymptotics and numerics of polynomials used in Tricomi and Buchholz expansions of Kummer functions]. Numerische Mathematik, August 2010.
-# Yudell L. Luke. ['Algorithms for Rational Approximations for A Confluent Hypergeometric Function II].  US Airforce report, 1976.
-# John W. Pearson, Sheehan Olver, and Mason A. Porter.  ['Numerical Methods for the Computation of the Confluent and Gauss Hypergeometric Functions].  Numerical Algorithms, March 2017, Volume 74, Issue 3, pp 821–866.
 # Javier Sesma.  ['The Temme’s sum rule for con%uent hypergeometric functions revisited].  Journal of Computational and Applied Mathematics 163 (2004) 429–431.
 # Javier Segura, Nico M. Temme.  ['Numerically satisfactory solutions of Kummer recurrence relations].  Numer. Math. (2008) 111:109–119.
 # Alfredo Deano AND Javier Segura. ['Transitory Minimal Solutions Of Hypergeometric Recursions And Pseudoconvergence Of Associated Continued Fractions].  Mathematics Of Computation, Volume 76, Number 258, April 2007.
+# W. Gautschi. ['Computational aspects of three-term recurrence relations]. SIAM Review 9, no.1 (1967) 24-82.
+# W. Gautschi. ['Anomalous convergence of a continued fraction for ratios of Kummer functions]. Math. Comput., 31, no.140 (1977) 994-999.
+# British Association for the Advancement of Science: ['Bessel functions, Part II, Mathematical Tables vol. X]. Cambridge (1952).
 
 
 [endsect]
