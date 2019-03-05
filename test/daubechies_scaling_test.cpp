@@ -8,7 +8,9 @@
 #include "math_unit_test.hpp"
 #include <numeric>
 #include <utility>
-#include <boost/hana.hpp>
+#include <boost/core/demangle.hpp>
+#include <boost/hana/for_each.hpp>
+#include <boost/hana/ext/std/integer_sequence.hpp>
 #include <boost/math/tools/condition_numbers.hpp>
 #include <boost/math/special_functions/daubechies_scaling.hpp>
 #include <boost/math/special_functions/daubechies_filters.hpp>
@@ -158,13 +160,125 @@ void test_integer_grid()
 
 }
 
+template<class Real>
+void test_dyadic_grid()
+{
+    std::cout << "Testing dyadic grid on type " << boost::core::demangle(typeid(Real).name()) << "\n";
+    boost::hana::for_each(std::make_index_sequence<13>(), [&](auto i){
+        auto phijk = boost::math::detail::dyadic_grid<Real, i+2, 0>(0);
+        auto phik = boost::math::detail::daubechies_scaling_integer_grid<Real, i+2, 0>();
+        assert(phik.size() == phijk.size());
+
+        for (size_t k = 0; k < phik.size(); ++k)
+        {
+            CHECK_ULP_CLOSE(phik[k], phijk[k], 0);
+        }
+
+        for (size_t j = 1; j < 10; ++j)
+        {
+            auto phijk = boost::math::detail::dyadic_grid<Real, i+2, 0>(j);
+            auto phik = boost::math::detail::daubechies_scaling_integer_grid<Real, i+2, 0>();
+            for (size_t i = 0; i < phik.size(); ++i)
+            {
+                CHECK_ULP_CLOSE(phik[i], phijk[i*(1<<j)], 0);
+            }
+
+            // This test is from Daubechies, Ten Lectures on Wavelets, Ch 7 "More About Compactly Supported Wavelets",
+            // page 245: \forall y \in \mathbb{R}, \sum_{n \in \mathbb{Z}} \phi(y+n) = 1
+            for (size_t k = 1; k < j; ++k)
+            {
+                auto cond = boost::math::tools::summation_condition_number<Real>(0);
+                for (size_t i = 0; i < phik.size(); ++i)
+                {
+                    size_t idx = i*(1<<j) + k;
+                    if (idx < phijk.size())
+                    {
+                        cond += phijk[idx];
+                    }
+                }
+                CHECK_MOLLIFIED_CLOSE(1, cond.sum(), 10*cond()*std::numeric_limits<Real>::epsilon());
+            }
+        }
+    });
+
+    // TODO: Add tests of derivative of dyadic grid.
+}
+
+
+template<class Real>
+void test_constant_and_linear_interpolation()
+{
+    std::cout << "Testing constant interpolation on type " << boost::core::demangle(typeid(Real).name()) << "\n";
+    boost::hana::for_each(std::make_index_sequence<13>(), [&](auto i){
+        auto phik = boost::math::detail::daubechies_scaling_integer_grid<Real, i+2, 0>();
+        for (size_t j = 0; j < 5; ++j) {
+            auto phi = boost::math::daubechies_scaling<Real, i+2>(j);
+            assert(phik.size()==phi.support().second + 1);
+            for (size_t k = 1; k < phik.size(); ++k) {
+                auto expected = phik[k];
+                auto computed = phi.constant_interpolation(k);
+                if (!CHECK_ULP_CLOSE(expected, computed, 0)) {
+                    std::cerr << "  Constant interpolation wrong at x = " << k << ", j_max = " << j << ", p = " << i+2 << "\n";
+                }
+
+                computed = phi.constant_interpolation(k*(1+2*std::numeric_limits<Real>::epsilon()));
+                if (!CHECK_ULP_CLOSE(expected, computed, 0)) {
+                    std::cerr << "  Constant interpolation wrong at x = " << k << ", j_max = " << j << ", p = " << i+2 << "\n";
+                }
+
+                computed = phi.constant_interpolation(k*(1-2*std::numeric_limits<Real>::epsilon()));
+                if (!CHECK_ULP_CLOSE(expected, computed, 0)) {
+                    std::cerr << "  Constant interpolation wrong at x = " << k << ", j_max = " << j << ", p = " << i+2 << "\n";
+                }
+
+                computed = phi.linear_interpolation(k);
+                if (!CHECK_ULP_CLOSE(expected, computed, 0)) {
+                    std::cerr << "  Linear interpolation wrong at x = " << k << ", j_max = " << j << ", p = " << i+2 << "\n";
+                }
+            }
+
+            for (size_t i = 0; i < phi.size() -1; ++i) {
+                Real x = phi.index_to_abscissa(i);
+                Real expected = phi[i];
+                Real computed = phi.constant_interpolation(x);
+                if (!CHECK_ULP_CLOSE(expected, computed, 0)) {
+                    std::cerr << "  Constant interpolation wrong at x = " << x << ", j_max = " << j << ", p = " << i+2 << "\n";
+                }
+
+                computed = phi.linear_interpolation(x);
+                if (!CHECK_ULP_CLOSE(expected, computed, 0)) {
+                    std::cerr << "  Linear interpolation wrong at x = " << x << ", j_max = " << j << ", p = " << i+2 << "\n";
+                }
+
+                x += phi.spacing()/2;
+                computed = phi.linear_interpolation(x);
+                expected = phi[i]/2 + phi[i+1]/2;
+                if (!CHECK_ULP_CLOSE(expected, computed, 0)) {
+                    std::cerr << "  Linear interpolation wrong at x = " << x << ", j_max = " << j << ", p = " << i+2 << "\n";
+                }
+
+                x *= (1+std::numeric_limits<Real>::epsilon());
+                computed = phi.constant_interpolation(x);
+                expected = phi[i+1];
+                if (!CHECK_ULP_CLOSE(expected, computed, 0)) {
+                    std::cerr << "  Linear interpolation wrong at x = " << x << ", j_max = " << j << ", p = " << i+2 << "\n";
+                }
+
+            }
+        }
+    });
+}
+
 
 int main()
 {
-    //auto phi = boost::math::daubechies_scaling<double, 4>();
-
-    //std::cout << phi(2.3) << "\n";
-
+    test_dyadic_grid<float>();
+    test_dyadic_grid<double>();
+    test_dyadic_grid<long double>();
+    test_dyadic_grid<boost::multiprecision::float128>();
+    test_constant_and_linear_interpolation<float>();
+    test_constant_and_linear_interpolation<double>();
+    test_constant_and_linear_interpolation<long double>();
 
     // All scaling functions have a first derivative.
     boost::hana::for_each(std::make_index_sequence<13>(), [&](auto idx){
@@ -200,7 +314,7 @@ int main()
         test_integer_grid<boost::multiprecision::float128, idx+4, 3>();
         #endif
     });
- 
+
     // 10-tap filter (5 vanishing moments) is the first to have a fourth derivative.
     boost::hana::for_each(std::make_index_sequence<11>(), [&](auto idx){
         test_integer_grid<float, idx+5, 4>();
@@ -210,7 +324,6 @@ int main()
         test_integer_grid<boost::multiprecision::float128, idx+5, 4>();
         #endif
     });
-  
 
     boost::hana::for_each(std::make_index_sequence<8>(), [&](auto i){
       test_daubechies_filters<float, i+1>();
@@ -235,8 +348,6 @@ int main()
     boost::hana::for_each(std::make_index_sequence<12>(), [&](auto i){
         test_daubechies_filters<float128, i+1>();
     });
-
     #endif
-
     return boost::math::test::report_errors();
 }
