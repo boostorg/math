@@ -38,21 +38,21 @@ std::vector<Real> dyadic_grid(int j_max)
         v[(i+1)*(1<<(j_max))] = phik[i];
     }
 
-    for (int j = 1; j <= j_max; ++j)
+    for (size_t j = 1; j <= j_max; ++j)
     {
-        int k_max = v.size()/(1 << (j_max-j));
-        for (int k = 1; k < k_max;  k += 2)
+        size_t k_max = v.size()/(1 << (j_max-j));
+        for (size_t k = 1; k < k_max;  k += 2)
         {
             // Where this value will go:
-            int delivery_idx = k*(1 << (j_max-j));
+            size_t delivery_idx = k*(1 << (j_max-j));
             if (delivery_idx >= v.size())
             {
                 std::cout << "Delivery index out of range!\n";
                 continue;
             }
             Real term = 0;
-            for (int l = 0; l < c.size(); ++l) {
-                int idx = k*(1 << (j_max - j + 1)) - l*(1 << j_max);
+            for (size_t l = 0; l < c.size(); ++l) {
+                size_t idx = k*(1 << (j_max - j + 1)) - l*(1 << j_max);
                 if (idx >= 0 && idx < v.size()) {
                     term += c[l]*v[idx];
                 }
