@@ -7,6 +7,8 @@
 
 #include "math_unit_test.hpp"
 #include <numeric>
+#include <utility>
+#include <boost/hana.hpp>
 #include <boost/math/tools/condition_numbers.hpp>
 #include <boost/math/special_functions/daubechies_scaling.hpp>
 #include <boost/math/special_functions/daubechies_filters.hpp>
@@ -123,15 +125,35 @@ void test_integer_grid()
     }
 
     if constexpr (order == 1) {
-        std::cout << "grid = {";
-
         auto cond = summation_condition_number<Real>(0);
-        for (auto & x : grid) {
-            std::cout << x << ", ";
-            cond += x;
+        for (size_t i = 0; i < grid.size(); ++i) {
+            cond += i*grid[i];
         }
-        std::cout << "}\n";
         CHECK_MOLLIFIED_CLOSE(-1, cond.sum(), 2*cond.l1_norm()*unit_roundoff);
+    }
+
+    if constexpr (order == 2) {
+        auto cond = summation_condition_number<Real>(0);
+        for (size_t i = 0; i < grid.size(); ++i) {
+            cond += i*i*grid[i];
+        }
+        CHECK_MOLLIFIED_CLOSE(2, cond.sum(), 2*cond.l1_norm()*unit_roundoff);
+    }
+
+    if constexpr (order == 3) {
+        auto cond = summation_condition_number<Real>(0);
+        for (size_t i = 0; i < grid.size(); ++i) {
+            cond += i*i*i*grid[i];
+        }
+        CHECK_MOLLIFIED_CLOSE(-6, cond.sum(), 2*cond.l1_norm()*unit_roundoff);
+    }
+
+    if constexpr (order == 4) {
+        auto cond = summation_condition_number<Real>(0);
+        for (size_t i = 0; i < grid.size(); ++i) {
+            cond += i*i*i*i*grid[i];
+        }
+        CHECK_MOLLIFIED_CLOSE(24, cond.sum(), 2*cond.l1_norm()*unit_roundoff);
     }
 
 }
@@ -143,188 +165,77 @@ int main()
 
     //std::cout << phi(2.3) << "\n";
 
-    test_integer_grid<float, 2, 0>();
-    test_integer_grid<float, 3, 0>();
-    test_integer_grid<float, 4, 0>();
-    test_integer_grid<float, 5, 0>();
-    test_integer_grid<float, 6, 0>();
-    test_integer_grid<float, 7, 0>();
-    test_integer_grid<float, 8, 0>();
-    test_integer_grid<float, 9, 0>();
-    test_integer_grid<float, 10, 0>();
-    test_integer_grid<float, 11, 0>();
-    test_integer_grid<float, 12, 0>();
-    test_integer_grid<float, 13, 0>();
 
-    test_integer_grid<double, 2, 0>();
-    test_integer_grid<double, 3, 0>();
-    test_integer_grid<double, 4, 0>();
-    test_integer_grid<double, 5, 0>();
-    test_integer_grid<double, 6, 0>();
-    test_integer_grid<double, 7, 0>();
-    test_integer_grid<double, 8, 0>();
-    test_integer_grid<double, 9, 0>();
-    test_integer_grid<double, 10, 0>();
-    test_integer_grid<double, 11, 0>();
-    test_integer_grid<double, 12, 0>();
-    test_integer_grid<double, 13, 0>();
+    // All scaling functions have a first derivative.
+    boost::hana::for_each(std::make_index_sequence<13>(), [&](auto idx){
+        test_integer_grid<float, idx+2, 0>();
+        test_integer_grid<float, idx+2, 1>();
+        test_integer_grid<double, idx+2, 0>();
+        test_integer_grid<double, idx+2, 1>();
+        test_integer_grid<long double, idx+2, 0>();
+        test_integer_grid<long double, idx+2, 1>();
+        #ifdef BOOST_HAS_FLOAT128
+        test_integer_grid<boost::multiprecision::float128, idx+2, 0>();
+        test_integer_grid<boost::multiprecision::float128, idx+2, 1>();
+        #endif
+    });
 
-    test_integer_grid<long double, 2, 0>();
-    test_integer_grid<long double, 3, 0>();
-    test_integer_grid<long double, 4, 0>();
-    test_integer_grid<long double, 5, 0>();
-    test_integer_grid<long double, 6, 0>();
-    test_integer_grid<long double, 7, 0>();
-    test_integer_grid<long double, 8, 0>();
-    test_integer_grid<long double, 9, 0>();
-    test_integer_grid<long double, 10, 0>();
-    test_integer_grid<long double, 11, 0>();
-    test_integer_grid<long double, 12, 0>();
-    test_integer_grid<long double, 13, 0>();
+    // 4-tap (2 vanishing moment) scaling function does not have a second derivative;
+    // all other scaling functions do.
+    boost::hana::for_each(std::make_index_sequence<13>(), [&](auto idx){
+        test_integer_grid<float, idx+3, 2>();
+        test_integer_grid<double, idx+3, 2>();
+        test_integer_grid<long double, idx+3, 2>();
+        #ifdef BOOST_HAS_FLOAT128
+        test_integer_grid<boost::multiprecision::float128, idx+3, 2>();
+        #endif
+    });
 
-    test_integer_grid<float128, 2, 0>();
-    test_integer_grid<float128, 3, 0>();
-    test_integer_grid<float128, 4, 0>();
-    test_integer_grid<float128, 5, 0>();
-    test_integer_grid<float128, 6, 0>();
-    test_integer_grid<float128, 7, 0>();
-    test_integer_grid<float128, 8, 0>();
-    test_integer_grid<float128, 9, 0>();
-    test_integer_grid<float128, 10, 0>();
-    test_integer_grid<float128, 11, 0>();
-    test_integer_grid<float128, 12, 0>();
-    test_integer_grid<float128, 13, 0>();
+    // 8-tap filter (4 vanishing moments) is the first to have a third derivative.
+    boost::hana::for_each(std::make_index_sequence<12>(), [&](auto idx){
+        test_integer_grid<float, idx+4, 3>();
+        test_integer_grid<double, idx+4, 3>();
+        test_integer_grid<long double, idx+4, 3>();
+        #ifdef BOOST_HAS_FLOAT128
+        test_integer_grid<boost::multiprecision::float128, idx+4, 3>();
+        #endif
+    });
+ 
+    // 10-tap filter (5 vanishing moments) is the first to have a fourth derivative.
+    boost::hana::for_each(std::make_index_sequence<11>(), [&](auto idx){
+        test_integer_grid<float, idx+5, 4>();
+        test_integer_grid<double, idx+5, 4>();
+        test_integer_grid<long double, idx+5, 4>();
+        #ifdef BOOST_HAS_FLOAT128
+        test_integer_grid<boost::multiprecision::float128, idx+5, 4>();
+        #endif
+    });
+  
 
-    test_integer_grid<float, 3, 1>();
-    /*test_integer_grid<float, 3, 1>();
-    test_integer_grid<float, 4, 1>();
-    test_integer_grid<float, 5, 1>();
-    test_integer_grid<float, 6, 1>();
-    test_integer_grid<float, 7, 1>();
-    test_integer_grid<float, 8, 1>();
-    test_integer_grid<float, 9, 1>();
-    test_integer_grid<float, 10, 1>();
-    test_integer_grid<float, 11, 1>();
-    test_integer_grid<float, 12, 1>();
-    test_integer_grid<float, 13, 1>();
+    boost::hana::for_each(std::make_index_sequence<8>(), [&](auto i){
+      test_daubechies_filters<float, i+1>();
+    });
 
-    test_integer_grid<double, 2, 1>();
-    test_integer_grid<double, 3, 1>();
-    test_integer_grid<double, 4, 1>();
-    test_integer_grid<double, 5, 1>();
-    test_integer_grid<double, 6, 1>();
-    test_integer_grid<double, 7, 1>();
-    test_integer_grid<double, 8, 1>();
-    test_integer_grid<double, 9, 1>();
-    test_integer_grid<double, 10, 1>();
-    test_integer_grid<double, 11, 1>();
-    test_integer_grid<double, 12, 1>();
-    test_integer_grid<double, 13, 1>();
+    boost::hana::for_each(std::make_index_sequence<12>(), [&](auto i){
+      test_daubechies_filters<double, i+1>();
+    });
 
-    test_integer_grid<long double, 2, 1>();
-    test_integer_grid<long double, 3, 1>();
-    test_integer_grid<long double, 4, 1>();
-    test_integer_grid<long double, 5, 1>();
-    test_integer_grid<long double, 6, 1>();
-    test_integer_grid<long double, 7, 1>();
-    test_integer_grid<long double, 8, 1>();
-    test_integer_grid<long double, 9, 1>();
-    test_integer_grid<long double, 10, 1>();
-    test_integer_grid<long double, 11, 1>();
-    test_integer_grid<long double, 12, 1>();
-    test_integer_grid<long double, 13, 1>();
+    boost::hana::for_each(std::make_index_sequence<11>(), [&](auto i){
+      test_daubechies_filters<long double, i+1>();
+    });
 
-    test_integer_grid<float128, 2, 1>();
-    test_integer_grid<float128, 3, 1>();
-    test_integer_grid<float128, 4, 1>();
-    test_integer_grid<float128, 5, 1>();
-    test_integer_grid<float128, 6, 1>();
-    test_integer_grid<float128, 7, 1>();
-    test_integer_grid<float128, 8, 1>();
-    test_integer_grid<float128, 9, 1>();
-    test_integer_grid<float128, 10, 1>();
-    test_integer_grid<float128, 11, 1>();
-    test_integer_grid<float128, 12, 1>();
-    test_integer_grid<float128, 13, 1>();*/
-
-
-
-    test_daubechies_filters<float, 1>();
-    test_daubechies_filters<float, 2>();
-    test_daubechies_filters<float, 3>();
-    test_daubechies_filters<float, 4>();
-    test_daubechies_filters<float, 5>();
-    test_daubechies_filters<float, 6>();
-    test_daubechies_filters<float, 7>();
-    test_daubechies_filters<float, 8>();
-    test_daubechies_filters<float, 9>();
-
-
-    test_daubechies_filters<double, 1>();
-    test_daubechies_filters<double, 2>();
-    test_daubechies_filters<double, 3>();
-    test_daubechies_filters<double, 4>();
-    test_daubechies_filters<double, 5>();
-    test_daubechies_filters<double, 6>();
-    test_daubechies_filters<double, 7>();
-    test_daubechies_filters<double, 8>();
-    test_daubechies_filters<double, 9>();
-    test_daubechies_filters<double, 10>();
-    test_daubechies_filters<double, 11>();
-    test_daubechies_filters<double, 12>();
-    test_daubechies_filters<double, 13>();
-
-    test_daubechies_filters<long double, 1>();
-    test_daubechies_filters<long double, 2>();
-    test_daubechies_filters<long double, 3>();
-    test_daubechies_filters<long double, 4>();
-    test_daubechies_filters<long double, 5>();
-    test_daubechies_filters<long double, 6>();
-    test_daubechies_filters<long double, 7>();
-    test_daubechies_filters<long double, 8>();
-    test_daubechies_filters<long double, 9>();
-    test_daubechies_filters<long double, 10>();
-    test_daubechies_filters<long double, 11>();
-    test_daubechies_filters<long double, 12>();
 
     #ifdef BOOST_HAS_FLOAT128
-    test_filter_ulp_distance<float128, long double, 1>();
-    test_filter_ulp_distance<float128, long double, 2>();
-    test_filter_ulp_distance<float128, long double, 3>();
-    test_filter_ulp_distance<float128, long double, 4>();
-    test_filter_ulp_distance<float128, long double, 5>();
-    test_filter_ulp_distance<float128, long double, 6>();
-    test_filter_ulp_distance<float128, long double, 7>();
-    test_filter_ulp_distance<float128, long double, 8>();
-    test_filter_ulp_distance<float128, long double, 9>();
-    test_filter_ulp_distance<float128, long double, 10>();
-    test_filter_ulp_distance<float128, long double, 11>();
-    test_filter_ulp_distance<float128, long double, 12>();
-    test_filter_ulp_distance<float128, long double, 13>();
-    test_filter_ulp_distance<float128, long double, 14>();
-    test_filter_ulp_distance<float128, long double, 15>();
-    test_filter_ulp_distance<float128, long double, 16>();
-    test_filter_ulp_distance<float128, long double, 17>();
-    test_filter_ulp_distance<float128, long double, 18>();
-    test_filter_ulp_distance<float128, long double, 19>();
-    test_filter_ulp_distance<float128, long double, 20>();
-    test_filter_ulp_distance<float128, long double, 21>();
-    test_filter_ulp_distance<float128, long double, 22>();
-    test_filter_ulp_distance<float128, long double, 23>();
-    test_filter_ulp_distance<float128, long double, 24>();
+    boost::hana::for_each(std::make_index_sequence<23>(), [&](auto i){
+        test_filter_ulp_distance<float128, long double, i+1>();
+        test_filter_ulp_distance<float128, double, i+1>();
+        test_filter_ulp_distance<float128, float, i+1>();
+    });
 
-    test_daubechies_filters<float128, 1>();
-    test_daubechies_filters<float128, 2>();
-    test_daubechies_filters<float128, 3>();
-    test_daubechies_filters<float128, 4>();
-    test_daubechies_filters<float128, 5>();
-    test_daubechies_filters<float128, 6>();
-    test_daubechies_filters<float128, 7>();
-    test_daubechies_filters<float128, 8>();
-    test_daubechies_filters<float128, 9>();
-    test_daubechies_filters<float128, 10>();
-    test_daubechies_filters<float128, 11>();
-    test_daubechies_filters<float128, 12>();
+    boost::hana::for_each(std::make_index_sequence<12>(), [&](auto i){
+        test_daubechies_filters<float128, i+1>();
+    });
+
     #endif
 
     return boost::math::test::report_errors();
