@@ -221,6 +221,16 @@ void test_constant_and_linear_interpolation()
                     std::cerr << "  Constant interpolation wrong at x = " << k << ", j_max = " << j << ", p = " << i+2 << "\n";
                 }
 
+                computed = phi.single_crank_linear(k);
+                if (!CHECK_ULP_CLOSE(expected, computed, 0)) {
+                    std::cerr << "  Single crank linear interpolation wrong at x = " << k << ", j_max = " << j << ", p = " << i+2 << "\n";
+                }
+
+                computed = phi.first_order_taylor(k);
+                if (!CHECK_ULP_CLOSE(expected, computed, 0)) {
+                    std::cerr << "  First order Taylor expansion wrong at x = " << k << ", j_max = " << j << ", p = " << i+2 << "\n";
+                }
+
                 computed = phi.constant_interpolation(k*(1+2*std::numeric_limits<Real>::epsilon()));
                 if (!CHECK_ULP_CLOSE(expected, computed, 0)) {
                     std::cerr << "  Constant interpolation wrong at x = " << k << ", j_max = " << j << ", p = " << i+2 << "\n";
@@ -250,6 +260,16 @@ void test_constant_and_linear_interpolation()
                     std::cerr << "  Linear interpolation wrong at x = " << x << ", j_max = " << j << ", p = " << i+2 << "\n";
                 }
 
+                computed = phi.single_crank_linear(x);
+                if (!CHECK_ULP_CLOSE(expected, computed, 0)) {
+                    std::cerr << "  Single crank linear interpolation wrong at x = " << x << ", j_max = " << j << ", p = " << i+2 << "\n";
+                }
+
+                computed = phi.first_order_taylor(x);
+                if (!CHECK_ULP_CLOSE(expected, computed, 0)) {
+                    std::cerr << "  First order Taylor expansion wrong at x = " << x << ", j_max = " << j << ", p = " << i+2 << "\n";
+                }
+
                 x += phi.spacing()/2;
                 computed = phi.linear_interpolation(x);
                 expected = phi[i]/2 + phi[i+1]/2;
@@ -269,16 +289,54 @@ void test_constant_and_linear_interpolation()
     });
 }
 
+template<class Real, int p>
+void test_efficiency(size_t j_max)
+{
+    std::cout << "Testing efficiency at p = " << p << " and j_max = " << j_max << "\n";
+    using std::abs;
+    auto phi128 = boost::math::daubechies_scaling<float128, p>(j_max);
+    for (size_t j = 8; j < j_max - 2; ++j)
+    {
+        auto phi = boost::math::daubechies_scaling<Real, p>(j);
+
+        Real worst_absolute_error = 0;
+        Real worst_relative_error = 0;
+        for (size_t k = 0; k < phi128.size(); ++k)
+        {
+            Real x = static_cast<Real>(phi128.index_to_abscissa(k));
+            Real computed = phi.single_crank_linear(x);
+            Real expected = static_cast<Real>(phi128[k]);
+            if (abs(computed - expected) > worst_absolute_error)
+            {
+                worst_absolute_error = abs(computed - expected);
+            }
+            if (abs(expected) > 10*std::numeric_limits<Real>::epsilon())
+            {
+                if (abs(computed - expected)/abs(expected) > worst_relative_error)
+                {
+                    worst_relative_error = abs(computed - expected)/abs(expected);
+                }
+            }
+
+        }
+        std::cout << "Worst absolute error for j = " << j << " = " << worst_absolute_error << "\n";
+        std::cout << "Worst relative error for j = " << j << " = " << worst_relative_error << "\n\n";
+    }
+}
+
 
 int main()
 {
+    //test_efficiency<float, 6>(24);
+
     test_dyadic_grid<float>();
     test_dyadic_grid<double>();
     test_dyadic_grid<long double>();
-    test_dyadic_grid<boost::multiprecision::float128>();
+    test_dyadic_grid<float128>();
     test_constant_and_linear_interpolation<float>();
     test_constant_and_linear_interpolation<double>();
     test_constant_and_linear_interpolation<long double>();
+    test_constant_and_linear_interpolation<float128>();
 
     // All scaling functions have a first derivative.
     boost::hana::for_each(std::make_index_sequence<13>(), [&](auto idx){
@@ -289,8 +347,8 @@ int main()
         test_integer_grid<long double, idx+2, 0>();
         test_integer_grid<long double, idx+2, 1>();
         #ifdef BOOST_HAS_FLOAT128
-        test_integer_grid<boost::multiprecision::float128, idx+2, 0>();
-        test_integer_grid<boost::multiprecision::float128, idx+2, 1>();
+        test_integer_grid<float128, idx+2, 0>();
+        test_integer_grid<float128, idx+2, 1>();
         #endif
     });
 
@@ -349,5 +407,6 @@ int main()
         test_daubechies_filters<float128, i+1>();
     });
     #endif
+
     return boost::math::test::report_errors();
 }

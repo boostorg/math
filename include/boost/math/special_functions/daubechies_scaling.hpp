@@ -84,14 +84,25 @@ public:
             if constexpr (std::is_same_v<Real, float128>)
             {
                 m_v = detail::dyadic_grid<Real, p, 0>(m_levels);
+                m_v_prime = detail::dyadic_grid<Real, p, 1>(m_levels);
             }
             else
             {
-                auto v = detail::dyadic_grid<float128, p, 0>(m_levels);
-                m_v.resize(v.size());
-                for (size_t i = 0; i < v.size(); ++i)
                 {
-                    m_v[i] = static_cast<Real>(v[i]);
+                    auto v = detail::dyadic_grid<float128, p, 0>(m_levels);
+                    m_v.resize(v.size());
+                    for (size_t i = 0; i < v.size(); ++i)
+                    {
+                        m_v[i] = static_cast<Real>(v[i]);
+                    }
+                }
+                {
+                    auto v_prime = detail::dyadic_grid<float128, p, 1>(m_levels);
+                    m_v_prime.resize(v_prime.size());
+                    for (size_t i = 0; i < v_prime.size(); ++i)
+                    {
+                        m_v_prime[i] = static_cast<Real>(v_prime[i]);
+                    }
                 }
             }
         }
@@ -99,14 +110,20 @@ public:
         {
             m_levels = levels;
             m_v = detail::dyadic_grid<Real, p, 0>(m_levels);
+            m_v_prime = detail::dyadic_grid<Real, p, 1>(m_levels);
         }
 
-        //float128 inv_spacing = float128(m_v.size()-1)/float128(2*p-1);
-        //m_inv_spacing = static_cast<Real>(inv_spacing);
         m_inv_spacing = (1 << m_levels);
+
+        m_c = boost::math::daubechies_scaling_filter<Real, p>();
+        Real scale = boost::math::constants::root_two<Real>();
+        for (auto & x : m_c)
+        {
+            x *= scale;
+        }
     }
 
-    Real operator()(Real x) const { return x; }
+    Real operator()(Real x) const { return this->linear_interpolation(x); }
 
     std::pair<int, int> support() const {
         return {0, 2*p-1};
@@ -116,39 +133,116 @@ public:
         if (x <= 0 || x >= 2*p-1) {
             return Real(0);
         }
-
-        using std::ceil;
         using std::floor;
-        Real rescale = (1<<m_levels)*x;
-        Real idx1 = floor((1<<m_levels)*x);
-        Real idx2 = ceil((1<<m_levels)*x);
+        Real y = (1 << m_levels)*x;
+        Real k = floor(y);
 
-        size_t idx = 0;
-        if (idx2 - rescale < rescale - idx1) {
-            idx = static_cast<size_t>(idx2);
-        } else {
-            idx = static_cast<size_t>(idx1);
+        if (y - k < k + 1 - y)
+        {
+            return m_v[static_cast<size_t>(k)];
         }
-        //std::cout << "Constant idx1 = " << idx1 << ", idx2 = " << idx2 << "\n";
-        return m_v[idx];
+        return m_v[static_cast<size_t>(k)+1];
     }
 
     Real linear_interpolation(Real x) const {
         if (x <= 0 || x >= 2*p-1) {
             return 0;
         }
-        using std::ceil;
         using std::floor;
 
         Real y = (1<<m_levels)*x;
+        Real k = floor(y);
+
+        size_t kk = static_cast<size_t>(k);
+
+        Real t = y - k;
+        return (1-t)*m_v[kk] + t*m_v[kk+1];
+    }
+
+    Real single_crank_linear(Real x) const {
+        if (x <= 0 || x >= 2*p-1) {
+            return 0;
+        }
+        using std::floor;
+        Real y = (1<<m_levels)*x;
         Real idx1 = floor(y);
-        Real idx2 = ceil(y);
 
-        auto v1 = m_v[static_cast<size_t>(idx1)];
-        auto v2 = m_v[static_cast<size_t>(idx2)];
+        Real term = 0;
+        size_t k = 2*idx1 + 1;
+        for (size_t l = 0; l < m_c.size(); ++l) {
+            uint64_t idx = k - l*(1 << m_levels);
+            if (idx >= 0 && idx < m_v.size()) {
+                term += m_c[l]*m_v[idx];
+            }
+        }
 
-        Real t = y - idx1;
-        return (1-t)*v1 + t*v2;
+        if (y - idx1 < idx1 + 1 - y)
+        {
+            Real t = (y - idx1)/2;
+            return (1-t)*m_v[static_cast<size_t>(idx1)] + t*term;
+        }
+        else {
+            Real t = (idx1 + 1 - y)/2;
+            return (1-t)*term + t*m_v[static_cast<size_t>(idx1)+1];
+        }
+    }
+
+    Real double_crank_linear(Real x) const {
+        return std::numeric_limits<Real>::quiet_NaN();
+    }
+
+
+    Real first_order_taylor(Real x) const {
+        if (x <= 0 || x >= 2*p-1) {
+            return 0;
+        }
+        using std::floor;
+
+        Real y = (1<<m_levels)*x;
+        Real k = floor(y);
+
+        size_t kk = static_cast<size_t>(k);
+        if (y - k < k + 1 - y)
+        {
+            Real eps = (y-k)*this->spacing();
+            return m_v[kk] + eps*m_v_prime[kk];
+        }
+        else {
+            Real eps = (y-k-1)*this->spacing();
+            return m_v[kk+1] + eps*m_v_prime[kk+1];
+        }
+    }
+
+    Real second_order_taylor(Real x) const {
+        return std::numeric_limits<Real>::quiet_NaN();
+    }
+
+    Real third_order_taylor(Real x) const {
+        return std::numeric_limits<Real>::quiet_NaN();
+    }
+
+    Real single_crank_first_order_taylor(Real x) const {
+        return std::numeric_limits<Real>::quiet_NaN();
+    }
+
+    Real double_crank_first_order_taylor(Real x) const {
+        return std::numeric_limits<Real>::quiet_NaN();
+    }
+
+    Real single_crank_second_order_taylor(Real x) const {
+        return std::numeric_limits<Real>::quiet_NaN();
+    }
+
+    Real double_crank_second_order_taylor(Real x) const {
+        return std::numeric_limits<Real>::quiet_NaN();
+    }
+
+    Real single_crank_third_order_taylor(Real x) const {
+        return std::numeric_limits<Real>::quiet_NaN();
+    }
+
+    Real double_crank_third_order_taylor(Real x) const {
+        return std::numeric_limits<Real>::quiet_NaN();
     }
 
     size_t bytes() const
@@ -178,8 +272,9 @@ public:
 private:
     size_t m_levels;
     Real m_inv_spacing;
-    //std::array<Real, 2*p-1> m_c;
+    std::array<Real, 2*p> m_c;
     std::vector<Real> m_v;
+    std::vector<Real> m_v_prime;
 };
 
 }
