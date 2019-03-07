@@ -12,6 +12,7 @@
 #include <boost/hana/for_each.hpp>
 #include <boost/hana/ext/std/integer_sequence.hpp>
 #include <boost/math/tools/condition_numbers.hpp>
+#include <boost/math/differentiation/finite_difference.hpp>
 #include <boost/math/special_functions/daubechies_scaling.hpp>
 #include <boost/math/special_functions/daubechies_filters.hpp>
 #include <boost/math/special_functions/detail/daubechies_scaling_integer_grid.hpp>
@@ -94,6 +95,35 @@ void test_daubechies_filters()
     // but I'm not gonna bother because it's painful!
 }
 
+// Test that the filters agree with Daubechies, Ten Lenctures on Wavelets, Table 6.1:
+
+void test_agreement_with_ten_lectures()
+{
+    std::array<double, 4> h2 = {0.4829629131445341, 0.8365163037378077, 0.2241438680420134, -0.1294095225512603};
+    auto h2_ = boost::math::daubechies_scaling_filter<double, 2>();
+    for (size_t i = 0; i < h2.size(); ++i)
+    {
+        CHECK_ULP_CLOSE(h2[i], h2_[i], 3);
+    }
+
+    std::array<double, 6> h3 = {0.3326705529500825, 0.8068915093110924, 0.4598775021184914, -0.1350110200102546, -0.0854412738820267, 0.0352262918857095};
+    auto h3_ = boost::math::daubechies_scaling_filter<double, 3>();
+    for (size_t i = 0; i < h3.size(); ++i)
+    {
+        CHECK_ULP_CLOSE(h3[i], h3_[i], 5);
+    }
+
+    std::array<double, 8> h4 = {0.2303778133088964, 0.7148465705529154, 0.6308807679298587, -0.0279837694168599, -0.1870348117190931, 0.0308413818355607, 0.0328830116668852 , -0.010597401785069};
+    auto h4_ = boost::math::daubechies_scaling_filter<double, 4>();
+    for (size_t i = 0; i < h4.size(); ++i)
+    {
+        if(!CHECK_ULP_CLOSE(h4[i], h4_[i], 18)) {
+            std::cerr << "  Index " << i << " incorrect.\n";
+        }
+    }
+
+}
+
 template<class Real1, class Real2, size_t p>
 void test_filter_ulp_distance()
 {
@@ -110,6 +140,7 @@ void test_filter_ulp_distance()
     }
 }
 
+
 template<class Real, unsigned p, unsigned order>
 void test_integer_grid()
 {
@@ -123,7 +154,7 @@ void test_integer_grid()
         for (auto & x : grid) {
             cond += x;
         }
-        CHECK_MOLLIFIED_CLOSE(1, cond.sum(), 2*cond.l1_norm()*unit_roundoff);
+        CHECK_MOLLIFIED_CLOSE(1, cond.sum(), 3*cond.l1_norm()*unit_roundoff);
     }
 
     if constexpr (order == 1) {
@@ -273,7 +304,7 @@ void test_constant_and_linear_interpolation()
                 x += phi.spacing()/2;
                 computed = phi.linear_interpolation(x);
                 expected = phi[i]/2 + phi[i+1]/2;
-                if (!CHECK_ULP_CLOSE(expected, computed, 0)) {
+                if (!CHECK_ULP_CLOSE(expected, computed, 1)) {
                     std::cerr << "  Linear interpolation wrong at x = " << x << ", j_max = " << j << ", p = " << i+2 << "\n";
                 }
 
@@ -287,6 +318,44 @@ void test_constant_and_linear_interpolation()
             }
         }
     });
+}
+
+// Taken from Lin, 2005, doi:10.1016/j.amc.2004.12.038,
+// "Direct algorithm for computation of derivatives of the Daubechies basis functions"
+void test_first_derivative()
+{
+    auto phi1_3 = boost::math::detail::daubechies_scaling_integer_grid<long double, 3, 1>();
+    std::array<long double, 6> lin_3{0.0L, 1.638452340884085725014976L, -2.232758190463137395017742L, 0.5501593582740176149905562L, 0.04414649130503405501220997L, 0.0L};
+    for (size_t i = 0; i < lin_3.size(); ++i)
+    {
+        if(!CHECK_ULP_CLOSE(lin_3[i], phi1_3[i], 0))
+        {
+            std::cerr << "  Index " << i << " is incorrect\n";
+        }
+    }
+
+    auto phi1_4 = boost::math::detail::daubechies_scaling_integer_grid<long double, 4, 1>();
+    std::array<long double, 8> lin_4 = {0.0L, 1.776072007522184640093776L, -2.785349397229543142492785L, 1.192452536632278174347632L, -0.1313745151846729587935189L, -0.05357102822023923595359996L,0.001770396479992522798495351L, 0.0L};
+
+    for (size_t i = 0; i < lin_4.size(); ++i)
+    {
+        if(!CHECK_ULP_CLOSE(lin_4[i], phi1_4[i], 0))
+        {
+            std::cerr << "  Index " << i << " is incorrect\n";
+        }
+    }
+
+    std::array<long double, 10> lin_5 = {0.0L,1.558326313047001366564379L,-2.436012783189551921436896L,1.235905129801454293947039L,-0.3674377136938866359947561L,-0.02178035117564654658884556L,0.03234719350814368885815854L,-0.001335619912770701035229331L,-0.00001216838474354431384970525L,0.0L};
+    auto phi1_5 = boost::math::detail::daubechies_scaling_integer_grid<long double, 5, 1>();
+    for (size_t i = 0; i < lin_5.size(); ++i)
+    {
+        if(!CHECK_ULP_CLOSE(lin_5[i], phi1_5[i], 0))
+        {
+            std::cerr << "  Index " << i << " is incorrect\n";
+        }
+    }
+
+
 }
 
 template<class Real, int p>
@@ -327,8 +396,10 @@ void test_efficiency(size_t j_max)
 
 int main()
 {
-    //test_efficiency<float, 6>(24);
+    //test_efficiency<double, 6>(24);
 
+    test_agreement_with_ten_lectures();
+    test_first_derivative();
     test_dyadic_grid<float>();
     test_dyadic_grid<double>();
     test_dyadic_grid<long double>();

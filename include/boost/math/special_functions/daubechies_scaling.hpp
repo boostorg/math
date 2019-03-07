@@ -1,5 +1,5 @@
 /*
- * Copyright Nick Thompson, 2018
+ * Copyright Nick Thompson, 2019
  * Use, modification and distribution are subject to the
  * Boost Software License, Version 1.0. (See accompanying file
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -267,6 +267,14 @@ public:
 
     Real spacing() const {
         return 1/m_inv_spacing;
+    }
+
+    auto begin() const {
+        return m_v.begin();
+    }
+
+    auto end() const {
+        return m_v.end();
     }
 
 private:

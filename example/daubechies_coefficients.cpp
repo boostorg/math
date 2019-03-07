@@ -61,7 +61,6 @@ std::vector<std::pair<Complex, Complex>> find_roots(size_t p)
     while(P.size() > 1)
     {
         Complex guess = {0.0, 1.0};
-        Real search_radius = 10;
         std::cout << std::setprecision(std::numeric_limits<Real>::digits10+3);
 
         auto f = [&](Complex x)->std::pair<Complex, Complex>
@@ -185,8 +184,7 @@ std::vector<typename Complex::value_type> daubechies_coefficients(std::vector<st
     // If we don't reverse, we get the Pywavelets and Mallat convention.
     // I believe this is because of the sign convention on the DFT, which differs between Daubechies and Mallat.
     // You implement a dot product in Daubechies/NR convention, and a convolution in PyWavelets/Mallat convention.
-    // I won't reverse so I can spot check against Pywavelets: http://wavelets.pybytes.com/wavelet/
-    //std::reverse(result.begin(), result.end());
+    std::reverse(result.begin(), result.end());
     std::vector<Real> h(result.size());
     for (size_t i = 0; i < result.size(); ++i)
     {

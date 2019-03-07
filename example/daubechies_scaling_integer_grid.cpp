@@ -12,7 +12,8 @@
 #include <cassert>
 #include <fstream>
 #include <Eigen/Eigenvalues>
-#include <boost/hana.hpp>
+#include <boost/hana/for_each.hpp>
+#include <boost/hana/ext/std/integer_sequence.hpp>
 #include <boost/core/demangle.hpp>
 #include <boost/multiprecision/float128.hpp>
 #include <boost/math/constants/constants.hpp>
