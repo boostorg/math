@@ -231,8 +231,6 @@ void test_dyadic_grid()
             }
         }
     });
-
-    // TODO: Add tests of derivative of dyadic grid.
 }
 
 
