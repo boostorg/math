@@ -10,6 +10,7 @@
 #include <vector>
 #include <array>
 #include <cmath>
+#include <thread>
 #include <boost/multiprecision/float128.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/detail/daubechies_scaling_integer_grid.hpp>
@@ -67,6 +68,8 @@ std::vector<Real> dyadic_grid(size_t j_max)
             v[delivery_idx] = term;
         }
     }
+
+
     return v;
 }
 
@@ -81,37 +84,32 @@ public:
         if (levels < 0)
         {
             m_levels = 22;
-            if constexpr (std::is_same_v<Real, float128>)
-            {
-                m_v = detail::dyadic_grid<Real, p, 0>(m_levels);
-                m_v_prime = detail::dyadic_grid<Real, p, 1>(m_levels);
-            }
-            else
-            {
-                {
-                    auto v = detail::dyadic_grid<float128, p, 0>(m_levels);
-                    m_v.resize(v.size());
-                    for (size_t i = 0; i < v.size(); ++i)
-                    {
-                        m_v[i] = static_cast<Real>(v[i]);
-                    }
-                }
-                {
-                    auto v_prime = detail::dyadic_grid<float128, p, 1>(m_levels);
-                    m_v_prime.resize(v_prime.size());
-                    for (size_t i = 0; i < v_prime.size(); ++i)
-                    {
-                        m_v_prime[i] = static_cast<Real>(v_prime[i]);
-                    }
-                }
-            }
         }
-        else
-        {
+        else {
             m_levels = levels;
-            m_v = detail::dyadic_grid<Real, p, 0>(m_levels);
-            m_v_prime = detail::dyadic_grid<Real, p, 1>(m_levels);
         }
+
+        auto f1 = [this] {
+            auto v = detail::dyadic_grid<float128, p, 0>(this->m_levels);
+            this->m_v.resize(v.size());
+            for (size_t i = 0; i < v.size(); ++i) {
+                this->m_v[i] = static_cast<Real>(v[i]);
+            }
+        };
+
+        auto f2 = [this] {
+            auto v_prime = detail::dyadic_grid<float128, p, 1>(this->m_levels);
+            this->m_v_prime.resize(v_prime.size());
+            for (size_t i = 0; i < v_prime.size(); ++i) {
+                this->m_v_prime[i] = static_cast<Real>(v_prime[i]);
+            }
+        };
+
+        std::thread t1(f1);
+        std::thread t2(f2);
+
+        t1.join();
+        t2.join();
 
         m_inv_spacing = (1 << m_levels);
 
