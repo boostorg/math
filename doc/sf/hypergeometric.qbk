@@ -177,8 +177,13 @@ over it's entire domain are not yet available.  We have worked extremely hard to
 
 [h4 Implementation]
 
-The implementation implementation for this function is really remarkably complex, and new methods for valuating the function are still a matter of active research,
+The implementation implementation for this function is really remarkably complex, and new methods for evaluating the function are still a matter of active research,
 readers will have to refer to the code for the transitions between methods, as we can only give an overview here.
+
+In almost all cases where /z < 0/ we use Kummer's relation to make /z/ positive:
+
+[/\large  $$_1F_1(a, b; -x) = e^{-x} {_1F_1}(a, b; x)$$]
+[$../equations/hypergeometric_1f1_12.svg]
 
 The main series representation
 
@@ -199,7 +204,7 @@ A&S 13.3.6 gives:
 
 Which is particularly useful for ['a [cong] b] and ['z > 0], or ['|a| << 1], and ['z < 0].
 
-Then we have Tricomi's approximation (given in simplified form in A&S 13.3.7) [link math_toolkit.hypergeometric.hypergeometric_refs 7]:
+Then we have Tricomi's approximation (given in simplified form in A&S 13.3.7) [link math_toolkit.hypergeometric.hypergeometric_refs (7)]:
 
 [/\large $$_1F_1(a, b; z) = \Gamma(b) e^{ \frac{1}{2} z} \sum_{n=0}^{\infty} 2^{-n}z^n A_n(a,b) E_{b-1+n}(z(\frac{b}{2}-a)) $$]
 [$../equations/hypergeometric_1f1_4.svg]
@@ -228,7 +233,7 @@ E_v(0) & = \frac{1}{\Gamma(v + 1)}
 
 This approximation is especially effective when ['a < 0] and somewhat effective when ['b < 0].
 
-For /a/ and /b/ both large and positive and somewhat similar in size then an expantion in terms of gamma functions can be used [link math_toolkit.hypergeometric.hypergeometric_refs 6]:
+For /a/ and /b/ both large and positive and somewhat similar in size then an expansion in terms of gamma functions can be used [link math_toolkit.hypergeometric.hypergeometric_refs (6)]:
 
 [/\large  $$_1F_1(a, b; x) = \frac{1}{B(a, b-a)} e^x \sum_{k=0}^{\infty} \frac{(1-a)_k}{k!} \frac{\gamma(b-a+k, x)}{x^{b-a+k}} $$]
 [$../equations/hypergeometric_1f1_8.svg]
@@ -241,9 +246,9 @@ For /z/ large we have the asymptotic expansion:
 Which is a special case of the gamma function expansion above.
 
 In the situation where `ab/z` is reasonably small then Luke's rational approximation is used - this is too complex to document
-here, refer either to the code or the original paper [link math_toolkit.hypergeometric.hypergeometric_refs 3].
+here, refer either to the code or the original paper [link math_toolkit.hypergeometric.hypergeometric_refs (3)].
 
-The special case [sub 1]F[sub 1](1, b, -z) is treated via Luke's Pade approximation [link math_toolkit.hypergeometric.hypergeometric_refs 3].
+The special case [sub 1]F[sub 1](1, b, -z) is treated via Luke's Pade approximation [link math_toolkit.hypergeometric.hypergeometric_refs (3)].
 
 That effectively completes the "direct" methods used, the remaining areas are treated indirectly via recurrence relations.  These require
 extreme care in their use, as they often change the direction of stability, or else are not stable at all.  Sometimes this is a well defined
@@ -255,9 +260,9 @@ and characterised change in direction: for example with /a,b and z/ all positive
 abruptly changes from stable forwards recursion to stable backwards if /2a-b+z/ changes sign.  Thus recurrence on /a/, even
 when [sub 1]F[sub 1](a+N, b, z) is strictly increasing, needs careful handling as /a -> 0/.
 
-The transitory nature of the stable recurrence relations is well documented in the literature, for example [link math_toolkit.hypergeometric.hypergeometric_refs 10]
-gives many exmples, including the anomylous behaviour of recurrence on /a/ and /b/ for large /z/ as first documented by Gauchi [link math_toolkit.hypergeometric.hypergeometric_refs 12].
-Gauchi also provides the definitive reference on 3-term recurrence relations in general in [link math_toolkit.hypergeometric.hypergeometric_refs 11].
+The transitory nature of the stable recurrence relations is well documented in the literature, for example [link math_toolkit.hypergeometric.hypergeometric_refs (10)]
+gives many exmples, including the anomalous behaviour of recurrence on /a/ and /b/ for large /z/ as first documented by Gauchi [link math_toolkit.hypergeometric.hypergeometric_refs (12)].
+Gauchi also provides the definitive reference on 3-term recurrence relations in general in [link math_toolkit.hypergeometric.hypergeometric_refs (11)].
 
 Unfortunately, not all recurrence stabilities are so well defined.  For example when considering [sub 1]F[sub 1](a, -b, z) it would be convenient to use
 the continued fractions associated with the recurrence relations to calculate [sub 1]F[sub 1](a, -b, z) / [sub 1]F[sub 1](a, 1-b, z) and then normalise
@@ -266,10 +271,10 @@ either by iterating forwards on b until b > 0 and comparison with a reference va
 [/\large  $$_1F_1(a, b; x) \frac{d}{dx}x^{1-b}_1F_1(1+a-b, 2-b; x) - x^{1-b}_1F_1(1+a-b, 2-b; x)\frac{d}{dx}{_1F_1}(a, b; x) = (1-b)z^{-b}e^z$$]
 [$../equations/hypergeometric_1f1_11.svg]
 
-Which is of course the well known Miller's method [link math_toolkit.hypergeometric.hypergeometric_refs 12].
+Which is of course the well known Miller's method [link math_toolkit.hypergeometric.hypergeometric_refs (12)].
 
 Unfortunately, stable forwards recursion on /b/ is stable only for /|b| << |z|/, as /|b|/ increases in magnitude it passes through a region
-where recursion is unstable in both directions before eventually becomming stable in the backwards direction (at least for a while!).  This transition 
+where recursion is unstable in both directions before eventually becoming stable in the backwards direction (at least for a while!).  This transition 
 is moderated not by a change of sign in the recurrence coefficients themselves, but by a change in the behaviour of the ['values] of [sub 1]F[sub 1] - 
 from alternating in sign when ['|b|] is small to having the same sign when /b/ is larger.  As a result the behaviour of the recurrence relations
 is almost impossible to reason about in this area, and we are left to using heuristic based approaches to "guess" which region we are in.
@@ -278,14 +283,29 @@ In this implementation we use recurrence relations as follows:
 
 For /a,b,z > 0/ and large we can either:
 
-* Make /0 < a < 1/ and /b > z/ and use evaluate the defining series directly, or
+* Make /0 < a < 1/ and /b > z/ and evaluate the defining series directly, or
 * The gamma function approximation has decent convergence and accuracy for /2b - 1 < a < 2b < z/, so we can move /a/ and /b/ into this region, or
 * We can recurse on /b/ alone so that /b-1 < a < b/ and use A&S 13.3.6 as long as /z/ is not too large.
 
-For /b < 0/ and /a/ tiny we would normally use A&S 13.3.6, but when that is non-convergent for some inputs we can use the forward recurrence relation on /b/ to
-calculate the ratio ['[sub 1]F[sub 1](a, -b, z)/[sub 1]F[sub 1](a, 1-b, z)] and then iterate forwards until /b > 0/ and compute a reference value
-and normalize (Millers Method).  In the same domain when /b/ is near -1 we can use a single backwards recursion on /b/ to compute /[sub 1]F[sub 1](a, -b, z)/
-from /[sub 1]F[sub 1](a, 2-b, z)/ and /[sub 1]F[sub 1](a, 1-b, z)/ even though technically we are recursing in the unstable direction.
+For ['b < 0] and ['a] tiny we would normally use A&S 13.3.6, but when that is non-convergent for some inputs we can use the forward recurrence relation on ['b] to
+calculate the ratio ['[sub 1]F[sub 1](a, -b, z)/[sub 1]F[sub 1](a, 1-b, z)] and then iterate forwards until ['b > 0] and compute a reference value
+and normalize (Millers Method).  In the same domain when ['b] is near -1 we can use a single backwards recursion on /b/ to compute ['[sub 1]F[sub 1](a, -b, z)]
+from ['[sub 1]F[sub 1](a, 2-b, z)] and ['[sub 1]F[sub 1](a, 1-b, z)] even though technically we are recursing in the unstable direction.
+
+For ['[sub 1]F[sub 1](-N, b, z)] and integer /N/ then backwards recursion from ['[sub 1]F[sub 1](0, b, z)] and ['[sub 1]F[sub 1](-1, b, z)] works well.
+
+For /a/ or /b/ < 0 and if all the direct methods have failed, then we use various fallbacks:
+
+For ['[sub 1]F[sub 1](-a, b, z)] we can use backwards recursion on /a/ as long as ['b > z], otherwise a more complex scheme is required
+which starts from ['[sub 1]F[sub 1](-a + N, b + M, z)], and recurses backwards in up to 3 stages: first on /a/, then on /a/ and /b/ together,
+and finally on /b/ alone.
+
+For /b < 0/ we have no good methods in some domains (see the unsolved issues above).  However in some circumstances we
+can either use 3-stage backwards recursion on both /a/, /a/ and /b/ and then /b/ as above, or else calculate the ratio
+['[sub 1]F[sub 1](a+1, b+1, z) / ['[sub 1]F[sub 1](a, b, z)]] and then normalise via the Wronksian above (Miller's method).
+
+If all else fails, then we use a checked series summation which will raise an __evaluation_error if more than half the digits
+are destroyed by cancellation.
 
 [endsect]
 [section:hypergeometric_refs Hypergeometric References]
