@@ -144,7 +144,7 @@ public:
 
     Real linear_interpolation(Real x) const {
         if (x <= 0 || x >= 2*p-1) {
-            return 0;
+            return Real(0);
         }
         using std::floor;
 
@@ -159,7 +159,7 @@ public:
 
     Real single_crank_linear(Real x) const {
         if (x <= 0 || x >= 2*p-1) {
-            return 0;
+            return Real(0);
         }
         using std::floor;
         Real y = (1<<m_levels)*x;
@@ -176,12 +176,12 @@ public:
 
         if (y - idx1 < idx1 + 1 - y)
         {
-            Real t = (y - idx1)/2;
+            Real t = 2*(y - idx1);
             return (1-t)*m_v[static_cast<size_t>(idx1)] + t*term;
         }
         else {
-            Real t = (idx1 + 1 - y)/2;
-            return (1-t)*term + t*m_v[static_cast<size_t>(idx1)+1];
+            Real t = 2*(idx1 + 1 - y);
+            return t*term + (1-t)*m_v[static_cast<size_t>(idx1)+1];
         }
     }
 
@@ -202,11 +202,11 @@ public:
         size_t kk = static_cast<size_t>(k);
         if (y - k < k + 1 - y)
         {
-            Real eps = (y-k)*this->spacing();
+            Real eps = (y-k)/(1<<m_levels);
             return m_v[kk] + eps*m_v_prime[kk];
         }
         else {
-            Real eps = (y-k-1)*this->spacing();
+            Real eps = (y-k-1)/(1<<m_levels);
             return m_v[kk+1] + eps*m_v_prime[kk+1];
         }
     }

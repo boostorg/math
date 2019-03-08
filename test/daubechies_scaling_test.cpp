@@ -235,7 +235,7 @@ void test_dyadic_grid()
 
 
 template<class Real>
-void test_constant_and_linear_interpolation()
+void test_interpolation()
 {
     std::cout << "Testing constant interpolation on type " << boost::core::demangle(typeid(Real).name()) << "\n";
     boost::hana::for_each(std::make_index_sequence<13>(), [&](auto i){
@@ -352,60 +352,20 @@ void test_first_derivative()
             std::cerr << "  Index " << i << " is incorrect\n";
         }
     }
-
-
 }
-
-template<class Real, int p>
-void test_efficiency(size_t j_max)
-{
-    std::cout << "Testing efficiency at p = " << p << " and j_max = " << j_max << "\n";
-    using std::abs;
-    auto phi128 = boost::math::daubechies_scaling<float128, p>(j_max);
-    for (size_t j = 8; j < j_max - 2; ++j)
-    {
-        auto phi = boost::math::daubechies_scaling<Real, p>(j);
-
-        Real worst_absolute_error = 0;
-        Real worst_relative_error = 0;
-        for (size_t k = 0; k < phi128.size(); ++k)
-        {
-            Real x = static_cast<Real>(phi128.index_to_abscissa(k));
-            Real computed = phi.single_crank_linear(x);
-            Real expected = static_cast<Real>(phi128[k]);
-            if (abs(computed - expected) > worst_absolute_error)
-            {
-                worst_absolute_error = abs(computed - expected);
-            }
-            if (abs(expected) > 10*std::numeric_limits<Real>::epsilon())
-            {
-                if (abs(computed - expected)/abs(expected) > worst_relative_error)
-                {
-                    worst_relative_error = abs(computed - expected)/abs(expected);
-                }
-            }
-
-        }
-        std::cout << "Worst absolute error for j = " << j << " = " << worst_absolute_error << "\n";
-        std::cout << "Worst relative error for j = " << j << " = " << worst_relative_error << "\n\n";
-    }
-}
-
 
 int main()
 {
-    //test_efficiency<double, 6>(24);
-
     test_agreement_with_ten_lectures();
     test_first_derivative();
     test_dyadic_grid<float>();
     test_dyadic_grid<double>();
     test_dyadic_grid<long double>();
     test_dyadic_grid<float128>();
-    test_constant_and_linear_interpolation<float>();
-    test_constant_and_linear_interpolation<double>();
-    test_constant_and_linear_interpolation<long double>();
-    test_constant_and_linear_interpolation<float128>();
+    test_interpolation<float>();
+    test_interpolation<double>();
+    test_interpolation<long double>();
+    test_interpolation<float128>();
 
     // All scaling functions have a first derivative.
     boost::hana::for_each(std::make_index_sequence<13>(), [&](auto idx){
