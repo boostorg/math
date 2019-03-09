@@ -105,11 +105,22 @@ public:
             }
         };
 
+
+        auto f3 = [this] {
+            auto v_dbl_prime = detail::dyadic_grid<float128, p, 2>(this->m_levels);
+            this->m_v_dbl_prime.resize(v_dbl_prime.size());
+            for (size_t i = 0; i < v_dbl_prime.size(); ++i) {
+                this->m_v_dbl_prime[i] = static_cast<Real>(v_dbl_prime[i]);
+            }
+        };
+
         std::thread t1(f1);
         std::thread t2(f2);
+        std::thread t3(f3);
 
         t1.join();
         t2.join();
+        t3.join();
 
         m_inv_spacing = (1 << m_levels);
 
@@ -185,6 +196,34 @@ public:
         }
     }
 
+    Real single_crank_quadratic(Real x) const {
+        if (x <= 0 || x >= 2*p-1) {
+            return Real(0);
+        }
+        using std::floor;
+        Real y = (1<<m_levels)*x;
+        Real idx1 = floor(y);
+
+        Real term = 0;
+        size_t k = 2*idx1 + 1;
+        for (size_t l = 0; l < m_c.size(); ++l) {
+            uint64_t idx = k - l*(1 << m_levels);
+            if (idx >= 0 && idx < m_v.size()) {
+                term += m_c[l]*m_v[idx];
+            }
+        }
+
+        Real y0 = m_v[static_cast<size_t>(idx1)];
+        Real y1 = term;
+        Real y2 = m_v[static_cast<size_t>(idx1)+1];
+
+        Real a = (y2+y0-2*y1)/2;
+        Real b = (4*y1-3*y0 - y2)/2;
+        Real t = 2*(y - idx1);
+        return a*t*t + b*t + y0;
+    }
+
+
     Real double_crank_linear(Real x) const {
         return std::numeric_limits<Real>::quiet_NaN();
     }
@@ -212,7 +251,24 @@ public:
     }
 
     Real second_order_taylor(Real x) const {
-        return std::numeric_limits<Real>::quiet_NaN();
+        if (x <= 0 || x >= 2*p-1) {
+            return 0;
+        }
+        using std::floor;
+
+        Real y = (1<<m_levels)*x;
+        Real k = floor(y);
+
+        size_t kk = static_cast<size_t>(k);
+        if (y - k < k + 1 - y)
+        {
+            Real eps = (y-k)/(1<<m_levels);
+            return m_v[kk] + eps*m_v_prime[kk] + eps*eps*m_v_dbl_prime[kk]/2;
+        }
+        else {
+            Real eps = (y-k-1)/(1<<m_levels);
+            return m_v[kk+1] + eps*m_v_prime[kk+1] + eps*eps*m_v_dbl_prime[kk+1]/2;
+        }
     }
 
     Real third_order_taylor(Real x) const {
@@ -281,6 +337,7 @@ private:
     std::array<Real, 2*p> m_c;
     std::vector<Real> m_v;
     std::vector<Real> m_v_prime;
+    std::vector<Real> m_v_dbl_prime;
 };
 
 }
