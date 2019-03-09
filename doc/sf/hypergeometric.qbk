@@ -167,10 +167,10 @@ over it's entire domain are not yet available.  We have worked extremely hard to
 
 [table
 [[domain][comment][example]]
-[[[sub 1]F[sub 1](-a, -b, -z)][a, b and z all large.][[sub 1]F[sub 1](-814723.75, -13586.87890625, -15.87335205078125)]]
-[[[sub 1]F[sub 1](-a, -b, z)][a < b, b > z, this is really the same domain as above.][ ]]
-[[[sub 1]F[sub 1](a, -b, z)][a, b and z all large.][[sub 1]F[sub 1](9057.91796875, -1252.51318359375, 15.87335205078125)]]
-[[[sub 1]F[sub 1](a[sub tiny], b, -z)][This domain is mostly handled by A&S 13.3.6 (see implementation notes below), but there
+[[ [/\large  $$_1F_1(-a, -b; -z)$$] [$../equations/hypergeometric_1f1_13.svg]  ][a, b and z all large.][[sub 1]F[sub 1](-814723.75, -13586.87890625, -15.87335205078125)]]
+[[ [/\large  $$_1F_1(-a, -b; z)$$] [$../equations/hypergeometric_1f1_14.svg]  ][a < b, b > z, this is really the same domain as above.][ ]]
+[[ [/\large  $$_1F_1(a, -b; z)$$] [$../equations/hypergeometric_1f1_15.svg]  ][a, b and z all large.][[sub 1]F[sub 1](9057.91796875, -1252.51318359375, 15.87335205078125)]]
+[[ [/\large  $$_1F_1(a_{tiny}, b; -z)$$] [$../equations/hypergeometric_1f1_16.svg]  ][This domain is mostly handled by A&S 13.3.6 (see implementation notes below), but there
       are some values where either that series is non-convergent (most particularly for b < 0)
       or where the series become divergent after a few terms limiting the precision that can be achieved.][[sub 1]F[sub 1](-5.9981750131794866e-15, 0.499999999999994, -240.42092034220695)]]
 ]
