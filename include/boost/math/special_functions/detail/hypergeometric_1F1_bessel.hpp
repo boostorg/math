@@ -27,6 +27,8 @@
      bool hypergeometric_1F1_is_tricomi_viable_positive_b(const T& a, const T& b, const T& z)
      {
         BOOST_MATH_STD_USING
+           if ((z < b) && (a > -50))
+              return false;  // might as well fall through to recursion
         if (b <= 100)
            return true;
         // Even though we're in a reasonable domain for Tricomi's approximation, 
@@ -68,7 +70,13 @@
            BOOST_MATH_STD_USING
            term /= pow(fabs(bessel_arg), b_minus_1_plus_n / 2);
            mult /= sqrt(fabs(bessel_arg));
-           if ((term == 0) || !(boost::math::isfinite)(term) || (!std::numeric_limits<T>::has_infinity && (fabs(term) > tools::max_value<T>())))
+           bessel_cache[cache_size - 1] = bessel_arg > 0 ? boost::math::cyl_bessel_j(b_minus_1_plus_n - 1, 2 * sqrt(bessel_arg), pol) : boost::math::cyl_bessel_i(b_minus_1_plus_n - 1, 2 * sqrt(-bessel_arg), pol);
+           if (fabs(bessel_cache[cache_size - 1]) < tools::min_value<T>() / tools::epsilon<T>())
+           {
+              // We get very limited precision due to rapid denormalisation/underflow of the Bessel values, raise an exception and try something else:
+              policies::raise_evaluation_error("hypergeometric_1F1_AS_13_3_7_tricomi_series<%1%>", "Underflow in Bessel functions", bessel_cache[cache_size - 1], pol);
+           }
+           if ((term * bessel_cache[cache_size - 1] < tools::min_value<T>() / (tools::epsilon<T>() * tools::epsilon<T>())) || !(boost::math::isfinite)(term) || (!std::numeric_limits<T>::has_infinity && (fabs(term) > tools::max_value<T>())))
            {
               term = -log(fabs(bessel_arg)) * b_minus_1_plus_n / 2;
               log_scale = itrunc(term);
@@ -77,7 +85,6 @@
            }
            else
               log_scale = 0;
-           bessel_cache[cache_size - 1] = bessel_arg > 0 ? boost::math::cyl_bessel_j(b_minus_1_plus_n - 1, 2 * sqrt(bessel_arg), pol) : boost::math::cyl_bessel_i(b_minus_1_plus_n - 1, 2 * sqrt(-bessel_arg), pol);
 #ifndef BOOST_NO_CXX17_IF_CONSTEXPR
            if constexpr (std::numeric_limits<T>::has_infinity)
            {
