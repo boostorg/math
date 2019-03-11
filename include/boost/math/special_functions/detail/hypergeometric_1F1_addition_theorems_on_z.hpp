@@ -40,11 +40,20 @@
         hypergeometric_1f1_recurrence_on_z_minus_zero_series(const T& a, const T& b, const T& z, int k_, const Policy& pol)
            : term(1), b_minus_a_plus_n(b - a), a_(a), b_(b), z_(z), n(0), k(k_)
         {
+           BOOST_MATH_STD_USING
            int scale1(0), scale2(0);
            M = boost::math::detail::hypergeometric_1F1_imp(a, b, z, pol, scale1);
            M_next = boost::math::detail::hypergeometric_1F1_imp(T(a - 1), b, z, pol, scale2);
            if (scale1 != scale2)
               M_next *= exp(scale2 - scale1);
+           if (M > 1e10f)
+           {
+              // rescale:
+              int rescale = itrunc(log(fabs(M)));
+              M *= exp(T(-rescale));
+              M_next *= exp(T(-rescale));
+              scale1 += rescale;
+           }
            scaling = scale1;
         }
         T operator()()
