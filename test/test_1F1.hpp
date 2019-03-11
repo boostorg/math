@@ -160,7 +160,7 @@ void test_spots5(T, const char* type_name)
 template <class T>
 void test_spots6(T, const char* type_name)
 {
-   static const boost::array<boost::array<T, 4>, 57> hypergeometric_1F1_bugs = { {
+   static const boost::array<boost::array<T, 4>, 63> hypergeometric_1F1_bugs = { {
         { { static_cast<double>(17955.561660766602), static_cast<double>(9.6968994205831605e-09), static_cast<double>(-82.406154185533524), SC_(6.98056008378736714088730927132364938220428678e-11) }},
         { { static_cast<double>(17955.561660766602), static_cast<double>(-9.6968994205831605e-09), static_cast<double>(-82.406154185533524), SC_(-6.98055306629610746072607353939306734740549551e-11) }},
         { { static_cast<double>(-17955.561660766602), static_cast<double>(-9.6968994205831605e-09), static_cast<double>(82.406154185533524), SC_(-42897094853118832762870100.8669248353530950866) }} ,
@@ -244,6 +244,14 @@ void test_spots6(T, const char* type_name)
          {{ static_cast<double>(5.6136137469239618e-15), static_cast<double>(-0.99999999999999434), static_cast<double>(-1989.8742001056671), SC_(0.00856985180985659334965068576732515544478559175) }},
          // Unexpected high error : 10431.000000023717802832834422588348388671875 Found : 0.99999999999772626324556767940521240234375 Expected : 1.00000000000004241051954068097984418272972107
          { { static_cast<double>(-5.6136137469239618e-15), static_cast<double>(-0.50000000000000566), static_cast<double>(-1989.8742001056671), SC_(1.00000000000004243096226509338784935080089269) }},
+         // And more from error rate testing:
+         {{ std::ldexp((double)-17079780487168000, -44), std::ldexp((double)9462273998848000, -46), std::ldexp((double)9928190459904000, -48), SC_(7.7358754011357422722746277257633664799903803239195e-72) }},
+         {{ std::ldexp((double)-16238757384192000, -44), std::ldexp((double)17248812490752000, -44), std::ldexp((double)12549255331840000, -49), SC_(4.7354970214088286546733909450191631190700414608975e-10) }},
+         {{ static_cast<double>(-6.8543290253728628), static_cast<double>(607.72073245607316), static_cast<double>(253.26409819535911), SC_(0.024418741483258497441042709681531519387974841769189) }},
+         {{ std::ldexp((double)-15569844699136000, -52), std::ldexp((double)12855440629760000, -44), std::ldexp((double)12563412279296000, -45), SC_(0.097879401070280078654536987721507669872679020399179) }},
+         {{ std::ldexp((double)-13521484578816000, -48), std::ldexp((double)11813014388736000, -46), std::ldexp((double)12736881098752000, -48), SC_(9.1262751214688536871555425535678062558805718157237e-08) }},
+         {{ std::ldexp((double)-13125670141952000, -44), std::ldexp((double)16524914262016000, -44), std::ldexp((double)12270166867968000, -49), SC_(2.0809215788388623809065210261671764534436583442155e-08) }},
+         //{{ std::ldexp((double)-9012443406336000, -45), std::ldexp((double)12293411340288000, -46), std::ldexp((double)15162862993408000, -52), 0.00634911418172408957356631082162378669273898042 }},
    } };
    static const boost::array<boost::array<T, 4>, 2> hypergeometric_1F1_big_bugs = { {
 #if DBL_MAX_EXP == LDBL_MAX_EXP

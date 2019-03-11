@@ -54,15 +54,21 @@ namespace boost { namespace math { namespace detail {
       //
       if (b > 0)
       {
+         // Commented out since recurrence seems to always be better?
+#if 0
+         if ((z < b) && (a > -50))
+            // Might as well use a recurrence in preference to z-recurrence:
+            return hypergeometric_1F1_backward_recurrence_for_negative_a(a, b, z, pol, function, log_scaling);
          T z_limit = fabs((2 * a - b) / (sqrt(fabs(a))));
          int k = 1 + itrunc(z - z_limit);
          // If k is too large we destroy all the digits in the result:
          T convergence_at_50 = (b - a + 50) * k / (z * 50);
-         if ((k > 0) && (k < 50) && (fabs(convergence_at_50) < 1))
+         if ((k > 0) && (k < 50) && (fabs(convergence_at_50) < 1) && (z > z_limit))
          {
             return boost::math::detail::hypergeometric_1f1_recurrence_on_z_minus_zero(a, b, T(z - k), k, pol, log_scaling);
          }
-         else if (z < b)
+#endif
+         if (z < b)
             return hypergeometric_1F1_backward_recurrence_for_negative_a(a, b, z, pol, function, log_scaling);
          else
             return hypergeometric_1F1_backwards_recursion_on_b_for_negative_a(a, b, z, pol, function, log_scaling);
