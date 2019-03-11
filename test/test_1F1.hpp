@@ -160,7 +160,7 @@ void test_spots5(T, const char* type_name)
 template <class T>
 void test_spots6(T, const char* type_name)
 {
-   static const boost::array<boost::array<T, 4>, 63> hypergeometric_1F1_bugs = { {
+   static const boost::array<boost::array<T, 4>, 65> hypergeometric_1F1_bugs = { {
         { { static_cast<double>(17955.561660766602), static_cast<double>(9.6968994205831605e-09), static_cast<double>(-82.406154185533524), SC_(6.98056008378736714088730927132364938220428678e-11) }},
         { { static_cast<double>(17955.561660766602), static_cast<double>(-9.6968994205831605e-09), static_cast<double>(-82.406154185533524), SC_(-6.98055306629610746072607353939306734740549551e-11) }},
         { { static_cast<double>(-17955.561660766602), static_cast<double>(-9.6968994205831605e-09), static_cast<double>(82.406154185533524), SC_(-42897094853118832762870100.8669248353530950866) }} ,
@@ -251,7 +251,8 @@ void test_spots6(T, const char* type_name)
          {{ std::ldexp((double)-15569844699136000, -52), std::ldexp((double)12855440629760000, -44), std::ldexp((double)12563412279296000, -45), SC_(0.097879401070280078654536987721507669872679020399179) }},
          {{ std::ldexp((double)-13521484578816000, -48), std::ldexp((double)11813014388736000, -46), std::ldexp((double)12736881098752000, -48), SC_(9.1262751214688536871555425535678062558805718157237e-08) }},
          {{ std::ldexp((double)-13125670141952000, -44), std::ldexp((double)16524914262016000, -44), std::ldexp((double)12270166867968000, -49), SC_(2.0809215788388623809065210261671764534436583442155e-08) }},
-         //{{ std::ldexp((double)-9012443406336000, -45), std::ldexp((double)12293411340288000, -46), std::ldexp((double)15162862993408000, -52), 0.00634911418172408957356631082162378669273898042 }},
+         {{ std::ldexp((double)-9012443406336000, -45), std::ldexp((double)12293411340288000, -46), std::ldexp((double)15162862993408000, -52), SC_(0.00634911418172408957356631082162378669273898042) }},
+         {{ std::ldexp((double)10907252916224000, -46), std::ldexp((double)10872033234944000, -44), std::ldexp((double)14845267734528000, -44), SC_(3.35597139167246486559762237420776458756928282e+152) }},
    } };
    static const boost::array<boost::array<T, 4>, 2> hypergeometric_1F1_big_bugs = { {
 #if DBL_MAX_EXP == LDBL_MAX_EXP

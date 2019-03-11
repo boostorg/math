@@ -336,7 +336,7 @@
         int a_shift(0), b_shift(0);
         if (a * z > b)
         {
-           a_shift = itrunc(a);
+           a_shift = itrunc(a) - 5;
            b_shift = b < z ? itrunc(b - z - 1) : 0;
         }
         //
