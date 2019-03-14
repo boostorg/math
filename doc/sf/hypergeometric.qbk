@@ -175,6 +175,42 @@ over it's entire domain are not yet available.  We have worked extremely hard to
       or where the series become divergent after a few terms limiting the precision that can be achieved.][[sub 1]F[sub 1](-5.9981750131794866e-15, 0.499999999999994, -240.42092034220695)]]
 ]
 
+[h4 Testing]
+
+There are 3 main groups of tests:
+
+* Spot tests for special inputs with known values.
+* Sanity checks which use integrals of hypergeometric functions of known value.  These are particularly useful
+since for fixed ['a] and ['b] they evaluate ['[sub 1]F[sub 1](a,b,z)] for all /z/.
+* Testing against values precomputed using arbitrary precision arithmetic and the /pFq/ series.
+
+We also have a [@../../tools/hypergeometric_1F1_error_plot.cpp small program] for testing random values over a user-specified domain of /a/, /b/ and /z/, this program
+is also used for the error rate plots below and has been extremely useful in fine tuning the implementation.
+
+It should be noted however, that there are some domains for large negative /a/ and /b/ that have poor test coverage as we were
+simply unable to compute test values in reasonable time: it is not uncommon for the /pFq/ series to cancel many humdreds of digits
+and sometimes into the thousands of digits.
+
+[h4 Errors]
+
+We divide the domain of [sub 1]F[sub 1] up into several domains to explain the error rates.  
+
+In the following graphs we ran 100000 random test cases over each domain, note that the scatter plots show only the very worst errors
+as otherwise the graphs are both incomprehensible and virtually unplottable (as in sudden browser death).
+
+For 0 < a,b,z the error rates are trivial small unless we are forced to take steps to avoid very-slow convergence and use a method other than direct evaluation of the series
+for performance reasons.  Even so the errors rates are broadly acceptible, with the scatter graph shows where the worst errors are located:
+
+[$../graphs/hypergeometric_1f1/positive_abz_bins.svg]
+[? __build_html '''<?dbhtml-include href="'''__base_path__'''/graphs/hypergeometric_1f1/positive_abz_include.html"?>''']
+[?! __build_html [$../graphs/hypergeometric_1f1/positive_abz.png]]
+
+For -1000 < a < 0 and 0 < b,z < 1000 the maximum error rates are higher, but most are still low, and the worst errors are fairly evenly distributed:
+
+[$../graphs/hypergeometric_1f1/negative_a_bins.svg]
+[? __build_html '''<?dbhtml-include href="'''__base_path__'''/graphs/hypergeometric_1f1/negative_a.html"?>''']
+[?! __build_html [$../graphs/hypergeometric_1f1/negative_a.png]]
+
 [h4 Implementation]
 
 The implementation implementation for this function is really remarkably complex, and new methods for evaluating the function are still a matter of active research,
