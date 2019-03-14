@@ -5592,6 +5592,18 @@ var negative_a = {
     ],
     "layout": {
         "scene": {
+            "xaxis": {
+                "type": "linear",
+                "title": {
+                    "text": "a"
+                }
+            },
+            "yaxis": {
+                "type": "linear",
+                "title": {
+                    "text": "b"
+                }
+            },
             "camera": {
                 "up": {
                     "x": 0,
