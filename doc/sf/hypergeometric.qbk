@@ -204,7 +204,7 @@ For 0 < a,b,z the error rates are trivial small unless we are forced to take ste
 for performance reasons.  Even so the errors rates are broadly acceptible, with the scatter graph shows where the worst errors are located:
 
 [$../graphs/hypergeometric_1f1/positive_abz_bins.svg]
-[? __build_html '''<?dbhtml-include href="'''__base_path__'''/graphs/hypergeometric_1f1/positive_abz_include.html"?>''']
+[? __build_html '''<?dbhtml-include href="'''__base_path__'''/graphs/hypergeometric_1f1/positive_abz.html"?>''']
 [?! __build_html [$../graphs/hypergeometric_1f1/positive_abz.png]]
 
 For -1000 < a < 0 and 0 < b,z < 1000 the maximum error rates are higher, but most are still low, and the worst errors are fairly evenly distributed:

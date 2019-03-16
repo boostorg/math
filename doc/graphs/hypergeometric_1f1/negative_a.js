@@ -5588,6 +5588,24 @@ var negative_a = {
                 "size": 3,
                 "color": "rgb(29, 92, 125)"
             }
+        },
+        {
+            "mode": "none",
+            "name": "&lt; 256 Not Shown For Bvrevity",
+            "type": "scatter3d",
+            "xsrc": "JohnMaddock:32:d956e1",
+            "x": [
+                "0"
+            ],
+            "ysrc": "JohnMaddock:32:d956e1",
+            "y": [
+                "0"
+            ],
+            "zsrc": "JohnMaddock:32:06d6bb",
+            "z": [
+                "0"
+            ],
+            "opacity": 0
         }
     ],
     "layout": {
@@ -5626,10 +5644,13 @@ var negative_a = {
             },
             "aspectmode": "auto",
             "aspectratio": {
-                "x": 1.0016702826973007,
-                "y": 1.0039160744052895,
-                "z": 0.9944382084790641
+                "x": 0.9995190543928182,
+                "y": 0.9985661972821688,
+                "z": 1.001917729390604
             }
+        },
+        "title": {
+            "text": "Error PLot for <i>1F1(a,b,z)</i><br><br>\n-1000 &lt; a &lt; 0 and 0 &lt; b,z &lt; 1000<br>\n<br>\n(Taken from 100000 uniformly distributed points)<br>"
         },
         "xaxis": {
             "range": [
