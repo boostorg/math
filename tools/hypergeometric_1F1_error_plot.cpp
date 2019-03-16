@@ -72,6 +72,28 @@ struct error_data
 
 int main()
 {
+   for (double aa = 7.5; aa < 20000; aa *= 1.5)
+   {
+      for (double bb = -7.5; bb > -20000; bb *= 1.5)
+      {
+         for (double zz = 1.25; zz < 50000; zz *= 1.1)
+         {
+            boost::uintmax_t max_iter = 200;
+            double rat = boost::math::tools::function_ratio_from_forwards_recurrence(boost::math::detail::hypergeometric_1F1_recurrence_a_and_b_coefficients<double>(aa - 1, bb - 1, zz), 4e-16, max_iter);
+            //double rat2 = 1 / boost::math::tools::function_ratio_from_backwards_recurrence(boost::math::detail::hypergeometric_1F1_recurrence_a_and_b_coefficients<double>(aa, bb, zz), 4e-16, max_iter);
+            double comp = (double)(boost::math::hypergeometric_pFq_precision({ mpfr_float(aa - 1) }, { mpfr_float(mpfr_float(bb - 1)) }, mpfr_float(zz), 100, 1000000.0) / boost::math::hypergeometric_pFq_precision({ mpfr_float(aa) }, { mpfr_float(mpfr_float(bb)) }, mpfr_float(zz), 100, 1000000.0));
+            double diff = boost::math::relative_difference(rat, (double)comp);
+            if (diff < 1e-14)
+            {
+               std::cout << std::setprecision(3) << std::scientific << "{" << aa << ", " << bb << ", " << zz << " }," << std::endl;
+               break;
+            }
+         }
+      }
+   }
+
+
+
    try {
       test_type max_a, max_b, max_z, min_a, min_b, min_z;
 
