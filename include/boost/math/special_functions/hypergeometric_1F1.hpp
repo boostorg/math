@@ -97,6 +97,8 @@ namespace boost { namespace math { namespace detail {
          {
             if (is_in_hypergeometric_1F1_from_function_ratio_negative_b_region(a, b, z))
                return hypergeometric_1F1_from_function_ratio_negative_b(a, b, z, pol, log_scaling);
+            else if (hypergeometric_1F1_is_in_forwards_recurence_for_negative_b_region(a, b, z))
+               return hypergeometric_1F1_from_function_ratio_negative_b_forwards(a, b, z, pol, log_scaling);
          }
       }
 
