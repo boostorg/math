@@ -148,7 +148,8 @@
      {
         //
         // There's no easy relation between a, b and z that tells us whether we're in the region
-        // where forwards recursion is stable, so use a lookup table:
+        // where forwards recursion is stable, so use a lookup table, note that the minumum
+        // permissible z-value is decreasing with a, and increasing with |b|:
         //
         static const float data[][3] = {
            {7.500e+00f, -7.500e+00f, 8.409e+00f },
@@ -559,8 +560,12 @@
         int index = 0;
         while (data[index][0] < a)
            ++index;
-        while (data[index][1] > b)
-           ++index;
+        --index;
+        while ((data[index][1] < b) && (data[index][2] > 1.25))
+           --index;
+        ++index;
+        BOOST_ASSERT(a > data[index][0]);
+        BOOST_ASSERT(-b < -data[index][1]);
         return z > data[index][2];
      }
      template <class T, class Policy>
@@ -585,6 +590,20 @@
         T reference_value = hypergeometric_1F1_imp(a + steps, b + steps, z, pol, log_scaling);
         T found = boost::math::tools::apply_recurrence_relation_forward(boost::math::detail::hypergeometric_1F1_recurrence_a_and_b_coefficients<T>(a + 1, b + 1, z), steps - 1, T(1), ratio, &scale);
         log_scaling -= scale;
+        if ((fabs(reference_value) < 1) && (fabs(reference_value) < tools::min_value<T>() * fabs(found)))
+        {
+           // Possible underflow, rescale
+           int s = itrunc(tools::log_max_value<T>());
+           log_scaling -= s;
+           reference_value *= exp(s);
+        }
+        else if ((fabs(found) < 1) && (fabs(reference_value) > tools::max_value<T>() * fabs(found)))
+        {
+           // Overflow, rescale:
+           int s = itrunc(tools::log_max_value<T>());
+           log_scaling += s;
+           reference_value /= exp(s);
+        }
         return reference_value / found;
      }
 
