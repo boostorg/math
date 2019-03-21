@@ -60,8 +60,7 @@
            //std::cout << k << " " << *bj.begin() + k << " " << result << " " << term << /*" " << term_at_k(*aj.begin(), *bj.begin(), z, k, pol) <<*/ std::endl;
            result += term;
            abs_result += abs(term);
-           //std::cout << result << std::endl;
-           //std::cout << abs_result << std::endl;
+           //std::cout << "k = " << k << " term = " << term * exp(log_scale) << " result = " << result * exp(log_scale) << " abs_result = " << abs_result * exp(log_scale) << std::endl;
 
            //
            // Rescaling:
@@ -137,15 +136,18 @@
                  else
                   term += log_pochhammer(*ai, s, pol, &s1);
               }
+              //std::cout << "term = " << term << std::endl;
               if (terminate)
                  break;
               for(auto bi = bj.begin(); bi != bj.end(); ++bi)
                  term -= log_pochhammer(*bi, s, pol, &s2);
+              //std::cout << "term = " << term << std::endl;
               term -= lgamma(Real(s + 1), pol);
               term += s * log(fabs(z));
               if (z < 0)
                  s1 *= (s & 1 ? -1 : 1);
               term -= local_scaling;
+              //std::cout << "term = " << term << std::endl;
               if (term > -tools::log_max_value<Real>())
               {
                  if (term > 10)
@@ -162,6 +164,7 @@
                  {
                     result += term;
                     abs_result += fabs(term);
+                    //std::cout << "k = " << k << " term = " << term * exp(log_scale) << " result = " << result * exp(log_scale) << " abs_result = " << abs_result * exp(log_scale) << std::endl;
                     if (abs_result * tol > abs(result))
                     {
                        // We have no correct bits in the result... just give up!
@@ -237,6 +240,7 @@
                     term *= (k + 1) / z;
                     result += term;
                     abs_result += fabs(term);
+                    //std::cout << "k = " << k << " result = " << result << " abs_result = " << abs_result << std::endl;
                     if (abs_result * tol > abs(result))
                     {
                        // We have no correct bits in the result... just give up!
@@ -286,7 +290,7 @@
         // Check to see how many digits we've lost, if it's more than half, raise an evaluation error -
         // this is an entirely arbitrary cut off, but not unreasonable.
         //
-        if (result.second * boost::math::policies::get_epsilon<Real, Policy>() > abs(result.first))
+        if (result.second * sqrt(boost::math::policies::get_epsilon<Real, Policy>()) > abs(result.first))
         {
            return boost::math::policies::raise_evaluation_error("boost::math::hypergeometric_pFq<%1%>", "Cancellation is so severe that fewer than half the bits in the result are correct, last result was %1%", Real(result.first * exp(Real(log_scale))), pol);
         }

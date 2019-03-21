@@ -555,12 +555,13 @@
         };
         if ((a > 1.663e+04) || (-b > 1.663e+04))
            return z > -b;  // Way overly conservative?
-        if (a < 7)
+        if (a < data[0][0])
            return false;
         int index = 0;
         while (data[index][0] < a)
            ++index;
-        --index;
+        if(a != data[index][0])
+           --index;
         while ((data[index][1] < b) && (data[index][2] > 1.25))
            --index;
         ++index;

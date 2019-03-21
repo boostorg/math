@@ -99,6 +99,19 @@ namespace boost { namespace math { namespace detail {
                return hypergeometric_1F1_from_function_ratio_negative_b(a, b, z, pol, log_scaling);
             else if (hypergeometric_1F1_is_in_forwards_recurence_for_negative_b_region(a, b, z))
                return hypergeometric_1F1_from_function_ratio_negative_b_forwards(a, b, z, pol, log_scaling);
+            //
+            // We could fall back to Tricomi's approximation if we're in the transition zone
+            // betweeen the above two regions.  However, I've been unable to find any examples
+            // where this is better than the series, and there are many cases where it leads to
+            // quite grievous errors.
+            /*
+            else if (allow_tricomi)
+            {
+               T aa = a < 1 ? T(1) : a;
+               if (z < fabs((2 * aa - b) / (sqrt(fabs(aa * b)))))
+                  return hypergeometric_1F1_AS_13_3_7_tricomi(a, b, z, pol, log_scaling);
+            }
+            */
          }
       }
 
@@ -452,12 +465,16 @@ namespace boost { namespace math { namespace detail {
                if (((z < z_limit) || (a > -500)) && ((b > -500) || (b - 2 * a > 0)) && (z < -a))
                   return detail::hypergeometric_1F1_AS_13_3_7_tricomi(a, b, z, pol, log_scaling);
             }
+            //
+            // We previosuly used Tricomi here, but it appears to be worse than
+            // the recurrence-based algorithms in hypergeometric_1F1_divergent_fallback.
+            /*
             else
             {
                T aa = a < 1 ? T(1) : a;
                if (z < fabs((2 * aa - b) / (sqrt(fabs(aa * b)))))
                   return detail::hypergeometric_1F1_AS_13_3_7_tricomi(a, b, z, pol, log_scaling);
-            }
+            }*/
          }
 
          return hypergeometric_1F1_divergent_fallback(a, b, z, pol, log_scaling);
