@@ -65,14 +65,14 @@
         BOOST_STATIC_CONSTEXPR bool                                                 has_infinity             = true;
         BOOST_STATIC_CONSTEXPR bool                                                 has_quiet_NaN            = true;
         BOOST_STATIC_CONSTEXPR bool                                                 has_signaling_NaN        = false;
-        BOOST_STATIC_CONSTEXPR float_denorm_style                                   has_denorm               = denorm_absent;
+        BOOST_STATIC_CONSTEXPR float_denorm_style                                   has_denorm               = denorm_present;
         BOOST_STATIC_CONSTEXPR bool                                                 has_denorm_loss          = false;
         static                 boost::math::cstdfloat::detail::float_internal128_t  infinity     ()          { return BOOST_FLOAT128_C(1.0) / BOOST_FLOAT128_C(0.0); }
-        static                 boost::math::cstdfloat::detail::float_internal128_t  quiet_NaN    ()          { return ::BOOST_CSTDFLOAT_FLOAT128_SQRT(BOOST_FLOAT128_C(-1.0)); }
+        static                 boost::math::cstdfloat::detail::float_internal128_t  quiet_NaN    ()          { return -(::BOOST_CSTDFLOAT_FLOAT128_SQRT(BOOST_FLOAT128_C(-1.0))); }
         static                 boost::math::cstdfloat::detail::float_internal128_t  signaling_NaN()          { return BOOST_FLOAT128_C(0.0); }
-        static                 boost::math::cstdfloat::detail::float_internal128_t  denorm_min   ()          { return BOOST_FLOAT128_C(0.0); }
+        static                 boost::math::cstdfloat::detail::float_internal128_t  denorm_min   ()          { return BOOST_CSTDFLOAT_FLOAT128_DENORM_MIN; }
         BOOST_STATIC_CONSTEXPR bool                                                 is_iec559                = true;
-        BOOST_STATIC_CONSTEXPR bool                                                 is_bounded               = false;
+        BOOST_STATIC_CONSTEXPR bool                                                 is_bounded               = true;
         BOOST_STATIC_CONSTEXPR bool                                                 is_modulo                = false;
         BOOST_STATIC_CONSTEXPR bool                                                 traps                    = false;
         BOOST_STATIC_CONSTEXPR bool                                                 tinyness_before          = false;
@@ -83,3 +83,4 @@
   #endif // Not BOOST_CSTDFLOAT_NO_LIBQUADMATH_SUPPORT (i.e., the user would like to have libquadmath support)
 
 #endif // _BOOST_CSTDFLOAT_LIMITS_2014_01_09_HPP_
+
