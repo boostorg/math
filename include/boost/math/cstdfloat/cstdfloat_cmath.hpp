@@ -140,6 +140,49 @@
     #define BOOST_CSTDFLOAT_FLOAT128_ATAN2  __atan2q
     #define BOOST_CSTDFLOAT_FLOAT128_LGAMMA __lgammaq
     #define BOOST_CSTDFLOAT_FLOAT128_TGAMMA __tgammaq
+	//	begin more functions
+	#define BOOST_CSTDFLOAT_FLOAT128_REMAINDER	__remainderq
+	#define BOOST_CSTDFLOAT_FLOAT128_REMQUO		__remquoq
+	#define BOOST_CSTDFLOAT_FLOAT128_FMA		__fmaq
+	#define BOOST_CSTDFLOAT_FLOAT128_FMAX		__fmaxq
+	#define BOOST_CSTDFLOAT_FLOAT128_FMIN		__fminq
+	#define BOOST_CSTDFLOAT_FLOAT128_FDIM		__fdimq
+	#define BOOST_CSTDFLOAT_FLOAT128_NAN		__nanq
+	#define BOOST_CSTDFLOAT_FLOAT128_EXP2		__exp2q
+	#define BOOST_CSTDFLOAT_FLOAT128_LOG2		__log2q
+	#define BOOST_CSTDFLOAT_FLOAT128_LOG1P		__log1pq
+	#define BOOST_CSTDFLOAT_FLOAT128_CBRT		__cbrtq
+	#define BOOST_CSTDFLOAT_FLOAT128_HYPOT		__hypotq
+	#define BOOST_CSTDFLOAT_FLOAT128_ERF		__erfq
+	#define BOOST_CSTDFLOAT_FLOAT128_ERFC		__erfcq
+	#define BOOST_CSTDFLOAT_FLOAT128_LLROUND	__llroundq
+	#define BOOST_CSTDFLOAT_FLOAT128_LROUND		__lroundq
+	#define BOOST_CSTDFLOAT_FLOAT128_ROUND		__roundq
+	#define BOOST_CSTDFLOAT_FLOAT128_NEARBYINT	__nearbyintq
+	#define BOOST_CSTDFLOAT_FLOAT128_LLRINT		__llrintq
+	#define BOOST_CSTDFLOAT_FLOAT128_LRINT		__lrintq
+	#define BOOST_CSTDFLOAT_FLOAT128_RINT		__rintq
+	#define BOOST_CSTDFLOAT_FLOAT128_MODF		__modfq
+	#define BOOST_CSTDFLOAT_FLOAT128_SCALBLN	__scalblnq
+	#define BOOST_CSTDFLOAT_FLOAT128_SCALBN		__scalbnq
+	#define BOOST_CSTDFLOAT_FLOAT128_ILOGB		__ilogbq
+	#define BOOST_CSTDFLOAT_FLOAT128_LOGB		__logbq
+	#define BOOST_CSTDFLOAT_FLOAT128_NEXTAFTER	__nextafterq
+	//#define BOOST_CSTDFLOAT_FLOAT128_NEXTTOWARD	__nexttowardq
+	#define BOOST_CSTDFLOAT_FLOAT128_COPYSIGN	__copysignq
+	#define BOOST_CSTDFLOAT_FLOAT128_SIGNBIT	__signbitq
+	//#define BOOST_CSTDFLOAT_FLOAT128_FPCLASSIFY	__fpclassifyq
+	#define BOOST_CSTDFLOAT_FLOAT128_ISFINITE	__isfiniteq
+	#define BOOST_CSTDFLOAT_FLOAT128_ISINF		__isinfq
+	#define BOOST_CSTDFLOAT_FLOAT128_ISNAN		__isnanq
+	//#define BOOST_CSTDFLOAT_FLOAT128_ISNORMAL	__isnormalq
+	//#define BOOST_CSTDFLOAT_FLOAT128_ISGREATER		__isgreaterq
+	//#define BOOST_CSTDFLOAT_FLOAT128_ISGREATEREQUAL	__isgreaterequalq
+	//#define BOOST_CSTDFLOAT_FLOAT128_ISLESS			__islessq
+	//#define BOOST_CSTDFLOAT_FLOAT128_ISLESSEQUAL	__islessequalq
+	//#define BOOST_CSTDFLOAT_FLOAT128_ISLESSGREATER	__islessgreaterq
+	//#define BOOST_CSTDFLOAT_FLOAT128_ISUNORDERED	__isunorderedq
+	//	end more functions
   #elif defined(__GNUC__)
     #define BOOST_CSTDFLOAT_FLOAT128_LDEXP  ldexpq
     #define BOOST_CSTDFLOAT_FLOAT128_FREXP  frexpq
@@ -182,6 +225,49 @@
     #define BOOST_CSTDFLOAT_FLOAT128_ATANH  atanhq_patch
     #define BOOST_CSTDFLOAT_FLOAT128_TGAMMA tgammaq_patch
     #endif // BOOST_CSTDFLOAT_BROKEN_FLOAT128_MATH_FUNCTIONS
+	//	begin more functions
+	#define BOOST_CSTDFLOAT_FLOAT128_REMAINDER	remainderq
+	#define BOOST_CSTDFLOAT_FLOAT128_REMQUO		remquoq
+	#define BOOST_CSTDFLOAT_FLOAT128_FMA		fmaq
+	#define BOOST_CSTDFLOAT_FLOAT128_FMAX		fmaxq
+	#define BOOST_CSTDFLOAT_FLOAT128_FMIN		fminq
+	#define BOOST_CSTDFLOAT_FLOAT128_FDIM		fdimq
+	#define BOOST_CSTDFLOAT_FLOAT128_NAN		nanq
+	#define BOOST_CSTDFLOAT_FLOAT128_EXP2		exp2q
+	#define BOOST_CSTDFLOAT_FLOAT128_LOG2		log2q
+	#define BOOST_CSTDFLOAT_FLOAT128_LOG1P		log1pq
+	#define BOOST_CSTDFLOAT_FLOAT128_CBRT		cbrtq
+	#define BOOST_CSTDFLOAT_FLOAT128_HYPOT		hypotq
+	#define BOOST_CSTDFLOAT_FLOAT128_ERF		erfq
+	#define BOOST_CSTDFLOAT_FLOAT128_ERFC		erfcq
+	#define BOOST_CSTDFLOAT_FLOAT128_LLROUND	llroundq
+	#define BOOST_CSTDFLOAT_FLOAT128_LROUND		lroundq
+	#define BOOST_CSTDFLOAT_FLOAT128_ROUND		roundq
+	#define BOOST_CSTDFLOAT_FLOAT128_NEARBYINT	nearbyintq
+	#define BOOST_CSTDFLOAT_FLOAT128_LLRINT		llrintq
+	#define BOOST_CSTDFLOAT_FLOAT128_LRINT		lrintq
+	#define BOOST_CSTDFLOAT_FLOAT128_RINT		rintq
+	#define BOOST_CSTDFLOAT_FLOAT128_MODF		modfq
+	#define BOOST_CSTDFLOAT_FLOAT128_SCALBLN	scalblnq
+	#define BOOST_CSTDFLOAT_FLOAT128_SCALBN		scalbnq
+	#define BOOST_CSTDFLOAT_FLOAT128_ILOGB		ilogbq
+	#define BOOST_CSTDFLOAT_FLOAT128_LOGB		logbq
+	#define BOOST_CSTDFLOAT_FLOAT128_NEXTAFTER	nextafterq
+	//#define BOOST_CSTDFLOAT_FLOAT128_NEXTTOWARD	nexttowardq
+	#define BOOST_CSTDFLOAT_FLOAT128_COPYSIGN	copysignq
+	#define BOOST_CSTDFLOAT_FLOAT128_SIGNBIT	signbitq
+	//#define BOOST_CSTDFLOAT_FLOAT128_FPCLASSIFY	fpclassifyq
+	#define BOOST_CSTDFLOAT_FLOAT128_ISFINITE	isfiniteq
+	#define BOOST_CSTDFLOAT_FLOAT128_ISINF		isinfq
+	#define BOOST_CSTDFLOAT_FLOAT128_ISNAN		isnanq
+	//#define BOOST_CSTDFLOAT_FLOAT128_ISNORMAL	isnormalq
+	//#define BOOST_CSTDFLOAT_FLOAT128_ISGREATER		isgreaterq
+	//#define BOOST_CSTDFLOAT_FLOAT128_ISGREATEREQUAL	isgreaterequalq
+	//#define BOOST_CSTDFLOAT_FLOAT128_ISLESS			islessq
+	//#define BOOST_CSTDFLOAT_FLOAT128_ISLESSEQUAL	islessequalq
+	//#define BOOST_CSTDFLOAT_FLOAT128_ISLESSGREATER	islessgreaterq
+	//#define BOOST_CSTDFLOAT_FLOAT128_ISUNORDERED	isunorderedq
+  	//	end more functions
   #endif
 
   // Implement quadruple-precision <cmath> functions in the namespace
@@ -210,6 +296,50 @@
   extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_FMOD  (boost::math::cstdfloat::detail::float_internal128_t, boost::math::cstdfloat::detail::float_internal128_t) throw();
   extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_ATAN2 (boost::math::cstdfloat::detail::float_internal128_t, boost::math::cstdfloat::detail::float_internal128_t) throw();
   extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_LGAMMA(boost::math::cstdfloat::detail::float_internal128_t) throw();
+
+	//	begin more functions
+  extern "C" boost::math::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_REMAINDER	(boost::math::cstdfloat::detail::float_internal128_t, boost::math::cstdfloat::detail::float_internal128_t)			throw();
+  extern "C" boost::math::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_REMQUO		(boost::math::cstdfloat::detail::float_internal128_t, boost::math::cstdfloat::detail::float_internal128_t, int*)	throw();
+  extern "C" boost::math::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_FMA			(boost::math::cstdfloat::detail::float_internal128_t, boost::math::cstdfloat::detail::float_internal128_t, boost::math::cstdfloat::detail::float_internal128_t)	throw();
+  extern "C" boost::math::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_FMAX			(boost::math::cstdfloat::detail::float_internal128_t, boost::math::cstdfloat::detail::float_internal128_t)			throw();
+  extern "C" boost::math::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_FMIN			(boost::math::cstdfloat::detail::float_internal128_t, boost::math::cstdfloat::detail::float_internal128_t)			throw();
+  extern "C" boost::math::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_FDIM			(boost::math::cstdfloat::detail::float_internal128_t, boost::math::cstdfloat::detail::float_internal128_t)			throw();
+  extern "C" boost::math::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_NAN			(const char*)	throw();
+  extern "C" boost::math::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_EXP2			(boost::math::cstdfloat::detail::float_internal128_t)	throw();
+  extern "C" boost::math::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_LOG2			(boost::math::cstdfloat::detail::float_internal128_t)	throw();
+  extern "C" boost::math::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_LOG1P		(boost::math::cstdfloat::detail::float_internal128_t)	throw();
+  extern "C" boost::math::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_CBRT			(boost::math::cstdfloat::detail::float_internal128_t)	throw();
+  extern "C" boost::math::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_HYPOT		(boost::math::cstdfloat::detail::float_internal128_t, boost::math::cstdfloat::detail::float_internal128_t)	throw();
+  extern "C" boost::math::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_ERF			(boost::math::cstdfloat::detail::float_internal128_t)	throw();
+  extern "C" boost::math::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_ERFC			(boost::math::cstdfloat::detail::float_internal128_t)	throw();
+  extern "C" long long int										  BOOST_CSTDFLOAT_FLOAT128_LLROUND		(boost::math::cstdfloat::detail::float_internal128_t)	throw();
+  extern "C" long int											  BOOST_CSTDFLOAT_FLOAT128_LROUND		(boost::math::cstdfloat::detail::float_internal128_t)	throw();
+  extern "C" boost::math::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_ROUND		(boost::math::cstdfloat::detail::float_internal128_t)	throw();
+  extern "C" boost::math::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_NEARBYINT	(boost::math::cstdfloat::detail::float_internal128_t)	throw();
+  extern "C" long long int										  BOOST_CSTDFLOAT_FLOAT128_LLRINT		(boost::math::cstdfloat::detail::float_internal128_t)	throw();
+  extern "C" long int											  BOOST_CSTDFLOAT_FLOAT128_LRINT		(boost::math::cstdfloat::detail::float_internal128_t)	throw();
+  extern "C" boost::math::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_RINT			(boost::math::cstdfloat::detail::float_internal128_t)	throw();
+  extern "C" boost::math::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_MODF			(boost::math::cstdfloat::detail::float_internal128_t, boost::math::cstdfloat::detail::float_internal128_t*)	throw();
+  extern "C" boost::math::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_SCALBLN		(boost::math::cstdfloat::detail::float_internal128_t, long int)	throw();
+  extern "C" boost::math::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_SCALBN		(boost::math::cstdfloat::detail::float_internal128_t, int)		throw();
+  extern "C" int												  BOOST_CSTDFLOAT_FLOAT128_ILOGB		(boost::math::cstdfloat::detail::float_internal128_t)	throw();
+  extern "C" boost::math::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_LOGB			(boost::math::cstdfloat::detail::float_internal128_t)	throw();
+  extern "C" boost::math::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_NEXTAFTER	(boost::math::cstdfloat::detail::float_internal128_t, boost::math::cstdfloat::detail::float_internal128_t)	throw();
+  //extern "C" boost::math::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_NEXTTOWARD	(boost::math::cstdfloat::detail::float_internal128_t, boost::math::cstdfloat::detail::float_internal128_t)	throw();
+  extern "C" boost::math::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_COPYSIGN		(boost::math::cstdfloat::detail::float_internal128_t, boost::math::cstdfloat::detail::float_internal128_t)	throw();
+  extern "C" int												  BOOST_CSTDFLOAT_FLOAT128_SIGNBIT		(boost::math::cstdfloat::detail::float_internal128_t)	throw();
+  //extern "C" int												  BOOST_CSTDFLOAT_FLOAT128_FPCLASSIFY	(boost::math::cstdfloat::detail::float_internal128_t)	throw();
+  extern "C" int												  BOOST_CSTDFLOAT_FLOAT128_ISFINITE		(boost::math::cstdfloat::detail::float_internal128_t)	throw();
+  extern "C" int												  BOOST_CSTDFLOAT_FLOAT128_ISINF		(boost::math::cstdfloat::detail::float_internal128_t)	throw();
+  extern "C" int												  BOOST_CSTDFLOAT_FLOAT128_ISNAN		(boost::math::cstdfloat::detail::float_internal128_t)	throw();
+  //extern "C" boost::math::cstdfloat::detail::float_internal128_t  BOOST_CSTDFLOAT_FLOAT128_ISNORMAL	(boost::math::cstdfloat::detail::float_internal128_t)	throw();
+  //extern "C" int												  BOOST_CSTDFLOAT_FLOAT128_ISGREATER	(boost::math::cstdfloat::detail::float_internal128_t, boost::math::cstdfloat::detail::float_internal128_t)	throw();
+  //extern "C" int												  BOOST_CSTDFLOAT_FLOAT128_ISGREATEREQUAL(boost::math::cstdfloat::detail::float_internal128_t, boost::math::cstdfloat::detail::float_internal128_t)	throw();
+  //extern "C" int												  BOOST_CSTDFLOAT_FLOAT128_ISLESS		(boost::math::cstdfloat::detail::float_internal128_t, boost::math::cstdfloat::detail::float_internal128_t)	throw();
+  //extern "C" int												  BOOST_CSTDFLOAT_FLOAT128_ISLESSEQUAL	(boost::math::cstdfloat::detail::float_internal128_t, boost::math::cstdfloat::detail::float_internal128_t)	throw();
+  //extern "C" int												  BOOST_CSTDFLOAT_FLOAT128_ISLESSGREATER(boost::math::cstdfloat::detail::float_internal128_t, boost::math::cstdfloat::detail::float_internal128_t)	throw();
+  //extern "C" int												  BOOST_CSTDFLOAT_FLOAT128_ISUNORDERED	(boost::math::cstdfloat::detail::float_internal128_t, boost::math::cstdfloat::detail::float_internal128_t)	throw();
+	//	end more functions
 
   #if !defined(BOOST_CSTDFLOAT_BROKEN_FLOAT128_MATH_FUNCTIONS)
 
@@ -527,6 +657,63 @@
   inline   boost::math::cstdfloat::detail::float_internal128_t atan2 (boost::math::cstdfloat::detail::float_internal128_t y, boost::math::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_ATAN2 (y, x); }
   inline   boost::math::cstdfloat::detail::float_internal128_t lgamma(boost::math::cstdfloat::detail::float_internal128_t x)                                                        { return ::BOOST_CSTDFLOAT_FLOAT128_LGAMMA(x); }
   inline   boost::math::cstdfloat::detail::float_internal128_t tgamma(boost::math::cstdfloat::detail::float_internal128_t x)                                                        { return ::BOOST_CSTDFLOAT_FLOAT128_TGAMMA(x); }
+  //	begin more functions
+  inline boost::math::cstdfloat::detail::float_internal128_t  reaminder	(boost::math::cstdfloat::detail::float_internal128_t x, boost::math::cstdfloat::detail::float_internal128_t y)			{ return ::BOOST_CSTDFLOAT_FLOAT128_REMAINDER(x, y);	}
+  inline boost::math::cstdfloat::detail::float_internal128_t  remquo	(boost::math::cstdfloat::detail::float_internal128_t x, boost::math::cstdfloat::detail::float_internal128_t y, int* z)	{ return ::BOOST_CSTDFLOAT_FLOAT128_REMQUO(x, y, z);	}
+  inline boost::math::cstdfloat::detail::float_internal128_t  fma		(boost::math::cstdfloat::detail::float_internal128_t x, boost::math::cstdfloat::detail::float_internal128_t y, boost::math::cstdfloat::detail::float_internal128_t z)	{ return BOOST_CSTDFLOAT_FLOAT128_FMA(x, y, z);	}
+  inline boost::math::cstdfloat::detail::float_internal128_t  fmax		(boost::math::cstdfloat::detail::float_internal128_t x, boost::math::cstdfloat::detail::float_internal128_t y)			{ return ::BOOST_CSTDFLOAT_FLOAT128_FMAX(x, y);			}
+  inline boost::math::cstdfloat::detail::float_internal128_t  fmin		(boost::math::cstdfloat::detail::float_internal128_t x, boost::math::cstdfloat::detail::float_internal128_t y)			{ return ::BOOST_CSTDFLOAT_FLOAT128_FMIN(x, y);			}
+  inline boost::math::cstdfloat::detail::float_internal128_t  fdim		(boost::math::cstdfloat::detail::float_internal128_t x, boost::math::cstdfloat::detail::float_internal128_t y)			{ return ::BOOST_CSTDFLOAT_FLOAT128_FDIM(x, y);			}
+  inline boost::math::cstdfloat::detail::float_internal128_t  nanq		(const char* x)											{ return ::BOOST_CSTDFLOAT_FLOAT128_NAN(x);		}
+  inline boost::math::cstdfloat::detail::float_internal128_t  exp2		(boost::math::cstdfloat::detail::float_internal128_t x)	{ return ::BOOST_CSTDFLOAT_FLOAT128_EXP2(x);	}
+  inline boost::math::cstdfloat::detail::float_internal128_t  log2		(boost::math::cstdfloat::detail::float_internal128_t x)	{ return ::BOOST_CSTDFLOAT_FLOAT128_LOG2(x);	}
+  inline boost::math::cstdfloat::detail::float_internal128_t  log1p		(boost::math::cstdfloat::detail::float_internal128_t x)	{ return ::BOOST_CSTDFLOAT_FLOAT128_LOG1P(x);	}
+  inline boost::math::cstdfloat::detail::float_internal128_t  cbrt		(boost::math::cstdfloat::detail::float_internal128_t x)	{ return ::BOOST_CSTDFLOAT_FLOAT128_CBRT(x);	}
+  inline boost::math::cstdfloat::detail::float_internal128_t  hypot		(boost::math::cstdfloat::detail::float_internal128_t x, boost::math::cstdfloat::detail::float_internal128_t y, boost::math::cstdfloat::detail::float_internal128_t z)	{ return ::BOOST_CSTDFLOAT_FLOAT128_SQRT(x*x + y*y + z*z);	}
+  inline boost::math::cstdfloat::detail::float_internal128_t  hypot		(boost::math::cstdfloat::detail::float_internal128_t x, boost::math::cstdfloat::detail::float_internal128_t y)	{ return ::BOOST_CSTDFLOAT_FLOAT128_HYPOT(x, y);	}
+  inline boost::math::cstdfloat::detail::float_internal128_t  erf		(boost::math::cstdfloat::detail::float_internal128_t x)	{ return ::BOOST_CSTDFLOAT_FLOAT128_ERF(x);		}
+  inline boost::math::cstdfloat::detail::float_internal128_t  erfc		(boost::math::cstdfloat::detail::float_internal128_t x)	{ return ::BOOST_CSTDFLOAT_FLOAT128_ERFC(x);	}
+  inline long long int										  llround	(boost::math::cstdfloat::detail::float_internal128_t x)	{ return ::BOOST_CSTDFLOAT_FLOAT128_LLROUND(x);	}
+  inline long int											  lround	(boost::math::cstdfloat::detail::float_internal128_t x)	{ return ::BOOST_CSTDFLOAT_FLOAT128_LROUND(x);	}
+  inline boost::math::cstdfloat::detail::float_internal128_t  round		(boost::math::cstdfloat::detail::float_internal128_t x)	{ return ::BOOST_CSTDFLOAT_FLOAT128_ROUND(x);	}
+  inline boost::math::cstdfloat::detail::float_internal128_t  nearbyint	(boost::math::cstdfloat::detail::float_internal128_t x)	{ return ::BOOST_CSTDFLOAT_FLOAT128_NEARBYINT(x);	}
+  inline long long int										  llrint	(boost::math::cstdfloat::detail::float_internal128_t x)	{ return ::BOOST_CSTDFLOAT_FLOAT128_LLRINT(x);	}
+  inline long int											  lrint		(boost::math::cstdfloat::detail::float_internal128_t x)	{ return ::BOOST_CSTDFLOAT_FLOAT128_LRINT(x);	}
+  inline boost::math::cstdfloat::detail::float_internal128_t  rint		(boost::math::cstdfloat::detail::float_internal128_t x)	{ return ::BOOST_CSTDFLOAT_FLOAT128_RINT(x);	}
+  inline boost::math::cstdfloat::detail::float_internal128_t  modf		(boost::math::cstdfloat::detail::float_internal128_t x, boost::math::cstdfloat::detail::float_internal128_t* y)	{ return ::BOOST_CSTDFLOAT_FLOAT128_MODF(x, y);	}
+  inline boost::math::cstdfloat::detail::float_internal128_t  scalbln	(boost::math::cstdfloat::detail::float_internal128_t x, long int y)	{ return ::BOOST_CSTDFLOAT_FLOAT128_SCALBLN(x, y);	}
+  inline boost::math::cstdfloat::detail::float_internal128_t  scalbn	(boost::math::cstdfloat::detail::float_internal128_t x, int y)		{ return ::BOOST_CSTDFLOAT_FLOAT128_SCALBN(x, y);	}
+  inline int												  ilogb		(boost::math::cstdfloat::detail::float_internal128_t x)	{ return ::BOOST_CSTDFLOAT_FLOAT128_ILOGB(x);	}
+  inline boost::math::cstdfloat::detail::float_internal128_t  logb		(boost::math::cstdfloat::detail::float_internal128_t x)	{ return ::BOOST_CSTDFLOAT_FLOAT128_LOGB(x);	}
+  inline boost::math::cstdfloat::detail::float_internal128_t  nextafter	(boost::math::cstdfloat::detail::float_internal128_t x, boost::math::cstdfloat::detail::float_internal128_t y)	{ return ::BOOST_CSTDFLOAT_FLOAT128_NEXTAFTER(x, y);		}
+  inline boost::math::cstdfloat::detail::float_internal128_t  nexttoward(boost::math::cstdfloat::detail::float_internal128_t x, boost::math::cstdfloat::detail::float_internal128_t y)	{ return -(::BOOST_CSTDFLOAT_FLOAT128_NEXTAFTER(-x, -y));	}
+  inline boost::math::cstdfloat::detail::float_internal128_t  copysign	(boost::math::cstdfloat::detail::float_internal128_t x, boost::math::cstdfloat::detail::float_internal128_t y)	{ return ::BOOST_CSTDFLOAT_FLOAT128_COPYSIGN(x, y);			}
+  inline bool												  signbit	(boost::math::cstdfloat::detail::float_internal128_t x)	{ return ::BOOST_CSTDFLOAT_FLOAT128_SIGNBIT(x);		}
+  inline int												  fpclassify(boost::math::cstdfloat::detail::float_internal128_t x)
+  {
+	  if (::BOOST_CSTDFLOAT_FLOAT128_ISNAN(x))
+		  return FP_NAN;
+	  else if (::BOOST_CSTDFLOAT_FLOAT128_ISINF(x))
+		  return FP_INFINITE;
+	  else if (x == BOOST_FLOAT128_C(0.0))
+		  return FP_ZERO;
+
+	  if (::BOOST_CSTDFLOAT_FLOAT128_FABS(x) < BOOST_CSTDFLOAT_FLOAT128_MIN)
+		  return FP_SUBNORMAL;
+	  else
+		  return FP_NORMAL;
+  }
+  inline bool												  isfinite	(boost::math::cstdfloat::detail::float_internal128_t x)	{ return ::BOOST_CSTDFLOAT_FLOAT128_ISFINITE(x);	}
+  inline bool												  isinf		(boost::math::cstdfloat::detail::float_internal128_t x)	{ return ::BOOST_CSTDFLOAT_FLOAT128_ISINF(x);		}
+  inline bool												  isnan		(boost::math::cstdfloat::detail::float_internal128_t x)	{ return ::BOOST_CSTDFLOAT_FLOAT128_ISNAN(x);		}
+  inline bool												  isnormal	(boost::math::cstdfloat::detail::float_internal128_t x)	{ return boost::math::cstdfloat::detail::fpclassify(x) == FP_NORMAL;		}
+  inline bool												  isgreater		(boost::math::cstdfloat::detail::float_internal128_t x, boost::math::cstdfloat::detail::float_internal128_t y)	{ return x>y;	}
+  inline bool												  isgreaterequal(boost::math::cstdfloat::detail::float_internal128_t x, boost::math::cstdfloat::detail::float_internal128_t y)	{ return x>=y;	}
+  inline bool												  isless		(boost::math::cstdfloat::detail::float_internal128_t x, boost::math::cstdfloat::detail::float_internal128_t y)	{ return x<y;	}
+  inline bool												  islessequal	(boost::math::cstdfloat::detail::float_internal128_t x, boost::math::cstdfloat::detail::float_internal128_t y)	{ return x<=y;	}
+  inline bool												  islessgreater	(boost::math::cstdfloat::detail::float_internal128_t x, boost::math::cstdfloat::detail::float_internal128_t y)	{ return (x<y) || (x>y);	}
+  inline bool												  isunordered	(boost::math::cstdfloat::detail::float_internal128_t x, boost::math::cstdfloat::detail::float_internal128_t y)	{ return ::BOOST_CSTDFLOAT_FLOAT128_ISNAN(x) || ::BOOST_CSTDFLOAT_FLOAT128_ISNAN(y);	}
+  //	end more functions
   } } } } // boost::math::cstdfloat::detail
 
   // We will now inject the quadruple-precision <cmath> functions
@@ -565,6 +752,51 @@
     using boost::math::cstdfloat::detail::atan2;
     using boost::math::cstdfloat::detail::lgamma;
     using boost::math::cstdfloat::detail::tgamma;
+
+    //	begin more functions
+    using boost::math::cstdfloat::detail::reaminder;
+    using boost::math::cstdfloat::detail::remquo;
+    using boost::math::cstdfloat::detail::fma;
+    using boost::math::cstdfloat::detail::fmax;
+    using boost::math::cstdfloat::detail::fmin;
+    using boost::math::cstdfloat::detail::fdim;
+    using boost::math::cstdfloat::detail::nanq;
+    using boost::math::cstdfloat::detail::exp2;
+    using boost::math::cstdfloat::detail::log2;
+    using boost::math::cstdfloat::detail::log1p;
+    using boost::math::cstdfloat::detail::cbrt;
+    using boost::math::cstdfloat::detail::hypot;
+    using boost::math::cstdfloat::detail::erf;
+    using boost::math::cstdfloat::detail::erfc;
+    using boost::math::cstdfloat::detail::llround;
+    using boost::math::cstdfloat::detail::lround;
+    using boost::math::cstdfloat::detail::round;
+    using boost::math::cstdfloat::detail::nearbyint;
+    using boost::math::cstdfloat::detail::llrint;
+    using boost::math::cstdfloat::detail::lrint;
+    using boost::math::cstdfloat::detail::rint;
+    using boost::math::cstdfloat::detail::modf;
+    using boost::math::cstdfloat::detail::scalbln;
+    using boost::math::cstdfloat::detail::scalbn;
+    using boost::math::cstdfloat::detail::ilogb;
+    using boost::math::cstdfloat::detail::logb;
+    using boost::math::cstdfloat::detail::nextafter;
+    using boost::math::cstdfloat::detail::nexttoward;
+    using boost::math::cstdfloat::detail::copysign;
+    using boost::math::cstdfloat::detail::signbit;
+    using boost::math::cstdfloat::detail::fpclassify;
+    using boost::math::cstdfloat::detail::isfinite;
+    using boost::math::cstdfloat::detail::isinf;
+    using boost::math::cstdfloat::detail::isnan;
+    using boost::math::cstdfloat::detail::isnormal;
+    using boost::math::cstdfloat::detail::isgreater;
+    using boost::math::cstdfloat::detail::isgreaterequal;
+    using boost::math::cstdfloat::detail::isless;
+    using boost::math::cstdfloat::detail::islessequal;
+    using boost::math::cstdfloat::detail::islessgreater;
+    using boost::math::cstdfloat::detail::isunordered;
+    //	end more functions
+
   } // namespace std
 
   // We will now remove the preprocessor symbols representing quadruple-precision <cmath>
@@ -599,6 +831,51 @@
   #undef BOOST_CSTDFLOAT_FLOAT128_LGAMMA
   #undef BOOST_CSTDFLOAT_FLOAT128_TGAMMA
 
+  //	begin more functions
+	#undef BOOST_CSTDFLOAT_FLOAT128_REMAINDER
+	#undef BOOST_CSTDFLOAT_FLOAT128_REMQUO
+	#undef BOOST_CSTDFLOAT_FLOAT128_FMA
+	#undef BOOST_CSTDFLOAT_FLOAT128_FMAX
+	#undef BOOST_CSTDFLOAT_FLOAT128_FMIN
+	#undef BOOST_CSTDFLOAT_FLOAT128_FDIM
+	#undef BOOST_CSTDFLOAT_FLOAT128_NAN
+	#undef BOOST_CSTDFLOAT_FLOAT128_EXP2
+	#undef BOOST_CSTDFLOAT_FLOAT128_LOG2
+	#undef BOOST_CSTDFLOAT_FLOAT128_LOG1P
+	#undef BOOST_CSTDFLOAT_FLOAT128_CBRT
+	#undef BOOST_CSTDFLOAT_FLOAT128_HYPOT
+	#undef BOOST_CSTDFLOAT_FLOAT128_ERF
+	#undef BOOST_CSTDFLOAT_FLOAT128_ERFC
+	#undef BOOST_CSTDFLOAT_FLOAT128_LLROUND
+	#undef BOOST_CSTDFLOAT_FLOAT128_LROUND
+	#undef BOOST_CSTDFLOAT_FLOAT128_ROUND
+	#undef BOOST_CSTDFLOAT_FLOAT128_NEARBYINT
+	#undef BOOST_CSTDFLOAT_FLOAT128_LLRINT
+	#undef BOOST_CSTDFLOAT_FLOAT128_LRINT
+	#undef BOOST_CSTDFLOAT_FLOAT128_RINT
+	#undef BOOST_CSTDFLOAT_FLOAT128_MODF
+	#undef BOOST_CSTDFLOAT_FLOAT128_SCALBLN
+	#undef BOOST_CSTDFLOAT_FLOAT128_SCALBN
+	#undef BOOST_CSTDFLOAT_FLOAT128_ILOGB
+	#undef BOOST_CSTDFLOAT_FLOAT128_LOGB
+	#undef BOOST_CSTDFLOAT_FLOAT128_NEXTAFTER
+	#undef BOOST_CSTDFLOAT_FLOAT128_NEXTTOWARD
+	#undef BOOST_CSTDFLOAT_FLOAT128_COPYSIGN
+	#undef BOOST_CSTDFLOAT_FLOAT128_SIGNBIT
+	#undef BOOST_CSTDFLOAT_FLOAT128_FPCLASSIFY
+	#undef BOOST_CSTDFLOAT_FLOAT128_ISFINITE
+	#undef BOOST_CSTDFLOAT_FLOAT128_ISINF
+	#undef BOOST_CSTDFLOAT_FLOAT128_ISNAN
+	#undef BOOST_CSTDFLOAT_FLOAT128_ISNORMAL
+	#undef BOOST_CSTDFLOAT_FLOAT128_ISGREATER
+	#undef BOOST_CSTDFLOAT_FLOAT128_ISGREATEREQUAL
+	#undef BOOST_CSTDFLOAT_FLOAT128_ISLESS
+	#undef BOOST_CSTDFLOAT_FLOAT128_ISLESSEQUAL
+	#undef BOOST_CSTDFLOAT_FLOAT128_ISLESSGREATER
+	#undef BOOST_CSTDFLOAT_FLOAT128_ISUNORDERED
+  //	end more functions
+
   #endif // Not BOOST_CSTDFLOAT_NO_LIBQUADMATH_SUPPORT (i.e., the user would like to have libquadmath support)
 
 #endif // _BOOST_CSTDFLOAT_CMATH_2014_02_15_HPP_
+
