@@ -21,10 +21,11 @@
 #include <stdexcept>
 #include <boost/cstdint.hpp>
 #include <boost/static_assert.hpp>
-#include <boost/ throw_exception.hpp>
+#include <boost/throw_exception.hpp>
 #include <boost/core/enable_if.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/type_traits/is_convertible.hpp>
+#include <boost/scoped_array.hpp>
 
 #if defined(_WIN32) && defined(__GNUC__)
   // Several versions of Mingw and probably cygwin too have broken
@@ -285,6 +286,8 @@ namespace boost {
 
 // Begin with some forward function declarations. Also implement patches
 // for compilers that have broken float128 exponential functions.
+
+extern "C" int quadmath_snprintf(char*, std::size_t, const char*, ...) throw();
 
 extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_LDEXP(boost::math::cstdfloat::detail::float_internal128_t, int) throw();
 extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_FREXP(boost::math::cstdfloat::detail::float_internal128_t, int*) throw();
@@ -986,7 +989,7 @@ namespace std
          v = quadmath_snprintf(&buf2[0], v_max + 3, format.c_str(), digits, m_value);
          if (v >= v_max + 3)
          {
-            BOOST_ throw_EXCEPTION(std::runtime_error("Formatting of float128_type failed."));
+            BOOST_THROW_EXCEPTION(std::runtime_error("Formatting of float128_type failed."));
          }
          s = &buf2[0];
       }
