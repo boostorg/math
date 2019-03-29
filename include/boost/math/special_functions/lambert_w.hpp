@@ -79,6 +79,16 @@ typedef double lookup_t; // Type for lookup table (double or float, or even long
 // #include "lambert_w_lookup_table.ipp" // Boost.Math version.
 #include <boost/math/special_functions/detail/lambert_w_lookup_table.ipp>
 
+#if defined(__GNUC__) && defined(BOOST_MATH_USE_FLOAT128)
+//
+// This is the only way we can avoid
+// warning: non-standard suffix on floating constant [-Wpedantic]
+// when building with -Wall -pedantic.  Neither __extension__
+// nor #pragma dianostic ignored work :(
+//
+#pragma GCC system_header
+#endif
+
 namespace boost {
 namespace math {
 namespace lambert_w_detail {
@@ -1862,7 +1872,7 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
     // N[productlog(-1, -1.4325445274604020119111357113179868158* 10^-27), 37] = -65.99999999999999999999999999999999955
 
     // R.M.Corless, G.H.Gonnet, D.E.G.Hare, D.J.Jeffrey, and D.E.Knuth,
-    // “On the Lambert W function, ” Adv.Comput.Math., vol. 5, pp. 329–359, 1996.
+    // \93On the Lambert W function, \94 Adv.Comput.Math., vol. 5, pp. 329\96359, 1996.
     // Francois Chapeau-Blondeau and Abdelilah Monir
     // Numerical Evaluation of the Lambert W Function
     // IEEE Transactions On Signal Processing, VOL. 50, NO. 9, Sep 2002

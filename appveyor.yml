@@ -126,6 +126,7 @@ install:
   - git submodule update --init libs/config
   - git submodule update --init libs/format
   - git submodule update --init libs/numeric
+  - git submodule update --init libs/timer
   - xcopy /s /e /q %APPVEYOR_BUILD_FOLDER% libs\math
   - git submodule update --init tools/boostdep
   - python tools/boostdep/depinst/depinst.py math
