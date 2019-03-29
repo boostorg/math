@@ -319,6 +319,10 @@ public:
         return m_v.at(i);
     }
 
+    Real prime(size_t i) const {
+        return m_v_prime.at(i);
+    }
+
     Real spacing() const {
         return 1/m_inv_spacing;
     }
