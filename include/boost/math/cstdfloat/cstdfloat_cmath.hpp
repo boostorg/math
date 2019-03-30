@@ -19,6 +19,7 @@
 
 #include <cmath>
 #include <stdexcept>
+#include <iostream>
 #include <boost/cstdint.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/throw_exception.hpp>
