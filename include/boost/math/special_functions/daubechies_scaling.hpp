@@ -335,6 +335,10 @@ public:
         return m_v.end();
     }
 
+    auto data() const {
+        return m_v.data();
+    }
+
 private:
     size_t m_levels;
     Real m_inv_spacing;

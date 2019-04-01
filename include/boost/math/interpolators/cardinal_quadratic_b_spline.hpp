@@ -40,7 +40,7 @@ public:
     // If you don't know the value of the derivative at the endpoints, leave them as nans and the routine will estimate them.
     // y[0] = y(a), y[n -1] = y(b), step_size = (b - a)/(n -1).
 
-    cardinal_quadratic_b_spline(Real* y,
+    cardinal_quadratic_b_spline(const Real* const y,
                                 size_t n,
                                 Real t0 /* initial time, left endpoint */,
                                 Real h  /*spacing, stepsize*/,
