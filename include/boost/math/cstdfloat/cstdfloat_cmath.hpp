@@ -957,7 +957,7 @@ namespace std
    //
    // Very basic iostream operator:
    //
-   std::ostream& operator << (std::ostream& os, __float128 m_value)
+   inline std::ostream& operator << (std::ostream& os, __float128 m_value)
    {
       std::streamsize digits = os.precision();
       std::ios_base::fmtflags f = os.flags();
