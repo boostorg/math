@@ -85,6 +85,7 @@
      template <class T, class Policy>
      T hypergeometric_1F1_from_function_ratio_negative_b(const T& a, const T& b, const T& z, const Policy& pol, int& log_scaling, const T& ratio)
      {
+        BOOST_MATH_STD_USING
         //
         // Let M2 = M(1+a-b, 2-b, z)
         // This is going to be a mighty big number:
@@ -588,7 +589,7 @@
         //
         int scale = 0;
         int steps = itrunc(ceil(-b));
-        T reference_value = hypergeometric_1F1_imp(a + steps, b + steps, z, pol, log_scaling);
+        T reference_value = hypergeometric_1F1_imp(T(a + steps), T(b + steps), z, pol, log_scaling);
         T found = boost::math::tools::apply_recurrence_relation_forward(boost::math::detail::hypergeometric_1F1_recurrence_a_and_b_coefficients<T>(a + 1, b + 1, z), steps - 1, T(1), ratio, &scale);
         log_scaling -= scale;
         if ((fabs(reference_value) < 1) && (fabs(reference_value) < tools::min_value<T>() * fabs(found)))
@@ -596,14 +597,14 @@
            // Possible underflow, rescale
            int s = itrunc(tools::log_max_value<T>());
            log_scaling -= s;
-           reference_value *= exp(s);
+           reference_value *= exp(T(s));
         }
         else if ((fabs(found) < 1) && (fabs(reference_value) > tools::max_value<T>() * fabs(found)))
         {
            // Overflow, rescale:
            int s = itrunc(tools::log_max_value<T>());
            log_scaling += s;
-           reference_value /= exp(s);
+           reference_value /= exp(T(s));
         }
         return reference_value / found;
      }
