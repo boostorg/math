@@ -114,9 +114,11 @@
         {
            if (k < crossover_locations[n])
            {
-              for(auto ai = aj.begin(); ai != aj.end(); ++ai)
+              for (auto ai = aj.begin(); ai != aj.end(); ++ai)
+              {
                  if ((*ai < 0) && (floor(*ai) == *ai) && (*ai > crossover_locations[n]))
                     return std::make_pair(result, abs_result);  // b's will never cross the origin!
+              }
               //
               // b hasn't crossed the origin yet and the series may spring back into life at that point
               // so we need to jump forward to that term and then evaluate forwards and backwards from there:
@@ -147,8 +149,22 @@
               if (z < 0)
                  s1 *= (s & 1 ? -1 : 1);
               term -= local_scaling;
-              //std::cout << "term = " << term << std::endl;
-              if (term > -tools::log_max_value<Real>())
+              if (term <= tools::log_min_value<Real>())
+              {
+                 // rescale if we can:
+                 int scale = itrunc(floor(term - tools::log_min_value<Real>()));
+                 if (scale < tools::log_max_value<Real>())
+                 {
+                    Real ex = exp(Real(-scale));
+                    if (tools::max_value<Real>() / ex > result)
+                    {
+                       term -= scale;
+                       log_scale += scale;
+                       result *= ex;
+                    }
+                 }
+              }
+              if (term > tools::log_min_value<Real>())
               {
                  if (term > 10)
                  {
