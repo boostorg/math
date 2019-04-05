@@ -24,6 +24,7 @@
 #include <boost/math/special_functions/detail/hypergeometric_1F1_addition_theorems_on_z.hpp>
 #include <boost/math/special_functions/detail/hypergeometric_1F1_large_abz.hpp>
 #include <boost/math/special_functions/detail/hypergeometric_1F1_small_a_negative_b_by_ratio.hpp>
+#include <boost/math/special_functions/detail/hypergeometric_1F1_negative_b_regions.hpp>
 
 namespace boost { namespace math { namespace detail {
 
@@ -95,9 +96,10 @@ namespace boost { namespace math { namespace detail {
          }
          else
          {
-            if (is_in_hypergeometric_1F1_from_function_ratio_negative_b_region(a, b, z))
+            int domain = hypergeometric_1F1_negative_b_recurrence_region(a, b, z);
+            if (domain < 0)
                return hypergeometric_1F1_from_function_ratio_negative_b(a, b, z, pol, log_scaling);
-            else if (hypergeometric_1F1_is_in_forwards_recurence_for_negative_b_region(a, b, z))
+            else if (domain > 0)
                return hypergeometric_1F1_from_function_ratio_negative_b_forwards(a, b, z, pol, log_scaling);
             //
             // We could fall back to Tricomi's approximation if we're in the transition zone
@@ -426,6 +428,11 @@ namespace boost { namespace math { namespace detail {
             T n = -floor(b);
             series_is_divergent = (a + n) * z / ((b + n) * n) < -1;
          }
+      }
+      else if (!series_is_divergent && (b < 0) && (a > 0))
+      {
+         // Series almost always become divergent as b crosses the origin:
+         series_is_divergent = true;
       }
       if (series_is_divergent && (b < -1) && (b > -5) && (a > b))
          series_is_divergent = false;  // don't bother with divergence, series will be OK

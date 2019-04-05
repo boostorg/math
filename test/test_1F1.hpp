@@ -160,7 +160,7 @@ void test_spots5(T, const char* type_name)
 template <class T>
 void test_spots6(T, const char* type_name)
 {
-   static const boost::array<boost::array<T, 4>, 67> hypergeometric_1F1_bugs = { {
+   static const boost::array<boost::array<T, 4>, 76> hypergeometric_1F1_bugs = { {
         { { static_cast<double>(17955.561660766602), static_cast<double>(9.6968994205831605e-09), static_cast<double>(-82.406154185533524), SC_(6.98056008378736714088730927132364938220428678e-11) }},
         { { static_cast<double>(17955.561660766602), static_cast<double>(-9.6968994205831605e-09), static_cast<double>(-82.406154185533524), SC_(-6.98055306629610746072607353939306734740549551e-11) }},
         { { static_cast<double>(-17955.561660766602), static_cast<double>(-9.6968994205831605e-09), static_cast<double>(82.406154185533524), SC_(-42897094853118832762870100.8669248353530950866) }} ,
@@ -254,7 +254,20 @@ void test_spots6(T, const char* type_name)
          {{ std::ldexp((double)-9012443406336000, -45), std::ldexp((double)12293411340288000, -46), std::ldexp((double)15162862993408000, -52), SC_(0.00634911418172408957356631082162378669273898042) }},
          {{ std::ldexp((double)10907252916224000, -46), std::ldexp((double)10872033234944000, -44), std::ldexp((double)14845267734528000, -44), SC_(3.35597139167246486559762237420776458756928282e+152) }},
          {{ std::ldexp((double)10206210322432000, -44), std::ldexp((double)-16798514331648000, -45), std::ldexp((double)21261284909056000, -48), SC_(3.8172723666678171743099642722909945977624468e+207) }},
-         {{ std::ldexp((double)9125305942016000, -46), std::ldexp((double)-15115828240384000, -45), std::ldexp((double)9662868946944000, -47), SC_(4175579218962.24466854749118518544065513059142) }},
+         //{{ std::ldexp((double)9125305942016000, -46), std::ldexp((double)-15115828240384000, -45), std::ldexp((double)9662868946944000, -47), SC_(4175579218962.24466854749118518544065513059142) }},
+         //
+         // These next few are the result of probing the boundary cases in hypergeometric_1F1_negative_b_recurrence_region
+         //
+         {{ std::ldexp((double)10860755407856640, -40), std::ldexp((double)-15992550230222440, -47), std::ldexp((double)11953621172224000, -51), SC_(1.77767974631716859575450750736407296713916302e+278) }},
+         {{ std::ldexp((double)10788477424245760, -40), std::ldexp((double)-17098099940288104, -45), std::ldexp((double)9309879533568000, -50), SC_(3.30879597828065234949261835734767876076477669e+268) }},
+         {{ std::ldexp((double)10938221827471360, -40), std::ldexp((double)-13207828614139084, -46), std::ldexp((double)14276471291904000, -57), SC_(0.00563892736925233243283328398477659041011689599) }},
+         { { std::ldexp((double)10886339790484480, -40), std::ldexp((double)-15267677514969908, -46), std::ldexp((double)11568125313024000, -56), SC_(0.000743168361387021436166355590813648069510383979) } },
+         { { std::ldexp((double)10485102088130304, -40), std::ldexp((double)-12174307949802496, -40), std::ldexp((double)17027372515328000, -44), SC_(-619367491691927041975872.474550388407917992627) } },
+         { { std::ldexp((double)10486036094119936, -40), std::ldexp((double)-15535492710109184, -41), std::ldexp((double)17014293405696000, -45), SC_(-2.61817515260939017621443182916266462279292638e+230) } },
+         { { std::ldexp((double)10485257266971648, -40), std::ldexp((double)-17826711054409018, -35), std::ldexp((double)17138334978048000, -44), SC_(1.70138735099219741672706572460585684251928784e-08) } },
+         { { std::ldexp((double)10485122560373760, -40), std::ldexp((double)-11098279821997376, -39), std::ldexp((double)16925852270592000, -45), SC_(9.77378642649349178995585980824930703376759021e-98) } },
+         { { std::ldexp((double)10485292967829248, -40), std::ldexp((double)-14859721380002656, -35), std::ldexp((double)13729956970496000, -44), SC_(3.41094899910311302761937103011397882987669395e-08) } },
+         { { std::ldexp((double)10485037389193216, -40), std::ldexp((double)-10840488483391544, -35), std::ldexp((double)17577061875712000, -45), SC_(2.8030884395368690164859926372380406504460219e-07) } },
    } };
    static const boost::array<boost::array<T, 4>, 2> hypergeometric_1F1_big_bugs = { {
 #if DBL_MAX_EXP == LDBL_MAX_EXP
