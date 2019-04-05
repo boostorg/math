@@ -59,6 +59,21 @@ namespace boost {
          return hypergeometric_pFq(aj, bj, z, pNorm, boost::math::policies::policy<>());
       }
 
+      template <class T>
+      struct scoped_precision
+      {
+         scoped_precision(unsigned p)
+         {
+            old_p = T::default_precision();
+            T::default_precision(p);
+         }
+         ~scoped_precision()
+         {
+            T::default_precision(old_p);
+         }
+         unsigned old_p;
+      };
+
       template <class Seq, class Real, class Policy>
       Real hypergeometric_pFq_precision(const Seq& aj, const Seq& bj, const Real& z, unsigned digits10, double timeout, const Policy& pol)
       {
@@ -78,7 +93,7 @@ namespace boost {
          std::vector<Real> aa(aj), bb(bj);
          do
          {
-            Real::default_precision(current_precision);
+            scoped_precision<Real> p(current_precision);
             for (auto ai = aa.begin(); ai != aa.end(); ++ai)
                ai->precision(current_precision);
             for (auto bi = bb.begin(); bi != bb.end(); ++bi)
