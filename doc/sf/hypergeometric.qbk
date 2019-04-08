@@ -147,6 +147,8 @@ Otherwise we use the defining series.
 
 [h4 Description]
 
+[? __build_html '''<?dbhtml-include href="'''__base_path__'''/graphs/hypergeometric_1f1/script_include.html"?>''']
+
 The function `hypergeometric_1F1(a, b, z)` returns the non-singular solution to [@https://en.wikipedia.org/wiki/Confluent_hypergeometric_function Kummer's equation]
 
 [/\large $$z \frac{d^2 w}{d z^2} + (b-z) \frac{dw}{dz} - aw = 0 $$]
@@ -171,11 +173,16 @@ Domains that are still unsolved include:
 [[domain][comment][example]]
 [[ [/\large  $$_1F_1(-a, -b; -z)$$] [$../equations/hypergeometric_1f1_13.svg]  ][ /a, b/ and /z/ all large.][[sub 1]F[sub 1](-814723.75, -13586.87890625, -15.87335205078125)]]
 [[ [/\large  $$_1F_1(-a, -b; z)$$] [$../equations/hypergeometric_1f1_14.svg]  ][ /a < b/, /b > z/, this is really the same domain as above.][ ]]
-[[ [/\large  $$_1F_1(a, -b; z)$$] [$../equations/hypergeometric_1f1_15.svg]  ][ /a/, /b/ and /z/ all large.][[sub 1]F[sub 1](9057.91796875, -1252.51318359375, 15.87335205078125)]]
+[[ [/\large  $$_1F_1(a, -b; z)$$] [$../equations/hypergeometric_1f1_15.svg]  ][ There is a gap in between methods where no reliable implementation is possible, the issue become much worse for /a/, /b/ and /z/ all large.][[sub 1]F[sub 1](9057.91796875, -1252.51318359375, 15.87335205078125)]]
 [[ [/\large  $$_1F_1(a_{tiny}, b; -z)$$] [$../equations/hypergeometric_1f1_16.svg]  ][This domain is mostly handled by A&S 13.3.6 (see implementation notes below), but there
       are some values where either that series is non-convergent (most particularly for /b/ < 0)
       or where the series become divergent after a few terms limiting the precision that can be achieved.][[sub 1]F[sub 1](-5.9981750131794866e-15, 0.499999999999994, -240.42092034220695)]]
 ]
+
+The following graph illustrates the problem area for /b < 0/ and /a,z > 0/:
+
+[? __build_html '''<?dbhtml-include href="'''__base_path__'''/graphs/hypergeometric_1f1/negative_b_incalculable.html"?>''']
+[?! __build_html [$../graphs/hypergeometric_1f1/negative_b_incalculable.png]]
 
 [h4 Testing]
 
@@ -212,6 +219,13 @@ For -1000 < a < 0 and 0 < b,z < 1000 the maximum error rates are higher, but mos
 [$../graphs/hypergeometric_1f1/negative_a_bins.svg]
 [? __build_html '''<?dbhtml-include href="'''__base_path__'''/graphs/hypergeometric_1f1/negative_a.html"?>''']
 [?! __build_html [$../graphs/hypergeometric_1f1/negative_a.png]]
+
+For -1000 < b < 0 and a,z > 0 the errors are mostly low at double precision except near the "unimplementable zone".
+Note however, that the some of the methods used here fail to converge to much better than double precision.
+
+[$../graphs/hypergeometric_1f1/negative_b_bins.svg]
+[? __build_html '''<?dbhtml-include href="'''__base_path__'''/graphs/hypergeometric_1f1/negative_b.html"?>''']
+[?! __build_html [$../graphs/hypergeometric_1f1/negative_b.png]]
 
 [h4 Implementation]
 
@@ -269,7 +283,7 @@ E_v(0) & = \frac{1}{\Gamma(v + 1)}
 \end{equation*}]
 [$../equations/hypergeometric_1f1_7.svg]
 
-This approximation is especially effective when ['a < 0] and somewhat effective when ['b < 0].
+This approximation is especially effective when ['a < 0].
 
 For /a/ and /b/ both large and positive and somewhat similar in size then an expansion in terms of gamma functions can be used [link math_toolkit.hypergeometric.hypergeometric_refs (6)]:
 
@@ -315,7 +329,9 @@ which is of course the well known Miller's method [link math_toolkit.hypergeomet
 Unfortunately, stable forwards recursion on /b/ is stable only for /|b| << |z|/, as /|b|/ increases in magnitude it passes through a region
 where recursion is unstable in both directions before eventually becoming stable in the backwards direction (at least for a while!).
 This transition is moderated not by a change of sign in the recurrence coefficients themselves, but by a change in the behaviour of the ['values] of [sub 1]F[sub 1] -
-from alternating in sign when ['|b|] is small to having the same sign when /b/ is larger.
+from alternating in sign when ['|b|] is small to having the same sign when /b/ is larger.  During the actual transition, [sub 1]F[sub 1] will either
+pass through a zero or a minima depending on whether b is even or odd (if there is a minima at [sub 1]F[sub 1](a, b, z) then there is necessarily a zero
+at [sub 1]F[sub 1](a+1, b+1, z) as per the [@https://dlmf.nist.gov/13.3#E15 derivative of the function]).
 As a result the behaviour of the recurrence relations
 is almost impossible to reason about in this area, and we are left to using heuristic based approaches to "guess" which region we are in.
 
@@ -342,8 +358,15 @@ which starts from ['[sub 1]F[sub 1](-a + N, b + M, z)], and recurses backwards i
 and finally on /b/ alone.
 
 For /b < 0/ we have no good methods in some domains (see the unsolved issues above).
-However in some circumstances we can either use 3-stage backwards recursion on both /a/, /a/ and /b/ and then /b/ as above, or else calculate the ratio
-['[sub 1]F[sub 1](a+1, b+1, z) / ['[sub 1]F[sub 1](a, b, z)]] and then normalize via the Wronskian above (Miller's method).
+However in some circumstances we can either use:
+
+* 3-stage backwards recursion on both /a/, /a/ and /b/ and then /b/ as above.
+* Calculate the ratio ['[sub 1]F[sub 1](a, b, z) / ['[sub 1]F[sub 1](a-1, b-1, z)]] via backwards recurence when z is small, and then normalize via the Wronskian above (Miller's method).
+* Calculate the ratio ['[sub 1]F[sub 1](a, b, z) / ['[sub 1]F[sub 1](a+1, b+1, z)]] via forwards recurence when z is large, and then normalize by iterating until b > 1 and comparing to a reference value.
+
+The latter two methods use a lookup table to detrmine whether inputs are in either of the domains or neither.  Unfortunately the methods are basically
+limited to double precision: calculation of the ratios require iteration ['towards] the no-mans-land between the two methods where iteration is unstable in
+both directions.  As a result, only low-precision results which require few iterations to calculate the ratio are available.
 
 If all else fails, then we use a checked series summation which will raise an __evaluation_error if more than half the digits
 are destroyed by cancellation.

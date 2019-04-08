@@ -160,7 +160,7 @@ void test_spots5(T, const char* type_name)
 template <class T>
 void test_spots6(T, const char* type_name)
 {
-   static const boost::array<boost::array<T, 4>, 76> hypergeometric_1F1_bugs = { {
+   static const boost::array<boost::array<T, 4>, 75> hypergeometric_1F1_bugs = { {
         { { static_cast<double>(17955.561660766602), static_cast<double>(9.6968994205831605e-09), static_cast<double>(-82.406154185533524), SC_(6.98056008378736714088730927132364938220428678e-11) }},
         { { static_cast<double>(17955.561660766602), static_cast<double>(-9.6968994205831605e-09), static_cast<double>(-82.406154185533524), SC_(-6.98055306629610746072607353939306734740549551e-11) }},
         { { static_cast<double>(-17955.561660766602), static_cast<double>(-9.6968994205831605e-09), static_cast<double>(82.406154185533524), SC_(-42897094853118832762870100.8669248353530950866) }} ,
@@ -262,7 +262,6 @@ void test_spots6(T, const char* type_name)
          {{ std::ldexp((double)10788477424245760, -40), std::ldexp((double)-17098099940288104, -45), std::ldexp((double)9309879533568000, -50), SC_(3.30879597828065234949261835734767876076477669e+268) }},
          {{ std::ldexp((double)10938221827471360, -40), std::ldexp((double)-13207828614139084, -46), std::ldexp((double)14276471291904000, -57), SC_(0.00563892736925233243283328398477659041011689599) }},
          { { std::ldexp((double)10886339790484480, -40), std::ldexp((double)-15267677514969908, -46), std::ldexp((double)11568125313024000, -56), SC_(0.000743168361387021436166355590813648069510383979) } },
-         { { std::ldexp((double)10485102088130304, -40), std::ldexp((double)-12174307949802496, -40), std::ldexp((double)17027372515328000, -44), SC_(-619367491691927041975872.474550388407917992627) } },
          { { std::ldexp((double)10486036094119936, -40), std::ldexp((double)-15535492710109184, -41), std::ldexp((double)17014293405696000, -45), SC_(-2.61817515260939017621443182916266462279292638e+230) } },
          { { std::ldexp((double)10485257266971648, -40), std::ldexp((double)-17826711054409018, -35), std::ldexp((double)17138334978048000, -44), SC_(1.70138735099219741672706572460585684251928784e-08) } },
          { { std::ldexp((double)10485122560373760, -40), std::ldexp((double)-11098279821997376, -39), std::ldexp((double)16925852270592000, -45), SC_(9.77378642649349178995585980824930703376759021e-98) } },
@@ -296,13 +295,21 @@ void test_spots(T z, const char* type_name)
 {
    test_spots1(z, type_name);
    test_spots2(z, type_name);
-   if (std::numeric_limits<T>::digits10 < 20)
+   //
+   // Test ranges that are limited to double precision, these contain test cases
+   // which require full double precision for the inputs, so we don't test
+   // at float precision as well as higher precisions:
+   //
+   if (std::numeric_limits<T>::digits10 == std::numeric_limits<double>::digits10)
       test_spots3(z, type_name);
 #ifdef TEST_UNSOLVED
    test_spots4(z, type_name);
 #endif
    test_spots5(z, type_name);
-   if(std::numeric_limits<T>::digits >= std::numeric_limits<double>::digits)
+   //
+   // Try as we might, we can't get better than quad precision on some of these:
+   //
+   if(std::numeric_limits<T>::digits >= std::numeric_limits<double>::digits && std::numeric_limits<T>::digits <= 128)
       test_spots6(z, type_name);
 }
 

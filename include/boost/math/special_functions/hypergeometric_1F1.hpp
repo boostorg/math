@@ -96,11 +96,36 @@ namespace boost { namespace math { namespace detail {
          }
          else
          {
+            //
+            // Start by getting the domain of the recurrence relations, we get either:
+            //   -1     Backwards recursion is stable and the CF will converge to double precision.
+            //   +1     Forwards recursion is satble and the CF will converge to double precision.
+            //    0     No man's land, we're not far enough away from the crossover point to get double precision from either CF.
+            //
+            // At higher than double precision we need to be further away from the crossover location to
+            // get full converge, but it's not clear how much further - indeed at quad precision it's
+            // basically impossible to ever get forwards iteration to work.  Backwards seems to work
+            // OK as long as a > 1 whatever the precision tbough.
+            //
             int domain = hypergeometric_1F1_negative_b_recurrence_region(a, b, z);
-            if (domain < 0)
+            if ((domain < 0) && ((a > 1) || (boost::math::policies::digits<T, Policy>() <= 64)))
                return hypergeometric_1F1_from_function_ratio_negative_b(a, b, z, pol, log_scaling);
             else if (domain > 0)
-               return hypergeometric_1F1_from_function_ratio_negative_b_forwards(a, b, z, pol, log_scaling);
+            {
+               if (boost::math::policies::digits<T, Policy>() <= 64)
+                  return hypergeometric_1F1_from_function_ratio_negative_b_forwards(a, b, z, pol, log_scaling);
+               try 
+               {
+                  return hypergeometric_1F1_checked_series_impl(a, b, z, pol, log_scaling);
+               }
+               catch (const evaluation_error&)
+               {
+                  //
+                  // The series failed, try the recursions instead and hope we get at least double precision:
+                  //
+                  return hypergeometric_1F1_from_function_ratio_negative_b_forwards(a, b, z, pol, log_scaling);
+               }
+            }
             //
             // We could fall back to Tricomi's approximation if we're in the transition zone
             // betweeen the above two regions.  However, I've been unable to find any examples
