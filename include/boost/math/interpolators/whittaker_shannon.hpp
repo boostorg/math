@@ -17,36 +17,53 @@ public:
     using Real = typename RandomAccessContainer::value_type;
     whittaker_shannon(RandomAccessContainer&& y, Real const & t0, Real const & h) : m_y{std::move(y)}, m_t0{t0}, m_h{h}
     {
+        for (size_t i = 1; i < m_y.size(); i += 2)
+        {
+            m_y[i] = -m_y[i];
+        }
     }
+
 
     Real operator()(Real t) const {
         using boost::math::constants::pi;
         using std::sin;
+        using std::isfinite;
+        using std::floor;
         Real y = 0;
         Real x = (t - m_t0)/m_h;
-        
         for (size_t i = 0; i < m_y.size(); ++i)
         {
             Real denom = (x - i);
-            if (denom == 0) {
-                return m_y[i];
+            y += m_y[i]/denom;
+        }
+
+        if (!isfinite(y))
+        {
+            BOOST_ASSERT_MSG(floor(x) == ceil(x), "Floor and ceiling should be equal.\n");
+            size_t i = static_cast<size_t>(floor(x));
+            if (i & 1)
+            {
+                return -m_y[i];
             }
-            if (i & 1) {
-                y -= m_y[i]/denom;
-            }
-            else {
-                y += m_y[i]/denom;
-            }
+            return m_y[i];
         }
         return y*sin_pi(x)/pi<Real>();
     }
 
 
     Real operator[](size_t i) const {
+        if (i & 1)
+        {
+            return -m_y[i];
+        }
         return m_y[i];
     }
 
     RandomAccessContainer&& return_data() {
+        for (size_t i = 1; i < m_y.size(); i += 2)
+        {
+            m_y[i] = -m_y[i];
+        }
         return std::move(m_y);
     }
 

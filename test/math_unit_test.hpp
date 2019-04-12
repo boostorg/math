@@ -19,7 +19,17 @@ bool check_mollified_close(Real expected, Real computed, Real tol, std::string c
 {
     using std::isnan;
     BOOST_ASSERT_MSG(!isnan(tol), "Tolerance cannot be a nan.");
+    BOOST_ASSERT_MSG(!isnan(expected), "Expected value cannot be a nan.");
     BOOST_ASSERT_MSG(tol >= 0, "Tolerance must be non-negative.");
+    if (isnan(computed)) {
+        std::ios_base::fmtflags f( std::cerr.flags() );
+        std::cerr << std::setprecision(3);
+        std::cerr << "\033[0;31mError at " << filename << ":" << function << ":" << line << ":\n"
+                  << " \033[0m Computed value is a nan\n";
+        std::cerr.flags(f);
+        ++detail::global_error_count;
+        return false;
+    }
     using std::max;
     using std::abs;
     Real denom = max(abs(expected), Real(1));
@@ -48,8 +58,20 @@ bool check_ulp_close(Real1 expected1, Real2 computed, size_t ulps, std::string c
 {
     using std::max;
     using std::abs;
+    using std::isnan;
     BOOST_ASSERT_MSG(sizeof(Real1) >= sizeof(Real2),
                      "The expected number must be computed in higher (or equal) precision than the number being tested.");
+
+    BOOST_ASSERT_MSG(!isnan(expected1), "Expected value cannot be a nan.");
+    if (isnan(computed)) {
+        std::ios_base::fmtflags f( std::cerr.flags() );
+        std::cerr << std::setprecision(3);
+        std::cerr << "\033[0;31mError at " << filename << ":" << function << ":" << line << ":\n"
+                  << " \033[0m Computed value is a nan\n";
+        std::cerr.flags(f);
+        ++detail::global_error_count;
+        return false;
+    }
 
     Real2 expected = Real2(expected1);
     Real2 dist = abs(boost::math::float_distance(expected, computed));

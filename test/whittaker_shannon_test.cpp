@@ -31,9 +31,9 @@ void test_knots()
     for(size_t i = 0;  i < n; ++i) {
       v[i] = static_cast<Real>(dis(gen));
     }
-    
+
     auto ws = whittaker_shannon(std::move(v), t0, h);
-  
+
     size_t i = 0;
     while (i < n) {
       Real t = t0 + i*h;
@@ -84,7 +84,7 @@ int main()
     test_knots<double>();
     test_knots<long double>();
 #ifdef BOOST_HAS_FLOAT128
-    test_knots<float128>(); 
+    test_knots<float128>();
 #endif
 
     test_bump<float>();
