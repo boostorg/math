@@ -31,10 +31,15 @@ public:
         using std::floor;
         Real y = 0;
         Real x = (t - m_t0)/m_h;
-        for (size_t i = 0; i < m_y.size(); ++i)
+        Real z = x;
+        auto it = m_y.begin();
+        while(it != m_y.end())
         {
-            Real denom = (x - i);
-            y += m_y[i]/denom;
+            // Doing the repeated conversion of i to double is super expensive:
+            // cvtsi2sd; avoid it via decrementing z:
+            //Real denom = (x - i);
+            y += *it++/z;
+            z -= 1;
         }
 
         if (!isfinite(y))
