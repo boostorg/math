@@ -124,6 +124,17 @@ void test_integer_mean()
     BOOST_TEST(abs(m1 - m2) < tol*abs(m1));
 }
 
+template<class RandomAccessContainer>
+auto naive_mean(RandomAccessContainer const & v)
+{
+    typename RandomAccessContainer::value_type sum = 0;
+    for (auto & x : v)
+    {
+        sum += x;
+    }
+    return sum/v.size();
+}
+
 template<class Real>
 void test_mean()
 {
@@ -172,6 +183,23 @@ void test_mean()
     }
     Real m2 = boost::math::tools::mean(v);
     BOOST_TEST(abs(m1 - m2) < tol*abs(m1));
+
+    // Stress test:
+    for (size_t i = 1; i < 30; ++i)
+    {
+        v = generate_random_vector<Real>(i, 12803);
+        auto naive_ = naive_mean(v);
+        auto higham_ = boost::math::tools::mean(v);
+        if (abs(higham_ - naive_) >= 100*tol*abs(naive_))
+        {
+            std::cout << std::hexfloat;
+            std::cout << "Terms = " << v.size() << "\n";
+            std::cout << "higham = " << higham_ << "\n";
+            std::cout << "naive_ = " << naive_ << "\n";
+        }
+        BOOST_TEST(abs(higham_ - naive_) < 100*tol*abs(naive_));
+    }
+
 }
 
 template<class Complex>
