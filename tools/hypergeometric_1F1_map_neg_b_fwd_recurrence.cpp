@@ -56,7 +56,7 @@ int main()
       std::cin >> b_mult;
 
       double error_limit = 200;
-      double time_limit = 100.0;
+      double time_limit = 10.0;
 
       for (test_type a = a_start; a < a_end; a_start < 0 ? a /= a_mult : a *= a_mult)
       {
@@ -65,9 +65,10 @@ int main()
             test_type z_mult = 2;
             test_type last_good = 0;
             test_type bad = 0;
-            for (test_type z = 1; z < 1e10; z *= z_mult, z_mult *= 2)
-            {
-               try {
+            try {
+               for (test_type z = 1; z < 1e10; z *= z_mult, z_mult *= 2)
+               {
+                  // std::cout << "z = " << z << std::endl;
                   boost::uintmax_t max_iter = 1000;
                   test_type calc = boost::math::tools::function_ratio_from_forwards_recurrence(boost::math::detail::hypergeometric_1F1_recurrence_a_and_b_coefficients<test_type>(a, b, z), std::numeric_limits<test_type>::epsilon() * 2, max_iter);
                   test_type reference = (test_type)(boost::math::hypergeometric_pFq_precision({ mpfr_float(a) }, { mpfr_float(b) }, mpfr_float(z), 50, time_limit) / boost::math::hypergeometric_pFq_precision({ mpfr_float(a + 1) }, { mpfr_float(b + 1) }, mpfr_float(z), std::numeric_limits<test_type>::digits10 * 2, time_limit));
@@ -83,11 +84,11 @@ int main()
                      bad = z;
                   }
                }
-               catch (const std::exception& e)
-               {
-                  std::cout << "Unexpected exception: " << e.what() << std::endl;
-                  std::cout << "For a = " << a << " b = " << b << " z = " << z << std::endl;
-               }
+            }
+            catch (const std::exception& e)
+            {
+               std::cout << "Unexpected exception: " << e.what() << std::endl;
+               std::cout << "For a = " << a << " b = " << b << " z = " << bad * z_mult / 2 << std::endl;
             }
             test_type z_limit;
             if (0 == bad)
@@ -109,14 +110,16 @@ int main()
                }, bad, last_good, boost::math::tools::equal_floor()).first;
                z_limit = floor(z_limit + 2);  // Give ourselves some headroom!
             }
+            // std::cout << "z_limit = " << z_limit << std::endl;
             //
             // Now over again for backwards recurrence domain at the same points:
             //
-            bad = z_limit;
+            bad = z_limit > 1e10 ? 1e10 : z_limit;
             last_good = 0;
             z_mult = 1.1;
-            for (test_type z = z_limit; z > 1; z /= z_mult, z_mult *= 2)
+            for (test_type z = bad; z > 1; z /= z_mult, z_mult *= 2)
             {
+               // std::cout << "z = " << z << std::endl;
                try {
                   boost::uintmax_t max_iter = 1000;
                   test_type calc = boost::math::tools::function_ratio_from_backwards_recurrence(boost::math::detail::hypergeometric_1F1_recurrence_a_and_b_coefficients<test_type>(a, b, z), std::numeric_limits<test_type>::epsilon() * 2, max_iter);
@@ -135,6 +138,7 @@ int main()
                }
                catch (const std::exception& e)
                {
+                  bad = z;
                   std::cout << "Unexpected exception: " << e.what() << std::endl;
                   std::cout << "For a = " << a << " b = " << b << " z = " << z << std::endl;
                }

@@ -122,7 +122,7 @@ int main()
          mpfr_float mp_expected;
 
          try {
-            mp_expected = boost::math::hypergeometric_pFq_precision({ mpfr_float(a) }, { mpfr_float(b) }, mpfr_float(z), 25, 3.0);
+            mp_expected = boost::math::hypergeometric_pFq_precision({ mpfr_float(a) }, { mpfr_float(b) }, mpfr_float(z), 25, 200.0);
             expected = (test_type)mp_expected;
          }
          catch (const std::exception&)
