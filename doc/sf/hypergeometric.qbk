@@ -173,10 +173,10 @@ Domains that are still unsolved include:
 [[domain][comment][example]]
 [[ [/\large  $$_1F_1(-a, -b; -z)$$] [$../equations/hypergeometric_1f1_13.svg]  ][ /a, b/ and /z/ all large.][[sub 1]F[sub 1](-814723.75, -13586.87890625, -15.87335205078125)]]
 [[ [/\large  $$_1F_1(-a, -b; z)$$] [$../equations/hypergeometric_1f1_14.svg]  ][ /a < b/, /b > z/, this is really the same domain as above.][ ]]
-[[ [/\large  $$_1F_1(a, -b; z)$$] [$../equations/hypergeometric_1f1_15.svg]  ][ There is a gap in between methods where no reliable implementation is possible, the issue become much worse for /a/, /b/ and /z/ all large.][[sub 1]F[sub 1](9057.91796875, -1252.51318359375, 15.87335205078125)]]
+[[ [/\large  $$_1F_1(a, -b; z)$$] [$../equations/hypergeometric_1f1_15.svg]  ][ There is a gap in between methods where no reliable implementation is possible, the issue becomes much worse for /a/, /b/ and /z/ all large.][[sub 1]F[sub 1](9057.91796875, -1252.51318359375, 15.87335205078125)]]
 [[ [/\large  $$_1F_1(a_{tiny}, b; -z)$$] [$../equations/hypergeometric_1f1_16.svg]  ][This domain is mostly handled by A&S 13.3.6 (see implementation notes below), but there
       are some values where either that series is non-convergent (most particularly for /b/ < 0)
-      or where the series become divergent after a few terms limiting the precision that can be achieved.][[sub 1]F[sub 1](-5.9981750131794866e-15, 0.499999999999994, -240.42092034220695)]]
+      or where the series becomes divergent after a few terms limiting the precision that can be achieved.][[sub 1]F[sub 1](-5.9981750131794866e-15, 0.499999999999994, -240.42092034220695)]]
 ]
 
 The following graph illustrates the problem area for /b < 0/ and /a,z > 0/:
@@ -226,6 +226,13 @@ Note however, that the some of the methods used here fail to converge to much be
 [$../graphs/hypergeometric_1f1/negative_b_bins.svg]
 [? __build_html '''<?dbhtml-include href="'''__base_path__'''/graphs/hypergeometric_1f1/negative_b.html"?>''']
 [?! __build_html [$../graphs/hypergeometric_1f1/negative_b.png]]
+
+For both /a/ and /b/ less than zero, the errors the worst errors are clustered in a "difficult zone" with /b < a/ and /z [cong] a/:
+
+[$../graphs/hypergeometric_1f1/negative_ab_bins.svg]
+[? __build_html '''<?dbhtml-include href="'''__base_path__'''/graphs/hypergeometric_1f1/negative_ab.html"?>''']
+[?! __build_html [$../graphs/hypergeometric_1f1/negative_ab.png]]
+
 
 [h4 Implementation]
 
