@@ -78,7 +78,7 @@ namespace boost { namespace math { namespace detail {
       {
          if (a < 0)
          {
-            if (a > 5 * b)
+            if ((b < a) && (z < -b / 4))
                return hypergeometric_1F1_from_function_ratio_negative_ab(a, b, z, pol, log_scaling);
             else
             {
@@ -88,9 +88,17 @@ namespace boost { namespace math { namespace detail {
                // Note that if sqr is negative then we have no solution, so assign an arbitrarily large value to the
                // number of iterations.
                //
+               bool can_use_recursion = (z - b + 100 < boost::math::policies::get_max_series_iterations<Policy>()) && (100 - a < boost::math::policies::get_max_series_iterations<Policy>());
                T sqr = 4 * a * z + b * b - 2 * b * z + z * z;
                T iterations_to_convergence = sqr > 0 ? T(0.5f * (-sqrt(sqr) - b + z)) : T(-a - b);
-               if((std::max)(a, b) + iterations_to_convergence > -300)
+               if(can_use_recursion && ((std::max)(a, b) + iterations_to_convergence > -300))
+                  return hypergeometric_1F1_backwards_recursion_on_b_for_negative_a(a, b, z, pol, function, log_scaling);
+               //
+               // When a < b and if we fall through to the series, then we get divergent behaviour when b crosses the origin
+               // so ideally we would pick another method.  Otherwise the terms immediately after b crosses the origin may
+               // suffer catestrophic cancellation....
+               //
+               if((a < b) && can_use_recursion)
                   return hypergeometric_1F1_backwards_recursion_on_b_for_negative_a(a, b, z, pol, function, log_scaling);
             }
          }
@@ -495,7 +503,22 @@ namespace boost { namespace math { namespace detail {
                // but up the expense of this function call:
                //
                if (((z < z_limit) || (a > -500)) && ((b > -500) || (b - 2 * a > 0)) && (z < -a))
-                  return detail::hypergeometric_1F1_AS_13_3_7_tricomi(a, b, z, pol, log_scaling);
+               {
+                  //
+                  // Outside this domain we will probably get better accuracy from the recursive methods.
+                  //
+                  if(!(((a < b) && (z > -b)) || (z > z_limit)))
+                     return detail::hypergeometric_1F1_AS_13_3_7_tricomi(a, b, z, pol, log_scaling);
+                  //
+                  // When b and z are both very small, we get large errors from the recurrence methods
+                  // in the fallbacks.  Tricomi seems to work well here, as does direct series evaluation
+                  // at least some of the time.  Picking the right method is not easy, and sometimes this
+                  // is much worse than the fallback.  Overall though, it's a reasonable choice that keeps
+                  // the very worst errors under control.
+                  //
+                  if(b > -1)
+                     return detail::hypergeometric_1F1_AS_13_3_7_tricomi(a, b, z, pol, log_scaling);
+               }
             }
             //
             // We previosuly used Tricomi here, but it appears to be worse than
@@ -535,6 +558,9 @@ namespace boost { namespace math { namespace detail {
       }
       if ((a > 0) && (b > 0) && (a * z > 50))
          return detail::hypergeometric_1F1_large_abz(a, b, z, pol, log_scaling);
+
+      if (b < 0)
+         return detail::hypergeometric_1F1_checked_series_impl(a, b, z, pol, log_scaling);
       
       return detail::hypergeometric_1F1_generic_series(a, b, z, pol, log_scaling, function);
    }
