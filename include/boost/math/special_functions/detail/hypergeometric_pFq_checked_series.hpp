@@ -161,6 +161,7 @@
                        term -= scale;
                        log_scale += scale;
                        result *= ex;
+                       abs_result *= ex;
                     }
                  }
               }
@@ -171,17 +172,26 @@
                     int scale = itrunc(floor(term));
                     term -= scale;
                     log_scale += scale;
-                    result *= exp(Real(-scale));
+                    Real ex = exp(Real(-scale));
+                    result *= ex;
+                    abs_result *= ex;
                  }
                  term = s1 * s2 * exp(term);
                  k = s;
                  term0 = term;
+                 bool terms_are_growing = true;
                  do
                  {
                     result += term;
                     abs_result += fabs(term);
                     //std::cout << "k = " << k << " term = " << term * exp(log_scale) << " result = " << result * exp(log_scale) << " abs_result = " << abs_result * exp(log_scale) << std::endl;
-                    if (abs_result * tol > abs(result))
+                    //
+                    // We don't perform this check if the terms are growing, as this part of the series may
+                    // outstrip whatever divergent terms we may have had above, so even though the value
+                    // of the sum may currently be trash, if these next terms are large enough we may end up
+                    // with a valid sum.
+                    //
+                    if (!terms_are_growing && (abs_result * tol > abs(result)))
                     {
                        // We have no correct bits in the result... just give up!
                        result = boost::math::policies::raise_evaluation_error("boost::math::hypergeometric_pFq<%1%>", "Cancellation is so severe that no bits in the reuslt are correct, last result was %1%", Real(result * exp(Real(log_scale))), pol);
@@ -227,7 +237,8 @@
 
                     ++k;
                     diff = fabs(term / result);
-                 } while ((diff > boost::math::policies::get_epsilon<Real, Policy>()) || (fabs(term) > fabs(term_m1)));
+                    terms_are_growing = fabs(term) > fabs(term_m1);
+                 } while ((diff > boost::math::policies::get_epsilon<Real, Policy>()) || terms_are_growing);
                  //
                  // Now go backwards as well:
                  //
