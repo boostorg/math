@@ -108,7 +108,13 @@ namespace boost {
                r = rp.first;
                norm = rp.second;
 
-               unsigned precision_obtained = current_precision - 1 - itrunc(log10(abs(norm / r)));
+               unsigned cancellation = itrunc(log10(abs(norm / r)));
+               if (cancellation >= current_precision - 1)
+               {
+                  current_precision *= 2;
+                  continue;
+               }
+               unsigned precision_obtained = current_precision - 1 - cancellation;
                if (precision_obtained < digits10)
                {
                   current_precision += digits10 - precision_obtained + 5;
