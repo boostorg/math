@@ -231,6 +231,13 @@
      else
 #endif
      {
+        if (z + n < 0)
+        {
+           T r = log_pochhammer(T(-z - n + 1), n, pol, s);
+           if (s)
+              *s *= (n & 1 ? -1 : 1);
+           return r;
+        }
         int s1, s2;
         T r = boost::math::lgamma(T(z + n), &s1, pol) - boost::math::lgamma(z, &s2, pol);
         if(s)
@@ -285,92 +292,6 @@
         ++n;
         diff = fabs(term / sum);
      } while ((diff > boost::math::policies::get_epsilon<T, Policy>()) || (fabs(term_m1) < fabs(term)) || (small_a && n < 10));
-
-     if (b + n < 0)
-     {
-        if ((a < 0) && (floor(a) == a) && (a > b))
-           return sum;  // b will never cross the origin!
-        //
-        // b hasn't crossed the origin yet and the series may spring back into life at that point
-        // so we need to jump forward to that term and then evaluate forwards and backwards from there:
-        //
-        unsigned s = itrunc(-b);
-        unsigned backstop = n;
-        int s1, s2;
-        T t1 = log_pochhammer(a, s, pol, &s1);
-        T t2 = log_pochhammer(b, s, pol, &s2);
-        term = t1 - t2;
-        t1 = lgamma(T(s + 1), pol);
-        term -= t1;
-        term += s * log(fabs(z));
-        if(z < 0)
-           s1 *= (s & 1 ? -1 : 1);
-        term -= local_scaling;
-        if (term > -tools::log_max_value<T>())
-        {
-           if (term > 10)
-           {
-              int scale = itrunc(floor(term));
-              term -= scale;
-              log_scaling += scale;
-              sum *= exp(T(-scale));
-           }
-           term = s1 * s2 * exp(term);
-           n = s;
-           T term0 = term;
-           do
-           {
-              sum += term;
-              if (fabs(sum) >= upper_limit)
-              {
-                 sum /= scaling_factor;
-                 term /= scaling_factor;
-                 log_scaling += log_scaling_factor;
-                 term0 /= scaling_factor;
-              }
-              if (fabs(sum) < lower_limit)
-              {
-                 sum *= scaling_factor;
-                 term *= scaling_factor;
-                 log_scaling -= log_scaling_factor;
-                 term0 *= scaling_factor;
-              }
-              term_m1 = term;
-              term *= (((a + n) / ((b + n) * (n + 1))) * z);
-              //if (n > boost::math::policies::get_max_series_iterations<Policy>())
-              //   return boost::math::policies::raise_evaluation_error(function, "Series did not converge, best value is %1%", sum, pol);
-              ++n;
-              diff = fabs(term / sum);
-           } while ((diff > boost::math::policies::get_epsilon<T, Policy>()) || (fabs(term) > fabs(term_m1)));
-           //
-           // Now go backwards as well:
-           //
-           n = s;
-           term = term0;
-           do
-           {
-              --n;
-              if (n == backstop)
-                 break;
-              term_m1 = term;
-              term /= (((a + n) / ((b + n) * (n + 1))) * z);
-              sum += term;
-              if (fabs(sum) >= upper_limit)
-              {
-                 sum /= scaling_factor;
-                 term /= scaling_factor;
-                 log_scaling += log_scaling_factor;
-              }
-              if (fabs(sum) < lower_limit)
-              {
-                 sum *= scaling_factor;
-                 term *= scaling_factor;
-                 log_scaling -= log_scaling_factor;
-              }
-              diff = fabs(term / sum);
-           } while ((diff > boost::math::policies::get_epsilon<T, Policy>()) || (fabs(term) > fabs(term_m1)));
-        }
-     }
 
      return sum;
   }
