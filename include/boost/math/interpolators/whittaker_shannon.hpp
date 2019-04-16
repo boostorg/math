@@ -24,7 +24,7 @@ public:
     }
 
 
-    Real operator()(Real t) const {
+    inline Real operator()(Real t) const {
         using boost::math::constants::pi;
         using std::sin;
         using std::isfinite;
@@ -33,11 +33,13 @@ public:
         Real x = (t - m_t0)/m_h;
         Real z = x;
         auto it = m_y.begin();
-        while(it != m_y.end())
+
+        // For some reason, neither clang nor g++ will cache the address of m_y.end() in a register.
+        // Hence make a copy of it:
+        auto end = m_y.end();
+        while(it != end)
         {
-            // Doing the repeated conversion of i to double is super expensive:
-            // cvtsi2sd; avoid it via decrementing z:
-            //Real denom = (x - i);
+
             y += *it++/z;
             z -= 1;
         }
