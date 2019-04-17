@@ -108,6 +108,13 @@ test-suite special_fun :
    [ run test_1F1.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_smart_ptr ] <define>TEST=6 release [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <define>BOOST_MATH_TEST_FLOAT128 <linkflags>"-Bstatic -lquadmath -Bdynamic" ] <toolset>clang:<cxxflags>-Wno-literal_range : test_1F1_quad ]
    [ run test_1F1.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_smart_ptr ] <define>TEST=7 release <toolset>clang:<cxxflags>-Wno-literal_range : test_1F1_dec_40 ]
 
+   [ run test_1F1_regularized.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_smart_ptr ] <define>TEST=2 <toolset>clang:<cxxflags>-Wno-literal_range : test_1F1_regularized_float ]
+   [ run test_1F1_regularized.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_smart_ptr ] <define>TEST=3 <toolset>clang:<cxxflags>-Wno-literal_range : test_1F1_regularized_double ]
+   [ run test_1F1_regularized.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_smart_ptr ] <define>TEST=4 release <toolset>clang:<cxxflags>-Wno-literal_range : test_1F1_regularized_long_double ]
+   [ run test_1F1_regularized.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_smart_ptr ] <define>TEST=5 <toolset>clang:<cxxflags>-Wno-literal_range : test_1F1_regularized_real_concept ]
+   [ run test_1F1_regularized.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_smart_ptr ] <define>TEST=6 release [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <define>BOOST_MATH_TEST_FLOAT128 <linkflags>"-Bstatic -lquadmath -Bdynamic" ] <toolset>clang:<cxxflags>-Wno-literal_range : test_1F1_regularized_quad ]
+   [ run test_1F1_regularized.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_smart_ptr ] <define>TEST=7 release <toolset>clang:<cxxflags>-Wno-literal_range : test_1F1_regularized_dec_40 ]
+
 
    [ run hypot_test.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ]
    [ run pow_test.cpp ../../test/build//boost_unit_test_framework ]
