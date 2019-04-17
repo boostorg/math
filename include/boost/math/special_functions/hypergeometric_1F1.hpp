@@ -574,8 +574,13 @@ namespace boost { namespace math { namespace detail {
       //
       // Actual result will be result * e^log_scaling.
       //
-      int max_scaling = itrunc(boost::math::tools::log_max_value<T>()) - 2;
+#ifndef BOOST_NO_CXX11_THREAD_LOCAL
+	  static const thread_local int max_scaling = itrunc(boost::math::tools::log_max_value<T>()) - 2;
+	  static const thread_local T max_scale_factor = exp(T(max_scaling));
+#else
+	  int max_scaling = itrunc(boost::math::tools::log_max_value<T>()) - 2;
       T max_scale_factor = exp(T(max_scaling));
+#endif
 
       while (log_scaling > max_scaling)
       {
@@ -590,6 +595,52 @@ namespace boost { namespace math { namespace detail {
       if (log_scaling)
          result *= exp(T(log_scaling));
       return result;
+   }
+
+   template <class T, class Policy>
+   inline T log_hypergeometric_1F1_imp(const T& a, const T& b, const T& z, int* sign, const Policy& pol)
+   {
+      BOOST_MATH_STD_USING // exp, fabs, sqrt
+      int log_scaling = 0;
+      T result = hypergeometric_1F1_imp(a, b, z, pol, log_scaling);
+	  if (sign)
+		  *sign = result < 0 ? -1 : 1;
+	  result = log(fabs(result)) + log_scaling;
+      return result;
+   }
+
+   template <class T, class Policy>
+   inline T hypergeometric_1F1_regularized_imp(const T& a, const T& b, const T& z, const Policy& pol)
+   {
+      BOOST_MATH_STD_USING // exp, fabs, sqrt
+      int log_scaling = 0;
+      T result = hypergeometric_1F1_imp(a, b, z, pol, log_scaling);
+      //
+      // Actual result will be result * e^log_scaling / tgamma(b).
+      //
+	  int sign = 1;
+	  T scale = log_scaling - boost::math::lgamma(b, &sign, pol);
+#ifndef BOOST_NO_CXX11_THREAD_LOCAL
+      static const thread_local T max_scaling = boost::math::tools::log_max_value<T>() - 2;
+	  static const thread_local T max_scale_factor = exp(max_scaling);
+#else
+	  T max_scaling = boost::math::tools::log_max_value<T>() - 2;
+	  T max_scale_factor = exp(max_scaling);
+#endif
+
+      while (scale > max_scaling)
+      {
+         result *= max_scale_factor;
+         scale -= max_scaling;
+      }
+      while (scale < -max_scaling)
+      {
+         result /= max_scale_factor;
+		 scale += max_scaling;
+      }
+      if (scale)
+         result *= exp(scale);
+      return result * sign;
    }
 
 } // namespace detail
@@ -619,6 +670,61 @@ template <class T1, class T2, class T3>
 inline typename tools::promote_args<T1, T2, T3>::type hypergeometric_1F1(T1 a, T2 b, T3 z)
 {
    return hypergeometric_1F1(a, b, z, policies::policy<>());
+}
+
+template <class T1, class T2, class T3, class Policy>
+inline typename tools::promote_args<T1, T2, T3>::type hypergeometric_1F1_regularized(T1 a, T2 b, T3 z, const Policy& /* pol */)
+{
+   BOOST_FPU_EXCEPTION_GUARD
+      typedef typename tools::promote_args<T1, T2, T3>::type result_type;
+   typedef typename policies::evaluation<result_type, Policy>::type value_type;
+   typedef typename policies::normalise<
+      Policy,
+      policies::promote_float<false>,
+      policies::promote_double<false>,
+      policies::discrete_quantile<>,
+      policies::assert_undefined<> >::type forwarding_policy;
+   return policies::checked_narrowing_cast<result_type, Policy>(
+      detail::hypergeometric_1F1_regularized_imp<value_type>(
+         static_cast<value_type>(a),
+         static_cast<value_type>(b),
+         static_cast<value_type>(z),
+         forwarding_policy()),
+      "boost::math::hypergeometric_1F1<%1%>(%1%,%1%,%1%)");
+}
+
+template <class T1, class T2, class T3>
+inline typename tools::promote_args<T1, T2, T3>::type hypergeometric_1F1_regularized(T1 a, T2 b, T3 z)
+{
+   return hypergeometric_1F1_regularized(a, b, z, policies::policy<>());
+}
+
+template <class T1, class T2, class T3, class Policy>
+inline typename tools::promote_args<T1, T2, T3>::type log_hypergeometric_1F1(T1 a, T2 b, T3 z, const Policy& /* pol */)
+{
+	BOOST_FPU_EXCEPTION_GUARD
+		typedef typename tools::promote_args<T1, T2, T3>::type result_type;
+	typedef typename policies::evaluation<result_type, Policy>::type value_type;
+	typedef typename policies::normalise<
+		Policy,
+		policies::promote_float<false>,
+		policies::promote_double<false>,
+		policies::discrete_quantile<>,
+		policies::assert_undefined<> >::type forwarding_policy;
+	return policies::checked_narrowing_cast<result_type, Policy>(
+		detail::log_hypergeometric_1F1_imp<value_type>(
+			static_cast<value_type>(a),
+			static_cast<value_type>(b),
+			static_cast<value_type>(z),
+			0,
+			forwarding_policy()),
+		"boost::math::hypergeometric_1F1<%1%>(%1%,%1%,%1%)");
+}
+
+template <class T1, class T2, class T3>
+inline typename tools::promote_args<T1, T2, T3>::type log_hypergeometric_1F1(T1 a, T2 b, T3 z)
+{
+	return log_hypergeometric_1F1(a, b, z, policies::policy<>());
 }
 
 

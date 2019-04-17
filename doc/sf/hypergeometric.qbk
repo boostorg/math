@@ -141,7 +141,13 @@ Otherwise we use the defining series.
    ``__sf_result`` hypergeometric_1F1(T1 a, T2 b, T3 z);
 
    template <class T1, class T2, class T3, class ``__Policy``>
-   ``__sf_result`` hypergeometric_1F0(T1 a, T2 b, T3 z, const ``__Policy``&);
+   ``__sf_result`` hypergeometric_1F1(T1 a, T2 b, T3 z, const ``__Policy``&);
+
+   template <class T1, class T2, class T3>
+   ``__sf_result`` hypergeometric_1F1_regularized(T1 a, T2 b, T3 z);
+
+   template <class T1, class T2, class T3, class ``__Policy``>
+   ``__sf_result`` hypergeometric_1F1_regularized(T1 a, T2 b, T3 z, const ``__Policy``&);
 
    }} // namespaces
 
@@ -160,6 +166,12 @@ which for |/z/| < 1 has the hypergeometric series expansion
 
 where (/a/)[sub /n/] denotes rising factorial.
 This function has the same definition as Mathematica's `Hypergeometric1F1[a, b, z]` and Maple's `KummerM(a, b, z)`.
+
+The "regularized" versions of the function return:
+
+[/ \Large  $$ \textbf{M}(a, b; z) = \frac{{_1F_1}(a, b; z)}{\Gamma(b)} = \sum_{n=0}^{\infty} \frac{(a)_n z^n}{\Gamma(b+n) n!} $$]
+[$../equations/hypergeometric_1f1_17.svg]
+
 
 [h4 Known Issues]
 
