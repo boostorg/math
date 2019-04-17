@@ -422,7 +422,8 @@ namespace boost {
             if (a > a_max)
             {
                //
-               // Checked with random testing.
+               // Crossover point is decreasing with increasing a
+			      // upper limit is fine, lower limit is not:
                //
                if (b > b_max)
                   return 0;  // TODO: don't know what else to do???
@@ -432,18 +433,8 @@ namespace boost {
                   ++index;
                double b0 = domain[index - 1][1];
                double b1 = domain[index][1];
-               double z0 = domain[index - 1][2];
-               double z1 = domain[index][2];
-               //
-               // Move b towards the lowest end of the range to account for curvature in
-               // the boundary surface:
-               //
-               T effective_b = b + (std::min)(T(b - b0), T(b1 - b)) * 0.25;
-               T lower_z_limit = (z0 * (b1 - effective_b) + z1 * (effective_b - b0)) / (b1 - b0);
-               if (z < lower_z_limit)
-                  return -1;
-               z0 = domain[index - 1][3];
-               z1 = domain[index][3];
+               double z0 = domain[index - 1][3];
+               double z1 = domain[index][3];
                T upper_z_limit = (z0 * (b1 - b) + z1 * (b - b0)) / (b1 - b0);
                if (z > upper_z_limit)
                   return 1;
