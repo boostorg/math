@@ -438,7 +438,8 @@ namespace boost {
                T upper_z_limit = (z0 * (b1 - b) + z1 * (b - b0)) / (b1 - b0);
                if (z > upper_z_limit)
                   return 1;
-               return 0;  // Oh dear, we're in the danger zone!
+               return z < -b / (4 - 5 * sqrt(log(a)) * a / b) ? -1 : 0;
+
             }
             if (b > b_max)
             {
