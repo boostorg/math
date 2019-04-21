@@ -75,7 +75,7 @@ namespace boost {
       };
 
       template <class Seq, class Real, class Policy>
-      Real hypergeometric_pFq_precision(const Seq& aj, const Seq& bj, const Real& z, unsigned digits10, double timeout, const Policy& pol)
+      Real hypergeometric_pFq_precision(const Seq& aj, const Seq& bj, Real z, unsigned digits10, double timeout, const Policy& pol)
       {
          unsigned current_precision = digits10 + 5;
 
@@ -98,10 +98,11 @@ namespace boost {
                ai->precision(current_precision);
             for (auto bi = bb.begin(); bi != bb.end(); ++bi)
                bi->precision(current_precision);
+            z.precision(current_precision);
             try
             {
                int scale = 0;
-               std::pair<Real, Real> rp = boost::math::detail::hypergeometric_pFq_checked_series_impl(aj, bj, z, pol, boost::math::detail::timed_iteration_terminator(boost::math::policies::get_max_series_iterations<Policy>(), timeout), scale);
+               std::pair<Real, Real> rp = boost::math::detail::hypergeometric_pFq_checked_series_impl(aa, bb, z, pol, boost::math::detail::timed_iteration_terminator(boost::math::policies::get_max_series_iterations<Policy>(), timeout), scale);
                rp.first *= exp(Real(scale));
                rp.second *= exp(Real(scale));
 
