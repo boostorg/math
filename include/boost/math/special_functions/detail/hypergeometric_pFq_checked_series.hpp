@@ -120,6 +120,12 @@
                     return std::make_pair(result, abs_result);  // b's will never cross the origin!
               }
               //
+              // local results:
+              //
+              Real loop_result = 0;
+              Real loop_abs_result = 0;
+              int loop_scale = 0;
+              //
               // b hasn't crossed the origin yet and the series may spring back into life at that point
               // so we need to jump forward to that term and then evaluate forwards and backwards from there:
               //
@@ -148,151 +154,192 @@
               term += s * log(fabs(z));
               if (z < 0)
                  s1 *= (s & 1 ? -1 : 1);
-              term -= local_scaling;
+              //term -= local_scaling;
               if (term <= tools::log_min_value<Real>())
               {
                  // rescale if we can:
-                 int scale = itrunc(floor(term - tools::log_min_value<Real>()));
-                 if (scale < tools::log_max_value<Real>())
-                 {
-                    Real ex = exp(Real(-scale));
-                    if (tools::max_value<Real>() / ex > result)
-                    {
-                       term -= scale;
-                       log_scale += scale;
-                       result *= ex;
-                       abs_result *= ex;
-                    }
-                 }
+                 int scale = itrunc(floor(term - tools::log_min_value<Real>()) - 2);
+                 term -= scale;
+                 loop_scale += scale;
               }
-              if (term > tools::log_min_value<Real>())
-              {
-                 if (term > 10)
-                 {
-                    int scale = itrunc(floor(term));
-                    term -= scale;
-                    log_scale += scale;
-                    Real ex = exp(Real(-scale));
-                    result *= ex;
-                    abs_result *= ex;
-                 }
-                 term = s1 * s2 * exp(term);
-                 k = s;
-                 term0 = term;
-                 bool terms_are_growing = true;
-                 do
-                 {
-                    result += term;
-                    abs_result += fabs(term);
-                    //std::cout << "k = " << k << " term = " << term * exp(log_scale) << " result = " << result * exp(log_scale) << " abs_result = " << abs_result * exp(log_scale) << std::endl;
-                    //
-                    // We don't perform this check if the terms are growing, as this part of the series may
-                    // outstrip whatever divergent terms we may have had above, so even though the value
-                    // of the sum may currently be trash, if these next terms are large enough we may end up
-                    // with a valid sum.
-                    //
-                    if (!terms_are_growing && (abs_result * tol > abs(result)))
-                    {
-                       // We have no correct bits in the result... just give up!
-                       result = boost::math::policies::raise_evaluation_error("boost::math::hypergeometric_pFq<%1%>", "Cancellation is so severe that no bits in the reuslt are correct, last result was %1%", Real(result * exp(Real(log_scale))), pol);
-                       return std::make_pair(result, result);
-                    }
-                    if (fabs(result) >= upper_limit)
-                    {
-                       result /= scaling_factor;
-                       abs_result /= scaling_factor;
-                       term /= scaling_factor;
-                       log_scale += log_scaling_factor;
-                       term0 /= scaling_factor;
-                    }
-                    if (fabs(result) < lower_limit)
-                    {
-                       result *= scaling_factor;
-                       abs_result *= scaling_factor;
-                       term *= scaling_factor;
-                       log_scale -= log_scaling_factor;
-                       term0 *= scaling_factor;
-                    }
-                    term_m1 = term;
-                    for (auto ai = aj.begin(); ai != aj.end(); ++ai)
-                    {
-                       term *= *ai + k;
-                    }
-                    if (term == 0)
-                    {
-                       // There is a negative integer in the aj's:
-                       return std::make_pair(result, abs_result);
-                    }
-                    for (auto bi = bj.begin(); bi != bj.end(); ++bi)
-                    {
-                       if (*bi + k == 0)
-                       {
-                          // The series is undefined:
-                          result = boost::math::policies::raise_domain_error("boost::math::hypergeometric_pFq<%1%>", "One of the b values was the negative integer %1%", *bi, pol);
-                          return std::make_pair(result, result);
-                       }
-                       term /= *bi + k;
-                    }
-                    term *= z / (k + 1);
+               if (term > 10)
+               {
+                  int scale = itrunc(floor(term));
+                  term -= scale;
+                  loop_scale += scale;
+               }
+               term = s1 * s2 * exp(term);
+               k = s;
+               term0 = term;
+               int saved_loop_scale = loop_scale;
+               bool terms_are_growing = true;
+               do
+               {
+                  loop_result += term;
+                  loop_abs_result += fabs(term);
+                  //std::cout << "k = " << k << " term = " << term * exp(log_scale) << " result = " << result * exp(log_scale) << " abs_result = " << abs_result * exp(log_scale) << std::endl;
+                  //
+                  if (fabs(loop_result) >= upper_limit)
+                  {
+                     loop_result /= scaling_factor;
+                     loop_abs_result /= scaling_factor;
+                     term /= scaling_factor;
+                     loop_scale += log_scaling_factor;
+                     term0 /= scaling_factor;
+                  }
+                  if (fabs(loop_result) < lower_limit)
+                  {
+                     loop_result *= scaling_factor;
+                     loop_abs_result *= scaling_factor;
+                     term *= scaling_factor;
+                     loop_scale -= log_scaling_factor;
+                     term0 *= scaling_factor;
+                  }
+                  term_m1 = term;
+                  for (auto ai = aj.begin(); ai != aj.end(); ++ai)
+                  {
+                     term *= *ai + k;
+                  }
+                  if (term == 0)
+                  {
+                     // There is a negative integer in the aj's:
+                     return std::make_pair(result, abs_result);
+                  }
+                  for (auto bi = bj.begin(); bi != bj.end(); ++bi)
+                  {
+                     if (*bi + k == 0)
+                     {
+                        // The series is undefined:
+                        result = boost::math::policies::raise_domain_error("boost::math::hypergeometric_pFq<%1%>", "One of the b values was the negative integer %1%", *bi, pol);
+                        return std::make_pair(result, result);
+                     }
+                     term /= *bi + k;
+                  }
+                  term *= z / (k + 1);
 
-                    ++k;
-                    diff = fabs(term / result);
-                    terms_are_growing = fabs(term) > fabs(term_m1);
-                 } while ((diff > boost::math::policies::get_epsilon<Real, Policy>()) || terms_are_growing);
-                 //
-                 // Now go backwards as well:
-                 //
-                 k = s;
-                 term = term0;
-                 do
-                 {
-                    --k;
-                    if (k == backstop)
-                       break;
-                    term_m1 = term;
-                    for (auto ai = aj.begin(); ai != aj.end(); ++ai)
-                    {
-                       term /= *ai + k;
-                    }
-                    for (auto bi = bj.begin(); bi != bj.end(); ++bi)
-                    {
-                       if (*bi + k == 0)
-                       {
-                          // The series is undefined:
-                          result = boost::math::policies::raise_domain_error("boost::math::hypergeometric_pFq<%1%>", "One of the b values was the negative integer %1%", *bi, pol);
-                          return std::make_pair(result, result);
-                       }
-                       term *= *bi + k;
-                    }
-                    term *= (k + 1) / z;
-                    result += term;
-                    abs_result += fabs(term);
-                    //std::cout << "k = " << k << " result = " << result << " abs_result = " << abs_result << std::endl;
-                    if (abs_result * tol > abs(result))
-                    {
-                       // We have no correct bits in the result... just give up!
-                       result = boost::math::policies::raise_evaluation_error("boost::math::hypergeometric_pFq<%1%>", "Cancellation is so severe that no bits in the reuslt are correct, last result was %1%", Real(result * exp(Real(log_scale))), pol);
-                       return std::make_pair(result, result);
-                    }
-                    if (fabs(result) >= upper_limit)
-                    {
-                       result /= scaling_factor;
-                       abs_result /= scaling_factor;
-                       term /= scaling_factor;
-                       log_scale += log_scaling_factor;
-                    }
-                    if (fabs(result) < lower_limit)
-                    {
-                       result *= scaling_factor;
-                       abs_result *= scaling_factor;
-                       term *= scaling_factor;
-                       log_scale -= log_scaling_factor;
-                    }
-                    diff = fabs(term / result);
-                 } while ((diff > boost::math::policies::get_epsilon<Real, Policy>()) || (fabs(term) > fabs(term_m1)));
-              }
+                  ++k;
+                  diff = fabs(term / loop_result);
+                  terms_are_growing = fabs(term) > fabs(term_m1);
+               } while ((diff > boost::math::policies::get_epsilon<Real, Policy>()) || terms_are_growing);
+               //
+               // We now need to combine the results of the first series summation with whatever
+               // local results we have now...
+               //
+               if (loop_scale > local_scaling)
+               {
+                  //
+                  // Need to shrink previous result:
+                  //
+                  int rescale = local_scaling - loop_scale;
+                  local_scaling = loop_scale;
+                  log_scale -= rescale;
+                  Real ex = exp(Real(rescale));
+                  result *= ex;
+                  abs_result *= ex;
+                  result += loop_result;
+                  abs_result += loop_abs_result;
+               }
+               else if (local_scaling > loop_scale)
+               {
+                  //
+                  // Need to shrink local result:
+                  //
+                  int rescale = loop_scale - local_scaling;
+                  Real ex = exp(Real(rescale));
+                  loop_result *= ex;
+                  loop_abs_result *= ex;
+                  result += loop_result;
+                  abs_result += loop_abs_result;
+               }
+               else
+               {
+                  result += loop_result;
+                  abs_result += loop_abs_result;
+               }
+               //
+               // Now go backwards as well:
+               //
+               k = s;
+               term = term0;
+               loop_result = 0;
+               loop_abs_result = 0;
+               loop_scale = saved_loop_scale;
+               do
+               {
+                  --k;
+                  if (k == backstop)
+                     break;
+                  term_m1 = term;
+                  for (auto ai = aj.begin(); ai != aj.end(); ++ai)
+                  {
+                     term /= *ai + k;
+                  }
+                  for (auto bi = bj.begin(); bi != bj.end(); ++bi)
+                  {
+                     if (*bi + k == 0)
+                     {
+                        // The series is undefined:
+                        result = boost::math::policies::raise_domain_error("boost::math::hypergeometric_pFq<%1%>", "One of the b values was the negative integer %1%", *bi, pol);
+                        return std::make_pair(result, result);
+                     }
+                     term *= *bi + k;
+                  }
+                  term *= (k + 1) / z;
+                  loop_result += term;
+                  loop_abs_result += fabs(term);
+                  //std::cout << "k = " << k << " result = " << result << " abs_result = " << abs_result << std::endl;
+                  if (fabs(loop_result) >= upper_limit)
+                  {
+                     loop_result /= scaling_factor;
+                     loop_abs_result /= scaling_factor;
+                     term /= scaling_factor;
+                     loop_scale += log_scaling_factor;
+                  }
+                  if (fabs(loop_result) < lower_limit)
+                  {
+                     loop_result *= scaling_factor;
+                     loop_abs_result *= scaling_factor;
+                     term *= scaling_factor;
+                     loop_scale -= log_scaling_factor;
+                  }
+                  diff = fabs(term / loop_result);
+               } while ((diff > boost::math::policies::get_epsilon<Real, Policy>()) || (fabs(term) > fabs(term_m1)));
+               //
+               // We now need to combine the results of the first series summation with whatever
+               // local results we have now...
+               //
+               if (loop_scale > local_scaling)
+               {
+                  //
+                  // Need to shrink previous result:
+                  //
+                  int rescale = local_scaling - loop_scale;
+                  local_scaling = loop_scale;
+                  log_scale -= rescale;
+                  Real ex = exp(Real(rescale));
+                  result *= ex;
+                  abs_result *= ex;
+                  result += loop_result;
+                  abs_result += loop_abs_result;
+               }
+               else if (local_scaling > loop_scale)
+               {
+                  //
+                  // Need to shrink local result:
+                  //
+                  int rescale = loop_scale - local_scaling;
+                  Real ex = exp(Real(rescale));
+                  loop_result *= ex;
+                  loop_abs_result *= ex;
+                  result += loop_result;
+                  abs_result += loop_abs_result;
+               }
+               else
+               {
+                  result += loop_result;
+                  abs_result += loop_abs_result;
+               }
            }
-
         }
 
         return std::make_pair(result, abs_result);
