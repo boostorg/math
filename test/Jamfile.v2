@@ -983,6 +983,7 @@ test-suite misc :
    [ run  compile_test/cstdfloat_concept_check_2.cpp  ]
    [ run  compile_test/cstdfloat_concept_check_3.cpp  ]
    [ run  compile_test/cstdfloat_concept_check_4.cpp  ]
+   [ run  test_cstdfloat.cpp ../../test/build//boost_unit_test_framework  : : : [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] ]
    [ run  compile_test/sf_airy_incl_test.cpp compile_test_main  ]
    [ run  compile_test/sf_hankel_incl_test.cpp compile_test_main  ]
    [ run  compile_test/sf_jacobi_incl_test.cpp compile_test_main  ]
