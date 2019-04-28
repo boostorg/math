@@ -1,0 +1,167 @@
+# Copyright 2019 Sam Day
+# Distributed under the Boost Software License, Version 1.0.
+# See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt
+#
+# NOTE: CMake support for Boost.math is currently experimental at best
+#       and the interface is likely to change in the future
+
+cmake_minimum_required(VERSION 3.5)
+project(BoostMath LANGUAGES CXX)
+
+add_library(boost_math
+        src/tr1/acosh.cpp
+        src/tr1/acoshf.cpp
+        src/tr1/acoshl.cpp
+        src/tr1/asinh.cpp
+        src/tr1/asinhf.cpp
+        src/tr1/asinhl.cpp
+        src/tr1/assoc_laguerre.cpp
+        src/tr1/assoc_laguerref.cpp
+        src/tr1/assoc_laguerrel.cpp
+        src/tr1/assoc_legendre.cpp
+        src/tr1/assoc_legendref.cpp
+        src/tr1/assoc_legendrel.cpp
+        src/tr1/atanh.cpp
+        src/tr1/atanhf.cpp
+        src/tr1/atanhl.cpp
+        src/tr1/beta.cpp
+        src/tr1/betaf.cpp
+        src/tr1/betal.cpp
+        src/tr1/cbrt.cpp
+        src/tr1/cbrtf.cpp
+        src/tr1/cbrtl.cpp
+        src/tr1/comp_ellint_1.cpp
+        src/tr1/comp_ellint_1f.cpp
+        src/tr1/comp_ellint_1l.cpp
+        src/tr1/comp_ellint_2.cpp
+        src/tr1/comp_ellint_2f.cpp
+        src/tr1/comp_ellint_2l.cpp
+        src/tr1/comp_ellint_3.cpp
+        src/tr1/comp_ellint_3f.cpp
+        src/tr1/comp_ellint_3l.cpp
+        src/tr1/copysign.cpp
+        src/tr1/copysignf.cpp
+        src/tr1/copysignl.cpp
+        src/tr1/cyl_bessel_i.cpp
+        src/tr1/cyl_bessel_if.cpp
+        src/tr1/cyl_bessel_il.cpp
+        src/tr1/cyl_bessel_j.cpp
+        src/tr1/cyl_bessel_jf.cpp
+        src/tr1/cyl_bessel_jl.cpp
+        src/tr1/cyl_bessel_k.cpp
+        src/tr1/cyl_bessel_kf.cpp
+        src/tr1/cyl_bessel_kl.cpp
+        src/tr1/cyl_neumann.cpp
+        src/tr1/cyl_neumannf.cpp
+        src/tr1/cyl_neumannl.cpp
+        src/tr1/ellint_1.cpp
+        src/tr1/ellint_1f.cpp
+        src/tr1/ellint_1l.cpp
+        src/tr1/ellint_2.cpp
+        src/tr1/ellint_2f.cpp
+        src/tr1/ellint_2l.cpp
+        src/tr1/ellint_3.cpp
+        src/tr1/ellint_3f.cpp
+        src/tr1/ellint_3l.cpp
+        src/tr1/erfc.cpp
+        src/tr1/erfcf.cpp
+        src/tr1/erfcl.cpp
+        src/tr1/erf.cpp
+        src/tr1/erff.cpp
+        src/tr1/erfl.cpp
+        src/tr1/expint.cpp
+        src/tr1/expintf.cpp
+        src/tr1/expintl.cpp
+        src/tr1/expm1.cpp
+        src/tr1/expm1f.cpp
+        src/tr1/expm1l.cpp
+        src/tr1/fmax.cpp
+        src/tr1/fmaxf.cpp
+        src/tr1/fmaxl.cpp
+        src/tr1/fmin.cpp
+        src/tr1/fminf.cpp
+        src/tr1/fminl.cpp
+        src/tr1/fpclassify.cpp
+        src/tr1/fpclassifyf.cpp
+        src/tr1/fpclassifyl.cpp
+        src/tr1/hermite.cpp
+        src/tr1/hermitef.cpp
+        src/tr1/hermitel.cpp
+        src/tr1/hypot.cpp
+        src/tr1/hypotf.cpp
+        src/tr1/hypotl.cpp
+        src/tr1/laguerre.cpp
+        src/tr1/laguerref.cpp
+        src/tr1/laguerrel.cpp
+        src/tr1/legendre.cpp
+        src/tr1/legendref.cpp
+        src/tr1/legendrel.cpp
+        src/tr1/lgamma.cpp
+        src/tr1/lgammaf.cpp
+        src/tr1/lgammal.cpp
+        src/tr1/llround.cpp
+        src/tr1/llroundf.cpp
+        src/tr1/llroundl.cpp
+        src/tr1/log1p.cpp
+        src/tr1/log1pf.cpp
+        src/tr1/log1pl.cpp
+        src/tr1/lround.cpp
+        src/tr1/lroundf.cpp
+        src/tr1/lroundl.cpp
+        src/tr1/nextafter.cpp
+        src/tr1/nextafterf.cpp
+        src/tr1/nextafterl.cpp
+        src/tr1/nexttoward.cpp
+        src/tr1/nexttowardf.cpp
+        src/tr1/nexttowardl.cpp
+        src/tr1/riemann_zeta.cpp
+        src/tr1/riemann_zetaf.cpp
+        src/tr1/riemann_zetal.cpp
+        src/tr1/round.cpp
+        src/tr1/roundf.cpp
+        src/tr1/roundl.cpp
+        src/tr1/sph_bessel.cpp
+        src/tr1/sph_besself.cpp
+        src/tr1/sph_bessell.cpp
+        src/tr1/sph_legendre.cpp
+        src/tr1/sph_legendref.cpp
+        src/tr1/sph_legendrel.cpp
+        src/tr1/sph_neumann.cpp
+        src/tr1/sph_neumannf.cpp
+        src/tr1/sph_neumannl.cpp
+        src/tr1/tgamma.cpp
+        src/tr1/tgammaf.cpp
+        src/tr1/tgammal.cpp
+        src/tr1/trunc.cpp
+        src/tr1/truncf.cpp
+        src/tr1/truncl.cpp
+        )
+
+add_library(Boost::math ALIAS boost_math)
+include_directories(src/tr1)
+
+target_include_directories(boost_math PUBLIC include)
+
+target_link_libraries(boost_math
+        PUBLIC
+        Boost::array
+        Boost::assert
+        Boost::atomic
+        Boost::concept_check
+        Boost::config
+        Boost::core
+        Boost::detail
+        Boost::fusion
+        Boost::integer
+        Boost::lambda
+        Boost::lexical_cast
+        Boost::mpl
+        Boost::multiprecision
+        Boost::predef
+        Boost::range
+        Boost::static_assert
+        Boost::throw_exception
+        Boost::tuple
+        Boost::type_traits
+        Boost::utility
+        )
