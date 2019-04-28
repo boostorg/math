@@ -790,8 +790,11 @@ struct Pn_size
 {
    // This is likely to be enough for ~35-50 digit accuracy
    // but it's hard to quantify exactly:
-   BOOST_STATIC_CONSTANT(unsigned, value = 50);
-   BOOST_STATIC_ASSERT(::boost::math::max_factorial<T>::value >= 100);
+   BOOST_STATIC_CONSTANT(unsigned, value = 
+      ::boost::math::max_factorial<T>::value >= 100 ? 50
+   : ::boost::math::max_factorial<T>::value >= ::boost::math::max_factorial<double>::value ? 30
+   : ::boost::math::max_factorial<T>::value >= ::boost::math::max_factorial<float>::value ? 15 : 1);
+   BOOST_STATIC_ASSERT(::boost::math::max_factorial<T>::value >= ::boost::math::max_factorial<float>::value);
 };
 template <>
 struct Pn_size<float>
