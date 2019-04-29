@@ -59,6 +59,6 @@ Here is an example of interpolating a smooth "bump function":
 
 The call to the constructor requires [bigo](1) operations, simply moving data into the class.
 Each call the the interpolant is [bigo](/n/), where /n/ is the number of points to interpolate.
-
+The compiler flag `-ffast-math` allows vectorization of the call to the interpolant (at least on clang) and is highly recommended.
 
 [endsect] [/section:whittaker_shannon]
