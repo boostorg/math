@@ -809,7 +809,7 @@ inline T unchecked_factorial(unsigned i)
 }
 
 #ifdef BOOST_MATH_USE_FLOAT128
-#define BOOST_MATH_DETAIL_FLOAT128_MAX_FACTORIAL : std::numeric_limits<T>::digits == std::numeric_limits<BOOST_MATH_FLOAT128_TYPE>::digits ? max_factorial<BOOST_MATH_FLOAT128_TYPE>::value
+#define BOOST_MATH_DETAIL_FLOAT128_MAX_FACTORIAL : std::numeric_limits<T>::digits == 113 ? max_factorial<BOOST_MATH_FLOAT128_TYPE>::value
 #else
 #define BOOST_MATH_DETAIL_FLOAT128_MAX_FACTORIAL
 #endif
