@@ -40,38 +40,47 @@ To use these floating-point types and constants, we need some includes:
 #include <iostream>
 #include <limits>
 
-//` So now we can demonstrate with some trivial calculations:
+/*` So now we can demonstrate with some trivial calculations:
+*/
+
+//] //[big_seventh_example_1]
 
 int main()
 {
-/*`Using `typedef cpp_dec_float_50` hides the complexity of multiprecision to allow us
-  to define variables with 50 decimal digit precision just like built-in `double`.
+
+//[big_seventh_example_2
+/*`Using `typedef cpp_dec_float_50` hides the complexity of multiprecision,
+allows us  to define variables with 50 decimal digit precision just like built-in `double`.
 */
-  using boost::multiprecision::cpp_dec_float_50;
+	using boost::multiprecision::cpp_dec_float_50;
 
-  cpp_dec_float_50 seventh = cpp_dec_float_50(1) / 7;
+	cpp_dec_float_50 seventh = cpp_dec_float_50(1) / 7;  // 1 / 7
 
-  /*`By default, output would only show the standard 6 decimal digits,
-     so set precision to show all 50 significant digits.
-  */
-  std::cout.precision(std::numeric_limits<cpp_dec_float_50>::digits10);
-  std::cout << seventh << std::endl;
+/*`By default, output would only show the standard 6 decimal digits,
+ so set precision to show all 50 significant digits, including any trailing zeros.
+*/
+	std::cout.precision(std::numeric_limits<cpp_dec_float_50>::digits10);
+	std::cout << std::showpoint << std::endl; // Append any trailing zeros.
+	std::cout << seventh << std::endl;
 /*`which outputs:
 
   0.14285714285714285714285714285714285714285714285714
 
-We can also use constants, guaranteed to be initialized with the very last bit of precision.
+We can also use Boost.Math __constants like [pi],
+guaranteed to be initialized with the very last bit of precision for the floating-point type.
 */
 
-  cpp_dec_float_50 circumference = boost::math::constants::pi<cpp_dec_float_50>() * 2 * seventh;
-
-  std::cout << circumference << std::endl;
+   std::cout << "pi = " << boost::math::constants::pi<cpp_dec_float_50>() << std::endl;
+   cpp_dec_float_50 circumference = boost::math::constants::pi<cpp_dec_float_50>() * 2 * seventh;
+   std::cout << "c =  "<< circumference << std::endl;
 
 /*`which outputs
 
-    0.89759790102565521098932668093700082405633411410717
+  pi = 3.1415926535897932384626433832795028841971693993751
+
+  c =  0.89759790102565521098932668093700082405633411410717
 */
-//]  [/big_seventh_example_1]
+//]  [/big_seventh_example_2]
 
     return 0;
 } // int main()
@@ -80,10 +89,11 @@ We can also use constants, guaranteed to be initialized with the very last bit o
 /*
 //[big_seventh_example_output
 
-  0.14285714285714285714285714285714285714285714285714
-  0.89759790102565521098932668093700082405633411410717
+0.14285714285714285714285714285714285714285714285714
+pi = 3.1415926535897932384626433832795028841971693993751
+c =  0.89759790102565521098932668093700082405633411410717
 
-//]
+//] //[big_seventh_example_output]
 
 */
 
