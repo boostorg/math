@@ -133,6 +133,22 @@ __cpp_dec_float is a useful user-defined type to provide a fixed number of decim
 See [@http://svn.boost.org/svn/boost/trunk/libs/multiprecision/doc/html/boost_multiprecision/intro.html mixed multiprecision arithmetic]
 and [@http://svn.boost.org/svn/boost/trunk/libs/multiprecision/doc/html/boost_multiprecision/tut/conversions.html conversion].
 
+# ['How do I choose between Boost.Multiprecision cpp_bin_50 and cpp_dec_50?]
+
+  Unless you have a specific reason to choose `cpp_dec_`, then the default choice should be `cpp_bin_`, for example using the convenience `typedefs` like
+`boost::multiprecision::cpp_bin_50` or `boost::multiprecision::cpp_bin_100`.
+
+  In general, both work well and give the same results and at roughly the same speed with `cpp_dec_50` sometimes faster.
+
+  cpp_dec_ was developed first paving the way for cpp_bin_. cpp_dec_ has several guard digits and is not rounded at all, using 'brute force' to get the promised number of decimal digits correct,
+but making it difficult to reason about precision and computational uncertainty, for example see [*https://svn.boost.org/trac10/ticket/12133].
+It also has a fast but imprecise division operator giving surprising results sometimes, see [*https://svn.boost.org/trac10/ticket/11178].
+
+  cpp_bin_ is correctly/exactly rounded making it possible to reason about both the precision and rounding of the results.
+
+
+
+
 
 [endsect] [/section:faq Frequently Asked Questions]
 

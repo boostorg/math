@@ -61,6 +61,8 @@ test-suite examples :
    [ run error_policies_example.cpp  ]
    [ run error_policy_example.cpp : : : <exception-handling>off:<build>no  ]
    [ run f_test.cpp  ]
+   [ run fft_sines_table.cpp  : : : [ requires cxx11_numeric_limits ] ]
+   
    [ run find_location_example.cpp : : : <exception-handling>off:<build>no  ]
    [ run find_mean_and_sd_normal.cpp : : : <exception-handling>off:<build>no  ]
    [ run find_root_example.cpp : : : <exception-handling>off:<build>no  ]
@@ -75,7 +77,6 @@ test-suite examples :
    [ run lambert_w_basic_example.cpp  : : : [ requires cxx11_numeric_limits ] ]
    [ run lambert_w_simple_examples.cpp  : : : [ requires cxx11_numeric_limits ] ]
    [ run lambert_w_precision_example.cpp  : : : [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] [ requires cxx11_numeric_limits cxx11_explicit_conversion_operators ] ]
-
 
    [ run inverse_gamma_example.cpp  ]
    [ run inverse_gamma_distribution_example.cpp : : : <exception-handling>off:<build>no  ]
