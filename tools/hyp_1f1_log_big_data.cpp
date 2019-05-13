@@ -30,7 +30,7 @@ struct hypergeometric_1f1_gen
    {
       mp_t result;
       try {
-         result = (mp_t)log(abs(boost::math::hypergeometric_pFq_precision({ mpfr_float(a1) }, { mpfr_float(mpfr_float(a2)) }, mpfr_float(z), 50, 25.0)));
+         result = (mp_t)log(abs(boost::math::hypergeometric_pFq_precision({ mpfr_float(a1) }, { mpfr_float(a2) }, mpfr_float(z), 70, 25.0)));
          std::cout << a1 << " " << a2 << " " << z << " " << result << std::endl;
       }
       catch (...)
@@ -40,6 +40,11 @@ struct hypergeometric_1f1_gen
       if (fabs(result) > std::numeric_limits<double>::max())
       {
          std::cout << "Rejecting over large value\n";
+         throw std::domain_error("");
+      }
+      if (fabs(result) < 1/1024.0)
+      {
+         std::cout << "Rejecting over small value\n";
          throw std::domain_error("");
       }
       return result;
@@ -102,7 +107,7 @@ int main(int, char* [])
          for (unsigned k = 0; k < v.size(); ++k)
          {
             std::cout << i << " " << j << " " << k << std::endl;
-            std::cout << v[i] << " " << (v[j] * 3) / 2 << " " << (v[j] * 5) / 4 << std::endl;
+            std::cout << v[i] << " " << (v[j] * 3) / 2 << " " << (v[k] * 5) / 4 << std::endl;
             arg1 = make_single_param(v[i]);
             arg2 = make_single_param(mp_t((v[j] * 3) / 2));
             arg3 = make_single_param(mp_t((v[k] * 5) / 4));
