@@ -16,6 +16,104 @@
 
   namespace boost { namespace math { namespace detail {
 
+     template <class Seq, class Real>
+     unsigned set_crossover_locations(const Seq& aj, const Seq& bj, const Real& z, unsigned int* crossover_locations)
+     {
+        unsigned N_terms = 0;
+
+        if(aj.size() == 1 && bj.size() == 1)
+        {
+           //
+           // For 1F1 we can work out where the peaks in the series occur,
+           //  which is to say when:
+           //
+           // (a + k)z / (k(b + k)) == +-1
+           //
+           // Then we are at either a maxima or a minima in the series, and the
+           // last such point must be a maxima since the series is globally convergent.
+           // Potentially then we are solving 2 quadratic equations and have up to 4
+           // solutions, any solutions which are complex or negative are discarded,
+           // leaving us with 4 options:
+           //
+           // 0 solutions: The series is directly convergent.
+           // 1 solution : The series diverges to a maxima before coverging.
+           // 2 solutions: The series is initially convergent, followed by divergence to a maxima before final convergence.
+           // 3 solutions: The series diverges to a maxima, converges to a minima before diverging again to a second maxima before final convergence.
+           // 4 solutions: The series converges to a minima before diverging to a maxima, converging to a minima, diverging to a second maxima and then converging.
+           //
+           // The first 2 situations are adequately handled by direct series evalution, while the 2,3 and 4 solutions are not.
+           //
+           Real a = *aj.begin();
+           Real b = *bj.begin();
+           Real sq = 4 * a * z + b * b - 2 * b * z + z * z;
+           if (sq >= 0)
+           {
+              Real t = (-sqrt(sq) - b + z) / 2;
+              if (t >= 0)
+              {
+                 crossover_locations[N_terms] = itrunc(t);
+                 ++N_terms;
+              }
+              t = (sqrt(sq) - b + z) / 2;
+              if (t >= 0)
+              {
+                 crossover_locations[N_terms] = itrunc(t);
+                 ++N_terms;
+              }
+           }
+           sq = -4 * a * z + b * b + 2 * b * z + z * z;
+           if (sq >= 0)
+           {
+              Real t = (-sqrt(sq) - b - z) / 2;
+              if (t >= 0)
+              {
+                 crossover_locations[N_terms] = itrunc(t);
+                 ++N_terms;
+              }
+              t = (sqrt(sq) - b - z) / 2;
+              if (t >= 0)
+              {
+                 crossover_locations[N_terms] = itrunc(t);
+                 ++N_terms;
+              }
+           }
+           std::sort(crossover_locations, crossover_locations + N_terms, std::less<Real>());
+           //
+           // Now we need to discard every other terms, as these are the minima:
+           //
+           switch (N_terms)
+           {
+           case 0:
+           case 1:
+              break;
+           case 2:
+              crossover_locations[0] = crossover_locations[1];
+              --N_terms;
+              break;
+           case 3:
+              crossover_locations[1] = crossover_locations[2];
+              --N_terms;
+              break;
+           case 4:
+              crossover_locations[0] = crossover_locations[1];
+              crossover_locations[1] = crossover_locations[3];
+              N_terms -= 2;
+              break;
+           }
+        }
+        else
+        {
+           unsigned n = 0;
+           for (auto bi = bj.begin(); bi != bj.end(); ++bi, ++n)
+           {
+              crossover_locations[n] = *bi >= 0 ? 0 : itrunc(-*bi) + 1;
+           }
+           std::sort(crossover_locations, crossover_locations + bj.size(), std::less<Real>());
+           N_terms = (unsigned)bj.size();
+        }
+        return N_terms;
+     }
+
      template <class Seq, class Real, class Policy, class Terminal>
      std::pair<Real, Real> hypergeometric_pFq_checked_series_impl(const Seq& aj, const Seq& bj, const Real& z, const Policy& pol, const Terminal& termination, int& log_scale)
      {
@@ -101,16 +199,12 @@
               Real(bj.size()), pol);
 
         unsigned crossover_locations[BOOST_MATH_PFQ_MAX_B_TERMS];
-        unsigned n = 0;
-        for (auto bi = bj.begin(); bi != bj.end(); ++bi, ++n)
-        {
-           crossover_locations[n] = *bi >= 0 ? 0 : itrunc(-*bi) + 1;
-        }
-        std::sort(crossover_locations, crossover_locations + bj.size(), std::greater<Real>());
+
+        unsigned N_crossovers = set_crossover_locations(aj, bj, z, crossover_locations);
 
         bool terminate = false;   // Set to true if one of the a's passes through the origin and terminates the series.
 
-        for (n = 0; n < bj.size(); ++n)
+        for (unsigned n = 0; n < N_crossovers; ++n)
         {
            if (k < crossover_locations[n])
            {
@@ -173,6 +267,7 @@
                term0 = term;
                int saved_loop_scale = loop_scale;
                bool terms_are_growing = true;
+               bool trivial_small_series_check = false;
                do
                {
                   loop_result += term;
@@ -185,7 +280,6 @@
                      loop_abs_result /= scaling_factor;
                      term /= scaling_factor;
                      loop_scale += log_scaling_factor;
-                     term0 /= scaling_factor;
                   }
                   if (fabs(loop_result) < lower_limit)
                   {
@@ -193,7 +287,6 @@
                      loop_abs_result *= scaling_factor;
                      term *= scaling_factor;
                      loop_scale -= log_scaling_factor;
-                     term0 *= scaling_factor;
                   }
                   term_m1 = term;
                   for (auto ai = aj.begin(); ai != aj.end(); ++ai)
@@ -220,7 +313,23 @@
                   ++k;
                   diff = fabs(term / loop_result);
                   terms_are_growing = fabs(term) > fabs(term_m1);
-               } while ((diff > boost::math::policies::get_epsilon<Real, Policy>()) || terms_are_growing);
+                  if (!trivial_small_series_check && !terms_are_growing)
+                  {
+                     //
+                     // Now that we have started to converge, check to see if the value of
+                     // this local sum is trivially small compared to the result.  If so
+                     // abort this part of the series.
+                     //
+                     trivial_small_series_check = true;
+                     Real d; 
+                     if(loop_scale > local_scaling)
+                        d = fabs(term / (result * exp(local_scaling - loop_scale)));
+                     else
+                        d = fabs(term * exp(loop_scale - local_scaling) / result);
+                     if (d < boost::math::policies::get_epsilon<Real, Policy>())
+                        break;
+                  }
+               } while (!termination(k - s) && ((diff > boost::math::policies::get_epsilon<Real, Policy>()) || terms_are_growing));
                //
                // We now need to combine the results of the first series summation with whatever
                // local results we have now...
@@ -264,6 +373,7 @@
                loop_result = 0;
                loop_abs_result = 0;
                loop_scale = saved_loop_scale;
+               trivial_small_series_check = false;
                do
                {
                   --k;
@@ -287,6 +397,24 @@
                   term *= (k + 1) / z;
                   loop_result += term;
                   loop_abs_result += fabs(term);
+
+                  if (!trivial_small_series_check && (fabs(term) < fabs(term_m1)))
+                  {
+                     //
+                     // Now that we have started to converge, check to see if the value of
+                     // this local sum is trivially small compared to the result.  If so
+                     // abort this part of the series.
+                     //
+                     trivial_small_series_check = true;
+                     Real d;
+                     if (loop_scale > local_scaling)
+                        d = fabs(term / (result * exp(local_scaling - loop_scale)));
+                     else
+                           d = fabs(term * exp(loop_scale - local_scaling) / result);
+                     if (d < boost::math::policies::get_epsilon<Real, Policy>())
+                        break;
+                  }
+
                   //std::cout << "k = " << k << " result = " << result << " abs_result = " << abs_result << std::endl;
                   if (fabs(loop_result) >= upper_limit)
                   {
@@ -303,7 +431,7 @@
                      loop_scale -= log_scaling_factor;
                   }
                   diff = fabs(term / loop_result);
-               } while ((diff > boost::math::policies::get_epsilon<Real, Policy>()) || (fabs(term) > fabs(term_m1)));
+               } while (!termination(s - k) && ((diff > boost::math::policies::get_epsilon<Real, Policy>()) || (fabs(term) > fabs(term_m1))));
                //
                // We now need to combine the results of the first series summation with whatever
                // local results we have now...
