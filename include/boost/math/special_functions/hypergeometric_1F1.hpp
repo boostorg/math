@@ -156,9 +156,17 @@ namespace boost { namespace math { namespace detail {
    }
 
    template <class T>
-   bool is_convergent_negative_z_series(const T& a, const T& b, const T& z)
+   bool is_convergent_negative_z_series(const T& a, const T& b, const T& z, const T& b_minus_a)
    {
       BOOST_MATH_STD_USING
+      //
+      // Filter out some cases we don't want first:
+      //
+      if((b_minus_a > 0) && (b > 0))
+      {
+         if (a < 0)
+            return false;
+      }
       //
       // Generic check: we have small initial divergence and are convergent after 10 terms:
       //
@@ -409,9 +417,9 @@ namespace boost { namespace math { namespace detail {
       {
          if (a == 1)
             return detail::hypergeometric_1F1_pade(b, z, pol);
-         if (is_convergent_negative_z_series(a, b, z))
+         if (is_convergent_negative_z_series(a, b, z, b_minus_a))
          {
-            if ((boost::math::sign(b - a) == boost::math::sign(b)) && ((b > 0) || (b < -200)))
+            if ((boost::math::sign(b_minus_a) == boost::math::sign(b)) && ((b > 0) || (b < -200)))
             {
                // Series is close enough to convergent that we should be OK,
                // In this domain b - a ~ b and since 1F1[a, a, z] = e^z 1F1[b-a, b, -z]
@@ -541,13 +549,14 @@ namespace boost { namespace math { namespace detail {
          // 13.3.6 appears to be the most efficient and often the most accurate method.
          return boost::math::detail::hypergeometric_1F1_AS_13_3_6(a, b, z, b_minus_a, pol, log_scaling);
       }
+#if 0
       if ((a > 0) && (b > 0) && (a * z / b > 2))
       {
          //
          // Series is initially divergent and slow to converge, see if applying
          // Kummer's relation can improve things:
          //
-         if (is_convergent_negative_z_series(b_minus_a, b, T(-z)))
+         if (is_convergent_negative_z_series(b_minus_a, b, T(-z), b_minus_a))
          {
             int scaling = itrunc(z);
             T r = exp(z - scaling) * detail::hypergeometric_1F1_checked_series_impl(b_minus_a, b, T(-z), pol, log_scaling);
@@ -556,6 +565,7 @@ namespace boost { namespace math { namespace detail {
          }
 
       }
+#endif
       if ((a > 0) && (b > 0) && (a * z > 50))
          return detail::hypergeometric_1F1_large_abz(a, b, z, pol, log_scaling);
 
