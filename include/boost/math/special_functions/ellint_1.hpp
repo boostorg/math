@@ -110,12 +110,13 @@ T ellint_f_imp(T phi, T k, const Policy& pol)
        BOOST_MATH_INSTRUMENT_VARIABLE(cosp);
        if(sinp > tools::min_value<T>())
        {
+          BOOST_ASSERT(rphi != 0); // precondition, can't be true if sin(rphi) != 0.
           //
           // Use http://dlmf.nist.gov/19.25#E5, note that
           // c-1 simplifies to cot^2(rphi) which avoid cancellation:
           //
           T c = 1 / sinp;
-          result = rphi == 0 ? static_cast<T>(0) : static_cast<T>(s * ellint_rf_imp(T(cosp / sinp), T(c - k * k), c, pol));
+          result = static_cast<T>(s * ellint_rf_imp(T(cosp / sinp), T(c - k * k), c, pol));
        }
        else
           result = s * sin(rphi);
