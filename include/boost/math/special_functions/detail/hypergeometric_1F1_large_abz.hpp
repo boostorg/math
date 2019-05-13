@@ -15,6 +15,12 @@
 
   namespace boost { namespace math { namespace detail {
 
+     template <class T>
+     inline bool is_negative_integer(const T& x)
+     {
+        return (x <= 0) && (floor(x) == x);
+     }
+
 
      template <class T, class Policy>
      struct hypergeometric_1F1_igamma_series
@@ -48,10 +54,10 @@
         {
            typedef typename lanczos::lanczos<T, Policy>::type lanczos_type;
 
-           gamma_cache[cache_size - 1] = boost::math::gamma_p(alpha_poch + (int)cache_size - 1, x, pol);
+           gamma_cache[cache_size - 1] = boost::math::gamma_p(alpha_poch + ((int)cache_size - 1), x, pol);
            for (int i = cache_size - 1; i > 0; --i)
            {
-              gamma_cache[i - 1] = gamma_cache[i] >= 1 ? T(1) : T(gamma_cache[i] + regularised_gamma_prefix(T(alpha_poch + i - 1), x, pol, lanczos_type()) / (alpha_poch + i - 1));
+              gamma_cache[i - 1] = gamma_cache[i] >= 1 ? T(1) : T(gamma_cache[i] + regularised_gamma_prefix(T(alpha_poch + (i - 1)), x, pol, lanczos_type()) / (alpha_poch + (i - 1)));
            }
         }
         T delta_poch, alpha_poch, x, term;
@@ -78,7 +84,7 @@
         boost::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
         T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
         boost::math::policies::check_series_iterations<T>("boost::math::tgamma<%1%>(%1%,%1%)", max_iter, pol);
-        T log_prefix = x + boost::math::lgamma(b, pol) - boost::math::lgamma(a);
+        T log_prefix = x + boost::math::lgamma(b, pol) - boost::math::lgamma(a, pol);
         int scale = itrunc(log_prefix);
         log_scaling += scale;
         return result * exp(log_prefix - scale);
@@ -274,6 +280,7 @@
            }
            else
            {
+              BOOST_ASSERT(!is_negative_integer(b - a));
               boost::math::detail::hypergeometric_1F1_recurrence_b_coefficients<T> b_coef(a, b_local, x);
               boost::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
               second = h / boost::math::tools::function_ratio_from_backwards_recurrence(b_coef, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
@@ -415,20 +422,26 @@
         // Cost of shifted series, is the number of recurrences required to move to a zone where
         // the series is convergent right from the start.
         // Note that recurrence relations fail for very small b, and too many recurrences on a
-        // will completely destroy all our digits:
+        // will completely destroy all our digits.
+        // Also note that the method fails when b-a is a negative integer unless b is already
+        // larger than z and thus does not need shifting.
         //
         T cost = a + ((b < z) ? T(z - b) : T(0));
-        if((b > 1) && (cost < current_cost))
+        if((b > 1) && (cost < current_cost) && ((b > z) || !is_negative_integer(b-a)))
         {
            current_method = method_shifted_series;
            current_cost = cost;
         }
         //
         // Cost for gamma function method is the number of recurrences required to move it
-        // into a convergent zone, note that recurrence relations fail for very small b:
+        // into a convergent zone, note that recurrence relations fail for very small b.
+        // Also add on a fudge factor to account for the fact that this method is both
+        // more expensive to compute (requires gamma functions), and less accurate than the
+        // methods above:
         //
-        T b_shift = (b * 2 < z ? T(0) : T(b - z / 2));
-        cost = fabs(b_shift) + fabs(b - b_shift - a);
+        T b_shift = fabs(b * 2 < z ? T(0) : T(b - z / 2));
+        T a_shift = fabs(a > b - b_shift ? T(-(b - b_shift - a - 1)) : T(-(b - b_shift - a)));
+        cost = 1000 + b_shift + a_shift;
         if((b > 1) && (cost <= current_cost))
         {
            current_method = method_gamma;
@@ -440,8 +453,11 @@
         // z: either overflow/numeric instability or else the series goes divergent.  We seem to be
         // OK for z smaller than log_max_value<Quad> though, maybe we can stretch a little further
         // but that's not clear...
+        // Also need to add on a fudge factor to the cost to account for the fact that we need
+        // to calculate the Bessel functions, this is not quite as high as the gamma function 
+        // method above as this is generally more accurate and so prefered if the methods are close:
         //
-        cost = fabs(b - a);
+        cost = 50 + fabs(b - a);
         if((b > 1) && (cost <= current_cost) && (z < tools::log_max_value<T>()) && (z < 11356) && (b - a != 0.5f))
         {
            current_method = method_bessel;
