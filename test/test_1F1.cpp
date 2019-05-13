@@ -40,7 +40,7 @@ void expected_results()
       ".*",                          // platform
       "cpp_bin_float_quad|cpp_bin_float_double_extended",          // test type(s)
       "Large.*",                     // test data group
-      ".*", 500000, 20000);          // test function
+      ".*", 500000, 22000);          // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
@@ -62,7 +62,7 @@ void expected_results()
       ".*",                          // platform
       "dec_40",                      // test type(s)
       "Large.*",                     // test data group
-      ".*", 20000000L, 600000L);     // test function
+      ".*", 20000000L, 610000L);     // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
@@ -131,21 +131,21 @@ void expected_results()
       ".*",                          // platform
       largest_type,                  // test type(s)
       "Large.*",                     // test data group
-      ".*", 400000, 8000);           // test function
+      ".*", 400000, 9000);           // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
       ".*",                          // platform
       "dec_40",                      // test type(s)
       "Bug cases.*",                 // test data group
-      ".*", 2200000, 400000);        // test function
+      ".*", 2200000, 430000);        // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
       ".*",                          // platform
       largest_type,                  // test type(s)
       "Bug cases.*",                 // test data group
-      ".*", 1500000, 400000);        // test function
+      ".*", 1500000, 430000);        // test function
 
    //
    // Finish off by printing out the compiler/stdlib/platform names,
