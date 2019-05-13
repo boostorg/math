@@ -73,6 +73,9 @@ T ellint_pi_imp(T v, T phi, T k, T vc, const Policy& pol)
 
    if(v == 1)
    {
+      if (k == 0)
+         return tan(phi);
+
       // http://functions.wolfram.com/08.06.03.0008.01
       T m = k * k;
       result = sqrt(1 - m * sphi * sphi) * tan(phi) - ellint_e_imp(phi, k, pol);
@@ -142,10 +145,6 @@ T ellint_pi_imp(T v, T phi, T k, T vc, const Policy& pol)
       {
          T vcr = sqrt(vc);
          return atan(vcr * tan(phi)) / vcr;
-      }
-      else if(v == 1)
-      {
-         return tan(phi);
       }
       else
       {
