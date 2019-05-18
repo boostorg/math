@@ -51,12 +51,6 @@ T ellint_f_imp(T phi, T k, const Policy& pol)
     BOOST_MATH_INSTRUMENT_VARIABLE(k);
     BOOST_MATH_INSTRUMENT_VARIABLE(function);
 
-    if (abs(k) > 1)
-    {
-       return policies::raise_domain_error<T>(function,
-            "Got k = %1%, function requires |k| <= 1", k, pol);
-    }
-
     bool invert = false;
     if(phi < 0)
     {
@@ -104,6 +98,11 @@ T ellint_f_imp(T phi, T k, const Policy& pol)
        }
        T sinp = sin(rphi);
        sinp *= sinp;
+       if (sinp * k * k >= 1)
+       {
+          return policies::raise_domain_error<T>(function,
+             "Got k^2 * sin^2(phi) = %1%, but the function requires this < 1", sinp * k * k, pol);
+       }
        T cosp = cos(rphi);
        cosp *= cosp;
        BOOST_MATH_INSTRUMENT_VARIABLE(sinp);

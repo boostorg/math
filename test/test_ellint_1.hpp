@@ -84,7 +84,7 @@ void test_spots(T, const char* type_name)
 {
     // Function values calculated on http://functions.wolfram.com/
     // Note that Mathematica's EllipticF accepts k^2 as the second parameter.
-    static const boost::array<boost::array<typename table_type<T>::type, 3>, 19> data1 = {{
+    static const boost::array<boost::array<typename table_type<T>::type, 3>, 22> data1 = {{
         {{ SC_(0.0), SC_(0.0), SC_(0.0) }},
         {{ SC_(-10.0), SC_(0.0), SC_(-10.0) }},
         {{ SC_(-1.0), SC_(-1.0), SC_(-1.2261911708835170708130609674719067527242483502207) }},
@@ -104,6 +104,10 @@ void test_spots(T, const char* type_name)
         {{ SC_(-4.0), SC_(0.5), SC_(-4.2543274975235836861894752787874633017836785640477) }},
         {{ SC_(-6.0), SC_(0.5), SC_(-6.4588766202317746302999080620490579800463614807916) }},
         {{ SC_(-10.0), SC_(0.5), SC_(-10.697409951222544858346795279378531495869386960090) }},
+        // Some values where k is > 1:
+        {{ static_cast<typename table_type<T>::type>(2)/13, static_cast<typename table_type<T>::type>(15)/13, SC_(0.154661869446904722070471580919758948531148566762183486996920)}},
+        {{ static_cast<typename table_type<T>::type>(2)/13, static_cast<typename table_type<T>::type>(19)/13, SC_(0.155166467455029577314314021156113481657713115640002027219)}},
+        {{ static_cast<typename table_type<T>::type>(2)/13, static_cast<typename table_type<T>::type>(32)/13, SC_(0.15776272074094290829870142225970052217542486917945444918)}},
     }};
 
     do_test_ellint_f<T>(data1, type_name, "Elliptic Integral F: Mathworld Data");
@@ -131,5 +135,15 @@ void test_spots(T, const char* type_name)
 #include "ellint_k_data.ipp"
 
     do_test_ellint_k<T>(ellint_k_data, type_name, "Elliptic Integral K: Random Data");
+
+    //
+    // Test error handling:
+    //
+    BOOST_CHECK_GE(boost::math::ellint_1(T(1)), boost::math::tools::max_value<T>());
+    BOOST_CHECK_GE(boost::math::ellint_1(T(-1)), boost::math::tools::max_value<T>());
+    BOOST_CHECK_THROW(boost::math::ellint_1(T(1.0001)), std::domain_error);
+    BOOST_CHECK_THROW(boost::math::ellint_1(T(-1.0001)), std::domain_error);
+    BOOST_CHECK_THROW(boost::math::ellint_1(T(2.2), T(0.5)), std::domain_error);
+    BOOST_CHECK_THROW(boost::math::ellint_1(T(-2.2), T(0.5)), std::domain_error);
 }
 
