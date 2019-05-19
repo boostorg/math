@@ -381,7 +381,7 @@ Returns the incomplete elliptic integral:
 
 [equation ellint_d]
 
-Requires ['-1 <= k <= 1], otherwise 
+Requires ['k[super 2]sin[super 2](phi) < 1], otherwise 
 returns the result of __domain_error (outside this range the result 
 would be complex).
 
