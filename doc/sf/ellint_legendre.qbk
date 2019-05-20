@@ -51,7 +51,7 @@ Returns the incomplete elliptic integral of the first kind ['F([phi], k)]:
 
 [equation ellint2]
 
-Requires -1 <= k <= 1, otherwise returns the result of __domain_error.
+Requires k[super 2]sin[super 2](phi) < 1, otherwise returns the result of __domain_error.
 
 [optional_policy]
 
@@ -65,7 +65,7 @@ Returns the complete elliptic integral of the first kind ['K(k)]:
 
 [equation ellint6]
 
-Requires -1 <= k <= 1, otherwise returns the result of __domain_error.
+Requires |k| < 1, otherwise returns the result of __domain_error.
 
 [optional_policy]
 
@@ -154,7 +154,7 @@ Returns the incomplete elliptic integral of the second kind ['E([phi], k)]:
 
 [equation ellint3]
 
-Requires -1 <= k <= 1, otherwise returns the result of __domain_error.
+Requires k[super 2]sin[super 2](phi) < 1, otherwise returns the result of __domain_error.
 
 [optional_policy]
 
@@ -168,7 +168,7 @@ Returns the complete elliptic integral of the second kind ['E(k)]:
 
 [equation ellint7]
 
-Requires -1 <= k <= 1, otherwise returns the result of __domain_error.
+Requires |k| < 1, otherwise returns the result of __domain_error.
 
 [optional_policy]
 
@@ -257,7 +257,7 @@ Returns the incomplete elliptic integral of the third kind ['[Pi](n, [phi], k)]:
 
 [equation ellint4]
 
-Requires ['-1 <= k <= 1] and ['n < 1/sin[super 2]([phi])], otherwise 
+Requires ['k[super 2]sin[super 2](phi) < 1] and ['n < 1/sin[super 2]([phi])], otherwise 
 returns the result of __domain_error (outside this range the result 
 would be complex).
 
@@ -273,7 +273,7 @@ Returns the complete elliptic integral of the first kind ['[Pi](n, k)]:
 
 [equation ellint8]
 
-Requires ['-1 <= k <= 1] and ['n < 1], otherwise returns the 
+Requires ['|k| < 1] and ['n < 1], otherwise returns the 
 result of __domain_error (outside this range the result would be complex).
 
 [optional_policy]
@@ -381,7 +381,7 @@ Returns the incomplete elliptic integral:
 
 [equation ellint_d]
 
-Requires ['-1 <= k <= 1], otherwise 
+Requires ['k[super 2]sin[super 2](phi) < 1], otherwise 
 returns the result of __domain_error (outside this range the result 
 would be complex).
 

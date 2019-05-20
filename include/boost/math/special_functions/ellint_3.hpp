@@ -49,15 +49,15 @@ T ellint_pi_imp(T v, T phi, T k, T vc, const Policy& pol)
 
    static const char* function = "boost::math::ellint_3<%1%>(%1%,%1%,%1%)";
 
-   if(abs(k) > 1)
-   {
-      return policies::raise_domain_error<T>(function,
-         "Got k = %1%, function requires |k| <= 1", k, pol);
-   }
 
    T sphi = sin(fabs(phi));
    T result = 0;
 
+   if (k * k * sphi * sphi > 1)
+   {
+      return policies::raise_domain_error<T>(function,
+         "Got k = %1%, function requires |k| <= 1", k, pol);
+   }
    // Special cases first:
    if(v == 0)
    {
@@ -154,7 +154,7 @@ T ellint_pi_imp(T v, T phi, T k, T vc, const Policy& pol)
          return (boost::math::log1p(arg, pol) - boost::math::log1p(-arg, pol)) / (2 * vcr);
       }
    }
-   if(v < 0)
+   if((v < 0) && fabs(k) <= 1)
    {
       //
       // If we don't shift to 0 <= v <= 1 we get
