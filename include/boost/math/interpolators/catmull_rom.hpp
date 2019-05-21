@@ -22,7 +22,9 @@ namespace boost{ namespace math{
         typename Point::value_type alpha_distance(Point const & p1, Point const & p2, typename Point::value_type alpha)
         {
             using std::pow;
+#if defined(__cplusplus) && (__cplusplus >= 201703L)
             using std::size;
+#endif
             typename Point::value_type dsq = 0;
             for (size_t i = 0; i < size(p1); ++i)
             {
@@ -125,7 +127,9 @@ catmull_rom<Point, RandomAccessContainer>::catmull_rom(RandomAccessContainer&& p
 template<class Point, class RandomAccessContainer >
 Point catmull_rom<Point, RandomAccessContainer>::operator()(const typename Point::value_type s) const
 {
+#if defined(__cplusplus) && (__cplusplus >= 201703L)
     using std::size;
+#endif
     if (s < 0 || s > m_max_s)
     {
         throw std::domain_error("Parameter outside bounds.");
@@ -185,7 +189,9 @@ Point catmull_rom<Point, RandomAccessContainer>::operator()(const typename Point
 template<class Point, class RandomAccessContainer >
 Point catmull_rom<Point, RandomAccessContainer>::prime(const typename Point::value_type s) const
 {
+#if defined(__cplusplus) && (__cplusplus >= 201703L)
     using std::size;
+#endif
     // https://math.stackexchange.com/questions/843595/how-can-i-calculate-the-derivative-of-a-catmull-rom-spline-with-nonuniform-param
     // http://denkovacs.com/2016/02/catmull-rom-spline-derivatives/
     if (s < 0 || s > m_max_s)
