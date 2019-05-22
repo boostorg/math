@@ -14,6 +14,24 @@
 #include <algorithm>
 #include <iterator>
 
+namespace std_workaround {
+
+#ifdef __cpp_lib_nonmember_container_access
+   using std::size;
+#else
+   template <class C>
+   inline BOOST_CONSTEXPR std::size_t size(const C& c)
+   {
+      return c.size();
+   }
+   template <class T, std::size_t N>
+   inline BOOST_CONSTEXPR std::size_t size(const T(&array)[N]) BOOST_NOEXCEPT
+   {
+      return N;
+   }
+#endif
+}
+
 namespace boost{ namespace math{
 
     namespace detail
@@ -22,7 +40,7 @@ namespace boost{ namespace math{
         typename Point::value_type alpha_distance(Point const & p1, Point const & p2, typename Point::value_type alpha)
         {
             using std::pow;
-            using std::size;
+            using std_workaround::size;
             typename Point::value_type dsq = 0;
             for (size_t i = 0; i < size(p1); ++i)
             {
@@ -125,7 +143,7 @@ catmull_rom<Point, RandomAccessContainer>::catmull_rom(RandomAccessContainer&& p
 template<class Point, class RandomAccessContainer >
 Point catmull_rom<Point, RandomAccessContainer>::operator()(const typename Point::value_type s) const
 {
-    using std::size;
+    using std_workaround::size;
     if (s < 0 || s > m_max_s)
     {
         throw std::domain_error("Parameter outside bounds.");
@@ -185,7 +203,7 @@ Point catmull_rom<Point, RandomAccessContainer>::operator()(const typename Point
 template<class Point, class RandomAccessContainer >
 Point catmull_rom<Point, RandomAccessContainer>::prime(const typename Point::value_type s) const
 {
-    using std::size;
+    using std_workaround::size;
     // https://math.stackexchange.com/questions/843595/how-can-i-calculate-the-derivative-of-a-catmull-rom-spline-with-nonuniform-param
     // http://denkovacs.com/2016/02/catmull-rom-spline-derivatives/
     if (s < 0 || s > m_max_s)
