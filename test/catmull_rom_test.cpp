@@ -118,6 +118,9 @@ template<class Real>
 void test_circle()
 {
     using boost::math::constants::pi;
+    using std::cos;
+    using std::sin;
+
     std::cout << "Testing that the Catmull-Rom spline interpolates circles correctly on type "
               << boost::typeindex::type_id<Real>().pretty_name() << "\n";
 
@@ -396,6 +399,7 @@ void test_random_access_container()
 
 BOOST_AUTO_TEST_CASE(catmull_rom_test)
 {
+#if !defined(TEST) || (TEST == 1)
     test_data_representations<float>();
     test_alpha_distance<double>();
 
@@ -404,7 +408,8 @@ BOOST_AUTO_TEST_CASE(catmull_rom_test)
 
     test_circle<float>();
     test_circle<double>();
-
+#endif
+#if !defined(TEST) || (TEST == 2)
     test_helix<double>();
 
     test_affine_invariance<double, 1>();
@@ -414,4 +419,5 @@ BOOST_AUTO_TEST_CASE(catmull_rom_test)
     test_affine_invariance<cpp_bin_float_50, 4>();
 
     test_random_access_container<double>();
+#endif
 }
