@@ -32,6 +32,7 @@
 #endif
 
 #include <boost/math/special_functions/sign.hpp>
+#include <boost/math/special_functions/next.hpp>
 #include <boost/math/tools/toms748_solve.hpp>
 #include <boost/math/policies/error_handling.hpp>
 
@@ -354,6 +355,118 @@ namespace detail{
       }
    };
 
+   template <class F, class T>
+   T bracket_root_towards_min(F f, T guess, const T& f0, T& min, T& max, boost::uintmax_t& count);
+
+   template <class F, class T>
+   T bracket_root_towards_max(F f, T guess, const T& f0, T& min, T& max, boost::uintmax_t& count)
+   {
+      using std::fabs;
+      using boost::math::get;
+      //
+      // Move guess towards max until we bracket the root, updating min and max as we go:
+      //
+      T guess0 = guess;
+      T multiplier = 2;
+      T f_current = f0;
+      if (fabs(min) < fabs(max))
+      {
+         while (--count && ((f_current < 0) == (f0 < 0)))
+         {
+            min = guess;
+            guess *= multiplier;
+            if (guess > max)
+            {
+               guess = max;
+               break;
+            }
+            multiplier *= 2;
+            f_current = get<0>(f(guess));
+         }
+      }
+      else
+      {
+         //
+         // If min and max are negative we have to divide to head towards max:
+         //
+         while (--count && ((f_current < 0) == (f0 < 0)))
+         {
+            min = guess;
+            guess /= multiplier;
+            if (guess > max)
+            {
+               guess = max;
+               break;
+            }
+            multiplier *= 2;
+            f_current = get<0>(f(guess));
+         }
+      }
+
+      if (count)
+      {
+         max = guess;
+         if (multiplier > 16)
+            return (guess0 - guess) + bracket_root_towards_min(f, guess, f_current, min, max, count);
+      }
+      return guess0 - (max + min) / 2;
+   }
+
+   template <class F, class T>
+   T bracket_root_towards_min(F f, T guess, const T& f0, T& min, T& max, boost::uintmax_t& count)
+   {
+      using std::fabs;
+      using boost::math::get;
+      //
+      // Move guess towards min until we bracket the root, updating min and max as we go:
+      //
+      T guess0 = guess;
+      T multiplier = 2;
+      T f_current = f0;
+
+      if (fabs(min) < fabs(max))
+      {
+         while (--count && ((f_current < 0) == (f0 < 0)))
+         {
+            max = guess;
+            guess /= multiplier;
+            if (guess < min)
+            {
+               guess = min;
+               break;
+            }
+            multiplier *= 2;
+            f_current = get<0>(f(guess));
+         }
+      }
+      else
+      {
+         //
+         // If min and max are negative we have to multiply to head towards min:
+         //
+         while (--count && ((f_current < 0) == (f0 < 0)))
+         {
+            max = guess;
+            guess *= multiplier;
+            if (guess < min)
+            {
+               guess = min;
+               break;
+            }
+            multiplier *= 2;
+            f_current = get<0>(f(guess));
+         }
+      }
+
+      if (count)
+      {
+         min = guess;
+         if (multiplier > 16)
+            return (guess0 - guess) + bracket_root_towards_max(f, guess, f_current, min, max, count);
+      }
+      return guess0 - (max + min) / 2;
+   }
+
    template <class Stepper, class F, class T>
    T second_order_root_finder(F f, T guess, T min, T max, int digits, boost::uintmax_t& max_iter) BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(T) && noexcept(std::declval<F>()(std::declval<T>())))
    {
@@ -459,10 +572,15 @@ namespace detail{
             }
             else
             {
-               delta = (guess - min) / 2;
-               result = guess - delta;
-               if((result == min) || (result == max))
+               if (fabs(float_distance(min, max)) < 2)
+               {
+                  result = guess = (min + max) / 2;
                   break;
+               }
+               delta = bracket_root_towards_min(f, guess, f0, min, max, count);
+               result = guess - delta;
+               guess = min;
+               continue;
             }
          }
          else if(result > max)
@@ -480,10 +598,15 @@ namespace detail{
             }
             else
             {
-               delta = (guess - max) / 2;
-               result = guess - delta;
-               if((result == min) || (result == max))
+               if (fabs(float_distance(min, max)) < 2)
+               {
+                  result = guess = (min + max) / 2;
                   break;
+               }
+               delta = bracket_root_towards_max(f, guess, f0, min, max, count);
+               result = guess - delta;
+               guess = min;
+               continue;
             }
          }
          // update brackets:
