@@ -378,6 +378,7 @@ namespace detail{
             if (guess > max)
             {
                guess = max;
+               f_current = -f_current;  // There must be a change of sign!
                break;
             }
             multiplier *= 2;
@@ -396,6 +397,7 @@ namespace detail{
             if (guess > max)
             {
                guess = max;
+               f_current = -f_current;  // There must be a change of sign!
                break;
             }
             multiplier *= 2;
@@ -433,6 +435,7 @@ namespace detail{
             if (guess < min)
             {
                guess = min;
+               f_current = -f_current;  // There must be a change of sign!
                break;
             }
             multiplier *= 2;
@@ -451,6 +454,7 @@ namespace detail{
             if (guess < min)
             {
                guess = min;
+               f_current = -f_current;  // There must be a change of sign!
                break;
             }
             multiplier *= 2;
