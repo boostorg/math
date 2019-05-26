@@ -350,6 +350,8 @@ void test_data_representations()
     mypoint3d<Real> p3(0.4, 0.5, 0.6);
     mypoint3d<Real> p4(0.5, 0.6, 0.7);
     mypoint3d<Real> p5(0.6, 0.7, 0.8);
+
+
     // Tests initializer_list:
     catmull_rom<mypoint3d<Real>> cat({p0, p1, p2, p3, p4, p5});
 
@@ -416,8 +418,10 @@ BOOST_AUTO_TEST_CASE(catmull_rom_test)
     test_affine_invariance<double, 2>();
     test_affine_invariance<double, 3>();
     test_affine_invariance<double, 4>();
-    test_affine_invariance<cpp_bin_float_50, 4>();
 
     test_random_access_container<double>();
+#endif
+#if !defined(TEST) || (TEST == 3)
+    test_affine_invariance<cpp_bin_float_50, 4>();
 #endif
 }
