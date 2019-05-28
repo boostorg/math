@@ -15,12 +15,12 @@
 
 namespace boost{ namespace math{
 
-    template<class Point>
+    template<class Point, class RandomAccessContainer = std::vector<Point> >
     class catmull_rom
     {
     public:
 
-        catmull_rom(std::vector<Point>&& points, bool closed = false, Real alpha = (Real) 1/ (Real) 2)
+        catmull_rom(RandomAccessContainer&& points, bool closed = false, Real alpha = (Real) 1/ (Real) 2)
 
         catmull_rom(std::initializer_list<Point> l, bool closed = false, typename Point::value_type alpha = (typename Point::value_type) 1/ (typename Point::value_type) 2);
 
@@ -216,6 +216,30 @@ The Catmull-Rom interpolator requires memory for three more points than is provi
 This causes the class to call a `resize()` on the input vector.
 If `v.capacity() >= v.size() + 3`, then no problems arise; there are no reallocs, and in practice this condition is almost always satisfied.
 However, if `v.capacity() < v.size() + 3`, the realloc causes a performance penalty of roughly 20%.
+
+[heading Generic Containers]
+
+The `Point` type may be stored in a different container than `std::vector`.
+For example, here is how to store the points in a Boost.uBLAS vector:
+
+    mypoint3d<Real> p0(0.1, 0.2, 0.3);
+    mypoint3d<Real> p1(0.2, 0.3, 0.4);
+    mypoint3d<Real> p2(0.3, 0.4, 0.5);
+    mypoint3d<Real> p3(0.4, 0.5, 0.6);
+    mypoint3d<Real> p4(0.5, 0.6, 0.7);
+    mypoint3d<Real> p5(0.6, 0.7, 0.8);
+
+    boost::numeric::ublas::vector<mypoint3d<Real>> u(6);
+    u[0] = p0;
+    u[1] = p1;
+    u[2] = p2;
+    u[3] = p3;
+    u[4] = p4;
+    u[5] = p5;
+
+    // Tests initializer_list:
+    catmull_rom<mypoint3d<Real>, decltype(u)> cat(std::move(u));
+
 
 [heading References]
 

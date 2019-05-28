@@ -49,15 +49,15 @@ T ellint_pi_imp(T v, T phi, T k, T vc, const Policy& pol)
 
    static const char* function = "boost::math::ellint_3<%1%>(%1%,%1%,%1%)";
 
-   if(abs(k) > 1)
-   {
-      return policies::raise_domain_error<T>(function,
-         "Got k = %1%, function requires |k| <= 1", k, pol);
-   }
 
    T sphi = sin(fabs(phi));
    T result = 0;
 
+   if (k * k * sphi * sphi > 1)
+   {
+      return policies::raise_domain_error<T>(function,
+         "Got k = %1%, function requires |k| <= 1", k, pol);
+   }
    // Special cases first:
    if(v == 0)
    {
@@ -73,6 +73,9 @@ T ellint_pi_imp(T v, T phi, T k, T vc, const Policy& pol)
 
    if(v == 1)
    {
+      if (k == 0)
+         return tan(phi);
+
       // http://functions.wolfram.com/08.06.03.0008.01
       T m = k * k;
       result = sqrt(1 - m * sphi * sphi) * tan(phi) - ellint_e_imp(phi, k, pol);
@@ -143,10 +146,6 @@ T ellint_pi_imp(T v, T phi, T k, T vc, const Policy& pol)
          T vcr = sqrt(vc);
          return atan(vcr * tan(phi)) / vcr;
       }
-      else if(v == 1)
-      {
-         return tan(phi);
-      }
       else
       {
          // v > 1:
@@ -155,7 +154,7 @@ T ellint_pi_imp(T v, T phi, T k, T vc, const Policy& pol)
          return (boost::math::log1p(arg, pol) - boost::math::log1p(-arg, pol)) / (2 * vcr);
       }
    }
-   if(v < 0)
+   if((v < 0) && fabs(k) <= 1)
    {
       //
       // If we don't shift to 0 <= v <= 1 we get
