@@ -17,40 +17,56 @@
 
 namespace boost{ namespace math{
 
-template<class RandomAccessContainer1, class RandomAccessContainer2>
+template<class TimeContainer, class SpaceContainer>
 class vector_barycentric_rational
 {
 public:
-    using Real = RandomAccessContainer2::value_type;
-    using Point = RandomAccessContainer1::value_type;
-    vector_barycentric_rational(RandomAccessContainer1&& positions, RandomAccessContainer2&& times, size_t approximation_order = 3);
+    using Real = typename TimeContainer::value_type;
+    using Point = typename SpaceContainer::value_type;
+    vector_barycentric_rational(TimeContainer&& times, SpaceContainer&& points, size_t approximation_order = 3);
 
     void operator()(Point& x, Real t) const;
 
+    // I have validated using google benchmark that returning a value is no more expensive populating it.
+    // This is kinda a weird thing to discover since it goes against the advice of basically every high-performance computing book.
+    Point operator()(Real t) const {
+        Point p;
+        this->operator()(p, t);
+        return p;
+    }
+
     void prime(Point& x, Real t) const;
 
+    Point prime(Real t) const {
+        Point p;
+        this->prime(p, t);
+        return p;
+    }
+
 private:
-    std::shared_ptr<detail::vector_barycentric_rational_imp<RandomAccessContainer1, RandomAccessContainer2>> m_imp;
+    std::shared_ptr<detail::vector_barycentric_rational_imp<TimeContainer, SpaceContainer>> m_imp;
 };
 
 
-template <class RandomAccessContainer1, class RandomAccessContainer2>
-vector_barycentric_rational<Real>::vector_barycentric_rational(RandomAccessContainer1&& x, RandomAccessContainer2&& t, size_t approximation_order):
- m_imp(std::make_shared<detail::vector_barycentric_rational_imp<Real>>(std::move(x), std::move(y), approximation_order))
+template <class TimeContainer, class SpaceContainer>
+vector_barycentric_rational<TimeContainer, SpaceContainer>::vector_barycentric_rational(TimeContainer&& times, SpaceContainer&& points, size_t approximation_order):
+ m_imp(std::make_shared<detail::vector_barycentric_rational_imp<TimeContainer, SpaceContainer>>(std::move(times), std::move(points), approximation_order))
 {
     return;
 }
 
-template <class RandomAccessContainer1, class RandomAccessContainer2>
-void vector_barycentric_rational<Real>::operator()(Real x) const
+template <class TimeContainer, class SpaceContainer>
+void vector_barycentric_rational<TimeContainer, SpaceContainer>::operator()(typename SpaceContainer::value_type& p, typename TimeContainer::value_type t) const
 {
-    return m_imp->operator()(x);
+    m_imp->operator()(p, t);
+    return;
 }
 
-template <class RandomAccessContainer1, class RandomAccessContainer2>
-void vector_barycentric_rational<Real>::prime(Real x) const
+template <class TimeContainer, class SpaceContainer>
+void vector_barycentric_rational<TimeContainer, SpaceContainer>::prime(typename SpaceContainer::value_type& p, typename TimeContainer::value_type t) const
 {
-    return m_imp->prime(x);
+    m_imp->prime(p, t);
+    return;
 }
 
 
