@@ -27,20 +27,8 @@ public:
 
     void eval_with_prime(Point& x, Point& dxdt, Real t) const;
 
-    /*Real prime(Real x) const;
-
-    // The barycentric weights are not really that interesting; except to the unit tests!
-    Real weight(size_t i) const { return m_w[i]; }
-
-    std::vector<Real>&& return_x()
-    {
-        return std::move(m_x);
-    }
-
-    std::vector<Real>&& return_y()
-    {
-        return std::move(m_y);
-    }*/
+    // The barycentric weights are only interesting to the unit tests:
+    Real weight(size_t i) const { return w_[i]; }
 
 private:
 
@@ -58,6 +46,7 @@ vector_barycentric_rational_imp<TimeContainer, SpaceContainer>::vector_barycentr
     using std::numeric_limits;
     t_ = std::move(t);
     y_ = std::move(y);
+
     BOOST_ASSERT_MSG(t_.size() == y_.size(), "There must be the same number of time points as space points.");
     BOOST_ASSERT_MSG(approximation_order < y_.size(), "Approximation order must be < data length.");
     for (size_t i = 1; i < t_.size(); ++i) {
@@ -98,11 +87,11 @@ void vector_barycentric_rational_imp<TimeContainer, SpaceContainer>::calculate_w
             }
             if (i % 2 == 0)
             {
-                t_[k] += 1/inv_product;
+                w_[k] += 1/inv_product;
             }
             else
             {
-                t_[k] -= 1/inv_product;
+                w_[k] -= 1/inv_product;
             }
         }
     }
@@ -140,16 +129,19 @@ void vector_barycentric_rational_imp<TimeContainer, SpaceContainer>::eval_with_p
     using Real = typename TimeContainer::value_type;
     this->operator()(x, t);
     Point numerator;
-    for (size_t i = 0; i < x.size(); ++i) {
+    for (decltype(x.size()) i = 0; i < x.size(); ++i) {
         numerator[i] = 0;
     }
     Real denominator = 0;
-    for(size_t i = 0; i < t_.size(); ++i)
+    for(decltype(t_.size()) i = 0; i < t_.size(); ++i)
     {
         if (t == t_[i])
         {
-            Real sum = 0;
-            for (size_t j = 0; j < t_.size(); ++j)
+            Point sum;
+            for (decltype(x.size()) i = 0; i < x.size(); ++i) {
+                numerator[i] = 0;
+            }
+            for (decltype(t_.size()) j = 0; j < t_.size(); ++j)
             {
                 if (j == i)
                 {
@@ -161,45 +153,13 @@ void vector_barycentric_rational_imp<TimeContainer, SpaceContainer>::eval_with_p
             return;
         }
         Real tw = w_[i]/(t - t_[i]);
-        Real diff = (x - y_[i])/(t-t_[i]);
+        Point diff = (x - y_[i])/(t-t_[i]);
         numerator += tw*diff;
         denominator += tw;
     }
-
     dxdt = numerator/denominator;
     return;
 }
-
-
-/*template<class TimeContainer, class SpaceContainer>
-void vector_barycentric_rational_imp<TimeContainer, SpaceContainer>::prime(typename SpaceContainer::value_type& p, typename TimeContainer::value_type t) const
-{
-    Real rx = this->operator()(x);
-    Real numerator = 0;
-    Real denominator = 0;
-    for(size_t i = 0; i < m_x.size(); ++i)
-    {
-        if (x == m_x[i])
-        {
-            Real sum = 0;
-            for (size_t j = 0; j < m_x.size(); ++j)
-            {
-                if (j == i)
-                {
-                    continue;
-                }
-                sum += m_w[j]*(m_y[i] - m_y[j])/(m_x[i] - m_x[j]);
-            }
-            return -sum/m_w[i];
-        }
-        Real t = m_w[i]/(x - m_x[i]);
-        Real diff = (rx - m_y[i])/(x-m_x[i]);
-        numerator += t*diff;
-        denominator += t;
-    }
-
-    return numerator/denominator;
-}*/
 
 }}}
 #endif

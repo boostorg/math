@@ -27,7 +27,8 @@ public:
 
     void operator()(Point& x, Real t) const;
 
-    // I have validated using google benchmark that returning a value is no more expensive populating it.
+    // I have validated using google benchmark that returning a value is no more expensive populating it,
+    // at least for Eigen vectors with known size at compile-time.
     // This is kinda a weird thing to discover since it goes against the advice of basically every high-performance computing book.
     Point operator()(Real t) const {
         Point p;
@@ -50,7 +51,7 @@ public:
         m_imp->eval_with_prime(x, dxdt, t);
         return;
     }
-    
+
     std::pair<Point, Point> eval_with_prime(Real t) const {
         Point x;
         Point dxdt;

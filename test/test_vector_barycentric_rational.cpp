@@ -1,4 +1,4 @@
-// Copyright Nick Thompson, 2017
+// Copyright Nick Thompson, 2019
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
@@ -15,7 +15,6 @@
 #include <boost/test/included/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/math/interpolators/vector_barycentric_rational.hpp>
-
 
 using std::sqrt;
 using std::abs;
@@ -72,40 +71,48 @@ void test_interpolation_condition_ublas()
         y[i][1] = dis(gen);
     }
 
+    std::vector<Real> t_copy = t;
+    std::vector<boost::numeric::ublas::vector<Real>> y_copy = y;
+
     boost::math::vector_barycentric_rational<decltype(t), decltype(y)> interpolator(std::move(t), std::move(y));
 
     boost::numeric::ublas::vector<Real> z(2);
-    for (size_t i = 0; i < t.size(); ++i)
+    for (size_t i = 0; i < t_copy.size(); ++i)
     {
-        interpolator(z, t[i]);
-        BOOST_CHECK_CLOSE(z[0], y[i][0], 100*numeric_limits<Real>::epsilon());
-        BOOST_CHECK_CLOSE(z[1], y[i][1], 100*numeric_limits<Real>::epsilon());
+        interpolator(z, t_copy[i]);
+        BOOST_CHECK_CLOSE(z[0], y_copy[i][0], 100*numeric_limits<Real>::epsilon());
+        BOOST_CHECK_CLOSE(z[1], y_copy[i][1], 100*numeric_limits<Real>::epsilon());
     }
 }
 
-/*template<class Real>
+template<class Real>
 void test_interpolation_condition_high_order()
 {
     std::cout << "Testing interpolation condition in high order for barycentric interpolation on type " << boost::typeindex::type_id<Real>().pretty_name()  << "\n";
     std::mt19937 gen(5);
     boost::random::uniform_real_distribution<Real> dis(0.1f, 1);
-    std::vector<Real> x(100);
-    std::vector<Real> y(100);
-    x[0] = dis(gen);
-    y[0] = dis(gen);
-    for (size_t i = 1; i < x.size(); ++i)
+    std::vector<Real> t(100);
+    std::vector<Eigen::Vector2d> y(100);
+    t[0] = dis(gen);
+    y[0][0] = dis(gen);
+    y[0][1] = dis(gen);
+    for (size_t i = 1; i < t.size(); ++i)
     {
-        x[i] = x[i-1] + dis(gen);
-        y[i] = dis(gen);
+        t[i] = t[i-1] + dis(gen);
+        y[i][0] = dis(gen);
+        y[i][1] = dis(gen);
     }
 
-    // Order 5 approximation:
-    boost::math::barycentric_rational<Real> interpolator(x.data(), y.data(), y.size(), 5);
+    std::vector<Eigen::Vector2d> y_copy = y;
+    std::vector<Real> t_copy = t;
+    boost::math::vector_barycentric_rational<decltype(t), decltype(y)> interpolator(std::move(t), std::move(y), 5);
 
-    for (size_t i = 0; i < x.size(); ++i)
+    Eigen::Vector2d z;
+    for (size_t i = 0; i < t_copy.size(); ++i)
     {
-        Real z = interpolator(x[i]);
-        BOOST_CHECK_CLOSE(z, y[i], 100*numeric_limits<Real>::epsilon());
+        interpolator(z, t_copy[i]);
+        BOOST_CHECK_CLOSE(z[0], y_copy[i][0], 100*numeric_limits<Real>::epsilon());
+        BOOST_CHECK_CLOSE(z[1], y_copy[i][1], 100*numeric_limits<Real>::epsilon());
     }
 }
 
@@ -117,112 +124,82 @@ void test_constant()
 
     std::mt19937 gen(6);
     boost::random::uniform_real_distribution<Real> dis(0.1f, 1);
-    std::vector<Real> x(100);
-    std::vector<Real> y(100);
-    Real constant = -8;
-    x[0] = dis(gen);
-    y[0] = constant;
-    for (size_t i = 1; i < x.size(); ++i)
+    std::vector<Real> t(100);
+    std::vector<Eigen::Vector2d> y(100);
+    t[0] = dis(gen);
+    Real constant0 = dis(gen);
+    Real constant1 = dis(gen);
+    y[0][0] = constant0;
+    y[0][1] = constant1;
+    for (size_t i = 1; i < t.size(); ++i)
     {
-        x[i] = x[i-1] + dis(gen);
-        y[i] = y[0];
+        t[i] = t[i-1] + dis(gen);
+        y[i][0] = constant0;
+        y[i][1] = constant1;
     }
 
-    boost::math::barycentric_rational<Real> interpolator(x.data(), y.data(), y.size());
+    std::vector<Eigen::Vector2d> y_copy = y;
+    std::vector<Real> t_copy = t;
+    boost::math::vector_barycentric_rational<decltype(t), decltype(y)> interpolator(std::move(t), std::move(y));
 
-    for (size_t i = 0; i < x.size(); ++i)
+    Eigen::Vector2d z;
+    for (size_t i = 0; i < t_copy.size(); ++i)
     {
         // Don't evaluate the constant at x[i]; that's already tested in the interpolation condition test.
-        Real t = x[i] + dis(gen);
-        Real z = interpolator(t);
-        BOOST_CHECK_CLOSE(z, constant, 100*sqrt(numeric_limits<Real>::epsilon()));
-        BOOST_CHECK_SMALL(interpolator.prime(t), sqrt(numeric_limits<Real>::epsilon()));
+        Real t = t_copy[i] + dis(gen);
+        z = interpolator(t);
+        BOOST_CHECK_CLOSE(z[0], constant0, 100*sqrt(numeric_limits<Real>::epsilon()));
+        BOOST_CHECK_CLOSE(z[1], constant1, 100*sqrt(numeric_limits<Real>::epsilon()));
+        Eigen::Vector2d zprime = interpolator.prime(t);
+        Real zero_0 = zprime[0];
+        Real zero_1 = zprime[1];
+        BOOST_CHECK_SMALL(zero_0, sqrt(numeric_limits<Real>::epsilon()));
+        BOOST_CHECK_SMALL(zero_1, sqrt(numeric_limits<Real>::epsilon()));
     }
 }
+
 
 template<class Real>
 void test_constant_high_order()
 {
-    std::cout << "Testing that constants are interpolated correctly in high order using barycentric interpolation on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing that constants are interpolated correctly using barycentric interpolation on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
 
-    std::mt19937 gen(7);
+    std::mt19937 gen(6);
     boost::random::uniform_real_distribution<Real> dis(0.1f, 1);
-    std::vector<Real> x(100);
-    std::vector<Real> y(100);
-    Real constant = 5;
-    x[0] = dis(gen);
-    y[0] = constant;
-    for (size_t i = 1; i < x.size(); ++i)
+    std::vector<Real> t(100);
+    std::vector<Eigen::Vector2d> y(100);
+    t[0] = dis(gen);
+    Real constant0 = dis(gen);
+    Real constant1 = dis(gen);
+    y[0][0] = constant0;
+    y[0][1] = constant1;
+    for (size_t i = 1; i < t.size(); ++i)
     {
-        x[i] = x[i-1] + dis(gen);
-        y[i] = y[0];
+        t[i] = t[i-1] + dis(gen);
+        y[i][0] = constant0;
+        y[i][1] = constant1;
     }
 
-    // Set interpolation order to 7:
-    boost::math::barycentric_rational<Real> interpolator(x.data(), y.data(), y.size(), 7);
+    std::vector<Eigen::Vector2d> y_copy = y;
+    std::vector<Real> t_copy = t;
+    boost::math::vector_barycentric_rational<decltype(t), decltype(y)> interpolator(std::move(t), std::move(y), 5);
 
-    for (size_t i = 0; i < x.size(); ++i)
+    Eigen::Vector2d z;
+    for (size_t i = 0; i < t_copy.size(); ++i)
     {
-        Real t = x[i] + dis(gen);
-        Real z = interpolator(t);
-        BOOST_CHECK_CLOSE(z, constant, 1000*sqrt(numeric_limits<Real>::epsilon()));
-        BOOST_CHECK_SMALL(interpolator.prime(t), 100*sqrt(numeric_limits<Real>::epsilon()));
+        // Don't evaluate the constant at x[i]; that's already tested in the interpolation condition test.
+        Real t = t_copy[i] + dis(gen);
+        z = interpolator(t);
+        BOOST_CHECK_CLOSE(z[0], constant0, 100*sqrt(numeric_limits<Real>::epsilon()));
+        BOOST_CHECK_CLOSE(z[1], constant1, 100*sqrt(numeric_limits<Real>::epsilon()));
+        Eigen::Vector2d zprime = interpolator.prime(t);
+        Real zero_0 = zprime[0];
+        Real zero_1 = zprime[1];
+        BOOST_CHECK_SMALL(zero_0, sqrt(numeric_limits<Real>::epsilon()));
+        BOOST_CHECK_SMALL(zero_1, sqrt(numeric_limits<Real>::epsilon()));
     }
 }
 
-
-template<class Real>
-void test_runge()
-{
-    std::cout << "Testing interpolation of Runge's 1/(1+25x^2) function using barycentric interpolation on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
-
-    std::mt19937 gen(8);
-    boost::random::uniform_real_distribution<Real> dis(0.005f, 0.01f);
-    std::vector<Real> x(100);
-    std::vector<Real> y(100);
-    x[0] = -2;
-    y[0] = 1/(1+25*x[0]*x[0]);
-    for (size_t i = 1; i < x.size(); ++i)
-    {
-        x[i] = x[i-1] + dis(gen);
-        y[i] = 1/(1+25*x[i]*x[i]);
-    }
-
-    boost::math::barycentric_rational<Real> interpolator(x.data(), y.data(), y.size(), 5);
-
-    for (size_t i = 0; i < x.size(); ++i)
-    {
-        Real t = x[i];
-        Real z = interpolator(t);
-        BOOST_CHECK_CLOSE(z, y[i], 0.03);
-        Real z_prime = interpolator.prime(t);
-        Real num = -50*t;
-        Real denom = (1+25*t*t)*(1+25*t*t);
-        if (abs(num/denom) > 0.00001)
-        {
-            BOOST_CHECK_CLOSE_FRACTION(z_prime, num/denom, 0.03);
-        }
-    }
-
-
-    Real tol = 0.0001;
-    for (size_t i = 0; i < x.size(); ++i)
-    {
-        Real t = x[i] + dis(gen);
-        Real z = interpolator(t);
-        BOOST_CHECK_CLOSE(z, 1/(1+25*t*t), tol);
-        Real z_prime = interpolator.prime(t);
-        Real num = -50*t;
-        Real denom = (1+25*t*t)*(1+25*t*t);
-        Real runge_prime = num/denom;
-
-        if (abs(runge_prime) > 0 && abs(z_prime - runge_prime)/abs(runge_prime) > tol)
-        {
-            std::cout << "Error too high for t = " << t << " which is a distance " << t - x[i] << " from node " << i << "/" << x.size() << " associated with data (" << x[i] << ", " << y[i] << ")\n";
-            BOOST_CHECK_CLOSE_FRACTION(z_prime, runge_prime, tol);
-        }
-    }
-}*/
 
 template<class Real>
 void test_weights()
@@ -231,38 +208,26 @@ void test_weights()
 
     std::mt19937 gen(9);
     boost::random::uniform_real_distribution<Real> dis(0.005, 0.01);
-    std::vector<Real> x(100);
-    std::vector<Real> y(100);
-    x[0] = -2;
-    y[0] = 1/(1+25*x[0]*x[0]);
-    for (size_t i = 1; i < x.size(); ++i)
+    std::vector<Real> t(100);
+    std::vector<Eigen::Vector2d> y(100);
+    t[0] = dis(gen);
+    y[0][0] = dis(gen);
+    y[0][1] = dis(gen);
+    for (size_t i = 1; i < t.size(); ++i)
     {
-        x[i] = x[i-1] + dis(gen);
-        y[i] = 1/(1+25*x[i]*x[i]);
+        t[i] = t[i-1] + dis(gen);
+        y[i][0] = dis(gen);
+        y[i][1] = dis(gen);
     }
 
-    boost::math::detail::barycentric_rational_imp<Real> interpolator(x.data(), x.data() + x.size(), y.data(), 0);
+    std::vector<Eigen::Vector2d> y_copy = y;
+    std::vector<Real> t_copy = t;
+    boost::math::detail::vector_barycentric_rational_imp<decltype(t), decltype(y)> interpolator(std::move(t), std::move(y), 1);
 
-    for (size_t i = 0; i < x.size(); ++i)
+    for (size_t i = 1; i < t_copy.size() - 1; ++i)
     {
         Real w = interpolator.weight(i);
-        if (i % 2 == 0)
-        {
-            BOOST_CHECK_CLOSE(w, 1, 0.00001);
-        }
-        else
-        {
-            BOOST_CHECK_CLOSE(w, -1, 0.00001);
-        }
-    }
-
-    // d = 1:
-    interpolator = boost::math::detail::barycentric_rational_imp<Real>(x.data(), x.data() + x.size(), y.data(), 1);
-
-    for (size_t i = 1; i < x.size() -1; ++i)
-    {
-        Real w = interpolator.weight(i);
-        Real w_expect = 1/(x[i] - x[i - 1]) + 1/(x[i+1] - x[i]);
+        Real w_expect = 1/(t_copy[i] - t_copy[i - 1]) + 1/(t_copy[i+1] - t_copy[i]);
         if (i % 2 == 0)
         {
             BOOST_CHECK_CLOSE(w, -w_expect, 0.00001);
@@ -277,40 +242,10 @@ void test_weights()
 
 BOOST_AUTO_TEST_CASE(vector_barycentric_rational)
 {
-    // The tests took too long at the higher precisions.
-    // They still pass, but the CI system is starting to time out,
-    // so I figured it'd be polite to comment out the most expensive tests.
     test_weights<double>();
-
-    //test_constant<float>();
-    //test_constant<double>();
-    //test_constant<long double>();
-    //test_constant<cpp_bin_float_50>();
-
-    //test_constant_high_order<float>();
-    //test_constant_high_order<double>();
-    //test_constant_high_order<long double>();
-    //test_constant_high_order<cpp_bin_float_50>();
-
-    test_interpolation_condition_eigen<float>();
+    test_constant<double>();
+    test_constant_high_order<double>();
     test_interpolation_condition_eigen<double>();
     test_interpolation_condition_ublas<double>();
-    test_interpolation_condition_ublas<float>();
-
-    //test_interpolation_condition_high_order<float>();
-    //test_interpolation_condition_high_order<double>();
-    //test_interpolation_condition_high_order<long double>();
-    //test_interpolation_condition_high_order<cpp_bin_float_50>();
-
-    //test_runge<double>();
-    //test_runge<long double>();
-    //test_runge<cpp_bin_float_50>();
-
-#ifdef BOOST_HAS_FLOAT128
-    //test_interpolation_condition<boost::multiprecision::float128>();
-    //test_constant<boost::multiprecision::float128>();
-    //test_constant_high_order<boost::multiprecision::float128>();
-    //test_interpolation_condition_high_order<boost::multiprecision::float128>();
-    //test_runge<boost::multiprecision::float128>();
-#endif
+    test_interpolation_condition_high_order<double>();
 }
