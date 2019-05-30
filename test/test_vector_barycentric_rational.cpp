@@ -15,16 +15,11 @@
 #include <boost/test/included/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/math/interpolators/vector_barycentric_rational.hpp>
-#include <boost/multiprecision/cpp_bin_float.hpp>
 
-#ifdef BOOST_HAS_FLOAT128
-#include <boost/multiprecision/float128.hpp>
-#endif
 
 using std::sqrt;
 using std::abs;
 using std::numeric_limits;
-using boost::multiprecision::cpp_bin_float_50;
 
 template<class Real>
 void test_interpolation_condition_eigen()
@@ -44,14 +39,16 @@ void test_interpolation_condition_eigen()
         y[i][1] = dis(gen);
     }
 
+    std::vector<Eigen::Vector2d> y_copy = y;
+    std::vector<Real> t_copy = t;
     boost::math::vector_barycentric_rational<decltype(t), decltype(y)> interpolator(std::move(t), std::move(y));
 
     Eigen::Vector2d z;
-    for (size_t i = 0; i < t.size(); ++i)
+    for (size_t i = 0; i < t_copy.size(); ++i)
     {
-        interpolator(z, t[i]);
-        BOOST_CHECK_CLOSE(z[0], y[i][0], 100*numeric_limits<Real>::epsilon());
-        BOOST_CHECK_CLOSE(z[1], y[i][1], 100*numeric_limits<Real>::epsilon());
+        interpolator(z, t_copy[i]);
+        BOOST_CHECK_CLOSE(z[0], y_copy[i][0], 100*numeric_limits<Real>::epsilon());
+        BOOST_CHECK_CLOSE(z[1], y_copy[i][1], 100*numeric_limits<Real>::epsilon());
     }
 }
 
@@ -225,7 +222,7 @@ void test_runge()
             BOOST_CHECK_CLOSE_FRACTION(z_prime, runge_prime, tol);
         }
     }
-}
+}*/
 
 template<class Real>
 void test_weights()
@@ -275,8 +272,7 @@ void test_weights()
             BOOST_CHECK_CLOSE(w, w_expect, 0.00001);
         }
     }
-
-}*/
+}
 
 
 BOOST_AUTO_TEST_CASE(vector_barycentric_rational)
@@ -284,7 +280,7 @@ BOOST_AUTO_TEST_CASE(vector_barycentric_rational)
     // The tests took too long at the higher precisions.
     // They still pass, but the CI system is starting to time out,
     // so I figured it'd be polite to comment out the most expensive tests.
-    //test_weights<double>();
+    test_weights<double>();
 
     //test_constant<float>();
     //test_constant<double>();
@@ -296,11 +292,10 @@ BOOST_AUTO_TEST_CASE(vector_barycentric_rational)
     //test_constant_high_order<long double>();
     //test_constant_high_order<cpp_bin_float_50>();
 
-    //test_interpolation_condition<float>();
+    test_interpolation_condition_eigen<float>();
     test_interpolation_condition_eigen<double>();
     test_interpolation_condition_ublas<double>();
-    //test_interpolation_condition<long double>();
-    //test_interpolation_condition<cpp_bin_float_50>();
+    test_interpolation_condition_ublas<float>();
 
     //test_interpolation_condition_high_order<float>();
     //test_interpolation_condition_high_order<double>();

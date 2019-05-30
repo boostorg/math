@@ -25,6 +25,8 @@ public:
 
     void operator()(Point& p, Real t) const;
 
+    void eval_with_prime(Point& x, Point& dxdt, Real t) const;
+
     /*Real prime(Real x) const;
 
     // The barycentric weights are not really that interesting; except to the unit tests!
@@ -111,7 +113,6 @@ template<class TimeContainer, class SpaceContainer>
 void vector_barycentric_rational_imp<TimeContainer, SpaceContainer>::operator()(typename SpaceContainer::value_type& p, typename TimeContainer::value_type t) const
 {
     using Real = typename TimeContainer::value_type;
-    //using Point = typename SpaceContainer::value_type;
     for (auto & x : p) {
         x = Real(0);
     }
@@ -132,8 +133,45 @@ void vector_barycentric_rational_imp<TimeContainer, SpaceContainer>::operator()(
     return;
 }
 
-
 template<class TimeContainer, class SpaceContainer>
+void vector_barycentric_rational_imp<TimeContainer, SpaceContainer>::eval_with_prime(typename SpaceContainer::value_type& x, typename SpaceContainer::value_type& dxdt, typename TimeContainer::value_type t) const
+{
+    using Point = typename SpaceContainer::value_type;
+    using Real = typename TimeContainer::value_type;
+    this->operator()(x, t);
+    Point numerator;
+    for (size_t i = 0; i < x.size(); ++i) {
+        numerator[i] = 0;
+    }
+    Real denominator = 0;
+    for(size_t i = 0; i < t_.size(); ++i)
+    {
+        if (t == t_[i])
+        {
+            Real sum = 0;
+            for (size_t j = 0; j < t_.size(); ++j)
+            {
+                if (j == i)
+                {
+                    continue;
+                }
+                sum += w_[j]*(y_[i] - y_[j])/(t_[i] - t_[j]);
+            }
+            dxdt = -sum/w_[i];
+            return;
+        }
+        Real tw = w_[i]/(t - t_[i]);
+        Real diff = (x - y_[i])/(t-t_[i]);
+        numerator += tw*diff;
+        denominator += tw;
+    }
+
+    dxdt = numerator/denominator;
+    return;
+}
+
+
+/*template<class TimeContainer, class SpaceContainer>
 void vector_barycentric_rational_imp<TimeContainer, SpaceContainer>::prime(typename SpaceContainer::value_type& p, typename TimeContainer::value_type t) const
 {
     Real rx = this->operator()(x);
@@ -161,7 +199,7 @@ void vector_barycentric_rational_imp<TimeContainer, SpaceContainer>::prime(typen
     }
 
     return numerator/denominator;
-}
+}*/
 
 }}}
 #endif

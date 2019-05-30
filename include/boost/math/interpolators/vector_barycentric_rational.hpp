@@ -35,12 +35,27 @@ public:
         return p;
     }
 
-    void prime(Point& x, Real t) const;
+    void prime(Point& dxdt, Real t) const {
+        Point x;
+        m_imp->eval_with_prime(x, dxdt, t);
+    }
 
     Point prime(Real t) const {
         Point p;
         this->prime(p, t);
         return p;
+    }
+
+    void eval_with_prime(Point& x, Point& dxdt, Real t) const {
+        m_imp->eval_with_prime(x, dxdt, t);
+        return;
+    }
+    
+    std::pair<Point, Point> eval_with_prime(Real t) const {
+        Point x;
+        Point dxdt;
+        m_imp->eval_with_prime(x, dxdt, t);
+        return {x, dxdt};
     }
 
 private:
@@ -61,14 +76,6 @@ void vector_barycentric_rational<TimeContainer, SpaceContainer>::operator()(type
     m_imp->operator()(p, t);
     return;
 }
-
-template <class TimeContainer, class SpaceContainer>
-void vector_barycentric_rational<TimeContainer, SpaceContainer>::prime(typename SpaceContainer::value_type& p, typename TimeContainer::value_type t) const
-{
-    m_imp->prime(p, t);
-    return;
-}
-
 
 }}
 #endif
