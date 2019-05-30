@@ -50,7 +50,7 @@ The call to the constructor computes the weights:
 
     std::vector<double> t(100);
     std::vector<Eigen::Vector2d> y(100);
-
+    // initialize t and y . . . 
     boost::math::vector_barycentric_rational<decltype(t), decltype(y)> interpolant(std::move(t), std::move(y));
 
 To evaluate the interpolant, use
