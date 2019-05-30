@@ -2,6 +2,8 @@
 # Copyright John Maddock 2009 - 2012
 # Copyright Paul A. Bristow 2009 - 2012
 
+FAQ \<FAQ\w*\>
+
 "Lanczos approximation" lanczos
 
 closed form \<closed\w*\>
@@ -9,6 +11,8 @@ closed form \<closed\w*\>
 expression \<express\w*\>
 
 constants  \<constant\w*\>
+
+multiprecision  \<\w*\multiprecision\w*\>
 
 !scan-path boost/math .*\.hpp true
 
@@ -40,7 +44,6 @@ Rmath
 Cephes
 
 DCDFLIB
-
 
 !rewrite-name "(?i)(?:A|The)\s+(.*)" "\1"
 !rewrite-name "Additional Implementation Notes" "Implementation Notes"
