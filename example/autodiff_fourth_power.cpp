@@ -6,23 +6,22 @@
 #include <boost/math/differentiation/autodiff.hpp>
 #include <iostream>
 
-template<typename T>
-T fourth_power(T x)
-{
-    x *= x;
-    return x *= x;
+template <typename T>
+T fourth_power(T const& x) {
+  T x4 = x * x;  // retval in operator*() uses x4's memory via NRVO.
+  x4 *= x4;      // No copies of x4 are made within operator*=() even when squaring.
+  return x4;     // x4 uses y's memory in main() via NRVO.
 }
 
-int main()
-{
-    using namespace boost::math::differentiation;
+int main() {
+  using namespace boost::math::differentiation;
 
-    constexpr int Order=5; // The highest order derivative to be calculated.
-    const autodiff_fvar<double,Order> x = make_fvar<double,Order>(2.0); // Find derivatives at x=2.
-    const autodiff_fvar<double,Order> y = fourth_power(x);
-    for (int i=0 ; i<=Order ; ++i)
-        std::cout << "y.derivative("<<i<<") = " << y.derivative(i) << std::endl;
-    return 0;
+  constexpr unsigned Order = 5;                  // The highest order derivative to be calculated.
+  auto const x = make_fvar<double, Order>(2.0);  // Find derivatives at x=2.
+  auto const y = fourth_power(x);
+  for (unsigned i = 0; i <= Order; ++i)
+    std::cout << "y.derivative(" << i << ") = " << y.derivative(i) << std::endl;
+  return 0;
 }
 /*
 Output:
