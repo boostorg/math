@@ -1,8 +1,11 @@
 # Boost.Math Indexing terms file.
 # Copyright John Maddock 2009 - 2012
-# Copyright Paul A. Bristow 2009 - 2012
+# Copyright Paul A. Bristow 2009 - 2019
 
 FAQ \<FAQ\w*\>
+
+cpp_bin_float \<cpp_bin_\w*\> 
+cpp_dec_float \<cpp_dec_\w*\>
 
 "Lanczos approximation" lanczos
 
