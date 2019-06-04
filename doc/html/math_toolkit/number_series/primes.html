@@ -3,8 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Prime Numbers</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
-<link rel="home" href="../../index.html" title="Math Toolkit 2.6.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<link rel="home" href="../../index.html" title="Math Toolkit 2.9.0">
 <link rel="up" href="../number_series.html" title="Number Series">
 <link rel="prev" href="tangent_numbers.html" title="Tangent Numbers">
 <link rel="next" href="../sf_gamma.html" title="Gamma Functions">
@@ -35,9 +35,9 @@
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span> <span class="special">{</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Policy</span><span class="special">&gt;</span>
-<span class="identifier">boost</span><span class="special">::</span><span class="identifier">uint32_t</span> <span class="identifier">prime</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">Policy</span><span class="special">&amp;</span> <span class="identifier">pol</span><span class="special">);</span>
+<span class="keyword">constexpr</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">uint32_t</span> <span class="identifier">prime</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">Policy</span><span class="special">&amp;</span> <span class="identifier">pol</span><span class="special">);</span>
 
-<span class="identifier">boost</span><span class="special">::</span><span class="identifier">uint32_t</span> <span class="identifier">prime</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">);</span>
+<span class="keyword">constexpr</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">uint32_t</span> <span class="identifier">prime</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">);</span>
 
 <span class="keyword">static</span> <span class="keyword">const</span> <span class="keyword">unsigned</span> <span class="identifier">max_prime</span> <span class="special">=</span> <span class="number">10000</span><span class="special">;</span>
 
@@ -51,7 +51,7 @@
         The function <code class="computeroutput"><span class="identifier">prime</span></code> provides
         fast table lookup to the first 10000 prime numbers (starting from 2 as the
         zeroth prime: as 1 isn't terribly useful in practice). There are two function
-        signatures one of which takes an optional <a class="link" href="../../policy.html" title="Chapter&#160;18.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>
+        signatures one of which takes an optional <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>
         as the second parameter to control error handling.
       </p>
 <p>
@@ -63,6 +63,10 @@
         Passing a value greater than <code class="computeroutput"><span class="identifier">max_prime</span></code>
         results in a <a class="link" href="../error_handling.html#math_toolkit.error_handling.domain_error">domain_error</a>
         being raised.
+      </p>
+<p>
+        This function is <code class="computeroutput"><span class="keyword">constexpr</span></code> only
+        if the compiler supports C++14 constexpr functions.
       </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

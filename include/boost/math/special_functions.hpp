@@ -70,5 +70,6 @@
 #include <boost/math/special_functions/hankel.hpp>
 #include <boost/math/special_functions/ulp.hpp>
 #include <boost/math/special_functions/relative_difference.hpp>
+#include <boost/math/special_functions/lambert_w.hpp>
 
 #endif // BOOST_MATH_SPECIAL_FUNCTIONS_HPP

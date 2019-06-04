@@ -3,8 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Exponential Integral En</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
-<link rel="home" href="../../index.html" title="Math Toolkit 2.6.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<link rel="home" href="../../index.html" title="Math Toolkit 2.9.0">
 <link rel="up" href="../expint.html" title="Exponential Integrals">
 <link rel="prev" href="../expint.html" title="Exponential Integrals">
 <link rel="next" href="expint_i.html" title="Exponential Integral Ei">
@@ -37,8 +37,8 @@
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">expint</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">z</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;18.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">expint</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;18.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">expint</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 
 <span class="special">}}</span> <span class="comment">// namespaces</span>
 </pre>
@@ -47,9 +47,9 @@
         type calculation rules</em></span></a>: the return type is <code class="computeroutput"><span class="keyword">double</span></code> if T is an integer type, and T otherwise.
       </p>
 <p>
-        The final <a class="link" href="../../policy.html" title="Chapter&#160;18.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
+        The final <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
         be used to control the behaviour of the function: how it handles errors,
-        what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter&#160;18.&#160;Policies: Controlling Precision, Error Handling etc">policy
+        what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">policy
         documentation for more details</a>.
       </p>
 <h5>
@@ -59,8 +59,8 @@
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">expint</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">z</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;18.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">expint</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;18.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">expint</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 </pre>
 <p>
         Returns the <a href="http://mathworld.wolfram.com/En-Function.html" target="_top">exponential
@@ -84,7 +84,7 @@
         zero error</a>.
       </p>
 <div class="table">
-<a name="math_toolkit.expint.expint_n.table_expint_En_"></a><p class="title"><b>Table&#160;6.74.&#160;Error rates for expint (En)</b></p>
+<a name="math_toolkit.expint.expint_n.table_expint_En_"></a><p class="title"><b>Table&#160;7.77.&#160;Error rates for expint (En)</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for expint (En)">
 <colgroup>
 <col>
@@ -98,22 +98,22 @@
               </th>
 <th>
                 <p>
-                  Microsoft Visual C++ version 12.0<br> Win32<br> double
+                  GNU C++ version 7.1.0<br> linux<br> double
                 </p>
               </th>
 <th>
                 <p>
-                  GNU C++ version 5.1.0<br> linux<br> double
+                  GNU C++ version 7.1.0<br> linux<br> long double
                 </p>
               </th>
 <th>
                 <p>
-                  GNU C++ version 5.1.0<br> linux<br> long double
+                  Sun compiler version 0x5150<br> Sun Solaris<br> long double
                 </p>
               </th>
 <th>
                 <p>
-                  Sun compiler version 0x5130<br> Sun Solaris<br> long double
+                  Microsoft Visual C++ version 14.1<br> Win32<br> double
                 </p>
               </th>
 </tr></thead>
@@ -126,13 +126,8 @@
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 7.16&#949; (Mean = 1.85&#949;)</span>
-                </p>
-              </td>
-<td>
-                <p>
                   <span class="blue">Max = 0.589&#949; (Mean = 0.0331&#949;)</span><br>
-                  <br> (<span class="emphasis"><em>GSL 1.16:</em></span> Max = 58.5&#949; (Mean = 17.1&#949;))
+                  <br> (<span class="emphasis"><em>GSL 2.1:</em></span> Max = 58.5&#949; (Mean = 17.1&#949;))
                 </p>
               </td>
 <td>
@@ -143,6 +138,11 @@
 <td>
                 <p>
                   <span class="blue">Max = 9.97&#949; (Mean = 2.13&#949;)</span>
+                </p>
+              </td>
+<td>
+                <p>
+                  <span class="blue">Max = 7.16&#949; (Mean = 1.85&#949;)</span>
                 </p>
               </td>
 </tr>
@@ -154,13 +154,8 @@
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 2.62&#949; (Mean = 0.531&#949;)</span>
-                </p>
-              </td>
-<td>
-                <p>
                   <span class="blue">Max = 0&#949; (Mean = 0&#949;)</span><br> <br> (<span class="emphasis"><em>GSL
-                  1.16:</em></span> Max = 115&#949; (Mean = 23.6&#949;))
+                  2.1:</em></span> Max = 115&#949; (Mean = 23.6&#949;))
                 </p>
               </td>
 <td>
@@ -171,6 +166,11 @@
 <td>
                 <p>
                   <span class="blue">Max = 1.99&#949; (Mean = 0.559&#949;)</span>
+                </p>
+              </td>
+<td>
+                <p>
+                  <span class="blue">Max = 2.62&#949; (Mean = 0.531&#949;)</span>
                 </p>
               </td>
 </tr>
@@ -182,13 +182,8 @@
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0.988&#949; (Mean = 0.486&#949;)</span>
-                </p>
-              </td>
-<td>
-                <p>
                   <span class="blue">Max = 0.556&#949; (Mean = 0.0625&#949;)</span><br>
-                  <br> (<span class="emphasis"><em>GSL 1.16:</em></span> Max = 0.988&#949; (Mean = 0.469&#949;))
+                  <br> (<span class="emphasis"><em>GSL 2.1:</em></span> Max = 0.988&#949; (Mean = 0.469&#949;))
                 </p>
               </td>
 <td>
@@ -198,7 +193,12 @@
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0.965&#949; (Mean = 0.409&#949;)</span>
+                  <span class="blue">Max = 0.965&#949; (Mean = 0.408&#949;)</span>
+                </p>
+              </td>
+<td>
+                <p>
+                  <span class="blue">Max = 0.988&#949; (Mean = 0.486&#949;)</span>
                 </p>
               </td>
 </tr>

@@ -1,10 +1,49 @@
 [template history[]
 
 Currently open bug reports can be viewed
-[@https://svn.boost.org/trac/boost/query?status=assigned&status=new&status=reopened&component=math&col=id&col=summary&col=status&col=type&col=milestone&col=component&order=priority here].
+[@https://github.com/boostorg/math/issues here].
 
 All bug reports including closed ones can be viewed
-[@https://svn.boost.org/trac/boost/query?status=assigned&status=closed&status=new&status=reopened&component=math&col=id&col=summary&col=status&col=type&col=milestone&col=component&order=priority here].
+[@https://svn.boost.org/trac/boost/query?status=assigned&status=closed&status=new&status=reopened&component=math&col=id&col=summary&col=status&col=type&col=milestone&col=component&order=priority here]
+and [@https://github.com/boostorg/math/issues?utf8=%E2%9C%93&q=is%3Aissue here].
+
+[h4 Math-2.9.0 (Boost-1.70)]
+
+* Add Lanczos smoothing derivatives
+* Move `numerical_differentiation.hpp` from `boost/math/tools/` to `boost/math/differentiation/finite_difference.hpp`.
+* Add mean, variance, skewness, kurtosis, median, Gini coefficient, and median absolute deviation to `tools/univariate_statistics.hpp`.
+* Add correlation coefficients and covariance to `tools/bivariate_statistics.hpp`
+* Add absolute Gini coefficient, Hoyer sparsity, oracle SNR, and the /M/[sub 2]/M/[sub 4] SNR estimator to `tools/signal_statistics.hpp`.
+* Add total variation, l0, l1, l2, and sup norms, as well as corresponding distance functions to `tools/norms.hpp`.
+* Add move constructors for polynomials, support complex coefficients, add `.prime()` and `.integrate()` methods.
+* Add `quadratic_roots` to `tools/roots.hpp`.
+* Add support for complex-valued functions to Newton's method in `roots.hpp`.
+* Add Catmull-Rom interpolator.
+* Fix bug in `newton_raphson_iterate` where we could terminate incorrectly under certain exceptional cases.
+* Suppressed warnings from use of `Q` suffix on constants when compiling with `g++ -Wall -pedantic`.
+
+[h4 Math-2.8.0 (Boost-1.69)]
+
+* Add LambertW functions.
+* Update integration routines to support complex valued integrands and contour integrals.
+* Added the derivative of the Barycentric rational approximation.
+* Updated continued fraction and series evaluation code to support complex types.
+* Minor fixes to better support variable precision floating point types.
+* Removed use of deprecated Boost.Endian in favour of Predef.
+* Prevent logic error leading to infinite loop in toms748_solve.  See [@https://github.com/boostorg/math/issues/138 #138].
+* Fix mean and standard_deviation for extreme_value_distribution.  See [@https://github.com/boostorg/math/issues/139 #139].
+* Improve heuristics used in newton_raphson_iterate.  See [@https://github.com/boostorg/math/issues/145 #145].
+* Fix result of `erf(NaN)`.  See [@https://github.com/boostorg/math/issues/141 #141].
+* Big push to reduce GCC warnings.  See [@https://github.com/boostorg/math/issues/136 #136].
+* Refactor polynomial addition.  See [@https://github.com/boostorg/math/pull/132 PR132].
+* Fix for vxWorks having a `real` function in the global namespace. See [@https://github.com/boostorg/math/pull/131 PR131].
+* Improve `sinc` approximations and add better tests.
+* Fix typo in Student's T hypothesis testing documentation, see [@https://github.com/boostorg/math/issues/143 #143].
+
+[h4 Math-2.7.1 (Boost-1.68)]
+
+* Continue to improve numerical integration routines, and in particular add support for contour integrals.
+* Improve accuracy of erfc function's rational approximations.
 
 [h4 Math-2.7.0 (Boost-1.66)]
 

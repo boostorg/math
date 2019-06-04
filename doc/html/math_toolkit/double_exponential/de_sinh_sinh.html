@@ -3,8 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>sinh_sinh</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
-<link rel="home" href="../../index.html" title="Math Toolkit 2.6.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<link rel="home" href="../../index.html" title="Math Toolkit 2.9.0">
 <link rel="up" href="../double_exponential.html" title="Double-exponential quadrature">
 <link rel="prev" href="de_tanh_sinh_2_arg.html" title="Handling functions with large features near an endpoint with tanh-sinh quadrature">
 <link rel="next" href="de_exp_sinh.html" title="exp_sinh">
@@ -33,11 +33,11 @@
     <span class="identifier">sinh_sinh</span><span class="special">(</span><span class="identifier">size_t</span> <span class="identifier">max_refinements</span> <span class="special">=</span> <span class="number">9</span><span class="special">);</span>
 
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">&gt;</span>
-    <span class="identifier">Real</span> <span class="identifier">integrate</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span>
+    <span class="keyword">auto</span> <span class="identifier">integrate</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span>
                    <span class="identifier">Real</span> <span class="identifier">tol</span> <span class="special">=</span> <span class="identifier">sqrt</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">Real</span><span class="special">&gt;::</span><span class="identifier">epsilon</span><span class="special">()),</span>
                    <span class="identifier">Real</span><span class="special">*</span> <span class="identifier">error</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">,</span>
                    <span class="identifier">Real</span><span class="special">*</span> <span class="identifier">L1</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">,</span>
-                   <span class="identifier">size_t</span><span class="special">*</span> <span class="identifier">levels</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+                   <span class="identifier">size_t</span><span class="special">*</span> <span class="identifier">levels</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">)-&gt;</span><span class="keyword">decltype</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">declval</span><span class="special">&lt;</span><span class="identifier">F</span><span class="special">&gt;()(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">declval</span><span class="special">&lt;</span><span class="identifier">Real</span><span class="special">&gt;()))</span> <span class="keyword">const</span><span class="special">;;</span>
 <span class="special">};</span>
 </pre>
 <p>
@@ -53,6 +53,28 @@
 <p>
         Note that the limits of integration are understood to be (-&#8734;, &#8734;).
       </p>
+<p>
+        Complex valued integrands are supported as well, for example the <a href="https://en.wikipedia.org/wiki/Dirichlet_eta_function" target="_top">Dirichlet
+        Eta function</a> can be represented via:
+      </p>
+<p>
+        <span class="inlinemediaobject"><img src="../../../equations/complex_eta_integral.svg"></span>
+      </p>
+<p>
+        which we can directly code up as:
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Complex</span><span class="special">&gt;</span>
+<span class="identifier">Complex</span> <span class="identifier">eta</span><span class="special">(</span><span class="identifier">Complex</span> <span class="identifier">s</span><span class="special">)</span>
+<span class="special">{</span>
+   <span class="keyword">typedef</span> <span class="keyword">typename</span> <span class="identifier">Complex</span><span class="special">::</span><span class="identifier">value_type</span> <span class="identifier">value_type</span><span class="special">;</span>
+   <span class="keyword">using</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">pow</span><span class="special">;</span>  <span class="keyword">using</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">exp</span><span class="special">;</span>
+   <span class="identifier">Complex</span> <span class="identifier">i</span><span class="special">(</span><span class="number">0</span><span class="special">,</span> <span class="number">1</span><span class="special">);</span>
+   <span class="identifier">value_type</span> <span class="identifier">pi</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">constants</span><span class="special">::</span><span class="identifier">pi</span><span class="special">&lt;</span><span class="identifier">value_type</span><span class="special">&gt;();</span>
+   <span class="keyword">auto</span> <span class="identifier">f</span> <span class="special">=</span> <span class="special">[&amp;,</span> <span class="identifier">s</span><span class="special">,</span> <span class="identifier">i</span><span class="special">](</span><span class="identifier">value_type</span> <span class="identifier">t</span><span class="special">)</span> <span class="special">{</span> <span class="keyword">return</span> <span class="identifier">pow</span><span class="special">(</span><span class="number">0.5</span> <span class="special">+</span> <span class="identifier">i</span> <span class="special">*</span> <span class="identifier">t</span><span class="special">,</span> <span class="special">-</span><span class="identifier">s</span><span class="special">)</span> <span class="special">/</span> <span class="special">(</span><span class="identifier">exp</span><span class="special">(</span><span class="identifier">pi</span> <span class="special">*</span> <span class="identifier">t</span><span class="special">)</span> <span class="special">+</span> <span class="identifier">exp</span><span class="special">(-</span><span class="identifier">pi</span> <span class="special">*</span> <span class="identifier">t</span><span class="special">));</span> <span class="special">};</span>
+   <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">quadrature</span><span class="special">::</span><span class="identifier">sinh_sinh</span><span class="special">&lt;</span><span class="identifier">value_type</span><span class="special">&gt;</span> <span class="identifier">integrator</span><span class="special">;</span>
+   <span class="keyword">return</span> <span class="identifier">integrator</span><span class="special">.</span><span class="identifier">integrate</span><span class="special">(</span><span class="identifier">f</span><span class="special">);</span>
+<span class="special">}</span>
+</pre>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>

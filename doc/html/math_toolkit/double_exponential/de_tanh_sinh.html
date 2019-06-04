@@ -3,8 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>tanh_sinh</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
-<link rel="home" href="../../index.html" title="Math Toolkit 2.6.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<link rel="home" href="../../index.html" title="Math Toolkit 2.9.0">
 <link rel="up" href="../double_exponential.html" title="Double-exponential quadrature">
 <link rel="prev" href="de_overview.html" title="Overview">
 <link rel="next" href="de_tanh_sinh_2_arg.html" title="Handling functions with large features near an endpoint with tanh-sinh quadrature">
@@ -33,18 +33,18 @@
     <span class="identifier">tanh_sinh</span><span class="special">(</span><span class="identifier">size_t</span> <span class="identifier">max_refinements</span> <span class="special">=</span> <span class="number">15</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">Real</span><span class="special">&amp;</span> <span class="identifier">min_complement</span> <span class="special">=</span> <span class="identifier">tools</span><span class="special">::</span><span class="identifier">min_value</span><span class="special">&lt;</span><span class="identifier">Real</span><span class="special">&gt;()</span> <span class="special">*</span> <span class="number">4</span><span class="special">)</span>
 
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">&gt;</span>
-    <span class="identifier">Real</span> <span class="identifier">integrate</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">b</span><span class="special">,</span>
+    <span class="keyword">auto</span> <span class="identifier">integrate</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">b</span><span class="special">,</span>
                    <span class="identifier">Real</span> <span class="identifier">tolerance</span> <span class="special">=</span> <span class="identifier">tools</span><span class="special">::</span><span class="identifier">root_epsilon</span><span class="special">&lt;</span><span class="identifier">Real</span><span class="special">&gt;(),</span>
                    <span class="identifier">Real</span><span class="special">*</span> <span class="identifier">error</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">,</span>
                    <span class="identifier">Real</span><span class="special">*</span> <span class="identifier">L1</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">,</span>
-                   <span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span><span class="special">*</span> <span class="identifier">levels</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">)</span>
+                   <span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span><span class="special">*</span> <span class="identifier">levels</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">)-&gt;</span><span class="keyword">decltype</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">declval</span><span class="special">&lt;</span><span class="identifier">F</span><span class="special">&gt;()(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">declval</span><span class="special">&lt;</span><span class="identifier">Real</span><span class="special">&gt;()))</span> <span class="keyword">const</span><span class="special">;</span>
 
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">&gt;</span>
-    <span class="identifier">Real</span> <span class="identifier">integrate</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span> <span class="identifier">Real</span>
+    <span class="keyword">auto</span> <span class="identifier">integrate</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span> <span class="identifier">Real</span>
                    <span class="identifier">tolerance</span> <span class="special">=</span> <span class="identifier">tools</span><span class="special">::</span><span class="identifier">root_epsilon</span><span class="special">&lt;</span><span class="identifier">Real</span><span class="special">&gt;(),</span>
                    <span class="identifier">Real</span><span class="special">*</span> <span class="identifier">error</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">,</span>
                    <span class="identifier">Real</span><span class="special">*</span> <span class="identifier">L1</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">,</span>
-                   <span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span><span class="special">*</span> <span class="identifier">levels</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">)</span>
+                   <span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span><span class="special">*</span> <span class="identifier">levels</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">)-&gt;</span><span class="keyword">decltype</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">declval</span><span class="special">&lt;</span><span class="identifier">F</span><span class="special">&gt;()(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">declval</span><span class="special">&lt;</span><span class="identifier">Real</span><span class="special">&gt;()))</span> <span class="keyword">const</span><span class="special">;</span>
 
 <span class="special">};</span>
 </pre>
@@ -85,7 +85,7 @@
         at the endpoints of the integration domain. For instance, the following integrand,
         singular at both endpoints, can be efficiently evaluated to 100 binary digits:
       </p>
-<pre class="programlisting"><span class="keyword">auto</span> <span class="identifier">f</span> <span class="special">=</span> <span class="special">[](</span><span class="identifier">Real</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">{</span> <span class="keyword">return</span> <span class="identifier">log</span><span class="special">(</span><span class="identifier">x</span><span class="special">)*</span><span class="identifier">log</span><span class="special">(</span><span class="number">1</span><span class="special">-</span><span class="identifier">x</span><span class="special">);</span> <span class="special">};</span>
+<pre class="programlisting"><span class="keyword">auto</span> <span class="identifier">f</span> <span class="special">=</span> <span class="special">[](</span><span class="identifier">Real</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">{</span> <span class="keyword">return</span> <span class="identifier">log</span><span class="special">(</span><span class="identifier">x</span><span class="special">)*</span><span class="identifier">log1p</span><span class="special">(-</span><span class="identifier">x</span><span class="special">);</span> <span class="special">};</span>
 <span class="identifier">Real</span> <span class="identifier">Q</span> <span class="special">=</span> <span class="identifier">integrator</span><span class="special">.</span><span class="identifier">integrate</span><span class="special">(</span><span class="identifier">f</span><span class="special">,</span> <span class="special">(</span><span class="identifier">Real</span><span class="special">)</span> <span class="number">0</span><span class="special">,</span> <span class="special">(</span><span class="identifier">Real</span><span class="special">)</span> <span class="number">1</span><span class="special">);</span>
 </pre>
 <p>
@@ -489,6 +489,32 @@
         have been provided that allow stable computation over infinite domains; these
         being the exp-sinh and sinh-sinh quadrature.
       </p>
+<h5>
+<a name="math_toolkit.double_exponential.de_tanh_sinh.h0"></a>
+        <span class="phrase"><a name="math_toolkit.double_exponential.de_tanh_sinh.complex_integrals"></a></span><a class="link" href="de_tanh_sinh.html#math_toolkit.double_exponential.de_tanh_sinh.complex_integrals">Complex
+        integrals</a>
+      </h5>
+<p>
+        The tanh_sinh integrator supports integration of functions which return complex
+        results, for example the sine-integral <code class="computeroutput"><span class="identifier">Si</span><span class="special">(</span><span class="identifier">z</span><span class="special">)</span></code>
+        has the integral representation:
+      </p>
+<p>
+        <span class="inlinemediaobject"><img src="../../../equations/sine_integral.svg"></span>
+      </p>
+<p>
+        Which we can code up directly as:
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Complex</span><span class="special">&gt;</span>
+<span class="identifier">Complex</span> <span class="identifier">Si</span><span class="special">(</span><span class="identifier">Complex</span> <span class="identifier">z</span><span class="special">)</span>
+<span class="special">{</span>
+   <span class="keyword">typedef</span> <span class="keyword">typename</span> <span class="identifier">Complex</span><span class="special">::</span><span class="identifier">value_type</span> <span class="identifier">value_type</span><span class="special">;</span>
+   <span class="keyword">using</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">sin</span><span class="special">;</span>  <span class="keyword">using</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">cos</span><span class="special">;</span> <span class="keyword">using</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">exp</span><span class="special">;</span>
+   <span class="keyword">auto</span> <span class="identifier">f</span> <span class="special">=</span> <span class="special">[&amp;</span><span class="identifier">z</span><span class="special">](</span><span class="identifier">value_type</span> <span class="identifier">t</span><span class="special">)</span> <span class="special">{</span> <span class="keyword">return</span> <span class="special">-</span><span class="identifier">exp</span><span class="special">(-</span><span class="identifier">z</span> <span class="special">*</span> <span class="identifier">cos</span><span class="special">(</span><span class="identifier">t</span><span class="special">))</span> <span class="special">*</span> <span class="identifier">cos</span><span class="special">(</span><span class="identifier">z</span> <span class="special">*</span> <span class="identifier">sin</span><span class="special">(</span><span class="identifier">t</span><span class="special">));</span> <span class="special">};</span>
+   <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">quadrature</span><span class="special">::</span><span class="identifier">tanh_sinh</span><span class="special">&lt;</span><span class="identifier">value_type</span><span class="special">&gt;</span> <span class="identifier">integrator</span><span class="special">;</span>
+   <span class="keyword">return</span> <span class="identifier">integrator</span><span class="special">.</span><span class="identifier">integrate</span><span class="special">(</span><span class="identifier">f</span><span class="special">,</span> <span class="number">0</span><span class="special">,</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">constants</span><span class="special">::</span><span class="identifier">half_pi</span><span class="special">&lt;</span><span class="identifier">value_type</span><span class="special">&gt;())</span> <span class="special">+</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">constants</span><span class="special">::</span><span class="identifier">half_pi</span><span class="special">&lt;</span><span class="identifier">value_type</span><span class="special">&gt;();</span>
+<span class="special">}</span>
+</pre>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>

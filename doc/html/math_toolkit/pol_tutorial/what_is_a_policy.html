@@ -3,8 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>So Just What is a Policy Anyway?</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
-<link rel="home" href="../../index.html" title="Math Toolkit 2.6.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<link rel="home" href="../../index.html" title="Math Toolkit 2.9.0">
 <link rel="up" href="../pol_tutorial.html" title="Policy Tutorial">
 <link rel="prev" href="../pol_tutorial.html" title="Policy Tutorial">
 <link rel="next" href="policy_tut_defaults.html" title="Policies Have Sensible Defaults">
@@ -52,21 +52,34 @@
           </li>
 </ul></div>
 <p>
-        Some of these policies could arguably be runtime variables, but then we couldn't
-        use compile-time dispatch internally to select the best evaluation method
-        for the given policies.
+        Some of these policies could arguably be run-time variables, but then we
+        couldn't use compile-time dispatch internally to select the best evaluation
+        method for the given policies.
       </p>
 <p>
         For this reason a Policy is a <span class="emphasis"><em>type</em></span>: in fact it's an
         instance of the class template <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">policy</span><span class="special">&lt;&gt;</span></code>. This class is just a compile-time-container
-        of user-selected policies (sometimes called a type-list):
+        of user-selected policies (sometimes called a type-list).
+      </p>
+<p>
+        Over a dozen <a class="link" href="policy_tut_defaults.html" title="Policies Have Sensible Defaults">policy
+        defaults</a> are provided, so most of the time you can ignore the policy
+        framework, but you can overwrite the defaults with your own policies to give
+        detailed control, for example:
       </p>
 <pre class="programlisting"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">;</span>
-<span class="comment">//</span>
-<span class="comment">// Define a policy that sets ::errno on overflow, and does</span>
-<span class="comment">// not promote double to long double internally:</span>
-<span class="comment">//</span>
-<span class="keyword">typedef</span> <span class="identifier">policy</span><span class="special">&lt;</span><span class="identifier">domain_error</span><span class="special">&lt;</span><span class="identifier">errno_on_error</span><span class="special">&gt;,</span> <span class="identifier">promote_double</span><span class="special">&lt;</span><span class="keyword">false</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="identifier">mypolicy</span><span class="special">;</span>
+
+<span class="comment">// Define a policy that sets ::errno on overflow,</span>
+<span class="comment">// and does not promote double to long double internally,</span>
+<span class="comment">// and only aims for precision of only 3 decimal digits,</span>
+<span class="comment">// to an error-handling policy, usually to trade precision for speed:</span>
+
+<span class="keyword">typedef</span> <span class="identifier">policy</span>
+<span class="special">&lt;</span>
+  <span class="identifier">domain_error</span><span class="special">&lt;</span><span class="identifier">errno_on_error</span><span class="special">&gt;,</span>
+  <span class="identifier">promote_double</span><span class="special">&lt;</span><span class="keyword">false</span><span class="special">&gt;,</span>
+  <span class="identifier">digits10</span><span class="special">&lt;</span><span class="number">3</span><span class="special">&gt;</span>
+<span class="special">&gt;</span> <span class="identifier">my_policy</span><span class="special">;</span>
 </pre>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

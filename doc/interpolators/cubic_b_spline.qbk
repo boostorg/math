@@ -19,7 +19,7 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
     {
     public:
 
-	    template <class BidiIterator>
+      template <class BidiIterator>
         cubic_b_spline(BidiIterator a, BidiIterator b, Real left_endpoint, Real step_size,
                        Real left_endpoint_derivative = std::numeric_limits<Real>::quiet_NaN(),
                        Real right_endpoint_derivative = std::numeric_limits<Real>::quiet_NaN());
@@ -39,10 +39,10 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 The cubic B-spline class provided by boost allows fast and accurate interpolation of a function which is known at equally spaced points.
 The cubic B-spline interpolation is numerically stable as it uses compactly supported basis functions constructed via iterative convolution.
-This is to be contrasted to traditional cubic spline interpolation is ill-conditioned as the global support of cubic polynomials causes small changes far from the evaluation point exert a large influence on the calculated value.
+This is to be contrasted to traditional cubic spline interpolation which is ill-conditioned as the global support of cubic polynomials causes small changes far from the evaluation point to exert a large influence on the calculated value.
 
 There are many use cases for interpolating a function at equally spaced points.
-One particularly important example is solving ODE's whose coefficients depend on data determined from experiment or numerical simulation.
+One particularly important example is solving ODEs whose coefficients depend on data determined from experiment or numerical simulation.
 Since most ODE steppers are adaptive, they must be able to sample the coefficients at arbitrary points; not just at the points we know the values of our function.
 
 The first two arguments to the constructor are either:
@@ -113,4 +113,4 @@ In addition, constant, linear, and quadratic functions are interpolated to ensur
 
 [cubic_b_spline_example_out]
 
-[endsect]
+[endsect] [/section:cubic_b Cubic B-spline interpolation]

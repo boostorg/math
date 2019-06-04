@@ -3,8 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Setting Policies at Namespace or Translation Unit Scope</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
-<link rel="home" href="../../index.html" title="Math Toolkit 2.6.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<link rel="home" href="../../index.html" title="Math Toolkit 2.9.0">
 <link rel="up" href="../pol_tutorial.html" title="Policy Tutorial">
 <link rel="prev" href="ad_hoc_sf_policies.html" title="Changing the Policy on an Ad Hoc Basis for the Special Functions">
 <link rel="next" href="user_def_err_pol.html" title="Calling User Defined Error Handlers">
@@ -176,12 +176,12 @@ errno = 33
         that now the macro BOOST_MATH_DECLARE_DISTRIBUTIONS accepts two parameters:
         the floating point type to use, and the policy type to apply. For example:
       </p>
-<pre class="programlisting"><span class="identifier">BOOST_MATH_DECLARE_DISTRIBUTIONS</span><span class="special">(</span><span class="keyword">double</span><span class="special">,</span> <span class="identifier">mypolicy</span><span class="special">)</span>
+<pre class="programlisting"><span class="identifier">BOOST_MATH_DECLARE_DISTRIBUTIONS</span><span class="special">(</span><span class="keyword">double</span><span class="special">,</span> <span class="identifier">my_policy</span><span class="special">)</span>
 </pre>
 <p>
         Results a set of typedefs being defined like this:
       </p>
-<pre class="programlisting"><span class="keyword">typedef</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">normal_distribution</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="identifier">mypolicy</span><span class="special">&gt;</span> <span class="identifier">normal</span><span class="special">;</span>
+<pre class="programlisting"><span class="keyword">typedef</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">normal_distribution</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="identifier">my_policy</span><span class="special">&gt;</span> <span class="identifier">normal</span><span class="special">;</span>
 </pre>
 <p>
         The name of each typedef is the same as the name of the distribution class

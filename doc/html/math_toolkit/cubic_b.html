@@ -3,10 +3,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Cubic B-spline interpolation</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
-<link rel="home" href="../index.html" title="Math Toolkit 2.6.0">
-<link rel="up" href="../interpolation.html" title="Chapter&#160;10.&#160;Interpolation">
-<link rel="prev" href="../interpolation.html" title="Chapter&#160;10.&#160;Interpolation">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<link rel="home" href="../index.html" title="Math Toolkit 2.9.0">
+<link rel="up" href="../interpolation.html" title="Chapter&#160;11.&#160;Interpolation">
+<link rel="prev" href="../interpolation.html" title="Chapter&#160;11.&#160;Interpolation">
 <link rel="next" href="barycentric.html" title="Barycentric Rational Interpolation">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -39,7 +39,7 @@
   <span class="special">{</span>
   <span class="keyword">public</span><span class="special">:</span>
 
-      <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidiIterator</span><span class="special">&gt;</span>
+    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">BidiIterator</span><span class="special">&gt;</span>
       <span class="identifier">cubic_b_spline</span><span class="special">(</span><span class="identifier">BidiIterator</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">BidiIterator</span> <span class="identifier">b</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">left_endpoint</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">step_size</span><span class="special">,</span>
                      <span class="identifier">Real</span> <span class="identifier">left_endpoint_derivative</span> <span class="special">=</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">Real</span><span class="special">&gt;::</span><span class="identifier">quiet_NaN</span><span class="special">(),</span>
                      <span class="identifier">Real</span> <span class="identifier">right_endpoint_derivative</span> <span class="special">=</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">Real</span><span class="special">&gt;::</span><span class="identifier">quiet_NaN</span><span class="special">());</span>
@@ -64,13 +64,13 @@
       of a function which is known at equally spaced points. The cubic B-spline interpolation
       is numerically stable as it uses compactly supported basis functions constructed
       via iterative convolution. This is to be contrasted to traditional cubic spline
-      interpolation is ill-conditioned as the global support of cubic polynomials
-      causes small changes far from the evaluation point exert a large influence
+      interpolation which is ill-conditioned as the global support of cubic polynomials
+      causes small changes far from the evaluation point to exert a large influence
       on the calculated value.
     </p>
 <p>
       There are many use cases for interpolating a function at equally spaced points.
-      One particularly important example is solving ODE's whose coefficients depend
+      One particularly important example is solving ODEs whose coefficients depend
       on data determined from experiment or numerical simulation. Since most ODE
       steppers are adaptive, they must be able to sample the coefficients at arbitrary
       points; not just at the points we know the values of our function.
@@ -213,7 +213,6 @@
     <span class="comment">// We will try to figure out when the population of the United States crossed 100 million.</span>
     <span class="comment">// Since the census is taken every 10 years, the data is equally spaced, so we can use the cubic b spline.</span>
     <span class="comment">// Data taken from https://en.wikipedia.org/wiki/United_States_Census</span>
-    <span class="comment">// An eye</span>
     <span class="comment">// We'll start at the year 1860:</span>
     <span class="keyword">double</span> <span class="identifier">t0</span> <span class="special">=</span> <span class="number">1860</span><span class="special">;</span>
     <span class="keyword">double</span> <span class="identifier">time_step</span> <span class="special">=</span> <span class="number">10</span><span class="special">;</span>
@@ -231,13 +230,13 @@
 
     <span class="comment">// An eyeball estimate indicates that the population crossed 100 million around 1915.</span>
     <span class="comment">// Let's see what interpolation says:</span>
-    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">cubic_b_spline</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">p</span><span class="special">(</span><span class="identifier">population</span><span class="special">.</span><span class="identifier">data</span><span class="special">(),</span> <span class="identifier">population</span><span class="special">.</span><span class="identifier">size</span><span class="special">(),</span> <span class="identifier">t0</span><span class="special">,</span> <span class="number">10</span><span class="special">);</span>
+    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">cubic_b_spline</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">p</span><span class="special">(</span><span class="identifier">population</span><span class="special">.</span><span class="identifier">data</span><span class="special">(),</span> <span class="identifier">population</span><span class="special">.</span><span class="identifier">size</span><span class="special">(),</span> <span class="identifier">t0</span><span class="special">,</span> <span class="identifier">time_step</span><span class="special">);</span>
 
     <span class="comment">// Now create a function which has a zero at p = 100,000,000:</span>
     <span class="keyword">auto</span> <span class="identifier">f</span> <span class="special">=</span> <span class="special">[=](</span><span class="keyword">double</span> <span class="identifier">t</span><span class="special">){</span> <span class="keyword">return</span> <span class="identifier">p</span><span class="special">(</span><span class="identifier">t</span><span class="special">)</span> <span class="special">-</span> <span class="number">100000000</span><span class="special">;</span> <span class="special">};</span>
 
     <span class="comment">// Boost includes a bisection algorithm, which is robust, though not as fast as some others </span>
-    <span class="comment">// we provide, but lets try that first.  We need a termination condition for it, which</span>
+    <span class="comment">// we provide, but let's try that first.  We need a termination condition for it, which</span>
     <span class="comment">// takes the two endpoints of the range and returns either true (stop) or false (keep going),</span>
     <span class="comment">// we could use a predefined one such as boost::math::tools::eps_tolerance&lt;double&gt;, but that</span>
     <span class="comment">// won't stop until we have full double precision which is overkill, since we just need the </span>

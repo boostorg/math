@@ -299,7 +299,7 @@ void test_legendre_p_zeros()
 
     // Don't take the tolerances too seriously.
     // The other test shows that the zeros are estimated more accurately than the function!
-    for (int n = 6; n < 130; ++n)
+    for (unsigned n = 6; n < 130; ++n)
     {
         zeros = legendre_p_zeros<Real>(n);
         if (n & 1)
@@ -315,7 +315,7 @@ void test_legendre_p_zeros()
             BOOST_CHECK_SMALL(legendre_p(n, zeros[0]), 550*tol);
         }
         Real previous_zero = zeros[0];
-        for (int k = 1; k < zeros.size(); ++k)
+        for (unsigned k = 1; k < zeros.size(); ++k)
         {
             Real next_zero = zeros[k];
             BOOST_CHECK(next_zero > previous_zero);

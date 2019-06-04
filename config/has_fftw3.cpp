@@ -7,9 +7,12 @@
 
 int main()
 {
+   fftwq_plan plan;  // early versions don't have this it seems.
+
    fftw_cleanup();
    fftwf_cleanup();
    fftwl_cleanup();
+
 
    return 0;
 }

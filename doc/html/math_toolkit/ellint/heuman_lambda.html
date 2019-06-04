@@ -3,8 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Heuman Lambda Function</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
-<link rel="home" href="../../index.html" title="Math Toolkit 2.6.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<link rel="home" href="../../index.html" title="Math Toolkit 2.9.0">
 <link rel="up" href="../ellint.html" title="Elliptic Integrals">
 <link rel="prev" href="jacobi_zeta.html" title="Jacobi Zeta Function">
 <link rel="next" href="../jacobi.html" title="Jacobi Elliptic Functions">
@@ -37,8 +37,8 @@
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">heuman_lambda</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">k</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">phi</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;18.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">heuman_lambda</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">k</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">phi</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;18.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">heuman_lambda</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">k</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">phi</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 
 <span class="special">}}</span> <span class="comment">// namespaces</span>
 </pre>
@@ -63,9 +63,9 @@
         (outside this range the result would be complex).
       </p>
 <p>
-        The final <a class="link" href="../../policy.html" title="Chapter&#160;18.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
+        The final <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
         be used to control the behaviour of the function: how it handles errors,
-        what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter&#160;18.&#160;Policies: Controlling Precision, Error Handling etc">policy
+        what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">policy
         documentation for more details</a>.
       </p>
 <p>
@@ -84,7 +84,7 @@ is very large, in which case the usual trigonometric function argument-reduction
         issues apply.
       </p>
 <div class="table">
-<a name="math_toolkit.ellint.heuman_lambda.table_heuman_lambda"></a><p class="title"><b>Table&#160;6.69.&#160;Error rates for heuman_lambda</b></p>
+<a name="math_toolkit.ellint.heuman_lambda.table_heuman_lambda"></a><p class="title"><b>Table&#160;7.69.&#160;Error rates for heuman_lambda</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for heuman_lambda">
 <colgroup>
 <col>
@@ -98,22 +98,22 @@ is very large, in which case the usual trigonometric function argument-reduction
               </th>
 <th>
                 <p>
-                  Microsoft Visual C++ version 12.0<br> Win32<br> double
+                  GNU C++ version 7.1.0<br> linux<br> double
                 </p>
               </th>
 <th>
                 <p>
-                  GNU C++ version 5.1.0<br> linux<br> double
+                  GNU C++ version 7.1.0<br> linux<br> long double
                 </p>
               </th>
 <th>
                 <p>
-                  GNU C++ version 5.1.0<br> linux<br> long double
+                  Sun compiler version 0x5150<br> Sun Solaris<br> long double
                 </p>
               </th>
 <th>
                 <p>
-                  Sun compiler version 0x5130<br> Sun Solaris<br> long double
+                  Microsoft Visual C++ version 14.1<br> Win32<br> double
                 </p>
               </th>
 </tr></thead>
@@ -122,11 +122,6 @@ is very large, in which case the usual trigonometric function argument-reduction
 <td>
                 <p>
                   Elliptic Integral Jacobi Zeta: Mathworld Data
-                </p>
-              </td>
-<td>
-                <p>
-                  <span class="blue">Max = 1.08&#949; (Mean = 0.734&#949;)</span>
                 </p>
               </td>
 <td>
@@ -144,16 +139,16 @@ is very large, in which case the usual trigonometric function argument-reduction
                   <span class="blue">Max = 1.89&#949; (Mean = 0.887&#949;)</span>
                 </p>
               </td>
+<td>
+                <p>
+                  <span class="blue">Max = 1.08&#949; (Mean = 0.734&#949;)</span>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
                 <p>
                   Elliptic Integral Heuman Lambda: Random Data
-                </p>
-              </td>
-<td>
-                <p>
-                  <span class="blue">Max = 2.12&#949; (Mean = 0.59&#949;)</span>
                 </p>
               </td>
 <td>
@@ -169,6 +164,11 @@ is very large, in which case the usual trigonometric function argument-reduction
 <td>
                 <p>
                   <span class="blue">Max = 3.82&#949; (Mean = 0.608&#949;)</span>
+                </p>
+              </td>
+<td>
+                <p>
+                  <span class="blue">Max = 2.12&#949; (Mean = 0.588&#949;)</span>
                 </p>
               </td>
 </tr>

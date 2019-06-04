@@ -3,8 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Comparison of Cube Root Finding Algorithms</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
-<link rel="home" href="../../index.html" title="Math Toolkit 2.6.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<link rel="home" href="../../index.html" title="Math Toolkit 2.9.0">
 <link rel="up" href="../root_comparison.html" title="Comparison of Root Finding Algorithms">
 <link rel="prev" href="../root_comparison.html" title="Comparison of Root Finding Algorithms">
 <link rel="next" href="root_n_comparison.html" title="Comparison of Nth-root Finding Algorithms">
@@ -29,7 +29,7 @@
 </h3></div></div></div>
 <p>
         In the table below, the cube root of 28 was computed for three <a href="http://en.cppreference.com/w/cpp/language/types" target="_top">fundamental
-        types</a> floating-point types, and one <a href="../../../../../../libs/multiprecision/doc/html/index.html" target="_top">Boost.Multiprecision</a>
+        (built-in) types</a> floating-point types, and one <a href="../../../../../../libs/multiprecision/doc/html/index.html" target="_top">Boost.Multiprecision</a>
         type <a href="../../../../../../libs/multiprecision/doc/html/boost_multiprecision/tut/floats/cpp_bin_float.html" target="_top">cpp_bin_float</a>
         using 50 decimal digit precision, using four algorithms.
       </p>
@@ -202,8 +202,8 @@
           </li>
 <li class="listitem">
             For <a href="http://en.cppreference.com/w/cpp/language/types" target="_top">fundamental
-            types</a>, there was little to choose between the three derivative
-            methods, but for <a href="../../../../../../libs/multiprecision/doc/html/boost_multiprecision/tut/floats/cpp_bin_float.html" target="_top">cpp_bin_float</a>,
+            (built-in) types</a>, there was little to choose between the three
+            derivative methods, but for <a href="../../../../../../libs/multiprecision/doc/html/boost_multiprecision/tut/floats/cpp_bin_float.html" target="_top">cpp_bin_float</a>,
             <a class="link" href="../roots_deriv.html#math_toolkit.roots_deriv.newton">Newton-Raphson iteration</a>
             was twice as fast. Note that the cube-root is an extreme test case as
             the cost of calling the functor is so cheap that the runtimes are largely
@@ -248,12 +248,12 @@
 <h6>
 <a name="math_toolkit.root_comparison.cbrt_comparison.h0"></a>
         <span class="phrase"><a name="math_toolkit.root_comparison.cbrt_comparison.program_root_finding_algorithms_"></a></span><a class="link" href="cbrt_comparison.html#math_toolkit.root_comparison.cbrt_comparison.program_root_finding_algorithms_">Program
-        root_finding_algorithms.cpp, Microsoft Visual C++ version 14.0, Dinkumware
+        root_finding_algorithms.cpp, Microsoft Visual C++ version 14.1, Dinkumware
         standard library version 650, Win32, x86<br> 1000000 evaluations of each
         of 5 root_finding algorithms.</a>
       </h6>
 <div class="table">
-<a name="math_toolkit.root_comparison.cbrt_comparison.cbrt_4"></a><p class="title"><b>Table&#160;8.1.&#160;Cube root(28) for float, double, long double and cpp_bin_float_50</b></p>
+<a name="math_toolkit.root_comparison.cbrt_comparison.cbrt_4"></a><p class="title"><b>Table&#160;9.1.&#160;Cube root(28) for float, double, long double and cpp_bin_float_50</b></p>
 <div class="table-contents"><table class="table" summary="Cube root(28) for float, double, long double and cpp_bin_float_50">
 <colgroup>
 <col>
@@ -441,7 +441,7 @@
               </td>
 <td>
                 <p>
-                  187500
+                  78125
                 </p>
               </td>
 <td>
@@ -463,29 +463,7 @@
               </td>
 <td>
                 <p>
-                  171875
-                </p>
-              </td>
-<td>
-                <p>
-                  <span class="blue">1.0</span>
-                </p>
-              </td>
-<td>
-                <p>
-                  1
-                </p>
-              </td>
-<td>
-              </td>
-<td>
-                <p>
-                  0
-                </p>
-              </td>
-<td>
-                <p>
-                  187500
+                  78125
                 </p>
               </td>
 <td>
@@ -507,12 +485,34 @@
               </td>
 <td>
                 <p>
-                  7468750
+                  93750
                 </p>
               </td>
 <td>
                 <p>
                   <span class="blue">1.0</span>
+                </p>
+              </td>
+<td>
+                <p>
+                  1
+                </p>
+              </td>
+<td>
+              </td>
+<td>
+                <p>
+                  0
+                </p>
+              </td>
+<td>
+                <p>
+                  10828125
+                </p>
+              </td>
+<td>
+                <p>
+                  2.3
                 </p>
               </td>
 <td>
@@ -536,12 +536,12 @@
               </td>
 <td>
                 <p>
-                  718750
+                  515625
                 </p>
               </td>
 <td>
                 <p>
-                  3.8
+                  <span class="red">6.6</span>
                 </p>
               </td>
 <td>
@@ -558,12 +558,12 @@
               </td>
 <td>
                 <p>
-                  921875
+                  718750
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="red">5.4</span>
+                  <span class="red">9.2</span>
                 </p>
               </td>
 <td>
@@ -580,12 +580,12 @@
               </td>
 <td>
                 <p>
-                  906250
+                  718750
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="red">4.8</span>
+                  <span class="red">7.7</span>
                 </p>
               </td>
 <td>
@@ -602,12 +602,12 @@
               </td>
 <td>
                 <p>
-                  52812500
+                  43359375
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="red">7.1</span>
+                  <span class="red">9.1</span>
                 </p>
               </td>
 <td>
@@ -631,51 +631,7 @@
               </td>
 <td>
                 <p>
-                  500000
-                </p>
-              </td>
-<td>
-                <p>
-                  2.7
-                </p>
-              </td>
-<td>
-                <p>
-                  0
-                </p>
-              </td>
-<td>
-              </td>
-<td>
-                <p>
-                  6
-                </p>
-              </td>
-<td>
-                <p>
-                  515625
-                </p>
-              </td>
-<td>
-                <p>
-                  3.0
-                </p>
-              </td>
-<td>
-                <p>
-                  0
-                </p>
-              </td>
-<td>
-              </td>
-<td>
-                <p>
-                  6
-                </p>
-              </td>
-<td>
-                <p>
-                  515625
+                  218750
                 </p>
               </td>
 <td>
@@ -692,12 +648,56 @@
               </td>
 <td>
                 <p>
+                  6
+                </p>
+              </td>
+<td>
+                <p>
+                  218750
+                </p>
+              </td>
+<td>
+                <p>
+                  2.8
+                </p>
+              </td>
+<td>
+                <p>
+                  0
+                </p>
+              </td>
+<td>
+              </td>
+<td>
+                <p>
+                  6
+                </p>
+              </td>
+<td>
+                <p>
+                  218750
+                </p>
+              </td>
+<td>
+                <p>
+                  2.3
+                </p>
+              </td>
+<td>
+                <p>
+                  0
+                </p>
+              </td>
+<td>
+              </td>
+<td>
+                <p>
                   2
                 </p>
               </td>
 <td>
                 <p>
-                  7781250
+                  4781250
                 </p>
               </td>
 <td>
@@ -726,12 +726,12 @@
               </td>
 <td>
                 <p>
-                  484375
+                  187500
                 </p>
               </td>
 <td>
                 <p>
-                  2.6
+                  2.4
                 </p>
               </td>
 <td>
@@ -748,7 +748,7 @@
               </td>
 <td>
                 <p>
-                  515625
+                  234375
                 </p>
               </td>
 <td>
@@ -770,12 +770,12 @@
               </td>
 <td>
                 <p>
-                  515625
+                  250000
                 </p>
               </td>
 <td>
                 <p>
-                  2.8
+                  2.7
                 </p>
               </td>
 <td>
@@ -792,12 +792,12 @@
               </td>
 <td>
                 <p>
-                  19375000
+                  11421875
                 </p>
               </td>
 <td>
                 <p>
-                  2.6
+                  2.4
                 </p>
               </td>
 <td>
@@ -821,7 +821,29 @@
               </td>
 <td>
                 <p>
-                  515625
+                  203125
+                </p>
+              </td>
+<td>
+                <p>
+                  2.6
+                </p>
+              </td>
+<td>
+                <p>
+                  0
+                </p>
+              </td>
+<td>
+              </td>
+<td>
+                <p>
+                  5
+                </p>
+              </td>
+<td>
+                <p>
+                  218750
                 </p>
               </td>
 <td>
@@ -843,34 +865,12 @@
               </td>
 <td>
                 <p>
-                  515625
+                  234375
                 </p>
               </td>
 <td>
                 <p>
-                  3.0
-                </p>
-              </td>
-<td>
-                <p>
-                  0
-                </p>
-              </td>
-<td>
-              </td>
-<td>
-                <p>
-                  5
-                </p>
-              </td>
-<td>
-                <p>
-                  531250
-                </p>
-              </td>
-<td>
-                <p>
-                  2.8
+                  2.5
                 </p>
               </td>
 <td>
@@ -887,12 +887,12 @@
               </td>
 <td>
                 <p>
-                  24453125
+                  14062500
                 </p>
               </td>
 <td>
                 <p>
-                  3.3
+                  2.9
                 </p>
               </td>
 <td>
@@ -909,12 +909,12 @@
 <br class="table-break"><h6>
 <a name="math_toolkit.root_comparison.cbrt_comparison.h1"></a>
         <span class="phrase"><a name="math_toolkit.root_comparison.cbrt_comparison.program_root_finding_algorithms0"></a></span><a class="link" href="cbrt_comparison.html#math_toolkit.root_comparison.cbrt_comparison.program_root_finding_algorithms0">Program
-        root_finding_algorithms.cpp, GNU C++ version 4.9.2, GNU libstdc++ version
-        20141030, Win32, x64<br> 1000000 evaluations of each of 5 root_finding
+        root_finding_algorithms.cpp, GNU C++ version 8.2.0, GNU libstdc++ version
+        20180728, linux, x64<br> 1000000 evaluations of each of 5 root_finding
         algorithms.</a>
       </h6>
 <div class="table">
-<a name="math_toolkit.root_comparison.cbrt_comparison.cbrt_4_0"></a><p class="title"><b>Table&#160;8.2.&#160;Cube root(28) for float, double, long double and cpp_bin_float_50</b></p>
+<a name="math_toolkit.root_comparison.cbrt_comparison.cbrt_4_0"></a><p class="title"><b>Table&#160;9.2.&#160;Cube root(28) for float, double, long double and cpp_bin_float_50</b></p>
 <div class="table-contents"><table class="table" summary="Cube root(28) for float, double, long double and cpp_bin_float_50">
 <colgroup>
 <col>
@@ -1102,7 +1102,7 @@
               </td>
 <td>
                 <p>
-                  46875
+                  30000
                 </p>
               </td>
 <td>
@@ -1124,7 +1124,7 @@
               </td>
 <td>
                 <p>
-                  46875
+                  60000
                 </p>
               </td>
 <td>
@@ -1146,7 +1146,7 @@
               </td>
 <td>
                 <p>
-                  46875
+                  70000
                 </p>
               </td>
 <td>
@@ -1168,12 +1168,12 @@
               </td>
 <td>
                 <p>
-                  3500000
+                  4440000
                 </p>
               </td>
 <td>
                 <p>
-                  1.1
+                  <span class="blue">1.0</span>
                 </p>
               </td>
 <td>
@@ -1197,12 +1197,12 @@
               </td>
 <td>
                 <p>
-                  187500
+                  220000
                 </p>
               </td>
 <td>
                 <p>
-                  4.0
+                  <span class="red">7.3</span>
                 </p>
               </td>
 <td>
@@ -1219,12 +1219,12 @@
               </td>
 <td>
                 <p>
-                  406250
+                  370000
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="red">8.7</span>
+                  <span class="red">6.2</span>
                 </p>
               </td>
 <td>
@@ -1241,12 +1241,12 @@
               </td>
 <td>
                 <p>
-                  609375
+                  580000
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="red">13.</span>
+                  <span class="red">8.3</span>
                 </p>
               </td>
 <td>
@@ -1258,17 +1258,17 @@
               </td>
 <td>
                 <p>
-                  7
+                  6
                 </p>
               </td>
 <td>
                 <p>
-                  44531250
+                  28360000
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="red">14.</span>
+                  <span class="red">6.7</span>
                 </p>
               </td>
 <td>
@@ -1292,34 +1292,12 @@
               </td>
 <td>
                 <p>
-                  93750
+                  120000
                 </p>
               </td>
 <td>
                 <p>
-                  2.0
-                </p>
-              </td>
-<td>
-                <p>
-                  0
-                </p>
-              </td>
-<td>
-              </td>
-<td>
-                <p>
-                  6
-                </p>
-              </td>
-<td>
-                <p>
-                  109375
-                </p>
-              </td>
-<td>
-                <p>
-                  2.3
+                  4.0
                 </p>
               </td>
 <td>
@@ -1336,12 +1314,34 @@
               </td>
 <td>
                 <p>
-                  171875
+                  130000
                 </p>
               </td>
 <td>
                 <p>
-                  3.7
+                  2.2
+                </p>
+              </td>
+<td>
+                <p>
+                  0
+                </p>
+              </td>
+<td>
+              </td>
+<td>
+                <p>
+                  6
+                </p>
+              </td>
+<td>
+                <p>
+                  180000
+                </p>
+              </td>
+<td>
+                <p>
+                  2.6
                 </p>
               </td>
 <td>
@@ -1358,7 +1358,7 @@
               </td>
 <td>
                 <p>
-                  3140625
+                  4260000
                 </p>
               </td>
 <td>
@@ -1387,34 +1387,12 @@
               </td>
 <td>
                 <p>
-                  93750
+                  110000
                 </p>
               </td>
 <td>
                 <p>
-                  2.0
-                </p>
-              </td>
-<td>
-                <p>
-                  0
-                </p>
-              </td>
-<td>
-              </td>
-<td>
-                <p>
-                  4
-                </p>
-              </td>
-<td>
-                <p>
-                  125000
-                </p>
-              </td>
-<td>
-                <p>
-                  2.7
+                  3.7
                 </p>
               </td>
 <td>
@@ -1431,12 +1409,34 @@
               </td>
 <td>
                 <p>
-                  218750
+                  140000
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="red">4.7</span>
+                  2.3
+                </p>
+              </td>
+<td>
+                <p>
+                  0
+                </p>
+              </td>
+<td>
+              </td>
+<td>
+                <p>
+                  4
+                </p>
+              </td>
+<td>
+                <p>
+                  230000
+                </p>
+              </td>
+<td>
+                <p>
+                  3.3
                 </p>
               </td>
 <td>
@@ -1453,12 +1453,12 @@
               </td>
 <td>
                 <p>
-                  7171875
+                  9210000
                 </p>
               </td>
 <td>
                 <p>
-                  2.3
+                  2.2
                 </p>
               </td>
 <td>
@@ -1482,7 +1482,29 @@
               </td>
 <td>
                 <p>
-                  109375
+                  120000
+                </p>
+              </td>
+<td>
+                <p>
+                  4.0
+                </p>
+              </td>
+<td>
+                <p>
+                  0
+                </p>
+              </td>
+<td>
+              </td>
+<td>
+                <p>
+                  5
+                </p>
+              </td>
+<td>
+                <p>
+                  140000
                 </p>
               </td>
 <td>
@@ -1504,34 +1526,12 @@
               </td>
 <td>
                 <p>
-                  171875
+                  280000
                 </p>
               </td>
 <td>
                 <p>
-                  3.7
-                </p>
-              </td>
-<td>
-                <p>
-                  0
-                </p>
-              </td>
-<td>
-              </td>
-<td>
-                <p>
-                  5
-                </p>
-              </td>
-<td>
-                <p>
-                  281250
-                </p>
-              </td>
-<td>
-                <p>
-                  <span class="red">6.0</span>
+                  4.0
                 </p>
               </td>
 <td>
@@ -1548,12 +1548,12 @@
               </td>
 <td>
                 <p>
-                  8703125
+                  11630000
                 </p>
               </td>
 <td>
                 <p>
-                  2.8
+                  2.7
                 </p>
               </td>
 <td>

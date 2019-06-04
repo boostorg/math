@@ -6,7 +6,7 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ]
 
 
-[section:trapezoidal Adaptive Trapezoidal Quadrature]
+[section:trapezoidal Trapezoidal Quadrature]
 
 [heading Synopsis]
 
@@ -14,15 +14,15 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
     namespace boost{ namespace math{ namespace quadrature {
 
     template<class F, class Real>
-    Real trapezoidal(F f, Real a, Real b,
+    auto trapezoidal(F f, Real a, Real b,
                      Real tol = sqrt(std::numeric_limits<Real>::epsilon()),
-                     size_t max_refinements = 10,
+                     size_t max_refinements = 12,
                      Real* error_estimate = nullptr,
                      Real* L1 = nullptr);
-    
-	template<class F, class Real, class ``__Policy``>
-    Real trapezoidal(F f, Real a, Real b, Real tol, size_t max_refinements, 
-	                 Real* error_estimate, Real* L1, const ``__Policy``& pol);
+
+    template<class F, class Real, class ``__Policy``>
+    auto trapezoidal(F f, Real a, Real b, Real tol, size_t max_refinements,
+                     Real* error_estimate, Real* L1, const ``__Policy``& pol);
 
     }}} // namespaces
 
@@ -39,7 +39,7 @@ However, the trapezoidal rule has an astonishing property:
 If the integrand is periodic, and we integrate it over a period,
 then the trapezoidal rule converges faster than any power of the step size /h/.
 This can be seen by examination of the [@https://en.wikipedia.org/wiki/Euler-Maclaurin_formula Euler-Maclaurin summation formula],
-which relates a definite integral to its trapezoidal sum and error terms proportional to the derivatives of the function at the endpoints.
+which relates a definite integral to its trapezoidal sum and error terms proportional to the derivatives of the function at the endpoints and the Bernoulli numbers.
 If the derivatives at the endpoints are the same or vanish, then the error very nearly vanishes.
 Hence the trapezoidal rule is essentially optimal for periodic integrands.
 
@@ -53,6 +53,24 @@ In its simplest form, an integration can be performed by the following code
     auto f = [](double x) { return 1/(5 - 4*cos(x)); };
     double I = trapezoidal(f, 0.0, boost::math::constants::two_pi<double>());
 
+The integrand must accept a real number argument, but can return a complex number.
+This is useful for contour integrals (which are manifestly periodic) and high-order numerical differentiation of analytic functions.
+An example using the integral definition of the complex Bessel function is shown here:
+
+    auto bessel_integrand = [&n, &z](double theta)->std::complex<double>
+    {
+        std::complex<double> z{2, 3};
+        using std::cos;
+        using std::sin;
+        return cos(z*sin(theta) - 2*theta)/pi<double>();
+    };
+
+    using boost::math::quadrature::trapezoidal;
+    std::complex<double> Jnz = trapezoidal(bessel_integrand, 0.0, pi<Real>());
+
+Other special functions which are efficiently evaluated in the complex plane by trapezoidal quadrature are modified Bessel functions and the complementary error function. Another application of complex-valued trapezoidal quadrature is computation of high-order numerical derivatives; see Lyness and Moler for details.
+
+
 Since the routine is adaptive, step sizes are halved continuously until a tolerance is reached.
 In order to control this tolerance, simply call the routine with an additional argument
 
@@ -65,9 +83,9 @@ Hence, once the integration routine has estimated that the error is [radic][epsi
 If the integrand is *not* periodic, then reducing the error to [radic][epsilon] takes much longer, but is nonetheless possible without becoming a major performance bug.
 
 A question arises as to what to do when successive estimates never pass below the tolerance threshold.
-The stepsize would be halved until it eventually would be flushed to zero, leading to an infinite loop.
+The stepsize would be halved repeatedly, generating an exponential explosion in function evaluations.
 As such, you may pass an optional argument `max_refinements` which controls how many times the interval may be halved before giving up.
-By default, this maximum number of refinement steps is 10,
+By default, this maximum number of refinement steps is 12,
 which should never be hit in double precision unless the function is not periodic.
 However, for higher-precision types,
 it may be of interest to allow the algorithm to compute more refinements:
@@ -128,5 +146,7 @@ Stoer, Josef, and Roland Bulirsch. ['Introduction to numerical analysis. Vol. 12
 
 Higham, Nicholas J. ['Accuracy and stability of numerical algorithms.] Society for industrial and applied mathematics, 2002.
 
+Lyness, James N., and Cleve B. Moler. ['Numerical differentiation of analytic functions.] SIAM Journal on Numerical Analysis 4.2 (1967): 202-210.
 
+Gil, Amparo, Javier Segura, and Nico M. Temme. ['Computing special functions by using quadrature rules.] Numerical Algorithms 33.1-4 (2003): 265-275.
 [endsect]

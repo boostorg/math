@@ -3,8 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Introduction</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
-<link rel="home" href="../index.html" title="Math Toolkit 2.6.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<link rel="home" href="../index.html" title="Math Toolkit 2.9.0">
 <link rel="up" href="../constants.html" title="Chapter&#160;4.&#160;Mathematical Constants">
 <link rel="prev" href="../constants.html" title="Chapter&#160;4.&#160;Mathematical Constants">
 <link rel="next" href="tutorial.html" title="Tutorial">
@@ -83,6 +83,7 @@
           at long double precision.
         </li>
 <li class="listitem">
+<p class="simpara">
           Faster - can avoid (re-)calculation at runtime.
           <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem">
@@ -92,9 +93,15 @@
               </li>
 <li class="listitem">
                 If the value is computed and cached (or constructed from a string
-                representation and cached), then it's returned by constant reference.<br>
-                This can be significant if:
+                representation and cached), then it's returned by constant reference.
               </li>
+</ul></div>
+        </p>
+<p class="simpara">
+          This can be significant if:
+        </p>
+<p class="simpara">
+          <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem">
                 Functions pow, trig or log are used.
               </li>
@@ -109,7 +116,8 @@
                 <code class="computeroutput"><span class="keyword">double</span></code>, are not available.
               </li>
 </ul></div>
-        </li>
+        </p>
+</li>
 </ul></div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

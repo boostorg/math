@@ -1572,8 +1572,9 @@ void test_powm1_sqrtp1m1(T, const char* type_name)
    func_t f = &boost::math::sqrt1pm1<T>;
 #endif
 
+   boost::math::tools::test_result<T> result;
 #if !(defined(ERROR_REPORTING_MODE) && !defined(SQRT1PM1_FUNCTION_TO_TEST))
-   boost::math::tools::test_result<T> result = boost::math::tools::test_hetero<T>(
+   result = boost::math::tools::test_hetero<T>(
       sqrtp1m1_data, 
       bind_func<T>(f, 0), 
       extract_result<T>(1));
@@ -1583,7 +1584,6 @@ void test_powm1_sqrtp1m1(T, const char* type_name)
    handle_test_result(result, sqrtp1m1_data[result.worst()], result.worst(), type_name, "sqrt1pm1", "sqrt1pm1");
 
 #endif
-#if !(defined(ERROR_REPORTING_MODE) && !defined(POWM1_FUNCTION_TO_TEST))
 
    typedef T (*func2_t)(T const, T const);
 #ifdef POWM1_FUNCTION_TO_TEST
@@ -1591,6 +1591,7 @@ void test_powm1_sqrtp1m1(T, const char* type_name)
 #else
    func2_t f2 = &boost::math::powm1<T,T>;
 #endif
+#if !(defined(ERROR_REPORTING_MODE) && !defined(POWM1_FUNCTION_TO_TEST))
    result = boost::math::tools::test_hetero<T>(
       powm1_data, 
       bind_func<T>(f2, 0, 1), 

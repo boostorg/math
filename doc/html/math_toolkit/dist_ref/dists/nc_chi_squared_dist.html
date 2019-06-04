@@ -3,8 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Noncentral Chi-Squared Distribution</title>
 <link rel="stylesheet" href="../../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
-<link rel="home" href="../../../index.html" title="Math Toolkit 2.6.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<link rel="home" href="../../../index.html" title="Math Toolkit 2.9.0">
 <link rel="up" href="../dists.html" title="Distributions">
 <link rel="prev" href="nc_beta_dist.html" title="Noncentral Beta Distribution">
 <link rel="next" href="nc_f_dist.html" title="Noncentral F Distribution">
@@ -31,12 +31,12 @@
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span>
-          <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;18.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
+          <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">non_central_chi_squared_distribution</span><span class="special">;</span>
 
 <span class="keyword">typedef</span> <span class="identifier">non_central_chi_squared_distribution</span><span class="special">&lt;&gt;</span> <span class="identifier">non_central_chi_squared</span><span class="special">;</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;18.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">non_central_chi_squared_distribution</span>
 <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
@@ -226,22 +226,22 @@
                 </th>
 <th>
                   <p>
-                    Microsoft Visual C++ version 12.0<br> Win32<br> double
+                    GNU C++ version 7.1.0<br> linux<br> double
                   </p>
                 </th>
 <th>
                   <p>
-                    GNU C++ version 5.1.0<br> linux<br> double
+                    GNU C++ version 7.1.0<br> linux<br> long double
                   </p>
                 </th>
 <th>
                   <p>
-                    GNU C++ version 5.1.0<br> linux<br> long double
+                    Sun compiler version 0x5150<br> Sun Solaris<br> long double
                   </p>
                 </th>
 <th>
                   <p>
-                    Sun compiler version 0x5130<br> Sun Solaris<br> long double
+                    Microsoft Visual C++ version 14.1<br> Win32<br> double
                   </p>
                 </th>
 </tr></thead>
@@ -254,13 +254,8 @@
                 </td>
 <td>
                   <p>
-                    <span class="blue">Max = 48.9&#949; (Mean = 10&#949;)</span>
-                  </p>
-                </td>
-<td>
-                  <p>
-                    <span class="blue">Max = 0.99&#949; (Mean = 0.0529&#949;)</span><br>
-                    <br> (<span class="emphasis"><em>Rmath 3.0.2:</em></span> Max = 727&#949; (Mean = 121&#949;))
+                    <span class="blue">Max = 0.99&#949; (Mean = 0.0544&#949;)</span><br>
+                    <br> (<span class="emphasis"><em>Rmath 3.2.3:</em></span> Max = 727&#949; (Mean = 121&#949;))
                   </p>
                 </td>
 <td>
@@ -273,6 +268,11 @@
                     <span class="blue">Max = 115&#949; (Mean = 13.9&#949;)</span>
                   </p>
                 </td>
+<td>
+                  <p>
+                    <span class="blue">Max = 48.9&#949; (Mean = 10&#949;)</span>
+                  </p>
+                </td>
 </tr>
 <tr>
 <td>
@@ -282,13 +282,8 @@
                 </td>
 <td>
                   <p>
-                    <span class="blue">Max = 9.79e+003&#949; (Mean = 723&#949;)</span>
-                  </p>
-                </td>
-<td>
-                  <p>
                     <span class="blue">Max = 1.07&#949; (Mean = 0.102&#949;)</span><br>
-                    <br> (<span class="emphasis"><em>Rmath 3.0.2:</em></span> <span class="red">Max
+                    <br> (<span class="emphasis"><em>Rmath 3.2.3:</em></span> <span class="red">Max
                     = 3.27e+08&#949; (Mean = 2.23e+07&#949;))</span>
                   </p>
                 </td>
@@ -300,6 +295,11 @@
 <td>
                   <p>
                     <span class="blue">Max = 6.17e+03&#949; (Mean = 677&#949;)</span>
+                  </p>
+                </td>
+<td>
+                  <p>
+                    <span class="blue">Max = 9.79e+03&#949; (Mean = 723&#949;)</span>
                   </p>
                 </td>
 </tr>
@@ -321,22 +321,22 @@
                 </th>
 <th>
                   <p>
-                    Microsoft Visual C++ version 12.0<br> Win32<br> double
+                    GNU C++ version 7.1.0<br> linux<br> double
                   </p>
                 </th>
 <th>
                   <p>
-                    GNU C++ version 5.1.0<br> linux<br> double
+                    GNU C++ version 7.1.0<br> linux<br> long double
                   </p>
                 </th>
 <th>
                   <p>
-                    GNU C++ version 5.1.0<br> linux<br> long double
+                    Sun compiler version 0x5150<br> Sun Solaris<br> long double
                   </p>
                 </th>
 <th>
                   <p>
-                    Sun compiler version 0x5130<br> Sun Solaris<br> long double
+                    Microsoft Visual C++ version 14.1<br> Win32<br> double
                   </p>
                 </th>
 </tr></thead>
@@ -349,25 +349,25 @@
                 </td>
 <td>
                   <p>
-                    <span class="blue">Max = 98.6&#949; (Mean = 15.8&#949;)</span>
-                  </p>
-                </td>
-<td>
-                  <p>
                     <span class="blue">Max = 0.96&#949; (Mean = 0.0635&#949;)</span><br>
-                    <br> (<span class="emphasis"><em>Rmath 3.0.2:</em></span> <span class="red">Max
-                    = +INF&#949; (Mean = +INF&#949;) <a class="link" href="../../logs_and_tables/logs.html#errors_GNU_C_version_5_1_0_linux_double_non_central_chi_squared_CDF_complement_Rmath_3_0_2_Non_Central_Chi_Squared_medium_parameters">And
+                    <br> (<span class="emphasis"><em>Rmath 3.2.3:</em></span> <span class="red">Max
+                    = +INF&#949; (Mean = +INF&#949;) <a class="link" href="../../logs_and_tables/logs.html#errors_GNU_C_version_7_1_0_linux_double_non_central_chi_squared_CDF_complement_Rmath_3_2_3_Non_Central_Chi_Squared_medium_parameters">And
                     other failures.</a>)</span>
                   </p>
                 </td>
 <td>
                   <p>
-                    <span class="blue">Max = 107&#949; (Mean = 17.1&#949;)</span>
+                    <span class="blue">Max = 107&#949; (Mean = 17.2&#949;)</span>
                   </p>
                 </td>
 <td>
                   <p>
                     <span class="blue">Max = 171&#949; (Mean = 22.8&#949;)</span>
+                  </p>
+                </td>
+<td>
+                  <p>
+                    <span class="blue">Max = 98.6&#949; (Mean = 15.8&#949;)</span>
                   </p>
                 </td>
 </tr>
@@ -379,14 +379,9 @@
                 </td>
 <td>
                   <p>
-                    <span class="blue">Max = 5.43e+003&#949; (Mean = 705&#949;)</span>
-                  </p>
-                </td>
-<td>
-                  <p>
                     <span class="blue">Max = 2.11&#949; (Mean = 0.278&#949;)</span><br>
-                    <br> (<span class="emphasis"><em>Rmath 3.0.2:</em></span> <span class="red">Max
-                    = +INF&#949; (Mean = +INF&#949;) <a class="link" href="../../logs_and_tables/logs.html#errors_GNU_C_version_5_1_0_linux_double_non_central_chi_squared_CDF_complement_Rmath_3_0_2_Non_Central_Chi_Squared_large_parameters">And
+                    <br> (<span class="emphasis"><em>Rmath 3.2.3:</em></span> <span class="red">Max
+                    = +INF&#949; (Mean = +INF&#949;) <a class="link" href="../../logs_and_tables/logs.html#errors_GNU_C_version_7_1_0_linux_double_non_central_chi_squared_CDF_complement_Rmath_3_2_3_Non_Central_Chi_Squared_large_parameters">And
                     other failures.</a>)</span>
                   </p>
                 </td>
@@ -398,6 +393,11 @@
 <td>
                   <p>
                     <span class="blue">Max = 5.1e+03&#949; (Mean = 577&#949;)</span>
+                  </p>
+                </td>
+<td>
+                  <p>
+                    <span class="blue">Max = 5.43e+03&#949; (Mean = 705&#949;)</span>
                   </p>
                 </td>
 </tr>

@@ -246,13 +246,6 @@ BOOST_AUTO_TEST_CASE( test_main )
 
 #if defined(TEST_SSE2)
 
-#ifdef _MSC_VER
-#  pragma message("Compiling SSE2 test code")
-#endif
-#ifdef __GNUC__
-#  pragma message "Compiling SSE2 test code"
-#endif
-
    int mmx_flags = _mm_getcsr(); // We'll restore these later.
 
 #ifdef _WIN32

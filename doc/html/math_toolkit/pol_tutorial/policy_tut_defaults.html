@@ -3,8 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Policies Have Sensible Defaults</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
-<link rel="home" href="../../index.html" title="Math Toolkit 2.6.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<link rel="home" href="../../index.html" title="Math Toolkit 2.9.0">
 <link rel="up" href="../pol_tutorial.html" title="Policy Tutorial">
 <link rel="prev" href="what_is_a_policy.html" title="So Just What is a Policy Anyway?">
 <link rel="next" href="policy_usage.html" title="So How are Policies Used Anyway?">
@@ -113,14 +113,31 @@
 <span class="comment">//</span>
 <span class="comment">// Define a policy that sets ::errno on overflow, and does</span>
 <span class="comment">// not promote double to long double internally:</span>
-<span class="comment">//</span>
-<span class="keyword">typedef</span> <span class="identifier">policy</span><span class="special">&lt;</span><span class="identifier">domain_error</span><span class="special">&lt;</span><span class="identifier">errno_on_error</span><span class="special">&gt;,</span> <span class="identifier">promote_double</span><span class="special">&lt;</span><span class="keyword">false</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="identifier">mypolicy</span><span class="special">;</span>
+
+<span class="keyword">typedef</span> <span class="identifier">policy</span>
+<span class="special">&lt;</span>
+  <span class="identifier">domain_error</span><span class="special">&lt;</span><span class="identifier">errno_on_error</span><span class="special">&gt;,</span>
+  <span class="identifier">promote_double</span><span class="special">&lt;</span><span class="keyword">false</span><span class="special">&gt;</span>
+<span class="special">&gt;</span> <span class="identifier">my_policy</span><span class="special">;</span>
 </pre>
 <p>
-        then <code class="computeroutput"><span class="identifier">mypolicy</span></code> defines a policy
-        where only the overflow error handling and <code class="computeroutput"><span class="keyword">double</span></code>-promotion
+        then <code class="computeroutput"><span class="identifier">my_policy</span></code> defines a
+        policy where only the overflow error handling and <code class="computeroutput"><span class="keyword">double</span></code>-promotion
         policies differ from the defaults.
       </p>
+<p>
+        We can also add a desired precision, for example, 9 bits or 3 decimal digits,
+        to an error-handling policy, usually to trade precision for speed:
+      </p>
+<pre class="programlisting"><span class="keyword">typedef</span> <span class="identifier">policy</span><span class="special">&lt;</span><span class="identifier">domain_error</span><span class="special">&lt;</span><span class="identifier">errno_on_error</span><span class="special">&gt;,</span> <span class="identifier">digit2</span><span class="special">&lt;</span><span class="number">9</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="identifier">my_policy</span><span class="special">;</span>
+</pre>
+<p>
+        Or if you want to further modify an existing user policy, use <code class="computeroutput"><span class="identifier">normalise</span></code>:
+      </p>
+<pre class="programlisting"><span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">normalise</span><span class="special">;</span>
+
+<span class="keyword">typedef</span> <span class="identifier">normalise</span><span class="special">&lt;</span><span class="identifier">my_policy</span><span class="special">,</span> <span class="identifier">digits2</span><span class="special">&lt;</span><span class="number">9</span><span class="special">&gt;&gt;::</span><span class="identifier">type</span> <span class="identifier">my_policy_9</span><span class="special">;</span> <span class="comment">// errno on error, and limited precision.</span>
+</pre>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>

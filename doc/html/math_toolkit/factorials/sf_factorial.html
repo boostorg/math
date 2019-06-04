@@ -3,8 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Factorial</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
-<link rel="home" href="../../index.html" title="Math Toolkit 2.6.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<link rel="home" href="../../index.html" title="Math Toolkit 2.9.0">
 <link rel="up" href="../factorials.html" title="Factorials and Binomial Coefficients">
 <link rel="prev" href="../factorials.html" title="Factorials and Binomial Coefficients">
 <link rel="next" href="sf_double_factorial.html" title="Double Factorial">
@@ -37,11 +37,11 @@
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="identifier">T</span> <span class="identifier">factorial</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">i</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;18.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<span class="identifier">T</span> <span class="identifier">factorial</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">i</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;18.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<span class="identifier">T</span> <span class="identifier">factorial</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">i</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<span class="identifier">T</span> <span class="identifier">unchecked_factorial</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">i</span><span class="special">);</span>
+<span class="keyword">constexpr</span> <span class="identifier">T</span> <span class="identifier">unchecked_factorial</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">i</span><span class="special">);</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">max_factorial</span><span class="special">;</span>
@@ -100,16 +100,16 @@
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="identifier">T</span> <span class="identifier">factorial</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">i</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;18.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<span class="identifier">T</span> <span class="identifier">factorial</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">i</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;18.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<span class="identifier">T</span> <span class="identifier">factorial</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">i</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 </pre>
 <p>
         Returns <code class="literal">i!</code>.
       </p>
 <p>
-        The final <a class="link" href="../../policy.html" title="Chapter&#160;18.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
+        The final <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
         be used to control the behaviour of the function: how it handles errors,
-        what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter&#160;18.&#160;Policies: Controlling Precision, Error Handling etc">policy
+        what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">policy
         documentation for more details</a>.
       </p>
 <p>
@@ -122,7 +122,7 @@
         in type T, then calls <a class="link" href="../error_handling.html#math_toolkit.error_handling.overflow_error">overflow_error</a>.
       </p>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<span class="identifier">T</span> <span class="identifier">unchecked_factorial</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">i</span><span class="special">);</span>
+<span class="keyword">constexpr</span> <span class="identifier">T</span> <span class="identifier">unchecked_factorial</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">i</span><span class="special">);</span>
 </pre>
 <p>
         Returns <code class="literal">i!</code>.
@@ -146,6 +146,10 @@
         The member <code class="computeroutput"><span class="identifier">value</span></code> can be used
         where integral constant expressions are required: for example to define the
         size of further tables that depend on the factorials.
+      </p>
+<p>
+        This function is <code class="computeroutput"><span class="keyword">constexpr</span></code> only
+        if the compiler supports C++14 constexpr functions.
       </p>
 <h5>
 <a name="math_toolkit.factorials.sf_factorial.h2"></a>

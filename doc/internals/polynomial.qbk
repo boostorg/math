@@ -24,8 +24,14 @@
       template <class I>
       polynomial(I first, I last);
       template <class U>
-      explicit polynomial(const U& point);
+      explicit polynomial(const U& point, 
+            typename boost::enable_if<boost::is_convertible<U, T> >::type* = 0);
+      template <class Range>
+      explicit polynomial(const Range& r, 
+            typename boost::enable_if<boost::math::tools::detail::is_const_iterable<Range> >::type* = 0); // C++14
       polynomial(std::initializer_list<T> l); // C++11
+
+      polynomial(std::vector<T>&& p);
 
       // access:
       size_type size()const;
@@ -35,7 +41,15 @@
       std::vector<T> const& data() const;
       std::vector<T>& data();
       explicit operator bool() const;
-      
+
+      polynomial<T> prime() const;
+
+      polynomial<T> integrate() const;
+
+      T operator()(T z) const;
+
+
+
       // modify:
       void set_zero();
 
@@ -101,8 +115,8 @@
    template <class T>
    polynomial<T> operator <<= (const U& a);
    template <class T>
-   polynomial<T> operator << (polynomial<T> const &a, const U& b);   
-   
+   polynomial<T> operator << (polynomial<T> const &a, const U& b);
+
    template <class T>
    bool operator == (const polynomial<T> &a, const polynomial<T> &b);
    template <class T>

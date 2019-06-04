@@ -3,9 +3,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Gauss-Kronrod Quadrature</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
-<link rel="home" href="../index.html" title="Math Toolkit 2.6.0">
-<link rel="up" href="../quadrature.html" title="Chapter&#160;11.&#160;Quadrature">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<link rel="home" href="../index.html" title="Math Toolkit 2.9.0">
+<link rel="up" href="../quadrature.html" title="Chapter&#160;12.&#160;Quadrature and Differentiation">
 <link rel="prev" href="gauss.html" title="Gauss-Legendre quadrature">
 <link rel="next" href="double_exponential.html" title="Double-exponential quadrature">
 </head>
@@ -41,7 +41,7 @@
       it is rarely done via numerical methods. Instead, transcendental and numerically
       defined functions are integrated via Gaussian quadrature, and the defining
       problem becomes how to estimate the remainder. Gaussian quadrature alone (without
-      some form on interval splitting) cannot answer this question.
+      some form of interval splitting) cannot answer this question.
     </p>
 <p>
       It is possible to compute a Gaussian quadrature of order <span class="emphasis"><em>n</em></span>
@@ -64,22 +64,21 @@
       singularities, please refer to the <a class="link" href="double_exponential.html" title="Double-exponential quadrature">double-exponential
       integration schemes</a>.
     </p>
-<p>
-      <code class="computeroutput"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">quadrature</span><span class="special">/</span><span class="identifier">gauss_kronrod</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>
-    </p>
-<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Real</span><span class="special">,</span> <span class="keyword">unsigned</span> <span class="identifier">N</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../policy.html" title="Chapter&#160;18.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">policy</span><span class="special">&lt;&gt;</span> <span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">quadrature</span><span class="special">/</span><span class="identifier">gauss_kronrod</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Real</span><span class="special">,</span> <span class="keyword">unsigned</span> <span class="identifier">N</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">policy</span><span class="special">&lt;&gt;</span> <span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">gauss_kronrod</span>
 <span class="special">{</span>
    <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">RandomAccessContainer</span><span class="special">&amp;</span> <span class="identifier">abscissa</span><span class="special">();</span>
    <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">RandomAccessContainer</span><span class="special">&amp;</span> <span class="identifier">weights</span><span class="special">();</span>
 
    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">&gt;</span>
-   <span class="keyword">static</span> <span class="identifier">value_type</span> <span class="identifier">integrate</span><span class="special">(</span><span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span>
-                               <span class="identifier">Real</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">b</span><span class="special">,</span>
-                               <span class="keyword">unsigned</span> <span class="identifier">max_depth</span> <span class="special">=</span> <span class="number">15</span><span class="special">,</span>
-                               <span class="identifier">Real</span> <span class="identifier">tol</span> <span class="special">=</span> <span class="identifier">tools</span><span class="special">::</span><span class="identifier">root_epsilon</span><span class="special">&lt;</span><span class="identifier">Real</span><span class="special">&gt;(),</span>
-                               <span class="identifier">Real</span><span class="special">*</span> <span class="identifier">error</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">,</span>
-                               <span class="identifier">Real</span><span class="special">*</span> <span class="identifier">pL1</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">);</span>
+   <span class="keyword">static</span> <span class="keyword">auto</span> <span class="identifier">integrate</span><span class="special">(</span><span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span>
+                         <span class="identifier">Real</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">b</span><span class="special">,</span>
+                         <span class="keyword">unsigned</span> <span class="identifier">max_depth</span> <span class="special">=</span> <span class="number">15</span><span class="special">,</span>
+                         <span class="identifier">Real</span> <span class="identifier">tol</span> <span class="special">=</span> <span class="identifier">tools</span><span class="special">::</span><span class="identifier">root_epsilon</span><span class="special">&lt;</span><span class="identifier">Real</span><span class="special">&gt;(),</span>
+                         <span class="identifier">Real</span><span class="special">*</span> <span class="identifier">error</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">,</span>
+                         <span class="identifier">Real</span><span class="special">*</span> <span class="identifier">pL1</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">)-&gt;</span><span class="keyword">decltype</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">declval</span><span class="special">&lt;</span><span class="identifier">F</span><span class="special">&gt;()(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">declval</span><span class="special">&lt;</span><span class="identifier">Real</span><span class="special">&gt;()));</span>
 <span class="special">};</span>
 </pre>
 <h4>
@@ -97,12 +96,12 @@
       the Gauss and Kronrod points.
     </p>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">&gt;</span>
-<span class="keyword">static</span> <span class="identifier">value_type</span> <span class="identifier">integrate</span><span class="special">(</span><span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span>
+<span class="keyword">static</span> <span class="keyword">auto</span> <span class="identifier">integrate</span><span class="special">(</span><span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span>
                             <span class="identifier">Real</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">b</span><span class="special">,</span>
                             <span class="keyword">unsigned</span> <span class="identifier">max_depth</span> <span class="special">=</span> <span class="number">15</span><span class="special">,</span>
                             <span class="identifier">Real</span> <span class="identifier">tol</span> <span class="special">=</span> <span class="identifier">tools</span><span class="special">::</span><span class="identifier">root_epsilon</span><span class="special">&lt;</span><span class="identifier">Real</span><span class="special">&gt;(),</span>
                             <span class="identifier">Real</span><span class="special">*</span> <span class="identifier">error</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">,</span>
-                            <span class="identifier">Real</span><span class="special">*</span> <span class="identifier">pL1</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">);</span>
+                            <span class="identifier">Real</span><span class="special">*</span> <span class="identifier">pL1</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">)-&gt;</span><span class="keyword">decltype</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">declval</span><span class="special">&lt;</span><span class="identifier">F</span><span class="special">&gt;()(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">declval</span><span class="special">&lt;</span><span class="identifier">Real</span><span class="special">&gt;()));</span>
 </pre>
 <p>
       Performs adaptive Gauss-Kronrod quadrature on function <span class="emphasis"><em>f</em></span>
@@ -170,6 +169,15 @@
 </ul></div>
 <h4>
 <a name="math_toolkit.gauss_kronrod.h3"></a>
+      <span class="phrase"><a name="math_toolkit.gauss_kronrod.complex_quadrature"></a></span><a class="link" href="gauss_kronrod.html#math_toolkit.gauss_kronrod.complex_quadrature">Complex
+      Quadrature</a>
+    </h4>
+<p>
+      The Gauss-Kronrod quadrature support integrands defined on the real line and
+      returning complex values.
+    </p>
+<h4>
+<a name="math_toolkit.gauss_kronrod.h4"></a>
       <span class="phrase"><a name="math_toolkit.gauss_kronrod.examples"></a></span><a class="link" href="gauss_kronrod.html#math_toolkit.gauss_kronrod.examples">Examples</a>
     </h4>
 <p>
@@ -220,7 +228,7 @@
       We still achieve 1e-15 precision, with an error estimate of 1e-10.
     </p>
 <h4>
-<a name="math_toolkit.gauss_kronrod.h4"></a>
+<a name="math_toolkit.gauss_kronrod.h5"></a>
       <span class="phrase"><a name="math_toolkit.gauss_kronrod.caveats"></a></span><a class="link" href="gauss_kronrod.html#math_toolkit.gauss_kronrod.caveats">Caveats</a>
     </h4>
 <p>
@@ -241,7 +249,7 @@
       integration schemes</a> which are generally much more robust.
     </p>
 <h4>
-<a name="math_toolkit.gauss_kronrod.h5"></a>
+<a name="math_toolkit.gauss_kronrod.h6"></a>
       <span class="phrase"><a name="math_toolkit.gauss_kronrod.references"></a></span><a class="link" href="gauss_kronrod.html#math_toolkit.gauss_kronrod.references">References</a>
     </h4>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">

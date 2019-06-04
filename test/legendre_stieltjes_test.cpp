@@ -45,7 +45,7 @@ void test_legendre_stieltjes()
         BOOST_CHECK_CLOSE_FRACTION(ls2.prime(x), 3*x, tol);
 
         Real p3 = legendre_p(3, x);
-        BOOST_CHECK_CLOSE_FRACTION(ls3(x), p3 - 9*x/static_cast<Real>(14), 100*tol);
+        BOOST_CHECK_CLOSE_FRACTION(ls3(x), p3 - 9*x/static_cast<Real>(14), 600*tol);
         BOOST_CHECK_CLOSE_FRACTION(ls3.prime(x), 15*x*x*half<Real>() -3*half<Real>()-9/static_cast<Real>(14), 100*tol);
 
         Real p4 = legendre_p(4, x);

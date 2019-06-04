@@ -1,15 +1,15 @@
 [book Math Toolkit
-    [quickbook 1.6]
-    [copyright 2006, 2007, 2008, 2009, 2010, 2012, 2013, 2014, 2017 Nikhar Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Johan Råde, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg, Daryle Walker and Xiaogang Zhang]
+    [quickbook 1.7]
+    [copyright 2006, 2007, 2008, 2009, 2010, 2012, 2013, 2014, 2017 Nikhar Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Matthew Pulver, Johan Råde, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg, Daryle Walker and Xiaogang Zhang]
     [/purpose ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22]
     [license
         Distributed under the Boost Software License, Version 1.0.
         (See accompanying file LICENSE_1_0.txt or copy at
         [@http://www.boost.org/LICENSE_1_0.txt])
     ]
-    [authors [Agrawal, Nikhar], [Bikineev, Anton], [Bristow, Paul A.], [Holin, Hubert], [Guazzone, Marco], [Kormanyos, Christopher], [Lalande, Bruno], [Maddock, John], [Murphy, Jeremy W.], [Råde, Johan], [Sobotta, Benjamin], [Sewani, Gautam], [Thompson, Nicholas], [van den Berg, Thijs], [Walker, Daryle], [Zhang, Xiaogang]]
+    [authors [Agrawal, Nikhar], [Bikineev, Anton], [Bristow, Paul A.], [Holin, Hubert], [Guazzone, Marco], [Kormanyos, Christopher], [Lalande, Bruno], [Maddock, John], [Murphy, Jeremy W.], [Pulver, Matthew], [Råde, Johan], [Sobotta, Benjamin], [Sewani, Gautam], [Thompson, Nicholas], [van den Berg, Thijs], [Walker, Daryle], [Zhang, Xiaogang]]
     [/last-revision $Date$]
-    [version 2.6.0]
+    [version 2.9.0]
 ]
 
 [template mathpart[id title]
@@ -216,6 +216,15 @@ and use the function's name as the link text.]
 [def __sph_hankel_1  [link math_toolkit.hankel.sph_hankel sph_hankel_1]]
 [def __sph_hankel_2  [link math_toolkit.hankel.sph_hankel sph_hankel_2]]
 
+[/Lambert W function]
+[def __lambert_w [link math_toolkit.sf_lambert_w.lambert_w_function lambert_w]]
+[def __lambert_w_implementation [link math_toolkit.lambert_w.implementation implementation]]
+[def __lambert_w_precision[link math_toolkit.lambert_w.precision precision]]
+[def __lambert_w_examples [link math_toolkit.lambert_w.examples examples]]
+[def __lambert_w_wm1_near_zero [link math_toolkit.lambert_w.wm1_near_zero wm1_near_zero]]
+[def __lambert_w_references [link math_toolkit.lambert_w.references references]]
+
+
 [/Airy Functions]
 [def __airy_ai [link math_toolkit.airy.ai airy_ai]]
 [def __airy_bi [link math_toolkit.airy.bi airy_bi]]
@@ -379,6 +388,8 @@ and use the function's name as the link text.]
 
 [def __real_concept [link math_toolkit.real_concepts  real concept]]
 [def __next_float [link math_toolkit.next_float Adjacent Floating-Point Values]]
+[def __remez_practical [link math_toolkit.remez.practical remez_practical]]
+
 
 [/ External links]
 [def __gsl [@http://www.gnu.org/software/gsl/ GSL-1.9]]
@@ -406,6 +417,8 @@ and use the function's name as the link text.]
 [def __errno [@http://en.wikipedia.org/wiki/Errno `::errno`]]
 [def __Mathworld [@http://mathworld.wolfram.com Wolfram MathWorld]]
 [def __Mathematica [@http://www.wolfram.com/products/mathematica/index.html Wolfram Mathematica]]
+[def __Maple [@https://www.maplesoft.com Maple]]
+
 [def __WolframAlpha [@http://www.wolframalpha.com/ Wolfram Alpha]]
 [def __TOMS748 [@http://portal.acm.org/citation.cfm?id=210111 TOMS Algorithm 748: enclosing zeros of continuous functions]]
 [def __TOMS910 [@http://portal.acm.org/citation.cfm?id=1916469 TOMS Algorithm 910: A Portable C++ Multiple-Precision System for Special-Function Calculations]]
@@ -420,7 +433,7 @@ and use the function's name as the link text.]
 [def __epsilon [@http://en.wikipedia.org/wiki/Machine_epsilon machine epsilon]]
 [def __ADL [@http://en.cppreference.com/w/cpp/language/adl Argument Dependent Lookup (ADL)]]
 [def __function_template_instantiation [@http://en.cppreference.com/w/cpp/language/function_template Function template instantiation]]
-[def __fundamental_types [@http://en.cppreference.com/w/cpp/language/types fundamental types]]
+[def __fundamental_types [@http://en.cppreference.com/w/cpp/language/types fundamental (built-in) types]]
 [def __guard_digits [@http://en.wikipedia.org/wiki/Guard_digit guard digits]]
 [def __SSE2 [@http://en.wikipedia.org/wiki/SSE2 SSE2 instructions]]
 [def __representable [@http://en.wikipedia.org/wiki/Floating_point#Representable_numbers.2C_conversion_and_rounding representable]]
@@ -429,6 +442,12 @@ and use the function's name as the link text.]
 [def __random_variable [@http://en.wikipedia.org/wiki/Random_variable random variable]]
 [def __probability_distribution [@http://en.wikipedia.org/wiki/Probability_distribution probability_distribution]]
 [def __C_math [@http://www.cplusplus.com/reference/cmath/ C math functions]]
+[def __Lambert_W [@http://en.wikipedia.org/wiki/Lambert_W_function Lambert W function]]
+[def __CUDA [@https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#c-cplusplus-language-support CUDA NVidia GPU C/C++ language support]]
+[def __Luu_thesis [@http://discovery.ucl.ac.uk/1482128/1/Luu_thesis.pdf Thomas Luu, Thesis, University College London (2015)]]
+[def __rational_function [@https://en.wikipedia.org/wiki/Rational_function rational function]]
+[def __remez [@http://en.wikipedia.org/wiki/Remez_algorithm Remez algorithm]]
+[def __ULP [@https://en.wikipedia.org/wiki/Unit_in_the_last_place Unit in the Last Place]]
 
 [/ Some composite templates]
 [template super[x]'''<superscript>'''[x]'''</superscript>''']
@@ -520,6 +539,7 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [include fp_utilities/fp_facets.qbk]
 [include fp_utilities/float_next.qbk]
 [include fp_utilities/float_comparison.qbk]
+[include fp_utilities/condition_numbers.qbk]
 [endmathpart]
 
 [mathpart cstdfloat..Specified-width floating-point typedefs]
@@ -532,6 +552,13 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [include distributions/dist_tutorial.qbk]
 [include distributions/dist_reference.qbk] [/includes all individual distribution.qbk files]
 [endmathpart] [/section:dist Statistical Distributions and Functions]
+
+[mathpart vector_functionals Vector Functionals]
+[include vector_functionals/univariate_statistics.qbk]
+[include vector_functionals/bivariate_statistics.qbk]
+[include vector_functionals/signal_statistics.qbk]
+[include vector_functionals/norms.qbk]
+[endmathpart] [/section:vector_functionals Vector Functionals]
 
 [mathpart special Special Functions]
 
@@ -594,6 +621,9 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 
 [include sf/jacobi_elliptic.qbk]
 
+[/ Lambert W function]
+[include sf/lambert_w.qbk]
+
 [section:zetas Zeta Functions]
 [include sf/zeta.qbk]
 [endsect]
@@ -629,14 +659,19 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [mathpart interpolation Interpolation]
 [include interpolators/cubic_b_spline.qbk]
 [include interpolators/barycentric_rational_interpolation.qbk]
+[include interpolators/catmull_rom.qbk]
 [endmathpart]
 
-[mathpart quadrature Quadrature]
+[mathpart quadrature Quadrature and Differentiation]
 [include quadrature/trapezoidal.qbk]
 [include quadrature/gauss.qbk]
 [include quadrature/gauss_kronrod.qbk]
 [include quadrature/double_exponential.qbk]
 [include quadrature/ooura_fourier_integrals.qbk]
+[include quadrature/naive_monte_carlo.qbk]
+[include differentiation/numerical_differentiation.qbk]
+[include differentiation/autodiff.qbk]
+[include differentiation/lanczos_smoothing.qbk]
 [endmathpart]
 
 [include complex/complex-tr1.qbk]

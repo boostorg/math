@@ -53,6 +53,7 @@ project
       <toolset>msvc:<cxxflags>/wd4189 # local variable is initialized but not referenced
       <toolset>msvc-7.1:<source>../vc71_fix//vc_fix
       <toolset>msvc-7.1:<pch>off
+      <toolset>clang-6.0.0:<pch>off  # added to see effect.
       <toolset>gcc,<target-os>windows:<pch>off
       <toolset>borland:<runtime-link>static
       # <toolset>msvc:<cxxflags>/wd4506 has no effect?
@@ -208,6 +209,7 @@ test-suite special_fun :
         : # requirements
           <define>TEST_FLOAT
           <toolset>intel:<pch>off
+          <toolset>gcc:<cxxflags>-Wno-overflow
         : test_ibeta_derivative_float  ]
    [ run test_ibeta_derivative.cpp  test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework
         : # command line
@@ -215,6 +217,7 @@ test-suite special_fun :
         : # requirements
           <define>TEST_DOUBLE
           <toolset>intel:<pch>off
+          <toolset>gcc:<cxxflags>-Wno-overflow
         : test_ibeta_derivative_double  ]
    [ run test_ibeta_derivative.cpp  test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework
         : # command line
@@ -222,6 +225,7 @@ test-suite special_fun :
         : # requirements
           <define>TEST_LDOUBLE
           <toolset>intel:<pch>off
+          <toolset>gcc:<cxxflags>-Wno-overflow
         : test_ibeta_derivative_long_double  ]
    [ run test_ibeta_derivative.cpp  test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework
         : # command line
@@ -230,6 +234,7 @@ test-suite special_fun :
           <define>TEST_REAL_CONCEPT
           <define>TEST_DATA=1
           <toolset>intel:<pch>off
+          <toolset>gcc:<cxxflags>-Wno-overflow
         : test_ibeta_derivative_real_concept1  ]
    [ run test_ibeta_derivative.cpp  test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework
         : # command line
@@ -238,6 +243,7 @@ test-suite special_fun :
           <define>TEST_REAL_CONCEPT
           <define>TEST_DATA=2
           <toolset>intel:<pch>off
+          <toolset>gcc:<cxxflags>-Wno-overflow
         : test_ibeta_derivative_real_concept2  ]
    [ run test_ibeta_derivative.cpp  test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework
         : # command line
@@ -246,6 +252,7 @@ test-suite special_fun :
           <define>TEST_REAL_CONCEPT
           <define>TEST_DATA=3
           <toolset>intel:<pch>off
+          <toolset>gcc:<cxxflags>-Wno-overflow
         : test_ibeta_derivative_real_concept3  ]
    [ run test_ibeta_derivative.cpp  test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework
         : # command line
@@ -254,6 +261,7 @@ test-suite special_fun :
           <define>TEST_REAL_CONCEPT
           <define>TEST_DATA=4
           <toolset>intel:<pch>off
+          <toolset>gcc:<cxxflags>-Wno-overflow
         : test_ibeta_derivative_real_concept4  ]
 
    [ run test_ibeta_inv.cpp  test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework
@@ -414,12 +422,25 @@ test-suite special_fun :
    [ run test_instantiate1.cpp test_instantiate2.cpp  ]
    [ run test_jacobi.cpp pch_light ../../test/build//boost_unit_test_framework  ]
    [ run test_laguerre.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
+
+   [ run test_lambert_w.cpp ../../test/build//boost_unit_test_framework  ]
+   [ run test_lambert_w.cpp ../../test/build//boost_unit_test_framework : : : <define>BOOST_MATH_TEST_MULTIPRECISION=1  [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <define>BOOST_MATH_TEST_FLOAT128 <linkflags>"-Bstatic -lquadmath -Bdynamic" ]  : test_lambert_w_multiprecision_1 ]
+   [ run test_lambert_w.cpp ../../test/build//boost_unit_test_framework : : : <define>BOOST_MATH_TEST_MULTIPRECISION=2  [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <define>BOOST_MATH_TEST_FLOAT128 <linkflags>"-Bstatic -lquadmath -Bdynamic" ]  : test_lambert_w_multiprecision_2 ]
+   [ run test_lambert_w.cpp ../../test/build//boost_unit_test_framework : : : <define>BOOST_MATH_TEST_MULTIPRECISION=3  [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <define>BOOST_MATH_TEST_FLOAT128 <linkflags>"-Bstatic -lquadmath -Bdynamic" ]  : test_lambert_w_multiprecision_3 ]
+   [ run test_lambert_w.cpp ../../test/build//boost_unit_test_framework : : : <define>BOOST_MATH_TEST_MULTIPRECISION=4 <define>BOOST_MATH_TEST_FLOAT128 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <define>BOOST_MATH_TEST_FLOAT128 <linkflags>"-Bstatic -lquadmath -Bdynamic" ]  : test_lambert_w_multiprecision_4 ]
+   [ run test_lambert_w_integrals_float128.cpp ../../test/build//boost_unit_test_framework : : : release [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>"-Bstatic -lquadmath -Bdynamic" : <build>no ] [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] ]
+   [ run test_lambert_w_integrals_quad.cpp ../../test/build//boost_unit_test_framework : : : release [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <define>BOOST_MATH_TEST_FLOAT128 <linkflags>"-Bstatic -lquadmath -Bdynamic" ] ]
+   [ run test_lambert_w_integrals_long_double.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] ]
+   [ run test_lambert_w_integrals_double.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] ]
+   [ run test_lambert_w_integrals_float.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] ]
+   [ run test_lambert_w_derivative.cpp ../../test/build//boost_unit_test_framework : : : <define>BOOST_MATH_TEST_MULTIPRECISION  [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <define>BOOST_MATH_TEST_FLOAT128 <linkflags>"-Bstatic -lquadmath -Bdynamic" ]  ]
+
    [ run test_legendre.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework : : : [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>"-Bstatic -lquadmath -Bdynamic" ]  ]
    [ run chebyshev_test.cpp  : : : [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>"-Bstatic -lquadmath -Bdynamic" ]  ]
-   [ run chebyshev_transform_test.cpp ../config//fftw3f : : : <define>TEST1 [ check-target-builds ../config//has_fftw3 "libfftw3" : : <build>no ] : chebyshev_transform_test_1 ]
-   [ run chebyshev_transform_test.cpp ../config//fftw3 : : : <define>TEST2 [ check-target-builds ../config//has_fftw3 "libfftw3" : : <build>no ] : chebyshev_transform_test_2 ]
-   [ run chebyshev_transform_test.cpp ../config//fftw3l : : : <define>TEST3 [ check-target-builds ../config//has_fftw3 "libfftw3" : : <build>no ] : chebyshev_transform_test_3 ]
-   [ run chebyshev_transform_test.cpp ../config//fftw3q ../config//quadmath : : : <define>TEST4 [ check-target-builds ../config//has_fftw3 "libfftw3" : : <build>no ] [ check-target-builds ../config//has_float128 "__float128" : : <build>no ] : chebyshev_transform_test_4 ]
+   [ run chebyshev_transform_test.cpp ../config//fftw3f : : : <define>TEST1 [ requires cxx11_auto_declarations cxx11_range_based_for ] [ check-target-builds ../config//has_fftw3 "libfftw3" : : <build>no ] : chebyshev_transform_test_1 ]
+   [ run chebyshev_transform_test.cpp ../config//fftw3 : : : <define>TEST2 [ requires cxx11_auto_declarations cxx11_range_based_for ] [ check-target-builds ../config//has_fftw3 "libfftw3" : : <build>no ] : chebyshev_transform_test_2 ]
+   [ run chebyshev_transform_test.cpp ../config//fftw3l : : : <define>TEST3 [ requires cxx11_auto_declarations cxx11_range_based_for ] [ check-target-builds ../config//has_fftw3 "libfftw3" : : <build>no ] : chebyshev_transform_test_3 ]
+   [ run chebyshev_transform_test.cpp ../config//fftw3q ../config//quadmath : : : <define>TEST4 [ requires cxx11_auto_declarations cxx11_range_based_for ] [ check-target-builds ../config//has_fftw3 "libfftw3" : : <build>no ] [ check-target-builds ../config//has_float128 "__float128" : : <build>no ] : chebyshev_transform_test_4 ]
 
    [ run test_ldouble_simple.cpp ../../test/build//boost_unit_test_framework  ]
    # Needs to run in release mode, as it's rather slow:
@@ -434,6 +455,7 @@ test-suite special_fun :
    [ run test_tgamma_ratio.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
    [ run test_trig.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
    [ run test_zeta.cpp ../../test/build//boost_unit_test_framework test_instances//test_instances pch_light  ]
+   [ run test_sinc.cpp ../../test/build//boost_unit_test_framework pch_light ]
    [ run test_tr1.cpp
    ../build//boost_math_tr1
    ../build//boost_math_tr1f
@@ -474,6 +496,44 @@ test-suite special_fun :
       :
       test_tr1_c_long_double
     ]
+   [ run test_constants.cpp ../../test/build//boost_unit_test_framework  ]
+   [ run test_classify.cpp pch ../../test/build//boost_unit_test_framework  ]
+   [ run test_error_handling.cpp ../../test/build//boost_unit_test_framework  ]
+   [ run legendre_stieltjes_test.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_range_based_for ] [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]  ]
+   [ run test_minima.cpp pch ../../test/build//boost_unit_test_framework  ]
+   [ run test_rationals.cpp ../../test/build//boost_unit_test_framework
+      test_rational_instances/test_rational_double1.cpp
+      test_rational_instances/test_rational_double2.cpp
+      test_rational_instances/test_rational_double3.cpp
+      test_rational_instances/test_rational_double4.cpp
+      test_rational_instances/test_rational_double5.cpp
+      test_rational_instances/test_rational_float1.cpp
+      test_rational_instances/test_rational_float2.cpp
+      test_rational_instances/test_rational_float3.cpp
+      test_rational_instances/test_rational_float4.cpp
+      test_rational_instances/test_rational_ldouble1.cpp
+      test_rational_instances/test_rational_ldouble2.cpp
+      test_rational_instances/test_rational_ldouble3.cpp
+      test_rational_instances/test_rational_ldouble4.cpp
+      test_rational_instances/test_rational_ldouble5.cpp
+      test_rational_instances/test_rational_real_concept1.cpp
+      test_rational_instances/test_rational_real_concept2.cpp
+      test_rational_instances/test_rational_real_concept3.cpp
+      test_rational_instances/test_rational_real_concept4.cpp
+      test_rational_instances/test_rational_real_concept5.cpp
+   ]
+   [ run test_policy.cpp ../../test/build//boost_unit_test_framework  ]
+   [ run test_policy_2.cpp ../../test/build//boost_unit_test_framework  ]
+   [ run test_policy_3.cpp ../../test/build//boost_unit_test_framework  ]
+   [ run test_policy_4.cpp ../../test/build//boost_unit_test_framework  ]
+   [ run test_policy_5.cpp ../../test/build//boost_unit_test_framework  ]
+   [ run test_policy_6.cpp ../../test/build//boost_unit_test_framework  ]
+   [ run test_policy_7.cpp ../../test/build//boost_unit_test_framework  ]
+   [ run test_policy_8.cpp ../../test/build//boost_unit_test_framework  ]
+   [ compile test_policy_9.cpp  ]
+   [ run test_policy_sf.cpp ../../test/build//boost_unit_test_framework  ]
+   [ run test_long_double_support.cpp ../../test/build//boost_unit_test_framework
+      : : : [ check-target-builds ../config//has_long_double_support "long double support" : : <build>no ] ]
 ;
 
 test-suite distribution_tests :
@@ -772,7 +832,9 @@ test-suite distribution_tests :
    [ run test_rayleigh.cpp ../../test/build//boost_unit_test_framework  ]
    [ run test_students_t.cpp ../../test/build//boost_unit_test_framework  ]
    [ run test_skew_normal.cpp ../../test/build//boost_unit_test_framework  ]
-   [ run test_trapezoidal.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_lambdas ]  ]
+   [ run test_trapezoidal.cpp ../../test/build//boost_unit_test_framework : : :
+         release [ requires cxx11_lambdas cxx11_auto_declarations cxx11_decltype cxx11_unified_initialization_syntax cxx11_variadic_templates ]
+         [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>"-Bstatic -lquadmath -Bdynamic" ] ]
    [ run test_triangular.cpp pch ../../test/build//boost_unit_test_framework  ]
    [ run test_uniform.cpp pch ../../test/build//boost_unit_test_framework  ]
    [ run test_weibull.cpp ../../test/build//boost_unit_test_framework  ]
@@ -815,61 +877,45 @@ test-suite distribution_tests :
    [ run test_nonfinite_trap.cpp ../../test/build//boost_unit_test_framework : : : <exception-handling>off:<build>no  ]
    [ run test_signed_zero.cpp ../../test/build//boost_unit_test_framework  ]
    [ run complex_test.cpp ../../test/build//boost_unit_test_framework  ]
+   #
+   # Moved from misc for load balancing reasons:
+   #
+   [ run test_polynomial.cpp ../../test/build//boost_unit_test_framework : : : <define>TEST1 : test_polynomial_1  ]
+   [ run test_polynomial.cpp ../../test/build//boost_unit_test_framework : : : <define>TEST2 : test_polynomial_2  ]
+   [ run test_polynomial.cpp ../../test/build//boost_unit_test_framework : : : <define>TEST3 : test_polynomial_3  ]
+   [ run polynomial_concept_check.cpp ]
+
+   [ compile multiprc_concept_check_1.cpp : <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release <exception-handling>off:<build>no  ]
+   [ compile multiprc_concept_check_2.cpp : <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release <exception-handling>off:<build>no  ]
+   [ compile multiprc_concept_check_3.cpp : <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release <exception-handling>off:<build>no  ]
+   [ compile multiprc_concept_check_4.cpp : <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release <exception-handling>off:<build>no  ]
+   [ compile ntl_concept_check.cpp : [ check-target-builds ../config//has_ntl_rr : : <build>no ] <debug-symbols>off  ]
+   [ compile mpfr_concept_check.cpp : [ check-target-builds ../config//has_mpfr_class : : <build>no ] <debug-symbols>off  ]
+   [ compile mpreal_concept_check.cpp : [ check-target-builds ../config//has_mpreal : : <build>no ] <debug-symbols>off  ]
+   [ compile e_float_concept_check.cpp : [ check-target-builds ../config//has_e_float : : <build>no ] <debug-symbols>off  ]
+
 ;
 
 test-suite misc :
-   [ run test_constants.cpp ../../test/build//boost_unit_test_framework  ]
    [ run test_print_info_on_type.cpp  ]
-   [ run test_barycentric_rational.cpp ../../test/build//boost_unit_test_framework : : :  [ requires cxx11_smart_ptr ] [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]  ]
+   [ run test_barycentric_rational.cpp ../../test/build//boost_unit_test_framework : : :  [ requires cxx11_smart_ptr cxx11_defaulted_functions cxx11_auto_declarations cxx11_unified_initialization_syntax ] [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]  ]
    [ run test_constant_generate.cpp : : : release <define>USE_CPP_FLOAT=1 <exception-handling>off:<build>no  ]
-   [ run test_classify.cpp pch ../../test/build//boost_unit_test_framework  ]
-   [ run test_cubic_b_spline.cpp ../../test/build//boost_unit_test_framework : : :  [ requires cxx11_smart_ptr cxx11_defaulted_functions ]  ]
-   [ run test_error_handling.cpp ../../test/build//boost_unit_test_framework  ]
-   [ run legendre_stieltjes_test.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_range_based_for ] [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>"-Bstatic -lquadmath -Bdynamic" ]  ]
-   [ run test_minima.cpp pch ../../test/build//boost_unit_test_framework  ]
-   [ run test_rationals.cpp ../../test/build//boost_unit_test_framework
-      test_rational_instances/test_rational_double1.cpp
-      test_rational_instances/test_rational_double2.cpp
-      test_rational_instances/test_rational_double3.cpp
-      test_rational_instances/test_rational_double4.cpp
-      test_rational_instances/test_rational_double5.cpp
-      test_rational_instances/test_rational_float1.cpp
-      test_rational_instances/test_rational_float2.cpp
-      test_rational_instances/test_rational_float3.cpp
-      test_rational_instances/test_rational_float4.cpp
-      test_rational_instances/test_rational_ldouble1.cpp
-      test_rational_instances/test_rational_ldouble2.cpp
-      test_rational_instances/test_rational_ldouble3.cpp
-      test_rational_instances/test_rational_ldouble4.cpp
-      test_rational_instances/test_rational_ldouble5.cpp
-      test_rational_instances/test_rational_real_concept1.cpp
-      test_rational_instances/test_rational_real_concept2.cpp
-      test_rational_instances/test_rational_real_concept3.cpp
-      test_rational_instances/test_rational_real_concept4.cpp
-      test_rational_instances/test_rational_real_concept5.cpp
-   ]
+   [ run test_cubic_b_spline.cpp ../../test/build//boost_unit_test_framework : : :  [ requires cxx11_smart_ptr cxx11_defaulted_functions ] <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ]
+   [ run catmull_rom_test.cpp ../../test/build//boost_unit_test_framework : : :  [ requires cxx17_if_constexpr cxx17_std_apply ] ] # does not in fact require C++17 constexpr; requires C++17 std::size.
+   [ run univariate_statistics_test.cpp ../../test/build//boost_unit_test_framework : : :  [ requires cxx17_if_constexpr cxx17_std_apply ] ]
+   [ run norms_test.cpp ../../test/build//boost_unit_test_framework : : :  [ requires cxx17_if_constexpr cxx17_std_apply ] ]
+   [ run signal_statistics_test.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
+   [ run bivariate_statistics_test.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
+   [ run lanczos_smoothing_test.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
+   [ run condition_number_test.cpp ../../test/build//boost_unit_test_framework : : :  [ requires cxx17_if_constexpr cxx17_std_apply ] ]
    [ run test_real_concept.cpp ../../test/build//boost_unit_test_framework  ]
    [ run test_remez.cpp pch ../../test/build//boost_unit_test_framework  ]
    [ run test_roots.cpp pch ../../test/build//boost_unit_test_framework  ]
    [ run test_root_iterations.cpp pch ../../test/build//boost_unit_test_framework : : : [ requires cxx11_hdr_tuple ]  ]
    [ run test_root_finding_concepts.cpp ../../test/build//boost_unit_test_framework  ]
    [ run test_toms748_solve.cpp pch ../../test/build//boost_unit_test_framework  ]
-   [ run test_policy.cpp ../../test/build//boost_unit_test_framework  ]
-   [ run test_policy_2.cpp ../../test/build//boost_unit_test_framework  ]
-   [ run test_policy_3.cpp ../../test/build//boost_unit_test_framework  ]
-   [ run test_policy_4.cpp ../../test/build//boost_unit_test_framework  ]
-   [ run test_policy_5.cpp ../../test/build//boost_unit_test_framework  ]
-   [ run test_policy_6.cpp ../../test/build//boost_unit_test_framework  ]
-   [ run test_policy_7.cpp ../../test/build//boost_unit_test_framework  ]
-   [ run test_policy_8.cpp ../../test/build//boost_unit_test_framework  ]
-   [ compile test_policy_9.cpp  ]
-   [ run test_policy_sf.cpp ../../test/build//boost_unit_test_framework  ]
-   [ run test_long_double_support.cpp ../../test/build//boost_unit_test_framework
-      : : : [ check-target-builds ../config//has_long_double_support "long double support" : : <build>no ] ]
-   [ run  compile_test/cubic_spline_incl_test.cpp compile_test_main : : :  [ requires cxx11_smart_ptr cxx11_defaulted_functions ]  ]
-   [ run  compile_test/barycentric_rational_incl_test.cpp compile_test_main : : :  [ requires cxx11_smart_ptr cxx11_defaulted_functions ]  ]
-   [ run  compile_test/common_factor_rt_inc_test.cpp compile_test_main  ]
-   [ run  compile_test/common_factor_ct_inc_test.cpp compile_test_main  ]
+   [ run  compile_test/cubic_spline_incl_test.cpp compile_test_main : : :  [ requires cxx11_smart_ptr cxx11_defaulted_functions cxx11_auto_declarations ]  ]
+   [ run  compile_test/barycentric_rational_incl_test.cpp compile_test_main : : :  [ requires cxx11_smart_ptr cxx11_defaulted_functions cxx11_auto_declarations cxx11_unified_initialization_syntax ]  ]
    [ run  compile_test/compl_abs_incl_test.cpp compile_test_main  ]
    [ run  compile_test/compl_acos_incl_test.cpp compile_test_main  ]
    [ run  compile_test/compl_acosh_incl_test.cpp compile_test_main  ]
@@ -914,6 +960,7 @@ test-suite misc :
    [ run  compile_test/sf_modf_incl_test.cpp compile_test_main  ]
    [ run  compile_test/sf_next_incl_test.cpp compile_test_main  ]
    [ run  compile_test/sf_powm1_incl_test.cpp compile_test_main  ]
+   [ run  compile_test/sf_prime_incl_test.cpp compile_test_main  ]
    [ run  compile_test/sf_relative_distance_incl_test.cpp compile_test_main  ]
    [ run  compile_test/sf_round_incl_test.cpp compile_test_main  ]
    [ run  compile_test/sf_sign_incl_test.cpp compile_test_main  ]
@@ -926,19 +973,24 @@ test-suite misc :
    [ run  compile_test/sf_ulp_incl_test.cpp compile_test_main  ]
    [ run  compile_test/sf_zeta_incl_test.cpp compile_test_main  ]
    [ run  compile_test/std_real_concept_check.cpp  ]
+   [ compile compile_test/std_real_concept_check.cpp  : <define>EMULATE32 : std_real_concept_check_32 ]
+   [ compile compile_test/std_real_concept_check.cpp  : <define>EMULATE64 : std_real_concept_check_64 ]
+   [ compile compile_test/std_real_concept_check.cpp  : <define>EMULATE80 : std_real_concept_check_80 ]
+   [ compile compile_test/std_real_concept_check.cpp  : <define>EMULATE128 : std_real_concept_check_128 ]
    [ run  compile_test/cstdfloat_concept_check_1.cpp
       : : : [ check-target-builds ../config//has_intel_quad "Intel _Quad datatype support" : <cxxflags>-Qoption,cpp,--extended_float_type ]
             [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] ]
    [ run  compile_test/cstdfloat_concept_check_2.cpp  ]
    [ run  compile_test/cstdfloat_concept_check_3.cpp  ]
    [ run  compile_test/cstdfloat_concept_check_4.cpp  ]
+   [ run  test_cstdfloat.cpp ../../test/build//boost_unit_test_framework  : : : [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] ]
    [ run  compile_test/sf_airy_incl_test.cpp compile_test_main  ]
    [ run  compile_test/sf_hankel_incl_test.cpp compile_test_main  ]
    [ run  compile_test/sf_jacobi_incl_test.cpp compile_test_main  ]
    [ run  compile_test/sf_owens_t_incl_test.cpp compile_test_main  ]
    [ run  compile_test/dist_skew_norm_incl_test.cpp compile_test_main  ]
    [ run  compile_test/constants_incl_test.cpp compile_test_main  ]
-   [ run  compile_test/trapezoidal_incl_test.cpp compile_test_main  ]
+   [ run  compile_test/trapezoidal_incl_test.cpp compile_test_main  : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_decltype cxx11_unified_initialization_syntax cxx11_variadic_templates ] ]
    [ compile  compile_test/test_traits.cpp  ]
    [ compile  compile_test/tools_config_inc_test.cpp  ]
    [ compile  compile_test/tools_fraction_inc_test.cpp  ]
@@ -956,81 +1008,75 @@ test-suite misc :
    [ compile  compile_test/tools_test_inc_test.cpp  ]
    [ compile  compile_test/tools_toms748_inc_test.cpp  ]
    [ compile  compile_test/cubic_spline_concept_test.cpp :  [ requires cxx11_smart_ptr cxx11_defaulted_functions ]  ]
-   [ compile  compile_test/barycentric_rational_concept_test.cpp :  [ requires cxx11_smart_ptr cxx11_defaulted_functions ]  ]
+   [ compile  compile_test/barycentric_rational_concept_test.cpp :  [ requires cxx11_smart_ptr cxx11_defaulted_functions cxx11_unified_initialization_syntax ]  ]
    [ compile  compile_test/sf_legendre_stieltjes_concept_test.cpp : [ requires cxx11_auto_declarations cxx11_defaulted_functions cxx11_lambdas ]   ]
-   [ compile  compile_test/trapezoidal_concept_test.cpp  ]
+   [ compile  compile_test/trapezoidal_concept_test.cpp : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_decltype cxx11_unified_initialization_syntax cxx11_variadic_templates ] ]
    [ run octonion_test.cpp
        ../../test/build//boost_unit_test_framework ]
    [ run quaternion_constexpr_test.cpp ]
    [ run quaternion_test.cpp
-       ../../test/build//boost_unit_test_framework : : : [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>"-Bstatic -lquadmath -Bdynamic" ] ]
+       ../../test/build//boost_unit_test_framework : : : [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] ]
    [ run quaternion_mult_incl_test.cpp
        quaternion_mi1.cpp
        quaternion_mi2.cpp
        ../../test/build//boost_unit_test_framework ]
-   [ run test_polynomial.cpp ../../test/build//boost_unit_test_framework : : : <define>TEST1 : test_polynomial_1  ]
-   [ run test_polynomial.cpp ../../test/build//boost_unit_test_framework : : : <define>TEST2 : test_polynomial_2  ]
-   [ run test_polynomial.cpp ../../test/build//boost_unit_test_framework : : : <define>TEST3 : test_polynomial_3  ]
-   [ run polynomial_concept_check.cpp ]
-   [ run test_gcd.cpp ../../test/build//boost_unit_test_framework  ]
 
-   [ compile multiprc_concept_check_1.cpp : <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release <exception-handling>off:<build>no  ]
-   [ compile multiprc_concept_check_2.cpp : <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release <exception-handling>off:<build>no  ]
-   [ compile multiprc_concept_check_3.cpp : <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release <exception-handling>off:<build>no  ]
-   [ compile multiprc_concept_check_4.cpp : <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release <exception-handling>off:<build>no  ]
-   [ compile ntl_concept_check.cpp : [ check-target-builds ../config//has_ntl_rr : : <build>no ] <debug-symbols>off  ]
-   [ compile mpfr_concept_check.cpp : [ check-target-builds ../config//has_mpfr_class : : <build>no ] <debug-symbols>off  ]
-   [ compile mpreal_concept_check.cpp : [ check-target-builds ../config//has_mpreal : : <build>no ] <debug-symbols>off  ]
-   [ compile e_float_concept_check.cpp : [ check-target-builds ../config//has_e_float : : <build>no ] <debug-symbols>off  ]
+   [ run __temporary_test.cpp test_instances//test_instances : : : <test-info>always_show_run_output <pch>off ]
+;
 
+test-suite quadrature :
    [ run  tanh_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
-     : : : <define>TEST1 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] 
-     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] : 
+     : : : <toolset>msvc:<cxxflags>/bigobj <define>TEST1 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]
+     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] :
 	 tanh_sinh_quadrature_test_1 ]
    [ run  tanh_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
-     : : : <define>TEST1A [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] 
-     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] : 
+     : : : <toolset>msvc:<cxxflags>/bigobj <define>TEST1A [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]
+     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] :
 	 tanh_sinh_quadrature_test_1a ]
    [ run  tanh_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
-     : : : <define>TEST2 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] 
-     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] : 
+     : : : <toolset>msvc:<cxxflags>/bigobj <define>TEST2 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]
+     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] :
 	 tanh_sinh_quadrature_test_2 ]
    [ run  tanh_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
-     : : : <define>TEST2A [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] 
-     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] : 
+     : : : <toolset>msvc:<cxxflags>/bigobj <define>TEST2A [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]
+     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] :
 	 tanh_sinh_quadrature_test_2a ]
    [ run  tanh_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
-     : : : <define>TEST3 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] 
-     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] : 
+     : : : <toolset>msvc:<cxxflags>/bigobj <define>TEST3 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]
+     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] :
 	 tanh_sinh_quadrature_test_3 ]
    [ run  tanh_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
-     : : : <define>TEST3A [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] 
-     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] : 
+     : : : <toolset>msvc:<cxxflags>/bigobj <define>TEST3A [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]
+     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] :
 	 tanh_sinh_quadrature_test_3a ]
    [ run  tanh_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
-     : : : release <define>TEST4 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] 
-     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] : 
+     : : : release <toolset>msvc:<cxxflags>/bigobj <define>TEST4 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]
+     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] :
 	 tanh_sinh_quadrature_test_4 ]
    [ run  tanh_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
-     : : : release <define>TEST5 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] 
-     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] : 
+     : : : release <toolset>msvc:<cxxflags>/bigobj <define>TEST5 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]
+     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] :
 	 tanh_sinh_quadrature_test_5 ]
    [ run  tanh_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
-     : : : <define>TEST6 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] 
-     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] : 
+     : : : <toolset>msvc:<cxxflags>/bigobj <define>TEST6 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]
+     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] :
 	 tanh_sinh_quadrature_test_6 ]
    [ run  tanh_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
-     : : : <define>TEST6A [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] 
-     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] : 
+     : : : <toolset>msvc:<cxxflags>/bigobj <define>TEST6A [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]
+     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] :
 	 tanh_sinh_quadrature_test_6a ]
    [ run  tanh_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
-     : : : release <define>TEST7 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] 
-     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] : 
+     : : : release <toolset>msvc:<cxxflags>/bigobj <define>TEST7 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]
+     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] :
 	 tanh_sinh_quadrature_test_7 ]
    [ run  tanh_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
-     : : : release <define>TEST8 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] 
-     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] : 
+     : : : release <toolset>msvc:<cxxflags>/bigobj <define>TEST8 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]
+     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] :
 	 tanh_sinh_quadrature_test_8 ]
+   [ run  tanh_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
+     : : : release <toolset>msvc:<cxxflags>/bigobj <define>TEST9
+     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] :
+	 tanh_sinh_quadrature_test_9 ]
 
    [ run sinh_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
      : : : release [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] ]
@@ -1038,23 +1084,26 @@ test-suite misc :
      : : : <define>TEST1 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] : exp_sinh_quadrature_test_1 ]
 
    [ run exp_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
-     : : : release <define>TEST2 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] 
+     : : : release <define>TEST2 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] : exp_sinh_quadrature_test_2 ]
    [ run exp_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
-     : : : <define>TEST3 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] 
+     : : : <define>TEST3 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] : exp_sinh_quadrature_test_3 ]
    [ run exp_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
-     : : : release <define>TEST4 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] 
+     : : : release <define>TEST4 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] : exp_sinh_quadrature_test_4 ]
    [ run exp_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
-     : : : release <define>TEST5 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] 
+     : : : release <define>TEST5 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] : exp_sinh_quadrature_test_5 ]
    [ run exp_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
-     : : : release <define>TEST6 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] 
+     : : : release <define>TEST6 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] : exp_sinh_quadrature_test_6 ]
    [ run exp_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
-     : : : release <define>TEST7 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] 
+     : : : release <define>TEST7 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] : exp_sinh_quadrature_test_7 ]
+   [ run exp_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
+     : : : release <define>TEST8 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]
+     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] : exp_sinh_quadrature_test_8 ]
 
    [ run  compile_test/exp_sinh_incl_test.cpp compile_test_main : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] ]
    [ run  compile_test/sinh_sinh_incl_test.cpp compile_test_main : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] ]
@@ -1063,38 +1112,141 @@ test-suite misc :
    [ compile  compile_test/sinh_sinh_concept_test.cpp : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] ]
    [ compile  compile_test/tanh_sinh_concept_test.cpp : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] ]
 
-   [ run gauss_quadrature_test.cpp : : : <define>TEST1 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] 
-     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] : gauss_quadrature_test_1 ]
-   [ run gauss_quadrature_test.cpp : : : <define>TEST2 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] 
-     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] : gauss_quadrature_test_2 ]
-   [ run gauss_kronrod_quadrature_test.cpp : : : <define>TEST1 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] 
-     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] : gauss_kronrod_quadrature_test_1 ]
-   [ run gauss_kronrod_quadrature_test.cpp : : : <define>TEST1A [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] 
-     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] : gauss_kronrod_quadrature_test_1a ]
-   [ run gauss_kronrod_quadrature_test.cpp : : : <define>TEST2 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] 
-     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] : gauss_kronrod_quadrature_test_2 ]
-   [ run gauss_kronrod_quadrature_test.cpp : : : <define>TEST3 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] 
-     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] : gauss_kronrod_quadrature_test_3 ]
-   [ run adaptive_gauss_kronrod_quadrature_test.cpp : : : <define>TEST1 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] 
-     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] : adaptive_gauss_quadrature_test_1 ]
-   [ run adaptive_gauss_kronrod_quadrature_test.cpp : : : <define>TEST1A [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] 
-     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] : adaptive_gauss_quadrature_test_1a ]
-   [ run adaptive_gauss_kronrod_quadrature_test.cpp : : : <define>TEST2 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] 
-     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] : adaptive_gauss_quadrature_test_2 ]
-   [ run adaptive_gauss_kronrod_quadrature_test.cpp : : : <define>TEST3 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] 
-     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] : adaptive_gauss_quadrature_test_3 ]
+   [ run gauss_quadrature_test.cpp : : : <define>TEST1 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]
+     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release : gauss_quadrature_test_1 ]
+   [ run gauss_quadrature_test.cpp : : : <define>TEST2 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]
+     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release : gauss_quadrature_test_2 ]
+   [ run gauss_quadrature_test.cpp : : : <define>TEST3 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]
+     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release : gauss_quadrature_test_3 ]
+   [ run gauss_kronrod_quadrature_test.cpp : : : <define>TEST1 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]
+     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release : gauss_kronrod_quadrature_test_1 ]
+   [ run gauss_kronrod_quadrature_test.cpp : : : <define>TEST1A [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]
+     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release : gauss_kronrod_quadrature_test_1a ]
+   [ run gauss_kronrod_quadrature_test.cpp : : : <define>TEST2 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]
+     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release : gauss_kronrod_quadrature_test_2 ]
+   [ run gauss_kronrod_quadrature_test.cpp : : : <define>TEST3 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]
+     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release : gauss_kronrod_quadrature_test_3 ]
+   [ run adaptive_gauss_kronrod_quadrature_test.cpp : : : <define>TEST1 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]
+     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release : adaptive_gauss_quadrature_test_1 ]
+   [ run adaptive_gauss_kronrod_quadrature_test.cpp : : : <define>TEST1A [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]
+     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release : adaptive_gauss_quadrature_test_1a ]
+   [ run adaptive_gauss_kronrod_quadrature_test.cpp : : : <define>TEST2 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]
+     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release : adaptive_gauss_quadrature_test_2 ]
+   [ run adaptive_gauss_kronrod_quadrature_test.cpp : : : <define>TEST3 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]
+     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release : adaptive_gauss_quadrature_test_3 ]
+
+   [ run naive_monte_carlo_test.cpp ../../atomic/build//boost_atomic : : :
+     <toolset>msvc:<cxxflags>/bigobj <define>TEST=1  [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
+     <target-os>linux:<linkflags>"-pthread" : naive_monte_carlo_test_1
+   ]
+   [ run naive_monte_carlo_test.cpp ../../atomic/build//boost_atomic : : :
+     <toolset>msvc:<cxxflags>/bigobj <define>TEST=2  [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
+     <target-os>linux:<linkflags>"-pthread" : naive_monte_carlo_test_2
+   ]
+   [ run naive_monte_carlo_test.cpp ../../atomic/build//boost_atomic : : :
+     <toolset>msvc:<cxxflags>/bigobj <define>TEST=3  [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
+     <target-os>linux:<linkflags>"-pthread" : naive_monte_carlo_test_3
+   ]
+   [ run naive_monte_carlo_test.cpp ../../atomic/build//boost_atomic : : :
+     <toolset>msvc:<cxxflags>/bigobj <define>TEST=4  [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
+     <target-os>linux:<linkflags>"-pthread" : naive_monte_carlo_test_4
+   ]
+   [ run naive_monte_carlo_test.cpp ../../atomic/build//boost_atomic : : :
+     <toolset>msvc:<cxxflags>/bigobj <define>TEST=5  [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
+     <target-os>linux:<linkflags>"-pthread" : naive_monte_carlo_test_5
+   ]
+   [ run naive_monte_carlo_test.cpp ../../atomic/build//boost_atomic : : :
+     <toolset>msvc:<cxxflags>/bigobj <define>TEST=6  [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
+     <target-os>linux:<linkflags>"-pthread" : naive_monte_carlo_test_6
+   ]
+   [ run naive_monte_carlo_test.cpp ../../atomic/build//boost_atomic : : :
+     <toolset>msvc:<cxxflags>/bigobj <define>TEST=7  [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
+     <target-os>linux:<linkflags>"-pthread" : naive_monte_carlo_test_7
+   ]
+   [ run naive_monte_carlo_test.cpp ../../atomic/build//boost_atomic : : :
+     <toolset>msvc:<cxxflags>/bigobj <define>TEST=8  [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
+     <target-os>linux:<linkflags>"-pthread" : naive_monte_carlo_test_8
+   ]
+   [ run naive_monte_carlo_test.cpp ../../atomic/build//boost_atomic : : :
+     <toolset>msvc:<cxxflags>/bigobj <define>TEST=9  [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
+     <target-os>linux:<linkflags>"-pthread" : naive_monte_carlo_test_9
+   ]
+   [ run naive_monte_carlo_test.cpp ../../atomic/build//boost_atomic : : :
+     <toolset>msvc:<cxxflags>/bigobj <define>TEST=10  [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
+     <target-os>linux:<linkflags>"-pthread" : naive_monte_carlo_test_10
+   ]
+   [ run naive_monte_carlo_test.cpp ../../atomic/build//boost_atomic : : :
+     <toolset>msvc:<cxxflags>/bigobj <define>TEST=11  [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
+     <target-os>linux:<linkflags>"-pthread" : naive_monte_carlo_test_11
+   ]
+   [ run naive_monte_carlo_test.cpp ../../atomic/build//boost_atomic : : :
+     <toolset>msvc:<cxxflags>/bigobj <define>TEST=12  [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
+     <target-os>linux:<linkflags>"-pthread" : naive_monte_carlo_test_12
+   ]
+   [ run naive_monte_carlo_test.cpp ../../atomic/build//boost_atomic : : :
+     <toolset>msvc:<cxxflags>/bigobj <define>TEST=13  [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
+     <target-os>linux:<linkflags>"-pthread" : naive_monte_carlo_test_13
+   ]
+   [ run naive_monte_carlo_test.cpp ../../atomic/build//boost_atomic : : :
+     <toolset>msvc:<cxxflags>/bigobj <define>TEST=14  [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
+     <target-os>linux:<linkflags>"-pthread" : naive_monte_carlo_test_14
+   ]
+   [ run naive_monte_carlo_test.cpp ../../atomic/build//boost_atomic : : :
+     <toolset>msvc:<cxxflags>/bigobj <define>TEST=15  [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
+     <target-os>linux:<linkflags>"-pthread" : naive_monte_carlo_test_15
+   ]
+   [ run naive_monte_carlo_test.cpp ../../atomic/build//boost_atomic : : :
+     <toolset>msvc:<cxxflags>/bigobj <define>TEST=16  [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
+     <target-os>linux:<linkflags>"-pthread" : naive_monte_carlo_test_16
+   ]
+   [ run naive_monte_carlo_test.cpp ../../atomic/build//boost_atomic : : :
+     <toolset>msvc:<cxxflags>/bigobj <define>TEST=17  [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
+     <target-os>linux:<linkflags>"-pthread" : naive_monte_carlo_test_17
+   ]
+   [ run naive_monte_carlo_test.cpp ../../atomic/build//boost_atomic : : :
+     <toolset>msvc:<cxxflags>/bigobj <define>TEST=18  [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
+     <target-os>linux:<linkflags>"-pthread" : naive_monte_carlo_test_18
+   ]
+   [ run naive_monte_carlo_test.cpp ../../atomic/build//boost_atomic : : :
+     <toolset>msvc:<cxxflags>/bigobj <define>TEST=19  [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
+     <target-os>linux:<linkflags>"-pthread" : naive_monte_carlo_test_19
+   ]
+   [ run naive_monte_carlo_test.cpp ../../atomic/build//boost_atomic : : :
+     <toolset>msvc:<cxxflags>/bigobj <define>TEST=20  [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
+     <target-os>linux:<linkflags>"-pthread" : naive_monte_carlo_test_20
+   ]
+   [ run naive_monte_carlo_test.cpp ../../atomic/build//boost_atomic : : :
+     <toolset>msvc:<cxxflags>/bigobj <define>TEST=21  [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
+     <target-os>linux:<linkflags>"-pthread" : naive_monte_carlo_test_21
+   ]
+   [ run naive_monte_carlo_test.cpp ../../atomic/build//boost_atomic : : :
+     <toolset>msvc:<cxxflags>/bigobj <define>TEST=22  [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
+     <target-os>linux:<linkflags>"-pthread" : naive_monte_carlo_test_22
+   ]
+   [ run naive_monte_carlo_test.cpp ../../atomic/build//boost_atomic : : :
+     <toolset>msvc:<cxxflags>/bigobj <define>TEST=23  [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
+     <target-os>linux:<linkflags>"-pthread" : naive_monte_carlo_test_23
+   ]
+   [ compile compile_test/naive_monte_carlo_incl_test.cpp ../../atomic/build//boost_atomic :
+     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
+     <target-os>linux:<linkflags>"-pthread"
+   ]
+   [ compile compile_test/naive_monte_carlo_concept_test.cpp ../../atomic/build//boost_atomic :
+     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
+     <target-os>linux:<linkflags>"-pthread"
+   ]
 
    [ compile compile_test/gauss_concept_test.cpp : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] ]
    [ compile compile_test/gauss_kronrod_concept_test.cpp : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] ]
 
+   [ run test_numerical_differentiation.cpp ../../test/build//boost_unit_test_framework  : : : <toolset>msvc:<cxxflags>/bigobj [ requires cxx11_auto_declarations cxx11_constexpr ] ]
+   [ run  compile_test/numerical_differentiation_incl_test.cpp compile_test_main  : : : [ requires cxx11_auto_declarations cxx11_constexpr ] ]
+   [ compile  compile_test/numerical_differentiation_concept_test.cpp  : [ requires cxx11_auto_declarations cxx11_constexpr ] ]
+   [ run test_autodiff_1.cpp ../../test/build//boost_unit_test_framework : : : <toolset>msvc:<cxxflags>/bigobj [ requires cxx11_inline_namespaces ] ]
+   [ run test_autodiff_2.cpp ../../test/build//boost_unit_test_framework : : : <toolset>msvc:<cxxflags>/bigobj [ requires cxx11_inline_namespaces ] ]
+   [ run test_autodiff_3.cpp ../../test/build//boost_unit_test_framework : : : <toolset>msvc:<cxxflags>/bigobj [ requires cxx11_inline_namespaces ] ]
+   [ run test_autodiff_4.cpp ../../test/build//boost_unit_test_framework : : : <toolset>msvc:<cxxflags>/bigobj [ requires cxx11_inline_namespaces ] ]
 ;
-
-
-
-# Temporary tests for support of max_digits10
-# run ztest_max_digits10.cpp ;
-# run zztest_max_digits10.cpp ;
-#  Removed as inexplicably failing for VS12 on teeks99 but OK locally.
 
 build-project ../example ;
 
@@ -1110,7 +1262,7 @@ rule get_float128_tests
            : # input files
            : # requirements
             [ check-target-builds ../config//has_intel_quad "Intel _Quad datatype support" : <cxxflags>-Qoption,cpp,--extended_float_type <define>BOOST_MATH_USE_FLOAT128 ]
-            [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>"-Bstatic -lquadmath -Bdynamic" ]
+            [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]
             [ check-target-builds ../config//has_128bit_floatmax_t "128-bit floatmax_t" : : <build>no ]
             <define>BOOST_ALL_NO_LIB
            : $(source:B)_floatmax_t ] ;

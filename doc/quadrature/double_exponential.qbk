@@ -25,18 +25,18 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
         tanh_sinh(size_t max_refinements = 15, const Real& min_complement = tools::min_value<Real>() * 4)
 
         template<class F>
-        Real integrate(const F f, Real a, Real b, 
-                       Real tolerance = tools::root_epsilon<Real>(), 
-                       Real* error = nullptr, 
-                       Real* L1 = nullptr, 
-                       std::size_t* levels = nullptr)
+        auto integrate(const F f, Real a, Real b,
+                       Real tolerance = tools::root_epsilon<Real>(),
+                       Real* error = nullptr,
+                       Real* L1 = nullptr,
+                       std::size_t* levels = nullptr)->decltype(std::declval<F>()(std::declval<Real>())) const;
 
         template<class F>
-        Real integrate(const F f, Real 
-                       tolerance = tools::root_epsilon<Real>(), 
-                       Real* error = nullptr, 
-                       Real* L1 = nullptr, 
-                       std::size_t* levels = nullptr)
+        auto integrate(const F f, Real
+                       tolerance = tools::root_epsilon<Real>(),
+                       Real* error = nullptr,
+                       Real* L1 = nullptr,
+                       std::size_t* levels = nullptr)->decltype(std::declval<F>()(std::declval<Real>())) const;
 
     };
 
@@ -47,17 +47,17 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
         exp_sinh(size_t max_refinements = 9);
 
         template<class F>
-        Real integrate(const F f, Real a, Real b, 
-                       Real tol = sqrt(std::numeric_limits<Real>::epsilon()), 
-                       Real* error = nullptr, 
-                       Real* L1 = nullptr, 
-                       size_t* levels = nullptr) const;
+        auto integrate(const F f, Real a, Real b,
+                       Real tol = sqrt(std::numeric_limits<Real>::epsilon()),
+                       Real* error = nullptr,
+                       Real* L1 = nullptr,
+                       size_t* levels = nullptr)->decltype(std::declval<F>()(std::declval<Real>())) const;
         template<class F>
-        Real integrate(const F f, 
-                       Real tol = sqrt(std::numeric_limits<Real>::epsilon()), 
-                       Real* error = nullptr, 
-                       Real* L1 = nullptr, 
-                       size_t* levels = nullptr) const;
+        auto integrate(const F f,
+                       Real tol = sqrt(std::numeric_limits<Real>::epsilon()),
+                       Real* error = nullptr,
+                       Real* L1 = nullptr,
+                       size_t* levels = nullptr)->decltype(std::declval<F>()(std::declval<Real>())) const;
     };
 
     template<class Real>
@@ -67,11 +67,11 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
         sinh_sinh(size_t max_refinements = 9);
 
         template<class F>
-        Real integrate(const F f, 
-                       Real tol = sqrt(std::numeric_limits<Real>::epsilon()), 
-                       Real* error = nullptr, 
-                       Real* L1 = nullptr, 
-                       size_t* levels = nullptr) const;
+        auto integrate(const F f,
+                       Real tol = sqrt(std::numeric_limits<Real>::epsilon()),
+                       Real* error = nullptr,
+                       Real* L1 = nullptr,
+                       size_t* levels = nullptr)->decltype(std::declval<F>()(std::declval<Real>())) const;
     };
 
 }}
@@ -83,6 +83,8 @@ For example, the `sinh_sinh` quadrature integrates over the entire real line, th
 The latter integrators also have auxilliary ranges which are handled via a change of variables on the function being integrated,
 so that the `tanh_sinh` can handle integration over (a, b), and `exp_sinh` over (a, \u221E) and(-\u221E, b).
 
+Like the other quadrature routines in Boost, these routines support both real and complex-valued integrands.
+
 The `integrate` methods which do not specify a range always integrate over the native range of the method, and generally
 are the most efficient and produce the smallest code, on the other hand the methods which do specify the bounds of integration
 are the most general, and use argument transformations which are generally very robust.  The following table summarizes
@@ -90,9 +92,9 @@ the ranges supported by each method:
 
 [table
 [[Integrator][Native range][Other supported ranges][Comments]]
-[[tanh_sinh]  [(-1,1)]  [(a,b)[br](a,[infin])[br](-[infin],b)[br](-[infin],[infin])]  
+[[tanh_sinh]  [(-1,1)]  [(a,b)[br](a,[infin])[br](-[infin],b)[br](-[infin],[infin])]
       [Special care is taken for endpoints at or near zero to ensure that abscissa values are calculated without the loss of precision
-      that would normally occur.  Likewise when transforming to an infinite endpoint, the additional information which tanh_sinh has 
+      that would normally occur.  Likewise when transforming to an infinite endpoint, the additional information which tanh_sinh has
       internally on abscissa values is used to ensure no loss of precision during the transformation.]]
 [[exp_sinh]  [(0,[infin])]  [(a,[infin])[br](-[infin],0)[br](-[infin],b)]  []]
 [[sinh_sinh]  [(-[infin],[infin])]  [][]]
@@ -109,18 +111,18 @@ the ranges supported by each method:
         tanh_sinh(size_t max_refinements = 15, const Real& min_complement = tools::min_value<Real>() * 4)
 
         template<class F>
-        Real integrate(const F f, Real a, Real b, 
-                       Real tolerance = tools::root_epsilon<Real>(), 
-                       Real* error = nullptr, 
-                       Real* L1 = nullptr, 
-                       std::size_t* levels = nullptr)
+        auto integrate(const F f, Real a, Real b,
+                       Real tolerance = tools::root_epsilon<Real>(),
+                       Real* error = nullptr,
+                       Real* L1 = nullptr,
+                       std::size_t* levels = nullptr)->decltype(std::declval<F>()(std::declval<Real>())) const;
 
         template<class F>
-        Real integrate(const F f, Real 
-                       tolerance = tools::root_epsilon<Real>(), 
-                       Real* error = nullptr, 
-                       Real* L1 = nullptr, 
-                       std::size_t* levels = nullptr)
+        auto integrate(const F f, Real
+                       tolerance = tools::root_epsilon<Real>(),
+                       Real* error = nullptr,
+                       Real* L1 = nullptr,
+                       std::size_t* levels = nullptr)->decltype(std::declval<F>()(std::declval<Real>())) const;
 
     };
 
@@ -142,7 +144,7 @@ The basic idea of tanh-sinh quadrature is that a variable transformation can cau
 When the derivatives at the endpoints decay much faster than the Bernoulli numbers grow,
 the Euler-Maclaurin summation formula tells us that simple trapezoidal quadrature converges faster than any power of /h/.
 That means the number of correct digits of the result should roughly double with each new level of integration (halving of /h/),
-Hence the default termination condition for integration is usually set to the square root of machine epsilon. 
+Hence the default termination condition for integration is usually set to the square root of machine epsilon.
 Most well-behaved integrals should converge to full machine precision with this termination condition,
 and in 6 or fewer levels at double precision, or 7 or fewer levels for quad precision.
 
@@ -150,7 +152,7 @@ and in 6 or fewer levels at double precision, or 7 or fewer levels for quad prec
 One very nice property of tanh-sinh quadrature is that it can handle singularities at the endpoints of the integration domain.
 For instance, the following integrand, singular at both endpoints, can be efficiently evaluated to 100 binary digits:
 
-    auto f = [](Real x) { return log(x)*log(1-x); };
+    auto f = [](Real x) { return log(x)*log1p(-x); };
     Real Q = integrator.integrate(f, (Real) 0, (Real) 1);
 
 Now onto the caveats: As stated before, the integrands must lie in a Hardy space to ensure rapid convergence.
@@ -184,7 +186,7 @@ This can be queried as follows:
     double Q = integrator.integrate(f, 0.0, 1.0, termination, &error, &L1, &levels);
     double condition_number = L1/std::abs(Q);
 
-If the condition number is large, the computed integral is worthless: typically one can assume that Q has lost one digit of precision 
+If the condition number is large, the computed integral is worthless: typically one can assume that Q has lost one digit of precision
 when the condition number of O(10^Q).
 The returned error term is not the actual error in the result, but merely an a posteriori error estimate.
 It is the absolute difference between the last two approximations, and for well behaved integrals, the actual error should be very much smaller than this.
@@ -196,9 +198,9 @@ to the square root of epsilon, and all tests were conducted in double precision:
 [[`5 * x + 7`][(0,1)][3.5e-15][0][5][1][This trivial case shows just how accurate these methods can be.]]
 [[`log(x) * log(x)`][0, 1)][0][0][5][1][This is an example of an integral that Gaussian integrators fail to handle.]]
 [[`exp(-x) / sqrt(x)`][(0,+[infin])][8.0e-10][1.1e-15][5][1][Gaussian integrators typically fail to handle the singularities at the endpoints of this one.]]
-[[`x * sin(2 * exp(2 * sin(2 * exp(2 * x))))`][(-1,1)][7.2e-16][4.9e-17][9][1.89][This is a truely horrible integral that oscillates wildly and 
+[[`x * sin(2 * exp(2 * sin(2 * exp(2 * x))))`][(-1,1)][7.2e-16][4.9e-17][9][1.89][This is a truely horrible integral that oscillates wildly and
          unpredictably with some very sharp "spikes" in it's graph.  The higher number of levels used reflects the difficulty of sampling the more extreme features.]]
-[[`x == 0 ? 1 : sin(x) / x`][(-[infin], [infin])][3.0e-1][4.0e-1][15][159][This highly oscillatory integral isn't handled at all well by tanh-sinh quadrature: there is so much 
+[[`x == 0 ? 1 : sin(x) / x`][(-[infin], [infin])][3.0e-1][4.0e-1][15][159][This highly oscillatory integral isn't handled at all well by tanh-sinh quadrature: there is so much
       cancellation in the sum that the result is essentially worthless.  The argument transformation of the infinite integral behaves somewhat badly as well, in fact
       we do ['slightly] better integrating over 2 symmetrical and large finite limits.]]
 [[`sqrt(x / (1 - x * x))`][(0,1)][1e-8][1e-8][5][1][This an example of an integral that has all its area close to a non-zero endpoint, the problem here is that
@@ -210,6 +212,24 @@ to the square root of epsilon, and all tests were conducted in double precision:
 
 Although the tanh-sinh quadrature can compute integral over infinite domains by variable transformations, these transformations can create a very poorly behaved integrand.
 For this reason, double-exponential variable transformations have been provided that allow stable computation over infinite domains; these being the exp-sinh and sinh-sinh quadrature.
+
+[h4 Complex integrals]
+
+The tanh_sinh integrator supports integration of functions which return complex results, for example the sine-integral `Si(z)` has the integral representation:
+
+[equation sine_integral]
+
+Which we can code up directly as:
+   
+   template <class Complex>
+   Complex Si(Complex z)
+   {
+      typedef typename Complex::value_type value_type;
+      using std::sin;  using std::cos; using std::exp;
+      auto f = [&z](value_type t) { return -exp(-z * cos(t)) * cos(z * sin(t)); };
+      boost::math::quadrature::tanh_sinh<value_type> integrator;
+      return integrator.integrate(f, 0, boost::math::constants::half_pi<value_type>()) + boost::math::constants::half_pi<value_type>();
+   }
 
 [endsect]
 
@@ -256,11 +276,11 @@ Not only is this form accurate to full machine precision, but it converges to th
         sinh_sinh(size_t max_refinements = 9);
 
         template<class F>
-        Real integrate(const F f, 
-                       Real tol = sqrt(std::numeric_limits<Real>::epsilon()), 
-                       Real* error = nullptr, 
-                       Real* L1 = nullptr, 
-                       size_t* levels = nullptr) const;
+        auto integrate(const F f,
+                       Real tol = sqrt(std::numeric_limits<Real>::epsilon()),
+                       Real* error = nullptr,
+                       Real* L1 = nullptr,
+                       size_t* levels = nullptr)->decltype(std::declval<F>()(std::declval<Real>())) const;;
     };
 
 The sinh-sinh quadrature allows computation over the entire real line, and is called as follows:
@@ -271,7 +291,27 @@ The sinh-sinh quadrature allows computation over the entire real line, and is ca
     double L1;
     double Q = integrator.integrate(f, &error, &L1);
 
-Note that the limits of integration are understood to be (-\u221E, \u221E).
+Note that the limits of integration are understood to be (-\u221E, \u221E). 
+
+Complex valued integrands are supported as well, for example the [@https://en.wikipedia.org/wiki/Dirichlet_eta_function Dirichlet Eta function]
+can be represented via:
+
+[equation complex_eta_integral]
+
+which we can directly code up as:
+
+   template <class Complex>
+   Complex eta(Complex s)
+   {
+      typedef typename Complex::value_type value_type;
+      using std::pow;  using std::exp;
+      Complex i(0, 1);
+      value_type pi = boost::math::constants::pi<value_type>();
+      auto f = [&, s, i](value_type t) { return pow(0.5 + i * t, -s) / (exp(pi * t) + exp(-pi * t)); };
+      boost::math::quadrature::sinh_sinh<value_type> integrator;
+      return integrator.integrate(f);
+   }
+
 
 [endsect]
 
@@ -284,17 +324,17 @@ Note that the limits of integration are understood to be (-\u221E, \u221E).
         exp_sinh(size_t max_refinements = 9);
 
         template<class F>
-        Real integrate(const F f, Real a, Real b, 
-                       Real tol = sqrt(std::numeric_limits<Real>::epsilon()), 
-                       Real* error = nullptr, 
-                       Real* L1 = nullptr, 
-                       size_t* levels = nullptr) const;
+        auto integrate(const F f, Real a, Real b,
+                       Real tol = sqrt(std::numeric_limits<Real>::epsilon()),
+                       Real* error = nullptr,
+                       Real* L1 = nullptr,
+                       size_t* levels = nullptr)->decltype(std::declval<F>()(std::declval<Real>())) const;
         template<class F>
-        Real integrate(const F f, 
-                       Real tol = sqrt(std::numeric_limits<Real>::epsilon()), 
-                       Real* error = nullptr, 
-                       Real* L1 = nullptr, 
-                       size_t* levels = nullptr) const;
+        auto integrate(const F f,
+                       Real tol = sqrt(std::numeric_limits<Real>::epsilon()),
+                       Real* error = nullptr,
+                       Real* L1 = nullptr,
+                       size_t* levels = nullptr)->decltype(std::declval<F>()(std::declval<Real>())) const;
     };
 
 For half-infinite intervals, the exp-sinh quadrature is provided:
@@ -309,7 +349,33 @@ For half-infinite intervals, the exp-sinh quadrature is provided:
 
 The native integration range of this integrator is (0, [infin]), but we also support (a, [infin]), (-[infin], 0) and (-[infin], b) via argument transformations.
 
-Endpoint singularities are supported by exp-sinh.
+Endpoint singularities and complex-valued integrands are supported by exp-sinh.
+
+For example, the modified Bessel function K can be represented via:
+
+[equation complex_bessel_k_integral]
+
+Which we can code up as:
+
+   template <class Complex>
+   Complex bessel_K(Complex alpha, Complex z)
+   {
+      typedef typename Complex::value_type value_type;
+      using std::cosh;  using std::exp;
+      auto f = [&, alpha, z](value_type t) 
+      {
+         value_type ct = cosh(t);
+         if (ct > log(std::numeric_limits<value_type>::max()))
+            return Complex(0);
+         return exp(-z * ct) * cosh(alpha * t); 
+      };
+      boost::math::quadrature::exp_sinh<value_type> integrator;
+      return integrator.integrate(f);
+   }
+
+The only wrinkle in the above code is the need to check for large `cosh(t)` in which case we assume that
+`exp(-x cosh(t))` tends to zero faster than `cosh(alpha x)` tends to infinity and return `0`.  Without that
+check we end up with `0 * Infinity` as the result (a NaN).
 
 [endsect]
 
@@ -367,7 +433,7 @@ All three of the double-exponential integrators are thread safe as long as BOOST
 integrators store a large amount of fairly hard to compute data, it is recommended that these objects are stored and reused
 as much as possible.
 
-Internally all three of the double-exponential integrators use the same caching strategy: they allocate all the vectors needed 
+Internally all three of the double-exponential integrators use the same caching strategy: they allocate all the vectors needed
 to store the maximum permitted levels, but only populate the first few levels when constructed.  This means a minimal amount of memory
 is actually allocated when the integrator is first constructed, and already populated levels can be accessed via a lockfree
 atomic read, and only populating new levels requires a thread lock.
@@ -383,7 +449,7 @@ A few things to keep in mind while using the tanh-sinh, exp-sinh, and sinh-sinh 
 
 These routines are *very* aggressive about approaching the endpoint singularities.
 This allows lots of significant digits to be extracted, but also has another problem: Roundoff error can cause the function to be evaluated at the endpoints.
-A few ways to avoid this: Narrow up the bounds of integration to say, [a + [epsilon], b - [epsilon]], make sure (a+b)/2 and (b-a)/2 are representable, and finally, 
+A few ways to avoid this: Narrow up the bounds of integration to say, [a + [epsilon], b - [epsilon]], make sure (a+b)/2 and (b-a)/2 are representable, and finally,
 if you think the compromise between accuracy an usability has gone too far in the direction of accuracy, file a ticket.
 
 Both exp-sinh and sinh-sinh quadratures evaluate the functions they are passed at *very* large argument.
@@ -405,7 +471,7 @@ has the correct behavior for large /x/, but `auto f = [](double x) { return exp(
 Oscillatory integrals, such as the sinc integral, are poorly approximated by double-exponential quadrature.
 Fortunately the error estimates and L1 norm are massive for these integrals, but nonetheless, oscillatory integrals require different techniques.
 
-A special mention should be made about integrating through zero: while our range adaptors preserve precision when one endpoint is zero, 
+A special mention should be made about integrating through zero: while our range adaptors preserve precision when one endpoint is zero,
 things get harder when the origin is neither in the center of the range, nor at an endpoint.  Consider integrating:
 
    1 / (1 +x^2)
@@ -452,7 +518,7 @@ seems sensible:
 There is an alternative, more complex method, which is applicable when we are dealing with expressions which can be simplified
 by evaluating by logs.  Let's suppose that as in this case, all the area under the graph is infinitely close to zero, now inagine
 that we could expand that region out over a much larger range of abscissa values: that's exactly what happens if we perform
-argument substitution, replacing `x` by `exp(-x)` (note that we must also multiply by the derivative of `exp(-x)`).  
+argument substitution, replacing `x` by `exp(-x)` (note that we must also multiply by the derivative of `exp(-x)`).
 Now the singularity at zero is moved to +[infin], and the [pi]/2 bound to
 -log([pi]/2).  Initially our argument substituted function looks like:
 
@@ -464,7 +530,7 @@ small `exp(-x)`, and therefore [^x > -log([epsilon])], we can greatly simplify t
    auto f = [&](double x)
    {
       static const double crossover = -log(std::numeric_limits<double>::epsilon());
-      return x > crossover ? exp((p - 1) * x) : exp(-x) * pow(tan(exp(-x)), -p); 
+      return x > crossover ? exp((p - 1) * x) : exp(-x) * pow(tan(exp(-x)), -p);
    };
 
 This form integrates just fine over (-log([pi]/2), +[infin]) using either the tanh_sinh or exp_sinh classes.

@@ -17,22 +17,55 @@ platform:
 environment:
   matrix:
     - ARGS: --toolset=msvc-9.0  address-model=32
+      TEST_SUITE: special_fun distribution_tests
     - ARGS: --toolset=msvc-10.0 address-model=32
+      TEST_SUITE: special_fun distribution_tests
     - ARGS: --toolset=msvc-11.0 address-model=32
+      TEST_SUITE: special_fun distribution_tests
     - ARGS: --toolset=msvc-12.0 address-model=32
+      TEST_SUITE: special_fun distribution_tests
     - ARGS: --toolset=msvc-14.0 address-model=32
+      TEST_SUITE: special_fun distribution_tests
+    - ARGS: --toolset=msvc-9.0  address-model=32
+      TEST_SUITE: misc quadrature ../example//examples
+    - ARGS: --toolset=msvc-10.0 address-model=32
+      TEST_SUITE: misc quadrature ../example//examples
+    - ARGS: --toolset=msvc-11.0 address-model=32
+      TEST_SUITE: misc quadrature ../example//examples
+    - ARGS: --toolset=msvc-12.0 address-model=32
+      TEST_SUITE: misc quadrature ../example//examples
+    - ARGS: --toolset=msvc-14.0 address-model=32
+      TEST_SUITE: misc quadrature ../example//examples
     - ARGS: --toolset=msvc-12.0 address-model=64
+      TEST_SUITE: special_fun distribution_tests
+    - ARGS: --toolset=msvc-12.0 address-model=64
+      TEST_SUITE: misc quadrature ../example//examples
     - ARGS: --toolset=msvc-14.0 address-model=64
-    #- ARGS: --toolset=msvc-14.0 address-model=64 cxxflags=-std:c++latest
+      TEST_SUITE: special_fun
+    - ARGS: --toolset=msvc-14.0 address-model=64
+      TEST_SUITE: distribution_tests
+    - ARGS: --toolset=msvc-14.0 address-model=64
+      TEST_SUITE: misc quadrature ../example//examples
 
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-      ARGS: --toolset=msvc-14.1 address-model=64
+      ARGS: --toolset=msvc-14.1 address-model=64 cxxstd=17
+      TEST_SUITE: special_fun distribution_tests
+    
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      ARGS: --toolset=msvc-14.1 address-model=64 cxxstd=17
+      TEST_SUITE: misc quadrature ../example//examples
     
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
       ARGS: --toolset=msvc-14.1 address-model=32
+      TEST_SUITE: special_fun
     
-    #- APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-    #  ARGS: --toolset=msvc-14.1 address-model=64 cxxflags=-std:c++latest
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      ARGS: --toolset=msvc-14.1 address-model=32
+      TEST_SUITE: distribution_tests
+    
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      ARGS: --toolset=msvc-14.1 address-model=32
+      TEST_SUITE: misc quadrature ../example//examples
     
     - ARGS: --toolset=gcc address-model=64
       TEST_SUITE: float128_tests
@@ -63,7 +96,15 @@ environment:
       PATH: C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin;%PATH%
     
     - ARGS: --toolset=gcc address-model=64 cxxflags=-std=gnu++1z
+      TEST_SUITE: quadrature
+      PATH: C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin;%PATH%
+
+    - ARGS: --toolset=gcc address-model=64 
       TEST_SUITE: misc
+      PATH: C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin;%PATH%
+    
+    - ARGS: --toolset=gcc address-model=64 cxxflags=-std=gnu++1z
+      TEST_SUITE: quadrature
       PATH: C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin;%PATH%
 
     - ARGS: --toolset=gcc address-model=64 
@@ -80,9 +121,12 @@ install:
   - git clone -b %APPVEYOR_REPO_BRANCH% --depth 1 https://github.com/boostorg/boost.git boost-root
   - cd boost-root
   - git submodule update --init tools/build
+  - git submodule update --init tools/boost_install
+  - git submodule update --init libs/headers
   - git submodule update --init libs/config
   - git submodule update --init libs/format
   - git submodule update --init libs/numeric
+  - git submodule update --init libs/timer
   - xcopy /s /e /q %APPVEYOR_BUILD_FOLDER% libs\math
   - git submodule update --init tools/boostdep
   - python tools/boostdep/depinst/depinst.py math

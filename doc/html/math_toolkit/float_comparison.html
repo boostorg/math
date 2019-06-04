@@ -3,11 +3,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Floating-point Comparison</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
-<link rel="home" href="../index.html" title="Math Toolkit 2.6.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<link rel="home" href="../index.html" title="Math Toolkit 2.9.0">
 <link rel="up" href="../utils.html" title="Chapter&#160;2.&#160;Floating Point Utilities">
 <link rel="prev" href="next_float/ulp.html" title="Obtaining the Size of a Unit In the Last Place - ULP">
-<link rel="next" href="../cstdfloat.html" title="Chapter&#160;3.&#160;Specified-width floating-point typedefs">
+<link rel="next" href="cond.html" title="Condition Numbers">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -20,7 +20,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="next_float/ulp.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../utils.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="../cstdfloat.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="next_float/ulp.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../utils.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="cond.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -191,10 +191,9 @@
 </pre>
 <p>
       The following examples display values with all possibly significant digits.
-      Newer compilers should provide <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limitsFPT</span><span class="special">&gt;::</span><span class="identifier">max_digits10</span></code>
-      for this purpose, and here we use <code class="computeroutput"><span class="keyword">float</span></code>
-      precision where <code class="computeroutput"><span class="identifier">max_digits10</span></code>
-      = 9 to avoid displaying a distracting number of decimal digits.
+      Newer compilers should provide <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">FPT</span><span class="special">&gt;::</span><span class="identifier">max_digits10</span></code> for this purpose, and here we
+      use <code class="computeroutput"><span class="keyword">float</span></code> precision where <code class="computeroutput"><span class="identifier">max_digits10</span></code> = 9 to avoid displaying a distracting
+      number of decimal digits.
     </p>
 <div class="note"><table border="0" summary="Note">
 <tr>
@@ -203,7 +202,7 @@
 </tr>
 <tr><td align="left" valign="top"><p>
         Older compilers can use this formula to calculate <code class="computeroutput"><span class="identifier">max_digits10</span></code>
-        from <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">FPT</span><span class="special">&gt;::</span><span class="identifier">digits10</span></code>:<br> &#8192;&#8192; <code class="computeroutput"><span class="keyword">int</span>
+        from <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">FPT</span><span class="special">&gt;::</span><span class="identifier">digits10</span></code>: &#8192;&#8192; <code class="computeroutput"><span class="keyword">int</span>
         <span class="identifier">max_digits10</span> <span class="special">=</span>
         <span class="number">2</span> <span class="special">+</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">FPT</span><span class="special">&gt;::</span><span class="identifier">digits10</span>
         <span class="special">*</span> <span class="number">3010</span><span class="special">/</span><span class="number">10000</span><span class="special">;</span></code>
@@ -408,7 +407,7 @@ epsilon_difference = 0.000000000</pre>
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="next_float/ulp.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../utils.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="../cstdfloat.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="next_float/ulp.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../utils.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="cond.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

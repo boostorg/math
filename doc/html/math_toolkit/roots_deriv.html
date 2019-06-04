@@ -3,9 +3,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Root Finding With Derivatives: Newton-Raphson, Halley &amp; Schr&#246;der</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
-<link rel="home" href="../index.html" title="Math Toolkit 2.6.0">
-<link rel="up" href="../root_finding.html" title="Chapter&#160;8.&#160;Root Finding &amp; Minimization Algorithms">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<link rel="home" href="../index.html" title="Math Toolkit 2.9.0">
+<link rel="up" href="../root_finding.html" title="Chapter&#160;9.&#160;Root Finding &amp; Minimization Algorithms">
 <link rel="prev" href="roots_noderiv/implementation.html" title="Implementation">
 <link rel="next" href="root_finding_examples.html" title="Examples of Root-Finding (with and without derivatives)">
 </head>
@@ -56,6 +56,12 @@
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="identifier">T</span> <span class="identifier">schroder_iterate</span><span class="special">(</span><span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">guess</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">min</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">max</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">digits</span><span class="special">,</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">uintmax_t</span><span class="special">&amp;</span> <span class="identifier">max_iter</span><span class="special">);</span>
 
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Complex</span><span class="special">&gt;</span>
+<span class="identifier">Complex</span> <span class="identifier">complex_newton</span><span class="special">(</span><span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span> <span class="identifier">Complex</span> <span class="identifier">guess</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">max_iterations</span> <span class="special">=</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Complex</span><span class="special">::</span><span class="identifier">value_type</span><span class="special">&gt;::</span><span class="identifier">digits</span><span class="special">);</span>
+
+<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<span class="keyword">auto</span> <span class="identifier">quadratic_roots</span><span class="special">(</span><span class="identifier">T</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">b</span><span class="special">,</span> <span class="identifier">T</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">c</span><span class="special">);</span>
+
 <span class="special">}}}</span> <span class="comment">// namespaces boost::math::tools.</span>
 </pre>
 <h5>
@@ -76,18 +82,24 @@
           <code class="computeroutput"><span class="identifier">halley_iterate</span></code> and <code class="computeroutput"><span class="identifier">schroder_iterate</span></code> perform third-order
           <a class="link" href="roots_deriv.html#math_toolkit.roots_deriv.halley">Halley</a> and <a class="link" href="roots_deriv.html#math_toolkit.roots_deriv.schroder">Schr&#246;der</a> iteration.
         </li>
+<li class="listitem">
+          <code class="computeroutput"><span class="identifier">complex_newton</span></code> performs
+          Newton's method on complex-analytic functions.
+        </li>
+<li class="listitem">
+          <code class="computeroutput"><span class="identifier">solve_quadratic</span></code> solves
+          quadratic equations using various tricks to keep catastrophic cancellation
+          from occurring in computation of the discriminant.
+        </li>
 </ul></div>
-<p>
-      The functions all take the same parameters:
-    </p>
 <div class="variablelist">
-<p class="title"><b>Parameters of the root finding functions</b></p>
+<p class="title"><b>Parameters of the real-valued root finding functions</b></p>
 <dl class="variablelist">
 <dt><span class="term">F f</span></dt>
 <dd>
 <p>
-            Type F must be a callable function object that accepts one parameter
-            and returns a <a class="link" href="internals/tuples.html" title="Tuples">std::pair,
+            Type F must be a callable function object (or C++ lambda) that accepts
+            one parameter and returns a <a class="link" href="internals/tuples.html" title="Tuples">std::pair,
             std::tuple, boost::tuple or boost::fusion::tuple</a>:
           </p>
 <p>
@@ -283,8 +295,56 @@
       method), and is known to work well in the presence of multiple roots: something
       that neither Newton nor Halley can do.
     </p>
+<p>
+      The complex Newton method works slightly differently than the rest of the methods:
+      Since there is no way to bracket roots in the complex plane, the <code class="computeroutput"><span class="identifier">min</span></code> and <code class="computeroutput"><span class="identifier">max</span></code>
+      arguments are not accepted. Failure to reach a root is communicated by returning
+      <code class="computeroutput"><span class="identifier">nan</span></code>s. Remember that if a function
+      has many roots, then which root the complex Newton's method converges to is
+      essentially impossible to predict a priori; see the Newton's fractal for more
+      information.
+    </p>
+<p>
+      Finally, the derivative of <span class="emphasis"><em>f</em></span> must be continuous at the
+      root or else non-roots can be found; see <a href="https://math.stackexchange.com/questions/3017766/constructing-newton-iteration-converging-to-non-root" target="_top">here</a>
+      for an example.
+    </p>
+<p>
+      An example usage of <code class="computeroutput"><span class="identifier">complex_newton</span></code>
+      is given in <code class="computeroutput"><span class="identifier">examples</span><span class="special">/</span><span class="identifier">daubechies_coefficients</span><span class="special">.</span><span class="identifier">cpp</span></code>.
+    </p>
 <h5>
 <a name="math_toolkit.roots_deriv.h5"></a>
+      <span class="phrase"><a name="math_toolkit.roots_deriv.quadratics"></a></span><a class="link" href="roots_deriv.html#math_toolkit.roots_deriv.quadratics">Quadratics</a>
+    </h5>
+<p>
+      To solve a quadratic <span class="emphasis"><em>ax</em></span><sup>2</sup> + <span class="emphasis"><em>bx</em></span> + <span class="emphasis"><em>c</em></span>
+      = 0, we may use
+    </p>
+<pre class="programlisting"><span class="keyword">auto</span> <span class="special">[</span><span class="identifier">x0</span><span class="special">,</span> <span class="identifier">x1</span><span class="special">]</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tools</span><span class="special">::</span><span class="identifier">quadratic_roots</span><span class="special">(</span><span class="identifier">a</span><span class="special">,</span> <span class="identifier">b</span><span class="special">,</span> <span class="identifier">c</span><span class="special">);</span>
+</pre>
+<p>
+      If the roots are real, they are arranged so that <code class="computeroutput"><span class="identifier">x0</span></code>
+      &#8804; <code class="computeroutput"><span class="identifier">x1</span></code>. If the roots are
+      complex and the inputs are real, <code class="computeroutput"><span class="identifier">x0</span></code>
+      and <code class="computeroutput"><span class="identifier">x1</span></code> are both <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">Real</span><span class="special">&gt;::</span><span class="identifier">quiet_NaN</span><span class="special">()</span></code>. In this case we must cast <code class="computeroutput"><span class="identifier">a</span></code>, <code class="computeroutput"><span class="identifier">b</span></code>
+      and <code class="computeroutput"><span class="identifier">c</span></code> to a complex type to
+      extract the complex roots. If <code class="computeroutput"><span class="identifier">a</span></code>,
+      <code class="computeroutput"><span class="identifier">b</span></code> and <code class="computeroutput"><span class="identifier">c</span></code>
+      are integral, then the roots are of type double. The routine is much faster
+      if the fused-multiply-add instruction is available on your architecture. If
+      the fma is not available, the function resorts to slow emulation. Finally,
+      speed is improved if you compile for your particular architecture. For instance,
+      if you compile without any architecture flags, then the <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">fma</span></code> call
+      compiles down to <code class="computeroutput"><span class="identifier">call</span> <span class="identifier">_fma</span></code>,
+      which dynamically chooses to emulate or execute the <code class="computeroutput"><span class="identifier">vfmadd132sd</span></code>
+      instruction based on the capabilities of the architecture. If instead, you
+      compile with (say) <code class="computeroutput"><span class="special">-</span><span class="identifier">march</span><span class="special">=</span><span class="identifier">native</span></code> then
+      no dynamic choice is made: The <code class="computeroutput"><span class="identifier">vfmadd132sd</span></code>
+      instruction is always executed if available and emulation is used if not.
+    </p>
+<h5>
+<a name="math_toolkit.roots_deriv.h6"></a>
       <span class="phrase"><a name="math_toolkit.roots_deriv.examples"></a></span><a class="link" href="roots_deriv.html#math_toolkit.roots_deriv.examples">Examples</a>
     </h5>
 <p>

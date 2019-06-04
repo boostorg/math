@@ -3,8 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>exp_sinh</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
-<link rel="home" href="../../index.html" title="Math Toolkit 2.6.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<link rel="home" href="../../index.html" title="Math Toolkit 2.9.0">
 <link rel="up" href="../double_exponential.html" title="Double-exponential quadrature">
 <link rel="prev" href="de_sinh_sinh.html" title="sinh_sinh">
 <link rel="next" href="de_tol.html" title="Setting the Termination Condition for Integration">
@@ -33,17 +33,17 @@
     <span class="identifier">exp_sinh</span><span class="special">(</span><span class="identifier">size_t</span> <span class="identifier">max_refinements</span> <span class="special">=</span> <span class="number">9</span><span class="special">);</span>
 
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">&gt;</span>
-    <span class="identifier">Real</span> <span class="identifier">integrate</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">b</span><span class="special">,</span>
+    <span class="keyword">auto</span> <span class="identifier">integrate</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">b</span><span class="special">,</span>
                    <span class="identifier">Real</span> <span class="identifier">tol</span> <span class="special">=</span> <span class="identifier">sqrt</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">Real</span><span class="special">&gt;::</span><span class="identifier">epsilon</span><span class="special">()),</span>
                    <span class="identifier">Real</span><span class="special">*</span> <span class="identifier">error</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">,</span>
                    <span class="identifier">Real</span><span class="special">*</span> <span class="identifier">L1</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">,</span>
-                   <span class="identifier">size_t</span><span class="special">*</span> <span class="identifier">levels</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+                   <span class="identifier">size_t</span><span class="special">*</span> <span class="identifier">levels</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">)-&gt;</span><span class="keyword">decltype</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">declval</span><span class="special">&lt;</span><span class="identifier">F</span><span class="special">&gt;()(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">declval</span><span class="special">&lt;</span><span class="identifier">Real</span><span class="special">&gt;()))</span> <span class="keyword">const</span><span class="special">;</span>
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">&gt;</span>
-    <span class="identifier">Real</span> <span class="identifier">integrate</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span>
+    <span class="keyword">auto</span> <span class="identifier">integrate</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span>
                    <span class="identifier">Real</span> <span class="identifier">tol</span> <span class="special">=</span> <span class="identifier">sqrt</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">Real</span><span class="special">&gt;::</span><span class="identifier">epsilon</span><span class="special">()),</span>
                    <span class="identifier">Real</span><span class="special">*</span> <span class="identifier">error</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">,</span>
                    <span class="identifier">Real</span><span class="special">*</span> <span class="identifier">L1</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">,</span>
-                   <span class="identifier">size_t</span><span class="special">*</span> <span class="identifier">levels</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+                   <span class="identifier">size_t</span><span class="special">*</span> <span class="identifier">levels</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">)-&gt;</span><span class="keyword">decltype</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">declval</span><span class="special">&lt;</span><span class="identifier">F</span><span class="special">&gt;()(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">declval</span><span class="special">&lt;</span><span class="identifier">Real</span><span class="special">&gt;()))</span> <span class="keyword">const</span><span class="special">;</span>
 <span class="special">};</span>
 </pre>
 <p>
@@ -61,7 +61,40 @@
         (a, &#8734;), (-&#8734;, 0) and (-&#8734;, b) via argument transformations.
       </p>
 <p>
-        Endpoint singularities are supported by exp-sinh.
+        Endpoint singularities and complex-valued integrands are supported by exp-sinh.
+      </p>
+<p>
+        For example, the modified Bessel function K can be represented via:
+      </p>
+<p>
+        <span class="inlinemediaobject"><img src="../../../equations/complex_bessel_k_integral.svg"></span>
+      </p>
+<p>
+        Which we can code up as:
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Complex</span><span class="special">&gt;</span>
+<span class="identifier">Complex</span> <span class="identifier">bessel_K</span><span class="special">(</span><span class="identifier">Complex</span> <span class="identifier">alpha</span><span class="special">,</span> <span class="identifier">Complex</span> <span class="identifier">z</span><span class="special">)</span>
+<span class="special">{</span>
+   <span class="keyword">typedef</span> <span class="keyword">typename</span> <span class="identifier">Complex</span><span class="special">::</span><span class="identifier">value_type</span> <span class="identifier">value_type</span><span class="special">;</span>
+   <span class="keyword">using</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">cosh</span><span class="special">;</span>  <span class="keyword">using</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">exp</span><span class="special">;</span>
+   <span class="keyword">auto</span> <span class="identifier">f</span> <span class="special">=</span> <span class="special">[&amp;,</span> <span class="identifier">alpha</span><span class="special">,</span> <span class="identifier">z</span><span class="special">](</span><span class="identifier">value_type</span> <span class="identifier">t</span><span class="special">)</span>
+   <span class="special">{</span>
+      <span class="identifier">value_type</span> <span class="identifier">ct</span> <span class="special">=</span> <span class="identifier">cosh</span><span class="special">(</span><span class="identifier">t</span><span class="special">);</span>
+      <span class="keyword">if</span> <span class="special">(</span><span class="identifier">ct</span> <span class="special">&gt;</span> <span class="identifier">log</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">value_type</span><span class="special">&gt;::</span><span class="identifier">max</span><span class="special">()))</span>
+         <span class="keyword">return</span> <span class="identifier">Complex</span><span class="special">(</span><span class="number">0</span><span class="special">);</span>
+      <span class="keyword">return</span> <span class="identifier">exp</span><span class="special">(-</span><span class="identifier">z</span> <span class="special">*</span> <span class="identifier">ct</span><span class="special">)</span> <span class="special">*</span> <span class="identifier">cosh</span><span class="special">(</span><span class="identifier">alpha</span> <span class="special">*</span> <span class="identifier">t</span><span class="special">);</span>
+   <span class="special">};</span>
+   <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">quadrature</span><span class="special">::</span><span class="identifier">exp_sinh</span><span class="special">&lt;</span><span class="identifier">value_type</span><span class="special">&gt;</span> <span class="identifier">integrator</span><span class="special">;</span>
+   <span class="keyword">return</span> <span class="identifier">integrator</span><span class="special">.</span><span class="identifier">integrate</span><span class="special">(</span><span class="identifier">f</span><span class="special">);</span>
+<span class="special">}</span>
+</pre>
+<p>
+        The only wrinkle in the above code is the need to check for large <code class="computeroutput"><span class="identifier">cosh</span><span class="special">(</span><span class="identifier">t</span><span class="special">)</span></code> in which case we assume that <code class="computeroutput"><span class="identifier">exp</span><span class="special">(-</span><span class="identifier">x</span>
+        <span class="identifier">cosh</span><span class="special">(</span><span class="identifier">t</span><span class="special">))</span></code> tends
+        to zero faster than <code class="computeroutput"><span class="identifier">cosh</span><span class="special">(</span><span class="identifier">alpha</span> <span class="identifier">x</span><span class="special">)</span></code> tends
+        to infinity and return <code class="computeroutput"><span class="number">0</span></code>. Without
+        that check we end up with <code class="computeroutput"><span class="number">0</span> <span class="special">*</span> <span class="identifier">Infinity</span></code>
+        as the result (a NaN).
       </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

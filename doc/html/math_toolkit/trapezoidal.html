@@ -1,12 +1,12 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
-<title>Adaptive Trapezoidal Quadrature</title>
+<title>Trapezoidal Quadrature</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
-<link rel="home" href="../index.html" title="Math Toolkit 2.6.0">
-<link rel="up" href="../quadrature.html" title="Chapter&#160;11.&#160;Quadrature">
-<link rel="prev" href="../quadrature.html" title="Chapter&#160;11.&#160;Quadrature">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<link rel="home" href="../index.html" title="Math Toolkit 2.9.0">
+<link rel="up" href="../quadrature.html" title="Chapter&#160;12.&#160;Quadrature and Differentiation">
+<link rel="prev" href="../quadrature.html" title="Chapter&#160;12.&#160;Quadrature and Differentiation">
 <link rel="next" href="gauss.html" title="Gauss-Legendre quadrature">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -24,7 +24,7 @@
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="math_toolkit.trapezoidal"></a><a class="link" href="trapezoidal.html" title="Adaptive Trapezoidal Quadrature">Adaptive Trapezoidal Quadrature</a>
+<a name="math_toolkit.trapezoidal"></a><a class="link" href="trapezoidal.html" title="Trapezoidal Quadrature">Trapezoidal Quadrature</a>
 </h2></div></div></div>
 <h4>
 <a name="math_toolkit.trapezoidal.h0"></a>
@@ -34,15 +34,15 @@
 <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">quadrature</span> <span class="special">{</span>
 
 <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Real</span><span class="special">&gt;</span>
-<span class="identifier">Real</span> <span class="identifier">trapezoidal</span><span class="special">(</span><span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">b</span><span class="special">,</span>
+<span class="keyword">auto</span> <span class="identifier">trapezoidal</span><span class="special">(</span><span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">b</span><span class="special">,</span>
                  <span class="identifier">Real</span> <span class="identifier">tol</span> <span class="special">=</span> <span class="identifier">sqrt</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">Real</span><span class="special">&gt;::</span><span class="identifier">epsilon</span><span class="special">()),</span>
-                 <span class="identifier">size_t</span> <span class="identifier">max_refinements</span> <span class="special">=</span> <span class="number">10</span><span class="special">,</span>
+                 <span class="identifier">size_t</span> <span class="identifier">max_refinements</span> <span class="special">=</span> <span class="number">12</span><span class="special">,</span>
                  <span class="identifier">Real</span><span class="special">*</span> <span class="identifier">error_estimate</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">,</span>
                  <span class="identifier">Real</span><span class="special">*</span> <span class="identifier">L1</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">);</span>
 
-<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Real</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../policy.html" title="Chapter&#160;18.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<span class="identifier">Real</span> <span class="identifier">trapezoidal</span><span class="special">(</span><span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">b</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">tol</span><span class="special">,</span> <span class="identifier">size_t</span> <span class="identifier">max_refinements</span><span class="special">,</span>
-                 <span class="identifier">Real</span><span class="special">*</span> <span class="identifier">error_estimate</span><span class="special">,</span> <span class="identifier">Real</span><span class="special">*</span> <span class="identifier">L1</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../policy.html" title="Chapter&#160;18.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;</span> <span class="identifier">pol</span><span class="special">);</span>
+<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Real</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<span class="keyword">auto</span> <span class="identifier">trapezoidal</span><span class="special">(</span><span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">b</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">tol</span><span class="special">,</span> <span class="identifier">size_t</span> <span class="identifier">max_refinements</span><span class="special">,</span>
+                 <span class="identifier">Real</span><span class="special">*</span> <span class="identifier">error_estimate</span><span class="special">,</span> <span class="identifier">Real</span><span class="special">*</span> <span class="identifier">L1</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;</span> <span class="identifier">pol</span><span class="special">);</span>
 
 <span class="special">}}}</span> <span class="comment">// namespaces</span>
 </pre>
@@ -66,9 +66,9 @@
       seen by examination of the <a href="https://en.wikipedia.org/wiki/Euler-Maclaurin_formula" target="_top">Euler-Maclaurin
       summation formula</a>, which relates a definite integral to its trapezoidal
       sum and error terms proportional to the derivatives of the function at the
-      endpoints. If the derivatives at the endpoints are the same or vanish, then
-      the error very nearly vanishes. Hence the trapezoidal rule is essentially optimal
-      for periodic integrands.
+      endpoints and the Bernoulli numbers. If the derivatives at the endpoints are
+      the same or vanish, then the error very nearly vanishes. Hence the trapezoidal
+      rule is essentially optimal for periodic integrands.
     </p>
 <p>
       Other classes of integrands which are integrated efficiently by this method
@@ -84,6 +84,30 @@
 <span class="keyword">auto</span> <span class="identifier">f</span> <span class="special">=</span> <span class="special">[](</span><span class="keyword">double</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">{</span> <span class="keyword">return</span> <span class="number">1</span><span class="special">/(</span><span class="number">5</span> <span class="special">-</span> <span class="number">4</span><span class="special">*</span><span class="identifier">cos</span><span class="special">(</span><span class="identifier">x</span><span class="special">));</span> <span class="special">};</span>
 <span class="keyword">double</span> <span class="identifier">I</span> <span class="special">=</span> <span class="identifier">trapezoidal</span><span class="special">(</span><span class="identifier">f</span><span class="special">,</span> <span class="number">0.0</span><span class="special">,</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">constants</span><span class="special">::</span><span class="identifier">two_pi</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;());</span>
 </pre>
+<p>
+      The integrand must accept a real number argument, but can return a complex
+      number. This is useful for contour integrals (which are manifestly periodic)
+      and high-order numerical differentiation of analytic functions. An example
+      using the integral definition of the complex Bessel function is shown here:
+    </p>
+<pre class="programlisting"><span class="keyword">auto</span> <span class="identifier">bessel_integrand</span> <span class="special">=</span> <span class="special">[&amp;</span><span class="identifier">n</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">z</span><span class="special">](</span><span class="keyword">double</span> <span class="identifier">theta</span><span class="special">)-&gt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">complex</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span>
+<span class="special">{</span>
+    <span class="identifier">std</span><span class="special">::</span><span class="identifier">complex</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">z</span><span class="special">{</span><span class="number">2</span><span class="special">,</span> <span class="number">3</span><span class="special">};</span>
+    <span class="keyword">using</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">cos</span><span class="special">;</span>
+    <span class="keyword">using</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">sin</span><span class="special">;</span>
+    <span class="keyword">return</span> <span class="identifier">cos</span><span class="special">(</span><span class="identifier">z</span><span class="special">*</span><span class="identifier">sin</span><span class="special">(</span><span class="identifier">theta</span><span class="special">)</span> <span class="special">-</span> <span class="number">2</span><span class="special">*</span><span class="identifier">theta</span><span class="special">)/</span><span class="identifier">pi</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;();</span>
+<span class="special">};</span>
+
+<span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">quadrature</span><span class="special">::</span><span class="identifier">trapezoidal</span><span class="special">;</span>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">complex</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">Jnz</span> <span class="special">=</span> <span class="identifier">trapezoidal</span><span class="special">(</span><span class="identifier">bessel_integrand</span><span class="special">,</span> <span class="number">0.0</span><span class="special">,</span> <span class="identifier">pi</span><span class="special">&lt;</span><span class="identifier">Real</span><span class="special">&gt;());</span>
+</pre>
+<p>
+      Other special functions which are efficiently evaluated in the complex plane
+      by trapezoidal quadrature are modified Bessel functions and the complementary
+      error function. Another application of complex-valued trapezoidal quadrature
+      is computation of high-order numerical derivatives; see Lyness and Moler for
+      details.
+    </p>
 <p>
       Since the routine is adaptive, step sizes are halved continuously until a tolerance
       is reached. In order to control this tolerance, simply call the routine with
@@ -104,13 +128,14 @@
     </p>
 <p>
       A question arises as to what to do when successive estimates never pass below
-      the tolerance threshold. The stepsize would be halved until it eventually would
-      be flushed to zero, leading to an infinite loop. As such, you may pass an optional
-      argument <code class="computeroutput"><span class="identifier">max_refinements</span></code> which
-      controls how many times the interval may be halved before giving up. By default,
-      this maximum number of refinement steps is 10, which should never be hit in
-      double precision unless the function is not periodic. However, for higher-precision
-      types, it may be of interest to allow the algorithm to compute more refinements:
+      the tolerance threshold. The stepsize would be halved repeatedly, generating
+      an exponential explosion in function evaluations. As such, you may pass an
+      optional argument <code class="computeroutput"><span class="identifier">max_refinements</span></code>
+      which controls how many times the interval may be halved before giving up.
+      By default, this maximum number of refinement steps is 12, which should never
+      be hit in double precision unless the function is not periodic. However, for
+      higher-precision types, it may be of interest to allow the algorithm to compute
+      more refinements:
     </p>
 <pre class="programlisting"><span class="identifier">size_t</span> <span class="identifier">max_refinements</span> <span class="special">=</span> <span class="number">15</span><span class="special">;</span>
 <span class="keyword">long</span> <span class="keyword">double</span> <span class="identifier">I</span> <span class="special">=</span> <span class="identifier">trapezoidal</span><span class="special">(</span><span class="identifier">f</span><span class="special">,</span> <span class="number">0.0L</span><span class="special">,</span> <span class="identifier">two_pi</span><span class="special">&lt;</span><span class="keyword">long</span> <span class="keyword">double</span><span class="special">&gt;(),</span> <span class="number">1e-9L</span><span class="special">,</span> <span class="identifier">max_refinements</span><span class="special">);</span>
@@ -169,9 +194,9 @@
       that zero correct digits are obtained.
     </p>
 <p>
-      The final <a class="link" href="../policy.html" title="Chapter&#160;18.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
+      The final <a class="link" href="../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
       be used to control the behaviour of the function: how it handles errors, what
-      level of precision to use etc. Refer to the <a class="link" href="../policy.html" title="Chapter&#160;18.&#160;Policies: Controlling Precision, Error Handling etc">policy documentation
+      level of precision to use etc. Refer to the <a class="link" href="../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">policy documentation
       for more details</a>.
     </p>
 <p>
@@ -188,6 +213,16 @@
 <p>
       Higham, Nicholas J. <span class="emphasis"><em>Accuracy and stability of numerical algorithms.</em></span>
       Society for industrial and applied mathematics, 2002.
+    </p>
+<p>
+      Lyness, James N., and Cleve B. Moler. <span class="emphasis"><em>Numerical differentiation of
+      analytic functions.</em></span> SIAM Journal on Numerical Analysis 4.2 (1967):
+      202-210.
+    </p>
+<p>
+      Gil, Amparo, Javier Segura, and Nico M. Temme. <span class="emphasis"><em>Computing special
+      functions by using quadrature rules.</em></span> Numerical Algorithms 33.1-4
+      (2003): 265-275.
     </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

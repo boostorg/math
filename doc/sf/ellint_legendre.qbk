@@ -51,7 +51,7 @@ Returns the incomplete elliptic integral of the first kind ['F([phi], k)]:
 
 [equation ellint2]
 
-Requires -1 <= k <= 1, otherwise returns the result of __domain_error.
+Requires k[super 2]sin[super 2](phi) < 1, otherwise returns the result of __domain_error.
 
 [optional_policy]
 
@@ -65,7 +65,7 @@ Returns the complete elliptic integral of the first kind ['K(k)]:
 
 [equation ellint6]
 
-Requires -1 <= k <= 1, otherwise returns the result of __domain_error.
+Requires |k| < 1, otherwise returns the result of __domain_error.
 
 [optional_policy]
 
@@ -78,6 +78,15 @@ system are given as narrower types have __zero_error.  All values
 are relative errors in units of epsilon.
 
 [table_ellint_1]
+
+The following error plot are based on an exhaustive search of the functions domain, MSVC-15.5 at `double` precision, 
+and GCC-7.1/Ubuntu for `long double` and `__float128`.
+
+[graph elliptic_integral_k__double]
+
+[graph elliptic_integral_k__80_bit_long_double]
+
+[graph elliptic_integral_k____float128]
 
 [heading Testing]
 
@@ -145,7 +154,7 @@ Returns the incomplete elliptic integral of the second kind ['E([phi], k)]:
 
 [equation ellint3]
 
-Requires -1 <= k <= 1, otherwise returns the result of __domain_error.
+Requires k[super 2]sin[super 2](phi) < 1, otherwise returns the result of __domain_error.
 
 [optional_policy]
 
@@ -159,7 +168,7 @@ Returns the complete elliptic integral of the second kind ['E(k)]:
 
 [equation ellint7]
 
-Requires -1 <= k <= 1, otherwise returns the result of __domain_error.
+Requires |k| < 1, otherwise returns the result of __domain_error.
 
 [optional_policy]
 
@@ -172,6 +181,15 @@ system are given as narrower types have __zero_error.  All values
 are relative errors in units of epsilon.
 
 [table_ellint_2]
+
+The following error plot are based on an exhaustive search of the functions domain, MSVC-15.5 at `double` precision, 
+and GCC-7.1/Ubuntu for `long double` and `__float128`.
+
+[graph elliptic_integral_e__double]
+
+[graph elliptic_integral_e__80_bit_long_double]
+
+[graph elliptic_integral_e____float128]
 
 [heading Testing]
 
@@ -239,7 +257,7 @@ Returns the incomplete elliptic integral of the third kind ['[Pi](n, [phi], k)]:
 
 [equation ellint4]
 
-Requires ['-1 <= k <= 1] and ['n < 1/sin[super 2]([phi])], otherwise 
+Requires ['k[super 2]sin[super 2](phi) < 1] and ['n < 1/sin[super 2]([phi])], otherwise 
 returns the result of __domain_error (outside this range the result 
 would be complex).
 
@@ -255,7 +273,7 @@ Returns the complete elliptic integral of the first kind ['[Pi](n, k)]:
 
 [equation ellint8]
 
-Requires ['-1 <= k <= 1] and ['n < 1], otherwise returns the 
+Requires ['|k| < 1] and ['n < 1], otherwise returns the 
 result of __domain_error (outside this range the result would be complex).
 
 [optional_policy]
@@ -363,7 +381,7 @@ Returns the incomplete elliptic integral:
 
 [equation ellint_d]
 
-Requires ['-1 <= k <= 1], otherwise 
+Requires ['k[super 2]sin[super 2](phi) < 1], otherwise 
 returns the result of __domain_error (outside this range the result 
 would be complex).
 
@@ -391,6 +409,17 @@ is very large, in which case the usual trigonometric function argument-reduction
 [table_ellint_d_complete_]
 
 [table_ellint_d]
+
+The following error plot are based on an exhaustive search of the functions domain, MSVC-15.5 at `double` precision, 
+and GCC-7.1/Ubuntu for `long double` and `__float128`.
+
+[graph elliptic_integral_d__double]
+
+[graph elliptic_integral_d__80_bit_long_double]
+
+[graph elliptic_integral_d____float128]
+
+
 
 [heading Testing]
 

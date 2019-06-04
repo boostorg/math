@@ -3,10 +3,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Gauss-Legendre quadrature</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
-<link rel="home" href="../index.html" title="Math Toolkit 2.6.0">
-<link rel="up" href="../quadrature.html" title="Chapter&#160;11.&#160;Quadrature">
-<link rel="prev" href="trapezoidal.html" title="Adaptive Trapezoidal Quadrature">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<link rel="home" href="../index.html" title="Math Toolkit 2.9.0">
+<link rel="up" href="../quadrature.html" title="Chapter&#160;12.&#160;Quadrature and Differentiation">
+<link rel="prev" href="trapezoidal.html" title="Trapezoidal Quadrature">
 <link rel="next" href="gauss_kronrod.html" title="Gauss-Kronrod Quadrature">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -35,17 +35,17 @@
     </p>
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">quadrature</span><span class="special">{</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Real</span><span class="special">,</span> <span class="keyword">unsigned</span> <span class="identifier">Points</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../policy.html" title="Chapter&#160;18.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">policy</span><span class="special">&lt;&gt;</span> <span class="special">&gt;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Real</span><span class="special">,</span> <span class="keyword">unsigned</span> <span class="identifier">Points</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">policy</span><span class="special">&lt;&gt;</span> <span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">gauss</span>
 <span class="special">{</span>
    <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">RandomAccessContainer</span><span class="special">&amp;</span> <span class="identifier">abscissa</span><span class="special">();</span>
    <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">RandomAccessContainer</span><span class="special">&amp;</span> <span class="identifier">weights</span><span class="special">();</span>
 
    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">&gt;</span>
-   <span class="keyword">static</span> <span class="identifier">value_type</span> <span class="identifier">integrate</span><span class="special">(</span><span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span> <span class="identifier">Real</span><span class="special">*</span> <span class="identifier">pL1</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">);</span>
+   <span class="keyword">static</span> <span class="keyword">auto</span> <span class="identifier">integrate</span><span class="special">(</span><span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span> <span class="identifier">Real</span><span class="special">*</span> <span class="identifier">pL1</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">)-&gt;</span><span class="keyword">decltype</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">declval</span><span class="special">&lt;</span><span class="identifier">F</span><span class="special">&gt;()(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">declval</span><span class="special">&lt;</span><span class="identifier">Real</span><span class="special">&gt;()))</span>
 
    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">&gt;</span>
-   <span class="keyword">static</span> <span class="identifier">value_type</span> <span class="identifier">integrate</span><span class="special">(</span><span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">b</span><span class="special">,</span> <span class="identifier">Real</span><span class="special">*</span> <span class="identifier">pL1</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">);</span>
+   <span class="keyword">static</span> <span class="keyword">auto</span> <span class="identifier">integrate</span><span class="special">(</span><span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">b</span><span class="special">,</span> <span class="identifier">Real</span><span class="special">*</span> <span class="identifier">pL1</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">)-&gt;</span><span class="keyword">decltype</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">declval</span><span class="special">&lt;</span><span class="identifier">F</span><span class="special">&gt;()(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">declval</span><span class="special">&lt;</span><span class="identifier">Real</span><span class="special">&gt;()))</span>
 <span class="special">};</span>
 
 <span class="special">}}}</span> <span class="comment">// namespaces</span>
@@ -63,7 +63,8 @@
 <p>
       This is intentionally a very simple quadrature routine, it obtains no estimate
       of the error, and is not adaptive, but is very efficient in simple cases that
-      involve integrating smooth "bell like" functions.
+      involve integrating smooth "bell like" functions and functions with
+      rapidly convergent power series.
     </p>
 <pre class="programlisting"><span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">RandomAccessContainer</span><span class="special">&amp;</span> <span class="identifier">abscissa</span><span class="special">();</span>
 <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">RandomAccessContainer</span><span class="special">&amp;</span> <span class="identifier">weights</span><span class="special">();</span>
@@ -75,7 +76,7 @@
       positive (or zero) abscissa and weights are stored.
     </p>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">&gt;</span>
-<span class="keyword">static</span> <span class="identifier">value_type</span> <span class="identifier">integrate</span><span class="special">(</span><span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span> <span class="identifier">Real</span><span class="special">*</span> <span class="identifier">pL1</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">);</span>
+<span class="keyword">static</span> <span class="keyword">auto</span> <span class="identifier">integrate</span><span class="special">(</span><span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span> <span class="identifier">Real</span><span class="special">*</span> <span class="identifier">pL1</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">)-&gt;</span><span class="keyword">decltype</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">declval</span><span class="special">&lt;</span><span class="identifier">F</span><span class="special">&gt;()(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">declval</span><span class="special">&lt;</span><span class="identifier">Real</span><span class="special">&gt;()))</span>
 </pre>
 <p>
       Integrates <span class="emphasis"><em>f</em></span> over (-1,1), and optionally sets <code class="computeroutput"><span class="special">*</span><span class="identifier">pL1</span></code> to the
@@ -84,7 +85,7 @@
       is available.
     </p>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">&gt;</span>
-<span class="keyword">static</span> <span class="identifier">value_type</span> <span class="identifier">integrate</span><span class="special">(</span><span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">b</span><span class="special">,</span> <span class="identifier">Real</span><span class="special">*</span> <span class="identifier">pL1</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">);</span>
+<span class="keyword">static</span> <span class="keyword">auto</span> <span class="identifier">integrate</span><span class="special">(</span><span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">b</span><span class="special">,</span> <span class="identifier">Real</span><span class="special">*</span> <span class="identifier">pL1</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">)-&gt;</span><span class="keyword">decltype</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">declval</span><span class="special">&lt;</span><span class="identifier">F</span><span class="special">&gt;()(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">declval</span><span class="special">&lt;</span><span class="identifier">Real</span><span class="special">&gt;()))</span>
 </pre>
 <p>
       Integrates <span class="emphasis"><em>f</em></span> over (a,b), and optionally sets <code class="computeroutput"><span class="special">*</span><span class="identifier">pL1</span></code> to the
@@ -94,6 +95,39 @@
       and <span class="emphasis"><em>b</em></span>, as long as <code class="computeroutput"><span class="identifier">a</span>
       <span class="special">&lt;</span> <span class="identifier">b</span></code>.
     </p>
+<p>
+      The Gaussian quadrature routine support both real and complex-valued quadrature.
+      For example, the Lambert-W function admits the integral representation
+    </p>
+<p>
+      W(z) = 1/2&#928; &#8747;<sub>-&#928;</sub><sup>&#928;</sup>  ((1- v cot(v) )^2 + v^2)/(z + v csc(v)
+      exp(-v cot(v))) dv
+    </p>
+<p>
+      so it can be effectively computed via Gaussian quadrature using the following
+      code:
+    </p>
+<pre class="programlisting"><span class="identifier">Complex</span> <span class="identifier">z</span><span class="special">{</span><span class="number">2</span><span class="special">,</span> <span class="number">3</span><span class="special">};</span>
+<span class="keyword">auto</span> <span class="identifier">lw</span> <span class="special">=</span> <span class="special">[&amp;</span><span class="identifier">z</span><span class="special">](</span><span class="identifier">Real</span> <span class="identifier">v</span><span class="special">)-&gt;</span><span class="identifier">Complex</span> <span class="special">{</span>
+  <span class="keyword">using</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">cos</span><span class="special">;</span>
+  <span class="keyword">using</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">sin</span><span class="special">;</span>
+  <span class="keyword">using</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">exp</span><span class="special">;</span>
+  <span class="identifier">Real</span> <span class="identifier">sinv</span> <span class="special">=</span> <span class="identifier">sin</span><span class="special">(</span><span class="identifier">v</span><span class="special">);</span>
+  <span class="identifier">Real</span> <span class="identifier">cosv</span> <span class="special">=</span> <span class="identifier">cos</span><span class="special">(</span><span class="identifier">v</span><span class="special">);</span>
+
+  <span class="identifier">Real</span> <span class="identifier">cotv</span> <span class="special">=</span> <span class="identifier">cosv</span><span class="special">/</span><span class="identifier">sinv</span><span class="special">;</span>
+  <span class="identifier">Real</span> <span class="identifier">cscv</span> <span class="special">=</span> <span class="number">1</span><span class="special">/</span><span class="identifier">sinv</span><span class="special">;</span>
+  <span class="identifier">Real</span> <span class="identifier">t</span> <span class="special">=</span> <span class="special">(</span><span class="number">1</span><span class="special">-</span><span class="identifier">v</span><span class="special">*</span><span class="identifier">cotv</span><span class="special">)*(</span><span class="number">1</span><span class="special">-</span><span class="identifier">v</span><span class="special">*</span><span class="identifier">cotv</span><span class="special">)</span> <span class="special">+</span> <span class="identifier">v</span><span class="special">*</span><span class="identifier">v</span><span class="special">;</span>
+  <span class="identifier">Real</span> <span class="identifier">x</span> <span class="special">=</span> <span class="identifier">v</span><span class="special">*</span><span class="identifier">cscv</span><span class="special">*</span><span class="identifier">exp</span><span class="special">(-</span><span class="identifier">v</span><span class="special">*</span><span class="identifier">cotv</span><span class="special">);</span>
+  <span class="identifier">Complex</span> <span class="identifier">den</span> <span class="special">=</span> <span class="identifier">z</span> <span class="special">+</span> <span class="identifier">x</span><span class="special">;</span>
+  <span class="identifier">Complex</span> <span class="identifier">num</span> <span class="special">=</span> <span class="identifier">t</span><span class="special">*(</span><span class="identifier">z</span><span class="special">/</span><span class="identifier">pi</span><span class="special">&lt;</span><span class="identifier">Real</span><span class="special">&gt;());</span>
+  <span class="identifier">Complex</span> <span class="identifier">res</span> <span class="special">=</span> <span class="identifier">num</span><span class="special">/</span><span class="identifier">den</span><span class="special">;</span>
+  <span class="keyword">return</span> <span class="identifier">res</span><span class="special">;</span>
+<span class="special">};</span>
+
+<span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">quadrature</span><span class="special">::</span><span class="identifier">gauss</span><span class="special">&lt;</span><span class="identifier">Real</span><span class="special">,</span> <span class="number">30</span><span class="special">&gt;</span> <span class="identifier">integrator</span><span class="special">;</span>
+<span class="identifier">Complex</span> <span class="identifier">W</span> <span class="special">=</span> <span class="identifier">integrator</span><span class="special">.</span><span class="identifier">integrate</span><span class="special">(</span><span class="identifier">lw</span><span class="special">,</span> <span class="special">(</span><span class="identifier">Real</span><span class="special">)</span> <span class="number">0</span><span class="special">,</span> <span class="identifier">pi</span><span class="special">&lt;</span><span class="identifier">Real</span><span class="special">&gt;());</span>
+</pre>
 <h4>
 <a name="math_toolkit.gauss.h2"></a>
       <span class="phrase"><a name="math_toolkit.gauss.choosing_the_number_of_points"></a></span><a class="link" href="gauss.html#math_toolkit.gauss.choosing_the_number_of_points">Choosing

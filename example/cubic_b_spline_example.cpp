@@ -53,7 +53,6 @@ int main()
     // We will try to figure out when the population of the United States crossed 100 million.
     // Since the census is taken every 10 years, the data is equally spaced, so we can use the cubic b spline.
     // Data taken from https://en.wikipedia.org/wiki/United_States_Census
-    // An eye
     // We'll start at the year 1860:
     double t0 = 1860;
     double time_step = 10;
@@ -71,13 +70,13 @@ int main()
 
     // An eyeball estimate indicates that the population crossed 100 million around 1915.
     // Let's see what interpolation says:
-    boost::math::cubic_b_spline<double> p(population.data(), population.size(), t0, 10);
+    boost::math::cubic_b_spline<double> p(population.data(), population.size(), t0, time_step);
 
     // Now create a function which has a zero at p = 100,000,000:
     auto f = [=](double t){ return p(t) - 100000000; };
 
     // Boost includes a bisection algorithm, which is robust, though not as fast as some others 
-    // we provide, but lets try that first.  We need a termination condition for it, which
+    // we provide, but let's try that first.  We need a termination condition for it, which
     // takes the two endpoints of the range and returns either true (stop) or false (keep going),
     // we could use a predefined one such as boost::math::tools::eps_tolerance<double>, but that
     // won't stop until we have full double precision which is overkill, since we just need the 

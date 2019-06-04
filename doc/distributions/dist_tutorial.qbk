@@ -168,7 +168,8 @@ and [@http://en.wikipedia.org/wiki/Parameter distribution parameters]
 are conventionally distinguished (for example in Wikipedia and Wolfram MathWorld)
 by placing a semi-colon or vertical bar)
 /after/ the __random_variable (whose value you 'choose'),
-to separate the variate from the parameter(s) that defines the shape of the distribution.[br]
+to separate the variate from the parameter(s) that defines the shape of the distribution.
+
 For example, the binomial distribution probability distribution function (PDF) is written as
 ['f(k| n, p)] = Pr(K = k|n, p) = probability of observing k successes out of n trials.
 K is the __random_variable, k is the __random_variate, 

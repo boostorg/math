@@ -328,7 +328,7 @@ We can list quantiles for a few probabilities:
     double ps[] = {0., 0.001, 0.01, 0.05, 0.1, 0.5, 0.9, 0.95, 0.99, 0.999, 1.};
     // Confidence as fraction = 1-alpha, as percent =  100 * (1-alpha[i]) %
     cout.precision(3);
-    for (int i = 0; i < sizeof(ps)/sizeof(ps[0]); i++)
+    for (unsigned i = 0; i < sizeof(ps)/sizeof(ps[0]); i++)
     {
       cout << "If confidence of meeting quota is " << ps[i]
         << ", then finishing house is " << quantile(nb, ps[i]) + sales_quota

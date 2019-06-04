@@ -3,10 +3,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Polynomials</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
-<link rel="home" href="../index.html" title="Math Toolkit 2.6.0">
-<link rel="up" href="../poly.html" title="Chapter&#160;9.&#160;Polynomials and Rational Functions">
-<link rel="prev" href="../poly.html" title="Chapter&#160;9.&#160;Polynomials and Rational Functions">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<link rel="home" href="../index.html" title="Math Toolkit 2.9.0">
+<link rel="up" href="../poly.html" title="Chapter&#160;10.&#160;Polynomials and Rational Functions">
+<link rel="prev" href="../poly.html" title="Chapter&#160;10.&#160;Polynomials and Rational Functions">
 <link rel="next" href="rational.html" title="Polynomial and Rational Function Evaluation">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -50,8 +50,14 @@
    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">I</span><span class="special">&gt;</span>
    <span class="identifier">polynomial</span><span class="special">(</span><span class="identifier">I</span> <span class="identifier">first</span><span class="special">,</span> <span class="identifier">I</span> <span class="identifier">last</span><span class="special">);</span>
    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">U</span><span class="special">&gt;</span>
-   <span class="keyword">explicit</span> <span class="identifier">polynomial</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">U</span><span class="special">&amp;</span> <span class="identifier">point</span><span class="special">);</span>
+   <span class="keyword">explicit</span> <span class="identifier">polynomial</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">U</span><span class="special">&amp;</span> <span class="identifier">point</span><span class="special">,</span>
+         <span class="keyword">typename</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">enable_if</span><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">is_convertible</span><span class="special">&lt;</span><span class="identifier">U</span><span class="special">,</span> <span class="identifier">T</span><span class="special">&gt;</span> <span class="special">&gt;::</span><span class="identifier">type</span><span class="special">*</span> <span class="special">=</span> <span class="number">0</span><span class="special">);</span>
+   <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Range</span><span class="special">&gt;</span>
+   <span class="keyword">explicit</span> <span class="identifier">polynomial</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">Range</span><span class="special">&amp;</span> <span class="identifier">r</span><span class="special">,</span>
+         <span class="keyword">typename</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">enable_if</span><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tools</span><span class="special">::</span><span class="identifier">detail</span><span class="special">::</span><span class="identifier">is_const_iterable</span><span class="special">&lt;</span><span class="identifier">Range</span><span class="special">&gt;</span> <span class="special">&gt;::</span><span class="identifier">type</span><span class="special">*</span> <span class="special">=</span> <span class="number">0</span><span class="special">);</span> <span class="comment">// C++14</span>
    <span class="identifier">polynomial</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">initializer_list</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">l</span><span class="special">);</span> <span class="comment">// C++11</span>
+
+   <span class="identifier">polynomial</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;&amp;&amp;</span> <span class="identifier">p</span><span class="special">);</span>
 
    <span class="comment">// access:</span>
    <span class="identifier">size_type</span> <span class="identifier">size</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
@@ -61,6 +67,14 @@
    <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">data</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
    <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;&amp;</span> <span class="identifier">data</span><span class="special">();</span>
    <span class="keyword">explicit</span> <span class="keyword">operator</span> <span class="keyword">bool</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
+
+   <span class="identifier">polynomial</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">prime</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
+
+   <span class="identifier">polynomial</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">integrate</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
+
+   <span class="identifier">T</span> <span class="keyword">operator</span><span class="special">()(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+
+
 
    <span class="comment">// modify:</span>
    <span class="keyword">void</span> <span class="identifier">set_zero</span><span class="special">();</span>

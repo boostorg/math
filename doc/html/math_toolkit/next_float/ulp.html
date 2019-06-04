@@ -3,8 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Obtaining the Size of a Unit In the Last Place - ULP</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
-<link rel="home" href="../../index.html" title="Math Toolkit 2.6.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<link rel="home" href="../../index.html" title="Math Toolkit 2.9.0">
 <link rel="up" href="../next_float.html" title="Floating-Point Representation Distance (ULP), and Finding Adjacent Floating-Point Values">
 <link rel="prev" href="float_advance.html" title="Advancing a floating-point Value by a Specific Representation Distance (ULP) float_advance">
 <link rel="next" href="../float_comparison.html" title="Floating-point Comparison">
@@ -57,7 +57,7 @@
         in the last place</a> of <span class="emphasis"><em>x</em></span>.
       </p>
 <p>
-        Corner cases are handled as followes:
+        Corner cases are handled as follows:
       </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
@@ -70,7 +70,7 @@
             If the argument is zero then returns the smallest representable value:
             for example for type <code class="computeroutput"><span class="keyword">double</span></code>
             this would be either <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;::</span><span class="identifier">min</span><span class="special">()</span></code> or <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;::</span><span class="identifier">denorm_min</span><span class="special">()</span></code> depending whether denormals are supported
-            (which have the values 2.<code class="computeroutput"><span class="number">2250738585072014e-308</span></code>
+            (which have the values <code class="computeroutput"><span class="number">2.2250738585072014e-308</span></code>
             and <code class="computeroutput"><span class="number">4.9406564584124654e-324</span></code>
             respectively).
           </li>
