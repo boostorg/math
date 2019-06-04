@@ -15,6 +15,7 @@
 #include <boost/math/special_functions/next.hpp>
 
 #include <boost/math/tools/recurrence.hpp>
+#include <boost/math/special_functions/detail/hypergeometric_pFq_checked_series.hpp>
 
   namespace boost { namespace math { namespace detail {
 
@@ -185,7 +186,7 @@
 
 
   template <class T, class Policy>
-  T hypergeometric_1F1_backwards_recursion_on_b_for_negative_a(const T& a, const T& b, const T& z, const Policy& pol, const char* function, int& log_scaling)
+  T hypergeometric_1F1_backwards_recursion_on_b_for_negative_a(const T& a, const T& b, const T& z, const Policy& pol, const char*, int& log_scaling)
   {
      using std::swap;
      BOOST_MATH_STD_USING // modf, frexp, fabs, pow
@@ -219,12 +220,15 @@
      {
         a_shift += 2;
      }
-
+     //
+     // If the shifts are so large that we would throw an evaluation_error, try the series instead,
+     // even though this will almost certainly throw as well:
+     //
      if (b_shift > static_cast<boost::intmax_t>(boost::math::policies::get_max_series_iterations<Policy>()))
-        return boost::math::policies::raise_evaluation_error<T>(function, "1F1 arguments sit in a range with z - b so large that we have no evaluation method, got z - b = %1%", z - b, pol);
+        return hypergeometric_1F1_checked_series_impl(a, b, z, pol, log_scaling);
 
      if (a_shift > static_cast<boost::intmax_t>(boost::math::policies::get_max_series_iterations<Policy>()))
-        return boost::math::policies::raise_evaluation_error<T>(function, "1F1 arguments sit in a range with a so negative that we have no evaluation method, got a = %1%", a, pol);
+        return hypergeometric_1F1_checked_series_impl(a, b, z, pol, log_scaling);
 
      int a_b_shift = b < 0 ? itrunc(b + b_shift) : b_shift;   // The max we can shift on a and b together
      int leading_a_shift = (std::min)(3, a_shift);        // Just enough to make a negative
