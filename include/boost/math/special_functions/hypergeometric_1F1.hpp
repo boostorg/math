@@ -613,9 +613,9 @@ namespace boost { namespace math { namespace detail {
       BOOST_MATH_STD_USING // exp, fabs, sqrt
       int log_scaling = 0;
       T result = hypergeometric_1F1_imp(a, b, z, pol, log_scaling);
-	  if (sign)
+      if (sign)
 		  *sign = result < 0 ? -1 : 1;
-	  result = log(fabs(result)) + log_scaling;
+	   result = log(fabs(result)) + log_scaling;
       return result;
    }
 
@@ -648,7 +648,7 @@ namespace boost { namespace math { namespace detail {
          result /= max_scale_factor;
 		 scale += max_scaling;
       }
-      if (scale)
+      if (scale != 0)
          result *= exp(scale);
       return result * sign;
    }
