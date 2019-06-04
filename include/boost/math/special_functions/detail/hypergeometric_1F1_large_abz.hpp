@@ -18,6 +18,7 @@
      template <class T>
      inline bool is_negative_integer(const T& x)
      {
+        using std::floor;
         return (x <= 0) && (floor(x) == x);
      }
 
