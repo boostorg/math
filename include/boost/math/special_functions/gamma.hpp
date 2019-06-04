@@ -548,6 +548,8 @@ T lgamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&, int* sig
    // Special case handling of small factorials:
    if((!b_neg) && floor_of_z_is_equal_to_z && (z < boost::math::max_factorial<T>::value))
    {
+      if (sign)
+         *sign = 1;
       return log(boost::math::unchecked_factorial<T>(itrunc(z) - 1));
    }
 
@@ -563,6 +565,8 @@ T lgamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&, int* sig
       // Here we simply take the logarithm of tgamma(). This is somewhat
       // inefficient, but simple. The rationale is that the argument here
       // is relatively small and overflow is not expected to be likely.
+      if (sign)
+         * sign = 1;
       if(fabs(z - 1) < 0.25)
       {
          return log_gamma_near_1(T(zz - 1), pol);
@@ -586,7 +590,12 @@ T lgamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&, int* sig
       {
          // No issue with spurious overflow in reflection formula, 
          // just fall through to regular code:
-         log_gamma_value = log(abs(gamma_imp(zz, pol, lanczos::undefined_lanczos())));
+         T g = gamma_imp(zz, pol, lanczos::undefined_lanczos());
+         if (sign)
+         {
+            *sign = g < 0 ? -1 : 1;
+         }
+         log_gamma_value = log(abs(g));
       }
    }
    else
