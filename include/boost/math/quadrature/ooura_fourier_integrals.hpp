@@ -14,6 +14,7 @@
 #define BOOST_MATH_QUADRATURE_OOURA_FOURIER_INTEGRALS_HPP
 #include <utility>
 #include <boost/math/special_functions/expm1.hpp>
+#include <boost/math/constants/constants.hpp>
 
 namespace boost { namespace math { namespace quadrature {
 
