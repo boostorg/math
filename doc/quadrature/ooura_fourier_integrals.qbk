@@ -1,5 +1,5 @@
 [/
-Copyright (c) 2018 Nick Thompson
+Copyright (c) 2019 Nick Thompson
 Use, modification and distribution are subject to the
 Boost Software License, Version 1.0. (See accompanying file
 LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -24,7 +24,7 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
     }}}
 ``
 
-Ooura's Fourier integrals compute the oscillatory integrals of the form
+Ooura's method for Fourier integrals computes
 
 \u222B[sub 0][super \u03A0] f(t)sin( \u03C9 t) dt
 

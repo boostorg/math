@@ -1,4 +1,4 @@
-// Copyright Nick Thompson, 2018
+// Copyright Nick Thompson, 2019
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
@@ -107,9 +107,9 @@ namespace detail {
     Real determine_alpha(Real M)
     {
         using boost::math::constants::pi;
-        using std::log;
+        using std::log1p;
         using std::sqrt;
-        Real x = sqrt(1 + M*log(1+M)/(4*pi<Real>()) );
+        Real x = sqrt(1 + M*log1p(M)/(4*pi<Real>()) );
         return 1/(4*x);
     }
 
@@ -184,7 +184,7 @@ Real ooura_fourier_sin(F const & integrand, const Real omega, const Real toleran
         return -ooura_fourier_sin(integrand, -omega, tolerance);
     }
 
-    Real h = 0x1p-1;
+    Real h = Real(1)/Real(2);
     Real I0 = 0;
     Real I1 = numeric_limits<Real>::max();
     Real error_estimate = numeric_limits<Real>::quiet_NaN();
@@ -283,7 +283,7 @@ Real ooura_fourier_cos(F const & integrand, const Real omega, const Real toleran
         return ooura_fourier_cos(integrand, -omega, tolerance);
     }
 
-    Real h = 0x1p-1;
+    Real h = Real(1)/Real(2);
     Real I0 = 0;
     Real I1 = numeric_limits<Real>::max();
     Real error_estimate = numeric_limits<Real>::quiet_NaN();
