@@ -19,6 +19,7 @@
      template <class Seq, class Real>
      unsigned set_crossover_locations(const Seq& aj, const Seq& bj, const Real& z, unsigned int* crossover_locations)
      {
+        BOOST_MATH_STD_USING
         unsigned N_terms = 0;
 
         if(aj.size() == 1 && bj.size() == 1)
@@ -190,6 +191,9 @@
            }
            term0 = term;
         }
+        //std::cout << "result = " << result << std::endl;
+        //std::cout << "local_scaling = " << local_scaling << std::endl;
+        //std::cout << "Norm result = " << std::setprecision(35) << boost::multiprecision::mpfr_float_50(result) * exp(boost::multiprecision::mpfr_float_50(local_scaling)) << std::endl;
         //
         // We have to be careful when one of the b's crosses the origin:
         //
@@ -262,7 +266,10 @@
                   term -= scale;
                   loop_scale += scale;
                }
+               //std::cout << "term = " << term << std::endl;
                term = s1 * s2 * exp(term);
+               //std::cout << "term = " << term << std::endl;
+               //std::cout << "loop_scale = " << loop_scale << std::endl;
                k = s;
                term0 = term;
                int saved_loop_scale = loop_scale;
@@ -272,8 +279,7 @@
                {
                   loop_result += term;
                   loop_abs_result += fabs(term);
-                  //std::cout << "k = " << k << " term = " << term * exp(log_scale) << " result = " << result * exp(log_scale) << " abs_result = " << abs_result * exp(log_scale) << std::endl;
-                  //
+                  //std::cout << "k = " << k << " term = " << term * exp(loop_scale) << " result = " << loop_result * exp(loop_scale) << " abs_result = " << loop_abs_result * exp(loop_scale) << std::endl;
                   if (fabs(loop_result) >= upper_limit)
                   {
                      loop_result /= scaling_factor;
@@ -322,14 +328,28 @@
                      //
                      trivial_small_series_check = true;
                      Real d; 
-                     if(loop_scale > local_scaling)
-                        d = fabs(term / (result * exp(local_scaling - loop_scale)));
+                     if (loop_scale > local_scaling)
+                     {
+                        int rescale = local_scaling - loop_scale;
+                        if (rescale < tools::log_min_value<Real>())
+                           d = 1;  // arbtrary value, we want to keep going
+                        else
+                           d = fabs(term / (result * exp(Real(rescale))));
+                     }
                      else
-                        d = fabs(term * exp(loop_scale - local_scaling) / result);
+                     {
+                        int rescale = loop_scale - local_scaling;
+                        if (rescale < tools::log_min_value<Real>())
+                           d = 0;  // terminate this loop
+                        else
+                           d = fabs(term * exp(Real(rescale)) / result);
+                     }
                      if (d < boost::math::policies::get_epsilon<Real, Policy>())
                         break;
                   }
                } while (!termination(k - s) && ((diff > boost::math::policies::get_epsilon<Real, Policy>()) || terms_are_growing));
+
+               //std::cout << "Norm loop result = " << std::setprecision(35) << boost::multiprecision::mpfr_float_50(loop_result)* exp(boost::multiprecision::mpfr_float_50(loop_scale)) << std::endl;
                //
                // We now need to combine the results of the first series summation with whatever
                // local results we have now...
@@ -408,9 +428,21 @@
                      trivial_small_series_check = true;
                      Real d;
                      if (loop_scale > local_scaling)
-                        d = fabs(term / (result * exp(local_scaling - loop_scale)));
+                     {
+                        int rescale = local_scaling - loop_scale;
+                        if (rescale < tools::log_min_value<Real>())
+                           d = 1;  // keep going
+                        else
+                           d = fabs(term / (result * exp(Real(rescale))));
+                     }
                      else
-                           d = fabs(term * exp(loop_scale - local_scaling) / result);
+                     {
+                        int rescale = loop_scale - local_scaling;
+                        if (rescale < tools::log_min_value<Real>())
+                           d = 0;  // stop, underflow
+                        else
+                           d = fabs(term * exp(Real(rescale)) / result);
+                     }
                      if (d < boost::math::policies::get_epsilon<Real, Policy>())
                         break;
                   }
@@ -432,6 +464,8 @@
                   }
                   diff = fabs(term / loop_result);
                } while (!termination(s - k) && ((diff > boost::math::policies::get_epsilon<Real, Policy>()) || (fabs(term) > fabs(term_m1))));
+
+               //std::cout << "Norm loop result = " << std::setprecision(35) << boost::multiprecision::mpfr_float_50(loop_result)* exp(boost::multiprecision::mpfr_float_50(loop_scale)) << std::endl;
                //
                // We now need to combine the results of the first series summation with whatever
                // local results we have now...
