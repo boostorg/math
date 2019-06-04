@@ -147,18 +147,26 @@ namespace boost {
             for (unsigned k = 0; k < last_index; ++k)
             {
                tie(a, b, c) = get_coefs(k);
-               // scale each part seperately to avoid spurious overflow:
-               third = (a / -c) * first + (b / -c) * second;
 
-               if ((log_scaling) && ((fabs(third) > tools::max_value<T>() / 100000) || (fabs(third) < tools::min_value<T>() * 100000)))
+               if ((log_scaling) &&
+                  ((fabs(tools::max_value<T>() * (c / (a * 2048))) < fabs(first))
+                     || (fabs(tools::max_value<T>() * (c / (b * 2048))) < fabs(second))
+                     || (fabs(tools::min_value<T>() * (c * 2048 / a)) > fabs(first))
+                     || (fabs(tools::min_value<T>() * (c * 2048 / b)) > fabs(second))
+                     ))
+
                {
                   // Rescale everything:
-                  int log_scale = itrunc(log(fabs(third)));
+                  int log_scale = itrunc(log(fabs(second)));
                   T scale = exp(T(-log_scale));
                   second *= scale;
-                  third *= scale;
+                  first *= scale;
                   *log_scaling += log_scale;
                }
+               // scale each part seperately to avoid spurious overflow:
+               third = (a / -c) * first + (b / -c) * second;
+               BOOST_ASSERT((boost::math::isfinite)(third));
+
 
                swap(first, second);
                swap(second, third);
@@ -194,18 +202,24 @@ namespace boost {
             for (unsigned k = 0; k < last_index; ++k)
             {
                tie(a, b, c) = get_coefs(-static_cast<int>(k));
-               // scale each part seperately to avoid spurious overflow:
-               next = (b / -a) * second + (c / -a) * first;
 
-               if ((log_scaling) && ((fabs(next) > tools::max_value<T>() / 100000) || (fabs(next) < tools::min_value<T>() * 100000)))
+               if ((log_scaling) && 
+                  ( (fabs(tools::max_value<T>() * (a / b) / 2048) < fabs(second))
+                     || (fabs(tools::max_value<T>() * (a / c) / 2048) < fabs(first))
+                     || (fabs(tools::min_value<T>() * (a / b) * 2048) > fabs(second))
+                     || (fabs(tools::min_value<T>() * (a / c) * 2048) > fabs(first))
+                  ))
                {
                   // Rescale everything:
-                  int log_scale = itrunc(log(fabs(next)));
+                  int log_scale = itrunc(log(fabs(second)));
                   T scale = exp(T(-log_scale));
                   second *= scale;
-                  next *= scale;
+                  first *= scale;
                   *log_scaling += log_scale;
                }
+               // scale each part seperately to avoid spurious overflow:
+               next = (b / -a) * second + (c / -a) * first;
+               BOOST_ASSERT((boost::math::isfinite)(next));
 
                swap(first, second);
                swap(second, next);
