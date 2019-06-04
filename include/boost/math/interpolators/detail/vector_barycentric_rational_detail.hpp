@@ -115,10 +115,14 @@ void vector_barycentric_rational_imp<TimeContainer, SpaceContainer>::operator()(
             return;
         }
         Real x = w_[i]/(t - t_[i]);
-        p += x*y_[i];
+        for (size_t j = 0; j < p.size(); ++j){
+            p[j] += x*y_[i][j];
+        }
         denominator += x;
     }
-    p /= denominator;
+    for (size_t j = 0; j < p.size(); ++j){
+        p[j] /= denominator;
+    }
     return;
 }
 
@@ -147,9 +151,13 @@ void vector_barycentric_rational_imp<TimeContainer, SpaceContainer>::eval_with_p
                 {
                     continue;
                 }
-                sum += w_[j]*(y_[i] - y_[j])/(t_[i] - t_[j]);
+                for (size_t k = 0; k < sum.size(); ++k) {
+                    sum[k] += w_[j]*(y_[i][k] - y_[j][k])/(t_[i] - t_[j]);
+                }
             }
-            dxdt = -sum/w_[i];
+            for (size_t k = 0; k < sum.size(); ++k) {
+                dxdt[k] = -sum[k]/w_[i];
+            }
             return;
         }
         Real tw = w_[i]/(t - t_[i]);
