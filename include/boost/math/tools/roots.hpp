@@ -274,7 +274,8 @@ T newton_raphson_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_
          T shift = (delta > 0) ? (result - min) / 2 : (result - max) / 2;
          if ((result != 0) && (fabs(shift) > fabs(result)))
          {
-            delta = sign(delta) * result; // protect against huge jumps!
+            delta = sign(delta) * fabs(result); // Protect against huge jumps!
+            //delta = sign(delta) * result; // Protect against huge jumps! Failed for negative result. https://github.com/boostorg/math/issues/216
          }
          else
             delta = shift;
