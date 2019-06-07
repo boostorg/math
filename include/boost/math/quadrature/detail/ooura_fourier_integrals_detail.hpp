@@ -11,6 +11,8 @@
 #include <boost/math/special_functions/sin_pi.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/tools/condition_numbers.hpp>
+#include <boost/multiprecision/float128.hpp>
+using boost::multiprecision::float128;
 
 namespace boost { namespace math { namespace quadrature { namespace detail {
 
@@ -102,8 +104,9 @@ std::pair<Real, Real> ooura_sin_node_and_weight(long n, Real h, Real alpha)
 template<class Real>
 class ooura_fourier_sin_detail {
 public:
-    ooura_fourier_sin_detail(const Real relative_error_tolerance, size_t levels = sizeof(Real)) {
+    ooura_fourier_sin_detail(const Real relative_error_tolerance, size_t levels) {
         using std::abs;
+        starting_level_ = 0;
         rel_err_ = relative_error_tolerance;
         Real unit_roundoff = std::numeric_limits<Real>::epsilon()/2;
         big_nodes_.resize(levels);
@@ -112,7 +115,7 @@ public:
         lweights_.resize(levels);
 
         // h0 = 1. Then all further levels have h_i = 1/2^i.
-        Real h = 1;
+        float128 h = 1;
         for (size_t i = 0; i < big_nodes_.size(); ++i) {
             auto& bnode_row = big_nodes_[i];
             auto& bweight_row = bweights_[i];
@@ -126,11 +129,13 @@ public:
 
             Real max_weight = 1;
 
-            Real alpha = calculate_ooura_alpha(h);
+            float128 alpha = calculate_ooura_alpha(h);
             long n = 0;
             Real w;
             do {
-                auto [node, weight] = ooura_sin_node_and_weight(n, h, alpha);
+                auto [node1, weight1] = ooura_sin_node_and_weight(n, h, alpha);
+                Real node = static_cast<Real>(node1);
+                Real weight = static_cast<Real>(weight1);
                 w = weight;
                 bnode_row.push_back(node);
                 bweight_row.push_back(weight);
@@ -145,7 +150,9 @@ public:
             // This is because it will create the opportunity to sensibly truncate the quadrature sum to significant terms.
             n = -1;
             do {
-                auto [node, weight] = ooura_sin_node_and_weight(n, h, alpha);
+                auto [node1, weight1] = ooura_sin_node_and_weight(n, h, alpha);
+                Real node = static_cast<Real>(node1);
+                Real weight = static_cast<Real>(weight1);
                 w = weight;
                 lnode_row.push_back(node);
                 lweight_row.push_back(weight);
@@ -176,7 +183,12 @@ public:
         }
         //Real I0 = 0;
         Real I1 = std::numeric_limits<Real>::quiet_NaN();
-        size_t i = 1;
+        // As we compute integrals, we learn about their structure.
+        // Assuming we compute f(t)sin(wt) for many different omega, this gives some
+        // a posteriori ability to choose a refinement level that is roughly appropriate.
+        size_t i = starting_level_;
+        //size_t i = 0;
+        std::cout << "starting at level = " << i << "\n";
         Real inv_omega = Real(1)/omega;
         do {
             auto cond = boost::math::tools::summation_condition_number<Real, true>(0);
@@ -200,6 +212,7 @@ public:
 
             std::cout << "I0 = " << cond.sum()/omega << ", calls = " << calls << ", err est = " << abs(cond.sum()-I1)  << ",  cond = " << cond() << "\n";
             if (abs(cond.sum()-I1) < rel_err_*max(abs(cond.sum()), abs(I1))) {
+                starting_level_ = std::max(long(i) - 1, long(0));
                 return cond.sum()/omega;
             }
             I1 = cond.sum();
@@ -208,6 +221,7 @@ public:
 
         } while(i < big_nodes_.size());
 
+        starting_level_ = big_nodes_.size() - 2;
         std::cout << "Warning: Used all available levels.\n";
         return I1/omega;
     }
@@ -223,6 +237,7 @@ private:
     std::vector<std::vector<Real>> little_nodes_;
     std::vector<std::vector<Real>> lweights_;
     Real rel_err_;
+    std::atomic<long> starting_level_;
 };
 
 }}}}

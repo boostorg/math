@@ -75,7 +75,7 @@ void test_sinc()
     ooura_fourier_sin<Real> integrator(tol);
     auto f = [](Real x)->Real { return 1/x; };
     Real omega = 1;
-    while (omega < 5)
+    while (omega < 10)
     {
         Real Is = integrator.integrate(f, omega);
         BOOST_CHECK_CLOSE_FRACTION(Is, pi<Real>()/2, tol);
@@ -149,7 +149,7 @@ void test_double_osc()
     Real lambda = 7;
     auto f = [&lambda](Real x)->Real { return cos(lambda*cos(x))/x; };
     Real omega = 1;
-    Real Is = integrator.integrate(f, omega);
+    Real Is = 2*integrator.integrate(f, omega);
     Real exact = asymptotic(lambda);
     BOOST_CHECK_CLOSE_FRACTION(Is, exact, 0.01);
 }
@@ -204,17 +204,19 @@ BOOST_AUTO_TEST_CASE(ooura_fourier_transform_test)
     test_ooura_alpha<double>();
     test_ooura_alpha<long double>();
 
-    //test_sinc<float>();
-    //test_sinc<double>();
-    //test_sinc<long double>();
+    test_sinc<float>();
+    test_sinc<double>();
+    test_sinc<long double>();
 
     test_exp<float>();
     test_exp<double>();
-    //test_exp<long double>();
+    test_exp<long double>();
 
     test_root<float>();
     test_root<double>();
+    test_root<long double>();
 
     test_double_osc<float>();
     test_double_osc<double>();
+    test_double_osc<long double>();
 }
