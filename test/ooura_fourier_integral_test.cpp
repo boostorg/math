@@ -12,9 +12,11 @@
 #include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/quadrature/ooura_fourier_integrals.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
+#include <boost/multiprecision/float128.hpp>
 
 using boost::math::quadrature::ooura_fourier_sin;
 using boost::math::constants::pi;
+using boost::multiprecision::float128;
 
 
 template<class Real>
@@ -187,7 +189,7 @@ void test_double_osc()
     Real omega = 1;
     Real Is = 2*integrator.integrate(f, omega);
     Real exact = asymptotic(lambda);
-    BOOST_CHECK_CLOSE_FRACTION(Is, exact, 0.01);
+    BOOST_CHECK_CLOSE_FRACTION(Is, exact, 0.05);
 }
 
 
