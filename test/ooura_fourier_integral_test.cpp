@@ -11,9 +11,11 @@
 #include <boost/test/included/unit_test.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/quadrature/ooura_fourier_integrals.hpp>
+#include <boost/multiprecision/cpp_bin_float.hpp>
 
 using boost::math::quadrature::ooura_fourier_sin;
 using boost::math::constants::pi;
+
 
 template<class Real>
 void test_ooura_eta()
@@ -64,6 +66,40 @@ void test_ooura_alpha() {
     Real alpha = calculate_ooura_alpha(Real(1));
     Real expected = 1/sqrt(16 + 4*log1p(pi<Real>()));
     BOOST_CHECK_CLOSE_FRACTION(alpha, expected, 10*std::numeric_limits<Real>::epsilon());
+}
+
+void test_node_weight_precision_agreement()
+{
+    using std::abs;
+    using boost::math::quadrature::detail::ooura_sin_node_and_weight;
+    using boost::math::quadrature::detail::ooura_eta;
+    using boost::multiprecision::cpp_bin_float_quad;
+    std::cout << "Testing agreement in two different precisions of nodes and weights\n";
+    float128 alpha_quad = 1;
+    long int_max = 128;
+    float128 h_quad = 1/float128(int_max);
+    double alpha_dbl = 1;
+    double h_dbl = static_cast<double>(h_quad);
+    std::cout << std::fixed;
+    for (long n = -1; n > -6*int_max; --n) {
+        auto [node_dbl, weight_dbl] = ooura_sin_node_and_weight(n, h_dbl, alpha_dbl);
+        auto p = ooura_sin_node_and_weight(n, h_quad, alpha_quad);
+        double node_quad = static_cast<double>(p.first);
+        double weight_quad = static_cast<double>(p.second);
+        auto node_dist = abs(boost::math::float_distance(node_quad, node_dbl));
+        if ( (weight_quad < 0 && weight_dbl > 0) || (weight_dbl < 0 && weight_quad > 0) ){
+            std::cout << "Weights at different precisions have different signs!\n";
+        } else {
+            auto weight_dist = abs(boost::math::float_distance(weight_quad, weight_dbl));
+            if (weight_dist > 100) {
+                std::cout << std::fixed;
+                std::cout <<"n =" << n << ", x = " << n*h_dbl << ", node distance = " << node_dist << ", weight distance = " << weight_dist << "\n";
+                std::cout << std::scientific;
+                std::cout << "computed weight = " << weight_dbl << ", actual weight = " << weight_quad << "\n";
+            }
+        }
+    }
+
 }
 
 template<class Real>
@@ -192,6 +228,7 @@ void test_cos_integral1()
 
 BOOST_AUTO_TEST_CASE(ooura_fourier_transform_test)
 {
+    //test_node_weight_precision_agreement();
     test_ooura_eta<float>();
     test_ooura_eta<double>();
     test_ooura_eta<long double>();
@@ -219,4 +256,5 @@ BOOST_AUTO_TEST_CASE(ooura_fourier_transform_test)
     test_double_osc<float>();
     test_double_osc<double>();
     test_double_osc<long double>();
+    test_double_osc<float128>();
 }

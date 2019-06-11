@@ -7,12 +7,12 @@
 #define BOOST_MATH_QUADRATURE_DETAIL_OOURA_FOURIER_INTEGRALS_DETAIL_HPP
 #include <utility> // for std::pair.
 #include <mutex>
+#include <atomic>
 #include <boost/math/special_functions/expm1.hpp>
 #include <boost/math/special_functions/sin_pi.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/tools/condition_numbers.hpp>
 #include <boost/multiprecision/float128.hpp>
-using boost::multiprecision::float128;
 
 namespace boost { namespace math { namespace quadrature { namespace detail {
 
@@ -53,6 +53,7 @@ std::pair<Real, Real> ooura_sin_node_and_weight(long n, Real h, Real alpha)
 {
     using std::expm1;
     using std::exp;
+    using std::abs;
     using boost::math::constants::pi;
 
     if (n == 0) {
@@ -72,32 +73,33 @@ std::pair<Real, Real> ooura_sin_node_and_weight(long n, Real h, Real alpha)
     Real exp_meta = exp(-eta);
     Real node = -n*pi<Real>()/expm1_meta;
 
-    // I do worry about whether this is the most accurate method of computing phi'(x):
+    // I have verified that this is not a significant source of inaccuracy in the weight computation:
     Real phi_prime = -(expm1_meta + x*exp_meta*eta_prime)/(expm1_meta*expm1_meta);
 
-
+    // The main source of inaccuracy is in computation of sin_pi.
+    // But I've agonized over this, and I think it's as good as it can get:
     Real s = pi<Real>();
     Real arg;
     if(eta > 1) {
         arg = n/( 1/exp_meta - 1 );
+        s *= boost::math::sin_pi(arg);
+        if (n&1) {
+            s *= -1;
+        }
+    }
+    else if (eta < -1) {
+        arg = n/(1-exp_meta);
+        s *= boost::math::sin_pi(arg);
     }
     else {
         arg = -n*exp_meta/expm1_meta;
-    }
-
-    s *= boost::math::sin_pi<Real>(arg);
-    if (n&1) {
-        s *= -1;
+        s *= boost::math::sin_pi(arg);
+        if (n&1) {
+            s *= -1;
+        }
     }
 
     Real weight = s*phi_prime;
-    using std::isfinite;
-    if (!isfinite(weight)) {
-        throw std::domain_error("Weight is not finite.");
-    }
-    if (node <= 0) {
-        throw std::domain_error("Computed a non-positive quadrature node; this is a major problem.");
-    }
     return {node, weight};
 }
 
@@ -105,7 +107,11 @@ template<class Real>
 class ooura_fourier_sin_detail {
 public:
     ooura_fourier_sin_detail(const Real relative_error_tolerance, size_t levels) {
+        if (relative_error_tolerance <= std::numeric_limits<Real>::epsilon()/2) {
+            throw std::domain_error("The relative error tolerance cannot be smaller than the unit roundoff.");
+        }
         using std::abs;
+        using boost::multiprecision::float128;
         starting_level_ = 0;
         rel_err_ = relative_error_tolerance;
         Real unit_roundoff = std::numeric_limits<Real>::epsilon()/2;
@@ -116,6 +122,7 @@ public:
 
         // h0 = 1. Then all further levels have h_i = 1/2^i.
         float128 h = 1;
+
         for (size_t i = 0; i < big_nodes_.size(); ++i) {
             auto& bnode_row = big_nodes_[i];
             auto& bweight_row = bweights_[i];
@@ -129,7 +136,7 @@ public:
 
             Real max_weight = 1;
 
-            float128 alpha = calculate_ooura_alpha(h);
+            auto alpha = calculate_ooura_alpha(h);
             long n = 0;
             Real w;
             do {
@@ -152,6 +159,9 @@ public:
             do {
                 auto [node1, weight1] = ooura_sin_node_and_weight(n, h, alpha);
                 Real node = static_cast<Real>(node1);
+                if (node <= 0) {
+                    break;
+                }
                 Real weight = static_cast<Real>(weight1);
                 w = weight;
                 lnode_row.push_back(node);
@@ -187,10 +197,11 @@ public:
         // Assuming we compute f(t)sin(wt) for many different omega, this gives some
         // a posteriori ability to choose a refinement level that is roughly appropriate.
         size_t i = starting_level_;
-        //size_t i = 0;
-        std::cout << "starting at level = " << i << "\n";
+        //std::cout << "starting at level = " << i << "\n";
         Real inv_omega = Real(1)/omega;
         do {
+            // Because so few function evaluations are required to get high accuracy on the integrals in the tests,
+            // Kahan summation doesn't really help.
             auto cond = boost::math::tools::summation_condition_number<Real, true>(0);
             size_t calls = 0;
             auto& b_nodes = big_nodes_[i];
@@ -222,7 +233,9 @@ public:
         } while(i < big_nodes_.size());
 
         starting_level_ = big_nodes_.size() - 2;
-        std::cout << "Warning: Used all available levels.\n";
+
+        // TODO: Create additional levels if necessary.
+        //std::cout << "Warning: Used all available levels.\n";
         return I1/omega;
     }
 
