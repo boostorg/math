@@ -24,11 +24,26 @@ public:
     {}
 
     template<class F>
-    Real integrate(F const & f, Real omega) {
+    std::pair<Real, Real> integrate(F const & f, Real omega) {
         return impl_->integrate(f, omega);
     }
 private:
     std::shared_ptr<detail::ooura_fourier_sin_detail<Real>> impl_;
+};
+
+
+template<class Real>
+class ooura_fourier_cos {
+public:
+    ooura_fourier_cos(const Real relative_error_tolerance = tools::root_epsilon<Real>(), size_t levels = sizeof(Real)) : impl_(std::make_shared<detail::ooura_fourier_sin_detail<Real>>(relative_error_tolerance, levels))
+    {}
+
+    template<class F>
+    std::pair<Real, Real> integrate(F const & f, Real omega) {
+        return impl_->integrate(f, omega);
+    }
+private:
+    std::shared_ptr<detail::ooura_fourier_cos_detail<Real>> impl_;
 };
 
 /*

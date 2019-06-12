@@ -18,6 +18,28 @@ using boost::math::quadrature::ooura_fourier_sin;
 using boost::math::constants::pi;
 using boost::multiprecision::float128;
 
+float float_tol = 10*std::numeric_limits<float>::epsilon();
+ooura_fourier_sin<float> float_integrator(float_tol);
+
+double double_tol = 10*std::numeric_limits<double>::epsilon();
+ooura_fourier_sin<double> double_integrator(double_tol);
+
+long double long_double_tol = 10*std::numeric_limits<long double>::epsilon();
+ooura_fourier_sin<long double> long_double_integrator(long_double_tol);
+
+template<class Real>
+auto get_integrator() {
+    if constexpr (std::is_same_v<Real, float>) {
+        return float_integrator;
+    }
+    if constexpr (std::is_same_v<Real, double>) {
+        return double_integrator;
+    }
+    if constexpr (std::is_same_v<Real, long double>) {
+        return long_double_integrator;
+    }
+}
+
 
 template<class Real>
 void test_ooura_eta()
@@ -110,16 +132,16 @@ void test_sinc()
     std::cout << "Testing sinc integral on type " << boost::typeindex::type_id<Real>().pretty_name()  << "\n";
     using std::numeric_limits;
     Real tol = 50*numeric_limits<Real>::epsilon();
-    ooura_fourier_sin<Real> integrator(tol);
+    auto integrator = get_integrator<Real>();
     auto f = [](Real x)->Real { return 1/x; };
     Real omega = 1;
     while (omega < 10)
     {
-        Real Is = integrator.integrate(f, omega);
+        auto [Is, err] = integrator.integrate(f, omega);
         BOOST_CHECK_CLOSE_FRACTION(Is, pi<Real>()/2, tol);
 
-        Is = integrator.integrate(f, -omega);
-        BOOST_CHECK_CLOSE_FRACTION(Is, -pi<Real>()/2, tol);
+        auto [Isn, errn] = integrator.integrate(f, -omega);
+        BOOST_CHECK_CLOSE_FRACTION(Isn, -pi<Real>()/2, tol);
         omega += 1;
     }
 }
@@ -132,12 +154,12 @@ void test_exp()
     using std::exp;
     using std::numeric_limits;
     Real tol = 50*numeric_limits<Real>::epsilon();
-    ooura_fourier_sin<Real> integrator(tol);
+    auto integrator = get_integrator<Real>();
     auto f = [](Real x)->Real {return exp(-x);};
     Real omega = 1;
     while (omega < 5)
     {
-        Real Is = integrator.integrate(f, omega);
+        auto [Is, err] = integrator.integrate(f, omega);
         Real exact = omega/(1+omega*omega);
         BOOST_CHECK_CLOSE_FRACTION(Is, exact, tol);
         omega += 1;
@@ -152,15 +174,13 @@ void test_root()
     using std::sqrt;
     using std::numeric_limits;
     Real tol = 10*numeric_limits<Real>::epsilon();
-    ooura_fourier_sin<Real> integrator(tol);
+    auto integrator = get_integrator<Real>();
     auto f = [](Real x)->Real { return 1/sqrt(x);};
     Real omega = 1;
-    while (omega < 5)
-    {
-
-        Real Is = integrator.integrate(f, omega);
+    while (omega < 5) {
+        auto [Is, err] = integrator.integrate(f, omega);
         Real exact = sqrt(pi<Real>()/(2*omega));
-        BOOST_CHECK_CLOSE_FRACTION(Is, exact, tol);
+        BOOST_CHECK_CLOSE_FRACTION(Is, exact, 6*tol);
         omega += 1;
     }
 }
@@ -183,13 +203,29 @@ void test_double_osc()
     using std::sqrt;
     using std::numeric_limits;
     Real tol = 10*numeric_limits<Real>::epsilon();
-    ooura_fourier_sin<Real> integrator(tol);
+    auto integrator = get_integrator<Real>();
     Real lambda = 7;
     auto f = [&lambda](Real x)->Real { return cos(lambda*cos(x))/x; };
     Real omega = 1;
-    Real Is = 2*integrator.integrate(f, omega);
+    auto [Is, err] = integrator.integrate(f, omega);
     Real exact = asymptotic(lambda);
-    BOOST_CHECK_CLOSE_FRACTION(Is, exact, 0.05);
+    BOOST_CHECK_CLOSE_FRACTION(2*Is, exact, 0.05);
+}
+
+template<class Real>
+void test_zero_integrand()
+{
+    // Make sure relative error tolerance doesn't break on zero integrand:
+    std::cout << "Testing zero integrand on type " << boost::typeindex::type_id<Real>().pretty_name()  << "\n";
+    using std::sqrt;
+    using std::numeric_limits;
+    Real tol = 10*numeric_limits<Real>::epsilon();
+    auto integrator = get_integrator<Real>();
+    auto f = [](Real x)->Real { return Real(0); };
+    Real omega = 1;
+    auto [Is, err] = integrator.integrate(f, omega);
+    Real exact = 0;
+    BOOST_CHECK_EQUAL(Is, exact);
 }
 
 
@@ -231,6 +267,9 @@ void test_cos_integral1()
 BOOST_AUTO_TEST_CASE(ooura_fourier_transform_test)
 {
     //test_node_weight_precision_agreement();
+    test_zero_integrand<float>();
+    test_zero_integrand<double>();
+
     test_ooura_eta<float>();
     test_ooura_eta<double>();
     test_ooura_eta<long double>();
@@ -258,5 +297,4 @@ BOOST_AUTO_TEST_CASE(ooura_fourier_transform_test)
     test_double_osc<float>();
     test_double_osc<double>();
     test_double_osc<long double>();
-    test_double_osc<float128>();
 }
