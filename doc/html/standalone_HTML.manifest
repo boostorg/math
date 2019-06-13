@@ -306,6 +306,7 @@ math_toolkit/double_exponential/de_caveats.html
 math_toolkit/double_exponential/de_refes.html
 math_toolkit/naive_monte_carlo.html
 math_toolkit/diff.html
+math_toolkit/autodiff.html
 math_toolkit/diff0.html
 inverse_complex.html
 math_toolkit/complex_implementation.html

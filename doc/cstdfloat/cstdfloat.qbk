@@ -153,28 +153,28 @@ The definition (or not) of a
 [link math_toolkit.macros floating-point constant macro]
 is a way to test if a [*specific width floating-point] is available on a platform.
 
-	#if defined(BOOST_FLOAT16_C)
-	// Can use boost::float16_t, perhaps a proposed __short_float.
-	// P0192R1, Adding Fundamental Type for Short Float,
-	// Boris Fomitchev, Sergei Nikolaev, Olivier Giroux, Lawrence Crowl, 2016 Feb14
-	// http://www.open-std.org/jtc1/sc22/wg14/www/docs/n2016.pdf
-	#endif
+  #if defined(BOOST_FLOAT16_C)
+  // Can use boost::float16_t, perhaps a proposed __short_float.
+  // P0192R1, Adding Fundamental Type for Short Float,
+  // Boris Fomitchev, Sergei Nikolaev, Olivier Giroux, Lawrence Crowl, 2016 Feb14
+  // http://www.open-std.org/jtc1/sc22/wg14/www/docs/n2016.pdf
+  #endif
 
-	#if defined(BOOST_FLOAT32_C)
-	// Can use boost::float32_t, usually type `float`.
-	#endif
+  #if defined(BOOST_FLOAT32_C)
+  // Can use boost::float32_t, usually type `float`.
+  #endif
 
-	#if defined(BOOST_FLOAT64_C)
-	// Can use boost::float64_t, usually type `double`, and sometimes also type `long double`.
-	#endif
+  #if defined(BOOST_FLOAT64_C)
+  // Can use boost::float64_t, usually type `double`, and sometimes also type `long double`.
+  #endif
 
-	#if defined(BOOST_FLOAT80_C)
-	// Can use boost::float80_t, sometimes type `long double`.
-	#endif
+  #if defined(BOOST_FLOAT80_C)
+  // Can use boost::float80_t, sometimes type `long double`.
+  #endif
 
-	#if defined(BOOST_FLOAT128_C)
-	// Can use boost::float128_t. Sometimes type `__float128` or `_Quad`.
-	#endif
+  #if defined(BOOST_FLOAT128_C)
+  // Can use boost::float128_t. Sometimes type `__float128` or `_Quad`.
+  #endif
 
 This can be used to write code which will compile and run (albeit differently) on several platforms.
 Without these tests, if a width, say `float128_t` is not supported, then compilation would fail.
@@ -407,13 +407,13 @@ Intel on Windows you need to compile with `-Qoption,cpp,--extended_float_type -D
 activate 128-bit floating point support.]
 
 The `__float128` type is provided by the [@http://gcc.gnu.org/onlinedocs/libquadmath/ libquadmath library] on GCC or
-by Intel's FORTRAN library with Intel C++. THey also provide a full set of `<cmath>` functions in `namespace std`.
+by Intel's FORTRAN library with Intel C++. They also provide a full set of `<cmath>` functions in `namespace std`.
 
 [h4 Using C __float128 quadmath type]
 
-[quadmath_snprintf_1]
+[/quadmath_snprintf_1]
 
-The source code is at [@../../example/quadmath_snprintf.c quadmath_snprintf.c].
+The source code is at [@https://gcc.gnu.org/onlinedocs/gcc-9.1.0/libquadmath/quadmath_005fsnprintf.html#quadmath_005fsnprintf quadmath_snprintf.c].
 
 [h4 Using C++ `float128` quadmath type]
 

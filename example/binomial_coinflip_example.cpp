@@ -160,6 +160,17 @@ Finally, print two tables of probability for the /exactly/ and /at least/ a numb
 /*`
 The last (0 to 10 heads) must, of course, be 100% probability.
 */
+		double probability = 0.3;
+		double q = quantile(flip, probability);
+		std::cout << "Quantile (flip, " << probability << ") = " << q << std::endl; // Quantile (flip, 0.3) = 3
+		probability = 0.6;
+		q = quantile(flip, probability);
+		std::cout << "Quantile (flip, " << probability << ") = " << q << std::endl; // Quantile (flip, 0.6) = 5
+
+
+
+
+
   }
   catch(const std::exception& e)
   {
