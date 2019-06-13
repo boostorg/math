@@ -12,31 +12,48 @@
 #include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/quadrature/ooura_fourier_integrals.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
-#include <boost/multiprecision/float128.hpp>
 
 using boost::math::quadrature::ooura_fourier_sin;
+using boost::math::quadrature::ooura_fourier_cos;
 using boost::math::constants::pi;
-using boost::multiprecision::float128;
+
 
 float float_tol = 10*std::numeric_limits<float>::epsilon();
-ooura_fourier_sin<float> float_integrator(float_tol);
+ooura_fourier_sin<float> float_sin_integrator(float_tol);
 
 double double_tol = 10*std::numeric_limits<double>::epsilon();
-ooura_fourier_sin<double> double_integrator(double_tol);
+ooura_fourier_sin<double> double_sin_integrator(double_tol);
 
 long double long_double_tol = 10*std::numeric_limits<long double>::epsilon();
-ooura_fourier_sin<long double> long_double_integrator(long_double_tol);
+ooura_fourier_sin<long double> long_double_sin_integrator(long_double_tol);
 
 template<class Real>
-auto get_integrator() {
+auto get_sin_integrator() {
     if constexpr (std::is_same_v<Real, float>) {
-        return float_integrator;
+        return float_sin_integrator;
     }
     if constexpr (std::is_same_v<Real, double>) {
-        return double_integrator;
+        return double_sin_integrator;
     }
     if constexpr (std::is_same_v<Real, long double>) {
-        return long_double_integrator;
+        return long_double_sin_integrator;
+    }
+}
+
+ooura_fourier_cos<float> float_cos_integrator(float_tol);
+ooura_fourier_cos<double> double_cos_integrator(double_tol);
+ooura_fourier_cos<long double> long_double_cos_integrator(long_double_tol);
+
+template<class Real>
+auto get_cos_integrator() {
+    if constexpr (std::is_same_v<Real, float>) {
+        return float_cos_integrator;
+    }
+    if constexpr (std::is_same_v<Real, double>) {
+        return double_cos_integrator;
+    }
+    if constexpr (std::is_same_v<Real, long double>) {
+        return long_double_cos_integrator;
     }
 }
 
@@ -99,9 +116,9 @@ void test_node_weight_precision_agreement()
     using boost::math::quadrature::detail::ooura_eta;
     using boost::multiprecision::cpp_bin_float_quad;
     std::cout << "Testing agreement in two different precisions of nodes and weights\n";
-    float128 alpha_quad = 1;
+    cpp_bin_float_quad alpha_quad = 1;
     long int_max = 128;
-    float128 h_quad = 1/float128(int_max);
+    cpp_bin_float_quad h_quad = 1/cpp_bin_float_quad(int_max);
     double alpha_dbl = 1;
     double h_dbl = static_cast<double>(h_quad);
     std::cout << std::fixed;
@@ -132,7 +149,7 @@ void test_sinc()
     std::cout << "Testing sinc integral on type " << boost::typeindex::type_id<Real>().pretty_name()  << "\n";
     using std::numeric_limits;
     Real tol = 50*numeric_limits<Real>::epsilon();
-    auto integrator = get_integrator<Real>();
+    auto integrator = get_sin_integrator<Real>();
     auto f = [](Real x)->Real { return 1/x; };
     Real omega = 1;
     while (omega < 10)
@@ -154,7 +171,7 @@ void test_exp()
     using std::exp;
     using std::numeric_limits;
     Real tol = 50*numeric_limits<Real>::epsilon();
-    auto integrator = get_integrator<Real>();
+    auto integrator = get_sin_integrator<Real>();
     auto f = [](Real x)->Real {return exp(-x);};
     Real omega = 1;
     while (omega < 5)
@@ -174,7 +191,7 @@ void test_root()
     using std::sqrt;
     using std::numeric_limits;
     Real tol = 10*numeric_limits<Real>::epsilon();
-    auto integrator = get_integrator<Real>();
+    auto integrator = get_sin_integrator<Real>();
     auto f = [](Real x)->Real { return 1/sqrt(x);};
     Real omega = 1;
     while (omega < 5) {
@@ -203,7 +220,7 @@ void test_double_osc()
     using std::sqrt;
     using std::numeric_limits;
     Real tol = 10*numeric_limits<Real>::epsilon();
-    auto integrator = get_integrator<Real>();
+    auto integrator = get_sin_integrator<Real>();
     Real lambda = 7;
     auto f = [&lambda](Real x)->Real { return cos(lambda*cos(x))/x; };
     Real omega = 1;
@@ -220,7 +237,7 @@ void test_zero_integrand()
     using std::sqrt;
     using std::numeric_limits;
     Real tol = 10*numeric_limits<Real>::epsilon();
-    auto integrator = get_integrator<Real>();
+    auto integrator = get_sin_integrator<Real>();
     auto f = [](Real x)->Real { return Real(0); };
     Real omega = 1;
     auto [Is, err] = integrator.integrate(f, omega);
@@ -245,7 +262,7 @@ void test_zero_integrand()
 //     BOOST_CHECK_CLOSE_FRACTION(Is, -euler<Real>(), tol);
 // }
 
-/*
+
 template<class Real>
 void test_cos_integral1()
 {
@@ -255,20 +272,79 @@ void test_cos_integral1()
     using boost::math::constants::e;
     using std::numeric_limits;
     Real tol = 10*numeric_limits<Real>::epsilon();
+
+    auto integrator = get_cos_integrator<Real>();
     auto f = [](Real x)->Real { return 1/(x*x+1);};
     Real omega = 1;
-    Real Is = ooura_fourier_cos<decltype(f), Real>(f, omega);
+    auto [Is, err] = integrator.integrate(f, omega);
     Real exact = half_pi<Real>()/e<Real>();
     BOOST_CHECK_CLOSE_FRACTION(Is, exact, tol);
 }
 
-*/
+template<class Real>
+void test_cos_integral2()
+{
+    std::cout << "Testing integral of cos(x)/(x*x+1) on type " << boost::typeindex::type_id<Real>().pretty_name()  << "\n";
+    using std::exp;
+    using boost::math::constants::half_pi;
+    using boost::math::constants::e;
+    using std::numeric_limits;
+    Real tol = 10*numeric_limits<Real>::epsilon();
+
+    auto integrator = get_cos_integrator<Real>();
+    for (Real a = 1; a < 5; ++a) {
+        auto f = [&a](Real x)->Real { return exp(-a*x);};
+        for(Real omega = 1; omega < 5; ++omega) {
+            auto [Is, err] = integrator.integrate(f, omega);
+            Real exact = a/(a*a+omega*omega);
+            BOOST_CHECK_CLOSE_FRACTION(Is, exact, 10*tol);
+        }
+    }
+}
+
+template<class Real>
+void test_nodes()
+{
+    std::cout << "Testing nodes and weights on type " << boost::typeindex::type_id<Real>().pretty_name()  << "\n";
+    auto sin_integrator = get_sin_integrator<Real>();
+
+    auto const & big_nodes = sin_integrator.big_nodes();
+    for (auto & node_row : big_nodes) {
+        Real t0 = node_row[0];
+        for (size_t i = 1; i < node_row.size(); ++i) {
+            Real t1 = node_row[i];
+            BOOST_CHECK(t1 > t0);
+            t0 = t1;
+        }
+    }
+
+    auto const & little_nodes = sin_integrator.little_nodes();
+    for (auto & node_row : little_nodes) {
+        Real t0 = node_row[0];
+        for (size_t i = 1; i < node_row.size(); ++i) {
+            Real t1 = node_row[i];
+            BOOST_CHECK(t1 < t0);
+            t0 = t1;
+        }
+    }
+
+
+}
+
 
 BOOST_AUTO_TEST_CASE(ooura_fourier_transform_test)
 {
+    /*test_cos_integral1<float>();
+    test_cos_integral1<double>();
+    test_cos_integral1<long double>();
+
+    test_cos_integral2<float>();
+    test_cos_integral2<double>();
+    test_cos_integral2<long double>();
+
     //test_node_weight_precision_agreement();
-    test_zero_integrand<float>();
-    test_zero_integrand<double>();
+    //test_zero_integrand<float>();
+    //test_zero_integrand<double>();
 
     test_ooura_eta<float>();
     test_ooura_eta<double>();
@@ -280,11 +356,11 @@ BOOST_AUTO_TEST_CASE(ooura_fourier_transform_test)
 
     test_ooura_alpha<float>();
     test_ooura_alpha<double>();
-    test_ooura_alpha<long double>();
+    test_ooura_alpha<long double>();*/
 
-    test_sinc<float>();
+    //test_sinc<float>();
     test_sinc<double>();
-    test_sinc<long double>();
+    /*test_sinc<long double>();
 
     test_exp<float>();
     test_exp<double>();
@@ -297,4 +373,9 @@ BOOST_AUTO_TEST_CASE(ooura_fourier_transform_test)
     test_double_osc<float>();
     test_double_osc<double>();
     test_double_osc<long double>();
+
+    // This test should be last:
+    test_nodes<float>();
+    test_nodes<double>();
+    test_nodes<long double>();*/
 }

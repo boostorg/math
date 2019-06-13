@@ -5,9 +5,8 @@ Boost Software License, Version 1.0. (See accompanying file
 LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ]
 
-[section:fourier_integrals Fourier Integral]
+[section:fourier_integrals Fourier Integrals]
 
-[section:de_overview Overview]
 
 [heading Synopsis]
 
@@ -15,25 +14,41 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
     #include <boost/math/quadrature/ooura_fourier_integrals.hpp>
     namespace boost { namespace math { namespace quadrature {
 
-    template<class F, class Real>
-    Real ooura_fourier_sin(F const & integrand, const Real omega, const Real tolerance = tools::root_epsilon<Real>());
+    template<class Real>
+    class ooura_fourier_sin {
+    public:
+        ooura_fourier_sin(const Real relative_error_tolerance = tools::root_epsilon<Real>(), size_t levels = sizeof(Real));
 
-    template<class F, class Real>
-    Real ooura_fourier_cos(F const & integrand, const Real omega, const Real tolerance = tools::root_epsilon<Real>());
+        template<class F>
+        std::pair<Real, Real> integrate(F const & f, Real omega);
+
+    };
+
+
+    template<class Real>
+    class ooura_fourier_cos {
+    public:
+        ooura_fourier_cos(const Real relative_error_tolerance = tools::root_epsilon<Real>(), size_t levels = sizeof(Real))
+
+        template<class F>
+        std::pair<Real, Real> integrate(F const & f, Real omega);
+    };
+
 
     }}}
 ``
 
 Ooura's method for Fourier integrals computes
 
-\u222B[sub 0][super \u03A0] f(t)sin( \u03C9 t) dt
+\u222B[sub 0][super \u221E] f(t)sin(\u03C9 t) dt
 
 and
 
-\u222B[sub 0][super \u03A0] f(t)cos( \u03C9 t) dt
+\u222B[sub 0][super \u221E] f(t)cos(\u03C9 t) dt
 
+by a double exponentially decaying transformation.
 These integrals arise from computing continuous Fourier transform of odd and even functions, respectively.
-Oscillatory integrals are known to cause standard quadrature methods to suffer, so these routines are provided to cope with the most common oscillatory use case.
+Oscillatory integrals are known to cause trouble for standard quadrature methods, so these routines are provided to cope with the most common oscillatory use case.
 
 The overly-verbose names `ooura_fourier_sin` and `ooura_fourier_cos` are used because no oscillatory quadrature method has yet been designed that is free of failure modes.
 The `ooura_fourier_sin` and `ooura_fourier_cos` converge rapidly as long as the integrand is complex analytic and has no poles near the positive real axis.
@@ -42,30 +57,33 @@ Other oscillatory quadrature methods, such as Filon's method, might be of use wh
 The basic usage is shown below:
 
 ```
+using boost::math::quadrature::ooura_fourier_sin;
+auto integrator = ooura_fourier_sin<double>();
 auto f = [](double x) { return 1/x; };
 double omega = 1;
-double Is = ooura_fourier_sin<decltype(f), double>(f, omega);
+auto [Is, relative_error] = integrator.integrate(f, omega);
 ```
 
-In this case, the computed value should be \u03A0/2.
+In this case, the computed value should be \u03C0/2.
 
 A classical cosine transform is presented below:
 
 ```
+using boost::math::quadrature::ooura_fourier_cos;
+auto integrator = ooura_fourier_cos<double>();
 auto f = [](double x) { return 1/(x*x+1); };
 double omega = 1;
-double Ic = ooura_fourier_cos<decltype(f), double>(f, omega);
+auto [Ic, relative_error] = integrator.integrate(f, omega);
 ```
 
-The value of `Ic` should be \u03A0/e.
+The value of `Ic` should be \u03C0/e.
 
-[endsect]
+The integrator precomputes nodes and weights, and hence can be reused for many different frequencies with good efficiency.
 
 
-
-[section:ooura_integral_refs References]
+[Heading References]
 
 * Ooura, Takuya, and Masatake Mori, ['A robust double exponential formula for Fourier-type integrals.] Journal of computational and applied mathematics 112.1-2 (1999): 229-241.
 
-[endsect]
+
 [endsect]

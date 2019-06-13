@@ -10,9 +10,8 @@
 #include <atomic>
 #include <boost/math/special_functions/expm1.hpp>
 #include <boost/math/special_functions/sin_pi.hpp>
+#include <boost/math/special_functions/cos_pi.hpp>
 #include <boost/math/constants/constants.hpp>
-#include <boost/math/tools/condition_numbers.hpp>
-#include <boost/multiprecision/float128.hpp>
 
 namespace boost { namespace math { namespace quadrature { namespace detail {
 
@@ -55,6 +54,7 @@ std::pair<Real, Real> ooura_sin_node_and_weight(long n, Real h, Real alpha)
     using std::exp;
     using std::abs;
     using boost::math::constants::pi;
+    using std::isnan;
 
     if (n == 0) {
         // Equation 44 of https://arxiv.org/pdf/0911.4796.pdf
@@ -72,6 +72,7 @@ std::pair<Real, Real> ooura_sin_node_and_weight(long n, Real h, Real alpha)
     Real expm1_meta = expm1(-eta);
     Real exp_meta = exp(-eta);
     Real node = -n*pi<Real>()/expm1_meta;
+
 
     // I have verified that this is not a significant source of inaccuracy in the weight computation:
     Real phi_prime = -(expm1_meta + x*exp_meta*eta_prime)/(expm1_meta*expm1_meta);
@@ -104,6 +105,43 @@ std::pair<Real, Real> ooura_sin_node_and_weight(long n, Real h, Real alpha)
 }
 
 template<class Real>
+std::pair<Real, Real> ooura_cos_node_and_weight(long n, Real h, Real alpha)
+{
+    using std::expm1;
+    using std::exp;
+    using std::abs;
+    using boost::math::constants::pi;
+
+    Real x = h*(n-Real(1)/Real(2));
+    auto [eta, eta_prime] = ooura_eta(x, alpha);
+
+    Real expm1_meta = expm1(-eta);
+    Real exp_meta = exp(-eta);
+    Real node = pi<Real>()*(Real(1)/Real(2)-n)/expm1_meta;
+
+    Real phi_prime = -(expm1_meta + x*exp_meta*eta_prime)/(expm1_meta*expm1_meta);
+
+    // Equation 4.6 of A robust double exponential formula for Fourier-type integrals
+    Real s = pi<Real>();
+    Real arg;
+    if (eta < -1) {
+        arg = -(n-Real(1)/Real(2))/expm1_meta;
+        s *= boost::math::cos_pi(arg);
+    }
+    else {
+        arg = -(n-Real(1)/Real(2))*exp_meta/expm1_meta;
+        s *= boost::math::sin_pi(arg);
+        if (n&1) {
+            s *= -1;
+        }
+    }
+
+    Real weight = s*phi_prime;
+    return {node, weight};
+}
+
+
+template<class Real>
 class ooura_fourier_sin_detail {
 public:
     ooura_fourier_sin_detail(const Real relative_error_goal, size_t levels) {
@@ -130,7 +168,22 @@ public:
                 add_level<Real>(i);
             }
         }
+    }
 
+    auto const & big_nodes() const {
+        return big_nodes_;
+    }
+
+    auto const & weights_for_big_nodes() const {
+        return bweights_;
+    }
+
+    auto const & little_nodes() const {
+        return little_nodes_;
+    }
+
+    auto const & weights_for_little_nodes() const {
+        return lweights_;
     }
 
     template<class F>
@@ -155,11 +208,18 @@ public:
         size_t i = starting_level_;
         do {
             Real I0 = estimate_integral(f, omega, i);
-            //std::cout << "I0 = " << I0/omega << ", absolute error est = " << abs(I0-I1)  << "\n";
-            Real relative_error_estimate = abs(I0-I1)/max(abs(I0), abs(I1));
-            if (relative_error_estimate <= rel_err_goal_) {
+#ifdef BOOST_MATH_INSTRUMENT_OOURA
+            std::cout << std::setprecision(std::numeric_limits<Real>::digits10) << std::fixed;
+            std::cout << "\nh = " << Real(1)/Real(1<<i) << ", I_h = " << I0/omega
+                      << " = " << std::hexfloat << I0/omega << ", absolute error est = "
+                      << std::defaultfloat << std::scientific << abs(I0-I1)  << "\n";
+#endif
+            Real absolute_error_estimate = abs(I0-I1);
+            Real scale = max(abs(I0), abs(I1));
+            using std::isnan;
+            if (!isnan(scale) && absolute_error_estimate <= rel_err_goal_*scale) {
                 starting_level_ = std::max(long(i) - 1, long(0));
-                return {I0/omega, relative_error_estimate};
+                return {I0/omega, absolute_error_estimate/scale};
             }
             I1 = I0;
         } while(++i < big_nodes_.size());
@@ -183,10 +243,11 @@ public:
                 add_level<Real>(i);
             }
             Real I0 = estimate_integral(f, omega, i);
-            Real relative_error_estimate = abs(I0-I1)/max(abs(I0), abs(I1));
-            if (relative_error_estimate <= rel_err_goal_) {
+            Real absolute_error_estimate = abs(I0-I1);
+            Real scale = max(abs(I0), abs(I1));
+            if (absolute_error_estimate <= rel_err_goal_*scale) {
                 starting_level_ = std::max(long(i) - 1, long(0));
-                return {I0/omega, relative_error_estimate};
+                return {I0/omega, absolute_error_estimate/scale};
             }
             I1 = I0;
             ++i;
@@ -229,6 +290,11 @@ private:
             Real node = static_cast<Real>(precise_node);
             Real weight = static_cast<Real>(precise_weight);
             w = weight;
+            if (bnode_row.size() > 0) {
+                if (bnode_row.back() == node) {
+                    throw std::logic_error("Nodes have fused.\n");
+                }
+            }
             bnode_row.push_back(node);
             bweight_row.push_back(weight);
             if (abs(weight) > max_weight) {
@@ -252,6 +318,26 @@ private:
             }
             Real weight = static_cast<Real>(precise_weight);
             w = weight;
+            using std::isnan;
+            if (isnan(node)) {
+                // This occurs at n = -11 in quad precision:
+                std::cout << "Little nodes is nan in Ooura Fourier sine; node = " << node << ", n = " << n << ", sizeof(Real) = " << sizeof(Real) << ", h = " << h << "\n";
+                break;
+            }
+            if (lnode_row.size() > 0) {
+                if (lnode_row[lnode_row.size()-1] == node) {
+                    // The nodes have fused into each other:
+                    std::cout << "Little nodes have fused in Ooura Fourier sine; node = " << node << ", n = " << n << ", sizeof(Real) = " << sizeof(Real)  << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+                    std::cout << "other node = " << lnode_row[lnode_row.size()-1] << "\n";
+                    std::cout << "lnode_row.size() = " << lnode_row.size() << "\n";
+                    std::cout << "lnode_row = {";
+                    for (auto & lnode : lnode_row) {
+                        std::cout << lnode << ", ";
+                    }
+                    std::cout << "}\n";
+                    break;
+                }
+            }
             lnode_row.push_back(node);
             lweight_row.push_back(weight);
             if (abs(weight) > max_weight) {
@@ -264,7 +350,8 @@ private:
         lnode_row.shrink_to_fit();
         lweight_row.shrink_to_fit();
 
-        std::scoped_lock(node_weight_mutex_);
+        // std::scoped_lock once C++17 is more common?
+        std::lock_guard<std::mutex> lock(node_weight_mutex_);
         // Another thread might have already finished this calculation and appended it to the nodes/weights:
         if (current_num_levels == big_nodes_.size()) {
             big_nodes_.push_back(bnode_row);
@@ -279,8 +366,8 @@ private:
     Real estimate_integral(F const & f, Real omega, size_t i) {
         // Because so few function evaluations are required to get high accuracy on the integrals in the tests,
         // Kahan summation doesn't really help.
-        Real I0 = 0;
         //auto cond = boost::math::tools::summation_condition_number<Real, true>(0);
+        Real I0 = 0;
         auto const & b_nodes = big_nodes_[i];
         auto const & b_weights = bweights_[i];
         // Will benchmark if this is helpful:
@@ -350,36 +437,34 @@ public:
         using boost::math::constants::pi;
 
         if (omega == 0) {
-            return {Real(0), Real(0)};
+            throw std::domain_error("At omega = 0, the integral is not oscillatory. The user must choose an appropriate method for this case.\n");
         }
+
         if (omega < 0) {
-            auto [I, err] = this->integrate(f, -omega);
-            return {-I, err};
+            return this->integrate(f, -omega);
         }
 
         Real I1 = std::numeric_limits<Real>::quiet_NaN();
-        Real relative_error_estimate = std::numeric_limits<Real>::quiet_NaN();
-        // As we compute integrals, we learn about their structure.
-        // Assuming we compute f(t)sin(wt) for many different omega, this gives some
-        // a posteriori ability to choose a refinement level that is roughly appropriate.
+        Real absolute_error_estimate = std::numeric_limits<Real>::quiet_NaN();
+        Real scale = std::numeric_limits<Real>::quiet_NaN();
         size_t i = starting_level_;
         do {
             Real I0 = estimate_integral(f, omega, i);
-            //std::cout << "I0 = " << I0/omega << ", absolute error est = " << abs(I0-I1)  << "\n";
-            Real relative_error_estimate = abs(I0-I1)/max(abs(I0), abs(I1));
-            if (relative_error_estimate <= rel_err_goal_) {
+#ifdef BOOST_MATH_INSTRUMENT_OOURA
+            std::cout << std::setprecision(std::numeric_limits<Real>::digits10);
+            std::cout << "h = " << Real(1)/Real(1<<i) << ", I_h = " << I0/omega
+                      << " = " << std::hexfloat << I0/omega << ", absolute error est = "
+                      << std::defaultfloat << std::scientific << abs(I0-I1)  << "\n";
+#endif
+            absolute_error_estimate = abs(I0-I1);
+            scale = max(abs(I0), abs(I1));
+            if (absolute_error_estimate <= rel_err_goal_*scale) {
                 starting_level_ = std::max(long(i) - 1, long(0));
-                return {I0/omega, relative_error_estimate};
+                return {I0/omega, absolute_error_estimate/scale};
             }
             I1 = I0;
         } while(++i < big_nodes_.size());
 
-        // We've used up all our precomputed levels.
-        // Now we need to add more.
-        // It might seems reasonable to just keep adding levels indefinitely, if that's what the user wants.
-        // But in fact the nodes and weights just merge into each other and the error gets worse after a certain number.
-        // This value for max_additional_levels was chosen by observation of a slowly converging oscillatory integral:
-        // f(x) := cos(7cos(x))sin(x)/x
         size_t max_additional_levels = 4;
         while (big_nodes_.size() < requested_levels_ + max_additional_levels) {
             size_t i = big_nodes_.size();
@@ -393,17 +478,18 @@ public:
                 add_level<Real>(i);
             }
             Real I0 = estimate_integral(f, omega, i);
-            Real relative_error_estimate = abs(I0-I1)/max(abs(I0), abs(I1));
-            if (relative_error_estimate <= rel_err_goal_) {
+            absolute_error_estimate = abs(I0-I1);
+            scale = max(abs(I0), abs(I1));
+            if (absolute_error_estimate <= rel_err_goal_*scale) {
                 starting_level_ = std::max(long(i) - 1, long(0));
-                return {I0/omega, relative_error_estimate};
+                return {I0/omega, absolute_error_estimate/scale};
             }
             I1 = I0;
             ++i;
         }
 
         starting_level_ = big_nodes_.size() - 2;
-        return {I1/omega, relative_error_estimate};
+        return {I1/omega, absolute_error_estimate/scale};
     }
 
 private:
@@ -412,15 +498,10 @@ private:
     void add_level(size_t i) {
         size_t current_num_levels = big_nodes_.size();
         Real unit_roundoff = std::numeric_limits<Real>::epsilon()/2;
-        // h0 = 1. Then all further levels have h_i = 1/2^i.
-        // Since the nodes don't nest, we could conceivably divide h by (say) 1.5, or 3.
-        // It's not clear how much benefit (or loss) would be obtained from this.
         PreciseReal h = PreciseReal(1)/PreciseReal(1<<i);
 
         std::vector<Real> bnode_row;
         std::vector<Real> bweight_row;
-        // Definitely could use a more sophisticated heuristic for how many elements
-        // will be placed in the vector. This is a pretty huge overestimate:
         bnode_row.reserve((1<<i)*sizeof(Real));
         bweight_row.reserve((1<<i)*sizeof(Real));
 
@@ -435,7 +516,7 @@ private:
         long n = 0;
         Real w;
         do {
-            auto [precise_node, precise_weight] = ooura_sin_node_and_weight(n, h, alpha);
+            auto [precise_node, precise_weight] = ooura_cos_node_and_weight(n, h, alpha);
             Real node = static_cast<Real>(precise_node);
             Real weight = static_cast<Real>(precise_weight);
             w = weight;
@@ -448,33 +529,39 @@ private:
             // f(t)->0 as t->infty, which is why the weights are computed up to the unit roundoff.
         } while(abs(w) > unit_roundoff*max_weight);
 
-        // This class tends to consume a lot of memory; shrink the vectors back down to size:
         bnode_row.shrink_to_fit();
         bweight_row.shrink_to_fit();
-        // Why we are splitting the nodes into regimes where t_n >> 1 and t_n << 1?
-        // It will create the opportunity to sensibly truncate the quadrature sum to significant terms.
         n = -1;
         do {
-            auto [precise_node, precise_weight] = ooura_sin_node_and_weight(n, h, alpha);
+            auto [precise_node, precise_weight] = ooura_cos_node_and_weight(n, h, alpha);
             Real node = static_cast<Real>(precise_node);
-            if (node <= 0) {
+            // The function cannot be singular at zero,
+            // so zero is not a unreasonable node,
+            // unlike in the case of the Fourier Sine.
+            // Hence only break if the node is negative.
+            if (node < 0) {
                 break;
             }
             Real weight = static_cast<Real>(precise_weight);
             w = weight;
+            if (lnode_row.size() > 0) {
+                if (lnode_row.back() == node) {
+                    // The nodes have fused into each other:
+                    break;
+                }
+            }
             lnode_row.push_back(node);
             lweight_row.push_back(weight);
             if (abs(weight) > max_weight) {
                 max_weight = abs(weight);
             }
             --n;
-            // f(t)->infty is possible as t->0, hence compute up to the min.
         } while(abs(w) > std::numeric_limits<Real>::min()*max_weight);
 
         lnode_row.shrink_to_fit();
         lweight_row.shrink_to_fit();
 
-        std::scoped_lock(node_weight_mutex_);
+        std::lock_guard<std::mutex> lock(node_weight_mutex_);
         // Another thread might have already finished this calculation and appended it to the nodes/weights:
         if (current_num_levels == big_nodes_.size()) {
             big_nodes_.push_back(bnode_row);
@@ -487,13 +574,9 @@ private:
 
     template<class F>
     Real estimate_integral(F const & f, Real omega, size_t i) {
-        // Because so few function evaluations are required to get high accuracy on the integrals in the tests,
-        // Kahan summation doesn't really help.
         Real I0 = 0;
-        //auto cond = boost::math::tools::summation_condition_number<Real, true>(0);
         auto const & b_nodes = big_nodes_[i];
         auto const & b_weights = bweights_[i];
-        // Will benchmark if this is helpful:
         Real inv_omega = 1/omega;
         for(size_t j = 0 ; j < b_nodes.size(); ++j) {
             I0 += f(b_nodes[j]*inv_omega)*b_weights[j];
@@ -501,7 +584,6 @@ private:
 
         auto const & l_nodes = little_nodes_[i];
         auto const & l_weights = lweights_[i];
-        // If f decays rapidly as |t|->infty, not all of these calls are necessary.
         for (size_t j = 0; j < l_nodes.size(); ++j) {
             I0 += f(l_nodes[j]*inv_omega)*l_weights[j];
         }
@@ -509,20 +591,15 @@ private:
     }
 
     std::mutex node_weight_mutex_;
-    // Nodes for n >= 0, giving t_n = pi*phi(nh)/h. Generally t_n >> 1.
     std::vector<std::vector<Real>> big_nodes_;
-    // The term bweights_ will indicate that these are weights corresponding
-    // to the big nodes:
     std::vector<std::vector<Real>> bweights_;
 
-    // Nodes for n < 0: Generally t_n << 1, and an invariant is that t_n > 0.
     std::vector<std::vector<Real>> little_nodes_;
     std::vector<std::vector<Real>> lweights_;
     Real rel_err_goal_;
     std::atomic<long> starting_level_;
     size_t requested_levels_;
 };
-
 
 
 }}}}
