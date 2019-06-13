@@ -369,7 +369,6 @@ namespace detail{
    T bracket_root_towards_max(F f, T guess, const T& f0, T& min, T& max, boost::uintmax_t& count)
    {
       using std::fabs;
-      using boost::math::get;
       //
       // Move guess towards max until we bracket the root, updating min and max as we go:
       //
@@ -389,7 +388,7 @@ namespace detail{
                break;
             }
             multiplier *= 2;
-            f_current = get<0>(f(guess));
+            unpack_0(f(guess), f_current);
          }
       }
       else
@@ -408,7 +407,7 @@ namespace detail{
                break;
             }
             multiplier *= 2;
-            f_current = get<0>(f(guess));
+            unpack_0(f(guess), f_current);
          }
       }
 
@@ -425,7 +424,6 @@ namespace detail{
    T bracket_root_towards_min(F f, T guess, const T& f0, T& min, T& max, boost::uintmax_t& count)
    {
       using std::fabs;
-      using boost::math::get;
       //
       // Move guess towards min until we bracket the root, updating min and max as we go:
       //
@@ -446,7 +444,7 @@ namespace detail{
                break;
             }
             multiplier *= 2;
-            f_current = get<0>(f(guess));
+            unpack_0(f(guess), f_current);
          }
       }
       else
@@ -465,7 +463,7 @@ namespace detail{
                break;
             }
             multiplier *= 2;
-            f_current = get<0>(f(guess));
+            unpack_0(f(guess), f_current);
          }
       }
 
