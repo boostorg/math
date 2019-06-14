@@ -4,13 +4,13 @@ This library is divided into several interconnected parts:
 
 [h4 Floating Point Utilities]
 
-Utility functions for dealing with floating point arithmetic, includes functions
+Utility functions for dealing with floating-point arithmetic, includes functions
 for floating point classification (fpclassify, isnan, isinf etc), sign manipulation,
 rounding, comparison, and computing the distance between floating point numbers.
 
-[h4 Specific Width Floating Point Types]
+[h4 Specific Width Floating-Point Types]
 
-A set of typedefs similar to those provided by `<cstdint>` but for floating point types.
+A set of typedefs similar to those provided by `<cstdint>` but for floating-point types.
 
 [h4 Mathematical Constants]
 
@@ -77,11 +77,11 @@ Tools for manipulating polynomials and for efficient evaluation of rationals or 
 
 [h4 Interpolation]
 
-Function interpolation via Barycentic or cubic B_spline approximations.
+Function interpolation via Barycentric or cubic B_spline approximations.
 
 [h4 Numerical Integration and Differentiation]
 
-A reasonably comprehensive set of routines for integration (trapezoidal, Gaus-Legendre, Gaus-Kronrod and double-exponential) and differentiation.
+A reasonably comprehensive set of routines for integration (trapezoidal, Gauss-Legendre, Gauss-Kronrod and double-exponential) and differentiation.
 
 The integration routines are all usable for functions returning complex results - and as a result for contour integrals as well.
 

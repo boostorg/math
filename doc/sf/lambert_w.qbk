@@ -352,7 +352,7 @@ for example, using __halley or __schroder methods.
 For C++, the most precise results possible, closest to the nearest __representable for the C++ type being used,
 it is usually necessary to use a higher precision type for intermediate computation,
 finally static-casting back to the smaller desired result type.
-This strategy is used by __Maple and WolframAlpha, for example, using arbitrary precision arithmetic,
+This strategy is used by __Maple and __WolframAlpha, for example, using arbitrary precision arithmetic,
 and some of their high-precision values are used for testing this library.
 This method is also used to provide some __boost_test values using __multiprecision,
 typically, a 50 decimal digit type like `cpp_bin_float_50`
@@ -367,7 +367,7 @@ In practical applications, the increased computation required
 (often towards a thousand-fold slower and requiring much additional code for __multiprecision)
 is not justified and the algorithms here do not implement this.
 But because the Boost.Lambert_W algorithms has been tested using __multiprecision,
-users who require this can always easily achieve the nearest representation for __fundamental
+users who require this can always easily achieve the nearest representation for __fundamental_types
 - if the application justifies the very large extra computation cost.
 
 [h5 Evolution of this implementation]
@@ -724,7 +724,7 @@ precision can be much lower, as might be expected.
 See source at:
 [@../../example/lambert_w_simple_examples.cpp lambert_w_simple_examples.cpp]
 [@../../test/test_lambert_w.cpp test_lambert_w.cpp] contains routine tests using __boost_test.
-[@../sf/lambert_w_errors_graph.cpp lambert_w_errors_graph.cpp] generating error graphs.
+[@../../tools/lambert_w_errors_graph.cpp lambert_w_errors_graph.cpp] generating error graphs.
 
 [h5:quadrature_testing  Testing with quadrature]
 

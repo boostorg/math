@@ -901,7 +901,9 @@ test-suite misc :
    [ run test_barycentric_rational.cpp ../../test/build//boost_unit_test_framework : : :  [ requires cxx11_smart_ptr cxx11_defaulted_functions cxx11_auto_declarations cxx11_unified_initialization_syntax ] [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]  ]
    [ run test_constant_generate.cpp : : : release <define>USE_CPP_FLOAT=1 <exception-handling>off:<build>no  ]
    [ run test_cubic_b_spline.cpp ../../test/build//boost_unit_test_framework : : :  [ requires cxx11_smart_ptr cxx11_defaulted_functions ] <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ]
-   [ run catmull_rom_test.cpp ../../test/build//boost_unit_test_framework : : :  [ requires cxx17_if_constexpr cxx17_std_apply ] ] # does not in fact require C++17 constexpr; requires C++17 std::size.
+   [ run catmull_rom_test.cpp ../../test/build//boost_unit_test_framework : : : <define>TEST=1 [ requires cxx11_hdr_array cxx11_hdr_initializer_list ] : catmull_rom_test_1 ]
+   [ run catmull_rom_test.cpp ../../test/build//boost_unit_test_framework : : : <define>TEST=2 [ requires cxx11_hdr_array cxx11_hdr_initializer_list ] : catmull_rom_test_2 ]
+   [ run catmull_rom_test.cpp ../../test/build//boost_unit_test_framework : : : <define>TEST=3 [ requires cxx11_hdr_array cxx11_hdr_initializer_list ] : catmull_rom_test_3 ]
    [ run ooura_fourier_integral_test.cpp ../../test/build//boost_unit_test_framework : : :  [ requires cxx17_if_constexpr cxx17_std_apply ] ]
    [ run univariate_statistics_test.cpp ../../test/build//boost_unit_test_framework : : :  [ requires cxx17_if_constexpr cxx17_std_apply ] ]
    [ run norms_test.cpp ../../test/build//boost_unit_test_framework : : :  [ requires cxx17_if_constexpr cxx17_std_apply ] ]
