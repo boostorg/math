@@ -104,6 +104,20 @@ std::pair<Real, Real> ooura_sin_node_and_weight(long n, Real h, Real alpha)
     return {node, weight};
 }
 
+#ifdef BOOST_MATH_INSTRUMENT_OOURA
+template<class Real>
+void print_ooura_estimate(size_t i, Real I0, Real I1, Real omega) {
+    using std::abs;
+    std::cout << std::defaultfloat
+              << std::setprecision(std::numeric_limits<Real>::digits10)
+              << std::fixed;
+    std::cout << "h = " << Real(1)/Real(1<<i) << ", I_h = " << I0/omega
+              << " = " << std::hexfloat << I0/omega << ", absolute error est = "
+              << std::defaultfloat << std::scientific << abs(I0-I1)  << "\n";
+}
+#endif
+
+
 template<class Real>
 std::pair<Real, Real> ooura_cos_node_and_weight(long n, Real h, Real alpha)
 {
@@ -209,15 +223,11 @@ public:
         do {
             Real I0 = estimate_integral(f, omega, i);
 #ifdef BOOST_MATH_INSTRUMENT_OOURA
-            std::cout << std::setprecision(std::numeric_limits<Real>::digits10) << std::fixed;
-            std::cout << "\nh = " << Real(1)/Real(1<<i) << ", I_h = " << I0/omega
-                      << " = " << std::hexfloat << I0/omega << ", absolute error est = "
-                      << std::defaultfloat << std::scientific << abs(I0-I1)  << "\n";
+            print_ooura_estimate(i, I0, I1, omega);
 #endif
             Real absolute_error_estimate = abs(I0-I1);
             Real scale = max(abs(I0), abs(I1));
-            using std::isnan;
-            if (!isnan(scale) && absolute_error_estimate <= rel_err_goal_*scale) {
+            if (!isnan(I1) && absolute_error_estimate <= rel_err_goal_*scale) {
                 starting_level_ = std::max(long(i) - 1, long(0));
                 return {I0/omega, absolute_error_estimate/scale};
             }
@@ -245,6 +255,9 @@ public:
             Real I0 = estimate_integral(f, omega, i);
             Real absolute_error_estimate = abs(I0-I1);
             Real scale = max(abs(I0), abs(I1));
+#ifdef BOOST_MATH_INSTRUMENT_OOURA
+            print_ooura_estimate(i, I0, I1, omega);
+#endif
             if (absolute_error_estimate <= rel_err_goal_*scale) {
                 starting_level_ = std::max(long(i) - 1, long(0));
                 return {I0/omega, absolute_error_estimate/scale};
@@ -290,11 +303,6 @@ private:
             Real node = static_cast<Real>(precise_node);
             Real weight = static_cast<Real>(precise_weight);
             w = weight;
-            if (bnode_row.size() > 0) {
-                if (bnode_row.back() == node) {
-                    throw std::logic_error("Nodes have fused.\n");
-                }
-            }
             bnode_row.push_back(node);
             bweight_row.push_back(weight);
             if (abs(weight) > max_weight) {
@@ -321,20 +329,11 @@ private:
             using std::isnan;
             if (isnan(node)) {
                 // This occurs at n = -11 in quad precision:
-                std::cout << "Little nodes is nan in Ooura Fourier sine; node = " << node << ", n = " << n << ", sizeof(Real) = " << sizeof(Real) << ", h = " << h << "\n";
                 break;
             }
             if (lnode_row.size() > 0) {
                 if (lnode_row[lnode_row.size()-1] == node) {
                     // The nodes have fused into each other:
-                    std::cout << "Little nodes have fused in Ooura Fourier sine; node = " << node << ", n = " << n << ", sizeof(Real) = " << sizeof(Real)  << boost::typeindex::type_id<Real>().pretty_name() << "\n";
-                    std::cout << "other node = " << lnode_row[lnode_row.size()-1] << "\n";
-                    std::cout << "lnode_row.size() = " << lnode_row.size() << "\n";
-                    std::cout << "lnode_row = {";
-                    for (auto & lnode : lnode_row) {
-                        std::cout << lnode << ", ";
-                    }
-                    std::cout << "}\n";
                     break;
                 }
             }
@@ -451,14 +450,11 @@ public:
         do {
             Real I0 = estimate_integral(f, omega, i);
 #ifdef BOOST_MATH_INSTRUMENT_OOURA
-            std::cout << std::setprecision(std::numeric_limits<Real>::digits10);
-            std::cout << "h = " << Real(1)/Real(1<<i) << ", I_h = " << I0/omega
-                      << " = " << std::hexfloat << I0/omega << ", absolute error est = "
-                      << std::defaultfloat << std::scientific << abs(I0-I1)  << "\n";
+            print_ooura_estimate(i, I0, I1, omega);
 #endif
             absolute_error_estimate = abs(I0-I1);
             scale = max(abs(I0), abs(I1));
-            if (absolute_error_estimate <= rel_err_goal_*scale) {
+            if (!isnan(I1) && absolute_error_estimate <= rel_err_goal_*scale) {
                 starting_level_ = std::max(long(i) - 1, long(0));
                 return {I0/omega, absolute_error_estimate/scale};
             }
@@ -478,6 +474,9 @@ public:
                 add_level<Real>(i);
             }
             Real I0 = estimate_integral(f, omega, i);
+#ifdef BOOST_MATH_INSTRUMENT_OOURA
+            print_ooura_estimate(i, I0, I1, omega);
+#endif
             absolute_error_estimate = abs(I0-I1);
             scale = max(abs(I0), abs(I1));
             if (absolute_error_estimate <= rel_err_goal_*scale) {

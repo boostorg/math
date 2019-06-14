@@ -197,7 +197,7 @@ void test_root()
     while (omega < 5) {
         auto [Is, err] = integrator.integrate(f, omega);
         Real exact = sqrt(pi<Real>()/(2*omega));
-        BOOST_CHECK_CLOSE_FRACTION(Is, exact, 6*tol);
+        BOOST_CHECK_CLOSE_FRACTION(Is, exact, 10*tol);
         omega += 1;
     }
 }
@@ -334,7 +334,7 @@ void test_nodes()
 
 BOOST_AUTO_TEST_CASE(ooura_fourier_transform_test)
 {
-    /*test_cos_integral1<float>();
+    test_cos_integral1<float>();
     test_cos_integral1<double>();
     test_cos_integral1<long double>();
 
@@ -343,8 +343,8 @@ BOOST_AUTO_TEST_CASE(ooura_fourier_transform_test)
     test_cos_integral2<long double>();
 
     //test_node_weight_precision_agreement();
-    //test_zero_integrand<float>();
-    //test_zero_integrand<double>();
+    test_zero_integrand<float>();
+    test_zero_integrand<double>();
 
     test_ooura_eta<float>();
     test_ooura_eta<double>();
@@ -356,11 +356,11 @@ BOOST_AUTO_TEST_CASE(ooura_fourier_transform_test)
 
     test_ooura_alpha<float>();
     test_ooura_alpha<double>();
-    test_ooura_alpha<long double>();*/
+    test_ooura_alpha<long double>();
 
-    //test_sinc<float>();
+    test_sinc<float>();
     test_sinc<double>();
-    /*test_sinc<long double>();
+    test_sinc<long double>();
 
     test_exp<float>();
     test_exp<double>();
@@ -368,14 +368,14 @@ BOOST_AUTO_TEST_CASE(ooura_fourier_transform_test)
 
     test_root<float>();
     test_root<double>();
-    test_root<long double>();
 
     test_double_osc<float>();
     test_double_osc<double>();
-    test_double_osc<long double>();
+    // Takes too long!
+    //test_double_osc<long double>();
 
     // This test should be last:
     test_nodes<float>();
     test_nodes<double>();
-    test_nodes<long double>();*/
+    test_nodes<long double>();
 }
