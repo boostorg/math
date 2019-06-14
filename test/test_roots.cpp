@@ -49,27 +49,28 @@
 template <class T, class Policy>
 struct ibeta_roots_1   // for first order algorithms
 {
-   ibeta_roots_1(T _a, T _b, T t, bool inv = false)
-      : a(_a), b(_b), target(t), invert(inv) {}
+   ibeta_roots_1(T _a, T _b, T t, bool inv = false, bool neg = false)
+      : a(_a), b(_b), target(t), invert(inv), neg(neg) {}
 
    T operator()(const T& x)
    {
-      return boost::math::detail::ibeta_imp(a, b, x, Policy(), invert, true) - target;
+      return boost::math::detail::ibeta_imp(a, b, (neg ? -x : x), Policy(), invert, true) - target;
    }
 private:
    T a, b, target;
-   bool invert;
+   bool invert, neg;
 };
 
 template <class T, class Policy>
 struct ibeta_roots_2   // for second order algorithms
 {
-   ibeta_roots_2(T _a, T _b, T t, bool inv = false)
-      : a(_a), b(_b), target(t), invert(inv) {}
+   ibeta_roots_2(T _a, T _b, T t, bool inv = false, bool neg = false)
+      : a(_a), b(_b), target(t), invert(inv), neg(neg) {}
 
-   boost::math::tuple<T, T> operator()(const T& x)
+   boost::math::tuple<T, T> operator()(const T& xx)
    {
       typedef typename boost::math::lanczos::lanczos<T, Policy>::type L;
+      T x = neg ? -xx : xx;
       T f = boost::math::detail::ibeta_imp(a, b, x, Policy(), invert, true) - target;
       T f1 = invert ?
          -boost::math::detail::ibeta_power_terms(b, a, 1 - x, x, L(), true, Policy())
@@ -83,22 +84,23 @@ struct ibeta_roots_2   // for second order algorithms
       if(f1 == 0)
          f1 = (invert ? -1 : 1) * boost::math::tools::min_value<T>() * 64;
 
-      return boost::math::make_tuple(f, f1);
+      return boost::math::make_tuple(f, neg ? -f1 : f1);
    }
 private:
    T a, b, target;
-   bool invert;
+   bool invert, neg;
 };
 
 template <class T, class Policy>
 struct ibeta_roots_3   // for third order algorithms
 {
-   ibeta_roots_3(T _a, T _b, T t, bool inv = false)
-      : a(_a), b(_b), target(t), invert(inv) {}
+   ibeta_roots_3(T _a, T _b, T t, bool inv = false, bool neg = false)
+      : a(_a), b(_b), target(t), invert(inv), neg(neg) {}
 
-   boost::math::tuple<T, T, T> operator()(const T& x)
+   boost::math::tuple<T, T, T> operator()(const T& xx)
    {
       typedef typename boost::math::lanczos::lanczos<T, Policy>::type L;
+      T x = neg ? -xx : xx;
       T f = boost::math::detail::ibeta_imp(a, b, x, Policy(), invert, true) - target;
       T f1 = invert ?
                -boost::math::detail::ibeta_power_terms(b, a, 1 - x, x, L(), true, Policy())
@@ -115,11 +117,16 @@ struct ibeta_roots_3   // for third order algorithms
       if(f1 == 0)
          f1 = (invert ? -1 : 1) * boost::math::tools::min_value<T>() * 64;
 
+      if (neg)
+      {
+         f1 = -f1;
+      }
+
       return boost::math::make_tuple(f, f1, f2);
    }
 private:
    T a, b, target;
-   bool invert;
+   bool invert, neg;
 };
 
 double inverse_ibeta_bisect(double a, double b, double z)
@@ -154,6 +161,38 @@ double inverse_ibeta_bisect(double a, double b, double z)
    return boost::math::tools::bisect(ibeta_roots_1<double, pol>(a, b, z, invert), min, max, tol).first;
 }
 
+double inverse_ibeta_bisect_neg(double a, double b, double z)
+{
+   typedef boost::math::policies::policy<> pol;
+   bool invert = false;
+   int bits = std::numeric_limits<double>::digits;
+
+   //
+   // special cases, we need to have these because there may be other
+   // possible answers:
+   //
+   if(z == 1) return 1;
+   if(z == 0) return 0;
+
+   //
+   // We need a good estimate of the error in the incomplete beta function
+   // so that we don't set the desired precision too high.  Assume that 3-bits
+   // are lost each time the arguments increase by a factor of 10:
+   //
+   using namespace std;
+   int bits_lost = static_cast<int>(ceil(log10((std::max)(a, b)) * 3));
+   if(bits_lost < 0)
+      bits_lost = 3;
+   else
+      bits_lost += 3;
+   int precision = bits - bits_lost;
+
+   double min = -1;
+   double max = 0;
+   boost::math::tools::eps_tolerance<double> tol(precision);
+   return -boost::math::tools::bisect(ibeta_roots_1<double, pol>(a, b, z, invert, true), min, max, tol).first;
+}
+
 double inverse_ibeta_newton(double a, double b, double z)
 {
    double guess = 0.5;
@@ -185,6 +224,37 @@ double inverse_ibeta_newton(double a, double b, double z)
    return boost::math::tools::newton_raphson_iterate(ibeta_roots_2<double, boost::math::policies::policy<> >(a, b, z, invert), guess, min, max, precision);
 }
 
+double inverse_ibeta_newton_neg(double a, double b, double z)
+{
+   double guess = 0.5;
+   bool invert = false;
+   int bits = std::numeric_limits<double>::digits;
+
+   //
+   // special cases, we need to have these because there may be other
+   // possible answers:
+   //
+   if(z == 1) return 1;
+   if(z == 0) return 0;
+
+   //
+   // We need a good estimate of the error in the incomplete beta function
+   // so that we don't set the desired precision too high.  Assume that 3-bits
+   // are lost each time the arguments increase by a factor of 10:
+   //
+   using namespace std;
+   int bits_lost = static_cast<int>(ceil(log10((std::max)(a, b)) * 3));
+   if(bits_lost < 0)
+      bits_lost = 3;
+   else
+      bits_lost += 3;
+   int precision = bits - bits_lost;
+
+   double min = -1;
+   double max = 0;
+   return -boost::math::tools::newton_raphson_iterate(ibeta_roots_2<double, boost::math::policies::policy<> >(a, b, z, invert, true), -guess, min, max, precision);
+}
+
 double inverse_ibeta_halley(double a, double b, double z)
 {
    double guess = 0.5;
@@ -214,6 +284,37 @@ double inverse_ibeta_halley(double a, double b, double z)
    double min = 0;
    double max = 1;
    return boost::math::tools::halley_iterate(ibeta_roots_3<double, boost::math::policies::policy<> >(a, b, z, invert), guess, min, max, precision);
+}
+
+double inverse_ibeta_halley_neg(double a, double b, double z)
+{
+   double guess = -0.5;
+   bool invert = false;
+   int bits = std::numeric_limits<double>::digits;
+
+   //
+   // special cases, we need to have these because there may be other
+   // possible answers:
+   //
+   if(z == 1) return 1;
+   if(z == 0) return 0;
+
+   //
+   // We need a good estimate of the error in the incomplete beta function
+   // so that we don't set the desired precision too high.  Assume that 3-bits
+   // are lost each time the arguments increase by a factor of 10:
+   //
+   using namespace std;
+   int bits_lost = static_cast<int>(ceil(log10((std::max)(a, b)) * 3));
+   if(bits_lost < 0)
+      bits_lost = 3;
+   else
+      bits_lost += 3;
+   int precision = bits - bits_lost;
+
+   double min = -1;
+   double max = 0;
+   return -boost::math::tools::halley_iterate(ibeta_roots_3<double, boost::math::policies::policy<> >(a, b, z, invert, true), guess, min, max, precision);
 }
 
 double inverse_ibeta_schroder(double a, double b, double z)
@@ -269,9 +370,12 @@ void test_inverses(const T& data)
       if(data[i][5] == 0)
       {
          BOOST_CHECK_EQUAL(inverse_ibeta_halley(Real(data[i][0]), Real(data[i][1]), Real(data[i][5])), value_type(0));
+         BOOST_CHECK_EQUAL(inverse_ibeta_halley_neg(Real(data[i][0]), Real(data[i][1]), Real(data[i][5])), value_type(0));
          BOOST_CHECK_EQUAL(inverse_ibeta_schroder(Real(data[i][0]), Real(data[i][1]), Real(data[i][5])), value_type(0));
          BOOST_CHECK_EQUAL(inverse_ibeta_newton(Real(data[i][0]), Real(data[i][1]), Real(data[i][5])), value_type(0));
+         BOOST_CHECK_EQUAL(inverse_ibeta_newton_neg(Real(data[i][0]), Real(data[i][1]), Real(data[i][5])), value_type(0));
          BOOST_CHECK_EQUAL(inverse_ibeta_bisect(Real(data[i][0]), Real(data[i][1]), Real(data[i][5])), value_type(0));
+         BOOST_CHECK_EQUAL(inverse_ibeta_bisect_neg(Real(data[i][0]), Real(data[i][1]), Real(data[i][5])), value_type(0));
       }
       else if((1 - data[i][5] > 0.001)
          && (fabs(data[i][5]) > 2 * boost::math::tools::min_value<value_type>())
@@ -279,19 +383,29 @@ void test_inverses(const T& data)
       {
          value_type inv = inverse_ibeta_halley(Real(data[i][0]), Real(data[i][1]), Real(data[i][5]));
          BOOST_CHECK_CLOSE_EX(Real(data[i][2]), inv, precision, i);
+         inv = inverse_ibeta_halley_neg(Real(data[i][0]), Real(data[i][1]), Real(data[i][5]));
+         BOOST_ASSERT(boost::math::isfinite(inv));
+         BOOST_CHECK_CLOSE_EX(Real(data[i][2]), inv, precision, i);
          inv = inverse_ibeta_schroder(Real(data[i][0]), Real(data[i][1]), Real(data[i][5]));
          BOOST_CHECK_CLOSE_EX(Real(data[i][2]), inv, precision, i);
          inv = inverse_ibeta_newton(Real(data[i][0]), Real(data[i][1]), Real(data[i][5]));
          BOOST_CHECK_CLOSE_EX(Real(data[i][2]), inv, precision, i);
+         inv = inverse_ibeta_newton_neg(Real(data[i][0]), Real(data[i][1]), Real(data[i][5]));
+         BOOST_CHECK_CLOSE_EX(Real(data[i][2]), inv, precision, i);
          inv = inverse_ibeta_bisect(Real(data[i][0]), Real(data[i][1]), Real(data[i][5]));
+         BOOST_CHECK_CLOSE_EX(Real(data[i][2]), inv, precision, i);
+         inv = inverse_ibeta_bisect_neg(Real(data[i][0]), Real(data[i][1]), Real(data[i][5]));
          BOOST_CHECK_CLOSE_EX(Real(data[i][2]), inv, precision, i);
       }
       else if(1 == data[i][5])
       {
          BOOST_CHECK_EQUAL(inverse_ibeta_halley(Real(data[i][0]), Real(data[i][1]), Real(data[i][5])), value_type(1));
+         BOOST_CHECK_EQUAL(inverse_ibeta_halley_neg(Real(data[i][0]), Real(data[i][1]), Real(data[i][5])), value_type(1));
          BOOST_CHECK_EQUAL(inverse_ibeta_schroder(Real(data[i][0]), Real(data[i][1]), Real(data[i][5])), value_type(1));
          BOOST_CHECK_EQUAL(inverse_ibeta_newton(Real(data[i][0]), Real(data[i][1]), Real(data[i][5])), value_type(1));
+         BOOST_CHECK_EQUAL(inverse_ibeta_newton_neg(Real(data[i][0]), Real(data[i][1]), Real(data[i][5])), value_type(1));
          BOOST_CHECK_EQUAL(inverse_ibeta_bisect(Real(data[i][0]), Real(data[i][1]), Real(data[i][5])), value_type(1));
+         BOOST_CHECK_EQUAL(inverse_ibeta_bisect_neg(Real(data[i][0]), Real(data[i][1]), Real(data[i][5])), value_type(1));
       }
 
    }
