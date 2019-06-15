@@ -6,7 +6,6 @@
 
 /*
  * References:
- * Ooura, Takuya. "A double exponential formula for the Fourier transforms." Publications of the Research Institute for Mathematical Sciences 41.4 (2005): 971-977.
  * Ooura, Takuya, and Masatake Mori. "A robust double exponential formula for Fourier-type integrals." Journal of computational and applied mathematics 112.1-2 (1999): 229-241.
  * http://www.kurims.kyoto-u.ac.jp/~ooura/intde.html
  */
@@ -28,19 +27,19 @@ public:
         return impl_->integrate(f, omega);
     }
 
-    auto const & big_nodes() const {
+    std::vector<std::vector<Real>> const & big_nodes() const {
         return impl_->big_nodes();
     }
 
-    auto const & weights_for_big_nodes() const {
+    std::vector<std::vector<Real>> const & weights_for_big_nodes() const {
         return impl_->weights_for_big_nodes();
     }
 
-    auto const & little_nodes() const {
+    std::vector<std::vector<Real>> const & little_nodes() const {
         return impl_->little_nodes();
     }
 
-    auto const & weights_for_little_nodes() const {
+    std::vector<std::vector<Real>> const & weights_for_little_nodes() const {
         return impl_->weights_for_little_nodes();
     }
 

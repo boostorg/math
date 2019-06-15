@@ -8,6 +8,8 @@
 #include <utility> // for std::pair.
 #include <mutex>
 #include <atomic>
+#include <vector>
+#include <iostream>
 #include <boost/math/special_functions/expm1.hpp>
 #include <boost/math/special_functions/sin_pi.hpp>
 #include <boost/math/special_functions/cos_pi.hpp>
@@ -67,7 +69,9 @@ std::pair<Real, Real> ooura_sin_node_and_weight(long n, Real h, Real alpha)
         return {node, weight};
     }
     Real x = n*h;
-    auto [eta, eta_prime] = ooura_eta(x, alpha);
+    auto p = ooura_eta(x, alpha);
+    auto eta = p.first;
+    auto eta_prime = p.second;
 
     Real expm1_meta = expm1(-eta);
     Real exp_meta = exp(-eta);
@@ -127,8 +131,9 @@ std::pair<Real, Real> ooura_cos_node_and_weight(long n, Real h, Real alpha)
     using boost::math::constants::pi;
 
     Real x = h*(n-Real(1)/Real(2));
-    auto [eta, eta_prime] = ooura_eta(x, alpha);
-
+    auto p = ooura_eta(x, alpha);
+    auto eta = p.first;
+    auto eta_prime = p.second;
     Real expm1_meta = expm1(-eta);
     Real exp_meta = exp(-eta);
     Real node = pi<Real>()*(Real(1)/Real(2)-n)/expm1_meta;
@@ -172,10 +177,10 @@ public:
         lweights_.reserve(levels);
 
         for (size_t i = 0; i < levels; ++i) {
-            if constexpr (std::is_same<Real, float>::value) {
+            if (std::is_same<Real, float>::value) {
                 add_level<double>(i);
             }
-            else if constexpr (std::is_same<Real, double>::value) {
+            else if (std::is_same<Real, double>::value) {
                 add_level<long double>(i);
             }
             else {
@@ -184,19 +189,19 @@ public:
         }
     }
 
-    auto const & big_nodes() const {
+    std::vector<std::vector<Real>> const & big_nodes() const {
         return big_nodes_;
     }
 
-    auto const & weights_for_big_nodes() const {
+    std::vector<std::vector<Real>> const & weights_for_big_nodes() const {
         return bweights_;
     }
 
-    auto const & little_nodes() const {
+    std::vector<std::vector<Real>> const & little_nodes() const {
         return little_nodes_;
     }
 
-    auto const & weights_for_little_nodes() const {
+    std::vector<std::vector<Real>> const & weights_for_little_nodes() const {
         return lweights_;
     }
 
@@ -210,8 +215,8 @@ public:
             return {Real(0), Real(0)};
         }
         if (omega < 0) {
-            auto [I, err] = this->integrate(f, -omega);
-            return {-I, err};
+            auto p = this->integrate(f, -omega);
+            return {-p.first, p.second};
         }
 
         Real I1 = std::numeric_limits<Real>::quiet_NaN();
@@ -243,10 +248,10 @@ public:
         size_t max_additional_levels = 4;
         while (big_nodes_.size() < requested_levels_ + max_additional_levels) {
             size_t i = big_nodes_.size();
-            if constexpr (std::is_same<Real, float>::value) {
+            if (std::is_same<Real, float>::value) {
                 add_level<double>(i);
             }
-            else if constexpr (std::is_same<Real, double>::value) {
+            else if (std::is_same<Real, double>::value) {
                 add_level<long double>(i);
             }
             else {
@@ -299,9 +304,9 @@ private:
         long n = 0;
         Real w;
         do {
-            auto [precise_node, precise_weight] = ooura_sin_node_and_weight(n, h, alpha);
-            Real node = static_cast<Real>(precise_node);
-            Real weight = static_cast<Real>(precise_weight);
+            auto precise_nw = ooura_sin_node_and_weight(n, h, alpha);
+            Real node = static_cast<Real>(precise_nw.first);
+            Real weight = static_cast<Real>(precise_nw.second);
             w = weight;
             bnode_row.push_back(node);
             bweight_row.push_back(weight);
@@ -319,12 +324,12 @@ private:
         // It will create the opportunity to sensibly truncate the quadrature sum to significant terms.
         n = -1;
         do {
-            auto [precise_node, precise_weight] = ooura_sin_node_and_weight(n, h, alpha);
-            Real node = static_cast<Real>(precise_node);
+            auto precise_nw = ooura_sin_node_and_weight(n, h, alpha);
+            Real node = static_cast<Real>(precise_nw.first);
             if (node <= 0) {
                 break;
             }
-            Real weight = static_cast<Real>(precise_weight);
+            Real weight = static_cast<Real>(precise_nw.second);
             w = weight;
             using std::isnan;
             if (isnan(node)) {
@@ -416,10 +421,10 @@ public:
         lweights_.reserve(levels);
 
         for (size_t i = 0; i < levels; ++i) {
-            if constexpr (std::is_same<Real, float>::value) {
+            if (std::is_same<Real, float>::value) {
                 add_level<double>(i);
             }
-            else if constexpr (std::is_same<Real, double>::value) {
+            else if (std::is_same<Real, double>::value) {
                 add_level<long double>(i);
             }
             else {
@@ -464,10 +469,10 @@ public:
         size_t max_additional_levels = 4;
         while (big_nodes_.size() < requested_levels_ + max_additional_levels) {
             size_t i = big_nodes_.size();
-            if constexpr (std::is_same<Real, float>::value) {
+            if (std::is_same<Real, float>::value) {
                 add_level<double>(i);
             }
-            else if constexpr (std::is_same<Real, double>::value) {
+            else if (std::is_same<Real, double>::value) {
                 add_level<long double>(i);
             }
             else {
@@ -515,9 +520,9 @@ private:
         long n = 0;
         Real w;
         do {
-            auto [precise_node, precise_weight] = ooura_cos_node_and_weight(n, h, alpha);
-            Real node = static_cast<Real>(precise_node);
-            Real weight = static_cast<Real>(precise_weight);
+            auto precise_nw = ooura_cos_node_and_weight(n, h, alpha);
+            Real node = static_cast<Real>(precise_nw.first);
+            Real weight = static_cast<Real>(precise_nw.second);
             w = weight;
             bnode_row.push_back(node);
             bweight_row.push_back(weight);
@@ -532,8 +537,8 @@ private:
         bweight_row.shrink_to_fit();
         n = -1;
         do {
-            auto [precise_node, precise_weight] = ooura_cos_node_and_weight(n, h, alpha);
-            Real node = static_cast<Real>(precise_node);
+            auto precise_nw = ooura_cos_node_and_weight(n, h, alpha);
+            Real node = static_cast<Real>(precise_nw.first);
             // The function cannot be singular at zero,
             // so zero is not a unreasonable node,
             // unlike in the case of the Fourier Sine.
@@ -541,7 +546,7 @@ private:
             if (node < 0) {
                 break;
             }
-            Real weight = static_cast<Real>(precise_weight);
+            Real weight = static_cast<Real>(precise_nw.second);
             w = weight;
             if (lnode_row.size() > 0) {
                 if (lnode_row.back() == node) {

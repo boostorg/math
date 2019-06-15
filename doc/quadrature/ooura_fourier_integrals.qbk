@@ -60,7 +60,8 @@ double omega = 1;
 auto [Is, relative_error] = integrator.integrate(f, omega);
 ```
 
-In this case, the computed value should be \u03C0/2.
+The computed value should be \u03C0/2.
+Note that this integrator is more insistent about examining the error estimate, than (say) tanh-sinh, which just returns the value of the integral.
 
 A classical cosine transform is presented below:
 
