@@ -172,10 +172,10 @@ public:
         lweights_.reserve(levels);
 
         for (size_t i = 0; i < levels; ++i) {
-            if constexpr (std::is_same_v<Real, float>) {
+            if constexpr (std::is_same<Real, float>::value) {
                 add_level<double>(i);
             }
-            else if constexpr (std::is_same_v<Real, double>) {
+            else if constexpr (std::is_same<Real, double>::value) {
                 add_level<long double>(i);
             }
             else {
@@ -243,10 +243,10 @@ public:
         size_t max_additional_levels = 4;
         while (big_nodes_.size() < requested_levels_ + max_additional_levels) {
             size_t i = big_nodes_.size();
-            if constexpr (std::is_same_v<Real, float>) {
+            if constexpr (std::is_same<Real, float>::value) {
                 add_level<double>(i);
             }
-            else if constexpr (std::is_same_v<Real, double>) {
+            else if constexpr (std::is_same<Real, double>::value) {
                 add_level<long double>(i);
             }
             else {
@@ -416,10 +416,10 @@ public:
         lweights_.reserve(levels);
 
         for (size_t i = 0; i < levels; ++i) {
-            if constexpr (std::is_same_v<Real, float>) {
+            if constexpr (std::is_same<Real, float>::value) {
                 add_level<double>(i);
             }
-            else if constexpr (std::is_same_v<Real, double>) {
+            else if constexpr (std::is_same<Real, double>::value) {
                 add_level<long double>(i);
             }
             else {
@@ -464,10 +464,10 @@ public:
         size_t max_additional_levels = 4;
         while (big_nodes_.size() < requested_levels_ + max_additional_levels) {
             size_t i = big_nodes_.size();
-            if constexpr (std::is_same_v<Real, float>) {
+            if constexpr (std::is_same<Real, float>::value) {
                 add_level<double>(i);
             }
-            else if constexpr (std::is_same_v<Real, double>) {
+            else if constexpr (std::is_same<Real, double>::value) {
                 add_level<long double>(i);
             }
             else {
