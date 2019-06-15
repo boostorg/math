@@ -568,6 +568,7 @@ matrix:
       addons:
         apt:
           packages:
+            - libjsoncpp0
             - clang-6.0
           sources:
             - ubuntu-toolchain-r-test
@@ -579,6 +580,7 @@ matrix:
       addons:
         apt:
           packages:
+            - libjsoncpp0
             - clang-6.0
           sources:
             - ubuntu-toolchain-r-test
@@ -590,6 +592,7 @@ matrix:
       addons:
         apt:
           packages:
+            - libjsoncpp0
             - clang-6.0
           sources:
             - ubuntu-toolchain-r-test
@@ -601,6 +604,7 @@ matrix:
       addons:
         apt:
           packages:
+            - libjsoncpp0
             - clang-6.0
           sources:
             - ubuntu-toolchain-r-test
@@ -612,6 +616,7 @@ matrix:
       addons:
         apt:
           packages:
+            - libjsoncpp0
             - clang-6.0
           sources:
             - ubuntu-toolchain-r-test
