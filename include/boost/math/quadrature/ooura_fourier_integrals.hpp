@@ -27,6 +27,7 @@ public:
         return impl_->integrate(f, omega);
     }
 
+    // These are just for debugging/unit tests:
     std::vector<std::vector<Real>> const & big_nodes() const {
         return impl_->big_nodes();
     }
@@ -61,7 +62,6 @@ public:
 private:
     std::shared_ptr<detail::ooura_fourier_cos_detail<Real>> impl_;
 };
-
 
 
 }}}
