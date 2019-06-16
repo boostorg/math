@@ -36,10 +36,12 @@ promote<Price, Sigma, Tau, Rate> black_scholes_option_price(CP cp,
   using namespace std;
   auto const d1 = (log(S / K) + (r + sigma * sigma / 2) * tau) / (sigma * sqrt(tau));
   auto const d2 = (log(S / K) + (r - sigma * sigma / 2) * tau) / (sigma * sqrt(tau));
-  if (cp == CP::call)
-    return S * Phi(d1) - exp(-r * tau) * K * Phi(d2);
-  else
-    return exp(-r * tau) * K * Phi(-d2) - S * Phi(-d1);
+  switch (cp) {
+    case CP::call:
+      return S * Phi(d1) - exp(-r * tau) * K * Phi(d2);
+    case CP::put:
+      return exp(-r * tau) * K * Phi(-d2) - S * Phi(-d1);
+  }
 }
 
 int main() {
@@ -52,8 +54,6 @@ int main() {
   auto const call_price = black_scholes_option_price(CP::call, K, S, sigma, tau, r);
   auto const put_price = black_scholes_option_price(CP::put, K, S, sigma, tau, r);
 
-  // Compare automatically calculated greeks by autodiff with formulas for greeks.
-  // https://en.wikipedia.org/wiki/Greeks_(finance)#Formulas_for_European_option_Greeks
   double const d1 = static_cast<double>((log(S / K) + (r + sigma * sigma / 2) * tau) / (sigma * sqrt(tau)));
   double const d2 = static_cast<double>((log(S / K) + (r - sigma * sigma / 2) * tau) / (sigma * sqrt(tau)));
   double const formula_call_delta = +Phi(+d1);

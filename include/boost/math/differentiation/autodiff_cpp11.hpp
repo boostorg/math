@@ -19,6 +19,8 @@
     "Do not #include this file directly. This should only be #included by autodiff.hpp for C++11 compatibility."
 #endif
 
+#include <boost/mp11/integer_sequence.hpp>
+
 namespace boost {
 namespace math {
 namespace differentiation {

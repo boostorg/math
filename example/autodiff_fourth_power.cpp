@@ -16,7 +16,7 @@ T fourth_power(T const& x) {
 int main() {
   using namespace boost::math::differentiation;
 
-  constexpr unsigned Order = 5;                  // The highest order derivative to be calculated.
+  constexpr unsigned Order = 5;                  // Highest order derivative to be calculated.
   auto const x = make_fvar<double, Order>(2.0);  // Find derivatives at x=2.
   auto const y = fourth_power(x);
   for (unsigned i = 0; i <= Order; ++i)

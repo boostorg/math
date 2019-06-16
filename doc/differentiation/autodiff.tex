@@ -9,6 +9,7 @@
 \usepackage{array} % m{} column in tabular
 \usepackage{csquotes} % displayquote
 \usepackage{fancyhdr}
+\usepackage{fancyvrb}
 \usepackage[margin=0.75in]{geometry}
 \usepackage{graphicx}
 \usepackage{hyperref}
@@ -48,64 +49,17 @@ Distributed under the Boost Software License, Version 1.0.\\
 %\begin{abstract}
 %\end{abstract}
 
-\section{Synopsis}
+\tableofcontents
 
-\begingroup
-\fontsize{10pt}{10pt}\selectfont
-\begin{verbatim}
-#include <boost/math/differentiation/autodiff.hpp>
+%\section{Synopsis}
+%\begingroup
+%\fontsize{10pt}{10pt}\selectfont
+%\begin{verbatim}
+% example/synopsis.cpp
+%\end{verbatim}
+%\endgroup
 
-namespace boost {
-namespace math {
-namespace differentiation {
-
-// Function returning a single variable of differentiation. Recommended: Use auto for type.
-template <typename RealType, size_t Order, size_t... Orders>
-autodiff_fvar<RealType, Order, Orders...> make_fvar(RealType const& ca);
-
-// Function returning multiple independent variables of differentiation in a std::tuple.
-template<typename RealType, size_t... Orders, typename... RealTypes>
-auto make_ftuple(RealTypes const&... ca);
-
-// Type of combined autodiff types. Recommended: Use auto for return type (C++14).
-template <typename RealType, typename... RealTypes>
-using promote = typename detail::promote_args_n<RealType, RealTypes...>::type;
-
-namespace detail {
-
-// Single autodiff variable. Use make_fvar() or make_ftuple() to instantiate.
-template <typename RealType, size_t Order>
-class fvar {
- public:
-  // Query return value of function to get the derivatives.
-  template <typename... Orders>
-  get_type_at<RealType, sizeof...(Orders) - 1> derivative(Orders... orders) const;
-
-  // All of the arithmetic and comparison operators are overloaded.
-  template <typename RealType2, size_t Order2>
-  fvar& operator+=(fvar<RealType2, Order2> const&);
-
-  fvar& operator+=(root_type const&);
-
-  // ...
-};
-
-// Standard math functions are overloaded and called via argument-dependent lookup (ADL).
-template <typename RealType, size_t Order>
-fvar<RealType, Order> floor(fvar<RealType, Order> const&);
-
-template <typename RealType, size_t Order>
-fvar<RealType, Order> exp(fvar<RealType, Order> const&);
-
-// ...
-
-}  // namespace detail
-
-}  // namespace differentiation
-}  // namespace math
-}  // namespace boost
-\end{verbatim}
-\endgroup
+\newpage
 
 \section{Description}
 
@@ -126,11 +80,11 @@ to compute $f(x_0+\varepsilon)$, the resulting polynomial in $\varepsilon$ conta
 $f'(x_0)$, $f''(x_0)$, $f'''(x_0)$, ...  within the coefficients. Each coefficient is equal to the derivative of
 its respective order, divided by the factorial of the order.
 
-In greater detail, assume one is interested in calculating the first $N$ derivatives of $f$ at $x_0$. Without any
-loss of precision to the calculation of the derivatives, all terms $O\left(\varepsilon^{N+1}\right)$ that include
-powers of $\varepsilon$ greater than $N$ can be discarded. (This is due to the fact that each term in a polynomial
-depends only upon equal and lower-order terms under arithmetic operations.) Under these truncation rules, $f$
-provides a polynomial-to-polynomial transformation:
+In greater detail, assume one is interested in calculating the first $N$ derivatives of $f$ at $x_0$. Without loss
+of precision to the calculation of the derivatives, all terms $O\left(\varepsilon^{N+1}\right)$ that include powers
+of $\varepsilon$ greater than $N$ can be discarded. (This is due to the fact that each term in a polynomial depends
+only upon equal and lower-order terms under arithmetic operations.) Under these truncation rules, $f$ provides a
+polynomial-to-polynomial transformation:
 
 \[
 f \qquad : \qquad x_0+\varepsilon \qquad \mapsto \qquad
@@ -174,7 +128,7 @@ T fourth_power(T const& x) {
 int main() {
   using namespace boost::math::differentiation;
 
-  constexpr unsigned Order = 5;                  // The highest order derivative to be calculated.
+  constexpr unsigned Order = 5;                  // Highest order derivative to be calculated.
   auto const x = make_fvar<double, Order>(2.0);  // Find derivatives at x=2.
   auto const y = fourth_power(x);
   for (unsigned i = 0; i <= Order; ++i)
@@ -202,7 +156,7 @@ The above calculates
 {\tt y.derivative(5)} &=& f^{(5)}(2) =&& 0 &
 \end{alignat*}
 
-\subsection{Example 2: Multi-variable mixed partial derivatives with multi-precision data type}
+\subsection{Example 2: Multi-variable mixed partial derivatives with multi-precision data type}\label{multivar}
 \subsubsection{Calculate $\frac{\partial^{12}f}{\partial w^{3}\partial x^{2}\partial y^{4}\partial z^{3}}(11,12,13,14)$
 with a precision of about 50 decimal digits,\\
 where $f(w,x,y,z)=\exp\left(w\sin\left(\frac{x\log(y)}{z}\right)+\sqrt{\frac{wz}{xy}}\right)+\frac{w^2}{\tan(z)}$.}
@@ -260,7 +214,7 @@ relative error: 2.67e-50
 \subsubsection{Calculate greeks directly from the Black-Scholes pricing function.}
 
 Below is the standard Black-Scholes pricing function written as a function template, where the price, volatility
-(sigma), time to expiration (tau) and interest rate are template parameters. This means that any greek based on
+(sigma), time to expiration (tau) and interest rate are template parameters. This means that any Greek based on
 these 4 variables can be calculated using autodiff. The below example calculates delta and gamma where the variable
 of differentiation is only the price. For examples of more exotic greeks, see {\tt example/black\_scholes.cpp}.
 
@@ -293,10 +247,12 @@ promote<Price, Sigma, Tau, Rate> black_scholes_option_price(CP cp,
   using namespace std;
   auto const d1 = (log(S / K) + (r + sigma * sigma / 2) * tau) / (sigma * sqrt(tau));
   auto const d2 = (log(S / K) + (r - sigma * sigma / 2) * tau) / (sigma * sqrt(tau));
-  if (cp == CP::call)
-    return S * Phi(d1) - exp(-r * tau) * K * Phi(d2);
-  else
-    return exp(-r * tau) * K * Phi(-d2) - S * Phi(-d1);
+  switch (cp) {
+    case CP::call:
+      return S * Phi(d1) - exp(-r * tau) * K * Phi(d2);
+    case CP::put:
+      return exp(-r * tau) * K * Phi(-d2) - S * Phi(-d1);
+  }
 }
 
 int main() {
@@ -308,8 +264,6 @@ int main() {
   auto const call_price = black_scholes_option_price(CP::call, K, S, sigma, tau, r);
   auto const put_price = black_scholes_option_price(CP::put, K, S, sigma, tau, r);
 
-  // Compare automatically calculated greeks by autodiff with formulas for greeks.
-  // https://en.wikipedia.org/wiki/Greeks_(finance)#Formulas_for_European_option_Greeks
   std::cout << "black-scholes call price = " << call_price.derivative(0) << '\n'
             << "black-scholes put  price = " << put_price.derivative(0) << '\n'
             << "call delta = " << call_price.derivative(1) << '\n'
@@ -328,6 +282,28 @@ call gamma = 0.00199852
 put  gamma = 0.00199852
 */
 \end{verbatim}
+
+\section{Advantages of Automatic Differentiation}
+The above examples illustrate some of the advantages of using autodiff:
+\begin{itemize}
+\item Elimination of code redundancy. The existence of $N$ separate functions to calculate derivatives is a form
+  of code redundancy, with all the liabilities that come with it:
+  \begin{itemize}
+    \item Changes to one function require $N$ additional changes to other functions. In the \nth{3} example above,
+        consider how much larger and inter-dependent the above code base would be if a separate function were
+        written for \href{https://en.wikipedia.org/wiki/Greeks\_(finance)#Formulas\_for\_European\_option\_Greeks}
+        {each Greek} value.
+    \item Dependencies upon a derivative function for a different purpose will break when changes are made to
+        the original function. What doesn't need to exist cannot break.
+    \item Code bloat, reducing conceptual integrity. Control over the evolution of code is easier/safer when
+        the code base is smaller and able to be intuitively grasped.
+  \end{itemize}
+\item Accuracy of derivatives over finite difference methods. Finite difference methods always include a
+   $\Delta x$ free variable that must be carefully chosen for each application. If $\Delta x$ is too small, then
+   numerical errors become large. If $\Delta x$ is too large, then mathematical errors become large.  With autodiff,
+   there are no free variables to set and the accuracy of the answer is generally superior to finite difference
+   methods even with the best choice of $\Delta x$.
+\end{itemize}
 
 \section{Mathematics}
 
@@ -475,9 +451,9 @@ depends on the previously calculated values $z_0, z_1, ..., z_{i-1}$.
 
 Calling standard mathematical functions such as {\tt log()}, {\tt cos()}, etc. should return accurate higher
 order derivatives. For example, {\tt exp(x)} may be written internally as a specific \nth{14}-degree polynomial to
-approximate $e^x$ when $0<x<1$. This would mean that the \nth{15} derivative, and all higher order derivatives,
-would be 0, however we know that $\exp^{(15)}(x)=e^x$.  How should such functions whose derivatives are known be
-written to provide accurate higher order derivatives? The answer again comes back to the function's Taylor series.
+approximate $e^x$ when $0<x<1$. This would mean that the \nth{15} derivative, and all higher order derivatives, would
+be 0, however we know that $\frac{d^{15}}{dx^{15}}e^x=e^x$.  How should such functions whose derivatives are known
+be written to provide accurate higher order derivatives? The answer again comes back to the function's Taylor series.
 
 To simplify notation, for a given polynomial ${\bf x} = x_0 + x_1\varepsilon + x_2\varepsilon^2 +\cdots+
 x_N\varepsilon^N$ define
@@ -538,7 +514,17 @@ array {\tt v} whose element at $(i,j)$ is
     \qquad \text{for}\; (i,j)\in\{0,1,2,...,M\}\times\{0,1,2,...,N\}.
 \]
 The generalization to additional independent variables follows the same pattern.
-%This is made more concrete with C++ code in the next section.
+
+\subsubsection{Declaring Multiple Variables}
+
+Internally, independent variables are represented by vectors within orthogonal vector spaces. Because of this,
+one must be careful when declaring more than one independent variable so that they do not end up in
+parallel vector spaces. This can easily be achieved by following one rule:
+\begin{itemize}
+\item When declaring more than one independent variable, call {\tt make\_ftuple<>()} once and only once.
+\end{itemize}
+The tuple of values returned are independent. Though it is possible to achieve the same result with multiple calls
+to {\tt make\_fvar}, this is an easier and less error-prone method. See Section~\ref{multivar} for example usage.
 
 %\section{Usage}
 %
@@ -718,225 +704,163 @@ The generalization to additional independent variables follows the same pattern.
 %represent 0 values. Once {\tt z} is combined with {\tt x} and {\tt y} during the computation, the types will be
 %promoted as necessary.  This is the recommended way to initialize variables in autodiff.
 
-\section{Migrating Code for Autodiff Compatibility}\label{migrate}
+\section{Writing Functions for Autodiff Compatibility}\label{compatibility}
 
-In this section, a general procedure is given for transforming an existing C++
-mathematical function for compatibility with autodiff, so that single and/or multi-variable
-derivatives can be automatically calculated for it. The example used here is the standard
-\href{https://en.wikipedia.org/wiki/Greeks_(finance)#Formulas_for_European_option_Greeks}{Black-Scholes pricing
-model} for pricing European options:
+In this section, a general procedure is given for writing new, and transforming existing, C++ mathematical
+functions for compatibility with autodiff.
 
-\begingroup
-\fontsize{10pt}{10pt}\selectfont
-\begin{verbatim}
-#include <boost/math/constants/constants.hpp>
-#include <cmath>
-
-// Standard normal cumulative distribution function
-double Phi(double x)
-{
-  return 0.5*std::erfc(-boost::math::constants::one_div_root_two<double>()*x);
-}
-
-enum CP { call, put };
-
-// Black-Scholes pricing function, assuming zero annual dividend yield (q=0).
-double bs_price(CP cp, double K, double S, double sigma, double tau, double r)
-{
-  double d1 = (std::log(S/K) + (r+sigma*sigma/2)*tau) / (sigma*std::sqrt(tau));
-  double d2 = (std::log(S/K) + (r-sigma*sigma/2)*tau) / (sigma*std::sqrt(tau));
-  if (cp == CP::call)
-    return S*Phi(d1) - std::exp(-r*tau)*K*Phi(d2);
-  else
-    return std::exp(-r*tau)*K*Phi(-d2) - S*Phi(-d1);
-}
-\end{verbatim}
-\endgroup
-
-\subsection{General Rules for Transforming a C++ Function}
-To apply autodiff for calculating derivatives of a given function:
-
+There are 3 categories of functions that require different strategies:
 \begin{enumerate}
-\item {\tt \#include <boost/math/differentiation/autodiff.hpp>}
-\item {\tt using namespace boost::math::differentiation;}
-\item Select which function parameters will be variables of differentiation (aka autodiff variables). The
-  non-variables are called constants. (Note that the use of the word {\it constant}\/ here is different than the
-  {\tt const} C/C++ keyword. There can be {\tt const} variables of differentiation, as well as non-{\tt const}
-  constants, for example, as seen below.)
-\item For each function that takes at least one variable of differentiation as a parameter:
-  \begin{enumerate}
-  \item Replace the data type (e.g. {\tt double}) of each variable parameter with a generic template type.
-    For best performance, make it a reference. For best practice, also make it {\tt const} if appropriate.
-    Declare a separate template type for each variable parameter.
-  \item Replace the return value with {\tt promote<T1,T2,T3>} where {\tt T1}, {\tt T2}, {\tt T3} are the template
-    types created in the previous step. There can be any number of types. (If there is only 1 type {\tt T} then the
-    return type can simply be {\tt T} instead of {\tt promote<T>}).
-  \item Update the data type of all temporary variables that depend on an autodiff variable by {\tt auto} (easiest)
-    or where that is not possible, then use {\tt promote<...>} to combine the data types of the autodiff variables
-    in the intermediate calculation. Omitting any necessary data types from {\tt promote<>} can lead to incorrect
-    results, which can be avoided by using {\tt auto}.
-  \item Remove the namespace prefix from mathematical function calls applied to autodiff variables, to allow
-    for overloaded functions to be called via argument-dependent lookup (ADL). This requires that the function exist
-    in the autodiff library of overloaded functions (E.g. {\tt exp}, {\tt log}, {\tt erfc}, etc.). If it doesn't,
-    then an appropriate alternative must be made available.
-  \end{enumerate}
-\item Each variable of differentiation must be separately declared and initialized by calling the
-  {\tt make\_fvar<...>()} template function. Say there are $M$ such variables. For each variable:
-  \begin{enumerate}
-  \item Select the underlying {\tt root\_type} for the variable. E.g. {\tt float}, {\tt double}, {\tt long double},\\
-    {\tt boost::multiprecision::cpp\_bin\_float\_50}, etc. This is always the first template parameter.
-  \item Select what the highest order derivative $N_i$ will be calculated for it, where $i\in\{1,2,...,M\}$.
-    That, and all lower order derivatives will be available in the result. This must be a compile-time, or
-    {\tt constexpr} value. Specify this value as the $i^\text{th}$ template parameter to {\tt make\_fvar},
-    where the \nth{0} parameter is the {\tt root\_type}, and all parameters in between set to 0. {\bf The number
-    of template parameters to {\tt make\_fvar} is how autodiff distinguishes independent variables from one
-    another.} If two independent variables are declared with the same number of template parameters, and they
-    are used in the same calculation, then the results may be non-sensical (unless you deliberately understand
-    the mathematical consequences of this.)
-  \item Set the actual value of the parameter as the function parameter. This is stored internally as
-    {\tt root\_type} and may be determined at run-time.
-  \end{enumerate}
-  For example, to set the \nth{3} variable to 2.0, and calculate up to $N_3=5$ derivatives for it, the initialization
-  would be {\tt auto x3 = make\_fvar<double,0,0,5>(2.0);}
-\item Call the function, and store the result as type {\tt auto} (easiest) or of type {\tt promote<T1,T2,T3,...>}:\\
-  {\tt auto y = f(x1, x2, x3, ...);}
-\item Call {\tt y.derivative(...)} to obtain all mixed partial derivatives, with the following requirements:
-  \begin{enumerate}
-  \item {\tt derivative(...)} must be called with exactly $M$ parameters (one for each variable.)
-  \item The $i^\text{th}$ parameter to {\tt derivative(...)} (where $i=1$ corresponds to the first parameter) must
-    be of type {\tt size\_t} with a maximum value of $N_i$.
-  \end{enumerate}
-\item For best performance, compile with the C++17 flag, or highest available, with C++11 at a minimum.
+\item Piecewise-rational functions. These are simply piecewise quotients of polynomials. All that is needed is to
+    turn the function parameters and return value into generic (template) types. This will then allow the function
+    to accept and return autodiff's {\tt fvar} types, thereby using autodiff's overloaded arithmetic operators
+    which calculate the derivatives automatically.
+\item Functions that call existing autodiff functions. This is the same as the previous, but may also include
+    calls to functions that are in the autodiff library. Examples: {\tt exp()}, {\tt log()}, {\tt tgamma()}, etc.
+\item New functions for which the derivatives can be calculated. This is the most general technique, as it
+    allows for the development of a function which do not fall into the previous two categories.
 \end{enumerate}
+Functions written in any of these ways may then be added to the autodiff library.
 
-\subsection{Example: Black-Scholes Option Pricing with Automatic Greeks}
-The above procedure is applied below to the Black-Scholes pricing function {\tt bs\_price()}. Of the 6 parameters
-to {\tt bs\_price()}, the first 2 (call/put {\tt cp} and strike price {\tt K}) are constant, since no derivatives
-are calculated with respect to them, and the remaining 4 are autodiff variables. A {\tt main()} function is added
-to demonstrate how to initialize the $M=4$ independent variables with {\tt make\_fvar<>()}, invoke the function
-{\tt bs\_price()}, and retrieve its derivatives:
-
-\begingroup
-\fontsize{10pt}{10pt}\selectfont
-\begin{verbatim}
-#include <boost/math/constants/constants.hpp>
-#include <cmath>
+\subsection{Piecewise-Rational Functions}
+\[
+f(x) = \frac{1}{1+x^2}
+\]
+By simply writing this as a template function, autodiff can calculate derivatives for it:
+\begin{Verbatim}[xleftmargin=2em]
+#include <boost/math/differentiation/autodiff.hpp>
 #include <iostream>
 
-#include <boost/math/differentiation/autodiff.hpp>
-using namespace boost::math::differentiation;
-
-// Standard normal cumulative distribution function
-template<typename T>
-T Phi(const T& x)
-{
-  using std::erfc;
-  return 0.5*erfc(-boost::math::constants::one_div_root_two<T>()*x);
+template <typename T>
+T rational(T const& x) {
+  return 1 / (1 + x * x);
 }
 
-enum CP { call, put };
-
-// Black-Scholes pricing function, assuming zero annual dividend yield (q=0).
-template<typename T1, typename T2, typename T3, typename T4>
-promote<T1,T2,T3,T4>
-  bs_price(CP cp, double K, const T1& S, const T2& sigma, const T3& tau, const T4& r)
-{
-  using namespace std;
-  auto d1 = (log(S/K) + (r+sigma*sigma/2)*tau) / (sigma*sqrt(tau));
-  auto d2 = (log(S/K) + (r-sigma*sigma/2)*tau) / (sigma*sqrt(tau));
-  if (cp == CP::call)
-    return S*Phi(d1) - exp(-r*tau)*K*Phi(d2);
-  else
-    return exp(-r*tau)*K*Phi(-d2) - S*Phi(-d1);
-}
-
-int main()
-{
-  double K   = 100.0; // Strike price
-  auto S     = make_fvar<double,3>(105); // Spot price
-  auto sigma = make_fvar<double,0,3>(5); // Volatility
-  auto tau   = make_fvar<double,0,0,1>(30.0/365); // 30 days to expiration
-  auto r     = make_fvar<double,0,0,0,1>(1.25/100); // 1.25% interest rate
-  auto call_price = bs_price(CP::call, K, S, sigma, tau, r);
-  auto put_price  = bs_price(CP::put , K, S, sigma, tau, r);
-
+int main() {
+  using namespace boost::math::differentiation;
+  auto const x = make_fvar<double, 10>(0);
+  auto const y = rational(x);
   std::cout << std::setprecision(std::numeric_limits<double>::digits10)
-    << "call price  = " <<  call_price.derivative(0,0,0,0) << '\n'
-    << "put  price  = " <<   put_price.derivative(0,0,0,0) << '\n'
-    << "\n## First-order Greeks\n"
-    << "call delta  = " <<  call_price.derivative(1,0,0,0) << '\n'
-    << "call vega   = " <<  call_price.derivative(0,1,0,0) << '\n'
-    << "call theta  = " << -call_price.derivative(0,0,1,0) << '\n' // minus sign due to
-    << "call rho    = " <<  call_price.derivative(0,0,0,1) << '\n' //      tau = T-time
-    << '\n'
-    << "put delta   = " <<   put_price.derivative(1,0,0,0) << '\n'
-    << "put vega    = " <<   put_price.derivative(0,1,0,0) << '\n'
-    << "put theta   = " <<  -put_price.derivative(0,0,1,0) << '\n'
-    << "put rho     = " <<   put_price.derivative(0,0,0,1) << '\n'
-    << "\n## Second-order Greeks (same for call and put)\n"
-    << "call gamma  = " <<  call_price.derivative(2,0,0,0) << '\n'
-    << "put  gamma  = " <<   put_price.derivative(2,0,0,0) << '\n'
-    << "call vanna  = " <<  call_price.derivative(1,1,0,0) << '\n'
-    << "put  vanna  = " <<   put_price.derivative(1,1,0,0) << '\n'
-    << "call charm  = " << -call_price.derivative(1,0,1,0) << '\n'
-    << "put  charm  = " <<  -put_price.derivative(1,0,1,0) << '\n'
-    << "call vomma  = " <<  call_price.derivative(0,2,0,0) << '\n'
-    << "put  vomma  = " <<   put_price.derivative(0,2,0,0) << '\n'
-    << "call veta   = " <<  call_price.derivative(0,1,1,0) << '\n'
-    << "put  veta   = " <<   put_price.derivative(0,1,1,0) << '\n'
-    << "\n## Third-order Greeks (same for call and put)\n"
-    << "call speed  = " <<  call_price.derivative(3,0,0,0) << '\n'
-    << "put  speed  = " <<   put_price.derivative(3,0,0,0) << '\n'
-    << "call zomma  = " <<  call_price.derivative(2,1,0,0) << '\n'
-    << "put  zomma  = " <<   put_price.derivative(2,1,0,0) << '\n'
-    << "call color  = " <<  call_price.derivative(2,0,1,0) << '\n'
-    << "put  color  = " <<   put_price.derivative(2,0,1,0) << '\n'
-    << "call ultima = " <<  call_price.derivative(0,3,0,0) << '\n'
-    << "put  ultima = " <<   put_price.derivative(0,3,0,0) << '\n';
+            << "y.derivative(10) = " << y.derivative(10) << std::endl;
   return 0;
 }
-\end{verbatim}
-\endgroup
-Note the correspondence between the number of template parameters to {\tt make\_fvar<...>} and the order
-of parameters to {\tt derivative(...)}. The 4 independent variables are initialized as:
+/*
+Output:
+y.derivative(10) = -3628800
+*/
+\end{Verbatim}
+As simple as $f(x)$ may seem, the derivatives can get increasingly complex as derivatives are taken.
+For example, the \nth{10} derivative has the form
+\[
+f^{(10)}(x) = -3628800\frac{1 - 55x^2 + 330x^4 - 462x^6 + 165x^8 - 11x^{10}}{(1 + x^2)^{11}}.
+\]
+Derivatives of $f(x)$ are useful, and in fact used, in calculating higher order derivatives for $\arctan(x)$
+for instance, since
+\[
+\arctan^{(n)}(x) = \left(\frac{d}{dx}\right)^{n-1} \frac{1}{1+x^2}\qquad\text{for}\quad 1\le n.
+\]
 
-\begin{verbatim}
-  auto S     = make_fvar<double,3>(105); // Spot price
-  auto sigma = make_fvar<double,0,3>(5); // Volatility
-  auto tau   = make_fvar<double,0,0,1>(30.0/365); // 30 days to expiration
-  auto r     = make_fvar<double,0,0,0,1>(1.25/100); // 1.25% interest rate
-\end{verbatim}
-This means the variable {\tt S} corresponds to variable 1, {\tt sigma} to 2, {\tt tau} to 3, and {\tt r} to 4.
-The maximum number of derivatives to be calculated for each are $N_1=3$, $N_2=3$, $N_3=1$, and $N_4=1$, respectively.
+\subsection{Functions That Call Existing Autodiff Functions}
 
-Taking for example the calculation of \href{https://en.wikipedia.org/wiki/Greeks_(finance)#Color}{color}:
+Many of the standard library math function are overloaded in autodiff. It is recommended to use
+\href{https://en.cppreference.com/w/cpp/language/adl}{argument-dependent lookup} (ADL) in order for functions to
+be written in a way that is general enough to accommodate standard types ({\tt double}) as well as autodiff types
+({\tt fvar}).
+\\
+Example:
+\begin{Verbatim}[xleftmargin=2em]
+#include <boost/math/constants/constants.hpp>
+#include <cmath>
 
-\begin{verbatim}
-    << "call color  = " <<  call_price.derivative(2,0,1,0) << '\n'
-\end{verbatim}
-This returns the \nth{2} partial derivative of {\tt call\_price} with respect to variable 1 ({\tt S})
-and the \nth{1} partial derivative with respect to variable 3 ({\tt tau}).
+using namespace boost::math::constants;
 
-\subsection{Advantages of Automatic Differentiation}
-This example also provides an opportunity to point out some of the advantages of using autodiff:
-\begin{itemize}
-\item Elimination of code redundancy. The existence of $N$ separate functions to calculate derivatives is a form
-  of code redundancy, with all the liabilities that come with it:
-  \begin{itemize}
-    \item Changes to one function require $N$ additional changes to other functions. Consider how much larger
-        and inter-dependent the above code base would be if a separate function were written for
-        \href{https://en.wikipedia.org/wiki/Greeks_(finance)#Formulas_for_European_option_Greeks}{each Greek} value.
-    \item Dependencies upon a derivative function for a different purpose will break when changes are made to
-        the original function. These dependencies won't exist if such derivative functions don't exist.
-    \item Code bloat, reducing conceptual integrity. Control over the evolution of code is easier/safer when
-        the code base is smaller and able to be intuitively grasped.
-  \end{itemize}
-\item Accuracy of derivatives over finite difference methods. Finite difference methods always include a
-   $\Delta x$ free variable that must be carefully chosen for each application. If $\Delta x$ is too small, then
-   numerical errors become large. If $\Delta x$ is too large, then mathematical errors become large.  With autodiff,
-   there are no free variables to set and the accuracy of the answer is generally superior to finite difference
-   methods even with the best choice of $\Delta x$.
-\end{itemize}
+// Standard normal cumulative distribution function
+template <typename T>
+T Phi(T const& x)
+{
+  return 0.5 * std::erfc(-one_div_root_two<T>() * x);
+}
+\end{Verbatim}
+Though {\tt Phi(x)} is general enough to handle the various fundamental floating point types, this will
+not work if {\tt x} is an autodiff {\tt fvar} variable, since {\tt std::erfc} does not include a specialization
+for {\tt fvar}. The recommended solution is to remove the namespace prefix {\tt std::} from {\tt erfc}:
+\begin{Verbatim}[xleftmargin=2em]
+#include <boost/math/constants/constants.hpp>
+#include <boost/math/differentiation/autodiff.hpp>
+#include <cmath>
+
+using namespace boost::math::constants;
+
+// Standard normal cumulative distribution function
+template <typename T>
+T Phi(T const& x)
+{
+  using std::erfc;
+  return 0.5 * erfc(-one_div_root_two<T>() * x);
+}
+\end{Verbatim}
+In this form, when {\tt x} is of type {\tt fvar}, the C++ compiler will search for and find a function {\tt erfc}
+within the same namespace as {\tt fvar}, which is in the autodiff library, via ADL. Because of the using-declaration,
+it will also call {\tt std::erfc} when {\tt x} is a fundamental type such as {\tt double}.
+
+\subsection{New Functions For Which The Derivatives Can Be Calculated}\label{new_functions}
+
+Mathematical functions which do not fall into the previous two categories can be constructed using autodiff helper
+functions. This requires a separate function for calculating the derivatives. In case you are asking yourself what
+good is an autodiff library if one needs to supply the derivatives, the answer is that the new function will fit
+in with the rest of the autodiff library, thereby allowing for the creation of additional functions via all of
+the arithmetic operators, plus function composition, which was not readily available without the library.
+
+The example given here is for {\tt cos}:
+\begin{Verbatim}[xleftmargin=2em]
+template <typename RealType, size_t Order>
+fvar<RealType, Order> cos(fvar<RealType, Order> const& cr) {
+  using std::cos;
+  using std::sin;
+  using root_type = typename fvar<RealType, Order>::root_type;
+  constexpr size_t order = fvar<RealType, Order>::order_sum;
+  root_type const d0 = cos(static_cast<root_type>(cr));
+  if constexpr (order == 0)
+    return fvar<RealType, Order>(d0);
+  else {
+    root_type const d1 = -sin(static_cast<root_type>(cr));
+    root_type const derivatives[4]{d0, d1, -d0, -d1};
+    return cr.apply_derivatives(order,
+                                [&derivatives](size_t i) { return derivatives[i & 3]; });
+  }
+}
+\end{Verbatim}
+This uses the helper function {\tt fvar::apply\_derivatives} which takes two parameters:
+\begin{enumerate}
+\item The highest order derivative to be calculated.
+\item A function that maps derivative order to derivative value.
+\end{enumerate}
+The highest order derivative necessary to be calculated is generally equal to {\tt fvar::order\_sum}.  In the case
+of {\tt sin} and {\tt cos}, the derivatives are cyclical with period 4. Thus it is sufficient to store only these
+4 values into an array, and take the derivative order modulo 4 as the index into this array.
+
+A second helper function, not shown here, is {\tt apply\_coefficients}. This is used the same as
+{\tt apply\_derivatives} except that the supplied function calculates coefficients instead of derivatives.
+The relationship between a coefficient $C_n$ and derivative $D_n$ for derivative order $n$ is
+\[
+C_n = \frac{D_n}{n!}.
+\]
+Internally, {\tt fvar} holds coefficients rather than derivatives, so in case the coefficient values are more readily
+available than the derivatives, it can save some unnecessary computation to use {\tt apply\_coefficients}.
+See the definition of {\tt atan} for an example.
+
+Both of these helper functions use Horner's method when calculating the resulting polynomial {\tt fvar}. This works
+well when the derivatives are finite, but in cases where derivatives are infinite, this can quickly result in NaN
+values as the computation progresses. In these cases, one can call non-Horner versions of both function which
+better ``isolate'' infinite values so that they are less likely to evolve into NaN values.
+
+The four helper functions available for constructing new autodiff functions from known coefficients/derivatives are:
+\begin{enumerate}
+\item {\tt fvar::apply\_coefficients}
+\item {\tt fvar::apply\_coefficients\_nonhorner}
+\item {\tt fvar::apply\_derivatives}
+\item {\tt fvar::apply\_derivatives\_nonhorner}
+\end{enumerate}
 
 \section{Function Writing Guidelines}
 
@@ -964,7 +888,7 @@ One potential implementation of $f(x)=\max(0,x)$ is:
         return 0 < x ? x : 0;
     }
 \end{verbatim}
-Though this is consistent with Section~\ref{migrate}, there are two problems with it:
+Though this is consistent with Section~\ref{compatibility}, there are two problems with it:
 
 \begin{enumerate}
 \item {\tt f(nan) = 0}. This problem is independent of autodiff, but is worth addressing anyway. If there is
@@ -1013,7 +937,7 @@ A potential implementation is:
         return x == 0 ? 1 : sin(x) / x;
     }
 \end{verbatim}
-Though this is again consistent with Section~\ref{migrate}, and returns correct non-derivative values,
+Though this is again consistent with Section~\ref{compatibility}, and returns correct non-derivative values,
 it returns a constant when {\tt x==0} thereby losing all derivative information contained in {\tt x} and
 contributions from $\sinc$. For example, $\sinc''(0)=-\frac{1}{3}$, however {\tt y.derivative(2) == 0} when
 {\tt y = sinc(make\_fvar<double,2>(0))} using the above incorrect implementation. Applying the AFP, the intervals
@@ -1101,16 +1025,17 @@ effectively evaluate derivatives for.
 Examples have been given to illustrate some common items to avoid doing:
 
 \begin{enumerate}
-\item It is not enough for functions to be piecewise continuous. On boundary points between intervals, return the
-    average expression of both intervals, rather than just one of them. Example: $\max(0,x)$ at $x=0$.
+\item It is not enough for functions to be piecewise continuous. On boundary points between intervals, consider
+    returning the average expression of both intervals, rather than just one of them. Example: $\max(0,x)$ at $x=0$.
+    In cases where the limits from both sides must match, and they do not, then {\tt nan} may be a more appropriate
+    value depending on the application.
 \item Avoid returning individual constant values (e.g. $\sinc(0)=1$.) Values must be computed uniformly along
     with other values in its local interval. If that is not possible, then the function must be overloaded to
-    compute the derivatives precisely.
+    compute the derivatives precisely using the helper functions from Section~\ref{new_functions}.
 \item Avoid intermediate indeterminate values in both the value ($\sinc(x)$ at $x=0$) and derivatives
     ($(\sqrt{x}+1)^2$ at $x=0$). Try to isolate expressions that may contain infinite values/derivatives so
     that they do not introduce NaN values into the computation.
 \end{enumerate}
-This is not an exhaustive list, and will be added to as examples are encountered.
 
 \section{Acknowledgments}
 

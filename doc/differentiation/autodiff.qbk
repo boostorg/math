@@ -82,9 +82,9 @@ algorithm to compute ['f(x[sub 0]+\u03b5)], the resulting polynomial in ['\u03b5
 derivative of its respective order, divided by the factorial of the order.
 
 In greater detail, assume one is interested in calculating the first /N/ derivatives of /f/ at ['x[sub 0]]. Without
-any loss of precision to the calculation of the derivatives, all terms ['O(\u03b5[super N+1])] that include powers
-of ['\u03b5] greater than /N/ can be discarded. (This is due to the fact that each term in a polynomial depends only
-upon equal and lower-order terms under arithmetic operations.) Under these truncation rules, /f/ provides a
+loss of precision to the calculation of the derivatives, all terms ['O(\u03b5[super N+1])] that include powers
+of ['\u03b5] greater than /N/ can be discarded. (This is due to the fact that each term in a polynomial depends
+only upon equal and lower-order terms under arithmetic operations.) Under these truncation rules, /f/ provides a
 polynomial-to-polynomial transformation:
 
 [/ \Large$$f \qquad : \qquad x_0+\varepsilon \qquad \mapsto \qquad
@@ -130,7 +130,7 @@ a polynomial with coefficients `y = {16, 32, 24, 8, 1, 0}`.  The derivatives are
     int main() {
       using namespace boost::math::differentiation;
     
-      constexpr unsigned Order = 5;                  // The highest order derivative to be calculated.
+      constexpr unsigned Order = 5;                  // Highest order derivative to be calculated.
       auto const x = make_fvar<double, Order>(2.0);  // Find derivatives at x=2.
       auto const y = fourth_power(x);
       for (unsigned i = 0; i <= Order; ++i)
@@ -223,68 +223,89 @@ Below is the standard Black-Scholes pricing function written as a function templ
 these 4 variables can be calculated using autodiff. The below example calculates delta and gamma where the variable
 of differentiation is only the price. For examples of more exotic greeks, see `example/black_scholes.cpp`.
 
-    #include <boost/math/differentiation/autodiff.hpp>
-    #include <iostream>
-    
-    using namespace boost::math::constants;
-    using namespace boost::math::differentiation;
-    
-    // Equations and function/variable names are from
-    // https://en.wikipedia.org/wiki/Greeks_(finance)#Formulas_for_European_option_Greeks
-    
-    // Standard normal cumulative distribution function
-    template <typename X>
-    X Phi(X const& x) {
-      return 0.5 * erfc(-one_div_root_two<X>() * x);
-    }
-    
-    enum class CP { call, put };
-    
-    // Assume zero annual dividend yield (q=0).
-    template <typename Price, typename Sigma, typename Tau, typename Rate>
-    promote<Price, Sigma, Tau, Rate> black_scholes_option_price(CP cp,
-                                                                double K,
-                                                                Price const& S,
-                                                                Sigma const& sigma,
-                                                                Tau const& tau,
-                                                                Rate const& r) {
-      using namespace std;
-      auto const d1 = (log(S / K) + (r + sigma * sigma / 2) * tau) / (sigma * sqrt(tau));
-      auto const d2 = (log(S / K) + (r - sigma * sigma / 2) * tau) / (sigma * sqrt(tau));
-      if (cp == CP::call)
-        return S * Phi(d1) - exp(-r * tau) * K * Phi(d2);
-      else
-        return exp(-r * tau) * K * Phi(-d2) - S * Phi(-d1);
-    }
-    
-    int main() {
-      double const K = 100.0;                    // Strike price.
-      auto const S = make_fvar<double, 2>(105);  // Stock price.
-      double const sigma = 5;                    // Volatility.
-      double const tau = 30.0 / 365;             // Time to expiration in years. (30 days).
-      double const r = 1.25 / 100;               // Interest rate.
-      auto const call_price = black_scholes_option_price(CP::call, K, S, sigma, tau, r);
-      auto const put_price = black_scholes_option_price(CP::put, K, S, sigma, tau, r);
-    
-      // Compare automatically calculated greeks by autodiff with formulas for greeks.
-      // https://en.wikipedia.org/wiki/Greeks_(finance)#Formulas_for_European_option_Greeks
-      std::cout << "black-scholes call price = " << call_price.derivative(0) << '\n'
-                << "black-scholes put  price = " << put_price.derivative(0) << '\n'
-                << "call delta = " << call_price.derivative(1) << '\n'
-                << "put  delta = " << put_price.derivative(1) << '\n'
-                << "call gamma = " << call_price.derivative(2) << '\n'
-                << "put  gamma = " << put_price.derivative(2) << '\n';
-      return 0;
-    }
-    /*
-    Output:
-    black-scholes call price = 56.5136
-    black-scholes put  price = 51.4109
-    call delta = 0.773818
-    put  delta = -0.226182
-    call gamma = 0.00199852
-    put  gamma = 0.00199852
-    */
+```
+#include <boost/math/differentiation/autodiff.hpp>
+#include <iostream>
+
+using namespace boost::math::constants;
+using namespace boost::math::differentiation;
+
+// Equations and function/variable names are from
+// https://en.wikipedia.org/wiki/Greeks_(finance)#Formulas_for_European_option_Greeks
+
+// Standard normal cumulative distribution function
+template <typename X>
+X Phi(X const& x) {
+  return 0.5 * erfc(-one_div_root_two<X>() * x);
+}
+
+enum class CP { call, put };
+
+// Assume zero annual dividend yield (q=0).
+template <typename Price, typename Sigma, typename Tau, typename Rate>
+promote<Price, Sigma, Tau, Rate> black_scholes_option_price(CP cp,
+                                                            double K,
+                                                            Price const& S,
+                                                            Sigma const& sigma,
+                                                            Tau const& tau,
+                                                            Rate const& r) {
+  using namespace std;
+  auto const d1 = (log(S / K) + (r + sigma * sigma / 2) * tau) / (sigma * sqrt(tau));
+  auto const d2 = (log(S / K) + (r - sigma * sigma / 2) * tau) / (sigma * sqrt(tau));
+  switch (cp) {
+    case CP::call:
+      return S * Phi(d1) - exp(-r * tau) * K * Phi(d2);
+    case CP::put:
+      return exp(-r * tau) * K * Phi(-d2) - S * Phi(-d1);
+  }
+}
+
+int main() {
+  double const K = 100.0;                    // Strike price.
+  auto const S = make_fvar<double, 2>(105);  // Stock price.
+  double const sigma = 5;                    // Volatility.
+  double const tau = 30.0 / 365;             // Time to expiration in years. (30 days).
+  double const r = 1.25 / 100;               // Interest rate.
+  auto const call_price = black_scholes_option_price(CP::call, K, S, sigma, tau, r);
+  auto const put_price = black_scholes_option_price(CP::put, K, S, sigma, tau, r);
+
+  std::cout << "black-scholes call price = " << call_price.derivative(0) << '\n'
+            << "black-scholes put  price = " << put_price.derivative(0) << '\n'
+            << "call delta = " << call_price.derivative(1) << '\n'
+            << "put  delta = " << put_price.derivative(1) << '\n'
+            << "call gamma = " << call_price.derivative(2) << '\n'
+            << "put  gamma = " << put_price.derivative(2) << '\n';
+  return 0;
+}
+/*
+Output:
+black-scholes call price = 56.5136
+black-scholes put  price = 51.4109
+call delta = 0.773818
+put  delta = -0.226182
+call gamma = 0.00199852
+put  gamma = 0.00199852
+*/
+```
+
+[h1 Advantages of Automatic Differentiation]
+The above examples illustrate some of the advantages of using autodiff:
+
+* Elimination of code redundancy. The existence of /N/ separate functions to calculate derivatives is a form
+  of code redundancy, with all the liabilities that come with it:
+    * Changes to one function require /N/ additional changes to other functions. In the 3rd example above,
+      consider how much larger and inter-dependent the above code base would be if a separate function were
+      written for [@https://en.wikipedia.org/wiki/Greeks_(finance)#Formulas_for_European_option_Greeks
+      each Greek] value.
+    * Dependencies upon a derivative function for a different purpose will break when changes are made to
+      the original function. What doesn't need to exist cannot break.
+    * Code bloat, reducing conceptual integrity. Control over the evolution of code is easier/safer when
+      the code base is smaller and able to be intuitively grasped.
+* Accuracy of derivatives over finite difference methods. Finite difference methods always include a
+  ['\u0394x] free variable that must be carefully chosen for each application. If ['\u0394x] is too small, then
+  numerical errors become large. If ['\u0394x] is too large, then mathematical errors become large.  With autodiff,
+  there are no free variables to set and the accuracy of the answer is generally superior to finite difference
+  methods even with the best choice of ['\u0394x].
 
 [h1 Manual]
 Additional details are in the [@../differentiation/autodiff.pdf autodiff manual].
