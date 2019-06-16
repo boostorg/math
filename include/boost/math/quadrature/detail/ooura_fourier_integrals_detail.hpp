@@ -288,8 +288,8 @@ private:
 
         std::vector<Real> bnode_row;
         std::vector<Real> bweight_row;
-        // Definitely could use a more sophisticated heuristic for how many elements
-        // will be placed in the vector. This is a pretty huge overestimate:
+
+        // This is a pretty good estimate for how many elements will be placed in the vector:
         bnode_row.reserve((1<<i)*sizeof(Real));
         bweight_row.reserve((1<<i)*sizeof(Real));
 
@@ -308,6 +308,11 @@ private:
             Real node = static_cast<Real>(precise_nw.first);
             Real weight = static_cast<Real>(precise_nw.second);
             w = weight;
+            if (bnode_row.size() == bnode_row.capacity()) {
+                bnode_row.reserve(2*bnode_row.size());
+                bweight_row.reserve(2*bnode_row.size());
+            }
+
             bnode_row.push_back(node);
             bweight_row.push_back(weight);
             if (abs(weight) > max_weight) {
@@ -341,6 +346,10 @@ private:
                     // The nodes have fused into each other:
                     break;
                 }
+            }
+            if (lnode_row.size() == lnode_row.capacity()) {
+                lnode_row.reserve(2*lnode_row.size());
+                lweight_row.reserve(2*lnode_row.size());
             }
             lnode_row.push_back(node);
             lweight_row.push_back(weight);
@@ -524,6 +533,11 @@ private:
             Real node = static_cast<Real>(precise_nw.first);
             Real weight = static_cast<Real>(precise_nw.second);
             w = weight;
+            if (bnode_row.size() == bnode_row.capacity()) {
+                bnode_row.reserve(2*bnode_row.size());
+                bweight_row.reserve(2*bnode_row.size());
+            }
+
             bnode_row.push_back(node);
             bweight_row.push_back(weight);
             if (abs(weight) > max_weight) {
@@ -554,6 +568,11 @@ private:
                     break;
                 }
             }
+            if (lnode_row.size() == lnode_row.capacity()) {
+                lnode_row.reserve(2*lnode_row.size());
+                lweight_row.reserve(2*lnode_row.size());
+            }
+
             lnode_row.push_back(node);
             lweight_row.push_back(weight);
             if (abs(weight) > max_weight) {
