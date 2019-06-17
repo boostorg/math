@@ -49,7 +49,8 @@ vector_barycentric_rational_imp<TimeContainer, SpaceContainer>::vector_barycentr
 
     BOOST_ASSERT_MSG(t_.size() == y_.size(), "There must be the same number of time points as space points.");
     BOOST_ASSERT_MSG(approximation_order < y_.size(), "Approximation order must be < data length.");
-    for (size_t i = 1; i < t_.size(); ++i) {
+    for (size_t i = 1; i < t_.size(); ++i)
+    {
         BOOST_ASSERT_MSG(t_[i] - t_[i-1] >  (numeric_limits<Real>::min)(), "The abscissas must be listed in strictly increasing order t[0] < t[1] < ... < t[n-1].");
     }
     calculate_weights(approximation_order);
@@ -102,7 +103,8 @@ template<class TimeContainer, class SpaceContainer>
 void vector_barycentric_rational_imp<TimeContainer, SpaceContainer>::operator()(typename SpaceContainer::value_type& p, typename TimeContainer::value_type t) const
 {
     using Real = typename TimeContainer::value_type;
-    for (auto & x : p) {
+    for (auto & x : p)
+    {
         x = Real(0);
     }
     Real denominator = 0;
@@ -115,12 +117,14 @@ void vector_barycentric_rational_imp<TimeContainer, SpaceContainer>::operator()(
             return;
         }
         Real x = w_[i]/(t - t_[i]);
-        for (size_t j = 0; j < p.size(); ++j){
+        for (decltype(p.size()) j = 0; j < p.size(); ++j)
+        {
             p[j] += x*y_[i][j];
         }
         denominator += x;
     }
-    for (size_t j = 0; j < p.size(); ++j){
+    for (decltype(p.size()) j = 0; j < p.size(); ++j)
+    {
         p[j] /= denominator;
     }
     return;
@@ -133,7 +137,8 @@ void vector_barycentric_rational_imp<TimeContainer, SpaceContainer>::eval_with_p
     using Real = typename TimeContainer::value_type;
     this->operator()(x, t);
     Point numerator;
-    for (decltype(x.size()) i = 0; i < x.size(); ++i) {
+    for (decltype(x.size()) i = 0; i < x.size(); ++i)
+    {
         numerator[i] = 0;
     }
     Real denominator = 0;
@@ -142,30 +147,45 @@ void vector_barycentric_rational_imp<TimeContainer, SpaceContainer>::eval_with_p
         if (t == t_[i])
         {
             Point sum;
-            for (decltype(x.size()) i = 0; i < x.size(); ++i) {
-                numerator[i] = 0;
+            for (decltype(x.size()) i = 0; i < x.size(); ++i)
+            {
+                sum[i] = 0;
             }
+
             for (decltype(t_.size()) j = 0; j < t_.size(); ++j)
             {
                 if (j == i)
                 {
                     continue;
                 }
-                for (size_t k = 0; k < sum.size(); ++k) {
+                for (decltype(sum.size()) k = 0; k < sum.size(); ++k)
+                {
                     sum[k] += w_[j]*(y_[i][k] - y_[j][k])/(t_[i] - t_[j]);
                 }
             }
-            for (size_t k = 0; k < sum.size(); ++k) {
+            for (decltype(sum.size()) k = 0; k < sum.size(); ++k)
+            {
                 dxdt[k] = -sum[k]/w_[i];
             }
             return;
         }
         Real tw = w_[i]/(t - t_[i]);
-        Point diff = (x - y_[i])/(t-t_[i]);
-        numerator += tw*diff;
+        Point diff;
+        for (decltype(diff.size()) j = 0; j < diff.size(); ++j)
+        {
+            diff[j] = (x[j] - y_[i][j])/(t-t_[i]);
+        }
+        for (decltype(diff.size()) j = 0; j < diff.size(); ++j)
+        {
+            numerator[j] += tw*diff[j];
+        }
         denominator += tw;
     }
-    dxdt = numerator/denominator;
+
+    for (decltype(dxdt.size()) j = 0; j < dxdt.size(); ++j)
+    {
+        dxdt[j] = numerator[j]/denominator;
+    }
     return;
 }
 
