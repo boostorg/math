@@ -295,6 +295,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(next_hpp, T, all_float_types) {
   }
 }
 
+/*
 BOOST_AUTO_TEST_CASE_TEMPLATE(owens_t_hpp, T, bin_float_types) {
   BOOST_MATH_STD_USING;
   using test_constants = test_constants_t<T>;
@@ -311,7 +312,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(owens_t_hpp, T, bin_float_types) {
     BOOST_CHECK(isNearZero(autodiff_v.derivative(0u) - anchor_v));
   }
 }
-
+*/
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(pow_hpp, T, all_float_types) {
   using test_constants = test_constants_t<T>;
