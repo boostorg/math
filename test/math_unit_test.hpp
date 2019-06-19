@@ -44,7 +44,7 @@ bool check_mollified_close(Real expected, Real computed, Real tol, std::string c
     if (mollified_relative_error > tol)
     {
         Real dist = abs(boost::math::float_distance(expected, computed));
-        detail::total_ulp_distance += static_cast<uint64_t>(dist);
+        detail::total_ulp_distance += static_cast<int64_t>(dist);
         std::ios_base::fmtflags f( std::cerr.flags() );
         std::cerr << std::setprecision(3);
         std::cerr << "\033[0;31mError at " << filename << ":" << function << ":" << line << ":\n"
@@ -88,7 +88,7 @@ bool check_ulp_close(PreciseReal expected1, Real computed, size_t ulps, std::str
     Real dist = abs(boost::math::float_distance(expected, computed));
     if (dist > ulps)
     {
-        detail::total_ulp_distance += static_cast<uint64_t>(dist);
+        detail::total_ulp_distance += static_cast<int64_t>(dist);
         Real denom = max(abs(expected), Real(1));
         Real mollified_relative_error = abs(expected - computed)/denom;
         std::ios_base::fmtflags f( std::cerr.flags() );
@@ -121,10 +121,17 @@ int report_errors()
 {
     if (detail::global_error_count > 0)
     {
-        std::cerr << "\033[0;31mError count: " << detail::global_error_count
-                  << ", total ulp distance = " << detail::total_ulp_distance
-                  << "\n";
+        std::cerr << "\033[0;31mError count: " << detail::global_error_count;
+        if (detail::total_ulp_distance > 0) {
+            std::cerr << ", total ulp distance = " << detail::total_ulp_distance << "\n";
+        }
+        else {
+            // else we overflowed the ULPs counter and all we could print is a bizarre negative number.
+            std::cerr << "\n";
+        }
+
         detail::global_error_count = 0;
+        detail::total_ulp_distance = 0;
         return 1;
     }
     std::cout << "\x1B[32mNo errors detected.\n";

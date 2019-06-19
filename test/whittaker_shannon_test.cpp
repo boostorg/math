@@ -19,6 +19,28 @@ using boost::multiprecision::float128;
 using boost::math::interpolators::whittaker_shannon;
 
 template<class Real>
+void test_trivial()
+{
+    Real t0 = 0;
+    Real h = Real(1)/Real(16);
+    std::vector<Real> v{1.5};
+    std::vector<Real> v_copy = v;
+    auto ws = whittaker_shannon<decltype(v)>(std::move(v), t0, h);
+
+
+    Real expected = 0;
+    if(!CHECK_MOLLIFIED_CLOSE(expected, ws.prime(0), 10*std::numeric_limits<Real>::epsilon())) {
+        std::cerr << "  Problem occured at abscissa " << 0 << "\n";
+    }
+
+    expected = -v_copy[0]/h;
+    if(!CHECK_MOLLIFIED_CLOSE(expected, ws.prime(h), 10*std::numeric_limits<Real>::epsilon())) {
+        std::cerr << "  Problem occured at abscissa " << 0 << "\n";
+    }
+
+}
+
+template<class Real>
 void test_knots()
 {
     Real t0 = 0;
@@ -39,10 +61,11 @@ void test_knots()
       Real t = t0 + i*h;
       Real expected = ws[i];
       Real computed = ws(t);
-      if(std::isnan(computed)) {
+      using std::isnan;
+      if(isnan(computed)) {
           throw std::domain_error("This is bad m'kay?");
       }
-      if(std::isnan(expected)) {
+      if(isnan(expected)) {
           throw std::domain_error("This is bad m'kay?");
       }
       CHECK_ULP_CLOSE(ws[i], ws(t), 16);
@@ -70,7 +93,25 @@ void test_bump()
     }
 
 
+    std::vector<Real> v_copy = v;
     auto ws = whittaker_shannon<decltype(v)>(std::move(v), t0, h);
+
+    // Test the knots:
+    for(size_t i = v_copy.size()/4; i < 3*v_copy.size()/4; ++i) {
+        Real t = t0 + i*h;
+        Real expected = v_copy[i];
+        Real computed = ws(t);
+        if(!CHECK_MOLLIFIED_CLOSE(expected, computed, 10*std::numeric_limits<Real>::epsilon())) {
+            std::cerr << "  Problem occured at abscissa " << t << "\n";
+        }
+
+        Real expected_prime = bump_prime(t);
+        Real computed_prime = ws.prime(t);
+        if(!CHECK_MOLLIFIED_CLOSE(expected_prime, computed_prime, 10*std::numeric_limits<Real>::epsilon())) {
+            std::cerr << "  Problem occured at abscissa " << t << "\n";
+        }
+
+    }
 
     std::mt19937 gen(323723);
     std::uniform_real_distribution<long double> dis(-0.95, 0.95);
@@ -96,16 +137,18 @@ void test_bump()
 
 int main()
 {
-    test_knots<float>();
+/*    test_knots<float>();
     test_knots<double>();
     test_knots<long double>();
 #ifdef BOOST_HAS_FLOAT128
     test_knots<float128>();
-#endif
+#endif*/
 
-    test_bump<float>();
+    //test_bump<float>();
     test_bump<double>();
     //test_bump<long double>();
 
+    test_trivial<float>();
+    test_trivial<double>();
     return boost::math::test::report_errors();
 }

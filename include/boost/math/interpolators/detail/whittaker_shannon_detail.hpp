@@ -61,13 +61,34 @@ public:
         using boost::math::constants::pi;
         using std::isfinite;
         using std::floor;
-        Real s = 0;
+
         Real x = (t - m_t0)/m_h;
+        if (ceil(x) == x) {
+            //std::cout << "TAKING INTEGER ARGUMENT BRANCH: x = " << x << "\n";
+            Real s = 0;
+            long j = static_cast<long>(x);
+            long n = m_y.size();
+            for (long i = 0; i < n; ++i)
+            {
+                if (j - i != 0)
+                {
+                    s += m_y[i]/(j-i);
+                }
+                // else derivative of sinc at zero is zero.
+            }
+            if (j & 1) {
+                s /= -m_h;
+            } else {
+                s /= m_h;
+            }
+            return s;
+        }
         Real z = x;
         auto it = m_y.begin();
         Real cospix = boost::math::cos_pi(x);
         Real sinpix = boost::math::sin_pi(x);
 
+        Real s = 0;
         // For some reason, neither clang nor g++ will cache the address of m_y.end() in a register.
         // Hence make a copy of it:
         auto end = m_y.end();
@@ -77,18 +98,6 @@ public:
             z -= 1;
         }
 
-        if (!isfinite(s))
-        {
-            return std::numeric_limits<Real>::quiet_NaN();
-            BOOST_ASSERT_MSG(floor(x) == ceil(x), "Floor and ceiling should be equal.\n");
-            size_t i = static_cast<size_t>(floor(x));
-            // gotta think here!
-            if (i & 1)
-            {
-                return -m_y[i];
-            }
-            return m_y[i];
-        }
         return s/(pi<Real>()*m_h);
     }
 
