@@ -24,7 +24,7 @@
       binomial_distribution(RealType n, RealType p);
 
       // parameter access::
-      RealType success_fraction() consttable
+      RealType success_fraction() const;
       RealType trials() const;
 
       // Bounds on success fraction:

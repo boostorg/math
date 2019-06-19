@@ -1,4 +1,4 @@
-[section:main_faq Frequently Asked Questions FAQ]
+[section:main_faq Boost.Math Frequently Asked Questions (FAQs)]
 
 # ['I'm a FORTRAN/NAG/SPSS/SAS/Cephes/MathCad/R user
 and I don't see where the functions like dnorm(mean, sd) are in Boost.Math?]
@@ -22,14 +22,15 @@ see [@http://sourceforge.net/projects/distexplorer/ Statistical Distribution Exp
 # ['I'm allegic to reading manuals and prefer to learn from examples.]
 
   Fear not - you are not alone! Many examples are available for functions and distributions.
-Some are referenced directly from the text.  Others can be found at \boost_latest_release\libs\math\example.
+Some are referenced directly from the text.  Others can be found at `\boost_latest_release\libs\math\example`,
+for example 
 If you are a Visual Studio user, you should be able to create projects from each of these,
-making sure that the Boost library is in the include directories list.
+making sure that the Boost library is in the include directories list (there are usually NO libraries that must be built).
 
 # ['How do I make sure that the Boost library is in the Visual Studio include directories list?]
 
   You can add an include path, for example,  your Boost place /boost-latest_release,
-for example `X:/boost_1_45_0/` if you have a separate partition X for Boost releases.
+for example `X:/boost_1_70_0/` if you have a separate partition X for Boost releases.
 Or you can use an environment variable BOOST_ROOT set to your Boost place, and include that.
 Visual Studio before 2010 provided Tools, Options, VC++ Directories to control directories:
 Visual Studio 2010 instead provides property sheets to assist.

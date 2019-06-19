@@ -118,6 +118,9 @@ template<class Real>
 void test_circle()
 {
     using boost::math::constants::pi;
+    using std::cos;
+    using std::sin;
+
     std::cout << "Testing that the Catmull-Rom spline interpolates circles correctly on type "
               << boost::typeindex::type_id<Real>().pretty_name() << "\n";
 
@@ -332,7 +335,7 @@ private:
 
 // Must define the free function "size()":
 template<class Real>
-constexpr size_t size(const mypoint3d<Real>& c)
+BOOST_CONSTEXPR std::size_t size(const mypoint3d<Real>& c)
 {
     return 3;
 }
@@ -347,6 +350,8 @@ void test_data_representations()
     mypoint3d<Real> p3(0.4, 0.5, 0.6);
     mypoint3d<Real> p4(0.5, 0.6, 0.7);
     mypoint3d<Real> p5(0.6, 0.7, 0.8);
+
+
     // Tests initializer_list:
     catmull_rom<mypoint3d<Real>> cat({p0, p1, p2, p3, p4, p5});
 
@@ -396,6 +401,7 @@ void test_random_access_container()
 
 BOOST_AUTO_TEST_CASE(catmull_rom_test)
 {
+#if !defined(TEST) || (TEST == 1)
     test_data_representations<float>();
     test_alpha_distance<double>();
 
@@ -404,14 +410,18 @@ BOOST_AUTO_TEST_CASE(catmull_rom_test)
 
     test_circle<float>();
     test_circle<double>();
-
+#endif
+#if !defined(TEST) || (TEST == 2)
     test_helix<double>();
 
     test_affine_invariance<double, 1>();
     test_affine_invariance<double, 2>();
     test_affine_invariance<double, 3>();
     test_affine_invariance<double, 4>();
-    test_affine_invariance<cpp_bin_float_50, 4>();
 
     test_random_access_container<double>();
+#endif
+#if !defined(TEST) || (TEST == 3)
+    test_affine_invariance<cpp_bin_float_50, 4>();
+#endif
 }
