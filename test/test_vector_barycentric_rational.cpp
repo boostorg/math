@@ -15,11 +15,62 @@
 #include <boost/type_index.hpp>
 #include <boost/test/included/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
+#include <boost/math/interpolators/barycentric_rational.hpp>
 #include <boost/math/interpolators/vector_barycentric_rational.hpp>
 
 using std::sqrt;
 using std::abs;
 using std::numeric_limits;
+
+template<class Real>
+void test_agreement_with_1d()
+{
+    std::cout << "Testing with 1D interpolation on type "
+              << boost::typeindex::type_id<Real>().pretty_name()  << "\n";
+    std::mt19937 gen(4723);
+    boost::random::uniform_real_distribution<Real> dis(0.1f, 1);
+    std::vector<Real> t(100);
+    std::vector<Eigen::Vector2d> y(100);
+    t[0] = dis(gen);
+    y[0][0] = dis(gen);
+    y[0][1] = dis(gen);
+    for (size_t i = 1; i < t.size(); ++i)
+    {
+        t[i] = t[i-1] + dis(gen);
+        y[i][0] = dis(gen);
+        y[i][1] = dis(gen);
+    }
+
+    std::vector<Eigen::Vector2d> y_copy = y;
+    std::vector<Real> t_copy = t;
+    std::vector<Real> t_copy0 = t;
+    std::vector<Real> t_copy1 = t;
+
+    std::vector<Real> y_copy0(y.size());
+    std::vector<Real> y_copy1(y.size());
+    for (size_t i = 0; i < y.size(); ++i) {
+        y_copy0[i] = y[i][0];
+        y_copy1[i] = y[i][1];
+    }
+
+    boost::random::uniform_real_distribution<Real> dis2(t[0], t[t.size()-1]);
+    boost::math::vector_barycentric_rational<decltype(t), decltype(y)> interpolator(std::move(t), std::move(y));
+    boost::math::barycentric_rational<Real> scalar_interpolator0(std::move(t_copy0), std::move(y_copy0));
+    boost::math::barycentric_rational<Real> scalar_interpolator1(std::move(t_copy1), std::move(y_copy1));
+
+
+    Eigen::Vector2d z;
+
+    size_t samples = 0;
+    while (samples++ < 1000)
+    {
+        Real t = dis2(gen);
+        interpolator(z, t);
+        BOOST_CHECK_CLOSE(z[0], scalar_interpolator0(t), 2*numeric_limits<Real>::epsilon());
+        BOOST_CHECK_CLOSE(z[1], scalar_interpolator1(t), 2*numeric_limits<Real>::epsilon());
+    }
+}
+
 
 template<class Real>
 void test_interpolation_condition_eigen()
@@ -330,4 +381,5 @@ BOOST_AUTO_TEST_CASE(vector_barycentric_rational)
     test_interpolation_condition_ublas<double>();
     test_interpolation_condition_std_array<double>();
     test_interpolation_condition_high_order<double>();
+    test_agreement_with_1d<double>();
 }
