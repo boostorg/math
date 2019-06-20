@@ -67,7 +67,7 @@ void test_ooura_eta()
         Real x = 0;
         Real alpha = 7;
         auto [eta, eta_prime] = ooura_eta(x, alpha);
-        BOOST_CHECK_SMALL(eta, std::numeric_limits<Real>::min());
+        BOOST_CHECK_SMALL(eta, (std::numeric_limits<Real>::min)());
         BOOST_CHECK_CLOSE_FRACTION(eta_prime, 2 + alpha + Real(1)/Real(4), 10*std::numeric_limits<Real>::epsilon());
     }
 
@@ -219,7 +219,6 @@ void test_double_osc()
     std::cout << "Testing double oscillation on type " << boost::typeindex::type_id<Real>().pretty_name()  << "\n";
     using std::sqrt;
     using std::numeric_limits;
-    Real tol = 10*numeric_limits<Real>::epsilon();
     auto integrator = get_sin_integrator<Real>();
     Real lambda = 7;
     auto f = [&lambda](Real x)->Real { return cos(lambda*cos(x))/x; };
@@ -236,7 +235,6 @@ void test_zero_integrand()
     std::cout << "Testing zero integrand on type " << boost::typeindex::type_id<Real>().pretty_name()  << "\n";
     using std::sqrt;
     using std::numeric_limits;
-    Real tol = 10*numeric_limits<Real>::epsilon();
     auto integrator = get_sin_integrator<Real>();
     auto f = [](Real x)->Real { return Real(0); };
     Real omega = 1;

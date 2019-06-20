@@ -358,7 +358,7 @@ private:
             }
             --n;
             // f(t)->infty is possible as t->0, hence compute up to the min.
-        } while(abs(w) > std::numeric_limits<Real>::min()*max_weight);
+        } while(abs(w) > (std::numeric_limits<Real>::min)()*max_weight);
 
         lnode_row.shrink_to_fit();
         lweight_row.shrink_to_fit();
@@ -579,7 +579,7 @@ private:
                 max_weight = abs(weight);
             }
             --n;
-        } while(abs(w) > std::numeric_limits<Real>::min()*max_weight);
+        } while(abs(w) > (std::numeric_limits<Real>::min)()*max_weight);
 
         lnode_row.shrink_to_fit();
         lweight_row.shrink_to_fit();
