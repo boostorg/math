@@ -233,7 +233,7 @@ public:
             Real absolute_error_estimate = abs(I0-I1);
             Real scale = max(abs(I0), abs(I1));
             if (!isnan(I1) && absolute_error_estimate <= rel_err_goal_*scale) {
-                starting_level_ = std::max(long(i) - 1, long(0));
+                starting_level_ = max(long(i) - 1, long(0));
                 return {I0/omega, absolute_error_estimate/scale};
             }
             I1 = I0;
@@ -264,7 +264,7 @@ public:
             print_ooura_estimate(i, I0, I1, omega);
 #endif
             if (absolute_error_estimate <= rel_err_goal_*scale) {
-                starting_level_ = std::max(long(i) - 1, long(0));
+                starting_level_ = max(long(i) - 1, long(0));
                 return {I0/omega, absolute_error_estimate/scale};
             }
             I1 = I0;
@@ -469,7 +469,7 @@ public:
             absolute_error_estimate = abs(I0-I1);
             scale = max(abs(I0), abs(I1));
             if (!isnan(I1) && absolute_error_estimate <= rel_err_goal_*scale) {
-                starting_level_ = std::max(long(i) - 1, long(0));
+                starting_level_ = max(long(i) - 1, long(0));
                 return {I0/omega, absolute_error_estimate/scale};
             }
             I1 = I0;
@@ -494,7 +494,7 @@ public:
             absolute_error_estimate = abs(I0-I1);
             scale = max(abs(I0), abs(I1));
             if (absolute_error_estimate <= rel_err_goal_*scale) {
-                starting_level_ = std::max(long(i) - 1, long(0));
+                starting_level_ = max(long(i) - 1, long(0));
                 return {I0/omega, absolute_error_estimate/scale};
             }
             I1 = I0;
@@ -509,6 +509,7 @@ private:
 
     template<class PreciseReal>
     void add_level(size_t i) {
+        using std::abs;
         size_t current_num_levels = big_nodes_.size();
         Real unit_roundoff = std::numeric_limits<Real>::epsilon()/2;
         PreciseReal h = PreciseReal(1)/PreciseReal(1<<i);
