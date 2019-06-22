@@ -279,6 +279,7 @@ private:
 
     template<class PreciseReal>
     void add_level(size_t i) {
+        using std::abs;
         size_t current_num_levels = big_nodes_.size();
         Real unit_roundoff = std::numeric_limits<Real>::epsilon()/2;
         // h0 = 1. Then all further levels have h_i = 1/2^i.
