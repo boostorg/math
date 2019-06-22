@@ -298,11 +298,11 @@ The above examples illustrate some of the advantages of using autodiff:
     \item Code bloat, reducing conceptual integrity. Control over the evolution of code is easier/safer when
         the code base is smaller and able to be intuitively grasped.
   \end{itemize}
-\item Accuracy of derivatives over finite difference methods. Finite difference methods always include a
-   $\Delta x$ free variable that must be carefully chosen for each application. If $\Delta x$ is too small, then
-   numerical errors become large. If $\Delta x$ is too large, then mathematical errors become large.  With autodiff,
-   there are no free variables to set and the accuracy of the answer is generally superior to finite difference
-   methods even with the best choice of $\Delta x$.
+\item Accuracy of derivatives over finite difference methods. Single-iteration finite difference methods always
+   include a $\Delta x$ free variable that must be carefully chosen for each application. If $\Delta x$ is too
+   small, then numerical errors become large. If $\Delta x$ is too large, then mathematical errors become large.
+   With autodiff, there are no free variables to set and the accuracy of the answer is generally superior to finite
+   difference methods even with the best choice of $\Delta x$.
 \end{itemize}
 
 \section{Mathematics}
