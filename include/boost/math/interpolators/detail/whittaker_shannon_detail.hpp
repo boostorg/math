@@ -64,7 +64,6 @@ public:
 
         Real x = (t - m_t0)/m_h;
         if (ceil(x) == x) {
-            //std::cout << "TAKING INTEGER ARGUMENT BRANCH: x = " << x << "\n";
             Real s = 0;
             long j = static_cast<long>(x);
             long n = m_y.size();
@@ -86,19 +85,17 @@ public:
         Real z = x;
         auto it = m_y.begin();
         Real cospix = boost::math::cos_pi(x);
-        Real sinpix = boost::math::sin_pi(x);
+        Real sinpix_div_pi = boost::math::sin_pi(x)/pi<Real>();
 
         Real s = 0;
-        // For some reason, neither clang nor g++ will cache the address of m_y.end() in a register.
-        // Hence make a copy of it:
         auto end = m_y.end();
         while(it != end)
         {
-            s += (*it++)*(pi<Real>()*z*cospix - sinpix)/(z*z);
+            s += (*it++)*(z*cospix - sinpix_div_pi)/(z*z);
             z -= 1;
         }
 
-        return s/(pi<Real>()*m_h);
+        return s/m_h;
     }
 
 

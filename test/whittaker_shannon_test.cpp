@@ -37,7 +37,6 @@ void test_trivial()
     if(!CHECK_MOLLIFIED_CLOSE(expected, ws.prime(h), 10*std::numeric_limits<Real>::epsilon())) {
         std::cerr << "  Problem occured at abscissa " << 0 << "\n";
     }
-
 }
 
 template<class Real>
@@ -48,12 +47,11 @@ void test_knots()
     size_t n = 512;
     std::vector<Real> v(n);
     std::mt19937 gen(323723);
-    std::uniform_real_distribution<long double> dis(1.0, 2.0);
+    std::uniform_real_distribution<Real> dis(1.0, 2.0);
 
     for(size_t i = 0;  i < n; ++i) {
       v[i] = static_cast<Real>(dis(gen));
     }
-
     auto ws = whittaker_shannon<decltype(v)>(std::move(v), t0, h);
 
     size_t i = 0;
@@ -61,14 +59,7 @@ void test_knots()
       Real t = t0 + i*h;
       Real expected = ws[i];
       Real computed = ws(t);
-      using std::isnan;
-      if(isnan(computed)) {
-          throw std::domain_error("This is bad m'kay?");
-      }
-      if(isnan(expected)) {
-          throw std::domain_error("This is bad m'kay?");
-      }
-      CHECK_ULP_CLOSE(ws[i], ws(t), 16);
+      CHECK_ULP_CLOSE(expected, computed, 16);
       ++i;
     }
 }
@@ -78,6 +69,7 @@ void test_bump()
 {
     using std::exp;
     using std::abs;
+    using std::sqrt;
     auto bump = [](Real x) { if (abs(x) >= 1) { return Real(0); } return exp(-Real(1)/(Real(1)-x*x)); };
 
     auto bump_prime = [&bump](Real x) { Real z = 1-x*x; return -2*x*bump(x)/(z*z); };
@@ -107,14 +99,14 @@ void test_bump()
 
         Real expected_prime = bump_prime(t);
         Real computed_prime = ws.prime(t);
-        if(!CHECK_MOLLIFIED_CLOSE(expected_prime, computed_prime, 10*std::numeric_limits<Real>::epsilon())) {
+        if(!CHECK_MOLLIFIED_CLOSE(expected_prime, computed_prime, 1000*std::numeric_limits<Real>::epsilon())) {
             std::cerr << "  Problem occured at abscissa " << t << "\n";
         }
 
     }
 
     std::mt19937 gen(323723);
-    std::uniform_real_distribution<long double> dis(-0.95, 0.95);
+    std::uniform_real_distribution<long double> dis(-0.85, 0.85);
 
     size_t i = 0;
     while (i++ < 1000)
@@ -128,7 +120,7 @@ void test_bump()
 
         Real expected_prime = bump_prime(t);
         Real computed_prime = ws.prime(t);
-        if(!CHECK_MOLLIFIED_CLOSE(expected_prime, computed_prime, 10*std::numeric_limits<Real>::epsilon())) {
+        if(!CHECK_MOLLIFIED_CLOSE(expected_prime, computed_prime, sqrt(std::numeric_limits<Real>::epsilon()))) {
             std::cerr << "  Problem occured at abscissa " << t << "\n";
         }
     }
@@ -137,16 +129,12 @@ void test_bump()
 
 int main()
 {
-/*    test_knots<float>();
+    test_knots<float>();
     test_knots<double>();
     test_knots<long double>();
-#ifdef BOOST_HAS_FLOAT128
-    test_knots<float128>();
-#endif*/
 
-    //test_bump<float>();
     test_bump<double>();
-    //test_bump<long double>();
+    test_bump<long double>();
 
     test_trivial<float>();
     test_trivial<double>();
