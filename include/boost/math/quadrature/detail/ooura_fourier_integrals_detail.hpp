@@ -291,14 +291,14 @@ private:
         std::vector<Real> bweight_row;
 
         // This is a pretty good estimate for how many elements will be placed in the vector:
-        bnode_row.reserve((1<<i)*sizeof(Real));
-        bweight_row.reserve((1<<i)*sizeof(Real));
+        bnode_row.reserve((static_cast<size_t>(1)<<i)*sizeof(Real));
+        bweight_row.reserve((static_cast<size_t>(1)<<i)*sizeof(Real));
 
         std::vector<Real> lnode_row;
         std::vector<Real> lweight_row;
 
-        lnode_row.reserve((1<<i)*sizeof(Real));
-        lweight_row.reserve((1<<i)*sizeof(Real));
+        lnode_row.reserve((static_cast<size_t>(1)<<i)*sizeof(Real));
+        lweight_row.reserve((static_cast<size_t>(1)<<i)*sizeof(Real));
 
         Real max_weight = 1;
         auto alpha = calculate_ooura_alpha(h);
@@ -517,14 +517,14 @@ private:
 
         std::vector<Real> bnode_row;
         std::vector<Real> bweight_row;
-        bnode_row.reserve((1<<i)*sizeof(Real));
-        bweight_row.reserve((1<<i)*sizeof(Real));
+        bnode_row.reserve((static_cast<size_t>(1)<<i)*sizeof(Real));
+        bweight_row.reserve((static_cast<size_t>(1)<<i)*sizeof(Real));
 
         std::vector<Real> lnode_row;
         std::vector<Real> lweight_row;
 
-        lnode_row.reserve((1<<i)*sizeof(Real));
-        lweight_row.reserve((1<<i)*sizeof(Real));
+        lnode_row.reserve((static_cast<size_t>(1)<<i)*sizeof(Real));
+        lweight_row.reserve((static_cast<size_t>(1)<<i)*sizeof(Real));
 
         Real max_weight = 1;
         auto alpha = calculate_ooura_alpha(h);
