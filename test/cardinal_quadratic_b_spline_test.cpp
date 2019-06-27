@@ -19,7 +19,7 @@ void test_constant()
     Real h = Real(1)/Real(16);
     size_t n = 512;
     std::vector<Real> v(n, c);
-    auto qbs = cardinal_quadratic_b_spline(v.data(), v.size(), t0, h);
+    auto qbs = cardinal_quadratic_b_spline<Real>(v.data(), v.size(), t0, h);
 
     size_t i = 0;
     while (i < n) {
@@ -54,7 +54,7 @@ void test_linear()
       Real t = i*h;
       y[i] = m*t + b;
     }
-    auto qbs = cardinal_quadratic_b_spline(y.data(), y.size(), t0, h);
+    auto qbs = cardinal_quadratic_b_spline<Real>(y.data(), y.size(), t0, h);
 
     size_t i = 0;
     while (i < n) {
@@ -91,7 +91,7 @@ void test_quadratic()
       y[i] = a*t*t + b*t + c;
     }
     Real t_max = t0 + (n-1)*h;
-    auto qbs = cardinal_quadratic_b_spline(y, t0, h, b, 2*a*t_max + b);
+    auto qbs = cardinal_quadratic_b_spline<Real>(y, t0, h, b, 2*a*t_max + b);
 
     size_t i = 0;
     while (i < n) {
