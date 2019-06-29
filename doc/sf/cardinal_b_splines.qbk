@@ -1,0 +1,119 @@
+[/
+  Copyright 2019, Nick Thompson
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+
+[section:b_spline Cardinal B-splines]
+
+[h4 Synopsis]
+
+``
+#include <boost/math/special_functions/cardinal_b_spline.hpp>
+``
+
+   namespace boost{ namespace math{
+
+   template<class Real>
+   Real cardinal_b_spline(unsigned n, Real x);
+
+   template<class Real>
+   Real cardinal_b_spline_prime(unsigned n, Real x);
+
+   template<class Real>
+   Real cardinal_b_spline_double_prime(unsigned n, Real x);
+
+   template<class Real>
+   Real forward_cardinal_b_spline(unsigned n, Real x);
+
+   }} // namespaces
+
+Cardinal /B/-splines are a family of compactly supported functions useful for the smooth interpolation of tables.
+
+The first /B/-spline /B/[sub 0] is simply a box function:
+It takes the value one inside the interval \[-1/2, 1/2\], and is zero elsewhere.
+/B/-splines of higher smoothness are constructed by iterative convolution, namely, /B/[sub 1] := /B/[sub 0] \u2217 /B/[sub 0],
+and /B/[sub /n/+1] := /B/[sub /n/ ] \u2217 /B/[sub 0].
+For example, /B/[sub 1](/x/) = 1 - |/x/| for /x/ in \[-1,1\], and zero elsewhere, so it is a hat function.
+
+A basic usage is as follows:
+
+    using boost::math::cardinal_b_spline;
+    double x = 0.5;
+    // B₀(x), the box function:
+    double y = cardinal_b_spline(0, x);
+    // B₁(x), the hat function:
+    y = cardinal_b_spline(1, x);
+
+    // The derivative of B₁(x):
+    double y_p = cardinal_b_spline_prime(1,x);
+    // The second derivative of B₃:
+    double y_pp = cardinal_b_spline_double_prime(3, x);
+
+[$../graphs/central_b_splines.svg]
+[$../graphs/central_b_spline_derivatives.svg]
+
+[h3 Caveats]
+
+Numerous notational conventions for /B/-splines exist.
+Whereas Boost.Math (following Kress) zero indexes the /B/-splines,
+other authors (such as Schoenberg and Massopust) use 1-based indexing.
+So (for example) Boost.Math's hat function /B/[sub 1] is what Schoenberg calls /M/[sub 2].
+Mathematica, like Boost, uses the zero-indexing convention for its `BSplineCurve`.
+
+Even the support of the splines is not agreed upon.
+Mathematica starts the support of the splines at zero and rescales the independent variable so that the support of every member is \[0, 1\].
+Massopust as well as Unser puts the support of the /B/-splines at \[0, /n/\], whereas Kress centers them at zero.
+Schoenberg distinguishes between the two cases, called the splines starting at zero forward splines, and the ones symmetric about zero /central/.
+
+The /B/-splines of Boost.Math are central, with support support \[-(/n/+1)\/2, (/n/+1)\/2\].
+If necessary, the forward splines can be evaluated by using `forward_cardinal_b_spline`, whose support is \[0, /n/+1\].
+
+[h3 Implementation]
+
+The implementation uses recursion for /n/ less than 8 and a summation for larger /n/.
+Double precision timing on a consumer x86 laptop is shown below:
+
+``
+Run on (4 X 2700 MHz CPU s)
+CPU Caches:
+  L1 Data 32K (x2)
+  L1 Instruction 32K (x2)
+  L2 Unified 262K (x2)
+  L3 Unified 3145K (x1)
+Load Average: 1.70, 1.74, 1.59
+---------------------------------------------------------------------
+Benchmark                                        Time             CPU
+---------------------------------------------------------------------
+CardinalBSplines<double>/0                    18.0 ns         18.0 ns
+CardinalBSplines<double>/1                    19.9 ns         19.9 ns
+CardinalBSplines<double>/2                    22.6 ns         22.5 ns
+CardinalBSplines<double>/3                    27.5 ns         27.5 ns
+CardinalBSplines<double>/4                    36.3 ns         36.2 ns
+CardinalBSplines<double>/5                    52.9 ns         52.8 ns
+CardinalBSplines<double>/6                    84.7 ns         84.6 ns
+CardinalBSplines<double>/7                     148 ns          147 ns
+CardinalBSplines<double>/8                     323 ns          307 ns
+CardinalBSplines<double>/9                     306 ns          305 ns
+CardinalBSplines<double>/10                    331 ns          330 ns
+CardinalBSplines<double>/11                    359 ns          356 ns
+CardinalBSplines<double>/12                    373 ns          372 ns
+CardinalBSplines<double>/13                    395 ns          394 ns
+CardinalBSplines<double>/14                    412 ns          411 ns
+CardinalBSplines<double>/15                    485 ns          461 ns
+CardinalBSplines<double>/16                    504 ns          484 ns
+CardinalBSplines<double>/17                    466 ns          464 ns
+CardinalBSplines<double>/18                    474 ns          474 ns
+CardinalBSplines<double>/19                    512 ns          503 ns
+CardinalBSplines<double>/20                    571 ns          550 ns
+``
+
+[h3 References]
+
+* I.J. Schoenberg, ['Cardinal Spline Interpolation], SIAM Volume 12, 1973
+* Rainer Kress, ['Numerical Analysis], Springer, 1998
+* Peter Massopust, ['On Some Generalizations of B-splines], arxiv preprint, 2019
+* Michael Unser and Thierry Blu, ['Fractional Splines and Wavelets], SIAM Review, Volume 42, No. 1
+
+[endsect]
