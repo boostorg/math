@@ -7,7 +7,7 @@
 #define BOOST_MATH_SPECIAL_CARDINAL_B_SPLINE_HPP
 
 #include <boost/math/special_functions/factorials.hpp>
-#include <boost/math/special_functions/binomial.hpp>
+//#include <boost/math/special_functions/binomial.hpp>
 
 namespace boost { namespace math {
 
@@ -21,12 +21,20 @@ Real cardinal_b_spline_summation_impl(unsigned n, Real x)
     if (x < 0) {
         return cardinal_b_spline_summation_impl(n, -x);
     }
+    if (x >= Real(n+1)/2) {
+        return Real(0);
+    }
     Real z = x + Real(n+1)/2;
-    unsigned kmax = std::min(static_cast<unsigned>(floor(z)), n+1);
+    unsigned kmax = floor(z);
 
-    Real result = 0;
-    for (unsigned k = 0; k <= kmax; ++k) {
-        Real term = pow(z,n)*boost::math::binomial_coefficient<Real>(n+1,k);
+    Real result = pow(z,n);
+    z -= 1;
+    Real kfact = 1;
+    Real num = n+1;
+    for (unsigned k = 1; k <= kmax; ++k) {
+        kfact *= k;
+        Real term = pow(z,n)*num/kfact;
+        num *= n-k+1;
         if (k&1) {
             result -= term;
         } else {
@@ -73,7 +81,7 @@ Real cardinal_b_spline_recursive_impl(unsigned n, Real x) {
 
 template<class Real>
 Real cardinal_b_spline(unsigned n, Real x) {
-    if (n <= 8) {
+    if (n <= 5) {
         return detail::cardinal_b_spline_recursive_impl(n, x);
     }
     return detail::cardinal_b_spline_summation_impl(n,x);
