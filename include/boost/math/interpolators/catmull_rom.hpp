@@ -14,6 +14,24 @@
 #include <algorithm>
 #include <iterator>
 
+namespace std_workaround {
+
+#if defined(__cpp_lib_nonmember_container_access) || (defined(BOOST_MSVC) && (BOOST_MSVC >= 1900))
+   using std::size;
+#else
+   template <class C>
+   inline BOOST_CONSTEXPR std::size_t size(const C& c)
+   {
+      return c.size();
+   }
+   template <class T, std::size_t N>
+   inline BOOST_CONSTEXPR std::size_t size(const T(&array)[N]) BOOST_NOEXCEPT
+   {
+      return N;
+   }
+#endif
+}
+
 namespace boost{ namespace math{
 
     namespace detail
@@ -22,7 +40,7 @@ namespace boost{ namespace math{
         typename Point::value_type alpha_distance(Point const & p1, Point const & p2, typename Point::value_type alpha)
         {
             using std::pow;
-            using std::size;
+            using std_workaround::size;
             typename Point::value_type dsq = 0;
             for (size_t i = 0; i < size(p1); ++i)
             {
@@ -33,14 +51,14 @@ namespace boost{ namespace math{
         }
     }
 
-template <class Point>
+template <class Point, class RandomAccessContainer = std::vector<Point> >
 class catmull_rom
 {
 public:
 
-    catmull_rom(std::vector<Point>&& points, bool closed = false, typename Point::value_type alpha = (typename Point::value_type) 1/ (typename Point::value_type) 2);
+    catmull_rom(RandomAccessContainer&& points, bool closed = false, typename Point::value_type alpha = (typename Point::value_type) 1/ (typename Point::value_type) 2);
 
-    catmull_rom(std::initializer_list<Point> l, bool closed = false, typename Point::value_type alpha = (typename Point::value_type) 1/ (typename Point::value_type) 2) : catmull_rom(std::vector<Point>(l), closed, alpha) {}
+    catmull_rom(std::initializer_list<Point> l, bool closed = false, typename Point::value_type alpha = (typename Point::value_type) 1/ (typename Point::value_type) 2) : catmull_rom<Point, RandomAccessContainer>(RandomAccessContainer(l), closed, alpha) {}
 
     typename Point::value_type max_parameter() const
     {
@@ -56,19 +74,19 @@ public:
 
     Point prime(const typename Point::value_type s) const;
 
-    std::vector<Point>&& get_points()
+    RandomAccessContainer&& get_points()
     {
         return std::move(m_pnts);
     }
 
 private:
-    std::vector<Point> m_pnts;
+    RandomAccessContainer m_pnts;
     std::vector<typename Point::value_type> m_s;
     typename Point::value_type m_max_s;
 };
 
-template<class Point>
-catmull_rom<Point>::catmull_rom(std::vector<Point>&& points, bool closed, typename Point::value_type alpha) : m_pnts(std::move(points))
+template<class Point, class RandomAccessContainer >
+catmull_rom<Point, RandomAccessContainer>::catmull_rom(RandomAccessContainer&& points, bool closed, typename Point::value_type alpha) : m_pnts(std::move(points))
 {
     size_t num_pnts = m_pnts.size();
     //std::cout << "Number of points = " << num_pnts << "\n";
@@ -122,10 +140,10 @@ catmull_rom<Point>::catmull_rom(std::vector<Point>&& points, bool closed, typena
 }
 
 
-template<class Point>
-Point catmull_rom<Point>::operator()(const typename Point::value_type s) const
+template<class Point, class RandomAccessContainer >
+Point catmull_rom<Point, RandomAccessContainer>::operator()(const typename Point::value_type s) const
 {
-    using std::size;
+    using std_workaround::size;
     if (s < 0 || s > m_max_s)
     {
         throw std::domain_error("Parameter outside bounds.");
@@ -182,10 +200,10 @@ Point catmull_rom<Point>::operator()(const typename Point::value_type s) const
     return B1_or_C;
 }
 
-template<class Point>
-Point catmull_rom<Point>::prime(const typename Point::value_type s) const
+template<class Point, class RandomAccessContainer >
+Point catmull_rom<Point, RandomAccessContainer>::prime(const typename Point::value_type s) const
 {
-    using std::size;
+    using std_workaround::size;
     // https://math.stackexchange.com/questions/843595/how-can-i-calculate-the-derivative-of-a-catmull-rom-spline-with-nonuniform-param
     // http://denkovacs.com/2016/02/catmull-rom-spline-derivatives/
     if (s < 0 || s > m_max_s)

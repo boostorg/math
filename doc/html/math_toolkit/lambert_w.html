@@ -797,9 +797,10 @@ with the functions <code class="computeroutput"><span class="identifier">lambert
       for the C++ type being used, it is usually necessary to use a higher precision
       type for intermediate computation, finally static-casting back to the smaller
       desired result type. This strategy is used by <a href="https://www.maplesoft.com" target="_top">Maple</a>
-      and WolframAlpha, for example, using arbitrary precision arithmetic, and some
-      of their high-precision values are used for testing this library. This method
-      is also used to provide some <a href="../../../../../libs/test/doc/html/index.html" target="_top">Boost.Test</a>
+      and <a href="http://www.wolframalpha.com/" target="_top">Wolfram Alpha</a>, for example,
+      using arbitrary precision arithmetic, and some of their high-precision values
+      are used for testing this library. This method is also used to provide some
+      <a href="https://www.boost.org/doc/libs/release/libs/test/doc/html/index.html" target="_top">Boost.Test</a>
       values using <a href="../../../../../libs/multiprecision/doc/html/index.html" target="_top">Boost.Multiprecision</a>,
       typically, a 50 decimal digit type like <code class="computeroutput"><span class="identifier">cpp_bin_float_50</span></code>
       <code class="computeroutput"><span class="keyword">static_cast</span></code> to a <code class="computeroutput"><span class="keyword">float</span></code>, <code class="computeroutput"><span class="keyword">double</span></code>
@@ -820,8 +821,9 @@ with the functions <code class="computeroutput"><span class="identifier">lambert
       is not justified and the algorithms here do not implement this. But because
       the Boost.Lambert_W algorithms has been tested using <a href="../../../../../libs/multiprecision/doc/html/index.html" target="_top">Boost.Multiprecision</a>,
       users who require this can always easily achieve the nearest representation
-      for __fundamental - if the application justifies the very large extra computation
-      cost.
+      for <a href="http://en.cppreference.com/w/cpp/language/types" target="_top">fundamental
+      (built-in) types</a> - if the application justifies the very large extra
+      computation cost.
     </p>
 <h6>
 <a name="math_toolkit.lambert_w.h16"></a>
@@ -1749,8 +1751,8 @@ if (f(w) / f'</span><span class="special">(</span><span class="identifier">w</sp
 <p>
       See source at: <a href="../../../example/lambert_w_simple_examples.cpp" target="_top">lambert_w_simple_examples.cpp</a>
       <a href="../../../test/test_lambert_w.cpp" target="_top">test_lambert_w.cpp</a> contains
-      routine tests using <a href="../../../../../libs/test/doc/html/index.html" target="_top">Boost.Test</a>.
-      <a href="../../sf/lambert_w_errors_graph.cpp" target="_top">lambert_w_errors_graph.cpp</a>
+      routine tests using <a href="https://www.boost.org/doc/libs/release/libs/test/doc/html/index.html" target="_top">Boost.Test</a>.
+      <a href="../../../tools/lambert_w_errors_graph.cpp" target="_top">lambert_w_errors_graph.cpp</a>
       generating error graphs.
     </p>
 <h6>
@@ -1892,9 +1894,9 @@ if (f(w) / f'</span><span class="special">(</span><span class="identifier">w</sp
 <td align="left"></td>
 <td align="right"><div class="copyright-footer">Copyright &#169; 2006-2010, 2012-2014, 2017 Nikhar
       Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos,
-      Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Johan R&#229;de, Gautam
-      Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg, Daryle Walker
-      and Xiaogang Zhang<p>
+      Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Matthew Pulver, Johan
+      R&#229;de, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg,
+      Daryle Walker and Xiaogang Zhang<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

@@ -16,6 +16,7 @@
 #include <boost/math/interpolators/catmull_rom.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/multiprecision/cpp_dec_float.hpp>
+#include <boost/numeric/ublas/vector.hpp>
 
 using std::abs;
 using boost::multiprecision::cpp_bin_float_50;
@@ -117,6 +118,9 @@ template<class Real>
 void test_circle()
 {
     using boost::math::constants::pi;
+    using std::cos;
+    using std::sin;
+
     std::cout << "Testing that the Catmull-Rom spline interpolates circles correctly on type "
               << boost::typeindex::type_id<Real>().pretty_name() << "\n";
 
@@ -331,7 +335,7 @@ private:
 
 // Must define the free function "size()":
 template<class Real>
-constexpr size_t size(const mypoint3d<Real>& c)
+BOOST_CONSTEXPR std::size_t size(const mypoint3d<Real>& c)
 {
     return 3;
 }
@@ -346,6 +350,8 @@ void test_data_representations()
     mypoint3d<Real> p3(0.4, 0.5, 0.6);
     mypoint3d<Real> p4(0.5, 0.6, 0.7);
     mypoint3d<Real> p5(0.6, 0.7, 0.8);
+
+
     // Tests initializer_list:
     catmull_rom<mypoint3d<Real>> cat({p0, p1, p2, p3, p4, p5});
 
@@ -360,8 +366,42 @@ void test_data_representations()
     BOOST_CHECK_CLOSE_FRACTION(p[2], p1[2], tol);
 }
 
+template<class Real>
+void test_random_access_container()
+{
+    std::cout << "Testing that the Catmull-Rom spline works with multiple data representations.\n";
+    mypoint3d<Real> p0(0.1, 0.2, 0.3);
+    mypoint3d<Real> p1(0.2, 0.3, 0.4);
+    mypoint3d<Real> p2(0.3, 0.4, 0.5);
+    mypoint3d<Real> p3(0.4, 0.5, 0.6);
+    mypoint3d<Real> p4(0.5, 0.6, 0.7);
+    mypoint3d<Real> p5(0.6, 0.7, 0.8);
+
+    boost::numeric::ublas::vector<mypoint3d<Real>> u(6);
+    u[0] = p0;
+    u[1] = p1;
+    u[2] = p2;
+    u[3] = p3;
+    u[4] = p4;
+    u[5] = p5;
+
+    // Tests initializer_list:
+    catmull_rom<mypoint3d<Real>, decltype(u)> cat(std::move(u));
+
+    Real tol = 0.001;
+    auto p = cat(cat.parameter_at_point(0));
+    BOOST_CHECK_CLOSE_FRACTION(p[0], p0[0], tol);
+    BOOST_CHECK_CLOSE_FRACTION(p[1], p0[1], tol);
+    BOOST_CHECK_CLOSE_FRACTION(p[2], p0[2], tol);
+    p = cat(cat.parameter_at_point(1));
+    BOOST_CHECK_CLOSE_FRACTION(p[0], p1[0], tol);
+    BOOST_CHECK_CLOSE_FRACTION(p[1], p1[1], tol);
+    BOOST_CHECK_CLOSE_FRACTION(p[2], p1[2], tol);
+}
+
 BOOST_AUTO_TEST_CASE(catmull_rom_test)
 {
+#if !defined(TEST) || (TEST == 1)
     test_data_representations<float>();
     test_alpha_distance<double>();
 
@@ -370,12 +410,18 @@ BOOST_AUTO_TEST_CASE(catmull_rom_test)
 
     test_circle<float>();
     test_circle<double>();
-
+#endif
+#if !defined(TEST) || (TEST == 2)
     test_helix<double>();
 
     test_affine_invariance<double, 1>();
     test_affine_invariance<double, 2>();
     test_affine_invariance<double, 3>();
     test_affine_invariance<double, 4>();
+
+    test_random_access_container<double>();
+#endif
+#if !defined(TEST) || (TEST == 3)
     test_affine_invariance<cpp_bin_float_50, 4>();
+#endif
 }

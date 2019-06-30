@@ -57,23 +57,21 @@
 <p>
         So now we can demonstrate with some trivial calculations:
       </p>
-<pre class="programlisting"><span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
-<span class="special">{</span>
-</pre>
 <p>
         Using <code class="computeroutput"><span class="keyword">typedef</span> <span class="identifier">cpp_dec_float_50</span></code>
-        hides the complexity of multiprecision to allow us to define variables with
+        hides the complexity of multiprecision, allows us to define variables with
         50 decimal digit precision just like built-in <code class="computeroutput"><span class="keyword">double</span></code>.
       </p>
 <pre class="programlisting"><span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">multiprecision</span><span class="special">::</span><span class="identifier">cpp_dec_float_50</span><span class="special">;</span>
 
-<span class="identifier">cpp_dec_float_50</span> <span class="identifier">seventh</span> <span class="special">=</span> <span class="identifier">cpp_dec_float_50</span><span class="special">(</span><span class="number">1</span><span class="special">)</span> <span class="special">/</span> <span class="number">7</span><span class="special">;</span>
+<span class="identifier">cpp_dec_float_50</span> <span class="identifier">seventh</span> <span class="special">=</span> <span class="identifier">cpp_dec_float_50</span><span class="special">(</span><span class="number">1</span><span class="special">)</span> <span class="special">/</span> <span class="number">7</span><span class="special">;</span>  <span class="comment">// 1 / 7</span>
 </pre>
 <p>
         By default, output would only show the standard 6 decimal digits, so set
-        precision to show all 50 significant digits.
+        precision to show all 50 significant digits, including any trailing zeros.
       </p>
 <pre class="programlisting"><span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span><span class="special">.</span><span class="identifier">precision</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">cpp_dec_float_50</span><span class="special">&gt;::</span><span class="identifier">digits10</span><span class="special">);</span>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">showpoint</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span> <span class="comment">// Append any trailing zeros.</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">seventh</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
 </pre>
 <p>
@@ -82,22 +80,28 @@
 <pre class="programlisting"><span class="number">0.14285714285714285714285714285714285714285714285714</span>
 </pre>
 <p>
-        We can also use constants, guaranteed to be initialized with the very last
-        bit of precision.
+        We can also use Boost.Math <a class="link" href="../constants.html" title="The Mathematical Constants">constants</a>
+        like &#960;, guaranteed to be initialized with the very last bit of precision for
+        the floating-point type.
       </p>
-<pre class="programlisting"><span class="identifier">cpp_dec_float_50</span> <span class="identifier">circumference</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">constants</span><span class="special">::</span><span class="identifier">pi</span><span class="special">&lt;</span><span class="identifier">cpp_dec_float_50</span><span class="special">&gt;()</span> <span class="special">*</span> <span class="number">2</span> <span class="special">*</span> <span class="identifier">seventh</span><span class="special">;</span>
-
-<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">circumference</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+<pre class="programlisting"><span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"pi = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">constants</span><span class="special">::</span><span class="identifier">pi</span><span class="special">&lt;</span><span class="identifier">cpp_dec_float_50</span><span class="special">&gt;()</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+<span class="identifier">cpp_dec_float_50</span> <span class="identifier">circumference</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">constants</span><span class="special">::</span><span class="identifier">pi</span><span class="special">&lt;</span><span class="identifier">cpp_dec_float_50</span><span class="special">&gt;()</span> <span class="special">*</span> <span class="number">2</span> <span class="special">*</span> <span class="identifier">seventh</span><span class="special">;</span>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"c =  "</span><span class="special">&lt;&lt;</span> <span class="identifier">circumference</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
 </pre>
 <p>
         which outputs
       </p>
-<pre class="programlisting"><span class="number">0.89759790102565521098932668093700082405633411410717</span>
+<pre class="programlisting"><span class="identifier">pi</span> <span class="special">=</span> <span class="number">3.1415926535897932384626433832795028841971693993751</span>
+
+<span class="identifier">c</span> <span class="special">=</span>  <span class="number">0.89759790102565521098932668093700082405633411410717</span>
 </pre>
+<p>
+        The full source of this example is at <a href="../../../../example/big_seventh.cpp" target="_top">big_seventh.cpp</a>
+      </p>
 <h6>
 <a name="math_toolkit.high_precision.use_multiprecision.h1"></a>
         <span class="phrase"><a name="math_toolkit.high_precision.use_multiprecision.using_boost_multiprecision_to_ge"></a></span><a class="link" href="use_multiprecision.html#math_toolkit.high_precision.use_multiprecision.using_boost_multiprecision_to_ge">Using
-        Boost.Multiprecision to generate a high-precision array of sin coefficents
+        Boost.Multiprecision to generate a high-precision array of sine coefficents
         for use with FFT.</a>
       </h6>
 <p>
@@ -105,18 +109,37 @@
         exceeding that of standard built-in types such as <code class="computeroutput"><span class="keyword">float</span></code>,
         <code class="computeroutput"><span class="keyword">double</span></code> and <code class="computeroutput"><span class="keyword">long</span>
         <span class="keyword">double</span></code>. For extended-precision calculations,
-        Boost.Multiprecision supplies a template data type called <code class="computeroutput"><span class="identifier">cpp_dec_float</span></code>.
-        The number of decimal digits of precision is fixed at compile-time via template
-        parameter.
+        Boost.Multiprecision supplies a template data type called <code class="computeroutput"><span class="identifier">cpp_bin_float</span></code>.
+        The number of decimal digits of precision is fixed at compile-time via a
+        template parameter.
       </p>
 <p>
-        To use these floating-point types and constants, we need some includes:
+        One often needs to compute tables of numbers in mathematical software. To
+        avoid the <a href="https://en.wikipedia.org/wiki/Rounding#Table-maker's_dilemma" target="_top">Table-maker's
+        dilemma</a> it is necessary to use a higher precision type to compute
+        the table values so that they have the nearest representable bit-pattern
+        for the type, say <code class="computeroutput"><span class="keyword">double</span></code>, of
+        the table value.
+      </p>
+<p>
+        This example is a program <code class="computeroutput"><span class="identifier">fft_since_table</span><span class="special">.</span><span class="identifier">cpp</span></code> that
+        writes a header file <code class="computeroutput"><span class="identifier">sines</span><span class="special">.</span><span class="identifier">hpp</span></code> containing
+        an array of sine coefficients for use with a Fast Fourier Transform (FFT),
+        that can be included by the FFT program.
+      </p>
+<p>
+        To use Boost.Multiprecision's high-precision floating-point types and constants,
+        we need some includes:
       </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">constants</span><span class="special">/</span><span class="identifier">constants</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="comment">// using boost::math::constants::pi;</span>
 
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">multiprecision</span><span class="special">/</span><span class="identifier">cpp_dec_float</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
-<span class="comment">// using boost::multiprecision::cpp_dec_float</span>
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">multiprecision</span><span class="special">/</span><span class="identifier">cpp_bin_float</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span> <span class="comment">// for</span>
+<span class="comment">// using boost::multiprecision::cpp_bin_float and</span>
+<span class="comment">// using boost::multiprecision::cpp_bin_float_50;</span>
+<span class="comment">// using boost::multiprecision::cpp_bin_float_quad;</span>
+
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">array</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span> <span class="comment">// or &lt;array&gt; for std::array</span>
 
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">limits</span><span class="special">&gt;</span>
@@ -127,42 +150,14 @@
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">fstream</span><span class="special">&gt;</span>
 </pre>
 <p>
-        Define a text string which is a C++ comment with the program licence, copyright
-        etc. You could of course, tailor this to your needs, including your copyright
-        claim. There are versions of <code class="computeroutput"><span class="identifier">array</span></code>
-        provided by Boost.Array in <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">array</span></code>
-        or the C++11 std::array, but since not all platforms provide C++11 support,
-        this program provides the Boost version as fallback.
+        First, this example defines a prolog text string which is a C++ comment with
+        the program licence, copyright etc. (You would of course, tailor this to
+        your needs, including <span class="bold"><strong>your</strong></span> copyright claim).
+        This will appear at the top of the written header file <code class="computeroutput"><span class="identifier">sines</span><span class="special">.</span><span class="identifier">hpp</span></code>.
       </p>
-<pre class="programlisting"><span class="keyword">static</span> <span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">prolog</span> <span class="special">=</span>
-<span class="special">{</span>
-  <span class="string">"// Use, modification and distribution are subject to the\n"</span>
-  <span class="string">"// Boost Software License, Version 1.0.\n"</span>
-  <span class="string">"// (See accompanying file LICENSE_1_0.txt\n"</span>
-  <span class="string">"// or copy at "</span><span class="string">"http://www.boost.org/LICENSE_1_0.txt)\n\n"</span>
-
-  <span class="string">"// Copyright ???? 2013.\n\n"</span>
-
-  <span class="string">"// Use boost/array if std::array (C++11 feature) is not available.\n"</span>
-  <span class="string">"#ifdef  BOOST_NO_CXX11_HDR_ARRAY\n"</span>
-  <span class="string">"#include &lt;boost/array/array.hpp&gt;\n"</span>
-  <span class="string">"#else\n"</span>
-  <span class="string">"#include &lt;array&gt;\n"</span>
-  <span class="string">"#endif\n\n"</span>
-<span class="special">};</span>
-
-
-<span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">multiprecision</span><span class="special">::</span><span class="identifier">cpp_dec_float_50</span><span class="special">;</span>
+<pre class="programlisting"><span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">multiprecision</span><span class="special">::</span><span class="identifier">cpp_bin_float_50</span><span class="special">;</span>
 <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">constants</span><span class="special">::</span><span class="identifier">pi</span><span class="special">;</span>
-<span class="comment">// VS 2010 (wrongly) requires these at file scope, not local scope in `main`.</span>
-<span class="comment">// This program also requires `-std=c++11` option to compile using Clang and GCC.</span>
-
-<span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
-<span class="special">{</span>
 </pre>
-<p>
-        One often needs to compute tables of numbers in mathematical software.
-      </p>
 <p>
         A fast Fourier transform (FFT), for example, may use a table of the values
         of sin((&#960;/2<sup>n</sup>) in its implementation details. In order to maximize the precision
@@ -174,29 +169,29 @@
         1 &lt;= n &lt;= 31.
       </p>
 <p>
-        This program makes use of, among other program elements, the data type <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">multiprecision</span><span class="special">::</span><span class="identifier">cpp_dec_float_50</span></code> for a precision of 50
+        This program makes use of, among other program elements, the data type <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">multiprecision</span><span class="special">::</span><span class="identifier">cpp_bin_float_50</span></code> for a precision of 50
         decimal digits from Boost.Multiprecision, the value of constant &#960; retrieved
         from Boost.Math, guaranteed to be initialized with the very last bit of precision
-        for the type, here <code class="computeroutput"><span class="identifier">cpp_dec_float_50</span></code>,
+        for the type, here <code class="computeroutput"><span class="identifier">cpp_bin_float_50</span></code>,
         and a C++11 lambda function combined with <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">for_each</span><span class="special">()</span></code>.
       </p>
 <p>
-        define the number of values in the array.
+        define the number of values (32) in the array of sines.
       </p>
 <pre class="programlisting"><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> <span class="identifier">size</span> <span class="special">=</span> <span class="number">32U</span><span class="special">;</span>
-<span class="identifier">cpp_dec_float_50</span> <span class="identifier">p</span> <span class="special">=</span> <span class="identifier">pi</span><span class="special">&lt;</span><span class="identifier">cpp_dec_float_50</span><span class="special">&gt;();</span>
-<span class="identifier">cpp_dec_float_50</span> <span class="identifier">p2</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">constants</span><span class="special">::</span><span class="identifier">pi</span><span class="special">&lt;</span><span class="identifier">cpp_dec_float_50</span><span class="special">&gt;();</span>
+<span class="comment">//cpp_bin_float_50 p = pi&lt;cpp_bin_float_50&gt;();</span>
+<span class="identifier">cpp_bin_float_50</span> <span class="identifier">p</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">constants</span><span class="special">::</span><span class="identifier">pi</span><span class="special">&lt;</span><span class="identifier">cpp_bin_float_50</span><span class="special">&gt;();</span>
 
-<span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span> <span class="special">&lt;</span><span class="identifier">cpp_dec_float_50</span><span class="special">&gt;</span> <span class="identifier">sin_values</span> <span class="special">(</span><span class="identifier">size</span><span class="special">);</span>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span> <span class="special">&lt;</span><span class="identifier">cpp_bin_float_50</span><span class="special">&gt;</span> <span class="identifier">sin_values</span> <span class="special">(</span><span class="identifier">size</span><span class="special">);</span>
 <span class="keyword">unsigned</span> <span class="identifier">n</span> <span class="special">=</span> <span class="number">1U</span><span class="special">;</span>
 <span class="comment">// Generate the sine values.</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">for_each</span>
 <span class="special">(</span>
   <span class="identifier">sin_values</span><span class="special">.</span><span class="identifier">begin</span> <span class="special">(),</span>
   <span class="identifier">sin_values</span><span class="special">.</span><span class="identifier">end</span> <span class="special">(),</span>
-  <span class="special">[&amp;</span><span class="identifier">n</span><span class="special">](</span><span class="identifier">cpp_dec_float_50</span><span class="special">&amp;</span> <span class="identifier">y</span><span class="special">)</span>
+  <span class="special">[&amp;</span><span class="identifier">n</span><span class="special">](</span><span class="identifier">cpp_bin_float_50</span><span class="special">&amp;</span> <span class="identifier">y</span><span class="special">)</span>
   <span class="special">{</span>
-    <span class="identifier">y</span> <span class="special">=</span> <span class="identifier">sin</span><span class="special">(</span> <span class="identifier">pi</span><span class="special">&lt;</span><span class="identifier">cpp_dec_float_50</span><span class="special">&gt;()</span> <span class="special">/</span> <span class="identifier">pow</span><span class="special">(</span><span class="identifier">cpp_dec_float_50</span> <span class="special">(</span><span class="number">2</span><span class="special">),</span> <span class="identifier">n</span><span class="special">));</span>
+    <span class="identifier">y</span> <span class="special">=</span> <span class="identifier">sin</span><span class="special">(</span> <span class="identifier">pi</span><span class="special">&lt;</span><span class="identifier">cpp_bin_float_50</span><span class="special">&gt;()</span> <span class="special">/</span> <span class="identifier">pow</span><span class="special">(</span><span class="identifier">cpp_bin_float_50</span> <span class="special">(</span><span class="number">2</span><span class="special">),</span> <span class="identifier">n</span><span class="special">));</span>
     <span class="special">++</span><span class="identifier">n</span><span class="special">;</span>
   <span class="special">}</span>
 <span class="special">);</span>
@@ -204,7 +199,7 @@
 <p>
         Define the floating-point type for the generated file, either built-in <code class="computeroutput"><span class="keyword">double</span><span class="special">,</span> </code>float,
         or <code class="computeroutput"><span class="keyword">long</span> <span class="keyword">double</span></code>,
-        or a user defined type like <code class="computeroutput"><span class="identifier">cpp_dec_float_50</span></code>.
+        or a user defined type like <code class="computeroutput"><span class="identifier">cpp_bin_float_50</span></code>.
       </p>
 <pre class="programlisting"><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="identifier">fp_type</span> <span class="special">=</span> <span class="string">"double"</span><span class="special">;</span>
 
@@ -214,24 +209,31 @@
 <p>
         By default, output would only show the standard 6 decimal digits, so set
         precision to show enough significant digits for the chosen floating-point
-        type. For <code class="computeroutput"><span class="identifier">cpp_dec_float_50</span></code>
+        type. For <code class="computeroutput"><span class="identifier">cpp_bin_float_50</span></code>
         is 50. (50 decimal digits should be ample for most applications).
       </p>
-<pre class="programlisting"><span class="identifier">std</span><span class="special">::</span><span class="identifier">streamsize</span> <span class="identifier">precision</span> <span class="special">=</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">cpp_dec_float_50</span><span class="special">&gt;::</span><span class="identifier">digits10</span><span class="special">;</span>
+<pre class="programlisting"><span class="identifier">std</span><span class="special">::</span><span class="identifier">streamsize</span> <span class="identifier">precision</span> <span class="special">=</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">cpp_bin_float_50</span><span class="special">&gt;::</span><span class="identifier">digits10</span><span class="special">;</span>
 
-<span class="comment">//  std::cout.precision(std::numeric_limits&lt;cpp_dec_float_50&gt;::digits10);</span>
-<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">precision</span> <span class="special">&lt;&lt;</span> <span class="string">" decimal digits precision. "</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Sines table precision is "</span> <span class="special">&lt;&lt;</span> <span class="identifier">precision</span> <span class="special">&lt;&lt;</span> <span class="string">" decimal digits. "</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
 </pre>
 <p>
-        Of course, one could also choose less, for example, 36 would be sufficient
-        for the most precise current <code class="computeroutput"><span class="keyword">long</span>
-        <span class="keyword">double</span></code> implementations using 128-bit.
-        In general, it should be a couple of decimal digits more (guard digits) than
-        <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;::</span><span class="identifier">max_digits10</span></code> for the target system floating-point
-        type. If the implementation does not provide <code class="computeroutput"><span class="identifier">max_digits10</span></code>,
-        the the Kahan formula <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;::</span><span class="identifier">digits</span>
-        <span class="special">*</span> <span class="number">3010</span><span class="special">/</span><span class="number">10000</span> <span class="special">+</span>
-        <span class="number">2</span></code> can be used instead.
+        Of course, one could also choose a lower precision for the table values,
+        for example,
+      </p>
+<p>
+        <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">streamsize</span> <span class="identifier">precision</span>
+        <span class="special">=</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">cpp_bin_float_quad</span><span class="special">&gt;::</span><span class="identifier">max_digits10</span><span class="special">;</span></code>
+      </p>
+<p>
+        128-bit 'quad' precision of 36 decimal digits would be sufficient for the
+        most precise current <code class="computeroutput"><span class="keyword">long</span> <span class="keyword">double</span></code>
+        implementations using 128-bit. In general, it should be a couple of decimal
+        digits more (guard digits) than <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;::</span><span class="identifier">max_digits10</span></code>
+        for the target system floating-point type. (If the implementation does not
+        provide <code class="computeroutput"><span class="identifier">max_digits10</span></code>, the
+        the Kahan formula <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;::</span><span class="identifier">digits</span> <span class="special">*</span> <span class="number">3010</span><span class="special">/</span><span class="number">10000</span>
+        <span class="special">+</span> <span class="number">2</span></code>
+        can be used instead).
       </p>
 <p>
         The compiler will read these values as decimal digits strings and use the
@@ -240,50 +242,48 @@
 <p>
         Now output all the sine table, to a file of your chosen name.
       </p>
-<pre class="programlisting">  <span class="keyword">const</span> <span class="keyword">char</span> <span class="identifier">sines_name</span><span class="special">[]</span> <span class="special">=</span> <span class="string">"sines.hpp"</span><span class="special">;</span>  <span class="comment">// In same directory as .exe</span>
+<pre class="programlisting"><span class="keyword">const</span> <span class="keyword">char</span> <span class="identifier">sines_name</span><span class="special">[]</span> <span class="special">=</span> <span class="string">"sines.hpp"</span><span class="special">;</span>  <span class="comment">// Assuming in same directory as .exe</span>
 
-  <span class="identifier">std</span><span class="special">::</span><span class="identifier">ofstream</span> <span class="identifier">fout</span><span class="special">(</span><span class="identifier">sines_name</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">ios_base</span><span class="special">::</span><span class="identifier">out</span><span class="special">);</span>  <span class="comment">// Creates if no file exists,</span>
-  <span class="comment">// &amp; uses default overwrite/ ios::replace.</span>
-  <span class="keyword">if</span> <span class="special">(</span><span class="identifier">fout</span><span class="special">.</span><span class="identifier">is_open</span><span class="special">()</span> <span class="special">==</span> <span class="keyword">false</span><span class="special">)</span>
-  <span class="special">{</span>  <span class="comment">// failed to open OK!</span>
-    <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Open file "</span> <span class="special">&lt;&lt;</span> <span class="identifier">sines_name</span> <span class="special">&lt;&lt;</span> <span class="string">" failed!"</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
-    <span class="keyword">return</span> <span class="identifier">EXIT_FAILURE</span><span class="special">;</span>
-  <span class="special">}</span>
-  <span class="keyword">else</span>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">ofstream</span> <span class="identifier">fout</span><span class="special">(</span><span class="identifier">sines_name</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">ios_base</span><span class="special">::</span><span class="identifier">out</span><span class="special">);</span>  <span class="comment">// Creates if no file exists,</span>
+<span class="comment">// &amp; uses default overwrite/ ios::replace.</span>
+<span class="keyword">if</span> <span class="special">(</span><span class="identifier">fout</span><span class="special">.</span><span class="identifier">is_open</span><span class="special">()</span> <span class="special">==</span> <span class="keyword">false</span><span class="special">)</span>
+<span class="special">{</span>  <span class="comment">// failed to open OK!</span>
+  <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Open file "</span> <span class="special">&lt;&lt;</span> <span class="identifier">sines_name</span> <span class="special">&lt;&lt;</span> <span class="string">" failed!"</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+  <span class="keyword">return</span> <span class="identifier">EXIT_FAILURE</span><span class="special">;</span>
+<span class="special">}</span>
+<span class="keyword">else</span>
+<span class="special">{</span> <span class="comment">// Write prolog etc as a C++ comment.</span>
+  <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Open file "</span> <span class="special">&lt;&lt;</span> <span class="identifier">sines_name</span> <span class="special">&lt;&lt;</span> <span class="string">" for output OK."</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+  <span class="identifier">fout</span> <span class="special">&lt;&lt;</span> <span class="identifier">prolog</span>
+  <span class="special">&lt;&lt;</span> <span class="string">"// Table of "</span> <span class="special">&lt;&lt;</span> <span class="identifier">sin_values</span><span class="special">.</span><span class="identifier">size</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="string">" values with "</span>
+    <span class="special">&lt;&lt;</span> <span class="identifier">precision</span> <span class="special">&lt;&lt;</span> <span class="string">" decimal digits precision,\n"</span>
+    <span class="string">"// generated by program fft_sines_table.cpp.\n"</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+
+<span class="identifier">fout</span> <span class="special">&lt;&lt;</span> <span class="string">"#include &lt;array&gt; // std::array"</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+
+<span class="comment">// Write the table of sines as a C++ array.</span>
+  <span class="identifier">fout</span> <span class="special">&lt;&lt;</span>  <span class="string">"\nstatic const std::array&lt;double, "</span> <span class="special">&lt;&lt;</span> <span class="identifier">size</span> <span class="special">&lt;&lt;</span> <span class="string">"&gt; sines =\n"</span>
+  <span class="string">"{{\n"</span><span class="special">;</span> <span class="comment">// 2nd { needed for some old GCC compiler versions.</span>
+  <span class="identifier">fout</span><span class="special">.</span><span class="identifier">precision</span><span class="special">(</span><span class="identifier">precision</span><span class="special">);</span>
+
+  <span class="keyword">for</span> <span class="special">(</span><span class="keyword">unsigned</span> <span class="keyword">int</span> <span class="identifier">i</span> <span class="special">=</span> <span class="number">0U</span><span class="special">;</span> <span class="special">;)</span>
   <span class="special">{</span>
-    <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Open file "</span> <span class="special">&lt;&lt;</span> <span class="identifier">sines_name</span> <span class="special">&lt;&lt;</span> <span class="string">" for output OK."</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
-    <span class="identifier">fout</span> <span class="special">&lt;&lt;</span> <span class="identifier">prolog</span> <span class="special">&lt;&lt;</span> <span class="string">"// Table of "</span> <span class="special">&lt;&lt;</span> <span class="identifier">sin_values</span><span class="special">.</span><span class="identifier">size</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="string">" values with "</span>
-      <span class="special">&lt;&lt;</span> <span class="identifier">precision</span> <span class="special">&lt;&lt;</span> <span class="string">" decimal digits precision,\n"</span>
-      <span class="string">"// generated by program fft_sines_table.cpp.\n"</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
-
-    <span class="identifier">fout</span> <span class="special">&lt;&lt;</span>
-<span class="string">"#ifdef BOOST_NO_CXX11_HDR_ARRAY"</span><span class="string">"\n"</span>
- <span class="string">"  static const boost::array&lt;double, "</span> <span class="special">&lt;&lt;</span> <span class="identifier">size</span> <span class="special">&lt;&lt;</span> <span class="string">"&gt; sines =\n"</span>
-<span class="string">"#else"</span><span class="string">"\n"</span>
-<span class="string">"  static const std::array&lt;double, "</span> <span class="special">&lt;&lt;</span> <span class="identifier">size</span> <span class="special">&lt;&lt;</span> <span class="string">"&gt; sines =\n"</span>
-<span class="string">"#endif"</span><span class="string">"\n"</span>
-    <span class="string">"{{\n"</span><span class="special">;</span> <span class="comment">// 2nd { needed for some GCC compiler versions.</span>
-    <span class="identifier">fout</span><span class="special">.</span><span class="identifier">precision</span><span class="special">(</span><span class="identifier">precision</span><span class="special">);</span>
-
-    <span class="keyword">for</span> <span class="special">(</span><span class="keyword">unsigned</span> <span class="keyword">int</span> <span class="identifier">i</span> <span class="special">=</span> <span class="number">0U</span><span class="special">;</span> <span class="special">;)</span>
-    <span class="special">{</span>
-      <span class="identifier">fout</span> <span class="special">&lt;&lt;</span> <span class="string">"  "</span> <span class="special">&lt;&lt;</span> <span class="identifier">sin_values</span><span class="special">[</span><span class="identifier">i</span><span class="special">];</span>
-      <span class="keyword">if</span> <span class="special">(</span><span class="identifier">i</span> <span class="special">==</span> <span class="identifier">sin_values</span><span class="special">.</span><span class="identifier">size</span><span class="special">()-</span><span class="number">1</span><span class="special">)</span>
-      <span class="special">{</span> <span class="comment">// next is last value.</span>
-        <span class="identifier">fout</span> <span class="special">&lt;&lt;</span> <span class="string">"\n}};\n"</span><span class="special">;</span> <span class="comment">// 2nd } needed for some earlier GCC compiler versions.</span>
-        <span class="keyword">break</span><span class="special">;</span>
-      <span class="special">}</span>
-      <span class="keyword">else</span>
-      <span class="special">{</span>
-        <span class="identifier">fout</span> <span class="special">&lt;&lt;</span> <span class="string">",\n"</span><span class="special">;</span>
-        <span class="identifier">i</span><span class="special">++;</span>
-      <span class="special">}</span>
+    <span class="identifier">fout</span> <span class="special">&lt;&lt;</span> <span class="string">"  "</span> <span class="special">&lt;&lt;</span> <span class="identifier">sin_values</span><span class="special">[</span><span class="identifier">i</span><span class="special">];</span>
+    <span class="keyword">if</span> <span class="special">(</span><span class="identifier">i</span> <span class="special">==</span> <span class="identifier">sin_values</span><span class="special">.</span><span class="identifier">size</span><span class="special">()-</span><span class="number">1</span><span class="special">)</span>
+    <span class="special">{</span> <span class="comment">// next is last value.</span>
+      <span class="identifier">fout</span> <span class="special">&lt;&lt;</span> <span class="string">"\n}};  // array sines\n"</span><span class="special">;</span> <span class="comment">// 2nd } needed for some old GCC compiler versions.</span>
+      <span class="keyword">break</span><span class="special">;</span>
     <span class="special">}</span>
+    <span class="keyword">else</span>
+    <span class="special">{</span>
+      <span class="identifier">fout</span> <span class="special">&lt;&lt;</span> <span class="string">",\n"</span><span class="special">;</span>
+      <span class="identifier">i</span><span class="special">++;</span>
+    <span class="special">}</span>
+  <span class="special">}</span> <span class="comment">// for</span>
 
-    <span class="identifier">fout</span><span class="special">.</span><span class="identifier">close</span><span class="special">();</span>
-    <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Close file "</span> <span class="special">&lt;&lt;</span> <span class="identifier">sines_name</span> <span class="special">&lt;&lt;</span> <span class="string">" for output OK."</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
-
-  <span class="special">}</span>
+  <span class="identifier">fout</span><span class="special">.</span><span class="identifier">close</span><span class="special">();</span>
+  <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Closed file "</span> <span class="special">&lt;&lt;</span> <span class="identifier">sines_name</span> <span class="special">&lt;&lt;</span> <span class="string">" for output."</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+<span class="special">}</span>
 </pre>
 <p>
         The output file generated can be seen at <a href="../../../../example/sines.hpp" target="_top">../../example/sines.hpp</a>
@@ -344,14 +344,17 @@
         knowledge engine can also be used to generate this table. The same command
         can be pasted into the compute box.
       </p>
+<p>
+        The full source of this example is at <a href="../../../../example/fft_sines_table.cpp" target="_top">fft_sines_table.cpp</a>
+      </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
 <td align="right"><div class="copyright-footer">Copyright &#169; 2006-2010, 2012-2014, 2017 Nikhar
       Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos,
-      Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Johan R&#229;de, Gautam
-      Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg, Daryle Walker
-      and Xiaogang Zhang<p>
+      Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Matthew Pulver, Johan
+      R&#229;de, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg,
+      Daryle Walker and Xiaogang Zhang<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

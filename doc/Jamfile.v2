@@ -65,6 +65,7 @@ boostbook standalone
         # default pnd graphics are awful in PDF form,
         # better use SVG's instead:
         <format>pdf:<xsl:param>admon.graphics.extension=".svg"
+        <format>pdf:<xsl:param>admon.graphics.path=$(here)/../../../doc/src/images/
         <format>pdf:<xsl:param>use.role.for.mediaobject=1 
         <format>pdf:<xsl:param>preferred.mediaobject.role=print
         <format>pdf:<xsl:param>img.src.path=$(images_location)/

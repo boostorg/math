@@ -775,17 +775,57 @@ inline T unchecked_factorial_imp(unsigned i, const mpl::int_<0>&)
 }
 
 template <class T>
+inline T unchecked_factorial_imp(unsigned i, const mpl::int_<std::numeric_limits<float>::digits>&)
+{
+   return unchecked_factorial<float>(i);
+}
+
+template <class T>
+inline T unchecked_factorial_imp(unsigned i, const mpl::int_<std::numeric_limits<double>::digits>&)
+{
+   return unchecked_factorial<double>(i);
+}
+
+#if DBL_MANT_DIG != LDBL_MANT_DIG
+template <class T>
+inline T unchecked_factorial_imp(unsigned i, const mpl::int_<LDBL_MANT_DIG>&)
+{
+   return unchecked_factorial<long double>(i);
+}
+#endif
+#ifdef BOOST_MATH_USE_FLOAT128
+template <class T>
+inline T unchecked_factorial_imp(unsigned i, const mpl::int_<113>&)
+{
+   return unchecked_factorial<BOOST_MATH_FLOAT128_TYPE>(i);
+}
+#endif
+
+template <class T>
 inline T unchecked_factorial(unsigned i)
 {
    typedef typename boost::math::policies::precision<T, boost::math::policies::policy<> >::type tag_type;
    return unchecked_factorial_imp<T>(i, tag_type());
 }
 
+#ifdef BOOST_MATH_USE_FLOAT128
+#define BOOST_MATH_DETAIL_FLOAT128_MAX_FACTORIAL : std::numeric_limits<T>::digits == 113 ? max_factorial<BOOST_MATH_FLOAT128_TYPE>::value
+#else
+#define BOOST_MATH_DETAIL_FLOAT128_MAX_FACTORIAL
+#endif
+
 template <class T>
 struct max_factorial
 {
-   BOOST_STATIC_CONSTANT(unsigned, value = 100);
+   BOOST_STATIC_CONSTANT(unsigned, value = 
+      std::numeric_limits<T>::digits == std::numeric_limits<float>::digits ? max_factorial<float>::value 
+      : std::numeric_limits<T>::digits == std::numeric_limits<double>::digits ? max_factorial<double>::value 
+      : std::numeric_limits<T>::digits == std::numeric_limits<long double>::digits ? max_factorial<long double>::value 
+      BOOST_MATH_DETAIL_FLOAT128_MAX_FACTORIAL
+      : 100);
 };
+
+#undef BOOST_MATH_DETAIL_FLOAT128_MAX_FACTORIAL
 
 #else // BOOST_MATH_NO_LEXICAL_CAST
 

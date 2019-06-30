@@ -93,6 +93,7 @@ and numbers of points.
 [heading Complex Quadrature]
 
 The Gauss-Kronrod quadrature support integrands defined on the real line and returning complex values.
+In this case, the template argument is the real type, and the complex type is deduced via the return type of the function.
 
 [heading Examples]
 

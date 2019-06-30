@@ -579,16 +579,13 @@
                 </td>
 <td>
                   <p>
-                    The <span class="bold"><strong>greatest</strong></span> number of successes
-                    that may be observed from n trials with success fraction p, at
-                    probability P. Note that the value returned is a real-number,
-                    and not an integer. Depending on the use case you may want to
-                    take either the floor or ceiling of the result. For example:
-                  </p>
-                  <p>
-                    <code class="computeroutput"><span class="identifier">quantile</span><span class="special">(</span><span class="identifier">binomial</span><span class="special">(</span><span class="identifier">n</span><span class="special">,</span>
-                    <span class="identifier">p</span><span class="special">),</span>
-                    <span class="identifier">P</span><span class="special">)</span></code>
+                    Given a binomial distribution with <span class="emphasis"><em>n</em></span> trials,
+                    success fraction <span class="emphasis"><em>p</em></span> and probability <span class="emphasis"><em>P</em></span>,
+                    finds the largest number of successes <span class="emphasis"><em>k</em></span>
+                    whose CDF is less than <span class="emphasis"><em>P</em></span>. It is strongly
+                    recommended that you read the tutorial <a class="link" href="../../pol_tutorial/understand_dis_quant.html" title="Understanding Quantiles of Discrete Distributions">Understanding
+                    Quantiles of Discrete Distributions</a> before using the quantile
+                    function.
                   </p>
                 </td>
 </tr>
@@ -601,16 +598,13 @@
                 </td>
 <td>
                   <p>
-                    The <span class="bold"><strong>smallest</strong></span> number of successes
-                    that may be observed from n trials with success fraction p, at
-                    probability P. Note that the value returned is a real-number,
-                    and not an integer. Depending on the use case you may want to
-                    take either the floor or ceiling of the result. For example:
-                  </p>
-                  <p>
-                    <code class="computeroutput"><span class="identifier">quantile</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">binomial</span><span class="special">(</span><span class="identifier">n</span><span class="special">,</span>
-                    <span class="identifier">p</span><span class="special">),</span>
-                    <span class="identifier">P</span><span class="special">))</span></code>
+                    Given a binomial distribution with <span class="emphasis"><em>n</em></span> trials,
+                    success fraction <span class="emphasis"><em>p</em></span> and probability <span class="emphasis"><em>Q</em></span>,
+                    finds the smallest number of successes <span class="emphasis"><em>k</em></span>
+                    whose CDF is greater than <span class="emphasis"><em>1-Q</em></span>. It is strongly
+                    recommended that you read the tutorial <a class="link" href="../../pol_tutorial/understand_dis_quant.html" title="Understanding Quantiles of Discrete Distributions">Understanding
+                    Quantiles of Discrete Distributions</a> before using the quantile
+                    function.
                   </p>
                 </td>
 </tr>
@@ -893,9 +887,9 @@
 <td align="left"></td>
 <td align="right"><div class="copyright-footer">Copyright &#169; 2006-2010, 2012-2014, 2017 Nikhar
       Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos,
-      Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Johan R&#229;de, Gautam
-      Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg, Daryle Walker
-      and Xiaogang Zhang<p>
+      Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Matthew Pulver, Johan
+      R&#229;de, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg,
+      Daryle Walker and Xiaogang Zhang<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

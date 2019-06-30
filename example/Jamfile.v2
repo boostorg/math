@@ -61,6 +61,9 @@ test-suite examples :
    [ run error_policies_example.cpp  ]
    [ run error_policy_example.cpp : : : <exception-handling>off:<build>no  ]
    [ run f_test.cpp  ]
+   # [ run fft_sines_table.cpp  : : : [ requires cxx11_numeric_limits ] ]
+   # No need to re-run this routinely as it only creates a table of sines for a documentation example.
+   
    [ run find_location_example.cpp : : : <exception-handling>off:<build>no  ]
    [ run find_mean_and_sd_normal.cpp : : : <exception-handling>off:<build>no  ]
    [ run find_root_example.cpp : : : <exception-handling>off:<build>no  ]
@@ -75,7 +78,6 @@ test-suite examples :
    [ run lambert_w_basic_example.cpp  : : : [ requires cxx11_numeric_limits ] ]
    [ run lambert_w_simple_examples.cpp  : : : [ requires cxx11_numeric_limits ] ]
    [ run lambert_w_precision_example.cpp  : : : [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] [ requires cxx11_numeric_limits cxx11_explicit_conversion_operators ] ]
-
 
    [ run inverse_gamma_example.cpp  ]
    [ run inverse_gamma_distribution_example.cpp : : : <exception-handling>off:<build>no  ]
@@ -132,17 +134,22 @@ test-suite examples :
    [ run series.cpp  ]
    [ run continued_fractions.cpp  ]
 
-   [ run root_elliptic_finding.cpp /boost/timer : : : release <link>static  [ requires cxx11_unified_initialization_syntax cxx11_defaulted_functions ] <target-os>freebsd:<linkflags>"-lrt" <target-os>linux:<linkflags>"-lrt -lpthread" ]
-   [ run root_finding_algorithms.cpp /boost/timer : : : release <link>static  [ requires cxx11_hdr_tuple cxx11_unified_initialization_syntax ] <target-os>freebsd:<linkflags>"-lrt" <target-os>linux:<linkflags>"-lrt -lpthread" ]
-   [ run root_n_finding_algorithms.cpp /boost/timer : : : release <link>static  [ requires cxx11_unified_initialization_syntax cxx11_defaulted_functions ] <target-os>freebsd:<linkflags>"-lrt" <target-os>linux:<linkflags>"-lrt -lpthread" ]
-
-   [ explicit root_elliptic_finding  ]
-   [ explicit root_finding_algorithms  ]
-   [ explicit root_n_finding_algorithms  ]
-
    [ run barycentric_interpolation_example.cpp : : : [ requires cxx11_smart_ptr cxx11_function_template_default_args cxx11_unified_initialization_syntax cxx11_defaulted_functions cxx11_allocator cxx11_auto_declarations cxx11_lambdas ]  ]
    [ run barycentric_interpolation_example_2.cpp : : : [ requires cxx11_smart_ptr cxx11_function_template_default_args cxx11_unified_initialization_syntax cxx11_defaulted_functions cxx11_allocator cxx11_auto_declarations cxx11_lambdas ]  ]
    [ run cubic_b_spline_example.cpp : : : [ requires cxx11_smart_ptr cxx11_hdr_random cxx11_defaulted_functions ]  ]
    [ compile naive_monte_carlo_example.cpp : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ] ]  # requires user input, can't run it, take a long time too!
    [ run catmull_rom_example.cpp : : : [ requires cxx17_if_constexpr cxx11_auto_declarations cxx17_std_apply ] ] # Actually the C++17 features used is std::size, not if constexpr; looks like there isn't yet a test for it.
+   [ run autodiff_black_scholes_brief.cpp : : : [ requires cxx11_inline_namespaces ] ]
+   [ run autodiff_black_scholes.cpp : : : [ requires cxx11_inline_namespaces ] ]
+   [ run autodiff_fourth_power.cpp : : : [ requires cxx11_inline_namespaces ] ]
+   [ run autodiff_mixed_partials.cpp : : : [ requires cxx11_inline_namespaces ] ]
+   [ run autodiff_multiprecision.cpp : : : [ requires cxx11_inline_namespaces ] ]
 ;
+
+run root_elliptic_finding.cpp /boost/timer : : : release <link>static  [ requires cxx11_unified_initialization_syntax cxx11_defaulted_functions ] <target-os>freebsd:<linkflags>"-lrt" <target-os>linux:<linkflags>"-lrt -lpthread" ;
+run root_finding_algorithms.cpp /boost/timer : : : release <link>static  [ requires cxx11_hdr_tuple cxx11_unified_initialization_syntax ] <target-os>freebsd:<linkflags>"-lrt" <target-os>linux:<linkflags>"-lrt -lpthread" ;
+run root_n_finding_algorithms.cpp /boost/timer : : : release <link>static  [ requires cxx11_unified_initialization_syntax cxx11_defaulted_functions ] <target-os>freebsd:<linkflags>"-lrt" <target-os>linux:<linkflags>"-lrt -lpthread" ;
+
+explicit root_elliptic_finding  ;
+explicit root_finding_algorithms  ;
+explicit root_n_finding_algorithms  ;

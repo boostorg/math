@@ -1,13 +1,13 @@
 [book Math Toolkit
     [quickbook 1.7]
-    [copyright 2006, 2007, 2008, 2009, 2010, 2012, 2013, 2014, 2017 Nikhar Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Johan Råde, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg, Daryle Walker and Xiaogang Zhang]
+    [copyright 2006, 2007, 2008, 2009, 2010, 2012, 2013, 2014, 2017 Nikhar Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Matthew Pulver, Johan Råde, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg, Daryle Walker and Xiaogang Zhang]
     [/purpose ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22]
     [license
         Distributed under the Boost Software License, Version 1.0.
         (See accompanying file LICENSE_1_0.txt or copy at
         [@http://www.boost.org/LICENSE_1_0.txt])
     ]
-    [authors [Agrawal, Nikhar], [Bikineev, Anton], [Bristow, Paul A.], [Holin, Hubert], [Guazzone, Marco], [Kormanyos, Christopher], [Lalande, Bruno], [Maddock, John], [Murphy, Jeremy W.], [Råde, Johan], [Sobotta, Benjamin], [Sewani, Gautam], [Thompson, Nicholas], [van den Berg, Thijs], [Walker, Daryle], [Zhang, Xiaogang]]
+    [authors [Agrawal, Nikhar], [Bikineev, Anton], [Bristow, Paul A.], [Holin, Hubert], [Guazzone, Marco], [Kormanyos, Christopher], [Lalande, Bruno], [Maddock, John], [Murphy, Jeremy W.], [Pulver, Matthew], [Råde, Johan], [Sobotta, Benjamin], [Sewani, Gautam], [Thompson, Nicholas], [van den Berg, Thijs], [Walker, Daryle], [Zhang, Xiaogang]]
     [/last-revision $Date$]
     [version 2.9.0]
 ]
@@ -402,9 +402,13 @@ and use the function's name as the link text.]
 [def __MPFR [@http://www.mpfr.org/ GNU MPFR library]]
 [def __GMP [@http://gmplib.org/ GNU Multiple Precision Arithmetic Library]]
 [def __multiprecision [@boost:/libs/multiprecision/doc/html/index.html Boost.Multiprecision]]
+
+[def __gcc_quad_type [@https://gcc.gnu.org/onlinedocs/gcc-9.1.0/libquadmath/index.html GCC 128-bit floating-point type]]
+
 [def __cpp_dec_float [@boost:/libs/multiprecision/doc/html/boost_multiprecision/tut/floats/cpp_dec_float.html cpp_dec_float]]
 [def __cpp_bin_float [@boost:/libs/multiprecision/doc/html/boost_multiprecision/tut/floats/cpp_bin_float.html cpp_bin_float]]
-[def __boost_test [@boost:/libs/test/doc/html/index.html Boost.Test]]
+[/ @boost:/libs/test/doc/index.html  doesn't work for Boost.Test non-quickbook, so use instead]
+[def __boost_test [@https://www.boost.org/doc/libs/release/libs/test/doc/html/index.html  Boost.Test]]
 [def __boost_timer [@boost:/libs/timer/doc/index.html Boost.Timer]]
 [def __boost_test_fp [@boost:/libs/test/doc/html/boost_test/users_guide/testing_tools/testing_floating_points.html Boost.Test floating-point comparison]]
 [def __boost_math_fp [link math_toolkit.float_comparison Boost.Math floating-point utilities]]
@@ -418,7 +422,6 @@ and use the function's name as the link text.]
 [def __Mathworld [@http://mathworld.wolfram.com Wolfram MathWorld]]
 [def __Mathematica [@http://www.wolfram.com/products/mathematica/index.html Wolfram Mathematica]]
 [def __Maple [@https://www.maplesoft.com Maple]]
-
 [def __WolframAlpha [@http://www.wolframalpha.com/ Wolfram Alpha]]
 [def __TOMS748 [@http://portal.acm.org/citation.cfm?id=210111 TOMS Algorithm 748: enclosing zeros of continuous functions]]
 [def __TOMS910 [@http://portal.acm.org/citation.cfm?id=1916469 TOMS Algorithm 910: A Portable C++ Multiple-Precision System for Special-Function Calculations]]
@@ -658,7 +661,10 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 
 [mathpart interpolation Interpolation]
 [include interpolators/cubic_b_spline.qbk]
+[include interpolators/cardinal_quadratic_b_spline.qbk]
+[include interpolators/whittaker_shannon.qbk]
 [include interpolators/barycentric_rational_interpolation.qbk]
+[include interpolators/vector_barycentric_rational.qbk]
 [include interpolators/catmull_rom.qbk]
 [endmathpart]
 
@@ -667,8 +673,10 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [include quadrature/gauss.qbk]
 [include quadrature/gauss_kronrod.qbk]
 [include quadrature/double_exponential.qbk]
+[include quadrature/ooura_fourier_integrals.qbk]
 [include quadrature/naive_monte_carlo.qbk]
 [include differentiation/numerical_differentiation.qbk]
+[include differentiation/autodiff.qbk]
 [include differentiation/lanczos_smoothing.qbk]
 [endmathpart]
 
