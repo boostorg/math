@@ -83,30 +83,30 @@ CPU Caches:
   L2 Unified 262K (x2)
   L3 Unified 3145K (x1)
 Load Average: 1.70, 1.74, 1.59
----------------------------------------------------------------------
-Benchmark                                        Time             CPU
----------------------------------------------------------------------
-CardinalBSplines<double>/0                    18.0 ns         18.0 ns
-CardinalBSplines<double>/1                    19.9 ns         19.9 ns
-CardinalBSplines<double>/2                    22.6 ns         22.5 ns
-CardinalBSplines<double>/3                    27.5 ns         27.5 ns
-CardinalBSplines<double>/4                    36.3 ns         36.2 ns
-CardinalBSplines<double>/5                    52.9 ns         52.8 ns
-CardinalBSplines<double>/6                    84.7 ns         84.6 ns
-CardinalBSplines<double>/7                     148 ns          147 ns
-CardinalBSplines<double>/8                     323 ns          307 ns
-CardinalBSplines<double>/9                     306 ns          305 ns
-CardinalBSplines<double>/10                    331 ns          330 ns
-CardinalBSplines<double>/11                    359 ns          356 ns
-CardinalBSplines<double>/12                    373 ns          372 ns
-CardinalBSplines<double>/13                    395 ns          394 ns
-CardinalBSplines<double>/14                    412 ns          411 ns
-CardinalBSplines<double>/15                    485 ns          461 ns
-CardinalBSplines<double>/16                    504 ns          484 ns
-CardinalBSplines<double>/17                    466 ns          464 ns
-CardinalBSplines<double>/18                    474 ns          474 ns
-CardinalBSplines<double>/19                    512 ns          503 ns
-CardinalBSplines<double>/20                    571 ns          550 ns
+-----------------------------------------
+Benchmark                            Time
+-----------------------------------------
+CardinalBSplines<double>/0        17.9 ns
+CardinalBSplines<double>/1        20.0 ns
+CardinalBSplines<double>/2        22.7 ns
+CardinalBSplines<double>/3        28.4 ns
+CardinalBSplines<double>/4        37.0 ns
+CardinalBSplines<double>/5        54.4 ns
+CardinalBSplines<double>/6        74.7 ns
+CardinalBSplines<double>/7        91.0 ns
+CardinalBSplines<double>/8         109 ns
+CardinalBSplines<double>/9         129 ns
+CardinalBSplines<double>/10        150 ns
+CardinalBSplines<double>/11        173 ns
+CardinalBSplines<double>/12        196 ns
+CardinalBSplines<double>/13        223 ns
+CardinalBSplines<double>/14        252 ns
+CardinalBSplines<double>/15        281 ns
+CardinalBSplines<double>/16        316 ns
+CardinalBSplines<double>/17        347 ns
+CardinalBSplines<double>/18        382 ns
+CardinalBSplines<double>/19        429 ns
+CardinalBSplines<double>/20        442 ns
 ``
 
 [h3 References]

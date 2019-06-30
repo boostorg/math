@@ -16,6 +16,7 @@
 using boost::multiprecision::float128;
 #endif
 
+using std::abs;
 using boost::math::cardinal_b_spline;
 using boost::math::cardinal_b_spline_prime;
 using boost::math::forward_cardinal_b_spline;
