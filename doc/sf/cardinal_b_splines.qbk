@@ -27,6 +27,9 @@
    template<class Real>
    Real forward_cardinal_b_spline(unsigned n, Real x);
 
+   template<class Real>
+   Real forward_fractional_cardinal_b_spline(Real alpha, Real x);
+
    }} // namespaces
 
 Cardinal /B/-splines are a family of compactly supported functions useful for the smooth interpolation of tables.
@@ -54,6 +57,14 @@ A basic usage is as follows:
 [$../graphs/central_b_splines.svg]
 [$../graphs/central_b_spline_derivatives.svg]
 
+[h3 Fractional B-splines]
+
+A useful generalization of the Schoenberg's /B/-splines are the fractional /B/-splines.
+For more information see Unser and Blu.
+Be aware that the fractional /B/-splines are more computationally expensive than integer /B/-splines.
+
+[$../graphs/forward_fractional_b_splines.svg]
+
 [h3 Caveats]
 
 Numerous notational conventions for /B/-splines exist.
@@ -72,7 +83,7 @@ If necessary, the forward splines can be evaluated by using `forward_cardinal_b_
 
 [h3 Implementation]
 
-The implementation uses recursion for /n/ less than 8 and a summation for larger /n/.
+The implementation uses recursion for /n/ less than 5 and a summation for larger /n/.
 Double precision timing on a consumer x86 laptop is shown below:
 
 ``
@@ -114,6 +125,6 @@ CardinalBSplines<double>/20        442 ns
 * I.J. Schoenberg, ['Cardinal Spline Interpolation], SIAM Volume 12, 1973
 * Rainer Kress, ['Numerical Analysis], Springer, 1998
 * Peter Massopust, ['On Some Generalizations of B-splines], arxiv preprint, 2019
-* Michael Unser and Thierry Blu, ['Fractional Splines and Wavelets], SIAM Review, Volume 42, No. 1
+* Michael Unser and Thierry Blu, ['Fractional Splines and Wavelets], SIAM Review 2000, Volume 42, No. 1
 
 [endsect]
