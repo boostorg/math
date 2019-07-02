@@ -8,6 +8,7 @@
 
 #include <boost/math/special_functions/factorials.hpp>
 #include <boost/math/special_functions/gamma.hpp>
+#include <boost/math/special_functions/binomial.hpp>
 
 namespace boost { namespace math {
 
@@ -18,32 +19,62 @@ Real cardinal_b_spline_summation_impl(unsigned n, Real x)
 {
     using std::floor;
     using std::pow;
+    using std::ceil;
     if (x < 0) {
         return cardinal_b_spline_summation_impl(n, -x);
     }
     if (x >= Real(n+1)/2) {
         return Real(0);
     }
-    Real z = x + Real(n+1)/2;
-    int kmax = floor(z);
+    if (x <= Real(n+1)/4) {
+        Real z = x + Real(n+1)/2;
+        int kmax = floor(z);
 
-    Real result = pow(z,n);
-    z -= 1;
-    Real kfact = 1;
-    Real num = n+1;
-    for (int k = 1; k <= kmax; ++k)
-    {
-        kfact *= k;
-        Real term = pow(z,n)*num/kfact;
-        num *= n-k+1;
-        if (k&1) {
-            result -= term;
-        } else {
-            result += term;
-        }
+        Real result = pow(z,n);
         z -= 1;
+        Real kfact = 1;
+        Real num = n+1;
+        for (int k = 1; k <= kmax; ++k)
+        {
+            kfact *= k;
+            Real term = pow(z,n)*num/kfact;
+            num *= n-k+1;
+            if (k&1) {
+                result -= term;
+            } else {
+                result += term;
+            }
+            z -= 1;
+        }
+        return result/factorial<Real>(n);
     }
-    return result/factorial<Real>(n);
+    else {
+        // Schoenberg, Cardinal Spline interpolation, equation 1.4:
+        using std::ceil;
+        int kmin = ceil(x + Real(n+1)/2);
+        Real z = kmin - (x + Real(n+1)/2);
+        Real result = 0;
+        for (int k = kmin; k <= n+1; ++k)
+        {
+            Real term = binomial_coefficient<Real>(n+1, k)*pow(z, n);
+            if (k&1)
+            {
+                result -= term;
+            } else {
+                result += term;
+            }
+            z += 1;
+        }
+        if (n & 1)
+        {
+            return result/factorial<Real>(n);
+        }
+        else
+        {
+            return -result/factorial<Real>(n);
+        }
+
+    }
 }
 
 template<class Real>
