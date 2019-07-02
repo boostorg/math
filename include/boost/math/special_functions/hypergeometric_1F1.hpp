@@ -737,6 +737,34 @@ inline typename tools::promote_args<T1, T2, T3>::type log_hypergeometric_1F1(T1 
 	return log_hypergeometric_1F1(a, b, z, policies::policy<>());
 }
 
+template <class T1, class T2, class T3, class Policy>
+inline typename tools::promote_args<T1, T2, T3>::type log_hypergeometric_1F1(T1 a, T2 b, T3 z, int* sign, const Policy& /* pol */)
+{
+	BOOST_FPU_EXCEPTION_GUARD
+		typedef typename tools::promote_args<T1, T2, T3>::type result_type;
+	typedef typename policies::evaluation<result_type, Policy>::type value_type;
+	typedef typename policies::normalise<
+		Policy,
+		policies::promote_float<false>,
+		policies::promote_double<false>,
+		policies::discrete_quantile<>,
+		policies::assert_undefined<> >::type forwarding_policy;
+	return policies::checked_narrowing_cast<result_type, Policy>(
+		detail::log_hypergeometric_1F1_imp<value_type>(
+			static_cast<value_type>(a),
+			static_cast<value_type>(b),
+			static_cast<value_type>(z),
+			sign,
+			forwarding_policy()),
+		"boost::math::hypergeometric_1F1<%1%>(%1%,%1%,%1%)");
+}
+
+template <class T1, class T2, class T3>
+inline typename tools::promote_args<T1, T2, T3>::type log_hypergeometric_1F1(T1 a, T2 b, T3 z, int* sign)
+{
+	return log_hypergeometric_1F1(a, b, z, sign, policies::policy<>());
+}
+
 
   } } // namespace boost::math
 

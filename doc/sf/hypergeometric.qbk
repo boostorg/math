@@ -149,6 +149,18 @@ Otherwise we use the defining series.
    template <class T1, class T2, class T3, class ``__Policy``>
    ``__sf_result`` hypergeometric_1F1_regularized(T1 a, T2 b, T3 z, const ``__Policy``&);
 
+   template <class T1, class T2, class T3>
+   ``__sf_result`` log_hypergeometric_1F1(T1 a, T2 b, T3 z);
+
+   template <class T1, class T2, class T3, class ``__Policy``>
+   ``__sf_result`` log_hypergeometric_1F1(T1 a, T2 b, T3 z, const ``__Policy``&);
+
+   template <class T1, class T2, class T3>
+   ``__sf_result`` log_hypergeometric_1F1(T1 a, T2 b, T3 z, int* sign);
+
+   template <class T1, class T2, class T3, class ``__Policy``>
+   ``__sf_result`` log_hypergeometric_1F1(T1 a, T2 b, T3 z, int* sign, const ``__Policy``&);
+
    }} // namespaces
 
 [h4 Description]
@@ -172,6 +184,15 @@ The "regularized" versions of the function return:
 [/ \Large  $$ \textbf{M}(a, b; z) = \frac{{_1F_1}(a, b; z)}{\Gamma(b)} = \sum_{n=0}^{\infty} \frac{(a)_n z^n}{\Gamma(b+n) n!} $$]
 [$../equations/hypergeometric_1f1_17.svg]
 
+The "log" versions of the function return:
+
+[/ \Large  $$ ln(|_1F_1(a, b, z)|) $$ ]
+[$../equations/hypergeometric_1f1_18.svg]
+
+When the optional /sign/ argument is supplied it is set on exit to either +1 or -1 depending on the sign of [sub 1]F[sub 1](a, b, z).
+
+Both the regularized and the logarithmic versions of these functions return results without the spurious
+under/overflow that a naive implementation would suggest.
 
 [h4 Known Issues]
 
