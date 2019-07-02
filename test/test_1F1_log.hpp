@@ -70,8 +70,19 @@ void test_spots1(T, const char* type_name)
 }
 
 template <class T>
+void test_spots2(T, const char* type_name)
+{
+#include "hypergeometric_1f1_log_large_unsolved.ipp"
+
+   do_test_1F1<T>(hypergeometric_1f1_log_large_unsolved, type_name, "Large random values - log - unsolved");
+}
+
+template <class T>
 void test_spots(T z, const char* type_name)
 {
    test_spots1(z, type_name);
+#ifdef TEST_UNSOLVED
+   test_spots2(z, type_name);
+#endif
 }
 
