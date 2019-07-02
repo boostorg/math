@@ -91,7 +91,7 @@ T ellint_d_imp(T phi, T k, const Policy& pol)
        T c = 1 / (sinp * sinp);
        T cm1 = cosp * cosp / (sinp * sinp);  // c - 1
        T k2 = k * k;
-       if(k2 > 1)
+       if(k2 * sinp * sinp > 1)
        {
           return policies::raise_domain_error<T>("boost::math::ellint_d<%1%>(%1%, %1%)", "The parameter k is out of range, got k = %1%", k, pol);
        }

@@ -8,7 +8,8 @@ can be used with a number of high-precision libraries, including:
 * __NTL
 * __GMP
 * __MPFR
-* __float128
+* __gcc_quad_type
+* Intel _Quad type
 
 The last four have some license restrictions;
 only __multiprecision when using the `cpp_float` backend
@@ -42,7 +43,8 @@ Some reasons why one would want to use a higher precision:
 * Using an extended-precision type implemented in software as
 [@http://en.wikipedia.org/wiki/Double-double_(arithmetic)#Double-double_arithmetic double-double]
 ([@http://en.wikipedia.org/wiki/Darwin_(operating_system) Darwin]) is sometimes unpredictably inaccurate.
-* Loss of precision or inaccuracy caused by extreme arguments or cancellation error.
+* Loss of precision or inaccuracy caused by extreme arguments or
+[@http://en.wikipedia.org/wiki/Loss_of_significance cancellation errors].
 * An accuracy as good as possible for a chosen built-in floating-point type is required.
 * As a reference value, for example, to determine the inaccuracy
 of a value computed with a built-in floating point type,
@@ -65,7 +67,10 @@ often caused by [@http://en.wikipedia.org/wiki/Loss_of_significance cancellation
 can be avoided by using __complements: see __why_complements).
 
 If you require a value which is as accurate as can be represented in the floating-point type,
-and is thus the closest representable value and has an error less than 1/2 a
+and is thus the 
+[@https://en.wikipedia.org/wiki/Floating-point_arithmetic#Representable_numbers,_conversion_and_rounding closest representable value]
+correctly rounded to nearest,
+and has an error less than 1/2 a
 [@http://en.wikipedia.org/wiki/Least_significant_bit least significant bit] or
 [@http://en.wikipedia.org/wiki/Unit_in_the_last_place ulp]
 it may be useful to use a higher-precision type,
@@ -93,10 +98,15 @@ is a practical way of generating (almost always) correctly rounded values.
 [import ../../example/big_seventh.cpp]
 
 [big_seventh_example_1]
+[big_seventh_example_2]
+The full source of this example is at [@../../example/big_seventh.cpp big_seventh.cpp]
 
 [import ../../example/fft_sines_table.cpp]
 
 [fft_sines_table_example_1]
+[fft_sines_table_example_2]
+[fft_sines_table_example_3
+]
 
 The table output is:
 
@@ -104,6 +114,7 @@ The table output is:
 
 [fft_sines_table_example_check]
 
+The full source of this example is at [@../../example/fft_sines_table.cpp fft_sines_table.cpp]
 
 [/TODO another example needed here]
 
@@ -123,8 +134,9 @@ At present support for GCC's native `__float128` datatype is extremely limited: 
 will all work with that type, and that's about it.  If you want to use the distributions or special
 functions then you will need to provide your own wrapper header that:
 
-* Provides std::numeric_limits<__float128> support.
-* Provides overloads of the standard library math function for type `__float128`and which forward to the libquadmath equivalents.
+* Provides `std::numeric_limits<__float128>` support.
+* Provides overloads of the standard library math functions for type `__float128` 
+and which forward to the libquadmath equivalents.
 
 Ultimately these facilities should be provided by GCC and `libstdc++`.
 

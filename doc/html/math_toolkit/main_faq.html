@@ -1,10 +1,10 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
-<title>Frequently Asked Questions FAQ</title>
+<title>Boost.Math Frequently Asked Questions (FAQs)</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
-<link rel="home" href="../index.html" title="Math Toolkit 2.8.0">
+<link rel="home" href="../index.html" title="Math Toolkit 2.9.0">
 <link rel="up" href="../overview.html" title="Chapter&#160;1.&#160;Overview">
 <link rel="prev" href="overview_tr1.html" title="C99 and C++ TR1 C-style Functions">
 <link rel="next" href="contact.html" title="Contact Info and Support">
@@ -24,7 +24,8 @@
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="math_toolkit.main_faq"></a><a class="link" href="main_faq.html" title="Frequently Asked Questions FAQ">Frequently Asked Questions FAQ</a>
+<a name="math_toolkit.main_faq"></a><a class="link" href="main_faq.html" title="Boost.Math Frequently Asked Questions (FAQs)">Boost.Math Frequently Asked Questions
+    (FAQs)</a>
 </h2></div></div></div>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
@@ -64,9 +65,10 @@
 <p class="simpara">
           Fear not - you are not alone! Many examples are available for functions
           and distributions. Some are referenced directly from the text. Others can
-          be found at \boost_latest_release\libs\math\example. If you are a Visual
-          Studio user, you should be able to create projects from each of these,
-          making sure that the Boost library is in the include directories list.
+          be found at <code class="computeroutput"><span class="special">\</span><span class="identifier">boost_latest_release</span><span class="special">\</span><span class="identifier">libs</span><span class="special">\</span><span class="identifier">math</span><span class="special">\</span><span class="identifier">example</span></code>,
+          for example If you are a Visual Studio user, you should be able to create
+          projects from each of these, making sure that the Boost library is in the
+          include directories list (there are usually NO libraries that must be built).
         </p>
 </li>
 <li class="listitem">
@@ -76,7 +78,7 @@
         </p>
 <p class="simpara">
           You can add an include path, for example, your Boost place /boost-latest_release,
-          for example <code class="computeroutput"><span class="identifier">X</span><span class="special">:/</span><span class="identifier">boost_1_45_0</span><span class="special">/</span></code>
+          for example <code class="computeroutput"><span class="identifier">X</span><span class="special">:/</span><span class="identifier">boost_1_70_0</span><span class="special">/</span></code>
           if you have a separate partition X for Boost releases. Or you can use an
           environment variable BOOST_ROOT set to your Boost place, and include that.
           Visual Studio before 2010 provided Tools, Options, VC++ Directories to
@@ -135,7 +137,7 @@
 <p class="simpara">
           Policies are a powerful (if necessarily complex) fine-grain mechanism that
           allow you to customise the behaviour of the Boost.Math library according
-          to your precise needs. See <a class="link" href="../policy.html" title="Chapter&#160;18.&#160;Policies: Controlling Precision, Error Handling etc">Policies</a>. But
+          to your precise needs. See <a class="link" href="../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policies</a>. But
           if, very probably, the default behaviour suits you, you don't need to know
           more.
         </p>
@@ -221,7 +223,7 @@
 <p class="simpara">
           We hope Boost.Math to be more accurate: our priority is accuracy (over
           speed). See the section on accuracy. But for evaluations that require iterations
-          there are parameters which can change the required accuracy (see <a class="link" href="../policy.html" title="Chapter&#160;18.&#160;Policies: Controlling Precision, Error Handling etc">Policies</a>). You might be able to squeeze a little
+          there are parameters which can change the required accuracy (see <a class="link" href="../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policies</a>). You might be able to squeeze a little
           more (or less) accuracy at the cost of runtime.
         </p>
 </li>
@@ -235,7 +237,7 @@
           For most functions, making sure you have the latest compiler version with
           all optimisations switched on is the key to speed. For evaluations that
           require iteration, you may be able to gain a little more speed at the expense
-          of accuracy. See detailed suggestions and results on <a class="link" href="../perf.html" title="Chapter&#160;19.&#160;Performance">performance</a>.
+          of accuracy. See detailed suggestions and results on <a class="link" href="../perf.html" title="Chapter&#160;20.&#160;Performance">performance</a>.
         </p>
 </li>
 <li class="listitem">
@@ -292,15 +294,44 @@
           multiprecision arithmetic</a> and <a href="http://svn.boost.org/svn/boost/trunk/libs/multiprecision/doc/html/boost_multiprecision/tut/conversions.html" target="_top">conversion</a>.
         </p>
 </li>
+<li class="listitem">
+<p class="simpara">
+          <span class="emphasis"><em>How do I choose between Boost.Multiprecision cpp_bin_50 and cpp_dec_50?</em></span>
+        </p>
+<p class="simpara">
+          Unless you have a specific reason to choose <code class="computeroutput"><span class="identifier">cpp_dec_</span></code>,
+          then the default choice should be <code class="computeroutput"><span class="identifier">cpp_bin_</span></code>,
+          for example using the convenience <code class="computeroutput"><span class="identifier">typedefs</span></code>
+          like <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">multiprecision</span><span class="special">::</span><span class="identifier">cpp_bin_50</span></code> or <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">multiprecision</span><span class="special">::</span><span class="identifier">cpp_bin_100</span></code>.
+        </p>
+<p class="simpara">
+          In general, both work well and give the same results and at roughly the
+          same speed with <code class="computeroutput"><span class="identifier">cpp_dec_50</span></code>
+          sometimes faster.
+        </p>
+<p class="simpara">
+          cpp_dec_ was developed first paving the way for cpp_bin_. cpp_dec_ has
+          several guard digits and is not rounded at all, using 'brute force' to
+          get the promised number of decimal digits correct, but making it difficult
+          to reason about precision and computational uncertainty, for example see
+          <span class="bold"><strong>https://svn.boost.org/trac10/ticket/12133</strong></span>.
+          It also has a fast but imprecise division operator giving surprising results
+          sometimes, see <span class="bold"><strong>https://svn.boost.org/trac10/ticket/11178</strong></span>.
+        </p>
+<p class="simpara">
+          cpp_bin_ is correctly/exactly rounded making it possible to reason about
+          both the precision and rounding of the results.
+        </p>
+</li>
 </ol></div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
 <td align="right"><div class="copyright-footer">Copyright &#169; 2006-2010, 2012-2014, 2017 Nikhar
       Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos,
-      Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Johan R&#229;de, Gautam
-      Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg, Daryle Walker
-      and Xiaogang Zhang<p>
+      Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Matthew Pulver, Johan
+      R&#229;de, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg,
+      Daryle Walker and Xiaogang Zhang<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

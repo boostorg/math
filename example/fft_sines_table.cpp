@@ -19,21 +19,35 @@
 
 //[fft_sines_table_example_1
 
-/*`[h5 Using Boost.Multiprecision to generate a high-precision array of sin coefficents for use with FFT.]
+/*`[h5 Using Boost.Multiprecision to generate a high-precision array of sine coefficents for use with FFT.]
 
 The Boost.Multiprecision library can be used for computations requiring precision
 exceeding that of standard built-in types such as `float`, `double`
 and `long double`. For extended-precision calculations, Boost.Multiprecision
-supplies a template data type called `cpp_dec_float`. The number of decimal
-digits of precision is fixed at compile-time via template parameter.
+supplies a template data type called `cpp_bin_float`. The number of decimal
+digits of precision is fixed at compile-time via a template parameter.
 
-To use these floating-point types and constants, we need some includes:
+One often needs to compute tables of numbers in mathematical software.
+To avoid the
+[@https://en.wikipedia.org/wiki/Rounding#Table-maker's_dilemma Table-maker's dilemma]
+it is necessary to use a higher precision type to compute the table values so that they have
+the nearest representable bit-pattern for the type, say `double`, of the table value.
+
+This example is a program `fft_since_table.cpp` that writes a header file `sines.hpp`
+containing an array of sine coefficients for use with a Fast Fourier Transform (FFT),
+that can be included by the FFT program.
+
+To use Boost.Multiprecision's high-precision floating-point types and constants, we need some includes:
 */
 #include <boost/math/constants/constants.hpp>
 // using boost::math::constants::pi;
 
-#include <boost/multiprecision/cpp_dec_float.hpp>
-// using boost::multiprecision::cpp_dec_float
+#include <boost/multiprecision/cpp_bin_float.hpp> // for
+// using boost::multiprecision::cpp_bin_float and
+// using boost::multiprecision::cpp_bin_float_50;
+// using boost::multiprecision::cpp_bin_float_quad;
+
+#include <boost/array.hpp> // or <array> for std::array
 
 #include <iostream>
 #include <limits>
@@ -43,12 +57,13 @@ To use these floating-point types and constants, we need some includes:
 #include <iterator>
 #include <fstream>
 
-/*`Define a text string which is a C++ comment with the program licence, copyright etc.
-You could of course, tailor this to your needs, including your copyright claim.
-There are versions of `array` provided by Boost.Array in `boost::array` or
-the C++11 std::array, but since not all platforms provide C++11 support,
-this program provides the Boost version as fallback.
+/*`First, this example defines a prolog text string which is a C++ comment with the program licence, copyright etc.
+(You would of course, tailor this to your needs, including *your* copyright claim).
+This will appear at the top of the written header file `sines.hpp`.
 */
+
+//] [fft_sines_table_example_1]
+
 static const char* prolog =
 {
   "// Use, modification and distribution are subject to the\n"
@@ -56,27 +71,23 @@ static const char* prolog =
   "// (See accompanying file LICENSE_1_0.txt\n"
   "// or copy at ""http://www.boost.org/LICENSE_1_0.txt)\n\n"
 
-  "// Copyright ???? 2013.\n\n"
-
-  "// Use boost/array if std::array (C++11 feature) is not available.\n"
-  "#ifdef  BOOST_NO_CXX11_HDR_ARRAY\n"
-  "#include <boost/array/array.hpp>\n"
-  "#else\n"
-  "#include <array>\n"
-  "#endif\n\n"
+  "// Copyright A N Other, 2019.\n\n"
 };
 
+//[fft_sines_table_example_2
 
-using boost::multiprecision::cpp_dec_float_50;
+using boost::multiprecision::cpp_bin_float_50;
 using boost::math::constants::pi;
+
+//] [fft_sines_table_example_2]
+
 // VS 2010 (wrongly) requires these at file scope, not local scope in `main`.
 // This program also requires `-std=c++11` option to compile using Clang and GCC.
 
 int main()
 {
-/*`One often needs to compute tables of numbers in mathematical software.
-
-A fast Fourier transform (FFT), for example, may use a table of the values of
+//[fft_sines_table_example_3
+/*`A fast Fourier transform (FFT), for example, may use a table of the values of
 sin(([pi]/2[super n]) in its implementation details. In order to maximize the precision in
 the FFT implementation, the precision of the tabulated trigonometric values
 should exceed that of the built-in floating-point type used in the FFT.
@@ -85,37 +96,37 @@ The sample below computes a table of the values of sin([pi]/2[super n])
 in the range 1  <= n <= 31.
 
 This program makes use of, among other program elements, the data type
-`boost::multiprecision::cpp_dec_float_50`
+`boost::multiprecision::cpp_bin_float_50`
 for a precision of 50 decimal digits from Boost.Multiprecision,
 the value of constant [pi] retrieved from Boost.Math,
 guaranteed to be initialized with the very last bit of precision for the type,
-here `cpp_dec_float_50`,
+here `cpp_bin_float_50`,
 and a C++11 lambda function combined with `std::for_each()`.
 */
 
-/*`define the number of values in the array.
+/*`define the number of values (32) in the array of sines.
 */
 
   std::size_t size = 32U;
-  cpp_dec_float_50 p = pi<cpp_dec_float_50>();
-  cpp_dec_float_50 p2 = boost::math::constants::pi<cpp_dec_float_50>();
+  //cpp_bin_float_50 p = pi<cpp_bin_float_50>();
+  cpp_bin_float_50 p = boost::math::constants::pi<cpp_bin_float_50>();
 
-  std::vector <cpp_dec_float_50> sin_values (size);
+  std::vector <cpp_bin_float_50> sin_values (size);
   unsigned n = 1U;
   // Generate the sine values.
   std::for_each
   (
     sin_values.begin (),
     sin_values.end (),
-    [&n](cpp_dec_float_50& y)
+    [&n](cpp_bin_float_50& y)
     {
-      y = sin( pi<cpp_dec_float_50>() / pow(cpp_dec_float_50 (2), n));
+      y = sin( pi<cpp_bin_float_50>() / pow(cpp_bin_float_50 (2), n));
       ++n;
     }
   );
 
 /*`Define the floating-point type for the generated file, either built-in
-`double, `float, or `long double`, or a user defined type like `cpp_dec_float_50`.
+`double, `float, or `long double`, or a user defined type like `cpp_bin_float_50`.
 */
 
 std::string fp_type = "double";
@@ -125,26 +136,30 @@ std::cout << "Generating an `std::array` or `boost::array` for floating-point ty
 
 /*`By default, output would only show the standard 6 decimal digits,
 so set precision to show enough significant digits for the chosen floating-point type.
-For `cpp_dec_float_50` is 50. (50 decimal digits should be ample for most applications).
+For `cpp_bin_float_50` is 50. (50 decimal digits should be ample for most applications).
+
 */
-  std::streamsize precision = std::numeric_limits<cpp_dec_float_50>::digits10;
+  std::streamsize precision = std::numeric_limits<cpp_bin_float_50>::digits10;
 
-  //  std::cout.precision(std::numeric_limits<cpp_dec_float_50>::digits10);
-  std::cout << precision << " decimal digits precision. " << std::endl;
+  std::cout << "Sines table precision is " << precision << " decimal digits. " << std::endl;
 
-/*`Of course, one could also choose less, for example, 36 would be sufficient
+/*`Of course, one could also choose a lower precision for the table values, for example,
+
+`std::streamsize precision = std::numeric_limits<cpp_bin_float_quad>::max_digits10;`
+
+128-bit 'quad' precision of 36 decimal digits would be sufficient
 for the most precise current `long double` implementations using 128-bit.
 In general, it should be a couple of decimal digits more (guard digits) than
 `std::numeric_limits<RealType>::max_digits10` for the target system floating-point type.
-If the implementation does not provide `max_digits10`, the the Kahan formula
-`std::numeric_limits<RealType>::digits * 3010/10000 + 2` can be used instead.
+(If the implementation does not provide `max_digits10`, the the Kahan formula
+`std::numeric_limits<RealType>::digits * 3010/10000 + 2` can be used instead).
 
 The compiler will read these values as decimal digits strings and
 use the nearest representation for the floating-point type.
 
 Now output all the sine table, to a file of your chosen name.
 */
-  const char sines_name[] = "sines.hpp";  // In same directory as .exe
+  const char sines_name[] = "sines.hpp";  // Assuming in same directory as .exe
 
   std::ofstream fout(sines_name, std::ios_base::out);  // Creates if no file exists,
   // & uses default overwrite/ ios::replace.
@@ -154,19 +169,18 @@ Now output all the sine table, to a file of your chosen name.
     return EXIT_FAILURE;
   }
   else
-  {
+  { // Write prolog etc as a C++ comment.
     std::cout << "Open file " << sines_name << " for output OK." << std::endl;
-    fout << prolog << "// Table of " << sin_values.size() << " values with "
+    fout << prolog
+    << "// Table of " << sin_values.size() << " values with "
       << precision << " decimal digits precision,\n"
       "// generated by program fft_sines_table.cpp.\n" << std::endl;
 
-    fout <<
-"#ifdef BOOST_NO_CXX11_HDR_ARRAY""\n"
- "  static const boost::array<double, " << size << "> sines =\n"
-"#else""\n"
-"  static const std::array<double, " << size << "> sines =\n"
-"#endif""\n"
-    "{{\n"; // 2nd { needed for some GCC compiler versions.
+  fout << "#include <array> // std::array" << std::endl;
+
+  // Write the table of sines as a C++ array.
+    fout <<  "\nstatic const std::array<double, " << size << "> sines =\n"
+    "{{\n"; // 2nd { needed for some old GCC compiler versions.
     fout.precision(precision);
 
     for (unsigned int i = 0U; ;)
@@ -174,7 +188,7 @@ Now output all the sine table, to a file of your chosen name.
       fout << "  " << sin_values[i];
       if (i == sin_values.size()-1)
       { // next is last value.
-        fout << "\n}};\n"; // 2nd } needed for some earlier GCC compiler versions.
+        fout << "\n}};  // array sines\n"; // 2nd } needed for some old GCC compiler versions.
         break;
       }
       else
@@ -182,14 +196,14 @@ Now output all the sine table, to a file of your chosen name.
         fout << ",\n";
         i++;
       }
-    }
+    } // for
 
     fout.close();
-    std::cout << "Close file " << sines_name << " for output OK." << std::endl;
-
+    std::cout << "Closed file " << sines_name << " for output." << std::endl;
   }
 //`The output file generated can be seen at [@../../example/sines.hpp]
-//] [/fft_sines_table_example_1]
+
+//] [/fft_sines_table_example_3]
 
   return EXIT_SUCCESS;
 

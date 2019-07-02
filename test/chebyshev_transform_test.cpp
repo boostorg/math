@@ -165,7 +165,7 @@ void test_atap_examples()
         {
            BOOST_CHECK_CLOSE_FRACTION(f1(x), cheb1(x), 1.3e-5);
         }
-        BOOST_CHECK_CLOSE_FRACTION(f2(x), cheb2(x), 5e-3);
+        BOOST_CHECK_CLOSE_FRACTION(f2(x), cheb2(x), 6e-3);
         //BOOST_CHECK_CLOSE_FRACTION(f3(x), cheb3(x), 100*tol);
         x += static_cast<Real>(1)/static_cast<Real>(1 << 7);
     }

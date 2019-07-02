@@ -59,7 +59,6 @@ std::vector<std::pair<Complex, Complex>> find_roots(size_t p)
     while(P.size() > 1)
     {
         Complex guess = {0.0, 1.0};
-        Real search_radius = 10;
         std::cout << std::setprecision(std::numeric_limits<Real>::digits10+3);
 
         auto f = [&](Complex x)->std::pair<Complex, Complex>

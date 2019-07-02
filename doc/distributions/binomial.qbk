@@ -311,19 +311,17 @@ the context of this distribution:
 
 `cdf(complement(binomial(n, p), k))`]]
 [[__quantile]
-   [The [*greatest] number of successes that may be observed from n trials
-   with success fraction p, at probability P.  Note that the value returned
-   is a real-number, and not an integer.  Depending on the use case you may
-   want to take either the floor or ceiling of the result.  For example:
-
-`quantile(binomial(n, p), P)`]]
+   [Given a binomial distribution with ['n] trials, success fraction ['p] and probability ['P], 
+   finds the largest number of successes ['k] whose CDF is less than ['P].
+   It is strongly recommended that you read the tutorial 
+   [link math_toolkit.pol_tutorial.understand_dis_quant Understanding Quantiles of Discrete Distributions] before
+   using the quantile function.]]
 [[__quantile_c]
-   [The [*smallest] number of successes that may be observed from n trials
-   with success fraction p, at probability P.  Note that the value returned
-   is a real-number, and not an integer.  Depending on the use case you may
-   want to take either the floor or ceiling of the result. For example:
-
-`quantile(complement(binomial(n, p), P))`]]
+   [Given a binomial distribution with ['n] trials, success fraction ['p] and probability ['Q], 
+   finds the smallest number of successes ['k] whose CDF is greater than ['1-Q].
+   It is strongly recommended that you read the tutorial 
+   [link math_toolkit.pol_tutorial.understand_dis_quant Understanding Quantiles of Discrete Distributions] before
+   using the quantile function.]]
 ]
 
 [h4 Examples]
