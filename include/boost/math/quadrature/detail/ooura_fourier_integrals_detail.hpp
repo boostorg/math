@@ -247,31 +247,31 @@ public:
         // f(x) := cos(7cos(x))sin(x)/x
         size_t max_additional_levels = 4;
         while (big_nodes_.size() < requested_levels_ + max_additional_levels) {
-            size_t i = big_nodes_.size();
+            size_t ii = big_nodes_.size();
             if (std::is_same<Real, float>::value) {
-                add_level<double>(i);
+                add_level<double>(ii);
             }
             else if (std::is_same<Real, double>::value) {
-                add_level<long double>(i);
+                add_level<long double>(ii);
             }
             else {
-                add_level<Real>(i);
+                add_level<Real>(ii);
             }
-            Real I0 = estimate_integral(f, omega, i);
+            Real I0 = estimate_integral(f, omega, ii);
             Real absolute_error_estimate = abs(I0-I1);
             Real scale = max(abs(I0), abs(I1));
 #ifdef BOOST_MATH_INSTRUMENT_OOURA
-            print_ooura_estimate(i, I0, I1, omega);
+            print_ooura_estimate(ii, I0, I1, omega);
 #endif
             if (absolute_error_estimate <= rel_err_goal_*scale) {
-                starting_level_ = max(long(i) - 1, long(0));
+                starting_level_ = max(long(ii) - 1, long(0));
                 return {I0/omega, absolute_error_estimate/scale};
             }
             I1 = I0;
-            ++i;
+            ++ii;
         }
 
-        starting_level_ = big_nodes_.size() - 2;
+        starting_level_ = static_cast<long>(big_nodes_.size() - 2);
         return {I1/omega, relative_error_estimate};
     }
 
@@ -478,31 +478,31 @@ public:
 
         size_t max_additional_levels = 4;
         while (big_nodes_.size() < requested_levels_ + max_additional_levels) {
-            size_t i = big_nodes_.size();
+            size_t ii = big_nodes_.size();
             if (std::is_same<Real, float>::value) {
-                add_level<double>(i);
+                add_level<double>(ii);
             }
             else if (std::is_same<Real, double>::value) {
-                add_level<long double>(i);
+                add_level<long double>(ii);
             }
             else {
-                add_level<Real>(i);
+                add_level<Real>(ii);
             }
-            Real I0 = estimate_integral(f, omega, i);
+            Real I0 = estimate_integral(f, omega, ii);
 #ifdef BOOST_MATH_INSTRUMENT_OOURA
-            print_ooura_estimate(i, I0, I1, omega);
+            print_ooura_estimate(ii, I0, I1, omega);
 #endif
             absolute_error_estimate = abs(I0-I1);
             scale = max(abs(I0), abs(I1));
             if (absolute_error_estimate <= rel_err_goal_*scale) {
-                starting_level_ = max(long(i) - 1, long(0));
+                starting_level_ = max(long(ii) - 1, long(0));
                 return {I0/omega, absolute_error_estimate/scale};
             }
             I1 = I0;
-            ++i;
+            ++ii;
         }
 
-        starting_level_ = big_nodes_.size() - 2;
+        starting_level_ = static_cast<long>(big_nodes_.size() - 2);
         return {I1/omega, absolute_error_estimate/scale};
     }
 
