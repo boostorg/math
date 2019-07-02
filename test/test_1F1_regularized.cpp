@@ -98,7 +98,7 @@ void expected_results()
       ".*",                          // platform
       "double",                      // test type(s)
       "Large.*",                     // test data group
-      ".*", 40, 20);                 // test function
+      ".*", 100, 20);                 // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
