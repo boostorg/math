@@ -274,7 +274,7 @@
      if (sq >= 0)
      {
         T t = (-sqrt(sq) - b + z) / 2;
-        if (t > 0)
+        if (t > 1)  // Don't worry about a minima between 0 and 1.
            have_minima = true;
         t = (sqrt(sq) - b + z) / 2;
         if (t > 0)
@@ -383,7 +383,7 @@
         do
         {
            sum += term;
-           //std::cout << n << " " << term * exp(boost::multiprecision::mpfr_float(local_scaling)) << " " << rising_factorial(boost::multiprecision::mpfr_float(a), n)* pow(boost::multiprecision::mpfr_float(z), n) / (rising_factorial(boost::multiprecision::mpfr_float(b), n)* factorial<boost::multiprecision::mpfr_float>(n)) << std::endl;
+           //std::cout << n << " " << term << " " << sum << std::endl;
            if (fabs(sum) >= upper_limit)
            {
               sum /= scaling_factor;
@@ -398,14 +398,14 @@
               log_scaling -= log_scaling_factor;
               local_scaling -= log_scaling_factor;
            }
-           term_m1 = term;
+           //term_m1 = term;
            term *= (((a + n) / ((b + n) * (n + 1))) * z);
            if (n > boost::math::policies::get_max_series_iterations<Policy>())
               return boost::math::policies::raise_evaluation_error(function, "Series did not converge, best value is %1%", sum, pol);
            if (++n == backstop)
               break; // we've caught up with ourselves.
            diff = fabs(term / sum);
-        } while ((diff > boost::math::policies::get_epsilon<T, Policy>()) || (fabs(term_m1) < fabs(term)));
+        } while ((diff > boost::math::policies::get_epsilon<T, Policy>())/* || (fabs(term_m1) < fabs(term))*/);
      }
      //std::cout << sum << std::endl;
      return sum;
