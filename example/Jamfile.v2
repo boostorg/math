@@ -144,6 +144,10 @@ test-suite examples :
    [ run autodiff_fourth_power.cpp : : : [ requires cxx11_inline_namespaces ] ]
    [ run autodiff_mixed_partials.cpp : : : [ requires cxx11_inline_namespaces ] ]
    [ run autodiff_multiprecision.cpp : : : [ requires cxx11_inline_namespaces ] ]
+   [ run ooura_fourier_integrals_example.cpp : : : [ requires cxx11_lambdas cxx11_inline_namespaces cxx11_auto_declarations ] ]
+   [ run ooura_fourier_integrals_cosine_example.cpp : : : [ requires cxx11_inline_namespaces cxx11_auto_declarations cxx17_std_apply ] ]
+   [ run ooura_fourier_integrals_multiprecision_example.cpp : : : [ requires cxx11_inline_namespaces cxx11_auto_declarations cxx17_std_apply ] ]
+
 ;
 
 run root_elliptic_finding.cpp /boost/timer : : : release <link>static  [ requires cxx11_unified_initialization_syntax cxx11_defaulted_functions ] <target-os>freebsd:<linkflags>"-lrt" <target-os>linux:<linkflags>"-lrt -lpthread" ;
