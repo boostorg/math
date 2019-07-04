@@ -6,11 +6,13 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-// This example requires C++17.
+#ifdef BOOST_NO_CXX11_LAMBDAS
+#  error "This example requires a C++17 compiler that supports 'structured bindings'. Try /std:c++17 or -std=c++17 or later."
+#endif
 
 //#define BOOST_MATH_INSTRUMENT_OOURA // or -DBOOST_MATH_INSTRUMENT_OOURA etc for diagnostic output.
 
-#include <boost/math/quadrature/ooura_fourier_integrals.hpp>  // 
+#include <boost/math/quadrature/ooura_fourier_integrals.hpp> // For ooura_fourier_cos
 
 #include <boost/math/constants/constants.hpp>  // For pi (including for multiprecision types, if used.)
 
@@ -21,14 +23,13 @@
 
 int main()
 {
-
+	try
+	{
 	std::cout.precision(std::numeric_limits<double>::max_digits10); // Show all potentially significant digits.
 
 	using boost::math::quadrature::ooura_fourier_cos;
 	using boost::math::constants::half_pi;
 	using boost::math::constants::e;
-
-	// constexpr double double_tol = 10 * std::numeric_limits<double>::epsilon(); // Tolerance. 
 
  //[ooura_fourier_integrals_cosine_example_1
 	auto integrator = ooura_fourier_cos<double>();
@@ -49,8 +50,15 @@ int main()
 	//[ooura_fourier_integrals_cosine_example_2
 
 	constexpr double expected = half_pi<double>() / e<double>();
-	std::cout << "pi/(2e) = " << expected << ", difference " << result - expected << std::endl;
+	std::cout << "pi/(2e) =  " << expected << ", difference " << result - expected << std::endl;
 	//] [/ooura_fourier_integrals_cosine_example_2]
+	}
+	catch (std::exception ex)
+	{
+		// Lacking try&catch blocks, the program will abort after any throw, whereas the
+		// message below from the thrown exception will give some helpful clues as to the cause of the problem.
+		std::cout << "\n""Message from thrown exception was:\n   " << ex.what() << std::endl;
+	}
 
 } // int main()
 
@@ -59,19 +67,21 @@ int main()
 //[ooura_fourier_integrals_example_cosine_output_1
 
 Integral = 0.57786367489546109, relative error estimate 6.4177395404415149e-09
-pi/2 = 0.57786367489546087, difference 2.2204460492503131e-16
+pi/(2e) =  0.57786367489546087, difference 2.2204460492503131e-16
 
 //] [/ooura_fourier_integrals_example_cosine_output_1]
 
 
 //[ooura_fourier_integrals_example_cosine_diagnostic_output_1
 
+ooura_fourier_cos with relative error goal 1.4901161193847656e-08 & 8 levels.
+epsilon for type = 2.2204460492503131e-16
 h = 1.000000000000000, I_h = 0.588268622591776 = 0x1.2d318b7e96dbe00p-1, absolute error estimate = nan
 h = 0.500000000000000, I_h = 0.577871642184837 = 0x1.27decab8f07b200p-1, absolute error estimate = 1.039698040693926e-02
 h = 0.250000000000000, I_h = 0.577863671186883 = 0x1.27ddbf42969be00p-1, absolute error estimate = 7.970997954576120e-06
 h = 0.125000000000000, I_h = 0.577863674895461 = 0x1.27ddbf6271dc000p-1, absolute error estimate = 3.708578555361441e-09
 Integral = 5.778636748954611e-01, relative error estimate 6.417739540441515e-09
-pi/2 = 5.778636748954609e-01, difference 2.220446049250313e-16
+pi/(2e)  = 5.778636748954609e-01, difference 2.220446049250313e-16
 
 //] [/ooura_fourier_integrals_example_cosine_diagnostic_output_1]
 

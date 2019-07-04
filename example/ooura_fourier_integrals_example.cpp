@@ -6,7 +6,9 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-// This example requires C++11.
+#ifdef BOOST_NO_CXX11_LAMBDAS
+#  error "This example requires a C++11 compiler that supports lambdas.  Try C++11 or later."
+#endif
 
 #define BOOST_MATH_INSTRUMENT_OOURA // or -DBOOST_MATH_INSTRUMENT_OOURA etc for diagnostics.
 
@@ -21,13 +23,12 @@
 
 int main()
 {
-
+	try
+	{
 	std::cout.precision(std::numeric_limits<double>::max_digits10); // Show all potentially significant digits.
 
 	using boost::math::quadrature::ooura_fourier_sin;
   using boost::math::constants::half_pi;
-
- // constexpr double double_tol = 10 * std::numeric_limits<double>::epsilon(); // Tolerance. 
 
 //[ooura_fourier_integrals_example_1
 	ooura_fourier_sin<double>integrator = ooura_fourier_sin<double>();
@@ -47,9 +48,15 @@ int main()
 //[ooura_fourier_integrals_example_2
 
 	constexpr double expected = half_pi<double>();
-	std::cout << "pi/2 = " << expected << ", difference " << result.first - expected << std::endl;
+	std::cout << "pi/2 =     " << expected << ", difference " << result.first - expected << std::endl;
 //] [/ooura_fourier_integrals_example_2]
-
+	}
+	catch (std::exception ex)
+	{
+		// Lacking try&catch blocks, the program will abort after any throw, whereas the
+		// message below from the thrown exception will give some helpful clues as to the cause of the problem.
+		std::cout << "\n""Message from thrown exception was:\n   " << ex.what() << std::endl;
+	}
 } // int main()
 
 /*
@@ -57,7 +64,7 @@ int main()
 //[ooura_fourier_integrals_example_output_1
 
 integral = 1.5707963267948966, relative error estimate 1.2655356398390254e-11
-pi/2 = 1.5707963267948966, difference 0
+pi/2 =     1.5707963267948966, difference 0
 
 //] [/ooura_fourier_integrals_example_output_1]
 
@@ -70,7 +77,7 @@ h = 0.500000000000000, I_h = 1.570793292491940 = 0x1.921f825c076f600p+0, absolut
 h = 0.250000000000000, I_h = 1.570796326814776 = 0x1.921fb54458acf00p+0, absolute error estimate = 3.034322835882008e-06
 h = 0.125000000000000, I_h = 1.570796326794897 = 0x1.921fb54442d1800p+0, absolute error estimate = 1.987898734512328e-11
 Integral = 1.570796326794897e+00, relative error estimate 1.265535639839025e-11
-pi/2 = 1.570796326794897e+00, difference 0.000000000000000e+00
+pi/2 =     1.570796326794897e+00, difference 0.000000000000000e+00
 
 //] [/ooura_fourier_integrals_example_diagnostic_output_1]
 

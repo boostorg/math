@@ -38,10 +38,9 @@ int main()
 
 		// Use the default parameters for tolerance root_epsilon and eight levels for the type.
 		//auto integrator = ooura_fourier_cos<Real>();
-		// Decide a (tight) tolerance.
-		//const Real tol = 2 * std::numeric_limits<Real>::epsilon(); // Tolerance. 
-		const Real tol = 1 * std::numeric_limits<Real>::epsilon();
-		auto integrator = ooura_fourier_cos<Real>(tol, 8); // Loops for 16
+		// Decide on a (tight) tolerance.
+		const Real tol = 2 * std::numeric_limits<Real>::epsilon();
+		auto integrator = ooura_fourier_cos<Real>(tol, 8); // Loops or gets worse for more than 8.
 
 		auto f = [](Real x)
 		{ // More complex example function. 
@@ -49,23 +48,21 @@ int main()
 		};
 
 		double omega = 1;
-
 		auto [result, relative_error] = integrator.integrate(f, omega);
-		std::cout << "Integral = " << result << ", relative error estimate " << relative_error << std::endl;
 
 		//] [/ooura_fourier_integrals_multiprecision_example_1]
 
 		//[ooura_fourier_integrals_multiprecision_example_2
+		std::cout << "Integral = " << result << ", relative error estimate " << relative_error << std::endl;
 
-		const Real expected = half_pi<Real>() / e<Real>();
+		const Real expected = half_pi<Real>() / e<Real>(); // Expect integral = 1/(2e)
 		std::cout << "pi/(2e)  = " << expected << ", difference " << result - expected << std::endl;
 		//] [/ooura_fourier_integrals_multiprecision_example_2]
 	}
 	catch (std::exception ex)
 	{
-		// Lacking try& catch blocks, the program will abort, whereas the
-		//message below from the thrown exception will give some helpful clues as to the cause of the problem.
-		
+		// Lacking try&catch blocks, the program will abort after any throw, whereas the
+		// message below from the thrown exception will give some helpful clues as to the cause of the problem.
 		std::cout << "\n""Message from thrown exception was:\n   " << ex.what() << std::endl;
 	}
 
@@ -98,6 +95,10 @@ h = 0.003906250000000000000000000000000, I_h = 0.5778636748954608589550465916563
 Integral = 5.778636748954608589550465916563475e-01, relative error estimate 3.332844800697411177051445985473052e-34
 pi/(2e)  = 5.778636748954608589550465916563481e-01, difference -6.740754805355325485695922799047246e-34
 
+//] [/ooura_fourier_integrals_example_multiprecision_diagnostic_output_1]
+
+
+Example of it going wrong below
 
 >ooura_fourier_cos with relative error goal 1.925929944387235853055977942584927319e-34 & 15 levels.
 1>epsilon for type = 1.925929944387235853055977942584927319e-34
@@ -120,6 +121,6 @@ pi/(2e)  = 5.778636748954608589550465916563481e-01, difference -6.74075480535532
 
 
 
-//] [/ooura_fourier_integrals_example_multiprecision_diagnostic_output_1]
+
 
 */
