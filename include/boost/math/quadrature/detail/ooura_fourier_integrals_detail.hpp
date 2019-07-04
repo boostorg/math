@@ -60,6 +60,13 @@ std::pair<Real, Real> ooura_sin_node_and_weight(long n, Real h, Real alpha)
 
     if (n == 0) {
         // Equation 44 of https://arxiv.org/pdf/0911.4796.pdf
+				// Fourier Transform of the Stretched Exponential Function: Analytic Error Bounds,
+				// Double Exponential Transform, and Open-Source Implementation,
+				// Joachim Wuttke, 
+				// The C library libkww provides functions to compute the Kohlrausch-Williams-Watts function, 
+				// the Laplace-Fourier transform of the stretched (or compressed) exponential function exp(-t^beta)
+				// for exponent beta between 0.1 and 1.9 with sixteen decimal digits accuracy.
+
         Real eta_prime_0 = Real(2) + alpha + Real(1)/Real(4);
         Real node = pi<Real>()/(eta_prime_0*h);
         Real weight = pi<Real>()*boost::math::sin_pi(1/(eta_prime_0*h));
@@ -116,8 +123,8 @@ void print_ooura_estimate(size_t i, Real I0, Real I1, Real omega) {
               << std::setprecision(std::numeric_limits<Real>::digits10)
               << std::fixed;
     std::cout << "h = " << Real(1)/Real(1<<i) << ", I_h = " << I0/omega
-              << " = " << std::hexfloat << I0/omega << ", absolute error est = "
-              << std::defaultfloat << std::scientific << abs(I0-I1)  << "\n";
+              << " = " << std::hexfloat << I0/omega << ", absolute error estimate = "
+              << std::defaultfloat << std::scientific << abs(I0-I1)  << std::endl;
 }
 #endif
 
@@ -140,7 +147,10 @@ std::pair<Real, Real> ooura_cos_node_and_weight(long n, Real h, Real alpha)
 
     Real phi_prime = -(expm1_meta + x*exp_meta*eta_prime)/(expm1_meta*expm1_meta);
 
-    // Equation 4.6 of A robust double exponential formula for Fourier-type integrals
+    // Takuya Ooura and Masatake Mori,
+		// Journal of Computational and Applied Mathematics, 112 (1999) 229-241.
+		// A robust double exponential formula for Fourier-type integrals.
+		// Equation 4.6
     Real s = pi<Real>();
     Real arg;
     if (eta < -1) {
@@ -164,7 +174,11 @@ template<class Real>
 class ooura_fourier_sin_detail {
 public:
     ooura_fourier_sin_detail(const Real relative_error_goal, size_t levels) {
-        if (relative_error_goal <= std::numeric_limits<Real>::epsilon()/2) {
+#ifdef BOOST_MATH_INSTRUMENT_OOURA
+			std::cout << "ooura_fourier_sin with relative error goal " << relative_error_goal 
+				<< " & " << levels << " levels." << std::endl;
+#endif // BOOST_MATH_INSTRUMENT_OOURA
+        if (relative_error_goal < std::numeric_limits<Real>::epsilon() * 2) {
             throw std::domain_error("The relative error goal cannot be smaller than the unit roundoff.");
         }
         using std::abs;
@@ -418,9 +432,15 @@ template<class Real>
 class ooura_fourier_cos_detail {
 public:
     ooura_fourier_cos_detail(const Real relative_error_goal, size_t levels) {
-        if (relative_error_goal <= std::numeric_limits<Real>::epsilon()/2) {
-            throw std::domain_error("The relative error goal cannot be smaller than the unit roundoff.");
+#ifdef BOOST_MATH_INSTRUMENT_OOURA
+			std::cout << "ooura_fourier_cos with relative error goal " << relative_error_goal
+				<< " & " << levels << " levels." << std::endl;
+			std::cout << "epsilon for type = " << std::numeric_limits<Real>::epsilon() << std::endl;
+#endif // BOOST_MATH_INSTRUMENT_OOURA
+        if (relative_error_goal < std::numeric_limits<Real>::epsilon() * 2) {
+            throw std::domain_error("The relative error goal cannot be smaller than the unit roundoff!");
         }
+
         using std::abs;
         requested_levels_ = levels;
         starting_level_ = 0;
