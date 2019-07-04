@@ -367,7 +367,7 @@ and
 These two functions evaluate the incomplete elliptic integral 
 ['D([phi], k)] and its complete counterpart ['D(k) = D([pi]/2, k)].
 
-The return type of these functions is computed using the __arg_pomotion_rules
+The return type of these functions is computed using the __arg_promotion_rules
 when the arguments are of different types: when they are the same type then the result
 is the same type as the arguments.
 
@@ -471,7 +471,12 @@ This function evaluates the Jacobi Zeta Function ['Z([phi], k)]
 
 [equation jacobi_zeta]
 
-The return type of this function is computed using the __arg_pomotion_rules
+Please note the use of [phi], and /k/ as the parameters, the function is often defined as ['Z([phi], m)]
+with ['m = k[super 2]], see for example  [@http://mathworld.wolfram.com/JacobiZetaFunction.html Weisstein, Eric W. "Jacobi Zeta Function." From MathWorld--A Wolfram Web Resource.]
+Or else as [@https://dlmf.nist.gov/22.16#E32 ['Z(x, k)]] with ['[phi] = am(x, k)], where ['am] is the [@https://dlmf.nist.gov/22.16#E1 Jacobi amplitude function] which is equivalent to
+['asin(jacobi_elliptic(k, x))].
+
+The return type of this function is computed using the __arg_promotion_rules
 when the arguments are of different types: when they are the same type then the result
 is the same type as the arguments.
 
@@ -541,7 +546,7 @@ This function evaluates the Heuman Lambda Function ['[Lambda][sub 0]([phi], k)]
 
 [equation heuman_lambda]
 
-The return type of this function is computed using the __arg_pomotion_rules
+The return type of this function is computed using the __arg_promotion_rules
 when the arguments are of different types: when they are the same type then the result
 is the same type as the arguments.
 
