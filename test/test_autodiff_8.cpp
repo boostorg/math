@@ -295,7 +295,6 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(next_hpp, T, all_float_types) {
   }
 }
 
-/*
 BOOST_AUTO_TEST_CASE_TEMPLATE(owens_t_hpp, T, bin_float_types) {
   BOOST_MATH_STD_USING;
   using test_constants = test_constants_t<T>;
@@ -312,7 +311,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(owens_t_hpp, T, bin_float_types) {
     BOOST_CHECK(isNearZero(autodiff_v.derivative(0u) - anchor_v));
   }
 }
-*/
+
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(pow_hpp, T, all_float_types) {
   using test_constants = test_constants_t<T>;
@@ -501,21 +500,6 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(trigamma_hpp, T, all_float_types) {
     BOOST_CHECK(
         isNearZero(boost::math::trigamma(make_fvar<T, m>(x)).derivative(0u) -
                    boost::math::trigamma(x)));
-  }
-}
-
-BOOST_AUTO_TEST_CASE_TEMPLATE(zeta_hpp, T, all_float_types) {
-  using test_constants = test_constants_t<T>;
-  static constexpr auto m = test_constants::order;
-  test_detail::RandomSample<T> x_sampler{-30, 30};
-  for (auto i : boost::irange(test_constants::n_samples)) {
-    std::ignore = i;
-    auto x = x_sampler.next();
-    BOOST_WARN(
-        isNearZero(boost::math::zeta(make_fvar<T, m>(x)).derivative(0u) -
-                   boost::math::zeta(x)));
-    BOOST_CHECK_CLOSE(boost::math::zeta(make_fvar<T, m>(x)).derivative(0u),
-        boost::math::zeta(x), 50 * test_constants::pct_epsilon());
   }
 }
 
