@@ -6,19 +6,14 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#ifdef BOOST_NO_CXX11_LAMBDAS
-#  error "This example requires a C++17 compiler that supports 'structured bindings'. Try /std:c++17 or -std=c++17 or later."
-#endif
-
 //#define BOOST_MATH_INSTRUMENT_OOURA // or -DBOOST_MATH_INSTRUMENT_OOURA etc for diagnostic output.
 
 #include <boost/math/quadrature/ooura_fourier_integrals.hpp> // For ooura_fourier_cos
-
 #include <boost/math/constants/constants.hpp>  // For pi (including for multiprecision types, if used.)
 
 #include <cmath>
 #include <iostream>
-#include <limits>  
+#include <limits>
 #include <iostream>
 
 int main()
@@ -36,7 +31,7 @@ int main()
 	// Use the default tolerance root_epsilon and eight levels for type double.
 
 	auto f = [](double x)
-	{ // More complex example function. 
+	{ // More complex example function.
 		return 1 / (x * x + 1);
 	};
 
@@ -53,7 +48,7 @@ int main()
 	std::cout << "pi/(2e) =  " << expected << ", difference " << result - expected << std::endl;
 	//] [/ooura_fourier_integrals_cosine_example_2]
 	}
-	catch (std::exception ex)
+	catch (std::exception const & ex)
 	{
 		// Lacking try&catch blocks, the program will abort after any throw, whereas the
 		// message below from the thrown exception will give some helpful clues as to the cause of the problem.

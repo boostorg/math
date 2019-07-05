@@ -63,7 +63,7 @@ test-suite examples :
    [ run f_test.cpp  ]
    # [ run fft_sines_table.cpp  : : : [ requires cxx11_numeric_limits ] ]
    # No need to re-run this routinely as it only creates a table of sines for a documentation example.
-   
+
    [ run find_location_example.cpp : : : <exception-handling>off:<build>no  ]
    [ run find_mean_and_sd_normal.cpp : : : <exception-handling>off:<build>no  ]
    [ run find_root_example.cpp : : : <exception-handling>off:<build>no  ]
@@ -146,7 +146,7 @@ test-suite examples :
    [ run autodiff_multiprecision.cpp : : : [ requires cxx11_inline_namespaces ] ]
    [ run ooura_fourier_integrals_example.cpp : : : [ requires cxx11_lambdas cxx11_inline_namespaces cxx11_auto_declarations ] ]
    [ run ooura_fourier_integrals_cosine_example.cpp : : : [ requires cxx11_inline_namespaces cxx11_auto_declarations cxx17_std_apply ] ]
-   [ run ooura_fourier_integrals_multiprecision_example.cpp : : : [ requires cxx11_inline_namespaces cxx11_auto_declarations cxx17_std_apply ] ]
+   [ run ooura_fourier_integrals_multiprecision_example.cpp : : : [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] [ requires cxx11_inline_namespaces cxx11_auto_declarations cxx17_std_apply ] ]
 
 ;
 

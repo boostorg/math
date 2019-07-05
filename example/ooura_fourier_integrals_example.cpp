@@ -12,13 +12,12 @@
 
 //#define BOOST_MATH_INSTRUMENT_OOURA // or -DBOOST_MATH_INSTRUMENT_OOURA etc for diagnostics.
 
-#include <boost/math/quadrature/ooura_fourier_integrals.hpp>  // 
-
+#include <boost/math/quadrature/ooura_fourier_integrals.hpp>
 #include <boost/math/constants/constants.hpp>  // For pi (including for multiprecision types, if used.)
 
 #include <cmath>
 #include <iostream>
-#include <limits>  
+#include <limits>
 #include <iostream>
 
 int main()
@@ -34,7 +33,7 @@ int main()
 	ooura_fourier_sin<double>integrator = ooura_fourier_sin<double>();
 	// Use the default tolerance root_epsilon and eight levels for type double.
 
-	auto f = [](double x) 
+	auto f = [](double x)
 	{ // Simple reciprocal function for sinc.
 		return 1 / x;
 	};
@@ -51,7 +50,7 @@ int main()
 	std::cout << "pi/2 =     " << expected << ", difference " << result.first - expected << std::endl;
 //] [/ooura_fourier_integrals_example_2]
 	}
-	catch (std::exception ex)
+	catch (std::exception const & ex)
 	{
 		// Lacking try&catch blocks, the program will abort after any throw, whereas the
 		// message below from the thrown exception will give some helpful clues as to the cause of the problem.
