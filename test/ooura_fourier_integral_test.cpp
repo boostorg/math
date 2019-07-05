@@ -282,7 +282,7 @@ void test_cos_integral1()
 template<class Real>
 void test_cos_integral2()
 {
-    std::cout << "Testing integral of cos(x)/(x*x+1) on type " << boost::typeindex::type_id<Real>().pretty_name()  << "\n";
+    std::cout << "Testing integral of exp(-a*x) on type " << boost::typeindex::type_id<Real>().pretty_name()  << "\n";
     using std::exp;
     using boost::math::constants::half_pi;
     using boost::math::constants::e;

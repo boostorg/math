@@ -6,9 +6,11 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-// This example math/example/ooura_fourier_integrals_multiprecision_example/ooura_fourier_integrals_multiprecision_example.cpp requires C++17.
+#if !defined(__cpp_structured_bindings) || (__cpp_structured_bindings < 201606L)
+#  error "This example requires a C++17 compiler that supports 'structured bindings'. Try /std:c++17 or -std=c++17 or later."
+#endif
 
-#define BOOST_MATH_INSTRUMENT_OOURA // or -DBOOST_MATH_INSTRUMENT_OOURA etc for diagnostic output.
+//#define BOOST_MATH_INSTRUMENT_OOURA // or -DBOOST_MATH_INSTRUMENT_OOURA etc for diagnostic output.
 
 #include <boost/math/quadrature/ooura_fourier_integrals.hpp>  // 
 #include <boost/multiprecision/cpp_bin_float.hpp> // for cpp_bin_float_quad, cpp_bin_float_50...
