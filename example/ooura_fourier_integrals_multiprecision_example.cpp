@@ -65,22 +65,20 @@ int main()
 		// message below from the thrown exception will give some helpful clues as to the cause of the problem.
 		std::cout << "\n""Message from thrown exception was:\n   " << ex.what() << std::endl;
 	}
-
 } // int main()
 
 /*
 
 //[ooura_fourier_integrals_example_multiprecision_output_1
-
+``
 Integral = 0.5778636748954608589550465916563501587, relative error estimate 4.609814684522163895264277312610830278e-17
 pi/(2e) = 0.5778636748954608659545328919193707407, difference -6.999486300263020581921171645255733758e-18
-
-
+``
 //] [/ooura_fourier_integrals_example_multiprecision_output_1]
 
 
 //[ooura_fourier_integrals_example_multiprecision_diagnostic_output_1
-
+``
 ooura_fourier_cos with relative error goal 3.851859888774471706111955885169854637e-34 & 15 levels.
 epsilon for type = 1.925929944387235853055977942584927319e-34
 h = 1.000000000000000000000000000000000, I_h = 0.588268622591776615359568690603776 = 0.5882686225917766153595686906037760, absolute error estimate = nan
@@ -94,7 +92,7 @@ h = 0.007812500000000000000000000000000, I_h = 0.5778636748954608589550465916563
 h = 0.003906250000000000000000000000000, I_h = 0.577863674895460858955046591656347 = 0.5778636748954608589550465916563475, absolute error estimate = 1.925929944387235853055977942584927e-34
 Integral = 5.778636748954608589550465916563475e-01, relative error estimate 3.332844800697411177051445985473052e-34
 pi/(2e)  = 5.778636748954608589550465916563481e-01, difference -6.740754805355325485695922799047246e-34
-
+``
 //] [/ooura_fourier_integrals_example_multiprecision_diagnostic_output_1]
 
 

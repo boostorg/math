@@ -10,7 +10,7 @@
 #  error "This example requires a C++11 compiler that supports lambdas.  Try C++11 or later."
 #endif
 
-#define BOOST_MATH_INSTRUMENT_OOURA // or -DBOOST_MATH_INSTRUMENT_OOURA etc for diagnostics.
+//#define BOOST_MATH_INSTRUMENT_OOURA // or -DBOOST_MATH_INSTRUMENT_OOURA etc for diagnostics.
 
 #include <boost/math/quadrature/ooura_fourier_integrals.hpp>  // 
 
