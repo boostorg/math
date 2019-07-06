@@ -5,6 +5,7 @@
 
 #include <boost/math/differentiation/autodiff.hpp>
 #include <iostream>
+#include <stdexcept>
 
 using namespace boost::math::constants;
 using namespace boost::math::differentiation;
@@ -36,6 +37,8 @@ promote<Price, Sigma, Tau, Rate> black_scholes_option_price(CP cp,
       return S * Phi(d1) - exp(-r * tau) * K * Phi(d2);
     case CP::put:
       return exp(-r * tau) * K * Phi(-d2) - S * Phi(-d1);
+    default:
+      throw std::runtime_error("Invalid CP value.");
   }
 }
 

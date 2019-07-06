@@ -5,7 +5,9 @@
 
 #include <boost/math/differentiation/autodiff.hpp>
 #include <iostream>
+#include <stdexcept>
 
+using namespace boost::math::constants;
 using namespace boost::math::differentiation;
 
 // Equations and function/variable names are from
@@ -14,13 +16,13 @@ using namespace boost::math::differentiation;
 // Standard normal probability density function
 template <typename X>
 X phi(X const& x) {
-  return boost::math::constants::one_div_root_two_pi<X>() * exp(-0.5 * x * x);
+  return one_div_root_two_pi<X>() * exp(-0.5 * x * x);
 }
 
 // Standard normal cumulative distribution function
 template <typename X>
 X Phi(X const& x) {
-  return 0.5 * erfc(-boost::math::constants::one_div_root_two<X>() * x);
+  return 0.5 * erfc(-one_div_root_two<X>() * x);
 }
 
 enum class CP { call, put };
@@ -41,6 +43,8 @@ promote<Price, Sigma, Tau, Rate> black_scholes_option_price(CP cp,
       return S * Phi(d1) - exp(-r * tau) * K * Phi(d2);
     case CP::put:
       return exp(-r * tau) * K * Phi(-d2) - S * Phi(-d1);
+    default:
+      throw std::runtime_error("Invalid CP value.");
   }
 }
 
