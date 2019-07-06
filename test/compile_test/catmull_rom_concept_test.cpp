@@ -15,7 +15,7 @@ void compile_and_link_test()
     std::vector<boost::math::concepts::std_real_concept> p4{0.5, 0.6, 0.7};
     std::vector<boost::math::concepts::std_real_concept> p5{0.6, 0.7, 0.8};
     std::vector<std::vector<boost::math::concepts::std_real_concept>> v{p0, p1, p2, p3, p4, p5};
-    boost::math::catmull_rom<std::vector<boost::math::concepts::std_real_concept>> cat(v.data(), v.size());
+    boost::math::catmull_rom<std::vector<boost::math::concepts::std_real_concept>> cat(std::move(v));
     cat(0.0);
     cat.prime(0.0);
 }
