@@ -110,7 +110,7 @@ catmull_rom<Point, RandomAccessContainer>::catmull_rom(RandomAccessContainer&& p
     m_pnts[num_pnts+2] = m_pnts[1];
 
     auto tmp = m_pnts[num_pnts-1];
-    for (std::size_t i = num_pnts-1; i >= 0; --i)
+    for (std::ptrdiff_t i = num_pnts-1; i >= 0; --i)
     {
         m_pnts[i+1] = m_pnts[i];
     }
