@@ -7,7 +7,6 @@
 #define BOOST_MATH_DIFFERENTIATION_AUTODIFF_HPP
 
 #include <boost/cstdfloat.hpp>
-#include <boost/lexical_cast.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions.hpp>
 #include <boost/math/tools/config.hpp>
@@ -141,8 +140,6 @@ class fvar {
 
   template <typename RealType2>
   fvar(RealType2 const& ca);  // Supports any RealType2 for which static_cast<root_type>(ca) compiles.
-
-  explicit fvar(char const* ca);  // Converts a char const* string to RealType by boost::lexical_cast
 
   // r = cr | RealType& | Assignment operator.
   fvar& operator=(fvar const&) = default;
@@ -683,10 +680,6 @@ fvar<RealType, Order>::fvar(root_type const& ca) : v{{static_cast<RealType>(ca)}
 template <typename RealType, size_t Order>
 template <typename RealType2>
 fvar<RealType, Order>::fvar(RealType2 const& ca) : v{{static_cast<RealType>(ca)}} {}
-
-template <typename RealType, size_t Order>
-fvar<RealType, Order>::fvar(char const* ca_str)
-    : v{{static_cast<RealType>(boost::lexical_cast<promote<root_type, double>>(ca_str))}} {}
 
 /*
 template<typename RealType, size_t Order>
