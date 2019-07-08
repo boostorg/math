@@ -7,6 +7,18 @@ All bug reports including closed ones can be viewed
 [@https://svn.boost.org/trac/boost/query?status=assigned&status=closed&status=new&status=reopened&component=math&col=id&col=summary&col=status&col=type&col=milestone&col=component&order=priority here]
 and [@https://github.com/boostorg/math/issues?utf8=%E2%9C%93&q=is%3Aissue here].
 
+[h4 Math-2.10.0 (Boost-1.71)]
+
+* Catmull-Rom interpolator now works in C++11
+* Cardinal quadratic B-spline interpolation
+* Domain of elliptic integrals extended
+* sin_pi and cos_pi performance improvements
+* Forward-mode automatic differentiation
+* Vector valued barycentric rational interpolation
+* Ooura's method for evaluation of Fourier integrals
+* Multiple compatibility issues with Multiprecision fixed
+* Lambert-W fixed on a rare architecture
+
 [h4 Math-2.9.0 (Boost-1.70)]
 
 * Add Lanczos smoothing derivatives
