@@ -22,7 +22,7 @@ void compile_and_link_test()
     std::vector<double> p4{0.5, 0.6, 0.7};
     std::vector<double> p5{0.6, 0.7, 0.8};
     std::vector<std::vector<double>> v{p0, p1, p2, p3, p4, p5};
-    boost::math::catmull_rom<std::vector<double>> cat(v.data(), v.size());
-    check_result<double>(cat(0.0));
-    check_result<double>(cat.prime(0.0));
+    boost::math::catmull_rom<std::vector<double>> cat(std::move(v));
+    check_result<std::vector<double>>(cat(0.0));
+    check_result<std::vector<double>>(cat.prime(0.0));
 }

@@ -13,6 +13,7 @@
 #include <vector>
 #include <algorithm>
 #include <iterator>
+#include <boost/config.hpp>
 
 namespace std_workaround {
 
@@ -54,25 +55,26 @@ namespace boost{ namespace math{
 template <class Point, class RandomAccessContainer = std::vector<Point> >
 class catmull_rom
 {
+   typedef typename Point::value_type value_type;
 public:
 
-    catmull_rom(RandomAccessContainer&& points, bool closed = false, typename Point::value_type alpha = (typename Point::value_type) 1/ (typename Point::value_type) 2);
+    catmull_rom(RandomAccessContainer&& points, bool closed = false, value_type alpha = (value_type) 1/ (value_type) 2);
 
-    catmull_rom(std::initializer_list<Point> l, bool closed = false, typename Point::value_type alpha = (typename Point::value_type) 1/ (typename Point::value_type) 2) : catmull_rom<Point, RandomAccessContainer>(RandomAccessContainer(l), closed, alpha) {}
+    catmull_rom(std::initializer_list<Point> l, bool closed = false, value_type alpha = (value_type) 1/ (value_type) 2) : catmull_rom<Point, RandomAccessContainer>(RandomAccessContainer(l), closed, alpha) {}
 
-    typename Point::value_type max_parameter() const
+    value_type max_parameter() const
     {
         return m_max_s;
     }
 
-    typename Point::value_type parameter_at_point(size_t i) const
+    value_type parameter_at_point(size_t i) const
     {
         return m_s[i+1];
     }
 
-    Point operator()(const typename Point::value_type s) const;
+    Point operator()(const value_type s) const;
 
-    Point prime(const typename Point::value_type s) const;
+    Point prime(const value_type s) const;
 
     RandomAccessContainer&& get_points()
     {
@@ -81,14 +83,14 @@ public:
 
 private:
     RandomAccessContainer m_pnts;
-    std::vector<typename Point::value_type> m_s;
-    typename Point::value_type m_max_s;
+    std::vector<value_type> m_s;
+    value_type m_max_s;
 };
 
 template<class Point, class RandomAccessContainer >
 catmull_rom<Point, RandomAccessContainer>::catmull_rom(RandomAccessContainer&& points, bool closed, typename Point::value_type alpha) : m_pnts(std::move(points))
 {
-    size_t num_pnts = m_pnts.size();
+    std::size_t num_pnts = m_pnts.size();
     //std::cout << "Number of points = " << num_pnts << "\n";
     if (num_pnts < 4)
     {
@@ -108,7 +110,7 @@ catmull_rom<Point, RandomAccessContainer>::catmull_rom(RandomAccessContainer&& p
     m_pnts[num_pnts+2] = m_pnts[1];
 
     auto tmp = m_pnts[num_pnts-1];
-    for (int64_t i = num_pnts-1; i >= 0; --i)
+    for (std::ptrdiff_t i = num_pnts-1; i >= 0; --i)
     {
         m_pnts[i+1] = m_pnts[i];
     }
