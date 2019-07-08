@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Fourier Integrals</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
 <link rel="home" href="../index.html" title="Math Toolkit 2.10.0">
 <link rel="up" href="../quadrature.html" title="Chapter&#160;12.&#160;Quadrature and Differentiation">
 <link rel="prev" href="double_exponential/de_refes.html" title="References">
@@ -133,7 +133,7 @@
 <span class="comment">// Use the default tolerance root_epsilon and eight levels for type double.</span>
 
 <span class="keyword">auto</span> <span class="identifier">f</span> <span class="special">=</span> <span class="special">[](</span><span class="keyword">double</span> <span class="identifier">x</span><span class="special">)</span>
-<span class="special">{</span> <span class="comment">// More complex example function. </span>
+<span class="special">{</span> <span class="comment">// More complex example function.</span>
 	<span class="keyword">return</span> <span class="number">1</span> <span class="special">/</span> <span class="special">(</span><span class="identifier">x</span> <span class="special">*</span> <span class="identifier">x</span> <span class="special">+</span> <span class="number">1</span><span class="special">);</span>
 <span class="special">};</span>
 
@@ -190,14 +190,14 @@ pi/(2e)  = 5.778636748954609e-01, difference 2.220446049250313e-16
 <p>
       It is simple to extend to higher precision using <a href="../../../../../libs/multiprecision/doc/html/index.html" target="_top">Boost.Multiprecision</a>.
     </p>
-<pre class="programlisting"><span class="comment">// Use the default parameters for tolerance root_epsilon and eight levels for the type.</span>
+<pre class="programlisting"><span class="comment">// Use the default parameters for tolerance root_epsilon and eight levels for a type of 8 bytes.</span>
 <span class="comment">//auto integrator = ooura_fourier_cos&lt;Real&gt;();</span>
 <span class="comment">// Decide on a (tight) tolerance.</span>
 <span class="keyword">const</span> <span class="identifier">Real</span> <span class="identifier">tol</span> <span class="special">=</span> <span class="number">2</span> <span class="special">*</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">Real</span><span class="special">&gt;::</span><span class="identifier">epsilon</span><span class="special">();</span>
 <span class="keyword">auto</span> <span class="identifier">integrator</span> <span class="special">=</span> <span class="identifier">ooura_fourier_cos</span><span class="special">&lt;</span><span class="identifier">Real</span><span class="special">&gt;(</span><span class="identifier">tol</span><span class="special">,</span> <span class="number">8</span><span class="special">);</span> <span class="comment">// Loops or gets worse for more than 8.</span>
 
 <span class="keyword">auto</span> <span class="identifier">f</span> <span class="special">=</span> <span class="special">[](</span><span class="identifier">Real</span> <span class="identifier">x</span><span class="special">)</span>
-<span class="special">{</span> <span class="comment">// More complex example function. </span>
+<span class="special">{</span> <span class="comment">// More complex example function.</span>
 	<span class="keyword">return</span> <span class="number">1</span> <span class="special">/</span> <span class="special">(</span><span class="identifier">x</span> <span class="special">*</span> <span class="identifier">x</span> <span class="special">+</span> <span class="number">1</span><span class="special">);</span>
 <span class="special">};</span>
 
