@@ -1,0 +1,68 @@
+[/
+Copyright (c) 2019 Nick Thompson
+Use, modification and distribution are subject to the
+Boost Software License, Version 1.0. (See accompanying file
+LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+]
+
+[section:theis Theis interpolation]
+
+[heading Synopsis]
+``
+  #include <boost/math/interpolators/theis.hpp>
+``
+
+  namespace boost { namespace math { namespace interpolators {
+
+    template <class RandomAccessContainer>
+    class theis
+    {
+    public:
+
+        using Real = RandomAccessContainer::value_type;
+
+        theis(RandomAccessContainer&& v, Real left_endpoint, Real step_size);
+
+        Real operator()(Real x) const;
+    };
+
+  }}} // namespaces
+
+
+[heading Theis Interpolation]
+
+The Theis interpolator takes equispaced data and interpolates between them via a sum of squared sinc functions.
+Like the Whittaker-Shannon interpolant, this interpolation is stable and infinitely smooth, but has linear complexity in the data, making it slow relative to compactly-supported B-splines.
+However, it solves a number of problems with Whittaker-Shannon interpolation, such as ill-conditioning of the sum and slow decay of the basis functions.
+Here is an example of interpolating a smooth "bump function":
+
+    auto bump = [](double x) { if (std::abs(x) >= 1) { return 0.0; } return std::exp(-1.0/(1.0-x*x)); };
+
+    double t0 = -1;
+    size_t n = 2049;
+    double h = 2.0/(n-1.0);
+
+    std::vector<double> v(n);
+    for(size_t i = 0; i < n; ++i) {
+        double t = t0 + i*h;
+        v[i] = bump(t);
+    }
+
+
+    auto s = boost::math::interpolators::theis(std::move(v), t0, h);
+
+    double y = s(0.3);
+
+
+[heading Complexity and Performance]
+
+The call to the constructor requires [bigo](1) operations, simply moving data into the class.
+Each call the the interpolant is [bigo](/n/), where /n/ is the number of points to interpolate.
+
+[heading References]
+
+* Maria Theis. ['Über eine interpla- tionsformel von de la vallée poussin. Mathematische Zeitschrift], 3(1):93–113, 1919
+
+* Paul L Butzer and Rudolf L Stens. ['Sampling theory for not necessarily band-limited functions: a historical overview.] SIAM review, 34(1):40–53, 1992
+
+[endsect] [/section:theis]

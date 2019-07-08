@@ -11,7 +11,7 @@
 namespace boost { namespace math { namespace interpolators {
 
 template<class RandomAccessContainer>
-class thies {
+class theis {
 public:
 
     using Real = typename RandomAccessContainer::value_type;
@@ -22,11 +22,6 @@ public:
     inline Real operator()(Real t) const
     {
         return m_impl->operator()(t);
-    }
-
-    inline Real prime(Real t) const
-    {
-        return m_impl->prime(t);
     }
 
     inline Real operator[](size_t i) const
