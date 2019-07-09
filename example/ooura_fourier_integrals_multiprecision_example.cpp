@@ -12,13 +12,13 @@
 
 //#define BOOST_MATH_INSTRUMENT_OOURA // or -DBOOST_MATH_INSTRUMENT_OOURA etc for diagnostic output.
 
-#include <boost/math/quadrature/ooura_fourier_integrals.hpp>  // 
+#include <boost/math/quadrature/ooura_fourier_integrals.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp> // for cpp_bin_float_quad, cpp_bin_float_50...
 #include <boost/math/constants/constants.hpp>  // For pi (including for multiprecision types, if used.)
 
 #include <cmath>
 #include <iostream>
-#include <limits>  
+#include <limits>
 #include <iostream>
 #include <exception>
 
@@ -36,14 +36,14 @@ int main()
 
 	 //[ooura_fourier_integrals_multiprecision_example_1
 
-		// Use the default parameters for tolerance root_epsilon and eight levels for the type.
+		// Use the default parameters for tolerance root_epsilon and eight levels for a type of 8 bytes.
 		//auto integrator = ooura_fourier_cos<Real>();
 		// Decide on a (tight) tolerance.
 		const Real tol = 2 * std::numeric_limits<Real>::epsilon();
 		auto integrator = ooura_fourier_cos<Real>(tol, 8); // Loops or gets worse for more than 8.
 
 		auto f = [](Real x)
-		{ // More complex example function. 
+		{ // More complex example function.
 			return 1 / (x * x + 1);
 		};
 
@@ -59,7 +59,7 @@ int main()
 		std::cout << "pi/(2e)  = " << expected << ", difference " << result - expected << std::endl;
 		//] [/ooura_fourier_integrals_multiprecision_example_2]
 	}
-	catch (std::exception ex)
+	catch (std::exception const & ex)
 	{
 		// Lacking try&catch blocks, the program will abort after any throw, whereas the
 		// message below from the thrown exception will give some helpful clues as to the cause of the problem.

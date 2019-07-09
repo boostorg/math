@@ -23,60 +23,6 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(expm1_hpp, T, all_float_types) {
   }
 }
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(factorials_hpp, T, all_float_types) {
-  using test_constants = test_constants_t<T>;
-  static constexpr auto m = test_constants::order;
-  test_detail::RandomSample<T> x_sampler{0, 28};
-  for (auto i :
-       boost::irange(static_cast<unsigned>(test_constants::n_samples))) {
-    {
-      auto fact_i = boost::math::factorial<T>(i);
-      auto autodiff_v = boost::math::factorial<autodiff_fvar<T, m>>(i);
-      BOOST_CHECK_CLOSE(autodiff_v.derivative(0u), fact_i,
-                        50 * test_constants::pct_epsilon());
-    }
-
-    {
-      auto fact_i = boost::math::unchecked_factorial<T>(i);
-      auto autodiff_v =
-          boost::math::unchecked_factorial<autodiff_fvar<T, m>>(i);
-      BOOST_CHECK_CLOSE(autodiff_v.derivative(0u), fact_i,
-                        50 * test_constants::pct_epsilon());
-    }
-
-    {
-      auto fact_i = boost::math::unchecked_factorial<T>(i);
-      auto autodiff_v =
-          boost::math::unchecked_factorial<autodiff_fvar<T, m>>(i);
-      BOOST_CHECK_CLOSE(autodiff_v.derivative(0u), fact_i,
-                        50 * test_constants::pct_epsilon());
-    }
-
-    {
-      auto fact_i = boost::math::double_factorial<T>(i);
-      auto autodiff_v = boost::math::double_factorial<autodiff_fvar<T, m>>(i);
-      BOOST_CHECK_CLOSE(autodiff_v.derivative(0u), fact_i,
-                        50 * test_constants::pct_epsilon());
-    }
-
-    auto x = x_sampler.next();
-    {
-      auto fact_i = boost::math::rising_factorial<T>(x, static_cast<int>(i));
-      auto autodiff_v = make_fvar<T, m>(fact_i);
-      BOOST_CHECK_CLOSE(autodiff_v.derivative(0u), fact_i,
-                        50 * test_constants::pct_epsilon());
-    }
-
-    {
-      auto fact_i =
-          boost::math::falling_factorial<T>(x, test_constants::n_samples - i);
-      auto autodiff_v = make_fvar<T, m>(fact_i);
-      BOOST_CHECK_CLOSE(autodiff_v.derivative(0u), fact_i,
-                        50 * test_constants::pct_epsilon());
-    }
-  }
-}
-
 BOOST_AUTO_TEST_CASE_TEMPLATE(fpclassify_hpp, T, all_float_types) {
   using boost::math::fpclassify;
   using boost::math::isfinite;
