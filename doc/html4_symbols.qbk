@@ -180,6 +180,7 @@
 [template thickspace[] '''&#x2004;'''] [/ 3 per em space]
 [template midspace[] '''&#x2005;'''] [/ 4 per em space]
 [template sixemspace[] '''&#x2006;'''] [/ 6 em space]
+[template indent[] '''&#x2006;&#x2006;&#x2006;'''] [/ 3 * 6 = 18 em space suitable for indenting formulae & equations.]
 [template figspace[] '''&#x2007;'''] [/ space = width fixed font digit]
 [template punctspace[] '''&#x2008;'''] [/ space = width punctuation]
 [template thin[] '''&#x2009;'''] [/ thin space ]
