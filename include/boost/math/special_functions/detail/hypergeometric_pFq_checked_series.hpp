@@ -132,6 +132,58 @@
         Real term_m1 = 0;
         int local_scaling = 0;
 
+        if ((aj.size() == 1) && (bj.size() == 0))
+        {
+           if (fabs(z) > 1)
+           {
+              if ((z > 0) && (floor(*aj.begin()) != *aj.begin()))
+              {
+                 Real r = policies::raise_domain_error("boost::math::hypergeometric_pFq", "Got p == 1 and q == 0 and |z| > 1, result is imaginary", z, pol);
+                 return std::make_pair(r, r);
+              }
+              std::pair<Real, Real> r = hypergeometric_pFq_checked_series_impl(aj, bj, Real(1 / z), pol, termination, log_scale);
+              Real mul = pow(-z, -*aj.begin());
+              r.first *= mul;
+              r.second *= mul;
+              return r;
+           }
+        }
+
+        if (aj.size() > bj.size())
+        {
+           if (aj.size() == bj.size() + 1)
+           {
+              if (fabs(z) > 1)
+              {
+                 Real r = policies::raise_domain_error("boost::math::hypergeometric_pFq", "Got p == q+1 and |z| > 1, series does not converge", z, pol);
+                 return std::make_pair(r, r);
+              }
+              if (fabs(z) == 1)
+              {
+                 Real s = 0;
+                 for (auto i = bj.begin(); i != bj.end(); ++i)
+                    s += *i;
+                 for (auto i = aj.begin(); i != aj.end(); ++i)
+                    s -= *i;
+                 if ((z == 1) && (s <= 0))
+                 {
+                    Real r = policies::raise_domain_error("boost::math::hypergeometric_pFq", "Got p == q+1 and |z| == 1, in a situation where the series does not converge", z, pol);
+                    return std::make_pair(r, r);
+                 }
+                 if ((z == -1) && (s <= -1))
+                 {
+                    Real r = policies::raise_domain_error("boost::math::hypergeometric_pFq", "Got p == q+1 and |z| == 1, in a situation where the series does not converge", z, pol);
+                    return std::make_pair(r, r);
+                 }
+              }
+           }
+           else
+           {
+              Real r = policies::raise_domain_error("boost::math::hypergeometric_pFq", "Got p > q+1, series does not converge", z, pol);
+              return std::make_pair(r, r);
+           }
+        }
+
         while (!termination(k))
         {
            for (auto ai = aj.begin(); ai != aj.end(); ++ai)
@@ -224,6 +276,12 @@
               Real loop_abs_result = 0;
               int loop_scale = 0;
               //
+              // loop_error_scale will be used to increase the size of the error
+              // estimate (absolute sum), based on the errors inherent in calculating 
+              // the pochhammer symbols.
+              //
+              Real loop_error_scale = 0;
+              //
               // b hasn't crossed the origin yet and the series may spring back into life at that point
               // so we need to jump forward to that term and then evaluate forwards and backwards from there:
               //
@@ -240,19 +298,45 @@
                     break;
                  }
                  else
-                  term += log_pochhammer(*ai, s, pol, &s1);
+                 {
+                    Real p = log_pochhammer(*ai, s, pol, &s1);
+                    term += p;
+                    loop_error_scale += p > 0 ? p : 0;
+                 }
               }
               //std::cout << "term = " << term << std::endl;
               if (terminate)
                  break;
-              for(auto bi = bj.begin(); bi != bj.end(); ++bi)
-                 term -= log_pochhammer(*bi, s, pol, &s2);
+              for (auto bi = bj.begin(); bi != bj.end(); ++bi)
+              {
+                 Real p = log_pochhammer(*bi, s, pol, &s2);
+                 term -= p;
+                 loop_error_scale += p > 0 ? p : 0;
+              }
               //std::cout << "term = " << term << std::endl;
-              term -= lgamma(Real(s + 1), pol);
-              term += s * log(fabs(z));
+              Real p = lgamma(Real(s + 1), pol);
+              term -= p;
+              loop_error_scale += p > 0 ? p : 0;
+              p = s * log(fabs(z));
+              term += p;
+              loop_error_scale += p > 0 ? p : 0;
+              //
+              // Convert loop_error scale to the absolute error
+              // in term after exp is applied:
+              //
+              loop_error_scale *= tools::epsilon<Real>();
+              //
+              // Convert to relative error after exp:
+              //
+              loop_error_scale = fabs(expm1(loop_error_scale));
+              //
+              // Convert to multiplier for the error term:
+              //
+              loop_error_scale /= tools::epsilon<Real>();
+
               if (z < 0)
                  s1 *= (s & 1 ? -1 : 1);
-              //term -= local_scaling;
+
               if (term <= tools::log_min_value<Real>())
               {
                  // rescale if we can:
@@ -352,8 +436,10 @@
                //std::cout << "Norm loop result = " << std::setprecision(35) << boost::multiprecision::mpfr_float_50(loop_result)* exp(boost::multiprecision::mpfr_float_50(loop_scale)) << std::endl;
                //
                // We now need to combine the results of the first series summation with whatever
-               // local results we have now...
+               // local results we have now.  First though, rescale abs_result by loop_error_scale
+               // to factor in the error in the pochhammer terms at the start of this block:
                //
+               abs_result += loop_error_scale * fabs(loop_result);
                if (loop_scale > local_scaling)
                {
                   //
@@ -468,7 +554,10 @@
                //std::cout << "Norm loop result = " << std::setprecision(35) << boost::multiprecision::mpfr_float_50(loop_result)* exp(boost::multiprecision::mpfr_float_50(loop_scale)) << std::endl;
                //
                // We now need to combine the results of the first series summation with whatever
-               // local results we have now...
+               // local results we have now.  First though, rescale abs_result by loop_error_scale
+               // to factor in the error in the pochhammer terms at the start of this block:
+               //
+               abs_result += loop_error_scale * fabs(loop_result);
                //
                if (loop_scale > local_scaling)
                {
