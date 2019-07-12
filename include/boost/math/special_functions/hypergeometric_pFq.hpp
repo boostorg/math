@@ -54,9 +54,21 @@ namespace boost {
       }
 
       template <class Seq, class Real>
-      inline std::pair<Real, Real> hypergeometric_pFq(const Seq& aj, const Seq& bj, const Real& z, Real* pNorm = 0)
+      inline Real hypergeometric_pFq(const Seq& aj, const Seq& bj, const Real& z, Real* pNorm = 0)
       {
          return hypergeometric_pFq(aj, bj, z, pNorm, boost::math::policies::policy<>());
+      }
+
+      template <class R, class Real, class Policy>
+      inline Real hypergeometric_pFq(const std::initializer_list<R>& aj, const std::initializer_list<R>& bj, const Real& z, Real* pNorm, const Policy& pol)
+      {
+         return hypergeometric_pFq<std::initializer_list<R>, Real, Policy>(aj, bj, z, pNorm, pol);
+      }
+      
+      template <class R, class Real>
+      inline Real hypergeometric_pFq(const std::initializer_list<R>& aj, const std::initializer_list<R>& bj, const Real& z, Real* pNorm = 0)
+      {
+         return hypergeometric_pFq<std::initializer_list<R>, Real>(aj, bj, z, pNorm);
       }
 
       template <class T>
