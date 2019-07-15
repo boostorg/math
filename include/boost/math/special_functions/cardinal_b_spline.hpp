@@ -7,6 +7,7 @@
 #define BOOST_MATH_SPECIAL_CARDINAL_B_SPLINE_HPP
 
 #include <array>
+#include <cmath>
 
 namespace boost { namespace math {
 
@@ -34,7 +35,9 @@ Real cardinal_b_spline(Real x) {
       return cardinal_b_spline<n>(-x);
   }
 
-  if constexpr (n==0)
+  // Someday we'll be able to 'if constexpr' on many compilers.
+  // Not today though! In any case, it's not a big performance hit.
+  if /*constexpr*/ (n==0)
   {
     if (x < Real(1)/Real(2)) {
       return Real(1);
@@ -47,7 +50,7 @@ Real cardinal_b_spline(Real x) {
     }
   }
 
-  if constexpr (n==1) {
+  if /*constexpr*/ (n==1) {
     return detail::B1(x);
   }
 
@@ -57,7 +60,9 @@ Real cardinal_b_spline(Real x) {
     return Real(0);
   }
 
-  // Fill v with values of B
+  // Fill v with values of B1:
+  // At most two of these terms are nonzero, and at least 1.
+  // There is only one non-zero term when n is odd and x = 0.
   std::array<Real, n> v;
   Real z = x + 1 - supp_max;
   for (unsigned i = 0; i < n; ++i)
@@ -66,10 +71,11 @@ Real cardinal_b_spline(Real x) {
       z += 1;
   }
 
+  Real smx = supp_max - x;
   for (unsigned j = 2; j <= n; ++j)
   {
-    Real a = (x + j + 1 - supp_max);
-    Real b = (supp_max - x);
+    Real a = (j + 1 - smx);
+    Real b = smx;
     for(unsigned k = 0; k <= n - j; ++k)
     {
       v[k] = (a*v[k+1] + b*v[k])/Real(j);

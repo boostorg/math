@@ -135,6 +135,26 @@ void test_quintic()
 
 }
 
+template<unsigned n, typename Real>
+void test_partition_of_unity()
+{
+  std::mt19937 gen(323723);
+  Real supp = (n+1.0)/2.0;
+  std::uniform_real_distribution<Real> dis(-supp, -supp+1);
+
+  for(size_t i = 0; i < 500; ++i) {
+    Real x = dis(gen);
+    Real one = 0;
+    while (x < supp) {
+        one += cardinal_b_spline<n>(x);
+        x += 1;
+    }
+    if(!CHECK_ULP_CLOSE(1, one, n)) {
+      std::cerr << "  Partition of unity failure at n = " << n << "\n";
+    }
+  }
+}
+
 
 int main()
 {
@@ -158,6 +178,12 @@ int main()
     test_quintic<double>();
     test_quintic<long double>();
 
+    test_partition_of_unity<1, double>();
+    test_partition_of_unity<2, double>();
+    test_partition_of_unity<3, double>();
+    test_partition_of_unity<4, double>();
+    test_partition_of_unity<5, double>();
+    test_partition_of_unity<6, double>();
 
 #ifdef BOOST_HAS_FLOAT128
     test_box<float128>();

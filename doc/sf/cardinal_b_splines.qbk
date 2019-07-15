@@ -5,7 +5,7 @@
   http://www.boost.org/LICENSE_1_0.txt).
 ]
 
-[section:b_spline Cardinal B-splines]
+[section:cardinal_b_splines Cardinal B-splines]
 
 [h4 Synopsis]
 
@@ -15,20 +15,11 @@
 
    namespace boost{ namespace math{
 
-   template<class Real>
-   Real cardinal_b_spline(unsigned n, Real x);
+   template<unsigned n, typename Real>
+   Real cardinal_b_spline(Real x);
 
-   template<class Real>
-   Real cardinal_b_spline_prime(unsigned n, Real x);
-
-   template<class Real>
-   Real cardinal_b_spline_double_prime(unsigned n, Real x);
-
-   template<class Real>
-   Real forward_cardinal_b_spline(unsigned n, Real x);
-
-   template<class Real>
-   Real forward_fractional_cardinal_b_spline(Real alpha, Real x);
+   template<unsigned n, typename Real>
+   Real forward_cardinal_b_spline(Real x);
 
    }} // namespaces
 
@@ -45,25 +36,12 @@ A basic usage is as follows:
     using boost::math::cardinal_b_spline;
     double x = 0.5;
     // B₀(x), the box function:
-    double y = cardinal_b_spline(0, x);
+    double y = cardinal_b_spline<0>(x);
     // B₁(x), the hat function:
-    y = cardinal_b_spline(1, x);
+    y = cardinal_b_spline<1>(x);
 
-    // The derivative of B₁(x):
-    double y_p = cardinal_b_spline_prime(1,x);
-    // The second derivative of B₃:
-    double y_pp = cardinal_b_spline_double_prime(3, x);
 
 [$../graphs/central_b_splines.svg]
-[$../graphs/central_b_spline_derivatives.svg]
-
-[h3 Fractional B-splines]
-
-A useful generalization of the Schoenberg's /B/-splines are the fractional /B/-splines.
-For more information see Unser and Blu.
-Be aware that the fractional /B/-splines are more computationally expensive than integer /B/-splines.
-
-[$../graphs/forward_fractional_b_splines.svg]
 
 [h3 Caveats]
 
@@ -83,7 +61,9 @@ If necessary, the forward splines can be evaluated by using `forward_cardinal_b_
 
 [h3 Implementation]
 
-The implementation follows Maurice Cox' 1972 paper 'The Numerical Evaluation of B-splines'.
+The implementation follows Maurice Cox' 1972 paper 'The Numerical Evaluation of B-splines', and uses the triangular array of Algorithm 6.1 of the reference rather than the rhombohedral array of Algorithm 6.2.
+Benchmarks revealed that the time to calculate the indexes of the rhombohedral array exceed the time to simply add zeroes together, except for /n/ > 18.
+Since few people use /B/ splines of degree 18, the triangular array is used.
 
 [h3 Performance]
 
@@ -124,6 +104,15 @@ UniformReal<double>               11.5 ns
 ``
 
 A uniformly distributed random number within the support of the spline is generated for the argument, so subtracting 11.5 ns from these gives a good idea of the performance of the calls.
+
+[h3 Accuracy]
+
+Some representative ULP plots are shown below.
+The error grows linearly with /n/, as expected from Cox equation 10.5.
+
+[$../graphs/b_spline_ulp_3.svg]
+[$../graphs/b_spline_ulp_5.svg]
+[$../graphs/b_spline_ulp_9.svg]
 
 [h3 References]
 
