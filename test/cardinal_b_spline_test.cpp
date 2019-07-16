@@ -23,22 +23,22 @@ using boost::math::forward_cardinal_b_spline;
 template<class Real>
 void test_box()
 {
-    Real t = cardinal_b_spline<0>(1.1);
+    Real t = cardinal_b_spline<0>(Real(1.1));
     Real expected = 0;
     CHECK_ULP_CLOSE(expected, t, 0);
 
-    t = cardinal_b_spline<0>(-1.1);
+    t = cardinal_b_spline<0>(Real(-1.1));
     expected = 0;
     CHECK_ULP_CLOSE(expected, t, 0);
 
     Real h = Real(1)/Real(256);
-    for (Real t = -Real(1)/Real(2)+h; t < Real(1)/Real(2); t += h)
+    for (t = -Real(1)/Real(2)+h; t < Real(1)/Real(2); t += h)
     {
         expected = 1;
         CHECK_ULP_CLOSE(expected, cardinal_b_spline<0>(t), 0);
     }
 
-    for (Real t = h; t < 1; t += h)
+    for (t = h; t < 1; t += h)
     {
         expected = 1;
         CHECK_ULP_CLOSE(expected, forward_cardinal_b_spline<0>(t), 0);
@@ -48,16 +48,16 @@ void test_box()
 template<class Real>
 void test_hat()
 {
-    Real t = cardinal_b_spline<1>(2.1);
+    Real t = cardinal_b_spline<1>(Real(2.1));
     Real expected = 0;
     CHECK_ULP_CLOSE(expected, t, 0);
 
-    t = cardinal_b_spline<1>(-2.1);
+    t = cardinal_b_spline<1>(Real(-2.1));
     expected = 0;
     CHECK_ULP_CLOSE(expected, t, 0);
 
     Real h = Real(1)/Real(256);
-    for (Real t = -1; t <= 1; t += h)
+    for (t = -1; t <= 1; t += h)
     {
         expected = 1-abs(t);
         if(!CHECK_ULP_CLOSE(expected, cardinal_b_spline<1>(t), 0) )
@@ -66,7 +66,7 @@ void test_hat()
         }
     }
 
-    for (Real t = 0; t < 2; t += h)
+    for (t = 0; t < 2; t += h)
     {
         expected = 1 - abs(t-1);
         CHECK_ULP_CLOSE(expected, forward_cardinal_b_spline<1>(t), 0);
