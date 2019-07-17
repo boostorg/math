@@ -45,6 +45,22 @@ bool is_small_a(const Seq& a)
    return false;
 }
 
+template <class Seq>
+bool has_negative_ab(const Seq& a, const Seq& b)
+{
+   for(auto p = a.begin(); p != a.end(); ++p)
+   {
+      if(*p < 0)
+         return true;
+   }
+   for(auto p = b.begin(); p != b.end(); ++p)
+   {
+      if(*p < 0)
+         return true;
+   }
+   return false;
+}
+
 template <class T>
 void check_pFq_result(const T& result, const T& norm, const T& expect, const std::initializer_list<T>& a, const std::initializer_list<T>& b, const T& z)
 {
@@ -61,9 +77,15 @@ void check_pFq_result(const T& result, const T& norm, const T& expect, const std
    T fudge_factor = 25;
    if (is_small_a(a))
       fudge_factor *= 4;  // not sure why??
-   if (((err > fudge_factor * found_err) && (found_err < 1) || (boost::math::isnan)(found_err)) && (!(boost::math::isinf)(result)))
+   if ((has_negative_ab(a, b)) || ((a.size() == 2) && (b.size() == 1)) || (boost::math::tools::epsilon<T>() < boost::math::tools::epsilon<double>()))
    {
-      std::cout << "Found error = " << err << " expected = " << found_err << std::endl;
+      T min_err = boost::math::tools::epsilon<T>() * 600 / found_err;
+      fudge_factor = (std::max)(fudge_factor, min_err);
+   }
+   if ((((err > fudge_factor * found_err) && (found_err < 1)) || (boost::math::isnan)(found_err)) && (!(boost::math::isinf)(result)))
+   {
+      std::cout << "Found error = " << err << " error from norm = " << found_err << std::endl;
+      std::cout << "Testing fudge factor = " << fudge_factor << std::endl;
       std::cout << "  a = ";
       for (auto pa = a.begin(); pa != a.end(); ++pa)
          std::cout << *pa << ",";
@@ -211,10 +233,78 @@ void test_spots_1F1_b(T, const char*)
 }
 
 template <class T>
+void test_spots_2F1(T, const char*)
+{
+#include "hypergeometric_2F1.ipp"
+
+   for (auto row = hypergeometric_2F1.begin(); row != hypergeometric_2F1.end(); ++row)
+   {
+      try {
+         T norm;
+         T result = boost::math::hypergeometric_pFq({ (*row)[0], (*row)[1] }, { (*row)[2] }, (*row)[3], &norm);
+         check_pFq_result(result, norm, (*row)[4], { (*row)[0], (*row)[1] }, { (*row)[2] }, (*row)[3]);
+      }
+      catch (const boost::math::evaluation_error&) {}
+   }
+}
+
+template <class T>
+void test_spots_0F2(T, const char*)
+{
+#include "hypergeometric_0F2.ipp"
+
+   for (auto row = hypergeometric_0F2.begin(); row != hypergeometric_0F2.end(); ++row)
+   {
+      try {
+         T norm;
+         T result = boost::math::hypergeometric_pFq({}, { (*row)[0], (*row)[1] }, (*row)[2], &norm);
+         check_pFq_result(result, norm, (*row)[3], {}, { (*row)[0], (*row)[1] }, (*row)[2]);
+      }
+      catch (const boost::math::evaluation_error&) {}
+   }
+}
+
+template <class T>
+void test_spots_1F2(T, const char*)
+{
+#include "hypergeometric_1F2.ipp"
+
+   for (auto row = hypergeometric_1F2.begin(); row != hypergeometric_1F2.end(); ++row)
+   {
+      try {
+         T norm;
+         T result = boost::math::hypergeometric_pFq({ (*row)[0] }, { (*row)[1], (*row)[2] }, (*row)[3], &norm);
+         check_pFq_result(result, norm, (*row)[4], { (*row)[0] }, { (*row)[1], (*row)[2] }, (*row)[3]);
+      }
+      catch (const boost::math::evaluation_error&) {}
+   }
+}
+
+template <class T>
+void test_spots_2F2(T, const char*)
+{
+#include "hypergeometric_2F2.ipp"
+
+   for (auto row = hypergeometric_2F2.begin(); row != hypergeometric_2F2.end(); ++row)
+   {
+      try {
+         T norm;
+         T result = boost::math::hypergeometric_pFq({ (*row)[0], (*row)[1] }, { (*row)[2], (*row)[3] }, (*row)[4], &norm);
+         check_pFq_result(result, norm, (*row)[5], { (*row)[0], (*row)[1] }, { (*row)[2], (*row)[3] }, (*row)[4]);
+      }
+      catch (const boost::math::evaluation_error&) {}
+   }
+}
+
+template <class T>
 void test_spots(T z, const char* type_name)
 {
    test_spots_1F0(z, type_name);
    test_spots_0F1(z, type_name);
    test_spots_1F1(z, type_name);
    test_spots_1F1_b(z, type_name);
+   test_spots_0F2(z, type_name);
+   test_spots_1F2(z, type_name);
+   test_spots_2F2(z, type_name);
+   test_spots_2F1(z, type_name);
 }
