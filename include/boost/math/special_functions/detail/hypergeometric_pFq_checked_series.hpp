@@ -281,6 +281,7 @@
               // the pochhammer symbols.
               //
               Real loop_error_scale = 0;
+              //boost::multiprecision::mpfi_float err_est = 0;
               //
               // b hasn't crossed the origin yet and the series may spring back into life at that point
               // so we need to jump forward to that term and then evaluate forwards and backwards from there:
@@ -299,9 +300,12 @@
                  }
                  else
                  {
-                    Real p = log_pochhammer(*ai, s, pol, &s1);
+                    int ls = 1;
+                    Real p = log_pochhammer(*ai, s, pol, &ls);
+                    s1 *= ls;
                     term += p;
-                    loop_error_scale += p > 0 ? p : 0;
+                    loop_error_scale = (std::max)(p, loop_error_scale);
+                    //err_est += boost::multiprecision::mpfi_float(p);
                  }
               }
               //std::cout << "term = " << term << std::endl;
@@ -309,17 +313,24 @@
                  break;
               for (auto bi = bj.begin(); bi != bj.end(); ++bi)
               {
-                 Real p = log_pochhammer(*bi, s, pol, &s2);
+                 int ls = 1;
+                 Real p = log_pochhammer(*bi, s, pol, &ls);
+                 s2 *= ls;
                  term -= p;
-                 loop_error_scale += p > 0 ? p : 0;
+                 loop_error_scale = (std::max)(p, loop_error_scale);
+                 //err_est -= boost::multiprecision::mpfi_float(p);
               }
               //std::cout << "term = " << term << std::endl;
               Real p = lgamma(Real(s + 1), pol);
               term -= p;
-              loop_error_scale += p > 0 ? p : 0;
+              loop_error_scale = (std::max)(p, loop_error_scale);
+              //err_est -= boost::multiprecision::mpfi_float(p);
               p = s * log(fabs(z));
               term += p;
-              loop_error_scale += p > 0 ? p : 0;
+              loop_error_scale = (std::max)(p, loop_error_scale);
+              //err_est += boost::multiprecision::mpfi_float(p);
+              //err_est = exp(err_est);
+              //std::cout << err_est << std::endl;
               //
               // Convert loop_error scale to the absolute error
               // in term after exp is applied:
@@ -439,7 +450,8 @@
                // local results we have now.  First though, rescale abs_result by loop_error_scale
                // to factor in the error in the pochhammer terms at the start of this block:
                //
-               abs_result += loop_error_scale * fabs(loop_result);
+               boost::uintmax_t next_backstop = k;
+               loop_abs_result += loop_error_scale * fabs(loop_result);
                if (loop_scale > local_scaling)
                {
                   //
@@ -557,7 +569,7 @@
                // local results we have now.  First though, rescale abs_result by loop_error_scale
                // to factor in the error in the pochhammer terms at the start of this block:
                //
-               abs_result += loop_error_scale * fabs(loop_result);
+               loop_abs_result += loop_error_scale * fabs(loop_result);
                //
                if (loop_scale > local_scaling)
                {
@@ -590,6 +602,10 @@
                   result += loop_result;
                   abs_result += loop_abs_result;
                }
+               //
+               // Reset k to the largest k we reached
+               //
+               k = next_backstop;
            }
         }
 
