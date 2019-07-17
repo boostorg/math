@@ -331,6 +331,135 @@ public:
       return *this;
    }
 
+   template <class F>
+   test_data& insert(F func, const parameter_info<T>& arg1, const parameter_info<T>& arg2, const parameter_info<T>& arg3, const parameter_info<T>& arg4)
+   {
+      // generate data for 4-argument functor F
+
+      typedef typename std::set<T>::const_iterator it_type;
+
+      std::set<T> points1, points2, points3, points4;
+      create_test_points(points1, arg1);
+      create_test_points(points2, arg2);
+      create_test_points(points3, arg3);
+      create_test_points(points4, arg4);
+      it_type a = points1.begin();
+      it_type b = points1.end();
+      row_type row;
+      while(a != b)
+      {
+         it_type c = points2.begin();
+         it_type d = points2.end();
+         while(c != d)
+         {
+            it_type e = points3.begin();
+            it_type f = points3.end();
+            while(e != f)
+            {
+               it_type g = points4.begin();
+               it_type h = points4.end();
+               while (g != h)
+               {
+                  if ((arg1.type & dummy_param) == 0)
+                     row.push_back(*a);
+                  if ((arg2.type & dummy_param) == 0)
+                     row.push_back(*c);
+                  if ((arg3.type & dummy_param) == 0)
+                     row.push_back(*e);
+                  if ((arg4.type & dummy_param) == 0)
+                     row.push_back(*g);
+#ifndef BOOST_NO_EXCEPTIONS
+                  try {
+#endif
+                     // domain_error exceptions from func are swallowed
+                     // and this data point is ignored:
+                     detail::unpack_and_append(row, func(*a, *c, *e, *g));
+                     m_data.insert(row);
+#ifndef BOOST_NO_EXCEPTIONS
+                  }
+                  catch (const std::domain_error&) {}
+#endif
+                  row.clear();
+                  ++g;
+               }
+               ++e;
+            }
+            ++c;
+         }
+         ++a;
+      }
+      return *this;
+   }
+
+   template <class F>
+   test_data& insert(F func, const parameter_info<T>& arg1, const parameter_info<T>& arg2, const parameter_info<T>& arg3, const parameter_info<T>& arg4, const parameter_info<T>& arg5)
+   {
+      // generate data for 5-argument functor F
+
+      typedef typename std::set<T>::const_iterator it_type;
+
+      std::set<T> points1, points2, points3, points4, points5;
+      create_test_points(points1, arg1);
+      create_test_points(points2, arg2);
+      create_test_points(points3, arg3);
+      create_test_points(points4, arg4);
+      create_test_points(points5, arg5);
+      it_type a = points1.begin();
+      it_type b = points1.end();
+      row_type row;
+      while(a != b)
+      {
+         it_type c = points2.begin();
+         it_type d = points2.end();
+         while(c != d)
+         {
+            it_type e = points3.begin();
+            it_type f = points3.end();
+            while(e != f)
+            {
+               it_type g = points4.begin();
+               it_type h = points4.end();
+               while (g != h)
+               {
+                  it_type i = points5.begin();
+                  it_type j = points5.end();
+                  while (i != j)
+                  {
+                     if ((arg1.type & dummy_param) == 0)
+                        row.push_back(*a);
+                     if ((arg2.type & dummy_param) == 0)
+                        row.push_back(*c);
+                     if ((arg3.type & dummy_param) == 0)
+                        row.push_back(*e);
+                     if ((arg4.type & dummy_param) == 0)
+                        row.push_back(*g);
+                     if ((arg5.type & dummy_param) == 0)
+                        row.push_back(*i);
+#ifndef BOOST_NO_EXCEPTIONS
+                     try {
+#endif
+                        // domain_error exceptions from func are swallowed
+                        // and this data point is ignored:
+                        detail::unpack_and_append(row, func(*a, *c, *e, *g, *i));
+                        m_data.insert(row);
+#ifndef BOOST_NO_EXCEPTIONS
+                     }
+                     catch (const std::domain_error&) {}
+#endif
+                     row.clear();
+                     ++i;
+                  }
+                  ++g;
+               }
+               ++e;
+            }
+            ++c;
+         }
+         ++a;
+      }
+      return *this;
+   }
+
    void clear(){ m_data.clear(); }
 
    // access:
