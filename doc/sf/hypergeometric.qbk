@@ -412,6 +412,67 @@ If all else fails, then we use a checked series summation which will raise an __
 are destroyed by cancellation.
 
 [endsect]
+
+[section:pFq Hypergeometric [sub p]F[sub q]]
+
+   #include <boost/math/special_functions/hypergeometric_pFq.hpp>
+
+   namespace boost { namespace math {
+
+   template <class Seq, class Real>
+   ``__sf_result`` hypergeometric_pFq(const Seq& aj, const Seq& bj, const Real& z, Real* pNorm, const Policy& pol);
+
+   template <class Seq, class Real>
+   ``__sf_result`` hypergeometric_pFq(const Seq& aj, const Seq& bj, const Real& z, Real* pNorm = 0)
+
+   template <class R, class Real>
+   ``__sf_result`` hypergeometric_pFq(const std::initializer_list<R>& aj, const std::initializer_list<R>& bj, const Real& z, Real* pNorm, const Policy& pol);
+
+   template <class R, class Real>
+   ``__sf_result`` hypergeometric_pFq(const std::initializer_list<R>& aj, const std::initializer_list<R>& bj, const Real& z, Real* pNorm = 0)
+
+   }} // namespaces
+
+[h4 Description]
+
+The function `hypergeometric_pFq` returns the result of:
+
+[/\Large  $$ _pF_q(\{a_1...a_n\}, \{b_1...b_n\}; z) = \sum_{k=0}^{\infty} \frac{\Pi_{j=1}^n(a_j)_n z^k}{\Pi_{j=1}^n(b_j)_n k!} $$]
+[$../equations/hypergeometric_pfq_1.svg]
+
+It is most naturally used via initializer lists as in:
+
+   double h = hypergeometric_pFq({2,3,4}, {5,6,7,8}, z);  // Calculate 3F4
+
+The optional ['norm] argument calculates the norm of the sum and can be used for error estimation, which is to say the ['absolute error]
+in the result is estimated to be:
+
+   norm * std::numeric_limits<decltype(norm)>::epsilon();
+
+You should divide this value by the result to get an estimate of ['relative error].
+
+It should be noted that the error estimates are rather crude - the error can be significantly underestimated 
+in some circumstances, and over-estimated in others.
+
+[h4 Implementation]
+
+This function is implemented by direct summation of the series, summation normally starts with the zeroth term,
+but will skip forward and sum outward (ie in both forward and backward directions) from some term /N/ when
+required.  This is particularly important when some of the /b/ arguments are negative, as in this situation
+the sum undergoes "false-convergence", and then diverges again as each b[sub j] passes the origin.  Consequently,
+were you to plot the magnitude of the terms in the sum, you would see them pass through a series of
+minima and maxima before finally converging to zero at infinity.  For some values of /p/ and /q/ we
+can compute where the maxima occur, and therefore sum only the terms that will have an impact on the
+result.  For other /p/ and /q/ values, predicting the exact locations of the maxima is not so easy, and we
+simply restart summation at the point where each b[sub j] passes the origin: this will eventually reach
+all the significant terms of the sum, but the key word may well be "eventually".
+
+The error term /norm/ is normally simply the sum of the absolute values of each term.  However,
+if it was necessary for the summation to skip forward, then /norm/ is adjusted to account for the
+error inherent in calculating the N'th term via logarithms.
+
+[endsect]
+
 [section:hypergeometric_refs Hypergeometric References]
 
 # Beals, Richard, and Roderick Wong. ['Special functions: a graduate text.] Vol. 126. Cambridge University Press, 2010.
