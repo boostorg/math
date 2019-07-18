@@ -9,6 +9,7 @@
 #include <numeric>
 #include <utility>
 #include <random>
+#include <cmath>
 #include <boost/core/demangle.hpp>
 #include <boost/math/special_functions/cardinal_b_spline.hpp>
 #ifdef BOOST_HAS_FLOAT128
@@ -149,7 +150,7 @@ void test_partition_of_unity()
         one += cardinal_b_spline<n>(x);
         x += 1;
     }
-    if(!CHECK_ULP_CLOSE(1, one, n)) {
+    if(!CHECK_ULP_CLOSE(Real(1), one, n)) {
       std::cerr << "  Partition of unity failure at n = " << n << "\n";
     }
   }
