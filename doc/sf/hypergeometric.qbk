@@ -122,7 +122,7 @@ When both `a1` and `a2` are integers then the function is implemented in terms o
 
 [equation hyper_2f0_laguerre]
 
-Otherwise if the defining series would be divergent, then we use the continued fraction form:
+If the defining series is divergent, we use the continued fraction
 
 [equation hyper_2f0_cf]
 
@@ -186,13 +186,13 @@ The "regularized" versions of the function return:
 
 The "log" versions of the function return:
 
-[/ \Large  $$ ln(|_1F_1(a, b, z)|) $$ ]
+[/ \Large  $$ \ln(|_1F_1(a, b, z)|) $$ ]
 [$../equations/hypergeometric_1f1_18.svg]
 
-When the optional /sign/ argument is supplied it is set on exit to either +1 or -1 depending on the sign of [sub 1]F[sub 1](a, b, z).
+When the optional `sign` argument is supplied it is set on exit to either +1 or -1 depending on the sign of [sub 1]/F/[sub 1](/a/, /b/, /z/).
 
 Both the regularized and the logarithmic versions of these functions return results without the spurious
-under/overflow that a naive implementation would suggest.
+under/overflow that plague naive implementations.
 
 [h4 Known Issues]
 
@@ -235,13 +235,13 @@ and sometimes into the thousands of digits.
 
 [h4 Errors]
 
-We divide the domain of [sub 1]F[sub 1] up into several domains to explain the error rates.  
+We divide the domain of [sub 1]/F/[sub 1] up into several domains to explain the error rates.
 
 In the following graphs we ran 100000 random test cases over each domain, note that the scatter plots show only the very worst errors
 as otherwise the graphs are both incomprehensible and virtually unplottable (as in sudden browser death).
 
-For 0 < a,b,z the error rates are trivial small unless we are forced to take steps to avoid very-slow convergence and use a method other than direct evaluation of the series
-for performance reasons.  Even so the errors rates are broadly acceptible, with the scatter graph shows where the worst errors are located:
+For 0 < a,b,z the error rates are trivially small unless we are forced to take steps to avoid very-slow convergence and use a method other than direct evaluation of the series
+for performance reasons.  Even so the errors rates are broadly acceptable, with the scatter graph shows where the worst errors are located:
 
 [$../graphs/hypergeometric_1f1/positive_abz_bins.svg]
 [? __build_html '''<?dbhtml-include href="'''__base_path__'''/graphs/hypergeometric_1f1/positive_abz.html"?>''']
@@ -253,14 +253,14 @@ For -1000 < a < 0 and 0 < b,z < 1000 the maximum error rates are higher, but mos
 [? __build_html '''<?dbhtml-include href="'''__base_path__'''/graphs/hypergeometric_1f1/negative_a.html"?>''']
 [?! __build_html [$../graphs/hypergeometric_1f1/negative_a.png]]
 
-For -1000 < b < 0 and a,z > 0 the errors are mostly low at double precision except near the "unimplementable zone".
+For -1000 < /b/ < 0 and /a/,/z/ > 0 the errors are mostly low at double precision except near the "unimplementable zone".
 Note however, that the some of the methods used here fail to converge to much better than double precision.
 
 [$../graphs/hypergeometric_1f1/negative_b_bins.svg]
 [? __build_html '''<?dbhtml-include href="'''__base_path__'''/graphs/hypergeometric_1f1/negative_b.html"?>''']
 [?! __build_html [$../graphs/hypergeometric_1f1/negative_b.png]]
 
-For both /a/ and /b/ less than zero, the errors the worst errors are clustered in a "difficult zone" with /b < a/ and /z [cong] a/:
+For both /a/ and /b/ less than zero, the errors the worst errors are clustered in a "difficult zone" with /b < a/ and /z/ [cong] /a/:
 
 [$../graphs/hypergeometric_1f1/negative_ab_bins.svg]
 [? __build_html '''<?dbhtml-include href="'''__base_path__'''/graphs/hypergeometric_1f1/negative_ab.html"?>''']
@@ -269,7 +269,7 @@ For both /a/ and /b/ less than zero, the errors the worst errors are clustered i
 
 [h4 Implementation]
 
-The implementation implementation for this function is remarkably complex,
+The implementation implementation for this function is remarkably complex;
 readers will have to refer to the code for the transitions between methods, as we can only give an overview here.
 
 In almost all cases where /z < 0/ we use Kummer's relation to make /z/ positive:
@@ -350,7 +350,7 @@ Sometimes this is a well defined and characterized change in direction: for exam
 [$../equations/hypergeometric_1f1_10.svg]
 
 abruptly changes from stable forwards recursion to stable backwards if /2a-b+z/ changes sign.
-Thus recurrence on /a/, even when [sub 1]F[sub 1](/a/+/N/, /b/, /z/) is strictly increasing, needs careful handling as /a/ \u2192 0.
+Thus recurrence on /a/, even when [sub 1]/F/[sub 1](/a/+/N/, /b/, /z/) is strictly increasing, needs careful handling as /a/ \u2192 0.
 
 The transitory nature of the stable recurrence relations is well documented in the literature, for example [link math_toolkit.hypergeometric.hypergeometric_refs (10)]
 gives many exmples, including the anomalous behaviour of recurrence on /a/ and /b/ for large /z/ as first documented by Gauchi [link math_toolkit.hypergeometric.hypergeometric_refs (12)].
