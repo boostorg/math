@@ -395,7 +395,7 @@ namespace boost {
             };
             static const unsigned total_elements = sizeof(domain) / sizeof(domain[0]);
             static const unsigned stride = 16;
-            static const unsigned a_elements = total_elements / stride;
+            //static const unsigned a_elements = total_elements / stride;
             BOOST_ASSERT(total_elements % stride == 0);
 
             static const double a_max = domain[total_elements - 1][0];
