@@ -236,7 +236,7 @@ void test_zero_integrand()
     using std::sqrt;
     using std::numeric_limits;
     auto integrator = get_sin_integrator<Real>();
-    auto f = [](Real x)->Real { return Real(0); };
+    auto f = [](Real /* x */)->Real { return Real(0); };
     Real omega = 1;
     auto [Is, err] = integrator.integrate(f, omega);
     Real exact = 0;
@@ -325,8 +325,6 @@ void test_nodes()
             t0 = t1;
         }
     }
-
-
 }
 
 

@@ -184,8 +184,8 @@ and a success fraction 0.25, 25% or 1 in 4, is constructed like this:
   then we can write:
   */
   using namespace boost::multiprecision;
-
   negative_binomial_distribution<cpp_bin_float_50>  mydist8(8, 0.25);
+
   // `integer` arguments are promoted to your RealType exactly, but
   // `double` argument are converted to RealType,
   // most likely losing precision!
