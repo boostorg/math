@@ -494,87 +494,6 @@ test-suite special_fun :
    [ run test_trig.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
    [ run test_zeta.cpp ../../test/build//boost_unit_test_framework test_instances//test_instances pch_light  ]
    [ run test_sinc.cpp ../../test/build//boost_unit_test_framework pch_light ]
-   [ run test_tr1.cpp
-   ../build//boost_math_tr1
-   ../build//boost_math_tr1f
-   ../build//boost_math_c99
-   ../build//boost_math_c99f
-   ../../test/build//boost_unit_test_framework
-     ]
-
-   [ run test_tr1.cpp
-      ../build//boost_math_tr1l
-      ../build//boost_math_c99l
-      ../../test/build//boost_unit_test_framework
-      : : :
-      <define>TEST_LD=1
-      [ check-target-builds ../config//has_long_double_support "long double support" : : <build>no ]
-      :
-      test_tr1_long_double
-     ]
-
-   [ run test_tr1.c
-      ../build//boost_math_tr1
-      ../build//boost_math_tr1f
-      ../build//boost_math_c99
-      ../build//boost_math_c99f
-      ../../test/build//boost_unit_test_framework
-      : : : #requirements
-      :
-      test_tr1_c
-    ]
-
-   [ run test_tr1.c
-      ../build//boost_math_tr1l
-      ../build//boost_math_c99l
-      ../../test/build//boost_unit_test_framework
-      : : :
-      <define>TEST_LD=1
-      [ check-target-builds ../config//has_long_double_support "long double support" : : <build>no ]
-      :
-      test_tr1_c_long_double
-    ]
-   [ run test_constants.cpp ../../test/build//boost_unit_test_framework  ]
-   [ run test_classify.cpp pch ../../test/build//boost_unit_test_framework  ]
-   [ run test_error_handling.cpp ../../test/build//boost_unit_test_framework  ]
-   [ run legendre_stieltjes_test.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_range_based_for ] [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]  ]
-   [ run test_minima.cpp pch ../../test/build//boost_unit_test_framework  ]
-   [ run test_rationals.cpp ../../test/build//boost_unit_test_framework
-      test_rational_instances/test_rational_double1.cpp
-      test_rational_instances/test_rational_double2.cpp
-      test_rational_instances/test_rational_double3.cpp
-      test_rational_instances/test_rational_double4.cpp
-      test_rational_instances/test_rational_double5.cpp
-      test_rational_instances/test_rational_float1.cpp
-      test_rational_instances/test_rational_float2.cpp
-      test_rational_instances/test_rational_float3.cpp
-      test_rational_instances/test_rational_float4.cpp
-      test_rational_instances/test_rational_ldouble1.cpp
-      test_rational_instances/test_rational_ldouble2.cpp
-      test_rational_instances/test_rational_ldouble3.cpp
-      test_rational_instances/test_rational_ldouble4.cpp
-      test_rational_instances/test_rational_ldouble5.cpp
-      test_rational_instances/test_rational_real_concept1.cpp
-      test_rational_instances/test_rational_real_concept2.cpp
-      test_rational_instances/test_rational_real_concept3.cpp
-      test_rational_instances/test_rational_real_concept4.cpp
-      test_rational_instances/test_rational_real_concept5.cpp
-   ]
-   [ run test_policy.cpp ../../test/build//boost_unit_test_framework  ]
-   [ run test_policy_2.cpp ../../test/build//boost_unit_test_framework  ]
-   [ run test_policy_3.cpp ../../test/build//boost_unit_test_framework  ]
-   [ run test_policy_4.cpp ../../test/build//boost_unit_test_framework  ]
-   [ run test_policy_5.cpp ../../test/build//boost_unit_test_framework  ]
-   [ run test_policy_6.cpp ../../test/build//boost_unit_test_framework  ]
-   [ run test_policy_7.cpp ../../test/build//boost_unit_test_framework  ]
-   [ run test_policy_8.cpp ../../test/build//boost_unit_test_framework  ]
-   [ compile test_policy_9.cpp  ]
-   [ run test_policy_sf.cpp ../../test/build//boost_unit_test_framework  ]
-   [ run test_long_double_support.cpp ../../test/build//boost_unit_test_framework
-      : : : [ check-target-builds ../config//has_long_double_support "long double support" : : <build>no ] ]
-   [ run test_recurrence.cpp : : : <define>TEST=1 [ requires cxx11_auto_declarations cxx11_decltype ] : test_recurrence_1 ]
-   [ run test_recurrence.cpp : : : <define>TEST=2 release [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <define>BOOST_MATH_TEST_FLOAT128 <linkflags>"-Bstatic -lquadmath -Bdynamic" ] [ requires cxx11_auto_declarations cxx11_decltype ]  : test_recurrence_2 ]
-   [ run test_recurrence.cpp : : : <define>TEST=3 release [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <define>BOOST_MATH_TEST_FLOAT128 <linkflags>"-Bstatic -lquadmath -Bdynamic" ] [ requires cxx11_auto_declarations cxx11_decltype ]  : test_recurrence_3 ]
 ;
 
 test-suite distribution_tests :
@@ -938,6 +857,88 @@ test-suite distribution_tests :
 ;
 
 test-suite misc :
+   [ run test_tr1.cpp
+   ../build//boost_math_tr1
+   ../build//boost_math_tr1f
+   ../build//boost_math_c99
+   ../build//boost_math_c99f
+   ../../test/build//boost_unit_test_framework
+     ]
+
+   [ run test_tr1.cpp
+      ../build//boost_math_tr1l
+      ../build//boost_math_c99l
+      ../../test/build//boost_unit_test_framework
+      : : :
+      <define>TEST_LD=1
+      [ check-target-builds ../config//has_long_double_support "long double support" : : <build>no ]
+      :
+      test_tr1_long_double
+     ]
+
+   [ run test_tr1.c
+      ../build//boost_math_tr1
+      ../build//boost_math_tr1f
+      ../build//boost_math_c99
+      ../build//boost_math_c99f
+      ../../test/build//boost_unit_test_framework
+      : : : #requirements
+      :
+      test_tr1_c
+    ]
+
+   [ run test_tr1.c
+      ../build//boost_math_tr1l
+      ../build//boost_math_c99l
+      ../../test/build//boost_unit_test_framework
+      : : :
+      <define>TEST_LD=1
+      [ check-target-builds ../config//has_long_double_support "long double support" : : <build>no ]
+      :
+      test_tr1_c_long_double
+    ]
+   [ run test_constants.cpp ../../test/build//boost_unit_test_framework  ]
+   [ run test_classify.cpp pch ../../test/build//boost_unit_test_framework  ]
+   [ run test_error_handling.cpp ../../test/build//boost_unit_test_framework  ]
+   [ run legendre_stieltjes_test.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_range_based_for ] [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]  ]
+   [ run test_minima.cpp pch ../../test/build//boost_unit_test_framework  ]
+   [ run test_rationals.cpp ../../test/build//boost_unit_test_framework
+      test_rational_instances/test_rational_double1.cpp
+      test_rational_instances/test_rational_double2.cpp
+      test_rational_instances/test_rational_double3.cpp
+      test_rational_instances/test_rational_double4.cpp
+      test_rational_instances/test_rational_double5.cpp
+      test_rational_instances/test_rational_float1.cpp
+      test_rational_instances/test_rational_float2.cpp
+      test_rational_instances/test_rational_float3.cpp
+      test_rational_instances/test_rational_float4.cpp
+      test_rational_instances/test_rational_ldouble1.cpp
+      test_rational_instances/test_rational_ldouble2.cpp
+      test_rational_instances/test_rational_ldouble3.cpp
+      test_rational_instances/test_rational_ldouble4.cpp
+      test_rational_instances/test_rational_ldouble5.cpp
+      test_rational_instances/test_rational_real_concept1.cpp
+      test_rational_instances/test_rational_real_concept2.cpp
+      test_rational_instances/test_rational_real_concept3.cpp
+      test_rational_instances/test_rational_real_concept4.cpp
+      test_rational_instances/test_rational_real_concept5.cpp
+   ]
+   [ run test_policy.cpp ../../test/build//boost_unit_test_framework  ]
+   [ run test_policy_2.cpp ../../test/build//boost_unit_test_framework  ]
+   [ run test_policy_3.cpp ../../test/build//boost_unit_test_framework  ]
+   [ run test_policy_4.cpp ../../test/build//boost_unit_test_framework  ]
+   [ run test_policy_5.cpp ../../test/build//boost_unit_test_framework  ]
+   [ run test_policy_6.cpp ../../test/build//boost_unit_test_framework  ]
+   [ run test_policy_7.cpp ../../test/build//boost_unit_test_framework  ]
+   [ run test_policy_8.cpp ../../test/build//boost_unit_test_framework  ]
+   [ compile test_policy_9.cpp  ]
+   [ run test_policy_sf.cpp ../../test/build//boost_unit_test_framework  ]
+   [ run test_long_double_support.cpp ../../test/build//boost_unit_test_framework
+      : : : [ check-target-builds ../config//has_long_double_support "long double support" : : <build>no ] ]
+   [ run test_recurrence.cpp : : : <define>TEST=1 [ requires cxx11_auto_declarations cxx11_decltype ] : test_recurrence_1 ]
+   [ run test_recurrence.cpp : : : <define>TEST=2 release [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <define>BOOST_MATH_TEST_FLOAT128 <linkflags>"-Bstatic -lquadmath -Bdynamic" ] [ requires cxx11_auto_declarations cxx11_decltype ]  : test_recurrence_2 ]
+   [ run test_recurrence.cpp : : : <define>TEST=3 release [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <define>BOOST_MATH_TEST_FLOAT128 <linkflags>"-Bstatic -lquadmath -Bdynamic" ] [ requires cxx11_auto_declarations cxx11_decltype ]  : test_recurrence_3 ]
+
    [ run test_print_info_on_type.cpp  ]
    [ run test_barycentric_rational.cpp ../../test/build//boost_unit_test_framework : : :  [ requires cxx11_smart_ptr cxx11_defaulted_functions cxx11_auto_declarations cxx11_unified_initialization_syntax ] [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]  ]
    [ run test_vector_barycentric_rational.cpp ../../test/build//boost_unit_test_framework : : :  [ requires cxx11_smart_ptr cxx11_defaulted_functions cxx11_auto_declarations cxx11_unified_initialization_syntax ]  [ check-target-builds ../../multiprecision/config//has_eigen : : <build>no ] ]
