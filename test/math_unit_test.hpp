@@ -69,10 +69,13 @@ bool check_ulp_close(PreciseReal expected1, Real computed, size_t ulps, std::str
     using std::max;
     using std::abs;
     using std::isnan;
-    BOOST_ASSERT_MSG(sizeof(PreciseReal) >= sizeof(Real),
-                     "The expected number must be computed in higher (or equal) precision than the number being tested.");
+    // Of course integers can be expected values, and they are exact:
+    if (!std::is_integral<PreciseReal>::value) {
+        BOOST_ASSERT_MSG(sizeof(PreciseReal) >= sizeof(Real),
+                         "The expected number must be computed in higher (or equal) precision than the number being tested.");
+        BOOST_ASSERT_MSG(!isnan(expected1), "Expected value cannot be a nan.");
+    }
 
-    BOOST_ASSERT_MSG(!isnan(expected1), "Expected value cannot be a nan.");
     if (isnan(computed))
     {
         std::ios_base::fmtflags f( std::cerr.flags() );

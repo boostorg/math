@@ -300,6 +300,7 @@ and use the function's name as the link text.]
 [def __legendre_q [link math_toolkit.sf_poly.legendre legendre_q]]
 [def __legendre_next [link math_toolkit.sf_poly.legendre legendre_next]]
 [def __hermite [link math_toolkit.sf_poly.hermite hermite]]
+[def __cardinal_b_splines [link math_toolkit.sf_poly.cardinal_b_splines cardinal_b_splines]]
 
 [/Misc]
 [def __expint [link math_toolkit.expint.expint_i expint]]
@@ -600,6 +601,7 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [include sf/hermite.qbk]
 [include sf/chebyshev.qbk]
 [include sf/spherical_harmonic.qbk]
+[include sf/cardinal_b_splines.qbk]
 [endsect] [/section:sf_poly Polynomials]
 
 [section:bessel Bessel Functions]
