@@ -7,8 +7,17 @@
 
 #include <boost/multiprecision/cpp_bin_float.hpp>
 
+#if defined(_MSC_FULL_VER) && (_MSC_FULL_VER < 190023026)
+//
+// Early msvc versions have <initializer_list> but can't handle
+// argument deduction of actual initializer_lists :(
+//
+#define DISABLE_TESTS
+#endif
+
 BOOST_AUTO_TEST_CASE( test_main )
 {
+#ifndef DISABLE_TESTS
 #if !defined(TEST) || (TEST == 2)
    test_spots(0.0F, "float");
 #endif
@@ -25,15 +34,13 @@ BOOST_AUTO_TEST_CASE( test_main )
 #endif
 #endif
 #endif
-#if (!defined(TEST) || (TEST == 4)) && (DBL_MAX_EXP == LDBL_MAX_EXP)
-   test_spots(boost::multiprecision::cpp_bin_float_double_extended(), "cpp_bin_float_double_extended");
-#endif
 #if !defined(TEST) || (TEST == 6)
    test_spots(boost::multiprecision::cpp_bin_float_quad(), "cpp_bin_float_quad");
 #endif
 #if !defined(TEST) || (TEST == 7)
    typedef boost::multiprecision::number<boost::multiprecision::cpp_bin_float<40> > dec_40;
    test_spots(dec_40(), "dec_40");
+#endif
 #endif
 }
 

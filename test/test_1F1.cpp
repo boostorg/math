@@ -183,9 +183,6 @@ BOOST_AUTO_TEST_CASE( test_main )
 #endif
 #endif
 #endif
-#if (!defined(TEST) || (TEST == 4)) && (DBL_MAX_EXP == LDBL_MAX_EXP)
-   test_spots(boost::multiprecision::cpp_bin_float_double_extended(), "cpp_bin_float_double_extended");
-#endif
 #if !defined(TEST) || (TEST == 6)
    test_spots(boost::multiprecision::cpp_bin_float_quad(), "cpp_bin_float_quad");
 #endif
