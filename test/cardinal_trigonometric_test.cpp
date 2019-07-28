@@ -31,6 +31,8 @@ void test_constant()
       auto ct = cardinal_trigonometric<decltype(v)>(v, t0, h);
       CHECK_ULP_CLOSE(c, ct(0.3), 3);
       CHECK_ULP_CLOSE(c*h*n, ct.integrate(), 3);
+
+      CHECK_ULP_CLOSE(c*c*h*n, ct.squared_l2(), 3);
     }
 }
 
@@ -119,7 +121,12 @@ void test_bump()
 
   // Wolfram Alpha:
   // NIntegrate[Exp[-1/(1-x*x)],{x,-1,1}]
-  CHECK_ULP_CLOSE(Real(0.4439938161680794378), ct.integrate(), 3);
+  CHECK_ULP_CLOSE(Real(0.443993816168079437823L), ct.integrate(), 3);
+
+  // NIntegrate[Exp[-2/(1-x*x)],{x,-1,1}]
+  CHECK_ULP_CLOSE(Real(0.1330861208449942715569473279553285713625791551628130055345002588895389L), ct.squared_l2(), 1);
+
+
 }
 
 
@@ -131,6 +138,7 @@ int main()
     test_sampled_sine<float>();
     test_bump<float>();
 #endif
+
 
 #ifdef TEST2
     test_constant<double>();

@@ -25,6 +25,8 @@ public:
     Real period() const;
 
     Real integrate() const;
+
+    Real squared_l2() const;
 };
 }}}
 ```
@@ -54,7 +56,7 @@ The period is always given by `v.size()*h`.
 Off-by-one errors are common in programming, and hence if you wonder what this interpolator believes the period to be, you can query it with the `.period()` member function.
 
 In addition, the transform into the trigonometric basis gives a trivial way to compute the integral of the function over a period; this is done via the `.integrate()` member function.
-
+Evaluation of the square of the L[super 2] norm is trivial in this basis; it is computed by the `.squared_l2()` member function.
 
 [heading Caveats]
 

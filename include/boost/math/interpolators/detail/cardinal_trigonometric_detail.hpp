@@ -86,6 +86,7 @@ public:
       float s = m_gamma[0][0];
       float x = two_pi<float>()*(t - m_t0)/m_T;
       fftwf_complex z;
+      // boost::math::cos_pi with a redefinition of x? Not now . . .
       z[0] = cos(x);
       z[1] = sin(x);
       fftwf_complex b{0, 0};
@@ -107,8 +108,22 @@ public:
     return m_T;
   }
 
-  float integrate() const {
+  float integrate() const
+  {
       return m_T*m_gamma[0][0];
+  }
+
+  float squared_l2() const
+  {
+    float s = 0;
+    // Always add smallest to largest for accuracy.
+    for (size_t i = m_complex_vector_size - 1; i >= 1; --i)
+    {
+        s += (m_gamma[i][0]*m_gamma[i][0] + m_gamma[i][1]*m_gamma[i][1]);
+    }
+    s *= 2;
+    s += m_gamma[0][0]*m_gamma[0][0];
+    return s*m_T;
   }
 
   ~cardinal_trigonometric_detail()
@@ -205,6 +220,18 @@ public:
     return m_T*m_gamma[0][0];
   }
 
+  double squared_l2() const
+  {
+    double s = 0;
+    for (size_t i = m_complex_vector_size - 1; i >= 1; --i)
+    {
+        s += (m_gamma[i][0]*m_gamma[i][0] + m_gamma[i][1]*m_gamma[i][1]);
+    }
+    s *= 2;
+    s += m_gamma[0][0]*m_gamma[0][0];
+    return s*m_T;
+  }
+
   ~cardinal_trigonometric_detail()
   {
     if (m_gamma)
@@ -292,9 +319,21 @@ public:
     return m_T;
   }
 
-  double integrate() const
+  long double integrate() const
   {
     return m_T*m_gamma[0][0];
+  }
+
+  long double squared_l2() const
+  {
+    long double s = 0;
+    for (size_t i = m_complex_vector_size - 1; i >= 1; --i)
+    {
+        s += (m_gamma[i][0]*m_gamma[i][0] + m_gamma[i][1]*m_gamma[i][1]);
+    }
+    s *= 2;
+    s += m_gamma[0][0]*m_gamma[0][0];
+    return s*m_T;
   }
 
   ~cardinal_trigonometric_detail()
@@ -389,6 +428,17 @@ public:
     return m_T*m_gamma[0][0];
   }
 
+  __float128 squared_l2() const
+  {
+    __float128 s = 0;
+    for (size_t i = m_complex_vector_size - 1; i >= 1; --i)
+    {
+        s += (m_gamma[i][0]*m_gamma[i][0] + m_gamma[i][1]*m_gamma[i][1]);
+    }
+    s *= 2;
+    s += m_gamma[0][0]*m_gamma[0][0];
+    return s*m_T;
+  }
 
   ~cardinal_trigonometric_detail()
   {
