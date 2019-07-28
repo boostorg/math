@@ -5,6 +5,9 @@
 
 #define BOOST_TEST_MODULE test_recurrences
 
+#include <boost/config.hpp>
+
+#ifndef BOOST_NO_CXX11_HDR_TUPLE
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/math/tools/recurrence.hpp>
 #include <boost/math/special_functions/bessel.hpp>
@@ -146,10 +149,10 @@ void test_spots(T, const char* name)
    }
 }
 
+
 BOOST_AUTO_TEST_CASE( test_main )
 {
    BOOST_MATH_CONTROL_FP;
-
 #if !defined(TEST) || TEST == 1
    test_spots(0.0F, "float");
    test_spots(0.0, "double");
@@ -164,3 +167,9 @@ BOOST_AUTO_TEST_CASE( test_main )
    test_spots(boost::multiprecision::cpp_bin_float_quad(), "cpp_bin_float_quad");
 #endif
 }
+
+#else
+
+int main() { return 0; }
+
+#endif

@@ -10,6 +10,12 @@
 #ifndef BOOST_MATH_HYPERGEOMETRIC_1F1_HPP
 #define BOOST_MATH_HYPERGEOMETRIC_1F1_HPP
 
+#include <boost/config.hpp>
+
+#if defined(BOOST_NO_CXX11_AUTO_DECLARATIONS) || defined(BOOST_NO_CXX11_LAMBDAS) || defined(BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX)
+# error "hypergeometric_1F1 requires a C++11 compiler"
+#endif
+
 #include <boost/math/policies/policy.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/detail/hypergeometric_series.hpp>

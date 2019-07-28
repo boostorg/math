@@ -73,7 +73,7 @@ void check_pFq_result(const T& result, const T& norm, const T& expect, const std
    // so we add a small fudge factor when comparing errors:
    //
    T err = boost::math::relative_difference(result, expect);
-   T found_err = boost::math::tools::epsilon<T>() * norm / fabs(result);
+   T found_err = norm / fabs(result);
    T fudge_factor = 25;
    if (is_small_a(a))
       fudge_factor *= 4;  // not sure why??

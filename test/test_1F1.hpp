@@ -145,7 +145,7 @@ void test_spots5(T, const char* type_name)
    BOOST_CHECK_CLOSE(computed, expected, tol);
    computed = hypergeometric_1F1(T(1), T(2), T(36.25));
    expected = boost::math::expm1(T(36.25)) / T(36.25);
-   BOOST_CHECK_CLOSE(computed, expected, tol);
+   BOOST_CHECK_CLOSE(computed, expected, tol * 3);
    computed = hypergeometric_1F1(T(10.25), T(9.25), T(36.25));
    expected = exp(T(36.25)) * (T(9.25) + T(36.25)) / T(9.25);
    BOOST_CHECK_CLOSE(computed, expected, tol);

@@ -331,8 +331,9 @@ void instantiate(RealType)
    boost::math::hypergeometric_1F0(v1, v2);
    boost::math::hypergeometric_0F1(v1, v2);
    boost::math::hypergeometric_2F0(v1, v2, v3);
-#if !defined(BOOST_NO_CXX11_DECLTYPE) && !defined(BOOST_NO_CXX11_AUTO_DECLARATIONS) && !defined(BOOST_NO_CXX11_HDR_ARRAY)
+#if !defined(BOOST_NO_CXX11_DECLTYPE) && !defined(BOOST_NO_CXX11_AUTO_DECLARATIONS) && !defined(BOOST_NO_CXX11_HDR_ARRAY) && !defined(BOOST_NO_CXX11_HDR_TUPLE)
    boost::math::hypergeometric_1F1(v1, v2, v3);
+   boost::math::hypergeometric_pFq({ v1 }, { v2 }, v3);
 #endif
 
    boost::math::expint(v1);
@@ -730,7 +731,7 @@ void instantiate(RealType)
    boost::math::hypergeometric_2F0(i, v2, v3, pol);
    boost::math::hypergeometric_2F0(v1, i, v3, pol);
    boost::math::hypergeometric_2F0(v1, v2, i, pol);
-#if !defined(BOOST_NO_CXX11_DECLTYPE) && !defined(BOOST_NO_CXX11_AUTO_DECLARATIONS) && !defined(BOOST_NO_CXX11_HDR_ARRAY)
+#if !defined(BOOST_NO_CXX11_DECLTYPE) && !defined(BOOST_NO_CXX11_AUTO_DECLARATIONS) && !defined(BOOST_NO_CXX11_HDR_ARRAY) && !defined(BOOST_NO_CXX11_HDR_TUPLE)
    boost::math::hypergeometric_1F1(i, v2, v3, pol);
    boost::math::hypergeometric_1F1(v1, i, v3, pol);
    boost::math::hypergeometric_1F1(v1, v2, i, pol);
@@ -943,7 +944,7 @@ void instantiate(RealType)
    test::hypergeometric_1F0(v1, v2);
    test::hypergeometric_0F1(v1, v2);
    test::hypergeometric_2F0(v1, v1, v2);
-#if !defined(BOOST_NO_CXX11_DECLTYPE) && !defined(BOOST_NO_CXX11_AUTO_DECLARATIONS) && !defined(BOOST_NO_CXX11_HDR_ARRAY)
+#if !defined(BOOST_NO_CXX11_DECLTYPE) && !defined(BOOST_NO_CXX11_AUTO_DECLARATIONS) && !defined(BOOST_NO_CXX11_HDR_ARRAY) && !defined(BOOST_NO_CXX11_HDR_TUPLE)
    test::hypergeometric_1F1(v1, v2, v2);
 #endif
 
