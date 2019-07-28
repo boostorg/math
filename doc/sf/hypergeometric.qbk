@@ -420,16 +420,16 @@ are destroyed by cancellation.
    namespace boost { namespace math {
 
    template <class Seq, class Real>
-   ``__sf_result`` hypergeometric_pFq(const Seq& aj, const Seq& bj, const Real& z, Real* pNorm, const Policy& pol);
+   ``__sf_result`` hypergeometric_pFq(const Seq& aj, const Seq& bj, const Real& z, Real* p_abs_error, const Policy& pol);
 
    template <class Seq, class Real>
-   ``__sf_result`` hypergeometric_pFq(const Seq& aj, const Seq& bj, const Real& z, Real* pNorm = 0)
+   ``__sf_result`` hypergeometric_pFq(const Seq& aj, const Seq& bj, const Real& z, Real* p_abs_error = 0)
 
    template <class R, class Real>
-   ``__sf_result`` hypergeometric_pFq(const std::initializer_list<R>& aj, const std::initializer_list<R>& bj, const Real& z, Real* pNorm, const Policy& pol);
+   ``__sf_result`` hypergeometric_pFq(const std::initializer_list<R>& aj, const std::initializer_list<R>& bj, const Real& z, Real* p_abs_error, const Policy& pol);
 
    template <class R, class Real>
-   ``__sf_result`` hypergeometric_pFq(const std::initializer_list<R>& aj, const std::initializer_list<R>& bj, const Real& z, Real* pNorm = 0)
+   ``__sf_result`` hypergeometric_pFq(const std::initializer_list<R>& aj, const std::initializer_list<R>& bj, const Real& z, Real* p_abs_error = 0)
 
    }} // namespaces
 
@@ -444,10 +444,8 @@ It is most naturally used via initializer lists as in:
 
    double h = hypergeometric_pFq({2,3,4}, {5,6,7,8}, z);  // Calculate 3F4
 
-The optional ['norm] argument calculates the norm of the sum and can be used for error estimation, which is to say the ['absolute error]
-in the result is estimated to be:
-
-   norm * std::numeric_limits<decltype(norm)>::epsilon();
+The optional ['p_abs_error] argument calculates an estimate of the absolute error in the result from the 
+L1 norm of the sum, plus some other factors (see implementation below).
 
 You should divide this value by the result to get an estimate of ['relative error].
 
@@ -467,8 +465,9 @@ result.  For other /p/ and /q/ values, predicting the exact locations of the max
 simply restart summation at the point where each b[sub j] passes the origin: this will eventually reach
 all the significant terms of the sum, but the key word may well be "eventually".
 
-The error term /norm/ is normally simply the sum of the absolute values of each term.  However,
-if it was necessary for the summation to skip forward, then /norm/ is adjusted to account for the
+The error term /p_abs_error/ is normally simply the sum of the absolute values of each term multiplied
+by machine epsilon for type `Real`.  However,
+if it was necessary for the summation to skip forward, then /p_abs_error/ is adjusted to account for the
 error inherent in calculating the N'th term via logarithms.
 
 [endsect]

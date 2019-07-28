@@ -8,8 +8,15 @@
 #ifndef BOOST_MATH_HYPERGEOMETRIC_PFQ_HPP
 #define BOOST_MATH_HYPERGEOMETRIC_PFQ_HPP
 
+#include <boost/config.hpp>
+
+#if defined(BOOST_NO_CXX11_AUTO_DECLARATIONS) || defined(BOOST_NO_CXX11_LAMBDAS) || defined(BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX) || defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
+# error "hypergeometric_pFq requires a C++11 compiler"
+#endif
+
 #include <boost/math/special_functions/detail/hypergeometric_pFq_checked_series.hpp>
 #include <boost/chrono.hpp>
+#include <initializer_list>
 
 namespace boost {
    namespace math {
@@ -42,7 +49,7 @@ namespace boost {
       }
 
       template <class Seq, class Real, class Policy>
-      inline typename tools::promote_args<Real, typename Seq::value_type>::type hypergeometric_pFq(const Seq& aj, const Seq& bj, const Real& z, Real* pNorm, const Policy& pol)
+      inline typename tools::promote_args<Real, typename Seq::value_type>::type hypergeometric_pFq(const Seq& aj, const Seq& bj, const Real& z, Real* p_abs_error, const Policy& pol)
       {
          typedef typename tools::promote_args<Real, typename Seq::value_type>::type result_type;
          typedef typename policies::evaluation<result_type, Policy>::type value_type;
@@ -59,27 +66,27 @@ namespace boost {
          std::pair<value_type, value_type> r = boost::math::detail::hypergeometric_pFq_checked_series_impl(aj, bj, value_type(z), pol, boost::math::detail::iteration_terminator(boost::math::policies::get_max_series_iterations<forwarding_policy>()), scale);
          r.first *= exp(Real(scale));
          r.second *= exp(Real(scale));
-         if (pNorm)
-            *pNorm = static_cast<Real>(r.second);
+         if (p_abs_error)
+            *p_abs_error = static_cast<Real>(r.second) * boost::math::tools::epsilon<Real>();
          return policies::checked_narrowing_cast<result_type, Policy>(r.first, "boost::math::hypergeometric_pFq<%1%>(%1%,%1%,%1%)");
       }
 
       template <class Seq, class Real>
-      inline typename tools::promote_args<Real, typename Seq::value_type>::type hypergeometric_pFq(const Seq& aj, const Seq& bj, const Real& z, Real* pNorm = 0)
+      inline typename tools::promote_args<Real, typename Seq::value_type>::type hypergeometric_pFq(const Seq& aj, const Seq& bj, const Real& z, Real* p_abs_error = 0)
       {
-         return hypergeometric_pFq(aj, bj, z, pNorm, boost::math::policies::policy<>());
+         return hypergeometric_pFq(aj, bj, z, p_abs_error, boost::math::policies::policy<>());
       }
 
       template <class R, class Real, class Policy>
-      inline typename tools::promote_args<Real, R>::type hypergeometric_pFq(const std::initializer_list<R>& aj, const std::initializer_list<R>& bj, const Real& z, Real* pNorm, const Policy& pol)
+      inline typename tools::promote_args<Real, R>::type hypergeometric_pFq(const std::initializer_list<R>& aj, const std::initializer_list<R>& bj, const Real& z, Real* p_abs_error, const Policy& pol)
       {
-         return hypergeometric_pFq<std::initializer_list<R>, Real, Policy>(aj, bj, z, pNorm, pol);
+         return hypergeometric_pFq<std::initializer_list<R>, Real, Policy>(aj, bj, z, p_abs_error, pol);
       }
       
       template <class R, class Real>
-      inline typename tools::promote_args<Real, R>::type  hypergeometric_pFq(const std::initializer_list<R>& aj, const std::initializer_list<R>& bj, const Real& z, Real* pNorm = 0)
+      inline typename tools::promote_args<Real, R>::type  hypergeometric_pFq(const std::initializer_list<R>& aj, const std::initializer_list<R>& bj, const Real& z, Real* p_abs_error = 0)
       {
-         return hypergeometric_pFq<std::initializer_list<R>, Real>(aj, bj, z, pNorm);
+         return hypergeometric_pFq<std::initializer_list<R>, Real>(aj, bj, z, p_abs_error);
       }
 
       template <class T>
