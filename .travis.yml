@@ -619,27 +619,27 @@ matrix:
 
     - os: osx
       env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=special_fun
-      osx_image: xcode9.3
+      osx_image: xcode11
 
     - os: osx
       env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=distribution_tests
-      osx_image: xcode9.3
+      osx_image: xcode11
 
     - os: osx
       env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=misc
-      osx_image: xcode9.3
+      osx_image: xcode11
 
     - os: osx
       env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=quadrature
-      osx_image: xcode9.3
+      osx_image: xcode11
 
     - os: osx
       env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=float128_tests
-      osx_image: xcode9.3
+      osx_image: xcode11
 
     - os: osx
       env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=../example//examples
-      osx_image: xcode9.3
+      osx_image: xcode11
 
 
 install:

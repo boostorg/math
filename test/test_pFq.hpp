@@ -104,6 +104,8 @@ void check_pFq_result(const T& result, const T& norm, const T& expect, const std
 template <class T>
 void test_spots_1F0(T, const char*)
 {
+   using std::pow;
+   
    T tolerance = boost::math::tools::epsilon<T>() * 1000;
 
    BOOST_CHECK_CLOSE(boost::math::hypergeometric_pFq({ T(-3) }, {}, T(2)), T(-1), tolerance);
