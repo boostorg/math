@@ -33,7 +33,7 @@
 #endif
 
 #if !defined(TEST1) && !defined(TEST2) && !defined(TEST3) && !defined(TEST4) && !defined(TEST5) && !defined(TEST6) && !defined(TEST7) && !defined(TEST8)\
-    && !defined(TEST1A) && !defined(TEST2A) && !defined(TEST3A) && !defined(TEST6A) && !defined(TEST9)
+    && !defined(TEST1A) && !defined(TEST1B) && !defined(TEST2A) && !defined(TEST3A) && !defined(TEST6A) && !defined(TEST9)
 #  define TEST1
 #  define TEST2
 #  define TEST3
@@ -43,6 +43,7 @@
 #  define TEST7
 #  define TEST8
 #  define TEST1A
+#  define TEST1B
 #  define TEST2A
 #  define TEST3A
 #  define TEST6A
@@ -859,9 +860,10 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
 #endif
 #ifdef TEST1A
     test_early_termination<float>();
-    test_crc<float>();
     test_2_arg<float>();
-
+#endif
+#ifdef TEST1B
+    test_crc<float>();
 #endif
 #ifdef TEST2
     test_right_limit_infinite<double>();
@@ -906,7 +908,6 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
 #endif
 
 #ifdef TEST4
-
     test_right_limit_infinite<cpp_bin_float_quad>();
     test_left_limit_infinite<cpp_bin_float_quad>();
     test_linear<cpp_bin_float_quad>();
