@@ -21,17 +21,17 @@ class cardinal_trigonometric_detail {
 public:
   cardinal_trigonometric_detail(const Real* data, size_t length, Real t0, Real h)
   {
-      m_data = data;
-      m_length = length;
-      m_t0 = t0;
-      m_h = h;
-      throw std::domain_error("Not implemented.");
+    m_data = data;
+    m_length = length;
+    m_t0 = t0;
+    m_h = h;
+    throw std::domain_error("Not implemented.");
   }
 private:
-    size_t m_length;
-    Real m_t0;
-    Real m_h;
-    Real* m_data;
+  size_t m_length;
+  Real m_t0;
+  Real m_h;
+  Real* m_data;
 };
 
 template<>
@@ -41,11 +41,11 @@ public:
   {
     if (length == 0)
     {
-        throw std::logic_error("At least one sample is required.");
+      throw std::logic_error("At least one sample is required.");
     }
     if (h <= 0)
     {
-        throw std::logic_error("The step size must be > 0");
+      throw std::logic_error("The step size must be > 0");
     }
     // The period sadly must be stored, since the complex vector has length that cannot be used to recover the period:
     m_T = m_h*length;
@@ -66,8 +66,15 @@ public:
     float denom = length;
     for (size_t k = 0; k < m_complex_vector_size; ++k)
     {
-        m_gamma[k][0] /= denom;
-        m_gamma[k][1] /= denom;
+      m_gamma[k][0] /= denom;
+      m_gamma[k][1] /= denom;
+    }
+
+    if (length % 2 == 0)
+    {
+      m_gamma[m_complex_vector_size -1][0] /= 2;
+      // numerically, m_gamma[m_complex_vector_size -1][1] should be zero . . .
+      // I believe, but need to check, that FFTW guarantees that it is identically zero.
     }
   }
 
@@ -79,28 +86,28 @@ public:
 
   float operator()(float t) const
   {
-      using std::sin;
-      using std::cos;
-      using boost::math::constants::two_pi;
-      using std::exp;
-      float s = m_gamma[0][0];
-      float x = two_pi<float>()*(t - m_t0)/m_T;
-      fftwf_complex z;
-      // boost::math::cos_pi with a redefinition of x? Not now . . .
-      z[0] = cos(x);
-      z[1] = sin(x);
-      fftwf_complex b{0, 0};
-      // u = b*z
-      fftw_complex u;
-      for (size_t k = m_complex_vector_size - 1; k >= 1; --k) {
-        u[0] = b[0]*z[0] - b[1]*z[1];
-        u[1] = b[0]*z[1] + b[1]*z[0];
-        b[0] = m_gamma[k][0] + u[0];
-        b[1] = m_gamma[k][1] + u[1];
-      }
+    using std::sin;
+    using std::cos;
+    using boost::math::constants::two_pi;
+    using std::exp;
+    float s = m_gamma[0][0];
+    float x = two_pi<float>()*(t - m_t0)/m_T;
+    fftwf_complex z;
+    // boost::math::cos_pi with a redefinition of x? Not now . . .
+    z[0] = cos(x);
+    z[1] = sin(x);
+    fftwf_complex b{0, 0};
+    // u = b*z
+    fftw_complex u;
+    for (size_t k = m_complex_vector_size - 1; k >= 1; --k) {
+      u[0] = b[0]*z[0] - b[1]*z[1];
+      u[1] = b[0]*z[1] + b[1]*z[0];
+      b[0] = m_gamma[k][0] + u[0];
+      b[1] = m_gamma[k][1] + u[1];
+    }
 
-      s += 2*(b[0]*z[0] - b[1]*z[1]);
-      return s;
+    s += 2*(b[0]*z[0] - b[1]*z[1]);
+    return s;
   }
 
   float period() const
@@ -110,7 +117,7 @@ public:
 
   float integrate() const
   {
-      return m_T*m_gamma[0][0];
+    return m_T*m_gamma[0][0];
   }
 
   float squared_l2() const
@@ -125,6 +132,7 @@ public:
     s += m_gamma[0][0]*m_gamma[0][0];
     return s*m_T;
   }
+
 
   ~cardinal_trigonometric_detail()
   {
@@ -175,6 +183,11 @@ public:
     {
       m_gamma[k][0] /= denom;
       m_gamma[k][1] /= denom;
+    }
+
+    if (length % 2 == 0)
+    {
+      m_gamma[m_complex_vector_size -1][0] /= 2;
     }
   }
 
@@ -281,6 +294,10 @@ public:
       m_gamma[k][0] /= denom;
       m_gamma[k][1] /= denom;
     }
+
+    if (length % 2 == 0) {
+      m_gamma[m_complex_vector_size -1][0] /= 2;
+    }
   }
 
   cardinal_trigonometric_detail(const cardinal_trigonometric_detail& old)  = delete;
@@ -385,6 +402,10 @@ public:
       m_gamma[k][0] /= denom;
       m_gamma[k][1] /= denom;
     }
+    if (length % 2 == 0)
+    {
+      m_gamma[m_complex_vector_size -1][0] /= 2;
+    }
   }
 
   cardinal_trigonometric_detail(const cardinal_trigonometric_detail& old)  = delete;
@@ -433,7 +454,7 @@ public:
     __float128 s = 0;
     for (size_t i = m_complex_vector_size - 1; i >= 1; --i)
     {
-        s += (m_gamma[i][0]*m_gamma[i][0] + m_gamma[i][1]*m_gamma[i][1]);
+      s += (m_gamma[i][0]*m_gamma[i][0] + m_gamma[i][1]*m_gamma[i][1]);
     }
     s *= 2;
     s += m_gamma[0][0]*m_gamma[0][0];

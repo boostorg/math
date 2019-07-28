@@ -36,6 +36,34 @@ void test_constant()
     }
 }
 
+template<class Real>
+void test_interpolation_condition()
+{
+  std::mt19937 gen(1234);
+  std::uniform_real_distribution<Real> dis(1, 10);
+
+  for(size_t n = 1; n < 20; ++n) {
+    Real t0 = dis(gen);
+    Real h = dis(gen);
+    std::vector<Real> v(n);
+    for (size_t i = 0; i < n; ++i) {
+      v[i] = dis(gen);
+    }
+    auto ct = cardinal_trigonometric<decltype(v)>(v, t0, h);
+    for (size_t i = 0; i < n; ++i) {
+      Real arg = t0 + i*h;
+      Real expected = v[i];
+      Real computed = ct(arg);
+      if(!CHECK_ULP_CLOSE(expected, computed, 5*n))
+      {
+        std::cerr << "  Samples: " << n << "\n";
+      }
+    }
+  }
+
+}
+
+
 #ifdef BOOST_HAS_FLOAT128
 void test_constant_q()
 {
@@ -137,6 +165,7 @@ int main()
     test_constant<float>();
     test_sampled_sine<float>();
     test_bump<float>();
+    test_interpolation_condition<float>();
 #endif
 
 
@@ -144,12 +173,14 @@ int main()
     test_constant<double>();
     test_sampled_sine<double>();
     test_bump<double>();
+    test_interpolation_condition<double>();
 #endif
 
 #ifdef TEST3
     test_constant<long double>();
     test_sampled_sine<long double>();
     test_bump<long double>();
+    test_interpolation_condition<long double>();
 #endif
 
 #ifdef TEST4
