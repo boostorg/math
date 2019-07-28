@@ -58,6 +58,12 @@ Off-by-one errors are common in programming, and hence if you wonder what this i
 In addition, the transform into the trigonometric basis gives a trivial way to compute the integral of the function over a period; this is done via the `.integrate()` member function.
 Evaluation of the square of the L[super 2] norm is trivial in this basis; it is computed by the `.squared_l2()` member function.
 
+Below is a graph of a /C/[super \u221E] bump function approximated by trigonometric series.
+The graphs are visually indistinguishable at 20 samples.
+
+[$../graphs/fourier_bump.svg]
+
+
 [heading Caveats]
 
 This routine depends on FFTW3, and hence will only compile in float, double, long double, and quad precision, unlike the large bulk of the library which is compatible with arbitrary precision arithmetic.
