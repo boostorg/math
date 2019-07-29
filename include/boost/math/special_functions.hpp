@@ -47,7 +47,7 @@
 #include <boost/math/special_functions/hypergeometric_1F0.hpp>
 #include <boost/math/special_functions/hypergeometric_0F1.hpp>
 #include <boost/math/special_functions/hypergeometric_2F0.hpp>
-#if !defined(BOOST_NO_CXX11_DECLTYPE) && !defined(BOOST_NO_CXX11_AUTO_DECLARATIONS) && !defined(BOOST_NO_CXX11_HDR_ARRAY) && !defined(BOOST_NO_CXX11_HDR_TUPLE)
+#if !defined(BOOST_NO_CXX11_AUTO_DECLARATIONS) && !defined(BOOST_NO_CXX11_LAMBDAS) && !defined(BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX) && !defined(BOOST_NO_CXX11_HDR_TUPLE)
 #include <boost/math/special_functions/hypergeometric_1F1.hpp>
 #ifndef BOOST_NO_CXX11_HDR_INITIALIZER_LIST
 #include <boost/math/special_functions/hypergeometric_pFq.hpp>
