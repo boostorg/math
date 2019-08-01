@@ -333,7 +333,9 @@ void instantiate(RealType)
    boost::math::hypergeometric_2F0(v1, v2, v3);
 #if !defined(BOOST_NO_CXX11_DECLTYPE) && !defined(BOOST_NO_CXX11_AUTO_DECLARATIONS) && !defined(BOOST_NO_CXX11_HDR_ARRAY) && !defined(BOOST_NO_CXX11_HDR_TUPLE)
    boost::math::hypergeometric_1F1(v1, v2, v3);
+#ifndef BOOST_NO_CXX11_HDR_INITIALIZER_LIST
    boost::math::hypergeometric_pFq({ v1 }, { v2 }, v3);
+#endif
 #endif
 
    boost::math::expint(v1);

@@ -90,8 +90,6 @@ explicit ntl ;
 cpp-pch pch : pch.hpp : <use>../../test/build//boost_unit_test_framework ;
 cpp-pch pch_light : pch_light.hpp : <use>../../test/build//boost_unit_test_framework ;
 lib compile_test_main : compile_test/main.cpp ;
-lib gmp : : <search>$(gmp_path) ;
-lib mpfr : : <search>$(gmp_path) <search>$(mpfr_path) <search>$(mpfr_path)/build.vc10/lib/Win32/Debug ;
 
 test-suite special_fun :
    [ run test_1F0.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_smart_ptr ] ] # hypergeometric_pFq_checked_series.hpp uses auto, the rest are from quadrature tests.
@@ -1313,7 +1311,7 @@ test-suite long-running-tests :
    [ run test_1F1_log.cpp ../../test/build//boost_unit_test_framework : : : release [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_smart_ptr ] <define>TEST=7 release <toolset>clang:<cxxflags>-Wno-literal_range : test_1F1_log_dec_40 ]
    [ run test_pFq.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_hdr_initializer_list cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_smart_ptr ] <define>TEST=6 release [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <define>BOOST_MATH_TEST_FLOAT128 <linkflags>"-Bstatic -lquadmath -Bdynamic" ] <toolset>clang:<cxxflags>-Wno-literal_range : test_pFq_quad ]
    [ run test_pFq.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_hdr_initializer_list cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_smart_ptr ] <define>TEST=7 release <toolset>clang:<cxxflags>-Wno-literal_range : test_pFq_dec_40 ]
-   [ run test_pFq_precision.cpp ../../test/build//boost_unit_test_framework gmp mpfr : : : [ check-target-builds ../config//has_mpfr : : <build>no ] [ requires cxx11_hdr_initializer_list cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_smart_ptr ] release <toolset>clang:<cxxflags>-Wno-literal_range ]
+   [ run test_pFq_precision.cpp ../../test/build//boost_unit_test_framework gmp mpfr : : : <linkflags>-lgmp <linkflags>-lmpfr [ check-target-builds ../config//has_mpfr : : <build>no ] [ requires cxx11_hdr_initializer_list cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_smart_ptr ] release <toolset>clang:<cxxflags>-Wno-literal_range ]
    [ run test_constant_generate.cpp : : : release <define>USE_CPP_FLOAT=1 <exception-handling>off:<build>no  ]
 ;
 
