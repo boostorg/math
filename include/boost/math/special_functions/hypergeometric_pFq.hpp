@@ -139,7 +139,15 @@ namespace boost {
                r = rp.first;
                norm = rp.second;
 
-               unsigned cancellation = itrunc(log10(abs(norm / r)));
+               unsigned cancellation;
+               try {
+                  cancellation = itrunc(log10(abs(norm / r)));
+               }
+               catch (const boost::math::rounding_error&)
+               {
+                  // Happens when r is near enough zero:
+                  cancellation = UINT_MAX;
+               }
                if (cancellation >= current_precision - 1)
                {
                   current_precision *= 2;

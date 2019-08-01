@@ -423,13 +423,25 @@ are destroyed by cancellation.
    ``__sf_result`` hypergeometric_pFq(const Seq& aj, const Seq& bj, const Real& z, Real* p_abs_error, const Policy& pol);
 
    template <class Seq, class Real>
-   ``__sf_result`` hypergeometric_pFq(const Seq& aj, const Seq& bj, const Real& z, Real* p_abs_error = 0)
+   ``__sf_result`` hypergeometric_pFq(const Seq& aj, const Seq& bj, const Real& z, Real* p_abs_error = 0);
 
    template <class R, class Real>
    ``__sf_result`` hypergeometric_pFq(const std::initializer_list<R>& aj, const std::initializer_list<R>& bj, const Real& z, Real* p_abs_error, const Policy& pol);
 
    template <class R, class Real>
-   ``__sf_result`` hypergeometric_pFq(const std::initializer_list<R>& aj, const std::initializer_list<R>& bj, const Real& z, Real* p_abs_error = 0)
+   ``__sf_result`` hypergeometric_pFq(const std::initializer_list<R>& aj, const std::initializer_list<R>& bj, const Real& z, Real* p_abs_error = 0);
+
+   template <class Seq, class Real, class Policy>
+   Real hypergeometric_pFq_precision(const Seq& aj, const Seq& bj, Real z, unsigned digits10, double timeout, const Policy& pol);
+
+   template <class Seq, class Real>
+   Real hypergeometric_pFq_precision(const Seq& aj, const Seq& bj, const Real& z, unsigned digits10, double timeout = 0.5);
+
+   template <class Real, class Policy>
+   Real hypergeometric_pFq_precision(const std::initializer_list<Real>& aj, const std::initializer_list<Real>& bj, const Real& z, unsigned digits10, double timeout, const Policy& pol);
+
+   template <class Real>
+   Real hypergeometric_pFq_precision(const std::initializer_list<Real>& aj, const std::initializer_list<Real>& bj, const Real& z, unsigned digits10, double timeout = 0.5);
 
    }} // namespaces
 
@@ -451,6 +463,22 @@ You should divide this value by the result to get an estimate of ['relative erro
 
 It should be noted that the error estimates are rather crude - the error can be significantly underestimated 
 in some circumstances, and over-estimated in others.
+
+The `hypergeometric_pFq_precision` functions will calculate `pFq` to a specified number of decimal places, and if `timeout`
+is reached then they raise an __evaluation_error.  Note that while these functions are defined as templates, they
+require type `Real` to be a variable-precision floating point type: in practice the only type currently supported
+(as of July 2019) is `boost::multiprecision::mpfr_float`.  Typical usage would be:
+
+
+   typedef boost::multiprecision::mpfr_float mp_type;
+   //
+   // Calculate 2F2 to 20 decimal places using a 10 second timeout:
+   //
+   mp_type result = boost::math::hypergeometric_pFq_precision({ mp_type(a1), mp_type(a2) }, { mp_type(b1), m_type(b2) }, mp_type(z), 20, 10.0);
+   //
+   // Convert the result back to a double:
+   //
+   double d_result = static_cast<double>(result);
 
 [h4 Implementation]
 

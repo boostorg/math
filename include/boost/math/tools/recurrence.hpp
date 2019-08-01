@@ -139,7 +139,7 @@ namespace boost {
          // second: w(0);
          //
          template <class NextCoefs, class T>
-         inline T apply_recurrence_relation_forward(const NextCoefs& get_coefs, unsigned last_index, T first, T second, int* log_scaling = 0, T* previous = 0)
+         inline T apply_recurrence_relation_forward(const NextCoefs& get_coefs, unsigned number_of_steps, T first, T second, int* log_scaling = 0, T* previous = 0)
          {
             BOOST_MATH_STD_USING
             using boost::math::tuple;
@@ -148,7 +148,7 @@ namespace boost {
             T third = 0;
             T a, b, c;
 
-            for (unsigned k = 0; k < last_index; ++k)
+            for (unsigned k = 0; k < number_of_steps; ++k)
             {
                tie(a, b, c) = get_coefs(k);
 
@@ -189,12 +189,12 @@ namespace boost {
          // Params:
          // get_coefs: functor returning a tuple, where
          //            get<0>() is a(n); get<1>() is b(n); get<2>() is c(n);
-         // last_index: index N to be found;
+         // number_of_steps: index N to be found;
          // first: w(1);
          // second: w(0);
          //
          template <class T, class NextCoefs>
-         inline T apply_recurrence_relation_backward(const NextCoefs& get_coefs, unsigned last_index, T first, T second, int* log_scaling = 0, T* previous = 0)
+         inline T apply_recurrence_relation_backward(const NextCoefs& get_coefs, unsigned number_of_steps, T first, T second, int* log_scaling = 0, T* previous = 0)
          {
             BOOST_MATH_STD_USING
             using boost::math::tuple;
@@ -203,7 +203,7 @@ namespace boost {
             T next = 0;
             T a, b, c;
 
-            for (unsigned k = 0; k < last_index; ++k)
+            for (unsigned k = 0; k < number_of_steps; ++k)
             {
                tie(a, b, c) = get_coefs(-static_cast<int>(k));
 

@@ -693,6 +693,7 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [section:internals Internal tools]
 [include internals/series.qbk]
 [include internals/fraction.qbk]
+[include internals/recurrence.qbk]
 [/include internals/rational.qbk] [/moved to tools]
 [include internals/tuple.qbk]
 [/include internals/polynomial.qbk] [/moved to tools]
