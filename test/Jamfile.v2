@@ -924,9 +924,9 @@ test-suite misc :
    [ run test_policy_sf.cpp ../../test/build//boost_unit_test_framework  ]
    [ run test_long_double_support.cpp ../../test/build//boost_unit_test_framework
       : : : [ check-target-builds ../config//has_long_double_support "long double support" : : <build>no ] ]
-   [ run test_recurrence.cpp : : : <define>TEST=1 [ requires cxx11_hdr_tuple cxx11_auto_declarations cxx11_decltype ] <toolset>msvc:<cxxflags>/bigobj : test_recurrence_1 ]
-   [ run test_recurrence.cpp : : : <define>TEST=2 release [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <define>BOOST_MATH_TEST_FLOAT128 <linkflags>"-Bstatic -lquadmath -Bdynamic" ] [ requires cxx11_hdr_tuple cxx11_auto_declarations cxx11_decltype ]  : test_recurrence_2 ]
-   [ run test_recurrence.cpp : : : <define>TEST=3 release [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <define>BOOST_MATH_TEST_FLOAT128 <linkflags>"-Bstatic -lquadmath -Bdynamic" ] [ requires cxx11_hdr_tuple cxx11_auto_declarations cxx11_decltype ]  : test_recurrence_3 ]
+   [ run test_recurrence.cpp : : : <define>TEST=1 [ requires cxx11_unified_initialization_syntax cxx11_hdr_tuple cxx11_auto_declarations cxx11_decltype ] <toolset>msvc:<cxxflags>/bigobj : test_recurrence_1 ]
+   [ run test_recurrence.cpp : : : <define>TEST=2 release [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <define>BOOST_MATH_TEST_FLOAT128 <linkflags>"-Bstatic -lquadmath -Bdynamic" ] [ requires cxx11_unified_initialization_syntax cxx11_hdr_tuple cxx11_auto_declarations cxx11_decltype ]  : test_recurrence_2 ]
+   [ run test_recurrence.cpp : : : <define>TEST=3 release [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <define>BOOST_MATH_TEST_FLOAT128 <linkflags>"-Bstatic -lquadmath -Bdynamic" ] [ requires cxx11_unified_initialization_syntax cxx11_hdr_tuple cxx11_auto_declarations cxx11_decltype ]  : test_recurrence_3 ]
 
    [ run test_print_info_on_type.cpp  ]
    [ run test_barycentric_rational.cpp ../../test/build//boost_unit_test_framework : : :  [ requires cxx11_smart_ptr cxx11_defaulted_functions cxx11_auto_declarations cxx11_unified_initialization_syntax ] [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]  ]
