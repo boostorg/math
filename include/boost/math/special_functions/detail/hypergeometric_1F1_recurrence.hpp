@@ -135,6 +135,146 @@
     int offset;
     hypergeometric_1F1_recurrence_a_and_b_coefficients operator=(const hypergeometric_1F1_recurrence_a_and_b_coefficients&);
   };
+#if 0
+  //
+  // These next few recurrence relations are archived for future refernece, some of them are novel, though all
+  // are trivially derived from the existing well known relations:
+  //
+  // Recurrence relation for double-stepping on both a and b:
+  // - b(b-1)(b-2) / (2-b+z) M(a-2,b-2,z) + [b(a-1)z / (2-b+z) + b(1-b+z) + abz(b+1) /(b+1)(z-b)] M(a,b,z) - a(a+1)z^2 / (b+1)(z-b) M(a+2,b+2,z)
+  //
+  template <class T>
+  struct hypergeometric_1F1_recurrence_2a_and_2b_coefficients
+  {
+     typedef boost::math::tuple<T, T, T> result_type;
+
+     hypergeometric_1F1_recurrence_2a_and_2b_coefficients(const T& a, const T& b, const T& z, int offset = 0) :
+        a(a), b(b), z(z), offset(offset)
+     {
+     }
+
+     result_type operator()(boost::intmax_t i) const
+     {
+        i *= 2;
+        const T ai = a + (offset + i);
+        const T bi = b + (offset + i);
+
+        const T an = -bi * (b + (offset + i - 1)) * (b + (offset + i - 2)) / (-(b + (offset + i - 2)) + z);
+        const T bn = bi * (a + (offset + i - 1)) * z / (z - (b + (offset + i - 2)))
+           + bi * (z - (b + (offset + i - 1)))
+           + ai * bi * z * (b + (offset + i + 1)) / ((b + (offset + i + 1)) * (z - bi));
+        const T cn = -ai * (a + (offset + i + 1)) * z * z / ((b + (offset + i + 1)) * (z - bi));
+
+        return boost::math::make_tuple(an, bn, cn);
+     }
+
+  private:
+     const T a, b, z;
+     int offset;
+     hypergeometric_1F1_recurrence_2a_and_2b_coefficients operator=(const hypergeometric_1F1_recurrence_2a_and_2b_coefficients&);
+  };
+
+  //
+  // Recurrence relation for double-stepping on a:
+  // -(b-a)(1 + b - a)/(2a-2-b+z)M(a-2,b,z)  + [(b-a)(a-1)/(2a-2-b+z) + (2a-b+z) + a(b-a-1)/(2a+2-b+z)]M(a,b,z)   -a(a+1)/(2a+2-b+z)M(a+2,b,z)
+  //
+  template <class T>
+  struct hypergeometric_1F1_recurrence_2a_coefficients
+  {
+     typedef boost::math::tuple<T, T, T> result_type;
+
+     hypergeometric_1F1_recurrence_2a_coefficients(const T& a, const T& b, const T& z, int offset = 0) :
+        a(a), b(b), z(z), offset(offset)
+     {
+     }
+
+     result_type operator()(boost::intmax_t i) const
+     {
+        i *= 2;
+        const T ai = a + (offset + i);
+        // -(b-a)(1 + b - a)/(2a-2-b+z)
+        const T an = -(b - ai) * (b - (a + (offset + i - 1))) / (2 * (a + (offset + i - 1)) - b + z);
+        const T bn = (b - ai) * (a + (offset + i - 1)) / (2 * (a + (offset + i - 1)) - b + z) + (2 * ai - b + z) + ai * (b - (a + (offset + i + 1))) / (2 * (a + (offset + i + 1)) - b + z);
+        const T cn = -ai * (a + (offset + i + 1)) / (2 * (a + (offset + i + 1)) - b + z);
+
+        return boost::math::make_tuple(an, bn, cn);
+     }
+
+  private:
+     const T a, b, z;
+     int offset;
+     hypergeometric_1F1_recurrence_2a_coefficients operator=(const hypergeometric_1F1_recurrence_2a_coefficients&);
+  };
+
+  //
+  // Recurrence relation for double-stepping on b:
+  // b(b-1)^2(b-2)/((1-b)(2-b-z)) M(a,b-2,z)  + [zb(b-1)(b-1-a)/((1-b)(2-b-z)) + b(1-b-z) + z(b-a)(b+1)b/((b+1)(b+z)) ] M(a,b,z) + z^2(b-a)(b+1-a)/((b+1)(b+z)) M(a,b+2,z)
+  //
+  template <class T>
+  struct hypergeometric_1F1_recurrence_2b_coefficients
+  {
+     typedef boost::math::tuple<T, T, T> result_type;
+
+     hypergeometric_1F1_recurrence_2b_coefficients(const T& a, const T& b, const T& z, int offset = 0) :
+        a(a), b(b), z(z), offset(offset)
+     {
+     }
+
+     result_type operator()(boost::intmax_t i) const
+     {
+        i *= 2;
+        const T bi = b + (offset + i);
+        const T bi_m1 = b + (offset + i - 1);
+        const T bi_p1 = b + (offset + i + 1);
+        const T bi_m2 = b + (offset + i - 2);
+
+        const T an = bi * (bi_m1) * (bi_m1) * (bi_m2) / (-bi_m1 * (-bi_m2 - z));
+        const T bn = z * bi * bi_m1 * (bi_m1 - a) / (-bi_m1 * (-bi_m2 - z)) + bi * (-bi_m1 - z) + z * (bi - a) * bi_p1 * bi / (bi_p1 * (bi + z));
+        const T cn = z * z * (bi - a) * (bi_p1 - a) / (bi_p1 * (bi + z));
+
+        return boost::math::make_tuple(an, bn, cn);
+     }
+
+  private:
+     const T a, b, z;
+     int offset;
+     hypergeometric_1F1_recurrence_2b_coefficients operator=(const hypergeometric_1F1_recurrence_2b_coefficients&);
+  };
+
+  //
+  // Recurrence relation for a+ b-:
+  // -z(b-a)(a-1-b)/(b(a-1+z)) M(a-1,b+1,z) + [(b-a)(a-1)b/(b(a-1+z)) + (2a-b+z) + a(b-a-1)/(a+z)] M(a,b,z) + a(1-b)/(a+z) M(a+1,b-1,z)
+  //
+  // This is potentially the most useful of these novel recurrences.
+  //              -                                      -                  +        -                           +
+  template <class T>
+  struct hypergeometric_1F1_recurrence_a_plus_b_minus_coefficients
+  {
+     typedef boost::math::tuple<T, T, T> result_type;
+
+     hypergeometric_1F1_recurrence_a_plus_b_minus_coefficients(const T& a, const T& b, const T& z, int offset = 0) :
+        a(a), b(b), z(z), offset(offset)
+     {
+     }
+
+     result_type operator()(boost::intmax_t i) const
+     {
+        const T ai = a + (offset + i);
+        const T bi = b - (offset + i);
+
+        const T an = -z * (bi - ai) * (ai - 1 - bi) / (bi * (ai - 1 + z));
+        const T bn = z * ((-1 / (ai + z) - 1 / (ai + z - 1)) * (bi + z - 1) + 3) + bi - 1;
+        const T cn = ai * (1 - bi) / (ai + z);
+
+        return boost::math::make_tuple(an, bn, cn);
+     }
+
+  private:
+     const T a, b, z;
+     int offset;
+     hypergeometric_1F1_recurrence_a_plus_b_minus_coefficients operator=(const hypergeometric_1F1_recurrence_a_plus_b_minus_coefficients&);
+  };
+#endif
 
   template <class T, class Policy>
   inline T hypergeometric_1F1_backward_recurrence_for_negative_a(const T& a, const T& b, const T& z, const Policy& pol, const char* function, int& log_scaling)
