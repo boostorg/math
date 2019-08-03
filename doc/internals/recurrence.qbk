@@ -67,7 +67,7 @@ Given a functor r which encodes the recurrence relation for function F at some l
 
 [/\Large  $$ F_n / F_{n-1} $$][$../equations/three_term_recurrence_backwards_ratio.svg]
 
-This calculation is stable only if recurrence is stable in the backwards direction.  Further the ration calculated
+This calculation is stable only if recurrence is stable in the backwards direction.  Further the ratio calculated
 is for the dominant solution (in the backwards direction) of the recurrence relation, if there are multiple solutions,
 then there is no guarantee that this will find the one you want or expect.
 
@@ -82,7 +82,7 @@ Given a functor r which encodes the recurrence relation for function F at some l
 
 [/\Large  $$ F_n / F_{n+1} $$][$../equations/three_term_recurrence_forwards_ratio.svg]
 
-This calculation is stable only if recurrence is stable in the forwards direction.  Further the ration calculated
+This calculation is stable only if recurrence is stable in the forwards direction.  Further the ratio calculated
 is for the dominant solution (in the forwards direction) of the recurrence relation, if there are multiple solutions,
 then there is no guarantee that this will find the one you want or expect.
 

@@ -230,7 +230,7 @@ We also have a [@../../tools/hypergeometric_1F1_error_plot.cpp small program] fo
 is also used for the error rate plots below and has been extremely useful in fine tuning the implementation.
 
 It should be noted however, that there are some domains for large negative /a/ and /b/ that have poor test coverage as we were
-simply unable to compute test values in reasonable time: it is not uncommon for the /pFq/ series to cancel many humdreds of digits
+simply unable to compute test values in reasonable time: it is not uncommon for the /pFq/ series to cancel many hundreds of digits
 and sometimes into the thousands of digits.
 
 [h4 Errors]
@@ -401,10 +401,10 @@ For /b < 0/ we have no good methods in some domains (see the unsolved issues abo
 However in some circumstances we can either use:
 
 * 3-stage backwards recursion on both /a/, /a/ and /b/ and then /b/ as above.
-* Calculate the ratio ['[sub 1]F[sub 1](a, b, z) / ['[sub 1]F[sub 1](a-1, b-1, z)]] via backwards recurence when z is small, and then normalize via the Wronskian above (Miller's method).
-* Calculate the ratio ['[sub 1]F[sub 1](a, b, z) / ['[sub 1]F[sub 1](a+1, b+1, z)]] via forwards recurence when z is large, and then normalize by iterating until b > 1 and comparing to a reference value.
+* Calculate the ratio ['[sub 1]F[sub 1](a, b, z) / ['[sub 1]F[sub 1](a-1, b-1, z)]] via backwards recurrence when z is small, and then normalize via the Wronskian above (Miller's method).
+* Calculate the ratio ['[sub 1]F[sub 1](a, b, z) / ['[sub 1]F[sub 1](a+1, b+1, z)]] via forwards recurrence when z is large, and then normalize by iterating until b > 1 and comparing to a reference value.
 
-The latter two methods use a lookup table to detrmine whether inputs are in either of the domains or neither.  Unfortunately the methods are basically
+The latter two methods use a lookup table to determine whether inputs are in either of the domains or neither.  Unfortunately the methods are basically
 limited to double precision: calculation of the ratios require iteration ['towards] the no-mans-land between the two methods where iteration is unstable in
 both directions.  As a result, only low-precision results which require few iterations to calculate the ratio are available.
 
