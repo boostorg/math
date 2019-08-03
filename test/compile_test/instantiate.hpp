@@ -328,6 +328,16 @@ void instantiate(RealType)
    boost::math::airy_ai_zero<RealType>(i, i, oi);
    boost::math::airy_bi_zero<RealType>(i, i, oi);
 
+   boost::math::hypergeometric_1F0(v1, v2);
+   boost::math::hypergeometric_0F1(v1, v2);
+   boost::math::hypergeometric_2F0(v1, v2, v3);
+#if !defined(BOOST_NO_CXX11_AUTO_DECLARATIONS) && !defined(BOOST_NO_CXX11_LAMBDAS) && !defined(BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX) && !defined(BOOST_NO_CXX11_HDR_TUPLE)
+   boost::math::hypergeometric_1F1(v1, v2, v3);
+#ifndef BOOST_NO_CXX11_HDR_INITIALIZER_LIST
+   boost::math::hypergeometric_pFq({ v1 }, { v2 }, v3);
+#endif
+#endif
+
    boost::math::expint(v1);
    boost::math::expint(i);
    boost::math::expint(i, v2);
@@ -714,6 +724,21 @@ void instantiate(RealType)
    boost::math::airy_ai_zero<RealType>(i, i, oi, pol);
    boost::math::airy_bi_zero<RealType>(i, i, oi, pol);
 
+   boost::math::hypergeometric_1F0(i, v2, pol);
+   boost::math::hypergeometric_1F0(v1, i, pol);
+   boost::math::hypergeometric_1F0(i, i, pol);
+   boost::math::hypergeometric_0F1(i, v2, pol);
+   boost::math::hypergeometric_0F1(v1, i, pol);
+   boost::math::hypergeometric_0F1(i, i, pol);
+   boost::math::hypergeometric_2F0(i, v2, v3, pol);
+   boost::math::hypergeometric_2F0(v1, i, v3, pol);
+   boost::math::hypergeometric_2F0(v1, v2, i, pol);
+#if !defined(BOOST_NO_CXX11_AUTO_DECLARATIONS) && !defined(BOOST_NO_CXX11_LAMBDAS) && !defined(BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX) && !defined(BOOST_NO_CXX11_HDR_TUPLE)
+   boost::math::hypergeometric_1F1(i, v2, v3, pol);
+   boost::math::hypergeometric_1F1(v1, i, v3, pol);
+   boost::math::hypergeometric_1F1(v1, v2, i, pol);
+#endif
+
    boost::math::expint(v1, pol);
    boost::math::expint(i, pol);
    boost::math::expint(i, v2, pol);
@@ -917,6 +942,13 @@ void instantiate(RealType)
    test::airy_bi_zero<RealType>(i);
    test::airy_ai_zero<RealType>(i, i, oi);
    test::airy_bi_zero<RealType>(i, i, oi);
+
+   test::hypergeometric_1F0(v1, v2);
+   test::hypergeometric_0F1(v1, v2);
+   test::hypergeometric_2F0(v1, v1, v2);
+#if !defined(BOOST_NO_CXX11_AUTO_DECLARATIONS) && !defined(BOOST_NO_CXX11_LAMBDAS) && !defined(BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX) && !defined(BOOST_NO_CXX11_HDR_TUPLE)
+   test::hypergeometric_1F1(v1, v2, v2);
+#endif
 
    test::expint(v1);
    test::expint(i);

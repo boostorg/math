@@ -33,7 +33,7 @@
 #include <boost/math/special_functions/detail/unchecked_factorial.hpp>
 #include <boost/math/special_functions/detail/lgamma_small.hpp>
 #include <boost/math/special_functions/bernoulli.hpp>
-#include <boost/math/special_functions/zeta.hpp>
+#include <boost/math/special_functions/polygamma.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 #include <boost/assert.hpp>
 #include <boost/mpl/greater.hpp>
@@ -500,7 +500,8 @@ inline T log_gamma_near_1(const T& z, Policy const& pol)
 {
    //
    // This is for the multiprecision case where there is
-   // no lanczos support...
+   // no lanczos support, use a taylor series at z = 1,
+   // see https://www.wolframalpha.com/input/?i=taylor+series+lgamma(x)+at+x+%3D+1
    //
    BOOST_MATH_STD_USING // ADL of std names
 
@@ -508,20 +509,17 @@ inline T log_gamma_near_1(const T& z, Policy const& pol)
 
    T result = -constants::euler<T>() * z;
 
-   T power_term = z * z;
-   T term;
-   unsigned j = 0;
+   T power_term = z * z / 2;
+   int n = 2;
+   T term = 0;
 
    do
    {
-      term = boost::math::zeta<T>(j + 2, pol) * power_term / (j + 2);
-      if(j & 1)
-         result -= term;
-      else
-         result += term;
-      power_term *= z;
-      ++j;
-   } while(fabs(result) * tools::epsilon<T>() < fabs(term));
+      term = power_term * boost::math::polygamma(n - 1, T(1));
+      result += term;
+      ++n;
+      power_term *= z / n;
+   } while (fabs(result) * tools::epsilon<T>() < fabs(term));
 
    return result;
 }
@@ -567,6 +565,8 @@ T lgamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&, int* sig
       // Here we simply take the logarithm of tgamma(). This is somewhat
       // inefficient, but simple. The rationale is that the argument here
       // is relatively small and overflow is not expected to be likely.
+      if (sign)
+         * sign = 1;
       if(fabs(z - 1) < 0.25)
       {
          log_gamma_value = log_gamma_near_1(T(zz - 1), pol);
@@ -587,7 +587,12 @@ T lgamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&, int* sig
       {
          // No issue with spurious overflow in reflection formula, 
          // just fall through to regular code:
-         log_gamma_value = log(abs(gamma_imp(zz, pol, lanczos::undefined_lanczos())));
+         T g = gamma_imp(zz, pol, lanczos::undefined_lanczos());
+         if (sign)
+         {
+            *sign = g < 0 ? -1 : 1;
+         }
+         log_gamma_value = log(abs(g));
       }
    }
    else

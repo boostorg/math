@@ -6,11 +6,18 @@
 using quickbook ;
 using auto-index ;
 import modules ;
+import regex ;
 
 path-constant images_location : html ;
 path-constant here : . ;
+constant here-url : [ regex.replace $(here) "\\\\" "/" ] ;
 
-xml math : math.qbk ;
+xml math : math.qbk :
+        <quickbook-define>enable_index 
+        <quickbook-define>__base_path__=$(here-url)
+        <format>pdf:<quickbook-define>__build_pdf
+        <format>html:<quickbook-define>__build_html
+;
 boostbook standalone
     :
         math
@@ -76,7 +83,6 @@ boostbook standalone
         <auto-index-script>$(here)/index.idx
         <auto-index-prefix>$(here)/../../.. 
         #<auto-index-verbose>on
-        <quickbook-define>enable_index 
         <format>pdf:<xsl:param>index.on.type=1
     ;
 
