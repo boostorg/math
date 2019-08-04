@@ -7,11 +7,8 @@
 #define BOOST_MATH_SPECIAL_GEGENBAUER_HPP
 
 #include <stdexcept>
-//#include <cmath>
-//#include <boost/math/tools/recurrence.hpp>
 
 namespace boost { namespace math {
-
 
 template<typename Real>
 Real gegenbauer(unsigned n, Real lambda, Real x)
@@ -19,12 +16,15 @@ Real gegenbauer(unsigned n, Real lambda, Real x)
     if (lambda <= -1/Real(2)) {
         throw std::domain_error("lambda > -1/2 is required.");
     }
-    if (x < 0) {
-        if (n&1) {
-            return -gegenbauer(n, lambda, -x);
-        }
-        return gegenbauer(n, lambda, -x);
-    }
+    // The only reason to do this is because of some instability that could be present for x < 0 that is not present for x > 0.
+    // I haven't observed this, but then again, I haven't managed to test an exhaustive number of parameters.
+    // In any case, the routine is distinctly faster without this test:
+    //if (x < 0) {
+    //    if (n&1) {
+    //        return -gegenbauer(n, lambda, -x);
+    //    }
+    //    return gegenbauer(n, lambda, -x);
+    //}
 
     if (x > 1) {
         throw std::domain_error("Recurrence implementations for the Gegenbauer polynomials have unknown stability for x > 1.");
@@ -33,29 +33,38 @@ Real gegenbauer(unsigned n, Real lambda, Real x)
     if (n == 0) {
         return Real(1);
     }
-    if (n == 1) {
-        return 2*lambda*x;
-    }
     Real y0 = 1;
     Real y1 = 2*lambda*x;
 
-    Real yk;
-    for (unsigned k = 2; k <= n; ++k) {
-        yk = ( 2*(k+lambda-1)*x*y1 - (k+2*lambda-2)*y0)/Real(k);
+    Real yk = y1;
+    Real k = 2;
+    Real k_max = n*(1+std::numeric_limits<Real>::epsilon());
+    Real gamma = 2*(lambda - 1);
+    while(k < k_max)
+    {
+        yk = ( (2 + gamma/k)*x*y1 - (1+gamma/k)*y0);
         y0 = y1;
         y1 = yk;
+        k += 1;
     }
     return yk;
-
-    /*// (n+1)C_{n+1}(lambda, x) - (2x(n+lambda))C_{n}(lambda, x) + (n-1+2lambda)C_{n-1}(lambda, x) = 0
-    auto Recurrence = [&](unsigned j) { return std::make_tuple<Real2, Real2, Real2>( n-1+2*lambda, -2*x*(n+lambda), n+1); };
-
-    Real2 factor = 1;
-    boost::uintmax_t max_iter = n + 1;
-    Real2 Clambdax = boost::math::tools::function_ratio_from_backwards_recurrence(Recurrence, factor, max_iter);
-
-    return Clambdax;*/
 }
+
+template<typename Real>
+Real gegenbauer_derivative(unsigned n, Real lambda, Real x, unsigned k)
+{
+    if (k > n) {
+        return Real(0);
+    }
+    Real gegen = gegenbauer<Real>(n-k, lambda + k, x);
+    Real scale = 1;
+    for (unsigned j = 0; j < k; ++j) {
+        scale *= 2*lambda;
+        lambda += 1;
+    }
+    return scale*gegen;
+}
+
 
 }}
 #endif

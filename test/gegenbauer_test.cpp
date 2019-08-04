@@ -19,6 +19,7 @@ using boost::multiprecision::float128;
 
 using std::abs;
 using boost::math::gegenbauer;
+using boost::math::gegenbauer_derivative;
 
 template<class Real>
 void test_parity()
@@ -70,7 +71,28 @@ void test_cubic()
     while (x < 1) {
         Real expected = c3(x);
         Real computed = gegenbauer(3, lambda, x);
+        CHECK_ULP_CLOSE(expected, computed, 4);
+        x += h;
+    }
+}
+
+template<class Real>
+void test_derivative()
+{
+    Real lambda = 0.5;
+    auto c3_prime = [&](Real x) { return 2*lambda*(lambda+1)*(-1 + 2*(lambda+2)*x*x); };
+    auto c3_double_prime = [&](Real x) { return 8*lambda*(lambda+1)*(lambda+2)*x; };
+    Real x = -1;
+    Real h = 1/Real(256);
+    while (x < 1) {
+        Real expected = c3_prime(x);
+        Real computed = gegenbauer_derivative(3, lambda, x, 1);
         CHECK_ULP_CLOSE(expected, computed, 1);
+
+        expected = c3_double_prime(x);
+        computed = gegenbauer_derivative(3, lambda, x, 2);
+        CHECK_ULP_CLOSE(expected, computed, 1);
+
         x += h;
     }
 
@@ -91,6 +113,10 @@ int main()
     test_cubic<float>();
     test_cubic<double>();
     test_cubic<long double>();
+
+    test_derivative<float>();
+    test_derivative<double>();
+    test_derivative<long double>();
 
 #ifdef BOOST_HAS_FLOAT128
     test_quadratic<boost::multiprecision::float128>();
