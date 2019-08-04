@@ -43,7 +43,7 @@ The /k/-th derivative of the /n/-th Gegenbauer polynomial is given by
     unsigned k = 2;
     double y = gegenbauer_derivative(n, lambda, x, k);
 
-
+[$../graphs/gegenbauer.svg]
 
 [h3 Implementation]
 
@@ -96,6 +96,11 @@ The relative accuracy cannot be controlled at the roots of the polynomial, as is
 [$../graphs/gegenbauer_ulp_3.svg]
 [$../graphs/gegenbauer_ulp_5.svg]
 [$../graphs/gegenbauer_ulp_9.svg]
+
+[h3 Caveats]
+
+Some programs define the Gegenbauer polynomial with \u03BB = 0 via renormalization (which makes them Chebyshev polynomials).
+We do not follow this convention: In this case, only the zeroth Gegenbauer polynomial is nonzero.
 
 
 [endsect]
