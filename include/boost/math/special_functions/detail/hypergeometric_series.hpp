@@ -337,7 +337,6 @@
         // Backup state:
         //
         term = saved_term * exp(T(local_scaling - saved_scale));
-        term_m1 = term;
         n = summit_location;
         term *= (b + (n - 1)) * n / ((a + (n - 1)) * z);
         --n;
@@ -389,14 +388,12 @@
               sum /= scaling_factor;
               term /= scaling_factor;
               log_scaling += log_scaling_factor;
-              local_scaling += log_scaling_factor;
            }
            if (fabs(sum) < lower_limit)
            {
               sum *= scaling_factor;
               term *= scaling_factor;
               log_scaling -= log_scaling_factor;
-              local_scaling -= log_scaling_factor;
            }
            //term_m1 = term;
            term *= (((a + n) / ((b + n) * (n + 1))) * z);

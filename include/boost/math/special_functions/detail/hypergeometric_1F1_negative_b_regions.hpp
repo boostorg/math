@@ -435,7 +435,7 @@ namespace boost {
                double b1 = domain[index][1];
                double z0 = domain[index - 1][3];
                double z1 = domain[index][3];
-               T upper_z_limit = (z0 * (b1 - b) + z1 * (b - b0)) / (b1 - b0);
+               T upper_z_limit = static_cast<T>((z0 * (b1 - b) + z1 * (b - b0)) / (b1 - b0));
                if (z > upper_z_limit)
                   return 1;
                return z < -b / (4 - 5 * sqrt(log(a)) * a / b) ? -1 : 0;
@@ -483,10 +483,10 @@ namespace boost {
             // of making our lower bound smaller than it would otherwise be, and more so nearer
             // the centre of the bounding box.
             //
-            T effective_x = a + (std::min)(T(a - x1), T(x2 - a)) * 0.25;
-            T effective_y = b + (std::min)(T(b - y1), T(y2 - b)) * 0.25;
+            T effective_x = static_cast<T>(a + (std::min)(T(a - x1), T(x2 - a)) * 0.25);
+            T effective_y = static_cast<T>(b + (std::min)(T(b - y1), T(y2 - b)) * 0.25);
 
-            T lower_limit = 1 / ((x2 - x1) * (y2 - y1)) * (f11 * (x2 - effective_x) * (y2 - effective_y) + f21 * (effective_x - x1) * (y2 - effective_y) + f12 * (x2 - effective_x) * (effective_y - y1) + f22 * (effective_x - x1) * (effective_y - y1));
+            T lower_limit = static_cast<T>(1 / ((x2 - x1) * (y2 - y1)) * (f11 * (x2 - effective_x) * (y2 - effective_y) + f21 * (effective_x - x1) * (y2 - effective_y) + f12 * (x2 - effective_x) * (effective_y - y1) + f22 * (effective_x - x1) * (effective_y - y1)));
 
             //
             // If one f value was zero, take the whole box as zero:
@@ -509,7 +509,7 @@ namespace boost {
             BOOST_ASSERT(f22 <= domain[index][3]);
             f22 = domain[index][3];
 
-            T upper_limit = 1 / ((x2 - x1) * (y2 - y1)) * (f11 * (x2 - a) * (y2 - b) + f21 * (a - x1) * (y2 - b) + f12 * (x2 - a) * (b - y1) + f22 * (a - x1) * (b - y1));
+            T upper_limit = static_cast<T>(1 / ((x2 - x1) * (y2 - y1)) * (f11 * (x2 - a) * (y2 - b) + f21 * (a - x1) * (y2 - b) + f12 * (x2 - a) * (b - y1) + f22 * (a - x1) * (b - y1)));
             if (z > upper_limit)
                return 1;
             return 0;

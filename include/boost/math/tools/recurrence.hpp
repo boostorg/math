@@ -145,7 +145,7 @@ namespace boost {
             using boost::math::tuple;
             using boost::math::get;
 
-            T third = 0;
+            T third;
             T a, b, c;
 
             for (unsigned k = 0; k < number_of_steps; ++k)
@@ -200,7 +200,7 @@ namespace boost {
             using boost::math::tuple;
             using boost::math::get;
 
-            T next = 0;
+            T next;
             T a, b, c;
 
             for (unsigned k = 0; k < number_of_steps; ++k)

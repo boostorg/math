@@ -129,7 +129,7 @@
         Real lower_limit(1 / upper_limit);
         int log_scaling_factor = itrunc(boost::math::tools::log_max_value<Real>()) - 2;
         Real scaling_factor = exp(Real(log_scaling_factor));
-        Real term_m1 = 0;
+        Real term_m1;
         int local_scaling = 0;
 
         if ((aj.size() == 1) && (bj.size() == 0))

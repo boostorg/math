@@ -184,11 +184,11 @@
                     //
                     if ((j < cache_size - 2) && (tools::max_value<T>() / fabs(64 * bessel_cache[j] / bessel_cache[j + 1]) < fabs(bessel_cache[j])))
                     {
-                       T scale = pow(fabs(bessel_cache[j] / bessel_cache[j + 1]), j + 1) * 2;
-                       if (!((boost::math::isfinite)(scale)))
-                          scale = tools::max_value<T>();
+                       T rescale = pow(fabs(bessel_cache[j] / bessel_cache[j + 1]), j + 1) * 2;
+                       if (!((boost::math::isfinite)(rescale)))
+                          rescale = tools::max_value<T>();
                        for (int k = j; k < cache_size; ++k)
-                          bessel_cache[k] /= scale;
+                          bessel_cache[k] /= rescale;
                        bessel_j_backwards_iterator<T> ti(b_minus_1_plus_n + j, 2 * sqrt(bessel_arg), bessel_cache[j + 1], bessel_cache[j]);
                        i = ti;
                     }
@@ -259,11 +259,11 @@
                     //
                     if ((j < cache_size - 2) && (tools::max_value<T>() / fabs(64 * bessel_cache[j] / bessel_cache[j + 1]) < fabs(bessel_cache[j])))
                     {
-                       T scale = pow(fabs(bessel_cache[j] / bessel_cache[j + 1]), j + 1) * 2;
-                       if (!((boost::math::isfinite)(scale)))
-                          scale = tools::max_value<T>();
+                       T rescale = pow(fabs(bessel_cache[j] / bessel_cache[j + 1]), j + 1) * 2;
+                       if (!((boost::math::isfinite)(rescale)))
+                          rescale = tools::max_value<T>();
                        for (int k = j; k < cache_size; ++k)
-                          bessel_cache[k] /= scale;
+                          bessel_cache[k] /= rescale;
                        i = bessel_i_backwards_iterator<T>(b_minus_1_plus_n + j, 2 * sqrt(-bessel_arg), bessel_cache[j + 1], bessel_cache[j]);
                     }
                  }
@@ -417,7 +417,7 @@
               // Overflow:
               scale = itrunc(tools::log_max_value<T>()) - 10;
               log_scale += scale;
-              result /= exp(scale);
+              result /= exp(T(scale));
            }
            result *= prefix;
         }

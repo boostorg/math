@@ -260,7 +260,7 @@ Note however, that the some of the methods used here fail to converge to much be
 [? __build_html '''<?dbhtml-include href="'''__base_path__'''/graphs/hypergeometric_1f1/negative_b.html"?>''']
 [?! __build_html [$../graphs/hypergeometric_1f1/negative_b.png]]
 
-For both /a/ and /b/ less than zero, the errors the worst errors are clustered in a "difficult zone" with /b < a/ and /z/ [cong] /a/:
+For both /a/ and /b/ less than zero, the errors the worst errors are clustered in a "difficult zone" with /b < a/ and /z/ [asymp] /a/:
 
 [$../graphs/hypergeometric_1f1/negative_ab_bins.svg]
 [? __build_html '''<?dbhtml-include href="'''__base_path__'''/graphs/hypergeometric_1f1/negative_ab.html"?>''']

@@ -264,7 +264,7 @@
               {
                  // Ooops, need to rescale h:
                  int rescale = itrunc(log(fabs(h)));
-                 T scale = exp(-rescale);
+                 T scale = exp(T(-rescale));
                  h *= scale;
                  log_scaling += rescale;
               }

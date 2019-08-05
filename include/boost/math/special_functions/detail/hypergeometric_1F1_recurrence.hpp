@@ -417,7 +417,7 @@
      //
      second = boost::math::detail::hypergeometric_1F1_imp(T(a + a_shift - 1), T(b + b_shift), z, pol, scale2);
      if (scale1 != scale2)
-        second *= exp(scale2 - scale1);
+        second *= exp(T(scale2 - scale1));
      log_scaling += scale1;
 
      //

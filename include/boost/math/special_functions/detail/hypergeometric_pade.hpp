@@ -37,7 +37,7 @@
     const unsigned max_iterations = boost::math::policies::get_max_series_iterations<Policy>();
 
     T b2 = T(0), a2 = T(0);
-    T result = T(0), prev_result = a1 / b1;
+    T result = T(0), prev_result;
 
     for (unsigned k = 1; k < max_iterations; ++k)
     {

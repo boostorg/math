@@ -634,8 +634,8 @@ namespace boost { namespace math { namespace detail {
       //
       // Actual result will be result * e^log_scaling / tgamma(b).
       //
-	  int sign = 1;
-	  T scale = log_scaling - boost::math::lgamma(b, &sign, pol);
+	  int result_sign = 1;
+	  T scale = log_scaling - boost::math::lgamma(b, &result_sign, pol);
 #ifndef BOOST_NO_CXX11_THREAD_LOCAL
       static const thread_local T max_scaling = boost::math::tools::log_max_value<T>() - 2;
 	  static const thread_local T max_scale_factor = exp(max_scaling);
@@ -656,7 +656,7 @@ namespace boost { namespace math { namespace detail {
       }
       if (scale != 0)
          result *= exp(scale);
-      return result * sign;
+      return result * result_sign;
    }
 
 } // namespace detail
