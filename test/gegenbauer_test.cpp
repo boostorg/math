@@ -110,7 +110,6 @@ int main()
     test_quadratic<double>();
     test_quadratic<long double>();
 
-    test_cubic<float>();
     test_cubic<double>();
     test_cubic<long double>();
 
