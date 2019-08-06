@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Trigamma</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../index.html" title="Math Toolkit 2.10.0">
 <link rel="up" href="../sf_gamma.html" title="Gamma Functions">
 <link rel="prev" href="digamma.html" title="Digamma">
@@ -50,12 +50,14 @@
         Returns the trigamma function of <span class="emphasis"><em>x</em></span>. Trigamma is defined
         as the derivative of the digamma function:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/trigamma1.svg"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/trigamma.svg" align="middle"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/trigamma1.svg"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/trigamma.svg" align="middle"></span>
+
+        </p></blockquote></div>
 <p>
         The final <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
         be used to control the behaviour of the function: how it handles errors,
@@ -151,15 +153,18 @@
         precision, and GCC-7.1/Ubuntu for <code class="computeroutput"><span class="keyword">long</span>
         <span class="keyword">double</span></code> and <code class="computeroutput"><span class="identifier">__float128</span></code>.
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/trigamma__double.svg" align="middle"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/trigamma__80_bit_long_double.svg" align="middle"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/trigamma____float128.svg" align="middle"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/trigamma__double.svg" align="middle"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/trigamma__80_bit_long_double.svg" align="middle"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/trigamma____float128.svg" align="middle"></span>
+
+        </p></blockquote></div>
 <h5>
 <a name="math_toolkit.sf_gamma.trigamma.h3"></a>
         <span class="phrase"><a name="math_toolkit.sf_gamma.trigamma.testing"></a></span><a class="link" href="trigamma.html#math_toolkit.sf_gamma.trigamma.testing">Testing</a>
@@ -178,28 +183,32 @@
         For built in fixed precision types, negative arguments are first made positive
         via:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/trigamma2.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/trigamma2.svg"></span>
+
+        </p></blockquote></div>
 <p>
         Then arguments in the range [0, 1) are shifted to &gt;= 1 via:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/trigamma3.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/trigamma3.svg"></span>
+
+        </p></blockquote></div>
 <p>
         Then evaluation is via one of a number of rational approximations, for small
         x these are of the form:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/trigamma4.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/trigamma4.svg"></span>
+
+        </p></blockquote></div>
 <p>
         and for large x of the form:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/trigamma5.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/trigamma5.svg"></span>
+
+        </p></blockquote></div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>

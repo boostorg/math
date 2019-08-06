@@ -1,11 +1,11 @@
 [template history[]
 
 Currently open bug reports can be viewed
-[@https://github.com/boostorg/math/issues here].
+[@https://github.com/boostorg/math/issues here] on GIThub.
 
-All bug reports including closed ones can be viewed
+All bug reports including closed ones can be viewed on Trac
 [@https://svn.boost.org/trac/boost/query?status=assigned&status=closed&status=new&status=reopened&component=math&col=id&col=summary&col=status&col=type&col=milestone&col=component&order=priority here]
-and [@https://github.com/boostorg/math/issues?utf8=%E2%9C%93&q=is%3Aissue here].
+and more recent on GIThub [@https://github.com/boostorg/math/issues?utf8=%E2%9C%93&q=is%3Aissue here].
 
 [h4 Math-2.10.0 (Boost-1.71)]
 

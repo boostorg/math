@@ -3,10 +3,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Error Function Inverses</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../index.html" title="Math Toolkit 2.10.0">
 <link rel="up" href="../sf_erf.html" title="Error Functions">
-<link rel="prev" href="error_function.html" title="Error Functions">
+<link rel="prev" href="error_function.html" title="Error Function erf and complement erfc">
 <link rel="next" href="../sf_poly.html" title="Polynomials">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -72,11 +72,13 @@
         Returns the <a href="http://functions.wolfram.com/GammaBetaErf/InverseErf/" target="_top">inverse
         error function</a> of z, that is a value x such that:
       </p>
-<pre class="programlisting"><span class="identifier">p</span> <span class="special">=</span> <span class="identifier">erf</span><span class="special">(</span><span class="identifier">x</span><span class="special">);</span>
-</pre>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/erf_inv.svg" align="middle"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="emphasis"><em>p = erf(x);</em></span>
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/erf_inv.svg" align="middle"></span>
+
+        </p></blockquote></div>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">erfc_inv</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">);</span>
 
@@ -87,11 +89,13 @@
         Returns the inverse of the complement of the error function of z, that is
         a value x such that:
       </p>
-<pre class="programlisting"><span class="identifier">p</span> <span class="special">=</span> <span class="identifier">erfc</span><span class="special">(</span><span class="identifier">x</span><span class="special">);</span>
-</pre>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/erfc_inv.svg" align="middle"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="emphasis"><em>p = erfc(x);</em></span>
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/erfc_inv.svg" align="middle"></span>
+
+        </p></blockquote></div>
 <h5>
 <a name="math_toolkit.sf_erf.error_inv.h2"></a>
         <span class="phrase"><a name="math_toolkit.sf_erf.error_inv.accuracy"></a></span><a class="link" href="error_inv.html#math_toolkit.sf_erf.error_inv.accuracy">Accuracy</a>
@@ -99,7 +103,7 @@
 <p>
         For types up to and including 80-bit long doubles the approximations used
         are accurate to less than ~ 2 epsilon. For higher precision types these functions
-        have the same accuracy as the <a class="link" href="error_function.html" title="Error Functions">forward
+        have the same accuracy as the <a class="link" href="error_function.html" title="Error Function erf and complement erfc">forward
         error functions</a>.
       </p>
 <div class="table">
@@ -257,15 +261,18 @@
         precision, and GCC-7.1/Ubuntu for <code class="computeroutput"><span class="keyword">long</span>
         <span class="keyword">double</span></code> and <code class="computeroutput"><span class="identifier">__float128</span></code>.
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/erfc__double.svg" align="middle"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/erfc__80_bit_long_double.svg" align="middle"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/erfc____float128.svg" align="middle"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/erfc__double.svg" align="middle"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/erfc__80_bit_long_double.svg" align="middle"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/erfc____float128.svg" align="middle"></span>
+
+        </p></blockquote></div>
 <h5>
 <a name="math_toolkit.sf_erf.error_inv.h3"></a>
         <span class="phrase"><a name="math_toolkit.sf_erf.error_inv.testing"></a></span><a class="link" href="error_inv.html#math_toolkit.sf_erf.error_inv.testing">Testing</a>
@@ -314,8 +321,9 @@
         For <span class="emphasis"><em>p &lt; 0.5</em></span> the inverse erf function is reasonably
         smooth and the approximation:
       </p>
-<pre class="programlisting"><span class="identifier">x</span> <span class="special">=</span> <span class="identifier">p</span><span class="special">(</span><span class="identifier">p</span> <span class="special">+</span> <span class="number">10</span><span class="special">)(</span><span class="identifier">Y</span> <span class="special">+</span> <span class="identifier">R</span><span class="special">(</span><span class="identifier">p</span><span class="special">))</span>
-</pre>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="emphasis"><em>x = p(p + 10)(Y + R(p))</em></span>
+        </p></blockquote></div>
 <p>
         Gives a good result for a constant Y, and R(p) optimised for low absolute
         error compared to |Y|.
@@ -324,18 +332,21 @@
         For q &lt; 0.5 things get trickier, over the interval <span class="emphasis"><em>0.5 &gt;
         q &gt; 0.25</em></span> the following approximation works well:
       </p>
-<pre class="programlisting"><span class="identifier">x</span> <span class="special">=</span> <span class="identifier">sqrt</span><span class="special">(-</span><span class="number">2l</span><span class="identifier">og</span><span class="special">(</span><span class="identifier">q</span><span class="special">))</span> <span class="special">/</span> <span class="special">(</span><span class="identifier">Y</span> <span class="special">+</span> <span class="identifier">R</span><span class="special">(</span><span class="identifier">q</span><span class="special">))</span>
-</pre>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="emphasis"><em>x = sqrt(-2log(q)) / (Y + R(q))</em></span>
+        </p></blockquote></div>
 <p>
         While for q &lt; 0.25, let
       </p>
-<pre class="programlisting"><span class="identifier">z</span> <span class="special">=</span> <span class="identifier">sqrt</span><span class="special">(-</span><span class="identifier">log</span><span class="special">(</span><span class="identifier">q</span><span class="special">))</span>
-</pre>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="emphasis"><em>z = sqrt(-log(q))</em></span>
+        </p></blockquote></div>
 <p>
         Then the result is given by:
       </p>
-<pre class="programlisting"><span class="identifier">x</span> <span class="special">=</span> <span class="identifier">z</span><span class="special">(</span><span class="identifier">Y</span> <span class="special">+</span> <span class="identifier">R</span><span class="special">(</span><span class="identifier">z</span> <span class="special">-</span> <span class="identifier">B</span><span class="special">))</span>
-</pre>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="emphasis"><em>x = z(Y + R(z - B))</em></span>
+        </p></blockquote></div>
 <p>
         As before Y is a constant and the rational function R is optimised for low
         absolute error compared to |Y|. B is also a constant: it is the smallest

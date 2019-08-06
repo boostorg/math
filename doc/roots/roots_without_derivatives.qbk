@@ -58,7 +58,7 @@
          boost::uintmax_t& max_iter,
          const ``__Policy``&);
 
-	// TOMS 748 algorithm
+  // TOMS 748 algorithm
    template <class F, class T, class Tol>
    std::pair<T, T>
       toms748_solve(
@@ -359,12 +359,12 @@ Generally speaking it is easier (and often more efficient) to use __bracket_solv
 rather than trying to bracket the root yourself as this function requires.
 
 This function is provided rather than [@http://en.wikipedia.org/wiki/Brent%27s_method Brent's method] as it is known to be more
-effient in many cases (it is asymptotically the most efficient known,
+efficient in many cases (it is asymptotically the most efficient known,
 and has been shown to be optimal for a certain classes of smooth functions).
 It also has the useful property of decreasing the bracket size
 with each step, unlike Brent's method which only shrinks the enclosing interval in the
 final step.  This makes it particularly useful when you need a result where the ends
-of the interval round to the same integer: as often happens in statistical applications
+of the interval round to the same integer: as often happens in statistical applications,
 for example.  In this situation the function is able to exit after a much smaller
 number of iterations than would otherwise be possible.
 
@@ -393,15 +393,15 @@ The __root_finding_TOMS748 parameters are:
 
 `toms748_solve` returns: a pair of values ['r] that bracket the root so that:
 
-   f(r.first) * f(r.second) <= 0
+[:['f(r.first) * f(r.second) <= 0]]
 
 and either
 
-   tol(r.first, r.second) == true
+[:['tol(r.first, r.second) == true]]
 
 or
 
-   max_iter >= m
+[:['max_iter >= m]]
 
 where ['m] is the initial value of ['max_iter] passed to the function.
 

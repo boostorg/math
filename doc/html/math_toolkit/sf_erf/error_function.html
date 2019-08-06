@@ -1,9 +1,9 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
-<title>Error Functions</title>
+<title>Error Function erf and complement erfc</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../index.html" title="Math Toolkit 2.10.0">
 <link rel="up" href="../sf_erf.html" title="Error Functions">
 <link rel="prev" href="../sf_erf.html" title="Error Functions">
@@ -24,7 +24,8 @@
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="math_toolkit.sf_erf.error_function"></a><a class="link" href="error_function.html" title="Error Functions">Error Functions</a>
+<a name="math_toolkit.sf_erf.error_function"></a><a class="link" href="error_function.html" title="Error Function erf and complement erfc">Error Function erf
+      and complement erfc</a>
 </h3></div></div></div>
 <h5>
 <a name="math_toolkit.sf_erf.error_function.h0"></a>
@@ -73,12 +74,14 @@
         function</a> <a href="http://functions.wolfram.com/GammaBetaErf/Erf/" target="_top">erf</a>
         of z:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/erf1.svg"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/erf.svg" align="middle"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/erf1.svg"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/erf.svg" align="middle"></span>
+
+        </p></blockquote></div>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">erfc</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">);</span>
 
@@ -89,22 +92,24 @@
         Returns the complement of the <a href="http://functions.wolfram.com/GammaBetaErf/Erfc/" target="_top">error
         function</a> of z:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/erf2.svg"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/erfc.svg" align="middle"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/erf2.svg"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/erfc.svg" align="middle"></span>
+
+        </p></blockquote></div>
 <h5>
 <a name="math_toolkit.sf_erf.error_function.h2"></a>
         <span class="phrase"><a name="math_toolkit.sf_erf.error_function.accuracy"></a></span><a class="link" href="error_function.html#math_toolkit.sf_erf.error_function.accuracy">Accuracy</a>
       </h5>
 <p>
         The following table shows the peak errors (in units of epsilon) found on
-        various platforms with various floating point types, along with comparisons
+        various platforms with various floating-point types, along with comparisons
         to the <a href="http://www.gnu.org/software/gsl/" target="_top">GSL-1.9</a>, <a href="http://www.gnu.org/software/libc/" target="_top">GNU C Lib</a>, <a href="http://docs.hp.com/en/B9106-90010/index.html" target="_top">HP-UX
         C Library</a> and <a href="http://www.netlib.org/cephes/" target="_top">Cephes</a>
-        libraries. Unless otherwise specified any floating point type that is narrower
+        libraries. Unless otherwise specified any floating-point type that is narrower
         than the one shown will have <a class="link" href="../relative_error.html#math_toolkit.relative_error.zero_error">effectively
         zero error</a>.
       </p>
@@ -382,15 +387,18 @@
         precision, and GCC-7.1/Ubuntu for <code class="computeroutput"><span class="keyword">long</span>
         <span class="keyword">double</span></code> and <code class="computeroutput"><span class="identifier">__float128</span></code>.
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/erf__double.svg" align="middle"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/erf__80_bit_long_double.svg" align="middle"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/erf____float128.svg" align="middle"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/erf__double.svg" align="middle"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/erf__80_bit_long_double.svg" align="middle"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/erf____float128.svg" align="middle"></span>
+
+        </p></blockquote></div>
 <h5>
 <a name="math_toolkit.sf_erf.error_function.h3"></a>
         <span class="phrase"><a name="math_toolkit.sf_erf.error_function.testing"></a></span><a class="link" href="error_function.html#math_toolkit.sf_erf.error_function.testing">Testing</a>
@@ -413,12 +421,17 @@
         All versions of these functions first use the usual reflection formulas to
         make their arguments positive:
       </p>
-<pre class="programlisting"><span class="identifier">erf</span><span class="special">(-</span><span class="identifier">z</span><span class="special">)</span> <span class="special">=</span> <span class="number">1</span> <span class="special">-</span> <span class="identifier">erf</span><span class="special">(</span><span class="identifier">z</span><span class="special">);</span>
-
-<span class="identifier">erfc</span><span class="special">(-</span><span class="identifier">z</span><span class="special">)</span> <span class="special">=</span> <span class="number">2</span> <span class="special">-</span> <span class="identifier">erfc</span><span class="special">(</span><span class="identifier">z</span><span class="special">);</span>  <span class="comment">// preferred when -z &lt; -0.5</span>
-
-<span class="identifier">erfc</span><span class="special">(-</span><span class="identifier">z</span><span class="special">)</span> <span class="special">=</span> <span class="number">1</span> <span class="special">+</span> <span class="identifier">erf</span><span class="special">(</span><span class="identifier">z</span><span class="special">);</span>   <span class="comment">// preferred when -0.5 &lt;= -z &lt; 0</span>
-</pre>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="emphasis"><em>erf(-z) = 1 - erf(z);</em></span>
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="emphasis"><em>erfc(-z) = 2 - erfc(z);</em></span> // preferred when -z &lt;
+          -0.5
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="emphasis"><em>erfc(-z) = 1 + erf(z);</em></span> // preferred when -0.5 &lt;=
+          -z &lt; 0
+        </p></blockquote></div>
 <p>
         The generic versions of these functions are implemented in terms of the incomplete
         gamma function.
@@ -435,32 +448,36 @@
         erf is used, based on the observation that erf is an odd function and therefore
         erf is calculated using:
       </p>
-<pre class="programlisting"><span class="identifier">erf</span><span class="special">(</span><span class="identifier">z</span><span class="special">)</span> <span class="special">=</span> <span class="identifier">z</span> <span class="special">*</span> <span class="special">(</span><span class="identifier">C</span> <span class="special">+</span> <span class="identifier">R</span><span class="special">(</span><span class="identifier">z</span><span class="special">*</span><span class="identifier">z</span><span class="special">));</span>
-</pre>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="emphasis"><em>erf(z) = z * (C + R(z*z));</em></span>
+        </p></blockquote></div>
 <p>
-        where the rational approximation R(z*z) is optimised for absolute error:
-        as long as its absolute error is small enough compared to the constant C,
-        then any round-off error incurred during the computation of R(z*z) will effectively
-        disappear from the result. As a result the error for erf and erfc in this
-        region is very low: the last bit is incorrect in only a very small number
-        of cases.
+        where the rational approximation <span class="emphasis"><em>R(z*z)</em></span> is optimised
+        for absolute error: as long as its absolute error is small enough compared
+        to the constant C, then any round-off error incurred during the computation
+        of R(z*z) will effectively disappear from the result. As a result the error
+        for erf and erfc in this region is very low: the last bit is incorrect in
+        only a very small number of cases.
       </p>
 <p>
         For <code class="computeroutput"><span class="identifier">z</span> <span class="special">&gt;</span>
         <span class="number">0.5</span></code> we observe that over a small interval
-        [a, b) then:
+        [<span class="emphasis"><em>a, b)</em></span> then:
       </p>
-<pre class="programlisting"><span class="identifier">erfc</span><span class="special">(</span><span class="identifier">z</span><span class="special">)</span> <span class="special">*</span> <span class="identifier">exp</span><span class="special">(</span><span class="identifier">z</span><span class="special">*</span><span class="identifier">z</span><span class="special">)</span> <span class="special">*</span> <span class="identifier">z</span> <span class="special">~</span> <span class="identifier">c</span>
-</pre>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="emphasis"><em>erfc(z) * exp(z*z) * z ~ c</em></span>
+        </p></blockquote></div>
 <p>
         for some constant c.
       </p>
 <p>
         Therefore for <code class="computeroutput"><span class="identifier">z</span> <span class="special">&gt;</span>
-        <span class="number">0.5</span></code> we calculate erfc using:
+        <span class="number">0.5</span></code> we calculate <code class="computeroutput"><span class="identifier">erfc</span></code>
+        using:
       </p>
-<pre class="programlisting"><span class="identifier">erfc</span><span class="special">(</span><span class="identifier">z</span><span class="special">)</span> <span class="special">=</span> <span class="identifier">exp</span><span class="special">(-</span><span class="identifier">z</span><span class="special">*</span><span class="identifier">z</span><span class="special">)</span> <span class="special">*</span> <span class="special">(</span><span class="identifier">C</span> <span class="special">+</span> <span class="identifier">R</span><span class="special">(</span><span class="identifier">z</span> <span class="special">-</span> <span class="identifier">B</span><span class="special">))</span> <span class="special">/</span> <span class="identifier">z</span><span class="special">;</span>
-</pre>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="emphasis"><em>erfc(z) = exp(-z*z) * (C + R(z - B)) / z;</em></span>
+        </p></blockquote></div>
 <p>
         Again R(z - B) is optimised for absolute error, and the constant <code class="computeroutput"><span class="identifier">C</span></code> is the average of <code class="computeroutput"><span class="identifier">erfc</span><span class="special">(</span><span class="identifier">z</span><span class="special">)</span>
         <span class="special">*</span> <span class="identifier">exp</span><span class="special">(</span><span class="identifier">z</span><span class="special">*</span><span class="identifier">z</span><span class="special">)</span> <span class="special">*</span>
@@ -479,8 +496,9 @@
         For large <code class="computeroutput"><span class="identifier">z</span></code> over a range
         [a, +&#8734;] the above approximation is modified to:
       </p>
-<pre class="programlisting"><span class="identifier">erfc</span><span class="special">(</span><span class="identifier">z</span><span class="special">)</span> <span class="special">=</span> <span class="identifier">exp</span><span class="special">(-</span><span class="identifier">z</span><span class="special">*</span><span class="identifier">z</span><span class="special">)</span> <span class="special">*</span> <span class="special">(</span><span class="identifier">C</span> <span class="special">+</span> <span class="identifier">R</span><span class="special">(</span><span class="number">1</span> <span class="special">/</span> <span class="identifier">z</span><span class="special">))</span> <span class="special">/</span> <span class="identifier">z</span><span class="special">;</span>
-</pre>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="emphasis"><em>erfc(z) = exp(-z*z) * (C + R(1 / z)) / z;</em></span>
+        </p></blockquote></div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>

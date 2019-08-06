@@ -14,43 +14,43 @@ This library is centred around statistical distributions, this tutorial
 will give you an overview of what they are, how they can be used, and
 provides a few worked examples of applying the library to statistical tests.
 
-[section:overview Overview of Distributions]
+[section:overview Overview of Statistical Distributions]
 
 [section:headers Headers and Namespaces]
 
-All the code in this library is inside namespace boost::math.
+All the code in this library is inside `namespace boost::math`.
 
 In order to use a distribution /my_distribution/ you will need to include
-either the header <boost/math/my_distribution.hpp> or
-the "include all the distributions" header: <boost/math/distributions.hpp>.
+either the header(s) `<boost/math/my_distribution.hpp>` (quicker compiles), or
+the "include all the distributions" header: `<boost/math/distributions.hpp>`.
 
 For example, to use the Students-t distribution include either
-<boost/math/students_t.hpp> or
-<boost/math/distributions.hpp>
+`<boost/math/students_t.hpp>` or
+`<boost/math/distributions.hpp>`
 
 You also need to bring distribution names into scope,
 perhaps with a `using namespace boost::math;` declaration,
 
 or specific  `using` declarations like `using boost::math::normal;` (*recommended*).
 
-[caution Some math function names are also used in namespace std so including <random> could cause ambiguity!]
+[caution Some math function names are also used in `namespace std` so including `<random>` could cause ambiguity!]
 
 [endsect] [/ section:headers Headers and Namespaces]
 
 [section:objects Distributions are Objects]
 
-Each kind of distribution in this library is a class type - an object.
-
-[link policy Policies] provide fine-grained control
-of the behaviour of these classes, allowing the user to customise
-behaviour such as how errors are handled, or how the quantiles
-of discrete distribtions behave.
+Each kind of distribution in this library is a class type - an object, with member functions.
 
 [tip If you are familiar with statistics libraries using functions,
 and 'Distributions as Objects' seem alien, see
 [link math_toolkit.stat_tut.weg.nag_library the comparison to
 other statistics libraries.]
 ] [/tip]
+
+[link policy Policies] provide optional fine-grained control
+of the behaviour of these classes, allowing the user to customise
+behaviour such as how errors are handled, or how the quantiles
+of discrete distributions behave.
 
 Making distributions class types does two things:
 

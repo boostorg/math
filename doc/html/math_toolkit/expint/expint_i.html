@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Exponential Integral Ei</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../index.html" title="Math Toolkit 2.10.0">
 <link rel="up" href="../expint.html" title="Exponential Integrals">
 <link rel="prev" href="expint_n.html" title="Exponential Integral En">
@@ -66,12 +66,14 @@
         Returns the <a href="http://mathworld.wolfram.com/ExponentialIntegral.html" target="_top">exponential
         integral</a> of z:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/expint_i_1.svg"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/expint_i.svg" align="middle"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/expint_i_1.svg"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/expint_i.svg" align="middle"></span>
+
+        </p></blockquote></div>
 <h5>
 <a name="math_toolkit.expint.expint_i.h2"></a>
         <span class="phrase"><a name="math_toolkit.expint.expint_i.accuracy"></a></span><a class="link" href="expint_i.html#math_toolkit.expint.expint_i.accuracy">Accuracy</a>
@@ -218,15 +220,18 @@
         precision, and GCC-7.1/Ubuntu for <code class="computeroutput"><span class="keyword">long</span>
         <span class="keyword">double</span></code> and <code class="computeroutput"><span class="identifier">__float128</span></code>.
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/exponential_integral_ei__double.svg" align="middle"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/exponential_integral_ei__80_bit_long_double.svg" align="middle"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/exponential_integral_ei____float128.svg" align="middle"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/exponential_integral_ei__double.svg" align="middle"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/exponential_integral_ei__80_bit_long_double.svg" align="middle"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/exponential_integral_ei____float128.svg" align="middle"></span>
+
+        </p></blockquote></div>
 <h5>
 <a name="math_toolkit.expint.expint_i.h3"></a>
         <span class="phrase"><a name="math_toolkit.expint.expint_i.testing"></a></span><a class="link" href="expint_i.html#math_toolkit.expint.expint_i.testing">Testing</a>
@@ -253,9 +258,10 @@
 <p>
         For x &gt; 0 the generic version is implemented using the infinte series:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/expint_i_2.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/expint_i_2.svg"></span>
+
+        </p></blockquote></div>
 <p>
         However, when the precision of the argument type is known at compile time
         and is 113 bits or less, then rational approximations <a class="link" href="../sf_implementation.html#math_toolkit.sf_implementation.rational_approximations_used">devised
@@ -264,15 +270,16 @@
 <p>
         For 0 &lt; z &lt; 6 a root-preserving approximation of the form:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/expint_i_3.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/expint_i_3.svg"></span>
+
+        </p></blockquote></div>
 <p>
         is used, where z<sub>0</sub> is the positive root of the function, and R(z/3 - 1) is
         a minimax rational approximation rescaled so that it is evaluated over [-1,1].
         Note that while the rational approximation over [0,6] converges rapidly to
         the minimax solution it is rather ill-conditioned in practice. Cody and Thacher
-        <a href="#ftn.math_toolkit.expint.expint_i.f0" class="footnote" name="math_toolkit.expint.expint_i.f0"><sup class="footnote">[5]</sup></a> experienced the same issue and converted the polynomials into
+        <a href="#ftn.math_toolkit.expint.expint_i.f0" class="footnote"><sup class="footnote"><a name="math_toolkit.expint.expint_i.f0"></a>[5]</sup></a> experienced the same issue and converted the polynomials into
         Chebeshev form to ensure stable computation. By experiment we found that
         the polynomials are just as stable in polynomial as Chebyshev form, <span class="emphasis"><em>provided</em></span>
         they are computed over the interval [-1,1].
@@ -281,9 +288,10 @@
         Over the a series of intervals [a,b] and [b,INF] the rational approximation
         takes the form:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/expint_i_4.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/expint_i_4.svg"></span>
+
+        </p></blockquote></div>
 <p>
         where <span class="emphasis"><em>c</em></span> is a constant, and R(t) is a minimax solution
         optimised for low absolute error compared to <span class="emphasis"><em>c</em></span>. Variable
@@ -299,7 +307,7 @@
         involved.
       </p>
 <div class="footnotes">
-<br><hr style="width:100; text-align:left;margin-left: 0">
+<br><hr style="width:100; align:left;">
 <div id="ftn.math_toolkit.expint.expint_i.f0" class="footnote"><p><a href="#math_toolkit.expint.expint_i.f0" class="para"><sup class="para">[5] </sup></a>
           W. J. Cody and H. C. Thacher, Jr., Rational Chebyshev approximations for
           the exponential integral E<sub>1</sub>(x), Math. Comp. 22 (1968), 641-649, and W.

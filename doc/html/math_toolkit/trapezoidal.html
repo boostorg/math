@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Trapezoidal Quadrature</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../index.html" title="Math Toolkit 2.10.0">
 <link rel="up" href="../quadrature.html" title="Chapter&#160;12.&#160;Quadrature and Differentiation">
 <link rel="prev" href="../quadrature.html" title="Chapter&#160;12.&#160;Quadrature and Differentiation">
@@ -164,9 +164,9 @@
       in a rigorous manner by defining the <span class="bold"><strong>condition number
       of summation</strong></span>. The condition number of summation is defined by
     </p>
-<p>
-      &#954;(S<sub>n</sub>) := &#931;<sub>i</sub><sup>n</sup> |x<sub>i</sub>|/|&#931;<sub>i</sub><sup>n</sup> x<sub>i</sub>|
-    </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+        <span class="emphasis"><em>&#954;(S<sub>n</sub>) := &#931;<sub>i</sub><sup>n</sup> |x<sub>i</sub>|/|&#931;<sub>i</sub><sup>n</sup> x<sub>i</sub>|</em></span>
+      </p></blockquote></div>
 <p>
       If this number of ~10<sup>k</sup>, then <span class="emphasis"><em>k</em></span> additional digits are expected
       to be lost in addition to digits lost due to floating point rounding error.
@@ -180,9 +180,9 @@
       As an example, we consider evaluation of Bessel functions by trapezoidal quadrature.
       The Bessel function of the first kind is defined via
     </p>
-<p>
-      J<sub>n</sub>(x) = 1/2&#928; &#8747;<sub>-&#928;</sub><sup>&#928;</sup> cos(n t - x sin(t)) dt
-    </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+        <span class="emphasis"><em>J<sub>n</sub>(x) = 1/2&#928; &#8747;<sub>-&#928;</sub><sup>&#928;</sup> cos(n t - x sin(t)) dt</em></span>
+      </p></blockquote></div>
 <p>
       The integrand is periodic, so the Euler-Maclaurin summation formula guarantees
       exponential convergence via the trapezoidal quadrature. Without careful consideration,

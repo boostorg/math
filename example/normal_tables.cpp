@@ -133,7 +133,7 @@ int main()
 #ifdef BOOST_FLOAT32_C
     normal_table<boost::float32_t>(); // Usually type float
 #endif
-    normal_table<boost::float64_t>(); // Uusually type double. Assume that float64_t is always available.
+    normal_table<boost::float64_t>(); // Usually type double. Assume that float64_t is always available.
 #ifdef BOOST_FLOAT80_C
     normal_table<boost::float80_t>(); // Type long double on some X86 platforms.
 #endif

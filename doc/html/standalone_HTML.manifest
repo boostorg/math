@@ -189,6 +189,7 @@ math_toolkit/sf_poly/laguerre.html
 math_toolkit/sf_poly/hermite.html
 math_toolkit/sf_poly/chebyshev.html
 math_toolkit/sf_poly/sph_harm.html
+math_toolkit/sf_poly/cardinal_b_splines.html
 math_toolkit/bessel.html
 math_toolkit/bessel/bessel_over.html
 math_toolkit/bessel/bessel_first.html

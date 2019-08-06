@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Fourier Integrals</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../index.html" title="Math Toolkit 2.10.0">
 <link rel="up" href="../quadrature.html" title="Chapter&#160;12.&#160;Quadrature and Differentiation">
 <link rel="prev" href="double_exponential/de_refes.html" title="References">
@@ -59,15 +59,15 @@
 <p>
       Ooura's method for Fourier integrals computes
     </p>
-<p>
-      &#8198;  &#8198; &#8747;<sub>0</sub><sup>&#8734;</sup> f(t)sin(&#969; t) dt
-    </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+        &#8747;<sub>0</sub><sup>&#8734;</sup> f(t)sin(&#969; t) dt
+      </p></blockquote></div>
 <p>
       and
     </p>
-<p>
-      &#8198;  &#8198; &#8747;<sub>0</sub><sup>&#8734;</sup> f(t)cos(&#969;  t) dt
-    </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+        &#8747;<sub>0</sub><sup>&#8734;</sup> f(t)cos(&#969; t) dt
+      </p></blockquote></div>
 <p>
       by a double exponentially decaying transformation. These integrals arise when
       computing continuous Fourier transform of odd and even functions, respectively.
@@ -172,7 +172,8 @@ pi/(2e)  = 5.778636748954609e-01, difference 2.220446049250313e-16
 <p>
       The integrator precomputes nodes and weights, and hence can be reused for many
       different frequencies with good efficiency. The integrator is pimpl'd and hence
-      can be shared between threads without a memcpy of the nodes and weights.
+      can be shared between threads without a <code class="computeroutput"><span class="identifier">memcpy</span></code>
+      of the nodes and weights.
     </p>
 <p>
       Ooura and Mori's paper identifies criteria for rapid convergence based on the
@@ -243,15 +244,58 @@ pi/(2e)  = 5.778636748954608589550465916563481e-01, difference -6.74075480535532
       For more examples of other functions and tests, see the full test suite at
       <a href="../../../test/ooura_fourier_integral_test.cpp" target="_top">ooura_fourier_integral_test.cpp</a>.
     </p>
-<h4>
+<p>
+      Ngyen and Nuyens make use of <a href="../../../../../libs/multiprecision/doc/html/index.html" target="_top">Boost.Multiprecision</a>
+      in their extension to multiple dimensions, showing relative errors reducing
+      to &#8773; 10<sup>-2000</sup>!
+    </p>
+<h6>
 <a name="math_toolkit.fourier_integrals.h3"></a>
+      <span class="phrase"><a name="math_toolkit.fourier_integrals.rationale"></a></span><a class="link" href="fourier_integrals.html#math_toolkit.fourier_integrals.rationale">Rationale</a>
+    </h6>
+<p>
+      This implementation is base on Ooura's 1999 paper rather than the later 2005
+      paper. It does not preclude a second future implementation based on the later
+      work.
+    </p>
+<p>
+      Some of the features of the Ooura's 2005 paper that were less appealing were:
+    </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+          The advance of that paper is that one can compute <span class="emphasis"><em>both</em></span>
+          the Fourier sine transform and Fourier cosine transform in a single shot.
+          But there are examples, like sinc integral, where the Fourier sine would
+          converge, but the Fourier cosine would diverge.
+        </li>
+<li class="listitem">
+          It would force users to live in the complex plane, when many potential
+          applications only need real.
+        </li>
+</ul></div>
+<h5>
+<a name="math_toolkit.fourier_integrals.h4"></a>
       <span class="phrase"><a name="math_toolkit.fourier_integrals.references"></a></span><a class="link" href="fourier_integrals.html#math_toolkit.fourier_integrals.references">References</a>
-    </h4>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+    </h5>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
           Ooura, Takuya, and Masatake Mori, <span class="emphasis"><em>A robust double exponential
           formula for Fourier-type integrals.</em></span> Journal of computational
-          and applied mathematics 112.1-2 (1999): 229-241.
-        </li></ul></div>
+          and applied mathematics, 112.1-2 (1999): 229-241.
+        </li>
+<li class="listitem">
+          Ooura, Takuya, <span class="emphasis"><em>A Double Exponential Formula for the Fourier Transforms.</em></span>
+          Publ. RIMS, Kyoto Univ., 41 (2005), 971-977. <a href="https://pdfs.semanticscholar.org/16ec/a5d76fd6b3d7acaaff0b2a6e8a70caa70190.pdf" target="_top">https://pdfs.semanticscholar.org/16ec/a5d76fd6b3d7acaaff0b2a6e8a70caa70190.pdf</a>
+        </li>
+<li class="listitem">
+          Khatibi, Arezoo and Khatibi, Omid,<span class="emphasis"><em>Criteria for the Application
+          of Double Exponential Transformation.</em></span> (2017) <a href="https://arxiv.org/pdf/1704.05752.pdf" target="_top">1704.05752.pdf</a>.
+        </li>
+<li class="listitem">
+          Nguyen, Dong T.P. and Nuyens, Dirk, <span class="emphasis"><em>Multivariate integration
+          over Reals with exponential rate of convergence.</em></span> (2016) <a href="https://core.ac.uk/download/pdf/80799199.pdf" target="_top">https://core.ac.uk/download/pdf/80799199.pdf</a>.
+        </li>
+</ul></div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>

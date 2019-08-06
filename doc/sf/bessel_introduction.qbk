@@ -103,12 +103,12 @@ separation of variables, the radial equation has the form:
 [equation sbessel1]
 
 The two linearly independent solutions to this equation are called the 
-spherical Bessel functions j[sub n][space] and y[sub n][space], and are related to the 
-ordinary Bessel functions J[sub n][space] and Y[sub n][space] by:
+spherical Bessel functions j[sub n] and y[sub n] and are related to the 
+ordinary Bessel functions J[sub n] and Y[sub n] by:
 
 [equation sbessel2]
 
-The spherical Bessel function of the second kind y[sub n][space]
+The spherical Bessel function of the second kind y[sub n]
 is also known as the spherical Neumann function n[sub n].
 
 These functions are implemented in this library as __sph_bessel and

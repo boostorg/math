@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Riemann Zeta Function</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../index.html" title="Math Toolkit 2.10.0">
 <link rel="up" href="../zetas.html" title="Zeta Functions">
 <link rel="prev" href="../zetas.html" title="Zeta Functions">
@@ -66,15 +66,18 @@
         Returns the <a href="http://mathworld.wolfram.com/RiemannZetaFunction.html" target="_top">zeta
         function</a> of z:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/zeta1.svg"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/zeta1.svg" align="middle"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/zeta2.svg" align="middle"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/zeta1.svg"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/zeta1.svg" align="middle"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/zeta2.svg" align="middle"></span>
+
+        </p></blockquote></div>
 <h5>
 <a name="math_toolkit.zetas.zeta.h2"></a>
         <span class="phrase"><a name="math_toolkit.zetas.zeta.accuracy"></a></span><a class="link" href="zeta.html#math_toolkit.zetas.zeta.accuracy">Accuracy</a>
@@ -277,15 +280,18 @@
         precision, and GCC-7.1/Ubuntu for <code class="computeroutput"><span class="keyword">long</span>
         <span class="keyword">double</span></code> and <code class="computeroutput"><span class="identifier">__float128</span></code>.
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/zeta__double.svg" align="middle"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/zeta__80_bit_long_double.svg" align="middle"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/zeta____float128.svg" align="middle"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/zeta__double.svg" align="middle"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/zeta__80_bit_long_double.svg" align="middle"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/zeta____float128.svg" align="middle"></span>
+
+        </p></blockquote></div>
 <h5>
 <a name="math_toolkit.zetas.zeta.h3"></a>
         <span class="phrase"><a name="math_toolkit.zetas.zeta.testing"></a></span><a class="link" href="zeta.html#math_toolkit.zetas.zeta.testing">Testing</a>
@@ -308,15 +314,17 @@
         All versions of these functions first use the usual reflection formulas to
         make their arguments positive:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/zeta3.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/zeta3.svg"></span>
+
+        </p></blockquote></div>
 <p>
         The generic versions of these functions are implemented using the series:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/zeta6.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/zeta6.svg"></span>
+
+        </p></blockquote></div>
 <p>
         When the significand (mantissa) size is recognised (currently for 53, 64
         and 113-bit reals, plus single-precision 24-bit handled via promotion to
@@ -326,27 +334,29 @@
 <p>
         For 0 &lt; z &lt; 1 the approximating form is:
       </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/zeta4.svg"></span>
+
+        </p></blockquote></div>
 <p>
-        <span class="inlinemediaobject"><img src="../../../equations/zeta4.svg"></span>
-      </p>
-<p>
-        For a rational approximation R(1-z) and a constant C.
+        For a rational approximation R(1-z) and a constant C:
       </p>
 <p>
         For 1 &lt; z &lt; 4 the approximating form is:
       </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/zeta5.svg"></span>
+
+        </p></blockquote></div>
 <p>
-        <span class="inlinemediaobject"><img src="../../../equations/zeta5.svg"></span>
-      </p>
-<p>
-        For a rational approximation R(n-z) and a constant C and integer n.
+        For a rational approximation R(n-z) and a constant C and integer n:
       </p>
 <p>
         For z &gt; 4 the approximating form is:
       </p>
-<p>
-        &#950;(z) = 1 + e<sup>R(z - n)</sup>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          &#950;(z) = 1 + e<sup>R(z - n)</sup>
+        </p></blockquote></div>
 <p>
         For a rational approximation R(z-n) and integer n, note that the accuracy
         required for R(z-n) is not full machine precision, but an absolute error
@@ -357,15 +367,18 @@
         Finally, there are some special cases for integer arguments, there are closed
         forms for negative or even integers:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/zeta7.svg"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/zeta8.svg"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/zeta9.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/zeta7.svg"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/zeta8.svg"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/zeta9.svg"></span>
+
+        </p></blockquote></div>
 <p>
         and for positive odd integers we simply cache pre-computed values as these
         are of great benefit to some infinite series calculations.

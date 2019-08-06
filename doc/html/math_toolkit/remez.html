@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>The Remez Method</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../index.html" title="Math Toolkit 2.10.0">
 <link rel="up" href="../backgrounders.html" title="Chapter&#160;21.&#160;Backgrounders">
 <link rel="prev" href="lanczos.html" title="The Lanczos Approximation">
@@ -45,16 +45,16 @@
       is defined to be the approximation that has the least deviation from f(x).
       We can measure the deviation by way of an error function:
     </p>
-<p>
-      E<sub>abs</sub>(x) = f(x) - R(x)
-    </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+        <span class="emphasis"><em>E<sub>abs</sub>(x) = f(x) - R(x)</em></span>
+      </p></blockquote></div>
 <p>
       which is expressed in terms of absolute error, but we can equally use relative
       error:
     </p>
-<p>
-      E<sub>rel</sub>(x) = (f(x) - R(x)) / |f(x)|
-    </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+        <span class="emphasis"><em>E<sub>rel</sub>(x) = (f(x) - R(x)) / |f(x)|</em></span>
+      </p></blockquote></div>
 <p>
       And indeed in general we can scale the error function in any way we want, it
       makes no difference to the maths, although the two forms above cover almost
@@ -81,9 +81,9 @@
       That means that if we know the location of the extrema of the error function
       then we can write N+2 simultaneous equations:
     </p>
-<p>
-      R(x<sub>i</sub>) + (-1)<sup>i</sup>E = f(x<sub>i</sub>)
-    </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+        <span class="emphasis"><em>R(x<sub>i</sub>) + (-1)<sup>i</sup>E = f(x<sub>i</sub>)</em></span>
+      </p></blockquote></div>
 <p>
       where E is the maximal error term, and x<sub>i</sub> are the abscissa values of the N+2
       extrema of the error function. It is then trivial to solve the simultaneous
@@ -118,9 +118,9 @@
       N+1 points (x<sub>0</sub>...x<sub>N</sub>): with our interpolated form passing through each of those
       points that yields N+1 simultaneous equations:
     </p>
-<p>
-      f(x<sub>i</sub>) = P(x<sub>i</sub>) = c<sub>0</sub> + c<sub>1</sub>x<sub>i</sub> ... + c<sub>N</sub>x<sub>i</sub><sup>N</sup>
-    </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+        <span class="emphasis"><em>f(x<sub>i</sub>) = P(x<sub>i</sub>) = c<sub>0</sub> + c<sub>1</sub>x<sub>i</sub> ... + c<sub>N</sub>x<sub>i</sub><sup>N</sup></em></span>
+      </p></blockquote></div>
 <p>
       Which can be solved for the coefficients c<sub>0</sub>...c<sub>N</sub> in P(x).
     </p>
@@ -181,9 +181,9 @@
       The first step in the Remez method, given our current set of N+2 Chebyshev
       control points x<sub>i</sub>, is to solve the N+2 simultaneous equations:
     </p>
-<p>
-      P(x<sub>i</sub>) + (-1)<sup>i</sup>E = f(x<sub>i</sub>)
-    </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+        <span class="emphasis"><em>P(x<sub>i</sub>) + (-1)<sup>i</sup>E = f(x<sub>i</sub>)</em></span>
+      </p></blockquote></div>
 <p>
       To obtain the error term E, and the coefficients of the polynomial P(x).
     </p>
@@ -255,9 +255,9 @@
 <p>
       If we wish to extend the Remez method to a rational approximation of the form
     </p>
-<p>
-      f(x) = R(x) = P(x) / Q(x)
-    </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+        <span class="emphasis"><em>f(x) = R(x) = P(x) / Q(x)</em></span>
+      </p></blockquote></div>
 <p>
       where P(x) and Q(x) are polynomials, then we proceed as before, except that
       now we have N+M+2 unknowns if P(x) is of order N and Q(x) is of order M. This
@@ -267,9 +267,9 @@
 <p>
       The simultaneous equations to be solved are now:
     </p>
-<p>
-      P(x<sub>i</sub>) / Q(x<sub>i</sub>) + (-1)<sup>i</sup>E = f(x<sub>i</sub>)
-    </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+        <span class="emphasis"><em>P(x<sub>i</sub>) / Q(x<sub>i</sub>) + (-1)<sup>i</sup>E = f(x<sub>i</sub>)</em></span>
+      </p></blockquote></div>
 <p>
       Evaluated at the N+M+2 control points x<sub>i</sub>.
     </p>
@@ -308,9 +308,9 @@
 <p>
       So far we have used a direct approximation:
     </p>
-<p>
-      f(x) = R(x)
-    </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+        <span class="emphasis"><em>f(x) = R(x)</em></span>
+      </p></blockquote></div>
 <p>
       But this will converge to a useful approximation only if f(x) is smooth. In
       addition round-off errors when evaluating the rational form mean that this
@@ -324,16 +324,16 @@
       changing remainder which can be approximated by a rational approximation. We
       might be tempted to write:
     </p>
-<p>
-      f(x) = g(x) + R(x)
-    </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+        <span class="emphasis"><em>f(x) = g(x) + R(x)</em></span>
+      </p></blockquote></div>
 <p>
       where g(x) is the dominant part of f(x), but if f(x)/g(x) is approximately
       constant over the interval of interest then:
     </p>
-<p>
-      f(x) = g(x)(c + R(x))
-    </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+        <span class="emphasis"><em>f(x) = g(x)(c + R(x))</em></span>
+      </p></blockquote></div>
 <p>
       Will yield a much better solution: here <span class="emphasis"><em>c</em></span> is a constant
       that is the approximate value of f(x)/g(x) and R(x) is typically tiny compared
@@ -344,12 +344,12 @@
 <p>
       The difficult part is obviously finding the right g(x) to extract from your
       function: often the asymptotic behaviour of the function will give a clue,
-      so for example the function <a class="link" href="sf_erf/error_function.html" title="Error Functions">erfc</a>
+      so for example the function <a class="link" href="sf_erf/error_function.html" title="Error Function erf and complement erfc">erfc</a>
       becomes proportional to e<sup>-x<sup>2</sup></sup>/x as x becomes large. Therefore using:
     </p>
-<p>
-      erfc(z) = (C + R(x)) e<sup>-x<sup>2</sup></sup>/x
-    </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+        <span class="emphasis"><em>erfc(z) = (C + R(x)) e<sup>-x<sup>2</sup></sup>/x</em></span>
+      </p></blockquote></div>
 <p>
       as the approximating form seems like an obvious thing to try, and does indeed
       yield a useful approximation.

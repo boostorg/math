@@ -29,7 +29,7 @@ The [@http://en.wikipedia.org/wiki/Rayleigh_distribution Rayleigh distribution]
 is a continuous distribution with the
 [@http://en.wikipedia.org/wiki/Probability_density_function probability density function]:
 
-f(x; sigma) = x * exp(-x[super 2]/2 [sigma][super 2]) / [sigma][super 2]
+[:f(x; sigma) = x * exp(-x[super 2]/2 [sigma][super 2]) / [sigma][super 2]]
 
 For sigma parameter [sigma][space] > 0, and x > 0.
 

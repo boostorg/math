@@ -140,7 +140,8 @@ and which forward to the libquadmath equivalents.
 
 Ultimately these facilities should be provided by GCC and `libstdc++`.
 
-[endsect]
+[endsect] [/section:float128 Using with GCC's __float128 datatype]
+
 
 [section:use_mpfr Using With MPFR or GMP - High-Precision Floating-Point Library]
 
@@ -625,7 +626,7 @@ The class template `DistributionConcept` verifies the existence
 required by the [link math_toolkit.dist_concept Distribution concept].
 These are checked by calls like
 
-v = pdf(dist, x); // (Result v is ignored).
+  v = pdf(dist, x); // (Result v is ignored).
 
 And in addition, those that accept two arguments do the right thing when the
 arguments are of different types (the result type is always the same as the

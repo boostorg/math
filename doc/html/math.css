@@ -78,3 +78,64 @@ Table of contents
     .toc dl dl { margin: 0; }
 
 
+/*==============================================================================
+Alignment and coloring use 'role' feature, available from Quickbook 1.6 up.
+Added from Niall Douglas for role color and alignment.
+http://article.gmane.org/gmane.comp.lib.boost.devel/243318
+*/
+
+/* Add text alignment (see http://www.w3schools.com/cssref/pr_text_text-align.asp) */
+span.aligncenter
+{
+  display: inline-block; width: 100%; text-align: center;
+}
+span.alignright
+{
+  display: inline-block; width: 100%; text-align: right;
+}
+/* alignleft is the default. */
+span.alignleft
+{
+  display: inline-block; width: 100%; text-align: left;
+}
+
+/* alignjustify stretches the word spacing so that each line has equal width
+within a chosen fraction of page width (here arbitrarily 20%).
+*Not* useful inside table items as the column width remains the total string width.
+Nor very useful, except to temporarily restrict the width.
+*/
+span.alignjustify
+{
+  display: inline-block; width: 20%; text-align: justify;
+}
+
+/* Text colors.
+Names at http://www.w3.org/TR/2002/WD-css3-color-20020219/ 4.3. X11 color keywords.
+Quickbook Usage: [role red Some red text]
+
+*/
+span.red { inline-block; color: red; }
+span.green { color: green; }
+span.lime { color: #00FF00; }
+span.blue { color: blue; }
+span.navy { color: navy; }
+span.yellow { color: yellow; }
+span.magenta { color: magenta; }
+span.indigo { color: #4B0082; }
+span.cyan { color: cyan; }
+span.purple { color: purple; }
+span.gold { color: gold; }
+span.silver { color: silver; } /* lighter gray */
+span.gray { color: #808080; } /* light gray */
+
+/* Custom indent of paragraphs to make equations look nicer.
+https://www.w3schools.com/tags/tag_blockquote.asp says 
+  "Most browsers will display the <blockquote> element with left and right margin 40px values: "
+*/
+blockquote {
+    display: block;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    margin-left: 15px;
+    margin-right: 15px;
+}

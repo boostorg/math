@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Binomial Coefficients</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../index.html" title="Math Toolkit 2.10.0">
 <link rel="up" href="../factorials.html" title="Factorials and Binomial Coefficients">
 <link rel="prev" href="sf_falling_factorial.html" title="Falling Factorial">
@@ -108,23 +108,23 @@
         Binomial coefficients are calculated using table lookup of factorials where
         possible using:
       </p>
-<p>
-        <sub>n</sub>C<sub>k</sub> = n! / (k!(n-k)!)
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <sub>n</sub>C<sub>k</sub> = n! / (k!(n-k)!)
+        </p></blockquote></div>
 <p>
         Otherwise it is implemented in terms of the beta function using the relations:
       </p>
-<p>
-        <sub>n</sub>C<sub>k</sub> = 1 / (k * <a class="link" href="../sf_beta/beta_function.html" title="Beta">beta</a>(k,
-        n-k+1))
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <sub>n</sub>C<sub>k</sub> = 1 / (k * <a class="link" href="../sf_beta/beta_function.html" title="Beta">beta</a>(k,
+          n-k+1))
+        </p></blockquote></div>
 <p>
         and
       </p>
-<p>
-        <sub>n</sub>C<sub>k</sub> = 1 / ((n-k) * <a class="link" href="../sf_beta/beta_function.html" title="Beta">beta</a>(k+1,
-        n-k))
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <sub>n</sub>C<sub>k</sub> = 1 / ((n-k) * <a class="link" href="../sf_beta/beta_function.html" title="Beta">beta</a>(k+1,
+          n-k))
+        </p></blockquote></div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>

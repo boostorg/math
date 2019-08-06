@@ -40,7 +40,7 @@ Let's suppose we want to find the root of a number ['a], and to start, compute t
 
 So the equation we want to solve is:
 
-__spaces ['f(x) = x[cubed] -a]
+[:['f(x) = x[cubed] -a]]
 
 We will first solve this without using any information
 about the slope or curvature of the cube root function.
@@ -153,7 +153,7 @@ Next we define yet another even better functor `cbrt_functor_2deriv` that return
 both the evaluation of the function to solve,
 along with its first [*and second] derivative:
 
-__spaces['f''(x) = 6x]
+[:['f''(x) = 6x]]
 
 using information about both slope and curvature to speed convergence.
 
@@ -201,7 +201,8 @@ Or to put it another way: ['nothing beats a really good initial guess!]
 Full code of this example is at
 [@../../example/root_finding_example.cpp  root_finding_example.cpp],
 
-[endsect]
+[endsect] [/section:cbrt_eg Finding the Cubed Root With and Without Derivatives]
+
 
 [section:lambda Using C++11 Lambda's]
 
@@ -213,7 +214,8 @@ work (often in a lot less code) with C++11 lambda's.  Here's the much reduced co
 Full code of this example is at
 [@../../example/root_finding_example.cpp  root_finding_example.cpp],
 
-[endsect]
+[endsect] [/section:lambda Using C++11 Lambda's]
+
 
 [section:5th_root_eg Computing the Fifth Root]
 
@@ -221,7 +223,7 @@ Let's now suppose we want to find the [*fifth root] of a number ['a].
 
 The equation we want to solve is :
 
-__spaces['f](x) = ['x[super 5] -a]
+[:['f](x) = ['x[super 5] -a]]
 
 If your differentiation is a little rusty
 (or you are faced with an function whose complexity makes differentiation daunting),
@@ -250,11 +252,11 @@ to get a result with a precision of 50 decimal digits:
 
 (We could also get a reference value using __multiprecision_root).
 
-The 1st and 2nd derivatives of x[super 5] are:
+The 1st and 2nd derivatives of ['x[super 5]] are:
 
-__spaces['f]\'(x) = 5x[super 4]
+[:['f\'(x) = 5x[super 4]]]
 
-__spaces['f]\'\'(x) = 20x[super 3]
+[:['f\'\'(x) = 20x[super 3]]]
 
 [root_finding_fifth_functor_2deriv]
 [root_finding_fifth_2deriv]
@@ -263,7 +265,8 @@ Full code of this example is at
 [@../../example/root_finding_example.cpp  root_finding_example.cpp] and
 [@../../example/root_finding_n_example.cpp  root_finding_n_example.cpp].
 
-[endsect]
+[endsect] [/section:5th_root_eg Computing the Fifth Root]
+
 
 [section:multiprecision_root  Root-finding using Boost.Multiprecision]
 
@@ -376,7 +379,7 @@ Making the `cbrt` type explicit with `cbrt_2deriv<cpp_dec_float_50>(2.);` will g
 Full code of this example is at
 [@../../example/root_finding_multiprecision_example.cpp  root_finding_multiprecision_example.cpp].
 
-[endsect]
+[endsect] [/section:multiprecision_root  Root-finding using Boost.Multiprecision]
 
 [section:nth_root Generalizing to Compute the nth root]
 

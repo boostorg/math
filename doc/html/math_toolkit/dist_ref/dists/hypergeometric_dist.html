@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Hypergeometric Distribution</title>
 <link rel="stylesheet" href="../../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../../index.html" title="Math Toolkit 2.10.0">
 <link rel="up" href="../dists.html" title="Distributions">
 <link rel="prev" href="hyperexponential_dist.html" title="Hyperexponential Distribution">
@@ -85,18 +85,20 @@
           of "defective" items changes, while keeping the population and
           sample sizes constant:
         </p>
-<p>
-          <span class="inlinemediaobject"><img src="../../../../graphs/hypergeometric_pdf_1.svg" align="middle"></span>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../graphs/hypergeometric_pdf_1.svg" align="middle"></span>
+
+          </p></blockquote></div>
 <p>
           Note that since the distribution is symmetrical in parameters <span class="emphasis"><em>n</em></span>
           and <span class="emphasis"><em>r</em></span>, if we change the sample size and keep the population
           and proportion "defective" the same then we obtain basically
           the same graphs:
         </p>
-<p>
-          <span class="inlinemediaobject"><img src="../../../../graphs/hypergeometric_pdf_2.svg" align="middle"></span>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../graphs/hypergeometric_pdf_2.svg" align="middle"></span>
+
+          </p></blockquote></div>
 <h5>
 <a name="math_toolkit.dist_ref.dists.hypergeometric_dist.h0"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.hypergeometric_dist.member_functions"></a></span><a class="link" href="hypergeometric_dist.html#math_toolkit.dist_ref.dists.hypergeometric_dist.member_functions">Member
@@ -225,9 +227,10 @@
 <p>
           The PDF can be calculated directly using the formula:
         </p>
-<p>
-          <span class="inlinemediaobject"><img src="../../../../equations/hypergeometric1.svg"></span>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../equations/hypergeometric1.svg"></span>
+
+          </p></blockquote></div>
 <p>
           However, this can only be used directly when the largest of the factorials
           is guaranteed not to overflow the floating point representation used. This
@@ -243,23 +246,26 @@
           Pages 33-43 is used. The method relies on the fact that there is an easy
           method for factorising a factorial into the product of prime numbers:
         </p>
-<p>
-          <span class="inlinemediaobject"><img src="../../../../equations/hypergeometric2.svg"></span>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../equations/hypergeometric2.svg"></span>
+
+          </p></blockquote></div>
 <p>
           Where p<sub>i</sub> is the i'th prime number, and e<sub>i</sub> is a small positive integer or
           zero, which can be calculated via:
         </p>
-<p>
-          <span class="inlinemediaobject"><img src="../../../../equations/hypergeometric3.svg"></span>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../equations/hypergeometric3.svg"></span>
+
+          </p></blockquote></div>
 <p>
           Further we can combine the factorials in the expression for the PDF to
           yield the PDF directly as the product of prime numbers:
         </p>
-<p>
-          <span class="inlinemediaobject"><img src="../../../../equations/hypergeometric4.svg"></span>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../equations/hypergeometric4.svg"></span>
+
+          </p></blockquote></div>
 <p>
           With this time the exponents e<sub>i</sub> being either positive, negative or zero.
           Indeed such a degree of cancellation occurs in the calculation of the e<sub>i</sub> that
@@ -299,9 +305,10 @@
           (or <span class="emphasis"><em>k+1</em></span> if we're calculating the complement) and calculate
           successive PDF values via the recurrence relations:
         </p>
-<p>
-          <span class="inlinemediaobject"><img src="../../../../equations/hypergeometric5.svg"></span>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../equations/hypergeometric5.svg"></span>
+
+          </p></blockquote></div>
 <p>
           Until we either reach the end of the distributions domain, or the next
           PDF value to be summed would be too small to affect the result.
@@ -316,9 +323,10 @@
           The median is simply the quantile at 0.5, and the remaining properties
           are calculated via:
         </p>
-<p>
-          <span class="inlinemediaobject"><img src="../../../../equations/hypergeometric6.svg"></span>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../equations/hypergeometric6.svg"></span>
+
+          </p></blockquote></div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>

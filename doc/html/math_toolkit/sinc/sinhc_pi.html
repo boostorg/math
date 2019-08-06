@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>sinhc_pi</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../index.html" title="Math Toolkit 2.10.0">
 <link rel="up" href="../sinc.html" title="Sinus Cardinal and Hyperbolic Sinus Cardinal Functions">
 <link rel="prev" href="sinc_pi.html" title="sinc_pi">
@@ -41,11 +41,13 @@
 <span class="identifier">U</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">sinhc_pi</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">U</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 </pre>
 <p>
-        Computes http://mathworld.wolfram.com/SinhcFunction.html <a class="link" href="sinc_overview.html" title="Sinus Cardinal and Hyperbolic Sinus Cardinal Functions Overview">the
-        Hyperbolic Sinus Cardinal</a> of x:
+        Computes <a href="http://mathworld.wolfram.com/SinhcFunction.html" target="_top">sinhc
+        function</a>, the <a class="link" href="sinc_overview.html" title="Sinus Cardinal and Hyperbolic Sinus Cardinal Functions Overview">Hyperbolic
+        Sinus Cardinal</a> of x:
       </p>
-<pre class="programlisting"><span class="identifier">sinhc_pi</span><span class="special">(</span><span class="identifier">x</span><span class="special">)</span> <span class="special">=</span> <span class="identifier">sinh</span><span class="special">(</span><span class="identifier">x</span><span class="special">)</span> <span class="special">/</span> <span class="identifier">x</span>
-</pre>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="emphasis"><em>sinhc_pi(x) = sinh(x) / x</em></span>
+        </p></blockquote></div>
 <p>
         The second form is for complex numbers, quaternions, octonions etc. Taylor
         series are used at the origin to ensure accuracy.
@@ -60,9 +62,10 @@
         what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">policy
         documentation for more details</a>.
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/sinhc_pi.svg" align="middle"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/sinhc_pi.svg" align="middle"></span>
+
+        </p></blockquote></div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>

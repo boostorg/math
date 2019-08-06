@@ -88,7 +88,6 @@ where it was not possible to generate any reliable test values
 
 There are also two sets of sanity tests: spot values are computed using __Mathematica and __R.
 
-
 [h4 Implementation]
 
 The function was proposed and evaluated by

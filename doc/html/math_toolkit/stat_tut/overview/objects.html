@@ -3,9 +3,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Distributions are Objects</title>
 <link rel="stylesheet" href="../../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../../index.html" title="Math Toolkit 2.10.0">
-<link rel="up" href="../overview.html" title="Overview of Distributions">
+<link rel="up" href="../overview.html" title="Overview of Statistical Distributions">
 <link rel="prev" href="headers.html" title="Headers and Namespaces">
 <link rel="next" href="generic.html" title="Generic operations common to all distributions are non-member functions">
 </head>
@@ -28,13 +28,8 @@
         are Objects</a>
 </h4></div></div></div>
 <p>
-          Each kind of distribution in this library is a class type - an object.
-        </p>
-<p>
-          <a class="link" href="../../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policies</a> provide fine-grained control of
-          the behaviour of these classes, allowing the user to customise behaviour
-          such as how errors are handled, or how the quantiles of discrete distribtions
-          behave.
+          Each kind of distribution in this library is a class type - an object,
+          with member functions.
         </p>
 <div class="tip"><table border="0" summary="Tip">
 <tr>
@@ -47,6 +42,12 @@
             comparison to other statistics libraries.</a>
           </p></td></tr>
 </table></div>
+<p>
+          <a class="link" href="../../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policies</a> provide optional fine-grained control
+          of the behaviour of these classes, allowing the user to customise behaviour
+          such as how errors are handled, or how the quantiles of discrete distributions
+          behave.
+        </p>
 <p>
           Making distributions class types does two things:
         </p>

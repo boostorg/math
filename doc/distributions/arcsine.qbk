@@ -77,7 +77,7 @@ and some generalized examples with other ['x] ranges.
 
 The Cumulative Distribution Function CDF is defined as
 
-[figspace]  [figspace]  F(x) = 2[sdot]arcsin([sqrt]((x-x_min)/(x_max - x))) / [pi]
+[:F(x) = 2[sdot]arcsin([sqrt]((x-x_min)/(x_max - x))) / [pi]]
 
 [graph arcsine_cdf]
 
@@ -223,7 +223,7 @@ Users should see __why_complements for guidance on when to avoid loss of accurac
 The results were tested against a few accurate spot values computed by __WolframAlpha, for example:
 
       N[PDF[arcsinedistribution[0, 1], 0.5], 50]
-	    0.63661977236758134307553505349005744813783858296183
+      0.63661977236758134307553505349005744813783858296183
 
 [h4 Implementation]
 

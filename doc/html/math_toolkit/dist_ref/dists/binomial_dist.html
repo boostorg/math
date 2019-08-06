@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Binomial Distribution</title>
 <link rel="stylesheet" href="../../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../../index.html" title="Math Toolkit 2.10.0">
 <link rel="up" href="../dists.html" title="Distributions">
 <link rel="prev" href="beta_dist.html" title="Beta Distribution">
@@ -104,24 +104,27 @@
 <p>
           The PDF for the binomial distribution is given by:
         </p>
-<p>
-          <span class="inlinemediaobject"><img src="../../../../equations/binomial_ref2.svg"></span>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../equations/binomial_ref2.svg"></span>
+
+          </p></blockquote></div>
 <p>
           The following two graphs illustrate how the PDF changes depending upon
           the distributions parameters, first we'll keep the success fraction <span class="emphasis"><em>p</em></span>
           fixed at 0.5, and vary the sample size:
         </p>
-<p>
-          <span class="inlinemediaobject"><img src="../../../../graphs/binomial_pdf_1.svg" align="middle"></span>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../graphs/binomial_pdf_1.svg" align="middle"></span>
+
+          </p></blockquote></div>
 <p>
           Alternatively, we can keep the sample size fixed at N=20 and vary the success
           fraction <span class="emphasis"><em>p</em></span>:
         </p>
-<p>
-          <span class="inlinemediaobject"><img src="../../../../graphs/binomial_pdf_2.svg" align="middle"></span>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../graphs/binomial_pdf_2.svg" align="middle"></span>
+
+          </p></blockquote></div>
 <div class="caution"><table border="0" summary="Caution">
 <tr>
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Caution]" src="../../../../../../../doc/src/images/caution.png"></td>
@@ -666,9 +669,10 @@
                     Implementation is in terms of <a class="link" href="../../sf_beta/beta_derivative.html" title="Derivative of the Incomplete Beta Function">ibeta_derivative</a>:
                     if <sub>n</sub>C<sub>k </sub> is the binomial coefficient of a and b, then we have:
                   </p>
-                  <p>
-                    <span class="inlinemediaobject"><img src="../../../../equations/binomial_ref1.svg"></span>
-                  </p>
+                  <div class="blockquote"><blockquote class="blockquote"><p>
+                      <span class="inlinemediaobject"><img src="../../../../equations/binomial_ref1.svg"></span>
+
+                    </p></blockquote></div>
                   <p>
                     Which can be evaluated as <code class="computeroutput"><span class="identifier">ibeta_derivative</span><span class="special">(</span><span class="identifier">k</span><span class="special">+</span><span class="number">1</span><span class="special">,</span> <span class="identifier">n</span><span class="special">-</span><span class="identifier">k</span><span class="special">+</span><span class="number">1</span><span class="special">,</span> <span class="identifier">p</span><span class="special">)</span> <span class="special">/</span>
                     <span class="special">(</span><span class="identifier">n</span><span class="special">+</span><span class="number">1</span><span class="special">)</span></code>

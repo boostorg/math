@@ -86,10 +86,10 @@ distribution.
 
 [graph beta_pdf]
 
-If [alpha] = [beta] = 1, then it is a __space
+If [alpha] = [beta] = 1, then it is a[emspace]
 [@http://en.wikipedia.org/wiki/Uniform_distribution_%28continuous%29 uniform distribution],
 equal to unity in the entire interval x = 0 to 1.
-If [alpha] __space and [beta] __space are < 1, then the pdf is U-shaped.
+If [alpha] and [beta] are < 1, then the pdf is U-shaped.
 If [alpha] != [beta], then the shape is asymmetric
 and could be approximated by a triangle
 whose apex is away from the centre (where x = half).
@@ -135,13 +135,13 @@ So for example:
 
 Two pairs of parameter estimators are provided.
 
-One estimates either [alpha] __space or [beta] __space 
+One estimates either [alpha]  or [beta] 
 from presumed-known mean and variance.
 
-The other pair estimates either [alpha] __space or [beta] __space from 
+The other pair estimates either [alpha] or [beta] from 
 the cdf and x.
 
-It is also possible to estimate [alpha] __space and  [beta] __space from 
+It is also possible to estimate [alpha] and  [beta]  from 
 'known' mode & quantile.  For example, calculators are provided by the
 [@http://www.ausvet.com.au/pprev/content.php?page=PPscript 
 Pooled Prevalence Calculator] and
@@ -196,16 +196,16 @@ It is also widely used in [@http://en.wikipedia.org/wiki/Bayesian_inference Baye
 
 [h4 Related distributions]
 
-The beta distribution with both [alpha]  __space and [beta] = 1 follows a
+The beta distribution with both [alpha] and [beta] = 1 follows a
 [@http://en.wikipedia.org/wiki/Uniform_distribution_%28continuous%29 uniform distribution].
 
 The [@http://en.wikipedia.org/wiki/Triangular_distribution triangular]
 is used when less precise information is available.
 
 The [@http://en.wikipedia.org/wiki/Binomial_distribution binomial distribution]
-is closely related when [alpha]  __space and [beta]  __space are integers.
+is closely related when [alpha] and [beta]  are integers.
 
-With integer values of [alpha]  __space and [beta]  __space the distribution B(i, j) is
+With integer values of [alpha]  and [beta] the distribution B(i, j) is
 that of the j-th highest of a sample of i + j + 1 independent random variables
 uniformly distributed between 0 and 1.
 The cumulative probability from 0 to x is thus
@@ -223,7 +223,7 @@ please refer to these functions for information on accuracy.
 
 [h4 Implementation]
 
-In the following table /a/ and /b/ are the parameters [alpha][space] and [beta],
+In the following table /a/ and /b/ are the parameters [alpha] and [beta],
 /x/ is the random variable, /p/ is the probability and /q = 1-p/.
 
 [table

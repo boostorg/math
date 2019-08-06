@@ -3,11 +3,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Spherical Harmonics</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../index.html" title="Math Toolkit 2.10.0">
 <link rel="up" href="../sf_poly.html" title="Polynomials">
 <link rel="prev" href="chebyshev.html" title="Chebyshev Polynomials">
-<link rel="next" href="../bessel.html" title="Bessel Functions">
+<link rel="next" href="cardinal_b_splines.html" title="Cardinal B-splines">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -20,7 +20,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="chebyshev.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../sf_poly.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="../bessel.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="chebyshev.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../sf_poly.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="cardinal_b_splines.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h3 class="title">
@@ -77,9 +77,10 @@
 <p>
         Returns the value of the Spherical Harmonic Y<sub>n</sub><sup>m</sup>(theta, phi):
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/spherical_0.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/spherical_0.svg"></span>
+
+        </p></blockquote></div>
 <p>
         The spherical harmonics Y<sub>n</sub><sup>m</sup>(theta, phi) are the angular portion of the solution
         to Laplace's equation in spherical coordinates where azimuthal symmetry is
@@ -129,9 +130,10 @@
 <p>
         Returns the real part of Y<sub>n</sub><sup>m</sup>(theta, phi):
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/spherical_1.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/spherical_1.svg"></span>
+
+        </p></blockquote></div>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">spherical_harmonic_i</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">T1</span> <span class="identifier">theta</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">phi</span><span class="special">);</span>
 
@@ -141,9 +143,10 @@
 <p>
         Returns the imaginary part of Y<sub>n</sub><sup>m</sup>(theta, phi):
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/spherical_2.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/spherical_2.svg"></span>
+
+        </p></blockquote></div>
 <h5>
 <a name="math_toolkit.sf_poly.sph_harm.h2"></a>
         <span class="phrase"><a name="math_toolkit.sf_poly.sph_harm.accuracy"></a></span><a class="link" href="sph_harm.html#math_toolkit.sf_poly.sph_harm.accuracy">Accuracy</a>
@@ -329,7 +332,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="chebyshev.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../sf_poly.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="../bessel.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="chebyshev.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../sf_poly.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="cardinal_b_splines.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

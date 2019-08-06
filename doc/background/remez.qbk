@@ -16,12 +16,12 @@ We want to find the "best" rational approximation, where
 "best" is defined to be the approximation that has the least deviation
 from f(x).  We can measure the deviation by way of an error function:
 
-E[sub abs](x) = f(x) - R(x)
+[:['E[sub abs](x) = f(x) - R(x)]]
 
 which is expressed in terms of absolute error, but we can equally use
 relative error:
 
-E[sub rel](x) = (f(x) - R(x)) / |f(x)|
+[:['E[sub rel](x) = (f(x) - R(x)) / |f(x)|]]
 
 And indeed in general we can scale the error function in any way we want, it
 makes no difference to the maths, although the two forms above cover almost
@@ -41,7 +41,7 @@ function.
 That means that if we know the location of the extrema of the error function
 then we can write N+2 simultaneous equations:
 
-R(x[sub i]) + (-1)[super i]E = f(x[sub i])
+[:['R(x[sub i]) + (-1)[super i]E = f(x[sub i])]]
 
 where E is the maximal error term, and x[sub i] are the abscissa values of the
 N+2 extrema of the error function.  It is then trivial to solve the simultaneous
@@ -69,7 +69,7 @@ we need N+1 points (x[sub 0]...x[sub N]): with our interpolated form
 passing through each of those points
 that yields N+1 simultaneous equations:
 
-f(x[sub i]) = P(x[sub i]) = c[sub 0] + c[sub 1]x[sub i] ... + c[sub N]x[sub i][super N]
+[:['f(x[sub i]) = P(x[sub i]) = c[sub 0] + c[sub 1]x[sub i] ... + c[sub N]x[sub i][super N]]]
 
 Which can be solved for the coefficients c[sub 0]...c[sub N] in P(x).
 
@@ -112,7 +112,7 @@ The first step in the Remez method, given our current set of
 N+2 Chebyshev control points x[sub i], is to solve the N+2 simultaneous
 equations:
 
-P(x[sub i]) + (-1)[super i]E = f(x[sub i])
+[:['P(x[sub i]) + (-1)[super i]E = f(x[sub i])]]
 
 To obtain the error term E, and the coefficients of the polynomial P(x).
 
@@ -165,7 +165,7 @@ solution with a peak relative error of
 
 If we wish to extend the Remez method to a rational approximation of the form
 
-f(x) = R(x) = P(x) / Q(x)
+[:['f(x) = R(x) = P(x) / Q(x)]]
 
 where P(x) and Q(x) are polynomials, then we proceed as before, except that now
 we have N+M+2 unknowns if P(x) is of order N and Q(x) is of order M.  This assumes
@@ -174,7 +174,7 @@ N+M+1 polynomial coefficients in total, plus the error term E.
 
 The simultaneous equations to be solved are now:
 
-P(x[sub i]) / Q(x[sub i]) + (-1)[super i]E = f(x[sub i])
+[:['P(x[sub i]) / Q(x[sub i]) + (-1)[super i]E = f(x[sub i])]]
 
 Evaluated at the N+M+2 control points x[sub i].
 
@@ -207,7 +207,7 @@ on a solution.
 
 So far we have used a direct approximation:
 
-f(x) = R(x)
+[:['f(x) = R(x)]]
 
 But this will converge to a useful approximation only if f(x) is smooth.  In
 addition round-off errors when evaluating the rational form mean that this
@@ -220,12 +220,12 @@ a dominant part that we can compute accurately by another method, and a
 slowly changing remainder which can be approximated by a rational approximation.
 We might be tempted to write:
 
-f(x) = g(x) + R(x)
+[:['f(x) = g(x) + R(x)]]
 
 where g(x) is the dominant part of f(x), but if f(x)\/g(x) is approximately
 constant over the interval of interest then:
 
-f(x) = g(x)(c + R(x))
+[:['f(x) = g(x)(c + R(x))]]
 
 Will yield a much better solution: here /c/ is a constant that is the approximate
 value of f(x)\/g(x) and R(x) is typically tiny compared to /c/.  In this situation
@@ -238,7 +238,7 @@ function: often the asymptotic behaviour of the function will give a clue, so
 for example the function __erfc becomes proportional to
 e[super -x[super 2]]\/x as x becomes large.  Therefore using:
 
-erfc(z) = (C + R(x)) e[super -x[super 2]]/x
+[:['erfc(z) = (C + R(x)) e[super -x[super 2]]/x]]
 
 as the approximating form seems like an obvious thing to try, and does indeed
 yield a useful approximation.
@@ -366,7 +366,7 @@ G. L. Litvinov, ['Approximate construction of rational
 approximations and the effect of error autocorrection],
 Russian Journal of Mathematical Physics, vol.1, No. 3, 1994.
 
-[endsect][/section:remez The Remez Method]
+[endsect] [/section:remez The Remez Method]
 
 [/
   Copyright 2006 John Maddock and Paul A. Bristow.

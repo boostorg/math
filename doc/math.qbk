@@ -17,25 +17,36 @@
 [template endmathpart[]
 [block '''</chapter>''']]
 
-[/ \u00E5 = Latin small letter A with ring above doesn't seem to work in authors with Quickbook 1.5]
-
-[template equation[name]  '''<inlinemediaobject>
+[/insert Equation as an image, previous generated with an external tool like Latex.]
+[template equation[name] 
+[:
+'''<inlinemediaobject>
 <imageobject role="html">
 <imagedata fileref="../equations/'''[name]'''.svg"></imagedata>
 </imageobject>
 <imageobject role="print">
 <imagedata fileref="../equations/'''[name]'''.svg"></imagedata>
 </imageobject>
-</inlinemediaobject>''']
+</inlinemediaobject>'''
+]
+]
 
-[template graph[name]  '''<inlinemediaobject>
+[/Used thus [equation ellint6] ]
+
+[/insert Graph as an image, previous generated with an external tool like SVG_plot.]
+
+[template graph[name] 
+[:
+'''<inlinemediaobject>
 <imageobject role="html">
 <imagedata align="center" fileref="../graphs/'''[name]'''.svg"></imagedata>
 </imageobject>
 <imageobject role="print">
 <imagedata align="center" fileref="../graphs/'''[name]'''.svg"></imagedata>
 </imageobject>
-</inlinemediaobject>''']
+</inlinemediaobject>'''
+]
+]
 
 [import ../../../tools/auto_index/include/auto_index_helpers.qbk]
 [/ Must be first included file!]
@@ -55,6 +66,7 @@
 [def __ex '''<code>e<superscript>x</superscript></code>'''] [/e^x]
 [def __te '''2&#x025B;''']  [/small Latin letter open e]
 
+[/These should be in html4_symbols.qbk]
 [def __ceilR '''&#x2309;''']
 [def __ceilL '''&#2308;''']
 [def __floorR '''&#x230B;''']
@@ -67,8 +79,7 @@
 [def __nearequal '''&#x224A;''']
 [def __spaces '''&#x2000;&#x2000;'''] [/ two spaces - useful for an indent.]
 
-[def __tick [role aligncenter [role green \u2714]]] [/ u2714 is a HEAVY CHECK MARK tick (2713 check
-mark)]
+[def __tick [role aligncenter [role green \u2714]]] [/ u2714 is a HEAVY CHECK MARK tick (2713 check mark)]
 [def __cross [role aligncenter [role red \u2718]]] [/ u2718 is a heavy cross]
 [def __star [role aligncenter [role red \u2736]]] [/ 6-point star]
 
@@ -432,7 +443,7 @@ and use the function's name as the link text.]
 [def __building [link math_toolkit.building building libraries]]
 [def __e_float [@http://calgo.acm.org/910.zip e_float (TOMS Algorithm 910)]]
 [def __Abramowitz_Stegun M. Abramowitz and I. A. Stegun, Handbook of Mathematical Functions, NBS  (1964)]
-[def __DMLF [@http://dlmf.nist.gov/ NIST Digital Library of Mathematical Functions]]
+[def __DMLF [@http://dlmf.nist.gov/ NIST Digital Library of Mathematical Functions (DMLF)]]
 [def __floating_point  [@http://en.wikipedia.org/wiki/Floating_point Floating point]]
 [def __epsilon [@http://en.wikipedia.org/wiki/Machine_epsilon machine epsilon]]
 [def __ADL [@http://en.cppreference.com/w/cpp/language/adl Argument Dependent Lookup (ADL)]]
@@ -655,7 +666,6 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [include roots/roots_overview.qbk]
 [endmathpart] [/mathpart roots Root Finding Algorithms]
 
-
 [mathpart poly Polynomials and Rational Functions]
 [include internals/polynomial.qbk]
 [include internals/rational.qbk]
@@ -742,6 +752,7 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [section:history2 History and What's New]
 [history]
 [endsect]
+
 [include overview/issues.qbk]
 [include overview/credits.qbk]
 [/include test_HTML4_symbols.qbk]

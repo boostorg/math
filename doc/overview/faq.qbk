@@ -147,8 +147,14 @@ It also has a fast but imprecise division operator giving surprising results som
 
   cpp_bin_ is correctly/exactly rounded making it possible to reason about both the precision and rounding of the results.
 
+#['How do I see or report bugs and features, and request new functions?]
 
+  Currently open bug reports can be viewed
+  [@https://github.com/boostorg/math/issues here] on GITHUB.
 
+  All bug reports including closed ones can be viewed on Trac
+  [@https://svn.boost.org/trac/boost/query?status=assigned&status=closed&status=new&status=reopened&component=math&col=id&col=summary&col=status&col=type&col=milestone&col=component&order=priority here]
+  and more recent on GIThub [@https://github.com/boostorg/math/issues?utf8=%E2%9C%93&q=is%3Aissue here].
 
 
 [endsect] [/section:faq Frequently Asked Questions]

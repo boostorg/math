@@ -23,9 +23,9 @@
 The functions __cyl_bessel_j and __cyl_neumann return the result of the
 Bessel functions of the first and second kinds respectively:
 
-cyl_bessel_j(v, x) = J[sub v](x)
+[:cyl_bessel_j(v, x) = J[sub v](x)]
 
-cyl_neumann(v, x) = Y[sub v](x) = N[sub v](x)
+[:cyl_neumann(v, x) = Y[sub v](x) = N[sub v](x)]
 
 where:
 
@@ -125,9 +125,9 @@ move to /v > 0/:
 
 Note that if the order is an integer, then these formulae reduce to:
 
-J[sub -n] = (-1)[super n]J[sub n]
+[:J[sub -n] = (-1)[super n]J[sub n]]
 
-Y[sub -n] = (-1)[super n]Y[sub n]
+[:Y[sub -n] = (-1)[super n]Y[sub n]]
 
 However, in general, a negative order implies that we will need to compute
 both J and Y.
@@ -209,11 +209,11 @@ The continued fractions are computed using the modified Lentz's method
 (W.J. Lentz, ['Generating Bessel functions in Mie scattering calculations
 using continued fractions], Applied Optics, vol 15, 668 (1976)).
 Their convergence rates depend on ['x], therefore we need
-different strategies for large ['x] and small ['x].
+different strategies for large ['x] and small ['x]:
 
-['x > v], CF1 needs O(['x]) iterations to converge, CF2 converges rapidly
+[:['x > v], CF1 needs O(['x]) iterations to converge, CF2 converges rapidly]
 
-['x <= v], CF1 converges rapidly, CF2 fails to converge when ['x] [^->] 0
+[:['x <= v], CF1 converges rapidly, CF2 fails to converge when ['x] [^->] 0]
 
 When ['x] is large (['x] > 2), both continued fractions converge (CF1
 may be slow for really large ['x]). J[sub [mu]], J[sub [mu]+1],
@@ -326,9 +326,9 @@ Every real order [nu] cylindrical Bessel and Neumann functions have an infinite
 number of zeros on the positive real axis. The real zeros on the positive real
 axis can be found by solving for the roots of
 
-[emquad] ['J[sub [nu]](j[sub [nu], m]) = 0]
+[:['J[sub [nu]](j[sub [nu], m]) = 0]]
 
-[emquad] ['Y[sub [nu]](y[sub [nu], m]) = 0]
+[:['Y[sub [nu]](y[sub [nu], m]) = 0]]
 
 Here, ['j[sub [nu], m]] represents the ['m[super th]]
 root of the cylindrical Bessel function of order ['[nu]],
@@ -342,7 +342,7 @@ of the Bessel and Neumann functions are computed by two functions,
 In each case the index or rank of the zero
 returned is 1-based, which is to say:
 
-   cyl_bessel_j_zero(v, 1);
+[:cyl_bessel_j_zero(v, 1);]
 
 returns the first zero of Bessel J.
 
@@ -404,9 +404,9 @@ as well as its derivative. The derivatives of ['J[sub [nu]](x)] and ['Y[sub [nu]
 with respect to  ['x] are given by __Abramowitz_Stegun.
 In particular,
 
-[emquad] ['d/[sub dx] ['J[sub [nu]](x)] = ['J[sub [nu]-1](x)] - [nu] J[sub [nu]](x)] / x
+[:['d/[sub dx] ['J[sub [nu]](x)] = ['J[sub [nu]-1](x)] - [nu] J[sub [nu]](x)] / x]
 
-[emquad] ['d/[sub dx] ['Y[sub [nu]](x)] = ['Y[sub [nu]-1](x)] - [nu] Y[sub [nu]](x)] / x
+[:['d/[sub dx] ['Y[sub [nu]](x)] = ['Y[sub [nu]-1](x)] - [nu] Y[sub [nu]](x)] / x]
 
 Enumeration of the rank of a root (in other words the index of a root)
 begins with one and counts up, in other words
@@ -446,27 +446,23 @@ Calculations of the estimates of ['j[sub [nu],1]] and ['y[sub [nu],1]]
 with ['[nu][ge] 2.2] use Eqs.9.5.14 and 9.5.15 in __Abramowitz_Stegun.
 
 In particular,
-
-[emquad] ['j[sub [nu],1] [cong] [nu] + 1.85575 [nu][super [frac13]] + 1.033150 [nu][super -[frac13]] - 0.00397 [nu][super -1] - 0.0908 [nu][super -5/3] + 0.043 [nu][super -7/3] + [ellipsis]]
+[:['j[sub [nu],1] [cong] [nu] + 1.85575 [nu][super [frac13]] + 1.033150 [nu][super -[frac13]] - 0.00397 [nu][super -1] - 0.0908 [nu][super -5/3] + 0.043 [nu][super -7/3] + [ellipsis]]]
 
 and
 
-[emquad] ['y[sub [nu],1] [cong] [nu] + 0.93157 [nu][super [frac13]] + 0.26035 [nu][super -[frac13]] + 0.01198 [nu][super -1] - 0.0060 [nu][super -5/3] - 0.001 [nu][super -7/3] + [ellipsis]]
+[:['y[sub [nu],1] [cong] [nu] + 0.93157 [nu][super [frac13]] + 0.26035 [nu][super -[frac13]] + 0.01198 [nu][super -1] - 0.0060 [nu][super -5/3] - 0.001 [nu][super -7/3] + [ellipsis]]]
 
 Calculations of the estimates of ['j[sub [nu], m]]  and  ['y[sub [nu], m]]
 with rank ['m > 2] and ['0 [le] [nu] < 2.2]  use
 McMahon's approximation, as described in M. Abramowitz and I. A. Stegan, Section 9.5 and 9.5.12.
 In particular,
 
-[emquad] ['j[sub [nu],m], y[sub [nu],m] [cong] [beta] - ([mu]-1) / 8[beta]]
-
-[emquad] [emquad] [emquad] ['- 4([mu]-1)(7[mu] - 31) / 3(8[beta])[super 3]]
-
-[emquad] [emquad] [emquad] ['-32([mu]-1)(83[mu][sup2] - 982[mu] + 3779) / 15(8[beta])[super 5]]
-
-[emquad] [emquad] [emquad] ['-64([mu]-1)(6949[mu][super 3] - 153855[mu][sup2] + 1585743[mu]- 6277237) / 105(8a)[super 7]]
-
-[emquad] [emquad] [emquad] ['- [ellipsis]]       [emquad] [emquad]                                              (5)
+[:['j[sub [nu],m], y[sub [nu],m] [cong]]]
+[:[:[beta] - ([mu]-1) / 8[beta]]]
+[:[:['- 4([mu]-1)(7[mu] - 31) / 3(8[beta])[super 3]]]]
+[:[:['-32([mu]-1)(83[mu][sup2] - 982[mu] + 3779) / 15(8[beta])[super 5]]]]
+[:[:['-64([mu]-1)(6949[mu][super 3] - 153855[mu][sup2] + 1585743[mu]- 6277237) / 105(8a)[super 7]]]]
+[:[:['- [ellipsis]] [emquad] [emquad]  (5)]]
 
 where ['[mu] = 4[nu][super 2]] and ['[beta] = (m + [frac12][nu] - [frac14])[pi]]
 for ['j[sub [nu],m]] and

@@ -43,11 +43,11 @@ Samuel Kotz & Saralees Nadarajah].
 
 The distribution has a PDF given by:
 
-f(x) = (1/scale) e[super -(x-location)/scale] e[super -e[super -(x-location)/scale]]
+[:f(x) = (1/scale) e[super -(x-location)/scale] e[super -e[super -(x-location)/scale]]]
 
-Which in the standard case (scale = 1, location = 0) reduces to:
+which in the standard case (scale = 1, location = 0) reduces to:
 
-f(x) = e[super -x]e[super -e[super -x]]
+[:f(x) = e[super -x]e[super -e[super -x]]]
 
 The following graph illustrates how the PDF varies with the location parameter:
 

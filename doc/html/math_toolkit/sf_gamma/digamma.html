@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Digamma</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../index.html" title="Math Toolkit 2.10.0">
 <link rel="up" href="../sf_gamma.html" title="Gamma Functions">
 <link rel="prev" href="lgamma.html" title="Log Gamma">
@@ -50,12 +50,14 @@
         Returns the digamma or psi function of <span class="emphasis"><em>x</em></span>. Digamma is
         defined as the logarithmic derivative of the gamma function:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/digamma1.svg"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/digamma.svg" align="middle"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/digamma1.svg"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/digamma.svg" align="middle"></span>
+
+        </p></blockquote></div>
 <p>
         The final <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
         be used to control the behaviour of the function: how it handles errors,
@@ -329,15 +331,18 @@
         precision, and GCC-7.1/Ubuntu for <code class="computeroutput"><span class="keyword">long</span>
         <span class="keyword">double</span></code> and <code class="computeroutput"><span class="identifier">__float128</span></code>.
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/digamma__double.svg" align="middle"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/digamma__80_bit_long_double.svg" align="middle"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/digamma____float128.svg" align="middle"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/digamma__double.svg" align="middle"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/digamma__80_bit_long_double.svg" align="middle"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/digamma____float128.svg" align="middle"></span>
+
+        </p></blockquote></div>
 <h5>
 <a name="math_toolkit.sf_gamma.digamma.h3"></a>
         <span class="phrase"><a name="math_toolkit.sf_gamma.digamma.testing"></a></span><a class="link" href="digamma.html#math_toolkit.sf_gamma.digamma.testing">Testing</a>
@@ -386,9 +391,10 @@
 <p>
         For arguments &gt; BIG the asymptotic expansion:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/digamma2.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/digamma2.svg"></span>
+
+        </p></blockquote></div>
 <p>
         can be used. However, this expansion is divergent after a few terms: exactly
         how many terms depends on the size of <span class="emphasis"><em>x</em></span>. Therefore the
@@ -403,12 +409,14 @@
         until x &gt; BIG, and then evaluation via the asymptotic expansion above.
         As special cases integer and half integer arguments are handled via:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/digamma4.svg"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/digamma5.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/digamma4.svg"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/digamma5.svg"></span>
+
+        </p></blockquote></div>
 <p>
         The rational approximation <a class="link" href="../sf_implementation.html#math_toolkit.sf_implementation.rational_approximations_used">devised
         by JM</a> in the range [1,2] is derived as follows.
@@ -418,9 +426,10 @@
         differentiated <a class="link" href="../lanczos.html" title="The Lanczos Approximation">Lanczos approximation</a>,
         the form used is:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/digamma3.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/digamma3.svg"></span>
+
+        </p></blockquote></div>
 <p>
         Where P(x) and Q(x) are the polynomials from the rational form of the Lanczos
         sum, and P'(x) and Q'(x) are their first derivatives. The Lanzos part of

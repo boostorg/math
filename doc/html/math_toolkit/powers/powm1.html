@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>powm1</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../index.html" title="Math Toolkit 2.10.0">
 <link rel="up" href="../powers.html" title="Basic Functions">
 <link rel="prev" href="sqrt1pm1.html" title="sqrt1pm1">
@@ -28,9 +28,10 @@
 </h3></div></div></div>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">powm1</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
-<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
-
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
+<p>
+        namespace boost{ namespace math{
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">powm1</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">y</span><span class="special">);</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
@@ -43,7 +44,7 @@
       </p>
 <p>
         The return type of this function is computed using the <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>result
-        type calculation rules</em></span></a> when T1 and T2 are dufferent types.
+        type calculation rules</em></span></a> when T1 and T2 are different types.
       </p>
 <p>
         The final <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
@@ -52,8 +53,8 @@
         documentation for more details</a>.
       </p>
 <p>
-        There are two domains where this is useful: when y is very small, or when
-        x is close to 1.
+        There are two domains where this is useful: when <span class="emphasis"><em>y</em></span> is
+        very small, or when <span class="emphasis"><em>x</em></span> is close to 1.
       </p>
 <p>
         Implemented in terms of <code class="computeroutput"><span class="identifier">expm1</span></code>.
@@ -61,9 +62,10 @@
 <p>
         The following graph illustrates the behaviour of powm1:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/powm1.svg" align="middle"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/powm1.svg" align="middle"></span>
+
+        </p></blockquote></div>
 <h5>
 <a name="math_toolkit.powers.powm1.h0"></a>
         <span class="phrase"><a name="math_toolkit.powers.powm1.accuracy"></a></span><a class="link" href="powm1.html#math_toolkit.powers.powm1.accuracy">Accuracy</a>

@@ -77,9 +77,9 @@ Tools for manipulating polynomials and for efficient evaluation of rationals or 
 
 [h4 Interpolation]
 
-Function interpolation via Barycentric or cubic B_spline approximations.
+Function interpolation via Barycentric or cubic B_spline approximations. Smoothing.
 
-[h4 Numerical Integration and Differentiation]
+[h4 Numerical Integration (Quadrature) and Differentiation]
 
 A reasonably comprehensive set of routines for integration (trapezoidal, Gauss-Legendre, Gauss-Kronrod and double-exponential) and differentiation.
 
@@ -89,7 +89,12 @@ The integration routines are all usable for functions returning complex results 
 
 Quaternion and Octonians as class templates similar to `std::complex`.
 
-[endsect]
+[h4 Automatic Differentiation]
+
+Autodiff is a header-only C++ library that facilitates the automaticdifferentiation (forward mode) of mathematical functions of singleand multiple variables
+
+[endsect] [/section:main_intro About the Math Toolkit]
+
 
 [/
   Copyright 2006, 2012, 2015 John Maddock and Paul A. Bristow.

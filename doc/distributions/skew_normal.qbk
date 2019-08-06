@@ -36,17 +36,17 @@ hence the latter can be regarded as a special case of the more generic skew norm
 
 If the standard (mean = 0, scale = 1) normal distribution probability density function is
 
-[space][space][equation normal01_pdf]
+[equation normal01_pdf]
 
 and the cumulative distribution function
 
-[space][space][equation normal01_cdf]
+[equation normal01_cdf]
 
 then the [@http://en.wikipedia.org/wiki/Probability_density_function PDF]
 of the [@http://en.wikipedia.org/wiki/Skew_normal_distribution skew normal distribution]
 with shape parameter [alpha], defined by O'Hagan and Leonhard (1976) is
 
-[space][space][equation skew_normal_pdf0]
+[equation skew_normal_pdf0]
 
 Given [@http://en.wikipedia.org/wiki/Location_parameter location] [xi],
 [@http://en.wikipedia.org/wiki/Scale_parameter scale] [omega],
@@ -55,11 +55,11 @@ it can be
 [@http://en.wikipedia.org/wiki/Skew_normal_distribution transformed],
 to the form:
 
-[space][space][equation skew_normal_pdf]
+[equation skew_normal_pdf]
 
 and [@http://en.wikipedia.org/wiki/Cumulative_distribution_function CDF]:
 
-[space][space][equation skew_normal_cdf]
+[equation skew_normal_cdf]
 
 where ['T(h,a)] is Owen's T function, and ['[Phi](x)] is the normal distribution.
 

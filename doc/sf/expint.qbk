@@ -87,7 +87,8 @@ and for `x > 1` a Chebyshev interpolated approximation of the form:
 is used.
 
 
-[endsect]
+[endsect] [/section:expint_n Exponential Integral En]
+
 
 [section:expint_i Exponential Integral Ei]
 
@@ -153,8 +154,6 @@ and GCC-7.1/Ubuntu for `long double` and `__float128`.
 
 [graph exponential_integral_ei____float128]
 
-
-
 [h4 Testing]
 
 The tests for these functions come in two parts:
@@ -217,8 +216,9 @@ error rates are typically 2 to 3 epsilon which is comparible to the error
 rate that Cody and Thacher achieved using J-Fractions, but marginally more
 efficient given that fewer divisions are involved.
 
-[endsect]
-[endsect]
+[endsect] [/section:expint_n Exponential Integral En] 
+
+[endsect] [/section:expint Exponential Integrals]
 
 [/ 
   Copyright 2006 John Maddock and Paul A. Bristow.

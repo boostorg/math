@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Elliptic Integrals - Carlson Form</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../index.html" title="Math Toolkit 2.10.0">
 <link rel="up" href="../ellint.html" title="Elliptic Integrals">
 <link rel="prev" href="ellint_intro.html" title="Elliptic Integral Overview">
@@ -100,9 +100,10 @@
         have complicated behavior over all their possible domains, but the following
         graph gives an idea of their behavior:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/ellint_carlson.svg" align="middle"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/ellint_carlson.svg" align="middle"></span>
+
+        </p></blockquote></div>
 <p>
         The return type of these functions is computed using the <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>result
         type calculation rules</em></span></a> when the arguments are of different
@@ -117,9 +118,10 @@
 <p>
         Returns Carlson's Elliptic Integral R<sub>F</sub>:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/ellint9.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/ellint9.svg"></span>
+
+        </p></blockquote></div>
 <p>
         Requires that all of the arguments are non-negative, and at most one may
         be zero. Otherwise returns the result of <a class="link" href="../error_handling.html#math_toolkit.error_handling.domain_error">domain_error</a>.
@@ -139,9 +141,10 @@
 <p>
         Returns Carlson's elliptic integral R<sub>D</sub>:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/ellint10.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/ellint10.svg"></span>
+
+        </p></blockquote></div>
 <p>
         Requires that x and y are non-negative, with at most one of them zero, and
         that z &gt;= 0. Otherwise returns the result of <a class="link" href="../error_handling.html#math_toolkit.error_handling.domain_error">domain_error</a>.
@@ -161,9 +164,10 @@
 <p>
         Returns Carlson's elliptic integral R<sub>J</sub>:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/ellint11.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/ellint11.svg"></span>
+
+        </p></blockquote></div>
 <p>
         Requires that x, y and z are non-negative, with at most one of them zero,
         and that <span class="emphasis"><em>p != 0</em></span>. Otherwise returns the result of <a class="link" href="../error_handling.html#math_toolkit.error_handling.domain_error">domain_error</a>.
@@ -178,9 +182,10 @@
         When <span class="emphasis"><em>p &lt; 0</em></span> the function returns the <a href="http://en.wikipedia.org/wiki/Cauchy_principal_value" target="_top">Cauchy
         principal value</a> using the relation:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/ellint17.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/ellint17.svg"></span>
+
+        </p></blockquote></div>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">ellint_rc</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">y</span><span class="special">)</span>
 
@@ -190,9 +195,10 @@
 <p>
         Returns Carlson's elliptic integral R<sub>C</sub>:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/ellint12.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/ellint12.svg"></span>
+
+        </p></blockquote></div>
 <p>
         Requires that <span class="emphasis"><em>x &gt; 0</em></span> and that <span class="emphasis"><em>y != 0</em></span>.
         Otherwise returns the result of <a class="link" href="../error_handling.html#math_toolkit.error_handling.domain_error">domain_error</a>.
@@ -207,9 +213,10 @@
         When <span class="emphasis"><em>y &lt; 0</em></span> the function returns the <a href="http://mathworld.wolfram.com/CauchyPrincipalValue.html" target="_top">Cauchy
         principal value</a> using the relation:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/ellint18.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/ellint18.svg"></span>
+
+        </p></blockquote></div>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T3</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">ellint_rg</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">y</span><span class="special">,</span> <span class="identifier">T3</span> <span class="identifier">z</span><span class="special">)</span>
 
@@ -219,9 +226,10 @@
 <p>
         Returns Carlson's elliptic integral R<sub>G</sub>:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/ellint27.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/ellint27.svg"></span>
+
+        </p></blockquote></div>
 <p>
         Requires that x and y are non-negative, otherwise returns the result of
         <a class="link" href="../error_handling.html#math_toolkit.error_handling.domain_error">domain_error</a>.
@@ -939,17 +947,19 @@
         The key of Carlson's algorithm [<a class="link" href="ellint_intro.html#ellint_ref_carlson79">Carlson79</a>]
         is the duplication theorem:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/ellint13.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/ellint13.svg"></span>
+
+        </p></blockquote></div>
 <p>
         By applying it repeatedly, <span class="emphasis"><em>x</em></span>, <span class="emphasis"><em>y</em></span>,
         <span class="emphasis"><em>z</em></span> get closer and closer. When they are nearly equal,
         the special case equation
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/ellint16.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/ellint16.svg"></span>
+
+        </p></blockquote></div>
 <p>
         is used. More specifically, <span class="emphasis"><em>[R F]</em></span> is evaluated from
         a Taylor series expansion to the fifth order. The calculations of the other
@@ -962,12 +972,14 @@
         are singular and their <a href="http://mathworld.wolfram.com/CauchyPrincipalValue.html" target="_top">Cauchy
         principal values</a> are returned via the relations:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/ellint17.svg"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/ellint18.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/ellint17.svg"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/ellint18.svg"></span>
+
+        </p></blockquote></div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>

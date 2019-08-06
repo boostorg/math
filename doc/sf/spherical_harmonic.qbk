@@ -134,7 +134,7 @@ without roundoff error using ['x = cos(theta)], and
 rates for these functions is the need to calculate values near the roots
 of the associated Legendre functions.
 
-[endsect][/section:beta_function The Beta Function]
+[endsect] [/section:beta_function The Beta Function]
 [/ 
   Copyright 2006 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.

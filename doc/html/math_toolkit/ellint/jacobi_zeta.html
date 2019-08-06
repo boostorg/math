@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Jacobi Zeta Function</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../index.html" title="Math Toolkit 2.10.0">
 <link rel="up" href="../ellint.html" title="Elliptic Integrals">
 <link rel="prev" href="ellint_d.html" title="Elliptic Integral D - Legendre Form">
@@ -49,9 +49,10 @@
 <p>
         This function evaluates the Jacobi Zeta Function <span class="emphasis"><em>Z(&#966;, k)</em></span>
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/jacobi_zeta.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/jacobi_zeta.svg"></span>
+
+        </p></blockquote></div>
 <p>
         Please note the use of &#966;, and <span class="emphasis"><em>k</em></span> as the parameters, the
         function is often defined as <span class="emphasis"><em>Z(&#966;, m)</em></span> with <span class="emphasis"><em>m
@@ -219,9 +220,9 @@ is very large, in which case the usual trigonometric function argument-reduction
       </h5>
 <p>
         The tests use a mixture of spot test values calculated using values calculated
-        at wolframalpha.com, and random test data generated using MPFR at 1000-bit
-        precision and a deliberately naive implementation in terms of the Legendre
-        integrals.
+        at <a href="http://www.wolframalpha.com/" target="_top">Wolfram Alpha</a>, and random
+        test data generated using MPFR at 1000-bit precision and a deliberately naive
+        implementation in terms of the Legendre integrals.
       </p>
 <h5>
 <a name="math_toolkit.ellint.jacobi_zeta.h4"></a>
@@ -230,23 +231,33 @@ is very large, in which case the usual trigonometric function argument-reduction
 <p>
         The implementation for Z(&#966;, k) first makes the argument &#966; positive using:
       </p>
-<p>
-        <span class="emphasis"><em>Z(-&#966;, k) = -Z(&#966;, k)</em></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="emphasis"><em>Z(-&#966;, k) = -Z(&#966;, k)</em></span>
+        </p></blockquote></div>
 <p>
         The function is then implemented in terms of Carlson's integral R<sub>J</sub>
 using the
         relation:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/jacobi_zeta.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/jacobi_zeta.svg"></span>
+
+        </p></blockquote></div>
 <p>
         There is one special case where the above relation fails: when <span class="emphasis"><em>k
         = 1</em></span>, in that case the function simplifies to
       </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="emphasis"><em>Z(&#966;, 1) = sign(cos(&#966;)) sin(&#966;)</em></span>
+        </p></blockquote></div>
+<h6>
+<a name="math_toolkit.ellint.jacobi_zeta.h5"></a>
+        <span class="phrase"><a name="math_toolkit.ellint.jacobi_zeta.jacobi_zeta_example"></a></span><a class="link" href="jacobi_zeta.html#math_toolkit.ellint.jacobi_zeta.jacobi_zeta_example">Example</a>
+      </h6>
 <p>
-        <span class="emphasis"><em>Z(&#966;, 1) = sign(cos(&#966;)) sin(&#966;)</em></span>
+        A simple example comparing use of <a href="http://www.wolframalpha.com/" target="_top">Wolfram
+        Alpha</a> with Boost.Math (including much higher precision using Boost.Multiprecision)
+        is <a href="../../../../example/jacobi_zeta_example.cpp" target="_top">jacobi_zeta_example.cpp</a>.
       </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

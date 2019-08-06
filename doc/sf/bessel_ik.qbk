@@ -23,9 +23,9 @@
 The functions __cyl_bessel_i and __cyl_bessel_k return the result of the
 modified Bessel functions of the first and second kind respectively:
 
-cyl_bessel_i(v, x) = I[sub v](x)
+[:cyl_bessel_i(v, x) = I[sub v](x)]
 
-cyl_bessel_k(v, x) = K[sub v](x)
+[:cyl_bessel_k(v, x) = K[sub v](x)]
 
 where:
 
@@ -80,7 +80,6 @@ problem cases in other libraries:
 
 The following error plot are based on an exhaustive search of the functions domain for I0, I1, K0, and K1, 
 MSVC-15.5 at `double` precision, and GCC-7.1/Ubuntu for `long double` and `__float128`.
-
 
 [graph i0__double]
 
@@ -145,10 +144,9 @@ Similarly we have:
 
 The 0.5 case is a simple trigonometric function:
 
-I[sub 0.5](x) = sqrt(2 / [pi]x) * sinh(x)
+[:I[sub 0.5](x) = sqrt(2 / [pi]x) * sinh(x)]
 
-For K[sub v][space] with /v/ an integer, the result is calculated using the
-recurrence relation:
+For K[sub v][space] with /v/ an integer, the result is calculated using th ecurrence relation:
 
 [equation mbessel5]
 

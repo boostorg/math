@@ -25,7 +25,7 @@
 
 The exponential funtion is defined, for all objects for which this makes sense, 
 as the power series 
-[equation special_functions_blurb1], 
+[equation special_functions_blurb1]
 with ['[^n! = 1x2x3x4x5...xn]] (and ['[^0! = 1]] by definition) being the factorial of ['[^n]]. 
 In particular, the exponential function is well defined for real numbers, 
 complex number, quaternions, octonions, and matrices of complex numbers, 
@@ -56,20 +56,22 @@ Hyperbolic tangent: [equation special_functions_blurb7]
 The hyperbolic sine is one to one on the set of real numbers, 
 with range the full set of reals, while the hyperbolic tangent is 
 also one to one on the set of real numbers but with range __form1, and 
-therefore both have inverses. The hyperbolic cosine is one to one from __form2 
-onto __form3 (and from __form4 onto __form3); the inverse function we use 
-here is defined on __form3 with range __form2.
+therefore both have inverses.
+
+The hyperbolic cosine is one to one from __form2 onto __form3 (and from __form4 onto __form3).
+
+The inverse function we use here is defined on __form3 with range __form2.
 
 The inverse of the hyperbolic tangent is called the Argument hyperbolic tangent, 
-and can be computed as [equation special_functions_blurb15].
+and can be computed as [equation special_functions_blurb15]
 
 The inverse of the hyperbolic sine is called the Argument hyperbolic sine, 
-and can be computed (for __form5) as [equation special_functions_blurb17].
+and can be computed (for __form5) as [equation special_functions_blurb17]
 
 The inverse of the hyperbolic cosine is called the Argument hyperbolic cosine, 
-and can be computed as [equation special_functions_blurb18].
+and can be computed as [equation special_functions_blurb18]
 
-[endsect]
+[endsect] [/section:inv_hyper_over Inverse Hyperbolic Functions Overview]
 
 [section:acosh acosh]
 
@@ -98,7 +100,7 @@ the return type is `double` when T is an integer type, and T otherwise.
 
 [h4 Accuracy]
 
-Generally accuracy is to within 1 or 2 epsilon across all supported platforms.
+Generally accuracy is to within 1 or 2 __epsilon across all supported platforms.
 
 [h4 Testing]
 
@@ -135,7 +137,7 @@ primary definition] is used:
 
 [equation acosh1]
 
-[endsect]
+[endsect] [/section:acosh acosh]
 
 [section:asinh asinh]
 
@@ -162,7 +164,7 @@ the return type is `double` when T is an integer type, and T otherwise.
 
 [h4 Accuracy]
 
-Generally accuracy is to within 1 or 2 epsilon across all supported platforms.
+Generally accuracy is to within 1 or 2 __epsilon across all supported platforms.
 
 [h4 Testing]
 
@@ -198,7 +200,7 @@ primary definition]:
 
 [equation asinh4]
 
-[endsect]
+[endsect] [/section:asinh asinh]
 
 [section:atanh atanh]
 
@@ -228,14 +230,14 @@ If x is in the range
 __form5, 
 then the result of -__overflow_error is returned, with 
 __form6[space]
-denoting numeric_limits<T>::epsilon().
+denoting `std::numeric_limits<T>::epsilon()`.
 
 If x is in the range 
 __form7, 
 then the result of __overflow_error is returned, with 
 __form6[space]
 denoting 
-numeric_limits<T>::epsilon().
+`std::numeric_limits<T>::epsilon()`.
 
 The return type of this function is computed using the __arg_promotion_rules:
 the return type is `double` when T is an integer type, and T otherwise.
@@ -244,7 +246,7 @@ the return type is `double` when T is an integer type, and T otherwise.
 
 [h4 Accuracy]
 
-Generally accuracy is to within 1 or 2 epsilon across all supported platforms.
+Generally accuracy is to within 1 or 2 __epsilon across all supported platforms.
 
 [h4 Testing]
 
@@ -274,6 +276,7 @@ or its equivalent form:
 
 is used.
 
-[endsect]
+[endsect] [/section:atanh atanh]
 
-[endsect]
+[endsect] [/section:inv_hyper Inverse Hyperbolic Functions]
+

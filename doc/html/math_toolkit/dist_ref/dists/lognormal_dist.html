@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Log Normal Distribution</title>
 <link rel="stylesheet" href="../../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../../index.html" title="Math Toolkit 2.10.0">
 <link rel="up" href="../dists.html" title="Distributions">
 <link rel="prev" href="logistic_dist.html" title="Logistic Distribution">
@@ -61,9 +61,10 @@
           For location and scale parameters <span class="emphasis"><em>m</em></span> and <span class="emphasis"><em>s</em></span>
           it is defined by the probability density function:
         </p>
-<p>
-          <span class="inlinemediaobject"><img src="../../../../equations/lognormal_ref.svg"></span>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../equations/lognormal_ref.svg"></span>
+
+          </p></blockquote></div>
 <p>
           The location and scale parameters are equivalent to the mean and standard
           deviation of the logarithm of the random variable.
@@ -73,15 +74,17 @@
           the PDF, note that the range of the random variable remains [0,+&#8734;] irrespective
           of the value of the location parameter:
         </p>
-<p>
-          <span class="inlinemediaobject"><img src="../../../../graphs/lognormal_pdf1.svg" align="middle"></span>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../graphs/lognormal_pdf1.svg" align="middle"></span>
+
+          </p></blockquote></div>
 <p>
           The next graph illustrates the effect of the scale parameter on the PDF:
         </p>
-<p>
-          <span class="inlinemediaobject"><img src="../../../../graphs/lognormal_pdf2.svg" align="middle"></span>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../graphs/lognormal_pdf2.svg" align="middle"></span>
+
+          </p></blockquote></div>
 <h5>
 <a name="math_toolkit.dist_ref.dists.lognormal_dist.h0"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.lognormal_dist.member_functions"></a></span><a class="link" href="lognormal_dist.html#math_toolkit.dist_ref.dists.lognormal_dist.member_functions">Member
@@ -141,7 +144,7 @@
         </h5>
 <p>
           The lognormal distribution is implemented in terms of the standard library
-          log and exp functions, plus the <a class="link" href="../../sf_erf/error_function.html" title="Error Functions">error
+          log and exp functions, plus the <a class="link" href="../../sf_erf/error_function.html" title="Error Function erf and complement erfc">error
           function</a>, and as such should have very low error rates.
         </p>
 <h5>
