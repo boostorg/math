@@ -37,5 +37,19 @@ Real jacobi(unsigned n, Real alpha, Real beta, Real x)
     return yk;
 }
 
+template<typename Real>
+Real jacobi_derivative(unsigned n, Real alpha, Real beta, Real x, unsigned k)
+{
+    if (k > n) {
+        return Real(0);
+    }
+    Real scale = 1;
+    for(unsigned j = 1; j <= k; ++j) {
+        scale *= (alpha + beta + n + j)/2;
+    }
+
+    return scale*jacobi<Real>(n-k, alpha + k, beta+k, x);
+}
+
 }}
 #endif
