@@ -191,7 +191,6 @@ std::pair<T, T> bisect(F f, T min, T max, Tol tol, boost::uintmax_t& max_iter, c
       else if(sign(fmid) * sign(fmin) < 0)
       {
          max = mid;
-         fmax = fmid;
       }
       else
       {
@@ -280,7 +279,7 @@ T newton_raphson_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_
          T shift = (delta > 0) ? (result - min) / 2 : (result - max) / 2;
          if ((result != 0) && (fabs(shift) > fabs(result)))
          {
-            delta = sign(delta) * fabs(result) * 0.9; // Protect against huge jumps!
+            delta = sign(delta) * fabs(result) * 0.9f; // Protect against huge jumps!
             //delta = sign(delta) * result; // Protect against huge jumps! Failed for negative result. https://github.com/boostorg/math/issues/216
          }
          else
@@ -556,7 +555,7 @@ namespace detail{
             // last two steps haven't converged.
             delta = (delta > 0) ? (result - min) / 2 : (result - max) / 2;
             if ((result != 0) && (fabs(delta) > result))
-               delta = sign(delta) * fabs(result) * 0.9; // protect against huge jumps!
+               delta = sign(delta) * fabs(result) * 0.9f; // protect against huge jumps!
             // reset delta2 so that this branch will *not* be taken on the
             // next iteration:
             delta2 = delta * 3;

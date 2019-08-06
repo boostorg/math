@@ -646,6 +646,8 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 
 [include sf/expint.qbk]
 
+[include sf/hypergeometric.qbk]
+
 [include sf/powers.qbk]
 [include sf/sinc.qbk]
 [include sf/inv_hyper.qbk]
@@ -678,6 +680,7 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [include interpolators/barycentric_rational_interpolation.qbk]
 [include interpolators/vector_barycentric_rational.qbk]
 [include interpolators/catmull_rom.qbk]
+[include interpolators/cardinal_trigonometric.qbk]
 [endmathpart]
 
 [mathpart quadrature Quadrature and Differentiation]
@@ -703,6 +706,7 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [section:internals Internal tools]
 [include internals/series.qbk]
 [include internals/fraction.qbk]
+[include internals/recurrence.qbk]
 [/include internals/rational.qbk] [/moved to tools]
 [include internals/tuple.qbk]
 [/include internals/polynomial.qbk] [/moved to tools]
