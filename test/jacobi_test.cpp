@@ -95,8 +95,6 @@ void test_derivative()
 
 int main()
 {
-
-    test_to_quadratic<float>();
     test_to_quadratic<double>();
     test_to_quadratic<long double>();
 
