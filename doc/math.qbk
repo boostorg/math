@@ -60,6 +60,8 @@
 [import overview/tr1.qbk] [/tr1 docs also appear in more than one place!]
 [import overview/roadmap.qbk] [/ for history]
 
+[def __build_html]
+
 [def __effects [*Effects: ]]
 [def __formula [*Formula: ]]
 [def __exm1 '''<code>e<superscript>x</superscript> - 1</code>'''] [/e^x -1]
@@ -568,7 +570,7 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [include distributions/dist_reference.qbk] [/includes all individual distribution.qbk files]
 [endmathpart] [/section:dist Statistical Distributions and Functions]
 
-[mathpart vector_functionals Vector Functionals]
+[mathpart vector_functionals Vector Functionals - Statistics \& Norms]
 [include vector_functionals/univariate_statistics.qbk]
 [include vector_functionals/bivariate_statistics.qbk]
 [include vector_functionals/signal_statistics.qbk]

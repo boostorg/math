@@ -173,9 +173,8 @@ Some clues about requirements can be gleaned from tests and examples (see jamfil
 You can refer to the [@https://www.boost.org/development/tests/develop/developer/math.html Boost Test Matrix] to see the 
 current results for Boost.Math tests of many compilers on many platforms.
 But bear in mind that the testing or demonstration code may use C++11 or higher features like 
-`std::numeric_limits<>max_digits10` `auto` `lambdas ...` for convenience;
+`std::numeric_limits<>max_digits10`, `auto`, `lambdas ...` for convenience;
 these may not be needed for your application.
-
 
 [endsect] [/section:faq Frequently Asked Questions]
 

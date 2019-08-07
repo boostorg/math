@@ -62,8 +62,9 @@
 <tr><td align="left" valign="top">
 <p>
           The functions described above are templates where the template argument
-          T can not be deduced from the arguments passed to the function. Therefore
-          if you write something like:
+          <code class="computeroutput"><span class="identifier">T</span></code> can not be deduced from
+          the arguments passed to the function. Therefore if you write something
+          like:
         </p>
 <p>
           <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">binomial_coefficient</span><span class="special">(</span><span class="number">10</span><span class="special">,</span> <span class="number">2</span><span class="special">);</span></code>
@@ -109,21 +110,21 @@
         possible using:
       </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-          <sub>n</sub>C<sub>k</sub> = n! / (k!(n-k)!)
+          <span class="emphasis"><em><sub>n</sub>C<sub>k</sub> = n! / (k!(n-k)!)</em></span>
         </p></blockquote></div>
 <p>
         Otherwise it is implemented in terms of the beta function using the relations:
       </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-          <sub>n</sub>C<sub>k</sub> = 1 / (k * <a class="link" href="../sf_beta/beta_function.html" title="Beta">beta</a>(k,
-          n-k+1))
+          <span class="emphasis"><em><sub>n</sub>C<sub>k</sub> = 1 / (k * <a class="link" href="../sf_beta/beta_function.html" title="Beta">beta</a>(k,
+          n-k+1))</em></span>
         </p></blockquote></div>
 <p>
         and
       </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-          <sub>n</sub>C<sub>k</sub> = 1 / ((n-k) * <a class="link" href="../sf_beta/beta_function.html" title="Beta">beta</a>(k+1,
-          n-k))
+          <span class="emphasis"><em><sub>n</sub>C<sub>k</sub> = 1 / ((n-k) * <a class="link" href="../sf_beta/beta_function.html" title="Beta">beta</a>(k+1,
+          n-k))</em></span>
         </p></blockquote></div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
