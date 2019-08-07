@@ -60,7 +60,7 @@ DCDFLIB
 
 feedback
 
-bugs \<bug\w*\>
+bug \<bug\w*\>
 
 GIT \<GIT\w*\>
 
