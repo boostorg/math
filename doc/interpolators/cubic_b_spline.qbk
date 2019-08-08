@@ -30,6 +30,8 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
         Real operator()(Real x) const;
 
         Real prime(Real x) const;
+
+        Real double_prime(Real x) const;
     };
 
   }} // namespaces
@@ -37,7 +39,7 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 [heading Cubic B-Spline Interpolation]
 
-The cubic B-spline class provided by boost allows fast and accurate interpolation of a function which is known at equally spaced points.
+The cubic B-spline class provided by Boost allows fast and accurate interpolation of a function which is known at equally spaced points.
 The cubic B-spline interpolation is numerically stable as it uses compactly supported basis functions constructed via iterative convolution.
 This is to be contrasted to traditional cubic spline interpolation which is ill-conditioned as the global support of cubic polynomials causes small changes far from the evaluation point to exert a large influence on the calculated value.
 
@@ -78,6 +80,15 @@ and to evaluate the derivative of the interpolant we use
     double yp = spline.prime(x);
 
 Be aware that the accuracy guarantees on the derivative of the spline are an order lower than the guarantees on the original function, see [@http://www.springer.com/us/book/9780387984087 Numerical Analysis, Graduate Texts in Mathematics, 181, Rainer Kress] for details.
+
+The last interesting member is the second derivative, evaluated via
+
+    double ypp = spline.double_prime(x);
+
+The basis functions of the spline are cubic polynomials, so the second derivative is simply linear interpolation.
+But the interpolation is not constrained by data (you don't pass in the second derivatives), and hence is less accurate than would be expected from assuming it is a linear interpolation.
+The problem is especially pronounced at the boundaries, where the second derivative is totally unconstrained.
+Use the second derivative of the cubic B-spline interpolator only in desperation.
 
 Finally, note that this is an interpolator, not an extrapolator.
 Therefore, you should strenuously avoid evaluating the spline outside the endpoints.
