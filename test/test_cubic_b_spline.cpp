@@ -30,6 +30,9 @@ void test_b3_spline()
     BOOST_CHECK_SMALL(boost::math::detail::b3_spline<Real>(-2.5), (Real) 0);
     BOOST_CHECK_SMALL(boost::math::detail::b3_spline_prime<Real>(2.5), (Real) 0);
     BOOST_CHECK_SMALL(boost::math::detail::b3_spline_prime<Real>(-2.5), (Real) 0);
+    BOOST_CHECK_SMALL(boost::math::detail::b3_spline_double_prime<Real>(2.5), (Real) 0);
+    BOOST_CHECK_SMALL(boost::math::detail::b3_spline_double_prime<Real>(-2.5), (Real) 0);
+
 
     // On the boundary of support:
     BOOST_CHECK_SMALL(boost::math::detail::b3_spline<Real>(2), (Real) 0);
@@ -52,6 +55,7 @@ void test_b3_spline()
         Real arg = i*0.01;
         BOOST_CHECK_CLOSE(boost::math::detail::b3_spline<Real>(arg), boost::math::detail::b3_spline<Real>(arg), eps);
         BOOST_CHECK_CLOSE(boost::math::detail::b3_spline_prime<Real>(-arg), -boost::math::detail::b3_spline_prime<Real>(arg), eps);
+        BOOST_CHECK_CLOSE(boost::math::detail::b3_spline_double_prime<Real>(-arg), boost::math::detail::b3_spline_double_prime<Real>(arg), eps);
     }
 
 }
@@ -109,6 +113,9 @@ void test_constant_function()
         BOOST_CHECK_CLOSE(y, constant, 10*std::numeric_limits<Real>::epsilon());
         Real y_prime = spline.prime(i*step + a + 0.002);
         BOOST_CHECK_SMALL(y_prime, 5000*std::numeric_limits<Real>::epsilon());
+        Real y_double_prime = spline.double_prime(i*step + a + 0.002);
+        BOOST_CHECK_SMALL(y_double_prime, 5000*std::numeric_limits<Real>::epsilon());
+
     }
 
     // Test that correctly specified left and right-derivatives work properly:
