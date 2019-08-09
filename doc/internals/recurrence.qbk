@@ -1,4 +1,4 @@
-[section:recurrence Tools For 3 Term Recurrence Relations]
+[section:recurrence Tools For 3-Term Recurrence Relations]
 
 [h4 Synopsis]
 
@@ -33,13 +33,13 @@
 All of the tools in this header require a description of the recurrence relation: this takes the form of
 a functor that returns a tuple containing the 3 coefficients, specifically, given a recurrence relation:
 
-[/\Large  $$ a_nF_{n-1} + b_nF_n + c_nF_{n+1} = 0 $$][$../equations/three_term_recurrence.svg]
+[/\Large  $$ a_nF_{n-1} + b_nF_n + c_nF_{n+1} = 0 $$] [equation three_term_recurrence.svg]
 
 And a functor F then the expression:
 
    F(n);
 
-Returns a tuple containing ['{ a[sub n], b[sub n], c[sub n] }].
+Returns a tuple containing [role serif_italic { a[sub n], b[sub n], c[sub n] }].
 
 For example, the recurrence relation for the Bessel J and Y functions when written in this form is:
 
@@ -154,7 +154,7 @@ only one value is provided, then the second is computed by using the recurrence 
 
 Note that /incrementing/ this iterator moves the value returned successively to F[sub n-1], F[sub n-2] etc.
 
-[endsect]
+[endsect] [/section:recurrence Tools For 3-Term Recurrence Relations]
 
 [/ 
   Copyright 2019 John Maddock.

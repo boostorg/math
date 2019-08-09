@@ -48,7 +48,7 @@ the series being summed.
 
 The second argument is the precision required, 
 summation will stop when the next term is less than
-/tolerance/ times the result.  The deprecated versions of sum_series
+/tolerance/ times the result.  The deprecated versions of `sum_series`
 take an integer number of bits here - internally they just convert this to
 a tolerance and forward the call.
 
@@ -108,7 +108,7 @@ definition for epsilon, and within the functor, mixed complex and integer arithm
 
 Of course with a few traits classes and a bit of meta-programming we could fold these two implementations into one, but that's beyond the scope of these examples.
 
-[endsect][/section Series Evaluation]
+[endsect] [/section Series Evaluation]
 
 [/ 
   Copyright 2006 John Maddock and Paul A. Bristow.

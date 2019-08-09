@@ -33,11 +33,12 @@
 The noncentral beta distribution is a generalization of the __beta_distrib.
 
 It is defined as the ratio
-X = [chi][sub m][super 2]([lambda]) \/ ([chi][sub m][super 2]([lambda])
-+ [chi][sub n][super 2])
-where [chi][sub m][super 2]([lambda]) is a noncentral [chi][super 2]
+[expression X = [chi][sub m][super 2]([lambda]) \/ ([chi][sub m][super 2]([lambda])
++ [chi][sub n][super 2])]
+where [role serif_italic [chi][sub m][super 2]([lambda])]
+is a noncentral [role serif_italic [chi][super 2]]
 random variable with /m/ degrees of freedom, and [chi][sub n][super 2]
-is a central [chi][super 2] random variable with /n/ degrees of freedom.
+is a central [role serif_italic [chi][super 2] ] random variable with /n/ degrees of freedom.
 
 This gives a PDF that can be expressed as a Poisson mixture
 of beta distribution PDFs:

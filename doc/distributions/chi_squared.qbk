@@ -150,7 +150,7 @@ In the following table /v/ is the number of degrees of freedom of the distributi
 * [@http://mathworld.wolfram.com/Chi-SquaredDistribution.html Weisstein, Eric W. "Chi-Squared Distribution." From MathWorld--A Wolfram Web Resource.]
 
 
-[endsect][/section:chi_squared_dist Chi Squared]
+[endsect] [/section:chi_squared_dist Chi Squared]
 
 [/ chi_squared.qbk
   Copyright 2006 John Maddock and Paul A. Bristow.

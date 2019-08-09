@@ -92,6 +92,8 @@ In the following table [lambda][space] is the mean of the distribution,
 [[kurtosis excess][1/[lambda]]]
 ]
 
+[endsect] [/section:poisson_dist Poisson]
+
 [/ poisson.qbk
   Copyright 2006 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.
@@ -99,5 +101,4 @@ In the following table [lambda][space] is the mean of the distribution,
   http://www.boost.org/LICENSE_1_0.txt).
 ]
 
-[endsect][/section:poisson_dist Poisson]
 

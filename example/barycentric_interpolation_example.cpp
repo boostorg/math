@@ -17,7 +17,7 @@ This example shows how to use barycentric rational interpolation, using Walter K
 In this paper, Kohn needs to repeatedly solve an ODE (the radial Schrodinger equation) given a potential
 which is only known at non-equally samples data.
 
-If he'd only had the barycentric rational interpolant of boost::math!
+If he'd only had the barycentric rational interpolant of Boost.Math!
 
 References: Kohn, W., and N. Rostoker. "Solution of the Schrodinger equation in periodic lattices with an application to metallic lithium." Physical Review 94.5 (1954): 1111.
 */

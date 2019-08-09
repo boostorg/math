@@ -39,18 +39,18 @@
    }} // namespaces
 
 The noncentral chi-squared distribution is a generalization of the
-__chi_squared_distrib. If X[sub i] are [nu] independent, normally
-distributed random variables with means [mu][sub i] and variances
-[sigma][sub i][super 2], then the random variable
+__chi_squared_distrib. If ['X[sub i]] are /[nu]/ independent, normally
+distributed random variables with means /[mu][sub i]/ and variances
+['[sigma][sub i][super 2]], then the random variable
 
 [equation nc_chi_squ_ref1]
 
 is distributed according to the noncentral chi-squared distribution.
 
 The noncentral chi-squared distribution has two parameters:
-[nu] which specifies the number of degrees of freedom
-(i.e. the number of X[sub i]), and [lambda] which is related to the
-mean of the random variables X[sub i] by:
+/[nu]/ which specifies the number of degrees of freedom
+(i.e. the number of ['X[sub i])], and [lambda] which is related to the
+mean of the random variables ['X[sub i]] by:
 
 [equation nc_chi_squ_ref2]
 
@@ -205,7 +205,7 @@ This method uses the well known sum:
 
 [equation nc_chi_squ_ref5]
 
-Where P[sub a](x) is the incomplete gamma function.
+Where ['P[sub a](x)] is the incomplete gamma function.
 
 The method starts at the [lambda]th term, which is where the Poisson weighting
 function achieves its maximum value, although this is not necessarily

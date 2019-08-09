@@ -108,7 +108,7 @@ and /q = 1-p/.
 [[kurtosis excess][e[super 4s[super 2] ] + 2e[super 3s[super 2] ] + 3e[super 2s[super 2] ] - 6 ]]
 ]
 
-[endsect][/section:normal_dist Normal]
+[endsect] [/section:lognormal_dist Log Normal Distribution]
 
 [/ 
   Copyright 2006 John Maddock and Paul A. Bristow.

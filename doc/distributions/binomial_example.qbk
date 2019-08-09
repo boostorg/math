@@ -321,7 +321,7 @@ less than 1 in 1000 chance of observing a component failure
 
 [endsect] [/section:binom_size_eg Estimating Sample Sizes for a Binomial Distribution.]
 
-[endsect][/section:binom_eg Binomial Distribution]
+[endsect] [/section:binom_eg Binomial Distribution]
 
 [/ 
   Copyright 2006 John Maddock and Paul A. Bristow.

@@ -101,19 +101,19 @@
           density function PDF</a> for the <a href="http://en.wikipedia.org/wiki/Beta_distribution" target="_top">beta
           distribution</a> defined on the interval [0,1] is given by:
         </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="serif_italic">f(x;&#945;,&#946;) = x<sup>&#945; - 1</sup> (1 - x)<sup>&#946; -1</sup> / B(&#945;, &#946;)</span>
+          </p></blockquote></div>
 <p>
-          f(x;&#945;,&#946;) = x<sup>&#945; - 1</sup> (1 - x)<sup>&#946; -1</sup> / B(&#945;, &#946;)
-        </p>
-<p>
-          where B(&#945;, &#946;) is the <a href="http://en.wikipedia.org/wiki/Beta_function" target="_top">beta
+          where <span class="serif_italic">B(&#945;, &#946;)</span> is the <a href="http://en.wikipedia.org/wiki/Beta_function" target="_top">beta
           function</a>, implemented in this library as <a class="link" href="../../sf_beta/beta_function.html" title="Beta">beta</a>.
           Division by the beta function ensures that the pdf is normalized to the
           range zero to unity.
         </p>
 <p>
           The following graph illustrates examples of the pdf for various values
-          of the shape parameters. Note the &#945; = &#946; = 2 (blue line) is dome-shaped, and
-          might be approximated by a symmetrical triangular distribution.
+          of the shape parameters. Note the <span class="emphasis"><em>&#945; = &#946; = 2</em></span> (blue line)
+          is dome-shaped, and might be approximated by a symmetrical triangular distribution.
         </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
             <span class="inlinemediaobject"><img src="../../../../graphs/beta_pdf.svg" align="middle"></span>
@@ -344,7 +344,7 @@ from presumed-known mean and variance.
                 </td>
 <td>
                   <p>
-                    f(x;&#945;,&#946;) = x<sup>&#945; - 1</sup> (1 - x)<sup>&#946; -1</sup> / B(&#945;, &#946;)
+                    <span class="serif_italic">f(x;&#945;,&#946;) = x<sup>&#945; - 1</sup> (1 - x)<sup>&#946; -1</sup> / B(&#945;, &#946;)</span>
                   </p>
                   <p>
                     Implemented using <a class="link" href="../../sf_beta/beta_derivative.html" title="Derivative of the Incomplete Beta Function">ibeta_derivative</a>(a,
@@ -499,10 +499,7 @@ from presumed-known mean and variance.
 <tr>
 <td>
                   <p>
-                    alpha
-                  </p>
-                  <p>
-                    from mean and variance
+                    alpha (from mean and variance)
                   </p>
                 </td>
 <td>
@@ -519,10 +516,7 @@ from presumed-known mean and variance.
 <tr>
 <td>
                   <p>
-                    beta
-                  </p>
-                  <p>
-                    from mean and variance
+                    beta (from mean and variance)
                   </p>
                 </td>
 <td>

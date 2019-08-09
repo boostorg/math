@@ -16,7 +16,7 @@ the TR1 components as opposed to the header only ones.
 
 The ['only] time you ['need] to build the library is if you want to use the
 `extern "C"` functions declared in `<boost/math/tr1.hpp>`.  To build this
-using Boost.Build, from a commandline boost-root directory issue a command like:
+using Boost.Build, from a command-line boost-root directory issue a command like:
 
    bjam toolset=gcc --with-math install
 
@@ -51,7 +51,7 @@ BOOST_MATH_NO_LIB or BOOST_ALL_NO_LIB at project level
 Optionally the sources in `libs/math/src/tr1` have support for using
 `libs/math/src/tr1/pch.hpp` as a precompiled header
 ['if your compiler supports precompiled headers.]  Note that normally
-this header is a do-nothing include: to activate the header so that
+this header is a do-nothing `#include` to activate the header so that
 it #includes everything required by all the sources you will need to
 define BOOST_BUILD_PCH_ENABLED on the command line, both when building
 the pre-compiled header and when building the sources.  Boost.Build
@@ -77,26 +77,28 @@ You will also need to build and link to
 the Boost.Regex library for many of the tests: this can built
 from the command line by following the
 [@http://www.boost.org/doc/libs/release/more/getting_started/index.html
-getting started guide], using a command such as:
+getting started guide], using commands such as:
 
    bjam toolset=gcc --with-regex install
-
+or   
+   bjam toolset=clang --with-regex install
 or
-
+   bjam toolset=gcc,clang --with-regex install
+or
    bjam toolset=msvc --with-regex --build-type=complete stage
 
 depending on whether you are on Linux or Windows.
 
 Many of the tests have optional precompiled header support
 using the header `libs/math/test/pch.hpp`.
-Note that normally
-this header is a do-nothing include: to activate the header so that
-it #includes everything required by all the sources you will need to
+Note that normally this header is a do-nothing include:
+to activate the header so that
+it `#include`s everything required by all the sources you will need to
 define BOOST_BUILD_PCH_ENABLED on the command line, both when building
 the pre-compiled header and when building the sources.  Boost.Build
 will do this automatically when appropriate.
 
-[endsect]
+[endsect] [/section:building If and How to Build a Boost.Math Library, and its Examples and Tests]
 
 [/ building.qbk
   Copyright 2006, 2007, 2008, 2010 John Maddock and Paul A. Bristow.

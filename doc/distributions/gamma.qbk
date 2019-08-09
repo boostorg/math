@@ -109,7 +109,7 @@ data for those functions for more information.
 [h4 Implementation]
 
 In the following table /k/ is the shape parameter of the distribution, 
-[theta][space] is its scale parameter, /x/ is the random variate, /p/ is the probability
+[theta] is its scale parameter, /x/ is the random variate, /p/ is the probability
 and /q = 1-p/.
 
 [table
@@ -127,7 +127,7 @@ and /q = 1-p/.
 [[kurtosis excess][6 / k ]]
 ]
 
-[endsect][/section:gamma_dist Gamma (and Erlang) Distribution]
+[endsect] [/section:gamma_dist Gamma (and Erlang) Distribution]
 
 
 [/ 

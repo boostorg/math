@@ -43,7 +43,7 @@ namespace boost{ namespace math{
 Barycentric rational interpolation is a high-accuracy interpolation method for non-uniformly spaced samples.
 It requires [bigo](/N/) time for construction, and [bigo](/N/) time for each evaluation.
 Linear time evaluation is not optimal; for instance the cubic B-spline can be evaluated in constant time.
-However, using the cubic B-spline requires uniformly spaced samples, which are not always available.
+However, using the cubic B-spline requires uniformly-spaced samples, which are not always available.
 
 Use of the class requires a vector of independent variables `x[0]`, `x[1]`, .... `x[n-1]` where `x[i+1] > x[i]`,
 and a vector of dependent variables `y[0]`, `y[1]`, ... , `y[n-1]`.
@@ -80,13 +80,18 @@ Be aware that once you return your data, the interpolant is *dead*.
 
 Although this algorithm is robust, it can surprise you.
 The main way this occurs is if the sample spacing at the endpoints is much larger than the spacing in the center.
-This is to be expected; all interpolants perform better in the opposite regime, where samples are clustered at the endpoints and somewhat uniformly spaced throughout the center.
+This is to be expected; all interpolants perform better in the opposite regime,
+where samples are clustered at the endpoints and somewhat uniformly spaced throughout the center.
 
-A desirable property of any interpolator /f/ is that for all /x/[sub min] \u2264 /x/ \u2264 /x/[sub max], /y/[sub min] \u2264 /f/(/x/) \u2264 /y/[sub max].
+A desirable property of any interpolator /f/ is that for all
+/x/[sub min] [le] /x/ [le] /x/[sub max], also /y/[sub min] [le] /f/(/x/) [le] /y/[sub max].
+
 /This property does not hold for the barycentric rational interpolator./
-However, unless you deliberately try to antagonize this interpolator (by, for instance, placing the final value far from all the rest), you will probably not fall victim to this problem.
+However, unless you deliberately try to antagonize this interpolator (by, for instance, placing the final value far from all the rest),
+you will probably not fall victim to this problem.
 
-The reference used for implementation of this algorithm is [@https://web.archive.org/save/_embed/http://www.mn.uio.no/math/english/people/aca/michaelf/papers/rational.pdf Barycentric rational interpolation with no poles and a high rate of interpolation], and the evaluation of the derivative is given by [@http://www.ams.org/journals/mcom/1986-47-175/S0025-5718-1986-0842136-8/S0025-5718-1986-0842136-8.pdf Some New Aspects of Rational Interpolation].
+The reference used for implementation of this algorithm is 
+[@https://web.archive.org/save/_embed/http://www.mn.uio.no/math/english/people/aca/michaelf/papers/rational.pdf Barycentric rational interpolation with no poles and a high rate of interpolation], and the evaluation of the derivative is given by [@http://www.ams.org/journals/mcom/1986-47-175/S0025-5718-1986-0842136-8/S0025-5718-1986-0842136-8.pdf Some New Aspects of Rational Interpolation].
 
 [heading Examples]
 
@@ -98,6 +103,5 @@ The reference used for implementation of this algorithm is [@https://web.archive
 [barycentric_rational_example2]
 
 [barycentric_rational_example2_out]
-
 
 [endsect] [/section:barycentric Barycentric Rational Interpolation]

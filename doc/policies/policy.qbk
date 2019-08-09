@@ -309,7 +309,7 @@ For example:
   
 at the head of the file - see __policy_macros. 
  
-[endsect][/section:assert_undefined Mathematically Undefined Function Policies]
+[endsect] [/section:assert_undefined Mathematically Undefined Function Policies]
 
 [section:discrete_quant_ref Discrete Quantile Policies]
 
@@ -422,7 +422,7 @@ For example:
 
 Results in `x = 27` (rounded from 27.3898) and `y = 68` (rounded from 68.1584).
 
-[endsect][/section:discrete_quant_ref Discrete Quantile Policies]
+[endsect] [/section:discrete_quant_ref Discrete Quantile Policies]
 
 [section:precision_pol Precision Policies]
 
@@ -468,7 +468,7 @@ And for a quantile of a distribution to approximately 25-bit precision:
 
 [policy_ref_snip11]
 
-[endsect][/section:precision_pol Precision Policies]
+[endsect] [/section:precision_pol Precision Policies]
 
 [section:iteration_pol Iteration Limits Policies]
 
@@ -638,7 +638,7 @@ or we could place these definitions *before*
 
 in a source .cpp file.
 
-[endsect][/section:policy_defaults Changing the Policy Defaults]
+[endsect] [/section:policy_defaults Changing the Policy Defaults]
 
 [section:namespace_pol Setting Polices at Namespace Scope]
 
@@ -691,7 +691,7 @@ declare a typedef for each distribution like this:
 and so on.  The name given to each typedef is the name of the distribution
 with the "_distribution" suffix removed.
 
-[endsect][/section Changing the Policy Defaults]
+[endsect] [/section Changing the Policy Defaults]
 
 [section:pol_ref_ref Policy Class Reference]
 
@@ -882,12 +882,12 @@ implementation.  In this way code bloat is reduced, since the
 actual implementation depends only on the policy types that they
 actually use.
 
-[endsect][/section:pol_ref_ref Policy Class Reference]
+[endsect] [/section:pol_ref_ref Policy Class Reference]
 
-[endsect][/section:pol_ref Policy Reference]
-[endmathpart][/section:policy Policies]
+[endsect] [/section:pol_ref Policy Reference]
+[endmathpart] [/section:policy Policies]
 
-[/ qbk
+[/ policy.qbk
   Copyright 2007, 2010 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at

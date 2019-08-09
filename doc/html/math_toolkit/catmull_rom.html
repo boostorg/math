@@ -75,15 +75,15 @@
         </li>
 <li class="listitem">
           Interpolation of control points-this means the curve passes through the
-          control points. Many curves (such as Bezier) are <span class="emphasis"><em>approximating</em></span>-they
-          do not pass through their control points. This makes them more difficult
+          control points. Many curves (such as B&#233;zier) are <span class="emphasis"><em>approximating</em></span>
+          - they do not pass through their control points. This makes them more difficult
           to use than interpolating splines.
         </li>
 </ul></div>
 <p>
       The <code class="computeroutput"><span class="identifier">catmull_rom</span></code> class provided
-      by Boost creates a cubic Catmull-Rom spline from an array of points in any
-      dimension. Since there are numerous ways to represent a point in <span class="emphasis"><em>n</em></span>-dimensional
+      by Boost.Math creates a cubic Catmull-Rom spline from an array of points in
+      any dimension. Since there are numerous ways to represent a point in <span class="emphasis"><em>n</em></span>-dimensional
       space, the class attempts to be flexible by templating on the point type. The
       requirements on the point type are discussing in more detail below, but roughly,
       it must have a dereference operator defined (e.g., <code class="computeroutput"><span class="identifier">p</span><span class="special">[</span><span class="number">0</span><span class="special">]</span></code>
@@ -296,7 +296,8 @@
       then no problems arise; there are no reallocs, and in practice this condition
       is almost always satisfied. However, if <code class="computeroutput"><span class="identifier">v</span><span class="special">.</span><span class="identifier">capacity</span><span class="special">()</span> <span class="special">&lt;</span> <span class="identifier">v</span><span class="special">.</span><span class="identifier">size</span><span class="special">()</span>
       <span class="special">+</span> <span class="number">3</span></code>,
-      the realloc causes a performance penalty of roughly 20%.
+      the <code class="computeroutput"><span class="identifier">realloc</span></code> causes a performance
+      penalty of roughly 20%.
     </p>
 <h4>
 <a name="math_toolkit.catmull_rom.h6"></a>

@@ -85,7 +85,7 @@ provides additional background or rationale.]
 Failure to follow suggestions in these blocks will probably result in undesired behavior.
 Read all of these you find.]
 
-[warning Failure to heed this will lead to incorrect, and very likely undesired, results.]
+[warning Failure to heed this will lead to incorrect, and very likely undesired, results!]
 
 [endsect] [/section:hints Other Hints and tips]
 
@@ -102,7 +102,7 @@ Read all of these you find.]
    reserved for this type where possible), a few will use `float` or 
    `long double`, but it is also possible to use higher precision types 
    like __NTL_RR, __GMP, __MPFR, __multiprecision like cpp_bin_float_50
-that conform to the requirements specified by real_concept.]]
+that conform to the requirements specified by `real_concept`.]]
 
 [[\/constants\/]
    [Templated definition of some highly accurate math constants ([@https://github.com/boostorg/math/blob/develop/include/boost/math/constants/constants.hpp constants.hpp]).]]
@@ -154,7 +154,7 @@ that conform to the requirements specified by real_concept.]]
    
 [section:namespaces Namespaces]
    
-All math functions and distributions are in `namespace boost::math`
+All math functions and distributions are in `namespace boost::math`.
    
 So, for example, the Students-t distribution template in `namespace boost::math` is
    
@@ -176,11 +176,12 @@ Functions that may have more general use, like `digits`
 (significand), `max_value`, `min_value` and `epsilon` are in 
 `boost::math::tools`.
 
-__Policy and configuration information is in namespace `boost::math::policies`.
+__Policy and configuration information is in `namespace` `boost::math::policies`.
 
 [tip Many code snippets assume implicit namespace(s),
 for example, `std::` or `boost::math`.]
 
+[tip Start your work from a copy of the example source code; links usually provided.]
 
 [endsect] [/section:namespaces Namespaces]
 

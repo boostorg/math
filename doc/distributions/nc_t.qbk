@@ -31,18 +31,17 @@
 
 The noncentral T distribution is a generalization of the __students_t_distrib.
 Let X have a normal distribution with mean [delta] and variance 1, and let
-[nu] S[super 2] have
+['[nu] S[super 2]] have
 a chi-squared distribution with degrees of freedom [nu]. Assume that
-X and S[super 2] are independent. The
-distribution of t[sub [nu]]([delta])=X/S is called a
-noncentral t distribution with degrees of freedom [nu] and noncentrality
-parameter [delta].
+X and S[super 2] are independent.
+The distribution of [role serif_italic t[sub [nu]]([delta])=X/S] is called a
+noncentral t distribution with degrees of freedom [nu] and noncentrality parameter [delta].
 
 This gives the following PDF:
 
 [equation nc_t_ref1]
 
-where [sub 1]F[sub 1](a;b;x) is a confluent hypergeometric function.
+where [role serif_italic [sub 1]F[sub 1](a;b;x)] is a confluent hypergeometric function.
 
 The following graph illustrates how the distribution changes
 for different values of [nu] and [delta]:

@@ -130,7 +130,7 @@ q <=0.5: x = [mu] - [sigma]*log( 2*q )
 
 * M. Abramowitz and I. A. Stegun, Handbook of Mathematical Functions, 1972, p. 930.
 
-[endsect][/section:laplace_dist laplace]
+[endsect] [/section:laplace_dist laplace]
 
 [/
   Copyright 2008, 2009 John Maddock, Paul A. Bristow and M.A. (Thijs) van den Berg.

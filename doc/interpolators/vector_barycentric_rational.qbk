@@ -44,7 +44,7 @@ public:
 The /n/ dimensional vector-valued barycentric rational interpolator is exactly the same as /n/ scalar-valued barycentric rational interpolators.
 This is provided primarily for convenience and a slight improvement in efficiency over using /n/ different rational interpolators and combining their results.
 
-Use of the class requires a `Point`-type which has size known at compile time.
+Use of the class requires a `Point`-type which has size known at compile-time.
 These requirements are satisfied by (for example) `Eigen::Vector2d`s and `std::array<Real, N>` classes.
 The call to the constructor computes the weights:
 
