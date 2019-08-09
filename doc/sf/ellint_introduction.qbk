@@ -1,10 +1,3 @@
-[/
-Copyright (c) 2006 Xiaogang Zhang
-Use, modification and distribution are subject to the
-Boost Software License, Version 1.0. (See accompanying file
-LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-]
-
 [section:ellint_intro Elliptic Integral Overview]
 
 The main reference for the elliptic integrals is:
@@ -15,7 +8,7 @@ Mathematical Tables,
 National Bureau of Standards Applied Mathematics Series, U.S. Government Printing Office, Washington, D.C.]
 
 and its recently revised version __DMLF, in particular
-[@https://dlmf.nist.gov/19 Elliptic Integrals, B. C. Carlson]
+[:[@https://dlmf.nist.gov/19 Elliptic Integrals, B. C. Carlson]]
 
 Mathworld also contain a lot of useful background information:
 
@@ -95,7 +88,7 @@ So you should be extra careful when using these functions!]
 
 [warning Boost.Math order of arguments differs from other implementations: /k/ is always the *first* argument.]
 
-A simple example comparing use of __WolframAlpha with Boost.Math (including much higher precision using Boost.Multiprecision)
+A simple example comparing use of __WolframAlpha with Boost.Math (including much higher precision using __multiprecision)
 is [@../../example/jacobi_zeta_example.cpp jacobi_zeta_example.cpp].
 
 When ['[phi]] = ['[pi]] / 2, the elliptic integrals are called ['complete].
@@ -112,7 +105,7 @@ Complete Elliptic Integral of the Third Kind (Legendre form)
 
 [equation ellint8]
 
-Legendre also defined a fourth integral D([phi],k) which is a combination of the other three:
+Legendre also defined a fourth integral /D([phi],k)/ which is a combination of the other three:
 
 [equation ellint_d]
 
@@ -195,9 +188,10 @@ The conventional methods for computing elliptic integrals are Gauss
 and Landen transformations, which converge quadratically and work
 well for elliptic integrals of the first and second kinds.
 Unfortunately they suffer from loss of significant digits for the
-third kind. Carlson's algorithm [[link ellint_ref_carlson79  Carlson79]] [[link ellint_ref_carlson78  Carlson78]], by contrast,
-provides a unified method for all three kinds of elliptic integrals
-with satisfactory precisions.
+third kind.
+
+Carlson's algorithm [[link ellint_ref_carlson79  Carlson79]] [[link ellint_ref_carlson78  Carlson78]], by contrast,
+provides a unified method for all three kinds of elliptic integrals with satisfactory precisions.
 
 [h4 References]
 
@@ -256,4 +250,12 @@ Numerical Computation of Incomplete Elliptic Integrals of a General Form.]]
 Celestial Mechanics and Dynamical Astronomy, Volume 59, Number 3 / July, 1994,
 237-251.
 
-[endsect]
+[endsect] [/section:ellint_intro Elliptic Integral Overview]
+
+[/
+Copyright (c) 2006 Xiaogang Zhang
+Use, modification and distribution are subject to the
+Boost Software License, Version 1.0. (See accompanying file
+LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+]
+

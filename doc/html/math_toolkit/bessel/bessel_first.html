@@ -105,7 +105,7 @@
         </p></blockquote></div>
 <p>
         The following graph shows the behaviour of Y<sub>v</sub>: this is also cyclic for large
-        <span class="emphasis"><em>x</em></span>, but tends to -&#8734; &#160; for small <span class="emphasis"><em>x</em></span>:
+        <span class="emphasis"><em>x</em></span>, but tends to -&#8734; for small <span class="emphasis"><em>x</em></span>:
       </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
           <span class="inlinemediaobject"><img src="../../../graphs/cyl_neumann.svg" align="middle"></span>
@@ -1211,9 +1211,9 @@
       </p>
 <p>
         When the order <span class="emphasis"><em>v</em></span> is an integer the method first relates
-        the result to J<sub>0</sub>, J<sub>1</sub>, Y<sub>0</sub> &#160; and Y<sub>1</sub> &#160; using either forwards or backwards recurrence
+        the result to J<sub>0</sub>, J<sub>1</sub>, Y<sub>0</sub> and Y<sub>1</sub> using either forwards or backwards recurrence
         (Miller's algorithm) depending upon which is stable. The values for J<sub>0</sub>, J<sub>1</sub>,
-        Y<sub>0</sub> &#160; and Y<sub>1</sub> &#160; are calculated using the rational minimax approximations on root-bracketing
+        Y<sub>0</sub> and Y<sub>1</sub> are calculated using the rational minimax approximations on root-bracketing
         intervals for small <span class="emphasis"><em>|x|</em></span> and Hankel asymptotic expansion
         for large <span class="emphasis"><em>|x|</em></span>. The coefficients are from:
       </p>
@@ -1268,18 +1268,18 @@
         </p></blockquote></div>
 <p>
         When <span class="emphasis"><em>x</em></span> is small compared to <span class="emphasis"><em>v</em></span>,
-        J<sub>v</sub>x &#160; is best computed directly from the series:
+        J<sub>v</sub>x is best computed directly from the series:
       </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
           <span class="inlinemediaobject"><img src="../../../equations/bessel2.svg"></span>
 
         </p></blockquote></div>
 <p>
-        In the general case we compute J<sub>v</sub> &#160; and Y<sub>v</sub> &#160; simultaneously.
+        In the general case we compute J<sub>v</sub> and Y<sub>v</sub> simultaneously.
       </p>
 <p>
-        To get the initial values, let &#956; &#160; = &#957; - floor(&#957; + 1/2), then &#956; &#160; is the fractional part
-        of &#957; &#160; such that |&#956;| &lt;= 1/2 (we need this for convergence later). The idea
+        To get the initial values, let &#956; = &#957; - floor(&#957; + 1/2), then &#956; is the fractional part
+        of &#957; such that |&#956;| &lt;= 1/2 (we need this for convergence later). The idea
         is to calculate J<sub>&#956;</sub>(x), J<sub>&#956;+1</sub>(x), Y<sub>&#956;</sub>(x), Y<sub>&#956;+1</sub>(x) and use them to obtain J<sub>&#957;</sub>(x), Y<sub>&#957;</sub>(x).
       </p>
 <p>
@@ -1354,7 +1354,7 @@
 
         </p></blockquote></div>
 <p>
-        g<sub>k</sub> &#160; and h<sub>k</sub> &#160;
+        g<sub>k</sub> and h<sub>k</sub>
 are also computed by recursions (involving gamma functions), but
         the formulas are a little complicated, readers are refered to N.M. Temme,
         <span class="emphasis"><em>On the numerical evaluation of the ordinary Bessel function of
@@ -1362,7 +1362,7 @@ are also computed by recursions (involving gamma functions), but
         (1976). Note Temme's series converge only for |&#956;| &lt;= 1/2.
       </p>
 <p>
-        As the previous case, Y<sub>&#957;</sub> &#160; is calculated from the forward recurrence, so is Y<sub>&#957;+1</sub>.
+        As the previous case, Y<sub>&#957;</sub> is calculated from the forward recurrence, so is Y<sub>&#957;+1</sub>.
         With these two values and f<sub>&#957;</sub>, the Wronskian yields J<sub>&#957;</sub>(x) directly without backward
         recurrence.
       </p>

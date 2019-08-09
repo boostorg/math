@@ -1,4 +1,3 @@
-
 [section:bessel_over Bessel Function Overview]
 
 [h4 Ordinary Bessel Functions]
@@ -114,7 +113,7 @@ is also known as the spherical Neumann function n[sub n].
 These functions are implemented in this library as __sph_bessel and
 __sph_neumann.
 
-[endsect]
+[endsect] [/section:bessel_over Bessel Function Overview]
 
 [/ 
   Copyright 2006 John Maddock, Paul A. Bristow and Xiaogang Zhang.

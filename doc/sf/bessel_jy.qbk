@@ -1,4 +1,3 @@
-
 [section:bessel_first Bessel Functions of the First and Second Kinds]
 
 [h4 Synopsis]
@@ -49,7 +48,7 @@ The following graph illustrates the cyclic nature of J[sub v]:
 [graph cyl_bessel_j]
 
 The following graph shows the behaviour of Y[sub v]: this is also
-cyclic for large /x/, but tends to -[infin][space] for small /x/:
+cyclic for large /x/, but tends to -[infin] for small /x/:
 
 [graph cyl_neumann]
 
@@ -139,9 +138,9 @@ for large /x/ in M. Abramowitz and I.A. Stegun,
 than those in A&S 9.2.5).
 
 When the order /v/ is an integer the method first relates the result
-to J[sub 0], J[sub 1], Y[sub 0][space] and Y[sub 1][space] using either
+to J[sub 0], J[sub 1], Y[sub 0] and Y[sub 1] using either
 forwards or backwards recurrence (Miller's algorithm) depending upon which is stable.
-The values for J[sub 0], J[sub 1], Y[sub 0][space] and Y[sub 1][space] are
+The values for J[sub 0], J[sub 1], Y[sub 0] and Y[sub 1] are
 calculated using the rational minimax approximations on
 root-bracketing intervals for small ['|x|] and Hankel asymptotic
 expansion for large ['|x|]. The coefficients are from:
@@ -179,16 +178,16 @@ approximations are often too slow to converge to be used
 
 [equation bessel_yv_small_z]
 
-When /x/ is small compared to /v/, J[sub v]x[space] is best computed directly from the series:
+When /x/ is small compared to /v/, J[sub v]x is best computed directly from the series:
 
 [equation bessel2]
 
-In the general case we compute J[sub v][space] and
-Y[sub v][space] simultaneously.
+In the general case we compute J[sub v] and
+Y[sub v] simultaneously.
 
 To get the initial values, let
-[mu][space] = [nu] - floor([nu] + 1/2), then [mu][space] is the fractional part
-of [nu][space] such that
+[mu] = [nu] - floor([nu] + 1/2), then [mu] is the fractional part
+of [nu] such that
 |[mu]| <= 1/2 (we need this for convergence later). The idea is to
 calculate J[sub [mu]](x), J[sub [mu]+1](x), Y[sub [mu]](x), Y[sub [mu]+1](x)
 and use them to obtain J[sub [nu]](x), Y[sub [nu]](x).
@@ -237,19 +236,19 @@ where
 
 [equation bessel16]
 
-g[sub k][space] and h[sub k][space]
+g[sub k] and h[sub k]
 are also computed by recursions (involving gamma functions), but the
 formulas are a little complicated, readers are refered to
 N.M. Temme, ['On the numerical evaluation of the ordinary Bessel function
 of the second kind], Journal of Computational Physics, vol 21, 343 (1976).
 Note Temme's series converge only for |[mu]| <= 1/2.
 
-As the previous case, Y[sub [nu]][space] is calculated from the forward
+As the previous case, Y[sub [nu]] is calculated from the forward
 recurrence, so is Y[sub [nu]+1]. With these two
 values and f[sub [nu]], the Wronskian yields J[sub [nu]](x) directly
 without backward recurrence.
 
-[endsect]
+[endsect] [/section:bessel_first Bessel Functions of the First and Second Kinds]
 
 [section:bessel_root Finding Zeros of Bessel Functions of the First and Second Kinds]
 
@@ -480,32 +479,32 @@ The latter two equations are expressed for argument ['(x)] greater than one.
 
 In summary,
 
-[emquad] ['j[sub [nu], m] [sim] [nu]x(-[zeta]) + f[sub 1](-[zeta]/[nu])]
+[:['j[sub [nu], m] [sim] [nu]x(-[zeta]) + f[sub 1](-[zeta]/[nu])]]
 
 where ['-[zeta] = [nu][super -2/3]a[sub m]] and ['a[sub m]] is
 the absolute value of the ['m[super th]] root of ['Ai(x)] on the negative real axis.
 
 Here ['x = x(-[zeta])] is the inverse of the function
 
-[emquad] ['[frac23](-[zeta])[super 3/2] = [radic](x[sup2] - 1) - cos[supminus][sup1](1/x)]  [emquad] [emquad]   (7)
+[:['[frac23](-[zeta])[super 3/2] = [radic](x[sup2] - 1) - cos[supminus][sup1](1/x)]  ]  (7)
 
 Furthermore,
 
-[emquad] ['f[sub 1](-[zeta]) = [frac12]x(-[zeta]) {h(-[zeta])}[sup2] [sdot] b[sub 0](-[zeta])]
+[:['f[sub 1](-[zeta]) = [frac12]x(-[zeta]) {h(-[zeta])}[sup2] [sdot] b[sub 0](-[zeta])]]
 
 where
 
-[emquad] ['h(-[zeta]) = {4(-[zeta]) / (x[sup2] - 1)}[super 4]]
+[:['h(-[zeta]) = {4(-[zeta]) / (x[sup2] - 1)}[super 4]]]
 
 and
 
-[emquad] ['b[sub 0](-[zeta]) = -5/(48[zeta][sup2]) + 1/(-[zeta])[super [frac12]] [sdot] { 5/(24(x[super 2]-1)[super 3/2]) + 1/(8(x[super 2]-1)[super [frac12])]}]
+[:['b[sub 0](-[zeta]) = -5/(48[zeta][sup2]) + 1/(-[zeta])[super [frac12]] [sdot] { 5/(24(x[super 2]-1)[super 3/2]) + 1/(8(x[super 2]-1)[super [frac12])]}]]
 
 When solving for ['x(-[zeta])] in Eq. 7 above,
 the right-hand-side is expanded to order 2 in
 a Taylor series for large ['x]. This results in
 
-[emquad] ['[frac23](-[zeta])[super 3/2] [approx] x + 1/2x - [pi]/2]
+[:['[frac23](-[zeta])[super 3/2] [approx] x + 1/2x - [pi]/2]]
 
 The positive root of the resulting quadratic equation
 is used to find an initial estimate ['x(-[zeta])].
@@ -521,7 +520,7 @@ is bracketed by the ['m[super th]] root and the
 ['(m+1)[super th]] root of the Bessel function of
 corresponding positive integer order. In other words,
 
-[emquad]  ['j[sub n[nu],m]] <  ['j[sub -[nu],m]] <  ['j[sub n[nu],m+1]]
+[:['j[sub n[nu],m]] < ['j[sub -[nu],m]] < ['j[sub n[nu],m+1]]]
 
 where ['m > 1] and ['n[sub [nu]]] represents the integral
 floor of the absolute value of ['|-[nu]|].

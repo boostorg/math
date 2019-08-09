@@ -40,7 +40,7 @@ Let's suppose we want to find the root of a number ['a], and to start, compute t
 
 So the equation we want to solve is:
 
-[:['f(x) = x[cubed] -a]]
+[expression ['f(x) = x[cubed] -a]]
 
 We will first solve this without using any information
 about the slope or curvature of the cube root function.
@@ -153,7 +153,7 @@ Next we define yet another even better functor `cbrt_functor_2deriv` that return
 both the evaluation of the function to solve,
 along with its first [*and second] derivative:
 
-[:['f''(x) = 6x]]
+[expression ['f''(x) = 6x]]
 
 using information about both slope and curvature to speed convergence.
 
@@ -223,7 +223,7 @@ Let's now suppose we want to find the [*fifth root] of a number ['a].
 
 The equation we want to solve is :
 
-[:['f](x) = ['x[super 5] -a]]
+[expression ['f](x) = ['x[super 5] -a]]
 
 If your differentiation is a little rusty
 (or you are faced with an function whose complexity makes differentiation daunting),
@@ -254,9 +254,9 @@ to get a result with a precision of 50 decimal digits:
 
 The 1st and 2nd derivatives of ['x[super 5]] are:
 
-[:['f\'(x) = 5x[super 4]]]
+[expression ['f\'(x) = 5x[super 4]]]
 
-[:['f\'\'(x) = 20x[super 3]]]
+[expression ['f\'\'(x) = 20x[super 3]]]
 
 [root_finding_fifth_functor_2deriv]
 [root_finding_fifth_2deriv]
