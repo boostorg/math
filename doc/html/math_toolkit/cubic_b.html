@@ -50,6 +50,8 @@
       <span class="identifier">Real</span> <span class="keyword">operator</span><span class="special">()(</span><span class="identifier">Real</span> <span class="identifier">x</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
 
       <span class="identifier">Real</span> <span class="identifier">prime</span><span class="special">(</span><span class="identifier">Real</span> <span class="identifier">x</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+
+      <span class="identifier">Real</span> <span class="identifier">double_prime</span><span class="special">(</span><span class="identifier">Real</span> <span class="identifier">x</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
   <span class="special">};</span>
 
 <span class="special">}}</span> <span class="comment">// namespaces</span>
@@ -60,7 +62,7 @@
       B-Spline Interpolation</a>
     </h4>
 <p>
-      The cubic B-spline class provided by boost allows fast and accurate interpolation
+      The cubic B-spline class provided by Boost allows fast and accurate interpolation
       of a function which is known at equally spaced points. The cubic B-spline interpolation
       is numerically stable as it uses compactly supported basis functions constructed
       via iterative convolution. This is to be contrasted to traditional cubic spline
@@ -130,6 +132,20 @@
       Be aware that the accuracy guarantees on the derivative of the spline are an
       order lower than the guarantees on the original function, see <a href="http://www.springer.com/us/book/9780387984087" target="_top">Numerical
       Analysis, Graduate Texts in Mathematics, 181, Rainer Kress</a> for details.
+    </p>
+<p>
+      The last interesting member is the second derivative, evaluated via
+    </p>
+<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">ypp</span> <span class="special">=</span> <span class="identifier">spline</span><span class="special">.</span><span class="identifier">double_prime</span><span class="special">(</span><span class="identifier">x</span><span class="special">);</span>
+</pre>
+<p>
+      The basis functions of the spline are cubic polynomials, so the second derivative
+      is simply linear interpolation. But the interpolation is not constrained by
+      data (you don't pass in the second derivatives), and hence is less accurate
+      than would be expected from assuming it is a linear interpolation. The problem
+      is especially pronounced at the boundaries, where the second derivative is
+      totally unconstrained. Use the second derivative of the cubic B-spline interpolator
+      only in desperation.
     </p>
 <p>
       Finally, note that this is an interpolator, not an extrapolator. Therefore,
