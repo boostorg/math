@@ -11,7 +11,7 @@
 #include <boost/random/uniform_real_distribution.hpp>
 #include <boost/type_index.hpp>
 #include <boost/test/included/unit_test.hpp>
-#include <boost/test/floating_point_comparison.hpp>
+#include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/interpolators/barycentric_rational.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
 

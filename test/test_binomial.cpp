@@ -36,7 +36,7 @@ using boost::math::binomial_distribution;
 
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp> // for test_main
-#include <boost/test/floating_point_comparison.hpp> // for BOOST_CHECK_CLOSE
+#include <boost/test/tools/floating_point_comparison.hpp> // for BOOST_CHECK_CLOSE
 #include "table_type.hpp"
 
 #include "test_out_of_range.hpp"

@@ -16,7 +16,7 @@
 #include <boost/math/tools/remez.hpp>
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
-#include <boost/test/floating_point_comparison.hpp>
+#include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/special_functions/expm1.hpp>
 #include <iostream>
 #include <iomanip>

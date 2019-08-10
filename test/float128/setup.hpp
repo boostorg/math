@@ -22,7 +22,7 @@ BOOST_STATIC_ASSERT_MSG(std::numeric_limits<boost::floatmax_t>::digits == 113, "
 #ifndef BOOST_MATH_TEST_TYPE
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
-#include <boost/test/floating_point_comparison.hpp>
+#include <boost/test/tools/floating_point_comparison.hpp>
 #endif
 
 #endif
