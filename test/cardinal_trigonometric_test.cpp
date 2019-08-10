@@ -119,7 +119,7 @@ void test_sampled_sine()
 
         expected = s_double_prime(arg);
         computed = ct.double_prime(arg);
-        CHECK_MOLLIFIED_CLOSE(expected, computed, 48000*std::numeric_limits<Real>::epsilon());
+        CHECK_MOLLIFIED_CLOSE(expected, computed, 100000*std::numeric_limits<Real>::epsilon());
 
       }
       CHECK_MOLLIFIED_CLOSE(Real(0), ct.integrate(), std::numeric_limits<Real>::epsilon());
