@@ -32,7 +32,7 @@
 
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp> // for test_main
-#include <boost/test/floating_point_comparison.hpp> // for BOOST_CHECK_CLOSE_FRACTION, BOOST_CHECK_EQUAL...
+#include <boost/test/tools/floating_point_comparison.hpp> // for BOOST_CHECK_CLOSE_FRACTION, BOOST_CHECK_EQUAL...
 
 #include <iostream>
 #include <iomanip>

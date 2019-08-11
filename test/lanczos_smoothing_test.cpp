@@ -12,7 +12,7 @@
 #include <boost/numeric/ublas/vector.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/test/included/unit_test.hpp>
-#include <boost/test/floating_point_comparison.hpp>
+#include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/differentiation/lanczos_smoothing.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/math/special_functions/next.hpp> // for float_distance
