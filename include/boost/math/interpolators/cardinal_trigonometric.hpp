@@ -25,6 +25,16 @@ public:
         return m_impl->operator()(t);
     }
 
+    Real prime(Real t) const
+    {
+        return m_impl->prime(t);
+    }
+
+    Real double_prime(Real t) const
+    {
+        return m_impl->double_prime(t);
+    }
+
     Real period() const
     {
         return m_impl->period();
