@@ -17,7 +17,7 @@
 #include <locale>
 #include <string>
 #include <boost/lexical_cast.hpp>
-#include <boost/test/auto_unit_test.hpp>
+#include <boost/test/unit_test.hpp>
 
 #include <boost/math/special_functions/nonfinite_num_facets.hpp>
 #include <boost/math/special_functions/sign.hpp>

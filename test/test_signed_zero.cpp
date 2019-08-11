@@ -12,7 +12,7 @@
 
 #define BOOST_TEST_MAIN
 
-#include <boost/test/auto_unit_test.hpp>
+#include <boost/test/unit_test.hpp>
 #include <boost/math/special_functions/nonfinite_num_facets.hpp>
 #include "s_.ipp" // To create test strings like std::basic_string<CharType> s = S_("0 -0");
 
