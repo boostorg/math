@@ -19,6 +19,7 @@ using boost::multiprecision::float128;
 
 using std::abs;
 using boost::math::cardinal_b_spline;
+using boost::math::cardinal_b_spline_prime;
 using boost::math::forward_cardinal_b_spline;
 
 template<class Real>
@@ -27,6 +28,7 @@ void test_box()
     Real t = cardinal_b_spline<0>(Real(1.1));
     Real expected = 0;
     CHECK_ULP_CLOSE(expected, t, 0);
+    CHECK_ULP_CLOSE(expected, cardinal_b_spline_prime<0>(Real(1.1)), 0);
 
     t = cardinal_b_spline<0>(Real(-1.1));
     expected = 0;
@@ -37,6 +39,8 @@ void test_box()
     {
         expected = 1;
         CHECK_ULP_CLOSE(expected, cardinal_b_spline<0>(t), 0);
+        expected = 0;
+        CHECK_ULP_CLOSE(expected, cardinal_b_spline_prime<0>(Real(1.1)), 0);
     }
 
     for (t = h; t < 1; t += h)
@@ -64,6 +68,15 @@ void test_hat()
         if(!CHECK_ULP_CLOSE(expected, cardinal_b_spline<1>(t), 0) )
         {
             std::cerr << "  Problem at t = " << t << "\n";
+        }
+        if (t < 0) {
+            CHECK_ULP_CLOSE(Real(1), cardinal_b_spline_prime<1>(t), 0);
+        }
+        else if (t == 0) {
+            CHECK_ULP_CLOSE(Real(0), cardinal_b_spline_prime<1>(t), 0);
+        }
+        else if (t > 0) {
+            CHECK_ULP_CLOSE(Real(-1), cardinal_b_spline_prime<1>(t), 0);
         }
     }
 

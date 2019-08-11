@@ -16,7 +16,13 @@
    namespace boost{ namespace math{
 
    template<unsigned n, typename Real>
-   Real cardinal_b_spline(Real x);
+   auto cardinal_b_spline(Real x);
+
+   template<unsigned n, typename Real>
+   auto cardinal_b_spline_prime(Real x);
+
+   template<unsigned n, typename Real>
+   auto cardinal_b_spline_double_prime(Real x);
 
    template<unsigned n, typename Real>
    Real forward_cardinal_b_spline(Real x);
@@ -34,11 +40,17 @@ For example, /B/[sub 1](/x/) = 1 - |/x/| for /x/ in \[-1,1\], and zero elsewhere
 A basic usage is as follows:
 
     using boost::math::cardinal_b_spline;
+    using boost::math::cardinal_b_spline_prime;
+    using boost::math::cardinal_b_spline_double_prime;
     double x = 0.5;
     // B₀(x), the box function:
     double y = cardinal_b_spline<0>(x);
     // B₁(x), the hat function:
     y = cardinal_b_spline<1>(x);
+    // First derivative of B₃:
+    yp = cardinal_b_spline_prime<3>(x);
+    // Second derivative of B₃:
+    ypp = cardinal_b_spline_double_prime<3>(x);
 
 
 [$../graphs/central_b_splines.svg]
