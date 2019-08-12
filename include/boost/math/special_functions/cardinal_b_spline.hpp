@@ -116,17 +116,24 @@ Real cardinal_b_spline_prime(Real x)
         }
     }
 
+    if (n==1)
+    {
+        if (x==0)
+        {
+            return Real(0);
+        }
+        if (x==1)
+        {
+            return -Real(1)/Real(2);
+        }
+        return Real(-1);
+    }
+
+
     Real supp_max = (n+1)/Real(2);
     if (x >= supp_max)
     {
         return Real(0);
-    }
-
-    if (n==1) {
-        if (x==0) {
-            return Real(0);
-        }
-        return Real(-1);
     }
 
     // Now we want to evaluate B_{n}(x), but stop at the second to last step and collect B_{n-1}(x+1/2) and B_{n-1}(x-1/2):
@@ -154,13 +161,56 @@ Real cardinal_b_spline_prime(Real x)
     return v[1] - v[0];
 }
 
-template<unsigned n, class Real>
-auto forward_cardinal_b_spline(Real x)
+
+template<unsigned n, typename Real>
+Real cardinal_b_spline_double_prime(Real x)
 {
-    if constexpr (std::is_integral<Real>::value)
+    static_assert(!std::is_integral<Real>::value, "Cardinal B-splines do not work with integer types.");
+    static_assert(n >= 3);
+
+    if (x < 0)
     {
-        return forward_cardinal_b_spline<n, double>(x);
+        // All B-splines are even functions, so second derivatives are even:
+        return cardinal_b_spline_double_prime<n, Real>(-x);
     }
+
+
+    Real supp_max = (n+1)/Real(2);
+    if (x >= supp_max)
+    {
+        return Real(0);
+    }
+
+    // Now we want to evaluate B_{n}(x), but stop at the second to last step and collect B_{n-1}(x+1/2) and B_{n-1}(x-1/2):
+    std::array<Real, n> v;
+    Real z = x + 1 - supp_max;
+    for (unsigned i = 0; i < n; ++i)
+    {
+        v[i] = detail::B1(z);
+        z += 1;
+    }
+
+    Real smx = supp_max - x;
+    for (unsigned j = 2; j <= n - 2; ++j)
+    {
+        Real a = (j + 1 - smx);
+        Real b = smx;
+        for(unsigned k = 0; k <= n - j; ++k)
+        {
+            v[k] = (a*v[k+1] + b*v[k])/Real(j);
+            a += 1;
+            b -= 1;
+        }
+    }
+
+    return v[2] - 2*v[1] + v[0];
+}
+
+
+template<unsigned n, class Real>
+Real forward_cardinal_b_spline(Real x)
+{
+    static_assert(!std::is_integral<Real>::value, "Cardinal B-splines do not work with integral types.");
     return cardinal_b_spline<n>(x - (n+1)/Real(2));
 }
 

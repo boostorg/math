@@ -54,6 +54,8 @@ A basic usage is as follows:
 
 
 [$../graphs/central_b_splines.svg]
+[$../graphs/central_b_spline_derivatives.svg]
+[$../graphs/central_b_spline_second_derivatives.svg]
 
 [h3 Caveats]
 
