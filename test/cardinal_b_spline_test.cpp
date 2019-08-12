@@ -199,15 +199,15 @@ void test_b_spline_derivatives()
 {
     Real h = 1/Real(256);
     Real supp = (n+Real(1))/Real(2);
-    for (Real t = supp - 1; t <= supp+1; t+= h)
+    for (Real t = -supp - 1; t <= supp+1; t+= h)
     {
         Real expected = cardinal_b_spline<n-1>(t+Real(1)/Real(2)) - cardinal_b_spline<n-1>(t - Real(1)/Real(2));
         Real computed = cardinal_b_spline_prime<n>(t);
-        CHECK_ULP_CLOSE(expected, computed, 2);
+        CHECK_MOLLIFIED_CLOSE(expected, computed, std::numeric_limits<Real>::epsilon());
 
         expected = cardinal_b_spline<n-2>(t+1) - 2*cardinal_b_spline<n-2>(t) + cardinal_b_spline<n-2>(t-1);
         computed = cardinal_b_spline_double_prime<n>(t);
-        CHECK_ULP_CLOSE(expected, computed, 2);
+        CHECK_MOLLIFIED_CLOSE(expected, computed, 2*std::numeric_limits<Real>::epsilon());
     }
 }
 
