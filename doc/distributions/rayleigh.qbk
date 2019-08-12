@@ -31,7 +31,7 @@ is a continuous distribution with the
 
 [expression f(x; sigma) = x * exp(-x[super 2]/2 [sigma][super 2]) / [sigma][super 2]]
 
-For sigma parameter /[sigma]/ > 0, and /x/ > 0.
+For sigma parameter ['[sigma]] > 0, and /x/ > 0.
 
 The Rayleigh distribution is often used where two orthogonal components
 have an absolute value,

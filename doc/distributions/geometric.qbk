@@ -63,7 +63,7 @@ The geometric distribution assumes that success_fraction /p/ is fixed for all /k
 
 The probability that there are /k/ failures before the first success
 
-[expression Pr(Y=/k/) = (1-/p/)[super /k/]/p/]
+[expression Pr(Y=/k/) = (1-/p/)[super /k/] /p/]
 
 For example, when throwing a 6-face dice the success probability /p/ = 1/6 = 0.1666[recur].
 Throwing repeatedly until a /three/ appears,
@@ -71,7 +71,7 @@ the probability distribution of the number of times /not-a-three/ is thrown is g
 
 Geometric distribution has the Probability Density Function PDF:
 
-[expression (1-/p/)[super /k/]/p/]
+[expression (1-/p/)[super /k/] /p/]
 
 The following graph illustrates how the PDF and CDF vary for three examples
 of the success fraction /p/, 

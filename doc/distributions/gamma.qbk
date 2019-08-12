@@ -47,7 +47,7 @@ probability density function:
 [equation gamma_dist_ref1]
 
 Sometimes an alternative formulation is used: given parameters
-[alpha]= k and [beta]= 1 / [theta], then the 
+[alpha] = k and [beta] = 1 / [theta], then the 
 distribution can be defined by the PDF:
 
 [equation gamma_dist_ref2]

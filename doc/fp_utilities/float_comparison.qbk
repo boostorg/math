@@ -38,7 +38,6 @@ with small differences, and due to the way floating-point values are encoded can
 edit distance.  This is the method documented below: if `float_distance` is a surgeon's scalpel, then `relative_difference` is more
 like a Swiss army knife: both have important but different use cases.
 
-
 [h5:fp_relative Relative Comparison of Floating-point Values]
 
 

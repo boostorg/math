@@ -32,7 +32,7 @@ It is also called the double exponential distribution.
 [/ Wikipedia definition is The difference between two independent identically distributed
 exponential random variables is governed by a Laplace distribution.]
 
-For location parameter /[mu]/ and scale parameter /[sigma]/, it is defined by the
+For location parameter ['[mu]] and scale parameter ['[sigma]], it is defined by the
 probability density function:
 
 [equation laplace_pdf]

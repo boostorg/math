@@ -208,7 +208,7 @@ Now even when the confidence level is very high, the limits are really
 quite close to the experimentally calculated value of 0.2.  Furthermore
 the difference between the two calculation methods is now really quite small.
 
-[endsect]
+[endsect] [/section:binom_conf Calculating Confidence Limits on the Frequency of Occurrence for a Binomial Distribution]
 
 [section:binom_size_eg Estimating Sample Sizes for a Binomial Distribution.]
 
