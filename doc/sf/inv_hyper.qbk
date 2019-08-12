@@ -15,7 +15,7 @@
 
 [def __effects [*Effects: ]]
 [def __formula [*Formula: ]]
-[def __exm1 '''<code>e<superscript>x</superscript> - 1</code>'''[space]]
+[def __exm1 '''<code>e<superscript>x</superscript> - 1</code>''']
 [def __ex '''<code>e<superscript>x</superscript></code>''']
 [def __te '''2&#x03B5;''']
 

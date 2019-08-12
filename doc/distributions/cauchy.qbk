@@ -120,7 +120,7 @@ Substituting into the above we get:
 
 So the procedure is to calculate the cdf for -fabs(x)
 using the above formula.  Note that to factor in the location and scale
-parameters you must substitute (x - __x0) / [gamma][space] for x in the above.
+parameters you must substitute (x - __x0) / [gamma] for x in the above.
 
 This procedure yields the smaller of /p/ and /q/, so the result
 may need subtracting from 1 depending on whether we want the complement

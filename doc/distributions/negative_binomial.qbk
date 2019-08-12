@@ -104,7 +104,7 @@ geometric(p) = negative_binomial(1, p).
 
 The Poisson distribution is a special case for large successes
 
-poisson([lambda]) = lim [sub r [rarr] [infin]] [space] negative_binomial(r, r / ([lambda] + r)))
+poisson([lambda]) = lim [sub r [rarr] [infin]] negative_binomial(r, r / ([lambda] + r)))
 
 [discrete_quantile_warning Negative Binomial]
 
