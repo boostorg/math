@@ -26,7 +26,7 @@
 #define BOOST_LIB_DIAGNOSTIC "on" // Report library file details.
 #include <boost/test/included/unit_test.hpp> // Boost.Test
 // #include <boost/test/unit_test.hpp> // Boost.Test
-#include <boost/test/floating_point_comparison.hpp>
+#include <boost/test/tools/floating_point_comparison.hpp>
 
 #include <boost/array.hpp>
 #include <boost/lexical_cast.hpp>

@@ -22,6 +22,10 @@ public:
 
     Real operator()(Real t) const;
 
+    Real prime(Real t) const;
+
+    Real double_prime(Real t) const;
+
     Real period() const;
 
     Real integrate() const;
@@ -50,6 +54,11 @@ using boost::math::interpolators::cardinal_trigonometric;
 std::vector<double> v(17, 3.2);
 auto ct = cardinal_trigonometric(v, /*t0 = */ 0.0, /* h = */ 0.125);
 std::cout << "ct(1.3) = " << ct(1.3) << "\n";
+
+// Derivative:
+std::cout << ct.prime(1.2) << "\n";
+// Second derivative:
+std::cout << ct.double_prime(1.2) << "\n";
 ```
 
 The period is always given by `v.size()*h`.
@@ -69,6 +78,8 @@ The graphs are visually indistinguishable at 20 samples.
 This routine depends on FFTW3, and hence will only compile in float, double, long double, and quad precision, unlike the large bulk of the library which is compatible with arbitrary precision arithmetic.
 The FFTW linker flags must be added to the compile step, i.e., `-lm -lfftw3` for double precision, `-lm -lfftw3f` for float, so on.
 
+Evaluation of derivatives is done by differentiation of Horner's method.
+As always, differentiation amplifies noise; and because some rounding error is produced by computation of the Fourier coefficients, this error is amplified by differentiation.
 
 
 [heading References]

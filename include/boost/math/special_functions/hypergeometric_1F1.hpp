@@ -232,15 +232,15 @@ namespace boost { namespace math { namespace detail {
    {
       // Approximately the ratio I_10.5(z/2) / I_9.5(z/2), this gives us an idea of how quickly
       // the Bessel terms in A&S 13.6.4 are converging:
-      if (z < 160)
+      if (z < -160)
          return 1;
-      if (z < 40)
+      if (z < -40)
          return 0.75f;
-      if (z < 20)
+      if (z < -20)
          return 0.5f;
-      if (z < 7)
+      if (z < -7)
          return 0.25f;
-      if (z < 2)
+      if (z < -2)
          return 0.1f;
       return 0.05f;
    }
