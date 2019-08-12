@@ -207,7 +207,6 @@ and
 
 [equation ellint22]
 
-
 [endsect] [/section:ellint_2 Elliptic Integrals of the Second Kind - Legendre Form]
 
 [section:ellint_3 Elliptic Integrals of the Third Kind - Legendre Form]
@@ -297,9 +296,9 @@ NTL::RR at 1000-bit precision and this implementation.
 
 The implementation for [Pi](n, [phi], k) first siphons off the special cases:
 
-[:['[Pi](0, [phi], k) = F([phi], k)]]
+[expression ['[Pi](0, [phi], k) = F([phi], k)]]
 
-[:['[Pi](n, [pi]/2, k) = [Pi](n, k)]]
+[expression ['[Pi](n, [pi]/2, k) = [Pi](n, k)]]
 
 and
 
@@ -313,11 +312,11 @@ are used to shift /n/ to the range \[0, 1\].
 
 Then the relations:
 
-[:['[Pi](n, -[phi], k) = -[Pi](n, [phi], k)]]
+[expression ['[Pi](n, -[phi], k) = -[Pi](n, [phi], k)]]
 
-[:['[Pi](n, [phi]+m[pi], k) = [Pi](n, [phi], k) + 2m[Pi](n, k) ; n <= 1]]
+[expression ['[Pi](n, [phi]+m[pi], k) = [Pi](n, [phi], k) + 2m[Pi](n, k) ; n <= 1]]
 
-[:['[Pi](n, [phi]+m[pi], k) = [Pi](n, [phi], k) ; n > 1] [indent] [indent]
+[expression ['[Pi](n, [phi]+m[pi], k) = [Pi](n, [phi], k) ; n > 1] [indent] [indent]
 [footnote I haven't been able to find a literature reference for this
 relation, but it appears to be the convention used by Mathematica.
 Intuitively the first ['2 * m * [Pi](n, k)] terms cancel out as the
@@ -428,11 +427,11 @@ the Legendre integrals.
 
 The implementation for D([phi], k) first performs argument reduction using the relations:
 
-[:['D(-[phi], k) = -D([phi], k)]]
+[expression ['D(-[phi], k) = -D([phi], k)]]
 
 and
 
-[:['D(n[pi]+[phi], k) = 2nD(k) + D([phi], k)]]
+[expression ['D(n[pi]+[phi], k) = 2nD(k) + D([phi], k)]]
 
 to move [phi] to the range \[0, [pi]\/2\].
 
@@ -504,7 +503,7 @@ the Legendre integrals.
 
 The implementation for Z([phi], k) first makes the argument [phi] positive using:
 
-[:['Z(-[phi], k) = -Z([phi], k)]]
+[expression ['Z(-[phi], k) = -Z([phi], k)]]
 
 The function is then implemented in terms of Carlson's integral R[sub J]
 using the relation:
@@ -514,7 +513,7 @@ using the relation:
 There is one special case where the above relation fails: when ['k = 1], in that case
 the function simplifies to
 
-[:['Z([phi], 1) = sign(cos([phi])) sin([phi])]]
+[expression ['Z([phi], 1) = sign(cos([phi])) sin([phi])]]
 
 [h5:jacobi_zeta_example Example]
 

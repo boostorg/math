@@ -27,11 +27,11 @@
    }} //namespaces
 
 The F distribution is a continuous distribution that arises when testing
-whether two samples have the same variance.  If [chi][super 2][sub m][space] and
-[chi][super 2][sub n][space] are independent variates each distributed as 
+whether two samples have the same variance.  If [chi][super 2][sub m] and
+[chi][super 2][sub n] are independent variates each distributed as 
 Chi-Squared with /m/ and /n/ degrees of freedom, then the test statistic:
 
-[expression F[sub n,m][space] = ([chi][super 2][sub n][space] / n) / ([chi][super 2][sub m][space] / m)]
+[expression F[sub n,m] = ([chi][super 2][sub n] / n) / ([chi][super 2][sub m] / m)]
 
 Is distributed over the range \[0, [infin]\] with an F distribution, and
 has the PDF:

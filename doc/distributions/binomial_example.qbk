@@ -93,7 +93,7 @@ respectively.  Note that since we are calculating a two-sided interval,
 we must divide the value of alpha in two.
 
 Please note that calculating two separate /single sided bounds/, each with risk
-level [alpha][space]is not the same thing as calculating a two sided interval.
+level [alpha] is not the same thing as calculating a two sided interval.
 Had we calculate two single-sided intervals each with a risk
 that the true value is outside the interval of [alpha], then:
 

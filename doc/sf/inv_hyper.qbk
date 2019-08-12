@@ -229,13 +229,13 @@ then returns the result of __domain_error.
 If x is in the range 
 __form5, 
 then the result of -__overflow_error is returned, with 
-__form6[space]
+__form6
 denoting `std::numeric_limits<T>::epsilon()`.
 
 If x is in the range 
 __form7, 
 then the result of __overflow_error is returned, with 
-__form6[space]
+__form6
 denoting 
 `std::numeric_limits<T>::epsilon()`.
 

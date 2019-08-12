@@ -152,14 +152,14 @@ but this is not yet implemented here.
         RealType mean, // Expected value of mean.
         RealType variance); // Expected value of variance.
         
-Returns the unique value of [alpha][space] that corresponds to a 
+Returns the unique value of [alpha] that corresponds to a 
 beta distribution with mean /mean/ and variance /variance/.
       
       static RealType find_beta(
         RealType mean, // Expected value of mean.
         RealType variance); // Expected value of variance.
   
-Returns the unique value of [beta][space] that corresponds to a 
+Returns the unique value of [beta] that corresponds to a 
 beta distribution with mean /mean/ and variance /variance/.
       
       static RealType find_alpha(
@@ -167,7 +167,7 @@ beta distribution with mean /mean/ and variance /variance/.
         RealType x, //  x.
         RealType probability); // probability cdf
         
-Returns the value of [alpha][space] that gives:
+Returns the value of [alpha] that gives:
 `cdf(beta_distribution<RealType>(alpha, beta), x) == probability`.
       
       static RealType find_beta(
@@ -175,7 +175,7 @@ Returns the value of [alpha][space] that gives:
         RealType x, // probability x.
         RealType probability); // probability cdf.
 
-Returns the value of [beta][space] that gives:
+Returns the value of [beta] that gives:
 `cdf(beta_distribution<RealType>(alpha, beta), x) == probability`.
       
 [h4 Non-member Accessor Functions]

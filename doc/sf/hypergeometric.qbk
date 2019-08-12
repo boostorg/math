@@ -32,7 +32,7 @@ undefined or complex.  This occurs for `z == 1` or `1 - z < 0` and `a` not an in
 
 The implementation is trivial:
 
-[:['[sub 1]F[sub 0](a, z) = (1-z)[super -a]]]
+[expression ['[sub 1]F[sub 0](a, z) = (1-z)[super -a]]]
 
 [endsect] [/section:hyper_geometric_1f0 Hypergeometric [sub 1]/F/[sub 0] ]
 

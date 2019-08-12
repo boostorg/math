@@ -62,23 +62,23 @@ integrals are expressed in a variety of different ways.  In particular,
 the final parameter /k/ (the modulus) may be expressed using a modular
 angle [alpha], or a parameter /m/.  These are related by:
 
-[:k = sin[thin][alpha]]
+[expression k = sin[thin][alpha]]
 
-[:m = k[super 2] = sin[super 2][alpha]]
+[expression m = k[super 2] = sin[super 2][alpha]]
 
 So that the integral of the third kind (for example) may be expressed as
 either:
 
-[:[Pi](n, [phi], k)]
+[expression [Pi](n, [phi], k)]
 
-[:[Pi](n, [phi] \\ [alpha])]
+[expression [Pi](n, [phi] \\ [alpha])]
 
-[:[Pi](n, [phi] | m)]
+[expression [Pi](n, [phi] | m)]
 
 To further complicate matters, some texts refer to the ['complement
 of the parameter m], or 1 - m, where:
 
-[:1 - m = 1 - k[super 2] = cos[super 2][alpha]]
+[expression 1 - m = 1 - k[super 2] = cos[super 2][alpha]]
 
 This implementation uses /k/ throughout: this matches the requirements
 of the [@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1836.pdf

@@ -227,7 +227,7 @@ The results were tested against a few accurate spot values computed by __Wolfram
 
 [h4 Implementation]
 
-In the following table ['a] and ['b] are the parameters ['x_min][space] and ['x_max],
+In the following table ['a] and ['b] are the parameters ['x_min] and ['x_max],
 ['x] is the random variable, ['p] is the probability and its complement ['q = 1-p].
 
 [table

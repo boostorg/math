@@ -54,6 +54,7 @@
 [:
 [role serif_italic [equation]]
 ]
+[/ Hint you may need to enclose equation in brackets if it contains comma(s) to avoid "error invalid number of arguments"]
 ]
 
 [import ../../../tools/auto_index/include/auto_index_helpers.qbk]

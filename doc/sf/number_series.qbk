@@ -114,8 +114,8 @@ with one call (one with default policy and the other allowing a user-defined pol
 
 These return a series of Bernoulli numbers:
 
-[:B[sub 2*start_index],B[sub 2*(start_index+1)],...,B[sub 2*(start_index+number_of_bernoullis_b2n-1)]]
-
+[expression [B[sub 2*start_index], B[sub 2*(start_index+1)], ..., B[sub 2*(start_index+number_of_bernoullis_b2n-1)]]]
+ 
 [h4 Examples]
 [bernoulli_example_2]
 [bernoulli_output_2]
@@ -149,8 +149,7 @@ __spaces[equation tangent_numbers]
 
 Their relation with Bernoulli numbers ['B[sub i]] are defined by
 
-if i > 0 and i is even then
-__spaces[equation bernoulli_numbers] [br]
+if i > 0 and i is even then  [equation bernoulli_numbers] [br]
 elseif i == 0 then  ['B[sub i]] = 1 [br]
 elseif i == 1 then  ['B[sub i]] = -1/2 [br]
 elseif i < 0 or i is odd then ['B[sub i]] = 0
