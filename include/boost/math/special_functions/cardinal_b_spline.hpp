@@ -166,7 +166,7 @@ template<unsigned n, typename Real>
 Real cardinal_b_spline_double_prime(Real x)
 {
     static_assert(!std::is_integral<Real>::value, "Cardinal B-splines do not work with integer types.");
-    static_assert(n >= 3);
+    static_assert(n >= 3, "n>=3 for second derivatives of cardinal B-splines is required.");
 
     if (x < 0)
     {
