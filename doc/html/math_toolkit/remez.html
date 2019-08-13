@@ -34,26 +34,27 @@
       your favorite textbook.
     </p>
 <p>
-      Imagine that you want to approximate some function f(x) by way of a rational
-      function R(x), where R(x) may be either a polynomial P(x) or a ratio of two
-      polynomials P(x)/Q(x) (a rational function). Initially we'll concentrate on
-      the polynomial case, as it's by far the easier to deal with, later we'll extend
-      to the full rational function case.
+      Imagine that you want to approximate some function <span class="emphasis"><em>f(x)</em></span>
+      by way of a rational function <span class="emphasis"><em>R(x)</em></span>, where <span class="emphasis"><em>R(x)</em></span>
+      may be either a polynomial <span class="emphasis"><em>P(x)</em></span> or a ratio of two polynomials
+      <span class="emphasis"><em>P(x)/Q(x)</em></span> (a rational function). Initially we'll concentrate
+      on the polynomial case, as it's by far the easier to deal with, later we'll
+      extend to the full rational function case.
     </p>
 <p>
       We want to find the "best" rational approximation, where "best"
-      is defined to be the approximation that has the least deviation from f(x).
+      is defined to be the approximation that has the least deviation from <span class="emphasis"><em>f(x)</em></span>.
       We can measure the deviation by way of an error function:
     </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-        <span class="emphasis"><em>E<sub>abs</sub>(x) = f(x) - R(x)</em></span>
+        <span class="serif_italic">E<sub>abs</sub>(x) = f(x) - R(x)</span>
       </p></blockquote></div>
 <p>
       which is expressed in terms of absolute error, but we can equally use relative
       error:
     </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-        <span class="emphasis"><em>E<sub>rel</sub>(x) = (f(x) - R(x)) / |f(x)|</em></span>
+        <span class="serif_italic">E<sub>rel</sub>(x) = (f(x) - R(x)) / |f(x)|</span>
       </p></blockquote></div>
 <p>
       And indeed in general we can scale the error function in any way we want, it
@@ -61,17 +62,20 @@
       every practical case that you're likely to encounter.
     </p>
 <p>
-      The minimax rational function R(x) is then defined to be the function that
-      yields the smallest maximal value of the error function. Chebyshev showed that
-      there is a unique minimax solution for R(x) that has the following properties:
+      The minimax rational function <span class="emphasis"><em>R(x)</em></span> is then defined to
+      be the function that yields the smallest maximal value of the error function.
+      Chebyshev showed that there is a unique minimax solution for <span class="emphasis"><em>R(x)</em></span>
+      that has the following properties:
     </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
-          If R(x) is a polynomial of degree N, then there are N+2 unknowns: the N+1
+          If <span class="emphasis"><em>R(x)</em></span> is a polynomial of degree <span class="emphasis"><em>N</em></span>,
+          then there are <span class="emphasis"><em>N+2</em></span> unknowns: the <span class="emphasis"><em>N+1</em></span>
           coefficients of the polynomial, and maximal value of the error function.
         </li>
 <li class="listitem">
-          The error function has N+1 roots, and N+2 extrema (minima and maxima).
+          The error function has <span class="emphasis"><em>N+1</em></span> roots, and <span class="emphasis"><em>N+2</em></span>
+          extrema (minima and maxima).
         </li>
 <li class="listitem">
           The extrema alternate in sign, and all have the same magnitude.
@@ -79,15 +83,16 @@
 </ul></div>
 <p>
       That means that if we know the location of the extrema of the error function
-      then we can write N+2 simultaneous equations:
+      then we can write <span class="emphasis"><em>N+2</em></span> simultaneous equations:
     </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-        <span class="emphasis"><em>R(x<sub>i</sub>) + (-1)<sup>i</sup>E = f(x<sub>i</sub>)</em></span>
+        <span class="serif_italic">R(x<sub>i</sub>) + (-1)<sup>i</sup>E = f(x<sub>i</sub>)</span>
       </p></blockquote></div>
 <p>
-      where E is the maximal error term, and x<sub>i</sub> are the abscissa values of the N+2
-      extrema of the error function. It is then trivial to solve the simultaneous
-      equations to obtain the polynomial coefficients and the error term.
+      where <span class="emphasis"><em>E</em></span> is the maximal error term, and <span class="emphasis"><em>x<sub>i</sub></em></span>
+      are the abscissa values of the <span class="emphasis"><em>N+2</em></span> extrema of the error
+      function. It is then trivial to solve the simultaneous equations to obtain
+      the polynomial coefficients and the error term.
     </p>
 <p>
       <span class="emphasis"><em>Unfortunately we don't know where the extrema of the error function
@@ -105,34 +110,35 @@
     </p>
 <p>
       In the following discussion we'll use a concrete example to illustrate the
-      Remez method: an approximation to the function e<sup>x</sup> &#160; over the range [-1, 1].
+      Remez method: an approximation to the function e<sup>x</sup> over the range [-1, 1].
     </p>
 <p>
       Before we can begin the Remez method, we must obtain an initial value for the
       location of the extrema of the error function. We could "guess" these,
       but a much closer first approximation can be obtained by first constructing
-      an interpolated polynomial approximation to f(x).
+      an interpolated polynomial approximation to <span class="emphasis"><em>f(x)</em></span>.
     </p>
 <p>
-      In order to obtain the N+1 coefficients of the interpolated polynomial we need
-      N+1 points (x<sub>0</sub>...x<sub>N</sub>): with our interpolated form passing through each of those
-      points that yields N+1 simultaneous equations:
+      In order to obtain the <span class="emphasis"><em>N+1</em></span> coefficients of the interpolated
+      polynomial we need N+1 points /(x<sub>0</sub>&#8230;x<sub>N</sub>): with our interpolated form passing through
+      each of those points that yields <span class="emphasis"><em>N+1</em></span> simultaneous equations:
     </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-        <span class="emphasis"><em>f(x<sub>i</sub>) = P(x<sub>i</sub>) = c<sub>0</sub> + c<sub>1</sub>x<sub>i</sub> ... + c<sub>N</sub>x<sub>i</sub><sup>N</sup></em></span>
+        <span class="serif_italic">f(x<sub>i</sub>) = P(x<sub>i</sub>) = c<sub>0</sub> + c<sub>1</sub>x<sub>i</sub> &#8230; + c<sub>N</sub>x<sub>i</sub><sup>N</sup></span>
       </p></blockquote></div>
 <p>
-      Which can be solved for the coefficients c<sub>0</sub>...c<sub>N</sub> in P(x).
+      Which can be solved for the coefficients <span class="emphasis"><em>c<sub>0</sub> &#8230;c<sub>N</sub></em></span> in <span class="emphasis"><em>P(x)</em></span>.
     </p>
 <p>
       Obviously this is not a minimax solution, indeed our only guarantee is that
-      f(x) and P(x) touch at N+1 locations, away from those points the error may
-      be arbitrarily large. However, we would clearly like this initial approximation
-      to be as close to f(x) as possible, and it turns out that using the zeros of
-      an orthogonal polynomial as the initial interpolation points is a good choice.
-      In our example we'll use the zeros of a Chebyshev polynomial as these are particularly
-      easy to calculate, interpolating for a polynomial of degree 4, and measuring
-      <span class="emphasis"><em>relative error</em></span> we get the following error function:
+      <span class="emphasis"><em>f(x)</em></span> and <span class="emphasis"><em>P(x)</em></span> touch at <span class="emphasis"><em>N+1</em></span>
+      locations, away from those points the error may be arbitrarily large. However,
+      we would clearly like this initial approximation to be as close to <span class="emphasis"><em>f(x)</em></span>
+      as possible, and it turns out that using the zeros of an orthogonal polynomial
+      as the initial interpolation points is a good choice. In our example we'll
+      use the zeros of a Chebyshev polynomial as these are particularly easy to calculate,
+      interpolating for a polynomial of degree 4, and measuring <span class="emphasis"><em>relative
+      error</em></span> we get the following error function:
     </p>
 <p>
       <span class="inlinemediaobject"><img src="../../graphs/remez-2.png"></span>
@@ -178,22 +184,24 @@
       Step 1</a>
     </h5>
 <p>
-      The first step in the Remez method, given our current set of N+2 Chebyshev
-      control points x<sub>i</sub>, is to solve the N+2 simultaneous equations:
+      The first step in the Remez method, given our current set of <span class="emphasis"><em>N+2</em></span>
+      Chebyshev control points <span class="emphasis"><em>x<sub>i</sub></em></span>, is to solve the <span class="emphasis"><em>N+2</em></span>
+      simultaneous equations:
     </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-        <span class="emphasis"><em>P(x<sub>i</sub>) + (-1)<sup>i</sup>E = f(x<sub>i</sub>)</em></span>
+        <span class="serif_italic">P(x<sub>i</sub>) + (-1)<sup>i</sup>E = f(x<sub>i</sub>)</span>
       </p></blockquote></div>
 <p>
-      To obtain the error term E, and the coefficients of the polynomial P(x).
+      To obtain the error term <span class="emphasis"><em>E</em></span>, and the coefficients of the
+      polynomial <span class="emphasis"><em>P(x)</em></span>.
     </p>
 <p>
-      This gives us a new approximation to f(x) that has the same error <span class="emphasis"><em>E</em></span>
-      at each of the control points, and whose error function <span class="emphasis"><em>alternates
-      in sign</em></span> at the control points. This is still not necessarily the
-      minimax solution though: since the control points may not be at the extrema
-      of the error function. After this first step here's what our approximation's
-      error function looks like:
+      This gives us a new approximation to <span class="emphasis"><em>f(x)</em></span> that has the
+      same error <span class="emphasis"><em>E</em></span> at each of the control points, and whose
+      error function <span class="emphasis"><em>alternates in sign</em></span> at the control points.
+      This is still not necessarily the minimax solution though: since the control
+      points may not be at the extrema of the error function. After this first step
+      here's what our approximation's error function looks like:
     </p>
 <p>
       <span class="inlinemediaobject"><img src="../../graphs/remez-3.png"></span>
@@ -256,32 +264,37 @@
       If we wish to extend the Remez method to a rational approximation of the form
     </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-        <span class="emphasis"><em>f(x) = R(x) = P(x) / Q(x)</em></span>
+        <span class="serif_italic">f(x) = R(x) = P(x) / Q(x)</span>
       </p></blockquote></div>
 <p>
-      where P(x) and Q(x) are polynomials, then we proceed as before, except that
-      now we have N+M+2 unknowns if P(x) is of order N and Q(x) is of order M. This
-      assumes that Q(x) is normalised so that its leading coefficient is 1, giving
-      N+M+1 polynomial coefficients in total, plus the error term E.
+      where <span class="emphasis"><em>P(x)</em></span> and <span class="emphasis"><em>Q(x)</em></span> are polynomials,
+      then we proceed as before, except that now we have <span class="emphasis"><em>N+M+2</em></span>
+      unknowns if <span class="emphasis"><em>P(x)</em></span> is of order <span class="emphasis"><em>N</em></span> and
+      <span class="emphasis"><em>Q(x)</em></span> is of order <span class="emphasis"><em>M</em></span> This assumes that
+      <span class="emphasis"><em>Q(x)</em></span> is normalised so that its leading coefficient is
+      1, giving <span class="emphasis"><em>N+M+1</em></span> polynomial coefficients in total, plus
+      the error term <span class="emphasis"><em>E</em></span>.
     </p>
 <p>
       The simultaneous equations to be solved are now:
     </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-        <span class="emphasis"><em>P(x<sub>i</sub>) / Q(x<sub>i</sub>) + (-1)<sup>i</sup>E = f(x<sub>i</sub>)</em></span>
+        <span class="serif_italic">P(x<sub>i</sub>) / Q(x<sub>i</sub>) + (-1)<sup>i</sup>E = f(x<sub>i</sub>)</span>
       </p></blockquote></div>
 <p>
-      Evaluated at the N+M+2 control points x<sub>i</sub>.
+      Evaluated at the <span class="emphasis"><em>N+M+2</em></span> control points <span class="emphasis"><em>x<sub>i</sub></em></span>.
     </p>
 <p>
-      Unfortunately these equations are non-linear in the error term E: we can only
-      solve them if we know E, and yet E is one of the unknowns!
+      Unfortunately these equations are non-linear in the error term <span class="emphasis"><em>E</em></span>:
+      we can only solve them if we know <span class="emphasis"><em>E</em></span>, and yet <span class="emphasis"><em>E</em></span>
+      is one of the unknowns!
     </p>
 <p>
       The method usually adopted to solve these equations is an iterative one: we
-      guess the value of E, solve the equations to obtain a new value for E (as well
-      as the polynomial coefficients), then use the new value of E as the next guess.
-      The method is repeated until E converges on a stable value.
+      guess the value of <span class="emphasis"><em>E</em></span>, solve the equations to obtain a
+      new value for <span class="emphasis"><em>E</em></span> (as well as the polynomial coefficients),
+      then use the new value of <span class="emphasis"><em>E</em></span> as the next guess. The method
+      is repeated until <span class="emphasis"><em>E</em></span> converges on a stable value.
     </p>
 <p>
       These complications extend the running time required for the development of
@@ -309,46 +322,50 @@
       So far we have used a direct approximation:
     </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-        <span class="emphasis"><em>f(x) = R(x)</em></span>
+        <span class="serif_italic">f(x) = R(x)</span>
       </p></blockquote></div>
 <p>
-      But this will converge to a useful approximation only if f(x) is smooth. In
-      addition round-off errors when evaluating the rational form mean that this
-      will never get closer than within a few epsilon of machine precision. Therefore
-      this form of direct approximation is often reserved for situations where we
-      want efficiency, rather than accuracy.
+      But this will converge to a useful approximation only if <span class="emphasis"><em>f(x)</em></span>
+      is smooth. In addition round-off errors when evaluating the rational form mean
+      that this will never get closer than within a few epsilon of machine precision.
+      Therefore this form of direct approximation is often reserved for situations
+      where we want efficiency, rather than accuracy.
     </p>
 <p>
-      The first step in improving the situation is generally to split f(x) into a
-      dominant part that we can compute accurately by another method, and a slowly
-      changing remainder which can be approximated by a rational approximation. We
-      might be tempted to write:
+      The first step in improving the situation is generally to split <span class="emphasis"><em>f(x)</em></span>
+      into a dominant part that we can compute accurately by another method, and
+      a slowly changing remainder which can be approximated by a rational approximation.
+      We might be tempted to write:
     </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-        <span class="emphasis"><em>f(x) = g(x) + R(x)</em></span>
+        <span class="serif_italic">f(x) = g(x) + R(x)</span>
       </p></blockquote></div>
 <p>
-      where g(x) is the dominant part of f(x), but if f(x)/g(x) is approximately
-      constant over the interval of interest then:
+      where <span class="emphasis"><em>g(x)</em></span> is the dominant part of <span class="emphasis"><em>f(x)</em></span>,
+      but if <span class="emphasis"><em>f(x)/g(x)</em></span> is approximately constant over the interval
+      of interest then:
     </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-        <span class="emphasis"><em>f(x) = g(x)(c + R(x))</em></span>
+        <span class="serif_italic">f(x) = g(x)(c + R(x))</span>
       </p></blockquote></div>
 <p>
       Will yield a much better solution: here <span class="emphasis"><em>c</em></span> is a constant
-      that is the approximate value of f(x)/g(x) and R(x) is typically tiny compared
-      to <span class="emphasis"><em>c</em></span>. In this situation if R(x) is optimised for absolute
-      error, then as long as its error is small compared to the constant <span class="emphasis"><em>c</em></span>,
-      that error will effectively get wiped out when R(x) is added to <span class="emphasis"><em>c</em></span>.
+      that is the approximate value of <span class="emphasis"><em>f(x)/g(x)</em></span> and <span class="emphasis"><em>R(x)</em></span>
+      is typically tiny compared to <span class="emphasis"><em>c</em></span>. In this situation if
+      <span class="emphasis"><em>R(x)</em></span> is optimised for absolute error, then as long as
+      its error is small compared to the constant <span class="emphasis"><em>c</em></span>, that error
+      will effectively get wiped out when <span class="emphasis"><em>R(x)</em></span> is added to
+      <span class="emphasis"><em>c</em></span>.
     </p>
 <p>
-      The difficult part is obviously finding the right g(x) to extract from your
-      function: often the asymptotic behaviour of the function will give a clue,
-      so for example the function <a class="link" href="sf_erf/error_function.html" title="Error Function erf and complement erfc">erfc</a>
-      becomes proportional to e<sup>-x<sup>2</sup></sup>/x as x becomes large. Therefore using:
+      The difficult part is obviously finding the right <span class="emphasis"><em>g(x)</em></span>
+      to extract from your function: often the asymptotic behaviour of the function
+      will give a clue, so for example the function <a class="link" href="sf_erf/error_function.html" title="Error Function erf and complement erfc">erfc</a>
+      becomes proportional to <span class="emphasis"><em>e<sup>-x<sup>2</sup></sup>/x</em></span> as <span class="emphasis"><em>x</em></span>
+      becomes large. Therefore using:
     </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-        <span class="emphasis"><em>erfc(z) = (C + R(x)) e<sup>-x<sup>2</sup></sup>/x</em></span>
+        <span class="serif_italic">erfc(z) = (C + R(x)) e<sup>-x<sup>2</sup></sup>/x</span>
       </p></blockquote></div>
 <p>
       as the approximating form seems like an obvious thing to try, and does indeed
@@ -383,7 +400,7 @@
       will be skewed towards the middle of the [-1,1] interval, while a positive
       power less than one will skew them towards either end. More usefully, if we
       initially rescale the points over [0,1] and then raise to a positive power,
-      we can skew them to the left or right. Returning to our example of e<sup>x</sup> &#160; over [-1,1],
+      we can skew them to the left or right. Returning to our example of e<sup>x</sup> over [-1,1],
       the initial interpolated form was some way from the minimax solution:
     </p>
 <p>
@@ -392,7 +409,7 @@
 <p>
       However, if we first skew the interpolation points to the left (rescale them
       to [0, 1], raise to the power 1.3, and then rescale back to [-1,1]) we reduce
-      the error from 1.3x10<sup>-3</sup> &#160;to 6x10<sup>-4</sup>:
+      the error from 1.3x10<sup>-3</sup> to 6x10<sup>-4</sup>:
     </p>
 <p>
       <span class="inlinemediaobject"><img src="../../graphs/remez-5.png"></span>
@@ -460,7 +477,7 @@
       <span class="phrase"><a name="math_toolkit.remez.references"></a></span><a class="link" href="remez.html#math_toolkit.remez.references">References</a>
     </h5>
 <p>
-      The original references for the Remez Method and it's extension to rational
+      The original references for the Remez Method and its extension to rational
       functions are unfortunately in Russian:
     </p>
 <p>

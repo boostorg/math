@@ -38,8 +38,10 @@
 <p>
         and its recently revised version <a href="http://dlmf.nist.gov/" target="_top">NIST
         Digital Library of Mathematical Functions (DMLF)</a>, in particular
-        <a href="https://dlmf.nist.gov/19" target="_top">Elliptic Integrals, B. C. Carlson</a>
       </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <a href="https://dlmf.nist.gov/19" target="_top">Elliptic Integrals, B. C. Carlson</a>
+        </p></blockquote></div>
 <p>
         Mathworld also contain a lot of useful background information:
       </p>
@@ -137,30 +139,30 @@
           &#945;, or a parameter <span class="emphasis"><em>m</em></span>. These are related by:
         </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-            k = sin &#8201;&#945;
+            <span class="serif_italic">k = sin &#8201;&#945;</span>
           </p></blockquote></div>
 <div class="blockquote"><blockquote class="blockquote"><p>
-            m = k<sup>2</sup> = sin<sup>2</sup>&#945;
+            <span class="serif_italic">m = k<sup>2</sup> = sin<sup>2</sup>&#945;</span>
           </p></blockquote></div>
 <p>
           So that the integral of the third kind (for example) may be expressed as
           either:
         </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-            &#928;(n, &#966;, k)
+            <span class="serif_italic">&#928;(n, &#966;, k)</span>
           </p></blockquote></div>
 <div class="blockquote"><blockquote class="blockquote"><p>
-            &#928;(n, &#966; \ &#945;)
+            <span class="serif_italic">&#928;(n, &#966; \ &#945;)</span>
           </p></blockquote></div>
 <div class="blockquote"><blockquote class="blockquote"><p>
-            &#928;(n, &#966; | m)
+            <span class="serif_italic">&#928;(n, &#966; | m)</span>
           </p></blockquote></div>
 <p>
           To further complicate matters, some texts refer to the <span class="emphasis"><em>complement
           of the parameter m</em></span>, or 1 - m, where:
         </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-            1 - m = 1 - k<sup>2</sup> = cos<sup>2</sup>&#945;
+            <span class="serif_italic">1 - m = 1 - k<sup>2</sup> = cos<sup>2</sup>&#945;</span>
           </p></blockquote></div>
 <p>
           This implementation uses <span class="emphasis"><em>k</em></span> throughout: this matches
@@ -184,7 +186,7 @@
 </table></div>
 <p>
         A simple example comparing use of <a href="http://www.wolframalpha.com/" target="_top">Wolfram
-        Alpha</a> with Boost.Math (including much higher precision using Boost.Multiprecision)
+        Alpha</a> with Boost.Math (including much higher precision using <a href="../../../../../../libs/multiprecision/doc/html/index.html" target="_top">Boost.Multiprecision</a>)
         is <a href="../../../../example/jacobi_zeta_example.cpp" target="_top">jacobi_zeta_example.cpp</a>.
       </p>
 <p>
@@ -213,8 +215,8 @@
 
         </p></blockquote></div>
 <p>
-        Legendre also defined a fourth integral D(&#966;,k) which is a combination of the
-        other three:
+        Legendre also defined a fourth integral /D(&#966;,k)/ which is a combination of
+        the other three:
       </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
           <span class="inlinemediaobject"><img src="../../../equations/ellint_d.svg"></span>
@@ -365,7 +367,10 @@
         The conventional methods for computing elliptic integrals are Gauss and Landen
         transformations, which converge quadratically and work well for elliptic
         integrals of the first and second kinds. Unfortunately they suffer from loss
-        of significant digits for the third kind. Carlson's algorithm [<a class="link" href="ellint_intro.html#ellint_ref_carlson79">Carlson79</a>]
+        of significant digits for the third kind.
+      </p>
+<p>
+        Carlson's algorithm [<a class="link" href="ellint_intro.html#ellint_ref_carlson79">Carlson79</a>]
         [<a class="link" href="ellint_intro.html#ellint_ref_carlson78">Carlson78</a>], by contrast, provides
         a unified method for all three kinds of elliptic integrals with satisfactory
         precisions.

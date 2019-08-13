@@ -44,11 +44,11 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 Ooura's method for Fourier integrals computes
 
-[:[int][sub 0][super [infin]] f(t)sin([omega] t) dt]
+[expression [int][sub 0][super [infin]] f(t)sin([omega] t) dt]
 
 and
 
-[:[int][sub 0][super [infin]] f(t)cos([omega] t) dt]
+[expression [int][sub 0][super [infin]] f(t)cos([omega] t) dt]
 
 by a double exponentially decaying transformation.
 These integrals arise when computing continuous Fourier transform of odd and even functions, respectively.

@@ -58,7 +58,7 @@ Computes
 [link math_toolkit.sinc.sinc_overview 
 the Sinus Cardinal] of x:
 
-[:['sinc_pi(x) = sin(x) / x]]
+[expression sinc_pi(x) = sin(x) / x]
 
 The second form is for complex numbers, 
 quaternions, octonions etc. Taylor series are used at the origin 
@@ -92,7 +92,7 @@ to ensure accuracy.
 Computes [@http://mathworld.wolfram.com/SinhcFunction.html sinhc function],
 the [link math_toolkit.sinc.sinc_overview  Hyperbolic Sinus Cardinal] of x:
 
-[:['sinhc_pi(x) = sinh(x) / x]]
+[expression sinhc_pi(x) = sinh(x) / x]
 
 The second form is for 
 complex numbers, quaternions, octonions etc. Taylor series are used at the origin 

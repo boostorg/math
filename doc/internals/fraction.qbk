@@ -166,7 +166,7 @@ So now we can implement Q, this time using [^continued_fraction_a]:
 
 [cf_gamma_Q]
 
-[endsect][/section:cf Continued Fraction Evaluation]
+[endsect] [/section:cf Continued Fraction Evaluation]
 
 [/ 
   Copyright 2006 John Maddock and Paul A. Bristow.

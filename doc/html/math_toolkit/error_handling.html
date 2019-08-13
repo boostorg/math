@@ -49,7 +49,8 @@
 </tr>
 <tr><td align="left" valign="top"><p>
         The default error actions are to throw an exception with an informative error
-        message. If you do not try to catch the exception, you will not see the message!
+        message. <span class="red">If you do not try to catch the exception, you
+        will not see the message!</span>
       </p></td></tr>
 </table></div>
 <p>
@@ -832,27 +833,14 @@
         <span class="emphasis"><em>"Each of the functions declared above shall return a NaN (Not
         a Number) if any argument value is a NaN, but it shall not report a domain
         error. Otherwise, each of the functions declared above shall report a domain
-        error for just those argument values for which:</em></span>
-      </p></blockquote></div>
-<div class="blockquote"><blockquote class="blockquote">
-<p>
-        <span class="emphasis"><em>"the function description's Returns clause explicitly specifies
-        a domain, and those arguments fall outside the specified domain; or</em></span>
-      </p>
-<p>
-        <span class="emphasis"><em>"the corresponding mathematical function value has a non-zero
-        imaginary component; or</em></span>
-      </p>
-<p>
-        <span class="emphasis"><em>"the corresponding mathematical function is not mathematically
-        defined.</em></span>
-      </p>
-</blockquote></div>
-<div class="blockquote"><blockquote class="blockquote"><p>
-        <span class="emphasis"><em>"Note 2: A mathematical function is mathematically defined
-        for a given set of argument values if it is explicitly defined for that set
-        of argument values or if its limiting value exists and does not depend on
-        the direction of approach."</em></span>
+        error for just those argument values for which:<br> the function description's
+        Returns clause explicitly specifies a domain, and those arguments fall outside
+        the specified domain; or <br> the corresponding mathematical function value
+        has a non-zero imaginary component; or <br> the corresponding mathematical
+        function is not mathematically defined. <br> Note 2: A mathematical function
+        is mathematically defined for a given set of argument values if it is explicitly
+        defined for that set of argument values or if its limiting value exists and
+        does not depend on the direction of approach."</em></span>
       </p></blockquote></div>
 <p>
       Note that in order to support information-rich error messages when throwing

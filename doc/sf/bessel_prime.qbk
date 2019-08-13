@@ -1,4 +1,3 @@
-
 [section:bessel_derivatives Derivatives of the Bessel Functions]
 
 [h4 Synopsis]
@@ -98,7 +97,7 @@ And for small x:
 
 [equation bessel_derivatives5]
 
-[endsect] 
+[endsect]  [/section:bessel_derivatives Derivatives of the Bessel Functions]
 
 [/
   Copyright 2013, 2013 John Maddock, Anton Bikineev.

@@ -324,7 +324,7 @@ overflow or underflow, even though the result is in fact perfectly representable
 The function is even and symmetric in /x/ and /y/, so first take assume
 ['x,y > 0] and ['x > y] (we can permute the arguments if this is not the case).
 
-Then if ['x * [epsilon][space] >= y] we can simply return /x/.
+Then if ['x * [epsilon] >= y] we can simply return /x/.
 
 Otherwise the result is given by:
 

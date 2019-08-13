@@ -10,7 +10,7 @@ Handling of errors by this library is split into two orthogonal parts:
 * What should be done when the error is raised?
 
 [warning The default error actions are to throw an exception with an informative error message.
-If you do not try to catch the exception, you will not see the message!]
+[role red If you do not try to catch the exception, you will not see the message!]]
 
 The kinds of errors that can be raised are:
 
@@ -199,21 +199,17 @@ This behaviour is chosen to assist compatibility with the behaviour of
 and with the
 [@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1836.pdf Draft Technical Report on C++ Library Extensions, 2005-06-24, section 5.2.1, paragraph 6]:
 
-[:['"Each of the functions declared above shall return a NaN (Not a Number)
+[:['\"Each of the functions declared above shall return a NaN (Not a Number)
 if any argument value is a NaN, but it shall not report a domain error.
 Otherwise, each of the functions declared above shall report a domain error
-for just those argument values for which:]]
-
-[:['"the function description's Returns clause explicitly specifies a domain, and those arguments fall outside the specified domain; or]
-
-['"the corresponding mathematical function value has a non-zero imaginary component; or]
-
-['"the corresponding mathematical function is not mathematically defined.]]
-
-[:['"Note 2: A mathematical function is mathematically defined
+for just those argument values for which:[br]
+the function description's Returns clause explicitly specifies a domain, and those arguments fall outside the specified domain; or [br]
+the corresponding mathematical function value has a non-zero imaginary component; or [br]
+the corresponding mathematical function is not mathematically defined. [br]
+Note 2: A mathematical function is mathematically defined
 for a given set of argument values if it is explicitly defined
 for that set of argument values or
-if its limiting value exists and does not depend on the direction of approach."]]
+if its limiting value exists and does not depend on the direction of approach.\"]]
 
 Note that in order to support information-rich error messages when throwing
 exceptions, `Message` must contain
@@ -392,7 +388,7 @@ Is used to perform these conversions, and will call the error handlers
 listed above on [link math_toolkit.error_handling.overflow_error overflow], 
 [link math_toolkit.error_handling.underflow_error underflow] or [link math_toolkit.error_handling.denorm_error denormalisation].
 
-[endsect][/section:error_handling Error Handling]
+[endsect] [/section:error_handling Error Handling]
 
 [/ 
   Copyright 2006 - 2012 John Maddock and Paul A. Bristow.

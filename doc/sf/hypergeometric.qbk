@@ -1,4 +1,3 @@
-
 [section:hypergeometric Hypergeometric Functions]
 
 [section:hyper_geometric_1f0 Hypergeometric [sub 1]/F/[sub 0] ]
@@ -33,7 +32,7 @@ undefined or complex.  This occurs for `z == 1` or `1 - z < 0` and `a` not an in
 
 The implementation is trivial:
 
-[:['[sub 1]F[sub 0](a, z) = (1-z)[super -a]]]
+[expression ['[sub 1]F[sub 0](a, z) = (1-z)[super -a]]]
 
 [endsect] [/section:hyper_geometric_1f0 Hypergeometric [sub 1]/F/[sub 0] ]
 
@@ -513,11 +512,11 @@ error inherent in calculating the N'th term via logarithms.
 # Beals, Richard, and Roderick Wong. ['Special functions: a graduate text.] Vol. 126. Cambridge University Press, 2010.
 # Pearson, John W., Sheehan Olver, and Mason A. Porter. ['Numerical methods for the computation of the confluent and Gauss hypergeometric functions.] Numerical Algorithms 74.3 (2017): 821-866.
 # Luke, Yudell L. ['Algorithms for Rational Approximations for a Confluent Hypergeometric Function  II.] MISSOURI UNIV KANSAS CITY DEPT OF MATHEMATICS, 1976.
-# Dereziński, Jan. ['Hypergeometric type functions and their symmetries.] Annales Henri Poincaré. Vol. 15. No. 8. Springer Basel, 2014.
+# Derezinski, Jan. ['Hypergeometric type functions and their symmetries.] Annales Henri Poincar[eacute]. Vol. 15. No. 8. Springer Basel, 2014.
 # Keith E. Muller ['Computing the confluent hypergeometric function, M(a, b, x)].  Numer. Math. 90: 179-196 (2001).
 # Carlo Morosi, Livio Pizzocchero. ['On the expansion of the Kummer function in terms of incomplete Gamma functions.]  Arch. Inequal. Appl. 2 (2004), 49-72.
 # Jose Luis Lopez, Nico M. Temme. ['Asymptotics and numerics of polynomials used in Tricomi and Buchholz expansions of Kummer functions]. Numerische Mathematik, August 2010.
-# Javier Sesma.  ['The Temme’s sum rule for confluent hypergeometric functions revisited].  Journal of Computational and Applied Mathematics 163 (2004) 429–431.
+# Javier Sesma.  ['The Temme's sum rule for confluent hypergeometric functions revisited].  Journal of Computational and Applied Mathematics 163 (2004) 429-431.
 # Javier Segura, Nico M. Temme.  ['Numerically satisfactory solutions of Kummer recurrence relations].  Numer. Math. (2008) 111:109-119.
 # Alfredo Deano, Javier Segura. ['Transitory Minimal Solutions Of Hypergeometric Recursions And Pseudoconvergence of Associated Continued Fractions].  Mathematics of Computation, Volume 76, Number 258, April 2007.
 # W. Gautschi. ['Computational aspects of three-term recurrence relations]. SIAM Review 9, no.1 (1967) 24-82.

@@ -92,11 +92,11 @@ gives us reasonably independent test data.  Using our test data to test other
 All versions of these functions first use the usual reflection formulas
 to make their arguments positive:
 
-[:['erf(-z) = 1 - erf(z);] ]
+[expression ['erf(-z) = 1 - erf(z);] ]
    
-[:['erfc(-z) = 2 - erfc(z);]  // preferred when -z < -0.5]
+[expression ['erfc(-z) = 2 - erfc(z);]  // preferred when -z < -0.5]
    
-[:['erfc(-z) = 1 + erf(z);]   // preferred when -0.5 <= -z < 0]
+[expression ['erfc(-z) = 1 + erf(z);]   // preferred when -0.5 <= -z < 0]
 
 The generic versions of these functions are implemented in terms of
 the incomplete gamma function.
@@ -108,7 +108,7 @@ then a series of rational approximations [jm_rationals] are used.
 For `z <= 0.5` then a rational approximation to erf is used, based on the 
 observation that erf is an odd function and therefore erf is calculated using:
 
-[:['erf(z) = z * (C + R(z*z));]]
+[expression ['erf(z) = z * (C + R(z*z));]]
    
 where the rational approximation /R(z*z)/ is optimised for absolute error:
 as long as its absolute error is small enough compared to the constant C, then any 
@@ -119,13 +119,13 @@ cases.
 
 For `z > 0.5` we observe that over a small interval \[['a, b)] then:
 
-[:['erfc(z) * exp(z*z) * z ~ c]]
+[expression ['erfc(z) * exp(z*z) * z ~ c]]
    
 for some constant c.
 
 Therefore for `z > 0.5` we calculate `erfc` using:
 
-[:['erfc(z) = exp(-z*z) * (C + R(z - B)) / z;]]
+[expression ['erfc(z) = exp(-z*z) * (C + R(z - B)) / z;]]
    
 Again R(z - B) is optimised for absolute error, and the constant `C` is
 the average of `erfc(z) * exp(z*z) * z` taken at the endpoints of the range.
@@ -138,7 +138,7 @@ of the rational approximation is 0.
 
 For large `z` over a range \[a, +[infin]\] the above approximation is modified to:
 
-[:['erfc(z) = exp(-z*z) * (C + R(1 / z)) / z;]]
+[expression ['erfc(z) = exp(-z*z) * (C + R(1 / z)) / z;]]
 
 [endsect] [/section:error_function Error Function erf and complement erfc]
 

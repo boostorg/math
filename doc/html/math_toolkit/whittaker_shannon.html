@@ -61,10 +61,10 @@
       smooth, but has linear complexity in the data, making it slow relative to compactly-supported
       b-splines. In addition, we cannot pass an infinite amount of data into the
       class, and must truncate the (perhaps) infinite sinc series to a finite number
-      of terms. Since the sinc function has slow 1/x decay, the truncation of the
-      series can incur large error. Hence this interpolator works best when operating
-      on samples of compactly supported functions. Here is an example of interpolating
-      a smooth "bump function":
+      of terms. Since the sinc function has slow <span class="emphasis"><em>1/x</em></span> decay,
+      the truncation of the series can incur large error. Hence this interpolator
+      works best when operating on samples of compactly-supported functions. Here
+      is an example of interpolating a smooth "bump function":
     </p>
 <pre class="programlisting"><span class="keyword">auto</span> <span class="identifier">bump</span> <span class="special">=</span> <span class="special">[](</span><span class="keyword">double</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">{</span> <span class="keyword">if</span> <span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">abs</span><span class="special">(</span><span class="identifier">x</span><span class="special">)</span> <span class="special">&gt;=</span> <span class="number">1</span><span class="special">)</span> <span class="special">{</span> <span class="keyword">return</span> <span class="number">0.0</span><span class="special">;</span> <span class="special">}</span> <span class="keyword">return</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">exp</span><span class="special">(-</span><span class="number">1.0</span><span class="special">/(</span><span class="number">1.0</span><span class="special">-</span><span class="identifier">x</span><span class="special">*</span><span class="identifier">x</span><span class="special">));</span> <span class="special">};</span>
 
@@ -77,7 +77,6 @@
     <span class="keyword">double</span> <span class="identifier">t</span> <span class="special">=</span> <span class="identifier">t0</span> <span class="special">+</span> <span class="identifier">i</span><span class="special">*</span><span class="identifier">h</span><span class="special">;</span>
     <span class="identifier">v</span><span class="special">[</span><span class="identifier">i</span><span class="special">]</span> <span class="special">=</span> <span class="identifier">bump</span><span class="special">(</span><span class="identifier">t</span><span class="special">);</span>
 <span class="special">}</span>
-
 
 <span class="keyword">auto</span> <span class="identifier">ws</span> <span class="special">=</span> <span class="identifier">whittaker_shannon</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">move</span><span class="special">(</span><span class="identifier">v</span><span class="special">),</span> <span class="identifier">t0</span><span class="special">,</span> <span class="identifier">h</span><span class="special">);</span>
 
@@ -96,7 +95,7 @@
     </h4>
 <p>
       The call to the constructor requires &#119926;(1) operations, simply moving data into
-      the class. Each call the the interpolant is &#119926;(<span class="emphasis"><em>n</em></span>), where
+      the class. Each call to the interpolant is &#119926;(<span class="emphasis"><em>n</em></span>), where
       <span class="emphasis"><em>n</em></span> is the number of points to interpolate.
     </p>
 </div>

@@ -256,7 +256,7 @@ recurrence relations.  These relations guarantee low absolute error
 but cannot guarantee low relative error near one of the roots of the
 polynomials.
 
-[endsect][/section:beta_function The Beta Function]
+[endsect] [/section:beta_function The Beta Function]
 [/
   Copyright 2006 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.

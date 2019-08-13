@@ -49,16 +49,20 @@
 <span class="special">};</span>
 </pre>
 <p>
-        The tanh-sinh quadrature routine provided by boost is a rapidly convergent
-        numerical integration scheme for holomorphic integrands. By this we mean
-        that the integrand is the restriction to the real line of a complex-differentiable
-        function which is bounded on the interior of the unit disk <span class="emphasis"><em>|z|
-        &lt; 1</em></span>, so that it lies within the so-called <a href="https://en.wikipedia.org/wiki/Hardy_space" target="_top">Hardy
-        space</a>. If your integrand obeys these conditions, it can be shown
-        that tanh-sinh integration is optimal, in the sense that it requires the
-        fewest function evaluations for a given accuracy of any quadrature algorithm
-        for a random element from the Hardy space. A basic example of how to use
-        the tanh-sinh quadrature is shown below:
+        The <code class="computeroutput"><span class="identifier">tanh</span><span class="special">-</span><span class="identifier">sinh</span></code> quadrature routine provided by boost
+        is a rapidly convergent numerical integration scheme for holomorphic integrands.
+        By this we mean that the integrand is the restriction to the real line of
+        a complex-differentiable function which is bounded on the interior of the
+        unit disk <span class="emphasis"><em>|z| &lt; 1</em></span>, so that it lies within the so-called
+        <a href="https://en.wikipedia.org/wiki/Hardy_space" target="_top">Hardy space</a>.
+        If your integrand obeys these conditions, it can be shown that <code class="computeroutput"><span class="identifier">tanh</span><span class="special">-</span><span class="identifier">sinh</span></code>
+        integration is optimal, in the sense that it requires the fewest function
+        evaluations for a given accuracy of any quadrature algorithm for a random
+        element from the Hardy space.
+      </p>
+<p>
+        A basic example of how to use the <code class="computeroutput"><span class="identifier">tanh</span><span class="special">-</span><span class="identifier">sinh</span></code> quadrature
+        is shown below:
       </p>
 <pre class="programlisting"><span class="identifier">tanh_sinh</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">integrator</span><span class="special">;</span>
 <span class="keyword">auto</span> <span class="identifier">f</span> <span class="special">=</span> <span class="special">[](</span><span class="keyword">double</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">{</span> <span class="keyword">return</span> <span class="number">5</span><span class="special">*</span><span class="identifier">x</span> <span class="special">+</span> <span class="number">7</span><span class="special">;</span> <span class="special">};</span>
@@ -68,7 +72,7 @@
 <span class="identifier">Q</span> <span class="special">=</span> <span class="identifier">integrator</span><span class="special">.</span><span class="identifier">integrate</span><span class="special">(</span><span class="identifier">f</span><span class="special">,</span> <span class="number">0.0</span><span class="special">,</span> <span class="number">1.1</span><span class="special">);</span>
 </pre>
 <p>
-        The basic idea of tanh-sinh quadrature is that a variable transformation
+        The basic idea of <code class="computeroutput"><span class="identifier">tanh</span><span class="special">-</span><span class="identifier">sinh</span></code> quadrature is that a variable transformation
         can cause the endpoint derivatives to decay rapidly. When the derivatives
         at the endpoints decay much faster than the Bernoulli numbers grow, the Euler-Maclaurin
         summation formula tells us that simple trapezoidal quadrature converges faster
@@ -483,11 +487,11 @@
 </tbody>
 </table></div>
 <p>
-        Although the tanh-sinh quadrature can compute integral over infinite domains
-        by variable transformations, these transformations can create a very poorly
-        behaved integrand. For this reason, double-exponential variable transformations
-        have been provided that allow stable computation over infinite domains; these
-        being the exp-sinh and sinh-sinh quadrature.
+        Although the <code class="computeroutput"><span class="identifier">tanh</span><span class="special">-</span><span class="identifier">sinh</span></code> quadrature can compute integral over
+        infinite domains by variable transformations, these transformations can create
+        a very poorly behaved integrand. For this reason, double-exponential variable
+        transformations have been provided that allow stable computation over infinite
+        domains; these being the exp-sinh and sinh-sinh quadrature.
       </p>
 <h5>
 <a name="math_toolkit.double_exponential.de_tanh_sinh.h0"></a>
@@ -495,9 +499,10 @@
         integrals</a>
       </h5>
 <p>
-        The tanh_sinh integrator supports integration of functions which return complex
-        results, for example the sine-integral <code class="computeroutput"><span class="identifier">Si</span><span class="special">(</span><span class="identifier">z</span><span class="special">)</span></code>
-        has the integral representation:
+        The <code class="computeroutput"><span class="identifier">tanh_sinh</span></code> integrator
+        supports integration of functions which return complex results, for example
+        the sine-integral <code class="computeroutput"><span class="identifier">Si</span><span class="special">(</span><span class="identifier">z</span><span class="special">)</span></code> has
+        the integral representation:
       </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
           <span class="inlinemediaobject"><img src="../../../equations/sine_integral.svg"></span>

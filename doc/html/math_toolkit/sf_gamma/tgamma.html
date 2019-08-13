@@ -465,7 +465,8 @@
       </h5>
 <p>
         The generic version of the <code class="computeroutput"><span class="identifier">tgamma</span></code>
-        function is implemented Sterling's approximation for lgamma for large z:
+        function is implemented Sterling's approximation for <code class="computeroutput"><span class="identifier">lgamma</span></code>
+        for large z:
       </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
           <span class="inlinemediaobject"><img src="../../../equations/gamma6.svg"></span>
@@ -503,9 +504,9 @@
 
         </p></blockquote></div>
 <p>
-        is used. Particular care has to be taken to evaluate the <code class="literal">z * sin(&#960; &#160; *
+        is used. Particular care has to be taken to evaluate the <code class="literal">z * sin(&#960; *
         z)</code> part: a special routine is used to reduce z prior to multiplying
-        by &#960; &#160; to ensure that the result in is the range [0, &#960;/2]. Without this an excessive
+        by &#960; to ensure that the result in is the range [0, &#960;/2]. Without this an excessive
         amount of error occurs in this region (which is hard enough already, as the
         rate of change near a negative pole is <span class="emphasis"><em>exceptionally</em></span>
         high).

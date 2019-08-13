@@ -18,7 +18,7 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
     class cardinal_quadratic_b_spline
     {
     public:
-        // If you don't know the value of the derivative at the endpoints, leave them as nans and the routine will estimate them.
+        // If you don't know the value of the derivative at the endpoints, leave them as NaNs and the routine will estimate them.
         // y[0] = y(a), y[n - 1] = y(b), step_size = (b - a)/(n -1).
         cardinal_quadratic_b_spline(const Real* const y,
                                     size_t n,
@@ -48,9 +48,9 @@ rather than three times as is done with the cubic B-spline.
 Since the basis functions are less smooth than the cubic B-spline,
 you will nearly always wish to use the cubic B-spline interpolator rather than this.
 However, this interpolator is occasionally useful for approximating functions of reduced smoothness,
-as hence finds a uses internally in the Boost.Math library.
+as hence finds use internally in the Boost.Math library.
 
-It is reasonable to test this interpolator against the cubic b-spline interpolator when you are approximating functions which are two or three times continuously differentiable, but not three or four times differentiable.
+It is reasonable to test this interpolator against the cubic b-spline interpolator when you are approximating functions 
+which are two or three times continuously differentiable, but not three or four times differentiable.
 
-[endsect]
-[/section:cardinal_quadratic_b]
+[endsect] [/section:cardinal_quadratic_b]

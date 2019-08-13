@@ -166,11 +166,6 @@ The last (0 to 10 heads) must, of course, be 100% probability.
 		probability = 0.6;
 		q = quantile(flip, probability);
 		std::cout << "Quantile (flip, " << probability << ") = " << q << std::endl; // Quantile (flip, 0.6) = 5
-
-
-
-
-
   }
   catch(const std::exception& e)
   {

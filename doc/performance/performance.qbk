@@ -31,7 +31,7 @@ all the appropriate corner cases.  They do not necessarily represent
 "typical" usage: whatever that may be!
 ]
 
-[endsect]
+[endsect] [/section:interp Interpreting these Results]
 
 [section:getting_best Getting the Best Performance from this Library: Compiler and Compiler Options]
 
@@ -364,7 +364,7 @@ compiler.
 
 [endsect] [/section:perf_test_app The Performance Test Applications]
 
-[endmathpart]
+[endmathpart] [/mathpart perf Performance]
 
 [/
   Copyright 2006 John Maddock and Paul A. Bristow.

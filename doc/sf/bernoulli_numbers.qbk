@@ -145,12 +145,12 @@ and their generating function is also given therein.
 The relation of Tangent numbers with Bernoulli numbers  ['B[sub i]]
 is given by Brent and Harvey's equation 14:
 
-__spaces[equation tangent_numbers]
+[equation tangent_numbers]
 
 Their relation with Bernoulli numbers ['B[sub i]] are defined by
 
 if i > 0 and i is even then
-__spaces[equation bernoulli_numbers] [br]
+[equation bernoulli_numbers] [br]
 elseif i == 0 then  ['B[sub i]] = 1 [br]
 elseif i == 1 then  ['B[sub i]] = -1/2 [br]
 elseif i < 0 or i is odd then ['B[sub i]] = 0
@@ -164,7 +164,6 @@ stored in our cache, an asymptotic expansion [@http://www.luschny.de/math/primes
 [equation bernoulli_numbers2]
 
 [endsect] [/section:bernoulli_numbers Bernoulli Numbers]
-
 
 [section:tangent_numbers Tangent Numbers]
 

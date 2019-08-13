@@ -39,7 +39,7 @@
 <span class="keyword">class</span> <span class="identifier">cardinal_quadratic_b_spline</span>
 <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
-    <span class="comment">// If you don't know the value of the derivative at the endpoints, leave them as nans and the routine will estimate them.</span>
+    <span class="comment">// If you don't know the value of the derivative at the endpoints, leave them as NaNs and the routine will estimate them.</span>
     <span class="comment">// y[0] = y(a), y[n - 1] = y(b), step_size = (b - a)/(n -1).</span>
     <span class="identifier">cardinal_quadratic_b_spline</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">Real</span><span class="special">*</span> <span class="keyword">const</span> <span class="identifier">y</span><span class="special">,</span>
                                 <span class="identifier">size_t</span> <span class="identifier">n</span><span class="special">,</span>
@@ -75,7 +75,7 @@
       Since the basis functions are less smooth than the cubic B-spline, you will
       nearly always wish to use the cubic B-spline interpolator rather than this.
       However, this interpolator is occasionally useful for approximating functions
-      of reduced smoothness, as hence finds a uses internally in the Boost.Math library.
+      of reduced smoothness, as hence finds use internally in the Boost.Math library.
     </p>
 <p>
       It is reasonable to test this interpolator against the cubic b-spline interpolator

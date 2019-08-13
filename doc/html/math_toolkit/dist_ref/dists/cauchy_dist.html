@@ -59,10 +59,11 @@
 
           </p></blockquote></div>
 <p>
-          The location parameter x<sub>0</sub> &#160; is the location of the peak of the distribution
-          (the mode of the distribution), while the scale parameter &#947; &#160; specifies half
-          the width of the PDF at half the maximum height. If the location is zero,
-          and the scale 1, then the result is a standard Cauchy distribution.
+          The location parameter <span class="emphasis"><em>x<sub>0</sub></em></span> is the location of the peak
+          of the distribution (the mode of the distribution), while the scale parameter
+          &#947; specifies half the width of the PDF at half the maximum height. If the
+          location is zero, and the scale 1, then the result is a standard Cauchy
+          distribution.
         </p>
 <p>
           The distribution is important in physics as it is the solution to the differential
@@ -160,7 +161,7 @@
         </h5>
 <p>
           In the following table x<sub>0 </sub> is the location parameter of the distribution,
-          &#947; &#160; is its scale parameter, <span class="emphasis"><em>x</em></span> is the random variate,
+          &#947; is its scale parameter, <span class="emphasis"><em>x</em></span> is the random variate,
           <span class="emphasis"><em>p</em></span> is the probability and <span class="emphasis"><em>q = 1-p</em></span>.
         </p>
 <div class="informaltable"><table class="table">
@@ -189,7 +190,8 @@
                 </td>
 <td>
                   <p>
-                    Using the relation: pdf = 1 / (&#960; * &#947; * (1 + ((x - x<sub>0 </sub>) / &#947;)<sup>2</sup>)
+                    Using the relation: <span class="emphasis"><em>pdf = 1 / (&#960; * &#947; * (1 + ((x - x<sub>0 </sub>)
+                    / &#947;)<sup>2</sup>) </em></span>
                   </p>
                 </td>
 </tr>
@@ -203,27 +205,27 @@
                   <p>
                     The cdf is normally given by:
                   </p>
-                  <p>
-                    p = 0.5 + atan(x)/&#960;
-                  </p>
+                  <div class="blockquote"><blockquote class="blockquote"><p>
+                      <span class="serif_italic">p = 0.5 + atan(x)/&#960;</span>
+                    </p></blockquote></div>
                   <p>
                     But that suffers from cancellation error as x -&gt; -&#8734;. So recall
                     that for <code class="computeroutput"><span class="identifier">x</span> <span class="special">&lt;</span>
                     <span class="number">0</span></code>:
                   </p>
-                  <p>
-                    atan(x) = -&#960;/2 - atan(1/x)
-                  </p>
+                  <div class="blockquote"><blockquote class="blockquote"><p>
+                      <span class="serif_italic">atan(x) = -&#960;/2 - atan(1/x)</span>
+                    </p></blockquote></div>
                   <p>
                     Substituting into the above we get:
                   </p>
-                  <p>
-                    p = -atan(1/x) ; x &lt; 0
-                  </p>
+                  <div class="blockquote"><blockquote class="blockquote"><p>
+                      <span class="serif_italic">p = -atan(1/x) ; x &lt; 0</span>
+                    </p></blockquote></div>
                   <p>
                     So the procedure is to calculate the cdf for -fabs(x) using the
                     above formula. Note that to factor in the location and scale
-                    parameters you must substitute (x - x<sub>0 </sub>) / &#947; &#160; for x in the above.
+                    parameters you must substitute (x - x<sub>0 </sub>) / &#947; for x in the above.
                   </p>
                   <p>
                     This procedure yields the smaller of <span class="emphasis"><em>p</em></span> and
@@ -245,9 +247,9 @@
                     from the probability or its complement. First the argument <span class="emphasis"><em>p</em></span>
                     is reduced to the range [-0.5, 0.5], then the relation
                   </p>
-                  <p>
-                    x = x<sub>0 </sub> &#177; &#947; &#160; / tan(&#960; * p)
-                  </p>
+                  <div class="blockquote"><blockquote class="blockquote"><p>
+                      <span class="serif_italic">x = x<sub>0 </sub> &#177; &#947; / tan(&#960; * p)</span>
+                    </p></blockquote></div>
                   <p>
                     is used to obtain the result. Whether we're adding or subtracting
                     from x<sub>0 </sub> is determined by whether we're starting from the complement

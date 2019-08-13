@@ -33,7 +33,7 @@
 
 [/Used thus [equation ellint6] ]
 
-[/insert Graph as an image, previous generated with an external tool like SVG_plot.]
+[/insert Graph as an SVG or PNG image, previous generated with an external tool like SVG_plot.]
 
 [template graph[name] 
 [:
@@ -46,6 +46,15 @@
 </imageobject>
 </inlinemediaobject>'''
 ]
+]
+
+[/insert Indented one-line expression italic and serif font probably using Unicode symbols for Greek and symbols.]
+[/Example: [expression [sub 1]F[sub 0](a, z) = (1-z)[super -a]]]
+[template expression[equation] 
+[:
+[role serif_italic [equation]]
+]
+[/ Hint you may need to enclose equation in brackets if it contains comma(s) to avoid "error invalid number of arguments"]
 ]
 
 [import ../../../tools/auto_index/include/auto_index_helpers.qbk]
@@ -437,6 +446,7 @@ and use the function's name as the link text.]
 [def __Mathematica [@http://www.wolfram.com/products/mathematica/index.html Wolfram Mathematica]]
 [def __Maple [@https://www.maplesoft.com Maple]]
 [def __WolframAlpha [@http://www.wolframalpha.com/ Wolfram Alpha]]
+[def __Wolfram_functions [@https://functions.wolfram.com functions.wolfram.com]]
 [def __TOMS748 [@http://portal.acm.org/citation.cfm?id=210111 TOMS Algorithm 748: enclosing zeros of continuous functions]]
 [def __TOMS910 [@http://portal.acm.org/citation.cfm?id=1916469 TOMS Algorithm 910: A Portable C++ Multiple-Precision System for Special-Function Calculations]]
 [def __why_complements [link why_complements why complements?]]
@@ -465,7 +475,9 @@ and use the function's name as the link text.]
 [def __rational_function [@https://en.wikipedia.org/wiki/Rational_function rational function]]
 [def __remez [@http://en.wikipedia.org/wiki/Remez_algorithm Remez algorithm]]
 [def __ULP [@https://en.wikipedia.org/wiki/Unit_in_the_last_place Unit in the Last Place]]
-
+[def __github [@github.com GitHub]]
+[def __github_boost [@https://github.com/boostorg Boost GitHub]]
+[def __github_math [@https://github.com/boostorg/math Boost.Math GitHub]]
 [/ Some composite templates]
 [template super[x]'''<superscript>'''[x]'''</superscript>''']
 [template sub[x]'''<subscript>'''[x]'''</subscript>''']

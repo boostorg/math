@@ -45,7 +45,8 @@ This is to be contrasted to traditional cubic spline interpolation which is ill-
 
 There are many use cases for interpolating a function at equally spaced points.
 One particularly important example is solving ODEs whose coefficients depend on data determined from experiment or numerical simulation.
-Since most ODE steppers are adaptive, they must be able to sample the coefficients at arbitrary points; not just at the points we know the values of our function.
+Since most ODE steppers are adaptive, they must be able to sample the coefficients at arbitrary points; 
+not just at the points we know the values of our function.
 
 The first two arguments to the constructor are either:
 
@@ -54,8 +55,8 @@ The first two arguments to the constructor are either:
 
 These are then followed by:
 
-* The start of the functions domain
-* The step size
+* The start of the functions domain,
+* The step size.
 
 Optionally, you may provide two additional arguments to the constructor, namely the derivative of the function at the left endpoint, and the derivative at the right endpoint.
 If you do not provide these arguments, they will be estimated using one-sided finite-difference formulas.
@@ -66,10 +67,10 @@ An example of a valid call to the constructor is
     double h = 0.01;
     boost::math::cubic_b_spline<double> spline(f.begin(), f.end(), t0, h);
 
-The endpoints are estimated using a one-sided finite-difference formula. If you know the derivative at the endpoint, you may pass it to the constructor via
+The endpoints are estimated using a one-sided finite-difference formula. 
+If you know the derivative at the endpoint, you may pass it to the constructor via
 
     boost::math::cubic_b_spline<double> spline(f.begin(), f.end(), t0, h, a_prime, b_prime);
-
 
 To evaluate the interpolant at a point, we simply use
 
@@ -79,7 +80,8 @@ and to evaluate the derivative of the interpolant we use
 
     double yp = spline.prime(x);
 
-Be aware that the accuracy guarantees on the derivative of the spline are an order lower than the guarantees on the original function, see [@http://www.springer.com/us/book/9780387984087 Numerical Analysis, Graduate Texts in Mathematics, 181, Rainer Kress] for details.
+Be aware that the accuracy guarantees on the derivative of the spline are an order lower than the guarantees on the original function,
+see [@http://www.springer.com/us/book/9780387984087 Numerical Analysis, Graduate Texts in Mathematics, 181, Rainer Kress] for details.
 
 The last interesting member is the second derivative, evaluated via
 
@@ -110,7 +112,7 @@ Let /h/ be the stepsize. If /f/ is four-times continuously differentiable, then 
 
 [heading Testing]
 
-Since the interpolant obeys ['s(x[sub j]) = f(x[sub j])] at all interpolation points,
+Since the interpolant obeys [role serif_italic s(x[sub j]) = f(x[sub j])] at all interpolation points,
 the tests generate random data and evaluate the interpolant at the interpolation points,
 validating that equality with the data holds.
 

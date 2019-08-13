@@ -92,7 +92,8 @@ in such cases, only a low /absolute error/ can be guaranteed.
 [[variance][ ([pi]*s)[super 2] / 3]]
 ]
 
-[endsect]
+[endsect] [/section:logistic_dist Logistic Distribution]
+
 
 [/ logistic.qbk
   Copyright 2006, 2007 John Maddock and Paul A. Bristow.

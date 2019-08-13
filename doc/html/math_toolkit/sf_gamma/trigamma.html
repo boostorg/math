@@ -35,10 +35,10 @@
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">trigamma</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">);</span>
+<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">trigamma</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">x</span><span class="special">);</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">trigamma</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">trigamma</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 
 <span class="special">}}</span> <span class="comment">// namespaces</span>
 </pre>
@@ -180,7 +180,7 @@
         The arbitrary precision version of this function simply calls <a class="link" href="polygamma.html" title="Polygamma">polygamma</a>.
       </p>
 <p>
-        For built in fixed precision types, negative arguments are first made positive
+        For built in fixed-precision types, negative arguments are first made positive
         via:
       </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
@@ -196,14 +196,14 @@
         </p></blockquote></div>
 <p>
         Then evaluation is via one of a number of rational approximations, for small
-        x these are of the form:
+        <span class="emphasis"><em>x</em></span> these are of the form:
       </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
           <span class="inlinemediaobject"><img src="../../../equations/trigamma4.svg"></span>
 
         </p></blockquote></div>
 <p>
-        and for large x of the form:
+        and for large <span class="emphasis"><em>x</em></span> of the form:
       </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
           <span class="inlinemediaobject"><img src="../../../equations/trigamma5.svg"></span>

@@ -1,4 +1,4 @@
-
+[/These are templates used in many other Quickbook files.]
 
 [template policy_overview[]
 
@@ -48,7 +48,8 @@ by passing a specific policy to a special function], or to a
 [link math_toolkit.pol_tutorial.ad_hoc_dist_policies
 statistical distribution].
 
-]
+] [/template policy_overview]
+
 
 [template performance_overview[]
 
@@ -85,7 +86,7 @@ information on the performance
 of this library, what you can do to fine tune it, and how this library
 compares to some other open source alternatives.
 
-]
+] [/template performance_overview]
 
 [template compilers_overview[]
 
@@ -220,7 +221,7 @@ for some functions).
 You will need to cast an eye over the output from
 the failing tests and make a judgement as to whether
 the error rates are acceptable or not.
-]
+] [/template compilers_overview]
 
 [/ common_overviews.qbk
   Copyright 2007, 2012, 2014 John Maddock and Paul A. Bristow.

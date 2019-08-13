@@ -51,9 +51,9 @@
         The function <a class="link" href="jacobi_elliptic.html" title="Jacobi Elliptic SN, CN and DN">jacobi_elliptic</a>
         calculates the three copolar Jacobi elliptic functions <span class="emphasis"><em>sn(u, k)</em></span>,
         <span class="emphasis"><em>cn(u, k)</em></span> and <span class="emphasis"><em>dn(u, k)</em></span>. The returned
-        value is <span class="emphasis"><em>sn(u, k)</em></span>, and if provided, <span class="emphasis"><em>*pcn</em></span>
-        is set to <span class="emphasis"><em>cn(u, k)</em></span>, and <span class="emphasis"><em>*pdn</em></span> is
-        set to <span class="emphasis"><em>dn(u, k)</em></span>.
+        value is <span class="emphasis"><em>sn(u, k)</em></span>, and if provided, <code class="computeroutput"><span class="special">*</span><span class="identifier">pcn</span></code> is set to <span class="emphasis"><em>cn(u, k)</em></span>,
+        and <code class="computeroutput"><span class="special">*</span><span class="identifier">pdn</span></code>
+        is set to <span class="emphasis"><em>dn(u, k)</em></span>.
       </p>
 <p>
         The functions are defined as follows, given:
@@ -63,7 +63,8 @@
 
         </p></blockquote></div>
 <p>
-        The the angle &#966; is called the <span class="emphasis"><em>amplitude</em></span> and:
+        The the angle <span class="emphasis"><em>&#966;</em></span> is called the <span class="emphasis"><em>amplitude</em></span>
+        and:
       </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
           <span class="inlinemediaobject"><img src="../../../equations/jacobi2.svg"></span>
@@ -92,30 +93,30 @@
           <span class="emphasis"><em>m</em></span>. These are related by:
         </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-            k = sin &#160;&#945;
+            <span class="serif_italic">k = sin &#945;</span>
           </p></blockquote></div>
 <div class="blockquote"><blockquote class="blockquote"><p>
-            m = k<sup>2</sup> = sin<sup>2</sup>&#945;
+            <span class="serif_italic">m = k<sup>2</sup> = sin<sup>2</sup>&#945;</span>
           </p></blockquote></div>
 <p>
           So that the function <span class="emphasis"><em>sn</em></span> (for example) may be expressed
           as either:
         </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-            sn(u, k)
+            <span class="serif_italic">sn(u, k)</span>
           </p></blockquote></div>
 <div class="blockquote"><blockquote class="blockquote"><p>
-            sn(u \ &#945;)
+            <span class="serif_italic">sn(u \ &#945;)</span>
           </p></blockquote></div>
 <div class="blockquote"><blockquote class="blockquote"><p>
-            sn(u | m)
+            <span class="serif_italic">sn(u | m)</span>
           </p></blockquote></div>
 <p>
           To further complicate matters, some texts refer to the <span class="emphasis"><em>complement
           of the parameter m</em></span>, or 1 - m, where:
         </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-            1 - m = 1 - k<sup>2</sup> = cos<sup>2</sup>&#945;
+            <span class="serif_italic">1 - m = 1 - k<sup>2</sup> = cos<sup>2</sup>&#945;</span>
           </p></blockquote></div>
 <p>
           This implementation uses <span class="emphasis"><em>k</em></span> throughout, and makes this
@@ -730,13 +731,16 @@
         Then filter off the special cases:
       </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-          <span class="emphasis"><em>sn(0, k) = 0</em></span> and <span class="emphasis"><em>cn(0, k) = dn(0, k) = 1</em></span>
+          <span class="serif_italic"><span class="emphasis"><em>sn(0, k) = 0</em></span> and <span class="emphasis"><em>cn(0,
+          k) = dn(0, k) = 1</em></span></span>
         </p></blockquote></div>
 <div class="blockquote"><blockquote class="blockquote"><p>
-          <span class="emphasis"><em>sn(u, 0) = sin(u), cn(u, 0) = cos(u) and dn(u, 0) = 1</em></span>
+          <span class="serif_italic"><span class="emphasis"><em>sn(u, 0) = sin(u), cn(u, 0) = cos(u)
+          and dn(u, 0) = 1</em></span></span>
         </p></blockquote></div>
 <div class="blockquote"><blockquote class="blockquote"><p>
-          <span class="emphasis"><em>sn(u, 1) = tanh(u), cn(u, 1) = dn(u, 1) = 1 / cosh(u)</em></span>
+          <span class="serif_italic"><span class="emphasis"><em>sn(u, 1) = tanh(u), cn(u, 1) = dn(u,
+          1) = 1 / cosh(u)</em></span></span>
         </p></blockquote></div>
 <p>
         And for <span class="emphasis"><em>k<sup>4</sup> &lt; &#949;</em></span> we have:

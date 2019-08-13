@@ -40,7 +40,7 @@
 </tr>
 <tr><td align="left" valign="top"><p>
           The header <code class="computeroutput"><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">tools</span><span class="special">/</span><span class="identifier">test</span><span class="special">.</span><span class="identifier">hpp</span></code> is located under <code class="computeroutput"><span class="identifier">libs</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">include_private</span></code>
-          and is not installed to the usual locations by default, you will need to
+          and is NOT installed to the usual locations by default; you will need to
           add <code class="computeroutput"><span class="identifier">libs</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">include_private</span></code> to your compiler's include
           path in order to use this header.
         </p></td></tr>
@@ -170,10 +170,11 @@
         <span class="phrase"><a name="math_toolkit.internals.error_test.example"></a></span><a class="link" href="error_test.html#math_toolkit.internals.error_test.example">Example</a>
       </h5>
 <p>
-        Suppose we want to test the tgamma and lgamma functions, we can create a
-        two dimensional matrix of test data, each row is one test case, and contains
-        three elements: the input value, and the expected results for the tgamma
-        and lgamma functions respectively.
+        Suppose we want to test the <code class="computeroutput"><span class="identifier">tgamma</span></code>
+        and <code class="computeroutput"><span class="identifier">lgamma</span></code> functions, we
+        can create a two-dimensional matrix of test data, each row is one test case,
+        and contains three elements: the input value, and the expected results for
+        the <code class="computeroutput"><span class="identifier">tgamma</span></code> and <code class="computeroutput"><span class="identifier">lgamma</span></code> functions respectively.
       </p>
 <pre class="programlisting"><span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">array</span><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">array</span><span class="special">&lt;</span><span class="identifier">TestType</span><span class="special">,</span> <span class="number">3</span><span class="special">&gt;,</span> <span class="identifier">NumberOfTests</span><span class="special">&gt;</span>
    <span class="identifier">factorials</span> <span class="special">=</span> <span class="special">{</span>

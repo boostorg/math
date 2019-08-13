@@ -422,15 +422,16 @@
         make their arguments positive:
       </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-          <span class="emphasis"><em>erf(-z) = 1 - erf(z);</em></span>
+          <span class="serif_italic"><span class="emphasis"><em>erf(-z) = 1 - erf(z);</em></span>
+          </span>
         </p></blockquote></div>
 <div class="blockquote"><blockquote class="blockquote"><p>
-          <span class="emphasis"><em>erfc(-z) = 2 - erfc(z);</em></span> // preferred when -z &lt;
-          -0.5
+          <span class="serif_italic"><span class="emphasis"><em>erfc(-z) = 2 - erfc(z);</em></span>
+          // preferred when -z &lt; -0.5</span>
         </p></blockquote></div>
 <div class="blockquote"><blockquote class="blockquote"><p>
-          <span class="emphasis"><em>erfc(-z) = 1 + erf(z);</em></span> // preferred when -0.5 &lt;=
-          -z &lt; 0
+          <span class="serif_italic"><span class="emphasis"><em>erfc(-z) = 1 + erf(z);</em></span>
+          // preferred when -0.5 &lt;= -z &lt; 0</span>
         </p></blockquote></div>
 <p>
         The generic versions of these functions are implemented in terms of the incomplete
@@ -449,7 +450,7 @@
         erf is calculated using:
       </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-          <span class="emphasis"><em>erf(z) = z * (C + R(z*z));</em></span>
+          <span class="serif_italic"><span class="emphasis"><em>erf(z) = z * (C + R(z*z));</em></span></span>
         </p></blockquote></div>
 <p>
         where the rational approximation <span class="emphasis"><em>R(z*z)</em></span> is optimised
@@ -465,7 +466,7 @@
         [<span class="emphasis"><em>a, b)</em></span> then:
       </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-          <span class="emphasis"><em>erfc(z) * exp(z*z) * z ~ c</em></span>
+          <span class="serif_italic"><span class="emphasis"><em>erfc(z) * exp(z*z) * z ~ c</em></span></span>
         </p></blockquote></div>
 <p>
         for some constant c.
@@ -476,7 +477,8 @@
         using:
       </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-          <span class="emphasis"><em>erfc(z) = exp(-z*z) * (C + R(z - B)) / z;</em></span>
+          <span class="serif_italic"><span class="emphasis"><em>erfc(z) = exp(-z*z) * (C + R(z -
+          B)) / z;</em></span></span>
         </p></blockquote></div>
 <p>
         Again R(z - B) is optimised for absolute error, and the constant <code class="computeroutput"><span class="identifier">C</span></code> is the average of <code class="computeroutput"><span class="identifier">erfc</span><span class="special">(</span><span class="identifier">z</span><span class="special">)</span>
@@ -497,7 +499,8 @@
         [a, +&#8734;] the above approximation is modified to:
       </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-          <span class="emphasis"><em>erfc(z) = exp(-z*z) * (C + R(1 / z)) / z;</em></span>
+          <span class="serif_italic"><span class="emphasis"><em>erfc(z) = exp(-z*z) * (C + R(1 /
+          z)) / z;</em></span></span>
         </p></blockquote></div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

@@ -103,7 +103,7 @@ to around 100 decimal digits.
 [h4 Implementation]
 
 The generic version of the `tgamma` function is implemented Sterling's approximation
-for lgamma for large z:
+for `lgamma` for large z:
 
 [equation gamma6]
 
@@ -125,8 +125,8 @@ For z < -20 the reflection formula:
 
 [equation gamm5]
 
-is used.  Particular care has to be taken to evaluate the [^ z * sin([pi][space] * z)] part: 
-a special routine is used to reduce z prior to multiplying by [pi][space] to ensure that the
+is used.  Particular care has to be taken to evaluate the [^ z * sin([pi] * z)] part: 
+a special routine is used to reduce z prior to multiplying by [pi] to ensure that the
 result in is the range [0, [pi]/2]. Without this an excessive amount of error occurs
 in this region (which is hard enough already, as the rate of change near a negative pole
 is /exceptionally/ high).
@@ -141,7 +141,7 @@ the approximation is `log(tgamma(dz+1))` which can fed into __expm1 to give
 the desired result.  Outside the range `-0.5 < dz < 2` then the naive formula
 `tgamma1pm1(dz) = tgamma(dz+1)-1` can be used directly.
 
-[endsect][/section:tgamma The Gamma Function]
+[endsect] [/section:tgamma The Gamma Function]
 [/ 
   Copyright 2006 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.
