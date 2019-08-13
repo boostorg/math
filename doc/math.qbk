@@ -18,7 +18,7 @@
 [block '''</chapter>''']]
 
 [/insert Equation as an image, previous generated with an external tool like Latex.]
-[template equation[name] 
+[template equation[name]
 [:
 '''<inlinemediaobject>
 <imageobject role="html">
@@ -35,7 +35,7 @@
 
 [/insert Graph as an SVG or PNG image, previous generated with an external tool like SVG_plot.]
 
-[template graph[name] 
+[template graph[name]
 [:
 '''<inlinemediaobject>
 <imageobject role="html">
@@ -50,7 +50,7 @@
 
 [/insert Indented one-line expression italic and serif font probably using Unicode symbols for Greek and symbols.]
 [/Example: [expression [sub 1]F[sub 0](a, z) = (1-z)[super -a]]]
-[template expression[equation] 
+[template expression[equation]
 [:
 [role serif_italic [equation]]
 ]
@@ -690,6 +690,7 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [mathpart interpolation Interpolation]
 [include interpolators/cubic_b_spline.qbk]
 [include interpolators/cardinal_quadratic_b_spline.qbk]
+[include interpolators/cardinal_quintic_b_spline.qbk]
 [include interpolators/whittaker_shannon.qbk]
 [include interpolators/barycentric_rational_interpolation.qbk]
 [include interpolators/vector_barycentric_rational.qbk]
