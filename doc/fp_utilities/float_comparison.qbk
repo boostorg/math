@@ -22,7 +22,7 @@ Some background reading is:
 * [@http://adtmag.com/articles/2000/03/16/comparing-floatshow-to-determine-if-floating-quantities-are-close-enough-once-a-tolerance-has-been-r.aspx
 Alberto Squassabia, Comparing floats listing]
 * [@https://code.google.com/p/googletest/wiki/AdvancedGuide#Floating-Point_Comparison Google Floating-Point_Comparison guide]
-* [@boost:/libs/test/doc/html/boost_test/users_guide/testing_tools/testing_floating_points.html Boost.Test Floating-Point_Comparison]
+* [@https://www.boost.org/doc/libs/release/libs/test/doc/html/boost_test/testing_tools/extended_comparison/floating_point.html Boost.Test Floating-Point_Comparison]
 
 Boost provides a number of ways to compare floating-point values to see if they are tolerably close enough to each other,
 but first we must decide what kind of comparison we require:
@@ -35,8 +35,7 @@ This function is somewhat difficult to compute, and doesn't scale to values that
 * The relative distance/error between two values.  This is quick and easy to compute, and is generally the method of choice when
 checking that your results are "tolerably close" to one another.  However, it is not as exact as the edit distance when dealing
 with small differences, and due to the way floating-point values are encoded can "wobble" by a factor of 2 compared to the "true"
-edit distance.  This is the method documented below: if `float_distance` is a surgeon's scalpel, then `relative_difference` is more
-like a Swiss army knife: both have important but different use cases.
+edit distance.  This is the method documented below: if `float_distance` is a surgeon's scalpel, then `relative_difference` is more like a Swiss army knife: both have important but different use cases.
 
 [h5:fp_relative Relative Comparison of Floating-point Values]
 
@@ -51,7 +50,7 @@ like a Swiss army knife: both have important but different use cases.
 
 The function `relative_difference` returns the relative distance/error ['E] between two values as defined by:
 
-[pre E = fabs((a - b) / min(a,b))]
+[expression E = fabs((a - b) / min(a,b))]
 
 The function `epsilon_difference` is a convenience function that returns `relative_difference(a, b) / eps` where
 `eps` is the machine epsilon for the result type.

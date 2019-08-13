@@ -1,11 +1,11 @@
 [section:contact Contact Info and Support]
 
-The main place to see and raise issues is now at [@https://github.com/boostorg/math/ GIThub].
+The main place to see and raise issues is now at [@https://github.com/boostorg/math/ GitHub].
 Currently open bug reports can be viewed [@https://github.com/boostorg/math/issues here].
 
 All old bug reports, including closed ones, can be viewed on Trac (now read-only)
 [@https://svn.boost.org/trac/boost/query?status=assigned&status=closed&status=new&status=reopened&component=math&col=id&col=summary&col=status&col=type&col=milestone&col=component&order=priority here]
-and more recent issues on GIThub [@https://github.com/boostorg/math/issues?utf8=%E2%9C%93&q=is%3Aissue here].
+and more recent issues on GitHub [@https://github.com/boostorg/math/issues?utf8=%E2%9C%93&q=is%3Aissue here].
 
 The other places for discussion about this library are via the Boost mailing lists:
 
