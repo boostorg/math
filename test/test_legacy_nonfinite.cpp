@@ -28,7 +28,7 @@ excluding C99 specification  "nan -nan nan -nan" and "inf -inf".
 #include <sstream>
 
 #define BOOST_TEST_MAIN
-#include <boost/test/auto_unit_test.hpp>
+#include <boost/test/unit_test.hpp>
 
 //#include "almost_equal.hpp"
 //#include "S_.hpp"
