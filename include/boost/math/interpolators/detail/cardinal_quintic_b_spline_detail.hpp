@@ -6,6 +6,7 @@
 
 #ifndef BOOST_MATH_INTERPOLATORS_CARDINAL_QUINTIC_B_SPLINE_DETAIL_HPP
 #define BOOST_MATH_INTERPOLATORS_CARDINAL_QUINTIC_B_SPLINE_DETAIL_HPP
+#include <cmath>
 #include <vector>
 #include <utility>
 #include <boost/math/special_functions/cardinal_b_spline.hpp>
@@ -37,8 +38,9 @@ public:
             throw std::logic_error("The interpolator requires at least 3 points.");
         }
 
-        if(std::isnan(left_endpoint_derivatives.first) || std::isnan(left_endpoint_derivatives.second) ||
-           std::isnan(right_endpoint_derivatives.first) || std::isnan(right_endpoint_derivatives.second)) {
+        using std::isnan;
+        if(isnan(left_endpoint_derivatives.first) ||  isnan(left_endpoint_derivatives.second) ||
+           isnan(right_endpoint_derivatives.first) || isnan(right_endpoint_derivatives.second)) {
             throw std::logic_error("Derivative estimation is not yet implemented!");
         }
 
@@ -153,6 +155,8 @@ public:
     }
 
     Real operator()(Real t) const {
+        using std::ceil;
+        using std::floor;
         using boost::math::cardinal_b_spline;
         // tf = t0 + (n-1)*h
         // alpha.size() = n+4
@@ -172,19 +176,42 @@ public:
     }
 
     Real prime(Real t) const {
+        using std::ceil;
+        using std::floor;
+        using boost::math::cardinal_b_spline_prime;
         if (t < m_t0 || t > m_t0 + (m_alpha.size()-5)/m_inv_h) {
             const char* err_msg = "Tried to evaluate the cardinal quintic b-spline outside the domain of of interpolation; extrapolation does not work.";
             throw std::domain_error(err_msg);
         }
-        return std::numeric_limits<Real>::quiet_NaN();
+        Real x = (t-m_t0)*m_inv_h;
+        // Support of B_5 is [-3, 3]. So -3 < x - j + 2 < 3, so x-1 < j < x+5
+        int64_t j_min = std::max(int64_t(0), int64_t(ceil(x-1)));
+        int64_t j_max = std::min(int64_t(m_alpha.size() - 1), int64_t(floor(x+5)) );
+        Real s = 0;
+        for (int64_t j = j_min; j <= j_max; ++j) {
+            s += m_alpha[j]*cardinal_b_spline_prime<5, Real>(x - j + 2);
+        }
+        return s*m_inv_h;
+
     }
 
     Real double_prime(Real t) const {
+        using std::ceil;
+        using std::floor;
+        using boost::math::cardinal_b_spline_double_prime;
         if (t < m_t0 || t > m_t0 + (m_alpha.size()-5)/m_inv_h) {
             const char* err_msg = "Tried to evaluate the cardinal quintic b-spline outside the domain of of interpolation; extrapolation does not work.";
             throw std::domain_error(err_msg);
         }
-        return std::numeric_limits<Real>::quiet_NaN();
+        Real x = (t-m_t0)*m_inv_h;
+        // Support of B_5 is [-3, 3]. So -3 < x - j + 2 < 3, so x-1 < j < x+5
+        int64_t j_min = std::max(int64_t(0), int64_t(ceil(x-1)));
+        int64_t j_max = std::min(int64_t(m_alpha.size() - 1), int64_t(floor(x+5)) );
+        Real s = 0;
+        for (int64_t j = j_min; j <= j_max; ++j) {
+            s += m_alpha[j]*cardinal_b_spline_double_prime<5, Real>(x - j + 2);
+        }
+        return s*m_inv_h*m_inv_h;
     }
 
 

@@ -9,12 +9,16 @@
 #include <numeric>
 #include <utility>
 #include <boost/math/interpolators/cardinal_quintic_b_spline.hpp>
+#ifdef BOOST_HAS_FLOAT128
+#include <boost/multiprecision/float128.hpp>
+using boost::multiprecision::float128;
+#endif
 using boost::math::interpolators::cardinal_quintic_b_spline;
 
 template<class Real>
 void test_constant()
 {
-    Real c = 7.2;
+    Real c = 7.5;
     Real t0 = 0;
     Real h = Real(1)/Real(16);
     size_t n = 513;
@@ -27,18 +31,21 @@ void test_constant()
     while (i < n) {
       Real t = t0 + i*h;
       CHECK_ULP_CLOSE(c, qbs(t), 3);
-      //CHECK_MOLLIFIED_CLOSE(0, qbs.prime(t), 100*std::numeric_limits<Real>::epsilon());
+      CHECK_MOLLIFIED_CLOSE(Real(0), qbs.prime(t), 400*std::numeric_limits<Real>::epsilon());
+      CHECK_MOLLIFIED_CLOSE(Real(0), qbs.double_prime(t), 60000*std::numeric_limits<Real>::epsilon());
       ++i;
     }
 
     i = 0;
     while (i < n - 1) {
       Real t = t0 + i*h + h/2;
-      CHECK_ULP_CLOSE(c, qbs(t), 4);
-      //CHECK_MOLLIFIED_CLOSE(0, qbs.prime(t), 300*std::numeric_limits<Real>::epsilon());
+      CHECK_ULP_CLOSE(c, qbs(t), 5);
+      CHECK_MOLLIFIED_CLOSE(Real(0), qbs.prime(t), 600*std::numeric_limits<Real>::epsilon());
+      CHECK_MOLLIFIED_CLOSE(Real(0), qbs.double_prime(t), 30000*std::numeric_limits<Real>::epsilon());
       t = t0 + i*h + h/4;
       CHECK_ULP_CLOSE(c, qbs(t), 4);
-      //CHECK_MOLLIFIED_CLOSE(0, qbs.prime(t), 150*std::numeric_limits<Real>::epsilon());
+      CHECK_MOLLIFIED_CLOSE(Real(0), qbs.prime(t), 600*std::numeric_limits<Real>::epsilon());
+      CHECK_MOLLIFIED_CLOSE(Real(0), qbs.double_prime(t), 10000*std::numeric_limits<Real>::epsilon());
       ++i;
     }
 }
@@ -47,6 +54,7 @@ void test_constant()
 template<class Real>
 void test_linear()
 {
+    using std::abs;
     Real m = 8.3;
     Real b = 7.2;
     Real t0 = 0;
@@ -67,7 +75,12 @@ void test_linear()
       if (!CHECK_ULP_CLOSE(m*t+b, qbs(t), 3)) {
           std::cerr << "  Problem at t = " << t << "\n";
       }
-      //CHECK_ULP_CLOSE(m, qbs.prime(t), 820);
+      if(!CHECK_MOLLIFIED_CLOSE(m, qbs.prime(t), 100*abs(m*t+b)*std::numeric_limits<Real>::epsilon())) {
+          std::cerr << "  Problem at t = " << t << "\n";
+      }
+      if(!CHECK_MOLLIFIED_CLOSE(0, qbs.double_prime(t), 10000*abs(m*t+b)*std::numeric_limits<Real>::epsilon())) {
+          std::cerr << "  Problem at t = " << t << "\n";
+      }
       ++i;
     }
 
@@ -77,12 +90,12 @@ void test_linear()
       if(!CHECK_ULP_CLOSE(m*t+b, qbs(t), 4)) {
           std::cerr << "  Problem at t = " << t << "\n";
       }
-      //CHECK_MOLLIFIED_CLOSE(m, qbs.prime(t), 1500*std::numeric_limits<Real>::epsilon());
+      CHECK_MOLLIFIED_CLOSE(m, qbs.prime(t), 1500*std::numeric_limits<Real>::epsilon());
       t = t0 + i*h + h/4;
       if(!CHECK_ULP_CLOSE(m*t+b, qbs(t), 4)) {
           std::cerr << "  Problem at t = " << t << "\n";
       }
-      //CHECK_MOLLIFIED_CLOSE(m, qbs.prime(t), 1500*std::numeric_limits<Real>::epsilon());
+      CHECK_MOLLIFIED_CLOSE(m, qbs.prime(t), 3000*std::numeric_limits<Real>::epsilon());
       ++i;
     }
 }
@@ -132,7 +145,6 @@ void test_quadratic()
 
 int main()
 {
-    test_constant<float>();
     test_constant<double>();
     test_constant<long double>();
 
@@ -140,8 +152,14 @@ int main()
     test_linear<double>();
     test_linear<long double>();
 
+    test_quadratic<double>();
     test_quadratic<long double>();
-    //test_quadratic<long double>();
+
+
+    #ifdef BOOST_HAS_FLOAT128
+        test_constant<float128>();
+        test_linear<float128>();
+    #endif
 
     return boost::math::test::report_errors();
 }
