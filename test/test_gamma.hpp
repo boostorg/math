@@ -324,5 +324,14 @@ void test_spots(T, const char* name)
       BOOST_CHECK_EQUAL(boost::math::tgamma(-std::numeric_limits<T>::denorm_min()), -std::numeric_limits<T>::infinity());
       BOOST_CHECK_EQUAL(boost::math::tgamma(std::numeric_limits<T>::denorm_min()), std::numeric_limits<T>::infinity());
    }
+   //
+   // Extra large values for lgamma, see https://github.com/boostorg/math/issues/242
+   //
+   if (boost::math::tools::digits<T>() >= std::numeric_limits<double>::digits)
+   {
+      BOOST_CHECK_CLOSE(::boost::math::lgamma(ldexp(static_cast<T>(11103367432951928LL), 32)), static_cast<T>(2.7719825960021351251696385101478518546793793286704974382373670822285114741208958e27L), tolerance);
+      BOOST_CHECK_CLOSE(::boost::math::lgamma(ldexp(static_cast<T>(11103367432951928LL), 62)), static_cast<T>(4.0411767712186990905102512019058204792570873633363159e36L), tolerance);
+      BOOST_CHECK_CLOSE(::boost::math::lgamma(ldexp(static_cast<T>(11103367432951928LL), 326)), static_cast<T>(3.9754720509185529233002820161357111676582583112671658e116L), tolerance);
+   }
 }
 
