@@ -34,14 +34,28 @@ public:
         m_inv_h = 1/h;
         m_t0 = t0;
 
-        if (n < 5) {
-            throw std::logic_error("The interpolator requires at least 3 points.");
+        if (n < 8) {
+            throw std::logic_error("The quntic B-spline interpolator requires at least 8 points.");
         }
 
         using std::isnan;
-        if(isnan(left_endpoint_derivatives.first) ||  isnan(left_endpoint_derivatives.second) ||
-           isnan(right_endpoint_derivatives.first) || isnan(right_endpoint_derivatives.second)) {
-            throw std::logic_error("Derivative estimation is not yet implemented!");
+        // This interpolator has error of order h^6, so the derivatives should be estimated with the same error.
+        // See: https://en.wikipedia.org/wiki/Finite_difference_coefficient
+        if (isnan(left_endpoint_derivatives.first)) {
+            Real tmp = -49*y[0]/20 + 6*y[1] - 15*y[2]/2 + 20*y[3]/3 - 15*y[4]/4 + 6*y[5]/5 - y[6]/6;
+            left_endpoint_derivatives.first = tmp/h;
+        }
+        if (isnan(right_endpoint_derivatives.first)) {
+            Real tmp = 49*y[n-1]/20 - 6*y[n-2] + 15*y[n-3]/2 - 20*y[n-4]/3 + 15*y[n-5]/4 - 6*y[n-6]/5 + y[n-7]/6;
+            right_endpoint_derivatives.first = tmp/h;
+        }
+        if(isnan(left_endpoint_derivatives.second)) {
+            Real tmp = 469*y[0]/90 - 223*y[1]/10 + 879*y[2]/20 - 949*y[3]/18 + 41*y[4] - 201*y[5]/10 + 1019*y[6]/180 - 7*y[7]/10;
+            left_endpoint_derivatives.second = tmp/(h*h);
+        }
+        if (isnan(right_endpoint_derivatives.second)) {
+            Real tmp = 469*y[n-1]/90 - 223*y[n-2]/10 + 879*y[n-3]/20 - 949*y[n-4]/18 + 41*y[n-5] - 201*y[n-6]/10 + 1019*y[n-7]/180 - 7*y[n-8]/10;
+            right_endpoint_derivatives.second = tmp/(h*h);
         }
 
         // This is really challenging my mental limits on by-hand row reduction.
@@ -146,12 +160,6 @@ public:
             m_alpha[i] = rhs[i] - first_superdiagonal[i]*m_alpha[i+1] - second_superdiagonal[i]*m_alpha[i+2];
         }
 
-
-        /*std::cout << "alpha = {";
-        for (auto & a : m_alpha) {
-            std::cout << a << ", ";
-        }
-        std::cout << "}\n";*/
     }
 
     Real operator()(Real t) const {
@@ -165,11 +173,13 @@ public:
             throw std::domain_error(err_msg);
         }
         Real x = (t-m_t0)*m_inv_h;
-        // Support of B_5 is [-3, 3]. So -3 < x - j + 2 < 3, so x-1 < j < x+5
+        // Support of B_5 is [-3, 3]. So -3 < x - j + 2 < 3, so x-1 < j < x+5.
+        // TODO: Zero pad m_alpha so that only the domain check is necessary.
         int64_t j_min = std::max(int64_t(0), int64_t(ceil(x-1)));
         int64_t j_max = std::min(int64_t(m_alpha.size() - 1), int64_t(floor(x+5)) );
         Real s = 0;
         for (int64_t j = j_min; j <= j_max; ++j) {
+            // TODO: Use Cox 1972 to generate all integer translates of B5 simultaneously.
             s += m_alpha[j]*cardinal_b_spline<5, Real>(x - j + 2);
         }
         return s;

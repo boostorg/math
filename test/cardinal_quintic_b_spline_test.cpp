@@ -50,6 +50,39 @@ void test_constant()
     }
 }
 
+template<class Real>
+void test_constant_estimate_derivatives()
+{
+    Real c = 7.5;
+    Real t0 = 0;
+    Real h = Real(1)/Real(16);
+    size_t n = 513;
+    std::vector<Real> v(n, c);
+    auto qbs = cardinal_quintic_b_spline<Real>(v.data(), v.size(), t0, h);
+
+    size_t i = 0;
+    while (i < n) {
+      Real t = t0 + i*h;
+      CHECK_ULP_CLOSE(c, qbs(t), 3);
+      CHECK_MOLLIFIED_CLOSE(Real(0), qbs.prime(t), 1200*std::numeric_limits<Real>::epsilon());
+      CHECK_MOLLIFIED_CLOSE(Real(0), qbs.double_prime(t), 200000*std::numeric_limits<Real>::epsilon());
+      ++i;
+    }
+
+    i = 0;
+    while (i < n - 1) {
+      Real t = t0 + i*h + h/2;
+      CHECK_ULP_CLOSE(c, qbs(t), 8);
+      CHECK_MOLLIFIED_CLOSE(Real(0), qbs.prime(t), 1200*std::numeric_limits<Real>::epsilon());
+      CHECK_MOLLIFIED_CLOSE(Real(0), qbs.double_prime(t), 80000*std::numeric_limits<Real>::epsilon());
+      t = t0 + i*h + h/4;
+      CHECK_ULP_CLOSE(c, qbs(t), 5);
+      CHECK_MOLLIFIED_CLOSE(Real(0), qbs.prime(t), 1200*std::numeric_limits<Real>::epsilon());
+      CHECK_MOLLIFIED_CLOSE(Real(0), qbs.double_prime(t), 38000*std::numeric_limits<Real>::epsilon());
+      ++i;
+    }
+}
+
 
 template<class Real>
 void test_linear()
@@ -88,6 +121,54 @@ void test_linear()
     while (i < n - 1) {
       Real t = t0 + i*h + h/2;
       if(!CHECK_ULP_CLOSE(m*t+b, qbs(t), 4)) {
+          std::cerr << "  Problem at t = " << t << "\n";
+      }
+      CHECK_MOLLIFIED_CLOSE(m, qbs.prime(t), 1500*std::numeric_limits<Real>::epsilon());
+      t = t0 + i*h + h/4;
+      if(!CHECK_ULP_CLOSE(m*t+b, qbs(t), 4)) {
+          std::cerr << "  Problem at t = " << t << "\n";
+      }
+      CHECK_MOLLIFIED_CLOSE(m, qbs.prime(t), 3000*std::numeric_limits<Real>::epsilon());
+      ++i;
+    }
+}
+
+template<class Real>
+void test_linear_estimate_derivatives()
+{
+    using std::abs;
+    Real m = 8.3;
+    Real b = 7.2;
+    Real t0 = 0;
+    Real h = Real(1)/Real(16);
+    size_t n = 512;
+    std::vector<Real> y(n);
+    for (size_t i = 0; i < n; ++i) {
+      Real t = i*h;
+      y[i] = m*t + b;
+    }
+
+    auto qbs = cardinal_quintic_b_spline<Real>(y.data(), y.size(), t0, h);
+
+    size_t i = 0;
+    while (i < n) {
+      Real t = t0 + i*h;
+      if (!CHECK_ULP_CLOSE(m*t+b, qbs(t), 3)) {
+          std::cerr << "  Problem at t = " << t << "\n";
+      }
+      if(!CHECK_MOLLIFIED_CLOSE(m, qbs.prime(t), 100*abs(m*t+b)*std::numeric_limits<Real>::epsilon())) {
+          std::cerr << "  Problem at t = " << t << "\n";
+      }
+      if(!CHECK_MOLLIFIED_CLOSE(0, qbs.double_prime(t), 20000*abs(m*t+b)*std::numeric_limits<Real>::epsilon())) {
+          std::cerr << "  Problem at t = " << t << "\n";
+      }
+      ++i;
+    }
+
+    i = 0;
+    while (i < n - 1) {
+      Real t = t0 + i*h + h/2;
+      if(!CHECK_ULP_CLOSE(m*t+b, qbs(t), 5)) {
           std::cerr << "  Problem at t = " << t << "\n";
       }
       CHECK_MOLLIFIED_CLOSE(m, qbs.prime(t), 1500*std::numeric_limits<Real>::epsilon());
@@ -143,22 +224,72 @@ void test_quadratic()
     }
 }
 
+
+template<class Real>
+void test_quadratic_estimate_derivatives()
+{
+    Real a = Real(1)/Real(16);
+    Real b = -3.5;
+    Real c = -9;
+    Real t0 = 0;
+    Real h = Real(1)/Real(16);
+    size_t n = 513;
+    std::vector<Real> y(n);
+    for (size_t i = 0; i < n; ++i) {
+      Real t = i*h;
+      y[i] = a*t*t + b*t + c;
+    }
+    auto qbs = cardinal_quintic_b_spline<Real>(y, t0, h);
+
+    size_t i = 0;
+    while (i < n) {
+      Real t = t0 + i*h;
+      CHECK_ULP_CLOSE(a*t*t + b*t + c, qbs(t), 3);
+      ++i;
+    }
+
+    i = 0;
+    while (i < n -1) {
+      Real t = t0 + i*h + h/2;
+      if(!CHECK_ULP_CLOSE(a*t*t + b*t + c, qbs(t), 10)) {
+          std::cerr << "  Problem at abscissa t = " << t << "\n";
+      }
+
+      t = t0 + i*h + h/4;
+      if (!CHECK_ULP_CLOSE(a*t*t + b*t + c, qbs(t), 6)) {
+          std::cerr << "  Problem abscissa t = " << t << "\n";
+      }
+      ++i;
+    }
+}
+
+
 int main()
 {
     test_constant<double>();
     test_constant<long double>();
 
+    test_constant_estimate_derivatives<double>();
+    test_constant_estimate_derivatives<long double>();
+
     test_linear<float>();
     test_linear<double>();
     test_linear<long double>();
 
+    test_linear_estimate_derivatives<double>();
+    test_linear_estimate_derivatives<long double>();
+
     test_quadratic<double>();
     test_quadratic<long double>();
+
+    test_quadratic_estimate_derivatives<double>();
+    test_quadratic_estimate_derivatives<long double>();
 
 
     #ifdef BOOST_HAS_FLOAT128
         test_constant<float128>();
         test_linear<float128>();
+        test_linear_estimate_derivatives<float128>();
     #endif
 
     return boost::math::test::report_errors();
