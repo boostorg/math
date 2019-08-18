@@ -91,7 +91,7 @@ Real b3_spline_double_prime(Real x)
 
     if (x < 1)
     {
-        return (3*boost::math::constants::half<Real>()*x - 2) + x*(3*boost::math::constants::half<Real>());
+        return 3*x - 2;
     }
     if (x < 2)
     {
