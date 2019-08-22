@@ -5,25 +5,25 @@ Boost Software License, Version 1.0. (See accompanying file
 LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ]
 
-[section:cubic_b Cubic B-spline interpolation]
+[section:cardinal_cubic_b Cardinal Cubic B-spline interpolation]
 
 [heading Synopsis]
 ``
-  #include <boost/math/interpolators/cubic_b_spline.hpp>
+  #include <boost/math/interpolators/cardinal_cubic_b_spline.hpp>
 ``
 
-  namespace boost { namespace math {
+  namespace boost { namespace math { namespace interpolators {
 
     template <class Real>
-    class cubic_b_spline
+    class cardinal_cubic_b_spline
     {
     public:
 
       template <class BidiIterator>
-        cubic_b_spline(BidiIterator a, BidiIterator b, Real left_endpoint, Real step_size,
+        cardinal_cubic_b_spline(BidiIterator a, BidiIterator b, Real left_endpoint, Real step_size,
                        Real left_endpoint_derivative = std::numeric_limits<Real>::quiet_NaN(),
                        Real right_endpoint_derivative = std::numeric_limits<Real>::quiet_NaN());
-        cubic_b_spline(const Real* const f, size_t length, Real left_endpoint, Real step_size,
+        cardinal_cubic_b_spline(const Real* const f, size_t length, Real left_endpoint, Real step_size,
                        Real left_endpoint_derivative = std::numeric_limits<Real>::quiet_NaN(),
                        Real right_endpoint_derivative = std::numeric_limits<Real>::quiet_NaN());
 
@@ -34,18 +34,18 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
         Real double_prime(Real x) const;
     };
 
-  }} // namespaces
+  }}} // namespaces
 
 
-[heading Cubic B-Spline Interpolation]
+[heading Cardinal Cubic B-Spline Interpolation]
 
-The cubic B-spline class provided by Boost allows fast and accurate interpolation of a function which is known at equally spaced points.
-The cubic B-spline interpolation is numerically stable as it uses compactly supported basis functions constructed via iterative convolution.
-This is to be contrasted to traditional cubic spline interpolation which is ill-conditioned as the global support of cubic polynomials causes small changes far from the evaluation point to exert a large influence on the calculated value.
+The cardinal cubic /B/-spline class provided by Boost allows fast and accurate interpolation of a function which is known at equally spaced points.
+The cubic /B/-spline interpolation is numerically stable as it uses compactly supported basis functions constructed via iterative convolution.
+This is to be contrasted to one-sided power function cubic spline interpolation which is ill-conditioned as the global support of cubic polynomials causes small changes far from the evaluation point to exert a large influence on the calculated value.
 
 There are many use cases for interpolating a function at equally spaced points.
 One particularly important example is solving ODEs whose coefficients depend on data determined from experiment or numerical simulation.
-Since most ODE steppers are adaptive, they must be able to sample the coefficients at arbitrary points; 
+Since most ODE steppers are adaptive, they must be able to sample the coefficients at arbitrary points;
 not just at the points we know the values of our function.
 
 The first two arguments to the constructor are either:
@@ -65,12 +65,12 @@ An example of a valid call to the constructor is
     std::vector<double> f{0.01, -0.02, 0.3, 0.8, 1.9, -8.78, -22.6};
     double t0 = 0;
     double h = 0.01;
-    boost::math::cubic_b_spline<double> spline(f.begin(), f.end(), t0, h);
+    boost::math::interpolators::cardinal_cubic_b_spline<double> spline(f.begin(), f.end(), t0, h);
 
-The endpoints are estimated using a one-sided finite-difference formula. 
+The endpoints are estimated using a one-sided finite-difference formula.
 If you know the derivative at the endpoint, you may pass it to the constructor via
 
-    boost::math::cubic_b_spline<double> spline(f.begin(), f.end(), t0, h, a_prime, b_prime);
+    boost::math::interpolators::cardinal_cubic_b_spline<double> spline(f.begin(), f.end(), t0, h, a_prime, b_prime);
 
 To evaluate the interpolant at a point, we simply use
 
@@ -88,16 +88,11 @@ The last interesting member is the second derivative, evaluated via
     double ypp = spline.double_prime(x);
 
 The basis functions of the spline are cubic polynomials, so the second derivative is simply linear interpolation.
-But the interpolation is not constrained by data (you don't pass in the second derivatives), and hence is less accurate than would be expected from assuming it is a linear interpolation.
+But the interpolation is not constrained by data (you don't pass in the second derivatives),
+and hence is less accurate than would be naively expected from a linear interpolator.
 The problem is especially pronounced at the boundaries, where the second derivative is totally unconstrained.
 Use the second derivative of the cubic B-spline interpolator only in desperation.
-
-Finally, note that this is an interpolator, not an extrapolator.
-Therefore, you should strenuously avoid evaluating the spline outside the endpoints.
-However, it is not an error if you do, as often you cannot control where (say) an ODE stepper will evaluate your function.
-As such the interpolant tries to do something reasonable when the passed a value outside the endpoints.
-For evaluation within one stepsize of the interval, you can assume something somewhat reasonable was returned.
-As you move further away from the endpoints, the interpolant decays to its average on the interval.
+The quintic /B/-spline interpolator is recommended for cases where second derivatives are needed.
 
 
 [heading Complexity and Performance]
@@ -120,10 +115,10 @@ In addition, constant, linear, and quadratic functions are interpolated to ensur
 
 [heading Example]
 
-[import ../../example/cubic_b_spline_example.cpp]
+[import ../../example/cardinal_cubic_b_spline_example.cpp]
 
 [cubic_b_spline_example]
 
 [cubic_b_spline_example_out]
 
-[endsect] [/section:cubic_b Cubic B-spline interpolation]
+[endsect] [/section:cardinal_cubic_b]

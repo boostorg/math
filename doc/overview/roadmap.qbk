@@ -68,7 +68,7 @@ Recent issues on GitHub [@https://github.com/boostorg/math/issues?utf8=%E2%9C%93
 
 New Features:
 
-* Add [link math_toolkit.cubic_b cubic B-Spline interpolation functions], with thanks to Nick Thompson.
+* Add [link math_toolkit.cardinal_cubic_b Cardinal cubic B-Spline interpolation functions], with thanks to Nick Thompson.
 * Add [link math_toolkit.barycentric barycentric rational interpolation functions], with thanks to Nick Thompson.
 * Add [link math_toolkit.trapezoidal adaptive trapezoidal quadrature], with thanks to Nick Thompson.
 * Add [link math_toolkit.sf_poly.legendre support for the zeros and derivatives of Legendre polynomials], with thanks to Nick Thompson.

@@ -12,8 +12,8 @@
 #include <boost/type_index.hpp>
 #include <boost/test/included/unit_test.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
-#include <boost/math/interpolators/cubic_b_spline.hpp>
-#include <boost/math/interpolators/detail/cubic_b_spline_detail.hpp>
+#include <boost/math/interpolators/cardinal_cubic_b_spline.hpp>
+#include <boost/math/interpolators/detail/cardinal_cubic_b_spline_detail.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
 
 using boost::multiprecision::cpp_bin_float_50;
@@ -26,36 +26,36 @@ void test_b3_spline()
     std::cout << "Testing evaluation of spline basis functions on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
     // Outside the support:
     Real eps = std::numeric_limits<Real>::epsilon();
-    BOOST_CHECK_SMALL(boost::math::detail::b3_spline<Real>(2.5), (Real) 0);
-    BOOST_CHECK_SMALL(boost::math::detail::b3_spline<Real>(-2.5), (Real) 0);
-    BOOST_CHECK_SMALL(boost::math::detail::b3_spline_prime<Real>(2.5), (Real) 0);
-    BOOST_CHECK_SMALL(boost::math::detail::b3_spline_prime<Real>(-2.5), (Real) 0);
-    BOOST_CHECK_SMALL(boost::math::detail::b3_spline_double_prime<Real>(2.5), (Real) 0);
-    BOOST_CHECK_SMALL(boost::math::detail::b3_spline_double_prime<Real>(-2.5), (Real) 0);
+    BOOST_CHECK_SMALL(boost::math::interpolators::detail::b3_spline<Real>(2.5), (Real) 0);
+    BOOST_CHECK_SMALL(boost::math::interpolators::detail::b3_spline<Real>(-2.5), (Real) 0);
+    BOOST_CHECK_SMALL(boost::math::interpolators::detail::b3_spline_prime<Real>(2.5), (Real) 0);
+    BOOST_CHECK_SMALL(boost::math::interpolators::detail::b3_spline_prime<Real>(-2.5), (Real) 0);
+    BOOST_CHECK_SMALL(boost::math::interpolators::detail::b3_spline_double_prime<Real>(2.5), (Real) 0);
+    BOOST_CHECK_SMALL(boost::math::interpolators::detail::b3_spline_double_prime<Real>(-2.5), (Real) 0);
 
 
     // On the boundary of support:
-    BOOST_CHECK_SMALL(boost::math::detail::b3_spline<Real>(2), (Real) 0);
-    BOOST_CHECK_SMALL(boost::math::detail::b3_spline<Real>(-2), (Real) 0);
-    BOOST_CHECK_SMALL(boost::math::detail::b3_spline_prime<Real>(2), (Real) 0);
-    BOOST_CHECK_SMALL(boost::math::detail::b3_spline_prime<Real>(-2), (Real) 0);
+    BOOST_CHECK_SMALL(boost::math::interpolators::detail::b3_spline<Real>(2), (Real) 0);
+    BOOST_CHECK_SMALL(boost::math::interpolators::detail::b3_spline<Real>(-2), (Real) 0);
+    BOOST_CHECK_SMALL(boost::math::interpolators::detail::b3_spline_prime<Real>(2), (Real) 0);
+    BOOST_CHECK_SMALL(boost::math::interpolators::detail::b3_spline_prime<Real>(-2), (Real) 0);
 
     // Special values:
-    BOOST_CHECK_CLOSE(boost::math::detail::b3_spline<Real>(-1), third<Real>()*half<Real>(), eps);
-    BOOST_CHECK_CLOSE(boost::math::detail::b3_spline<Real>( 1), third<Real>()*half<Real>(), eps);
-    BOOST_CHECK_CLOSE(boost::math::detail::b3_spline<Real>(0), 2*third<Real>(), eps);
+    BOOST_CHECK_CLOSE(boost::math::interpolators::detail::b3_spline<Real>(-1), third<Real>()*half<Real>(), eps);
+    BOOST_CHECK_CLOSE(boost::math::interpolators::detail::b3_spline<Real>( 1), third<Real>()*half<Real>(), eps);
+    BOOST_CHECK_CLOSE(boost::math::interpolators::detail::b3_spline<Real>(0), 2*third<Real>(), eps);
 
-    BOOST_CHECK_CLOSE(boost::math::detail::b3_spline_prime<Real>(-1), half<Real>(), eps);
-    BOOST_CHECK_CLOSE(boost::math::detail::b3_spline_prime<Real>( 1), -half<Real>(), eps);
-    BOOST_CHECK_SMALL(boost::math::detail::b3_spline_prime<Real>(0), eps);
+    BOOST_CHECK_CLOSE(boost::math::interpolators::detail::b3_spline_prime<Real>(-1), half<Real>(), eps);
+    BOOST_CHECK_CLOSE(boost::math::interpolators::detail::b3_spline_prime<Real>( 1), -half<Real>(), eps);
+    BOOST_CHECK_SMALL(boost::math::interpolators::detail::b3_spline_prime<Real>(0), eps);
 
     // Properties: B3 is an even function, B3' is an odd function.
     for (size_t i = 1; i < 200; ++i)
     {
         Real arg = i*0.01;
-        BOOST_CHECK_CLOSE(boost::math::detail::b3_spline<Real>(arg), boost::math::detail::b3_spline<Real>(arg), eps);
-        BOOST_CHECK_CLOSE(boost::math::detail::b3_spline_prime<Real>(-arg), -boost::math::detail::b3_spline_prime<Real>(arg), eps);
-        BOOST_CHECK_CLOSE(boost::math::detail::b3_spline_double_prime<Real>(-arg), boost::math::detail::b3_spline_double_prime<Real>(arg), eps);
+        BOOST_CHECK_CLOSE(boost::math::interpolators::detail::b3_spline<Real>(arg), boost::math::interpolators::detail::b3_spline<Real>(arg), eps);
+        BOOST_CHECK_CLOSE(boost::math::interpolators::detail::b3_spline_prime<Real>(-arg), -boost::math::interpolators::detail::b3_spline_prime<Real>(arg), eps);
+        BOOST_CHECK_CLOSE(boost::math::interpolators::detail::b3_spline_double_prime<Real>(-arg), boost::math::interpolators::detail::b3_spline_double_prime<Real>(arg), eps);
     }
 
 }
@@ -78,7 +78,7 @@ void test_interpolation_condition()
 
     Real step = 0.01;
     Real a = 5;
-    boost::math::cubic_b_spline<Real> spline(v.data(), v.size(), a, step);
+    boost::math::interpolators::cardinal_cubic_b_spline<Real> spline(v.data(), v.size(), a, step);
 
     for (size_t i = 0; i < v.size(); ++i)
     {
@@ -104,7 +104,7 @@ void test_constant_function()
 
     Real step = 0.02;
     Real a = 5;
-    boost::math::cubic_b_spline<Real> spline(v.data(), v.size(), a, step);
+    boost::math::interpolators::cardinal_cubic_b_spline<Real> spline(v.data(), v.size(), a, step);
 
     for (size_t i = 0; i < v.size(); ++i)
     {
@@ -119,7 +119,7 @@ void test_constant_function()
     }
 
     // Test that correctly specified left and right-derivatives work properly:
-    spline = boost::math::cubic_b_spline<Real>(v.data(), v.size(), a, step, 0, 0);
+    spline = boost::math::interpolators::cardinal_cubic_b_spline<Real>(v.data(), v.size(), a, step, 0, 0);
 
     for (size_t i = 0; i < v.size(); ++i)
     {
@@ -132,7 +132,7 @@ void test_constant_function()
     //
     // Again with iterator constructor:
     //
-    boost::math::cubic_b_spline<Real> spline2(v.begin(), v.end(), a, step);
+    boost::math::interpolators::cardinal_cubic_b_spline<Real> spline2(v.begin(), v.end(), a, step);
 
     for (size_t i = 0; i < v.size(); ++i)
     {
@@ -144,7 +144,7 @@ void test_constant_function()
     }
 
     // Test that correctly specified left and right-derivatives work properly:
-    spline2 = boost::math::cubic_b_spline<Real>(v.begin(), v.end(), a, step, 0, 0);
+    spline2 = boost::math::interpolators::cardinal_cubic_b_spline<Real>(v.begin(), v.end(), a, step, 0, 0);
 
     for (size_t i = 0; i < v.size(); ++i)
     {
@@ -172,7 +172,7 @@ void test_affine_function()
         v[i] = f(i*step);
     }
 
-    boost::math::cubic_b_spline<Real> spline(v.data(), v.size(), 0, step);
+    boost::math::interpolators::cardinal_cubic_b_spline<Real> spline(v.data(), v.size(), 0, step);
 
     for (size_t i = 0; i < v.size() - 1; ++i)
     {
@@ -184,7 +184,7 @@ void test_affine_function()
     }
 
     // Test that correctly specified left and right-derivatives work properly:
-    spline = boost::math::cubic_b_spline<Real>(v.data(), v.size(), 0, step, a, a);
+    spline = boost::math::interpolators::cardinal_cubic_b_spline<Real>(v.data(), v.size(), 0, step, a, a);
 
     for (size_t i = 0; i < v.size() - 1; ++i)
     {
@@ -214,7 +214,7 @@ void test_quadratic_function()
         v[i] = f(i*step);
     }
 
-    boost::math::cubic_b_spline<Real> spline(v.data(), v.size(), 0, step);
+    boost::math::interpolators::cardinal_cubic_b_spline<Real> spline(v.data(), v.size(), 0, step);
 
     for (size_t i = 0; i < v.size() -1; ++i)
     {
@@ -241,7 +241,7 @@ void test_trig_function()
         v[i] = sin(x0 + step * i);
     }
 
-    boost::math::cubic_b_spline<Real> spline(v.data(), v.size(), x0, step);
+    boost::math::interpolators::cardinal_cubic_b_spline<Real> spline(v.data(), v.size(), x0, step);
 
     boost::random::uniform_real_distribution<Real> absissa(x0, x0 + 499 * step);
 
@@ -268,12 +268,12 @@ void test_copy_move()
         v[i] = sin(x0 + step * i);
     }
 
-    boost::math::cubic_b_spline<Real> spline(v.data(), v.size(), x0, step);
+    boost::math::interpolators::cardinal_cubic_b_spline<Real> spline(v.data(), v.size(), x0, step);
 
 
     // Default constructor should compile so that splines can be member variables:
-    boost::math::cubic_b_spline<Real> d;
-    d = boost::math::cubic_b_spline<Real>(v.data(), v.size(), x0, step);
+    boost::math::interpolators::cardinal_cubic_b_spline<Real> d;
+    d = boost::math::interpolators::cardinal_cubic_b_spline<Real>(v.data(), v.size(), x0, step);
     BOOST_CHECK_CLOSE(d(x0), sin(x0), 0.01);
     // Passing to lambda should compile:
     auto f = [=](Real x) { return d(x); };
@@ -284,11 +284,11 @@ void test_copy_move()
     auto s = std::move(spline);
 
     // Copy operations should compile:
-    boost::math::cubic_b_spline<Real> c = d;
+    boost::math::interpolators::cardinal_cubic_b_spline<Real> c = d;
     BOOST_CHECK_CLOSE(c(x0), sin(x0), 0.01);
 
     // Test with std::bind:
-    auto h = std::bind(&boost::math::cubic_b_spline<double>::operator(), &s, std::placeholders::_1);
+    auto h = std::bind(&boost::math::interpolators::cardinal_cubic_b_spline<double>::operator(), &s, std::placeholders::_1);
     BOOST_CHECK_CLOSE(h(x0), sin(x0), 0.01);
 }
 
@@ -305,7 +305,7 @@ void test_outside_interval()
         v[i] = sin(x0 + step * i);
     }
 
-    boost::math::cubic_b_spline<Real> spline(v.data(), v.size(), x0, step);
+    boost::math::interpolators::cardinal_cubic_b_spline<Real> spline(v.data(), v.size(), x0, step);
 
     // There's no test here; it simply does it's best to be an extrapolator.
     //
