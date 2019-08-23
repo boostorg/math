@@ -7,12 +7,14 @@
 #define BOOST_MATH_SPECIAL_GEGENBAUER_HPP
 
 #include <stdexcept>
+#include <type_traits>
 
 namespace boost { namespace math {
 
 template<typename Real>
 Real gegenbauer(unsigned n, Real lambda, Real x)
 {
+    static_assert(!std::is_integral<Real>::value, "Gegenbauer polynomials required floating point arguments.");
     if (lambda <= -1/Real(2)) {
         throw std::domain_error("lambda > -1/2 is required.");
     }
@@ -25,10 +27,6 @@ Real gegenbauer(unsigned n, Real lambda, Real x)
     //    }
     //    return gegenbauer(n, lambda, -x);
     //}
-
-    if (x > 1) {
-        throw std::domain_error("Recurrence implementations for the Gegenbauer polynomials have unknown stability for x > 1.");
-    }
 
     if (n == 0) {
         return Real(1);
@@ -50,6 +48,7 @@ Real gegenbauer(unsigned n, Real lambda, Real x)
     return yk;
 }
 
+
 template<typename Real>
 Real gegenbauer_derivative(unsigned n, Real lambda, Real x, unsigned k)
 {
@@ -63,6 +62,11 @@ Real gegenbauer_derivative(unsigned n, Real lambda, Real x, unsigned k)
         lambda += 1;
     }
     return scale*gegen;
+}
+
+template<typename Real>
+Real gegenbauer_prime(unsigned n, Real lambda, Real x) {
+    return gegenbauer_derivative<Real>(n, lambda, x, 1);
 }
 
 

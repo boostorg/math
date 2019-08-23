@@ -19,6 +19,9 @@
    Real gegenbauer(unsigned n, Real lambda, Real x);
 
    template<typename Real>
+   Real gegenbauer_prime(unsigned n, Real lambda, Real x);
+
+   template<typename Real>
    Real gegenbauer_derivative(unsigned n, Real lambda, Real x, unsigned k);
 
    }} // namespaces
@@ -42,6 +45,8 @@ The /k/-th derivative of the /n/-th Gegenbauer polynomial is given by
     unsigned n = 3;
     unsigned k = 2;
     double y = gegenbauer_derivative(n, lambda, x, k);
+
+For consistency with the rest of the library, `gegenbauer_prime` is provided which simply returns `gegenbauer_derivative(n, lambda, x,1 )`.
 
 [$../graphs/gegenbauer.svg]
 
