@@ -54,19 +54,19 @@ int main()
     return 0;
   }
   //locale old_locale; // Current global locale.
-  // Create tmp_locale and store the output nonfinite_num_put facet in it.
+  //  Create tmp_locale and store the output nonfinite_num_put facet in it.
   //locale tmp_locale(old_locale, new nonfinite_num_put<char>);
-  // Create new_locale and store the input nonfinite_num_get facet in it.
+  //  Create new_locale and store the input nonfinite_num_get facet in it.
   //locale new_locale(tmp_locale, new nonfinite_num_get<char>);
-  // Can only add one facet at a time, hence need a tmp_locale.
-  // Unless we write:
+  //  Can only add one facet at a time, hence need a tmp_locale,
+  //  unless we write:
 
   std::locale new_locale(std::locale(std::locale(std::locale(),
     new boost::math::nonfinite_num_put<char>),
     new boost::math::nonfinite_num_get<char>));
-  
+
   stringstream ss; // Both input and output, so need both get and put facets.
-  
+
   ss.imbue(new_locale);
 
   double inf = numeric_limits<double>::infinity();
@@ -74,7 +74,7 @@ int main()
   double r;
   ss >> r; // Read back in.
 
-  assert(inf == r); // OK MSVC <= 10.0!
+  BOOST_ASSERT(inf == r); // OK MSVC <= 10.0!
 
 } // int main()
 

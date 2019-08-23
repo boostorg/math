@@ -61,7 +61,7 @@ int main()
     cout << "infinity output was " << inf << endl;
     cout << "infinity input was " << r << endl;
 
-    assert(inf == r); 
+    BOOST_ASSERT(inf == r);
   }
   {
     stringstream ss;
@@ -75,8 +75,8 @@ int main()
     cout << "NaN output was " << nan << endl;
     cout << "NaN input was " << v << endl;
 
-    // assert(nan == v); // Always fails because NaN == NaN fails!
-    // assert(nan == numeric_limits<double>::quiet_NaN()); asserts!
+    // BOOST_ASSERT(nan == v); // Always fails because NaN == NaN fails!
+    // BOOST_ASSERT(nan == numeric_limits<double>::quiet_NaN()); asserts!
   }
 
 } // int main()

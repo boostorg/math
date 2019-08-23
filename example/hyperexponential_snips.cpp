@@ -72,7 +72,7 @@ int main()
 
    hyperexponential he(rates.begin(), rates.end());
 
-   assert(he.probabilities()[0] == 0.5); // Phase probabilities will be equal and normalised to unity.
+   BOOST_ASSERT(he.probabilities()[0] == 0.5); // Phase probabilities will be equal and normalised to unity.
    //]
    }
    {
@@ -81,7 +81,7 @@ int main()
 
    hyperexponential he(rates);
 
-   assert(he.probabilities()[0] == 0.5); // Phase probabilities will be equal and normalised to unity.
+   BOOST_ASSERT(he.probabilities()[0] == 0.5); // Phase probabilities will be equal and normalised to unity.
    //]
    }
 #endif
@@ -95,7 +95,7 @@ int main()
    //[hyperexponential_snip7
    hyperexponential he = { 1.0 / 10, 1.0 / 12 };
 
-   assert(he.probabilities()[0] == 0.5);
+   BOOST_ASSERT(he.probabilities()[0] == 0.5);
    //]
    }
 #endif

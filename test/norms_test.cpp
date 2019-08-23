@@ -70,7 +70,7 @@ std::vector<T> generate_random_vector(size_t size, size_t seed)
     else if constexpr (std::is_integral<T>::value)
     {
         // Rescaling by larger than 2 is UB!
-        std::uniform_int_distribution<T> dis(std::numeric_limits<T>::lowest()/2, std::numeric_limits<T>::max()/2);
+        std::uniform_int_distribution<T> dis(std::numeric_limits<T>::lowest()/2, (std::numeric_limits<T>::max)()/2);
         for (size_t i = 0; i < v.size(); ++i)
         {
             v[i] = dis(gen);
@@ -136,7 +136,7 @@ void test_lp()
     // Does it work with ublas vectors?
     // Does it handle the overflow of intermediates?
     boost::numeric::ublas::vector<Real> w(4);
-    Real bignum = sqrt(std::numeric_limits<Real>::max())/256;
+    Real bignum = sqrt((std::numeric_limits<Real>::max)())/256;
     for (size_t i = 0; i < w.size(); ++i)
     {
         w[i] = bignum;
@@ -629,7 +629,7 @@ void test_l2_norm()
     l2 = boost::math::tools::l2_norm(w);
     BOOST_TEST(abs(l2 - 2) < tol);
 
-    Real bignum = 4*sqrt(std::numeric_limits<Real>::max());
+    Real bignum = 4*sqrt((std::numeric_limits<Real>::max)());
     v[0] = bignum;
     v[1] = 0;
     v[2] = 0;

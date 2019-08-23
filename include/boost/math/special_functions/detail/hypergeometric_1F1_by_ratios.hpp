@@ -31,8 +31,7 @@
       having to apply one extra recurrence to convert from an a or b
       recurrence to an a+b one.
 
-      See: H. SHINTAN, Note on Miller’s recurrence algorithm, J. Sci. Hiroshima Univ. Ser. A-I
-      Math., 29 (1965), pp. 121-133.
+      See: H. Shintan, Note on Miller's recurrence algorithm, J. Sci. Hiroshima Univ. Ser. A-I Math., 29 (1965), pp. 121-133.
       Also: Computational Aspects of Three Term Recurrence Relations, SIAM Review, January 1967.
 
       The following table lists by experiment, how large z can be in order to

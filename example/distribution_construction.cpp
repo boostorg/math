@@ -116,7 +116,7 @@ and a success fraction 0.25, 25% or 1 in 4, is constructed like this:
   negative_binomial mydist11(5, 0.4); // Using provided typedef of type double, and int and double arguments.
   /*`
   This is probably the most common usage.
-	Other combination are possible too:
+  Other combination are possible too:
   */
   negative_binomial mydist12(5., 0.4F); // Double and float arguments.
   negative_binomial mydist13(5, 1); // Both arguments integer.
@@ -177,7 +177,7 @@ and a success fraction 0.25, 25% or 1 in 4, is constructed like this:
 
   // Explicit long double precision:
   negative_binomial_distribution<long double>   mydist7(8., 0.25);
-		 
+     
   /*`
   And you can use your own template RealType,
   for example, `boost::math::cpp_bin_float_50` (an arbitrary 50 decimal digits precision type),
@@ -189,8 +189,8 @@ and a success fraction 0.25, 25% or 1 in 4, is constructed like this:
   // `integer` arguments are promoted to your RealType exactly, but
   // `double` argument are converted to RealType,
   // most likely losing precision!
-	
-	// So DON'T be tempted to write the 'obvious':
+  
+  // So DON'T be tempted to write the 'obvious':
   negative_binomial_distribution<cpp_bin_float_50>  mydist20(8, 0.23456789012345678901234567890);
  // to avoid truncation of second parameter to `0.2345678901234567` and loss of precision.
 
@@ -199,7 +199,7 @@ and a success fraction 0.25, 25% or 1 in 4, is constructed like this:
 
   // Ensure that all potentially significant digits are shown.
   std::cout.precision(std::numeric_limits<cpp_bin_float_50>::digits10);
-	// 
+  // 
   cpp_bin_float_50 x("1.23456789012345678901234567890");
   std::cout << pdf(mydist8, x) << std::endl;
 /*` showing  0.00012630010495970320103876754721976419438231705359935

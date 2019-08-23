@@ -18,42 +18,42 @@
 
 int main()
 {
-	try
-	{
-	std::cout.precision(std::numeric_limits<double>::max_digits10); // Show all potentially significant digits.
+  try
+  {
+  std::cout.precision(std::numeric_limits<double>::max_digits10); // Show all potentially significant digits.
 
-	using boost::math::quadrature::ooura_fourier_cos;
-	using boost::math::constants::half_pi;
-	using boost::math::constants::e;
+  using boost::math::quadrature::ooura_fourier_cos;
+  using boost::math::constants::half_pi;
+  using boost::math::constants::e;
 
  //[ooura_fourier_integrals_cosine_example_1
-	auto integrator = ooura_fourier_cos<double>();
-	// Use the default tolerance root_epsilon and eight levels for type double.
+  auto integrator = ooura_fourier_cos<double>();
+  // Use the default tolerance root_epsilon and eight levels for type double.
 
-	auto f = [](double x)
-	{ // More complex example function.
-		return 1 / (x * x + 1);
-	};
+  auto f = [](double x)
+  { // More complex example function.
+    return 1 / (x * x + 1);
+  };
 
-	double omega = 1;
+  double omega = 1;
 
-	auto [result, relative_error] = integrator.integrate(f, omega);
-	std::cout << "Integral = " << result << ", relative error estimate " << relative_error << std::endl;
+  auto [result, relative_error] = integrator.integrate(f, omega);
+  std::cout << "Integral = " << result << ", relative error estimate " << relative_error << std::endl;
 
-	//] [/ooura_fourier_integrals_cosine_example_1]
+  //] [/ooura_fourier_integrals_cosine_example_1]
 
-	//[ooura_fourier_integrals_cosine_example_2
+  //[ooura_fourier_integrals_cosine_example_2
 
-	constexpr double expected = half_pi<double>() / e<double>();
-	std::cout << "pi/(2e) =  " << expected << ", difference " << result - expected << std::endl;
-	//] [/ooura_fourier_integrals_cosine_example_2]
-	}
-	catch (std::exception const & ex)
-	{
-		// Lacking try&catch blocks, the program will abort after any throw, whereas the
-		// message below from the thrown exception will give some helpful clues as to the cause of the problem.
-		std::cout << "\n""Message from thrown exception was:\n   " << ex.what() << std::endl;
-	}
+  constexpr double expected = half_pi<double>() / e<double>();
+  std::cout << "pi/(2e) =  " << expected << ", difference " << result - expected << std::endl;
+  //] [/ooura_fourier_integrals_cosine_example_2]
+  }
+  catch (std::exception const & ex)
+  {
+    // Lacking try&catch blocks, the program will abort after any throw, whereas the
+    // message below from the thrown exception will give some helpful clues as to the cause of the problem.
+    std::cout << "\n""Message from thrown exception was:\n   " << ex.what() << std::endl;
+  }
 
 } // int main()
 

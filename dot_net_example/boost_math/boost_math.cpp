@@ -16,7 +16,7 @@
 // "BOOST_MATH_OVERFLOW_ERROR_POLICY="errno_on_error""
 // so command line shows:
 // /D "BOOST_MATH_ASSERT_UNDEFINED_POLICY=0"
-// /D "BOOST_MATH_OVERFLOW_ERROR_POLICY="errno_on_error"" 
+// /D "BOOST_MATH_OVERFLOW_ERROR_POLICY="errno_on_error""
 
 #include "stdafx.h"
 
@@ -92,7 +92,7 @@ any_distribution::any_distribution(int t, double arg1, double arg2, double arg3)
       break;
    case 17:
       this->reset(new concrete_distribution<boost::math::negative_binomial_distribution<> >(boost::math::negative_binomial_distribution<>(arg1, arg2)));
-      break; 
+      break;
    case 18:
       this->reset(new concrete_distribution<boost::math::non_central_beta_distribution<> >(boost::math::non_central_beta_distribution<>(arg1, arg2, arg3)));
       break;
@@ -133,10 +133,10 @@ any_distribution::any_distribution(int t, double arg1, double arg2, double arg3)
       this->reset(new concrete_distribution<boost::math::weibull>(boost::math::weibull(arg1, arg2)));
       break;
 
-  
+
    default:
       // TODO  Need some proper error handling here?
-      assert(0);
+      BOOST_ASSERT(0);
    }
    TRANSLATE_EXCEPTIONS_END
 } // any_distribution constructor.
@@ -156,8 +156,8 @@ struct distribution_info
    double third_default; // 0 if there isn't a third argument.
 };
 
-distribution_info distributions[] = 
-{ // distribution name, parameter name(s) and default(s) 
+distribution_info distributions[] =
+{ // distribution name, parameter name(s) and default(s)
   // Order must match any_distribution constructor above!
   // Null string "" and zero default for un-used arguments.
    { "Bernoulli", "Probability", "", "",0.5, 0, 0}, // case 0
