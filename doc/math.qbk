@@ -627,6 +627,7 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [include sf/chebyshev.qbk]
 [include sf/spherical_harmonic.qbk]
 [include sf/cardinal_b_splines.qbk]
+[include sf/gegenbauer.qbk]
 [endsect] [/section:sf_poly Polynomials]
 
 [section:bessel Bessel Functions]
