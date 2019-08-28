@@ -45,6 +45,8 @@ public:
 
     Real prime(Real x) const;
 
+    Real double_prime(Real x) const;
+
 private:
     std::shared_ptr<detail::cubic_b_spline_imp<Real>> m_imp;
 };
@@ -73,6 +75,13 @@ Real cubic_b_spline<Real>::prime(Real x) const
 {
     return m_imp->prime(x);
 }
+
+template<class Real>
+Real cubic_b_spline<Real>::double_prime(Real x) const
+{
+    return m_imp->double_prime(x);
+}
+
 
 }}
 #endif

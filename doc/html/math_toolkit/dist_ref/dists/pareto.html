@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Pareto Distribution</title>
 <link rel="stylesheet" href="../../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../../index.html" title="Math Toolkit 2.10.0">
 <link rel="up" href="../dists.html" title="Distributions">
 <link rel="prev" href="normal_dist.html" title="Normal (Gaussian) Distribution">
@@ -54,11 +54,11 @@
           distribution</a> is a continuous distribution with the <a href="http://en.wikipedia.org/wiki/Probability_density_function" target="_top">probability
           density function (pdf)</a>:
         </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="serif_italic">f(x; &#945;, &#946;) = &#945;&#946;<sup>&#945;</sup> / x<sup>&#945;+ 1</sup></span>
+          </p></blockquote></div>
 <p>
-          f(x; &#945;, &#946;) = &#945;&#946;<sup>&#945;</sup> / x<sup>&#945;+ 1</sup>
-        </p>
-<p>
-          For shape parameter &#945; &#160; &gt; 0, and scale parameter &#946; &#160; &gt; 0. If x &lt; &#946; &#160;, the
+          For shape parameter &#945; &gt; 0, and scale parameter &#946; &gt; 0. If x &lt; &#946;, the
           pdf is zero.
         </p>
 <p>
@@ -70,16 +70,18 @@
           The following graph illustrates how the PDF varies with the scale parameter
           &#946;:
         </p>
-<p>
-          <span class="inlinemediaobject"><img src="../../../../graphs/pareto_pdf1.svg" align="middle"></span>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../graphs/pareto_pdf1.svg" align="middle"></span>
+
+          </p></blockquote></div>
 <p>
           And this graph illustrates how the PDF varies with the shape parameter
           &#945;:
         </p>
-<p>
-          <span class="inlinemediaobject"><img src="../../../../graphs/pareto_pdf2.svg" align="middle"></span>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../graphs/pareto_pdf2.svg" align="middle"></span>
+
+          </p></blockquote></div>
 <h5>
 <a name="math_toolkit.dist_ref.dists.pareto.h0"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.pareto.related_distributions"></a></span><a class="link" href="pareto.html#math_toolkit.dist_ref.dists.pareto.related_distributions">Related
@@ -147,8 +149,8 @@
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.pareto.implementation"></a></span><a class="link" href="pareto.html#math_toolkit.dist_ref.dists.pareto.implementation">Implementation</a>
         </h5>
 <p>
-          In the following table &#945; &#160; is the shape parameter of the distribution, and
-          &#946; &#160; is its scale parameter, <span class="emphasis"><em>x</em></span> is the random variate,
+          In the following table &#945; is the shape parameter of the distribution, and
+          &#946; is its scale parameter, <span class="emphasis"><em>x</em></span> is the random variate,
           <span class="emphasis"><em>p</em></span> is the probability and its complement <span class="emphasis"><em>q
           = 1-p</em></span>.
         </p>
@@ -190,7 +192,7 @@
                 </td>
 <td>
                   <p>
-                    Using the relation: cdf p = 1 - (&#946; &#160; / x)<sup>&#945;</sup>
+                    Using the relation: cdf p = 1 - (&#946; / x)<sup>&#945;</sup>
                   </p>
                 </td>
 </tr>
@@ -202,7 +204,7 @@
                 </td>
 <td>
                   <p>
-                    Using the relation: q = 1 - p = -(&#946; &#160; / x)<sup>&#945;</sup>
+                    Using the relation: q = 1 - p = -(&#946; / x)<sup>&#945;</sup>
                   </p>
                 </td>
 </tr>

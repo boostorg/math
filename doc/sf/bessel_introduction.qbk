@@ -1,4 +1,3 @@
-
 [section:bessel_over Bessel Function Overview]
 
 [h4 Ordinary Bessel Functions]
@@ -8,20 +7,20 @@ equation:
 
 [equation bessel1]
 
-where [nu][space] is the /order/ of the equation, and may be an arbitrary
+where [nu] is the /order/ of the equation, and may be an arbitrary
 real or complex number, although integer orders are the most common occurrence.
 
 This library supports either integer or real orders.
 
 Since this is a second order differential equation, there must be two
-linearly independent solutions, the first of these is denoted J[sub v][space]
+linearly independent solutions, the first of these is denoted J[sub v]
 and known as a Bessel function of the first kind:
 
 [equation bessel2]
 
 This function is implemented in this library as __cyl_bessel_j.
 
-The second solution is denoted either Y[sub v][space] or N[sub v][space]
+The second solution is denoted either Y[sub v] or N[sub v]
 and is known as either a Bessel Function of the second kind, or as a
 Neumann function:
 
@@ -63,7 +62,7 @@ independent solutions to the modified Bessel equation:
 
 The solutions are known as the modified Bessel functions of the first and 
 second kind (or occasionally as the hyperbolic Bessel functions of the first
-and second kind).  They are denoted I[sub v][space] and K[sub v][space]
+and second kind).  They are denoted I[sub v] and K[sub v]
 respectively:
 
 [equation mbessel2]
@@ -103,18 +102,18 @@ separation of variables, the radial equation has the form:
 [equation sbessel1]
 
 The two linearly independent solutions to this equation are called the 
-spherical Bessel functions j[sub n][space] and y[sub n][space], and are related to the 
-ordinary Bessel functions J[sub n][space] and Y[sub n][space] by:
+spherical Bessel functions j[sub n] and y[sub n] and are related to the 
+ordinary Bessel functions J[sub n] and Y[sub n] by:
 
 [equation sbessel2]
 
-The spherical Bessel function of the second kind y[sub n][space]
+The spherical Bessel function of the second kind y[sub n]
 is also known as the spherical Neumann function n[sub n].
 
 These functions are implemented in this library as __sph_bessel and
 __sph_neumann.
 
-[endsect]
+[endsect] [/section:bessel_over Bessel Function Overview]
 
 [/ 
   Copyright 2006 John Maddock, Paul A. Bristow and Xiaogang Zhang.

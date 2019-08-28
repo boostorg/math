@@ -510,7 +510,7 @@ was temporarily provided by `boost/cstdfloat.hpp`.
 
 The mingw bug was fixed at 2014-03-12 and GCC 6.1.1 now works as expected.
 
-[tip It is essential to link to the quadmath library].
+[tip It is essential to *link* to the quadmath library, for example, in a b2/bjam file: `<linkflags>-lquadmath`].
 
 [endsect] [/section:exp_function exp function]
 

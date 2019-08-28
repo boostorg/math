@@ -17,6 +17,16 @@ constants  \<constant\w*\>
 
 multiprecision  \<\w*\multiprecision\w*\>
 
+quadrature
+
+differentiation
+autodiff
+
+integration
+interpolation \<interpol\w*\>
+
+zeta  \<\w*\closed\w*\>
+
 !scan-path boost/math .*\.hpp true
 
 !exclude policy precision apply evaluation polynomial name helper 
@@ -47,6 +57,17 @@ Rmath
 Cephes
 
 DCDFLIB
+
+feedback
+
+bug \<bug\w*\>
+
+GIT \<GIT\w*\>
+
+Trac
+directory
+file structure
+
 
 !rewrite-name "(?i)(?:A|The)\s+(.*)" "\1"
 !rewrite-name "Additional Implementation Notes" "Implementation Notes"

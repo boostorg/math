@@ -127,7 +127,7 @@ Given an initial guess ['x0] the subsequent values are computed using:
 
 [equation roots1]
 
-Out of bounds steps revert to __bisection of the current bounds.
+Out-of-bounds steps revert to __bisection of the current bounds.
 
 Under ideal conditions, the number of correct digits doubles with each iteration.
 

@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Noncentral F Distribution</title>
 <link rel="stylesheet" href="../../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../../index.html" title="Math Toolkit 2.10.0">
 <link rel="up" href="../dists.html" title="Distributions">
 <link rel="prev" href="nc_chi_squared_dist.html" title="Noncentral Chi-Squared Distribution">
@@ -60,8 +60,9 @@
           The noncentral F distribution is a generalization of the <a class="link" href="f_dist.html" title="F Distribution">Fisher
           F Distribution</a>. It is defined as the ratio
         </p>
-<pre class="programlisting"><span class="identifier">F</span> <span class="special">=</span> <span class="special">(</span><span class="identifier">X</span><span class="special">/</span><span class="identifier">v1</span><span class="special">)</span> <span class="special">/</span> <span class="special">(</span><span class="identifier">Y</span><span class="special">/</span><span class="identifier">v2</span><span class="special">)</span>
-</pre>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="serif_italic">F = (X/v1) / (Y/v2)</span>
+          </p></blockquote></div>
 <p>
           where X is a noncentral &#967;<sup>2</sup>
 random variable with <span class="emphasis"><em>v1</em></span> degrees
@@ -71,22 +72,27 @@ random variable with <span class="emphasis"><em>v1</em></span> degrees
 <p>
           This gives the following PDF:
         </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../equations/nc_f_ref1.svg"></span>
+
+          </p></blockquote></div>
 <p>
-          <span class="inlinemediaobject"><img src="../../../../equations/nc_f_ref1.svg"></span>
+          where <span class="emphasis"><em>L<sub>a</sub><sup>b</sup>(c)</em></span> is a generalised Laguerre polynomial
+          and <span class="emphasis"><em>B(a,b)</em></span> is the <a class="link" href="../../sf_beta/beta_function.html" title="Beta">beta</a>
+          function, or
         </p>
-<p>
-          where L<sub>a</sub><sup>b</sup>(c) is a generalised Laguerre polynomial and B(a,b) is the <a class="link" href="../../sf_beta/beta_function.html" title="Beta">beta</a> function, or
-        </p>
-<p>
-          <span class="inlinemediaobject"><img src="../../../../equations/nc_f_ref2.svg"></span>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../equations/nc_f_ref2.svg"></span>
+
+          </p></blockquote></div>
 <p>
           The following graph illustrates how the distribution changes for different
           values of &#955;:
         </p>
-<p>
-          <span class="inlinemediaobject"><img src="../../../../graphs/nc_f_pdf.svg" align="middle"></span>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../graphs/nc_f_pdf.svg" align="middle"></span>
+
+          </p></blockquote></div>
 <h5>
 <a name="math_toolkit.dist_ref.dists.nc_f_dist.h0"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.nc_f_dist.member_functions"></a></span><a class="link" href="nc_f_dist.html#math_toolkit.dist_ref.dists.nc_f_dist.member_functions">Member
@@ -99,7 +105,8 @@ random variable with <span class="emphasis"><em>v1</em></span> degrees
           and <span class="emphasis"><em>v2</em></span> and non-centrality parameter <span class="emphasis"><em>lambda</em></span>.
         </p>
 <p>
-          Requires v1 &gt; 0, v2 &gt; 0 and lambda &gt;= 0, otherwise calls <a class="link" href="../../error_handling.html#math_toolkit.error_handling.domain_error">domain_error</a>.
+          Requires <span class="emphasis"><em>v1</em></span> &gt; 0, <span class="emphasis"><em>v2</em></span> &gt; 0
+          and lambda &gt;= 0, otherwise calls <a class="link" href="../../error_handling.html#math_toolkit.error_handling.domain_error">domain_error</a>.
         </p>
 <pre class="programlisting"><span class="identifier">RealType</span> <span class="identifier">degrees_of_freedom1</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
 </pre>
@@ -196,13 +203,15 @@ is the non-centrality parameter, <span class="emphasis"><em>x</em></span> is the
                     Implemented in terms of the non-central beta PDF using the relation:
                   </p>
                   <p>
-                    f(x;v1,v2;&#955;) = (v1/v2) / ((1+y)*(1+y)) * g(y/(1+y);v1/2,v2/2;&#955;)
+                    <span class="serif_italic">f(x;v1,v2;&#955;) = (v1/v2) / ((1+y)*(1+y))
+                    * g(y/(1+y);v1/2,v2/2;&#955;)</span>
                   </p>
                   <p>
-                    where g(x; a, b; &#955;) is the non central beta PDF, and:
+                    where <span class="serif_italic">g(x; a, b; &#955;)</span> is the
+                    non central beta PDF, and:
                   </p>
                   <p>
-                    y = x * v1 / v2
+                    <span class="serif_italic">y = x * v1 / v2</span>
                   </p>
                 </td>
 </tr>
@@ -217,13 +226,14 @@ is the non-centrality parameter, <span class="emphasis"><em>x</em></span> is the
                     Using the relation:
                   </p>
                   <p>
-                    p = B<sub>y</sub>(v1/2, v2/2; &#955;)
+                    <span class="serif_italic">p = B<sub>y</sub>(v1/2, v2/2; &#955;)</span>
                   </p>
                   <p>
-                    where B<sub>x</sub>(a, b; &#955;) is the noncentral beta distribution CDF and
+                    where <span class="serif_italic">B<sub>x</sub>(a, b; &#955;)</span> is the
+                    noncentral beta distribution CDF and
                   </p>
                   <p>
-                    y = x * v1 / v2
+                    <span class="serif_italic">y = x * v1 / v2</span>
                   </p>
                 </td>
 </tr>
@@ -238,14 +248,14 @@ is the non-centrality parameter, <span class="emphasis"><em>x</em></span> is the
                     Using the relation:
                   </p>
                   <p>
-                    q = 1 - B<sub>y</sub>(v1/2, v2/2; &#955;)
+                    <span class="serif_italic">q = 1 - B<sub>y</sub>(v1/2, v2/2; &#955;)</span>
                   </p>
                   <p>
-                    where 1 - B<sub>x</sub>(a, b; &#955;) is the complement of the noncentral beta
-                    distribution CDF and
+                    where <span class="serif_italic">1 - B<sub>x</sub>(a, b; &#955;)</span> is
+                    the complement of the noncentral beta distribution CDF and
                   </p>
                   <p>
-                    y = x * v1 / v2
+                    <span class="serif_italic">y = x * v1 / v2</span>
                   </p>
                 </td>
 </tr>
@@ -260,19 +270,19 @@ is the non-centrality parameter, <span class="emphasis"><em>x</em></span> is the
                     Using the relation:
                   </p>
                   <p>
-                    x = (bx / (1-bx)) * (v1 / v2)
+                    <span class="serif_italic">x = (bx / (1-bx)) * (v1 / v2)</span>
                   </p>
                   <p>
                     where
                   </p>
                   <p>
-                    bx = Q<sub>p</sub><sup>-1</sup>(v1/2, v2/2; &#955;)
+                    <span class="serif_italic">bx = Q<sub>p</sub><sup>-1</sup>(v1/2, v2/2; &#955;)</span>
                   </p>
                   <p>
                     and
                   </p>
                   <p>
-                    Q<sub>p</sub><sup>-1</sup>(v1/2, v2/2; &#955;)
+                    <span class="serif_italic">Q<sub>p</sub><sup>-1</sup>(v1/2, v2/2; &#955;)</span>
                   </p>
                   <p>
                     is the noncentral beta quantile.
@@ -293,19 +303,19 @@ is the non-centrality parameter, <span class="emphasis"><em>x</em></span> is the
                     Using the relation:
                   </p>
                   <p>
-                    x = (bx / (1-bx)) * (v1 / v2)
+                    <span class="serif_italic">x = (bx / (1-bx)) * (v1 / v2)</span>
                   </p>
                   <p>
                     where
                   </p>
                   <p>
-                    bx = QC<sub>q</sub><sup>-1</sup>(v1/2, v2/2; &#955;)
+                    <span class="serif_italic">bx = QC<sub>q</sub><sup>-1</sup>(v1/2, v2/2; &#955;)</span>
                   </p>
                   <p>
                     and
                   </p>
                   <p>
-                    QC<sub>q</sub><sup>-1</sup>(v1/2, v2/2; &#955;)
+                    <span class="serif_italic">QC<sub>q</sub><sup>-1</sup>(v1/2, v2/2; &#955;)</span>
                   </p>
                   <p>
                     is the noncentral beta quantile from the complement.
@@ -320,7 +330,7 @@ is the non-centrality parameter, <span class="emphasis"><em>x</em></span> is the
                 </td>
 <td>
                   <p>
-                    v2 * (v1 + l) / (v1 * (v2 - 2))
+                    <span class="serif_italic">v2 * (v1 + l) / (v1 * (v2 - 2))</span>
                   </p>
                 </td>
 </tr>

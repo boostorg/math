@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Cubic B-spline interpolation</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../index.html" title="Math Toolkit 2.10.0">
 <link rel="up" href="../interpolation.html" title="Chapter&#160;11.&#160;Interpolation">
 <link rel="prev" href="../interpolation.html" title="Chapter&#160;11.&#160;Interpolation">
@@ -50,6 +50,8 @@
       <span class="identifier">Real</span> <span class="keyword">operator</span><span class="special">()(</span><span class="identifier">Real</span> <span class="identifier">x</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
 
       <span class="identifier">Real</span> <span class="identifier">prime</span><span class="special">(</span><span class="identifier">Real</span> <span class="identifier">x</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+
+      <span class="identifier">Real</span> <span class="identifier">double_prime</span><span class="special">(</span><span class="identifier">Real</span> <span class="identifier">x</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
   <span class="special">};</span>
 
 <span class="special">}}</span> <span class="comment">// namespaces</span>
@@ -60,7 +62,7 @@
       B-Spline Interpolation</a>
     </h4>
 <p>
-      The cubic B-spline class provided by boost allows fast and accurate interpolation
+      The cubic B-spline class provided by Boost allows fast and accurate interpolation
       of a function which is known at equally spaced points. The cubic B-spline interpolation
       is numerically stable as it uses compactly supported basis functions constructed
       via iterative convolution. This is to be contrasted to traditional cubic spline
@@ -91,10 +93,10 @@
     </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
-          The start of the functions domain
+          The start of the functions domain,
         </li>
 <li class="listitem">
-          The step size
+          The step size.
         </li>
 </ul></div>
 <p>
@@ -132,6 +134,20 @@
       Analysis, Graduate Texts in Mathematics, 181, Rainer Kress</a> for details.
     </p>
 <p>
+      The last interesting member is the second derivative, evaluated via
+    </p>
+<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">ypp</span> <span class="special">=</span> <span class="identifier">spline</span><span class="special">.</span><span class="identifier">double_prime</span><span class="special">(</span><span class="identifier">x</span><span class="special">);</span>
+</pre>
+<p>
+      The basis functions of the spline are cubic polynomials, so the second derivative
+      is simply linear interpolation. But the interpolation is not constrained by
+      data (you don't pass in the second derivatives), and hence is less accurate
+      than would be expected from assuming it is a linear interpolation. The problem
+      is especially pronounced at the boundaries, where the second derivative is
+      totally unconstrained. Use the second derivative of the cubic B-spline interpolator
+      only in desperation.
+    </p>
+<p>
       Finally, note that this is an interpolator, not an extrapolator. Therefore,
       you should strenuously avoid evaluating the spline outside the endpoints. However,
       it is not an error if you do, as often you cannot control where (say) an ODE
@@ -166,9 +182,10 @@
       <span class="phrase"><a name="math_toolkit.cubic_b.testing"></a></span><a class="link" href="cubic_b.html#math_toolkit.cubic_b.testing">Testing</a>
     </h4>
 <p>
-      Since the interpolant obeys <span class="emphasis"><em>s(x<sub>j</sub>) = f(x<sub>j</sub>)</em></span> at all interpolation
-      points, the tests generate random data and evaluate the interpolant at the
-      interpolation points, validating that equality with the data holds.
+      Since the interpolant obeys <span class="serif_italic">s(x<sub>j</sub>) = f(x<sub>j</sub>)</span>
+      at all interpolation points, the tests generate random data and evaluate the
+      interpolant at the interpolation points, validating that equality with the
+      data holds.
     </p>
 <p>
       In addition, constant, linear, and quadratic functions are interpolated to

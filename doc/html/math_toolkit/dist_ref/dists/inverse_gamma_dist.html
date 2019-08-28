@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Inverse Gamma Distribution</title>
 <link rel="stylesheet" href="../../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../../index.html" title="Math Toolkit 2.10.0">
 <link rel="up" href="../dists.html" title="Distributions">
 <link rel="prev" href="inverse_chi_squared_dist.html" title="Inverse Chi Squared Distribution">
@@ -94,25 +94,27 @@
           For shape parameter &#945; and scale parameter &#946;, it is defined by the probability
           density function (PDF):
         </p>
-<p>
-          &#8192;&#8192; f(x;&#945;, &#946;) = &#946;<sup>&#945;</sup> * (1/x) <sup>&#945;+1</sup> exp(-&#946;/x) / &#915;(&#945;)
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="serif_italic">f(x;&#945;, &#946;) = &#946;<sup>&#945;</sup> * (1/x) <sup>&#945;+1</sup> exp(-&#946;/x) / &#915;(&#945;)</span>
+          </p></blockquote></div>
 <p>
           and cumulative density function (CDF)
         </p>
-<p>
-          &#8192;&#8192; F(x;&#945;, &#946;) = &#915;(&#945;, &#946;/x) / &#915;(&#945;)
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="serif_italic">F(x;&#945;, &#946;) = &#915;(&#945;, &#946;/x) / &#915;(&#945;)</span>
+          </p></blockquote></div>
 <p>
           The following graphs illustrate how the PDF and CDF of the inverse gamma
           distribution varies as the parameters vary:
         </p>
-<p>
-          <span class="inlinemediaobject"><img src="../../../../graphs/inverse_gamma_pdf.svg" align="middle"></span>
-        </p>
-<p>
-          <span class="inlinemediaobject"><img src="../../../../graphs/inverse_gamma_cdf.svg" align="middle"></span>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../graphs/inverse_gamma_pdf.svg" align="middle"></span>
+
+          </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../graphs/inverse_gamma_cdf.svg" align="middle"></span>
+
+          </p></blockquote></div>
 <h5>
 <a name="math_toolkit.dist_ref.dists.inverse_gamma_dist.h0"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.inverse_gamma_dist.member_functions"></a></span><a class="link" href="inverse_gamma_dist.html#math_toolkit.dist_ref.dists.inverse_gamma_dist.member_functions">Member
@@ -186,7 +188,7 @@
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.inverse_gamma_dist.implementation"></a></span><a class="link" href="inverse_gamma_dist.html#math_toolkit.dist_ref.dists.inverse_gamma_dist.implementation">Implementation</a>
         </h5>
 <p>
-          In the following table &#945; is the shape parameter of the distribution, &#945; &#160; is its
+          In the following table &#945; is the shape parameter of the distribution, &#945; is its
           scale parameter, <span class="emphasis"><em>x</em></span> is the random variate, <span class="emphasis"><em>p</em></span>
           is the probability and <span class="emphasis"><em>q = 1-p</em></span>.
         </p>
@@ -255,7 +257,7 @@
                 </td>
 <td>
                   <p>
-                    Using the relation: x = &#946; &#160;/ <a class="link" href="../../sf_gamma/igamma_inv.html" title="Incomplete Gamma Function Inverses">gamma_q_inv</a>(&#945;,
+                    Using the relation: x = &#946;/ <a class="link" href="../../sf_gamma/igamma_inv.html" title="Incomplete Gamma Function Inverses">gamma_q_inv</a>(&#945;,
                     p)
                   </p>
                 </td>
@@ -268,7 +270,7 @@
                 </td>
 <td>
                   <p>
-                    Using the relation: x = &#945; &#160;/ <a class="link" href="../../sf_gamma/igamma_inv.html" title="Incomplete Gamma Function Inverses">gamma_p_inv</a>(&#945;,
+                    Using the relation: x = &#945;/ <a class="link" href="../../sf_gamma/igamma_inv.html" title="Incomplete Gamma Function Inverses">gamma_p_inv</a>(&#945;,
                     q)
                   </p>
                 </td>

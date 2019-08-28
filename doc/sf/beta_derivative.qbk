@@ -39,7 +39,7 @@ This function just expose some of the internals of the incomplete
 beta function __ibeta: refer to the documentation for that function
 for more information.
 
-[endsect][/section Derivatives of the Incomplete Beta and Gamma Functions]
+[endsect] [/section Derivatives of the Incomplete Beta and Gamma Functions]
 [/ 
   Copyright 2006 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.

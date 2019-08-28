@@ -1,16 +1,21 @@
 @import url('../../../../doc/src/boostbook.css');
+/* Contains the basic settings for BoostBook and used by Quickbook to docbook conversion. */
 
 /*=============================================================================
-Copyright (c) 2004 Joel de Guzman
+Copyright (c) 2004 Joel de Guzman    http://spirit.sourceforge.net/
 Copyright (c) 2014 John Maddock
-http://spirit.sourceforge.net/
-
 Copyright 2013 Niall Douglas additions for colors and alignment.
 Copyright 2013 Paul A. Bristow additions for more colors and alignments.
+Copyright 2019 Paul A. Bristow additions for more control of serif-italic font etc.
 
 Distributed under the Boost Software License, Version 1.0. (See accompany-
 ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-=============================================================================*/
+
+    This Cascading Style Sheet is used to override and add to the standard Boost
+    CSS BoostBook for a particular library, for example Boost.Math and Boost.Multiprecision.
+
+    Visual Studio is recommended for editing this file 
+    because it checks syntax, does layout and provides help on options.
 
 /*=============================================================================
 Program listings
@@ -34,9 +39,9 @@ Program listings
     {
         font-size: 10pt;
         display: block;
-        margin: 1pc 4% 0pc 4%;
+        /* was margin: 1pc 4% 0pc 4%; */
+        margin: 1pc 2% 0pc 2%;
         padding: 0.5pc 0.5pc 0.5pc 0.5pc;
-
     }
 		@media screen
     {
@@ -78,3 +83,79 @@ Table of contents
     .toc dl dl { margin: 0; }
 
 
+/*==============================================================================
+Alignment and coloring use 'role' feature, available from Quickbook 1.6 up.
+Added from Niall Douglas for role color and alignment.
+http://article.gmane.org/gmane.comp.lib.boost.devel/243318
+*/
+
+/* Add text alignment (see http://www.w3schools.com/cssref/pr_text_text-align.asp) */
+span.aligncenter
+{
+  display: inline-block; width: 100%; text-align: center;
+}
+span.alignright
+{
+  display: inline-block; width: 100%; text-align: right;
+}
+/* alignleft is the default. */
+span.alignleft
+{
+  display: inline-block; width: 100%; text-align: left;
+}
+
+/* alignjustify stretches the word spacing so that each line has equal width
+within a chosen fraction of page width (here arbitrarily 20%).
+*Not* useful inside table items as the column width remains the total string width.
+Nor very useful, except to temporarily restrict the width.
+*/
+span.alignjustify
+{
+  display: inline-block; width: 20%; text-align: justify;
+}
+
+/* Text colors.
+Names at http://www.w3.org/TR/2002/WD-css3-color-20020219/ 4.3. X11 color keywords.
+Quickbook Usage: [role red Some red text]
+
+*/
+span.red { inline-block; color: red; }
+span.green { color: green; }
+span.lime { color: #00FF00; }
+span.blue { color: blue; }
+span.navy { color: navy; }
+span.yellow { color: yellow; }
+span.magenta { color: magenta; }
+span.indigo { color: #4B0082; }
+span.cyan { color: cyan; }
+span.purple { color: purple; }
+span.gold { color: gold; }
+span.silver { color: silver; } /* lighter gray */
+span.gray { color: #808080; } /* light gray */
+
+/* role for inline Unicode mathematical equations,
+    making font an italic (as is conventional for equations)
+    and a serif version of font (to match those generated using .mml to SVG or PNG)
+    and a little bigger (* 125%) because the serif font appears smaller than the default sans serif fonts.
+    Used, for example: [role serif_italic This is in serif font and italic].
+    Used in turn by template for inline expressions to match equations as SVG or PNG images.
+
+*/
+span.serif_italic {
+    font-family: serif;
+    font-style: italic;
+    font-size: 125%;
+    font-stretch: expanded;
+}
+
+/* Custom indent of paragraphs to make equations look nicer.
+https://www.w3schools.com/tags/tag_blockquote.asp says 
+  "Most browsers will display the <blockquote> element with left and right margin 40px values: "
+*/
+blockquote {
+    display: block;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    margin-left: 2%;
+    margin-right: 2%;
+}

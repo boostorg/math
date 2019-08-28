@@ -3,11 +3,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Catmull-Rom Splines</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../index.html" title="Math Toolkit 2.10.0">
 <link rel="up" href="../interpolation.html" title="Chapter&#160;11.&#160;Interpolation">
 <link rel="prev" href="vector_barycentric.html" title="Vector-valued Barycentric Rational Interpolation">
-<link rel="next" href="../quadrature.html" title="Chapter&#160;12.&#160;Quadrature and Differentiation">
+<link rel="next" href="cardinal_trigonometric.html" title="Cardinal Trigonometric interpolation">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -20,7 +20,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="vector_barycentric.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../interpolation.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="../quadrature.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="vector_barycentric.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../interpolation.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="cardinal_trigonometric.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -75,15 +75,15 @@
         </li>
 <li class="listitem">
           Interpolation of control points-this means the curve passes through the
-          control points. Many curves (such as Bezier) are <span class="emphasis"><em>approximating</em></span>-they
-          do not pass through their control points. This makes them more difficult
+          control points. Many curves (such as B&#233;zier) are <span class="emphasis"><em>approximating</em></span>
+          - they do not pass through their control points. This makes them more difficult
           to use than interpolating splines.
         </li>
 </ul></div>
 <p>
       The <code class="computeroutput"><span class="identifier">catmull_rom</span></code> class provided
-      by Boost creates a cubic Catmull-Rom spline from an array of points in any
-      dimension. Since there are numerous ways to represent a point in <span class="emphasis"><em>n</em></span>-dimensional
+      by Boost.Math creates a cubic Catmull-Rom spline from an array of points in
+      any dimension. Since there are numerous ways to represent a point in <span class="emphasis"><em>n</em></span>-dimensional
       space, the class attempts to be flexible by templating on the point type. The
       requirements on the point type are discussing in more detail below, but roughly,
       it must have a dereference operator defined (e.g., <code class="computeroutput"><span class="identifier">p</span><span class="special">[</span><span class="number">0</span><span class="special">]</span></code>
@@ -296,7 +296,8 @@
       then no problems arise; there are no reallocs, and in practice this condition
       is almost always satisfied. However, if <code class="computeroutput"><span class="identifier">v</span><span class="special">.</span><span class="identifier">capacity</span><span class="special">()</span> <span class="special">&lt;</span> <span class="identifier">v</span><span class="special">.</span><span class="identifier">size</span><span class="special">()</span>
       <span class="special">+</span> <span class="number">3</span></code>,
-      the realloc causes a performance penalty of roughly 20%.
+      the <code class="computeroutput"><span class="identifier">realloc</span></code> causes a performance
+      penalty of roughly 20%.
     </p>
 <h4>
 <a name="math_toolkit.catmull_rom.h6"></a>
@@ -357,7 +358,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="vector_barycentric.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../interpolation.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="../quadrature.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="vector_barycentric.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../interpolation.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="cardinal_trigonometric.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

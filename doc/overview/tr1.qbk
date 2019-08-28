@@ -385,7 +385,6 @@ return type determined by the __arg_promotion_rules.
    long double hypergl(long double a, long double b, long double c,
    long double x);
 
-
 ]
 
 [/ 

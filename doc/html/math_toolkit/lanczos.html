@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>The Lanczos Approximation</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../index.html" title="Math Toolkit 2.10.0">
 <link rel="up" href="../backgrounders.html" title="Chapter&#160;21.&#160;Backgrounders">
 <link rel="prev" href="relative_error.html" title="Relative Error">
@@ -105,23 +105,26 @@
 <p>
       The Lanczos Approximation to the Gamma Function is given by:
     </p>
-<p>
-      <span class="inlinemediaobject"><img src="../../equations/lanczos0.svg"></span>
-    </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+        <span class="inlinemediaobject"><img src="../../equations/lanczos0.svg"></span>
+
+      </p></blockquote></div>
 <p>
       Where S<sub>g</sub>(z) is an infinite sum, that is convergent for all z &gt; 0, and <span class="emphasis"><em>g</em></span>
       is an arbitrary parameter that controls the "shape" of the terms
       in the sum which is given by:
     </p>
-<p>
-      <span class="inlinemediaobject"><img src="../../equations/lanczos0a.svg"></span>
-    </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+        <span class="inlinemediaobject"><img src="../../equations/lanczos0a.svg"></span>
+
+      </p></blockquote></div>
 <p>
       With individual coefficients defined in closed form by:
     </p>
-<p>
-      <span class="inlinemediaobject"><img src="../../equations/lanczos0b.svg"></span>
-    </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+        <span class="inlinemediaobject"><img src="../../equations/lanczos0b.svg"></span>
+
+      </p></blockquote></div>
 <p>
       However, evaluation of the sum in that form can lead to numerical instability
       in the computation of the ratios of rising and falling factorials (effectively
@@ -132,15 +135,17 @@
       The Lanczos approximation is therefore often written in partial fraction form
       with the leading constants absorbed by the coefficients in the sum:
     </p>
-<p>
-      <span class="inlinemediaobject"><img src="../../equations/lanczos1.svg"></span>
-    </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+        <span class="inlinemediaobject"><img src="../../equations/lanczos1.svg"></span>
+
+      </p></blockquote></div>
 <p>
       where:
     </p>
-<p>
-      <span class="inlinemediaobject"><img src="../../equations/lanczos2.svg"></span>
-    </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+        <span class="inlinemediaobject"><img src="../../equations/lanczos2.svg"></span>
+
+      </p></blockquote></div>
 <p>
       Again parameter <span class="emphasis"><em>g</em></span> is an arbitrarily chosen constant, and
       <span class="emphasis"><em>N</em></span> is an arbitrarily chosen number of terms to evaluate
@@ -177,27 +182,31 @@
 <p>
       where B is an NxN matrix:
     </p>
-<p>
-      <span class="inlinemediaobject"><img src="../../equations/lanczos4.svg"></span>
-    </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+        <span class="inlinemediaobject"><img src="../../equations/lanczos4.svg"></span>
+
+      </p></blockquote></div>
 <p>
       D is an NxN matrix:
     </p>
-<p>
-      <span class="inlinemediaobject"><img src="../../equations/lanczos3.svg"></span>
-    </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+        <span class="inlinemediaobject"><img src="../../equations/lanczos3.svg"></span>
+
+      </p></blockquote></div>
 <p>
       C is an NxN matrix:
     </p>
-<p>
-      <span class="inlinemediaobject"><img src="../../equations/lanczos5.svg"></span>
-    </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+        <span class="inlinemediaobject"><img src="../../equations/lanczos5.svg"></span>
+
+      </p></blockquote></div>
 <p>
       and F is an N element column vector:
     </p>
-<p>
-      <span class="inlinemediaobject"><img src="../../equations/lanczos6.svg"></span>
-    </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+        <span class="inlinemediaobject"><img src="../../equations/lanczos6.svg"></span>
+
+      </p></blockquote></div>
 <p>
       Note than the matrices B, D and C contain all integer terms and depend only
       on <span class="emphasis"><em>N</em></span>, this product should be computed first, and then
@@ -525,9 +534,10 @@
       a factor of exp(g) from the denominator, and then dividing all the coefficients
       by exp(g):
     </p>
-<p>
-      <span class="inlinemediaobject"><img src="../../equations/lanczos7.svg"></span>
-    </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+        <span class="inlinemediaobject"><img src="../../equations/lanczos7.svg"></span>
+
+      </p></blockquote></div>
 <p>
       This form is more convenient for calculating lgamma, but for the gamma function
       the division by <span class="emphasis"><em>e</em></span> turns a possibly exact quality into

@@ -58,7 +58,7 @@
          boost::uintmax_t& max_iter,
          const ``__Policy``&);
 
-	// TOMS 748 algorithm
+  // TOMS 748 algorithm
    template <class F, class T, class Tol>
    std::pair<T, T>
       toms748_solve(
@@ -198,15 +198,15 @@ These functions locate the root using __bisection_wikipedia.
 
 [*Returns]: a pair of values ['r] that bracket the root so that:
 
-   f(r.first) * f(r.second) <= 0
+[:f(r.first) * f(r.second) <= 0]
 
 and either
 
-   tol(r.first, r.second) == true
+[:tol(r.first, r.second) == true]
 
 or
 
-   max_iter >= m
+[:max_iter >= m]
 
 where ['m] is the initial value of ['max_iter] passed to the function.
 
@@ -215,7 +215,7 @@ as a result of exceeding ['max_iter] function invocations (easily done by
 checking the updated value of ['max_iter] when the function returns), rather than
 because the termination condition ['tol] was satisfied.
 
-[endsect]
+[endsect] [/section:bisect Bisection]
 
 [section:bracket_solve Bracket and Solve Root]
 
@@ -287,15 +287,15 @@ The `bracket_and_solve_root` parameters are:
 
 [*Returns]: a pair of values ['r] that bracket the root so that:
 
-   f(r.first) * f(r.second) <= 0
+[:f(r.first) * f(r.second) <= 0]
 
 and either
 
-   tol(r.first, r.second) == true
+[:tol(r.first, r.second) == true]
 
 or
 
-   max_iter >= m
+[:max_iter >= m]
 
 where ['m] is the initial value of ['max_iter] passed to the function.
 
@@ -304,7 +304,7 @@ as a result of exceeding ['max_iter] function invocations (easily done by
 checking the value of ['max_iter]  when the function returns), rather than
 because the termination condition ['tol] was satisfied.
 
-[endsect]
+[endsect] [/section:bracket_solve Bracket and Solve Root]
 
 [section:TOMS748 Algorithm TOMS 748: Alefeld, Potra and Shi: Enclosing zeros of continuous functions]
 
@@ -359,12 +359,12 @@ Generally speaking it is easier (and often more efficient) to use __bracket_solv
 rather than trying to bracket the root yourself as this function requires.
 
 This function is provided rather than [@http://en.wikipedia.org/wiki/Brent%27s_method Brent's method] as it is known to be more
-effient in many cases (it is asymptotically the most efficient known,
+efficient in many cases (it is asymptotically the most efficient known,
 and has been shown to be optimal for a certain classes of smooth functions).
 It also has the useful property of decreasing the bracket size
 with each step, unlike Brent's method which only shrinks the enclosing interval in the
 final step.  This makes it particularly useful when you need a result where the ends
-of the interval round to the same integer: as often happens in statistical applications
+of the interval round to the same integer: as often happens in statistical applications,
 for example.  In this situation the function is able to exit after a much smaller
 number of iterations than would otherwise be possible.
 
@@ -393,15 +393,15 @@ The __root_finding_TOMS748 parameters are:
 
 `toms748_solve` returns: a pair of values ['r] that bracket the root so that:
 
-   f(r.first) * f(r.second) <= 0
+[:['f(r.first) * f(r.second) <= 0]]
 
 and either
 
-   tol(r.first, r.second) == true
+[:['tol(r.first, r.second) == true]]
 
 or
 
-   max_iter >= m
+[:['max_iter >= m]]
 
 where ['m] is the initial value of ['max_iter] passed to the function.
 
@@ -411,7 +411,7 @@ checking the updated value of ['max_iter]
 against its previous value passed as parameter),
 rather than because the termination condition ['tol] was satisfied.
 
-[endsect]
+[endsect] [/section:TOMS748 Algorithm TOMS 748: Alefeld, Potra and Shi: Enclosing zeros of continuous functions]
 
 [section:brent Brent-Decker Algorithm]
 
@@ -419,7 +419,7 @@ The [@http://en.wikipedia.org/wiki/Brent%27s_method Brent-Dekker algorithm], alt
 is not provided by this library as __root_finding_TOMS748 or
 its slightly easier to use variant __bracket_solve are superior and provide equivalent functionality.
 
-[endsect]
+[endsect] [/section:brent Brent-Decker Algorithm]
 
 [section:root_termination Termination Condition Functors]
 
@@ -471,7 +471,7 @@ This termination condition is used when you want to find an integer result
 that is the /closest/ to the true root.  It will terminate as soon as both ends
 of the interval round to the same nearest integer.
 
-[endsect]
+[endsect] [/section:root_termination Termination Condition Functors]
 
 [section:implementation Implementation]
 
@@ -487,7 +487,8 @@ Pages 327-344.]
 
 The implementation here is a faithful translation of this paper into C++.
 
-[endsect]
+[endsect] [/section:implementation Implementation]
+
 [endsect] [/section:roots_noderiv Root Finding Without Derivatives]
 
 [/

@@ -251,7 +251,7 @@ definition for the SC_ macro:
 
    // A couple of Boost.Test headers in case we need any BOOST_CHECK_* macros:
    #include <boost/test/unit_test.hpp>
-   #include <boost/test/floating_point_comparison.hpp>
+   #include <boost/test/tools/floating_point_comparison.hpp>
    // Our function to test:
    #include <boost/math/special_functions/my_special.hpp>
    // We need boost::array for our test data, plus a few headers from

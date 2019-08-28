@@ -93,7 +93,7 @@ respectively.  Note that since we are calculating a two-sided interval,
 we must divide the value of alpha in two.
 
 Please note that calculating two separate /single sided bounds/, each with risk
-level [alpha][space]is not the same thing as calculating a two sided interval.
+level [alpha] is not the same thing as calculating a two sided interval.
 Had we calculate two single-sided intervals each with a risk
 that the true value is outside the interval of [alpha], then:
 
@@ -208,7 +208,7 @@ Now even when the confidence level is very high, the limits are really
 quite close to the experimentally calculated value of 0.2.  Furthermore
 the difference between the two calculation methods is now really quite small.
 
-[endsect]
+[endsect] [/section:binom_conf Calculating Confidence Limits on the Frequency of Occurrence for a Binomial Distribution]
 
 [section:binom_size_eg Estimating Sample Sizes for a Binomial Distribution.]
 
@@ -321,7 +321,7 @@ less than 1 in 1000 chance of observing a component failure
 
 [endsect] [/section:binom_size_eg Estimating Sample Sizes for a Binomial Distribution.]
 
-[endsect][/section:binom_eg Binomial Distribution]
+[endsect] [/section:binom_eg Binomial Distribution]
 
 [/ 
   Copyright 2006 John Maddock and Paul A. Bristow.

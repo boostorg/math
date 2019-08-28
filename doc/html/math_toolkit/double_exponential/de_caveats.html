@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Caveats</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../index.html" title="Math Toolkit 2.10.0">
 <link rel="up" href="../double_exponential.html" title="Double-exponential quadrature">
 <link rel="prev" href="de_thread.html" title="Thread Safety">
@@ -75,8 +75,9 @@
         when the origin is neither in the center of the range, nor at an endpoint.
         Consider integrating:
       </p>
-<pre class="programlisting"><span class="number">1</span> <span class="special">/</span> <span class="special">(</span><span class="number">1</span> <span class="special">+</span><span class="identifier">x</span><span class="special">^</span><span class="number">2</span><span class="special">)</span>
-</pre>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="serif_italic">1 / (1 +x^2)</span>
+        </p></blockquote></div>
 <p>
         Over (a, &#8734;). As long as <code class="computeroutput"><span class="identifier">a</span> <span class="special">&gt;=</span> <span class="number">0</span></code> both
         the tanh_sinh and the exp_sinh integrators will handle this just fine: in
@@ -92,8 +93,8 @@
         each seperately using the tanh-sinh integrator, works just fine.
       </p>
 <p>
-        Finally, some endpoint singularities are too strong to be handled by tanh_sinh
-        or equivalent methods, for example consider integrating the function:
+        Finally, some endpoint singularities are too strong to be handled by <code class="computeroutput"><span class="identifier">tanh_sinh</span></code> or equivalent methods, for example
+        consider integrating the function:
       </p>
 <pre class="programlisting"><span class="keyword">double</span> <span class="identifier">p</span> <span class="special">=</span> <span class="identifier">some_value</span><span class="special">;</span>
 <span class="identifier">tanh_sinh</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">integrator</span><span class="special">;</span>
@@ -116,12 +117,12 @@
         over.
       </p>
 <p>
-        This actually works just fine for p &lt; 0.95, but after that the tanh_sinh
-        integrator starts thrashing around and is unable to converge on the integral.
-        The problem is actually a lack of exponent range: if we simply swap type
-        double for something with a greater exponent range (an 80-bit long double
-        or a quad precision type), then we can get to at least p = 0.99. If we want
-        to go beyond that, or stick with type double, then we have to get smart.
+        This actually works just fine for p &lt; 0.95, but after that the <code class="computeroutput"><span class="identifier">tanh_sinh</span></code> integrator starts thrashing around
+        and is unable to converge on the integral. The problem is actually a lack
+        of exponent range: if we simply swap type double for something with a greater
+        exponent range (an 80-bit long double or a quad precision type), then we
+        can get to at least p = 0.99. If we want to go beyond that, or stick with
+        type double, then we have to get smart.
       </p>
 <p>
         The easiest method is to notice that for small x, then <code class="literal">tan(x) &#8773; x</code>,
@@ -164,8 +165,8 @@
 <span class="special">};</span>
 </pre>
 <p>
-        This form integrates just fine over (-log(&#960;/2), +&#8734;) using either the tanh_sinh
-        or exp_sinh classes.
+        This form integrates just fine over (-log(&#960;/2), +&#8734;) using either the <code class="computeroutput"><span class="identifier">tanh_sinh</span></code> or <code class="computeroutput"><span class="identifier">exp_sinh</span></code>
+        classes.
       </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

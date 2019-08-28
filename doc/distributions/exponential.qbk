@@ -97,7 +97,7 @@ In the following table [lambda] is the parameter lambda of the distribution,
 Samuel Kotz & Saralees Nadarajah]
 discuss the relationship of the types of extreme value distributions.
 
-[endsect][/section:exp_dist Exponential]
+[endsect] [/section:exp_dist Exponential]
 
 [/ exponential.qbk
   Copyright 2006 John Maddock and Paul A. Bristow.

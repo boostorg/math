@@ -52,7 +52,7 @@ The [@http://en.wikipedia.org/wiki/Probability_density_function probability dens
 for the [@http://en.wikipedia.org/wiki/arcsine_distribution arcsine distribution]
 defined on the interval \[['x_min, x_max]\] is given by:
 
-[figspace] [figspace] f(x; x_min, x_max) = 1 /([pi][sdot][sqrt]((x - x_min)[sdot](x_max - x_min))
+[expression f(x; x_min, x_max) = 1 /([pi][sdot][sqrt]((x - x_min)[sdot](x_max - x_min))]
 
 For example, __WolframAlpha  arcsine distribution, from input of
 
@@ -77,7 +77,7 @@ and some generalized examples with other ['x] ranges.
 
 The Cumulative Distribution Function CDF is defined as
 
-[figspace]  [figspace]  F(x) = 2[sdot]arcsin([sqrt]((x-x_min)/(x_max - x))) / [pi]
+[expression F(x) = 2[sdot]arcsin([sqrt]((x-x_min)/(x_max - x))) / [pi]]
 
 [graph arcsine_cdf]
 
@@ -137,7 +137,7 @@ and their appplication to solve  stock market and other
 The random variate ['x] is constrained to ['x_min] and ['x_max], (for our 'standard' distribution, 0 and 1),
 and is usually some fraction.  For any other ['x_min] and ['x_max] a fraction can be obtained from ['x] using
 
-[sixemspace] fraction = (x - x_min) / (x_max - x_min)
+[expression fraction = (x - x_min) / (x_max - x_min)]
 
 The simplest example is tossing heads and tails with a fair coin and modelling the risk of losing, or winning.
 Walkers (molecules, drunks...) moving  left or right of a centre line are another common example.
@@ -223,11 +223,11 @@ Users should see __why_complements for guidance on when to avoid loss of accurac
 The results were tested against a few accurate spot values computed by __WolframAlpha, for example:
 
       N[PDF[arcsinedistribution[0, 1], 0.5], 50]
-	    0.63661977236758134307553505349005744813783858296183
+      0.63661977236758134307553505349005744813783858296183
 
 [h4 Implementation]
 
-In the following table ['a] and ['b] are the parameters ['x_min][space] and ['x_max],
+In the following table ['a] and ['b] are the parameters ['x_min] and ['x_max],
 ['x] is the random variable, ['p] is the probability and its complement ['q = 1-p].
 
 [table
@@ -258,7 +258,7 @@ which was interpreted as
 
 and produced the resulting expression
 
-  x = -a sin^2((pi p)/2)+a+b sin^2((pi p)/2)
+[expression x = -a sin^2((pi p)/2)+a+b sin^2((pi p)/2)]
 
 Thanks to Wolfram for providing this facility.
 

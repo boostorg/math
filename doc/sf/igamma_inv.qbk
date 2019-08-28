@@ -48,13 +48,13 @@ when T1 and T2 are different types, otherwise the return type is simply T1.
 
 [tip When people normally talk about the inverse of the incomplete
 gamma function, they are talking about inverting on parameter /x/.
-These are implemented here as gamma_p_inv and gamma_q_inv, and are by
+These are implemented here as `gamma_p_inv` and `gamma_q_inv`, and are by
 far the most efficient of the inverses presented here.
 
 The inverse on the /a/ parameter finds use in some statistical
 applications but has to be computed by rather brute force numerical
 techniques and is consequently several times slower.
-These are implemented here as gamma_p_inva and gamma_q_inva.]
+These are implemented here as `gamma_p_inva` and `gamma_q_inva`.]
 
 
    template <class T1, class T2>
@@ -132,7 +132,7 @@ the accuracy of the result, given exact input values.
 
 [h4 Implementation]
 
-The functions gamma_p_inv and [@http://functions.wolfram.com/GammaBetaErf/InverseGammaRegularized/ gamma_q_inv]
+The functions `gamma_p_inv` and [@http://functions.wolfram.com/GammaBetaErf/InverseGammaRegularized/ `gamma_q_inv`]
 share a common implementation.
 
 First an initial approximation is computed using the methodology described
@@ -149,17 +149,17 @@ incomplete gamma functions.  In testing, no more than 3 iterations are required
 to produce a result as accurate as the forward incomplete gamma function, and
 in many cases only one iteration is required.
 
-The functions gamma_p_inva and gamma_q_inva also share a common implementation
-but are handled separately from gamma_p_inv and gamma_q_inv.
+The functions `gamma_p_inva` and `gamma_q_inva` also share a common implementation
+but are handled separately from `gamma_p_inv` and `gamma_q_inv`.
 
 An initial approximation for /a/ is computed very crudely so that
 /gamma_p(a, x) ~ 0.5/, this value is then used as a starting point
 for a generic derivative-free root finding algorithm.  As a consequence,
 these two functions are rather more expensive to compute than the 
-gamma_p_inv or gamma_q_inv functions.  Even so, the root is usually found
+`gamma_p_inv` or `gamma_q_inv` functions.  Even so, the root is usually found
 in fewer than 10 iterations.
 
-[endsect][/section The Incomplete Gamma Function Inverses]
+[endsect] [/section The Incomplete Gamma Function Inverses]
 
 [/ 
   Copyright 2006 John Maddock and Paul A. Bristow.

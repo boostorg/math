@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>expm1</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../index.html" title="Math Toolkit 2.10.0">
 <link rel="up" href="../powers.html" title="Basic Functions">
 <link rel="prev" href="log1p.html" title="log1p">
@@ -53,11 +53,11 @@
         documentation for more details</a>.
       </p>
 <p>
-        For small x, then <code class="computeroutput">e<sup>x</sup></code> is very close to 1, as a result calculating <code class="computeroutput">e<sup>x</sup> - 1</code> results in
-        catastrophic cancellation errors when x is small. <code class="computeroutput"><span class="identifier">expm1</span></code>
-        calculates <code class="computeroutput">e<sup>x</sup> - 1</code> using rational approximations (for up to 128-bit long doubles),
-        otherwise via a series expansion when x is small (giving an accuracy of less
-        than 2&#603;).
+        For small <span class="emphasis"><em>x</em></span>, then <code class="computeroutput">e<sup>x</sup></code> is very close to 1, as a result calculating
+        <code class="computeroutput">e<sup>x</sup> - 1</code> results in catastrophic cancellation errors when <span class="emphasis"><em>x</em></span> is
+        small. <code class="computeroutput"><span class="identifier">expm1</span></code> calculates <code class="computeroutput">e<sup>x</sup> - 1</code> using
+        rational approximations (for up to 128-bit long doubles), otherwise via a
+        series expansion when x is small (giving an accuracy of less than 2&#603;).
       </p>
 <p>
         Finally when BOOST_HAS_EXPM1 is defined then the <code class="computeroutput"><span class="keyword">float</span><span class="special">/</span><span class="keyword">double</span><span class="special">/</span><span class="keyword">long</span> <span class="keyword">double</span></code>
@@ -67,9 +67,10 @@
 <p>
         The following graph illustrates the behaviour of expm1:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/expm1.svg" align="middle"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/expm1.svg" align="middle"></span>
+
+        </p></blockquote></div>
 <h5>
 <a name="math_toolkit.powers.expm1.h0"></a>
         <span class="phrase"><a name="math_toolkit.powers.expm1.accuracy"></a></span><a class="link" href="expm1.html#math_toolkit.powers.expm1.accuracy">Accuracy</a>

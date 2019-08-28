@@ -68,14 +68,14 @@ the result of the incomplete beta (p) or its complement (q).
 
 [tip When people normally talk about the inverse of the incomplete
 beta function, they are talking about inverting on parameter /x/.
-These are implemented here as ibeta_inv and ibetac_inv, and are by
+These are implemented here as `ibeta_inv` and `ibetac_inv`, and are by
 far the most efficient of the inverses presented here.
 
 The inverses on the /a/ and /b/ parameters find use in some statistical
 applications, but have to be computed by rather brute force numerical
 techniques and are consequently several times slower.
-These are implemented here as ibeta_inva and ibeta_invb,
-and complement versions ibetac_inva and ibetac_invb.]
+These are implemented here as `ibeta_inva` and `ibeta_invb`,
+and complement versions `ibetac_inva` and `ibetac_invb`.]
 
 The return type of these functions is computed using the __arg_promotion_rules
 when called with arguments T1...TN of different types.

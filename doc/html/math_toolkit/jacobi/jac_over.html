@@ -1,9 +1,9 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
-<title>Overvew of the Jacobi Elliptic Functions</title>
+<title>Overview of the Jacobi Elliptic Functions</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../index.html" title="Math Toolkit 2.10.0">
 <link rel="up" href="../jacobi.html" title="Jacobi Elliptic Functions">
 <link rel="prev" href="../jacobi.html" title="Jacobi Elliptic Functions">
@@ -24,14 +24,14 @@
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="math_toolkit.jacobi.jac_over"></a><a class="link" href="jac_over.html" title="Overvew of the Jacobi Elliptic Functions">Overvew of the Jacobi Elliptic
-      Functions</a>
+<a name="math_toolkit.jacobi.jac_over"></a><a class="link" href="jac_over.html" title="Overview of the Jacobi Elliptic Functions">Overview of the Jacobi
+      Elliptic Functions</a>
 </h3></div></div></div>
 <p>
         There are twelve Jacobi Elliptic functions, of which the three copolar functions
         <span class="emphasis"><em>sn</em></span>, <span class="emphasis"><em>cn</em></span> and <span class="emphasis"><em>dn</em></span>
         are the most important as the other nine can be computed from these three
-        <a href="#ftn.math_toolkit.jacobi.jac_over.f0" class="footnote" name="math_toolkit.jacobi.jac_over.f0"><sup class="footnote">[2]</sup></a> <a href="#ftn.math_toolkit.jacobi.jac_over.f1" class="footnote" name="math_toolkit.jacobi.jac_over.f1"><sup class="footnote">[3]</sup></a> <a href="#ftn.math_toolkit.jacobi.jac_over.f2" class="footnote" name="math_toolkit.jacobi.jac_over.f2"><sup class="footnote">[4]</sup></a>.
+        <a href="#ftn.math_toolkit.jacobi.jac_over.f0" class="footnote"><sup class="footnote"><a name="math_toolkit.jacobi.jac_over.f0"></a>[2]</sup></a> <a href="#ftn.math_toolkit.jacobi.jac_over.f1" class="footnote"><sup class="footnote"><a name="math_toolkit.jacobi.jac_over.f1"></a>[3]</sup></a> <a href="#ftn.math_toolkit.jacobi.jac_over.f2" class="footnote"><sup class="footnote"><a name="math_toolkit.jacobi.jac_over.f2"></a>[4]</sup></a>.
       </p>
 <p>
         These functions each take two arguments: a parameter, and a variable as described
@@ -49,7 +49,7 @@
             = k<sup>2</sup></em></span>.
           </li>
 <li class="listitem">
-            In terms of the modular angle &#945;, where <span class="emphasis"><em>m = sin<sup>2</sup>&#945;</em></span>.
+            In terms of the modular angle &#945;, where <span class="emphasis"><em>m = sin<sup>2</sup> &#8201;&#945;</em></span>.
           </li>
 </ul></div>
 <p>
@@ -61,11 +61,18 @@
         an amplitude &#966;, in our implementation we always use <span class="emphasis"><em>u</em></span>.
       </p>
 <p>
-        Finally note that our functions all take the elliptic modulus as the first
-        argument - this is for alignment with the Elliptic Integrals.
+        Finally note that our functions all take the elliptic modulus <span class="emphasis"><em>k</em></span>
+        as the <span class="bold"><strong>first</strong></span> argument - this is for alignment
+        with the Elliptic Integrals (but is different from other implementations,
+        for example Mathworks).
       </p>
 <p>
-        There are twenve functions for computing the twelve individual Jacobi elliptic
+        A simple example comparing use of <a href="http://www.wolframalpha.com/" target="_top">Wolfram
+        Alpha</a> with Boost.Math (including much higher precision using Boost.Multiprecision)
+        is <a href="../../../../example/jacobi_zeta_example.cpp" target="_top">jacobi_zeta_example.cpp</a>.
+      </p>
+<p>
+        There are twelve functions for computing the twelve individual Jacobi elliptic
         functions: <a class="link" href="jacobi_cd.html" title="Jacobi Elliptic Function cd">jacobi_cd</a>,
         <a class="link" href="jacobi_cn.html" title="Jacobi Elliptic Function cn">jacobi_cn</a>, <a class="link" href="jacobi_cs.html" title="Jacobi Elliptic Function cs">jacobi_cs</a>,
         <a class="link" href="jacobi_dc.html" title="Jacobi Elliptic Function dc">jacobi_dc</a>, <a class="link" href="jacobi_dn.html" title="Jacobi Elliptic Function dn">jacobi_dn</a>,
@@ -83,12 +90,20 @@
         Note however that these individual functions are all really thin wrappers
         around the function <a class="link" href="jacobi_elliptic.html" title="Jacobi Elliptic SN, CN and DN">jacobi_elliptic</a>
         which calculates the three copolar functions <span class="emphasis"><em>sn</em></span>, <span class="emphasis"><em>cn</em></span>
-        and <span class="emphasis"><em>dn</em></span> in a single function call. Thus if you need more
-        than one of these functions for a given set of arguments, it's most efficient
-        to use <a class="link" href="jacobi_elliptic.html" title="Jacobi Elliptic SN, CN and DN">jacobi_elliptic</a>.
+        and <span class="emphasis"><em>dn</em></span> in a single function call.
       </p>
+<div class="tip"><table border="0" summary="Tip">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="../../../../../../doc/src/images/tip.png"></td>
+<th align="left">Tip</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+          If you need more than one of these functions for a given set of arguments,
+          it's most efficient to use <a class="link" href="jacobi_elliptic.html" title="Jacobi Elliptic SN, CN and DN">jacobi_elliptic</a>.
+        </p></td></tr>
+</table></div>
 <div class="footnotes">
-<br><hr style="width:100; text-align:left;margin-left: 0">
+<br><hr style="width:100; align:left;">
 <div id="ftn.math_toolkit.jacobi.jac_over.f0" class="footnote"><p><a href="#math_toolkit.jacobi.jac_over.f0" class="para"><sup class="para">[2] </sup></a>
           <a href="http://en.wikipedia.org/wiki/Jacobi_elliptic_functions" target="_top">Wikipedia:
           Jacobi elliptic functions</a>
@@ -100,7 +115,7 @@
         </p></div>
 <div id="ftn.math_toolkit.jacobi.jac_over.f2" class="footnote"><p><a href="#math_toolkit.jacobi.jac_over.f2" class="para"><sup class="para">[4] </sup></a>
           <a href="http://dlmf.nist.gov/22" target="_top">Digital Library of Mathematical Functions:
-          Jacobian Elliptic Functions</a>
+          Jacobian Elliptic Functions, Reinhardt, W. P., Walker, O. L.</a>
         </p></div>
 </div>
 </div>

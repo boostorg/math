@@ -531,7 +531,7 @@
            //
            cache_offset += cache_size;
            T last_value = bessel_i_cache.back();
-           bessel_i_backwards_iterator<T> i(b_minus_a + cache_offset + (int)cache_size - 1.5f, half_z, tools::min_value<T>() * (fabs(last_value) > 1 ? last_value : 1));
+           bessel_i_backwards_iterator<T> i(b_minus_a + cache_offset + (int)cache_size - 1.5f, half_z, tools::min_value<T>() * (fabs(last_value) > 1 ? last_value : 1) / tools::epsilon<T>());
 
            for (int j = cache_size - 1; j >= 0; --j, ++i)
            {
@@ -543,7 +543,7 @@
               // it's likely that our series will only need 1 or 2 terms of the series but we
               // can't be sure of that:
               //
-              if((j < cache_size - 2) && (tools::max_value<T>() / fabs(64 * bessel_i_cache[j] / bessel_i_cache[j + 1]) < fabs(bessel_i_cache[j])))
+              if((j < cache_size - 2) && (bessel_i_cache[j + 1] != 0) && (tools::max_value<T>() / fabs(64 * bessel_i_cache[j] / bessel_i_cache[j + 1]) < fabs(bessel_i_cache[j])))
               {
                  T rescale = pow(fabs(bessel_i_cache[j] / bessel_i_cache[j + 1]), j + 1) * 2;
                  if (rescale > tools::max_value<T>())

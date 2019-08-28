@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Lambert W function</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../index.html" title="Math Toolkit 2.10.0">
 <link rel="up" href="../special.html" title="Chapter&#160;7.&#160;Special Functions">
 <link rel="prev" href="jacobi/jacobi_sn.html" title="Jacobi Elliptic Function sn">
@@ -75,12 +75,22 @@
       are labelled <code class="computeroutput"><span class="identifier">lambert_w0_prime</span></code>
       and <code class="computeroutput"><span class="identifier">lambert_wm1_prime</span></code>.
     </p>
-<p>
-      <span class="inlinemediaobject"><img src="../../graphs/lambert_w_graph.svg" align="middle"></span>
-  <span class="inlinemediaobject"><img src="../../graphs/lambert_w_graph_big_w.svg" align="middle"></span>
-  <span class="inlinemediaobject"><img src="../../graphs/lambert_w0_prime_graph.svg" align="middle"></span>
-  <span class="inlinemediaobject"><img src="../../graphs/lambert_wm1_prime_graph.svg" align="middle"></span>
-    </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+        <span class="inlinemediaobject"><img src="../../graphs/lambert_w_graph.svg" align="middle"></span>
+
+      </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+        <span class="inlinemediaobject"><img src="../../graphs/lambert_w_graph_big_w.svg" align="middle"></span>
+
+      </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+        <span class="inlinemediaobject"><img src="../../graphs/lambert_w0_prime_graph.svg" align="middle"></span>
+
+      </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+        <span class="inlinemediaobject"><img src="../../graphs/lambert_wm1_prime_graph.svg" align="middle"></span>
+
+      </p></blockquote></div>
 <p>
       There is a singularity where the branches meet at <span class="emphasis"><em>e</em></span><sup>-1</sup> &#8773; <code class="literal">-0.367879</code>.
       Approaching this point, the condition number of function evaluation tends to
@@ -335,9 +345,9 @@ with the functions <code class="computeroutput"><span class="identifier">lambert
 <p>
       Banwell and Jakaumar equation 5
     </p>
-<p>
-      &#8198; &#160; I(V) = &#956; V<sub>T</sub>/ R <sub>S</sub> &#8228; W<sub>0</sub>(I<sub>0</sub> R<sub>S</sub> / (&#956; V<sub>T</sub>))
-    </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+        <span class="serif_italic">I(V) = &#956; V<sub>T</sub>/ R <sub>S</sub> &#8228; W<sub>0</sub>(I<sub>0</sub> R<sub>S</sub> / (&#956; V<sub>T</sub>))</span>
+      </p></blockquote></div>
 <p>
       Using these variables
     </p>
@@ -385,9 +395,10 @@ with the functions <code class="computeroutput"><span class="identifier">lambert
 <p>
       to reproduce their Fig 2:
     </p>
-<p>
-      <span class="inlinemediaobject"><img src="../../graphs/diode_iv_plot.svg" align="middle"></span>
-    </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+        <span class="inlinemediaobject"><img src="../../graphs/diode_iv_plot.svg" align="middle"></span>
+
+      </p></blockquote></div>
 <p>
       The plotted points for no external series resistance (derived from their published
       plot as the raw data are not publicly available) are used to extrapolate back
@@ -615,12 +626,14 @@ with the functions <code class="computeroutput"><span class="identifier">lambert
       reference 'best' z50 evaluations using <code class="computeroutput"><span class="identifier">cpp_bin_float_50</span></code>
       type reduced to <code class="computeroutput"><span class="keyword">double</span></code> with <code class="computeroutput"><span class="keyword">static_cast</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">(</span><span class="identifier">z50</span><span class="special">)</span></code> :
     </p>
-<p>
-      <span class="inlinemediaobject"><img src="../../graphs/lambert_w0_errors_graph.svg" align="middle"></span>
-    </p>
-<p>
-      <span class="inlinemediaobject"><img src="../../graphs/lambert_wm1_errors_graph.svg" align="middle"></span>
-    </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+        <span class="inlinemediaobject"><img src="../../graphs/lambert_w0_errors_graph.svg" align="middle"></span>
+
+      </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+        <span class="inlinemediaobject"><img src="../../graphs/lambert_wm1_errors_graph.svg" align="middle"></span>
+
+      </p></blockquote></div>
 <p>
       As noted in the implementation section, the distribution of these differences
       is somewhat biased for Lambert <span class="emphasis"><em>W</em></span><sub>-1</sub> and this might be reduced
@@ -1737,10 +1750,14 @@ if (f(w) / f'</span><span class="special">(</span><span class="identifier">w</sp
       value, a minority are within 1 <a href="http://en.wikipedia.org/wiki/Unit_in_the_last_place" target="_top">Unit
       in the last place (ULP)</a> and only a very few 2 ULP.
     </p>
-<p>
-      <span class="inlinemediaobject"><img src="../../graphs/lambert_w0_errors_graph.svg" align="middle"></span>
-  <span class="inlinemediaobject"><img src="../../graphs/lambert_wm1_errors_graph.svg" align="middle"></span>
-    </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+        <span class="inlinemediaobject"><img src="../../graphs/lambert_w0_errors_graph.svg" align="middle"></span>
+
+      </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+        <span class="inlinemediaobject"><img src="../../graphs/lambert_wm1_errors_graph.svg" align="middle"></span>
+
+      </p></blockquote></div>
 <p>
       For the range of z arguments over the range -0.35 to 0.5, a different algorithm
       is used, but the same technique of evaluating reference values using a <a href="../../../../../libs/multiprecision/doc/html/index.html" target="_top">Boost.Multiprecision</a>

@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Minimax Approximations and the Remez Algorithm</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../index.html" title="Math Toolkit 2.10.0">
 <link rel="up" href="../internals.html" title="Internal tools">
 <link rel="prev" href="tuples.html" title="Tuples">
@@ -28,12 +28,12 @@
       and the Remez Algorithm</a>
 </h3></div></div></div>
 <p>
-        The directory libs/math/minimax contains a command line driven program for
-        the generation of minimax approximations using the Remez algorithm. Both
-        polynomial and rational approximations are supported, although the latter
-        are tricky to converge: it is not uncommon for convergence of rational forms
-        to fail. No such limitations are present for polynomial approximations which
-        should always converge smoothly.
+        The directory <code class="computeroutput"><span class="identifier">libs</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">minimax</span></code>
+        contains an interactive command-line driven program for the generation of
+        minimax approximations using the Remez algorithm. Both polynomial and rational
+        approximations are supported, although the latter are tricky to converge:
+        it is not uncommon for convergence of rational forms to fail. No such limitations
+        are present for polynomial approximations which should always converge smoothly.
       </p>
 <p>
         It's worth stressing that developing rational approximations to functions
@@ -82,8 +82,9 @@
         of the approximation: for example if you are approximating a function <span class="emphasis"><em>f(x)</em></span>
         then it is quite common to use:
       </p>
-<pre class="programlisting"><span class="identifier">f</span><span class="special">(</span><span class="identifier">x</span><span class="special">)</span> <span class="special">=</span> <span class="identifier">g</span><span class="special">(</span><span class="identifier">x</span><span class="special">)(</span><span class="identifier">Y</span> <span class="special">+</span> <span class="identifier">R</span><span class="special">(</span><span class="identifier">x</span><span class="special">))</span>
-</pre>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="serif_italic">f(x) = g(x)(Y + R(x))</span>
+        </p></blockquote></div>
 <p>
         where <span class="emphasis"><em>g(x)</em></span> is the dominant part of <span class="emphasis"><em>f(x)</em></span>,
         <span class="emphasis"><em>Y</em></span> is some constant, and <span class="emphasis"><em>R(x)</em></span> is
@@ -91,7 +92,7 @@
         compared to |Y|.
       </p>
 <p>
-        In this case you would define <span class="emphasis"><em>f</em></span> to return <span class="emphasis"><em>f(x)/g(x)</em></span>
+        In this case you would define <span class="emphasis"><em>f</em></span> to return <span class="serif-italic">f(x)/g(x)</span>
         and then set the y-offset of the approximation to <span class="emphasis"><em>Y</em></span>
         (see command line options below).
       </p>

@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Elliptic Integral D - Legendre Form</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../index.html" title="Math Toolkit 2.10.0">
 <link rel="up" href="../ellint.html" title="Elliptic Integrals">
 <link rel="prev" href="ellint_3.html" title="Elliptic Integrals of the Third Kind - Legendre Form">
@@ -72,9 +72,10 @@
 <p>
         Returns the incomplete elliptic integral:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/ellint_d.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/ellint_d.svg"></span>
+
+        </p></blockquote></div>
 <p>
         Requires <span class="emphasis"><em>k<sup>2</sup>sin<sup>2</sup>(phi) &lt; 1</em></span>, otherwise returns the result
         of <a class="link" href="../error_handling.html#math_toolkit.error_handling.domain_error">domain_error</a>
@@ -309,24 +310,27 @@ is very large, in which case the usual trigonometric function argument-reduction
         precision, and GCC-7.1/Ubuntu for <code class="computeroutput"><span class="keyword">long</span>
         <span class="keyword">double</span></code> and <code class="computeroutput"><span class="identifier">__float128</span></code>.
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/elliptic_integral_d__double.svg" align="middle"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/elliptic_integral_d__80_bit_long_double.svg" align="middle"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/elliptic_integral_d____float128.svg" align="middle"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/elliptic_integral_d__double.svg" align="middle"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/elliptic_integral_d__80_bit_long_double.svg" align="middle"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/elliptic_integral_d____float128.svg" align="middle"></span>
+
+        </p></blockquote></div>
 <h5>
 <a name="math_toolkit.ellint.ellint_d.h3"></a>
         <span class="phrase"><a name="math_toolkit.ellint.ellint_d.testing"></a></span><a class="link" href="ellint_d.html#math_toolkit.ellint.ellint_d.testing">Testing</a>
       </h5>
 <p>
         The tests use a mixture of spot test values calculated using values calculated
-        at wolframalpha.com, and random test data generated using MPFR at 1000-bit
-        precision and a deliberately naive implementation in terms of the Legendre
-        integrals.
+        at <a href="http://www.wolframalpha.com/" target="_top">Wolfram Alpha</a>, and random
+        test data generated using MPFR at 1000-bit precision and a deliberately naive
+        implementation in terms of the Legendre integrals.
       </p>
 <h5>
 <a name="math_toolkit.ellint.ellint_d.h4"></a>
@@ -336,26 +340,27 @@ is very large, in which case the usual trigonometric function argument-reduction
         The implementation for D(&#966;, k) first performs argument reduction using the
         relations:
       </p>
-<p>
-        <span class="emphasis"><em>D(-&#966;, k) = -D(&#966;, k)</em></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="serif_italic"><span class="emphasis"><em>D(-&#966;, k) = -D(&#966;, k)</em></span></span>
+        </p></blockquote></div>
 <p>
         and
       </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="serif_italic"><span class="emphasis"><em>D(n&#960;+&#966;, k) = 2nD(k) + D(&#966;, k)</em></span></span>
+        </p></blockquote></div>
 <p>
-        <span class="emphasis"><em>D(n&#960;+&#966;, k) = 2nD(k) + D(&#966;, k)</em></span>
-      </p>
-<p>
-        to move &#966; &#160; to the range [0, &#960;/2].
+        to move &#966; to the range [0, &#960;/2].
       </p>
 <p>
         The functions are then implemented in terms of Carlson's integral R<sub>D</sub>
 using
         the relation:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/ellint_d.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/ellint_d.svg"></span>
+
+        </p></blockquote></div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>

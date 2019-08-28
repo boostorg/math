@@ -14,7 +14,7 @@
 #include <boost/math/tools/test.hpp>
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
-#include <boost/test/floating_point_comparison.hpp>
+#include <boost/test/tools/floating_point_comparison.hpp>
 
 #include <boost/typeof/typeof.hpp>
 #include <boost/type_traits/is_same.hpp>

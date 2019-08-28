@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Bessel Functions of the First and Second Kinds</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../index.html" title="Math Toolkit 2.10.0">
 <link rel="up" href="../bessel.html" title="Bessel Functions">
 <link rel="prev" href="bessel_over.html" title="Bessel Function Overview">
@@ -55,21 +55,23 @@
         and <a class="link" href="bessel_first.html" title="Bessel Functions of the First and Second Kinds">cyl_neumann</a> return
         the result of the Bessel functions of the first and second kinds respectively:
       </p>
-<p>
-        cyl_bessel_j(v, x) = J<sub>v</sub>(x)
-      </p>
-<p>
-        cyl_neumann(v, x) = Y<sub>v</sub>(x) = N<sub>v</sub>(x)
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="serif_italic">cyl_bessel_j(v, x) = J<sub>v</sub>(x)</span>
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="serif_italic">cyl_neumann(v, x) = Y<sub>v</sub>(x) = N<sub>v</sub>(x)</span>
+        </p></blockquote></div>
 <p>
         where:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/bessel2.svg"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/bessel3.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/bessel2.svg"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/bessel3.svg"></span>
+
+        </p></blockquote></div>
 <p>
         The return type of these functions is computed using the <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>result
         type calculation rules</em></span></a> when T1 and T2 are different types.
@@ -97,16 +99,18 @@
 <p>
         The following graph illustrates the cyclic nature of J<sub>v</sub>:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/cyl_bessel_j.svg" align="middle"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/cyl_bessel_j.svg" align="middle"></span>
+
+        </p></blockquote></div>
 <p>
         The following graph shows the behaviour of Y<sub>v</sub>: this is also cyclic for large
-        <span class="emphasis"><em>x</em></span>, but tends to -&#8734; &#160; for small <span class="emphasis"><em>x</em></span>:
+        <span class="emphasis"><em>x</em></span>, but tends to -&#8734; for small <span class="emphasis"><em>x</em></span>:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/cyl_neumann.svg" align="middle"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/cyl_neumann.svg" align="middle"></span>
+
+        </p></blockquote></div>
 <h5>
 <a name="math_toolkit.bessel.bessel_first.h2"></a>
         <span class="phrase"><a name="math_toolkit.bessel.bessel_first.testing"></a></span><a class="link" href="bessel_first.html#math_toolkit.bessel.bessel_first.testing">Testing</a>
@@ -1152,12 +1156,14 @@
         illustrate the relatively large errors as you approach a zero, and the very
         low errors elsewhere.
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/j0__double.svg" align="middle"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/y0__double.svg" align="middle"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/j0__double.svg" align="middle"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/y0__double.svg" align="middle"></span>
+
+        </p></blockquote></div>
 <h5>
 <a name="math_toolkit.bessel.bessel_first.h4"></a>
         <span class="phrase"><a name="math_toolkit.bessel.bessel_first.implementation"></a></span><a class="link" href="bessel_first.html#math_toolkit.bessel.bessel_first.implementation">Implementation</a>
@@ -1175,21 +1181,23 @@
         When the order <span class="emphasis"><em>v</em></span> is negative then the reflection formulae
         can be used to move to <span class="emphasis"><em>v &gt; 0</em></span>:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/bessel9.svg"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/bessel10.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/bessel9.svg"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/bessel10.svg"></span>
+
+        </p></blockquote></div>
 <p>
         Note that if the order is an integer, then these formulae reduce to:
       </p>
-<p>
-        J<sub>-n</sub> = (-1)<sup>n</sup>J<sub>n</sub>
-      </p>
-<p>
-        Y<sub>-n</sub> = (-1)<sup>n</sup>Y<sub>n</sub>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="serif_italic">J<sub>-n</sub> = (-1)<sup>n</sup>J<sub>n</sub></span>
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="serif_italic">Y<sub>-n</sub> = (-1)<sup>n</sup>Y<sub>n</sub></span>
+        </p></blockquote></div>
 <p>
         However, in general, a negative order implies that we will need to compute
         both J and Y.
@@ -1203,24 +1211,24 @@
       </p>
 <p>
         When the order <span class="emphasis"><em>v</em></span> is an integer the method first relates
-        the result to J<sub>0</sub>, J<sub>1</sub>, Y<sub>0</sub> &#160; and Y<sub>1</sub> &#160; using either forwards or backwards recurrence
+        the result to J<sub>0</sub>, J<sub>1</sub>, Y<sub>0</sub> and Y<sub>1</sub> using either forwards or backwards recurrence
         (Miller's algorithm) depending upon which is stable. The values for J<sub>0</sub>, J<sub>1</sub>,
-        Y<sub>0</sub> &#160; and Y<sub>1</sub> &#160; are calculated using the rational minimax approximations on root-bracketing
+        Y<sub>0</sub> and Y<sub>1</sub> are calculated using the rational minimax approximations on root-bracketing
         intervals for small <span class="emphasis"><em>|x|</em></span> and Hankel asymptotic expansion
         for large <span class="emphasis"><em>|x|</em></span>. The coefficients are from:
       </p>
-<p>
-        W.J. Cody, <span class="emphasis"><em>ALGORITHM 715: SPECFUN - A Portable FORTRAN Package
-        of Special Function Routines and Test Drivers</em></span>, ACM Transactions
-        on Mathematical Software, vol 19, 22 (1993).
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          W.J. Cody, <span class="emphasis"><em>ALGORITHM 715: SPECFUN - A Portable FORTRAN Package
+          of Special Function Routines and Test Drivers</em></span>, ACM Transactions
+          on Mathematical Software, vol 19, 22 (1993).
+        </p></blockquote></div>
 <p>
         and
       </p>
-<p>
-        J.F. Hart et al, <span class="emphasis"><em>Computer Approximations</em></span>, John Wiley
-        &amp; Sons, New York, 1968.
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          J.F. Hart et al, <span class="emphasis"><em>Computer Approximations</em></span>, John Wiley
+          &amp; Sons, New York, 1968.
+        </p></blockquote></div>
 <p>
         These approximations are accurate to around 19 decimal digits: therefore
         these methods are not used when type T has more than 64 binary digits.
@@ -1232,55 +1240,64 @@
         <a href="http://functions.wolfram.com/03.03.06.0039.01" target="_top">http://functions.wolfram.com/03.03.06.0039.01</a>
         and <a href="http://functions.wolfram.com/03.03.06.0040.01" target="_top">http://functions.wolfram.com/03.03.06.0040.01</a>):
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/bessel_y0_small_z.svg"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/bessel_y1_small_z.svg"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/bessel_y2_small_z.svg"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/bessel_yn_small_z.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/bessel_y0_small_z.svg"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/bessel_y1_small_z.svg"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/bessel_y2_small_z.svg"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/bessel_yn_small_z.svg"></span>
+
+        </p></blockquote></div>
 <p>
         When <span class="emphasis"><em>x</em></span> is small compared to <span class="emphasis"><em>v</em></span> and
         <span class="emphasis"><em>v</em></span> is not an integer, then the following series approximation
         can be used for Y<sub>v</sub>(x), this is also an area where other approximations are
         often too slow to converge to be used (see <a href="http://functions.wolfram.com/03.03.06.0034.01" target="_top">http://functions.wolfram.com/03.03.06.0034.01</a>):
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/bessel_yv_small_z.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/bessel_yv_small_z.svg"></span>
+
+        </p></blockquote></div>
 <p>
         When <span class="emphasis"><em>x</em></span> is small compared to <span class="emphasis"><em>v</em></span>,
-        J<sub>v</sub>x &#160; is best computed directly from the series:
+        J<sub>v</sub>x is best computed directly from the series:
+      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/bessel2.svg"></span>
+
+        </p></blockquote></div>
+<p>
+        In the general case we compute J<sub>v</sub> and Y<sub>v</sub> simultaneously.
       </p>
 <p>
-        <span class="inlinemediaobject"><img src="../../../equations/bessel2.svg"></span>
-      </p>
-<p>
-        In the general case we compute J<sub>v</sub> &#160; and Y<sub>v</sub> &#160; simultaneously.
-      </p>
-<p>
-        To get the initial values, let &#956; &#160; = &#957; - floor(&#957; + 1/2), then &#956; &#160; is the fractional part
-        of &#957; &#160; such that |&#956;| &lt;= 1/2 (we need this for convergence later). The idea
+        To get the initial values, let &#956; = &#957; - floor(&#957; + 1/2), then &#956; is the fractional part
+        of &#957; such that |&#956;| &lt;= 1/2 (we need this for convergence later). The idea
         is to calculate J<sub>&#956;</sub>(x), J<sub>&#956;+1</sub>(x), Y<sub>&#956;</sub>(x), Y<sub>&#956;+1</sub>(x) and use them to obtain J<sub>&#957;</sub>(x), Y<sub>&#957;</sub>(x).
       </p>
 <p>
         The algorithm is called Steed's method, which needs two continued fractions
         as well as the Wronskian:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/bessel8.svg"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/bessel11.svg"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/bessel12.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/bessel8.svg"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/bessel11.svg"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/bessel12.svg"></span>
+
+        </p></blockquote></div>
 <p>
         See: F.S. Acton, <span class="emphasis"><em>Numerical Methods that Work</em></span>, The Mathematical
         Association of America, Washington, 1997.
@@ -1290,30 +1307,32 @@
         Lentz, <span class="emphasis"><em>Generating Bessel functions in Mie scattering calculations
         using continued fractions</em></span>, Applied Optics, vol 15, 668 (1976)).
         Their convergence rates depend on <span class="emphasis"><em>x</em></span>, therefore we need
-        different strategies for large <span class="emphasis"><em>x</em></span> and small <span class="emphasis"><em>x</em></span>.
+        different strategies for large <span class="emphasis"><em>x</em></span> and small <span class="emphasis"><em>x</em></span>:
       </p>
-<p>
-        <span class="emphasis"><em>x &gt; v</em></span>, CF1 needs O(<span class="emphasis"><em>x</em></span>) iterations
-        to converge, CF2 converges rapidly
-      </p>
-<p>
-        <span class="emphasis"><em>x &lt;= v</em></span>, CF1 converges rapidly, CF2 fails to converge
-        when <span class="emphasis"><em>x</em></span> <code class="literal">-&gt;</code> 0
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="emphasis"><em>x &gt; v</em></span>, CF1 needs O(<span class="emphasis"><em>x</em></span>) iterations
+          to converge, CF2 converges rapidly
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="emphasis"><em>x &lt;= v</em></span>, CF1 converges rapidly, CF2 fails to converge
+          when <span class="emphasis"><em>x</em></span> <code class="literal">-&gt;</code> 0
+        </p></blockquote></div>
 <p>
         When <span class="emphasis"><em>x</em></span> is large (<span class="emphasis"><em>x</em></span> &gt; 2), both
         continued fractions converge (CF1 may be slow for really large <span class="emphasis"><em>x</em></span>).
         J<sub>&#956;</sub>, J<sub>&#956;+1</sub>, Y<sub>&#956;</sub>, Y<sub>&#956;+1</sub> can be calculated by
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/bessel13.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/bessel13.svg"></span>
+
+        </p></blockquote></div>
 <p>
         where
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/bessel14.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/bessel14.svg"></span>
+
+        </p></blockquote></div>
 <p>
         J<sub>&#957;</sub> and Y<sub>&#956;</sub> are then calculated using backward (Miller's algorithm) and forward
         recurrence respectively.
@@ -1323,17 +1342,19 @@
         convergence may fail (but CF1 works very well). The solution here is Temme's
         series:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/bessel15.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/bessel15.svg"></span>
+
+        </p></blockquote></div>
 <p>
         where
       </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/bessel16.svg"></span>
+
+        </p></blockquote></div>
 <p>
-        <span class="inlinemediaobject"><img src="../../../equations/bessel16.svg"></span>
-      </p>
-<p>
-        g<sub>k</sub> &#160; and h<sub>k</sub> &#160;
+        g<sub>k</sub> and h<sub>k</sub>
 are also computed by recursions (involving gamma functions), but
         the formulas are a little complicated, readers are refered to N.M. Temme,
         <span class="emphasis"><em>On the numerical evaluation of the ordinary Bessel function of
@@ -1341,7 +1362,7 @@ are also computed by recursions (involving gamma functions), but
         (1976). Note Temme's series converge only for |&#956;| &lt;= 1/2.
       </p>
 <p>
-        As the previous case, Y<sub>&#957;</sub> &#160; is calculated from the forward recurrence, so is Y<sub>&#957;+1</sub>.
+        As the previous case, Y<sub>&#957;</sub> is calculated from the forward recurrence, so is Y<sub>&#957;+1</sub>.
         With these two values and f<sub>&#957;</sub>, the Wronskian yields J<sub>&#957;</sub>(x) directly without backward
         recurrence.
       </p>

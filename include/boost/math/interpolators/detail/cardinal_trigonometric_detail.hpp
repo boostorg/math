@@ -98,7 +98,7 @@ public:
     z[1] = sin(x);
     fftwf_complex b{0, 0};
     // u = b*z
-    fftw_complex u;
+    fftwf_complex u;
     for (size_t k = m_complex_vector_size - 1; k >= 1; --k) {
       u[0] = b[0]*z[0] - b[1]*z[1];
       u[1] = b[0]*z[1] + b[1]*z[0];
@@ -108,6 +108,54 @@ public:
 
     s += 2*(b[0]*z[0] - b[1]*z[1]);
     return s;
+  }
+
+  float prime(float t) const
+  {
+      using std::sin;
+      using std::cos;
+      using boost::math::constants::two_pi;
+      using std::exp;
+      float x = two_pi<float>()*(t - m_t0)/m_T;
+      fftwf_complex z;
+      z[0] = cos(x);
+      z[1] = sin(x);
+      fftwf_complex b{0, 0};
+      // u = b*z
+      fftwf_complex u;
+      for (size_t k = m_complex_vector_size - 1; k >= 1; --k)
+      {
+        u[0] = b[0]*z[0] - b[1]*z[1];
+        u[1] = b[0]*z[1] + b[1]*z[0];
+        b[0] = k*m_gamma[k][0] + u[0];
+        b[1] = k*m_gamma[k][1] + u[1];
+      }
+      // b*z = (b[0]*z[0] - b[1]*z[1]) + i(b[1]*z[0] + b[0]*z[1])
+      return -2*two_pi<float>()*(b[1]*z[0] + b[0]*z[1])/m_T;
+  }
+
+  float double_prime(float t) const
+  {
+      using std::sin;
+      using std::cos;
+      using boost::math::constants::two_pi;
+      using std::exp;
+      float x = two_pi<float>()*(t - m_t0)/m_T;
+      fftwf_complex z;
+      z[0] = cos(x);
+      z[1] = sin(x);
+      fftwf_complex b{0, 0};
+      // u = b*z
+      fftwf_complex u;
+      for (size_t k = m_complex_vector_size - 1; k >= 1; --k)
+      {
+        u[0] = b[0]*z[0] - b[1]*z[1];
+        u[1] = b[0]*z[1] + b[1]*z[0];
+        b[0] = k*k*m_gamma[k][0] + u[0];
+        b[1] = k*k*m_gamma[k][1] + u[1];
+      }
+      // b*z = (b[0]*z[0] - b[1]*z[1]) + i(b[1]*z[0] + b[0]*z[1])
+      return -2*two_pi<float>()*two_pi<float>()*(b[0]*z[0] - b[1]*z[1])/(m_T*m_T);
   }
 
   float period() const
@@ -223,6 +271,54 @@ public:
     return s;
   }
 
+  double prime(double t) const
+  {
+      using std::sin;
+      using std::cos;
+      using boost::math::constants::two_pi;
+      using std::exp;
+      double x = two_pi<double>()*(t - m_t0)/m_T;
+      fftw_complex z;
+      z[0] = cos(x);
+      z[1] = sin(x);
+      fftw_complex b{0, 0};
+      // u = b*z
+      fftw_complex u;
+      for (size_t k = m_complex_vector_size - 1; k >= 1; --k)
+      {
+        u[0] = b[0]*z[0] - b[1]*z[1];
+        u[1] = b[0]*z[1] + b[1]*z[0];
+        b[0] = k*m_gamma[k][0] + u[0];
+        b[1] = k*m_gamma[k][1] + u[1];
+      }
+      // b*z = (b[0]*z[0] - b[1]*z[1]) + i(b[1]*z[0] + b[0]*z[1])
+      return -2*two_pi<double>()*(b[1]*z[0] + b[0]*z[1])/m_T;
+  }
+
+  double double_prime(double t) const
+  {
+      using std::sin;
+      using std::cos;
+      using boost::math::constants::two_pi;
+      using std::exp;
+      double x = two_pi<double>()*(t - m_t0)/m_T;
+      fftw_complex z;
+      z[0] = cos(x);
+      z[1] = sin(x);
+      fftw_complex b{0, 0};
+      // u = b*z
+      fftw_complex u;
+      for (size_t k = m_complex_vector_size - 1; k >= 1; --k)
+      {
+        u[0] = b[0]*z[0] - b[1]*z[1];
+        u[1] = b[0]*z[1] + b[1]*z[0];
+        b[0] = k*k*m_gamma[k][0] + u[0];
+        b[1] = k*k*m_gamma[k][1] + u[1];
+      }
+      // b*z = (b[0]*z[0] - b[1]*z[1]) + i(b[1]*z[0] + b[0]*z[1])
+      return -2*two_pi<double>()*two_pi<double>()*(b[0]*z[0] - b[1]*z[1])/(m_T*m_T);
+  }
+
   double period() const
   {
     return m_T;
@@ -331,6 +427,54 @@ public:
     return s;
   }
 
+  long double prime(long double t) const
+  {
+      using std::sin;
+      using std::cos;
+      using boost::math::constants::two_pi;
+      using std::exp;
+      long double x = two_pi<long double>()*(t - m_t0)/m_T;
+      fftwl_complex z;
+      z[0] = cos(x);
+      z[1] = sin(x);
+      fftwl_complex b{0, 0};
+      // u = b*z
+      fftwl_complex u;
+      for (size_t k = m_complex_vector_size - 1; k >= 1; --k)
+      {
+        u[0] = b[0]*z[0] - b[1]*z[1];
+        u[1] = b[0]*z[1] + b[1]*z[0];
+        b[0] = k*m_gamma[k][0] + u[0];
+        b[1] = k*m_gamma[k][1] + u[1];
+      }
+      // b*z = (b[0]*z[0] - b[1]*z[1]) + i(b[1]*z[0] + b[0]*z[1])
+      return -2*two_pi<long double>()*(b[1]*z[0] + b[0]*z[1])/m_T;
+  }
+
+  long double double_prime(long double t) const
+  {
+      using std::sin;
+      using std::cos;
+      using boost::math::constants::two_pi;
+      using std::exp;
+      long double x = two_pi<long double>()*(t - m_t0)/m_T;
+      fftwl_complex z;
+      z[0] = cos(x);
+      z[1] = sin(x);
+      fftwl_complex b{0, 0};
+      // u = b*z
+      fftwl_complex u;
+      for (size_t k = m_complex_vector_size - 1; k >= 1; --k)
+      {
+        u[0] = b[0]*z[0] - b[1]*z[1];
+        u[1] = b[0]*z[1] + b[1]*z[0];
+        b[0] = k*k*m_gamma[k][0] + u[0];
+        b[1] = k*k*m_gamma[k][1] + u[1];
+      }
+      // b*z = (b[0]*z[0] - b[1]*z[1]) + i(b[1]*z[0] + b[0]*z[1])
+      return -2*two_pi<long double>()*two_pi<long double>()*(b[0]*z[0] - b[1]*z[1])/(m_T*m_T);
+  }
+
   long double period() const
   {
     return m_T;
@@ -437,6 +581,54 @@ public:
 
     s += 2*(b[0]*z[0] - b[1]*z[1]);
     return s;
+  }
+
+  __float128 prime(__float128 t) const
+  {
+      using std::sin;
+      using std::cos;
+      using boost::math::constants::two_pi;
+      using std::exp;
+      __float128 x = two_pi<__float128>()*(t - m_t0)/m_T;
+      fftwq_complex z;
+      z[0] = cosq(x);
+      z[1] = sinq(x);
+      fftwq_complex b{0, 0};
+      // u = b*z
+      fftwq_complex u;
+      for (size_t k = m_complex_vector_size - 1; k >= 1; --k)
+      {
+        u[0] = b[0]*z[0] - b[1]*z[1];
+        u[1] = b[0]*z[1] + b[1]*z[0];
+        b[0] = k*m_gamma[k][0] + u[0];
+        b[1] = k*m_gamma[k][1] + u[1];
+      }
+      // b*z = (b[0]*z[0] - b[1]*z[1]) + i(b[1]*z[0] + b[0]*z[1])
+      return -2*two_pi<__float128>()*(b[1]*z[0] + b[0]*z[1])/m_T;
+  }
+
+  __float128 double_prime(__float128 t) const
+  {
+      using std::sin;
+      using std::cos;
+      using boost::math::constants::two_pi;
+      using std::exp;
+      __float128 x = two_pi<__float128>()*(t - m_t0)/m_T;
+      fftwq_complex z;
+      z[0] = cosq(x);
+      z[1] = sinq(x);
+      fftwq_complex b{0, 0};
+      // u = b*z
+      fftwq_complex u;
+      for (size_t k = m_complex_vector_size - 1; k >= 1; --k)
+      {
+        u[0] = b[0]*z[0] - b[1]*z[1];
+        u[1] = b[0]*z[1] + b[1]*z[0];
+        b[0] = k*k*m_gamma[k][0] + u[0];
+        b[1] = k*k*m_gamma[k][1] + u[1];
+      }
+      // b*z = (b[0]*z[0] - b[1]*z[1]) + i(b[1]*z[0] + b[0]*z[1])
+      return -2*two_pi<__float128>()*two_pi<__float128>()*(b[0]*z[0] - b[1]*z[1])/(m_T*m_T);
   }
 
   __float128 period() const

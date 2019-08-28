@@ -8,7 +8,7 @@
 
 [important
 The header `boost/math/tools/test.hpp` is located under `libs/math/include_private`
-and is not installed to the usual locations by default, you will need to add `libs/math/include_private`
+and is NOT installed to the usual locations by default; you will need to add `libs/math/include_private`
 to your compiler's include path in order to use this header.]
 
    template <class T>
@@ -82,10 +82,10 @@ you use Boost.Test).  This is mainly a debugging/development aid
 
 [h4 Example]
 
-Suppose we want to test the tgamma and lgamma functions, we can create a
-two dimensional matrix of test data, each row is one test case, and contains
-three elements: the input value, and the expected results for the tgamma and
-lgamma functions respectively.
+Suppose we want to test the `tgamma` and `lgamma` functions, we can create a
+two-dimensional matrix of test data, each row is one test case, and contains
+three elements: the input value, and the expected results for the `tgamma` and
+`lgamma` functions respectively.
 
    static const boost::array<boost::array<TestType, 3>, NumberOfTests> 
       factorials = {
@@ -129,7 +129,7 @@ Now we can invoke the test function to test tgamma:
    // etc ...
    //
    
-[endsect][/section:error_test Relative Error and Testing]
+[endsect] [/section:error_test Relative Error and Testing]
 
 [/ 
   Copyright 2006 John Maddock and Paul A. Bristow.

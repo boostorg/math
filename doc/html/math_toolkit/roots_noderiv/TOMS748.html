@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Algorithm TOMS 748: Alefeld, Potra and Shi: Enclosing zeros of continuous functions</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../index.html" title="Math Toolkit 2.10.0">
 <link rel="up" href="../roots_noderiv.html" title="Root Finding Without Derivatives">
 <link rel="prev" href="bracket_solve.html" title="Bracket and Solve Root">
@@ -82,13 +82,13 @@
       </p>
 <p>
         This function is provided rather than <a href="http://en.wikipedia.org/wiki/Brent%27s_method" target="_top">Brent's
-        method</a> as it is known to be more effient in many cases (it is asymptotically
+        method</a> as it is known to be more efficient in many cases (it is asymptotically
         the most efficient known, and has been shown to be optimal for a certain
         classes of smooth functions). It also has the useful property of decreasing
         the bracket size with each step, unlike Brent's method which only shrinks
         the enclosing interval in the final step. This makes it particularly useful
         when you need a result where the ends of the interval round to the same integer:
-        as often happens in statistical applications for example. In this situation
+        as often happens in statistical applications, for example. In this situation
         the function is able to exit after a much smaller number of iterations than
         would otherwise be possible.
       </p>
@@ -151,18 +151,21 @@
         <code class="computeroutput"><span class="identifier">toms748_solve</span></code> returns: a
         pair of values <span class="emphasis"><em>r</em></span> that bracket the root so that:
       </p>
-<pre class="programlisting"><span class="identifier">f</span><span class="special">(</span><span class="identifier">r</span><span class="special">.</span><span class="identifier">first</span><span class="special">)</span> <span class="special">*</span> <span class="identifier">f</span><span class="special">(</span><span class="identifier">r</span><span class="special">.</span><span class="identifier">second</span><span class="special">)</span> <span class="special">&lt;=</span> <span class="number">0</span>
-</pre>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="emphasis"><em>f(r.first) * f(r.second) &lt;= 0</em></span>
+        </p></blockquote></div>
 <p>
         and either
       </p>
-<pre class="programlisting"><span class="identifier">tol</span><span class="special">(</span><span class="identifier">r</span><span class="special">.</span><span class="identifier">first</span><span class="special">,</span> <span class="identifier">r</span><span class="special">.</span><span class="identifier">second</span><span class="special">)</span> <span class="special">==</span> <span class="keyword">true</span>
-</pre>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="emphasis"><em>tol(r.first, r.second) == true</em></span>
+        </p></blockquote></div>
 <p>
         or
       </p>
-<pre class="programlisting"><span class="identifier">max_iter</span> <span class="special">&gt;=</span> <span class="identifier">m</span>
-</pre>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="emphasis"><em>max_iter &gt;= m</em></span>
+        </p></blockquote></div>
 <p>
         where <span class="emphasis"><em>m</em></span> is the initial value of <span class="emphasis"><em>max_iter</em></span>
         passed to the function.

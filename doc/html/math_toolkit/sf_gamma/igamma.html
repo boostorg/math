@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Incomplete Gamma Functions</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../index.html" title="Math Toolkit 2.10.0">
 <link rel="up" href="../sf_gamma.html" title="Gamma Functions">
 <link rel="prev" href="gamma_ratios.html" title="Ratios of Gamma Functions">
@@ -70,7 +70,7 @@
         incomplete gamma functions) that return values in the range [0, 1], and two
         are non-normalised and return values in the range [0, &#915;(a)]. Users interested
         in statistical applications should use the <a href="http://mathworld.wolfram.com/RegularizedGammaFunction.html" target="_top">normalised
-        versions (gamma_p and gamma_q)</a>.
+        versions (<code class="computeroutput"><span class="identifier">gamma_p</span></code> and <code class="computeroutput"><span class="identifier">gamma_q</span></code>)</a>.
       </p>
 <p>
         All of these functions require <span class="emphasis"><em>a &gt; 0</em></span> and <span class="emphasis"><em>z
@@ -96,15 +96,17 @@
 <p>
         Returns the normalised lower incomplete gamma function of a and z:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/igamma4.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/igamma4.svg"></span>
+
+        </p></blockquote></div>
 <p>
         This function changes rapidly from 0 to 1 around the point z == a:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/gamma_p.svg" align="middle"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/gamma_p.svg" align="middle"></span>
+
+        </p></blockquote></div>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">gamma_q</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">);</span>
 
@@ -114,15 +116,17 @@
 <p>
         Returns the normalised upper incomplete gamma function of a and z:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/igamma3.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/igamma3.svg"></span>
+
+        </p></blockquote></div>
 <p>
         This function changes rapidly from 1 to 0 around the point z == a:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/gamma_q.svg" align="middle"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/gamma_q.svg" align="middle"></span>
+
+        </p></blockquote></div>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">tgamma_lower</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">);</span>
 
@@ -133,9 +137,10 @@
         Returns the full (non-normalised) lower incomplete gamma function of a and
         z:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/igamma2.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/igamma2.svg"></span>
+
+        </p></blockquote></div>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">);</span>
 
@@ -146,9 +151,10 @@
         Returns the full (non-normalised) upper incomplete gamma function of a and
         z:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/igamma1.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/igamma1.svg"></span>
+
+        </p></blockquote></div>
 <h5>
 <a name="math_toolkit.sf_gamma.igamma.h2"></a>
         <span class="phrase"><a name="math_toolkit.sf_gamma.igamma.accuracy"></a></span><a class="link" href="igamma.html#math_toolkit.sf_gamma.igamma.accuracy">Accuracy</a>
@@ -157,7 +163,7 @@
         The following tables give peak and mean relative errors in over various domains
         of a and z, along with comparisons to the <a href="http://www.gnu.org/software/gsl/" target="_top">GSL-1.9</a>
         and <a href="http://www.netlib.org/cephes/" target="_top">Cephes</a> libraries.
-        Note that only results for the widest floating point type on the system are
+        Note that only results for the widest floating-point type on the system are
         given as narrower types have <a class="link" href="../relative_error.html#math_toolkit.relative_error.zero_error">effectively
         zero error</a>.
       </p>
@@ -752,20 +758,36 @@
         via:
       </p>
 <p>
-        1) <span class="inlinemediaobject"><img src="../../../equations/igamma5.svg"></span>
+        1)
       </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/igamma5.svg"></span>
+
+        </p></blockquote></div>
 <p>
-        2) <span class="inlinemediaobject"><img src="../../../equations/igamma6.svg"></span>
+        2)
       </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/igamma6.svg"></span>
+
+        </p></blockquote></div>
 <p>
-        3) <span class="inlinemediaobject"><img src="../../../equations/igamma7.svg"></span>
+        3)
       </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/igamma7.svg"></span>
+
+        </p></blockquote></div>
 <p>
         The lower incomplete gamma is computed from its series representation:
       </p>
 <p>
-        4) <span class="inlinemediaobject"><img src="../../../equations/igamma8.svg"></span>
+        4)
       </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/igamma8.svg"></span>
+
+        </p></blockquote></div>
 <p>
         Or by subtraction of the upper integral from either &#915;(a) or 1 when <span class="emphasis"><em>x
         - (1</em></span>(3x)) &gt; a and x &gt; 1.1/.
@@ -774,8 +796,12 @@
         The upper integral is computed from Legendre's continued fraction representation:
       </p>
 <p>
-        5) <span class="inlinemediaobject"><img src="../../../equations/igamma9.svg"></span>
+        5)
       </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/igamma9.svg"></span>
+
+        </p></blockquote></div>
 <p>
         When <span class="emphasis"><em>(x &gt; 1.1)</em></span> or by subtraction of the lower integral
         from either &#915;(a) or 1 when <span class="emphasis"><em>x - (1</em></span>(3x)) &lt; a/.
@@ -786,15 +812,23 @@
         area. However there is another series representation for the lower integral:
       </p>
 <p>
-        6) <span class="inlinemediaobject"><img src="../../../equations/igamma10.svg"></span>
+        6)
       </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/igamma10.svg"></span>
+
+        </p></blockquote></div>
 <p>
         That lends itself to calculation of the upper integral via rearrangement
         to:
       </p>
 <p>
-        7) <span class="inlinemediaobject"><img src="../../../equations/igamma11.svg"></span>
+        7)
       </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/igamma11.svg"></span>
+
+        </p></blockquote></div>
 <p>
         Refer to the documentation for <a class="link" href="../powers/powm1.html" title="powm1">powm1</a>
         and <a class="link" href="tgamma.html" title="Gamma">tgamma1pm1</a> for details
@@ -821,15 +855,23 @@
         30</em></span> then the following finite sum is used:
       </p>
 <p>
-        9) <span class="inlinemediaobject"><img src="../../../equations/igamma1f.svg"></span>
+        9)
       </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/igamma1f.svg"></span>
+
+        </p></blockquote></div>
 <p>
-        While for half integers in the range <span class="emphasis"><em>0.5 &lt;= a &lt; 30</em></span>
+        While for half-integers in the range <span class="emphasis"><em>0.5 &lt;= a &lt; 30</em></span>
         then the following finite sum is used:
       </p>
 <p>
-        10) <span class="inlinemediaobject"><img src="../../../equations/igamma2f.svg"></span>
+        10)
       </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/igamma2f.svg"></span>
+
+        </p></blockquote></div>
 <p>
         These are both more stable and more efficient than the continued fraction
         alternative.
@@ -840,17 +882,33 @@
         In this area an expansion due to Temme is used:
       </p>
 <p>
-        11) <span class="inlinemediaobject"><img src="../../../equations/igamma16.svg"></span>
+        11)
       </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/igamma16.svg"></span>
+
+        </p></blockquote></div>
 <p>
-        12) <span class="inlinemediaobject"><img src="../../../equations/igamma17.svg"></span>
+        12)
       </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/igamma17.svg"></span>
+
+        </p></blockquote></div>
 <p>
-        13) <span class="inlinemediaobject"><img src="../../../equations/igamma18.svg"></span>
+        13)
       </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/igamma18.svg"></span>
+
+        </p></blockquote></div>
 <p>
-        14) <span class="inlinemediaobject"><img src="../../../equations/igamma19.svg"></span>
+        14)
       </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/igamma19.svg"></span>
+
+        </p></blockquote></div>
 <p>
         The double sum is truncated to a fixed number of terms - to give a specific
         target precision - and evaluated as a polynomial-of-polynomials. There are
@@ -884,8 +942,12 @@
         approximation</a> gives the greatest accuracy:
       </p>
 <p>
-        15) <span class="inlinemediaobject"><img src="../../../equations/igamma12.svg"></span>
+        15)
       </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/igamma12.svg"></span>
+
+        </p></blockquote></div>
 <p>
         In the event that this causes underflow/overflow then the exponent can be
         reduced by a factor of <span class="emphasis"><em>a</em></span> and brought inside the power
@@ -898,8 +960,12 @@
         can be avoided by using:
       </p>
 <p>
-        16) <span class="inlinemediaobject"><img src="../../../equations/igamma13.svg"></span>
+        16)
       </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/igamma13.svg"></span>
+
+        </p></blockquote></div>
 <p>
         when <span class="emphasis"><em>a-x</em></span> is small and a and x are large. There is still
         a subtraction and therefore some cancellation errors - but the terms are

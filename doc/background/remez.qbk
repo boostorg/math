@@ -6,45 +6,45 @@ to a function.  This short article gives a brief overview of the method, but
 it should not be regarded as a thorough theoretical treatment, for that you
 should consult your favorite textbook.
 
-Imagine that you want to approximate some function f(x) by way of a rational
-function R(x), where R(x) may be either a polynomial P(x) or a ratio of two
-polynomials P(x)/Q(x) (a rational function).  Initially we'll concentrate on the
+Imagine that you want to approximate some function /f(x)/ by way of a rational
+function /R(x)/, where /R(x)/ may be either a polynomial /P(x)/ or a ratio of two
+polynomials /P(x)/Q(x)/ (a rational function).  Initially we'll concentrate on the
 polynomial case, as it's by far the easier to deal with, later we'll extend
 to the full rational function case.
 
 We want to find the "best" rational approximation, where
 "best" is defined to be the approximation that has the least deviation
-from f(x).  We can measure the deviation by way of an error function:
+from /f(x)/.  We can measure the deviation by way of an error function:
 
-E[sub abs](x) = f(x) - R(x)
+[expression E[sub abs](x) = f(x) - R(x)]
 
 which is expressed in terms of absolute error, but we can equally use
 relative error:
 
-E[sub rel](x) = (f(x) - R(x)) / |f(x)|
+[expression E[sub rel](x) = (f(x) - R(x)) / |f(x)|]
 
 And indeed in general we can scale the error function in any way we want, it
 makes no difference to the maths, although the two forms above cover almost
 every practical case that you're likely to encounter.
 
-The minimax rational function R(x) is then defined to be the function that
+The minimax rational function /R(x)/ is then defined to be the function that
 yields the smallest maximal value of the error function.  Chebyshev showed
-that there is a unique minimax solution for R(x) that has the following
+that there is a unique minimax solution for /R(x)/ that has the following
 properties:
 
-* If R(x) is a polynomial of degree N, then there are N+2 unknowns:
-the N+1 coefficients of the polynomial, and maximal value of the error
+* If /R(x)/ is a polynomial of degree /N/, then there are /N+2/ unknowns:
+the /N+1/ coefficients of the polynomial, and maximal value of the error
 function.
-* The error function has N+1 roots, and N+2 extrema (minima and maxima).
+* The error function has /N+1/ roots, and /N+2/ extrema (minima and maxima).
 * The extrema alternate in sign, and all have the same magnitude.
 
 That means that if we know the location of the extrema of the error function
-then we can write N+2 simultaneous equations:
+then we can write /N+2/ simultaneous equations:
 
-R(x[sub i]) + (-1)[super i]E = f(x[sub i])
+[expression R(x[sub i]) + (-1)[super i]E = f(x[sub i])]
 
-where E is the maximal error term, and x[sub i] are the abscissa values of the
-N+2 extrema of the error function.  It is then trivial to solve the simultaneous
+where /E/ is the maximal error term, and ['x[sub i]] are the abscissa values of the
+/N+2/ extrema of the error function.  It is then trivial to solve the simultaneous
 equations to obtain the polynomial coefficients and the error term.
 
 ['Unfortunately we don't know where the extrema of the error function are located!]
@@ -56,27 +56,27 @@ assumptions, will converge on the extrema of the error function, and therefore
 the minimax solution.
 
 In the following discussion we'll use a concrete example to illustrate
-the Remez method: an approximation to the function e[super x][space] over
+the Remez method: an approximation to the function e[super x] over
 the range \[-1, 1\].
 
 Before we can begin the Remez method, we must obtain an initial value
 for the location of the extrema of the error function.  We could "guess"
 these, but a much closer first approximation can be obtained by first
-constructing an interpolated polynomial approximation to f(x).
+constructing an interpolated polynomial approximation to /f(x)/.
 
-In order to obtain the N+1 coefficients of the interpolated polynomial
-we need N+1 points (x[sub 0]...x[sub N]): with our interpolated form
+In order to obtain the /N+1/ coefficients of the interpolated polynomial
+we need N+1 points /(x[sub 0][hellip]x[sub N]): with our interpolated form
 passing through each of those points
-that yields N+1 simultaneous equations:
+that yields /N+1/ simultaneous equations:
 
-f(x[sub i]) = P(x[sub i]) = c[sub 0] + c[sub 1]x[sub i] ... + c[sub N]x[sub i][super N]
+[expression f(x[sub i]) = P(x[sub i]) = c[sub 0] + c[sub 1]x[sub i] [hellip] + c[sub N]x[sub i][super N]]
 
-Which can be solved for the coefficients c[sub 0]...c[sub N] in P(x).
+Which can be solved for the coefficients ['c[sub 0] [hellip]c[sub N]] in /P(x)/.
 
-Obviously this is not a minimax solution, indeed our only guarantee is that f(x) and
-P(x) touch at N+1 locations, away from those points the error may be arbitrarily
+Obviously this is not a minimax solution, indeed our only guarantee is that /f(x)/ and
+/P(x)/ touch at /N+1/ locations, away from those points the error may be arbitrarily
 large.  However, we would clearly like this initial approximation to be as close to
-f(x) as possible, and it turns out that using the zeros of an orthogonal polynomial
+/f(x)/ as possible, and it turns out that using the zeros of an orthogonal polynomial
 as the initial interpolation points is a good choice.  In our example we'll use the
 zeros of a Chebyshev polynomial as these are particularly easy to calculate,
 interpolating for a polynomial of degree 4, and measuring /relative error/
@@ -109,14 +109,14 @@ A more technical discussion of the theory involved can be found in this
 [h4 Remez Step 1]
 
 The first step in the Remez method, given our current set of
-N+2 Chebyshev control points x[sub i], is to solve the N+2 simultaneous
+/N+2/ Chebyshev control points ['x[sub i]], is to solve the /N+2/ simultaneous
 equations:
 
-P(x[sub i]) + (-1)[super i]E = f(x[sub i])
+[expression P(x[sub i]) + (-1)[super i]E = f(x[sub i])]
 
-To obtain the error term E, and the coefficients of the polynomial P(x).
+To obtain the error term /E/, and the coefficients of the polynomial /P(x)/.
 
-This gives us a new approximation to f(x) that has the same error /E/ at
+This gives us a new approximation to /f(x)/ that has the same error /E/ at
 each of the control points, and whose error function ['alternates in sign]
 at the control points.  This is still not necessarily the minimax
 solution though: since the control points may not be at the extrema of the error
@@ -165,26 +165,26 @@ solution with a peak relative error of
 
 If we wish to extend the Remez method to a rational approximation of the form
 
-f(x) = R(x) = P(x) / Q(x)
+[expression f(x) = R(x) = P(x) / Q(x)]
 
-where P(x) and Q(x) are polynomials, then we proceed as before, except that now
-we have N+M+2 unknowns if P(x) is of order N and Q(x) is of order M.  This assumes
-that Q(x) is normalised so that its leading coefficient is 1, giving
-N+M+1 polynomial coefficients in total, plus the error term E.
+where /P(x)/ and /Q(x)/ are polynomials, then we proceed as before, except that now
+we have /N+M+2/ unknowns if /P(x)/ is of order /N/ and /Q(x)/ is of order /M/  This assumes
+that /Q(x)/ is normalised so that its leading coefficient is 1, giving
+/N+M+1/ polynomial coefficients in total, plus the error term /E/.
 
 The simultaneous equations to be solved are now:
 
-P(x[sub i]) / Q(x[sub i]) + (-1)[super i]E = f(x[sub i])
+[expression P(x[sub i]) / Q(x[sub i]) + (-1)[super i]E = f(x[sub i])]
 
-Evaluated at the N+M+2 control points x[sub i].
+Evaluated at the /N+M+2/ control points ['x[sub i]].
 
-Unfortunately these equations are non-linear in the error term E: we can only
-solve them if we know E, and yet E is one of the unknowns!
+Unfortunately these equations are non-linear in the error term /E/: we can only
+solve them if we know /E/, and yet /E/ is one of the unknowns!
 
 The method usually adopted to solve these equations is an iterative one: we guess the
-value of E, solve the equations to obtain a new value for E (as well as the polynomial
-coefficients), then use the new value of E as the next guess.  The method is
-repeated until E converges on a stable value.
+value of /E/, solve the equations to obtain a new value for /E/ (as well as the polynomial
+coefficients), then use the new value of /E/ as the next guess.  The method is
+repeated until /E/ converges on a stable value.
 
 These complications extend the running time required for the development
 of rational approximations quite considerably. It is often desirable
@@ -207,38 +207,38 @@ on a solution.
 
 So far we have used a direct approximation:
 
-f(x) = R(x)
+[expression f(x) = R(x)]
 
-But this will converge to a useful approximation only if f(x) is smooth.  In
+But this will converge to a useful approximation only if /f(x)/ is smooth.  In
 addition round-off errors when evaluating the rational form mean that this
 will never get closer than within a few epsilon of machine precision.
 Therefore this form of direct approximation is often reserved for situations
 where we want efficiency, rather than accuracy.
 
-The first step in improving the situation is generally to split f(x) into
+The first step in improving the situation is generally to split /f(x)/ into
 a dominant part that we can compute accurately by another method, and a
 slowly changing remainder which can be approximated by a rational approximation.
 We might be tempted to write:
 
-f(x) = g(x) + R(x)
+[expression f(x) = g(x) + R(x)]
 
-where g(x) is the dominant part of f(x), but if f(x)\/g(x) is approximately
+where /g(x)/ is the dominant part of /f(x)/, but if ['f(x)/g(x)] is approximately
 constant over the interval of interest then:
 
-f(x) = g(x)(c + R(x))
+[expression f(x) = g(x)(c + R(x))]
 
 Will yield a much better solution: here /c/ is a constant that is the approximate
-value of f(x)\/g(x) and R(x) is typically tiny compared to /c/.  In this situation
-if R(x) is optimised for absolute error, then as long as its error is small compared
-to the constant /c/, that error will effectively get wiped out when R(x) is added to
+value of ['f(x)/g(x)] and /R(x)/ is typically tiny compared to /c/.  In this situation
+if /R(x)/ is optimised for absolute error, then as long as its error is small compared
+to the constant /c/, that error will effectively get wiped out when /R(x)/ is added to
 /c/.
 
-The difficult part is obviously finding the right g(x) to extract from your
+The difficult part is obviously finding the right /g(x)/ to extract from your
 function: often the asymptotic behaviour of the function will give a clue, so
 for example the function __erfc becomes proportional to
-e[super -x[super 2]]\/x as x becomes large.  Therefore using:
+['e[super -x[super 2]]\/x] as /x/ becomes large.  Therefore using:
 
-erfc(z) = (C + R(x)) e[super -x[super 2]]/x
+[expression erfc(z) = (C + R(x)) e[super -x[super 2]]/x]
 
 as the approximating form seems like an obvious thing to try, and does indeed
 yield a useful approximation.
@@ -271,14 +271,14 @@ then the roots will be skewed towards the middle of the \[-1,1\] interval,
 while a positive power less than one
 will skew them towards either end.  More usefully, if we initially rescale the
 points over \[0,1\] and then raise to a positive power, we can skew them to the left
-or right.  Returning to our example of e[super x][space] over \[-1,1\], the initial
+or right.  Returning to our example of e[super x] over \[-1,1\], the initial
 interpolated form was some way from the minimax solution:
 
 [$../graphs/remez-2.png]
 
 However, if we first skew the interpolation points to the left (rescale them
 to \[0, 1\], raise to the power 1.3, and then rescale back to \[-1,1\]) we
-reduce the error from 1.3x10[super -3][space]to 6x10[super -4]:
+reduce the error from 1.3x10[super -3] to 6x10[super -4]:
 
 [$../graphs/remez-5.png]
 
@@ -322,7 +322,7 @@ over, say \[0, b\], for some smallish value /b/.
 
 [h4 References]
 
-The original references for the Remez Method and it's extension
+The original references for the Remez Method and its extension
 to rational functions are unfortunately in Russian:
 
 Remez, E.Ya., ['Fundamentals of numerical methods for Chebyshev approximations],
@@ -366,7 +366,7 @@ G. L. Litvinov, ['Approximate construction of rational
 approximations and the effect of error autocorrection],
 Russian Journal of Mathematical Physics, vol.1, No. 3, 1994.
 
-[endsect][/section:remez The Remez Method]
+[endsect] [/section:remez The Remez Method]
 
 [/
   Copyright 2006 John Maddock and Paul A. Bristow.

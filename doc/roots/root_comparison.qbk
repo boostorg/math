@@ -244,7 +244,6 @@ the second comes almost for free, consequently the third order methods (Halley) 
 guarantees of ['quadratic] convergence, while Halley relies on a smooth function with a single root to
 give ['cubic] convergence.  It's not entirely clear why Schroder iteration often does worse than Newton.
 
-[endsect][/section:elliptic_comparison Comparison of Elliptic Integral Root Finding Algoritghms]
+[endsect] [/section:elliptic_comparison Comparison of Elliptic Integral Root Finding Algoritghms]
 
 [endsect] [/section:root_comparison  Comparison of Root Finding Algorithms]
-

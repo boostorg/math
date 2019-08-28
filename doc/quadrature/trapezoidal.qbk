@@ -5,7 +5,6 @@ Boost Software License, Version 1.0. (See accompanying file
 LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ]
 
-
 [section:trapezoidal Trapezoidal Quadrature]
 
 [heading Synopsis]
@@ -115,7 +114,7 @@ Second, the L[sub 1] norm can be used to evaluate the stability of the computati
 This can be formulated in a rigorous manner by defining the *condition number of summation*.
 The condition number of summation is defined by
 
-[kappa](S[sub n]) := [Sigma][sub i][super n] |x[sub i]|/|[Sigma][sub i][super n] x[sub i]|
+[expression ['[kappa](S[sub n]) := [Sigma][sub i][super n] |x[sub i]|/|[Sigma][sub i][super n] x[sub i]|]]
 
 If this number of ~10[super k],
 then /k/ additional digits are expected to be lost in addition to digits lost due to floating point rounding error.
@@ -127,7 +126,7 @@ Hence both the error estimate and the condition number of summation should be an
 As an example, we consider evaluation of Bessel functions by trapezoidal quadrature.
 The Bessel function of the first kind is defined via
 
-J[sub n](x) = 1/2\u03A0 \u222B[sub -\u03A0][super \u03A0] cos(n t - x sin(t)) dt
+[expression ['J[sub n](x) = 1/2\u03A0 \u222B[sub -\u03A0][super \u03A0] cos(n t - x sin(t)) dt]]
 
 The integrand is periodic, so the Euler-Maclaurin summation formula guarantees exponential convergence via the trapezoidal quadrature.
 Without careful consideration, it seems this would be a very attractive method to compute Bessel functions.
@@ -149,4 +148,5 @@ Higham, Nicholas J. ['Accuracy and stability of numerical algorithms.] Society f
 Lyness, James N., and Cleve B. Moler. ['Numerical differentiation of analytic functions.] SIAM Journal on Numerical Analysis 4.2 (1967): 202-210.
 
 Gil, Amparo, Javier Segura, and Nico M. Temme. ['Computing special functions by using quadrature rules.] Numerical Algorithms 33.1-4 (2003): 265-275.
-[endsect]
+[endsect] [/section:trapezoidal Trapezoidal Quadrature]
+

@@ -69,7 +69,7 @@ Requires -1 <= x <= 1, otherwise returns the result of __domain_error.
 
 Negative orders are handled via the reflection formula:
 
-P[sub -l-1](x) = P[sub l](x)
+[:P[sub -l-1](x) = P[sub l](x)]
 
 The following graph illustrates the behaviour of the first few
 Legendre Polynomials:
@@ -256,7 +256,7 @@ recurrence relations.  These relations guarantee low absolute error
 but cannot guarantee low relative error near one of the roots of the
 polynomials.
 
-[endsect][/section:beta_function The Beta Function]
+[endsect] [/section:beta_function The Beta Function]
 [/
   Copyright 2006 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.

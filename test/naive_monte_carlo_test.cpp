@@ -12,7 +12,7 @@
 #include <boost/type_index.hpp>
 #include <boost/test/included/unit_test.hpp>
 
-#include <boost/test/floating_point_comparison.hpp>
+#include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/quadrature/naive_monte_carlo.hpp>
 

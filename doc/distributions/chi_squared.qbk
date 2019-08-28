@@ -35,9 +35,9 @@
    }} // namespaces
    
 The Chi-Squared distribution is one of the most widely used distributions
-in statistical tests.  If [chi][sub i][space] are [nu][space] 
+in statistical tests.  If [chi][sub i] are [nu] 
 independent, normally distributed
-random variables with means [mu][sub i][space] and variances [sigma][sub i][super 2], 
+random variables with means [mu][sub i] and variances [sigma][sub i][super 2], 
 then the random variable:
 
 [equation chi_squ_ref1]
@@ -45,7 +45,7 @@ then the random variable:
 is distributed according to the Chi-Squared distribution.
 
 The Chi-Squared distribution is a special case of the gamma distribution
-and has a single parameter [nu][space] that specifies the number of degrees of
+and has a single parameter [nu] that specifies the number of degrees of
 freedom.  The following graph illustrates how the distribution changes
 for different values of [nu]:
 
@@ -150,7 +150,7 @@ In the following table /v/ is the number of degrees of freedom of the distributi
 * [@http://mathworld.wolfram.com/Chi-SquaredDistribution.html Weisstein, Eric W. "Chi-Squared Distribution." From MathWorld--A Wolfram Web Resource.]
 
 
-[endsect][/section:chi_squared_dist Chi Squared]
+[endsect] [/section:chi_squared_dist Chi Squared]
 
 [/ chi_squared.qbk
   Copyright 2006 John Maddock and Paul A. Bristow.

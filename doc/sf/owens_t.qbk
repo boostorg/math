@@ -53,13 +53,13 @@ the result is of type `double` when T is an integer type, and type T otherwise.
 
 Owen's original paper (page 1077) provides some additional corner cases.
 
-[: ['T(h, 0) = 0]]
+[expression  ['T(h, 0) = 0]]
 
-[:['T(0, a) = [frac12][pi] arctan(a)]]
+[expression ['T(0, a) = [frac12][pi] arctan(a)]]
 
-[:['T(h, 1) = [frac12] G(h) \[1 - G(h)\]]]
+[expression ['T(h, 1) = [frac12] G(h) \[1 - G(h)\]]]
 
-[:['T(h, [infin]) = G(|h|)]]
+[expression ['T(h, [infin]) = G(|h|)]]
 
 where G(h) is the univariate normal with zero mean and unit variance integral from -[infin] to h.  
 
@@ -87,7 +87,6 @@ where it was not possible to generate any reliable test values
 (all the methods got rejected for one reason or another).
 
 There are also two sets of sanity tests: spot values are computed using __Mathematica and __R.
-
 
 [h4 Implementation]
 

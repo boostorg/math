@@ -34,7 +34,7 @@ and [@http://mathworld.wolfram.com/Octonion.html octonions].
 [: ['[*Sinus Cardinal of index pi (purple) and Hyperbolic Sinus Cardinal of index pi (red) on R]]]
 [: [$../graphs/sinc_pi_and_sinhc_pi_on_r.png]]
 
-[endsect]
+[endsect] [/section:sinc_overview Sinus Cardinal and Hyperbolic Sinus Cardinal Functions Overview]
 
 [section sinc_pi]
 
@@ -58,7 +58,7 @@ Computes
 [link math_toolkit.sinc.sinc_overview 
 the Sinus Cardinal] of x:
 
-   sinc_pi(x) = sin(x) / x
+[expression sinc_pi(x) = sin(x) / x]
 
 The second form is for complex numbers, 
 quaternions, octonions etc. Taylor series are used at the origin 
@@ -68,7 +68,8 @@ to ensure accuracy.
 
 [optional_policy]
 
-[endsect]
+[endsect] [/section sinc_pi]
+
 
 [section sinhc_pi]
 
@@ -88,11 +89,10 @@ to ensure accuracy.
    template<class T, template<typename> class U, class ``__Policy``> 
    U<T> sinhc_pi(const U<T> x, const ``__Policy``&);
 
-Computes http://mathworld.wolfram.com/SinhcFunction.html
-[link math_toolkit.sinc.sinc_overview
-the Hyperbolic Sinus Cardinal] of x:
+Computes [@http://mathworld.wolfram.com/SinhcFunction.html sinhc function],
+the [link math_toolkit.sinc.sinc_overview  Hyperbolic Sinus Cardinal] of x:
 
-   sinhc_pi(x) = sinh(x) / x
+[expression sinhc_pi(x) = sinh(x) / x]
 
 The second form is for 
 complex numbers, quaternions, octonions etc. Taylor series are used at the origin 
@@ -105,6 +105,7 @@ when T is an integer type.
 
 [graph sinhc_pi]
 
-[endsect]
+[endsect] [/section sinhc_pi]
 
-[endsect]
+[endsect] [/section:sinc Sinus Cardinal and Hyperbolic Sinus Cardinal Functions]
+

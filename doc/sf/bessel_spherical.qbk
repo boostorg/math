@@ -1,4 +1,3 @@
-
 [section:sph_bessel Spherical Bessel Functions of the First and Second Kinds]
 
 [h4 Synopsis]
@@ -22,9 +21,9 @@
 The functions __sph_bessel and __sph_neumann return the result of the
 Spherical Bessel functions of the first and second kinds respectively:
 
-sph_bessel(v, x) = j[sub v](x)
+[:sph_bessel(v, x) = j[sub v](x)]
 
-sph_neumann(v, x) = y[sub v](x) = n[sub v](x)
+[:sph_neumann(v, x) = y[sub v](x) = n[sub v](x)]
 
 where:
 
@@ -38,12 +37,11 @@ for the single argument type T.
 The functions return the result of __domain_error whenever the result is
 undefined or complex: this occurs when `x < 0`.
 
-The j[sub v][space] function is cyclic like J[sub v][space] but differs
-in its behaviour at the origin:
+The j[sub v] function is cyclic like J[sub v] but differs in its behaviour at the origin:
 
 [graph sph_bessel]
 
-Likewise y[sub v][space] is also cyclic for large x, but tends to -[infin][space]
+Likewise y[sub v] is also cyclic for large x, but tends to -[infin]
 for small /x/:
 
 [graph sph_neumann]
@@ -71,7 +69,7 @@ are implemented directly in terms of their definitions:
 
 The special cases occur for:
 
-j[sub 0][space]= __sinc_pi(x) = sin(x) / x
+[:j[sub 0]= __sinc_pi(x) = sin(x) / x]
 
 and for small ['x < 1], we can use the series:
 
@@ -80,7 +78,7 @@ and for small ['x < 1], we can use the series:
 which neatly avoids the problem of calculating 0/0 that can occur with the
 main definition as x [rarr] 0.
 
-[endsect]
+[endsect] [/section:sph_bessel Spherical Bessel Functions of the First and Second Kinds]
 
 [/ 
   Copyright 2006 John Maddock, Paul A. Bristow and Xiaogang Zhang.

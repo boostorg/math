@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Bracket and Solve Root</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../index.html" title="Math Toolkit 2.10.0">
 <link rel="up" href="../roots_noderiv.html" title="Root Finding Without Derivatives">
 <link rel="prev" href="bisect.html" title="Bisection">
@@ -140,18 +140,21 @@
         <span class="bold"><strong>Returns</strong></span>: a pair of values <span class="emphasis"><em>r</em></span>
         that bracket the root so that:
       </p>
-<pre class="programlisting"><span class="identifier">f</span><span class="special">(</span><span class="identifier">r</span><span class="special">.</span><span class="identifier">first</span><span class="special">)</span> <span class="special">*</span> <span class="identifier">f</span><span class="special">(</span><span class="identifier">r</span><span class="special">.</span><span class="identifier">second</span><span class="special">)</span> <span class="special">&lt;=</span> <span class="number">0</span>
-</pre>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          f(r.first) * f(r.second) &lt;= 0
+        </p></blockquote></div>
 <p>
         and either
       </p>
-<pre class="programlisting"><span class="identifier">tol</span><span class="special">(</span><span class="identifier">r</span><span class="special">.</span><span class="identifier">first</span><span class="special">,</span> <span class="identifier">r</span><span class="special">.</span><span class="identifier">second</span><span class="special">)</span> <span class="special">==</span> <span class="keyword">true</span>
-</pre>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          tol(r.first, r.second) == true
+        </p></blockquote></div>
 <p>
         or
       </p>
-<pre class="programlisting"><span class="identifier">max_iter</span> <span class="special">&gt;=</span> <span class="identifier">m</span>
-</pre>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          max_iter &gt;= m
+        </p></blockquote></div>
 <p>
         where <span class="emphasis"><em>m</em></span> is the initial value of <span class="emphasis"><em>max_iter</em></span>
         passed to the function.

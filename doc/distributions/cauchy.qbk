@@ -29,9 +29,9 @@ given by:
 
 [equation cauchy_ref1]
 
-The location parameter x[sub 0][space] is the location of the 
+The location parameter ['x[sub 0]] is the location of the 
 peak of the distribution (the mode of the distribution),
-while the scale parameter [gamma][space] specifies half the width
+while the scale parameter [gamma] specifies half the width
 of the PDF at half the maximum height.  If the location is 
 zero, and the scale 1, then the result is a standard Cauchy
 distribution.
@@ -98,29 +98,29 @@ and as such should have very low error rates.
 [def __x0 x[sub 0 ]]
 
 In the following table __x0 is the location parameter of the distribution, 
-[gamma][space] is its scale parameter,
+[gamma] is its scale parameter,
 /x/ is the random variate, /p/ is the probability and /q = 1-p/.
 
 [table
 [[Function][Implementation Notes]]
-[[pdf][Using the relation: pdf = 1 / ([pi] * [gamma] * (1 + ((x - __x0) / [gamma])[super 2]) ]]
+[[pdf][Using the relation: ['pdf = 1 / ([pi] * [gamma] * (1 + ((x - __x0) / [gamma])[super 2]) ]]]
 [[cdf and its complement][
 The cdf is normally given by:
 
-p = 0.5 + atan(x)/[pi]
+[expression p = 0.5 + atan(x)/[pi]]
 
 But that suffers from cancellation error as x -> -[infin].
 So recall that for `x < 0`:
 
-atan(x) = -[pi]/2 - atan(1/x)
+[expression atan(x) = -[pi]/2 - atan(1/x)]
 
 Substituting into the above we get:
 
-p = -atan(1/x)  ; x < 0
+[expression p = -atan(1/x)  ; x < 0]
 
 So the procedure is to calculate the cdf for -fabs(x)
 using the above formula.  Note that to factor in the location and scale
-parameters you must substitute (x - __x0) / [gamma][space] for x in the above.
+parameters you must substitute (x - __x0) / [gamma] for x in the above.
 
 This procedure yields the smaller of /p/ and /q/, so the result
 may need subtracting from 1 depending on whether we want the complement
@@ -130,7 +130,7 @@ or not, and whether /x/ is less than __x0 or not.
             from the probability or its complement.  First the argument /p/ is
             reduced to the range \[-0.5, 0.5\], then the relation
             
-x = __x0 [plusminus] [gamma][space] / tan([pi] * p)
+[expression x = __x0 [plusminus] [gamma] / tan([pi] * p)]
 
 is used to obtain the result.  Whether we're adding
             or subtracting from __x0 is determined by whether we're

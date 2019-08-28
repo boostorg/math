@@ -16,18 +16,18 @@
    
    }} // namespaces
    
-Returns the sine of ['[pi]x].
+Returns the sine of ['[pi][thin]x]. [/thin space to avoid collision of italic chars.]
 
 The return type of this function is computed using the __arg_promotion_rules:
 the return is `double` when /x/ is an integer type and T otherwise.
 
 [optional_policy]
 
-This function performs exact all-integer arithmetic argument reduction before computing the sine of ['[pi]x].
+This function performs exact all-integer arithmetic argument reduction before computing the sine of ['[pi][sdot]x].
 
 [table_sin_pi]
 
-[endsect]
+[endsect] [/section:sin_pi sin_pi]
 
 [section:cos_pi cos_pi]
 
@@ -45,18 +45,18 @@ This function performs exact all-integer arithmetic argument reduction before co
    
    }} // namespaces
    
-Returns the cosine of ['[pi]x].
+Returns the cosine of ['[pi][thin]x].
 
 The return type of this function is computed using the __arg_promotion_rules:
 the return is `double` when /x/ is an integer type and T otherwise.
 
 [optional_policy]
 
-This function performs exact all-integer arithmetic argument reduction before computing the cosine of ['[pi]x].
+This function performs exact all-integer arithmetic argument reduction before computing the cosine of ['[pi][cdot]x].
 
 [table_cos_pi]
 
-[endsect]
+[endsect] [/section:cos_pi cos_pi]
 
 [section:log1p log1p]
 
@@ -74,23 +74,22 @@ This function performs exact all-integer arithmetic argument reduction before co
    
    }} // namespaces
    
-Returns the natural logarithm of `x+1`.
+Returns the natural logarithm of /x+1/.
 
 The return type of this function is computed using the __arg_promotion_rules:
 the return is `double` when /x/ is an integer type and T otherwise.
-
 [optional_policy]
 
 There are many situations where it is desirable to compute `log(x+1)`. 
-However, for small `x` then `x+1` suffers from catastrophic cancellation errors 
-so that `x+1 == 1` and `log(x+1) == 0`, when in fact for very small x, the 
-best approximation to `log(x+1)` would be `x`.  `log1p` calculates the best
+However, for small /x/ then /x+1/ suffers from catastrophic cancellation errors 
+so that /x+1 == 1/ and /log(x+1) == 0/, when in fact for very small x, the 
+best approximation to /log(x+1)/ would be /x/.  `log1p` calculates the best
 approximation to `log(1+x)` using a Taylor series expansion for accuracy 
 (less than __te).
 Alternatively note that there are faster methods available, 
 for example using the equivalence:
 
-   log(1+x) == (log(1+x) * x) / ((1+x) - 1)
+[:['log(1+x) == (log(1+x) * x) / ((1+x) - 1)]]
 
 However, experience has shown that these methods tend to fail quite spectacularly
 once the compiler's optimizations are turned on, consequently they are
@@ -98,7 +97,7 @@ used only when known not to break with a particular compiler.
 In contrast, the series expansion method seems to be reasonably 
 immune to optimizer-induced errors.
 
-Finally when BOOST_HAS_LOG1P is defined then the `float/double/long double` 
+Finally when macro BOOST_HAS_LOG1P is defined then the `float/double/long double` 
 specializations of this template simply forward to the platform's 
 native (POSIX) implementation of this function.
 
@@ -109,7 +108,7 @@ The following graph illustrates the behaviour of log1p:
 [h4 Accuracy]
 
 For built in floating point types `log1p`
-should have approximately 1 epsilon accuracy.
+should have approximately 1 __epsilon accuracy.
 
 [table_log1p]
 
@@ -118,7 +117,7 @@ should have approximately 1 epsilon accuracy.
 A mixture of spot test sanity checks, and random high precision test values
 calculated using NTL::RR at 1000-bit precision.
 
-[endsect]
+[endsect] [/section:log1p log1p]
 
 [section:expm1 expm1]
 
@@ -143,8 +142,8 @@ the return is `double` when /x/ is an integer type and T otherwise.
 
 [optional_policy]
 
-For small x, then __ex is very close to 1, as a result calculating __exm1 results
-in catastrophic cancellation errors when x is small.  `expm1` calculates __exm1 using
+For small /x/, then __ex is very close to 1, as a result calculating __exm1 results
+in catastrophic cancellation errors when /x/ is small.  `expm1` calculates __exm1 using
 rational approximations (for up to 128-bit long doubles), otherwise via
 a series expansion when x is small (giving an accuracy of less than __te).
 
@@ -168,7 +167,7 @@ should have approximately 1 epsilon accuracy.
 A mixture of spot test sanity checks, and random high precision test values
 calculated using NTL::RR at 1000-bit precision.
 
-[endsect]
+[endsect] [/section:expm1 expm1]
 
 [section:cbrt cbrt]
 
@@ -186,7 +185,7 @@ calculated using NTL::RR at 1000-bit precision.
    
    }} // namespaces
    
-Returns the cubed root of x: x[super 1/3].
+Returns the cubed root of x: x[super 1/3] or [cbrt]x.
 
 The return type of this function is computed using the __arg_promotion_rules:
 the return is `double` when /x/ is an integer type and T otherwise.
@@ -201,8 +200,7 @@ The following graph illustrates the behaviour of cbrt:
    
 [h4 Accuracy]
 
-For built in floating-point types `cbrt`
-should have approximately 2 epsilon accuracy.
+For built in floating-point types `cbrt` should have approximately 2 epsilon accuracy.
 
 [table_cbrt]
 
@@ -211,14 +209,13 @@ should have approximately 2 epsilon accuracy.
 A mixture of spot test sanity checks, and random high precision test values
 calculated using NTL::RR at 1000-bit precision.
 
-[endsect]
+[endsect] [/section:cbrt cbrt]
 
 [section:sqrt1pm1 sqrt1pm1]
 
 ``
 #include <boost/math/special_functions/sqrt1pm1.hpp>
 ``
-
    namespace boost{ namespace math{
    
    template <class T>
@@ -232,12 +229,12 @@ calculated using NTL::RR at 1000-bit precision.
 Returns `sqrt(1+x) - 1`.
 
 The return type of this function is computed using the __arg_promotion_rules:
-the return is `double` when /x/ is an integer type and T otherwise.
+the return is `double` when /x/ is an integer-type and T otherwise.
 
 [optional_policy]
 
-This function is useful when you need the difference between sqrt(x) and 1, when
-x is itself close to 1.
+This function is useful when you need the difference between `sqrt(x)` and 1, when
+/x/ is itself close to 1.
 
 Implemented in terms of `log1p` and `expm1`.
 
@@ -257,14 +254,13 @@ should have approximately 3 epsilon accuracy.
 A selection of random high precision test values
 calculated using NTL::RR at 1000-bit precision.
 
-[endsect]
+[endsect] [/section:sqrt1pm1 sqrt1pm1]
 
 [section:powm1 powm1]
 
 ``
 #include <boost/math/special_functions/powm1.hpp>
 ``
-
    namespace boost{ namespace math{
    
    template <class T1, class T2>
@@ -278,12 +274,12 @@ calculated using NTL::RR at 1000-bit precision.
 Returns x[super y ] - 1.
 
 The return type of this function is computed using the __arg_promotion_rules
-when T1 and T2 are dufferent types.
+when T1 and T2 are different types.
 
 [optional_policy]
 
-There are two domains where this is useful: when y is very small, or when
-x is close to 1.
+There are two domains where this is useful: when /y/ is very small, or when
+/x/ is close to 1.
 
 Implemented in terms of `expm1`.
 
@@ -302,7 +298,7 @@ Should have approximately 2-3 epsilon accuracy.
 A selection of random high precision test values
 calculated using NTL::RR at 1000-bit precision.
 
-[endsect]
+[endsect] [/section:powm1 powm1]
 
 [section:hypot hypot]
 
@@ -325,22 +321,21 @@ overflow or underflow, even though the result is in fact perfectly representable
 
 [h4 Implementation]
 
-The function is even and symmetric in x and y, so first take assume
+The function is even and symmetric in /x/ and /y/, so first take assume
 ['x,y > 0] and ['x > y] (we can permute the arguments if this is not the case).
 
-Then if ['x * [epsilon][space] >= y] we can simply return /x/.
+Then if ['x * [epsilon] >= y] we can simply return /x/.
 
 Otherwise the result is given by:
 
 [equation hypot2]
 
-[endsect]
+[endsect] [/section:hypot hypot]
 
 [include pow.qbk]
 
-
-[endsect][/section:powers Logs, Powers, Roots and Exponentials]
-
+[endsect] [/section:powers Logs, Powers, Roots and Exponentials]
+ 
 [/ 
   Copyright 2006 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.

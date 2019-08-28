@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Barycentric Rational Interpolation</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../index.html" title="Math Toolkit 2.10.0">
 <link rel="up" href="../interpolation.html" title="Chapter&#160;11.&#160;Interpolation">
 <link rel="prev" href="whittaker_shannon.html" title="Whittaker-Shannon interpolation">
@@ -64,7 +64,7 @@
       for non-uniformly spaced samples. It requires &#119926;(<span class="emphasis"><em>N</em></span>) time
       for construction, and &#119926;(<span class="emphasis"><em>N</em></span>) time for each evaluation. Linear
       time evaluation is not optimal; for instance the cubic B-spline can be evaluated
-      in constant time. However, using the cubic B-spline requires uniformly spaced
+      in constant time. However, using the cubic B-spline requires uniformly-spaced
       samples, which are not always available.
     </p>
 <p>
@@ -123,11 +123,14 @@
 <p>
       A desirable property of any interpolator <span class="emphasis"><em>f</em></span> is that for
       all <span class="emphasis"><em>x</em></span><sub>min</sub> &#8804; <span class="emphasis"><em>x</em></span> &#8804; <span class="emphasis"><em>x</em></span><sub>max</sub>,
-      <span class="emphasis"><em>y</em></span><sub>min</sub> &#8804; <span class="emphasis"><em>f</em></span>(<span class="emphasis"><em>x</em></span>)
-      &#8804; <span class="emphasis"><em>y</em></span><sub>max</sub>. <span class="emphasis"><em>This property does not hold for
-      the barycentric rational interpolator.</em></span> However, unless you deliberately
-      try to antagonize this interpolator (by, for instance, placing the final value
-      far from all the rest), you will probably not fall victim to this problem.
+      also <span class="emphasis"><em>y</em></span><sub>min</sub> &#8804; <span class="emphasis"><em>f</em></span>(<span class="emphasis"><em>x</em></span>)
+      &#8804; <span class="emphasis"><em>y</em></span><sub>max</sub>.
+    </p>
+<p>
+      <span class="emphasis"><em>This property does not hold for the barycentric rational interpolator.</em></span>
+      However, unless you deliberately try to antagonize this interpolator (by, for
+      instance, placing the final value far from all the rest), you will probably
+      not fall victim to this problem.
     </p>
 <p>
       The reference used for implementation of this algorithm is <a href="https://web.archive.org/save/_embed/http://www.mn.uio.no/math/english/people/aca/michaelf/papers/rational.pdf" target="_top">Barycentric
@@ -147,7 +150,7 @@
       potential which is only known at non-equally samples data.
     </p>
 <p>
-      If he'd only had the barycentric rational interpolant of boost::math!
+      If he'd only had the barycentric rational interpolant of Boost.Math!
     </p>
 <p>
       References: Kohn, W., and N. Rostoker. "Solution of the Schrodinger equation
@@ -185,9 +188,8 @@
 
 <span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
 <span class="special">{</span>
-    <span class="comment">// The lithium potential is given in Kohn's paper, Table I,</span>
-    <span class="comment">// we could equally use an unordered_map, a list of tuples or pairs,</span>
-    <span class="comment">// or a 2-dimentional array equally easily:</span>
+    <span class="comment">// The lithium potential is given in Kohn's paper, Table I.</span>
+    <span class="comment">// (We could equally easily use an unordered_map, a list of tuples or pairs, or a 2-dimentional array).</span>
     <span class="identifier">std</span><span class="special">::</span><span class="identifier">map</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">r</span><span class="special">;</span>
 
     <span class="identifier">r</span><span class="special">[</span><span class="number">0.02</span><span class="special">]</span> <span class="special">=</span> <span class="number">5.727</span><span class="special">;</span>

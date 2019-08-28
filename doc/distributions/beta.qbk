@@ -72,24 +72,24 @@ The [@http://en.wikipedia.org/wiki/Probability_density_function probability dens
 for the [@http://en.wikipedia.org/wiki/Beta_distribution beta distribution]
 defined on the interval \[0,1\] is given by:
 
-f(x;[alpha],[beta]) = x[super[alpha] - 1] (1 - x)[super[beta] -1] / B([alpha], [beta])
+[expression f(x;[alpha],[beta]) = x[super[alpha] - 1] (1 - x)[super[beta] -1] / B([alpha], [beta])]
 
-where B([alpha], [beta]) is the
+where [role serif_italic B([alpha], [beta])] is the
 [@http://en.wikipedia.org/wiki/Beta_function beta function],
 implemented in this library as __beta.  Division by the beta function
 ensures that the pdf is normalized to the range zero to unity.
 
 The following graph illustrates examples of the pdf for various values 
-of the shape parameters.  Note the [alpha] = [beta] = 2 (blue line) 
+of the shape parameters.  Note the ['[alpha] = [beta] = 2] (blue line) 
 is dome-shaped, and might be approximated by a symmetrical triangular 
 distribution.
 
 [graph beta_pdf]
 
-If [alpha] = [beta] = 1, then it is a __space
+If [alpha] = [beta] = 1, then it is a[emspace]
 [@http://en.wikipedia.org/wiki/Uniform_distribution_%28continuous%29 uniform distribution],
 equal to unity in the entire interval x = 0 to 1.
-If [alpha] __space and [beta] __space are < 1, then the pdf is U-shaped.
+If [alpha] and [beta] are < 1, then the pdf is U-shaped.
 If [alpha] != [beta], then the shape is asymmetric
 and could be approximated by a triangle
 whose apex is away from the centre (where x = half).
@@ -135,13 +135,13 @@ So for example:
 
 Two pairs of parameter estimators are provided.
 
-One estimates either [alpha] __space or [beta] __space 
+One estimates either [alpha]  or [beta] 
 from presumed-known mean and variance.
 
-The other pair estimates either [alpha] __space or [beta] __space from 
+The other pair estimates either [alpha] or [beta] from 
 the cdf and x.
 
-It is also possible to estimate [alpha] __space and  [beta] __space from 
+It is also possible to estimate [alpha] and  [beta]  from 
 'known' mode & quantile.  For example, calculators are provided by the
 [@http://www.ausvet.com.au/pprev/content.php?page=PPscript 
 Pooled Prevalence Calculator] and
@@ -152,14 +152,14 @@ but this is not yet implemented here.
         RealType mean, // Expected value of mean.
         RealType variance); // Expected value of variance.
         
-Returns the unique value of [alpha][space] that corresponds to a 
+Returns the unique value of [alpha] that corresponds to a 
 beta distribution with mean /mean/ and variance /variance/.
       
       static RealType find_beta(
         RealType mean, // Expected value of mean.
         RealType variance); // Expected value of variance.
   
-Returns the unique value of [beta][space] that corresponds to a 
+Returns the unique value of [beta] that corresponds to a 
 beta distribution with mean /mean/ and variance /variance/.
       
       static RealType find_alpha(
@@ -167,7 +167,7 @@ beta distribution with mean /mean/ and variance /variance/.
         RealType x, //  x.
         RealType probability); // probability cdf
         
-Returns the value of [alpha][space] that gives:
+Returns the value of [alpha] that gives:
 `cdf(beta_distribution<RealType>(alpha, beta), x) == probability`.
       
       static RealType find_beta(
@@ -175,7 +175,7 @@ Returns the value of [alpha][space] that gives:
         RealType x, // probability x.
         RealType probability); // probability cdf.
 
-Returns the value of [beta][space] that gives:
+Returns the value of [beta] that gives:
 `cdf(beta_distribution<RealType>(alpha, beta), x) == probability`.
       
 [h4 Non-member Accessor Functions]
@@ -196,16 +196,16 @@ It is also widely used in [@http://en.wikipedia.org/wiki/Bayesian_inference Baye
 
 [h4 Related distributions]
 
-The beta distribution with both [alpha]  __space and [beta] = 1 follows a
+The beta distribution with both [alpha] and [beta] = 1 follows a
 [@http://en.wikipedia.org/wiki/Uniform_distribution_%28continuous%29 uniform distribution].
 
 The [@http://en.wikipedia.org/wiki/Triangular_distribution triangular]
 is used when less precise information is available.
 
 The [@http://en.wikipedia.org/wiki/Binomial_distribution binomial distribution]
-is closely related when [alpha]  __space and [beta]  __space are integers.
+is closely related when [alpha] and [beta]  are integers.
 
-With integer values of [alpha]  __space and [beta]  __space the distribution B(i, j) is
+With integer values of [alpha]  and [beta] the distribution B(i, j) is
 that of the j-th highest of a sample of i + j + 1 independent random variables
 uniformly distributed between 0 and 1.
 The cumulative probability from 0 to x is thus
@@ -223,16 +223,14 @@ please refer to these functions for information on accuracy.
 
 [h4 Implementation]
 
-In the following table /a/ and /b/ are the parameters [alpha][space] and [beta],
+In the following table /a/ and /b/ are the parameters [alpha] and [beta],
 /x/ is the random variable, /p/ is the probability and /q = 1-p/.
 
 [table
 [[Function][Implementation Notes]]
-[[pdf]
-   [f(x;[alpha],[beta]) = x[super[alpha] - 1] (1 - x)[super[beta] -1] / B([alpha], [beta])
+[[pdf][[role serif_italic f(x;[alpha],[beta]) = x[super[alpha] - 1] (1 - x)[super[beta] -1] / B([alpha], [beta])]
    
     Implemented using __ibeta_derivative(a, b, x).]]
-    
 [[cdf][Using the incomplete beta function __ibeta(a, b, x)]]
 [[cdf complement][__ibetac(a, b, x)]]
 [[quantile][Using the inverse incomplete beta function __ibeta_inv(a, b, p)]]
@@ -244,12 +242,8 @@ In the following table /a/ and /b/ are the parameters [alpha][space] and [beta],
 [[kurtosis excess][ [equation beta_dist_kurtosis]  ]]
 [[kurtosis][`kurtosis + 3`]]
 [[parameter estimation][ ]]
-[[alpha
-
-   from mean and variance][`mean * (( (mean * (1 - mean)) / variance)- 1)`]]
-[[beta
-
-  from mean and variance][`(1 - mean) * (((mean * (1 - mean)) /variance)-1)`]]
+[[alpha (from mean and variance)][`mean * (( (mean * (1 - mean)) / variance)- 1)`]]
+[[beta (from mean and variance)][`(1 - mean) * (((mean * (1 - mean)) /variance)-1)`]]
 [[The member functions `find_alpha` and `find_beta`
 
   from cdf and probability x
@@ -260,7 +254,7 @@ In the following table /a/ and /b/ are the parameters [alpha][space] and [beta],
 __ibeta_inva, and __ibeta_invb respectively.]]
 [[`find_alpha`][`ibeta_inva(beta, x, probability)`]]
 [[`find_beta`][`ibeta_invb(alpha, x, probability)`]]
-]
+] [/table]
 
 [h4 References]
 
@@ -270,7 +264,7 @@ __ibeta_inva, and __ibeta_invb respectively.]]
 
 [@http://mathworld.wolfram.com/BetaDistribution.html Wolfram MathWorld]
 
-[endsect][/section:beta_dist beta]
+[endsect] [/section:beta_dist beta]
 
 [/ beta.qbk
   Copyright 2006 John Maddock and Paul A. Bristow.

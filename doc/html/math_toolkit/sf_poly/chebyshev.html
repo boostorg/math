@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Chebyshev Polynomials</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../index.html" title="Math Toolkit 2.10.0">
 <link rel="up" href="../sf_poly.html" title="Polynomials">
 <link rel="prev" href="hermite.html" title="Hermite Polynomials">
@@ -58,9 +58,9 @@
 <span class="special">}}</span> <span class="comment">// namespaces</span>
 </pre>
 <p>
-        <span class="quote">&#8220;<span class="quote">Real analysts cannot do without Fourier, complex analysts cannot do
-        without Laurent, and numerical analysts cannot do without Chebyshev</span>&#8221;</span>--Lloyd
-        N. Trefethen
+        <span class="emphasis"><em>"Real analysts cannot do without Fourier, complex analysts
+        cannot do without Laurent, and numerical analysts cannot do without Chebyshev"</em></span>
+        --Lloyd N. Trefethen
       </p>
 <p>
         The Chebyshev polynomials of the first kind are defined by the recurrence
@@ -116,16 +116,16 @@
         work. This is because two traditions exist in notation for the Chebyshev
         series expansion,
       </p>
-<p>
-        <span class="emphasis"><em>f</em></span>(<span class="emphasis"><em>x</em></span>) &#8776; &#8721;<sub>n=0</sub><sup>N-1</sup> <span class="emphasis"><em>a</em></span><sub>n</sub><span class="emphasis"><em>T</em></span><sub>n</sub>(<span class="emphasis"><em>x</em></span>)
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="emphasis"><em>f</em></span>(<span class="emphasis"><em>x</em></span>) &#8776; &#8721;<sub>n=0</sub><sup>N-1</sup> <span class="emphasis"><em>a</em></span><sub>n</sub><span class="emphasis"><em>T</em></span><sub>n</sub>(<span class="emphasis"><em>x</em></span>)
+        </p></blockquote></div>
 <p>
         and
       </p>
-<p>
-        <span class="emphasis"><em>f</em></span>(<span class="emphasis"><em>x</em></span>) &#8776; <span class="emphasis"><em>c</em></span><sub>0</sub>/2
-        + &#8721;<sub>n=1</sub><sup>N-1</sup> <span class="emphasis"><em>c</em></span><sub>n</sub><span class="emphasis"><em>T</em></span><sub>n</sub>(<span class="emphasis"><em>x</em></span>)
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="emphasis"><em>f</em></span>(<span class="emphasis"><em>x</em></span>) &#8776; <span class="emphasis"><em>c</em></span><sub>0</sub>/2
+          + &#8721;<sub>n=1</sub><sup>N-1</sup> <span class="emphasis"><em>c</em></span><sub>n</sub><span class="emphasis"><em>T</em></span><sub>n</sub>(<span class="emphasis"><em>x</em></span>)
+        </p></blockquote></div>
 <p>
         <span class="emphasis"><em><span class="bold"><strong>boost math always uses the second convention,
         with the factor of 1/2 on the first coefficient.</strong></span></em></span>
@@ -161,7 +161,7 @@
       </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
-            We want a numerically stable way to evaluate the function's derivative
+            We want a numerically stable way to evaluate the function's derivative.
           </li>
 <li class="listitem">
             Our function is expensive to evaluate, and we wish to find a less expensive
@@ -172,7 +172,7 @@
             accelerate the computation of these functions.
           </li>
 <li class="listitem">
-            We wish to numerically integrate the function
+            We wish to numerically integrate the function.
           </li>
 </ul></div>
 <p>
@@ -214,8 +214,9 @@
         The Chebyshev transform works by creating a vector of values by evaluating
         the input function at the Chebyshev points, and then performing a discrete
         cosine transform on the resulting vector. In order to do this efficiently,
-        we have used FFTW3. So to compile, you must have <code class="computeroutput"><span class="identifier">FFTW3</span></code>
-        installed, and link with <code class="computeroutput"><span class="special">-</span><span class="identifier">lfftw3</span></code>
+        we have used <a href="http://www.fftw.org/" target="_top">FFTW3</a>. So to compile,
+        you must have <code class="computeroutput"><span class="identifier">FFTW3</span></code> installed,
+        and link with <code class="computeroutput"><span class="special">-</span><span class="identifier">lfftw3</span></code>
         for double precision, <code class="computeroutput"><span class="special">-</span><span class="identifier">lfftw3f</span></code>
         for float precision, <code class="computeroutput"><span class="special">-</span><span class="identifier">lfftw3l</span></code>
         for long double precision, and -lfftwq for quad (<code class="computeroutput"><span class="identifier">__float128</span></code>)

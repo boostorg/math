@@ -5,16 +5,16 @@ This library is divided into several interconnected parts:
 [h4 Floating Point Utilities]
 
 Utility functions for dealing with floating-point arithmetic, includes functions
-for floating point classification (fpclassify, isnan, isinf etc), sign manipulation,
+for floating point classification (`fpclassify`, `isnan`, `isinf` etc), sign manipulation,
 rounding, comparison, and computing the distance between floating point numbers.
 
 [h4 Specific Width Floating-Point Types]
 
-A set of typedefs similar to those provided by `<cstdint>` but for floating-point types.
+A set of `typedef`s similar to those provided by `<cstdint>` but for floating-point types.
 
 [h4 Mathematical Constants]
 
-A wide range of constants ranging from various multiples of [pi], fractions, through to euler's constant etc.
+A wide range of high-precision constants ranging from various multiples of [pi], fractions, through to Euler's constant etc.
 
 These are of course usable from template code, or as non-templates with a simplified interface if that is more appropriate.
 
@@ -77,19 +77,26 @@ Tools for manipulating polynomials and for efficient evaluation of rationals or 
 
 [h4 Interpolation]
 
-Function interpolation via Barycentric or cubic B_spline approximations.
+Function interpolation via Barycentric or cubic B_spline approximations. Smoothing.
 
-[h4 Numerical Integration and Differentiation]
+[h4 Numerical Integration (Quadrature) and Differentiation]
 
-A reasonably comprehensive set of routines for integration (trapezoidal, Gauss-Legendre, Gauss-Kronrod and double-exponential) and differentiation.
+A reasonably comprehensive set of routines for integration (trapezoidal, Gauss-Legendre, Gauss-Kronrod and double-exponential) 
+and differentiation. (See also automatic differentiation).
 
 The integration routines are all usable for functions returning complex results - and as a result for contour integrals as well.
 
 [h4 Quaternions and Octonions]
 
-Quaternion and Octonians as class templates similar to `std::complex`.
+Quaternions and Octonians as class templates similar to `std::complex`.
 
-[endsect]
+[h4 Automatic Differentiation]
+
+Autodiff is a header-only C++ library that facilitates the automaticdifferentiation (forward mode) 
+of mathematical functions of single and multiple variables.
+
+[endsect] [/section:main_intro About the Math Toolkit]
+
 
 [/
   Copyright 2006, 2012, 2015 John Maddock and Paul A. Bristow.

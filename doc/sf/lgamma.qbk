@@ -98,7 +98,7 @@ approximation.  The logarithmic version of the __lanczos is:
 
 [equation lgamm4]
 
-Where L[sub e,g][space] is the Lanczos sum, scaled by e[super g].
+Where L[sub e,g] is the Lanczos sum, scaled by e[super g].
 
 As before the reflection formula is used for /z < 0/.
 
@@ -116,8 +116,7 @@ form used is:
    lgamma(z) = (z-2)(z+1)(Y + R(z-2));
    
 Where Y is a constant, and R(z-2) is the rational approximation: optimised
-so that it's absolute error is tiny compared to Y.  In addition 
-small values of z greater
+so that its absolute error is tiny compared to Y.  In addition, small values of z greater
 than 3 can handled by argument reduction using the recurrence relation:
 
    lgamma(z+1) = log(z) + lgamma(z);
@@ -154,13 +153,13 @@ terms tend to zero, as /z -> 1/:
 
 [equation lgamm5]
 
-The C[sub k][space] terms in the above are the same as in the __lanczos.
+The C[sub k] terms in the above are the same as in the __lanczos.
 
 A similar rearrangement can be performed at /z = 2/:
 
 [equation lgamm6]
 
-[endsect][/section:lgamma The Log Gamma Function]
+[endsect] [/section:lgamma The Log Gamma Function]
 
 [/ 
   Copyright 2006 John Maddock and Paul A. Bristow.

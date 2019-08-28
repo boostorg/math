@@ -103,7 +103,7 @@ as the arguments.
   template <class T1, class T2, class T3, class ``__Policy``>
   ``__sf_result`` ellint_rf(T1 x, T2 y, T3 z, const ``__Policy``&)
   
-Returns Carlson's Elliptic Integral R[sub F]:
+Returns Carlson's Elliptic Integral ['R[sub F]]:
 
 [equation ellint9]
 
@@ -175,7 +175,7 @@ using the relation:
   template <class T1, class T2, class T3, class ``__Policy``>
   ``__sf_result`` ellint_rg(T1 x, T2 y, T3 z, const ``__Policy``&)
   
-Returns Carlson's elliptic integral R[sub G]:
+Returns Carlson's elliptic integral ['R[sub G]:]
 
 [equation ellint27]
 
@@ -243,4 +243,5 @@ are returned via the relations:
 
 [equation ellint18]
 
-[endsect]
+[endsect] [/section:ellint_carlson Elliptic Integrals - Carlson Form]
+

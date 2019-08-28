@@ -32,7 +32,7 @@ and checks that can input C99 infinity and NaN too.
 
 #define BOOST_TEST_MAIN
 
-#include <boost/test/auto_unit_test.hpp>
+#include <boost/test/unit_test.hpp>
 
 #include "almost_equal.ipp"
 #include "s_.ipp"

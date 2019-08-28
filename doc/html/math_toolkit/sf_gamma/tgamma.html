@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Gamma</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../index.html" title="Math Toolkit 2.10.0">
 <link rel="up" href="../sf_gamma.html" title="Gamma Functions">
 <link rel="prev" href="../sf_gamma.html" title="Gamma Functions">
@@ -61,12 +61,14 @@
 <p>
         Returns the "true gamma" (hence name tgamma) of value z:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/gamm1.svg"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/tgamma.svg" align="middle"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/gamm1.svg"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/tgamma.svg" align="middle"></span>
+
+        </p></blockquote></div>
 <p>
         The final <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
         be used to control the behaviour of the function: how it handles errors,
@@ -430,15 +432,18 @@
         precision, and GCC-7.1/Ubuntu for <code class="computeroutput"><span class="keyword">long</span>
         <span class="keyword">double</span></code> and <code class="computeroutput"><span class="identifier">__float128</span></code>.
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/tgamma__double.svg" align="middle"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/tgamma__80_bit_long_double.svg" align="middle"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/tgamma____float128.svg" align="middle"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/tgamma__double.svg" align="middle"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/tgamma__80_bit_long_double.svg" align="middle"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/tgamma____float128.svg" align="middle"></span>
+
+        </p></blockquote></div>
 <h5>
 <a name="math_toolkit.sf_gamma.tgamma.h3"></a>
         <span class="phrase"><a name="math_toolkit.sf_gamma.tgamma.testing"></a></span><a class="link" href="tgamma.html#math_toolkit.sf_gamma.tgamma.testing">Testing</a>
@@ -460,11 +465,13 @@
       </h5>
 <p>
         The generic version of the <code class="computeroutput"><span class="identifier">tgamma</span></code>
-        function is implemented Sterling's approximation for lgamma for large z:
+        function is implemented Sterling's approximation for <code class="computeroutput"><span class="identifier">lgamma</span></code>
+        for large z:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/gamma6.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/gamma6.svg"></span>
+
+        </p></blockquote></div>
 <p>
         Following exponentiation, downward recursion is then used for small values
         of z.
@@ -478,25 +485,28 @@
         For z in the range -20 &lt; z &lt; 1 then recursion is used to shift to z
         &gt; 1 via:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/gamm3.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/gamm3.svg"></span>
+
+        </p></blockquote></div>
 <p>
         For very small z, this helps to preserve the identity:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/gamm4.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/gamm4.svg"></span>
+
+        </p></blockquote></div>
 <p>
         For z &lt; -20 the reflection formula:
       </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/gamm5.svg"></span>
+
+        </p></blockquote></div>
 <p>
-        <span class="inlinemediaobject"><img src="../../../equations/gamm5.svg"></span>
-      </p>
-<p>
-        is used. Particular care has to be taken to evaluate the <code class="literal">z * sin(&#960; &#160; *
+        is used. Particular care has to be taken to evaluate the <code class="literal">z * sin(&#960; *
         z)</code> part: a special routine is used to reduce z prior to multiplying
-        by &#960; &#160; to ensure that the result in is the range [0, &#960;/2]. Without this an excessive
+        by &#960; to ensure that the result in is the range [0, &#960;/2]. Without this an excessive
         amount of error occurs in this region (which is hard enough already, as the
         rate of change near a negative pole is <span class="emphasis"><em>exceptionally</em></span>
         high).

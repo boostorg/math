@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Finding Zeros of Bessel Functions of the First and Second Kinds</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../index.html" title="Math Toolkit 2.10.0">
 <link rel="up" href="../bessel.html" title="Bessel Functions">
 <link rel="prev" href="bessel_first.html" title="Bessel Functions of the First and Second Kinds">
@@ -111,12 +111,12 @@
         number of zeros on the positive real axis. The real zeros on the positive
         real axis can be found by solving for the roots of
       </p>
-<p>
-        &#8193; <span class="emphasis"><em>J<sub>&#957;</sub>(j<sub>&#957;, m</sub>) = 0</em></span>
-      </p>
-<p>
-        &#8193; <span class="emphasis"><em>Y<sub>&#957;</sub>(y<sub>&#957;, m</sub>) = 0</em></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="emphasis"><em>J<sub>&#957;</sub>(j<sub>&#957;, m</sub>) = 0</em></span>
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="emphasis"><em>Y<sub>&#957;</sub>(y<sub>&#957;, m</sub>) = 0</em></span>
+        </p></blockquote></div>
 <p>
         Here, <span class="emphasis"><em>j<sub>&#957;, m</sub></em></span> represents the <span class="emphasis"><em>m<sup>th</sup></em></span> root
         of the cylindrical Bessel function of order <span class="emphasis"><em>&#957;</em></span>, and <span class="emphasis"><em>y<sub>&#957;,
@@ -134,8 +134,9 @@
         In each case the index or rank of the zero returned is 1-based, which is
         to say:
       </p>
-<pre class="programlisting"><span class="identifier">cyl_bessel_j_zero</span><span class="special">(</span><span class="identifier">v</span><span class="special">,</span> <span class="number">1</span><span class="special">);</span>
-</pre>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          cyl_bessel_j_zero(v, 1);
+        </p></blockquote></div>
 <p>
         returns the first zero of Bessel J.
       </p>
@@ -158,12 +159,14 @@
         the <code class="computeroutput"><span class="identifier">cyl_bessel_j</span></code> and <code class="computeroutput"><span class="identifier">cyl_neumann</span></code> functions, but not infinite
         nor NaN.
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/bessel_j_zeros.svg" align="middle"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/neumann_y_zeros.svg" align="middle"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/bessel_j_zeros.svg" align="middle"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/neumann_y_zeros.svg" align="middle"></span>
+
+        </p></blockquote></div>
 <h5>
 <a name="math_toolkit.bessel.bessel_root.h2"></a>
         <span class="phrase"><a name="math_toolkit.bessel.bessel_root.examples_of_finding_bessel_and_n"></a></span><a class="link" href="bessel_root.html#math_toolkit.bessel.bessel_root.examples_of_finding_bessel_and_n">Examples
@@ -560,14 +563,14 @@
         by M. Abramowitz and I. A. Stegun, Handbook of Mathematical Functions, NBS
         (1964). In particular,
       </p>
-<p>
-        &#8193; <span class="emphasis"><em>d/<sub>dx</sub> <span class="emphasis"><em>J<sub>&#957;</sub>(x)</em></span> = <span class="emphasis"><em>J<sub>&#957;-1</sub>(x)</em></span> - &#957; J<sub>&#957;</sub>(x)</em></span>
-        / x
-      </p>
-<p>
-        &#8193; <span class="emphasis"><em>d/<sub>dx</sub> <span class="emphasis"><em>Y<sub>&#957;</sub>(x)</em></span> = <span class="emphasis"><em>Y<sub>&#957;-1</sub>(x)</em></span> - &#957; Y<sub>&#957;</sub>(x)</em></span>
-        / x
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="serif_italic">d/<sub>dx</sub> <span class="emphasis"><em>J<sub>&#957;</sub>(x)</em></span> = <span class="emphasis"><em>J<sub>&#957;-1</sub>(x)</em></span>
+          - &#957; J<sub>&#957;</sub>(x) / x</span>
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="serif_italic">d/<sub>dx</sub> <span class="emphasis"><em>Y<sub>&#957;</sub>(x)</em></span> = <span class="emphasis"><em>Y<sub>&#957;-1</sub>(x)</em></span>
+          - &#957; Y<sub>&#957;</sub>(x) / x</span>
+        </p></blockquote></div>
 <p>
         Enumeration of the rank of a root (in other words the index of a root) begins
         with one and counts up, in other words <span class="emphasis"><em>m,=1,2,3,&#8230;</em></span> The
@@ -613,38 +616,41 @@
 <p>
         In particular,
       </p>
-<p>
-        &#8193; <span class="emphasis"><em>j<sub>&#957;,1</sub> &#8773; &#957; + 1.85575 &#957;<sup>&#8531;</sup> + 1.033150 &#957;<sup>-&#8531;</sup> - 0.00397 &#957;<sup>-1</sup> - 0.0908 &#957;<sup>-5/3</sup> + 0.043 &#957;<sup>-7/3</sup> +
-        &#8230;</em></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="serif_italic">j<sub>&#957;,1</sub> &#8773; &#957; + 1.85575 &#957;<sup>&#8531;</sup> + 1.033150 &#957;<sup>-&#8531;</sup> - 0.00397 &#957;<sup>-1</sup> - 0.0908
+          &#957;<sup>-5/3</sup> + 0.043 &#957;<sup>-7/3</sup> + &#8230;</span>
+        </p></blockquote></div>
 <p>
         and
       </p>
-<p>
-        &#8193; <span class="emphasis"><em>y<sub>&#957;,1</sub> &#8773; &#957; + 0.93157 &#957;<sup>&#8531;</sup> + 0.26035 &#957;<sup>-&#8531;</sup> + 0.01198 &#957;<sup>-1</sup> - 0.0060 &#957;<sup>-5/3</sup> - 0.001 &#957;<sup>-7/3</sup> +
-        &#8230;</em></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="serif_italic">y<sub>&#957;,1</sub> &#8773; &#957; + 0.93157 &#957;<sup>&#8531;</sup> + 0.26035 &#957;<sup>-&#8531;</sup> + 0.01198 &#957;<sup>-1</sup> - 0.0060
+          &#957;<sup>-5/3</sup> - 0.001 &#957;<sup>-7/3</sup> + &#8230;</span>
+        </p></blockquote></div>
 <p>
         Calculations of the estimates of <span class="emphasis"><em>j<sub>&#957;, m</sub></em></span> and <span class="emphasis"><em>y<sub>&#957;,
         m</sub></em></span> with rank <span class="emphasis"><em>m &gt; 2</em></span> and <span class="emphasis"><em>0 &#8804; &#957; &lt;
         2.2</em></span> use McMahon's approximation, as described in M. Abramowitz
         and I. A. Stegan, Section 9.5 and 9.5.12. In particular,
       </p>
-<p>
-        &#8193; <span class="emphasis"><em>j<sub>&#957;,m</sub>, y<sub>&#957;,m</sub> &#8773; &#946; - (&#956;-1) / 8&#946;</em></span>
-      </p>
-<p>
-        &#8193;  &#8193;  &#8193; <span class="emphasis"><em>- 4(&#956;-1)(7&#956; - 31) / 3(8&#946;)<sup>3</sup></em></span>
-      </p>
-<p>
-        &#8193;  &#8193;  &#8193; <span class="emphasis"><em>-32(&#956;-1)(83&#956;&#178; - 982&#956; + 3779) / 15(8&#946;)<sup>5</sup></em></span>
-      </p>
-<p>
-        &#8193;  &#8193;  &#8193; <span class="emphasis"><em>-64(&#956;-1)(6949&#956;<sup>3</sup> - 153855&#956;&#178; + 1585743&#956;- 6277237) / 105(8a)<sup>7</sup></em></span>
-      </p>
-<p>
-        &#8193;  &#8193;  &#8193; <span class="emphasis"><em>- &#8230;</em></span> &#8193;  &#8193;                                              (5)
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="emphasis"><em>j<sub>&#957;,m</sub>, y<sub>&#957;,m</sub> &#8773;</em></span>
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><div class="blockquote"><blockquote class="blockquote"><p>
+            &#946; - (&#956;-1) / 8&#946;
+          </p></blockquote></div></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="emphasis"><em>- 4(&#956;-1)(7&#956; - 31) / 3(8&#946;)<sup>3</sup></em></span>
+          </p></blockquote></div></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="emphasis"><em>-32(&#956;-1)(83&#956;&#178; - 982&#956; + 3779) / 15(8&#946;)<sup>5</sup></em></span>
+          </p></blockquote></div></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="emphasis"><em>-64(&#956;-1)(6949&#956;<sup>3</sup> - 153855&#956;&#178; + 1585743&#956;- 6277237) / 105(8a)<sup>7</sup></em></span>
+          </p></blockquote></div></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="emphasis"><em>- &#8230;</em></span> &#8193; (5)
+          </p></blockquote></div></blockquote></div>
 <p>
         where <span class="emphasis"><em>&#956; = 4&#957;<sup>2</sup></em></span> and <span class="emphasis"><em>&#946; = (m + &#189;&#957; - &#188;)&#960;</em></span> for
         <span class="emphasis"><em>j<sub>&#957;,m</sub></em></span> and <span class="emphasis"><em>&#946; = (m + &#189;&#957; -&#190;)&#960; for <span class="emphasis"><em>y<sub>&#957;,m</sub></em></span></em></span>.
@@ -663,9 +669,9 @@
 <p>
         In summary,
       </p>
-<p>
-        &#8193; <span class="emphasis"><em>j<sub>&#957;, m</sub> &#8764; &#957;x(-&#950;) + f<sub>1</sub>(-&#950;/&#957;)</em></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="serif_italic">j<sub>&#957;, m</sub> &#8764; &#957;x(-&#950;) + f<sub>1</sub>(-&#950;/&#957;)</span>
+        </p></blockquote></div>
 <p>
         where <span class="emphasis"><em>-&#950; = &#957;<sup>-2/3</sup>a<sub>m</sub></em></span> and <span class="emphasis"><em>a<sub>m</sub></em></span> is the absolute
         value of the <span class="emphasis"><em>m<sup>th</sup></em></span> root of <span class="emphasis"><em>Ai(x)</em></span>
@@ -674,35 +680,39 @@
 <p>
         Here <span class="emphasis"><em>x = x(-&#950;)</em></span> is the inverse of the function
       </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="serif_italic">&#8532;(-&#950;)<sup>3/2</sup> = &#8730;(x&#178; - 1) - cos&#8315;&#185;(1/x)</span>
+        </p></blockquote></div>
 <p>
-        &#8193; <span class="emphasis"><em>&#8532;(-&#950;)<sup>3/2</sup> = &#8730;(x&#178; - 1) - cos&#8315;&#185;(1/x)</em></span> &#8193;  &#8193;   (7)
+        (7)
       </p>
 <p>
         Furthermore,
       </p>
-<p>
-        &#8193; <span class="emphasis"><em>f<sub>1</sub>(-&#950;) = &#189;x(-&#950;) {h(-&#950;)}&#178; &#8901; b<sub>0</sub>(-&#950;)</em></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="serif_italic">f<sub>1</sub>(-&#950;) = &#189;x(-&#950;) {h(-&#950;)}&#178; &#8901; b<sub>0</sub>(-&#950;)</span>
+        </p></blockquote></div>
 <p>
         where
       </p>
-<p>
-        &#8193; <span class="emphasis"><em>h(-&#950;) = {4(-&#950;) / (x&#178; - 1)}<sup>4</sup></em></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="serif_italic">h(-&#950;) = {4(-&#950;) / (x&#178; - 1)}<sup>4</sup></span>
+        </p></blockquote></div>
 <p>
         and
       </p>
-<p>
-        &#8193; <span class="emphasis"><em>b<sub>0</sub>(-&#950;) = -5/(48&#950;&#178;) + 1/(-&#950;)<sup>&#189;</sup> &#8901; { 5/(24(x<sup>2</sup>-1)<sup>3/2</sup>) + 1/(8(x<sup>2</sup>-1)<sup>&#189;)</sup>}</em></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="serif_italic">b<sub>0</sub>(-&#950;) = -5/(48&#950;&#178;) + 1/(-&#950;)<sup>&#189;</sup> &#8901; { 5/(24(x<sup>2</sup>-1)<sup>3/2</sup>) +
+          1/(8(x<sup>2</sup>-1)<sup>&#189;)</sup>}</span>
+        </p></blockquote></div>
 <p>
         When solving for <span class="emphasis"><em>x(-&#950;)</em></span> in Eq. 7 above, the right-hand-side
         is expanded to order 2 in a Taylor series for large <span class="emphasis"><em>x</em></span>.
         This results in
       </p>
-<p>
-        &#8193; <span class="emphasis"><em>&#8532;(-&#950;)<sup>3/2</sup> &#8776; x + 1/2x - &#960;/2</em></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="serif_italic">&#8532;(-&#950;)<sup>3/2</sup> &#8776; x + 1/2x - &#960;/2</span>
+        </p></blockquote></div>
 <p>
         The positive root of the resulting quadratic equation is used to find an
         initial estimate <span class="emphasis"><em>x(-&#950;)</em></span>. This initial estimate is subsequently
@@ -716,9 +726,9 @@
         root of the Bessel function of corresponding positive integer order. In other
         words,
       </p>
-<p>
-        &#8193;  <span class="emphasis"><em>j<sub>n&#957;,m</sub></em></span> &lt; <span class="emphasis"><em>j<sub>-&#957;,m</sub></em></span> &lt; <span class="emphasis"><em>j<sub>n&#957;,m+1</sub></em></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="serif_italic">j<sub>n&#957;, m</sub> &lt; j<sub>-&#957;, m</sub> &lt; j<sub>n&#957;, m+1</sub></span>
+        </p></blockquote></div>
 <p>
         where <span class="emphasis"><em>m &gt; 1</em></span> and <span class="emphasis"><em>n<sub>&#957;</sub></em></span> represents
         the integral floor of the absolute value of <span class="emphasis"><em>|-&#957;|</em></span>.

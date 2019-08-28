@@ -142,14 +142,39 @@ and [@http://svn.boost.org/svn/boost/trunk/libs/multiprecision/doc/html/boost_mu
   In general, both work well and give the same results and at roughly the same speed with `cpp_dec_50` sometimes faster.
 
   cpp_dec_ was developed first paving the way for cpp_bin_. cpp_dec_ has several guard digits and is not rounded at all, using 'brute force' to get the promised number of decimal digits correct,
-but making it difficult to reason about precision and computational uncertainty, for example see [*https://svn.boost.org/trac10/ticket/12133].
-It also has a fast but imprecise division operator giving surprising results sometimes, see [*https://svn.boost.org/trac10/ticket/11178].
+but making it difficult to reason about precision and computational uncertainty, for example
+see [*https://svn.boost.org/trac10/ticket/12133].
+It also has a fast but imprecise division operator giving surprising results sometimes,
+see [*https://svn.boost.org/trac10/ticket/11178].
 
   cpp_bin_ is correctly/exactly rounded making it possible to reason about both the precision and rounding of the results.
 
+#['How do I see or report bugs and features, and request new functions?]
 
+  Currently open bug reports can be viewed
+  [@https://github.com/boostorg/math/issues here] on GITHUB.
 
+  All old bug reports including closed ones can be viewed on Trac (now read-only)
+  [@https://svn.boost.org/trac/boost/query?status=assigned&status=closed&status=new&status=reopened&component=math&col=id&col=summary&col=status&col=type&col=milestone&col=component&order=priority here]
+  and more recent issues on GIThub [@https://github.com/boostorg/math/issues?utf8=%E2%9C%93&q=is%3Aissue here].
 
+#[' How can I tell if my compiler will work with Boost.Math?]
+
+You should start by assuming that your compiler/platform *will* compile, even if it only supports a C++03 standard.
+
+Boost in general does *not* 'support' a particular C++ standard or compiler or platform.
+Each library has its own requirements, and for Boost.Math, each individual function or distribution
+or tool may have different requirements and may or may not work on any particular compiler.
+
+So the short answer is to try it and see what works for you.
+
+Some recent functions are written to require more recent standards, even perhaps not-yet-standardized features.
+Some clues about requirements can be gleaned from tests and examples (see jamfiles) and notes on requirements in documentation. 
+You can refer to the [@https://www.boost.org/development/tests/develop/developer/math.html Boost Test Matrix] to see the 
+current results for Boost.Math tests of many compilers on many platforms.
+But bear in mind that the testing or demonstration code may use C++11 or higher features like 
+`std::numeric_limits<>max_digits10`, `auto`, `lambdas ...` for convenience;
+these may not be needed for your application.
 
 [endsect] [/section:faq Frequently Asked Questions]
 

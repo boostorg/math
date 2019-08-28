@@ -189,6 +189,7 @@ math_toolkit/sf_poly/laguerre.html
 math_toolkit/sf_poly/hermite.html
 math_toolkit/sf_poly/chebyshev.html
 math_toolkit/sf_poly/sph_harm.html
+math_toolkit/sf_poly/cardinal_b_splines.html
 math_toolkit/bessel.html
 math_toolkit/bessel/bessel_over.html
 math_toolkit/bessel/bessel_first.html
@@ -235,6 +236,13 @@ math_toolkit/zetas/zeta.html
 math_toolkit/expint.html
 math_toolkit/expint/expint_n.html
 math_toolkit/expint/expint_i.html
+math_toolkit/hypergeometric.html
+math_toolkit/hypergeometric/hyper_geometric_1f0.html
+math_toolkit/hypergeometric/hypergeometric_0f1.html
+math_toolkit/hypergeometric/hyper_geometric_1f0_0.html
+math_toolkit/hypergeometric/hyper_geometric_1f1.html
+math_toolkit/hypergeometric/pFq.html
+math_toolkit/hypergeometric/hypergeometric_refs.html
 math_toolkit/powers.html
 math_toolkit/powers/sin_pi.html
 math_toolkit/powers/cos_pi.html
@@ -292,6 +300,7 @@ math_toolkit/whittaker_shannon.html
 math_toolkit/barycentric.html
 math_toolkit/vector_barycentric.html
 math_toolkit/catmull_rom.html
+math_toolkit/cardinal_trigonometric.html
 quadrature.html
 math_toolkit/trapezoidal.html
 math_toolkit/gauss.html
@@ -360,6 +369,7 @@ math_toolkit/internals_overview.html
 math_toolkit/internals.html
 math_toolkit/internals/series_evaluation.html
 math_toolkit/internals/cf.html
+math_toolkit/internals/recurrence.html
 math_toolkit/internals/tuples.html
 math_toolkit/internals/minimax.html
 math_toolkit/internals/error_test.html

@@ -84,7 +84,7 @@ continued fraction parts are collected together into:
 
 [equation beta8]
 
-where la, lb and lc are the integration limits used for a, b, and a+b.
+where /la/, /lb/ and /lc/ are the integration limits used for /a/, /b/, and /a+b/.
 
 There are a few special cases worth mentioning:
 
@@ -100,7 +100,7 @@ In addition:
 
 [equation beta7]
 
-[endsect][/section:beta_function The Beta Function]
+[endsect] [/section:beta_function The Beta Function]
 [/ 
   Copyright 2006 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.

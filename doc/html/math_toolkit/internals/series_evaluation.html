@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Series Evaluation</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../index.html" title="Math Toolkit 2.10.0">
 <link rel="up" href="../internals.html" title="Internal tools">
 <link rel="prev" href="../internals.html" title="Internal tools">
@@ -79,8 +79,9 @@
 <p>
         The second argument is the precision required, summation will stop when the
         next term is less than <span class="emphasis"><em>tolerance</em></span> times the result. The
-        deprecated versions of sum_series take an integer number of bits here - internally
-        they just convert this to a tolerance and forward the call.
+        deprecated versions of <code class="computeroutput"><span class="identifier">sum_series</span></code>
+        take an integer number of bits here - internally they just convert this to
+        a tolerance and forward the call.
       </p>
 <p>
         The third argument <span class="emphasis"><em>max_terms</em></span> sets an upper limit on
@@ -131,9 +132,10 @@
         Let's suppose we want to implement <span class="emphasis"><em>log(1+x)</em></span> via its
         infinite series,
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/log1pseries.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/log1pseries.svg"></span>
+
+        </p></blockquote></div>
 <p>
         We begin by writing a small function object to return successive terms of
         the series:

@@ -34,9 +34,10 @@ sequences of independent Bernoulli trials can be based.
 The Bernoulli is the binomial distribution (k = 1, p) with only one trial.
 
 [@http://en.wikipedia.org/wiki/Probability_density_function probability density function pdf]
-f(0) = 1 - p, f(1) = p.
+[expression f(0) = 1 - p, f(1) = p]
+
 [@http://en.wikipedia.org/wiki/Cumulative_Distribution_Function Cumulative distribution function]
-D(k) = if (k == 0) 1 - p else 1.
+[expression D(k) = if (k == 0) 1 - p else 1]
 
 The following graph illustrates how the
 [@http://en.wikipedia.org/wiki/Probability_density_function probability density function pdf]

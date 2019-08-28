@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>atanh</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../index.html" title="Math Toolkit 2.10.0">
 <link rel="up" href="../inv_hyper.html" title="Inverse Hyperbolic Functions">
 <link rel="prev" href="asinh.html" title="asinh">
@@ -50,27 +50,29 @@
       </p>
 <p>
         If x is in the range <code class="literal">[-1;-1+&#949;[</code>, then the result of -<a class="link" href="../error_handling.html#math_toolkit.error_handling.overflow_error">overflow_error</a>
-        is returned, with &#949; &#160;
-denoting numeric_limits&lt;T&gt;::epsilon().
+        is returned, with &#949;
+denoting <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">epsilon</span><span class="special">()</span></code>.
       </p>
 <p>
         If x is in the range <code class="literal">]+1-&#949;;+1]</code>, then the result of <a class="link" href="../error_handling.html#math_toolkit.error_handling.overflow_error">overflow_error</a>
-        is returned, with &#949; &#160;
-denoting numeric_limits&lt;T&gt;::epsilon().
+        is returned, with &#949;
+denoting <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">epsilon</span><span class="special">()</span></code>.
       </p>
 <p>
         The return type of this function is computed using the <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>result
         type calculation rules</em></span></a>: the return type is <code class="computeroutput"><span class="keyword">double</span></code> when T is an integer type, and T otherwise.
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/atanh.svg" align="middle"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/atanh.svg" align="middle"></span>
+
+        </p></blockquote></div>
 <h5>
 <a name="math_toolkit.inv_hyper.atanh.h0"></a>
         <span class="phrase"><a name="math_toolkit.inv_hyper.atanh.accuracy"></a></span><a class="link" href="atanh.html#math_toolkit.inv_hyper.atanh.accuracy">Accuracy</a>
       </h5>
 <p>
-        Generally accuracy is to within 1 or 2 epsilon across all supported platforms.
+        Generally accuracy is to within 1 or 2 <a href="http://en.wikipedia.org/wiki/Machine_epsilon" target="_top">machine
+        epsilon</a> across all supported platforms.
       </p>
 <h5>
 <a name="math_toolkit.inv_hyper.atanh.h1"></a>
@@ -81,9 +83,10 @@ denoting numeric_limits&lt;T&gt;::epsilon().
         to give full function coverage computed at high precision using the "naive"
         formula:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/atanh1.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/atanh1.svg"></span>
+
+        </p></blockquote></div>
 <p>
         along with a selection of sanity check values computed using functions.wolfram.com
         to at least 50 decimal digits.
@@ -95,22 +98,25 @@ denoting numeric_limits&lt;T&gt;::epsilon().
 <p>
         For sufficiently small x we can use the <a href="http://functions.wolfram.com/ElementaryFunctions/ArcTanh/06/01/03/01/" target="_top">approximation</a>:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/atanh2.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/atanh2.svg"></span>
+
+        </p></blockquote></div>
 <p>
         Otherwise the <a href="http://functions.wolfram.com/ElementaryFunctions/ArcTanh/02/" target="_top">primary
         definition</a>:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/atanh1.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/atanh1.svg"></span>
+
+        </p></blockquote></div>
 <p>
         or its equivalent form:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/atanh3.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/atanh3.svg"></span>
+
+        </p></blockquote></div>
 <p>
         is used.
       </p>

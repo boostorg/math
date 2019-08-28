@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Noncentral Beta Distribution</title>
 <link rel="stylesheet" href="../../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../../index.html" title="Math Toolkit 2.10.0">
 <link rel="up" href="../dists.html" title="Distributions">
 <link rel="prev" href="negative_binomial_dist.html" title="Negative Binomial Distribution">
@@ -61,34 +61,42 @@
           Distribution</a>.
         </p>
 <p>
-          It is defined as the ratio X = &#967;<sub>m</sub><sup>2</sup>(&#955;) / (&#967;<sub>m</sub><sup>2</sup>(&#955;) + &#967;<sub>n</sub><sup>2</sup>) where &#967;<sub>m</sub><sup>2</sup>(&#955;) is a noncentral
-          &#967;<sup>2</sup>
-random variable with <span class="emphasis"><em>m</em></span> degrees of freedom, and &#967;<sub>n</sub><sup>2</sup>
-is
-          a central &#967;<sup>2</sup> random variable with <span class="emphasis"><em>n</em></span> degrees of freedom.
+          It is defined as the ratio
+        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="serif_italic">X = &#967;<sub>m</sub><sup>2</sup>(&#955;) / (&#967;<sub>m</sub><sup>2</sup>(&#955;) + &#967;<sub>n</sub><sup>2</sup>)</span>
+          </p></blockquote></div>
+<p>
+          where <span class="serif_italic">&#967;<sub>m</sub><sup>2</sup>(&#955;)</span> is a noncentral <span class="serif_italic">&#967;<sup>2</sup></span> random variable with <span class="emphasis"><em>m</em></span>
+          degrees of freedom, and &#967;<sub>n</sub><sup>2</sup>
+is a central <span class="serif_italic">&#967;<sup>2</sup> </span>
+          random variable with <span class="emphasis"><em>n</em></span> degrees of freedom.
         </p>
 <p>
           This gives a PDF that can be expressed as a Poisson mixture of beta distribution
           PDFs:
         </p>
-<p>
-          <span class="inlinemediaobject"><img src="../../../../equations/nc_beta_ref1.svg"></span>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../equations/nc_beta_ref1.svg"></span>
+
+          </p></blockquote></div>
 <p>
           where P(i;&#955;/2) is the discrete Poisson probablity at <span class="emphasis"><em>i</em></span>,
           with mean &#955;/2, and I<sub>x</sub><sup>'</sup>(&#945;, &#946;) is the derivative of the incomplete beta function.
           This leads to the usual form of the CDF as:
         </p>
-<p>
-          <span class="inlinemediaobject"><img src="../../../../equations/nc_beta_ref2.svg"></span>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../equations/nc_beta_ref2.svg"></span>
+
+          </p></blockquote></div>
 <p>
           The following graph illustrates how the distribution changes for different
           values of &#955;:
         </p>
-<p>
-          <span class="inlinemediaobject"><img src="../../../../graphs/nc_beta_pdf.svg" align="middle"></span>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../graphs/nc_beta_pdf.svg" align="middle"></span>
+
+          </p></blockquote></div>
 <h5>
 <a name="math_toolkit.dist_ref.dists.nc_beta_dist.h0"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.nc_beta_dist.member_functions"></a></span><a class="link" href="nc_beta_dist.html#math_toolkit.dist_ref.dists.nc_beta_dist.member_functions">Member
@@ -390,15 +398,17 @@ is
           Distribution Function", Applied Statistics, Vol. 46, No. 1. (1997),
           pp. 146-156.
         </p>
-<p>
-          <span class="inlinemediaobject"><img src="../../../../equations/nc_beta_ref3.svg"></span>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../equations/nc_beta_ref3.svg"></span>
+
+          </p></blockquote></div>
 <p>
           Then either the CDF or its complement is computed using the relations:
         </p>
-<p>
-          <span class="inlinemediaobject"><img src="../../../../equations/nc_beta_ref4.svg"></span>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../equations/nc_beta_ref4.svg"></span>
+
+          </p></blockquote></div>
 <p>
           The summation is performed by starting at i = &#955;/2, and then recursing in
           both directions, using the usual recurrence relations for the Poisson PDF
@@ -453,9 +463,10 @@ is
           The PDF is computed using the methodology of Benton and Krishnamoorthy
           and the relation:
         </p>
-<p>
-          <span class="inlinemediaobject"><img src="../../../../equations/nc_beta_ref1.svg"></span>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../equations/nc_beta_ref1.svg"></span>
+
+          </p></blockquote></div>
 <p>
           Quantiles are computed using a specially modified version of <a class="link" href="../../roots_noderiv/bracket_solve.html" title="Bracket and Solve Root">bracket
           and solve</a>, starting the search for the root at the mean of the distribution.

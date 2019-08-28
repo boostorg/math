@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Beta</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../index.html" title="Math Toolkit 2.10.0">
 <link rel="up" href="../sf_beta.html" title="Beta Functions">
 <link rel="prev" href="../sf_beta.html" title="Beta Functions">
@@ -49,12 +49,14 @@
 <p>
         The beta function is defined by:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/beta1.svg"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/beta.svg" align="middle"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/beta1.svg"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/beta.svg" align="middle"></span>
+
+        </p></blockquote></div>
 <p>
         The final <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
         be used to control the behaviour of the function: how it handles errors,
@@ -243,9 +245,10 @@
         if we regard the gamma function as a white-box containing the <a class="link" href="../lanczos.html" title="The Lanczos Approximation">Lanczos
         approximation</a>, then we can combine the power terms:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/beta2.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/beta2.svg"></span>
+
+        </p></blockquote></div>
 <p>
         which is almost the ideal solution, however almost all of the error occurs
         in evaluating the power terms when <span class="emphasis"><em>a</em></span> or <span class="emphasis"><em>b</em></span>
@@ -253,9 +256,10 @@
         of the two power terms can be reduced by a factor of <span class="emphasis"><em>b</em></span>,
         which immediately cuts the maximum error in half:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/beta3.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/beta3.svg"></span>
+
+        </p></blockquote></div>
 <p>
         This may not be the final solution, but it is very competitive compared to
         other implementation methods.
@@ -267,11 +271,14 @@
         to avoid numerical overflow the power terms that prefix the series and continued
         fraction parts are collected together into:
       </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/beta8.svg"></span>
+
+        </p></blockquote></div>
 <p>
-        <span class="inlinemediaobject"><img src="../../../equations/beta8.svg"></span>
-      </p>
-<p>
-        where la, lb and lc are the integration limits used for a, b, and a+b.
+        where <span class="emphasis"><em>la</em></span>, <span class="emphasis"><em>lb</em></span> and <span class="emphasis"><em>lc</em></span>
+        are the integration limits used for <span class="emphasis"><em>a</em></span>, <span class="emphasis"><em>b</em></span>,
+        and <span class="emphasis"><em>a+b</em></span>.
       </p>
 <p>
         There are a few special cases worth mentioning:
@@ -280,21 +287,24 @@
         When <span class="emphasis"><em>a</em></span> or <span class="emphasis"><em>b</em></span> are less than one,
         we can use the recurrence relations:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/beta4.svg"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/beta5.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/beta4.svg"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/beta5.svg"></span>
+
+        </p></blockquote></div>
 <p>
         to move to a more favorable region where they are both greater than 1.
       </p>
 <p>
         In addition:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/beta7.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/beta7.svg"></span>
+
+        </p></blockquote></div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>

@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Incomplete Gamma Function Inverses</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../index.html" title="Math Toolkit 2.10.0">
 <link rel="up" href="../sf_gamma.html" title="Gamma Functions">
 <link rel="prev" href="igamma.html" title="Incomplete Gamma Functions">
@@ -92,14 +92,15 @@
 <p>
           When people normally talk about the inverse of the incomplete gamma function,
           they are talking about inverting on parameter <span class="emphasis"><em>x</em></span>. These
-          are implemented here as gamma_p_inv and gamma_q_inv, and are by far the
-          most efficient of the inverses presented here.
+          are implemented here as <code class="computeroutput"><span class="identifier">gamma_p_inv</span></code>
+          and <code class="computeroutput"><span class="identifier">gamma_q_inv</span></code>, and are
+          by far the most efficient of the inverses presented here.
         </p>
 <p>
           The inverse on the <span class="emphasis"><em>a</em></span> parameter finds use in some statistical
           applications but has to be computed by rather brute force numerical techniques
           and is consequently several times slower. These are implemented here as
-          gamma_p_inva and gamma_q_inva.
+          <code class="computeroutput"><span class="identifier">gamma_p_inva</span></code> and <code class="computeroutput"><span class="identifier">gamma_q_inva</span></code>.
         </p>
 </td></tr>
 </table></div>
@@ -570,8 +571,8 @@
         <span class="phrase"><a name="math_toolkit.sf_gamma.igamma_inv.implementation"></a></span><a class="link" href="igamma_inv.html#math_toolkit.sf_gamma.igamma_inv.implementation">Implementation</a>
       </h5>
 <p>
-        The functions gamma_p_inv and <a href="http://functions.wolfram.com/GammaBetaErf/InverseGammaRegularized/" target="_top">gamma_q_inv</a>
-        share a common implementation.
+        The functions <code class="computeroutput"><span class="identifier">gamma_p_inv</span></code>
+        and <a href="http://functions.wolfram.com/GammaBetaErf/InverseGammaRegularized/" target="_top"><code class="computeroutput"><span class="identifier">gamma_q_inv</span></code></a> share a common implementation.
       </p>
 <p>
         First an initial approximation is computed using the methodology described
@@ -591,16 +592,19 @@
         cases only one iteration is required.
       </p>
 <p>
-        The functions gamma_p_inva and gamma_q_inva also share a common implementation
-        but are handled separately from gamma_p_inv and gamma_q_inv.
+        The functions <code class="computeroutput"><span class="identifier">gamma_p_inva</span></code>
+        and <code class="computeroutput"><span class="identifier">gamma_q_inva</span></code> also share
+        a common implementation but are handled separately from <code class="computeroutput"><span class="identifier">gamma_p_inv</span></code>
+        and <code class="computeroutput"><span class="identifier">gamma_q_inv</span></code>.
       </p>
 <p>
         An initial approximation for <span class="emphasis"><em>a</em></span> is computed very crudely
         so that <span class="emphasis"><em>gamma_p(a, x) ~ 0.5</em></span>, this value is then used
         as a starting point for a generic derivative-free root finding algorithm.
         As a consequence, these two functions are rather more expensive to compute
-        than the gamma_p_inv or gamma_q_inv functions. Even so, the root is usually
-        found in fewer than 10 iterations.
+        than the <code class="computeroutput"><span class="identifier">gamma_p_inv</span></code> or
+        <code class="computeroutput"><span class="identifier">gamma_q_inv</span></code> functions. Even
+        so, the root is usually found in fewer than 10 iterations.
       </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

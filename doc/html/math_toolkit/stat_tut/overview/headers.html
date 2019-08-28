@@ -3,10 +3,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Headers and Namespaces</title>
 <link rel="stylesheet" href="../../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../../index.html" title="Math Toolkit 2.10.0">
-<link rel="up" href="../overview.html" title="Overview of Distributions">
-<link rel="prev" href="../overview.html" title="Overview of Distributions">
+<link rel="up" href="../overview.html" title="Overview of Statistical Distributions">
+<link rel="prev" href="../overview.html" title="Overview of Statistical Distributions">
 <link rel="next" href="objects.html" title="Distributions are Objects">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -28,16 +28,17 @@
         Namespaces</a>
 </h4></div></div></div>
 <p>
-          All the code in this library is inside namespace boost::math.
+          All the code in this library is inside <code class="computeroutput"><span class="keyword">namespace</span>
+          <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span></code>.
         </p>
 <p>
           In order to use a distribution <span class="emphasis"><em>my_distribution</em></span> you
-          will need to include either the header &lt;boost/math/my_distribution.hpp&gt;
-          or the "include all the distributions" header: &lt;boost/math/distributions.hpp&gt;.
+          will need to include either the header(s) <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">my_distribution</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>
+          (quicker compiles), or the "include all the distributions" header:
+          <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>.
         </p>
 <p>
-          For example, to use the Students-t distribution include either &lt;boost/math/students_t.hpp&gt;
-          or &lt;boost/math/distributions.hpp&gt;
+          For example, to use the Students-t distribution include either <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">students_t</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code> or <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>
         </p>
 <p>
           You also need to bring distribution names into scope, perhaps with a <code class="computeroutput"><span class="keyword">using</span> <span class="keyword">namespace</span>
@@ -54,8 +55,8 @@
 <th align="left">Caution</th>
 </tr>
 <tr><td align="left" valign="top"><p>
-            Some math function names are also used in namespace std so including
-            &lt;random&gt; could cause ambiguity!
+            Some math function names are also used in <code class="computeroutput"><span class="keyword">namespace</span>
+            <span class="identifier">std</span></code> so including <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">random</span><span class="special">&gt;</span></code> could cause ambiguity!
           </p></td></tr>
 </table></div>
 </div>

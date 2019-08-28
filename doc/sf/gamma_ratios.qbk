@@ -87,7 +87,7 @@ the reciprocal of a rising factorial, or where both arguments
 are smallish integers: in which case table lookup of factorials
 can be used to calculate the ratio.
 
-[endsect][/section:gamma_ratios Ratios of Gamma Functions]
+[endsect] [/section:gamma_ratios Ratios of Gamma Functions]
 
 [/ 
   Copyright 2006 John Maddock and Paul A. Bristow.

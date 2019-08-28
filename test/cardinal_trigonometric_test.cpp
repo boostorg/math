@@ -31,8 +31,9 @@ void test_constant()
       auto ct = cardinal_trigonometric<decltype(v)>(v, t0, h);
       CHECK_ULP_CLOSE(c, ct(0.3), 3);
       CHECK_ULP_CLOSE(c*h*n, ct.integrate(), 3);
-
       CHECK_ULP_CLOSE(c*c*h*n, ct.squared_l2(), 3);
+      CHECK_MOLLIFIED_CLOSE(Real(0), ct.prime(0.8), 25*std::numeric_limits<Real>::epsilon());
+      CHECK_MOLLIFIED_CLOSE(Real(0), ct.double_prime(0.8), 25*std::numeric_limits<Real>::epsilon());
     }
 }
 
@@ -85,6 +86,7 @@ template<class Real>
 void test_sampled_sine()
 {
     using std::sin;
+    using std::cos;
     for (unsigned n = 15; n < 50; ++n)
     {
       Real t0 = 0;
@@ -92,6 +94,8 @@ void test_sampled_sine()
       Real h = T/n;
       std::vector<Real> v(n);
       auto s = [&](Real t) { return sin(two_pi<Real>()*(t-t0)/T);};
+      auto s_prime = [&](Real t) { return two_pi<Real>()*cos(two_pi<Real>()*(t-t0)/T)/T;};
+      auto s_double_prime = [&](Real t) { return -two_pi<Real>()*two_pi<Real>()*sin(two_pi<Real>()*(t-t0)/T)/(T*T);};
       for(size_t j = 0; j < v.size(); ++j)
       {
           Real t = t0 + j*h;
@@ -103,11 +107,20 @@ void test_sampled_sine()
       std::uniform_real_distribution<Real> dist(0, 500);
 
       unsigned j = 0;
-      while (j++ < 5) {
+      while (j++ < 50) {
         Real arg = dist(gen);
         Real expected = s(arg);
         Real computed = ct(arg);
         CHECK_MOLLIFIED_CLOSE(expected, computed, std::numeric_limits<Real>::epsilon()*4000);
+
+        expected = s_prime(arg);
+        computed = ct.prime(arg);
+        CHECK_MOLLIFIED_CLOSE(expected, computed, 18000*std::numeric_limits<Real>::epsilon());
+
+        expected = s_double_prime(arg);
+        computed = ct.double_prime(arg);
+        CHECK_MOLLIFIED_CLOSE(expected, computed, 100000*std::numeric_limits<Real>::epsilon());
+
       }
       CHECK_MOLLIFIED_CLOSE(Real(0), ct.integrate(), std::numeric_limits<Real>::epsilon());
     }
@@ -119,10 +132,23 @@ void test_bump()
   using std::exp;
   using std::abs;
   using std::sqrt;
-  auto bump = [](Real x) { if (abs(x) >= 1) { return Real(0); } return exp(-Real(1)/(Real(1)-x*x)); };
+  using std::pow;
+  auto bump = [](Real x)->Real { if (abs(x) >= 1) { return Real(0); } return exp(-Real(1)/(Real(1)-x*x)); };
+  auto bump_prime = [](Real x)->Real {
+      if (abs(x) >= 1) { return Real(0); }
+
+      return -2*x*exp(-Real(1)/(Real(1)-x*x))/pow(1-x*x,2);
+  };
+
+  auto bump_double_prime = [](Real x)->Real {
+      if (abs(x) >= 1) { return Real(0); }
+
+      return (6*pow(x,4)-2)*exp(-Real(1)/(Real(1)-x*x))/pow(1-x*x,4);
+  };
+
 
   Real t0 = -1;
-  size_t n = 2048;
+  size_t n = 4096;
   Real h = Real(2)/Real(n);
 
   std::vector<Real> v(n);
@@ -145,6 +171,20 @@ void test_bump()
       if(!CHECK_MOLLIFIED_CLOSE(expected, computed, 2*std::numeric_limits<Real>::epsilon())) {
           std::cerr << "  Problem occured at abscissa " << t << "\n";
       }
+
+      expected = bump_prime(t);
+      computed = ct.prime(t);
+      if(!CHECK_MOLLIFIED_CLOSE(expected, computed, 4000*std::numeric_limits<Real>::epsilon())) {
+          std::cerr << "  Problem occured at abscissa " << t << "\n";
+      }
+
+      expected = bump_double_prime(t);
+      computed = ct.double_prime(t);
+      if(!CHECK_MOLLIFIED_CLOSE(expected, computed, 4000*4000*std::numeric_limits<Real>::epsilon())) {
+          std::cerr << "  Problem occured at abscissa " << t << "\n";
+      }
+
+
   }
 
   // Wolfram Alpha:
