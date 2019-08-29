@@ -41,9 +41,9 @@
 
 static const char sep = ','; // Separator of bracketed float and double values.
 
-// Use max_digits10 (or equivalent) to obtain 
+// Use max_digits10 (or equivalent) to obtain
 // all potentially significant decimal digits for the floating-point types.
-    
+
 #ifdef BOOST_NO_CXX11_NUMERIC_LIMITS
   std::streamsize  max_digits10_float = 2 + std::numeric_limits<float>::digits * 30103UL / 100000UL;
   std::streamsize  max_digits10_double = 2 + std::numeric_limits<double>::digits * 30103UL / 100000UL;
@@ -176,7 +176,7 @@ int main (void)
 #ifdef BOOST_NO_CXX11_NUMERIC_LIMITS
   std::cout << "BOOST_NO_CXX11_NUMERIC_LIMITS is defined, so no max_digits10 available either,"
      "using our own version instead." << std::endl;
-#endif  
+#endif
   std::cout << "std::numeric_limits<float>::max_digits10 is " << max_digits10_float << std::endl;
   std::cout << "std::numeric_limits<double>::max_digits10 is " << max_digits10_double << std::endl;
 
@@ -247,7 +247,8 @@ int main (void)
     f3.print (std::clog, "f3");
 
     std::locale the_out_locale (the_default_locale, new boost::math::nonfinite_num_put<char>);
-    std::ofstream fout ("nonfinite_archive_test.txt");
+    // Use a temporary folder .temps (which contains "boost-no-inspect" so that it will not be inspected, and made 'hidden' too).
+    std::ofstream fout ("./.temps/nonfinite_archive_test.txt");
     fout.imbue (the_out_locale);
     boost::archive::text_oarchive toar (fout, boost::archive::no_codecvt);
     // Write to archive.
@@ -261,7 +262,8 @@ int main (void)
   {
     std::clog << "Deserialize (Boost text archive)..." << std::endl;
     std::locale the_in_locale (the_default_locale, new boost::math::nonfinite_num_get<char>);
-    std::ifstream fin ("nonfinite_archive_test.txt");
+     // Use a temporary folder .temps (which contains "boost-no-inspect" so that it will not be inspected, and made 'hidden' too).
+    std::ifstream fin ("./.temps/nonfinite_archive_test.txt");
     fin.imbue (the_in_locale);
     boost::archive::text_iarchive tiar (fin, boost::archive::no_codecvt);
     foo f0, f1, f2, f3;
@@ -293,7 +295,8 @@ int main (void)
     f3.print (std::clog, "f3");
 
     std::locale the_out_locale (the_default_locale, new boost::math::nonfinite_num_put<char>);
-    std::ofstream fout ("nonfinite_XML_archive_test.txt");
+      // Use a temporary folder /.temps (which contains "boost-no-inspect" so that it will not be inspected, and made 'hidden' too).
+    std::ofstream fout ("./.temps/nonfinite_XML_archive_test.txt");
     fout.imbue (the_out_locale);
     boost::archive::xml_oarchive xoar (fout, boost::archive::no_codecvt);
 
@@ -307,7 +310,8 @@ int main (void)
   {
     std::clog << "Deserialize (Boost XML archive)..." << std::endl;
     std::locale the_in_locale (the_default_locale, new boost::math::nonfinite_num_get<char>);
-    std::ifstream fin ("nonfinite_XML_archive_test.txt");
+    // Use a temporary folder /.temps (which contains "boost-no-inspect" so that it will not be inspected, and made 'hidden' too).
+    std::ifstream fin ("./.temps/nonfinite_XML_archive_test.txt");  // Previously written above.
     fin.imbue (the_in_locale);
     boost::archive::xml_iarchive xiar (fin, boost::archive::no_codecvt);
     foo f0, f1, f2, f3;
@@ -337,16 +341,16 @@ Output:
   std::numeric_limits<float>::max_digits10 is 8
   std::numeric_limits<double>::max_digits10 is 17
   Construct some foo structures with a finite and nonfinites.
-  f0 : 
+  f0 :
   |-- fvalue = 3.141593
   `-- dvalue = 3.14159265358979
-  f1 : 
+  f1 :
   |-- fvalue = -1.#INF
   `-- dvalue = -1.#INF
-  f2 : 
+  f2 :
   |-- fvalue = 1.#INF
   `-- dvalue = 1.#INF
-  f3 : 
+  f3 :
   |-- fvalue = 1.#QNAN
   `-- dvalue = 1.#QNAN
    Write to a string buffer.
@@ -355,72 +359,72 @@ Output:
   Read foo structures from a string buffer.
   Input is: `(3.1415927,3.1415926535897931)(-inf,-inf)(inf,inf)(nan,nan)'
   Read OK.
-  f0 : 
+  f0 :
   |-- fvalue = 3.141593
   `-- dvalue = 3.14159265358979
-  f1 : 
+  f1 :
   |-- fvalue = -1.#INF
   `-- dvalue = -1.#INF
-  f2 : 
+  f2 :
   |-- fvalue = 1.#INF
   `-- dvalue = 1.#INF
-  f3 : 
+  f3 :
   |-- fvalue = 1.#QNAN
   `-- dvalue = 1.#QNAN
   Done input from istringstream.
   Serialize (using Boost text archive).
-  f0 : 
+  f0 :
   |-- fvalue = 3.141593
   `-- dvalue = 3.14159265358979
-  f1 : 
+  f1 :
   |-- fvalue = -1.#INF
   `-- dvalue = -1.#INF
-  f2 : 
+  f2 :
   |-- fvalue = 1.#INF
   `-- dvalue = 1.#INF
-  f3 : 
+  f3 :
   |-- fvalue = 1.#QNAN
   `-- dvalue = 1.#QNAN
   Done.
   Deserialize (Boost text archive)...
-  f0 : 
+  f0 :
   |-- fvalue = 3.141593
   `-- dvalue = 3.14159265358979
-  f1 : 
+  f1 :
   |-- fvalue = -1.#INF
   `-- dvalue = -1.#INF
-  f2 : 
+  f2 :
   |-- fvalue = 1.#INF
   `-- dvalue = 1.#INF
-  f3 : 
+  f3 :
   |-- fvalue = 1.#QNAN
   `-- dvalue = 1.#QNAN
   Done.
   Serialize (Boost XML archive)...
-  f0 : 
+  f0 :
   |-- fvalue = 3.141593
   `-- dvalue = 3.14159265358979
-  f1 : 
+  f1 :
   |-- fvalue = -1.#INF
   `-- dvalue = -1.#INF
-  f2 : 
+  f2 :
   |-- fvalue = 1.#INF
   `-- dvalue = 1.#INF
-  f3 : 
+  f3 :
   |-- fvalue = 1.#QNAN
   `-- dvalue = 1.#QNAN
   Done.
   Deserialize (Boost XML archive)...
-  f0 : 
+  f0 :
   |-- fvalue = 3.141593
   `-- dvalue = 3.14159265358979
-  f1 : 
+  f1 :
   |-- fvalue = -1.#INF
   `-- dvalue = -1.#INF
-  f2 : 
+  f2 :
   |-- fvalue = 1.#INF
   `-- dvalue = 1.#INF
-  f3 : 
+  f3 :
   |-- fvalue = 1.#QNAN
   `-- dvalue = 1.#QNAN
   Done.

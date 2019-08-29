@@ -246,8 +246,8 @@ T newton_raphson_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_
    boost::uintmax_t count(max_iter);
 
 #ifdef BOOST_MATH_INSTRUMENT
-	 std::cout << "Newton_raphson_iterate, guess = " << guess << ", min = " << min << ", max = " << max 
-		 << ", digits = " << digits << ", max_iter = " << max_iter << std::endl;
+   std::cout << "Newton_raphson_iterate, guess = " << guess << ", min = " << min << ", max = " << max 
+     << ", digits = " << digits << ", max_iter = " << max_iter << std::endl;
 #endif
 
    do{
@@ -321,7 +321,7 @@ T newton_raphson_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_
    {
       max_count = max_iter;
       // std::cout << "Maximum iterations: " << max_iter << std::endl;
-	    // Puzzled what this tells us, so commented out for now?
+      // Puzzled what this tells us, so commented out for now?
    }
 #endif
 
@@ -481,8 +481,8 @@ namespace detail{
       BOOST_MATH_STD_USING
 
 #ifdef BOOST_MATH_INSTRUMENT
-				std::cout << "Second order root iteration, guess = " << guess << ", min = " << min << ", max = " << max
-				<< ", digits = " << digits << ", max_iter = " << max_iter << std::endl;
+        std::cout << "Second order root iteration, guess = " << guess << ", min = " << min << ", max = " << max
+        << ", digits = " << digits << ", max_iter = " << max_iter << std::endl;
 #endif
 
       T f0(0), f1, f2;
@@ -763,7 +763,7 @@ Complex complex_newton(F g, Complex guess, int max_iterations=std::numeric_limit
        // See: https://math.stackexchange.com/questions/3017766/constructing-newton-iteration-converging-to-non-root
        // If f' is continuous, then convergence of x_n -> x* implies f(x*) = 0.
        // This condition approximates this convergence condition by requiring three consecutive iterates to be clustered.
-       Real tol = max(abs(z2)*std::numeric_limits<Real>::epsilon(), std::numeric_limits<Real>::epsilon());
+       Real tol = (max)(abs(z2)*std::numeric_limits<Real>::epsilon(), std::numeric_limits<Real>::epsilon());
        bool real_close = abs(z0.real() - z1.real()) < tol && abs(z0.real() - z2.real()) < tol && abs(z1.real() - z2.real()) < tol;
        bool imag_close = abs(z0.imag() - z1.imag()) < tol && abs(z0.imag() - z2.imag()) < tol && abs(z1.imag() - z2.imag()) < tol;
        if (real_close && imag_close)

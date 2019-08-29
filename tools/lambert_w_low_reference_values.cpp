@@ -7,7 +7,7 @@
 
 // Write a C++ file J:\Cpp\Misc\lambert_w_1000_test_values\lambert_w_mp_values.ipp
 // containing arrays of z arguments and 100 decimal digit precision lambert_w0(z) reference values.
-// These can be used in tests of precision of less-precise types like 
+// These can be used in tests of precision of less-precise types like
 // built-in float, double, long double and quad and cpp_dec_float_50.
 
 // Multiprecision types:
@@ -15,7 +15,7 @@
 #include <boost/multiprecision/cpp_dec_float.hpp> // boost::multiprecision::cpp_dec_float_100
 using  boost::multiprecision::cpp_dec_float_100;
 
-#include <boost/math/special_functions/lambert_w.hpp> // 
+#include <boost/math/special_functions/lambert_w.hpp> //
 using boost::math::lambert_w0;
 
 #include <iostream>
@@ -88,11 +88,11 @@ void init_ws()
 
 // Global so accessible from output_value.
 // Creates if no file exists, & uses default overwrite/ ios::replace.
-const char filename[] = "lambert_w_low_reference values.ipp"; // 
-std::ofstream fout(filename, std::ios::out); ; // 
+const char filename[] = "lambert_w_low_reference values.ipp"; //
+std::ofstream fout(filename, std::ios::out); ; //
 
 // 100 decimal digits for the value fed to macro BOOST_MATH_TEST_VALUE
-typedef cpp_dec_float_100 RealType;  
+typedef cpp_dec_float_100 RealType;
 
 void output_value(size_t index, RealType value)
 {
@@ -115,7 +115,7 @@ void output_lambert_w0(size_t index, RealType value)
 }
 
 int main()
-{	// Make C++ file containing Lambert W test values.
+{  // Make C++ file containing Lambert W test values.
   std::cout << filename << " ";
 #ifdef __TIMESTAMP__
   std::cout << __TIMESTAMP__;
@@ -124,7 +124,7 @@ int main()
   std::cout << "Lambert W0 decimal digit precision values." << std::endl;
 
   // Note __FILE__ & __TIMESTAMP__ are ANSI standard C & thus Std C++?
- 
+
   if (!fout.is_open())
   {  // File failed to open OK.
     std::cerr << "Open file " << filename << " failed!" << std::endl;
@@ -133,7 +133,7 @@ int main()
   }
 
   int output_precision = std::numeric_limits<cpp_dec_float_100>::digits10;
-  // cpp_dec_float_100 is ample precision and 
+  // cpp_dec_float_100 is ample precision and
   // has several extra bits internally so max_digits10 are not needed.
   fout.precision(output_precision);
 
@@ -150,7 +150,7 @@ int main()
     "// Written by " << __FILE__ << " " << __TIMESTAMP__ << "\n"
 
     "\n"
-    "// Copyright Paul A. Bristow 2017." 	"\n"
+    "// Copyright Paul A. Bristow 2017."   "\n"
     "// Distributed under the Boost Software License, Version 1.0." "\n"
     "// (See accompanying file LICENSE_1_0.txt" "\n"
     "// or copy at http://www.boost.org/LICENSE_1_0.txt)" "\n"
@@ -158,7 +158,7 @@ int main()
 
   fout << "// Size of arrays of arguments z and Lambert W" << std::endl;
   fout << "static const unsigned int noof_tests = " << no_of_tests << ";" << std::endl;
-  
+
   // Declare arrays of z and Lambert W.
 
   fout << "// Declare arrays of arguments z and Lambert W(z)" << std::endl;
@@ -185,7 +185,7 @@ int main()
   size_t step_count = no_of_tests;
 
   // Output to initialize array of arguments z for Lambert W.
-  fout << 
+  fout <<
     "\n"
     << "template <typename RealType>\n"
     "void init_zs()\n"
@@ -198,7 +198,7 @@ int main()
     z += step_size;
   }
   fout << "};" << std::endl;
-  
+
   // Output array of Lambert W values.
   fout <<
     "\n"
@@ -213,7 +213,7 @@ int main()
     z += step_size;
   }
   fout << "};" << std::endl;
-    
+
   fout << "// End of lambert_w_mp_values.ipp " << std::endl;
   fout.close();
 

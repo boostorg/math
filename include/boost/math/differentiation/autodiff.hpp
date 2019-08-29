@@ -1819,7 +1819,7 @@ fvar<RealType, Order> digamma(fvar<RealType, Order> const& cr) {
   if BOOST_AUTODIFF_IF_CONSTEXPR (order == 0)
     return fvar<RealType, Order>(d0);
   else {
-    static_assert(order <= static_cast<size_t>(std::numeric_limits<int>::max()),
+    static_assert(order <= static_cast<size_t>((std::numeric_limits<int>::max)()),
                   "order exceeds maximum derivative for boost::math::polygamma().");
     return cr.apply_derivatives(
         order, [&x, &d0](size_t i) { return i ? boost::math::polygamma(static_cast<int>(i), x) : d0; });
@@ -1904,7 +1904,7 @@ fvar<RealType, Order> lgamma(fvar<RealType, Order> const& cr) {
   if BOOST_AUTODIFF_IF_CONSTEXPR (order == 0)
     return fvar<RealType, Order>(d0);
   else {
-    static_assert(order <= static_cast<size_t>(std::numeric_limits<int>::max()) + 1,
+    static_assert(order <= static_cast<size_t>((std::numeric_limits<int>::max)()) + 1,
                   "order exceeds maximum derivative for boost::math::polygamma().");
     return cr.apply_derivatives(
         order, [&x, &d0](size_t i) { return i ? boost::math::polygamma(static_cast<int>(i - 1), x) : d0; });

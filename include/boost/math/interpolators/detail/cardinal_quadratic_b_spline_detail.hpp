@@ -145,8 +145,8 @@ public:
             const char* err_msg = "Tried to evaluate the cardinal quadratic b-spline outside the domain of of interpolation; extrapolation does not work.";
             throw std::domain_error(err_msg);
         }
-        // Let k, γ be defined via t = t0 + kh + γh.
-        // Now find all j: |k-j+1+γ|< 3/2, or, in other words
+        // Let k, gamma be defined via t = t0 + kh + gamma * h.
+        // Now find all j: |k-j+1+gamma|< 3/2, or, in other words
         // j_min = ceil((t-t0)/h - 1/2)
         // j_max = floor(t-t0)/h + 5/2)
         using std::floor;
@@ -171,8 +171,8 @@ public:
             const char* err_msg = "Tried to evaluate the cardinal quadratic b-spline outside the domain of of interpolation; extrapolation does not work.";
             throw std::domain_error(err_msg);
         }
-        // Let k, γ be defined via t = t0 + kh + γh.
-        // Now find all j: |k-j+1+γ|< 3/2, or, in other words
+        // Let k, gamma be defined via t = t0 + kh + gamma * h.
+        // Now find all j: |k-j+1+gamma|< 3/2, or, in other words
         // j_min = ceil((t-t0)/h - 1/2)
         // j_max = floor(t-t0)/h + 5/2)
         using std::floor;

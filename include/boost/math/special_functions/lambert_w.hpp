@@ -1231,10 +1231,10 @@ inline T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<1>&)
   static const char* function = "boost::math::lambert_w0<%1%>"; // For error messages.
   BOOST_MATH_STD_USING // Aid ADL of std functions.
 
-	if ((boost::math::isnan)(z))
-	{
-	  return boost::math::policies::raise_domain_error<T>(function, "Expected a value > -e^-1 (-0.367879...) but got %1%.", z, pol);
-	}
+  if ((boost::math::isnan)(z))
+  {
+    return boost::math::policies::raise_domain_error<T>(function, "Expected a value > -e^-1 (-0.367879...) but got %1%.", z, pol);
+  }
   if ((boost::math::isinf)(z))
   {
     return boost::math::policies::raise_overflow_error<T>(function, "Expected a finite value but got %1%.", z, pol);
@@ -1633,7 +1633,7 @@ inline T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<2>&)
    // Detect unusual case of 32-bit double with a wider/64-bit long double
    BOOST_STATIC_ASSERT_MSG(std::numeric_limits<double>::digits >= 53,
    "Our double precision coefficients will be truncated, "
-	 "please file a bug report with details of your platform's floating point types "
+   "please file a bug report with details of your platform's floating point types "
    "- or possibly edit the coefficients to have "
    "an appropriate size-suffix for 64-bit floats on your platform - L?");
 

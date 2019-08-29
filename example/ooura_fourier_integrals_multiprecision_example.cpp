@@ -24,47 +24,47 @@
 
 int main()
 {
-	try
-	{
-		typedef boost::multiprecision::cpp_bin_float_quad Real;
+  try
+  {
+    typedef boost::multiprecision::cpp_bin_float_quad Real;
 
-		std::cout.precision(std::numeric_limits<Real>::max_digits10); // Show all potentially significant digits.
+    std::cout.precision(std::numeric_limits<Real>::max_digits10); // Show all potentially significant digits.
 
-		using boost::math::quadrature::ooura_fourier_cos;
-		using boost::math::constants::half_pi;
-		using boost::math::constants::e;
+    using boost::math::quadrature::ooura_fourier_cos;
+    using boost::math::constants::half_pi;
+    using boost::math::constants::e;
 
-	 //[ooura_fourier_integrals_multiprecision_example_1
+   //[ooura_fourier_integrals_multiprecision_example_1
 
-		// Use the default parameters for tolerance root_epsilon and eight levels for a type of 8 bytes.
-		//auto integrator = ooura_fourier_cos<Real>();
-		// Decide on a (tight) tolerance.
-		const Real tol = 2 * std::numeric_limits<Real>::epsilon();
-		auto integrator = ooura_fourier_cos<Real>(tol, 8); // Loops or gets worse for more than 8.
+    // Use the default parameters for tolerance root_epsilon and eight levels for a type of 8 bytes.
+    //auto integrator = ooura_fourier_cos<Real>();
+    // Decide on a (tight) tolerance.
+    const Real tol = 2 * std::numeric_limits<Real>::epsilon();
+    auto integrator = ooura_fourier_cos<Real>(tol, 8); // Loops or gets worse for more than 8.
 
-		auto f = [](Real x)
-		{ // More complex example function.
-			return 1 / (x * x + 1);
-		};
+    auto f = [](Real x)
+    { // More complex example function.
+      return 1 / (x * x + 1);
+    };
 
-		double omega = 1;
-		auto [result, relative_error] = integrator.integrate(f, omega);
+    double omega = 1;
+    auto [result, relative_error] = integrator.integrate(f, omega);
 
-		//] [/ooura_fourier_integrals_multiprecision_example_1]
+    //] [/ooura_fourier_integrals_multiprecision_example_1]
 
-		//[ooura_fourier_integrals_multiprecision_example_2
-		std::cout << "Integral = " << result << ", relative error estimate " << relative_error << std::endl;
+    //[ooura_fourier_integrals_multiprecision_example_2
+    std::cout << "Integral = " << result << ", relative error estimate " << relative_error << std::endl;
 
-		const Real expected = half_pi<Real>() / e<Real>(); // Expect integral = 1/(2e)
-		std::cout << "pi/(2e)  = " << expected << ", difference " << result - expected << std::endl;
-		//] [/ooura_fourier_integrals_multiprecision_example_2]
-	}
-	catch (std::exception const & ex)
-	{
-		// Lacking try&catch blocks, the program will abort after any throw, whereas the
-		// message below from the thrown exception will give some helpful clues as to the cause of the problem.
-		std::cout << "\n""Message from thrown exception was:\n   " << ex.what() << std::endl;
-	}
+    const Real expected = half_pi<Real>() / e<Real>(); // Expect integral = 1/(2e)
+    std::cout << "pi/(2e)  = " << expected << ", difference " << result - expected << std::endl;
+    //] [/ooura_fourier_integrals_multiprecision_example_2]
+  }
+  catch (std::exception const & ex)
+  {
+    // Lacking try&catch blocks, the program will abort after any throw, whereas the
+    // message below from the thrown exception will give some helpful clues as to the cause of the problem.
+    std::cout << "\n""Message from thrown exception was:\n   " << ex.what() << std::endl;
+  }
 } // int main()
 
 /*

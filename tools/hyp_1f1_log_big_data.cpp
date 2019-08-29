@@ -37,7 +37,7 @@ struct hypergeometric_1f1_gen
       {
          throw std::domain_error("");
       }
-      if (fabs(result) > std::numeric_limits<double>::max())
+      if (fabs(result) > (std::numeric_limits<double>::max)())
       {
          std::cout << "Rejecting over large value\n";
          throw std::domain_error("");
@@ -125,7 +125,7 @@ int main(int, char* [])
    std::ofstream ofs(line.c_str());
    ofs << std::scientific << std::setprecision(40);
    write_code(ofs, data, line.c_str());
-   
+
    return 0;
 }
 

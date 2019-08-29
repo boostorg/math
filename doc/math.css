@@ -16,6 +16,8 @@ ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
     Visual Studio is recommended for editing this file 
     because it checks syntax, does layout and provides help on options.
+    
+    boost-no-inspect
 
 /*=============================================================================
 Program listings
@@ -34,22 +36,15 @@ Program listings
         padding: 0.5pc 0.5pc 0.5pc 0.5pc;
     }
 
-.programlisting,
-.screen {
-    font-size: 10pt;
-    display: block;
-    /* was margin: 1pc 4% 0pc 4%; 
-            but that led to overflow on some code lines, so reduced and lined up with blockquote indent (see below). */
-    margin: 1pc 2% 0pc 2%;
-    /* https://www.w3schools.com/Css/css_margin.asp  margin-top margin-right margin-bottom margin-left. 
-        * auto - the browser calculates the margin
-        * length - specifies a margin in px, pt, cm, etc.
-        * % - specifies a margin in % of the width of the containing element
-        * inherit - specifies that the margin should be inherited from the parent element
-
-    */
-    padding: 0.5pc 0.5pc 0.5pc 0.5pc;
-}
+    .programlisting,
+    .screen
+    {
+        font-size: 10pt;
+        display: block;
+        /* was margin: 1pc 4% 0pc 4%; */
+        margin: 1pc 2% 0pc 2%;
+        padding: 0.5pc 0.5pc 0.5pc 0.5pc;
+    }
 		@media screen
     {
        /* Syntax Highlighting */
@@ -146,7 +141,6 @@ span.gray { color: #808080; } /* light gray */
     and a little bigger (* 125%) because the serif font appears smaller than the default sans serif fonts.
     Used, for example: [role serif_italic This is in serif font and italic].
     Used in turn by template for inline expressions to match equations as SVG or PNG images.
-
 */
 span.serif_italic {
     font-family: serif;
@@ -155,7 +149,7 @@ span.serif_italic {
     font-stretch: expanded;
 }
 
-/* Custom indent of paragraphs to make equations look nicer, 2% to match that indent of code block above.
+/* Custom indent of paragraphs to make equations look nicer.
 https://www.w3schools.com/tags/tag_blockquote.asp says 
   "Most browsers will display the <blockquote> element with left and right margin 40px values: "
 */

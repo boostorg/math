@@ -23,7 +23,7 @@ namespace boost {
 
             //
             // Function ratios directly from recurrence relations:
-            // H. SHINTAN, Note on Miller’s recurrence algorithm, J. Sci. Hiroshima Univ. Ser. A-I
+            // H. Shintan, Note on Miller's recurrence algorithm, J. Sci. Hiroshima Univ. Ser. A-I
             // Math., 29 (1965), pp. 121 - 133.
             // and:
             // COMPUTATIONAL ASPECTS OF THREE-TERM RECURRENCE RELATIONS

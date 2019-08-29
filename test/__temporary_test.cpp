@@ -1,4 +1,8 @@
-//
+//  Copyright John Maddock 2018
+//  Distributed under the Boost Software License, Version 1.0. (See
+//  accompanying file LICENSE_1_0.txt or copy at
+//  http://www.boost.org/LICENSE_1_0.txt)
+
 // This test file exists to output diagnostic info for tests failing in the online matrix
 // for perplexing reasons, it's contents are subject to constant change!!
 //

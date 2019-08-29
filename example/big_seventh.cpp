@@ -1,4 +1,3 @@
-
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
@@ -52,16 +51,16 @@ int main()
 /*`Using `typedef cpp_dec_float_50` hides the complexity of multiprecision,
 allows us  to define variables with 50 decimal digit precision just like built-in `double`.
 */
-	using boost::multiprecision::cpp_dec_float_50;
+  using boost::multiprecision::cpp_dec_float_50;
 
-	cpp_dec_float_50 seventh = cpp_dec_float_50(1) / 7;  // 1 / 7
+  cpp_dec_float_50 seventh = cpp_dec_float_50(1) / 7;  // 1 / 7
 
 /*`By default, output would only show the standard 6 decimal digits,
  so set precision to show all 50 significant digits, including any trailing zeros.
 */
-	std::cout.precision(std::numeric_limits<cpp_dec_float_50>::digits10);
-	std::cout << std::showpoint << std::endl; // Append any trailing zeros.
-	std::cout << seventh << std::endl;
+  std::cout.precision(std::numeric_limits<cpp_dec_float_50>::digits10);
+  std::cout << std::showpoint << std::endl; // Append any trailing zeros.
+  std::cout << seventh << std::endl;
 /*`which outputs:
 
   0.14285714285714285714285714285714285714285714285714

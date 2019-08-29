@@ -12,7 +12,8 @@
 #include <boost/math/tools/recurrence.hpp>
 #include <boost/math/special_functions/bessel.hpp>
 #include <boost/test/included/unit_test.hpp>
-#include <boost/test/tools/floating_point_comparison.hpp>
+#include <boost/test/floating_point_comparison.hpp>
+//#include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/concepts/real_concept.hpp>
 
 #ifdef BOOST_MSVC

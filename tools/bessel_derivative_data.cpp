@@ -114,7 +114,7 @@ int cpp_main(int argc, char*argv [])
          letter = "y";
       }
       else
-         assert(0);
+         BOOST_ASSERT(0);
    }
 
    bool cont;
@@ -142,7 +142,7 @@ int cpp_main(int argc, char*argv [])
       else if(functype == func_y)
          fp = sph_bessel_y_derivative_bare;
       else
-         assert(0);
+         BOOST_ASSERT(0);
 
       data.insert(fp, arg2, arg1);
 

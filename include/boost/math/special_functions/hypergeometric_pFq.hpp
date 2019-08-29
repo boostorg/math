@@ -111,13 +111,13 @@ namespace boost {
 
          for (auto ai = aj.begin(); ai != aj.end(); ++ai)
          {
-            current_precision = std::max(current_precision, ai->precision());
+            current_precision = (std::max)(current_precision, ai->precision());
          }
          for (auto bi = bj.begin(); bi != bj.end(); ++bi)
          {
-            current_precision = std::max(current_precision, bi->precision());
+            current_precision = (std::max)(current_precision, bi->precision());
          }
-         current_precision = std::max(current_precision, z.precision());
+         current_precision = (std::max)(current_precision, z.precision());
 
          Real r, norm;
          std::vector<Real> aa(aj), bb(bj);

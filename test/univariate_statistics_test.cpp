@@ -57,7 +57,7 @@ std::vector<T> generate_random_vector(size_t size, size_t seed)
     else if constexpr (std::is_integral<T>::value)
     {
         // Rescaling by larger than 2 is UB!
-        std::uniform_int_distribution<T> dis(std::numeric_limits<T>::lowest()/2, std::numeric_limits<T>::max()/2);
+        std::uniform_int_distribution<T> dis(std::numeric_limits<T>::lowest()/2, (std::numeric_limits<T>::max)()/2);
         for (size_t i = 0; i < v.size(); ++i)
         {
          v[i] = dis(gen);

@@ -56,7 +56,7 @@ int main()
     double inf = numeric_limits<double>::infinity();
     oss << inf; // Write out.
     cout << "infinity output was " << oss.str() << endl;
-    assert(oss.str() == "inf");
+    BOOST_ASSERT(oss.str() == "inf");
   }
   {
     istringstream iss;
@@ -65,7 +65,7 @@ int main()
     double inf;
     iss >> inf; // Read from "inf"
     cout << "Infinity input was " << iss.str() << endl;
-    assert(inf == numeric_limits<double>::infinity());
+    BOOST_ASSERT(inf == numeric_limits<double>::infinity());
   }
 
   {
@@ -74,10 +74,10 @@ int main()
     ss.imbue(new_locale);
     double inf = numeric_limits<double>::infinity();
     ss << inf; // Write out.
-    assert(ss.str() == "inf");
+    BOOST_ASSERT(ss.str() == "inf");
     double r;
     ss >> r; // Read back in.
-    assert(inf == r); // Confirms that the double values really are identical.
+    BOOST_ASSERT(inf == r); // Confirms that the double values really are identical.
 
     cout << "infinity output was " << ss.str() << endl;
     cout << "infinity input was " << r << endl;
@@ -96,7 +96,7 @@ int main()
 
     double nan = numeric_limits<double>::quiet_NaN();
     ss << nan; // Write out.
-    assert(ss.str() == "nan");
+    BOOST_ASSERT(ss.str() == "nan");
 
     double v;
     ss >> v; // Read back in.
