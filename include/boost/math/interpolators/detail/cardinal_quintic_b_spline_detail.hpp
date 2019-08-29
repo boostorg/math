@@ -28,6 +28,7 @@ public:
                                      std::pair<Real, Real> left_endpoint_derivatives,
                                      std::pair<Real, Real> right_endpoint_derivatives)
     {
+        static_assert(!std::is_integral<Real>::value, "The quintic B-spline interpolator only works with floating point types.");
         if (h <= 0) {
             throw std::logic_error("Spacing must be > 0.");
         }
