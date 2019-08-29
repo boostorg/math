@@ -50,7 +50,7 @@ void test_spots(T, const char* name)
    std::cout << "Running tests for type " << name << std::endl;
    T tol = boost::math::tools::epsilon<T>() * 5;
    if ((std::numeric_limits<T>::digits > 53) || (std::numeric_limits<T>::digits == 0))
-      tol *= 3;
+      tol *= 5;
    //
    // Test forward recurrence on Y_v(x):
    //

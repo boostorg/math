@@ -115,7 +115,7 @@ test-suite examples :
    [ run policy_ref_snip10.cpp  ]
    [ run policy_ref_snip11.cpp  ]
    [ run policy_ref_snip12.cpp  ]
-   [ run policy_ref_snip13.cpp : : : <exception-handling>off:<build>no  ]
+   [ run policy_ref_snip13.cpp : : : <exception-handling>off:<build>no  ]  # Fails clang-win - thrown exception from no Cauchy mean.
    [ run policy_ref_snip2.cpp  ]
    [ run policy_ref_snip3.cpp : : : <exception-handling>off:<build>no  ]
    [ run policy_ref_snip4.cpp  ]
