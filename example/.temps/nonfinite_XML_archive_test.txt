@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<!DOCTYPE boost_serialization>
+<boost_serialization signature="serialization::archive" version="17">
+<f0 class_id="0" tracking_level="0" version="0">
+	<fvalue>3.141592741e+00</fvalue>
+	<dvalue>3.14159265358979312e+00</dvalue>
+</f0>
+<f1>
+	<fvalue>-inf</fvalue>
+	<dvalue>-inf</dvalue>
+</f1>
+<f2>
+	<fvalue>inf</fvalue>
+	<dvalue>inf</dvalue>
+</f2>
+<f3>
+	<fvalue>nan</fvalue>
+	<dvalue>nan</dvalue>
+</f3>
+</boost_serialization>
+
