@@ -19,31 +19,28 @@
 // - s(x_j) = f(x_j)
 // - All cubic polynomials interpolated exactly
 
-#ifndef BOOST_MATH_INTERPOLATORS_CUBIC_B_SPLINE_HPP
-#define BOOST_MATH_INTERPOLATORS_CUBIC_B_SPLINE_HPP
+#ifndef BOOST_MATH_INTERPOLATORS_CARDINAL_CUBIC_B_SPLINE_HPP
+#define BOOST_MATH_INTERPOLATORS_CARINDAL_CUBIC_B_SPLINE_HPP
 
-#include <boost/math/interpolators/detail/cubic_b_spline_detail.hpp>
-#include <boost/config/header_deprecated.hpp>
+#include <boost/math/interpolators/detail/cardinal_cubic_b_spline_detail.hpp>
 
-BOOST_HEADER_DEPRECATED("<boost/math/interpolators/cardinal_cubic_b_spline.hpp>");
-
-namespace boost{ namespace math{
+namespace boost{ namespace math{ namespace interpolators {
 
 template <class Real>
-class cubic_b_spline
+class cardinal_cubic_b_spline
 {
 public:
     // If you don't know the value of the derivative at the endpoints, leave them as nans and the routine will estimate them.
     // f[0] = f(a), f[length -1] = b, step_size = (b - a)/(length -1).
     template <class BidiIterator>
-    cubic_b_spline(const BidiIterator f, BidiIterator end_p, Real left_endpoint, Real step_size,
+    cardinal_cubic_b_spline(const BidiIterator f, BidiIterator end_p, Real left_endpoint, Real step_size,
                    Real left_endpoint_derivative = std::numeric_limits<Real>::quiet_NaN(),
                    Real right_endpoint_derivative = std::numeric_limits<Real>::quiet_NaN());
-    cubic_b_spline(const Real* const f, size_t length, Real left_endpoint, Real step_size,
+    cardinal_cubic_b_spline(const Real* const f, size_t length, Real left_endpoint, Real step_size,
        Real left_endpoint_derivative = std::numeric_limits<Real>::quiet_NaN(),
        Real right_endpoint_derivative = std::numeric_limits<Real>::quiet_NaN());
 
-    cubic_b_spline() = default;
+    cardinal_cubic_b_spline() = default;
     Real operator()(Real x) const;
 
     Real prime(Real x) const;
@@ -51,40 +48,40 @@ public:
     Real double_prime(Real x) const;
 
 private:
-    std::shared_ptr<detail::cubic_b_spline_imp<Real>> m_imp;
+    std::shared_ptr<detail::cardinal_cubic_b_spline_imp<Real>> m_imp;
 };
 
 template<class Real>
-cubic_b_spline<Real>::cubic_b_spline(const Real* const f, size_t length, Real left_endpoint, Real step_size,
-                                     Real left_endpoint_derivative, Real right_endpoint_derivative) : m_imp(std::make_shared<detail::cubic_b_spline_imp<Real>>(f, f + length, left_endpoint, step_size, left_endpoint_derivative, right_endpoint_derivative))
+cardinal_cubic_b_spline<Real>::cardinal_cubic_b_spline(const Real* const f, size_t length, Real left_endpoint, Real step_size,
+                                     Real left_endpoint_derivative, Real right_endpoint_derivative) : m_imp(std::make_shared<detail::cardinal_cubic_b_spline_imp<Real>>(f, f + length, left_endpoint, step_size, left_endpoint_derivative, right_endpoint_derivative))
 {
 }
 
 template <class Real>
 template <class BidiIterator>
-cubic_b_spline<Real>::cubic_b_spline(BidiIterator f, BidiIterator end_p, Real left_endpoint, Real step_size,
-   Real left_endpoint_derivative, Real right_endpoint_derivative) : m_imp(std::make_shared<detail::cubic_b_spline_imp<Real>>(f, end_p, left_endpoint, step_size, left_endpoint_derivative, right_endpoint_derivative))
+cardinal_cubic_b_spline<Real>::cardinal_cubic_b_spline(BidiIterator f, BidiIterator end_p, Real left_endpoint, Real step_size,
+   Real left_endpoint_derivative, Real right_endpoint_derivative) : m_imp(std::make_shared<detail::cardinal_cubic_b_spline_imp<Real>>(f, end_p, left_endpoint, step_size, left_endpoint_derivative, right_endpoint_derivative))
 {
 }
 
 template<class Real>
-Real cubic_b_spline<Real>::operator()(Real x) const
+Real cardinal_cubic_b_spline<Real>::operator()(Real x) const
 {
     return m_imp->operator()(x);
 }
 
 template<class Real>
-Real cubic_b_spline<Real>::prime(Real x) const
+Real cardinal_cubic_b_spline<Real>::prime(Real x) const
 {
     return m_imp->prime(x);
 }
 
 template<class Real>
-Real cubic_b_spline<Real>::double_prime(Real x) const
+Real cardinal_cubic_b_spline<Real>::double_prime(Real x) const
 {
     return m_imp->double_prime(x);
 }
 
 
-}}
+}}}
 #endif
