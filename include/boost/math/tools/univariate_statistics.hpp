@@ -8,6 +8,11 @@
 
 #include <algorithm>
 #include <iterator>
+#if __has_include(<execution>)
+#include <execution>
+#include <thread>
+#include <future>
+#endif
 #include <boost/type_traits/is_complex.hpp>
 #include <boost/assert.hpp>
 #include <boost/multiprecision/detail/number_base.hpp>
@@ -82,6 +87,69 @@ inline auto mean(Container const & v)
 {
     return mean(v.cbegin(), v.cend());
 }
+
+template<class RandomAccessIterator, typename Projection>
+inline auto mean(RandomAccessIterator first, RandomAccessIterator last, Projection projection)
+{
+    auto it = first;
+    auto mu = std::invoke(projection, it);
+    decltype(mu) i = 2;
+    while(++it != last)
+    {
+        mu += (std::invoke(projection, it) - mu)/i;
+        i += 1;
+    }
+    return mu;
+}
+
+template<class RandomAccessContainer, typename Projection>
+inline auto mean(RandomAccessContainer const & v, Projection projection)
+{
+    return mean(v.begin(), v.end(), projection);
+}
+
+
+#if __has_include(<execution>)
+template<class ExecutionPolicy, class RandomAccessIterator>
+inline auto mean(ExecutionPolicy&& exec_pol, RandomAccessIterator first, RandomAccessIterator last) {
+    using Real = typename std::iterator_traits<RandomAccessIterator>::value_type;
+    //static_assert(std::is_execution_policy_v<ExecutionPolicy>, "First argument must be an execution policy.");
+    if (exec_pol == std::execution::par) {
+        size_t elems = std::distance(first, last);
+        if (elems*sizeof(Real) < /*guestimate*/ 4096) {
+            return mean(first, last);
+        }
+
+        unsigned threads = std::thread::hardware_concurrency();
+        if (threads == 0) {
+            threads = 2;
+        }
+        std::vector<std::future<Real>> futures;
+        size_t elems_per_thread = elems/threads;
+        auto it = first;
+        for (unsigned i = 0; i < threads -1; ++i) {
+
+            futures.push_back(std::async(std::launch::async, &mean<RandomAccessIterator>, it, it + elems_per_thread));
+            it += elems_per_thread;
+        }
+        futures.push_back(std::async(std::launch::async, &mean<RandomAccessIterator>, it, last));
+
+        Real mu = 0;
+        for (auto fut : futures) {
+            mu += fut.get();
+        }
+        mu /= threads;
+        return mu;
+    }
+}
+
+/*template<class ExecutionPolicy, class RandomAccessContainer>
+inline auto mean(ExecutionPolicy exec_pol, RandomAccessContainer const & v) {
+    return mean(exec_pol, v.begin(), v.end());
+}*/
+
+#endif
+
 
 template<class ForwardIterator>
 auto variance(ForwardIterator first, ForwardIterator last)
@@ -269,6 +337,8 @@ template<class ForwardIterator>
 auto kurtosis(ForwardIterator first, ForwardIterator last)
 {
     auto [M1, M2, M3, M4] = first_four_moments(first, last);
+    std::ignore = M1;
+    std::ignore = M3;
     if (M2 == 0)
     {
         return M2;
