@@ -111,12 +111,16 @@ inline auto mean(RandomAccessContainer const & v, Projection projection)
 
 #if __has_include(<execution>)
 template<class ExecutionPolicy, class RandomAccessIterator>
-inline auto mean(ExecutionPolicy&& exec_pol, RandomAccessIterator first, RandomAccessIterator last) {
+inline auto mean(ExecutionPolicy, RandomAccessIterator first, RandomAccessIterator last, typename std::enable_if_t<std::is_execution_policy_v<ExecutionPolicy>>* = 0) {
     using Real = typename std::iterator_traits<RandomAccessIterator>::value_type;
-    //static_assert(std::is_execution_policy_v<ExecutionPolicy>, "First argument must be an execution policy.");
-    if (exec_pol == std::execution::par) {
+    static_assert(std::is_same_v<ExecutionPolicy, std::execution::parallel_unsequenced_policy> ||
+                  std::is_same_v<ExecutionPolicy, std::execution::sequenced_policy>,
+                  "Only two policies are supported: std::execution::par_unseq and std::execution::seq.");
+
+    if constexpr (std::is_same_v<ExecutionPolicy,
+                  std::execution::parallel_unsequenced_policy>) {
         size_t elems = std::distance(first, last);
-        if (elems*sizeof(Real) < /*guestimate*/ 4096) {
+        if (elems*sizeof(Real) < /*guestimate*/ 1048576) {
             return mean(first, last);
         }
 
@@ -126,28 +130,43 @@ inline auto mean(ExecutionPolicy&& exec_pol, RandomAccessIterator first, RandomA
         }
         std::vector<std::future<Real>> futures;
         size_t elems_per_thread = elems/threads;
-        auto it = first;
-        for (unsigned i = 0; i < threads -1; ++i) {
 
-            futures.push_back(std::async(std::launch::async, &mean<RandomAccessIterator>, it, it + elems_per_thread));
-            it += elems_per_thread;
+        /*std::cout << "elements = " << elems << "\n";
+        std::cout << "threads = " << threads << "\n";
+        std::cout << "elements per thread = " << elems_per_thread << "\n";*/
+        auto it1 = first;
+        auto f = [](RandomAccessIterator it1, RandomAccessIterator it2) {
+            return std::distance(it1, it2)*mean<RandomAccessIterator>(it1, it2);
+        };
+        for (unsigned i = 0; i < threads - 1; ++i) {
+            auto it2 = it1 + elems_per_thread;
+            //std::cout << "Elements for thread " << i << "= " << std::distance(it1, it2) << "\n";
+            auto task = std::async(std::launch::async, f, it1, it2);
+            futures.push_back(std::move(task));
+            it1 = it2;
         }
-        futures.push_back(std::async(std::launch::async, &mean<RandomAccessIterator>, it, last));
+        //std::cout << "Elements for last thread = " << std::distance(it1, last) << "\n";
+        auto task = std::async(std::launch::async, f, it1, last);
+        futures.push_back(std::move(task));
 
         Real mu = 0;
-        for (auto fut : futures) {
+        for (auto && fut : futures) {
             mu += fut.get();
         }
-        mu /= threads;
+        mu /= std::distance(first, last);
         return mu;
+    }
+    else if constexpr (std::is_same_v<ExecutionPolicy,
+                       std::execution::sequenced_policy>)
+    {
+        return mean(first, last);
     }
 }
 
-/*template<class ExecutionPolicy, class RandomAccessContainer>
-inline auto mean(ExecutionPolicy exec_pol, RandomAccessContainer const & v) {
+template<class ExecutionPolicy, class RandomAccessContainer>
+inline auto mean(ExecutionPolicy exec_pol, RandomAccessContainer const & v, typename std::enable_if_t<std::is_execution_policy_v<ExecutionPolicy>>* = 0) {
     return mean(exec_pol, v.begin(), v.end());
-}*/
-
+}
 #endif
 
 

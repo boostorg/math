@@ -249,8 +249,11 @@ void test_parallel_mean()
         v[i] = Real(i);
     }
 
-    Real m = boost::math::tools::mean(std::execution::par, v.begin(), v.end());
-    CHECK_MOLLIFIED_CLOSE(m, (v.size()-1)/Real(2), tol);
+    Real m = boost::math::tools::mean(std::execution::par_unseq, v.begin(), v.end());
+    Real expected = (v.size()-1)/Real(2);
+    CHECK_MOLLIFIED_CLOSE(expected, m, tol);
+    m = boost::math::tools::mean(std::execution::seq, v.begin(), v.end());
+    CHECK_MOLLIFIED_CLOSE(expected, m, tol);
 }
 
 template<class Real>
@@ -767,16 +770,16 @@ void test_integer_gini_coefficient()
 
 int main()
 {
-    test_mean<float>();
+    /*test_mean<float>();
     test_mean<double>();
     test_mean<long double>();
-    test_mean<cpp_bin_float_50>();
+    test_mean<cpp_bin_float_50>();*/
 
     test_mean_projection<double>();
 
     test_parallel_mean<double>();
 
-    test_integer_mean<unsigned>();
+    /*test_integer_mean<unsigned>();
     test_integer_mean<int>();
 
     test_complex_mean<std::complex<float>>();
@@ -835,7 +838,7 @@ int main()
     test_sample_gini_coefficient<float>();
     test_sample_gini_coefficient<double>();
     test_sample_gini_coefficient<long double>();
-    test_sample_gini_coefficient<cpp_bin_float_50>();
+    test_sample_gini_coefficient<cpp_bin_float_50>();*/
 
     return boost::math::test::report_errors();
 }
