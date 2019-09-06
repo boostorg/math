@@ -800,8 +800,8 @@ namespace detail
     inline T discriminant(T const & a, T const & b, T const & c)
     {
         T w = 4*a*c;
-        T e = std::fma(-c, 4*a, w);
-        T f = std::fma(b, b, -w);
+        T e = fma(-c, 4*a, w);
+        T f = fma(b, b, -w);
         return f + e;
     }
 }
@@ -809,7 +809,6 @@ namespace detail
 template<class T>
 auto quadratic_roots(T const& a, T const& b, T const& c)
 {
-    using std::copysign;
     using std::sqrt;
     if constexpr (std::is_integral<T>::value)
     {
