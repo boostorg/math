@@ -9,8 +9,7 @@
 #ifdef _MSC_VER
 #pragma once
 #endif
-#include <boost/multiprecision/detail/number_base.hpp> // test for multiprecision types.
-#include <boost/type_traits/is_complex.hpp> // test for complex types
+#include <boost/math/tools/complex.hpp> // test for multiprecision types.
 
 #include <iostream>
 #include <utility>
@@ -890,7 +889,7 @@ auto quadratic_roots(T const& a, T const& b, T const& c)
         }
         return std::pair<T, T>(x1, x0);
     }
-    else if constexpr (boost::is_complex<T>::value || boost::multiprecision::number_category<T>::value == boost::multiprecision::number_kind_complex)
+    else if constexpr (boost::math::tools::is_complex_type<T>::value)
     {
         typename T::value_type nan = std::numeric_limits<typename T::value_type>::quiet_NaN();
         if(a.real()==0 && a.imag() ==0)
