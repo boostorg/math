@@ -192,6 +192,7 @@ void test_spots(RealType)
    BOOST_CHECK_CLOSE_FRACTION(sqrt(e<RealType>()), root_e<RealType>(), tolerance);
    BOOST_CHECK_CLOSE_FRACTION(log10(e<RealType>()), log10_e<RealType>(), tolerance);
    BOOST_CHECK_CLOSE_FRACTION(1/log10(e<RealType>()), one_div_log10_e<RealType>(), tolerance);
+   BOOST_CHECK_CLOSE_FRACTION((1/ln_two<RealType>()), log2_e<RealType>(), tolerance);
 
    // Trigonmetric
    BOOST_CHECK_CLOSE_FRACTION(pi<RealType>()/180, degree<RealType>(), tolerance);
@@ -690,6 +691,7 @@ void test_real_concept_policy(const Policy&)
    BOOST_CHECK_CLOSE_FRACTION(sqrt(e<real_concept, Policy>()), (root_e<real_concept, Policy>)(), tolerance);
    BOOST_CHECK_CLOSE_FRACTION(log10(e<real_concept, Policy>()), (log10_e<real_concept, Policy>)(), tolerance);
    BOOST_CHECK_CLOSE_FRACTION(1/log10(e<real_concept, Policy>()), (one_div_log10_e<real_concept, Policy>)(), tolerance);
+   BOOST_CHECK_CLOSE_FRACTION((1/ln_two<real_concept, Policy>()), (log2_e<real_concept, Policy>)(), tolerance);
 
    // Trigonmetric
    BOOST_CHECK_CLOSE_FRACTION((pi<real_concept, Policy>)()/180, (degree<real_concept, Policy>)(), tolerance);
