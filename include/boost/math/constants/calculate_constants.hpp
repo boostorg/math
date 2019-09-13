@@ -985,6 +985,27 @@ inline T constant_log2_e<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(mpl:
    return 1 / boost::math::constants::ln_two<T>();
 }
 
+template <class T>
+template<int N>
+inline T constant_quarter_pi<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(mpl::int_<N>))
+{
+   return boost::math::constants::pi<T>() / 4;
+}
+
+template <class T>
+template<int N>
+inline T constant_one_div_pi<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(mpl::int_<N>))
+{
+   return 1 / boost::math::constants::pi<T>();
+}
+
+template <class T>
+template<int N>
+inline T constant_two_div_root_pi<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(mpl::int_<N>))
+{
+   return 2 * boost::math::constants::one_div_root_pi<T>();
+}
+
 }
 }
 }
