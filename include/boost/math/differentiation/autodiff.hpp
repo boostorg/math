@@ -11,7 +11,6 @@
 #include <boost/math/special_functions.hpp>
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/promotion.hpp>
-#include <boost/multiprecision/rational_adaptor.hpp>
 
 #include <algorithm>
 #include <array>
@@ -1518,7 +1517,6 @@ fvar<RealType, Order> log(fvar<RealType, Order> const& cr) {
 
 template <typename RealType, size_t Order>
 fvar<RealType, Order> frexp(fvar<RealType, Order> const& cr, int* exp) {
-  using multiprecision::exp2;
   using std::exp2;
   using std::frexp;
   using root_type = typename fvar<RealType, Order>::root_type;
@@ -1529,7 +1527,6 @@ fvar<RealType, Order> frexp(fvar<RealType, Order> const& cr, int* exp) {
 template <typename RealType, size_t Order>
 fvar<RealType, Order> ldexp(fvar<RealType, Order> const& cr, int exp) {
   // argument to std::exp2 must be casted to root_type, otherwise std::exp2 returns double (always)
-  using multiprecision::exp2;
   using std::exp2;
   return cr * exp2(static_cast<typename fvar<RealType, Order>::root_type>(exp));
 }
