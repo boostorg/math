@@ -458,12 +458,12 @@ void test_complex_newton()
     Complex root = complex_newton(f, guess);
 
     BOOST_CHECK(abs(root.real()) <= tol);
-    BOOST_CHECK_CLOSE(root.imag(), 1, tol);
+    BOOST_CHECK_CLOSE(root.imag(), (Real)1, tol);
 
     guess = -guess;
     root = complex_newton(f, guess);
     BOOST_CHECK(abs(root.real()) <= tol);
-    BOOST_CHECK_CLOSE(root.imag(), -1, tol);
+    BOOST_CHECK_CLOSE(root.imag(), (Real)-1, tol);
 
     // Test that double roots are handled correctly-as correctly as possible.
     // Convergence at a double root is not quadratic.
@@ -474,7 +474,7 @@ void test_complex_newton()
     auto g = [&](Complex z) { return std::make_pair<Complex, Complex>(p(z), p_prime(z)); };
     root = complex_newton(g, guess);
     BOOST_CHECK(abs(root.real()) < 10*sqrt(tol));
-    BOOST_CHECK_CLOSE(root.imag(), 1, tol);
+    BOOST_CHECK_CLOSE(root.imag(), (Real)1, tol);
 
     // Test that zero derivatives are handled.
     // p(z) = z^2 + iz + 1
@@ -569,7 +569,7 @@ void test_solve_real_quadratic()
     {
         // Kahan's example: This is the test that demonstrates the necessity of the fma instruction.
         // https://en.wikipedia.org/wiki/Loss_of_significance#Instability_of_the_quadratic_equation
-        p = quadratic_roots<Real>(94906265.625, -189812534, 94906268.375);
+        p = quadratic_roots<Real>((Real)94906265.625, (Real )-189812534, (Real)94906268.375);
         BOOST_CHECK_CLOSE_FRACTION(p.first, Real(1), tol);
         BOOST_CHECK_CLOSE_FRACTION(p.second, 1.000000028975958, 4*tol);
     }
@@ -617,6 +617,22 @@ void test_solve_complex_quadratic()
 
 }
 
+void test_failures()
+{
+#if !defined(BOOST_NO_CXX11_LAMBDAS)
+   // There is no root:
+   BOOST_CHECK_THROW(boost::math::tools::newton_raphson_iterate([](double x) { return std::make_pair(x * x + 1, 2 * x); }, 10.0, -12.0, 12.0, 52), boost::math::evaluation_error);
+   BOOST_CHECK_THROW(boost::math::tools::newton_raphson_iterate([](double x) { return std::make_pair(x * x + 1, 2 * x); }, -10.0, -12.0, 12.0, 52), boost::math::evaluation_error);
+   // There is a root, but a bad guess takes us into a local minima:
+   BOOST_CHECK_THROW(boost::math::tools::newton_raphson_iterate([](double x) { return std::make_pair(boost::math::pow<6>(x) - 2 * boost::math::pow<4>(x) + x + 0.5, 6 * boost::math::pow<5>(x) - 8 * boost::math::pow<3>(x) + 1); }, 0.75, -20., 20., 52), boost::math::evaluation_error);
+
+   // There is no root:
+   BOOST_CHECK_THROW(boost::math::tools::halley_iterate([](double x) { return std::make_tuple(x * x + 1, 2 * x, 2); }, 10.0, -12.0, 12.0, 52), boost::math::evaluation_error);
+   BOOST_CHECK_THROW(boost::math::tools::halley_iterate([](double x) { return std::make_tuple(x * x + 1, 2 * x, 2); }, -10.0, -12.0, 12.0, 52), boost::math::evaluation_error);
+   // There is a root, but a bad guess takes us into a local minima:
+   BOOST_CHECK_THROW(boost::math::tools::halley_iterate([](double x) { return std::make_tuple(boost::math::pow<6>(x) - 2 * boost::math::pow<4>(x) + x + 0.5, 6 * boost::math::pow<5>(x) - 8 * boost::math::pow<3>(x) + 1, 30 * boost::math::pow<4>(x) - 24 * boost::math::pow<2>(x)); }, 0.75, -20., 20., 52), boost::math::evaluation_error);
+#endif
+}
 
 #endif
 
@@ -641,5 +657,5 @@ BOOST_AUTO_TEST_CASE( test_main )
     test_solve_int_quadratic<int>();
     test_solve_complex_quadratic<std::complex<double>>();
 #endif
-
+    test_failures();
 }
