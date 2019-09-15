@@ -545,12 +545,12 @@ void test_solve_real_quadratic()
     BOOST_CHECK_CLOSE(x0, Real(-1), tol);
     BOOST_CHECK_CLOSE(x1, Real(1), tol);
 
-    auto p = quadratic_roots<Real>(7, 0, 0);
+    auto p = quadratic_roots((Real)7, (Real)0, (Real)0);
     BOOST_CHECK_SMALL(p.first, tol);
     BOOST_CHECK_SMALL(p.second, tol);
 
     // (x-7)^2 = x^2 - 14*x + 49:
-    p = quadratic_roots<Real>(1, -14, 49);
+    p = quadratic_roots((Real)1, (Real)-14, (Real)49);
     BOOST_CHECK_CLOSE(p.first, Real(7), tol);
     BOOST_CHECK_CLOSE(p.second, Real(7), tol);
 
@@ -560,7 +560,9 @@ void test_solve_real_quadratic()
     {
         // (x-1)(x-1-eps) = x^2 + (-eps - 2)x + (1)(1+eps)
         Real eps = 2*std::numeric_limits<Real>::epsilon();
-        p = quadratic_roots<Real>(256, 256*(-2 - eps), 256*(1 + eps));
+        Real b = 256 * (-2 - eps);
+        Real c = 256 * (1 + eps);
+        p = quadratic_roots((Real)256, b, c);
         BOOST_CHECK_CLOSE(p.first, Real(1), tol);
         BOOST_CHECK_CLOSE(p.second, Real(1) + eps, tol);
     }
