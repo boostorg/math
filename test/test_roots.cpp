@@ -619,6 +619,8 @@ void test_solve_complex_quadratic()
 
 }
 
+#endif
+
 void test_failures()
 {
 #if !defined(BOOST_NO_CXX11_LAMBDAS)
@@ -635,8 +637,6 @@ void test_failures()
    BOOST_CHECK_THROW(boost::math::tools::halley_iterate([](double x) { return std::make_tuple(boost::math::pow<6>(x) - 2 * boost::math::pow<4>(x) + x + 0.5, 6 * boost::math::pow<5>(x) - 8 * boost::math::pow<3>(x) + 1, 30 * boost::math::pow<4>(x) - 24 * boost::math::pow<2>(x)); }, 0.75, -20., 20., 52), boost::math::evaluation_error);
 #endif
 }
-
-#endif
 
 BOOST_AUTO_TEST_CASE( test_main )
 {
