@@ -82,6 +82,8 @@ initial guess is a long way from the correct value and the derivatives are close
 derivatives, and fall back to __bisect in this case.  However, it is helpful
 if functor F is defined to return an arbitrarily small value ['of the correct sign] rather
 than zero.
+* The functions will raise an __evaluation_error if arguments `min` and `max` are the wrong way around
+or if they converge to a local minima.
 * If the derivative at the current best guess for the result is infinite (or
 very close to being infinite) then these functions may terminate prematurely.
 A large first derivative leads to a very small next step, triggering the termination
