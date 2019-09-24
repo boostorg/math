@@ -15,7 +15,6 @@ class empirical_cumulative_distribution_function {
 public:
     empirical_cumulative_distribution_function(RandomAccessContainer && v)
     {
-        static_assert(!std::is_integral_v<Real>, "Integer data not implemented.");
         m_v = std::move(v);
         if (!std::is_sorted(m_v.begin(), m_v.end())) {
             std::sort(m_v.begin(), m_v.end());
@@ -23,6 +22,17 @@ public:
     }
 
     auto operator()(Real x) const {
+       if constexpr (std::is_integral_v<Real>) {
+         if (x < m_v[0]) {
+           return double(0);
+         }
+         if (x >= m_v[m_v.size()-1]) {
+           return double(1);
+         }
+         auto it = std::upper_bound(m_v.begin(), m_v.end(), x);
+         return static_cast<double>(std::distance(m_v.begin(), it))/static_cast<double>(m_v.size());
+       }
+       else {
        if (x < m_v[0]) {
          return Real(0);
        }
@@ -31,7 +41,9 @@ public:
        }
        auto it = std::upper_bound(m_v.begin(), m_v.end(), x);
        return static_cast<Real>(std::distance(m_v.begin(), it))/static_cast<Real>(m_v.size());
+      }
     }
+
 
 
 private:
