@@ -2,7 +2,7 @@
 <svg xmlns='http://www.w3.org/2000/svg' width='1100' height='679'>
 <style>svg { background-color: black; }
 </style>
-<text x='550' y='20' font-family='Palatino' font-size='25' fill='white'  alignment-baseline='middle' text-anchor='middle'>Empirical (blue) and theoretical CDF (orange) of an dice roll distribution on n = 128 samples</text>
+<text x='550' y='20' font-family='Palatino' font-size='25' fill='white'  alignment-baseline='middle' text-anchor='middle'>Empirical (blue) and theoretical CDF (orange) of the dice roll distribution on n = 128 samples</text>
 <g transform='translate(25, 40)'>
 <line x1='0' y1='0' x2='0' y2='619' stroke='gray' stroke-width='1' />
 <line x1='0' y1='619' x2='1055' y2='619' stroke='gray' stroke-width='1' />

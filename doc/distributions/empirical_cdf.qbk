@@ -1,0 +1,71 @@
+[/
+Copyright (c) 2019 Nick Thompson
+Use, modification and distribution are subject to the
+Boost Software License, Version 1.0. (See accompanying file
+LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+]
+
+[section:empirical_cdf Empirical Cumulative Distribution Function]
+
+[heading Synopsis]
+
+```
+#include <boost/math/distributions/empirical_cumulative_distribution_function.hpp>
+
+namespace boost{ namespace math{
+
+template <class RandomAccessContainer>
+class empirical_cumulative_distribution_function
+{
+public:
+    using Real = typename RandomAccessContainer::value_type;
+    empirical_cumulative_distribution_function(RandomAccessContainer && v);
+
+    auto operator()(Real t) const;
+};
+
+}}
+```
+
+[heading Empirical Cumulative Distribution Function]
+
+The empirical cumulative distribution function is a step function constructed from observed data which converges to the true cumulative distribution function in the limit of infinite data.
+This function is a basic building block of hypothesis testing workflows that attempt to answer the question "does my data come from a given distribution?"
+These tests require computing quadratures over some function of the empirical CDF and the supposed CDF to create a distance measurement, and hence it is occasionally useful to construct a continuous callable from the data.
+
+An example usage is demonstrated below:
+
+```
+#include <vector>
+#include <random>
+#include <boost/math/distributions/empirical_cumulative_distribution_function.hpp>
+using boost::math::empirical_cumulative_distribution_function;
+std::random_device rd;
+std::mt19937 gen{rd()};
+std::normal_distribution<double> dis(0, 1);
+size_t n = 128;
+std::vector<double> v(n);
+for (size_t i = 0; i < n; ++i) {
+  v[i] = dis(gen);
+}
+
+auto ecdf = empirical_cumulative_distribution_function(std::move(v));
+std::cout << "ecdf(0.0) = " << ecdf(0.0) << "\n";
+// should print approximately 0.5 . . .
+```
+
+The empirical distribution function operates on sorted data.
+If the data are not already sorted, the constructor sorts it for you at O(Nlog(N)) cost.
+
+Call operator complexity is O(log(N)).
+
+Works with both integer and floating point types.
+If the input data consists of integers, the output of the call operator is a double. Requires C++17.
+
+[$../graphs/empiricial_cumulative_distribution_gauss.svg]
+
+[$../graphs/empiricial_cumulative_distribution_uniform.svg]
+
+
+[endsect]
+[/section:empirical_cdf]

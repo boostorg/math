@@ -6,6 +6,7 @@
 #ifndef BOOST_MATH_DISTRIBUTIONS_EMPIRICAL_CUMULATIVE_DISTRIBUTION_FUNCTION_HPP
 #define BOOST_MATH_DISTRIBUTIONS_EMPIRICAL_CUMULATIVE_DISTRIBUTION_FUNCTION_HPP
 #include <algorithm>
+#include <iterator>
 
 namespace boost { namespace math{
 
@@ -22,7 +23,8 @@ public:
     }
 
     auto operator()(Real x) const {
-       if constexpr (std::is_integral_v<Real>) {
+       if constexpr (std::is_integral_v<Real>)
+       {
          if (x < m_v[0]) {
            return double(0);
          }
@@ -32,15 +34,16 @@ public:
          auto it = std::upper_bound(m_v.begin(), m_v.end(), x);
          return static_cast<double>(std::distance(m_v.begin(), it))/static_cast<double>(m_v.size());
        }
-       else {
-       if (x < m_v[0]) {
-         return Real(0);
-       }
-       if (x >= m_v[m_v.size()-1]) {
-         return Real(1);
-       }
-       auto it = std::upper_bound(m_v.begin(), m_v.end(), x);
-       return static_cast<Real>(std::distance(m_v.begin(), it))/static_cast<Real>(m_v.size());
+       else
+       {
+         if (x < m_v[0]) {
+           return Real(0);
+         }
+         if (x >= m_v[m_v.size()-1]) {
+           return Real(1);
+         }
+         auto it = std::upper_bound(m_v.begin(), m_v.end(), x);
+         return static_cast<Real>(std::distance(m_v.begin(), it))/static_cast<Real>(m_v.size());
       }
     }
 
