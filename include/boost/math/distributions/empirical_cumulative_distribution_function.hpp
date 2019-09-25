@@ -7,6 +7,7 @@
 #define BOOST_MATH_DISTRIBUTIONS_EMPIRICAL_CUMULATIVE_DISTRIBUTION_FUNCTION_HPP
 #include <algorithm>
 #include <iterator>
+#include <stdexcept>
 
 namespace boost { namespace math{
 
@@ -14,10 +15,13 @@ template<class RandomAccessContainer>
 class empirical_cumulative_distribution_function {
     using Real = typename RandomAccessContainer::value_type;
 public:
-    empirical_cumulative_distribution_function(RandomAccessContainer && v)
+    empirical_cumulative_distribution_function(RandomAccessContainer && v, bool sorted = false)
     {
+        if (v.size() == 0) {
+            throw std::domain_error("At least one sample is required to compute an empirical CDF.");
+        }
         m_v = std::move(v);
-        if (!std::is_sorted(m_v.begin(), m_v.end())) {
+        if (!sorted) {
             std::sort(m_v.begin(), m_v.end());
         }
     }
@@ -47,7 +51,9 @@ public:
       }
     }
 
-
+    RandomAccessContainer&& return_data() {
+        return std::move(m_v);
+    }
 
 private:
     RandomAccessContainer m_v;
