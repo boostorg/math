@@ -127,6 +127,12 @@ void test_spots(RealType)
     BOOST_MATH_CHECK_THROW(quantile(complement(N01, +std::numeric_limits<RealType>::quiet_NaN())), std::domain_error); // p = + infinity
   }
 
+  BOOST_CHECK_EQUAL(mean(N01), 0);
+  BOOST_CHECK_EQUAL(mode(N01), 0);
+  BOOST_CHECK_EQUAL(variance(N01), 1);
+  BOOST_CHECK_EQUAL(skewness(N01), 0);
+  BOOST_CHECK_EQUAL(kurtosis_excess(N01), 0);
+
    cout << "Tolerance for type " << typeid(RealType).name()  << " is " << tolerance << " %" << endl;
 
    // Tests where shape = 0, so same as normal tests.
