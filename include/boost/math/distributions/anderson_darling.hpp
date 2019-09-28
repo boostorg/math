@@ -1,27 +1,29 @@
+/*
+ * Copyright Nick Thompson, 2019
+ * Use, modification and distribution are subject to the
+ * Boost Software License, Version 1.0. (See accompanying file
+ * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+ */
+
 #ifndef BOOST_MATH_DISTRIBUTIONS_ANDERSON_DARLING_HPP
 #define BOOST_MATH_DISTRIBUTIONS_ANDERSON_DARLING_HPP
 
 #include <cmath>
 #include <algorithm>
-#include <boost/math/distributions/normal.hpp>
 #include <boost/math/tools/univariate_statistics.hpp>
-#include <boost/math/quadrature/exp_sinh.hpp>
-#include <boost/math/quadrature/gauss_kronrod.hpp>
 #include <boost/math/special_functions/erf.hpp>
 
 namespace boost { namespace math {
 
 template<class RandomAccessContainer>
-auto anderson_darling_normality_test(RandomAccessContainer const & v,
-                                     typename RandomAccessContainer::value_type mu = std::numeric_limits<typename RandomAccessContainer::value_type>::quiet_NaN(),
-                                     typename RandomAccessContainer::value_type sd = std::numeric_limits<typename RandomAccessContainer::value_type>::quiet_NaN())
+auto anderson_darling_normality_statistic(RandomAccessContainer const & v,
+                                          typename RandomAccessContainer::value_type mu = std::numeric_limits<typename RandomAccessContainer::value_type>::quiet_NaN(),
+                                          typename RandomAccessContainer::value_type sd = std::numeric_limits<typename RandomAccessContainer::value_type>::quiet_NaN())
 {
     using Real = typename RandomAccessContainer::value_type;
     using std::log;
-    using std::pow;
     using std::sqrt;
     using boost::math::erfc;
-    using boost::math::erf;
 
     if (std::isnan(mu)) {
         mu = boost::math::tools::mean(v);
@@ -42,8 +44,11 @@ auto anderson_darling_normality_test(RandomAccessContainer const & v,
     Real inv_var_scale = 1/(sd*sqrt(Real(2)));
     Real s0 = (v[0] - mu)*inv_var_scale;
     Real erfcs0 = erfc(s0);
+    // Here's the actual value of the tail integral:
     //Real left_tail = -1 + erfcs0/2 + log(Real(2)) - log(erfcs0);
-
+    // But we're going to add erfcs0/2 at the first integral, so drop it here:
+    //Real left_tail = -1 + log(Real(2)) - log(erfcs0);
+    Real left_tail = -1 + log(Real(2));
     // For the right tail, the ecdf is identically 1.
     // Hence we need the integral:
     // \int_{v_{n-1}}^{\infty} \frac{(1-F(x))F'(x)}{F(x)} \, \mathrm{d}x
@@ -51,12 +56,15 @@ auto anderson_darling_normality_test(RandomAccessContainer const & v,
     // Integrate[(E^(-(z^2/2)) *(1 - 1/2 (1 + Erf[z/Sqrt[2]])))/(Sqrt[2 \[Pi]] (1/2 (1 + Erf[z/Sqrt[2]]))),
     // {z, zn, \[Infinity]}, Assumptions -> {zn \[Element] Reals && mu \[Element] Reals}]
 
+    typedef boost::math::policies::policy<
+          boost::math::policies::promote_float<false>,
+          boost::math::policies::promote_double<false> >
+          no_promote_policy;
     Real sf = (v[v.size()-1] - mu)*inv_var_scale;
-    Real erfcsf = erfc(sf);
-    Real right_tail = -erfcsf/2 + log(Real(2)) - log(2-erfcsf);
-
-    //Real erfsf = erf(sf);
-    //Real right_tail = (-1 + erfsf + 2*log(2/(1+erfsf)))/2;
+    Real erfcsf = erfc<Real>(sf, no_promote_policy());
+    // This is the actual value of the tail integral. However, the -erfcsf/2 cancels from previous integral:
+    //Real right_tail = -erfcsf/2 + log(Real(2)) - log(2-erfcsf);
+    Real right_tail = log(Real(2)) - log(2-erfcsf);
 
     // Now we need each integral:
     // \int_{v_i}^{v_{i+1}} \frac{(i+1/n - F(x))^2F'(x)}{F(x)(1-F(x))}  \, \mathrm{d}x
@@ -67,64 +75,20 @@ auto anderson_darling_normality_test(RandomAccessContainer const & v,
     Real integrals = 0;
     int64_t N = v.size();
     for (int64_t i = 0; i < N - 1; ++i) {
-        Real k = (i+1)/Real(N);
-        Real s1 = (v[i+1]-mu)*inv_var_scale;
-        Real erfcs1 = erfc(s1);
-
-        Real term = -erfcs0/2 + erfcs1/2 + log(erfcs0) - log(erfcs1) + k*(k*log(erfcs0*(-2 + erfcs1)/(erfcs1*(-2 + erfcs0))) + 2*log(erfcs1/erfcs0));
         if (v[i] > v[i+1]) {
             throw std::domain_error("Input data must be sorted in increasing order v[0] <= v[1] <= . . .  <= v[n-1]");
         }
+        Real k = (i+1)/Real(N);
+        Real s1 = (v[i+1]-mu)*inv_var_scale;
+        Real erfcs1 = erfc<Real>(s1, no_promote_policy());
+
+        // Is there more optimization potential in this expression? I don't know!
+        Real term = k*(k*log(erfcs0*(-2 + erfcs1)/(erfcs1*(-2 + erfcs0))) + 2*log(erfcs1/erfcs0));
         integrals += term;
         s0 = s1;
         erfcs0 = erfcs1;
     }
-
-    return v.size()*(left_tail + right_tail + integrals);
-}
-
-template<class RandomAccessContainer>
-auto anderson_darling_normality_step(RandomAccessContainer const & v, typename RandomAccessContainer::value_type mu = 0, typename RandomAccessContainer::value_type sd = 1)
-{
-    using Real = typename RandomAccessContainer::value_type;
-    using std::log;
-    using std::pow;
-
-    auto normal = boost::math::normal_distribution(mu, sd);
-
-    auto left_integrand = [&normal](Real x)->Real {
-        Real Fx = boost::math::cdf(normal, x);
-        Real dmu = boost::math::pdf(normal, x);
-        return Fx*dmu/(1-Fx);
-    };
-    auto es = boost::math::quadrature::exp_sinh<Real>();
-    Real left_tail = es.integrate(left_integrand, -std::numeric_limits<Real>::infinity(), v[0]);
-
-    auto right_integrand = [&normal](Real x)->Real {
-        Real Fx = boost::math::cdf(normal, x);
-        Real dmu = boost::math::pdf(normal, x);
-        return (1-Fx)*dmu/Fx;
-    };
-    Real right_tail = es.integrate(right_integrand, v[v.size()-1], std::numeric_limits<Real>::infinity());
-
-
-    auto integrator = boost::math::quadrature::gauss<Real, 7>();
-    Real integrals = 0;
-    int64_t N = v.size();
-    for (int64_t i = 0; i < N - 1; ++i) {
-        auto integrand = [&normal, &i, &N](Real x)->Real {
-            Real Fx = boost::math::cdf(normal, x);
-            Real dmu = boost::math::pdf(normal, x);
-            Real Fn = (i+1)/Real(N);
-            return (Fn - Fx)*(Fn-Fx)*dmu/(Fx*(1-Fx));
-        };
-        auto term = integrator.integrate(integrand, v[i], v[i+1]);
-        if (v[i] > v[i+1]) {
-            throw std::domain_error("Input data must be sorted in increasing order v[0] <= v[1] <= . . .  <= v[n-1]");
-        }
-        integrals += term;
-    }
-
+    integrals -= log(erfcs0);
     return v.size()*(left_tail + right_tail + integrals);
 }
 
