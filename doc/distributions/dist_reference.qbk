@@ -37,6 +37,7 @@
 [include triangular.qbk]
 [include uniform.qbk]
 [include weibull.qbk]
+[include empirical_cdf.qbk]
 
 [endsect] [/section:dists Distributions]
 
@@ -138,10 +139,3 @@ opportunity to integrate the statistical tests with this framework at some later
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
 ]
-
-
-
-
-
-
-
