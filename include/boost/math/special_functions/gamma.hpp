@@ -961,7 +961,12 @@ T regularised_gamma_prefix(T a, T z, const Policy& pol, const lanczos::undefined
 {
    BOOST_MATH_STD_USING
 
-   if(a > minimum_argument_for_bernoulli_recursion<T>())
+   if((a < 1) && (z < 1))
+   {
+      // No overflow possible since the power terms tend to unity as a,z -> 0
+      return pow(z, a) * exp(-z) / boost::math::tgamma(a, pol);
+   }
+   else if(a > minimum_argument_for_bernoulli_recursion<T>())
    {
       T scaled_gamma = scaled_tgamma_no_lanczos(a);
       T power_term = pow(z / a, a / 2);
