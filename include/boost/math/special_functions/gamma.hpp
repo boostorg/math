@@ -372,13 +372,71 @@ std::size_t highest_bernoulli_index()
 }
 
 template<class T>
-T minimum_argument_for_bernoulli_recursion()
+int minimum_argument_for_bernoulli_recursion()
 {
    const float digits10_of_type = (std::numeric_limits<T>::is_specialized
                                       ? static_cast<float>(std::numeric_limits<T>::digits10)
                                       : static_cast<float>(boost::math::tools::digits<T>() * 0.301F));
 
-   return T(digits10_of_type * 1.7F);
+   const float limit = std::ceil(std::pow(1.0f / std::ldexp(1.0f, 1-boost::math::tools::digits<T>()), 1.0f / 20.0f));
+
+   return (int)((std::min)(digits10_of_type * 1.7F, limit));
+}
+
+template <class T, class Policy>
+T scaled_tgamma_no_lanczos(const T& z, const Policy& pol, bool islog = false)
+{
+   BOOST_MATH_STD_USING
+   //
+   // Calculates tgamma(z) / (z/e)^z
+   // Requires that our argument is large enough for Sterling's approximation to hold.
+   // Used internally when combining gamma's of similar magnitude without logarithms.
+   //
+   BOOST_ASSERT(minimum_argument_for_bernoulli_recursion<T>() <= z);
+
+   // Perform the Bernoulli series expansion of Stirling's approximation.
+
+   const std::size_t number_of_bernoullis_b2n = policies::get_max_series_iterations<Policy>();
+
+   T one_over_x_pow_two_n_minus_one = 1 / z;
+   const T one_over_x2 = one_over_x_pow_two_n_minus_one * one_over_x_pow_two_n_minus_one;
+   T sum = (boost::math::bernoulli_b2n<T>(1) / 2) * one_over_x_pow_two_n_minus_one;
+   const T target_epsilon_to_break_loop = sum * boost::math::tools::epsilon<T>();
+   const T half_ln_two_pi_over_z = sqrt(boost::math::constants::two_pi<T>() / z);
+   T last_term = 2 * sum;
+
+   for (std::size_t n = 2U;; ++n)
+   {
+      one_over_x_pow_two_n_minus_one *= one_over_x2;
+
+      const std::size_t n2 = static_cast<std::size_t>(n * 2U);
+
+      const T term = (boost::math::bernoulli_b2n<T>(static_cast<int>(n)) * one_over_x_pow_two_n_minus_one) / (n2 * (n2 - 1U));
+
+      if ((n >= 3U) && (abs(term) < target_epsilon_to_break_loop))
+      {
+         // We have reached the desired precision in Stirling's expansion.
+         // Adding additional terms to the sum of this divergent asymptotic
+         // expansion will not improve the result.
+
+         // Break from the loop.
+         break;
+      }
+      if (n > number_of_bernoullis_b2n)
+         return policies::raise_evaluation_error("scaled_tgamma_no_lanczos<%1%>()", "Exceeded maximum series iterations without reaching convergence, best approximation was %1%", T(exp(sum) * half_ln_two_pi_over_z), pol);
+
+      sum += term;
+
+      // Sanity check for divergence:
+      T fterm = fabs(term);
+      if(fterm > last_term)
+         return policies::raise_evaluation_error("scaled_tgamma_no_lanczos<%1%>()", "Series became divergent without reaching convergence, best approximation was %1%", T(exp(sum) * half_ln_two_pi_over_z), pol);
+      last_term = fterm;
+   }
+
+   // Complete Stirling's approximation.
+   T scaled_gamma_value = islog ? T(sum + log(half_ln_two_pi_over_z)) : T(exp(sum) * half_ln_two_pi_over_z);
+   return scaled_gamma_value;
 }
 
 // Forward declaration of the lgamma_imp template specialization.
@@ -426,7 +484,7 @@ T gamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&)
 
    // Scale the argument up for the calculation of lgamma,
    // and use downward recursion later for the final result.
-   const T min_arg_for_recursion = minimum_argument_for_bernoulli_recursion<T>();
+   const int min_arg_for_recursion = minimum_argument_for_bernoulli_recursion<T>();
 
    int n_recur;
 
@@ -440,13 +498,20 @@ T gamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&)
    {
       n_recur = 0;
    }
-
-   const T log_gamma_value = lgamma_imp(zz, pol, lanczos::undefined_lanczos());
-
-   if(log_gamma_value > tools::log_max_value<T>())
+   if (!n_recur)
+   {
+      if (zz > tools::log_max_value<T>())
+         return policies::raise_overflow_error<T>(function, 0, pol);
+      if (log(zz) * zz / 2 > tools::log_max_value<T>())
+         return policies::raise_overflow_error<T>(function, 0, pol);
+   }
+   T gamma_value = scaled_tgamma_no_lanczos(zz, pol);
+   T power_term = pow(zz, zz / 2);
+   T exp_term = exp(-zz);
+   gamma_value *= (power_term * exp_term);
+   if(!n_recur && (tools::max_value<T>() / power_term < gamma_value))
       return policies::raise_overflow_error<T>(function, 0, pol);
-
-   T gamma_value = exp(log_gamma_value);
+   gamma_value *= power_term;
 
    // Rescale the result using downward recursion if necessary.
    if(n_recur)
@@ -560,7 +625,7 @@ T lgamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&, int* sig
    // Make a local, unsigned copy of the input argument.
    T zz((!b_neg) ? z : -z);
 
-   const T min_arg_for_recursion = minimum_argument_for_bernoulli_recursion<T>();
+   const int min_arg_for_recursion = minimum_argument_for_bernoulli_recursion<T>();
 
    T log_gamma_value;
 
@@ -602,39 +667,8 @@ T lgamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&, int* sig
    else
    {
       // Perform the Bernoulli series expansion of Stirling's approximation.
-
-      const std::size_t number_of_bernoullis_b2n = highest_bernoulli_index<T>();
-
-            T one_over_x_pow_two_n_minus_one = 1 / zz;
-      const T one_over_x2                    = one_over_x_pow_two_n_minus_one * one_over_x_pow_two_n_minus_one;
-            T sum                            = (boost::math::bernoulli_b2n<T>(1) / 2) * one_over_x_pow_two_n_minus_one;
-      const T target_epsilon_to_break_loop   = (sum * boost::math::tools::epsilon<T>()) * T(1.0E-10F);
-
-      for(std::size_t n = 2U; n < number_of_bernoullis_b2n; ++n)
-      {
-         one_over_x_pow_two_n_minus_one *= one_over_x2;
-
-         const std::size_t n2 = static_cast<std::size_t>(n * 2U);
-
-         const T term = (boost::math::bernoulli_b2n<T>(static_cast<int>(n)) * one_over_x_pow_two_n_minus_one) / (n2 * (n2 - 1U));
-
-         if((n >= 8U) && (abs(term) < target_epsilon_to_break_loop))
-         {
-            // We have reached the desired precision in Stirling's expansion.
-            // Adding additional terms to the sum of this divergent asymptotic
-            // expansion will not improve the result.
-
-            // Break from the loop.
-            break;
-         }
-
-         sum += term;
-      }
-
-      // Complete Stirling's approximation.
-      const T half_ln_two_pi = log(boost::math::constants::two_pi<T>()) / 2;
-
-      log_gamma_value = ((((zz - boost::math::constants::half<T>()) * log(zz)) - zz) + half_ln_two_pi) + sum;
+      T sum = scaled_tgamma_no_lanczos(zz, pol, true);
+      log_gamma_value = zz * (log(zz) - 1) + sum;
    }
 
    int sign_of_result = 1;
@@ -667,54 +701,6 @@ T lgamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&, int* sig
    if(sign != static_cast<int*>(0U)) { *sign = sign_of_result; }
 
    return log_gamma_value;
-}
-
-template <class T>
-T scaled_tgamma_no_lanczos(const T& z)
-{
-   BOOST_MATH_STD_USING
-   //
-   // Calculates tgamma(z) / (z/e)^z
-   // Requires that our argument is large enough for Sterling's approximation to hold.
-   // Used internally when combining gamma's of similar magnitude without logarithms.
-   //
-   BOOST_ASSERT(minimum_argument_for_bernoulli_recursion<T>() < z);
-
-   // Perform the Bernoulli series expansion of Stirling's approximation.
-
-   const std::size_t number_of_bernoullis_b2n = highest_bernoulli_index<T>();
-
-   T one_over_x_pow_two_n_minus_one = 1 / z;
-   const T one_over_x2 = one_over_x_pow_two_n_minus_one * one_over_x_pow_two_n_minus_one;
-   T sum = (boost::math::bernoulli_b2n<T>(1) / 2) * one_over_x_pow_two_n_minus_one;
-   const T target_epsilon_to_break_loop = (sum * boost::math::tools::epsilon<T>()) * T(1.0E-10F);
-
-   for (std::size_t n = 2U; n < number_of_bernoullis_b2n; ++n)
-   {
-      one_over_x_pow_two_n_minus_one *= one_over_x2;
-
-      const std::size_t n2 = static_cast<std::size_t>(n * 2U);
-
-      const T term = (boost::math::bernoulli_b2n<T>(static_cast<int>(n)) * one_over_x_pow_two_n_minus_one) / (n2 * (n2 - 1U));
-
-      if ((n >= 8U) && (abs(term) < target_epsilon_to_break_loop))
-      {
-         // We have reached the desired precision in Stirling's expansion.
-         // Adding additional terms to the sum of this divergent asymptotic
-         // expansion will not improve the result.
-
-         // Break from the loop.
-         break;
-      }
-
-      sum += term;
-   }
-
-   // Complete Stirling's approximation.
-   const T half_ln_two_pi_over_z = sqrt(boost::math::constants::two_pi<T>() / z);
-
-   T scaled_gamma_value = exp(sum) * half_ln_two_pi_over_z;
-   return scaled_gamma_value;
 }
 
 //
@@ -968,7 +954,7 @@ T regularised_gamma_prefix(T a, T z, const Policy& pol, const lanczos::undefined
    }
    else if(a > minimum_argument_for_bernoulli_recursion<T>())
    {
-      T scaled_gamma = scaled_tgamma_no_lanczos(a);
+      T scaled_gamma = scaled_tgamma_no_lanczos(a, pol);
       T power_term = pow(z / a, a / 2);
       T a_minus_z = a - z;
       if ((0 == power_term) || (fabs(a_minus_z) > tools::log_max_value<T>()))
@@ -984,7 +970,7 @@ T regularised_gamma_prefix(T a, T z, const Policy& pol, const lanczos::undefined
       // Usual case is to calculate the prefix at a+shift and recurse down
       // to the value we want:
       //
-      const T min_z = minimum_argument_for_bernoulli_recursion<T>();
+      const int min_z = minimum_argument_for_bernoulli_recursion<T>();
       long shift = 1 + ltrunc(min_z - a);
       T result = regularised_gamma_prefix(T(a + shift), z, pol, l);
       if (result != 0)
@@ -1003,7 +989,7 @@ T regularised_gamma_prefix(T a, T z, const Policy& pol, const lanczos::undefined
          // we calculate z^a e^-z / tgamma(a+shift), combining power terms
          // as we go.  And again recurse down to the result.
          //
-         T scaled_gamma = scaled_tgamma_no_lanczos(T(a + shift));
+         T scaled_gamma = scaled_tgamma_no_lanczos(T(a + shift), pol);
          T power_term_1 = pow(z / (a + shift), a);
          T power_term_2 = pow(a + shift, -shift);
          T power_term_3 = exp(a + shift - z);
@@ -1597,7 +1583,7 @@ T tgamma_delta_ratio_imp_lanczos(T z, T delta, const Policy& pol, const lanczos:
    //
    long numerator_shift = 0;
    long denominator_shift = 0;
-   const T min_z = minimum_argument_for_bernoulli_recursion<T>();
+   const int min_z = minimum_argument_for_bernoulli_recursion<T>();
    
    if (min_z > z)
       numerator_shift = 1 + ltrunc(min_z - z);
@@ -1609,8 +1595,8 @@ T tgamma_delta_ratio_imp_lanczos(T z, T delta, const Policy& pol, const lanczos:
    //
    if (numerator_shift == 0 && denominator_shift == 0)
    {
-      T scaled_tgamma_num = scaled_tgamma_no_lanczos(z);
-      T scaled_tgamma_denom = scaled_tgamma_no_lanczos(T(z + delta));
+      T scaled_tgamma_num = scaled_tgamma_no_lanczos(z, pol);
+      T scaled_tgamma_denom = scaled_tgamma_no_lanczos(T(z + delta), pol);
       T result = scaled_tgamma_num / scaled_tgamma_denom;
       result *= exp(z * boost::math::log1p(-delta / (z + delta), pol)) * pow((delta + z) / constants::e<T>(), -delta);
       return result;
