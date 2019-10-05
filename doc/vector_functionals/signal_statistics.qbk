@@ -70,8 +70,8 @@ A sparse expansion has most of its norm concentrated in just a few coefficients,
 See [@https://arxiv.org/pdf/0811.4706.pdf Hurley and Rickard] for details.
 However, for measuring sparsity, the phase of the numbers is irrelevant, so we provide the `absolute_gini_coefficient`:
 
-    using boost::math::tools::sample_absolute_gini_coefficient;
-    using boost::math::tools::absolute_gini_coefficient;
+    using boost::math::statistics::sample_absolute_gini_coefficient;
+    using boost::math::statistics::absolute_gini_coefficient;
     std::vector<std::complex<double>> v{{0,1}, {0,0}, {0,0}, {0,0}};
     double abs_gini = sample_absolute_gini_coefficient(v);
     // now abs_gini = 1; maximally unequal
@@ -113,10 +113,10 @@ If the elements of /v/ are uniformly distributed on an interval [0, /b/], then t
 Usage:
 
     std::vector<Real> v{1,0,0};
-    Real hs = boost::math::tools::hoyer_sparsity(v);
+    Real hs = boost::math::statistics::hoyer_sparsity(v);
     // hs = 1
     std::vector<Real> v{1,-1,1};
-    Real hs = boost::math::tools::hoyer_sparsity(v.begin(), v.end());
+    Real hs = boost::math::statistics::hoyer_sparsity(v.begin(), v.end());
     // hs = 0
 
 The container must be forward iterable and the contents are not modified.
@@ -136,8 +136,8 @@ Usage:
     std::vector<double> signal(500, 3.2);
     std::vector<double> noisy_signal(500);
     // fill 'noisy_signal' signal + noise
-    double snr_db = boost::math::tools::oracle_snr_db(signal, noisy_signal);
-    double snr = boost::math::tools::oracle_snr(signal, noisy_signal);
+    double snr_db = boost::math::statistics::oracle_snr_db(signal, noisy_signal);
+    double snr = boost::math::statistics::oracle_snr(signal, noisy_signal);
 
 The input can be real, complex, or integral.
 Integral inputs produce double precision floating point outputs.
@@ -150,7 +150,7 @@ See [@https://doi.org/10.1109/26.871393  Pauluzzi and N.C. Beaulieu] and [@https
 
     std::vector<double> noisy_signal(512);
     // fill noisy_signal with data contaminated by Gaussian white noise:
-    double est_snr_db = boost::math::tools::m2m4_snr_estimator_db(noisy_signal);
+    double est_snr_db = boost::math::statistics::m2m4_snr_estimator_db(noisy_signal);
 
 The /M/[sub 2]/M/[sub 4] SNR estimator is an "in-service" estimator, meaning that the estimate is made using the noisy, data-bearing signal, and does not require a background estimate.
 This estimator has been found to be work best between roughly -3 and 15db, tending to overestimate the noise below -3db, and underestimate the noise above 15db.
@@ -164,7 +164,7 @@ These parameters, however, can be overridden:
     double signal_kurtosis = 1.5;
     // Noise is assumed to follow Laplace distribution, which has kurtosis of 6:
     double noise_kurtosis = 6;
-    double est_snr = boost::math::tools::m2m4_snr_estimator_db(noisy_signal, signal_kurtosis, noise_kurtosis);
+    double est_snr = boost::math::statistics::m2m4_snr_estimator_db(noisy_signal, signal_kurtosis, noise_kurtosis);
 
 Now, technically the method is a "blind SNR estimator", meaning that the no /a-priori/ information about the signal is required to use the method.
 However, the performance of the method is /vastly/ better if you can come up with a better estimate of the signal and noise kurtosis.
