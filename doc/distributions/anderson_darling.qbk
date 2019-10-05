@@ -134,6 +134,16 @@ AndersonDarlingNormalityTest<double>/16777216  706160246 ns    bytes_per_second=
 AndersonDarlingNormalityTest<double>_BigO          42.06 N
 ```
 
+[heading Caveats]
+
+Some authors, including [@https://www.itl.nist.gov/div898/handbook/eda/section3/eda35e.htm NIST], give the following definition of the Anderson-Darling test statistic:
+
+[$../graphs/alternative_anderson_darling_definition.svg]
+
+This is an approximation to the quadrature sum we use as our definition.
+Boost.Math /does not compute this quantity/.
+(However, with a sufficiently large amount of data the two definitions seem to agree to two digits, so the importance of making a clear distinction between the two is unclear.)
+Our computation of the Anderson-Darling test statistic agrees with Mathematica.
 
 [endsect]
 [/section:anderson_darling]
