@@ -11,9 +11,9 @@
 [heading Synopsis]
 
 ``
-#include <boost/math/tools/bivariate_statistics.hpp>
+#include <boost/math/statistics/bivariate_statistics.hpp>
 
-namespace boost{ namespace math{ namespace tools {
+namespace boost{ namespace math{ namespace statistics {
 
     template<class Container>
     auto covariance(Container const & u, Container const & v);
@@ -37,7 +37,7 @@ Computes the population covariance of two datasets:
 
     std::vector<double> u{1,2,3,4,5};
     std::vector<double> v{1,2,3,4,5};
-    double cov_uv = boost::math::tools::covariance(u, v);
+    double cov_uv = boost::math::statistics::covariance(u, v);
 
 The implementation follows [@https://doi.org/10.1109/CLUSTR.2009.5289161 Bennet et al].
 The data is not modified. Requires a random-access container.
@@ -49,7 +49,7 @@ As such, we provide `means_and_covariance`:
 
     std::vector<double> u{1,2,3,4,5};
     std::vector<double> v{1,2,3,4,5};
-    auto [mu_u, mu_v, cov_uv] = boost::math::tools::means_and_covariance(u, v);
+    auto [mu_u, mu_v, cov_uv] = boost::math::statistics::means_and_covariance(u, v);
 
 [heading Correlation Coefficient]
 
@@ -57,7 +57,7 @@ Computes the [@https://en.wikipedia.org/wiki/Pearson_correlation_coefficient Pea
 
     std::vector<double> u{1,2,3,4,5};
     std::vector<double> v{1,2,3,4,5};
-    double rho_uv = boost::math::tools::correlation_coefficient(u, v);
+    double rho_uv = boost::math::statistics::correlation_coefficient(u, v);
     // rho_uv = 1.
 
 The data must be random access and cannot be complex.

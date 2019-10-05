@@ -12,11 +12,9 @@
 #include <boost/math/tools/complex.hpp>
 #include <boost/math/tools/roots.hpp>
 #include <boost/math/statistics/univariate_statistics.hpp>
-#include <boost/config/header_deprecated.hpp>
 
-BOOST_HEADER_DEPRECATED("<boost/math/statistics/signal_statistics.hpp>");
 
-namespace boost::math::tools {
+namespace boost::math::statistics {
 
 template<class ForwardIterator>
 auto absolute_gini_coefficient(ForwardIterator first, ForwardIterator last)
@@ -51,20 +49,20 @@ auto absolute_gini_coefficient(ForwardIterator first, ForwardIterator last)
 template<class RandomAccessContainer>
 inline auto absolute_gini_coefficient(RandomAccessContainer & v)
 {
-    return boost::math::tools::absolute_gini_coefficient(v.begin(), v.end());
+    return boost::math::statistics::absolute_gini_coefficient(v.begin(), v.end());
 }
 
 template<class ForwardIterator>
 auto sample_absolute_gini_coefficient(ForwardIterator first, ForwardIterator last)
 {
     size_t n = std::distance(first, last);
-    return n*boost::math::tools::absolute_gini_coefficient(first, last)/(n-1);
+    return n*boost::math::statistics::absolute_gini_coefficient(first, last)/(n-1);
 }
 
 template<class RandomAccessContainer>
 inline auto sample_absolute_gini_coefficient(RandomAccessContainer & v)
 {
-    return boost::math::tools::sample_absolute_gini_coefficient(v.begin(), v.end());
+    return boost::math::statistics::sample_absolute_gini_coefficient(v.begin(), v.end());
 }
 
 
@@ -122,7 +120,7 @@ auto hoyer_sparsity(const ForwardIterator first, const ForwardIterator last)
 template<class Container>
 inline auto hoyer_sparsity(Container const & v)
 {
-    return boost::math::tools::hoyer_sparsity(v.cbegin(), v.cend());
+    return boost::math::statistics::hoyer_sparsity(v.cbegin(), v.cend());
 }
 
 
@@ -201,7 +199,7 @@ auto mean_invariant_oracle_snr(Container const & signal, Container const & noisy
     using Real = typename Container::value_type;
     BOOST_ASSERT_MSG(signal.size() == noisy_signal.size(), "Signal and noisy signal must be have the same number of elements.");
 
-    Real mu = boost::math::tools::mean(signal);
+    Real mu = boost::math::statistics::mean(signal);
     Real numerator = 0;
     Real denominator = 0;
     for (size_t i = 0; i < signal.size(); ++i)
@@ -227,7 +225,7 @@ template<class Container>
 auto mean_invariant_oracle_snr_db(Container const & signal, Container const & noisy_signal)
 {
     using std::log10;
-    return 10*log10(boost::math::tools::mean_invariant_oracle_snr(signal, noisy_signal));
+    return 10*log10(boost::math::statistics::mean_invariant_oracle_snr(signal, noisy_signal));
 }
 
 
@@ -236,7 +234,7 @@ template<class Container>
 auto oracle_snr_db(Container const & signal, Container const & noisy_signal)
 {
     using std::log10;
-    return 10*log10(boost::math::tools::oracle_snr(signal, noisy_signal));
+    return 10*log10(boost::math::statistics::oracle_snr(signal, noisy_signal));
 }
 
 // A good reference on the M2M4 estimator:
@@ -261,7 +259,7 @@ auto m2m4_snr_estimator(ForwardIterator first, ForwardIterator last, decltype(*f
         // However, I can't prove that, so there is a chance that this does unnecessary work.
         // Future improvements: There are algorithms which can solve quadratics much more effectively than the naive implementation found here.
         // See: https://stackoverflow.com/questions/48979861/numerically-stable-method-for-solving-quadratic-equations/50065711#50065711
-        auto [M1, M2, M3, M4] = boost::math::tools::first_four_moments(first, last);
+        auto [M1, M2, M3, M4] = boost::math::statistics::first_four_moments(first, last);
         if (M4 == 0)
         {
             // The signal is constant. There is no noise:

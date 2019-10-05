@@ -3,17 +3,14 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef BOOST_MATH_TOOLS_UNIVARIATE_STATISTICS_HPP
-#define BOOST_MATH_TOOLS_UNIVARIATE_STATISTICS_HPP
+#ifndef BOOST_MATH_STATISTICS_UNIVARIATE_STATISTICS_HPP
+#define BOOST_MATH_STATISTICS_UNIVARIATE_STATISTICS_HPP
 
 #include <algorithm>
 #include <iterator>
 #include <boost/assert.hpp>
-#include <boost/config/header_deprecated.hpp>
 
-BOOST_HEADER_DEPRECATED("<boost/math/statistics/univariate_statistics.hpp>");
-
-namespace boost::math::tools {
+namespace boost::math::statistics {
 
 template<class ForwardIterator>
 auto mean(ForwardIterator first, ForwardIterator last)
@@ -138,6 +135,43 @@ inline auto sample_variance(Container const & v)
 {
     return sample_variance(v.cbegin(), v.cend());
 }
+
+template<class ForwardIterator>
+auto mean_and_sample_variance(ForwardIterator first, ForwardIterator last)
+{
+    using Real = typename std::iterator_traits<ForwardIterator>::value_type;
+    BOOST_ASSERT_MSG(first != last, "At least one sample is required to compute mean and variance.");
+    // Higham, Accuracy and Stability, equation 1.6a and 1.6b:
+    if constexpr (std::is_integral<Real>::value)
+    {
+        double M = *first;
+        double Q = 0;
+        double k = 2;
+        for (auto it = std::next(first); it != last; ++it)
+        {
+            double tmp = *it - M;
+            Q = Q + ((k-1)*tmp*tmp)/k;
+            M = M + tmp/k;
+            k += 1;
+        }
+        return std::pair<double, double>{M, Q/(k-2)};
+    }
+    else
+    {
+        Real M = *first;
+        Real Q = 0;
+        Real k = 2;
+        for (auto it = std::next(first); it != last; ++it)
+        {
+            Real tmp = (*it - M)/k;
+            Q += k*(k-1)*tmp*tmp;
+            M += tmp;
+            k += 1;
+        }
+        return std::pair<Real, Real>{M, Q/(k-2)};
+    }
+}
+
 
 
 // Follows equation 1.5 of:
@@ -398,7 +432,7 @@ auto median_absolute_deviation(RandomAccessIterator first, RandomAccessIterator 
     using std::isnan;
     if (isnan(center))
     {
-        center = boost::math::tools::median(first, last);
+        center = boost::math::statistics::median(first, last);
     }
     size_t num_elems = std::distance(first, last);
     BOOST_ASSERT_MSG(num_elems > 0, "The median of a zero-length vector is undefined.");

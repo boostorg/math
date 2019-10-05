@@ -11,9 +11,9 @@
 [heading Synopsis]
 
 ``
-#include <boost/math/tools/signal_statistics.hpp>
+#include <boost/math/statistics/signal_statistics.hpp>
 
-namespace boost::math::tools {
+namespace boost::math::statistics {
 
     template<class Container>
     auto absolute_gini_coefficient(Container & c);
@@ -56,7 +56,7 @@ namespace boost::math::tools {
 
 [heading Description]
 
-The file `boost/math/tools/signal_statistics.hpp` is a set of facilities for computing quantities commonly used in signal analysis.
+The file `boost/math/statistics/signal_statistics.hpp` is a set of facilities for computing quantities commonly used in signal analysis.
 
 Our examples use `std::vector<double>` to hold the data, but this not required.
 In general, you can store your data in an Eigen array, and Armadillo vector, `std::array`, and for many of the routines, a `std::forward_list`.

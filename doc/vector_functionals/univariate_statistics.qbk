@@ -11,9 +11,9 @@
 [heading Synopsis]
 
 ``
-#include <boost/math/tools/univariate_statistics.hpp>
+#include <boost/math/statistics/univariate_statistics.hpp>
 
-namespace boost{ namespace math{ namespace tools {
+namespace boost{ namespace math{ namespace statistics {
 
     template<class Container>
     auto mean(Container const & c);
@@ -32,6 +32,9 @@ namespace boost{ namespace math{ namespace tools {
 
     template<class ForwardIterator>
     auto sample_variance(ForwardIterator first, ForwardIterator last);
+
+    template<class Container>
+    auto mean_and_sample_variance(Container const & c);
 
     template<class Container>
     auto skewness(Container const & c);
@@ -104,9 +107,9 @@ For certain operations (total variation, for example) integer inputs are support
 [heading Mean]
 
     std::vector<double> v{1,2,3,4,5};
-    double mu = boost::math::tools::mean(v.cbegin(), v.cend());
+    double mu = boost::math::statistics::mean(v.cbegin(), v.cend());
     // Alternative syntax if you want to use entire container:
-    mu = boost::math::tools::mean(v);
+    mu = boost::math::statistics::mean(v);
 
 The implementation follows [@https://doi.org/10.1137/1.9780898718027 Higham 1.6a].
 The data is not modified and must be forward iterable.
@@ -116,23 +119,23 @@ If the input is an integer type, the output is a double precision float.
 [heading Variance]
 
     std::vector<double> v{1,2,3,4,5};
-    Real sigma_sq = boost::math::tools::variance(v.cbegin(), v.cend());
+    Real sigma_sq = boost::math::statistics::variance(v.cbegin(), v.cend());
 
 If you don't need to calculate on a subset of the input, then the range call is more terse:
 
     std::vector<double> v{1,2,3,4,5};
-    Real sigma_sq = boost::math::tools::variance(v);
+    Real sigma_sq = boost::math::statistics::variance(v);
 
 The implementation follows [@https://doi.org/10.1137/1.9780898718027 Higham 1.6b].
 The input data must be forward iterable and the range `[first, last)` must contain at least two elements.
 It is /not/ in general sensible to pass complex numbers to this routine.
 If integers are passed as input, then the output is a double precision float.
 
-`boost::math::tools::variance` returns the population variance.
+`boost::math::statistics::variance` returns the population variance.
 If you want a sample variance, use
 
     std::vector<double> v{1,2,3,4,5};
-    Real sn_sq = boost::math::tools::sample_variance(v);
+    Real sn_sq = boost::math::statistics::sample_variance(v);
 
 
 [heading Skewness]
@@ -140,7 +143,7 @@ If you want a sample variance, use
 Computes the skewness of a dataset:
 
     std::vector<double> v{1,2,3,4,5};
-    double skewness = boost::math::tools::skewness(v);
+    double skewness = boost::math::statistics::skewness(v);
     // skewness = 0.
 
 The input vector is not modified, works with integral and real data.
@@ -155,14 +158,14 @@ The implementation follows [@https://prod.sandia.gov/techlib-noauth/access-contr
 Computes the kurtosis of a dataset:
 
     std::vector<double> v{1,2,3,4,5};
-    double kurtosis = boost::math::tools::kurtosis(v);
+    double kurtosis = boost::math::statistics::kurtosis(v);
     // kurtosis = 17/10
 
 The implementation follows [@https://prod.sandia.gov/techlib-noauth/access-control.cgi/2008/086212.pdf Pebay].
 The input data must be forward iterable and must consist of real or integral values.
 If the input data is integral, the output is a double precision float.
 Note that this is /not/ the excess kurtosis.
-If you require the excess kurtosis, use `boost::math::tools::excess_kurtosis`.
+If you require the excess kurtosis, use `boost::math::statistics::excess_kurtosis`.
 This function simply subtracts 3 from the kurtosis, but it makes eminently clear our definition of kurtosis.
 
 [heading First four moments]
@@ -170,7 +173,7 @@ This function simply subtracts 3 from the kurtosis, but it makes eminently clear
 Simultaneously computes the first four [@https://en.wikipedia.org/wiki/Central_moment central moments] in a single pass through the data:
 
     std::vector<double> v{1,2,3,4,5};
-    auto [M1, M2, M3, M4] = boost::math::tools::first_four_moments(v);
+    auto [M1, M2, M3, M4] = boost::math::statistics::first_four_moments(v);
 
 
 [heading Median]
@@ -178,7 +181,7 @@ Simultaneously computes the first four [@https://en.wikipedia.org/wiki/Central_m
 Computes the median of a dataset:
 
     std::vector<double> v{1,2,3,4,5};
-    double m = boost::math::tools::median(v.begin(), v.end());
+    double m = boost::math::statistics::median(v.begin(), v.end());
 
 /Nota bene: The input vector is modified./
 The calculation of the median is a thin wrapper around the C++11 [@https://en.cppreference.com/w/cpp/algorithm/nth_element `nth_element`].
@@ -190,7 +193,7 @@ In particular, the container must allow random access.
 Computes the [@https://en.wikipedia.org/wiki/Median_absolute_deviation median absolute deviation] of a dataset:
 
     std::vector<double> v{1,2,3,4,5};
-    double mad = boost::math::tools::median_absolute_deviation(v);
+    double mad = boost::math::statistics::median_absolute_deviation(v);
 
 By default, the deviation from the median is used.
 If you have some prior that the median is zero, or wish to compute the median absolute deviation from the mean,
@@ -198,11 +201,11 @@ use the following:
 
     // prior is that center is zero:
     double center = 0;
-    double mad = boost::math::tools::median_absolute_deviation(v, center);
+    double mad = boost::math::statistics::median_absolute_deviation(v, center);
 
     // compute median absolute deviation from the mean:
-    double mu = boost::math::tools::mean(v);
-    double mad = boost::math::tools::median_absolute_deviation(v, mu);
+    double mu = boost::math::statistics::mean(v);
+    double mad = boost::math::statistics::median_absolute_deviation(v, mu);
 
 /Nota bene:/ The input vector is modified.
 Again the vector is passed into a call to [@https://en.cppreference.com/w/cpp/algorithm/nth_element `nth_element`].
@@ -212,12 +215,12 @@ Again the vector is passed into a call to [@https://en.cppreference.com/w/cpp/al
 Compute the Gini coefficient of a dataset:
 
     std::vector<double> v{1,0,0,0};
-    double gini = boost::math::tools::gini_coefficient(v);
+    double gini = boost::math::statistics::gini_coefficient(v);
     // gini = 3/4
-    double s_gini = boost::math::tools::sample_gini_coefficient(v);
+    double s_gini = boost::math::statistics::sample_gini_coefficient(v);
     // s_gini = 1.
     std::vector<double> w{1,1,1,1};
-    gini = boost::math::tools::gini_coefficient(w.begin(), w.end());
+    gini = boost::math::statistics::gini_coefficient(w.begin(), w.end());
     // gini = 0, as all elements are now equal.
 
 /Nota bene/: The input data is altered: in particular, it is sorted. Makes a call to `std::sort`, and as such requires random access iterators.

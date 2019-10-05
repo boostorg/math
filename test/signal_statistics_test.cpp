@@ -13,8 +13,8 @@
 #include <boost/core/lightweight_test.hpp>
 #include <boost/numeric/ublas/vector.hpp>
 #include <boost/math/constants/constants.hpp>
-#include <boost/math/tools/univariate_statistics.hpp>
-#include <boost/math/tools/signal_statistics.hpp>
+#include <boost/math/statistics/univariate_statistics.hpp>
+#include <boost/math/statistics/signal_statistics.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/multiprecision/cpp_complex.hpp>
 
@@ -39,24 +39,24 @@ void test_hoyer_sparsity()
     using std::sqrt;
     Real tol = 5*std::numeric_limits<Real>::epsilon();
     std::vector<Real> v{1,0,0};
-    Real hs = boost::math::tools::hoyer_sparsity(v.begin(), v.end());
+    Real hs = boost::math::statistics::hoyer_sparsity(v.begin(), v.end());
     BOOST_TEST(abs(hs - 1) < tol);
 
-    hs = boost::math::tools::hoyer_sparsity(v);
+    hs = boost::math::statistics::hoyer_sparsity(v);
     BOOST_TEST(abs(hs - 1) < tol);
 
     // Does it work with constant iterators?
-    hs = boost::math::tools::hoyer_sparsity(v.cbegin(), v.cend());
+    hs = boost::math::statistics::hoyer_sparsity(v.cbegin(), v.cend());
     BOOST_TEST(abs(hs - 1) < tol);
 
     v[0] = 1;
     v[1] = 1;
     v[2] = 1;
-    hs = boost::math::tools::hoyer_sparsity(v.cbegin(), v.cend());
+    hs = boost::math::statistics::hoyer_sparsity(v.cbegin(), v.cend());
     BOOST_TEST(abs(hs) < tol);
 
     std::array<Real, 3> w{1,1,1};
-    hs = boost::math::tools::hoyer_sparsity(w);
+    hs = boost::math::statistics::hoyer_sparsity(w);
     BOOST_TEST(abs(hs) < tol);
 
     // Now some statistics:
@@ -69,13 +69,13 @@ void test_hoyer_sparsity()
     for (size_t i = 0; i < v.size(); ++i) {
         v[i] = dis(gen);
     }
-    hs = boost::math::tools::hoyer_sparsity(v);
+    hs = boost::math::statistics::hoyer_sparsity(v);
     Real expected = (1.0 - boost::math::constants::root_three<Real>()/2)/(1.0 - 1.0/sqrt(v.size()));
     BOOST_TEST(abs(expected - hs) < 0.01);
 
     // Does it work with a forward list?
     std::forward_list<Real> u1{1, 1, 1};
-    hs = boost::math::tools::hoyer_sparsity(u1);
+    hs = boost::math::statistics::hoyer_sparsity(u1);
     BOOST_TEST(abs(hs) < tol);
 
     // Does it work with a boost ublas vector?
@@ -83,7 +83,7 @@ void test_hoyer_sparsity()
     u2[0] = 1;
     u2[1] = 1;
     u2[2] = 1;
-    hs = boost::math::tools::hoyer_sparsity(u2);
+    hs = boost::math::statistics::hoyer_sparsity(u2);
     BOOST_TEST(abs(hs) < tol);
 
 }
@@ -94,13 +94,13 @@ void test_integer_hoyer_sparsity()
     using std::sqrt;
     double tol = 5*std::numeric_limits<double>::epsilon();
     std::vector<Z> v{1,0,0};
-    double hs = boost::math::tools::hoyer_sparsity(v);
+    double hs = boost::math::statistics::hoyer_sparsity(v);
     BOOST_TEST(abs(hs - 1) < tol);
 
     v[0] = 1;
     v[1] = 1;
     v[2] = 1;
-    hs = boost::math::tools::hoyer_sparsity(v);
+    hs = boost::math::statistics::hoyer_sparsity(v);
     BOOST_TEST(abs(hs) < tol);
 }
 
@@ -112,21 +112,21 @@ void test_complex_hoyer_sparsity()
     using std::sqrt;
     Real tol = 5*std::numeric_limits<Real>::epsilon();
     std::vector<Complex> v{{0,1}, {0, 0}, {0,0}};
-    Real hs = boost::math::tools::hoyer_sparsity(v.begin(), v.end());
+    Real hs = boost::math::statistics::hoyer_sparsity(v.begin(), v.end());
     BOOST_TEST(abs(hs - 1) < tol);
 
-    hs = boost::math::tools::hoyer_sparsity(v);
+    hs = boost::math::statistics::hoyer_sparsity(v);
     BOOST_TEST(abs(hs - 1) < tol);
 
     // Does it work with constant iterators?
-    hs = boost::math::tools::hoyer_sparsity(v.cbegin(), v.cend());
+    hs = boost::math::statistics::hoyer_sparsity(v.cbegin(), v.cend());
     BOOST_TEST(abs(hs - 1) < tol);
 
     // All are the same magnitude:
     v[0] = {0, 1};
     v[1] = {1, 0};
     v[2] = {0,-1};
-    hs = boost::math::tools::hoyer_sparsity(v.cbegin(), v.cend());
+    hs = boost::math::statistics::hoyer_sparsity(v.cbegin(), v.cend());
     BOOST_TEST(abs(hs) < tol);
 }
 
@@ -134,8 +134,8 @@ void test_complex_hoyer_sparsity()
 template<class Real>
 void test_absolute_gini_coefficient()
 {
-    using boost::math::tools::absolute_gini_coefficient;
-    using boost::math::tools::sample_absolute_gini_coefficient;
+    using boost::math::statistics::absolute_gini_coefficient;
+    using boost::math::statistics::sample_absolute_gini_coefficient;
     Real tol = std::numeric_limits<Real>::epsilon();
     std::vector<Real> v{-1,0,0};
     Real gini = sample_absolute_gini_coefficient(v.begin(), v.end());
@@ -207,8 +207,8 @@ void test_oracle_snr()
     std::vector<Real> noisy_signal = signal;
 
     noisy_signal[0] += 1;
-    Real snr = boost::math::tools::oracle_snr(signal, noisy_signal);
-    Real snr_db = boost::math::tools::oracle_snr_db(signal, noisy_signal);
+    Real snr = boost::math::statistics::oracle_snr(signal, noisy_signal);
+    Real snr_db = boost::math::statistics::oracle_snr_db(signal, noisy_signal);
     BOOST_TEST(abs(snr - length) < tol);
     BOOST_TEST(abs(snr_db - 10*log10(length)) < tol);
 }
@@ -222,8 +222,8 @@ void test_integer_oracle_snr()
     std::vector<Z> noisy_signal = signal;
 
     noisy_signal[0] += 1;
-    double snr = boost::math::tools::oracle_snr(signal, noisy_signal);
-    double snr_db = boost::math::tools::oracle_snr_db(signal, noisy_signal);
+    double snr = boost::math::statistics::oracle_snr(signal, noisy_signal);
+    double snr_db = boost::math::statistics::oracle_snr_db(signal, noisy_signal);
     BOOST_TEST(abs(snr - length) < tol);
     BOOST_TEST(abs(snr_db - 10*log10(length)) < tol);
 }
@@ -240,8 +240,8 @@ void test_complex_oracle_snr()
     std::vector<Complex> noisy_signal = signal;
 
     noisy_signal[0] += Complex(1,0);
-    Real snr = boost::math::tools::oracle_snr(signal, noisy_signal);
-    Real snr_db = boost::math::tools::oracle_snr_db(signal, noisy_signal);
+    Real snr = boost::math::statistics::oracle_snr(signal, noisy_signal);
+    Real snr_db = boost::math::statistics::oracle_snr_db(signal, noisy_signal);
     BOOST_TEST(abs(snr - length) < tol);
     BOOST_TEST(abs(snr_db - 10*log10(length)) < tol);
 }
@@ -262,8 +262,8 @@ void test_m2m4_snr_estimator()
     }
 
     // Kurtosis of a sine wave is 1.5:
-    auto m2m4_db = boost::math::tools::m2m4_snr_estimator_db(x, 1.5);
-    auto oracle_snr_db = boost::math::tools::mean_invariant_oracle_snr_db(signal, x);
+    auto m2m4_db = boost::math::statistics::m2m4_snr_estimator_db(x, 1.5);
+    auto oracle_snr_db = boost::math::statistics::mean_invariant_oracle_snr_db(signal, x);
     BOOST_TEST(abs(m2m4_db - oracle_snr_db) < 0.2);
 
     std::uniform_real_distribution<Real> uni_dis{-1,1};
@@ -273,8 +273,8 @@ void test_m2m4_snr_estimator()
     }
 
     // Kurtosis of continuous uniform distribution over [-1,1] is 1.8:
-    m2m4_db = boost::math::tools::m2m4_snr_estimator_db(x, 1.5, 1.8);
-    oracle_snr_db = boost::math::tools::mean_invariant_oracle_snr_db(signal, x);
+    m2m4_db = boost::math::statistics::m2m4_snr_estimator_db(x, 1.5, 1.8);
+    oracle_snr_db = boost::math::statistics::mean_invariant_oracle_snr_db(signal, x);
     // The performance depends on the exact numbers generated by the distribution, but this isn't bad:
     BOOST_TEST(abs(m2m4_db - oracle_snr_db) < 0.2);
 
@@ -282,12 +282,12 @@ void test_m2m4_snr_estimator()
     // If x has snr y, then kx should have snr y.
     Real ka = 1.5;
     Real kw = 1.8;
-    auto m2m4 = boost::math::tools::m2m4_snr_estimator(x.begin(), x.end(), ka, kw);
+    auto m2m4 = boost::math::statistics::m2m4_snr_estimator(x.begin(), x.end(), ka, kw);
     for(size_t i = 0; i < x.size(); ++i)
     {
         x[i] *= 4096;
     }
-    auto m2m4_2 = boost::math::tools::m2m4_snr_estimator(x.begin(), x.end(), ka, kw);
+    auto m2m4_2 = boost::math::statistics::m2m4_snr_estimator(x.begin(), x.end(), ka, kw);
     BOOST_TEST(abs(m2m4 - m2m4_2) < tol);
 }
 

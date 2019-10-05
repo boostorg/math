@@ -3,17 +3,15 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef BOOST_MATH_TOOLS_BIVARIATE_STATISTICS_HPP
-#define BOOST_MATH_TOOLS_BIVARIATE_STATISTICS_HPP
+#ifndef BOOST_MATH_STATISTICS_BIVARIATE_STATISTICS_HPP
+#define BOOST_MATH_STATISTICS_BIVARIATE_STATISTICS_HPP
 
 #include <iterator>
 #include <tuple>
 #include <boost/assert.hpp>
-#include <boost/config/header_deprecated.hpp>
 
-BOOST_HEADER_DEPRECATED("<boost/math/statistics/bivariate_statistics.hpp>");
 
-namespace boost{ namespace math{ namespace tools {
+namespace boost{ namespace math{ namespace statistics {
 
 template<class Container>
 auto means_and_covariance(Container const & u, Container const & v)
@@ -43,7 +41,7 @@ auto means_and_covariance(Container const & u, Container const & v)
 template<class Container>
 auto covariance(Container const & u, Container const & v)
 {
-    auto [mu_u, mu_v, cov] = boost::math::tools::means_and_covariance(u, v);
+    auto [mu_u, mu_v, cov] = boost::math::statistics::means_and_covariance(u, v);
     return cov;
 }
 

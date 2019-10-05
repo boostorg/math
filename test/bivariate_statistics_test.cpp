@@ -15,8 +15,8 @@
 #include <boost/core/lightweight_test.hpp>
 #include <boost/numeric/ublas/vector.hpp>
 #include <boost/math/constants/constants.hpp>
-#include <boost/math/tools/univariate_statistics.hpp>
-#include <boost/math/tools/bivariate_statistics.hpp>
+#include <boost/math/statistics/univariate_statistics.hpp>
+#include <boost/math/statistics/bivariate_statistics.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/multiprecision/cpp_complex.hpp>
 
@@ -32,8 +32,8 @@ using boost::multiprecision::cpp_complex_50;
  * 5) Does it work with complex data if complex data is sensible?
  */
 
-using  boost::math::tools::means_and_covariance;
-using  boost::math::tools::covariance;
+using  boost::math::statistics::means_and_covariance;
+using  boost::math::statistics::covariance;
 
 template<class Real>
 void test_covariance()
@@ -94,10 +94,10 @@ void test_covariance()
         v[i] = (Real) dis(gen);
     }
 
-    Real mu_u = boost::math::tools::mean(u);
-    Real mu_v = boost::math::tools::mean(v);
-    Real sigma_u_sq = boost::math::tools::variance(u);
-    Real sigma_v_sq = boost::math::tools::variance(v);
+    Real mu_u = boost::math::statistics::mean(u);
+    Real mu_v = boost::math::statistics::mean(v);
+    Real sigma_u_sq = boost::math::statistics::variance(u);
+    Real sigma_v_sq = boost::math::statistics::variance(v);
 
     auto [mu_u_, mu_v_, cov_uv] = means_and_covariance(u, v);
     BOOST_TEST(abs(mu_u - mu_u_) < tol);
@@ -116,7 +116,7 @@ void test_covariance()
 template<class Real>
 void test_correlation_coefficient()
 {
-    using boost::math::tools::correlation_coefficient;
+    using boost::math::statistics::correlation_coefficient;
 
     Real tol = std::numeric_limits<Real>::epsilon();
     std::vector<Real> u{1};
