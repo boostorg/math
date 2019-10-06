@@ -8,6 +8,7 @@
 
 #include <algorithm>
 #include <iterator>
+#include <tuple>
 #include <boost/assert.hpp>
 #include <boost/config/header_deprecated.hpp>
 
