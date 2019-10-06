@@ -5,15 +5,15 @@
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  */
 
-#ifndef BOOST_MATH_DISTRIBUTIONS_ANDERSON_DARLING_HPP
-#define BOOST_MATH_DISTRIBUTIONS_ANDERSON_DARLING_HPP
+#ifndef BOOST_MATH_STATISTICS_ANDERSON_DARLING_HPP
+#define BOOST_MATH_STATISTICS_ANDERSON_DARLING_HPP
 
 #include <cmath>
 #include <algorithm>
 #include <boost/math/tools/univariate_statistics.hpp>
 #include <boost/math/special_functions/erf.hpp>
 
-namespace boost { namespace math {
+namespace boost { namespace math { namespace statistics {
 
 template<class RandomAccessContainer>
 auto anderson_darling_normality_statistic(RandomAccessContainer const & v,
@@ -92,5 +92,5 @@ auto anderson_darling_normality_statistic(RandomAccessContainer const & v,
     return v.size()*(left_tail + right_tail + integrals);
 }
 
-}}
+}}}
 #endif

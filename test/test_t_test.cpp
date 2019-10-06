@@ -7,7 +7,31 @@
 
 #include "math_unit_test.hpp"
 #include <vector>
+#include <random>
+#include <boost/math/statistics/univariate_statistics.hpp>
 #include <boost/math/statistics/t_test.hpp>
+
+template<typename Real>
+void test_exact_mean()
+{
+    // Of course this test seems obvious, but just for the sake of comfort, here's the Mathematica to demo this test:
+    // data3 = RandomReal[NormalDistribution[], 1024];
+    // NumberForm[TTest[data3, Mean[data3], "TestStatistic"], 16]
+    // NumberForm[TTest[data3, Mean[data3], "PValue"], 16]
+    std::mt19937 gen{5125122};
+    std::normal_distribution<Real> dis{0,3};
+    std::vector<Real> v(1024);
+    for (auto & x : v) {
+      x = dis(gen);
+    }
+
+    Real mu = boost::math::statistics::mean(v);
+
+    auto [computed_statistic, computed_pvalue] = boost::math::statistics::one_sample_t_test(v, mu);
+
+    CHECK_MOLLIFIED_CLOSE(Real(0), computed_statistic, 10*std::numeric_limits<Real>::epsilon());
+    CHECK_ULP_CLOSE(Real(1), computed_pvalue, 9);
+}
 
 void test_agreement_with_mathematica()
 {
@@ -40,44 +64,33 @@ void test_agreement_with_mathematica()
                           1.816698960862263,-0.972941421015463};
 
 
-
-
     double expected_statistic = 0.4587075249160456;
     double expected_pvalue = 0.6472282548266728;
 
-    double computed_statistic = boost::math::statistics::one_sample_t_test_statistic(v, 0.0);
+    auto [computed_statistic, computed_pvalue] = boost::math::statistics::one_sample_t_test(v, 0.0);
 
-    double computed_pvalue = boost::math::statistics::one_sample_t_test_pvalue(v, 0.0);
-    std::cout << "Expected statistic = " << expected_statistic << std::hexfloat << " = " << expected_statistic << "\n";
-    std::cout << std::defaultfloat;
-    std::cout << "Computed statistic = " << computed_statistic << std::hexfloat << " = " << computed_statistic << "\n";
-    std::cout << std::defaultfloat;
-    std::cout << "Expected pvalue = " << expected_pvalue << std::hexfloat << " = " << expected_pvalue << "\n";
-    std::cout << std::defaultfloat;
-    std::cout << "Computed pvalue = " << computed_pvalue << std::hexfloat << " = " << computed_pvalue << "\n";
+    CHECK_ULP_CLOSE(expected_statistic, computed_statistic, 8);
+    CHECK_ULP_CLOSE(expected_pvalue, computed_pvalue, 90);
 
 
-    v = {0.7304375676969546,3.227250635039257,1.01821954205186};
+    {
+        std::vector<double> v = {0.7304375676969546,3.227250635039257,1.01821954205186};
 
-    expected_statistic = 2.103013485037935;
-    expected_pvalue = 0.1701790440880712;
+        expected_statistic = 2.103013485037935;
+        expected_pvalue = 0.1701790440880712;
 
-    computed_statistic = boost::math::statistics::one_sample_t_test_statistic(v, 0.0);
-    computed_pvalue = boost::math::statistics::one_sample_t_test_pvalue(v, 0.0);
-    std::cout << std::defaultfloat << "\n";
-    std::cout << "Expected statistic = " << expected_statistic << std::hexfloat << " = " << expected_statistic << "\n";
-    std::cout << std::defaultfloat;
-    std::cout << "Computed statistic = " << computed_statistic << std::hexfloat << " = " << computed_statistic << "\n";
-    std::cout << std::defaultfloat;
-    std::cout << "Expected pvalue = " << expected_pvalue << std::hexfloat << " = " << expected_pvalue << "\n";
-    std::cout << std::defaultfloat;
-    std::cout << "Computed pvalue = " << computed_pvalue << std::hexfloat << " = " << computed_pvalue << "\n";
-
+        auto [computed_statistic, computed_pvalue] = boost::math::statistics::one_sample_t_test(v, 0.0);
+        CHECK_ULP_CLOSE(expected_statistic, computed_statistic, 2);
+        CHECK_ULP_CLOSE(expected_pvalue, computed_pvalue, 7);
+    }
 }
 
 
 int main()
 {
     test_agreement_with_mathematica();
+    test_exact_mean<float>();
+    test_exact_mean<double>();
+    test_exact_mean<long double>();
     return boost::math::test::report_errors();
 }

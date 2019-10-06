@@ -1,0 +1,75 @@
+[/
+Copyright (c) 2019 Nick Thompson
+Use, modification and distribution are subject to the
+Boost Software License, Version 1.0. (See accompanying file
+LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+]
+
+[section:t_test /t/-tests]
+
+[heading Synopsis]
+
+```
+#include <boost/math/statistics/t_test.hpp>
+
+namespace boost{ namespace math { namespace { statistics {
+
+namespace boost::math::statistics {
+
+template<typename Real>
+std::pair<Real, Real> one_sample_t_test(Real sample_mean, Real sample_variance, Real num_samples, Real assumed_mean);
+
+template<class ForwardIterator>
+auto one_sample_t_test(ForwardIterator begin, ForwardIterator end, typename std::iterator_traits<ForwardIterator>::value_type assumed_mean);
+
+template<class Container>
+auto one_sample_t_test(Container const & v, typename Container::value_type assumed_mean);
+
+}}}
+```
+
+[heading Background]
+
+A one-sample /t/-test attempts to answer the question "is it likely that the population mean of my data is a certain value, given a sample mean?"
+The test statistic is
+
+[$../graphs/one_sample_t_test_statistic.svg]
+
+where µ[sub 0] is the assumed mean, /s/[super 2] is the sample variance, and /n/ is the number of samples.
+If the absolute value of the test statistic is large, then we have low confidence that the population mean is equal to µ[sub 0], and if the absolute value of the test statistic is small, we have high confidence.
+We now ask the question "what constitutes large and small in this context?"
+
+Under reasonable assumptions, the test statistic /t/ can be assumed to come from a Student's /t/-distribution.
+Since we wish to know if the sample mean deviates from the true mean in either direction, the test is two-tailed.
+Hence the /p/-value is straightforward to calculate from the Student's /t/-distribution on /n/ - 1 degrees of freedom, but nonetheless it is convenient to have it computed here.
+
+An example usage is as follows:
+
+```
+#include <vector>
+#include <random>
+#include <boost/math/statistics/t_test.hpp>
+
+std::random_device rd;
+std::mt19937 gen{rd()};
+std::normal_distribution<double> dis{0,1};
+std::vector<double> v(1024);
+for (auto & x : v) {
+  x = dis(gen);
+}
+
+auto [t, p] = boost::math::statistics::one_sample_t_test(v, 0.0);
+```
+
+The test statistic is the first element of the pair, and the /p/-value is the second element.
+
+
+
+[heading Performance]
+
+
+[heading Caveats]
+
+
+[endsect]
+[/section:t_test]

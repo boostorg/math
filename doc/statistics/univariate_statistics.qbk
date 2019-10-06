@@ -89,7 +89,7 @@ namespace boost{ namespace math{ namespace statistics {
 
 [heading Description]
 
-The file `boost/math/tools/univariate_statistics.hpp` is a set of facilities for computing scalar values from vectors.
+The file `boost/math/statistics/univariate_statistics.hpp` is a set of facilities for computing scalar values from vectors.
 
 Many of these functionals have trivial naive implementations, but experienced programmers will recognize that even trivial algorithms are easy to screw up, and that numerical instabilities often lurk in corner cases.
 We have attempted to do our "due diligence" to root out these problems-scouring the literature for numerically stable algorithms for even the simplest of functionals.

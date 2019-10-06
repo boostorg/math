@@ -10,12 +10,14 @@
 #include <utility>
 #include <random>
 #include <boost/core/demangle.hpp>
-#include <boost/math/distributions/anderson_darling.hpp>
+#include <boost/math/statistics/anderson_darling.hpp>
 #ifdef BOOST_HAS_FLOAT128
 #include <boost/multiprecision/float128.hpp>
 using boost::multiprecision::float128;
 #endif
 
+
+using boost::math::statistics::anderson_darling_normality_statistic;
 
 void test_ad_normal_agreement_w_mathematica()
 {
@@ -36,7 +38,7 @@ void test_ad_normal_agreement_w_mathematica()
 
     double expected = 1.542329830419774;
     std::sort(v.begin(), v.end());
-    double ADtest = boost::math::anderson_darling_normality_statistic(v, 0.0, 1.0);
+    double ADtest = anderson_darling_normality_statistic(v, 0.0, 1.0);
 
     CHECK_ULP_CLOSE(expected, ADtest, 250);
 
@@ -44,14 +46,14 @@ void test_ad_normal_agreement_w_mathematica()
     for (auto & x : v) {
         x *= sigma;
     }
-    ADtest = boost::math::anderson_darling_normality_statistic(v, 0.0, sigma);
+    ADtest = anderson_darling_normality_statistic(v, 0.0, sigma);
     CHECK_ULP_CLOSE(expected, ADtest, 250);
 
     double mu = 10;
     for (auto & x : v) {
         x += mu;
     }
-    ADtest = boost::math::anderson_darling_normality_statistic(v, mu, sigma);
+    ADtest = anderson_darling_normality_statistic(v, mu, sigma);
     CHECK_ULP_CLOSE(expected, ADtest, 250);
 }
 

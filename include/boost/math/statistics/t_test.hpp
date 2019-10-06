@@ -6,25 +6,40 @@
 #ifndef BOOST_MATH_STATISTICS_T_TEST_HPP
 #define BOOST_MATH_STATISTICS_T_TEST_HPP
 
+#include <cmath>
+#include <iterator>
+#include <utility>
 #include <boost/math/distributions/students_t.hpp>
 #include <boost/math/statistics/univariate_statistics.hpp>
 
 namespace boost::math::statistics {
 
-template<class RandomAccessContainer>
-auto one_sample_t_test_statistic(RandomAccessContainer const & v, typename RandomAccessContainer::value_type assumed_mean) {
-    auto [mu, s_sq] = mean_and_sample_variance(v.begin(), v.end());
-    return (mu - assumed_mean)/sqrt(s_sq/v.size());
+template<typename Real>
+std::pair<Real, Real> one_sample_t_test(Real sample_mean, Real sample_variance, Real num_samples, Real assumed_mean) {
+    using std::sqrt;
+    Real test_statistic = (sample_mean - assumed_mean)/sqrt(sample_variance/num_samples);
+    auto student = boost::math::students_t_distribution<Real>(num_samples - 1);
+    Real pvalue;
+    if (test_statistic > 0) {
+        pvalue = 2*boost::math::cdf<Real>(student, -test_statistic);;
+    }
+    else {
+        pvalue = 2*boost::math::cdf<Real>(student, test_statistic);
+    }
+    return std::make_pair(test_statistic, pvalue);
 }
 
-template<class RandomAccessContainer>
-auto one_sample_t_test_pvalue(RandomAccessContainer const & v, typename RandomAccessContainer::value_type assumed_mean) {
-    using Real = typename RandomAccessContainer::value_type;
-    auto statistic = one_sample_t_test_statistic(v, assumed_mean);
-    auto student = boost::math::students_t_distribution<Real>(v.size()-1);
-    return boost::math::cdf(student, statistic);
+template<class ForwardIterator>
+auto one_sample_t_test(ForwardIterator begin, ForwardIterator end, typename std::iterator_traits<ForwardIterator>::value_type assumed_mean) {
+    using Real = typename std::iterator_traits<ForwardIterator>::value_type;
+    auto [mu, s_sq] = mean_and_sample_variance(begin, end);
+    return one_sample_t_test(mu, s_sq, Real(std::distance(begin, end)), assumed_mean);
 }
 
+template<class Container>
+auto one_sample_t_test(Container const & v, typename Container::value_type assumed_mean) {
+    return one_sample_t_test(v.begin(), v.end(), assumed_mean);
+}
 
 }
 #endif

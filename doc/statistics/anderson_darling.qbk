@@ -10,16 +10,16 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 [heading Synopsis]
 
 ```
-#include <boost/math/distributions/anderson_darling.hpp>
+#include <boost/math/statistics/anderson_darling.hpp>
 
-namespace boost{ namespace math{
+namespace boost{ namespace math { namespace { statistics {
 
 template<class RandomAccessContainer>
 auto anderson_darling_normality_statistic(RandomAccessContainer const & v,
                                           typename RandomAccessContainer::value_type mu = std::numeric_limits<typename RandomAccessContainer::value_type>::quiet_NaN(),
                                           typename RandomAccessContainer::value_type sd = std::numeric_limits<typename RandomAccessContainer::value_type>::quiet_NaN());
 
-}}
+}}}
 ```
 
 [heading Background]
@@ -43,8 +43,8 @@ An example usage is demonstrated below:
 #include <vector>
 #include <random>
 #include <iostream>
-#include <boost/math/distributions/anderson_darling.hpp>
-using boost::math::anderson_darling_normality_statistic;
+#include <boost/math/statistics/anderson_darling.hpp>
+using boost::math::statistics::anderson_darling_normality_statistic;
 std::random_device rd;
 std::normal_distribution<double> dis(0, 1);
 std::vector<double> v(8192);

@@ -38,7 +38,6 @@
 [include uniform.qbk]
 [include weibull.qbk]
 [include empirical_cdf.qbk]
-[include anderson_darling.qbk]
 
 [endsect] [/section:dists Distributions]
 
