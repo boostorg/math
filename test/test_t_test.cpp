@@ -91,6 +91,5 @@ int main()
     test_agreement_with_mathematica();
     test_exact_mean<float>();
     test_exact_mean<double>();
-    test_exact_mean<long double>();
     return boost::math::test::report_errors();
 }

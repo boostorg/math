@@ -17,8 +17,13 @@ namespace boost::math::statistics {
 template<typename Real>
 std::pair<Real, Real> one_sample_t_test(Real sample_mean, Real sample_variance, Real num_samples, Real assumed_mean) {
     using std::sqrt;
+    typedef boost::math::policies::policy<
+          boost::math::policies::promote_float<false>,
+          boost::math::policies::promote_double<false> >
+          no_promote_policy;
+
     Real test_statistic = (sample_mean - assumed_mean)/sqrt(sample_variance/num_samples);
-    auto student = boost::math::students_t_distribution<Real>(num_samples - 1);
+    auto student = boost::math::students_t_distribution<Real, no_promote_policy>(num_samples - 1);
     Real pvalue;
     if (test_statistic > 0) {
         pvalue = 2*boost::math::cdf<Real>(student, -test_statistic);;

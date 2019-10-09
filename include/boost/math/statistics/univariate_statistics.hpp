@@ -172,7 +172,11 @@ auto mean_and_sample_variance(ForwardIterator first, ForwardIterator last)
     }
 }
 
-
+template<class Container>
+auto mean_and_sample_variance(Container const & v)
+{
+    return mean_and_sample_variance(v.begin(), v.end());
+}
 
 // Follows equation 1.5 of:
 // https://prod.sandia.gov/techlib-noauth/access-control.cgi/2008/086212.pdf
