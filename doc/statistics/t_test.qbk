@@ -12,8 +12,6 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ```
 #include <boost/math/statistics/t_test.hpp>
 
-namespace boost{ namespace math { namespace { statistics {
-
 namespace boost::math::statistics {
 
 template<typename Real>
@@ -30,7 +28,7 @@ auto one_sample_t_test(Container const & v, typename Container::value_type assum
 
 [heading Background]
 
-A one-sample /t/-test attempts to answer the question "is it likely that the population mean of my data is a certain value, given a sample mean?"
+A one-sample /t/-test attempts to answer the question "given a sample mean, is it likely that the population mean of my data is a certain value?"
 The test statistic is
 
 [$../graphs/one_sample_t_test_statistic.svg]
@@ -64,11 +62,40 @@ auto [t, p] = boost::math::statistics::one_sample_t_test(v, 0.0);
 The test statistic is the first element of the pair, and the /p/-value is the second element.
 
 
-
 [heading Performance]
 
+There are two cases: Where the mean and sample variance have already been computed, and the case where the mean and sample variance must be computed on the fly.
 
-[heading Caveats]
+```
+----------------------------------------------
+Benchmark                                Time
+----------------------------------------------
+OneSampleTTest<double>/8               291 ns bytes_per_second=210.058M/s
+OneSampleTTest<double>/16             1064 ns bytes_per_second=114.697M/s
+OneSampleTTest<double>/32              407 ns bytes_per_second=599.213M/s
+OneSampleTTest<double>/64              595 ns bytes_per_second=821.086M/s
+OneSampleTTest<double>/128            1475 ns bytes_per_second=662.071M/s
+OneSampleTTest<double>/256            1746 ns bytes_per_second=1118.85M/s
+OneSampleTTest<double>/512            3303 ns bytes_per_second=1.15492G/s
+OneSampleTTest<double>/1024           6404 ns bytes_per_second=1.19139G/s
+OneSampleTTest<double>/2048          12461 ns bytes_per_second=1.2245G/s
+OneSampleTTest<double>/4096          24805 ns bytes_per_second=1.23029G/s
+OneSampleTTest<double>/8192          49639 ns bytes_per_second=1.22956G/s
+OneSampleTTest<double>/16384         98685 ns bytes_per_second=1.23698G/s
+OneSampleTTest<double>/32768        197434 ns bytes_per_second=1.23656G/s
+OneSampleTTest<double>/65536        393929 ns bytes_per_second=1.23952G/s
+OneSampleTTest<double>/131072       790967 ns bytes_per_second=1.23466G/s
+OneSampleTTest<double>/262144      1582366 ns bytes_per_second=1.23434G/s
+OneSampleTTest<double>/524288      3141112 ns bytes_per_second=1.24358G/s
+OneSampleTTest<double>/1048576     6260407 ns bytes_per_second=1.24792G/s
+OneSampleTTest<double>/2097152    12521811 ns bytes_per_second=1.24784G/s
+OneSampleTTest<double>/4194304    25076257 ns bytes_per_second=1.24619G/s
+OneSampleTTest<double>/8388608    50226183 ns bytes_per_second=1.2444G/s
+OneSampleTTest<double>/16777216  100522789 ns bytes_per_second=1.24353G/s
+OneSampleTTest<double>_BigO           5.99 N
+OneSampleTTest<double>_RMS               0 %
+OneSampleTTestKnownMeanAndVariance<double>        207 ns
+```
 
 
 [endsect]
