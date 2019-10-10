@@ -25,7 +25,7 @@ auto ljung_box(RandomAccessIterator begin, RandomAccessIterator end, int64_t lag
     if (lags == -1) {
       // This is the same default as Mathematica; it seems sensible enough . . .
       lags = static_cast<int64_t>(std::ceil(std::log(Real(n))));
-      std::cout << "Number of lags = " << lags << "\n";
+      //std::cout << "Number of lags = " << lags << "\n";
     }
 
     if (lags <= 0) {
@@ -45,14 +45,14 @@ auto ljung_box(RandomAccessIterator begin, RandomAccessIterator end, int64_t lag
     Real Q = 0;
     for (size_t i = 1; i < r.size(); ++i) {
       r[i] /= r[0];
-      std::cout << "r[" << i << "] = " << r[i] << "\n";
+     // std::cout << "r[" << i << "] = " << r[i] << "\n";
     }
 
 
     for (size_t k = 1; k < r.size(); ++k) {
       Q += r[k]*r[k]/((n-k));
     }
-    std::cout << "Q/(n*(n+2)) = " << Q << "\n";
+    //std::cout << "Q/(n*(n+2)) = " << Q << "\n";
     Q *= n*(n+2);
     Real pvalue = -1;
     return std::make_pair(Q, pvalue);
