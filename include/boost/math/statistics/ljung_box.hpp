@@ -32,12 +32,14 @@ auto ljung_box(RandomAccessIterator begin, RandomAccessIterator end, int64_t lag
       throw std::domain_error("Must have at least one lag.");
     }
 
+    auto mu = boost::math::statistics::mean(begin, end);
+
 
     std::vector<Real> r(lags + 1, Real(0));
     for (size_t i = 0; i < r.size(); ++i) {
       for (auto it = begin + i; it != end; ++it) {
-        Real ak = *(it);
-        Real akml = *(it-i);
+        Real ak = *(it) - mu;
+        Real akml = *(it-i) - mu;
         r[i] += ak*akml;
       }
     }
@@ -54,7 +56,15 @@ auto ljung_box(RandomAccessIterator begin, RandomAccessIterator end, int64_t lag
     }
     //std::cout << "Q/(n*(n+2)) = " << Q << "\n";
     Q *= n*(n+2);
-    Real pvalue = -1;
+
+    typedef boost::math::policies::policy<
+          boost::math::policies::promote_float<false>,
+          boost::math::policies::promote_double<false> >
+          no_promote_policy;
+
+    auto chi = boost::math::chi_squared_distribution<Real, no_promote_policy>(Real(lags - fit_dof));
+
+    Real pvalue = 1 - boost::math::pdf(chi, Q);
     return std::make_pair(Q, pvalue);
 }
 

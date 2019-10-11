@@ -23,6 +23,7 @@ void test_trivial()
   auto [computed_statistic, computed_pvalue] = ljung_box(v, 1);
   CHECK_ULP_CLOSE(expected_statistic, computed_statistic, 10);
 
+  std::cout << "Compute p-value = " << computed_pvalue << "\n";
 }
 
 
@@ -32,13 +33,14 @@ void test_agreement_with_mathematica()
   double expected_statistic = 10.2076093223439;
 
   auto [computed_statistic, computed_pvalue] = ljung_box(v);
-  CHECK_ULP_CLOSE(expected_statistic, computed_statistic, 10);
+  CHECK_ULP_CLOSE(expected_statistic, computed_statistic, 0);
+
 
 }
 
 int main()
 {
     test_trivial<double>();
-    //test_agreement_with_mathematica();
+    test_agreement_with_mathematica();
     return boost::math::test::report_errors();
 }
