@@ -73,6 +73,13 @@ void expected_results()
          "[^|]*",                          // compiler
          "[^|]*",                          // stdlib
          "[^|]*",                          // platform
+         "real_concept",                     // test type(s)
+         "[^|]*Large.*",                          // test data group
+         ".*", 160000, 8000);                  // test function
+      add_expected_result(
+         "[^|]*",                          // compiler
+         "[^|]*",                          // stdlib
+         "[^|]*",                          // platform
          largest_type,                     // test type(s)
          "[^|]*Large.*",                          // test data group
          ".*", 80000, 5000);                  // test function
