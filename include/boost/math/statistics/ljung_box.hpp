@@ -25,7 +25,6 @@ auto ljung_box(RandomAccessIterator begin, RandomAccessIterator end, int64_t lag
     if (lags == -1) {
       // This is the same default as Mathematica; it seems sensible enough . . .
       lags = static_cast<int64_t>(std::ceil(std::log(Real(n))));
-      //std::cout << "Number of lags = " << lags << "\n";
     }
 
     if (lags <= 0) {
@@ -33,7 +32,6 @@ auto ljung_box(RandomAccessIterator begin, RandomAccessIterator end, int64_t lag
     }
 
     auto mu = boost::math::statistics::mean(begin, end);
-
 
     std::vector<Real> r(lags + 1, Real(0));
     for (size_t i = 0; i < r.size(); ++i) {
@@ -45,16 +43,10 @@ auto ljung_box(RandomAccessIterator begin, RandomAccessIterator end, int64_t lag
     }
 
     Real Q = 0;
-    for (size_t i = 1; i < r.size(); ++i) {
-      r[i] /= r[0];
-     // std::cout << "r[" << i << "] = " << r[i] << "\n";
-    }
-
 
     for (size_t k = 1; k < r.size(); ++k) {
-      Q += r[k]*r[k]/((n-k));
+      Q += r[k]*r[k]/(r[0]*r[0]*(n-k));
     }
-    //std::cout << "Q/(n*(n+2)) = " << Q << "\n";
     Q *= n*(n+2);
 
     typedef boost::math::policies::policy<
@@ -64,7 +56,7 @@ auto ljung_box(RandomAccessIterator begin, RandomAccessIterator end, int64_t lag
 
     auto chi = boost::math::chi_squared_distribution<Real, no_promote_policy>(Real(lags - fit_dof));
 
-    Real pvalue = 1 - boost::math::pdf(chi, Q);
+    Real pvalue = 1 - boost::math::cdf(chi, Q);
     return std::make_pair(Q, pvalue);
 }
 

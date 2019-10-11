@@ -26,7 +26,7 @@ auto ljung_box(RandomAccessContainer const & v, int64_t lags = -1, int64_t fit_d
 
 [heading Background]
 
-The Ljung-Box test is used to test if residuals from a fitted model do not have unwanted autocorrelation.
+The Ljung-Box test is used to test if residuals from a fitted model have unwanted autocorrelation.
 If autocorrelation exists in the residuals, then presumably a model with more parameters can be fitted to the original data and explain more of the structure it contains.
 
 The test statistic is
@@ -36,6 +36,8 @@ The test statistic is
 where /n/ is the length of /v/ and \u2113 is the number of lags.
 
 The variance of the statistic slightly exceeds the variance of the chi squared distribution, but nonetheless it still is a fairly good test with reasonable computational cost.
+
+An example use is given below:
 
 
 ```
@@ -49,6 +51,15 @@ std::normal_distribution<double> dis(0, 1);
 std::vector<double> v(8192);
 for (auto & x : v) { x = dis(rd); }
 auto [Q, p] = ljung_box(v);
+// Possible output: Q = 5.94734, p = 0.819668
+```
+
+Now if the result is clearly autocorrelated:
+
+```
+for (size_t i = 0; i < v.size(); ++i) { v[i] = i; }
+auto [Q, p] = ljung_box(v);
+// Possible output: Q = 81665.1, p = 0
 ```
 
 By default, the number of lags is taken to be the logarithm of the number of samples, so that the default complexity is [bigO](/n/ ln /n/).
@@ -68,10 +79,7 @@ int64_t fit_dof = 2;
 auto [Q, p] = ljung_box(v, -1, fit_dof);
 ```
 
-For example, if you fit your data with an ARIMA(p,q) model, then `fit_dof = p + q`.
-
-
-[heading Performance]
+For example, if you fit your data with an ARIMA(/p/, /q/) model, then `fit_dof = p + q`.
 
 
 
