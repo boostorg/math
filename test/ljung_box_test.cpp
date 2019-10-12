@@ -42,10 +42,8 @@ void test_agreement_with_mathematica()
   double expected_pvalue = 0.00607359458123835072;
 
   auto [computed_statistic, computed_pvalue] = ljung_box(v);
-  CHECK_ULP_CLOSE(expected_statistic, computed_statistic, 0);
-  CHECK_ULP_CLOSE(expected_pvalue, computed_pvalue, 0);
-
-
+  CHECK_ULP_CLOSE(expected_statistic, computed_statistic, 3);
+  CHECK_ULP_CLOSE(expected_pvalue, computed_pvalue, 3);
 }
 
 int main()
