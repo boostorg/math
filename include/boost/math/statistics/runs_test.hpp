@@ -11,6 +11,7 @@
 #include <cmath>
 #include <algorithm>
 #include <boost/math/statistics/univariate_statistics.hpp>
+#include <boost/math/distributions/normal.hpp>
 
 namespace boost::math::statistics {
 
@@ -18,6 +19,13 @@ template<class RandomAccessContainer>
 auto runs_above_threshold(RandomAccessContainer const & v,
                           typename RandomAccessContainer::value_type threshold)
 {
+    using Real = typename RandomAccessContainer::value_type;
+    using std::sqrt;
+    using std::abs;
+    if (v.size() == 0)
+    {
+        throw std::domain_error("Need at least one sample to get number of runs.");
+    }
     typedef boost::math::policies::policy<
           boost::math::policies::promote_float<false>,
           boost::math::policies::promote_double<false> >
@@ -36,8 +44,29 @@ auto runs_above_threshold(RandomAccessContainer const & v,
     }
     Real n = nabove + nbelow;
 
-    Real mu = Real(1) + Real(2*nabove*nbelow)/Real(n);
+    Real expected_runs = Real(1) + Real(2*nabove*nbelow)/Real(n);
     Real var = 2*nabove*nbelow*(2*nabove*nbelow-n)/Real(n*n*(n-1));
+
+    bool run_sign = (v[0] > threshold);
+    decltype(v.size()) runs = 1;
+    for (decltype(v.size()) i = 1; i < v.size(); ++i) {
+      if (v[i] == threshold) {
+        // skip values precisely equal to threshold.
+        continue;
+      }
+      if (run_sign == (v[i] > threshold)) {
+        continue;
+      }
+      else {
+        run_sign = (v[i] > threshold);
+        runs++;
+      }
+    }
+    Real sd = sqrt(var);
+    Real statistic = (runs - expected_runs)/sd;
+    auto normal = boost::math::normal_distribution<Real, no_promote_policy>(0,1);
+    Real pvalue = 2*boost::math::cdf(normal, -abs(statistic));
+    return std::make_pair(statistic, pvalue);
 }
 
 template<class RandomAccessContainer>
@@ -55,6 +84,7 @@ auto runs_above_median(RandomAccessContainer const & v)
         auto w = v;
         median = boost::math::statistics::median(w);
     }
+    std::cout << "Median = " << median << "\n";
 
 
     return runs_above_threshold(v, median);

@@ -1,0 +1,63 @@
+[/
+Copyright (c) 2019 Nick Thompson
+Use, modification and distribution are subject to the
+Boost Software License, Version 1.0. (See accompanying file
+LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+]
+
+[section:runs_test Runs tests]
+
+[heading Synopsis]
+
+```
+#include <boost/math/statistics/runs_test.hpp>
+
+namespace boost::math::statistics {
+
+template<typename RandomAccessContainer>
+std::pair<Real, Real> runs_above_threshold(RandomAccessContainer const & v, typename RandomAccessContainer::value_type threshold);
+
+template<typename RandomAccessContainer>
+std::pair<Real, Real> runs_above_median(RandomAccessContainer const & v);
+
+}}}
+```
+
+[heading Background]
+
+The "runs above median test" tries to determine if a sequence is random by looking at the number of runs which exceed the median value of the sequence.
+
+An example usage is as follows:
+
+```
+#include <vector>
+#include <random>
+#include <boost/math/statistics/runs_test.hpp>
+
+std::random_device rd;
+std::mt19937 gen{rd()};
+std::normal_distribution<double> dis{0,1};
+std::vector<double> v(1024);
+for (auto & x : v) {
+  x = dis(gen);
+}
+
+auto [t, p] = boost::math::statistics::runs_above_median(v);
+```
+
+The test statistic is the first element of the pair, and the /p/-value is the second element.
+
+
+[heading Performance]
+
+There are two cases: Where the threshold (typically the median) has already been computed, and the case where the mean and sample variance must be computed on the fly.
+
+```
+----------------------------------------------
+Benchmark                                Time
+----------------------------------------------
+```
+
+
+[endsect]
+[/section:runs_test]
