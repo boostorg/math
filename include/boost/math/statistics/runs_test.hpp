@@ -16,15 +16,15 @@
 namespace boost::math::statistics {
 
 template<class RandomAccessContainer>
-auto runs_above_threshold(RandomAccessContainer const & v,
+auto runs_above_and_below_threshold(RandomAccessContainer const & v,
                           typename RandomAccessContainer::value_type threshold)
 {
     using Real = typename RandomAccessContainer::value_type;
     using std::sqrt;
     using std::abs;
-    if (v.size() == 0)
+    if (v.size() <= 4)
     {
-        throw std::domain_error("Need at least one sample to get number of runs.");
+        throw std::domain_error("At least 5 samples are required to get number of runs.");
     }
     typedef boost::math::policies::policy<
           boost::math::policies::promote_float<false>,
@@ -34,60 +34,60 @@ auto runs_above_threshold(RandomAccessContainer const & v,
     decltype(v.size()) nabove = 0;
     decltype(v.size()) nbelow = 0;
 
-    for (auto const & x : v) {
-        if (x > threshold) {
-            ++nabove;
-        }
-        if (x < threshold) {
-            ++nbelow;
-        }
+    bool run_up = (v[0] > threshold);
+    if (run_up) {
+        ++nabove;
+    } else {
+        ++nbelow;
     }
-    Real n = nabove + nbelow;
-
-    Real expected_runs = Real(1) + Real(2*nabove*nbelow)/Real(n);
-    Real var = 2*nabove*nbelow*(2*nabove*nbelow-n)/Real(n*n*(n-1));
-
-    bool run_sign = (v[0] > threshold);
     decltype(v.size()) runs = 1;
     for (decltype(v.size()) i = 1; i < v.size(); ++i) {
       if (v[i] == threshold) {
         // skip values precisely equal to threshold.
         continue;
       }
-      if (run_sign == (v[i] > threshold)) {
+      bool above = (v[i] > threshold);
+      if (above) {
+          ++nabove;
+      } else {
+          ++nbelow;
+      }
+      if (run_up == above) {
         continue;
       }
       else {
-        run_sign = (v[i] > threshold);
+        run_up = above;
         runs++;
       }
     }
+
+    // What should be done about a constant vector? Then n = 0:
+    Real n = nabove + nbelow;
+
+    Real expected_runs = Real(1) + Real(2*nabove*nbelow)/Real(n);
+    // What if this <= 0? I shudder to think of it. . .
+    Real var = 2*nabove*nbelow*(2*nabove*nbelow-n)/Real(n*n*(n-1));
+
     Real sd = sqrt(var);
     Real statistic = (runs - expected_runs)/sd;
+
     auto normal = boost::math::normal_distribution<Real, no_promote_policy>(0,1);
     Real pvalue = 2*boost::math::cdf(normal, -abs(statistic));
     return std::make_pair(statistic, pvalue);
 }
 
 template<class RandomAccessContainer>
-auto runs_above_median(RandomAccessContainer const & v)
+auto runs_above_and_below_median(RandomAccessContainer const & v)
 {
     using Real = typename RandomAccessContainer::value_type;
     using std::log;
     using std::sqrt;
 
-    Real median;
-
-    {
-        // We have to memcpy v because the median does a partial sort,
-        // and that would be catastrophic for the runs test.
-        auto w = v;
-        median = boost::math::statistics::median(w);
-    }
-    std::cout << "Median = " << median << "\n";
-
-
-    return runs_above_threshold(v, median);
+    // We have to memcpy v because the median does a partial sort,
+    // and that would be catastrophic for the runs test.
+    auto w = v;
+    Real median = boost::math::statistics::median(w);
+    return runs_above_and_below_threshold(v, median);
 }
 
 }

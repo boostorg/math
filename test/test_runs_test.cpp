@@ -10,7 +10,7 @@
 #include <random>
 #include <boost/math/statistics/runs_test.hpp>
 
-using boost::math::statistics::runs_above_median;
+using boost::math::statistics::runs_above_and_below_median;
 
 void test_agreement_with_r_randtests()
 {
@@ -39,13 +39,10 @@ void test_agreement_with_r_randtests()
   double expected_statistic = -1.74772579501060576;
   double expected_pvalue = 0.0805115199405023046;
 
-  auto [computed_statistic, computed_pvalue] = runs_above_median(v);
-  std::cout << "Computed statistic = " << computed_statistic << "\n";
-  std::cout << "Expected statistic = " << expected_statistic << "\n";
+  auto [computed_statistic, computed_pvalue] = runs_above_and_below_median(v);
 
   CHECK_ULP_CLOSE(expected_statistic, computed_statistic, 3);
   CHECK_ULP_CLOSE(expected_pvalue, computed_pvalue, 3);
-
 }
 
 int main()
