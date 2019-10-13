@@ -42,7 +42,6 @@ private:
 template <class TimeContainer, class SpaceContainer>
 vector_barycentric_rational_imp<TimeContainer, SpaceContainer>::vector_barycentric_rational_imp(TimeContainer&& t, SpaceContainer&& y, size_t approximation_order)
 {
-    using Real = typename TimeContainer::value_type;
     using std::numeric_limits;
     t_ = std::move(t);
     y_ = std::move(y);
