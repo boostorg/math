@@ -66,8 +66,8 @@ void test_agreement_with_1d()
     {
         Real t = dis2(gen);
         interpolator(z, t);
-        BOOST_CHECK_CLOSE(z[0], scalar_interpolator0(t), 2*numeric_limits<Real>::epsilon());
-        BOOST_CHECK_CLOSE(z[1], scalar_interpolator1(t), 2*numeric_limits<Real>::epsilon());
+        BOOST_CHECK_CLOSE(z[0], scalar_interpolator0(t), 10000*numeric_limits<Real>::epsilon());
+        BOOST_CHECK_CLOSE(z[1], scalar_interpolator1(t), 10000*numeric_limits<Real>::epsilon());
     }
 }
 
