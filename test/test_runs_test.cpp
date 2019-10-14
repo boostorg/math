@@ -45,8 +45,33 @@ void test_agreement_with_r_randtests()
   CHECK_ULP_CLOSE(expected_pvalue, computed_pvalue, 3);
 }
 
+void test_doc_example()
+{
+    std::vector<double> v{5, 2, 0, 4, 7, 9, 10, 6, 1, 8, 3};
+    double expected_statistic = -0.670820393249936919;
+    double expected_pvalue = 0.502334954360502017;
+
+    auto [computed_statistic, computed_pvalue] = runs_above_and_below_median(v);
+
+    CHECK_ULP_CLOSE(expected_statistic, computed_statistic, 3);
+    CHECK_ULP_CLOSE(expected_pvalue, computed_pvalue, 3);
+}
+
+void test_constant_vector()
+{
+    std::vector<double> v{5,5,5,5,5,5,5};
+    auto [computed_statistic, computed_pvalue] = runs_above_and_below_median(v);
+    double expected_pvalue = 0;
+    CHECK_ULP_CLOSE(expected_pvalue, computed_pvalue, 3);
+    if (!std::isnan(computed_statistic)) {
+        std::cerr << "Computed statistic is not a nan!\n";
+    }
+}
+
 int main()
 {
+    test_constant_vector();
     test_agreement_with_r_randtests();
+    test_doc_example();
     return boost::math::test::report_errors();
 }

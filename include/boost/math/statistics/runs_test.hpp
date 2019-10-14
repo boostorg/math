@@ -10,6 +10,7 @@
 
 #include <cmath>
 #include <algorithm>
+#include <utility>
 #include <boost/math/statistics/univariate_statistics.hpp>
 #include <boost/math/distributions/normal.hpp>
 
@@ -22,9 +23,9 @@ auto runs_above_and_below_threshold(RandomAccessContainer const & v,
     using Real = typename RandomAccessContainer::value_type;
     using std::sqrt;
     using std::abs;
-    if (v.size() <= 4)
+    if (v.size() <= 1)
     {
-        throw std::domain_error("At least 5 samples are required to get number of runs.");
+        throw std::domain_error("At least 2 samples are required to get number of runs.");
     }
     typedef boost::math::policies::policy<
           boost::math::policies::promote_float<false>,
@@ -34,16 +35,28 @@ auto runs_above_and_below_threshold(RandomAccessContainer const & v,
     decltype(v.size()) nabove = 0;
     decltype(v.size()) nbelow = 0;
 
-    bool run_up = (v[0] > threshold);
+    decltype(v.size()) imin = 0;
+
+    // Take care of the case that v[0] == threshold:
+    while (imin < v.size() && v[imin] == threshold) {
+        ++imin;
+    }
+
+    // Take care of the constant vector case:
+    if (imin == v.size()) {
+        return std::make_pair(std::numeric_limits<Real>::quiet_NaN(), Real(0));
+    }
+
+    bool run_up = (v[imin] > threshold);
     if (run_up) {
         ++nabove;
     } else {
         ++nbelow;
     }
     decltype(v.size()) runs = 1;
-    for (decltype(v.size()) i = 1; i < v.size(); ++i) {
+    for (decltype(v.size()) i = imin + 1; i < v.size(); ++i) {
       if (v[i] == threshold) {
-        // skip values precisely equal to threshold.
+        // skip values precisely equal to threshold (following R's randtests package)
         continue;
       }
       bool above = (v[i] > threshold);
@@ -61,14 +74,28 @@ auto runs_above_and_below_threshold(RandomAccessContainer const & v,
       }
     }
 
-    // What should be done about a constant vector? Then n = 0:
+    // If you make n an int, the subtraction is gonna be bad in the variance:
     Real n = nabove + nbelow;
 
     Real expected_runs = Real(1) + Real(2*nabove*nbelow)/Real(n);
-    // What if this <= 0? I shudder to think of it. . .
-    Real var = 2*nabove*nbelow*(2*nabove*nbelow-n)/Real(n*n*(n-1));
+    Real variance = 2*nabove*nbelow*(2*nabove*nbelow-n)/Real(n*n*(n-1));
 
-    Real sd = sqrt(var);
+    // Bizarre, pathological limits:
+    if (variance == 0)
+    {
+        if (runs == expected_runs)
+        {
+            Real statistic = 0;
+            Real pvalue = 1;
+            return std::make_pair(statistic, pvalue);
+        }
+        else
+        {
+            return std::make_pair(std::numeric_limits<Real>::quiet_NaN(), Real(0));
+        }
+    }
+
+    Real sd = sqrt(variance);
     Real statistic = (runs - expected_runs)/sd;
 
     auto normal = boost::math::normal_distribution<Real, no_promote_policy>(0,1);
