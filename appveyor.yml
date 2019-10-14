@@ -50,67 +50,63 @@ environment:
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
       ARGS: --toolset=msvc-14.1 address-model=64 cxxstd=17
       TEST_SUITE: special_fun distribution_tests
-    
+
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
       ARGS: --toolset=msvc-14.1 address-model=64 cxxstd=17
       TEST_SUITE: misc quadrature ../example//examples
-    
+
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
       ARGS: --toolset=msvc-14.1 address-model=32
       TEST_SUITE: special_fun
-    
+
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
       ARGS: --toolset=msvc-14.1 address-model=32
       TEST_SUITE: distribution_tests
-    
+
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
       ARGS: --toolset=msvc-14.1 address-model=32
       TEST_SUITE: misc quadrature ../example//examples
-    
+
     - ARGS: --toolset=gcc address-model=64
       TEST_SUITE: float128_tests
       PATH: C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin;%PATH%
-    
+
     - ARGS: --toolset=gcc address-model=64 cxxflags=-std=gnu++1z
       TEST_SUITE: float128_tests
       PATH: C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin;%PATH%
-    
+
     - ARGS: --toolset=gcc address-model=64
       TEST_SUITE: special_fun
       PATH: C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin;%PATH%
-    
+
     - ARGS: --toolset=gcc address-model=64 cxxflags=-std=gnu++1z
       TEST_SUITE: special_fun
       PATH: C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin;%PATH%
-    
+
     - ARGS: --toolset=gcc address-model=64
       TEST_SUITE: distribution_tests
       PATH: C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin;%PATH%
-    
+
     - ARGS: --toolset=gcc address-model=64 cxxflags=-std=gnu++1z
       TEST_SUITE: distribution_tests
       PATH: C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin;%PATH%
-    
-    - ARGS: --toolset=gcc address-model=64 
+
+    - ARGS: --toolset=gcc address-model=64
       TEST_SUITE: misc
       PATH: C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin;%PATH%
-    
+
     - ARGS: --toolset=gcc address-model=64 cxxflags=-std=gnu++1z
       TEST_SUITE: quadrature
       PATH: C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin;%PATH%
 
-    - ARGS: --toolset=gcc address-model=64 
+    - ARGS: --toolset=gcc address-model=64
       TEST_SUITE: misc
       PATH: C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin;%PATH%
-    
-    - ARGS: --toolset=gcc address-model=64 cxxflags=-std=gnu++1z
-      TEST_SUITE: quadrature
-      PATH: C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin;%PATH%
 
-    - ARGS: --toolset=gcc address-model=64 
+    - ARGS: --toolset=gcc address-model=64
       TEST_SUITE: ../example//examples
       PATH: C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin;%PATH%
-    
+
     - ARGS: --toolset=gcc address-model=64 cxxflags=-std=gnu++1z
       TEST_SUITE: ../example//examples
       PATH: C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin;%PATH%
