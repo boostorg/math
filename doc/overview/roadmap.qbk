@@ -8,6 +8,12 @@ All old bug reports including closed ones can be viewed on Trac
 
 Recent issues on GitHub [@https://github.com/boostorg/math/issues?utf8=%E2%9C%93&q=is%3Aissue here].
 
+[h4 Math-2.11.0 (Boost-1.72)]
+
+* Reworked the Sterling approximation used by multiprecision gamma functions to be applicable
+to all the function that use the Lanczos approximation at regular precision.  Also extended
+Lanczos approximations up to 100 decimal digit precision.
+
 [h4 Math-2.10.0 (Boost-1.71)]
 
 * Catmull-Rom interpolator now works in C++11.
