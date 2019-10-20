@@ -10,6 +10,20 @@ Recent issues on GitHub [@https://github.com/boostorg/math/issues?utf8=%E2%9C%93
 
 [h4 Math-2.11.0 (Boost-1.72)]
 
+* Added Hypergeometric functions [link math_toolkit.hypergeometric.hypergeometric_1f0 1F0], [link math_toolkit.hypergeometric.hypergeometric_0f1 0F1],
+[link math_toolkit.hypergeometric.hypergeometric_2f0 2F0], [link math_toolkit.hypergeometric.hypergeometric_1f1 1F1] and [link math_toolkit.hypergeometric.hypergeometric_pfq pFq].
+* Added [link math_toolkit.sf_poly.jacobi Jacobi polynomial] (and derivatives) evaluation.
+* Added [link math_toolkit.sf_poly.gegenbauer Gegenbauer polynomial] (and derivatives) evaluation.
+* Added [link math_toolkit.sf_poly.cardinal_b_splines Cardinal B-Splines] (and derivatives) as polynomial functions in their own right.
+* Added [link math_toolkit.cardinal_trigonometric Cardinal Trigonometric Interpolation].
+* Added new statistics sub-section.
+* Added [link math_toolkit.t_test One Sample Student's T Test].
+* Added [link math_toolkit.anderson_darling Anderson Darling test for normality].
+* Added [link math_toolkit.ljung_box Ljung Box test for  auto-correlation].
+* Added [link math_toolkit.runs_test Runs test for random sequences].
+* The headers `boost/math/tools/univariate_statistics.hpp` and `boost/math/tools/bivariate_statistics.hpp`, 
+have been deprecated in favor of `boost/math/statistics/univariate_statistics.hpp` and `boost/math/statistics/bivariate_statistics.hpp`.
+* Added [link math_toolkit.dist_ref.dists.empirical_cdf The Empirical CDF distribution].
 * Reworked the Sterling approximation used by multiprecision gamma functions to be applicable
 to all the function that use the Lanczos approximation at regular precision.  Also extended
 Lanczos approximations up to 100 decimal digit precision.

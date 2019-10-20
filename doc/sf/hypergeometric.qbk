@@ -1,6 +1,6 @@
 [section:hypergeometric Hypergeometric Functions]
 
-[section:hyper_geometric_1f0 Hypergeometric [sub 1]/F/[sub 0] ]
+[section:hypergeometric_1f0 Hypergeometric [sub 1]/F/[sub 0] ]
 
    #include <boost/math/special_functions/hypergeometric_1F0.hpp>
 
@@ -81,7 +81,7 @@ and one of the Bessel function relations otherwise:
 
 [endsect] [/section:hypergeometric_0f1 Hypergeometric [sub 0]/F/[sub 1] ]
 
-[section:hyper_geometric_1f0 Hypergeometric [sub 2]/F/[sub 0]]
+[section:hypergeometric_2f0 Hypergeometric [sub 2]/F/[sub 0]]
 
    #include <boost/math/special_functions/hypergeometric_2F0.hpp>
 
@@ -128,7 +128,7 @@ Otherwise we use the defining series.
 
 [endsect] [/section:hyper_geometric_1f0 Hypergeometric [sub 2]/F/[sub 0]]
 
-[section:hyper_geometric_1f1 Hypergeometric [sub 1]/F/[sub 1]]
+[section:hypergeometric_1f1 Hypergeometric [sub 1]/F/[sub 1]]
 
 
    #include <boost/math/special_functions/hypergeometric_1F1.hpp>
@@ -418,7 +418,7 @@ are destroyed by cancellation.
 
 [endsect]  [/section:hyper_geometric_1f1 Hypergeometric [sub 1]/F/[sub 1]]
 
-[section:pFq Hypergeometric [sub p]F[sub q]]
+[section:hypergeometric_pfq Hypergeometric [sub p]F[sub q]]
 
    #include <boost/math/special_functions/hypergeometric_pFq.hpp>
 

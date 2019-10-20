@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Examples</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
 <link rel="home" href="../../index.html" title="Math Toolkit 2.10.0">
 <link rel="up" href="../fp_facets.html" title="Facets for Floating-Point Infinities and NaNs">
 <link rel="prev" href="reference.html" title="Reference">
@@ -39,10 +39,10 @@
 <span class="identifier">ss</span><span class="special">.</span><span class="identifier">imbue</span><span class="special">(</span><span class="identifier">new_locale</span><span class="special">);</span>
 <span class="keyword">double</span> <span class="identifier">inf</span> <span class="special">=</span> <span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;::</span><span class="identifier">infinity</span><span class="special">();</span>
 <span class="identifier">ss</span> <span class="special">&lt;&lt;</span> <span class="identifier">inf</span><span class="special">;</span> <span class="comment">// Write out.</span>
-<span class="identifier">assert</span><span class="special">(</span><span class="identifier">ss</span><span class="special">.</span><span class="identifier">str</span><span class="special">()</span> <span class="special">==</span> <span class="string">"inf"</span><span class="special">);</span>
+<span class="identifier">BOOST_ASSERT</span><span class="special">(</span><span class="identifier">ss</span><span class="special">.</span><span class="identifier">str</span><span class="special">()</span> <span class="special">==</span> <span class="string">"inf"</span><span class="special">);</span>
 <span class="keyword">double</span> <span class="identifier">r</span><span class="special">;</span>
 <span class="identifier">ss</span> <span class="special">&gt;&gt;</span> <span class="identifier">r</span><span class="special">;</span> <span class="comment">// Read back in.</span>
-<span class="identifier">assert</span><span class="special">(</span><span class="identifier">inf</span> <span class="special">==</span> <span class="identifier">r</span><span class="special">);</span> <span class="comment">// Confirms that the double values really are identical.</span>
+<span class="identifier">BOOST_ASSERT</span><span class="special">(</span><span class="identifier">inf</span> <span class="special">==</span> <span class="identifier">r</span><span class="special">);</span> <span class="comment">// Confirms that the double values really are identical.</span>
 
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"infinity output was "</span> <span class="special">&lt;&lt;</span> <span class="identifier">ss</span><span class="special">.</span><span class="identifier">str</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"infinity input was "</span> <span class="special">&lt;&lt;</span> <span class="identifier">r</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
