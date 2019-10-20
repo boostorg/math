@@ -10,7 +10,7 @@
 #include <iostream>
 #include <boost/type_index.hpp>
 #include <boost/test/included/unit_test.hpp>
-#include <boost/test/floating_point_comparison.hpp>
+#include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/special_functions/bessel.hpp>
 #include <boost/math/special_functions/bessel_prime.hpp>
 #include <boost/math/special_functions/next.hpp>

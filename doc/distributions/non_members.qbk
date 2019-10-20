@@ -297,10 +297,10 @@ a defined skewness.
 
 Returns the 'proper' kurtosis (normalized fourth moment) of the distribution /dist/.
 
-kertosis = [beta][sub 2][space]= [mu][sub 4][space] / [mu][sub 2][super 2]
+kertosis = [beta][sub 2]= [mu][sub 4] / [mu][sub 2][super 2]
 
-Where [mu][sub i][space] is the i'th central moment of the distribution, and
-in particular [mu][sub 2][space] is the variance of the distribution.
+Where [mu][sub i] is the i'th central moment of the distribution, and
+in particular [mu][sub 2] is the variance of the distribution.
 
 The kurtosis is a measure of the "peakedness" of a distribution.
 
@@ -329,10 +329,10 @@ a defined kurtosis.
 
 Returns the kurtosis excess of the distribution /dist/.
 
-kurtosis excess = [gamma][sub 2][space]= [mu][sub 4][space] / [mu][sub 2][super 2][space]- 3 = kurtosis - 3
+kurtosis excess = [gamma][sub 2]= [mu][sub 4] / [mu][sub 2][super 2]- 3 = kurtosis - 3
 
-Where [mu][sub i][space] is the i'th central moment of the distribution, and
-in particular [mu][sub 2][space] is the variance of the distribution.
+Where [mu][sub i] is the i'th central moment of the distribution, and
+in particular [mu][sub 2] is the variance of the distribution.
 
 The kurtosis excess is a measure of the "peakedness" of a distribution, and
 is more widely used than the "kurtosis proper".  It is defined so that

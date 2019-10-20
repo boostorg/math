@@ -101,7 +101,6 @@ In this case, the template argument is the real type, and the complex type is de
 
 [gauss_kronrod_example]
 
-
 [heading Caveats]
 
 For essentially all analytic integrands bounded on the domain, the error estimates provided by the routine are woefully pessimistic.
@@ -120,4 +119,5 @@ use one of the [link math_toolkit.double_exponential double-exponential integrat
 * Dirk P. Laurie, ['Calculation of Gauss-Kronrod Quadrature Rules], Mathematics of Computation, Volume 66, Number 219, 1997
 * Gonnet, Pedro, ['A Review of Error Estimation in Adaptive Quadrature], https://arxiv.org/pdf/1003.4629.pdf
 
-[endsect]
+[endsect] [/section:gauss_kronrod Gauss-Kronrod Quadrature]
+

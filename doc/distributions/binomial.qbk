@@ -130,8 +130,7 @@ best estimate for the success fraction is simply ['k/n], but if you
 want to be 95% sure that the true value is [*greater than] some value,
 ['p[sub min]], then:
 
-   p``[sub min]`` = binomial_distribution<RealType>::find_lower_bound_on_p(
-                       n, k, 0.05);
+   p``[sub min]`` = binomial_distribution<RealType>::find_lower_bound_on_p(n, k, 0.05);
 
 [link math_toolkit.stat_tut.weg.binom_eg.binom_conf See worked example.]
 
@@ -210,8 +209,7 @@ best estimate for the success fraction is simply ['k/n], but if you
 want to be 95% sure that the true value is [*less than] some value,
 ['p[sub max]], then:
 
-   p``[sub max]`` = binomial_distribution<RealType>::find_upper_bound_on_p(
-                       n, k, 0.05);
+   p``[sub max]`` = binomial_distribution<RealType>::find_upper_bound_on_p(n, k, 0.05);
 
 [link math_toolkit.stat_tut.weg.binom_eg.binom_conf See worked example.]
 

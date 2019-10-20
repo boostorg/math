@@ -7,7 +7,7 @@
 <link rel="home" href="../../index.html" title="Math Toolkit 2.10.0">
 <link rel="up" href="../sf_poly.html" title="Polynomials">
 <link rel="prev" href="chebyshev.html" title="Chebyshev Polynomials">
-<link rel="next" href="../bessel.html" title="Bessel Functions">
+<link rel="next" href="cardinal_b_splines.html" title="Cardinal B-splines">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -20,7 +20,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="chebyshev.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../sf_poly.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="../bessel.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="chebyshev.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../sf_poly.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="cardinal_b_splines.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h3 class="title">
@@ -37,20 +37,20 @@
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">complex</span><span class="special">&lt;</span><a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a><span class="special">&gt;</span> <span class="identifier">spherical_harmonic</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">T1</span> <span class="identifier">theta</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">phi</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<span class="identifier">std</span><span class="special">::</span><span class="identifier">complex</span><span class="special">&lt;</span><a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a><span class="special">&gt;</span> <span class="identifier">spherical_harmonic</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">T1</span> <span class="identifier">theta</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">phi</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">complex</span><span class="special">&lt;</span><a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a><span class="special">&gt;</span> <span class="identifier">spherical_harmonic</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">T1</span> <span class="identifier">theta</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">phi</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">spherical_harmonic_r</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">T1</span> <span class="identifier">theta</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">phi</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">spherical_harmonic_r</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">T1</span> <span class="identifier">theta</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">phi</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">spherical_harmonic_r</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">T1</span> <span class="identifier">theta</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">phi</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">spherical_harmonic_i</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">T1</span> <span class="identifier">theta</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">phi</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">spherical_harmonic_i</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">T1</span> <span class="identifier">theta</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">phi</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">spherical_harmonic_i</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">T1</span> <span class="identifier">theta</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">phi</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 
 <span class="special">}}</span> <span class="comment">// namespaces</span>
 </pre>
@@ -63,23 +63,24 @@
         type calculation rules</em></span></a> when T1 and T2 are different types.
       </p>
 <p>
-        The final <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
+        The final <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
         be used to control the behaviour of the function: how it handles errors,
-        what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">policy
+        what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">policy
         documentation for more details</a>.
       </p>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">complex</span><span class="special">&lt;</span><a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a><span class="special">&gt;</span> <span class="identifier">spherical_harmonic</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">T1</span> <span class="identifier">theta</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">phi</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<span class="identifier">std</span><span class="special">::</span><span class="identifier">complex</span><span class="special">&lt;</span><a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a><span class="special">&gt;</span> <span class="identifier">spherical_harmonic</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">T1</span> <span class="identifier">theta</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">phi</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">complex</span><span class="special">&lt;</span><a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a><span class="special">&gt;</span> <span class="identifier">spherical_harmonic</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">T1</span> <span class="identifier">theta</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">phi</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 </pre>
 <p>
         Returns the value of the Spherical Harmonic Y<sub>n</sub><sup>m</sup>(theta, phi):
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/spherical_0.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/spherical_0.svg"></span>
+
+        </p></blockquote></div>
 <p>
         The spherical harmonics Y<sub>n</sub><sup>m</sup>(theta, phi) are the angular portion of the solution
         to Laplace's equation in spherical coordinates where azimuthal symmetry is
@@ -93,8 +94,8 @@
 <tr><td align="left" valign="top">
 <p>
           Care must be taken in correctly identifying the arguments to this function:
-          &#952; &#160; is taken as the polar (colatitudinal) coordinate with &#952; &#160; in [0, &#960;], and &#966; &#160; as
-          the azimuthal (longitudinal) coordinate with &#966; &#160; in [0,2&#960;). This is the convention
+          &#952; is taken as the polar (colatitudinal) coordinate with &#952; in [0, &#960;], and &#966;as
+          the azimuthal (longitudinal) coordinate with &#966;in [0,2&#960;). This is the convention
           used in Physics, and matches the definition used by <a href="http://documents.wolfram.com/mathematica/functions/SphericalHarmonicY" target="_top">Mathematica
           in the function SpericalHarmonicY</a>, but is opposite to the usual
           mathematical conventions.
@@ -108,11 +109,11 @@
           This implementation returns zero for m &gt; n
         </p>
 <p>
-          For &#952; &#160; outside [0, &#960;] and &#966; &#160; outside [0, 2&#960;] this implementation follows the convention
-          used by Mathematica: the function is periodic with period &#960; &#160; in &#952; &#160; and 2&#960; &#160; in &#966;.
+          For &#952; outside [0, &#960;] and &#966; outside [0, 2&#960;] this implementation follows the convention
+          used by Mathematica: the function is periodic with period &#960; in &#952; and 2&#960; in &#966;.
           Please note that this is not the behaviour one would get from a casual
-          application of the function's definition. Cautious users should keep &#952; &#160; and
-          &#966; &#160; to the range [0, &#960;] and [0, 2&#960;] respectively.
+          application of the function's definition. Cautious users should keep &#952; and
+          &#966; to the range [0, &#960;] and [0, 2&#960;] respectively.
         </p>
 <p>
           See: <a href="http://mathworld.wolfram.com/SphericalHarmonic.html" target="_top">Weisstein,
@@ -123,27 +124,29 @@
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">spherical_harmonic_r</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">T1</span> <span class="identifier">theta</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">phi</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">spherical_harmonic_r</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">T1</span> <span class="identifier">theta</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">phi</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">spherical_harmonic_r</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">T1</span> <span class="identifier">theta</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">phi</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 </pre>
 <p>
         Returns the real part of Y<sub>n</sub><sup>m</sup>(theta, phi):
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/spherical_1.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/spherical_1.svg"></span>
+
+        </p></blockquote></div>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">spherical_harmonic_i</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">T1</span> <span class="identifier">theta</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">phi</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">spherical_harmonic_i</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">T1</span> <span class="identifier">theta</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">phi</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">spherical_harmonic_i</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">T1</span> <span class="identifier">theta</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">phi</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 </pre>
 <p>
         Returns the imaginary part of Y<sub>n</sub><sup>m</sup>(theta, phi):
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/spherical_2.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/spherical_2.svg"></span>
+
+        </p></blockquote></div>
 <h5>
 <a name="math_toolkit.sf_poly.sph_harm.h2"></a>
         <span class="phrase"><a name="math_toolkit.sf_poly.sph_harm.accuracy"></a></span><a class="link" href="sph_harm.html#math_toolkit.sf_poly.sph_harm.accuracy">Accuracy</a>
@@ -160,7 +163,7 @@
         All values are in units of epsilon.
       </p>
 <div class="table">
-<a name="math_toolkit.sf_poly.sph_harm.table_spherical_harmonic_r"></a><p class="title"><b>Table&#160;7.38.&#160;Error rates for spherical_harmonic_r</b></p>
+<a name="math_toolkit.sf_poly.sph_harm.table_spherical_harmonic_r"></a><p class="title"><b>Table&#160;8.38.&#160;Error rates for spherical_harmonic_r</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for spherical_harmonic_r">
 <colgroup>
 <col>
@@ -223,7 +226,7 @@
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="math_toolkit.sf_poly.sph_harm.table_spherical_harmonic_i"></a><p class="title"><b>Table&#160;7.39.&#160;Error rates for spherical_harmonic_i</b></p>
+<a name="math_toolkit.sf_poly.sph_harm.table_spherical_harmonic_i"></a><p class="title"><b>Table&#160;8.39.&#160;Error rates for spherical_harmonic_i</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for spherical_harmonic_i">
 <colgroup>
 <col>
@@ -329,7 +332,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="chebyshev.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../sf_poly.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="../bessel.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="chebyshev.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../sf_poly.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="cardinal_b_splines.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

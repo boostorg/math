@@ -33,13 +33,13 @@
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">log1p</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">x</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">log1p</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">log1p</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 
 <span class="special">}}</span> <span class="comment">// namespaces</span>
 </pre>
 <p>
-        Returns the natural logarithm of <code class="computeroutput"><span class="identifier">x</span><span class="special">+</span><span class="number">1</span></code>.
+        Returns the natural logarithm of <span class="emphasis"><em>x+1</em></span>.
       </p>
 <p>
         The return type of this function is computed using the <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>result
@@ -47,25 +47,25 @@
         when <span class="emphasis"><em>x</em></span> is an integer type and T otherwise.
       </p>
 <p>
-        The final <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
+        The final <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
         be used to control the behaviour of the function: how it handles errors,
-        what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">policy
+        what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">policy
         documentation for more details</a>.
       </p>
 <p>
         There are many situations where it is desirable to compute <code class="computeroutput"><span class="identifier">log</span><span class="special">(</span><span class="identifier">x</span><span class="special">+</span><span class="number">1</span><span class="special">)</span></code>.
-        However, for small <code class="computeroutput"><span class="identifier">x</span></code> then
-        <code class="computeroutput"><span class="identifier">x</span><span class="special">+</span><span class="number">1</span></code> suffers from catastrophic cancellation errors
-        so that <code class="computeroutput"><span class="identifier">x</span><span class="special">+</span><span class="number">1</span> <span class="special">==</span> <span class="number">1</span></code>
-        and <code class="computeroutput"><span class="identifier">log</span><span class="special">(</span><span class="identifier">x</span><span class="special">+</span><span class="number">1</span><span class="special">)</span> <span class="special">==</span> <span class="number">0</span></code>,
-        when in fact for very small x, the best approximation to <code class="computeroutput"><span class="identifier">log</span><span class="special">(</span><span class="identifier">x</span><span class="special">+</span><span class="number">1</span><span class="special">)</span></code> would be
-        <code class="computeroutput"><span class="identifier">x</span></code>. <code class="computeroutput"><span class="identifier">log1p</span></code>
-        calculates the best approximation to <code class="computeroutput"><span class="identifier">log</span><span class="special">(</span><span class="number">1</span><span class="special">+</span><span class="identifier">x</span><span class="special">)</span></code> using
-        a Taylor series expansion for accuracy (less than 2&#603;). Alternatively note that
-        there are faster methods available, for example using the equivalence:
+        However, for small <span class="emphasis"><em>x</em></span> then <span class="emphasis"><em>x+1</em></span> suffers
+        from catastrophic cancellation errors so that <span class="emphasis"><em>x+1 == 1</em></span>
+        and <span class="emphasis"><em>log(x+1) == 0</em></span>, when in fact for very small x, the
+        best approximation to <span class="emphasis"><em>log(x+1)</em></span> would be <span class="emphasis"><em>x</em></span>.
+        <code class="computeroutput"><span class="identifier">log1p</span></code> calculates the best
+        approximation to <code class="computeroutput"><span class="identifier">log</span><span class="special">(</span><span class="number">1</span><span class="special">+</span><span class="identifier">x</span><span class="special">)</span></code> using a Taylor series expansion for accuracy
+        (less than 2&#603;). Alternatively note that there are faster methods available,
+        for example using the equivalence:
       </p>
-<pre class="programlisting"><span class="identifier">log</span><span class="special">(</span><span class="number">1</span><span class="special">+</span><span class="identifier">x</span><span class="special">)</span> <span class="special">==</span> <span class="special">(</span><span class="identifier">log</span><span class="special">(</span><span class="number">1</span><span class="special">+</span><span class="identifier">x</span><span class="special">)</span> <span class="special">*</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">/</span> <span class="special">((</span><span class="number">1</span><span class="special">+</span><span class="identifier">x</span><span class="special">)</span> <span class="special">-</span> <span class="number">1</span><span class="special">)</span>
-</pre>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="emphasis"><em>log(1+x) == (log(1+x) * x) / ((1+x) - 1)</em></span>
+        </p></blockquote></div>
 <p>
         However, experience has shown that these methods tend to fail quite spectacularly
         once the compiler's optimizations are turned on, consequently they are used
@@ -74,26 +74,28 @@
         errors.
       </p>
 <p>
-        Finally when BOOST_HAS_LOG1P is defined then the <code class="computeroutput"><span class="keyword">float</span><span class="special">/</span><span class="keyword">double</span><span class="special">/</span><span class="keyword">long</span> <span class="keyword">double</span></code>
+        Finally when macro BOOST_HAS_LOG1P is defined then the <code class="computeroutput"><span class="keyword">float</span><span class="special">/</span><span class="keyword">double</span><span class="special">/</span><span class="keyword">long</span> <span class="keyword">double</span></code>
         specializations of this template simply forward to the platform's native
         (POSIX) implementation of this function.
       </p>
 <p>
         The following graph illustrates the behaviour of log1p:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/log1p.svg" align="middle"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/log1p.svg" align="middle"></span>
+
+        </p></blockquote></div>
 <h5>
 <a name="math_toolkit.powers.log1p.h0"></a>
         <span class="phrase"><a name="math_toolkit.powers.log1p.accuracy"></a></span><a class="link" href="log1p.html#math_toolkit.powers.log1p.accuracy">Accuracy</a>
       </h5>
 <p>
         For built in floating point types <code class="computeroutput"><span class="identifier">log1p</span></code>
-        should have approximately 1 epsilon accuracy.
+        should have approximately 1 <a href="http://en.wikipedia.org/wiki/Machine_epsilon" target="_top">machine
+        epsilon</a> accuracy.
       </p>
 <div class="table">
-<a name="math_toolkit.powers.log1p.table_log1p"></a><p class="title"><b>Table&#160;7.81.&#160;Error rates for log1p</b></p>
+<a name="math_toolkit.powers.log1p.table_log1p"></a><p class="title"><b>Table&#160;8.81.&#160;Error rates for log1p</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for log1p">
 <colgroup>
 <col>

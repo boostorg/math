@@ -30,14 +30,14 @@
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
  <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span>
-           <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
+           <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">beta_distribution</span><span class="special">;</span>
 
 <span class="comment">// typedef beta_distribution&lt;double&gt; beta;</span>
 <span class="comment">// Note that this is deliberately NOT provided,</span>
 <span class="comment">// to avoid a clash with the function name beta.</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">beta_distribution</span>
 <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
@@ -101,29 +101,31 @@
           density function PDF</a> for the <a href="http://en.wikipedia.org/wiki/Beta_distribution" target="_top">beta
           distribution</a> defined on the interval [0,1] is given by:
         </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="serif_italic">f(x;&#945;,&#946;) = x<sup>&#945; - 1</sup> (1 - x)<sup>&#946; -1</sup> / B(&#945;, &#946;)</span>
+          </p></blockquote></div>
 <p>
-          f(x;&#945;,&#946;) = x<sup>&#945; - 1</sup> (1 - x)<sup>&#946; -1</sup> / B(&#945;, &#946;)
-        </p>
-<p>
-          where B(&#945;, &#946;) is the <a href="http://en.wikipedia.org/wiki/Beta_function" target="_top">beta
+          where <span class="serif_italic">B(&#945;, &#946;)</span> is the <a href="http://en.wikipedia.org/wiki/Beta_function" target="_top">beta
           function</a>, implemented in this library as <a class="link" href="../../sf_beta/beta_function.html" title="Beta">beta</a>.
           Division by the beta function ensures that the pdf is normalized to the
           range zero to unity.
         </p>
 <p>
           The following graph illustrates examples of the pdf for various values
-          of the shape parameters. Note the &#945; = &#946; = 2 (blue line) is dome-shaped, and
-          might be approximated by a symmetrical triangular distribution.
+          of the shape parameters. Note the <span class="emphasis"><em>&#945; = &#946; = 2</em></span> (blue line)
+          is dome-shaped, and might be approximated by a symmetrical triangular distribution.
         </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../graphs/beta_pdf.svg" align="middle"></span>
+
+          </p></blockquote></div>
 <p>
-          <span class="inlinemediaobject"><img src="../../../../graphs/beta_pdf.svg" align="middle"></span>
-        </p>
-<p>
-          If &#945; = &#946; = 1, then it is a __space <a href="http://en.wikipedia.org/wiki/Uniform_distribution_%28continuous%29" target="_top">uniform
+          If &#945; = &#946; = 1, then it is a &#8195;
+<a href="http://en.wikipedia.org/wiki/Uniform_distribution_%28continuous%29" target="_top">uniform
           distribution</a>, equal to unity in the entire interval x = 0 to 1.
-          If &#945; __space and &#946; __space are &lt; 1, then the pdf is U-shaped. If &#945; != &#946;, then
-          the shape is asymmetric and could be approximated by a triangle whose apex
-          is away from the centre (where x = half).
+          If &#945; and &#946; are &lt; 1, then the pdf is U-shaped. If &#945; != &#946;, then the shape is
+          asymmetric and could be approximated by a triangle whose apex is away from
+          the centre (where x = half).
         </p>
 <h5>
 <a name="math_toolkit.dist_ref.dists.beta_dist.h0"></a>
@@ -190,14 +192,15 @@
           Two pairs of parameter estimators are provided.
         </p>
 <p>
-          One estimates either &#945; __space or &#946; __space from presumed-known mean and variance.
+          One estimates either &#945;  or &#946; 
+from presumed-known mean and variance.
         </p>
 <p>
-          The other pair estimates either &#945; __space or &#946; __space from the cdf and x.
+          The other pair estimates either &#945; or &#946; from the cdf and x.
         </p>
 <p>
-          It is also possible to estimate &#945; __space and &#946; __space from 'known' mode &amp;
-          quantile. For example, calculators are provided by the <a href="http://www.ausvet.com.au/pprev/content.php?page=PPscript" target="_top">Pooled
+          It is also possible to estimate &#945; and &#946;  from 'known' mode &amp; quantile. For
+          example, calculators are provided by the <a href="http://www.ausvet.com.au/pprev/content.php?page=PPscript" target="_top">Pooled
           Prevalence Calculator</a> and <a href="http://www.epi.ucdavis.edu/diagnostictests/betabuster.html" target="_top">Beta
           Buster</a> but this is not yet implemented here.
         </p>
@@ -206,7 +209,7 @@
   <span class="identifier">RealType</span> <span class="identifier">variance</span><span class="special">);</span> <span class="comment">// Expected value of variance.</span>
 </pre>
 <p>
-          Returns the unique value of &#945; &#160; that corresponds to a beta distribution with
+          Returns the unique value of &#945; that corresponds to a beta distribution with
           mean <span class="emphasis"><em>mean</em></span> and variance <span class="emphasis"><em>variance</em></span>.
         </p>
 <pre class="programlisting"><span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_beta</span><span class="special">(</span>
@@ -214,7 +217,7 @@
   <span class="identifier">RealType</span> <span class="identifier">variance</span><span class="special">);</span> <span class="comment">// Expected value of variance.</span>
 </pre>
 <p>
-          Returns the unique value of &#946; &#160; that corresponds to a beta distribution with
+          Returns the unique value of &#946; that corresponds to a beta distribution with
           mean <span class="emphasis"><em>mean</em></span> and variance <span class="emphasis"><em>variance</em></span>.
         </p>
 <pre class="programlisting"><span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_alpha</span><span class="special">(</span>
@@ -223,7 +226,7 @@
   <span class="identifier">RealType</span> <span class="identifier">probability</span><span class="special">);</span> <span class="comment">// probability cdf</span>
 </pre>
 <p>
-          Returns the value of &#945; &#160; that gives: <code class="computeroutput"><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">beta_distribution</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;(</span><span class="identifier">alpha</span><span class="special">,</span> <span class="identifier">beta</span><span class="special">),</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">==</span> <span class="identifier">probability</span></code>.
+          Returns the value of &#945; that gives: <code class="computeroutput"><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">beta_distribution</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;(</span><span class="identifier">alpha</span><span class="special">,</span> <span class="identifier">beta</span><span class="special">),</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">==</span> <span class="identifier">probability</span></code>.
         </p>
 <pre class="programlisting"><span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_beta</span><span class="special">(</span>
   <span class="identifier">RealType</span> <span class="identifier">alpha</span><span class="special">,</span> <span class="comment">// alpha.</span>
@@ -231,7 +234,7 @@
   <span class="identifier">RealType</span> <span class="identifier">probability</span><span class="special">);</span> <span class="comment">// probability cdf.</span>
 </pre>
 <p>
-          Returns the value of &#946; &#160; that gives: <code class="computeroutput"><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">beta_distribution</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;(</span><span class="identifier">alpha</span><span class="special">,</span> <span class="identifier">beta</span><span class="special">),</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">==</span> <span class="identifier">probability</span></code>.
+          Returns the value of &#946; that gives: <code class="computeroutput"><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">beta_distribution</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;(</span><span class="identifier">alpha</span><span class="special">,</span> <span class="identifier">beta</span><span class="special">),</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">==</span> <span class="identifier">probability</span></code>.
         </p>
 <h5>
 <a name="math_toolkit.dist_ref.dists.beta_dist.h4"></a>
@@ -274,7 +277,7 @@
           distributions</a>
         </h5>
 <p>
-          The beta distribution with both &#945;  __space and &#946; = 1 follows a <a href="http://en.wikipedia.org/wiki/Uniform_distribution_%28continuous%29" target="_top">uniform
+          The beta distribution with both &#945; and &#946; = 1 follows a <a href="http://en.wikipedia.org/wiki/Uniform_distribution_%28continuous%29" target="_top">uniform
           distribution</a>.
         </p>
 <p>
@@ -283,15 +286,15 @@
         </p>
 <p>
           The <a href="http://en.wikipedia.org/wiki/Binomial_distribution" target="_top">binomial
-          distribution</a> is closely related when &#945;  __space and &#946;  __space are integers.
+          distribution</a> is closely related when &#945; and &#946;  are integers.
         </p>
 <p>
-          With integer values of &#945;  __space and &#946;  __space the distribution B(i, j) is
-          that of the j-th highest of a sample of i + j + 1 independent random variables
-          uniformly distributed between 0 and 1. The cumulative probability from
-          0 to x is thus the probability that the j-th highest value is less than
-          x. Or it is the probability that at least i of the random variables are
-          less than x, a probability given by summing over the <a class="link" href="binomial_dist.html" title="Binomial Distribution">Binomial
+          With integer values of &#945;  and &#946; the distribution B(i, j) is that of the j-th
+          highest of a sample of i + j + 1 independent random variables uniformly
+          distributed between 0 and 1. The cumulative probability from 0 to x is
+          thus the probability that the j-th highest value is less than x. Or it
+          is the probability that at least i of the random variables are less than
+          x, a probability given by summing over the <a class="link" href="binomial_dist.html" title="Binomial Distribution">Binomial
           Distribution</a> with its p parameter set to x.
         </p>
 <h5>
@@ -312,7 +315,7 @@
         </h5>
 <p>
           In the following table <span class="emphasis"><em>a</em></span> and <span class="emphasis"><em>b</em></span>
-          are the parameters &#945; &#160; and &#946;, <span class="emphasis"><em>x</em></span> is the random variable,
+          are the parameters &#945; and &#946;, <span class="emphasis"><em>x</em></span> is the random variable,
           <span class="emphasis"><em>p</em></span> is the probability and <span class="emphasis"><em>q = 1-p</em></span>.
         </p>
 <div class="informaltable"><table class="table">
@@ -341,7 +344,7 @@
                 </td>
 <td>
                   <p>
-                    f(x;&#945;,&#946;) = x<sup>&#945; - 1</sup> (1 - x)<sup>&#946; -1</sup> / B(&#945;, &#946;)
+                    <span class="serif_italic">f(x;&#945;,&#946;) = x<sup>&#945; - 1</sup> (1 - x)<sup>&#946; -1</sup> / B(&#945;, &#946;)</span>
                   </p>
                   <p>
                     Implemented using <a class="link" href="../../sf_beta/beta_derivative.html" title="Derivative of the Incomplete Beta Function">ibeta_derivative</a>(a,
@@ -465,9 +468,10 @@
                   </p>
                 </td>
 <td>
-                  <p>
-                    <span class="inlinemediaobject"><img src="../../../../equations/beta_dist_kurtosis.svg"></span>
-                  </p>
+                  <div class="blockquote"><blockquote class="blockquote"><p>
+                      <span class="inlinemediaobject"><img src="../../../../equations/beta_dist_kurtosis.svg"></span>
+
+                    </p></blockquote></div>
                 </td>
 </tr>
 <tr>
@@ -495,10 +499,7 @@
 <tr>
 <td>
                   <p>
-                    alpha
-                  </p>
-                  <p>
-                    from mean and variance
+                    alpha (from mean and variance)
                   </p>
                 </td>
 <td>
@@ -515,10 +516,7 @@
 <tr>
 <td>
                   <p>
-                    beta
-                  </p>
-                  <p>
-                    from mean and variance
+                    beta (from mean and variance)
                   </p>
                 </td>
 <td>

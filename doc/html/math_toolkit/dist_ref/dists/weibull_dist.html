@@ -30,12 +30,12 @@
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span>
-          <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
+          <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">weibull_distribution</span><span class="special">;</span>
 
 <span class="keyword">typedef</span> <span class="identifier">weibull_distribution</span><span class="special">&lt;&gt;</span> <span class="identifier">weibull</span><span class="special">;</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">weibull_distribution</span>
 <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
@@ -55,11 +55,12 @@
           distribution</a> is a continuous distribution with the <a href="http://en.wikipedia.org/wiki/Probability_density_function" target="_top">probability
           density function</a>:
         </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="serif_italic">f(x; &#945;, &#946;) = (&#945;/&#946;) * (x / &#946;)<sup>&#945; - 1</sup> * e<sup>-(x/&#946;)<sup>&#945;</sup></sup></span>
+          </p></blockquote></div>
 <p>
-          f(x; &#945;, &#946;) = (&#945;/&#946;) * (x / &#946;)<sup>&#945; - 1</sup> * e<sup>-(x/&#946;)<sup>&#945;</sup></sup>
-        </p>
-<p>
-          For shape parameter &#945; &#160; &gt; 0, and scale parameter &#946; &#160; &gt; 0, and x &gt; 0.
+          For shape parameter <span class="emphasis"><em>&#945;</em></span> &gt; 0, and scale parameter
+          <span class="emphasis"><em>&#946;</em></span> &gt; 0, and <span class="emphasis"><em>x</em></span> &gt; 0.
         </p>
 <p>
           The Weibull distribution is often used in the field of failure analysis;
@@ -68,41 +69,44 @@
         </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
-              constant over time, then &#945; &#160; = 1, suggests that items are failing from
-              random events.
+              constant over time, then <span class="emphasis"><em>&#945;</em></span> = 1, suggests that items
+              are failing from random events.
             </li>
 <li class="listitem">
-              decreases over time, then &#945; &#160; &lt; 1, suggesting "infant mortality".
+              decreases over time, then <span class="emphasis"><em>&#945;</em></span> &lt; 1, suggesting
+              "infant mortality".
             </li>
 <li class="listitem">
-              increases over time, then &#945; &#160; &gt; 1, suggesting "wear out" -
-              more likely to fail as time goes by.
+              increases over time, then <span class="emphasis"><em>&#945;</em></span> &gt; 1, suggesting
+              "wear out" - more likely to fail as time goes by.
             </li>
 </ul></div>
 <p>
           The following graph illustrates how the PDF varies with the shape parameter
-          &#945;:
+          <span class="emphasis"><em>&#945;</em></span>:
         </p>
-<p>
-          <span class="inlinemediaobject"><img src="../../../../graphs/weibull_pdf1.svg" align="middle"></span>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../graphs/weibull_pdf1.svg" align="middle"></span>
+
+          </p></blockquote></div>
 <p>
           While this graph illustrates how the PDF varies with the scale parameter
-          &#946;:
+          <span class="emphasis"><em>&#946;</em></span>:
         </p>
-<p>
-          <span class="inlinemediaobject"><img src="../../../../graphs/weibull_pdf2.svg" align="middle"></span>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../graphs/weibull_pdf2.svg" align="middle"></span>
+
+          </p></blockquote></div>
 <h5>
 <a name="math_toolkit.dist_ref.dists.weibull_dist.h0"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.weibull_dist.related_distributions"></a></span><a class="link" href="weibull_dist.html#math_toolkit.dist_ref.dists.weibull_dist.related_distributions">Related
           distributions</a>
         </h5>
 <p>
-          When &#945; &#160; = 3, the <a href="http://en.wikipedia.org/wiki/Weibull_distribution" target="_top">Weibull
+          When <span class="emphasis"><em>&#945;</em></span> = 3, the <a href="http://en.wikipedia.org/wiki/Weibull_distribution" target="_top">Weibull
           distribution</a> appears similar to the <a href="http://en.wikipedia.org/wiki/Normal_distribution" target="_top">normal
-          distribution</a>. When &#945; &#160; = 1, the Weibull distribution reduces to the
-          <a href="http://en.wikipedia.org/wiki/Exponential_distribution" target="_top">exponential
+          distribution</a>. When <span class="emphasis"><em>&#945;</em></span> = 1, the Weibull distribution
+          reduces to the <a href="http://en.wikipedia.org/wiki/Exponential_distribution" target="_top">exponential
           distribution</a>. The relationship of the types of extreme value distributions,
           of which the Weibull is but one, is discussed by <a href="http://www.worldscibooks.com/mathematics/p191.html" target="_top">Extreme
           Value Distributions, Theory and Applications Samuel Kotz &amp; Saralees
@@ -169,9 +173,10 @@
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.weibull_dist.implementation"></a></span><a class="link" href="weibull_dist.html#math_toolkit.dist_ref.dists.weibull_dist.implementation">Implementation</a>
         </h5>
 <p>
-          In the following table &#945; &#160; is the shape parameter of the distribution, &#946; &#160; is its
-          scale parameter, <span class="emphasis"><em>x</em></span> is the random variate, <span class="emphasis"><em>p</em></span>
-          is the probability and <span class="emphasis"><em>q = 1-p</em></span>.
+          In the following table <span class="emphasis"><em>&#945;</em></span> is the shape parameter of
+          the distribution, <span class="emphasis"><em>&#946;</em></span> is its scale parameter, <span class="emphasis"><em>x</em></span>
+          is the random variate, <span class="emphasis"><em>p</em></span> is the probability and <span class="emphasis"><em>q
+          = 1-p</em></span>.
         </p>
 <div class="informaltable"><table class="table">
 <colgroup>

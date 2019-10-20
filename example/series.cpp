@@ -4,6 +4,8 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/math/tools/series.hpp>
+#include <boost/assert.hpp>
+
 #include <iostream>
 #include <complex>
 #include <cassert>
@@ -22,7 +24,7 @@ struct log1p_series
    {
       // This is the function operator invoked by the summation
       // algorithm, the first call to this operator should return
-      // the first term of the series, the second call the second 
+      // the first term of the series, the second call the second
       // term and so on.
       m_prod *= m_mult;
       return m_prod / ++k;
@@ -40,7 +42,7 @@ template <class T>
 T log1p(T x)
 {
    // We really should add some error checking on x here!
-   assert(std::fabs(x) < 1);
+   BOOST_ASSERT(std::fabs(x) < 1);
 
    // Construct the series functor:
    log1p_series<T> s(x);
@@ -65,7 +67,7 @@ struct log1p_series<std::complex<T> >
    {
       // This is the function operator invoked by the summation
       // algorithm, the first call to this operator should return
-      // the first term of the series, the second call the second 
+      // the first term of the series, the second call the second
       // term and so on.
       m_prod *= m_mult;
       return m_prod / T(++k);
@@ -82,7 +84,7 @@ template <class T>
 std::complex<T> log1p(std::complex<T> x)
 {
    // We really should add some error checking on x here!
-   assert(abs(x) < 1);
+   BOOST_ASSERT(abs(x) < 1);
 
    // Construct the series functor:
    log1p_series<std::complex<T> > s(x);

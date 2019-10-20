@@ -58,7 +58,7 @@ using std::numeric_limits;
 
 // http://en.wikipedia.org/wiki/Brent%27s_method Brent's method
 
-// An example of a function for which we want to find a minimum. 
+// An example of a function for which we want to find a minimum.
 double f(double x)
 {
   return (x + 3) * (x - 1) * (x - 1);
@@ -68,7 +68,7 @@ double f(double x)
 struct funcdouble
 {
   double operator()(double const& x)
-  { 
+  {
     return (x + 3) * (x - 1) * (x - 1); // (x + 3)(x - 1)^2
   }
 };
@@ -79,7 +79,7 @@ struct func
 {
   template <class T>
   T operator()(T const& x)
-  { 
+  {
     return (x + 3) * (x - 1) * (x - 1); // (x + 3)(x - 1)^2
   }
 };
@@ -96,7 +96,7 @@ is_close_to(FPT left, FPT right, FPT tolerance)
 //[brent_minimise_close
 
 //! Compare if value got is close to expected,
-//! checking first if expected is very small 
+//! checking first if expected is very small
 //! (to avoid divide by tiny or zero during comparison)
 //! before comparing expect with value got.
 
@@ -136,7 +136,7 @@ void show_minima()
     std::cout << "\n\nFor type: " << typeid(T).name()
       << ",\n  epsilon = " << std::numeric_limits<T>::epsilon()
       // << ", precision of " << bits << " bits"
-      << ",\n  the maximum theoretical precision from Brent's minimization is " 
+      << ",\n  the maximum theoretical precision from Brent's minimization is "
       << sqrt(std::numeric_limits<T>::epsilon())
       << "\n  Displaying to std::numeric_limits<T>::digits10 " << prec << ", significant decimal digits."
       << std::endl;
@@ -165,7 +165,7 @@ void show_minima()
     }
     // Check that result is that expected (compared to theoretical uncertainty).
     T uncertainty = sqrt(std::numeric_limits<T>::epsilon());
-    std::cout << std::boolalpha << "x == 1 (compared to uncertainty " << uncertainty << ") is " 
+    std::cout << std::boolalpha << "x == 1 (compared to uncertainty " << uncertainty << ") is "
       << is_close(static_cast<T>(1), r.first, uncertainty) << std::endl;
     std::cout << std::boolalpha << "f(x) == (0 compared to uncertainty " << uncertainty << ") is "
       << is_close(static_cast<T>(0), r.second, uncertainty) << std::endl;
@@ -194,7 +194,7 @@ int main()
 
   // Tip - using
   // std::cout.precision(std::numeric_limits<T>::digits10);
-  // during debugging is wise because it warns 
+  // during debugging is wise because it warns
   // if construction of multiprecision involves conversion from double
   // by finding random or zero digits after 17th decimal digit.
 
@@ -224,9 +224,9 @@ int main()
   using boost::math::fpc::is_small;
 
   std::cout << "x = " << r.first << ", f(x) = " << r.second << std::endl;
-  std::cout << std::boolalpha << "x == 1 (compared to uncertainty " 
+  std::cout << std::boolalpha << "x == 1 (compared to uncertainty "
     << uncertainty << ") is " << is_close(1., r.first, uncertainty) << std::endl; // true
-  std::cout << std::boolalpha << "f(x) == 0 (compared to uncertainty " 
+  std::cout << std::boolalpha << "f(x) == 0 (compared to uncertainty "
     << uncertainty << ") is " << is_close(0., r.second, uncertainty) << std::endl; // true
 //] [/brent_minimise_double_1a]
 
@@ -248,11 +248,11 @@ int main()
   std::streamsize prec = static_cast<int>(2 + sqrt((double)bits));  // Number of significant decimal digits.
   std::streamsize precision_3 = std::cout.precision(prec); // Save and set new precision.
   std::cout << "Showing " << bits << " bits "
-    "precision with " << prec 
+    "precision with " << prec
     << " decimal digits from tolerance " << sqrt(std::numeric_limits<double>::epsilon())
     << std::endl;
 
-  std::cout << "x at minimum = " << r.first 
+  std::cout << "x at minimum = " << r.first
     << ", f(" << r.first << ") = " << r.second
     << " after " << it << " iterations. " << std::endl;
   std::cout.precision(precision_3); // Restore.
@@ -362,7 +362,7 @@ int main()
   typedef boost::multiprecision::number<boost::multiprecision::cpp_bin_float<50>,
     boost::multiprecision::et_off>
     cpp_bin_float_50_et_off;
-  
+
   typedef boost::multiprecision::number<boost::multiprecision::cpp_dec_float<50>,
     boost::multiprecision::et_on> // et_on is default so is same as cpp_dec_float_50.
     cpp_dec_float_50_et_on;
@@ -382,7 +382,7 @@ int main()
     std::cout << "Bracketing " << bracket_min << " to " << bracket_max << std::endl;
     const boost::uintmax_t maxit = 20;
     boost::uintmax_t it = maxit; // Will be updated with actual iteration count.
-    std::pair<cpp_bin_float_50, cpp_bin_float_50> r 
+    std::pair<cpp_bin_float_50, cpp_bin_float_50> r
       = brent_find_minima(func(), bracket_min, bracket_max, bits, it);
 
     std::cout << "x at minimum = " << r.first << ",\n f(" << r.first << ") = " << r.second
@@ -406,7 +406,7 @@ x == 1 (compared to uncertainty 7.311312755e-26) is true
 f(x) == (0 compared to uncertainty 7.311312755e-26) is true
 -4 1.3333333333333333333333333333333333333333333333333
 x at minimum = 0.99999999999999999999999999998813903221565569205253,
-f(0.99999999999999999999999999998813903221565569205253) = 
+f(0.99999999999999999999999999998813903221565569205253) =
   5.6273022712501408640665300316078046703496236636624e-58
 14 iterations
 //] [/brent_minimise_mp_output_1]
@@ -556,21 +556,21 @@ f(x) == 0 (compared to uncertainty 1.49012e-08) is true
 
 Type double with limited iterations.
 Precision bits = 53
-x at minimum = 1.00000, f(1.00000) = 5.04853e-18 after 10 iterations. 
+x at minimum = 1.00000, f(1.00000) = 5.04853e-18 after 10 iterations.
 Showing 53 bits precision with 9 decimal digits from tolerance 1.49011612e-08
-x at minimum = 1.00000000, f(1.00000000) = 5.04852568e-18 after 10 iterations. 
+x at minimum = 1.00000000, f(1.00000000) = 5.04852568e-18 after 10 iterations.
 
 Type double with limited iterations and half double bits.
 Showing 26 bits precision with 7 decimal digits from tolerance 0.000172633
 x at minimum = 1.000000, f(1.000000) = 5.048526e-18
-10 iterations. 
+10 iterations.
 
 Type double with limited iterations and quarter double bits.
 Showing 13 bits precision with 5 decimal digits from tolerance 0.0156250
-x at minimum = 0.99998, f(0.99998) = 2.0070e-09, after 7 iterations. 
+x at minimum = 0.99998, f(0.99998) = 2.0070e-09, after 7 iterations.
 
 Type long double with limited iterations and all long double bits.
-x at minimum = 1.00000000112345, f(1.00000000112345) = 5.04852568272458e-18, after 10 iterations. 
+x at minimum = 1.00000000112345, f(1.00000000112345) = 5.04852568272458e-18, after 10 iterations.
 
 
 For type: float,
@@ -603,7 +603,7 @@ x == 1 (compared to uncertainty 1.490116e-08) is true
 f(x) == (0 compared to uncertainty 1.490116e-08) is true
 Bracketing -4.0000000000000000000000000000000000000000000000000 to 1.3333333333333333333333333333333333333333333333333
 x at minimum = 0.99999999999999999999999999998813903221565569205253,
-f(0.99999999999999999999999999998813903221565569205253) = 5.6273022712501408640665300316078046703496236636624e-58, after 14 iterations. 
+f(0.99999999999999999999999999998813903221565569205253) = 5.6273022712501408640665300316078046703496236636624e-58, after 14 iterations.
 
 
 For type: class boost::multiprecision::number<class boost::multiprecision::backends::cpp_bin_float<50,10,void,int,0,0>,1>,
@@ -616,7 +616,7 @@ x == 1 (compared to uncertainty 7.3113127550e-26) is true
 f(x) == (0 compared to uncertainty 7.3113127550e-26) is true
 -4.0000000000000000000000000000000000000000000000000 1.3333333333333333333333333333333333333333333333333
 x at minimum = 0.99999999999999999999999999998813903221565569205253, f(0.99999999999999999999999999998813903221565569205253) = 5.6273022712501408640665300316078046703496236636624e-58
-14 iterations. 
+14 iterations.
 
 
 For type: class boost::multiprecision::number<class boost::multiprecision::backends::cpp_bin_float<50,10,void,int,0,0>,1>,

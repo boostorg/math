@@ -5,9 +5,9 @@
 <link rel="stylesheet" href="../math.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
 <link rel="home" href="../index.html" title="Math Toolkit 2.10.0">
-<link rel="up" href="../using_udt.html" title="Chapter&#160;18.&#160;Use with User-Defined Floating-Point Types - Boost.Multiprecision and others">
+<link rel="up" href="../using_udt.html" title="Chapter&#160;19.&#160;Use with User-Defined Floating-Point Types - Boost.Multiprecision and others">
 <link rel="prev" href="dist_concept.html" title="Conceptual Requirements for Distribution Types">
-<link rel="next" href="../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">
+<link rel="next" href="../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -166,9 +166,8 @@
       required by the <a class="link" href="dist_concept.html" title="Conceptual Requirements for Distribution Types">Distribution concept</a>.
       These are checked by calls like
     </p>
-<p>
-      v = pdf(dist, x); // (Result v is ignored).
-    </p>
+<pre class="programlisting"><span class="identifier">v</span> <span class="special">=</span> <span class="identifier">pdf</span><span class="special">(</span><span class="identifier">dist</span><span class="special">,</span> <span class="identifier">x</span><span class="special">);</span> <span class="comment">// (Result v is ignored).</span>
+</pre>
 <p>
       And in addition, those that accept two arguments do the right thing when the
       arguments are of different types (the result type is always the same as the

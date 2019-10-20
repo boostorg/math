@@ -9,7 +9,7 @@
 #include <boost/cstdfloat.hpp>
 #include <boost/type_index.hpp>
 #include <boost/test/included/unit_test.hpp>
-#include <boost/test/floating_point_comparison.hpp>
+#include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/special_functions/chebyshev.hpp>
 #include <boost/math/special_functions/chebyshev_transform.hpp>
 #include <boost/math/special_functions/sinc.hpp>

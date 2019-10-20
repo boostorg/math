@@ -31,7 +31,7 @@ all the appropriate corner cases.  They do not necessarily represent
 "typical" usage: whatever that may be!
 ]
 
-[endsect]
+[endsect] [/section:interp Interpreting these Results]
 
 [section:getting_best Getting the Best Performance from this Library: Compiler and Compiler Options]
 
@@ -293,8 +293,8 @@ or unexpected non-finite values.
 
 [caution
 You should exercise extreme caution when interpreting
-these results, relative performance may vary by platform, the tests use
-data that gives good code coverage of /our/ code, but which may skew the
+these results, relative performance may vary by platform, by compiler options settings,
+the tests use data that gives good code coverage of /our/ code, but which may skew the
 results towards the corner cases.  Finally, remember that different
 libraries make different choices with regard to performance verses
 numerical stability.
@@ -306,11 +306,11 @@ The first results compare standard library functions to Boost equivalents with M
 
 On Linux with GCC, we can also compare to the TR1 functions, and to GSL and RMath:
 
-[table_Library_Comparison_with_GNU_C_version_5_1_0_on_linux]
+[table_Library_Comparison_with_GNU_C_version_5_3_0_on_linux]
 
 And finally we can compare the statistical distributions to GSL, RMath and DCDFLIB:
 
-[table_Distribution_performance_comparison_with_GNU_C_version_5_1_0_on_linux]
+[table_Distribution_performance_comparison_with_GNU_C_version_5_3_0_on_linux]
 
 [endsect] [/section:comparisons Comparisons to Other Open Source Libraries]
 
@@ -364,7 +364,7 @@ compiler.
 
 [endsect] [/section:perf_test_app The Performance Test Applications]
 
-[endmathpart]
+[endmathpart] [/mathpart perf Performance]
 
 [/
   Copyright 2006 John Maddock and Paul A. Bristow.

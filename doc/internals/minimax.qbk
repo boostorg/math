@@ -1,6 +1,6 @@
 [section:minimax Minimax Approximations and the Remez Algorithm]
 
-The directory libs/math/minimax contains a command line driven
+The directory `libs/math/minimax` contains an interactive command-line driven
 program for the generation of minimax approximations using the Remez
 algorithm.  Both polynomial and rational approximations are supported,
 although the latter are tricky to converge: it is not uncommon for
@@ -12,10 +12,8 @@ is often not an easy task, and one to which many books have been devoted.
 To use this tool, you will need to have a reasonable grasp of what the Remez
 algorithm is, and the general form of the approximation you want to achieve.
 
-Unless you already familar with the Remez method,
-you should first read the [link math_toolkit.remez
-brief background article explaining the principles behind the
-Remez algorithm].
+Unless you already familar with the Remez method, you should first read the
+[link math_toolkit.remez brief background article explaining the principles behind the Remez algorithm].
 
 The program consists of two parts:
 
@@ -41,13 +39,13 @@ Note that the function /f/ must return the rational part of the
 approximation: for example if you are approximating a function
 /f(x)/ then it is quite common to use:
 
-   f(x) = g(x)(Y + R(x))
+[expression f(x) = g(x)(Y + R(x))]
 
 where /g(x)/ is the dominant part of /f(x)/, /Y/ is some constant, and
 /R(x)/ is the rational approximation part, usually optimised for a low
 absolute error compared to |Y|.
 
-In this case you would define /f/ to return ['f(x)/g(x)] and then set the
+In this case you would define /f/ to return [role serif-italic f(x)/g(x)] and then set the
 y-offset of the approximation to /Y/ (see command line options below).
 
 Many other forms are possible, but in all cases the objective is to
@@ -156,8 +154,7 @@ Command line options for the program are as follows:
          x and y offsets, and of course the coefficients of the polynomials.]]
 ]
 
-
-[endsect][/section:minimax Minimax Approximations and the Remez Algorithm]
+[endsect] [/section:minimax Minimax Approximations and the Remez Algorithm]
 
 [/
   Copyright 2006 John Maddock and Paul A. Bristow.

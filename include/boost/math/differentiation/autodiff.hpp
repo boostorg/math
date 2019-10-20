@@ -11,7 +11,6 @@
 #include <boost/math/special_functions.hpp>
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/promotion.hpp>
-#include <boost/multiprecision/rational_adaptor.hpp>
 
 #include <algorithm>
 #include <array>
@@ -1518,7 +1517,6 @@ fvar<RealType, Order> log(fvar<RealType, Order> const& cr) {
 
 template <typename RealType, size_t Order>
 fvar<RealType, Order> frexp(fvar<RealType, Order> const& cr, int* exp) {
-  using multiprecision::exp2;
   using std::exp2;
   using std::frexp;
   using root_type = typename fvar<RealType, Order>::root_type;
@@ -1529,7 +1527,6 @@ fvar<RealType, Order> frexp(fvar<RealType, Order> const& cr, int* exp) {
 template <typename RealType, size_t Order>
 fvar<RealType, Order> ldexp(fvar<RealType, Order> const& cr, int exp) {
   // argument to std::exp2 must be casted to root_type, otherwise std::exp2 returns double (always)
-  using multiprecision::exp2;
   using std::exp2;
   return cr * exp2(static_cast<typename fvar<RealType, Order>::root_type>(exp));
 }
@@ -1819,7 +1816,7 @@ fvar<RealType, Order> digamma(fvar<RealType, Order> const& cr) {
   if BOOST_AUTODIFF_IF_CONSTEXPR (order == 0)
     return fvar<RealType, Order>(d0);
   else {
-    static_assert(order <= static_cast<size_t>(std::numeric_limits<int>::max()),
+    static_assert(order <= static_cast<size_t>((std::numeric_limits<int>::max)()),
                   "order exceeds maximum derivative for boost::math::polygamma().");
     return cr.apply_derivatives(
         order, [&x, &d0](size_t i) { return i ? boost::math::polygamma(static_cast<int>(i), x) : d0; });
@@ -1904,7 +1901,7 @@ fvar<RealType, Order> lgamma(fvar<RealType, Order> const& cr) {
   if BOOST_AUTODIFF_IF_CONSTEXPR (order == 0)
     return fvar<RealType, Order>(d0);
   else {
-    static_assert(order <= static_cast<size_t>(std::numeric_limits<int>::max()) + 1,
+    static_assert(order <= static_cast<size_t>((std::numeric_limits<int>::max)()) + 1,
                   "order exceeds maximum derivative for boost::math::polygamma().");
     return cr.apply_derivatives(
         order, [&x, &d0](size_t i) { return i ? boost::math::polygamma(static_cast<int>(i - 1), x) : d0; });

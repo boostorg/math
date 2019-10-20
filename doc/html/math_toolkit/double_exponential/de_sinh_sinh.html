@@ -51,15 +51,16 @@
 <span class="keyword">double</span> <span class="identifier">Q</span> <span class="special">=</span> <span class="identifier">integrator</span><span class="special">.</span><span class="identifier">integrate</span><span class="special">(</span><span class="identifier">f</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">error</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">L1</span><span class="special">);</span>
 </pre>
 <p>
-        Note that the limits of integration are understood to be (-&#8734;, &#8734;).
+        Note that the limits of integration are understood to be (-&#8734;, +&#8734;).
       </p>
 <p>
         Complex valued integrands are supported as well, for example the <a href="https://en.wikipedia.org/wiki/Dirichlet_eta_function" target="_top">Dirichlet
         Eta function</a> can be represented via:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/complex_eta_integral.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/complex_eta_integral.svg"></span>
+
+        </p></blockquote></div>
 <p>
         which we can directly code up as:
       </p>

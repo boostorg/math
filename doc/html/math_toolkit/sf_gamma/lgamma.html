@@ -37,14 +37,14 @@
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">lgamma</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">lgamma</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">lgamma</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">lgamma</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">int</span><span class="special">*</span> <span class="identifier">sign</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">lgamma</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">int</span><span class="special">*</span> <span class="identifier">sign</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">lgamma</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">int</span><span class="special">*</span> <span class="identifier">sign</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 
 <span class="special">}}</span> <span class="comment">// namespaces</span>
 </pre>
@@ -56,33 +56,24 @@
         The <a href="http://en.wikipedia.org/wiki/Gamma_function" target="_top">lgamma function</a>
         is defined by:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/lgamm1.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/lgamm1.svg"></span>
+
+        </p></blockquote></div>
 <p>
         The second form of the function takes a pointer to an integer, which if non-null
         is set on output to the sign of tgamma(z).
       </p>
 <p>
-        The final <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
+        The final <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
         be used to control the behaviour of the function: how it handles errors,
-        what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">policy
+        what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">policy
         documentation for more details</a>.
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/lgamma.svg" align="middle"></span>
-      </p>
-<p>
-        There are effectively two versions of this function internally: a fully generic
-        version that is slow, but reasonably accurate, and a much more efficient
-        approximation that is used where the number of digits in the significand
-        of T correspond to a certain <a class="link" href="../lanczos.html" title="The Lanczos Approximation">Lanczos
-        approximation</a>. In practice, any built-in floating-point type you will
-        encounter has an appropriate <a class="link" href="../lanczos.html" title="The Lanczos Approximation">Lanczos
-        approximation</a> defined for it. It is also possible, given enough machine
-        time, to generate further <a class="link" href="../lanczos.html" title="The Lanczos Approximation">Lanczos approximation</a>'s
-        using the program libs/math/tools/lanczos_generator.cpp.
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/lgamma.svg" align="middle"></span>
+
+        </p></blockquote></div>
 <p>
         The return type of these functions is computed using the <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>result
         type calculation rules</em></span></a>: the result is of type <code class="computeroutput"><span class="keyword">double</span></code> if T is an integer type, or type T
@@ -106,7 +97,7 @@
         error can be guaranteed.
       </p>
 <div class="table">
-<a name="math_toolkit.sf_gamma.lgamma.table_lgamma"></a><p class="title"><b>Table&#160;7.3.&#160;Error rates for lgamma</b></p>
+<a name="math_toolkit.sf_gamma.lgamma.table_lgamma"></a><p class="title"><b>Table&#160;8.3.&#160;Error rates for lgamma</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for lgamma">
 <colgroup>
 <col>
@@ -347,15 +338,18 @@
         precision, and GCC-7.1/Ubuntu for <code class="computeroutput"><span class="keyword">long</span>
         <span class="keyword">double</span></code> and <code class="computeroutput"><span class="identifier">__float128</span></code>.
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/lgamma__double.svg" align="middle"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/lgamma__80_bit_long_double.svg" align="middle"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/lgamma____float128.svg" align="middle"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/lgamma__double.svg" align="middle"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/lgamma__80_bit_long_double.svg" align="middle"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/lgamma____float128.svg" align="middle"></span>
+
+        </p></blockquote></div>
 <h5>
 <a name="math_toolkit.sf_gamma.lgamma.h3"></a>
         <span class="phrase"><a name="math_toolkit.sf_gamma.lgamma.testing"></a></span><a class="link" href="lgamma.html#math_toolkit.sf_gamma.lgamma.testing">Testing</a>
@@ -375,9 +369,10 @@
         The generic version of this function is implemented using Sterling's approximation
         for large arguments:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/gamma6.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/gamma6.svg"></span>
+
+        </p></blockquote></div>
 <p>
         For small arguments, the logarithm of tgamma is used.
       </p>
@@ -385,20 +380,22 @@
         For negative <span class="emphasis"><em>z</em></span> the logarithm version of the reflection
         formula is used:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/lgamm3.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/lgamm3.svg"></span>
+
+        </p></blockquote></div>
 <p>
         For types of known precision, the <a class="link" href="../lanczos.html" title="The Lanczos Approximation">Lanczos
         approximation</a> is used, a traits class <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">lanczos</span><span class="special">::</span><span class="identifier">lanczos_traits</span></code>
         maps type T to an appropriate approximation. The logarithmic version of the
         <a class="link" href="../lanczos.html" title="The Lanczos Approximation">Lanczos approximation</a> is:
       </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/lgamm4.svg"></span>
+
+        </p></blockquote></div>
 <p>
-        <span class="inlinemediaobject"><img src="../../../equations/lgamm4.svg"></span>
-      </p>
-<p>
-        Where L<sub>e,g</sub> &#160; is the Lanczos sum, scaled by e<sup>g</sup>.
+        Where L<sub>e,g</sub> is the Lanczos sum, scaled by e<sup>g</sup>.
       </p>
 <p>
         As before the reflection formula is used for <span class="emphasis"><em>z &lt; 0</em></span>.
@@ -419,7 +416,7 @@
 </pre>
 <p>
         Where Y is a constant, and R(z-2) is the rational approximation: optimised
-        so that it's absolute error is tiny compared to Y. In addition small values
+        so that its absolute error is tiny compared to Y. In addition, small values
         of z greater than 3 can handled by argument reduction using the recurrence
         relation:
       </p>
@@ -463,19 +460,21 @@
         also be fed into log1p. Crucially, all of the terms tend to zero, as <span class="emphasis"><em>z
         -&gt; 1</em></span>:
       </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/lgamm5.svg"></span>
+
+        </p></blockquote></div>
 <p>
-        <span class="inlinemediaobject"><img src="../../../equations/lgamm5.svg"></span>
-      </p>
-<p>
-        The C<sub>k</sub> &#160; terms in the above are the same as in the <a class="link" href="../lanczos.html" title="The Lanczos Approximation">Lanczos
+        The C<sub>k</sub> terms in the above are the same as in the <a class="link" href="../lanczos.html" title="The Lanczos Approximation">Lanczos
         approximation</a>.
       </p>
 <p>
         A similar rearrangement can be performed at <span class="emphasis"><em>z = 2</em></span>:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/lgamm6.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/lgamm6.svg"></span>
+
+        </p></blockquote></div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>

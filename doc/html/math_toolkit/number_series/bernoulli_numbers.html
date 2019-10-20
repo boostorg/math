@@ -76,12 +76,12 @@
         may provide a better interface for performance critical code.
       </p>
 <p>
-        The final <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
+        The final <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
         be used to control the behaviour of the function: how it handles errors,
         what level of precision to use, etc.
       </p>
 <p>
-        Refer to <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policies</a> for more details.
+        Refer to <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policies</a> for more details.
       </p>
 <h5>
 <a name="math_toolkit.number_series.bernoulli_numbers.h3"></a>
@@ -209,7 +209,7 @@ and also obtain much
         These return a series of Bernoulli numbers:
       </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-          B<sub>2*start_index</sub>,B<sub>2*(start_index+1)</sub>,...,B<sub>2*(start_index+number_of_bernoullis_b2n-1)</sub>
+          <span class="serif_italic">[B<sub>2*start_index</sub>, B<sub>2*(start_index+1)</sub>, ..., B<sub>2*(start_index+number_of_bernoullis_b2n-1)</sub>]</span>
         </p></blockquote></div>
 <h5>
 <a name="math_toolkit.number_series.bernoulli_numbers.h9"></a>
@@ -328,17 +328,27 @@ and also obtain much
         is given by Brent and Harvey's equation 14:
       </p>
 <p>
-        &#8192;&#8192;  <span class="inlinemediaobject"><img src="../../../equations/tangent_numbers.svg"></span>
+        &#8192;&#8192;
       </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/tangent_numbers.svg"></span>
+
+        </p></blockquote></div>
 <p>
         Their relation with Bernoulli numbers <span class="emphasis"><em>B<sub>i</sub></em></span> are defined
         by
       </p>
 <p>
-        if i &gt; 0 and i is even then &#8192;&#8192;  <span class="inlinemediaobject"><img src="../../../equations/bernoulli_numbers.svg"></span> <br> elseif
-        i == 0 then <span class="emphasis"><em>B<sub>i</sub></em></span> = 1 <br> elseif i == 1 then <span class="emphasis"><em>B<sub>i</sub></em></span>
-        = -1/2 <br> elseif i &lt; 0 or i is odd then <span class="emphasis"><em>B<sub>i</sub></em></span> =
-        0
+        if i &gt; 0 and i is even then
+      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/bernoulli_numbers.svg"></span>
+
+        </p></blockquote></div>
+<p>
+        <br> elseif i == 0 then <span class="emphasis"><em>B<sub>i</sub></em></span> = 1 <br> elseif i ==
+        1 then <span class="emphasis"><em>B<sub>i</sub></em></span> = -1/2 <br> elseif i &lt; 0 or i is odd
+        then <span class="emphasis"><em>B<sub>i</sub></em></span> = 0
       </p>
 <p>
         Note that computed values are stored in a fixed-size table, access is thread
@@ -350,9 +360,10 @@ and also obtain much
         our cache, an asymptotic expansion <a href="http://www.luschny.de/math/primes/bernincl.html" target="_top">due
         to Luschny</a> is used:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/bernoulli_numbers2.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/bernoulli_numbers2.svg"></span>
+
+        </p></blockquote></div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>

@@ -33,9 +33,9 @@ distribution: it is also known as the Gaussian Distribution.
 A normal distribution with mean zero and standard deviation one
 is known as the ['Standard Normal Distribution].
 
-Given mean [mu][space]and standard deviation [sigma][space]it has the PDF:
+Given mean [mu] and standard deviation [sigma] it has the PDF:
 
-[space] [equation normal_ref1]
+[equation normal_ref1]
 
 The variation the PDF with its parameters is illustrated
 in the following graph:
@@ -44,7 +44,7 @@ in the following graph:
 
 The cumulative distribution function is given by
 
-[space] [equation normal_cdf]
+[equation normal_cdf]
 
 and illustrated by this graph
 
@@ -58,7 +58,7 @@ and illustrated by this graph
 Constructs a normal distribution with mean /mean/ and
 standard deviation /sd/.
 
-Requires sd > 0, otherwise __domain_error is called.
+Requires /sd/ > 0, otherwise __domain_error is called.
 
    RealType mean()const;
    RealType location()const;

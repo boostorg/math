@@ -7,7 +7,7 @@
 <link rel="home" href="../../index.html" title="Math Toolkit 2.10.0">
 <link rel="up" href="../internals.html" title="Internal tools">
 <link rel="prev" href="series_evaluation.html" title="Series Evaluation">
-<link rel="next" href="tuples.html" title="Tuples">
+<link rel="next" href="recurrence.html" title="Tools For 3-Term Recurrence Relations">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -20,7 +20,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="series_evaluation.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../internals.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="tuples.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="series_evaluation.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../internals.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="recurrence.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h3 class="title">
@@ -81,15 +81,17 @@
         the continued fraction described by the <span class="emphasis"><em>generator</em></span> type
         argument. The functions with an "_a" suffix evaluate the fraction:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/fraction2.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/fraction2.svg"></span>
+
+        </p></blockquote></div>
 <p>
         and those with a "_b" suffix evaluate the fraction:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/fraction1.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/fraction1.svg"></span>
+
+        </p></blockquote></div>
 <p>
         This latter form is somewhat more natural in that it corresponds with the
         usual definition of a continued fraction, but note that the first <span class="emphasis"><em>a</em></span>
@@ -192,9 +194,10 @@
         = 1.618033989...</a> can be computed from the simplest continued fraction
         of all:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/fraction3.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/fraction3.svg"></span>
+
+        </p></blockquote></div>
 <p>
         We begin by defining a generator function:
       </p>
@@ -223,9 +226,10 @@
         and the <span class="emphasis"><em>b</em></span>'s when evaluating special functions by continued
         fractions, for example the tan function is defined by:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/fraction4.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/fraction4.svg"></span>
+
+        </p></blockquote></div>
 <p>
         So its generator object would look like:
       </p>
@@ -270,9 +274,10 @@
         Now we'll look at a couple of complex number examples, starting with the
         exponential integral which can be calculated via:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/expint_n_3.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/expint_n_3.svg"></span>
+
+        </p></blockquote></div>
 <p>
         So our functor looks like this:
       </p>
@@ -319,9 +324,10 @@
         there is only one special function in our code which uses that variant, and
         it's the upper incomplete gamma function (Q), which can be calculated via:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/igamma9.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/igamma9.svg"></span>
+
+        </p></blockquote></div>
 <p>
         In this case the first couple of terms are different from the rest, so our
         fraction will start with the first "regular" a term:
@@ -375,7 +381,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="series_evaluation.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../internals.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="tuples.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="series_evaluation.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../internals.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="recurrence.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

@@ -42,12 +42,11 @@ Given N independent measurements, let
 
 [equation students_t_dist]
 
-where /M/ is the population mean, [' ''' &#x3BC; '''] is the sample mean, and /s/ is the
-sample variance.
+where /M/ is the population mean, [mu] is the sample mean, and /s/ is the sample variance.
 
 [@https://en.wikipedia.org/wiki/Student%27s_t-distribution Student's t-distribution]
 is defined as the distribution of the random
-variable t which is  - very loosely - the "best" that we can do not
+variable t which is  - very loosely - the "best" that we can do while not
 knowing the true standard deviation of the sample.  It has the PDF:
 
 [equation students_t_ref1]
@@ -133,12 +132,12 @@ In the following table /v/ is the degrees of freedom of the distribution,
 
 [table
 [[Function][Implementation Notes]]
-[[pdf][Using the relation: pdf = (v \/ (v + t[super 2]))[super (1+v)\/2 ] / (sqrt(v) * __beta(v\/2, 0.5))   ]]
+[[pdf][Using the relation: [role serif_italic pdf = (v \/ (v + t[super 2]))[super (1+v)\/2 ] / (sqrt(v) * __beta(v\/2, 0.5))] ]]
 [[cdf][Using the relations:
 
-p = 1 - z /iff t > 0/
+[role serif_italic p = 1 - z /iff t > 0/]
 
-p = z     /otherwise/
+[role serif_italic p = z     /otherwise/]
 
 where z is given by:
 
@@ -146,13 +145,13 @@ __ibeta(v \/ 2, 0.5, v \/ (v + t[super 2])) \/ 2 ['iff v < 2t[super 2]]
 
 __ibetac(0.5, v \/ 2, t[super 2 ] / (v + t[super 2]) \/ 2   /otherwise/]]
 [[cdf complement][Using the relation: q = cdf(-t) ]]
-[[quantile][Using the relation: t = sign(p - 0.5) * sqrt(v * y \/ x)
+[[quantile][Using the relation: [role serif_italic t = sign(p - 0.5) * sqrt(v * y \/ x)]
 
 where:
 
-x = __ibeta_inv(v \/ 2, 0.5, 2 * min(p, q))
+[role serif_italic x = __ibeta_inv(v \/ 2, 0.5, 2 * min(p, q)) ]
 
-y = 1 - x
+[role serif_italic y = 1 - x]
 
 The quantities /x/ and /y/ are both returned by __ibeta_inv
 without the subtraction implied above.]]

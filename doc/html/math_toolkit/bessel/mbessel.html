@@ -37,14 +37,14 @@
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">cyl_bessel_i</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">v</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">x</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">cyl_bessel_i</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">v</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">cyl_bessel_i</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">v</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">cyl_bessel_k</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">v</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">x</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">cyl_bessel_k</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">v</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">cyl_bessel_k</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">v</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 </pre>
 <h5>
 <a name="math_toolkit.bessel.mbessel.h1"></a>
@@ -56,21 +56,23 @@
         the result of the modified Bessel functions of the first and second kind
         respectively:
       </p>
-<p>
-        cyl_bessel_i(v, x) = I<sub>v</sub>(x)
-      </p>
-<p>
-        cyl_bessel_k(v, x) = K<sub>v</sub>(x)
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          cyl_bessel_i(v, x) = I<sub>v</sub>(x)
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          cyl_bessel_k(v, x) = K<sub>v</sub>(x)
+        </p></blockquote></div>
 <p>
         where:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/mbessel2.svg"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/mbessel3.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/mbessel2.svg"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/mbessel3.svg"></span>
+
+        </p></blockquote></div>
 <p>
         The return type of these functions is computed using the <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>result
         type calculation rules</em></span></a> when T1 and T2 are different types.
@@ -78,9 +80,9 @@
         an integer.
       </p>
 <p>
-        The final <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
+        The final <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
         be used to control the behaviour of the function: how it handles errors,
-        what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">policy
+        what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">policy
         documentation for more details</a>.
       </p>
 <p>
@@ -98,15 +100,17 @@
 <p>
         The following graph illustrates the exponential behaviour of I<sub>v</sub>.
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/cyl_bessel_i.svg" align="middle"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/cyl_bessel_i.svg" align="middle"></span>
+
+        </p></blockquote></div>
 <p>
         The following graph illustrates the exponential decay of K<sub>v</sub>.
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/cyl_bessel_k.svg" align="middle"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/cyl_bessel_k.svg" align="middle"></span>
+
+        </p></blockquote></div>
 <h5>
 <a name="math_toolkit.bessel.mbessel.h2"></a>
         <span class="phrase"><a name="math_toolkit.bessel.mbessel.testing"></a></span><a class="link" href="mbessel.html#math_toolkit.bessel.mbessel.testing">Testing</a>
@@ -130,7 +134,7 @@
         of the worst problem cases in other libraries:
       </p>
 <div class="table">
-<a name="math_toolkit.bessel.mbessel.table_cyl_bessel_i_integer_orders_"></a><p class="title"><b>Table&#160;7.44.&#160;Error rates for cyl_bessel_i (integer orders)</b></p>
+<a name="math_toolkit.bessel.mbessel.table_cyl_bessel_i_integer_orders_"></a><p class="title"><b>Table&#160;8.44.&#160;Error rates for cyl_bessel_i (integer orders)</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for cyl_bessel_i (integer orders)">
 <colgroup>
 <col>
@@ -265,7 +269,7 @@
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="math_toolkit.bessel.mbessel.table_cyl_bessel_i"></a><p class="title"><b>Table&#160;7.45.&#160;Error rates for cyl_bessel_i</b></p>
+<a name="math_toolkit.bessel.mbessel.table_cyl_bessel_i"></a><p class="title"><b>Table&#160;8.45.&#160;Error rates for cyl_bessel_i</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for cyl_bessel_i">
 <colgroup>
 <col>
@@ -532,7 +536,7 @@
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="math_toolkit.bessel.mbessel.table_cyl_bessel_k_integer_orders_"></a><p class="title"><b>Table&#160;7.46.&#160;Error rates for cyl_bessel_k (integer orders)</b></p>
+<a name="math_toolkit.bessel.mbessel.table_cyl_bessel_k_integer_orders_"></a><p class="title"><b>Table&#160;8.46.&#160;Error rates for cyl_bessel_k (integer orders)</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for cyl_bessel_k (integer orders)">
 <colgroup>
 <col>
@@ -661,7 +665,7 @@
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="math_toolkit.bessel.mbessel.table_cyl_bessel_k"></a><p class="title"><b>Table&#160;7.47.&#160;Error rates for cyl_bessel_k</b></p>
+<a name="math_toolkit.bessel.mbessel.table_cyl_bessel_k"></a><p class="title"><b>Table&#160;8.47.&#160;Error rates for cyl_bessel_k</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for cyl_bessel_k">
 <colgroup>
 <col>
@@ -925,42 +929,54 @@
         precision, and GCC-7.1/Ubuntu for <code class="computeroutput"><span class="keyword">long</span>
         <span class="keyword">double</span></code> and <code class="computeroutput"><span class="identifier">__float128</span></code>.
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/i0__double.svg" align="middle"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/i0__80_bit_long_double.svg" align="middle"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/i0____float128.svg" align="middle"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/i1__double.svg" align="middle"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/i1__80_bit_long_double.svg" align="middle"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/i1____float128.svg" align="middle"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/k0__double.svg" align="middle"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/k0__80_bit_long_double.svg" align="middle"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/k0____float128.svg" align="middle"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/k1__double.svg" align="middle"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/k1__80_bit_long_double.svg" align="middle"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/k1____float128.svg" align="middle"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/i0__double.svg" align="middle"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/i0__80_bit_long_double.svg" align="middle"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/i0____float128.svg" align="middle"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/i1__double.svg" align="middle"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/i1__80_bit_long_double.svg" align="middle"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/i1____float128.svg" align="middle"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/k0__double.svg" align="middle"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/k0__80_bit_long_double.svg" align="middle"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/k0____float128.svg" align="middle"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/k1__double.svg" align="middle"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/k1__80_bit_long_double.svg" align="middle"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/k1____float128.svg" align="middle"></span>
+
+        </p></blockquote></div>
 <h5>
 <a name="math_toolkit.bessel.mbessel.h4"></a>
         <span class="phrase"><a name="math_toolkit.bessel.mbessel.implementation"></a></span><a class="link" href="mbessel.html#math_toolkit.bessel.mbessel.implementation">Implementation</a>
@@ -969,12 +985,12 @@
         The following are handled as special cases first:
       </p>
 <p>
-        When computing I<sub>v</sub> &#160; for <span class="emphasis"><em>x &lt; 0</em></span>, then &#957; &#160; must be an integer
-        or a domain error occurs. If &#957; &#160; is an integer, then the function is odd if &#957; &#160; is
-        odd and even if &#957; &#160; is even, and we can reflect to <span class="emphasis"><em>x &gt; 0</em></span>.
+        When computing I<sub>v</sub> for <span class="emphasis"><em>x &lt; 0</em></span>, then &#957; must be an integer
+        or a domain error occurs. If &#957; is an integer, then the function is odd if &#957; is
+        odd and even if &#957; is even, and we can reflect to <span class="emphasis"><em>x &gt; 0</em></span>.
       </p>
 <p>
-        For I<sub>v</sub> &#160; with v equal to 0, 1 or 0.5 are handled as special cases.
+        For I<sub>v</sub> with v equal to 0, 1 or 0.5 are handled as special cases.
       </p>
 <p>
         The 0 and 1 cases use polynomial approximations on finite and infinite intervals.
@@ -984,92 +1000,116 @@
         extended by us to deal with up to 128-bit precision (with different approximations
         for each target precision).
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/bessel21.svg"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/bessel20.svg"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/bessel17.svg"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/bessel18.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/bessel21.svg"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/bessel20.svg"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/bessel17.svg"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/bessel18.svg"></span>
+
+        </p></blockquote></div>
 <p>
         Similarly we have:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/bessel22.svg"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/bessel23.svg"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/bessel24.svg"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/bessel25.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/bessel22.svg"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/bessel23.svg"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/bessel24.svg"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/bessel25.svg"></span>
+
+        </p></blockquote></div>
 <p>
         The 0.5 case is a simple trigonometric function:
       </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          I<sub>0.5</sub>(x) = sqrt(2 / &#960;x) * sinh(x)
+        </p></blockquote></div>
 <p>
-        I<sub>0.5</sub>(x) = sqrt(2 / &#960;x) * sinh(x)
-      </p>
-<p>
-        For K<sub>v</sub> &#160; with <span class="emphasis"><em>v</em></span> an integer, the result is calculated using
+        For K<sub>v</sub> with <span class="emphasis"><em>v</em></span> an integer, the result is calculated using
         the recurrence relation:
       </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/mbessel5.svg"></span>
+
+        </p></blockquote></div>
 <p>
-        <span class="inlinemediaobject"><img src="../../../equations/mbessel5.svg"></span>
-      </p>
-<p>
-        starting from K<sub>0</sub> &#160; and K<sub>1</sub> &#160; which are calculated using rational the approximations
+        starting from K<sub>0</sub> and K<sub>1</sub> which are calculated using rational the approximations
         above. These rational approximations are accurate to around 19 digits, and
         are therefore only used when T has no more than 64 binary digits of precision.
       </p>
 <p>
         When <span class="emphasis"><em>x</em></span> is small compared to <span class="emphasis"><em>v</em></span>,
-        I<sub>v</sub>x &#160; is best computed directly from the series:
+        I<sub>v</sub>x is best computed directly from the series:
       </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/mbessel17.svg"></span>
+
+        </p></blockquote></div>
 <p>
-        <span class="inlinemediaobject"><img src="../../../equations/mbessel17.svg"></span>
-      </p>
-<p>
-        In the general case, we first normalize &#957; &#160; to [<code class="literal">0, [inf]</code>)
+        In the general case, we first normalize &#957; to [<code class="literal">0, [inf]</code>)
         with the help of the reflection formulae:
       </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/mbessel9.svg"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/mbessel10.svg"></span>
+
+        </p></blockquote></div>
 <p>
-        <span class="inlinemediaobject"><img src="../../../equations/mbessel9.svg"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/mbessel10.svg"></span>
-      </p>
-<p>
-        Let &#956; &#160; = &#957; - floor(&#957; + 1/2), then &#956; &#160; is the fractional part of &#957; &#160; such that |&#956;| &lt;= 1/2
+        Let &#956; = &#957; - floor(&#957; + 1/2), then &#956; is the fractional part of &#957; such that |&#956;| &lt;= 1/2
         (we need this for convergence later). The idea is to calculate K<sub>&#956;</sub>(x) and K<sub>&#956;+1</sub>(x),
         and use them to obtain I<sub>&#957;</sub>(x) and K<sub>&#957;</sub>(x).
       </p>
 <p>
-        The algorithm is proposed by Temme in N.M. Temme, <span class="emphasis"><em>On the numerical
-        evaluation of the modified bessel function of the third kind</em></span>,
-        Journal of Computational Physics, vol 19, 324 (1975), which needs two continued
-        fractions as well as the Wronskian:
+        The algorithm is proposed by Temme in
       </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          N.M. Temme, <span class="emphasis"><em>On the numerical evaluation of the modified bessel
+          function of the third kind</em></span>, Journal of Computational Physics,
+          vol 19, 324 (1975),
+        </p></blockquote></div>
 <p>
-        <span class="inlinemediaobject"><img src="../../../equations/mbessel11.svg"></span>
+        which needs two continued fractions as well as the Wronskian:
       </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/mbessel11.svg"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/mbessel12.svg"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/mbessel8.svg"></span>
+
+        </p></blockquote></div>
 <p>
-        <span class="inlinemediaobject"><img src="../../../equations/mbessel12.svg"></span>
+        The continued fractions are computed using the modified Lentz's method
       </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          (W.J. Lentz, <span class="emphasis"><em>Generating Bessel functions in Mie scattering calculations
+          using continued fractions</em></span>, Applied Optics, vol 15, 668 (1976)).
+        </p></blockquote></div>
 <p>
-        <span class="inlinemediaobject"><img src="../../../equations/mbessel8.svg"></span>
-      </p>
-<p>
-        The continued fractions are computed using the modified Lentz's method (W.J.
-        Lentz, <span class="emphasis"><em>Generating Bessel functions in Mie scattering calculations
-        using continued fractions</em></span>, Applied Optics, vol 15, 668 (1976)).
         Their convergence rates depend on <span class="emphasis"><em>x</em></span>, therefore we need
         different strategies for large <span class="emphasis"><em>x</em></span> and small <span class="emphasis"><em>x</em></span>.
       </p>
@@ -1084,45 +1124,56 @@
 <p>
         When <span class="emphasis"><em>x</em></span> is large (<span class="emphasis"><em>x</em></span> &gt; 2), both
         continued fractions converge (CF1 may be slow for really large <span class="emphasis"><em>x</em></span>).
-        K<sub>&#956;</sub> &#160; and K<sub>&#956;+1</sub> &#160;
+        K<sub>&#956;</sub> and K<sub>&#956;+1</sub>
 can be calculated by
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/mbessel13.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/mbessel13.svg"></span>
+
+        </p></blockquote></div>
 <p>
         where
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/mbessel14.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/mbessel14.svg"></span>
+
+        </p></blockquote></div>
 <p>
         <span class="emphasis"><em>S</em></span> is also a series that is summed along with CF2, see
-        I.J. Thompson and A.R. Barnett, <span class="emphasis"><em>Modified Bessel functions I_v and
-        K_v of real order and complex argument to selected accuracy</em></span>, Computer
-        Physics Communications, vol 47, 245 (1987).
       </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          I.J. Thompson and A.R. Barnett, <span class="emphasis"><em>Modified Bessel functions I_v
+          and K_v of real order and complex argument to selected accuracy</em></span>,
+          Computer Physics Communications, vol 47, 245 (1987).
+        </p></blockquote></div>
 <p>
         When <span class="emphasis"><em>x</em></span> is small (<span class="emphasis"><em>x</em></span> &lt;= 2), CF2
         convergence may fail (but CF1 works very well). The solution here is Temme's
         series:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/mbessel15.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/mbessel15.svg"></span>
+
+        </p></blockquote></div>
 <p>
         where
       </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/mbessel16.svg"></span>
+
+        </p></blockquote></div>
 <p>
-        <span class="inlinemediaobject"><img src="../../../equations/mbessel16.svg"></span>
-      </p>
-<p>
-        f<sub>k</sub> &#160; and h<sub>k</sub> &#160;
+        f<sub>k</sub> and h<sub>k</sub>
 are also computed by recursions (involving gamma functions), but
-        the formulas are a little complicated, readers are referred to N.M. Temme,
-        <span class="emphasis"><em>On the numerical evaluation of the modified Bessel function of
-        the third kind</em></span>, Journal of Computational Physics, vol 19, 324
-        (1975). Note: Temme's series converge only for |&#956;| &lt;= 1/2.
+        the formulas are a little complicated, readers are referred to
+      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          N.M. Temme, <span class="emphasis"><em>On the numerical evaluation of the modified Bessel
+          function of the third kind</em></span>, Journal of Computational Physics,
+          vol 19, 324 (1975).
+        </p></blockquote></div>
+<p>
+        Note: Temme's series converge only for |&#956;| &lt;= 1/2.
       </p>
 <p>
         K<sub>&#957;</sub>(x) is then calculated from the forward recurrence, as is K<sub>&#957;+1</sub>(x). With these

@@ -31,7 +31,7 @@
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span>
-          <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
+          <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">gamma_distribution</span>
 <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
@@ -75,19 +75,21 @@
 </td></tr>
 </table></div>
 <p>
-          For shape parameter <span class="emphasis"><em>k</em></span> and scale parameter &#952; &#160; it is defined
+          For shape parameter <span class="emphasis"><em>k</em></span> and scale parameter &#952; it is defined
           by the probability density function:
         </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../equations/gamma_dist_ref1.svg"></span>
+
+          </p></blockquote></div>
 <p>
-          <span class="inlinemediaobject"><img src="../../../../equations/gamma_dist_ref1.svg"></span>
+          Sometimes an alternative formulation is used: given parameters &#945; = k and
+          &#946; = 1 / &#952;, then the distribution can be defined by the PDF:
         </p>
-<p>
-          Sometimes an alternative formulation is used: given parameters &#945; &#160;= k and
-          &#946; &#160;= 1 / &#952;, then the distribution can be defined by the PDF:
-        </p>
-<p>
-          <span class="inlinemediaobject"><img src="../../../../equations/gamma_dist_ref2.svg"></span>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../equations/gamma_dist_ref2.svg"></span>
+
+          </p></blockquote></div>
 <p>
           In this form the inverse scale parameter is called a <span class="emphasis"><em>rate parameter</em></span>.
         </p>
@@ -101,12 +103,14 @@
           The following two graphs illustrate how the PDF of the gamma distribution
           varies as the parameters vary:
         </p>
-<p>
-          <span class="inlinemediaobject"><img src="../../../../graphs/gamma1_pdf.svg" align="middle"></span>
-        </p>
-<p>
-          <span class="inlinemediaobject"><img src="../../../../graphs/gamma2_pdf.svg" align="middle"></span>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../graphs/gamma1_pdf.svg" align="middle"></span>
+
+          </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../graphs/gamma2_pdf.svg" align="middle"></span>
+
+          </p></blockquote></div>
 <p>
           The <span class="bold"><strong>Erlang Distribution</strong></span> is the same as
           the Gamma, but with the shape parameter an integer. It is often expressed
@@ -183,7 +187,7 @@
         </h5>
 <p>
           In the following table <span class="emphasis"><em>k</em></span> is the shape parameter of
-          the distribution, &#952; &#160; is its scale parameter, <span class="emphasis"><em>x</em></span> is the
+          the distribution, &#952; is its scale parameter, <span class="emphasis"><em>x</em></span> is the
           random variate, <span class="emphasis"><em>p</em></span> is the probability and <span class="emphasis"><em>q
           = 1-p</em></span>.
         </p>
@@ -252,7 +256,7 @@
                 </td>
 <td>
                   <p>
-                    Using the relation: x = &#952; &#160;* <a class="link" href="../../sf_gamma/igamma_inv.html" title="Incomplete Gamma Function Inverses">gamma_p_inv</a>(k,
+                    Using the relation: x = &#952; * <a class="link" href="../../sf_gamma/igamma_inv.html" title="Incomplete Gamma Function Inverses">gamma_p_inv</a>(k,
                     p)
                   </p>
                 </td>
@@ -265,7 +269,7 @@
                 </td>
 <td>
                   <p>
-                    Using the relation: x = &#952; &#160;* <a class="link" href="../../sf_gamma/igamma_inv.html" title="Incomplete Gamma Function Inverses">gamma_q_inv</a>(k,
+                    Using the relation: x = &#952;* <a class="link" href="../../sf_gamma/igamma_inv.html" title="Incomplete Gamma Function Inverses">gamma_q_inv</a>(k,
                     p)
                   </p>
                 </td>
@@ -302,7 +306,7 @@
                 </td>
 <td>
                   <p>
-                    (k-1)&#952; &#160; for <span class="emphasis"><em>k&gt;1</em></span> otherwise a <a class="link" href="../../error_handling.html#math_toolkit.error_handling.domain_error">domain_error</a>
+                    (k-1)&#952; for <span class="emphasis"><em>k&gt;1</em></span> otherwise a <a class="link" href="../../error_handling.html#math_toolkit.error_handling.domain_error">domain_error</a>
                   </p>
                 </td>
 </tr>

@@ -137,7 +137,7 @@
 <p class="simpara">
           Policies are a powerful (if necessarily complex) fine-grain mechanism that
           allow you to customise the behaviour of the Boost.Math library according
-          to your precise needs. See <a class="link" href="../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policies</a>. But
+          to your precise needs. See <a class="link" href="../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policies</a>. But
           if, very probably, the default behaviour suits you, you don't need to know
           more.
         </p>
@@ -223,7 +223,7 @@
 <p class="simpara">
           We hope Boost.Math to be more accurate: our priority is accuracy (over
           speed). See the section on accuracy. But for evaluations that require iterations
-          there are parameters which can change the required accuracy (see <a class="link" href="../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policies</a>). You might be able to squeeze a little
+          there are parameters which can change the required accuracy (see <a class="link" href="../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policies</a>). You might be able to squeeze a little
           more (or less) accuracy at the cost of runtime.
         </p>
 </li>
@@ -237,7 +237,7 @@
           For most functions, making sure you have the latest compiler version with
           all optimisations switched on is the key to speed. For evaluations that
           require iteration, you may be able to gain a little more speed at the expense
-          of accuracy. See detailed suggestions and results on <a class="link" href="../perf.html" title="Chapter&#160;20.&#160;Performance">performance</a>.
+          of accuracy. See detailed suggestions and results on <a class="link" href="../perf.html" title="Chapter&#160;21.&#160;Performance">performance</a>.
         </p>
 </li>
 <li class="listitem">
@@ -323,7 +323,49 @@
           both the precision and rounding of the results.
         </p>
 </li>
+<li class="listitem">
+<p class="simpara">
+          <span class="emphasis"><em>How do I see or report bugs and features, and request new functions?</em></span>
+        </p>
+<p class="simpara">
+          Currently open bug reports can be viewed <a href="https://github.com/boostorg/math/issues" target="_top">here</a>
+          on GITHUB.
+        </p>
+<p class="simpara">
+          All old bug reports including closed ones can be viewed on Trac (now read-only)
+          <a href="https://svn.boost.org/trac/boost/query?status=assigned&amp;status=closed&amp;status=new&amp;status=reopened&amp;component=math&amp;col=id&amp;col=summary&amp;col=status&amp;col=type&amp;col=milestone&amp;col=component&amp;order=priority" target="_top">here</a>
+          and more recent issues on GIThub <a href="https://github.com/boostorg/math/issues?utf8=%E2%9C%93&amp;q=is%3Aissue" target="_top">here</a>.
+        </p>
+</li>
+<li class="listitem">
+          <span class="emphasis"><em>How can I tell if my compiler will work with Boost.Math?</em></span>
+        </li>
 </ol></div>
+<p>
+      You should start by assuming that your compiler/platform <span class="bold"><strong>will</strong></span>
+      compile, even if it only supports a C++03 standard.
+    </p>
+<p>
+      Boost in general does <span class="bold"><strong>not</strong></span> 'support' a particular
+      C++ standard or compiler or platform. Each library has its own requirements,
+      and for Boost.Math, each individual function or distribution or tool may have
+      different requirements and may or may not work on any particular compiler.
+    </p>
+<p>
+      So the short answer is to try it and see what works for you.
+    </p>
+<p>
+      Some recent functions are written to require more recent standards, even perhaps
+      not-yet-standardized features. Some clues about requirements can be gleaned
+      from tests and examples (see jamfiles) and notes on requirements in documentation.
+      You can refer to the <a href="https://www.boost.org/development/tests/develop/developer/math.html" target="_top">Boost
+      Test Matrix</a> to see the current results for Boost.Math tests of many
+      compilers on many platforms. But bear in mind that the testing or demonstration
+      code may use C++11 or higher features like <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;&gt;</span><span class="identifier">max_digits10</span></code>,
+      <code class="computeroutput"><span class="keyword">auto</span></code>, <code class="computeroutput"><span class="identifier">lambdas</span>
+      <span class="special">...</span></code> for convenience; these may not be
+      needed for your application.
+    </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>

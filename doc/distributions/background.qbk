@@ -14,14 +14,14 @@ This means the probability density\/mass function (pdf) is written as ['f(k; n, 
 Translating this into code the `binomial_distribution` constructor 
 therefore has two parameters:
 
-	binomial_distribution(RealType n, RealType p);
+  binomial_distribution(RealType n, RealType p);
 
 While the function `pdf` has one argument specifying the distribution type
 (which includes its parameters, if any),
 and a second argument for the __random_variate.  So taking our binomial distribution 
 example, we would write:
 
-	pdf(binomial_distribution<RealType>(n, p), k);
+  pdf(binomial_distribution<RealType>(n, p), k);
 
 [endsect]
 
@@ -72,7 +72,7 @@ describe how to change the rounding policy
 for these distributions.
 ]
 
-[endsect]
+[endsect] [/section:variates Random Variates and Distribution Parameters]
 
 [/ 
   Copyright 2006 John Maddock and Paul A. Bristow.

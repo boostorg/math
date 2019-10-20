@@ -29,12 +29,12 @@
 </h4></div></div></div>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">extreme</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></pre>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span>
-          <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
+          <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">extreme_value_distribution</span><span class="special">;</span>
 
 <span class="keyword">typedef</span> <span class="identifier">extreme_value_distribution</span><span class="special">&lt;&gt;</span> <span class="identifier">extreme_value</span><span class="special">;</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">extreme_value_distribution</span>
 <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
@@ -72,27 +72,29 @@
 <p>
           The distribution has a PDF given by:
         </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="serif_italic">f(x) = (1/scale) e<sup>-(x-location)/scale</sup> e<sup>-e<sup>-(x-location)/scale</sup></sup></span>
+          </p></blockquote></div>
 <p>
-          f(x) = (1/scale) e<sup>-(x-location)/scale</sup> e<sup>-e<sup>-(x-location)/scale</sup></sup>
+          which in the standard case (scale = 1, location = 0) reduces to:
         </p>
-<p>
-          Which in the standard case (scale = 1, location = 0) reduces to:
-        </p>
-<p>
-          f(x) = e<sup>-x</sup>e<sup>-e<sup>-x</sup></sup>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="serif_italic">f(x) = e<sup>-x</sup>e<sup>-e<sup>-x</sup></sup></span>
+          </p></blockquote></div>
 <p>
           The following graph illustrates how the PDF varies with the location parameter:
         </p>
-<p>
-          <span class="inlinemediaobject"><img src="../../../../graphs/extreme_value_pdf1.svg" align="middle"></span>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../graphs/extreme_value_pdf1.svg" align="middle"></span>
+
+          </p></blockquote></div>
 <p>
           And this graph illustrates how the PDF varies with the shape parameter:
         </p>
-<p>
-          <span class="inlinemediaobject"><img src="../../../../graphs/extreme_value_pdf2.svg" align="middle"></span>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../graphs/extreme_value_pdf2.svg" align="middle"></span>
+
+          </p></blockquote></div>
 <h5>
 <a name="math_toolkit.dist_ref.dists.extreme_dist.h0"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.extreme_dist.member_functions"></a></span><a class="link" href="extreme_dist.html#math_toolkit.dist_ref.dists.extreme_dist.member_functions">Member

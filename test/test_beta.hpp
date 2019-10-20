@@ -13,7 +13,7 @@
 #include <boost/math/concepts/real_concept.hpp>
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
-#include <boost/test/floating_point_comparison.hpp>
+#include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/tools/stats.hpp>
 #include <boost/math/tools/test.hpp>
@@ -98,6 +98,6 @@ void test_spots(T)
    BOOST_CHECK_CLOSE(::boost::math::beta(small, static_cast<T>(4)), 1/small, tolerance);
    BOOST_CHECK_CLOSE(::boost::math::beta(static_cast<T>(4), small), 1/small, tolerance);
    BOOST_CHECK_CLOSE(::boost::math::beta(static_cast<T>(4), static_cast<T>(20)), static_cast<T>(0.00002823263692828910220214568040654997176736L), tolerance);
-   BOOST_CHECK_CLOSE(::boost::math::beta(static_cast<T>(0.0125L), static_cast<T>(0.000023L)), static_cast<T>(43558.24045647538375006349016083320744662L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::beta(static_cast<T>(0.0125L), static_cast<T>(0.000023L)), static_cast<T>(43558.24045647538375006349016083320744662L), tolerance * 2);
 }
 

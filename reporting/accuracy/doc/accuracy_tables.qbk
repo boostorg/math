@@ -4352,3 +4352,11 @@ underflow[br]30, 8.58993e+09, -8.44974e-268[br]underflow[br]30, 1.71799e+10, -7.
 [errors_GNU_C_version_7_1_0_linux_double_polygamma_GSL_2_1_Mathematica_Data_negative_arguments]
 [errors_GNU_C_version_7_1_0_linux_double_polygamma_GSL_2_1_Mathematica_Data_large_arguments]
 ]
+
+
+[/
+  Copyright 2015 John Maddock and Paul A. Bristow.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]

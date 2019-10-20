@@ -31,12 +31,12 @@
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span>
-          <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
+          <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">non_central_chi_squared_distribution</span><span class="special">;</span>
 
 <span class="keyword">typedef</span> <span class="identifier">non_central_chi_squared_distribution</span><span class="special">&lt;&gt;</span> <span class="identifier">non_central_chi_squared</span><span class="special">;</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">non_central_chi_squared_distribution</span>
 <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
@@ -66,32 +66,37 @@
 </pre>
 <p>
           The noncentral chi-squared distribution is a generalization of the <a class="link" href="chi_squared_dist.html" title="Chi Squared Distribution">Chi Squared Distribution</a>.
-          If X<sub>i</sub> are &#957; independent, normally distributed random variables with means
-          &#956;<sub>i</sub> and variances &#963;<sub>i</sub><sup>2</sup>, then the random variable
+          If <span class="emphasis"><em>X<sub>i</sub></em></span> are /&#957;/ independent, normally distributed random
+          variables with means /&#956;<sub>i</sub>/ and variances <span class="emphasis"><em>&#963;<sub>i</sub><sup>2</sup></em></span>, then the
+          random variable
         </p>
-<p>
-          <span class="inlinemediaobject"><img src="../../../../equations/nc_chi_squ_ref1.svg"></span>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../equations/nc_chi_squ_ref1.svg"></span>
+
+          </p></blockquote></div>
 <p>
           is distributed according to the noncentral chi-squared distribution.
         </p>
 <p>
-          The noncentral chi-squared distribution has two parameters: &#957; which specifies
-          the number of degrees of freedom (i.e. the number of X<sub>i</sub>), and &#955; which is
-          related to the mean of the random variables X<sub>i</sub> by:
+          The noncentral chi-squared distribution has two parameters: /&#957;/ which specifies
+          the number of degrees of freedom (i.e. the number of <span class="emphasis"><em>X<sub>i</sub>)</em></span>,
+          and &#955; which is related to the mean of the random variables <span class="emphasis"><em>X<sub>i</sub></em></span>
+          by:
         </p>
-<p>
-          <span class="inlinemediaobject"><img src="../../../../equations/nc_chi_squ_ref2.svg"></span>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../equations/nc_chi_squ_ref2.svg"></span>
+
+          </p></blockquote></div>
 <p>
           (Note that some references define &#955; as one half of the above sum).
         </p>
 <p>
           This leads to a PDF of:
         </p>
-<p>
-          <span class="inlinemediaobject"><img src="../../../../equations/nc_chi_squ_ref3.svg"></span>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../equations/nc_chi_squ_ref3.svg"></span>
+
+          </p></blockquote></div>
 <p>
           where <span class="emphasis"><em>f(x;k)</em></span> is the central chi-squared distribution
           PDF, and <span class="emphasis"><em>I<sub>v</sub>(x)</em></span> is a modified Bessel function of the
@@ -101,9 +106,10 @@
           The following graph illustrates how the distribution changes for different
           values of &#955;:
         </p>
-<p>
-          <span class="inlinemediaobject"><img src="../../../../graphs/nccs_pdf.svg" align="middle"></span>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../graphs/nccs_pdf.svg" align="middle"></span>
+
+          </p></blockquote></div>
 <h5>
 <a name="math_toolkit.dist_ref.dists.nc_chi_squared_dist.h0"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.nc_chi_squared_dist.member_functions"></a></span><a class="link" href="nc_chi_squared_dist.html#math_toolkit.dist_ref.dists.nc_chi_squared_dist.member_functions">Member
@@ -454,9 +460,10 @@
           #2 Distribution Function", Cherng G. Ding, Applied Statistics, Vol.
           41, No. 2. (1992), pp. 478-482). This uses the following series representation:
         </p>
-<p>
-          <span class="inlinemediaobject"><img src="../../../../equations/nc_chi_squ_ref4.svg"></span>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../equations/nc_chi_squ_ref4.svg"></span>
+
+          </p></blockquote></div>
 <p>
           which requires just one call to <a class="link" href="../../sf_gamma/gamma_derivatives.html" title="Derivative of the Incomplete Gamma Function">gamma_p_derivative</a>
           with the subsequent terms being computed by recursion as shown above.
@@ -479,11 +486,12 @@
 <p>
           This method uses the well known sum:
         </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../equations/nc_chi_squ_ref5.svg"></span>
+
+          </p></blockquote></div>
 <p>
-          <span class="inlinemediaobject"><img src="../../../../equations/nc_chi_squ_ref5.svg"></span>
-        </p>
-<p>
-          Where P<sub>a</sub>(x) is the incomplete gamma function.
+          Where <span class="emphasis"><em>P<sub>a</sub>(x)</em></span> is the incomplete gamma function.
         </p>
 <p>
           The method starts at the &#955;th term, which is where the Poisson weighting
@@ -500,9 +508,10 @@
           Computation of the complement of the CDF uses an extension of Krishnamoorthy's
           method, given that:
         </p>
-<p>
-          <span class="inlinemediaobject"><img src="../../../../equations/nc_chi_squ_ref6.svg"></span>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../equations/nc_chi_squ_ref6.svg"></span>
+
+          </p></blockquote></div>
 <p>
           we can again start at the &#955;'th term and proceed in both directions from
           there until the required precision is achieved. This time it is backwards
@@ -513,9 +522,10 @@
 <p>
           The PDF is computed directly using the relation:
         </p>
-<p>
-          <span class="inlinemediaobject"><img src="../../../../equations/nc_chi_squ_ref3.svg"></span>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../equations/nc_chi_squ_ref3.svg"></span>
+
+          </p></blockquote></div>
 <p>
           Where <span class="emphasis"><em>f(x; v)</em></span> is the PDF of the central <a class="link" href="chi_squared_dist.html" title="Chi Squared Distribution">Chi
           Squared Distribution</a> and <span class="emphasis"><em>I<sub>v</sub>(x)</em></span> is a modified
@@ -541,9 +551,10 @@
 <p>
           The remaining non-member functions use the following formulas:
         </p>
-<p>
-          <span class="inlinemediaobject"><img src="../../../../equations/nc_chi_squ_ref7.svg"></span>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../equations/nc_chi_squ_ref7.svg"></span>
+
+          </p></blockquote></div>
 <p>
           Some analytic properties of noncentral distributions (particularly unimodality,
           and monotonicity of their modes) are surveyed and summarized by:

@@ -31,17 +31,17 @@
 <pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">atanh</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">);</span>
 
-<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">atanh</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">atanh</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 </pre>
 <p>
         Computes the reciprocal of <a class="link" href="inv_hyper_over.html" title="Inverse Hyperbolic Functions Overview">the
         hyperbolic tangent function</a>, at x.
       </p>
 <p>
-        The final <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
+        The final <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
         be used to control the behaviour of the function: how it handles errors,
-        what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">policy
+        what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">policy
         documentation for more details</a>.
       </p>
 <p>
@@ -50,27 +50,29 @@
       </p>
 <p>
         If x is in the range <code class="literal">[-1;-1+&#949;[</code>, then the result of -<a class="link" href="../error_handling.html#math_toolkit.error_handling.overflow_error">overflow_error</a>
-        is returned, with &#949; &#160;
-denoting numeric_limits&lt;T&gt;::epsilon().
+        is returned, with &#949;
+denoting <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">epsilon</span><span class="special">()</span></code>.
       </p>
 <p>
         If x is in the range <code class="literal">]+1-&#949;;+1]</code>, then the result of <a class="link" href="../error_handling.html#math_toolkit.error_handling.overflow_error">overflow_error</a>
-        is returned, with &#949; &#160;
-denoting numeric_limits&lt;T&gt;::epsilon().
+        is returned, with &#949;
+denoting <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">epsilon</span><span class="special">()</span></code>.
       </p>
 <p>
         The return type of this function is computed using the <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>result
         type calculation rules</em></span></a>: the return type is <code class="computeroutput"><span class="keyword">double</span></code> when T is an integer type, and T otherwise.
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/atanh.svg" align="middle"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/atanh.svg" align="middle"></span>
+
+        </p></blockquote></div>
 <h5>
 <a name="math_toolkit.inv_hyper.atanh.h0"></a>
         <span class="phrase"><a name="math_toolkit.inv_hyper.atanh.accuracy"></a></span><a class="link" href="atanh.html#math_toolkit.inv_hyper.atanh.accuracy">Accuracy</a>
       </h5>
 <p>
-        Generally accuracy is to within 1 or 2 epsilon across all supported platforms.
+        Generally accuracy is to within 1 or 2 <a href="http://en.wikipedia.org/wiki/Machine_epsilon" target="_top">machine
+        epsilon</a> across all supported platforms.
       </p>
 <h5>
 <a name="math_toolkit.inv_hyper.atanh.h1"></a>
@@ -81,9 +83,10 @@ denoting numeric_limits&lt;T&gt;::epsilon().
         to give full function coverage computed at high precision using the "naive"
         formula:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/atanh1.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/atanh1.svg"></span>
+
+        </p></blockquote></div>
 <p>
         along with a selection of sanity check values computed using functions.wolfram.com
         to at least 50 decimal digits.
@@ -95,22 +98,25 @@ denoting numeric_limits&lt;T&gt;::epsilon().
 <p>
         For sufficiently small x we can use the <a href="http://functions.wolfram.com/ElementaryFunctions/ArcTanh/06/01/03/01/" target="_top">approximation</a>:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/atanh2.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/atanh2.svg"></span>
+
+        </p></blockquote></div>
 <p>
         Otherwise the <a href="http://functions.wolfram.com/ElementaryFunctions/ArcTanh/02/" target="_top">primary
         definition</a>:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/atanh1.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/atanh1.svg"></span>
+
+        </p></blockquote></div>
 <p>
         or its equivalent form:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/atanh3.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/atanh3.svg"></span>
+
+        </p></blockquote></div>
 <p>
         is used.
       </p>

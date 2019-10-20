@@ -59,7 +59,7 @@ supports both finite and infinite /a/ and /b/, as long as `a < b`.
 The Gaussian quadrature routine support both real and complex-valued quadrature.
 For example, the Lambert-W function admits the integral representation
 
-W(z) = 1/2\u03A0 \u222B[sub -\u03A0][super \u03A0]  ((1- v cot(v) )^2 + v^2)/(z + v csc(v) exp(-v cot(v))) dv
+[expression ['W(z) = 1/2\u03A0 \u222B[sub -\u03A0][super \u03A0]  ((1- v cot(v) )^2 + v^2)/(z + v csc(v) exp(-v cot(v))) dv]]
 
 so it can be effectively computed via Gaussian quadrature using the following code:
 
@@ -107,4 +107,5 @@ and numbers of points.
 
 [gauss_example]
 
-[endsect]
+[endsect] [/section:gauss Gauss-Legendre quadrature]
+

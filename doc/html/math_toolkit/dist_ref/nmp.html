@@ -195,8 +195,8 @@
         <span class="phrase"><a name="math_toolkit.dist_ref.nmp.cdf"></a></span><a class="link" href="nmp.html#math_toolkit.dist_ref.nmp.cdf">Cumulative
         Distribution Function</a>
       </h5>
-<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<span class="identifier">RealType</span> <span class="identifier">cdf</span><span class="special">(</span><span class="keyword">const</span> <span class="emphasis"><em>Distribution-Type</em></span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;&amp;</span> <span class="identifier">dist</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">RealType</span><span class="special">&amp;</span> <span class="identifier">x</span><span class="special">);</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<span class="identifier">RealType</span> <span class="identifier">cdf</span><span class="special">(</span><span class="keyword">const</span> <span class="emphasis"><em>Distribution-Type</em></span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;&amp;</span> <span class="identifier">dist</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">RealType</span><span class="special">&amp;</span> <span class="identifier">x</span><span class="special">);</span>
 </pre>
 <p>
         The <a class="link" href="nmp.html#math_toolkit.dist_ref.nmp.cdf">Cumulative Distribution
@@ -261,8 +261,8 @@
         <span class="phrase"><a name="math_toolkit.dist_ref.nmp.hazard"></a></span><a class="link" href="nmp.html#math_toolkit.dist_ref.nmp.hazard">Hazard
         Function</a>
       </h5>
-<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<span class="identifier">RealType</span> <span class="identifier">hazard</span><span class="special">(</span><span class="keyword">const</span> <span class="emphasis"><em>Distribution-Type</em></span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;&amp;</span> <span class="identifier">dist</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">RealType</span><span class="special">&amp;</span> <span class="identifier">x</span><span class="special">);</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<span class="identifier">RealType</span> <span class="identifier">hazard</span><span class="special">(</span><span class="keyword">const</span> <span class="emphasis"><em>Distribution-Type</em></span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;&amp;</span> <span class="identifier">dist</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">RealType</span><span class="special">&amp;</span> <span class="identifier">x</span><span class="special">);</span>
 </pre>
 <p>
         Returns the <a class="link" href="nmp.html#math_toolkit.dist_ref.nmp.hazard">Hazard Function</a>
@@ -272,9 +272,10 @@
         This function may return a <a class="link" href="../error_handling.html#math_toolkit.error_handling.domain_error">domain_error</a>
         if the random variable is outside the defined range for the distribution.
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/hazard.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/hazard.svg"></span>
+
+        </p></blockquote></div>
 <div class="caution"><table border="0" summary="Caution">
 <tr>
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Caution]" src="../../../../../../doc/src/images/caution.png"></td>
@@ -290,8 +291,8 @@
         <span class="phrase"><a name="math_toolkit.dist_ref.nmp.chf"></a></span><a class="link" href="nmp.html#math_toolkit.dist_ref.nmp.chf">Cumulative
         Hazard Function</a>
       </h5>
-<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<span class="identifier">RealType</span> <span class="identifier">chf</span><span class="special">(</span><span class="keyword">const</span> <span class="emphasis"><em>Distribution-Type</em></span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;&amp;</span> <span class="identifier">dist</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">RealType</span><span class="special">&amp;</span> <span class="identifier">x</span><span class="special">);</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<span class="identifier">RealType</span> <span class="identifier">chf</span><span class="special">(</span><span class="keyword">const</span> <span class="emphasis"><em>Distribution-Type</em></span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;&amp;</span> <span class="identifier">dist</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">RealType</span><span class="special">&amp;</span> <span class="identifier">x</span><span class="special">);</span>
 </pre>
 <p>
         Returns the <a class="link" href="nmp.html#math_toolkit.dist_ref.nmp.chf">Cumulative Hazard
@@ -301,9 +302,10 @@
         This function may return a <a class="link" href="../error_handling.html#math_toolkit.error_handling.domain_error">domain_error</a>
         if the random variable is outside the defined range for the distribution.
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/chf.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/chf.svg"></span>
+
+        </p></blockquote></div>
 <div class="caution"><table border="0" summary="Caution">
 <tr>
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Caution]" src="../../../../../../doc/src/images/caution.png"></td>
@@ -317,8 +319,8 @@
 <a name="math_toolkit.dist_ref.nmp.h6"></a>
         <span class="phrase"><a name="math_toolkit.dist_ref.nmp.mean"></a></span><a class="link" href="nmp.html#math_toolkit.dist_ref.nmp.mean">mean</a>
       </h5>
-<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<span class="identifier">RealType</span> <span class="identifier">mean</span><span class="special">(</span><span class="keyword">const</span> <span class="emphasis"><em>Distribution-Type</em></span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;&amp;</span> <span class="identifier">dist</span><span class="special">);</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<span class="identifier">RealType</span> <span class="identifier">mean</span><span class="special">(</span><span class="keyword">const</span> <span class="emphasis"><em>Distribution-Type</em></span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;&amp;</span> <span class="identifier">dist</span><span class="special">);</span>
 </pre>
 <p>
         Returns the mean of the distribution <span class="emphasis"><em>dist</em></span>.
@@ -332,8 +334,8 @@
 <a name="math_toolkit.dist_ref.nmp.h7"></a>
         <span class="phrase"><a name="math_toolkit.dist_ref.nmp.median"></a></span><a class="link" href="nmp.html#math_toolkit.dist_ref.nmp.median">median</a>
       </h5>
-<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<span class="identifier">RealType</span> <span class="identifier">median</span><span class="special">(</span><span class="keyword">const</span> <span class="emphasis"><em>Distribution-Type</em></span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;&amp;</span> <span class="identifier">dist</span><span class="special">);</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<span class="identifier">RealType</span> <span class="identifier">median</span><span class="special">(</span><span class="keyword">const</span> <span class="emphasis"><em>Distribution-Type</em></span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;&amp;</span> <span class="identifier">dist</span><span class="special">);</span>
 </pre>
 <p>
         Returns the median of the distribution <span class="emphasis"><em>dist</em></span>.
@@ -342,8 +344,8 @@
 <a name="math_toolkit.dist_ref.nmp.h8"></a>
         <span class="phrase"><a name="math_toolkit.dist_ref.nmp.mode"></a></span><a class="link" href="nmp.html#math_toolkit.dist_ref.nmp.mode">mode</a>
       </h5>
-<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<span class="identifier">RealType</span> <span class="identifier">mode</span><span class="special">(</span><span class="keyword">const</span> <span class="emphasis"><em>Distribution-Type</em></span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;&amp;</span> <span class="identifier">dist</span><span class="special">);</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<span class="identifier">RealType</span> <span class="identifier">mode</span><span class="special">(</span><span class="keyword">const</span> <span class="emphasis"><em>Distribution-Type</em></span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;&amp;</span> <span class="identifier">dist</span><span class="special">);</span>
 </pre>
 <p>
         Returns the mode of the distribution <span class="emphasis"><em>dist</em></span>.
@@ -357,8 +359,8 @@
         <span class="phrase"><a name="math_toolkit.dist_ref.nmp.pdf"></a></span><a class="link" href="nmp.html#math_toolkit.dist_ref.nmp.pdf">Probability
         Density Function</a>
       </h5>
-<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<span class="identifier">RealType</span> <span class="identifier">pdf</span><span class="special">(</span><span class="keyword">const</span> <span class="emphasis"><em>Distribution-Type</em></span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;&amp;</span> <span class="identifier">dist</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">RealType</span><span class="special">&amp;</span> <span class="identifier">x</span><span class="special">);</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<span class="identifier">RealType</span> <span class="identifier">pdf</span><span class="special">(</span><span class="keyword">const</span> <span class="emphasis"><em>Distribution-Type</em></span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;&amp;</span> <span class="identifier">dist</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">RealType</span><span class="special">&amp;</span> <span class="identifier">x</span><span class="special">);</span>
 </pre>
 <p>
         For a continuous function, the probability density function (pdf) returns
@@ -385,8 +387,8 @@
 <a name="math_toolkit.dist_ref.nmp.h10"></a>
         <span class="phrase"><a name="math_toolkit.dist_ref.nmp.range"></a></span><a class="link" href="nmp.html#math_toolkit.dist_ref.nmp.range">Range</a>
       </h5>
-<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <span class="identifier">RealType</span><span class="special">&gt;</span> <span class="identifier">range</span><span class="special">(</span><span class="keyword">const</span> <span class="emphasis"><em>Distribution-Type</em></span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;&amp;</span> <span class="identifier">dist</span><span class="special">);</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <span class="identifier">RealType</span><span class="special">&gt;</span> <span class="identifier">range</span><span class="special">(</span><span class="keyword">const</span> <span class="emphasis"><em>Distribution-Type</em></span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;&amp;</span> <span class="identifier">dist</span><span class="special">);</span>
 </pre>
 <p>
         Returns the valid range of the random variable over distribution <span class="emphasis"><em>dist</em></span>.
@@ -395,8 +397,8 @@
 <a name="math_toolkit.dist_ref.nmp.h11"></a>
         <span class="phrase"><a name="math_toolkit.dist_ref.nmp.quantile"></a></span><a class="link" href="nmp.html#math_toolkit.dist_ref.nmp.quantile">Quantile</a>
       </h5>
-<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<span class="identifier">RealType</span> <span class="identifier">quantile</span><span class="special">(</span><span class="keyword">const</span> <span class="emphasis"><em>Distribution-Type</em></span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;&amp;</span> <span class="identifier">dist</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">RealType</span><span class="special">&amp;</span> <span class="identifier">p</span><span class="special">);</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<span class="identifier">RealType</span> <span class="identifier">quantile</span><span class="special">(</span><span class="keyword">const</span> <span class="emphasis"><em>Distribution-Type</em></span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;&amp;</span> <span class="identifier">dist</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">RealType</span><span class="special">&amp;</span> <span class="identifier">p</span><span class="special">);</span>
 </pre>
 <p>
         The quantile is best viewed as the inverse of the <a class="link" href="nmp.html#math_toolkit.dist_ref.nmp.cdf">Cumulative
@@ -472,8 +474,8 @@
         <span class="phrase"><a name="math_toolkit.dist_ref.nmp.sd"></a></span><a class="link" href="nmp.html#math_toolkit.dist_ref.nmp.sd">Standard
         Deviation</a>
       </h5>
-<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<span class="identifier">RealType</span> <span class="identifier">standard_deviation</span><span class="special">(</span><span class="keyword">const</span> <span class="emphasis"><em>Distribution-Type</em></span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;&amp;</span> <span class="identifier">dist</span><span class="special">);</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<span class="identifier">RealType</span> <span class="identifier">standard_deviation</span><span class="special">(</span><span class="keyword">const</span> <span class="emphasis"><em>Distribution-Type</em></span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;&amp;</span> <span class="identifier">dist</span><span class="special">);</span>
 </pre>
 <p>
         Returns the standard deviation of distribution <span class="emphasis"><em>dist</em></span>.
@@ -486,8 +488,8 @@
 <a name="math_toolkit.dist_ref.nmp.h14"></a>
         <span class="phrase"><a name="math_toolkit.dist_ref.nmp.support"></a></span><a class="link" href="nmp.html#math_toolkit.dist_ref.nmp.support">support</a>
       </h5>
-<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <span class="identifier">RealType</span><span class="special">&gt;</span> <span class="identifier">support</span><span class="special">(</span><span class="keyword">const</span> <span class="emphasis"><em>Distribution-Type</em></span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;&amp;</span> <span class="identifier">dist</span><span class="special">);</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <span class="identifier">RealType</span><span class="special">&gt;</span> <span class="identifier">support</span><span class="special">(</span><span class="keyword">const</span> <span class="emphasis"><em>Distribution-Type</em></span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;&amp;</span> <span class="identifier">dist</span><span class="special">);</span>
 </pre>
 <p>
         Returns the supported range of random variable over the distribution <span class="emphasis"><em>dist</em></span>.
@@ -503,8 +505,8 @@
 <a name="math_toolkit.dist_ref.nmp.h15"></a>
         <span class="phrase"><a name="math_toolkit.dist_ref.nmp.variance"></a></span><a class="link" href="nmp.html#math_toolkit.dist_ref.nmp.variance">Variance</a>
       </h5>
-<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<span class="identifier">RealType</span> <span class="identifier">variance</span><span class="special">(</span><span class="keyword">const</span> <span class="emphasis"><em>Distribution-Type</em></span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;&amp;</span> <span class="identifier">dist</span><span class="special">);</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<span class="identifier">RealType</span> <span class="identifier">variance</span><span class="special">(</span><span class="keyword">const</span> <span class="emphasis"><em>Distribution-Type</em></span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;&amp;</span> <span class="identifier">dist</span><span class="special">);</span>
 </pre>
 <p>
         Returns the variance of the distribution <span class="emphasis"><em>dist</em></span>.
@@ -517,8 +519,8 @@
 <a name="math_toolkit.dist_ref.nmp.h16"></a>
         <span class="phrase"><a name="math_toolkit.dist_ref.nmp.skewness"></a></span><a class="link" href="nmp.html#math_toolkit.dist_ref.nmp.skewness">Skewness</a>
       </h5>
-<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<span class="identifier">RealType</span> <span class="identifier">skewness</span><span class="special">(</span><span class="keyword">const</span> <span class="emphasis"><em>Distribution-Type</em></span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;&amp;</span> <span class="identifier">dist</span><span class="special">);</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<span class="identifier">RealType</span> <span class="identifier">skewness</span><span class="special">(</span><span class="keyword">const</span> <span class="emphasis"><em>Distribution-Type</em></span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;&amp;</span> <span class="identifier">dist</span><span class="special">);</span>
 </pre>
 <p>
         Returns the skewness of the distribution <span class="emphasis"><em>dist</em></span>.
@@ -531,19 +533,19 @@
 <a name="math_toolkit.dist_ref.nmp.h17"></a>
         <span class="phrase"><a name="math_toolkit.dist_ref.nmp.kurtosis"></a></span><a class="link" href="nmp.html#math_toolkit.dist_ref.nmp.kurtosis">Kurtosis</a>
       </h5>
-<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<span class="identifier">RealType</span> <span class="identifier">kurtosis</span><span class="special">(</span><span class="keyword">const</span> <span class="emphasis"><em>Distribution-Type</em></span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;&amp;</span> <span class="identifier">dist</span><span class="special">);</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<span class="identifier">RealType</span> <span class="identifier">kurtosis</span><span class="special">(</span><span class="keyword">const</span> <span class="emphasis"><em>Distribution-Type</em></span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;&amp;</span> <span class="identifier">dist</span><span class="special">);</span>
 </pre>
 <p>
         Returns the 'proper' kurtosis (normalized fourth moment) of the distribution
         <span class="emphasis"><em>dist</em></span>.
       </p>
 <p>
-        kertosis = &#946;<sub>2</sub> &#160;= &#956;<sub>4</sub> &#160; / &#956;<sub>2</sub><sup>2</sup>
+        kertosis = &#946;<sub>2</sub>= &#956;<sub>4</sub> / &#956;<sub>2</sub><sup>2</sup>
       </p>
 <p>
-        Where &#956;<sub>i</sub> &#160; is the i'th central moment of the distribution, and in particular
-        &#956;<sub>2</sub> &#160; is the variance of the distribution.
+        Where &#956;<sub>i</sub> is the i'th central moment of the distribution, and in particular
+        &#956;<sub>2</sub> is the variance of the distribution.
       </p>
 <p>
         The kurtosis is a measure of the "peakedness" of a distribution.
@@ -574,18 +576,18 @@
         <span class="phrase"><a name="math_toolkit.dist_ref.nmp.kurtosis_excess"></a></span><a class="link" href="nmp.html#math_toolkit.dist_ref.nmp.kurtosis_excess">Kurtosis
         excess</a>
       </h5>
-<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<span class="identifier">RealType</span> <span class="identifier">kurtosis_excess</span><span class="special">(</span><span class="keyword">const</span> <span class="emphasis"><em>Distribution-Type</em></span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;&amp;</span> <span class="identifier">dist</span><span class="special">);</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<span class="identifier">RealType</span> <span class="identifier">kurtosis_excess</span><span class="special">(</span><span class="keyword">const</span> <span class="emphasis"><em>Distribution-Type</em></span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;&amp;</span> <span class="identifier">dist</span><span class="special">);</span>
 </pre>
 <p>
         Returns the kurtosis excess of the distribution <span class="emphasis"><em>dist</em></span>.
       </p>
 <p>
-        kurtosis excess = &#947;<sub>2</sub> &#160;= &#956;<sub>4</sub> &#160; / &#956;<sub>2</sub><sup>2</sup> &#160;- 3 = kurtosis - 3
+        kurtosis excess = &#947;<sub>2</sub>= &#956;<sub>4</sub> / &#956;<sub>2</sub><sup>2</sup>- 3 = kurtosis - 3
       </p>
 <p>
-        Where &#956;<sub>i</sub> &#160; is the i'th central moment of the distribution, and in particular
-        &#956;<sub>2</sub> &#160; is the variance of the distribution.
+        Where &#956;<sub>i</sub> is the i'th central moment of the distribution, and in particular
+        &#956;<sub>2</sub> is the variance of the distribution.
       </p>
 <p>
         The kurtosis excess is a measure of the "peakedness" of a distribution,

@@ -45,11 +45,8 @@ The [@http://en.wikipedia.org/wiki/Triangular_distribution triangular distributi
 is a distribution with the
 [@http://en.wikipedia.org/wiki/Probability_density_function probability density function]:
 
-__spaces f(x) =
-
-* 2(x-a)/(b-a) (c-a) for a <= x <= c
-
-* 2(b-x)/(b-a)(b-c) for c < x <= b
+[expression f(x) = 2(x-a)/(b-a) (c-a) [sixemspace]  for a <= x <= c]
+[expression f(x) = 2(b-x)/(b-a) (b-c) [sixemspace] for c < x <= b]
 
 Parameter ['a] (lower) can be any finite value.
 Parameter ['b] (upper) can be any finite value > a (lower).

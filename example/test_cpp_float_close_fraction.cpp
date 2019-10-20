@@ -15,7 +15,7 @@
 #define BOOST_LIB_DIAGNOSTIC "on"// Show library file details.
 
 #include <boost/test/unit_test.hpp>
-#include <boost/test/floating_point_comparison.hpp> // Extra test tool for FP comparison.
+#include <boost/test/tools/floating_point_comparison.hpp> // Extra test tool for FP comparison.
 
 #include <iostream>
 #include <limits>

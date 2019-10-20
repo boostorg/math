@@ -394,8 +394,7 @@ This time there's no need to plot a graph, the first few rows are:
    4.0096,   2.39712,        21
    5.0095,   0.233263,       16
 
-So it's pretty clear that this fraction shouldn't be used for small values
-of a and z.
+So it's pretty clear that this fraction shouldn't be used for small values of /a/ and /z/.
 
 [h4 reference]
 
@@ -436,7 +435,7 @@ before passing it to the function under test, usually the functor will then
 return both the transformed input and the result in a tuple, so there's no
 need for the original pseudo-parameter to be included in program output.
 
-[endsect][/section:test_data Graphing, Profiling, and Generating Test Data for Special Functions]
+[endsect] [/section:test_data Graphing, Profiling, and Generating Test Data for Special Functions]
 
 [/ 
   Copyright 2006 John Maddock and Paul A. Bristow.

@@ -37,14 +37,14 @@
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">sph_bessel</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">v</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">x</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">sph_bessel</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">v</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">sph_bessel</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">v</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">sph_neumann</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">v</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">x</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">sph_neumann</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">v</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">sph_neumann</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">v</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 </pre>
 <h5>
 <a name="math_toolkit.bessel.sph_bessel.h1"></a>
@@ -56,26 +56,27 @@
         the result of the Spherical Bessel functions of the first and second kinds
         respectively:
       </p>
-<p>
-        sph_bessel(v, x) = j<sub>v</sub>(x)
-      </p>
-<p>
-        sph_neumann(v, x) = y<sub>v</sub>(x) = n<sub>v</sub>(x)
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          sph_bessel(v, x) = j<sub>v</sub>(x)
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          sph_neumann(v, x) = y<sub>v</sub>(x) = n<sub>v</sub>(x)
+        </p></blockquote></div>
 <p>
         where:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/sbessel2.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/sbessel2.svg"></span>
+
+        </p></blockquote></div>
 <p>
         The return type of these functions is computed using the <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>result
         type calculation rules</em></span></a> for the single argument type T.
       </p>
 <p>
-        The final <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
+        The final <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
         be used to control the behaviour of the function: how it handles errors,
-        what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">policy
+        what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">policy
         documentation for more details</a>.
       </p>
 <p>
@@ -83,18 +84,20 @@
         whenever the result is undefined or complex: this occurs when <code class="computeroutput"><span class="identifier">x</span> <span class="special">&lt;</span> <span class="number">0</span></code>.
       </p>
 <p>
-        The j<sub>v</sub> &#160; function is cyclic like J<sub>v</sub> &#160; but differs in its behaviour at the origin:
+        The j<sub>v</sub> function is cyclic like J<sub>v</sub> but differs in its behaviour at the origin:
       </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/sph_bessel.svg" align="middle"></span>
+
+        </p></blockquote></div>
 <p>
-        <span class="inlinemediaobject"><img src="../../../graphs/sph_bessel.svg" align="middle"></span>
-      </p>
-<p>
-        Likewise y<sub>v</sub> &#160; is also cyclic for large x, but tends to -&#8734; &#160;
+        Likewise y<sub>v</sub> is also cyclic for large x, but tends to -&#8734;
 for small <span class="emphasis"><em>x</em></span>:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/sph_neumann.svg" align="middle"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/sph_neumann.svg" align="middle"></span>
+
+        </p></blockquote></div>
 <h5>
 <a name="math_toolkit.bessel.sph_bessel.h2"></a>
         <span class="phrase"><a name="math_toolkit.bessel.sph_bessel.testing"></a></span><a class="link" href="sph_bessel.html#math_toolkit.bessel.sph_bessel.testing">Testing</a>
@@ -109,7 +112,7 @@ for small <span class="emphasis"><em>x</em></span>:
         <span class="phrase"><a name="math_toolkit.bessel.sph_bessel.accuracy"></a></span><a class="link" href="sph_bessel.html#math_toolkit.bessel.sph_bessel.accuracy">Accuracy</a>
       </h5>
 <div class="table">
-<a name="math_toolkit.bessel.sph_bessel.table_sph_bessel"></a><p class="title"><b>Table&#160;7.48.&#160;Error rates for sph_bessel</b></p>
+<a name="math_toolkit.bessel.sph_bessel.table_sph_bessel"></a><p class="title"><b>Table&#160;8.48.&#160;Error rates for sph_bessel</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for sph_bessel">
 <colgroup>
 <col>
@@ -174,7 +177,7 @@ for small <span class="emphasis"><em>x</em></span>:
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="math_toolkit.bessel.sph_bessel.table_sph_neumann"></a><p class="title"><b>Table&#160;7.49.&#160;Error rates for sph_neumann</b></p>
+<a name="math_toolkit.bessel.sph_bessel.table_sph_neumann"></a><p class="title"><b>Table&#160;8.49.&#160;Error rates for sph_neumann</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for sph_neumann">
 <colgroup>
 <col>
@@ -246,22 +249,24 @@ for small <span class="emphasis"><em>x</em></span>:
         Other than error handling and a couple of special cases these functions are
         implemented directly in terms of their definitions:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/sbessel2.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/sbessel2.svg"></span>
+
+        </p></blockquote></div>
 <p>
         The special cases occur for:
       </p>
-<p>
-        j<sub>0</sub> &#160;= <a class="link" href="../sinc/sinc_pi.html" title="sinc_pi">sinc_pi</a>(x) = sin(x)
-        / x
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          j<sub>0</sub>= <a class="link" href="../sinc/sinc_pi.html" title="sinc_pi">sinc_pi</a>(x) = sin(x)
+          / x
+        </p></blockquote></div>
 <p>
         and for small <span class="emphasis"><em>x &lt; 1</em></span>, we can use the series:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/sbessel5.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/sbessel5.svg"></span>
+
+        </p></blockquote></div>
 <p>
         which neatly avoids the problem of calculating 0/0 that can occur with the
         main definition as x &#8594; 0.

@@ -1,10 +1,3 @@
-[/
-Copyright (c) 2006 Xiaogang Zhang
-Use, modification and distribution are subject to the
-Boost Software License, Version 1.0. (See accompanying file
-LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-]
-
 [section:ellint_intro Elliptic Integral Overview]
 
 The main reference for the elliptic integrals is:
@@ -13,6 +6,9 @@ The main reference for the elliptic integrals is:
 Handbook of Mathematical Functions with Formulas, Graphs, and
 Mathematical Tables,      
 National Bureau of Standards Applied Mathematics Series, U.S. Government Printing Office, Washington, D.C.]
+
+and its recently revised version __DMLF, in particular
+[:[@https://dlmf.nist.gov/19 Elliptic Integrals, B. C. Carlson]]
 
 Mathworld also contain a lot of useful background information:
 
@@ -33,7 +29,7 @@ is called elliptic integral if ['R(t, s)] is a rational function
 of ['t] and ['s], and ['s[super 2]] is a cubic or quartic polynomial
 in ['t].
 
-Elliptic integrals generally can not be expressed in terms of
+Elliptic integrals generally cannot be expressed in terms of
 elementary functions. However, Legendre showed that all elliptic
 integrals can be reduced to the following three canonical forms:
 
@@ -55,7 +51,7 @@ where
 
 [note ['[phi]] is called the amplitude.
 
-['k] is called the modulus. 
+['k] is called the elliptic modulus or eccentricity. 
 
 ['[alpha]] is called the modular angle. 
 
@@ -66,28 +62,34 @@ integrals are expressed in a variety of different ways.  In particular,
 the final parameter /k/ (the modulus) may be expressed using a modular
 angle [alpha], or a parameter /m/.  These are related by:
 
-k = sin[alpha]
+[expression k = sin[thin][alpha]]
 
-m = k[super 2] = sin[super 2][alpha]
+[expression m = k[super 2] = sin[super 2][alpha]]
 
 So that the integral of the third kind (for example) may be expressed as
 either:
 
-[Pi](n, [phi], k)
+[expression [Pi](n, [phi], k)]
 
-[Pi](n, [phi] \\ [alpha])
+[expression [Pi](n, [phi] \\ [alpha])]
 
-[Pi](n, [phi]| m)
+[expression [Pi](n, [phi] | m)]
 
 To further complicate matters, some texts refer to the ['complement
 of the parameter m], or 1 - m, where:
 
-1 - m = 1 - k[super 2] = cos[super 2][alpha]
+[expression 1 - m = 1 - k[super 2] = cos[super 2][alpha]]
 
 This implementation uses /k/ throughout: this matches the requirements
 of the [@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1836.pdf
-Technical Report on C++ Library Extensions].  However, you should
-be extra careful when using these functions!]
+Technical Report on C++ Library Extensions].[br]
+
+So you should be extra careful when using these functions!]
+
+[warning Boost.Math order of arguments differs from other implementations: /k/ is always the *first* argument.]
+
+A simple example comparing use of __WolframAlpha with Boost.Math (including much higher precision using __multiprecision)
+is [@../../example/jacobi_zeta_example.cpp jacobi_zeta_example.cpp].
 
 When ['[phi]] = ['[pi]] / 2, the elliptic integrals are called ['complete].
 
@@ -103,7 +105,7 @@ Complete Elliptic Integral of the Third Kind (Legendre form)
 
 [equation ellint8]
 
-Legendre also defined a forth integral D([phi],k) which is a combination of the other three:
+Legendre also defined a fourth integral /D([phi],k)/ which is a combination of the other three:
 
 [equation ellint_d]
 
@@ -186,15 +188,16 @@ The conventional methods for computing elliptic integrals are Gauss
 and Landen transformations, which converge quadratically and work
 well for elliptic integrals of the first and second kinds.
 Unfortunately they suffer from loss of significant digits for the
-third kind. Carlson's algorithm [[link ellint_ref_carlson79  Carlson79]] [[link ellint_ref_carlson78  Carlson78]], by contrast,
-provides a unified method for all three kinds of elliptic integrals
-with satisfactory precisions.
+third kind.
+
+Carlson's algorithm [[link ellint_ref_carlson79  Carlson79]] [[link ellint_ref_carlson78  Carlson78]], by contrast,
+provides a unified method for all three kinds of elliptic integrals with satisfactory precisions.
 
 [h4 References]
 
 Special mention goes to:
 
-[:A. M. Legendre, ['Traitd des Fonctions Elliptiques et des Integrales 
+[:A. M. Legendre, ['Trait[eacute] des Fonctions Elliptiques et des Integrales 
 Euleriennes], Vol. 1. Paris (1825).]
 
 However the main references are:
@@ -203,6 +206,7 @@ However the main references are:
 Handbook of Mathematical Functions with Formulas, Graphs, and
 Mathematical Tables,      
 National Bureau of Standards Applied Mathematics Series, U.S. Government Printing Office, Washington, D.C.
+# [@https://dlmf.nist.gov/19 NIST Digital Library of Mathematical Functions, Elliptic Integrals, B. C. Carlson]
 # [#ellint_ref_carlson79]B.C. Carlson, ['Computing elliptic integrals by duplication],
     Numerische Mathematik, vol 33, 1 (1979).
 # [#ellint_ref_carlson77]B.C. Carlson, ['Elliptic Integrals of the First Kind],
@@ -246,4 +250,12 @@ Numerical Computation of Incomplete Elliptic Integrals of a General Form.]]
 Celestial Mechanics and Dynamical Astronomy, Volume 59, Number 3 / July, 1994,
 237-251.
 
-[endsect]
+[endsect] [/section:ellint_intro Elliptic Integral Overview]
+
+[/
+Copyright (c) 2006 Xiaogang Zhang
+Use, modification and distribution are subject to the
+Boost Software License, Version 1.0. (See accompanying file
+LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+]
+

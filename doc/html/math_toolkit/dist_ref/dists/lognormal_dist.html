@@ -31,12 +31,12 @@
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span>
-          <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
+          <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">lognormal_distribution</span><span class="special">;</span>
 
 <span class="keyword">typedef</span> <span class="identifier">lognormal_distribution</span><span class="special">&lt;&gt;</span> <span class="identifier">lognormal</span><span class="special">;</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">lognormal_distribution</span>
 <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
@@ -61,9 +61,10 @@
           For location and scale parameters <span class="emphasis"><em>m</em></span> and <span class="emphasis"><em>s</em></span>
           it is defined by the probability density function:
         </p>
-<p>
-          <span class="inlinemediaobject"><img src="../../../../equations/lognormal_ref.svg"></span>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../equations/lognormal_ref.svg"></span>
+
+          </p></blockquote></div>
 <p>
           The location and scale parameters are equivalent to the mean and standard
           deviation of the logarithm of the random variable.
@@ -73,15 +74,17 @@
           the PDF, note that the range of the random variable remains [0,+&#8734;] irrespective
           of the value of the location parameter:
         </p>
-<p>
-          <span class="inlinemediaobject"><img src="../../../../graphs/lognormal_pdf1.svg" align="middle"></span>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../graphs/lognormal_pdf1.svg" align="middle"></span>
+
+          </p></blockquote></div>
 <p>
           The next graph illustrates the effect of the scale parameter on the PDF:
         </p>
-<p>
-          <span class="inlinemediaobject"><img src="../../../../graphs/lognormal_pdf2.svg" align="middle"></span>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../graphs/lognormal_pdf2.svg" align="middle"></span>
+
+          </p></blockquote></div>
 <h5>
 <a name="math_toolkit.dist_ref.dists.lognormal_dist.h0"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.lognormal_dist.member_functions"></a></span><a class="link" href="lognormal_dist.html#math_toolkit.dist_ref.dists.lognormal_dist.member_functions">Member
@@ -141,7 +144,7 @@
         </h5>
 <p>
           The lognormal distribution is implemented in terms of the standard library
-          log and exp functions, plus the <a class="link" href="../../sf_erf/error_function.html" title="Error Functions">error
+          log and exp functions, plus the <a class="link" href="../../sf_erf/error_function.html" title="Error Function erf and complement erfc">error
           function</a>, and as such should have very low error rates.
         </p>
 <h5>

@@ -42,7 +42,6 @@ private:
 template <class TimeContainer, class SpaceContainer>
 vector_barycentric_rational_imp<TimeContainer, SpaceContainer>::vector_barycentric_rational_imp(TimeContainer&& t, SpaceContainer&& y, size_t approximation_order)
 {
-    using Real = typename TimeContainer::value_type;
     using std::numeric_limits;
     t_ = std::move(t);
     y_ = std::move(y);
@@ -51,7 +50,7 @@ vector_barycentric_rational_imp<TimeContainer, SpaceContainer>::vector_barycentr
     BOOST_ASSERT_MSG(approximation_order < y_.size(), "Approximation order must be < data length.");
     for (size_t i = 1; i < t_.size(); ++i)
     {
-        BOOST_ASSERT_MSG(t_[i] - t_[i-1] >  (numeric_limits<Real>::min)(), "The abscissas must be listed in strictly increasing order t[0] < t[1] < ... < t[n-1].");
+        BOOST_ASSERT_MSG(t_[i] - t_[i-1] >  (numeric_limits<typename TimeContainer::value_type>::min)(), "The abscissas must be listed in strictly increasing order t[0] < t[1] < ... < t[n-1].");
     }
     calculate_weights(approximation_order);
 }

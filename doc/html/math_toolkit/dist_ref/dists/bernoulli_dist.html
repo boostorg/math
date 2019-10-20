@@ -30,12 +30,12 @@
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">bernoulli</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></pre>
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
  <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span>
-           <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
+           <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
  <span class="keyword">class</span> <span class="identifier">bernoulli_distribution</span><span class="special">;</span>
 
  <span class="keyword">typedef</span> <span class="identifier">bernoulli_distribution</span><span class="special">&lt;&gt;</span> <span class="identifier">bernoulli</span><span class="special">;</span>
 
- <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+ <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
  <span class="keyword">class</span> <span class="identifier">bernoulli_distribution</span>
  <span class="special">{</span>
  <span class="keyword">public</span><span class="special">:</span>
@@ -64,23 +64,34 @@
         </p>
 <p>
           <a href="http://en.wikipedia.org/wiki/Probability_density_function" target="_top">probability
-          density function pdf</a> f(0) = 1 - p, f(1) = p. <a href="http://en.wikipedia.org/wiki/Cumulative_Distribution_Function" target="_top">Cumulative
-          distribution function</a> D(k) = if (k == 0) 1 - p else 1.
+          density function pdf</a>
         </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="serif_italic">f(0) = 1 - p, f(1) = p</span>
+          </p></blockquote></div>
+<p>
+          <a href="http://en.wikipedia.org/wiki/Cumulative_Distribution_Function" target="_top">Cumulative
+          distribution function</a>
+        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="serif_italic">D(k) = if (k == 0) 1 - p else 1</span>
+          </p></blockquote></div>
 <p>
           The following graph illustrates how the <a href="http://en.wikipedia.org/wiki/Probability_density_function" target="_top">probability
           density function pdf</a> varies with the outcome of the single trial:
         </p>
-<p>
-          <span class="inlinemediaobject"><img src="../../../../graphs/bernoulli_pdf.svg" align="middle"></span>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../graphs/bernoulli_pdf.svg" align="middle"></span>
+
+          </p></blockquote></div>
 <p>
           and the <a href="http://en.wikipedia.org/wiki/Cumulative_Distribution_Function" target="_top">Cumulative
           distribution function</a>
         </p>
-<p>
-          <span class="inlinemediaobject"><img src="../../../../graphs/bernoulli_cdf.svg" align="middle"></span>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../graphs/bernoulli_cdf.svg" align="middle"></span>
+
+          </p></blockquote></div>
 <h5>
 <a name="math_toolkit.dist_ref.dists.bernoulli_dist.h0"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.bernoulli_dist.member_functions"></a></span><a class="link" href="bernoulli_dist.html#math_toolkit.dist_ref.dists.bernoulli_dist.member_functions">Member

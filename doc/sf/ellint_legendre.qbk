@@ -97,8 +97,7 @@ NTL::RR at 1000-bit precision and this implementation.
 
 [heading Implementation]
 
-These functions are implemented in terms of Carlson's integrals
-using the relations:
+These functions are implemented in terms of Carlson's integrals using the relations:
 
 [equation ellint19]
 
@@ -106,8 +105,7 @@ and
 
 [equation ellint20]
 
-
-[endsect]
+[endsect] [/section:ellint_1 Elliptic Integrals of the First Kind - Legendre Form]
 
 [section:ellint_2 Elliptic Integrals of the Second Kind - Legendre Form]
 
@@ -209,8 +207,7 @@ and
 
 [equation ellint22]
 
-
-[endsect]
+[endsect] [/section:ellint_2 Elliptic Integrals of the Second Kind - Legendre Form]
 
 [section:ellint_3 Elliptic Integrals of the Third Kind - Legendre Form]
 
@@ -299,9 +296,9 @@ NTL::RR at 1000-bit precision and this implementation.
 
 The implementation for [Pi](n, [phi], k) first siphons off the special cases:
 
-['[Pi](0, [phi], k) = F([phi], k)]
+[expression ['[Pi](0, [phi], k) = F([phi], k)]]
 
-['[Pi](n, [pi]/2, k) = [Pi](n, k)]
+[expression ['[Pi](n, [pi]/2, k) = [Pi](n, k)]]
 
 and
 
@@ -315,20 +312,19 @@ are used to shift /n/ to the range \[0, 1\].
 
 Then the relations:
 
-['[Pi](n, -[phi], k) = -[Pi](n, [phi], k)]
+[expression ['[Pi](n, -[phi], k) = -[Pi](n, [phi], k)]]
 
-['[Pi](n, [phi]+m[pi], k) = [Pi](n, [phi], k) + 2m[Pi](n, k) ; n <= 1]
+[expression ['[Pi](n, [phi]+m[pi], k) = [Pi](n, [phi], k) + 2m[Pi](n, k) ; n <= 1]]
 
-['[Pi](n, [phi]+m[pi], k) = [Pi](n, [phi], k) ; n > 1] 
+[expression ['[Pi](n, [phi]+m[pi], k) = [Pi](n, [phi], k) ; n > 1] [indent] [indent]
 [footnote I haven't been able to find a literature reference for this
 relation, but it appears to be the convention used by Mathematica.
 Intuitively the first ['2 * m * [Pi](n, k)] terms cancel out as the
-derivative alternates between +[infin] and -[infin].]
+derivative alternates between +[infin] and -[infin].]]
 
-are used to move [phi][space] to the range \[0, [pi]\/2\].
+are used to move [phi] to the range \[0, [pi]\/2\].
 
-The functions are then implemented in terms of Carlson's integrals
-using the relations:
+The functions are then implemented in terms of Carlson's integrals using the relations:
 
 [equation ellint25]
 
@@ -336,7 +332,7 @@ and
 
 [equation ellint26]
 
-[endsect]
+[endsect] [/section:ellint_3 Elliptic Integrals of the Third Kind - Legendre Form]
 
 [section:ellint_d Elliptic Integral D - Legendre Form]
 
@@ -420,11 +416,10 @@ and GCC-7.1/Ubuntu for `long double` and `__float128`.
 [graph elliptic_integral_d____float128]
 
 
-
 [heading Testing]
 
 The tests use a mixture of spot test values calculated using 
-values calculated at wolframalpha.com, and random test data generated using
+values calculated at __WolframAlpha, and random test data generated using
 MPFR at 1000-bit precision and a deliberately naive implementation in terms of
 the Legendre integrals.
 
@@ -432,20 +427,20 @@ the Legendre integrals.
 
 The implementation for D([phi], k) first performs argument reduction using the relations:
 
-['D(-[phi], k) = -D([phi], k)]
+[expression ['D(-[phi], k) = -D([phi], k)]]
 
 and
 
-['D(n[pi]+[phi], k) = 2nD(k) + D([phi], k)]
+[expression ['D(n[pi]+[phi], k) = 2nD(k) + D([phi], k)]]
 
-to move [phi][space] to the range \[0, [pi]\/2\].
+to move [phi] to the range \[0, [pi]\/2\].
 
 The functions are then implemented in terms of Carlson's integral R[sub D]
 using the relation:
 
 [equation ellint_d]
 
-[endsect]
+[endsect] [/section:ellint_d Elliptic Integral D - Legendre Form]
 
 [section:jacobi_zeta Jacobi Zeta Function]
 
@@ -473,16 +468,16 @@ This function evaluates the Jacobi Zeta Function ['Z([phi], k)]
 
 Please note the use of [phi], and /k/ as the parameters, the function is often defined as ['Z([phi], m)]
 with ['m = k[super 2]], see for example  [@http://mathworld.wolfram.com/JacobiZetaFunction.html Weisstein, Eric W. "Jacobi Zeta Function." From MathWorld--A Wolfram Web Resource.]
-Or else as [@https://dlmf.nist.gov/22.16#E32 ['Z(x, k)]] with ['[phi] = am(x, k)], where ['am] is the [@https://dlmf.nist.gov/22.16#E1 Jacobi amplitude function] which is equivalent to
-['asin(jacobi_elliptic(k, x))].
+Or else as [@https://dlmf.nist.gov/22.16#E32 ['Z(x, k)]] with ['[phi] = am(x, k)], 
+where ['am] is the [@https://dlmf.nist.gov/22.16#E1 Jacobi amplitude function] 
+which is equivalent to ['asin(jacobi_elliptic(k, x))].
 
 The return type of this function is computed using the __arg_promotion_rules
 when the arguments are of different types: when they are the same type then the result
 is the same type as the arguments.
 
 Requires ['-1 <= k <= 1], otherwise 
-returns the result of __domain_error (outside this range the result 
-would be complex).
+returns the result of __domain_error (outside this range the result would be complex).
 
 [optional_policy]
 
@@ -500,7 +495,7 @@ is very large, in which case the usual trigonometric function argument-reduction
 [heading Testing]
 
 The tests use a mixture of spot test values calculated using 
-values calculated at wolframalpha.com, and random test data generated using
+values calculated at __WolframAlpha, and random test data generated using
 MPFR at 1000-bit precision and a deliberately naive implementation in terms of
 the Legendre integrals.
 
@@ -508,7 +503,7 @@ the Legendre integrals.
 
 The implementation for Z([phi], k) first makes the argument [phi] positive using:
 
-['Z(-[phi], k) = -Z([phi], k)]
+[expression ['Z(-[phi], k) = -Z([phi], k)]]
 
 The function is then implemented in terms of Carlson's integral R[sub J]
 using the relation:
@@ -518,9 +513,14 @@ using the relation:
 There is one special case where the above relation fails: when ['k = 1], in that case
 the function simplifies to
 
-['Z([phi], 1) = sign(cos([phi])) sin([phi])]
+[expression ['Z([phi], 1) = sign(cos([phi])) sin([phi])]]
 
-[endsect]
+[h5:jacobi_zeta_example Example]
+
+A simple example comparing use of __WolframAlpha with Boost.Math (including much higher precision using Boost.Multiprecision)
+is [@../../example/jacobi_zeta_example.cpp jacobi_zeta_example.cpp].
+
+[endsect] [/section:jacobi_zeta Jacobi Zeta Function]
 
 [section:heuman_lambda Heuman Lambda Function]
 
@@ -551,8 +551,7 @@ when the arguments are of different types: when they are the same type then the 
 is the same type as the arguments.
 
 Requires ['-1 <= k <= 1], otherwise 
-returns the result of __domain_error (outside this range the result 
-would be complex).
+returns the result of __domain_error (outside this range the result would be complex).
 
 [optional_policy]
 
@@ -570,7 +569,7 @@ is very large, in which case the usual trigonometric function argument-reduction
 [heading Testing]
 
 The tests use a mixture of spot test values calculated using 
-values calculated at wolframalpha.com, and random test data generated using
+values calculated at __WolframAlpha, and random test data generated using
 MPFR at 1000-bit precision and a deliberately naive implementation in terms of
 the Legendre integrals.
 
@@ -584,5 +583,6 @@ using the relation:
 This relation fails for ['|[phi]| >= [pi]/2] in which case the definition in terms of the
 Jacobi Zeta is used.
 
-[endsect]
+[endsect] [/section:heuman_lambda Heuman Lambda Function]
+
 

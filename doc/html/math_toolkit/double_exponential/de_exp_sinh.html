@@ -47,7 +47,8 @@
 <span class="special">};</span>
 </pre>
 <p>
-        For half-infinite intervals, the exp-sinh quadrature is provided:
+        For half-infinite intervals, the <code class="computeroutput"><span class="identifier">exp</span><span class="special">-</span><span class="identifier">sinh</span></code> quadrature
+        is provided:
       </p>
 <pre class="programlisting"><span class="identifier">exp_sinh</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">integrator</span><span class="special">;</span>
 <span class="keyword">auto</span> <span class="identifier">f</span> <span class="special">=</span> <span class="special">[](</span><span class="keyword">double</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">{</span> <span class="keyword">return</span> <span class="identifier">exp</span><span class="special">(-</span><span class="number">3</span><span class="special">*</span><span class="identifier">x</span><span class="special">);</span> <span class="special">};</span>
@@ -58,17 +59,18 @@
 </pre>
 <p>
         The native integration range of this integrator is (0, &#8734;), but we also support
-        (a, &#8734;), (-&#8734;, 0) and (-&#8734;, b) via argument transformations.
+        /(a, &#8734;), (-&#8734;, 0)/ and /(-&#8734;, b)/ via argument transformations.
       </p>
 <p>
-        Endpoint singularities and complex-valued integrands are supported by exp-sinh.
+        Endpoint singularities and complex-valued integrands are supported by <code class="computeroutput"><span class="identifier">exp</span><span class="special">-</span><span class="identifier">sinh</span></code>.
       </p>
 <p>
         For example, the modified Bessel function K can be represented via:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/complex_bessel_k_integral.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/complex_bessel_k_integral.svg"></span>
+
+        </p></blockquote></div>
 <p>
         Which we can code up as:
       </p>

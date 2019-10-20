@@ -7,7 +7,7 @@
 <link rel="home" href="../../index.html" title="Math Toolkit 2.10.0">
 <link rel="up" href="../expint.html" title="Exponential Integrals">
 <link rel="prev" href="expint_n.html" title="Exponential Integral En">
-<link rel="next" href="../powers.html" title="Basic Functions">
+<link rel="next" href="../hypergeometric.html" title="Hypergeometric Functions">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -20,7 +20,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="expint_n.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../expint.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="../powers.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="expint_n.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../expint.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="../hypergeometric.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h3 class="title">
@@ -37,8 +37,8 @@
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">expint</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">expint</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">expint</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 
 <span class="special">}}</span> <span class="comment">// namespaces</span>
 </pre>
@@ -47,9 +47,9 @@
         type calculation rules</em></span></a>: the return type is <code class="computeroutput"><span class="keyword">double</span></code> if T is an integer type, and T otherwise.
       </p>
 <p>
-        The final <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
+        The final <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
         be used to control the behaviour of the function: how it handles errors,
-        what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">policy
+        what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">policy
         documentation for more details</a>.
       </p>
 <h5>
@@ -59,19 +59,21 @@
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">expint</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">expint</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">expint</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 </pre>
 <p>
         Returns the <a href="http://mathworld.wolfram.com/ExponentialIntegral.html" target="_top">exponential
         integral</a> of z:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/expint_i_1.svg"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/expint_i.svg" align="middle"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/expint_i_1.svg"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/expint_i.svg" align="middle"></span>
+
+        </p></blockquote></div>
 <h5>
 <a name="math_toolkit.expint.expint_i.h2"></a>
         <span class="phrase"><a name="math_toolkit.expint.expint_i.accuracy"></a></span><a class="link" href="expint_i.html#math_toolkit.expint.expint_i.accuracy">Accuracy</a>
@@ -85,7 +87,7 @@
         zero error</a>.
       </p>
 <div class="table">
-<a name="math_toolkit.expint.expint_i.table_expint_Ei_"></a><p class="title"><b>Table&#160;7.78.&#160;Error rates for expint (Ei)</b></p>
+<a name="math_toolkit.expint.expint_i.table_expint_Ei_"></a><p class="title"><b>Table&#160;8.78.&#160;Error rates for expint (Ei)</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for expint (Ei)">
 <colgroup>
 <col>
@@ -218,15 +220,18 @@
         precision, and GCC-7.1/Ubuntu for <code class="computeroutput"><span class="keyword">long</span>
         <span class="keyword">double</span></code> and <code class="computeroutput"><span class="identifier">__float128</span></code>.
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/exponential_integral_ei__double.svg" align="middle"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/exponential_integral_ei__80_bit_long_double.svg" align="middle"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/exponential_integral_ei____float128.svg" align="middle"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/exponential_integral_ei__double.svg" align="middle"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/exponential_integral_ei__80_bit_long_double.svg" align="middle"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/exponential_integral_ei____float128.svg" align="middle"></span>
+
+        </p></blockquote></div>
 <h5>
 <a name="math_toolkit.expint.expint_i.h3"></a>
         <span class="phrase"><a name="math_toolkit.expint.expint_i.testing"></a></span><a class="link" href="expint_i.html#math_toolkit.expint.expint_i.testing">Testing</a>
@@ -253,9 +258,10 @@
 <p>
         For x &gt; 0 the generic version is implemented using the infinte series:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/expint_i_2.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/expint_i_2.svg"></span>
+
+        </p></blockquote></div>
 <p>
         However, when the precision of the argument type is known at compile time
         and is 113 bits or less, then rational approximations <a class="link" href="../sf_implementation.html#math_toolkit.sf_implementation.rational_approximations_used">devised
@@ -264,9 +270,10 @@
 <p>
         For 0 &lt; z &lt; 6 a root-preserving approximation of the form:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/expint_i_3.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/expint_i_3.svg"></span>
+
+        </p></blockquote></div>
 <p>
         is used, where z<sub>0</sub> is the positive root of the function, and R(z/3 - 1) is
         a minimax rational approximation rescaled so that it is evaluated over [-1,1].
@@ -278,16 +285,20 @@
         they are computed over the interval [-1,1].
       </p>
 <p>
-        Over the a series of intervals [a,b] and [b,INF] the rational approximation
-        takes the form:
+        Over the a series of intervals <span class="emphasis"><em>[a, b]</em></span> and <span class="emphasis"><em>[b,
+        INF]</em></span> the rational approximation takes the form:
       </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/expint_i_4.svg"></span>
+
+        </p></blockquote></div>
 <p>
-        <span class="inlinemediaobject"><img src="../../../equations/expint_i_4.svg"></span>
-      </p>
-<p>
-        where <span class="emphasis"><em>c</em></span> is a constant, and R(t) is a minimax solution
-        optimised for low absolute error compared to <span class="emphasis"><em>c</em></span>. Variable
-        <span class="emphasis"><em>t</em></span> is <code class="computeroutput"><span class="number">1</span><span class="special">/</span><span class="identifier">z</span></code> when the range in infinite and <code class="computeroutput"><span class="number">2</span><span class="identifier">z</span><span class="special">/(</span><span class="identifier">b</span><span class="special">-</span><span class="identifier">a</span><span class="special">)</span> <span class="special">-</span> <span class="special">(</span><span class="number">2</span><span class="identifier">a</span><span class="special">/(</span><span class="identifier">b</span><span class="special">-</span><span class="identifier">a</span><span class="special">)</span> <span class="special">+</span> <span class="number">1</span><span class="special">)</span></code> otherwise: this has the effect of scaling
+        where <span class="emphasis"><em>c</em></span> is a constant, and <span class="emphasis"><em>R(t)</em></span>
+        is a minimax solution optimised for low absolute error compared to <span class="emphasis"><em>c</em></span>.
+        Variable <span class="emphasis"><em>t</em></span> is <code class="computeroutput"><span class="number">1</span><span class="special">/</span><span class="identifier">z</span></code> when
+        the range in infinite and <code class="computeroutput"><span class="number">2</span><span class="identifier">z</span><span class="special">/(</span><span class="identifier">b</span><span class="special">-</span><span class="identifier">a</span><span class="special">)</span> <span class="special">-</span>
+        <span class="special">(</span><span class="number">2</span><span class="identifier">a</span><span class="special">/(</span><span class="identifier">b</span><span class="special">-</span><span class="identifier">a</span><span class="special">)</span>
+        <span class="special">+</span> <span class="number">1</span><span class="special">)</span></code> otherwise: this has the effect of scaling
         z to the interval [-1,1]. As before rational approximations over arbitrary
         intervals were found to be ill-conditioned: Cody and Thacher solved this
         issue by converting the polynomials to their J-Fraction equivalent. However,
@@ -322,7 +333,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="expint_n.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../expint.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="../powers.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="expint_n.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../expint.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="../hypergeometric.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

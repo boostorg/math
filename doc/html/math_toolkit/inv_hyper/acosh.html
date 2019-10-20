@@ -31,8 +31,8 @@
 <pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">acosh</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">);</span>
 
-<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">acosh</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">acosh</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 </pre>
 <p>
         Computes the reciprocal of (the restriction to the range of <code class="literal">[0;+&#8734;[</code>)
@@ -48,20 +48,22 @@
         type calculation rules</em></span></a>: the return type is <code class="computeroutput"><span class="keyword">double</span></code> when T is an integer type, and T otherwise.
       </p>
 <p>
-        The final <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
+        The final <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
         be used to control the behaviour of the function: how it handles errors,
-        what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">policy
+        what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">policy
         documentation for more details</a>.
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/acosh.svg" align="middle"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/acosh.svg" align="middle"></span>
+
+        </p></blockquote></div>
 <h5>
 <a name="math_toolkit.inv_hyper.acosh.h0"></a>
         <span class="phrase"><a name="math_toolkit.inv_hyper.acosh.accuracy"></a></span><a class="link" href="acosh.html#math_toolkit.inv_hyper.acosh.accuracy">Accuracy</a>
       </h5>
 <p>
-        Generally accuracy is to within 1 or 2 epsilon across all supported platforms.
+        Generally accuracy is to within 1 or 2 <a href="http://en.wikipedia.org/wiki/Machine_epsilon" target="_top">machine
+        epsilon</a> across all supported platforms.
       </p>
 <h5>
 <a name="math_toolkit.inv_hyper.acosh.h1"></a>
@@ -72,9 +74,10 @@
         to give full function coverage computed at high precision using the "naive"
         formula:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/acosh1.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/acosh1.svg"></span>
+
+        </p></blockquote></div>
 <p>
         along with a selection of sanity check values computed using functions.wolfram.com
         to at least 50 decimal digits.
@@ -86,29 +89,33 @@
 <p>
         For sufficiently large x, we can use the <a href="http://functions.wolfram.com/ElementaryFunctions/ArcCosh/06/01/06/01/0001/" target="_top">approximation</a>:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/acosh2.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/acosh2.svg"></span>
+
+        </p></blockquote></div>
 <p>
         For x sufficiently close to 1 we can use the <a href="http://functions.wolfram.com/ElementaryFunctions/ArcCosh/06/01/04/01/0001/" target="_top">approximation</a>:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/acosh4.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/acosh4.svg"></span>
+
+        </p></blockquote></div>
 <p>
         Otherwise for x close to 1 we can use the following rearrangement of the
         primary definition to preserve accuracy:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/acosh3.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/acosh3.svg"></span>
+
+        </p></blockquote></div>
 <p>
         Otherwise the <a href="http://functions.wolfram.com/ElementaryFunctions/ArcCosh/02/" target="_top">primary
         definition</a> is used:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/acosh1.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/acosh1.svg"></span>
+
+        </p></blockquote></div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>

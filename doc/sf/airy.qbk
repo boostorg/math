@@ -33,8 +33,9 @@ to the differential equation:
 [equation airy]
 
 See Weisstein, Eric W. "Airy Functions." From MathWorld--A Wolfram Web Resource.
-[@http://mathworld.wolfram.com/AiryFunctions.html];
+[@http://mathworld.wolfram.com/AiryFunctions.html]
 
+and [@https://en.wikipedia.org/wiki/Airy_zeta_function Airy Zeta function].
 
 [optional_policy]
 
@@ -64,7 +65,7 @@ This function is implemented in terms of the Bessel functions using the relation
 
 [equation airy_ai]
 
-[endsect]
+[endsect] [/section:ai Airy Ai Function]
 
 [section:bi Airy Bi Function]
 
@@ -118,7 +119,7 @@ This function is implemented in terms of the Bessel functions using the relation
 
 [equation airy_bi]
 
-[endsect]
+[endsect] [/section:bi Airy Bi Function]
 
 [section:aip Airy Ai' Function]
 
@@ -172,7 +173,7 @@ This function is implemented in terms of the Bessel functions using the relation
 
 [equation airy_aip]
 
-[endsect]
+[endsect] [/section:aip Airy Ai' Function]
 
 [section:bip Airy Bi' Function]
 
@@ -226,7 +227,7 @@ This function is implemented in terms of the Bessel functions using the relation
 
 [equation airy_bip]
 
-[endsect]
+[endsect] [/section:bip Airy Bi' Function]
 
 [section:airy_root Finding Zeros of Airy Functions]
 
@@ -295,9 +296,9 @@ The Airy Ai and Bi functions have an infinite
 number of zeros on the negative real axis. The real zeros on the negative real
 axis can be found by solving for the roots of
 
-[emquad] ['Ai(x[sub m]) = 0]
+[:['Ai(x[sub m]) = 0]]
 
-[emquad] ['Bi(y[sub m]) = 0]
+[:['Bi(y[sub m]) = 0]]
 
 Here, ['x[sub m]] represents the ['m[super th]]
 root of the Airy Ai function,
@@ -330,7 +331,6 @@ The first few zeros returned by these functions have approximate values as follo
 ]
 
 [graph airy_zeros]
-
 
 [h4 Examples of finding Airy Zeros]
 
@@ -379,14 +379,12 @@ and an initial estimate for the n[super th] zero b[sub n] of Bi is given by (A&S
 
 Thereafter the roots are refined using Newton iteration.
 
-
 [h3 Testing]
 
 The precision of evaluation of zeros was tested at 50 decimal digits using `cpp_dec_float_50`
 and found identical with spot values computed by __WolframAlpha.
 
-[endsect]  [/section:bessel Finding Zeros of Bessel Functions of the First and Second Kinds]
+[endsect] [/section:airy_root Finding Zeros of Airy Functions]
 
-
-[endsect]
+[endsect] [/section:airy Airy Functions]
 

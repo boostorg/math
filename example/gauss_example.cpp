@@ -71,13 +71,13 @@ void gauss_kronrod_examples()
    using namespace boost::math::quadrature;
 
    auto f1 = [](double t) { return std::exp(-t*t / 2); };
-   
+
    //<-
    double Q_expected = sqrt(boost::math::constants::half_pi<double>());
    //->
 
    /*`
-   W'll start off with a one shot (ie non-adaptive)
+   We'll start off with a one shot (ie non-adaptive)
    integration, and keep track of the estimated error:
    */
    double error;
@@ -117,7 +117,7 @@ void gauss_kronrod_examples()
    std::cout << error << std::endl;
    //->
    /*`
-   This yields an actual error of zero, against an estimate of 4e-15.  In fact in this case the requested tolerance was almost 
+   This yields an actual error of zero, against an estimate of 4e-15.  In fact in this case the requested tolerance was almost
    certainly set too low: as we've seen above, for smooth functions, the precision achieved is often double
    that of the estimate, so if we integrate with a tolerance of 1e-9:
    */

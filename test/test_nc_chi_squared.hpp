@@ -7,7 +7,7 @@
 #include <boost/math/concepts/real_concept.hpp>
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
-#include <boost/test/floating_point_comparison.hpp>
+#include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/distributions/non_central_chi_squared.hpp>
 #include <boost/type_traits/is_floating_point.hpp>
 #include <boost/array.hpp>

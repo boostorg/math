@@ -77,7 +77,7 @@ void expected_results()
          "[^|]*",                          // platform
          "real_concept",                     // test type(s)
          "[^|]*small[^|]*",                   // test data group
-         "[^|]*", 70000, 8000);                  // test function
+         "[^|]*", 98000, 12000);                  // test function
    }
    //
    // These high error rates are seen on on some Linux

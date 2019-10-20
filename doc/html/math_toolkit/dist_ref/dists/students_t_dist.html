@@ -31,12 +31,12 @@
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span>
-          <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
+          <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">students_t_distribution</span><span class="special">;</span>
 
 <span class="keyword">typedef</span> <span class="identifier">students_t_distribution</span><span class="special">&lt;&gt;</span> <span class="identifier">students_t</span><span class="special">;</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">students_t_distribution</span>
 <span class="special">{</span>
    <span class="keyword">typedef</span> <span class="identifier">RealType</span> <span class="identifier">value_type</span><span class="special">;</span>
@@ -68,22 +68,24 @@
 <p>
           Given N independent measurements, let
         </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../equations/students_t_dist.svg"></span>
+
+          </p></blockquote></div>
 <p>
-          <span class="inlinemediaobject"><img src="../../../../equations/students_t_dist.svg"></span>
-        </p>
-<p>
-          where <span class="emphasis"><em>M</em></span> is the population mean, <span class="emphasis"><em>&#956;</em></span>
-          is the sample mean, and <span class="emphasis"><em>s</em></span> is the sample variance.
+          where <span class="emphasis"><em>M</em></span> is the population mean, &#956; is the sample mean,
+          and <span class="emphasis"><em>s</em></span> is the sample variance.
         </p>
 <p>
           <a href="https://en.wikipedia.org/wiki/Student%27s_t-distribution" target="_top">Student's
           t-distribution</a> is defined as the distribution of the random variable
-          t which is - very loosely - the "best" that we can do not knowing
-          the true standard deviation of the sample. It has the PDF:
+          t which is - very loosely - the "best" that we can do while not
+          knowing the true standard deviation of the sample. It has the PDF:
         </p>
-<p>
-          <span class="inlinemediaobject"><img src="../../../../equations/students_t_ref1.svg"></span>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../equations/students_t_ref1.svg"></span>
+
+          </p></blockquote></div>
 <p>
           The Student's t-distribution takes a single parameter: the number of degrees
           of freedom of the sample. When the degrees of freedom is <span class="emphasis"><em>one</em></span>
@@ -92,9 +94,10 @@
           the normal-distribution. The following graph illustrates how the PDF varies
           with the degrees of freedom &#957;:
         </p>
-<p>
-          <span class="inlinemediaobject"><img src="../../../../graphs/students_t_pdf.svg" align="middle"></span>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../graphs/students_t_pdf.svg" align="middle"></span>
+
+          </p></blockquote></div>
 <h5>
 <a name="math_toolkit.dist_ref.dists.students_t_dist.h0"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.students_t_dist.member_functions"></a></span><a class="link" href="students_t_dist.html#math_toolkit.dist_ref.dists.students_t_dist.member_functions">Member
@@ -245,9 +248,9 @@
                 </td>
 <td>
                   <p>
-                    Using the relation: pdf = (v / (v + t<sup>2</sup>))<sup>(1+v)/2 </sup> / (sqrt(v) *
-                    <a class="link" href="../../sf_beta/beta_function.html" title="Beta">beta</a>(v/2,
-                    0.5))
+                    Using the relation: <span class="serif_italic">pdf = (v / (v
+                    + t<sup>2</sup>))<sup>(1+v)/2 </sup> / (sqrt(v) * <a class="link" href="../../sf_beta/beta_function.html" title="Beta">beta</a>(v/2,
+                    0.5))</span>
                   </p>
                 </td>
 </tr>
@@ -262,10 +265,10 @@
                     Using the relations:
                   </p>
                   <p>
-                    p = 1 - z <span class="emphasis"><em>iff t &gt; 0</em></span>
+                    <span class="serif_italic">p = 1 - z <span class="emphasis"><em>iff t &gt; 0</em></span></span>
                   </p>
                   <p>
-                    p = z <span class="emphasis"><em>otherwise</em></span>
+                    <span class="serif_italic">p = z <span class="emphasis"><em>otherwise</em></span></span>
                   </p>
                   <p>
                     where z is given by:
@@ -300,17 +303,18 @@
                 </td>
 <td>
                   <p>
-                    Using the relation: t = sign(p - 0.5) * sqrt(v * y / x)
+                    Using the relation: <span class="serif_italic">t = sign(p -
+                    0.5) * sqrt(v * y / x)</span>
                   </p>
                   <p>
                     where:
                   </p>
                   <p>
-                    x = <a class="link" href="../../sf_beta/ibeta_inv_function.html" title="The Incomplete Beta Function Inverses">ibeta_inv</a>(v
-                    / 2, 0.5, 2 * min(p, q))
+                    <span class="serif_italic">x = <a class="link" href="../../sf_beta/ibeta_inv_function.html" title="The Incomplete Beta Function Inverses">ibeta_inv</a>(v
+                    / 2, 0.5, 2 * min(p, q)) </span>
                   </p>
                   <p>
-                    y = 1 - x
+                    <span class="serif_italic">y = 1 - x</span>
                   </p>
                   <p>
                     The quantities <span class="emphasis"><em>x</em></span> and <span class="emphasis"><em>y</em></span>

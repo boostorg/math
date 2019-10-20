@@ -32,17 +32,14 @@ The [@http://en.wikipedia.org/wiki/Uniform_distribution_%28continuous%29 continu
 is a distribution with the 
 [@http://en.wikipedia.org/wiki/Probability_density_function probability density function]:
 
-f(x) =
-
-* 1 / (upper - lower) for lower < x < upper
-
-* zero for x < lower or x > upper
+[expression f(x) =1 / (upper - lower) [sixemspace] for lower < x < upper]
+[expression f(x) =zero [sixemspace] for x < lower or x > upper]
         
 and in this implementation:
         
-* 1 / (upper - lower) for x = lower or x = upper
+[expression 1 / (upper - lower) [sixemspace] for x = lower or x = upper]
 
-The choice of x = lower or x = upper is made because statistical use of this distribution judged is most likely:
+The choice of /x = lower/ or /x = upper/ is made because statistical use of this distribution judged is most likely:
 the method of maximum likelihood uses this definition.
 
 There is also a [@http://en.wikipedia.org/wiki/Discrete_uniform_distribution *discrete* uniform distribution].
@@ -50,7 +47,7 @@ There is also a [@http://en.wikipedia.org/wiki/Discrete_uniform_distribution *di
 Parameters lower and upper can be any finite value.
 
 The [@http://en.wikipedia.org/wiki/Random_variate random variate]
-x must also be finite, and is supported lower <= x <= upper.
+/x/ must also be finite, and is supported /lower <= x <= upper/.
 
 The lower parameter is also called the
 [@http://www.itl.nist.gov/div898/handbook/eda/section3/eda364.htm location parameter],
@@ -123,7 +120,7 @@ b is the /upper/ parameter,
 * [@http://mathworld.wolfram.com/UniformDistribution.html Weisstein, Weisstein, Eric W. "Uniform Distribution." From MathWorld--A Wolfram Web Resource.]
 * [@http://www.itl.nist.gov/div898/handbook/eda/section3/eda3662.htm]
 
-[endsect][/section:uniform_dist Uniform]
+[endsect] [/section:uniform_dist Uniform]
 
 [/ 
   Copyright 2006 John Maddock and Paul A. Bristow.

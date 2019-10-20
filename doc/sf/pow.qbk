@@ -33,7 +33,7 @@ value of the exponent involves counting the number of occurrences of /base/),
 error-prone (it's easy to forget an occurrence), syntactically bulky, and 
 non-optimal in terms of performance.
 
-The pow function of Boost.Math helps writing this kind expression along 
+The `pow` function of Boost.Math helps writing this kind expression along 
 with solving all the problems listed above:
 
     // 8th power of a 'base' variable using math::pow
@@ -132,7 +132,6 @@ is defined as above, we can achieve the same result like this:
 
     double result = pow<-5>(base);
 
-
 [h4 Acknowledgements]
 
 Bruno Lalande submitted this addition to Boost.Math.
@@ -146,7 +145,8 @@ improving the implementation.
 
 D.E. Knuth, ['The Art of Computer Programming, Vol. 2: Seminumerical Algorithms], 2nd ed., Addison-Wesley, Reading, MA, 1981
 
-[endsect]
+[endsect] [/section:ct_pow Compile Time Power of a Runtime Base]
+
 
 [/ 
   Copyright 2008 Bruno Lalande.

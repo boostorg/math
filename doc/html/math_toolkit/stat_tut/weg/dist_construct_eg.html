@@ -213,7 +213,7 @@ error C3861: 'mybetad0': identifier not found
  <span class="comment">// `double` argument are converted to RealType,</span>
  <span class="comment">// most likely losing precision!</span>
 
-   <span class="comment">// So DON'T be tempted to write the 'obvious':</span>
+ <span class="comment">// So DON'T be tempted to write the 'obvious':</span>
  <span class="identifier">negative_binomial_distribution</span><span class="special">&lt;</span><span class="identifier">cpp_bin_float_50</span><span class="special">&gt;</span>  <span class="identifier">mydist20</span><span class="special">(</span><span class="number">8</span><span class="special">,</span> <span class="number">0.23456789012345678901234567890</span><span class="special">);</span>
 <span class="comment">// to avoid truncation of second parameter to `0.2345678901234567` and loss of precision.</span>
 
@@ -222,7 +222,7 @@ error C3861: 'mybetad0': identifier not found
 
  <span class="comment">// Ensure that all potentially significant digits are shown.</span>
  <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span><span class="special">.</span><span class="identifier">precision</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">cpp_bin_float_50</span><span class="special">&gt;::</span><span class="identifier">digits10</span><span class="special">);</span>
-   <span class="comment">// </span>
+ <span class="comment">// </span>
  <span class="identifier">cpp_bin_float_50</span> <span class="identifier">x</span><span class="special">(</span><span class="string">"1.23456789012345678901234567890"</span><span class="special">);</span>
  <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">pdf</span><span class="special">(</span><span class="identifier">mydist8</span><span class="special">,</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
 </pre>

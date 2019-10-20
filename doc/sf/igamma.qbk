@@ -42,7 +42,7 @@ two are normalised versions (also known as /regularized/ incomplete gamma functi
 that return values in the range [0, 1], and two are non-normalised and
 return values in the range [0, [Gamma](a)].  Users interested in statistical
 applications should use the
-[@http://mathworld.wolfram.com/RegularizedGammaFunction.html normalised versions (gamma_p and gamma_q)].
+[@http://mathworld.wolfram.com/RegularizedGammaFunction.html normalised versions (`gamma_p` and `gamma_q`)].
 
 All of these functions require /a > 0/ and /z >= 0/, otherwise they return
 the result of __domain_error.
@@ -104,7 +104,7 @@ Returns the full (non-normalised) upper incomplete gamma function of a and z:
 
 The following tables give peak and mean relative errors in over various domains of
 a and z, along with comparisons to the __gsl and __cephes libraries.
-Note that only results for the widest floating point type on the system are given as
+Note that only results for the widest floating-point type on the system are given as
 narrower types have __zero_error.
 
 Note that errors grow as /a/ grows larger.
@@ -176,11 +176,7 @@ to:
 7) [equation igamma11]
 
 Refer to the documentation for __powm1 and __tgamma1pm1 for details
-of their implementation.  Note however that the precision of __tgamma1pm1
-is capped to either around 35 digits, or to that of the __lanczos associated with
-type T - if there is one - whichever of the two is the greater.  
-That therefore imposes a similar limit on the precision of this 
-function in this region.
+of their implementation.
 
 For /x < 1.1/ the crossover point where the result is ~0.5 no longer
 occurs for /x ~ y/.  Using /x * 0.75 < a/ as the crossover criterion
@@ -198,7 +194,7 @@ finite sum is used:
 
 9) [equation igamma1f]
 
-While for half integers in the range /0.5 <= a < 30/ then the
+While for half-integers in the range /0.5 <= a < 30/ then the
 following finite sum is used:
 
 10) [equation igamma2f]
@@ -280,7 +276,7 @@ and Contemporary Applied Mathematics, Atti dei Convegni Lincei, n. 147,
 Accademia Nazionale dei Lincei, Roma, 1998, pp. 203--237. 
 [@http://citeseer.ist.psu.edu/gautschi98incomplete.html http://citeseer.ist.psu.edu/gautschi98incomplete.html]
 
-[endsect][/section:igamma The Incomplete Gamma Function]
+[endsect] [/section:igamma The Incomplete Gamma Function]
 
 [/ 
   Copyright 2006 John Maddock and Paul A. Bristow.

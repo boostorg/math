@@ -1,4 +1,3 @@
-
 [section:bessel_first Bessel Functions of the First and Second Kinds]
 
 [h4 Synopsis]
@@ -23,9 +22,9 @@
 The functions __cyl_bessel_j and __cyl_neumann return the result of the
 Bessel functions of the first and second kinds respectively:
 
-cyl_bessel_j(v, x) = J[sub v](x)
+[expression cyl_bessel_j(v, x) = J[sub v](x)]
 
-cyl_neumann(v, x) = Y[sub v](x) = N[sub v](x)
+[expression cyl_neumann(v, x) = Y[sub v](x) = N[sub v](x)]
 
 where:
 
@@ -49,7 +48,7 @@ The following graph illustrates the cyclic nature of J[sub v]:
 [graph cyl_bessel_j]
 
 The following graph shows the behaviour of Y[sub v]: this is also
-cyclic for large /x/, but tends to -[infin][space] for small /x/:
+cyclic for large /x/, but tends to -[infin] for small /x/:
 
 [graph cyl_neumann]
 
@@ -125,9 +124,9 @@ move to /v > 0/:
 
 Note that if the order is an integer, then these formulae reduce to:
 
-J[sub -n] = (-1)[super n]J[sub n]
+[expression J[sub -n] = (-1)[super n]J[sub n]]
 
-Y[sub -n] = (-1)[super n]Y[sub n]
+[expression Y[sub -n] = (-1)[super n]Y[sub n]]
 
 However, in general, a negative order implies that we will need to compute
 both J and Y.
@@ -139,20 +138,20 @@ for large /x/ in M. Abramowitz and I.A. Stegun,
 than those in A&S 9.2.5).
 
 When the order /v/ is an integer the method first relates the result
-to J[sub 0], J[sub 1], Y[sub 0][space] and Y[sub 1][space] using either
+to J[sub 0], J[sub 1], Y[sub 0] and Y[sub 1] using either
 forwards or backwards recurrence (Miller's algorithm) depending upon which is stable.
-The values for J[sub 0], J[sub 1], Y[sub 0][space] and Y[sub 1][space] are
+The values for J[sub 0], J[sub 1], Y[sub 0] and Y[sub 1] are
 calculated using the rational minimax approximations on
 root-bracketing intervals for small ['|x|] and Hankel asymptotic
 expansion for large ['|x|]. The coefficients are from:
 
-W.J. Cody, ['ALGORITHM 715: SPECFUN - A Portable FORTRAN Package of
+[:W.J. Cody, ['ALGORITHM 715: SPECFUN - A Portable FORTRAN Package of
 Special Function Routines and Test Drivers], ACM Transactions on Mathematical
-Software, vol 19, 22 (1993).
+Software, vol 19, 22 (1993).]
 
 and
 
-J.F. Hart et al, ['Computer Approximations], John Wiley & Sons, New York, 1968.
+[:J.F. Hart et al, ['Computer Approximations], John Wiley & Sons, New York, 1968.]
 
 These approximations are accurate to around 19 decimal digits: therefore
 these methods are not used when type T has more than 64 binary digits.
@@ -179,16 +178,16 @@ approximations are often too slow to converge to be used
 
 [equation bessel_yv_small_z]
 
-When /x/ is small compared to /v/, J[sub v]x[space] is best computed directly from the series:
+When /x/ is small compared to /v/, J[sub v]x is best computed directly from the series:
 
 [equation bessel2]
 
-In the general case we compute J[sub v][space] and
-Y[sub v][space] simultaneously.
+In the general case we compute J[sub v] and
+Y[sub v] simultaneously.
 
 To get the initial values, let
-[mu][space] = [nu] - floor([nu] + 1/2), then [mu][space] is the fractional part
-of [nu][space] such that
+[mu] = [nu] - floor([nu] + 1/2), then [mu] is the fractional part
+of [nu] such that
 |[mu]| <= 1/2 (we need this for convergence later). The idea is to
 calculate J[sub [mu]](x), J[sub [mu]+1](x), Y[sub [mu]](x), Y[sub [mu]+1](x)
 and use them to obtain J[sub [nu]](x), Y[sub [nu]](x).
@@ -209,11 +208,11 @@ The continued fractions are computed using the modified Lentz's method
 (W.J. Lentz, ['Generating Bessel functions in Mie scattering calculations
 using continued fractions], Applied Optics, vol 15, 668 (1976)).
 Their convergence rates depend on ['x], therefore we need
-different strategies for large ['x] and small ['x].
+different strategies for large ['x] and small ['x]:
 
-['x > v], CF1 needs O(['x]) iterations to converge, CF2 converges rapidly
+[:['x > v], CF1 needs O(['x]) iterations to converge, CF2 converges rapidly]
 
-['x <= v], CF1 converges rapidly, CF2 fails to converge when ['x] [^->] 0
+[:['x <= v], CF1 converges rapidly, CF2 fails to converge when ['x] [^->] 0]
 
 When ['x] is large (['x] > 2), both continued fractions converge (CF1
 may be slow for really large ['x]). J[sub [mu]], J[sub [mu]+1],
@@ -237,19 +236,19 @@ where
 
 [equation bessel16]
 
-g[sub k][space] and h[sub k][space]
+g[sub k] and h[sub k]
 are also computed by recursions (involving gamma functions), but the
 formulas are a little complicated, readers are refered to
 N.M. Temme, ['On the numerical evaluation of the ordinary Bessel function
 of the second kind], Journal of Computational Physics, vol 21, 343 (1976).
 Note Temme's series converge only for |[mu]| <= 1/2.
 
-As the previous case, Y[sub [nu]][space] is calculated from the forward
+As the previous case, Y[sub [nu]] is calculated from the forward
 recurrence, so is Y[sub [nu]+1]. With these two
 values and f[sub [nu]], the Wronskian yields J[sub [nu]](x) directly
 without backward recurrence.
 
-[endsect]
+[endsect] [/section:bessel_first Bessel Functions of the First and Second Kinds]
 
 [section:bessel_root Finding Zeros of Bessel Functions of the First and Second Kinds]
 
@@ -326,9 +325,9 @@ Every real order [nu] cylindrical Bessel and Neumann functions have an infinite
 number of zeros on the positive real axis. The real zeros on the positive real
 axis can be found by solving for the roots of
 
-[emquad] ['J[sub [nu]](j[sub [nu], m]) = 0]
+[:['J[sub [nu]](j[sub [nu], m]) = 0]]
 
-[emquad] ['Y[sub [nu]](y[sub [nu], m]) = 0]
+[:['Y[sub [nu]](y[sub [nu], m]) = 0]]
 
 Here, ['j[sub [nu], m]] represents the ['m[super th]]
 root of the cylindrical Bessel function of order ['[nu]],
@@ -342,7 +341,7 @@ of the Bessel and Neumann functions are computed by two functions,
 In each case the index or rank of the zero
 returned is 1-based, which is to say:
 
-   cyl_bessel_j_zero(v, 1);
+[:cyl_bessel_j_zero(v, 1);]
 
 returns the first zero of Bessel J.
 
@@ -404,9 +403,9 @@ as well as its derivative. The derivatives of ['J[sub [nu]](x)] and ['Y[sub [nu]
 with respect to  ['x] are given by __Abramowitz_Stegun.
 In particular,
 
-[emquad] ['d/[sub dx] ['J[sub [nu]](x)] = ['J[sub [nu]-1](x)] - [nu] J[sub [nu]](x)] / x
+[expression d/[sub dx] ['J[sub [nu]](x)] = ['J[sub [nu]-1](x)] - [nu] J[sub [nu]](x) / x]
 
-[emquad] ['d/[sub dx] ['Y[sub [nu]](x)] = ['Y[sub [nu]-1](x)] - [nu] Y[sub [nu]](x)] / x
+[expression d/[sub dx] ['Y[sub [nu]](x)] = ['Y[sub [nu]-1](x)] - [nu] Y[sub [nu]](x) / x]
 
 Enumeration of the rank of a root (in other words the index of a root)
 begins with one and counts up, in other words
@@ -446,27 +445,23 @@ Calculations of the estimates of ['j[sub [nu],1]] and ['y[sub [nu],1]]
 with ['[nu][ge] 2.2] use Eqs.9.5.14 and 9.5.15 in __Abramowitz_Stegun.
 
 In particular,
-
-[emquad] ['j[sub [nu],1] [cong] [nu] + 1.85575 [nu][super [frac13]] + 1.033150 [nu][super -[frac13]] - 0.00397 [nu][super -1] - 0.0908 [nu][super -5/3] + 0.043 [nu][super -7/3] + [ellipsis]]
+[expression j[sub [nu],1] [cong] [nu] + 1.85575 [nu][super [frac13]] + 1.033150 [nu][super -[frac13]] - 0.00397 [nu][super -1] - 0.0908 [nu][super -5/3] + 0.043 [nu][super -7/3] + [ellipsis]]
 
 and
 
-[emquad] ['y[sub [nu],1] [cong] [nu] + 0.93157 [nu][super [frac13]] + 0.26035 [nu][super -[frac13]] + 0.01198 [nu][super -1] - 0.0060 [nu][super -5/3] - 0.001 [nu][super -7/3] + [ellipsis]]
+[expression y[sub [nu],1] [cong] [nu] + 0.93157 [nu][super [frac13]] + 0.26035 [nu][super -[frac13]] + 0.01198 [nu][super -1] - 0.0060 [nu][super -5/3] - 0.001 [nu][super -7/3] + [ellipsis]]
 
 Calculations of the estimates of ['j[sub [nu], m]]  and  ['y[sub [nu], m]]
 with rank ['m > 2] and ['0 [le] [nu] < 2.2]  use
 McMahon's approximation, as described in M. Abramowitz and I. A. Stegan, Section 9.5 and 9.5.12.
 In particular,
 
-[emquad] ['j[sub [nu],m], y[sub [nu],m] [cong] [beta] - ([mu]-1) / 8[beta]]
-
-[emquad] [emquad] [emquad] ['- 4([mu]-1)(7[mu] - 31) / 3(8[beta])[super 3]]
-
-[emquad] [emquad] [emquad] ['-32([mu]-1)(83[mu][sup2] - 982[mu] + 3779) / 15(8[beta])[super 5]]
-
-[emquad] [emquad] [emquad] ['-64([mu]-1)(6949[mu][super 3] - 153855[mu][sup2] + 1585743[mu]- 6277237) / 105(8a)[super 7]]
-
-[emquad] [emquad] [emquad] ['- [ellipsis]]       [emquad] [emquad]                                              (5)
+[:['j[sub [nu],m], y[sub [nu],m] [cong]]]
+[:[:[beta] - ([mu]-1) / 8[beta]]]
+[:[:['- 4([mu]-1)(7[mu] - 31) / 3(8[beta])[super 3]]]]
+[:[:['-32([mu]-1)(83[mu][sup2] - 982[mu] + 3779) / 15(8[beta])[super 5]]]]
+[:[:['-64([mu]-1)(6949[mu][super 3] - 153855[mu][sup2] + 1585743[mu]- 6277237) / 105(8a)[super 7]]]]
+[:[:['- [ellipsis]] [emquad] (5)]]
 
 where ['[mu] = 4[nu][super 2]] and ['[beta] = (m + [frac12][nu] - [frac14])[pi]]
 for ['j[sub [nu],m]] and
@@ -484,32 +479,32 @@ The latter two equations are expressed for argument ['(x)] greater than one.
 
 In summary,
 
-[emquad] ['j[sub [nu], m] [sim] [nu]x(-[zeta]) + f[sub 1](-[zeta]/[nu])]
+[expression j[sub [nu], m] [sim] [nu]x(-[zeta]) + f[sub 1](-[zeta]/[nu])]
 
 where ['-[zeta] = [nu][super -2/3]a[sub m]] and ['a[sub m]] is
 the absolute value of the ['m[super th]] root of ['Ai(x)] on the negative real axis.
 
 Here ['x = x(-[zeta])] is the inverse of the function
 
-[emquad] ['[frac23](-[zeta])[super 3/2] = [radic](x[sup2] - 1) - cos[supminus][sup1](1/x)]  [emquad] [emquad]   (7)
+[expression [frac23](-[zeta])[super 3/2] = [radic](x[sup2] - 1) - cos[supminus][sup1](1/x)]     (7)
 
 Furthermore,
 
-[emquad] ['f[sub 1](-[zeta]) = [frac12]x(-[zeta]) {h(-[zeta])}[sup2] [sdot] b[sub 0](-[zeta])]
+[expression f[sub 1](-[zeta]) = [frac12]x(-[zeta]) {h(-[zeta])}[sup2] [sdot] b[sub 0](-[zeta])]
 
 where
 
-[emquad] ['h(-[zeta]) = {4(-[zeta]) / (x[sup2] - 1)}[super 4]]
+[expression h(-[zeta]) = {4(-[zeta]) / (x[sup2] - 1)}[super 4]]
 
 and
 
-[emquad] ['b[sub 0](-[zeta]) = -5/(48[zeta][sup2]) + 1/(-[zeta])[super [frac12]] [sdot] { 5/(24(x[super 2]-1)[super 3/2]) + 1/(8(x[super 2]-1)[super [frac12])]}]
+[expression b[sub 0](-[zeta]) = -5/(48[zeta][sup2]) + 1/(-[zeta])[super [frac12]] [sdot] { 5/(24(x[super 2]-1)[super 3/2]) + 1/(8(x[super 2]-1)[super [frac12])]}]
 
 When solving for ['x(-[zeta])] in Eq. 7 above,
 the right-hand-side is expanded to order 2 in
 a Taylor series for large ['x]. This results in
 
-[emquad] ['[frac23](-[zeta])[super 3/2] [approx] x + 1/2x - [pi]/2]
+[expression [frac23](-[zeta])[super 3/2] [approx] x + 1/2x - [pi]/2]
 
 The positive root of the resulting quadratic equation
 is used to find an initial estimate ['x(-[zeta])].
@@ -525,7 +520,7 @@ is bracketed by the ['m[super th]] root and the
 ['(m+1)[super th]] root of the Bessel function of
 corresponding positive integer order. In other words,
 
-[emquad]  ['j[sub n[nu],m]] <  ['j[sub -[nu],m]] <  ['j[sub n[nu],m+1]]
+[expression j[sub n[nu], m] < j[sub -[nu], m] < j[sub n[nu], m+1]]
 
 where ['m > 1] and ['n[sub [nu]]] represents the integral
 floor of the absolute value of ['|-[nu]|].

@@ -10,7 +10,7 @@
 #include <boost/multiprecision/cpp_complex.hpp>
 #include <boost/math/concepts/real_concept.hpp>
 #include <boost/test/included/unit_test.hpp>
-#include <boost/test/floating_point_comparison.hpp>
+#include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/quadrature/exp_sinh.hpp>
 #include <boost/math/special_functions/sinc.hpp>
 #include <boost/math/special_functions/bessel.hpp>

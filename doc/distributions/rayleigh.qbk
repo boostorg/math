@@ -29,9 +29,9 @@ The [@http://en.wikipedia.org/wiki/Rayleigh_distribution Rayleigh distribution]
 is a continuous distribution with the
 [@http://en.wikipedia.org/wiki/Probability_density_function probability density function]:
 
-f(x; sigma) = x * exp(-x[super 2]/2 [sigma][super 2]) / [sigma][super 2]
+[expression f(x; sigma) = x * exp(-x[super 2]/2 [sigma][super 2]) / [sigma][super 2]]
 
-For sigma parameter [sigma][space] > 0, and x > 0.
+For sigma parameter ['[sigma]] > 0, and /x/ > 0.
 
 The Rayleigh distribution is often used where two orthogonal components
 have an absolute value,
@@ -86,13 +86,13 @@ NTL RR type with 150-bit accuracy, about 50 decimal digits.
 
 [h4 Implementation]
 
-In the following table [sigma][space] is the sigma parameter of the distribution,
+In the following table [sigma] is the sigma parameter of the distribution,
 /x/ is the random variate, /p/ is the probability and /q = 1-p/.
 
 [table
 [[Function][Implementation Notes]]
 [[pdf][Using the relation: pdf = x * exp(-x[super 2])/2 [sigma][super 2] ]]
-[[cdf][Using the relation: p = 1 - exp(-x[super 2]/2) [sigma][super 2][space] = -__expm1(-x[super 2]/2) [sigma][super 2]]]
+[[cdf][Using the relation: p = 1 - exp(-x[super 2]/2) [sigma][super 2]= -__expm1(-x[super 2]/2) [sigma][super 2]]]
 [[cdf complement][Using the relation: q =  exp(-x[super 2]/ 2) * [sigma][super 2] ]]
 [[quantile][Using the relation: x = sqrt(-2 * [sigma] [super 2]) * log(1 - p)) = sqrt(-2 * [sigma] [super 2]) * __log1p(-p))]]
 [[quantile from the complement][Using the relation: x = sqrt(-2 * [sigma] [super 2]) * log(q)) ]]

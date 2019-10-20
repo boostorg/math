@@ -67,11 +67,11 @@ For mean parameters [mu] and scale (also called precision) parameter [lambda],
 and random variate x,
 the inverse_gaussian distribution is defined by the probability density function (PDF):
 
-__spaces f(x;[mu], [lambda]) = [sqrt]([lambda]/2[pi]x[super 3]) e[super -[lambda](x-[mu])[sup2]/2[mu][sup2]x]
+[expression f(x;[mu], [lambda]) = [sqrt]([lambda]/2[pi]x[super 3]) e[super -[lambda](x-[mu])[sup2]/2[mu][sup2]x] ]
 
 and Cumulative Density Function (CDF):
 
-__spaces  F(x;[mu], [lambda]) = [Phi]{[sqrt]([lambda]/x) (x/[mu]-1)} + e[super 2[mu]/[lambda]] [Phi]{-[sqrt]([lambda]/[mu]) (1+x/[mu])} 
+[expression  F(x;[mu], [lambda]) = [Phi]{[sqrt]([lambda]/x) (x/[mu]-1)} + e[super 2[mu]/[lambda]] [Phi]{-[sqrt]([lambda]/[mu]) (1+x/[mu])} ]
 
 where [Phi] is the standard normal distribution CDF.
 

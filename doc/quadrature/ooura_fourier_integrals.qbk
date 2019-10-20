@@ -44,11 +44,11 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 Ooura's method for Fourier integrals computes
 
-[sixemspace] [sixemspace] [int][sub 0][super [infin]] f(t)sin([omega] t) dt
+[expression [int][sub 0][super [infin]] f(t)sin([omega] t) dt]
 
 and
 
-[sixemspace] [sixemspace] [int][sub 0][super [infin]] f(t)cos([omega]  t) dt
+[expression [int][sub 0][super [infin]] f(t)cos([omega] t) dt]
 
 by a double exponentially decaying transformation.
 These integrals arise when computing continuous Fourier transform of odd and even functions, respectively.
@@ -90,7 +90,7 @@ Working code of this example is at [@../../example/ooura_fourier_integrals_cosin
 
 [h5:performance Performance]
 The integrator precomputes nodes and weights, and hence can be reused for many different frequencies with good efficiency.
-The integrator is pimpl'd and hence can be shared between threads without a memcpy of the nodes and weights.
+The integrator is pimpl'd and hence can be shared between threads without a `memcpy` of the nodes and weights.
 
 Ooura and Mori's paper identifies criteria for rapid convergence based on the position of the poles of the integrand in the complex plane.
 If these poles are too close to the real axis the convergence is slow.
@@ -117,10 +117,25 @@ Working code of this example is at [@../../example/ooura_fourier_integrals_multi
 For more examples of other functions and tests, see the full test suite at
 [@../../test/ooura_fourier_integral_test.cpp ooura_fourier_integral_test.cpp]. 
 
-[heading References]
+Ngyen and Nuyens make use of __multiprecision in their extension to multiple dimensions, showing relative errors reducing to [cong] 10[super -2000]!
 
-* Ooura, Takuya, and Masatake Mori, ['A robust double exponential formula for Fourier-type integrals.] Journal of computational and applied mathematics 112.1-2 (1999): 229-241.
+[h5:rationale Rationale]
 
+This implementation is base on Ooura's 1999 paper rather than the later 2005 paper.
+It does not preclude a second future implementation based on the later work.
+
+Some of the features of the Ooura's 2005 paper that were less appealing were:
+
+* The advance of that paper is that one can compute ['both] the Fourier sine transform and Fourier cosine transform in a single shot. 
+But there are examples, like sinc integral, where the Fourier sine would converge, but the Fourier cosine would diverge.
+* It would force users to live in the complex plane, when many potential applications only need real.
+
+[h4:references References]
+
+* Ooura, Takuya, and Masatake Mori, ['A robust double exponential formula for Fourier-type integrals.] Journal of computational and applied mathematics, 112.1-2 (1999): 229-241.
+* Ooura, Takuya, ['A Double Exponential Formula for the Fourier Transforms.] Publ. RIMS, Kyoto Univ., 41 (2005), 971-977. [@https://pdfs.semanticscholar.org/16ec/a5d76fd6b3d7acaaff0b2a6e8a70caa70190.pdf ]
+* Khatibi, Arezoo and Khatibi, Omid,[' Criteria for the Application of Double Exponential Transformation.] (2017) [@https://arxiv.org/pdf/1704.05752.pdf 1704.05752.pdf].
+* Nguyen, Dong T.P. and Nuyens, Dirk, ['Multivariate integration over Reals with exponential rate of convergence.] (2016) [@https://core.ac.uk/download/pdf/80799199.pdf].
 
 [endsect] [/section:fourier_integrals Fourier Integrals]
 

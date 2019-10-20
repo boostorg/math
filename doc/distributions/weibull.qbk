@@ -1,6 +1,5 @@
 [section:weibull_dist Weibull Distribution]
 
-
 ``#include <boost/math/distributions/weibull.hpp>``
 
    namespace boost{ namespace math{ 
@@ -31,32 +30,32 @@ is a continuous distribution
 with the 
 [@http://en.wikipedia.org/wiki/Probability_density_function probability density function]:
 
-f(x; [alpha], [beta]) = ([alpha]\/[beta]) * (x \/ [beta])[super [alpha] - 1] * e[super -(x\/[beta])[super [alpha]]]
+[expression f(x; [alpha], [beta]) = ([alpha]\/[beta]) * (x \/ [beta])[super [alpha] - 1] * e[super -(x\/[beta])[super [alpha]]]]
 
-For shape parameter [alpha][space] > 0, and scale parameter [beta][space] > 0, and x > 0.
+For shape parameter ['[alpha]] > 0, and scale parameter ['[beta]] > 0, and /x/ > 0.
 
 The Weibull distribution is often used in the field of failure analysis;
 in particular it can mimic distributions where the failure rate varies over time.
 If the failure rate is:
 
-* constant over time, then [alpha][space] = 1, suggests that items are failing from random events.
-* decreases over time, then [alpha][space] < 1, suggesting "infant mortality".
-* increases over time, then [alpha][space] > 1, suggesting "wear out" - more likely to fail as time goes by.
+* constant over time, then ['[alpha]] = 1, suggests that items are failing from random events.
+* decreases over time, then ['[alpha]] < 1, suggesting "infant mortality".
+* increases over time, then ['[alpha]] > 1, suggesting "wear out" - more likely to fail as time goes by.
 
-The following graph illustrates how the PDF varies with the shape parameter [alpha]:
+The following graph illustrates how the PDF varies with the shape parameter ['[alpha]]:
 
 [graph weibull_pdf1]
 
-While this graph illustrates how the PDF varies with the scale parameter [beta]:
+While this graph illustrates how the PDF varies with the scale parameter ['[beta]]:
 
 [graph weibull_pdf2]
 
 [h4 Related distributions]
 
-When [alpha][space] = 3, the
+When ['[alpha]] = 3, the
 [@http://en.wikipedia.org/wiki/Weibull_distribution Weibull distribution] appears similar to the
 [@http://en.wikipedia.org/wiki/Normal_distribution normal distribution].
-When [alpha][space] = 1, the Weibull distribution reduces to the
+When ['[alpha]] = 1, the Weibull distribution reduces to the
 [@http://en.wikipedia.org/wiki/Exponential_distribution exponential distribution].
 The relationship of the types of extreme value distributions, of which the Weibull is but one, is
 discussed by
@@ -98,8 +97,8 @@ and as such should have very low error rates.
 [h4 Implementation]
 
 
-In the following table [alpha][space] is the shape parameter of the distribution, 
-[beta][space] is its scale parameter, /x/ is the random variate, /p/ is the probability
+In the following table ['[alpha]] is the shape parameter of the distribution, 
+['[beta]] is its scale parameter, /x/ is the random variate, /p/ is the probability
 and /q = 1-p/.
 
 [table
@@ -122,7 +121,7 @@ and /q = 1-p/.
 * [@http://mathworld.wolfram.com/WeibullDistribution.html Weisstein, Eric W. "Weibull Distribution." From MathWorld--A Wolfram Web Resource.]
 * [@http://www.itl.nist.gov/div898/handbook/eda/section3/eda3668.htm Weibull in NIST Exploratory Data Analysis]
 
-[endsect][/section:weibull Weibull]
+[endsect] [/section:weibull Weibull]
 
 [/ 
   Copyright 2006 John Maddock and Paul A. Bristow.

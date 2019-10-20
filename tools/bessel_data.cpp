@@ -302,7 +302,7 @@ int main(int argc, char* argv[])
          letter = "y";
       }
       else
-         assert(0);
+         BOOST_ASSERT(0);
    }
 
    bool cont;
@@ -314,11 +314,11 @@ int main(int argc, char* argv[])
       get_user_parameter_info(arg1, "v");
       get_user_parameter_info(arg2, "x");
       mp_t (*fp)(mp_t, mp_t);
-      if(functype == func_J) 
+      if(functype == func_J)
          fp = cyl_bessel_j_bare;
-      else if(functype == func_I) 
+      else if(functype == func_I)
          fp = cyl_bessel_i_bare;
-      else if(functype == func_K) 
+      else if(functype == func_K)
          fp = cyl_bessel_k_bare;
       else if(functype == func_Y)
          fp = cyl_neumann_bare;
@@ -327,7 +327,7 @@ int main(int argc, char* argv[])
       else if(functype == func_y)
          fp = sph_bessel_y_bare;
       else
-         assert(0);
+         BOOST_ASSERT(0);
 
       data.insert(fp, arg1, arg2);
 

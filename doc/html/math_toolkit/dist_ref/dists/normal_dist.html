@@ -31,12 +31,12 @@
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span>
-          <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
+          <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">normal_distribution</span><span class="special">;</span>
 
 <span class="keyword">typedef</span> <span class="identifier">normal_distribution</span><span class="special">&lt;&gt;</span> <span class="identifier">normal</span><span class="special">;</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">normal_distribution</span>
 <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
@@ -61,30 +61,34 @@
           Normal Distribution</em></span>.
         </p>
 <p>
-          Given mean &#956; &#160;and standard deviation &#963; &#160;it has the PDF:
+          Given mean &#956; and standard deviation &#963; it has the PDF:
         </p>
-<p>
-          &#160;   <span class="inlinemediaobject"><img src="../../../../equations/normal_ref1.svg"></span>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../equations/normal_ref1.svg"></span>
+
+          </p></blockquote></div>
 <p>
           The variation the PDF with its parameters is illustrated in the following
           graph:
         </p>
-<p>
-          <span class="inlinemediaobject"><img src="../../../../graphs/normal_pdf.svg" align="middle"></span>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../graphs/normal_pdf.svg" align="middle"></span>
+
+          </p></blockquote></div>
 <p>
           The cumulative distribution function is given by
         </p>
-<p>
-          &#160;   <span class="inlinemediaobject"><img src="../../../../equations/normal_cdf.svg"></span>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../equations/normal_cdf.svg"></span>
+
+          </p></blockquote></div>
 <p>
           and illustrated by this graph
         </p>
-<p>
-          <span class="inlinemediaobject"><img src="../../../../graphs/normal_cdf.svg" align="middle"></span>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../graphs/normal_cdf.svg" align="middle"></span>
+
+          </p></blockquote></div>
 <h5>
 <a name="math_toolkit.dist_ref.dists.normal_dist.h0"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.normal_dist.member_functions"></a></span><a class="link" href="normal_dist.html#math_toolkit.dist_ref.dists.normal_dist.member_functions">Member
@@ -97,7 +101,7 @@
           standard deviation <span class="emphasis"><em>sd</em></span>.
         </p>
 <p>
-          Requires sd &gt; 0, otherwise <a class="link" href="../../error_handling.html#math_toolkit.error_handling.domain_error">domain_error</a>
+          Requires <span class="emphasis"><em>sd</em></span> &gt; 0, otherwise <a class="link" href="../../error_handling.html#math_toolkit.error_handling.domain_error">domain_error</a>
           is called.
         </p>
 <pre class="programlisting"><span class="identifier">RealType</span> <span class="identifier">mean</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
@@ -142,7 +146,7 @@
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.normal_dist.accuracy"></a></span><a class="link" href="normal_dist.html#math_toolkit.dist_ref.dists.normal_dist.accuracy">Accuracy</a>
         </h5>
 <p>
-          The normal distribution is implemented in terms of the <a class="link" href="../../sf_erf/error_function.html" title="Error Functions">error
+          The normal distribution is implemented in terms of the <a class="link" href="../../sf_erf/error_function.html" title="Error Function erf and complement erfc">error
           function</a>, and as such should have very low error rates.
         </p>
 <h5>
@@ -191,7 +195,7 @@
                 </td>
 <td>
                   <p>
-                    Using the relation: p = 0.5 * <a class="link" href="../../sf_erf/error_function.html" title="Error Functions">erfc</a>(-(x-m)/(s*sqrt(2)))
+                    Using the relation: p = 0.5 * <a class="link" href="../../sf_erf/error_function.html" title="Error Function erf and complement erfc">erfc</a>(-(x-m)/(s*sqrt(2)))
                   </p>
                 </td>
 </tr>
@@ -203,7 +207,7 @@
                 </td>
 <td>
                   <p>
-                    Using the relation: q = 0.5 * <a class="link" href="../../sf_erf/error_function.html" title="Error Functions">erfc</a>((x-m)/(s*sqrt(2)))
+                    Using the relation: q = 0.5 * <a class="link" href="../../sf_erf/error_function.html" title="Error Function erf and complement erfc">erfc</a>((x-m)/(s*sqrt(2)))
                   </p>
                 </td>
 </tr>

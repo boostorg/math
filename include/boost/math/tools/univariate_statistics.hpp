@@ -8,10 +8,11 @@
 
 #include <algorithm>
 #include <iterator>
-#include <boost/type_traits/is_complex.hpp>
+#include <tuple>
 #include <boost/assert.hpp>
-#include <boost/multiprecision/detail/number_base.hpp>
+#include <boost/config/header_deprecated.hpp>
 
+BOOST_HEADER_DEPRECATED("<boost/math/statistics/univariate_statistics.hpp>");
 
 namespace boost::math::tools {
 

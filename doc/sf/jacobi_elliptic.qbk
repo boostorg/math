@@ -7,13 +7,13 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 [section:jacobi Jacobi Elliptic Functions]
 
-[section:jac_over Overvew of the Jacobi Elliptic Functions]
+[section:jac_over Overview of the Jacobi Elliptic Functions]
 
 There are twelve Jacobi Elliptic functions, of which the three copolar functions ['sn], ['cn] and ['dn] are the most important
 as the other nine can be computed from these three
 [footnote [@http://en.wikipedia.org/wiki/Jacobi_elliptic_functions Wikipedia: Jacobi elliptic functions]]
 [footnote [@http://mathworld.wolfram.com/JacobiEllipticFunctions.html Weisstein, Eric W. "Jacobi Elliptic Functions." From MathWorld - A Wolfram Web Resource.]]
-[footnote [@http://dlmf.nist.gov/22 Digital Library of Mathematical Functions: Jacobian Elliptic Functions]].
+[footnote [@http://dlmf.nist.gov/22 Digital Library of Mathematical Functions: Jacobian Elliptic Functions, Reinhardt, W. P.,  Walker, O. L.]].
 
 These functions each take two arguments: a parameter, and a variable as described below.
 
@@ -21,16 +21,19 @@ Like all elliptic functions these can be parameterised in a number of ways:
 
 * In terms of a parameter ['m].
 * In terms of the elliptic modulus ['k] where ['m = k[super 2]].
-* In terms of the modular angle [alpha], where ['m = sin[super 2][alpha]].
+* In terms of the modular angle [alpha], where ['m = sin[super 2][thin][alpha]].
 
 In our implementation, these functions all take the elliptic modulus /k/ as the parameter.
 
 In addition the variable /u/ is sometimes expressed as an amplitude [phi], in our implementation we always use /u/.
 
-Finally note that our functions all take the elliptic modulus as the first argument - this is for alignment with
-the Elliptic Integrals.
+Finally note that our functions all take the elliptic modulus /k/ as the *first* argument - this is for alignment with
+the Elliptic Integrals (but is different from other implementations, for example Mathworks).
 
-There are twenve functions for computing the twelve individual Jacobi elliptic functions: __jacobi_cd, __jacobi_cn, __jacobi_cs,
+A simple example comparing use of __WolframAlpha with Boost.Math (including much higher precision using Boost.Multiprecision)
+is [@../../example/jacobi_zeta_example.cpp jacobi_zeta_example.cpp].
+
+There are twelve functions for computing the twelve individual Jacobi elliptic functions: __jacobi_cd, __jacobi_cn, __jacobi_cs,
 __jacobi_dc, __jacobi_dn, __jacobi_ds, __jacobi_nc, __jacobi_nd, __jacobi_ns, __jacobi_sc, __jacobi_sd and __jacobi_sn.
 
 They are all called as for example:
@@ -38,10 +41,12 @@ They are all called as for example:
    jacobi_cs(k, u);
 
 Note however that these individual functions are all really thin wrappers around the function __jacobi_elliptic which calculates
-the three copolar functions ['sn], ['cn] and ['dn] in a single function call.  Thus if you need more than one of these functions
-for a given set of arguments, it's most efficient to use __jacobi_elliptic.
+the three copolar functions ['sn], ['cn] and ['dn] in a single function call. 
 
-[endsect]
+[tip If you need more than one of these functions
+for a given set of arguments, it's most efficient to use __jacobi_elliptic.]
+
+[endsect] [/section:jac_over Overvew of the Jacobi Elliptic Functions]
 
 [section:jacobi_elliptic Jacobi Elliptic SN, CN and DN]
 
@@ -65,21 +70,20 @@ for a given set of arguments, it's most efficient to use __jacobi_elliptic.
 
 The function __jacobi_elliptic calculates the three copolar Jacobi elliptic functions
 ['sn(u, k)], ['cn(u, k)] and ['dn(u, k)].  The returned value is 
-['sn(u, k)], and if provided, ['*pcn] is
-set to ['cn(u, k)], and ['*pdn] is set to ['dn(u, k)].
+['sn(u, k)], and if provided, `*pcn` is
+set to ['cn(u, k)], and `*pdn` is set to ['dn(u, k)].
 
 The functions are defined as follows, given:
 
 [equation jacobi1]
 
-The the angle [phi] is called the ['amplitude] and:
+The the angle ['[phi]] is called the ['amplitude] and:
 
 [equation jacobi2]
 
-[note ['[phi]] is called the amplitude.
-
-['k] is called the modulus. 
-
+[note 
+  ['[phi]] is called the amplitude.
+  ['k] is called the elliptic modulus. 
 ]
       
 [caution Rather like other elliptic functions, the Jacobi functions
@@ -87,23 +91,23 @@ are expressed in a variety of different ways.  In particular,
 the parameter /k/ (the modulus) may also be expressed using a modular
 angle [alpha], or a parameter /m/.  These are related by:
 
-k = sin[alpha]
+[expression k = sin [alpha]]
 
-m = k[super 2] = sin[super 2][alpha]
+[expression m = k[super 2] = sin[super 2][alpha]]
 
 So that the function ['sn] (for example) may be expressed as
 either:
 
-sn(u, k)
+[expression sn(u, k)]
 
-sn(u \\ [alpha])
+[expression sn(u \\ [alpha])]
 
-sn(u| m)
+[expression sn(u | m)]
 
 To further complicate matters, some texts refer to the ['complement
 of the parameter m], or 1 - m, where:
 
-1 - m = 1 - k[super 2] = cos[super 2][alpha]
+[expression 1 - m = 1 - k[super 2] = cos[super 2][alpha]]
 
 This implementation uses /k/ throughout, and makes this the first argument
 to the functions: this is for alignment with the elliptic integrals which match the requirements
@@ -128,7 +132,7 @@ These functions are computed using only basic arithmetic operations and trigomom
 there isn't much variation in accuracy over differing platforms.
 Typically errors are trivially small for small angles, and as is typical for cyclic
 functions, grow as the angle increases.
-Note that only results for the widest floating point type on the 
+Note that only results for the widest floating-point type on the 
 system are given as narrower types have __zero_error.  All values
 are relative errors in units of epsilon.
 
@@ -153,11 +157,11 @@ For ['k > 1] we apply the relations:
 
 Then filter off the special cases:
 
-['sn(0, k) = 0] and ['cn(0, k) = dn(0, k) = 1].
+[expression ['sn(0, k) = 0] and ['cn(0, k) = dn(0, k) = 1]]
 
-['sn(u, 0) = sin(u), cn(u, 0) = cos(u) and dn(u, 0) = 1].
+[expression ['sn(u, 0) = sin(u), cn(u, 0) = cos(u) and dn(u, 0) = 1]]
 
-['sn(u, 1) = tanh(u), cn(u, 1) = dn(u, 1) = 1 / cosh(u)].
+[expression ['sn(u, 1) = tanh(u), cn(u, 1) = dn(u, 1) = 1 / cosh(u)]]
 
 And for ['k[super 4] < [epsilon]] we have:
 
@@ -165,7 +169,8 @@ And for ['k[super 4] < [epsilon]] we have:
 
 Otherwise the values are calculated using the method of [@http://dlmf.nist.gov/22.20#SS2 arithmetic geometric means].
 
-[endsect]
+[endsect] [/section:jacobi_elliptic Jacobi Elliptic SN, CN and DN]
+
 
 [section:jacobi_cd Jacobi Elliptic Function cd]
 
@@ -193,11 +198,12 @@ This function returns the Jacobi elliptic function ['cd].
 
 This function is a trivial wrapper around __jacobi_elliptic, with:
 
-['cd(u, k) = cn(u, k) / dn(u, k)]
+[expression ['cd(u, k) = cn(u, k) / dn(u, k)]]
 
 [graph jacobi_cd]
 
-[endsect]
+[endsect] [/section:jacobi_cd Jacobi Elliptic Function cd]
+
 
 [section:jacobi_cn Jacobi Elliptic Function cn]
 
@@ -227,7 +233,8 @@ This function is a trivial wrapper around __jacobi_elliptic.
 
 [graph jacobi_cn]
 
-[endsect]
+[endsect] [/section:jacobi_cn Jacobi Elliptic Function cn]
+
 
 [section:jacobi_cs Jacobi Elliptic Function cs]
 
@@ -255,11 +262,12 @@ This function returns the Jacobi elliptic function ['cs].
 
 This function is a trivial wrapper around __jacobi_elliptic, with:
 
-['cs(u, k) = cn(u, k) / sn(u, k)]
+[expression ['cs(u, k) = cn(u, k) / sn(u, k)]]
 
 [graph jacobi_cs]
 
-[endsect]
+[endsect] [/section:jacobi_cs Jacobi Elliptic Function cs]
+
 
 [section:jacobi_dc Jacobi Elliptic Function dc]
 
@@ -287,11 +295,11 @@ This function returns the Jacobi elliptic function ['dc].
 
 This function is a trivial wrapper around __jacobi_elliptic, with:
 
-['dc(u, k) = dn(u, k) / cn(u, k)]
+[expression ['dc(u, k) = dn(u, k) / cn(u, k)]]
 
 [graph jacobi_dc]
 
-[endsect]
+[endsect] [/section:jacobi_dc Jacobi Elliptic Function dc]
 
 [section:jacobi_dn Jacobi Elliptic Function dn]
 
@@ -349,11 +357,11 @@ This function returns the Jacobi elliptic function ['ds].
 
 This function is a trivial wrapper around __jacobi_elliptic, with:
 
-['ds(u, k) = dn(u, k) / sn(u, k)]
+[expression ['ds(u, k) = dn(u, k) / sn(u, k)]]
 
 [graph jacobi_ds]
 
-[endsect]
+[endsect] [/section:jacobi_dn Jacobi Elliptic Function dn]
 
 [section:jacobi_nc Jacobi Elliptic Function nc]
 
@@ -381,11 +389,11 @@ This function returns the Jacobi elliptic function ['nc].
 
 This function is a trivial wrapper around __jacobi_elliptic, with:
 
-['nc(u, k) = 1 / cn(u, k)]
+[expression ['nc(u, k) = 1 / cn(u, k)]]
 
 [graph jacobi_nc]
 
-[endsect]
+[endsect] [/section:jacobi_nc Jacobi Elliptic Function nc]
 
 [section:jacobi_nd Jacobi Elliptic Function nd]
 
@@ -413,11 +421,11 @@ This function returns the Jacobi elliptic function ['nd].
 
 This function is a trivial wrapper around __jacobi_elliptic, with:
 
-['nd(u, k) = 1 / dn(u, k)]
+[expression ['nd(u, k) = 1 / dn(u, k)]]
 
 [graph jacobi_nd]
 
-[endsect]
+[endsect] [/section:jacobi_nd Jacobi Elliptic Function nd]
 
 [section:jacobi_ns Jacobi Elliptic Function ns]
 
@@ -445,11 +453,11 @@ This function returns the Jacobi elliptic function ['ns].
 
 This function is a trivial wrapper around __jacobi_elliptic, with:
 
-['ns(u, k) = 1 / sn(u, k)]
+[expression ['ns(u, k) = 1 / sn(u, k)]]
 
 [graph jacobi_ns]
 
-[endsect]
+[endsect] [/section:jacobi_ns Jacobi Elliptic Function ns]
 
 [section:jacobi_sc Jacobi Elliptic Function sc]
 
@@ -477,11 +485,11 @@ This function returns the Jacobi elliptic function ['sc].
 
 This function is a trivial wrapper around __jacobi_elliptic, with:
 
-['sc(u, k) = sn(u, k) / cn(u, k)]
+[expression ['sc(u, k) = sn(u, k) / cn(u, k)]]
 
 [graph jacobi_sc]
 
-[endsect]
+[endsect] [/section:jacobi_sc Jacobi Elliptic Function sc]
 
 [section:jacobi_sd Jacobi Elliptic Function sd]
 
@@ -509,11 +517,11 @@ This function returns the Jacobi elliptic function ['sd].
 
 This function is a trivial wrapper around __jacobi_elliptic, with:
 
-['sd(u, k) = sn(u, k) / dn(u, k)]
+[expression ['sd(u, k) = sn(u, k) / dn(u, k)]]
 
 [graph jacobi_sd]
 
-[endsect]
+[endsect] [/section:jacobi_sd Jacobi Elliptic Function sd]
 
 [section:jacobi_sn Jacobi Elliptic Function sn]
 
@@ -543,8 +551,8 @@ This function is a trivial wrapper around __jacobi_elliptic.
 
 [graph jacobi_sn]
 
-[endsect]
+[endsect] [/section:jacobi_sn Jacobi Elliptic Function sn]
 
+[endsect] [/section:jacobi Jacobi Elliptic Functions]
 
-[endsect]
 

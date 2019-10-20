@@ -31,21 +31,23 @@
 <pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">sinhc_pi</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">);</span>
 
-<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">sinhc_pi</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">sinhc_pi</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 
 <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span><span class="special">&gt;</span> <span class="keyword">class</span> <span class="identifier">U</span><span class="special">&gt;</span>
 <span class="identifier">U</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">sinhc_pi</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">U</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">x</span><span class="special">);</span>
 
-<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span><span class="special">&gt;</span> <span class="keyword">class</span> <span class="identifier">U</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<span class="identifier">U</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">sinhc_pi</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">U</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span><span class="special">&gt;</span> <span class="keyword">class</span> <span class="identifier">U</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<span class="identifier">U</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">sinhc_pi</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">U</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 </pre>
 <p>
-        Computes http://mathworld.wolfram.com/SinhcFunction.html <a class="link" href="sinc_overview.html" title="Sinus Cardinal and Hyperbolic Sinus Cardinal Functions Overview">the
-        Hyperbolic Sinus Cardinal</a> of x:
+        Computes <a href="http://mathworld.wolfram.com/SinhcFunction.html" target="_top">sinhc
+        function</a>, the <a class="link" href="sinc_overview.html" title="Sinus Cardinal and Hyperbolic Sinus Cardinal Functions Overview">Hyperbolic
+        Sinus Cardinal</a> of x:
       </p>
-<pre class="programlisting"><span class="identifier">sinhc_pi</span><span class="special">(</span><span class="identifier">x</span><span class="special">)</span> <span class="special">=</span> <span class="identifier">sinh</span><span class="special">(</span><span class="identifier">x</span><span class="special">)</span> <span class="special">/</span> <span class="identifier">x</span>
-</pre>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="serif_italic">sinhc_pi(x) = sinh(x) / x</span>
+        </p></blockquote></div>
 <p>
         The second form is for complex numbers, quaternions, octonions etc. Taylor
         series are used at the origin to ensure accuracy.
@@ -55,14 +57,15 @@
         type calculation rules</em></span></a> when T is an integer type.
       </p>
 <p>
-        The final <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
+        The final <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
         be used to control the behaviour of the function: how it handles errors,
-        what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">policy
+        what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">policy
         documentation for more details</a>.
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../graphs/sinhc_pi.svg" align="middle"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/sinhc_pi.svg" align="middle"></span>
+
+        </p></blockquote></div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>

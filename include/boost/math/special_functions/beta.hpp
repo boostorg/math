@@ -121,7 +121,7 @@ T beta_imp(T a, T b, const Lanczos&, const Policy& pol)
 // (Caution this is slow!!!):
 //
 template <class T, class Policy>
-T beta_imp(T a, T b, const lanczos::undefined_lanczos& /* l */, const Policy& pol)
+T beta_imp(T a, T b, const lanczos::undefined_lanczos& l, const Policy& pol)
 {
    BOOST_MATH_STD_USING
 
@@ -130,60 +130,65 @@ T beta_imp(T a, T b, const lanczos::undefined_lanczos& /* l */, const Policy& po
    if(b <= 0)
       return policies::raise_domain_error<T>("boost::math::beta<%1%>(%1%,%1%)", "The arguments to the beta function must be greater than zero (got b=%1%).", b, pol);
 
-   T result;
+   const T c = a + b;
 
-   T prefix = 1;
-   T c = a + b;
-
-   // special cases:
-   if((c == a) && (b < tools::epsilon<T>()))
-      return boost::math::tgamma(b, pol);
-   else if((c == b) && (a < tools::epsilon<T>()))
-      return boost::math::tgamma(a, pol);
-   if(b == 1)
-      return 1/a;
-   else if(a == 1)
-      return 1/b;
-
-   // shift to a and b > 1 if required:
-   if(a < 1)
+   // Special cases:
+   if ((c == a) && (b < tools::epsilon<T>()))
+      return 1 / b;
+   else if ((c == b) && (a < tools::epsilon<T>()))
+      return 1 / a;
+   if (b == 1)
+      return 1 / a;
+   else if (a == 1)
+      return 1 / b;
+   else if (c < tools::epsilon<T>())
    {
-      prefix *= c / a;
-      c += 1;
-      a += 1;
+      T result = c / a;
+      result /= b;
+      return result;
    }
-   if(b < 1)
+
+   // Regular cases start here:
+   const T min_sterling = minimum_argument_for_bernoulli_recursion<T>();
+   
+   long shift_a = 0;
+   long shift_b = 0;
+
+   if(a < min_sterling)
+      shift_a = 1 + ltrunc(min_sterling - a);
+   if(b < min_sterling)
+      shift_b = 1 + ltrunc(min_sterling - b);
+   long shift_c = shift_a + shift_b;
+
+   if ((shift_a == 0) && (shift_b == 0))
    {
-      prefix *= c / b;
-      c += 1;
-      b += 1;
+      return pow(a / c, a) * pow(b / c, b) * scaled_tgamma_no_lanczos(a, pol) * scaled_tgamma_no_lanczos(b, pol) / scaled_tgamma_no_lanczos(c, pol);
    }
-   if(a < b)
-      std::swap(a, b);
+   else if ((a < 1) && (b < 1))
+   {
+      return boost::math::tgamma(a, pol) * (boost::math::tgamma(b, pol) / boost::math::tgamma(c));
+   }
+   else if(a < 1)
+      return boost::math::tgamma(a, pol) * boost::math::tgamma_delta_ratio(b, a, pol);
+   else if(b < 1)
+      return boost::math::tgamma(b, pol) * boost::math::tgamma_delta_ratio(a, b, pol);
+   else
+   {
+      T result = beta_imp(T(a + shift_a), T(b + shift_b), l, pol);
+      //
+      // Recursion:
+      //
+      for (long i = 0; i < shift_c; ++i)
+      {
+         result *= c + i;
+         if (i < shift_a)
+            result /= a + i;
+         if (i < shift_b)
+            result /= b + i;
+      }
+      return result;
+   }
 
-   // set integration limits:
-   T la = (std::max)(T(10), a);
-   T lb = (std::max)(T(10), b);
-   T lc = (std::max)(T(10), T(a+b));
-
-   // calculate the fraction parts:
-   T sa = detail::lower_gamma_series(a, la, pol) / a;
-   sa += detail::upper_gamma_fraction(a, la, ::boost::math::policies::get_epsilon<T, Policy>());
-   T sb = detail::lower_gamma_series(b, lb, pol) / b;
-   sb += detail::upper_gamma_fraction(b, lb, ::boost::math::policies::get_epsilon<T, Policy>());
-   T sc = detail::lower_gamma_series(c, lc, pol) / c;
-   sc += detail::upper_gamma_fraction(c, lc, ::boost::math::policies::get_epsilon<T, Policy>());
-
-   // and the exponent part:
-   result = exp(lc - la - lb) * pow(la/lc, a) * pow(lb/lc, b);
-
-   // and combine:
-   result *= sa * sb / sc;
-
-   // if a and b were originally less than 1 we need to scale the result:
-   result *= prefix;
-
-   return result;
 } // template <class T>T beta_imp(T a, T b, const lanczos::undefined_lanczos& l)
 
 
@@ -431,7 +436,7 @@ T ibeta_power_terms(T a,
                         T b,
                         T x,
                         T y,
-                        const boost::math::lanczos::undefined_lanczos&,
+                        const boost::math::lanczos::undefined_lanczos& l,
                         bool normalised,
                         const Policy& pol, 
                         T prefix = 1,
@@ -441,65 +446,79 @@ T ibeta_power_terms(T a,
 
    if(!normalised)
    {
-      return pow(x, a) * pow(y, b);
+      return prefix * pow(x, a) * pow(y, b);
    }
-
-   T result= 0; // assignment here silences warnings later
 
    T c = a + b;
 
-   // integration limits for the gamma functions:
-   //T la = (std::max)(T(10), a);
-   //T lb = (std::max)(T(10), b);
-   //T lc = (std::max)(T(10), a+b);
-   T la = a + 5;
-   T lb = b + 5;
-   T lc = a + b + 5;
-   // gamma function partials:
-   T sa = detail::lower_gamma_series(a, la, pol) / a;
-   sa += detail::upper_gamma_fraction(a, la, ::boost::math::policies::get_epsilon<T, Policy>());
-   T sb = detail::lower_gamma_series(b, lb, pol) / b;
-   sb += detail::upper_gamma_fraction(b, lb, ::boost::math::policies::get_epsilon<T, Policy>());
-   T sc = detail::lower_gamma_series(c, lc, pol) / c;
-   sc += detail::upper_gamma_fraction(c, lc, ::boost::math::policies::get_epsilon<T, Policy>());
-   // gamma function powers combined with incomplete beta powers:
+   const T min_sterling = minimum_argument_for_bernoulli_recursion<T>();
 
-   T b1 = (x * lc) / la;
-   T b2 = (y * lc) / lb;
-   T e1 = -5; // lc - la - lb;
-   T lb1 = a * log(b1);
-   T lb2 = b * log(b2);
+   long shift_a = 0;
+   long shift_b = 0;
 
-   if((lb1 >= tools::log_max_value<T>())
-      || (lb1 <= tools::log_min_value<T>())
-      || (lb2 >= tools::log_max_value<T>())
-      || (lb2 <= tools::log_min_value<T>())
-      || (e1 >= tools::log_max_value<T>())
-      || (e1 <= tools::log_min_value<T>())
-      )
+   if (a < min_sterling)
+      shift_a = 1 + ltrunc(min_sterling - a);
+   if (b < min_sterling)
+      shift_b = 1 + ltrunc(min_sterling - b);
+
+   if ((shift_a == 0) && (shift_b == 0))
    {
-      result = exp(lb1 + lb2 - e1 + log(prefix));
+      T power1, power2;
+      if (a < b)
+      {
+         power1 = pow((x * y * c * c) / (a * b), a);
+         power2 = pow((y * c) / b, b - a);
+      }
+      else
+      {
+         power1 = pow((x * y * c * c) / (a * b), b);
+         power2 = pow((x * c) / a, a - b);
+      }
+      if (!(boost::math::isnormal)(power1) || !(boost::math::isnormal)(power2))
+      {
+         // We have to use logs :(
+         return prefix * exp(a * log(x * c / a) + b * log(y * c / b)) * scaled_tgamma_no_lanczos(c, pol) / (scaled_tgamma_no_lanczos(a, pol) * scaled_tgamma_no_lanczos(b, pol));
+      }
+      return prefix * power1 * power2 * scaled_tgamma_no_lanczos(c, pol) / (scaled_tgamma_no_lanczos(a, pol) * scaled_tgamma_no_lanczos(b, pol));
    }
-   else
+   
+   T power1 = pow(x, a);
+   T power2 = pow(y, b);
+   T bet = beta_imp(a, b, l, pol);
+   
+   if(!(boost::math::isnormal)(power1) || !(boost::math::isnormal)(power2) || !(boost::math::isnormal)(bet))
    {
-      T p1, p2;
-      p1 = (x * b - y * la) / la;
-      if(fabs(p1) < 0.5f)
-         p1 = exp(a * boost::math::log1p(p1, pol));
+      int shift_c = shift_a + shift_b;
+      T result = ibeta_power_terms(T(a + shift_a), T(b + shift_b), x, y, l, normalised, pol, prefix);
+      if ((boost::math::isnormal)(result))
+      {
+         for (int i = 0; i < shift_c; ++i)
+         {
+            result /= c + i;
+               if (i < shift_a)
+               {
+                  result *= a + i;
+                     result /= x;
+               }
+            if (i < shift_b)
+            {
+               result *= b + i;
+               result /= y;
+            }
+         }
+         return prefix * result;
+      }
       else
-         p1 = pow(b1, a);
-      p2 = (y * a - x * lb) / lb;
-      if(fabs(p2) < 0.5f)
-         p2 = exp(b * boost::math::log1p(p2, pol));
-      else
-         p2 = pow(b2, b);
-      T p3 = exp(e1);
-      result = prefix * p1 * (p2 / p3);
+      {
+         T log_result = log(x) * a + log(y) * b + log(prefix);
+         if ((boost::math::isnormal)(bet))
+            log_result -= log(bet);
+         else
+            log_result += boost::math::lgamma(c, pol) - boost::math::lgamma(a) - boost::math::lgamma(c, pol);
+         return exp(log_result);
+      }
    }
-   // and combine with the remaining gamma function components:
-   result /= sa * sb / sc;
-
-   return result;
+   return prefix * power1 * (power2 / bet);
 }
 //
 // Series approximation to the incomplete beta:
@@ -593,7 +612,7 @@ T ibeta_series(T a, T b, T x, T s0, const Lanczos&, bool normalised, T* p_deriva
 // Incomplete Beta series again, this time without Lanczos support:
 //
 template <class T, class Policy>
-T ibeta_series(T a, T b, T x, T s0, const boost::math::lanczos::undefined_lanczos&, bool normalised, T* p_derivative, T y, const Policy& pol)
+T ibeta_series(T a, T b, T x, T s0, const boost::math::lanczos::undefined_lanczos& l, bool normalised, T* p_derivative, T y, const Policy& pol)
 {
    BOOST_MATH_STD_USING
 
@@ -602,53 +621,35 @@ T ibeta_series(T a, T b, T x, T s0, const boost::math::lanczos::undefined_lanczo
 
    if(normalised)
    {
+      const T min_sterling = minimum_argument_for_bernoulli_recursion<T>();
+
+      long shift_a = 0;
+      long shift_b = 0;
+
+      if (a < min_sterling)
+         shift_a = 1 + ltrunc(min_sterling - a);
+      if (b < min_sterling)
+         shift_b = 1 + ltrunc(min_sterling - b);
+      long shift_c = shift_a + shift_b;
       T c = a + b;
 
-      // figure out integration limits for the gamma function:
-      //T la = (std::max)(T(10), a);
-      //T lb = (std::max)(T(10), b);
-      //T lc = (std::max)(T(10), a+b);
-      T la = a + 5;
-      T lb = b + 5;
-      T lc = a + b + 5;
-
-      // calculate the gamma parts:
-      T sa = detail::lower_gamma_series(a, la, pol) / a;
-      sa += detail::upper_gamma_fraction(a, la, ::boost::math::policies::get_epsilon<T, Policy>());
-      T sb = detail::lower_gamma_series(b, lb, pol) / b;
-      sb += detail::upper_gamma_fraction(b, lb, ::boost::math::policies::get_epsilon<T, Policy>());
-      T sc = detail::lower_gamma_series(c, lc, pol) / c;
-      sc += detail::upper_gamma_fraction(c, lc, ::boost::math::policies::get_epsilon<T, Policy>());
-
-      // and their combined power-terms:
-      T b1 = (x * lc) / la;
-      T b2 = lc/lb;
-      T e1 = lc - la - lb;
-      T lb1 = a * log(b1);
-      T lb2 = b * log(b2);
-
-      if((lb1 >= tools::log_max_value<T>())
-         || (lb1 <= tools::log_min_value<T>())
-         || (lb2 >= tools::log_max_value<T>())
-         || (lb2 <= tools::log_min_value<T>())
-         || (e1 >= tools::log_max_value<T>())
-         || (e1 <= tools::log_min_value<T>()) )
+      if ((shift_a == 0) && (shift_b == 0))
       {
-         T p = lb1 + lb2 - e1;
-         result = exp(p);
+         result = pow(x * c / a, a) * pow(c / b, b) * scaled_tgamma_no_lanczos(c, pol) / (scaled_tgamma_no_lanczos(a, pol) * scaled_tgamma_no_lanczos(b, pol));
       }
+      else if ((a < 1) && (b > 1))
+         result = pow(x, a) / (boost::math::tgamma(a, pol) * boost::math::tgamma_delta_ratio(b, a, pol));
       else
       {
-         result = pow(b1, a);
-         if(a * b < lb * 10)
-            result *= exp(b * boost::math::log1p(a / lb, pol));
+         T power = pow(x, a);
+         T bet = beta_imp(a, b, l, pol);
+         if (!(boost::math::isnormal)(power) || !(boost::math::isnormal)(bet))
+         {
+            result = exp(a * log(x) + boost::math::lgamma(c, pol) - boost::math::lgamma(a, pol) - boost::math::lgamma(b, pol));
+         }
          else
-            result *= pow(b2, b);
-         result /= exp(e1);
+            result = power / bet;
       }
-      // and combine the results:
-      result /= sa * sb / sc;
-
       if(p_derivative)
       {
          *p_derivative = result * pow(y, b);

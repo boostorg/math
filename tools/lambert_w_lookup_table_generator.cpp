@@ -9,15 +9,15 @@
 //! to 34 decimal digits precision to cater for platforms that have 128-bit long double.
 //! The function bisection can then use any built-in floating-point type,
 //! which may have different precision and speed on different platforms.
-//! The actual builtin floating-point type of the arrays is chosen by a 
+//! The actual builtin floating-point type of the arrays is chosen by a
 //! typedef in \modular-boost\libs\math\include\boost\math\special_functions\lambert_w.hpp
-//! by default, for example: typedef double lookup_t; 
+//! by default, for example: typedef double lookup_t;
 
 
 // This includes lookup tables for both branches W0 and W-1.
 // Only W-1 is needed by current code that uses JM rational Polynomials,
 // but W0 is kept (for now) to allow comparison with the previous FKDVPB version
-// that uses lookup for W0 branch as well as W-1. 
+// that uses lookup for W0 branch as well as W-1.
 
 #include <boost/config.hpp>
 #include <boost/math/constants/constants.hpp> // For exp_minus_one == 3.67879441171442321595523770161460867e-01.
@@ -102,7 +102,7 @@ g: 0, 2.7182818284590452, 14.7781121978613, 60.256610769563003, 218.392600132576
 5.2317811346197018e+28, 1.4450833904658542e+29, 3.9904954117194348e+29
 
 
-lambert_wm1 version of arrays from Fukushima 
+lambert_wm1 version of arrays from Fukushima
 e: 2.7182817459106445 7.3890557289123535 20.085535049438477 54.59814453125 148.41314697265625 403.42874145507813 1096.6329345703125 2980.957275390625 8103.08154296875 22026.458984375 59874.12109375 162754.734375 442413.21875 1202603.75 3269015.75 8886106 24154940 65659932 178482192 485164896 1318814848 3584910336 9744796672 26489102336 72004845568 195729457152 532047822848 1446255919104 3931331100672 10686465835008 29048824659968 78962889850880 214643389759488 583461240832000 1586012102852608 4311227773747200 11719131799748608 31855901283450880 86593318145753088 2.3538502982225101e+17 6.398428560008151e+17 1.7392731886358364e+18 4.7278345784949473e+18 1.2851586685678387e+19 3.493423319351296e+19 9.4961089747571704e+19 2.581309902546461e+20 7.0167278463083348e+20 1.9073443887231177e+21 5.1846992652160593e+21 1.4093473476000776e+22 3.831003235981371e+22 1.0413746376682761e+23 2.8307496154307266e+23 7.6947746628514896e+23 2.0916565667371597e+24 5.6857119515524837e+24 1.5455367020327599e+25 4.2012039964445827e+25 1.1420056438012293e+26 3.1042929865047826e+26 8.4383428037470738e+26 2.2937792813113457e+27 6.2351382164292627e+27
 
 g: -0.36787945032119751 -0.27067059278488159 -0.14936122298240662 -0.073262564837932587 -0.033689741045236588 -0.014872515574097633 -0.0063831745646893978 -0.0026837014593183994 -0.0011106884339824319 -0.00045399941154755652 -0.00018371877376921475 -7.3730567237362266e-05 -2.9384291337919421e-05 -1.1641405762929935e-05 -4.5885362851549871e-06 -1.8005634956352878e-06 -7.0378973759943619e-07 -2.7413975089984888e-07 -1.0645318582191976e-07 -4.122309249510181e-08 -1.5923385277005764e-08 -6.1368328196920174e-09 -2.3602335641470518e-09 -9.0603280433754207e-10 -3.471987974901225e-10 -1.3283640853956058e-10 -5.0747316071575455e-11 -1.9360334516105304e-11 -7.3766357605586919e-12 -2.8072891233854591e-12 -1.0671687058344537e-12 -4.0525363013271809e-13 -1.5374336461045079e-13 -5.8272932648966574e-14 -2.206792725173521e-14 -8.3502896573240185e-15 -3.1572303958374423e-15 -1.192871523299666e-15 -4.5038112940094517e-16 -1.699343306816689e-16 -6.4078234365689933e-17 -2.4148019279880996e-17 -9.095073346605316e-18 -3.4237017961279004e-18 -1.2881348671140216e-18 -4.8440896082993503e-19 -1.8207810463107454e-19 -6.8407959442757565e-20 -2.569017156788846e-20 -9.6437611040447661e-21 -3.6186962678628536e-21 -1.357346940624028e-21 -5.0894276378983633e-22 -1.9076220526102576e-22 -7.1477077345829229e-23 -2.6773039821769189e-23 -1.0025130740057213e-23 -3.7527418826161672e-24 -1.4043593713279384e-24 -5.2539147015754201e-25 -1.9650207139502987e-25 -7.3474141096711539e-26 -2.7465588329293218e-26 -1.0264406957471058e-26
@@ -146,7 +146,7 @@ int main()
     int output_precision = std::numeric_limits<cpp_bin_float_quad>::max_digits10; // 37 decimal digits.
     fout.precision(output_precision);
     fout <<
-      "// Copyright Paul A. Bristow 2017." 	"\n"
+      "// Copyright Paul A. Bristow 2017."   "\n"
       "// Distributed under the Boost Software License, Version 1.0." "\n"
       "// (See accompanying file LICENSE_1_0.txt" "\n"
       "// or copy at http://www.boost.org/LICENSE_1_0.txt)" "\n"
@@ -157,7 +157,7 @@ int main()
       "// C++ floating-point precision is 128-bit long double.\n"
       "// Output as "
       << std::numeric_limits<table_lookup_t>::max_digits10
-      << " decimal digits, suffixed L.\n" 
+      << " decimal digits, suffixed L.\n"
       "\n"
       "// C++ floating-point type is provided by lambert_w.hpp typedef."  "\n"
       "// For example: typedef lookup_t double; (or float or long double)"  "\n"
@@ -179,7 +179,7 @@ int main()
     BOOST_STATIC_CONSTEXPR std::size_t noof_w0zs = 65; // F[k] 0 <= k <= 64. f[0] = F[0], f[64] = F[64]
     BOOST_STATIC_CONSTEXPR std::size_t noof_w0es = 66; //  noof_w0zs +1 for gratuitous extra power.
     BOOST_STATIC_CONSTEXPR std::size_t noof_wm1zs = 64; // G[k] 1 <= k <= 64. (W-1 = 0 would be z = -infinity, so not stored in array) g[0] == G[1], g[63] = G[64]
-    BOOST_STATIC_CONSTEXPR std::size_t noof_wm1es = 64; // 
+    BOOST_STATIC_CONSTEXPR std::size_t noof_wm1es = 64; //
 
     fout << "BOOST_STATIC_CONSTEXPR std::size_t  noof_w0es = " << noof_w0zs << ";" << std::endl;
     fout << "BOOST_STATIC_CONSTEXPR std::size_t  noof_w0zs = " << noof_w0zs << ";" << std::endl;
@@ -204,7 +204,7 @@ int main()
       table_lookup_t ej = 1; //
       w0es[0] = e<table_lookup_t>(); // e = 2.7182 exp(-1) - 1/e exp_minus_one = 0.36787944.
       w0es[1] = 1; // e^0
-      w0zs[0] = 0; // F[0] = 0 or W0 branch. 
+      w0zs[0] = 0; // F[0] = 0 or W0 branch.
       for (int j = 1, jj = 2; jj != noof_w0es; ++jj)
       {
         w0es[jj] = w0es[j] * exp_minus_one<table_lookup_t>(); // previous * 0.36787944.
@@ -212,13 +212,13 @@ int main()
         w0zs[j] = j * ej; // For W0 branch.
         j = jj; // Previous.
       } // for
-    } 
+    }
     // Checks on accuracy of W0 exponents.
 
     // Checks on e power w0es
 
     // w0es[64] =       4.3596100000630809736231248158884615452e-28
-    // N[e ^ -63, 37] = 4.359610000063080973623124815888459643×10^-28
+    // N[e ^ -63, 37] = 4.359610000063080973623124815888459643*10^-28
     // So slight loss at last decimal place.
 
     // Checks on accuracy of z for integral W0 w0zs
@@ -228,7 +228,7 @@ int main()
     // w0zs[64] = 3.9904954117194348050619127737142022705e+29
     // N[productlog(0, 3.9904954117194348050619127737142022705 10^+29), 37]
     //   =  63.99999999999999999999999999999999547
-    //   = 64.0 to 34 decimal digits, so exact. :-) 
+    //   = 64.0 to 34 decimal digits, so exact. :-)
 
     { // z values for integral powers G[k] and e^-k for W-1 branch.
       // Fukushima indexing of G (k-1) differs by 1 from(k).
@@ -236,10 +236,10 @@ int main()
       // and last is g[63] = G[64] = 1.026e-26
       table_lookup_t e1 = 1. / e<table_lookup_t>(); // 1/e = 0.36787944117144233
       table_lookup_t ej = e1;
-      wm1es[0] = e<table_lookup_t>(); // e = 2.7182  
+      wm1es[0] = e<table_lookup_t>(); // e = 2.7182
       wm1zs[0] = -e1; // -1/e = - 0.3678
       for (int j = 0, jj = 1; jj != noof_wm1zs; ++jj)
-      { 
+      {
         ej *= e1; // * 0.3678..
         wm1es[jj] = wm1es[j] * e<table_lookup_t>();
         wm1zs[jj] = -(jj + 1) * ej;
@@ -253,10 +253,10 @@ int main()
     // wm1es[0] =   2.7182818284590452353602874713526623144  - close enough.
     // N[e ^ 3, 37]         20.08553692318766774092852965458171790
     // computed wm1es[2]    2.0085536923187667740928529654581712847e+01L  OK
-    // e ^ 66 =        4.6071866343312915426773184428060086893349003037096040 × 10^28
+    // e ^ 66 =        4.6071866343312915426773184428060086893349003037096040 * 10^28
     // N[e ^ 66, 34] = 4.607186634331291542677318442806009 10^28
     // computed        4.6071866343312915426773184428059867859e+28L
-    // N[e ^ 66, 37] = 4.607186634331291542677318442806008689×10^28
+    // N[e ^ 66, 37] = 4.607186634331291542677318442806008689*10^28
     // so suffering some loss of precision by repeated multiplication computation.
     // :-(
 
@@ -264,10 +264,10 @@ int main()
     //                 4.60718663433129154267731844280600868933490030370929982
     // output std::cout.precision(std::numeric_limits<cpp_bin_float_quad>::max_digits10) as 37 decimal digits.
     //                 4.6071866343312915426773184428060086893e+28L
-    // N[e ^ 66, 37] = 4.607186634331291542677318442806008689×10^28
+    // N[e ^ 66, 37] = 4.607186634331291542677318442806008689*10^28
     // Agrees exactly for 37th place, so should be read in to nearest representable value.
 
-    
+
     // Checks W-1 branch z values wm1zs
     // W-1[0] = -2.7067056647322538378799898994496883858e-01
     // w-1[1] = -1.4936120510359182893802724695018536337e-01
@@ -277,13 +277,13 @@ int main()
     // N[productlog(-1, -1.4325445274604020119111357113179868158* 10^-27), 37]
     // = -65.99999999999999999999999999999999955
     // = -66 accurately, so this is OK.
-    // z = 66 * e^66 = 
+    // z = 66 * e^66 =
     // =N[-66*e ^ -66, 37]
-    //           -1.432544527460402011911135711317986177×10^-27
+    //           -1.432544527460402011911135711317986177*10^-27
     // wm1zs[65] -1.4325445274604020119111357113179868158e-27
     // which agrees well enough to 34 decimal digits.
     // last wm1zs[65] = 0 is unused.
-   
+
     // Halves, common to both W0 and W-1.
     halves[0] = static_cast<table_lookup_t>(0.5); // Exactly representable.
     for (int j = 0; j != noof_sqrts -1; ++j)
@@ -310,7 +310,7 @@ int main()
     fout << std::noshowpoint; // Do show NOT trailing zeros for halves and sqrts values.
 
     fout <<
-      "\n" "BOOST_STATIC_CONSTEXPR lookup_t halves[noof_halves] = " // 
+      "\n" "BOOST_STATIC_CONSTEXPR lookup_t halves[noof_halves] = " //
       "\n" "{ // Common to Lambert W0 and W-1 (and exactly representable)." << "\n  ";
       for (int i = 0; i != noof_halves; i++)
       {
@@ -327,7 +327,7 @@ int main()
       fout << "}; // halves, 0.5, 0.25, ... 0.000244140625, common to W0 and W-1." << std::endl;
 
       fout <<
-        "\n" "BOOST_STATIC_CONSTEXPR lookup_t sqrtw0s[noof_sqrts] = " // 
+        "\n" "BOOST_STATIC_CONSTEXPR lookup_t sqrtw0s[noof_sqrts] = " //
         "\n" "{  // For Lambert W0 only." << "\n  ";
       for (int i = 0; i != noof_sqrts; i++)
       {
@@ -344,7 +344,7 @@ int main()
       fout << "}; // sqrtw0s" << std::endl;
 
       fout <<
-        "\n" "BOOST_STATIC_CONSTEXPR lookup_t sqrtwm1s[noof_sqrts] = " // 
+        "\n" "BOOST_STATIC_CONSTEXPR lookup_t sqrtwm1s[noof_sqrts] = " //
         "\n" "{ // For Lambert W-1 only." << "\n  ";
       for (int i = 0; i != noof_sqrts; i++)
       {
@@ -362,14 +362,14 @@ int main()
 
       fout << std::scientific // May be needed to avoid very large dddddddddddddddd.ddddddddddddddd output?
         << std::showpoint; // Do show trailing zeros for sqrts and halves.
-     
+
       // Two W0 arrays
 
       fout << // W0 e values.
         // Fukushima code generates an extra unused power, but it is not output by using noof_w0zs instead of noof_w0es.
-        "\n" "BOOST_STATIC_CONSTEXPR lookup_t w0es[noof_w0zs] = " // 
+        "\n" "BOOST_STATIC_CONSTEXPR lookup_t w0es[noof_w0zs] = " //
         "\n" "{ // Fukushima e powers array e[0] = 2.718, 1., e[2] = e^-1 = 0.135, e[3] = e^-2 = 0.133 ... e[64] = 4.3596100000630809736231248158884615452e-28." << "\n  ";
-      for (int i = 0; i != noof_w0zs; i++) 
+      for (int i = 0; i != noof_w0zs; i++)
       {
         fout << w0es[i] << 'L';
         if (i != noof_w0es - 1)
@@ -384,7 +384,7 @@ int main()
       fout << "\n}; // w0es" << std::endl;
 
       fout << // W0 z values for W[1], .
-        "\n" "BOOST_STATIC_CONSTEXPR lookup_t w0zs[noof_w0zs] = " // 
+        "\n" "BOOST_STATIC_CONSTEXPR lookup_t w0zs[noof_w0zs] = " //
         "\n" "{ // z values for W[0], W[1], W[2] ... W[64] (Fukushima array Fk). " << "\n  ";
       for (int i = 0; i != noof_w0zs; i++)
       {
@@ -403,7 +403,7 @@ int main()
       // Two arrays for w-1
 
       fout << // W-1 e values.
-        "\n" "BOOST_STATIC_CONSTEXPR lookup_t wm1es[noof_wm1es] = " // 
+        "\n" "BOOST_STATIC_CONSTEXPR lookup_t wm1es[noof_wm1es] = " //
         "\n" "{ // Fukushima e array e[0] = e^1 = 2.718, e[1] = e^2 = 7.39 ... e[64] = 4.60718e+28." << "\n  ";
       for (int i = 0; i != noof_wm1es; i++)
       {
@@ -420,7 +420,7 @@ int main()
       fout << "\n}; // wm1es" << std::endl;
 
       fout << // Wm1 z values for integral K.
-        "\n" "BOOST_STATIC_CONSTEXPR lookup_t wm1zs[noof_wm1zs] = " // 
+        "\n" "BOOST_STATIC_CONSTEXPR lookup_t wm1zs[noof_wm1zs] = " //
         "\n" "{ // Fukushima G array of z values for integral K, (Fukushima Gk) g[0] (k = -1) = 1 ... g[64] = -1.0264389699511303e-26." << "\n  ";
       for (int i = 0; i != noof_wm1zs; i++)
       {
@@ -453,7 +453,7 @@ Original arrays as output by Veberic/Fukushima code:
 
 w0 branch
 
-W-1 branch 
+W-1 branch
 
 e: 2.7182818284590451 7.3890560989306495 20.085536923187664 54.598150033144229 148.41315910257657 403.42879349273500 1096.6331584284583 2980.9579870417274 8103.0839275753815 22026.465794806707 59874.141715197788 162754.79141900383 442413.39200892020 1202604.2841647759 3269017.3724721079 8886110.5205078647 24154952.753575277 65659969.137330450 178482300.96318710 485165195.40978980 1318815734.4832134 3584912846.1315880 9744803446.2488918 26489122129.843441 72004899337.385788 195729609428.83853 532048240601.79797 1446257064291.4734 3931334297144.0371 10686474581524.447 29048849665247.383 78962960182680.578 214643579785915.75 583461742527454.00 1586013452313428.3 4311231547115188.5 11719142372802592. 31855931757113704. 86593400423993600. 2.3538526683701958e+17 6.3984349353005389e+17 1.7392749415204982e+18 4.7278394682293381e+18 1.2851600114359284e+19 3.4934271057485025e+19 9.4961194206024286e+19 2.5813128861900616e+20 7.0167359120976157e+20 1.9073465724950953e+21 5.1847055285870605e+21 1.4093490824269355e+22 3.8310080007165677e+22 1.0413759433029062e+23 2.8307533032746866e+23 7.6947852651419974e+23 2.0916594960129907e+24 5.6857199993359170e+24 1.5455389355900996e+25 4.2012104037905024e+25 1.1420073898156810e+26 3.1042979357019109e+26 8.4383566687414291e+26 2.2937831594696028e+27 6.2351490808115970e+27
 

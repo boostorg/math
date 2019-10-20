@@ -118,7 +118,7 @@ void expected_results()
       "[^|]*",                          // platform
       "real_concept",                   // test type(s)
       "[^|]*",                          // test data group
-      "tgamma_delta_ratio[^|]*", 40, 15);                 // test function
+      "tgamma_delta_ratio[^|]*", 50, 20); // test function
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib

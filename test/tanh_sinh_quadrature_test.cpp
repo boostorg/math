@@ -13,7 +13,7 @@
 
 #include <boost/math/concepts/real_concept.hpp>
 #include <boost/test/included/unit_test.hpp>
-#include <boost/test/floating_point_comparison.hpp>
+#include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/quadrature/tanh_sinh.hpp>
 #include <boost/math/special_functions/sinc.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
@@ -33,7 +33,7 @@
 #endif
 
 #if !defined(TEST1) && !defined(TEST2) && !defined(TEST3) && !defined(TEST4) && !defined(TEST5) && !defined(TEST6) && !defined(TEST7) && !defined(TEST8)\
-    && !defined(TEST1A) && !defined(TEST2A) && !defined(TEST3A) && !defined(TEST6A) && !defined(TEST9)
+    && !defined(TEST1A) && !defined(TEST1B) && !defined(TEST2A) && !defined(TEST3A) && !defined(TEST6A) && !defined(TEST9)
 #  define TEST1
 #  define TEST2
 #  define TEST3
@@ -43,6 +43,7 @@
 #  define TEST7
 #  define TEST8
 #  define TEST1A
+#  define TEST1B
 #  define TEST2A
 #  define TEST3A
 #  define TEST6A
@@ -695,7 +696,7 @@ void test_sf()
       // Check some really extreme versions:
       a = 1000;
       b = 500;
-      BOOST_CHECK_CLOSE_FRACTION(integrator.integrate(f, 0, 1), Real(1), tol * 10);
+      BOOST_CHECK_CLOSE_FRACTION(integrator.integrate(f, 0, 1), Real(1), tol * 15);
       //
       // This is as extreme as we can get in this domain: otherwise the function has all it's 
       // area so close to zero we never get in there no matter how many levels we go down:
@@ -859,9 +860,10 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
 #endif
 #ifdef TEST1A
     test_early_termination<float>();
-    test_crc<float>();
     test_2_arg<float>();
-
+#endif
+#ifdef TEST1B
+    test_crc<float>();
 #endif
 #ifdef TEST2
     test_right_limit_infinite<double>();
@@ -906,7 +908,6 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
 #endif
 
 #ifdef TEST4
-
     test_right_limit_infinite<cpp_bin_float_quad>();
     test_left_limit_infinite<cpp_bin_float_quad>();
     test_linear<cpp_bin_float_quad>();

@@ -34,16 +34,23 @@ The Legendre-Stieltjes polynomials assist with this task because their zeros /in
 meaning that between any two zeros of a Legendre polynomial of degree n, there exists a zero of the Legendre-Stieltjes polynomial
 of degree n+1.
 
-The Legendre-Stieltjes polynomials /E/[sub n+1] are defined by the property that they have /n/ vanishing moments against the oscillatory measure P[sub n], i.e., \u222B[sub -1][super 1] E[sub n+1](x)P[sub n](x) x[super k] dx = 0 for /k = 0, 1, ..., n/.
+The Legendre-Stieltjes polynomials ['E[sub n+1]] are defined by the property that they have /n/ vanishing moments against the oscillatory measure ['P[sub n]], i.e., 
+
+[expression [int] [sub -1][super 1] E[sub n+1](x)P[sub n](x) x[super k]dx = 0] for /k = 0, 1, ..., n/.
+
 The first few are
 
-* E[sub 1](x) = P[sub 1](x)
-* E[sub 2](x) = P[sub 2](x) - 2P[sub 0](x)/5
-* E[sub 3](x) = P[sub 3](x) - 9P[sub 1](x)/14
-* E[sub 4](x) = P[sub 4](x) - 20P[sub 2](x)/27 + 14P[sub 0](x)/891
-* E[sub 5](x) = P[sub 5](x) - 35P[sub 3](x)/44 + 135P[sub 1](x)/12584
+[expression E[sub 1](x) = P[sub 1](x)]
 
-where P[sub i] are the Legendre polynomials.
+[expression E[sub 2](x) = P[sub 2](x) - 2P[sub 0](x)/5]
+
+[expression  E[sub 3](x) = P[sub 3](x) - 9P[sub 1](x)/14]
+
+[expression  E[sub 4](x) = P[sub 4](x) - 20P[sub 2](x)/27 + 14P[sub 0](x)/891]
+
+[expression  E[sub 5](x) = P[sub 5](x) - 35P[sub 3](x)/44 + 135P[sub 1](x)/12584]
+
+where ['P[sub i]] are the Legendre polynomials.
 The scaling follows [@http://www.ams.org/journals/mcom/1968-22-104/S0025-5718-68-99866-9/S0025-5718-68-99866-9.pdf Patterson],
 who expanded the Legendre-Stieltjes polynomials in a Legendre series and took the coefficient of the highest-order Legendre polynomial in the series to be unity.
 
@@ -62,7 +69,8 @@ Example usage:
     // Use the norm_sq to change between scalings, if desired:
     double norm = std::sqrt(E.norm_sq());
 
-[endsect]
+[endsect] [/section:legendre_stieltjes Legendre-Stieltjes Polynomials]
+
 [/
   Copyright 2017 Nick Thompson
   Distributed under the Boost Software License, Version 1.0.

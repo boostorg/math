@@ -38,7 +38,7 @@ the return type is `double` if T is an integer type, and T otherwise.
 Returns the [@http://functions.wolfram.com/GammaBetaErf/InverseErf/ inverse error function]
 of z, that is a value x such that:
 
-   p = erf(x);
+[expression ['p = erf(x);]]
 
 [graph erf_inv]
 
@@ -51,7 +51,7 @@ of z, that is a value x such that:
 Returns the inverse of the complement of the error function of z, that is a
 value x such that:
 
-   p = erfc(x);
+[expression ['p = erfc(x);]]
 
 [graph erfc_inv]
 
@@ -110,7 +110,7 @@ cases we want to solve for the same result /x/.
 
 For /p < 0.5/ the inverse erf function is reasonably smooth and the approximation:
 
-   x = p(p + 10)(Y + R(p))
+[expression ['x = p(p + 10)(Y + R(p))]]
    
 Gives a good result for a constant Y, and R(p) optimised for low absolute error
 compared to |Y|.
@@ -118,15 +118,15 @@ compared to |Y|.
 For q < 0.5 things get trickier, over the interval /0.5 > q > 0.25/
 the following approximation works well:
 
-   x = sqrt(-2log(q)) / (Y + R(q))
+[expression ['x = sqrt(-2log(q)) / (Y + R(q))]]
    
 While for q < 0.25, let 
 
-   z = sqrt(-log(q))
+[expression ['z = sqrt(-log(q))]]
 
 Then the result is given by:
 
-   x = z(Y + R(z - B))
+[expression ['x = z(Y + R(z - B))]]
 
 As before Y is a constant and the rational function R is optimised for low
 absolute error compared to |Y|.  B is also a constant: it is the smallest value
@@ -135,7 +135,7 @@ of this form each of which reaches a little further into the tail of the erfc
 function (at `long double` precision the extended exponent range compared to
 `double` means that the tail goes on for a very long way indeed).
 
-[endsect][/ :error_inv The Error Function Inverses]
+[endsect] [/ :error_inv The Error Function Inverses]
 
 [/ 
   Copyright 2006 John Maddock and Paul A. Bristow.

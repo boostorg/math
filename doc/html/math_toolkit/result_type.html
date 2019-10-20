@@ -112,7 +112,38 @@
       <code class="computeroutput"><span class="keyword">float</span></code>.
     </p>
 <p>
-      And for user-defined types, all of the following return an <code class="computeroutput"><span class="identifier">NTL</span><span class="special">::</span><span class="identifier">RR</span></code> result:
+      And for user-defined types, typically <a href="../../../../../libs/multiprecision/doc/html/index.html" target="_top">Boost.Multiprecision</a>,
+    </p>
+<p>
+      All of the following return a <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">multiprecision</span><span class="special">::</span><span class="identifier">cpp_bin_quad_float</span></code>
+      result:
+    </p>
+<pre class="programlisting"><span class="identifier">cyl_bessel_j</span><span class="special">(</span><span class="number">0</span><span class="special">,</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">multiprecision</span><span class="special">::</span><span class="identifier">cpp_bin_quad_float</span><span class="special">(</span><span class="number">2</span><span class="special">));</span>
+
+<span class="identifier">cyl_bessel_j</span><span class="special">(</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">multiprecision</span><span class="special">::</span><span class="identifier">cpp_bin_quad_float</span><span class="special">(</span><span class="number">2</span><span class="special">),</span> <span class="number">3</span><span class="special">);</span>
+
+<span class="identifier">cyl_bessel_j</span><span class="special">(</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">multiprecision</span><span class="special">::</span><span class="identifier">cpp_bin_quad_float</span><span class="special">(</span><span class="number">2</span><span class="special">),</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">multiprecision</span><span class="special">::</span><span class="identifier">cpp_bin_quad_float</span><span class="special">(</span><span class="number">3</span><span class="special">));</span>
+</pre>
+<p>
+      but rely on the parameters provided being exactly representable, avoiding loss
+      of precision from construction from <code class="computeroutput"><span class="keyword">double</span></code>.
+    </p>
+<div class="tip"><table border="0" summary="Tip">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="../../../../../doc/src/images/tip.png"></td>
+<th align="left">Tip</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+        All new projects should use Boost.Multiprecision.
+      </p></td></tr>
+</table></div>
+<p>
+      During development of Boost.Math, <a href="http://www.shoup.net/ntl/" target="_top">NTL
+      A Library for doing Number Theory</a> was invaluable to create highly precise
+      tables.
+    </p>
+<p>
+      All of the following return an <code class="computeroutput"><span class="identifier">NTL</span><span class="special">::</span><span class="identifier">RR</span></code> result:
     </p>
 <pre class="programlisting"><span class="identifier">cyl_bessel_j</span><span class="special">(</span><span class="number">0</span><span class="special">,</span> <span class="identifier">NTL</span><span class="special">::</span><span class="identifier">RR</span><span class="special">(</span><span class="number">2</span><span class="special">));</span>
 

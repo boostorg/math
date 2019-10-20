@@ -80,7 +80,7 @@ Otherwise, loading the archive may fail.
 By default, archives are saved and loaded with a classic C locale with a
 `boost::archive::codecvt_null` facet added.
 Normally you do not have to worry about that.
-The constructors for the archive classes, as a side-effect, 
+The constructors for the archive classes, as a side-effect,
 imbue the stream with such a locale.
 
 However, if you want to use the facets `nonfinite_num_put` and `nonfinite_num_get`
@@ -112,16 +112,16 @@ int main()
   // codecvt_null so the archive constructor will not imbue the stream with a new locale.
 
   locale my_locale(default_locale, new nonfinite_num_put<char>);
-  // Add nonfinite_num_put facet to locale. 
+  // Add nonfinite_num_put facet to locale.
 
-  ofstream ofs("test.txt");
-  ofs.imbue(my_locale); 
+  // Use a temporary folder /.temps (which contains "boost-no-inspect" so that it will not be inspected, and made 'hidden' too).
+  ofstream ofs("./.temps/test.txt");
+  ofs.imbue(my_locale);
 
   boost::archive::text_oarchive oa(ofs, no_codecvt);
 
   double x = numeric_limits<double>::infinity();
   oa & x;
-
 
 } // int main()
 

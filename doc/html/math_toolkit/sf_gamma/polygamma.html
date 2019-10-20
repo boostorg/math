@@ -37,8 +37,8 @@
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">polygamma</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">z</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">polygamma</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">polygamma</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 
 <span class="special">}}</span> <span class="comment">// namespaces</span>
 </pre>
@@ -50,21 +50,26 @@
         Returns the polygamma function of <span class="emphasis"><em>x</em></span>. Polygamma is defined
         as the n'th derivative of the digamma function:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/polygamma1.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/polygamma1.svg"></span>
+
+        </p></blockquote></div>
 <p>
         The following graphs illustrate the behaviour of the function for odd and
         even order:
       </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/polygamma2.svg" align="middle"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../graphs/polygamma3.svg" align="middle"></span>
+
+        </p></blockquote></div>
 <p>
-        <span class="inlinemediaobject"><img src="../../../graphs/polygamma2.svg" align="middle"></span>
-  <span class="inlinemediaobject"><img src="../../../graphs/polygamma3.svg" align="middle"></span>
-      </p>
-<p>
-        The final <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
+        The final <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
         be used to control the behaviour of the function: how it handles errors,
-        what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">policy
+        what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">policy
         documentation for more details</a>.
       </p>
 <p>
@@ -82,7 +87,7 @@
         any floating point type that is narrower than the one shown will have <a class="link" href="../relative_error.html#math_toolkit.relative_error.zero_error">effectively zero error</a>.
       </p>
 <div class="table">
-<a name="math_toolkit.sf_gamma.polygamma.table_polygamma"></a><p class="title"><b>Table&#160;7.6.&#160;Error rates for polygamma</b></p>
+<a name="math_toolkit.sf_gamma.polygamma.table_polygamma"></a><p class="title"><b>Table&#160;8.6.&#160;Error rates for polygamma</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for polygamma">
 <colgroup>
 <col>
@@ -327,23 +332,26 @@
 <p>
         For x &lt; 0 the following reflection formula is used:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/polygamma2.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/polygamma2.svg"></span>
+
+        </p></blockquote></div>
 <p>
         The n'th derivative of <span class="emphasis"><em>cot(x)</em></span> is tabulated for small
         <span class="emphasis"><em>n</em></span>, and for larger n has the general form:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/polygamma3.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/polygamma3.svg"></span>
+
+        </p></blockquote></div>
 <p>
         The coefficients of the cosine terms can be calculated iteratively starting
         from <span class="emphasis"><em>C<sub>1,0</sub> = -1</em></span> and then using
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/polygamma7.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/polygamma7.svg"></span>
+
+        </p></blockquote></div>
 <p>
         to generate coefficients for n+1.
       </p>
@@ -355,9 +363,10 @@
         Once x is positive then we have two methods available to us, for small x
         we use the series expansion:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/polygamma4.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/polygamma4.svg"></span>
+
+        </p></blockquote></div>
 <p>
         Note that the evaluation of zeta functions at integer values is essentially
         a table lookup as <a class="link" href="../zetas/zeta.html" title="Riemann Zeta Function">zeta</a> is
@@ -366,27 +375,31 @@
 <p>
         For large x we use the asymptotic expansion:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/polygamma5.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/polygamma5.svg"></span>
+
+        </p></blockquote></div>
 <p>
         For x in-between the two extremes we use the relation:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/polygamma6.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/polygamma6.svg"></span>
+
+        </p></blockquote></div>
 <p>
         to make x large enough for the asymptotic expansion to be used.
       </p>
 <p>
         There are also two special cases:
       </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/polygamma8.svg"></span>
-      </p>
-<p>
-        <span class="inlinemediaobject"><img src="../../../equations/polygamma9.svg"></span>
-      </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/polygamma8.svg"></span>
+
+        </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="inlinemediaobject"><img src="../../../equations/polygamma9.svg"></span>
+
+        </p></blockquote></div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>

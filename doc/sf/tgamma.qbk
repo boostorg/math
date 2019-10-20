@@ -38,15 +38,6 @@ Returns the "true gamma" (hence name tgamma) of value z:
 
 [optional_policy]
 
-There are effectively two versions of the [@http://en.wikipedia.org/wiki/Gamma_function tgamma]
-function internally: a fully
-generic version that is slow, but reasonably accurate, and a much more
-efficient approximation that is used where the number of digits in the significand
-of T correspond to a certain __lanczos.  In practice any built in
-floating point type you will encounter has an appropriate __lanczos
-defined for it.  It is also possible, given enough machine time, to generate
-further __lanczos's using the program libs/math/tools/lanczos_generator.cpp.
-
 The return type of this function is computed using the __arg_promotion_rules:
 the result is `double` when T is an integer type, and T otherwise.
 
@@ -58,9 +49,7 @@ the result is `double` when T is an integer type, and T otherwise.
   
 Returns `tgamma(dz + 1) - 1`.  Internally the implementation does not make
 use of the addition and subtraction implied by the definition, leading to
-accurate results even for very small `dz`.  However, the implementation is
-capped to either 35 digit accuracy, or to the precision of the __lanczos
-associated with type T, whichever is more accurate.
+accurate results even for very small `dz`.
   
 The return type of this function is computed using the __arg_promotion_rules:
 the result is `double` when T is an integer type, and T otherwise.
@@ -103,7 +92,7 @@ to around 100 decimal digits.
 [h4 Implementation]
 
 The generic version of the `tgamma` function is implemented Sterling's approximation
-for lgamma for large z:
+for `lgamma` for large z:
 
 [equation gamma6]
 
@@ -125,8 +114,8 @@ For z < -20 the reflection formula:
 
 [equation gamm5]
 
-is used.  Particular care has to be taken to evaluate the [^ z * sin([pi][space] * z)] part: 
-a special routine is used to reduce z prior to multiplying by [pi][space] to ensure that the
+is used.  Particular care has to be taken to evaluate the [^ z * sin([pi] * z)] part: 
+a special routine is used to reduce z prior to multiplying by [pi] to ensure that the
 result in is the range [0, [pi]/2]. Without this an excessive amount of error occurs
 in this region (which is hard enough already, as the rate of change near a negative pole
 is /exceptionally/ high).
@@ -141,7 +130,7 @@ the approximation is `log(tgamma(dz+1))` which can fed into __expm1 to give
 the desired result.  Outside the range `-0.5 < dz < 2` then the naive formula
 `tgamma1pm1(dz) = tgamma(dz+1)-1` can be used directly.
 
-[endsect][/section:tgamma The Gamma Function]
+[endsect] [/section:tgamma The Gamma Function]
 [/ 
   Copyright 2006 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.

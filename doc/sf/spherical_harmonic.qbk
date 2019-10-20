@@ -50,9 +50,9 @@ portion of the solution to Laplace's equation in spherical coordinates
 where azimuthal symmetry is not present.
 
 [caution Care must be taken in correctly identifying the arguments to this
-function: [theta][space] is taken as the polar (colatitudinal) coordinate 
-with [theta][space] in \[0, [pi]\], and [phi][space] as the azimuthal (longitudinal)
-coordinate with [phi][space] in \[0,2[pi]).  This is the convention used in Physics,
+function: [theta] is taken as the polar (colatitudinal) coordinate 
+with [theta] in \[0, [pi]\], and [phi]as the azimuthal (longitudinal)
+coordinate with [phi]in \[0,2[pi]).  This is the convention used in Physics,
 and matches the definition used by 
 [@http://documents.wolfram.com/mathematica/functions/SphericalHarmonicY 
 Mathematica in the function SpericalHarmonicY], 
@@ -64,12 +64,12 @@ definition of the associated Legendre polynomial already includes this term.
 
 This implementation returns zero for m > n
 
-For [theta][space] outside \[0, [pi]\] and [phi][space] outside \[0, 2[pi]\] this 
+For [theta] outside \[0, [pi]\] and [phi] outside \[0, 2[pi]\] this 
 implementation follows the convention used by Mathematica:
-the function is periodic with period [pi][space] in [theta][space] and 2[pi][space] in
+the function is periodic with period [pi] in [theta] and 2[pi] in
 [phi].  Please note that this is not the behaviour one would get
 from a casual application of the function's definition.  Cautious users 
-should keep [theta][space] and [phi][space] to the range \[0, [pi]\] and 
+should keep [theta] and [phi] to the range \[0, [pi]\] and 
 \[0, 2[pi]\] respectively.
 
 See: [@http://mathworld.wolfram.com/SphericalHarmonic.html 
@@ -134,7 +134,7 @@ without roundoff error using ['x = cos(theta)], and
 rates for these functions is the need to calculate values near the roots
 of the associated Legendre functions.
 
-[endsect][/section:beta_function The Beta Function]
+[endsect] [/section:beta_function The Beta Function]
 [/ 
   Copyright 2006 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.

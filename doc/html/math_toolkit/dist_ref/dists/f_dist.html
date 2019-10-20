@@ -30,12 +30,12 @@
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span>
-          <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
+          <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">fisher_f_distribution</span><span class="special">;</span>
 
 <span class="keyword">typedef</span> <span class="identifier">fisher_f_distribution</span><span class="special">&lt;&gt;</span> <span class="identifier">fisher_f</span><span class="special">;</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">fisher_f_distribution</span>
 <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
@@ -53,27 +53,29 @@
 </pre>
 <p>
           The F distribution is a continuous distribution that arises when testing
-          whether two samples have the same variance. If &#967;<sup>2</sup><sub>m</sub> &#160; and &#967;<sup>2</sup><sub>n</sub> &#160; are independent
+          whether two samples have the same variance. If &#967;<sup>2</sup><sub>m</sub> and &#967;<sup>2</sup><sub>n</sub> are independent
           variates each distributed as Chi-Squared with <span class="emphasis"><em>m</em></span> and
           <span class="emphasis"><em>n</em></span> degrees of freedom, then the test statistic:
         </p>
-<p>
-          F<sub>n,m</sub> &#160; = (&#967;<sup>2</sup><sub>n</sub> &#160; / n) / (&#967;<sup>2</sup><sub>m</sub> &#160; / m)
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="serif_italic">F<sub>n,m</sub> = (&#967;<sup>2</sup><sub>n</sub> / n) / (&#967;<sup>2</sup><sub>m</sub> / m)</span>
+          </p></blockquote></div>
 <p>
           Is distributed over the range [0, &#8734;] with an F distribution, and has the
           PDF:
         </p>
-<p>
-          <span class="inlinemediaobject"><img src="../../../../equations/fisher_pdf.svg"></span>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../equations/fisher_pdf.svg"></span>
+
+          </p></blockquote></div>
 <p>
           The following graph illustrates how the PDF varies depending on the two
           degrees of freedom parameters.
         </p>
-<p>
-          <span class="inlinemediaobject"><img src="../../../../graphs/fisher_f_pdf.svg" align="middle"></span>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../graphs/fisher_f_pdf.svg" align="middle"></span>
+
+          </p></blockquote></div>
 <h5>
 <a name="math_toolkit.dist_ref.dists.f_dist.h0"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.f_dist.member_functions"></a></span><a class="link" href="f_dist.html#math_toolkit.dist_ref.dists.f_dist.member_functions">Member Functions</a>
@@ -174,9 +176,10 @@
                   <p>
                     The usual form of the PDF is given by:
                   </p>
-                  <p>
-                    <span class="inlinemediaobject"><img src="../../../../equations/fisher_pdf.svg"></span>
-                  </p>
+                  <div class="blockquote"><blockquote class="blockquote"><p>
+                      <span class="inlinemediaobject"><img src="../../../../equations/fisher_pdf.svg"></span>
+
+                    </p></blockquote></div>
                   <p>
                     However, that form is hard to evaluate directly without incurring
                     problems with either accuracy or numeric overflow.
@@ -188,20 +191,20 @@
                   <p>
                     led to the following two formulas:
                   </p>
-                  <p>
-                    f<sub>v1,v2</sub>(x) = y * <a class="link" href="../../sf_beta/beta_derivative.html" title="Derivative of the Incomplete Beta Function">ibeta_derivative</a>(v2
-                    / 2, v1 / 2, v2 / (v2 + v1 * x))
-                  </p>
+                  <div class="blockquote"><blockquote class="blockquote"><p>
+                      <span class="serif_italic">f<sub>v1,v2</sub>(x) = y * <a class="link" href="../../sf_beta/beta_derivative.html" title="Derivative of the Incomplete Beta Function">ibeta_derivative</a>(v2
+                      / 2, v1 / 2, v2 / (v2 + v1 * x))</span>
+                    </p></blockquote></div>
                   <p>
                     with y = (v2 * v1) / ((v2 + v1 * x) * (v2 + v1 * x))
                   </p>
                   <p>
                     and
                   </p>
-                  <p>
-                    f<sub>v1,v2</sub>(x) = y * <a class="link" href="../../sf_beta/beta_derivative.html" title="Derivative of the Incomplete Beta Function">ibeta_derivative</a>(v1
-                    / 2, v2 / 2, v1 * x / (v2 + v1 * x))
-                  </p>
+                  <div class="blockquote"><blockquote class="blockquote"><p>
+                      <span class="serif_italic">f<sub>v1,v2</sub>(x) = y * <a class="link" href="../../sf_beta/beta_derivative.html" title="Derivative of the Incomplete Beta Function">ibeta_derivative</a>(v1
+                      / 2, v2 / 2, v1 * x / (v2 + v1 * x))</span>
+                    </p></blockquote></div>
                   <p>
                     with y = (z * v1 - x * v1 * v1) / z<sup>2</sup>
                   </p>
@@ -228,17 +231,17 @@
                   <p>
                     Using the relations:
                   </p>
-                  <p>
-                    p = <a class="link" href="../../sf_beta/ibeta_function.html" title="Incomplete Beta Functions">ibeta</a>(v1
-                    / 2, v2 / 2, v1 * x / (v2 + v1 * x))
-                  </p>
+                  <div class="blockquote"><blockquote class="blockquote"><p>
+                      <span class="serif_italic">p = <a class="link" href="../../sf_beta/ibeta_function.html" title="Incomplete Beta Functions">ibeta</a>(v1
+                      / 2, v2 / 2, v1 * x / (v2 + v1 * x))</span>
+                    </p></blockquote></div>
                   <p>
                     and
                   </p>
-                  <p>
-                    p = <a class="link" href="../../sf_beta/ibeta_function.html" title="Incomplete Beta Functions">ibetac</a>(v2
-                    / 2, v1 / 2, v2 / (v2 + v1 * x))
-                  </p>
+                  <div class="blockquote"><blockquote class="blockquote"><p>
+                      <span class="serif_italic">:p = <a class="link" href="../../sf_beta/ibeta_function.html" title="Incomplete Beta Functions">ibetac</a>(v2
+                      / 2, v1 / 2, v2 / (v2 + v1 * x))</span>
+                    </p></blockquote></div>
                   <p>
                     The first is used for v1 * x &gt; v2, otherwise the second is
                     used.
@@ -259,17 +262,17 @@
                   <p>
                     Using the relations:
                   </p>
-                  <p>
-                    p = <a class="link" href="../../sf_beta/ibeta_function.html" title="Incomplete Beta Functions">ibetac</a>(v1
-                    / 2, v2 / 2, v1 * x / (v2 + v1 * x))
-                  </p>
+                  <div class="blockquote"><blockquote class="blockquote"><p>
+                      <span class="serif_italic">p = <a class="link" href="../../sf_beta/ibeta_function.html" title="Incomplete Beta Functions">ibetac</a>(v1
+                      / 2, v2 / 2, v1 * x / (v2 + v1 * x))</span>
+                    </p></blockquote></div>
                   <p>
                     and
                   </p>
-                  <p>
-                    p = <a class="link" href="../../sf_beta/ibeta_function.html" title="Incomplete Beta Functions">ibeta</a>(v2
-                    / 2, v1 / 2, v2 / (v2 + v1 * x))
-                  </p>
+                  <div class="blockquote"><blockquote class="blockquote"><p>
+                      <span class="serif_italic">p = <a class="link" href="../../sf_beta/ibeta_function.html" title="Incomplete Beta Functions">ibeta</a>(v2
+                      / 2, v1 / 2, v2 / (v2 + v1 * x))</span>
+                    </p></blockquote></div>
                   <p>
                     The first is used for v1 * x &lt; v2, otherwise the second is
                     used.
@@ -290,22 +293,22 @@
                   <p>
                     Using the relation:
                   </p>
-                  <p>
-                    x = v2 * a / (v1 * b)
-                  </p>
+                  <div class="blockquote"><blockquote class="blockquote"><p>
+                      <span class="serif_italic">x = v2 * a / (v1 * b)</span>
+                    </p></blockquote></div>
                   <p>
                     where:
                   </p>
-                  <p>
-                    a = <a class="link" href="../../sf_beta/ibeta_inv_function.html" title="The Incomplete Beta Function Inverses">ibeta_inv</a>(v1
-                    / 2, v2 / 2, p)
-                  </p>
+                  <div class="blockquote"><blockquote class="blockquote"><p>
+                      <span class="serif_italic">a = <a class="link" href="../../sf_beta/ibeta_inv_function.html" title="The Incomplete Beta Function Inverses">ibeta_inv</a>(v1
+                      / 2, v2 / 2, p)</span>
+                    </p></blockquote></div>
                   <p>
                     and
                   </p>
-                  <p>
-                    b = 1 - a
-                  </p>
+                  <div class="blockquote"><blockquote class="blockquote"><p>
+                      <span class="serif_italic">b = 1 - a</span>
+                    </p></blockquote></div>
                   <p>
                     Quantities <span class="emphasis"><em>a</em></span> and <span class="emphasis"><em>b</em></span>
                     are both computed by <a class="link" href="../../sf_beta/ibeta_inv_function.html" title="The Incomplete Beta Function Inverses">ibeta_inv</a>
@@ -326,22 +329,22 @@
                   <p>
                     Using the relation:
                   </p>
-                  <p>
-                    x = v2 * a / (v1 * b)
-                  </p>
+                  <div class="blockquote"><blockquote class="blockquote"><p>
+                      <span class="serif_italic">x = v2 * a / (v1 * b)</span>
+                    </p></blockquote></div>
                   <p>
                     where
                   </p>
-                  <p>
-                    a = <a class="link" href="../../sf_beta/ibeta_inv_function.html" title="The Incomplete Beta Function Inverses">ibetac_inv</a>(v1
-                    / 2, v2 / 2, p)
-                  </p>
+                  <div class="blockquote"><blockquote class="blockquote"><p>
+                      <span class="serif_italic">a = <a class="link" href="../../sf_beta/ibeta_inv_function.html" title="The Incomplete Beta Function Inverses">ibetac_inv</a>(v1
+                      / 2, v2 / 2, p)</span>
+                    </p></blockquote></div>
                   <p>
                     and
                   </p>
-                  <p>
-                    b = 1 - a
-                  </p>
+                  <div class="blockquote"><blockquote class="blockquote"><p>
+                      <span class="serif_italic">b = 1 - a</span>
+                    </p></blockquote></div>
                   <p>
                     Quantities <span class="emphasis"><em>a</em></span> and <span class="emphasis"><em>b</em></span>
                     are both computed by <a class="link" href="../../sf_beta/ibeta_inv_function.html" title="The Incomplete Beta Function Inverses">ibetac_inv</a>

@@ -31,7 +31,7 @@
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span>
-          <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
+          <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">inverse_gaussian_distribution</span>
 <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
@@ -106,15 +106,16 @@
           variate x, the inverse_gaussian distribution is defined by the probability
           density function (PDF):
         </p>
-<p>
-          &#8192;&#8192; f(x;&#956;, &#955;) = &#8730;(&#955;/2&#960;x<sup>3</sup>) e<sup>-&#955;(x-&#956;)&#178;/2&#956;&#178;x</sup>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="serif_italic">f(x;&#956;, &#955;) = &#8730;(&#955;/2&#960;x<sup>3</sup>) e<sup>-&#955;(x-&#956;)&#178;/2&#956;&#178;x</sup> </span>
+          </p></blockquote></div>
 <p>
           and Cumulative Density Function (CDF):
         </p>
-<p>
-          &#8192;&#8192;  F(x;&#956;, &#955;) = &#934;{&#8730;(&#955;<span class="emphasis"><em>x) (x</em></span>&#956;-1)} + e<sup>2&#956;/&#955;</sup> &#934;{-&#8730;(&#955;/&#956;) (1+x/&#956;)}
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="serif_italic">F(x;&#956;, &#955;) = &#934;{&#8730;(&#955;<span class="emphasis"><em>x) (x</em></span>&#956;-1)}
+            + e<sup>2&#956;/&#955;</sup> &#934;{-&#8730;(&#955;/&#956;) (1+x/&#956;)} </span>
+          </p></blockquote></div>
 <p>
           where &#934; is the standard normal distribution CDF.
         </p>
@@ -122,12 +123,14 @@
           The following graphs illustrate how the PDF and CDF of the inverse_gaussian
           distribution varies for a few values of parameters &#956; and &#955;:
         </p>
-<p>
-          <span class="inlinemediaobject"><img src="../../../../graphs/inverse_gaussian_pdf.svg" align="middle"></span>
-        </p>
-<p>
-          <span class="inlinemediaobject"><img src="../../../../graphs/inverse_gaussian_cdf.svg" align="middle"></span>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../graphs/inverse_gaussian_pdf.svg" align="middle"></span>
+
+          </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../graphs/inverse_gaussian_cdf.svg" align="middle"></span>
+
+          </p></blockquote></div>
 <p>
           Tweedie also provided 3 other parameterisations where (&#956; and &#955;) are replaced
           by their ratio &#966; = &#955;/&#956; and by 1/&#956;: these forms may be more suitable for Bayesian

@@ -86,8 +86,8 @@ and for `x > 1` a Chebyshev interpolated approximation of the form:
 
 is used.
 
+[endsect] [/section:expint_n Exponential Integral En]
 
-[endsect]
 
 [section:expint_i Exponential Integral Ei]
 
@@ -153,8 +153,6 @@ and GCC-7.1/Ubuntu for `long double` and `__float128`.
 
 [graph exponential_integral_ei____float128]
 
-
-
 [h4 Testing]
 
 The tests for these functions come in two parts:
@@ -200,12 +198,12 @@ computation.  By experiment we found that the polynomials are just as stable
 in polynomial as Chebyshev form, /provided/ they are computed
 over the interval \[-1,1\].
 
-Over the a series of intervals [a,b] and [b,INF] the rational approximation
+Over the a series of intervals ['[a, b]] and ['[b, INF]] the rational approximation
 takes the form:
 
 [equation expint_i_4]
 
-where /c/ is a constant, and R(t) is a minimax solution optimised for low
+where /c/ is a constant, and ['R(t)] is a minimax solution optimised for low
 absolute error compared to /c/.  Variable /t/ is `1/z` when the range in infinite
 and `2z/(b-a) - (2a/(b-a) + 1)` otherwise: this has the effect of scaling z to the 
 interval \[-1,1\].  As before rational approximations over arbitrary intervals
@@ -217,8 +215,9 @@ error rates are typically 2 to 3 epsilon which is comparible to the error
 rate that Cody and Thacher achieved using J-Fractions, but marginally more
 efficient given that fewer divisions are involved.
 
-[endsect]
-[endsect]
+[endsect] [/section:expint_n Exponential Integral En] 
+
+[endsect] [/section:expint Exponential Integrals]
 
 [/ 
   Copyright 2006 John Maddock and Paul A. Bristow.

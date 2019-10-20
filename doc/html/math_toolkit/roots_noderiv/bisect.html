@@ -43,7 +43,7 @@
       <span class="identifier">Tol</span> <span class="identifier">tol</span><span class="special">,</span>
       <span class="identifier">boost</span><span class="special">::</span><span class="identifier">uintmax_t</span><span class="special">&amp;</span> <span class="identifier">max_iter</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Tol</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Tol</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">T</span><span class="special">&gt;</span>
    <span class="identifier">bisect</span><span class="special">(</span> <span class="comment">// Specified policy.</span>
       <span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span>
@@ -51,7 +51,7 @@
       <span class="identifier">T</span> <span class="identifier">max</span><span class="special">,</span>
       <span class="identifier">Tol</span> <span class="identifier">tol</span><span class="special">,</span>
       <span class="identifier">boost</span><span class="special">::</span><span class="identifier">uintmax_t</span><span class="special">&amp;</span> <span class="identifier">max_iter</span><span class="special">,</span>
-      <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+      <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 </pre>
 <p>
         These functions locate the root using <a href="https://en.wikipedia.org/wiki/Bisection" target="_top">bisection</a>.
@@ -78,9 +78,9 @@
               It is a precondition that <span class="emphasis"><em>min &lt; max</em></span> and <span class="emphasis"><em>f(min)*f(max)
               &lt;= 0</em></span>, the function raises an <a class="link" href="../error_handling.html#math_toolkit.error_handling.evaluation_error">evaluation_error</a>
               if these preconditions are violated. The action taken on error is controlled
-              by the <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> template argument: the
+              by the <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> template argument: the
               default behavior is to throw a <span class="emphasis"><em>boost::math::evaluation_error</em></span>.
-              If the <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> is changed to not throw
+              If the <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> is changed to not throw
               then it returns <span class="emphasis"><em>std::pair&lt;T&gt;(min, min)</em></span>.
             </p></dd>
 <dt><span class="term">tol</span></dt>
@@ -99,27 +99,30 @@
 </dl>
 </div>
 <p>
-        The final <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
+        The final <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
         be used to control the behaviour of the function: how it handles errors,
-        what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">policy
+        what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">policy
         documentation for more details</a>.
       </p>
 <p>
         <span class="bold"><strong>Returns</strong></span>: a pair of values <span class="emphasis"><em>r</em></span>
         that bracket the root so that:
       </p>
-<pre class="programlisting"><span class="identifier">f</span><span class="special">(</span><span class="identifier">r</span><span class="special">.</span><span class="identifier">first</span><span class="special">)</span> <span class="special">*</span> <span class="identifier">f</span><span class="special">(</span><span class="identifier">r</span><span class="special">.</span><span class="identifier">second</span><span class="special">)</span> <span class="special">&lt;=</span> <span class="number">0</span>
-</pre>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          f(r.first) * f(r.second) &lt;= 0
+        </p></blockquote></div>
 <p>
         and either
       </p>
-<pre class="programlisting"><span class="identifier">tol</span><span class="special">(</span><span class="identifier">r</span><span class="special">.</span><span class="identifier">first</span><span class="special">,</span> <span class="identifier">r</span><span class="special">.</span><span class="identifier">second</span><span class="special">)</span> <span class="special">==</span> <span class="keyword">true</span>
-</pre>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          tol(r.first, r.second) == true
+        </p></blockquote></div>
 <p>
         or
       </p>
-<pre class="programlisting"><span class="identifier">max_iter</span> <span class="special">&gt;=</span> <span class="identifier">m</span>
-</pre>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          max_iter &gt;= m
+        </p></blockquote></div>
 <p>
         where <span class="emphasis"><em>m</em></span> is the initial value of <span class="emphasis"><em>max_iter</em></span>
         passed to the function.

@@ -5,8 +5,8 @@
 <link rel="stylesheet" href="../math.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
 <link rel="home" href="../index.html" title="Math Toolkit 2.10.0">
-<link rel="up" href="../quadrature.html" title="Chapter&#160;12.&#160;Quadrature and Differentiation">
-<link rel="prev" href="../quadrature.html" title="Chapter&#160;12.&#160;Quadrature and Differentiation">
+<link rel="up" href="../quadrature.html" title="Chapter&#160;13.&#160;Quadrature and Differentiation">
+<link rel="prev" href="../quadrature.html" title="Chapter&#160;13.&#160;Quadrature and Differentiation">
 <link rel="next" href="gauss.html" title="Gauss-Legendre quadrature">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -40,9 +40,9 @@
                  <span class="identifier">Real</span><span class="special">*</span> <span class="identifier">error_estimate</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">,</span>
                  <span class="identifier">Real</span><span class="special">*</span> <span class="identifier">L1</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">);</span>
 
-<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Real</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Real</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
 <span class="keyword">auto</span> <span class="identifier">trapezoidal</span><span class="special">(</span><span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">b</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">tol</span><span class="special">,</span> <span class="identifier">size_t</span> <span class="identifier">max_refinements</span><span class="special">,</span>
-                 <span class="identifier">Real</span><span class="special">*</span> <span class="identifier">error_estimate</span><span class="special">,</span> <span class="identifier">Real</span><span class="special">*</span> <span class="identifier">L1</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;</span> <span class="identifier">pol</span><span class="special">);</span>
+                 <span class="identifier">Real</span><span class="special">*</span> <span class="identifier">error_estimate</span><span class="special">,</span> <span class="identifier">Real</span><span class="special">*</span> <span class="identifier">L1</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;</span> <span class="identifier">pol</span><span class="special">);</span>
 
 <span class="special">}}}</span> <span class="comment">// namespaces</span>
 </pre>
@@ -164,9 +164,9 @@
       in a rigorous manner by defining the <span class="bold"><strong>condition number
       of summation</strong></span>. The condition number of summation is defined by
     </p>
-<p>
-      &#954;(S<sub>n</sub>) := &#931;<sub>i</sub><sup>n</sup> |x<sub>i</sub>|/|&#931;<sub>i</sub><sup>n</sup> x<sub>i</sub>|
-    </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+        <span class="serif_italic"><span class="emphasis"><em>&#954;(S<sub>n</sub>) := &#931;<sub>i</sub><sup>n</sup> |x<sub>i</sub>|/|&#931;<sub>i</sub><sup>n</sup> x<sub>i</sub>|</em></span></span>
+      </p></blockquote></div>
 <p>
       If this number of ~10<sup>k</sup>, then <span class="emphasis"><em>k</em></span> additional digits are expected
       to be lost in addition to digits lost due to floating point rounding error.
@@ -180,9 +180,10 @@
       As an example, we consider evaluation of Bessel functions by trapezoidal quadrature.
       The Bessel function of the first kind is defined via
     </p>
-<p>
-      J<sub>n</sub>(x) = 1/2&#928; &#8747;<sub>-&#928;</sub><sup>&#928;</sup> cos(n t - x sin(t)) dt
-    </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+        <span class="serif_italic"><span class="emphasis"><em>J<sub>n</sub>(x) = 1/2&#928; &#8747;<sub>-&#928;</sub><sup>&#928;</sup> cos(n
+        t - x sin(t)) dt</em></span></span>
+      </p></blockquote></div>
 <p>
       The integrand is periodic, so the Euler-Maclaurin summation formula guarantees
       exponential convergence via the trapezoidal quadrature. Without careful consideration,
@@ -194,9 +195,9 @@
       that zero correct digits are obtained.
     </p>
 <p>
-      The final <a class="link" href="../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
+      The final <a class="link" href="../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
       be used to control the behaviour of the function: how it handles errors, what
-      level of precision to use etc. Refer to the <a class="link" href="../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">policy documentation
+      level of precision to use etc. Refer to the <a class="link" href="../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">policy documentation
       for more details</a>.
     </p>
 <p>

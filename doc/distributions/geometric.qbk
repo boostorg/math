@@ -61,18 +61,17 @@ before the first success.
 (unlike another definition where the set of trials starts at one, sometimes named /shifted/).]
 The geometric distribution assumes that success_fraction /p/ is fixed for all /k/ trials.
 
-The probability that there are /k/ failures before the first success is
+The probability that there are /k/ failures before the first success
 
-__spaces Pr(Y=/k/) = (1-/p/)[super /k/]/p/
+[expression Pr(Y=/k/) = (1-/p/)[super /k/] /p/]
 
-For example, when throwing a 6-face dice the success probability /p/ = 1/6 = 0.1666[recur][space].
+For example, when throwing a 6-face dice the success probability /p/ = 1/6 = 0.1666[recur].
 Throwing repeatedly until a /three/ appears,
-the probability distribution of the number of times /not-a-three/ is thrown
-is geometric. 
+the probability distribution of the number of times /not-a-three/ is thrown is geometric. 
 
 Geometric distribution has the Probability Density Function PDF:
 
-__spaces (1-/p/)[super /k/]/p/
+[expression (1-/p/)[super /k/] /p/]
 
 The following graph illustrates how the PDF and CDF vary for three examples
 of the success fraction /p/, 
@@ -339,7 +338,7 @@ the expected number of failures using the quantile.
 [[`find_maximum_number_of_trials`][See __negative_binomial_distrib]]
 ]
 
-[endsect][/section:geometric_dist geometric]
+[endsect] [/section:geometric_dist geometric]
 
 [/ geometric.qbk
   Copyright 2010 John Maddock and Paul A. Bristow.

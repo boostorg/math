@@ -50,7 +50,7 @@ The procedure begins by printing out a summary of our input data:
 The test statistic for an F-test is simply the ratio of the square of
 the two standard deviations:
 
-F = s[sub 1][super 2] / s[sub 2][super 2]
+[expression F = s[sub 1][super 2] / s[sub 2][super 2]]
 
 where s[sub 1] is the standard deviation of the first sample and s[sub 2]
 is the standard deviation of the second sample.  Or in code:
@@ -83,9 +83,9 @@ critical value of the F distribution with degrees of freedom N1-1 and N2-1.
 
 The upper and lower critical values can be computed using the quantile function:
 
-F[sub (1-alpha; N1-1, N2-1)] = `quantile(fisher_f(N1-1, N2-1), alpha)`
+[expression F[sub (1-alpha; N1-1, N2-1)] = `quantile(fisher_f(N1-1, N2-1), alpha)`]
 
-F[sub (alpha; N1-1, N2-1)] = `quantile(complement(fisher_f(N1-1, N2-1), alpha))`
+[expression F[sub (alpha; N1-1, N2-1)] = `quantile(complement(fisher_f(N1-1, N2-1), alpha))`]
 
 In our example program we need both upper and lower critical values for alpha
 and for alpha/2:

@@ -30,12 +30,12 @@
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">triangular</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></pre>
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
  <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span>
-           <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
+           <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
  <span class="keyword">class</span> <span class="identifier">triangular_distribution</span><span class="special">;</span>
 
  <span class="keyword">typedef</span> <span class="identifier">triangular_distribution</span><span class="special">&lt;&gt;</span> <span class="identifier">triangular</span><span class="special">;</span>
 
- <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+ <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
  <span class="keyword">class</span> <span class="identifier">triangular_distribution</span>
  <span class="special">{</span>
  <span class="keyword">public</span><span class="special">:</span>
@@ -73,17 +73,14 @@
           distribution</a> is a distribution with the <a href="http://en.wikipedia.org/wiki/Probability_density_function" target="_top">probability
           density function</a>:
         </p>
-<p>
-          &#8192;&#8192; f(x) =
-        </p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem">
-              2(x-a)/(b-a) (c-a) for a &lt;= x &lt;= c
-            </li>
-<li class="listitem">
-              2(b-x)/(b-a)(b-c) for c &lt; x &lt;= b
-            </li>
-</ul></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="serif_italic">f(x) = 2(x-a)/(b-a) (c-a) &#8198;  for a &lt;= x &lt;=
+            c</span>
+          </p></blockquote></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="serif_italic">f(x) = 2(b-x)/(b-a) (b-c) &#8198; for c &lt; x &lt;=
+            b</span>
+          </p></blockquote></div>
 <p>
           Parameter <span class="emphasis"><em>a</em></span> (lower) can be any finite value. Parameter
           <span class="emphasis"><em>b</em></span> (upper) can be any finite value &gt; a (lower).
@@ -113,15 +110,17 @@
           The following graph illustrates how the <a href="http://en.wikipedia.org/wiki/Probability_density_function" target="_top">probability
           density function PDF</a> varies with the various parameters:
         </p>
-<p>
-          <span class="inlinemediaobject"><img src="../../../../graphs/triangular_pdf.svg" align="middle"></span>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../graphs/triangular_pdf.svg" align="middle"></span>
+
+          </p></blockquote></div>
 <p>
           and cumulative distribution function
         </p>
-<p>
-          <span class="inlinemediaobject"><img src="../../../../graphs/triangular_cdf.svg" align="middle"></span>
-        </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+            <span class="inlinemediaobject"><img src="../../../../graphs/triangular_cdf.svg" align="middle"></span>
+
+          </p></blockquote></div>
 <h5>
 <a name="math_toolkit.dist_ref.dists.triangular_dist.h0"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.triangular_dist.member_functions"></a></span><a class="link" href="triangular_dist.html#math_toolkit.dist_ref.dists.triangular_dist.member_functions">Member

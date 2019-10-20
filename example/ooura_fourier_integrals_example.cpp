@@ -22,40 +22,40 @@
 
 int main()
 {
-	try
-	{
-	std::cout.precision(std::numeric_limits<double>::max_digits10); // Show all potentially significant digits.
+  try
+  {
+  std::cout.precision(std::numeric_limits<double>::max_digits10); // Show all potentially significant digits.
 
-	using boost::math::quadrature::ooura_fourier_sin;
+  using boost::math::quadrature::ooura_fourier_sin;
   using boost::math::constants::half_pi;
 
 //[ooura_fourier_integrals_example_1
-	ooura_fourier_sin<double>integrator = ooura_fourier_sin<double>();
-	// Use the default tolerance root_epsilon and eight levels for type double.
+  ooura_fourier_sin<double>integrator = ooura_fourier_sin<double>();
+  // Use the default tolerance root_epsilon and eight levels for type double.
 
-	auto f = [](double x)
-	{ // Simple reciprocal function for sinc.
-		return 1 / x;
-	};
+  auto f = [](double x)
+  { // Simple reciprocal function for sinc.
+    return 1 / x;
+  };
 
-	double omega = 1;
-	std::pair<double, double> result = integrator.integrate(f, omega);
-	std::cout << "Integral = " << result.first << ", relative error estimate " << result.second << std::endl;
+  double omega = 1;
+  std::pair<double, double> result = integrator.integrate(f, omega);
+  std::cout << "Integral = " << result.first << ", relative error estimate " << result.second << std::endl;
 
 //] [/ooura_fourier_integrals_example_1]
 
 //[ooura_fourier_integrals_example_2
 
-	constexpr double expected = half_pi<double>();
-	std::cout << "pi/2 =     " << expected << ", difference " << result.first - expected << std::endl;
+  constexpr double expected = half_pi<double>();
+  std::cout << "pi/2 =     " << expected << ", difference " << result.first - expected << std::endl;
 //] [/ooura_fourier_integrals_example_2]
-	}
-	catch (std::exception const & ex)
-	{
-		// Lacking try&catch blocks, the program will abort after any throw, whereas the
-		// message below from the thrown exception will give some helpful clues as to the cause of the problem.
-		std::cout << "\n""Message from thrown exception was:\n   " << ex.what() << std::endl;
-	}
+  }
+  catch (std::exception const & ex)
+  {
+    // Lacking try&catch blocks, the program will abort after any throw, whereas the
+    // message below from the thrown exception will give some helpful clues as to the cause of the problem.
+    std::cout << "\n""Message from thrown exception was:\n   " << ex.what() << std::endl;
+  }
 } // int main()
 
 /*
