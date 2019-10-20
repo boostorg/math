@@ -17,6 +17,14 @@ ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
     Visual Studio is recommended for editing this file 
     because it checks syntax, does layout and provides help on options.
 
+IMPORTANT: there are two versions of this file - 
+
+one in libs/math/doc and one in libs/math/doc/html
+
+ONLY EVER EDIT THE FIRST OF THESE  !!!!
+
+=============================================================================*/
+
 /*=============================================================================
 Program listings
 =============================================================================*/
