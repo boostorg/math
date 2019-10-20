@@ -959,7 +959,7 @@ test-suite misc :
    [ run ljung_box_test.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
    [ run test_t_test.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
    [ run bivariate_statistics_test.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
-   [ run least_squares_test.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
+   [ run linear_regression_test.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
    [ run test_runs_test.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
    [ run lanczos_smoothing_test.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
    [ run condition_number_test.cpp ../../test/build//boost_unit_test_framework : : :  [ requires cxx17_if_constexpr cxx17_std_apply ] ]
