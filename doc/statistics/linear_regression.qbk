@@ -1,0 +1,46 @@
+[/
+Copyright (c) 2019 Nick Thompson
+Use, modification and distribution are subject to the
+Boost Software License, Version 1.0. (See accompanying file
+LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+]
+
+[section:linear_regression Linear Regression]
+
+[heading Synopsis]
+
+```
+#include <boost/math/statistics/linear_regression.hpp>
+
+namespace boost::math::statistics {
+
+template<typename RandomAccessContainer>
+std::pair<Real, Real> ordinary_least_squares(RandomAccessContainer const & x,
+                                             RandomAccessContainer const & y);
+
+
+}}}
+```
+
+[heading Background]
+
+
+```
+#include <vector>
+#include <random>
+#include <boost/math/statistics/linear_regression.hpp>
+
+std::vector<double> x{1, 3, 7, 12};
+std::vector<double> y{8,13,42, 48};
+auto [c0, c1] = boost::math::statistics::ordinary_least_squares(x,y);
+// Model: y(x) = c0 + c1*x;
+```
+
+
+[heading Performance]
+
+
+
+
+[endsect]
+[/section:linear_regression]
