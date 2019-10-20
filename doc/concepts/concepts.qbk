@@ -193,11 +193,6 @@ Alternatively use with `mpreal` would look like:
       std::cout << std::setprecision(50) << v << std::endl;
    }
 
-For those functions that are based upon the __lanczos, the bindings
-defines a series of approximations with up to 61 terms and accuracy
-up to approximately 3e-113.  This therefore sets the upper limit for accuracy
-to the majority of functions defined this library when used with either `mpfr_class` or `mpreal`.
-
 There is a concept checking test program for mpfr support
 [@../../../../libs/math/test/mpfr_concept_check.cpp here] and
 [@../../../../libs/math/test/mpreal_concept_check.cpp here].
@@ -459,7 +454,7 @@ and then specialise `lanczos_traits` for type T.  Otherwise you may have to hack
 [@../../tools/lanczos_generator.cpp
 libs/math/tools/lanczos_generator.cpp] to find a suitable
 approximation for your RealType.  The code will still compile if you don't do
-this, but both accuracy and efficiency will be greatly compromised in any
+this, but both accuracy and efficiency will be somewhat compromised in any
 function that makes use of the gamma\/beta\/erf family of functions.
 
 [endsect] [/section:real_concepts Conceptual Requirements for Real Number Types]
