@@ -102,6 +102,59 @@ void test_permutation_invariance()
     }
 }
 
+template<typename Real>
+void test_scaling_relations()
+{
+    std::vector<Real> x(256);
+    std::vector<Real> y(256);
+    std::mt19937_64 gen{123456};
+    std::normal_distribution<Real> dis(0, 0.1);
+
+    Real expected_c0 = 3.2;
+    Real expected_c1 = -13.5;
+
+    x[0] = 0;
+    y[0] = expected_c0 + dis(gen);
+    for(size_t i = 1; i < x.size(); ++i) {
+        Real t = dis(gen);
+        x[i] = x[i-1] + t*t;
+        y[i] = expected_c0 + expected_c1*x[i] + dis(gen);
+    }
+
+    auto [c0, c1, Rsquared] = simple_ordinary_least_squares_with_R_squared(x, y);
+    CHECK_MOLLIFIED_CLOSE(expected_c0, c0, 0.002);
+    CHECK_MOLLIFIED_CLOSE(expected_c1, c1, 0.002);
+
+    // If y -> lambda y, then c0 -> lambda c0 and c1 -> lambda c1.
+    Real lambda = 6;
+
+    for (auto& s : y) {
+        s *= lambda;
+    }
+
+    auto [c0_lambda, c1_lambda, Rsquared_lambda] = simple_ordinary_least_squares_with_R_squared(x, y);
+
+    CHECK_ULP_CLOSE(lambda*c0, c0_lambda, 20);
+    CHECK_ULP_CLOSE(lambda*c1, c1_lambda, 20);
+    CHECK_ULP_CLOSE(Rsquared, Rsquared_lambda, 3);
+
+    // If x -> lambda x, then c0 -> c0 and c1 -> c1/lambda
+    for (auto& s : x) {
+        s *= lambda;
+    }
+    // Put y back into it's original state:
+    for (auto& s : y) {
+        s /= lambda;
+    }
+    auto [c0_, c1_, Rsquared_] = simple_ordinary_least_squares_with_R_squared(x, y);
+
+    CHECK_ULP_CLOSE(c0, c0_, 50);
+    CHECK_ULP_CLOSE(c1, c1_*lambda, 50);
+    CHECK_ULP_CLOSE(Rsquared, Rsquared_, 50);
+
+}
+
+
 int main()
 {
     test_line<float>();
@@ -115,5 +168,9 @@ int main()
     test_permutation_invariance<float>();
     test_permutation_invariance<double>();
     test_permutation_invariance<long double>();
+
+    test_scaling_relations<float>();
+    test_scaling_relations<double>();
+    test_scaling_relations<long double>();
     return boost::math::test::report_errors();
 }
