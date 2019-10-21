@@ -3,9 +3,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Bivariate Statistics</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
 <link rel="home" href="../index.html" title="Math Toolkit 2.10.0">
-<link rel="up" href="../vector_functionals.html" title="Chapter&#160;6.&#160;Vector Functionals - Statistics &amp; Norms">
+<link rel="up" href="../statistics.html" title="Chapter&#160;6.&#160;Statistics">
 <link rel="prev" href="univariate_statistics.html" title="Univariate Statistics">
 <link rel="next" href="signal_statistics.html" title="Signal Statistics">
 </head>
@@ -20,7 +20,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="univariate_statistics.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../vector_functionals.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="signal_statistics.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="univariate_statistics.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../statistics.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="signal_statistics.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -30,9 +30,9 @@
 <a name="math_toolkit.bivariate_statistics.h0"></a>
       <span class="phrase"><a name="math_toolkit.bivariate_statistics.synopsis"></a></span><a class="link" href="bivariate_statistics.html#math_toolkit.bivariate_statistics.synopsis">Synopsis</a>
     </h4>
-<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">tools</span><span class="special">/</span><span class="identifier">bivariate_statistics</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">statistics</span><span class="special">/</span><span class="identifier">bivariate_statistics</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 
-<span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">tools</span> <span class="special">{</span>
+<span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">statistics</span> <span class="special">{</span>
 
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Container</span><span class="special">&gt;</span>
     <span class="keyword">auto</span> <span class="identifier">covariance</span><span class="special">(</span><span class="identifier">Container</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">u</span><span class="special">,</span> <span class="identifier">Container</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">v</span><span class="special">);</span>
@@ -61,7 +61,7 @@
     </p>
 <pre class="programlisting"><span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">u</span><span class="special">{</span><span class="number">1</span><span class="special">,</span><span class="number">2</span><span class="special">,</span><span class="number">3</span><span class="special">,</span><span class="number">4</span><span class="special">,</span><span class="number">5</span><span class="special">};</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">v</span><span class="special">{</span><span class="number">1</span><span class="special">,</span><span class="number">2</span><span class="special">,</span><span class="number">3</span><span class="special">,</span><span class="number">4</span><span class="special">,</span><span class="number">5</span><span class="special">};</span>
-<span class="keyword">double</span> <span class="identifier">cov_uv</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tools</span><span class="special">::</span><span class="identifier">covariance</span><span class="special">(</span><span class="identifier">u</span><span class="special">,</span> <span class="identifier">v</span><span class="special">);</span>
+<span class="keyword">double</span> <span class="identifier">cov_uv</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">statistics</span><span class="special">::</span><span class="identifier">covariance</span><span class="special">(</span><span class="identifier">u</span><span class="special">,</span> <span class="identifier">v</span><span class="special">);</span>
 </pre>
 <p>
       The implementation follows <a href="https://doi.org/10.1109/CLUSTR.2009.5289161" target="_top">Bennet
@@ -76,7 +76,7 @@
     </p>
 <pre class="programlisting"><span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">u</span><span class="special">{</span><span class="number">1</span><span class="special">,</span><span class="number">2</span><span class="special">,</span><span class="number">3</span><span class="special">,</span><span class="number">4</span><span class="special">,</span><span class="number">5</span><span class="special">};</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">v</span><span class="special">{</span><span class="number">1</span><span class="special">,</span><span class="number">2</span><span class="special">,</span><span class="number">3</span><span class="special">,</span><span class="number">4</span><span class="special">,</span><span class="number">5</span><span class="special">};</span>
-<span class="keyword">auto</span> <span class="special">[</span><span class="identifier">mu_u</span><span class="special">,</span> <span class="identifier">mu_v</span><span class="special">,</span> <span class="identifier">cov_uv</span><span class="special">]</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tools</span><span class="special">::</span><span class="identifier">means_and_covariance</span><span class="special">(</span><span class="identifier">u</span><span class="special">,</span> <span class="identifier">v</span><span class="special">);</span>
+<span class="keyword">auto</span> <span class="special">[</span><span class="identifier">mu_u</span><span class="special">,</span> <span class="identifier">mu_v</span><span class="special">,</span> <span class="identifier">cov_uv</span><span class="special">]</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">statistics</span><span class="special">::</span><span class="identifier">means_and_covariance</span><span class="special">(</span><span class="identifier">u</span><span class="special">,</span> <span class="identifier">v</span><span class="special">);</span>
 </pre>
 <h4>
 <a name="math_toolkit.bivariate_statistics.h3"></a>
@@ -90,7 +90,7 @@
     </p>
 <pre class="programlisting"><span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">u</span><span class="special">{</span><span class="number">1</span><span class="special">,</span><span class="number">2</span><span class="special">,</span><span class="number">3</span><span class="special">,</span><span class="number">4</span><span class="special">,</span><span class="number">5</span><span class="special">};</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">v</span><span class="special">{</span><span class="number">1</span><span class="special">,</span><span class="number">2</span><span class="special">,</span><span class="number">3</span><span class="special">,</span><span class="number">4</span><span class="special">,</span><span class="number">5</span><span class="special">};</span>
-<span class="keyword">double</span> <span class="identifier">rho_uv</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tools</span><span class="special">::</span><span class="identifier">correlation_coefficient</span><span class="special">(</span><span class="identifier">u</span><span class="special">,</span> <span class="identifier">v</span><span class="special">);</span>
+<span class="keyword">double</span> <span class="identifier">rho_uv</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">statistics</span><span class="special">::</span><span class="identifier">correlation_coefficient</span><span class="special">(</span><span class="identifier">u</span><span class="special">,</span> <span class="identifier">v</span><span class="special">);</span>
 <span class="comment">// rho_uv = 1.</span>
 </pre>
 <p>
@@ -127,7 +127,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="univariate_statistics.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../vector_functionals.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="signal_statistics.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="univariate_statistics.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../statistics.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="signal_statistics.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

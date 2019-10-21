@@ -90,6 +90,8 @@ boostbook standalone
 install pdfinstall : standalone/<format>pdf : <location>. <install-type>PDF <name>math.pdf ;
 explicit pdfinstall ; # b2 pdf pdfinstall to do this pdf file copy.
 
+install css_install : math.css : <location>$(here)/html ; 
+
 ###############################################################################
 alias boostdoc ;
 explicit boostdoc ;

@@ -176,11 +176,7 @@ to:
 7) [equation igamma11]
 
 Refer to the documentation for __powm1 and __tgamma1pm1 for details
-of their implementation.  Note however that the precision of __tgamma1pm1
-is capped to either around 35 digits, or to that of the __lanczos associated with
-type T - if there is one - whichever of the two is the greater.  
-That therefore imposes a similar limit on the precision of this 
-function in this region.
+of their implementation.
 
 For /x < 1.1/ the crossover point where the result is ~0.5 no longer
 occurs for /x ~ y/.  Using /x * 0.75 < a/ as the crossover criterion

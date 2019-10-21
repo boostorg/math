@@ -8,8 +8,11 @@
 
 #include <algorithm>
 #include <iterator>
+#include <tuple>
 #include <boost/assert.hpp>
+#include <boost/config/header_deprecated.hpp>
 
+BOOST_HEADER_DEPRECATED("<boost/math/statistics/univariate_statistics.hpp>");
 
 namespace boost::math::tools {
 

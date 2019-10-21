@@ -3,9 +3,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Root Finding With Derivatives: Newton-Raphson, Halley &amp; Schr&#246;der</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
 <link rel="home" href="../index.html" title="Math Toolkit 2.10.0">
-<link rel="up" href="../root_finding.html" title="Chapter&#160;9.&#160;Root Finding &amp; Minimization Algorithms">
+<link rel="up" href="../root_finding.html" title="Chapter&#160;10.&#160;Root Finding &amp; Minimization Algorithms">
 <link rel="prev" href="roots_noderiv/implementation.html" title="Implementation">
 <link rel="next" href="root_finding_examples.html" title="Examples of Root-Finding (with and without derivatives)">
 </head>
@@ -162,6 +162,11 @@
           in this case. However, it is helpful if functor F is defined to return
           an arbitrarily small value <span class="emphasis"><em>of the correct sign</em></span> rather
           than zero.
+        </li>
+<li class="listitem">
+          The functions will raise an <a class="link" href="error_handling.html#math_toolkit.error_handling.evaluation_error">evaluation_error</a>
+          if arguments <code class="computeroutput"><span class="identifier">min</span></code> and <code class="computeroutput"><span class="identifier">max</span></code> are the wrong way around or if they
+          converge to a local minima.
         </li>
 <li class="listitem">
           If the derivative at the current best guess for the result is infinite

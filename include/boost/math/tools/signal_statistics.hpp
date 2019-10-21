@@ -11,8 +11,10 @@
 #include <boost/assert.hpp>
 #include <boost/math/tools/complex.hpp>
 #include <boost/math/tools/roots.hpp>
-#include <boost/math/tools/univariate_statistics.hpp>
+#include <boost/math/statistics/univariate_statistics.hpp>
+#include <boost/config/header_deprecated.hpp>
 
+BOOST_HEADER_DEPRECATED("<boost/math/statistics/signal_statistics.hpp>");
 
 namespace boost::math::tools {
 

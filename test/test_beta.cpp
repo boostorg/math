@@ -76,7 +76,7 @@ void expected_results()
       ".*",                          // platform
       "real_concept",                // test type(s)
       "Beta Function: Small.*",      // test data group
-      "beta", 15, 15);   // test function
+      "beta", 25, 15);   // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
@@ -90,7 +90,7 @@ void expected_results()
       ".*",                          // platform
       "real_concept",                // test type(s)
       "Beta Function: Divergent.*",  // test data group
-      "beta", 25, 8);   // test function
+      "beta", 30, 15);   // test function
 
    //
    // Finish off by printing out the compiler/stdlib/platform names,

@@ -16,8 +16,14 @@ ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
     Visual Studio is recommended for editing this file 
     because it checks syntax, does layout and provides help on options.
-    
-    boost-no-inspect
+
+IMPORTANT: there are two versions of this file - 
+
+one in libs/math/doc and one in libs/math/doc/html
+
+ONLY EVER EDIT THE FIRST OF THESE  !!!!
+
+=============================================================================*/
 
 /*=============================================================================
 Program listings
@@ -141,6 +147,7 @@ span.gray { color: #808080; } /* light gray */
     and a little bigger (* 125%) because the serif font appears smaller than the default sans serif fonts.
     Used, for example: [role serif_italic This is in serif font and italic].
     Used in turn by template for inline expressions to match equations as SVG or PNG images.
+
 */
 span.serif_italic {
     font-family: serif;
