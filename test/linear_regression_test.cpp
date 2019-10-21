@@ -65,6 +65,42 @@ void test_constant()
 
 }
 
+template<typename Real>
+void test_permutation_invariance()
+{
+    std::vector<Real> x(256);
+    std::vector<Real> y(256);
+    std::mt19937_64 gen{123456};
+    std::normal_distribution<Real> dis(0, 0.1);
+
+    Real expected_c0 = -7.2;
+    Real expected_c1 = -13.5;
+
+    x[0] = 0;
+    y[0] = expected_c0 + dis(gen);
+    for(size_t i = 1; i < x.size(); ++i) {
+        Real t = dis(gen);
+        x[i] = x[i-1] + t*t;
+        y[i] = expected_c0 + expected_c1*x[i] + dis(gen);
+    }
+
+    auto [c0, c1, Rsquared] = simple_ordinary_least_squares_with_R_squared(x, y);
+    CHECK_MOLLIFIED_CLOSE(expected_c0, c0, 0.002);
+    CHECK_MOLLIFIED_CLOSE(expected_c1, c1, 0.002);
+
+    int j = 0;
+    std::mt19937_64 gen1{12345};
+    std::mt19937_64 gen2{12345};
+    while(j++ < 10) {
+        std::shuffle(x.begin(), x.end(), gen1);
+        std::shuffle(y.begin(), y.end(), gen2);
+        auto [c0_, c1_, Rsquared_] = simple_ordinary_least_squares_with_R_squared(x, y);
+
+        CHECK_ULP_CLOSE(c0, c0_, 65);
+        CHECK_ULP_CLOSE(c1, c1_, 65);
+        CHECK_ULP_CLOSE(Rsquared, Rsquared_, 65);
+    }
+}
 
 int main()
 {
@@ -75,5 +111,9 @@ int main()
     test_constant<float>();
     test_constant<double>();
     test_constant<long double>();
+
+    test_permutation_invariance<float>();
+    test_permutation_invariance<double>();
+    test_permutation_invariance<long double>();
     return boost::math::test::report_errors();
 }
