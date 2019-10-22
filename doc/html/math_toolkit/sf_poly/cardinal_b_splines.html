@@ -3,11 +3,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Cardinal B-splines</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
 <link rel="home" href="../../index.html" title="Math Toolkit 2.10.0">
 <link rel="up" href="../sf_poly.html" title="Polynomials">
 <link rel="prev" href="sph_harm.html" title="Spherical Harmonics">
-<link rel="next" href="../bessel.html" title="Bessel Functions">
+<link rel="next" href="gegenbauer.html" title="Gegenbauer Polynomials">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -20,7 +20,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="sph_harm.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../sf_poly.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="../bessel.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="sph_harm.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../sf_poly.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="gegenbauer.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h3 class="title">
@@ -35,7 +35,13 @@
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
 <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Real</span><span class="special">&gt;</span>
-<span class="identifier">Real</span> <span class="identifier">cardinal_b_spline</span><span class="special">(</span><span class="identifier">Real</span> <span class="identifier">x</span><span class="special">);</span>
+<span class="keyword">auto</span> <span class="identifier">cardinal_b_spline</span><span class="special">(</span><span class="identifier">Real</span> <span class="identifier">x</span><span class="special">);</span>
+
+<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Real</span><span class="special">&gt;</span>
+<span class="keyword">auto</span> <span class="identifier">cardinal_b_spline_prime</span><span class="special">(</span><span class="identifier">Real</span> <span class="identifier">x</span><span class="special">);</span>
+
+<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Real</span><span class="special">&gt;</span>
+<span class="keyword">auto</span> <span class="identifier">cardinal_b_spline_double_prime</span><span class="special">(</span><span class="identifier">Real</span> <span class="identifier">x</span><span class="special">);</span>
 
 <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Real</span><span class="special">&gt;</span>
 <span class="identifier">Real</span> <span class="identifier">forward_cardinal_b_spline</span><span class="special">(</span><span class="identifier">Real</span> <span class="identifier">x</span><span class="special">);</span>
@@ -61,14 +67,21 @@
         A basic usage is as follows:
       </p>
 <pre class="programlisting"><span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">cardinal_b_spline</span><span class="special">;</span>
+<span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">cardinal_b_spline_prime</span><span class="special">;</span>
+<span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">cardinal_b_spline_double_prime</span><span class="special">;</span>
 <span class="keyword">double</span> <span class="identifier">x</span> <span class="special">=</span> <span class="number">0.5</span><span class="special">;</span>
 <span class="comment">// B&#8320;(x), the box function:</span>
 <span class="keyword">double</span> <span class="identifier">y</span> <span class="special">=</span> <span class="identifier">cardinal_b_spline</span><span class="special">&lt;</span><span class="number">0</span><span class="special">&gt;(</span><span class="identifier">x</span><span class="special">);</span>
 <span class="comment">// B&#8321;(x), the hat function:</span>
 <span class="identifier">y</span> <span class="special">=</span> <span class="identifier">cardinal_b_spline</span><span class="special">&lt;</span><span class="number">1</span><span class="special">&gt;(</span><span class="identifier">x</span><span class="special">);</span>
+<span class="comment">// First derivative of B&#8323;:</span>
+<span class="identifier">yp</span> <span class="special">=</span> <span class="identifier">cardinal_b_spline_prime</span><span class="special">&lt;</span><span class="number">3</span><span class="special">&gt;(</span><span class="identifier">x</span><span class="special">);</span>
+<span class="comment">// Second derivative of B&#8323;:</span>
+<span class="identifier">ypp</span> <span class="special">=</span> <span class="identifier">cardinal_b_spline_double_prime</span><span class="special">&lt;</span><span class="number">3</span><span class="special">&gt;(</span><span class="identifier">x</span><span class="special">);</span>
 </pre>
 <p>
-        <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../graphs/central_b_splines.svg"></object></span>
+        <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../graphs/central_b_splines.svg"></object></span> <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../graphs/central_b_spline_derivatives.svg"></object></span>
+        <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../graphs/central_b_spline_second_derivatives.svg"></object></span>
       </p>
 <h4>
 <a name="math_toolkit.sf_poly.cardinal_b_splines.h1"></a>
@@ -206,7 +219,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="sph_harm.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../sf_poly.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="../bessel.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="sph_harm.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../sf_poly.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="gegenbauer.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

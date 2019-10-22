@@ -3,11 +3,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Signal Statistics</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
 <link rel="home" href="../index.html" title="Math Toolkit 2.10.0">
-<link rel="up" href="../vector_functionals.html" title="Chapter&#160;6.&#160;Vector Functionals - Statistics &amp; Norms">
+<link rel="up" href="../statistics.html" title="Chapter&#160;6.&#160;Statistics">
 <link rel="prev" href="bivariate_statistics.html" title="Bivariate Statistics">
-<link rel="next" href="norms.html" title="Norms">
+<link rel="next" href="anderson_darling.html" title="The Anderson-Darling Test">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -20,7 +20,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="bivariate_statistics.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../vector_functionals.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="norms.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="bivariate_statistics.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../statistics.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="anderson_darling.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -30,9 +30,9 @@
 <a name="math_toolkit.signal_statistics.h0"></a>
       <span class="phrase"><a name="math_toolkit.signal_statistics.synopsis"></a></span><a class="link" href="signal_statistics.html#math_toolkit.signal_statistics.synopsis">Synopsis</a>
     </h4>
-<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">tools</span><span class="special">/</span><span class="identifier">signal_statistics</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">statistics</span><span class="special">/</span><span class="identifier">signal_statistics</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 
-<span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tools</span> <span class="special">{</span>
+<span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">statistics</span> <span class="special">{</span>
 
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Container</span><span class="special">&gt;</span>
     <span class="keyword">auto</span> <span class="identifier">absolute_gini_coefficient</span><span class="special">(</span><span class="identifier">Container</span> <span class="special">&amp;</span> <span class="identifier">c</span><span class="special">);</span>
@@ -77,7 +77,7 @@
       <span class="phrase"><a name="math_toolkit.signal_statistics.description"></a></span><a class="link" href="signal_statistics.html#math_toolkit.signal_statistics.description">Description</a>
     </h4>
 <p>
-      The file <code class="computeroutput"><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">tools</span><span class="special">/</span><span class="identifier">signal_statistics</span><span class="special">.</span><span class="identifier">hpp</span></code> is a
+      The file <code class="computeroutput"><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">statistics</span><span class="special">/</span><span class="identifier">signal_statistics</span><span class="special">.</span><span class="identifier">hpp</span></code> is a
       set of facilities for computing quantities commonly used in signal analysis.
     </p>
 <p>
@@ -102,8 +102,8 @@
       and Rickard</a> for details. However, for measuring sparsity, the phase
       of the numbers is irrelevant, so we provide the <code class="computeroutput"><span class="identifier">absolute_gini_coefficient</span></code>:
     </p>
-<pre class="programlisting"><span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tools</span><span class="special">::</span><span class="identifier">sample_absolute_gini_coefficient</span><span class="special">;</span>
-<span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tools</span><span class="special">::</span><span class="identifier">absolute_gini_coefficient</span><span class="special">;</span>
+<pre class="programlisting"><span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">statistics</span><span class="special">::</span><span class="identifier">sample_absolute_gini_coefficient</span><span class="special">;</span>
+<span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">statistics</span><span class="special">::</span><span class="identifier">absolute_gini_coefficient</span><span class="special">;</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">complex</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;&gt;</span> <span class="identifier">v</span><span class="special">{{</span><span class="number">0</span><span class="special">,</span><span class="number">1</span><span class="special">},</span> <span class="special">{</span><span class="number">0</span><span class="special">,</span><span class="number">0</span><span class="special">},</span> <span class="special">{</span><span class="number">0</span><span class="special">,</span><span class="number">0</span><span class="special">},</span> <span class="special">{</span><span class="number">0</span><span class="special">,</span><span class="number">0</span><span class="special">}};</span>
 <span class="keyword">double</span> <span class="identifier">abs_gini</span> <span class="special">=</span> <span class="identifier">sample_absolute_gini_coefficient</span><span class="special">(</span><span class="identifier">v</span><span class="special">);</span>
 <span class="comment">// now abs_gini = 1; maximally unequal</span>
@@ -160,10 +160,10 @@
       Usage:
     </p>
 <pre class="programlisting"><span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="identifier">Real</span><span class="special">&gt;</span> <span class="identifier">v</span><span class="special">{</span><span class="number">1</span><span class="special">,</span><span class="number">0</span><span class="special">,</span><span class="number">0</span><span class="special">};</span>
-<span class="identifier">Real</span> <span class="identifier">hs</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tools</span><span class="special">::</span><span class="identifier">hoyer_sparsity</span><span class="special">(</span><span class="identifier">v</span><span class="special">);</span>
+<span class="identifier">Real</span> <span class="identifier">hs</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">statistics</span><span class="special">::</span><span class="identifier">hoyer_sparsity</span><span class="special">(</span><span class="identifier">v</span><span class="special">);</span>
 <span class="comment">// hs = 1</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="identifier">Real</span><span class="special">&gt;</span> <span class="identifier">v</span><span class="special">{</span><span class="number">1</span><span class="special">,-</span><span class="number">1</span><span class="special">,</span><span class="number">1</span><span class="special">};</span>
-<span class="identifier">Real</span> <span class="identifier">hs</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tools</span><span class="special">::</span><span class="identifier">hoyer_sparsity</span><span class="special">(</span><span class="identifier">v</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">v</span><span class="special">.</span><span class="identifier">end</span><span class="special">());</span>
+<span class="identifier">Real</span> <span class="identifier">hs</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">statistics</span><span class="special">::</span><span class="identifier">hoyer_sparsity</span><span class="special">(</span><span class="identifier">v</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">v</span><span class="special">.</span><span class="identifier">end</span><span class="special">());</span>
 <span class="comment">// hs = 0</span>
 </pre>
 <p>
@@ -195,8 +195,8 @@
 <pre class="programlisting"><span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">signal</span><span class="special">(</span><span class="number">500</span><span class="special">,</span> <span class="number">3.2</span><span class="special">);</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">noisy_signal</span><span class="special">(</span><span class="number">500</span><span class="special">);</span>
 <span class="comment">// fill 'noisy_signal' signal + noise</span>
-<span class="keyword">double</span> <span class="identifier">snr_db</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tools</span><span class="special">::</span><span class="identifier">oracle_snr_db</span><span class="special">(</span><span class="identifier">signal</span><span class="special">,</span> <span class="identifier">noisy_signal</span><span class="special">);</span>
-<span class="keyword">double</span> <span class="identifier">snr</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tools</span><span class="special">::</span><span class="identifier">oracle_snr</span><span class="special">(</span><span class="identifier">signal</span><span class="special">,</span> <span class="identifier">noisy_signal</span><span class="special">);</span>
+<span class="keyword">double</span> <span class="identifier">snr_db</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">statistics</span><span class="special">::</span><span class="identifier">oracle_snr_db</span><span class="special">(</span><span class="identifier">signal</span><span class="special">,</span> <span class="identifier">noisy_signal</span><span class="special">);</span>
+<span class="keyword">double</span> <span class="identifier">snr</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">statistics</span><span class="special">::</span><span class="identifier">oracle_snr</span><span class="special">(</span><span class="identifier">signal</span><span class="special">,</span> <span class="identifier">noisy_signal</span><span class="special">);</span>
 </pre>
 <p>
       The input can be real, complex, or integral. Integral inputs produce double
@@ -216,7 +216,7 @@
     </p>
 <pre class="programlisting"><span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">noisy_signal</span><span class="special">(</span><span class="number">512</span><span class="special">);</span>
 <span class="comment">// fill noisy_signal with data contaminated by Gaussian white noise:</span>
-<span class="keyword">double</span> <span class="identifier">est_snr_db</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tools</span><span class="special">::</span><span class="identifier">m2m4_snr_estimator_db</span><span class="special">(</span><span class="identifier">noisy_signal</span><span class="special">);</span>
+<span class="keyword">double</span> <span class="identifier">est_snr_db</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">statistics</span><span class="special">::</span><span class="identifier">m2m4_snr_estimator_db</span><span class="special">(</span><span class="identifier">noisy_signal</span><span class="special">);</span>
 </pre>
 <p>
       The <span class="emphasis"><em>M</em></span><sub>2</sub><span class="emphasis"><em>M</em></span><sub>4</sub> SNR estimator is an "in-service"
@@ -237,7 +237,7 @@
 <span class="keyword">double</span> <span class="identifier">signal_kurtosis</span> <span class="special">=</span> <span class="number">1.5</span><span class="special">;</span>
 <span class="comment">// Noise is assumed to follow Laplace distribution, which has kurtosis of 6:</span>
 <span class="keyword">double</span> <span class="identifier">noise_kurtosis</span> <span class="special">=</span> <span class="number">6</span><span class="special">;</span>
-<span class="keyword">double</span> <span class="identifier">est_snr</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tools</span><span class="special">::</span><span class="identifier">m2m4_snr_estimator_db</span><span class="special">(</span><span class="identifier">noisy_signal</span><span class="special">,</span> <span class="identifier">signal_kurtosis</span><span class="special">,</span> <span class="identifier">noise_kurtosis</span><span class="special">);</span>
+<span class="keyword">double</span> <span class="identifier">est_snr</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">statistics</span><span class="special">::</span><span class="identifier">m2m4_snr_estimator_db</span><span class="special">(</span><span class="identifier">noisy_signal</span><span class="special">,</span> <span class="identifier">signal_kurtosis</span><span class="special">,</span> <span class="identifier">noise_kurtosis</span><span class="special">);</span>
 </pre>
 <p>
       Now, technically the method is a "blind SNR estimator", meaning that
@@ -330,7 +330,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="bivariate_statistics.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../vector_functionals.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="norms.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="bivariate_statistics.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../statistics.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="anderson_darling.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

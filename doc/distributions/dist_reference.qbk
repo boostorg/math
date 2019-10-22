@@ -10,6 +10,7 @@
 [include binomial.qbk]
 [include cauchy.qbk]
 [include chi_squared.qbk]
+[include empirical_cdf.qbk]
 [include exponential.qbk]
 [include extreme_value.qbk]
 [include fisher.qbk]
@@ -37,8 +38,6 @@
 [include triangular.qbk]
 [include uniform.qbk]
 [include weibull.qbk]
-[include empirical_cdf.qbk]
-
 [endsect] [/section:dists Distributions]
 
 [include dist_algorithms.qbk]

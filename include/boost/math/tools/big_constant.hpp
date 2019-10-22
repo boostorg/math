@@ -11,6 +11,7 @@
 #ifndef BOOST_MATH_NO_LEXICAL_CAST
 #include <boost/lexical_cast.hpp>
 #endif
+#include <boost/type_traits/is_constructible.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 #include <boost/type_traits/is_floating_point.hpp>
 
@@ -72,14 +73,14 @@ inline BOOST_MATH_CONSTEXPR T make_big_value(largest_float, const char* s, mpl::
           || boost::is_floating_point<T>::value \
           || (boost::math::tools::numeric_traits<T>::is_specialized && \
           (boost::math::tools::numeric_traits<T>::digits10 <= boost::math::tools::numeric_traits<boost::math::tools::largest_float>::digits10))) >(), \
-      boost::is_convertible<const char*, T>())
+      boost::is_constructible<T, const char*>())
 //
 // For constants too huge for any conceivable long double (and which generate compiler errors if we try and declare them as such):
 //
 #define BOOST_MATH_HUGE_CONSTANT(T, D, x)\
    boost::math::tools::make_big_value<T>(0.0L, BOOST_STRINGIZE(x), \
    boost::mpl::bool_<boost::is_floating_point<T>::value || (boost::math::tools::numeric_traits<T>::is_specialized && boost::math::tools::numeric_traits<T>::max_exponent <= boost::math::tools::numeric_traits<boost::math::tools::largest_float>::max_exponent && boost::math::tools::numeric_traits<T>::digits <= boost::math::tools::numeric_traits<boost::math::tools::largest_float>::digits)>(), \
-   boost::is_constructible<const char*, T>())
+   boost::is_constructible<T, const char*>())
 
 }}} // namespaces
 

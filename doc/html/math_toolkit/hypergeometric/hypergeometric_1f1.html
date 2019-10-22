@@ -3,11 +3,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Hypergeometric 1F1</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
 <link rel="home" href="../../index.html" title="Math Toolkit 2.10.0">
 <link rel="up" href="../hypergeometric.html" title="Hypergeometric Functions">
-<link rel="prev" href="hyper_geometric_1f0_0.html" title="Hypergeometric 2F0">
-<link rel="next" href="pFq.html" title="Hypergeometric pFq">
+<link rel="prev" href="hypergeometric_2f0.html" title="Hypergeometric 2F0">
+<link rel="next" href="hypergeometric_pfq.html" title="Hypergeometric pFq">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -20,11 +20,11 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="hyper_geometric_1f0_0.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../hypergeometric.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="pFq.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="hypergeometric_2f0.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../hypergeometric.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="hypergeometric_pfq.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="math_toolkit.hypergeometric.hyper_geometric_1f1"></a><a class="link" href="hyper_geometric_1f1.html" title="Hypergeometric 1F1">Hypergeometric
+<a name="math_toolkit.hypergeometric.hypergeometric_1f1"></a><a class="link" href="hypergeometric_1f1.html" title="Hypergeometric 1F1">Hypergeometric
       <sub>1</sub><span class="emphasis"><em>F</em></span><sub>1</sub></a>
 </h3></div></div></div>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">hypergeometric_1F1</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
@@ -34,32 +34,32 @@
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T3</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">hypergeometric_1F1</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">b</span><span class="special">,</span> <span class="identifier">T3</span> <span class="identifier">z</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T3</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">hypergeometric_1F1</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">b</span><span class="special">,</span> <span class="identifier">T3</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T3</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">hypergeometric_1F1</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">b</span><span class="special">,</span> <span class="identifier">T3</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T3</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">hypergeometric_1F1_regularized</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">b</span><span class="special">,</span> <span class="identifier">T3</span> <span class="identifier">z</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T3</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">hypergeometric_1F1_regularized</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">b</span><span class="special">,</span> <span class="identifier">T3</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T3</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">hypergeometric_1F1_regularized</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">b</span><span class="special">,</span> <span class="identifier">T3</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T3</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">log_hypergeometric_1F1</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">b</span><span class="special">,</span> <span class="identifier">T3</span> <span class="identifier">z</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T3</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">log_hypergeometric_1F1</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">b</span><span class="special">,</span> <span class="identifier">T3</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T3</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">log_hypergeometric_1F1</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">b</span><span class="special">,</span> <span class="identifier">T3</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T3</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">log_hypergeometric_1F1</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">b</span><span class="special">,</span> <span class="identifier">T3</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">int</span><span class="special">*</span> <span class="identifier">sign</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T3</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">log_hypergeometric_1F1</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">b</span><span class="special">,</span> <span class="identifier">T3</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">int</span><span class="special">*</span> <span class="identifier">sign</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T3</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">log_hypergeometric_1F1</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">b</span><span class="special">,</span> <span class="identifier">T3</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">int</span><span class="special">*</span> <span class="identifier">sign</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 
 <span class="special">}}</span> <span class="comment">// namespaces</span>
 </pre>
 <h5>
-<a name="math_toolkit.hypergeometric.hyper_geometric_1f1.h0"></a>
-        <span class="phrase"><a name="math_toolkit.hypergeometric.hyper_geometric_1f1.description"></a></span><a class="link" href="hyper_geometric_1f1.html#math_toolkit.hypergeometric.hyper_geometric_1f1.description">Description</a>
+<a name="math_toolkit.hypergeometric.hypergeometric_1f1.h0"></a>
+        <span class="phrase"><a name="math_toolkit.hypergeometric.hypergeometric_1f1.description"></a></span><a class="link" href="hypergeometric_1f1.html#math_toolkit.hypergeometric.hypergeometric_1f1.description">Description</a>
       </h5>
 <p>
         </p>
@@ -75,13 +75,13 @@
         equation</a>
       </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-          <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../equations/hypergeometric_1f1_2.svg" width="181.25" height="33.75"></object></span>
+          <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../equations/hypergeometric_1f1_2.svg" width="181" height="34"></object></span>
         </p></blockquote></div>
 <p>
         which for |<span class="emphasis"><em>z</em></span>| &lt; 1 has the hypergeometric series expansion
       </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-          <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../equations/hypergeometric_1f1_1.svg" width="233.75" height="37.5"></object></span>
+          <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../equations/hypergeometric_1f1_1.svg" width="234" height="38"></object></span>
         </p></blockquote></div>
 <p>
         where (<span class="emphasis"><em>a</em></span>)<sub><span class="emphasis"><em>n</em></span></sub> denotes rising factorial.
@@ -93,13 +93,13 @@
         The "regularized" versions of the function return:
       </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-          <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../equations/hypergeometric_1f1_17.svg" width="312.5" height="43.75"></object></span>
+          <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../equations/hypergeometric_1f1_17.svg" width="313" height="44"></object></span>
         </p></blockquote></div>
 <p>
         The "log" versions of the function return:
       </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-          <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../equations/hypergeometric_1f1_18.svg" width="118.75" height="20"></object></span>
+          <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../equations/hypergeometric_1f1_18.svg" width="119" height="20"></object></span>
         </p></blockquote></div>
 <p>
         When the optional <code class="computeroutput"><span class="identifier">sign</span></code> argument
@@ -112,8 +112,8 @@
         results without the spurious under/overflow that plague naive implementations.
       </p>
 <h5>
-<a name="math_toolkit.hypergeometric.hyper_geometric_1f1.h1"></a>
-        <span class="phrase"><a name="math_toolkit.hypergeometric.hyper_geometric_1f1.known_issues"></a></span><a class="link" href="hyper_geometric_1f1.html#math_toolkit.hypergeometric.hyper_geometric_1f1.known_issues">Known
+<a name="math_toolkit.hypergeometric.hypergeometric_1f1.h1"></a>
+        <span class="phrase"><a name="math_toolkit.hypergeometric.hypergeometric_1f1.known_issues"></a></span><a class="link" href="hypergeometric_1f1.html#math_toolkit.hypergeometric.hypergeometric_1f1.known_issues">Known
         Issues</a>
       </h5>
 <p>
@@ -150,7 +150,7 @@
 <tr>
 <td>
                 <p>
-                  <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../equations/hypergeometric_1f1_13.svg" width="101.25" height="16.25"></object></span>
+                  <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../equations/hypergeometric_1f1_13.svg" width="101" height="16"></object></span>
                 </p>
               </td>
 <td>
@@ -167,7 +167,7 @@
 <tr>
 <td>
                 <p>
-                  <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../equations/hypergeometric_1f1_14.svg" width="88.75" height="16.25"></object></span>
+                  <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../equations/hypergeometric_1f1_14.svg" width="89" height="16"></object></span>
                 </p>
               </td>
 <td>
@@ -182,7 +182,7 @@
 <tr>
 <td>
                 <p>
-                  <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../equations/hypergeometric_1f1_15.svg" width="77.5" height="16.25"></object></span>
+                  <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../equations/hypergeometric_1f1_15.svg" width="78" height="16"></object></span>
                 </p>
               </td>
 <td>
@@ -201,7 +201,7 @@
 <tr>
 <td>
                 <p>
-                  <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../equations/hypergeometric_1f1_16.svg" width="97.5" height="17.5"></object></span>
+                  <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../equations/hypergeometric_1f1_16.svg" width="98" height="18"></object></span>
                 </p>
               </td>
 <td>
@@ -270,8 +270,8 @@
 
       </p>
 <h5>
-<a name="math_toolkit.hypergeometric.hyper_geometric_1f1.h2"></a>
-        <span class="phrase"><a name="math_toolkit.hypergeometric.hyper_geometric_1f1.testing"></a></span><a class="link" href="hyper_geometric_1f1.html#math_toolkit.hypergeometric.hyper_geometric_1f1.testing">Testing</a>
+<a name="math_toolkit.hypergeometric.hypergeometric_1f1.h2"></a>
+        <span class="phrase"><a name="math_toolkit.hypergeometric.hypergeometric_1f1.testing"></a></span><a class="link" href="hypergeometric_1f1.html#math_toolkit.hypergeometric.hypergeometric_1f1.testing">Testing</a>
       </h5>
 <p>
         There are 3 main groups of tests:
@@ -306,8 +306,8 @@
         of digits and sometimes into the thousands of digits.
       </p>
 <h5>
-<a name="math_toolkit.hypergeometric.hyper_geometric_1f1.h3"></a>
-        <span class="phrase"><a name="math_toolkit.hypergeometric.hyper_geometric_1f1.errors"></a></span><a class="link" href="hyper_geometric_1f1.html#math_toolkit.hypergeometric.hyper_geometric_1f1.errors">Errors</a>
+<a name="math_toolkit.hypergeometric.hypergeometric_1f1.h3"></a>
+        <span class="phrase"><a name="math_toolkit.hypergeometric.hypergeometric_1f1.errors"></a></span><a class="link" href="hypergeometric_1f1.html#math_toolkit.hypergeometric.hypergeometric_1f1.errors">Errors</a>
       </h5>
 <p>
         We divide the domain of <sub>1</sub><span class="emphasis"><em>F</em></span><sub>1</sub> up into several domains to
@@ -327,7 +327,7 @@
         errors are located:
       </p>
 <p>
-        <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../graphs/hypergeometric_1f1/positive_abz_bins.svg" width="566.893700787401" height="319.96062992126"></object></span>
+        <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../graphs/hypergeometric_1f1/positive_abz_bins.svg" width="567" height="320"></object></span>
         </p>
 <div>
    <script type="text/javascript" src="../../../graphs/hypergeometric_1f1/positive_abz.js"></script>
@@ -377,7 +377,7 @@
         distributed:
       </p>
 <p>
-        <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../graphs/hypergeometric_1f1/negative_a_bins.svg" width="566.893700787401" height="330.625984251969"></object></span>
+        <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../graphs/hypergeometric_1f1/negative_a_bins.svg" width="567" height="331"></object></span>
         </p>
 <div>
    <script type="text/javascript" src="../../../graphs/hypergeometric_1f1/negative_a.js"></script>
@@ -428,7 +428,7 @@
         converge to much better than double precision.
       </p>
 <p>
-        <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../graphs/hypergeometric_1f1/negative_b_bins.svg" width="566.893700787401" height="318.86220472441"></object></span>
+        <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../graphs/hypergeometric_1f1/negative_b_bins.svg" width="567" height="319"></object></span>
         </p>
 <div>
         
@@ -479,7 +479,7 @@
         with <span class="emphasis"><em>b &lt; a</em></span> and <span class="emphasis"><em>z</em></span> &#8776; <span class="emphasis"><em>a</em></span>:
       </p>
 <p>
-        <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../graphs/hypergeometric_1f1/negative_ab_bins.svg" width="460.594488188976" height="279.92125984252"></object></span>
+        <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../graphs/hypergeometric_1f1/negative_ab_bins.svg" width="461" height="280"></object></span>
         <body>
         <script type="text/javascript" src="../../../graphs/hypergeometric_1f1/negative_ab.js"></script>
         
@@ -522,8 +522,8 @@
 
       </p>
 <h5>
-<a name="math_toolkit.hypergeometric.hyper_geometric_1f1.h4"></a>
-        <span class="phrase"><a name="math_toolkit.hypergeometric.hyper_geometric_1f1.implementation"></a></span><a class="link" href="hyper_geometric_1f1.html#math_toolkit.hypergeometric.hyper_geometric_1f1.implementation">Implementation</a>
+<a name="math_toolkit.hypergeometric.hypergeometric_1f1.h4"></a>
+        <span class="phrase"><a name="math_toolkit.hypergeometric.hypergeometric_1f1.implementation"></a></span><a class="link" href="hypergeometric_1f1.html#math_toolkit.hypergeometric.hypergeometric_1f1.implementation">Implementation</a>
       </h5>
 <p>
         The implementation for this function is remarkably complex; readers will
@@ -535,13 +535,13 @@
         relation</a> to make <span class="emphasis"><em>z</em></span> positive:
       </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-          <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../equations/hypergeometric_1f1_12.svg" width="188.75" height="16.25"></object></span>
+          <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../equations/hypergeometric_1f1_12.svg" width="189" height="16"></object></span>
         </p></blockquote></div>
 <p>
         The main series representation
       </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-          <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../equations/hypergeometric_1f1_1.svg" width="233.75" height="37.5"></object></span>
+          <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../equations/hypergeometric_1f1_1.svg" width="234" height="38"></object></span>
         </p></blockquote></div>
 <p>
         is used only when
@@ -564,7 +564,7 @@
         A&amp;S 13.3.6 gives
       </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-          <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../equations/hypergeometric_1f1_3.svg" width="613.75" height="38.75"></object></span>
+          <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../equations/hypergeometric_1f1_3.svg" width="614" height="39"></object></span>
         </p></blockquote></div>
 <p>
         which is particularly useful for <span class="emphasis"><em>a &#8773; b</em></span> and <span class="emphasis"><em>z
@@ -576,25 +576,25 @@
         13.3.7) <a class="link" href="hypergeometric_refs.html" title="Hypergeometric References">(7)</a>
       </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-          <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../equations/hypergeometric_1f1_4.svg" width="356.25" height="37.5"></object></span>
+          <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../equations/hypergeometric_1f1_4.svg" width="356" height="38"></object></span>
         </p></blockquote></div>
 <p>
         with
       </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-          <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../equations/hypergeometric_1f1_5.svg" width="390" height="32.5"></object></span>
+          <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../equations/hypergeometric_1f1_5.svg" width="390" height="33"></object></span>
         </p></blockquote></div>
 <p>
         and
       </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-          <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../equations/hypergeometric_1f1_6.svg" width="370" height="16.25"></object></span>
+          <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../equations/hypergeometric_1f1_6.svg" width="370" height="16"></object></span>
         </p></blockquote></div>
 <p>
         With <span class="emphasis"><em>E<sub>v</sub></em></span> defined as:
       </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-          <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../equations/hypergeometric_1f1_7.svg" width="148.75" height="86.25"></object></span>
+          <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../equations/hypergeometric_1f1_7.svg" width="149" height="86"></object></span>
         </p></blockquote></div>
 <p>
         This approximation is especially effective when <span class="emphasis"><em>a &lt; 0</em></span>.
@@ -605,13 +605,13 @@
         can be used <a class="link" href="hypergeometric_refs.html" title="Hypergeometric References">(6)</a>:
       </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-          <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../equations/hypergeometric_1f1_8.svg" width="348.75" height="42.5"></object></span>
+          <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../equations/hypergeometric_1f1_8.svg" width="349" height="43"></object></span>
         </p></blockquote></div>
 <p>
         For <span class="emphasis"><em>z</em></span> large we have the asymptotic expansion:
       </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-          <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../equations/hypergeometric_1f1_9.svg" width="261.25" height="42.5"></object></span>
+          <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../equations/hypergeometric_1f1_9.svg" width="261" height="43"></object></span>
         </p></blockquote></div>
 <p>
         which is a special case of the gamma function expansion above.
@@ -634,7 +634,7 @@
         all positive recurrence on <span class="emphasis"><em>a</em></span> via
       </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-          <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../equations/hypergeometric_1f1_10.svg" width="428.75" height="16.25"></object></span>
+          <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../equations/hypergeometric_1f1_10.svg" width="429" height="16"></object></span>
         </p></blockquote></div>
 <p>
         abruptly changes from stable forwards recursion to stable backwards if <span class="emphasis"><em>2a-b+z</em></span>
@@ -662,7 +662,7 @@
         with a reference value, or by using the Wronskian
       </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-          <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../equations/hypergeometric_1f1_11.svg" width="563.75" height="32.5"></object></span>
+          <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../equations/hypergeometric_1f1_11.svg" width="564" height="33"></object></span>
         </p></blockquote></div>
 <p>
         which is of course the well known Miller's method <a class="link" href="hypergeometric_refs.html" title="Hypergeometric References">(12)</a>.
@@ -786,7 +786,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="hyper_geometric_1f0_0.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../hypergeometric.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="pFq.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="hypergeometric_2f0.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../hypergeometric.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="hypergeometric_pfq.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

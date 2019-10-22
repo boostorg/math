@@ -107,7 +107,7 @@ void test_spots(T, const char* name)
    // Test backward recurrence on J_v(x):
    //
    {
-      if (std::numeric_limits<T>::digits > 53)
+      if ((std::numeric_limits<T>::digits > 53) || !std::numeric_limits<T>::is_specialized)
          tol *= 5;
 
       T v = 22.25;

@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Hyperexponential Distribution</title>
 <link rel="stylesheet" href="../../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
 <link rel="home" href="../../../index.html" title="Math Toolkit 2.10.0">
 <link rel="up" href="../dists.html" title="Distributions">
 <link rel="prev" href="geometric_dist.html" title="Geometric Distribution">
@@ -31,12 +31,12 @@
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span>
-          <span class="keyword">typename</span> <a class="link" href="../../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
+          <span class="keyword">typename</span> <a class="link" href="../../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">hyperexponential_distribution</span><span class="special">;</span>
 
 <span class="keyword">typedef</span> <span class="identifier">hyperexponential_distribution</span><span class="special">&lt;&gt;</span> <span class="identifier">hyperexponential</span><span class="special">;</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">typename</span> <a class="link" href="../../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">typename</span> <a class="link" href="../../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">hyperexponential_distribution</span>
 <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
@@ -970,7 +970,7 @@
 
 <span class="identifier">hyperexponential</span> <span class="identifier">he</span><span class="special">(</span><span class="identifier">rates</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">rates</span><span class="special">.</span><span class="identifier">end</span><span class="special">());</span>
 
-<span class="identifier">assert</span><span class="special">(</span><span class="identifier">he</span><span class="special">.</span><span class="identifier">probabilities</span><span class="special">()[</span><span class="number">0</span><span class="special">]</span> <span class="special">==</span> <span class="number">0.5</span><span class="special">);</span> <span class="comment">// Phase probabilities will be equal and normalised to unity.</span>
+<span class="identifier">BOOST_ASSERT</span><span class="special">(</span><span class="identifier">he</span><span class="special">.</span><span class="identifier">probabilities</span><span class="special">()[</span><span class="number">0</span><span class="special">]</span> <span class="special">==</span> <span class="number">0.5</span><span class="special">);</span> <span class="comment">// Phase probabilities will be equal and normalised to unity.</span>
 </pre>
 <h5>
 <a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h19"></a>
@@ -1014,7 +1014,7 @@
 
 <span class="identifier">hyperexponential</span> <span class="identifier">he</span><span class="special">(</span><span class="identifier">rates</span><span class="special">);</span>
 
-<span class="identifier">assert</span><span class="special">(</span><span class="identifier">he</span><span class="special">.</span><span class="identifier">probabilities</span><span class="special">()[</span><span class="number">0</span><span class="special">]</span> <span class="special">==</span> <span class="number">0.5</span><span class="special">);</span> <span class="comment">// Phase probabilities will be equal and normalised to unity.</span>
+<span class="identifier">BOOST_ASSERT</span><span class="special">(</span><span class="identifier">he</span><span class="special">.</span><span class="identifier">probabilities</span><span class="special">()[</span><span class="number">0</span><span class="special">]</span> <span class="special">==</span> <span class="number">0.5</span><span class="special">);</span> <span class="comment">// Phase probabilities will be equal and normalised to unity.</span>
 </pre>
 <h5>
 <a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h23"></a>
@@ -1085,7 +1085,7 @@
         </h6>
 <pre class="programlisting"><span class="identifier">hyperexponential</span> <span class="identifier">he</span> <span class="special">=</span> <span class="special">{</span> <span class="number">1.0</span> <span class="special">/</span> <span class="number">10</span><span class="special">,</span> <span class="number">1.0</span> <span class="special">/</span> <span class="number">12</span> <span class="special">};</span>
 
-<span class="identifier">assert</span><span class="special">(</span><span class="identifier">he</span><span class="special">.</span><span class="identifier">probabilities</span><span class="special">()[</span><span class="number">0</span><span class="special">]</span> <span class="special">==</span> <span class="number">0.5</span><span class="special">);</span>
+<span class="identifier">BOOST_ASSERT</span><span class="special">(</span><span class="identifier">he</span><span class="special">.</span><span class="identifier">probabilities</span><span class="special">()[</span><span class="number">0</span><span class="special">]</span> <span class="special">==</span> <span class="number">0.5</span><span class="special">);</span>
 </pre>
 <h5>
 <a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h29"></a>

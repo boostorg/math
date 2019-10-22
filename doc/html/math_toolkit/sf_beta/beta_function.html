@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Beta</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
 <link rel="home" href="../../index.html" title="Math Toolkit 2.10.0">
 <link rel="up" href="../sf_beta.html" title="Beta Functions">
 <link rel="prev" href="../sf_beta.html" title="Beta Functions">
@@ -37,8 +37,8 @@
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">beta</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">b</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">beta</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">b</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">beta</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">b</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 
 <span class="special">}}</span> <span class="comment">// namespaces</span>
 </pre>
@@ -58,21 +58,10 @@
 
         </p></blockquote></div>
 <p>
-        The final <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
+        The final <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
         be used to control the behaviour of the function: how it handles errors,
-        what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">policy
+        what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">policy
         documentation for more details</a>.
-      </p>
-<p>
-        There are effectively two versions of this function internally: a fully generic
-        version that is slow, but reasonably accurate, and a much more efficient
-        approximation that is used where the number of digits in the significand
-        of T correspond to a certain <a class="link" href="../lanczos.html" title="The Lanczos Approximation">Lanczos
-        approximation</a>. In practice any built-in floating-point type you will
-        encounter has an appropriate <a class="link" href="../lanczos.html" title="The Lanczos Approximation">Lanczos
-        approximation</a> defined for it. It is also possible, given enough machine
-        time, to generate further <a class="link" href="../lanczos.html" title="The Lanczos Approximation">Lanczos approximation</a>'s
-        using the program libs/math/tools/lanczos_generator.cpp.
       </p>
 <p>
         The return type of these functions is computed using the <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>result
@@ -91,7 +80,7 @@
         zero error</a>.
       </p>
 <div class="table">
-<a name="math_toolkit.sf_beta.beta_function.table_beta"></a><p class="title"><b>Table&#160;7.17.&#160;Error rates for beta</b></p>
+<a name="math_toolkit.sf_beta.beta_function.table_beta"></a><p class="title"><b>Table&#160;8.17.&#160;Error rates for beta</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for beta">
 <colgroup>
 <col>
@@ -267,18 +256,9 @@
 <p>
         The generic implementation - where no <a class="link" href="../lanczos.html" title="The Lanczos Approximation">Lanczos
         approximation</a> approximation is available - is implemented in a very
-        similar way to the generic version of the gamma function. Again in order
-        to avoid numerical overflow the power terms that prefix the series and continued
-        fraction parts are collected together into:
-      </p>
-<div class="blockquote"><blockquote class="blockquote"><p>
-          <span class="inlinemediaobject"><img src="../../../equations/beta8.svg"></span>
-
-        </p></blockquote></div>
-<p>
-        where <span class="emphasis"><em>la</em></span>, <span class="emphasis"><em>lb</em></span> and <span class="emphasis"><em>lc</em></span>
-        are the integration limits used for <span class="emphasis"><em>a</em></span>, <span class="emphasis"><em>b</em></span>,
-        and <span class="emphasis"><em>a+b</em></span>.
+        similar way to the generic version of the gamma function by means of Sterling's
+        approximation. Again in order to avoid numerical overflow the power terms
+        that prefix the series are collected together
       </p>
 <p>
         There are a few special cases worth mentioning:

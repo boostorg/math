@@ -696,7 +696,7 @@ void test_sf()
       // Check some really extreme versions:
       a = 1000;
       b = 500;
-      BOOST_CHECK_CLOSE_FRACTION(integrator.integrate(f, 0, 1), Real(1), tol * 10);
+      BOOST_CHECK_CLOSE_FRACTION(integrator.integrate(f, 0, 1), Real(1), tol * 15);
       //
       // This is as extreme as we can get in this domain: otherwise the function has all it's 
       // area so close to zero we never get in there no matter how many levels we go down:
