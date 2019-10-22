@@ -126,18 +126,18 @@ int report_errors()
     {
         std::cerr << "\033[0;31mError count: " << detail::global_error_count;
         if (detail::total_ulp_distance > 0) {
-            std::cerr << ", total ulp distance = " << detail::total_ulp_distance << "\n";
+            std::cerr << ", total ulp distance = " << detail::total_ulp_distance << "\n\033[0m";
         }
         else {
             // else we overflowed the ULPs counter and all we could print is a bizarre negative number.
-            std::cerr << "\n";
+            std::cerr << "\n\033[0m";
         }
 
         detail::global_error_count = 0;
         detail::total_ulp_distance = 0;
         return 1;
     }
-    std::cout << "\x1B[32mNo errors detected.\n";
+    std::cout << "\x1B[32mNo errors detected.\n\033[0m";
     return 0;
 }
 
