@@ -18,7 +18,6 @@
 #define BOOST_TEST_MAIN
 #define BOOST_LIB_DIAGNOSTIC "on" // Report library file details.
 #include <boost/test/included/unit_test.hpp> // Boost.Test
-// #include <boost/test/unit_test.hpp> // Boost.Test
 #include <boost/test/tools/floating_point_comparison.hpp>
 
 #include <boost/array.hpp>
@@ -194,12 +193,13 @@ BOOST_AUTO_TEST_CASE( integrals )
   using boost::math::policies::ignore_error;
   using boost::math::policies::throw_on_error;
 
+  /*
   typedef policy<
     domain_error<throw_on_error>,
     overflow_error<ignore_error>
   > no_throw_policy;
 
-  /*
+
   // Experiment with better diagnostics.
   typedef float Real;
 
