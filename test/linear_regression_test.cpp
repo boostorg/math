@@ -96,8 +96,8 @@ void test_permutation_invariance()
         std::shuffle(y.begin(), y.end(), gen2);
         auto [c0_, c1_, Rsquared_] = simple_ordinary_least_squares_with_R_squared(x, y);
 
-        CHECK_ULP_CLOSE(c0, c0_, 65);
-        CHECK_ULP_CLOSE(c1, c1_, 65);
+        CHECK_ULP_CLOSE(c0, c0_, 100);
+        CHECK_ULP_CLOSE(c1, c1_, 100);
         CHECK_ULP_CLOSE(Rsquared, Rsquared_, 65);
     }
 }
@@ -122,8 +122,8 @@ void test_scaling_relations()
     }
 
     auto [c0, c1, Rsquared] = simple_ordinary_least_squares_with_R_squared(x, y);
-    CHECK_MOLLIFIED_CLOSE(expected_c0, c0, 0.002);
-    CHECK_MOLLIFIED_CLOSE(expected_c1, c1, 0.002);
+    CHECK_MOLLIFIED_CLOSE(expected_c0, c0, 0.005);
+    CHECK_MOLLIFIED_CLOSE(expected_c1, c1, 0.005);
 
     // If y -> lambda y, then c0 -> lambda c0 and c1 -> lambda c1.
     Real lambda = 6;
@@ -134,8 +134,8 @@ void test_scaling_relations()
 
     auto [c0_lambda, c1_lambda, Rsquared_lambda] = simple_ordinary_least_squares_with_R_squared(x, y);
 
-    CHECK_ULP_CLOSE(lambda*c0, c0_lambda, 20);
-    CHECK_ULP_CLOSE(lambda*c1, c1_lambda, 20);
+    CHECK_ULP_CLOSE(lambda*c0, c0_lambda, 30);
+    CHECK_ULP_CLOSE(lambda*c1, c1_lambda, 30);
     CHECK_ULP_CLOSE(Rsquared, Rsquared_lambda, 3);
 
     // If x -> lambda x, then c0 -> c0 and c1 -> c1/lambda
