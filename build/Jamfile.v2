@@ -120,7 +120,4 @@ lib boost_math_c99l : ../src/tr1/$(C99_SOURCES)l.cpp pch
          [ check-target-builds ../config//has_long_double_support "long double support" : : <build>no ]
    ;
 
-# Fake 'library' target for dependency resolution purposes
-alias boost_math ;
-
-boost-install boost_math_c99 boost_math_c99f boost_math_c99l boost_math_tr1 boost_math_tr1f boost_math_tr1l boost_math ;
+boost-install boost_math_c99 boost_math_c99f boost_math_c99l boost_math_tr1 boost_math_tr1f boost_math_tr1l ;
