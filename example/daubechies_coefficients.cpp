@@ -5,6 +5,7 @@
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  */
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include <string>
 #include <complex>
@@ -16,6 +17,7 @@
 #include <boost/math/tools/roots.hpp>
 #include <boost/math/special_functions/binomial.hpp>
 #include <boost/multiprecision/cpp_complex.hpp>
+#include <boost/multiprecision/float128.hpp>
 #include <boost/multiprecision/complex128.hpp>
 #include <boost/math/quadrature/gauss_kronrod.hpp>
 
@@ -182,8 +184,7 @@ std::vector<typename Complex::value_type> daubechies_coefficients(std::vector<st
     // If we don't reverse, we get the Pywavelets and Mallat convention.
     // I believe this is because of the sign convention on the DFT, which differs between Daubechies and Mallat.
     // You implement a dot product in Daubechies/NR convention, and a convolution in PyWavelets/Mallat convention.
-    // I won't reverse so I can spot check against Pywavelets: http://wavelets.pybytes.com/wavelet/
-    //std::reverse(result.begin(), result.end());
+    std::reverse(result.begin(), result.end());
     std::vector<Real> h(result.size());
     for (size_t i = 0; i < result.size(); ++i)
     {
@@ -207,15 +208,86 @@ std::vector<typename Complex::value_type> daubechies_coefficients(std::vector<st
 
 int main()
 {
-    typedef boost::multiprecision::cpp_complex<100> Complex;
-    for(size_t p = 1; p < 200; ++p)
+    typedef boost::multiprecision::cpp_complex<150> Complex;
+    size_t p_max = 25;
+    std::ofstream fs{"daubechies_filters.hpp"};
+    fs << "/*\n"
+       << " * Copyright Nick Thompson, 2019\n"
+       << " * Use, modification and distribution are subject to the\n"
+       << " * Boost Software License, Version 1.0. (See accompanying file\n"
+       << " * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)\n"
+       << " */\n"
+       << "#ifndef BOOST_MATH_FILTERS_DAUBECHIES_HPP\n"
+       << "#define BOOST_MATH_FILTERS_DAUBECHIES_HPP\n"
+       << "#include <array>\n"
+       << "#ifdef BOOST_HAS_FLOAT128\n"
+       << "#include <boost/multiprecision/float128.hpp>\n"
+       << "#endif\n"
+       << "namespace boost::math::filters {\n\n"
+       << "template <typename Real, unsigned p>\n"
+       << "constexpr std::array<Real, 2*p> daubechies_scaling_filter()\n"
+       << "{\n"
+       << "    static_assert(sizeof(Real) <= 16, \"Filter coefficients only computed up to 128 bits of precision.\");\n"
+       << "    static_assert(p < " << p_max << ", \"Filter coefficients only implemented up to " << p_max - 1 << ".\");\n";
+
+    for(size_t p = 1; p < p_max; ++p)
     {
+        fs << std::hexfloat;
         auto roots = find_roots<Complex>(p);
         auto h = daubechies_coefficients(roots);
-        std::cout << "h_" << p << "[] = {";
-        for (auto& x : h) {
-            std::cout << x << ", ";
+        fs << "    if constexpr (p == " << p << ") {\n";
+        fs << "        if constexpr (std::is_same_v<Real, float>) {\n";
+        fs << "            return {";
+        for (size_t i = 0; i < h.size() - 1; ++i) {
+            fs << static_cast<float>(h[i]) << "f, ";
         }
-        std::cout << "} // = h_" << p << "\n\n\n\n";
+        fs << static_cast<float>(h[h.size()-1]) << "f};\n";
+        fs << "        }\n";
+
+        fs << "        if constexpr (std::is_same_v<Real, double>) {\n";
+        fs << "            return {";
+        for (size_t i = 0; i < h.size() - 1; ++i) {
+            fs << static_cast<double>(h[i]) << ", ";
+        }
+        fs << static_cast<double>(h[h.size()-1]) << "};\n";
+        fs << "        }\n";
+
+        fs << "        if constexpr (std::is_same_v<Real, long double>) {\n";
+        fs << "            return {";
+        for (size_t i = 0; i < h.size() - 1; ++i) {
+            fs << static_cast<long double>(h[i]) << "L, ";
+        }
+        fs << static_cast<long double>(h[h.size()-1]) << "L};\n";
+        fs << "        }\n";
+
+        fs << "        #ifdef BOOST_HAS_FLOAT128\n";
+        fs << "        if constexpr (std::is_same_v<Real, boost::multiprecision::float128>) {\n";
+        fs << "            return {";
+        for (size_t i = 0; i < h.size() - 1; ++i) {
+            fs << static_cast<boost::multiprecision::float128>(h[i]) << "Q, ";
+        }
+        fs << static_cast<boost::multiprecision::float128>(h[h.size()-1]) << "Q};\n";
+        fs << "        }\n";
+        fs << "        #endif\n";
+
+
+        fs << "    }\n";
     }
+
+    fs << "}\n\n";
+
+    fs << "template<class Real, size_t p>\n";
+    fs << "std::array<Real, 2*p> daubechies_wavelet_filter() {\n";
+    fs << "    std::array<Real, 2*p> g;\n";
+    fs << "    auto h = daubechies_scaling_filter<Real, p>();\n";
+    fs << "    for (size_t i = 0; i < g.size(); i += 2)\n";
+    fs << "    {\n";
+    fs << "        g[i] = h[g.size() - i - 1];\n";
+    fs << "        g[i+1] = -h[g.size() - i - 2];\n";
+    fs << "    }\n";
+    fs << "    return g;\n";
+    fs << "}\n\n";
+    fs << "} // namespaces\n";
+    fs << "#endif\n";
+    fs.close();
 }

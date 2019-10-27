@@ -1,0 +1,53 @@
+[/
+  Copyright 2019, Nick Thompson
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+
+[section:daubechies Daubechies Wavelets and Scaling Functions]
+
+[h4 Synopsis]
+
+    #include <boost/math/filters/daubechies.hpp>
+
+   namespace boost::math::filters {
+
+   template <typename Real, unsigned p>
+   constexpr std::array<Real, 2*p> daubechies_scaling_filter();
+
+   template<typename Real, unsigned p>
+   std::array<Real, 2*p> daubechies_wavelet_filter();
+
+   } // namespaces
+
+
+Daubechies wavelets are a family of compactly supported functions indexed by an integer /p/ which have /p/ vanishing moments and an associated filter of length /2p/.
+They are used in signal denoising, Galerkin methods for PDEs, and compression.
+
+The canonical reference on these functions is Daubechies' monograph /Ten Lectures on Wavelets/,
+which we attempt to follow here.
+
+To get the (low-pass) scaling filter for the Daubechies scaling function with 3 vanishing moments, use
+
+    auto h = boost::math::filters::daubechies_scaling_filter<double, 3>();
+
+To get the (high-pass) wavelet filter for the Daubechies wavelet with 3 vanishing moments, use
+
+    auto g = boost::math::filters::daubechies_wavelet_filter<double, 3>();
+
+Notational conventions for these filters seem not to exist.
+Ambiguities include whether or not the filter is defined via convolution or dot product (which corresponds to reversing the array),
+and the overall scaling.
+/The filters in Boost.Math agree with Daubechies, Ten Lectures, Table 6.1./
+This means that the elements sum to sqrt(2), and the filter is defined via a dot product.
+
+
+[heading References]
+
+* Daubechies, Ingrid. ['Ten lectures on wavelets.] Vol. 61. Siam, 1992.
+* Mallat, Stephane. ['A wavelet tour of signal processing: the sparse way] Academic press, 2008.
+
+
+
+[endsect]
