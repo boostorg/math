@@ -8,6 +8,7 @@
 
 #include <algorithm>
 #include <iterator>
+#include <tuple>
 #include <boost/assert.hpp>
 
 namespace boost::math::statistics {
