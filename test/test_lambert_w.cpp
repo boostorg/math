@@ -24,6 +24,9 @@
 // Boost macros
 #define BOOST_TEST_MAIN
 #define BOOST_LIB_DIAGNOSTIC "on" // Report library file details.
+//#define BOOST_TEST_LOG_LEVEL all  // Appears not to work???
+// run with --log_level="message"
+
 #include <boost/test/included/unit_test.hpp> // Boost.Test
 // #include <boost/test/unit_test.hpp> // Boost.Test
 #include <boost/test/tools/floating_point_comparison.hpp>
@@ -801,8 +804,9 @@ BOOST_AUTO_TEST_CASE( test_types )
   BOOST_MATH_CONTROL_FP;
   // BOOST_TEST_MESSAGE output only appears if command line has --log_level="message"
   // or call set_threshold_level function:
-  boost::unit_test_framework::unit_test_log.set_threshold_level(boost::unit_test_framework::log_messages);
-  BOOST_TEST_MESSAGE("\nTest Lambert W function for several types.");
+  // boost::unit_test::unit_test_log.set_threshold_level(boost::unit_test_framework::log_messages);
+
+  BOOST_TEST_MESSAGE("\nTest Lambert W function for several types.\n");
   BOOST_TEST_MESSAGE(show_versions());  // Full version of Boost, STL and compiler info.
 #ifndef BOOST_MATH_TEST_MULTIPRECISION
   // Fundamental built-in types:
