@@ -1,0 +1,25 @@
+Integers:
+
+               Value                Base              Result
+                   0             default                   0
+                 -23             default                 -23
+                  23                 hex                  17
+                  17                 oct                  27
+
+
+Basic floating point values:
+
+               Value           Precision              Format              Result
+                   3             default             default                   3
+                3.14             default             default                3.14
+        -1.23457e-24             default             default     -1.23457x10^-24
+        -1.23457e-24                   3          scientific       -1.235x10^-24
+
+
+Complex Values:
+
+               Value           Precision              Format                        Result
+         (3.25,4.67)             default             default                  3.25 + 4.67i
+            (3.14,0)             default             default                     3.14 + 0i
+    (1.23,-1.23e-24)             default             default           1.23 - 1.23x10^-24i
+    (1.23,-1.23e-24)                   3          scientific  1.230x10^+00 - 1.235x10^-24i

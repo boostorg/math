@@ -1,0 +1,44 @@
+\documentclass{article}
+ \begin{ document }
+
+\textbf{Basic Integer Values}
+
+\begin{tabular}{r r r}
+Value & Base & Result \\ \hline 
+0 & default & $0$\\
+-23 & default & $-23$ \\
+23 & hex & $17$\\
+23 & oct & $27$\\
+\end{tabular}
+
+\textbf{Basic Float Values}
+
+\begin{tabular}{r r r r}
+Value & Precision & Format & Result \\
+3 & default & default & $3$ \\
+3.14 & default & default & $3.14$ \\
+-1.23457e-24 & default & default & $-1.23457\times 10^{-24}$ \\
+-1.23457e-24 & 3 & scientific & $-1.235\times 10^{-24}$ \\
+-1.235e-24 & 10 & scientific + latex\_as\_text & -1.2345678765$\times$10\textsuperscript{-24} \\
+-1.2345678765e-24 & 3 & scientific + multiply\_x & $-1.235\mathrm{x} 10^{-24}$ \\
+-1.235e-24 & 10 & scientific + latex\_as\_text + multiply\_x & -1.2345678765x10\textsuperscript{-24} \\
+-1.2345678765e-24 & 3 & scientific + multiply\_dot & $-1.235\cdot 10^{-24}$ \\
+-1.235e-24 & 10 & scientific + latex\_as\_text + multiply\_dot & -1.2345678765$\cdot$10\textsuperscript{-24} \\
+\end{tabular}
+
+\textbf{Basic Complex Values}
+
+\begin{tabular}{r r r r}
+Value & Precision & Format & Result \\
+(3.25,4.67) & default & default & $3.25 + 4.67\mathrm{i}$ \\
+(3.14,0) & default & default & $3.14 + 0\mathrm{i}$ \\
+(1.23,-1.234567876e-24) & default & default & $1.23 - 1.234567876\times 10^{-24}\mathrm{i}$ \\
+(1.23,-1.234567876e-24) & 3 & scientific & $1.230\times 10^{+00} - 1.235\times 10^{-24}\mathrm{i}$ \\
+(1.230e+00,-1.235e-24) & 12 & default + slanted\_i & $1.23 - 1.2345678765\times 10^{-24}i$ \\
+(1.23,-1.2345678765e-24) & 12 & default + upright\_i & $1.23 - 1.2345678765\times 10^{-24}\mathrm{i}$ \\
+(1.23,-1.2345678765e-24) & 12 & default + slanted\_i + latex\_as\_text & 1.23 - 1.2345678765$\times$10\textsuperscript{-24}\textit{i} \\
+(1.23,-1.2345678765e-24) & 12 & default + upright\_i + latex\_as\_text& 1.23 - 1.2345678765$\times$10\textsuperscript{-24}i \\
+\end{tabular}
+
+\end{document}
+

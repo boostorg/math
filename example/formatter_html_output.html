@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<body>
+<style>  span.number { font-weight:bold; } span.integer { color:red; } span.float { color:blue; } span.complex { color:green; } td {  text-align:right; } th { text-align:right; } </style>
+<h2>Basic Integers Values:</h2>
+<table style="width:90%"><tr><th>Value</th><th>Base</th><th>Result</th></tr><tr><td>0</td><td>default</td><td><span class="number"><span class="integer">0</span></span></td></tr>
+<tr><td>-23</td><td>default</td><td><span class="number"><span class="integer">-23</span></span></td></tr>
+<tr><td>23</td><td>hex</td><td><span class="number"><span class="integer">17</span></span></td></tr>
+<tr><td>23</td><td>oct</td><td><span class="number"><span class="integer">27</span></span></td></tr>
+</table>
+
+<h2>Basic Floating Point Values:</h2>
+
+<table style="width:90%"><tr><th>Value</th><th>Precision</th><th>Format</th><th>Result</th></tr><tr><td>3</td><td>default</td><td>default</td><td><span class="number"><span class="float">3</span></span></td></tr>
+<tr><td>3.14</td><td>default</td><td>default</td><td><span class="number"><span class="float">3.14</span></span></td></tr>
+<tr><td>-1.23457e-24</td><td>default</td><td>default</td><td><span class="number"><span class="float">-1.23457&#x00D7;10<sup>-24</sup></span></span></td></tr>
+<tr><td>-1.23457e-24</td><td>3</td><td>scientific</td><td><span class="number"><span class="float">-1.235&#x00D7;10<sup>-24</sup></span></span></td></tr>
+<tr><td>-1.235e-24</td><td>default</td><td>multiply_x</td><td><span class="number"><span class="float">-1.235x10<sup>-24</sup></span></span></td></tr>
+<tr><td>-1.235e-24</td><td>3</td><td>scientific + multiply_x</td><td><span class="number"><span class="float">-1.235x10<sup>-24</sup></span></span></td></tr>
+<tr><td>-1.235e-24</td><td>default</td><td>multiply_dot</td><td><span class="number"><span class="float">-1.235&#x22C5;10<sup>-24</sup></span></span></td></tr>
+<tr><td>-1.235e-24</td><td>3</td><td>scientific + multiply_dot</td><td><span class="number"><span class="float">-1.235&#x22C5;10<sup>-24</sup></span></span></td></tr>
+</table>
+
+<h2>Complex Values:</h2>
+
+<table style="width:90%"><tr><th>Value</th><th>Precision</th><th>Format</th><th>Result</th></tr><tr><td>(3.25,4.67)</td><td>default</td><td>default</td><td><span class="number"><span class="complex">3.25 + 4.67<span class="imaginary_i">i</span></span></span></td></tr>
+<tr><td>(3.14,0)</td><td>default</td><td>default</td><td><span class="number"><span class="complex">3.14 + 0<span class="imaginary_i">i</span></span></span></td></tr>
+<tr><td>(1.23,-1.23e-24)</td><td>default</td><td>default</td><td><span class="number"><span class="complex">1.23 - 1.23&#x00D7;10<sup>-24</sup><span class="imaginary_i">i</span></span></span></td></tr>
+<tr><td>(1.23,-1.23e-24)</td><td>3</td><td>scientific</td><td><span class="number"><span class="complex">1.230&#x00D7;10<sup>+00</sup> - 1.235&#x00D7;10<sup>-24</sup><span class="imaginary_i">i</span></span></span></td></tr>
+<tr><td>(1.230e+00,-1.235e-24)</td><td>12</td><td>default + slanted_i</td><td><span class="number"><span class="complex">1.23 - 1.2345678765&#x00D7;10<sup>-24</sup><span class="imaginary_i"><i>i</i></span></span></span></td></tr>
+<tr><td>(1.23,-1.2345678765e-24)</td><td>12</td><td>default + doublestruck_i</td><td><span class="number"><span class="complex">1.23 - 1.2345678765&#x00D7;10<sup>-24</sup><span class="imaginary_i">&#x2148;</span></span></span></td></tr>
+<tr><td>(1.23,-1.2345678765e-24)</td><td>12</td><td>default + doublestruck_i + multiply_x</td><td><span class="number"><span class="complex">1.23 - 1.2345678765x10<sup>-24</sup><span class="imaginary_i">&#x2148;</span></span></span></td></tr>
+<tr><td>(1.23,-1.2345678765e-24)</td><td>12</td><td>default + doublestruck_i + multiply_dot</td><td><span class="number"><span class="complex">1.23 - 1.2345678765&#x22C5;10<sup>-24</sup><span class="imaginary_i">&#x2148;</span></span></span></td></tr>
+
+</table>
+
+</body></html>
+

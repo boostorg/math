@@ -8,6 +8,9 @@
 # bring in the rules for testing
 import testing ;
 import ../../config/checks/config : requires ;
+using quickbook ;
+
+path-constant here : . ;
 
 project
     : requirements
@@ -147,7 +150,11 @@ test-suite examples :
    [ run ooura_fourier_integrals_example.cpp : : : [ requires cxx11_hdr_mutex cxx11_lambdas cxx11_inline_namespaces cxx11_auto_declarations ] ]
    [ run ooura_fourier_integrals_cosine_example.cpp : : : [ requires cxx11_hdr_mutex cxx11_inline_namespaces cxx11_auto_declarations cxx17_std_apply ] ]
    [ run ooura_fourier_integrals_multiprecision_example.cpp : : : [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] [ requires cxx11_hdr_mutex cxx11_inline_namespaces cxx11_auto_declarations cxx17_std_apply ] ]
-
+   
+   [ run formatter_latex_output.cpp : $(here)/formatter_latex_output.tex : : [ requires cxx11_constexpr cxx14_variable_templates ] ]
+   [ run formatter_html_output.cpp : $(here)/formatter_html_output.html : : [ requires cxx11_constexpr cxx14_variable_templates ] ]
+   [ run formatter_docbook_output.cpp : $(here)/formatter_docbook_output.qbk : : [ requires cxx11_constexpr cxx14_variable_templates ] ]
+   [ run formatter_text_output.cpp : $(here)/formatter_text_output.txt : : [ requires cxx11_constexpr cxx14_variable_templates ] ]
 ;
 
 run root_elliptic_finding.cpp /boost/timer : : : release <link>static  [ requires cxx11_unified_initialization_syntax cxx11_defaulted_functions ] <target-os>freebsd:<linkflags>"-lrt" <target-os>linux:<linkflags>"-lrt -lpthread" ;
@@ -157,3 +164,15 @@ run root_n_finding_algorithms.cpp /boost/timer : : : release <link>static  [ req
 explicit root_elliptic_finding  ;
 explicit root_finding_algorithms  ;
 explicit root_n_finding_algorithms  ;
+
+xml formatting_test : formatter_docbook_output_test.qbk : <dependency>formatter_docbook_output
+;
+boostbook standalone
+    :
+        formatting_test
+    :
+;
+
+explicit standalone ;
+install pdfinstall : standalone/<format>pdf : <location>. <install-type>PDF <name>formatting.pdf ;
+explicit pdfinstall ; # b2 pdf pdfinstall to do this pdf file copy.
