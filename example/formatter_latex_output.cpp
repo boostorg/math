@@ -48,7 +48,42 @@ void print(std::ostream& os)
    printer.stream() << fval << " & 3 & scientific + multiply\\_dot & ";
    printer << std::setprecision(3) << std::scientific << boost::math::tools::multiply_dot << fval << " \\\\\n";
    printer.stream() << fval << " & 10 & scientific + latex\\_as\\_text + multiply\\_dot & ";
-   printer << std::setprecision(10) << boost::math::tools::latex_as_text << boost::math::tools::multiply_dot << std::scientific << fval << " \\\\\n" << boost::math::tools::latex_as_equation << boost::math::tools::multiply_times;
+   printer << std::setprecision(10) << boost::math::tools::latex_as_text << boost::math::tools::multiply_dot << std::scientific << fval << " \\\\\n" 
+      << boost::math::tools::latex_as_equation << boost::math::tools::multiply_times << std::defaultfloat;
+
+   // Special Values:
+   fval = 0;
+   printer.stream() << fval << " & default & default & ";
+   printer << fval << " \\\\\n";
+   fval = -fval;
+   printer.stream() << fval << " & default & default & ";
+   printer << fval << " \\\\\n";
+   fval = std::numeric_limits<double>::infinity();
+   printer.stream() << fval << " & default & default & ";
+   printer << fval << " \\\\\n";
+   fval = -fval;
+   printer.stream() << fval << " & default & default & ";
+   printer << fval << " \\\\\n";
+   fval = std::numeric_limits<double>::quiet_NaN();
+   printer.stream() << fval << " & default & default & ";
+   printer << fval << " \\\\\n";
+   printer << boost::math::tools::latex_as_text;
+   fval = 0;
+   printer.stream() << fval << " & default & latex\\_as\\_text & ";
+   printer << fval << " \\\\\n";
+   fval = -fval;
+   printer.stream() << fval << " & default & latex\\_as\\_text & ";
+   printer << fval << " \\\\\n";
+   fval = std::numeric_limits<double>::infinity();
+   printer.stream() << fval << " & default & latex\\_as\\_text & ";
+   printer << fval << " \\\\\n";
+   fval = -fval;
+   printer.stream() << fval << " & default & latex\\_as\\_text & ";
+   printer << fval << " \\\\\n";
+   fval = std::numeric_limits<double>::quiet_NaN();
+   printer.stream() << fval << " & default & latex\\_as\\_text & ";
+   printer << fval << " \\\\\n";
+   printer << boost::math::tools::latex_as_equation;
 
    printer << "\\end{tabular}\n\n" << std::defaultfloat;
 
@@ -73,6 +108,55 @@ void print(std::ostream& os)
    printer.stream() << cval << " & 12 & default + upright\\_i + latex\\_as\\_text& ";
    printer << boost::math::tools::upright_i << std::defaultfloat << std::setprecision(12) << cval << " \\\\\n";
    printer << "\\end{tabular}\n\n" << std::defaultfloat << boost::math::tools::multiply_times;
+
+   printer << "\\textbf{Complex Special Values}\n\n\\begin{tabular}{r r r r}\nValue & Precision & Format & Result \\\\\n";
+   cval = std::complex<double>(0, 0);
+   printer.stream() << cval << " & default & default & ";
+   printer << cval << " \\\\\n";
+   printer.stream() << cval << " & default & show\\_zero\\_components & ";
+   printer << boost::math::tools::show_zero_components  << cval << " \\\\\n" << boost::math::tools::hide_zero_components;
+   cval = std::complex<double>(2.5, 0);
+   printer.stream() << cval << " & default & default & ";
+   printer << cval << " \\\\\n";
+   printer.stream() << cval << " & default & show\\_zero\\_components & " << boost::math::tools::show_zero_components;
+   printer << boost::math::tools::show_zero_components << cval << " \\\\\n" << boost::math::tools::hide_zero_components;
+   cval = std::complex<double>(-2.5, 0);
+   printer.stream() << cval << " & default & default & ";
+   printer << cval << " \\\\\n";
+   printer.stream() << cval << " & default & show\\_zero\\_components & ";
+   printer << boost::math::tools::show_zero_components << cval << " \\\\\n" << boost::math::tools::hide_zero_components;
+   cval = std::complex<double>(0, 2.5);
+   printer.stream() << cval << " & default & default & ";
+   printer << cval << " \\\\\n";
+   printer.stream() << cval << " & default & show\\_zero\\_components & ";
+   printer << boost::math::tools::show_zero_components << cval << " \\\\\n" << boost::math::tools::hide_zero_components;
+   cval = std::complex<double>(0, -2.5);
+   printer.stream() << cval << " & default & default & ";
+   printer << cval << " \\\\\n";
+   printer.stream() << cval << " & default & show\\_zero\\_components & ";
+   printer << boost::math::tools::show_zero_components << cval << " \\\\\n" << boost::math::tools::hide_zero_components;
+   // Infinity:
+   cval = std::complex<double>(std::numeric_limits<double>::infinity(), 2.5);
+   printer.stream() << cval << " & default & default & ";
+   printer << cval << " \\\\\n";
+   cval = std::complex<double>(2.5, std::numeric_limits<double>::infinity());
+   printer.stream() << cval << " & default & default & ";
+   printer << cval << " \\\\\n";
+   // NaN:
+   cval = std::complex<double>(std::numeric_limits<double>::quiet_NaN(), 2.5);
+   printer.stream() << cval << " & default & default & ";
+   printer << cval << " \\\\\n";
+   cval = std::complex<double>(2.5, std::numeric_limits<double>::quiet_NaN());
+   printer.stream() << cval << " & default & default & ";
+   printer << cval << " \\\\\n";
+   cval = std::complex<double>(std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::infinity());
+   printer.stream() << cval << " & default & default & ";
+   printer << cval << " \\\\\n";
+   cval = std::complex<double>(std::numeric_limits<double>::infinity(), std::numeric_limits<double>::quiet_NaN());
+   printer.stream() << cval << " & default & default & ";
+   printer << cval << " \\\\\n";
+   printer << "\\end{tabular}\n\n" << std::defaultfloat << boost::math::tools::multiply_times;
+
 
    printer << "\\end{document}\n\n";
 }

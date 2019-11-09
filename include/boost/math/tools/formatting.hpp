@@ -10,6 +10,7 @@
 #include <iomanip>
 #include <sstream>
 #include <limits>
+#include <cmath>
 #include <boost/throw_exception.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/is_detected.hpp>
@@ -97,6 +98,12 @@ namespace boost {
             doublestruck_i = 2
          };
 
+         enum zero_component_t
+         {
+            hide_zero_components = 0,
+            show_zero_components = 1
+         };
+
          struct latex_as_text_t {};
          struct latex_as_equation_t {};
 
@@ -113,6 +120,7 @@ namespace boost {
             imaginary_i_t i_style;
             multiplyer_t  multiply_style;
             bool requires_parenthesis;
+            bool m_show_zero_components;
          protected:
             template <class Float>
             static void decompose_float(std::basic_ostream<charT, Traits>& os, const Float& f, std::basic_string<charT, Traits>& mantissa, std::basic_string<charT, Traits>& exponent)
@@ -133,7 +141,7 @@ namespace boost {
                   mantissa = s;
             }
          public:
-            basic_numeric_formatter_base() : styling_level(full_styling), requires_parenthesis(false), multiply_style(multiply_times) {}
+            basic_numeric_formatter_base() : styling_level(full_styling), requires_parenthesis(false), multiply_style(multiply_times), m_show_zero_components(false) {}
 
             void styling(styling_level_t i)
             {
@@ -167,6 +175,14 @@ namespace boost {
             {
                return requires_parenthesis;
             }
+            void show_zero_components(bool b)
+            {
+               m_show_zero_components = b;
+            }
+            bool show_zero_components()const
+            {
+               return m_show_zero_components;
+            }
             template <class Integer>
             static std::basic_ostream<charT, Traits>& format_integer(std::basic_ostream<charT, Traits>& os, const Integer& i)
             {
@@ -182,8 +198,22 @@ namespace boost {
                return os << mantissa;
             }
             template <class Complex>
-            static std::basic_ostream<charT, Traits>& format_complex(std::basic_ostream<charT, Traits>& os, const Complex& f)
+            std::basic_ostream<charT, Traits>& format_complex(std::basic_ostream<charT, Traits>& os, const Complex& f)
             {
+               if (!this->show_zero_components())
+               {
+                  if (f.imag() == 0)
+                  {
+                     format_float(os, f.real());
+                     return os;
+                  }
+                  else if (f.real() == 0)
+                  {
+                     format_float(os, f.imag());
+                     os.put(os.widen('i'));
+                     return os;
+                  }
+               }
                format_float(os, f.real());
                typename Complex::value_type i(f.imag());
                bool isneg = i < 0;
@@ -198,7 +228,8 @@ namespace boost {
                os.put(os.widen('i'));
                return os;
             }
-            void latex_as_equation();
+            bool latex_as_equation()const { return false; }
+            void latex_as_equation(bool) {}
          };
 
          template <class charT, class Traits>
@@ -227,26 +258,40 @@ namespace boost {
             template <class Float>
             std::basic_ostream<charT, Traits>& format_float(std::basic_ostream<charT, Traits>& os, const Float& f)
             {
-               std::basic_string<charT, Traits> mantissa, exponent;
-               basic_numeric_formatter_base<charT, Traits>::decompose_float(os, f, mantissa, exponent);
                if (this->styling() >= minimal_styling)
                   os << "<phrase role=\"number\">";
                if (this->styling() > minimal_styling)
                   os << "<phrase role=\"float\">";
 
-               if (exponent.size())
+               if ((std::isinf)(f))
                {
-                  os << mantissa;
-                  if (this->multiply() == multiply_x)
-                     os.put(os.widen('x'));
-                  else if (this->multiply() == multiply_dot)
-                     os << "&#x22C5;";
-                  else
-                     os << "&#x00D7;";
-                  os << "10<superscript>" << exponent << "</superscript>";
+                  if (f < 0)
+                     os.put(os.widen('-'));
+                  os << "&#8734;";
+               }
+               else if ((std::isnan(f)))
+               {
+                  os << "NaN";
                }
                else
-                  os << mantissa;
+               {
+                  std::basic_string<charT, Traits> mantissa, exponent;
+                  basic_numeric_formatter_base<charT, Traits>::decompose_float(os, f, mantissa, exponent);
+
+                  if (exponent.size())
+                  {
+                     os << mantissa;
+                     if (this->multiply() == multiply_x)
+                        os.put(os.widen('x'));
+                     else if (this->multiply() == multiply_dot)
+                        os << "&#x22C5;";
+                     else
+                        os << "&#x00D7;";
+                     os << "10<superscript>" << exponent << "</superscript>";
+                  }
+                  else
+                     os << mantissa;
+               }
 
                if (this->styling() > minimal_styling)
                   os << "</phrase>";
@@ -263,33 +308,59 @@ namespace boost {
                if (this->styling() > minimal_styling)
                   os << "<phrase role=\"complex\">";
 
-               styling_level_t saved_style = this->styling();
-               this->styling(no_styling);
-
-               format_float(os, f.real());
-               typename Complex::value_type i(f.imag());
-               bool isneg = i < 0;
-               if (isneg)
+               if ((std::isnan(f.real())) || (std::isnan)(f.imag()))
                {
-                  i = -i;
-                  os << " - ";
+                  os << "NaN";
+               }
+               else if ((std::isinf)(f.real()) || (std::isinf)(f.imag()))
+               {
+                  os << "&#8734;&#x0303;";
                }
                else
-                  os << " + ";
-               format_float(os, i);
+               {
+                  styling_level_t saved_style = this->styling();
+                  this->styling(no_styling);
 
-               if (saved_style >= minimal_styling)
-                  os << "<phrase role=\"imaginary_i\">";
-               if (this->imaginary_style() == doublestruck_i)
-                  os << "&#x2148;";
-               else if (this->imaginary_style() == slanted_i)
-                  os << "<emphasis>i</emphasis>";
-               else
-                  os.put(os.widen('i'));
-               if (saved_style >= minimal_styling)
-                  os << "</phrase>";
+                  bool need_i = true;
 
-               this->styling(saved_style);
+                  if (!this->show_zero_components() && (f.imag() == 0))
+                  {
+                     format_float(os, f.real());
+                     need_i = false;
+                  }
+                  else if (!this->show_zero_components() && (f.real() == 0))
+                  {
+                     format_float(os, f.imag());
+                  }
+                  else
+                  {
+                     format_float(os, f.real());
+                     typename Complex::value_type i(f.imag());
+                     bool isneg = i < 0;
+                     if (isneg)
+                     {
+                        i = -i;
+                        os << " - ";
+                     }
+                     else
+                        os << " + ";
+                     format_float(os, i);
+                  }
+                  if (need_i)
+                  {
+                     if (saved_style >= minimal_styling)
+                        os << "<phrase role=\"imaginary_i\">";
+                     if (this->imaginary_style() == doublestruck_i)
+                        os << "&#x2148;";
+                     else if (this->imaginary_style() == slanted_i)
+                        os << "<emphasis>i</emphasis>";
+                     else
+                        os.put(os.widen('i'));
+                     if (saved_style >= minimal_styling)
+                        os << "</phrase>";
+                  }
+                  this->styling(saved_style);
+               }
 
                if (this->styling() > minimal_styling)
                   os << "</phrase>";
@@ -326,6 +397,26 @@ namespace boost {
             {
                std::basic_string<charT, Traits> mantissa, exponent;
                basic_numeric_formatter_base<charT, Traits>::decompose_float(os, f, mantissa, exponent);
+
+               if ((std::isinf)(f))
+               {
+                  if (!inside_equation)
+                     os.put(os.widen('$'));
+                  if (f < 0)
+                     os.put(os.widen('-'));
+                  os << "\\infty";
+                  if (!inside_equation)
+                     os.put(os.widen('$'));
+                  return os;
+               }
+               else if ((std::isnan)(f))
+               {
+                  if (inside_equation)
+                     os << "\\mathrm{NaN}";
+                  else
+                     os << "NaN";
+                  return os;
+               }
 
                if (latex_as_equation())
                {
@@ -367,29 +458,64 @@ namespace boost {
                if (!inside_equation && latex_as_equation())
                   os.put(os.widen('$'));
                bool saved_inside_equation = inside_equation;
-               inside_equation = true;
-
-               format_float(os, f.real());
-               typename Complex::value_type i(f.imag());
-               bool isneg = i < 0;
-               if (isneg)
+               inside_equation = latex_as_equation();
+               if ((std::isnan(f.real())) || (std::isnan)(f.imag()))
                {
-                  i = -i;
-                  os << " - ";
+                  if (inside_equation)
+                     os << "\\mathrm{NaN}";
+                  else
+                     os << "NaN";
+                  return os;
+               }
+               else if ((std::isinf)(f.real()) || (std::isinf)(f.imag()))
+               {
+                  if (!inside_equation)
+                     os.put(os.widen('$'));
+                  os << "\\tilde{\\infty}";
+                  if (!inside_equation)
+                     os.put(os.widen('$'));
+                  return os;
                }
                else
-                  os << " + ";
-               format_float(os, i);
+               {
+                  bool need_i = true;
 
-               if (this->imaginary_style() == doublestruck_i)
-                  BOOST_THROW_EXCEPTION(std::runtime_error("Doublestruck imaginary i not implemented for LaTex output."));
-               else if ((this->imaginary_style() == upright_i) && latex_as_equation())
-                  os << "\\mathrm{i}";
-               else if ((this->imaginary_style() == slanted_i) && !latex_as_equation())
-                  os << "\\textit{i}";
-               else
-                  os.put(os.widen('i'));
+                  if (!this->show_zero_components() && (f.imag() == 0))
+                  {
+                     format_float(os, f.real());
+                     need_i = false;
+                  }
+                  else if (!this->show_zero_components() && (f.real() == 0))
+                  {
+                     format_float(os, f.imag());
+                  }
+                  else
+                  {
 
+                     format_float(os, f.real());
+                     typename Complex::value_type i(f.imag());
+                     bool isneg = i < 0;
+                     if (isneg)
+                     {
+                        i = -i;
+                        os << " - ";
+                     }
+                     else
+                        os << " + ";
+                     format_float(os, i);
+                  }
+                  if (need_i)
+                  {
+                     if (this->imaginary_style() == doublestruck_i)
+                        BOOST_THROW_EXCEPTION(std::runtime_error("Doublestruck imaginary i not implemented for LaTex output."));
+                     else if ((this->imaginary_style() == upright_i) && latex_as_equation())
+                        os << "\\mathrm{i}";
+                     else if ((this->imaginary_style() == slanted_i) && !latex_as_equation())
+                        os << "\\textit{i}";
+                     else
+                        os.put(os.widen('i'));
+                  }
+               }
                inside_equation = saved_inside_equation;
                if (!inside_equation && latex_as_equation())
                   os.put(os.widen('$'));
@@ -419,27 +545,40 @@ namespace boost {
             template <class Float>
             std::basic_ostream<charT, Traits>& format_float(std::basic_ostream<charT, Traits>& os, const Float& f)
             {
-               std::basic_string<charT, Traits> mantissa, exponent;
-               basic_numeric_formatter_base<charT, Traits>::decompose_float(os, f, mantissa, exponent);
-
                if (this->styling() >= minimal_styling)
                   os << "<span class=\"number\">";
                if (this->styling() > minimal_styling)
                   os << "<span class=\"float\">";
 
-               if (exponent.size())
+               if ((std::isinf)(f))
                {
-                  os << mantissa;
-                  if (this->multiply() == multiply_x)
-                     os.put(os.widen('x'));
-                  else if (this->multiply() == multiply_dot)
-                     os << "&#x22C5;";
-                  else
-                     os << "&#x00D7;";
-                  os << "10<sup>" << exponent << "</sup>";
+                  if (f < 0)
+                     os.put(os.widen('-'));
+                  os << "&#8734;";
+               }
+               else if ((std::isnan(f)))
+               {
+                  os << "NaN";
                }
                else
-                  os << mantissa;
+               {
+                  std::basic_string<charT, Traits> mantissa, exponent;
+                  basic_numeric_formatter_base<charT, Traits>::decompose_float(os, f, mantissa, exponent);
+
+                  if (exponent.size())
+                  {
+                     os << mantissa;
+                     if (this->multiply() == multiply_x)
+                        os.put(os.widen('x'));
+                     else if (this->multiply() == multiply_dot)
+                        os << "&#x22C5;";
+                     else
+                        os << "&#x00D7;";
+                     os << "10<sup>" << exponent << "</sup>";
+                  }
+                  else
+                     os << mantissa;
+               }
 
                if (this->styling() > minimal_styling)
                   os << "</span>";
@@ -456,33 +595,59 @@ namespace boost {
                if (this->styling() > minimal_styling)
                   os << "<span class=\"complex\">";
 
-               styling_level_t saved_style = this->styling();
-               this->styling(no_styling);
-
-               format_float(os, f.real());
-               typename Complex::value_type i(f.imag());
-               bool isneg = i < 0;
-               if (isneg)
+               if ((std::isnan(f.real())) || (std::isnan)(f.imag()))
                {
-                  i = -i;
-                  os << " - ";
+                  os << "NaN";
+               }
+               else if ((std::isinf)(f.real()) || (std::isinf)(f.imag()))
+               {
+                  os << "&#8734;&#x0303;";
                }
                else
-                  os << " + ";
-               format_float(os, i);
+               {
+                  styling_level_t saved_style = this->styling();
+                  this->styling(no_styling);
+                  
+                  bool need_i = true;
 
-               if (saved_style >= minimal_styling)
-                  os << "<span class=\"imaginary_i\">";
-               if (this->imaginary_style() == doublestruck_i)
-                  os << "&#x2148;";
-               else if (this->imaginary_style() == slanted_i)
-                  os << "<i>i</i>";
-               else
-                  os.put(os.widen('i'));
-               if (saved_style >= minimal_styling)
-                  os << "</span>";
-
-               this->styling(saved_style);
+                  if(!this->show_zero_components() && (f.imag() == 0))
+                  { 
+                     format_float(os, f.real());
+                     need_i = false;
+                  }
+                  else if (!this->show_zero_components() && (f.real() == 0))
+                  {
+                     format_float(os, f.imag());
+                  }
+                  else
+                  {
+                     format_float(os, f.real());
+                     typename Complex::value_type i(f.imag());
+                     bool isneg = i < 0;
+                     if (isneg)
+                     {
+                        i = -i;
+                        os << " - ";
+                     }
+                     else
+                        os << " + ";
+                     format_float(os, i);
+                  }
+                  if (need_i)
+                  {
+                     if (saved_style >= minimal_styling)
+                        os << "<span class=\"imaginary_i\">";
+                     if (this->imaginary_style() == doublestruck_i)
+                        os << "&#x2148;";
+                     else if (this->imaginary_style() == slanted_i)
+                        os << "<i>i</i>";
+                     else
+                        os.put(os.widen('i'));
+                     if (saved_style >= minimal_styling)
+                        os << "</span>";
+                  }
+                  this->styling(saved_style);
+               }
 
                if (this->styling() > minimal_styling)
                   os << "</span>";
@@ -502,6 +667,16 @@ namespace boost {
 
          public:
             basic_numeric_printer(std::basic_ostream<charT, Traits>& os) : p_stream(&os) {}
+            basic_numeric_printer(std::basic_ostream<charT, Traits>& os, const basic_numeric_printer& printer) 
+               : p_stream(&os) 
+            {
+               styling(printer.styling());
+               imaginary_style(printer.imaginary_style());
+               latex_as_equation(printer.latex_as_equation());
+               parenthesis(printer.parenthesis());
+               multiply(printer.multiply());
+               show_zero_components(printer.show_zero_components());
+            }
 
             using base_type::format_integer;
             using base_type::format_float;
@@ -511,6 +686,7 @@ namespace boost {
             using base_type::latex_as_equation;
             using base_type::parenthesis;
             using base_type::multiply;
+            using base_type::show_zero_components;
 
             std::basic_ostream<charT, Traits>& stream()
             {
@@ -537,7 +713,7 @@ namespace boost {
                ss.copyfmt(os.stream());
                ss.imbue(os.stream().getloc());
                ss.width(0);
-               basic_numeric_printer<Format, charT, Traits> fmt(ss);
+               basic_numeric_printer<Format, charT, Traits> fmt(ss, os);
                fmt.format_integer(fmt.stream(), i);
                os.stream() << ss.str();
             }
@@ -555,7 +731,7 @@ namespace boost {
                ss.copyfmt(os.stream());
                ss.imbue(os.stream().getloc());
                ss.width(0);
-               basic_numeric_printer<Format, charT, Traits> fmt(ss);
+               basic_numeric_printer<Format, charT, Traits> fmt(ss, os);
                fmt.format_float(fmt.stream(), f);
                os.stream() << ss.str();
             }
@@ -573,7 +749,7 @@ namespace boost {
                ss.copyfmt(os.stream());
                ss.imbue(os.stream().getloc());
                ss.width(0);
-               basic_numeric_printer<Format, charT, Traits> fmt(ss);
+               basic_numeric_printer<Format, charT, Traits> fmt(ss, os);
                fmt.format_complex(fmt.stream(), f);
                os.stream() << ss.str();
             }
@@ -614,6 +790,13 @@ namespace boost {
          basic_numeric_printer<Format, charT, Traits>& operator << (basic_numeric_printer<Format, charT, Traits>& os, const imaginary_i_t i)
          {
             os.imaginary_style(i);
+            return os;
+         }
+
+         template <output_format_t Format, class charT, class Traits>
+         basic_numeric_printer<Format, charT, Traits>& operator << (basic_numeric_printer<Format, charT, Traits>& os, const zero_component_t z)
+         {
+            os.show_zero_components(z == ::boost::math::tools::show_zero_components ? true : false);
             return os;
          }
 

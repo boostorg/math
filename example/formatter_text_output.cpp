@@ -56,7 +56,35 @@ void print(std::ostream& os)
    printer.stream() << std::setw(20) << cval << std::setw(20) << "default" << std::setw(20) << "default" << std::setw(30);
    printer << cval << std::endl;
    printer.stream() << std::setw(20) << cval << std::setw(20) << "3" << std::setw(20) << "scientific" << std::setw(30);
-   printer << std::scientific << std::setprecision(3) << cval << std::endl;
+   printer << std::scientific << std::setprecision(3) << cval << std::endl << std::endl << std::defaultfloat;
+
+   printer << "Complex Zeros:\n\n";
+   cval = std::complex<double>(0);
+   printer << std::setw(20) << "Value" << std::setw(20) << "Precision" << std::setw(23) << "Format" << std::setw(30) << "Result" << std::endl;
+   printer.stream() << std::setw(20) << cval << std::setw(20) << "default" << std::setw(23) << "default" << std::setw(30);
+   printer << cval << std::endl;
+   printer.stream() << std::setw(20) << cval << std::setw(20) << "default" << std::setw(23) << "show_zero_components" << std::setw(30);
+   printer << boost::math::tools::show_zero_components << cval << std::endl << boost::math::tools::hide_zero_components;
+   cval = 3.14;
+   printer.stream() << std::setw(20) << cval << std::setw(20) << "default" << std::setw(23) << "default" << std::setw(30);
+   printer << cval << std::endl;
+   printer.stream() << std::setw(20) << cval << std::setw(20) << "default" << std::setw(23) << "show_zero_components" << std::setw(30);
+   printer << boost::math::tools::show_zero_components << cval << std::endl << boost::math::tools::hide_zero_components;
+   cval = -3.14;
+   printer.stream() << std::setw(20) << cval << std::setw(20) << "default" << std::setw(23) << "default" << std::setw(30);
+   printer << cval << std::endl;
+   printer.stream() << std::setw(20) << cval << std::setw(20) << "default" << std::setw(23) << "show_zero_components" << std::setw(30);
+   printer << boost::math::tools::show_zero_components << cval << std::endl << boost::math::tools::hide_zero_components;
+   cval = std::complex<double>(0, 25.25);
+   printer.stream() << std::setw(20) << cval << std::setw(20) << "default" << std::setw(23) << "default" << std::setw(30);
+   printer << cval << std::endl;
+   printer.stream() << std::setw(20) << cval << std::setw(20) << "default" << std::setw(23) << "show_zero_components" << std::setw(30);
+   printer << boost::math::tools::show_zero_components << cval << std::endl << boost::math::tools::hide_zero_components;
+   cval = std::complex<double>(0, -25.25);
+   printer.stream() << std::setw(20) << cval << std::setw(20) << "default" << std::setw(23) << "default" << std::setw(30);
+   printer << cval << std::endl;
+   printer.stream() << std::setw(20) << cval << std::setw(20) << "default" << std::setw(23) << "show_zero_components" << std::setw(30);
+   printer << boost::math::tools::show_zero_components << cval << std::endl << boost::math::tools::hide_zero_components;
 }
 
 int main(int argc, const char* argv[])
