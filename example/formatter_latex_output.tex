@@ -1,5 +1,8 @@
-\documentclass{article}
- \begin{ document }
+\documentclass[10pt]{article}
+\usepackage{lingmacros}
+\usepackage{tree-dvips}
+\usepackage[a4paper, left = { 0.5in }]{ geometry }
+\begin{document}
 
 \textbf{Basic Integer Values}
 
@@ -24,20 +27,52 @@ Value & Precision & Format & Result \\
 -1.235e-24 & 10 & scientific + latex\_as\_text + multiply\_x & -1.2345678765x10\textsuperscript{-24} \\
 -1.2345678765e-24 & 3 & scientific + multiply\_dot & $-1.235\cdot 10^{-24}$ \\
 -1.235e-24 & 10 & scientific + latex\_as\_text + multiply\_dot & -1.2345678765$\cdot$10\textsuperscript{-24} \\
+0 & default & default & $0$ \\
+-0 & default & default & $-0$ \\
+inf & default & default & $\infty$ \\
+-inf & default & default & $-\infty$ \\
+nan & default & default & NaN \\
+0 & default & latex\_as\_text & 0 \\
+-0 & default & latex\_as\_text & -0 \\
+inf & default & latex\_as\_text & $\infty$ \\
+-inf & default & latex\_as\_text & $-\infty$ \\
+nan & default & latex\_as\_text & NaN \\
 \end{tabular}
 
 \textbf{Basic Complex Values}
 
 \begin{tabular}{r r r r}
 Value & Precision & Format & Result \\
-(3.25,4.67) & default & default & $3.25 + 4.67\mathrm{i}$ \\
-(3.14,0) & default & default & $3.14 + 0\mathrm{i}$ \\
-(1.23,-1.234567876e-24) & default & default & $1.23 - 1.234567876\times 10^{-24}\mathrm{i}$ \\
-(1.23,-1.234567876e-24) & 3 & scientific & $1.230\times 10^{+00} - 1.235\times 10^{-24}\mathrm{i}$ \\
+(3.25,4.67) & default & default & $3.25 + 4.67i$ \\
+(3.14,0) & default & default & $3.14$ \\
+(1.23,-1.234567876e-24) & default & default & $1.23 - 1.234567876\times 10^{-24}i$ \\
+(1.23,-1.234567876e-24) & 3 & scientific & $1.230\times 10^{+00} - 1.235\times 10^{-24}i$ \\
 (1.230e+00,-1.235e-24) & 12 & default + slanted\_i & $1.23 - 1.2345678765\times 10^{-24}i$ \\
 (1.23,-1.2345678765e-24) & 12 & default + upright\_i & $1.23 - 1.2345678765\times 10^{-24}\mathrm{i}$ \\
 (1.23,-1.2345678765e-24) & 12 & default + slanted\_i + latex\_as\_text & 1.23 - 1.2345678765$\times$10\textsuperscript{-24}\textit{i} \\
 (1.23,-1.2345678765e-24) & 12 & default + upright\_i + latex\_as\_text& 1.23 - 1.2345678765$\times$10\textsuperscript{-24}i \\
+\end{tabular}
+
+\textbf{Complex Special Values}
+
+\begin{tabular}{r r r r}
+Value & Precision & Format & Result \\
+(0,0) & default & default & 0 \\
+(0,0) & default & show\_zero\_components & 0 + 0i \\
+(2.5,0) & default & default & 2.5 \\
+(2.5,0) & default & show\_zero\_components & 2.5 + 0i \\
+(-2.5,0) & default & default & -2.5 \\
+(-2.5,0) & default & show\_zero\_components & -2.5 + 0i \\
+(0,2.5) & default & default & 2.5i \\
+(0,2.5) & default & show\_zero\_components & 0 + 2.5i \\
+(0,-2.5) & default & default & -2.5i \\
+(0,-2.5) & default & show\_zero\_components & 0 - 2.5i \\
+(inf,2.5) & default & default & $\tilde{\infty}$ \\
+(2.5,inf) & default & default & $\tilde{\infty}$ \\
+(nan,2.5) & default & default & NaN \\
+(2.5,nan) & default & default & NaN \\
+(nan,inf) & default & default & NaN \\
+(inf,nan) & default & default & NaN \\
 \end{tabular}
 
 \end{document}

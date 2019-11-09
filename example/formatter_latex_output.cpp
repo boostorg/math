@@ -11,7 +11,11 @@ void print(std::ostream& os)
 {
    boost::math::tools::latex_printer printer(os);
 
-   printer << "\\documentclass{article}\n \\begin{ document }\n\n";
+   printer << "\\documentclass[10pt]{article}" << std::endl;
+   printer << "\\usepackage{lingmacros}" << std::endl;
+   printer << "\\usepackage{tree-dvips}" << std::endl;
+   printer << "\\usepackage[a4paper, left = { 0.5in }]{ geometry }" << std::endl;
+   printer << "\\begin{document}" << std::endl << std::endl;
 
    int ival = 0;
    printer << "\\textbf{Basic Integer Values}\n\n\\begin{tabular}{r r r}\nValue & Base & Result \\\\ \\hline \n";
@@ -118,7 +122,7 @@ void print(std::ostream& os)
    cval = std::complex<double>(2.5, 0);
    printer.stream() << cval << " & default & default & ";
    printer << cval << " \\\\\n";
-   printer.stream() << cval << " & default & show\\_zero\\_components & " << boost::math::tools::show_zero_components;
+   printer.stream() << cval << " & default & show\\_zero\\_components & ";
    printer << boost::math::tools::show_zero_components << cval << " \\\\\n" << boost::math::tools::hide_zero_components;
    cval = std::complex<double>(-2.5, 0);
    printer.stream() << cval << " & default & default & ";
