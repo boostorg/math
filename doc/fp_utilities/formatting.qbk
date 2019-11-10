@@ -27,25 +27,26 @@
 
 [heading Description]
 
-Class `basic_numeric_printer` provides "pretty printing" capabilities for numeric data, it's use mirrors that of the iostream
-library, but fullfills a very different role:  there is no "input streaming" and the output is intended to be human readable
-and formatted for printing and not for consumption by machine.
+The class `basic_numeric_printer` provides "pretty printing" capabilities for numeric data.
+Its use mirrors that of the `iostream` library, but fulfills a very different role:
+There is no "input streaming" and the output is human readable--and not intended for machine consumption.
 
-Supported input number types are integers, floating point number, complex numbers, rationals(TODO), polynomials(TODO), intervals(TODO)
-and containers thereof(TODO).  Other types, plus all the standard library manipulators can also be streamed to `basic_numeric_printer`
-but are simply formwarded to the underlying stream and ignored by the pretty printer.
+Supported types are integers, floating point numbers, complex numbers, rationals(TODO), polynomials(TODO), intervals(TODO)
+and containers thereof(TODO).
+Other types, plus all the standard library manipulators can also be streamed to `basic_numeric_printer`
+but are simply forwarded to the underlying stream.
 
 Output formats include plain text (not so useful), Docbook XML markup, HTML markup, and Latex.  MathML may come later(TODO).
 
 [h4 Examples:]
 
-Integer values have the same representation as the underlying stream would give them, but can have styling applied to their XML wrapper
-in HTML and Docbook output modes.
+Integer values have the same representation as the underlying stream would give them,
+but can have styling applied to their XML wrapper in HTML and Docbook output modes.
 
-Floats in scientific mode, are styled somewhat differently from the underlying iostream: '''<phrase role="number">-1.23457&#x00D7;10<superscript>-24</superscript></phrase>'''
-and can be customised to change the default multipication operator: '''<phrase role="number">-1.235&#x22C5;10<superscript>-24</superscript></phrase>'''.
+Floats in scientific mode are styled somewhat differently from the underlying `iostream`: '''<phrase role="number">-1.23457&#x00D7;10<superscript>-24</superscript></phrase>'''
+and can be customised to change the default multiplication operator: '''<phrase role="number">-1.235&#x22C5;10<superscript>-24</superscript></phrase>'''.
 
-Complex numbers inherit all the properties of floats, and in addition allow the unit "i" to be customised, for example 
+Complex numbers inherit all the properties of floats, and in addition allow the unit "i" to be customised, for example
 '''<phrase role="number">1.23 - 1.23&#x00D7;10<superscript>-24</superscript><phrase role="imaginary_i">i</phrase></phrase>''' or
 '''<phrase role="number"><phrase role="complex">1.23 - 1.2345678765&#x22C5;10<superscript>-24</superscript><phrase role="imaginary_i">&#x2148;</phrase></phrase></phrase>'''.
 
@@ -79,11 +80,11 @@ Complex numbers inherit all the properties of floats, and in addition allow the 
    typedef basic_numeric_printer<latex_format, wchar_t> wlatex_printer;
    typedef basic_numeric_printer<html_format, wchar_t> whtml_printer;
 
-Class `basic_numeric_printer` is a `std::basic_ostream` lookalike which is constructable from an underlying
+Class `basic_numeric_printer` is a `std::basic_ostream` lookalike which is constructible from an underlying
 stream, and has a single public member function which returns a reference to the underlying stream.
 
-It's usage via `<<` manipulators is identical to that of `std::basic_ostream`: anything that `basic_numeric_printer` doesn't
-understand is passed unchanged to the underlying stream, while numeric data alone is intercepted and pretty-formtted.
+Its usage via `<<` manipulators is identical to that of `std::basic_ostream`: anything that `basic_numeric_printer` doesn't
+understand is passed unchanged to the underlying stream, while numeric data alone is intercepted and pretty-formatted.
 
 [heading Manipulators]
 
@@ -141,9 +142,9 @@ Controls how the imaginary unit is formatted (plain text output ignores this opt
    constexpr const unspecified latex_as_equation;
    constexpr const unspecified latex_as_text;
 
-Controls how latex output is handled: the default is to format all numbers in equation mode, but streaming `latex_as_text` to the stream
-will result in numbers being formatted in text mode instead.  Note that even in text mode some entities need to drop into math mode temporarily
-for example to access symbols such as `\times`.
+Controls how Latex output is handled: the default is to format all numbers in equation mode, but streaming `latex_as_text` to the stream
+will result in numbers being formatted in text mode instead.
+Note that even in text mode some entities need to drop into math mode temporarily for example to access symbols such as `\times`.
 
 [heading Format Gallery]
 
@@ -172,7 +173,7 @@ The above tables of sample output are available in various other formats
 [endsect] [/section:formatting]
 
 
-[/  Copyright 2017 John Maddock.
+[/  Copyright 2019 John Maddock.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
