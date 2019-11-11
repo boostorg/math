@@ -95,12 +95,6 @@ is a practical way of generating (almost always) correctly rounded values.
 
 [*All new projects are recommended to use __multiprecision.]
 
-[import ../../example/big_seventh.cpp]
-
-[big_seventh_example_1]
-[big_seventh_example_2]
-The full source of this example is at [@../../example/big_seventh.cpp big_seventh.cpp]
-
 [import ../../example/fft_sines_table.cpp]
 
 [fft_sines_table_example_1]
