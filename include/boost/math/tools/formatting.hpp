@@ -16,6 +16,7 @@
 #include <boost/type_traits/is_detected.hpp>
 #include <boost/type_traits/is_class.hpp>
 #include <boost/type_traits/is_arithmetic.hpp>
+#include <boost/regex/pending/unicode_iterator.hpp>
 
 #ifdef _MSC_VER
 #pragma once
@@ -54,7 +55,7 @@ namespace boost {
          template<class T>
          using imag_t = decltype(std::declval<T&>().imag(std::declval<T const&>().real()));
          template <class T>
-         using polynomial_t = decltype(std::declval<const T&>()(std::declval<const T&>()[0] + std::declval<const T&>().order()));
+         using polynomial_t = decltype(std::declval<const T&>()(std::declval<const T&>()[0] + std::declval<const T&>().degree()));
 
          template <class T>
          struct is_complex_like
@@ -63,9 +64,15 @@ namespace boost {
          };
 
          template <class T>
+         struct is_polynomial_like
+         {
+            static const bool value = boost::is_detected_v<polynomial_t, T>;
+         };
+
+         template <class T>
          struct is_unhandled_type
          {
-            static const bool value = !is_complex_like<T>::value && !is_float_like<T>::value && !is_integer_like<T>::value;
+            static const bool value = !is_complex_like<T>::value && !is_float_like<T>::value && !is_integer_like<T>::value && !is_polynomial_like<T>::value;
          };
 
 
@@ -104,11 +111,117 @@ namespace boost {
             show_zero_components = 1
          };
 
-         struct latex_as_text_t {};
-         struct latex_as_equation_t {};
+         enum latex_t
+         {
+            latex_as_text = 1,
+            latex_as_equation = 0
+         };
 
-         constexpr const latex_as_text_t* latex_as_text = nullptr;
-         constexpr const latex_as_equation_t* latex_as_equation = nullptr;
+         enum unicode_text_t
+         {
+            unicode_text_output = 0,
+            ascii_text_output = 1
+         };
+
+         template<class charT, class Traits>
+         typename boost::enable_if_c<sizeof(charT) == 1>::type write_unicode_char(std::basic_ostream <charT, Traits>& os, std::uint32_t code_point)
+         {
+            std::uint32_t u[2] = { code_point, 0 };
+            boost::u32_to_u8_iterator<const std::uint32_t*, charT> i(u), j(&u[0] + 1);
+            while (i != j)
+            {
+               os.put(*i++);
+            }
+         }
+         template<class charT, class Traits>
+         typename boost::enable_if_c<sizeof(charT) == 2>::type write_unicode_char(std::basic_ostream <charT, Traits>& os, std::uint32_t code_point)
+         {
+            std::uint32_t u[2] = { code_point, 0 };
+            boost::u32_to_u16_iterator<const std::uint32_t*, charT> i(u), j(&u[0] + 1);
+            while (i != j)
+            {
+               os.put(*i++);
+            }
+         }
+         template<class charT, class Traits>
+         typename boost::enable_if_c<sizeof(charT) == 4>::type write_unicode_char(std::basic_ostream <charT, Traits>& os, std::uint32_t code_point)
+         {
+            os.put(code_point);
+         }
+
+         template<class charT, class Traits>
+         void write_unicode_superscript(std::basic_ostream <charT, Traits>& os, std::basic_string<charT, Traits> digits)
+         {
+            for (std::size_t i = 0; i < digits.size(); ++i)
+            {
+               switch (digits[i])
+               {
+               case '0':
+                  write_unicode_char(os, 0x2070);
+                  break;
+               case '1':
+                  write_unicode_char(os, 0xB9);
+                  break;
+               case '2':
+                  write_unicode_char(os, 0xB2);
+                  break;
+               case '3':
+                  write_unicode_char(os, 0xB3);
+                  break;
+               case '4':
+                  write_unicode_char(os, 0x2074);
+                  break;
+               case '5':
+                  write_unicode_char(os, 0x2075);
+                  break;
+               case '6':
+                  write_unicode_char(os, 0x2076);
+                  break;
+               case '7':
+                  write_unicode_char(os, 0x2076);
+                  break;
+               case '8':
+                  write_unicode_char(os, 0x2078);
+                  break;
+               case '9':
+                  write_unicode_char(os, 0x2079);
+                  break;
+               case '+':
+                  write_unicode_char(os, 0x207A);
+                  break;
+               case '-':
+                  write_unicode_char(os, 0x207B);
+                  break;
+               }
+            }
+         }
+
+         template <class charT>
+         typename boost::enable_if_c<sizeof(charT) == 1, std::size_t>::type unicode_character_len(const charT* p)
+         {
+            std::size_t l = 0;
+            for (unsigned i = 0; p && p[i]; ++i) 
+               ++l;
+            boost::u8_to_u32_iterator<const charT*> i(p), j(p + l);
+            return std::distance(i, j);
+         }
+         template <class charT>
+         typename boost::enable_if_c<sizeof(charT) == 2, std::size_t>::type unicode_character_len(const charT* p)
+         {
+            std::size_t l = 0;
+            for (unsigned i = 0; p && p[i]; ++i) 
+               ++l;
+            boost::u16_to_u32_iterator<const charT*> i(p), j(p + l);
+            return std::distance(i, j);
+         }
+         template <class charT>
+         typename boost::enable_if_c<sizeof(charT) == 4, std::size_t>::type unicode_character_len(const charT* p)
+         {
+            std::size_t l = 0;
+            for (unsigned i = 0; p && p[i]; ++i) 
+               ++l;
+            return l;
+         }
 
          template <output_format_t Format, class charT, class Traits>
          class basic_numeric_formatter;
@@ -121,11 +234,12 @@ namespace boost {
             multiplyer_t  multiply_style;
             bool requires_parenthesis;
             bool m_show_zero_components;
+            bool m_use_unicode;
          protected:
             template <class Float>
             static void decompose_float(std::basic_ostream<charT, Traits>& os, const Float& f, std::basic_string<charT, Traits>& mantissa, std::basic_string<charT, Traits>& exponent)
             {
-               static const charT exponent_string[2] = { 'e', 'E' };
+               static const charT exponent_string[3] = { 'e', 'E', 0 };
                std::basic_stringstream<charT, Traits> ss;
                ss.copyfmt(os);
                ss.imbue(os.getloc());
@@ -141,7 +255,7 @@ namespace boost {
                   mantissa = s;
             }
          public:
-            basic_numeric_formatter_base() : styling_level(full_styling), requires_parenthesis(false), multiply_style(multiply_times), m_show_zero_components(false) {}
+            basic_numeric_formatter_base() : styling_level(full_styling), requires_parenthesis(false), multiply_style(multiply_times), m_show_zero_components(false), m_use_unicode(true) {}
 
             void styling(styling_level_t i)
             {
@@ -183,53 +297,169 @@ namespace boost {
             {
                return m_show_zero_components;
             }
+            void use_unicode(bool b)
+            {
+               m_use_unicode = b;
+            }
+            bool use_unicode()const
+            {
+               return m_use_unicode;
+            }
             template <class Integer>
             static std::basic_ostream<charT, Traits>& format_integer(std::basic_ostream<charT, Traits>& os, const Integer& i)
             {
                return os << i;
             }
             template <class Float>
-            static std::basic_ostream<charT, Traits>& format_float(std::basic_ostream<charT, Traits>& os, const Float& f)
+            std::basic_ostream<charT, Traits>& format_float(std::basic_ostream<charT, Traits>& os, const Float& f)
             {
+               if ((std::isinf)(f))
+               {
+                  if (f < 0)
+                     os << "-";
+                  if (use_unicode())
+                  {
+                     write_unicode_char(os, 0x221E);
+                  }
+                  else
+                     os << "INFINITY";
+                  return os;
+               }
+               if ((std::isnan)(f))
+               {
+                  return os << "NaN";
+               }
                std::basic_string<charT, Traits> mantissa, exponent;
                decompose_float(os, f, mantissa, exponent);
+               os << mantissa;
                if (exponent.size())
-                  return os << mantissa << "x10^" << exponent;
-               return os << mantissa;
+               {
+                  if (use_unicode())
+                  {
+                     if (multiply() == multiply_times)
+                        write_unicode_char(os, 0xD7);
+                     else if (multiply() == multiply_dot)
+                        write_unicode_char(os, 0x22C5);
+                     else
+                        os << "x";
+                     os << "10";
+                     write_unicode_superscript(os, exponent);
+                  }
+                  else
+                     os << "x10^" << exponent;
+               }
+               return os;
             }
             template <class Complex>
             std::basic_ostream<charT, Traits>& format_complex(std::basic_ostream<charT, Traits>& os, const Complex& f)
             {
-               if (!this->show_zero_components())
+               if ((std::isnan)(f.real()) || (std::isnan)(f.imag()))
                {
-                  if (f.imag() == 0)
-                  {
-                     format_float(os, f.real());
-                     return os;
-                  }
-                  else if (f.real() == 0)
-                  {
-                     format_float(os, f.imag());
-                     os.put(os.widen('i'));
-                     return os;
-                  }
+                  return os << "NaN";
                }
-               format_float(os, f.real());
-               typename Complex::value_type i(f.imag());
-               bool isneg = i < 0;
-               if (isneg)
+               if ((std::isinf)(f.real()) || (std::isinf)(f.imag()))
                {
-                  i = -i;
-                  os << " - ";
+                  if (use_unicode())
+                  {
+                     write_unicode_char(os, 0x221E);
+                     write_unicode_char(os, 0x0303);
+                  }
+                  else
+                     os << "COMPLEX INFINITY";
+                  return os;
+               }
+               if ((!this->show_zero_components()) && (f.imag() == 0))
+               {
+                  format_float(os, f.real());
+                  return os;
+               }
+               else if ((!this->show_zero_components()) && (f.real() == 0))
+               {
+                  format_float(os, f.imag());
                }
                else
-                  os << " + ";
-               format_float(os, i);
-               os.put(os.widen('i'));
+               {
+                  format_float(os, f.real());
+                  typename Complex::value_type i(f.imag());
+                  bool isneg = i < 0;
+                  if (isneg)
+                  {
+                     i = -i;
+                     os << " - ";
+                  }
+                  else
+                     os << " + ";
+                  format_float(os, i);
+               }
+               if ((use_unicode()) && (this->imaginary_style() == doublestruck_i))
+                  write_unicode_char(os, 0x2148);
+               else if ((use_unicode()) && (this->imaginary_style() == slanted_i))
+                  write_unicode_char(os, 0x1D456);
+               else
+                  os.put(os.widen('i'));
+               return os;
+            }
+            template <class Polynomial>
+            std::basic_ostream<charT, Traits>& format_polynomial(std::basic_ostream<charT, Traits>& os, const Polynomial& f)
+            {
+               bool have_first = false;
+               for (unsigned i = 0; i <= f.degree(); ++i)
+               {
+                  auto coef = f[i];
+                  if (show_zero_components() || (coef != 0))
+                  {
+                     if (have_first)
+                     {
+                        if (coef > 0)
+                           os << " + ";
+                        else
+                           os << " - ";
+                     }
+                     print(*this, os, coef > 0 ? coef : -coef);
+                     have_first = true;
+                     if (i)
+                     {
+                        os << "x";
+                        if (i > 1)
+                        {
+                           if (use_unicode())
+                           {
+                              std::basic_stringstream<charT, Traits> ss;
+                              ss << i;
+                              std::basic_string<charT, Traits> s = ss.str();
+                              write_unicode_superscript(os, s);
+                           }
+                           else
+                              os << "^" << i;
+                        }
+                     }
+                  }
+               }
                return os;
             }
             bool latex_as_equation()const { return false; }
             void latex_as_equation(bool) {}
+
+            template <class Printer, class Value>
+            typename boost::enable_if_c<is_integer_like<Value>::value>::type print(Printer& printer, std::basic_ostream<charT, Traits>& os, const Value& value)
+            {
+               printer.format_integer(os, value);
+            }
+            template <class Printer, class Value>
+            typename boost::enable_if_c<is_float_like<Value>::value>::type print(Printer& printer, std::basic_ostream<charT, Traits>& os, const Value& value)
+            {
+               printer.format_float(os, value);
+            }
+            template <class Printer, class Value>
+            typename boost::enable_if_c<is_complex_like<Value>::value>::type print(Printer& printer, std::basic_ostream<charT, Traits>& os, const Value& value)
+            {
+               printer.format_complex(os, value);
+            }
+            template <class Printer, class Value>
+            typename boost::enable_if_c<is_polynomial_like<Value>::value>::type print(Printer& printer, std::basic_ostream<charT, Traits>& os, const Value& value)
+            {
+               printer.format_polynomial(os, value);
+            }
          };
 
          template <class charT, class Traits>
@@ -369,6 +599,8 @@ namespace boost {
 
                return os;
             }
+            template <class Polynomial>
+            std::basic_ostream<charT, Traits>& format_polynomial(std::basic_ostream<charT, Traits>& os, const Polynomial& f);
          };
 
          template <class charT, class Traits>
@@ -522,6 +754,8 @@ namespace boost {
 
                return os;
             }
+            template <class Polynomial>
+            std::basic_ostream<charT, Traits>& format_polynomial(std::basic_ostream<charT, Traits>& os, const Polynomial& f);
          };
 
          template <class charT, class Traits>
@@ -656,6 +890,8 @@ namespace boost {
 
                return os;
             }
+            template <class Polynomial>
+            std::basic_ostream<charT, Traits>& format_polynomial(std::basic_ostream<charT, Traits>& os, const Polynomial& f);
          };
 
 
@@ -681,12 +917,15 @@ namespace boost {
             using base_type::format_integer;
             using base_type::format_float;
             using base_type::format_complex;
+            using base_type::format_polynomial;
             using base_type::styling;
             using base_type::imaginary_style;
             using base_type::latex_as_equation;
             using base_type::parenthesis;
             using base_type::multiply;
             using base_type::show_zero_components;
+            using base_type::use_unicode;
+            using base_type::print;
 
             std::basic_ostream<charT, Traits>& stream()
             {
@@ -704,6 +943,32 @@ namespace boost {
          typedef basic_numeric_printer<latex_format, wchar_t> wlatex_printer;
          typedef basic_numeric_printer<html_format, wchar_t> whtml_printer;
 
+         template <output_format_t Format, class charT, class Traits, class Integer>
+         typename boost::enable_if_c<!is_unhandled_type<Integer>::value, basic_numeric_printer<Format, charT, Traits>&>::type operator << (basic_numeric_printer<Format, charT, Traits>& os, const Integer& i)
+         {
+            std::size_t w = (std::size_t)os.stream().width();
+            if (w)
+            {
+               std::basic_stringstream<charT, Traits> ss;
+               ss.copyfmt(os.stream());
+               ss.imbue(os.stream().getloc());
+               ss.width(0);
+               basic_numeric_printer<Format, charT, Traits> fmt(ss, os);
+               fmt.print(fmt, fmt.stream(), i);
+               std::basic_string<charT, Traits> s = ss.str();
+               std::size_t len = unicode_character_len(s.c_str());
+               if (len < w)
+               {
+                  auto pos = os.stream().flags() & std::ios_base::adjustfield;
+                  s.insert(pos == std::ios_base::left ? s.end() : s.begin(), w - len, os.stream().fill());
+               }
+               os.stream() << s;
+            }
+            else
+               os.print(os, os.stream(), i);
+            return os;
+         }
+#if 0
          template <output_format_t Format, class charT, class Traits, class Integer>
          typename boost::enable_if_c<is_integer_like<Integer>::value, basic_numeric_printer<Format, charT, Traits>&>::type operator << (basic_numeric_printer<Format, charT, Traits>& os, const Integer& i)
          {
@@ -758,6 +1023,24 @@ namespace boost {
             return os;
          }
 
+         template <output_format_t Format, class charT, class Traits, class Polynomial>
+         typename boost::enable_if_c<is_polynomial_like<Polynomial>::value, basic_numeric_printer<Format, charT, Traits>&>::type operator << (basic_numeric_printer<Format, charT, Traits>& os, const Polynomial& f)
+         {
+            if (os.stream().width())
+            {
+               std::basic_stringstream<charT, Traits> ss;
+               ss.copyfmt(os.stream());
+               ss.imbue(os.stream().getloc());
+               ss.width(0);
+               basic_numeric_printer<Format, charT, Traits> fmt(ss, os);
+               fmt.format_polynomial(fmt.stream(), f);
+               os.stream() << ss.str();
+            }
+            else
+               os.format_polynomial(os.stream(), f);
+            return os;
+         }
+#endif
          template <output_format_t Format, class charT, class Traits>
          basic_numeric_printer<Format, charT, Traits>& operator << (basic_numeric_printer<Format, charT, Traits>& os, styling_level_t s)
          {
@@ -773,16 +1056,9 @@ namespace boost {
          }
 
          template <output_format_t Format, class charT, class Traits>
-         basic_numeric_printer<Format, charT, Traits>& operator << (basic_numeric_printer<Format, charT, Traits>& os, const latex_as_equation_t* const&)
+         basic_numeric_printer<Format, charT, Traits>& operator << (basic_numeric_printer<Format, charT, Traits>& os, latex_t l)
          {
-            os.latex_as_equation(true);
-            return os;
-         }
-
-         template <output_format_t Format, class charT, class Traits>
-         basic_numeric_printer<Format, charT, Traits>& operator << (basic_numeric_printer<Format, charT, Traits>& os, const latex_as_text_t* const&)
-         {
-            os.latex_as_equation(false);
+            os.latex_as_equation(l == latex_as_equation);
             return os;
          }
 
@@ -797,6 +1073,13 @@ namespace boost {
          basic_numeric_printer<Format, charT, Traits>& operator << (basic_numeric_printer<Format, charT, Traits>& os, const zero_component_t z)
          {
             os.show_zero_components(z == ::boost::math::tools::show_zero_components ? true : false);
+            return os;
+         }
+
+         template <output_format_t Format, class charT, class Traits>
+         basic_numeric_printer<Format, charT, Traits>& operator << (basic_numeric_printer<Format, charT, Traits>& os, const unicode_text_t z)
+         {
+            os.use_unicode(z == ::boost::math::tools::unicode_text_output ? true : false);
             return os;
          }
 

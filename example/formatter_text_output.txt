@@ -12,14 +12,49 @@ Basic floating point values:
                Value           Precision              Format              Result
                    3             default             default                   3
                 3.14             default             default                3.14
-        -1.23457e-24             default             default     -1.23457x10^-24
-        -1.23457e-24                   3          scientific       -1.235x10^-24
+        -1.23457e-24             default             default      -1.23457×10⁻²⁴
+       -1.234568e-24                   3          scientific        -1.235×10⁻²⁴
+                   0             default             default                   0
+                  -0             default             default                  -0
+                   0             default             default         0.000×10⁺⁰⁰
+          -0.000e+00             default             default        -0.000×10⁺⁰⁰
+                 inf             default             default                   ∞
+                -inf             default             default                  -∞
+                 nan             default             default                 NaN
 
 
 Complex Values:
 
                Value           Precision              Format                        Result
          (3.25,4.67)             default             default                  3.25 + 4.67i
-            (3.14,0)             default             default                     3.14 + 0i
-    (1.23,-1.23e-24)             default             default           1.23 - 1.23x10^-24i
-    (1.23,-1.23e-24)                   3          scientific  1.230x10^+00 - 1.235x10^-24i
+            (3.14,0)             default             default                          3.14
+    (1.23,-1.23e-24)             default             default            1.23 - 1.23×10⁻²⁴i
+    (1.23,-1.23e-24)                   3          scientific    1.230×10⁺⁰⁰ - 1.235×10⁻²⁴i
+
+    (1.23,-1.23e-24)           slanted_i             default            1.23 - 1.23×10⁻²⁴𝑖
+    (1.23,-1.23e-24)      doublestruck_i             default            1.23 - 1.23×10⁻²⁴ⅈ
+Complex Zeros:
+
+               Value           Precision                 Format                        Result
+               (0,0)             default                default                             0
+               (0,0)             default   show_zero_components                        0 + 0i
+            (3.14,0)             default                default                          3.14
+            (3.14,0)             default   show_zero_components                     3.14 + 0i
+           (-3.14,0)             default                default                         -3.14
+           (-3.14,0)             default   show_zero_components                    -3.14 + 0i
+            (0,25.3)             default                default                         25.3i
+            (0,25.3)             default   show_zero_components                     0 + 25.3i
+           (0,-25.3)             default                default                        -25.3i
+           (0,-25.3)             default   show_zero_components                     0 - 25.3i
+         (inf,-25.3)             default                default                            ∞̃
+             (2,inf)             default                default                            ∞̃
+          (-inf,inf)             default                default                            ∞̃
+         (nan,-25.3)             default                default                           NaN
+             (3,nan)             default                default                           NaN
+           (nan,inf)             default                default                           NaN
+           (inf,nan)             default                default                           NaN
+
+Polynomials:
+
+Integer: 2 - 3x + 4x² + 5x³
+Integer: 2.4 - 34.3x + 4.2×10⁻⁰⁶x² - 5.34×10⁻⁶⁶x³

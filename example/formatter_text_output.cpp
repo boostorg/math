@@ -4,12 +4,14 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/math/tools/formatting.hpp>
+#include <boost/math/tools/polynomial.hpp>
 #include <complex>
 #include <fstream>
 
-void print(std::ostream& os)
+template <class charT>
+void print(std::basic_ostream<charT>& os)
 {
-   boost::math::tools::text_printer printer(os);
+   boost::math::tools::basic_numeric_printer<boost::math::tools::text_format, charT> printer(os);
 
    printer << "Integers:\n\n";
 
@@ -39,10 +41,31 @@ void print(std::ostream& os)
    fval = -1.2345678765e-24;
    printer.stream() << std::setw(20) << fval << std::setw(20) << "default" << std::setw(20) << "default" << std::setw(20);
    printer << fval << std::endl;
-   printer.stream() << std::setw(20) << fval << std::setw(20) << "3" << std::setw(20) << "scientific" << std::setw(20);
-   printer << std::scientific << std::setprecision(3) << fval << std::endl;
+   printer.stream() << std::scientific << std::setw(20) << fval << std::setw(20) << "3" << std::setw(20) << "scientific" << std::setw(20);
+   printer << std::setprecision(3) << fval << std::endl << std::defaultfloat;
+   fval = 0;
+   printer.stream() << std::setw(20) << fval << std::setw(20) << "default" << std::setw(20) << "default" << std::setw(20);
+   printer << fval << std::endl;
+   fval = -fval;
+   printer.stream() << std::setw(20) << fval << std::setw(20) << "default" << std::setw(20) << "default" << std::setw(20);
+   printer << fval << std::endl;
+   fval = 0;
+   printer.stream() << std::setw(20) << fval << std::setw(20) << "default" << std::setw(20) << "default" << std::setw(20);
+   printer << std::scientific << fval << std::endl;
+   fval = -fval;
+   printer.stream() << std::setw(20) << fval << std::setw(20) << "default" << std::setw(20) << "default" << std::setw(20);
+   printer << fval << std::endl << std::defaultfloat;
+   fval = std::numeric_limits<double>::infinity();
+   printer.stream() << std::setw(20) << fval << std::setw(20) << "default" << std::setw(20) << "default" << std::setw(20);
+   printer << fval << std::endl;
+   fval = -std::numeric_limits<double>::infinity();
+   printer.stream() << std::setw(20) << fval << std::setw(20) << "default" << std::setw(20) << "default" << std::setw(20);
+   printer << fval << std::endl;
+   fval = std::numeric_limits<double>::quiet_NaN();
+   printer.stream() << std::setw(20) << fval << std::setw(20) << "default" << std::setw(20) << "default" << std::setw(20);
+   printer << fval << std::endl;
 
-   printer << std::endl << std::endl << std::defaultfloat;
+   printer << std::endl << std::endl;
 
    printer << "Complex Values:\n\n";
    std::complex<double> cval(3.25, 4.67);
@@ -57,6 +80,12 @@ void print(std::ostream& os)
    printer << cval << std::endl;
    printer.stream() << std::setw(20) << cval << std::setw(20) << "3" << std::setw(20) << "scientific" << std::setw(30);
    printer << std::scientific << std::setprecision(3) << cval << std::endl << std::endl << std::defaultfloat;
+   printer.stream() << std::setw(20) << cval << std::setw(20) << "slanted_i" << std::setw(20) << "default" << std::setw(30);
+   printer << boost::math::tools::slanted_i << cval << std::endl;
+   printer.stream() << std::setw(20) << cval << std::setw(20) << "doublestruck_i" << std::setw(20) << "default" << std::setw(30);
+   printer << boost::math::tools::doublestruck_i << cval << std::endl << boost::math::tools::upright_i;
+
+   std::cout << std::endl << std::endl;
 
    printer << "Complex Zeros:\n\n";
    cval = std::complex<double>(0);
@@ -85,6 +114,36 @@ void print(std::ostream& os)
    printer << cval << std::endl;
    printer.stream() << std::setw(20) << cval << std::setw(20) << "default" << std::setw(23) << "show_zero_components" << std::setw(30);
    printer << boost::math::tools::show_zero_components << cval << std::endl << boost::math::tools::hide_zero_components;
+   // Infinities:
+   cval = std::complex<double>(std::numeric_limits<double>::infinity(), -25.25);
+   printer.stream() << std::setw(20) << cval << std::setw(20) << "default" << std::setw(23) << "default" << std::setw(30);
+   printer << cval << std::endl;
+   cval = std::complex<double>(2, std::numeric_limits<double>::infinity());
+   printer.stream() << std::setw(20) << cval << std::setw(20) << "default" << std::setw(23) << "default" << std::setw(30);
+   printer << cval << std::endl;
+   cval = std::complex<double>(-std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity());
+   printer.stream() << std::setw(20) << cval << std::setw(20) << "default" << std::setw(23) << "default" << std::setw(30);
+   printer << cval << std::endl;
+   // NaN's:
+   cval = std::complex<double>(std::numeric_limits<double>::quiet_NaN(), -25.25);
+   printer.stream() << std::setw(20) << cval << std::setw(20) << "default" << std::setw(23) << "default" << std::setw(30);
+   printer << cval << std::endl;
+   cval = std::complex<double>(3, std::numeric_limits<double>::quiet_NaN());
+   printer.stream() << std::setw(20) << cval << std::setw(20) << "default" << std::setw(23) << "default" << std::setw(30);
+   printer << cval << std::endl;
+   cval = std::complex<double>(std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::infinity());
+   printer.stream() << std::setw(20) << cval << std::setw(20) << "default" << std::setw(23) << "default" << std::setw(30);
+   printer << cval << std::endl;
+   cval = std::complex<double>(std::numeric_limits<double>::infinity(), std::numeric_limits<double>::quiet_NaN());
+   printer.stream() << std::setw(20) << cval << std::setw(20) << "default" << std::setw(23) << "default" << std::setw(30);
+   printer << cval << std::endl;
+
+
+   printer << "\nPolynomials:\n\n";
+   boost::math::tools::polynomial<int> poly1 = { 2, -3, 4, 5 };
+   printer << "Integer: " << poly1 << std::endl;
+   boost::math::tools::polynomial<double> poly2 = { 2.4, -34.25, 4.2e-6, -5.34e-67 };
+   printer << "Integer: " << poly2 << std::endl;
 }
 
 int main(int argc, const char* argv[])
@@ -95,6 +154,9 @@ int main(int argc, const char* argv[])
       print(ofs);
    }
    else
+   {
       print(std::cout);
+      print(std::wcout);
+   }
    return 0;
 }
