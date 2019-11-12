@@ -427,7 +427,7 @@ and use the function's name as the link text.]
 [def __multiprecision [@boost:/libs/multiprecision/doc/html/index.html Boost.Multiprecision]]
 
 [def __gcc_quad_type [@https://gcc.gnu.org/onlinedocs/gcc-9.1.0/libquadmath/index.html GCC 128-bit floating-point type]]
-
+[def __float128_literals [@boost:/libs/multiprecision/doc/html/boost_multiprecision/tut/lits.html Boost.Multiprecision 128-bit Q floating-point literals]]
 [def __cpp_dec_float [@boost:/libs/multiprecision/doc/html/boost_multiprecision/tut/floats/cpp_dec_float.html cpp_dec_float]]
 [def __cpp_bin_float [@boost:/libs/multiprecision/doc/html/boost_multiprecision/tut/floats/cpp_bin_float.html cpp_bin_float]]
 [/ @boost:/libs/test/doc/index.html  doesn't work for Boost.Test non-quickbook, so use instead]
@@ -478,6 +478,9 @@ and use the function's name as the link text.]
 [def __github [@github.com GitHub]]
 [def __github_boost [@https://github.com/boostorg Boost GitHub]]
 [def __github_math [@https://github.com/boostorg/math Boost.Math GitHub]]
+[def __github_multiprecision [@https://github.com/boostorg/math Boost.Multiprecision GitHub]]
+
+
 [/ Some composite templates]
 [template super[x]'''<superscript>'''[x]'''</superscript>''']
 [template sub[x]'''<subscript>'''[x]'''</subscript>''']
