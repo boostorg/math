@@ -6,6 +6,7 @@
 #include <boost/math/tools/formatting.hpp>
 #include <complex>
 #include <fstream>
+#include <boost/math/tools/polynomial.hpp>
 
 void print(std::ostream& os)
 {
@@ -161,6 +162,16 @@ void print(std::ostream& os)
    printer << cval << " \\\\\n";
    printer << "\\end{tabular}\n\n" << std::defaultfloat << boost::math::tools::multiply_times;
 
+   printer << "\\textbf{Polynomial Values}\n\n\\begin{tabular}{r r}\nType & Result \\\\\n";
+   boost::math::tools::polynomial<int> poly1 = { 2, -3, 4, 5 };
+   printer << "Integer & " << poly1 << " \\\\\n";
+   boost::math::tools::polynomial<double> poly2 = { 2.4, -34.25, 4.2e-6, -5.34e-67 };
+   printer << "Float & " << poly2 << " \\\\\n";
+   boost::math::tools::polynomial<std::complex<double> > poly3 = { { 2.4, 3.25 }, {-34.25 }, { 0, 4.2e-6 }, { -5.34e-67, 4.65e-20 } };
+   printer << "Complex & " << poly3 << " \\\\\n";
+   printer << "Complex (latex\\_as\\_text) & " << boost::math::tools::latex_as_text << poly3 << " \\\\\n" << boost::math::tools::latex_as_equation;
+   printer << "Complex (multiply\\_dot) & " << boost::math::tools::multiply_dot << poly3 << " \\\\\n" << boost::math::tools::multiply_times;
+   printer << "\\end{tabular}\n\n" << std::defaultfloat << boost::math::tools::multiply_times;
 
    printer << "\\end{document}\n\n";
 }

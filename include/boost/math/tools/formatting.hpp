@@ -55,7 +55,9 @@ namespace boost {
          template<class T>
          using imag_t = decltype(std::declval<T&>().imag(std::declval<T const&>().real()));
          template <class T>
-         using polynomial_t = decltype(std::declval<const T&>()(std::declval<const T&>()[0] + std::declval<const T&>().degree()));
+         using polynomial_t = decltype(std::declval<const T&>()(std::declval<const T&>()[0]));
+         template <class T>
+         using polynomial2_t = decltype(std::declval<const T&>().degree());
 
          template <class T>
          struct is_complex_like
@@ -66,7 +68,7 @@ namespace boost {
          template <class T>
          struct is_polynomial_like
          {
-            static const bool value = boost::is_detected_v<polynomial_t, T>;
+            static const bool value = boost::is_detected_v<polynomial_t, T> && boost::is_detected_v<polynomial2_t, T>;
          };
 
          template <class T>
@@ -223,6 +225,27 @@ namespace boost {
             return l;
          }
 
+         template <class T>
+         typename boost::enable_if_c<is_complex_like<T>::value, bool>::type iszero(const T& val)
+         {
+            return (val.real() == 0) && (val.imag() == 0);
+         }
+         template <class T>
+         typename boost::disable_if_c<is_complex_like<T>::value, bool>::type iszero(const T& val)
+         {
+            return val == 0;
+         }
+         template <class T>
+         typename boost::enable_if_c<is_complex_like<T>::value, bool>::type isneg(const T& val)
+         {
+            return (val.real() < 0);
+         }
+         template <class T>
+         typename boost::disable_if_c<is_complex_like<T>::value, bool>::type isneg(const T& val)
+         {
+            return val < 0;
+         }
+
          template <output_format_t Format, class charT, class Traits>
          class basic_numeric_formatter;
 
@@ -232,7 +255,7 @@ namespace boost {
             styling_level_t styling_level;
             imaginary_i_t i_style;
             multiplyer_t  multiply_style;
-            bool requires_parenthesis;
+            std::size_t m_parenthesis;
             bool m_show_zero_components;
             bool m_use_unicode;
          protected:
@@ -255,7 +278,7 @@ namespace boost {
                   mantissa = s;
             }
          public:
-            basic_numeric_formatter_base() : styling_level(full_styling), requires_parenthesis(false), multiply_style(multiply_times), m_show_zero_components(false), m_use_unicode(true) {}
+            basic_numeric_formatter_base() : styling_level(full_styling), i_style(upright_i), multiply_style(multiply_times), m_parenthesis(0), m_show_zero_components(false), m_use_unicode(true) {}
 
             void styling(styling_level_t i)
             {
@@ -281,13 +304,13 @@ namespace boost {
             {
                return multiply_style;
             }
-            void parenthesis(bool b)
+            void parenthesis(std::size_t b)
             {
-               requires_parenthesis = b;
+               m_parenthesis = b;
             }
-            bool parenthesis()const
+            std::size_t parenthesis()const
             {
-               return requires_parenthesis;
+               return m_parenthesis;
             }
             void show_zero_components(bool b)
             {
@@ -305,6 +328,20 @@ namespace boost {
             {
                return m_use_unicode;
             }
+
+            struct scoped_parenthesis
+            {
+               basic_numeric_formatter_base<charT, Traits>* m_formatter;
+               scoped_parenthesis(basic_numeric_formatter_base<charT, Traits>* formatter) : m_formatter(formatter)
+               {
+                  m_formatter->parenthesis(1 + m_formatter->parenthesis());
+               }
+               ~scoped_parenthesis()
+               {
+                  m_formatter->parenthesis(m_formatter->parenthesis() - 1);
+               }
+            };
+
             template <class Integer>
             static std::basic_ostream<charT, Traits>& format_integer(std::basic_ostream<charT, Traits>& os, const Integer& i)
             {
@@ -379,6 +416,8 @@ namespace boost {
                }
                else
                {
+                  if (parenthesis())
+                     os << "(";
                   format_float(os, f.real());
                   typename Complex::value_type i(f.imag());
                   bool isneg = i < 0;
@@ -397,25 +436,28 @@ namespace boost {
                   write_unicode_char(os, 0x1D456);
                else
                   os.put(os.widen('i'));
+               if (parenthesis() && !((!this->show_zero_components()) && (f.real() == 0)))
+                  os << ")";
                return os;
             }
             template <class Polynomial>
             std::basic_ostream<charT, Traits>& format_polynomial(std::basic_ostream<charT, Traits>& os, const Polynomial& f)
             {
+               scoped_parenthesis scoped(this);
                bool have_first = false;
                for (unsigned i = 0; i <= f.degree(); ++i)
                {
                   auto coef = f[i];
-                  if (show_zero_components() || (coef != 0))
+                  if (show_zero_components() || (!iszero(coef)))
                   {
                      if (have_first)
                      {
-                        if (coef > 0)
+                        if (!isneg(coef))
                            os << " + ";
                         else
                            os << " - ";
                      }
-                     print(*this, os, coef > 0 ? coef : -coef);
+                     print(*this, os, !isneg(coef) ? coef : -coef);
                      have_first = true;
                      if (i)
                      {
@@ -470,6 +512,7 @@ namespace boost {
          template <class charT, class Traits>
          class basic_numeric_formatter<docbook_format, charT, Traits> : public basic_numeric_formatter_base<charT, Traits>
          {
+            friend class basic_numeric_formatter_base<charT, Traits>;
          protected:
             template <class Integer>
             std::basic_ostream<charT, Traits>& format_integer(std::basic_ostream<charT, Traits>& os, const Integer& i)
@@ -552,6 +595,7 @@ namespace boost {
                   this->styling(no_styling);
 
                   bool need_i = true;
+                  bool need_paren = false;
 
                   if (!this->show_zero_components() && (f.imag() == 0))
                   {
@@ -564,6 +608,11 @@ namespace boost {
                   }
                   else
                   {
+                     if (this->parenthesis())
+                     {
+                        os << "(";
+                        need_paren = true;
+                     }
                      format_float(os, f.real());
                      typename Complex::value_type i(f.imag());
                      bool isneg = i < 0;
@@ -589,6 +638,8 @@ namespace boost {
                      if (saved_style >= minimal_styling)
                         os << "</phrase>";
                   }
+                  if (need_paren)
+                     os << ")";
                   this->styling(saved_style);
                }
 
@@ -600,14 +651,58 @@ namespace boost {
                return os;
             }
             template <class Polynomial>
-            std::basic_ostream<charT, Traits>& format_polynomial(std::basic_ostream<charT, Traits>& os, const Polynomial& f);
+            std::basic_ostream<charT, Traits>& format_polynomial(std::basic_ostream<charT, Traits>& os, const Polynomial& f)
+            {
+               typename basic_numeric_formatter_base<charT, Traits>::scoped_parenthesis scoped(this);
+
+               if (this->styling() >= minimal_styling)
+                  os << "<phrase role=\"number\">";
+               if (this->styling() > minimal_styling)
+                  os << "<phrase role=\"polynomial\">";
+
+               bool have_first = false;
+               for (unsigned i = 0; i <= f.degree(); ++i)
+               {
+                  auto coef = f[i];
+                  if (this->show_zero_components() || !iszero(coef))
+                  {
+                     if (have_first)
+                     {
+                        if (!isneg(coef))
+                           os << " + ";
+                        else
+                           os << " - ";
+                     }
+                     basic_numeric_formatter_base<charT, Traits>::print(*this, os, !isneg(coef) ? coef : -coef);
+                     have_first = true;
+                     if (i)
+                     {
+                        os << "<emphasis>x</emphasis>";
+                        if (i > 1)
+                        {
+                           os << "<superscript>" << i << "</superscript>";
+                        }
+                     }
+                  }
+               }
+
+               if (this->styling() > minimal_styling)
+                  os << "</phrase>";
+               if (this->styling() >= minimal_styling)
+                  os << "</phrase>";
+
+               return os;
+            }
          };
 
          template <class charT, class Traits>
          class basic_numeric_formatter<latex_format, charT, Traits> : public basic_numeric_formatter_base<charT, Traits>
          {
+            friend class basic_numeric_formatter_base<charT, Traits>;
+
             bool is_latex_as_equation;
             bool inside_equation;
+
          public:
             basic_numeric_formatter() : is_latex_as_equation(true), inside_equation(false) {}
             void latex_as_equation(bool b) { is_latex_as_equation = b; }
@@ -711,6 +806,7 @@ namespace boost {
                else
                {
                   bool need_i = true;
+                  bool need_paren = false;
 
                   if (!this->show_zero_components() && (f.imag() == 0))
                   {
@@ -723,7 +819,11 @@ namespace boost {
                   }
                   else
                   {
-
+                     if (this->parenthesis())
+                     {
+                        os << "(";
+                        need_paren = true;
+                     }
                      format_float(os, f.real());
                      typename Complex::value_type i(f.imag());
                      bool isneg = i < 0;
@@ -747,6 +847,8 @@ namespace boost {
                      else
                         os.put(os.widen('i'));
                   }
+                  if (need_paren)
+                     os << ")";
                }
                inside_equation = saved_inside_equation;
                if (!inside_equation && latex_as_equation())
@@ -755,12 +857,59 @@ namespace boost {
                return os;
             }
             template <class Polynomial>
-            std::basic_ostream<charT, Traits>& format_polynomial(std::basic_ostream<charT, Traits>& os, const Polynomial& f);
+            std::basic_ostream<charT, Traits>& format_polynomial(std::basic_ostream<charT, Traits>& os, const Polynomial& f)
+            {
+               typename basic_numeric_formatter_base<charT, Traits>::scoped_parenthesis scoped(this);
+
+               if (!inside_equation && latex_as_equation())
+                  os.put(os.widen('$'));
+               bool saved_inside_equation = inside_equation;
+               inside_equation = latex_as_equation();
+               bool have_first = false;
+
+               for (unsigned i = 0; i <= f.degree(); ++i)
+               {
+                  auto coef = f[i];
+                  if (this->show_zero_components() || !iszero(coef))
+                  {
+                     if (have_first)
+                     {
+                        if (!isneg(coef))
+                           os << " + ";
+                        else
+                           os << " - ";
+                     }
+                     basic_numeric_formatter_base<charT, Traits>::print(*this, os, !isneg(coef) ? coef : -coef);
+                     have_first = true;
+                     if (i)
+                     {
+                        if (inside_equation)
+                           os << "x";
+                        else
+                           os << "\\textit{x}";
+                        if (i > 1)
+                        {
+                           if (inside_equation)
+                              os << "^{" << i << "}";
+                           else
+                              os << "\\textsuperscript{" << i << "}";
+                        }
+                     }
+                  }
+               }
+
+               inside_equation = saved_inside_equation;
+               if (!inside_equation && latex_as_equation())
+                  os.put(os.widen('$'));
+
+               return os;
+            }
          };
 
          template <class charT, class Traits>
          class basic_numeric_formatter<html_format, charT, Traits> : public basic_numeric_formatter_base<charT, Traits>
          {
+            friend class basic_numeric_formatter_base<charT, Traits>;
          protected:
             template <class Integer>
             std::basic_ostream<charT, Traits>& format_integer(std::basic_ostream<charT, Traits>& os, const Integer& i)
@@ -843,6 +992,7 @@ namespace boost {
                   this->styling(no_styling);
                   
                   bool need_i = true;
+                  bool need_paren = false;
 
                   if(!this->show_zero_components() && (f.imag() == 0))
                   { 
@@ -855,6 +1005,11 @@ namespace boost {
                   }
                   else
                   {
+                     if (this->parenthesis())
+                     {
+                        os << "(";
+                        need_paren = true;
+                     }
                      format_float(os, f.real());
                      typename Complex::value_type i(f.imag());
                      bool isneg = i < 0;
@@ -880,6 +1035,8 @@ namespace boost {
                      if (saved_style >= minimal_styling)
                         os << "</span>";
                   }
+                  if (need_paren)
+                     os << ")";
                   this->styling(saved_style);
                }
 
@@ -891,7 +1048,53 @@ namespace boost {
                return os;
             }
             template <class Polynomial>
-            std::basic_ostream<charT, Traits>& format_polynomial(std::basic_ostream<charT, Traits>& os, const Polynomial& f);
+            std::basic_ostream<charT, Traits>& format_polynomial(std::basic_ostream<charT, Traits>& os, const Polynomial& f)
+            {
+               typename basic_numeric_formatter_base<charT, Traits>::scoped_parenthesis scoped(this);
+
+               if (this->styling() >= minimal_styling)
+                  os << "<span class=\"number\">";
+               if (this->styling() > minimal_styling)
+                  os << "<span class=\"polynomial\">";
+
+               styling_level_t saved_style = this->styling();
+               this->styling(no_styling);
+
+               bool have_first = false;
+               for (unsigned i = 0; i <= f.degree(); ++i)
+               {
+                  auto coef = f[i];
+                  if (this->show_zero_components() || !iszero(coef))
+                  {
+                     if (have_first)
+                     {
+                        if (!isneg(coef))
+                           os << " + ";
+                        else
+                           os << " - ";
+                     }
+                     basic_numeric_formatter_base<charT, Traits>::print(*this, os, !isneg(coef) ? coef : -coef);
+                     have_first = true;
+                     if (i)
+                     {
+                        os << "<i>x</i>";
+                        if (i > 1)
+                        {
+                           os << "<sup>" << i << "</sup>";
+                        }
+                     }
+                  }
+               }
+
+               this->styling(saved_style);
+
+               if (this->styling() > minimal_styling)
+                  os << "</span>";
+               if (this->styling() >= minimal_styling)
+                  os << "</span>";
+
+               return os;
+            }
          };
 
 

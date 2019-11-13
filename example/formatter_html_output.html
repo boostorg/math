@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html>
 <body>
-<style>  span.number { font-weight:bold; } span.integer { color:red; } span.float { color:blue; } span.complex { color:green; } td {  text-align:right; } th { text-align:right; } </style>
+<style>  span.number { font-weight:bold; } span.integer { color:red; } span.float { color:blue; } span.complex { color:green; } span.polynomial { color:Olive } td {  text-align:right; } th { text-align:right; } </style>
+<h2>Synopsis</h2>
+<para>Sample HTML output for various number types, these are then styled in bold, and various (somewhat untasteful!) colors just because we can, and to check that our markup generation is working correctly.</para>
 <h2>Basic Integers Values:</h2>
 <table style="width:90%"><tr><th>Value</th><th>Base</th><th>Result</th></tr><tr><td>0</td><td>default</td><td><span class="number"><span class="integer">0</span></span></td></tr>
 <tr><td>-23</td><td>default</td><td><span class="number"><span class="integer">-23</span></span></td></tr>
@@ -63,6 +65,14 @@
 <tr><td>(-nan(ind),inf)</td><td>default</td><td>default</td><td><span class="number"><span class="complex">NaN</span></span></td></tr>
 <tr><td>(inf,nan)</td><td>default</td><td>default</td><td><span class="number"><span class="complex">NaN</span></span></td></tr>
 <tr><td>(inf,-nan(ind))</td><td>default</td><td>default</td><td><span class="number"><span class="complex">NaN</span></span></td></tr>
+
+</table>
+
+<h2>Polynomials:</h2>
+
+<table style="width:90%"><tr><th>Type</th><th>Result</th></tr><tr><td>Integer</td><td><span class="number"><span class="polynomial">2 - 3<i>x</i> + 4<i>x</i><sup>2</sup> + 5<i>x</i><sup>3</sup></span></span></td></tr>
+<tr><td>Float</td><td><span class="number"><span class="polynomial">2.4 - 34.25<i>x</i> + 4.2&#x00D7;10<sup>-06</sup><i>x</i><sup>2</sup> - 5.34&#x00D7;10<sup>-67</sup><i>x</i><sup>3</sup></span></span></td></tr>
+<tr><td>Complex</td><td><span class="number"><span class="polynomial">(2.4 + 3.25i) - 34.25<i>x</i> + 4.2&#x00D7;10<sup>-06</sup>i<i>x</i><sup>2</sup> - (5.34&#x00D7;10<sup>-67</sup> - 4.65&#x00D7;10<sup>-20</sup>i)<i>x</i><sup>3</sup></span></span></td></tr>
 
 </table>
 

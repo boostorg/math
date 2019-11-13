@@ -43,10 +43,10 @@ nan & default & latex\_as\_text & NaN \\
 
 \begin{tabular}{r r r r}
 Value & Precision & Format & Result \\
-(3.25,4.67) & default & default & $3.25 + 4.67i$ \\
+(3.25,4.67) & default & default & $3.25 + 4.67\mathrm{i}$ \\
 (3.14,0) & default & default & $3.14$ \\
-(1.23,-1.234567876e-24) & default & default & $1.23 - 1.234567876\times 10^{-24}i$ \\
-(1.23,-1.234567876e-24) & 3 & scientific & $1.230\times 10^{+00} - 1.235\times 10^{-24}i$ \\
+(1.23,-1.234567876e-24) & default & default & $1.23 - 1.234567876\times 10^{-24}\mathrm{i}$ \\
+(1.23,-1.234567876e-24) & 3 & scientific & $1.230\times 10^{+00} - 1.235\times 10^{-24}\mathrm{i}$ \\
 (1.230e+00,-1.235e-24) & 12 & default + slanted\_i & $1.23 - 1.2345678765\times 10^{-24}i$ \\
 (1.23,-1.2345678765e-24) & 12 & default + upright\_i & $1.23 - 1.2345678765\times 10^{-24}\mathrm{i}$ \\
 (1.23,-1.2345678765e-24) & 12 & default + slanted\_i + latex\_as\_text & 1.23 - 1.2345678765$\times$10\textsuperscript{-24}\textit{i} \\
@@ -73,6 +73,17 @@ Value & Precision & Format & Result \\
 (2.5,nan) & default & default & NaN \\
 (nan,inf) & default & default & NaN \\
 (inf,nan) & default & default & NaN \\
+\end{tabular}
+
+\textbf{Polynomial Values}
+
+\begin{tabular}{r r}
+Type & Result \\
+Integer & 2 - 3\textit{x} + 4\textit{x}\textsuperscript{2} + 5\textit{x}\textsuperscript{3} \\
+Float & 2.4 - 34.25\textit{x} + 4.2$\times$10\textsuperscript{-06}\textit{x}\textsuperscript{2} - 5.34$\times$10\textsuperscript{-67}\textit{x}\textsuperscript{3} \\
+Complex & (2.4 + 3.25i) - 34.25\textit{x} + 4.2$\times$10\textsuperscript{-06}i\textit{x}\textsuperscript{2} - (5.34$\times$10\textsuperscript{-67} - 4.65$\times$10\textsuperscript{-20}i)\textit{x}\textsuperscript{3} \\
+Complex (latex\_as\_text) & (2.4 + 3.25i) - 34.25\textit{x} + 4.2$\times$10\textsuperscript{-06}i\textit{x}\textsuperscript{2} - (5.34$\times$10\textsuperscript{-67} - 4.65$\times$10\textsuperscript{-20}i)\textit{x}\textsuperscript{3} \\
+Complex (multiply\_dot) & $(2.4 + 3.25\mathrm{i}) - 34.25x + 4.2\cdot 10^{-06}\mathrm{i}x^{2} - (5.34\cdot 10^{-67} - 4.65\cdot 10^{-20}\mathrm{i})x^{3}$ \\
 \end{tabular}
 
 \end{document}

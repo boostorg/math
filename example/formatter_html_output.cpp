@@ -6,13 +6,16 @@
 #include <boost/math/tools/formatting.hpp>
 #include <complex>
 #include <fstream>
+#include <boost/math/tools/polynomial.hpp>
 
 void print(std::ostream& os)
 {
    boost::math::tools::html_printer printer(os);
 
    printer << "<!DOCTYPE html>\n<html>\n<body>" << std::endl;
-   printer << "<style>  span.number { font-weight:bold; } span.integer { color:red; } span.float { color:blue; } span.complex { color:green; } td {  text-align:right; } th { text-align:right; } </style>" << std::endl;
+   printer << "<style>  span.number { font-weight:bold; } span.integer { color:red; } span.float { color:blue; } span.complex { color:green; } span.polynomial { color:Olive } td {  text-align:right; } th { text-align:right; } </style>" << std::endl;
+
+   printer << "<h2>Synopsis</h2>\n<para>Sample HTML output for various number types, these are then styled in bold, and various (somewhat untasteful!) colors just because we can, and to check that our markup generation is working correctly.</para>\n";
 
    printer << "<h2>Basic Integers Values:</h2>\n" << boost::math::tools::full_styling;
 
@@ -162,6 +165,17 @@ void print(std::ostream& os)
    printer.stream() << "<tr><td>" << cval << "</td><td>default</td><td>default</td><td>";
    printer << cval << "</td></tr>\n";
 
+   printer << "\n</table>\n\n";
+
+   printer << "<h2>Polynomials:</h2>\n\n";
+
+   printer << "<table style=\"width:90%\"><tr><th>Type</th><th>Result</th></tr>";
+   boost::math::tools::polynomial<int> poly1 = { 2, -3, 4, 5 };
+   printer << "<tr><td>Integer</td><td>" << poly1 << "</td></tr>\n";
+   boost::math::tools::polynomial<double> poly2 = { 2.4, -34.25, 4.2e-6, -5.34e-67 };
+   printer << "<tr><td>Float</td><td>" << poly2 << "</td></tr>\n";
+   boost::math::tools::polynomial<std::complex<double> > poly3 = { { 2.4, 3.25 }, {-34.25 }, { 0, 4.2e-6 }, { -5.34e-67, 4.65e-20 } };
+   printer << "<tr><td>Complex</td><td>" << poly3 << "</td></tr>\n";
    printer << "\n</table>\n\n";
 
    printer << "</body></html>\n\n";

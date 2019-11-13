@@ -6,6 +6,7 @@
 #include <boost/math/tools/formatting.hpp>
 #include <complex>
 #include <fstream>
+#include <boost/math/tools/polynomial.hpp>
 
 void print(std::ostream& os)
 {
@@ -92,27 +93,27 @@ void print(std::ostream& os)
    cval = std::complex<double>(0, 0);
    printer.stream() << "[[" << cval << "][default][default]['''";
    printer << cval << "''']]\n";
-   printer.stream() << "[[" << cval << "][default][default]['''";
+   printer.stream() << "[[" << cval << "][default][show_zero_components]['''";
    printer << boost::math::tools::show_zero_components << cval << "''']]\n" << boost::math::tools::hide_zero_components;
    cval = std::complex<double>(2.5, 0);
    printer.stream() << "[[" << cval << "][default][default]['''";
    printer << cval << "''']]\n";
-   printer.stream() << "[[" << cval << "][default][default]['''";
+   printer.stream() << "[[" << cval << "][default][show_zero_components]['''";
    printer << boost::math::tools::show_zero_components << cval << "''']]\n" << boost::math::tools::hide_zero_components;
    cval = std::complex<double>(-2.5, 0);
    printer.stream() << "[[" << cval << "][default][default]['''";
    printer << cval << "''']]\n";
-   printer.stream() << "[[" << cval << "][default][default]['''";
+   printer.stream() << "[[" << cval << "][default][show_zero_components]['''";
    printer << boost::math::tools::show_zero_components << cval << "''']]\n" << boost::math::tools::hide_zero_components;
    cval = std::complex<double>(0, 3.25);
    printer.stream() << "[[" << cval << "][default][default]['''";
    printer << cval << "''']]\n";
-   printer.stream() << "[[" << cval << "][default][default]['''";
+   printer.stream() << "[[" << cval << "][default][show_zero_components]['''";
    printer << boost::math::tools::show_zero_components << cval << "''']]\n" << boost::math::tools::hide_zero_components;
    cval = std::complex<double>(0, -3.25);
    printer.stream() << "[[" << cval << "][default][default]['''";
    printer << cval << "''']]\n";
-   printer.stream() << "[[" << cval << "][default][default]['''";
+   printer.stream() << "[[" << cval << "][default][show_zero_components]['''";
    printer << boost::math::tools::show_zero_components << cval << "''']]\n" << boost::math::tools::hide_zero_components;
    // Infinites and NaN's:
    cval = std::complex<double>(std::numeric_limits<double>::infinity(), 2.5);
@@ -139,6 +140,18 @@ void print(std::ostream& os)
    cval = std::complex<double>(std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::infinity());
    printer.stream() << "[[" << cval << "][default][default]['''";
    printer << cval << "''']]\n";
+
+   printer << "\n]\n]\n";
+
+
+   printer << "[template polynomial_formatting_examples[]\n";
+   printer << "[table:poly_fmt_examples Polynomial Values\n[[Kind][Result]]";
+   boost::math::tools::polynomial<int> poly1 = { 2, -3, 4, 5 };
+   printer << "[[Integer]['''" << poly1 << "''']]" << std::endl;
+   boost::math::tools::polynomial<double> poly2 = { 2.4, -34.25, 4.2e-6, -5.34e-67 };
+   printer << "[[Float]['''" << poly2 << "''']]" << std::endl;
+   boost::math::tools::polynomial<std::complex<double> > poly3 = { { 2.4, 3.25 }, {-34.25 }, { 0, 4.2e-6 }, { -5.34e-67, 4.65e-20 } };
+   printer << "[[Complex]['''" << poly3 << "''']]" << std::endl;
 
    printer << "\n]\n]\n";
 }

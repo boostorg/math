@@ -143,7 +143,9 @@ void print(std::basic_ostream<charT>& os)
    boost::math::tools::polynomial<int> poly1 = { 2, -3, 4, 5 };
    printer << "Integer: " << poly1 << std::endl;
    boost::math::tools::polynomial<double> poly2 = { 2.4, -34.25, 4.2e-6, -5.34e-67 };
-   printer << "Integer: " << poly2 << std::endl;
+   printer << "Float: " << poly2 << std::endl;
+   boost::math::tools::polynomial<std::complex<double> > poly3 = { { 2.4, 3.25 }, {-34.25 }, { 0, 4.2e-6 }, { -5.34e-67, 4.65e-20 } };
+   printer << "Complex: " << poly3 << std::endl;
 }
 
 int main(int argc, const char* argv[])

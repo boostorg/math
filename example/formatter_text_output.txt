@@ -57,4 +57,5 @@ Complex Zeros:
 Polynomials:
 
 Integer: 2 - 3x + 4x² + 5x³
-Integer: 2.4 - 34.3x + 4.2×10⁻⁰⁶x² - 5.34×10⁻⁶⁶x³
+Float: 2.4 - 34.3x + 4.2×10⁻⁰⁶x² - 5.34×10⁻⁶⁶x³
+Complex: (2.4 + 3.25i) - 34.3x + 4.2×10⁻⁰⁶ix² - (5.34×10⁻⁶⁶ - 4.65×10⁻²⁰i)x³

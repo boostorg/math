@@ -31,13 +31,11 @@ Class `basic_numeric_printer` provides "pretty printing" capabilities for numeri
 library, but fullfills a very different role:  there is no "input streaming" and the output is intended to be human readable
 and formatted for printing and not for consumption by machine.
 
-Supported input number types are integers, floating point number, complex numbers, rationals(TODO), polynomials(TODO), intervals(TODO)
+Supported input number types are integers, floating point number, complex numbers, rationals(TODO), polynomials, intervals(TODO)
 and containers thereof(TODO).  Other types, plus all the standard library manipulators can also be streamed to `basic_numeric_printer`
 but are simply formwarded to the underlying stream and ignored by the pretty printer.
 
-Output formats include plain text (not so useful), Docbook XML markup, HTML markup, and Latex.  MathML may come later(TODO).
-
-[h4 Examples:]
+Output formats include plain text (including formatted output to console), Docbook XML markup, HTML markup, and Latex.  MathML may come later(TODO).
 
 Integer values have the same representation as the underlying stream would give them, but can have styling applied to their XML wrapper
 in HTML and Docbook output modes.
@@ -48,6 +46,24 @@ and can be customised to change the default multipication operator: '''<phrase r
 Complex numbers inherit all the properties of floats, and in addition allow the unit "i" to be customised, for example 
 '''<phrase role="number">1.23 - 1.23&#x00D7;10<superscript>-24</superscript><phrase role="imaginary_i">i</phrase></phrase>''' or
 '''<phrase role="number"><phrase role="complex">1.23 - 1.2345678765&#x22C5;10<superscript>-24</superscript><phrase role="imaginary_i">&#x2148;</phrase></phrase></phrase>'''.
+
+Polynomials can be polynomials of integers, floats, or complex numbers and inherit all the properties of each of those:
+'''<phrase role="number"><phrase role="polynomial"><phrase role="number"><phrase role="complex">(2.4 + 3.25<phrase role="imaginary_i">i</phrase>)</phrase></phrase> - <phrase role="number"><phrase role="complex">34.25</phrase></phrase><emphasis>x</emphasis> + <phrase role="number"><phrase role="complex">4.2&#x00D7;10<superscript>-06</superscript><phrase role="imaginary_i">i</phrase></phrase></phrase><emphasis>x</emphasis><superscript>2</superscript> - <phrase role="number"><phrase role="complex">(5.34&#x00D7;10<superscript>-67</superscript> - 4.65&#x00D7;10<superscript>-20</superscript><phrase role="imaginary_i">i</phrase>)</phrase></phrase><emphasis>x</emphasis><superscript>3</superscript></phrase></phrase>'''.
+
+[import ../../example/formatter_snips.cpp]
+
+[formatting_eg1]
+
+[formatting_eg2]
+
+[formatting_eg3]
+ 
+Here's the revised result:
+
+[$../images/polynomial_latex_2.svg]
+
+
+[h4 Examples:]
 
 [heading Class `basic_numeric_printer`]
 
@@ -156,6 +172,8 @@ The following section (using Docbook output format) illustrates how each of the 
 [float_formatting_examples]
 
 [complex_formatting_examples]
+
+[polynomial_formatting_examples]
 
 [heading Output Format Gallery]
 
