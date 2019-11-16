@@ -31,7 +31,7 @@ The class `basic_numeric_printer` provides "pretty printing" capabilities for nu
 Its use mirrors that of the `iostream` library, but fulfills a very different role:
 There is no "input streaming" and the output is human readable--and not intended for machine consumption.
 
-Supported types are integers, floating point numbers, complex numbers, rationals(TODO), polynomials(TODO), intervals(TODO)
+Supported types are integers, floating point numbers, complex numbers, rationals, polynomials, intervals(TODO)
 and containers thereof(TODO).
 Other types, plus all the standard library manipulators can also be streamed to `basic_numeric_printer`
 but are simply forwarded to the underlying stream.
@@ -173,6 +173,8 @@ The following section (using Docbook output format) illustrates how each of the 
 [float_formatting_examples]
 
 [complex_formatting_examples]
+
+[rational_formatting_examples]
 
 [polynomial_formatting_examples]
 

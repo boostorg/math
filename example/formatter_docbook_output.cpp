@@ -7,6 +7,8 @@
 #include <complex>
 #include <fstream>
 #include <boost/math/tools/polynomial.hpp>
+#include <boost/rational.hpp>
+#include <boost/multiprecision/cpp_int.hpp>
 
 void print(std::ostream& os)
 {
@@ -25,7 +27,7 @@ void print(std::ostream& os)
    printer.stream() << std::dec << "[[" << ival << "][hex]['''";
    printer << std::hex << ival << "''']]\n";
    printer.stream() << std::dec << "[[" << ival << "][oct]['''";
-   printer << std::oct << ival << "''']]\n]\n]\n";
+   printer << std::oct << ival << "''']]\n]\n]\n" << std::dec;
 
    printer << "[template float_formatting_examples[]\n";
    double fval = 3;
@@ -143,6 +145,35 @@ void print(std::ostream& os)
 
    printer << "\n]\n]\n";
 
+   printer << "[template rational_formatting_examples[]\n";
+   printer << "[table:rat_fmt_examples Rational Values\n[[Value][Result]]\n";
+
+   boost::rational<int> rat(1, 3);
+   printer.stream() << "[[" << rat << "]['''";
+   printer << rat << "''']]\n";
+   rat = -rat;
+   printer.stream() << "[[" << rat;
+   printer << "]['''" << rat << "''']]\n";
+   rat *= 345634;
+   rat /= 565;
+   printer.stream() << "[[" << rat;
+   printer << "]['''" << rat << "''']]\n";
+   rat = 0;
+   printer.stream() << "[[" << rat;
+   printer << "]['''" << rat << "''']]\n";
+   rat = -23;
+   printer.stream() << "[[" << rat;
+   printer << "]['''" << rat << "''']]\n";
+   boost::multiprecision::cpp_rational rat2(1);
+   for (unsigned i = 1; i < 20; i += 2)
+   {
+      rat2 *= i;
+      rat2 /= i + 1;
+   }
+   printer.stream() << "[[" << rat2;
+   printer << "]['''" << rat2 << "''']]\n";
+   printer << "\n]\n]\n";
+
 
    printer << "[template polynomial_formatting_examples[]\n";
    printer << "[table:poly_fmt_examples Polynomial Values\n[[Kind][Result]]";
@@ -152,6 +183,8 @@ void print(std::ostream& os)
    printer << "[[Float]['''" << poly2 << "''']]" << std::endl;
    boost::math::tools::polynomial<std::complex<double> > poly3 = { { 2.4, 3.25 }, {-34.25 }, { 0, 4.2e-6 }, { -5.34e-67, 4.65e-20 } };
    printer << "[[Complex]['''" << poly3 << "''']]" << std::endl;
+   boost::math::tools::polynomial<boost::rational<int>> poly4 = { {2, 3}, {-3, 23}, {4, 56}, {5, 32} };
+   printer << "[[Rational]['''" << poly4 << "''']]" << std::endl;
 
    printer << "\n]\n]\n";
 }

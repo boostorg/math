@@ -23,8 +23,17 @@
 #endif
 
 namespace boost {
+
+   template <class T>
+   struct rational;
+
    namespace math {
       namespace tools {
+
+         template <class T>
+         T numerator(const boost::rational<T>& r) { return r.numerator(); }
+         template <class T>
+         T denominator(const boost::rational<T>& r) { return r.denominator(); }
 
          template <class T, bool = boost::is_arithmetic<T>::value || boost::is_class<T>::value>
          struct is_integer_like
@@ -58,6 +67,8 @@ namespace boost {
          using polynomial_t = decltype(std::declval<const T&>()(std::declval<const T&>()[0]));
          template <class T>
          using polynomial2_t = decltype(std::declval<const T&>().degree());
+         template <class T>
+         using rational_t = decltype(numerator(std::declval<const T&>()) + denominator(std::declval<const T&>()));
 
          template <class T>
          struct is_complex_like
@@ -72,11 +83,16 @@ namespace boost {
          };
 
          template <class T>
-         struct is_unhandled_type
+         struct is_rational_like
          {
-            static const bool value = !is_complex_like<T>::value && !is_float_like<T>::value && !is_integer_like<T>::value && !is_polynomial_like<T>::value;
+            static const bool value = boost::is_detected_v<rational_t, T>;
          };
 
+         template <class T>
+         struct is_unhandled_type
+         {
+            static const bool value = !is_complex_like<T>::value && !is_float_like<T>::value && !is_integer_like<T>::value && !is_polynomial_like<T>::value && !is_rational_like<T>::value;
+         };
 
          enum output_format_t
          {
@@ -198,6 +214,22 @@ namespace boost {
             }
          }
 
+         template<class charT, class Traits>
+         void write_unicode_subscript(std::basic_ostream <charT, Traits>& os, std::basic_string<charT, Traits> digits)
+         {
+            for (std::size_t i = 0; i < digits.size(); ++i)
+            {
+               if ((digits[i] >= '0') && (digits[i] <= '9'))
+                  write_unicode_char(os, 0x2080 + (digits[i] - '0'));
+               else if (digits[i] == '-')
+                  write_unicode_char(os, 0x208B);
+               else if (digits[i] == '+')
+                  write_unicode_char(os, 0x208A);
+               else
+                  os.put(digits[i]);
+            }
+         }
+
          template <class charT>
          typename boost::enable_if_c<sizeof(charT) == 1, std::size_t>::type unicode_character_len(const charT* p)
          {
@@ -258,6 +290,7 @@ namespace boost {
             std::size_t m_parenthesis;
             bool m_show_zero_components;
             bool m_use_unicode;
+            std::basic_ostream<charT, Traits>* p_stream;
          protected:
             template <class Float>
             static void decompose_float(std::basic_ostream<charT, Traits>& os, const Float& f, std::basic_string<charT, Traits>& mantissa, std::basic_string<charT, Traits>& exponent)
@@ -278,7 +311,12 @@ namespace boost {
                   mantissa = s;
             }
          public:
-            basic_numeric_formatter_base() : styling_level(full_styling), i_style(upright_i), multiply_style(multiply_times), m_parenthesis(0), m_show_zero_components(false), m_use_unicode(true) {}
+            basic_numeric_formatter_base(std::basic_ostream<charT, Traits>& os) 
+               : styling_level(full_styling), i_style(upright_i), multiply_style(multiply_times), 
+                 m_parenthesis(0), m_show_zero_components(false), m_use_unicode(true), p_stream(&os) {}
+            basic_numeric_formatter_base(std::basic_ostream<charT, Traits>& os, const basic_numeric_formatter_base& o) 
+               : styling_level(o.styling_level), i_style(o.i_style), multiply_style(o.multiply_style),
+                 m_parenthesis(o.m_parenthesis), m_show_zero_components(o.m_show_zero_components), m_use_unicode(o.m_use_unicode), p_stream(&os) {}
 
             void styling(styling_level_t i)
             {
@@ -327,6 +365,11 @@ namespace boost {
             bool use_unicode()const
             {
                return m_use_unicode;
+            }
+
+            std::basic_ostream<charT, Traits>& stream()
+            {
+               return *p_stream;
             }
 
             struct scoped_parenthesis
@@ -479,34 +522,88 @@ namespace boost {
                }
                return os;
             }
+
+            template <class Rational>
+            std::basic_ostream<charT, Traits>& format_rational(std::basic_ostream<charT, Traits>& os, const Rational& rat)
+            {
+               auto num = numerator(rat);
+               auto denom = denominator(rat);
+
+
+               if (num == 0)
+               {
+                  return os << "0";
+               }
+               else if (denom == 1)
+               {
+                  format_integer(os, num);
+                  return os;
+               }
+               else
+               {
+                  if (parenthesis())
+                     os << "(";
+                  auto s1 = part_as_string(*this, num);
+                  auto s2 = part_as_string(*this, denom);
+
+                  write_unicode_superscript(os, s1);
+                  os << "/";
+                  write_unicode_subscript(os, s2);
+
+                  if (parenthesis())
+                     os << ")";
+               }
+
+               return os;
+            }
+
             bool latex_as_equation()const { return false; }
             void latex_as_equation(bool) {}
 
             template <class Printer, class Value>
-            typename boost::enable_if_c<is_integer_like<Value>::value>::type print(Printer& printer, std::basic_ostream<charT, Traits>& os, const Value& value)
+            static std::basic_string<charT, Traits> part_as_string(Printer& printer, const Value& value)
+            {
+               std::basic_ostringstream<charT, Traits> ss;
+               ss.copyfmt(printer.stream());
+               ss.imbue(printer.stream().getloc());
+               ss.width(0);
+               Printer fmt(ss, printer);
+               fmt.print(fmt, fmt.stream(), value);
+               return ss.str();
+            }
+
+            template <class Printer, class Value>
+            static typename boost::enable_if_c<is_integer_like<Value>::value>::type print(Printer& printer, std::basic_ostream<charT, Traits>& os, const Value& value)
             {
                printer.format_integer(os, value);
             }
             template <class Printer, class Value>
-            typename boost::enable_if_c<is_float_like<Value>::value>::type print(Printer& printer, std::basic_ostream<charT, Traits>& os, const Value& value)
+            static typename boost::enable_if_c<is_float_like<Value>::value>::type print(Printer& printer, std::basic_ostream<charT, Traits>& os, const Value& value)
             {
                printer.format_float(os, value);
             }
             template <class Printer, class Value>
-            typename boost::enable_if_c<is_complex_like<Value>::value>::type print(Printer& printer, std::basic_ostream<charT, Traits>& os, const Value& value)
+            static typename boost::enable_if_c<is_complex_like<Value>::value>::type print(Printer& printer, std::basic_ostream<charT, Traits>& os, const Value& value)
             {
                printer.format_complex(os, value);
             }
             template <class Printer, class Value>
-            typename boost::enable_if_c<is_polynomial_like<Value>::value>::type print(Printer& printer, std::basic_ostream<charT, Traits>& os, const Value& value)
+            static typename boost::enable_if_c<is_polynomial_like<Value>::value>::type print(Printer& printer, std::basic_ostream<charT, Traits>& os, const Value& value)
             {
                printer.format_polynomial(os, value);
+            }
+            template <class Printer, class Value>
+            static typename boost::enable_if_c<is_rational_like<Value>::value>::type print(Printer& printer, std::basic_ostream<charT, Traits>& os, const Value& value)
+            {
+               printer.format_rational(os, value);
             }
          };
 
          template <class charT, class Traits>
          class basic_numeric_formatter<text_format, charT, Traits> : public basic_numeric_formatter_base<charT, Traits>
          {
+         public:
+            basic_numeric_formatter(std::basic_ostream<charT, Traits>& os) : basic_numeric_formatter_base<charT, Traits>(os) {}
          };
 
          template <class charT, class Traits>
@@ -514,6 +611,8 @@ namespace boost {
          {
             friend class basic_numeric_formatter_base<charT, Traits>;
          protected:
+            basic_numeric_formatter(std::basic_ostream<charT, Traits>& os) : basic_numeric_formatter_base<charT, Traits>(os) {}
+
             template <class Integer>
             std::basic_ostream<charT, Traits>& format_integer(std::basic_ostream<charT, Traits>& os, const Integer& i)
             {
@@ -693,6 +792,39 @@ namespace boost {
 
                return os;
             }
+            template <class Rational>
+            std::basic_ostream<charT, Traits>& format_rational(std::basic_ostream<charT, Traits>& os, const Rational& rat)
+            {
+               auto num = numerator(rat);
+               auto denom = denominator(rat);
+
+               if ((denom == 1) || (num == 0))
+               {
+                  format_integer(os, num);
+               }
+               else
+               {
+                  if (this->styling() >= minimal_styling)
+                     os << "<phrase role=\"number\">";
+                  if (this->styling() > minimal_styling)
+                     os << "<phrase role=\"rational\">";
+                  
+                  if (this->parenthesis())
+                     os << "(";
+                  
+                  os << "<superscript>" << num << "</superscript>";
+                  os << "&#x2044;<subscript>" << denom << "</subscript>";
+
+                  if (this->parenthesis())
+                     os << ")";
+
+                  if (this->styling() > minimal_styling)
+                     os << "</phrase>";
+                  if (this->styling() >= minimal_styling)
+                     os << "</phrase>";
+               }
+               return os;
+            }
          };
 
          template <class charT, class Traits>
@@ -704,7 +836,7 @@ namespace boost {
             bool inside_equation;
 
          public:
-            basic_numeric_formatter() : is_latex_as_equation(true), inside_equation(false) {}
+            basic_numeric_formatter(std::basic_ostream<charT, Traits>& os) : basic_numeric_formatter_base<charT, Traits>(os), is_latex_as_equation(true), inside_equation(false) {}
             void latex_as_equation(bool b) { is_latex_as_equation = b; }
             bool latex_as_equation()const { return is_latex_as_equation; }
 
@@ -904,6 +1036,42 @@ namespace boost {
 
                return os;
             }
+            template <class Rational>
+            std::basic_ostream<charT, Traits>& format_rational(std::basic_ostream<charT, Traits>& os, const Rational& rat)
+            {
+               auto num = numerator(rat);
+               auto denom = denominator(rat);
+
+
+               if ((num == 0) || (denom == 1))
+               {
+                  format_integer(os, num);
+               }
+               else
+               {
+                  if (!inside_equation && latex_as_equation())
+                     os.put(os.widen('$'));
+                  if (this->parenthesis())
+                     os << "(";
+                  
+                  if (latex_as_equation())
+                  {
+                     if(num < 0)
+                        os << "-\\frac{" << -num << "}{" << denom << "}";
+                     else
+                        os << "\\frac{" << num << "}{" << denom << "}";
+                  }
+                  else
+                     os << "\\textsuperscript{ " << num << "}/\\textsubscript{" << denom << "}";
+
+                  if (this->parenthesis())
+                     os << ")";
+                  if (!inside_equation && latex_as_equation())
+                     os.put(os.widen('$'));
+               }
+
+               return os;
+            }
          };
 
          template <class charT, class Traits>
@@ -911,6 +1079,8 @@ namespace boost {
          {
             friend class basic_numeric_formatter_base<charT, Traits>;
          protected:
+            basic_numeric_formatter(std::basic_ostream<charT, Traits>& os) : basic_numeric_formatter_base<charT, Traits>(os) {}
+
             template <class Integer>
             std::basic_ostream<charT, Traits>& format_integer(std::basic_ostream<charT, Traits>& os, const Integer& i)
             {
@@ -1095,19 +1265,51 @@ namespace boost {
 
                return os;
             }
+            template <class Rational>
+            std::basic_ostream<charT, Traits>& format_rational(std::basic_ostream<charT, Traits>& os, const Rational& rat)
+            {
+               auto num = numerator(rat);
+               auto denom = denominator(rat);
+
+               if ((num == 0) || (denom == 1))
+               {
+                  format_integer(os, num);
+               }
+               else
+               {
+                  if (this->styling() >= minimal_styling)
+                     os << "<span class=\"number\">";
+                  if (this->styling() > minimal_styling)
+                     os << "<span class=\"rational\">";
+
+                  if (this->parenthesis())
+                     os << "(";
+                  os << "<sup>" << num << "</sup>";
+                  os << "&#x2044;<sub>" << denom << "</sub>";
+
+                  if (this->parenthesis())
+                     os << ")";
+
+                  if (this->styling() > minimal_styling)
+                     os << "</span>";
+                  if (this->styling() >= minimal_styling)
+                     os << "</span>";
+               }
+
+               return os;
+            }
          };
 
 
          template <output_format_t Format = text_format, class charT = char, class Traits = std::char_traits<charT> >
          class basic_numeric_printer : private basic_numeric_formatter<Format, charT, Traits>
          {
-            std::basic_ostream<charT, Traits>* p_stream;
             typedef basic_numeric_formatter<Format, charT, Traits> base_type;
 
          public:
-            basic_numeric_printer(std::basic_ostream<charT, Traits>& os) : p_stream(&os) {}
+            basic_numeric_printer(std::basic_ostream<charT, Traits>& os) : basic_numeric_formatter<Format, charT, Traits>(os) {}
             basic_numeric_printer(std::basic_ostream<charT, Traits>& os, const basic_numeric_printer& printer) 
-               : p_stream(&os) 
+               : basic_numeric_formatter<Format, charT, Traits>(os)
             {
                styling(printer.styling());
                imaginary_style(printer.imaginary_style());
@@ -1121,6 +1323,7 @@ namespace boost {
             using base_type::format_float;
             using base_type::format_complex;
             using base_type::format_polynomial;
+            using base_type::format_rational;
             using base_type::styling;
             using base_type::imaginary_style;
             using base_type::latex_as_equation;
@@ -1129,11 +1332,7 @@ namespace boost {
             using base_type::show_zero_components;
             using base_type::use_unicode;
             using base_type::print;
-
-            std::basic_ostream<charT, Traits>& stream()
-            {
-               return *p_stream;
-            }
+            using base_type::stream;
          };
 
          typedef basic_numeric_printer<> text_printer;
@@ -1152,13 +1351,7 @@ namespace boost {
             std::size_t w = (std::size_t)os.stream().width();
             if (w)
             {
-               std::basic_stringstream<charT, Traits> ss;
-               ss.copyfmt(os.stream());
-               ss.imbue(os.stream().getloc());
-               ss.width(0);
-               basic_numeric_printer<Format, charT, Traits> fmt(ss, os);
-               fmt.print(fmt, fmt.stream(), i);
-               std::basic_string<charT, Traits> s = ss.str();
+               std::basic_string<charT, Traits> s = basic_numeric_formatter_base<charT, Traits>::part_as_string(os, i);
                std::size_t len = unicode_character_len(s.c_str());
                if (len < w)
                {

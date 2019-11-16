@@ -75,6 +75,18 @@ Value & Precision & Format & Result \\
 (inf,nan) & default & default & NaN \\
 \end{tabular}
 
+\textbf{Rational Values}
+
+\begin{tabular}{r r r}
+Value & Format & Result \\
+2/3 & default &\textsuperscript{ 2}/\textsubscript{3} \\
+-2/3 & default &\textsuperscript{ -2}/\textsubscript{3} \\
+0/1 & default &0 \\
+-23/1 & default &-23 \\
+-7949582/565 & default &\textsuperscript{ -7949582}/\textsubscript{565} \\
+-7949582/565 & latex\_as\_text &\textsuperscript{ -7949582}/\textsubscript{565} \\
+\end{tabular}
+
 \textbf{Polynomial Values}
 
 \begin{tabular}{r r}
@@ -84,6 +96,7 @@ Float & 2.4 - 34.25\textit{x} + 4.2$\times$10\textsuperscript{-06}\textit{x}\tex
 Complex & (2.4 + 3.25i) - 34.25\textit{x} + 4.2$\times$10\textsuperscript{-06}i\textit{x}\textsuperscript{2} - (5.34$\times$10\textsuperscript{-67} - 4.65$\times$10\textsuperscript{-20}i)\textit{x}\textsuperscript{3} \\
 Complex (latex\_as\_text) & (2.4 + 3.25i) - 34.25\textit{x} + 4.2$\times$10\textsuperscript{-06}i\textit{x}\textsuperscript{2} - (5.34$\times$10\textsuperscript{-67} - 4.65$\times$10\textsuperscript{-20}i)\textit{x}\textsuperscript{3} \\
 Complex (multiply\_dot) & $(2.4 + 3.25\mathrm{i}) - 34.25x + 4.2\cdot 10^{-06}\mathrm{i}x^{2} - (5.34\cdot 10^{-67} - 4.65\cdot 10^{-20}\mathrm{i})x^{3}$ \\
+Rational & $(\frac{2}{3}) - (\frac{3}{23})x + (\frac{1}{14})x^{2} + (\frac{5}{32})x^{3}$ \\
 \end{tabular}
 
 \end{document}

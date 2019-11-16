@@ -5,6 +5,8 @@
 
 #include <boost/math/tools/formatting.hpp>
 #include <boost/math/tools/polynomial.hpp>
+#include <boost/rational.hpp>
+#include <boost/multiprecision/cpp_int.hpp>
 #include <complex>
 #include <fstream>
 
@@ -26,7 +28,7 @@ void print(std::basic_ostream<charT>& os)
    printer.stream() << std::setw(20) << ival << std::setw(20) << "hex" << std::setw(20);
    printer << std::hex << ival << std::endl;
    printer.stream() << std::setw(20) << ival << std::setw(20) << "oct" << std::setw(20);
-   printer << std::oct << ival << std::endl;
+   printer << std::oct << ival << std::endl << std::dec;
 
    printer << std::endl << std::endl;
 
@@ -139,6 +141,27 @@ void print(std::basic_ostream<charT>& os)
    printer << cval << std::endl;
 
 
+   printer << "\nRationals:\n\n";
+   boost::rational<int> rat(1, 3);
+   printer << std::setw(20) << "Value" << std::setw(20) << "Result" << std::endl;
+   printer.stream() << std::setw(20) << rat;
+   printer << std::setw(20) << rat << std::endl;
+   rat = -rat;
+   printer.stream() << std::setw(20) << rat;
+   printer << std::setw(20) << rat << std::endl;
+   rat *= 345634;
+   rat /= 565;
+   printer.stream() << std::setw(20) << rat;
+   printer << std::setw(20) << rat << std::endl;
+   boost::multiprecision::cpp_rational rat2(1);
+   for (unsigned i = 1; i < 20; i += 2)
+   {
+      rat2 *= i;
+      rat2 /= i + 1;
+   }
+   printer.stream() << std::setw(20) << rat2;
+   printer << std::setw(20) << rat2 << std::endl;
+
    printer << "\nPolynomials:\n\n";
    boost::math::tools::polynomial<int> poly1 = { 2, -3, 4, 5 };
    printer << "Integer: " << poly1 << std::endl;
@@ -146,6 +169,8 @@ void print(std::basic_ostream<charT>& os)
    printer << "Float: " << poly2 << std::endl;
    boost::math::tools::polynomial<std::complex<double> > poly3 = { { 2.4, 3.25 }, {-34.25 }, { 0, 4.2e-6 }, { -5.34e-67, 4.65e-20 } };
    printer << "Complex: " << poly3 << std::endl;
+   boost::math::tools::polynomial<boost::rational<int>> poly4 = { {2, 3}, {-3, 23}, {4, 56}, {5, 32} };
+   printer << "Rational: " << poly4 << std::endl;
 }
 
 int main(int argc, const char* argv[])
@@ -158,7 +183,7 @@ int main(int argc, const char* argv[])
    else
    {
       print(std::cout);
-      print(std::wcout);
+      //print(std::wcout);
    }
    return 0;
 }

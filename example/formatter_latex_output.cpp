@@ -7,6 +7,7 @@
 #include <complex>
 #include <fstream>
 #include <boost/math/tools/polynomial.hpp>
+#include <boost/rational.hpp>
 
 void print(std::ostream& os)
 {
@@ -29,7 +30,7 @@ void print(std::ostream& os)
    printer.stream() << std::dec << ival << " & hex & ";
    printer << std::hex << ival << "\\\\\n";
    printer.stream() << std::dec << ival << " & oct & ";
-   printer << std::oct << ival << "\\\\\n\\end{tabular}\n\n";
+   printer << std::oct << ival << "\\\\\n\\end{tabular}\n\n" << std::dec;
 
    double fval = 3;
    printer << "\\textbf{Basic Float Values}\n\n\\begin{tabular}{r r r r}\nValue & Precision & Format & Result \\\\\n";
@@ -162,6 +163,27 @@ void print(std::ostream& os)
    printer << cval << " \\\\\n";
    printer << "\\end{tabular}\n\n" << std::defaultfloat << boost::math::tools::multiply_times;
 
+   printer << "\\textbf{Rational Values}\n\n\\begin{tabular}{r r r}\nValue & Format & Result \\\\\n";
+   boost::rational<int> r(2, 3);
+   printer.stream() << r << " & default &";
+   printer << r << " \\\\\n";
+   r = -r;
+   printer.stream() << r << " & default &";
+   printer << r << " \\\\\n";
+   r = 0;
+   printer.stream() << r << " & default &";
+   printer << r << " \\\\\n";
+   r = -23;
+   printer.stream() << r << " & default &";
+   printer << r << " \\\\\n";
+   r *= 345634;
+   r /= 565;
+   printer.stream() << r << " & default &";
+   printer << r << " \\\\\n";
+   printer.stream() << r << " & latex\\_as\\_text &";
+   printer << boost::math::tools::latex_as_text << r << " \\\\\n";
+   printer << "\\end{tabular}\n\n";
+
    printer << "\\textbf{Polynomial Values}\n\n\\begin{tabular}{r r}\nType & Result \\\\\n";
    boost::math::tools::polynomial<int> poly1 = { 2, -3, 4, 5 };
    printer << "Integer & " << poly1 << " \\\\\n";
@@ -171,6 +193,8 @@ void print(std::ostream& os)
    printer << "Complex & " << poly3 << " \\\\\n";
    printer << "Complex (latex\\_as\\_text) & " << boost::math::tools::latex_as_text << poly3 << " \\\\\n" << boost::math::tools::latex_as_equation;
    printer << "Complex (multiply\\_dot) & " << boost::math::tools::multiply_dot << poly3 << " \\\\\n" << boost::math::tools::multiply_times;
+   boost::math::tools::polynomial<boost::rational<int>> poly4 = { {2, 3}, {-3, 23}, {4, 56}, {5, 32} };
+   printer << "Rational & " << poly4 << " \\\\\n";
    printer << "\\end{tabular}\n\n" << std::defaultfloat << boost::math::tools::multiply_times;
 
    printer << "\\end{document}\n\n";
