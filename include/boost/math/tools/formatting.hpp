@@ -442,7 +442,8 @@ namespace boost {
                   if (use_unicode())
                   {
                      write_unicode_char(os, 0x221E);
-                     write_unicode_char(os, 0x0303);
+                     // Combining characters not supported in plain text?
+                     //write_unicode_char(os, 0x0303);
                   }
                   else
                      os << "COMPLEX INFINITY";

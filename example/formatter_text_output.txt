@@ -46,9 +46,9 @@ Complex Zeros:
             (0,25.3)             default   show_zero_components                     0 + 25.3i
            (0,-25.3)             default                default                        -25.3i
            (0,-25.3)             default   show_zero_components                     0 - 25.3i
-         (inf,-25.3)             default                default                            ∞̃
-             (2,inf)             default                default                            ∞̃
-          (-inf,inf)             default                default                            ∞̃
+         (inf,-25.3)             default                default                             ∞
+             (2,inf)             default                default                             ∞
+          (-inf,inf)             default                default                             ∞
          (nan,-25.3)             default                default                           NaN
              (3,nan)             default                default                           NaN
            (nan,inf)             default                default                           NaN

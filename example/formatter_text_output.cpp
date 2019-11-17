@@ -173,6 +173,10 @@ void print(std::basic_ostream<charT>& os)
    printer << "Rational: " << poly4 << std::endl;
 }
 
+#ifdef _WIN32
+#include <Windows.h>
+#endif
+
 int main(int argc, const char* argv[])
 {
    if (argc > 1)
@@ -182,8 +186,10 @@ int main(int argc, const char* argv[])
    }
    else
    {
+#ifdef _WIN32
+      SetConsoleOutputCP(CP_UTF8);
+#endif
       print(std::cout);
-      //print(std::wcout);
    }
    return 0;
 }
