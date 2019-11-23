@@ -14,7 +14,18 @@
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 
-namespace boost{ namespace math{ namespace interpolators{ namespace detail{
+namespace boost{ namespace math{ 
+
+   namespace tools
+   {
+      // Forward declaration only, we don't need the formatter's
+      // definition to be able to define a print function (only if
+      // we actually use it).
+      template <class charT, class Traits>
+      class basic_numeric_printer_base;
+   }
+
+namespace interpolators{ namespace detail{
 
 
 template <class Real>
@@ -33,6 +44,76 @@ public:
     Real prime(Real x) const;
 
     Real double_prime(Real x) const;
+
+    template <class charT, class Traits>
+    friend void print(boost::math::tools::basic_numeric_printer_base<charT, Traits>& os, const cardinal_cubic_b_spline_imp<Real>& spline)
+    {
+       typedef boost::math::tools::basic_numeric_printer_base<charT, Traits> printer_t;
+       //
+       // scoped_prolog is responsible for writing the prolog/epilog code
+       // to the stream, if the output format requires it.  Not a number in it's own
+       // right, but an expression, so set the name to the empty string and let each
+       // individual number style itself.
+       //
+       typename printer_t::scoped_prolog prolog(&os, "");
+       //
+       // scoped_parenthesis instructs nested types to wrap themselves in ()
+       // if they are compound rather than atomic number types (for example complex numbers):
+       //
+       typename printer_t::scoped_parenthesis param(&os);
+       //
+       // scoped_styling: turns off styling for nested types:
+       // this means that this whole thing will be styled as one
+       // "number" rather than as several seperate ones.
+       // Disabled here, as we'll leave the sub-components to style themselves.
+       //
+       // typename printer_t::scoped_styling style(&os);
+
+       print(os, spline.m_avg);
+       for (int64_t k = 0; k < int64_t(spline.m_beta.size()); ++k) 
+       {
+          if (spline.m_beta[k] < 0)
+          {
+             os.stream() << " - ";
+             print(os, -spline.m_beta[k]);
+          }
+          else
+          {
+             os.stream() << " + ";
+             print(os, spline.m_beta[k]);
+          }
+          os.print_times();
+          os.print_name("B");
+          os.print_subscript("3");
+          os.stream() << "(";
+          print(os, spline.m_h_inv);
+          os.stream() << "(";
+          os.print_variable('x');
+          if (spline.m_a < 0)
+          {
+             os.stream() << " + ";
+             print(os, -spline.m_a);
+          }
+          else
+          {
+             os.stream() << " - ";
+             print(os, spline.m_a);
+          }
+          os.stream() << ")";
+          auto t = 1 - k;
+          if (t > 0)
+          {
+             os.stream() << " + ";
+             print(os, t);
+          }
+          else if (t < 0)
+          {
+             os.stream() << " - ";
+             print(os, -t);
+          }
+          os.stream() << ")";
+       }
+    }
 
 private:
     std::vector<Real> m_beta;

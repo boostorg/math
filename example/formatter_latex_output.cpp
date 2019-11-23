@@ -55,7 +55,7 @@ void print(std::ostream& os)
    printer << std::setprecision(3) << std::scientific << boost::math::tools::multiply_dot << fval << " \\\\\n";
    printer.stream() << fval << " & 10 & scientific + latex\\_as\\_text + multiply\\_dot & ";
    printer << std::setprecision(10) << boost::math::tools::latex_as_text << boost::math::tools::multiply_dot << std::scientific << fval << " \\\\\n" 
-      << boost::math::tools::latex_as_equation << boost::math::tools::multiply_times << std::defaultfloat;
+      << boost::math::tools::latex_as_equation << boost::math::tools::multiply_times << std::defaultfloat << boost::math::tools::latex_as_equation;
 
    // Special Values:
    fval = 0;
@@ -113,7 +113,7 @@ void print(std::ostream& os)
    printer << boost::math::tools::slanted_i << boost::math::tools::latex_as_text << std::defaultfloat << std::setprecision(12) << cval << " \\\\\n";
    printer.stream() << cval << " & 12 & default + upright\\_i + latex\\_as\\_text& ";
    printer << boost::math::tools::upright_i << std::defaultfloat << std::setprecision(12) << cval << " \\\\\n";
-   printer << "\\end{tabular}\n\n" << std::defaultfloat << boost::math::tools::multiply_times;
+   printer << "\\end{tabular}\n\n" << std::defaultfloat << boost::math::tools::multiply_times << boost::math::tools::latex_as_equation;
 
    printer << "\\textbf{Complex Special Values}\n\n\\begin{tabular}{r r r r}\nValue & Precision & Format & Result \\\\\n";
    cval = std::complex<double>(0, 0);
@@ -182,7 +182,7 @@ void print(std::ostream& os)
    printer << r << " \\\\\n";
    printer.stream() << r << " & latex\\_as\\_text &";
    printer << boost::math::tools::latex_as_text << r << " \\\\\n";
-   printer << "\\end{tabular}\n\n";
+   printer << "\\end{tabular}\n\n" << boost::math::tools::latex_as_equation;
 
    printer << "\\textbf{Polynomial Values}\n\n\\begin{tabular}{r r}\nType & Result \\\\\n";
    boost::math::tools::polynomial<int> poly1 = { 2, -3, 4, 5 };

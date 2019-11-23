@@ -52,10 +52,10 @@ void print(std::basic_ostream<charT>& os)
    printer.stream() << std::setw(20) << fval << std::setw(20) << "default" << std::setw(20) << "default" << std::setw(20);
    printer << fval << std::endl;
    fval = 0;
-   printer.stream() << std::setw(20) << fval << std::setw(20) << "default" << std::setw(20) << "default" << std::setw(20);
-   printer << std::scientific << fval << std::endl;
+   printer.stream() << std::scientific << std::setw(20) << fval << std::setw(20) << "default" << std::setw(20) << "scientific" << std::setw(20);
+   printer << fval << std::endl;
    fval = -fval;
-   printer.stream() << std::setw(20) << fval << std::setw(20) << "default" << std::setw(20) << "default" << std::setw(20);
+   printer.stream() << std::setw(20) << fval << std::setw(20) << "default" << std::setw(20) << "scientific" << std::setw(20);
    printer << fval << std::endl << std::defaultfloat;
    fval = std::numeric_limits<double>::infinity();
    printer.stream() << std::setw(20) << fval << std::setw(20) << "default" << std::setw(20) << "default" << std::setw(20);

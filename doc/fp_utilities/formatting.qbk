@@ -174,6 +174,8 @@ The following section (using Docbook output format) illustrates how each of the 
 
 [complex_formatting_examples]
 
+[complex_formatting_examples_2]
+
 [rational_formatting_examples]
 
 [polynomial_formatting_examples]
@@ -189,6 +191,293 @@ The above tables of sample output are available in various other formats
 [@../../example/formatter_latex_output.tex Latex source output], generated with [@../../example/formatter_latex_output.cpp formatter_latex_output.cpp].
 
 [@../../example/formatter_latex_output.pdf Latex PDF output], generated with [@../../example/formatter_latex_output.cpp formatter_latex_output.cpp] and then converted to PDF.
+
+[heading Extender Manual]
+
+This component is (somewhat) extendable to other output formats and other numeric types.
+
+The class `basic_numeric_printer` inherits from `basic_numeric_printer_base` like so:
+
+         template <output_print_t Format, class charT, class Traits>
+         class basic_numeric_printer<text_format, charT, Traits> : public basic_numeric_printer_base<charT, Traits> {/*details*/ };
+
+The task of enabling a new output format is to define a partial specialisation of `basic_numeric_printer` which inherits from
+`basic_numeric_printer_base` and overrides it's virtual member functions to tailor the output.  Conversely, the task
+of enabling support for a new number type, is to provide a free function `print`:
+
+   template <class charT, class Traits>
+   void print(basic_numeric_printer_base<charT, Traits>& os, MyNumber const& value);
+
+Which can be found via ADL, and which calls `basic_numeric_printer_base`'s member functions to
+perform the formatted output, it may also make unqualified calls to `print` where the type
+is a collection of number types which are supported.  This is prefered to overloading `operator<<` directly, since the 
+default `operator<<` will handle stream padding (as a result of `std::setw()`) for you.
+
+         template <class charT, class Traits>
+         class basic_numeric_printer_base
+         {
+         public:
+
+            void styling(styling_level_t i);
+            styling_level_t styling()const;
+
+            void imaginary_style(imaginary_i_t i);
+            imaginary_i_t imaginary_style()const;
+
+            void multiply(multiplyer_t t);
+            multiplyer_t multiply()const;
+
+            void parenthesis(std::size_t b);
+            std::size_t parenthesis()const;
+
+            void show_zero_components(bool b);
+            bool show_zero_components()const;
+
+            void use_unicode(bool b);
+            bool use_unicode()const;
+
+            bool latex_as_equation()const;
+            void latex_as_equation(bool);
+
+            std::basic_ostream<charT, Traits>& stream();
+
+            struct scoped_parenthesis
+            {
+               scoped_parenthesis(basic_numeric_printer_base<charT, Traits>* formatter);
+               ~scoped_parenthesis();
+            };
+            struct scoped_styling
+            {
+               scoped_styling(basic_numeric_printer_base<charT, Traits>* formatter);
+               ~scoped_styling();
+            };
+            struct scoped_prolog
+            {
+               scoped_prolog(basic_numeric_printer_base<charT, Traits>* formatter, const char* number_type);
+               ~scoped_prolog();
+            };
+
+            virtual void print_prolog(const char*);
+            virtual void print_epilog();
+            virtual void print_special_character(boost::uint32_t unicode_value);
+            virtual void print_times();
+            virtual void print_superscript(const std::basic_string<charT, Traits>& s);
+            virtual void print_imaginary_unit();
+            virtual void print_complex_infinity();
+            virtual void print_variable(charT c);
+            virtual void print_name(const std::basic_string<charT, Traits>& s);
+            virtual void print_fraction(const std::basic_string<charT, Traits>& s1, const std::basic_string<charT, Traits>& s2);
+            virtual void print_subscript(const std::basic_string<charT, Traits>& s);
+
+            template <class Integer>
+            void print_integer(const Integer& i);
+            template <class Float>
+            void print_float(const Float& f);
+            template <class Complex>
+            void print_complex(const Complex& f);
+            template <class Polynomial>
+            void print_polynomial(const Polynomial& f);
+            template <class Rational>
+            void print_rational(const Rational& rat);
+
+            template <class Printer, class Value>
+            static std::basic_string<charT, Traits> part_as_string(Printer& printer, const Value& value);
+         };
+
+Details are as follows:
+
+            void styling(styling_level_t i);
+            styling_level_t styling()const;
+
+Gets and sets the XML styling level.
+
+            void imaginary_style(imaginary_i_t i);
+            imaginary_i_t imaginary_style()const;
+
+Gets and sets the character used for the imaginary unit /i/.
+
+            void multiply(multiplyer_t t);
+            multiplyer_t multiply()const;
+
+Gets and sets the character used as the multiplication symbol.
+
+            void parenthesis(std::size_t b);
+            std::size_t parenthesis()const;
+
+Gets and sets the current parenthesis level, should typically only be set via `scoped_parenthesis`.
+
+Compound types should always check the current parenthesis level and if it is greater than zero, wrap themselves in
+parenthesis.  They should do this before constructing a `scoped_parenthesis` of course.
+
+            void show_zero_components(bool b);
+            bool show_zero_components()const;
+
+Gets and sets whether zero sub-components are displayed or not.
+
+            void use_unicode(bool b);
+            bool use_unicode()const;
+
+Gets and sets whether plain text shoud use Unicode output or not: when `true` then the output is UTF-N where
+N is either 8, 16 or 32 and is determined by the size of `charT`.
+
+            bool latex_as_equation()const;
+            void latex_as_equation(bool);
+
+Gets and sets whether latex output formats numbers using math mode.
+
+            std::basic_ostream<charT, Traits>& stream();
+
+Returns the underlying output stream.
+
+            struct scoped_parenthesis
+            {
+               scoped_parenthesis(basic_numeric_printer_base<charT, Traits>* formatter);
+               ~scoped_parenthesis();
+            };
+
+A scoped parenthesis object should be constructed, whenever sub-objects need to wrap themselves in parenthesis if
+they themselves contain sub-objects.  For example the `print` function for polynomials declares a `scoped_parenthesis`
+right at it's start, if the coefficients are "atomic" types such as integers then they ignore the parenthesis level
+and are printed normally.  Compound coefficients such as complex numbers will make use of the parenthesis level though
+and wrap themselves in parenthesis.
+
+            struct scoped_styling
+            {
+               scoped_styling(basic_numeric_printer_base<charT, Traits>* formatter);
+               ~scoped_styling();
+            };
+
+XML output will wrap numbers in styling tags - for example `<span class="number">...</span>` in html output.
+If the current type being formatted should be treated as a single number then a `scoped_styling` object should be 
+constructed at the start of the types `print` function.  This will then suppress styling tags being added to
+any printed sub-objects.
+
+            struct scoped_prolog
+            {
+               scoped_prolog(basic_numeric_printer_base<charT, Traits>* formatter, const char* number_type);
+               ~scoped_prolog();
+            };
+
+Any type that provides a `print` function should construct a `scoped_prolog` object at it's start - it calls
+`print_prolog` during construction and `print_epilog` during destruction.  Set `number_type` to the empty
+string if you're printing an expression that contains multiple sub-components, and you're not constructing
+a `scoped_styling` object.  ie if sub-objects are styled, but this object is not.
+
+            virtual void print_prolog(const char*);
+
+Prints any prolog to the formatted output - for example styling tags in HTML/XML output.  
+
+`basic_numeric_printer_base<>::print_prolog` does nothing, specializations of `basic_numeric_printer`
+override that behaviour according to need.
+
+            virtual void print_epilog();
+
+Prints any elilog to the formatted output - for example closing styling tags in HTML/XML output.  
+
+`basic_numeric_printer_base<>::print_epilog` does nothing, specializations of `basic_numeric_printer`
+override that behaviour according to need.
+
+            virtual void print_special_character(boost::uint32_t unicode_value);
+
+Prints a special math character denoted by it's unicode code point.
+
+`basic_numeric_printer_base<>::print_special_character` outputs the character as UTF-N where N is determined by
+the size of `charT` if `use_unicode()` is true, otherwise prints the closest plain text approximation, 
+specializations of `basic_numeric_printer`
+override that behaviour according to need.
+
+
+            virtual void print_times();
+
+Prints the multiplication character.
+
+`basic_numeric_printer_base<>::print_times` outputs the character as UTF-N where N is determined by
+the size of `charT` if `use_unicode()` is true, otherwise prints an "x", specializations of `basic_numeric_printer`
+override that behaviour according to need.
+
+            virtual void print_superscript(const std::basic_string<charT, Traits>& s);
+
+Prints `s` as superscript.
+
+`basic_numeric_printer_base<>::print_superscript` outputs the characters as UTF-N superscript where N is determined by
+the size of `charT` if `use_unicode()` is true, otherwise prints a "^" followed by `s`, specializations of `basic_numeric_printer`
+override that behaviour according to need.
+
+            virtual void print_imaginary_unit();
+
+Prints the imaginary unit i.
+
+`basic_numeric_printer_base<>::print_imaginary_unit` outputs the character as UTF-N where N is determined by
+the size of `charT` if `use_unicode()` is true, otherwise prints a literal "i", specializations of `basic_numeric_printer`
+override that behaviour according to need.
+
+            virtual void print_complex_infinity();
+
+Prints complex infinity.
+
+`basic_numeric_printer_base<>::print_complex_infinity` outputs the infinity symbol as UTF-N where N is determined by
+the size of `charT` if `use_unicode()` is true, otherwise prints a literal "INFINITY", specializations of `basic_numeric_printer`
+override that behaviour according to need.
+
+            virtual void print_variable(charT c);
+
+Prints a character `c` that represents a named variable, typically rendered in italic text.
+
+`basic_numeric_printer_base<>::print_variable` outputs the character "as is", specializations of `basic_numeric_printer`
+override that behaviour according to need.
+
+            virtual void print_name(const std::basic_string<charT, Traits>& s);
+
+Prints a string name `s` that represents a named quantity, typically rendered in upright (non-italic) text.
+
+`basic_numeric_printer_base<>::print_variable` outputs the string "as is", specializations of `basic_numeric_printer`
+override that behaviour according to need.
+
+            virtual void print_fraction(const std::basic_string<charT, Traits>& s1, const std::basic_string<charT, Traits>& s2);
+
+Prints the fraction `s1/s2`.
+
+`basic_numeric_printer_base<>::print_fraction` outputs the fraction as plain text s1/s2, specializations of `basic_numeric_printer`
+override that behaviour according to need.
+
+            virtual void print_subscript(const std::basic_string<charT, Traits>& s);
+
+Prints `s` as subscript.
+
+`basic_numeric_printer_base<>::print_subscript` outputs the characters as UTF-N subscript where N is determined by
+the size of `charT` if `use_unicode()` is true, otherwise prints a "_" followed by `s`, specializations of `basic_numeric_printer`
+override that behaviour according to need.
+
+            template <class Integer>
+            void print_integer(const Integer& i);
+
+Prints integer value i.
+
+            template <class Float>
+            void print_float(const Float& f);
+
+Prints floating point value f.
+
+            template <class Complex>
+            void print_complex(const Complex& f);
+
+Prints complex number f.
+
+            template <class Polynomial>
+            void print_polynomial(const Polynomial& f);
+
+Prints polynomial f.
+
+            template <class Rational>
+            void print_rational(const Rational& rat);
+
+Prints the rational value rat.
+
+            template <class Printer, class Value>
+            static std::basic_string<charT, Traits> part_as_string(Printer& printer, const Value& value);
+
+Helper function.  Returns `value` as a string.  Uses a copy of `printer` which contains the same formatting flags (on both itself and
+the std::ostream it points to) but which outputs to a `std::basic_ostringstream` and then returns the result.
 
 [endsect] [/section:formatting]
 

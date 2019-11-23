@@ -20,22 +20,22 @@ Value & Base & Result \\ \hline
 Value & Precision & Format & Result \\
 3 & default & default & $3$ \\
 3.14 & default & default & $3.14$ \\
--1.23457e-24 & default & default & $-1.23457\times 10^{-24}$ \\
--1.23457e-24 & 3 & scientific & $-1.235\times 10^{-24}$ \\
+-1.23457e-24 & default & default & $-1.23457\times10^{-24}$ \\
+-1.23457e-24 & 3 & scientific & $-1.235\times10^{-24}$ \\
 -1.235e-24 & 10 & scientific + latex\_as\_text & -1.2345678765$\times$10\textsuperscript{-24} \\
--1.2345678765e-24 & 3 & scientific + multiply\_x & $-1.235\mathrm{x} 10^{-24}$ \\
+-1.2345678765e-24 & 3 & scientific + multiply\_x & $-1.235\mathrm{x}10^{-24}$ \\
 -1.235e-24 & 10 & scientific + latex\_as\_text + multiply\_x & -1.2345678765x10\textsuperscript{-24} \\
--1.2345678765e-24 & 3 & scientific + multiply\_dot & $-1.235\cdot 10^{-24}$ \\
+-1.2345678765e-24 & 3 & scientific + multiply\_dot & $-1.235\cdot10^{-24}$ \\
 -1.235e-24 & 10 & scientific + latex\_as\_text + multiply\_dot & -1.2345678765$\cdot$10\textsuperscript{-24} \\
 0 & default & default & $0$ \\
 -0 & default & default & $-0$ \\
 inf & default & default & $\infty$ \\
 -inf & default & default & $-\infty$ \\
-nan & default & default & NaN \\
+nan & default & default & $\mathrm{NaN}$ \\
 0 & default & latex\_as\_text & 0 \\
 -0 & default & latex\_as\_text & -0 \\
 inf & default & latex\_as\_text & $\infty$ \\
--inf & default & latex\_as\_text & $-\infty$ \\
+-inf & default & latex\_as\_text & -$\infty$ \\
 nan & default & latex\_as\_text & NaN \\
 \end{tabular}
 
@@ -45,10 +45,10 @@ nan & default & latex\_as\_text & NaN \\
 Value & Precision & Format & Result \\
 (3.25,4.67) & default & default & $3.25 + 4.67\mathrm{i}$ \\
 (3.14,0) & default & default & $3.14$ \\
-(1.23,-1.234567876e-24) & default & default & $1.23 - 1.234567876\times 10^{-24}\mathrm{i}$ \\
-(1.23,-1.234567876e-24) & 3 & scientific & $1.230\times 10^{+00} - 1.235\times 10^{-24}\mathrm{i}$ \\
-(1.230e+00,-1.235e-24) & 12 & default + slanted\_i & $1.23 - 1.2345678765\times 10^{-24}i$ \\
-(1.23,-1.2345678765e-24) & 12 & default + upright\_i & $1.23 - 1.2345678765\times 10^{-24}\mathrm{i}$ \\
+(1.23,-1.234567876e-24) & default & default & $1.23 - 1.234567876\times10^{-24}\mathrm{i}$ \\
+(1.23,-1.234567876e-24) & 3 & scientific & $1.230\times10^{+00} - 1.235\times10^{-24}\mathrm{i}$ \\
+(1.230e+00,-1.235e-24) & 12 & default + slanted\_i & $1.23 - 1.2345678765\times10^{-24}i$ \\
+(1.23,-1.2345678765e-24) & 12 & default + upright\_i & $1.23 - 1.2345678765\times10^{-24}\mathrm{i}$ \\
 (1.23,-1.2345678765e-24) & 12 & default + slanted\_i + latex\_as\_text & 1.23 - 1.2345678765$\times$10\textsuperscript{-24}\textit{i} \\
 (1.23,-1.2345678765e-24) & 12 & default + upright\_i + latex\_as\_text& 1.23 - 1.2345678765$\times$10\textsuperscript{-24}i \\
 \end{tabular}
@@ -57,45 +57,45 @@ Value & Precision & Format & Result \\
 
 \begin{tabular}{r r r r}
 Value & Precision & Format & Result \\
-(0,0) & default & default & 0 \\
-(0,0) & default & show\_zero\_components & 0 + 0i \\
-(2.5,0) & default & default & 2.5 \\
-(2.5,0) & default & show\_zero\_components & 2.5 + 0i \\
-(-2.5,0) & default & default & -2.5 \\
-(-2.5,0) & default & show\_zero\_components & -2.5 + 0i \\
-(0,2.5) & default & default & 2.5i \\
-(0,2.5) & default & show\_zero\_components & 0 + 2.5i \\
-(0,-2.5) & default & default & -2.5i \\
-(0,-2.5) & default & show\_zero\_components & 0 - 2.5i \\
+(0,0) & default & default & $0$ \\
+(0,0) & default & show\_zero\_components & $0 + 0\mathrm{i}$ \\
+(2.5,0) & default & default & $2.5$ \\
+(2.5,0) & default & show\_zero\_components & $2.5 + 0\mathrm{i}$ \\
+(-2.5,0) & default & default & $-2.5$ \\
+(-2.5,0) & default & show\_zero\_components & $-2.5 + 0\mathrm{i}$ \\
+(0,2.5) & default & default & $2.5\mathrm{i}$ \\
+(0,2.5) & default & show\_zero\_components & $0 + 2.5\mathrm{i}$ \\
+(0,-2.5) & default & default & $-2.5\mathrm{i}$ \\
+(0,-2.5) & default & show\_zero\_components & $0 - 2.5\mathrm{i}$ \\
 (inf,2.5) & default & default & $\tilde{\infty}$ \\
 (2.5,inf) & default & default & $\tilde{\infty}$ \\
-(nan,2.5) & default & default & NaN \\
-(2.5,nan) & default & default & NaN \\
-(nan,inf) & default & default & NaN \\
-(inf,nan) & default & default & NaN \\
+(nan,2.5) & default & default & $\mathrm{NaN}$ \\
+(2.5,nan) & default & default & $\mathrm{NaN}$ \\
+(nan,inf) & default & default & $\mathrm{NaN}$ \\
+(inf,nan) & default & default & $\mathrm{NaN}$ \\
 \end{tabular}
 
 \textbf{Rational Values}
 
 \begin{tabular}{r r r}
 Value & Format & Result \\
-2/3 & default &\textsuperscript{ 2}/\textsubscript{3} \\
--2/3 & default &\textsuperscript{ -2}/\textsubscript{3} \\
-0/1 & default &0 \\
--23/1 & default &-23 \\
--7949582/565 & default &\textsuperscript{ -7949582}/\textsubscript{565} \\
--7949582/565 & latex\_as\_text &\textsuperscript{ -7949582}/\textsubscript{565} \\
+2/3 & default &$\frac{2}{3}$ \\
+-2/3 & default &$-\frac{2}{3}$ \\
+0/1 & default &$0$ \\
+-23/1 & default &$-23$ \\
+-7949582/565 & default &$-\frac{7949582}{565}$ \\
+-7949582/565 & latex\_as\_text &-\textsuperscript{7949582}/\textsubscript{565} \\
 \end{tabular}
 
 \textbf{Polynomial Values}
 
 \begin{tabular}{r r}
 Type & Result \\
-Integer & 2 - 3\textit{x} + 4\textit{x}\textsuperscript{2} + 5\textit{x}\textsuperscript{3} \\
-Float & 2.4 - 34.25\textit{x} + 4.2$\times$10\textsuperscript{-06}\textit{x}\textsuperscript{2} - 5.34$\times$10\textsuperscript{-67}\textit{x}\textsuperscript{3} \\
-Complex & (2.4 + 3.25i) - 34.25\textit{x} + 4.2$\times$10\textsuperscript{-06}i\textit{x}\textsuperscript{2} - (5.34$\times$10\textsuperscript{-67} - 4.65$\times$10\textsuperscript{-20}i)\textit{x}\textsuperscript{3} \\
+Integer & $2 - 3x + 4x^{2} + 5x^{3}$ \\
+Float & $2.4 - 34.25x + 4.2\times10^{-06}x^{2} - 5.34\times10^{-67}x^{3}$ \\
+Complex & $(2.4 + 3.25\mathrm{i}) - 34.25x + 4.2\times10^{-06}\mathrm{i}x^{2} - (5.34\times10^{-67} - 4.65\times10^{-20}\mathrm{i})x^{3}$ \\
 Complex (latex\_as\_text) & (2.4 + 3.25i) - 34.25\textit{x} + 4.2$\times$10\textsuperscript{-06}i\textit{x}\textsuperscript{2} - (5.34$\times$10\textsuperscript{-67} - 4.65$\times$10\textsuperscript{-20}i)\textit{x}\textsuperscript{3} \\
-Complex (multiply\_dot) & $(2.4 + 3.25\mathrm{i}) - 34.25x + 4.2\cdot 10^{-06}\mathrm{i}x^{2} - (5.34\cdot 10^{-67} - 4.65\cdot 10^{-20}\mathrm{i})x^{3}$ \\
+Complex (multiply\_dot) & $(2.4 + 3.25\mathrm{i}) - 34.25x + 4.2\cdot10^{-06}\mathrm{i}x^{2} - (5.34\cdot10^{-67} - 4.65\cdot10^{-20}\mathrm{i})x^{3}$ \\
 Rational & $(\frac{2}{3}) - (\frac{3}{23})x + (\frac{1}{14})x^{2} + (\frac{5}{32})x^{3}$ \\
 \end{tabular}
 
