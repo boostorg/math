@@ -54,12 +54,6 @@ namespace boost {
                // The point "floats":
                static const bool value = false;
             };
-            template <class T>
-            struct is_float_like<T, true>
-            {
-               // The point "floats":
-               static const bool value = std::numeric_limits<T>::max_exponent != std::numeric_limits<T>::min_exponent;
-            };
 
             template<class T>
             using real_t = decltype(std::declval<T&>().real(std::declval<T const&>().imag()));
@@ -71,6 +65,8 @@ namespace boost {
             using polynomial2_t = decltype(std::declval<const T&>().degree());
             template <class T>
             using rational_t = decltype(numerator(std::declval<const T&>()) + denominator(std::declval<const T&>()));
+            template <class T>
+            using interval_t = decltype(singleton(std::declval<const T&>()) + intersect(std::declval<const T&>(), std::declval<const T&>()) + median(std::declval<const T&>()));
 
             template <class T>
             struct is_complex_like
@@ -88,6 +84,19 @@ namespace boost {
             struct is_rational_like
             {
                static const bool value = boost::is_detected_v<rational_t, T>;
+            };
+
+            template <class T>
+            struct is_interval_like
+            {
+               static const bool value = boost::is_detected_v<interval_t, T>;
+            };
+
+            template <class T>
+            struct is_float_like<T, true>
+            {
+               // The point "floats":
+               static const bool value = (std::numeric_limits<T>::max_exponent != std::numeric_limits<T>::min_exponent) && !is_interval_like<T>::value;
             };
 
             template <class T>
@@ -290,27 +299,191 @@ namespace boost {
          template <class charT, class Traits, class Value>
          typename boost::enable_if_c<detail::is_integer_like<Value>::value>::type print(basic_numeric_printer_base<charT, Traits>& os, const Value& value)
          {
-            os.print_integer(value);
+            typename basic_numeric_printer_base<charT, Traits>::scoped_prolog s(&os, "integer");
+            os.stream() << value;
          }
          template <class charT, class Traits, class Value>
-         typename boost::enable_if_c<detail::is_float_like<Value>::value>::type print(basic_numeric_printer_base<charT, Traits>& os, const Value& value)
+         typename boost::enable_if_c<detail::is_float_like<Value>::value>::type print(basic_numeric_printer_base<charT, Traits>& os, const Value& f)
          {
-            os.print_float(value);
+            using std::isinf;
+            using std::isnan;
+
+            typename basic_numeric_printer_base<charT, Traits>::scoped_prolog s(&os, "float");
+
+            if ((isinf)(f))
+            {
+               if (f < 0)
+                  os.stream() << "-";
+               os.print_special_character(0x221E);
+               return;
+            }
+            if ((isnan)(f))
+            {
+               os.print_name("NaN");
+               return;
+            }
+            std::basic_string<charT, Traits> mantissa, exponent;
+            os.decompose_float(os.stream(), f, mantissa, exponent);
+            os.stream() << mantissa;
+            if (exponent.size())
+            {
+               os.print_times();
+               os.stream() << "10";
+               os.print_superscript(exponent);
+            }
+            return;
+         }
+         template <class charT, class Traits, class Complex>
+         typename boost::enable_if_c<detail::is_complex_like<Complex>::value>::type print(basic_numeric_printer_base<charT, Traits>& os, const Complex& f)
+         {
+            using std::isnan;
+            using std::isinf;
+
+            typename basic_numeric_printer_base<charT, Traits>::scoped_prolog s1(&os, "complex");
+            typename basic_numeric_printer_base<charT, Traits>::scoped_styling s2(&os);
+
+            if ((isnan)(f.real()) || (isnan)(f.imag()))
+            {
+               os.print_name("NaN");
+               return;
+            }
+            else if ((isinf)(f.real()) || (isinf)(f.imag()))
+            {
+               os.print_complex_infinity();
+               return;
+            }
+            else if ((!os.show_zero_components()) && (f.imag() == 0))
+            {
+               print(os, f.real());
+               return;
+            }
+            else if ((!os.show_zero_components()) && (f.real() == 0))
+            {
+               print(os, f.imag());
+            }
+            else
+            {
+               if (os.parenthesis())
+                  os.stream() << "(";
+               print(os, f.real());
+               typename Complex::value_type i(f.imag());
+               bool isneg = i < 0;
+               if (isneg)
+               {
+                  i = -i;
+                  os.stream() << " - ";
+               }
+               else
+                  os.stream() << " + ";
+               print(os, i);
+            }
+            os.print_imaginary_unit();
+            if (os.parenthesis() && !((!os.show_zero_components()) && (f.real() == 0)))
+               os.stream() << ")";
+            return;
          }
          template <class charT, class Traits, class Value>
-         typename boost::enable_if_c<detail::is_complex_like<Value>::value>::type print(basic_numeric_printer_base<charT, Traits>& os, const Value& value)
+         typename boost::enable_if_c<detail::is_polynomial_like<Value>::value>::type print(basic_numeric_printer_base<charT, Traits>& os, const Value& f)
          {
-            os.print_complex(value);
+            typename basic_numeric_printer_base<charT, Traits>::scoped_prolog s1(&os, "polynomial");
+            typename basic_numeric_printer_base<charT, Traits>::scoped_parenthesis s2(&os);
+            typename basic_numeric_printer_base<charT, Traits>::scoped_styling s3(&os);
+
+            bool have_first = false;
+            for (unsigned i = 0; i <= f.degree(); ++i)
+            {
+               auto coef = f[i];
+               if (os.show_zero_components() || (!detail::iszero(coef)))
+               {
+                  if (have_first)
+                  {
+                     if (!detail::isneg(coef))
+                        os.stream() << " + ";
+                     else
+                        os.stream() << " - ";
+                  }
+                  print(os, !detail::isneg(coef) ? coef : -coef);
+                  have_first = true;
+                  if (i)
+                  {
+                     os.print_variable('x');
+                     if (i > 1)
+                     {
+                        std::basic_stringstream<charT, Traits> ss;
+                        ss << i;
+                        std::basic_string<charT, Traits> s = ss.str();
+                        os.print_superscript(s);
+                     }
+                  }
+               }
+            }
          }
          template <class charT, class Traits, class Value>
-         typename boost::enable_if_c<detail::is_polynomial_like<Value>::value>::type print(basic_numeric_printer_base<charT, Traits>& os, const Value& value)
+         typename boost::enable_if_c<detail::is_rational_like<Value>::value>::type print(basic_numeric_printer_base<charT, Traits>& os, const Value& rat)
          {
-            os.print_polynomial(value);
+            typename basic_numeric_printer_base<charT, Traits>::scoped_prolog s1(&os, "rational");
+            typename basic_numeric_printer_base<charT, Traits>::scoped_styling s3(&os);
+
+            auto num = numerator(rat);
+            auto denom = denominator(rat);
+
+            if ((num == 0) || (denom == 1))
+            {
+               print(os, num);
+               return;
+            }
+            else
+            {
+               if (detail::isneg(num))
+               {
+                  os.stream() << "-";
+                  num = -num;
+               }
+               if (os.parenthesis())
+                  os.stream() << "(";
+               {
+                  typename basic_numeric_printer_base<charT, Traits>::scoped_parenthesis s2(&os);
+
+                  auto str1 = os.part_as_string(num);
+                  auto str2 = os.part_as_string(denom);
+
+                  os.print_fraction(str1, str2);
+               }
+               if (os.parenthesis())
+                  os.stream() << ")";
+            }
          }
+
          template <class charT, class Traits, class Value>
-         typename boost::enable_if_c<detail::is_rational_like<Value>::value>::type print(basic_numeric_printer_base<charT, Traits>& os, const Value& value)
+         typename boost::enable_if_c<detail::is_interval_like<Value>::value>::type print(basic_numeric_printer_base<charT, Traits>& os, const Value& val)
          {
-            os.print_rational(value);
+            typename basic_numeric_printer_base<charT, Traits>::scoped_prolog s1(&os, "interval");
+            typename basic_numeric_printer_base<charT, Traits>::scoped_styling s3(&os);
+
+            if (singleton(val))
+            {
+               print(os, lower(val));
+               return;
+            }
+            else
+            {
+               auto med = median(val);
+               auto rad = width(val);
+               rad /= 2;
+
+               if (os.parenthesis())
+                  os.stream() << "(";
+               {
+                  typename basic_numeric_printer_base<charT, Traits>::scoped_parenthesis s2(&os);
+                  print(os, med);
+                  os.stream() << " ";
+                  os.print_special_character(0xB1);
+                  os.stream() << " ";
+                  print(os, rad);
+               }
+               if (os.parenthesis())
+                  os.stream() << ")";
+            }
          }
 
          template <class Stream, class Value>
@@ -333,7 +506,7 @@ namespace boost {
             bool m_show_zero_components;
             bool m_use_unicode;
             std::basic_ostream<charT, Traits>* p_stream;
-         protected:
+         public:
             template <class Float>
             static void decompose_float(std::basic_ostream<charT, Traits>& os, const Float& f, std::basic_string<charT, Traits>& mantissa, std::basic_string<charT, Traits>& exponent)
             {
@@ -352,7 +525,6 @@ namespace boost {
                else
                   mantissa = s;
             }
-         public:
             basic_numeric_printer_base(std::basic_ostream<charT, Traits>& os) 
                : styling_level(full_styling), i_style(upright_i), multiply_style(multiply_times), 
                  m_parenthesis(0), m_show_zero_components(false), m_use_unicode(true), p_stream(&os) {}
@@ -530,176 +702,17 @@ namespace boost {
                detail::print_unicode_subscript(stream(), s);
             }
 
-            template <class Integer>
-            void print_integer(const Integer& i)
-            {
-               scoped_prolog s(this, "integer");
-               this->stream() << i;
-            }
-            template <class Float>
-            void print_float(const Float& f)
-            {
-               using std::isinf;
-               using std::isnan;
-
-               scoped_prolog s(this, "float");
-
-               if ((isinf)(f))
-               {
-                  if (f < 0)
-                     stream() << "-";
-                  print_special_character(0x221E);
-                  return;
-               }
-               if ((isnan)(f))
-               {
-                  print_name("NaN");
-                  return;
-               }
-               std::basic_string<charT, Traits> mantissa, exponent;
-               decompose_float(stream(), f, mantissa, exponent);
-               stream() << mantissa;
-               if (exponent.size())
-               {
-                  print_times();
-                  stream() << "10";
-                  print_superscript(exponent);
-               }
-               return;
-            }
-            template <class Complex>
-            void print_complex(const Complex& f)
-            {
-               using std::isnan;
-               using std::isinf;
-
-               scoped_prolog s1(this, "complex");
-               scoped_styling s2(this);
-
-               if ((isnan)(f.real()) || (isnan)(f.imag()))
-               {
-                  print_name("NaN");
-                  return;
-               }
-               else if ((isinf)(f.real()) || (isinf)(f.imag()))
-               {
-                  print_complex_infinity();
-                  return;
-               }
-               else if ((!this->show_zero_components()) && (f.imag() == 0))
-               {
-                  this->print_float(f.real());
-                  return;
-               }
-               else if ((!this->show_zero_components()) && (f.real() == 0))
-               {
-                  this->print_float(f.imag());
-               }
-               else
-               {
-                  if (parenthesis())
-                     this->stream() << "(";
-                  this->print_float(f.real());
-                  typename Complex::value_type i(f.imag());
-                  bool isneg = i < 0;
-                  if (isneg)
-                  {
-                     i = -i;
-                     this->stream() << " - ";
-                  }
-                  else
-                     this->stream() << " + ";
-                  this->print_float(i);
-               }
-               print_imaginary_unit();
-               if (parenthesis() && !((!this->show_zero_components()) && (f.real() == 0)))
-                  this->stream() << ")";
-               return;
-            }
-            template <class Polynomial>
-            void print_polynomial(const Polynomial& f)
-            {
-               scoped_prolog s1(this, "polynomial");
-               scoped_parenthesis s2(this);
-               scoped_styling s3(this);
-
-               bool have_first = false;
-               for (unsigned i = 0; i <= f.degree(); ++i)
-               {
-                  auto coef = f[i];
-                  if (show_zero_components() || (!detail::iszero(coef)))
-                  {
-                     if (have_first)
-                     {
-                        if (!detail::isneg(coef))
-                           stream() << " + ";
-                        else
-                           stream() << " - ";
-                     }
-                     print(*this, !detail::isneg(coef) ? coef : -coef);
-                     have_first = true;
-                     if (i)
-                     {
-                        print_variable('x');
-                        if (i > 1)
-                        {
-                           std::basic_stringstream<charT, Traits> ss;
-                           ss << i;
-                           std::basic_string<charT, Traits> s = ss.str();
-                           print_superscript(s);
-                        }
-                     }
-                  }
-               }
-            }
-
-            template <class Rational>
-            void print_rational(const Rational& rat)
-            {
-               scoped_prolog s1(this, "rational");
-               scoped_styling s3(this);
-
-               auto num = numerator(rat);
-               auto denom = denominator(rat);
-
-               if ((num == 0) || (denom == 1))
-               {
-                  print_integer(num);
-                  return;
-               }
-               else
-               {
-                  if (detail::isneg(num))
-                  {
-                     stream() << "-";
-                     num = -num;
-                  }
-                  if (parenthesis())
-                     stream() << "(";
-                  {
-                     scoped_parenthesis s2(this);
-                     
-                     auto str1 = part_as_string(*this, num);
-                     auto str2 = part_as_string(*this, denom);
-
-                     print_fraction(str1, str2);
-                  }
-                  if (parenthesis())
-                     stream() << ")";
-               }
-            }
-
             bool latex_as_equation()const { return false; }
             void latex_as_equation(bool) {}
 
-            template <class Printer, class Value>
-            static std::basic_string<charT, Traits> part_as_string(Printer& printer, const Value& value)
+            template <class Value>
+            std::basic_string<charT, Traits> part_as_string(const Value& value)
             {
                std::basic_ostringstream<charT, Traits> ss;
-               ss.copyfmt(printer.stream());
-               ss.imbue(printer.stream().getloc());
+               ss.copyfmt(stream());
+               ss.imbue(stream().getloc());
                ss.width(0);
-               Printer fmt(ss, printer);
+               basic_numeric_printer_base fmt(ss, *this);
                print(fmt, value);
                return ss.str();
             }
@@ -831,6 +844,33 @@ namespace boost {
                   break;
                case 0x22C5:
                   this->stream() << "\\cdot";
+                  break;
+               case 0xB1:
+                  this->stream() << "\\pm";
+                  break;
+               case 0x2213:
+                  this->stream() << "\\mp";
+                  break;
+               case 0x221A:
+                  this->stream() << "\\surd";
+                  break;
+               case 0x3B4:
+                  this->stream() << "\\delta";
+                  break;
+               case 0x394:
+                  this->stream() << "\\Delta";
+                  break;
+               case 0x1D70B:
+                  this->stream() << "\\pi";
+                  break;
+               case 0x03C0:
+                  this->stream() << "\\pi";
+                  break;
+               case 0x1D70E:
+                  this->stream() << "\\sigma";
+                  break;
+               case 0x3c3:
+                  this->stream() << "\\sigma";
                   break;
                default:
                   throw std::runtime_error("Unsuported Unicode character encountered in LaTex output");
@@ -997,7 +1037,7 @@ namespace boost {
             std::size_t w = (std::size_t)os.stream().width();
             if (w)
             {
-               std::basic_string<charT, Traits> s = basic_numeric_printer_base<charT, Traits>::part_as_string(os, i);
+               std::basic_string<charT, Traits> s = os.part_as_string(i);
                std::size_t len = detail::unicode_character_len(s.c_str());
                if (len < w)
                {

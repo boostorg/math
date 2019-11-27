@@ -31,7 +31,7 @@ The class `basic_numeric_printer` provides "pretty printing" capabilities for nu
 Its use mirrors that of the `iostream` library, but fulfills a very different role:
 There is no "input streaming" and the output is human readable--and not intended for machine consumption.
 
-Supported types are integers, floating point numbers, complex numbers, rationals, polynomials, intervals(TODO)
+Supported types are integers, floating point numbers, complex numbers, rationals, polynomials, intervals
 and containers thereof(TODO).
 Other types, plus all the standard library manipulators can also be streamed to `basic_numeric_printer`
 but are simply forwarded to the underlying stream.
@@ -180,6 +180,12 @@ The following section (using Docbook output format) illustrates how each of the 
 
 [polynomial_formatting_examples]
 
+[table:intervals Interval Values
+[[Value][Result]]
+[[`boost::math::constants::pi<mpfi_float_50>()`]['''<phrase role="number"><phrase role="interval">3.1415926535897932384626433832795028841971693993751 &#xb1; 5.3455294201843912922810729343029637576303937602101&#xd7;10<superscript>-51</superscript></phrase></phrase>''']]
+[[Polynomial of `mpfi_float_50`]['''<phrase role="number"><phrase role="polynomial">2 - (1.6666666666666666666666666666666666666666666666667 &#xb1; 2.672764710092195646140536467151481878815196880105&#xd7;10<superscript>-51</superscript>)<emphasis>x</emphasis> + (0.66666666666666666666666666666666666666666666666666 &#xb1; 1.3363823550460978230702682335757409394075984400525&#xd7;10<superscript>-51</superscript>)<emphasis>x</emphasis><superscript>2</superscript> + 15<emphasis>x</emphasis><superscript>3</superscript> + 11<emphasis>x</emphasis><superscript>4</superscript> - (14.666666666666666666666666666666666666666666666667 &#xb1; 2.138211768073756516912429173721185503052157504084&#xd7;10<superscript>-50</superscript>)<emphasis>x</emphasis><superscript>5</superscript> - (5.6666666666666666666666666666666666666666666666667 &#xb1; 1.069105884036878258456214586860592751526078752042&#xd7;10<superscript>-50</superscript>)<emphasis>x</emphasis><superscript>6</superscript> + (9.3333333333333333333333333333333333333333333333334 &#xb1; 2.138211768073756516912429173721185503052157504084&#xd7;10<superscript>-50</superscript>)<emphasis>x</emphasis><superscript>7</superscript> + 20<emphasis>x</emphasis><superscript>8</superscript></phrase></phrase>''']]
+]
+
 [heading Output Format Gallery]
 
 The above tables of sample output are available in various other formats
@@ -209,15 +215,22 @@ of enabling support for a new number type, is to provide a free function `print`
    void print(basic_numeric_printer_base<charT, Traits>& os, MyNumber const& value);
 
 Which can be found via ADL, and which calls `basic_numeric_printer_base`'s member functions to
-perform the formatted output, it may also make unqualified calls to `print` where the type
-is a collection of number types which are supported.  This is prefered to overloading `operator<<` directly, since the 
+perform the formatted output, it may also make unqualified calls to `print` where the sub-type
+is already supported (integers, floats, complex numbers, polynomials).  This is prefered to overloading `operator<<` directly, since the 
 default `operator<<` will handle stream padding (as a result of `std::setw()`) for you.
+
+Note that it is not required to include the header `<boost/math/tools/formtter.hpp>`, a simple forward declaration 
+of `basic_numeric_printer_base` will suffice:
+
+   namespace boost { namespace math{ namespace tools{  template <class charT, class Traits> class basic_numeric_printer_base; }}}
+
+Details of the public interface of `basic_numeric_printer_base` are as follows:
 
          template <class charT, class Traits>
          class basic_numeric_printer_base
          {
          public:
-
+            // Manipulator support:
             void styling(styling_level_t i);
             styling_level_t styling()const;
 
@@ -238,9 +251,11 @@ default `operator<<` will handle stream padding (as a result of `std::setw()`) f
 
             bool latex_as_equation()const;
             void latex_as_equation(bool);
-
+            
+            // stream access:
             std::basic_ostream<charT, Traits>& stream();
 
+            // scoped helper objects
             struct scoped_parenthesis
             {
                scoped_parenthesis(basic_numeric_printer_base<charT, Traits>* formatter);
@@ -257,6 +272,7 @@ default `operator<<` will handle stream padding (as a result of `std::setw()`) f
                ~scoped_prolog();
             };
 
+            // virtual functions overridden in derived classes:
             virtual void print_prolog(const char*);
             virtual void print_epilog();
             virtual void print_special_character(boost::uint32_t unicode_value);
@@ -269,19 +285,8 @@ default `operator<<` will handle stream padding (as a result of `std::setw()`) f
             virtual void print_fraction(const std::basic_string<charT, Traits>& s1, const std::basic_string<charT, Traits>& s2);
             virtual void print_subscript(const std::basic_string<charT, Traits>& s);
 
-            template <class Integer>
-            void print_integer(const Integer& i);
-            template <class Float>
-            void print_float(const Float& f);
-            template <class Complex>
-            void print_complex(const Complex& f);
-            template <class Polynomial>
-            void print_polynomial(const Polynomial& f);
-            template <class Rational>
-            void print_rational(const Rational& rat);
-
-            template <class Printer, class Value>
-            static std::basic_string<charT, Traits> part_as_string(Printer& printer, const Value& value);
+            template <class Value>
+            std::basic_string<charT, Traits> part_as_string(const Value& value);
          };
 
 Details are as follows:
@@ -448,35 +453,10 @@ Prints `s` as subscript.
 the size of `charT` if `use_unicode()` is true, otherwise prints a "_" followed by `s`, specializations of `basic_numeric_printer`
 override that behaviour according to need.
 
-            template <class Integer>
-            void print_integer(const Integer& i);
+            template <class Value>
+            std::basic_string<charT, Traits> part_as_string(const Value& value);
 
-Prints integer value i.
-
-            template <class Float>
-            void print_float(const Float& f);
-
-Prints floating point value f.
-
-            template <class Complex>
-            void print_complex(const Complex& f);
-
-Prints complex number f.
-
-            template <class Polynomial>
-            void print_polynomial(const Polynomial& f);
-
-Prints polynomial f.
-
-            template <class Rational>
-            void print_rational(const Rational& rat);
-
-Prints the rational value rat.
-
-            template <class Printer, class Value>
-            static std::basic_string<charT, Traits> part_as_string(Printer& printer, const Value& value);
-
-Helper function.  Returns `value` as a string.  Uses a copy of `printer` which contains the same formatting flags (on both itself and
+Helper function.  Returns `value` as a string.  Uses a copy of `this` which contains the same formatting flags (on both itself and
 the std::ostream it points to) but which outputs to a `std::basic_ostringstream` and then returns the result.
 
 [endsect] [/section:formatting]
