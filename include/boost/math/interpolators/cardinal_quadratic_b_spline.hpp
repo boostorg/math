@@ -49,6 +49,11 @@ public:
         return impl_->t_max();
     }
 
+    template <class charT, class Traits>
+    friend void print(boost::math::tools::basic_numeric_printer_base<charT, Traits>& os, const cardinal_quadratic_b_spline<Real>& spline)
+    {
+       print(os, *spline.impl_);
+    }
 private:
     std::shared_ptr<detail::cardinal_quadratic_b_spline_detail<Real>> impl_;
 };

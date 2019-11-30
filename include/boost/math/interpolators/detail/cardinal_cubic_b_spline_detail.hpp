@@ -72,17 +72,21 @@ public:
        print(os, spline.m_avg);
        for (int64_t k = 0; k < int64_t(spline.m_beta.size()); ++k) 
        {
-          if (spline.m_beta[k] < 0)
+          auto alpha = spline.m_beta[k];
+          if (alpha < 0)
           {
              os.stream() << " - ";
-             print(os, -spline.m_beta[k]);
+             alpha = -alpha;
           }
           else
           {
              os.stream() << " + ";
-             print(os, spline.m_beta[k]);
           }
-          os.print_times();
+          if (os.part_as_plain_text(alpha) != "1")
+          {
+             print(os, alpha);
+             os.print_times();
+          }
           os.print_name("B");
           os.print_subscript("3");
           os.stream() << "(";

@@ -11,9 +11,10 @@
 
 int main() 
 {
-   boost::multiprecision::mpfi_float_50 f = boost::math::constants::pi<boost::multiprecision::mpfi_float_50>();
+   typedef boost::multiprecision::number<boost::multiprecision::mpfi_float_backend<20> > mp_type;
+   mp_type f = boost::math::constants::pi<mp_type>();
 
-   std::cout << std::setprecision(std::numeric_limits<boost::multiprecision::mpfi_float_50>::digits10);
+   std::cout << std::setprecision(std::numeric_limits<mp_type>::digits10);
 
    boost::math::tools::text_printer t_print(std::cout);
    t_print << f << std::endl;
@@ -24,8 +25,8 @@ int main()
    boost::math::tools::docbook_printer d_print(std::cout);
    d_print << f << std::endl;
 
-   boost::math::tools::polynomial<boost::multiprecision::mpfi_float_50> poly1 = { 2, 3, 4, -5, -4, 12 };
-   boost::math::tools::polynomial<boost::multiprecision::mpfi_float_50> poly2 = { -3, 2, 4, 5 };
+   boost::math::tools::polynomial<mp_type> poly1 = { 2, 3, 4, -5, -4, 12 };
+   boost::math::tools::polynomial<mp_type> poly2 = { -3, 2, 4, 5 };
    poly1 *= poly2;
    poly1 /= 3;
 

@@ -400,9 +400,14 @@ namespace boost {
                      if (!detail::isneg(coef))
                         os.stream() << " + ";
                      else
+                     {
                         os.stream() << " - ";
+                        coef = -coef;
+                     }
                   }
-                  print(os, !detail::isneg(coef) ? coef : -coef);
+                  auto s = os.part_as_plain_text(coef);
+                  if((s != "1") || !i)
+                     print(os, coef);
                   have_first = true;
                   if (i)
                   {
@@ -615,18 +620,19 @@ namespace boost {
             struct scoped_prolog
             {
                basic_numeric_printer_base<charT, Traits>* m_formatter;
-               scoped_prolog(basic_numeric_printer_base<charT, Traits>* formatter, const char* number_type) : m_formatter(formatter)
+               const char* m_type;
+               scoped_prolog(basic_numeric_printer_base<charT, Traits>* formatter, const char* number_type) : m_formatter(formatter), m_type(number_type)
                {
                   m_formatter->print_prolog(number_type);
                }
                ~scoped_prolog()
                {
-                  m_formatter->print_epilog();
+                  m_formatter->print_epilog(m_type);
                }
             };
 
             virtual void print_prolog(const char*) {}
-            virtual void print_epilog() {}
+            virtual void print_epilog(const char*) {}
             virtual void print_special_character(boost::uint32_t unicode_value)
             {
                if (use_unicode())
@@ -644,6 +650,7 @@ namespace boost {
                      break;
                   case 0x2044:
                      stream() << "/";
+                     break;
                   default:
                      throw std::runtime_error("Unsuported Unicode character encountered in plain text output");
                   }
@@ -701,6 +708,7 @@ namespace boost {
             {
                detail::print_unicode_subscript(stream(), s);
             }
+            virtual std::unique_ptr<basic_numeric_printer_base> clone(std::basic_ostream<charT, Traits>&) = 0;
 
             bool latex_as_equation()const { return false; }
             void latex_as_equation(bool) {}
@@ -712,7 +720,19 @@ namespace boost {
                ss.copyfmt(stream());
                ss.imbue(stream().getloc());
                ss.width(0);
-               basic_numeric_printer_base fmt(ss, *this);
+               std::unique_ptr<basic_numeric_printer_base> fmt(clone(ss));
+               print(*fmt, value);
+               return ss.str();
+            }
+            template <class Value>
+            std::basic_string<charT, Traits> part_as_plain_text(const Value& value)
+            {
+               std::basic_ostringstream<charT, Traits> ss;
+               ss.copyfmt(stream());
+               ss.imbue(stream().getloc());
+               ss.width(0);
+               basic_numeric_printer<text_format, charT, Traits> fmt(ss, *this);
+               fmt.use_unicode(false);
                print(fmt, value);
                return ss.str();
             }
@@ -723,17 +743,20 @@ namespace boost {
          {
          public:
             basic_numeric_printer(std::basic_ostream<charT, Traits>& os) : basic_numeric_printer_base<charT, Traits>(os) {}
-            basic_numeric_printer(std::basic_ostream<charT, Traits>& os, basic_numeric_printer const& fmt) : basic_numeric_printer_base<charT, Traits>(os, fmt) {}
+            basic_numeric_printer(std::basic_ostream<charT, Traits>& os, basic_numeric_printer_base<charT, Traits> const& fmt) : basic_numeric_printer_base<charT, Traits>(os, fmt) {}
+            virtual std::unique_ptr<basic_numeric_printer_base<charT, Traits> > clone(std::basic_ostream<charT, Traits>& os)
+            {
+               return std::unique_ptr<basic_numeric_printer_base<charT, Traits> >(new basic_numeric_printer(os, *this));
+            }
          };
 
          template <class charT, class Traits>
          class basic_numeric_printer<docbook_format, charT, Traits> : public basic_numeric_printer_base<charT, Traits>
          {
             friend class basic_numeric_printer_base<charT, Traits>;
-            bool need_epilog;
          public:
-            basic_numeric_printer(std::basic_ostream<charT, Traits>& os) : basic_numeric_printer_base<charT, Traits>(os), need_epilog(true) {}
-            basic_numeric_printer(std::basic_ostream<charT, Traits>& os, basic_numeric_printer const& fmt) : basic_numeric_printer_base<charT, Traits>(os, fmt), need_epilog(true) {}
+            basic_numeric_printer(std::basic_ostream<charT, Traits>& os) : basic_numeric_printer_base<charT, Traits>(os) {}
+            basic_numeric_printer(std::basic_ostream<charT, Traits>& os, basic_numeric_printer const& fmt) : basic_numeric_printer_base<charT, Traits>(os, fmt) {}
 
             virtual void print_prolog(const char* name)
             {
@@ -744,12 +767,10 @@ namespace boost {
                   if (this->styling() > minimal_styling)
                      this->stream() << "<phrase role=\"" << name << "\">";
                }
-               else
-                  need_epilog = false;
             }
-            virtual void print_epilog()
+            virtual void print_epilog(const char* name)
             {
-               if (need_epilog)
+               if (name && *name)
                {
                   if (this->styling() > minimal_styling)
                      this->stream() << "</phrase>";
@@ -796,6 +817,10 @@ namespace boost {
             {
                this->stream() << "<subscript>" << s << "</subscript>";
             }
+            virtual std::unique_ptr<basic_numeric_printer_base<charT, Traits> > clone(std::basic_ostream<charT, Traits>& os)
+            {
+               return std::unique_ptr<basic_numeric_printer_base<charT, Traits> >(new basic_numeric_printer(os, *this));
+            }
          };
 
          template <class charT, class Traits>
@@ -821,7 +846,7 @@ namespace boost {
                      this->stream().put(this->stream().widen('$'));
                }
             }
-            virtual void print_epilog()
+            virtual void print_epilog(const char*)
             {
                if (latex_as_equation())
                {
@@ -946,17 +971,19 @@ namespace boost {
                else
                   this->stream() << "\\textsubscript{" << s << "}";
             }
-
+            virtual std::unique_ptr<basic_numeric_printer_base<charT, Traits> > clone(std::basic_ostream<charT, Traits>& os)
+            {
+               return std::unique_ptr<basic_numeric_printer_base<charT, Traits> >(new basic_numeric_printer(os, *this));
+            }
          };
 
          template <class charT, class Traits>
          class basic_numeric_printer<html_format, charT, Traits> : public basic_numeric_printer_base<charT, Traits>
          {
             friend class basic_numeric_printer_base<charT, Traits>;
-            bool need_epilog;
          public:
-            basic_numeric_printer(std::basic_ostream<charT, Traits>& os) : basic_numeric_printer_base<charT, Traits>(os), need_epilog(true){}
-            basic_numeric_printer(std::basic_ostream<charT, Traits>& os, basic_numeric_printer const & fmt) : basic_numeric_printer_base<charT, Traits>(os, fmt), need_epilog(true){}
+            basic_numeric_printer(std::basic_ostream<charT, Traits>& os) : basic_numeric_printer_base<charT, Traits>(os) {}
+            basic_numeric_printer(std::basic_ostream<charT, Traits>& os, basic_numeric_printer const & fmt) : basic_numeric_printer_base<charT, Traits>(os, fmt) {}
 
             virtual void print_prolog(const char* name)
             {
@@ -967,12 +994,10 @@ namespace boost {
                   if (this->styling() > minimal_styling)
                      this->stream() << "<span class=\"" << name << "\">";
                }
-               else
-                  need_epilog = false;
             }
-            virtual void print_epilog()
+            virtual void print_epilog(const char* name)
             {
-               if (need_epilog)
+               if (name && *name)
                {
                   if (this->styling() > minimal_styling)
                      this->stream() << "</span>";
@@ -1018,6 +1043,10 @@ namespace boost {
             virtual void print_subscript(const std::basic_string<charT, Traits>& s)
             {
                this->stream() << "<sub>" << s << "</sub>";
+            }
+            virtual std::unique_ptr<basic_numeric_printer_base<charT, Traits> > clone(std::basic_ostream<charT, Traits>& os)
+            {
+               return std::unique_ptr<basic_numeric_printer_base<charT, Traits> >(new basic_numeric_printer(os, *this));
             }
          };
 
