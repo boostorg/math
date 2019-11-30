@@ -20,7 +20,7 @@ int main() {
    double step = 0.1;
    double a = 5;
    {
-      std::cout << "Quartic B Spline:\n\n";
+      std::cout << "Quadratic B Spline:\n\n";
       boost::math::interpolators::cardinal_quadratic_b_spline<double> spline(v.data(), v.size(), a, step);
 
       boost::math::tools::text_printer printer(std::cout);
