@@ -63,7 +63,7 @@ and are tab separated to assist input to other programs,
 for example, spreadsheets or text editors.
 
 Note: Excel (for example), only shows 10 decimal digits, by default:
-to display the maximum possible precision (abotu 15 decimal digits),
+to display the maximum possible precision (about 15 decimal digits),
 it is necessary to format all cells to display this precision.
 Although unusually accurate, not all values computed by Distexplorer will be as accurate as this.
 Values shown as NaN cannot be calculated from the value(s) given,

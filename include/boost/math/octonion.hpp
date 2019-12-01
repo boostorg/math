@@ -1259,7 +1259,7 @@ namespace boost
             // UNtemplated copy constructor
             // (this is taken care of by the compiler itself)
             
-            // explicit copy constructors (precision-loosing converters)
+            // explicit copy constructors (precision-losing converters)
             
             explicit                    octonion(octonion<double> const & a_recopier)
             {
@@ -1328,7 +1328,7 @@ namespace boost
                 *this = detail::octonion_type_converter<double, float>(a_recopier);
             }
             
-            // explicit copy constructors (precision-loosing converters)
+            // explicit copy constructors (precision-losing converters)
             
             explicit                    octonion(octonion<long double> const & a_recopier)
             {

@@ -32,7 +32,7 @@ inline typename tools::promote_args<T1, T2, T3>::type
 
 namespace detail{
 
-// Implement Legendre P and Q polynomials via recurrance:
+// Implement Legendre P and Q polynomials via recurrence:
 template <class T, class Policy>
 T legendre_imp(unsigned l, T x, const Policy& pol, bool second = false)
 {

@@ -19,7 +19,7 @@
 This module tests the Laplace distribution.
 
 Test 1: test_pdf_cdf_ocatave()
-         Compare pdf, cdf agains results obtained from GNU Octave.
+         Compare pdf, cdf against results obtained from GNU Octave.
 
 Test 2: test_cdf_quantile_symmetry()
          Checks if quantile is the inverse of cdf by testing

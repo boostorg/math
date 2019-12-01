@@ -284,7 +284,7 @@ namespace boost { namespace math { namespace detail{
      // forms are related via the Chebeshev polynomials of the first kind and
      // T_n(cos(x)) = cos(n x).  The polynomial form has the great advantage that
      // all the cosine terms are zero at half integer arguments - right where this
-     // function has it's minumum - thus avoiding cancellation error in this region.
+     // function has it's minimum - thus avoiding cancellation error in this region.
      //
      // And finally, since every other term in the polynomials is zero, we can save
      // space by only storing the non-zero terms.  This greatly complexifies

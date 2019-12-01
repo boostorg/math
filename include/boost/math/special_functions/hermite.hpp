@@ -28,7 +28,7 @@ inline typename tools::promote_args<T1, T2, T3>::type
 
 namespace detail{
 
-// Implement Hermite polynomials via recurrance:
+// Implement Hermite polynomials via recurrence:
 template <class T>
 T hermite_imp(unsigned n, T x)
 {

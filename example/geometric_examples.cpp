@@ -290,7 +290,7 @@ And if we require a high confidence, they widen to 0.00005 to 0.05.
     cout << "geometric::find_upper_bound_on_p(" << int(k) << ", " << alpha/2 << ") = "
         << t << endl; // 0.052
 /*`In real life, there will usually be more than one event (fault or success),
-when the negative binomial, which has the neccessary extra parameter, will be needed.
+when the negative binomial, which has the necessary extra parameter, will be needed.
 */
 
 /*`As noted above, using a catch block is always a good idea,

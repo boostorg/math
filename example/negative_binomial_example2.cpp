@@ -17,7 +17,7 @@
 // (Bernoulli, independent, yes or no, succeed or fail)
 // with success_fraction probability p,
 // negative_binomial is the probability that k or fewer failures
-// preceed the r th trial's success.
+// precede the r th trial's success.
 
 #include <iostream>
 using std::cout;

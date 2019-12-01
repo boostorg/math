@@ -39,7 +39,7 @@
 // The values obtained agree with those obtained by Didonato and Morris
 // (at least to the first 30 digits that they provide).
 // At double precision the degrees of polynomial required for full
-// machine precision are close to those recomended to Didonato and Morris,
+// machine precision are close to those recommended to Didonato and Morris,
 // but of course many more terms are needed for larger types.
 //
 #ifndef BOOST_MATH_DETAIL_IGAMMA_LARGE
@@ -475,7 +475,7 @@ T igamma_temme_large(T a, T x, const Policy& pol, mpl::int_<24> const *)
 // And finally, a version for 113-bit mantissa's
 // (128-bit long doubles, or 10^-34).
 // Note this one has been optimised for a > 200
-// It's use for a < 200 is not recomended, that would
+// It's use for a < 200 is not recommended, that would
 // require many more terms in the polynomials.
 //
 template <class T, class Policy>

@@ -333,7 +333,7 @@ So for example 128-bit rational approximations will work with UDT's and do the r
 
 * Deprecated wrongly named `twothirds` math constant in favour of `two_thirds` (with underscore separator).
 (issue [@https://svn.boost.org/trac/boost/ticket/6199 #6199]).
-* Refactored test data and some special function code to improve support for arbitary precision and/or expression-template-enabled types.
+* Refactored test data and some special function code to improve support for arbitrary precision and/or expression-template-enabled types.
 * Added new faster zeta function evaluation method.
 
 Fixed issues:

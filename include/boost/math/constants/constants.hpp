@@ -248,7 +248,7 @@ namespace boost{ namespace math
       constant_initializer2<T, N, & BOOST_JOIN(constant_, name)<T>::template get_from_compute<N> >::force_instantiate();\
       return get_from_compute<N>(); \
    }\
-   /* This one is for true arbitary precision, which may well vary at runtime: */ \
+   /* This one is for true arbitrary precision, which may well vary at runtime: */ \
    static inline T get(const mpl::int_<0>&)\
    {\
       BOOST_MATH_PRECOMPUTE_IF_NOT_LOCAL(constant_, name)\

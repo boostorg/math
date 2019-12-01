@@ -599,7 +599,7 @@ For multiprecision types, first several terms of the series are tabulated and ev
 Then our series functor is initialized "as if" it had already reached term 18,
 enough evaluation of built-in 64-bit double and float (and 80-bit `long double`) types.
 Finally the functor is called repeatedly to compute as many additional series terms
-as necessary to achive the desired precision, set from `get_epsilon`
+as necessary to achieve the desired precision, set from `get_epsilon`
 (or terminated by `evaluation_error` on reaching the set iteration limit `max_series_iterations`).
 
 A little more than one decimal digit of precision is gained by each additional series term.

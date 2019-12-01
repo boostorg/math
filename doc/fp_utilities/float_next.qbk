@@ -265,7 +265,7 @@ may ['sometimes] support denormals (as signalled by `std::numeric_limits<FPT>::h
 currently enabled at runtime (for example on SSE hardware, the DAZ or FTZ flags will disable denormal support).
 In this situation, the `ulp` function may return a value that is many orders of magnitude too large.
 
-In light of the issues above, we recomend that:
+In light of the issues above, we recommend that:
 
 * To move between adjacent floating-point values always use __float_next, __float_prior or __nextafter (`std::nextafter`
 is another candidate, but our experience is that this also often breaks depending which optimizations and

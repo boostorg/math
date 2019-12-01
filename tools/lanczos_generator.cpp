@@ -4841,7 +4841,7 @@ void print_code(const lanczos_info<T>& l, const char* name, int precision = std:
       "// Lanczos Coefficients for N=" << l.n << " G=" << l.r << "\n"
       "// Max experimental error (with ";
    if(std::strlen(name) == 0)
-      std::cout << "arbitary";
+      std::cout << "arbitrary";
    else
       std::cout << name;
    std::cout << " precision arithmetic) " << l.err <<
@@ -5107,7 +5107,7 @@ int main(int argc, char*argv [])
          "  -quad         test quad precision for the best approximation\n"
          "  -MP           test current multiprecision type for the best approximation\n"
          "  -spots        print out the best cases found in previous runs\n"
-         "  -sweet        Scan for more sweet spots for the arbitary parameter G: these "
+         "  -sweet        Scan for more sweet spots for the arbitrary parameter G: these "
          "                will need to cut and pasted into the big table at the start of this file"
          "                in order to search for greater precision approximations than otherwise supported."
          "  -data         print out the test data\n" << std::flush;

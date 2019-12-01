@@ -651,7 +651,7 @@ inline BOOST_CXX14_CONSTEXPR quaternion<T> operator / (const quaternion<T>& a, c
         template<typename T> inline BOOST_CONSTEXPR bool operator != (quaternion<T> const & lhs, quaternion<T> const & rhs) { return !(lhs == rhs); }
         
         
-        // Note:    we allow the following formats, whith a, b, c, and d reals
+        // Note:    we allow the following formats, with a, b, c, and d reals
         //            a
         //            (a), (a,b), (a,b,c), (a,b,c,d)
         //            (a,(c)), (a,(c,d)), ((a)), ((a),c), ((a),(c)), ((a),(c,d)), ((a,b)), ((a,b),c), ((a,b),(c)), ((a,b),(c,d))
