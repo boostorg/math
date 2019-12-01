@@ -197,7 +197,7 @@ cardinal_cubic_b_spline_imp<Real>::cardinal_cubic_b_spline_imp(BidiIterator f, B
 
     if (length < 5)
     {
-        if (boost::math::isnan(left_endpoint_derivative) || boost::math::isnan(right_endpoint_derivative))
+        if ((boost::math::isnan)(left_endpoint_derivative) || (boost::math::isnan)(right_endpoint_derivative))
         {
             throw std::logic_error("Interpolation using a cubic b spline with derivatives estimated at the endpoints requires at least 5 points.\n");
         }
@@ -207,7 +207,7 @@ cardinal_cubic_b_spline_imp<Real>::cardinal_cubic_b_spline_imp(BidiIterator f, B
         }
     }
 
-    if (boost::math::isnan(left_endpoint))
+    if ((boost::math::isnan)(left_endpoint))
     {
         throw std::logic_error("Left endpoint is NAN; this is disallowed.\n");
     }
@@ -229,7 +229,7 @@ cardinal_cubic_b_spline_imp<Real>::cardinal_cubic_b_spline_imp(BidiIterator f, B
     // to construct high-order estimates for one-sided derivatives:
     // https://en.wikipedia.org/wiki/Finite_difference_coefficient#Forward_and_backward_finite_difference
     // Here, we estimate then to O(h^4), as that is the maximum accuracy we could obtain from this method.
-    if (boost::math::isnan(a1))
+    if ((boost::math::isnan)(a1))
     {
         // For simple functions (linear, quadratic, so on)
         // almost all the error comes from derivative estimation.
@@ -240,7 +240,7 @@ cardinal_cubic_b_spline_imp<Real>::cardinal_cubic_b_spline_imp(BidiIterator f, B
     }
 
     Real b1 = right_endpoint_derivative;
-    if (boost::math::isnan(b1))
+    if ((boost::math::isnan)(b1))
     {
         size_t n = length - 1;
         Real t0 = 4*(f[n-3] + third<Real>()*f[n - 1]);
@@ -262,7 +262,7 @@ cardinal_cubic_b_spline_imp<Real>::cardinal_cubic_b_spline_imp(BidiIterator f, B
     Real t = 1;
     for (size_t i = 0; i < length; ++i)
     {
-        if (boost::math::isnan(f[i]))
+        if ((boost::math::isnan)(f[i]))
         {
             std::string err = "This function you are trying to interpolate is a nan at index " + std::to_string(i) + "\n";
             throw std::logic_error(err);

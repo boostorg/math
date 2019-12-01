@@ -11,7 +11,19 @@
 #include <utility>
 #include <boost/math/special_functions/cardinal_b_spline.hpp>
 
-namespace boost{ namespace math{ namespace interpolators{ namespace detail{
+namespace boost{ namespace math{ 
+   
+namespace tools
+{
+   // Forward declaration only, we don't need the formatter's
+   // definition to be able to define a print function (only if
+   // we actually use it).
+   template <class charT, class Traits>
+   class basic_numeric_printer_base;
+}
+
+
+namespace interpolators{ namespace detail{
 
 
 template <class Real>
@@ -42,19 +54,19 @@ public:
         using std::isnan;
         // This interpolator has error of order h^6, so the derivatives should be estimated with the same error.
         // See: https://en.wikipedia.org/wiki/Finite_difference_coefficient
-        if (isnan(left_endpoint_derivatives.first)) {
+        if ((isnan)(left_endpoint_derivatives.first)) {
             Real tmp = -49*y[0]/20 + 6*y[1] - 15*y[2]/2 + 20*y[3]/3 - 15*y[4]/4 + 6*y[5]/5 - y[6]/6;
             left_endpoint_derivatives.first = tmp/h;
         }
-        if (isnan(right_endpoint_derivatives.first)) {
+        if ((isnan)(right_endpoint_derivatives.first)) {
             Real tmp = 49*y[n-1]/20 - 6*y[n-2] + 15*y[n-3]/2 - 20*y[n-4]/3 + 15*y[n-5]/4 - 6*y[n-6]/5 + y[n-7]/6;
             right_endpoint_derivatives.first = tmp/h;
         }
-        if(isnan(left_endpoint_derivatives.second)) {
+        if((isnan)(left_endpoint_derivatives.second)) {
             Real tmp = 469*y[0]/90 - 223*y[1]/10 + 879*y[2]/20 - 949*y[3]/18 + 41*y[4] - 201*y[5]/10 + 1019*y[6]/180 - 7*y[7]/10;
             left_endpoint_derivatives.second = tmp/(h*h);
         }
-        if (isnan(right_endpoint_derivatives.second)) {
+        if ((isnan)(right_endpoint_derivatives.second)) {
             Real tmp = 469*y[n-1]/90 - 223*y[n-2]/10 + 879*y[n-3]/20 - 949*y[n-4]/18 + 41*y[n-5] - 201*y[n-6]/10 + 1019*y[n-7]/180 - 7*y[n-8]/10;
             right_endpoint_derivatives.second = tmp/(h*h);
         }

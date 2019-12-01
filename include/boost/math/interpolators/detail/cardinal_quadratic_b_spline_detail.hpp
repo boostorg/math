@@ -83,7 +83,7 @@ public:
 
         using std::isnan;
         Real a;
-        if (isnan(left_endpoint_derivative)) {
+        if ((isnan)(left_endpoint_derivative)) {
             // http://web.media.mit.edu/~crtaylor/calculator.html
             a = -3*y[0] + 4*y[1] - y[2];
         }
@@ -92,7 +92,7 @@ public:
         }
 
         Real b;
-        if (isnan(right_endpoint_derivative)) {
+        if ((isnan)(right_endpoint_derivative)) {
             b = 3*y[n-1] - 4*y[n-2] + y[n-3];
         }
         else {
