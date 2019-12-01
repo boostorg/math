@@ -174,6 +174,29 @@ namespace boost {
                   case '-':
                      print_unicode_char(os, 0x207B);
                      break;
+                  case '(':
+                     print_unicode_char(os, 0x207D);
+                     break;
+                  case ')':
+                     print_unicode_char(os, 0x207E);
+                     break;
+                  case 'n':
+                     print_unicode_char(os, 0x207F);
+                     break;
+                  case '=':
+                     print_unicode_char(os, 0x207C);
+                     break;
+                  case 'i':
+                     print_unicode_char(os, 0x2071);
+                     break;
+                  case 'x':
+                     print_unicode_char(os, 0x02e3);
+                     break;
+                  case '.':
+                     print_unicode_char(os, 0x22C5);
+                     break;
+                  default:
+                     os.put(digits[i]);
                   }
                }
             }
@@ -189,6 +212,14 @@ namespace boost {
                      print_unicode_char(os, 0x208B);
                   else if (digits[i] == '+')
                      print_unicode_char(os, 0x208A);
+                  else if (digits[i] == '(')
+                     print_unicode_char(os, 0x208D);
+                  else if (digits[i] == ')')
+                     print_unicode_char(os, 0x208E);
+                  else if (digits[i] == 'n')
+                     print_unicode_char(os, 0x2099);
+                  else if (digits[i] == 'x')
+                     print_unicode_char(os, 0x2093);
                   else
                      os.put(digits[i]);
                }
@@ -896,6 +927,12 @@ namespace boost {
                   break;
                case 0x3c3:
                   this->stream() << "\\sigma";
+                  break;
+               case 0x2227:
+                  this->stream() << "\\land";
+                  break;
+               case 0x2228:
+                  this->stream() << "\\lor";
                   break;
                default:
                   throw std::runtime_error("Unsuported Unicode character encountered in LaTex output");

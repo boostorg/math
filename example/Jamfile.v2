@@ -155,6 +155,8 @@ test-suite examples :
    [ run formatter_html_output.cpp : $(here)/formatter_html_output.html : : [ requires cxx11_constexpr cxx14_variable_templates ] ]
    [ run formatter_docbook_output.cpp : $(here)/formatter_docbook_output.qbk : : [ requires cxx11_constexpr cxx14_variable_templates ] ]
    [ run formatter_text_output.cpp : $(here)/formatter_text_output.txt : : [ requires cxx11_constexpr cxx14_variable_templates ] ]
+   [ run formatter_barycentric_interpolation_example.cpp : : : [ requires cxx11_constexpr cxx14_variable_templates ] ]
+   [ run formatter_b_spline_output.cpp : : : [ requires cxx11_constexpr cxx14_variable_templates ] ]
 ;
 
 run root_elliptic_finding.cpp /boost/timer : : : release <link>static  [ requires cxx11_unified_initialization_syntax cxx11_defaulted_functions ] <target-os>freebsd:<linkflags>"-lrt" <target-os>linux:<linkflags>"-lrt -lpthread" ;
