@@ -401,7 +401,7 @@ previous versions of `lexical_cast` using stringstream were not portable
 
 Although other examples imbue individual streams with the new locale,
 for the streams constructed inside lexical_cast,
-it was necesary to assign to a global locale.
+it was necessary to assign to a global locale.
 
   locale::global(new_locale);
 

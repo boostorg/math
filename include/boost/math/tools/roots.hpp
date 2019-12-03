@@ -527,7 +527,7 @@ namespace detail {
       T result = guess;
 
       T factor = ldexp(static_cast<T>(1.0), 1 - digits);
-      T delta = (std::max)(T(10000000 * guess), T(10000000));  // arbitarily large delta
+      T delta = (std::max)(T(10000000 * guess), T(10000000));  // arbitrarily large delta
       T last_f0 = 0;
       T delta1 = delta;
       T delta2 = delta;

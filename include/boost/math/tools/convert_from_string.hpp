@@ -26,7 +26,7 @@ namespace boost{ namespace math{ namespace tools{
    Real convert_from_string(const char* p, const mpl::false_&)
    {
 #ifdef BOOST_MATH_NO_LEXICAL_CAST
-      // This function should not compile, we don't have the necesary functionality to support it:
+      // This function should not compile, we don't have the necessary functionality to support it:
       BOOST_STATIC_ASSERT(sizeof(Real) == 0);
 #else
       return boost::lexical_cast<Real>(p);

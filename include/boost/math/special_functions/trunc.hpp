@@ -49,7 +49,7 @@ inline typename tools::promote_args<T>::type trunc(const T& v)
 }
 //
 // The following functions will not compile unless T has an
-// implicit convertion to the integer types.  For user-defined
+// implicit conversion to the integer types.  For user-defined
 // number types this will likely not be the case.  In that case
 // these functions should either be specialized for the UDT in
 // question, or else overloads should be placed in the same

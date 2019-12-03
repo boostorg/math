@@ -109,7 +109,7 @@ Denise Benton, K. Krishnamoorthy,
 Computational Statistics & Data Analysis 43 (2003) 249-267.
 
 Accuracy checks use test data computed with this
-implementation and arbitary precision interval arithmetic:
+implementation and arbitrary precision interval arithmetic:
 this test data is believed to be accurate to at least 50
 decimal places.
 

@@ -627,7 +627,7 @@ namespace boost
                   break;
             }
             abs_err += fabs(c * term);
-            if(sum < 0)  // sum must always be positive, if it's negative something really bad has happend:
+            if(sum < 0)  // sum must always be positive, if it's negative something really bad has happened:
                policies::raise_evaluation_error(function, 0, T(0), pol);
             return std::pair<T, T>((sum / d) / boost::math::constants::two_pi<T>(), abs_err / sum);
          }

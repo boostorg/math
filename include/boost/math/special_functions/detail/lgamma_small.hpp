@@ -118,7 +118,7 @@ T lgamma_small_imp(T z, T zm1, T zm2, const mpl::int_<64>&, const Policy& /* l *
    else
    {
       //
-      // If z is less than 1 use recurrance to shift to
+      // If z is less than 1 use recurrence to shift to
       // z in the interval [1,2]:
       //
       if(z < 1)
@@ -316,7 +316,7 @@ T lgamma_small_imp(T z, T zm1, T zm2, const mpl::int_<113>&, const Policy& /* l 
    else
    {
       //
-      // If z is less than 1 use recurrance to shift to
+      // If z is less than 1 use recurrence to shift to
       // z in the interval [1,2]:
       //
       if(z < 1)

@@ -1377,7 +1377,7 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
       {
          if((tools::max_value<T>() * div < *p_derivative))
          {
-            // overflow, return an arbitarily large value:
+            // overflow, return an arbitrarily large value:
             *p_derivative = tools::max_value<T>() / 2;
          }
          else

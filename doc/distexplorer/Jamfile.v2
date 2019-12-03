@@ -16,7 +16,7 @@ using quickbook ;
 
 #path-constant images_location : html ;
 # location of SVG images referenced by Quickbook.
-# screenshots installed as recomended by Sourceforge.
+# screenshots installed as recommended by Sourceforge.
 
 xml distexplorer
   :

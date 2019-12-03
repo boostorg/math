@@ -447,7 +447,7 @@ T digamma_imp(T x, const Tag* t, const Policy& pol)
          result += 1/x;
       }
       //
-      // If x < 1 use recurrance to shift to > 1:
+      // If x < 1 use recurrence to shift to > 1:
       //
       while(x < 1)
       {

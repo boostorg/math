@@ -456,7 +456,7 @@
         // but that's not clear...
         // Also need to add on a fudge factor to the cost to account for the fact that we need
         // to calculate the Bessel functions, this is not quite as high as the gamma function 
-        // method above as this is generally more accurate and so prefered if the methods are close:
+        // method above as this is generally more accurate and so preferred if the methods are close:
         //
         cost = 50 + fabs(b - a);
         if((b > 1) && (cost <= current_cost) && (z < tools::log_max_value<T>()) && (z < 11356) && (b - a != 0.5f))

@@ -112,7 +112,7 @@ T inverse_students_t_tail_series(T df, T v, const Policy& pol)
             * ((((((((((((945 * df) + 31506) * df + 425858) * df + 2980236) * df + 11266745) * df + 20675018) * df + 7747124) * df - 22574632) * df - 8565600) * df + 18108416) * df - 7099392) * df + 884736)
             / (46080 * np2 * np4 * np6 * (df + 8) * (df + 10) * (df +12));
    //
-   // Now bring everthing together to provide the result,
+   // Now bring everything together to provide the result,
    // this is Eq 62 of Shaw:
    //
    T rn = sqrt(df);

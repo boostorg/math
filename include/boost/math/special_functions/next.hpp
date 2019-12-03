@@ -475,7 +475,7 @@ T float_distance_imp(const T& a, const T& b, const mpl::true_&, const Policy& po
          + fabs(float_distance(static_cast<T>((a < 0) ? T(-detail::get_smallest_value<T>()) : detail::get_smallest_value<T>()), a, pol));
    //
    // By the time we get here, both a and b must have the same sign, we want
-   // b > a and both postive for the following logic:
+   // b > a and both positive for the following logic:
    //
    if(a < 0)
       return float_distance(static_cast<T>(-b), static_cast<T>(-a), pol);
@@ -583,7 +583,7 @@ T float_distance_imp(const T& a, const T& b, const mpl::false_&, const Policy& p
          + fabs(float_distance(static_cast<T>((a < 0) ? T(-detail::get_smallest_value<T>()) : detail::get_smallest_value<T>()), a, pol));
    //
    // By the time we get here, both a and b must have the same sign, we want
-   // b > a and both postive for the following logic:
+   // b > a and both positive for the following logic:
    //
    if(a < 0)
       return float_distance(static_cast<T>(-b), static_cast<T>(-a), pol);

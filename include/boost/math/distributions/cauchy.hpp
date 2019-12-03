@@ -50,7 +50,7 @@ RealType cdf_imp(const cauchy_distribution<RealType, Policy>& dist, const RealTy
    //
    // CDF = -atan(1/x)  ; x < 0
    //
-   // So the proceedure is to calculate the cdf for -fabs(x)
+   // So the procedure is to calculate the cdf for -fabs(x)
    // using the above formula, and then subtract from 1 when required
    // to get the result.
    //

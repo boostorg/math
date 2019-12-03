@@ -148,7 +148,7 @@
      {
         //
         // There's no easy relation between a, b and z that tells us whether we're in the region
-        // where forwards recursion is stable, so use a lookup table, note that the minumum
+        // where forwards recursion is stable, so use a lookup table, note that the minimum
         // permissible z-value is decreasing with a, and increasing with |b|:
         //
         static const float data[][3] = {

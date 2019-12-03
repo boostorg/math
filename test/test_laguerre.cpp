@@ -50,7 +50,7 @@ void expected_results()
    largest_type = "(long\\s+)?double";
 #endif
    //
-   // Linux special cases, error rates seem to be much higer here
+   // Linux special cases, error rates seem to be much higher here
    // even though the implementation contains nothing but basic
    // arithmetic?
    //

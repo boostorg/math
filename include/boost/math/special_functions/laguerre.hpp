@@ -29,7 +29,7 @@ inline typename tools::promote_args<T1, T2, T3>::type
 
 namespace detail{
 
-// Implement Laguerre polynomials via recurrance:
+// Implement Laguerre polynomials via recurrence:
 template <class T>
 T laguerre_imp(unsigned n, T x)
 {

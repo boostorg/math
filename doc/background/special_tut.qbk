@@ -441,7 +441,7 @@ the particular tests plus the platform and compiler:
 [h4 Testing Multiprecision Types]
 
 Testing of multiprecision types is handled by the test drivers in libs/multiprecision/test/math,
-please refer to these for examples.  Note that these tests are run only occationally as they take
+please refer to these for examples.  Note that these tests are run only occasionally as they take
 a lot of CPU cycles to build and run.
 
 [h4 Improving Compile Times]

@@ -733,7 +733,7 @@ and CALC100 100 decimal digit Complex Variable Calculator Program, a DOS utility
 
 Not here in this Boost.Math collection, because physical constants:
 
-* Are measurements, not truely constants.
+* Are measurements, not truly constants.
 * Are not truly constant and keeping changing as mensuration technology improves.
 * Have a instrinsic uncertainty.
 * Mathematical constants are stored and represented at varying precision, but should never be inaccurate.

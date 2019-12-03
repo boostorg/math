@@ -348,7 +348,7 @@ for each element in the tuple (in addition to the input parameters):
       result_type operator()(T val)
       {
          using namespace boost::math::tools;
-         // estimate the true value, using arbitary precision
+         // estimate the true value, using arbitrary precision
          // arithmetic and NTL::RR:
          NTL::RR rval(val);
          upper_incomplete_gamma_fract<NTL::RR> f1(rval, rval);

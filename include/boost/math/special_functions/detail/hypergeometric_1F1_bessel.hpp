@@ -300,7 +300,7 @@
               for (auto j = bessel_cache.begin(); j != bessel_cache.end(); ++j)
                  *j *= ratio;
            //
-           // Very occationally our normalisation fails because the normalisztion value
+           // Very occasionally our normalisation fails because the normalisztion value
            // is sitting right on top of a root (or very close to it).  When that happens
            // best to calculate a fresh Bessel evaluation and normalise again.
            //

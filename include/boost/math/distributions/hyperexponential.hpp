@@ -278,7 +278,7 @@ class hyperexponential_distribution
                                     PolicyT());
     }
 
-    // Two arg constructor from 2 ranges, we SFINAE this out of existance if
+    // Two arg constructor from 2 ranges, we SFINAE this out of existence if
     // either argument type is incrementable as in that case the type is
     // probably an iterator:
     public: template <typename ProbRangeT, typename RateRangeT>
@@ -299,7 +299,7 @@ class hyperexponential_distribution
     }
 
     // Two arg constructor for a pair of iterators: we SFINAE this out of
-    // existance if neither argument types are incrementable.
+    // existence if neither argument types are incrementable.
     // Note that we allow different argument types here to allow for
     // construction from an array plus a pointer into that array.
     public: template <typename RateIterT, typename RateIterT2>
