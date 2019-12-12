@@ -9,6 +9,7 @@
 #include <algorithm>
 #include <iterator>
 #include <tuple>
+#include <cmath>
 #include <boost/assert.hpp>
 
 namespace boost::math::statistics {
@@ -185,6 +186,7 @@ template<class ForwardIterator>
 auto skewness(ForwardIterator first, ForwardIterator last)
 {
     using Real = typename std::iterator_traits<ForwardIterator>::value_type;
+    using std::sqrt;
     BOOST_ASSERT_MSG(first != last, "At least one sample is required to compute skewness.");
     if constexpr (std::is_integral<Real>::value)
     {
