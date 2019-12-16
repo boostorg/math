@@ -27,7 +27,7 @@ int main()
   using boost::math::binomial_distribution;
 
   // This replicates the computation of the examples of using nag-binomial_dist
-  // using g01bjc in section g01 Somple Calculations on Statistical Data.
+  // using g01bjc in section g01 Simple Calculations on Statistical Data.
   // http://www.nag.co.uk/numeric/cl/manual/pdf/G01/g01bjc.pdf
   // Program results section 8.3 page 3.g01bjc.3
     //8.2. Program Data

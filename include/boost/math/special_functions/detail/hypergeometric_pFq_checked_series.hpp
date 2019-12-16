@@ -37,7 +37,7 @@
            // leaving us with 4 options:
            //
            // 0 solutions: The series is directly convergent.
-           // 1 solution : The series diverges to a maxima before coverging.
+           // 1 solution : The series diverges to a maxima before converging.
            // 2 solutions: The series is initially convergent, followed by divergence to a maxima before final convergence.
            // 3 solutions: The series diverges to a maxima, converges to a minima before diverging again to a second maxima before final convergence.
            // 4 solutions: The series converges to a minima before diverging to a maxima, converging to a minima, diverging to a second maxima and then converging.
@@ -427,7 +427,7 @@
                      {
                         int rescale = local_scaling - loop_scale;
                         if (rescale < tools::log_min_value<Real>())
-                           d = 1;  // arbtrary value, we want to keep going
+                           d = 1;  // arbitrary value, we want to keep going
                         else
                            d = fabs(term / (result * exp(Real(rescale))));
                      }

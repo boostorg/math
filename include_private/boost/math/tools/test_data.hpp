@@ -135,7 +135,7 @@ inline void unpack_and_append_tuple(Seq&,
                                     const boost::integral_constant<int, N>&,
                                     const boost::false_type&)
 {
-   // termimation condition nothing to do here
+   // termination condition nothing to do here
 }
 
 template <class Seq, class Item, int N>

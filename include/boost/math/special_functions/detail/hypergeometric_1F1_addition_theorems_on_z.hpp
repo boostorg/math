@@ -110,7 +110,7 @@
            a_plus_n += 1;
            b_plus_n += 1;
            // The a_plus_n == 0 case below isn't actually correct, but doesn't matter as that term will be zero
-           // anyway, we just need to not divde by zero and end up with a NaN in the result.
+           // anyway, we just need to not divide by zero and end up with a NaN in the result.
            T M2 = (a_plus_n == -1) ? 1 : (a_plus_n == 0) ? 0 : (M_next * b_plus_n * (1 - b_plus_n + z_) + b_plus_n * (b_plus_n - 1) * M) / (a_plus_n * z_);
            M = M_next;
            M_next = M2;

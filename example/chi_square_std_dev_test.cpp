@@ -300,7 +300,7 @@ int main()
 
    // List confidence interval multipliers for standard deviation
    // for a range of numbers of observations from 2 to a million,
-   // and for a few alpha values, 0.1, 0.05, 0.01 for condfidences 90, 95, 99 %
+   // and for a few alpha values, 0.1, 0.05, 0.01 for confidences 90, 95, 99 %
    confidence_limits_on_std_deviation_alpha(1., 0.1);
    confidence_limits_on_std_deviation_alpha(1., 0.05);
    confidence_limits_on_std_deviation_alpha(1., 0.01);

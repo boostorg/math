@@ -205,7 +205,7 @@ T elliptic_root_noderiv(T radius, T arc)
    T factor = 1.2;                     // How big steps to take when searching.
 
    const boost::uintmax_t maxit = 50;  // Limit to maximum iterations.
-   boost::uintmax_t it = maxit;        // Initally our chosen max iterations, but updated with actual.
+   boost::uintmax_t it = maxit;        // Initially our chosen max iterations, but updated with actual.
    bool is_rising = true;              // arc-length increases if one radii increases, so function is rising
    // Define a termination condition, stop when nearly all digits are correct, but allow for
    // the fact that we are returning a range, and must have some inaccuracy in the elliptic integral:

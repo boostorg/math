@@ -494,7 +494,7 @@ void test_big_df(RealType)
 
       RealType tolerance = 10 * boost::math::tools::epsilon<RealType>(); // static_cast<RealType>(1e-14); //
       std::cout.precision(17); // Note: need to reset after calling BOOST_CHECK_s
-      // due to buglet in Boost.test that fails to restore precision corrrectly.
+      // due to buglet in Boost.test that fails to restore precision correctly.
 
       // Test for large degrees of freedom when should be same as normal.
       RealType inf =

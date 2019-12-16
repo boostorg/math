@@ -90,7 +90,7 @@ void test_spots(RealType)
   // ppois(10, 1) = 9.999999899522340E-001
   // ppois(5,5) = 0.615960654833065
 
-  // qpois returns inverse Poission distribution, that is the smallest (floor) k so that ppois(k, lambda) >= p
+  // qpois returns inverse Poisson distribution, that is the smallest (floor) k so that ppois(k, lambda) >= p
   // p is real number, real mean lambda > 0
   // k is approximately the integer for which probability(X <= k) = p
   // when random variable X has the Poisson distribution with parameters lambda.

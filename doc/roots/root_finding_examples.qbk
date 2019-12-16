@@ -458,7 +458,7 @@ finding leads to the algorithm:
 [elliptic_root_noderiv]
 
 This function generally finds the root within 8-10 iterations, so given that the runtime
-is completely dominated by the cost of calling the ellliptic integral it would be nice to
+is completely dominated by the cost of calling the elliptic integral it would be nice to
 reduce that count somewhat. We'll try to do that by using a derivative-based method;
 the derivatives of this function are rather hard to work out by hand, but fortunately
 [@http://www.wolframalpha.com/input/?i=d%2Fda+\[4+*+a+*+EllipticE%281+-+b^2%2Fa^2%29\]

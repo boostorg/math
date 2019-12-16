@@ -201,7 +201,7 @@ decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) tanh_sin
     // indexes in each row, this may actually be one position to the left of max_left_position
     // in the case that is even.  Then, if we only evaluate f(-x_i) for abscissa values
     // i <= max_left_index we will never evaluate f(-x_i) at the left endpoint.
-    // max_right_position and max_right_index are defained similarly for the right boundary
+    // max_right_position and max_right_index are defined similarly for the right boundary
     // and are used to guard evaluation of f(x_i).
     //
     // max_left_position and max_right_position start off as the last element in row zero:
@@ -264,7 +264,7 @@ decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) tanh_sin
     Real err = 0;
     //
     // thrash_count is a heuristic - it counts how many time the error has actually increased
-    // rather than descreased, if this gets too high we abort...
+    // rather than decreased, if this gets too high we abort...
     //
     unsigned thrash_count = 0;
 
@@ -285,7 +285,7 @@ decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) tanh_sin
         // At the start of each new row we need to update the max left/right indexes
         // at which we can evaluate f(x_i).  The new logical position is simply twice
         // the old value.  The new max index is one position to the left of the new
-        // logical value (remmember each row contains only odd numbered positions).
+        // logical value (remember each row contains only odd numbered positions).
         // Then we have to make a single check, to see if one position to the right
         // is also in bounds (this is the new abscissa value in this row which is
         // known to be in between a value known to be in bounds, and one known to be

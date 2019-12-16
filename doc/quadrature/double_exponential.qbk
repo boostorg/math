@@ -81,7 +81,7 @@ These three integration routines provide robust general purpose quadrature, each
 quadrature is performed.
 For example, the `sinh_sinh` quadrature integrates over the entire real line, the `tanh_sinh` over (-1, 1), 
 and the `exp_sinh` over (0, [infin]).
-The latter integrators also have auxilliary ranges which are handled via a change of variables on the function being integrated,
+The latter integrators also have auxiliary ranges which are handled via a change of variables on the function being integrated,
 so that the `tanh_sinh` can handle integration over /(a, b)/, and `exp_sinh` over /(a, [infin]) and(-[infin], b)/.
 
 Like the other quadrature routines in Boost, these routines support both real and complex-valued integrands.
@@ -198,7 +198,7 @@ to the square root of epsilon, and all tests were conducted in double precision:
 [[`5 * x + 7`][(0,1)][3.5e-15][0][5][1][This trivial case shows just how accurate these methods can be.]]
 [[`log(x) * log(x)`][0, 1)][0][0][5][1][This is an example of an integral that Gaussian integrators fail to handle.]]
 [[`exp(-x) / sqrt(x)`][(0,+[infin])][8.0e-10][1.1e-15][5][1][Gaussian integrators typically fail to handle the singularities at the endpoints of this one.]]
-[[`x * sin(2 * exp(2 * sin(2 * exp(2 * x))))`][(-1,1)][7.2e-16][4.9e-17][9][1.89][This is a truely horrible integral that oscillates wildly and
+[[`x * sin(2 * exp(2 * sin(2 * exp(2 * x))))`][(-1,1)][7.2e-16][4.9e-17][9][1.89][This is a truly horrible integral that oscillates wildly and
          unpredictably with some very sharp "spikes" in it's graph.  The higher number of levels used reflects the difficulty of sampling the more extreme features.]]
 [[`x == 0 ? 1 : sin(x) / x`][(-[infin], [infin])][3.0e-1][4.0e-1][15][159][This highly oscillatory integral isn't handled at all well by tanh-sinh quadrature: there is so much
       cancellation in the sum that the result is essentially worthless.  The argument transformation of the infinite integral behaves somewhat badly as well, in fact

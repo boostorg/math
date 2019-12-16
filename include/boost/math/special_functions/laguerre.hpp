@@ -18,7 +18,7 @@
 namespace boost{
 namespace math{
 
-// Recurrance relation for Laguerre polynomials:
+// Recurrence relation for Laguerre polynomials:
 template <class T1, class T2, class T3>
 inline typename tools::promote_args<T1, T2, T3>::type  
    laguerre_next(unsigned n, T1 x, T2 Ln, T3 Lnm1)

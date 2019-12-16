@@ -46,7 +46,7 @@
 #endif
 #ifdef __IBMCPP__
 //
-// For reasons I don't unserstand, the tests with IMB's compiler all
+// For reasons I don't understand, the tests with IMB's compiler all
 // pass at long double precision, but fail with real_concept, those tests
 // are disabled for now.  (JM 2012).
 #  define BOOST_MATH_NO_REAL_CONCEPT_TESTS

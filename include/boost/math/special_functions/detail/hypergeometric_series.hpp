@@ -263,7 +263,7 @@
      // converging, then at some unspecified time very gradually
      // starts to diverge, potentially resulting in some very large
      // values being missed.  As a result we need a check for small
-     // a in the convergence critera.  Note that this issue occurs
+     // a in the convergence criteria.  Note that this issue occurs
      // even when all the terms are positive.
      //
      bool small_a = fabs(a) < 0.25;
