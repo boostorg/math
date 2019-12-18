@@ -104,10 +104,10 @@
 </pre>
 <p>
         This function generally finds the root within 8-10 iterations, so given that
-        the runtime is completely dominated by the cost of calling the elliptic
-        integral it would be nice to reduce that count somewhat. We'll try to do
-        that by using a derivative-based method; the derivatives of this function
-        are rather hard to work out by hand, but fortunately <a href="http://www.wolframalpha.com/input/?i=d%2Fda+%5b4+*+a+*+EllipticE%281+-+b%5e2%2Fa%5e2%29%5d" target="_top">Wolfram
+        the runtime is completely dominated by the cost of calling the elliptic integral
+        it would be nice to reduce that count somewhat. We'll try to do that by using
+        a derivative-based method; the derivatives of this function are rather hard
+        to work out by hand, but fortunately <a href="http://www.wolframalpha.com/input/?i=d%2Fda+%5b4+*+a+*+EllipticE%281+-+b%5e2%2Fa%5e2%29%5d" target="_top">Wolfram
         Alpha</a> can do the grunt work for us to give:
       </p>
 <pre class="programlisting">d/da L(a, b) = 4(a<sup>2</sup>E(k) - b<sup>2</sup>K(k)) / (a<sup>2</sup> - b<sup>2</sup>)</pre>
