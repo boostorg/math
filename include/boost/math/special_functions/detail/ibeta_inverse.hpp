@@ -149,7 +149,7 @@ T temme_method_2_ibeta_inverse(T /*a*/, T /*b*/, T z, T r, T theta, const Policy
    T s = sin(theta);
    T c = cos(theta);
    //
-   // Now we need to purturb eta0 to get eta, which we do by
+   // Now we need to perturb eta0 to get eta, which we do by
    // evaluating the polynomial in 1/r at the bottom of page 151,
    // to do this we first need the error terms e1, e2 e3
    // which we'll fill into the array "terms".  Since these
@@ -349,7 +349,7 @@ T temme_method_3_ibeta_inverse(T a, T b, T p, T q, const Policy& pol)
    T w1_3 = w1 * w1_2;
    T w1_4 = w1_2 * w1_2;
    //
-   // Now we need to compute the purturbation error terms that
+   // Now we need to compute the perturbation error terms that
    // convert eta0 to eta, these are all polynomials of polynomials.
    // Probably these should be re-written to use tabulated data
    // (see examples above), but it's less of a win in this case as we

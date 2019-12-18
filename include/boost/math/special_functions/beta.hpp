@@ -782,7 +782,7 @@ inline T rising_factorial_ratio(T a, T b, int k)
 // Routine for a > 15, b < 1
 //
 // Begin by figuring out how large our table of Pn's should be,
-// quoted accuracies are "guestimates" based on empiracal observation.
+// quoted accuracies are "guestimates" based on empirical observation.
 // Note that the table size should never exceed the size of our
 // tables of factorials.
 //
@@ -985,7 +985,7 @@ T binomial_ccdf(T n, T k, T x, T y)
 
 //
 // The incomplete beta function implementation:
-// This is just a big bunch of spagetti code to divide up the
+// This is just a big bunch of spaghetti code to divide up the
 // input range and select the right implementation method for
 // each domain:
 //

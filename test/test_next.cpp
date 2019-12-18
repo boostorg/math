@@ -189,7 +189,7 @@ void test_values(const T& val, const char* name)
       }
    }
    //
-   // We need to test float_distance over mulyiple orders of magnitude,
+   // We need to test float_distance over multiple orders of magnitude,
    // the only way to get an accurate true result is to count the representations
    // between the two end points, but we can only really do this for type float:
    //

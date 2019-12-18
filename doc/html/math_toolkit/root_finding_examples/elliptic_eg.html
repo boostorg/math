@@ -91,7 +91,7 @@
    <span class="identifier">T</span> <span class="identifier">factor</span> <span class="special">=</span> <span class="number">1.2</span><span class="special">;</span>                     <span class="comment">// How big steps to take when searching.</span>
 
    <span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">uintmax_t</span> <span class="identifier">maxit</span> <span class="special">=</span> <span class="number">50</span><span class="special">;</span>  <span class="comment">// Limit to maximum iterations.</span>
-   <span class="identifier">boost</span><span class="special">::</span><span class="identifier">uintmax_t</span> <span class="identifier">it</span> <span class="special">=</span> <span class="identifier">maxit</span><span class="special">;</span>        <span class="comment">// Initally our chosen max iterations, but updated with actual.</span>
+   <span class="identifier">boost</span><span class="special">::</span><span class="identifier">uintmax_t</span> <span class="identifier">it</span> <span class="special">=</span> <span class="identifier">maxit</span><span class="special">;</span>        <span class="comment">// Initially our chosen max iterations, but updated with actual.</span>
    <span class="keyword">bool</span> <span class="identifier">is_rising</span> <span class="special">=</span> <span class="keyword">true</span><span class="special">;</span>              <span class="comment">// arc-length increases if one radii increases, so function is rising</span>
    <span class="comment">// Define a termination condition, stop when nearly all digits are correct, but allow for</span>
    <span class="comment">// the fact that we are returning a range, and must have some inaccuracy in the elliptic integral:</span>
@@ -104,7 +104,7 @@
 </pre>
 <p>
         This function generally finds the root within 8-10 iterations, so given that
-        the runtime is completely dominated by the cost of calling the ellliptic
+        the runtime is completely dominated by the cost of calling the elliptic
         integral it would be nice to reduce that count somewhat. We'll try to do
         that by using a derivative-based method; the derivatives of this function
         are rather hard to work out by hand, but fortunately <a href="http://www.wolframalpha.com/input/?i=d%2Fda+%5b4+*+a+*+EllipticE%281+-+b%5e2%2Fa%5e2%29%5d" target="_top">Wolfram

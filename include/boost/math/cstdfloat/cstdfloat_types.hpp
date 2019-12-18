@@ -324,7 +324,7 @@
   // as the corresponding fixed-width type. This behavior may, however,
   // be modified when being optimized for a given compiler implementation.
 
-  // In addition, a clear assessment of IEEE-754 comformance is carried out
+  // In addition, a clear assessment of IEEE-754 conformance is carried out
   // using compile-time assertion.
 
   namespace boost

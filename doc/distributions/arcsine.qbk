@@ -131,7 +131,7 @@ The arcsine distribution is useful to describe
 [@http://en.wikipedia.org/wiki/Brownian_motion Brownian motion],
 [@http://en.wikipedia.org/wiki/Wiener_process  Weiner processes],
 [@http://en.wikipedia.org/wiki/Bernoulli_trial Bernoulli trials],
-and their appplication to solve  stock market and other
+and their application to solve  stock market and other
 [@http://en.wikipedia.org/wiki/Gambler%27s_ruin ruinous gambling games].
 
 The random variate ['x] is constrained to ['x_min] and ['x_max], (for our 'standard' distribution, 0 and 1),

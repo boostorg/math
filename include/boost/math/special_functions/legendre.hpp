@@ -21,7 +21,7 @@
 namespace boost{
 namespace math{
 
-// Recurrance relation for legendre P and Q polynomials:
+// Recurrence relation for legendre P and Q polynomials:
 template <class T1, class T2, class T3>
 inline typename tools::promote_args<T1, T2, T3>::type
    legendre_next(unsigned l, T1 x, T2 Pl, T3 Plm1)

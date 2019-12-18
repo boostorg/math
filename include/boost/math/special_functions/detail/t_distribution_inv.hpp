@@ -397,7 +397,7 @@ calculate_real:
       else
       {
          //
-         // Use Hill's method except in the exteme tails
+         // Use Hill's method except in the extreme tails
          // where we use Shaw's tail series.
          // The crossover point is roughly exponential in -df:
          //

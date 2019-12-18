@@ -100,7 +100,7 @@ void test_spot(
       if(k > 0)
       {
          // estimate success ratio:
-         // Note lower bound uses a different formual internally
+         // Note lower bound uses a different formula internally
          // from upper bound, have to adjust things to prevent
          // fencepost errors:
          BOOST_CHECK_CLOSE(

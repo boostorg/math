@@ -109,7 +109,7 @@ The library does not support the VAX floating-point formats.
 The main portability issues are:
 
 * Unsupported floating-point formats.
-* The library depends on the header `boost/detail/endian.hpp` to detemine endianness.
+* The library depends on the header `boost/detail/endian.hpp` to determine endianness.
 * Code such as `#if defined(__ia64) || defined(__ia64__) || defined(_M_IA64)`
 is used to determine the processor type.
 

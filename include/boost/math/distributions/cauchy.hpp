@@ -98,7 +98,7 @@ RealType quantile_imp(
    // the value p may be the probability, or its complement if complement=true.
    //
    // The procedure first performs argument reduction on p to avoid error
-   // when calculating the tangent, then calulates the distance from the
+   // when calculating the tangent, then calculates the distance from the
    // mid-point of the distribution.  This is either added or subtracted
    // from the location parameter depending on whether `complement` is true.
    //

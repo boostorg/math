@@ -148,7 +148,7 @@ std::pair<T,T> ibeta_fraction1_regular(T a, T b, T x)
 }
 
 //
-// we absolutely must trunctate the input values to float
+// we absolutely must truncate the input values to float
 // precision: we have to be certain that the input values
 // can be represented exactly in whatever width floating
 // point type we are testing, otherwise the output will 

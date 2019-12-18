@@ -613,7 +613,7 @@
      //
      // This next version is largely the same as above, but calculates the ratio for the b recurrence relation
      // which has a larger area of stability than the ab recurrence when a,b < 0.  We can then use a single
-     // recurrence step to convert this to the ratio for the ab recursion and proceed largly as before.
+     // recurrence step to convert this to the ratio for the ab recursion and proceed largely as before.
      // The routine is quite insensitive to the size of z, but requires |a| < |5b| for accuracy.
      // Fortunately the accuracy outside this domain falls off steadily rather than suddenly switching
      // to a different behaviour.

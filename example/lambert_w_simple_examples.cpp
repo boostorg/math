@@ -57,7 +57,7 @@ template<typename T>
 void show_value(T z)
 {
   std::streamsize precision = std::cout.precision(std::numeric_limits<T>::max_digits10);  // Save.
-  std::cout.precision(std::numeric_limits<T>::max_digits10); // Show all posssibly significant digits.
+  std::cout.precision(std::numeric_limits<T>::max_digits10); // Show all possibly significant digits.
   std::ios::fmtflags flags(std::cout.flags());
   std::cout.setf(std::ios_base::showpoint); // Include any trailing zeros.
   std::cout << z;

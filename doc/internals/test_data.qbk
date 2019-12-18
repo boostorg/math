@@ -354,7 +354,7 @@ for each element in the tuple (in addition to the input parameters):
          upper_incomplete_gamma_fract<NTL::RR> f1(rval, rval);
          NTL::RR true_val = continued_fraction_a(f1, 1000);
          //
-         // Now get the aproximation at double precision, along with the number of
+         // Now get the approximation at double precision, along with the number of
          // iterations required:
          boost::uintmax_t iters = std::numeric_limits<boost::uintmax_t>::max();
          upper_incomplete_gamma_fract<T> f2(val, val);

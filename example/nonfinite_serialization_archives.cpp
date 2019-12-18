@@ -22,7 +22,7 @@ C99 standard output of infinity and NaN in serialization archives.
 and imbue input and output streams with the non_finite_num put and get facets.
 This allow output and input of infinity and NaN in a Standard portable way,
 This permits 'loop-back' of output back into input (and portably across different system too).
-This is particularly useful when used with Boost.Seralization so that non-finite NaNs and infinity
+This is particularly useful when used with Boost.Serialization so that non-finite NaNs and infinity
 values in text and xml archives can be handled correctly and portably.
 
 */

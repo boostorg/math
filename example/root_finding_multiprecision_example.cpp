@@ -188,7 +188,7 @@ int main()
       r = cbrt_2deriv(static_cast<cpp_dec_float_50>(2.)); // Passing a cpp_dec_float_50, 
       // so will compute a cpp_dec_float_50 precision result.
       std::cout << "cbrt(" << two << ") = " << r << std::endl;
-      r = cbrt_2deriv<cpp_dec_float_50>(2.); // Explictly a cpp_dec_float_50, so will compute a cpp_dec_float_50 precision result.
+      r = cbrt_2deriv<cpp_dec_float_50>(2.); // Explicitly a cpp_dec_float_50, so will compute a cpp_dec_float_50 precision result.
       std::cout << "cbrt(" << two << ") = " << r << std::endl;
       // cpp_dec_float_50 1.2599210498948731647672106072782283505702514647015
 //] [/root_finding_multiprecision_example_2

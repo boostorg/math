@@ -207,7 +207,7 @@ T nth_root_noderiv(T x)
   T factor = 2; // How big steps to take when searching.
 
   const boost::uintmax_t maxit = 50; // Limit to maximum iterations.
-  boost::uintmax_t it = maxit; // Initally our chosen max iterations, but updated with actual.
+  boost::uintmax_t it = maxit; // Initially our chosen max iterations, but updated with actual.
   bool is_rising = true; // So if result if guess^3 is too low, then try increasing guess.
   // Some fraction of digits is used to control how accurate to try to make the result.
   int get_digits = std::numeric_limits<T>::digits - 2;

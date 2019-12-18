@@ -117,7 +117,7 @@ namespace boost
                }
             } // for(unsigned short i = 0; i != 7; i++)
 
-            // interprete select array as 8x15 matrix
+            // interpret select array as 8x15 matrix
             return select[iaint*15 + ihint];
 
          } // unsigned short owens_t_compute_code(const RealType h, const RealType a)

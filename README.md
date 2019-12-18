@@ -70,7 +70,7 @@ The full documentation is available on [boost.org](http://www.boost.org/doc/libs
 
 ## Support, bugs and feature requests ##
 
-Bugs and feature requests can be reported through the [Gitub issue tracker](https://github.com/boostorg/math/issues)
+Bugs and feature requests can be reported through the [GitHub issue tracker](https://github.com/boostorg/math/issues)
 (see [open issues](https://github.com/boostorg/math/issues) and
 [closed issues](https://github.com/boostorg/math/issues?utf8=%E2%9C%93&q=is%3Aissue+is%3Aclosed)).
 
