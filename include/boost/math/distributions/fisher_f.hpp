@@ -366,7 +366,7 @@ inline RealType kurtosis_excess(const fisher_f_distribution<RealType, Policy>& d
    if(df2 <= 8)
    {
       return policies::raise_domain_error<RealType>(
-         function, "Second degree of freedom was %1% but must be > 8 in order for the distribution to have a kutosis.", df2, Policy());
+         function, "Second degree of freedom was %1% but must be > 8 in order for the distribution to have a kurtosis.", df2, Policy());
    }
    RealType df2_2 = df2 * df2;
    RealType df1_2 = df1 * df1;

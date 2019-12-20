@@ -679,7 +679,7 @@ namespace boost
         // Metrika  (Metrika)  ISSN 0026-1335   CODEN MTRKA8
         // 1993, vol. 40, no3-4, pp. 185-189 (4 ref.)
 
-        // Bounds for median and 50 percetage point of binomial and negative binomial distribution
+        // Bounds for median and 50 percentage point of binomial and negative binomial distribution
         // Metrika, ISSN   0026-1335 (Print) 1435-926X (Online)
         // Volume 41, Number 1 / December, 1994, DOI   10.1007/BF01895303
          BOOST_MATH_STD_USING // ADL of std functions.

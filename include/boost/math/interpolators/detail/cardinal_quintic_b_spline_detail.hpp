@@ -36,7 +36,7 @@ public:
         m_t0 = t0;
 
         if (n < 8) {
-            throw std::logic_error("The quntic B-spline interpolator requires at least 8 points.");
+            throw std::logic_error("The quintic B-spline interpolator requires at least 8 points.");
         }
 
         using std::isnan;

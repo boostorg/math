@@ -236,7 +236,7 @@ T cbrt_noderiv(T x)
 
 template <class T>
 struct cbrt_functor_deriv
-{ // Functor also returning 1st derviative.
+{ // Functor also returning 1st derivative.
   cbrt_functor_deriv(T const& to_find_root_of) : a(to_find_root_of)
   { // Constructor stores value a to find root of,
     // for example: calling cbrt_functor_deriv<T>(x) to use to get cube root of x.

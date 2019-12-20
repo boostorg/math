@@ -366,7 +366,7 @@ void test_spots(T val, const char* type_name)
    // Spot values from Numerical Computation of Real or Complex 
    // Elliptic Integrals, B. C. Carlson: http://arxiv.org/abs/math.CA/9409227
    // RF:
-   T tolerance = (std::max)(T(1e-13f), tools::epsilon<T>() * 5) * 100; // Note 5eps expressed as a persentage!!!
+   T tolerance = (std::max)(T(1e-13f), tools::epsilon<T>() * 5) * 100; // Note 5eps expressed as a percentage!!!
    T eps2 = 5 * tools::epsilon<T>();
    BOOST_CHECK_CLOSE(ellint_rf(T(1), T(2), T(0)), T(1.3110287771461), tolerance);
    BOOST_CHECK_CLOSE(ellint_rf(T(0.5), T(1), T(0)), T(1.8540746773014), tolerance);

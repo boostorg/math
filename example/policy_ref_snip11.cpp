@@ -32,14 +32,14 @@ int main()
   std::streamsize p = 2 + (bits * 30103UL) / 100000UL; 
   // Approximate number of significant decimal digits for 25 bits.
   cout.precision(p); 
-  cout << bits << " binary bits is approoximately equivalent to " << p << " decimal digits " << endl;
+  cout << bits << " binary bits is approximately equivalent to " << p << " decimal digits " << endl;
   cout << "quantile(normal_distribution<double, policy<digits2<25> > >(), 0.05  = "
      << q << endl; // -1.64485
 }
 
 /*
 Output:
-  25 binary bits is approoximately equivalent to 9 decimal digits 
+  25 binary bits is approximately equivalent to 9 decimal digits 
   quantile(normal_distribution<double, policy<digits2<25> > >(), 0.05  = -1.64485363
   */
 

@@ -641,7 +641,7 @@ namespace boost
 
       typedef mpl::int_<0> bessel_no_int_tag;      // No integer optimisation possible.
       typedef mpl::int_<1> bessel_maybe_int_tag;   // Maybe integer optimisation.
-      typedef mpl::int_<2> bessel_int_tag;         // Definite integer optimistaion.
+      typedef mpl::int_<2> bessel_int_tag;         // Definite integer optimisation.
 
       template <class T1, class T2, class Policy>
       struct bessel_traits

@@ -78,7 +78,7 @@ int main()
     auto y_range = boost::adaptors::values(r);
     boost::math::barycentric_rational<double> b(x_range.begin(), x_range.end(), y_range.begin());
     //
-    // We'll use a lamda expression to provide the functor to our root finder, since we want
+    // We'll use a lambda expression to provide the functor to our root finder, since we want
     // the abscissa value that yields 3, not zero.  We pass the functor b by value to the
     // lambda expression since barycentric_rational is trivial to copy.
     // Here we're using simple bisection to find the root:

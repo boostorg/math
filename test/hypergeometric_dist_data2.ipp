@@ -4,7 +4,7 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
-// High precision test data generated with NTL::RR at 1000 bit presision, a few values
+// High precision test data generated with NTL::RR at 1000 bit precision, a few values
 // (5) are commented out as they are too close to numeric_limits<double>::min(), to expect
 // our implementation to cope :-(
 //

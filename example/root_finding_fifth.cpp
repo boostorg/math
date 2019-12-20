@@ -66,7 +66,7 @@ then you can get help, for example from the invaluable
 
 http://www.wolframalpha.com/ site
 
-entering the commmand
+entering the command
 
   differentiate x^5
 

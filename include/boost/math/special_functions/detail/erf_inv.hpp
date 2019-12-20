@@ -338,7 +338,7 @@ struct erf_inv_initializer
       static void do_init()
       {
          // If std::numeric_limits<T>::digits is zero, we must not call
-         // our inituialization code here as the precision presumably
+         // our initialization code here as the precision presumably
          // varies at runtime, and will not have been set yet.
          if(std::numeric_limits<T>::digits)
          {

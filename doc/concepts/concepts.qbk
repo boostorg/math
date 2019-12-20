@@ -443,7 +443,7 @@ boost/math/special_functions/lanczos.hpp] or
 boost/math/bindings/detail/big_lanczos.hpp]:
 in the former case you will need change
 `static_cast`'s to `lexical_cast`'s, and the constants to /strings/
-(in order to ensure the coefficients aren't truncated to `long doubl`e)
+(in order to ensure the coefficients aren't truncated to `long double`)
 and then specialise `lanczos_traits` for type T.  Otherwise you may have to hack
 [@../../tools/lanczos_generator.cpp
 libs/math/tools/lanczos_generator.cpp] to find a suitable
