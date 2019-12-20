@@ -861,10 +861,10 @@ Complex complex_newton(F g, Complex guess, int max_iterations = std::numeric_lim
 namespace detail
 {
 #if defined(BOOST_GNU_STDLIB) && !defined(_GLIBCXX_USE_C99_MATH_TR1)
-float fma_workaround(float f) { return ::fmaf(f); }
-double fma_workaround(double f) { return ::fma(f); }
+inline float fma_workaround(float x, float y, float z) { return ::fmaf(x, y, z); }
+inline double fma_workaround(double x, double y, double z) { return ::fma(x, y, z); }
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-long double fma_workaround(long double f) { return ::fmal(f); }
+inline long double fma_workaround(long double x, long double y, long double z) { return ::fmal(x, y, z); }
 #endif
 #endif            
 template<class T>
