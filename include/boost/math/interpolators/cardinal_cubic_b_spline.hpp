@@ -20,7 +20,7 @@
 // - All cubic polynomials interpolated exactly
 
 #ifndef BOOST_MATH_INTERPOLATORS_CARDINAL_CUBIC_B_SPLINE_HPP
-#define BOOST_MATH_INTERPOLATORS_CARINDAL_CUBIC_B_SPLINE_HPP
+#define BOOST_MATH_INTERPOLATORS_CARDINAL_CUBIC_B_SPLINE_HPP
 
 #include <boost/math/interpolators/detail/cardinal_cubic_b_spline_detail.hpp>
 
