@@ -396,7 +396,7 @@ void quantile_sanity_check(T& data, const char* type_name, const char* test)
          // Sanity check degrees-of-freedom finder, don't bother at float
          // precision though as there's not enough data in the probability
          // values to get back to the correct degrees of freedom or
-         // non-cenrality parameter:
+         // non-centrality parameter:
          //
 #ifndef BOOST_NO_EXCEPTIONS
          try{

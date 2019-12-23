@@ -185,7 +185,7 @@ boost::uintmax_t elliptic_root_noderiv(T radius, T arc, T guess)
 
 template <class T = double>
 struct elliptic_root_functor_1deriv
-{ // Functor also returning 1st derviative.
+{ // Functor also returning 1st derivative.
    BOOST_STATIC_ASSERT_MSG(boost::is_integral<T>::value == false, "Only floating-point type types can be used!");
 
    elliptic_root_functor_1deriv(T const& arc, T const& radius) : m_arc(arc), m_radius(radius)

@@ -13,7 +13,7 @@ For example, `normal my_norm(0, 1);  pdf(my_norm, 2.0);`
 
 # I'm a user of [@http://support.sas.com/rnd/app/da/new/probabilityfunctions.html New SAS Functions for Computing Probabilities].
 
-  You will find the interface more familar, but to be able to select a distribution (perhaps using a string)
+  You will find the interface more familiar, but to be able to select a distribution (perhaps using a string)
 see the Extras/Future Directions section,
 and /boost/libs/math/dot_net_example/boost_math.cpp for an example that is used to create a C# (C sharp) utility
 (that you might also find useful):

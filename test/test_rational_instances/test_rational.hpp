@@ -17,7 +17,7 @@ template <class T, class U>
 void do_test_spots1(T, U)
 {
    //
-   // Tolerance is 4 eps expressed as a persentage:
+   // Tolerance is 4 eps expressed as a percentage:
    //
    T tolerance = boost::math::tools::epsilon<T>() * 4 * 100;
 
@@ -576,7 +576,7 @@ template <class T, class U>
 void do_test_spots2(T, U)
 {
    //
-   // Tolerance is 4 eps expressed as a persentage:
+   // Tolerance is 4 eps expressed as a percentage:
    //
    T tolerance = boost::math::tools::epsilon<T>() * 4 * 100;
 
@@ -895,7 +895,7 @@ template <class T, class U>
 void do_test_spots3(T, U)
 {
    //
-   // Tolerance is 4 eps expressed as a persentage:
+   // Tolerance is 4 eps expressed as a percentage:
    //
    T tolerance = boost::math::tools::epsilon<T>() * 4 * 100;
 
@@ -1214,7 +1214,7 @@ template <class T, class U>
 void do_test_spots4(T, U)
 {
    //
-   // Tolerance is 4 eps expressed as a persentage:
+   // Tolerance is 4 eps expressed as a percentage:
    //
    T tolerance = boost::math::tools::epsilon<T>() * 4 * 100;
 
@@ -1533,7 +1533,7 @@ template <class T, class U>
 void do_test_spots5(T, U)
 {
    //
-   // Tolerance is 4 eps expressed as a persentage:
+   // Tolerance is 4 eps expressed as a percentage:
    //
    T tolerance = boost::math::tools::epsilon<T>() * 4 * 100;
 
@@ -1837,7 +1837,7 @@ template <class T, class U>
 void do_test_spots6(T, U)
 {
    //
-   // Tolerance is 4 eps expressed as a persentage:
+   // Tolerance is 4 eps expressed as a percentage:
    //
    T tolerance = boost::math::tools::epsilon<T>() * 4 * 100;
 
@@ -2126,7 +2126,7 @@ template <class T, class U>
 void do_test_spots7(T, U)
 {
    //
-   // Tolerance is 4 eps expressed as a persentage:
+   // Tolerance is 4 eps expressed as a percentage:
    //
    T tolerance = boost::math::tools::epsilon<T>() * 4 * 100;
 
@@ -2415,7 +2415,7 @@ template <class T, class U>
 void do_test_spots8(T, U)
 {
    //
-   // Tolerance is 4 eps expressed as a persentage:
+   // Tolerance is 4 eps expressed as a percentage:
    //
    T tolerance = boost::math::tools::epsilon<T>() * 4 * 100;
 
@@ -2704,7 +2704,7 @@ template <class T, class U>
 void do_test_spots9(T, U)
 {
    //
-   // Tolerance is 4 eps expressed as a persentage:
+   // Tolerance is 4 eps expressed as a percentage:
    //
    T tolerance = boost::math::tools::epsilon<T>() * 4 * 100;
 
@@ -2993,7 +2993,7 @@ template <class T, class U>
 void do_test_spots10(T, U)
 {
    //
-   // Tolerance is 4 eps expressed as a persentage:
+   // Tolerance is 4 eps expressed as a percentage:
    //
    T tolerance = boost::math::tools::epsilon<T>() * 4 * 100;
 
@@ -3267,7 +3267,7 @@ template <class T, class U>
 void do_test_spots11(T, U)
 {
    //
-   // Tolerance is 4 eps expressed as a persentage:
+   // Tolerance is 4 eps expressed as a percentage:
    //
    T tolerance = boost::math::tools::epsilon<T>() * 4 * 100;
 
@@ -3541,7 +3541,7 @@ template <class T, class U>
 void do_test_spots12(T, U)
 {
    //
-   // Tolerance is 4 eps expressed as a persentage:
+   // Tolerance is 4 eps expressed as a percentage:
    //
    T tolerance = boost::math::tools::epsilon<T>() * 4 * 100;
 
@@ -3814,7 +3814,7 @@ template <class T, class U>
 void do_test_spots13(T, U)
 {
    //
-   // Tolerance is 4 eps expressed as a persentage:
+   // Tolerance is 4 eps expressed as a percentage:
    //
    T tolerance = boost::math::tools::epsilon<T>() * 4 * 100;
 
@@ -4088,7 +4088,7 @@ template <class T, class U>
 void do_test_spots14(T, U)
 {
    //
-   // Tolerance is 4 eps expressed as a persentage:
+   // Tolerance is 4 eps expressed as a percentage:
    //
    T tolerance = boost::math::tools::epsilon<T>() * 4 * 100;
 
@@ -4362,7 +4362,7 @@ template <class T, class U>
 void do_test_spots15(T, U)
 {
    //
-   // Tolerance is 4 eps expressed as a persentage:
+   // Tolerance is 4 eps expressed as a percentage:
    //
    T tolerance = boost::math::tools::epsilon<T>() * 4 * 100;
 
@@ -4636,7 +4636,7 @@ template <class T, class U>
 void do_test_spots16(T, U)
 {
    //
-   // Tolerance is 4 eps expressed as a persentage:
+   // Tolerance is 4 eps expressed as a percentage:
    //
    T tolerance = boost::math::tools::epsilon<T>() * 4 * 100;
 
@@ -4910,7 +4910,7 @@ template <class T, class U>
 void do_test_spots17(T, U)
 {
    //
-   // Tolerance is 4 eps expressed as a persentage:
+   // Tolerance is 4 eps expressed as a percentage:
    //
    T tolerance = boost::math::tools::epsilon<T>() * 4 * 100;
 
@@ -5184,7 +5184,7 @@ template <class T, class U>
 void do_test_spots18(T, U)
 {
    //
-   // Tolerance is 4 eps expressed as a persentage:
+   // Tolerance is 4 eps expressed as a percentage:
    //
    T tolerance = boost::math::tools::epsilon<T>() * 4 * 100;
 

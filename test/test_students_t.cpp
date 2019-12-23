@@ -265,7 +265,7 @@ void test_spots(RealType)
       // Some special tests to exercise the double-precision approximations
       // to the quantile:
       //
-      // tolerance is 50 eps expressed as a persent:
+      // tolerance is 50 eps expressed as a percent:
       //
       tolerance = boost::math::tools::epsilon<RealType>() * 5000;
       BOOST_CHECK_CLOSE(boost::math::quantile(

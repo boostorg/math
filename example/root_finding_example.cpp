@@ -341,7 +341,7 @@ If your differentiation is a little rusty
 then you can get help, for example from the invaluable
 [@http://www.wolframalpha.com/ WolframAlpha site.]
 
-For example, entering the commmand: `differentiate x ^ 5`
+For example, entering the command: `differentiate x ^ 5`
 
 or the Wolfram Language command: ` D[x ^ 5, x]`
 

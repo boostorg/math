@@ -77,7 +77,7 @@ int main ()
   // (But these tests are expected to pass using non_finite num_put and num_get facets).
 
   // Use the current 'native' default locale.
-  std::locale default_locale (std::locale::classic ()); // Note the currrent (default C) locale.
+  std::locale default_locale (std::locale::classic ()); // Note the current (default C) locale.
 
   // Create plus and minus infinity.
   double plus_infinity = +std::numeric_limits<double>::infinity();

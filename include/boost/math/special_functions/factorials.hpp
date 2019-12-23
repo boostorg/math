@@ -155,7 +155,7 @@ T rising_factorial_imp(T x, int n, const Policy& pol)
    }
    //
    // We don't optimise this for small n, because
-   // tgamma_delta_ratio is alreay optimised for that
+   // tgamma_delta_ratio is already optimised for that
    // use case:
    //
    return 1 / boost::math::tgamma_delta_ratio(x, static_cast<T>(n), pol);
@@ -217,7 +217,7 @@ inline T falling_factorial_imp(T x, unsigned n, const Policy& pol)
    // Simple case: just the ratio of two
    // (positive argument) gamma functions.
    // Note that we don't optimise this for small n,
-   // because tgamma_delta_ratio is alreay optimised
+   // because tgamma_delta_ratio is already optimised
    // for that use case:
    //
    return boost::math::tgamma_delta_ratio(x + 1, -static_cast<T>(n), pol);

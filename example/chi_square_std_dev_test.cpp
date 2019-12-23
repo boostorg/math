@@ -25,7 +25,7 @@ void confidence_limits_on_std_deviation(
    // For example if we set the confidence limit to
    // 0.95, we know that if we repeat the sampling
    // 100 times, then we expect that the true standard deviation
-   // will be between out limits on 95 occations.
+   // will be between out limits on 95 occasions.
    // Note: this is not the same as saying a 95%
    // confidence interval means that there is a 95%
    // probability that the interval contains the true standard deviation.

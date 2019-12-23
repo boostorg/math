@@ -75,7 +75,7 @@ int main ()
     return 0;
   }
 
-  std::locale default_locale (std::locale::classic ()); // Note the currrent (default C) locale.
+  std::locale default_locale (std::locale::classic ()); // Note the current (default C) locale.
 
   // Create plus and minus infinity.
   double plus_infinity = +std::numeric_limits<double>::infinity();

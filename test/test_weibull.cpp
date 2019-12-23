@@ -70,7 +70,7 @@ void test_spots(RealType)
    // using the online calculator at 
    // http://espse.ed.psu.edu/edpsych/faculty/rhale/hale/507Mat/statlets/free/pdist.htm
    //
-   // Tolerance is just over 5 decimal digits expressed as a persentage:
+   // Tolerance is just over 5 decimal digits expressed as a percentage:
    // that's the limit of the test data.
    RealType tolerance = 2e-5f * 100;  
    cout << "Tolerance for type " << typeid(RealType).name()  << " is " << tolerance << " %" << endl;

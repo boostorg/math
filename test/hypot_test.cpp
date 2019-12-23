@@ -25,7 +25,7 @@ namespace std{ using ::sqrt; }
 // different computation method to those computed at float precision:
 // as long as these compute the same values then everything's OK.
 //
-// Tolerance is 2*epsilon, expressed here as a persentage:
+// Tolerance is 2*epsilon, expressed here as a percentage:
 //
 static const float tolerance = 200 * (std::numeric_limits<float>::epsilon)();
 const float boundaries[] = {
