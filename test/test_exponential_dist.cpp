@@ -227,6 +227,12 @@ void test_spots(RealType T)
          static_cast<RealType>(6),           
          tolerance); // %
 
+   BOOST_CHECK_CLOSE(
+      ::boost::math::entropy(
+         exponential_distribution<RealType>(2)),
+         static_cast<RealType>(1-log(2)),
+         tolerance); // %
+
    //
    // Things that are errors:
    //
