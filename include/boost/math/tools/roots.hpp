@@ -884,7 +884,11 @@ inline T discriminant(T const& a, T const& b, T const& c)
 template<class T>
 std::pair<T, T> quadratic_roots_imp(T const& a, T const& b, T const& c)
 {
+#if defined(BOOST_GNU_STDLIB) && !defined(_GLIBCXX_USE_C99_MATH_TR1)
+   using boost::math::copysign;
+#else
    using std::copysign;
+#endif
    using std::sqrt;
    if constexpr (std::is_floating_point<T>::value)
    {
