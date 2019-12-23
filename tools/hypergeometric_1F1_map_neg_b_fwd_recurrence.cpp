@@ -50,9 +50,9 @@ int main()
       test_type b_start, b_end;
       test_type a_mult, b_mult;
 
-      std::cout << "Enter range for paramater a: ";
+      std::cout << "Enter range for parameter a: ";
       std::cin >> a_start >> a_end;
-      std::cout << "Enter range for paramater b: ";
+      std::cout << "Enter range for parameter b: ";
       std::cin >> b_start >> b_end;
       std::cout << "Enter multiplier for a parameter: ";
       std::cin >> a_mult;

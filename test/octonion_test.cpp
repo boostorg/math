@@ -440,7 +440,7 @@ void    octonion_manual_test()
     BOOST_TEST_MESSAGE( "the value of the l1 norm is "
                 << l1(o0));
     
-    BOOST_TEST_MESSAGE( "the value of the magnitude (euclidian norm) is "
+    BOOST_TEST_MESSAGE( "the value of the magnitude (Euclidean norm) is "
                 << abs(o0));
     
     BOOST_TEST_MESSAGE( "the value of the (Cayley) norm is "

@@ -92,7 +92,7 @@ void test_ignore_policy(RealType)
     if (std::numeric_limits<RealType>::has_quiet_NaN)
     {
       // Demonstrate output of PDF with infinity,
-      // but strin goutput from NaN is platform dependent, so can't use BOOST_CHECK.
+      // but string output from NaN is platform dependent, so can't use BOOST_CHECK.
       if (std::numeric_limits<RealType>::has_infinity)
       {
         //std::cout << "pdf(ignore_error_arcsine(-1, +1), std::numeric_limits<RealType>::infinity()) = " << pdf(ignore_error_arcsine(-1, +1), std::numeric_limits<RealType>::infinity()) << std::endl;

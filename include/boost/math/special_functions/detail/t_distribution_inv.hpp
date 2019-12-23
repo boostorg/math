@@ -208,7 +208,7 @@ T inverse_students_t(T df, T u, T v, const Policy& pol, bool* pexact = 0)
 {
    //
    // df = number of degrees of freedom.
-   // u = probablity.
+   // u = probability.
    // v = 1 - u.
    // l = lanczos type to use.
    //

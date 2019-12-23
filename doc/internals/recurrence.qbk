@@ -101,7 +101,7 @@ the maximum number of permitted iterations in the associated continued fraction.
 Applies a recurrence relation in a stable forward direction, starting with the values F[sub n-1] and F[sub n].
 
 [variablelist
-    [[get_coefs] [Functor that returns the corefficients of the recurrence relation.  The coefficients should be centered on position /second/.]]
+    [[get_coefs] [Functor that returns the coefficients of the recurrence relation.  The coefficients should be centered on position /second/.]]
     [[number_of_steps][The number of steps to apply the recurrence relation onwards from /second/.]]
     [[first] [The value of F[sub n-1]]]
     [[second] [The value of F[sub n]]]
@@ -118,7 +118,7 @@ Returns F[sub n + number_of_steps].
 Applies a recurrence relation in a stable backward direction, starting with the values F[sub n+1] and F[sub n].
 
 [variablelist
-    [[get_coefs] [Functor that returns the corefficients of the recurrence relation.  The coefficients should be centered on position /second/.]]
+    [[get_coefs] [Functor that returns the coefficients of the recurrence relation.  The coefficients should be centered on position /second/.]]
     [[number_of_steps][The number of steps to apply the recurrence relation backwards from /second/.]]
     [[first] [The value of F[sub n+1]]]
     [[second] [The value of F[sub n]]]

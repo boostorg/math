@@ -312,7 +312,7 @@ public:
             ++color_index;
             color_index = color_index % (sizeof(colors)/sizeof(colors[0]));
          }
-      } // descrete
+      } // discrete
       plot.write(file);
    } // void plot(const std::string& title, const std::string& file)
 

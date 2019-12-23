@@ -31,7 +31,7 @@ the value of the real part is 1
 the value of the unreal part is (0,2,3,4)
 the value of the sup norm is 4
 the value of the l1 norm is 10
-the value of the magnitude (euclidian norm) is 5.47723
+the value of the magnitude (Euclidean norm) is 5.47723
 the value of the (Cayley) norm is 30
 the value of the conjugate is (1,-2,-3,-4)
 the value of the exponential is (1.69392,-0.78956,-1.18434,-1.57912)
