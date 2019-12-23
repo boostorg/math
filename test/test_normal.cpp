@@ -269,14 +269,19 @@ void test_spots(RealType)
     BOOST_CHECK_CLOSE(
        skewness(dist)
        , static_cast<RealType>(0), tol2);
-    // kertosis:
+    // kurtosis:
     BOOST_CHECK_CLOSE(
        kurtosis(dist)
        , static_cast<RealType>(3), tol2);
-    // kertosis excess:
+    // kurtosis excess:
     BOOST_CHECK_CLOSE(
        kurtosis_excess(dist)
        , static_cast<RealType>(0), tol2);
+
+    RealType expected_entropy = log(boost::math::constants::two_pi<RealType>()*boost::math::constants::e<RealType>()*9)/2;
+    BOOST_CHECK_CLOSE(
+       entropy(dist)
+       ,expected_entropy, tol2);
 
     normal_distribution<RealType> norm01(0, 1); // Test default (0, 1)
     BOOST_CHECK_CLOSE(

@@ -407,6 +407,13 @@ void test_mmm_moments()
                kurtosis_excess( laplace_distribution<RealType>(l,s) ),
                static_cast<RealType>(3),
                tolerance);
+
+            RealType expected_entropy = log(2*s*boost::math::constants::e<RealType>());
+            BOOST_CHECK_CLOSE(
+               entropy(laplace_distribution<RealType>(l,s) ),
+               expected_entropy,
+               tolerance);
+
          }
 } // template <class RealType> void test_mmm_moments()
 

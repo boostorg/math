@@ -318,12 +318,15 @@ void test_spots(RealType)
    // skewness:
    BOOST_CHECK_EQUAL(
     skewness(distu01), static_cast<RealType>(0));
-   // kertosis:
+   // kurtosis:
    BOOST_CHECK_CLOSE_FRACTION(
     kurtosis(distu01), kurtosis_excess(distu01) + static_cast<RealType>(3), tolerance);
-   // kertosis excess:
+   // kurtosis excess:
    BOOST_CHECK_CLOSE_FRACTION(
     kurtosis_excess(distu01), static_cast<RealType>(-1.2), tolerance);
+
+   BOOST_CHECK_SMALL(
+    entropy(distu01), tolerance);
 
    if(std::numeric_limits<RealType>::has_infinity)
   { // BOOST_CHECK tests for infinity using std::numeric_limits<>::infinity()
