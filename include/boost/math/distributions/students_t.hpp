@@ -483,6 +483,7 @@ template <class RealType, class Policy>
 inline RealType entropy(const students_t_distribution<RealType, Policy>& dist)
 {
    using std::log;
+   using std::sqrt;
    RealType v = dist.degrees_of_freedom();
    RealType vp1 = (v+1)/2;
    RealType vd2 = v/2;
