@@ -235,7 +235,7 @@ namespace boost
     template <class RealType, class Policy>
     inline RealType kurtosis(const poisson_distribution<RealType, Policy>& dist)
     { // kurtosis is 4th moment about the mean = u4 / sd ^ 4
-      // http://en.wikipedia.org/wiki/Curtosis
+      // http://en.wikipedia.org/wiki/Kurtosis
       // kurtosis can range from -2 (flat top) to +infinity (sharp peak & heavy tails).
       // http://www.itl.nist.gov/div898/handbook/eda/section3/eda35b.htm
       return 3 + 1 / dist.mean(); // NIST.

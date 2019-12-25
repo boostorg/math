@@ -54,7 +54,7 @@ void test_spots(RealType)
    // expressed as a percentage (so -2) for BOOST_CHECK_CLOSE,
 
    int decdigits = numeric_limits<RealType>::digits10;
-  // May eb >15 for 80 and 128-bit FP typtes.
+  // May eb >15 for 80 and 128-bit FP types.
   if (decdigits <= 0)
   { // decdigits is not defined, for example real concept,
     // so assume precision of most test data is double (for example, MathCAD).

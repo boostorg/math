@@ -141,7 +141,7 @@ public:
    RR const& operator+()const
    { return *this; }
 
-   // RR compatibity:
+   // RR compatibility:
    const ::NTL::ZZ& mantissa() const
    { return m_value.mantissa(); }
    long exponent() const

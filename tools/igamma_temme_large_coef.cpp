@@ -23,7 +23,7 @@ using namespace boost::math;
 // See "The Asymptotic Expansion of the Incomplete Gamma Functions"
 // N. M. Temme.
 // Siam J. Math Anal. Vol 10 No 4, July 1979, p757.
-// Coeffient calculation is described from Eq 3.8 (p762) onwards.
+// Coefficient calculation is described from Eq 3.8 (p762) onwards.
 //
 
 //
