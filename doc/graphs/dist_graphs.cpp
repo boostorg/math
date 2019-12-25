@@ -87,7 +87,7 @@ public:
       double a, b;
       std::tr1::tie(a, b) = support(d);
       //
-      // PDF maximimum is at the mode (probably):
+      // PDF maximum is at the mode (probably):
       double mod;
       try
       {

@@ -660,7 +660,7 @@ inline bernoulli_numbers_cache<T, Policy>& get_bernoulli_numbers_cache()
 {
    //
    // Force this function to be called at program startup so all the static variables
-   // get initailzed then (thread safety).
+   // get initialized then (thread safety).
    //
    bernoulli_initializer<T, Policy>::force_instantiate();
    static bernoulli_numbers_cache<T, Policy> data;

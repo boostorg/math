@@ -204,7 +204,7 @@ void test_spots(RealType)
    // Computing discrete mixtures of continuous
    // distributions: noncentral chisquare, noncentral t
    // and the distribution of the square of the sample
-   // multiple correlation coeficient.
+   // multiple correlation coefficient.
    // Denise Benton, K. Krishnamoorthy.
    // Computational Statistics & Data Analysis 43 (2003) 249 - 267
    //

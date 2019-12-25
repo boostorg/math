@@ -437,7 +437,7 @@ Bins for (signed) 0, 1, 2 and 3 and 4 bits proved suitable.
 
 However, though these give results within a few __epsilon of the nearest representable result,
 they do not get as close as is very often possible with further refinement,
-nrealy always to within one or two __epsilon.
+nearly always to within one or two __epsilon.
 
 More significantly, the evaluations of the sum of all signed differences using the Fukshima algorithm
 show a slight bias, being more likely to be a bit or few below the nearest representation than above;

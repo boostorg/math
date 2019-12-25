@@ -26,7 +26,7 @@
 
 #include <boost/multiprecision/float128.hpp>
 
-#include <boost/math/special_functions/fpclassify.hpp> // isnan, ifinite.
+#include <boost/math/special_functions/fpclassify.hpp> // isnan, isfinite.
 #include <boost/math/special_functions/next.hpp> // float_next, float_prior
 using boost::math::float_next;
 using boost::math::float_prior;

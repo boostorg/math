@@ -754,7 +754,7 @@ inline T schroder_iterate(F f, T guess, T min, T max, int digits) BOOST_NOEXCEPT
    return schroder_iterate(f, guess, min, max, digits, m);
 }
 //
-// These two are the old spelling of this function, retained for backwards compatibity just in case:
+// These two are the old spelling of this function, retained for backwards compatibility just in case:
 //
 template <class F, class T>
 T schroeder_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& max_iter) BOOST_NOEXCEPT_IF(policies::is_noexcept_error_policy<policies::policy<> >::value&& BOOST_MATH_IS_FLOAT(T) && noexcept(std::declval<F>()(std::declval<T>())))

@@ -11,7 +11,7 @@
 // Basic sanity tests for the beta Distribution.
 
 // http://members.aol.com/iandjmsmith/BETAEX.HTM  beta distribution calculator
-// Appreas to be a 64-bit calculator showing 17 decimal digit (last is noisy).
+// Appears to be a 64-bit calculator showing 17 decimal digit (last is noisy).
 // Similar to mathCAD?
 
 // http://www.nuhertz.com/statmat/distributions.html#Beta

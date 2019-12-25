@@ -42,7 +42,7 @@ typedef boost::mpl::list<float, double> test_types;
 template <typename RealT>
 RealT make_tolerance()
 {
-    // Tolerance is 100eps expressed as a persentage (as required by Boost.Build):
+    // Tolerance is 100eps expressed as a percentage (as required by Boost.Build):
     return boost::math::tools::epsilon<RealT>() * 100 * 100;
 }
 

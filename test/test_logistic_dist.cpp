@@ -225,7 +225,7 @@ void test_spots(RealType T)
    // Things that are errors:
    // 1. Domain errors for scale and location.
    // 2. x being NAN.
-   // 3. Probabilies being outside (0,1).
+   // 3. Probabilities being outside (0,1).
    check_out_of_range<logistic_distribution<RealType> >(0, 1);
    if(std::numeric_limits<RealType>::has_infinity)
    {
