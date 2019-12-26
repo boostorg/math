@@ -83,7 +83,7 @@ bool check_complex(const std::complex<T>& a, const std::complex<T>& b, int max_e
    }
    if((boost::math::isnan)(a.imag()))
    {
-      BOOST_ERROR("Found non-finite value for inaginary part: " << a);
+      BOOST_ERROR("Found non-finite value for imaginary part: " << a);
    }
 
    T rel = boost::math::fabs((b-a)/b) / eps;
@@ -258,7 +258,7 @@ void test_inverse_trig(T)
 
 //
 // check_spots:
-// Various spot values, mostly the C99 special cases (infinites and NAN's).
+// Various spot values, mostly the C99 special cases (infinities and NAN's).
 // TODO: add spot checks for the Wolfram spot values.
 //
 template <class T>

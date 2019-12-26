@@ -148,7 +148,7 @@ namespace boost
             //            but unlike them there is no meaningful notion of "imaginary part".
             //            Instead there is an "unreal part" which itself is a quaternion, and usually
             //            nothing simpler (as opposed to the complex number case).
-            //            However, for practicallity, there are accessors for the other components
+            //            However, for practicality, there are accessors for the other components
             //            (these are necessary for the templated copy constructor, for instance).
             
             BOOST_CONSTEXPR T real() const
@@ -1004,7 +1004,7 @@ inline BOOST_CXX14_CONSTEXPR quaternion<T> operator / (const quaternion<T>& a, c
         }
         
         
-        // Note:    This is the Cayley norm, not the Euclidian norm...
+        // Note:    This is the Cayley norm, not the Euclidean norm...
         
         template<typename T>
         inline BOOST_CXX14_CONSTEXPR T norm(quaternion<T>const  & q)

@@ -578,7 +578,7 @@ void test_crc()
     }
     // There is an alternative way to evaluate the above integral: by noticing that all the area of the integral
     // is near zero for p < 0 and near 1 for p > 0 we can substitute exp(-x) for x and remap the integral to the
-    // domain (0, INF).  Internally we need to expand out the terms and evaluate using logs to avoid spurous overflow, 
+    // domain (0, INF).  Internally we need to expand out the terms and evaluate using logs to avoid spurious overflow, 
     // this gives us
     // for p > 0:
     for (Real p = Real(0.99); p > 0; p -= Real(0.1)) {
@@ -647,7 +647,7 @@ void test_crc()
     // in the exp terms.  Note that for small x: tan(x) ~= x, so making this
     // substitution and evaluating by logs we have:
     //
-    // exp(-x)/tan(exp(-x))^h ~= exp((h - 1) * x)  for x > -log(epsion);
+    // exp(-x)/tan(exp(-x))^h ~= exp((h - 1) * x)  for x > -log(epsilon);
     //
     // Here's how that looks in code:
     //
