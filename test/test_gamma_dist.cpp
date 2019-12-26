@@ -213,7 +213,7 @@ void test_spots(RealType)
 
     BOOST_CHECK_CLOSE(
        median(dist), static_cast<RealType>(23.007748327502412), // double precision test value
-       (std::max)(tol2, static_cast<RealType>(std::numeric_limits<double>::epsilon() * 2 * 100))); // 2 eps as persent
+       (std::max)(tol2, static_cast<RealType>(std::numeric_limits<double>::epsilon() * 2 * 100))); // 2 eps as percent
     // Rely on default definition in derived accessors.
 
    // error tests

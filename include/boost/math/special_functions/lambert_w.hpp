@@ -84,7 +84,7 @@ typedef double lookup_t; // Type for lookup table (double or float, or even long
 // This is the only way we can avoid
 // warning: non-standard suffix on floating constant [-Wpedantic]
 // when building with -Wall -pedantic.  Neither __extension__
-// nor #pragma dianostic ignored work :(
+// nor #pragma diagnostic ignored work :(
 //
 #pragma GCC system_header
 #endif
@@ -954,8 +954,8 @@ inline T lambert_w0_small_z(T z, const Policy& pol, boost::mpl::int_<5> const&)
   // std::cout << "sum_series(s, get_epsilon<T, Policy>(), max_iter, result); = " << result << std::endl;
 
   //T epsilon = get_epsilon<T, Policy>();
-  //std::cout << "epilson from policy = " << epsilon << std::endl;
-  // epilson from policy = 1.93e-34 for T == quad
+  //std::cout << "epsilon from policy = " << epsilon << std::endl;
+  // epsilon from policy = 1.93e-34 for T == quad
   //  5.35e-51 for t = cpp_bin_float_50
 
   // std::cout << " get eps = " << get_epsilon<T, Policy>() << std::endl; // quad eps = 1.93e-34, bin_float_50 eps = 5.35e-51

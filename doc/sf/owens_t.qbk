@@ -99,7 +99,7 @@ The algorithms of Patefield, M. and Tandy, D.
 "Fast and accurate Calculation of Owen's T-Function", Journal of Statistical Software, 5 (5), 1 - 25 (2000)
 are adapted for C++ with arbitrary RealType.
 
-The Patefield-Tandy algorithm provides six methods of evalualution (T1 to T6);
+The Patefield-Tandy algorithm provides six methods of evaluation (T1 to T6);
 the best method is selected according to the values of ['a] and ['h].
 See the original paper and the source in
 [@../../../../boost/math/special_functions/owens_t.hpp owens_t.hpp] for details.
