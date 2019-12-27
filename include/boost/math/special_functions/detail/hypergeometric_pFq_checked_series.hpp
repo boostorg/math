@@ -42,7 +42,7 @@
            // 3 solutions: The series diverges to a maxima, converges to a minima before diverging again to a second maxima before final convergence.
            // 4 solutions: The series converges to a minima before diverging to a maxima, converging to a minima, diverging to a second maxima and then converging.
            //
-           // The first 2 situations are adequately handled by direct series evalution, while the 2,3 and 4 solutions are not.
+           // The first 2 situations are adequately handled by direct series evaluation, while the 2,3 and 4 solutions are not.
            //
            Real a = *aj.begin();
            Real b = *bj.begin();

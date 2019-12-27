@@ -136,7 +136,7 @@
               T first = 1;
               T second = ((1 + crossover_a - b_local) / crossover_a) + ((b_local - 1) / crossover_a) / b_ratio;
               //
-              // Recurse down to a_local, compare values and re-nomralise first and second:
+              // Recurse down to a_local, compare values and re-normalise first and second:
               //
               boost::math::detail::hypergeometric_1F1_recurrence_a_coefficients<T> a_coef(crossover_a, b_local, x);
               int backwards_scale = 0;
@@ -404,7 +404,7 @@
         BOOST_MATH_STD_USING
         //
         // This is the selection logic to pick the "best" method.
-        // We have a,b,z >> 0 and need to comute the approximate cost of each method
+        // We have a,b,z >> 0 and need to compute the approximate cost of each method
         // and then select whichever wins out.
         //
         enum method

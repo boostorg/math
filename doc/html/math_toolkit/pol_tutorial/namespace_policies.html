@@ -303,12 +303,12 @@ Result of quantile(complement(binom, 0.05)) is: 8
         with any alternate policies present in other translation units:
       </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span> <span class="comment">// All distributions.</span>
-<span class="comment">// using boost::math::normal; // Would create an ambguity between</span>
+<span class="comment">// using boost::math::normal; // Would create an ambiguity between</span>
 <span class="comment">// boost::math::normal_distribution&lt;RealType&gt; boost::math::normal and</span>
 <span class="comment">// 'anonymous-namespace'::normal'.</span>
 
 <span class="keyword">namespace</span>
-<span class="special">{</span> <span class="comment">// anonymous or unnnamed (rather than named as in policy_eg_6.cpp).</span>
+<span class="special">{</span> <span class="comment">// anonymous or unnamed (rather than named as in policy_eg_6.cpp).</span>
 
   <span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">;</span>
    <span class="comment">// using boost::math::policies::errno_on_error; // etc.</span>

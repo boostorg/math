@@ -34,7 +34,7 @@ more complex functions.
 The program used was [@ ../../example/root_finding_algorithms.cpp root_finding_algorithms.cpp].
 100000 evaluations of each floating-point type and algorithm were used and the CPU times were
 judged from repeat runs to have an uncertainty of 10 %.  Comparing MSVC for `double` and `long double`
-(which are identical on this patform) may give a guide to uncertainty of timing.
+(which are identical on this platform) may give a guide to uncertainty of timing.
 
 The requested precision was set as follows:
 
@@ -72,7 +72,7 @@ search going wildly off-track.  For a known precision, it may also be possible t
 fix the number of iterations, allowing inlining and loop unrolling.  It also
 algebraically simplifies the Halley steps leading to a big reduction in the
 number of floating point operations required compared to a "black box" implementation
-that calculates the derivatives seperately and then combines them in the Halley code.
+that calculates the derivatives separately and then combines them in the Halley code.
 Typically, it was found that computation using type `double`
 took a few times longer when using the various root-finding algorithms directly rather
 than the hand coded/optimized `cbrt` routine.
@@ -87,7 +87,7 @@ test case as the cost of calling the functor is so cheap that the runtimes are l
 dominated by the complexity of the iteration code.
 
 * Compiling with optimisation halved computation times, and any differences between algorithms
-became nearly negligible.  The optimisation speed-up of the __TOMS748 was especially noticable.
+became nearly negligible.  The optimisation speed-up of the __TOMS748 was especially noticeable.
 
 * Using a multiprecision type like `cpp_bin_float_50` for a precision of 50 decimal digits
 took a lot longer, as expected because most computation
@@ -116,7 +116,7 @@ not in the way the algorithm works.  This confirms previous observations using _
 A second example compares four generalized nth-root finding algorithms for various n-th roots (5, 7 and 13)
 of a single value 28.0, for four floating-point types, `float`, `double`,
 `long double` and a __multiprecision type `cpp_bin_float_50`.
-In each case the target accuracy was set using our "recomended" accuracy limits 
+In each case the target accuracy was set using our "recommended" accuracy limits 
 (or at least limits that make a good starting point - which is likely to give
 close to full accuracy without resorting to unnecessary iterations).
 
@@ -199,7 +199,7 @@ And of course, compiler optimisation is crucial for speed.
 
 [endsect] [/section:root_n_comparison Comparison of Nth-root Finding Algorithms]
 
-[section:elliptic_comparison Comparison of Elliptic Integral Root Finding Algoritghms]
+[section:elliptic_comparison Comparison of Elliptic Integral Root Finding Algorithms]
 
 A second example compares four root finding algorithms for locating
 the second radius of an ellipse with first radius 28 and arc length 300, 
@@ -210,7 +210,7 @@ Which is to say we're solving:
 
 [pre 4xE(sqrt(1 - 28[super 2] / x[super 2])) - 300 = 0]
 
-In each case the target accuracy was set using our "recomended" accuracy limits 
+In each case the target accuracy was set using our "recommended" accuracy limits 
 (or at least limits that make a good starting point - which is likely to give
 close to full accuracy without resorting to unnecessary iterations).
 
@@ -244,6 +244,6 @@ the second comes almost for free, consequently the third order methods (Halley) 
 guarantees of ['quadratic] convergence, while Halley relies on a smooth function with a single root to
 give ['cubic] convergence.  It's not entirely clear why Schroder iteration often does worse than Newton.
 
-[endsect] [/section:elliptic_comparison Comparison of Elliptic Integral Root Finding Algoritghms]
+[endsect] [/section:elliptic_comparison Comparison of Elliptic Integral Root Finding Algorithms]
 
 [endsect] [/section:root_comparison  Comparison of Root Finding Algorithms]

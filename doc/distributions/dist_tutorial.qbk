@@ -242,7 +242,7 @@ function.
 The quantile functions for these distributions are hard to specify
 in a manner that will satisfy everyone all of the time.  The default
 behaviour is to return an integer result, that has been rounded
-/outwards/: that is to say, lower quantiles - where the probablity
+/outwards/: that is to say, lower quantiles - where the probability
 is less than 0.5 are rounded down, while upper quantiles - where
 the probability is greater than 0.5 - are rounded up.  This behaviour
 ensures that if an X% quantile is requested, then /at least/ the requested
@@ -255,7 +255,7 @@ differently, or return a real-valued result using
 recommended that you read the tutorial
 [link math_toolkit.pol_tutorial.understand_dis_quant
 Understanding Quantiles of Discrete Distributions] before
-using the quantile function on a discrete distribtion.  The
+using the quantile function on a discrete distribution.  The
 [link math_toolkit.pol_ref.discrete_quant_ref reference docs]
 describe how to change the rounding policy
 for these distributions.

@@ -58,7 +58,7 @@ see:
 * Andrew Gelman, John B. Carlin, Hal E. Stern, Donald B. Rubin, Bayesian Data Analysis,
 2003, ISBN 978-1439840955.
 
-* Jim Albert, Bayesian Compution with R, Springer, 2009, ISBN 978-0387922973.
+* Jim Albert, Bayesian Computation with R, Springer, 2009, ISBN 978-0387922973.
 
 (As the scaled-inversed-chi-squared is another parameterization of the inverse-gamma distribution,
 this example could also have used the inverse-gamma distribution).
