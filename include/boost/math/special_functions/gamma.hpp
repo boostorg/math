@@ -874,7 +874,7 @@ T regularised_gamma_prefix(T a, T z, const Policy& pol, const Lanczos& l)
       // We have to treat a < 1 as a special case because our Lanczos
       // approximations are optimised against the factorials with a > 1,
       // and for high precision types especially (128-bit reals for example)
-      // very small values of a can give rather eroneous results for gamma
+      // very small values of a can give rather erroneous results for gamma
       // unless we do this:
       //
       // TODO: is this still required?  Lanczos approx should be better now?
@@ -1161,7 +1161,7 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert,
       // way from a in value then we can reliably use methods 2 and 4
       // below in logarithmic form and go straight to the result.
       // Otherwise we let the regularized gamma take the strain
-      // (the result is unlikely to unerflow in the central region anyway)
+      // (the result is unlikely to underflow in the central region anyway)
       // and combine with lgamma in the hopes that we get a finite result.
       //
       if(invert && (a * 4 < x))
@@ -1375,7 +1375,7 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert,
             // series sum based on what we'll end up subtracting it from
             // at the end.
             // Have to be careful though that this optimization doesn't 
-            // lead to spurious numberic overflow.  Note that the
+            // lead to spurious numeric overflow.  Note that the
             // scary/expensive overflow checks below are more often
             // than not bypassed in practice for "sensible" input
             // values:
@@ -1632,7 +1632,7 @@ T tgamma_delta_ratio_imp(T z, T delta, const Policy& pol)
 
    if((z <= 0) || (z + delta <= 0))
    {
-      // This isn't very sofisticated, or accurate, but it does work:
+      // This isn't very sophisticated, or accurate, but it does work:
       return boost::math::tgamma(z, pol) / boost::math::tgamma(z + delta, pol);
    }
 
@@ -1840,7 +1840,7 @@ struct igamma_initializer
       static void do_init(const mpl::int_<N>&)
       {
          // If std::numeric_limits<T>::digits is zero, we must not call
-         // our inituialization code here as the precision presumably
+         // our initialization code here as the precision presumably
          // varies at runtime, and will not have been set yet.  Plus the
          // code requiring initialization isn't called when digits == 0.
          if(std::numeric_limits<T>::digits)

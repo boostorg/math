@@ -198,7 +198,7 @@ void check_exact_quaternion_result(const boost::math::quaternion<T>& q, R1 a, R2
 template <class T, class R1, class R2, class R3, class R4>
 void check_approx_quaternion_result(const boost::math::quaternion<T>& q, R1 a, R2 b, R3 c, R4 d, int eps = 10)
 {
-   T tol = std::numeric_limits<T>::epsilon() * eps * 100;  // epsilon as a persentage.
+   T tol = std::numeric_limits<T>::epsilon() * eps * 100;  // epsilon as a percentage.
    using std::abs;
    if (abs(a) > tol / 100)
    {

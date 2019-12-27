@@ -273,7 +273,7 @@ namespace boost
             //            but unlike them there is no meaningful notion of "imaginary part".
             //            Instead there is an "unreal part" which itself is an octonion, and usually
             //            nothing simpler (as opposed to the complex number case).
-            //            However, for practicallity, there are accessors for the other components
+            //            However, for practicality, there are accessors for the other components
             //            (these are necessary for the templated copy constructor, for instance).
             
             BOOST_OCTONION_ACCESSOR_GENERATOR(T)
@@ -1280,7 +1280,7 @@ namespace boost
             //            but unlike them there is no meaningful notion of "imaginary part".
             //            Instead there is an "unreal part" which itself is an octonion, and usually
             //            nothing simpler (as opposed to the complex number case).
-            //            However, for practicallity, there are accessors for the other components
+            //            However, for practicality, there are accessors for the other components
             //            (these are necessary for the templated copy constructor, for instance).
             
             BOOST_OCTONION_ACCESSOR_GENERATOR(float)
@@ -1344,7 +1344,7 @@ namespace boost
             //            but unlike them there is no meaningful notion of "imaginary part".
             //            Instead there is an "unreal part" which itself is an octonion, and usually
             //            nothing simpler (as opposed to the complex number case).
-            //            However, for practicallity, there are accessors for the other components
+            //            However, for practicality, there are accessors for the other components
             //            (these are necessary for the templated copy constructor, for instance).
             
             BOOST_OCTONION_ACCESSOR_GENERATOR(double)
@@ -1408,7 +1408,7 @@ namespace boost
             //            but unlike them there is no meaningful notion of "imaginary part".
             //            Instead there is an "unreal part" which itself is an octonion, and usually
             //            nothing simpler (as opposed to the complex number case).
-            //            However, for practicallity, there are accessors for the other components
+            //            However, for practicality, there are accessors for the other components
             //            (these are necessary for the templated copy constructor, for instance).
             
             BOOST_OCTONION_ACCESSOR_GENERATOR(long double)
@@ -3971,7 +3971,7 @@ namespace boost
 #undef    BOOST_OCTONION_VALARRAY_LOADER
         
         
-        // Note:    This is the Cayley norm, not the Euclidian norm...
+        // Note:    This is the Cayley norm, not the Euclidean norm...
         
         template<typename T>
         inline T                                norm(octonion<T> const & o)

@@ -66,7 +66,7 @@ lanczos_spot_data sweet_spots[] = {
 23, 23.118012, 5.2e-35,
 
 // some more we've found, these are all the points where the first
-// negleted term from the Lanczos series changes sign, there is one 
+// neglected term from the Lanczos series changes sign, there is one 
 // point just above that point, and one just below:
 
 3, 0.58613894134759903, 0.00036580426080686315,
@@ -4331,7 +4331,7 @@ T binomial(int n, int k, T)
    return result;
 }
 //
-// Functions for creating the matrices that generate the coefficents.
+// Functions for creating the matrices that generate the coefficients.
 // See http://my.fit.edu/~gabdo/gamma.txt and http://www.rskey.org/gamma.htm
 //
 template <class T>
@@ -5100,7 +5100,7 @@ int main(int argc, char*argv [])
    if(argc < 2)
    {
       std::cout << 
-         "Useage:\n"
+         "Usage:\n"
          "  -float        test type float for the best approximation\n"
          "  -double       test type double for the best approximation\n"
          "  -long-double  test type long double for the best approximation\n"

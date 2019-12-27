@@ -110,7 +110,7 @@ See __why_complements for why the complement is useful and when it should be use
    template <class RealType, class ``__Policy``>
    RealType hazard(const ``['Distribution-Type]``<RealType, ``__Policy``>& dist, const RealType& x);
 
-Returns the __hazard of /x/ and distibution /dist/.
+Returns the __hazard of /x/ and distribution /dist/.
 
 This function may return a __domain_error if the random variable is outside
 the defined range for the distribution.
@@ -126,7 +126,7 @@ density function rather than the hazard function.]
    template <class RealType, class ``__Policy``>
    RealType chf(const ``['Distribution-Type]``<RealType, ``__Policy``>& dist, const RealType& x);
 
-Returns the __chf of /x/ and distibution /dist/.
+Returns the __chf of /x/ and distribution /dist/.
 
 This function may return a __domain_error if the random variable is outside
 the defined range for the distribution.
@@ -237,7 +237,7 @@ probability.
 This function is also called the inverse survival function, and is the
 same as calculating the ['upper critical value] of a distribution.
 
-This function returns a __domain_error if the probablity lies outside [0,1].
+This function returns a __domain_error if the probability lies outside [0,1].
 The function may return an __overflow_error if there is no finite value
 that has the specified probability.
 

@@ -59,7 +59,7 @@ using boost::multiprecision::float128;
 //#include <boost/fixed_point/fixed_point.hpp> // If available.
 
 #include <boost/math/concepts/real_concept.hpp> // for real_concept tests.
-#include <boost/math/special_functions/fpclassify.hpp> // isnan, ifinite.
+#include <boost/math/special_functions/fpclassify.hpp> // isnan, isfinite.
 #include <boost/math/special_functions/next.hpp> // float_next, float_prior
 using boost::math::float_next;
 using boost::math::float_prior;
@@ -616,7 +616,7 @@ void test_spots(RealType)
 
   // Tests to ensure that all JM rational polynomials are being checked.
 
-  // 1st polynomal if (z < 0.5)   // 0.05 < z < 0.5
+  // 1st polynomial if (z < 0.5)   // 0.05 < z < 0.5
   BOOST_CHECK_CLOSE_FRACTION(lambert_w0(BOOST_MATH_TEST_VALUE(RealType, 0.49)),
     BOOST_MATH_TEST_VALUE(RealType, 0.3465058086974944293540338951489158955895910665452626949),
     tolerance);
@@ -624,7 +624,7 @@ void test_spots(RealType)
     BOOST_MATH_TEST_VALUE(RealType, 0.04858156174600359264950777241723801201748517590507517888),
     tolerance);
 
-  // 2st polynomal if 0.5 < z < 2
+  // 2st polynomial if 0.5 < z < 2
   BOOST_CHECK_CLOSE_FRACTION(lambert_w0(BOOST_MATH_TEST_VALUE(RealType, 0.51)),
     BOOST_MATH_TEST_VALUE(RealType, 0.3569144916935871518694242462560450385494399307379277704),
     tolerance);

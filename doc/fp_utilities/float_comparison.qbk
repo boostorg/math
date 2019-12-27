@@ -6,7 +6,7 @@ Comparison of floating-point values has always been a source of endless difficul
 
 Unlike integral values that are exact, all floating-point operations
 will potentially produce an inexact result that will be rounded to the nearest
-available binary representation.  Even apparently inocuous operations such as assigning
+available binary representation.  Even apparently innocuous operations such as assigning
 0.1 to a double produces an inexact result (as this decimal number has no
 exact binary representation).
 
@@ -92,7 +92,7 @@ Imagine we're testing the following function:
       return sin(x) - sin(4 * x);
    }
 
-This function has multiple roots, some of which are quite predicable in that both
+This function has multiple roots, some of which are quite predictable in that both
 `sin(x)` and `sin(4x)` are zero together.  Others occur because the values returned
 from those two functions precisely cancel out.  At such points the relative difference
 between the true value of the function and the actual value returned may be ['arbitrarily

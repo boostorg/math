@@ -264,7 +264,7 @@ T temme_method_2_ibeta_inverse(T /*a*/, T /*b*/, T z, T r, T theta, const Policy
       // is 1:1 with the sign of eta and x-sin^2(theta) being the same.
       // So we can check if we have the right root of 3.2, and if not
       // switch x for 1-x.  This transformation is motivated by the fact
-      // that the distribution is *almost* symetric so 1-x will be in the right
+      // that the distribution is *almost* symmetric so 1-x will be in the right
       // ball park for the solution:
       //
       if((x - s_2) * eta < 0)
@@ -374,12 +374,12 @@ T temme_method_3_ibeta_inverse(T a, T b, T p, T q, const Policy& pol)
    e3 -= (442043 * w_9 + 2054169 * w_8 + 3803094 * w_7 + 3470754 * w_6 + 2141568 * w_5 - 2393568 * w_4 - 19904934 * w_3 - 34714674 * w_2 - 23128299 * w - 5253353) * d / (146966400 * w_6 * w1_3);
    e3 -= (116932 * w_10 + 819281 * w_9 + 2378172 * w_8 + 4341330 * w_7 + 6806004 * w_6 + 10622748 * w_5 + 18739500 * w_4 + 30651894 * w_3 + 30869976 * w_2 + 15431867 * w + 2919016) * d_2 / (146966400 * w1_4 * w_7);
    //
-   // Combine eta0 and the error terms to compute eta (Second eqaution p155):
+   // Combine eta0 and the error terms to compute eta (Second equation p155):
    //
    T eta = eta0 + e1 / a + e2 / (a * a) + e3 / (a * a * a);
    //
    // Now we need to solve Eq 4.2 to obtain x.  For any given value of
-   // eta there are two solutions to this equation, and since the distribtion
+   // eta there are two solutions to this equation, and since the distribution
    // may be very skewed, these are not related by x ~ 1-x we used when
    // implementing section 3 above.  However we know that:
    //
@@ -579,7 +579,7 @@ T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T* py)
          // When a and b differ by a small amount
          // the curve is quite symmetrical and we can use an error
          // function to approximate the inverse. This is the cheapest
-         // of the three Temme expantions, and the calculated value
+         // of the three Temme expansions, and the calculated value
          // for x will never be much larger than p, so we don't have
          // to worry about cancellation as long as p is small.
          //

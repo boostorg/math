@@ -14,12 +14,12 @@ using std::cout;  using std::endl;
 //[policy_eg_7
 
 #include <boost/math/distributions.hpp> // All distributions.
-// using boost::math::normal; // Would create an ambguity between
+// using boost::math::normal; // Would create an ambiguity between
 // boost::math::normal_distribution<RealType> boost::math::normal and
 // 'anonymous-namespace'::normal'.
 
 namespace
-{ // anonymous or unnnamed (rather than named as in policy_eg_6.cpp).
+{ // anonymous or unnamed (rather than named as in policy_eg_6.cpp).
 
   using namespace boost::math::policies;
    // using boost::math::policies::errno_on_error; // etc.

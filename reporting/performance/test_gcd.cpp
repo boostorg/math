@@ -103,7 +103,7 @@ T get_prime_products()
 template <class T>
 T get_uniform_random()
 {
-   static boost::random::uniform_int_distribution<T> minmax((std::numeric_limits<T>::min)(), (std::numeric_limits<T>::max)());
+   static boost::random::uniform_int_distribution<T> minimax((std::numeric_limits<T>::min)(), (std::numeric_limits<T>::max)());
    return minmax(rng);
 }
 

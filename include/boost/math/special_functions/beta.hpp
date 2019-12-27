@@ -850,7 +850,7 @@ T beta_small_b_large_a_series(T a, T b, T x, T y, T s0, T mult, const Policy& po
    }
    prefix *= mult;
    //
-   // now we need the quantity Pn, unfortunatately this is computed
+   // now we need the quantity Pn, unfortunately this is computed
    // recursively, and requires a full history of all the previous values
    // so no choice but to declare a big table and hope it's big enough...
    //

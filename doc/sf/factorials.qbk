@@ -33,7 +33,7 @@ arguments passed to the function.  Therefore if you write something like:
    `boost::math::factorial(2);`
 
 You will get a (perhaps perplexing) compiler error, usually indicating that there is no such function to be found.
-Instead you need to specify the return type explicity and write:
+Instead you need to specify the return type explicitly and write:
 
    `boost::math::factorial<double>(2);`
 
@@ -144,8 +144,8 @@ arguments passed to the function.  Therefore if you write something like:
 
    `boost::math::double_factorial(2);`
 
-You will get a (possibly perplexing) compiler error, usually indicating that there is no such function to be found.  Instead you need to specifiy
-the return type explicity and write:
+You will get a (possibly perplexing) compiler error, usually indicating that there is no such function to be found.  Instead you need to specify
+the return type explicitly and write:
 
    `boost::math::double_factorial<double>(2);`
 
@@ -324,8 +324,8 @@ arguments passed to the function.  Therefore if you write something like:
 
    `boost::math::binomial_coefficient(10, 2);`
 
-You will get a compiler error, usually indicating that there is no such function to be found.  Instead you need to specifiy
-the return type explicity and write:
+You will get a compiler error, usually indicating that there is no such function to be found.  Instead you need to specify
+the return type explicitly and write:
 
    `boost::math::binomial_coefficient<double>(10, 2);`
 
