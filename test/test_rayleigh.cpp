@@ -213,6 +213,13 @@ void test_spots(RealType T)
       ::boost::math::kurtosis_excess(rayleigh_distribution<RealType>(2)),
       ::boost::math::kurtosis(rayleigh_distribution<RealType>(2)) -3,
          tolerance* 100); // %
+
+
+   RealType expected_entropy = 1 + log(boost::math::constants::root_two<RealType>()) + boost::math::constants::euler<RealType>()/2;
+   BOOST_CHECK_CLOSE(
+      ::boost::math::entropy(rayleigh_distribution<RealType>(2)),
+      expected_entropy,
+         tolerance* 100);
    return;
 
 } // template <class RealType>void test_spots(RealType)

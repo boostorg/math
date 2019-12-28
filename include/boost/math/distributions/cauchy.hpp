@@ -347,6 +347,13 @@ inline RealType kurtosis_excess(const cauchy_distribution<RealType, Policy>& /*d
       std::numeric_limits<RealType>::quiet_NaN(), Policy());
 }
 
+template <class RealType, class Policy>
+inline RealType entropy(const cauchy_distribution<RealType, Policy> & dist)
+{
+   using std::log;
+   return log(2*constants::two_pi<RealType>()*dist.scale());
+}
+
 } // namespace math
 } // namespace boost
 

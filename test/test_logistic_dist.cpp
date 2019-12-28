@@ -349,6 +349,13 @@ void test_spots(RealType T)
       static_cast<RealType>(1.2L),              // probability
       tolerance);
 
+   BOOST_CHECK_CLOSE(
+      ::boost::math::entropy(
+      logistic_distribution<RealType>(2,1)
+      ),
+      static_cast<RealType>(2),
+      tolerance);
+
 } // template <class RealType>void test_spots(RealType)
 
 

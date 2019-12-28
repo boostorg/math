@@ -202,19 +202,25 @@ void test_spots(RealType)
     BOOST_CHECK_CLOSE(
        skewness(dist)
        , 2 / sqrt(static_cast<RealType>(8)), tol2);
-    // kertosis:
+    // kurtosis:
     BOOST_CHECK_CLOSE(
        kurtosis(dist)
        , 3 + 6 / static_cast<RealType>(8), tol2);
-    // kertosis excess:
+    // kurtosis excess:
     BOOST_CHECK_CLOSE(
        kurtosis_excess(dist)
        , 6 / static_cast<RealType>(8), tol2);
 
     BOOST_CHECK_CLOSE(
        median(dist), static_cast<RealType>(23.007748327502412), // double precision test value
-       (std::max)(tol2, static_cast<RealType>(std::numeric_limits<double>::epsilon() * 2 * 100))); // 2 eps as percent
-    // Rely on default definition in derived accessors.
+       (std::max)(tol2, static_cast<RealType>(std::numeric_limits<double>::epsilon() * 2 * 100))); // 2 eps as persent
+
+    using std::log;
+    RealType expected_entropy = RealType(8) + log(RealType(3)) + boost::math::lgamma(RealType(8)) - 7*boost::math::digamma(RealType(8));
+    BOOST_CHECK_CLOSE(
+       entropy(dist), expected_entropy, tol2);
+
+  // Rely on default definition in derived accessors.
 
    // error tests
    check_out_of_range<boost::math::gamma_distribution<RealType> >(1, 1);

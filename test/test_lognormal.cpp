@@ -234,6 +234,11 @@ void test_spots(RealType)
     kurtosis_excess(dist)
     , static_cast<RealType>(4312295840576300.2363383232038251L), tolerance);
 
+   RealType expected_entropy = 8 + log(boost::math::constants::two_pi<RealType>()*boost::math::constants::e<RealType>()*9)/2;
+   BOOST_CHECK_CLOSE(
+    entropy(dist)
+    , expected_entropy, tolerance);
+
    BOOST_CHECK_CLOSE(
     range(dist).first
     , static_cast<RealType>(0), tolerance);
