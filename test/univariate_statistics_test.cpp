@@ -381,7 +381,7 @@ void test_kurtosis()
     v = {1,2,3,4,5};
     // mu =1, sigma^2 = 2, kurtosis = 17/10
     kurt = boost::math::statistics::kurtosis(v);
-    BOOST_TEST(abs(kurt - Real(17)/Real(10)) < tol);
+    BOOST_TEST(abs(kurt - Real(17)/Real(10)) < 10*tol);
 
     v = {0,0,0,0,5};
     // mu = 1, sigma^2 = 4, sigma = 2, skew = 3/2, kurtosis = 13/4
@@ -723,6 +723,33 @@ void test_integer_gini_coefficient()
     BOOST_TEST(abs(gini) < tol);
 }
 
+template<typename Real>
+void test_interquartile_range()
+{
+    // Taken from Wikipedia's example:
+    std::vector<Real> v{7, 7, 31, 31, 47, 75, 87, 115, 116, 119, 119, 155, 177};
+    // Q1 = 31, Q3 = 119, Q3 - Q1 = 88.
+    Real iqr = boost::math::statistics::interquartile_range(v);
+    BOOST_TEST_EQ(iqr, 88);
+
+    std::mt19937 gen(486);
+    std::shuffle(v.begin(), v.end(), gen);
+
+    iqr = boost::math::statistics::interquartile_range(v);
+    BOOST_TEST_EQ(iqr, 88);
+
+    std::shuffle(v.begin(), v.end(), gen);
+
+    iqr = boost::math::statistics::interquartile_range(v);
+    BOOST_TEST_EQ(iqr, 88);
+
+    std::fill(v.begin(), v.end(), 1);
+    iqr = boost::math::statistics::interquartile_range(v);
+    BOOST_TEST_EQ(iqr, 0);
+
+
+}
+
 int main()
 {
     test_mean<float>();
@@ -790,5 +817,6 @@ int main()
     test_sample_gini_coefficient<long double>();
     test_sample_gini_coefficient<cpp_bin_float_50>();
 
+    test_interquartile_range<double>();
     return boost::report_errors();
 }

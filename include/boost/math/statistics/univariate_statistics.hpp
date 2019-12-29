@@ -465,5 +465,25 @@ inline auto median_absolute_deviation(RandomAccessContainer & v, typename Random
     return median_absolute_deviation(v.begin(), v.end(), center);
 }
 
+template<class ForwardIterator>
+auto interquartile_range(ForwardIterator first, ForwardIterator last)
+{
+    using Real = typename std::iterator_traits<ForwardIterator>::value_type;
+    BOOST_ASSERT_MSG(std::distance(first, last) >= 4, "At least 4 samples are required to compute the interquartile range.");
+    std::nth_element(first, first + (last-first)/4, last);
+    Real Q1 = *(first + (last-first)/4);
+    auto q1 = first + (last-first)/4;
+    std::nth_element(q1, q1 + (last-q1)/2, last);
+    Real Q3 = *(first + 3*(last-first)/4);
+    return Q3 - Q1;
+}
+
+template<class RandomAccessContainer>
+inline auto interquartile_range(RandomAccessContainer & v)
+{
+    return interquartile_range(v.begin(), v.end());
+}
+
+
 }
 #endif
