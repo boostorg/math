@@ -469,13 +469,33 @@ template<class ForwardIterator>
 auto interquartile_range(ForwardIterator first, ForwardIterator last)
 {
     using Real = typename std::iterator_traits<ForwardIterator>::value_type;
-    BOOST_ASSERT_MSG(std::distance(first, last) >= 4, "At least 4 samples are required to compute the interquartile range.");
-    std::nth_element(first, first + (last-first)/4, last);
-    Real Q1 = *(first + (last-first)/4);
-    auto q1 = first + (last-first)/4;
-    std::nth_element(q1, q1 + (last-q1)/2, last);
-    Real Q3 = *(first + 3*(last-first)/4);
-    return Q3 - Q1;
+    auto m = std::distance(first,last);
+    BOOST_ASSERT_MSG(m >= 3, "At least 3 samples are required to compute the interquartile range.");
+    auto k = m/4;
+    auto j = m - (4*k);
+    if ( (m/2) & 1 ) {
+        auto q1 = first + (last-first)/4;
+        auto q3 = first + 3*(last-first)/4;
+        std::nth_element(first, q1, last);
+        Real Q1 = *q1;
+        std::nth_element(q1, q3, last);
+        Real Q3 = *q3;
+        return Q3 - Q1;
+    } else {
+        auto q1 = first + m/4 - 1;
+        auto q3 = first + 3*m/4 - 1 + j;
+        std::nth_element(first, q1, last);
+        Real a = *q1;
+        std::nth_element(q1, q1 + 1, last);
+        Real b = *(q1 + 1);
+        Real Q1 = (a+b)/2;
+        std::nth_element(q1, q3, last);
+        a = *q3;
+        std::nth_element(q3, q3 + 1, last);
+        b = *(q3 + 1);
+        Real Q3 = (a+b)/2;
+        return Q3 - Q1;
+    }
 }
 
 template<class RandomAccessContainer>

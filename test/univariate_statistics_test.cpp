@@ -726,15 +726,16 @@ void test_integer_gini_coefficient()
 template<typename Real>
 void test_interquartile_range()
 {
+    std::mt19937 gen(486);
+    Real iqr;
     // Taken from Wikipedia's example:
     std::vector<Real> v{7, 7, 31, 31, 47, 75, 87, 115, 116, 119, 119, 155, 177};
+
     // Q1 = 31, Q3 = 119, Q3 - Q1 = 88.
-    Real iqr = boost::math::statistics::interquartile_range(v);
+    iqr = boost::math::statistics::interquartile_range(v);
     BOOST_TEST_EQ(iqr, 88);
 
-    std::mt19937 gen(486);
     std::shuffle(v.begin(), v.end(), gen);
-
     iqr = boost::math::statistics::interquartile_range(v);
     BOOST_TEST_EQ(iqr, 88);
 
@@ -747,6 +748,90 @@ void test_interquartile_range()
     iqr = boost::math::statistics::interquartile_range(v);
     BOOST_TEST_EQ(iqr, 0);
 
+    v = {1,2,3};
+    iqr = boost::math::statistics::interquartile_range(v);
+    BOOST_TEST_EQ(iqr, 2);
+    std::shuffle(v.begin(), v.end(), gen);
+    iqr = boost::math::statistics::interquartile_range(v);
+    BOOST_TEST_EQ(iqr, 2);
+
+    v = {0, 3, 5};
+    iqr = boost::math::statistics::interquartile_range(v);
+    BOOST_TEST_EQ(iqr, 5);
+    std::shuffle(v.begin(), v.end(), gen);
+    iqr = boost::math::statistics::interquartile_range(v);
+    BOOST_TEST_EQ(iqr, 5);
+
+    v = {1,2,3,4};
+    iqr = boost::math::statistics::interquartile_range(v);
+    BOOST_TEST_EQ(iqr, 2);
+    std::shuffle(v.begin(), v.end(), gen);
+    iqr = boost::math::statistics::interquartile_range(v);
+    BOOST_TEST_EQ(iqr, 2);
+
+    v = {1,2,3,4,5};
+    // Q1 = 1.5, Q3 = 4.5
+    iqr = boost::math::statistics::interquartile_range(v);
+    BOOST_TEST_EQ(iqr, 3);
+    std::shuffle(v.begin(), v.end(), gen);
+    iqr = boost::math::statistics::interquartile_range(v);
+    BOOST_TEST_EQ(iqr, 3);
+
+    v = {1,2,3,4,5,6};
+    // Q1 = 2, Q3 = 5
+    iqr = boost::math::statistics::interquartile_range(v);
+    BOOST_TEST_EQ(iqr, 3);
+    std::shuffle(v.begin(), v.end(), gen);
+    iqr = boost::math::statistics::interquartile_range(v);
+    BOOST_TEST_EQ(iqr, 3);
+
+    v = {1,2,3, 4, 5,6,7};
+    // Q1 = 2, Q3 = 6
+    iqr = boost::math::statistics::interquartile_range(v);
+    BOOST_TEST_EQ(iqr, 4);
+    std::shuffle(v.begin(), v.end(), gen);
+    iqr = boost::math::statistics::interquartile_range(v);
+    BOOST_TEST_EQ(iqr, 4);
+
+    v = {1,2,3,4,5,6,7,8};
+    // Q1 = 2.5, Q3 = 6.5
+    iqr = boost::math::statistics::interquartile_range(v);
+    BOOST_TEST_EQ(iqr, 4);
+    std::shuffle(v.begin(), v.end(), gen);
+    iqr = boost::math::statistics::interquartile_range(v);
+    BOOST_TEST_EQ(iqr, 4);
+
+    v = {1,2,3,4,5,6,7,8,9};
+    // Q1 = 2.5, Q3 = 7.5
+    iqr = boost::math::statistics::interquartile_range(v);
+    BOOST_TEST_EQ(iqr, 5);
+    std::shuffle(v.begin(), v.end(), gen);
+    iqr = boost::math::statistics::interquartile_range(v);
+    BOOST_TEST_EQ(iqr, 5);
+
+    v = {1,2,3,4,5,6,7,8,9,10};
+    // Q1 = 3, Q3 = 8
+    iqr = boost::math::statistics::interquartile_range(v);
+    BOOST_TEST_EQ(iqr, 5);
+    std::shuffle(v.begin(), v.end(), gen);
+    iqr = boost::math::statistics::interquartile_range(v);
+    BOOST_TEST_EQ(iqr, 5);
+
+    v = {1,2,3,4,5,6,7,8,9,10,11};
+    // Q1 = 3, Q3 = 9
+    iqr = boost::math::statistics::interquartile_range(v);
+    BOOST_TEST_EQ(iqr, 6);
+    std::shuffle(v.begin(), v.end(), gen);
+    iqr = boost::math::statistics::interquartile_range(v);
+    BOOST_TEST_EQ(iqr, 6);
+
+    v = {1,2,3,4,5,6,7,8,9,10,11,12};
+    // Q1 = 3.5, Q3 = 9.5
+    iqr = boost::math::statistics::interquartile_range(v);
+    BOOST_TEST_EQ(iqr, 6);
+    std::shuffle(v.begin(), v.end(), gen);
+    iqr = boost::math::statistics::interquartile_range(v);
+    BOOST_TEST_EQ(iqr, 6);
 
 }
 
@@ -818,5 +903,6 @@ int main()
     test_sample_gini_coefficient<cpp_bin_float_50>();
 
     test_interquartile_range<double>();
+    test_interquartile_range<cpp_bin_float_50>();
     return boost::report_errors();
 }
