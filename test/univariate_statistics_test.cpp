@@ -158,7 +158,7 @@ void test_mean()
     // Does it work for std::array?
     std::array<Real, 7> u{1,2,3,4,5,6,7};
     mu = boost::math::statistics::mean(u.begin(), u.end());
-    BOOST_TEST(abs(mu - 4) < tol);
+    BOOST_TEST(abs(mu - 4) < 10*tol);
 
     // Does it work for a forward iterator?
     std::forward_list<Real> l{1,2,3,4,5,6,7};
@@ -447,7 +447,7 @@ void test_integer_kurtosis()
     v = {1,2,3,4,5};
     // mu =1, sigma^2 = 2, kurtosis = 17/10
     kurt = boost::math::statistics::kurtosis(v);
-    BOOST_TEST(abs(kurt - 17.0/10.0) < tol);
+    BOOST_TEST(abs(kurt - 17.0/10.0) < 10*tol);
 
     v = {0,0,0,0,5};
     // mu = 1, sigma^2 = 4, sigma = 2, skew = 3/2, kurtosis = 13/4
@@ -740,7 +740,6 @@ void test_interquartile_range()
     BOOST_TEST_EQ(iqr, 88);
 
     std::shuffle(v.begin(), v.end(), gen);
-
     iqr = boost::math::statistics::interquartile_range(v);
     BOOST_TEST_EQ(iqr, 88);
 
@@ -832,7 +831,6 @@ void test_interquartile_range()
     std::shuffle(v.begin(), v.end(), gen);
     iqr = boost::math::statistics::interquartile_range(v);
     BOOST_TEST_EQ(iqr, 6);
-
 }
 
 int main()
