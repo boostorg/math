@@ -1,0 +1,59 @@
+[/
+Copyright (c) 2020 Nick Thompson
+Use, modification and distribution are subject to the
+Boost Software License, Version 1.0. (See accompanying file
+LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+]
+
+[section:makima Modified Akima interpolation]
+
+[heading Synopsis]
+``
+  #include <boost/math/interpolators/makima.hpp>
+``
+
+  namespace boost { namespace math { namespace interpolators {
+
+    template <class RandomAccessContainer>
+    class makima
+    {
+    public:
+
+        using Real = RandomAccessContainer::value_type;
+
+        makima(RandomAccessContainer&& abscissas, RandomAccessContainer&& ordinates);
+
+        Real operator()(Real x) const;
+
+        Real prime(Real x) const;
+    };
+
+  }}} // namespaces
+
+
+[heading Modified Akima Interpolation]
+
+The modified Akima interpolant takes non-equispaced data and interpolates between them via cubic Hermite polynomials whose slopes are chosen by a modification of a geometric construction proposed by [@https://doi.org/10.1145/321607.321609 Akima].
+The modification is given by [@https://blogs.mathworks.com/cleve/2019/04/29/makima-piecewise-cubic-interpolation/ Cosmin Ionita] and agrees with Matlab's version.
+The interpolant is /C/[super 1] and evaluation has [bigo](log(/N/)) complexity.
+This is faster than barycentric rational interpolation, but also less smooth.
+An example usage is as follows:
+
+    std::vector<double> x{1, 5, 9 , 12};
+    std::vector<double> y{8,17, 4, -3};
+    using boost::math::interpolators::makima;
+    auto spline = makima(std::move(x), std::move(y));
+    // evaluate at a point:
+    double z = spline(3.4);
+    // evaluate derivative at a point:
+    double zprime = spline.prime(3.4);
+
+The derivative of the spline is simply a linear interpolant, and hence has low accuracy.
+
+[heading Complexity and Performance]
+
+The call to the constructor requires [bigo](/N/) operations to compute the weighted slopes.
+Each call to the interpolant is [bigo](log(/N/)), where /N/ is the number of points to interpolate.
+
+[endsect]
+[/section:makima]
