@@ -22,13 +22,14 @@ public:
     makima(RandomAccessContainer && x, RandomAccessContainer && y) : x_{std::move(x)}, y_{std::move(y)}
     {
         using std::abs;
+        using std::isnan;
         if (x_.size() != y_.size())
         {
             throw std::domain_error("There must be the same number of ordinates as abscissas.");
         }
-        if (x_.size() < 2)
+        if (x_.size() < 3)
         {
-            throw std::domain_error("Must be at least two data points.");
+            throw std::domain_error("Must be at least three data points.");
         }
         Real x0 = x_[0];
         for (size_t i = 1; i < x_.size(); ++i) {
@@ -39,16 +40,41 @@ public:
             x0 = x1;
         }
 
-        s_.resize(x_.size());
+        s_.resize(x_.size(), std::numeric_limits<Real>::quiet_NaN());
+        Real m2 = (y_[3]-y_[2])/(x_[3]-x_[2]);
+        Real m1 = (y_[2]-y_[1])/(x_[2]-x_[1]);
+        Real m0 = (y_[1]-y_[0])/(x_[1]-x_[0]);
+        // Quadratic extrapolation: m_{-1} = 2m_0 - m_1:
+        Real mm1 = 2*m0 - m1;
+        // Quadratic extrapolation: m_{-2} = 2*m_{-1}-m_0:
+        Real mm2 = 2*mm1 - m0;
+        Real w1 = abs(m1-m0) + abs(m1+m0)/2;
+        Real w2 = abs(mm1-mm2) + abs(mm1+mm2)/2;
+        s_[0] = (w1*mm1 + w2*m0)/(w1+w2);
+        if (isnan(s_[0])) {
+            s_[0] = 0;
+        }
+
+        w1 = abs(m2-m1) + abs(m2+m1)/2;
+        w2 = abs(m0-mm1) + abs(m0+mm1)/2;
+        s_[1] = (w1*m0 + w2*m1)/(w1+w2);
+        if (isnan(s_[1])) {
+            s_[1] = 0;
+        }
+
         for (decltype(s_.size()) i = 2; i < s_.size()-2; ++i) {
             Real mim2 = (y_[i-1]-y_[i-2])/(x_[i-1]-x_[i-2]);
-            Real mim1 = (y_[i]-y_[i-1])/(x_[i]-x_[i-1]);
-            Real mi = (y_[i+1]-y_[i])/(x_[i+1]-x_[i]);
+            Real mim1 = (y_[i  ]-y_[i-1])/(x_[i  ]-x_[i-1]);
+            Real mi   = (y_[i+1]-y_[i  ])/(x_[i+1]-x_[i  ]);
             Real mip1 = (y_[i+2]-y_[i+1])/(x_[i+2]-x_[i+1]);
-            Real numerator = (abs(mip1-mi)*mim1 + abs(mim1-mim2)*mi);
-            Real denominator = abs(mip1-mi) + abs(mim1-mim2);
-            s_[i] = numerator/denominator;
+            w1 = abs(mip1-mi) + abs(mip1+mi)/2;
+            w2 = abs(mim1-mim2) + abs(mim1+mim2)/2;
+            s_[i] = (w1*mim1 + w2*mi)/(w1+w2);
+            if (isnan(s_[i])) {
+                s_[i] = 0;
+            }
         }
+        // TODO: Quadratic extrapolation at the other end
     }
 
     Real operator()(Real x) const {
