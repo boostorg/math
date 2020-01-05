@@ -11,6 +11,7 @@
 #define BOOST_MATH_INTERPOLATORS_MAKIMA_HPP
 #include <stdexcept>
 #include <algorithm>
+#include <cmath>
 
 namespace boost::math::interpolators {
 
@@ -106,8 +107,8 @@ public:
         //Real y = y0*(1+2*t)*(1-t)*(1-t) + dx*s0*t*(1-t)*(1-t)
         //       + y1*t*t*(3-2*t) + dx*s1*t*t*(t-1);
         // And then factorized further:
-        Real y = (1-t)*(1-t)*(y0*(1+2*t) + s0*dx)
-               + t*t*(y1*(3-2*t) + dx*s1*(t-1));
+        Real y = (1-t)*(1-t)*(y0*(1+2*t) + s0*(x-x0))
+              + t*t*(y1*(3-2*t) + dx*s1*(t-1));
         return y;
     }
 
