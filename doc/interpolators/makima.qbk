@@ -12,7 +12,7 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
   #include <boost/math/interpolators/makima.hpp>
 ``
 
-  namespace boost { namespace math { namespace interpolators {
+    namespace boost::math::interpolators {
 
     template <class RandomAccessContainer>
     class makima
@@ -26,9 +26,11 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
         Real operator()(Real x) const;
 
         Real prime(Real x) const;
+
+        friend std::ostream& operator<<(std::ostream & os, const makima & m);
     };
 
-  }}} // namespaces
+    } // namespaces
 
 
 [heading Modified Akima Interpolation]
@@ -52,6 +54,12 @@ Periodically, it is helpful to see what data the interpolator has, and the slope
 This can be achieved via
 
     std::cout << spline << "\n";
+
+[$../graphs/makima_vs_cubic_b.svg]
+
+The modified Akima spline compared to the cubic /B/-spline.
+The modified Akima spline oscillates less than the cubic spline, but has less smoothness and is not exact on quadratic polynomials.
+
 
 [heading Complexity and Performance]
 

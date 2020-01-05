@@ -12,6 +12,7 @@
 #include <stdexcept>
 #include <algorithm>
 #include <cmath>
+#include <iostream>
 
 namespace boost::math::interpolators {
 
@@ -28,9 +29,9 @@ public:
         {
             throw std::domain_error("There must be the same number of ordinates as abscissas.");
         }
-        if (x_.size() < 3)
+        if (x_.size() < 4)
         {
-            throw std::domain_error("Must be at least three data points.");
+            throw std::domain_error("Must be at least four data points.");
         }
         Real x0 = x_[0];
         for (size_t i = 1; i < x_.size(); ++i) {
@@ -75,19 +76,42 @@ public:
                 s_[i] = 0;
             }
         }
-        // TODO: Quadratic extrapolation at the other end
+        // Quadratic extrapolation at the other end:
+        
+        decltype(s_.size()) n = s_.size();
+        Real mnm4 = (y_[n-3]-y_[n-4])/(x_[n-3]-x_[n-4]);
+        Real mnm3 = (y_[n-2]-y_[n-3])/(x_[n-2]-x_[n-3]);
+        Real mnm2 = (y_[n-1]-y_[n-2])/(x_[n-1]-x_[n-2]);
+        Real mnm1 = 2*mnm2 - mnm3;
+        Real mn = 2*mnm1 - mnm2;
+        w1 = abs(mnm1 - mnm2) + abs(mnm1+mnm2)/2;
+        w2 = abs(mnm3 - mnm4) + abs(mnm3+mnm4)/2;
+
+        s_[n-2] = (w1*mnm3 + w2*mnm2)/(w1 + w2);
+        if (isnan(s_[n-2])) {
+            s_[n-2] = 0;
+        }
+
+        w1 = abs(mn - mnm1) + abs(mn+mnm1)/2;
+        w2 = abs(mnm2 - mnm3) + abs(mnm2+mnm3)/2;
+
+        s_[n-1] = (w1*mnm2 + w2*mnm1)/(w1+w2);
+        if (isnan(s_[n-1])) {
+            s_[n-1] = 0;
+        }
+
     }
 
     Real operator()(Real x) const {
-        if  (x < x_[0] || x > x_[x_.size()-1]) {
+        if  (x < x_[0] || x > x_.back()) {
             std::string err = "Requested abscissa x = " + std::to_string(x) + ", which is outside of allowed range [" 
-                             + std::to_string(x_[0]) + ", "  + std::to_string(x_[x_.size()-1]) + "]";
+                             + std::to_string(x_[0]) + ", "  + std::to_string(x_.back()) + "]";
             throw std::domain_error(err);
         }
         // We need t := (x-x_k)/(x_{k+1}-x_k) \in [0,1) for this to work.
         // Sadly this neccessitates this loathesome check:
-        if (x == x_[x_.size()-1]) {
-            return y_[y_.size()-1];
+        if (x == x_.back()) {
+            return y_.back();
         }
 
         auto it = std::upper_bound(x_.begin(), x_.end(), x);
