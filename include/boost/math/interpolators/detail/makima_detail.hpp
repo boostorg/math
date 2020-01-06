@@ -13,6 +13,7 @@
 #include <algorithm>
 #include <cmath>
 #include <iostream>
+#include <sstream>
 
 namespace boost::math::interpolators::detail {
 
@@ -104,9 +105,10 @@ public:
 
     Real operator()(Real x) const {
         if  (x < x_[0] || x > x_.back()) {
-            std::string err = "Requested abscissa x = " + std::to_string(x) + ", which is outside of allowed range [" 
-                             + std::to_string(x_[0]) + ", "  + std::to_string(x_.back()) + "]";
-            throw std::domain_error(err);
+            std::ostringstream oss;
+            oss << "Requested abscissa x = " << x << ", which is outside of allowed range [" 
+                << x_[0] << ", " << x_.back() << "]";
+            throw std::domain_error(oss.str());
         }
         // We need t := (x-x_k)/(x_{k+1}-x_k) \in [0,1) for this to work.
         // Sadly this neccessitates this loathesome check, otherwise we get t = 1 at x = xf.

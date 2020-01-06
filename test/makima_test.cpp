@@ -33,7 +33,7 @@ void test_constant()
     auto akima = makima(std::move(x_copy), std::move(y_copy));
 
     for (Real t = x[0]; t <= x.back(); t += 0.25) {
-        CHECK_ULP_CLOSE(7, akima(t), 2);
+        CHECK_ULP_CLOSE(Real(7), akima(t), 2);
     }
 }
 
@@ -110,6 +110,10 @@ int main()
     test_linear<long double>();
     test_interpolation_condition<long double>();
 
+#ifdef BOOST_HAS_FLOAT128
+    test_constant<float128>();
+    test_linear<float128>();
+#endif
 
     return boost::math::test::report_errors();
 }
