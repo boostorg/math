@@ -55,6 +55,9 @@ This can be achieved via
 
     std::cout << spline << "\n";
 
+Note that the interpolator is pimpl'd, so that copying the class is cheap, and hence it can be shared between threads.
+(The call operator and `.prime()` are threadsafe.)
+
 [$../graphs/makima_vs_cubic_b.svg]
 
 The modified Akima spline compared to the cubic /B/-spline.
