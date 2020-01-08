@@ -166,6 +166,7 @@ public:
     Real operator()(Real x) const {
         if  (x < x_[0] || x > x_.back()) {
             std::ostringstream oss;
+            oss.precision(std::numeric_limits<Real>::digits10+3);
             oss << "Requested abscissa x = " << x << ", which is outside of allowed range ["
                 << x_[0] << ", " << x_.back() << "]";
             throw std::domain_error(oss.str());
@@ -201,6 +202,7 @@ public:
     Real prime(Real x) const {
         if  (x < x_[0] || x > x_.back()) {
             std::ostringstream oss;
+            oss.precision(std::numeric_limits<Real>::digits10+3);
             oss << "Requested abscissa x = " << x << ", which is outside of allowed range ["
                 << x_[0] << ", " << x_.back() << "]";
             throw std::domain_error(oss.str());
@@ -213,18 +215,13 @@ public:
         auto i = std::distance(x_.begin(), it) -1;
         Real x0 = *(it-1);
         Real x1 = *it;
-        Real y0 = y_[i];
-        Real y1 = y_[i+1];
         Real s0 = s_[i];
         Real s1 = s_[i+1];
-        Real dx = (x1-x0);
-        Real t = (x-x0)/dx;
 
-        // See the section 'Representations' in the page
-        // https://en.wikipedia.org/wiki/Cubic_Hermite_spline
-        // Take the derivative of that interpolant:
-        Real dydt = 6*t*(t-1)*(y0-y1) + (3*t*t-4*t+1)*s0 + t*(3*t-2)*s1;
-        return dydt/dx;
+        // Ridiculous linear interpolation. Fine for now:
+        Real numerator = s0*(x1-x) + s1*(x-x0);
+        Real denominator = x1 - x0;
+        return numerator/denominator;
     }
 
 
