@@ -90,6 +90,7 @@ void test_linear()
     akima = makima(std::move(x_copy), std::move(y_copy));
     for (Real t = 0; t < x.back(); t += 0.5) {
         CHECK_ULP_CLOSE(t, akima(t), 0);
+        CHECK_ULP_CLOSE(Real(1), akima.prime(t), 0);
     }
 
     x_copy = x;
@@ -98,6 +99,7 @@ void test_linear()
     akima = makima(std::move(x_copy), std::move(y_copy), Real(1), Real(1));
     for (Real t = 0; t < x.back(); t += 0.5) {
         CHECK_ULP_CLOSE(t, akima(t), 0);
+        CHECK_ULP_CLOSE(Real(1), akima.prime(t), 0);
     }
 
 
