@@ -14,6 +14,7 @@
 #include <cmath>
 #include <iostream>
 #include <sstream>
+#include <limits>
 
 namespace boost::math::interpolators::detail {
 
@@ -22,7 +23,9 @@ class makima_detail {
 public:
     using Real = typename RandomAccessContainer::value_type;
 
-    makima_detail(RandomAccessContainer && x, RandomAccessContainer && y) : x_{std::move(x)}, y_{std::move(y)}
+    makima_detail(RandomAccessContainer && x, RandomAccessContainer && y,
+                  Real left_endpoint_derivative = std::numeric_limits<Real>::quiet_NaN(),
+                  Real right_endpoint_derivative = std::numeric_limits<Real>::quiet_NaN()) : x_{std::move(x)}, y_{std::move(y)}
     {
         using std::abs;
         using std::isnan;
@@ -53,9 +56,17 @@ public:
         Real mm2 = 2*mm1 - m0;
         Real w1 = abs(m1-m0) + abs(m1+m0)/2;
         Real w2 = abs(mm1-mm2) + abs(mm1+mm2)/2;
-        s_[0] = (w1*mm1 + w2*m0)/(w1+w2);
-        if (isnan(s_[0])) {
-            s_[0] = 0;
+        if (isnan(left_endpoint_derivative))
+        {
+            s_[0] = (w1*mm1 + w2*m0)/(w1+w2);
+            if (isnan(s_[0]))
+            {
+                s_[0] = 0;
+            }
+        }
+        else
+        {
+            s_[0] = left_endpoint_derivative;
         }
 
         w1 = abs(m2-m1) + abs(m2+m1)/2;
@@ -96,17 +107,66 @@ public:
         w1 = abs(mn - mnm1) + abs(mn+mnm1)/2;
         w2 = abs(mnm2 - mnm3) + abs(mnm2+mnm3)/2;
 
+
+        if (isnan(right_endpoint_derivative))
+        {
+            s_[n-1] = (w1*mnm2 + w2*mnm1)/(w1+w2);
+            if (isnan(s_[n-1])) {
+                s_[n-1] = 0;
+            }
+        }
+        else
+        {
+            s_[n-1] = right_endpoint_derivative;
+        }
+    }
+
+    void push_back(Real x, Real y) {
+        using std::abs;
+        using std::isnan;
+        x_.push_back(x);
+        y_.push_back(y);
+        s_.push_back(std::numeric_limits<Real>::quiet_NaN());
+        // s_[n-2] was computed by extrapolation. Now s_[n-2] -> s_[n-3], and it can be computed by the same formula.
+        decltype(s_.size()) n = s_.size();
+        auto i = n - 3;
+        Real mim2 = (y_[i-1]-y_[i-2])/(x_[i-1]-x_[i-2]);
+        Real mim1 = (y_[i  ]-y_[i-1])/(x_[i  ]-x_[i-1]);
+        Real mi   = (y_[i+1]-y_[i  ])/(x_[i+1]-x_[i  ]);
+        Real mip1 = (y_[i+2]-y_[i+1])/(x_[i+2]-x_[i+1]);
+        Real w1 = abs(mip1-mi) + abs(mip1+mi)/2;
+        Real w2 = abs(mim1-mim2) + abs(mim1+mim2)/2;
+        s_[i] = (w1*mim1 + w2*mi)/(w1+w2);
+        if (isnan(s_[i])) {
+            s_[i] = 0;
+        }
+
+        Real mnm4 = (y_[n-3]-y_[n-4])/(x_[n-3]-x_[n-4]);
+        Real mnm3 = (y_[n-2]-y_[n-3])/(x_[n-2]-x_[n-3]);
+        Real mnm2 = (y_[n-1]-y_[n-2])/(x_[n-1]-x_[n-2]);
+        Real mnm1 = 2*mnm2 - mnm3;
+        Real mn = 2*mnm1 - mnm2;
+        w1 = abs(mnm1 - mnm2) + abs(mnm1+mnm2)/2;
+        w2 = abs(mnm3 - mnm4) + abs(mnm3+mnm4)/2;
+
+        s_[n-2] = (w1*mnm3 + w2*mnm2)/(w1 + w2);
+        if (isnan(s_[n-2])) {
+            s_[n-2] = 0;
+        }
+
+        w1 = abs(mn - mnm1) + abs(mn+mnm1)/2;
+        w2 = abs(mnm2 - mnm3) + abs(mnm2+mnm3)/2;
+
         s_[n-1] = (w1*mnm2 + w2*mnm1)/(w1+w2);
         if (isnan(s_[n-1])) {
             s_[n-1] = 0;
         }
-
     }
 
     Real operator()(Real x) const {
         if  (x < x_[0] || x > x_.back()) {
             std::ostringstream oss;
-            oss << "Requested abscissa x = " << x << ", which is outside of allowed range [" 
+            oss << "Requested abscissa x = " << x << ", which is outside of allowed range ["
                 << x_[0] << ", " << x_.back() << "]";
             throw std::domain_error(oss.str());
         }
@@ -137,6 +197,31 @@ public:
               + t*t*(y1*(3-2*t) + dx*s1*(t-1));
         return y;
     }
+
+    Real prime(Real x) const {
+        if  (x < x_[0] || x > x_.back()) {
+            std::ostringstream oss;
+            oss << "Requested abscissa x = " << x << ", which is outside of allowed range ["
+                << x_[0] << ", " << x_.back() << "]";
+            throw std::domain_error(oss.str());
+        }
+        if (x == x_.back()) {
+            return s_.back();
+        }
+
+        auto it = std::upper_bound(x_.begin(), x_.end(), x);
+        auto i = std::distance(x_.begin(), it) -1;
+        Real x0 = *(it-1);
+        Real x1 = *it;
+        Real s0 = s_[i];
+        Real s1 = s_[i+1];
+
+        // Ridiculous linear interpolation. Fine for now:
+        Real numerator = s0*(x1-x) + s1*(x-x0);
+        Real denominator = x1 - x0;
+        return numerator/denominator;
+    }
+
 
     friend std::ostream& operator<<(std::ostream & os, const makima_detail & m)
     {

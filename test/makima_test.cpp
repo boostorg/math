@@ -10,6 +10,7 @@
 #include <utility>
 #include <random>
 #include <boost/math/interpolators/makima.hpp>
+#include <boost/circular_buffer.hpp>
 #ifdef BOOST_HAS_FLOAT128
 #include <boost/multiprecision/float128.hpp>
 using boost::multiprecision::float128;
@@ -34,7 +35,29 @@ void test_constant()
 
     for (Real t = x[0]; t <= x.back(); t += 0.25) {
         CHECK_ULP_CLOSE(Real(7), akima(t), 2);
+        CHECK_ULP_CLOSE(Real(0), akima.prime(t), 2);
     }
+
+    boost::circular_buffer<Real> x_buf(x.size());
+    for (auto & t : x) {
+        x_buf.push_back(t);
+    }
+
+    boost::circular_buffer<Real> y_buf(x.size());
+    for (auto & t : y) {
+        y_buf.push_back(t);
+    }
+
+    auto circular_akima = makima(std::move(x_buf), std::move(y_buf));
+
+    for (Real t = x[0]; t <= x.back(); t += 0.25) {
+        CHECK_ULP_CLOSE(Real(7), circular_akima(t), 2);
+        CHECK_ULP_CLOSE(Real(0), akima.prime(t), 2);
+    }
+
+    circular_akima.push_back(x.back() + 1, 7);
+    CHECK_ULP_CLOSE(Real(0), circular_akima.prime(x.back()+1), 2);
+
 }
 
 template<typename Real>
@@ -68,6 +91,38 @@ void test_linear()
     for (Real t = 0; t < x.back(); t += 0.5) {
         CHECK_ULP_CLOSE(t, akima(t), 0);
     }
+
+    x_copy = x;
+    y_copy = y;
+    // Test endpoint derivatives:
+    akima = makima(std::move(x_copy), std::move(y_copy), Real(1), Real(1));
+    for (Real t = 0; t < x.back(); t += 0.5) {
+        CHECK_ULP_CLOSE(t, akima(t), 0);
+    }
+
+
+    boost::circular_buffer<Real> x_buf(x.size());
+    for (auto & t : x) {
+        x_buf.push_back(t);
+    }
+
+    boost::circular_buffer<Real> y_buf(x.size());
+    for (auto & t : y) {
+        y_buf.push_back(t);
+    }
+
+    auto circular_akima = makima(std::move(x_buf), std::move(y_buf));
+
+    for (Real t = x[0]; t <= x.back(); t += 0.25) {
+        CHECK_ULP_CLOSE(t, circular_akima(t), 2);
+        CHECK_ULP_CLOSE(Real(1), circular_akima.prime(t), 2);
+    }
+
+    circular_akima.push_back(x.back() + 1, y.back()+1);
+
+    CHECK_ULP_CLOSE(Real(y.back() + 1), circular_akima(Real(x.back()+1)), 2);
+    CHECK_ULP_CLOSE(Real(1), circular_akima.prime(Real(x.back()+1)), 2);
+
 }
 
 template<typename Real>
@@ -89,6 +144,16 @@ void test_interpolation_condition()
         auto x_copy = x;
         auto y_copy = y;
         auto s = makima(std::move(x_copy), std::move(y_copy));
+        //std::cout << "s = " << s << "\n";
+        for (size_t i = 0; i < x.size(); ++i) {
+            CHECK_ULP_CLOSE(y[i], s(x[i]), 2);
+        }
+
+        x_copy = x;
+        y_copy = y;
+        // The interpolation condition is not affected by the endpoint derivatives, even though these derivatives might be super weird:
+        s = makima(std::move(x_copy), std::move(y_copy), Real(0), Real(0));
+        //std::cout << "s = " << s << "\n";
         for (size_t i = 0; i < x.size(); ++i) {
             CHECK_ULP_CLOSE(y[i], s(x[i]), 2);
         }

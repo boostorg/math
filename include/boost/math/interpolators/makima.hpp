@@ -19,17 +19,27 @@ class makima {
 public:
     using Real = typename RandomAccessContainer::value_type;
 
-    makima(RandomAccessContainer && x, RandomAccessContainer && y) : impl_(std::make_shared<detail::makima_detail<RandomAccessContainer>>(std::move(x), std::move(y)))
+    makima(RandomAccessContainer && x, RandomAccessContainer && y,
+           Real left_endpoint_derivative = std::numeric_limits<Real>::quiet_NaN(),
+           Real right_endpoint_derivative = std::numeric_limits<Real>::quiet_NaN()) : impl_(std::make_shared<detail::makima_detail<RandomAccessContainer>>(std::move(x), std::move(y), left_endpoint_derivative, right_endpoint_derivative))
     {}
 
     Real operator()(Real x) const {
         return impl_->operator()(x);
     }
 
+    Real prime(Real x) const {
+        return impl_->prime(x);
+    }
+
     friend std::ostream& operator<<(std::ostream & os, const makima & m)
     {
         os << *m.impl_;
         return os;
+    }
+
+    void push_back(Real x, Real y) {
+        impl_->push_back(x, y);
     }
 
 private:
