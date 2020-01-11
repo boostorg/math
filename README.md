@@ -29,7 +29,7 @@ A comprehensive tutorial is provided, along with a series of worked examples ill
 
 Provides a small number of high quality special functions; initially these were concentrated on functions used in statistical applications along with those in the Technical Report on C++ Library Extensions.
 
-The function families currently implemented are the gamma, beta & error functions along with the incomplete gamma and beta functions (four variants of each) and all the possible inverses of these, plus the digamma, various factorial functions, Bessel functions, elliptic integrals, sinus cardinals (along with their hyperbolic variants), inverse hyperbolic functions, Legrendre/Laguerre/Hermite/Chebyshev polynomials and various special power and logarithmic functions.
+The function families currently implemented are the gamma, beta & error functions along with the incomplete gamma and beta functions (four variants of each) and all the possible inverses of these, plus the digamma, various factorial functions, Bessel functions, elliptic integrals, hypergeometrics, sinus cardinals (along with their hyperbolic variants), inverse hyperbolic functions, Legrendre/Laguerre/Hermite/Chebyshev polynomials and various special power and logarithmic functions.
 
 All the implementations are fully generic and support the use of arbitrary "real-number" types, including Boost.Multiprecision, although they are optimised for use with types with known significand (or mantissa) sizes: typically float, double or long double.
 
@@ -47,7 +47,7 @@ Tools for manipulating polynomials and for efficient evaluation of rationals or 
 
 ### Interpolation
 
-Function interpolation via barycentric rational interpolation, compactly supported cubic B-splines, and the Chebyshev transform.
+Function interpolation via barycentric rational interpolation, compactly supported quadartic, cubic, and quintic B-splines, the Chebyshev transform, trigonometric polynomials, Makima, pchip, and cubic Hermite splines.
 
 ### Numerical Integration and Differentiation
 
