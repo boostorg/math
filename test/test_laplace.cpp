@@ -43,8 +43,8 @@ Test 5: test_mmm_moments()
 
          standard_deviation = sqrt(2)*scale
          skewness == 0
-         kurtoris == 6
-         excess kurtoris == 3
+         kurtosis == 6
+         excess kurtosis == 3
 
 Test 6: test_complemented()
          Test the cdf an quantile complemented function.

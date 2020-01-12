@@ -581,7 +581,7 @@ namespace boost
             // that each term decreases in size by a factor of 3.  However,
             // that assumption does not apply here, as the underlying T1 series can 
             // go quite strongly divergent in the early terms, before strongly
-            // converging later.  Various "guestimates" have been tried to take account
+            // converging later.  Various "guesstimates" have been tried to take account
             // of this, but they don't always work.... so instead set "n" to the 
             // largest value that won't cause overflow later, and abort iteration
             // when the last accelerated term was small enough...
@@ -699,7 +699,7 @@ namespace boost
             // that each term decreases in size by a factor of 3.  However,
             // that assumption does not apply here, as the underlying T1 series can 
             // go quite strongly divergent in the early terms, before strongly
-            // converging later.  Various "guestimates" have been tried to take account
+            // converging later.  Various "guesstimates" have been tried to take account
             // of this, but they don't always work.... so instead set "n" to the 
             // largest value that won't cause overflow later, and abort iteration
             // when the last accelerated term was small enough...

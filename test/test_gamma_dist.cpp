@@ -213,7 +213,7 @@ void test_spots(RealType)
 
     BOOST_CHECK_CLOSE(
        median(dist), static_cast<RealType>(23.007748327502412), // double precision test value
-       (std::max)(tol2, static_cast<RealType>(std::numeric_limits<double>::epsilon() * 2 * 100))); // 2 eps as persent
+       (std::max)(tol2, static_cast<RealType>(std::numeric_limits<double>::epsilon() * 2 * 100))); // 2 eps as percent
 
     using std::log;
     RealType expected_entropy = RealType(8) + log(RealType(3)) + boost::math::lgamma(RealType(8)) - 7*boost::math::digamma(RealType(8));
