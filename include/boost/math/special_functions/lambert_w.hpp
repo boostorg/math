@@ -993,7 +993,7 @@ T lambert_w0_approx(T z)
 //! float precision polynomials are used for 32-bit (usually float) precision (for speed)
 //! double precision polynomials are used for 64-bit (usually double) precision.
 //! For higher precisions, a 64-bit double approximation is computed first,
-//! and then refined using Halley interations.
+//! and then refined using Halley iterations.
 
 template <class T>
 inline T get_near_singularity_param(T z)

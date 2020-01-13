@@ -225,11 +225,11 @@ void test_spots(RealType)
    BOOST_CHECK_CLOSE(
     skewness(dist)
     , static_cast<RealType>(729551.38304660255658441529235697L), tolerance);
-   // kertosis:
+   // kurtosis:
    BOOST_CHECK_CLOSE(
     kurtosis(dist)
     , static_cast<RealType>(4312295840576303.2363383232038251L), tolerance);
-   // kertosis excess:
+   // kurtosis excess:
    BOOST_CHECK_CLOSE(
     kurtosis_excess(dist)
     , static_cast<RealType>(4312295840576300.2363383232038251L), tolerance);

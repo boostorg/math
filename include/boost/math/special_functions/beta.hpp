@@ -782,7 +782,7 @@ inline T rising_factorial_ratio(T a, T b, int k)
 // Routine for a > 15, b < 1
 //
 // Begin by figuring out how large our table of Pn's should be,
-// quoted accuracies are "guestimates" based on empirical observation.
+// quoted accuracies are "guesstimates" based on empirical observation.
 // Note that the table size should never exceed the size of our
 // tables of factorials.
 //

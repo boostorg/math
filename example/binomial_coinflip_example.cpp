@@ -147,8 +147,8 @@ Finally, print two tables of probability for the /exactly/ and /at least/ a numb
     } // for i
     cout << endl;
 
-    // Tabulate the probability of getting between zero heads and 0 upto 10 heads.
-    cout << "Probability of getting upto (<=) heads" << endl;
+    // Tabulate the probability of getting between zero heads and 0 up to 10 heads.
+    cout << "Probability of getting up to (<=) heads" << endl;
     for (int successes = 0; successes <= flips; successes++)
     { // Say success means getting a head
       // (equally success could mean getting a tail).
@@ -226,7 +226,7 @@ Probability of getting exactly (==) heads
 9      0.009766   or 1 in 102.4, or 0.9766%
 10     0.0009766  or 1 in 1024, or 0.09766%
 
-Probability of getting upto (<=) heads
+Probability of getting up to (<=) heads
 0         0.0009766  or 1 in 1024, or 0.09766%
 1         0.01074    or 1 in 93.09, or 1.074%
 2         0.05469    or 1 in 18.29, or 5.469%
