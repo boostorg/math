@@ -63,7 +63,7 @@ inline R convert_to(const char* s)
       return 0;
    }
 }
-
+#undef SC_
 #define SC_(x) convert_to<T>(BOOST_STRINGIZE(x))
 #endif
 
@@ -162,7 +162,7 @@ BOOST_AUTO_TEST_CASE( test_main )
 #endif
 #endif
 #ifdef TEST_CPP_DEC_FLOAT
-  typedef boost::multiprecision::mp_number<boost::multiprecision::cpp_dec_float<35> > cpp_dec_float_35;
+  typedef boost::multiprecision::number<boost::multiprecision::cpp_dec_float<35> > cpp_dec_float_35;
   test_owens_t(cpp_dec_float_35(0), "cpp_dec_float_35"); // Test real concept.
   test_owens_t(boost::multiprecision::cpp_dec_float_50(0), "cpp_dec_float_50"); // Test real concept.
   test_owens_t(boost::multiprecision::cpp_dec_float_100(0), "cpp_dec_float_100"); // Test real concept.
