@@ -102,33 +102,6 @@ inline T erf_asymptotic_limit()
       precision_type::value <= 64 ? 64 :
       precision_type::value <= 113 ? 113 : 0
    > tag_type;
-#if 0
-   typedef typename mpl::if_<
-      mpl::less_equal<precision_type, boost::integral_constant<int, 24> >,
-      typename mpl::if_<
-         mpl::less_equal<precision_type, boost::integral_constant<int, 0> >,
-      boost::integral_constant<int, 0>,
-      boost::integral_constant<int, 24>
-      >::type,
-      typename mpl::if_<
-         mpl::less_equal<precision_type, boost::integral_constant<int, 53> >,
-         boost::integral_constant<int, 53>,
-         typename mpl::if_<
-            mpl::less_equal<precision_type, boost::integral_constant<int, 64> >,
-            boost::integral_constant<int, 64>,
-            typename mpl::if_<
-               mpl::less_equal<precision_type, boost::integral_constant<int, 106> >,
-               boost::integral_constant<int, 106>,
-               typename mpl::if_<
-                  mpl::less_equal<precision_type, boost::integral_constant<int, 113> >,
-                  boost::integral_constant<int, 113>,
-                  boost::integral_constant<int, 0>
-               >::type
-            >::type
-         >::type
-      >::type
-   >::type tag_type;
-#endif
    return erf_asymptotic_limit_N(tag_type());
 }
 
@@ -1202,25 +1175,7 @@ inline typename tools::promote_args<T>::type erf(T z, const Policy& /* pol */)
       precision_type::value <= 64 ? 64 :
       precision_type::value <= 113 ? 113 : 0
    > tag_type;
-#if 0
-   typedef typename mpl::if_<
-      mpl::less_equal<precision_type, boost::integral_constant<int, 0> >,
-      boost::integral_constant<int, 0>,
-      typename mpl::if_<
-         mpl::less_equal<precision_type, boost::integral_constant<int, 53> >,
-         boost::integral_constant<int, 53>,  // double
-         typename mpl::if_<
-            mpl::less_equal<precision_type, boost::integral_constant<int, 64> >,
-            boost::integral_constant<int, 64>, // 80-bit long double
-            typename mpl::if_<
-               mpl::less_equal<precision_type, boost::integral_constant<int, 113> >,
-               boost::integral_constant<int, 113>, // 128-bit long double
-               boost::integral_constant<int, 0> // too many bits, use generic version.
-            >::type
-         >::type
-      >::type
-   >::type tag_type;
-#endif
+
    BOOST_MATH_INSTRUMENT_CODE("tag_type = " << typeid(tag_type).name());
 
    detail::erf_initializer<value_type, forwarding_policy, tag_type>::force_instantiate(); // Force constants to be initialized before main
@@ -1255,25 +1210,7 @@ inline typename tools::promote_args<T>::type erfc(T z, const Policy& /* pol */)
       precision_type::value <= 64 ? 64 :
       precision_type::value <= 113 ? 113 : 0
    > tag_type;
-#if 0
-   typedef typename mpl::if_<
-      mpl::less_equal<precision_type, boost::integral_constant<int, 0> >,
-      boost::integral_constant<int, 0>,
-      typename mpl::if_<
-         mpl::less_equal<precision_type, boost::integral_constant<int, 53> >,
-         boost::integral_constant<int, 53>,  // double
-         typename mpl::if_<
-            mpl::less_equal<precision_type, boost::integral_constant<int, 64> >,
-            boost::integral_constant<int, 64>, // 80-bit long double
-            typename mpl::if_<
-               mpl::less_equal<precision_type, boost::integral_constant<int, 113> >,
-               boost::integral_constant<int, 113>, // 128-bit long double
-               boost::integral_constant<int, 0> // too many bits, use generic version.
-            >::type
-         >::type
-      >::type
-   >::type tag_type;
-#endif
+
    BOOST_MATH_INSTRUMENT_CODE("tag_type = " << typeid(tag_type).name());
 
    detail::erf_initializer<value_type, forwarding_policy, tag_type>::force_instantiate(); // Force constants to be initialized before main

@@ -151,16 +151,7 @@ namespace boost
                precision_type::value <= 0 ? 64 :
                precision_type::value <= 53 ? 53 : 64
             > tag_type;
-#if 0
-            typedef typename mpl::if_<
-               mpl::or_<
-                  mpl::less_equal<precision_type, boost::integral_constant<int, 0> >,
-                  mpl::greater<precision_type, boost::integral_constant<int, 53> >
-               >,
-               boost::integral_constant<int, 64>,
-               boost::integral_constant<int, 53>
-            >::type tag_type;
-#endif
+
             return owens_t_get_order_imp(icode, r, tag_type());
          }
 
@@ -365,16 +356,7 @@ namespace boost
                precision_type::value <= 0 ? 64 :
                precision_type::value <= 53 ? 53 : 64
             > tag_type;
-#if 0
-            typedef typename mpl::if_<
-               mpl::or_<
-                  mpl::less_equal<precision_type, boost::integral_constant<int, 0> >,
-                  mpl::greater<precision_type, boost::integral_constant<int, 53> >
-               >,
-               boost::integral_constant<int, 64>,
-               boost::integral_constant<int, 53>
-            >::type tag_type;
-#endif
+
             return owens_t_T3_imp(h, a, ah, tag_type());
         }
 
@@ -533,16 +515,7 @@ namespace boost
                precision_type::value <= 0 ? 64 :
                precision_type::value <= 53 ? 53 : 64
             > tag_type;
-#if 0
-            typedef typename mpl::if_<
-               mpl::or_<
-                  mpl::less_equal<precision_type, boost::integral_constant<int, 0> >,
-                  mpl::greater<precision_type, boost::integral_constant<int, 53> >
-               >,
-               boost::integral_constant<int, 64>,
-               boost::integral_constant<int, 53>
-            >::type tag_type;
-#endif
+
             return owens_t_T5_imp(h, a, tag_type());
         }
 
@@ -1002,17 +975,7 @@ namespace boost
                precision_type::value <= 0 ? 0 :
                precision_type::value <= 64 ? 64 : 65
             > tag_type;
-#if 0
-            typedef typename mpl::if_c<
-               precision_type::value == 0,
-               boost::integral_constant<int, 0>,
-               typename mpl::if_c<
-                  precision_type::value <= 64,
-                  boost::integral_constant<int, 64>,
-                  boost::integral_constant<int, 65>
-               >::type
-            >::type tag_type;
-#endif
+
             return owens_t_dispatch(h, a, ah, pol, tag_type());
          }
          // compute Owen's T function, T(h,a), for arbitrary values of h and a
@@ -1103,17 +1066,7 @@ namespace boost
             precision_type::value <= 0 ? 0 :
             precision_type::value <= 64 ? 64 : 65
          > tag_type;
-#if 0
-         typedef typename mpl::if_c<
-               precision_type::value == 0,
-               boost::integral_constant<int, 0>,
-               typename mpl::if_c<
-                  precision_type::value <= 64,
-                  boost::integral_constant<int, 64>,
-                  boost::integral_constant<int, 65>
-               >::type
-            >::type tag_type;
-#endif
+
          detail::owens_t_initializer<result_type, Policy, tag_type>::force_instantiate();
             
          return policies::checked_narrowing_cast<result_type, Policy>(detail::owens_t(static_cast<value_type>(h), static_cast<value_type>(a), pol), "boost::math::owens_t<%1%>(%1%,%1%)");

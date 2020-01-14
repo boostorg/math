@@ -1074,26 +1074,7 @@ inline typename tools::promote_args<T>::type zeta(T s, const Policy&)
       precision_type::value <= 64 ? 64 :
       precision_type::value <= 113 ? 113 : 0
    > tag_type;
-#if 0
-   typedef typename mpl::if_<
-      mpl::less_equal<precision_type, boost::integral_constant<int, 0> >,
-      boost::integral_constant<int, 0>,
-      typename mpl::if_<
-         mpl::less_equal<precision_type, boost::integral_constant<int, 53> >,
-      boost::integral_constant<int, 53>,  // double
-         typename mpl::if_<
-            mpl::less_equal<precision_type, boost::integral_constant<int, 64> >,
-            boost::integral_constant<int, 64>, // 80-bit long double
-            typename mpl::if_<
-               mpl::less_equal<precision_type, boost::integral_constant<int, 113> >,
-               boost::integral_constant<int, 113>, // 128-bit long double
-               boost::integral_constant<int, 0> // too many bits, use generic version.
-            >::type
-         >::type
-      >::type
-   >::type tag_type;
-   //typedef boost::integral_constant<int, 0> tag_type;
-#endif
+
    detail::zeta_initializer<value_type, forwarding_policy, tag_type>::force_instantiate();
 
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::zeta_imp(

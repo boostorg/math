@@ -97,37 +97,6 @@ namespace boost{ namespace math
 #endif
          (real_precision::value <= max_string_digits) ? construct_from_string : real_precision::value
       > type;
-#if 0
-      typedef typename mpl::if_<
-         mpl::and_<boost::is_convertible<float, Real>, boost::integral_constant<bool, t1::value <= t2::value>, mpl::bool_<0 != t1::value> >,
-         boost::integral_constant<int, construct_from_float>,
-         typename mpl::if_<
-            mpl::and_<boost::is_convertible<double, Real>, boost::integral_constant<bool, t1::value <= t3::value>, mpl::bool_<0 != t1::value> >,
-            boost::integral_constant<int, construct_from_double>,
-            typename mpl::if_<
-               mpl::and_<boost::is_convertible<long double, Real>, boost::integral_constant<bool, t1::value <= t4::value>, mpl::bool_<0 != t1::value> >,
-               boost::integral_constant<int, construct_from_long_double>,
-#ifdef BOOST_MATH_USE_FLOAT128
-               typename mpl::if_<
-               mpl::and_<boost::is_convertible<BOOST_MATH_FLOAT128_TYPE, Real>, boost::integral_constant<bool, t1::value <= t5::value>, mpl::bool_<0 != t1::value> >,
-                  boost::integral_constant<int, construct_from_float128>,
-                  typename mpl::if_<
-                     mpl::and_<boost::integral_constant<bool, t1::value <= max_string_digits>, mpl::bool_<0 != t1::value> >,
-                     boost::integral_constant<int, construct_from_string>,
-                     boost::integral_constant<int, t1::value>
-                  >::type
-               >::type
-#else
-               typename mpl::if_<
-                  mpl::and_<boost::integral_constant<bool, t1::value <= max_string_digits>, mpl::bool_<0 != t1::value> >,
-                  boost::integral_constant<int, construct_from_string>,
-                  boost::integral_constant<int, t1::value>
-               >::type
-#endif
-            >::type
-         >::type
-      >::type type;
-#endif
    };
 
 #ifdef BOOST_HAS_THREADS

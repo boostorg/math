@@ -440,24 +440,6 @@ inline typename tools::promote_args<T>::type
       precision_type::value <= 64 ? 64 :
       precision_type::value <= 113 ? 113 : 0
    > tag_type;
-#if 0
-   typedef typename mpl::if_<
-      mpl::or_<
-         mpl::less_equal<precision_type, boost::integral_constant<int, 0> >,
-         mpl::greater<precision_type, boost::integral_constant<int, 114> >
-      >,
-      boost::integral_constant<int, 0>,
-      typename mpl::if_<
-         mpl::less<precision_type, boost::integral_constant<int, 54> >,
-         boost::integral_constant<int, 53>,
-         typename mpl::if_<
-            mpl::less<precision_type, boost::integral_constant<int, 65> >,
-            boost::integral_constant<int, 64>,
-            boost::integral_constant<int, 113>
-         >::type
-      >::type
-   >::type tag_type;
-#endif
    typedef typename policies::normalise<
       Policy,
       policies::promote_float<false>,

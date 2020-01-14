@@ -434,13 +434,6 @@ typename tools::promote_args<T>::type erfc_inv(T z, const Policy& pol)
       precision_type::value <= 0 ? 0 :
       precision_type::value <= 64 ? 64 : 0
    > tag_type;
-#if 0
-   typedef typename mpl::if_<
-      mpl::or_<mpl::less_equal<precision_type, boost::integral_constant<int, 0> >, mpl::greater<precision_type, boost::integral_constant<int, 64> > >,
-      boost::integral_constant<int, 0>,
-      boost::integral_constant<int, 64>
-   >::type tag_type;
-#endif
    //
    // Likewise use internal promotion, so we evaluate at a higher
    // precision internally if it's appropriate:
@@ -506,13 +499,6 @@ typename tools::promote_args<T>::type erf_inv(T z, const Policy& pol)
       precision_type::value <= 0 ? 0 :
       precision_type::value <= 64 ? 64 : 0
    > tag_type;
-#if 0
-   typedef typename mpl::if_<
-      mpl::or_<mpl::less_equal<precision_type, boost::integral_constant<int, 0> >, mpl::greater<precision_type, boost::integral_constant<int, 64> > >,
-      boost::integral_constant<int, 0>,
-      boost::integral_constant<int, 64>
-   >::type tag_type;
-#endif
    //
    // Likewise use internal promotion, so we evaluate at a higher
    // precision internally if it's appropriate:

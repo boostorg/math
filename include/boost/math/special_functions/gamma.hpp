@@ -256,21 +256,7 @@ T lgamma_imp(T z, const Policy& pol, const Lanczos& l, int* sign = 0)
          precision_type::value <= 64 ? 64 :
          precision_type::value <= 113 ? 113 : 0
       > tag_type;
-#if 0
-      typedef typename mpl::if_<
-         mpl::and_<
-            mpl::less_equal<precision_type, boost::integral_constant<int, 64> >,
-            mpl::greater<precision_type, boost::integral_constant<int, 0> >
-         >,
-         boost::integral_constant<int, 64>,
-         typename mpl::if_<
-            mpl::and_<
-               mpl::less_equal<precision_type, boost::integral_constant<int, 113> >,
-               mpl::greater<precision_type, boost::integral_constant<int, 0> >
-            >,
-            boost::integral_constant<int, 113>, boost::integral_constant<int, 0> >::type
-          >::type tag_type;
-#endif
+
       result = lgamma_small_imp<T>(z, T(z - 1), T(z - 2), tag_type(), pol, l);
    }
    else if((z >= 3) && (z < 100) && (std::numeric_limits<T>::max_exponent >= 1024))
@@ -726,22 +712,7 @@ T tgammap1m1_imp(T dz, Policy const& pol, const Lanczos& l)
       precision_type::value <= 64 ? 64 :
       precision_type::value <= 113 ? 113 : 0
    > tag_type;
-#if 0
-   typedef typename mpl::if_<
-      mpl::or_<
-         mpl::less_equal<precision_type, boost::integral_constant<int, 0> >,
-         mpl::greater<precision_type, boost::integral_constant<int, 113> >
-      >,
-      typename mpl::if_<
-         mpl::and_<is_same<Lanczos, lanczos::lanczos24m113>, mpl::greater<precision_type, boost::integral_constant<int, 0> > >,
-         boost::integral_constant<int, 113>,
-         boost::integral_constant<int, 0>
-      >::type,
-      typename mpl::if_<
-         mpl::less_equal<precision_type, boost::integral_constant<int, 64> >,
-         boost::integral_constant<int, 64>, boost::integral_constant<int, 113> >::type
-       >::type tag_type;
-#endif
+
    T result;
    if(dz < 0)
    {
@@ -1460,22 +1431,7 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert,
             precision_type::value <= 64 ? 64 :
             precision_type::value <= 113 ? 113 : 0
          > tag_type;
-#if 0
-         typedef typename mpl::if_<
-            mpl::or_<mpl::equal_to<precision_type, boost::integral_constant<int, 0> >,
-            mpl::greater<precision_type, boost::integral_constant<int, 113> > >,
-            boost::integral_constant<int, 0>,
-            typename mpl::if_<
-               mpl::less_equal<precision_type, boost::integral_constant<int, 53> >,
-               boost::integral_constant<int, 53>,
-               typename mpl::if_<
-                  mpl::less_equal<precision_type, boost::integral_constant<int, 64> >,
-                  boost::integral_constant<int, 64>,
-                  boost::integral_constant<int, 113>
-               >::type
-            >::type
-         >::type tag_type;
-#endif
+
          result = igamma_temme_large(a, x, pol, static_cast<tag_type const*>(0));
          if(x >= a)
             invert = !invert;
@@ -1845,22 +1801,7 @@ struct igamma_initializer
             precision_type::value <= 64 ? 64 :
             precision_type::value <= 113 ? 113 : 0
          > tag_type;
-#if 0
-         typedef typename mpl::if_<
-            mpl::or_<mpl::equal_to<precision_type, boost::integral_constant<int, 0> >,
-            mpl::greater<precision_type, boost::integral_constant<int, 113> > >,
-            boost::integral_constant<int, 0>,
-            typename mpl::if_<
-               mpl::less_equal<precision_type, boost::integral_constant<int, 53> >,
-               boost::integral_constant<int, 53>,
-               typename mpl::if_<
-                  mpl::less_equal<precision_type, boost::integral_constant<int, 64> >,
-                  boost::integral_constant<int, 64>,
-                  boost::integral_constant<int, 113>
-               >::type
-            >::type
-         >::type tag_type;
-#endif
+
          do_init(tag_type());
       }
       template <int N>
@@ -1901,21 +1842,7 @@ struct lgamma_initializer
             precision_type::value <= 64 ? 64 :
             precision_type::value <= 113 ? 113 : 0
          > tag_type;
-#if 0
-         typedef typename mpl::if_<
-            mpl::and_<
-               mpl::less_equal<precision_type, boost::integral_constant<int, 64> >,
-               mpl::greater<precision_type, boost::integral_constant<int, 0> >
-            >,
-            boost::integral_constant<int, 64>,
-            typename mpl::if_<
-               mpl::and_<
-                  mpl::less_equal<precision_type, boost::integral_constant<int, 113> >,
-                  mpl::greater<precision_type, boost::integral_constant<int, 0> >
-               >,
-               boost::integral_constant<int, 113>, boost::integral_constant<int, 0> >::type
-             >::type tag_type;
-#endif
+
          do_init(tag_type());
       }
       static void do_init(const boost::integral_constant<int, 64>&)
