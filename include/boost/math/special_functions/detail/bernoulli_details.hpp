@@ -91,7 +91,7 @@ private:
 };
 
 template <class T, class Policy>
-inline std::size_t find_bernoulli_overflow_limit(const mpl::false_&)
+inline std::size_t find_bernoulli_overflow_limit(const boost::false_type&)
 {
    // Set a limit on how large the result can ever be:
    static const double max_result = static_cast<double>((std::numeric_limits<std::size_t>::max)() - 1000u);
@@ -108,7 +108,7 @@ inline std::size_t find_bernoulli_overflow_limit(const mpl::false_&)
 }
 
 template <class T, class Policy>
-inline std::size_t find_bernoulli_overflow_limit(const mpl::true_&)
+inline std::size_t find_bernoulli_overflow_limit(const boost::true_type&)
 {
    return max_bernoulli_index<bernoulli_imp_variant<T>::value>::value;
 }
@@ -118,7 +118,7 @@ std::size_t b2n_overflow_limit()
 {
    // This routine is called at program startup if it's called at all:
    // that guarantees safe initialization of the static variable.
-   typedef mpl::bool_<(bernoulli_imp_variant<T>::value >= 1) && (bernoulli_imp_variant<T>::value <= 3)> tag_type;
+   typedef boost::integral_constant<bool, (bernoulli_imp_variant<T>::value >= 1) && (bernoulli_imp_variant<T>::value <= 3)> tag_type;
    static const std::size_t lim = find_bernoulli_overflow_limit<T, Policy>(tag_type());
    return lim;
 }

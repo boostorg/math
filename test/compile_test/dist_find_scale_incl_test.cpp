@@ -36,8 +36,8 @@ T quantile(const boost::math::complemented2_type<test_distribution<T, Policy>, T
 
 namespace boost{ namespace math{ namespace tools{
 
-   template <class T, class Policy> struct is_distribution<test_distribution<T, Policy> > : public mpl::true_{};
-   template <class T, class Policy> struct is_scaled_distribution<test_distribution<T, Policy> > : public mpl::true_{};
+   template <class T, class Policy> struct is_distribution<test_distribution<T, Policy> > : public true_type{};
+   template <class T, class Policy> struct is_scaled_distribution<test_distribution<T, Policy> > : public true_type{};
 
 }}}
 

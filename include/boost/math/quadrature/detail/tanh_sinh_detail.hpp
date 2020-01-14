@@ -40,7 +40,7 @@ class tanh_sinh_detail
 public:
     tanh_sinh_detail(size_t max_refinements, const Real& min_complement) : m_max_refinements(max_refinements)
     {
-       typedef mpl::int_<initializer_selector> tag_type;
+       typedef boost::integral_constant<int, initializer_selector> tag_type;
        init(min_complement, tag_type());
     }
 
@@ -88,12 +88,12 @@ private:
       return m_first_complements[n];
    }
 
-   void init(const Real& min_complement, const mpl::int_<0>&);
-   void init(const Real& min_complement, const mpl::int_<1>&);
-   void init(const Real& min_complement, const mpl::int_<2>&);
-   void init(const Real& min_complement, const mpl::int_<3>&);
+   void init(const Real& min_complement, const boost::integral_constant<int, 0>&);
+   void init(const Real& min_complement, const boost::integral_constant<int, 1>&);
+   void init(const Real& min_complement, const boost::integral_constant<int, 2>&);
+   void init(const Real& min_complement, const boost::integral_constant<int, 3>&);
 #ifdef BOOST_HAS_FLOAT128
-   void init(const Real& min_complement, const mpl::int_<4>&);
+   void init(const Real& min_complement, const boost::integral_constant<int, 4>&);
 #endif
    void prune_to_min_complement(const Real& m);
    void extend_refinements()const
@@ -399,7 +399,7 @@ decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) tanh_sin
 }
 
 template<class Real, class Policy>
-void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const mpl::int_<0>&)
+void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const boost::integral_constant<int, 0>&)
 {
    using std::tanh;
    using std::sinh;
@@ -479,7 +479,7 @@ void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const mpl:
 #endif
 
 template<class Real, class Policy>
-void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const mpl::int_<1>&)
+void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const boost::integral_constant<int, 1>&)
 {
    m_inital_row_length = 4;
    m_abscissas.reserve(m_max_refinements + 1);
@@ -532,7 +532,7 @@ void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const mpl:
 }
 
 template<class Real, class Policy>
-void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const mpl::int_<2>&)
+void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const boost::integral_constant<int, 2>&)
 {
    m_inital_row_length = 5;
    m_abscissas.reserve(m_max_refinements + 1);
@@ -584,7 +584,7 @@ void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const mpl:
 }
 
 template<class Real, class Policy>
-void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const mpl::int_<3>&)
+void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const boost::integral_constant<int, 3>&)
 {
    m_inital_row_length = 9;
    m_abscissas.reserve(m_max_refinements + 1);
@@ -638,7 +638,7 @@ void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const mpl:
 #ifdef BOOST_HAS_FLOAT128
 
 template<class Real, class Policy>
-void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const mpl::int_<4>&)
+void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const boost::integral_constant<int, 4>&)
 {
    m_inital_row_length = 9;
    m_abscissas.reserve(m_max_refinements + 1);
