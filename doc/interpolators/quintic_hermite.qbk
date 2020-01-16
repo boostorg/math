@@ -80,7 +80,6 @@ Hence we can use `boost::circular_buffer` to do real-time interpolation.
 The following google benchmark demonstrates the cost of the call operator for this interpolator:
 
 ```
-Running ./bench.x
 Run on (16 X 4300 MHz CPU s)
 CPU Caches:
   L1 Data 32K (x8)
@@ -88,7 +87,6 @@ CPU Caches:
   L2 Unified 1024K (x8)
   L3 Unified 11264K (x1)
 Load Average: 0.92, 0.64, 0.35
-***WARNING*** CPU scaling is enabled, the benchmark real time measurements may be noisy and will incur extra overhead.
 -----------------------------------------------
 Benchmark                                  Time
 -----------------------------------------------
