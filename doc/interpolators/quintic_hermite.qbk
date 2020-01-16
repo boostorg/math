@@ -1,0 +1,81 @@
+[/
+Copyright (c) 2020 Nick Thompson
+Use, modification and distribution are subject to the
+Boost Software License, Version 1.0. (See accompanying file
+LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+]
+
+[section:quintic_hermite Quintic Hermite interpolation]
+
+[heading Synopsis]
+``
+#include <boost/math/interpolators/quintic_hermite.hpp>
+
+namespace boost::math::interpolators {
+
+template<class RandomAccessContainer>
+class quintic_hermite {
+public:
+    using Real = typename RandomAccessContainer::value_type;
+    quintic_hermite(RandomAccessContainer && x, RandomAccessContainer && y, RandomAccessContainer && dydx, RandomAccessContainer && d2ydx2)
+
+    Real operator()(Real x) const;
+
+    Real prime(Real x) const;
+
+    friend std::ostream& operator<<(std::ostream & os, const quintic_hermite & m);
+
+    void push_back(Real x, Real y, Real dydx, Real d2ydx2);
+};
+}
+``
+
+
+[heading Quintic Hermite Interpolation]
+
+The quintic Hermite interpolator takes a list of possibly non-uniformly spaced abscissas, ordinates, and their velocities and accelerations which are used to construct a quintic interpolating polynomial between segments.
+The interpolant is /C/[super 2] and its evaluation has [bigo](log(/N/)) complexity.
+An example usage is as follows:
+
+    std::vector<double> x{1,2,3, 4, 5, 6};
+    std::vector<double> y{7,8,9,10,11,12};
+    std::vector<double> dydx{1,1,1,1,1,1};
+    std::vector<double> d2ydx2{0,0,0,0,0,0};
+
+    using boost::math::interpolators::quintic_hermite;
+    auto spline = quintic_hermite(std::move(x), std::move(y), std::move(dydx), std::move(d2ydx2));
+    // evaluate at a point:
+    double z = spline(3.4);
+    // evaluate derivative at a point:
+    double zprime = spline.prime(3.4);
+
+Periodically, it is helpful to see what data the interpolator has.
+This can be achieved via
+
+    std::cout << spline << "\n";
+
+Note that the interpolator is pimpl'd, so that copying the class is cheap, and hence it can be shared between threads.
+(The call operator and `.prime()` are threadsafe.)
+
+One unique aspect of this interpolator is that it can be updated in constant time.
+Hence we can use `boost::circular_buffer` to do real-time interpolation.
+
+
+    #include <boost/circular_buffer.hpp>
+    ...
+    boost::circular_buffer<double> initial_x{1,2,3,4};
+    boost::circular_buffer<double> initial_y{4,5,6,7};
+    boost::circular_buffer<double> initial_dydx{1,1,1,1};
+    boost::circular_buffer<double> initial_d2ydx2{0,0,0,0};
+    auto circular_akima = quintic_hermite(std::move(initial_x), std::move(initial_y), std::move(initial_dydx), std::move(initial_d2ydx2));
+    // interpolate via call operation:
+    double y = circular_akima(3.5);
+    // add new data:
+    circular_akima.push_back(5, 8, 1, 0);
+    // interpolat at 4.5:
+    y = circular_akima(4.5);
+
+
+
+[endsect]
+[/section:makima]
