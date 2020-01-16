@@ -2,6 +2,7 @@
 #define BOOST_MATH_INTERPOLATORS_DETAIL_QUINTIC_HERMITE_DETAIL_HPP
 #include <algorithm>
 #include <stdexcept>
+#include <sstream>
 
 namespace boost::math::interpolators::detail {
 
