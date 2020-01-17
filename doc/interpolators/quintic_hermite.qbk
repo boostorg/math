@@ -90,29 +90,29 @@ Load Average: 0.92, 0.64, 0.35
 -----------------------------------------------
 Benchmark                                  Time
 -----------------------------------------------
-BMQuinticHermite<double>/8              10.5 ns
-BMQuinticHermite<double>/16             11.0 ns
-BMQuinticHermite<double>/32             11.5 ns
-BMQuinticHermite<double>/64             12.1 ns
-BMQuinticHermite<double>/128            12.8 ns
-BMQuinticHermite<double>/256            13.3 ns
-BMQuinticHermite<double>/512            13.9 ns
-BMQuinticHermite<double>/1024           14.6 ns
-BMQuinticHermite<double>/2048           15.4 ns
-BMQuinticHermite<double>/4096           16.3 ns
-BMQuinticHermite<double>/8192           17.5 ns
-BMQuinticHermite<double>/16384          18.8 ns
-BMQuinticHermite<double>/32768          20.0 ns
-BMQuinticHermite<double>/65536          21.1 ns
-BMQuinticHermite<double>/131072         22.1 ns
-BMQuinticHermite<double>/262144         23.2 ns
-BMQuinticHermite<double>/524288         24.2 ns
-BMQuinticHermite<double>/1048576        25.9 ns
-BMQuinticHermite<double>/2097152        27.5 ns
-BMQuinticHermite<double>/4194304        29.0 ns
-BMQuinticHermite<double>/8388608        30.2 ns
-BMQuinticHermite<double>/16777216       31.7 ns
-BMQuinticHermite<double>_BigO           1.35 lgN
+BMQuinticHermite<double>/8              8.14 ns
+BMQuinticHermite<double>/16             8.69 ns
+BMQuinticHermite<double>/32             9.42 ns
+BMQuinticHermite<double>/64             9.90 ns
+BMQuinticHermite<double>/128            10.4 ns
+BMQuinticHermite<double>/256            10.9 ns
+BMQuinticHermite<double>/512            11.6 ns
+BMQuinticHermite<double>/1024           12.3 ns
+BMQuinticHermite<double>/2048           12.8 ns
+BMQuinticHermite<double>/4096           13.6 ns
+BMQuinticHermite<double>/8192           14.6 ns
+BMQuinticHermite<double>/16384          15.5 ns
+BMQuinticHermite<double>/32768          17.4 ns
+BMQuinticHermite<double>/65536          18.5 ns
+BMQuinticHermite<double>/131072         18.8 ns
+BMQuinticHermite<double>/262144         19.8 ns
+BMQuinticHermite<double>/524288         20.5 ns
+BMQuinticHermite<double>/1048576        21.6 ns
+BMQuinticHermite<double>/2097152        22.5 ns
+BMQuinticHermite<double>/4194304        24.2 ns
+BMQuinticHermite<double>/8388608        26.6 ns
+BMQuinticHermite<double>/16777216       26.7 ns
+BMQuinticHermite<double>_BigO           1.14 lgN
 ```
 
 [endsect]
