@@ -130,7 +130,10 @@ public:
         return os;
     }
 
-private:
+    auto size() const {
+        return x_.size();
+    }
+
     RandomAccessContainer x_;
     RandomAccessContainer y_;
     RandomAccessContainer dydx_;
