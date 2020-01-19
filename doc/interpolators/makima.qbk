@@ -8,9 +8,8 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 [section:makima Modified Akima interpolation]
 
 [heading Synopsis]
-``
-  #include <boost/math/interpolators/makima.hpp>
-``
+
+    #include <boost/math/interpolators/makima.hpp>
 
     namespace boost::math::interpolators {
 
@@ -87,47 +86,7 @@ The modified Akima spline oscillates less than the cubic spline, but has less sm
 
 [heading Complexity and Performance]
 
-The call to the constructor requires [bigo](/N/) operations to compute the weighted slopes.
-Each call to the interpolant is [bigo](log(/N/)), where /N/ is the number of points to interpolate.
-
-A google benchmark demonstrating the performance of evaluating the spline is given below:
-
-```
-Run on (4 X 2700 MHz CPU s)
-CPU Caches:
-  L1 Data 32K (x2)
-  L1 Instruction 32K (x2)
-  L2 Unified 262K (x2)
-  L3 Unified 3145K (x1)
-Load Average: 2.08, 1.83, 1.96
----------------------------------------
-Benchmark                          Time
----------------------------------------
-BMMakima<double>/8              11.3 ns
-BMMakima<double>/16             11.5 ns
-BMMakima<double>/32             12.7 ns
-BMMakima<double>/64             13.6 ns
-BMMakima<double>/128            14.5 ns
-BMMakima<double>/256            15.1 ns
-BMMakima<double>/512            17.2 ns
-BMMakima<double>/1024           18.3 ns
-BMMakima<double>/2048           19.6 ns
-BMMakima<double>/4096           20.7 ns
-BMMakima<double>/8192           22.1 ns
-BMMakima<double>/16384          23.1 ns
-BMMakima<double>/32768          24.2 ns
-BMMakima<double>/65536          25.3 ns
-BMMakima<double>/131072         27.1 ns
-BMMakima<double>/262144         28.3 ns
-BMMakima<double>/524288         29.9 ns
-BMMakima<double>/1048576        31.6 ns
-BMMakima<double>/2097152        31.8 ns
-BMMakima<double>/4194304        33.7 ns
-BMMakima<double>/8388608        35.0 ns
-BMMakima<double>/16777216       40.0 ns
-BMMakima<double>_BigO           1.63 lgN
-```
-
+The complexity and performance is identical to that of the cubic Hermite interpolator, since this object simply constructs derivatives and forwards the data to `cubic_hermite.hpp`.
 
 [endsect]
 [/section:makima]

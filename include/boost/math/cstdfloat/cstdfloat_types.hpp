@@ -9,8 +9,8 @@
 
 // Implement the types for floating-point typedefs having specified widths.
 
-#ifndef _BOOST_CSTDFLOAT_TYPES_2014_01_09_HPP_
-  #define _BOOST_CSTDFLOAT_TYPES_2014_01_09_HPP_
+#ifndef BOOST_MATH_CSTDFLOAT_TYPES_2014_01_09_HPP_
+  #define BOOST_MATH_CSTDFLOAT_TYPES_2014_01_09_HPP_
 
   #include <float.h>
   #include <limits>
@@ -438,5 +438,5 @@
   }
   // namespace boost
 
-#endif // _BOOST_CSTDFLOAT_BASE_TYPES_2014_01_09_HPP_
+#endif // BOOST_MATH_CSTDFLOAT_BASE_TYPES_2014_01_09_HPP_
 
