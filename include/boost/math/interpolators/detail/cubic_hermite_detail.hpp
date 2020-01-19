@@ -40,7 +40,11 @@ public:
         for (size_t i = 1; i < x_.size(); ++i) {
             Real x1 = x_[i];
             if (x1 <= x0) {
-                throw std::domain_error("Abscissas must be listed in strictly increasing order x0 < x1 < ... < x_{n-1}");
+                std::ostringstream oss;
+                oss.precision(std::numeric_limits<Real>::digits10+3);
+                oss << "Abscissas must be listed in strictly increasing order x0 < x1 < ... < x_{n-1}, ";
+                oss << "but at x[" << i - 1 << "] = " << x0 << ", and x[" << i << "] = " << x1 << ".\n";
+                throw std::domain_error(oss.str());
             }
             x0 = x1;
         }
