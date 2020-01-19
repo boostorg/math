@@ -51,7 +51,7 @@ Function interpolation via barycentric rational interpolation, compactly support
 
 ### Numerical Integration and Differentiation
 
-A reasonably comprehensive set of routines for integration (trapezoidal, Gauss-Legendre, Gauss-Kronrod, Gauss-Chebyshev, double-exponential, and Monte-Carlo) and differentiation (Chebyshev transform, finite difference, and the complex step derivative).
+A reasonably comprehensive set of routines for integration (trapezoidal, Gauss-Legendre, Gauss-Kronrod, Gauss-Chebyshev, double-exponential, and Monte-Carlo) and differentiation (Chebyshev transform, finite difference, the complex step derivative, and forward-mode automatic differentiation).
 
 The integration routines are usable for functions returning complex results - and hence can be used for computation of  contour integrals.
 
