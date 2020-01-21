@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <stdexcept>
 #include <sstream>
+#include <cmath>
 
 namespace boost::math::interpolators::detail {
 
@@ -78,8 +79,10 @@ public:
         // See the 'Basis functions' section of:
         // https://www.rose-hulman.edu/~finn/CCLI/Notes/day09.pdf
         // Also: https://github.com/MrHexxx/QuinticHermiteSpline/blob/master/HermiteSpline.cs
-        Real y = (1- t*t*t*(10 - 15*t + 6*t*t))*y0 + t*(1-6*t*t + 8*t*t*t -3*t*t*t*t)*v0 + t*t*(1-3*t +3*t*t-t*t*t)*a0/2;
-        y += t*t*t*((1 - 2*t + t*t)*a1/2 + (-4 + 7*t -3*t*t)*v1 + (10 - 15*t + 6*t*t)*y1);
+        Real y = (1- t*t*t*(10 + t*(-15 + 6*t)))*y0;
+        y += t*(1+ t*t*(-6 + t*(8 -3*t)))*v0;
+        y += t*t*(1 + t*(-3 + t*(3-t)))*a0/2;
+        y += t*t*t*((1 + t*(-2 + t))*a1/2 + (-4 + t*(7 -3*t))*v1 + (10 + t*(-15 + 6*t))*y1);
         return y;
     }
 
