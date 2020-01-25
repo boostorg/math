@@ -24,6 +24,9 @@
 // Boost macros
 #define BOOST_TEST_MAIN
 #define BOOST_LIB_DIAGNOSTIC "on" // Report library file details.
+//#define BOOST_TEST_LOG_LEVEL all  // Appears not to work???
+// run with --log_level="message"
+
 #include <boost/test/included/unit_test.hpp> // Boost.Test
 // #include <boost/test/unit_test.hpp> // Boost.Test
 #include <boost/test/tools/floating_point_comparison.hpp>
@@ -56,7 +59,7 @@ using boost::multiprecision::float128;
 //#include <boost/fixed_point/fixed_point.hpp> // If available.
 
 #include <boost/math/concepts/real_concept.hpp> // for real_concept tests.
-#include <boost/math/special_functions/fpclassify.hpp> // isnan, ifinite.
+#include <boost/math/special_functions/fpclassify.hpp> // isnan, isfinite.
 #include <boost/math/special_functions/next.hpp> // float_next, float_prior
 using boost::math::float_next;
 using boost::math::float_prior;
@@ -213,7 +216,7 @@ void wolfram_test_small_neg()
 }
 
 template <class T>
-void wolfram_test_large(const boost::mpl::true_&)
+void wolfram_test_large(const boost::true_type&)
 {
    //
    // Spots near the singularity from http://www.wolframalpha.com/input/?i=TABLE%5B%5BN%5B-1%2Fe%2B2%5E-i,+50%5D,+N%5BLambertW%5B-1%2Fe+%2B+2%5E-i%5D,+50%5D%5D,+%7Bi,+2,+40%7D%5D
@@ -231,12 +234,12 @@ void wolfram_test_large(const boost::mpl::true_&)
    }
 }
 template <class T>
-void wolfram_test_large(const boost::mpl::false_&){}
+void wolfram_test_large(const boost::false_type&){}
 
 template <class T>
 void wolfram_test_large() 
 {
-   wolfram_test_large<T>(boost::mpl::bool_<(std::numeric_limits<T>::max_exponent10 > 1000)>());
+   wolfram_test_large<T>(boost::integral_constant<bool, (std::numeric_limits<T>::max_exponent10 > 1000)>());
 }
 
 
@@ -613,7 +616,7 @@ void test_spots(RealType)
 
   // Tests to ensure that all JM rational polynomials are being checked.
 
-  // 1st polynomal if (z < 0.5)   // 0.05 < z < 0.5
+  // 1st polynomial if (z < 0.5)   // 0.05 < z < 0.5
   BOOST_CHECK_CLOSE_FRACTION(lambert_w0(BOOST_MATH_TEST_VALUE(RealType, 0.49)),
     BOOST_MATH_TEST_VALUE(RealType, 0.3465058086974944293540338951489158955895910665452626949),
     tolerance);
@@ -621,7 +624,7 @@ void test_spots(RealType)
     BOOST_MATH_TEST_VALUE(RealType, 0.04858156174600359264950777241723801201748517590507517888),
     tolerance);
 
-  // 2st polynomal if 0.5 < z < 2
+  // 2st polynomial if 0.5 < z < 2
   BOOST_CHECK_CLOSE_FRACTION(lambert_w0(BOOST_MATH_TEST_VALUE(RealType, 0.51)),
     BOOST_MATH_TEST_VALUE(RealType, 0.3569144916935871518694242462560450385494399307379277704),
     tolerance);
@@ -801,8 +804,9 @@ BOOST_AUTO_TEST_CASE( test_types )
   BOOST_MATH_CONTROL_FP;
   // BOOST_TEST_MESSAGE output only appears if command line has --log_level="message"
   // or call set_threshold_level function:
-  boost::unit_test_framework::unit_test_log.set_threshold_level(boost::unit_test_framework::log_messages);
-  BOOST_TEST_MESSAGE("\nTest Lambert W function for several types.");
+  // boost::unit_test::unit_test_log.set_threshold_level(boost::unit_test_framework::log_messages);
+
+  BOOST_TEST_MESSAGE("\nTest Lambert W function for several types.\n");
   BOOST_TEST_MESSAGE(show_versions());  // Full version of Boost, STL and compiler info.
 #ifndef BOOST_MATH_TEST_MULTIPRECISION
   // Fundamental built-in types:

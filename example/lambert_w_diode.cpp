@@ -77,7 +77,7 @@ rsat reverse saturation current
 \param v Voltage V to compute current I(V).
 \param vt Thermal voltage, for example 0.0257025 = 25 mV, computed from boltzmann_k * temp / charge_q; 
 \param rsat Resistance in series with the diode.
-\param re Instrinsic emitter resistance (estimated to be 0.3 ohm from the Rs = 0 data)
+\param re Intrinsic emitter resistance (estimated to be 0.3 ohm from the Rs = 0 data)
 \param isat Reverse saturation current (See equation 2).
 \param nu Ideality factor (default = unity).
 

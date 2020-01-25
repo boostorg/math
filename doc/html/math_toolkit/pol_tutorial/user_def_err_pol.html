@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Calling User Defined Error Handlers</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../index.html" title="Math Toolkit 2.11.0">
 <link rel="up" href="../pol_tutorial.html" title="Policy Tutorial">
 <link rel="prev" href="namespace_policies.html" title="Setting Policies at Namespace or Translation Unit Scope">
@@ -397,7 +397,7 @@
    <span class="comment">// Raise an underflow error:</span>
    <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Result of tgamma(-190.5) is: "</span>
       <span class="special">&lt;&lt;</span> <span class="identifier">mymath</span><span class="special">::</span><span class="identifier">tgamma</span><span class="special">(-</span><span class="number">190.5</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
-   <span class="comment">// Unfortunately we can't predicably raise a denormalised</span>
+   <span class="comment">// Unfortunately we can't predictably raise a denormalised</span>
    <span class="comment">// result, nor can we raise an evaluation error in this example</span>
    <span class="comment">// since these should never really occur!</span>
 <span class="special">}</span> <span class="comment">// int main()</span>

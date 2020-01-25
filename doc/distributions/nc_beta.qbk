@@ -45,7 +45,7 @@ of beta distribution PDFs:
 
 [equation nc_beta_ref1]
 
-where P(i;[lambda]\/2) is the discrete Poisson probablity at /i/, with mean
+where P(i;[lambda]\/2) is the discrete Poisson probability at /i/, with mean
 [lambda]\/2, and I[sub x][super ']([alpha], [beta]) is the derivative of
 the incomplete beta function.  This leads to the usual form of the CDF
 as:
@@ -98,7 +98,7 @@ The following table shows the peak errors
 (in units of [@http://en.wikipedia.org/wiki/Machine_epsilon epsilon])
 found on various platforms with various floating point types.
 The failures in the comparison to the [@http://www.r-project.org/ R Math library],
-seem to be mostly in the corner cases when the probablity would be very small.
+seem to be mostly in the corner cases when the probability would be very small.
 Unless otherwise specified any floating-point type that is narrower
 than the one shown will have __zero_error.
 

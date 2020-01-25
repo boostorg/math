@@ -11,7 +11,7 @@
 \file
 \brief Examples of nonfinite with output and input facets and stringstreams.
 
-\detail Contruct a new locale with the nonfinite_num_put and nonfinite_num_get
+\detail Construct a new locale with the nonfinite_num_put and nonfinite_num_get
 facets and imbue istringstream, ostringstream and stringstreams,
 showing output and input (and loopback for the stringstream).
 

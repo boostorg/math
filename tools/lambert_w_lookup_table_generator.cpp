@@ -127,7 +127,7 @@ std::ofstream fout(filename, std::ios::out); // File output stream.
 // (This is the precision for the tables output as a C++ program,
 // not the precision used by the lambert_w.hpp, that defines another typedef lookup_t, default double.
 
-typedef cpp_bin_float_50 table_lookup_t; // Compute tables to 50 decimla digit precision to avoid slight inaccuracy from repeated multiply.
+typedef cpp_bin_float_50 table_lookup_t; // Compute tables to 50 decimal digit precision to avoid slight inaccuracy from repeated multiply.
 
 // But Output using max_digits10 for 37 decimal digit precision.
 

@@ -190,7 +190,7 @@ template <class RealType> // Any floating-point type RealType.
 void test_spots(RealType)
 {
   // Basic sanity checks, test data is to three decimal places only
-  // so set tolerance to 0.002 expressed as a persentage.  Note that
+  // so set tolerance to 0.002 expressed as a percentage.  Note that
   // we can't even get full 3 digit accuracy since the data we're
   // using as input has *already been rounded*, leading to even
   // greater differences in output.  As an accuracy test this is

@@ -43,7 +43,7 @@ boost::uintmax_t cbrt_noderiv(T x, T guess)
    T factor = 2;                                 // How big steps to take when searching.
 
    const boost::uintmax_t maxit = 20;            // Limit to maximum iterations.
-   boost::uintmax_t it = maxit;                  // Initally our chosen max iterations, but updated with actual.
+   boost::uintmax_t it = maxit;                  // Initially our chosen max iterations, but updated with actual.
    bool is_rising = true;                        // So if result if guess^3 is too low, then try increasing guess.
    int digits = std::numeric_limits<T>::digits;  // Maximum possible binary digits accuracy for type T.
    // Some fraction of digits is used to control how accurate to try to make the result.
@@ -173,7 +173,7 @@ boost::uintmax_t elliptic_root_noderiv(T radius, T arc, T guess)
    T factor = 2;                       // How big steps to take when searching.
 
    const boost::uintmax_t maxit = 50;  // Limit to maximum iterations.
-   boost::uintmax_t it = maxit;        // Initally our chosen max iterations, but updated with actual.
+   boost::uintmax_t it = maxit;        // Initially our chosen max iterations, but updated with actual.
    bool is_rising = true;              // arc-length increases if one radii increases, so function is rising
    // Define a termination condition, stop when nearly all digits are correct, but allow for
    // the fact that we are returning a range, and must have some inaccuracy in the elliptic integral:
@@ -185,7 +185,7 @@ boost::uintmax_t elliptic_root_noderiv(T radius, T arc, T guess)
 
 template <class T = double>
 struct elliptic_root_functor_1deriv
-{ // Functor also returning 1st derviative.
+{ // Functor also returning 1st derivative.
    BOOST_STATIC_ASSERT_MSG(boost::is_integral<T>::value == false, "Only floating-point type types can be used!");
 
    elliptic_root_functor_1deriv(T const& arc, T const& radius) : m_arc(arc), m_radius(radius)

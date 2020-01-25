@@ -161,7 +161,7 @@ are used for the inverse gaussian function.
 #[@http://www.biostat.wustl.edu/archives/html/s-news/2001-12/msg00144.html pwald, qwald].
 #[@http://www.brighton-webs.co.uk/distributions/wald.asp Brighton Webs wald].
 
-[endsect] [/section:inverse_gaussian_dist Inverse Gaussiann Distribution]
+[endsect] [/section:inverse_gaussian_dist Inverse Gaussian Distribution]
 
 [/ 
   Copyright 2010 John Maddock and Paul A. Bristow.

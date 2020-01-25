@@ -165,7 +165,7 @@ namespace boost_math {
          reset(0);
       }
       // Is it OK for these to be inline?
-      // Distribution properties as 'pointer-to-implementions'.
+      // Distribution properties as 'pointer-to-implementations'.
       double mean()
       {
          TRANSLATE_EXCEPTIONS_BEGIN

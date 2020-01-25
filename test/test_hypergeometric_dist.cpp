@@ -444,7 +444,7 @@ void test_spots(RealType /*T*/, const char* type_name)
       boost::math::tools::epsilon<RealType>());
    cout<<"Absolute tolerance:"<<tolerance<<endl;
    
-   tolerance *= 50 * 100; // 50eps as a persentage
+   tolerance *= 50 * 100; // 50eps as a percentage
    cout << "Tolerance for type " << typeid(RealType).name()  << " is " << tolerance << " %" << endl;
 
    //

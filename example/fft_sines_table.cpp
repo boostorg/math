@@ -19,7 +19,7 @@
 
 //[fft_sines_table_example_1
 
-/*`[h5 Using Boost.Multiprecision to generate a high-precision array of sine coefficents for use with FFT.]
+/*`[h5 Using Boost.Multiprecision to generate a high-precision array of sine coefficients for use with FFT.]
 
 The Boost.Multiprecision library can be used for computations requiring precision
 exceeding that of standard built-in types such as `float`, `double`

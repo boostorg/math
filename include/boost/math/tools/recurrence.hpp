@@ -167,7 +167,7 @@ namespace boost {
                   first *= scale;
                   *log_scaling += log_scale;
                }
-               // scale each part seperately to avoid spurious overflow:
+               // scale each part separately to avoid spurious overflow:
                third = (a / -c) * first + (b / -c) * second;
                BOOST_ASSERT((boost::math::isfinite)(third));
 
@@ -221,7 +221,7 @@ namespace boost {
                   first *= scale;
                   *log_scaling += log_scale;
                }
-               // scale each part seperately to avoid spurious overflow:
+               // scale each part separately to avoid spurious overflow:
                next = (b / -a) * second + (c / -a) * first;
                BOOST_ASSERT((boost::math::isfinite)(next));
 

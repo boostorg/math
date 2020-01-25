@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Finding the Cubed Root With and Without Derivatives</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../index.html" title="Math Toolkit 2.11.0">
 <link rel="up" href="../root_finding_examples.html" title="Examples of Root-Finding (with and without derivatives)">
 <link rel="prev" href="../root_finding_examples.html" title="Examples of Root-Finding (with and without derivatives)">
@@ -127,7 +127,7 @@
   <span class="identifier">T</span> <span class="identifier">factor</span> <span class="special">=</span> <span class="number">2</span><span class="special">;</span>                                 <span class="comment">// How big steps to take when searching.</span>
 
   <span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">uintmax_t</span> <span class="identifier">maxit</span> <span class="special">=</span> <span class="number">20</span><span class="special">;</span>            <span class="comment">// Limit to maximum iterations.</span>
-  <span class="identifier">boost</span><span class="special">::</span><span class="identifier">uintmax_t</span> <span class="identifier">it</span> <span class="special">=</span> <span class="identifier">maxit</span><span class="special">;</span>                  <span class="comment">// Initally our chosen max iterations, but updated with actual.</span>
+  <span class="identifier">boost</span><span class="special">::</span><span class="identifier">uintmax_t</span> <span class="identifier">it</span> <span class="special">=</span> <span class="identifier">maxit</span><span class="special">;</span>                  <span class="comment">// Initially our chosen max iterations, but updated with actual.</span>
   <span class="keyword">bool</span> <span class="identifier">is_rising</span> <span class="special">=</span> <span class="keyword">true</span><span class="special">;</span>                        <span class="comment">// So if result if guess^3 is too low, then try increasing guess.</span>
   <span class="keyword">int</span> <span class="identifier">digits</span> <span class="special">=</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">digits</span><span class="special">;</span>  <span class="comment">// Maximum possible binary digits accuracy for type T.</span>
   <span class="comment">// Some fraction of digits is used to control how accurate to try to make the result.</span>
@@ -308,7 +308,7 @@
 <th align="left">Tip</th>
 </tr>
 <tr><td align="left" valign="top"><p>
-          There is a compromise between accuracy and speed when chosing the value
+          There is a compromise between accuracy and speed when choosing the value
           of <code class="computeroutput"><span class="identifier">digits</span></code>. It is tempting
           to simply chose <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">digits</span></code>, but this may mean some inefficient
           and unnecessary iterations as the function thrashes around trying to locate

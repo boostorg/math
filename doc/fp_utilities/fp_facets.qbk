@@ -401,7 +401,7 @@ previous versions of `lexical_cast` using stringstream were not portable
 
 Although other examples imbue individual streams with the new locale,
 for the streams constructed inside lexical_cast,
-it was necesary to assign to a global locale.
+it was necessary to assign to a global locale.
 
   locale::global(new_locale);
 
@@ -496,7 +496,7 @@ Serialization archives do not check the stream state.
 
 [@../../example/nonfinite_facet_simple.cpp nonfinite_facet_simple.cpp]
 give some more simple demonstrations of the difference between using classic C locale
-and constructing a C99 infinty and NaN compliant locale for input and output.
+and constructing a C99 infinity and NaN compliant locale for input and output.
 
 See [@../../example/nonfinite_facet_sstream.cpp  nonfinite_facet_sstream.cpp]
 for this example of use with `std::stringstream`s.

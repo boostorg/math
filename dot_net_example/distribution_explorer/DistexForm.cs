@@ -472,7 +472,7 @@ namespace distribution_explorer
         {
             coefficient_of_variation.Text = "Undefined";
         }
-        sw.WriteLine("Cofficient of variation" + separator + coefficient_of_variation.Text);
+        sw.WriteLine("Coefficient of variation" + separator + coefficient_of_variation.Text);
         try
         {
             kurtosis.Text = dist.kurtosis().ToString();

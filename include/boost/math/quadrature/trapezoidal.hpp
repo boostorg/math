@@ -43,7 +43,7 @@ auto trapezoidal(F f, Real a, Real b, Real tol, std::size_t max_refinements, Rea
     }
     if (!(boost::math::isfinite)(b))
     {
-       return static_cast<K>(boost::math::policies::raise_domain_error(function, "Right endpoint of integration must be finite for adaptive trapedzoidal integration but got b = %1%.\n", b, pol));
+       return static_cast<K>(boost::math::policies::raise_domain_error(function, "Right endpoint of integration must be finite for adaptive trapezoidal integration but got b = %1%.\n", b, pol));
     }
 
 
@@ -103,7 +103,7 @@ auto trapezoidal(F f, Real a, Real b, Real tol, std::size_t max_refinements, Rea
     return static_cast<K>(I1);
 }
 #if BOOST_WORKAROUND(BOOST_MSVC, < 1800)
-// Template argument dedcution failure otherwise:
+// Template argument deduction failure otherwise:
 template<class F, class Real>
 auto trapezoidal(F f, Real a, Real b, Real tol = 0, std::size_t max_refinements = 12, Real* error_estimate = 0, Real* L1 = 0)->decltype(std::declval<F>()(std::declval<Real>()))
 #elif !defined(BOOST_NO_CXX11_NULLPTR)

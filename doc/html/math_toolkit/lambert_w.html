@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Lambert W function</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../index.html" title="Math Toolkit 2.11.0">
 <link rel="up" href="../special.html" title="Chapter&#160;8.&#160;Special Functions">
 <link rel="prev" href="jacobi/jacobi_sn.html" title="Jacobi Elliptic Function sn">
@@ -939,7 +939,7 @@ if (f(w) / f'</span><span class="special">(</span><span class="identifier">w</sp
 <p>
       However, though these give results within a few <a href="http://en.wikipedia.org/wiki/Machine_epsilon" target="_top">machine
       epsilon</a> of the nearest representable result, they do not get as close
-      as is very often possible with further refinement, nrealy always to within
+      as is very often possible with further refinement, nearly always to within
       one or two <a href="http://en.wikipedia.org/wiki/Machine_epsilon" target="_top">machine
       epsilon</a>.
     </p>
@@ -1554,7 +1554,7 @@ if (f(w) / f'</span><span class="special">(</span><span class="identifier">w</sp
       of built-in 64-bit double and float (and 80-bit <code class="computeroutput"><span class="keyword">long</span>
       <span class="keyword">double</span></code>) types. Finally the functor is
       called repeatedly to compute as many additional series terms as necessary to
-      achive the desired precision, set from <code class="computeroutput"><span class="identifier">get_epsilon</span></code>
+      achieve the desired precision, set from <code class="computeroutput"><span class="identifier">get_epsilon</span></code>
       (or terminated by <code class="computeroutput"><span class="identifier">evaluation_error</span></code>
       on reaching the set iteration limit <code class="computeroutput"><span class="identifier">max_series_iterations</span></code>).
     </p>
@@ -1616,7 +1616,7 @@ if (f(w) / f'</span><span class="special">(</span><span class="identifier">w</sp
       (defined in <a href="../../../test/test_value.hpp" target="_top">test_value.hpp</a>)
       taking a decimal floating-point literal was used to allow testing with both
       built-in floating-point types like <code class="computeroutput"><span class="keyword">double</span></code>
-      which have contructors taking literal decimal values like <code class="computeroutput"><span class="number">3.14</span></code>,
+      which have constructors taking literal decimal values like <code class="computeroutput"><span class="number">3.14</span></code>,
       <span class="bold"><strong>and</strong></span> also multiprecision and other User-defined
       Types that only provide full-precision construction from decimal digit strings
       like <code class="computeroutput"><span class="string">"3.14"</span></code>. (Construction
@@ -1671,7 +1671,7 @@ if (f(w) / f'</span><span class="special">(</span><span class="identifier">w</sp
       iterations needed, it might allow return of a better low precision estimate
       <span class="bold"><strong>without any Halley iterations</strong></span>. For the worst
       case near w = 64, the error in the 'guess' is 0.008, ratio 0.0001 or 1 in 10,000
-      digits 10 ~= 4. Two log evalutations are still needed, but is probably over
+      digits 10 ~= 4. Two log evaluations are still needed, but is probably over
       an order of magnitude faster.
     </p>
 <p>

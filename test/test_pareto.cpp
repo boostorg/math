@@ -224,16 +224,20 @@ void test_spots(RealType)
     // skewness:
     BOOST_CHECK_CLOSE_FRACTION(
        skewness(pareto15), static_cast<RealType>(4.6475800154489004L), tol5eps);
-    // kertosis:
+    // kurtosis:
     BOOST_CHECK_CLOSE_FRACTION(
        kurtosis(pareto15), static_cast<RealType>(73.8L), tol5eps);
-    // kertosis excess:
+    // kurtosis excess:
     BOOST_CHECK_CLOSE_FRACTION(
        kurtosis_excess(pareto15), static_cast<RealType>(70.8L), tol5eps);
     // Check difference between kurtosis and excess:
     BOOST_CHECK_CLOSE_FRACTION(
       kurtosis_excess(pareto15), kurtosis(pareto15) - static_cast<RealType>(3L), tol5eps);
     // Check kurtosis excess = kurtosis - 3;
+
+    RealType expected_entropy = 1 + RealType(1)/RealType(5) + log(RealType(1)/RealType(5));
+    BOOST_CHECK_CLOSE_FRACTION(
+      entropy(pareto15), expected_entropy, tol5eps);
 
     // Error condition checks:
     check_out_of_range<pareto_distribution<RealType> >(1, 1);

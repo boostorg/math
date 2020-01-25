@@ -70,7 +70,7 @@ void test_spots(RealType)
    // using the online calculator at 
    // http://espse.ed.psu.edu/edpsych/faculty/rhale/hale/507Mat/statlets/free/pdist.htm
    //
-   // Tolerance is just over 5 decimal digits expressed as a persentage:
+   // Tolerance is just over 5 decimal digits expressed as a percentage:
    // that's the limit of the test data.
    RealType tolerance = 2e-5f * 100;  
    cout << "Tolerance for type " << typeid(RealType).name()  << " is " << tolerance << " %" << endl;
@@ -301,11 +301,11 @@ void test_spots(RealType)
     skewness(dist), 
     (boost::math::tgamma(1 + 3/dist.shape()) * pow(dist.scale(), RealType(3)) - 3 * mean(dist) * variance(dist) - pow(mean(dist), RealType(3))) / pow(standard_deviation(dist), RealType(3)), 
     tolerance * 100);
-   // kertosis:
+   // kurtosis:
    BOOST_CHECK_CLOSE(
     kurtosis(dist)
     , kurtosis_excess(dist) + 3, tolerance);
-   // kertosis excess:
+   // kurtosis excess:
    BOOST_CHECK_CLOSE(
     kurtosis_excess(dist), 
     (pow(dist.scale(), RealType(4)) * boost::math::tgamma(1 + 4/dist.shape()) 
@@ -314,6 +314,11 @@ void test_spots(RealType)
          - 6 * variance(dist) * mean(dist) * mean(dist) 
          - pow(mean(dist), RealType(4))) / (variance(dist) * variance(dist)), 
     tolerance * 1000);
+
+   RealType expected_entropy = boost::math::constants::euler<RealType>()*(1-1/dist.shape()) + log(dist.scale()/dist.shape()) + 1;
+   BOOST_CHECK_CLOSE(
+    entropy(dist)
+    , expected_entropy, tolerance);
 
    //
    // Special cases:

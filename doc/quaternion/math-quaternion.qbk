@@ -374,7 +374,7 @@ Long double specialization version:
 
    typedef long double value_type;
 
-These provide easy acces to the type the template is built upon.
+These provide easy access to the type the template is built upon.
 
 [endsect]
 
@@ -619,7 +619,7 @@ calls `is.setstate(ios::failbit)` (which may throw ios::failure (27.4.5.3)).
 
 The rationale for the list of accepted formats is that either we have a
 list of up to four reals, or else we have a couple of complex numbers,
-and in that case if it formated as a proper complex number, then it should
+and in that case if it formatted as a proper complex number, then it should
 be accepted. Thus potential ambiguities are lifted (for instance (a,b) is
 (a,b,0,0) and not (a,0,b,0), i.e. it is parsed as a list of two real numbers
 and not two complex numbers which happen to have imaginary parts equal to zero).
@@ -685,7 +685,7 @@ of the quaternion.
 
    template<typename T> T  abs(quaternion<T> const & q);
 
-This return the magnitude (Euclidian norm) of the quaternion.
+This return the magnitude (Euclidean norm) of the quaternion.
 
 [h4 norm]
 
@@ -694,7 +694,7 @@ This return the magnitude (Euclidian norm) of the quaternion.
 This return the (Cayley) norm of the quaternion.
 The term "norm" might be confusing, as most people associate it with the
 Euclidian norm (and quadratic functionals). For this version of
-(the mathematical objects known as) quaternions, the Euclidian norm
+(the mathematical objects known as) quaternions, the Euclidean norm
 (also known as magnitude) is the square root of the Cayley norm.
 
 [endsect] [/section:value_op Quaternion Value Operations]
@@ -774,7 +774,7 @@ plain brain-dead...
 
 We do, however provide several transcendentals, chief among which is the
 exponential. This author claims the complete proof of the "closed formula"
-as his own, as well as its independant invention (there are claims to prior
+as his own, as well as its independent invention (there are claims to prior
 invention of the formula, such as one by Professor Shoemake, and it is
 possible that the formula had been known a couple of centuries back, but in
 absence of bibliographical reference, the matter is pending, awaiting further
@@ -846,7 +846,7 @@ enabled).
 
 If you define the symbol TEST_VERBOSE, you will get
 additional output ([@../quaternion/output_more.txt verbose output]);
-this will only be helpfull if you enable message output at the same time,
+this will only be helpful if you enable message output at the same time,
 of course (by uncommenting the relevant line in the test or by adding
 [^--log_level=messages] to your command line,...). In that case, and if you
 are running interactively, you may in addition define the symbol
@@ -880,7 +880,7 @@ Thank you to all who contributed to the discution about this library.
 
 * 1.5.9 - 13/5/2013:  Incorporated into Boost.Math.
 * 1.5.8 - 17/12/2005: Converted documentation to Quickbook Format.
-* 1.5.7 - 24/02/2003: transitionned to the unit test framework; <boost/config.hpp> now included by the library header (rather than the test files).
+* 1.5.7 - 24/02/2003: transitioned to the unit test framework; <boost/config.hpp> now included by the library header (rather than the test files).
 * 1.5.6 - 15/10/2002: Gcc2.95.x and stlport on linux compatibility by Alkis Evlogimenos (alkis@routescience.com).
 * 1.5.5 - 27/09/2002: Microsoft VCPP 7 compatibility, by Michael Stevens (michael@acfr.usyd.edu.au); requires the /Za compiler option.
 * 1.5.4 - 19/09/2002: fixed problem with multiple inclusion (in different translation units); attempt at an improved compatibility with Microsoft compilers, by Michael Stevens (michael@acfr.usyd.edu.au) and Fredrik Blomqvist; other compatibility fixes.
@@ -900,7 +900,7 @@ Thank you to all who contributed to the discution about this library.
 [section:quat_todo To Do]
 
 * Improve testing.
-* Rewrite input operatore using Spirit (creates a dependency).
+* Rewrite input operator using Spirit (creates a dependency).
 * Put in place an Expression Template mechanism (perhaps borrowing from uBlas).
 * Use uBlas for the link with rotations (and move from the
 [@../../example/HSO3SO4.cpp example]

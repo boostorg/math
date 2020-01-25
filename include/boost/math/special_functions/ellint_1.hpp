@@ -157,7 +157,7 @@ T ellint_k_imp(T k, const Policy& pol)
 }
 
 template <typename T, typename Policy>
-inline typename tools::promote_args<T>::type ellint_1(T k, const Policy& pol, const mpl::true_&)
+inline typename tools::promote_args<T>::type ellint_1(T k, const Policy& pol, const boost::true_type&)
 {
    typedef typename tools::promote_args<T>::type result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
@@ -165,7 +165,7 @@ inline typename tools::promote_args<T>::type ellint_1(T k, const Policy& pol, co
 }
 
 template <class T1, class T2>
-inline typename tools::promote_args<T1, T2>::type ellint_1(T1 k, T2 phi, const mpl::false_&)
+inline typename tools::promote_args<T1, T2>::type ellint_1(T1 k, T2 phi, const boost::false_type&)
 {
    return boost::math::ellint_1(k, phi, policies::policy<>());
 }

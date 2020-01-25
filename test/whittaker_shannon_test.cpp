@@ -30,12 +30,12 @@ void test_trivial()
 
     Real expected = 0;
     if(!CHECK_MOLLIFIED_CLOSE(expected, ws.prime(0), 10*std::numeric_limits<Real>::epsilon())) {
-        std::cerr << "  Problem occured at abscissa " << 0 << "\n";
+        std::cerr << "  Problem occurred at abscissa " << 0 << "\n";
     }
 
     expected = -v_copy[0]/h;
     if(!CHECK_MOLLIFIED_CLOSE(expected, ws.prime(h), 10*std::numeric_limits<Real>::epsilon())) {
-        std::cerr << "  Problem occured at abscissa " << 0 << "\n";
+        std::cerr << "  Problem occurred at abscissa " << 0 << "\n";
     }
 }
 
@@ -94,13 +94,13 @@ void test_bump()
         Real expected = v_copy[i];
         Real computed = ws(t);
         if(!CHECK_MOLLIFIED_CLOSE(expected, computed, 10*std::numeric_limits<Real>::epsilon())) {
-            std::cerr << "  Problem occured at abscissa " << t << "\n";
+            std::cerr << "  Problem occurred at abscissa " << t << "\n";
         }
 
         Real expected_prime = bump_prime(t);
         Real computed_prime = ws.prime(t);
         if(!CHECK_MOLLIFIED_CLOSE(expected_prime, computed_prime, 1000*std::numeric_limits<Real>::epsilon())) {
-            std::cerr << "  Problem occured at abscissa " << t << "\n";
+            std::cerr << "  Problem occurred at abscissa " << t << "\n";
         }
 
     }
@@ -115,13 +115,13 @@ void test_bump()
         Real expected = bump(t);
         Real computed = ws(t);
         if(!CHECK_MOLLIFIED_CLOSE(expected, computed, 10*std::numeric_limits<Real>::epsilon())) {
-            std::cerr << "  Problem occured at abscissa " << t << "\n";
+            std::cerr << "  Problem occurred at abscissa " << t << "\n";
         }
 
         Real expected_prime = bump_prime(t);
         Real computed_prime = ws.prime(t);
         if(!CHECK_MOLLIFIED_CLOSE(expected_prime, computed_prime, sqrt(std::numeric_limits<Real>::epsilon()))) {
-            std::cerr << "  Problem occured at abscissa " << t << "\n";
+            std::cerr << "  Problem occurred at abscissa " << t << "\n";
         }
     }
 }

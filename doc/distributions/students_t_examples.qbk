@@ -211,7 +211,7 @@ at a given significance level:
 [note
 Non-statisticians might say 'not-rejected' means 'accepted',
 (often of the null-hypothesis) implying, wrongly, that there really *IS* no difference,
-but statisticans eschew this to avoid implying that there is positive evidence of 'no difference'.
+but statisticians eschew this to avoid implying that there is positive evidence of 'no difference'.
 'Not-rejected' here means there is *no evidence* of difference, but there still might well be a difference.
 For example, see [@http://en.wikipedia.org/wiki/Argument_from_ignorance argument from ignorance] and
 [@http://www.bmj.com/cgi/content/full/311/7003/485 Absence of evidence does not constitute evidence of absence.]

@@ -33,7 +33,7 @@ void load_file(std::string& s, std::istream& is)
 int main(int argc, const char* argv[])
 {
    //
-   // Set any additional text that should accumpany specific results:
+   // Set any additional text that should accompany specific results:
    //
    extra_text["msvc-dist-beta-R-quantile"] = "[footnote There are a small number of our test cases where the R library fails to converge on a result: these tend to dominate the performance result.]";
    extra_text["msvc-dist-nbinom-R-quantile"] = "[footnote The R library appears to use a linear-search strategy, that can perform very badly in a small number of pathological cases, but may or may not be more efficient in \"typical\" cases]";

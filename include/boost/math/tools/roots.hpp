@@ -527,7 +527,7 @@ namespace detail {
       T result = guess;
 
       T factor = ldexp(static_cast<T>(1.0), 1 - digits);
-      T delta = (std::max)(T(10000000 * guess), T(10000000));  // arbitarily large delta
+      T delta = (std::max)(T(10000000 * guess), T(10000000));  // arbitrarily large delta
       T last_f0 = 0;
       T delta1 = delta;
       T delta2 = delta;
@@ -754,7 +754,7 @@ inline T schroder_iterate(F f, T guess, T min, T max, int digits) BOOST_NOEXCEPT
    return schroder_iterate(f, guess, min, max, digits, m);
 }
 //
-// These two are the old spelling of this function, retained for backwards compatibity just in case:
+// These two are the old spelling of this function, retained for backwards compatibility just in case:
 //
 template <class F, class T>
 T schroeder_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& max_iter) BOOST_NOEXCEPT_IF(policies::is_noexcept_error_policy<policies::policy<> >::value&& BOOST_MATH_IS_FLOAT(T) && noexcept(std::declval<F>()(std::declval<T>())))
@@ -861,10 +861,10 @@ Complex complex_newton(F g, Complex guess, int max_iterations = std::numeric_lim
 namespace detail
 {
 #if defined(BOOST_GNU_STDLIB) && !defined(_GLIBCXX_USE_C99_MATH_TR1)
-float fma_workaround(float f) { return ::fmaf(f); }
-double fma_workaround(double f) { return ::fma(f); }
+inline float fma_workaround(float x, float y, float z) { return ::fmaf(x, y, z); }
+inline double fma_workaround(double x, double y, double z) { return ::fma(x, y, z); }
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-long double fma_workaround(long double f) { return ::fmal(f); }
+inline long double fma_workaround(long double x, long double y, long double z) { return ::fmal(x, y, z); }
 #endif
 #endif            
 template<class T>
@@ -884,7 +884,11 @@ inline T discriminant(T const& a, T const& b, T const& c)
 template<class T>
 std::pair<T, T> quadratic_roots_imp(T const& a, T const& b, T const& c)
 {
+#if defined(BOOST_GNU_STDLIB) && !defined(_GLIBCXX_USE_C99_MATH_TR1)
+   using boost::math::copysign;
+#else
    using std::copysign;
+#endif
    using std::sqrt;
    if constexpr (std::is_floating_point<T>::value)
    {

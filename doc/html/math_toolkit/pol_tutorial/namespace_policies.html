@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Setting Policies at Namespace or Translation Unit Scope</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../index.html" title="Math Toolkit 2.11.0">
 <link rel="up" href="../pol_tutorial.html" title="Policy Tutorial">
 <link rel="prev" href="ad_hoc_sf_policies.html" title="Changing the Policy on an Ad Hoc Basis for the Special Functions">
@@ -303,12 +303,12 @@ Result of quantile(complement(binom, 0.05)) is: 8
         with any alternate policies present in other translation units:
       </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span> <span class="comment">// All distributions.</span>
-<span class="comment">// using boost::math::normal; // Would create an ambguity between</span>
+<span class="comment">// using boost::math::normal; // Would create an ambiguity between</span>
 <span class="comment">// boost::math::normal_distribution&lt;RealType&gt; boost::math::normal and</span>
 <span class="comment">// 'anonymous-namespace'::normal'.</span>
 
 <span class="keyword">namespace</span>
-<span class="special">{</span> <span class="comment">// anonymous or unnnamed (rather than named as in policy_eg_6.cpp).</span>
+<span class="special">{</span> <span class="comment">// anonymous or unnamed (rather than named as in policy_eg_6.cpp).</span>
 
   <span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">;</span>
    <span class="comment">// using boost::math::policies::errno_on_error; // etc.</span>

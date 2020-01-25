@@ -26,7 +26,7 @@
 // This is the only way we can avoid
 // warning: non-standard suffix on floating constant [-Wpedantic]
 // when building with -Wall -pedantic.  Neither __extension__
-// nor #pragma dianostic ignored work :(
+// nor #pragma diagnostic ignored work :(
 //
 #pragma GCC system_header
 #endif
@@ -74,10 +74,10 @@ template <class Lanczos, class T>
 typename lanczos_initializer<Lanczos, T>::init const lanczos_initializer<Lanczos, T>::initializer;
 //
 // Lanczos Coefficients for N=6 G=5.581
-// Max experimental error (with arbitary precision arithmetic) 9.516e-12
+// Max experimental error (with arbitrary precision arithmetic) 9.516e-12
 // Generated with compiler: Microsoft Visual C++ version 8.0 on Win32 at Mar 23 2006
 //
-struct lanczos6 : public mpl::int_<35>
+struct lanczos6 : public boost::integral_constant<int, 35>
 {
    //
    // Produces slightly better than float precision when evaluated at
@@ -174,10 +174,10 @@ struct lanczos6 : public mpl::int_<35>
 
 //
 // Lanczos Coefficients for N=11 G=10.900511
-// Max experimental error (with arbitary precision arithmetic) 2.16676e-19
+// Max experimental error (with arbitrary precision arithmetic) 2.16676e-19
 // Generated with compiler: Microsoft Visual C++ version 8.0 on Win32 at Mar 23 2006
 //
-struct lanczos11 : public mpl::int_<60>
+struct lanczos11 : public boost::integral_constant<int, 60>
 {
    //
    // Produces slightly better than double precision when evaluated at
@@ -304,10 +304,10 @@ struct lanczos11 : public mpl::int_<60>
 
 //
 // Lanczos Coefficients for N=13 G=13.144565
-// Max experimental error (with arbitary precision arithmetic) 9.2213e-23
+// Max experimental error (with arbitrary precision arithmetic) 9.2213e-23
 // Generated with compiler: Microsoft Visual C++ version 8.0 on Win32 at Mar 23 2006
 //
-struct lanczos13 : public mpl::int_<72>
+struct lanczos13 : public boost::integral_constant<int, 72>
 {
    //
    // Produces slightly better than extended-double precision when evaluated at
@@ -446,10 +446,10 @@ struct lanczos13 : public mpl::int_<72>
 
 //
 // Lanczos Coefficients for N=22 G=22.61891
-// Max experimental error (with arbitary precision arithmetic) 2.9524e-38
+// Max experimental error (with arbitrary precision arithmetic) 2.9524e-38
 // Generated with compiler: Microsoft Visual C++ version 8.0 on Win32 at Mar 23 2006
 //
-struct lanczos22 : public mpl::int_<120>
+struct lanczos22 : public boost::integral_constant<int, 120>
 {
    //
    // Produces slightly better than 128-bit long-double precision when 
@@ -642,10 +642,10 @@ struct lanczos22 : public mpl::int_<120>
 
 //
 // Lanczos Coefficients for N=6 G=1.428456135094165802001953125
-// Max experimental error (with arbitary precision arithmetic) 8.111667e-8
+// Max experimental error (with arbitrary precision arithmetic) 8.111667e-8
 // Generated with compiler: Microsoft Visual C++ version 8.0 on Win32 at Mar 23 2006
 //
-struct lanczos6m24 : public mpl::int_<24>
+struct lanczos6m24 : public boost::integral_constant<int, 24>
 {
    //
    // Use for float precision, when evaluated as a float:
@@ -737,10 +737,10 @@ struct lanczos6m24 : public mpl::int_<24>
 
 //
 // Lanczos Coefficients for N=13 G=6.024680040776729583740234375
-// Max experimental error (with arbitary precision arithmetic) 1.196214e-17
+// Max experimental error (with arbitrary precision arithmetic) 1.196214e-17
 // Generated with compiler: Microsoft Visual C++ version 8.0 on Win32 at Mar 23 2006
 //
-struct lanczos13m53 : public mpl::int_<53>
+struct lanczos13m53 : public boost::integral_constant<int, 53>
 {
    //
    // Use for double precision, when evaluated as a double:
@@ -874,10 +874,10 @@ struct lanczos13m53 : public mpl::int_<53>
 
 //
 // Lanczos Coefficients for N=17 G=12.2252227365970611572265625
-// Max experimental error (with arbitary precision arithmetic) 2.7699e-26
+// Max experimental error (with arbitrary precision arithmetic) 2.7699e-26
 // Generated with compiler: Microsoft Visual C++ version 8.0 on Win32 at Mar 23 2006
 //
-struct lanczos17m64 : public mpl::int_<64>
+struct lanczos17m64 : public boost::integral_constant<int, 64>
 {
    //
    // Use for extended-double precision, when evaluated as an extended-double:
@@ -1039,10 +1039,10 @@ struct lanczos17m64 : public mpl::int_<64>
 
 //
 // Lanczos Coefficients for N=24 G=20.3209821879863739013671875
-// Max experimental error (with arbitary precision arithmetic) 1.0541e-38
+// Max experimental error (with arbitrary precision arithmetic) 1.0541e-38
 // Generated with compiler: Microsoft Visual C++ version 8.0 on Win32 at Mar 23 2006
 //
-struct lanczos24m113 : public mpl::int_<113>
+struct lanczos24m113 : public boost::integral_constant<int, 113>
 {
    //
    // Use for long-double precision, when evaluated as an long-double:
@@ -1250,7 +1250,7 @@ struct lanczos24m113 : public mpl::int_<113>
 // Generated with compiler: Microsoft Visual C++ version 14.2 on Win32 at Oct 14 2019
 // Type precision was 134 bits or 43 max_digits10
 //
-struct lanczos32MP : public mpl::int_<134>
+struct lanczos32MP : public boost::integral_constant<int, 134>
 {
    template <class T>
    static T lanczos_sum(const T& z)
@@ -1499,7 +1499,7 @@ struct lanczos32MP : public mpl::int_<134>
 // Generated with compiler: Microsoft Visual C++ version 14.2 on Win32 at Oct 14 2019
 // Type precision was 168 bits or 53 max_digits10
 //
-struct lanczos35MP : public mpl::int_<168>
+struct lanczos35MP : public boost::integral_constant<int, 168>
 {
    template <class T>
    static T lanczos_sum(const T& z)
@@ -1766,7 +1766,7 @@ struct lanczos35MP : public mpl::int_<168>
 // Generated with compiler: Microsoft Visual C++ version 14.2 on Win32 at Oct 14 2019
 // Type precision was 201 bits or 63 max_digits10
 //
-struct lanczos48MP : public mpl::int_<201>
+struct lanczos48MP : public boost::integral_constant<int, 201>
 {
    template <class T>
    static T lanczos_sum(const T& z)
@@ -2110,7 +2110,7 @@ struct lanczos48MP : public mpl::int_<201>
 // Generated with compiler: Microsoft Visual C++ version 14.2 on Win32 at Oct 14 2019
 // Type precision was 234 bits or 73 max_digits10
 //
-struct lanczos49MP : public mpl::int_<234>
+struct lanczos49MP : public boost::integral_constant<int, 234>
 {
    template <class T>
    static T lanczos_sum(const T& z)
@@ -2460,7 +2460,7 @@ struct lanczos49MP : public mpl::int_<234>
 // Generated with compiler: Microsoft Visual C++ version 14.2 on Win32 at Oct 14 2019
 // Type precision was 267 bits or 83 max_digits10
 //
-struct lanczos49MP_2 : public mpl::int_<267>
+struct lanczos49MP_2 : public boost::integral_constant<int, 267>
 {
    template <class T>
    static T lanczos_sum(const T& z)
@@ -2810,7 +2810,7 @@ struct lanczos49MP_2 : public mpl::int_<267>
 // Generated with compiler: Microsoft Visual C++ version 14.2 on Win32 at Oct 14 2019
 // Type precision was 334 bits or 103 max_digits10
 //
-struct lanczos58MP : public mpl::int_<334>
+struct lanczos58MP : public boost::integral_constant<int, 334>
 {
    template <class T>
    static T lanczos_sum(const T& z)
@@ -3213,7 +3213,7 @@ struct lanczos58MP : public mpl::int_<334>
 //
 // placeholder for no lanczos info available:
 //
-struct undefined_lanczos : public mpl::int_<INT_MAX - 1> { };
+struct undefined_lanczos : public boost::integral_constant<int, INT_MAX - 1> { };
 
 #if 0
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
@@ -3249,9 +3249,9 @@ struct lanczos
    typedef typename mpl::if_<
       typename mpl::less_equal<
          typename policies::precision<Real, Policy>::type,
-         mpl::int_<0>
+         boost::integral_constant<int, 0>
       >::type,
-      mpl::int_<INT_MAX - 2>,
+      boost::integral_constant<int, INT_MAX - 2>,
       typename policies::precision<Real, Policy>::type
    >::type target_precision;
 

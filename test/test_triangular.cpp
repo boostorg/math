@@ -479,6 +479,9 @@ void test_spots(RealType)
     BOOST_CHECK_CLOSE_FRACTION(
       kurtosis_excess(tridef), static_cast<RealType>(-0.6), tolerance); // Constant value of -3/5 for all distributions.
 
+    BOOST_CHECK_CLOSE_FRACTION(
+      entropy(tridef), static_cast<RealType>(1)/2, tolerance);
+
   {
     triangular_distribution<RealType> tri01(0, 1, 1); //  Asymmetric 0, 1, 1 distribution.
     RealType x = static_cast<RealType>(0.5);

@@ -29,7 +29,7 @@ void test_polynomial()
 #else
    double (*f)(double) = boost::math::expm1;
 #endif
-   std::cout << "Testing expm1 approximation, pinned to origin, abolute error, 6 term polynomial\n";
+   std::cout << "Testing expm1 approximation, pinned to origin, absolute error, 6 term polynomial\n";
    boost::math::tools::remez_minimax<double> approx1(f, 6, 0, -1, 1, true, false);
    std::cout << "Interpolation Error: " << approx1.max_error() << std::endl;
    for(unsigned i = 0; i < 7; ++i)
@@ -49,7 +49,7 @@ void test_polynomial()
    std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
 
    f = std::exp;
-   std::cout << "Testing exp approximation, not pinned to origin, abolute error, 6 term polynomial\n";
+   std::cout << "Testing exp approximation, not pinned to origin, absolute error, 6 term polynomial\n";
    boost::math::tools::remez_minimax<double> approx3(f, 6, 0, -1, 1, false, false);
    std::cout << "Interpolation Error: " << approx1.max_error() << std::endl;
    for(unsigned i = 0; i < 7; ++i)
@@ -69,7 +69,7 @@ void test_polynomial()
    std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
 
    f = std::cos;
-   std::cout << "Testing cos approximation, not pinned to origin, abolute error, 5 term polynomial\n";
+   std::cout << "Testing cos approximation, not pinned to origin, absolute error, 5 term polynomial\n";
    boost::math::tools::remez_minimax<double> approx5(f, 5, 0, -1, 1, false, false);
    std::cout << "Interpolation Error: " << approx1.max_error() << std::endl;
    for(unsigned i = 0; i < 7; ++i)
@@ -88,7 +88,7 @@ void test_polynomial()
    std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
 
    f = std::sin;
-   std::cout << "Testing sin approximation, pinned to origin, abolute error, 4 term polynomial\n";
+   std::cout << "Testing sin approximation, pinned to origin, absolute error, 4 term polynomial\n";
    boost::math::tools::remez_minimax<double> approx7(f, 4, 0, 0, 1, true, false);
    for(unsigned i = 0; i < 7; ++i)
    {
@@ -113,7 +113,7 @@ void test_rational()
 #else
    double (*f)(double) = boost::math::expm1;
 #endif
-   std::cout << "Testing expm1 approximation, pinned to origin, abolute error, 3+3 term rational\n";
+   std::cout << "Testing expm1 approximation, pinned to origin, absolute error, 3+3 term rational\n";
    boost::math::tools::remez_minimax<double> approx1(f, 3, 3, -1, 1, true, false);
    std::cout << "Interpolation Error: " << approx1.max_error() << std::endl;
    for(unsigned i = 0; i < 7; ++i)
@@ -137,7 +137,7 @@ void test_rational()
    std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
 #endif
    f = std::exp;
-   std::cout << "Testing exp approximation, not pinned to origin, abolute error, 3+3 term rational\n";
+   std::cout << "Testing exp approximation, not pinned to origin, absolute error, 3+3 term rational\n";
    boost::math::tools::remez_minimax<double> approx3(f, 3, 3, -1, 1, false, false);
    std::cout << "Interpolation Error: " << approx1.max_error() << std::endl;
    for(unsigned i = 0; i < 7; ++i)
@@ -157,7 +157,7 @@ void test_rational()
    std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
 
    f = std::cos;
-   std::cout << "Testing cos approximation, not pinned to origin, abolute error, 2+2 term rational\n";
+   std::cout << "Testing cos approximation, not pinned to origin, absolute error, 2+2 term rational\n";
    boost::math::tools::remez_minimax<double> approx5(f, 2, 2, 0, 1, false, false);
    std::cout << "Interpolation Error: " << approx1.max_error() << std::endl;
    for(unsigned i = 0; i < 7; ++i)

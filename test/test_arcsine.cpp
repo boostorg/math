@@ -92,7 +92,7 @@ void test_ignore_policy(RealType)
     if (std::numeric_limits<RealType>::has_quiet_NaN)
     {
       // Demonstrate output of PDF with infinity,
-      // but strin goutput from NaN is platform dependent, so can't use BOOST_CHECK.
+      // but string output from NaN is platform dependent, so can't use BOOST_CHECK.
       if (std::numeric_limits<RealType>::has_infinity)
       {
         //std::cout << "pdf(ignore_error_arcsine(-1, +1), std::numeric_limits<RealType>::infinity()) = " << pdf(ignore_error_arcsine(-1, +1), std::numeric_limits<RealType>::infinity()) << std::endl;
@@ -377,7 +377,7 @@ void test_spots(RealType)
       static_cast<RealType>(0.95), // Random variate  x
       static_cast<RealType>(0.85643370687129372924905811522494428117838480010259L), // Probability of result (CDF of arcsine), P
       static_cast<RealType>(0.14356629312870627075094188477505571882161519989741L),  // Complement of CDF Q = 1 - P
-      tolerance * 4); // Test tolerance (slightly inceased compared to x < 0.5 above).
+      tolerance * 4); // Test tolerance (slightly increased compared to x < 0.5 above).
 
     test_spot(
       static_cast<RealType>(0),   // lo or a
@@ -460,7 +460,7 @@ void test_spots(RealType)
     BOOST_MATH_CHECK_THROW(quantile(dist, -1), std::domain_error);
     BOOST_MATH_CHECK_THROW(quantile(complement(dist, -1)), std::domain_error);
 
-    // Various combinations of bad contructor and member function parameters.
+    // Various combinations of bad constructor and member function parameters.
     BOOST_MATH_CHECK_THROW(pdf(boost::math::arcsine_distribution<RealType>(0, 1), -1), std::domain_error);
     BOOST_MATH_CHECK_THROW(pdf(boost::math::arcsine_distribution<RealType>(-1, 1), +2), std::domain_error);
     BOOST_MATH_CHECK_THROW(quantile(boost::math::arcsine_distribution<RealType>(1, 1), -1), std::domain_error);

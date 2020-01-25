@@ -238,7 +238,7 @@ where
 
 g[sub k] and h[sub k]
 are also computed by recursions (involving gamma functions), but the
-formulas are a little complicated, readers are refered to
+formulas are a little complicated, readers are referred to
 N.M. Temme, ['On the numerical evaluation of the ordinary Bessel function
 of the second kind], Journal of Computational Physics, vol 21, 343 (1976).
 Note Temme's series converge only for |[mu]| <= 1/2.

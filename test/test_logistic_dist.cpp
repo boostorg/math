@@ -225,7 +225,7 @@ void test_spots(RealType T)
    // Things that are errors:
    // 1. Domain errors for scale and location.
    // 2. x being NAN.
-   // 3. Probabilies being outside (0,1).
+   // 3. Probabilities being outside (0,1).
    check_out_of_range<logistic_distribution<RealType> >(0, 1);
    if(std::numeric_limits<RealType>::has_infinity)
    {
@@ -347,6 +347,13 @@ void test_spots(RealType T)
       logistic_distribution<RealType>(2,1)      
       ),//x
       static_cast<RealType>(1.2L),              // probability
+      tolerance);
+
+   BOOST_CHECK_CLOSE(
+      ::boost::math::entropy(
+      logistic_distribution<RealType>(2,1)
+      ),
+      static_cast<RealType>(2),
       tolerance);
 
 } // template <class RealType>void test_spots(RealType)

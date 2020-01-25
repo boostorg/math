@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Barycentric Rational Interpolation</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../index.html" title="Math Toolkit 2.11.0">
 <link rel="up" href="../interpolation.html" title="Chapter&#160;12.&#160;Interpolation">
 <link rel="prev" href="whittaker_shannon.html" title="Whittaker-Shannon interpolation">
@@ -189,7 +189,7 @@
 <span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
 <span class="special">{</span>
     <span class="comment">// The lithium potential is given in Kohn's paper, Table I.</span>
-    <span class="comment">// (We could equally easily use an unordered_map, a list of tuples or pairs, or a 2-dimentional array).</span>
+    <span class="comment">// (We could equally easily use an unordered_map, a list of tuples or pairs, or a 2-dimensional array).</span>
     <span class="identifier">std</span><span class="special">::</span><span class="identifier">map</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">r</span><span class="special">;</span>
 
     <span class="identifier">r</span><span class="special">[</span><span class="number">0.02</span><span class="special">]</span> <span class="special">=</span> <span class="number">5.727</span><span class="special">;</span>
@@ -244,7 +244,7 @@
     <span class="keyword">auto</span> <span class="identifier">y_range</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">adaptors</span><span class="special">::</span><span class="identifier">values</span><span class="special">(</span><span class="identifier">r</span><span class="special">);</span>
     <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">barycentric_rational</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">b</span><span class="special">(</span><span class="identifier">x_range</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">x_range</span><span class="special">.</span><span class="identifier">end</span><span class="special">(),</span> <span class="identifier">y_range</span><span class="special">.</span><span class="identifier">begin</span><span class="special">());</span>
     <span class="comment">//</span>
-    <span class="comment">// We'll use a lamda expression to provide the functor to our root finder, since we want</span>
+    <span class="comment">// We'll use a lambda expression to provide the functor to our root finder, since we want</span>
     <span class="comment">// the abscissa value that yields 3, not zero.  We pass the functor b by value to the</span>
     <span class="comment">// lambda expression since barycentric_rational is trivial to copy.</span>
     <span class="comment">// Here we're using simple bisection to find the root:</span>

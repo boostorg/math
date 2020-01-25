@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Exponential Integral Ei</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../index.html" title="Math Toolkit 2.11.0">
 <link rel="up" href="../expint.html" title="Exponential Integrals">
 <link rel="prev" href="expint_n.html" title="Exponential Integral En">
@@ -256,7 +256,7 @@
         the type of x has 113 or fewer bits of precision.
       </p>
 <p>
-        For x &gt; 0 the generic version is implemented using the infinte series:
+        For x &gt; 0 the generic version is implemented using the infinite series:
       </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
           <span class="inlinemediaobject"><img src="../../../equations/expint_i_2.svg"></span>
@@ -279,7 +279,7 @@
         a minimax rational approximation rescaled so that it is evaluated over [-1,1].
         Note that while the rational approximation over [0,6] converges rapidly to
         the minimax solution it is rather ill-conditioned in practice. Cody and Thacher
-        <a href="#ftn.math_toolkit.expint.expint_i.f0" class="footnote" name="math_toolkit.expint.expint_i.f0"><sup class="footnote">[5]</sup></a> experienced the same issue and converted the polynomials into
+        <a href="#ftn.math_toolkit.expint.expint_i.f0" class="footnote"><sup class="footnote"><a name="math_toolkit.expint.expint_i.f0"></a>[5]</sup></a> experienced the same issue and converted the polynomials into
         Chebeshev form to ensure stable computation. By experiment we found that
         the polynomials are just as stable in polynomial as Chebyshev form, <span class="emphasis"><em>provided</em></span>
         they are computed over the interval [-1,1].
@@ -305,12 +305,12 @@
         as long as the interval of evaluation was [-1,1] and the number of terms
         carefully chosen, it was found that the polynomials <span class="emphasis"><em>could</em></span>
         be evaluated to suitable precision: error rates are typically 2 to 3 epsilon
-        which is comparible to the error rate that Cody and Thacher achieved using
+        which is comparable to the error rate that Cody and Thacher achieved using
         J-Fractions, but marginally more efficient given that fewer divisions are
         involved.
       </p>
 <div class="footnotes">
-<br><hr style="width:100; text-align:left;margin-left: 0">
+<br><hr style="width:100; align:left;">
 <div id="ftn.math_toolkit.expint.expint_i.f0" class="footnote"><p><a href="#math_toolkit.expint.expint_i.f0" class="para"><sup class="para">[5] </sup></a>
           W. J. Cody and H. C. Thacher, Jr., Rational Chebyshev approximations for
           the exponential integral E<sub>1</sub>(x), Math. Comp. 22 (1968), 641-649, and W.

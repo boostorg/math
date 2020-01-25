@@ -22,7 +22,7 @@
 // This is the only way we can avoid
 // warning: non-standard suffix on floating constant [-Wpedantic]
 // when building with -Wall -pedantic.  Neither __extension__
-// nor #pragma dianostic ignored work :(
+// nor #pragma diagnostic ignored work :(
 //
 #pragma GCC system_header
 #endif
@@ -70,23 +70,23 @@ inline float erf_asymptotic_limit_N(const T&)
 {
    return (std::numeric_limits<float>::max)();
 }
-inline float erf_asymptotic_limit_N(const mpl::int_<24>&)
+inline float erf_asymptotic_limit_N(const boost::integral_constant<int, 24>&)
 {
    return 2.8F;
 }
-inline float erf_asymptotic_limit_N(const mpl::int_<53>&)
+inline float erf_asymptotic_limit_N(const boost::integral_constant<int, 53>&)
 {
    return 4.3F;
 }
-inline float erf_asymptotic_limit_N(const mpl::int_<64>&)
+inline float erf_asymptotic_limit_N(const boost::integral_constant<int, 64>&)
 {
    return 4.8F;
 }
-inline float erf_asymptotic_limit_N(const mpl::int_<106>&)
+inline float erf_asymptotic_limit_N(const boost::integral_constant<int, 106>&)
 {
    return 6.5F;
 }
-inline float erf_asymptotic_limit_N(const mpl::int_<113>&)
+inline float erf_asymptotic_limit_N(const boost::integral_constant<int, 113>&)
 {
    return 6.8F;
 }
@@ -95,31 +95,13 @@ template <class T, class Policy>
 inline T erf_asymptotic_limit()
 {
    typedef typename policies::precision<T, Policy>::type precision_type;
-   typedef typename mpl::if_<
-      mpl::less_equal<precision_type, mpl::int_<24> >,
-      typename mpl::if_<
-         mpl::less_equal<precision_type, mpl::int_<0> >,
-         mpl::int_<0>,
-         mpl::int_<24>
-      >::type,
-      typename mpl::if_<
-         mpl::less_equal<precision_type, mpl::int_<53> >,
-         mpl::int_<53>,
-         typename mpl::if_<
-            mpl::less_equal<precision_type, mpl::int_<64> >,
-            mpl::int_<64>,
-            typename mpl::if_<
-               mpl::less_equal<precision_type, mpl::int_<106> >,
-               mpl::int_<106>,
-               typename mpl::if_<
-                  mpl::less_equal<precision_type, mpl::int_<113> >,
-                  mpl::int_<113>,
-                  mpl::int_<0>
-               >::type
-            >::type
-         >::type
-      >::type
-   >::type tag_type;
+   typedef boost::integral_constant<int,
+      precision_type::value <= 0 ? 0 :
+      precision_type::value <= 24 ? 24 :
+      precision_type::value <= 53 ? 53 :
+      precision_type::value <= 64 ? 64 :
+      precision_type::value <= 113 ? 113 : 0
+   > tag_type;
    return erf_asymptotic_limit_N(tag_type());
 }
 
@@ -186,7 +168,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const Tag& t)
 }
 
 template <class T, class Policy>
-T erf_imp(T z, bool invert, const Policy& pol, const mpl::int_<53>& t)
+T erf_imp(T z, bool invert, const Policy& pol, const boost::integral_constant<int, 53>& t)
 {
    BOOST_MATH_STD_USING
 
@@ -411,11 +393,11 @@ T erf_imp(T z, bool invert, const Policy& pol, const mpl::int_<53>& t)
    }
 
    return result;
-} // template <class T, class Lanczos>T erf_imp(T z, bool invert, const Lanczos& l, const mpl::int_<53>& t)
+} // template <class T, class Lanczos>T erf_imp(T z, bool invert, const Lanczos& l, const boost::integral_constant<int, 53>& t)
 
 
 template <class T, class Policy>
-T erf_imp(T z, bool invert, const Policy& pol, const mpl::int_<64>& t)
+T erf_imp(T z, bool invert, const Policy& pol, const boost::integral_constant<int, 64>& t)
 {
    BOOST_MATH_STD_USING
 
@@ -645,11 +627,11 @@ T erf_imp(T z, bool invert, const Policy& pol, const mpl::int_<64>& t)
    }
 
    return result;
-} // template <class T, class Lanczos>T erf_imp(T z, bool invert, const Lanczos& l, const mpl::int_<64>& t)
+} // template <class T, class Lanczos>T erf_imp(T z, bool invert, const Lanczos& l, const boost::integral_constant<int, 64>& t)
 
 
 template <class T, class Policy>
-T erf_imp(T z, bool invert, const Policy& pol, const mpl::int_<113>& t)
+T erf_imp(T z, bool invert, const Policy& pol, const boost::integral_constant<int, 113>& t)
 {
    BOOST_MATH_STD_USING
 
@@ -1113,7 +1095,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const mpl::int_<113>& t)
    }
 
    return result;
-} // template <class T, class Lanczos>T erf_imp(T z, bool invert, const Lanczos& l, const mpl::int_<113>& t)
+} // template <class T, class Lanczos>T erf_imp(T z, bool invert, const Lanczos& l, const boost::integral_constant<int, 113>& t)
 
 template <class T, class Policy, class tag>
 struct erf_initializer
@@ -1124,8 +1106,8 @@ struct erf_initializer
       {
          do_init(tag());
       }
-      static void do_init(const mpl::int_<0>&){}
-      static void do_init(const mpl::int_<53>&)
+      static void do_init(const boost::integral_constant<int, 0>&){}
+      static void do_init(const boost::integral_constant<int, 53>&)
       {
          boost::math::erf(static_cast<T>(1e-12), Policy());
          boost::math::erf(static_cast<T>(0.25), Policy());
@@ -1134,7 +1116,7 @@ struct erf_initializer
          boost::math::erf(static_cast<T>(4.25), Policy());
          boost::math::erf(static_cast<T>(5.25), Policy());
       }
-      static void do_init(const mpl::int_<64>&)
+      static void do_init(const boost::integral_constant<int, 64>&)
       {
          boost::math::erf(static_cast<T>(1e-12), Policy());
          boost::math::erf(static_cast<T>(0.25), Policy());
@@ -1143,7 +1125,7 @@ struct erf_initializer
          boost::math::erf(static_cast<T>(4.25), Policy());
          boost::math::erf(static_cast<T>(5.25), Policy());
       }
-      static void do_init(const mpl::int_<113>&)
+      static void do_init(const boost::integral_constant<int, 113>&)
       {
          boost::math::erf(static_cast<T>(1e-22), Policy());
          boost::math::erf(static_cast<T>(0.25), Policy());
@@ -1187,23 +1169,12 @@ inline typename tools::promote_args<T>::type erf(T z, const Policy& /* pol */)
    BOOST_MATH_INSTRUMENT_CODE("value_type = " << typeid(value_type).name());
    BOOST_MATH_INSTRUMENT_CODE("precision_type = " << typeid(precision_type).name());
 
-   typedef typename mpl::if_<
-      mpl::less_equal<precision_type, mpl::int_<0> >,
-      mpl::int_<0>,
-      typename mpl::if_<
-         mpl::less_equal<precision_type, mpl::int_<53> >,
-         mpl::int_<53>,  // double
-         typename mpl::if_<
-            mpl::less_equal<precision_type, mpl::int_<64> >,
-            mpl::int_<64>, // 80-bit long double
-            typename mpl::if_<
-               mpl::less_equal<precision_type, mpl::int_<113> >,
-               mpl::int_<113>, // 128-bit long double
-               mpl::int_<0> // too many bits, use generic version.
-            >::type
-         >::type
-      >::type
-   >::type tag_type;
+   typedef boost::integral_constant<int,
+      precision_type::value <= 0 ? 0 :
+      precision_type::value <= 53 ? 53 :
+      precision_type::value <= 64 ? 64 :
+      precision_type::value <= 113 ? 113 : 0
+   > tag_type;
 
    BOOST_MATH_INSTRUMENT_CODE("tag_type = " << typeid(tag_type).name());
 
@@ -1233,23 +1204,12 @@ inline typename tools::promote_args<T>::type erfc(T z, const Policy& /* pol */)
    BOOST_MATH_INSTRUMENT_CODE("value_type = " << typeid(value_type).name());
    BOOST_MATH_INSTRUMENT_CODE("precision_type = " << typeid(precision_type).name());
 
-   typedef typename mpl::if_<
-      mpl::less_equal<precision_type, mpl::int_<0> >,
-      mpl::int_<0>,
-      typename mpl::if_<
-         mpl::less_equal<precision_type, mpl::int_<53> >,
-         mpl::int_<53>,  // double
-         typename mpl::if_<
-            mpl::less_equal<precision_type, mpl::int_<64> >,
-            mpl::int_<64>, // 80-bit long double
-            typename mpl::if_<
-               mpl::less_equal<precision_type, mpl::int_<113> >,
-               mpl::int_<113>, // 128-bit long double
-               mpl::int_<0> // too many bits, use generic version.
-            >::type
-         >::type
-      >::type
-   >::type tag_type;
+   typedef boost::integral_constant<int,
+      precision_type::value <= 0 ? 0 :
+      precision_type::value <= 53 ? 53 :
+      precision_type::value <= 64 ? 64 :
+      precision_type::value <= 113 ? 113 : 0
+   > tag_type;
 
    BOOST_MATH_INSTRUMENT_CODE("tag_type = " << typeid(tag_type).name());
 

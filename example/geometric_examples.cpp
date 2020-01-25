@@ -87,7 +87,7 @@ Suppose an 'fair' 6-face dice is thrown repeatedly:
     // (so failure_fraction is 1 - success_fraction = 5./6 = 1- 0.1666 = 0.8333)
 
 /*`If the dice is thrown repeatedly until the *first* time a /three/ appears.
-The probablility distribution of the number of times it is thrown *not* getting a /three/
+The probability distribution of the number of times it is thrown *not* getting a /three/
  (/not-a-threes/ number of failures to get a /three/)
 is a geometric distribution with the success_fraction = 1/6 = 0.1666[recur].
 
@@ -290,7 +290,7 @@ And if we require a high confidence, they widen to 0.00005 to 0.05.
     cout << "geometric::find_upper_bound_on_p(" << int(k) << ", " << alpha/2 << ") = "
         << t << endl; // 0.052
 /*`In real life, there will usually be more than one event (fault or success),
-when the negative binomial, which has the neccessary extra parameter, will be needed.
+when the negative binomial, which has the necessary extra parameter, will be needed.
 */
 
 /*`As noted above, using a catch block is always a good idea,

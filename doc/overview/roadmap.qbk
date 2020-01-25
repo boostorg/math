@@ -144,7 +144,7 @@ Patches:
 see [@https://svn.boost.org/trac/boost/ticket/11557 11557].
 * Fix comments in code for the hypergeometric to match what it actually does, also fixes the parameter access functions to return
 the correct values.  See [@https://svn.boost.org/trac/boost/ticket/11556 11556].
-* Stopped using hidden visiblity library build with the Oracle compiler as it leads to unresolved externals from the C++ standard library.
+* Stopped using hidden visibility library build with the Oracle compiler as it leads to unresolved externals from the C++ standard library.
 See [@https://svn.boost.org/trac/boost/ticket/11547 11547].
 * Fix unintended use of __declspec when building with Oracle C++.  See [@https://svn.boost.org/trac/boost/ticket/11546 11546].
 * Fix corner case bug in root bracketing code, see [@https://svn.boost.org/trac/boost/ticket/11532 11532].
@@ -249,7 +249,7 @@ Random variate can now be infinite.
 * Fix bug in inverse incomplete beta that results in cancellation errors when the beta function is really an arcsine or Student's T distribution.
 * Fix issue in Bessel I and K function continued fractions that causes spurious over/underflow.
 * Add improvement to non-central chi squared distribution quantile due to Thomas Luu,
-[@http://discovery.ucl.ac.uk/1482128/ Fast and accurate parallel computation of quantile functions for random number generation, Doctorial Thesis 2016].
+[@http://discovery.ucl.ac.uk/1482128/ Fast and accurate parallel computation of quantile functions for random number generation, Doctoral Thesis 2016].
 [@http://discovery.ucl.ac.uk/1463470/ Efficient and Accurate Parallel Inversion of the Gamma Distribution, Thomas Luu]
 [h4 Boost-1.54]
 
@@ -333,7 +333,7 @@ So for example 128-bit rational approximations will work with UDT's and do the r
 
 * Deprecated wrongly named `twothirds` math constant in favour of `two_thirds` (with underscore separator).
 (issue [@https://svn.boost.org/trac/boost/ticket/6199 #6199]).
-* Refactored test data and some special function code to improve support for arbitary precision and/or expression-template-enabled types.
+* Refactored test data and some special function code to improve support for arbitrary precision and/or expression-template-enabled types.
 * Added new faster zeta function evaluation method.
 
 Fixed issues:

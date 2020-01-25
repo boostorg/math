@@ -1,0 +1,78 @@
+[/
+Copyright (c) 2020 Nick Thompson
+Use, modification and distribution are subject to the
+Boost Software License, Version 1.0. (See accompanying file
+LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+]
+
+[section:cubic_hermite Cubic Hermite interpolation]
+
+[heading Synopsis]
+``
+  #include <boost/math/interpolators/cubic_hermite.hpp>
+``
+
+    namespace boost::math::interpolators {
+
+    template <class RandomAccessContainer>
+    class cubic_hermite
+    {
+    public:
+
+        using Real = RandomAccessContainer::value_type;
+
+        cubic_hermite(RandomAccessContainer&& abscissas, RandomAccessContainer&& ordinates, RandomAccessContainer&& derivatives);
+
+        Real operator()(Real x) const;
+
+        Real prime(Real x) const;
+
+        void push_back(Real x, Real y, Real dydx);
+
+        friend std::ostream& operator<<(std::ostream & os, const cubic_hermite & m);
+    };
+
+    } // namespaces
+
+
+[heading Cubic Hermite Interpolation]
+
+The cubic Hermite interpolant takes non-equispaced data and interpolates between them via cubic Hermite polynomials whose slopes must be provided.
+The interpolant is /C/[super 1] and evaluation has [bigo](log(/N/)) complexity.
+An example usage is as follows:
+
+    std::vector<double> x{1, 5, 9 , 12};
+    std::vector<double> y{8,17, 4, -3};
+    std::vector<double dydx{5, -2, -1};
+    using boost::math::interpolators::cubic_hermite;
+    auto spline = cubic_hermite(std::move(x), std::move(y), std::move(dydx));
+    // evaluate at a point:
+    double z = spline(3.4);
+    // evaluate derivative at a point:
+    double zprime = spline.prime(3.4);
+
+Sanity checking of the interpolator can be achieved via:
+
+    std::cout << spline << "\n";
+
+Note that the interpolator is pimpl'd, so that copying the class is cheap, and hence it can be shared between threads.
+(The call operator and `.prime()` are threadsafe; `push_back` is not.)
+
+This interpolant can be updated in constant time.
+Hence we can use `boost::circular_buffer` to do real-time interpolation:
+
+    #include <boost/circular_buffer.hpp>
+    ...
+    boost::circular_buffer<double> initial_x{1,2,3,4};
+    boost::circular_buffer<double> initial_y{4,5,6,7};
+    boost::circular_buffer<double> initial_dydx{1,1,1,1};
+    auto circular_hermite = cubic_hermite(std::move(initial_x), std::move(initial_y), std::move(initial_dydx));
+    // interpolate via call operation:
+    double y = circular_hermite(3.5);
+    // add new data:
+    circular_hermite.push_back(5, 8);
+    // interpolate at 4.5:
+    y = circular_hermite(4.5);
+
+[endsect]
+[/section:cubic_hermite]

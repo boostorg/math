@@ -115,7 +115,7 @@ of floating-point values.
 The result of [@boost:/libs/math/include/boost/math/tools/roots.hpp `newton_raphson_iterate`]
 function is a single value.
 
-[tip There is a compromise between accuracy and speed when chosing the value of `digits`.
+[tip There is a compromise between accuracy and speed when choosing the value of `digits`.
 It is tempting to simply chose `std::numeric_limits<T>::digits`,
 but this may mean some inefficient and unnecessary iterations as the function thrashes around
 trying to locate the last bit.  In theory, since the precision doubles with each step
@@ -230,7 +230,7 @@ If your differentiation is a little rusty
 then you can get help, for example, from the invaluable
 [@http://www.wolframalpha.com/ WolframAlpha site.]
 
-For example, entering the commmand: `differentiate x ^ 5`
+For example, entering the command: `differentiate x ^ 5`
 
 or the Wolfram Language command: ` D[x ^ 5, x]`
 
@@ -458,7 +458,7 @@ finding leads to the algorithm:
 [elliptic_root_noderiv]
 
 This function generally finds the root within 8-10 iterations, so given that the runtime
-is completely dominated by the cost of calling the ellliptic integral it would be nice to
+is completely dominated by the cost of calling the elliptic integral it would be nice to
 reduce that count somewhat. We'll try to do that by using a derivative-based method;
 the derivatives of this function are rather hard to work out by hand, but fortunately
 [@http://www.wolframalpha.com/input/?i=d%2Fda+\[4+*+a+*+EllipticE%281+-+b^2%2Fa^2%29\]

@@ -54,7 +54,7 @@ void test_spots(RealType)
    // expressed as a percentage (so -2) for BOOST_CHECK_CLOSE,
 
    int decdigits = numeric_limits<RealType>::digits10;
-  // May eb >15 for 80 and 128-bit FP typtes.
+  // May eb >15 for 80 and 128-bit FP types.
   if (decdigits <= 0)
   { // decdigits is not defined, for example real concept,
     // so assume precision of most test data is double (for example, MathCAD).
@@ -90,7 +90,7 @@ void test_spots(RealType)
   // ppois(10, 1) = 9.999999899522340E-001
   // ppois(5,5) = 0.615960654833065
 
-  // qpois returns inverse Poission distribution, that is the smallest (floor) k so that ppois(k, lambda) >= p
+  // qpois returns inverse Poisson distribution, that is the smallest (floor) k so that ppois(k, lambda) >= p
   // p is real number, real mean lambda > 0
   // k is approximately the integer for which probability(X <= k) = p
   // when random variable X has the Poisson distribution with parameters lambda.

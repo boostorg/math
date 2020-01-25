@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Generic operations common to all distributions are non-member functions</title>
 <link rel="stylesheet" href="../../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../../index.html" title="Math Toolkit 2.11.0">
 <link rel="up" href="../overview.html" title="Overview of Statistical Distributions">
 <link rel="prev" href="objects.html" title="Distributions are Objects">
@@ -213,7 +213,7 @@
             The quantile functions for these distributions are hard to specify in
             a manner that will satisfy everyone all of the time. The default behaviour
             is to return an integer result, that has been rounded <span class="emphasis"><em>outwards</em></span>:
-            that is to say, lower quantiles - where the probablity is less than 0.5
+            that is to say, lower quantiles - where the probability is less than 0.5
             are rounded down, while upper quantiles - where the probability is greater
             than 0.5 - are rounded up. This behaviour ensures that if an X% quantile
             is requested, then <span class="emphasis"><em>at least</em></span> the requested coverage
@@ -225,7 +225,7 @@
             differently, or return a real-valued result using <a class="link" href="../../pol_overview.html" title="Policy Overview">Policies</a>.
             It is strongly recommended that you read the tutorial <a class="link" href="../../pol_tutorial/understand_dis_quant.html" title="Understanding Quantiles of Discrete Distributions">Understanding
             Quantiles of Discrete Distributions</a> before using the quantile
-            function on a discrete distribtion. The <a class="link" href="../../pol_ref/discrete_quant_ref.html" title="Discrete Quantile Policies">reference
+            function on a discrete distribution. The <a class="link" href="../../pol_ref/discrete_quant_ref.html" title="Discrete Quantile Policies">reference
             docs</a> describe how to change the rounding policy for these distributions.
           </p>
 <p>

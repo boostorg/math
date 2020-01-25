@@ -171,7 +171,7 @@ For x < 0 this function just calls __expint_n(1, -x): which in turn is implement
 in terms of rational approximations when the type of x has 113 or fewer bits of
 precision.
 
-For x > 0 the generic version is implemented using the infinte series:
+For x > 0 the generic version is implemented using the infinite series:
 
 [equation expint_i_2]
 
@@ -211,7 +211,7 @@ were found to be ill-conditioned: Cody and Thacher solved this issue by
 converting the polynomials to their J-Fraction equivalent.  However, as long
 as the interval of evaluation was \[-1,1\] and the number of terms carefully chosen,
 it was found that the polynomials /could/ be evaluated to suitable precision:
-error rates are typically 2 to 3 epsilon which is comparible to the error
+error rates are typically 2 to 3 epsilon which is comparable to the error
 rate that Cody and Thacher achieved using J-Fractions, but marginally more
 efficient given that fewer divisions are involved.
 

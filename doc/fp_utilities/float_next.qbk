@@ -255,7 +255,7 @@ Java's ulp function], please note
 however that this function should only ever be used for rough and ready calculations as there are enough
 corner cases to trap even careful programmers.  In particular:
 
-* The function is asymetrical, which is to say, given `u = ulp(x)` if `x > 0` then `x + u` is the
+* The function is asymmetrical, which is to say, given `u = ulp(x)` if `x > 0` then `x + u` is the
 next floating-point value, but `x - u` is not necessarily the previous value.  Similarly, if
 `x < 0` then `x - u` is the previous floating-point value, but `x + u` is not necessarily the next
 value.  The corner cases occur at power of 2 boundaries.
@@ -265,7 +265,7 @@ may ['sometimes] support denormals (as signalled by `std::numeric_limits<FPT>::h
 currently enabled at runtime (for example on SSE hardware, the DAZ or FTZ flags will disable denormal support).
 In this situation, the `ulp` function may return a value that is many orders of magnitude too large.
 
-In light of the issues above, we recomend that:
+In light of the issues above, we recommend that:
 
 * To move between adjacent floating-point values always use __float_next, __float_prior or __nextafter (`std::nextafter`
 is another candidate, but our experience is that this also often breaks depending which optimizations and

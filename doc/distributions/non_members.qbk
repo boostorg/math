@@ -28,6 +28,7 @@ to go straight to the function you want if you already know its name.
 * __sd.
 * __support.
 * __variance.
+* entropy.
 
 [h4:concept_index Conceptual Index]
 
@@ -57,6 +58,7 @@ to go straight to the function you want if you already know its name.
 * [link math_toolkit.dist_ref.nmp.support support].
 * [link math_toolkit.dist_ref.nmp.upper_critical Upper Critical Value].
 * __variance.
+* entropy
 
 [h4:cdf Cumulative Distribution Function]
 
@@ -110,7 +112,7 @@ See __why_complements for why the complement is useful and when it should be use
    template <class RealType, class ``__Policy``>
    RealType hazard(const ``['Distribution-Type]``<RealType, ``__Policy``>& dist, const RealType& x);
 
-Returns the __hazard of /x/ and distibution /dist/.
+Returns the __hazard of /x/ and distribution /dist/.
 
 This function may return a __domain_error if the random variable is outside
 the defined range for the distribution.
@@ -126,7 +128,7 @@ density function rather than the hazard function.]
    template <class RealType, class ``__Policy``>
    RealType chf(const ``['Distribution-Type]``<RealType, ``__Policy``>& dist, const RealType& x);
 
-Returns the __chf of /x/ and distibution /dist/.
+Returns the __chf of /x/ and distribution /dist/.
 
 This function may return a __domain_error if the random variable is outside
 the defined range for the distribution.
@@ -237,7 +239,7 @@ probability.
 This function is also called the inverse survival function, and is the
 same as calculating the ['upper critical value] of a distribution.
 
-This function returns a __domain_error if the probablity lies outside [0,1].
+This function returns a __domain_error if the probability lies outside [0,1].
 The function may return an __overflow_error if there is no finite value
 that has the specified probability.
 
@@ -297,7 +299,7 @@ a defined skewness.
 
 Returns the 'proper' kurtosis (normalized fourth moment) of the distribution /dist/.
 
-kertosis = [beta][sub 2]= [mu][sub 4] / [mu][sub 2][super 2]
+kurtosis = [beta][sub 2]= [mu][sub 4] / [mu][sub 2][super 2]
 
 Where [mu][sub i] is the i'th central moment of the distribution, and
 in particular [mu][sub 2] is the variance of the distribution.
@@ -393,6 +395,17 @@ probability].
 [h4:survival Survival Function]
 
 Refer to the __ccdf.
+
+[h4:entropy Entropy]
+
+The entropy (or differential entropy) of a continuous probability distribution /p/ is defined as
+
+[$../graphs/differential_entropy.svg]
+
+Note that the "natural" properties of the differential entropy do not uniquely specify a log base.
+In the Boost library, we /always/ use the natural logarithm to compute differential entropy.
+This choice of log base for entropy is sometimes referred to as "entropy measured in nats".
+See [@https://doi.org/10.1109/TIT.1978.1055832 On the entropy of continuous probability distributions] for more information.
 
 [endsect] [/section:nmp Non-Member Properties]
 

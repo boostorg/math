@@ -198,7 +198,7 @@ void check_exact_quaternion_result(const boost::math::quaternion<T>& q, R1 a, R2
 template <class T, class R1, class R2, class R3, class R4>
 void check_approx_quaternion_result(const boost::math::quaternion<T>& q, R1 a, R2 b, R3 c, R4 d, int eps = 10)
 {
-   T tol = std::numeric_limits<T>::epsilon() * eps * 100;  // epsilon as a persentage.
+   T tol = std::numeric_limits<T>::epsilon() * eps * 100;  // epsilon as a percentage.
    using std::abs;
    if (abs(a) > tol / 100)
    {
@@ -555,8 +555,8 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(arithmetic_test, T, test_types)
    T t = 5;
    T radius = boost::math::constants::root_two<T>();
    T longitude = boost::math::constants::pi<T>() / 4;
-   T lattitude = boost::math::constants::pi<T>() / 3;
-   q1 = ::boost::math::cylindrospherical(t, radius, longitude, lattitude);
+   T latitude = boost::math::constants::pi<T>() / 3;
+   q1 = ::boost::math::cylindrospherical(t, radius, longitude, latitude);
    check_approx_quaternion_result(q1, 5, 0.5, 0.5, boost::lexical_cast<T>("1.224744871391589049098642037352945695983"), 10);
    T r = boost::math::constants::root_two<T>();
    T angle = boost::math::constants::pi<T>() / 4;

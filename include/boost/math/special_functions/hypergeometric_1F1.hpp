@@ -102,7 +102,7 @@ namespace boost { namespace math { namespace detail {
                //
                // When a < b and if we fall through to the series, then we get divergent behaviour when b crosses the origin
                // so ideally we would pick another method.  Otherwise the terms immediately after b crosses the origin may
-               // suffer catestrophic cancellation....
+               // suffer catastrophic cancellation....
                //
                if((a < b) && can_use_recursion)
                   return hypergeometric_1F1_backwards_recursion_on_b_for_negative_a(a, b, z, pol, function, log_scaling);
@@ -113,7 +113,7 @@ namespace boost { namespace math { namespace detail {
             //
             // Start by getting the domain of the recurrence relations, we get either:
             //   -1     Backwards recursion is stable and the CF will converge to double precision.
-            //   +1     Forwards recursion is satble and the CF will converge to double precision.
+            //   +1     Forwards recursion is stable and the CF will converge to double precision.
             //    0     No man's land, we're not far enough away from the crossover point to get double precision from either CF.
             //
             // At higher than double precision we need to be further away from the crossover location to
@@ -142,7 +142,7 @@ namespace boost { namespace math { namespace detail {
             }
             //
             // We could fall back to Tricomi's approximation if we're in the transition zone
-            // betweeen the above two regions.  However, I've been unable to find any examples
+            // between the above two regions.  However, I've been unable to find any examples
             // where this is better than the series, and there are many cases where it leads to
             // quite grievous errors.
             /*
@@ -410,7 +410,7 @@ namespace boost { namespace math { namespace detail {
          {
          }
          //
-         // Very occationally our convergence criteria don't quite go to full precision
+         // Very occasionally our convergence criteria don't quite go to full precision
          // and we have to try another method:
          //
          log_scaling = saved_scale;
@@ -430,7 +430,7 @@ namespace boost { namespace math { namespace detail {
                // Series is close enough to convergent that we should be OK,
                // In this domain b - a ~ b and since 1F1[a, a, z] = e^z 1F1[b-a, b, -z]
                // and 1F1[a, a, -z] = e^-z the result must necessarily be somewhere near unity.
-               // We have to rule out b small and negative becuase if b crosses the origin early
+               // We have to rule out b small and negative because if b crosses the origin early
                // in the series (before we're pretty much converged) then all bets are off.
                // Note that this can go badly wrong when b and z are both large and negative,
                // in that situation the series goes in waves of large and small values which
@@ -535,7 +535,7 @@ namespace boost { namespace math { namespace detail {
                }
             }
             //
-            // We previosuly used Tricomi here, but it appears to be worse than
+            // We previously used Tricomi here, but it appears to be worse than
             // the recurrence-based algorithms in hypergeometric_1F1_divergent_fallback.
             /*
             else

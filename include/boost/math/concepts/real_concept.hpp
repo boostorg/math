@@ -355,7 +355,7 @@ namespace tools
 {
 
 template <>
-inline concepts::real_concept make_big_value<concepts::real_concept>(boost::math::tools::largest_float val, const char* , mpl::false_ const&, mpl::false_ const&)
+inline concepts::real_concept make_big_value<concepts::real_concept>(boost::math::tools::largest_float val, const char* , boost::false_type const&, boost::false_type const&)
 {
    return val;  // Can't use lexical_cast here, sometimes it fails....
 }

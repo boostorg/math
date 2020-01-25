@@ -393,9 +393,9 @@ Is a Javascript application that calculates and plots probability distributions,
 and provides the most complete range of distributions:
 
 [:Bernoulli, Binomial, discrete uniform, geometric, hypergeometric,
-negative binomial, Poisson, beta, Cauchy-Lorentz, chi-sequared, Erlang,
+negative binomial, Poisson, beta, Cauchy-Lorentz, chi-squared, Erlang,
 exponential, extreme value, Fisher, gamma, Laplace, logistic,
-lognormal, normal, Parteo, Student's t, triangular, uniform, and Weibull.]
+lognormal, normal, Pareto, Student's t, triangular, uniform, and Weibull.]
 
 It calculates pdf, cdf, survivor, log survivor, hazard, tail areas,
 & critical values for 5 tail values.

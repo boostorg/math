@@ -487,7 +487,7 @@ So the compiler tries to downcast the `float128_t` argument first to
 `long double`, then to `double`, then to `float`;
 the compilation fails because the result is ambiguous.
 However the compiler error message will appear cruelly inscrutable,
-at an apparently irelevant line number and making no mention of `float128`:
+at an apparently irrelevant line number and making no mention of `float128`:
 the word ['ambiguous] is the clue to what is wrong.
 
 Provided you `#include <boost/cstdfloat.hpp>` [*before] the inclusion

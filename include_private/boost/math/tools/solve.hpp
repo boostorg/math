@@ -32,7 +32,7 @@ namespace boost{ namespace math{ namespace tools{
 // Find x such that Ax = b
 //
 // Caution: this uses undocumented, and untested ublas code,
-// however short of writing our own LU-decompostion code
+// however short of writing our own LU-decomposition code
 // it's the only game in town.
 //
 template <class T>
