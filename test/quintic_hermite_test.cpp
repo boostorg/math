@@ -77,7 +77,7 @@ void test_quadratic()
 
     auto qh = quintic_hermite(std::move(x), std::move(y), std::move(dydx), std::move(d2ydx2));
 
-    for (Real t = 0; t <= 9; t += 0.125) {
+    for (Real t = 0; t <= 9; t += 0.0078125) {
         CHECK_ULP_CLOSE(Real(t*t)/2, qh(t), 2);
         CHECK_ULP_CLOSE(t, qh.prime(t), 2);
     }
@@ -106,8 +106,8 @@ void test_cubic()
 
     auto qh = quintic_hermite(std::move(x), std::move(y), std::move(dydx), std::move(d2ydx2));
 
-    for (Real t = 0; t <= 9; t += 0.125) {
-        CHECK_ULP_CLOSE(Real(t*t*t)/6, qh(t), 5);
+    for (Real t = 0; t <= 9; t += 0.0078125) {
+        CHECK_ULP_CLOSE(Real(t*t*t)/6, qh(t), 10);
         //CHECK_ULP_CLOSE(t, qh.prime(t), 2);
     }
 }
@@ -135,8 +135,8 @@ void test_quartic()
 
     auto qh = quintic_hermite(std::move(x), std::move(y), std::move(dydx), std::move(d2ydx2));
 
-    for (Real t = 0; t <= 9; t += 0.125) {
-        CHECK_ULP_CLOSE(Real(t*t*t*t)/24, qh(t), 43);
+    for (Real t = 1; t <= 11; t += 0.0078125) {
+        CHECK_ULP_CLOSE(Real(t*t*t*t)/24, qh(t), 100);
     }
 }
 
