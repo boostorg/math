@@ -24,6 +24,7 @@ namespace detail {
 template<class Real, int p, int order>
 std::vector<Real> dyadic_grid(size_t j_max)
 {
+    using std::isnan;
     auto c = boost::math::filters::daubechies_scaling_filter<Real, p>();
     Real scale = boost::math::constants::root_two<Real>()*(1 << order);
     for (auto & x : c)
@@ -35,11 +36,10 @@ std::vector<Real> dyadic_grid(size_t j_max)
 
     // Maximum sensible j for 32 bit floats is j_max = 22:
     std::vector<Real> v(2*p + (2*p-1)*((1<<j_max) -1), std::numeric_limits<Real>::quiet_NaN());
-    v.resize(2*p + (2*p-1)*((1<<j_max) -1), std::numeric_limits<Real>::quiet_NaN());
     v[0] = 0;
     v[v.size()-1] = 0;
     for (size_t i = 0; i < phik.size(); ++i) {
-        v[i*(1<<(j_max))] = phik[i];
+        v[i*(1<<j_max)] = phik[i];
     }
 
     for (size_t j = 1; j <= j_max; ++j)
