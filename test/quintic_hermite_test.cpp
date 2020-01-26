@@ -113,6 +113,35 @@ void test_cubic()
 }
 
 template<typename Real>
+void test_quartic()
+{
+
+    std::vector<Real> x{0,1,2,3, 4,5,6,7,8,9, 10, 11};
+    std::vector<Real> y(x.size());
+    for (size_t i = 0; i < y.size(); ++i)
+    {
+        y[i] = x[i]*x[i]*x[i]*x[i]/24;
+    }
+
+    std::vector<Real> dydx(x.size());
+    for (size_t i = 0; i < y.size(); ++i) {
+        dydx[i] = x[i]*x[i]*x[i]/6;
+    }
+
+    std::vector<Real> d2ydx2(x.size());
+    for (size_t i = 0; i < y.size(); ++i) {
+        d2ydx2[i] = x[i]*x[i]/2;
+    }
+
+    auto qh = quintic_hermite(std::move(x), std::move(y), std::move(dydx), std::move(d2ydx2));
+
+    for (Real t = 0; t <= 9; t += 0.125) {
+        CHECK_ULP_CLOSE(Real(t*t*t*t)/24, qh(t), 43);
+    }
+}
+
+
+template<typename Real>
 void test_interpolation_condition()
 {
     for (size_t n = 4; n < 50; ++n) {
@@ -152,18 +181,21 @@ int main()
     test_linear<float>();
     test_quadratic<float>();
     test_cubic<float>();
+    test_quartic<float>();
     test_interpolation_condition<float>();
 
     test_constant<double>();
     test_linear<double>();
     test_quadratic<double>();
     test_cubic<double>();
+    test_quartic<double>();
     test_interpolation_condition<double>();
 
     test_constant<long double>();
     test_linear<long double>();
     test_quadratic<long double>();
     test_cubic<long double>();
+    test_quartic<long double>();
     test_interpolation_condition<long double>();
 
 #ifdef BOOST_HAS_FLOAT128
@@ -171,6 +203,7 @@ int main()
     test_linear<float128>();
     test_quadratic<float128>();
     test_cubic<float128>();
+    test_quartic<float128>();
 #endif
 
     return boost::math::test::report_errors();
