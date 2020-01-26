@@ -1,5 +1,5 @@
 /*
- * Copyright Nick Thompson, 2019
+ * Copyright Nick Thompson, 2020
  * Use, modification and distribution are subject to the
  * Boost Software License, Version 1.0. (See accompanying file
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -51,7 +51,7 @@ std::vector<Real> dyadic_grid(size_t j_max)
             size_t delivery_idx = k*(1 << (j_max-j));
             if (delivery_idx >= v.size())
             {
-                std::cout << "Delivery index out of range!\n";
+                std::cerr << "Delivery index out of range!\n";
                 continue;
             }
             Real term = 0;
@@ -62,8 +62,8 @@ std::vector<Real> dyadic_grid(size_t j_max)
                 }
             }
             if (!isnan(v[delivery_idx])) {
-                std::cout << "Delivery index already populated!, = " << v[delivery_idx] << "\n";
-                std::cout << "would overwrite with " << term << "\n";
+                std::cerr << "Delivery index already populated!, = " << v[delivery_idx] << "\n";
+                std::cerr << "would overwrite with " << term << "\n";
             }
             v[delivery_idx] = term;
         }

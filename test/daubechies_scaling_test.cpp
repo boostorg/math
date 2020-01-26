@@ -32,6 +32,7 @@ using boost::math::constants::root_two;
 template<class Real, unsigned p>
 void test_daubechies_filters()
 {
+    std::cout << "Testing Daubechies filters with " << p << " vanishing moments on type " << boost::core::demangle(typeid(Real).name()) << "\n";
     Real tol = 3*std::numeric_limits<Real>::epsilon();
     using boost::math::filters::daubechies_scaling_filter;
     using boost::math::filters::daubechies_wavelet_filter;
@@ -99,6 +100,7 @@ void test_daubechies_filters()
 
 void test_agreement_with_ten_lectures()
 {
+    std::cout << "Testing agreement with Ten Lectures\n";
     std::array<double, 4> h2 = {0.4829629131445341, 0.8365163037378077, 0.2241438680420134, -0.1294095225512603};
     auto h2_ = boost::math::filters::daubechies_scaling_filter<double, 2>();
     for (size_t i = 0; i < h2.size(); ++i)
@@ -127,6 +129,9 @@ void test_agreement_with_ten_lectures()
 template<class Real1, class Real2, size_t p>
 void test_filter_ulp_distance()
 {
+    std::cout << "Testing filters ULP distance between types "
+              << boost::core::demangle(typeid(Real1).name()) << "and"
+              << boost::core::demangle(typeid(Real2).name()) << "\n";
     using boost::math::filters::daubechies_scaling_filter;
     auto h1 = daubechies_scaling_filter<Real1, p>();
     auto h2 = daubechies_scaling_filter<Real2, p>();
@@ -144,6 +149,7 @@ void test_filter_ulp_distance()
 template<class Real, unsigned p, unsigned order>
 void test_integer_grid()
 {
+    std::cout << "Testing integer grid with " << p << " vanishing moments and " << order << " derivative on type " << boost::core::demangle(typeid(Real).name()) << "\n";
     using boost::math::detail::daubechies_scaling_integer_grid;
     using boost::math::tools::summation_condition_number;
     Real unit_roundoff = std::numeric_limits<Real>::epsilon()/2;
@@ -163,6 +169,13 @@ void test_integer_grid()
             cond += i*grid[i];
         }
         CHECK_MOLLIFIED_CLOSE(-1, cond.sum(), 2*cond.l1_norm()*unit_roundoff);
+
+        // Differentiate \sum_{k} \phi(x-k) = 1 to get this:
+        cond = summation_condition_number<Real>(0);
+        for (size_t i = 0; i < grid.size(); ++i) {
+            cond += grid[i];
+        }
+        CHECK_MOLLIFIED_CLOSE(0, cond.sum(), 2*cond.l1_norm()*unit_roundoff);
     }
 
     if constexpr (order == 2) {
@@ -171,6 +184,13 @@ void test_integer_grid()
             cond += i*i*grid[i];
         }
         CHECK_MOLLIFIED_CLOSE(2, cond.sum(), 2*cond.l1_norm()*unit_roundoff);
+
+        // Differentiate \sum_{k} \phi(x-k) = 1 to get this:
+        cond = summation_condition_number<Real>(0);
+        for (size_t i = 0; i < grid.size(); ++i) {
+            cond += grid[i];
+        }
+        CHECK_MOLLIFIED_CLOSE(0, cond.sum(), 2*cond.l1_norm()*unit_roundoff);
     }
 
     if constexpr (order == 3) {
@@ -179,6 +199,14 @@ void test_integer_grid()
             cond += i*i*i*grid[i];
         }
         CHECK_MOLLIFIED_CLOSE(-6, cond.sum(), 2*cond.l1_norm()*unit_roundoff);
+
+        // Differentiate \sum_{k} \phi(x-k) = 1 to get this:
+        cond = summation_condition_number<Real>(0);
+        for (size_t i = 0; i < grid.size(); ++i) {
+            cond += grid[i];
+        }
+        CHECK_MOLLIFIED_CLOSE(0, cond.sum(), 2*cond.l1_norm()*unit_roundoff);
+
     }
 
     if constexpr (order == 4) {
@@ -187,6 +215,13 @@ void test_integer_grid()
             cond += i*i*i*i*grid[i];
         }
         CHECK_MOLLIFIED_CLOSE(24, cond.sum(), 2*cond.l1_norm()*unit_roundoff);
+
+        // Differentiate \sum_{k} \phi(x-k) = 1 to get this:
+        cond = summation_condition_number<Real>(0);
+        for (size_t i = 0; i < grid.size(); ++i) {
+            cond += grid[i];
+        }
+        CHECK_MOLLIFIED_CLOSE(0, cond.sum(), 2*cond.l1_norm()*unit_roundoff);
     }
 
 }
@@ -361,11 +396,16 @@ int main()
     test_dyadic_grid<float>();
     test_dyadic_grid<double>();
     test_dyadic_grid<long double>();
+    #ifdef BOOST_HAS_FLOAT128
     test_dyadic_grid<float128>();
+    #endif
+    /*
     test_interpolation<float>();
     test_interpolation<double>();
     test_interpolation<long double>();
+    #if BOOST_HAS_FLOAT128
     test_interpolation<float128>();
+    #endif*/
 
     // All scaling functions have a first derivative.
     boost::hana::for_each(std::make_index_sequence<13>(), [&](auto idx){
