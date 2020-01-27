@@ -135,6 +135,34 @@ void test_linear()
 }
 
 template<typename Real>
+void test_quadratic()
+{
+    std::vector<Real> x(50);
+    std::default_random_engine rd;
+    std::uniform_real_distribution<Real> dis(0.1,1);
+    Real x0 = dis(rd);
+    x[0] = x0;
+    for (size_t i = 1; i < x.size(); ++i) {
+        x[i] = x[i-1] + dis(rd);
+    }
+    Real xmax = x.back();
+
+    std::vector<Real> y(x.size());
+    std::vector<Real> dydx(x.size());
+    for (size_t i = 0; i < x.size(); ++i) {
+        y[i] = x[i]*x[i]/2;
+        dydx[i] = x[i];
+    }
+
+    auto s = cubic_hermite(std::move(x), std::move(y), std::move(dydx));
+    for (Real t = x0; t <= xmax; t+= 0.0125)
+    {
+        CHECK_ULP_CLOSE(t*t/2, s(t), 5);
+        CHECK_ULP_CLOSE(t, s.prime(t), 65);
+    }
+}
+
+template<typename Real>
 void test_interpolation_condition()
 {
     for (size_t n = 4; n < 50; ++n) {
@@ -168,15 +196,18 @@ int main()
 {
     test_constant<float>();
     test_linear<float>();
+    test_quadratic<float>();
     test_interpolation_condition<float>();
 
 
     test_constant<double>();
     test_linear<double>();
+    test_quadratic<double>();
     test_interpolation_condition<double>();
 
     test_constant<long double>();
     test_linear<long double>();
+    test_quadratic<long double>();
     test_interpolation_condition<long double>();
 
 #ifdef BOOST_HAS_FLOAT128

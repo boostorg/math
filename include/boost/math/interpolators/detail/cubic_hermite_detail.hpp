@@ -95,6 +95,14 @@ public:
         Real y = (1-t)*(1-t)*(y0*(1+2*t) + s0*(x-x0))
               + t*t*(y1*(3-2*t) + dx*s1*(t-1));
         return y;
+
+        // Another representation, useful for understanding the derivative calc:
+        /*Real d1 = (y1 - y0 - s0*dx)/(dx*dx);
+        Real d2 = (s1 - s0)/(2*dx);
+        Real c2 = 3*d1 - 2*d2;
+        Real c3 = 2*(d2 - d1)/dx;
+        Real y = y0 + s0*(x-x0) + c2*(x-x0)*(x-x0) + c3*(x-x0)*(x-x0)*(x-x0); 
+        return y;*/
     }
 
     Real prime(Real x) const {
@@ -113,13 +121,19 @@ public:
         auto i = std::distance(x_.begin(), it) -1;
         Real x0 = *(it-1);
         Real x1 = *it;
+        Real y0 = y_[i];
+        Real y1 = y_[i+1];
         Real s0 = dydx_[i];
         Real s1 = dydx_[i+1];
+        Real dx = (x1-x0);
 
-        // Ridiculous linear interpolation. Fine for now:
-        Real numerator = s0*(x1-x) + s1*(x-x0);
-        Real denominator = x1 - x0;
-        return numerator/denominator;
+        Real d1 = (y1 - y0 - s0*dx)/(dx*dx);
+        Real d2 = (s1 - s0)/(2*dx);
+        Real c2 = 3*d1 - 2*d2;
+        Real c3 = 2*(d2 - d1)/dx;
+        Real dydx = s0 + 2*c2*(x-x0) + 3*c3*(x-x0)*(x-x0); 
+
+        return dydx;
     }
 
 
