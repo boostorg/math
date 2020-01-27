@@ -20,6 +20,7 @@ constexpr std::array<Real, 2*p> daubechies_scaling_integer_grid()
     static_assert(p <= 15, "Integer grids only implemented up to 15.");
     static_assert(p > 1, "Integer grids only implemented for p >= 2.");
     if constexpr (p == 2) {
+        static_assert(order <= 1 && order >= 0, "The 2 vanishing moment Daubechies scaling function only has one derivative.");
         if constexpr (std::is_same_v<Real, float>) {
             if constexpr (order == 0) {
                 return {0x0p+0f, 0x1.5db3d8p+0f, -0x1.76cf5ep-2f, 0x0p+0f};
