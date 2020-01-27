@@ -75,6 +75,8 @@ Hence we can use `boost::circular_buffer` to do real-time interpolation.
     // interpolate at 4.5:
     y = circular_akima(4.5);
 
+[$../graphs/quintic_sine_approximation.svg]
+
 [heading Complexity and Performance]
 
 The following google benchmark demonstrates the cost of the call operator for this interpolator:
