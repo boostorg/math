@@ -32,9 +32,9 @@ public:
         {
             throw std::domain_error("There must be the same number of ordinates as derivative values.");
         }
-        if (x_.size() < 4)
+        if (x_.size() < 2)
         {
-            throw std::domain_error("Must be at least four data points.");
+            throw std::domain_error("Must be at least two data points.");
         }
         Real x0 = x_[0];
         for (size_t i = 1; i < x_.size(); ++i) {
