@@ -11,11 +11,14 @@
 #include <array>
 #include <cmath>
 #include <thread>
+#include <future>
 #include <iostream>
 #include <boost/multiprecision/float128.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/detail/daubechies_scaling_integer_grid.hpp>
 #include <boost/math/filters/daubechies.hpp>
+#include <boost/math/interpolators/detail/cubic_hermite_detail.hpp>
+#include <boost/math/interpolators/detail/quintic_hermite_detail.hpp>
 
 
 namespace boost::math {
@@ -82,18 +85,52 @@ std::vector<Real> dyadic_grid(int64_t j_max)
 template<class Real, int p>
 class daubechies_scaling {
 public:
-    daubechies_scaling(int levels = -1)
+    daubechies_scaling(int grid_refinements = -1)
     {
         using boost::multiprecision::float128;
-        if (levels < 0)
+        if (grid_refinements < 0)
         {
-            m_levels = 22;
-        }
-        else {
-            m_levels = levels;
+            grid_refinements = 20;
         }
 
-        auto f1 = [this] {
+        if (p < 4) {
+            throw std::domain_error("only p>=5 is currently implemented!");
+        }
+
+        // Compute the refined grid:
+        std::future<std::vector<Real>> t0 = std::async(std::launch::async, [&grid_refinements]() { return detail::dyadic_grid<Real, p, 0>(grid_refinements); });
+        // Compute the derivative of the refined grid:
+        std::future<std::vector<Real>> t1 = std::async(std::launch::async, [&grid_refinements]() { return detail::dyadic_grid<Real, p, 1>(grid_refinements); });
+
+        // if necessary, compute the second derivative:
+        std::vector<Real> d2ydx2;
+        if constexpr(p >= 6) {
+            std::future<std::vector<Real>> t3 = std::async(std::launch::async, [&grid_refinements]() { return detail::dyadic_grid<Real, p, 2>(grid_refinements); });
+            d2ydx2 = t3.get();
+        }
+
+        auto y = t0.get();
+        auto dydx = t1.get();
+
+
+
+        // Storing the vector of x's is unnecessary; it's only because I haven't implemented an equispaced cubic Hermite interpolator:
+        std::vector<Real> x(y.size());
+        Real h = Real(2*p-1)/(x.size()-1);
+        for (size_t i = 0; i < x.size(); ++i) {
+            x[i] = i*h;
+        }
+
+        if constexpr (p == 4 || p == 5) {
+            m_cbh = std::make_shared<interpolators::detail::cubic_hermite_detail<std::vector<Real>>>(std::move(x), std::move(y), std::move(dydx));
+        }
+        else if constexpr (p >= 6) {
+            
+            m_qh = std::make_shared<interpolators::detail::quintic_hermite_detail<std::vector<Real>>>(std::move(x), std::move(y), std::move(dydx), std::move(d2ydx2));
+        }
+
+ 
+        /*auto f1 = [this] {
             auto v = detail::dyadic_grid<float128, p, 0>(this->m_levels);
             this->m_v.resize(v.size());
             for (size_t i = 0; i < v.size(); ++i) {
@@ -133,16 +170,40 @@ public:
         for (auto & x : m_c)
         {
             x *= scale;
+        }*/
+    }
+
+
+    Real operator()(Real x) const {
+        if constexpr (p==4 || p ==5) {
+            return m_cbh->operator()(x);
+        }
+        else if constexpr (p >= 6) {
+            return m_qh->operator()(x);
         }
     }
 
-    Real operator()(Real x) const { return this->linear_interpolation(x); }
+    Real prime(Real x) const {
+        if constexpr (p==4 || p ==5) {
+            return m_cbh->prime(x);
+        }
+        else if constexpr (p >= 6) {
+            return m_qh->prime(x);
+        }
+    }
 
     std::pair<int, int> support() const {
         return {0, 2*p-1};
     }
 
-    Real constant_interpolation(Real x) const {
+private:
+    size_t m_levels;
+    // need this for p = 4,5:
+    std::shared_ptr<interpolators::detail::cubic_hermite_detail<std::vector<Real>>> m_cbh;
+    // need this for p >= 6:
+    std::shared_ptr<interpolators::detail::quintic_hermite_detail<std::vector<Real>>> m_qh;
+
+    /*Real constant_interpolation(Real x) const {
         if (x <= 0 || x >= 2*p-1) {
             return Real(0);
         }
@@ -349,7 +410,7 @@ private:
     std::array<Real, 2*p> m_c;
     std::vector<Real> m_v;
     std::vector<Real> m_v_prime;
-    std::vector<Real> m_v_dbl_prime;
+    std::vector<Real> m_v_dbl_prime;*/
 };
 
 }
