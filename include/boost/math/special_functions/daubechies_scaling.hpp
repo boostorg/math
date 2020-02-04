@@ -11,6 +11,7 @@
 #include <array>
 #include <cmath>
 #include <thread>
+#include <iostream>
 #include <boost/multiprecision/float128.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/detail/daubechies_scaling_integer_grid.hpp>
@@ -22,7 +23,7 @@ namespace boost::math {
 namespace detail {
 
 template<class Real, int p, int order>
-std::vector<Real> dyadic_grid(size_t j_max)
+std::vector<Real> dyadic_grid(int64_t j_max)
 {
     using std::isnan;
     auto c = boost::math::filters::daubechies_scaling_filter<Real, p>();
@@ -38,26 +39,29 @@ std::vector<Real> dyadic_grid(size_t j_max)
     std::vector<Real> v(2*p + (2*p-1)*((1<<j_max) -1), std::numeric_limits<Real>::quiet_NaN());
     v[0] = 0;
     v[v.size()-1] = 0;
-    for (size_t i = 0; i < phik.size(); ++i) {
+    for (int64_t i = 0; i < (int64_t) phik.size(); ++i) {
         v[i*(1<<j_max)] = phik[i];
     }
 
-    for (size_t j = 1; j <= j_max; ++j)
+    for (int64_t j = 1; j <= j_max; ++j)
     {
-        size_t k_max = v.size()/(1 << (j_max-j));
-        for (size_t k = 1; k < k_max;  k += 2)
+        int64_t k_max = v.size()/(1 << (j_max-j));
+        for (int64_t k = 1; k < k_max;  k += 2)
         {
             // Where this value will go:
-            size_t delivery_idx = k*(1 << (j_max-j));
-            if (delivery_idx >= v.size())
+            int64_t delivery_idx = k*(1 << (j_max-j));
+            if (delivery_idx >= (int64_t) v.size())
             {
                 std::cerr << "Delivery index out of range!\n";
                 continue;
             }
             Real term = 0;
-            for (size_t l = 0; l < c.size(); ++l) {
-                size_t idx = k*(1 << (j_max - j + 1)) - l*(1 << j_max);
-                if (idx >= 0 && idx < v.size()) {
+            for (int64_t l = 0; l < (int64_t) c.size(); ++l) {
+                int64_t idx = k*(1 << (j_max - j + 1)) - l*(1 << j_max);
+                if (idx < 0) {
+                    break;
+                }
+                if (idx < (int64_t) v.size()) {
                     term += c[l]*v[idx];
                 }
             }
