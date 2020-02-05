@@ -17,12 +17,12 @@
 #include <boost/math/interpolators/pchip.hpp>
 #include <boost/multiprecision/float128.hpp>
 #include <boost/core/demangle.hpp>
-#include <quicksvg/graph_fn.hpp>
-#include <quicksvg/ulp_plot.hpp>
+//#include <quicksvg/graph_fn.hpp>
+//#include <quicksvg/ulp_plot.hpp>
 
 using boost::multiprecision::float128;
 
-template<class Real, int p>
+/*template<class Real, int p>
 void do_ulp()
 {
     std::cout << "Creating ULP plot on type " << boost::core::demangle(typeid(Real).name()) << " and " << p << " vanishing moments.\n";  
@@ -78,7 +78,7 @@ void do_ulp()
                         title, 15000, 1100, 10);
     std::cout << "Done writing ulp plot\n";
 
-}
+}*/
 
 
 template<class Real, int p>
@@ -179,10 +179,10 @@ template<class Real, int p>
 void find_best_interpolator()
 {
     using std::abs;
-    int rmax = 18;
+    int rmax = 15;
     auto phi_dense = boost::math::detail::dyadic_grid<Real, p, 0>(rmax);
     Real dx_dense = (2*p-1)/static_cast<Real>(phi_dense.size()-1);
-    for (int r = 2; r < rmax-2; ++r)
+    for (int r = 2; r < rmax-1; ++r)
     {
         std::map<Real, std::string> m;
         auto phi = boost::math::detail::dyadic_grid<Real, p, 0>(r);
@@ -190,7 +190,7 @@ void find_best_interpolator()
 
         std::vector<Real> x(phi.size());
         Real dx = (2*p-1)/static_cast<Real>(x.size()-1);
-        std::cout << "dx = " << dx << "\n";
+        std::cout << "dx = 1/" << (1 << r) << " = " << dx << "\n";
         for (size_t i = 0; i < x.size(); ++i) {
             x[i] = i*dx;
         }
@@ -346,6 +346,7 @@ void find_best_interpolator()
           m.insert({sup, "makima"});
         }
 
+        // Again, linear complexity of evaluation => quadratic complexity of exhaustive checking.
         /*{
             auto trig = boost::math::interpolators::cardinal_trigonometric(phi, Real(0), dx);
             Real sup = 0;
@@ -489,15 +490,16 @@ void find_best_interpolator()
         }
         std::string best = "none";
         Real best_sup = 1000000000;
+        std::cout << std::setprecision(20) << std::fixed;
         for (auto & e : m) {
           
-          std::cout << std::setprecision(20) << std::fixed << e.first << " is error of " << e.second << "\n";
+          std::cout << "\t" << e.first << " is error of " << e.second << "\n";
           if (e.first < best_sup) {
             best = e.second;
             best_sup = e.first;
           }
         }
-        std::cout << "The best method for p = " << p << " is the " << best << "\n";
+        std::cout << "\tThe best method for p = " << p << " is the " << best << "\n";
     }
 }
 
@@ -510,7 +512,7 @@ int main() {
     // Says linear interpolation is the best:
     find_best_interpolator<long double, 2>();
 
-    /*// Says linear interpolation is the best:
+    // Says linear interpolation is the best:
     find_best_interpolator<long double, 3>();
 
     // Says cubic_hermite_spline is best:
@@ -526,5 +528,5 @@ int main() {
     find_best_interpolator<long double, 7>();
 
     // Says quintic_hermite_spline is best:
-    find_best_interpolator<long double, 15>();*/
+    find_best_interpolator<long double, 15>();
 }
