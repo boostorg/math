@@ -19,6 +19,7 @@
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/filters/daubechies.hpp>
 #include <boost/math/special_functions/factorials.hpp>
+#include <boost/multiprecision/cpp_bin_float.hpp>
 
 
 
@@ -193,6 +194,24 @@ void write_grid(std::ofstream & fs)
     }
     fs << "        }\n";
     fs << "        #endif\n";
+
+    fs << "        if constexpr (std::is_same_v<Real, boost::multiprecision::cpp_bin_float_oct>) {\n";
+    j = 0;
+    for (auto it = grids.begin(); it != grids.end(); ++it) {
+
+    fs << std::setprecision(std::numeric_limits<boost::multiprecision::cpp_bin_float_oct>::digits10 + 3);
+    fs << "            if constexpr (order == " << j << ") {\n";
+    fs << "                return {";
+        auto const & grid = *it;
+        for (size_t i = 0; i < grid.size() -1; ++i) {
+            fs << "boost::lexical_cast<boost::multiprecision::cpp_bin_float_oct>(\"" << static_cast<boost::multiprecision::cpp_bin_float_oct>(grid[i]) << "\"), ";
+        }
+        fs << "boost::lexical_cast<boost::multiprecision::cpp_bin_float_oct>(\"" << static_cast<boost::multiprecision::cpp_bin_float_oct>(grid[grid.size()-1]) << "\")};\n";
+    fs << "            }\n";
+        ++j;
+    }
+    fs << "        }\n";
+
     fs << "    }\n";
 
 }
@@ -226,7 +245,7 @@ int main()
     fs << std::hexfloat;
 
     boost::hana::for_each(std::make_index_sequence<p_max>(), [&](auto idx){
-        write_grid<boost::multiprecision::float128, idx+2>(fs);
+        write_grid<boost::multiprecision::cpp_bin_float_oct, idx+2>(fs);
     });
 
     fs << "    std::array<Real, 2*p> m{};\n"

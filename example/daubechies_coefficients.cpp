@@ -208,8 +208,8 @@ std::vector<typename Complex::value_type> daubechies_coefficients(std::vector<st
 
 int main()
 {
-    typedef boost::multiprecision::cpp_complex<150> Complex;
-    size_t p_max = 25;
+    typedef boost::multiprecision::cpp_complex<500> Complex;
+    size_t p_max = 20;
     std::ofstream fs{"daubechies_filters.hpp"};
     fs << "/*\n"
        << " * Copyright Nick Thompson, 2019\n"
@@ -223,11 +223,11 @@ int main()
        << "#ifdef BOOST_HAS_FLOAT128\n"
        << "#include <boost/multiprecision/float128.hpp>\n"
        << "#endif\n"
+       << "#include <boost/multiprecision/cpp_bin_float.hpp>\n"
        << "namespace boost::math::filters {\n\n"
        << "template <typename Real, unsigned p>\n"
        << "constexpr std::array<Real, 2*p> daubechies_scaling_filter()\n"
        << "{\n"
-       << "    static_assert(sizeof(Real) <= 16, \"Filter coefficients only computed up to 128 bits of precision.\");\n"
        << "    static_assert(p < " << p_max << ", \"Filter coefficients only implemented up to " << p_max - 1 << ".\");\n";
 
     for(size_t p = 1; p < p_max; ++p)
@@ -269,6 +269,15 @@ int main()
         fs << static_cast<boost::multiprecision::float128>(h[h.size()-1]) << "Q};\n";
         fs << "        }\n";
         fs << "        #endif\n";
+
+        fs << "        if constexpr (std::is_same_v<Real, boost::multiprecision::cpp_bin_float_oct>) {\n";
+        fs << "            return {";
+        fs <<std::setprecision(std::numeric_limits<boost::multiprecision::cpp_bin_float_oct>::digits10 + 3);
+        for (size_t i = 0; i < h.size() - 1; ++i) {
+            fs <<  "boost::lexical_cast<boost::multiprecision::cpp_bin_float_oct>(\"" <<  static_cast<boost::multiprecision::cpp_bin_float_oct>(h[i]) << "\"), ";
+        }
+        fs <<  "boost::lexical_cast<boost::multiprecision::cpp_bin_float_oct>(\"" << static_cast<boost::multiprecision::cpp_bin_float_oct>(h[h.size()-1]) << "\")};\n";
+        fs << "        }\n";
 
 
         fs << "    }\n";
