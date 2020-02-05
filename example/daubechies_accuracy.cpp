@@ -17,7 +17,6 @@
 #include <boost/math/interpolators/pchip.hpp>
 #include <boost/multiprecision/float128.hpp>
 #include <boost/core/demangle.hpp>
-#include <boost/math/special_functions/detail/daubechies_scaling_roots.hpp>
 #include <quicksvg/graph_fn.hpp>
 #include <quicksvg/ulp_plot.hpp>
 
@@ -81,143 +80,6 @@ void do_ulp()
 
 }
 
-template<class Real, int p>
-void test_interpolate_with_roots()
-{
-    std::cout << "Testing interpolation with roots on type " << boost::core::demangle(typeid(Real).name()) << " and " << p << " vanishing moments.\n";
-    using std::floor;
-    using std::ceil;
-    using std::abs;
-    int rmax = 22;
-    auto phi_dense = boost::math::detail::dyadic_grid<float128, p, 0>(rmax);
-    auto phi_dense_prime = boost::math::detail::dyadic_grid<float128, p, 1>(rmax);
-    Real dx_dense = (2*p-1)/static_cast<Real>(phi_dense.size()-1);
-
-    auto roots = boost::math::detail::daubechies_scaling_roots<Real, p>();
-    auto root_derivatives = boost::math::detail::daubechies_scaling_derivatives_at_roots<Real, p>();
-    if (std::is_same_v<Real, float>) {
-      roots.resize(12);
-      root_derivatives.resize(12);
-      std::cout << "Last root = " << roots.back() << "\n";
-    }
-
-    for (int r = 5; r <= rmax - 1; ++r) {
-        auto phi_accurate = boost::math::detail::dyadic_grid<float128, p, 0>(r);
-        std::vector<Real> phi(phi_accurate.size());
-        for (size_t i = 0; i < phi_accurate.size(); ++i) {
-            phi[i] = Real(phi_accurate[i]);
-        }
-        auto phi_prime_accurate = boost::math::detail::dyadic_grid<float128, p, 1>(r);
-        std::vector<Real> phi_prime(phi_accurate.size());
-        for (size_t i = 0; i < phi_prime_accurate.size(); ++i) {
-            phi_prime[i] = Real(phi_prime_accurate[i]);
-        }
-
-        std::vector<Real> x(phi.size());
-        Real dx = (2*p-1)/static_cast<Real>(x.size()-1);
-        std::cout << "dx = " << dx << "\n";
-        for (size_t i = 0; i < x.size(); ++i) {
-          x[i] = i*dx;
-        }
-
-        //std::cout << "x.size() before insertion = " << x.size() << "\n";
-        //std::cout << "Adding " << roots.size() << " roots; giving " << x.size() + roots.size() << " total\n";
-        // Now insert the roots into the vector:
-        //x.resize(x.size() + roots.size());
-        //phi.resize(phi.size() + roots.size());
-        //phi_prime.resize(phi_prime.size() + roots.size());
-        #ifdef COMPUTE_ROOTS
-        for (size_t i = 0; i < roots.size(); ++i) {
-          auto root = roots[i];
-          auto index = static_cast<size_t>(ceil(root/dx)) + i;
-          //std::cout << "Inserting root at index " << index << "\n";
-          x.insert(x.begin() + index, root);
-          phi.insert(phi.begin() + index, Real(0));
-          phi_prime.insert(phi_prime.begin()+ index, root_derivatives[i]);
-        }
-        #endif
-        /*if (std::is_sorted(x.begin(), x.end())) {
-          std::cout << "x is sorted! This is good!\n";
-        } else {
-          std::cout << "x is not sorted! This is bad!\n";
-        }
-        std::cout << "x.size() = " << x.size() << "\n";
-        std::cout << "phi.size()=" << phi.size() << "\n";*/
-
-        if constexpr (p < 6 && p >= 3) {
-            auto ch = boost::math::interpolators::cubic_hermite(std::move(x), std::move(phi), std::move(phi_prime));
-            Real flt_distance = 0;
-            Real sup  = 0;
-            Real worst_abscissa = 0;
-            Real worst_value = 0;
-            Real worst_computed = 0;
-            Real worst_absolute_abscissa = 0;
-            Real worst_absolute_value = 0;
-            Real worst_computed_absolute_value = 0;
-            Real condition_number1 = 0;
-            Real condition_number2 = 0;
-            Real l1 = 0;
-            Real rel_error_sum = 0;
-            for (size_t i = phi_dense.size()/16; i < phi_dense.size(); ++i) {
-              Real t = i*dx_dense;
-              Real computed = ch(t);
-              Real expected = Real(phi_dense[i]);
-              if (abs(expected) < 100*std::numeric_limits<Real>::epsilon()) {
-                continue;
-              }
-              
-              Real diff = abs(computed - expected);
-              l1 += diff;
-              rel_error_sum += diff/abs(expected);
-              Real distance = abs(boost::math::float_distance(computed, expected));
-              if (distance > flt_distance) {
-                flt_distance = distance;
-                worst_abscissa = t;
-                worst_value = expected;
-                worst_computed = computed;
-                condition_number1 = abs(t*ch.prime(t)/expected);
-              }
-              if (diff > sup) {
-                sup = diff;
-                worst_absolute_abscissa = t;
-                worst_absolute_value = expected;
-                worst_computed_absolute_value = computed;
-                condition_number2 = abs(t*ch.prime(t)/expected);
-              }
-            }
-            std::cout << std::setprecision(std::numeric_limits<Real>::digits10 + 3);
-            std::cout << "Float distance at r = " << r << " is " << flt_distance << ", sup distance = " << sup << "\n";
-            std::cout << "\tWorst abscissa = " << worst_abscissa << "\n"
-                      << "\tWorst expected = " << worst_value << "\n"
-                      << "\tWorst computed = " << worst_computed << "\n"
-                      << "\tCondition number: " << condition_number1 << "\n";
-            std::cout << "\tWorst absolute abscissa = " << worst_absolute_abscissa  << "\n"
-                      << "\tExpected value at worst absolute abscissa = " << worst_absolute_value <<"\n"
-                      << "\tComputed value at worst absolute abscissa = " << worst_computed_absolute_value << "\n"
-                      << "\tCondition number: " << condition_number2  << "\n"
-                      << "\tL1 error = " << l1*dx_dense << "\n"
-                      << "\tRelative error sum = " << rel_error_sum*dx_dense << "\n";
-            std::cout << "\tRAM = " << 4*phi_accurate.size()*sizeof(Real) << " bytes\n";
-
-            std::vector<float128> x_acc(phi_dense.size());
-            
-            for (size_t i = 0; i < x_acc.size(); ++i) {
-              x_acc[i] = i*dx_dense;
-            }
-
-            //std::cout << "phi_dense.size() = " << phi_dense.size() << "\n";
-            auto phi_dense_copy = phi_dense;
-            auto phi_dense_prime_copy = phi_dense_prime;
-            auto acc = boost::math::interpolators::cubic_hermite(std::move(x_acc), std::move(phi_dense_copy), std::move(phi_dense_prime_copy));
-            std::cout << "Writing ulp plot\n";
-            quicksvg::ulp_plot(ch, acc, Real(0), Real(2*p-1), 
-                               "ULP plot of Daubechies with " + std::to_string(r) + " refinements",
-                               "daub" + std::to_string(p) + "_" + std::to_string(r) + ".svg", 50000, 1100, 10);
-            std::cout << "Done writing ulp plot\n";
-        }
-        
-    }
-}
 
 template<class Real, int p>
 void choose_refinement()
@@ -317,7 +179,7 @@ template<class Real, int p>
 void find_best_interpolator()
 {
     using std::abs;
-    int rmax = 14;
+    int rmax = 18;
     auto phi_dense = boost::math::detail::dyadic_grid<Real, p, 0>(rmax);
     Real dx_dense = (2*p-1)/static_cast<Real>(phi_dense.size()-1);
     for (int r = 2; r < rmax-2; ++r)
@@ -332,6 +194,22 @@ void find_best_interpolator()
         for (size_t i = 0; i < x.size(); ++i) {
             x[i] = i*dx;
         }
+
+        {
+          auto phi_copy = phi;
+          auto phi_prime_copy = phi_prime;
+          auto mh = boost::math::detail::matched_holder(std::move(phi_copy), std::move(phi_prime_copy), r);
+          Real sup = 0;
+          for (size_t i = 0; i < phi_dense.size(); ++i) {
+            Real x = i*dx_dense;
+            Real diff = abs(phi_dense[i] - mh(x));
+            if (diff > sup) {
+              sup = diff;
+            }
+          }
+          m.insert({sup, "matched_holder"});
+        }
+
 
         {
             auto linear = [&phi, &dx, &r](Real x)->Real {
@@ -389,6 +267,9 @@ void find_best_interpolator()
           m.insert({cbs_sup, "cubic_b_spline"});
         }
 
+
+        // Whittaker-Shannon interpolation has linear complexity; test over all points and it's quadratic.
+        // I ran this a couple times and found it's not competitive; so comment out for now.
         /*{
             auto phi_copy = phi;
             auto ws = boost::math::interpolators::whittaker_shannon(std::move(phi_copy), Real(0), dx);
@@ -622,14 +503,14 @@ void find_best_interpolator()
 
 int main() {
 
-    do_ulp<float, 5>();
-    //test_interpolate_with_roots<double, 5>();
+    //do_ulp<float, 5>();
+
     //choose_refinement<float, 5>();
     //choose_refinement<double, 15>();
-    /*// Says linear interpolation is the best:
+    // Says linear interpolation is the best:
     find_best_interpolator<long double, 2>();
 
-    // Says linear interpolation is the best:
+    /*// Says linear interpolation is the best:
     find_best_interpolator<long double, 3>();
 
     // Says cubic_hermite_spline is best:

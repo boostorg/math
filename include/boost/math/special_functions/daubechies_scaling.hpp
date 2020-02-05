@@ -102,7 +102,7 @@ public:
         // It's only exactly right at dyadic rationals.
         //Real constexpr const alpha = 2 - log(1+sqrt(Real(3)))/log(Real(2));
         // So we're gonna make the graph dip a little harder; this will capture more of the self-similar behavior:
-        Real constexpr const alpha = 0.35;
+        Real constexpr const alpha = 0.3;
         int64_t i = static_cast<int64_t>(std::floor(x/h_));
         Real t = (x- i*h_)/h_;
         Real v = y_[i];
