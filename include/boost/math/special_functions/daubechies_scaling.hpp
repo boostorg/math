@@ -11,10 +11,14 @@
 #include <array>
 #include <cmath>
 #include <thread>
+#include <future>
+#include <iostream>
 #include <boost/multiprecision/float128.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/detail/daubechies_scaling_integer_grid.hpp>
 #include <boost/math/filters/daubechies.hpp>
+#include <boost/math/interpolators/detail/cubic_hermite_detail.hpp>
+#include <boost/math/interpolators/detail/quintic_hermite_detail.hpp>
 
 
 namespace boost::math {
@@ -22,7 +26,7 @@ namespace boost::math {
 namespace detail {
 
 template<class Real, int p, int order>
-std::vector<Real> dyadic_grid(size_t j_max)
+std::vector<Real> dyadic_grid(int64_t j_max)
 {
     using std::isnan;
     auto c = boost::math::filters::daubechies_scaling_filter<Real, p>();
@@ -38,26 +42,29 @@ std::vector<Real> dyadic_grid(size_t j_max)
     std::vector<Real> v(2*p + (2*p-1)*((1<<j_max) -1), std::numeric_limits<Real>::quiet_NaN());
     v[0] = 0;
     v[v.size()-1] = 0;
-    for (size_t i = 0; i < phik.size(); ++i) {
+    for (int64_t i = 0; i < (int64_t) phik.size(); ++i) {
         v[i*(1<<j_max)] = phik[i];
     }
 
-    for (size_t j = 1; j <= j_max; ++j)
+    for (int64_t j = 1; j <= j_max; ++j)
     {
-        size_t k_max = v.size()/(1 << (j_max-j));
-        for (size_t k = 1; k < k_max;  k += 2)
+        int64_t k_max = v.size()/(1 << (j_max-j));
+        for (int64_t k = 1; k < k_max;  k += 2)
         {
             // Where this value will go:
-            size_t delivery_idx = k*(1 << (j_max-j));
-            if (delivery_idx >= v.size())
+            int64_t delivery_idx = k*(1 << (j_max-j));
+            if (delivery_idx >= (int64_t) v.size())
             {
                 std::cerr << "Delivery index out of range!\n";
                 continue;
             }
             Real term = 0;
-            for (size_t l = 0; l < c.size(); ++l) {
-                size_t idx = k*(1 << (j_max - j + 1)) - l*(1 << j_max);
-                if (idx >= 0 && idx < v.size()) {
+            for (int64_t l = 0; l < (int64_t) c.size(); ++l) {
+                int64_t idx = k*(1 << (j_max - j + 1)) - l*(1 << j_max);
+                if (idx < 0) {
+                    break;
+                }
+                if (idx < (int64_t) v.size()) {
                     term += c[l]*v[idx];
                 }
             }
@@ -73,72 +80,135 @@ std::vector<Real> dyadic_grid(size_t j_max)
     return v;
 }
 
+template<class RandomAccessContainer>
+class matched_holder {
+public:
+    using Real = typename RandomAccessContainer::value_type;
+
+    matched_holder(RandomAccessContainer && y, RandomAccessContainer && dydx, int grid_refinements) : y_{std::move(y)}, dydx_{std::move(dydx)}
+    {
+        h_ = Real(1)/(1<< grid_refinements);
+    }
+    
+    Real operator()(Real x) const {
+        using std::log;
+        using std::floor;
+        using std::sqrt;
+        using std::pow;
+        if (x <= 0 || x >= 3) {
+            return 0;
+        }
+        // This is the exact Holder exponent, but it's pessimistic almost everywhere!
+        // It's only exactly right at dyadic rationals.
+        //Real constexpr const alpha = 2 - log(1+sqrt(Real(3)))/log(Real(2));
+        // So we're gonna make the graph dip a little harder; this will capture more of the self-similar behavior:
+        Real constexpr const alpha = 0.35;
+        int64_t i = static_cast<int64_t>(std::floor(x/h_));
+        Real t = (x- i*h_)/h_;
+        Real v = y_[i];
+        Real dphi = dydx_[i+1]*h_;
+        v += (dphi - alpha*(y_[i+1] - y_[i]))*t/(1-alpha);
+        v += (-dphi + y_[i+1] - y_[i])*pow(t, alpha)/(1-alpha);
+        return v;
+    }
+
+private:
+    Real h_;
+    RandomAccessContainer y_;
+    RandomAccessContainer dydx_;
+};
+
 }
 
 template<class Real, int p>
 class daubechies_scaling {
 public:
-    daubechies_scaling(int levels = -1)
+    daubechies_scaling(int grid_refinements = -1)
     {
         using boost::multiprecision::float128;
-        if (levels < 0)
+        if (grid_refinements < 0)
         {
-            m_levels = 22;
-        }
-        else {
-            m_levels = levels;
+            grid_refinements = 20;
         }
 
-        auto f1 = [this] {
-            auto v = detail::dyadic_grid<float128, p, 0>(this->m_levels);
-            this->m_v.resize(v.size());
-            for (size_t i = 0; i < v.size(); ++i) {
-                this->m_v[i] = static_cast<Real>(v[i]);
-            }
-        };
+        if (p==3) {
+            throw std::domain_error("p = 3 is not yet implemented!");
+        }
+        // Compute the refined grid:
+        // In fact for float precision I know the grid must be computed in double precision and then cast back down, or else parts of the support are systematically inaccurate.
+        std::future<std::vector<Real>> t0 = std::async(std::launch::async, [&grid_refinements]() { return detail::dyadic_grid<Real, p, 0>(grid_refinements); });
+        // Compute the derivative of the refined grid:
+        std::future<std::vector<Real>> t1 = std::async(std::launch::async, [&grid_refinements]() { return detail::dyadic_grid<Real, p, 1>(grid_refinements); });
 
-        auto f2 = [this] {
-            auto v_prime = detail::dyadic_grid<float128, p, 1>(this->m_levels);
-            this->m_v_prime.resize(v_prime.size());
-            for (size_t i = 0; i < v_prime.size(); ++i) {
-                this->m_v_prime[i] = static_cast<Real>(v_prime[i]);
-            }
-        };
+        // if necessary, compute the second derivative:
+        std::vector<Real> d2ydx2;
+        if constexpr (p >= 6) {
+            std::future<std::vector<Real>> t3 = std::async(std::launch::async, [&grid_refinements]() { return detail::dyadic_grid<Real, p, 2>(grid_refinements); });
+            d2ydx2 = t3.get();
+        }
+
+        auto y = t0.get();
+        auto dydx = t1.get();
 
 
-        auto f3 = [this] {
-            auto v_dbl_prime = detail::dyadic_grid<float128, p, 2>(this->m_levels);
-            this->m_v_dbl_prime.resize(v_dbl_prime.size());
-            for (size_t i = 0; i < v_dbl_prime.size(); ++i) {
-                this->m_v_dbl_prime[i] = static_cast<Real>(v_dbl_prime[i]);
-            }
-        };
 
-        std::thread t1(f1);
-        std::thread t2(f2);
-        std::thread t3(f3);
+        // Storing the vector of x's is unnecessary; it's only because I haven't implemented an equispaced cubic Hermite interpolator:
+        std::vector<Real> x(y.size());
+        Real h = Real(2*p-1)/(x.size()-1);
+        for (size_t i = 0; i < x.size(); ++i) {
+            x[i] = i*h;
+        }
 
-        t1.join();
-        t2.join();
-        t3.join();
+        if constexpr (p==2) {
+            m_mh = std::make_shared<detail::matched_holder<std::vector<Real>>>(std::move(y), std::move(dydx), grid_refinements);
+        }
+        if constexpr (p == 4 || p == 5) {
+            m_cbh = std::make_shared<interpolators::detail::cubic_hermite_detail<std::vector<Real>>>(std::move(x), std::move(y), std::move(dydx));
+        }
+        else if constexpr (p >= 6) {
+            m_qh = std::make_shared<interpolators::detail::quintic_hermite_detail<std::vector<Real>>>(std::move(x), std::move(y), std::move(dydx), std::move(d2ydx2));
+        }
+     }
 
-        m_inv_spacing = (1 << m_levels);
 
-        m_c = boost::math::filters::daubechies_scaling_filter<Real, p>();
-        Real scale = boost::math::constants::root_two<Real>();
-        for (auto & x : m_c)
-        {
-            x *= scale;
+    Real operator()(Real x) const {
+        if constexpr (p==2) {
+            return m_mh->operator()(x);
+        }
+        if constexpr (p==4 || p ==5) {
+            return m_cbh->operator()(x);
+        }
+        else if constexpr (p >= 6) {
+            return m_qh->operator()(x);
         }
     }
 
-    Real operator()(Real x) const { return this->linear_interpolation(x); }
+    Real prime(Real x) const {
+        if constexpr (p==2) {
+            throw std::domain_error("The 2-vanishing moment Daubechies scaling function is not continuously differentiable.");
+        }
+        if constexpr (p==4 || p ==5) {
+            return m_cbh->prime(x);
+        }
+        else if constexpr (p >= 6) {
+            return m_qh->prime(x);
+        }
+    }
 
     std::pair<int, int> support() const {
         return {0, 2*p-1};
     }
 
-    Real constant_interpolation(Real x) const {
+private:
+    size_t m_levels;
+    // Need this for p = 2:
+    std::shared_ptr<detail::matched_holder<std::vector<Real>>> m_mh;
+    // need this for p = 4,5:
+    std::shared_ptr<interpolators::detail::cubic_hermite_detail<std::vector<Real>>> m_cbh;
+    // need this for p >= 6:
+    std::shared_ptr<interpolators::detail::quintic_hermite_detail<std::vector<Real>>> m_qh;
+
+    /*Real constant_interpolation(Real x) const {
         if (x <= 0 || x >= 2*p-1) {
             return Real(0);
         }
@@ -345,7 +415,7 @@ private:
     std::array<Real, 2*p> m_c;
     std::vector<Real> m_v;
     std::vector<Real> m_v_prime;
-    std::vector<Real> m_v_dbl_prime;
+    std::vector<Real> m_v_dbl_prime;*/
 };
 
 }
