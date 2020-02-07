@@ -167,13 +167,15 @@ public:
             }
             else if (std::is_same_v<Real, double>)
             {
+                // r = 21 is correct for p >= 10.
+                // Before that, r > 21 would be appropriate, but the hardware isn't there yet!
                 //                          p= 2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15
-                std::array<int, 16> r{-1, -1, 22, 22, 22, 22, 22, 22, 22, 22, 21, 21, 20, 19, 18, 18};
+                std::array<int, 16> r{-1, -1, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 20, 19, 18, 18};
                 grid_refinements = r[p];
             }
             else
             {
-                grid_refinements = 22;
+                grid_refinements = 21;
             }
         }
 
