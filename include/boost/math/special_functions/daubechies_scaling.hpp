@@ -100,10 +100,10 @@ public:
         }
         // This is the exact Holder exponent, but it's pessimistic almost everywhere!
         // It's only exactly right at dyadic rationals.
-        //Real constexpr const alpha = 2 - log(1+sqrt(Real(3)))/log(Real(2));
+        Real const alpha = 2 - log(1+sqrt(Real(3)))/log(Real(2));
         // So we're gonna make the graph dip a little harder; this will capture more of the self-similar behavior:
-        Real constexpr const alpha = Real(3)/Real(10);
-        int64_t i = static_cast<int64_t>(std::floor(x/h_));
+        //Real constexpr const alpha = Real(3)/Real(10);
+        int64_t i = static_cast<int64_t>(floor(x/h_));
         Real t = (x- i*h_)/h_;
         Real v = y_[i];
         Real dphi = dydx_[i+1]*h_;
@@ -118,6 +118,36 @@ private:
     RandomAccessContainer dydx_;
 };
 
+
+template<class RandomAccessContainer>
+class linear_interpolation {
+public:
+    using Real = typename RandomAccessContainer::value_type;
+
+    linear_interpolation(RandomAccessContainer && y,  int grid_refinements) : y_{std::move(y)}
+    {
+        grid_refinements_ = grid_refinements;
+    }
+
+    Real operator()(Real x) const {
+        using std::floor;
+        if (x <= 0 || x >= 5) {
+            return 0;
+        }
+        Real y = x*(1<<grid_refinements_);
+        Real k = floor(y);
+
+        size_t kk = static_cast<size_t>(k);
+
+        Real t = y - k;
+        return (1-t)*y_[kk] + t*y_[kk+1];
+    }
+
+private:
+    int grid_refinements_;
+    RandomAccessContainer y_;
+};
+
 }
 
 template<class Real, int p>
@@ -125,25 +155,95 @@ class daubechies_scaling {
 public:
     daubechies_scaling(int grid_refinements = -1)
     {
+        static_assert(p <= 15, "Scaling functions only implements up to p = 15");
         using boost::multiprecision::float128;
         if (grid_refinements < 0)
         {
-            grid_refinements = 20;
+            if (std::is_same_v<Real, float>)
+            {
+                //                          p= 2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15
+                std::array<int, 16> r{-1, -1, 22, 21, 19, 17, 16, 15, 14, 13, 12, 11, 11, 11, 11, 11};
+                grid_refinements = r[p];
+            }
+            else if (std::is_same_v<Real, double>)
+            {
+                //                          p= 2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15
+                std::array<int, 16> r{-1, -1, 22, 22, 22, 22, 22, 22, 22, 22, 21, 21, 20, 19, 18, 18};
+                grid_refinements = r[p];
+            }
+            else
+            {
+                grid_refinements = 22;
+            }
         }
 
-        if (p==3) {
-            throw std::domain_error("p = 3 is not yet implemented!");
-        }
         // Compute the refined grid:
         // In fact for float precision I know the grid must be computed in double precision and then cast back down, or else parts of the support are systematically inaccurate.
-        std::future<std::vector<Real>> t0 = std::async(std::launch::async, [&grid_refinements]() { return detail::dyadic_grid<Real, p, 0>(grid_refinements); });
+        std::future<std::vector<Real>> t0 = std::async(std::launch::async, [&grid_refinements]() {
+            // Computing in higher precision and downcasting is essential for 1ULP evaluation in float precision:
+            if constexpr (std::is_same_v<Real, float>) {
+                auto v = detail::dyadic_grid<double, p, 0>(grid_refinements);
+                std::vector<float> w(v.size());
+                for (size_t i = 0; i < v.size(); ++i) {
+                    w[i] = v[i];
+                }
+                return w;
+            }
+            else if constexpr (std::is_same_v<Real, double>) {
+                auto v = detail::dyadic_grid<long double, p, 0>(grid_refinements);
+                std::vector<double> w(v.size());
+                for (size_t i = 0; i < v.size(); ++i) {
+                    w[i] = v[i];
+                }
+                return w;
+            }
+
+            return detail::dyadic_grid<Real, p, 0>(grid_refinements);
+        });
         // Compute the derivative of the refined grid:
-        std::future<std::vector<Real>> t1 = std::async(std::launch::async, [&grid_refinements]() { return detail::dyadic_grid<Real, p, 1>(grid_refinements); });
+        std::future<std::vector<Real>> t1 = std::async(std::launch::async, [&grid_refinements]() {
+            if constexpr (std::is_same_v<Real, float>) {
+                auto v = detail::dyadic_grid<double, p, 1>(grid_refinements);
+                std::vector<float> w(v.size());
+                for (size_t i = 0; i < v.size(); ++i) {
+                    w[i] = v[i];
+                }
+                return w;
+            }
+            else if constexpr (std::is_same_v<Real, double>) {
+                auto v = detail::dyadic_grid<long double, p, 1>(grid_refinements);
+                std::vector<double> w(v.size());
+                for (size_t i = 0; i < v.size(); ++i) {
+                    w[i] = v[i];
+                }
+                return w;
+            }
+
+            return detail::dyadic_grid<Real, p, 1>(grid_refinements);
+        });
 
         // if necessary, compute the second derivative:
         std::vector<Real> d2ydx2;
         if constexpr (p >= 6) {
-            std::future<std::vector<Real>> t3 = std::async(std::launch::async, [&grid_refinements]() { return detail::dyadic_grid<Real, p, 2>(grid_refinements); });
+            std::future<std::vector<Real>> t3 = std::async(std::launch::async, [&grid_refinements]() {
+                if constexpr (std::is_same_v<Real, float>) {
+                    auto v = detail::dyadic_grid<double, p, 2>(grid_refinements);
+                    std::vector<float> w(v.size());
+                    for (size_t i = 0; i < v.size(); ++i) {
+                        w[i] = v[i];
+                    }
+                    return w;
+                }
+                else if constexpr (std::is_same_v<Real, double>) {
+                    auto v = detail::dyadic_grid<long double, p, 2>(grid_refinements);
+                    std::vector<double> w(v.size());
+                    for (size_t i = 0; i < v.size(); ++i) {
+                        w[i] = v[i];
+                    }
+                    return w;
+                }
+
+                return detail::dyadic_grid<Real, p, 2>(grid_refinements); });
             d2ydx2 = t3.get();
         }
 
@@ -162,6 +262,9 @@ public:
         if constexpr (p==2) {
             m_mh = std::make_shared<detail::matched_holder<std::vector<Real>>>(std::move(y), std::move(dydx), grid_refinements);
         }
+        if constexpr (p==3) {
+            m_lin = std::make_shared<detail::linear_interpolation<std::vector<Real>>>(std::move(y), grid_refinements);
+        }
         if constexpr (p == 4 || p == 5) {
             m_cbh = std::make_shared<interpolators::detail::cubic_hermite_detail<std::vector<Real>>>(std::move(x), std::move(y), std::move(dydx));
         }
@@ -175,6 +278,9 @@ public:
         if constexpr (p==2) {
             return m_mh->operator()(x);
         }
+        if constexpr (p==3) {
+            return m_lin->operator()(x);
+        }
         if constexpr (p==4 || p ==5) {
             return m_cbh->operator()(x);
         }
@@ -184,8 +290,8 @@ public:
     }
 
     Real prime(Real x) const {
-        if constexpr (p==2) {
-            throw std::domain_error("The 2-vanishing moment Daubechies scaling function is not continuously differentiable.");
+        if constexpr (p==2 || p == 3) {
+            throw std::domain_error("The 2 and 3-vanishing moment Daubechies scaling function is not continuously differentiable.");
         }
         if constexpr (p==4 || p ==5) {
             return m_cbh->prime(x);
@@ -203,6 +309,8 @@ private:
     size_t m_levels;
     // Need this for p = 2:
     std::shared_ptr<detail::matched_holder<std::vector<Real>>> m_mh;
+    // Need this for p = 3:
+    std::shared_ptr<detail::linear_interpolation<std::vector<Real>>> m_lin;
     // need this for p = 4,5:
     std::shared_ptr<interpolators::detail::cubic_hermite_detail<std::vector<Real>>> m_cbh;
     // need this for p >= 6:
