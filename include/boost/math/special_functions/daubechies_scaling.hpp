@@ -19,6 +19,7 @@
 #include <boost/math/filters/daubechies.hpp>
 #include <boost/math/interpolators/detail/cubic_hermite_detail.hpp>
 #include <boost/math/interpolators/detail/quintic_hermite_detail.hpp>
+#include <boost/math/interpolators/detail/septic_hermite_detail.hpp>
 
 
 namespace boost::math {
@@ -226,6 +227,7 @@ public:
 
         // if necessary, compute the second derivative:
         std::vector<Real> d2ydx2;
+        std::vector<Real> d3ydx3;
         if constexpr (p >= 6) {
             std::future<std::vector<Real>> t3 = std::async(std::launch::async, [&grid_refinements]() {
                 if constexpr (std::is_same_v<Real, float>) {
@@ -245,9 +247,34 @@ public:
                     return w;
                 }
 
-                return detail::dyadic_grid<Real, p, 2>(grid_refinements); });
+                return detail::dyadic_grid<Real, p, 2>(grid_refinements);
+            });
+
+            if constexpr (p >= 10) {
+                std::future<std::vector<Real>> t4 = std::async(std::launch::async, [&grid_refinements]() {
+                    if constexpr (std::is_same_v<Real, float>) {
+                        auto v = detail::dyadic_grid<double, p, 3>(grid_refinements);
+                        std::vector<float> w(v.size());
+                        for (size_t i = 0; i < v.size(); ++i) {
+                            w[i] = v[i];
+                        }
+                        return w;
+                    }
+                    else if constexpr (std::is_same_v<Real, double>) {
+                        auto v = detail::dyadic_grid<long double, p, 3>(grid_refinements);
+                        std::vector<double> w(v.size());
+                        for (size_t i = 0; i < v.size(); ++i) {
+                            w[i] = v[i];
+                        }
+                        return w;
+                    }
+
+                    return detail::dyadic_grid<Real, p, 3>(grid_refinements); });
+                d3ydx3 = t4.get();
+            }
             d2ydx2 = t3.get();
         }
+
 
         auto y = t0.get();
         auto dydx = t1.get();
@@ -270,9 +297,13 @@ public:
         if constexpr (p == 4 || p == 5) {
             m_cbh = std::make_shared<interpolators::detail::cubic_hermite_detail<std::vector<Real>>>(std::move(x), std::move(y), std::move(dydx));
         }
-        else if constexpr (p >= 6) {
+        if constexpr (p >= 6 && p <= 9) {
             m_qh = std::make_shared<interpolators::detail::quintic_hermite_detail<std::vector<Real>>>(std::move(x), std::move(y), std::move(dydx), std::move(d2ydx2));
         }
+        if constexpr (p >= 10) {
+            m_sh = std::make_shared<interpolators::detail::septic_hermite_detail<std::vector<Real>>>(std::move(x), std::move(y), std::move(dydx), std::move(d2ydx2), std::move(d3ydx3));
+        }
+
      }
 
 
@@ -286,8 +317,11 @@ public:
         if constexpr (p==4 || p ==5) {
             return m_cbh->operator()(x);
         }
-        else if constexpr (p >= 6) {
+        if constexpr (p >= 6 && p <= 9) {
             return m_qh->operator()(x);
+        }
+        if constexpr (p >= 10) {
+            return m_sh->operator()(x);
         }
     }
 
@@ -298,8 +332,11 @@ public:
         if constexpr (p==4 || p ==5) {
             return m_cbh->prime(x);
         }
-        else if constexpr (p >= 6) {
+        if constexpr (p >= 6 && p <= 9) {
             return m_qh->prime(x);
+        }
+        if constexpr (p >= 10) {
+            return m_sh->prime(x);
         }
     }
 
@@ -315,8 +352,11 @@ private:
     std::shared_ptr<detail::linear_interpolation<std::vector<Real>>> m_lin;
     // need this for p = 4,5:
     std::shared_ptr<interpolators::detail::cubic_hermite_detail<std::vector<Real>>> m_cbh;
-    // need this for p >= 6:
+    // need this for p = 6,7,8,9:
     std::shared_ptr<interpolators::detail::quintic_hermite_detail<std::vector<Real>>> m_qh;
+
+    // need this for p >= 10:
+    std::shared_ptr<interpolators::detail::septic_hermite_detail<std::vector<Real>>> m_sh;
 
     /*Real constant_interpolation(Real x) const {
         if (x <= 0 || x >= 2*p-1) {

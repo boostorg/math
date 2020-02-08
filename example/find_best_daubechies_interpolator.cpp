@@ -5,8 +5,9 @@
 #include <thread>
 #include <boost/math/special_functions/daubechies_scaling.hpp>
 #include <boost/math/special_functions/detail/daubechies_scaling_integer_grid.hpp>
-#include <boost/math/interpolators/quintic_hermite.hpp>
 #include <boost/math/interpolators/cubic_hermite.hpp>
+#include <boost/math/interpolators/quintic_hermite.hpp>
+#include <boost/math/interpolators/septic_hermite.hpp>
 #include <boost/math/interpolators/cardinal_quadratic_b_spline.hpp>
 #include <boost/math/interpolators/cardinal_cubic_b_spline.hpp>
 #include <boost/math/interpolators/cardinal_quintic_b_spline.hpp>
@@ -21,64 +22,6 @@
 //#include <quicksvg/ulp_plot.hpp>
 
 using boost::multiprecision::float128;
-
-/*template<class Real, int p>
-void do_ulp()
-{
-    std::cout << "Creating ULP plot on type " << boost::core::demangle(typeid(Real).name()) << " and " << p << " vanishing moments.\n";  
-    using std::floor;
-    using std::ceil;
-    using std::abs;
-    int rmax = 14;
-    std::cout << "Computing phi_dense\n";
-    std::future<std::vector<long double>> f1 = std::async(std::launch::async, [&]{ return boost::math::detail::dyadic_grid<long double, p, 0>(rmax); });
-    std::future<std::vector<long double>> f2 = std::async(std::launch::async, [&]{ return boost::math::detail::dyadic_grid<long double, p, 1>(rmax); });
-
-    std::cout << "Computing phi and phi_prime\n";
-    std::future<std::vector<long double>> f3 = std::async(std::launch::async, [&]{ return boost::math::detail::dyadic_grid<long double, p, 0>(rmax-2); });
-    std::future<std::vector<long double>> f4 = std::async(std::launch::async, [&]{ return boost::math::detail::dyadic_grid<long double, p, 1>(rmax-2); });
-    auto phi_dense = f1.get();
-    auto phi_dense_prime = f2.get();
-    auto phi_accurate = f3.get();
-    auto phi_prime_accurate = f4.get();
-
-    Real dx_dense = (2*p-1)/static_cast<Real>(phi_dense.size()-1);
-    std::cout << "Done precomputing grids; downcasting now.\n";
-    std::vector<Real> phi(phi_accurate.size());
-    for (size_t i = 0; i < phi_accurate.size(); ++i) {
-        phi[i] = Real(phi_accurate[i]);
-    }
-    std::vector<Real> phi_prime(phi_accurate.size());
-    for (size_t i = 0; i < phi_prime_accurate.size(); ++i) {
-        phi_prime[i] = Real(phi_prime_accurate[i]);
-    }
-    phi_accurate.resize(0);
-    phi_prime_accurate.resize(0);
-
-    std::vector<Real> x(phi.size());
-    Real dx = (2*p-1)/static_cast<Real>(x.size()-1);
-    std::cout << "dx = " << dx << "\n";
-    for (size_t i = 0; i < x.size(); ++i) {
-      x[i] = i*dx;
-    }
-
-    auto ch = boost::math::interpolators::cubic_hermite(std::move(x), std::move(phi), std::move(phi_prime));
-
-    std::vector<long double> x_acc(phi_dense.size());
-    
-    for (size_t i = 0; i < x_acc.size(); ++i) {
-      x_acc[i] = i*dx_dense;
-    }
-
-    auto acc = boost::math::interpolators::cubic_hermite(std::move(x_acc), std::move(phi_dense), std::move(phi_dense_prime));
-    std::cout << "Writing ulp plot\n";
-    std::string title = "daub" + std::to_string(p) + "_" + std::to_string(rmax-2) + "_" + boost::core::demangle(typeid(Real).name()) + ".svg";
-    quicksvg::ulp_plot(ch, acc, Real(0), Real(2*p-1), 
-                        "ULP plot of Daubechies with " + std::to_string(rmax-2) + " refinements on type " + boost::core::demangle(typeid(Real).name()),
-                        title, 15000, 1100, 10);
-    std::cout << "Done writing ulp plot\n";
-
-}*/
 
 
 template<class Real, int p>
@@ -486,11 +429,29 @@ void find_best_interpolator()
               m.insert({sup, "Third-order Taylor"});
             }
 
+            {
+                auto phi_copy = phi;
+                auto x_copy = x;
+                auto phi_prime_copy = phi_prime;
+                auto phi_dbl_prime_copy = phi_dbl_prime;
+                auto phi_triple_prime_copy = phi_triple_prime;
+                auto sh = boost::math::interpolators::septic_hermite(std::move(x_copy), std::move(phi_copy), std::move(phi_prime_copy), std::move(phi_dbl_prime_copy), std::move(phi_triple_prime_copy));
+                Real sup = 0;
+                for (size_t i = 0; i < phi_dense.size(); ++i) {
+                  Real x = i*dx_dense;
+                  Real diff = abs(phi_dense[i] - sh(x));
+                  if (diff > sup) {
+                    sup = diff;
+                  }
+                }
+                m.insert({sup, "septic_hermite_spline"});
+            }
+
 
         }
         std::string best = "none";
         Real best_sup = 1000000000;
-        std::cout << std::setprecision(20) << std::fixed;
+        std::cout << std::setprecision(std::numeric_limits<Real>::digits10 + 3) << std::fixed;
         for (auto & e : m) {
           
           std::cout << "\t" << e.first << " is error of " << e.second << "\n";
@@ -505,12 +466,10 @@ void find_best_interpolator()
 
 int main() {
 
-    //do_ulp<float, 5>();
-
     //choose_refinement<float, 5>();
     //choose_refinement<double, 15>();
     // Says linear interpolation is the best:
-    find_best_interpolator<long double, 2>();
+    /*find_best_interpolator<long double, 2>();
 
     // Says linear interpolation is the best:
     find_best_interpolator<long double, 3>();
@@ -528,5 +487,21 @@ int main() {
     find_best_interpolator<long double, 7>();
 
     // Says quintic_hermite_spline is best:
-    find_best_interpolator<long double, 15>();
+    find_best_interpolator<long double, 8>();*/
+    // Says quintic_hermite_spline is best:
+    find_best_interpolator<long double, 9>();
+    // Says septic_hermite_spline is best:
+    find_best_interpolator<long double, 10>();
+    /*
+    // Says septic_hermite_spline is best:
+    find_best_interpolator<long double, 11>();
+    // Says septic_hermite_spline is best:
+    find_best_interpolator<long double, 12>();
+    // Says septic_hermite_spline is best:
+    find_best_interpolator<long double, 13>();
+    // Says septic_hermite_spline is best:
+    find_best_interpolator<long double, 14>();*/
+
+    // Says septic_hermite_spline is best:
+    find_best_interpolator<float128, 15>();
 }
