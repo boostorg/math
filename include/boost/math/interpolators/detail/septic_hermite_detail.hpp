@@ -97,11 +97,15 @@ public:
         Real t7 = t6*t;
         Real dx2 = dx*dx;
         Real dx3 = dx2*dx;
-        Real z0 = 20*t7 - 70*t6 + 84*t5 - 35*t4 + 1;
+
+
+        Real s = t4*(-35 + t*(84 + t*(-70 + 20*t)));
+        Real z4 = -s;
+        Real z0 = s + 1;
         Real z1 = 10*t7 - 36*t6 + 45*t5 - 20*t4 + t;
         Real z2 = 2*t7 - 15*t6/2 + 10*t5 - 5*t4 + t2/2;
         Real z3 = t7/6 - 2*t6/3 + t5 - 2*t4/3 + t3/6;
-        Real z4 = 1 - z0;
+        
         Real z5 = 10*t7 - 34*t6 + 39*t5 - 15*t4;
         Real z6 = -2*t7 + 13*t6/2 - 7*t5 + 5*t4/2;
         Real z7 = t7/6 - t6/2 + t5/2 - t4/6;

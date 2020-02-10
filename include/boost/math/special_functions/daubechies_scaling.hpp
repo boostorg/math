@@ -17,7 +17,7 @@
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/detail/daubechies_scaling_integer_grid.hpp>
 #include <boost/math/filters/daubechies.hpp>
-#include <boost/math/interpolators/detail/cubic_hermite_detail.hpp>
+#include <boost/math/interpolators/detail/cardinal_cubic_hermite_detail.hpp>
 #include <boost/math/interpolators/detail/quintic_hermite_detail.hpp>
 #include <boost/math/interpolators/detail/septic_hermite_detail.hpp>
 
@@ -295,7 +295,8 @@ public:
             m_lin = std::make_shared<detail::linear_interpolation<std::vector<Real>>>(std::move(y), grid_refinements);
         }
         if constexpr (p == 4 || p == 5) {
-            m_cbh = std::make_shared<interpolators::detail::cubic_hermite_detail<std::vector<Real>>>(std::move(x), std::move(y), std::move(dydx));
+            Real dx = Real(1)/(1 << grid_refinements);
+            m_cbh = std::make_shared<interpolators::detail::cardinal_cubic_hermite_detail<std::vector<Real>>>(std::move(y), std::move(dydx), Real(0), dx);
         }
         if constexpr (p >= 6 && p <= 9) {
             m_qh = std::make_shared<interpolators::detail::quintic_hermite_detail<std::vector<Real>>>(std::move(x), std::move(y), std::move(dydx), std::move(d2ydx2));
@@ -308,6 +309,9 @@ public:
 
 
     Real operator()(Real x) const {
+        if (x <= 0 || x >= 2*p-1) {
+            return 0;
+        }
         if constexpr (p==2) {
             return m_mh->operator()(x);
         }
@@ -326,6 +330,10 @@ public:
     }
 
     Real prime(Real x) const {
+        if (x <= 0 || x >= 2*p-1)
+        {
+            return 0;
+        }
         if constexpr (p==2 || p == 3) {
             throw std::domain_error("The 2 and 3-vanishing moment Daubechies scaling function is not continuously differentiable.");
         }
@@ -351,7 +359,7 @@ private:
     // Need this for p = 3:
     std::shared_ptr<detail::linear_interpolation<std::vector<Real>>> m_lin;
     // need this for p = 4,5:
-    std::shared_ptr<interpolators::detail::cubic_hermite_detail<std::vector<Real>>> m_cbh;
+    std::shared_ptr<interpolators::detail::cardinal_cubic_hermite_detail<std::vector<Real>>> m_cbh;
     // need this for p = 6,7,8,9:
     std::shared_ptr<interpolators::detail::quintic_hermite_detail<std::vector<Real>>> m_qh;
 
