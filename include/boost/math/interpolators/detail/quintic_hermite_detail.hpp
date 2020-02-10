@@ -48,7 +48,7 @@ public:
         d2ydx2_.push_back(d2ydx2);
     }
 
-    Real operator()(Real x) const {
+    inline Real operator()(Real x) const {
         if  (x < x_[0] || x > x_.back()) {
             std::ostringstream oss;
             oss.precision(std::numeric_limits<Real>::digits10+3);
@@ -86,7 +86,7 @@ public:
         return y;
     }
 
-    Real prime(Real x) const {
+    inline Real prime(Real x) const {
         if  (x < x_[0] || x > x_.back()) {
             std::ostringstream oss;
             oss.precision(std::numeric_limits<Real>::digits10+3);

@@ -312,7 +312,7 @@ public:
             return m_lin->operator()(x);
         }
         if constexpr (p==4 || p ==5) {
-            return m_cbh->operator()(x);
+            return m_cbh->unchecked_evaluation(x);
         }
         if constexpr (p >= 6 && p <= 9) {
             return m_qh->operator()(x);
@@ -331,7 +331,7 @@ public:
             throw std::domain_error("The 2 and 3-vanishing moment Daubechies scaling function is not continuously differentiable.");
         }
         if constexpr (p==4 || p ==5) {
-            return m_cbh->prime(x);
+            return m_cbh->unchecked_prime(x);
         }
         if constexpr (p >= 6 && p <= 9) {
             return m_qh->prime(x);

@@ -129,7 +129,6 @@ public:
     }
 
     inline Real operator()(Real x) const {
-        using std::floor;
         const Real xf = x0_ + (dat_.size()-1)*dx_;
         if  (x < x0_ || x > xf) {
             std::ostringstream oss;
