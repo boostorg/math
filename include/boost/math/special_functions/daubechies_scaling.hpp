@@ -91,7 +91,7 @@ public:
         h_ = Real(1)/(1<< grid_refinements);
     }
     
-    Real operator()(Real x) const {
+    inline Real operator()(Real x) const {
         using std::log;
         using std::floor;
         using std::sqrt;
@@ -130,11 +130,8 @@ public:
         grid_refinements_ = grid_refinements;
     }
 
-    Real operator()(Real x) const {
+    inline Real operator()(Real x) const {
         using std::floor;
-        if (x <= 0 || x >= 5) {
-            return 0;
-        }
         Real y = x*(1<<grid_refinements_);
         Real k = floor(y);
 
@@ -168,8 +165,6 @@ public:
             }
             else if (std::is_same_v<Real, double>)
             {
-                // r = 21 is correct for p >= 10.
-                // Before that, r > 21 would be appropriate, but the hardware isn't there yet!
                 //                          p= 2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15
                 std::array<int, 16> r{-1, -1, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 20, 19, 18, 18};
                 grid_refinements = r[p];
@@ -279,8 +274,6 @@ public:
         auto y = t0.get();
         auto dydx = t1.get();
 
-
-
         // Storing the vector of x's is unnecessary; it's only because I haven't implemented an equispaced cubic Hermite interpolator:
         std::vector<Real> x(y.size());
         Real h = Real(2*p-1)/(x.size()-1);
@@ -308,7 +301,7 @@ public:
      }
 
 
-    Real operator()(Real x) const {
+    inline Real operator()(Real x) const {
         if (x <= 0 || x >= 2*p-1) {
             return 0;
         }
@@ -358,12 +351,11 @@ private:
     std::shared_ptr<detail::matched_holder<std::vector<Real>>> m_mh;
     // Need this for p = 3:
     std::shared_ptr<detail::linear_interpolation<std::vector<Real>>> m_lin;
-    // need this for p = 4,5:
+    // Need this for p = 4,5:
     std::shared_ptr<interpolators::detail::cardinal_cubic_hermite_detail<std::vector<Real>>> m_cbh;
-    // need this for p = 6,7,8,9:
+    // Need this for p = 6,7,8,9:
     std::shared_ptr<interpolators::detail::quintic_hermite_detail<std::vector<Real>>> m_qh;
-
-    // need this for p >= 10:
+    // Need this for p >= 10:
     std::shared_ptr<interpolators::detail::septic_hermite_detail<std::vector<Real>>> m_sh;
 
     /*Real constant_interpolation(Real x) const {
