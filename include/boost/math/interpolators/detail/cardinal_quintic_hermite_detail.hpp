@@ -61,8 +61,6 @@ public:
         y += t*(1+ t*t*(-6 + t*(8 -3*t)))*v0*dx_;
         y += t*t*(1 + t*(-3 + t*(3-t)))*a0*dx_*dx_/2;
         y += t*t*t*((1 + t*(-2 + t))*a1*dx_*dx_/2 + (-4 + t*(7 -3*t))*v1*dx_ + (10 + t*(-15 + 6*t))*y1);
-        // there's a bug here!
-        return std::numeric_limits<Real>::quiet_NaN();
         return y;
     }
 
@@ -108,7 +106,8 @@ private:
 template<class RandomAccessContainer>
 class cardinal_quintic_hermite_detail_aos {
 public:
-    using Real = typename RandomAccessContainer::value_type;
+    using Point = typename RandomAccessContainer::value_type;
+    using Real = typename Point::value_type;
     cardinal_quintic_hermite_detail_aos(RandomAccessContainer && data, Real x0, Real dx)
     : data_{std::move(data)} , x0_{x0}, dx_{dx}
     {

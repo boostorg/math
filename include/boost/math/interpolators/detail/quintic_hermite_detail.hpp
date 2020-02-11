@@ -39,7 +39,8 @@ public:
     void push_back(Real x, Real y, Real dydx, Real d2ydx2) {
         using std::abs;
         using std::isnan;
-        if (x <= x_.back()) {
+        if (x <= x_.back())
+        {
              throw std::domain_error("Calling push_back must preserve the monotonicity of the x's");
         }
         x_.push_back(x);

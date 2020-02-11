@@ -8,8 +8,6 @@
 #include "math_unit_test.hpp"
 #include <numeric>
 #include <utility>
-#include <boost/random/uniform_real.hpp>
-#include <boost/random/mersenne_twister.hpp>
 #include <boost/math/interpolators/cardinal_quintic_hermite.hpp>
 #ifdef BOOST_HAS_FLOAT128
 #include <boost/multiprecision/float128.hpp>
@@ -40,14 +38,26 @@ void test_constant()
         //CHECK_ULP_CLOSE(Real(0), qh.prime(t), 24);
     }
 
+    std::vector<std::array<Real, 3>> data(25);
+    for (size_t i = 0; i < data.size(); ++i)
+    {
+        data[i][0] = 7;
+        data[i][1] = 0;
+        data[i][2] = 0;
+    }
 
+    auto qh_aos = cardinal_quintic_hermite_aos(std::move(data), x0, dx);
+    for (Real t = x0; t <= x0 + 24*dx; t += 0.25) {
+        CHECK_ULP_CLOSE(Real(7), qh_aos(t), 24);
+        //CHECK_ULP_CLOSE(Real(0), qh.prime(t), 24);
+    }
 }
 
 
 template<typename Real>
 void test_linear()
 {
-    std::vector<Real> y{0,1,2,3, 4,5,6,7,8,9};
+    std::vector<Real> y{0,1,2,3,4,5,6,7,8,9};
     Real x0 = 0;
     Real dx = 1;
     std::vector<Real> dydx(y.size(), 1);
@@ -59,6 +69,21 @@ void test_linear()
         CHECK_ULP_CLOSE(Real(t), qh(t), 2);
         //CHECK_ULP_CLOSE(Real(1), qh.prime(t), 2);
     }
+
+    std::vector<std::array<Real, 3>> data(10);
+    for (size_t i = 0; i < data.size(); ++i) {
+        data[i][0] = i;
+        data[i][1] = 1;
+        data[i][2] = 0;
+    }
+
+    auto qh_aos = cardinal_quintic_hermite_aos(std::move(data), x0, dx);
+
+    for (Real t = 0; t <= 9; t += 0.25) {
+        CHECK_ULP_CLOSE(Real(t), qh_aos(t), 2);
+        //CHECK_ULP_CLOSE(Real(1), qh.prime(t), 2);
+    }
+
 }
 
 template<typename Real>
@@ -69,7 +94,7 @@ void test_quadratic()
     std::vector<Real> y(10);
     for (size_t i = 0; i < y.size(); ++i)
     {
-        y[i] = i*i/2;
+        y[i] = i*i/Real(2);
     }
 
     std::vector<Real> dydx(y.size());
@@ -82,10 +107,24 @@ void test_quadratic()
     auto qh = cardinal_quintic_hermite(std::move(y), std::move(dydx), std::move(d2ydx2), x0, dx);
 
     for (Real t = 0; t <= 9; t += 0.0078125) {
-        CHECK_ULP_CLOSE(Real(t*t)/2, qh(t), 2);
+        Real computed = qh(t);
+        CHECK_ULP_CLOSE(Real(t*t)/2, computed, 2);
         //CHECK_ULP_CLOSE(t, qh.prime(t), 2);
     }
 
+    std::vector<std::array<Real, 3>> data(10);
+    for (size_t i = 0; i < data.size(); ++i) {
+        data[i][0] = i*i/Real(2);
+        data[i][1] = i;
+        data[i][2] = 1;
+    }
+    auto qh_aos = cardinal_quintic_hermite_aos(std::move(data), x0, dx);
+
+    for (Real t = 0; t <= 9; t += 0.0078125) {
+        Real computed = qh_aos(t);
+        CHECK_ULP_CLOSE(Real(t*t)/2, computed, 2);
+        //CHECK_ULP_CLOSE(t, qh_aos.prime(t), 2);
+    }
 }
 
 template<typename Real>
@@ -96,12 +135,12 @@ void test_cubic()
     std::vector<Real> y(10);
     for (size_t i = 0; i < y.size(); ++i)
     {
-        y[i] = i*i*i/6;
+        y[i] = i*i*i/Real(6);
     }
 
     std::vector<Real> dydx(y.size());
     for (size_t i = 0; i < y.size(); ++i) {
-        dydx[i] = i*i/2;
+        dydx[i] = i*i/Real(2);
     }
 
     std::vector<Real> d2ydx2(y.size());
@@ -112,7 +151,21 @@ void test_cubic()
     auto qh = cardinal_quintic_hermite(std::move(y), std::move(dydx), std::move(d2ydx2), x0, dx);
 
     for (Real t = 0; t <= 9; t += 0.0078125) {
-        CHECK_ULP_CLOSE(Real(t*t*t)/6, qh(t), 10);
+        Real computed = qh(t);
+        CHECK_ULP_CLOSE(Real(t*t*t)/6, computed, 10);
+    }
+
+    std::vector<std::array<Real, 3>> data(10);
+    for (size_t i = 0; i < data.size(); ++i) {
+        data[i][0] = i*i*i/Real(6);
+        data[i][1] = i*i/Real(2);
+        data[i][2] = i;
+    }
+
+    auto qh_aos = cardinal_quintic_hermite_aos(std::move(data), x0, dx);
+    for (Real t = 0; t <= 9; t += 0.0078125) {
+        Real computed = qh_aos(t);
+        CHECK_ULP_CLOSE(Real(t*t*t)/6, computed, 10);
     }
 }
 
@@ -122,42 +175,55 @@ void test_quartic()
 
     Real x0 = 0;
     Real dx = 1;
-    std::vector<Real> y(11);
+    std::vector<Real> y(7);
     for (size_t i = 0; i < y.size(); ++i)
     {
-        y[i] = i*i*i*i/24;
+        y[i] = i*i*i*i;
     }
 
     std::vector<Real> dydx(y.size());
     for (size_t i = 0; i < y.size(); ++i) {
-        dydx[i] = i*i*i/6;
+        dydx[i] = 4*i*i*i;
     }
 
     std::vector<Real> d2ydx2(y.size());
     for (size_t i = 0; i < y.size(); ++i) {
-        d2ydx2[i] = i*i/2;
+        d2ydx2[i] = 12*i*i;
     }
 
     auto qh = cardinal_quintic_hermite(std::move(y), std::move(dydx), std::move(d2ydx2), x0, dx);
 
-    for (Real t = 1; t <= 11; t += 0.0078125) {
-        CHECK_ULP_CLOSE(Real(t*t*t*t)/24, qh(t), 100);
+    for (Real t = 0; t <= 6; t += 0.0078125) {
+        CHECK_ULP_CLOSE(Real(t*t*t*t), qh(t), 250);
+    }
+
+    std::vector<std::array<Real, 3>> data(7);
+    for (size_t i = 0; i < data.size(); ++i) {
+        data[i][0] = i*i*i*i;
+        data[i][1] = 4*i*i*i;
+        data[i][2] = 12*i*i;
+    }
+
+    auto qh_aos = cardinal_quintic_hermite_aos(std::move(data), x0, dx);
+    for (Real t = 0; t <= 6; t += 0.0078125) {
+        Real computed = qh_aos(t);
+        CHECK_ULP_CLOSE(t*t*t*t, computed, 10);
     }
 }
 
 
 int main()
 {
-    /*test_constant<float>();
+    test_constant<float>();
     test_linear<float>();
     test_quadratic<float>();
     test_cubic<float>();
-    test_quartic<float>();*/
+    test_quartic<float>();
 
     test_constant<double>();
     test_linear<double>();
     test_quadratic<double>();
-    /*test_cubic<double>();
+    test_cubic<double>();
     test_quartic<double>();
 
     test_constant<long double>();
@@ -172,7 +238,7 @@ int main()
     test_quadratic<float128>();
     test_cubic<float128>();
     test_quartic<float128>();
-#endif*/
+#endif
 
     return boost::math::test::report_errors();
 }
