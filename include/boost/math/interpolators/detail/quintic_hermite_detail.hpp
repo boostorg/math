@@ -103,13 +103,20 @@ public:
         auto i = std::distance(x_.begin(), it) -1;
         Real x0 = *(it-1);
         Real x1 = *it;
-        Real s0 = dydx_[i];
-        Real s1 = dydx_[i+1];
+        Real dx = x1 - x0;
 
-        // Ridiculous linear interpolation. Fine for now:
-        Real numerator = s0*(x1-x) + s1*(x-x0);
-        Real denominator = x1 - x0;
-        return numerator/denominator;
+        Real y0 = y_[i];
+        Real y1 = y_[i+1];
+        Real v0 = dydx_[i];
+        Real v1 = dydx_[i+1];
+        Real a0 = d2ydx2_[i];
+        Real a1 = d2ydx2_[i+1];
+        Real t= (x-x0)/dx;
+
+        Real dydx = 30*t*t*(1 - 2*t + t*t)*(y1-y0)/dx;
+        dydx += (1-18*t*t + 32*t*t*t - 15*t*t*t*t)*v0 - t*t*(12 - 28*t + 15*t*t)*v1;
+        dydx += (t*dx/2)*((2 - 9*t + 12*t*t - 5*t*t*t)*a0 + t*(3 - 8*t + 5*t*t)*a1);
+        return dydx;
     }
 
 

@@ -35,7 +35,8 @@ void test_constant()
 
     for (Real t = x0; t <= x0 + 24*dx; t += 0.25) {
         CHECK_ULP_CLOSE(Real(7), qh(t), 24);
-        //CHECK_ULP_CLOSE(Real(0), qh.prime(t), 24);
+        CHECK_ULP_CLOSE(Real(0), qh.prime(t), 24);
+        CHECK_ULP_CLOSE(Real(0), qh.double_prime(t), 24);
     }
 
     std::vector<std::array<Real, 3>> data(25);
@@ -49,7 +50,7 @@ void test_constant()
     auto qh_aos = cardinal_quintic_hermite_aos(std::move(data), x0, dx);
     for (Real t = x0; t <= x0 + 24*dx; t += 0.25) {
         CHECK_ULP_CLOSE(Real(7), qh_aos(t), 24);
-        //CHECK_ULP_CLOSE(Real(0), qh.prime(t), 24);
+        CHECK_ULP_CLOSE(Real(0), qh_aos.prime(t), 24);
     }
 }
 
@@ -67,7 +68,8 @@ void test_linear()
 
     for (Real t = 0; t <= 9; t += 0.25) {
         CHECK_ULP_CLOSE(Real(t), qh(t), 2);
-        //CHECK_ULP_CLOSE(Real(1), qh.prime(t), 2);
+        CHECK_ULP_CLOSE(Real(1), qh.prime(t), 2);
+        CHECK_ULP_CLOSE(Real(0), qh.double_prime(t), 2);
     }
 
     std::vector<std::array<Real, 3>> data(10);
@@ -81,7 +83,8 @@ void test_linear()
 
     for (Real t = 0; t <= 9; t += 0.25) {
         CHECK_ULP_CLOSE(Real(t), qh_aos(t), 2);
-        //CHECK_ULP_CLOSE(Real(1), qh.prime(t), 2);
+        CHECK_ULP_CLOSE(Real(1), qh_aos.prime(t), 2);
+        //CHECK_ULP_CLOSE(Real(0), qh_aos.double_prime(t), 2);
     }
 
 }
@@ -109,7 +112,8 @@ void test_quadratic()
     for (Real t = 0; t <= 9; t += 0.0078125) {
         Real computed = qh(t);
         CHECK_ULP_CLOSE(Real(t*t)/2, computed, 2);
-        //CHECK_ULP_CLOSE(t, qh.prime(t), 2);
+        CHECK_ULP_CLOSE(t, qh.prime(t), 15);
+        CHECK_ULP_CLOSE(1, qh.double_prime(t), 32);
     }
 
     std::vector<std::array<Real, 3>> data(10);
@@ -123,7 +127,7 @@ void test_quadratic()
     for (Real t = 0; t <= 9; t += 0.0078125) {
         Real computed = qh_aos(t);
         CHECK_ULP_CLOSE(Real(t*t)/2, computed, 2);
-        //CHECK_ULP_CLOSE(t, qh_aos.prime(t), 2);
+        CHECK_ULP_CLOSE(t, qh_aos.prime(t), 7);
     }
 }
 
@@ -153,6 +157,8 @@ void test_cubic()
     for (Real t = 0; t <= 9; t += 0.0078125) {
         Real computed = qh(t);
         CHECK_ULP_CLOSE(Real(t*t*t)/6, computed, 10);
+        CHECK_ULP_CLOSE(t*t/2, qh.prime(t), 15);
+        CHECK_ULP_CLOSE(t, qh.double_prime(t), 39);
     }
 
     std::vector<std::array<Real, 3>> data(10);
@@ -166,13 +172,13 @@ void test_cubic()
     for (Real t = 0; t <= 9; t += 0.0078125) {
         Real computed = qh_aos(t);
         CHECK_ULP_CLOSE(Real(t*t*t)/6, computed, 10);
+        CHECK_ULP_CLOSE(t*t/2, qh_aos.prime(t), 10);
     }
 }
 
 template<typename Real>
 void test_quartic()
 {
-
     Real x0 = 0;
     Real dx = 1;
     std::vector<Real> y(7);
@@ -195,6 +201,7 @@ void test_quartic()
 
     for (Real t = 0; t <= 6; t += 0.0078125) {
         CHECK_ULP_CLOSE(Real(t*t*t*t), qh(t), 250);
+        CHECK_ULP_CLOSE(4*t*t*t, qh.prime(t), 250);
     }
 
     std::vector<std::array<Real, 3>> data(7);
@@ -208,6 +215,7 @@ void test_quartic()
     for (Real t = 0; t <= 6; t += 0.0078125) {
         Real computed = qh_aos(t);
         CHECK_ULP_CLOSE(t*t*t*t, computed, 10);
+        CHECK_ULP_CLOSE(4*t*t*t, qh_aos.prime(t), 64);
     }
 }
 

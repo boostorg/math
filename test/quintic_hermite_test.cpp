@@ -103,7 +103,7 @@ void test_quadratic()
 
     for (Real t = 0; t <= 9; t += 0.0078125) {
         CHECK_ULP_CLOSE(Real(t*t)/2, qh(t), 2);
-        CHECK_ULP_CLOSE(t, qh.prime(t), 2);
+        CHECK_ULP_CLOSE(t, qh.prime(t), 7);
     }
 
     boost::random::mt19937 rng;
@@ -133,9 +133,8 @@ void test_quadratic()
 
     for (Real t = xmin; t <= xmax; t += 0.125) {
         CHECK_ULP_CLOSE(Real(t*t)/2, qh(t), 4);
+        CHECK_ULP_CLOSE(t, qh.prime(t), 36);
     }
-
-
 }
 
 template<typename Real>

@@ -86,13 +86,53 @@ public:
         Real xi = x0_ + i*dx_;
         Real t = (x - xi)/dx_;
 
-        Real s0 = dydx_[i];
-        Real s1 = dydx_[i+1];
+        Real y0 = y_[i];
+        Real y1 = y_[i+1];
+        Real v0 = dydx_[i];
+        Real v1 = dydx_[i+1];
+        Real a0 = d2ydx2_[i];
+        Real a1 = d2ydx2_[i+1];
 
-        return std::numeric_limits<Real>::quiet_NaN();
+        Real dydx = 30*t*t*(1 - 2*t + t*t)*(y1-y0)/dx_;
+        dydx += (1-18*t*t + 32*t*t*t - 15*t*t*t*t)*v0 - t*t*(12 - 28*t + 15*t*t)*v1;
+        dydx += (t*dx_/2)*((2 - 9*t + 12*t*t - 5*t*t*t)*a0 + t*(3 - 8*t + 5*t*t)*a1);
+        return dydx;
     }
 
+    inline Real double_prime(Real x) const {
+        const Real xf = x0_ + (y_.size()-1)*dx_;
+        if  (x < x0_ || x > xf) {
+            std::ostringstream oss;
+            oss.precision(std::numeric_limits<Real>::digits10+3);
+            oss << "Requested abscissa x = " << x << ", which is outside of allowed range ["
+                << x0_ << ", " << xf << "]";
+            throw std::domain_error(oss.str());
+        }
+        if (x == xf) {
+            return d2ydx2_.back();
+        }
 
+        return this->unchecked_double_prime(x);
+    }
+
+    inline Real unchecked_double_prime(Real x) const {
+        using std::floor;
+        auto i = static_cast<decltype(y_.size())>(floor((x-x0_)/dx_));
+        Real xi = x0_ + i*dx_;
+        Real t = (x - xi)/dx_;
+
+        Real y0 = y_[i];
+        Real y1 = y_[i+1];
+        Real v0 = dydx_[i];
+        Real v1 = dydx_[i+1];
+        Real a0 = d2ydx2_[i];
+        Real a1 = d2ydx2_[i+1];
+
+        Real d2ydx2 = 60*t*(1 - 3*t + 2*t*t)*(y1 - y0)/(dx_*dx_);
+        d2ydx2 += (12*t/dx_)*((-3 + 8*t - 5*t*t)*v0 - (2 - 7*t + 5*t*t)*v1);
+        d2ydx2 += (1 - 9*t + 18*t*t - 10*t*t*t)*a0 + t*(3 - 12*t + 10*t*t)*a1;
+        return d2ydx2;
+    }
 
 private:
     RandomAccessContainer y_;
@@ -152,9 +192,6 @@ public:
         Real a0 = data_[i][2];
         Real a1 = data_[i+1][2];
 
-        // See the 'Basis functions' section of:
-        // https://www.rose-hulman.edu/~finn/CCLI/Notes/day09.pdf
-        // Also: https://github.com/MrHexxx/QuinticHermiteSpline/blob/master/HermiteSpline.cs
         Real y = (1- t*t*t*(10 + t*(-15 + 6*t)))*y0;
         y += t*(1+ t*t*(-6 + t*(8 -3*t)))*v0*dx_;
         y += t*t*(1 + t*(-3 + t*(3-t)))*a0*dx_*dx_/2;
@@ -184,10 +221,17 @@ public:
         Real xi = x0_ + i*dx_;
         Real t = (x - xi)/dx_;
 
+        Real y0 = data_[i][0];
+        Real y1 = data_[i+1][0];
         Real v0 = data_[i][1];
         Real v1 = data_[i+1][1];
+        Real a0 = data_[i][2];
+        Real a1 = data_[i+1][2];
 
-        return std::numeric_limits<Real>::quiet_NaN();
+        Real dydx = 30*t*t*(1 - 2*t + t*t)*(y1-y0)/dx_;
+        dydx += (1-18*t*t + 32*t*t*t - 15*t*t*t*t)*v0 - t*t*(12 - 28*t + 15*t*t)*v1;
+        dydx += (t*dx_/2)*((2 - 9*t + 12*t*t - 5*t*t*t)*a0 + t*(3 - 8*t + 5*t*t)*a1);
+        return dydx;
     }
 
 
@@ -199,4 +243,4 @@ private:
 };
 
 }
-#endif 
+#endif

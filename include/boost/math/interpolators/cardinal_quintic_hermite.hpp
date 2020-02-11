@@ -23,6 +23,9 @@ public:
         return impl_->prime(x);
     }
 
+    inline Real double_prime(Real x) const {
+        return impl_->double_prime(x);
+    }
 
 private:
     std::shared_ptr<detail::cardinal_quintic_hermite_detail<RandomAccessContainer>> impl_;
@@ -44,7 +47,6 @@ public:
     inline Real prime(Real x) const {
         return impl_->prime(x);
     }
-
 
 private:
     std::shared_ptr<detail::cardinal_quintic_hermite_detail_aos<RandomAccessContainer>> impl_;
