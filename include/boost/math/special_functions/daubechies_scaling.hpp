@@ -19,6 +19,7 @@
 #include <boost/math/filters/daubechies.hpp>
 #include <boost/math/interpolators/detail/cardinal_cubic_hermite_detail.hpp>
 #include <boost/math/interpolators/detail/quintic_hermite_detail.hpp>
+#include <boost/math/interpolators/detail/cardinal_quintic_hermite_detail.hpp>
 #include <boost/math/interpolators/detail/septic_hermite_detail.hpp>
 
 
@@ -220,7 +221,7 @@ public:
             return detail::dyadic_grid<Real, p, 1>(grid_refinements);
         });
 
-        // if necessary, compute the second derivative:
+        // if necessary, compute the second and third derivative:
         std::vector<Real> d2ydx2;
         std::vector<Real> d3ydx3;
         if constexpr (p >= 6) {
@@ -292,7 +293,8 @@ public:
             m_cbh = std::make_shared<interpolators::detail::cardinal_cubic_hermite_detail<std::vector<Real>>>(std::move(y), std::move(dydx), Real(0), dx);
         }
         if constexpr (p >= 6 && p <= 9) {
-            m_qh = std::make_shared<interpolators::detail::quintic_hermite_detail<std::vector<Real>>>(std::move(x), std::move(y), std::move(dydx), std::move(d2ydx2));
+            Real dx = Real(1)/(1 << grid_refinements);
+            m_qh = std::make_shared<interpolators::detail::cardinal_quintic_hermite_detail<std::vector<Real>>>(std::move(y), std::move(dydx), std::move(d2ydx2), Real(0), dx);
         }
         if constexpr (p >= 10) {
             m_sh = std::make_shared<interpolators::detail::septic_hermite_detail<std::vector<Real>>>(std::move(x), std::move(y), std::move(dydx), std::move(d2ydx2), std::move(d3ydx3));
@@ -315,14 +317,14 @@ public:
             return m_cbh->unchecked_evaluation(x);
         }
         if constexpr (p >= 6 && p <= 9) {
-            return m_qh->operator()(x);
+            return m_qh->unchecked_evaluation(x);
         }
         if constexpr (p >= 10) {
             return m_sh->operator()(x);
         }
     }
 
-    Real prime(Real x) const {
+    inline Real prime(Real x) const {
         if (x <= 0 || x >= 2*p-1)
         {
             return 0;
@@ -334,7 +336,7 @@ public:
             return m_cbh->unchecked_prime(x);
         }
         if constexpr (p >= 6 && p <= 9) {
-            return m_qh->prime(x);
+            return m_qh->unchecked_prime(x);
         }
         if constexpr (p >= 10) {
             return m_sh->prime(x);
@@ -354,7 +356,7 @@ private:
     // Need this for p = 4,5:
     std::shared_ptr<interpolators::detail::cardinal_cubic_hermite_detail<std::vector<Real>>> m_cbh;
     // Need this for p = 6,7,8,9:
-    std::shared_ptr<interpolators::detail::quintic_hermite_detail<std::vector<Real>>> m_qh;
+    std::shared_ptr<interpolators::detail::cardinal_quintic_hermite_detail<std::vector<Real>>> m_qh;
     // Need this for p >= 10:
     std::shared_ptr<interpolators::detail::septic_hermite_detail<std::vector<Real>>> m_sh;
 
