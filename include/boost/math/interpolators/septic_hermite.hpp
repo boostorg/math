@@ -34,5 +34,28 @@ public:
 private:
     std::shared_ptr<detail::septic_hermite_detail<RandomAccessContainer>> impl_;
 };
+
+template<class RandomAccessContainer>
+class cardinal_septic_hermite {
+public:
+    using Real = typename RandomAccessContainer::value_type;
+    cardinal_septic_hermite(RandomAccessContainer && y, RandomAccessContainer && dydx,
+                    RandomAccessContainer && d2ydx2, RandomAccessContainer && d3ydx3, Real x0, Real dx)
+     : impl_(std::make_shared<detail::cardinal_septic_hermite_detail<RandomAccessContainer>>(
+     std::move(y), std::move(dydx), std::move(d2ydx2), std::move(d3ydx3), x0, dx))
+    {}
+
+    Real operator()(Real x) const {
+        return impl_->operator()(x);
+    }
+
+    Real prime(Real x) const {
+        return impl_->prime(x);
+    }
+
+private:
+    std::shared_ptr<detail::cardinal_septic_hermite_detail<RandomAccessContainer>> impl_;
+};
+
 }
 #endif 

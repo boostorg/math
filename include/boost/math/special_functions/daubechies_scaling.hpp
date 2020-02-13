@@ -13,7 +13,9 @@
 #include <thread>
 #include <future>
 #include <iostream>
+#if BOOST_HAS_FLOAT128
 #include <boost/multiprecision/float128.hpp>
+#endif
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/detail/daubechies_scaling_integer_grid.hpp>
 #include <boost/math/filters/daubechies.hpp>
@@ -89,7 +91,7 @@ public:
 
     matched_holder(RandomAccessContainer && y, RandomAccessContainer && dydx, int grid_refinements) : y_{std::move(y)}, dydx_{std::move(dydx)}
     {
-        h_ = Real(1)/(1<< grid_refinements);
+        inv_h_ = 1<< grid_refinements;
     }
     
     inline Real operator()(Real x) const {
@@ -97,25 +99,27 @@ public:
         using std::floor;
         using std::sqrt;
         using std::pow;
-        if (x <= 0 || x >= 3) {
-            return 0;
-        }
         // This is the exact Holder exponent, but it's pessimistic almost everywhere!
         // It's only exactly right at dyadic rationals.
+        // Some compilers do not evaluate this at compile time:
         Real const alpha = 2 - log(1+sqrt(Real(3)))/log(Real(2));
+        Real const onemalpham1 = 1/(1-alpha);
+        //const Real alpha = 0.5500156865235042;
         // So we're gonna make the graph dip a little harder; this will capture more of the self-similar behavior:
         //Real constexpr const alpha = Real(3)/Real(10);
-        int64_t i = static_cast<int64_t>(floor(x/h_));
-        Real t = (x- i*h_)/h_;
+        Real s = x*inv_h_;
+        Real ii = floor(s);
+        int64_t i = static_cast<int64_t>(ii);
+        Real t = s - ii;
         Real v = y_[i];
-        Real dphi = dydx_[i+1]*h_;
-        v += (dphi - alpha*(y_[i+1] - y_[i]))*t/(1-alpha);
-        v += (-dphi + y_[i+1] - y_[i])*pow(t, alpha)/(1-alpha);
+        Real dphi = dydx_[i+1]/inv_h_;
+        Real diff = y_[i+1] - y_[i];
+        v += ((dphi - alpha*diff)*t + (-dphi + diff)*pow(t, alpha) )*onemalpham1;
         return v;
     }
 
 private:
-    Real h_;
+    Real inv_h_;
     RandomAccessContainer y_;
     RandomAccessContainer dydx_;
 };
@@ -155,7 +159,9 @@ public:
     daubechies_scaling(int grid_refinements = -1)
     {
         static_assert(p <= 15, "Scaling functions only implements up to p = 15");
+        #if BOOST_HAS_FLOAT128
         using boost::multiprecision::float128;
+        #endif
         if (grid_refinements < 0)
         {
             if (std::is_same_v<Real, float>)
@@ -275,13 +281,6 @@ public:
         auto y = t0.get();
         auto dydx = t1.get();
 
-        // Storing the vector of x's is unnecessary; it's only because I haven't implemented an equispaced cubic Hermite interpolator:
-        std::vector<Real> x(y.size());
-        Real h = Real(2*p-1)/(x.size()-1);
-        for (size_t i = 0; i < x.size(); ++i) {
-            x[i] = i*h;
-        }
-
         if constexpr (p==2) {
             m_mh = std::make_shared<detail::matched_holder<std::vector<Real>>>(std::move(y), std::move(dydx), grid_refinements);
         }
@@ -297,9 +296,9 @@ public:
             m_qh = std::make_shared<interpolators::detail::cardinal_quintic_hermite_detail<std::vector<Real>>>(std::move(y), std::move(dydx), std::move(d2ydx2), Real(0), dx);
         }
         if constexpr (p >= 10) {
-            m_sh = std::make_shared<interpolators::detail::septic_hermite_detail<std::vector<Real>>>(std::move(x), std::move(y), std::move(dydx), std::move(d2ydx2), std::move(d3ydx3));
+            Real dx = Real(1)/(1 << grid_refinements);
+            m_sh = std::make_shared<interpolators::detail::cardinal_septic_hermite_detail<std::vector<Real>>>(std::move(y), std::move(dydx), std::move(d2ydx2), std::move(d3ydx3), Real(0), dx);
         }
-
      }
 
 
@@ -320,7 +319,7 @@ public:
             return m_qh->unchecked_evaluation(x);
         }
         if constexpr (p >= 10) {
-            return m_sh->operator()(x);
+            return m_sh->unchecked_evaluation(x);
         }
     }
 
@@ -339,7 +338,7 @@ public:
             return m_qh->unchecked_prime(x);
         }
         if constexpr (p >= 10) {
-            return m_sh->prime(x);
+            return m_sh->unchecked_prime(x);
         }
     }
 
@@ -358,7 +357,7 @@ private:
     // Need this for p = 6,7,8,9:
     std::shared_ptr<interpolators::detail::cardinal_quintic_hermite_detail<std::vector<Real>>> m_qh;
     // Need this for p >= 10:
-    std::shared_ptr<interpolators::detail::septic_hermite_detail<std::vector<Real>>> m_sh;
+    std::shared_ptr<interpolators::detail::cardinal_septic_hermite_detail<std::vector<Real>>> m_sh;
 
     /*Real constant_interpolation(Real x) const {
         if (x <= 0 || x >= 2*p-1) {
