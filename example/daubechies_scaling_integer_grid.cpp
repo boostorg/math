@@ -1,5 +1,5 @@
 /*
- * Copyright Nick Thompson, 2019
+ * Copyright Nick Thompson, John Maddock 2020
  * Use, modification and distribution are subject to the
  * Boost Software License, Version 1.0. (See accompanying file
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -55,7 +55,7 @@ std::list<std::vector<Real>> integer_grid()
 
     Eigen::EigenSolver<decltype(A)> es(A);
 
-    auto complex_eigs = es.eigenvalues();
+    typename Eigen::EigenSolver<decltype(A)>::EigenvalueType complex_eigs = es.eigenvalues();
 
     std::vector<Real> eigs(complex_eigs.size(), std::numeric_limits<Real>::quiet_NaN());
 
@@ -80,7 +80,8 @@ std::list<std::vector<Real>> integer_grid()
         }
         size_t idx = std::distance(eigs.begin(), it);
         std::cout << "Eigenvector for derivative " << j << " is at index " << idx << "\n";
-        auto const & complex_eigenvec = es.eigenvectors().col(idx);
+        typename Eigen::EigenSolver<decltype(A)>::EigenvectorsType complex_eigenvectors = es.eigenvectors();
+        auto complex_eigenvec = complex_eigenvectors.col(idx);
         std::vector<Real> eigenvec(complex_eigenvec.size() + 2, std::numeric_limits<Real>::quiet_NaN());
         eigenvec[0] = 0;
         eigenvec[eigenvec.size()-1] = 0;
@@ -221,7 +222,7 @@ int main()
     constexpr const size_t p_max = 15;
     std::ofstream fs{"daubechies_scaling_integer_grid.hpp"};
     fs << "/*\n"
-       << " * Copyright Nick Thompson, 2019\n"
+       << " * Copyright Nick Thompson, John Maddock, 2020\n"
        << " * Use, modification and distribution are subject to the\n"
        << " * Boost Software License, Version 1.0. (See accompanying file\n"
        << " * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)\n"
