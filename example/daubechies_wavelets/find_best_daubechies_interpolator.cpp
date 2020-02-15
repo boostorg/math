@@ -146,15 +146,15 @@ void find_best_interpolator()
     Real dx_dense = (2*p-1)/static_cast<Real>(phi_dense.size()-1);
     fs << std::setprecision(std::numeric_limits<Real>::digits10 + 3);
     fs << std::fixed;
-    fs << "r, matched_holder, linear, quadratic B-spline, cubic B-spline, quintic B-spline, cubic Hermite, pchip, makima, fo_taylor";
+    fs << "r, matched_holder, linear, quadratic_b_spline, cubic_b_spline, quintic_b_spline, cubic_hermite, pchip, makima, fo_taylor";
     if (p==2) {
       fs << "\n";
     }
     else {
-      fs << ", quintic hermite, second-order taylor";
+      fs << ", quintic_hermite, second_order_taylor";
       if (p > 3)
       {
-        fs << ", third order taylor, septic_hermite\n";
+        fs << ", third_order_taylor, septic_hermite\n";
       }
       else {
         fs << "\n";
