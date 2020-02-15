@@ -134,7 +134,7 @@ void find_best_interpolator()
     std::ofstream fs{filename};
     static_assert(sizeof(PreciseReal) >= sizeof(Real), "sizeof(PreciseReal) >= sizeof(Real) is required.");
     using std::abs;
-    int rmax = 21;
+    int rmax = 20;
     auto phi_dense_precise = boost::math::detail::dyadic_grid<PreciseReal, p, 0>(rmax);
     std::vector<Real> phi_dense(phi_dense_precise.size());
     for (size_t i = 0; i < phi_dense.size(); ++i)
@@ -147,18 +147,21 @@ void find_best_interpolator()
     fs << std::setprecision(std::numeric_limits<Real>::digits10 + 3);
     fs << std::fixed;
     fs << "r, matched_holder, linear, quadratic_b_spline, cubic_b_spline, quintic_b_spline, cubic_hermite, pchip, makima, fo_taylor";
-    if (p==2) {
-      fs << "\n";
-    }
-    else {
-      fs << ", quintic_hermite, second_order_taylor";
-      if (p > 3)
-      {
-        fs << ", third_order_taylor, septic_hermite\n";
-      }
-      else {
+    if (p==2)
+    {
         fs << "\n";
-      }
+    }
+    else
+    {
+        fs << ", quintic_hermite, second_order_taylor";
+        if (p > 3)
+        {
+            fs << ", third_order_taylor, septic_hermite\n";
+        }
+        else
+        {
+            fs << "\n";
+        }
     }
     for (int r = 2; r < rmax-1; ++r)
     {
@@ -180,7 +183,7 @@ void find_best_interpolator()
             auto phi_prime_copy = phi_prime;
             auto mh = boost::math::detail::matched_holder(std::move(phi_copy), std::move(phi_prime_copy), r);
             Real sup = 0;
-            // call to matched_holder is unchecked:
+            // call to matched_holder is unchecked, so only go to phi_dense.size() -1.
             for (size_t i = 0; i < phi_dense.size() - 1; ++i)
             {
                 Real x = i*dx_dense;
