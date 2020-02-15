@@ -13,7 +13,7 @@
 #include <thread>
 #include <future>
 #include <iostream>
-#if BOOST_HAS_FLOAT128
+#ifdef BOOST_HAS_FLOAT128
 #include <boost/multiprecision/float128.hpp>
 #endif
 #include <boost/math/constants/constants.hpp>
@@ -159,7 +159,7 @@ public:
     daubechies_scaling(int grid_refinements = -1)
     {
         static_assert(p <= 15, "Scaling functions only implements up to p = 15");
-        #if BOOST_HAS_FLOAT128
+        #ifdef BOOST_HAS_FLOAT128
         using boost::multiprecision::float128;
         #endif
         if (grid_refinements < 0)

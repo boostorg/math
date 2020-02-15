@@ -263,7 +263,16 @@ public:
     }
 
     inline Real unchecked_prime(Real x) const {
-        return std::numeric_limits<Real>::quiet_NaN();
+        //TODO: Get the high accuracy approximation by differentiating the interpolant!
+        using std::floor;
+        auto i = static_cast<decltype(y_.size())>(floor((x-x0_)/dx_));
+        Real xi = x0_ + i*dx_;
+        Real t = (x - xi)/dx_;
+
+        // Velocity:
+        Real v0 = dydx_[i];
+        Real v1 = dydx_[i+1];
+        return (v0+v1)/2;
     }
 
 private:
