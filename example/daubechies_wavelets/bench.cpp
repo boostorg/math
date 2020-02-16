@@ -22,7 +22,7 @@ static void UnitStep(benchmark::internal::Benchmark* b)
     }
 }
 
-double exponential(long long unsigned int j)
+double exponential(int64_t j)
 {
     return std::pow(2, j);
 }
@@ -44,9 +44,9 @@ void DyadicGrid(benchmark::State & state)
     state.SetComplexityN(state.range(0));
 }
 
-BENCHMARK_TEMPLATE(DyadicGrid, double, 4)->Apply(UnitStep)->Unit(benchmark::kMillisecond)->Complexity(exponential);
-BENCHMARK_TEMPLATE(DyadicGrid, double, 8)->Apply(UnitStep)->Unit(benchmark::kMillisecond)->Complexity(exponential);
-BENCHMARK_TEMPLATE(DyadicGrid, double, 11)->Apply(UnitStep)->Unit(benchmark::kMillisecond)->Complexity(exponential);
+BENCHMARK_TEMPLATE(DyadicGrid, double, 4)->Apply(UnitStep)->Unit(benchmark::kMillisecond)->Complexity();
+//BENCHMARK_TEMPLATE(DyadicGrid, double, 8)->Apply(UnitStep)->Unit(benchmark::kMillisecond)->Complexity(exponential);
+//BENCHMARK_TEMPLATE(DyadicGrid, double, 11)->Apply(UnitStep)->Unit(benchmark::kMillisecond)->Complexity(exponential);
 
 
 template<typename Real, int p>
