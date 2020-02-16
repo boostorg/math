@@ -328,10 +328,10 @@ public:
         {
             return 0;
         }
-        if constexpr (p==2 || p == 3) {
+        if constexpr (p == 2 || p == 3) {
             throw std::domain_error("The 2 and 3-vanishing moment Daubechies scaling function is not continuously differentiable.");
         }
-        if constexpr (p==4 || p ==5) {
+        if constexpr (p == 4 || p == 5) {
             return m_cbh->unchecked_prime(x);
         }
         if constexpr (p >= 6 && p <= 9) {
@@ -342,12 +342,12 @@ public:
         }
     }
 
-    std::pair<int, int> support() const {
+    std::pair<int, int> support() const
+    {
         return {0, 2*p-1};
     }
 
 private:
-    size_t m_levels;
     // Need this for p = 2:
     std::shared_ptr<detail::matched_holder<std::vector<Real>>> m_mh;
     // Need this for p = 3:
@@ -359,36 +359,7 @@ private:
     // Need this for p >= 10:
     std::shared_ptr<interpolators::detail::cardinal_septic_hermite_detail<std::vector<Real>>> m_sh;
 
-    /*Real constant_interpolation(Real x) const {
-        if (x <= 0 || x >= 2*p-1) {
-            return Real(0);
-        }
-        using std::floor;
-        Real y = (1 << m_levels)*x;
-        Real k = floor(y);
-
-        if (y - k < k + 1 - y)
-        {
-            return m_v[static_cast<size_t>(k)];
-        }
-        return m_v[static_cast<size_t>(k)+1];
-    }
-
-    Real linear_interpolation(Real x) const {
-        if (x <= 0 || x >= 2*p-1) {
-            return Real(0);
-        }
-        using std::floor;
-
-        Real y = (1<<m_levels)*x;
-        Real k = floor(y);
-
-        size_t kk = static_cast<size_t>(k);
-
-        Real t = y - k;
-        return (1-t)*m_v[kk] + t*m_v[kk+1];
-    }
-
+    /*
     Real single_crank_linear(Real x) const {
         if (x <= 0 || x >= 2*p-1) {
             return Real(0);
@@ -444,129 +415,13 @@ private:
         return a*t*t + b*t + y0;
     }
 
-
-    Real double_crank_linear(Real x) const {
-        return std::numeric_limits<Real>::quiet_NaN();
-    }
-
-
-    Real first_order_taylor(Real x) const {
-        if (x <= 0 || x >= 2*p-1) {
-            return 0;
-        }
-        using std::floor;
-
-        Real y = (1<<m_levels)*x;
-        Real k = floor(y);
-
-        size_t kk = static_cast<size_t>(k);
-        if (y - k < k + 1 - y)
-        {
-            Real eps = (y-k)/(1<<m_levels);
-            return m_v[kk] + eps*m_v_prime[kk];
-        }
-        else {
-            Real eps = (y-k-1)/(1<<m_levels);
-            return m_v[kk+1] + eps*m_v_prime[kk+1];
-        }
-    }
-
-    Real second_order_taylor(Real x) const {
-        if (x <= 0 || x >= 2*p-1) {
-            return 0;
-        }
-        using std::floor;
-
-        Real y = (1<<m_levels)*x;
-        Real k = floor(y);
-
-        size_t kk = static_cast<size_t>(k);
-        if (y - k < k + 1 - y)
-        {
-            Real eps = (y-k)/(1<<m_levels);
-            return m_v[kk] + eps*m_v_prime[kk] + eps*eps*m_v_dbl_prime[kk]/2;
-        }
-        else {
-            Real eps = (y-k-1)/(1<<m_levels);
-            return m_v[kk+1] + eps*m_v_prime[kk+1] + eps*eps*m_v_dbl_prime[kk+1]/2;
-        }
-    }
-
-    Real third_order_taylor(Real x) const {
-        return std::numeric_limits<Real>::quiet_NaN();
-    }
-
-    Real single_crank_first_order_taylor(Real x) const {
-        return std::numeric_limits<Real>::quiet_NaN();
-    }
-
-    Real double_crank_first_order_taylor(Real x) const {
-        return std::numeric_limits<Real>::quiet_NaN();
-    }
-
-    Real single_crank_second_order_taylor(Real x) const {
-        return std::numeric_limits<Real>::quiet_NaN();
-    }
-
-    Real double_crank_second_order_taylor(Real x) const {
-        return std::numeric_limits<Real>::quiet_NaN();
-    }
-
-    Real single_crank_third_order_taylor(Real x) const {
-        return std::numeric_limits<Real>::quiet_NaN();
-    }
-
-    Real double_crank_third_order_taylor(Real x) const {
-        return std::numeric_limits<Real>::quiet_NaN();
-    }
-
     size_t bytes() const
     {
         size_t s = sizeof(*this);
         s += m_v.size()*sizeof(Real);
         return s;
     }
-
-    size_t size() const {
-        return m_v.size();
-    }
-
-    Real index_to_abscissa(size_t i) {
-        return i/m_inv_spacing;
-    }
-
-    // This is for debugging only; use the .at()
-    Real operator[](size_t i) const {
-        return m_v.at(i);
-    }
-
-    Real prime(size_t i) const {
-        return m_v_prime.at(i);
-    }
-
-    Real spacing() const {
-        return 1/m_inv_spacing;
-    }
-
-    auto begin() const {
-        return m_v.begin();
-    }
-
-    auto end() const {
-        return m_v.end();
-    }
-
-    auto data() const {
-        return m_v.data();
-    }
-
-private:
-    size_t m_levels;
-    Real m_inv_spacing;
-    std::array<Real, 2*p> m_c;
-    std::vector<Real> m_v;
-    std::vector<Real> m_v_prime;
-    std::vector<Real> m_v_dbl_prime;*/
+*/
 };
 
 }
