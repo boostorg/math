@@ -15,11 +15,11 @@ public:
     using Real = typename RandomAccessContainer::value_type;
 
     cardinal_cubic_hermite_detail(RandomAccessContainer && y, RandomAccessContainer dydx, Real x0, Real dx)
-    : y_{std::move(y)}, dydx_{std::move(dydx)}, x0_{x0}, dx_{dx}
+    : y_{std::move(y)}, dy_{std::move(dydx)}, x0_{x0}, inv_dx_{1/dx}
     {
         using std::abs;
         using std::isnan;
-        if (y_.size() != dydx_.size())
+        if (y_.size() != dy_.size())
         {
             throw std::domain_error("There must be the same number of derivatives as ordinates.");
         }
@@ -31,6 +31,11 @@ public:
         {
             throw std::domain_error("dx > 0 is required.");
         }
+
+        for (auto & dy : dy_)
+        {
+            dy *= dx;
+        }
     }
 
     // Why not implement push_back? It's awkward: If the buffer is circular, x0_ += dx_.
@@ -38,38 +43,9 @@ public:
     // We need a concept for circular_buffer!
 
     inline Real operator()(Real x) const {
-        const Real xf = x0_ + (y_.size()-1)*dx_;
-        if  (x < x0_ || x > xf) {
-            std::ostringstream oss;
-            oss.precision(std::numeric_limits<Real>::digits10+3);
-            oss << "Requested abscissa x = " << x << ", which is outside of allowed range ["
-                << x0_ << ", " << xf << "]";
-            throw std::domain_error(oss.str());
-        }
-        if (x == xf) {
-            return y_.back();
-        }
-        return this->unchecked_evaluation(x);
-    }
-
-    inline Real unchecked_evaluation(Real x) const
-    {
-        using std::floor;
-        auto i = static_cast<decltype(y_.size())>(floor((x-x0_)/dx_));
-        Real xi = x0_ + i*dx_;
-        Real t = (x - xi)/dx_;
-        Real y0 = y_[i];
-        Real y1 = y_[i+1];
-        Real v0 = dydx_[i];
-        Real v1 = dydx_[i+1];
-
-        return (1-t)*(1-t)*(y0*(1+2*t) + v0*(x-xi))
-              + t*t*(y1*(3-2*t) + dx_*v1*(t-1));
-    }
-
-    inline Real prime(Real x) const {
-        const Real xf = x0_ + (y_.size()-1)*dx_;
-        if  (x < x0_ || x > xf) {
+        const Real xf = x0_ + (y_.size()-1)/inv_dx_;
+        if  (x < x0_ || x > xf)
+        {
             std::ostringstream oss;
             oss.precision(std::numeric_limits<Real>::digits10+3);
             oss << "Requested abscissa x = " << x << ", which is outside of allowed range ["
@@ -78,22 +54,58 @@ public:
         }
         if (x == xf)
         {
-            return dydx_.back();
+            return y_.back();
+        }
+        return this->unchecked_evaluation(x);
+    }
+
+    inline Real unchecked_evaluation(Real x) const
+    {
+        using std::floor;
+        Real s = (x-x0_)*inv_dx_;
+        Real ii = floor(s);
+        auto i = static_cast<decltype(y_.size())>(ii);
+        Real t = s - ii;
+        Real y0 = y_[i];
+        Real y1 = y_[i+1];
+        Real dy0 = dy_[i];
+        Real dy1 = dy_[i+1];
+
+        Real r = 1-t;
+        return r*r*(y0*(1+2*t) + dy0*t)
+              + t*t*(y1*(3-2*t) - dy1*r);
+    }
+
+    inline Real prime(Real x) const {
+        const Real xf = x0_ + (y_.size()-1)/inv_dx_;
+        if  (x < x0_ || x > xf)
+        {
+            std::ostringstream oss;
+            oss.precision(std::numeric_limits<Real>::digits10+3);
+            oss << "Requested abscissa x = " << x << ", which is outside of allowed range ["
+                << x0_ << ", " << xf << "]";
+            throw std::domain_error(oss.str());
+        }
+        if (x == xf)
+        {
+            return dy_.back()*inv_dx_;
         }
         return this->unchecked_prime(x);
     }
 
     inline Real unchecked_prime(Real x) const {
         using std::floor;
-        auto i = static_cast<decltype(y_.size())>(floor((x-x0_)/dx_));
-        Real xi = x0_ + i*dx_;
-        Real t = (x - xi)/dx_;
+        Real s = (x-x0_)*inv_dx_;
+        Real ii = floor(s);
+        auto i = static_cast<decltype(y_.size())>(ii);
+        Real t = s - ii;
         Real y0 = y_[i];
         Real y1 = y_[i+1];
-        Real v0 = dydx_[i];
-        Real v1 = dydx_[i+1];
+        Real dy0 = dy_[i];
+        Real dy1 = dy_[i+1];
 
-        return 6*t*(1-t)*(y1 - y0)/dx_  + (3*t*t - 4*t+1)*v0 + t*(3*t-2)*v1;
+        Real dy = 6*t*(1-t)*(y1 - y0)  + (3*t*t - 4*t+1)*dy0 + t*(3*t-2)*dy1;
+        return dy*inv_dx_;
     }
 
 
@@ -103,9 +115,9 @@ public:
     }
 
     RandomAccessContainer y_;
-    RandomAccessContainer dydx_;
+    RandomAccessContainer dy_;
     Real x0_;
-    Real dx_;
+    Real inv_dx_;
 };
 
 
@@ -116,7 +128,7 @@ public:
     using Real = typename Point::value_type;
 
     cardinal_cubic_hermite_detail_aos(RandomAccessContainer && dat, Real x0, Real dx)
-    : dat_{std::move(dat)}, x0_{x0}, dx_{dx}
+    : dat_{std::move(dat)}, x0_{x0}, inv_dx_{1/dx}
     {
         if (dat_.size() < 2)
         {
@@ -126,42 +138,56 @@ public:
         {
             throw std::domain_error("Each datum must contain (y, y'), and nothing else.");
         }
+        if (dx <= 0)
+        {
+            throw std::domain_error("dx > 0 is required.");
+        }
+
+        for (auto & d : dat_)
+        {
+            d[1] *= dx;
+        }
     }
 
     inline Real operator()(Real x) const {
-        const Real xf = x0_ + (dat_.size()-1)*dx_;
-        if  (x < x0_ || x > xf) {
+        const Real xf = x0_ + (dat_.size()-1)/inv_dx_;
+        if  (x < x0_ || x > xf)
+        {
             std::ostringstream oss;
             oss.precision(std::numeric_limits<Real>::digits10+3);
             oss << "Requested abscissa x = " << x << ", which is outside of allowed range ["
                 << x0_ << ", " << xf << "]";
             throw std::domain_error(oss.str());
         }
-        if (x == xf) {
+        if (x == xf)
+        {
             return dat_.back()[0];
         }
-
         return this->unchecked_evaluation(x);
     }
 
-    inline Real unchecked_evaluation(Real x) const {
+    inline Real unchecked_evaluation(Real x) const
+    {
         using std::floor;
-        auto i = static_cast<decltype(dat_.size())>(floor((x-x0_)/dx_));
-        Real xi = x0_ + i*dx_;
-        Real t = (x-xi)/dx_;
+        Real s = (x-x0_)*inv_dx_;
+        Real ii = floor(s);
+        auto i = static_cast<decltype(dat_.size())>(ii);
+
+        Real t = s - ii;
         Real y0 = dat_[i][0];
         Real y1 = dat_[i+1][0];
-        Real v0 = dat_[i][1];
-        Real v1 = dat_[i+1][1];
+        Real dy0 = dat_[i][1];
+        Real dy1 = dat_[i+1][1];
 
-
-        return (1-t)*(1-t)*(y0*(1+2*t) + v0*(x-xi))
-              + t*t*(y1*(3-2*t) + dx_*v1*(t-1));
+        Real r = 1-t;
+        return r*r*(y0*(1+2*t) + dy0*t)
+              + t*t*(y1*(3-2*t) - dy1*r);
     }
 
     inline Real prime(Real x) const {
-        const Real xf = x0_ + (dat_.size()-1)*dx_;
-        if  (x < x0_ || x > xf) {
+        const Real xf = x0_ + (dat_.size()-1)/inv_dx_;
+        if  (x < x0_ || x > xf)
+        {
             std::ostringstream oss;
             oss.precision(std::numeric_limits<Real>::digits10+3);
             oss << "Requested abscissa x = " << x << ", which is outside of allowed range ["
@@ -175,27 +201,31 @@ public:
         return this->unchecked_prime(x);
     }
 
-    inline Real unchecked_prime(Real x) const {
+    inline Real unchecked_prime(Real x) const
+    {
         using std::floor;
-        auto i = static_cast<decltype(dat_.size())>(floor((x-x0_)/dx_));
-        Real xi = x0_ + i*dx_;
-        Real t = (x - xi)/dx_;
+        Real s = (x-x0_)*inv_dx_;
+        Real ii = floor(s);
+        auto i = static_cast<decltype(dat_.size())>(ii);
+        Real t = s - ii;
         Real y0 = dat_[i][0];
+        Real dy0 = dat_[i][1];
         Real y1 = dat_[i+1][0];
-        Real v0 = dat_[i][1];
-        Real v1 = dat_[i+1][1];
+        Real dy1 = dat_[i+1][1];
 
-        return 6*t*(1-t)*(y1 - y0)/dx_  + (3*t*t - 4*t+1)*v0 + t*(3*t-2)*v1;
+        Real dy = 6*t*(1-t)*(y1 - y0)  + (3*t*t - 4*t+1)*dy0 + t*(3*t-2)*dy1;
+        return dy*inv_dx_;
     }
 
 
-    auto size() const {
+    auto size() const
+    {
         return dat_.size();
     }
 
     RandomAccessContainer dat_;
     Real x0_;
-    Real dx_;
+    Real inv_dx_;
 };
 
 

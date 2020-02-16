@@ -52,7 +52,7 @@ BENCHMARK_TEMPLATE(DyadicGrid, double, 4)->Apply(UnitStep)->Unit(benchmark::kMil
 template<typename Real, int p>
 void ScalingEvaluation(benchmark::State & state)
 {
-    auto phi = boost::math::daubechies_scaling<Real, p>();    
+    auto phi = boost::math::daubechies_scaling<Real, p>();
     Real x = 0;
     for (auto _ : state)
     {
@@ -135,7 +135,7 @@ void CardinalCubicHermite(benchmark::State & state)
     }
 }
 
-BENCHMARK_TEMPLATE(CardinalCubicHermite, double)->RangeMultiplier(2)->Range(1<<8, 1<<22)->Complexity();
+BENCHMARK_TEMPLATE(CardinalCubicHermite, double)->RangeMultiplier(2)->Range(1<<8, 1<<20)->Complexity();
 
 template<typename Real>
 void CardinalCubicHermiteAOS(benchmark::State & state)
@@ -167,7 +167,7 @@ void CardinalCubicHermiteAOS(benchmark::State & state)
     }
 }
 
-BENCHMARK_TEMPLATE(CardinalCubicHermiteAOS, double)->RangeMultiplier(2)->Range(1<<8, 1<<14)->Complexity();
+BENCHMARK_TEMPLATE(CardinalCubicHermiteAOS, double)->RangeMultiplier(2)->Range(1<<8, 1<<20)->Complexity();
 
 template<class Real>
 void SineEvaluation(benchmark::State& state)
