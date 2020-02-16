@@ -57,25 +57,29 @@ std::vector<Real> dyadic_grid(int64_t j_max)
         {
             // Where this value will go:
             int64_t delivery_idx = k*(1 << (j_max-j));
-            if (delivery_idx >= (int64_t) v.size())
-            {
-                std::cerr << "Delivery index out of range!\n";
-                continue;
-            }
+            // This is a nice check, but we've tested this exhaustively, and it's expensive:
+            //if (delivery_idx >= (int64_t) v.size()) {
+            //    std::cerr << "Delivery index out of range!\n";
+            //    continue;
+            //}
             Real term = 0;
-            for (int64_t l = 0; l < (int64_t) c.size(); ++l) {
+            for (int64_t l = 0; l < (int64_t) c.size(); ++l)
+            {
                 int64_t idx = k*(1 << (j_max - j + 1)) - l*(1 << j_max);
-                if (idx < 0) {
+                if (idx < 0)
+                {
                     break;
                 }
-                if (idx < (int64_t) v.size()) {
+                if (idx < (int64_t) v.size())
+                {
                     term += c[l]*v[idx];
                 }
             }
-            if (!isnan(v[delivery_idx])) {
-                std::cerr << "Delivery index already populated!, = " << v[delivery_idx] << "\n";
-                std::cerr << "would overwrite with " << term << "\n";
-            }
+            // Again, another nice check:
+            //if (!isnan(v[delivery_idx])) {
+            //    std::cerr << "Delivery index already populated!, = " << v[delivery_idx] << "\n";
+            //    std::cerr << "would overwrite with " << term << "\n";
+            //}
             v[delivery_idx] = term;
         }
     }
@@ -89,39 +93,36 @@ class matched_holder {
 public:
     using Real = typename RandomAccessContainer::value_type;
 
-    matched_holder(RandomAccessContainer && y, RandomAccessContainer && dydx, int grid_refinements) : y_{std::move(y)}, dydx_{std::move(dydx)}
+    matched_holder(RandomAccessContainer && y, RandomAccessContainer && dydx, int grid_refinements) : y_{std::move(y)}, dy_{std::move(dydx)}
     {
-        inv_h_ = 1<< grid_refinements;
+        inv_h_ = (1 << grid_refinements);
+        Real h = 1/inv_h_;
+        for (auto & dy : dy_)
+        {
+            dy *= h;
+        }
     }
     
     inline Real operator()(Real x) const {
-        using std::log;
         using std::floor;
         using std::sqrt;
-        using std::pow;
         // This is the exact Holder exponent, but it's pessimistic almost everywhere!
         // It's only exactly right at dyadic rationals.
-        // Some compilers do not evaluate this at compile time:
-        Real const alpha = 2 - log(1+sqrt(Real(3)))/log(Real(2));
-        Real const onemalpham1 = 1/(1-alpha);
-        //const Real alpha = 0.5500156865235042;
-        // So we're gonna make the graph dip a little harder; this will capture more of the self-similar behavior:
-        //Real constexpr const alpha = Real(3)/Real(10);
+        //Real const alpha = 2 - log(1+sqrt(Real(3)))/log(Real(2));
+        // We're gonna use alpha = 1/2, rather than 0.5500...
         Real s = x*inv_h_;
         Real ii = floor(s);
-        int64_t i = static_cast<int64_t>(ii);
+        auto i = static_cast<decltype(y_.size())>(ii);
         Real t = s - ii;
-        Real v = y_[i];
-        Real dphi = dydx_[i+1]/inv_h_;
+        Real dphi = dy_[i+1];
         Real diff = y_[i+1] - y_[i];
-        v += ((dphi - alpha*diff)*t + (-dphi + diff)*pow(t, alpha) )*onemalpham1;
-        return v;
+        return y_[i] + (2*dphi - diff)*t + 2*sqrt(t)*(diff-dphi);
     }
 
 private:
     Real inv_h_;
     RandomAccessContainer y_;
-    RandomAccessContainer dydx_;
+    RandomAccessContainer dy_;
 };
 
 
@@ -132,22 +133,21 @@ public:
 
     linear_interpolation(RandomAccessContainer && y,  int grid_refinements) : y_{std::move(y)}
     {
-        grid_refinements_ = grid_refinements;
+        s_ = (1 << grid_refinements);
     }
 
     inline Real operator()(Real x) const {
         using std::floor;
-        Real y = x*(1<<grid_refinements_);
+        Real y = x*s_;
         Real k = floor(y);
 
-        size_t kk = static_cast<size_t>(k);
-
+        int64_t kk = static_cast<int64_t>(k);
         Real t = y - k;
         return (1-t)*y_[kk] + t*y_[kk+1];
     }
 
 private:
-    int grid_refinements_;
+    Real s_;
     RandomAccessContainer y_;
 };
 
