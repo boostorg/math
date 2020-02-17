@@ -233,6 +233,28 @@ public:
         Real ii = floor(s3);
         auto i = static_cast<decltype(y_.size())>(ii);
         Real t = s3 - ii;
+        // See:
+        // http://seisweb.usask.ca/classes/GEOL481/2017/Labs/interpolation_utilities_matlab/shermite.m
+        Real t2 = t*t;
+        Real t3 = t2*t;
+        Real t4 = t3*t;
+
+        Real s = t4*(-35 + t*(84 + t*(-70 + 20*t)));
+        Real z4 = -s;
+        Real z0 = s + 1;
+        //Real z1 = t*(10*t6 - 36*t5 + 45*t4 - 20*t3 + 1);
+        Real z1 = t*(1 + t3*(-20 + t*(45 + t*(-36+10*t))));
+        //Real z2 = t2*(4*t4*t - 15*t4 + 20*t3 - 10*t2 + 1);
+        Real z2 = t2*(1 + t2*(-10 + t*(20 + t*(-15+4*t))));
+        //Real z3 = t3*(t4 - 4*t3 + 6*t2 - 4*t + 1);
+        Real z3 = t3*(1 + t*(-4+t*(6+t*(-4+t))));
+
+        //Real z5 = t4*(10*t3 - 34*t2 + 39*t - 15);
+        Real z5 = t4*(-15 + t*(39 + t*(-34 + 10*t)));
+        //Real z6 = t4*(-4*t3 + 13*t2 - 14*t + 5);
+        Real z6 = t4*(5 + t*(-14 + t*(13-4*t)));
+        //Real z7 = t4*(t3 - 3*t2 + 3*t - 1);
+        Real z7 = t4*(-1 + t*(3+t*(-3+t)));
 
         Real y0 = y_[i];
         Real y1 = y_[i+1];
@@ -245,29 +267,6 @@ public:
         // Jerk:
         Real j0 = d3y_[i];
         Real j1 = d3y_[i+1];
-
-        // See:
-        // http://seisweb.usask.ca/classes/GEOL481/2017/Labs/interpolation_utilities_matlab/shermite.m
-        Real t2 = t*t;
-        Real t3 = t2*t;
-        Real t4 = t3*t;
-
-        Real s = t4*(-35 + t*(84 + t*(-70 + 20*t)));
-        Real z4 = -s;
-        Real z0 = s + 1;
-        //Real z1 = t*(10*t6 - 36*t5 + 45*t4 - 20*t3 + 1);
-        Real z1 = t*(1 + t3*(-20 + t*(45 + t*(-36+10*t))));
-        //Real z2 = t2*(4*t5 - 15*t4 + 20*t3 - 10*t2 + 1);
-        Real z2 = t2*(1+ t2*(4*t3 - 15*t + 20*t - 10));
-        //Real z3 = t3*(t4 - 4*t3 + 6*t2 - 4*t + 1);
-        Real z3 = t3*(1 + t*(-4+t*(6+t*(-4+t))));
-
-        //Real z5 = t4*(10*t3 - 34*t2 + 39*t - 15);
-        Real z5 = t4*(-15 + t*(39 + t*(-34 + 10*t)));
-        //Real z6 = t4*(-4*t3 + 13*t2 - 14*t + 5);
-        Real z6 = t4*(5 + t*(-14 + t*(13-4*t)));
-        //Real z7 = t4*(t3 - 3*t2 + 3*t - 1);
-        Real z7 = t4*(-1 + t*(3+t*(-3+t)));
 
         return z0*y0 + z1*dy0 + z2*a0 + z3*j0 + z4*y1 + z5*dy1 + z6*a1 + z7*j1;
     }
@@ -363,20 +362,6 @@ public:
         Real ii = floor(s3);
         auto i = static_cast<decltype(data_.size())>(ii);
         Real t = s3 - ii;
-
-
-        Real y0 = data_[i][0];
-        Real y1 = data_[i+1][0];
-        // Velocity:
-        Real dy0 = data_[i][1];
-        Real dy1 = data_[i+1][1];
-        // Acceleration:
-        Real a0 = data_[i][2];
-        Real a1 = data_[i+1][2];
-        // Jerk:
-        Real j0 = data_[i][3];
-        Real j1 = data_[i+1][3];
-
         Real t2 = t*t;
         Real t3 = t2*t;
         Real t4 = t3*t;
@@ -387,7 +372,7 @@ public:
         //Real z1 = t*(10*t6 - 36*t5 + 45*t4 - 20*t3 + 1);
         Real z1 = t*(1 + t3*(-20 + t*(45 + t*(-36+10*t))));
         //Real z2 = t2*(4*t5 - 15*t4 + 20*t3 - 10*t2 + 1);
-        Real z2 = t2*(1+ t2*(4*t3 - 15*t + 20*t - 10));
+        Real z2 = t2*(1 + t2*(-10 + t*(20 + t*(-15+4*t))));
         //Real z3 = t3*(t4 - 4*t3 + 6*t2 - 4*t + 1);
         Real z3 = t3*(1 + t*(-4+t*(6+t*(-4+t))));
 
@@ -397,6 +382,15 @@ public:
         Real z6 = t4*(5 + t*(-14 + t*(13-4*t)));
         //Real z7 = t4*(t3 - 3*t2 + 3*t - 1);
         Real z7 = t4*(-1 + t*(3+t*(-3+t)));
+
+        Real y0 = data_[i][0];
+        Real dy0 = data_[i][1];
+        Real a0 = data_[i][2];
+        Real j0 = data_[i][3];
+        Real y1 = data_[i+1][0];
+        Real dy1 = data_[i+1][1];
+        Real a1 = data_[i+1][2];
+        Real j1 = data_[i+1][3];
 
         return z0*y0 + z1*dy0 + z2*a0 + z3*j0 + z4*y1 + z5*dy1 + z6*a1 + z7*j1;
 
