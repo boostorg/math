@@ -180,7 +180,6 @@ public:
         {
             throw std::domain_error("Number of third derivatives must equal number of ordinates.");
         }
-
         if (y_.size() < 2)
         {
             throw std::domain_error("At least 2 abscissas are required.");
@@ -199,7 +198,6 @@ public:
         {
             d2y *= (dx*dx/2);
         }
-
         for (auto & d3y : d3y_)
         {
             d3y *= (dx*dx*dx/6);
@@ -218,8 +216,6 @@ public:
                 << x0_ << ", " << xf << "]";
             throw std::domain_error(oss.str());
         }
-        // We need t := (x-x_k)/(x_{k+1}-x_k) \in [0,1) for this to work.
-        // Sadly this neccessitates this loathesome check, otherwise we get t = 1 at x = xf.
         if (x == xf)
         {
             return y_.back();
@@ -242,29 +238,19 @@ public:
         Real s = t4*(-35 + t*(84 + t*(-70 + 20*t)));
         Real z4 = -s;
         Real z0 = s + 1;
-        //Real z1 = t*(10*t6 - 36*t5 + 45*t4 - 20*t3 + 1);
         Real z1 = t*(1 + t3*(-20 + t*(45 + t*(-36+10*t))));
-        //Real z2 = t2*(4*t4*t - 15*t4 + 20*t3 - 10*t2 + 1);
         Real z2 = t2*(1 + t2*(-10 + t*(20 + t*(-15+4*t))));
-        //Real z3 = t3*(t4 - 4*t3 + 6*t2 - 4*t + 1);
         Real z3 = t3*(1 + t*(-4+t*(6+t*(-4+t))));
-
-        //Real z5 = t4*(10*t3 - 34*t2 + 39*t - 15);
         Real z5 = t4*(-15 + t*(39 + t*(-34 + 10*t)));
-        //Real z6 = t4*(-4*t3 + 13*t2 - 14*t + 5);
         Real z6 = t4*(5 + t*(-14 + t*(13-4*t)));
-        //Real z7 = t4*(t3 - 3*t2 + 3*t - 1);
         Real z7 = t4*(-1 + t*(3+t*(-3+t)));
 
         Real y0 = y_[i];
         Real y1 = y_[i+1];
-        // Velocity:
         Real dy0 = dy_[i];
         Real dy1 = dy_[i+1];
-        // Acceleration:
         Real a0 = d2y_[i];
         Real a1 = d2y_[i+1];
-        // Jerk:
         Real j0 = d3y_[i];
         Real j1 = d3y_[i+1];
 
@@ -347,8 +333,6 @@ public:
                 << x0_ << ", " << xf << "]";
             throw std::domain_error(oss.str());
         }
-        // We need t := (x-x_k)/(x_{k+1}-x_k) \in [0,1) for this to work.
-        // Sadly this neccessitates this loathesome check, otherwise we get t = 1 at x = xf.
         if (x == xf)
         {
             return data_.back()[0];
@@ -369,18 +353,11 @@ public:
         Real s = t4*(-35 + t*(84 + t*(-70 + 20*t)));
         Real z4 = -s;
         Real z0 = s + 1;
-        //Real z1 = t*(10*t6 - 36*t5 + 45*t4 - 20*t3 + 1);
         Real z1 = t*(1 + t3*(-20 + t*(45 + t*(-36+10*t))));
-        //Real z2 = t2*(4*t5 - 15*t4 + 20*t3 - 10*t2 + 1);
         Real z2 = t2*(1 + t2*(-10 + t*(20 + t*(-15+4*t))));
-        //Real z3 = t3*(t4 - 4*t3 + 6*t2 - 4*t + 1);
         Real z3 = t3*(1 + t*(-4+t*(6+t*(-4+t))));
-
-        //Real z5 = t4*(10*t3 - 34*t2 + 39*t - 15);
         Real z5 = t4*(-15 + t*(39 + t*(-34 + 10*t)));
-        //Real z6 = t4*(-4*t3 + 13*t2 - 14*t + 5);
         Real z6 = t4*(5 + t*(-14 + t*(13-4*t)));
-        //Real z7 = t4*(t3 - 3*t2 + 3*t - 1);
         Real z7 = t4*(-1 + t*(3+t*(-3+t)));
 
         Real y0 = data_[i][0];

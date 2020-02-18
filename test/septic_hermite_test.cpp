@@ -231,7 +231,6 @@ void test_quadratic()
     {
         CHECK_ULP_CLOSE(t*t/2, csh_aos(t), 24);
     }
-
 }
 
 
@@ -263,6 +262,38 @@ void test_cubic()
 
     for (Real t = 0; t <= xmax; t += 0.0078125) {
         CHECK_ULP_CLOSE(t*t*t, sh(t), 151);
+    }
+
+    Real x0 = 0;
+    Real dx = 1;
+    y.resize(8);
+    dydx.resize(8);
+    d2ydx2.resize(8);
+    d3ydx3.resize(8,6);
+    for (size_t i = 0; i < y.size(); ++i) {
+        y[i] = i*i*i;
+        dydx[i] = 3*i*i;
+        d2ydx2[i] = 6*i;
+    }
+
+    auto csh = cardinal_septic_hermite(std::move(y), std::move(dydx), std::move(d2ydx2), std::move(d3ydx3), x0, dx);
+
+    for (Real t = 0; t <= xmax; t += 0.0078125) {
+        CHECK_ULP_CLOSE(t*t*t, csh(t), 151);
+    }
+
+    std::vector<std::array<Real, 4>> data(8);
+    for (size_t i = 0; i < data.size(); ++i) {
+        data[i][0] = i*i*i;
+        data[i][1] = 3*i*i;
+        data[i][2] = 6*i;
+        data[i][3] = 6;
+    }
+
+    auto csh_aos = cardinal_septic_hermite_aos(std::move(data), x0, dx);
+
+    for (Real t = 0; t <= xmax; t += 0.0078125) {
+        CHECK_ULP_CLOSE(t*t*t, csh_aos(t), 151);
     }
 }
 
@@ -298,6 +329,37 @@ void test_quartic()
     for (Real t = 1; t <= xmax; t += 0.0078125) {
         CHECK_ULP_CLOSE(t*t*t*t, sh(t), 117);
     }
+
+    y.resize(10);
+    dydx.resize(10);
+    d2ydx2.resize(10);
+    d3ydx3.resize(10);
+    for (size_t i = 0; i < y.size(); ++i) {
+        y[i] = i*i*i*i;
+        dydx[i] = 4*i*i*i;
+        d2ydx2[i] = 12*i*i;
+        d3ydx3[i] = 24*i;
+    }
+
+    auto csh = cardinal_septic_hermite(std::move(y), std::move(dydx), std::move(d2ydx2), std::move(d3ydx3), Real(0), Real(1));
+
+    for (Real t = 1; t <= xmax; t += 0.0078125) {
+        CHECK_ULP_CLOSE(t*t*t*t, csh(t), 117);
+    }
+
+    std::vector<std::array<Real, 4>> data(10);
+    for (size_t i = 0; i < data.size(); ++i) {
+        data[i][0] = i*i*i*i;
+        data[i][1] = 4*i*i*i;
+        data[i][2] = 12*i*i;
+        data[i][3] = 24*i;
+    }
+
+    auto csh_aos = cardinal_septic_hermite_aos(std::move(data), Real(0), Real(1));
+    for (Real t = 1; t <= xmax; t += 0.0078125) {
+        CHECK_ULP_CLOSE(t*t*t*t, csh_aos(t), 117);
+    }
+
 }
 
 
