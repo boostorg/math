@@ -8,7 +8,15 @@
 
 #include <boost/cstdfloat.hpp>
 #include <boost/math/constants/constants.hpp>
-#include <boost/math/special_functions.hpp>
+#include <boost/math/special_functions/trunc.hpp>
+#include <boost/math/special_functions/round.hpp>
+#include <boost/math/special_functions/acosh.hpp>
+#include <boost/math/special_functions/asinh.hpp>
+#include <boost/math/special_functions/atanh.hpp>
+#include <boost/math/special_functions/digamma.hpp>
+#include <boost/math/special_functions/polygamma.hpp>
+#include <boost/math/special_functions/erf.hpp>
+#include <boost/math/special_functions/lambert_w.hpp>
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/promotion.hpp>
 
@@ -56,7 +64,7 @@ template <typename RealType, size_t Order>
 struct is_fvar_impl<fvar<RealType, Order>> : std::true_type {};
 
 template <typename T>
-using is_fvar = is_fvar_impl<decay_t<T>>;
+using is_fvar = is_fvar_impl<typename std::decay<T>::type>;
 
 template <typename RealType, size_t Order, size_t... Orders>
 struct nest_fvar {
@@ -76,7 +84,7 @@ struct get_depth_impl<fvar<RealType, Order>>
     : std::integral_constant<size_t, get_depth_impl<RealType>::value + 1> {};
 
 template <typename T>
-using get_depth = get_depth_impl<decay_t<T>>;
+using get_depth = get_depth_impl<typename std::decay<T>::type>;
 
 template <typename>
 struct get_order_sum_t : std::integral_constant<size_t, 0> {};
@@ -86,7 +94,7 @@ struct get_order_sum_t<fvar<RealType, Order>>
     : std::integral_constant<size_t, get_order_sum_t<RealType>::value + Order> {};
 
 template <typename T>
-using get_order_sum = get_order_sum_t<decay_t<T>>;
+using get_order_sum = get_order_sum_t<typename std::decay<T>::type>;
 
 template <typename RealType>
 struct get_root_type {
@@ -316,7 +324,7 @@ class fvar {
 
   explicit operator root_type() const;  // Must be explicit, otherwise overloaded operators are ambiguous.
 
-  template <typename T, typename = typename boost::enable_if<boost::is_arithmetic<decay_t<T>>>::type>
+  template <typename T, typename = typename std::enable_if<std::is_arithmetic<typename std::decay<T>::type>::value>>
   explicit operator T() const;  // Must be explicit; multiprecision has trouble without the std::enable_if
 
   fvar& set_root(root_type const&);
