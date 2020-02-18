@@ -20,11 +20,11 @@ public:
     : impl_(std::make_shared<detail::cubic_hermite_detail<RandomAccessContainer>>(std::move(x), std::move(y), std::move(dydx)))
     {}
 
-    Real operator()(Real x) const {
+    inline Real operator()(Real x) const {
         return impl_->operator()(x);
     }
 
-    Real prime(Real x) const {
+    inline Real prime(Real x) const {
         return impl_->prime(x);
     }
 

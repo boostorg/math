@@ -10,7 +10,7 @@
 #include <benchmark/benchmark.h>
 #include <boost/random/uniform_real_distribution.hpp>
 #include <boost/math/special_functions/daubechies_scaling.hpp>
-#include <boost/math/interpolators/detail/cubic_hermite_detail.hpp>
+#include <boost/math/interpolators/cubic_hermite.hpp>
 #include <boost/math/interpolators/detail/cardinal_quintic_hermite_detail.hpp>
 #include <boost/math/interpolators/detail/septic_hermite_detail.hpp>
 
@@ -108,6 +108,44 @@ BENCHMARK_TEMPLATE(ScalingConstructor, double, 11)->Unit(benchmark::kMillisecond
 BENCHMARK_TEMPLATE(ScalingConstructor, long double, 11)->Unit(benchmark::kMillisecond);
 
 template<typename Real>
+void CubicHermite(benchmark::State & state)
+{
+    using boost::math::interpolators::cubic_hermite;
+    auto n = state.range(0);
+    std::vector<Real> x(n);
+    std::vector<Real> y(n);
+    std::vector<Real> dydx(n);
+    std::random_device rd;
+    boost::random::uniform_real_distribution<Real> dis(Real(0), Real(1));
+    x[0] = dis(rd);
+    y[0] = dis(rd);
+    dydx[0] = dis(rd);
+    for (size_t i = 1; i < y.size(); ++i)
+    {
+        x[i] = x[i-1] + dis(rd);
+        y[i] = dis(rd);
+        dydx[i] = dis(rd);
+    }
+    Real x0 = x.front();
+    Real xf = x.back();
+
+    auto qh = cubic_hermite(std::move(x), std::move(y), std::move(dydx));
+    Real t = x0;
+    for (auto _ : state)
+    {
+        benchmark::DoNotOptimize(qh(t));
+        t += (xf-x0)/128;
+        if (t >= xf)
+        {
+            t = x0;
+        }
+    }
+    state.SetComplexityN(state.range(0));
+}
+
+BENCHMARK_TEMPLATE(CubicHermite, double)->RangeMultiplier(2)->Range(1<<8, 1<<20)->Complexity(benchmark::oLogN);
+
+template<typename Real>
 void CardinalCubicHermite(benchmark::State & state)
 {
     using boost::math::interpolators::detail::cardinal_cubic_hermite_detail;
@@ -137,9 +175,10 @@ void CardinalCubicHermite(benchmark::State & state)
             x = x0;
         }
     }
+    state.SetComplexityN(state.range(0));
 }
 
-BENCHMARK_TEMPLATE(CardinalCubicHermite, double)->RangeMultiplier(2)->Range(1<<8, 1<<20)->Complexity();
+BENCHMARK_TEMPLATE(CardinalCubicHermite, double)->RangeMultiplier(2)->Range(1<<8, 1<<20)->Complexity(benchmark::o1);
 
 template<typename Real>
 void CardinalCubicHermiteAOS(benchmark::State & state)
@@ -169,9 +208,10 @@ void CardinalCubicHermiteAOS(benchmark::State & state)
             x = x0;
         }
     }
+    state.SetComplexityN(state.range(0));
 }
 
-BENCHMARK_TEMPLATE(CardinalCubicHermiteAOS, double)->RangeMultiplier(2)->Range(1<<8, 1<<20)->Complexity();
+BENCHMARK_TEMPLATE(CardinalCubicHermiteAOS, double)->RangeMultiplier(2)->Range(1<<8, 1<<20)->Complexity(benchmark::o1);
 
 template<class Real>
 void SineEvaluation(benchmark::State& state)
@@ -260,6 +300,7 @@ void CardinalQuinticHermite(benchmark::State & state)
             x = x0;
         }
     }
+    state.SetComplexityN(state.range(0));
 }
 
 BENCHMARK_TEMPLATE(CardinalQuinticHermite, double)->RangeMultiplier(2)->Range(1<<8, 1<<20)->Complexity();
@@ -294,6 +335,7 @@ void CardinalQuinticHermiteAOS(benchmark::State & state)
             x = x0;
         }
     }
+    state.SetComplexityN(state.range(0));
 }
 
 BENCHMARK_TEMPLATE(CardinalQuinticHermiteAOS, double)->RangeMultiplier(2)->Range(1<<8, 1<<20)->Complexity();
@@ -333,6 +375,7 @@ void CardinalSepticHermite(benchmark::State & state)
             x = x0;
         }
     }
+    state.SetComplexityN(state.range(0));
 }
 
 BENCHMARK_TEMPLATE(CardinalSepticHermite, double)->RangeMultiplier(2)->Range(1<<8, 1<<20)->Complexity();
@@ -368,6 +411,7 @@ void CardinalSepticHermiteAOS(benchmark::State & state)
             x = x0;
         }
     }
+    state.SetComplexityN(state.range(0));
 }
 
 BENCHMARK_TEMPLATE(CardinalSepticHermiteAOS, double)->RangeMultiplier(2)->Range(1<<8, 1<<20)->Complexity();
