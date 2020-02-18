@@ -42,5 +42,62 @@ private:
     std::shared_ptr<detail::cubic_hermite_detail<RandomAccessContainer>> impl_;
 };
 
+template<class RandomAccessContainer>
+class cardinal_cubic_hermite {
+public:
+    using Real = typename RandomAccessContainer::value_type;
+
+    cardinal_cubic_hermite(RandomAccessContainer && y, RandomAccessContainer && dydx, Real x0, Real dx) 
+    : impl_(std::make_shared<detail::cardinal_cubic_hermite_detail<RandomAccessContainer>>(std::move(y), std::move(dydx), x0, dx))
+    {}
+
+    inline Real operator()(Real x) const {
+        return impl_->operator()(x);
+    }
+
+    inline Real prime(Real x) const {
+        return impl_->prime(x);
+    }
+
+    friend std::ostream& operator<<(std::ostream & os, const cardinal_cubic_hermite & m)
+    {
+        os << *m.impl_;
+        return os;
+    }
+
+private:
+    std::shared_ptr<detail::cardinal_cubic_hermite_detail<RandomAccessContainer>> impl_;
+};
+
+
+template<class RandomAccessContainer>
+class cardinal_cubic_hermite_aos {
+public:
+    using Point = typename RandomAccessContainer::value_type;
+    using Real = typename Point::value_type;
+
+    cardinal_cubic_hermite_aos(RandomAccessContainer && data, Real x0, Real dx) 
+    : impl_(std::make_shared<detail::cardinal_cubic_hermite_detail_aos<RandomAccessContainer>>(std::move(data), x0, dx))
+    {}
+
+    inline Real operator()(Real x) const {
+        return impl_->operator()(x);
+    }
+
+    inline Real prime(Real x) const {
+        return impl_->prime(x);
+    }
+
+    friend std::ostream& operator<<(std::ostream & os, const cardinal_cubic_hermite_aos & m)
+    {
+        os << *m.impl_;
+        return os;
+    }
+
+private:
+    std::shared_ptr<detail::cardinal_cubic_hermite_detail_aos<RandomAccessContainer>> impl_;
+};
+
+
 }
 #endif

@@ -1,3 +1,9 @@
+// Copyright Nick Thompson, 2020
+// Use, modification and distribution are subject to the
+// Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt
+// or copy at http://www.boost.org/LICENSE_1_0.txt)
+
 #include <iostream>
 #include <unordered_map>
 #include <string>
@@ -7,7 +13,6 @@
 #include <boost/math/special_functions/daubechies_scaling.hpp>
 #include <boost/math/special_functions/detail/daubechies_scaling_integer_grid.hpp>
 #include <boost/math/interpolators/cubic_hermite.hpp>
-#include <boost/math/interpolators/cardinal_cubic_hermite.hpp>
 #include <boost/math/interpolators/quintic_hermite.hpp>
 #include <boost/math/interpolators/cardinal_quintic_hermite.hpp>
 #include <boost/math/interpolators/septic_hermite.hpp>
@@ -21,8 +26,6 @@
 #include <boost/math/interpolators/pchip.hpp>
 #include <boost/multiprecision/float128.hpp>
 #include <boost/core/demangle.hpp>
-//#include <quicksvg/graph_fn.hpp>
-//#include <quicksvg/ulp_plot.hpp>
 
 using boost::multiprecision::float128;
 

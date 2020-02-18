@@ -281,7 +281,7 @@ public:
         Real s3 = (x-x0_)*inv_dx_;
         Real ii = floor(s3);
         auto i = static_cast<decltype(y_.size())>(ii);
-        Real t = s3 - ii;
+        //Real t = s3 - ii;
 
         // Velocity:
         Real v0 = dy_[i];

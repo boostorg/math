@@ -10,7 +10,7 @@
 #include <benchmark/benchmark.h>
 #include <boost/random/uniform_real_distribution.hpp>
 #include <boost/math/special_functions/daubechies_scaling.hpp>
-#include <boost/math/interpolators/detail/cardinal_cubic_hermite_detail.hpp>
+#include <boost/math/interpolators/detail/cubic_hermite_detail.hpp>
 #include <boost/math/interpolators/detail/cardinal_quintic_hermite_detail.hpp>
 #include <boost/math/interpolators/detail/septic_hermite_detail.hpp>
 
@@ -72,6 +72,10 @@ BENCHMARK_TEMPLATE(ScalingEvaluation, double, 8);
 BENCHMARK_TEMPLATE(ScalingEvaluation, double, 9);
 BENCHMARK_TEMPLATE(ScalingEvaluation, double, 10);
 BENCHMARK_TEMPLATE(ScalingEvaluation, double, 11);
+BENCHMARK_TEMPLATE(ScalingEvaluation, double, 12);
+BENCHMARK_TEMPLATE(ScalingEvaluation, double, 13);
+BENCHMARK_TEMPLATE(ScalingEvaluation, double, 14);
+BENCHMARK_TEMPLATE(ScalingEvaluation, double, 15);
 
 
 template<typename Real, int p>
@@ -258,9 +262,8 @@ void CardinalQuinticHermite(benchmark::State & state)
     }
 }
 
-BENCHMARK_TEMPLATE(CardinalQuinticHermite, float)->RangeMultiplier(2)->Range(1<<8, 1<<22)->Complexity();
-BENCHMARK_TEMPLATE(CardinalQuinticHermite, double)->RangeMultiplier(2)->Range(1<<8, 1<<22)->Complexity();
-BENCHMARK_TEMPLATE(CardinalQuinticHermite, long double)->RangeMultiplier(2)->Range(1<<8, 1<<22)->Complexity();
+BENCHMARK_TEMPLATE(CardinalQuinticHermite, double)->RangeMultiplier(2)->Range(1<<8, 1<<20)->Complexity();
+
 
 
 template<typename Real>
@@ -293,9 +296,7 @@ void CardinalQuinticHermiteAOS(benchmark::State & state)
     }
 }
 
-BENCHMARK_TEMPLATE(CardinalQuinticHermiteAOS, float)->RangeMultiplier(2)->Range(1<<8, 1<<22)->Complexity();
-BENCHMARK_TEMPLATE(CardinalQuinticHermiteAOS, double)->RangeMultiplier(2)->Range(1<<8, 1<<22)->Complexity();
-BENCHMARK_TEMPLATE(CardinalQuinticHermiteAOS, long double)->RangeMultiplier(2)->Range(1<<8, 1<<22)->Complexity();
+BENCHMARK_TEMPLATE(CardinalQuinticHermiteAOS, double)->RangeMultiplier(2)->Range(1<<8, 1<<20)->Complexity();
 
 
 template<typename Real>
@@ -334,7 +335,42 @@ void CardinalSepticHermite(benchmark::State & state)
     }
 }
 
-BENCHMARK_TEMPLATE(CardinalSepticHermite, double)->RangeMultiplier(2)->Range(1<<8, 1<<22)->Complexity();
+BENCHMARK_TEMPLATE(CardinalSepticHermite, double)->RangeMultiplier(2)->Range(1<<8, 1<<20)->Complexity();
+
+template<typename Real>
+void CardinalSepticHermiteAOS(benchmark::State & state)
+{
+    using boost::math::interpolators::detail::cardinal_septic_hermite_detail_aos;
+    auto n = state.range(0);
+    std::vector<std::array<Real, 4>> data(n);
+    std::random_device rd;
+    boost::random::uniform_real_distribution<Real> dis(Real(0), Real(1));
+    for (size_t i = 0; i < data.size(); ++i)
+    {
+        for (size_t j = 0; j < 4; ++j)
+        {
+            data[i][j] = dis(rd);
+        }
+    }
+
+    Real dx = Real(1)/Real(8);
+    Real x0 = 0;
+    Real xf = x0 + (data.size()-1)*dx;
+
+    auto sh = cardinal_septic_hermite_detail_aos(std::move(data), x0, dx);
+    Real x = 0;
+    for (auto _ : state)
+    {
+        benchmark::DoNotOptimize(sh.unchecked_evaluation(x));
+        x += xf/128;
+        if (x >= xf)
+        {
+            x = x0;
+        }
+    }
+}
+
+BENCHMARK_TEMPLATE(CardinalSepticHermiteAOS, double)->RangeMultiplier(2)->Range(1<<8, 1<<20)->Complexity();
 
 
 BENCHMARK_MAIN();

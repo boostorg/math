@@ -127,7 +127,7 @@ int main()
     plot_phi<double, 2>();
     plot_phi<double, 3>();
     plot_phi<double, 4>();
-    plot_phi<double, 5>();
+    //plot_phi<double, 5>();
     plot_phi<double, 6>();
     plot_phi<double, 7>();
     plot_phi<double, 8>();
@@ -150,9 +150,9 @@ int main()
     plot_condition_number<long double, 13>();
 
     using PreciseReal = float128;
-    using CoarseReal = long double;
-    int precise_refinements = 21;
-    constexpr const int p = 9;
+    using CoarseReal = double;
+    int precise_refinements = 22;
+    constexpr const int p = 12;
     std::cout << "Computing precise scaling function in " << boost::core::demangle(typeid(PreciseReal).name()) << " precision.\n";
     auto phi_precise = boost::math::daubechies_scaling<PreciseReal, p>(precise_refinements);
     std::cout << "Beginning comparison with functions computed in " << boost::core::demangle(typeid(CoarseReal).name()) << " precision.\n";

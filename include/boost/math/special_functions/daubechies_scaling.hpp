@@ -19,7 +19,7 @@
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/detail/daubechies_scaling_integer_grid.hpp>
 #include <boost/math/filters/daubechies.hpp>
-#include <boost/math/interpolators/detail/cardinal_cubic_hermite_detail.hpp>
+#include <boost/math/interpolators/detail/cubic_hermite_detail.hpp>
 #include <boost/math/interpolators/detail/quintic_hermite_detail.hpp>
 #include <boost/math/interpolators/detail/cardinal_quintic_hermite_detail.hpp>
 #include <boost/math/interpolators/detail/septic_hermite_detail.hpp>
