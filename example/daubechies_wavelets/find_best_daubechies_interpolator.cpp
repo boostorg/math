@@ -401,11 +401,13 @@ void find_best_interpolator()
                 }
             }
             m.insert({fo_sup, "First-order Taylor"});
-            if (p==2) {
-            fs << fo_sup << "\n";
+            if (p==2)
+            {
+                fs << fo_sup << "\n";
             }
-            else {
-              fs << fo_sup << ", ";
+            else
+            {
+                fs << fo_sup << ", ";
             }
         }
 
@@ -534,7 +536,7 @@ void find_best_interpolator()
                     }
                 }
                 m.insert({septic_sup, "septic_hermite_spline"});
-                fs << septic_sup << ", ";
+                fs << septic_sup << "\n";
             }
 
 
