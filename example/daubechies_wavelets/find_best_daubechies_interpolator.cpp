@@ -137,7 +137,8 @@ void find_best_interpolator()
     std::ofstream fs{filename};
     static_assert(sizeof(PreciseReal) >= sizeof(Real), "sizeof(PreciseReal) >= sizeof(Real) is required.");
     using std::abs;
-    int rmax = 20;
+    int rmax = 17;
+    std::cout << "Computing phi_dense_precise\n";
     auto phi_dense_precise = boost::math::detail::dyadic_grid<PreciseReal, p, 0>(rmax);
     std::vector<Real> phi_dense(phi_dense_precise.size());
     for (size_t i = 0; i < phi_dense.size(); ++i)
@@ -145,6 +146,7 @@ void find_best_interpolator()
         phi_dense[i] = static_cast<Real>(phi_dense_precise[i]);
     }
     phi_dense_precise.resize(0);
+    std::cout << "Done\n";
 
     Real dx_dense = (2*p-1)/static_cast<Real>(phi_dense.size()-1);
     fs << std::setprecision(std::numeric_limits<Real>::digits10 + 3);
@@ -562,31 +564,31 @@ int main() {
     //choose_refinement<float, long double, 5>();
     //choose_refinement<double, float128, 15>();
     // Says linear interpolation is the best:
-    find_best_interpolator<double, float128, 2>();
+    find_best_interpolator<float128, float128, 2>();
     // Says linear interpolation is the best:
-    find_best_interpolator<double, float128, 3>();
+    find_best_interpolator<float128, float128, 3>();
     // Says cubic_hermite_spline is best:
-    find_best_interpolator<double, float128, 4>();
+    find_best_interpolator<float128, float128, 4>();
     // Says cubic_hermite_spline is best:
-    find_best_interpolator<double, float128, 5>();
+    find_best_interpolator<float128, float128, 5>();
     // Says quintic_hermite_spline is best:
-    find_best_interpolator<double, float128, 6>();
+    find_best_interpolator<float128, float128, 6>();
     // Says quintic_hermite_spline is best:
-    find_best_interpolator<double, float128, 7>();
+    find_best_interpolator<float128, float128, 7>();
     // Says quintic_hermite_spline is best:
-    find_best_interpolator<double, float128, 8>();
+    find_best_interpolator<float128, float128, 8>();
     // Says quintic_hermite_spline is best:
-    find_best_interpolator<double, float128, 9>();
+    find_best_interpolator<float128, float128, 9>();
     // Says septic_hermite_spline is best:
-    find_best_interpolator<double, float128, 10>();
+    find_best_interpolator<float128, float128, 10>();
     // Says septic_hermite_spline is best:
-    find_best_interpolator<double, float128, 11>();
+    find_best_interpolator<float128, float128, 11>();
     // Says septic_hermite_spline is best:
-    find_best_interpolator<double, float128, 12>();
+    find_best_interpolator<float128, float128, 12>();
     // Says septic_hermite_spline is best:
-    find_best_interpolator<double, float128, 13>();
+    find_best_interpolator<float128, float128, 13>();
     // Says septic_hermite_spline is best:
-    find_best_interpolator<double, float128, 14>();
+    find_best_interpolator<float128, float128, 14>();
     // Says septic_hermite_spline is best:
-    find_best_interpolator<double, float128, 15>();
+    find_best_interpolator<float128, float128, 15>();
 }

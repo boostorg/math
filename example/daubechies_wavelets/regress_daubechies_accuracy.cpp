@@ -83,63 +83,64 @@ int main(int argc, char** argv)
     }
 
     std::cout << std::fixed << std::setprecision(16);
-    auto p  = boost::math::statistics::simple_ordinary_least_squares(r, matched_holder);
+    auto q  = boost::math::statistics::simple_ordinary_least_squares_with_R_squared(r, matched_holder);
+    assert(std::get<1>(q) < 0);
+    std::cout << "Matched Holder    : " << std::get<0>(q) << " - " << std::abs(std::get<1>(q)) << "r, R^2 = " << std::get<2>(q) << "\n";
 
-    assert(p.second < 0);
-    std::cout << "Matched Holder    : " << p.first << " - " << std::abs(p.second) << "r\n";
+    q  = boost::math::statistics::simple_ordinary_least_squares_with_R_squared(r, linear);
+    assert(std::get<1>(q) < 0);
+    std::cout << "Linear            : " << std::get<0>(q) << " - " << std::abs(std::get<1>(q)) << "r, R^2 = " << std::get<2>(q) << "\n";
 
-    p  = boost::math::statistics::simple_ordinary_least_squares(r, linear);
-    assert(p.second < 0);
-    std::cout << "Linear            : " << p.first << " - " << std::abs(p.second) << "r\n";
+    q  = boost::math::statistics::simple_ordinary_least_squares_with_R_squared(r, quadratic_b_spline);
+    assert(std::get<1>(q) < 0);
+    std::cout << "Quadratic B-spline: " << std::get<0>(q) << " - " << std::abs(std::get<1>(q)) << "r, R^2 = " << std::get<2>(q) << "\n";
 
-    p  = boost::math::statistics::simple_ordinary_least_squares(r, quadratic_b_spline);
-    assert(p.second < 0);
-    std::cout << "Quadratic B-spline: " << p.first << " - " << std::abs(p.second) << "r\n";
+    q  = boost::math::statistics::simple_ordinary_least_squares_with_R_squared(r, cubic_b_spline);
+    assert(std::get<1>(q) < 0);
+    std::cout << "Cubic B-spline    : " << std::get<0>(q) << " - " << std::abs(std::get<1>(q)) << "r, R^2 = " << std::get<2>(q) << "\n";
 
-    p  = boost::math::statistics::simple_ordinary_least_squares(r, cubic_b_spline);
-    assert(p.second < 0);
-    std::cout << "Cubic B-spline    : " << p.first << " - " << std::abs(p.second) << "r\n";
+    q  = boost::math::statistics::simple_ordinary_least_squares_with_R_squared(r, quintic_b_spline);
+    assert(std::get<1>(q) < 0);
+    std::cout << "Quintic B-spline  : " << std::get<0>(q) << " - " << std::abs(std::get<1>(q)) << "r, R^2 = " << std::get<2>(q) << "\n";
 
-    p  = boost::math::statistics::simple_ordinary_least_squares(r, quintic_b_spline);
-    assert(p.second < 0);
-    std::cout << "Quintic B-spline  : " << p.first << " - " << std::abs(p.second) << "r\n";
+    q  = boost::math::statistics::simple_ordinary_least_squares_with_R_squared(r, cubic_hermite);
+    assert(std::get<1>(q) < 0);
+    std::cout << "Cubic Hermite     : " << std::get<0>(q) << " - " << std::abs(std::get<1>(q)) << "r, R^2 = " << std::get<2>(q) << "\n";
 
-    p  = boost::math::statistics::simple_ordinary_least_squares(r, cubic_hermite);
-    assert(p.second < 0);
-    std::cout << "Cubic Hermite     : " << p.first << " - " << std::abs(p.second) << "r\n";
+    q  = boost::math::statistics::simple_ordinary_least_squares_with_R_squared(r, pchip);
+    assert(std::get<1>(q) < 0);
+    std::cout << "PCHIP             : " << std::get<0>(q) << " - " << std::abs(std::get<1>(q)) << "r, R^2 = " << std::get<2>(q) << "\n";
 
-    p  = boost::math::statistics::simple_ordinary_least_squares(r, pchip);
-    assert(p.second < 0);
-    std::cout << "pchip             : " << p.first << " - " << std::abs(p.second) << "r\n";
+    q  = boost::math::statistics::simple_ordinary_least_squares_with_R_squared(r, makima);
+    assert(std::get<1>(q) < 0);
+    std::cout << "Makima            : " << std::get<0>(q) << " - " << std::abs(std::get<1>(q)) << "r, R^2 = " << std::get<2>(q) << "\n";
 
-    p  = boost::math::statistics::simple_ordinary_least_squares(r, makima);
-    assert(p.second < 0);
-    std::cout << "makima            : " << p.first << " - " << std::abs(p.second) << "r\n";
-
-    p  = boost::math::statistics::simple_ordinary_least_squares(r, fotaylor);
-    assert(p.second < 0);
-    std::cout << "First-order Taylor: " << p.first << " - " << std::abs(p.second) << "r\n";
+    q  = boost::math::statistics::simple_ordinary_least_squares_with_R_squared(r, fotaylor);
+    assert(std::get<1>(q) < 0);
+    std::cout << "First-order Taylor: " << std::get<0>(q) << " - " << std::abs(std::get<1>(q)) << "r, R^2 = " << std::get<2>(q) << "\n";
 
     if (sotaylor.size() > 0)
     {
-    p  = boost::math::statistics::simple_ordinary_least_squares(r, quintic_hermite);
-    assert(p.second < 0);
-    std::cout << "Quintic Hermite   : " << p.first << " - " << std::abs(p.second) << "r\n";
+    q  = boost::math::statistics::simple_ordinary_least_squares_with_R_squared(r, quintic_hermite);
+    assert(std::get<1>(q) < 0);
+    std::cout << "Quintic Hermite   : " << std::get<0>(q) << " - " << std::abs(std::get<1>(q)) << "r, R^2 = " << std::get<2>(q) << "\n";
 
-    p  = boost::math::statistics::simple_ordinary_least_squares(r, sotaylor);
-    assert(p.second < 0);
-    std::cout << "Second-orde Taylor: " << p.first << " - " << std::abs(p.second) << "r\n";
+    q  = boost::math::statistics::simple_ordinary_least_squares_with_R_squared(r, sotaylor);
+    assert(std::get<1>(q) < 0);
+    std::cout << "2nd order Taylor  : " << std::get<0>(q) << " - " << std::abs(std::get<1>(q)) << "r, R^2 = " << std::get<2>(q) << "\n";
+
     }
 
     if (totaylor.size() > 0)
     {
-    p  = boost::math::statistics::simple_ordinary_least_squares(r, totaylor);
-    assert(p.second < 0);
-    std::cout << "Third-order Taylor: " << p.first << " - " << std::abs(p.second) << "r\n";
+    q  = boost::math::statistics::simple_ordinary_least_squares_with_R_squared(r, totaylor);
+    assert(std::get<1>(q) < 0);
+    std::cout << "3rd order Taylor  : " << std::get<0>(q) << " - " << std::abs(std::get<1>(q)) << "r, R^2 = " << std::get<2>(q) << "\n";
 
-    p  = boost::math::statistics::simple_ordinary_least_squares(r, septic_hermite);
-    assert(p.second < 0);
-    std::cout << "septic hermite    : " << p.first << " - " << std::abs(p.second) << "r\n";
+    q  = boost::math::statistics::simple_ordinary_least_squares_with_R_squared(r, septic_hermite);
+    assert(std::get<1>(q) < 0);
+    std::cout << "Septic Hermite    : " << std::get<0>(q) << " - " << std::abs(std::get<1>(q)) << "r, R^2 = " << std::get<2>(q) << "\n";
+
     }
 
 }
