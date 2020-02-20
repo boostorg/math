@@ -19,14 +19,43 @@ public:
     using Real = typename RandomAccessContainer::value_type;
     quintic_hermite(RandomAccessContainer && x, RandomAccessContainer && y, RandomAccessContainer && dydx, RandomAccessContainer && d2ydx2)
 
-    Real operator()(Real x) const;
+    inline Real operator()(Real x) const;
 
-    Real prime(Real x) const;
+    inline Real prime(Real x) const;
+
+    inline Real double_prime(Real x) const;
 
     friend std::ostream& operator<<(std::ostream & os, const quintic_hermite & m);
 
     void push_back(Real x, Real y, Real dydx, Real d2ydx2);
 };
+
+template<class RandomAccessContainer>
+class cardinal_quintic_hermite {
+public:
+    using Real = typename RandomAccessContainer::value_type;
+    cardinal_quintic_hermite(RandomAccessContainer && y, RandomAccessContainer && dydx, RandomAccessContainer && d2ydx2, Real x0, Real dx);
+
+    inline Real operator()(Real x) const;
+
+    inline Real prime(Real x) const;
+
+    inline Real double_prime(Real x) const;
+};
+
+template<class RandomAccessContainer>
+class cardinal_quintic_hermite_aos {
+public:
+    using Point = typename RandomAccessContainer::value_type;
+    using Real = typename Point::value_type;
+    cardinal_quintic_hermite_aos(RandomAccessContainer && data, Real x0, Real dx)
+
+    inline Real operator()(Real x) const;
+
+    inline Real prime(Real x) const;
+
+    inline Real double_prime(Real x) const;
+
 }
 ``
 
@@ -34,6 +63,7 @@ public:
 [heading Quintic Hermite Interpolation]
 
 The quintic Hermite interpolator takes a list of possibly non-uniformly spaced abscissas, ordinates, and their velocities and accelerations which are used to construct a quintic interpolating polynomial between segments.
+This is useful for taking solution skeletons from ODE steppers and turning them into a continuous function, provided that the right-hand side /f/(/x/, /y/) is differentiable along the solution path.
 The interpolant is /C/[super 2] and its evaluation has [bigo](log(/N/)) complexity.
 An example usage is as follows:
 
@@ -76,6 +106,9 @@ Hence we can use `boost::circular_buffer` to do real-time interpolation.
     y = circular_akima(4.5);
 
 [$../graphs/quintic_sine_approximation.svg]
+
+For equispaced data, we can use `cardinal_quintic_hermite` or `cardinal_quintic_hermite_aos` to get constant-time evaluation.
+This is useful in memory-constrained or performance critical applications where data is equispaced.
 
 [heading Complexity and Performance]
 
