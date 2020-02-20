@@ -101,7 +101,7 @@ public:
             dy *= h;
         }
     }
-    
+
     inline Real operator()(Real x) const {
         using std::floor;
         using std::sqrt;
@@ -341,6 +341,14 @@ public:
         }
     }
 
+    inline Real double_prime(Real x) const {
+        if (x <= 0 || x >= 2*p - 1) {
+            return Real(0);
+        }
+        if constexpr (p >= 6 && p <= 9) {
+            return m_qh->unchecked_double_prime(x);
+        }
+    }
     std::pair<int, int> support() const
     {
         return {0, 2*p-1};
