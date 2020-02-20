@@ -11,7 +11,7 @@
 #include <boost/random/uniform_real_distribution.hpp>
 #include <boost/math/special_functions/daubechies_scaling.hpp>
 #include <boost/math/interpolators/cubic_hermite.hpp>
-#include <boost/math/interpolators/detail/cardinal_quintic_hermite_detail.hpp>
+#include <boost/math/interpolators/detail/quintic_hermite_detail.hpp>
 #include <boost/math/interpolators/detail/septic_hermite_detail.hpp>
 
 static void UnitStep(benchmark::internal::Benchmark* b)
@@ -303,9 +303,7 @@ void CardinalQuinticHermite(benchmark::State & state)
     state.SetComplexityN(state.range(0));
 }
 
-BENCHMARK_TEMPLATE(CardinalQuinticHermite, double)->RangeMultiplier(2)->Range(1<<8, 1<<20)->Complexity();
-
-
+BENCHMARK_TEMPLATE(CardinalQuinticHermite, double)->RangeMultiplier(2)->Range(1<<8, 1<<20)->Complexity(benchmark::o1);
 
 template<typename Real>
 void CardinalQuinticHermiteAOS(benchmark::State & state)
@@ -338,7 +336,7 @@ void CardinalQuinticHermiteAOS(benchmark::State & state)
     state.SetComplexityN(state.range(0));
 }
 
-BENCHMARK_TEMPLATE(CardinalQuinticHermiteAOS, double)->RangeMultiplier(2)->Range(1<<8, 1<<20)->Complexity();
+BENCHMARK_TEMPLATE(CardinalQuinticHermiteAOS, double)->RangeMultiplier(2)->Range(1<<8, 1<<20)->Complexity(benchmark::o1);
 
 
 template<typename Real>

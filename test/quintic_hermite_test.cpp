@@ -515,7 +515,6 @@ int main()
     test_cardinal_quadratic<float128>();
     test_cardinal_cubic<float128>();
     test_cardinal_quartic<float128>();
-
 #endif
 
     return boost::math::test::report_errors();

@@ -413,7 +413,6 @@ public:
         auto i = static_cast<decltype(data_.size())>(ii);
         Real t = s - ii;
 
-
         Real y0 = data_[i][0];
         Real dy0 = data_[i][1];
         Real d2y0 = data_[i][2];
@@ -421,10 +420,10 @@ public:
         Real dy1 = data_[i+1][1];
         Real d2y1 = data_[i+1][2];
 
-        Real y = (1- t*t*t*(10 + t*(-15 + 6*t)))*y0;
-        y += t*(1+ t*t*(-6 + t*(8 -3*t)))*dy0;
-        y += t*t*(1 + t*(-3 + t*(3-t)))*d2y0;
-        y += t*t*t*((1 + t*(-2 + t))*d2y1 + (-4 + t*(7 -3*t))*dy1 + (10 + t*(-15 + 6*t))*y1);
+        Real y = (1 - t*t*t*(10 + t*(-15 + 6*t)))*y0;
+        y += t*(1 + t*t*(-6 + t*(8 - 3*t)))*dy0;
+        y += t*t*(1 + t*(-3 + t*(3 - t)))*d2y0;
+        y += t*t*t*((1 + t*(-2 + t))*d2y1 + (-4 + t*(7 - 3*t))*dy1 + (10 + t*(-15 + 6*t))*y1);
         return y;
     }
 
