@@ -35,6 +35,26 @@ void plot_phi(int grid_refinements = -1)
 }
 
 template<typename Real, int p>
+void plot_dphi(int grid_refinements = -1)
+{
+    auto phi = boost::math::daubechies_scaling<Real, p>();
+    if (grid_refinements >= 0)
+    {
+        phi = boost::math::daubechies_scaling<Real, p>(grid_refinements);
+    }
+    Real a = 0;
+    Real b = phi.support().second;
+    std::string title = "Daubechies " + std::to_string(p) + " scaling function derivative";
+    std::string filename = "daubechies_" + std::to_string(p) + "_scaling_prime.svg";
+    int samples = 1024;
+    quicksvg::graph_fn daub(a, b, title, filename, samples, GRAPH_WIDTH);
+    daub.set_stroke_width(1);
+    auto dphi = [phi](Real x)->Real { return phi.prime(x); };
+    daub.add_fn(dphi);
+    daub.write_all();
+}
+
+template<typename Real, int p>
 void plot_convergence()
 {
     auto phi0 = boost::math::daubechies_scaling<Real, p>(0);
@@ -62,7 +82,7 @@ void plot_condition_number()
 {
     using std::abs;
     using std::log;
-    static_assert(p >= 4, "p = 2,3 are not differentiable, so condition numbers cannot be effectively evaluated.");
+    static_assert(p >= 3, "p = 2 is not differentiable, so condition numbers cannot be effectively evaluated.");
     auto phi = boost::math::daubechies_scaling<Real, p>();
     Real a = 1000*std::numeric_limits<Real>::epsilon();
     Real b = phi.support().second - 1000*std::numeric_limits<Real>::epsilon();
@@ -109,6 +129,47 @@ void do_ulp(int coarse_refinements, PhiPrecise phi_precise)
 
 int main()
 {
+    plot_phi<double, 2>();
+    plot_phi<double, 3>();
+    plot_phi<double, 4>();
+    plot_phi<double, 5>();
+    plot_phi<double, 6>();
+    plot_phi<double, 7>();
+    plot_phi<double, 8>();
+    plot_phi<double, 9>();
+    plot_phi<double, 10>();
+    plot_phi<double, 11>();
+    plot_phi<double, 12>();
+    plot_phi<double, 13>();
+    plot_phi<double, 14>();
+    plot_phi<double, 15>();
+
+    plot_dphi<double, 3>();
+    plot_dphi<double, 4>();
+    plot_dphi<double, 5>();
+    plot_dphi<double, 6>();
+    plot_dphi<double, 7>();
+    plot_dphi<double, 8>();
+    plot_dphi<double, 9>();
+    plot_dphi<double, 10>();
+    plot_dphi<double, 11>();
+    plot_dphi<double, 12>();
+    plot_dphi<double, 13>();
+    plot_dphi<double, 14>();
+    plot_dphi<double, 15>();
+
+    plot_condition_number<long double, 3>();
+    plot_condition_number<long double, 4>();
+    plot_condition_number<long double, 5>();
+    plot_condition_number<long double, 6>();
+    plot_condition_number<long double, 7>();
+    plot_condition_number<long double, 8>();
+    plot_condition_number<long double, 9>();
+    plot_condition_number<long double, 10>();
+    plot_condition_number<long double, 11>();
+    plot_condition_number<long double, 12>();
+    plot_condition_number<long double, 13>();
+
     plot_convergence<double, 2>();
     plot_convergence<double, 3>();
     plot_convergence<double, 4>();
@@ -124,30 +185,6 @@ int main()
     plot_convergence<double, 14>();
     plot_convergence<double, 15>();
 
-    plot_phi<double, 2>();
-    plot_phi<double, 3>();
-    plot_phi<double, 4>();
-    //plot_phi<double, 5>();
-    plot_phi<double, 6>();
-    plot_phi<double, 7>();
-    plot_phi<double, 8>();
-    plot_phi<double, 9>();
-    plot_phi<double, 10>();
-    plot_phi<double, 11>();
-    plot_phi<double, 12>();
-    plot_phi<double, 13>();
-    plot_phi<double, 14>();
-    plot_phi<double, 15>();
-    plot_condition_number<long double, 4>();
-    plot_condition_number<long double, 5>();
-    plot_condition_number<long double, 6>();
-    plot_condition_number<long double, 7>();
-    plot_condition_number<long double, 8>();
-    plot_condition_number<long double, 9>();
-    plot_condition_number<long double, 10>();
-    plot_condition_number<long double, 11>();
-    plot_condition_number<long double, 12>();
-    plot_condition_number<long double, 13>();
 
     using PreciseReal = float128;
     using CoarseReal = double;

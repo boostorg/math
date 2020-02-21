@@ -130,12 +130,13 @@ class linear_interpolation {
 public:
     using Real = typename RandomAccessContainer::value_type;
 
-    linear_interpolation(RandomAccessContainer && y,  int grid_refinements) : y_{std::move(y)}
+    linear_interpolation(RandomAccessContainer && y, RandomAccessContainer && dydx, int grid_refinements) : y_{std::move(y)}, dydx_{std::move(dydx)}
     {
         s_ = (1 << grid_refinements);
     }
 
-    inline Real operator()(Real x) const {
+    inline Real operator()(Real x) const
+    {
         using std::floor;
         Real y = x*s_;
         Real k = floor(y);
@@ -145,9 +146,21 @@ public:
         return (1-t)*y_[kk] + t*y_[kk+1];
     }
 
+    inline Real prime(Real x) const
+    {
+        using std::floor;
+        Real y = x*s_;
+        Real k = floor(y);
+
+        int64_t kk = static_cast<int64_t>(k);
+        Real t = y - k;
+        return (1-t)*dydx_[kk] + t*dydx_[kk+1];
+    }
+
 private:
     Real s_;
     RandomAccessContainer y_;
+    RandomAccessContainer dydx_;
 };
 
 }
@@ -280,78 +293,101 @@ public:
         auto y = t0.get();
         auto dydx = t1.get();
 
-        if constexpr (p==2) {
+        if constexpr (p==2)
+        {
             m_mh = std::make_shared<detail::matched_holder<std::vector<Real>>>(std::move(y), std::move(dydx), grid_refinements);
         }
-        if constexpr (p==3) {
-            m_lin = std::make_shared<detail::linear_interpolation<std::vector<Real>>>(std::move(y), grid_refinements);
+        if constexpr (p==3)
+        {
+            m_lin = std::make_shared<detail::linear_interpolation<std::vector<Real>>>(std::move(y), std::move(dydx), grid_refinements);
         }
-        if constexpr (p == 4 || p == 5) {
+        if constexpr (p == 4 || p == 5)
+        {
             Real dx = Real(1)/(1 << grid_refinements);
             m_cbh = std::make_shared<interpolators::detail::cardinal_cubic_hermite_detail<std::vector<Real>>>(std::move(y), std::move(dydx), Real(0), dx);
         }
-        if constexpr (p >= 6 && p <= 9) {
+        if constexpr (p >= 6 && p <= 9)
+        {
             Real dx = Real(1)/(1 << grid_refinements);
             m_qh = std::make_shared<interpolators::detail::cardinal_quintic_hermite_detail<std::vector<Real>>>(std::move(y), std::move(dydx), std::move(d2ydx2), Real(0), dx);
         }
-        if constexpr (p >= 10) {
+        if constexpr (p >= 10)
+        {
             Real dx = Real(1)/(1 << grid_refinements);
             m_sh = std::make_shared<interpolators::detail::cardinal_septic_hermite_detail<std::vector<Real>>>(std::move(y), std::move(dydx), std::move(d2ydx2), std::move(d3ydx3), Real(0), dx);
         }
      }
 
 
-    inline Real operator()(Real x) const {
-        if (x <= 0 || x >= 2*p-1) {
-            return 0;
-        }
-        if constexpr (p==2) {
-            return m_mh->operator()(x);
-        }
-        if constexpr (p==3) {
-            return m_lin->operator()(x);
-        }
-        if constexpr (p==4 || p ==5) {
-            return m_cbh->unchecked_evaluation(x);
-        }
-        if constexpr (p >= 6 && p <= 9) {
-            return m_qh->unchecked_evaluation(x);
-        }
-        if constexpr (p >= 10) {
-            return m_sh->unchecked_evaluation(x);
-        }
-    }
-
-    inline Real prime(Real x) const {
+    inline Real operator()(Real x) const
+    {
         if (x <= 0 || x >= 2*p-1)
         {
             return 0;
         }
-        if constexpr (p == 2 || p == 3) {
-            throw std::domain_error("The 2 and 3-vanishing moment Daubechies scaling function is not continuously differentiable.");
+        if constexpr (p==2)
+        {
+            return m_mh->operator()(x);
         }
-        if constexpr (p == 4 || p == 5) {
+        if constexpr (p==3)
+        {
+            return m_lin->operator()(x);
+        }
+        if constexpr (p==4 || p ==5)
+        {
+            return m_cbh->unchecked_evaluation(x);
+        }
+        if constexpr (p >= 6 && p <= 9)
+        {
+            return m_qh->unchecked_evaluation(x);
+        }
+        if constexpr (p >= 10)
+        {
+            return m_sh->unchecked_evaluation(x);
+        }
+    }
+
+    inline Real prime(Real x) const
+    {
+        static_assert(p != 2, "The 2-vanishing moment Daubechies scaling function is not continuously differentiable.");
+        if (x <= 0 || x >= 2*p-1)
+        {
+            return 0;
+        }
+        if constexpr (p == 3)
+        {
+            return m_lin->prime(x);
+        }
+        if constexpr (p == 4 || p == 5)
+        {
             return m_cbh->unchecked_prime(x);
         }
-        if constexpr (p >= 6 && p <= 9) {
+        if constexpr (p >= 6 && p <= 9)
+        {
             return m_qh->unchecked_prime(x);
         }
-        if constexpr (p >= 10) {
+        if constexpr (p >= 10)
+        {
             return m_sh->unchecked_prime(x);
         }
     }
 
-    inline Real double_prime(Real x) const {
-        if (x <= 0 || x >= 2*p - 1) {
+    inline Real double_prime(Real x) const
+    {
+        static_assert(p >= 6, "Second derivatives require at least 6 vanishing moments.");
+        if (x <= 0 || x >= 2*p - 1)
+        {
             return Real(0);
         }
-        if constexpr (p >= 6 && p <= 9) {
+        if constexpr (p >= 6 && p <= 9)
+        {
             return m_qh->unchecked_double_prime(x);
         }
     }
-    std::pair<int, int> support() const
+
+    std::pair<Real, Real> support() const
     {
-        return {0, 2*p-1};
+        return {Real(0), Real(2*p-1)};
     }
 
 private:
