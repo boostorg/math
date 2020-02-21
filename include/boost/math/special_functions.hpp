@@ -49,7 +49,7 @@
 #include <boost/math/special_functions/hypergeometric_2F0.hpp>
 #if !defined(BOOST_NO_CXX11_AUTO_DECLARATIONS) && !defined(BOOST_NO_CXX11_LAMBDAS) && !defined(BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX) && !defined(BOOST_NO_CXX11_HDR_TUPLE)
 #include <boost/math/special_functions/hypergeometric_1F1.hpp>
-#ifndef BOOST_NO_CXX11_HDR_INITIALIZER_LIST
+#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST) && !defined(BOOST_NO_CXX11_HDR_CHRONO)
 #include <boost/math/special_functions/hypergeometric_pFq.hpp>
 #endif
 #endif

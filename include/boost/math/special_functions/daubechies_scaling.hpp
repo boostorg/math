@@ -13,12 +13,15 @@
 #include <thread>
 #include <future>
 #include <iostream>
+#ifdef BOOST_HAS_FLOAT128
 #include <boost/multiprecision/float128.hpp>
+#endif
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/detail/daubechies_scaling_integer_grid.hpp>
 #include <boost/math/filters/daubechies.hpp>
 #include <boost/math/interpolators/detail/cubic_hermite_detail.hpp>
 #include <boost/math/interpolators/detail/quintic_hermite_detail.hpp>
+#include <boost/math/interpolators/detail/septic_hermite_detail.hpp>
 
 
 namespace boost::math {
@@ -53,25 +56,29 @@ std::vector<Real> dyadic_grid(int64_t j_max)
         {
             // Where this value will go:
             int64_t delivery_idx = k*(1 << (j_max-j));
-            if (delivery_idx >= (int64_t) v.size())
-            {
-                std::cerr << "Delivery index out of range!\n";
-                continue;
-            }
+            // This is a nice check, but we've tested this exhaustively, and it's expensive:
+            //if (delivery_idx >= (int64_t) v.size()) {
+            //    std::cerr << "Delivery index out of range!\n";
+            //    continue;
+            //}
             Real term = 0;
-            for (int64_t l = 0; l < (int64_t) c.size(); ++l) {
+            for (int64_t l = 0; l < (int64_t) c.size(); ++l)
+            {
                 int64_t idx = k*(1 << (j_max - j + 1)) - l*(1 << j_max);
-                if (idx < 0) {
+                if (idx < 0)
+                {
                     break;
                 }
-                if (idx < (int64_t) v.size()) {
+                if (idx < (int64_t) v.size())
+                {
                     term += c[l]*v[idx];
                 }
             }
-            if (!isnan(v[delivery_idx])) {
-                std::cerr << "Delivery index already populated!, = " << v[delivery_idx] << "\n";
-                std::cerr << "would overwrite with " << term << "\n";
-            }
+            // Again, another nice check:
+            //if (!isnan(v[delivery_idx])) {
+            //    std::cerr << "Delivery index already populated!, = " << v[delivery_idx] << "\n";
+            //    std::cerr << "would overwrite with " << term << "\n";
+            //}
             v[delivery_idx] = term;
         }
     }
@@ -85,37 +92,36 @@ class matched_holder {
 public:
     using Real = typename RandomAccessContainer::value_type;
 
-    matched_holder(RandomAccessContainer && y, RandomAccessContainer && dydx, int grid_refinements) : y_{std::move(y)}, dydx_{std::move(dydx)}
+    matched_holder(RandomAccessContainer && y, RandomAccessContainer && dydx, int grid_refinements) : y_{std::move(y)}, dy_{std::move(dydx)}
     {
-        h_ = Real(1)/(1<< grid_refinements);
+        inv_h_ = (1 << grid_refinements);
+        Real h = 1/inv_h_;
+        for (auto & dy : dy_)
+        {
+            dy *= h;
+        }
     }
-    
-    Real operator()(Real x) const {
-        using std::log;
+
+    inline Real operator()(Real x) const {
         using std::floor;
         using std::sqrt;
-        using std::pow;
-        if (x <= 0 || x >= 3) {
-            return 0;
-        }
         // This is the exact Holder exponent, but it's pessimistic almost everywhere!
         // It's only exactly right at dyadic rationals.
-        Real const alpha = 2 - log(1+sqrt(Real(3)))/log(Real(2));
-        // So we're gonna make the graph dip a little harder; this will capture more of the self-similar behavior:
-        //Real constexpr const alpha = Real(3)/Real(10);
-        int64_t i = static_cast<int64_t>(floor(x/h_));
-        Real t = (x- i*h_)/h_;
-        Real v = y_[i];
-        Real dphi = dydx_[i+1]*h_;
-        v += (dphi - alpha*(y_[i+1] - y_[i]))*t/(1-alpha);
-        v += (-dphi + y_[i+1] - y_[i])*pow(t, alpha)/(1-alpha);
-        return v;
+        //Real const alpha = 2 - log(1+sqrt(Real(3)))/log(Real(2));
+        // We're gonna use alpha = 1/2, rather than 0.5500...
+        Real s = x*inv_h_;
+        Real ii = floor(s);
+        auto i = static_cast<decltype(y_.size())>(ii);
+        Real t = s - ii;
+        Real dphi = dy_[i+1];
+        Real diff = y_[i+1] - y_[i];
+        return y_[i] + (2*dphi - diff)*t + 2*sqrt(t)*(diff-dphi);
     }
 
 private:
-    Real h_;
+    Real inv_h_;
     RandomAccessContainer y_;
-    RandomAccessContainer dydx_;
+    RandomAccessContainer dy_;
 };
 
 
@@ -124,28 +130,37 @@ class linear_interpolation {
 public:
     using Real = typename RandomAccessContainer::value_type;
 
-    linear_interpolation(RandomAccessContainer && y,  int grid_refinements) : y_{std::move(y)}
+    linear_interpolation(RandomAccessContainer && y, RandomAccessContainer && dydx, int grid_refinements) : y_{std::move(y)}, dydx_{std::move(dydx)}
     {
-        grid_refinements_ = grid_refinements;
+        s_ = (1 << grid_refinements);
     }
 
-    Real operator()(Real x) const {
+    inline Real operator()(Real x) const
+    {
         using std::floor;
-        if (x <= 0 || x >= 5) {
-            return 0;
-        }
-        Real y = x*(1<<grid_refinements_);
+        Real y = x*s_;
         Real k = floor(y);
 
-        size_t kk = static_cast<size_t>(k);
-
+        int64_t kk = static_cast<int64_t>(k);
         Real t = y - k;
         return (1-t)*y_[kk] + t*y_[kk+1];
     }
 
+    inline Real prime(Real x) const
+    {
+        using std::floor;
+        Real y = x*s_;
+        Real k = floor(y);
+
+        int64_t kk = static_cast<int64_t>(k);
+        Real t = y - k;
+        return (1-t)*dydx_[kk] + t*dydx_[kk+1];
+    }
+
 private:
-    int grid_refinements_;
+    Real s_;
     RandomAccessContainer y_;
+    RandomAccessContainer dydx_;
 };
 
 }
@@ -156,7 +171,9 @@ public:
     daubechies_scaling(int grid_refinements = -1)
     {
         static_assert(p <= 15, "Scaling functions only implements up to p = 15");
+        #ifdef BOOST_HAS_FLOAT128
         using boost::multiprecision::float128;
+        #endif
         if (grid_refinements < 0)
         {
             if (std::is_same_v<Real, float>)
@@ -167,8 +184,6 @@ public:
             }
             else if (std::is_same_v<Real, double>)
             {
-                // r = 21 is correct for p >= 10.
-                // Before that, r > 21 would be appropriate, but the hardware isn't there yet!
                 //                          p= 2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15
                 std::array<int, 16> r{-1, -1, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 20, 19, 18, 18};
                 grid_refinements = r[p];
@@ -224,8 +239,9 @@ public:
             return detail::dyadic_grid<Real, p, 1>(grid_refinements);
         });
 
-        // if necessary, compute the second derivative:
+        // if necessary, compute the second and third derivative:
         std::vector<Real> d2ydx2;
+        std::vector<Real> d3ydx3;
         if constexpr (p >= 6) {
             std::future<std::vector<Real>> t3 = std::async(std::launch::async, [&grid_refinements]() {
                 if constexpr (std::is_same_v<Real, float>) {
@@ -245,109 +261,148 @@ public:
                     return w;
                 }
 
-                return detail::dyadic_grid<Real, p, 2>(grid_refinements); });
+                return detail::dyadic_grid<Real, p, 2>(grid_refinements);
+            });
+
+            if constexpr (p >= 10) {
+                std::future<std::vector<Real>> t4 = std::async(std::launch::async, [&grid_refinements]() {
+                    if constexpr (std::is_same_v<Real, float>) {
+                        auto v = detail::dyadic_grid<double, p, 3>(grid_refinements);
+                        std::vector<float> w(v.size());
+                        for (size_t i = 0; i < v.size(); ++i) {
+                            w[i] = v[i];
+                        }
+                        return w;
+                    }
+                    else if constexpr (std::is_same_v<Real, double>) {
+                        auto v = detail::dyadic_grid<long double, p, 3>(grid_refinements);
+                        std::vector<double> w(v.size());
+                        for (size_t i = 0; i < v.size(); ++i) {
+                            w[i] = v[i];
+                        }
+                        return w;
+                    }
+
+                    return detail::dyadic_grid<Real, p, 3>(grid_refinements); });
+                d3ydx3 = t4.get();
+            }
             d2ydx2 = t3.get();
         }
+
 
         auto y = t0.get();
         auto dydx = t1.get();
 
-
-
-        // Storing the vector of x's is unnecessary; it's only because I haven't implemented an equispaced cubic Hermite interpolator:
-        std::vector<Real> x(y.size());
-        Real h = Real(2*p-1)/(x.size()-1);
-        for (size_t i = 0; i < x.size(); ++i) {
-            x[i] = i*h;
-        }
-
-        if constexpr (p==2) {
+        if constexpr (p==2)
+        {
             m_mh = std::make_shared<detail::matched_holder<std::vector<Real>>>(std::move(y), std::move(dydx), grid_refinements);
         }
-        if constexpr (p==3) {
-            m_lin = std::make_shared<detail::linear_interpolation<std::vector<Real>>>(std::move(y), grid_refinements);
+        if constexpr (p==3)
+        {
+            m_lin = std::make_shared<detail::linear_interpolation<std::vector<Real>>>(std::move(y), std::move(dydx), grid_refinements);
         }
-        if constexpr (p == 4 || p == 5) {
-            m_cbh = std::make_shared<interpolators::detail::cubic_hermite_detail<std::vector<Real>>>(std::move(x), std::move(y), std::move(dydx));
+        if constexpr (p == 4 || p == 5)
+        {
+            Real dx = Real(1)/(1 << grid_refinements);
+            m_cbh = std::make_shared<interpolators::detail::cardinal_cubic_hermite_detail<std::vector<Real>>>(std::move(y), std::move(dydx), Real(0), dx);
         }
-        else if constexpr (p >= 6) {
-            m_qh = std::make_shared<interpolators::detail::quintic_hermite_detail<std::vector<Real>>>(std::move(x), std::move(y), std::move(dydx), std::move(d2ydx2));
+        if constexpr (p >= 6 && p <= 9)
+        {
+            Real dx = Real(1)/(1 << grid_refinements);
+            m_qh = std::make_shared<interpolators::detail::cardinal_quintic_hermite_detail<std::vector<Real>>>(std::move(y), std::move(dydx), std::move(d2ydx2), Real(0), dx);
+        }
+        if constexpr (p >= 10)
+        {
+            Real dx = Real(1)/(1 << grid_refinements);
+            m_sh = std::make_shared<interpolators::detail::cardinal_septic_hermite_detail<std::vector<Real>>>(std::move(y), std::move(dydx), std::move(d2ydx2), std::move(d3ydx3), Real(0), dx);
         }
      }
 
 
-    Real operator()(Real x) const {
-        if constexpr (p==2) {
+    inline Real operator()(Real x) const
+    {
+        if (x <= 0 || x >= 2*p-1)
+        {
+            return 0;
+        }
+        if constexpr (p==2)
+        {
             return m_mh->operator()(x);
         }
-        if constexpr (p==3) {
+        if constexpr (p==3)
+        {
             return m_lin->operator()(x);
         }
-        if constexpr (p==4 || p ==5) {
-            return m_cbh->operator()(x);
+        if constexpr (p==4 || p ==5)
+        {
+            return m_cbh->unchecked_evaluation(x);
         }
-        else if constexpr (p >= 6) {
-            return m_qh->operator()(x);
+        if constexpr (p >= 6 && p <= 9)
+        {
+            return m_qh->unchecked_evaluation(x);
         }
-    }
-
-    Real prime(Real x) const {
-        if constexpr (p==2 || p == 3) {
-            throw std::domain_error("The 2 and 3-vanishing moment Daubechies scaling function is not continuously differentiable.");
-        }
-        if constexpr (p==4 || p ==5) {
-            return m_cbh->prime(x);
-        }
-        else if constexpr (p >= 6) {
-            return m_qh->prime(x);
+        if constexpr (p >= 10)
+        {
+            return m_sh->unchecked_evaluation(x);
         }
     }
 
-    std::pair<int, int> support() const {
-        return {0, 2*p-1};
+    inline Real prime(Real x) const
+    {
+        static_assert(p != 2, "The 2-vanishing moment Daubechies scaling function is not continuously differentiable.");
+        if (x <= 0 || x >= 2*p-1)
+        {
+            return 0;
+        }
+        if constexpr (p == 3)
+        {
+            return m_lin->prime(x);
+        }
+        if constexpr (p == 4 || p == 5)
+        {
+            return m_cbh->unchecked_prime(x);
+        }
+        if constexpr (p >= 6 && p <= 9)
+        {
+            return m_qh->unchecked_prime(x);
+        }
+        if constexpr (p >= 10)
+        {
+            return m_sh->unchecked_prime(x);
+        }
+    }
+
+    inline Real double_prime(Real x) const
+    {
+        static_assert(p >= 6, "Second derivatives require at least 6 vanishing moments.");
+        if (x <= 0 || x >= 2*p - 1)
+        {
+            return Real(0);
+        }
+        if constexpr (p >= 6 && p <= 9)
+        {
+            return m_qh->unchecked_double_prime(x);
+        }
+    }
+
+    std::pair<Real, Real> support() const
+    {
+        return {Real(0), Real(2*p-1)};
     }
 
 private:
-    size_t m_levels;
     // Need this for p = 2:
     std::shared_ptr<detail::matched_holder<std::vector<Real>>> m_mh;
     // Need this for p = 3:
     std::shared_ptr<detail::linear_interpolation<std::vector<Real>>> m_lin;
-    // need this for p = 4,5:
-    std::shared_ptr<interpolators::detail::cubic_hermite_detail<std::vector<Real>>> m_cbh;
-    // need this for p >= 6:
-    std::shared_ptr<interpolators::detail::quintic_hermite_detail<std::vector<Real>>> m_qh;
+    // Need this for p = 4,5:
+    std::shared_ptr<interpolators::detail::cardinal_cubic_hermite_detail<std::vector<Real>>> m_cbh;
+    // Need this for p = 6,7,8,9:
+    std::shared_ptr<interpolators::detail::cardinal_quintic_hermite_detail<std::vector<Real>>> m_qh;
+    // Need this for p >= 10:
+    std::shared_ptr<interpolators::detail::cardinal_septic_hermite_detail<std::vector<Real>>> m_sh;
 
-    /*Real constant_interpolation(Real x) const {
-        if (x <= 0 || x >= 2*p-1) {
-            return Real(0);
-        }
-        using std::floor;
-        Real y = (1 << m_levels)*x;
-        Real k = floor(y);
-
-        if (y - k < k + 1 - y)
-        {
-            return m_v[static_cast<size_t>(k)];
-        }
-        return m_v[static_cast<size_t>(k)+1];
-    }
-
-    Real linear_interpolation(Real x) const {
-        if (x <= 0 || x >= 2*p-1) {
-            return Real(0);
-        }
-        using std::floor;
-
-        Real y = (1<<m_levels)*x;
-        Real k = floor(y);
-
-        size_t kk = static_cast<size_t>(k);
-
-        Real t = y - k;
-        return (1-t)*m_v[kk] + t*m_v[kk+1];
-    }
-
+    /*
     Real single_crank_linear(Real x) const {
         if (x <= 0 || x >= 2*p-1) {
             return Real(0);
@@ -403,129 +458,13 @@ private:
         return a*t*t + b*t + y0;
     }
 
-
-    Real double_crank_linear(Real x) const {
-        return std::numeric_limits<Real>::quiet_NaN();
-    }
-
-
-    Real first_order_taylor(Real x) const {
-        if (x <= 0 || x >= 2*p-1) {
-            return 0;
-        }
-        using std::floor;
-
-        Real y = (1<<m_levels)*x;
-        Real k = floor(y);
-
-        size_t kk = static_cast<size_t>(k);
-        if (y - k < k + 1 - y)
-        {
-            Real eps = (y-k)/(1<<m_levels);
-            return m_v[kk] + eps*m_v_prime[kk];
-        }
-        else {
-            Real eps = (y-k-1)/(1<<m_levels);
-            return m_v[kk+1] + eps*m_v_prime[kk+1];
-        }
-    }
-
-    Real second_order_taylor(Real x) const {
-        if (x <= 0 || x >= 2*p-1) {
-            return 0;
-        }
-        using std::floor;
-
-        Real y = (1<<m_levels)*x;
-        Real k = floor(y);
-
-        size_t kk = static_cast<size_t>(k);
-        if (y - k < k + 1 - y)
-        {
-            Real eps = (y-k)/(1<<m_levels);
-            return m_v[kk] + eps*m_v_prime[kk] + eps*eps*m_v_dbl_prime[kk]/2;
-        }
-        else {
-            Real eps = (y-k-1)/(1<<m_levels);
-            return m_v[kk+1] + eps*m_v_prime[kk+1] + eps*eps*m_v_dbl_prime[kk+1]/2;
-        }
-    }
-
-    Real third_order_taylor(Real x) const {
-        return std::numeric_limits<Real>::quiet_NaN();
-    }
-
-    Real single_crank_first_order_taylor(Real x) const {
-        return std::numeric_limits<Real>::quiet_NaN();
-    }
-
-    Real double_crank_first_order_taylor(Real x) const {
-        return std::numeric_limits<Real>::quiet_NaN();
-    }
-
-    Real single_crank_second_order_taylor(Real x) const {
-        return std::numeric_limits<Real>::quiet_NaN();
-    }
-
-    Real double_crank_second_order_taylor(Real x) const {
-        return std::numeric_limits<Real>::quiet_NaN();
-    }
-
-    Real single_crank_third_order_taylor(Real x) const {
-        return std::numeric_limits<Real>::quiet_NaN();
-    }
-
-    Real double_crank_third_order_taylor(Real x) const {
-        return std::numeric_limits<Real>::quiet_NaN();
-    }
-
     size_t bytes() const
     {
         size_t s = sizeof(*this);
         s += m_v.size()*sizeof(Real);
         return s;
     }
-
-    size_t size() const {
-        return m_v.size();
-    }
-
-    Real index_to_abscissa(size_t i) {
-        return i/m_inv_spacing;
-    }
-
-    // This is for debugging only; use the .at()
-    Real operator[](size_t i) const {
-        return m_v.at(i);
-    }
-
-    Real prime(size_t i) const {
-        return m_v_prime.at(i);
-    }
-
-    Real spacing() const {
-        return 1/m_inv_spacing;
-    }
-
-    auto begin() const {
-        return m_v.begin();
-    }
-
-    auto end() const {
-        return m_v.end();
-    }
-
-    auto data() const {
-        return m_v.data();
-    }
-
-private:
-    size_t m_levels;
-    Real m_inv_spacing;
-    std::array<Real, 2*p> m_c;
-    std::vector<Real> m_v;
-    std::vector<Real> m_v_prime;
-    std::vector<Real> m_v_dbl_prime;*/
+*/
 };
 
 }
