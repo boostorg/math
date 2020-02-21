@@ -466,7 +466,7 @@ int main()
 
 
     #ifdef BOOST_HAS_FLOAT128
-    boost::hana::for_each(std::make_index_sequence<23>(), [&](auto i){
+    boost::hana::for_each(std::make_index_sequence<18>(), [&](auto i){
         test_filter_ulp_distance<float128, long double, i+1>();
         test_filter_ulp_distance<float128, double, i+1>();
         test_filter_ulp_distance<float128, float, i+1>();
