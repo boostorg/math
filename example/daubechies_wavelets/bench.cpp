@@ -14,14 +14,6 @@
 #include <boost/math/interpolators/detail/quintic_hermite_detail.hpp>
 #include <boost/math/interpolators/detail/septic_hermite_detail.hpp>
 
-static void UnitStep(benchmark::internal::Benchmark* b)
-{
-    for (int i = 7; i <= 25; ++i)
-    {
-        b->Args({i});
-    }
-}
-
 double exponential(benchmark::IterationCount j)
 {
     return std::pow(2, j);
@@ -44,9 +36,9 @@ void DyadicGrid(benchmark::State & state)
     state.SetComplexityN(state.range(0));
 }
 
-BENCHMARK_TEMPLATE(DyadicGrid, double, 4)->Apply(UnitStep)->Unit(benchmark::kMillisecond)->Complexity(exponential);
-//BENCHMARK_TEMPLATE(DyadicGrid, double, 8)->Apply(UnitStep)->Unit(benchmark::kMillisecond)->Complexity(exponential);
-//BENCHMARK_TEMPLATE(DyadicGrid, double, 11)->Apply(UnitStep)->Unit(benchmark::kMillisecond)->Complexity(exponential);
+BENCHMARK_TEMPLATE(DyadicGrid, double, 4)->DenseRange(3, 22, 1)->Unit(benchmark::kMillisecond)->Complexity(exponential);
+//BENCHMARK_TEMPLATE(DyadicGrid, double, 8)->DenseRange(3, 22, 1)->Unit(benchmark::kMillisecond)->Complexity(exponential);
+//BENCHMARK_TEMPLATE(DyadicGrid, double, 11)->DenseRange(3,22,1)->Unit(benchmark::kMillisecond)->Complexity(exponential);
 
 
 template<typename Real, int p>
@@ -337,6 +329,50 @@ void CardinalQuinticHermiteAOS(benchmark::State & state)
 }
 
 BENCHMARK_TEMPLATE(CardinalQuinticHermiteAOS, double)->RangeMultiplier(2)->Range(1<<8, 1<<20)->Complexity(benchmark::o1);
+
+template<typename Real>
+void SepticHermite(benchmark::State & state)
+{
+    using boost::math::interpolators::detail::septic_hermite_detail;
+    auto n = state.range(0);
+    std::vector<Real> x(n);
+    std::vector<Real> y(n);
+    std::vector<Real> dydx(n);
+    std::vector<Real> d2ydx2(n);
+    std::vector<Real> d3ydx3(n);
+    std::random_device rd;
+    boost::random::uniform_real_distribution<Real> dis(Real(0), Real(1));
+    Real x0 = dis(rd);
+    x[0] = x0;
+    for (size_t i = 1; i < n; ++i)
+    {
+        x[i] = x[i-1] + dis(rd);
+    }
+    for (size_t i = 0; i < y.size(); ++i)
+    {
+        y[i] = dis(rd);
+        dydx[i] = dis(rd);
+        d2ydx2[i] = dis(rd);
+        d3ydx3[i] = dis(rd);
+    }
+
+    Real xf = x.back();
+
+    auto sh = septic_hermite_detail(std::move(x), std::move(y), std::move(dydx), std::move(d2ydx2), std::move(d3ydx3));
+    Real t = x0;
+    for (auto _ : state)
+    {
+        benchmark::DoNotOptimize(sh(t));
+        t += xf/128;
+        if (t >= xf)
+        {
+            t = x0;
+        }
+    }
+    state.SetComplexityN(state.range(0));
+}
+
+BENCHMARK_TEMPLATE(SepticHermite, double)->RangeMultiplier(2)->Range(1<<8, 1<<20)->Complexity();
 
 
 template<typename Real>
