@@ -53,7 +53,7 @@ void test_constant()
     auto csh = cardinal_septic_hermite(std::move(y), std::move(dydx), std::move(d2ydx2), std::move(d3ydx3), x0, dx);
     for (Real t = x0; t <= 127; t += 0.25) {
         CHECK_ULP_CLOSE(Real(7), csh(t), 24);
-        //CHECK_ULP_CLOSE(Real(0), csh.prime(t), 24);
+        CHECK_ULP_CLOSE(Real(0), csh.prime(t), 24);
     }
 
     std::vector<std::array<Real, 4>> data(128);
@@ -65,9 +65,10 @@ void test_constant()
         data[i][3] = 0;
     }
     auto csh_aos = cardinal_septic_hermite_aos(std::move(data), x0, dx);
-    for (Real t = x0; t <= 127; t += 0.25) {
+    for (Real t = x0; t <= 127; t += 0.25)
+    {
         CHECK_ULP_CLOSE(Real(7), csh_aos(t), 24);
-        //CHECK_ULP_CLOSE(Real(0), csh.prime(t), 24);
+        CHECK_ULP_CLOSE(Real(0), csh_aos.prime(t), 24);
     }
 
 }
@@ -84,7 +85,8 @@ void test_linear()
 
     auto sh = septic_hermite(std::move(x), std::move(y), std::move(dydx), std::move(d2ydx2), std::move(d3ydx3));
 
-    for (Real t = 0; t <= 9; t += 0.25) {
+    for (Real t = 0; t <= 9; t += 0.25)
+    {
         CHECK_ULP_CLOSE(Real(t), sh(t), 2);
         CHECK_ULP_CLOSE(Real(1), sh.prime(t), 2);
     }
@@ -94,7 +96,8 @@ void test_linear()
     x.resize(512);
     x[0] = dis(rng);
     Real xmin = x[0];
-    for (size_t i = 1; i < x.size(); ++i) {
+    for (size_t i = 1; i < x.size(); ++i)
+    {
         x[i] = x[i-1] + dis(rng);
     }
     Real xmax = x.back();
@@ -118,13 +121,15 @@ void test_linear()
     dydx.resize(10, 1);
     d2ydx2.resize(10, 0);
     d3ydx3.resize(10, 0);
-    for (size_t i = 0; i < y.size(); ++i) {
+    for (size_t i = 0; i < y.size(); ++i)
+    {
         y[i] = i;
     }
     auto csh = cardinal_septic_hermite(std::move(y), std::move(dydx), std::move(d2ydx2), std::move(d3ydx3), x0, dx);
     for (Real t = 0; t <= 9; t += 0.125)
     {
         CHECK_ULP_CLOSE(t, csh(t), 15);
+        CHECK_ULP_CLOSE(Real(1), csh.prime(t), 15);
     }
 
     std::vector<std::array<Real, 4>> data(10);
@@ -139,6 +144,7 @@ void test_linear()
     for (Real t = 0; t <= 9; t += 0.125)
     {
         CHECK_ULP_CLOSE(t, csh_aos(t), 15);
+        CHECK_ULP_CLOSE(Real(1), csh_aos.prime(t), 15);
     }
 }
 
@@ -224,6 +230,7 @@ void test_quadratic()
     for (Real t = x0; t <= 9; t += 0.125)
     {
         CHECK_ULP_CLOSE(t*t/2, csh(t), 24);
+        CHECK_ULP_CLOSE(t, csh.prime(t), 24);
     }
 
     std::vector<std::array<Real, 4>> data(10);
@@ -238,6 +245,7 @@ void test_quadratic()
     for (Real t = x0; t <= 9; t += 0.125)
     {
         CHECK_ULP_CLOSE(t*t/2, csh_aos(t), 24);
+        CHECK_ULP_CLOSE(t, csh_aos.prime(t), 24);
     }
 }
 
@@ -256,12 +264,14 @@ void test_cubic()
     }
 
     std::vector<Real> dydx(x.size());
-    for (size_t i = 0; i < y.size(); ++i) {
+    for (size_t i = 0; i < y.size(); ++i)
+    {
         dydx[i] = 3*x[i]*x[i];
     }
 
     std::vector<Real> d2ydx2(x.size());
-    for (size_t i = 0; i < y.size(); ++i) {
+    for (size_t i = 0; i < y.size(); ++i)
+    {
         d2ydx2[i] = 6*x[i];
     }
     std::vector<Real> d3ydx3(x.size(), 6);
@@ -280,7 +290,8 @@ void test_cubic()
     dydx.resize(8);
     d2ydx2.resize(8);
     d3ydx3.resize(8,6);
-    for (size_t i = 0; i < y.size(); ++i) {
+    for (size_t i = 0; i < y.size(); ++i)
+    {
         y[i] = i*i*i;
         dydx[i] = 3*i*i;
         d2ydx2[i] = 6*i;
@@ -288,8 +299,10 @@ void test_cubic()
 
     auto csh = cardinal_septic_hermite(std::move(y), std::move(dydx), std::move(d2ydx2), std::move(d3ydx3), x0, dx);
 
-    for (Real t = 0; t <= xmax; t += 0.0078125) {
+    for (Real t = 0; t <= xmax; t += 0.0078125)
+    {
         CHECK_ULP_CLOSE(t*t*t, csh(t), 151);
+        CHECK_ULP_CLOSE(3*t*t, csh.prime(t), 151);
     }
 
     std::vector<std::array<Real, 4>> data(8);
@@ -302,8 +315,10 @@ void test_cubic()
 
     auto csh_aos = cardinal_septic_hermite_aos(std::move(data), x0, dx);
 
-    for (Real t = 0; t <= xmax; t += 0.0078125) {
+    for (Real t = 0; t <= xmax; t += 0.0078125)
+    {
         CHECK_ULP_CLOSE(t*t*t, csh_aos(t), 151);
+        CHECK_ULP_CLOSE(3*t*t, csh_aos.prime(t), 151);
     }
 }
 
@@ -320,17 +335,20 @@ void test_quartic()
     }
 
     std::vector<Real> dydx(x.size());
-    for (size_t i = 0; i < y.size(); ++i) {
+    for (size_t i = 0; i < y.size(); ++i)
+    {
         dydx[i] = 4*x[i]*x[i]*x[i];
     }
 
     std::vector<Real> d2ydx2(x.size());
-    for (size_t i = 0; i < y.size(); ++i) {
+    for (size_t i = 0; i < y.size(); ++i)
+    {
         d2ydx2[i] = 12*x[i]*x[i];
     }
 
     std::vector<Real> d3ydx3(x.size());
-    for (size_t i = 0; i < y.size(); ++i) {
+    for (size_t i = 0; i < y.size(); ++i)
+    {
         d3ydx3[i] = 24*x[i];
     }
 
@@ -345,7 +363,8 @@ void test_quartic()
     dydx.resize(10);
     d2ydx2.resize(10);
     d3ydx3.resize(10);
-    for (size_t i = 0; i < y.size(); ++i) {
+    for (size_t i = 0; i < y.size(); ++i)
+    {
         y[i] = i*i*i*i;
         dydx[i] = 4*i*i*i;
         d2ydx2[i] = 12*i*i;
@@ -354,12 +373,15 @@ void test_quartic()
 
     auto csh = cardinal_septic_hermite(std::move(y), std::move(dydx), std::move(d2ydx2), std::move(d3ydx3), Real(0), Real(1));
 
-    for (Real t = 1; t <= xmax; t += 0.0078125) {
+    for (Real t = 1; t <= xmax; t += 0.0078125)
+    {
         CHECK_ULP_CLOSE(t*t*t*t, csh(t), 117);
+        CHECK_ULP_CLOSE(4*t*t*t, csh.prime(t), 117);
     }
 
     std::vector<std::array<Real, 4>> data(10);
-    for (size_t i = 0; i < data.size(); ++i) {
+    for (size_t i = 0; i < data.size(); ++i)
+    {
         data[i][0] = i*i*i*i;
         data[i][1] = 4*i*i*i;
         data[i][2] = 12*i*i;
@@ -367,10 +389,11 @@ void test_quartic()
     }
 
     auto csh_aos = cardinal_septic_hermite_aos(std::move(data), Real(0), Real(1));
-    for (Real t = 1; t <= xmax; t += 0.0078125) {
+    for (Real t = 1; t <= xmax; t += 0.0078125)
+    {
         CHECK_ULP_CLOSE(t*t*t*t, csh_aos(t), 117);
+        CHECK_ULP_CLOSE(4*t*t*t, csh_aos.prime(t), 117);
     }
-
 }
 
 

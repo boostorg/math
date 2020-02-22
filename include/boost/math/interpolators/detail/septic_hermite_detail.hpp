@@ -303,18 +303,37 @@ public:
         return this->unchecked_prime(x);
     }
 
-    inline Real unchecked_prime(Real x) const {
-        //TODO: Get the high accuracy approximation by differentiating the interpolant!
+    inline Real unchecked_prime(Real x) const
+    {
         using std::floor;
         Real s3 = (x-x0_)*inv_dx_;
         Real ii = floor(s3);
         auto i = static_cast<decltype(y_.size())>(ii);
-        //Real t = s3 - ii;
+        Real t = s3 - ii;
+ 
+        Real y0 = y_[i];
+        Real y1 = y_[i+1];
+        Real dy0 = dy_[i];
+        Real dy1 = dy_[i+1];
+        Real a0 = d2y_[i];
+        Real a1 = d2y_[i+1];
+        Real j0 = d3y_[i];
+        Real j1 = d3y_[i+1];
+        Real t2 = t*t;
+        Real t3 = t2*t;
+        Real z0 = 140*t3*(1 + t*(-3 + t*(3 - t)));
+        Real z1 = 1 + t3*(-80 + t*(225 + t*(-216 + 70*t)));
+        Real z2 = t3*(-60 + t*(195 + t*(-204 + 70*t)));
+        Real z3 = 1 + t2*(-20 + t*(50 + t*(-45 + 14*t)));
+        Real z4 = t2*(10 + t*(-35 + t*(39 - 14*t)));
+        Real z5 = 3 + t*(-16 + t*(30 + t*(-24 + 7*t)));
+        Real z6 = t*(-4 + t*(15 + t*(-18 + 7*t)));
 
-        // Velocity:
-        Real v0 = dy_[i];
-        Real v1 = dy_[i+1];
-        return (v0+v1)*inv_dx_/2;
+        Real dydx = z0*(y1-y0)*inv_dx_;
+        dydx += (z1*dy0 + z2*dy1)*inv_dx_;
+        dydx += 2*t*(z3*a0 + z4*a1)*inv_dx_;
+        dydx += t*t*(z5*j0 + z6*j1);
+        return dydx;
     }
 
     inline Real double_prime(Real x) const
@@ -425,7 +444,35 @@ public:
     }
 
     inline Real unchecked_prime(Real x) const {
-        return std::numeric_limits<Real>::quiet_NaN();
+        using std::floor;
+        Real s3 = (x-x0_)*inv_dx_;
+        Real ii = floor(s3);
+        auto i = static_cast<decltype(data_.size())>(ii);
+        Real t = s3 - ii;
+ 
+        Real y0 = data_[i][0];
+        Real y1 = data_[i+1][0];
+        Real dy0 = data_[i][1];
+        Real dy1 = data_[i+1][1];
+        Real a0 = data_[i][2];
+        Real a1 = data_[i+1][2];
+        Real j0 = data_[i][3];
+        Real j1 = data_[i+1][3];
+        Real t2 = t*t;
+        Real t3 = t2*t;
+        Real z0 = 140*t3*(1 + t*(-3 + t*(3 - t)));
+        Real z1 = 1 + t3*(-80 + t*(225 + t*(-216 + 70*t)));
+        Real z2 = t3*(-60 + t*(195 + t*(-204 + 70*t)));
+        Real z3 = 1 + t2*(-20 + t*(50 + t*(-45 + 14*t)));
+        Real z4 = t2*(10 + t*(-35 + t*(39 - 14*t)));
+        Real z5 = 3 + t*(-16 + t*(30 + t*(-24 + 7*t)));
+        Real z6 = t*(-4 + t*(15 + t*(-18 + 7*t)));
+
+        Real dydx = z0*(y1-y0)*inv_dx_;
+        dydx += (z1*dy0 + z2*dy1)*inv_dx_;
+        dydx += 2*t*(z3*a0 + z4*a1)*inv_dx_;
+        dydx += t*t*(z5*j0 + z6*j1);
+        return dydx;
     }
 
     inline Real double_prime(Real x) const 
