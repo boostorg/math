@@ -14,24 +14,30 @@ public:
     septic_hermite_detail(RandomAccessContainer && x, RandomAccessContainer && y, RandomAccessContainer && dydx, RandomAccessContainer && d2ydx2, RandomAccessContainer && d3ydx3) 
     : x_{std::move(x)}, y_{std::move(y)}, dydx_{std::move(dydx)}, d2ydx2_{std::move(d2ydx2)}, d3ydx3_{std::move(d3ydx3)}
     {
-        if (x_.size() != y_.size()) {
+        if (x_.size() != y_.size())
+        {
             throw std::domain_error("Number of abscissas must = number of ordinates.");
         }
-        if (x_.size() != dydx_.size()) {
+        if (x_.size() != dydx_.size())
+        {
             throw std::domain_error("Numbers of derivatives must = number of abscissas.");
         }
-        if (x_.size() != d2ydx2_.size()) {
+        if (x_.size() != d2ydx2_.size())
+        {
             throw std::domain_error("Number of second derivatives must equal number of abscissas.");
         }
-        if (x_.size() != d3ydx3_.size()) {
+        if (x_.size() != d3ydx3_.size())
+        {
             throw std::domain_error("Number of third derivatives must equal number of abscissas.");
         }
 
-        if (x_.size() < 2) {
+        if (x_.size() < 2)
+        {
             throw std::domain_error("At least 2 abscissas are required.");
         }
         Real x0 = x_[0];
-        for (decltype(x_.size()) i = 1; i < x_.size(); ++i) {
+        for (decltype(x_.size()) i = 1; i < x_.size(); ++i)
+        {
             Real x1 = x_[i];
             if (x1 <= x0)
             {
@@ -41,7 +47,8 @@ public:
         }
     }
 
-    void push_back(Real x, Real y, Real dydx, Real d2ydx2, Real d3ydx3) {
+    void push_back(Real x, Real y, Real dydx, Real d2ydx2, Real d3ydx3)
+    {
         using std::abs;
         using std::isnan;
         if (x <= x_.back()) {
@@ -54,17 +61,19 @@ public:
         d3ydx3_.push_back(d3ydx3);
     }
 
-    Real operator()(Real x) const {
-        if  (x < x_[0] || x > x_.back()) {
+    Real operator()(Real x) const
+    {
+        if  (x < x_[0] || x > x_.back())
+        {
             std::ostringstream oss;
             oss.precision(std::numeric_limits<Real>::digits10+3);
             oss << "Requested abscissa x = " << x << ", which is outside of allowed range ["
                 << x_[0] << ", " << x_.back() << "]";
             throw std::domain_error(oss.str());
         }
-        // We need t := (x-x_k)/(x_{k+1}-x_k) \in [0,1) for this to work.
-        // Sadly this neccessitates this loathesome check, otherwise we get t = 1 at x = xf.
-        if (x == x_.back()) {
+        // t \in [0, 1)
+        if (x == x_.back())
+        {
             return y_.back();
         }
 
@@ -72,6 +81,27 @@ public:
         auto i = std::distance(x_.begin(), it) -1;
         Real x0 = *(it-1);
         Real x1 = *it;
+        Real dx = (x1-x0);
+        Real t = (x-x0)/dx;
+
+        // See: 
+        // http://seisweb.usask.ca/classes/GEOL481/2017/Labs/interpolation_utilities_matlab/shermite.m
+        Real t2 = t*t;
+        Real t3 = t2*t;
+        Real t4 = t3*t;
+        Real dx2 = dx*dx/2;
+        Real dx3 = dx2*dx/3;
+
+        Real s = t4*(-35 + t*(84 + t*(-70 + 20*t)));
+        Real z4 = -s;
+        Real z0 = s + 1;
+        Real z1 = t*(1 + t3*(-20 + t*(45 + t*(-36 + 10*t))));
+        Real z2 = t2*(1 + t2*(-10 + t*(20 + t*(-15 + 4*t))));
+        Real z3 = t3*(1 + t*(-4 + t*(6 + t*(-4 + t))));
+        Real z5 = t4*(-15 + t*(39 + t*(-34 + 10*t)));
+        Real z6 = t4*(5 + t*(-14 + t*(13 - 4*t)));
+        Real z7 = t4*(-1 + t*(3 + t*(-3+t)));
+
         Real y0 = y_[i];
         Real y1 = y_[i+1];
         // Velocity:
@@ -84,45 +114,21 @@ public:
         Real j0 = d3ydx3_[i];
         Real j1 = d3ydx3_[i+1];
 
-        Real dx = (x1-x0);
-        Real t = (x-x0)/dx;
-
-        // See: 
-        // http://seisweb.usask.ca/classes/GEOL481/2017/Labs/interpolation_utilities_matlab/shermite.m
-        Real t2 = t*t;
-        Real t3 = t2*t;
-        Real t4 = t3*t;
-        Real t5 = t4*t;
-        Real t6 = t5*t;
-        Real t7 = t6*t;
-        Real dx2 = dx*dx;
-        Real dx3 = dx2*dx;
-
-
-        Real s = t4*(-35 + t*(84 + t*(-70 + 20*t)));
-        Real z4 = -s;
-        Real z0 = s + 1;
-        Real z1 = 10*t7 - 36*t6 + 45*t5 - 20*t4 + t;
-        Real z2 = 2*t7 - 15*t6/2 + 10*t5 - 5*t4 + t2/2;
-        Real z3 = t7/6 - 2*t6/3 + t5 - 2*t4/3 + t3/6;
-        
-        Real z5 = 10*t7 - 34*t6 + 39*t5 - 15*t4;
-        Real z6 = -2*t7 + 13*t6/2 - 7*t5 + 5*t4/2;
-        Real z7 = t7/6 - t6/2 + t5/2 - t4/6;
-
-        Real y = z0*y0 + z1*dx*v0 + z2*dx2*a0 + z3*dx3*j0 + z4*y1 + z5*dx*v1 + z6*dx2*a1 + z7*dx3*j1;
-        return y;
+        return z0*y0 + z4*y1 + (z1*v0 + z5*v1)*dx + (z2*a0 + z6*a1)*dx2 + (z3*j0 + z7*j1)*dx3;
     }
 
-    Real prime(Real x) const {
-        if  (x < x_[0] || x > x_.back()) {
+    Real prime(Real x) const
+    {
+        if  (x < x_[0] || x > x_.back())
+        {
             std::ostringstream oss;
             oss.precision(std::numeric_limits<Real>::digits10+3);
             oss << "Requested abscissa x = " << x << ", which is outside of allowed range ["
                 << x_[0] << ", " << x_.back() << "]";
             throw std::domain_error(oss.str());
         }
-        if (x == x_.back()) {
+        if (x == x_.back())
+        {
             return dydx_.back();
         }
 
@@ -130,13 +136,36 @@ public:
         auto i = std::distance(x_.begin(), it) -1;
         Real x0 = *(it-1);
         Real x1 = *it;
-        Real s0 = dydx_[i];
-        Real s1 = dydx_[i+1];
+        Real y0 = y_[i];
+        Real y1 = y_[i+1];
+        Real v0 = dydx_[i];
+        Real v1 = dydx_[i+1];
+        Real a0 = d2ydx2_[i];
+        Real a1 = d2ydx2_[i+1];
+        Real j0 = d3ydx3_[i];
+        Real j1 = d3ydx3_[i+1];
+        Real dx = x1 - x0;
+        Real t = (x-x0)/dx;
+        Real t2 = t*t;
+        Real t3 = t2*t;
+        Real z0 = 140*t3*(1 + t*(-3 + t*(3 - t)));
+        Real z1 = 1 + t3*(-80 + t*(225 + t*(-216 + 70*t)));
+        Real z2 = t3*(-60 + t*(195 + t*(-204 + 70*t)));
+        Real z3 = 1 + t2*(-20 + t*(50 + t*(-45 + 14*t)));
+        Real z4 = t2*(10 + t*(-35 + t*(39 - 14*t)));
+        Real z5 = 3 + t*(-16 + t*(30 + t*(-24 + 7*t)));
+        Real z6 = t*(-4 + t*(15 + t*(-18 + 7*t)));
 
-        // Ridiculous linear interpolation. Fine for now:
-        Real numerator = s0*(x1-x) + s1*(x-x0);
-        Real denominator = x1 - x0;
-        return numerator/denominator;
+        Real dydx = z0*(y1-y0)/dx;
+        dydx += z1*v0 + z2*v1;
+        dydx += (x-x0)*(z3*a0 + z4*a1);
+        dydx += (x-x0)*(x-x0)*(z5*j0 + z6*j1)/6;
+        return dydx;
+    }
+
+    inline Real double_prime(Real x) const
+    {
+        return std::numeric_limits<Real>::quiet_NaN();
     }
 
 
@@ -150,7 +179,6 @@ public:
         os << "(" << m.x_[n] << ", " << m.y_[n] << ", " << m.dydx_[n] << ", " << m.d2ydx2_[n] << m.d3ydx3_[n] << ")}";
         return os;
     }
-
 
 
 private:
@@ -289,6 +317,11 @@ public:
         return (v0+v1)*inv_dx_/2;
     }
 
+    inline Real double_prime(Real x) const
+    {
+        return std::numeric_limits<Real>::quiet_NaN();
+    }
+
 private:
     RandomAccessContainer y_;
     RandomAccessContainer dy_;
@@ -392,6 +425,11 @@ public:
     }
 
     inline Real unchecked_prime(Real x) const {
+        return std::numeric_limits<Real>::quiet_NaN();
+    }
+
+    inline Real double_prime(Real x) const 
+    {
         return std::numeric_limits<Real>::quiet_NaN();
     }
 
