@@ -40,16 +40,43 @@ BENCHMARK_TEMPLATE(DyadicGrid, double, 4)->DenseRange(3, 22, 1)->Unit(benchmark:
 //BENCHMARK_TEMPLATE(DyadicGrid, double, 8)->DenseRange(3, 22, 1)->Unit(benchmark::kMillisecond)->Complexity(exponential);
 //BENCHMARK_TEMPLATE(DyadicGrid, double, 11)->DenseRange(3,22,1)->Unit(benchmark::kMillisecond)->Complexity(exponential);
 
+uint64_t s[2] = { 0x41, 0x29837592 };
+
+static inline uint64_t rotl(const uint64_t x, int k) {
+    return (x << k) | (x >> (64 - k));
+}
+
+uint64_t next(void) {
+    const uint64_t s0 = s[0];
+    uint64_t s1 = s[1];
+    const uint64_t result = s0 + s1;
+
+    s1 ^= s0;
+    s[0] = rotl(s0, 55) ^ s1 ^ (s1 << 14); // a, b
+    s[1] = rotl(s1, 36); // c
+
+    return result;
+}
+
+double uniform() {
+    return next()*(1.0/18446744073709551616.0);
+}
 
 template<typename Real, int p>
 void ScalingEvaluation(benchmark::State & state)
 {
     auto phi = boost::math::daubechies_scaling<Real, p>();
+    Real xmax = phi.support().second;
     Real x = 0;
+    Real step = uniform()/2048;
     for (auto _ : state)
     {
         benchmark::DoNotOptimize(phi(x));
-        x += std::numeric_limits<Real>::epsilon();
+        x += step;
+        if (x > xmax) {
+            x = 0;
+            step = uniform()/2048;
+        }
     }
 }
 
@@ -123,13 +150,15 @@ void CubicHermite(benchmark::State & state)
 
     auto qh = cubic_hermite(std::move(x), std::move(y), std::move(dydx));
     Real t = x0;
+    Real step = uniform()*(xf-x0)/2048;
     for (auto _ : state)
     {
         benchmark::DoNotOptimize(qh(t));
-        t += (xf-x0)/128;
+        t += step;
         if (t >= xf)
         {
             t = x0;
+            step = uniform()*(xf-x0)/2048;
         }
     }
     state.SetComplexityN(state.range(0));
@@ -148,8 +177,8 @@ void CardinalCubicHermite(benchmark::State & state)
     boost::random::uniform_real_distribution<Real> dis(Real(0), Real(1));
     for (size_t i = 0; i < y.size(); ++i)
     {
-        y[i] = dis(rd);
-        dydx[i] = dis(rd);
+        y[i] = uniform();
+        dydx[i] = uniform();
     }
 
     Real dx = Real(1)/Real(8);
@@ -157,20 +186,20 @@ void CardinalCubicHermite(benchmark::State & state)
     Real xf = x0 + (y.size()-1)*dx;
 
     auto qh = cardinal_cubic_hermite_detail(std::move(y), std::move(dydx), x0, dx);
-    Real x = 0;
+    Real x = x0;
+    Real step = uniform()*(xf-x0)/2048;
     for (auto _ : state)
     {
         benchmark::DoNotOptimize(qh.unchecked_evaluation(x));
-        x += xf/128;
+        x += step;
         if (x >= xf)
         {
             x = x0;
+            step = uniform()*(xf-x0)/2048;
         }
     }
     state.SetComplexityN(state.range(0));
 }
-
-BENCHMARK_TEMPLATE(CardinalCubicHermite, double)->RangeMultiplier(2)->Range(1<<8, 1<<20)->Complexity(benchmark::o1);
 
 template<typename Real>
 void CardinalCubicHermiteAOS(benchmark::State & state)
@@ -181,8 +210,8 @@ void CardinalCubicHermiteAOS(benchmark::State & state)
     boost::random::uniform_real_distribution<Real> dis(Real(0), Real(1));
     for (size_t i = 0; i < dat.size(); ++i)
     {
-        dat[i][0] = dis(rd);
-        dat[i][1] = dis(rd);
+        dat[i][0] = uniform();
+        dat[i][1] = uniform();
     }
 
     using boost::math::interpolators::detail::cardinal_cubic_hermite_detail_aos;
@@ -191,19 +220,22 @@ void CardinalCubicHermiteAOS(benchmark::State & state)
     Real xf = x0 + (dat.size()-1)*dx;
     auto qh = cardinal_cubic_hermite_detail_aos(std::move(dat), x0, dx);
     Real x = 0;
+    Real step = uniform()*(xf-x0)/2048;
     for (auto _ : state)
     {
         benchmark::DoNotOptimize(qh.unchecked_evaluation(x));
-        x += xf/128;
+        x += step;
         if (x >= xf)
         {
             x = x0;
+            step = uniform()*(xf-x0)/2048;
         }
     }
     state.SetComplexityN(state.range(0));
 }
 
-BENCHMARK_TEMPLATE(CardinalCubicHermiteAOS, double)->RangeMultiplier(2)->Range(1<<8, 1<<20)->Complexity(benchmark::o1);
+BENCHMARK_TEMPLATE(CardinalCubicHermiteAOS, double)->RangeMultiplier(2)->Range(1<<8, 1<<21)->Complexity(benchmark::o1);
+BENCHMARK_TEMPLATE(CardinalCubicHermite, double)->RangeMultiplier(2)->Range(1<<8, 1<<21)->Complexity(benchmark::o1);
 
 template<class Real>
 void SineEvaluation(benchmark::State& state)
@@ -272,9 +304,9 @@ void CardinalQuinticHermite(benchmark::State & state)
     boost::random::uniform_real_distribution<Real> dis(Real(0), Real(1));
     for (size_t i = 0; i < y.size(); ++i)
     {
-        y[i] = dis(rd);
-        dydx[i] = dis(rd);
-        d2ydx2[i] = dis(rd);
+        y[i] = uniform();
+        dydx[i] = uniform();
+        d2ydx2[i] = uniform();
     }
 
     Real dx = Real(1)/Real(8);
@@ -283,19 +315,19 @@ void CardinalQuinticHermite(benchmark::State & state)
 
     auto qh = cardinal_quintic_hermite_detail(std::move(y), std::move(dydx), std::move(d2ydx2), x0, dx);
     Real x = 0;
+    Real step = uniform()*(xf-x0)/2048;
     for (auto _ : state)
     {
         benchmark::DoNotOptimize(qh.unchecked_evaluation(x));
-        x += xf/128;
+        x += step;
         if (x >= xf)
         {
             x = x0;
+            step = uniform()*(xf-x0)/2048;
         }
     }
     state.SetComplexityN(state.range(0));
 }
-
-BENCHMARK_TEMPLATE(CardinalQuinticHermite, double)->RangeMultiplier(2)->Range(1<<8, 1<<20)->Complexity(benchmark::o1);
 
 template<typename Real>
 void CardinalQuinticHermiteAOS(benchmark::State & state)
@@ -306,9 +338,9 @@ void CardinalQuinticHermiteAOS(benchmark::State & state)
     boost::random::uniform_real_distribution<Real> dis(Real(0), Real(1));
     for (size_t i = 0; i < dat.size(); ++i)
     {
-        dat[i][0] = dis(rd);
-        dat[i][1] = dis(rd);
-        dat[i][2] = dis(rd);
+        dat[i][0] = uniform();
+        dat[i][1] = uniform();
+        dat[i][2] = uniform();
     }
 
     using boost::math::interpolators::detail::cardinal_quintic_hermite_detail_aos;
@@ -316,19 +348,22 @@ void CardinalQuinticHermiteAOS(benchmark::State & state)
     Real x0 = 0;
     Real xf = x0 + (dat.size()-1)*dx;
     auto qh = cardinal_quintic_hermite_detail_aos(std::move(dat), x0, dx);
-    Real x = 0;
+    Real x = x0;
+    Real step = uniform()*(xf-x0)/2048;
     for (auto _ : state) {
         benchmark::DoNotOptimize(qh.unchecked_evaluation(x));
-        x += xf/128;
+        x += step;
         if (x >= xf)
         {
             x = x0;
+            step = uniform()*(xf-x0)/2048;
         }
     }
     state.SetComplexityN(state.range(0));
 }
 
-BENCHMARK_TEMPLATE(CardinalQuinticHermiteAOS, double)->RangeMultiplier(2)->Range(1<<8, 1<<20)->Complexity(benchmark::o1);
+BENCHMARK_TEMPLATE(CardinalQuinticHermiteAOS, double)->RangeMultiplier(2)->Range(1<<8, 1<<22)->Complexity(benchmark::o1);
+BENCHMARK_TEMPLATE(CardinalQuinticHermite, double)->RangeMultiplier(2)->Range(1<<8, 1<<22)->Complexity(benchmark::o1);
 
 template<typename Real>
 void SepticHermite(benchmark::State & state)
