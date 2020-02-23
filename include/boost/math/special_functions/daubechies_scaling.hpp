@@ -124,6 +124,42 @@ private:
     RandomAccessContainer dy_;
 };
 
+template<class RandomAccessContainer>
+class matched_holder_aos {
+public:
+    using Point = typename RandomAccessContainer::value_type;
+    using Real = typename Point::value_type;
+
+    matched_holder_aos(RandomAccessContainer && data, int grid_refinements) : data_{std::move(data)}
+    {
+        inv_h_ = (1 << grid_refinements);
+        Real h = 1/inv_h_;
+        for (auto & datum : data_)
+        {
+            datum[1] *= h;
+        }
+    }
+
+    inline Real operator()(Real x) const
+    {
+        using std::floor;
+        using std::sqrt;
+        Real s = x*inv_h_;
+        Real ii = floor(s);
+        auto i = static_cast<decltype(data_.size())>(ii);
+        Real t = s - ii;
+        Real y0 = data_[i][0];
+        Real y1 = data_[i+1][0];
+        Real dphi = data_[i+1][1];
+        Real diff = y1 - y0;
+        return y0 + (2*dphi - diff)*t + 2*sqrt(t)*(diff-dphi);
+    }
+
+private:
+    Real inv_h_;
+    RandomAccessContainer data_;
+};
+
 
 template<class RandomAccessContainer>
 class linear_interpolation {
@@ -295,7 +331,13 @@ public:
 
         if constexpr (p==2)
         {
-            m_mh = std::make_shared<detail::matched_holder<std::vector<Real>>>(std::move(y), std::move(dydx), grid_refinements);
+            std::vector<std::array<Real, 2>> data(y.size());
+            for (size_t i = 0; i < y.size(); ++i)
+            {
+                data[i][0] = y[i];
+                data[i][1] = dydx[i];
+            }
+            m_mh = std::make_shared<detail::matched_holder_aos<std::vector<std::array<Real,2>>>>(std::move(data), grid_refinements);
         }
         if constexpr (p==3)
         {
@@ -392,7 +434,7 @@ public:
 
 private:
     // Need this for p = 2:
-    std::shared_ptr<detail::matched_holder<std::vector<Real>>> m_mh;
+    std::shared_ptr<detail::matched_holder_aos<std::vector<std::array<Real,2>>>> m_mh;
     // Need this for p = 3:
     std::shared_ptr<detail::linear_interpolation<std::vector<Real>>> m_lin;
     // Need this for p = 4,5:
