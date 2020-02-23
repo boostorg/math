@@ -8,21 +8,29 @@
 namespace boost::math::interpolators {
 
 template<class RandomAccessContainer>
-class septic_hermite {
+class septic_hermite
+{
 public:
     using Real = typename RandomAccessContainer::value_type;
     septic_hermite(RandomAccessContainer && x, RandomAccessContainer && y, RandomAccessContainer && dydx, 
-                    RandomAccessContainer && d2ydx2, RandomAccessContainer && d3ydx3)
+                   RandomAccessContainer && d2ydx2, RandomAccessContainer && d3ydx3)
      : impl_(std::make_shared<detail::septic_hermite_detail<RandomAccessContainer>>(std::move(x), 
      std::move(y), std::move(dydx), std::move(d2ydx2), std::move(d3ydx3)))
     {}
 
-    Real operator()(Real x) const {
+    inline Real operator()(Real x) const
+    {
         return impl_->operator()(x);
     }
 
-    Real prime(Real x) const {
+    inline Real prime(Real x) const
+    {
         return impl_->prime(x);
+    }
+
+    inline Real double_prime(Real x) const
+    {
+        return impl_->double_prime(x);
     }
 
     friend std::ostream& operator<<(std::ostream & os, const septic_hermite & m)
@@ -36,21 +44,29 @@ private:
 };
 
 template<class RandomAccessContainer>
-class cardinal_septic_hermite {
+class cardinal_septic_hermite
+{
 public:
     using Real = typename RandomAccessContainer::value_type;
     cardinal_septic_hermite(RandomAccessContainer && y, RandomAccessContainer && dydx,
-                    RandomAccessContainer && d2ydx2, RandomAccessContainer && d3ydx3, Real x0, Real dx)
+                            RandomAccessContainer && d2ydx2, RandomAccessContainer && d3ydx3, Real x0, Real dx)
      : impl_(std::make_shared<detail::cardinal_septic_hermite_detail<RandomAccessContainer>>(
      std::move(y), std::move(dydx), std::move(d2ydx2), std::move(d3ydx3), x0, dx))
     {}
 
-    Real operator()(Real x) const {
+    inline Real operator()(Real x) const
+    {
         return impl_->operator()(x);
     }
 
-    Real prime(Real x) const {
+    inline Real prime(Real x) const
+    {
         return impl_->prime(x);
+    }
+
+    inline Real double_prime(Real x) const
+    {
+        return impl_->double_prime(x);
     }
 
 private:
@@ -67,13 +83,21 @@ public:
      : impl_(std::make_shared<detail::cardinal_septic_hermite_detail_aos<RandomAccessContainer>>(std::move(data), x0, dx))
     {}
 
-    Real operator()(Real x) const {
+    inline Real operator()(Real x) const
+    {
         return impl_->operator()(x);
     }
 
-    Real prime(Real x) const {
+    inline Real prime(Real x) const
+    {
         return impl_->prime(x);
     }
+
+    inline Real double_prime(Real x) const 
+    {
+        return impl_->double_prime(x);
+    }
+
 
 private:
     std::shared_ptr<detail::cardinal_septic_hermite_detail_aos<RandomAccessContainer>> impl_;
