@@ -199,6 +199,44 @@ private:
     RandomAccessContainer dydx_;
 };
 
+template<class RandomAccessContainer>
+class linear_interpolation_aos {
+public:
+    using Point = typename RandomAccessContainer::value_type;
+    using Real = typename Point::value_type;
+
+    linear_interpolation_aos(RandomAccessContainer && data, int grid_refinements) : data_{std::move(data)}
+    {
+        s_ = (1 << grid_refinements);
+    }
+
+    inline Real operator()(Real x) const
+    {
+        using std::floor;
+        Real y = x*s_;
+        Real k = floor(y);
+
+        int64_t kk = static_cast<int64_t>(k);
+        Real t = y - k;
+        return (1-t)*data_[kk][0] + t*data_[kk+1][0];
+    }
+
+    inline Real prime(Real x) const
+    {
+        using std::floor;
+        Real y = x*s_;
+        Real k = floor(y);
+
+        int64_t kk = static_cast<int64_t>(k);
+        Real t = y - k;
+        return (1-t)*data_[kk][1] + t*data_[kk+1][1];
+    }
+
+private:
+    Real s_;
+    RandomAccessContainer data_;
+};
+
 }
 
 template<class Real, int p>
@@ -341,22 +379,50 @@ public:
         }
         if constexpr (p==3)
         {
-            m_lin = std::make_shared<detail::linear_interpolation<std::vector<Real>>>(std::move(y), std::move(dydx), grid_refinements);
+            std::vector<std::array<Real, 2>> data(y.size());
+            for (size_t i = 0; i < y.size(); ++i)
+            {
+                data[i][0] = y[i];
+                data[i][1] = dydx[i];
+            }
+            m_lin = std::make_shared<detail::linear_interpolation_aos<std::vector<std::array<Real, 2>>>>(std::move(data), grid_refinements);
         }
         if constexpr (p == 4 || p == 5)
         {
             Real dx = Real(1)/(1 << grid_refinements);
-            m_cbh = std::make_shared<interpolators::detail::cardinal_cubic_hermite_detail<std::vector<Real>>>(std::move(y), std::move(dydx), Real(0), dx);
+            std::vector<std::array<Real, 2>> data(y.size());
+            for (size_t i = 0; i < y.size(); ++i)
+            {
+                data[i][0] = y[i];
+                data[i][1] = dydx[i];
+            }
+            m_cbh = std::make_shared<interpolators::detail::cardinal_cubic_hermite_detail_aos<std::vector<std::array<Real,2>>>>(std::move(data), Real(0), dx);
         }
         if constexpr (p >= 6 && p <= 9)
         {
             Real dx = Real(1)/(1 << grid_refinements);
-            m_qh = std::make_shared<interpolators::detail::cardinal_quintic_hermite_detail<std::vector<Real>>>(std::move(y), std::move(dydx), std::move(d2ydx2), Real(0), dx);
+            std::vector<std::array<Real, 3>> data(y.size());
+            for (size_t i = 0; i < y.size(); ++i)
+            {
+                data[i][0] = y[i];
+                data[i][1] = dydx[i];
+                data[i][2] = d2ydx2[i];
+            }
+
+            m_qh = std::make_shared<interpolators::detail::cardinal_quintic_hermite_detail_aos<std::vector<std::array<Real,3>>>>(std::move(data), Real(0), dx);
         }
         if constexpr (p >= 10)
         {
             Real dx = Real(1)/(1 << grid_refinements);
-            m_sh = std::make_shared<interpolators::detail::cardinal_septic_hermite_detail<std::vector<Real>>>(std::move(y), std::move(dydx), std::move(d2ydx2), std::move(d3ydx3), Real(0), dx);
+            std::vector<std::array<Real, 4>> data(y.size());
+            for (size_t i = 0; i < y.size(); ++i)
+            {
+                data[i][0] = y[i];
+                data[i][1] = dydx[i];
+                data[i][2] = d2ydx2[i];
+                data[i][3] = d3ydx3[i];
+            }
+            m_sh = std::make_shared<interpolators::detail::cardinal_septic_hermite_detail_aos<std::vector<std::array<Real, 4>>>>(std::move(data), Real(0), dx);
         }
      }
 
@@ -436,13 +502,13 @@ private:
     // Need this for p = 2:
     std::shared_ptr<detail::matched_holder_aos<std::vector<std::array<Real,2>>>> m_mh;
     // Need this for p = 3:
-    std::shared_ptr<detail::linear_interpolation<std::vector<Real>>> m_lin;
+    std::shared_ptr<detail::linear_interpolation_aos<std::vector<std::array<Real, 2>>>> m_lin;
     // Need this for p = 4,5:
-    std::shared_ptr<interpolators::detail::cardinal_cubic_hermite_detail<std::vector<Real>>> m_cbh;
+    std::shared_ptr<interpolators::detail::cardinal_cubic_hermite_detail_aos<std::vector<std::array<Real, 2>>>> m_cbh;
     // Need this for p = 6,7,8,9:
-    std::shared_ptr<interpolators::detail::cardinal_quintic_hermite_detail<std::vector<Real>>> m_qh;
+    std::shared_ptr<interpolators::detail::cardinal_quintic_hermite_detail_aos<std::vector<std::array<Real, 3>>>> m_qh;
     // Need this for p >= 10:
-    std::shared_ptr<interpolators::detail::cardinal_septic_hermite_detail<std::vector<Real>>> m_sh;
+    std::shared_ptr<interpolators::detail::cardinal_septic_hermite_detail_aos<std::vector<std::array<Real, 4>>>> m_sh;
 
     /*
     Real single_crank_linear(Real x) const {
