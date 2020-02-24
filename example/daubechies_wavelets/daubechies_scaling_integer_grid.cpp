@@ -4,6 +4,9 @@
  * Boost Software License, Version 1.0. (See accompanying file
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  */
+
+#define BOOST_MATH_GENERATE_DAUBECHIES_GRID
+
 #include <iostream>
 #include <vector>
 #include <numeric>
@@ -15,13 +18,21 @@
 #include <boost/hana/for_each.hpp>
 #include <boost/hana/ext/std/integer_sequence.hpp>
 #include <boost/core/demangle.hpp>
+#ifdef BOOST_HAS_FLOAT128
 #include <boost/multiprecision/float128.hpp>
+#endif
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/filters/daubechies.hpp>
 #include <boost/math/special_functions/factorials.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
 
+typedef boost::multiprecision::number<boost::multiprecision::cpp_bin_float<237, boost::multiprecision::backends::digit_base_2, std::allocator<char>, boost::int32_t, -262142, 262143>,  boost::multiprecision::et_off> octuple_type;
 
+#ifdef BOOST_HAS_FLOAT128
+typedef boost::multiprecision::float128 float128_t;
+#else
+typedef boost::multiprecision::cpp_bin_float_quad float128_t;
+#endif
 
 template<class Real, int p>
 std::list<std::vector<Real>> integer_grid()
@@ -55,7 +66,7 @@ std::list<std::vector<Real>> integer_grid()
 
     Eigen::EigenSolver<decltype(A)> es(A);
 
-    typename Eigen::EigenSolver<decltype(A)>::EigenvalueType complex_eigs = es.eigenvalues();
+    auto complex_eigs = es.eigenvalues();
 
     std::vector<Real> eigs(complex_eigs.size(), std::numeric_limits<Real>::quiet_NaN());
 
@@ -80,8 +91,9 @@ std::list<std::vector<Real>> integer_grid()
         }
         size_t idx = std::distance(eigs.begin(), it);
         std::cout << "Eigenvector for derivative " << j << " is at index " << idx << "\n";
-        typename Eigen::EigenSolver<decltype(A)>::EigenvectorsType complex_eigenvectors = es.eigenvectors();
-        auto complex_eigenvec = complex_eigenvectors.col(idx);
+        auto eigenvector_matrix = es.eigenvectors();
+        auto complex_eigenvec = eigenvector_matrix.col(idx);
+
         std::vector<Real> eigenvec(complex_eigenvec.size() + 2, std::numeric_limits<Real>::quiet_NaN());
         eigenvec[0] = 0;
         eigenvec[eigenvec.size()-1] = 0;
@@ -128,101 +140,28 @@ template<class Real, int p>
 void write_grid(std::ofstream & fs)
 {
     auto grids = integer_grid<Real, p>();
-    fs << "    if constexpr (p == " << p << ") {\n";
-    fs << "        if constexpr (std::is_same_v<Real, float>) {\n";
     size_t j = 0;
-    for (auto it = grids.begin(); it != grids.end(); ++it) {
-
-    fs << "            if constexpr (order == " << j << ") {\n";
-    fs << "                return {";
-        auto const & grid = *it;
-        for (size_t i = 0; i < grid.size() -1; ++i) {
-            fs << static_cast<float>(grid[i]) << "f, ";
-        }
-        fs << static_cast<float>(grid[grid.size()-1]) << "f};\n";
-    fs << "            }\n";
-        ++j;
+    fs << std::setprecision(std::numeric_limits< boost::multiprecision::cpp_bin_float_quad>::max_digits10);
+    for (auto it = grids.begin(); it != grids.end(); ++it) 
+    {
+       auto const& grid = *it;
+       fs << "template <typename Real> struct daubechies_scaling_integer_grid_imp <Real, " << p << ", ";
+      fs << j << "> { static inline constexpr std::array<Real, " << grid.size() << "> value = { ";
+      for (size_t i = 0; i < grid.size() -1; ++i){
+        fs << "C_(" << static_cast<float128_t>(grid[i]) << "), ";
+      }
+      fs << "C_(" << static_cast<float128_t>(grid[grid.size()-1]) << ") }; };\n";
+      ++j;
     }
-    fs << "        }\n";
-
-    fs << "        if constexpr (std::is_same_v<Real, double>) {\n";
-    j = 0;
-    for (auto it = grids.begin(); it != grids.end(); ++it) {
-
-    fs << "            if constexpr (order == " << j << ") {\n";
-    fs << "                return {";
-        auto const & grid = *it;
-        for (size_t i = 0; i < grid.size() -1; ++i) {
-            fs << static_cast<double>(grid[i]) << ", ";
-        }
-        fs << static_cast<double>(grid[grid.size()-1]) << "};\n";
-    fs << "            }\n";
-        ++j;
-    }
-    fs << "        }\n";
-
-
-    fs << "        if constexpr (std::is_same_v<Real, long double>) {\n";
-    j = 0;
-    for (auto it = grids.begin(); it != grids.end(); ++it) {
-
-    fs << "            if constexpr (order == " << j << ") {\n";
-    fs << "                return {";
-        auto const & grid = *it;
-        for (size_t i = 0; i < grid.size() -1; ++i) {
-            fs << static_cast<long double>(grid[i]) << "L, ";
-        }
-        fs << static_cast<long double>(grid[grid.size()-1]) << "L};\n";
-    fs << "            }\n";
-        ++j;
-    }
-    fs << "        }\n";
-
-    fs << "        #ifdef BOOST_HAS_FLOAT128\n";
-    fs << "        if constexpr (std::is_same_v<Real, boost::multiprecision::float128>) {\n";
-    j = 0;
-    for (auto it = grids.begin(); it != grids.end(); ++it) {
-
-    fs << "            if constexpr (order == " << j << ") {\n";
-    fs << "                return {";
-        auto const & grid = *it;
-        for (size_t i = 0; i < grid.size() -1; ++i) {
-            fs << static_cast<boost::multiprecision::float128>(grid[i]) << "Q, ";
-        }
-        fs << static_cast<boost::multiprecision::float128>(grid[grid.size()-1]) << "Q};\n";
-    fs << "            }\n";
-        ++j;
-    }
-    fs << "        }\n";
-    fs << "        #endif\n";
-
-    fs << "        if constexpr (std::is_same_v<Real, boost::multiprecision::cpp_bin_float_oct>) {\n";
-    j = 0;
-    for (auto it = grids.begin(); it != grids.end(); ++it) {
-
-    fs << std::setprecision(std::numeric_limits<boost::multiprecision::cpp_bin_float_oct>::digits10 + 3);
-    fs << "            if constexpr (order == " << j << ") {\n";
-    fs << "                return {";
-        auto const & grid = *it;
-        for (size_t i = 0; i < grid.size() -1; ++i) {
-            fs << "boost::lexical_cast<boost::multiprecision::cpp_bin_float_oct>(\"" << static_cast<boost::multiprecision::cpp_bin_float_oct>(grid[i]) << "\"), ";
-        }
-        fs << "boost::lexical_cast<boost::multiprecision::cpp_bin_float_oct>(\"" << static_cast<boost::multiprecision::cpp_bin_float_oct>(grid[grid.size()-1]) << "\")};\n";
-    fs << "            }\n";
-        ++j;
-    }
-    fs << "        }\n";
-
-    fs << "    }\n";
-
 }
 
 int main()
 {
-    constexpr const size_t p_max = 15;
+    constexpr const size_t p_max = 18;
     std::ofstream fs{"daubechies_scaling_integer_grid.hpp"};
     fs << "/*\n"
-       << " * Copyright Nick Thompson, John Maddock, 2020\n"
+       << " * Copyright Nick Thompson, 2019\n"
+       << " * Copyright John Maddock, 2020\n"
        << " * Use, modification and distribution are subject to the\n"
        << " * Boost Software License, Version 1.0. (See accompanying file\n"
        << " * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)\n"
@@ -231,32 +170,42 @@ int main()
        << "#ifndef BOOST_MATH_DAUBECHIES_SCALING_INTEGER_GRID_HPP\n"
        << "#define BOOST_MATH_DAUBECHIES_SCALING_INTEGER_GRID_HPP\n"
        << "#include <array>\n"
+       << "#include <float.h>\n"
+       << "#include <boost/config.hpp>\n"
+       << "/*\n"
+       << "In order to keep the character count as small as possible and speed up\n"
+       << "compiler parsing times, we define a macro C_ which appends an appropriate\n"
+       << "suffix to each literal, and then casts it to type Real.\n"
+       << "The suffix is as follows:\n\n"
+       << "* Q, when we have __float128 support.\n"
+       << "* L, when we have either 80 or 128 bit long doubles.\n"
+       << "* Nothing otherwise.\n"
+       << "*/\n\n"
        << "#ifdef BOOST_HAS_FLOAT128\n"
-       << "#include <boost/multiprecision/float128.hpp>\n"
-       << "#endif\n"
+       << "#  define C_(x) static_cast<Real>(x##Q)\n"
+       << "#elif (LDBL_MANT_DIG > DBL_MANT_DIG)\n"
+       << "#  define C_(x) static_cast<Real>(x##L)\n"
+       << "#else\n"
+       << "#  define C_(x) static_cast<Real>(x)\n"
+       << "#endif\n\n"
        << "namespace boost::math::detail {\n\n"
-       << "template <typename Real, unsigned p, unsigned order>\n"
-       << "constexpr std::array<Real, 2*p> daubechies_scaling_integer_grid()\n"
+       << "template <typename Real, int p, int order> struct daubechies_scaling_integer_grid_imp;\n\n";
+
+    fs << std::hexfloat << std::setprecision(std::numeric_limits<boost::multiprecision::cpp_bin_float_quad>::max_digits10);
+
+    boost::hana::for_each(std::make_index_sequence<p_max>(), [&](auto idx){
+        write_grid<octuple_type, idx+2>(fs);
+    });
+
+    fs << "\n\ntemplate <typename Real, unsigned p, unsigned order>\n"
+       << "constexpr inline std::array<Real, 2*p> daubechies_scaling_integer_grid()\n"
        << "{\n"
        << "    static_assert(sizeof(Real) <= 16, \"Integer grids only computed up to 128 bits of precision.\");\n"
        << "    static_assert(p <= " << p_max << ", \"Integer grids only implemented up to " << p_max << ".\");\n"
-       << "    static_assert(p > 1, \"Integer grids only implemented for p >= 2.\");\n";
-
-
-    fs << std::hexfloat;
-
-    boost::hana::for_each(std::make_index_sequence<p_max>(), [&](auto idx){
-        write_grid<boost::multiprecision::cpp_bin_float_oct, idx+2>(fs);
-    });
-
-    fs << "    std::array<Real, 2*p> m{};\n"
-       << "    for (auto & x : m) {\n"
-       << "        x = std::numeric_limits<Real>::quiet_NaN();\n"
-       << "    }\n"
-       << "    return m;\n";
-
-
-    fs << "}\n\n";
+       << "    static_assert(p > 1, \"Integer grids only implemented for p >= 2.\");\n"
+       << "    std::array<Real, 2*p> m{};\n"
+       << "    return daubechies_scaling_integer_grid_imp<Real, p, order>::value;\n"
+       << "}\n\n";
 
     fs << "} // namespaces\n";
     fs << "#endif\n";

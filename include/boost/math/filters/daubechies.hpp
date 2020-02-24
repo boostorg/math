@@ -13,8 +13,11 @@
 #include <boost/multiprecision/cpp_bin_float.hpp>
 namespace boost::math::filters {
 
-//typedef boost::multiprecision::number<boost::multiprecision::cpp_bin_float<237, boost::multiprecision::backends::digit_base_2, std::allocator<char>, boost::int32_t, -262142, 262143>, boost::multiprecision::et_off> octuple_type;
+#ifdef BOOST_MATH_GENERATE_DAUBECHIES_GRID
+typedef boost::multiprecision::number<boost::multiprecision::cpp_bin_float<237, boost::multiprecision::backends::digit_base_2, std::allocator<char>, boost::int32_t, -262142, 262143>, boost::multiprecision::et_off> octuple_type;
+#else
 typedef boost::multiprecision::cpp_bin_float_oct octuple_type;
+#endif
    
 template <typename Real, unsigned p>
 constexpr std::array<Real, 2*p> daubechies_scaling_filter()
