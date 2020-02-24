@@ -336,9 +336,57 @@ public:
         return dydx;
     }
 
-    inline Real double_prime(Real x) const
+    inline Real double_prime(Real x) constq
     {
-        return std::numeric_limits<Real>::quiet_NaN();
+        Real xf = x0_ + (y_.size()-1)/inv_dx_;
+        if  (x < x0_ || x > xf)
+        {
+            std::ostringstream oss;
+            oss.precision(std::numeric_limits<Real>::digits10+3);
+            oss << "Requested abscissa x = " << x << ", which is outside of allowed range ["
+                << x0_ << ", " << xf << "]";
+            throw std::domain_error(oss.str());
+        }
+        if (x == xf)
+        {
+            return d2y_.back()*2*inv_dx_*inv_dx_;
+        }
+
+        return this->unchecked_double_prime(x);
+    }
+
+    inline Real unchecked_double_prime(Real x) const
+    {
+        using std::floor;
+        Real s3 = (x-x0_)*inv_dx_;
+        Real ii = floor(s3);
+        auto i = static_cast<decltype(y_.size())>(ii);
+        Real t = s3 - ii;
+
+        Real y0 = y_[i];
+        Real y1 = y_[i+1];
+        Real dy0 = dy_[i];
+        Real dy1 = dy_[i+1];
+        Real a0 = d2y_[i];
+        Real a1 = d2y_[i+1];
+        Real j0 = d3y_[i];
+        Real j1 = d3y_[i+1];
+        Real t2 = t*t;
+
+        Real z0 = 420*t2*(1 + t*(-4 + t*(5 - 2*t)));
+        Real z1 = 60*t2*(-4 + t*(15 + t*(-18 + 7*t)));
+        Real z2 = 60*t2*(-3 + t*(13 + t*(-17 + 7*t)));
+        Real z3 = (1 + t2*(-60 + t*(200 + t*(-225 + 84*t))));
+        Real z4 = t2*(30 + t*(-140 + t*(195 - 84*t)));
+        Real z5 = t*(1 + t*(-8 + t*(20 + t*(-20 + 7*t))));
+        Real z6 = t2*(-2 + t*(10 + t*(-15 + 7*t)));
+
+        Real d2ydx2 = z0*(y1-y0)*inv_dx_*inv_dx_;
+        d2ydx2 += (z1*dy0 + z2*dy1)*inv_dx_*inv_dx_;
+        d2ydx2 += (z3*a0 + z4*a1)*2*inv_dx_*inv_dx_;
+        d2ydx2 += 6*(z5*j0 + z6*j1)/(inv_dx_*inv_dx_);
+
+        return d2ydx2;
     }
 
 private:
@@ -437,7 +485,7 @@ public:
         }
         if (x == xf)
         {
-            return data_.back()[1];
+            return data_.back()[1]*inv_dx_;
         }
 
         return this->unchecked_prime(x);
@@ -449,7 +497,7 @@ public:
         Real ii = floor(s3);
         auto i = static_cast<decltype(data_.size())>(ii);
         Real t = s3 - ii;
- 
+
         Real y0 = data_[i][0];
         Real y1 = data_[i+1][0];
         Real dy0 = data_[i][1];
@@ -475,9 +523,57 @@ public:
         return dydx;
     }
 
-    inline Real double_prime(Real x) const 
+    inline Real double_prime(Real x) const
     {
-        return std::numeric_limits<Real>::quiet_NaN();
+        Real xf = x0_ + (data_.size()-1)/inv_dx_;
+        if  (x < x0_ || x > xf)
+        {
+            std::ostringstream oss;
+            oss.precision(std::numeric_limits<Real>::digits10+3);
+            oss << "Requested abscissa x = " << x << ", which is outside of allowed range ["
+                << x0_ << ", " << xf << "]";
+            throw std::domain_error(oss.str());
+        }
+        if (x == xf)
+        {
+            return data_.back()[2]*2*inv_dx_*inv_dx_;
+        }q
+
+        return this->unchecked_double_prime(x);
+    }
+
+    inline Real unchecked_double_prime(Real x) const
+    {
+        using std::floor;
+        Real s3 = (x-x0_)*inv_dx_;
+        Real ii = floor(s3);
+        auto i = static_cast<decltype(data_.size())>(ii);
+        Real t = s3 - ii;
+
+        Real y0 = data_[i][0];
+        Real y1 = data_[i+1][0];
+        Real dy0 = data_[i][1];
+        Real dy1 = data_[i+1][1];
+        Real a0 = data_[i][2];
+        Real a1 = data_[i+1][2];
+        Real j0 = data_[i][3];
+        Real j1 = data_[i+1][3];
+        Real t2 = t*t;
+
+        Real z0 = 420*t2*(1 + t*(-4 + t*(5 - 2*t)));
+        Real z1 = 60*t2*(-4 + t*(15 + t*(-18 + 7*t)));
+        Real z2 = 60*t2*(-3 + t*(13 + t*(-17 + 7*t)));
+        Real z3 = (1 + t2*(-60 + t*(200 + t*(-225 + 84*t))));
+        Real z4 = t2*(30 + t*(-140 + t*(195 - 84*t)));
+        Real z5 = t*(1 + t*(-8 + t*(20 + t*(-20 + 7*t))));
+        Real z6 = t2*(-2 + t*(10 + t*(-15 + 7*t)));
+
+        Real d2ydx2 = z0*(y1-y0)*inv_dx_*inv_dx_;
+        d2ydx2 += (z1*dy0 + z2*dy1)*inv_dx_*inv_dx_;
+        d2ydx2 += (z3*a0 + z4*a1)*2*inv_dx_*inv_dx_;
+        d2ydx2 += 6*(z5*j0 + z6*j1)/(inv_dx_*inv_dx_);
+
+        return d2ydx2;
     }
 
 private:
