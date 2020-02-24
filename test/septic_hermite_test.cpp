@@ -51,9 +51,11 @@ void test_constant()
     d2ydx2.resize(128, 0);
     d3ydx3.resize(128, 0);
     auto csh = cardinal_septic_hermite(std::move(y), std::move(dydx), std::move(d2ydx2), std::move(d3ydx3), x0, dx);
-    for (Real t = x0; t <= 127; t += 0.25) {
+    for (Real t = x0; t <= 127; t += 0.25)
+    {
         CHECK_ULP_CLOSE(Real(7), csh(t), 24);
         CHECK_ULP_CLOSE(Real(0), csh.prime(t), 24);
+        CHECK_ULP_CLOSE(Real(0), csh.double_prime(t), 24);
     }
 
     std::vector<std::array<Real, 4>> data(128);
@@ -69,6 +71,7 @@ void test_constant()
     {
         CHECK_ULP_CLOSE(Real(7), csh_aos(t), 24);
         CHECK_ULP_CLOSE(Real(0), csh_aos.prime(t), 24);
+        CHECK_ULP_CLOSE(Real(0), csh_aos.double_prime(t), 24);
     }
 
 }
@@ -130,6 +133,7 @@ void test_linear()
     {
         CHECK_ULP_CLOSE(t, csh(t), 15);
         CHECK_ULP_CLOSE(Real(1), csh.prime(t), 15);
+        CHECK_ULP_CLOSE(Real(0), csh.double_prime(t), 15);
     }
 
     std::vector<std::array<Real, 4>> data(10);
@@ -145,6 +149,7 @@ void test_linear()
     {
         CHECK_ULP_CLOSE(t, csh_aos(t), 15);
         CHECK_ULP_CLOSE(Real(1), csh_aos.prime(t), 15);
+        CHECK_ULP_CLOSE(Real(0), csh_aos.double_prime(t), 15);
     }
 }
 
@@ -231,6 +236,7 @@ void test_quadratic()
     {
         CHECK_ULP_CLOSE(t*t/2, csh(t), 24);
         CHECK_ULP_CLOSE(t, csh.prime(t), 24);
+        CHECK_ULP_CLOSE(Real(1), csh.double_prime(t), 24);
     }
 
     std::vector<std::array<Real, 4>> data(10);
@@ -246,6 +252,7 @@ void test_quadratic()
     {
         CHECK_ULP_CLOSE(t*t/2, csh_aos(t), 24);
         CHECK_ULP_CLOSE(t, csh_aos.prime(t), 24);
+        CHECK_ULP_CLOSE(Real(1), csh_aos.double_prime(t), 24);
     }
 }
 
@@ -303,6 +310,7 @@ void test_cubic()
     {
         CHECK_ULP_CLOSE(t*t*t, csh(t), 151);
         CHECK_ULP_CLOSE(3*t*t, csh.prime(t), 151);
+        CHECK_ULP_CLOSE(6*t, csh.double_prime(t), 151);
     }
 
     std::vector<std::array<Real, 4>> data(8);
@@ -319,6 +327,7 @@ void test_cubic()
     {
         CHECK_ULP_CLOSE(t*t*t, csh_aos(t), 151);
         CHECK_ULP_CLOSE(3*t*t, csh_aos.prime(t), 151);
+        CHECK_ULP_CLOSE(6*t, csh_aos.double_prime(t), 151);
     }
 }
 
@@ -377,6 +386,7 @@ void test_quartic()
     {
         CHECK_ULP_CLOSE(t*t*t*t, csh(t), 117);
         CHECK_ULP_CLOSE(4*t*t*t, csh.prime(t), 117);
+        CHECK_ULP_CLOSE(12*t*t, csh.double_prime(t), 117);
     }
 
     std::vector<std::array<Real, 4>> data(10);
@@ -393,6 +403,7 @@ void test_quartic()
     {
         CHECK_ULP_CLOSE(t*t*t*t, csh_aos(t), 117);
         CHECK_ULP_CLOSE(4*t*t*t, csh_aos.prime(t), 117);
+        CHECK_ULP_CLOSE(12*t*t, csh_aos.double_prime(t), 117);
     }
 }
 

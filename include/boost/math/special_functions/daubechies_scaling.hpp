@@ -491,6 +491,10 @@ public:
         {
             return m_qh->unchecked_double_prime(x);
         }
+        if constexpr (p >= 10)
+        {
+            return m_sh->unchecked_double_prime(x);
+        }
     }
 
     std::pair<Real, Real> support() const
