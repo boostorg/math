@@ -336,7 +336,7 @@ public:
         return dydx;
     }
 
-    inline Real double_prime(Real x) constq
+    inline Real double_prime(Real x) const
     {
         Real xf = x0_ + (y_.size()-1)/inv_dx_;
         if  (x < x0_ || x > xf)
@@ -537,7 +537,7 @@ public:
         if (x == xf)
         {
             return data_.back()[2]*2*inv_dx_*inv_dx_;
-        }q
+        }
 
         return this->unchecked_double_prime(x);
     }
