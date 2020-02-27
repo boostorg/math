@@ -84,8 +84,8 @@ void plot_condition_number()
     using std::log;
     static_assert(p >= 3, "p = 2 is not differentiable, so condition numbers cannot be effectively evaluated.");
     auto phi = boost::math::daubechies_scaling<Real, p>();
-    Real a = 1000*std::numeric_limits<Real>::epsilon();
-    Real b = phi.support().second - 1000*std::numeric_limits<Real>::epsilon();
+    Real a = std::sqrt(std::numeric_limits<Real>::epsilon());
+    Real b = phi.support().second - 1000*std::sqrt(std::numeric_limits<Real>::epsilon());
     std::string title = "log10 of condition number of function evaluation for Daubechies " + std::to_string(p) + " scaling function.";
     std::string filename = "daubechies_" + std::to_string(p) + "_scaling_condition_number.svg";
 
@@ -106,7 +106,7 @@ void plot_condition_number()
         if (isnan(z))
         {
             // Graphing libraries don't like nan's:
-            return Real(1); 
+            return Real(1);
         }
         return log10(z);
     };

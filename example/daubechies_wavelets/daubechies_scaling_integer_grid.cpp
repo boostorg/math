@@ -203,7 +203,6 @@ int main()
        << "    static_assert(sizeof(Real) <= 16, \"Integer grids only computed up to 128 bits of precision.\");\n"
        << "    static_assert(p <= " << p_max << ", \"Integer grids only implemented up to " << p_max << ".\");\n"
        << "    static_assert(p > 1, \"Integer grids only implemented for p >= 2.\");\n"
-       << "    std::array<Real, 2*p> m{};\n"
        << "    return daubechies_scaling_integer_grid_imp<Real, p, order>::value;\n"
        << "}\n\n";
 

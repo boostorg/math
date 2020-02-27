@@ -237,7 +237,6 @@ constexpr inline std::array<Real, 2*p> daubechies_scaling_integer_grid()
     static_assert(sizeof(Real) <= 16, "Integer grids only computed up to 128 bits of precision.");
     static_assert(p <= 18, "Integer grids only implemented up to 18.");
     static_assert(p > 1, "Integer grids only implemented for p >= 2.");
-    std::array<Real, 2*p> m{};
     return daubechies_scaling_integer_grid_imp<Real, p, order>::value;
 }
 
