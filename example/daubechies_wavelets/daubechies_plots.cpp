@@ -26,9 +26,11 @@ void plot_phi(int grid_refinements = -1)
     Real a = 0;
     Real b = phi.support().second;
     std::string title = "Daubechies " + std::to_string(p) + " scaling function";
+    title = "";
     std::string filename = "daubechies_" + std::to_string(p) + "_scaling.svg";
     int samples = 1024;
     quicksvg::graph_fn daub(a, b, title, filename, samples, GRAPH_WIDTH);
+    daub.set_gridlines(8, 2*p-1);
     daub.set_stroke_width(1);
     daub.add_fn(phi);
     daub.write_all();
@@ -45,10 +47,12 @@ void plot_dphi(int grid_refinements = -1)
     Real a = 0;
     Real b = phi.support().second;
     std::string title = "Daubechies " + std::to_string(p) + " scaling function derivative";
+    title = "";
     std::string filename = "daubechies_" + std::to_string(p) + "_scaling_prime.svg";
     int samples = 1024;
     quicksvg::graph_fn daub(a, b, title, filename, samples, GRAPH_WIDTH);
     daub.set_stroke_width(1);
+    daub.set_gridlines(8, 2*p-1);
     auto dphi = [phi](Real x)->Real { return phi.prime(x); };
     daub.add_fn(dphi);
     daub.write_all();
@@ -61,10 +65,12 @@ void plot_convergence()
     Real a = 0;
     Real b = phi0.support().second;
     std::string title = "Daubechies " + std::to_string(p) + " scaling at 0 (green), 1 (orange), 2 (red), and 24 (blue) grid refinements";
+    title = "";
     std::string filename = "daubechies_" + std::to_string(p) + "_scaling_convergence.svg";
 
     quicksvg::graph_fn daub(a, b, title, filename, 1024, GRAPH_WIDTH);
     daub.set_stroke_width(1);
+    daub.set_gridlines(8, 2*p-1);
 
     daub.add_fn(phi0, "green");
     auto phi1 = boost::math::daubechies_scaling<Real, p>(1);
@@ -74,6 +80,7 @@ void plot_convergence()
 
     auto phi21 = boost::math::daubechies_scaling<Real, p>(21);
     daub.add_fn(phi21);
+
     daub.write_all();
 }
 
@@ -87,11 +94,13 @@ void plot_condition_number()
     Real a = std::sqrt(std::numeric_limits<Real>::epsilon());
     Real b = phi.support().second - 1000*std::sqrt(std::numeric_limits<Real>::epsilon());
     std::string title = "log10 of condition number of function evaluation for Daubechies " + std::to_string(p) + " scaling function.";
+    title = "";
     std::string filename = "daubechies_" + std::to_string(p) + "_scaling_condition_number.svg";
 
 
     quicksvg::graph_fn daub(a, b, title, filename, 2048, GRAPH_WIDTH);
     daub.set_stroke_width(1);
+    daub.set_gridlines(8, 2*p-1);
 
     auto cond = [&phi](Real x)
     {
@@ -120,10 +129,14 @@ void do_ulp(int coarse_refinements, PhiPrecise phi_precise)
     auto phi_coarse = boost::math::daubechies_scaling<CoarseReal, p>(coarse_refinements);
 
     std::string title = std::to_string(p) + " vanishing moment ULP plot at " + std::to_string(coarse_refinements) + " refinements and " + boost::core::demangle(typeid(CoarseReal).name()) + " precision";
+    title = "";
+
     std::string filename = "daubechies_" + std::to_string(p) + "_" + boost::core::demangle(typeid(CoarseReal).name()) + "_" + std::to_string(coarse_refinements) + "_refinements.svg";
     int samples = 20000;
     int clip = 20;
-    quicksvg::ulp_plot<decltype(phi_coarse), CoarseReal, decltype(phi_precise), PreciseReal>(phi_coarse, phi_precise, CoarseReal(0), phi_coarse.support().second, title, filename, samples, GRAPH_WIDTH, clip);
+    int horizontal_lines = 8;
+    int vertical_lines = 2*p - 1;
+    quicksvg::ulp_plot<decltype(phi_coarse), CoarseReal, decltype(phi_precise), PreciseReal>(phi_coarse, phi_precise, CoarseReal(0), phi_coarse.support().second, title, filename, samples, GRAPH_WIDTH, clip, horizontal_lines, vertical_lines);
 }
 
 
@@ -189,7 +202,7 @@ int main()
     using PreciseReal = float128;
     using CoarseReal = double;
     int precise_refinements = 22;
-    constexpr const int p = 12;
+    constexpr const int p = 8;
     std::cout << "Computing precise scaling function in " << boost::core::demangle(typeid(PreciseReal).name()) << " precision.\n";
     auto phi_precise = boost::math::daubechies_scaling<PreciseReal, p>(precise_refinements);
     std::cout << "Beginning comparison with functions computed in " << boost::core::demangle(typeid(CoarseReal).name()) << " precision.\n";
