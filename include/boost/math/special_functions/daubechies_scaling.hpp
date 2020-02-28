@@ -252,9 +252,20 @@ public:
         {
             if (std::is_same_v<Real, float>)
             {
-                //                          p= 2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15
-                std::array<int, 16> r{-1, -1, 22, 21, 19, 17, 16, 15, 14, 13, 12, 11, 11, 11, 11, 11};
-                grid_refinements = r[p];
+                if (grid_refinements == -2)
+                {
+                    // Control absolute error:
+                    //                          p= 2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15
+                    std::array<int, 16> r{-1, -1, 18, 19, 16, 11,  8,  7,  7,  7,  5,  5,  4,  4,  4,  4};
+                    grid_refinements = r[p];
+                }
+                else
+                {
+                    // Control relative error:
+                    //                          p= 2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15
+                    std::array<int, 16> r{-1, -1, 21, 21, 21, 17, 16, 15, 14, 13, 12, 11, 11, 11, 11, 11};
+                    grid_refinements = r[p];
+                }
             }
             else if (std::is_same_v<Real, double>)
             {

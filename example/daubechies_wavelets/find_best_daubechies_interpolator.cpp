@@ -14,7 +14,7 @@
 #include <boost/math/special_functions/detail/daubechies_scaling_integer_grid.hpp>
 #include <boost/math/interpolators/cubic_hermite.hpp>
 #include <boost/math/interpolators/quintic_hermite.hpp>
-#include <boost/math/interpolators/cardinal_quintic_hermite.hpp>
+#include <boost/math/interpolators/quintic_hermite.hpp>
 #include <boost/math/interpolators/septic_hermite.hpp>
 #include <boost/math/interpolators/cardinal_quadratic_b_spline.hpp>
 #include <boost/math/interpolators/cardinal_cubic_b_spline.hpp>
@@ -35,99 +35,66 @@ void choose_refinement()
 {
     std::cout << "Choosing refinement for " << boost::core::demangle(typeid(Real).name()) << " precision Daubechies scaling function with " << p << " vanishing moments.\n";
     using std::abs;
-    int rmax = 21;
+    int rmax = 22;
     auto phi_dense = boost::math::detail::dyadic_grid<PreciseReal, p, 0>(rmax);
     Real dx_dense = (2*p-1)/static_cast<Real>(phi_dense.size()-1);
 
-    for (int r = 2; r <= rmax - 2; ++r)
+    for (int r = 2; r <= 12; ++r)
     {
-        auto phi_accurate = boost::math::detail::dyadic_grid<PreciseReal, p, 0>(r);
-        std::vector<Real> phi(phi_accurate.size());
-        for (size_t i = 0; i < phi_accurate.size(); ++i)
-        {
-            phi[i] = Real(phi_accurate[i]);
-        }
-        auto phi_prime_accurate = boost::math::detail::dyadic_grid<PreciseReal, p, 1>(r);
-        std::vector<Real> phi_prime(phi_accurate.size());
-        for (size_t i = 0; i < phi_prime_accurate.size(); ++i)
-        {
-            phi_prime[i] = Real(phi_prime_accurate[i]);
-        }
+        Real dx = Real(1)/ (1 << r);
+        std::cout << "\tdx = 1/" << (1/dx) << " = 1/2^" << r << " = " << dx << "\n";
+        auto phi = boost::math::daubechies_scaling<Real, p>(r);
+        Real max_flt_distance = 0;
+        Real sup  = 0;
+        Real rel_sup = 0;
+        Real worst_flt_abscissa = 0;
+        Real worst_flt_value = 0;
+        Real worst_flt_computed = 0;
 
-        Real dx = (2*p-1)/static_cast<Real>(phi.size()-1);
-        std::cout << "\tdx = 1/" << (1/dx) << " = " << dx << "\n";
+        Real worst_rel_abscissa = 0;
+        Real worst_rel_value = 0;
+        Real worst_rel_computed = 0;
 
-        if constexpr (p < 6 && p >= 3)
+        Real worst_abs_abscissa = 0;
+        Real worst_abs_computed = 0;
+        Real worst_abs_expected = 0;
+        for (size_t i = 0; i < phi_dense.size(); ++i)
         {
-            auto ch = boost::math::interpolators::cardinal_cubic_hermite(std::move(phi), std::move(phi_prime), Real(0), Real(dx));
-            Real flt_distance = 0;
-            Real sup  = 0;
-            Real worst_abscissa = 0;
-            Real worst_value = 0;
-            Real worst_computed = 0;
-            for (size_t i = 0; i < phi_dense.size(); ++i)
+            Real t = i*dx_dense;
+            Real computed = phi(t);
+            Real expected = Real(phi_dense[i]);
+            Real abs_diff = abs(computed - expected);
+            Real rel_diff = abs_diff/abs(expected);
+            Real flt_distance = abs(boost::math::float_distance(computed, expected));
+            if (flt_distance > max_flt_distance)
             {
-                Real t = i*dx_dense;
-                Real computed = ch(t);
-                Real expected = Real(phi_dense[i]);
-                if (std::abs(expected) < 100*std::numeric_limits<Real>::epsilon())
-                {
-                    continue;
-                }
-                Real diff = abs(computed - expected);
-                Real distance = abs(boost::math::float_distance(computed, expected));
-                if (distance > flt_distance)
-                {
-                    flt_distance = distance;
-                    worst_abscissa = t;
-                    worst_value = expected;
-                    worst_computed = computed;
-                }
-                if (diff > sup)
-                {
-                    sup = diff;
-                }
+                max_flt_distance = flt_distance;
+                worst_flt_abscissa = t;
+                worst_flt_value = expected;
+                worst_flt_computed = computed;
             }
-            std::cout << "\t\tFloat distance at r = " << r << " is " << flt_distance << ", sup distance = " << sup << "\n";
-            std::cout << "\t\tWorst abscissa = " << worst_abscissa << ", worst value = " << worst_value << ", computed = " << worst_computed << "\n";
-        }
-        else if constexpr (p >= 6)
-        {
-            auto phi_dbl_prime = boost::math::detail::dyadic_grid<Real, p, 2>(r);
-            auto qh = boost::math::interpolators::cardinal_quintic_hermite(std::move(phi), std::move(phi_prime), std::move(phi_dbl_prime), Real(0), dx);
-            Real flt_distance = 0;
-            Real sup  = 0;
-            Real worst_abscissa = 0;
-            Real worst_value = 0;
-            Real worst_computed = 0;
-            for (size_t i = 0; i < phi_dense.size(); ++i)
+            if (expected != 0 && rel_diff > rel_sup)
             {
-                Real t = i*dx_dense;
-                Real computed = qh(t);
-                Real expected = Real(phi_dense[i]);
-                if (std::abs(expected) < 100*std::numeric_limits<Real>::epsilon())
-                {
-                    continue;
-                }
+                rel_sup = rel_diff;
+                worst_rel_abscissa = t;
+                worst_rel_value = expected;
+                worst_rel_computed = computed;
 
-                Real diff = abs(computed - expected);
-                Real distance = abs(boost::math::float_distance(computed, expected));
-                if (distance > flt_distance)
-                {
-                    flt_distance = distance;
-                    worst_abscissa = t;
-                    worst_value = expected;
-                    worst_computed = computed;
-                }
-                if (diff > sup)
-                {
-                    sup = diff;
-                }
-                std::cout << "Float distance at r = " << r << " is " << flt_distance << ", sup distance = " << sup << "\n";
-                std::cout << "\tWorst abscissa = " << worst_abscissa << ", worst value = " << worst_value << ", computed = " << worst_computed << "\n"; 
+            }
+            if (abs_diff > sup)
+            {
+                sup = abs_diff;
+                worst_abs_abscissa = t;
+                worst_abs_computed = computed;
+                worst_abs_expected = expected;
             }
         }
+        std::cout << "\t\tFloat distance at r = " << r << " is " << max_flt_distance << ", sup distance = " << sup << ", max relative error = " << rel_sup << "\n";
+        std::cout << "\t\tWorst flt abscissa = " << worst_flt_abscissa << ", worst expected value = " << worst_flt_value << ", computed = " << worst_flt_computed << "\n";
+        std::cout << "\t\tWorst rel abscissa = " << worst_rel_abscissa << ", worst expected value = " << worst_rel_value << ", computed = " << worst_rel_computed << "\n";
+        std::cout << "\t\tWorst abs abscissa = " << worst_abs_abscissa << ", worst expected value = " << worst_abs_computed << ", worst abs value (expected) = " << worst_abs_expected << "\n";
     }
+    std::cout << "\n\n\n";
 }
 
 template<typename Real, typename PreciseReal, int p>
@@ -560,11 +527,25 @@ void find_best_interpolator()
 }
 
 int main() {
-    //choose_refinement<float, double, 5>();
+    /*choose_refinement<float, long double, 2>();
+    choose_refinement<float, long double, 3>();
+    choose_refinement<float, long double, 4>();
+    choose_refinement<float, long double, 5>();
+    choose_refinement<float, long double, 6>();
+    choose_refinement<float, long double, 7>();
+    choose_refinement<float, long double, 8>();*/
+
+    choose_refinement<float, long double, 9>();
+    choose_refinement<float, long double, 10>();
+    choose_refinement<float, long double, 11>();
+    choose_refinement<float, long double, 12>();
+    choose_refinement<float, long double, 13>();
+    choose_refinement<float, long double, 14>();
+    choose_refinement<float, long double, 15>();
     //choose_refinement<float, long double, 5>();
     //choose_refinement<double, float128, 15>();
     // Says linear interpolation is the best:
-    find_best_interpolator<float128, float128, 2>();
+    /*find_best_interpolator<float128, float128, 2>();
     // Says linear interpolation is the best:
     find_best_interpolator<float128, float128, 3>();
     // Says cubic_hermite_spline is best:
@@ -590,5 +571,5 @@ int main() {
     // Says septic_hermite_spline is best:
     find_best_interpolator<float128, float128, 14>();
     // Says septic_hermite_spline is best:
-    find_best_interpolator<float128, float128, 15>();
+    find_best_interpolator<float128, float128, 15>();*/
 }
