@@ -17,8 +17,14 @@
 #include <boost/math/tools/roots.hpp>
 #include <boost/math/special_functions/binomial.hpp>
 #include <boost/multiprecision/cpp_complex.hpp>
+#ifdef BOOST_HAS_FLOAT128
 #include <boost/multiprecision/float128.hpp>
-#include <boost/multiprecision/complex128.hpp>
+
+typedef boost::multiprecision::float128 float128_t;
+#else
+typedef boost::multiprecision::cpp_bin_float_quad float128_t;
+#endif
+//#include <boost/multiprecision/complex128.hpp>
 #include <boost/math/quadrature/gauss_kronrod.hpp>
 
 using std::string;
@@ -220,10 +226,8 @@ int main()
        << "#ifndef BOOST_MATH_FILTERS_DAUBECHIES_HPP\n"
        << "#define BOOST_MATH_FILTERS_DAUBECHIES_HPP\n"
        << "#include <array>\n"
-       << "#ifdef BOOST_HAS_FLOAT128\n"
-       << "#include <boost/multiprecision/float128.hpp>\n"
-       << "#endif\n"
-       << "#include <boost/multiprecision/cpp_bin_float.hpp>\n"
+       << "#include <limits>\n"
+       << "#include <boost/math/tools/big_constant.hpp>\n\n"
        << "namespace boost::math::filters {\n\n"
        << "template <typename Real, unsigned p>\n"
        << "constexpr std::array<Real, 2*p> daubechies_scaling_filter()\n"
@@ -232,54 +236,15 @@ int main()
 
     for(size_t p = 1; p < p_max; ++p)
     {
-        fs << std::hexfloat;
+        fs << std::setprecision(std::numeric_limits<boost::multiprecision::cpp_bin_float_oct>::max_digits10);
         auto roots = find_roots<Complex>(p);
         auto h = daubechies_coefficients(roots);
         fs << "    if constexpr (p == " << p << ") {\n";
-        fs << "        if constexpr (std::is_same_v<Real, float>) {\n";
-        fs << "            return {";
+        fs << "       return {";
         for (size_t i = 0; i < h.size() - 1; ++i) {
-            fs << static_cast<float>(h[i]) << "f, ";
+            fs << "BOOST_MATH_BIG_CONSTANT(Real, std::numeric_limits<Real>::digits, " << h[i] << "), ";
         }
-        fs << static_cast<float>(h[h.size()-1]) << "f};\n";
-        fs << "        }\n";
-
-        fs << "        if constexpr (std::is_same_v<Real, double>) {\n";
-        fs << "            return {";
-        for (size_t i = 0; i < h.size() - 1; ++i) {
-            fs << static_cast<double>(h[i]) << ", ";
-        }
-        fs << static_cast<double>(h[h.size()-1]) << "};\n";
-        fs << "        }\n";
-
-        fs << "        if constexpr (std::is_same_v<Real, long double>) {\n";
-        fs << "            return {";
-        for (size_t i = 0; i < h.size() - 1; ++i) {
-            fs << static_cast<long double>(h[i]) << "L, ";
-        }
-        fs << static_cast<long double>(h[h.size()-1]) << "L};\n";
-        fs << "        }\n";
-
-        fs << "        #ifdef BOOST_HAS_FLOAT128\n";
-        fs << "        if constexpr (std::is_same_v<Real, boost::multiprecision::float128>) {\n";
-        fs << "            return {";
-        for (size_t i = 0; i < h.size() - 1; ++i) {
-            fs << static_cast<boost::multiprecision::float128>(h[i]) << "Q, ";
-        }
-        fs << static_cast<boost::multiprecision::float128>(h[h.size()-1]) << "Q};\n";
-        fs << "        }\n";
-        fs << "        #endif\n";
-
-        fs << "        if constexpr (std::is_same_v<Real, boost::multiprecision::cpp_bin_float_oct>) {\n";
-        fs << "            return {";
-        fs <<std::setprecision(std::numeric_limits<boost::multiprecision::cpp_bin_float_oct>::digits10 + 3);
-        for (size_t i = 0; i < h.size() - 1; ++i) {
-            fs <<  "boost::lexical_cast<boost::multiprecision::cpp_bin_float_oct>(\"" <<  static_cast<boost::multiprecision::cpp_bin_float_oct>(h[i]) << "\"), ";
-        }
-        fs <<  "boost::lexical_cast<boost::multiprecision::cpp_bin_float_oct>(\"" << static_cast<boost::multiprecision::cpp_bin_float_oct>(h[h.size()-1]) << "\")};\n";
-        fs << "        }\n";
-
-
+        fs << "BOOST_MATH_BIG_CONSTANT(Real, std::numeric_limits<Real>::digits, " << h[h.size()-1] << ") };\n";
         fs << "    }\n";
     }
 
