@@ -18,8 +18,8 @@ void compile_and_link_test()
     TEST_DIST_FUNC(dirichlet)
 }
 
-template class boost::math::dirichlet_distribution<std::vector<double>, double, boost::math::policies::policy<>>;
-template class boost::math::dirichlet_distribution<std::vector<float>, float, boost::math::policies::policy<>>;
+template class boost::math::dirichlet_distribution<std::vector<double>, boost::math::policies::policy<>>;
+template class boost::math::dirichlet_distribution<std::vector<float>, boost::math::policies::policy<>>;
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-template class boost::math::dirichlet_distribution<std::vector<long double>, long double, boost::math::policies::policy<>>;
+template class boost::math::dirichlet_distribution<std::vector<long double>, boost::math::policies::policy<>>;
 #endif
