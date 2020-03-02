@@ -22,7 +22,6 @@
 #define BOOST_MATH_DISTRIBUTIONS_DIRICHLET_HPP
 
 #include <boost/math/distributions/fwd.hpp>
-#include <boost/multiprecision/float128.hpp>
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/distributions/complement.hpp>
 #include <boost/math/special_functions/digamma.hpp>
@@ -50,7 +49,7 @@ inline bool check_alpha(const char *function,
                         typename RandomAccessContainer::value_type *result,
                         const Policy &pol)
 {
-  using RealType = RandomAccessContainer::value_type;
+  using RealType = typename RandomAccessContainer::value_type;
   for (decltype(alpha.size()) i = 0; i < alpha.size(); ++i)
   {
     if (!(boost::math::isfinite)(alpha[i]) || (alpha[i] <= 0))
@@ -70,7 +69,7 @@ inline bool check_prob(const char *function,
                        typename RandomAccessContainer::value_type *result,
                        const Policy &pol)
 {
-  using RealType = RandomAccessContainer::value_type;
+  using RealType = typename RandomAccessContainer::value_type;
   for (decltype(p.size()) i = 0; i < p.size(); ++i)
   {
     if ((p[i] < 0) || (p[i] > 1) || !(boost::math::isfinite)(p[i]))
@@ -182,29 +181,6 @@ inline bool check_mean_and_variance(const char *function,
 {
   return check_mean(function, mean, result, pol) && check_variance(function, variance, result, pol);
 } // bool check_mean_and_variance
-
-template <class RandomAccessContainer>
-inline typename RandomAccessContainer::value_type mvar_beta(
-    const RandomAccessContainer &alpha,
-    const typename RandomAccessContainer::value_type &b)
-{
-  // B(a1,a2,...ak) = tgamma(a1+a2+...+ak)/(tgamma(a1)*tgamma(a2)...*tgamma(ak)
-  using RealType = typename RandomAccessContainer::value_type;
-  RealType mb;
-  RealType alpha_sum = accumulate(alpha.begin(), alpha.end(), b * alpha.size());
-  for (decltype(alpha.size()) i = 0; i < alpha.size(); ++i)
-  {
-    mb *= tgamma(alpha[i] + b);
-  }
-  mb /= tgamma(alpha_sum);
-  return mb;
-} // mvar_beta
-
-template <class RandomAccessContainer>
-inline typename RandomAccessContainer::value_type alpha0(const RandomAccessContainer &alpha)
-{
-  return accumulate(alpha.begin(), alpha.end(), 0);
-}
 } // namespace dirichlet_detail
 
 template <class RandomAccessContainer = std::vector<double>, class Policy = policies::policy<>>
@@ -223,20 +199,20 @@ public:
   } // dirichlet_distribution constructor.
 
   // Get the concentration parameters.
-  RandomAccessContainer &alpha() const { return m_alpha; }
+  const RandomAccessContainer &get_alpha() const { return m_alpha; }
   // Set the concentration parameters.
-  RandomAccessContainer &alpha() { return m_alpha; }
+  RandomAccessContainer &set_alpha() { return m_alpha; }
 
   // Get the order of concentration parameters.
-  decltype(m_alpha.size()) &order() const { return m_alpha.size(); }
+  size_t order() const { return m_alpha.size(); }
 
   // Get alpha from mean and variance.
-  static void find_alpha(
+  void find_alpha(
       RandomAccessContainer &&mean,     // Expected value of mean.
       RandomAccessContainer &&variance) // Expected value of variance.
   {
     assert(("Dimensions of mean and variance must be same!", mean.size() == variance.size()));
-    static const char *function = "boost::math::dirichlet_distribution<%1%>::alpha_from_mean_and_variance";
+    static const char *function = "boost::math::dirichlet_distribution<%1%>::find_alpha";
     RealType result = 0; // of error checks.
     if (!(dirichlet_detail::check_mean(function, mean, &result, Policy()) && dirichlet_detail::check_variance(function, variance, &result, Policy())))
     {
@@ -248,9 +224,27 @@ public:
     }
   } // void find_alpha
 
+  RealType normalizing_constant(RealType b = 0.0) const
+  {
+    // B(a1,a2,...ak) = tgamma(a1+a2+...+ak)/(tgamma(a1)*tgamma(a2)...*tgamma(ak)
+    RealType mb;
+    RealType alpha_sum = accumulate(m_alpha.begin(), m_alpha.end(), b * m_alpha.size());
+    for (decltype(m_alpha.size()) i = 0; i < m_alpha.size(); ++i)
+    {
+      mb *= tgamma(m_alpha[i] + b);
+    }
+    mb /= tgamma(alpha_sum);
+    return mb;
+  } // normalizing_constant
+
+  RealType sum_alpha() const
+  {
+    return accumulate(m_alpha.begin(), m_alpha.end(), 0);
+  } // sum_alpha
+
 private:
   RandomAccessContainer m_alpha; // https://en.wikipedia.org/wiki/Concentration_parameter.
-}; // template <class RealType, class Policy> class dirichlet_distribution
+};                               // template <class RealType, class Policy> class dirichlet_distribution
 
 template <class RandomAccessContainer, class Policy>
 inline const std::pair<
@@ -277,11 +271,12 @@ support(const dirichlet_distribution<RandomAccessContainer, Policy> & /* dist */
 template <class RandomAccessContainer, class Policy>
 inline RandomAccessContainer mean(const dirichlet_distribution<RandomAccessContainer, Policy> &dist)
 { // Mean of dirichlet distribution = c[i]/sum(c).
-  // using RealType = typename RandomAccessContainer::value_type;
+  using RealType = typename RandomAccessContainer::value_type;
+  RealType A = dist.sum_alpha();
   RandomAccessContainer m(dist.order());
   for (decltype(dist.order()) i = 0; i < dist.order(); ++i)
   {
-    m[i] = dist.m_alpha[i] / dirichlet_detail::alpha0(dist.m_alpha);
+    m[i] = dist.get_alpha()[i] / A;
   }
   return m;
 } // mean
@@ -289,10 +284,12 @@ inline RandomAccessContainer mean(const dirichlet_distribution<RandomAccessConta
 template <class RandomAccessContainer, class Policy>
 inline RandomAccessContainer variance(const dirichlet_distribution<RandomAccessContainer, Policy> &dist)
 {
+  using RealType = typename RandomAccessContainer::value_type;
+  RealType A = dist.sum_alpha();
   RandomAccessContainer v(dist.order());
   for (decltype(dist.order()) i = 0; i < dist.order(); ++i)
   {
-    v[i] = dist.m_alpha[i] / dirichlet_detail::alpha0(dist.m_alpha) * (1 - dist.m_alpha[i] / dirichlet_detail::alpha0(dist.alpha)) / (1 + dirichlet_detail::alpha0(dist.alpha));
+    v[i] = dist.get_alpha()[i] / A * (1 - dist.get_alpha()[i] / A) / (1 + A);
   }
   return v;
 } // variance
@@ -301,7 +298,7 @@ template <class RandomAccessContainer, class Policy>
 inline RandomAccessContainer standard_deviation(const dirichlet_distribution<RandomAccessContainer, Policy> &dist)
 {
   RandomAccessContainer std = variance(dist);
-  for (decltype(dist.order()) i = 0; i < s.size(); ++i)
+  for (decltype(dist.order()) i = 0; i < std.size(); ++i)
   {
     std[i] = std::sqrt(std[i]);
   }
@@ -313,19 +310,21 @@ inline RandomAccessContainer mode(const dirichlet_distribution<RandomAccessConta
 {
   using RealType = typename RandomAccessContainer::value_type;
   static const char *function = "boost::math::mode(dirichlet_distribution<%1%> const&)";
+  RealType result = 0;
+  RealType A = dist.sum_alpha();
   RandomAccessContainer m(dist.order());
   for (decltype(dist.order()) i = 0; i < m.size(); ++i)
   {
-    if (dist.m_alpha[i] <= 1)
+    if (dist.get_alpha()[i] <= 1)
     {
       result = policies::raise_domain_error<RealType>(
           function,
-          "mode undefined for alpha = %1%, must be > 1!", dist.m_alpha[i], Policy());
+          "mode undefined for alpha = %1%, must be > 1!", dist.get_alpha()[i], Policy());
       return result;
     }
     else
     {
-      m[i] = (dist.m_alpha[i] - 1) / (dirichlet_detail::alpha0(dist.m_alpha) - dist.order());
+      m[i] = (dist.get_alpha()[i] - 1) / (A - dist.order());
     }
   }
   return m;
@@ -335,10 +334,11 @@ template <class RandomAccessContainer, class Policy>
 inline typename RandomAccessContainer::value_type entropy(const dirichlet_distribution<RandomAccessContainer, Policy> &dist)
 {
   using RealType = typename RandomAccessContainer::value_type;
-  RealType ent = std::log(dirichlet_detail::mvar_beta(dist.m_alpha, 0)) + (dirichlet_detail::alpha0(dist.m_alpha) - dist.order()) * digamma(dirichlet_detail::alpha0(dist.m_alpha));
+  using std::log;
+  RealType ent = log(dist.normalizing_constant()) + (dist.sum_alpha() - dist.order()) * digamma(dist.sum_alpha());
   for (decltype(dist.order()) i = 0; i < dist.order(); ++i)
   {
-    ent += (dist.m_alpha[i] - 1) * digamma(dist.m_alpha[i]);
+    ent += (dist.get_alpha()[i] - 1) * digamma(dist.get_alpha()[i]);
   }
   return ent;
 }
@@ -348,11 +348,11 @@ inline RandomAccessContainer skewness(const dirichlet_distribution<RandomAccessC
 {
   using RealType = typename RandomAccessContainer::value_type;
   RandomAccessContainer s(dist.order());
-  RealType A = dirichlet_detail::alpha0(dist.m_alpha);
+  RealType A = dist.sum_alpha();
   RealType aj;
   for (decltype(dist.order()) i = 0; i < dist.order(); ++i)
   {
-    aj = dist.m_alpha[i];
+    aj = dist.get_alpha()[i];
     s[i] = std::sqrt(aj * (A + 1) / (A - aj)) * ((aj + 2) * (aj + 1) * A * A / (aj * (A + 2) * (A - aj)) - 3 - aj * (A + 1) / (A - aj));
   }
   return s;
@@ -364,11 +364,11 @@ inline RandomAccessContainer kurtosis(const dirichlet_distribution<RandomAccessC
   using RealType = typename RandomAccessContainer::value_type;
   using std::pow;
   RandomAccessContainer k(dist.order());
-  RealType A = dirichlet_detail::alpha0(dist.m_alpha);
+  RealType A = dist.sum_alpha();
   RealType aj;
   for (decltype(dist.order()) i = 0; i < dist.order(); ++i)
   {
-    aj = dist.m_alpha[i];
+    aj = dist.get_alpha()[i];
     k[i] = ((aj + 2) * (aj + 1) * ((aj + 3) * A / (A + 3) / aj - 4) + 6 * (aj + 1) * aj / (A + 1) / A - 3 * pow(aj / A, 2)) / std::pow((A - aj) / A / (A + 1), 2);
   }
   return k;
@@ -393,10 +393,11 @@ inline typename RandomAccessContainer::value_type pdf(
   using RealType = typename RandomAccessContainer::value_type;
   using std::pow;
   BOOST_FPU_EXCEPTION_GUARD
-  static const char *function = "boost::math::pdf(dirichlet_distribution<%1%> const&, %1%)";
+
+  const char *function = "boost::math::pdf(dirichlet_distribution<%1%> const&, %1%)";
   BOOST_MATH_STD_USING // for ADL of std functions
-  RealType result = 0;
-  if (!dirichlet_detail::check_dist_and_x(function, x, &result, Policy()))
+      RealType result = 0;
+  if (!dirichlet_detail::check_dist_and_x(function, dist.get_alpha(), x, &result, Policy()))
   {
     return result;
   }
@@ -404,9 +405,9 @@ inline typename RandomAccessContainer::value_type pdf(
   RealType f = 1;
   for (decltype(dist.order()) i = 0; i < dist.order(); ++i)
   {
-    f *= pow(x[i], dist.m_alpha[i] - 1);
+    f *= pow(x[i], dist.get_alpha()[i] - 1);
   }
-  f /= dirichlet_detail::mvar_beta(dist.m_alpha, 0);
+  f /= dist.normalizing_constant();
   return f;
 } // pdf
 
@@ -418,44 +419,45 @@ inline typename RandomAccessContainer::value_type cdf(
   using RealType = typename RandomAccessContainer::value_type;
   using std::pow;
   BOOST_MATH_STD_USING // for ADL of std functions
-
-  static const char *function = "boost::math::cdf(dirichlet_distribution<%1%> const&, %1%)";
+      RealType A = dist.sum_alpha();
+  const char *function = "boost::math::cdf(dirichlet_distribution<%1%> const&, %1%)";
   RealType result = 0; // Arguments check.
-  if (!dirichlet_detail::check_dist_and_x(function, dist.alpha, x, &result, Policy()))
+  if (!dirichlet_detail::check_dist_and_x(function, dist.get_alpha(), x, &result, Policy()))
   {
     return result;
   }
   RealType c = 1;
   for (decltype(dist.order()) i = 0; i < dist.order(); ++i)
   {
-    c *= pow(x[i], dist.m_alpha[i]) / tgamma(dist.m_alpha[i]) / dist.m_alpha[i];
+    c *= pow(x[i], dist.get_alpha()[i]) / tgamma(dist.get_alpha()[i]) / dist.get_alpha()[i];
   }
-  c *= tgamma(dirichlet_detail::alpha0(dist.m_alpha));
+  c *= tgamma(A);
   return c;
 } // dirichlet cdf
 
 template <class RandomAccessContainer, class Policy>
 inline typename RandomAccessContainer::value_type cdf(
     const complemented2_type<dirichlet_distribution<RandomAccessContainer, Policy>,
-    typename RandomAccessContainer::value_type> &c)
+                             typename RandomAccessContainer::value_type> &c)
 { // Complemented Cumulative Distribution Function dirichlet.
   using RealType = typename RandomAccessContainer::value_type;
   using std::pow;
   BOOST_MATH_STD_USING // for ADL of std functions
-  static const char *function = "boost::math::cdf(dirichlet_distribution<%1%> const&, %1%)";
+      const char *function = "boost::math::cdf(dirichlet_distribution<%1%> const&, %1%)";
   RealType const &x = c.param;
   dirichlet_distribution<RealType, Policy> const &dist = c.dist;
+  RealType A = dist.sum_alpha();
   RealType result = 0; // Argument checks.
-  if (!dirichlet_detail::check_dist_and_x(function, x, &result, Policy()))
+  if (!dirichlet_detail::check_dist_and_x(function, dist.get_alpha(), x, &result, Policy()))
   {
     return result;
   }
   RealType cumm = 1;
   for (decltype(dist.order()) i = 0; i < dist.order(); ++i)
   {
-    cumm *= pow(x[i], dist.m_alpha[i]) / tgamma(dist.m_alpha[i]) / dist.m_alpha[i];
+    cumm *= (1 - pow(x[i], dist.get_alpha()[i])) / tgamma(dist.get_alpha()[i]) / dist.get_alpha()[i];
   }
-  cumm *= tgamma(dirichlet_detail::alpha0(dist.m_alpha));
+  cumm *= tgamma(A);
   return cumm;
 } // dirichlet cdf
 
@@ -471,4 +473,4 @@ inline typename RandomAccessContainer::value_type cdf(
 #pragma warning(pop)
 #endif
 
-#endif // BOOST_MATH_DIST_DIRICHLET_HPP
+#endif // BOOST_MATH_DISTRIBUTIONS_DIRICHLET_HPP
