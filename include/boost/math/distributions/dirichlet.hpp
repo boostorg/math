@@ -100,7 +100,7 @@ inline bool check_x(const char *function,
       return false;
     }
   }
-  return true;
+  return std::accumulate(x.begin(), x.end(), 0.0) <= 1.0;
 } // bool check_x
 
 template <class RandomAccessContainer, class Policy>
@@ -200,16 +200,14 @@ public:
 
   // Get the concentration parameters.
   const RandomAccessContainer &get_alpha() const { return m_alpha; }
-  // Set the concentration parameters.
-  RandomAccessContainer &set_alpha() { return m_alpha; }
 
   // Get the order of concentration parameters.
   size_t order() const { return m_alpha.size(); }
 
   // Get alpha from mean and variance.
   void find_alpha(
-      RandomAccessContainer &&mean,     // Expected value of mean.
-      RandomAccessContainer &&variance) // Expected value of variance.
+      RandomAccessContainer &mean,     // Expected value of mean.
+      RandomAccessContainer &variance) const// Expected value of variance.
   {
     assert(("Dimensions of mean and variance must be same!", mean.size() == variance.size()));
     static const char *function = "boost::math::dirichlet_distribution<%1%>::find_alpha";
@@ -226,8 +224,8 @@ public:
 
   RealType normalizing_constant(RealType b = 0.0) const
   {
-    // B(a1,a2,...ak) = tgamma(a1+a2+...+ak)/(tgamma(a1)*tgamma(a2)...*tgamma(ak)
-    RealType mb;
+    // B(a1,a2,...ak) = (tgamma(a1)*tgamma(a2)...*tgamma(ak)/tgamma(a1+a2+...+ak)
+    RealType mb = 1.0;
     RealType alpha_sum = accumulate(m_alpha.begin(), m_alpha.end(), b * m_alpha.size());
     for (decltype(m_alpha.size()) i = 0; i < m_alpha.size(); ++i)
     {
@@ -239,7 +237,8 @@ public:
 
   RealType sum_alpha() const
   {
-    return accumulate(m_alpha.begin(), m_alpha.end(), 0);
+    RealType init = 0.0;
+    return std::accumulate(m_alpha.begin(), m_alpha.end(), init);
   } // sum_alpha
 
 private:
@@ -289,7 +288,7 @@ inline RandomAccessContainer variance(const dirichlet_distribution<RandomAccessC
   RandomAccessContainer v(dist.order());
   for (decltype(dist.order()) i = 0; i < dist.order(); ++i)
   {
-    v[i] = dist.get_alpha()[i] / A * (1 - dist.get_alpha()[i] / A) / (1 + A);
+    v[i] = (dist.get_alpha()[i] / A) * (1 - dist.get_alpha()[i] / A) / (1 + A);
   }
   return v;
 } // variance
@@ -297,10 +296,11 @@ inline RandomAccessContainer variance(const dirichlet_distribution<RandomAccessC
 template <class RandomAccessContainer, class Policy>
 inline RandomAccessContainer standard_deviation(const dirichlet_distribution<RandomAccessContainer, Policy> &dist)
 {
+  using std::sqrt;
   RandomAccessContainer std = variance(dist);
   for (decltype(dist.order()) i = 0; i < std.size(); ++i)
   {
-    std[i] = std::sqrt(std[i]);
+    std[i] = sqrt(std[i]);
   }
   return std;
 } // standard_deviation
@@ -347,13 +347,14 @@ template <class RandomAccessContainer, class Policy>
 inline RandomAccessContainer skewness(const dirichlet_distribution<RandomAccessContainer, Policy> &dist)
 {
   using RealType = typename RandomAccessContainer::value_type;
+  using std::sqrt;
   RandomAccessContainer s(dist.order());
   RealType A = dist.sum_alpha();
   RealType aj;
   for (decltype(dist.order()) i = 0; i < dist.order(); ++i)
   {
     aj = dist.get_alpha()[i];
-    s[i] = std::sqrt(aj * (A + 1) / (A - aj)) * ((aj + 2) * (aj + 1) * A * A / (aj * (A + 2) * (A - aj)) - 3 - aj * (A + 1) / (A - aj));
+    s[i] = sqrt(aj * (A + 1) / (A - aj)) * ((aj + 2) * (aj + 1) * A * A / (aj * (A + 2) * (A - aj)) - 3 - aj * (A + 1) / (A - aj));
   }
   return s;
 }
@@ -396,7 +397,7 @@ inline typename RandomAccessContainer::value_type pdf(
 
   const char *function = "boost::math::pdf(dirichlet_distribution<%1%> const&, %1%)";
   BOOST_MATH_STD_USING // for ADL of std functions
-      RealType result = 0;
+  RealType result = 0;
   if (!dirichlet_detail::check_dist_and_x(function, dist.get_alpha(), x, &result, Policy()))
   {
     return result;
