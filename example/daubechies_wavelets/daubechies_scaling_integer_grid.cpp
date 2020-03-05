@@ -160,8 +160,7 @@ int main()
     constexpr const size_t p_max = 18;
     std::ofstream fs{"daubechies_scaling_integer_grid.hpp"};
     fs << "/*\n"
-       << " * Copyright Nick Thompson, 2019\n"
-       << " * Copyright John Maddock, 2020\n"
+       << " * Copyright Nick Thompson, John Maddock 2020\n"
        << " * Use, modification and distribution are subject to the\n"
        << " * Boost Software License, Version 1.0. (See accompanying file\n"
        << " * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)\n"
@@ -201,7 +200,7 @@ int main()
        << "constexpr inline std::array<Real, 2*p> daubechies_scaling_integer_grid()\n"
        << "{\n"
        << "    static_assert(sizeof(Real) <= 16, \"Integer grids only computed up to 128 bits of precision.\");\n"
-       << "    static_assert(p <= " << p_max << ", \"Integer grids only implemented up to " << p_max << ".\");\n"
+       << "    static_assert(p <= " << p_max + 1 << ", \"Integer grids only implemented up to " << p_max + 1 << ".\");\n"
        << "    static_assert(p > 1, \"Integer grids only implemented for p >= 2.\");\n"
        << "    return daubechies_scaling_integer_grid_imp<Real, p, order>::value;\n"
        << "}\n\n";

@@ -63,7 +63,7 @@ void test_daubechies_filters()
     // Daubechies wavelet of order p has p vanishing moments.
     // Unfortunately, the condition number of the sum is infinite.
     // Hence we must scale the tolerance by the summation condition number to ensure that we don't get spurious test failures.
-    for (size_t k = 1; k < p; ++k)
+    for (size_t k = 1; k < p && k < 9; ++k)
     {
         Real hk = 0;
         Real abs_hk = 0;
@@ -82,7 +82,7 @@ void test_daubechies_filters()
         }
         // Multiply the tolerance by the condition number:
         Real cond = abs(hk) > 0 ? abs_hk/abs(hk) : 1/std::numeric_limits<Real>::epsilon();
-        if (!CHECK_MOLLIFIED_CLOSE(0, hk, cond*tol))
+        if (!CHECK_MOLLIFIED_CLOSE(0, hk, 2*cond*tol))
         {
             std::cerr << "  The " << k << "th moment of the p = " << p << " filter did not vanish\n";
             std::cerr << "  Condition number = " << abs_hk/abs(hk) << "\n";
@@ -97,7 +97,6 @@ void test_daubechies_filters()
 }
 
 // Test that the filters agree with Daubechies, Ten Lenctures on Wavelets, Table 6.1:
-
 void test_agreement_with_ten_lectures()
 {
     std::cout << "Testing agreement with Ten Lectures\n";
@@ -119,7 +118,8 @@ void test_agreement_with_ten_lectures()
     auto h4_ = boost::math::filters::daubechies_scaling_filter<double, 4>();
     for (size_t i = 0; i < h4.size(); ++i)
     {
-        if(!CHECK_ULP_CLOSE(h4[i], h4_[i], 18)) {
+        if(!CHECK_ULP_CLOSE(h4[i], h4_[i], 18))
+        {
             std::cerr << "  Index " << i << " incorrect.\n";
         }
     }
@@ -155,82 +155,93 @@ void test_integer_grid()
     Real unit_roundoff = std::numeric_limits<Real>::epsilon()/2;
     auto grid = daubechies_scaling_integer_grid<Real, p, order>();
 
-    if constexpr (order == 0) {
+    if constexpr (order == 0)
+    {
         auto cond = summation_condition_number<Real>(0);
-        for (auto & x : grid) {
+        for (auto & x : grid)
+        {
             cond += x;
         }
         CHECK_MOLLIFIED_CLOSE(1, cond.sum(), 6*cond.l1_norm()*unit_roundoff);
     }
 
-    if constexpr (order == 1) {
+    if constexpr (order == 1)
+    {
         auto cond = summation_condition_number<Real>(0);
         for (size_t i = 0; i < grid.size(); ++i) {
             cond += i*grid[i];
         }
-        CHECK_MOLLIFIED_CLOSE(-1, cond.sum(), 2*cond.l1_norm()*unit_roundoff);
+        CHECK_MOLLIFIED_CLOSE(Real(-1), cond.sum(), 2*cond.l1_norm()*unit_roundoff);
 
         // Differentiate \sum_{k} \phi(x-k) = 1 to get this:
         cond = summation_condition_number<Real>(0);
         for (size_t i = 0; i < grid.size(); ++i) {
             cond += grid[i];
         }
-        CHECK_MOLLIFIED_CLOSE(0, cond.sum(), 2*cond.l1_norm()*unit_roundoff);
+        CHECK_MOLLIFIED_CLOSE(Real(0), cond.sum(), 2*cond.l1_norm()*unit_roundoff);
     }
 
-    if constexpr (order == 2) {
+    if constexpr (order == 2)
+    {
         auto cond = summation_condition_number<Real>(0);
-        for (size_t i = 0; i < grid.size(); ++i) {
+        for (size_t i = 0; i < grid.size(); ++i)
+        {
             cond += i*i*grid[i];
         }
-        CHECK_MOLLIFIED_CLOSE(2, cond.sum(), 2*cond.l1_norm()*unit_roundoff);
+        CHECK_MOLLIFIED_CLOSE(Real(2), cond.sum(), 2*cond.l1_norm()*unit_roundoff);
 
         // Differentiate \sum_{k} \phi(x-k) = 1 to get this:
         cond = summation_condition_number<Real>(0);
-        for (size_t i = 0; i < grid.size(); ++i) {
+        for (size_t i = 0; i < grid.size(); ++i)
+        {
             cond += grid[i];
         }
-        CHECK_MOLLIFIED_CLOSE(0, cond.sum(), 2*cond.l1_norm()*unit_roundoff);
+        CHECK_MOLLIFIED_CLOSE(Real(0), cond.sum(), 2*cond.l1_norm()*unit_roundoff);
     }
 
-    if constexpr (order == 3) {
+    if constexpr (order == 3)
+    {
         auto cond = summation_condition_number<Real>(0);
-        for (size_t i = 0; i < grid.size(); ++i) {
+        for (size_t i = 0; i < grid.size(); ++i)
+        {
             cond += i*i*i*grid[i];
         }
-        CHECK_MOLLIFIED_CLOSE(-6, cond.sum(), 2*cond.l1_norm()*unit_roundoff);
+        CHECK_MOLLIFIED_CLOSE(Real(-6), cond.sum(), 2*cond.l1_norm()*unit_roundoff);
 
         // Differentiate \sum_{k} \phi(x-k) = 1 to get this:
         cond = summation_condition_number<Real>(0);
-        for (size_t i = 0; i < grid.size(); ++i) {
+        for (size_t i = 0; i < grid.size(); ++i)
+        {
             cond += grid[i];
         }
-        CHECK_MOLLIFIED_CLOSE(0, cond.sum(), 2*cond.l1_norm()*unit_roundoff);
-
+        CHECK_MOLLIFIED_CLOSE(Real(0), cond.sum(), 2*cond.l1_norm()*unit_roundoff);
     }
 
-    if constexpr (order == 4) {
+    if constexpr (order == 4)
+    {
         auto cond = summation_condition_number<Real>(0);
-        for (size_t i = 0; i < grid.size(); ++i) {
+        for (size_t i = 0; i < grid.size(); ++i)
+        {
             cond += i*i*i*i*grid[i];
         }
         CHECK_MOLLIFIED_CLOSE(24, cond.sum(), 2*cond.l1_norm()*unit_roundoff);
 
         // Differentiate \sum_{k} \phi(x-k) = 1 to get this:
         cond = summation_condition_number<Real>(0);
-        for (size_t i = 0; i < grid.size(); ++i) {
+        for (size_t i = 0; i < grid.size(); ++i)
+        {
             cond += grid[i];
         }
-        CHECK_MOLLIFIED_CLOSE(0, cond.sum(), 2*cond.l1_norm()*unit_roundoff);
+        CHECK_MOLLIFIED_CLOSE(Real(0), cond.sum(), 2*cond.l1_norm()*unit_roundoff);
     }
-
 }
 
 template<class Real>
 void test_dyadic_grid()
 {
     std::cout << "Testing dyadic grid on type " << boost::core::demangle(typeid(Real).name()) << "\n";
-    boost::hana::for_each(std::make_index_sequence<13>(), [&](auto i){
+    auto f = [&](auto i)
+    {
         auto phijk = boost::math::detail::dyadic_grid<Real, i+2, 0>(0);
         auto phik = boost::math::detail::daubechies_scaling_integer_grid<Real, i+2, 0>();
         assert(phik.size() == phijk.size());
@@ -262,103 +273,22 @@ void test_dyadic_grid()
                         cond += phijk[idx];
                     }
                 }
-                CHECK_MOLLIFIED_CLOSE(1, cond.sum(), 10*cond()*std::numeric_limits<Real>::epsilon());
+                CHECK_MOLLIFIED_CLOSE(Real(1), cond.sum(), 10*cond()*std::numeric_limits<Real>::epsilon());
             }
         }
-    });
+    };
+
+    boost::hana::for_each(std::make_index_sequence<18>(), f);
 }
 
-
-template<class Real>
-void test_interpolation()
-{
-    std::cout << "Testing constant interpolation on type " << boost::core::demangle(typeid(Real).name()) << "\n";
-    boost::hana::for_each(std::make_index_sequence<13>(), [&](auto i){
-        auto phik = boost::math::detail::daubechies_scaling_integer_grid<Real, i+2, 0>();
-        for (size_t j = 0; j < 5; ++j) {
-            auto phi = boost::math::daubechies_scaling<Real, i+2>(j);
-            assert(phik.size()==phi.support().second + 1);
-            for (size_t k = 1; k < phik.size(); ++k) {
-                auto expected = phik[k];
-                auto computed = phi.constant_interpolation(k);
-                if (!CHECK_ULP_CLOSE(expected, computed, 0)) {
-                    std::cerr << "  Constant interpolation wrong at x = " << k << ", j_max = " << j << ", p = " << i+2 << "\n";
-                }
-
-                computed = phi.single_crank_linear(k);
-                if (!CHECK_ULP_CLOSE(expected, computed, 0)) {
-                    std::cerr << "  Single crank linear interpolation wrong at x = " << k << ", j_max = " << j << ", p = " << i+2 << "\n";
-                }
-
-                computed = phi.first_order_taylor(k);
-                if (!CHECK_ULP_CLOSE(expected, computed, 0)) {
-                    std::cerr << "  First order Taylor expansion wrong at x = " << k << ", j_max = " << j << ", p = " << i+2 << "\n";
-                }
-
-                computed = phi.constant_interpolation(k*(1+2*std::numeric_limits<Real>::epsilon()));
-                if (!CHECK_ULP_CLOSE(expected, computed, 0)) {
-                    std::cerr << "  Constant interpolation wrong at x = " << k << ", j_max = " << j << ", p = " << i+2 << "\n";
-                }
-
-                computed = phi.constant_interpolation(k*(1-2*std::numeric_limits<Real>::epsilon()));
-                if (!CHECK_ULP_CLOSE(expected, computed, 0)) {
-                    std::cerr << "  Constant interpolation wrong at x = " << k << ", j_max = " << j << ", p = " << i+2 << "\n";
-                }
-
-                computed = phi.linear_interpolation(k);
-                if (!CHECK_ULP_CLOSE(expected, computed, 0)) {
-                    std::cerr << "  Linear interpolation wrong at x = " << k << ", j_max = " << j << ", p = " << i+2 << "\n";
-                }
-            }
-
-            for (size_t i = 0; i < phi.size() -1; ++i) {
-                Real x = phi.index_to_abscissa(i);
-                Real expected = phi[i];
-                Real computed = phi.constant_interpolation(x);
-                if (!CHECK_ULP_CLOSE(expected, computed, 0)) {
-                    std::cerr << "  Constant interpolation wrong at x = " << x << ", j_max = " << j << ", p = " << i+2 << "\n";
-                }
-
-                computed = phi.linear_interpolation(x);
-                if (!CHECK_ULP_CLOSE(expected, computed, 0)) {
-                    std::cerr << "  Linear interpolation wrong at x = " << x << ", j_max = " << j << ", p = " << i+2 << "\n";
-                }
-
-                computed = phi.single_crank_linear(x);
-                if (!CHECK_ULP_CLOSE(expected, computed, 0)) {
-                    std::cerr << "  Single crank linear interpolation wrong at x = " << x << ", j_max = " << j << ", p = " << i+2 << "\n";
-                }
-
-                computed = phi.first_order_taylor(x);
-                if (!CHECK_ULP_CLOSE(expected, computed, 0)) {
-                    std::cerr << "  First order Taylor expansion wrong at x = " << x << ", j_max = " << j << ", p = " << i+2 << "\n";
-                }
-
-                x += phi.spacing()/2;
-                computed = phi.linear_interpolation(x);
-                expected = phi[i]/2 + phi[i+1]/2;
-                if (!CHECK_ULP_CLOSE(expected, computed, 1)) {
-                    std::cerr << "  Linear interpolation wrong at x = " << x << ", j_max = " << j << ", p = " << i+2 << "\n";
-                }
-
-                x *= (1+std::numeric_limits<Real>::epsilon());
-                computed = phi.constant_interpolation(x);
-                expected = phi[i+1];
-                if (!CHECK_ULP_CLOSE(expected, computed, 0)) {
-                    std::cerr << "  Linear interpolation wrong at x = " << x << ", j_max = " << j << ", p = " << i+2 << "\n";
-                }
-
-            }
-        }
-    });
-}
 
 // Taken from Lin, 2005, doi:10.1016/j.amc.2004.12.038,
 // "Direct algorithm for computation of derivatives of the Daubechies basis functions"
 void test_first_derivative()
 {
     auto phi1_3 = boost::math::detail::daubechies_scaling_integer_grid<long double, 3, 1>();
-    std::array<long double, 6> lin_3{0.0L, 1.638452340884085725014976L, -2.232758190463137395017742L, 0.5501593582740176149905562L, 0.04414649130503405501220997L, 0.0L};
+    std::array<long double, 6> lin_3{0.0L, 1.638452340884085725014976L, -2.232758190463137395017742L,
+                                     0.5501593582740176149905562L, 0.04414649130503405501220997L, 0.0L};
     for (size_t i = 0; i < lin_3.size(); ++i)
     {
         if(!CHECK_ULP_CLOSE(lin_3[i], phi1_3[i], 0))
@@ -368,7 +298,8 @@ void test_first_derivative()
     }
 
     auto phi1_4 = boost::math::detail::daubechies_scaling_integer_grid<long double, 4, 1>();
-    std::array<long double, 8> lin_4 = {0.0L, 1.776072007522184640093776L, -2.785349397229543142492785L, 1.192452536632278174347632L, -0.1313745151846729587935189L, -0.05357102822023923595359996L,0.001770396479992522798495351L, 0.0L};
+    std::array<long double, 8> lin_4 = {0.0L, 1.776072007522184640093776L, -2.785349397229543142492785L, 1.192452536632278174347632L,
+                                       -0.1313745151846729587935189L, -0.05357102822023923595359996L,0.001770396479992522798495351L, 0.0L};
 
     for (size_t i = 0; i < lin_4.size(); ++i)
     {
@@ -378,7 +309,8 @@ void test_first_derivative()
         }
     }
 
-    std::array<long double, 10> lin_5 = {0.0L,1.558326313047001366564379L,-2.436012783189551921436896L,1.235905129801454293947039L,-0.3674377136938866359947561L,-0.02178035117564654658884556L,0.03234719350814368885815854L,-0.001335619912770701035229331L,-0.00001216838474354431384970525L,0.0L};
+    std::array<long double, 10> lin_5 = {0.0L, 1.558326313047001366564379L, -2.436012783189551921436896L, 1.235905129801454293947039L, -0.3674377136938866359947561L,
+                                        -0.02178035117564654658884556L,0.03234719350814368885815854L,-0.001335619912770701035229331L,-0.00001216838474354431384970525L,0.0L};
     auto phi1_5 = boost::math::detail::daubechies_scaling_integer_grid<long double, 5, 1>();
     for (size_t i = 0; i < lin_5.size(); ++i)
     {
@@ -392,23 +324,17 @@ void test_first_derivative()
 int main()
 {
     test_agreement_with_ten_lectures();
+
+    boost::hana::for_each(std::make_index_sequence<19>(), [&](auto i){
+      test_daubechies_filters<float, i+1>();
+      test_daubechies_filters<double, i+1>();
+      test_daubechies_filters<long double, i+1>();
+    });
+
     test_first_derivative();
-    test_dyadic_grid<float>();
-    test_dyadic_grid<double>();
-    test_dyadic_grid<long double>();
-    #ifdef BOOST_HAS_FLOAT128
-    test_dyadic_grid<float128>();
-    #endif
-    /*
-    test_interpolation<float>();
-    test_interpolation<double>();
-    test_interpolation<long double>();
-    #if BOOST_HAS_FLOAT128
-    test_interpolation<float128>();
-    #endif*/
 
     // All scaling functions have a first derivative.
-    boost::hana::for_each(std::make_index_sequence<13>(), [&](auto idx){
+    boost::hana::for_each(std::make_index_sequence<18>(), [&](auto idx){
         test_integer_grid<float, idx+2, 0>();
         test_integer_grid<float, idx+2, 1>();
         test_integer_grid<double, idx+2, 0>();
@@ -423,7 +349,7 @@ int main()
 
     // 4-tap (2 vanishing moment) scaling function does not have a second derivative;
     // all other scaling functions do.
-    boost::hana::for_each(std::make_index_sequence<13>(), [&](auto idx){
+    boost::hana::for_each(std::make_index_sequence<17>(), [&](auto idx){
         test_integer_grid<float, idx+3, 2>();
         test_integer_grid<double, idx+3, 2>();
         test_integer_grid<long double, idx+3, 2>();
@@ -433,7 +359,7 @@ int main()
     });
 
     // 8-tap filter (4 vanishing moments) is the first to have a third derivative.
-    boost::hana::for_each(std::make_index_sequence<12>(), [&](auto idx){
+    boost::hana::for_each(std::make_index_sequence<16>(), [&](auto idx){
         test_integer_grid<float, idx+4, 3>();
         test_integer_grid<double, idx+4, 3>();
         test_integer_grid<long double, idx+4, 3>();
@@ -443,7 +369,7 @@ int main()
     });
 
     // 10-tap filter (5 vanishing moments) is the first to have a fourth derivative.
-    boost::hana::for_each(std::make_index_sequence<11>(), [&](auto idx){
+    boost::hana::for_each(std::make_index_sequence<15>(), [&](auto idx){
         test_integer_grid<float, idx+5, 4>();
         test_integer_grid<double, idx+5, 4>();
         test_integer_grid<long double, idx+5, 4>();
@@ -452,27 +378,21 @@ int main()
         #endif
     });
 
-    boost::hana::for_each(std::make_index_sequence<8>(), [&](auto i){
-      test_daubechies_filters<float, i+1>();
-    });
-
-    boost::hana::for_each(std::make_index_sequence<12>(), [&](auto i){
-      test_daubechies_filters<double, i+1>();
-    });
-
-    boost::hana::for_each(std::make_index_sequence<11>(), [&](auto i){
-      test_daubechies_filters<long double, i+1>();
-    });
-
+    test_dyadic_grid<float>();
+    test_dyadic_grid<double>();
+    test_dyadic_grid<long double>();
+    #ifdef BOOST_HAS_FLOAT128
+    test_dyadic_grid<float128>();
+    #endif
 
     #ifdef BOOST_HAS_FLOAT128
-    boost::hana::for_each(std::make_index_sequence<18>(), [&](auto i){
+    boost::hana::for_each(std::make_index_sequence<19>(), [&](auto i){
         test_filter_ulp_distance<float128, long double, i+1>();
         test_filter_ulp_distance<float128, double, i+1>();
         test_filter_ulp_distance<float128, float, i+1>();
     });
 
-    boost::hana::for_each(std::make_index_sequence<12>(), [&](auto i){
+    boost::hana::for_each(std::make_index_sequence<19>(), [&](auto i){
         test_daubechies_filters<float128, i+1>();
     });
     #endif
