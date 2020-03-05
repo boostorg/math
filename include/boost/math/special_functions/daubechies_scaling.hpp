@@ -13,16 +13,12 @@
 #include <thread>
 #include <future>
 #include <iostream>
-#ifdef BOOST_HAS_FLOAT128
-#include <boost/multiprecision/float128.hpp>
-#endif
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/detail/daubechies_scaling_integer_grid.hpp>
 #include <boost/math/filters/daubechies.hpp>
 #include <boost/math/interpolators/detail/cubic_hermite_detail.hpp>
 #include <boost/math/interpolators/detail/quintic_hermite_detail.hpp>
 #include <boost/math/interpolators/detail/septic_hermite_detail.hpp>
-
 
 namespace boost::math {
 
@@ -244,10 +240,6 @@ class daubechies_scaling {
 public:
     daubechies_scaling(int grid_refinements = -1)
     {
-        static_assert(p <= 15, "Scaling functions only implements up to p = 15");
-        #ifdef BOOST_HAS_FLOAT128
-        using boost::multiprecision::float128;
-        #endif
         if (grid_refinements < 0)
         {
             if (std::is_same_v<Real, float>)
@@ -255,22 +247,22 @@ public:
                 if (grid_refinements == -2)
                 {
                     // Control absolute error:
-                    //                          p= 2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15
-                    std::array<int, 16> r{-1, -1, 18, 19, 16, 11,  8,  7,  7,  7,  5,  5,  4,  4,  4,  4};
+                    //                          p= 2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19
+                    std::array<int, 20> r{-1, -1, 18, 19, 16, 11,  8,  7,  7,  7,  5,  5,  4,  4,  4,  4,  4,  4,  4,  4};
                     grid_refinements = r[p];
                 }
                 else
                 {
                     // Control relative error:
-                    //                          p= 2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15
-                    std::array<int, 16> r{-1, -1, 21, 21, 21, 17, 16, 15, 14, 13, 12, 11, 11, 11, 11, 11};
+                    //                          p= 2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19
+                    std::array<int, 20> r{-1, -1, 21, 21, 21, 17, 16, 15, 14, 13, 12, 11, 11, 11, 11, 11, 11, 11, 11, 11};
                     grid_refinements = r[p];
                 }
             }
             else if (std::is_same_v<Real, double>)
             {
-                //                          p= 2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15
-                std::array<int, 16> r{-1, -1, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 20, 19, 18, 18};
+                //                          p= 2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19
+                std::array<int, 20> r{-1, -1, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 20, 19, 18, 18, 18, 18, 18, 18};
                 grid_refinements = r[p];
             }
             else
@@ -329,18 +321,22 @@ public:
         std::vector<Real> d3ydx3;
         if constexpr (p >= 6) {
             std::future<std::vector<Real>> t3 = std::async(std::launch::async, [&grid_refinements]() {
-                if constexpr (std::is_same_v<Real, float>) {
+                if constexpr (std::is_same_v<Real, float>)
+                {
                     auto v = detail::dyadic_grid<double, p, 2>(grid_refinements);
                     std::vector<float> w(v.size());
-                    for (size_t i = 0; i < v.size(); ++i) {
+                    for (size_t i = 0; i < v.size(); ++i)
+                    {
                         w[i] = v[i];
                     }
                     return w;
                 }
-                else if constexpr (std::is_same_v<Real, double>) {
+                else if constexpr (std::is_same_v<Real, double>)
+                {
                     auto v = detail::dyadic_grid<long double, p, 2>(grid_refinements);
                     std::vector<double> w(v.size());
-                    for (size_t i = 0; i < v.size(); ++i) {
+                    for (size_t i = 0; i < v.size(); ++i)
+                    {
                         w[i] = v[i];
                     }
                     return w;
@@ -351,10 +347,12 @@ public:
 
             if constexpr (p >= 10) {
                 std::future<std::vector<Real>> t4 = std::async(std::launch::async, [&grid_refinements]() {
-                    if constexpr (std::is_same_v<Real, float>) {
+                    if constexpr (std::is_same_v<Real, float>)
+                    {
                         auto v = detail::dyadic_grid<double, p, 3>(grid_refinements);
                         std::vector<float> w(v.size());
-                        for (size_t i = 0; i < v.size(); ++i) {
+                        for (size_t i = 0; i < v.size(); ++i)
+                        {
                             w[i] = v[i];
                         }
                         return w;
@@ -362,7 +360,8 @@ public:
                     else if constexpr (std::is_same_v<Real, double>) {
                         auto v = detail::dyadic_grid<long double, p, 3>(grid_refinements);
                         std::vector<double> w(v.size());
-                        for (size_t i = 0; i < v.size(); ++i) {
+                        for (size_t i = 0; i < v.size(); ++i)
+                        {
                             w[i] = v[i];
                         }
                         return w;
@@ -524,70 +523,6 @@ private:
     std::shared_ptr<interpolators::detail::cardinal_quintic_hermite_detail_aos<std::vector<std::array<Real, 3>>>> m_qh;
     // Need this for p >= 10:
     std::shared_ptr<interpolators::detail::cardinal_septic_hermite_detail_aos<std::vector<std::array<Real, 4>>>> m_sh;
-
-    /*
-    Real single_crank_linear(Real x) const {
-        if (x <= 0 || x >= 2*p-1) {
-            return Real(0);
-        }
-        using std::floor;
-        Real y = (1<<m_levels)*x;
-        Real idx1 = floor(y);
-
-        Real term = 0;
-        size_t k = 2*idx1 + 1;
-        for (size_t l = 0; l < m_c.size(); ++l) {
-            uint64_t idx = k - l*(1 << m_levels);
-            if (idx >= 0 && idx < m_v.size()) {
-                term += m_c[l]*m_v[idx];
-            }
-        }
-
-        if (y - idx1 < idx1 + 1 - y)
-        {
-            Real t = 2*(y - idx1);
-            return (1-t)*m_v[static_cast<size_t>(idx1)] + t*term;
-        }
-        else {
-            Real t = 2*(idx1 + 1 - y);
-            return t*term + (1-t)*m_v[static_cast<size_t>(idx1)+1];
-        }
-    }
-
-    Real single_crank_quadratic(Real x) const {
-        if (x <= 0 || x >= 2*p-1) {
-            return Real(0);
-        }
-        using std::floor;
-        Real y = (1<<m_levels)*x;
-        Real idx1 = floor(y);
-
-        Real term = 0;
-        size_t k = 2*idx1 + 1;
-        for (size_t l = 0; l < m_c.size(); ++l) {
-            uint64_t idx = k - l*(1 << m_levels);
-            if (idx >= 0 && idx < m_v.size()) {
-                term += m_c[l]*m_v[idx];
-            }
-        }
-
-        Real y0 = m_v[static_cast<size_t>(idx1)];
-        Real y1 = term;
-        Real y2 = m_v[static_cast<size_t>(idx1)+1];
-
-        Real a = (y2+y0-2*y1)/2;
-        Real b = (4*y1-3*y0 - y2)/2;
-        Real t = 2*(y - idx1);
-        return a*t*t + b*t + y0;
-    }
-
-    size_t bytes() const
-    {
-        size_t s = sizeof(*this);
-        s += m_v.size()*sizeof(Real);
-        return s;
-    }
-*/
 };
 
 }

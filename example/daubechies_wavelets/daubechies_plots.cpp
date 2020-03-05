@@ -6,6 +6,9 @@
  */
 #include <iostream>
 #include <boost/core/demangle.hpp>
+#include <boost/hana/for_each.hpp>
+#include <boost/hana/ext/std/integer_sequence.hpp>
+
 #include <boost/multiprecision/float128.hpp>
 #include <boost/math/special_functions/daubechies_scaling.hpp>
 #include <quicksvg/graph_fn.hpp>
@@ -142,62 +145,10 @@ void do_ulp(int coarse_refinements, PhiPrecise phi_precise)
 
 int main()
 {
-    plot_phi<double, 2>();
-    plot_phi<double, 3>();
-    plot_phi<double, 4>();
-    plot_phi<double, 5>();
-    plot_phi<double, 6>();
-    plot_phi<double, 7>();
-    plot_phi<double, 8>();
-    plot_phi<double, 9>();
-    plot_phi<double, 10>();
-    plot_phi<double, 11>();
-    plot_phi<double, 12>();
-    plot_phi<double, 13>();
-    plot_phi<double, 14>();
-    plot_phi<double, 15>();
-
-    plot_dphi<double, 3>();
-    plot_dphi<double, 4>();
-    plot_dphi<double, 5>();
-    plot_dphi<double, 6>();
-    plot_dphi<double, 7>();
-    plot_dphi<double, 8>();
-    plot_dphi<double, 9>();
-    plot_dphi<double, 10>();
-    plot_dphi<double, 11>();
-    plot_dphi<double, 12>();
-    plot_dphi<double, 13>();
-    plot_dphi<double, 14>();
-    plot_dphi<double, 15>();
-
-    plot_condition_number<long double, 3>();
-    plot_condition_number<long double, 4>();
-    plot_condition_number<long double, 5>();
-    plot_condition_number<long double, 6>();
-    plot_condition_number<long double, 7>();
-    plot_condition_number<long double, 8>();
-    plot_condition_number<long double, 9>();
-    plot_condition_number<long double, 10>();
-    plot_condition_number<long double, 11>();
-    plot_condition_number<long double, 12>();
-    plot_condition_number<long double, 13>();
-
-    plot_convergence<double, 2>();
-    plot_convergence<double, 3>();
-    plot_convergence<double, 4>();
-    plot_convergence<double, 5>();
-    plot_convergence<double, 6>();
-    plot_convergence<double, 7>();
-    plot_convergence<double, 8>();
-    plot_convergence<double, 9>();
-    plot_convergence<double, 10>();
-    plot_convergence<double, 11>();
-    plot_convergence<double, 12>();
-    plot_convergence<double, 13>();
-    plot_convergence<double, 14>();
-    plot_convergence<double, 15>();
-
+    boost::hana::for_each(std::make_index_sequence<18>(), [&](auto i){ plot_phi<double, i+2>(); });
+    boost::hana::for_each(std::make_index_sequence<17>(), [&](auto i){ plot_dphi<double, i+3>(); });
+    boost::hana::for_each(std::make_index_sequence<17>(), [&](auto i){ plot_condition_number<double, i+3>(); });
+    boost::hana::for_each(std::make_index_sequence<18>(), [&](auto i){ plot_convergence<double, i+2>(); });
 
     using PreciseReal = float128;
     using CoarseReal = double;
