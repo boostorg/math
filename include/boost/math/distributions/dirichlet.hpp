@@ -50,6 +50,12 @@ inline bool check_alpha(const char *function,
                         const Policy &pol)
 {
   using RealType = typename RandomAccessContainer::value_type;
+  using std::invalid_argument;
+  if (alpha.size() < 1)
+  {
+    throw invalid_argument("Size of 'concentration parameters' must be greater than 0.");
+    return false;
+  }
   for (decltype(alpha.size()) i = 0; i < alpha.size(); ++i)
   {
     if (!(boost::math::isfinite)(alpha[i]) || (alpha[i] <= 0))
@@ -64,32 +70,18 @@ inline bool check_alpha(const char *function,
 } // bool check_alpha
 
 template <class RandomAccessContainer, class Policy>
-inline bool check_prob(const char *function,
-                       const RandomAccessContainer &p,
-                       typename RandomAccessContainer::value_type *result,
-                       const Policy &pol)
-{
-  using RealType = typename RandomAccessContainer::value_type;
-  for (decltype(p.size()) i = 0; i < p.size(); ++i)
-  {
-    if ((p[i] < 0) || (p[i] > 1) || !(boost::math::isfinite)(p[i]))
-    {
-      *result = policies::raise_domain_error<RealType>(
-          function,
-          "Probability argument is %1%, but must be >= 0 and <= 1 !", p[i], pol);
-      return false;
-    }
-  }
-  return true;
-} // bool check_prob
-
-template <class RandomAccessContainer, class Policy>
 inline bool check_x(const char *function,
                     const RandomAccessContainer &x,
                     typename RandomAccessContainer::value_type *result,
                     const Policy &pol)
 {
   using RealType = typename RandomAccessContainer::value_type;
+  using std::invalid_argument;
+  if (x.size() < 1)
+  {
+    throw invalid_argument("Size of 'quantiles' vector must be greater than 0.");
+    return false;
+  }
   for (decltype(x.size()) i = 0; i < x.size(); ++i)
   {
     if (!(boost::math::isfinite)(x[i]) || (x[i] < 0) || (x[i] > 1))
@@ -100,37 +92,19 @@ inline bool check_x(const char *function,
       return false;
     }
   }
-  return std::accumulate(x.begin(), x.end(), 0.0) <= 1.0;
+  return accumulate(x.begin(), x.end(), 0.0) <= 1.0;
 } // bool check_x
 
-template <class RandomAccessContainer, class Policy>
-inline bool check_dist(const char *function,
-                       const RandomAccessContainer &alpha,
-                       typename RandomAccessContainer::value_type *result,
-                       const Policy &pol)
-{
-  return check_alpha(function, alpha, result, pol);
-} // bool check_dist
 
 template <class RandomAccessContainer, class Policy>
-inline bool check_dist_and_x(const char *function,
+inline bool check_alpha_and_x(const char *function,
                              const RandomAccessContainer &alpha,
                              const RandomAccessContainer &x,
                              typename RandomAccessContainer::value_type *result,
                              const Policy &pol)
 {
-  return check_dist(function, alpha, result, pol) && check_x(function, x, result, pol);
+  return check_alpha(function, alpha, result, pol) && check_x(function, x, result, pol);
 } // bool check_dist_and_x
-
-template <class RandomAccessContainer, class Policy>
-inline bool check_dist_and_prob(const char *function,
-                                const RandomAccessContainer &alpha,
-                                const RandomAccessContainer &p,
-                                typename RandomAccessContainer::value_type *result,
-                                const Policy &pol)
-{
-  return check_dist(function, alpha, result, pol) && check_prob(function, p, result, pol);
-} // bool check_dist_and_prob
 
 template <class RandomAccessContainer, class Policy>
 inline bool check_mean(const char *function,
@@ -139,6 +113,12 @@ inline bool check_mean(const char *function,
                        const Policy &pol)
 {
   using RealType = typename RandomAccessContainer::value_type;
+  using std::invalid_argument;
+  if (mean.size() < 1)
+  {
+    throw invalid_argument("Size of 'mean' vector must be greater than 0.");
+    return false;
+  }
   for (decltype(mean.size()) i = 0; i < mean.size(); ++i)
   {
     if (!(boost::math::isfinite)(mean[i]) || (mean[i] <= 0))
@@ -159,6 +139,12 @@ inline bool check_variance(const char *function,
                            const Policy &pol)
 {
   using RealType = typename RandomAccessContainer::value_type;
+  using std::invalid_argument;
+  if (variance.size() < 1)
+  {
+    throw invalid_argument("Size of 'variance' vector must be greater than 0.");
+    return false;
+  }
   for (decltype(variance.size()) i = 0; i < variance.size(); ++i)
   {
     if (!(boost::math::isfinite)(variance[i]) || (variance[i] <= 0))
@@ -191,28 +177,26 @@ class dirichlet_distribution
 public:
   dirichlet_distribution(RandomAccessContainer &&alpha) : m_alpha(alpha)
   {
-    RealType result;
-    dirichlet_detail::check_dist(
-        "boost::math::dirichlet_distribution<%1%>::dirichlet_distribution",
-        alpha,
-        &result, Policy());
+    RealType result = 0;
+    const char *function = "boost::math::dirichlet_distribution<%1%>::dirichlet_distribution";
+    dirichlet_detail::check_alpha(function, alpha, &result, Policy());
   } // dirichlet_distribution constructor.
 
   // Get the concentration parameters.
   const RandomAccessContainer &get_alpha() const { return m_alpha; }
 
   // Get the order of concentration parameters.
-  size_t order() const { return m_alpha.size(); }
+  auto order() const { return m_alpha.size(); }
 
   // Get alpha from mean and variance.
-  void find_alpha(
+  auto find_alpha(
       RandomAccessContainer &mean,     // Expected value of mean.
-      RandomAccessContainer &variance) const// Expected value of variance.
+      RandomAccessContainer &variance) // Expected value of variance.
   {
     assert(("Dimensions of mean and variance must be same!", mean.size() == variance.size()));
     static const char *function = "boost::math::dirichlet_distribution<%1%>::find_alpha";
     RealType result = 0; // of error checks.
-    if (!(dirichlet_detail::check_mean(function, mean, &result, Policy()) && dirichlet_detail::check_variance(function, variance, &result, Policy())))
+    if (!dirichlet_detail::check_mean_and_variance(function, mean, variance, &result, Policy()))
     {
       return result;
     }
@@ -238,7 +222,7 @@ public:
   RealType sum_alpha() const
   {
     RealType init = 0.0;
-    return std::accumulate(m_alpha.begin(), m_alpha.end(), init);
+    return accumulate(m_alpha.begin(), m_alpha.end(), init);
   } // sum_alpha
 
 private:
@@ -310,14 +294,14 @@ inline RandomAccessContainer mode(const dirichlet_distribution<RandomAccessConta
 {
   using RealType = typename RandomAccessContainer::value_type;
   static const char *function = "boost::math::mode(dirichlet_distribution<%1%> const&)";
-  RealType result = 0;
+  RandomAccessContainer result(1, 0);
   RealType A = dist.sum_alpha();
   RandomAccessContainer m(dist.order());
   for (decltype(dist.order()) i = 0; i < m.size(); ++i)
   {
     if (dist.get_alpha()[i] <= 1)
     {
-      result = policies::raise_domain_error<RealType>(
+      result[0] = policies::raise_domain_error<RealType>(
           function,
           "mode undefined for alpha = %1%, must be > 1!", dist.get_alpha()[i], Policy());
       return result;
@@ -394,11 +378,11 @@ inline typename RandomAccessContainer::value_type pdf(
   using RealType = typename RandomAccessContainer::value_type;
   using std::pow;
   BOOST_FPU_EXCEPTION_GUARD
+  BOOST_MATH_STD_USING // for ADL of std functions
 
   const char *function = "boost::math::pdf(dirichlet_distribution<%1%> const&, %1%)";
-  BOOST_MATH_STD_USING // for ADL of std functions
   RealType result = 0;
-  if (!dirichlet_detail::check_dist_and_x(function, dist.get_alpha(), x, &result, Policy()))
+  if (!dirichlet_detail::check_x(function, x, &result, Policy()))
   {
     return result;
   }
@@ -420,10 +404,10 @@ inline typename RandomAccessContainer::value_type cdf(
   using RealType = typename RandomAccessContainer::value_type;
   using std::pow;
   BOOST_MATH_STD_USING // for ADL of std functions
-      RealType A = dist.sum_alpha();
+  RealType A = dist.sum_alpha();
   const char *function = "boost::math::cdf(dirichlet_distribution<%1%> const&, %1%)";
   RealType result = 0; // Arguments check.
-  if (!dirichlet_detail::check_dist_and_x(function, dist.get_alpha(), x, &result, Policy()))
+  if (!dirichlet_detail::check_x(function, x, &result, Policy()))
   {
     return result;
   }
@@ -434,32 +418,6 @@ inline typename RandomAccessContainer::value_type cdf(
   }
   c *= tgamma(A);
   return c;
-} // dirichlet cdf
-
-template <class RandomAccessContainer, class Policy>
-inline typename RandomAccessContainer::value_type cdf(
-    const complemented2_type<dirichlet_distribution<RandomAccessContainer, Policy>,
-                             typename RandomAccessContainer::value_type> &c)
-{ // Complemented Cumulative Distribution Function dirichlet.
-  using RealType = typename RandomAccessContainer::value_type;
-  using std::pow;
-  BOOST_MATH_STD_USING // for ADL of std functions
-      const char *function = "boost::math::cdf(dirichlet_distribution<%1%> const&, %1%)";
-  RealType const &x = c.param;
-  dirichlet_distribution<RealType, Policy> const &dist = c.dist;
-  RealType A = dist.sum_alpha();
-  RealType result = 0; // Argument checks.
-  if (!dirichlet_detail::check_dist_and_x(function, dist.get_alpha(), x, &result, Policy()))
-  {
-    return result;
-  }
-  RealType cumm = 1;
-  for (decltype(dist.order()) i = 0; i < dist.order(); ++i)
-  {
-    cumm *= (1 - pow(x[i], dist.get_alpha()[i])) / tgamma(dist.get_alpha()[i]) / dist.get_alpha()[i];
-  }
-  cumm *= tgamma(A);
-  return cumm;
 } // dirichlet cdf
 
 } // namespace math
