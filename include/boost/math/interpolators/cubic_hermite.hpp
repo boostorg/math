@@ -34,8 +34,14 @@ public:
         return os;
     }
 
-    void push_back(Real x, Real y, Real dydx) {
+    void push_back(Real x, Real y, Real dydx)
+    {
         impl_->push_back(x, y, dydx);
+    }
+
+    int64_t bytes()
+    {
+        return impl_->bytes() + sizeof(impl_);
     }
 
 private:
@@ -51,11 +57,13 @@ public:
     : impl_(std::make_shared<detail::cardinal_cubic_hermite_detail<RandomAccessContainer>>(std::move(y), std::move(dydx), x0, dx))
     {}
 
-    inline Real operator()(Real x) const {
+    inline Real operator()(Real x) const
+    {
         return impl_->operator()(x);
     }
 
-    inline Real prime(Real x) const {
+    inline Real prime(Real x) const
+    {
         return impl_->prime(x);
     }
 
@@ -63,6 +71,11 @@ public:
     {
         os << *m.impl_;
         return os;
+    }
+
+    int64_t bytes() const
+    {
+        return impl_->bytes() + sizeof(impl_);
     }
 
 private:
@@ -80,11 +93,13 @@ public:
     : impl_(std::make_shared<detail::cardinal_cubic_hermite_detail_aos<RandomAccessContainer>>(std::move(data), x0, dx))
     {}
 
-    inline Real operator()(Real x) const {
+    inline Real operator()(Real x) const
+    {
         return impl_->operator()(x);
     }
 
-    inline Real prime(Real x) const {
+    inline Real prime(Real x) const
+    {
         return impl_->prime(x);
     }
 
@@ -92,6 +107,11 @@ public:
     {
         os << *m.impl_;
         return os;
+    }
+
+    int64_t bytes() const
+    {
+        return impl_->bytes() + sizeof(impl_);
     }
 
 private:

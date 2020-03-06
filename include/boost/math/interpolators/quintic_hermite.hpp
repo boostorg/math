@@ -15,15 +15,18 @@ public:
      : impl_(std::make_shared<detail::quintic_hermite_detail<RandomAccessContainer>>(std::move(x), std::move(y), std::move(dydx), std::move(d2ydx2)))
     {}
 
-    Real operator()(Real x) const {
+    Real operator()(Real x) const
+    {
         return impl_->operator()(x);
     }
 
-    Real prime(Real x) const {
+    Real prime(Real x) const
+    {
         return impl_->prime(x);
     }
 
-    Real double_prime(Real x) const {
+    Real double_prime(Real x) const
+    {
         return impl_->double_prime(x);
     }
 
@@ -33,10 +36,15 @@ public:
         return os;
     }
 
-    void push_back(Real x, Real y, Real dydx, Real d2ydx2) {
+    void push_back(Real x, Real y, Real dydx, Real d2ydx2)
+    {
         impl_->push_back(x, y, dydx, d2ydx2);
     }
 
+    int64_t bytes() const
+    {
+        returm impl_->bytes() + sizeof(impl_);
+    }
 
 private:
     std::shared_ptr<detail::quintic_hermite_detail<RandomAccessContainer>> impl_;
@@ -58,8 +66,14 @@ public:
         return impl_->prime(x);
     }
 
-    inline Real double_prime(Real x) const {
+    inline Real double_prime(Real x) const
+    {
         return impl_->double_prime(x);
+    }
+
+    int64_t bytes() const
+    {
+        returm impl_->bytes() + sizeof(impl_);
     }
 
 private:
@@ -75,18 +89,25 @@ public:
      : impl_(std::make_shared<detail::cardinal_quintic_hermite_detail_aos<RandomAccessContainer>>(std::move(data), x0, dx))
     {}
 
-    inline Real operator()(Real x) const {
+    inline Real operator()(Real x) const
+    {
         return impl_->operator()(x);
     }
 
-    inline Real prime(Real x) const {
+    inline Real prime(Real x) const
+    {
         return impl_->prime(x);
     }
 
-    inline Real double_prime(Real x) const {
+    inline Real double_prime(Real x) const
+    {
         return impl_->double_prime(x);
     }
 
+    int64_t bytes() const
+    {
+        return impl_->bytes() + sizeof(impl_);
+    }
 private:
     std::shared_ptr<detail::cardinal_quintic_hermite_detail_aos<RandomAccessContainer>> impl_;
 };

@@ -55,7 +55,8 @@ public:
         d2ydx2_.push_back(d2ydx2);
     }
 
-    inline Real operator()(Real x) const {
+    inline Real operator()(Real x) const
+    {
         if  (x < x_[0] || x > x_.back())
         {
             std::ostringstream oss;
@@ -133,7 +134,7 @@ public:
         return dydx;
     }
 
-   inline Real double_prime(Real x) const
+    inline Real double_prime(Real x) const
     {
         if  (x < x_[0] || x > x_.back())
         {
@@ -180,6 +181,11 @@ public:
         auto n = m.x_.size()-1;
         os << "(" << m.x_[n] << ", " << m.y_[n] << ", " << m.dydx_[n] << ", " << m.d2ydx2_[n] << ")}";
         return os;
+    }
+
+    int64_t bytes() const
+    {
+        return 4*x_.size()*sizeof(x_);
     }
 
 private:
@@ -310,7 +316,8 @@ public:
         return dydx;
     }
 
-    inline Real double_prime(Real x) const {
+    inline Real double_prime(Real x) const
+    {
         const Real xf = x0_ + (y_.size()-1)/inv_dx_;
         if  (x < x0_ || x > xf) {
             std::ostringstream oss;
@@ -327,7 +334,8 @@ public:
         return this->unchecked_double_prime(x);
     }
 
-    inline Real unchecked_double_prime(Real x) const {
+    inline Real unchecked_double_prime(Real x) const
+    {
         using std::floor;
         Real s = (x-x0_)*inv_dx_;
         Real ii = floor(s);
@@ -346,6 +354,11 @@ public:
         d2ydx2 += (12*t)*((-3 + 8*t - 5*t*t)*dy0 - (2 - 7*t + 5*t*t)*dy1);
         d2ydx2 += (1 - 9*t + 18*t*t - 10*t*t*t)*d2y0*(2*inv_dx_*inv_dx_) + t*(3 - 12*t + 10*t*t)*d2y1*(2*inv_dx_*inv_dx_);
         return d2ydx2;
+    }
+
+    int64_t bytes() const
+    {
+        return 3*y_.size()*sizeof(Real) + 2*sizeof(Real);
     }
 
 private:
@@ -446,7 +459,8 @@ public:
         return this->unchecked_prime(x);
     }
 
-    inline Real unchecked_prime(Real x) const {
+    inline Real unchecked_prime(Real x) const
+    {
         using std::floor;
         Real s = (x-x0_)*inv_dx_;
         Real ii = floor(s);
@@ -467,7 +481,8 @@ public:
         return dy*inv_dx_;
     }
 
-    inline Real double_prime(Real x) const {
+    inline Real double_prime(Real x) const
+    {
         const Real xf = x0_ + (data_.size()-1)/inv_dx_;
         if  (x < x0_ || x > xf)
         {
@@ -485,7 +500,8 @@ public:
         return this->unchecked_double_prime(x);
     }
 
-    inline Real unchecked_double_prime(Real x) const {
+    inline Real unchecked_double_prime(Real x) const
+    {
         using std::floor;
         Real s = (x-x0_)*inv_dx_;
         Real ii = floor(s);
@@ -506,6 +522,10 @@ public:
         return d2ydx2;
     }
 
+    int64_t bytes() const
+    {
+        return data_.size()*data_[0].size()*sizeof(Real) + 2*sizeof(Real);
+    }
 
 private:
     RandomAccessContainer data_;

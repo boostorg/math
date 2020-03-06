@@ -150,6 +150,11 @@ public:
         return x_.size();
     }
 
+    int64_t bytes() const
+    {
+        return 3*x_.size()*sizeof(Real) + 3*sizeof(x_);
+    }
+
     RandomAccessContainer x_;
     RandomAccessContainer y_;
     RandomAccessContainer dydx_;
@@ -241,7 +246,8 @@ public:
         return this->unchecked_prime(x);
     }
 
-    inline Real unchecked_prime(Real x) const {
+    inline Real unchecked_prime(Real x) const
+    {
         using std::floor;
         Real s = (x-x0_)*inv_dx_;
         Real ii = floor(s);
@@ -261,6 +267,13 @@ public:
     {
         return y_.size();
     }
+
+    int64_t bytes() const
+    {
+        return 2*y_.size()*sizeof(Real) + 2*sizeof(y_) + 2*sizeof(Real);
+    }
+
+private:
 
     RandomAccessContainer y_;
     RandomAccessContainer dy_;
@@ -373,6 +386,13 @@ public:
         return dat_.size();
     }
 
+    int64_t bytes() const
+    {
+        return dat_.size()*dat_[0].size()*sizeof(Real) + sizeof(dat_) + 2*sizeof(Real);
+    }
+
+
+private:
     RandomAccessContainer dat_;
     Real x0_;
     Real inv_dx_;

@@ -39,6 +39,11 @@ public:
         return os;
     }
 
+    int64_t bytes() const
+    {
+        return impl_->bytes() + sizeof(impl_);
+    }
+
 private:
     std::shared_ptr<detail::septic_hermite_detail<RandomAccessContainer>> impl_;
 };
@@ -67,6 +72,11 @@ public:
     inline Real double_prime(Real x) const
     {
         return impl_->double_prime(x);
+    }
+
+    int64_t bytes() const
+    {
+        return impl_->bytes() + sizeof(impl_);
     }
 
 private:
@@ -98,6 +108,10 @@ public:
         return impl_->double_prime(x);
     }
 
+    int64_t bytes() const
+    {
+        return impl_.size() + sizeof(impl_);
+    }
 
 private:
     std::shared_ptr<detail::cardinal_septic_hermite_detail_aos<RandomAccessContainer>> impl_;

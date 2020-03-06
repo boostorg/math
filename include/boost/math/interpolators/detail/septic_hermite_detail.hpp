@@ -168,7 +168,6 @@ public:
         return std::numeric_limits<Real>::quiet_NaN();
     }
 
-
     friend std::ostream& operator<<(std::ostream & os, const septic_hermite_detail & m)
     {
         os << "(x,y,y') = {";
@@ -180,6 +179,10 @@ public:
         return os;
     }
 
+    int64_t bytes()
+    {
+        return 5*x_.size()*sizeof(Real) + 5*sizeof(x_);
+    }
 
 private:
     RandomAccessContainer x_;
@@ -285,7 +288,8 @@ public:
         return z0*y0 + z1*dy0 + z2*a0 + z3*j0 + z4*y1 + z5*dy1 + z6*a1 + z7*j1;
     }
 
-    inline Real prime(Real x) const {
+    inline Real prime(Real x) const
+    {
         Real xf = x0_ + (y_.size()-1)/inv_dx_;
         if  (x < x0_ || x > xf)
         {
@@ -389,6 +393,11 @@ public:
         return d2ydx2;
     }
 
+    int64_t bytes() const
+    {
+        return 4*y_.size()*sizeof(Real) + 2*sizeof(Real) + 4*sizeof(y_);
+    }
+
 private:
     RandomAccessContainer y_;
     RandomAccessContainer dy_;
@@ -440,7 +449,8 @@ public:
         return this->unchecked_evaluation(x);
     }
 
-    inline Real unchecked_evaluation(Real x) const {
+    inline Real unchecked_evaluation(Real x) const
+    {
         using std::floor;
         Real s3 = (x-x0_)*inv_dx_;
         Real ii = floor(s3);
@@ -470,10 +480,10 @@ public:
         Real j1 = data_[i+1][3];
 
         return z0*y0 + z1*dy0 + z2*a0 + z3*j0 + z4*y1 + z5*dy1 + z6*a1 + z7*j1;
-
     }
 
-    inline Real prime(Real x) const {
+    inline Real prime(Real x) const
+    {
         Real xf = x0_ + (data_.size()-1)/inv_dx_;
         if  (x < x0_ || x > xf)
         {
@@ -491,7 +501,8 @@ public:
         return this->unchecked_prime(x);
     }
 
-    inline Real unchecked_prime(Real x) const {
+    inline Real unchecked_prime(Real x) const
+    {
         using std::floor;
         Real s3 = (x-x0_)*inv_dx_;
         Real ii = floor(s3);
@@ -574,6 +585,11 @@ public:
         d2ydx2 += 6*(z5*j0 + z6*j1)/(inv_dx_*inv_dx_);
 
         return d2ydx2;
+    }
+
+    int64_t bytes() const
+    {
+        return data_.size()*data_[0].size()*sizeof(Real) + 2*sizeof(Real) + sizeof(data_);
     }
 
 private:

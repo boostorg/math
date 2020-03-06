@@ -78,8 +78,6 @@ std::vector<Real> dyadic_grid(int64_t j_max)
             v[delivery_idx] = term;
         }
     }
-
-
     return v;
 }
 
@@ -98,7 +96,8 @@ public:
         }
     }
 
-    inline Real operator()(Real x) const {
+    inline Real operator()(Real x) const
+    {
         using std::floor;
         using std::sqrt;
         // This is the exact Holder exponent, but it's pessimistic almost everywhere!
@@ -112,6 +111,13 @@ public:
         Real dphi = dy_[i+1];
         Real diff = y_[i+1] - y_[i];
         return y_[i] + (2*dphi - diff)*t + 2*sqrt(t)*(diff-dphi);
+    }
+
+    int64_t bytes() const
+    {
+        int64_t b = 1 + y_.size() + dy_.size();
+        // There might be some layout issues here but this should be fine:
+        return b*sizeof(Real) + sizeof(y_) + sizeof(dy_);
     }
 
 private:
@@ -149,6 +155,12 @@ public:
         Real dphi = data_[i+1][1];
         Real diff = y1 - y0;
         return y0 + (2*dphi - diff)*t + 2*sqrt(t)*(diff-dphi);
+    }
+
+    int64_t bytes() const
+    {
+        int64_t b = 1 + data_.size()*data_[0].size()*sizeof(Real) + sizeof(data_);
+        return b;
     }
 
 private:
@@ -189,6 +201,11 @@ public:
         return (1-t)*dydx_[kk] + t*dydx_[kk+1];
     }
 
+    int64_t bytes() const
+    {
+        return (1 + y_.size() + dydx_.size())*sizeof(Real) + sizeof(y_) + sizeof(dydx_);
+    }
+
 private:
     Real s_;
     RandomAccessContainer y_;
@@ -226,6 +243,11 @@ public:
         int64_t kk = static_cast<int64_t>(k);
         Real t = y - k;
         return (1-t)*data_[kk][1] + t*data_[kk+1][1];
+    }
+
+    int64_t bytes() const
+    {
+        return sizeof(Real) + data_.size()*data_[0].size()*sizeof(Real);
     }
 
 private:
@@ -510,6 +532,32 @@ public:
     std::pair<Real, Real> support() const
     {
         return {Real(0), Real(2*p-1)};
+    }
+
+    int64_t bytes() const
+    {
+        if constexpr (p==2)
+        {
+            return m_mh->bytes() + sizeof(m_mh);
+        }
+        if constexpr (p == 3)
+        {
+            return m_lin->bytes() + sizeof(m_lin);
+        }
+        if constexpr (p == 4 || p == 5)
+        {
+            return m_cbh->bytes() + sizeof(m_cbh);
+        }
+        if constexpr (p >= 6 && p <= 9)
+        {
+            return m_qh->bytes() + sizeof(m_qh);
+        }
+        if constexpr (p >= 10)
+        {
+            return m_sh->bytes() + sizeof(m_sh);
+        }
+
+        return -1;
     }
 
 private:
