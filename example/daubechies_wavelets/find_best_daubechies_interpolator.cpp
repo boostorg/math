@@ -10,6 +10,8 @@
 #include <future>
 #include <thread>
 #include <fstream>
+#include <boost/hana/for_each.hpp>
+#include <boost/hana/ext/std/integer_sequence.hpp>
 #include <boost/math/special_functions/daubechies_scaling.hpp>
 #include <boost/math/special_functions/detail/daubechies_scaling_integer_grid.hpp>
 #include <boost/math/interpolators/cubic_hermite.hpp>
@@ -39,7 +41,7 @@ void choose_refinement()
     auto phi_dense = boost::math::detail::dyadic_grid<PreciseReal, p, 0>(rmax);
     Real dx_dense = (2*p-1)/static_cast<Real>(phi_dense.size()-1);
 
-    for (int r = 2; r <= 12; ++r)
+    for (int r = 2; r <= 18; ++r)
     {
         Real dx = Real(1)/ (1 << r);
         std::cout << "\tdx = 1/" << (1/dx) << " = 1/2^" << r << " = " << dx << "\n";
@@ -104,7 +106,7 @@ void find_best_interpolator()
     std::ofstream fs{filename};
     static_assert(sizeof(PreciseReal) >= sizeof(Real), "sizeof(PreciseReal) >= sizeof(Real) is required.");
     using std::abs;
-    int rmax = 17;
+    int rmax = 18;
     std::cout << "Computing phi_dense_precise\n";
     auto phi_dense_precise = boost::math::detail::dyadic_grid<PreciseReal, p, 0>(rmax);
     std::vector<Real> phi_dense(phi_dense_precise.size());
@@ -135,7 +137,7 @@ void find_best_interpolator()
             fs << "\n";
         }
     }
-    for (int r = 2; r < rmax-1; ++r)
+    for (int r = 2; r < 13; ++r)
     {
         fs << r << ", ";
         std::map<Real, std::string> m;
@@ -526,50 +528,8 @@ void find_best_interpolator()
     }
 }
 
-int main() {
-    /*choose_refinement<float, long double, 2>();
-    choose_refinement<float, long double, 3>();
-    choose_refinement<float, long double, 4>();
-    choose_refinement<float, long double, 5>();
-    choose_refinement<float, long double, 6>();
-    choose_refinement<float, long double, 7>();
-    choose_refinement<float, long double, 8>();*/
-
-    choose_refinement<float, long double, 9>();
-    choose_refinement<float, long double, 10>();
-    choose_refinement<float, long double, 11>();
-    choose_refinement<float, long double, 12>();
-    choose_refinement<float, long double, 13>();
-    choose_refinement<float, long double, 14>();
-    choose_refinement<float, long double, 15>();
-    //choose_refinement<float, long double, 5>();
-    //choose_refinement<double, float128, 15>();
-    // Says linear interpolation is the best:
-    /*find_best_interpolator<float128, float128, 2>();
-    // Says linear interpolation is the best:
-    find_best_interpolator<float128, float128, 3>();
-    // Says cubic_hermite_spline is best:
-    find_best_interpolator<float128, float128, 4>();
-    // Says cubic_hermite_spline is best:
-    find_best_interpolator<float128, float128, 5>();
-    // Says quintic_hermite_spline is best:
-    find_best_interpolator<float128, float128, 6>();
-    // Says quintic_hermite_spline is best:
-    find_best_interpolator<float128, float128, 7>();
-    // Says quintic_hermite_spline is best:
-    find_best_interpolator<float128, float128, 8>();
-    // Says quintic_hermite_spline is best:
-    find_best_interpolator<float128, float128, 9>();
-    // Says septic_hermite_spline is best:
-    find_best_interpolator<float128, float128, 10>();
-    // Says septic_hermite_spline is best:
-    find_best_interpolator<float128, float128, 11>();
-    // Says septic_hermite_spline is best:
-    find_best_interpolator<float128, float128, 12>();
-    // Says septic_hermite_spline is best:
-    find_best_interpolator<float128, float128, 13>();
-    // Says septic_hermite_spline is best:
-    find_best_interpolator<float128, float128, 14>();
-    // Says septic_hermite_spline is best:
-    find_best_interpolator<float128, float128, 15>();*/
+int main()
+{
+    boost::hana::for_each(std::make_index_sequence<4>(), [&](auto i){ choose_refinement<double, float128, i+16>(); });
+    boost::hana::for_each(std::make_index_sequence<4>(), [&](auto i){ find_best_interpolator<float128, float128, i+16>(); });
 }

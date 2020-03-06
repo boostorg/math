@@ -9,6 +9,8 @@
 #include <numeric>
 #include <utility>
 #include <random>
+#include <array>
+#include <vector>
 #include <boost/math/interpolators/cubic_hermite.hpp>
 #include <boost/circular_buffer.hpp>
 #ifdef BOOST_HAS_FLOAT128
