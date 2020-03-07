@@ -1,0 +1,68 @@
+[/
+  Copyright Nick Thompson, 2020
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+
+[section:daubechies_filters Daubechies Filters]
+
+[h4 Synopsis]
+
+#include <boost/math/filters/daubechies.hpp>
+
+   namespace boost::math:filters {
+
+   template <typename Real, unsigned p>
+   constexpr std::array<Real, 2*p> daubechies_scaling_filter();
+
+   template<class Real, size_t p>
+   std::array<Real, 2*p> daubechies_wavelet_filter();
+
+   } // namespaces
+
+The Daubechies filters provided by Boost.Math return the filter coefficients of the compactly-supported family discovered by Daubechies.
+
+A basic usage is as follows:
+
+    using boost::math::filters::daubechies_scaling_filter;
+    using boost::math::filters::daubechies_wavelet_filter;
+
+    auto h = daubechies_scaling_filter<double, 8>();
+    auto g = daubechies_wavelet_filter<double, 8>();
+
+The filters take the number of vanishing moments as a template argument, returning a `std::array` which has twice as many entries as vanishing moments.
+
+[h3 Caveats and Ambiguities]
+
+Numerous notational conventions for the filter coefficients exist.
+The first ambiguity is whether they should be indexed by the number of vanishing moments, or the number of filter taps.
+/Boost.Math indexes the family by the number of vanishing moments./
+This indexing convention is the same as PyWavelets and Mathematica, but differs from Numerical Recipes.
+
+Next, we need to ask whether the coefficients 
+
+Here are some printing of the coefficents to help recognize the ambiguities:
+
+
+WaveletFilterCoefficients[DaubechiesWavelet[2], "PrimalLowpass"]
+{{0, 0.341506}, {1, 0.591506}, {2, 0.158494}, {3, -0.0915064}}
+
+>>> print(pywt.Wavelet('db2').dec_lo)
+[-0.12940952255126037, 0.2241438680420134, 0.8365163037378079, 0.48296291314453416]
+>>> np.linalg.norm(pywt.Wavelet('db2').dec_lo)
+1.0
+
+
+
+
+
+[h3 Accuracy]
+
+The filters are accurate to quad precision.
+
+[h3 References]
+
+* Ingrid Daubechies, ['Ten Lectures on Wavelets], SIAM Volume 61, 1992
+
+[endsect]
