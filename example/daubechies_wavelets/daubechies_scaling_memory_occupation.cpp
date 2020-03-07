@@ -11,9 +11,8 @@ int main()
         std::cout << std::right;
         auto daub = boost::math::daubechies_scaling<float, i+2>();
         std::cout << "The Daubechies " << std::setw(2) <<  i + 2 << " scaling function occupies " 
-                  << std::setw(12) << daub.bytes() << " bytes in relative accuracy mode in "
+                  << std::setw(12) << daub.bytes()/1000.0 << " kilobytes in relative accuracy mode in "
                   << boost::core::demangle(typeid(float).name()) << " precision\n";
-        //std::cout << "Size of class = " << sizeof(daub) << "\n";
     });
 
     std::cout << std::endl;
@@ -25,9 +24,8 @@ int main()
         std::cout << std::right;
         auto daub = boost::math::daubechies_scaling<float, i+2>(-2);
         std::cout << "The Daubechies " << std::setw(2) <<  i + 2 << " scaling function occupies " 
-                  << std::setw(12) << daub.bytes() << " bytes in absolute accuracy mode in "
+                  << std::setw(12) << daub.bytes()/1000.0 << " kilobytes in absolute accuracy mode in "
                   << boost::core::demangle(typeid(float).name()) << " precision\n";
-        //std::cout << "Size of class = " << sizeof(daub) << "\n";
     });
 
     std::cout << std::endl;
@@ -40,7 +38,7 @@ int main()
         std::cout << std::right;
         auto daub = boost::math::daubechies_scaling<double, i+2>();
         std::cout << "The Daubechies " << std::setw(2) <<  i + 2 << " scaling function occupies " 
-                  << std::setw(12) << daub.bytes() << " bytes in relative accuracy mode in "
+                  << std::setw(12) << daub.bytes()/1000.0 << " kilobytes in relative accuracy mode in "
                   << boost::core::demangle(typeid(double).name()) << " precision\n";
     });
 
@@ -53,7 +51,7 @@ int main()
         std::cout << std::right;
         auto daub = boost::math::daubechies_scaling<double, i+2>(-2);
         std::cout << "The Daubechies " << std::setw(2) <<  i + 2 << " scaling function occupies " 
-                  << std::setw(12) << daub.bytes() << " bytes in absolute accuracy mode in "
+                  << std::setw(12) << daub.bytes()/1000.0 << " kilobytes in absolute accuracy mode in "
                   << boost::core::demangle(typeid(double).name()) << " precision\n";
     });
 

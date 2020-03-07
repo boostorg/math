@@ -22,8 +22,6 @@
 
 namespace boost::math {
 
-namespace detail {
-
 template<class Real, int p, int order>
 std::vector<Real> dyadic_grid(int64_t j_max)
 {
@@ -35,7 +33,7 @@ std::vector<Real> dyadic_grid(int64_t j_max)
         x *= scale;
     }
 
-    auto phik = daubechies_scaling_integer_grid<Real, p, order>();
+    auto phik = detail::daubechies_scaling_integer_grid<Real, p, order>();
 
     // Maximum sensible j for 32 bit floats is j_max = 22:
     std::vector<Real> v(2*p + (2*p-1)*((1<<j_max) -1), std::numeric_limits<Real>::quiet_NaN());
@@ -52,7 +50,7 @@ std::vector<Real> dyadic_grid(int64_t j_max)
         {
             // Where this value will go:
             int64_t delivery_idx = k*(1 << (j_max-j));
-            // This is a nice check, but we've tested this exhaustively, and it's expensive:
+            // This is a nice check, but we've tested this exhaustively, and it's an expensive check:
             //if (delivery_idx >= (int64_t) v.size()) {
             //    std::cerr << "Delivery index out of range!\n";
             //    continue;
@@ -80,6 +78,8 @@ std::vector<Real> dyadic_grid(int64_t j_max)
     }
     return v;
 }
+
+namespace detail {
 
 template<class RandomAccessContainer>
 class matched_holder {
@@ -298,7 +298,7 @@ public:
         std::future<std::vector<Real>> t0 = std::async(std::launch::async, [&grid_refinements]() {
             // Computing in higher precision and downcasting is essential for 1ULP evaluation in float precision:
             if constexpr (std::is_same_v<Real, float>) {
-                auto v = detail::dyadic_grid<double, p, 0>(grid_refinements);
+                auto v = dyadic_grid<double, p, 0>(grid_refinements);
                 std::vector<float> w(v.size());
                 for (size_t i = 0; i < v.size(); ++i) {
                     w[i] = v[i];
@@ -306,7 +306,7 @@ public:
                 return w;
             }
             else if constexpr (std::is_same_v<Real, double>) {
-                auto v = detail::dyadic_grid<long double, p, 0>(grid_refinements);
+                auto v = dyadic_grid<long double, p, 0>(grid_refinements);
                 std::vector<double> w(v.size());
                 for (size_t i = 0; i < v.size(); ++i) {
                     w[i] = v[i];
@@ -314,12 +314,12 @@ public:
                 return w;
             }
 
-            return detail::dyadic_grid<Real, p, 0>(grid_refinements);
+            return dyadic_grid<Real, p, 0>(grid_refinements);
         });
         // Compute the derivative of the refined grid:
         std::future<std::vector<Real>> t1 = std::async(std::launch::async, [&grid_refinements]() {
             if constexpr (std::is_same_v<Real, float>) {
-                auto v = detail::dyadic_grid<double, p, 1>(grid_refinements);
+                auto v = dyadic_grid<double, p, 1>(grid_refinements);
                 std::vector<float> w(v.size());
                 for (size_t i = 0; i < v.size(); ++i) {
                     w[i] = v[i];
@@ -327,7 +327,7 @@ public:
                 return w;
             }
             else if constexpr (std::is_same_v<Real, double>) {
-                auto v = detail::dyadic_grid<long double, p, 1>(grid_refinements);
+                auto v = dyadic_grid<long double, p, 1>(grid_refinements);
                 std::vector<double> w(v.size());
                 for (size_t i = 0; i < v.size(); ++i) {
                     w[i] = v[i];
@@ -335,7 +335,7 @@ public:
                 return w;
             }
 
-            return detail::dyadic_grid<Real, p, 1>(grid_refinements);
+            return dyadic_grid<Real, p, 1>(grid_refinements);
         });
 
         // if necessary, compute the second and third derivative:
@@ -345,7 +345,7 @@ public:
             std::future<std::vector<Real>> t3 = std::async(std::launch::async, [&grid_refinements]() {
                 if constexpr (std::is_same_v<Real, float>)
                 {
-                    auto v = detail::dyadic_grid<double, p, 2>(grid_refinements);
+                    auto v = dyadic_grid<double, p, 2>(grid_refinements);
                     std::vector<float> w(v.size());
                     for (size_t i = 0; i < v.size(); ++i)
                     {
@@ -355,7 +355,7 @@ public:
                 }
                 else if constexpr (std::is_same_v<Real, double>)
                 {
-                    auto v = detail::dyadic_grid<long double, p, 2>(grid_refinements);
+                    auto v = dyadic_grid<long double, p, 2>(grid_refinements);
                     std::vector<double> w(v.size());
                     for (size_t i = 0; i < v.size(); ++i)
                     {
@@ -364,14 +364,14 @@ public:
                     return w;
                 }
 
-                return detail::dyadic_grid<Real, p, 2>(grid_refinements);
+                return dyadic_grid<Real, p, 2>(grid_refinements);
             });
 
             if constexpr (p >= 10) {
                 std::future<std::vector<Real>> t4 = std::async(std::launch::async, [&grid_refinements]() {
                     if constexpr (std::is_same_v<Real, float>)
                     {
-                        auto v = detail::dyadic_grid<double, p, 3>(grid_refinements);
+                        auto v = dyadic_grid<double, p, 3>(grid_refinements);
                         std::vector<float> w(v.size());
                         for (size_t i = 0; i < v.size(); ++i)
                         {
@@ -380,7 +380,7 @@ public:
                         return w;
                     }
                     else if constexpr (std::is_same_v<Real, double>) {
-                        auto v = detail::dyadic_grid<long double, p, 3>(grid_refinements);
+                        auto v = dyadic_grid<long double, p, 3>(grid_refinements);
                         std::vector<double> w(v.size());
                         for (size_t i = 0; i < v.size(); ++i)
                         {
@@ -389,7 +389,7 @@ public:
                         return w;
                     }
 
-                    return detail::dyadic_grid<Real, p, 3>(grid_refinements); });
+                    return dyadic_grid<Real, p, 3>(grid_refinements); });
                 d3ydx3 = t4.get();
             }
             d2ydx2 = t3.get();
