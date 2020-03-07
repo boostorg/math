@@ -730,6 +730,10 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [include differentiation/lanczos_smoothing.qbk]
 [endmathpart]
 
+[mathpart filters Filters]
+[include filters/daubechies.qbk]
+[endmathpart]
+
 [include complex/complex-tr1.qbk]
 [include quaternion/math-quaternion.qbk]
 [include octonion/math-octonion.qbk]
