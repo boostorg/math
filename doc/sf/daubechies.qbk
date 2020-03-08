@@ -67,7 +67,7 @@ so
     
 gives a scaling function which keeps the absolute error bounded by roughly the double precision unit roundoff.
 
-If context precludes the ability to reuse the class in different parts of the program evaluation, it makes sense to reduce the accuracy even further.
+If context precludes the ability to reuse the class throughout the program, it makes sense to reduce the accuracy even further.
 This can be done by specifying the grid refinements, for example,
 
     auto phi = boost::math::daubechies_scaling<double, 8>(12);
@@ -85,7 +85,7 @@ Hence, it may make sense to precompute the dyadic grid and dump it in a `.cpp` f
     std::vector<float128> v = boost::math::dyadic_grid<float128, p, derivative>(grid_refinements);
 
 Note that quad precision is the most accurate precision provided, for both the dyadic grid and for the scaling function.
-1ULP accuracy can only be achieved for float and double precision.
+1ULP accuracy can only be achieved for float and double precision, in well-conditioned regions.
 
 Derivatives are only available if the wavelet and scaling function has sufficient smoothness.
 The compiler will gladly inform you of your error if you try to call `.prime` on [sub 2]\u03C6, which is not differentiable,
@@ -97,7 +97,7 @@ For this reason, we have provided `.support()` so that you can check our convent
 
     auto [xmin, xmax] = phi.support();
 
-For definiteness though, for the scaling function, the support is always [0, 2/p/ -1], and the support of the wavelet is [-/p/, /p/+1].
+For definiteness though, for the scaling function, the support is always [0, /2p/ - 1], and the support of the wavelet is [ -/p/, /p/ + 1].
 
 [heading References]
 
