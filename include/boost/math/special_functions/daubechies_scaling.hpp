@@ -263,6 +263,12 @@ public:
     daubechies_scaling(int grid_refinements = -1)
     {
         static_assert(p < 20, "Daubechies scaling functions are only implemented for p < 20.");
+        static_assert(p > 0, "Daubechies scaling functions must have at least 1 vanishing moment.");
+        if constexpr (p == 1)
+        {
+            return;
+        }
+        else {
         if (grid_refinements < 0)
         {
             if (std::is_same_v<Real, float>)
@@ -457,6 +463,7 @@ public:
             }
             m_sh = std::make_shared<interpolators::detail::cardinal_septic_hermite_detail_aos<std::vector<std::array<Real, 4>>>>(std::move(data), Real(0), dx);
         }
+        }
      }
 
 
@@ -465,6 +472,10 @@ public:
         if (x <= 0 || x >= 2*p-1)
         {
             return 0;
+        }
+        if constexpr (p==1)
+        {
+            return Real(1);
         }
         if constexpr (p==2)
         {
@@ -490,7 +501,7 @@ public:
 
     inline Real prime(Real x) const
     {
-        static_assert(p != 2, "The 2-vanishing moment Daubechies scaling function is not continuously differentiable.");
+        static_assert(p > 2, "The 3-vanishing moment Daubechies scaling function is the first which is continuously differentiable.");
         if (x <= 0 || x >= 2*p-1)
         {
             return 0;

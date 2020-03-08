@@ -8,6 +8,9 @@
 #include "math_unit_test.hpp"
 #include <numeric>
 #include <utility>
+#include <iomanip>
+#include <iostream>
+#include <random>
 #include <boost/core/demangle.hpp>
 #include <boost/hana/for_each.hpp>
 #include <boost/hana/ext/std/integer_sequence.hpp>
@@ -17,6 +20,7 @@
 #include <boost/math/filters/daubechies.hpp>
 #include <boost/math/special_functions/detail/daubechies_scaling_integer_grid.hpp>
 #include <boost/math/constants/constants.hpp>
+#include <boost/math/quadrature/trapezoidal.hpp>
 
 #ifdef BOOST_HAS_FLOAT128
 #include <boost/multiprecision/float128.hpp>
@@ -321,8 +325,71 @@ void test_first_derivative()
     }
 }
 
+template<typename Real, int p>
+void test_quadratures()
+{
+    using boost::math::quadrature::trapezoidal;
+    if constexpr (p == 2)
+    {
+         // 2phi is truly bizarre, because two successive trapezoidal estimates are always bitwise equal,
+         // whereas the third is way different. I don' t think that's a reasonable thing to optimize for,
+         // so one-off it is.
+         Real h = Real(1)/Real(256);
+         auto phi = boost::math::daubechies_scaling<Real, p>();
+         Real t = 0;
+         Real Q = 0;
+         while (t < 3) {
+             Q += phi(t);
+             t += h;
+         }
+         Q *= h;
+         CHECK_ULP_CLOSE(Real(1), Q, 32);
+         return;
+    }
+    else if constexpr (p > 2)
+    {
+        auto phi = boost::math::daubechies_scaling<Real, p>();
+        
+        Real tol = std::numeric_limits<Real>::epsilon();
+        Real error_estimate = std::numeric_limits<Real>::quiet_NaN();
+        Real L1 = std::numeric_limits<Real>::quiet_NaN();
+        auto [a, b] = phi.support();
+        Real Q = trapezoidal(phi, a, b, tol, 15, &error_estimate, &L1);
+        if (!CHECK_MOLLIFIED_CLOSE(Real(1), Q, Real(0.0001)))
+        {
+            std::cerr << "  Quadrature of " << p << " vanishing moment scaling function is not equal 1.\n";
+        }
+    
+        std::random_device rd;
+        Real t = static_cast<Real>(rd())/static_cast<Real>(rd.max());
+        Real S = phi(t);
+        Real dS = phi.prime(t);
+        while (t < b)
+        {
+            t += 1;
+            S += phi(t);
+            dS += phi.prime(t);
+        }
+
+        if(!CHECK_ULP_CLOSE(Real(1), S, 64))
+        {
+            std::cerr << "  Normalizing sum for " << p << " vanishing moment scaling function is incorrect.\n";
+        }
+
+        if(!CHECK_MOLLIFIED_CLOSE(Real(0), dS, 100*std::sqrt(std::numeric_limits<Real>::epsilon())))
+        {
+            std::cerr << "  Derivative of normalizing sum for " << p << " vanishing moment scaling function doesn't vanish.\n";
+        }  
+    }
+}
+
 int main()
 {
+    boost::hana::for_each(std::make_index_sequence<18>(), [&](auto i){
+      test_quadratures<float, i+2>();
+      test_quadratures<double, i+2>();
+    });
+
     test_agreement_with_ten_lectures();
 
     boost::hana::for_each(std::make_index_sequence<19>(), [&](auto i){
@@ -384,6 +451,7 @@ int main()
     #ifdef BOOST_HAS_FLOAT128
     test_dyadic_grid<float128>();
     #endif
+
 
     #ifdef BOOST_HAS_FLOAT128
     boost::hana::for_each(std::make_index_sequence<19>(), [&](auto i){
