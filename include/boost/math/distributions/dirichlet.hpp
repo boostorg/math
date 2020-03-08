@@ -21,6 +21,7 @@
 #ifndef BOOST_MATH_DISTRIBUTIONS_DIRICHLET_HPP
 #define BOOST_MATH_DISTRIBUTIONS_DIRICHLET_HPP
 
+#include <numeric>
 #include <boost/math/distributions/fwd.hpp>
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/distributions/complement.hpp>
@@ -50,10 +51,11 @@ inline bool check_alpha(const char *function,
                         const Policy &pol)
 {
   using RealType = typename RandomAccessContainer::value_type;
-  using std::invalid_argument;
   if (alpha.size() < 1)
   {
-    throw invalid_argument("Size of 'concentration parameters' must be greater than 0.");
+    *result = policies::raise_domain_error<RealType>(
+          function,
+          "Size of alpha vector is %1%, but must be > 0 !", alpha.size(), pol);
     return false;
   }
   for (decltype(alpha.size()) i = 0; i < alpha.size(); ++i)
@@ -76,10 +78,11 @@ inline bool check_x(const char *function,
                     const Policy &pol)
 {
   using RealType = typename RandomAccessContainer::value_type;
-  using std::invalid_argument;
   if (x.size() < 1)
   {
-    throw invalid_argument("Size of 'quantiles' vector must be greater than 0.");
+    *result = policies::raise_domain_error<RealType>(
+        function,
+        "Size of x is %1%, but must be > 0 !", x.size(), pol);
     return false;
   }
   for (decltype(x.size()) i = 0; i < x.size(); ++i)
@@ -92,7 +95,15 @@ inline bool check_x(const char *function,
       return false;
     }
   }
-  return accumulate(x.begin(), x.end(), 0.0) <= 1.0;
+  RealType s = accumulate(x.begin(), x.end(), RealType(0));
+  if (s > static_cast<RealType>(1.0))
+  {
+    *result = policies::raise_domain_error<RealType>(
+      function,
+      "Sum of quantiles is %1%, but must be <= 1 !", s, pol);
+    return false;
+  }
+  return true;
 } // bool check_x
 
 
@@ -113,10 +124,11 @@ inline bool check_mean(const char *function,
                        const Policy &pol)
 {
   using RealType = typename RandomAccessContainer::value_type;
-  using std::invalid_argument;
   if (mean.size() < 1)
   {
-    throw invalid_argument("Size of 'mean' vector must be greater than 0.");
+    *result = policies::raise_domain_error<RealType>(
+        function,
+        "Size of mean vector is %1%, but must be > 0 !", mean.size(), pol);
     return false;
   }
   for (decltype(mean.size()) i = 0; i < mean.size(); ++i)
@@ -142,7 +154,9 @@ inline bool check_variance(const char *function,
   using std::invalid_argument;
   if (variance.size() < 1)
   {
-    throw invalid_argument("Size of 'variance' vector must be greater than 0.");
+    *result = policies::raise_domain_error<RealType>(
+        function,
+        "Size of variance vector is %1%, but must be > 0 !", variance.size(), pol);
     return false;
   }
   for (decltype(variance.size()) i = 0; i < variance.size(); ++i)
@@ -314,6 +328,7 @@ inline RandomAccessContainer mode(const dirichlet_distribution<RandomAccessConta
   return m;
 } // mode
 
+// Differential Entropy of Dirichlet Distribution
 template <class RandomAccessContainer, class Policy>
 inline typename RandomAccessContainer::value_type entropy(const dirichlet_distribution<RandomAccessContainer, Policy> &dist)
 {
@@ -322,7 +337,7 @@ inline typename RandomAccessContainer::value_type entropy(const dirichlet_distri
   RealType ent = log(dist.normalizing_constant()) + (dist.sum_alpha() - dist.order()) * digamma(dist.sum_alpha());
   for (decltype(dist.order()) i = 0; i < dist.order(); ++i)
   {
-    ent += (dist.get_alpha()[i] - 1) * digamma(dist.get_alpha()[i]);
+    ent -= (dist.get_alpha()[i] - 1) * digamma(dist.get_alpha()[i]);
   }
   return ent;
 }
