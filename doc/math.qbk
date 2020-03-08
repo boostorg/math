@@ -683,6 +683,8 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [include sf/inv_hyper.qbk]
 
 [include sf/owens_t.qbk]
+[include sf/daubechies.qbk]
+
 
 [endmathpart] [/section:special Special Functions]
 

@@ -262,6 +262,7 @@ class daubechies_scaling {
 public:
     daubechies_scaling(int grid_refinements = -1)
     {
+        static_assert(p < 20, "Daubechies scaling functions are only implemented for p < 20.");
         if (grid_refinements < 0)
         {
             if (std::is_same_v<Real, float>)

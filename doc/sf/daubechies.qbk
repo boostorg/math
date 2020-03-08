@@ -1,5 +1,5 @@
 [/
-  Copyright 2019, Nick Thompson
+  Copyright Nick Thompson, John Maddock, 2020
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
@@ -9,44 +9,100 @@
 
 [h4 Synopsis]
 
-    #include <boost/math/filters/daubechies.hpp>
+    #include <boost/math/special_functions/daubechies_scaling.hpp>
 
-   namespace boost::math::filters {
+    namespace boost::math {
 
-   template <typename Real, unsigned p>
-   constexpr std::array<Real, 2*p> daubechies_scaling_filter();
+    template<class Real, int p>
+    class daubechies_scaling {
+    public:
+        daubechies_scaling(int grid_refinements = -1);
 
-   template<typename Real, unsigned p>
-   std::array<Real, 2*p> daubechies_wavelet_filter();
+        inline Real operator()(Real x) const;
 
-   } // namespaces
+        inline Real prime(Real x) const;
+
+        inline Real double_prime(Real x) const;
+
+        std::pair<Real, Real> support() const;
+
+        int64_t bytes() const;
+    };
+
+    template<class Real, int p, int order>
+    std::vector<Real> dyadic_grid(int64_t j_max);
+
+ 
+    } // namespaces
 
 
-Daubechies wavelets are a family of compactly supported functions indexed by an integer /p/ which have /p/ vanishing moments and an associated filter of length /2p/.
+Daubechies wavelets and scaling functions are a family of compactly supported functions indexed by an integer /p/ which have /p/ vanishing moments and an associated filter of length /2p/.
 They are used in signal denoising, Galerkin methods for PDEs, and compression.
 
 The canonical reference on these functions is Daubechies' monograph /Ten Lectures on Wavelets/,
-which we attempt to follow here.
+whose notational conventions we attempt to follow here.
 
-To get the (low-pass) scaling filter for the Daubechies scaling function with 3 vanishing moments, use
+A basic usage is as follows:
 
-    auto h = boost::math::filters::daubechies_scaling_filter<double, 3>();
+    auto phi = boost::math::daubechies_scaling<double, 8>();
+    double y = phi(0.38);
+    double dydx = phi.prime(0.38);
 
-To get the (high-pass) wavelet filter for the Daubechies wavelet with 3 vanishing moments, use
+Note that the constructor call is expensive, as it must assemble a /dyadic grid/--values of [sub /p/]\u03C6 at dyadic rationals,
+i.e., numbers of the form n/2[super /j/].
+You should only instantiate this class once in the duration of a program.
+The class is pimpl'd and all its member functions are threadsafe, so it can be copied cheaply and shared between threads.
+The default number of grid refinements is chosen so that the relative error is controlled to ~2-3 ULPs away from the right-hand side of the support,
+where superexponential growth of the condition number of function evaluation makes this impossible.
+However, controlling relative error of Daubechies wavelets and scaling functions is much more difficult than controlling absolute error,
+and the memory consumption is much higher in relative mode.
+The memory consumption of the class can be queried via
 
-    auto g = boost::math::filters::daubechies_wavelet_filter<double, 3>();
+    int64_t mem = phi.bytes();
 
-Notational conventions for these filters seem not to exist.
-Ambiguities include whether or not the filter is defined via convolution or dot product (which corresponds to reversing the array),
-and the overall scaling.
-/The filters in Boost.Math agree with Daubechies, Ten Lectures, Table 6.1./
-This means that the elements sum to sqrt(2), and the filter is defined via a dot product.
+and if this is deemed unacceptably large, the user may choose to control absolute error via calling the constructor with the `grid_refinements` parameter set to -2,
+so
 
+    auto phi = boost::math::daubechies_scaling<double, 8>(-2);
+    
+gives a scaling function which keeps the absolute error bounded by roughly the double precision unit roundoff.
+
+If context precludes the ability to reuse the class in different parts of the program evaluation, it makes sense to reduce the accuracy even further.
+This can be done by specifying the grid refinements, for example,
+
+    auto phi = boost::math::daubechies_scaling<double, 8>(12);
+
+creates a Daubechies scaling function interpolated from a dyadic grid computed down to depth /j/ = 12.
+The call to the constructor is exponential time in the number of grid refinements, and the call operator, `.prime`, and `.double_prime` are constant time.
+
+Note that the only reason that this is a class, rather than a free function is that the dyadic grids would make the Boost source download extremely large.
+Hence, it may make sense to precompute the dyadic grid and dump it in a `.cpp` file; this can be achieved via
+
+    using boost::multiprecision::float128;
+    int grid_refinements = 12;
+    constexpr const derivative = 0;
+    constexpr const p = 8;
+    std::vector<float128> v = boost::math::dyadic_grid<float128, p, derivative>(grid_refinements);
+
+Note that quad precision is the most accurate precision provided, for both the dyadic grid and for the scaling function.
+1ULP accuracy can only be achieved for float and double precision.
+
+Derivatives are only available if the wavelet and scaling function has sufficient smoothness.
+The compiler will gladly inform you of your error if you try to call `.prime` on [sub 2]\u03C6, which is not differentiable,
+but be aware that smoothness increases with the number of vanishing moments.
+
+The axioms of a multiresolution analysis ensure that integer shifts of the scaling functions are elements of the multiresolution analysis;
+a side effect is that the supports of the (unshifted) wavelet and scaling functions are arbitrary.
+For this reason, we have provided `.support()` so that you can check our conventions:
+
+    auto [xmin, xmax] = phi.support();
+
+For definiteness though, for the scaling function, the support is always [0, 2/p/ -1], and the support of the wavelet is [-/p/, /p/+1].
 
 [heading References]
 
-* Daubechies, Ingrid. ['Ten lectures on wavelets.] Vol. 61. Siam, 1992.
-* Mallat, Stephane. ['A wavelet tour of signal processing: the sparse way] Academic press, 2008.
+* Daubechies, Ingrid. ['Ten Lectures on Wavelets.] Vol. 61. Siam, 1992.
+* Mallat, Stephane. ['A Wavelet Tour of Signal Processing: the sparse way] Academic press, 2008.
 
 
 
