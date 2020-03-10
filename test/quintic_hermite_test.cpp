@@ -8,6 +8,8 @@
 #include "math_unit_test.hpp"
 #include <numeric>
 #include <utility>
+#include <vector>
+#include <array>
 #include <boost/random/uniform_real.hpp>
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/math/interpolators/quintic_hermite.hpp>

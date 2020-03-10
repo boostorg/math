@@ -45,7 +45,7 @@ std::vector<Real> dyadic_grid(int64_t j_max)
 
     for (int64_t j = 1; j <= j_max; ++j)
     {
-        int64_t k_max = v.size()/(1 << (j_max-j));
+        int64_t k_max = v.size()/(int64_t(1) << (j_max-j));
         for (int64_t k = 1; k < k_max;  k += 2)
         {
             // Where this value will go:
@@ -58,7 +58,7 @@ std::vector<Real> dyadic_grid(int64_t j_max)
             Real term = 0;
             for (int64_t l = 0; l < (int64_t) c.size(); ++l)
             {
-                int64_t idx = k*(1 << (j_max - j + 1)) - l*(1 << j_max);
+                int64_t idx = k*(int64_t(1) << (j_max - j + 1)) - l*(int64_t(1) << j_max);
                 if (idx < 0)
                 {
                     break;
