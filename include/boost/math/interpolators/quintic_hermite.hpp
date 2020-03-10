@@ -43,7 +43,7 @@ public:
 
     int64_t bytes() const
     {
-        returm impl_->bytes() + sizeof(impl_);
+        return impl_->bytes() + sizeof(impl_);
     }
 
 private:
@@ -73,7 +73,7 @@ public:
 
     int64_t bytes() const
     {
-        returm impl_->bytes() + sizeof(impl_);
+        return impl_->bytes() + sizeof(impl_);
     }
 
 private:
