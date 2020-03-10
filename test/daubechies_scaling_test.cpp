@@ -255,13 +255,13 @@ void test_dyadic_grid()
             CHECK_ULP_CLOSE(phik[k], phijk[k], 0);
         }
 
-        for (size_t j = 1; j < 10; ++j)
+        for (int64_t j = 1; j < 10; ++j)
         {
             phijk = boost::math::dyadic_grid<Real, i+2, 0>(j);
             phik = boost::math::detail::daubechies_scaling_integer_grid<Real, i+2, 0>();
-            for (size_t l = 0; l < phik.size(); ++l)
+            for (int64_t l = 0; l < static_cast<int64_t>(phik.size()); ++l)
             {
-                CHECK_ULP_CLOSE(phik[l], phijk[l*(1<<j)], 0);
+                CHECK_ULP_CLOSE(phik[l], phijk[l*(int64_t(1)<<j)], 0);
             }
 
             // This test is from Daubechies, Ten Lectures on Wavelets, Ch 7 "More About Compactly Supported Wavelets",
@@ -269,9 +269,9 @@ void test_dyadic_grid()
             for (size_t k = 1; k < j; ++k)
             {
                 auto cond = boost::math::tools::summation_condition_number<Real>(0);
-                for (size_t l = 0; l < phik.size(); ++l)
+                for (int64_t l = 0; l < static_cast<int64_t>(phik.size()); ++l)
                 {
-                    size_t idx = l*(1<<j) + k;
+                    int64_t idx = l*(int64_t(1)<<j) + k;
                     if (idx < phijk.size())
                     {
                         cond += phijk[idx];

@@ -304,19 +304,23 @@ public:
         // In fact for float precision I know the grid must be computed in double precision and then cast back down, or else parts of the support are systematically inaccurate.
         std::future<std::vector<Real>> t0 = std::async(std::launch::async, [&grid_refinements]() {
             // Computing in higher precision and downcasting is essential for 1ULP evaluation in float precision:
-            if constexpr (std::is_same_v<Real, float>) {
+            if constexpr (std::is_same_v<Real, float>)
+            {
                 auto v = dyadic_grid<double, p, 0>(grid_refinements);
                 std::vector<float> w(v.size());
-                for (size_t i = 0; i < v.size(); ++i) {
-                    w[i] = v[i];
+                for (size_t i = 0; i < v.size(); ++i)
+                {
+                    w[i] = static_cast<float>(v[i]);
                 }
                 return w;
             }
-            else if constexpr (std::is_same_v<Real, double>) {
+            else if constexpr (std::is_same_v<Real, double>)
+            {
                 auto v = dyadic_grid<long double, p, 0>(grid_refinements);
                 std::vector<double> w(v.size());
-                for (size_t i = 0; i < v.size(); ++i) {
-                    w[i] = v[i];
+                for (size_t i = 0; i < v.size(); ++i)
+                {
+                    w[i] = static_cast<double>(v[i]);
                 }
                 return w;
             }
@@ -325,19 +329,23 @@ public:
         });
         // Compute the derivative of the refined grid:
         std::future<std::vector<Real>> t1 = std::async(std::launch::async, [&grid_refinements]() {
-            if constexpr (std::is_same_v<Real, float>) {
+            if constexpr (std::is_same_v<Real, float>)
+            {
                 auto v = dyadic_grid<double, p, 1>(grid_refinements);
                 std::vector<float> w(v.size());
-                for (size_t i = 0; i < v.size(); ++i) {
-                    w[i] = v[i];
+                for (size_t i = 0; i < v.size(); ++i)
+                {
+                    w[i] = static_cast<float>(v[i]);
                 }
                 return w;
             }
-            else if constexpr (std::is_same_v<Real, double>) {
+            else if constexpr (std::is_same_v<Real, double>)
+            {
                 auto v = dyadic_grid<long double, p, 1>(grid_refinements);
                 std::vector<double> w(v.size());
-                for (size_t i = 0; i < v.size(); ++i) {
-                    w[i] = v[i];
+                for (size_t i = 0; i < v.size(); ++i)
+                {
+                    w[i] = static_cast<double>(v[i]);
                 }
                 return w;
             }
@@ -356,7 +364,7 @@ public:
                     std::vector<float> w(v.size());
                     for (size_t i = 0; i < v.size(); ++i)
                     {
-                        w[i] = v[i];
+                        w[i] = static_cast<float>(v[i]);
                     }
                     return w;
                 }
@@ -366,7 +374,7 @@ public:
                     std::vector<double> w(v.size());
                     for (size_t i = 0; i < v.size(); ++i)
                     {
-                        w[i] = v[i];
+                        w[i] = static_cast<double>(v[i]);
                     }
                     return w;
                 }
@@ -382,21 +390,23 @@ public:
                         std::vector<float> w(v.size());
                         for (size_t i = 0; i < v.size(); ++i)
                         {
-                            w[i] = v[i];
+                            w[i] = static_cast<float>(v[i]);
                         }
                         return w;
                     }
-                    else if constexpr (std::is_same_v<Real, double>) {
+                    else if constexpr (std::is_same_v<Real, double>)
+                    {
                         auto v = dyadic_grid<long double, p, 3>(grid_refinements);
                         std::vector<double> w(v.size());
                         for (size_t i = 0; i < v.size(); ++i)
                         {
-                            w[i] = v[i];
+                            w[i] = static_cast<double>(v[i]);
                         }
                         return w;
                     }
 
-                    return dyadic_grid<Real, p, 3>(grid_refinements); });
+                    return dyadic_grid<Real, p, 3>(grid_refinements);
+                });
                 d3ydx3 = t4.get();
             }
             d2ydx2 = t3.get();
