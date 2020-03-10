@@ -38,7 +38,7 @@ void choose_refinement()
     std::cout << "Choosing refinement for " << boost::core::demangle(typeid(Real).name()) << " precision Daubechies scaling function with " << p << " vanishing moments.\n";
     using std::abs;
     int rmax = 22;
-    auto phi_dense = boost::math::detail::dyadic_grid<PreciseReal, p, 0>(rmax);
+    auto phi_dense = boost::math::dyadic_grid<PreciseReal, p, 0>(rmax);
     Real dx_dense = (2*p-1)/static_cast<Real>(phi_dense.size()-1);
 
     for (int r = 2; r <= 18; ++r)
@@ -108,7 +108,7 @@ void find_best_interpolator()
     using std::abs;
     int rmax = 18;
     std::cout << "Computing phi_dense_precise\n";
-    auto phi_dense_precise = boost::math::detail::dyadic_grid<PreciseReal, p, 0>(rmax);
+    auto phi_dense_precise = boost::math::dyadic_grid<PreciseReal, p, 0>(rmax);
     std::vector<Real> phi_dense(phi_dense_precise.size());
     for (size_t i = 0; i < phi_dense.size(); ++i)
     {
@@ -141,8 +141,8 @@ void find_best_interpolator()
     {
         fs << r << ", ";
         std::map<Real, std::string> m;
-        auto phi = boost::math::detail::dyadic_grid<Real, p, 0>(r);
-        auto phi_prime = boost::math::detail::dyadic_grid<Real, p, 1>(r);
+        auto phi = boost::math::dyadic_grid<Real, p, 0>(r);
+        auto phi_prime = boost::math::dyadic_grid<Real, p, 1>(r);
 
         std::vector<Real> x(phi.size());
         Real dx = (2*p-1)/static_cast<Real>(x.size()-1);
@@ -383,7 +383,7 @@ void find_best_interpolator()
         }
 
         if constexpr (p > 2) {
-            auto phi_dbl_prime = boost::math::detail::dyadic_grid<Real, p, 2>(r);
+            auto phi_dbl_prime = boost::math::dyadic_grid<Real, p, 2>(r);
 
             {
                 auto phi_copy = phi;
@@ -451,8 +451,8 @@ void find_best_interpolator()
 
         if constexpr (p > 3)
         {
-            auto phi_dbl_prime = boost::math::detail::dyadic_grid<Real, p, 2>(r);
-            auto phi_triple_prime = boost::math::detail::dyadic_grid<Real, p, 3>(r);
+            auto phi_dbl_prime = boost::math::dyadic_grid<Real, p, 2>(r);
+            auto phi_triple_prime = boost::math::dyadic_grid<Real, p, 3>(r);
 
             {
                 auto totaylor = [&phi, &phi_prime, &phi_dbl_prime, &phi_triple_prime, &r](Real x)->Real {
