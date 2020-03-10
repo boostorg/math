@@ -943,6 +943,7 @@ test-suite misc :
    [ run jacobi_test.cpp : : :  [ requires cxx11_auto_declarations cxx11_constexpr cxx11_smart_ptr cxx11_defaulted_functions ] [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] ]
    [ run gegenbauer_test.cpp : : :  [ requires cxx11_auto_declarations cxx11_constexpr cxx11_smart_ptr cxx11_defaulted_functions ] [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] ]
    [ run daubechies_scaling_test.cpp  : : : <toolset>msvc:<cxxflags>/bigobj [ requires cxx17_if_constexpr cxx17_std_apply ]  [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] ]
+   [ run daubechies_wavelet_test.cpp  : : : <toolset>msvc:<cxxflags>/bigobj [ requires cxx17_if_constexpr cxx17_std_apply ]  [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] ]
    [ compile compile_test/daubechies_filters_incl_test.cpp : [ requires cxx17_if_constexpr cxx17_std_apply ]  ]
    [ compile compile_test/daubechies_scaling_incl_test.cpp : [ requires cxx17_if_constexpr cxx17_std_apply ]  ]
    [ run whittaker_shannon_test.cpp : : :  [ requires cxx11_auto_declarations cxx11_constexpr cxx11_smart_ptr cxx11_defaulted_functions ] ]

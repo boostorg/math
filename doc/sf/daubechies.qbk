@@ -32,6 +32,24 @@
     template<class Real, int p, int order>
     std::vector<Real> dyadic_grid(int64_t j_max);
 
+
+    #include <boost/math/special_functions/daubechies_wavelet.hpp>
+    template<class Real, int p>
+    class daubechies_wavelet {
+    public:
+        daubechies_wavelet(int grid_refinements = -1);
+
+        inline Real operator()(Real x) const;
+
+        inline Real prime(Real x) const;
+
+        inline Real double_prime(Real x) const;
+
+        std::pair<Real, Real> support() const;
+
+        int64_t bytes() const;
+    };
+
  
     } // namespaces
 
@@ -47,6 +65,9 @@ A basic usage is as follows:
     auto phi = boost::math::daubechies_scaling<double, 8>();
     double y = phi(0.38);
     double dydx = phi.prime(0.38);
+
+    auto psi = boost::math::daubechies_wavelet<double, 8>();
+    y = psi(0.38);
 
 Note that the constructor call is expensive, as it must assemble a /dyadic grid/--values of [sub /p/]\u03C6 at dyadic rationals,
 i.e., numbers of the form n/2[super /j/].
@@ -95,9 +116,9 @@ The axioms of a multiresolution analysis ensure that integer shifts of the scali
 a side effect is that the supports of the (unshifted) wavelet and scaling functions are arbitrary.
 For this reason, we have provided `.support()` so that you can check our conventions:
 
-    auto [xmin, xmax] = phi.support();
+    auto [a, b] = phi.support();
 
-For definiteness though, for the scaling function, the support is always [0, /2p/ - 1], and the support of the wavelet is [ -/p/, /p/ + 1].
+For definiteness though, for the scaling function, the support is always [0, /2p/ - 1], and the support of the wavelet is [ -/p/ + 1, /p/].
 
 [heading References]
 
