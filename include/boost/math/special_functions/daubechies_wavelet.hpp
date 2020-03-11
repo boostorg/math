@@ -198,8 +198,7 @@ public:
                 data[i][0] = y[i];
                 data[i][1] = dydx[i];
             }
-            // This need to change for the wavelet! Needs a starting support parameter!
-            m_mh = std::make_shared<detail::matched_holder_aos<std::vector<std::array<Real,2>>>>(std::move(data), grid_refinements);
+            m_mh = std::make_shared<detail::matched_holder_aos<std::vector<std::array<Real,2>>>>(std::move(data), grid_refinements, Real(-p+1));
         }
         if constexpr (p==3)
         {
@@ -209,8 +208,7 @@ public:
                 data[i][0] = y[i];
                 data[i][1] = dydx[i];
             }
-            // This needs to change for the wavelet! Needs a starting support parameter!
-            m_lin = std::make_shared<detail::linear_interpolation_aos<std::vector<std::array<Real, 2>>>>(std::move(data), grid_refinements);
+            m_lin = std::make_shared<detail::linear_interpolation_aos<std::vector<std::array<Real, 2>>>>(std::move(data), grid_refinements, Real(-p+1));
         }
         if constexpr (p == 4 || p == 5)
         {

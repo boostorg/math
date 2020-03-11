@@ -86,7 +86,7 @@ class matched_holder {
 public:
     using Real = typename RandomAccessContainer::value_type;
 
-    matched_holder(RandomAccessContainer && y, RandomAccessContainer && dydx, int grid_refinements) : y_{std::move(y)}, dy_{std::move(dydx)}
+    matched_holder(RandomAccessContainer && y, RandomAccessContainer && dydx, int grid_refinements, Real x0) : x0_{x0}, y_{std::move(y)}, dy_{std::move(dydx)}
     {
         inv_h_ = (1 << grid_refinements);
         Real h = 1/inv_h_;
@@ -104,7 +104,7 @@ public:
         // It's only exactly right at dyadic rationals.
         //Real const alpha = 2 - log(1+sqrt(Real(3)))/log(Real(2));
         // We're gonna use alpha = 1/2, rather than 0.5500...
-        Real s = x*inv_h_;
+        Real s = (x-x0_)*inv_h_;
         Real ii = floor(s);
         auto i = static_cast<decltype(y_.size())>(ii);
         Real t = s - ii;
@@ -115,12 +115,11 @@ public:
 
     int64_t bytes() const
     {
-        int64_t b = 1 + y_.size() + dy_.size();
-        // There might be some layout issues here but this should be fine:
-        return b*sizeof(Real) + sizeof(y_) + sizeof(dy_);
+        return 2*y_.size()*sizeof(Real) + sizeof(this);
     }
 
 private:
+    Real x0_;
     Real inv_h_;
     RandomAccessContainer y_;
     RandomAccessContainer dy_;
@@ -132,7 +131,7 @@ public:
     using Point = typename RandomAccessContainer::value_type;
     using Real = typename Point::value_type;
 
-    matched_holder_aos(RandomAccessContainer && data, int grid_refinements) : data_{std::move(data)}
+    matched_holder_aos(RandomAccessContainer && data, int grid_refinements, Real x0) : x0_{x0}, data_{std::move(data)}
     {
         inv_h_ = (1 << grid_refinements);
         Real h = 1/inv_h_;
@@ -146,7 +145,7 @@ public:
     {
         using std::floor;
         using std::sqrt;
-        Real s = x*inv_h_;
+        Real s = (x-x0_)*inv_h_;
         Real ii = floor(s);
         auto i = static_cast<decltype(data_.size())>(ii);
         Real t = s - ii;
@@ -159,11 +158,11 @@ public:
 
     int64_t bytes() const
     {
-        int64_t b = 1 + data_.size()*data_[0].size()*sizeof(Real) + sizeof(data_);
-        return b;
+        return data_.size()*data_[0].size()*sizeof(Real) + sizeof(this);
     }
 
 private:
+    Real x0_;
     Real inv_h_;
     RandomAccessContainer data_;
 };
@@ -218,7 +217,7 @@ public:
     using Point = typename RandomAccessContainer::value_type;
     using Real = typename Point::value_type;
 
-    linear_interpolation_aos(RandomAccessContainer && data, int grid_refinements) : data_{std::move(data)}
+    linear_interpolation_aos(RandomAccessContainer && data, int grid_refinements, Real x0) : x0_{x0}, data_{std::move(data)}
     {
         s_ = (1 << grid_refinements);
     }
@@ -226,7 +225,7 @@ public:
     inline Real operator()(Real x) const
     {
         using std::floor;
-        Real y = x*s_;
+        Real y = (x-x0_)*s_;
         Real k = floor(y);
 
         int64_t kk = static_cast<int64_t>(k);
@@ -237,7 +236,7 @@ public:
     inline Real prime(Real x) const
     {
         using std::floor;
-        Real y = x*s_;
+        Real y = (x-x0_)*s_;
         Real k = floor(y);
 
         int64_t kk = static_cast<int64_t>(k);
@@ -247,10 +246,11 @@ public:
 
     int64_t bytes() const
     {
-        return sizeof(Real) + data_.size()*data_[0].size()*sizeof(Real);
+        return sizeof(this) + data_.size()*data_[0].size()*sizeof(Real);
     }
 
 private:
+    Real x0_;
     Real s_;
     RandomAccessContainer data_;
 };
@@ -291,7 +291,7 @@ public:
             else if (std::is_same_v<Real, double>)
             {
                 //                          p= 2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19
-                std::array<int, 20> r{-1, -1, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 20, 19, 18, 18, 18, 18, 18, 18};
+                std::array<int, 20> r{-1, -1, 21, 21, 21, 21, 21, 21, 21, 21, 20, 20, 19, 19, 18, 18, 18, 18, 18, 18};
                 grid_refinements = r[p];
             }
             else
@@ -424,7 +424,7 @@ public:
                 data[i][0] = y[i];
                 data[i][1] = dydx[i];
             }
-            m_mh = std::make_shared<detail::matched_holder_aos<std::vector<std::array<Real,2>>>>(std::move(data), grid_refinements);
+            m_mh = std::make_shared<detail::matched_holder_aos<std::vector<std::array<Real,2>>>>(std::move(data), grid_refinements, Real(0));
         }
         if constexpr (p==3)
         {
@@ -434,7 +434,7 @@ public:
                 data[i][0] = y[i];
                 data[i][1] = dydx[i];
             }
-            m_lin = std::make_shared<detail::linear_interpolation_aos<std::vector<std::array<Real, 2>>>>(std::move(data), grid_refinements);
+            m_lin = std::make_shared<detail::linear_interpolation_aos<std::vector<std::array<Real, 2>>>>(std::move(data), grid_refinements, Real(0));
         }
         if constexpr (p == 4 || p == 5)
         {
