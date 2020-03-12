@@ -23,7 +23,7 @@
 namespace boost::math {
 
 template<class Real, int p, int order>
-std::vector<Real> dyadic_grid(int64_t j_max)
+std::vector<Real> daubechies_scaling_dyadic_grid(int64_t j_max)
 {
     using std::isnan;
     auto c = boost::math::filters::daubechies_scaling_filter<Real, p>();
@@ -36,6 +36,13 @@ std::vector<Real> dyadic_grid(int64_t j_max)
     auto phik = detail::daubechies_scaling_integer_grid<Real, p, order>();
 
     // Maximum sensible j for 32 bit floats is j_max = 22:
+    if (std::is_same_v<Real, float>)
+    {
+        if (j_max > 23)
+        {
+            throw std::logic_error("Requested dyadic grid more dense than number of representables on the interval.");
+        }
+    }
     std::vector<Real> v(2*p + (2*p-1)*((1<<j_max) -1), std::numeric_limits<Real>::quiet_NaN());
     v[0] = 0;
     v[v.size()-1] = 0;
@@ -306,7 +313,7 @@ public:
             // Computing in higher precision and downcasting is essential for 1ULP evaluation in float precision:
             if constexpr (std::is_same_v<Real, float>)
             {
-                auto v = dyadic_grid<double, p, 0>(grid_refinements);
+                auto v = daubechies_scaling_dyadic_grid<double, p, 0>(grid_refinements);
                 std::vector<float> w(v.size());
                 for (size_t i = 0; i < v.size(); ++i)
                 {
@@ -316,7 +323,7 @@ public:
             }
             else if constexpr (std::is_same_v<Real, double>)
             {
-                auto v = dyadic_grid<long double, p, 0>(grid_refinements);
+                auto v = daubechies_scaling_dyadic_grid<long double, p, 0>(grid_refinements);
                 std::vector<double> w(v.size());
                 for (size_t i = 0; i < v.size(); ++i)
                 {
@@ -324,14 +331,16 @@ public:
                 }
                 return w;
             }
-
-            return dyadic_grid<Real, p, 0>(grid_refinements);
+            else
+            {
+                return daubechies_scaling_dyadic_grid<Real, p, 0>(grid_refinements);
+            }
         });
         // Compute the derivative of the refined grid:
         std::future<std::vector<Real>> t1 = std::async(std::launch::async, [&grid_refinements]() {
             if constexpr (std::is_same_v<Real, float>)
             {
-                auto v = dyadic_grid<double, p, 1>(grid_refinements);
+                auto v = daubechies_scaling_dyadic_grid<double, p, 1>(grid_refinements);
                 std::vector<float> w(v.size());
                 for (size_t i = 0; i < v.size(); ++i)
                 {
@@ -341,7 +350,7 @@ public:
             }
             else if constexpr (std::is_same_v<Real, double>)
             {
-                auto v = dyadic_grid<long double, p, 1>(grid_refinements);
+                auto v = daubechies_scaling_dyadic_grid<long double, p, 1>(grid_refinements);
                 std::vector<double> w(v.size());
                 for (size_t i = 0; i < v.size(); ++i)
                 {
@@ -349,8 +358,10 @@ public:
                 }
                 return w;
             }
-
-            return dyadic_grid<Real, p, 1>(grid_refinements);
+            else
+            {
+                return daubechies_scaling_dyadic_grid<Real, p, 1>(grid_refinements);
+            }
         });
 
         // if necessary, compute the second and third derivative:
@@ -360,7 +371,7 @@ public:
             std::future<std::vector<Real>> t3 = std::async(std::launch::async, [&grid_refinements]() {
                 if constexpr (std::is_same_v<Real, float>)
                 {
-                    auto v = dyadic_grid<double, p, 2>(grid_refinements);
+                    auto v = daubechies_scaling_dyadic_grid<double, p, 2>(grid_refinements);
                     std::vector<float> w(v.size());
                     for (size_t i = 0; i < v.size(); ++i)
                     {
@@ -370,7 +381,7 @@ public:
                 }
                 else if constexpr (std::is_same_v<Real, double>)
                 {
-                    auto v = dyadic_grid<long double, p, 2>(grid_refinements);
+                    auto v = daubechies_scaling_dyadic_grid<long double, p, 2>(grid_refinements);
                     std::vector<double> w(v.size());
                     for (size_t i = 0; i < v.size(); ++i)
                     {
@@ -379,14 +390,14 @@ public:
                     return w;
                 }
 
-                return dyadic_grid<Real, p, 2>(grid_refinements);
+                return daubechies_scaling_dyadic_grid<Real, p, 2>(grid_refinements);
             });
 
             if constexpr (p >= 10) {
                 std::future<std::vector<Real>> t4 = std::async(std::launch::async, [&grid_refinements]() {
                     if constexpr (std::is_same_v<Real, float>)
                     {
-                        auto v = dyadic_grid<double, p, 3>(grid_refinements);
+                        auto v = daubechies_scaling_dyadic_grid<double, p, 3>(grid_refinements);
                         std::vector<float> w(v.size());
                         for (size_t i = 0; i < v.size(); ++i)
                         {
@@ -396,7 +407,7 @@ public:
                     }
                     else if constexpr (std::is_same_v<Real, double>)
                     {
-                        auto v = dyadic_grid<long double, p, 3>(grid_refinements);
+                        auto v = daubechies_scaling_dyadic_grid<long double, p, 3>(grid_refinements);
                         std::vector<double> w(v.size());
                         for (size_t i = 0; i < v.size(); ++i)
                         {
@@ -405,7 +416,7 @@ public:
                         return w;
                     }
 
-                    return dyadic_grid<Real, p, 3>(grid_refinements);
+                    return daubechies_scaling_dyadic_grid<Real, p, 3>(grid_refinements);
                 });
                 d3ydx3 = t4.get();
             }

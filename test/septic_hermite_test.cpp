@@ -177,7 +177,7 @@ void test_quadratic()
     for (Real t = 0; t <= 9; t += 0.0078125)
     {
         CHECK_ULP_CLOSE(t*t/2, sh(t), 100);
-        CHECK_ULP_CLOSE(t, sh.prime(t), 7);
+        CHECK_ULP_CLOSE(t, sh.prime(t), 32);
     }
 
     boost::random::mt19937 rng;

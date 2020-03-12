@@ -111,7 +111,7 @@ void test_quadratic()
     for (Real t = 0; t <= 9; t += 0.0078125)
     {
         CHECK_ULP_CLOSE(Real(t*t)/2, qh(t), 2);
-        CHECK_ULP_CLOSE(t, qh.prime(t), 7);
+        CHECK_ULP_CLOSE(t, qh.prime(t), 12);
         CHECK_ULP_CLOSE(Real(1), qh.double_prime(t), 32);
     }
 
@@ -145,7 +145,7 @@ void test_quadratic()
     for (Real t = xmin; t <= xmax; t += 0.125)
     {
         CHECK_ULP_CLOSE(Real(t*t)/2, qh(t), 4);
-        CHECK_ULP_CLOSE(t, qh.prime(t), 36);
+        CHECK_ULP_CLOSE(t, qh.prime(t), 53);
         CHECK_ULP_CLOSE(Real(1), qh.double_prime(t), 700);
     }
 }
@@ -363,7 +363,7 @@ void test_cardinal_quadratic()
     {
         Real computed = qh_aos(t);
         CHECK_ULP_CLOSE(Real(t*t)/2, computed, 2);
-        CHECK_ULP_CLOSE(t, qh_aos.prime(t), 7);
+        CHECK_ULP_CLOSE(t, qh_aos.prime(t), 12);
         CHECK_ULP_CLOSE(Real(1), qh_aos.double_prime(t), 64);
     }
 }

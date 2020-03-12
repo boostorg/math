@@ -24,9 +24,12 @@
 namespace boost::math {
 
 template<class Real, int p, int order>
-std::vector<Real> wavelet_dyadic_grid(int64_t j_max)
+std::vector<Real> daubechies_wavelet_dyadic_grid(int64_t j_max)
 {
-    auto phijk = dyadic_grid<Real, p, order>(j_max);
+    auto phijk = daubechies_scaling_dyadic_grid<Real, p, order>(j_max);
+
+    /// wrogn:
+    return phijk;
 }
 
 
@@ -80,7 +83,7 @@ public:
             // Computing in higher precision and downcasting is essential for 1ULP evaluation in float precision:
             if constexpr (std::is_same_v<Real, float>)
             {
-                auto v = dyadic_grid<double, p, 0>(grid_refinements);
+                auto v = daubechies_wavelet_dyadic_grid<double, p, 0>(grid_refinements);
                 std::vector<float> w(v.size());
                 for (size_t i = 0; i < v.size(); ++i)
                 {
@@ -90,7 +93,7 @@ public:
             }
             else if constexpr (std::is_same_v<Real, double>)
             {
-                auto v = dyadic_grid<long double, p, 0>(grid_refinements);
+                auto v = daubechies_wavelet_dyadic_grid<long double, p, 0>(grid_refinements);
                 std::vector<double> w(v.size());
                 for (size_t i = 0; i < v.size(); ++i)
                 {
@@ -99,13 +102,13 @@ public:
                 return w;
             }
 
-            return dyadic_grid<Real, p, 0>(grid_refinements);
+            return daubechies_wavelet_dyadic_grid<Real, p, 0>(grid_refinements);
         });
         // Compute the derivative of the refined grid:
         std::future<std::vector<Real>> t1 = std::async(std::launch::async, [&grid_refinements]() {
             if constexpr (std::is_same_v<Real, float>)
             {
-                auto v = dyadic_grid<double, p, 1>(grid_refinements);
+                auto v = daubechies_wavelet_dyadic_grid<double, p, 1>(grid_refinements);
                 std::vector<float> w(v.size());
                 for (size_t i = 0; i < v.size(); ++i)
                 {
@@ -115,7 +118,7 @@ public:
             }
             else if constexpr (std::is_same_v<Real, double>)
             {
-                auto v = dyadic_grid<long double, p, 1>(grid_refinements);
+                auto v = daubechies_wavelet_dyadic_grid<long double, p, 1>(grid_refinements);
                 std::vector<double> w(v.size());
                 for (size_t i = 0; i < v.size(); ++i)
                 {
@@ -124,7 +127,7 @@ public:
                 return w;
             }
 
-            return dyadic_grid<Real, p, 1>(grid_refinements);
+            return daubechies_wavelet_dyadic_grid<Real, p, 1>(grid_refinements);
         });
 
         // if necessary, compute the second and third derivative:
@@ -134,7 +137,7 @@ public:
             std::future<std::vector<Real>> t3 = std::async(std::launch::async, [&grid_refinements]() {
                 if constexpr (std::is_same_v<Real, float>)
                 {
-                    auto v = dyadic_grid<double, p, 2>(grid_refinements);
+                    auto v = daubechies_wavelet_dyadic_grid<double, p, 2>(grid_refinements);
                     std::vector<float> w(v.size());
                     for (size_t i = 0; i < v.size(); ++i)
                     {
@@ -144,7 +147,7 @@ public:
                 }
                 else if constexpr (std::is_same_v<Real, double>)
                 {
-                    auto v = dyadic_grid<long double, p, 2>(grid_refinements);
+                    auto v = daubechies_wavelet_dyadic_grid<long double, p, 2>(grid_refinements);
                     std::vector<double> w(v.size());
                     for (size_t i = 0; i < v.size(); ++i)
                     {
@@ -153,14 +156,14 @@ public:
                     return w;
                 }
 
-                return dyadic_grid<Real, p, 2>(grid_refinements);
+                return daubechies_wavelet_dyadic_grid<Real, p, 2>(grid_refinements);
             });
 
             if constexpr (p >= 10) {
                 std::future<std::vector<Real>> t4 = std::async(std::launch::async, [&grid_refinements]() {
                     if constexpr (std::is_same_v<Real, float>)
                     {
-                        auto v = dyadic_grid<double, p, 3>(grid_refinements);
+                        auto v = daubechies_wavelet_dyadic_grid<double, p, 3>(grid_refinements);
                         std::vector<float> w(v.size());
                         for (size_t i = 0; i < v.size(); ++i)
                         {
@@ -170,7 +173,7 @@ public:
                     }
                     else if constexpr (std::is_same_v<Real, double>)
                     {
-                        auto v = dyadic_grid<long double, p, 3>(grid_refinements);
+                        auto v = daubechies_wavelet_dyadic_grid<long double, p, 3>(grid_refinements);
                         std::vector<double> w(v.size());
                         for (size_t i = 0; i < v.size(); ++i)
                         {
@@ -179,7 +182,7 @@ public:
                         return w;
                     }
 
-                    return dyadic_grid<Real, p, 3>(grid_refinements);
+                    return daubechies_wavelet_dyadic_grid<Real, p, 3>(grid_refinements);
                 });
                 d3ydx3 = t4.get();
             }

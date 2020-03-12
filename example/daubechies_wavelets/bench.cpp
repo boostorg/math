@@ -27,7 +27,7 @@ void DyadicGrid(benchmark::State & state)
     size_t s = 0;
     for (auto _ : state)
     {
-        auto v = boost::math::dyadic_grid<Real, 4, 0>(j);
+        auto v = boost::math::daubechies_scaling_dyadic_grid<Real, 4, 0>(j);
         benchmark::DoNotOptimize(v[0]);
         s = v.size();
     }

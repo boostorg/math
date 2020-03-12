@@ -38,7 +38,7 @@ void choose_refinement()
     std::cout << "Choosing refinement for " << boost::core::demangle(typeid(Real).name()) << " precision Daubechies scaling function with " << p << " vanishing moments.\n";
     using std::abs;
     int rmax = 22;
-    auto phi_dense = boost::math::dyadic_grid<PreciseReal, p, 0>(rmax);
+    auto phi_dense = boost::math::daubechies_scaling_dyadic_grid<PreciseReal, p, 0>(rmax);
     Real dx_dense = (2*p-1)/static_cast<Real>(phi_dense.size()-1);
 
     for (int r = 2; r <= 18; ++r)
@@ -108,7 +108,7 @@ void find_best_interpolator()
     using std::abs;
     int rmax = 18;
     std::cout << "Computing phi_dense_precise\n";
-    auto phi_dense_precise = boost::math::dyadic_grid<PreciseReal, p, 0>(rmax);
+    auto phi_dense_precise = boost::math::daubechies_scaling_dyadic_grid<PreciseReal, p, 0>(rmax);
     std::vector<Real> phi_dense(phi_dense_precise.size());
     for (size_t i = 0; i < phi_dense.size(); ++i)
     {
@@ -141,8 +141,8 @@ void find_best_interpolator()
     {
         fs << r << ", ";
         std::map<Real, std::string> m;
-        auto phi = boost::math::dyadic_grid<Real, p, 0>(r);
-        auto phi_prime = boost::math::dyadic_grid<Real, p, 1>(r);
+        auto phi = boost::math::daubechies_scaling_dyadic_grid<Real, p, 0>(r);
+        auto phi_prime = boost::math::daubechies_scaling_dyadic_grid<Real, p, 1>(r);
 
         std::vector<Real> x(phi.size());
         Real dx = (2*p-1)/static_cast<Real>(x.size()-1);
@@ -155,7 +155,7 @@ void find_best_interpolator()
         {
             auto phi_copy = phi;
             auto phi_prime_copy = phi_prime;
-            auto mh = boost::math::detail::matched_holder(std::move(phi_copy), std::move(phi_prime_copy), r);
+            auto mh = boost::math::detail::matched_holder(std::move(phi_copy), std::move(phi_prime_copy), r, Real(0));
             Real sup = 0;
             // call to matched_holder is unchecked, so only go to phi_dense.size() -1.
             for (size_t i = 0; i < phi_dense.size() - 1; ++i)
@@ -383,7 +383,7 @@ void find_best_interpolator()
         }
 
         if constexpr (p > 2) {
-            auto phi_dbl_prime = boost::math::dyadic_grid<Real, p, 2>(r);
+            auto phi_dbl_prime = boost::math::daubechies_scaling_dyadic_grid<Real, p, 2>(r);
 
             {
                 auto phi_copy = phi;
@@ -451,8 +451,8 @@ void find_best_interpolator()
 
         if constexpr (p > 3)
         {
-            auto phi_dbl_prime = boost::math::dyadic_grid<Real, p, 2>(r);
-            auto phi_triple_prime = boost::math::dyadic_grid<Real, p, 3>(r);
+            auto phi_dbl_prime = boost::math::daubechies_scaling_dyadic_grid<Real, p, 2>(r);
+            auto phi_triple_prime = boost::math::daubechies_scaling_dyadic_grid<Real, p, 3>(r);
 
             {
                 auto totaylor = [&phi, &phi_prime, &phi_dbl_prime, &phi_triple_prime, &r](Real x)->Real {
@@ -530,6 +530,6 @@ void find_best_interpolator()
 
 int main()
 {
-    boost::hana::for_each(std::make_index_sequence<4>(), [&](auto i){ choose_refinement<double, float128, i+16>(); });
-    boost::hana::for_each(std::make_index_sequence<4>(), [&](auto i){ find_best_interpolator<float128, float128, i+16>(); });
+    //boost::hana::for_each(std::make_index_sequence<4>(), [&](auto i){ choose_refinement<double, float128, i+16>(); });
+    boost::hana::for_each(std::make_index_sequence<12>(), [&](auto i){ find_best_interpolator<double, float128, i+2>(); });
 }

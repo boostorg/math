@@ -246,7 +246,7 @@ void test_dyadic_grid()
     std::cout << "Testing dyadic grid on type " << boost::core::demangle(typeid(Real).name()) << "\n";
     auto f = [&](auto i)
     {
-        auto phijk = boost::math::dyadic_grid<Real, i+2, 0>(0);
+        auto phijk = boost::math::daubechies_scaling_dyadic_grid<Real, i+2, 0>(0);
         auto phik = boost::math::detail::daubechies_scaling_integer_grid<Real, i+2, 0>();
         assert(phik.size() == phijk.size());
 
@@ -257,7 +257,7 @@ void test_dyadic_grid()
 
         for (int64_t j = 1; j < 10; ++j)
         {
-            phijk = boost::math::dyadic_grid<Real, i+2, 0>(j);
+            phijk = boost::math::daubechies_scaling_dyadic_grid<Real, i+2, 0>(j);
             phik = boost::math::detail::daubechies_scaling_integer_grid<Real, i+2, 0>();
             for (int64_t l = 0; l < static_cast<int64_t>(phik.size()); ++l)
             {
