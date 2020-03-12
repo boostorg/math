@@ -26,10 +26,40 @@ namespace boost::math {
 template<class Real, int p, int order>
 std::vector<Real> daubechies_wavelet_dyadic_grid(int64_t j_max)
 {
-    auto phijk = daubechies_scaling_dyadic_grid<Real, p, order>(j_max);
+    auto phijk = daubechies_scaling_dyadic_grid<Real, p, order>(j_max-1);
+    //psi_j[l] = psi(-p+1 + l/2^j) = \sum_{k=0}^{2p-1} (-1)^k c_k \phi(1-2p+k + l/2^{j-1})
+    //For derivatives just map c_k -> 2^order c_k.
+    auto d = boost::math::filters::daubechies_scaling_filter<Real, p>();
+    Real scale = boost::math::constants::root_two<Real>()*(1 << order);
+    for (size_t i = 0; i < d.size(); ++i)
+    {
+        d[i] *= scale;
+        if (i & 1)
+        {
+            d[i] = -d[i];
+        }
+    }
 
-    /// wrogn:
-    return phijk;
+    std::vector<Real> v(2*p + (2*p-1)*((1<<j_max) -1), std::numeric_limits<Real>::quiet_NaN());
+    v[0] = 0;
+    v[v.size()-1] = 0;
+
+    for (int64_t l = 1; l < static_cast<int64_t>(v.size() - 1); ++l)
+    {
+        Real term = 0;
+        for (int64_t k = 0; k < static_cast<int64_t>(d.size()); ++k)
+        {
+            int64_t idx = (int64_t(1) << (j_max-1))*(1 - 2*p + k) + l;
+            if (idx < 0 || idx >= static_cast<int64_t>(phijk.size()))
+            {
+                continue;
+            }
+            term += d[k]*phijk[idx];
+        }
+        v[l] = term;
+    }
+
+    return v;
 }
 
 
@@ -68,7 +98,7 @@ public:
             else if (std::is_same_v<Real, double>)
             {
                 //                          p= 2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19
-                std::array<int, 20> r{-1, -1, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 20, 19, 18, 18, 18, 18, 18, 18};
+                std::array<int, 20> r{-1, -1, 21, 21, 21, 21, 21, 21, 21, 21, 20, 20, 19, 18, 18, 18, 18, 18, 18, 18};
                 grid_refinements = r[p];
             }
             else

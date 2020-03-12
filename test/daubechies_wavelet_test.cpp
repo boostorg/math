@@ -28,55 +28,10 @@ using boost::math::constants::pi;
 using boost::math::constants::root_two;
 
 
-template<class Real>
-void test_wavelet_dyadic_grid()
-{
-    std::cout << "Testing wavelet dyadic grid on type " << boost::core::demangle(typeid(Real).name()) << "\n";
-    auto f = [&](auto i)
-    {
-        auto phijk = boost::math::daubechies_scaling_dyadic_grid<Real, i+2, 0>(0);
-        auto phik = boost::math::detail::daubechies_scaling_integer_grid<Real, i+2, 0>();
-        assert(phik.size() == phijk.size());
-
-        for (size_t k = 0; k < phik.size(); ++k)
-        {
-            CHECK_ULP_CLOSE(phik[k], phijk[k], 0);
-        }
-
-        for (int64_t j = 1; j < 10; ++j)
-        {
-            phijk = boost::math::daubechies_scaling_dyadic_grid<Real, i+2, 0>(j);
-            phik = boost::math::detail::daubechies_scaling_integer_grid<Real, i+2, 0>();
-            for (int64_t l = 0; l < static_cast<int64_t>(phik.size()); ++l)
-            {
-                CHECK_ULP_CLOSE(phik[l], phijk[l*(int64_t(1)<<j)], 0);
-            }
-
-            // This test is from Daubechies, Ten Lectures on Wavelets, Ch 7 "More About Compactly Supported Wavelets",
-            // page 245: \forall y \in \mathbb{R}, \sum_{n \in \mathbb{Z}} \phi(y+n) = 1
-            for (size_t k = 1; k < j; ++k)
-            {
-                auto cond = boost::math::tools::summation_condition_number<Real>(0);
-                for (int64_t l = 0; l < static_cast<int64_t>(phik.size()); ++l)
-                {
-                    int64_t idx = l*(int64_t(1)<<j) + k;
-                    if (idx < phijk.size())
-                    {
-                        cond += phijk[idx];
-                    }
-                }
-                CHECK_MOLLIFIED_CLOSE(Real(1), cond.sum(), 10*cond()*std::numeric_limits<Real>::epsilon());
-            }
-        }
-    };
-
-    boost::hana::for_each(std::make_index_sequence<18>(), f);
-}
-
-
 template<typename Real, int p>
 void test_quadratures()
 {
+    std::cout << "Testing quadratures of " << p << " vanishing moment Daubechies wavelet on type " << boost::core::demangle(typeid(Real).name()) << "\n";
     using boost::math::quadrature::trapezoidal;
     auto psi = boost::math::daubechies_wavelet<Real, p>();
         
@@ -87,11 +42,23 @@ void test_quadratures()
     CHECK_ULP_CLOSE(Real(-p+1), a, 0);
     CHECK_ULP_CLOSE(Real(p), b, 0);
     // A wavelet is a function of zero average; ensure the quadrature over its support is zero.
-    /*Real Q = trapezoidal(psi, a, b, tol, 15, &error_estimate, &L1);
+    Real Q = trapezoidal(psi, a, b, tol, 15, &error_estimate, &L1);
     if (!CHECK_MOLLIFIED_CLOSE(Real(0), Q, Real(0.0001)))
     {
         std::cerr << "  Quadrature of " << p << " vanishing moment wavelet does not vanish.\n";
-    }*/
+        std::cerr << "  Error estimate: " << error_estimate << ", L1 norm: " << L1 << "\n";
+    }
+    auto psi_sq = [psi](Real x) {
+        Real t = psi(x);
+        return t*t;
+    };
+    Q = trapezoidal(psi_sq, a, b, tol, 15, &error_estimate, &L1);
+    Real quad_tol = 2000*std::sqrt(std::numeric_limits<Real>::epsilon())/(p*p*p);
+    if (!CHECK_MOLLIFIED_CLOSE(Real(1), Q, quad_tol))
+    {
+        std::cerr << "  L2 norm of " << p << " vanishing moment wavelet does not vanish.\n";
+        std::cerr << "  Error estimate: " << error_estimate << ", L1 norm: " << L1 << "\n";
+    }
     // psi is orthogonal to its integer translates: \int \psi(x-k) \psi(x) \, \mathrm{d}x = 0
     // psi has L2 norm 1:
 
@@ -100,18 +67,10 @@ void test_quadratures()
 
 int main()
 {
-    boost::hana::for_each(std::make_index_sequence<18>(), [&](auto i){
-      test_quadratures<float, i+2>();
-      test_quadratures<double, i+2>();
+    boost::hana::for_each(std::make_index_sequence<17>(), [&](auto i){
+        test_quadratures<float, i+3>();
+        test_quadratures<double, i+3>();
     });
-
-
-    test_wavelet_dyadic_grid<float>();
-    test_wavelet_dyadic_grid<double>();
-    test_wavelet_dyadic_grid<long double>();
-    #ifdef BOOST_HAS_FLOAT128
-    test_wavelet_dyadic_grid<float128>();
-    #endif
 
     return boost::math::test::report_errors();
 }
