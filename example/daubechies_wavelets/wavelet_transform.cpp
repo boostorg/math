@@ -5,46 +5,15 @@
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  */
 #include <cstdint>
-#include <boost/math/special_functions/daubechies_wavelet.hpp>
-#include <boost/math/quadrature/trapezoidal.hpp>
+#include <boost/math/quadrature/wavelet_transforms.hpp>
 #include <boost/gil.hpp>
 #include <boost/gil/extension/io/png.hpp>
 #include <boost/gil/extension/io/jpeg.hpp>
 #include <boost/gil/image.hpp>
+#include <Eigen/Dense>
 
 namespace bg = boost::gil;
-
-template<class F, typename Real, int p>
-class daubechies_wavelet_transform
-{
-public:
-    daubechies_wavelet_transform(F f, int grid_refinements = -1, Real tol = boost::math::tools::root_epsilon<Real>(),
-    int max_refinements = 12) : f_{f}, psi_(grid_refinements), tol_{tol}, max_refinements_{max_refinements}
-    {}
-
-    Real operator()(Real s, Real t) const
-    {
-        using std::sqrt;
-        using boost::math::quadrature::trapezoidal;
-        if (s <= 0)
-        {
-            throw std::domain_error("s > 0 is required.");
-        }
-        Real a = -s*p + s + t;
-        Real b = s*p + t;
-        Real Q = trapezoidal(f_, a, b, tol_, max_refinements_);
-        return Q/sqrt(s);
-    }
-
-private:
-    F f_;
-    boost::math::daubechies_wavelet<Real, p> psi_;
-    Real tol_;
-    int max_refinements_;
-};
-
-
-
+/*
 int main(int argc, char *argv[])
 {
     int height = 1000;
@@ -60,10 +29,11 @@ int main(int argc, char *argv[])
     //bg::write_view("img.png", bg::const_view(img), bg::png_tag());
     bg::write_view("img.jpeg", bg::const_view(img), bg::png_tag());
     return 0;
-}
+}*/
 
-/*int main()
+int main()
 {
+    using boost::math::quadrature::daubechies_wavelet_transform;
     double a = 1.3;
     auto f = [&a](double t) {
         if(t==0) {
@@ -74,9 +44,10 @@ int main(int argc, char *argv[])
 
     auto Wf = daubechies_wavelet_transform<decltype(f), double, 8>(f);
 
+    Eigen::MatrixXd grid(512, 512);
     double s = 7;
     double t = 9.2;
-    double Wfst = Wf(s, t);
-    std::cout << "W[f](s,t) = " << Wfst << "\n";
+    grid(0,0) = Wf(s, t);
+    std::cout << "W[f](s,t) = " << grid(0,0) << "\n";
     return 0;
-}*/
+}
