@@ -38,9 +38,10 @@
 // As from March 2020, C++03 support is deprecated, and as from March 2021 will be removed,
 // so mark up as such:
 //
-#if defined(_MSC_VER) || defined(__GNUC__)
+#if (defined(_MSC_VER) || defined(__GNUC__)) && !defined(BOOST_MATH_DISABLE_DEPRECATED_03_WARNING)
 #pragma message("CAUTION: One or more C++11 features were found to be unavailable")
 #pragma message("CAUTION: Compiling Boost.Math in pre-C++11 conformance modes is now deprecated and will be removed from March 2021.")
+#pragma message("CAUTION: Define BOOST_MATH_DISABLE_DEPRECATED_03_WARNING to suppress this message.")
 #endif
 #endif
 
