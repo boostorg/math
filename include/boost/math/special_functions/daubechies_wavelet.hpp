@@ -26,6 +26,10 @@ namespace boost::math {
 template<class Real, int p, int order>
 std::vector<Real> daubechies_wavelet_dyadic_grid(int64_t j_max)
 {
+    if (j_max == 0)
+    {
+        throw std::domain_error("The wavelet dyadic grid is refined from the scaling integer grid, so its minimum amount of data is half integer widths.");
+    }
     auto phijk = daubechies_scaling_dyadic_grid<Real, p, order>(j_max-1);
     //psi_j[l] = psi(-p+1 + l/2^j) = \sum_{k=0}^{2p-1} (-1)^k c_k \phi(1-2p+k + l/2^{j-1})
     //For derivatives just map c_k -> 2^order c_k.
@@ -34,13 +38,13 @@ std::vector<Real> daubechies_wavelet_dyadic_grid(int64_t j_max)
     for (size_t i = 0; i < d.size(); ++i)
     {
         d[i] *= scale;
-        if (i & 1)
+        if (!(i & 1))
         {
             d[i] = -d[i];
         }
     }
 
-    std::vector<Real> v(2*p + (2*p-1)*((1<<j_max) -1), std::numeric_limits<Real>::quiet_NaN());
+    std::vector<Real> v(2*p + (2*p-1)*((int64_t(1) <<j_max) -1), std::numeric_limits<Real>::quiet_NaN());
     v[0] = 0;
     v[v.size()-1] = 0;
 
@@ -70,6 +74,10 @@ public:
     {
         static_assert(p < 20, "Daubechies wavelets are only implemented for p < 20.");
         static_assert(p > 0, "Daubechies wavelets must have at least 1 vanishing moment.");
+        if (grid_refinements == 0)
+        {
+            throw std::domain_error("The wavelet requires at least 1 grid refinement.");
+        }
         if constexpr (p == 1)
         {
             return;

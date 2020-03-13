@@ -21,12 +21,12 @@ constexpr const int GRAPH_WIDTH = 700;
 template<typename Real, int p>
 void plot_psi(int grid_refinements = -1)
 {
-    auto phi = boost::math::daubechies_wavelet<Real, p>();
+    auto psi = boost::math::daubechies_wavelet<Real, p>();
     if (grid_refinements >= 0)
     {
-        phi = boost::math::daubechies_wavelet<Real, p>(grid_refinements);
+        psi = boost::math::daubechies_wavelet<Real, p>(grid_refinements);
     }
-    auto [a, b] = phi.support();
+    auto [a, b] = psi.support();
     std::string title = "Daubechies " + std::to_string(p) + " wavelet";
     title = "";
     std::string filename = "daubechies_" + std::to_string(p) + "_wavelet.svg";
@@ -34,7 +34,7 @@ void plot_psi(int grid_refinements = -1)
     quicksvg::graph_fn daub(a, b, title, filename, samples, GRAPH_WIDTH);
     daub.set_gridlines(8, 2*p-1);
     daub.set_stroke_width(1);
-    daub.add_fn(phi);
+    daub.add_fn(psi);
     daub.write_all();
 }
 
@@ -62,9 +62,9 @@ void plot_dpsi(int grid_refinements = -1)
 template<typename Real, int p>
 void plot_convergence()
 {
-    auto phi0 = boost::math::daubechies_wavelet<Real, p>(0);
-    auto [a, b] = phi0.support();
-    std::string title = "Daubechies " + std::to_string(p) + " wavelet at 0 (green), 1 (orange), 2 (red), and 24 (blue) grid refinements";
+    auto psi1 = boost::math::daubechies_wavelet<Real, p>(1);
+    auto [a, b] = psi1.support();
+    std::string title = "Daubechies " + std::to_string(p) + " wavelet at  1 (orange), 2 (red), and 21 (blue) grid refinements";
     title = "";
     std::string filename = "daubechies_" + std::to_string(p) + "_wavelet_convergence.svg";
 
@@ -72,14 +72,12 @@ void plot_convergence()
     daub.set_stroke_width(1);
     daub.set_gridlines(8, 2*p-1);
 
-    daub.add_fn(phi0, "green");
-    auto phi1 = boost::math::daubechies_wavelet<Real, p>(1);
-    daub.add_fn(phi1, "orange");
-    auto phi2 = boost::math::daubechies_wavelet<Real, p>(2);
-    daub.add_fn(phi2, "red");
+    daub.add_fn(psi1, "orange");
+    auto psi2 = boost::math::daubechies_wavelet<Real, p>(2);
+    daub.add_fn(psi2, "red");
 
-    auto phi21 = boost::math::daubechies_wavelet<Real, p>(21);
-    daub.add_fn(phi21);
+    auto psi21 = boost::math::daubechies_wavelet<Real, p>(21);
+    daub.add_fn(psi21);
 
     daub.write_all();
 }

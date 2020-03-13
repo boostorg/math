@@ -27,6 +27,23 @@ using boost::multiprecision::float128;
 using boost::math::constants::pi;
 using boost::math::constants::root_two;
 
+template<typename Real>
+void test_exact_value()
+{
+    // The global phase of the wavelet is not constrained by anything other than convention.
+    // Make sure that our conventions match the rest of the world:
+
+    auto psi = boost::math::daubechies_wavelet<Real, 2>(2);
+    auto phi = boost::math::daubechies_wavelet<Real, 2>(2);
+    auto h = boost::math::filters::daubechies_scaling_filter<Real, 2>();
+
+    Real computed = psi(1);
+    // this expression for expected is wrong!
+    Real expected = root_two<Real>()*(-h[0]*phi(1) + h[1]*phi(2));
+    CHECK_ULP_CLOSE(expected, computed, 1);
+
+    std::cout << "psi(" << 1 << ") = " << psi(1) << "\n";
+}
 
 template<typename Real, int p>
 void test_quadratures()
@@ -67,6 +84,8 @@ void test_quadratures()
 
 int main()
 {
+    //test_exact_value<double>();
+
     boost::hana::for_each(std::make_index_sequence<17>(), [&](auto i){
         test_quadratures<float, i+3>();
         test_quadratures<double, i+3>();
