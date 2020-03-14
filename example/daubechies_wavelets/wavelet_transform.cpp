@@ -5,6 +5,7 @@
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  */
 #include <cstdint>
+#include <cmath>
 #include <boost/math/quadrature/wavelet_transforms.hpp>
 #include <boost/gil.hpp>
 #include <boost/gil/extension/io/png.hpp>
@@ -46,8 +47,22 @@ int main()
 
     Eigen::MatrixXd grid(512, 512);
     double s = 7;
-    double t = 9.2;
+    double t = 0;
     grid(0,0) = Wf(s, t);
-    std::cout << "W[f](s,t) = " << grid(0,0) << "\n";
-    return 0;
+
+    auto g = [&a](double t)->std::complex<double> {
+        if (t==0) {
+            return {0.0, 0.0};
+        }
+        return std::exp(std::complex<double>(0.0, a/t));
+    };
+
+    auto Wg = daubechies_wavelet_transform<decltype(g), double, 8>(g);
+    std::cout << "W[f](s,t) = " << Wf(s,t) << "\n";
+    std::cout << "W[g](s,t) = " << Wg(s, t) << "\n";
+    std::cout << Wg(0.0, 3.5) << "\n";
+    std::cout << Wf(0.0, 4.8) << "\n";
+    std::cout << "W[f](-s,t) = " << Wf(-s, t) << "\n";
+    std::cout << "W[g](-s,t) = " << Wg(-s, t) << "\n";
+
 }

@@ -19,14 +19,11 @@ public:
     int max_refinements = 12) : f_{f}, psi_(grid_refinements), tol_{tol}, max_refinements_{max_refinements}
     {}
 
-    Real operator()(Real s, Real t) const
+    auto operator()(Real s, Real t)->decltype(std::declval<F>()(std::declval<Real>())) const
     {
         using std::sqrt;
+        using std::abs;
         using boost::math::quadrature::trapezoidal;
-        if (s == 0)
-        {
-            return std::numeric_limits<Real>::quiet_NaN();
-        }
 
         // -p + 1 < (x-t)/s < p so if s > 0 then s(1-p) + t < x < sp + t
         // if s < 0, then
@@ -37,8 +34,12 @@ public:
         {
             std::swap(a, b);
         }
-        Real Q = trapezoidal(f_, a, b, tol_, max_refinements_);
-        return Q/sqrt(s);
+        if (s == 0)
+        {
+            return std::numeric_limits<Real>::quiet_NaN();
+        }
+
+        return trapezoidal(f_, a, b, tol_, max_refinements_)/sqrt(abs(s));
     }
 
 private:
