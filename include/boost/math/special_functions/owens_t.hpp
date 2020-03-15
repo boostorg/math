@@ -53,7 +53,7 @@ namespace boost
          inline RealType owens_t_znorm1(const RealType x)
          {
             using namespace boost::math::constants;
-            return erf(x*one_div_root_two<RealType>())*half<RealType>();
+            return boost::math::erf(x*one_div_root_two<RealType>())*half<RealType>();
          } // RealType owens_t_znorm1(const RealType x)
 
          // owens_t_znorm2(x) = P(x<=Z<oo) with Z being normally distributed.
@@ -61,7 +61,7 @@ namespace boost
          inline RealType owens_t_znorm2(const RealType x)
          {
             using namespace boost::math::constants;
-            return erfc(x*one_div_root_two<RealType>())*half<RealType>();
+            return boost::math::erfc(x*one_div_root_two<RealType>())*half<RealType>();
          } // RealType owens_t_znorm2(const RealType x)
 
          // Auxiliary function, it computes an array key that is used to determine

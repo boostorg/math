@@ -363,7 +363,7 @@ T lambert_w_singularity_series(const T p)
 #ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W_TERMS
   {
     int terms = 20; // Default to using all terms.
-    if (absp < 0.001150)
+    if (absp < 0.01159)
     { // Very near singularity.
       terms = 6;
     }
