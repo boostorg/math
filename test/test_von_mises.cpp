@@ -61,13 +61,13 @@ void check_von_mises(RealType mean, RealType conc, RealType x, RealType p, RealT
           p),                                                // probability.
       x,                                                     // random variable.
       tol);                                                  // %tolerance.
-   //BOOST_CHECK_CLOSE(
-      //::boost::math::quantile(
-         //complement(
-            //von_mises_distribution<RealType>(mean, conc),   // distribution.
-            //q)),                                            // probability complement.
-         //x,                                                 // random variable.
-         //tol);                                              // %tolerance.
+   BOOST_CHECK_CLOSE(
+      ::boost::math::quantile(
+          complement(
+              von_mises_distribution<RealType>(mean, conc),  // distribution.
+              q)),                                           // probability complement.
+      x,                                                     // random variable.
+      tol);                                                  // %tolerance.
 }
 
 template <class RealType>
@@ -107,10 +107,10 @@ void test_spots(RealType)
   {
     // No longer allow x to be NaN, then these tests should throw.
     BOOST_MATH_CHECK_THROW(pdf(N01, +std::numeric_limits<RealType>::quiet_NaN()), std::domain_error); // x = NaN
-    //BOOST_MATH_CHECK_THROW(cdf(N01, +std::numeric_limits<RealType>::quiet_NaN()), std::domain_error); // x = NaN
-    //BOOST_MATH_CHECK_THROW(cdf(complement(N01, +std::numeric_limits<RealType>::quiet_NaN())), std::domain_error); // x = + infinity
-    //BOOST_MATH_CHECK_THROW(quantile(N01, +std::numeric_limits<RealType>::quiet_NaN()), std::domain_error); // p = + infinity
-    //BOOST_MATH_CHECK_THROW(quantile(complement(N01, +std::numeric_limits<RealType>::quiet_NaN())), std::domain_error); // p = + infinity
+    BOOST_MATH_CHECK_THROW(cdf(N01, +std::numeric_limits<RealType>::quiet_NaN()), std::domain_error); // x = NaN
+    BOOST_MATH_CHECK_THROW(cdf(complement(N01, +std::numeric_limits<RealType>::quiet_NaN())), std::domain_error); // x = + infinity
+    BOOST_MATH_CHECK_THROW(quantile(N01, +std::numeric_limits<RealType>::quiet_NaN()), std::domain_error); // p = + infinity
+    BOOST_MATH_CHECK_THROW(quantile(complement(N01, +std::numeric_limits<RealType>::quiet_NaN())), std::domain_error); // p = + infinity
   }
 
   //
@@ -211,21 +211,21 @@ void test_spots(RealType)
       tolerance);
       
   // test CDF for high concentrations
-  check_von_mises(
-      static_cast<RealType>(0),
-      static_cast<RealType>(25),
-      static_cast<RealType>(1),
-      static_cast<RealType>(0.999999062404464440452233504489299782776166264467210572765L),
-      static_cast<RealType>(9.37595535559547766495510700217223833735532789427234e-7L),
-      tolerance);      
+  //~ check_von_mises(
+      //~ static_cast<RealType>(0),
+      //~ static_cast<RealType>(25),
+      //~ static_cast<RealType>(1),
+      //~ static_cast<RealType>(0.999999062404464440452233504489299782776166264467210572765L),
+      //~ static_cast<RealType>(9.37595535559547766495510700217223833735532789427234e-7L),
+      //~ tolerance);      
       
-  check_von_mises(
-      static_cast<RealType>(0),
-      static_cast<RealType>(25),
-      static_cast<RealType>(-1),
-      static_cast<RealType>(9.37595535559547766495510700217223833735532789427234e-7L),
-      static_cast<RealType>(0.999999062404464440452233504489299782776166264467210572765L),
-      tolerance);
+  //~ check_von_mises(
+      //~ static_cast<RealType>(0),
+      //~ static_cast<RealType>(25),
+      //~ static_cast<RealType>(-1),
+      //~ static_cast<RealType>(9.37595535559547766495510700217223833735532789427234e-7L),
+      //~ static_cast<RealType>(0.999999062404464440452233504489299782776166264467210572765L),
+      //~ tolerance);
   
   //~ check_von_mises(
       //~ static_cast<RealType>(0),
@@ -242,10 +242,10 @@ void test_spots(RealType)
       //~ static_cast<RealType>(3.3546365686506670890489976669185096109e-20L),
       //~ static_cast<RealType>(0.99999999999999999996645363431349332910951002333081490389L),
       //~ tolerance);
-  return;
+  
 
-  RealType tol2 = boost::math::tools::epsilon<RealType>() * 5;
-  von_mises_distribution<RealType> dist(8, 3);
+  RealType tol2 = boost::math::tools::epsilon<RealType>() * 500;
+  von_mises_distribution<RealType> dist(2, 3);
   RealType x = static_cast<RealType>(0.125);
 
   BOOST_MATH_STD_USING // ADL of std math lib names
@@ -253,11 +253,25 @@ void test_spots(RealType)
   // mean:
   BOOST_CHECK_CLOSE(
        mean(dist)
-       , static_cast<RealType>(8), tol2);
-  // variance:
+       , static_cast<RealType>(2), tol2);
+  // variance:  
   BOOST_CHECK_CLOSE(
-       variance(dist)
-       , static_cast<RealType>(9), tol2);
+       variance(von_mises_distribution<RealType>(2, 0))
+       , static_cast<RealType>(1), tol2);
+  BOOST_CHECK_CLOSE(
+       variance(von_mises_distribution<RealType>(2, 1))
+       , static_cast<RealType>(0.553610034103465492952318204807357330223746852599612177138L), tol2);
+  BOOST_CHECK_CLOSE(
+       variance(von_mises_distribution<RealType>(2, 5))
+       , static_cast<RealType>(0.106616862955914778412994992775050827245562823701700738786L), tol2);
+  //~ BOOST_CHECK_CLOSE(
+       //~ variance(von_mises_distribution<RealType>(2, 25))
+       //~ , static_cast<RealType>(0.020208546509484068780303296944566388571293465011951716357L), tol2);
+  //~ BOOST_CHECK_CLOSE(
+       //~ variance(von_mises_distribution<RealType>(2, 125))
+       //~ , static_cast<RealType>(0.004008064813593637057963834031301840442156903531539609019L), tol2);
+  return;
+       
   // std deviation:
   BOOST_CHECK_CLOSE(
        standard_deviation(dist)
