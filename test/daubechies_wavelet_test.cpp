@@ -16,6 +16,7 @@
 #include <boost/hana/ext/std/integer_sequence.hpp>
 #include <boost/math/tools/condition_numbers.hpp>
 #include <boost/math/special_functions/daubechies_wavelet.hpp>
+#include <boost/math/special_functions/next.hpp>
 #include <boost/math/quadrature/trapezoidal.hpp>
 
 #ifdef BOOST_HAS_FLOAT128
@@ -32,17 +33,10 @@ void test_exact_value()
 {
     // The global phase of the wavelet is not constrained by anything other than convention.
     // Make sure that our conventions match the rest of the world:
-
     auto psi = boost::math::daubechies_wavelet<Real, 2>(2);
-    auto phi = boost::math::daubechies_wavelet<Real, 2>(2);
-    auto h = boost::math::filters::daubechies_scaling_filter<Real, 2>();
-
     Real computed = psi(1);
-    // this expression for expected is wrong!
-    Real expected = root_two<Real>()*(-h[0]*phi(1) + h[1]*phi(2));
-    CHECK_ULP_CLOSE(expected, computed, 1);
-
-    std::cout << "psi(" << 1 << ") = " << psi(1) << "\n";
+    Real expected = -1.366025403784439;
+    CHECK_MOLLIFIED_CLOSE(expected, computed, 0.0001);
 }
 
 template<typename Real, int p>
@@ -77,14 +71,33 @@ void test_quadratures()
         std::cerr << "  Error estimate: " << error_estimate << ", L1 norm: " << L1 << "\n";
     }
     // psi is orthogonal to its integer translates: \int \psi(x-k) \psi(x) \, \mathrm{d}x = 0
-    // psi has L2 norm 1:
-
     // g_n = 1/sqrt(2) <psi(t/2), phi(t-n)> (Mallat, 7.55)
+
+    // Now hit the boundary. Much can go wrong here; this just tests for segfaults:
+    int samples = 500;
+    Real xlo = a;
+    Real xhi = b;
+    for (int i = 0; i < samples; ++i)
+    {
+        CHECK_ULP_CLOSE(Real(0), psi(xlo), 0);
+        CHECK_ULP_CLOSE(Real(0), psi(xhi), 0);
+        xlo = std::nextafter(xlo, std::numeric_limits<Real>::lowest());
+        xhi = std::nextafter(xhi, std::numeric_limits<Real>::max());
+    }
+
+    xlo = a;
+    xhi = b;
+    for (int i = 0; i < samples; ++i) {
+        assert(abs(psi(xlo)) <= 5);
+        assert(abs(psi(xhi)) <= 5);
+        xlo = std::nextafter(xlo, std::numeric_limits<Real>::max());
+        xhi = std::nextafter(xhi, std::numeric_limits<Real>::lowest());
+    }
 }
 
 int main()
 {
-    //test_exact_value<double>();
+    test_exact_value<double>();
 
     boost::hana::for_each(std::make_index_sequence<17>(), [&](auto i){
         test_quadratures<float, i+3>();

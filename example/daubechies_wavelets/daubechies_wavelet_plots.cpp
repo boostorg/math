@@ -121,10 +121,10 @@ void plot_condition_number()
     daub.write_all();
 }
 
-template<typename CoarseReal, typename PreciseReal, int p, class PhiPrecise>
-void do_ulp(int coarse_refinements, PhiPrecise phi_precise)
+template<typename CoarseReal, typename PreciseReal, int p, class PsiPrecise>
+void do_ulp(int coarse_refinements, PsiPrecise psi_precise)
 {
-    auto phi_coarse = boost::math::daubechies_wavelet<CoarseReal, p>(coarse_refinements);
+    auto psi_coarse = boost::math::daubechies_wavelet<CoarseReal, p>(coarse_refinements);
 
     std::string title = std::to_string(p) + " vanishing moment ULP plot at " + std::to_string(coarse_refinements) + " refinements and " + boost::core::demangle(typeid(CoarseReal).name()) + " precision";
     title = "";
@@ -134,7 +134,7 @@ void do_ulp(int coarse_refinements, PhiPrecise phi_precise)
     int clip = 20;
     int horizontal_lines = 8;
     int vertical_lines = 2*p - 1;
-    quicksvg::ulp_plot<decltype(phi_coarse), CoarseReal, decltype(phi_precise), PreciseReal>(phi_coarse, phi_precise, CoarseReal(0), phi_coarse.support().second, title, filename, samples, GRAPH_WIDTH, clip, horizontal_lines, vertical_lines);
+    quicksvg::ulp_plot<decltype(psi_coarse), CoarseReal, decltype(psi_precise), PreciseReal>(psi_coarse, psi_precise, CoarseReal(psi_coarse.support().first), psi_coarse.support().second, title, filename, samples, GRAPH_WIDTH, clip, horizontal_lines, vertical_lines);
 }
 
 
@@ -148,7 +148,7 @@ int main()
     using PreciseReal = float128;
     using CoarseReal = double;
     int precise_refinements = 22;
-    constexpr const int p = 8;
+    constexpr const int p = 9;
     std::cout << "Computing precise wavelet function in " << boost::core::demangle(typeid(PreciseReal).name()) << " precision.\n";
     auto phi_precise = boost::math::daubechies_wavelet<PreciseReal, p>(precise_refinements);
     std::cout << "Beginning comparison with functions computed in " << boost::core::demangle(typeid(CoarseReal).name()) << " precision.\n";
