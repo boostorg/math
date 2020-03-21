@@ -259,6 +259,10 @@ void test_linear()
     Real Q = gauss<Real, Points>::integrate(f, (Real) 0, (Real) 1, &L1);
     BOOST_CHECK_CLOSE_FRACTION(Q, 9.5, tol);
     BOOST_CHECK_CLOSE_FRACTION(L1, 9.5, tol);
+    Q = gauss<Real, Points>::integrate(f, (Real) 0, (Real) 0, &L1);
+    BOOST_CHECK_CLOSE(Q, 0, tol);
+    Q = gauss<Real, Points>::integrate(f, (Real) 1, (Real) 0, &L1);
+    BOOST_CHECK_CLOSE_FRACTION(Q, -9.5, tol);
 }
 
 template<class Real, unsigned Points>
