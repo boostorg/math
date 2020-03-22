@@ -19,27 +19,20 @@ public:
     int max_refinements = 12) : f_{f}, psi_(grid_refinements), tol_{tol}, max_refinements_{max_refinements}
     {}
 
+    daubechies_wavelet_transform(F f, boost::math::daubechies_wavelet<Real, p> wavelet, Real tol = boost::math::tools::root_epsilon<Real>(),
+    int max_refinements = 12) : f_{f}, psi_{wavelet}, tol_{tol}, max_refinements_{max_refinements}
+    {}
+
     auto operator()(Real s, Real t)->decltype(std::declval<F>()(std::declval<Real>())) const
     {
         using std::sqrt;
         using std::abs;
         using boost::math::quadrature::trapezoidal;
-
-        // -p + 1 < (x-t)/s < p so if s > 0 then s(1-p) + t < x < sp + t
-        // if s < 0, then
-        // -sp + s >= x-t >= sp <=> sp + t < x < s(1-p) + t
-        Real a = -s*p + s + t;
-        Real b = s*p + t;
-        if (s < 0)
-        {
-            std::swap(a, b);
-        }
-        if (s == 0)
-        {
-            return std::numeric_limits<Real>::quiet_NaN();
-        }
-
-        return trapezoidal(f_, a, b, tol_, max_refinements_)/sqrt(abs(s));
+        auto g = [&] (Real u) {
+            return f_(s*u+t)*psi_(u);
+        };
+        auto [a,b] = psi_.support();
+        return sqrt(abs(s))*trapezoidal(g, a, b, tol_, max_refinements_);
     }
 
 private:
