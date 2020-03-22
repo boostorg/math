@@ -237,7 +237,7 @@ public:
 
         int64_t kk = static_cast<int64_t>(k);
         Real t = y - k;
-        return (1-t)*data_[kk][0] + t*data_[kk+1][0];
+        return (t != 0) ? (1-t)*data_[kk][0] + t*data_[kk+1][0] : data_[kk][0];
     }
 
     inline Real prime(Real x) const
@@ -248,7 +248,7 @@ public:
 
         int64_t kk = static_cast<int64_t>(k);
         Real t = y - k;
-        return (1-t)*data_[kk][1] + t*data_[kk+1][1];
+        return t != 0 ? (1-t)*data_[kk][1] + t*data_[kk+1][1] : data_[kk][1];
     }
 
     int64_t bytes() const
@@ -262,7 +262,43 @@ private:
     RandomAccessContainer data_;
 };
 
-}
+
+template <class T>
+struct daubechies_eval_type
+{
+   typedef T type;
+
+   static const std::vector<T>& vector_cast(const std::vector<T>& v) { return v; }
+
+};
+template <>
+struct daubechies_eval_type<float>
+{
+   typedef double type;
+
+   inline static std::vector<float> vector_cast(const std::vector<double>& v)
+   {
+      std::vector<float> result(v.size());
+      for (unsigned i = 0; i < v.size(); ++i)
+         result[i] = static_cast<float>(v[i]);
+      return result;
+   }
+};
+template <>
+struct daubechies_eval_type<double>
+{
+   typedef long double type;
+
+   inline static std::vector<double> vector_cast(const std::vector<long double>& v)
+   {
+      std::vector<double> result(v.size());
+      for (unsigned i = 0; i < v.size(); ++i)
+         result[i] = static_cast<double>(v[i]);
+      return result;
+   }
+};
+
+} // namespace detail
 
 template<class Real, int p>
 class daubechies_scaling {
@@ -311,57 +347,13 @@ public:
         // In fact for float precision I know the grid must be computed in double precision and then cast back down, or else parts of the support are systematically inaccurate.
         std::future<std::vector<Real>> t0 = std::async(std::launch::async, [&grid_refinements]() {
             // Computing in higher precision and downcasting is essential for 1ULP evaluation in float precision:
-            if constexpr (std::is_same_v<Real, float>)
-            {
-                auto v = daubechies_scaling_dyadic_grid<double, p, 0>(grid_refinements);
-                std::vector<float> w(v.size());
-                for (size_t i = 0; i < v.size(); ++i)
-                {
-                    w[i] = static_cast<float>(v[i]);
-                }
-                return w;
-            }
-            else if constexpr (std::is_same_v<Real, double>)
-            {
-                auto v = daubechies_scaling_dyadic_grid<long double, p, 0>(grid_refinements);
-                std::vector<double> w(v.size());
-                for (size_t i = 0; i < v.size(); ++i)
-                {
-                    w[i] = static_cast<double>(v[i]);
-                }
-                return w;
-            }
-            else
-            {
-                return daubechies_scaling_dyadic_grid<Real, p, 0>(grid_refinements);
-            }
+            auto v = daubechies_scaling_dyadic_grid<typename detail::daubechies_eval_type<Real>::type, p, 0>(grid_refinements);
+            return detail::daubechies_eval_type<Real>::vector_cast(v);
         });
         // Compute the derivative of the refined grid:
         std::future<std::vector<Real>> t1 = std::async(std::launch::async, [&grid_refinements]() {
-            if constexpr (std::is_same_v<Real, float>)
-            {
-                auto v = daubechies_scaling_dyadic_grid<double, p, 1>(grid_refinements);
-                std::vector<float> w(v.size());
-                for (size_t i = 0; i < v.size(); ++i)
-                {
-                    w[i] = static_cast<float>(v[i]);
-                }
-                return w;
-            }
-            else if constexpr (std::is_same_v<Real, double>)
-            {
-                auto v = daubechies_scaling_dyadic_grid<long double, p, 1>(grid_refinements);
-                std::vector<double> w(v.size());
-                for (size_t i = 0; i < v.size(); ++i)
-                {
-                    w[i] = static_cast<double>(v[i]);
-                }
-                return w;
-            }
-            else
-            {
-                return daubechies_scaling_dyadic_grid<Real, p, 1>(grid_refinements);
-            }
+           auto v = daubechies_scaling_dyadic_grid<typename detail::daubechies_eval_type<Real>::type, p, 1>(grid_refinements);
+           return detail::daubechies_eval_type<Real>::vector_cast(v);
         });
 
         // if necessary, compute the second and third derivative:
@@ -369,54 +361,14 @@ public:
         std::vector<Real> d3ydx3;
         if constexpr (p >= 6) {
             std::future<std::vector<Real>> t3 = std::async(std::launch::async, [&grid_refinements]() {
-                if constexpr (std::is_same_v<Real, float>)
-                {
-                    auto v = daubechies_scaling_dyadic_grid<double, p, 2>(grid_refinements);
-                    std::vector<float> w(v.size());
-                    for (size_t i = 0; i < v.size(); ++i)
-                    {
-                        w[i] = static_cast<float>(v[i]);
-                    }
-                    return w;
-                }
-                else if constexpr (std::is_same_v<Real, double>)
-                {
-                    auto v = daubechies_scaling_dyadic_grid<long double, p, 2>(grid_refinements);
-                    std::vector<double> w(v.size());
-                    for (size_t i = 0; i < v.size(); ++i)
-                    {
-                        w[i] = static_cast<double>(v[i]);
-                    }
-                    return w;
-                }
-                else
-                  return daubechies_scaling_dyadic_grid<Real, p, 2>(grid_refinements);
-            });
+               auto v = daubechies_scaling_dyadic_grid<typename detail::daubechies_eval_type<Real>::type, p, 2>(grid_refinements);
+               return detail::daubechies_eval_type<Real>::vector_cast(v);
+             });
 
             if constexpr (p >= 10) {
                 std::future<std::vector<Real>> t4 = std::async(std::launch::async, [&grid_refinements]() {
-                    if constexpr (std::is_same_v<Real, float>)
-                    {
-                        auto v = daubechies_scaling_dyadic_grid<double, p, 3>(grid_refinements);
-                        std::vector<float> w(v.size());
-                        for (size_t i = 0; i < v.size(); ++i)
-                        {
-                            w[i] = static_cast<float>(v[i]);
-                        }
-                        return w;
-                    }
-                    else if constexpr (std::is_same_v<Real, double>)
-                    {
-                        auto v = daubechies_scaling_dyadic_grid<long double, p, 3>(grid_refinements);
-                        std::vector<double> w(v.size());
-                        for (size_t i = 0; i < v.size(); ++i)
-                        {
-                            w[i] = static_cast<double>(v[i]);
-                        }
-                        return w;
-                    }
-                    else
-                     return daubechies_scaling_dyadic_grid<Real, p, 3>(grid_refinements);
+                   auto v = daubechies_scaling_dyadic_grid<typename detail::daubechies_eval_type<Real>::type, p, 3>(grid_refinements);
+                   return detail::daubechies_eval_type<Real>::vector_cast(v);
                 });
                 d3ydx3 = t4.get();
             }
