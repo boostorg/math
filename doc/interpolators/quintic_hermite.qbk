@@ -25,6 +25,8 @@ public:
 
     inline Real double_prime(Real x) const;
 
+    std::pair<Real, Real> domain() const;
+
     friend std::ostream& operator<<(std::ostream & os, const quintic_hermite & m);
 
     void push_back(Real x, Real y, Real dydx, Real d2ydx2);
@@ -41,6 +43,8 @@ public:
     inline Real prime(Real x) const;
 
     inline Real double_prime(Real x) const;
+
+    std::pair<Real, Real> domain() const;
 };
 
 template<class RandomAccessContainer>
@@ -55,6 +59,8 @@ public:
     inline Real prime(Real x) const;
 
     inline Real double_prime(Real x) const;
+
+    std::pair<Real, Real> domain() const;
 
 }
 ``

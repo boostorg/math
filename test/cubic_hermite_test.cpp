@@ -246,7 +246,7 @@ void test_cardinal_constant()
         }
     }
 
-        // Now check the boundaries:
+    // Now check the boundaries:
     Real tlo = x0;
     Real thi = x0 + (25-1)*dx;
     int samples = 5000;

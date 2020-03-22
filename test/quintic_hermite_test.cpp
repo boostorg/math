@@ -13,6 +13,7 @@
 #include <boost/random/uniform_real.hpp>
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/math/interpolators/quintic_hermite.hpp>
+#include <boost/math/special_functions/next.hpp>
 #include <boost/circular_buffer.hpp>
 #ifdef BOOST_HAS_FLOAT128
 #include <boost/multiprecision/float128.hpp>
@@ -287,6 +288,25 @@ void test_cardinal_constant()
         CHECK_ULP_CLOSE(Real(0), qh_aos.prime(t), 24);
         CHECK_ULP_CLOSE(Real(0), qh_aos.double_prime(t), 24);
     }
+
+    // Now check the boundaries:
+    auto [tlo, thi] = qh.domain();
+    int samples = 5000;
+    int i = 0;
+    while (i++ < samples)
+    {
+        CHECK_ULP_CLOSE(Real(7), qh(tlo), 2);
+        CHECK_ULP_CLOSE(Real(7), qh(thi), 2);
+        CHECK_ULP_CLOSE(Real(7), qh_aos(tlo), 2);
+        CHECK_ULP_CLOSE(Real(7), qh_aos(thi), 2);
+        CHECK_ULP_CLOSE(Real(0), qh.prime(tlo), 2);
+        CHECK_ULP_CLOSE(Real(0), qh.prime(thi), 2);
+        CHECK_ULP_CLOSE(Real(0), qh_aos.prime(tlo), 2);
+        CHECK_ULP_CLOSE(Real(0), qh_aos.prime(thi), 2);
+
+        tlo = boost::math::nextafter(tlo, std::numeric_limits<Real>::max());
+        thi = boost::math::nextafter(thi, std::numeric_limits<Real>::lowest());
+    }
 }
 
 
@@ -322,6 +342,24 @@ void test_cardinal_linear()
         CHECK_ULP_CLOSE(Real(0), qh_aos.double_prime(t), 2);
     }
 
+    // Now check the boundaries:
+    auto [tlo, thi] = qh.domain();
+    int samples = 5000;
+    int i = 0;
+    while (i++ < samples)
+    {
+        CHECK_ULP_CLOSE(Real(tlo), qh(tlo), 2);
+        CHECK_ULP_CLOSE(Real(thi), qh(thi), 2);
+        CHECK_ULP_CLOSE(Real(tlo), qh_aos(tlo), 2);
+        CHECK_ULP_CLOSE(Real(thi), qh_aos(thi), 2);
+        CHECK_ULP_CLOSE(Real(1), qh.prime(tlo), 2);
+        CHECK_ULP_CLOSE(Real(1), qh.prime(thi), 128);
+        CHECK_ULP_CLOSE(Real(1), qh_aos.prime(tlo), 2);
+        CHECK_ULP_CLOSE(Real(1), qh_aos.prime(thi), 128);
+
+        tlo = boost::math::nextafter(tlo, std::numeric_limits<Real>::max());
+        thi = boost::math::nextafter(thi, std::numeric_limits<Real>::lowest());
+    }
 }
 
 template<typename Real>
@@ -365,6 +403,25 @@ void test_cardinal_quadratic()
         CHECK_ULP_CLOSE(Real(t*t)/2, computed, 2);
         CHECK_ULP_CLOSE(t, qh_aos.prime(t), 12);
         CHECK_ULP_CLOSE(Real(1), qh_aos.double_prime(t), 64);
+    }
+
+        // Now check the boundaries:
+    auto [tlo, thi] = qh.domain();
+    int samples = 5000;
+    int i = 0;
+    while (i++ < samples)
+    {
+        CHECK_ULP_CLOSE(tlo*tlo/2, qh(tlo), 16);
+        CHECK_ULP_CLOSE(thi*thi/2, qh(thi), 16);
+        CHECK_ULP_CLOSE(tlo*tlo/2, qh_aos(tlo), 16);
+        CHECK_ULP_CLOSE(thi*thi/2, qh_aos(thi), 16);
+        CHECK_ULP_CLOSE(tlo, qh.prime(tlo), 16);
+        CHECK_ULP_CLOSE(thi, qh.prime(thi), 64);
+        CHECK_ULP_CLOSE(tlo, qh_aos.prime(tlo), 16);
+        CHECK_ULP_CLOSE(thi, qh_aos.prime(thi), 64);
+
+        tlo = boost::math::nextafter(tlo, std::numeric_limits<Real>::max());
+        thi = boost::math::nextafter(thi, std::numeric_limits<Real>::lowest());
     }
 }
 
