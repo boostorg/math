@@ -12,6 +12,7 @@
 #include <boost/random/uniform_real.hpp>
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/math/interpolators/septic_hermite.hpp>
+#include <boost/math/special_functions/next.hpp>
 #ifdef BOOST_HAS_FLOAT128
 #include <boost/multiprecision/float128.hpp>
 using boost::multiprecision::float128;
@@ -72,6 +73,29 @@ void test_constant()
         CHECK_ULP_CLOSE(Real(7), csh_aos(t), 24);
         CHECK_ULP_CLOSE(Real(0), csh_aos.prime(t), 24);
         CHECK_ULP_CLOSE(Real(0), csh_aos.double_prime(t), 24);
+    }
+
+    // Now check the boundaries:
+    auto [tlo, thi] = csh.domain();
+    int samples = 5000;
+    int i = 0;
+    while (i++ < samples)
+    {
+        CHECK_ULP_CLOSE(Real(7), csh(tlo), 2);
+        CHECK_ULP_CLOSE(Real(7), csh(thi), 2);
+        CHECK_ULP_CLOSE(Real(7), csh_aos(tlo), 2);
+        CHECK_ULP_CLOSE(Real(7), csh_aos(thi), 2);
+        CHECK_ULP_CLOSE(Real(0), csh.prime(tlo), 2);
+        CHECK_ULP_CLOSE(Real(0), csh.prime(thi), 2);
+        CHECK_ULP_CLOSE(Real(0), csh_aos.prime(tlo), 2);
+        CHECK_ULP_CLOSE(Real(0), csh_aos.prime(thi), 2);
+        CHECK_ULP_CLOSE(Real(0), csh.double_prime(tlo), 2);
+        CHECK_ULP_CLOSE(Real(0), csh.double_prime(thi), 2);
+        CHECK_ULP_CLOSE(Real(0), csh_aos.double_prime(tlo), 2);
+        CHECK_ULP_CLOSE(Real(0), csh_aos.double_prime(thi), 2);
+
+        tlo = boost::math::nextafter(tlo, std::numeric_limits<Real>::max());
+        thi = boost::math::nextafter(thi, std::numeric_limits<Real>::lowest());
     }
 
 }
@@ -151,6 +175,30 @@ void test_linear()
         CHECK_ULP_CLOSE(Real(1), csh_aos.prime(t), 15);
         CHECK_ULP_CLOSE(Real(0), csh_aos.double_prime(t), 15);
     }
+
+    // Now check the boundaries:
+    auto [tlo, thi] = csh.domain();
+    int samples = 5000;
+    int i = 0;
+    while (i++ < samples)
+    {
+        CHECK_ULP_CLOSE(Real(tlo), csh(tlo), 2);
+        CHECK_ULP_CLOSE(Real(thi), csh(thi), 2);
+        CHECK_ULP_CLOSE(Real(tlo), csh_aos(tlo), 2);
+        CHECK_ULP_CLOSE(Real(thi), csh_aos(thi), 2);
+        CHECK_ULP_CLOSE(Real(1), csh.prime(tlo), 2);
+        CHECK_ULP_CLOSE(Real(1), csh.prime(thi), 500);
+        CHECK_ULP_CLOSE(Real(1), csh_aos.prime(tlo), 2);
+        CHECK_ULP_CLOSE(Real(1), csh_aos.prime(thi), 500);
+        CHECK_MOLLIFIED_CLOSE(Real(0), csh.double_prime(tlo), std::numeric_limits<Real>::epsilon());
+        CHECK_MOLLIFIED_CLOSE(Real(0), csh.double_prime(thi), 400*std::numeric_limits<Real>::epsilon());
+        CHECK_MOLLIFIED_CLOSE(Real(0), csh_aos.double_prime(tlo), std::numeric_limits<Real>::epsilon());
+        CHECK_MOLLIFIED_CLOSE(Real(0), csh_aos.double_prime(thi), 400*std::numeric_limits<Real>::epsilon());
+
+        tlo = boost::math::nextafter(tlo, std::numeric_limits<Real>::max());
+        thi = boost::math::nextafter(thi, std::numeric_limits<Real>::lowest());
+    }
+
 }
 
 template<typename Real>

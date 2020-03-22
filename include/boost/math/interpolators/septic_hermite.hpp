@@ -44,6 +44,11 @@ public:
         return impl_->bytes() + sizeof(impl_);
     }
 
+    std::pair<Real, Real> domain() const
+    {
+        return impl_->domain();
+    }
+
 private:
     std::shared_ptr<detail::septic_hermite_detail<RandomAccessContainer>> impl_;
 };
@@ -79,6 +84,11 @@ public:
         return impl_->bytes() + sizeof(impl_);
     }
 
+    std::pair<Real, Real> domain() const
+    {
+        return impl_->domain();
+    }
+
 private:
     std::shared_ptr<detail::cardinal_septic_hermite_detail<RandomAccessContainer>> impl_;
 };
@@ -111,6 +121,11 @@ public:
     int64_t bytes() const
     {
         return impl_.size() + sizeof(impl_);
+    }
+
+    std::pair<Real, Real> domain() const
+    {
+        return impl_->domain();
     }
 
 private:

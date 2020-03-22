@@ -184,6 +184,11 @@ public:
         return 5*x_.size()*sizeof(Real) + 5*sizeof(x_);
     }
 
+    std::pair<Real, Real> domain() const
+    {
+        return {x_.front(), x_.back()};
+    }
+
 private:
     RandomAccessContainer x_;
     RandomAccessContainer y_;
@@ -260,6 +265,9 @@ public:
         Real ii = floor(s3);
         auto i = static_cast<decltype(y_.size())>(ii);
         Real t = s3 - ii;
+        if (t == 0) {
+            return y_[i];
+        }
         // See:
         // http://seisweb.usask.ca/classes/GEOL481/2017/Labs/interpolation_utilities_matlab/shermite.m
         Real t2 = t*t;
@@ -314,6 +322,10 @@ public:
         Real ii = floor(s3);
         auto i = static_cast<decltype(y_.size())>(ii);
         Real t = s3 - ii;
+        if (t==0)
+        {
+            return dy_[i]/inv_dx_;
+        }
  
         Real y0 = y_[i];
         Real y1 = y_[i+1];
@@ -366,6 +378,10 @@ public:
         Real ii = floor(s3);
         auto i = static_cast<decltype(y_.size())>(ii);
         Real t = s3 - ii;
+        if (t==0)
+        {
+            return d2y_[i]*2*inv_dx_*inv_dx_;
+        }
 
         Real y0 = y_[i];
         Real y1 = y_[i+1];
@@ -396,6 +412,11 @@ public:
     int64_t bytes() const
     {
         return 4*y_.size()*sizeof(Real) + 2*sizeof(Real) + 4*sizeof(y_);
+    }
+
+    std::pair<Real, Real> domain() const
+    {
+        return {x0_, x0_ + (y_.size()-1)/inv_dx_};
     }
 
 private:
@@ -456,6 +477,10 @@ public:
         Real ii = floor(s3);
         auto i = static_cast<decltype(data_.size())>(ii);
         Real t = s3 - ii;
+        if (t==0)
+        {
+            return data_[i][0];
+        }
         Real t2 = t*t;
         Real t3 = t2*t;
         Real t4 = t3*t;
@@ -508,6 +533,10 @@ public:
         Real ii = floor(s3);
         auto i = static_cast<decltype(data_.size())>(ii);
         Real t = s3 - ii;
+        if (t == 0)
+        {
+            return data_[i][1]*inv_dx_;
+        }
 
         Real y0 = data_[i][0];
         Real y1 = data_[i+1][0];
@@ -560,7 +589,10 @@ public:
         Real ii = floor(s3);
         auto i = static_cast<decltype(data_.size())>(ii);
         Real t = s3 - ii;
-
+        if (t == 0)
+        {
+            return data_[i][2]*2*inv_dx_*inv_dx_;
+        }
         Real y0 = data_[i][0];
         Real y1 = data_[i+1][0];
         Real dy0 = data_[i][1];
@@ -590,6 +622,11 @@ public:
     int64_t bytes() const
     {
         return data_.size()*data_[0].size()*sizeof(Real) + 2*sizeof(Real) + sizeof(data_);
+    }
+
+    std::pair<Real, Real> domain() const
+    {
+        return {x0_, x0_ + (data_.size() -1)/inv_dx_};
     }
 
 private:
