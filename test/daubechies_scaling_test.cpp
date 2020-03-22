@@ -1,5 +1,5 @@
 /*
- * Copyright Nick Thompson, 2019
+ * Copyright Nick Thompson, John Maddock 2020
  * Use, modification and distribution are subject to the
  * Boost Software License, Version 1.0. (See accompanying file
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -21,6 +21,7 @@
 #include <boost/math/special_functions/detail/daubechies_scaling_integer_grid.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/quadrature/trapezoidal.hpp>
+#include <boost/math/special_functions/next.hpp>
 
 #ifdef BOOST_HAS_FLOAT128
 #include <boost/multiprecision/float128.hpp>
@@ -328,23 +329,47 @@ void test_first_derivative()
 template<typename Real, int p>
 void test_quadratures()
 {
+    std::cout << "Testing " << p << " vanishing moment scaling function quadratures on type " << boost::core::demangle(typeid(Real).name()) << "\n";
     using boost::math::quadrature::trapezoidal;
     if constexpr (p == 2)
     {
-         // 2phi is truly bizarre, because two successive trapezoidal estimates are always bitwise equal,
-         // whereas the third is way different. I don' t think that's a reasonable thing to optimize for,
-         // so one-off it is.
-         Real h = Real(1)/Real(256);
-         auto phi = boost::math::daubechies_scaling<Real, p>();
-         Real t = 0;
-         Real Q = 0;
-         while (t < 3) {
-             Q += phi(t);
-             t += h;
-         }
-         Q *= h;
-         CHECK_ULP_CLOSE(Real(1), Q, 32);
-         return;
+        // 2phi is truly bizarre, because two successive trapezoidal estimates are always bitwise equal,
+        // whereas the third is way different. I don' t think that's a reasonable thing to optimize for,
+        // so one-off it is.
+        Real h = Real(1)/Real(256);
+        auto phi = boost::math::daubechies_scaling<Real, p>();
+        Real t = 0;
+        Real Q = 0;
+        while (t < 3) {
+            Q += phi(t);
+            t += h;
+        }
+        Q *= h;
+        CHECK_ULP_CLOSE(Real(1), Q, 32);
+
+        auto [a, b] = phi.support();
+        // Now hit the boundary. Much can go wrong here; this just tests for segfaults:
+        int samples = 500;
+        Real xlo = a;
+        Real xhi = b;
+        for (int i = 0; i < samples; ++i)
+        {
+            CHECK_ULP_CLOSE(Real(0), phi(xlo), 0);
+            CHECK_ULP_CLOSE(Real(0), phi(xhi), 0);
+            xlo = std::nextafter(xlo, std::numeric_limits<Real>::lowest());
+            xhi = std::nextafter(xhi, std::numeric_limits<Real>::max());
+        }
+
+        xlo = a;
+        xhi = b;
+        for (int i = 0; i < samples; ++i) {
+            assert(abs(phi(xlo)) <= 5);
+            assert(abs(phi(xhi)) <= 5);
+            xlo = std::nextafter(xlo, std::numeric_limits<Real>::max());
+            xhi = std::nextafter(xhi, std::numeric_limits<Real>::lowest());
+        }
+
+        return;
     }
     else if constexpr (p > 2)
     {
@@ -369,7 +394,6 @@ void test_quadratures()
             std::cerr << "  Error estimate is " << error_estimate << ", L1 norm is " << L1 << "\n";
         }
 
-    
         std::random_device rd;
         Real t = static_cast<Real>(rd())/static_cast<Real>(rd.max());
         Real S = phi(t);
@@ -393,6 +417,27 @@ void test_quadratures()
             {
                 std::cerr << "  Derivative of normalizing sum for " << p << " vanishing moment scaling function doesn't vanish.\n";
             }
+        }
+
+        // Test boundary for segfaults:
+        int samples = 500;
+        Real xlo = a;
+        Real xhi = b;
+        for (int i = 0; i < samples; ++i)
+        {
+            CHECK_ULP_CLOSE(Real(0), phi(xlo), 0);
+            CHECK_ULP_CLOSE(Real(0), phi(xhi), 0);
+            xlo = std::nextafter(xlo, std::numeric_limits<Real>::lowest());
+            xhi = std::nextafter(xhi, std::numeric_limits<Real>::max());
+        }
+
+        xlo = a;
+        xhi = b;
+        for (int i = 0; i < samples; ++i) {
+            assert(abs(phi(xlo)) <= 5);
+            assert(abs(phi(xhi)) <= 5);
+            xlo = std::nextafter(xlo, std::numeric_limits<Real>::max());
+            xhi = std::nextafter(xhi, std::numeric_limits<Real>::lowest());
         }
     }
 }
