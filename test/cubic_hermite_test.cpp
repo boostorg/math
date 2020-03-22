@@ -12,6 +12,7 @@
 #include <array>
 #include <vector>
 #include <boost/math/interpolators/cubic_hermite.hpp>
+#include <boost/math/special_functions/next.hpp>
 #include <boost/circular_buffer.hpp>
 #ifdef BOOST_HAS_FLOAT128
 #include <boost/multiprecision/float128.hpp>
@@ -27,10 +28,11 @@ using boost::math::interpolators::cardinal_cubic_hermite_aos;
 template<typename Real>
 void test_constant()
 {
-
-    std::vector<Real> x{0,1,2,3, 9, 22, 81};
+    Real x0 = 0;
+    std::vector<Real> x{x0,1,2,3, 9, 22, 81};
     std::vector<Real> y(x.size());
-    for (auto & t : y) {
+    for (auto & t : y)
+    {
         t = 7;
     }
 
@@ -40,9 +42,19 @@ void test_constant()
     auto dydx_copy = dydx;
     auto hermite_spline = cubic_hermite(std::move(x_copy), std::move(y_copy), std::move(dydx_copy));
 
-    for (Real t = x[0]; t <= x.back(); t += 0.25) {
-        CHECK_ULP_CLOSE(Real(7), hermite_spline(t), 2);
-        CHECK_ULP_CLOSE(Real(0), hermite_spline.prime(t), 2);
+    // Now check the boundaries:
+    Real tlo = x.front();
+    Real thi = x.back();
+    int samples = 5000;
+    int i = 0;
+    while (i++ < samples)
+    {
+        CHECK_ULP_CLOSE(Real(7), hermite_spline(tlo), 2);
+        CHECK_ULP_CLOSE(Real(7), hermite_spline(thi), 2);
+        CHECK_ULP_CLOSE(Real(0), hermite_spline.prime(tlo), 2);
+        CHECK_ULP_CLOSE(Real(0), hermite_spline.prime(thi), 2);
+        tlo = boost::math::nextafter(tlo, std::numeric_limits<Real>::max());
+        thi = boost::math::nextafter(thi, std::numeric_limits<Real>::lowest());
     }
 
     boost::circular_buffer<Real> x_buf(x.size());
@@ -226,10 +238,34 @@ void test_cardinal_constant()
     auto hermite_spline_aos = cardinal_cubic_hermite_aos(std::move(data), x0, dx);
 
     for (Real t = x0; t <= x0 + 24*dx; t += 0.25) {
-        CHECK_ULP_CLOSE(Real(7), hermite_spline_aos(t), 2);
-        CHECK_ULP_CLOSE(Real(0), hermite_spline_aos.prime(t), 2);
+        if (!CHECK_ULP_CLOSE(Real(7), hermite_spline_aos(t), 2)) {
+            std::cerr << "  Wrong evaluation at t = " << t << "\n";
+        }
+        if (!CHECK_ULP_CLOSE(Real(0), hermite_spline_aos.prime(t), 2)) {
+            std::cerr << "  Wrong evaluation at t = " << t << "\n";
+        }
     }
- 
+
+        // Now check the boundaries:
+    Real tlo = x0;
+    Real thi = x0 + (25-1)*dx;
+    int samples = 5000;
+    int i = 0;
+    while (i++ < samples)
+    {
+        CHECK_ULP_CLOSE(Real(7), hermite_spline(tlo), 2);
+        CHECK_ULP_CLOSE(Real(7), hermite_spline(thi), 2);
+        CHECK_ULP_CLOSE(Real(7), hermite_spline_aos(tlo), 2);
+        CHECK_ULP_CLOSE(Real(7), hermite_spline_aos(thi), 2);
+        CHECK_ULP_CLOSE(Real(0), hermite_spline.prime(tlo), 2);
+        CHECK_ULP_CLOSE(Real(0), hermite_spline.prime(thi), 2);
+        CHECK_ULP_CLOSE(Real(0), hermite_spline_aos.prime(tlo), 2);
+        CHECK_ULP_CLOSE(Real(0), hermite_spline_aos.prime(thi), 2);
+
+        tlo = boost::math::nextafter(tlo, std::numeric_limits<Real>::max());
+        thi = boost::math::nextafter(thi, std::numeric_limits<Real>::lowest());
+    }
+
 }
 
 
@@ -278,6 +314,25 @@ void test_cardinal_linear()
         CHECK_ULP_CLOSE(Real(1), hermite_spline_aos.prime(t), 0);
     }
 
+    Real tlo = x0;
+    Real thi = x0 + (45-1)*dx;
+    int samples = 5000;
+    int i = 0;
+    while (i++ < samples)
+    {
+        CHECK_ULP_CLOSE(Real(tlo), hermite_spline(tlo), 2);
+        CHECK_ULP_CLOSE(Real(thi), hermite_spline(thi), 2);
+        CHECK_ULP_CLOSE(Real(1), hermite_spline.prime(tlo), 2);
+        CHECK_ULP_CLOSE(Real(1), hermite_spline.prime(thi), 2);
+        CHECK_ULP_CLOSE(Real(tlo), hermite_spline_aos(tlo), 2);
+        CHECK_ULP_CLOSE(Real(thi), hermite_spline_aos(thi), 2);
+        CHECK_ULP_CLOSE(Real(1), hermite_spline_aos.prime(tlo), 2);
+        CHECK_ULP_CLOSE(Real(1), hermite_spline_aos.prime(thi), 2);
+
+        tlo = boost::math::nextafter(tlo, std::numeric_limits<Real>::max());
+        thi = boost::math::nextafter(thi, std::numeric_limits<Real>::lowest());
+    }
+
 
 }
 
@@ -318,6 +373,23 @@ void test_cardinal_quadratic()
         CHECK_ULP_CLOSE(t, saos.prime(t), 70);
     }
 
+    auto [tlo, thi] = s.domain();
+    int samples = 5000;
+    int i = 0;
+    while (i++ < samples)
+    {
+        CHECK_ULP_CLOSE(Real(tlo*tlo/2), s(tlo), 3);
+        CHECK_ULP_CLOSE(Real(thi*thi/2), s(thi), 3);
+        CHECK_ULP_CLOSE(Real(tlo), s.prime(tlo), 3);
+        CHECK_ULP_CLOSE(Real(thi), s.prime(thi), 3);
+        CHECK_ULP_CLOSE(Real(tlo*tlo/2), saos(tlo), 3);
+        CHECK_ULP_CLOSE(Real(thi*thi/2), saos(thi), 3);
+        CHECK_ULP_CLOSE(Real(tlo), saos.prime(tlo), 3);
+        CHECK_ULP_CLOSE(Real(thi), saos.prime(thi), 3);
+
+        tlo = boost::math::nextafter(tlo, std::numeric_limits<Real>::max());
+        thi = boost::math::nextafter(thi, std::numeric_limits<Real>::lowest());
+    }
 }
 
 
@@ -359,8 +431,6 @@ int main()
     test_cardinal_quadratic<float>();
     test_cardinal_interpolation_condition<float>();
 
-
-
     test_constant<double>();
     test_linear<double>();
     test_quadratic<double>();
@@ -369,7 +439,6 @@ int main()
     test_cardinal_linear<double>();
     test_cardinal_quadratic<double>();
     test_cardinal_interpolation_condition<double>();
-
 
     test_constant<long double>();
     test_linear<long double>();

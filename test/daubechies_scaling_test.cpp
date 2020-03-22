@@ -427,6 +427,14 @@ void test_quadratures()
         {
             CHECK_ULP_CLOSE(Real(0), phi(xlo), 0);
             CHECK_ULP_CLOSE(Real(0), phi(xhi), 0);
+            if constexpr (p > 2) {
+                assert(abs(phi.prime(xlo)) <= 5);
+                assert(abs(phi.prime(xhi)) <= 5);
+                if constexpr (p > 5) {
+                    assert(abs(phi.double_prime(xlo)) <= 5);
+                    assert(abs(phi.double_prime(xhi)) <= 5);
+                }
+            }
             xlo = std::nextafter(xlo, std::numeric_limits<Real>::lowest());
             xhi = std::nextafter(xhi, std::numeric_limits<Real>::max());
         }

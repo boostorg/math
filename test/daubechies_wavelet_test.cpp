@@ -11,6 +11,7 @@
 #include <iomanip>
 #include <iostream>
 #include <random>
+#include <cmath>
 #include <boost/core/demangle.hpp>
 #include <boost/hana/for_each.hpp>
 #include <boost/hana/ext/std/integer_sequence.hpp>
@@ -81,6 +82,15 @@ void test_quadratures()
     {
         CHECK_ULP_CLOSE(Real(0), psi(xlo), 0);
         CHECK_ULP_CLOSE(Real(0), psi(xhi), 0);
+        if constexpr (p > 2)
+        {
+            CHECK_ULP_CLOSE(Real(0), psi.prime(xlo), 0);
+            CHECK_ULP_CLOSE(Real(0), psi.prime(xhi), 0);
+            if constexpr (p >= 6) {
+                CHECK_ULP_CLOSE(Real(0), psi.double_prime(xlo), 0);
+                CHECK_ULP_CLOSE(Real(0), psi.double_prime(xhi), 0);
+            }
+        }
         xlo = std::nextafter(xlo, std::numeric_limits<Real>::lowest());
         xhi = std::nextafter(xhi, std::numeric_limits<Real>::max());
     }
@@ -88,8 +98,19 @@ void test_quadratures()
     xlo = a;
     xhi = b;
     for (int i = 0; i < samples; ++i) {
+        std::cout << std::setprecision(std::numeric_limits<Real>::max_digits10);
         assert(abs(psi(xlo)) <= 5);
         assert(abs(psi(xhi)) <= 5);
+        if constexpr (p > 2)
+        {
+            assert(abs(psi.prime(xlo)) <= 5);
+            assert(abs(psi.prime(xhi)) <= 5);
+            if constexpr (p >= 6)
+            {
+                assert(abs(psi.double_prime(xlo)) <= 5);
+                assert(abs(psi.double_prime(xhi)) <= 5);
+            }
+        }
         xlo = std::nextafter(xlo, std::numeric_limits<Real>::max());
         xhi = std::nextafter(xhi, std::numeric_limits<Real>::lowest());
     }

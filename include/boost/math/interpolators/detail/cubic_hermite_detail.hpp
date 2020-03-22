@@ -155,6 +155,11 @@ public:
         return 3*x_.size()*sizeof(Real) + 3*sizeof(x_);
     }
 
+    std::pair<Real, Real> domain() const
+    {
+        return {x_.front(), x_.back()};
+    }
+
     RandomAccessContainer x_;
     RandomAccessContainer y_;
     RandomAccessContainer dydx_;
@@ -273,6 +278,12 @@ public:
         return 2*y_.size()*sizeof(Real) + 2*sizeof(y_) + 2*sizeof(Real);
     }
 
+    std::pair<Real, Real> domain() const
+    {
+        Real xf = x0_ + (y_.size()-1)/inv_dx_;
+        return {x0_, xf};
+    }
+
 private:
 
     RandomAccessContainer y_;
@@ -336,6 +347,12 @@ public:
         auto i = static_cast<decltype(dat_.size())>(ii);
 
         Real t = s - ii;
+        // If we had infinite precision, this would never happen.
+        // But we don't have infinite precision.
+        if (t == 0)
+        {
+            return dat_[i][0];
+        }
         Real y0 = dat_[i][0];
         Real y1 = dat_[i+1][0];
         Real dy0 = dat_[i][1];
@@ -359,7 +376,7 @@ public:
         }
         if (x == xf)
         {
-            return dat_.back()[1];
+            return dat_.back()[1]*inv_dx_;
         }
         return this->unchecked_prime(x);
     }
@@ -371,6 +388,10 @@ public:
         Real ii = floor(s);
         auto i = static_cast<decltype(dat_.size())>(ii);
         Real t = s - ii;
+        if (t == 0)
+        {
+            return dat_[i][1]*inv_dx_;
+        }
         Real y0 = dat_[i][0];
         Real dy0 = dat_[i][1];
         Real y1 = dat_[i+1][0];
@@ -389,6 +410,12 @@ public:
     int64_t bytes() const
     {
         return dat_.size()*dat_[0].size()*sizeof(Real) + sizeof(dat_) + 2*sizeof(Real);
+    }
+
+    std::pair<Real, Real> domain() const
+    {
+        Real xf = x0_ + (dat_.size()-1)/inv_dx_;
+        return {x0_, xf};
     }
 
 

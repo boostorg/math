@@ -29,6 +29,8 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
         void push_back(Real x, Real y, Real dydx);
 
+        std::pair<Real, Real> domain() const;
+
         friend std::ostream& operator<<(std::ostream & os, const cubic_hermite & m);
     };
 
@@ -42,6 +44,8 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
         inline Real operator()(Real x) const;
 
         inline Real prime(Real x) const;
+
+        std::pair<Real, Real> domain() const;
     };
 
 
@@ -56,6 +60,8 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
         inline Real operator()(Real x) const;
 
         inline Real prime(Real x) const;
+
+        std::pair<Real, Real> domain() const;
     };
 
     } // namespaces
@@ -123,6 +129,10 @@ For the "array of structs" version:
     }
 
     auto ch = cardinal_cubic_hermite_aos(std::move(data), x0, dx);
+
+For a quick sanity check, we can call `ch.domain()`:
+
+    auto [x_min, x_max] = ch.domain();
 
 [heading Performance]
 
