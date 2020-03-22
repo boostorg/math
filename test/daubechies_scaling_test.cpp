@@ -73,7 +73,7 @@ void test_daubechies_filters()
         Real abs_hk = 0;
         for (size_t n = 0; n < h.size(); ++n)
         {
-            Real t = pow(n, k)*h[n];
+            Real t = static_cast<Real>(pow(n, k)*h[n]);
             if (n & 1)
             {
                 hk -= t;
@@ -255,13 +255,13 @@ void test_dyadic_grid()
             CHECK_ULP_CLOSE(phik[k], phijk[k], 0);
         }
 
-        for (int64_t j = 1; j < 10; ++j)
+        for (uint64_t j = 1; j < 10; ++j)
         {
             phijk = boost::math::daubechies_scaling_dyadic_grid<Real, i+2, 0>(j);
             phik = boost::math::detail::daubechies_scaling_integer_grid<Real, i+2, 0>();
-            for (int64_t l = 0; l < static_cast<int64_t>(phik.size()); ++l)
+            for (uint64_t l = 0; l < static_cast<uint64_t>(phik.size()); ++l)
             {
-                CHECK_ULP_CLOSE(phik[l], phijk[l*(int64_t(1)<<j)], 0);
+                CHECK_ULP_CLOSE(phik[l], phijk[l*(uint64_t(1)<<j)], 0);
             }
 
             // This test is from Daubechies, Ten Lectures on Wavelets, Ch 7 "More About Compactly Supported Wavelets",
@@ -269,9 +269,9 @@ void test_dyadic_grid()
             for (size_t k = 1; k < j; ++k)
             {
                 auto cond = boost::math::tools::summation_condition_number<Real>(0);
-                for (int64_t l = 0; l < static_cast<int64_t>(phik.size()); ++l)
+                for (uint64_t l = 0; l < static_cast<uint64_t>(phik.size()); ++l)
                 {
-                    int64_t idx = l*(int64_t(1)<<j) + k;
+                    uint64_t idx = l*(uint64_t(1)<<j) + k;
                     if (idx < phijk.size())
                     {
                         cond += phijk[idx];
@@ -387,7 +387,7 @@ void test_quadratures()
         }
 
         // The p = 3, 4 convergence rate is very slow, making this produce false positives:
-        if (p > 4)
+        if constexpr(p > 4)
         {
             if(!CHECK_MOLLIFIED_CLOSE(Real(0), dS, 100*std::sqrt(std::numeric_limits<Real>::epsilon())))
             {

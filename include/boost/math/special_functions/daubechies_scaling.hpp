@@ -47,7 +47,7 @@ std::vector<Real> daubechies_scaling_dyadic_grid(int64_t j_max)
     v[0] = 0;
     v[v.size()-1] = 0;
     for (int64_t i = 0; i < (int64_t) phik.size(); ++i) {
-        v[i*(1<<j_max)] = phik[i];
+        v[i*(1uLL<<j_max)] = phik[i];
     }
 
     for (int64_t j = 1; j <= j_max; ++j)
@@ -56,7 +56,7 @@ std::vector<Real> daubechies_scaling_dyadic_grid(int64_t j_max)
         for (int64_t k = 1; k < k_max;  k += 2)
         {
             // Where this value will go:
-            int64_t delivery_idx = k*(1 << (j_max-j));
+            int64_t delivery_idx = k*(1uLL << (j_max-j));
             // This is a nice check, but we've tested this exhaustively, and it's an expensive check:
             //if (delivery_idx >= (int64_t) v.size()) {
             //    std::cerr << "Delivery index out of range!\n";
@@ -140,7 +140,7 @@ public:
 
     matched_holder_aos(RandomAccessContainer && data, int grid_refinements, Real x0) : x0_{x0}, data_{std::move(data)}
     {
-        inv_h_ = (1 << grid_refinements);
+        inv_h_ = Real(1uLL << grid_refinements);
         Real h = 1/inv_h_;
         for (auto & datum : data_)
         {
@@ -226,7 +226,7 @@ public:
 
     linear_interpolation_aos(RandomAccessContainer && data, int grid_refinements, Real x0) : x0_{x0}, data_{std::move(data)}
     {
-        s_ = (1 << grid_refinements);
+        s_ = Real(1uLL << grid_refinements);
     }
 
     inline Real operator()(Real x) const
@@ -389,8 +389,8 @@ public:
                     }
                     return w;
                 }
-
-                return daubechies_scaling_dyadic_grid<Real, p, 2>(grid_refinements);
+                else
+                  return daubechies_scaling_dyadic_grid<Real, p, 2>(grid_refinements);
             });
 
             if constexpr (p >= 10) {
@@ -415,8 +415,8 @@ public:
                         }
                         return w;
                     }
-
-                    return daubechies_scaling_dyadic_grid<Real, p, 3>(grid_refinements);
+                    else
+                     return daubechies_scaling_dyadic_grid<Real, p, 3>(grid_refinements);
                 });
                 d3ydx3 = t4.get();
             }
