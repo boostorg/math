@@ -15,11 +15,11 @@ template<class F, typename Real, int p>
 class daubechies_wavelet_transform
 {
 public:
-    daubechies_wavelet_transform(F f, int grid_refinements = -1, Real tol = boost::math::tools::root_epsilon<Real>(),
+    daubechies_wavelet_transform(F f, int grid_refinements = -1, Real tol = 100*std::numeric_limits<Real>::epsilon(),
     int max_refinements = 12) : f_{f}, psi_(grid_refinements), tol_{tol}, max_refinements_{max_refinements}
     {}
 
-    daubechies_wavelet_transform(F f, boost::math::daubechies_wavelet<Real, p> wavelet, Real tol = boost::math::tools::root_epsilon<Real>(),
+    daubechies_wavelet_transform(F f, boost::math::daubechies_wavelet<Real, p> wavelet, Real tol = 100*std::numeric_limits<Real>::epsilon(),
     int max_refinements = 12) : f_{f}, psi_{wavelet}, tol_{tol}, max_refinements_{max_refinements}
     {}
 

@@ -1,0 +1,56 @@
+[/
+Copyright (c) 2019 Nick Thompson
+Copyright (c) 2019 Paul A. Bristow
+Use, modification and distribution are subject to the
+Boost Software License, Version 1.0. (See accompanying file
+LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+]
+
+[section:wavelet_transforms Wavelet Transforms]
+
+[heading Synopsis]
+
+```
+    #include <boost/math/quadrature/wavelet_transforms.hpp>
+    
+    namespace boost::math::quadrature {
+
+    template<class F, typename Real, int p>
+    class daubechies_wavelet_transform
+    {
+    public:
+        daubechies_wavelet_transform(F f, int grid_refinements = -1, Real tol = 100*std::numeric_limits<Real>::epsilon(),
+        int max_refinements = 12) {}
+
+        daubechies_wavelet_transform(F f, boost::math::daubechies_wavelet<Real, p> wavelet, Real tol = 100*std::numeric_limits<Real>::epsilon(),
+        int max_refinements = 12);
+
+        auto operator()(Real s, Real t)->decltype(std::declval<F>()(std::declval<Real>())) const;
+
+    };
+
+    } 
+```
+
+Wavelet transforms compute
+
+[$../graphs/wavelet_transform_definition.svg]
+
+For compactly supported Daubechies wavelets, the bounds can always be taken as finite, and we have 
+
+[$../graphs/daubechies_wavelet_transform_definition.svg]
+
+which gives definies the /s=0/ case.
+
+A basic usage is 
+
+    auto psi = daubechies_wavelet<double, 8>();
+    auto f = [](double x) {
+        return sin(2/x);
+    };
+    auto Wf = daubechies_wavelet_transform(f, psi);
+
+    auto z = Wf(0.8, 7.2);
+
+[endsect] [/section:wavelet_transforms]
+
