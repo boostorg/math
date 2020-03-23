@@ -298,147 +298,138 @@ struct daubechies_eval_type<double>
    }
 };
 
+struct null_interpolator
+{
+   template <class T>
+   T operator()(const T&)
+   {
+      return 1;
+   }
+};
+
 } // namespace detail
 
 template<class Real, int p>
 class daubechies_scaling {
+   //
+   // Some type manipulation so we know the type of the interpolator, and the vector type it requires:
+   //
+   typedef std::vector<std::array<Real, p < 6 ? 2 : p < 10 ? 3 : 4>> vector_type;
+   //
+   // List our interpolators:
+   //
+   typedef std::tuple<
+      detail::null_interpolator, detail::matched_holder_aos<vector_type>, detail::linear_interpolation_aos<vector_type>, 
+      interpolators::detail::cardinal_cubic_hermite_detail_aos<vector_type>, interpolators::detail::cardinal_quintic_hermite_detail_aos<vector_type>,
+      interpolators::detail::cardinal_septic_hermite_detail_aos<vector_type> > interpolator_list;
+   //
+   // Select the one we need:
+   //
+   typedef std::tuple_element_t<
+      p == 1 ? 0 :
+      p == 2 ? 1 :
+      p == 3 ? 2 :
+      p <= 5 ? 3 :
+      p <= 9 ? 4 : 5, interpolator_list> interpolator_type;
+
 public:
-    daubechies_scaling(int grid_refinements = -1)
-    {
-        static_assert(p < 20, "Daubechies scaling functions are only implemented for p < 20.");
-        static_assert(p > 0, "Daubechies scaling functions must have at least 1 vanishing moment.");
-        if constexpr (p == 1)
-        {
-            return;
-        }
-        else {
-        if (grid_refinements < 0)
-        {
+   daubechies_scaling(int grid_refinements = -1)
+   {
+      static_assert(p < 20, "Daubechies scaling functions are only implemented for p < 20.");
+      static_assert(p > 0, "Daubechies scaling functions must have at least 1 vanishing moment.");
+      if constexpr (p == 1)
+      {
+         return;
+      }
+      else {
+         if (grid_refinements < 0)
+         {
             if (std::is_same_v<Real, float>)
             {
-                if (grid_refinements == -2)
-                {
-                    // Control absolute error:
-                    //                          p= 2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19
-                    std::array<int, 20> r{-1, -1, 18, 19, 16, 11,  8,  7,  7,  7,  5,  5,  4,  4,  4,  4,  3,  3,  3,  3};
-                    grid_refinements = r[p];
-                }
-                else
-                {
-                    // Control relative error:
-                    //                          p= 2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19
-                    std::array<int, 20> r{-1, -1, 21, 21, 21, 17, 16, 15, 14, 13, 12, 11, 11, 11, 11, 11, 11, 11, 11, 11};
-                    grid_refinements = r[p];
-                }
+               if (grid_refinements == -2)
+               {
+                  // Control absolute error:
+                  //                          p= 2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19
+                  std::array<int, 20> r{ -1, -1, 18, 19, 16, 11,  8,  7,  7,  7,  5,  5,  4,  4,  4,  4,  3,  3,  3,  3 };
+                  grid_refinements = r[p];
+               }
+               else
+               {
+                  // Control relative error:
+                  //                          p= 2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19
+                  std::array<int, 20> r{ -1, -1, 21, 21, 21, 17, 16, 15, 14, 13, 12, 11, 11, 11, 11, 11, 11, 11, 11, 11 };
+                  grid_refinements = r[p];
+               }
             }
             else if (std::is_same_v<Real, double>)
             {
-                //                          p= 2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19
-                std::array<int, 20> r{-1, -1, 21, 21, 21, 21, 21, 21, 21, 21, 20, 20, 19, 19, 18, 18, 18, 18, 18, 18};
-                grid_refinements = r[p];
+               //                          p= 2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19
+               std::array<int, 20> r{ -1, -1, 21, 21, 21, 21, 21, 21, 21, 21, 20, 20, 19, 19, 18, 18, 18, 18, 18, 18 };
+               grid_refinements = r[p];
             }
             else
             {
-                grid_refinements = 21;
+               grid_refinements = 21;
             }
-        }
+         }
 
-        // Compute the refined grid:
-        // In fact for float precision I know the grid must be computed in double precision and then cast back down, or else parts of the support are systematically inaccurate.
-        std::future<std::vector<Real>> t0 = std::async(std::launch::async, [&grid_refinements]() {
+         // Compute the refined grid:
+         // In fact for float precision I know the grid must be computed in double precision and then cast back down, or else parts of the support are systematically inaccurate.
+         std::future<std::vector<Real>> t0 = std::async(std::launch::async, [&grid_refinements]() {
             // Computing in higher precision and downcasting is essential for 1ULP evaluation in float precision:
             auto v = daubechies_scaling_dyadic_grid<typename detail::daubechies_eval_type<Real>::type, p, 0>(grid_refinements);
             return detail::daubechies_eval_type<Real>::vector_cast(v);
-        });
-        // Compute the derivative of the refined grid:
-        std::future<std::vector<Real>> t1 = std::async(std::launch::async, [&grid_refinements]() {
-           auto v = daubechies_scaling_dyadic_grid<typename detail::daubechies_eval_type<Real>::type, p, 1>(grid_refinements);
-           return detail::daubechies_eval_type<Real>::vector_cast(v);
-        });
+            });
+         // Compute the derivative of the refined grid:
+         std::future<std::vector<Real>> t1 = std::async(std::launch::async, [&grid_refinements]() {
+            auto v = daubechies_scaling_dyadic_grid<typename detail::daubechies_eval_type<Real>::type, p, 1>(grid_refinements);
+            return detail::daubechies_eval_type<Real>::vector_cast(v);
+            });
 
-        // if necessary, compute the second and third derivative:
-        std::vector<Real> d2ydx2;
-        std::vector<Real> d3ydx3;
-        if constexpr (p >= 6) {
+         // if necessary, compute the second and third derivative:
+         std::vector<Real> d2ydx2;
+         std::vector<Real> d3ydx3;
+         if constexpr (p >= 6) {
             std::future<std::vector<Real>> t3 = std::async(std::launch::async, [&grid_refinements]() {
                auto v = daubechies_scaling_dyadic_grid<typename detail::daubechies_eval_type<Real>::type, p, 2>(grid_refinements);
                return detail::daubechies_eval_type<Real>::vector_cast(v);
-             });
+               });
 
             if constexpr (p >= 10) {
-                std::future<std::vector<Real>> t4 = std::async(std::launch::async, [&grid_refinements]() {
-                   auto v = daubechies_scaling_dyadic_grid<typename detail::daubechies_eval_type<Real>::type, p, 3>(grid_refinements);
-                   return detail::daubechies_eval_type<Real>::vector_cast(v);
-                });
-                d3ydx3 = t4.get();
+               std::future<std::vector<Real>> t4 = std::async(std::launch::async, [&grid_refinements]() {
+                  auto v = daubechies_scaling_dyadic_grid<typename detail::daubechies_eval_type<Real>::type, p, 3>(grid_refinements);
+                  return detail::daubechies_eval_type<Real>::vector_cast(v);
+                  });
+               d3ydx3 = t4.get();
             }
             d2ydx2 = t3.get();
-        }
+         }
 
 
-        auto y = t0.get();
-        auto dydx = t1.get();
+         auto y = t0.get();
+         auto dydx = t1.get();
 
-        if constexpr (p==2)
-        {
-            std::vector<std::array<Real, 2>> data(y.size());
+         if constexpr (p >= 2)
+         {
+            vector_type data(y.size());
             for (size_t i = 0; i < y.size(); ++i)
             {
-                data[i][0] = y[i];
-                data[i][1] = dydx[i];
+               data[i][0] = y[i];
+               data[i][1] = dydx[i];
+               if constexpr (p >= 6)
+                  data[i][2] = d2ydx2[i];
+               if constexpr (p >= 10)
+                  data[i][3] = d3ydx3[i];
             }
-            m_mh = std::make_shared<detail::matched_holder_aos<std::vector<std::array<Real,2>>>>(std::move(data), grid_refinements, Real(0));
-        }
-        if constexpr (p==3)
-        {
-            std::vector<std::array<Real, 2>> data(y.size());
-            for (size_t i = 0; i < y.size(); ++i)
-            {
-                data[i][0] = y[i];
-                data[i][1] = dydx[i];
-            }
-            m_lin = std::make_shared<detail::linear_interpolation_aos<std::vector<std::array<Real, 2>>>>(std::move(data), grid_refinements, Real(0));
-        }
-        if constexpr (p == 4 || p == 5)
-        {
-            Real dx = Real(1)/(1 << grid_refinements);
-            std::vector<std::array<Real, 2>> data(y.size());
-            for (size_t i = 0; i < y.size(); ++i)
-            {
-                data[i][0] = y[i];
-                data[i][1] = dydx[i];
-            }
-            m_cbh = std::make_shared<interpolators::detail::cardinal_cubic_hermite_detail_aos<std::vector<std::array<Real,2>>>>(std::move(data), Real(0), dx);
-        }
-        if constexpr (p >= 6 && p <= 9)
-        {
-            Real dx = Real(1)/(1 << grid_refinements);
-            std::vector<std::array<Real, 3>> data(y.size());
-            for (size_t i = 0; i < y.size(); ++i)
-            {
-                data[i][0] = y[i];
-                data[i][1] = dydx[i];
-                data[i][2] = d2ydx2[i];
-            }
-
-            m_qh = std::make_shared<interpolators::detail::cardinal_quintic_hermite_detail_aos<std::vector<std::array<Real,3>>>>(std::move(data), Real(0), dx);
-        }
-        if constexpr (p >= 10)
-        {
-            Real dx = Real(1)/(1 << grid_refinements);
-            std::vector<std::array<Real, 4>> data(y.size());
-            for (size_t i = 0; i < y.size(); ++i)
-            {
-                data[i][0] = y[i];
-                data[i][1] = dydx[i];
-                data[i][2] = d2ydx2[i];
-                data[i][3] = d3ydx3[i];
-            }
-            m_sh = std::make_shared<interpolators::detail::cardinal_septic_hermite_detail_aos<std::vector<std::array<Real, 4>>>>(std::move(data), Real(0), dx);
-        }
-        }
-     }
-
+            if constexpr (p <= 3)
+               m_interpolator = std::make_shared<interpolator_type>(std::move(data), grid_refinements, Real(0));
+            else
+               m_interpolator = std::make_shared<interpolator_type>(std::move(data), Real(0), Real(1) / (1 << grid_refinements));
+         }
+         else
+            m_interpolator = std::make_shared<detail::null_interpolator>();
+      }
+   }
 
     inline Real operator()(Real x) const
     {
@@ -446,30 +437,7 @@ public:
         {
             return 0;
         }
-        if constexpr (p==1)
-        {
-            return Real(1);
-        }
-        if constexpr (p==2)
-        {
-            return m_mh->operator()(x);
-        }
-        if constexpr (p==3)
-        {
-            return m_lin->operator()(x);
-        }
-        if constexpr (p==4 || p ==5)
-        {
-            return m_cbh->unchecked_evaluation(x);
-        }
-        if constexpr (p >= 6 && p <= 9)
-        {
-            return m_qh->unchecked_evaluation(x);
-        }
-        if constexpr (p >= 10)
-        {
-            return m_sh->unchecked_evaluation(x);
-        }
+        return (*m_interpolator)(x);
     }
 
     inline Real prime(Real x) const
@@ -479,22 +447,7 @@ public:
         {
             return 0;
         }
-        if constexpr (p == 3)
-        {
-            return m_lin->prime(x);
-        }
-        if constexpr (p == 4 || p == 5)
-        {
-            return m_cbh->unchecked_prime(x);
-        }
-        if constexpr (p >= 6 && p <= 9)
-        {
-            return m_qh->unchecked_prime(x);
-        }
-        if constexpr (p >= 10)
-        {
-            return m_sh->unchecked_prime(x);
-        }
+        return m_interpolator->prime(x);
     }
 
     inline Real double_prime(Real x) const
@@ -504,14 +457,7 @@ public:
         {
             return Real(0);
         }
-        if constexpr (p >= 6 && p <= 9)
-        {
-            return m_qh->unchecked_double_prime(x);
-        }
-        if constexpr (p >= 10)
-        {
-            return m_sh->unchecked_double_prime(x);
-        }
+        return m_interpolator->double_prime(x);
     }
 
     std::pair<Real, Real> support() const
@@ -521,41 +467,11 @@ public:
 
     int64_t bytes() const
     {
-        if constexpr (p==2)
-        {
-            return m_mh->bytes() + sizeof(m_mh);
-        }
-        if constexpr (p == 3)
-        {
-            return m_lin->bytes() + sizeof(m_lin);
-        }
-        if constexpr (p == 4 || p == 5)
-        {
-            return m_cbh->bytes() + sizeof(m_cbh);
-        }
-        if constexpr (p >= 6 && p <= 9)
-        {
-            return m_qh->bytes() + sizeof(m_qh);
-        }
-        if constexpr (p >= 10)
-        {
-            return m_sh->bytes() + sizeof(m_sh);
-        }
-
-        return -1;
+       return m_interpolator->bytes() + sizeof(m_interpolator);
     }
 
 private:
-    // Need this for p = 2:
-    std::shared_ptr<detail::matched_holder_aos<std::vector<std::array<Real,2>>>> m_mh;
-    // Need this for p = 3:
-    std::shared_ptr<detail::linear_interpolation_aos<std::vector<std::array<Real, 2>>>> m_lin;
-    // Need this for p = 4,5:
-    std::shared_ptr<interpolators::detail::cardinal_cubic_hermite_detail_aos<std::vector<std::array<Real, 2>>>> m_cbh;
-    // Need this for p = 6,7,8,9:
-    std::shared_ptr<interpolators::detail::cardinal_quintic_hermite_detail_aos<std::vector<std::array<Real, 3>>>> m_qh;
-    // Need this for p >= 10:
-    std::shared_ptr<interpolators::detail::cardinal_septic_hermite_detail_aos<std::vector<std::array<Real, 4>>>> m_sh;
+   std::shared_ptr<interpolator_type> m_interpolator;
 };
 
 }

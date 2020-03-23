@@ -46,6 +46,7 @@ void test_quadratures()
     std::cout << "Testing quadratures of " << p << " vanishing moment Daubechies wavelet on type " << boost::core::demangle(typeid(Real).name()) << "\n";
     using boost::math::quadrature::trapezoidal;
     auto psi = boost::math::daubechies_wavelet<Real, p>();
+    std::cout << "Wavelet functor size is " << psi.bytes() << " bytes" << std::endl;
         
     Real tol = std::numeric_limits<Real>::epsilon();
     Real error_estimate = std::numeric_limits<Real>::quiet_NaN();
