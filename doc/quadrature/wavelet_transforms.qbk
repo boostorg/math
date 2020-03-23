@@ -28,11 +28,10 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
         auto operator()(Real s, Real t)->decltype(std::declval<F>()(std::declval<Real>())) const;
 
     };
-
     } 
 ```
 
-Wavelet transforms compute
+The wavelet transform of a function /f/ with respect to a wavelet \u03C8 is
 
 [$../graphs/wavelet_transform_definition.svg]
 
@@ -40,17 +39,24 @@ For compactly supported Daubechies wavelets, the bounds can always be taken as f
 
 [$../graphs/daubechies_wavelet_transform_definition.svg]
 
-which gives definies the /s=0/ case.
+which also defines the /s/=0 case.
+
+The code provided by Boost merely forwards a lambda to the trapezoidal quadrature routine, which converges quickly due to the Euler-Maclaurin summation formula.
+However, the convergence is not as rapid as for infinitely differentiable functions, so the default tolerances are modified.
 
 A basic usage is 
 
     auto psi = daubechies_wavelet<double, 8>();
     auto f = [](double x) {
-        return sin(2/x);
+        return sin(1/x);
     };
     auto Wf = daubechies_wavelet_transform(f, psi);
 
-    auto z = Wf(0.8, 7.2);
+    double w = Wf(0.8, 7.2);
+
+An image from this function is shown below.
+
+[$../graphs/scalogram_sin1t_light.png]
+
 
 [endsect] [/section:wavelet_transforms]
-
