@@ -19,7 +19,7 @@ the value of the real part is 1
 the value of the unreal part is (0,2,3,4,5,6,7,8)
 the value of the sup norm is 8
 the value of the l1 norm is 36
-the value of the magnitude (euclidian norm) is 14.2829
+the value of the magnitude (Euclidean norm) is 14.2829
 the value of the (Cayley) norm is 204
 the value of the conjugate is (1,-2,-3,-4,-5,-6,-7,-8)
 the value of the exponential is (-0.300136,0.379239,0.568858,0.758478,0.948097,1.13772,1.32734,1.51696)

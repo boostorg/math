@@ -88,7 +88,7 @@ Which has a peak relative error of 1.2x10[super -3].
 
 While this is a pretty good approximation already, judging by the
 shape of the error function we can clearly do better.  Before starting
-on the Remez method propper, we have one more step to perform: locate
+on the Remez method proper, we have one more step to perform: locate
 all the extrema of the error function, and store
 these locations as our initial ['Chebyshev control points].
 

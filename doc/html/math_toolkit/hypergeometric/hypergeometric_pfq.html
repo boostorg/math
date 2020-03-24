@@ -4,7 +4,7 @@
 <title>Hypergeometric pFq</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
-<link rel="home" href="../../index.html" title="Math Toolkit 2.11.0">
+<link rel="home" href="../../index.html" title="Math Toolkit 2.12.0">
 <link rel="up" href="../hypergeometric.html" title="Hypergeometric Functions">
 <link rel="prev" href="hypergeometric_1f1.html" title="Hypergeometric 1F1">
 <link rel="next" href="hypergeometric_refs.html" title="Hypergeometric References">
@@ -66,7 +66,7 @@
         returns the result of:
       </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-          <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../equations/hypergeometric_pfq_1.svg" width="334" height="49"></object></span>
+          <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../equations/hypergeometric_pfq_1.svg" width="409" height="53"></object></span>
         </p></blockquote></div>
 <p>
         It is most naturally used via initializer lists as in:
@@ -102,7 +102,7 @@
 <span class="comment">// Calculate 2F2 to 20 decimal places using a 10 second timeout:</span>
 <span class="comment">//</span>
 <span class="identifier">mp_type</span> <span class="identifier">result</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">hypergeometric_pFq_precision</span><span class="special">(</span>
-  <span class="special">{</span> <span class="identifier">mp_type</span><span class="special">(</span><span class="identifier">a1</span><span class="special">),</span> <span class="identifier">mp_type</span><span class="special">(</span><span class="identifier">a2</span><span class="special">)</span> <span class="special">},</span> <span class="special">{</span> <span class="identifier">mp_type</span><span class="special">(</span><span class="identifier">b1</span><span class="special">),</span> <span class="identifier">m_type</span><span class="special">(</span><span class="identifier">b2</span><span class="special">)</span> <span class="special">},</span> <span class="identifier">mp_type</span><span class="special">(</span><span class="identifier">z</span><span class="special">),</span> <span class="number">20</span><span class="special">,</span> <span class="number">10.0</span>
+  <span class="special">{</span> <span class="identifier">mp_type</span><span class="special">(</span><span class="identifier">a1</span><span class="special">),</span> <span class="identifier">mp_type</span><span class="special">(</span><span class="identifier">a2</span><span class="special">)</span> <span class="special">},</span> <span class="special">{</span> <span class="identifier">mp_type</span><span class="special">(</span><span class="identifier">b1</span><span class="special">),</span> <span class="identifier">mp_type</span><span class="special">(</span><span class="identifier">b2</span><span class="special">)</span> <span class="special">},</span> <span class="identifier">mp_type</span><span class="special">(</span><span class="identifier">z</span><span class="special">),</span> <span class="number">20</span><span class="special">,</span> <span class="number">10.0</span>
   <span class="special">);</span>
 <span class="comment">//</span>
 <span class="comment">// Convert the result back to a double:</span>

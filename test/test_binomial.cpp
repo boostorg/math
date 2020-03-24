@@ -100,7 +100,7 @@ void test_spot(
       if(k > 0)
       {
          // estimate success ratio:
-         // Note lower bound uses a different formual internally
+         // Note lower bound uses a different formula internally
          // from upper bound, have to adjust things to prevent
          // fencepost errors:
          BOOST_CHECK_CLOSE(
@@ -220,15 +220,15 @@ template <class RealType> // Any floating-point type RealType.
 void test_spots(RealType T)
 {
   // Basic sanity checks, test data is to double precision only
-  // so set tolerance to 100eps expressed as a persent, or
-  // 100eps of type double expressed as a persent, whichever
+  // so set tolerance to 100eps expressed as a percent, or
+  // 100eps of type double expressed as a percent, whichever
   // is the larger.
 
   RealType tolerance = (std::max)
       (boost::math::tools::epsilon<RealType>(),
       static_cast<RealType>(std::numeric_limits<double>::epsilon()));
   tolerance *= 100 * 1000;
-  RealType tol2 = boost::math::tools::epsilon<RealType>() * 5 * 100;  // 5 eps as a persent
+  RealType tol2 = boost::math::tools::epsilon<RealType>() * 5 * 100;  // 5 eps as a percent
 
   cout << "Tolerance for type " << typeid(T).name()  << " is " << tolerance << " %" << endl;
 

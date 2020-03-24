@@ -656,6 +656,11 @@ void test_spots(RealType T)
    BOOST_CHECK_EQUAL(
        median(dist),
        static_cast<RealType>(0));
+   RealType expected_entropy = log(2*boost::math::constants::two_pi<RealType>());
+   BOOST_CHECK_CLOSE(
+       entropy(dist),
+       expected_entropy, tolerance);
+
    //
    // Things that now don't compile (BOOST-STATIC_ASSERT_FAILURE) by default.
    // #define BOOST_MATH_ASSERT_UNDEFINED_POLICY false 

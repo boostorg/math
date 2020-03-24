@@ -46,7 +46,7 @@ the three copolar functions ['sn], ['cn] and ['dn] in a single function call.
 [tip If you need more than one of these functions
 for a given set of arguments, it's most efficient to use __jacobi_elliptic.]
 
-[endsect] [/section:jac_over Overvew of the Jacobi Elliptic Functions]
+[endsect] [/section:jac_over Overview of the Jacobi Elliptic Functions]
 
 [section:jacobi_elliptic Jacobi Elliptic SN, CN and DN]
 
@@ -128,7 +128,7 @@ these are sine waves, while as /k/ tends to 1 they become hyperbolic functions:
 
 [heading Accuracy]
 
-These functions are computed using only basic arithmetic operations and trigomometric functions, so
+These functions are computed using only basic arithmetic operations and trigonometric functions, so
 there isn't much variation in accuracy over differing platforms.
 Typically errors are trivially small for small angles, and as is typical for cyclic
 functions, grow as the angle increases.

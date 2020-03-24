@@ -314,7 +314,7 @@ template <class RealType> // Any floating-point type RealType.
 void test_spots(RealType T)
 {
   // Basic sanity checks, test data is to three decimal places only
-  // so set tolerance to 0.001 expressed as a persentage.
+  // so set tolerance to 0.001 expressed as a percentage.
 
   RealType tolerance = 0.001f * 100;
 

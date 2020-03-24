@@ -136,7 +136,7 @@ struct root_info
   // = digits * digits_accuracy
   // Vector of values (4) for each algorithm, TOMS748, Newton, Halley & Schroder.
   //std::vector< boost::int_least64_t> times;  converted to int.
-  std::vector<int> times; // arbirary units (ticks).
+  std::vector<int> times; // arbitrary units (ticks).
   //boost::int_least64_t min_time = std::numeric_limits<boost::int_least64_t>::max(); // Used to normalize times (as int).
   std::vector<double> normed_times;
   int min_time = (std::numeric_limits<int>::max)(); // Used to normalize times.
@@ -205,7 +205,7 @@ T elliptic_root_noderiv(T radius, T arc)
    T factor = 1.2;                     // How big steps to take when searching.
 
    const boost::uintmax_t maxit = 50;  // Limit to maximum iterations.
-   boost::uintmax_t it = maxit;        // Initally our chosen max iterations, but updated with actual.
+   boost::uintmax_t it = maxit;        // Initially our chosen max iterations, but updated with actual.
    bool is_rising = true;              // arc-length increases if one radii increases, so function is rising
    // Define a termination condition, stop when nearly all digits are correct, but allow for
    // the fact that we are returning a range, and must have some inaccuracy in the elliptic integral:
@@ -223,7 +223,7 @@ T elliptic_root_noderiv(T radius, T arc)
 //[elliptic_1deriv_func
 template <class T = double>
 struct elliptic_root_functor_1deriv
-{ // Functor also returning 1st derviative.
+{ // Functor also returning 1st derivative.
    BOOST_STATIC_ASSERT_MSG(boost::is_integral<T>::value == false, "Only floating-point type types can be used!");
 
    elliptic_root_functor_1deriv(T const& arc, T const& radius) : m_arc(arc), m_radius(radius)
@@ -581,7 +581,7 @@ int test_root(cpp_bin_float_100 big_radius, cpp_bin_float_100 big_arc, cpp_bin_f
   return 4;  // eval_count of how many algorithms used.
 } // test_root
 
-/*! Fill array of times, interations, etc for Nth root for all 4 types,
+/*! Fill array of times, iterations, etc for Nth root for all 4 types,
  and write a table of results in Quickbook format.
  */
 void table_root_info(cpp_bin_float_100 radius, cpp_bin_float_100 arc)

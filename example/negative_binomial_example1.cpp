@@ -94,7 +94,7 @@ helpful error message instead of an abrupt program abort.
 /*`
 Selling five candy bars means getting five successes, so successes r = 5.
 The total number of trials (n, in this case, houses visited) this takes is therefore
-  = sucesses + failures or k + r = k + 5.
+  = successes + failures or k + r = k + 5.
 */
     double sales_quota = 5; // Pat's sales quota - successes (r).
 /*`

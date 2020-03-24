@@ -4,7 +4,7 @@
 <title>Graphing, Profiling, and Generating Test Data for Special Functions</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
-<link rel="home" href="../../index.html" title="Math Toolkit 2.11.0">
+<link rel="home" href="../../index.html" title="Math Toolkit 2.12.0">
 <link rel="up" href="../internals.html" title="Internal tools">
 <link rel="prev" href="error_test.html" title="Relative Error and Testing">
 <link rel="next" href="../../using_udt.html" title="Chapter&#160;19.&#160;Use with User-Defined Floating-Point Types - Boost.Multiprecision and others">
@@ -442,13 +442,13 @@
    <span class="identifier">result_type</span> <span class="keyword">operator</span><span class="special">()(</span><span class="identifier">T</span> <span class="identifier">val</span><span class="special">)</span>
    <span class="special">{</span>
       <span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tools</span><span class="special">;</span>
-      <span class="comment">// estimate the true value, using arbitary precision</span>
+      <span class="comment">// estimate the true value, using arbitrary precision</span>
       <span class="comment">// arithmetic and NTL::RR:</span>
       <span class="identifier">NTL</span><span class="special">::</span><span class="identifier">RR</span> <span class="identifier">rval</span><span class="special">(</span><span class="identifier">val</span><span class="special">);</span>
       <span class="identifier">upper_incomplete_gamma_fract</span><span class="special">&lt;</span><span class="identifier">NTL</span><span class="special">::</span><span class="identifier">RR</span><span class="special">&gt;</span> <span class="identifier">f1</span><span class="special">(</span><span class="identifier">rval</span><span class="special">,</span> <span class="identifier">rval</span><span class="special">);</span>
       <span class="identifier">NTL</span><span class="special">::</span><span class="identifier">RR</span> <span class="identifier">true_val</span> <span class="special">=</span> <span class="identifier">continued_fraction_a</span><span class="special">(</span><span class="identifier">f1</span><span class="special">,</span> <span class="number">1000</span><span class="special">);</span>
       <span class="comment">//</span>
-      <span class="comment">// Now get the aproximation at double precision, along with the number of</span>
+      <span class="comment">// Now get the approximation at double precision, along with the number of</span>
       <span class="comment">// iterations required:</span>
       <span class="identifier">boost</span><span class="special">::</span><span class="identifier">uintmax_t</span> <span class="identifier">iters</span> <span class="special">=</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">uintmax_t</span><span class="special">&gt;::</span><span class="identifier">max</span><span class="special">();</span>
       <span class="identifier">upper_incomplete_gamma_fract</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">f2</span><span class="special">(</span><span class="identifier">val</span><span class="special">,</span> <span class="identifier">val</span><span class="special">);</span>

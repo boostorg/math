@@ -4,7 +4,7 @@
 /*                                HSO4.hpp header file                                      */
 /*                                                                                          */
 /* This file is not currently part of the Boost library. It is simply an example of the use */
-/* quaternions can be put to. Hopefully it will be usefull too.                             */
+/* quaternions can be put to. Hopefully it will be useful too.                             */
 /*                                                                                          */
 /* This file provides tools to convert between quaternions and R^4 rotation matrices.       */
 /*                                                                                          */

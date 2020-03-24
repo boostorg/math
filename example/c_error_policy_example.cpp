@@ -29,7 +29,7 @@ using boost::math::policies::errno_on_error;
 using boost::math::policies::ignore_error;
 
 //using namespace boost::math::policies;
-//using namespace boost::math; // avoid potential ambiuity with std:: <random>
+//using namespace boost::math; // avoid potential ambiguity with std:: <random>
 
 // Define a policy:
 typedef policy<

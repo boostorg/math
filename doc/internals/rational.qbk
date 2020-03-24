@@ -116,7 +116,7 @@ Equivalent to `evaluate_polynomial(poly+1, z*z, count-1) * z + poly[0]`.
    V evaluate_rational(const T* num, const U* denom, V z, unsigned count);
 
 Evaluates the rational function (the ratio of two polynomials) described by
-the coefficients stored in /num/ and /demom/.
+the coefficients stored in /num/ and /denom/.
 
 If the size of the array is specified at runtime then both
 polynomials most have order /count-1/ with /count/ coefficients.

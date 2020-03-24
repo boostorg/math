@@ -4,7 +4,7 @@
 <title>Using Boost.Multiprecision</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
-<link rel="home" href="../../index.html" title="Math Toolkit 2.11.0">
+<link rel="home" href="../../index.html" title="Math Toolkit 2.12.0">
 <link rel="up" href="../high_precision.html" title="Using Boost.Math with High-Precision Floating-Point Libraries">
 <link rel="prev" href="why_high_precision.html" title="Why use a high-precision library rather than built-in floating-point types?">
 <link rel="next" href="float128.html" title="Using with GCC's __float128 datatype">
@@ -32,76 +32,8 @@
       </p>
 <h6>
 <a name="math_toolkit.high_precision.use_multiprecision.h0"></a>
-        <span class="phrase"><a name="math_toolkit.high_precision.use_multiprecision.using_boost_multiprecision_cpp_f"></a></span><a class="link" href="use_multiprecision.html#math_toolkit.high_precision.use_multiprecision.using_boost_multiprecision_cpp_f">Using
-        Boost.Multiprecision <code class="computeroutput"><span class="identifier">cpp_float</span></code>
-        for numerical calculations with high precision.</a>
-      </h6>
-<p>
-        The Boost.Multiprecision library can be used for computations requiring precision
-        exceeding that of standard built-in types such as float, double and long
-        double. For extended-precision calculations, Boost.Multiprecision supplies
-        a template data type called cpp_dec_float. The number of decimal digits of
-        precision is fixed at compile-time via template parameter.
-      </p>
-<p>
-        To use these floating-point types and constants, we need some includes:
-      </p>
-<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">constants</span><span class="special">/</span><span class="identifier">constants</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
-
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">multiprecision</span><span class="special">/</span><span class="identifier">cpp_dec_float</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
-<span class="comment">// using boost::multiprecision::cpp_dec_float</span>
-
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span>
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">limits</span><span class="special">&gt;</span>
-</pre>
-<p>
-        So now we can demonstrate with some trivial calculations:
-      </p>
-<p>
-        Using <code class="computeroutput"><span class="keyword">typedef</span> <span class="identifier">cpp_dec_float_50</span></code>
-        hides the complexity of multiprecision, allows us to define variables with
-        50 decimal digit precision just like built-in <code class="computeroutput"><span class="keyword">double</span></code>.
-      </p>
-<pre class="programlisting"><span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">multiprecision</span><span class="special">::</span><span class="identifier">cpp_dec_float_50</span><span class="special">;</span>
-
-<span class="identifier">cpp_dec_float_50</span> <span class="identifier">seventh</span> <span class="special">=</span> <span class="identifier">cpp_dec_float_50</span><span class="special">(</span><span class="number">1</span><span class="special">)</span> <span class="special">/</span> <span class="number">7</span><span class="special">;</span>  <span class="comment">// 1 / 7</span>
-</pre>
-<p>
-        By default, output would only show the standard 6 decimal digits, so set
-        precision to show all 50 significant digits, including any trailing zeros.
-      </p>
-<pre class="programlisting"><span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span><span class="special">.</span><span class="identifier">precision</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">cpp_dec_float_50</span><span class="special">&gt;::</span><span class="identifier">digits10</span><span class="special">);</span>
-<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">showpoint</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span> <span class="comment">// Append any trailing zeros.</span>
-<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">seventh</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
-</pre>
-<p>
-        which outputs:
-      </p>
-<pre class="programlisting"><span class="number">0.14285714285714285714285714285714285714285714285714</span>
-</pre>
-<p>
-        We can also use Boost.Math <a class="link" href="../constants.html" title="The Mathematical Constants">constants</a>
-        like &#960;, guaranteed to be initialized with the very last bit of precision for
-        the floating-point type.
-      </p>
-<pre class="programlisting"><span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"pi = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">constants</span><span class="special">::</span><span class="identifier">pi</span><span class="special">&lt;</span><span class="identifier">cpp_dec_float_50</span><span class="special">&gt;()</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
-<span class="identifier">cpp_dec_float_50</span> <span class="identifier">circumference</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">constants</span><span class="special">::</span><span class="identifier">pi</span><span class="special">&lt;</span><span class="identifier">cpp_dec_float_50</span><span class="special">&gt;()</span> <span class="special">*</span> <span class="number">2</span> <span class="special">*</span> <span class="identifier">seventh</span><span class="special">;</span>
-<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"c =  "</span><span class="special">&lt;&lt;</span> <span class="identifier">circumference</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
-</pre>
-<p>
-        which outputs
-      </p>
-<pre class="programlisting"><span class="identifier">pi</span> <span class="special">=</span> <span class="number">3.1415926535897932384626433832795028841971693993751</span>
-
-<span class="identifier">c</span> <span class="special">=</span>  <span class="number">0.89759790102565521098932668093700082405633411410717</span>
-</pre>
-<p>
-        The full source of this example is at <a href="../../../../example/big_seventh.cpp" target="_top">big_seventh.cpp</a>
-      </p>
-<h6>
-<a name="math_toolkit.high_precision.use_multiprecision.h1"></a>
         <span class="phrase"><a name="math_toolkit.high_precision.use_multiprecision.using_boost_multiprecision_to_ge"></a></span><a class="link" href="use_multiprecision.html#math_toolkit.high_precision.use_multiprecision.using_boost_multiprecision_to_ge">Using
-        Boost.Multiprecision to generate a high-precision array of sine coefficents
+        Boost.Multiprecision to generate a high-precision array of sine coefficients
         for use with FFT.</a>
       </h6>
 <p>

@@ -66,7 +66,7 @@ lanczos_spot_data sweet_spots[] = {
 23, 23.118012, 5.2e-35,
 
 // some more we've found, these are all the points where the first
-// negleted term from the Lanczos series changes sign, there is one 
+// neglected term from the Lanczos series changes sign, there is one 
 // point just above that point, and one just below:
 
 3, 0.58613894134759903, 0.00036580426080686315,
@@ -4331,7 +4331,7 @@ T binomial(int n, int k, T)
    return result;
 }
 //
-// Functions for creating the matrices that generate the coefficents.
+// Functions for creating the matrices that generate the coefficients.
 // See http://my.fit.edu/~gabdo/gamma.txt and http://www.rskey.org/gamma.htm
 //
 template <class T>
@@ -4841,14 +4841,14 @@ void print_code(const lanczos_info<T>& l, const char* name, int precision = std:
       "// Lanczos Coefficients for N=" << l.n << " G=" << l.r << "\n"
       "// Max experimental error (with ";
    if(std::strlen(name) == 0)
-      std::cout << "arbitary";
+      std::cout << "arbitrary";
    else
       std::cout << name;
    std::cout << " precision arithmetic) " << l.err <<
       "\n// Generated with compiler: " << BOOST_COMPILER << " on " << BOOST_PLATFORM << " at " << __DATE__ << "\n"
       "// Type precision was " << precision2 << " bits or " << precision << " max_digits10\n"
       "//\n"
-      "struct lanczos" << l.n << name << " : public mpl::int_<" << precision2 << ">\n"
+      "struct lanczos" << l.n << name << " : public boost::integral_constant<int, " << precision2 << ">\n"
       "{\n"
       "   template <class T>\n"
       "   static T lanczos_sum(const T& z)\n"
@@ -5100,14 +5100,14 @@ int main(int argc, char*argv [])
    if(argc < 2)
    {
       std::cout << 
-         "Useage:\n"
+         "Usage:\n"
          "  -float        test type float for the best approximation\n"
          "  -double       test type double for the best approximation\n"
          "  -long-double  test type long double for the best approximation\n"
          "  -quad         test quad precision for the best approximation\n"
          "  -MP           test current multiprecision type for the best approximation\n"
          "  -spots        print out the best cases found in previous runs\n"
-         "  -sweet        Scan for more sweet spots for the arbitary parameter G: these "
+         "  -sweet        Scan for more sweet spots for the arbitrary parameter G: these "
          "                will need to cut and pasted into the big table at the start of this file"
          "                in order to search for greater precision approximations than otherwise supported."
          "  -data         print out the test data\n" << std::flush;

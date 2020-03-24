@@ -780,7 +780,7 @@ namespace distribution_explorer
           this.newToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
           this.newToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
           this.newToolStripMenuItem.Text = "&New";
-          this.newToolStripMenuItem.ToolTipText = "New is not yet implementd. Enter data into dialog boxes.";
+          this.newToolStripMenuItem.ToolTipText = "New is not yet implemented. Enter data into dialog boxes.";
           this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
           // 
           // openToolStripMenuItem
@@ -792,7 +792,7 @@ namespace distribution_explorer
           this.openToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
           this.openToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
           this.openToolStripMenuItem.Text = "&Open";
-          this.openToolStripMenuItem.ToolTipText = "Open is not yet implementd. Enter data into dialog boxes.";
+          this.openToolStripMenuItem.ToolTipText = "Open is not yet implemented. Enter data into dialog boxes.";
           this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
           // 
           // toolStripSeparator

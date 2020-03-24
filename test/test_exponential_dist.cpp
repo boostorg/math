@@ -28,13 +28,13 @@ void test_spot(RealType l, RealType x, RealType p, RealType q, RealType toleranc
 {
    BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
-         exponential_distribution<RealType>(l),      
+         exponential_distribution<RealType>(l),
          x),
          p,
          tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
-         complement(exponential_distribution<RealType>(l),      
+         complement(exponential_distribution<RealType>(l),
          x)),
          q,
          tolerance); // %
@@ -42,7 +42,7 @@ void test_spot(RealType l, RealType x, RealType p, RealType q, RealType toleranc
    {
       BOOST_CHECK_CLOSE(
          ::boost::math::quantile(
-            exponential_distribution<RealType>(l),      
+            exponential_distribution<RealType>(l),
             p),
             x,
             tolerance); // %
@@ -51,7 +51,7 @@ void test_spot(RealType l, RealType x, RealType p, RealType q, RealType toleranc
    {
       BOOST_CHECK_CLOSE(
          ::boost::math::quantile(
-            complement(exponential_distribution<RealType>(l),      
+            complement(exponential_distribution<RealType>(l),
             q)),
             x,
             tolerance); // %
@@ -68,7 +68,7 @@ void test_spots(RealType T)
    RealType tolerance = (std::max)(
       static_cast<RealType>(boost::math::tools::epsilon<double>()),
       boost::math::tools::epsilon<RealType>());
-   tolerance *= 50 * 100; 
+   tolerance *= 50 * 100;
    // #  pragma warning(disable: 4100) // unreferenced formal parameter.
    // prevent his spurious warning.
    if (T != 0)
@@ -162,29 +162,29 @@ void test_spots(RealType T)
       static_cast<RealType>(9.999999499998730E-008L), // p
       static_cast<RealType>(1-9.999999499998730E-008L), //q
       tolerance);
-   */   
+   */
 
    BOOST_CHECK_CLOSE(
       ::boost::math::pdf(
-         exponential_distribution<RealType>(0.5),      
+         exponential_distribution<RealType>(0.5),
          static_cast<RealType>(0.125)),              // x
          static_cast<RealType>(0.46970653140673789305985541231115L),                // probability.
          tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::pdf(
-         exponential_distribution<RealType>(0.5),      
+         exponential_distribution<RealType>(0.5),
          static_cast<RealType>(5)),              // x
          static_cast<RealType>(0.04104249931194939758476433723358L),                // probability.
          tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::pdf(
-         exponential_distribution<RealType>(2),      
+         exponential_distribution<RealType>(2),
          static_cast<RealType>(0.125)),              // x
          static_cast<RealType>(1.5576015661428097364903405339566L),                // probability.
          tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::pdf(
-         exponential_distribution<RealType>(2),      
+         exponential_distribution<RealType>(2),
          static_cast<RealType>(5)),              // x
          static_cast<RealType>(9.0799859524969703071183031121101e-5L),                // probability.
          tolerance); // %
@@ -192,39 +192,46 @@ void test_spots(RealType T)
    BOOST_CHECK_CLOSE(
       ::boost::math::mean(
          exponential_distribution<RealType>(2)),
-         static_cast<RealType>(0.5),           
+         static_cast<RealType>(0.5),
          tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::standard_deviation(
-         exponential_distribution<RealType>(2)), 
+         exponential_distribution<RealType>(2)),
          static_cast<RealType>(0.5),
          tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::mode(
          exponential_distribution<RealType>(2)),
-         static_cast<RealType>(0),           
+         static_cast<RealType>(0),
          tolerance); // %
 
    BOOST_CHECK_CLOSE(
       ::boost::math::median(
          exponential_distribution<RealType>(4)),
-         static_cast<RealType>(0.693147180559945309417232121458176568075500134360255254) / 4,           
+         static_cast<RealType>(0.693147180559945309417232121458176568075500134360255254) / 4,
          tolerance); // %
 
    BOOST_CHECK_CLOSE(
       ::boost::math::skewness(
          exponential_distribution<RealType>(2)),
-         static_cast<RealType>(2),           
+         static_cast<RealType>(2),
          tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::kurtosis(
          exponential_distribution<RealType>(2)),
-         static_cast<RealType>(9),           
+         static_cast<RealType>(9),
          tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::kurtosis_excess(
          exponential_distribution<RealType>(2)),
-         static_cast<RealType>(6),           
+         static_cast<RealType>(6),
+         tolerance); // %
+
+   using std::log;
+   BOOST_CHECK_CLOSE(
+      ::boost::math::entropy(
+         exponential_distribution<RealType>(2)),
+         static_cast<RealType>(1-log(RealType(2))),
          tolerance); // %
 
    //

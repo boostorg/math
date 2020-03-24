@@ -10,8 +10,8 @@
 // Implement a specialization of std::complex<> for *anything* that
 // is defined as BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE.
 
-#ifndef _BOOST_CSTDFLOAT_COMPLEX_STD_2014_02_15_HPP_
-  #define _BOOST_CSTDFLOAT_COMPLEX_STD_2014_02_15_HPP_
+#ifndef BOOST_MATH_CSTDFLOAT_COMPLEX_STD_2014_02_15_HPP_
+  #define BOOST_MATH_CSTDFLOAT_COMPLEX_STD_2014_02_15_HPP_
 
   #if defined(__GNUC__)
   #pragma GCC system_header
@@ -638,4 +638,4 @@
     }
   } // namespace std
 
-#endif // _BOOST_CSTDFLOAT_COMPLEX_STD_2014_02_15_HPP_
+#endif // BOOST_MATH_CSTDFLOAT_COMPLEX_STD_2014_02_15_HPP_

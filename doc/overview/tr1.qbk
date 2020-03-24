@@ -69,7 +69,7 @@ build of the libraries.]
 these libraries installed, and can generally just link against
 -lboost_math_tr1 etc.]
 
-[h4 Usage Recomendations]
+[h4 Usage Recommendations]
 
 This library now presents the user with a choice:
 

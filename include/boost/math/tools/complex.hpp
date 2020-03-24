@@ -17,7 +17,7 @@ namespace boost {
       namespace tools {
 
          //
-         // Speicalize this trait for user-defined complex types (ie Boost.Multiprecision):
+         // Specialize this trait for user-defined complex types (ie Boost.Multiprecision):
          //
          template <class T>
          struct is_complex_type : public boost::is_complex<T> {};

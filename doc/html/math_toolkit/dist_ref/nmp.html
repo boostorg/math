@@ -4,7 +4,7 @@
 <title>Non-Member Properties</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
-<link rel="home" href="../../index.html" title="Math Toolkit 2.11.0">
+<link rel="home" href="../../index.html" title="Math Toolkit 2.12.0">
 <link rel="up" href="../dist_ref.html" title="Statistical Distributions Reference">
 <link rel="prev" href="../dist_ref.html" title="Statistical Distributions Reference">
 <link rel="next" href="dists.html" title="Distributions">
@@ -96,6 +96,9 @@
           </li>
 <li class="listitem">
             <a class="link" href="nmp.html#math_toolkit.dist_ref.nmp.variance">variance</a>.
+          </li>
+<li class="listitem">
+            entropy.
           </li>
 </ul></div>
 <h5>
@@ -189,6 +192,9 @@
 <li class="listitem">
             <a class="link" href="nmp.html#math_toolkit.dist_ref.nmp.variance">variance</a>.
           </li>
+<li class="listitem">
+            entropy
+          </li>
 </ul></div>
 <h5>
 <a name="math_toolkit.dist_ref.nmp.h2"></a>
@@ -266,7 +272,7 @@
 </pre>
 <p>
         Returns the <a class="link" href="nmp.html#math_toolkit.dist_ref.nmp.hazard">Hazard Function</a>
-        of <span class="emphasis"><em>x</em></span> and distibution <span class="emphasis"><em>dist</em></span>.
+        of <span class="emphasis"><em>x</em></span> and distribution <span class="emphasis"><em>dist</em></span>.
       </p>
 <p>
         This function may return a <a class="link" href="../error_handling.html#math_toolkit.error_handling.domain_error">domain_error</a>
@@ -296,7 +302,7 @@
 </pre>
 <p>
         Returns the <a class="link" href="nmp.html#math_toolkit.dist_ref.nmp.chf">Cumulative Hazard
-        Function</a> of <span class="emphasis"><em>x</em></span> and distibution <span class="emphasis"><em>dist</em></span>.
+        Function</a> of <span class="emphasis"><em>x</em></span> and distribution <span class="emphasis"><em>dist</em></span>.
       </p>
 <p>
         This function may return a <a class="link" href="../error_handling.html#math_toolkit.error_handling.domain_error">domain_error</a>
@@ -460,7 +466,7 @@
       </p>
 <p>
         This function returns a <a class="link" href="../error_handling.html#math_toolkit.error_handling.domain_error">domain_error</a>
-        if the probablity lies outside [0,1]. The function may return an <a class="link" href="../error_handling.html#math_toolkit.error_handling.overflow_error">overflow_error</a>
+        if the probability lies outside [0,1]. The function may return an <a class="link" href="../error_handling.html#math_toolkit.error_handling.overflow_error">overflow_error</a>
         if there is no finite value that has the specified probability.
       </p>
 <p>
@@ -541,7 +547,7 @@
         <span class="emphasis"><em>dist</em></span>.
       </p>
 <p>
-        kertosis = &#946;<sub>2</sub>= &#956;<sub>4</sub> / &#956;<sub>2</sub><sup>2</sup>
+        kurtosis = &#946;<sub>2</sub>= &#956;<sub>4</sub> / &#956;<sub>2</sub><sup>2</sup>
       </p>
 <p>
         Where &#956;<sub>i</sub> is the i'th central moment of the distribution, and in particular
@@ -687,6 +693,25 @@
 <p>
         Refer to the <a class="link" href="nmp.html#math_toolkit.dist_ref.nmp.ccdf">Complement of
         the Cumulative Distribution Function</a>.
+      </p>
+<h5>
+<a name="math_toolkit.dist_ref.nmp.h27"></a>
+        <span class="phrase"><a name="math_toolkit.dist_ref.nmp.entropy"></a></span><a class="link" href="nmp.html#math_toolkit.dist_ref.nmp.entropy">Entropy</a>
+      </h5>
+<p>
+        The entropy (or differential entropy) of a continuous probability distribution
+        <span class="emphasis"><em>p</em></span> is defined as
+      </p>
+<p>
+        <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../graphs/differential_entropy.svg" width="311" height="43"></object></span>
+      </p>
+<p>
+        Note that the "natural" properties of the differential entropy
+        do not uniquely specify a log base. In the Boost library, we <span class="emphasis"><em>always</em></span>
+        use the natural logarithm to compute differential entropy. This choice of
+        log base for entropy is sometimes referred to as "entropy measured in
+        nats". See <a href="https://doi.org/10.1109/TIT.1978.1055832" target="_top">On
+        the entropy of continuous probability distributions</a> for more information.
       </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

@@ -4,7 +4,7 @@
 <title>Caveats</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
-<link rel="home" href="../../index.html" title="Math Toolkit 2.11.0">
+<link rel="home" href="../../index.html" title="Math Toolkit 2.12.0">
 <link rel="up" href="../double_exponential.html" title="Double-exponential quadrature">
 <link rel="prev" href="de_thread.html" title="Thread Safety">
 <link rel="next" href="de_refes.html" title="References">
@@ -90,7 +90,7 @@
         there for <code class="computeroutput"><span class="identifier">a</span> <span class="special">&lt;&lt;</span>
         <span class="number">0</span></code>. On the other hand, the simple expedient
         of breaking the integral into two domains: (a, 0) and (0, b) and integrating
-        each seperately using the tanh-sinh integrator, works just fine.
+        each separately using the tanh-sinh integrator, works just fine.
       </p>
 <p>
         Finally, some endpoint singularities are too strong to be handled by <code class="computeroutput"><span class="identifier">tanh_sinh</span></code> or equivalent methods, for example
@@ -140,7 +140,7 @@
         There is an alternative, more complex method, which is applicable when we
         are dealing with expressions which can be simplified by evaluating by logs.
         Let's suppose that as in this case, all the area under the graph is infinitely
-        close to zero, now inagine that we could expand that region out over a much
+        close to zero, now imagine that we could expand that region out over a much
         larger range of abscissa values: that's exactly what happens if we perform
         argument substitution, replacing <code class="computeroutput"><span class="identifier">x</span></code>
         by <code class="computeroutput"><span class="identifier">exp</span><span class="special">(-</span><span class="identifier">x</span><span class="special">)</span></code> (note

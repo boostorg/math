@@ -30,10 +30,10 @@
 #include <boost/utility/enable_if.hpp>
 
 // Check at compile time that the construction method for constants of type float, is "construct from a float", or "construct from a double", ...
-BOOST_STATIC_ASSERT((boost::is_same<boost::math::constants::construction_traits<float, boost::math::policies::policy<> >::type, boost::mpl::int_<boost::math::constants::construct_from_float> >::value));
-BOOST_STATIC_ASSERT((boost::is_same<boost::math::constants::construction_traits<double, boost::math::policies::policy<> >::type, boost::mpl::int_<boost::math::constants::construct_from_double> >::value));
-BOOST_STATIC_ASSERT((boost::is_same<boost::math::constants::construction_traits<long double, boost::math::policies::policy<> >::type, boost::mpl::int_<(sizeof(double) == sizeof(long double) ? boost::math::constants::construct_from_double : boost::math::constants::construct_from_long_double)> >::value));
-BOOST_STATIC_ASSERT((boost::is_same<boost::math::constants::construction_traits<boost::math::concepts::real_concept, boost::math::policies::policy<> >::type, boost::mpl::int_<0> >::value));
+BOOST_STATIC_ASSERT((boost::is_same<boost::math::constants::construction_traits<float, boost::math::policies::policy<> >::type, boost::integral_constant<int, boost::math::constants::construct_from_float> >::value));
+BOOST_STATIC_ASSERT((boost::is_same<boost::math::constants::construction_traits<double, boost::math::policies::policy<> >::type, boost::integral_constant<int, boost::math::constants::construct_from_double> >::value));
+BOOST_STATIC_ASSERT((boost::is_same<boost::math::constants::construction_traits<long double, boost::math::policies::policy<> >::type, boost::integral_constant<int, (sizeof(double) == sizeof(long double) ? boost::math::constants::construct_from_double : boost::math::constants::construct_from_long_double)> >::value));
+BOOST_STATIC_ASSERT((boost::is_same<boost::math::constants::construction_traits<boost::math::concepts::real_concept, boost::math::policies::policy<> >::type, boost::integral_constant<int, 0> >::value));
 
 // Policy to set precision at maximum possible using long double.
 typedef boost::math::policies::policy<boost::math::policies::digits2<std::numeric_limits<long double>::digits> > real_concept_policy_1;
@@ -48,8 +48,8 @@ typedef boost::math::policies::policy<boost::math::policies::digits2<std::numeri
 // Policy with precision greater than the string representations, forces computation of values (i.e. different code path):
 typedef boost::math::policies::policy<boost::math::policies::digits2<400> > real_concept_policy_3;
 
-BOOST_STATIC_ASSERT((boost::is_same<boost::math::constants::construction_traits<boost::math::concepts::real_concept, real_concept_policy_1 >::type, boost::mpl::int_<(sizeof(double) == sizeof(long double) ? boost::math::constants::construct_from_double : boost::math::constants::construct_from_long_double) > >::value));
-BOOST_STATIC_ASSERT((boost::is_same<boost::math::constants::construction_traits<boost::math::concepts::real_concept, real_concept_policy_2 >::type, boost::mpl::int_<boost::math::constants::construct_from_string> >::value));
+BOOST_STATIC_ASSERT((boost::is_same<boost::math::constants::construction_traits<boost::math::concepts::real_concept, real_concept_policy_1 >::type, boost::integral_constant<int, (sizeof(double) == sizeof(long double) ? boost::math::constants::construct_from_double : boost::math::constants::construct_from_long_double) > >::value));
+BOOST_STATIC_ASSERT((boost::is_same<boost::math::constants::construction_traits<boost::math::concepts::real_concept, real_concept_policy_2 >::type, boost::integral_constant<int, boost::math::constants::construct_from_string> >::value));
 BOOST_STATIC_ASSERT((boost::math::constants::construction_traits<boost::math::concepts::real_concept, real_concept_policy_3>::type::value >= 5));
 
 
@@ -199,7 +199,7 @@ void test_spots(RealType)
    BOOST_CHECK_CLOSE_FRACTION(1/log10(e<RealType>()), one_div_log10_e<RealType>(), tolerance);
    BOOST_CHECK_CLOSE_FRACTION((1/ln_two<RealType>()), log2_e<RealType>(), tolerance);
 
-   // Trigonmetric
+   // Trigonometric
    BOOST_CHECK_CLOSE_FRACTION(pi<RealType>()/180, degree<RealType>(), tolerance);
    BOOST_CHECK_CLOSE_FRACTION(180 / pi<RealType>(), radian<RealType>(), tolerance);
    BOOST_CHECK_CLOSE_FRACTION(sin(1.L), sin_one<RealType>(), tolerance);
@@ -334,7 +334,7 @@ void test_float_spots()
    BOOST_CHECK_CLOSE_FRACTION(log10(e), log10_e, tolerance);
    BOOST_CHECK_CLOSE_FRACTION(static_cast<float>(1)/log10(e), one_div_log10_e, tolerance);
 
-   // Trigonmetric
+   // Trigonometric
    BOOST_CHECK_CLOSE_FRACTION(pi/180, degree, tolerance);
    BOOST_CHECK_CLOSE_FRACTION(180 / pi, radian, tolerance);
    BOOST_CHECK_CLOSE_FRACTION(sin(1.F), sin_one, tolerance);
@@ -455,7 +455,7 @@ void test_double_spots()
    BOOST_CHECK_CLOSE_FRACTION(log10(e), log10_e, tolerance);
    BOOST_CHECK_CLOSE_FRACTION(static_cast<double>(1)/log10(e), one_div_log10_e, tolerance);
 
-   // Trigonmetric
+   // Trigonometric
    BOOST_CHECK_CLOSE_FRACTION(pi/180, degree, tolerance);
    BOOST_CHECK_CLOSE_FRACTION(180 / pi, radian, tolerance);
    BOOST_CHECK_CLOSE_FRACTION(sin(1.), sin_one, tolerance);
@@ -583,7 +583,7 @@ void test_long_double_spots()
    BOOST_CHECK_CLOSE_FRACTION(log10(e), log10_e, tolerance);
    BOOST_CHECK_CLOSE_FRACTION(static_cast<long double>(1)/log10(e), one_div_log10_e, tolerance);
 
-   // Trigonmetric
+   // Trigonometric
    BOOST_CHECK_CLOSE_FRACTION(pi/180, degree, tolerance);
    BOOST_CHECK_CLOSE_FRACTION(180 / pi, radian, tolerance);
    BOOST_CHECK_CLOSE_FRACTION(sin(1.L), sin_one, tolerance);
@@ -714,7 +714,7 @@ void test_real_concept_policy(const Policy&)
    BOOST_CHECK_CLOSE_FRACTION(1/log10(e<real_concept, Policy>()), (one_div_log10_e<real_concept, Policy>)(), tolerance);
    BOOST_CHECK_CLOSE_FRACTION((1/ln_two<real_concept, Policy>()), (log2_e<real_concept, Policy>)(), tolerance);
 
-   // Trigonmetric
+   // Trigonometric
    BOOST_CHECK_CLOSE_FRACTION((pi<real_concept, Policy>)()/180, (degree<real_concept, Policy>)(), tolerance);
    BOOST_CHECK_CLOSE_FRACTION(180 / (pi<real_concept, Policy>)(), (radian<real_concept, Policy>)(), tolerance);
    BOOST_CHECK_CLOSE_FRACTION(sin(1.L), (sin_one<real_concept, Policy>)(), tolerance);

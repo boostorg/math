@@ -66,7 +66,7 @@ then you can get help, for example from the invaluable
 
 http://www.wolframalpha.com/ site
 
-entering the commmand
+entering the command
 
   differentiate x^5
 
@@ -183,7 +183,7 @@ T fifth_noderiv(T x)
   // We could also have used a maximum iterations provided by any policy:
   // boost::uintmax_t max_it = policies::get_max_root_iterations<Policy>();
 
-  boost::uintmax_t it = maxit; // Initally our chosen max iterations,
+  boost::uintmax_t it = maxit; // Initially our chosen max iterations,
 
   bool is_rising = true; // So if result if guess^5 is too low, try increasing guess.
   eps_tolerance<double> tol(digits);

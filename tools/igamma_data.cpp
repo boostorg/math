@@ -13,7 +13,7 @@
 using namespace boost::math::tools;
 
 //
-// Force trunctation to float precision of input values:
+// Force truncation to float precision of input values:
 // we must ensure that the input values are exactly representable
 // in whatever type we are testing, or the output values will all
 // be thrown off:

@@ -99,7 +99,7 @@ namespace detail
 //                -----
 //                b3 + ...
 //
-// Note that the first a0 returned by generator Gen is disarded.
+// Note that the first a0 returned by generator Gen is discarded.
 //
 template <class Gen, class U>
 inline typename detail::fraction_traits<Gen>::result_type continued_fraction_b(Gen& g, const U& factor, boost::uintmax_t& max_terms) 

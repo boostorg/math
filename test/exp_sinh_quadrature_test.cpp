@@ -52,7 +52,7 @@ using boost::math::constants::root_two_pi;
 using boost::math::constants::root_pi;
 using boost::math::quadrature::exp_sinh;
 
-#if !defined(TEST1) && !defined(TEST2) && !defined(TEST3) && !defined(TEST4) && !defined(TEST5) && !defined(TEST6) && !defined(TEST7) && !defined(TEST8)
+#if !defined(TEST1) && !defined(TEST2) && !defined(TEST3) && !defined(TEST4) && !defined(TEST5) && !defined(TEST6) && !defined(TEST7) && !defined(TEST8) && !defined(TEST9)
 #  define TEST1
 #  define TEST2
 #  define TEST3
@@ -61,6 +61,7 @@ using boost::math::quadrature::exp_sinh;
 #  define TEST6
 #  define TEST7
 #  define TEST8
+#  define TEST9
 #endif
 
 #ifdef BOOST_MSVC
@@ -515,6 +516,37 @@ void test_complex_modified_bessel()
     BOOST_CHECK_CLOSE_FRACTION(K0.imag(), K0_y_expected, tol);
 }
 
+template<typename Complex>
+void test_complex_exponential_integral_E1(){
+    std::cout << "Testing complex exponential integral on type " << boost::typeindex::type_id<Complex>().pretty_name() << "\n";
+    typedef typename Complex::value_type Real;
+    Real tol = 100 * boost::math::tools::epsilon<Real>();
+    Real error;
+    Real L1;
+    auto integrator = get_integrator<Real>();
+
+    Complex z{1.5,0.5};
+
+    // Integral representation of exponential integral E1, valid for Re z > 0
+    // https://en.wikipedia.org/wiki/Exponential_integral#Definitions
+    auto f = [&z](const Real& t)->Complex
+    {
+       using std::exp;
+       return exp(-z*t)/t;
+    };
+
+    Real inf = std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>();
+
+    Complex E1 = integrator.integrate(f,1,inf,get_convergence_tolerance<Real>(),&error,&L1);
+
+   // Mathematica code: N[ExpIntegral[1,1.5 + 0.5 I],140]
+    Real E1_real_expected = boost::lexical_cast<Real>("0.071702995463938694845949672113596046091766639758473558841839765788732549949008866887694451956003503764943496943262401868244277788066634858393");
+    Real E1_imag_expected = boost::lexical_cast<Real>("-0.065138628279238400564373880665751377423524428792583839078600260273866805818117625959446311737353882269129094759883720722150048944193926087208");
+    BOOST_CHECK_CLOSE_FRACTION(E1.real(), E1_real_expected, tol);
+    BOOST_CHECK_CLOSE_FRACTION(E1.imag(), E1_imag_expected, tol);
+
+}
+
 
 BOOST_AUTO_TEST_CASE(exp_sinh_quadrature_test)
 {
@@ -578,7 +610,7 @@ BOOST_AUTO_TEST_CASE(exp_sinh_quadrature_test)
     test_nr_examples<boost::multiprecision::cpp_dec_float_50>();
     //
     // This one causes stack overflows on the CI machine, but not locally,
-    // assume it's due to resticted resources on the server, and <shrug> for now...
+    // assume it's due to restricted resources on the server, and <shrug> for now...
     //
 #if ! BOOST_WORKAROUND(BOOST_MSVC, == 1900)
     test_crc<boost::multiprecision::cpp_dec_float_50>();
@@ -592,5 +624,14 @@ BOOST_AUTO_TEST_CASE(exp_sinh_quadrature_test)
         test_complex_modified_bessel<boost::multiprecision::complex128>();
     #endif
     test_complex_modified_bessel<boost::multiprecision::cpp_complex_quad>();
+#endif
+#ifdef TEST9
+    test_complex_exponential_integral_E1<std::complex<float>>();
+    test_complex_exponential_integral_E1<std::complex<double>>();
+    test_complex_exponential_integral_E1<std::complex<long double>>();
+      #ifdef BOOST_HAS_FLOAT128
+         test_complex_exponential_integral_E1<boost::multiprecision::complex128>();
+      #endif
+    test_complex_exponential_integral_E1<boost::multiprecision::cpp_complex_quad>();
 #endif
 }

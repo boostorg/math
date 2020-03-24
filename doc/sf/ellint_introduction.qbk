@@ -214,7 +214,7 @@ National Bureau of Standards Applied Mathematics Series, U.S. Government Printin
 # [#ellint_ref_carlson78]B.C. Carlson, ['Short Proofs of Three Theorems on Elliptic Integrals],
     SIAM Journal on Mathematical Analysis, vol 9, 524 (1978).
 # [#ellint_ref_carlson81]B.C. Carlson and E.M. Notis, ['ALGORITHM 577: Algorithms for Incomplete
-    Elliptic Integrals], ACM Transactions on Mathematmal Software,
+    Elliptic Integrals], ACM Transactions on Mathematical Software,
     vol 7, 398 (1981).
 # B. C. Carlson, ['On computing elliptic integrals and functions]. J. Math. and
 Phys., 44 (1965), pp. 36-51.
@@ -236,14 +236,14 @@ Asymptotic Approximations for Symmetric Elliptic Integrals]],
 SIAM Journal on Mathematical Analysis, Volume 25, Issue 2 (March 1994), 288-303.
 
 
-The following references, while not directly relevent to our implementation,
+The following references, while not directly relevant to our implementation,
 may also be of interest:
 
-# R. Burlisch, ['Numerical Compuation of Elliptic Integrals and Elliptic Functions.]
+# R. Burlisch, ['Numerical Computation of Elliptic Integrals and Elliptic Functions.]
 Numerical Mathematik 7, 78-90.
 # R. Burlisch, ['An extension of the Bartky Transformation to Incomplete
 Elliptic Integrals of the Third Kind]. Numerical Mathematik 13, 266-284.
-# R. Burlisch, ['Numerical Compuation of Elliptic Integrals and Elliptic Functions. III]. 
+# R. Burlisch, ['Numerical Computation of Elliptic Integrals and Elliptic Functions. III]. 
 Numerical Mathematik 13, 305-315.
 # T. Fukushima and H. Ishizaki, ['[@http://adsabs.harvard.edu/abs/1994CeMDA..59..237F 
 Numerical Computation of Incomplete Elliptic Integrals of a General Form.]]

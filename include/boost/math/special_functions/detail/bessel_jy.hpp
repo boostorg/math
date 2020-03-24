@@ -510,7 +510,7 @@ namespace boost { namespace math {
             T t = u / x - fu;                   // t = J'/J
             gamma = (p - t) / q;
             //
-            // We can't allow gamma to cancel out to zero competely as it messes up
+            // We can't allow gamma to cancel out to zero completely as it messes up
             // the subsequent logic.  So pretend that one bit didn't cancel out
             // and set to a suitably small value.  The only test case we've been able to
             // find for this, is when v = 8.5 and x = 4*PI.

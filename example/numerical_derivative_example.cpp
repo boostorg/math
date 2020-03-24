@@ -53,7 +53,7 @@ bits of lost precision.
 
 */
 
-/*` [note Rquires the C++11 feature of
+/*` [note Requires the C++11 feature of
 [@http://en.wikipedia.org/wiki/Anonymous_function#C.2B.2B anonymous functions]
 for the derivative function calls like `[]( const double & x_) -> double`.
 */

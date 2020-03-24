@@ -17,7 +17,7 @@
 // (Bernoulli, independent, yes or no, succeed or fail)
 // with success_fraction probability p,
 // negative_binomial is the probability that k or fewer failures
-// preceed the r th trial's success.
+// precede the r th trial's success.
 
 #include <iostream>
 using std::cout;
@@ -62,7 +62,7 @@ int main()
   }
   // Compare with the cdf
   double cdf8 = cdf(mynbdist, static_cast<double>(k));
-  double diff = sum - cdf8; // Expect the diference to be very small.
+  double diff = sum - cdf8; // Expect the difference to be very small.
   cout << setprecision(17) << "Sum pdfs = " << sum << ' ' // sum = 0.40025683281803698
   << ", cdf = " << cdf(mynbdist, static_cast<double>(k)) //  cdf = 0.40025683281803687
   << ", difference = "  // difference = 0.50000000000000000

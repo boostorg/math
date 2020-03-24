@@ -4,7 +4,7 @@
 <title>Trading Accuracy for Performance</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
-<link rel="home" href="../index.html" title="Math Toolkit 2.11.0">
+<link rel="home" href="../index.html" title="Math Toolkit 2.12.0">
 <link rel="up" href="../perf.html" title="Chapter&#160;21.&#160;Performance">
 <link rel="prev" href="getting_best.html" title="Getting the Best Performance from this Library: Compiler and Compiler Options">
 <link rel="next" href="multiprecision.html" title="Cost of High-Precision Non-built-in Floating-point">
@@ -85,7 +85,7 @@
 <span class="comment">//</span>
 <span class="comment">// Define a Policy for fast evaluation:</span>
 <span class="comment">//</span>
-<span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">polcies</span><span class="special">;</span>
+<span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">;</span>
 <span class="keyword">typedef</span> <span class="identifier">policy</span><span class="special">&lt;</span><span class="identifier">promote_double</span><span class="special">&lt;</span><span class="keyword">false</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="identifier">fast_policy</span><span class="special">;</span>
 <span class="comment">//</span>
 <span class="comment">// Invoke BOOST_MATH_DECLARE_SPECIAL_FUNCTIONS:</span>
@@ -118,7 +118,7 @@
 <span class="comment">//</span>
 <span class="comment">// Define a Policy for fast evaluation:</span>
 <span class="comment">//</span>
-<span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">polcies</span><span class="special">;</span>
+<span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">;</span>
 <span class="keyword">typedef</span> <span class="identifier">policy</span><span class="special">&lt;</span><span class="identifier">promote_double</span><span class="special">&lt;</span><span class="keyword">false</span><span class="special">&gt;,</span> <span class="identifier">digits10</span><span class="special">&lt;</span><span class="number">9</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="identifier">fast_policy</span><span class="special">;</span>
 <span class="comment">//</span>
 <span class="comment">// Invoke BOOST_MATH_DECLARE_SPECIAL_FUNCTIONS:</span>
@@ -137,7 +137,7 @@
 <span class="comment">//</span>
 <span class="comment">// Define a policy for fastest possible evaluation:</span>
 <span class="comment">//</span>
-<span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">polcies</span><span class="special">;</span>
+<span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">;</span>
 <span class="keyword">typedef</span> <span class="identifier">policy</span><span class="special">&lt;</span><span class="identifier">promote_float</span><span class="special">&lt;</span><span class="keyword">false</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="identifier">fast_float_policy</span><span class="special">;</span>
 <span class="comment">//</span>
 <span class="comment">// Invoke BOOST_MATH_DECLARE_DISTRIBUTIONS</span>

@@ -1,12 +1,12 @@
 [section:issues Known Issues, and TODO List]
 
 Predominantly this is a TODO list, or a list of possible
-future enhancements.  Items labled "High Priority" effect
+future enhancements.  Items labeled "High Priority" effect
 the proper functioning of the component, and should be fixed
-as soon as possible.  Items labled "Medium Priority" are
+as soon as possible.  Items labeled "Medium Priority" are
 desirable enhancements, often pertaining to the performance
 of the component, but do not effect it's accuracy or functionality.
-Items labled "Low Priority" should probably be investigated at
+Items labeled "Low Priority" should probably be investigated at
 some point.  Such classifications are obviously highly subjective.
 
 If you don't see a component listed here, then we don't have any known

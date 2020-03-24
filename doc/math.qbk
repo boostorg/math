@@ -9,7 +9,7 @@
     ]
     [authors [Agrawal, Nikhar], [Bikineev, Anton], [Bristow, Paul A.], [Holin, Hubert], [Guazzone, Marco], [Kormanyos, Christopher], [Lalande, Bruno], [Maddock, John], [Murphy, Jeremy W.], [Pulver, Matthew], [Råde, Johan], [Sobotta, Benjamin], [Sewani, Gautam], [Thompson, Nicholas], [van den Berg, Thijs], [Walker, Daryle], [Zhang, Xiaogang]]
     [/last-revision $Date$]
-    [version 2.11.0]
+    [version 2.12.0]
 ]
 
 [template mathpart[id title]
@@ -330,6 +330,7 @@ and use the function's name as the link text.]
 [def __owens_t [link math_toolkit.owens_t Owens T]]
 [def __constants_intro [link math_toolkit.constants_intro  constants]]
 [def __constants[link math_toolkit.constants  constants]]
+[def __math_constants[link math_toolkit.constants  constants]]
 
 [/tools]
 [def __tuple [link math_toolkit.internals.tuples boost::math::tuple]]
@@ -405,6 +406,7 @@ and use the function's name as the link text.]
 [def __policy_macros [link math_toolkit.pol_ref.policy_defaults Using Macros to Change the Policy Defaults]]
 
 
+
 [def __usual_accessors __cdf, __pdf, __quantile, __hazard,
    __chf, __mean, __median, __mode, __variance, __sd, __skewness,
    __kurtosis, __kurtosis_excess, __range and __support]
@@ -427,7 +429,7 @@ and use the function's name as the link text.]
 [def __multiprecision [@boost:/libs/multiprecision/doc/html/index.html Boost.Multiprecision]]
 
 [def __gcc_quad_type [@https://gcc.gnu.org/onlinedocs/gcc-9.1.0/libquadmath/index.html GCC 128-bit floating-point type]]
-
+[def __float128_literals [@boost:/libs/multiprecision/doc/html/boost_multiprecision/tut/lits.html Boost.Multiprecision 128-bit Q floating-point literals]]
 [def __cpp_dec_float [@boost:/libs/multiprecision/doc/html/boost_multiprecision/tut/floats/cpp_dec_float.html cpp_dec_float]]
 [def __cpp_bin_float [@boost:/libs/multiprecision/doc/html/boost_multiprecision/tut/floats/cpp_bin_float.html cpp_bin_float]]
 [/ @boost:/libs/test/doc/index.html  doesn't work for Boost.Test non-quickbook, so use instead]
@@ -478,6 +480,9 @@ and use the function's name as the link text.]
 [def __github [@github.com GitHub]]
 [def __github_boost [@https://github.com/boostorg Boost GitHub]]
 [def __github_math [@https://github.com/boostorg/math Boost.Math GitHub]]
+[def __github_multiprecision [@https://github.com/boostorg/math Boost.Multiprecision GitHub]]
+
+
 [/ Some composite templates]
 [template super[x]'''<superscript>'''[x]'''</superscript>''']
 [template sub[x]'''<subscript>'''[x]'''</subscript>''']
@@ -590,6 +595,7 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [include statistics/t_test.qbk]
 [include statistics/runs_test.qbk]
 [include statistics/ljung_box.qbk]
+[include statistics/linear_regression.qbk]
 [endmathpart] [/section:statistics Statistics]
 
 [mathpart vector_functionals Vector Functionals -  Norms]
@@ -706,6 +712,10 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [include interpolators/vector_barycentric_rational.qbk]
 [include interpolators/catmull_rom.qbk]
 [include interpolators/cardinal_trigonometric.qbk]
+[include interpolators/cubic_hermite.qbk]
+[include interpolators/makima.qbk]
+[include interpolators/pchip.qbk]
+[include interpolators/quintic_hermite.qbk]
 [endmathpart]
 
 [mathpart quadrature Quadrature and Differentiation]

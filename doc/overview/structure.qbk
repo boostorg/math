@@ -55,7 +55,7 @@ This documentation aims to use of the following naming and formatting convention
 
 [section:hints Other Hints and tips]
 
-* Historial records of issues are at [@https://svn.boost.org/trac/boost/ Boost Trac], now read-only.
+* Historical records of issues are at [@https://svn.boost.org/trac/boost/ Boost Trac], now read-only.
 * Always ensure that you are using the  [@https://www.boost.org/users/download/#live current release version].
 * The current documentation for the release version is [@https://www.boost.org/doc/libs/release/libs/math/doc/html/index.html here].
 * The current documentation for the version being developed is [@https://www.boost.org/doc/libs/develop/libs/math/doc/html/index.html here].

@@ -72,6 +72,12 @@ namespace boost{ namespace math{ namespace statistics {
     template<class RandomAccessContainer>
     auto median_absolute_deviation(RandomAccessContainer v, typename RandomAccessContainer::value_type center=std::numeric_limits<Real>::quiet_NaN());
 
+    template<class RandomAccessIterator>
+    auto interquartile_range(ForwardIterator first, ForwardIterator last);
+
+    template<class RandomAccessContainer>
+    auto interquartile_range(RandomAccessContainer v);
+
     template<class Container>
     auto gini_coefficient(Container & c);
 
@@ -209,6 +215,19 @@ use the following:
 
 /Nota bene:/ The input vector is modified.
 Again the vector is passed into a call to [@https://en.cppreference.com/w/cpp/algorithm/nth_element `nth_element`].
+
+[heading Interquartile Range]
+
+Computes the [@https://en.wikipedia.org/wiki/Interquartile_range interquartile range] of a dataset:
+
+    std::vector<double> v{1,2,3,4,5};
+    double iqr = boost::math::statistics::interquartile_range(v);
+    // Q1 = 1.5, Q3 = 4.5 => iqr = 3
+
+For a vector of length /2n+1/ or /2n/, the first quartile /Q/[sub 1] is the median of the /n/ smallest values,
+and the third quartile /Q/[sub 3] is the median of the /n/ largest values.
+The interquartile range is then /Q/[sub 3] - /Q/[sub 1].
+The function `interquartile_range`, like the `median`, calls into `std::nth_element`, and hence partially sorts the data.
 
 [heading Gini Coefficient]
 

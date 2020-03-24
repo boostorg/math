@@ -209,7 +209,7 @@ the traits class `construction_traits`:
    template <class T, class Policy>
    struct construction_traits
    {
-      typedef mpl::int_<N> type;
+      typedef boost::integral_constant<int, N> type;
    };
 
    }}} // namespaces
@@ -240,7 +240,7 @@ mechanism.  We can achieve this by specialising the class template `boost::math:
    struct constant_pi<mpfr_class>
    {
       template<int N>
-      static mpfr_class get(const mpl::int_<N>&)
+      static mpfr_class get(const boost::integral_constant<int, N>&)
       {
          // The template param N is one of the values in the table above,
          // we can either handle all cases in one as is the case here,
@@ -408,7 +408,7 @@ The function should look like this:
 
   template <class Real>
   template <int N>
-  Real constant_my_constant<Real>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(mpl::int_<N>))
+  Real constant_my_constant<Real>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC((boost::integral_constant<int, N>)))
   {
     int required_precision = N ? N : tools::digits<Real>();
     Real result = /* value computed to required_precision bits */ ;
@@ -430,7 +430,7 @@ For example, to calculate [pi]/2, add to `boost/math/constants/calculate_constan
 
   template <class T>
   template<int N>
-  inline T constant_half_pi<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(mpl::int_<N>))
+  inline T constant_half_pi<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC((boost::integral_constant<int, N>)))
   {
      BOOST_MATH_STD_USING
      return pi<T, policies::policy<policies::digits2<N> > >() / static_cast<T>(2);
@@ -564,7 +564,7 @@ especially when trig and other functions are called.
 for example, using [@http://oeis.org/ The On-Line Encyclopedia of Integer Sequences (OEIS)]
 again using at least 35 decimal digits strings.
 
-# Comparison with independely calculated values using arbitrary precision tools like
+# Comparison with independently calculated values using arbitrary precision tools like
 [@http://www.wolfram.com/mathematica/ Mathematica], again using at least 35 decimal digits literal strings.
 
 [warning We have not yet been able to [*check] that
@@ -722,8 +722,8 @@ from Simon Plouffe's web based collection [@http://pi.lacim.uqam.ca/eng/].
 # Checks using  printed text optically scanned values and converted from:
 D. E. Knuth, Art of Computer Programming, Appendix A, Table 1, Vol 1, ISBN 0 201 89683 4 (1997)
 # M. Abrahamovitz & I. E. Stegun, National Bureau of Standards, Handbook of Mathematical Functions,
-a reference source for formulae now superceded by
-# Frank W. Olver, Daniel W. Lozier, Ronald F. Boisvert, Charles W. Clark, NIST Handbook of Mathemetical Functions, Cambridge University Press, ISBN 978-0-521-14063-8, 2010.
+a reference source for formulae now superseded by
+# Frank W. Olver, Daniel W. Lozier, Ronald F. Boisvert, Charles W. Clark, NIST Handbook of Mathematical Functions, Cambridge University Press, ISBN 978-0-521-14063-8, 2010.
 # John F Hart, Computer Approximations, Kreiger (1978) ISBN 0 88275 642 7.
 # Some values from Cephes Mathematical Library, Stephen L. Moshier
 and CALC100 100 decimal digit Complex Variable Calculator Program, a DOS utility.
@@ -733,9 +733,9 @@ and CALC100 100 decimal digit Complex Variable Calculator Program, a DOS utility
 
 Not here in this Boost.Math collection, because physical constants:
 
-* Are measurements, not truely constants.
+* Are measurements, not truly constants.
 * Are not truly constant and keeping changing as mensuration technology improves.
-* Have a instrinsic uncertainty.
+* Have a intrinsic uncertainty.
 * Mathematical constants are stored and represented at varying precision, but should never be inaccurate.
 
 Some physical constants may be available in Boost.Units.

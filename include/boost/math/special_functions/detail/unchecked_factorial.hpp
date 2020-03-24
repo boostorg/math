@@ -34,7 +34,7 @@
 // This is the only way we can avoid
 // warning: non-standard suffix on floating constant [-Wpedantic]
 // when building with -Wall -pedantic.  Neither __extension__
-// nor #pragma dianostic ignored work :(
+// nor #pragma diagnostic ignored work :(
 //
 #pragma GCC system_header
 #endif
@@ -523,7 +523,7 @@ const typename unchecked_factorial_initializer<T>::init unchecked_factorial_init
 
 
 template <class T, int N>
-inline T unchecked_factorial_imp(unsigned i, const mpl::int_<N>&)
+inline T unchecked_factorial_imp(unsigned i, const boost::integral_constant<int, N>&)
 {
    BOOST_STATIC_ASSERT(!boost::is_integral<T>::value);
    // factorial<unsigned int>(n) is not implemented
@@ -643,7 +643,7 @@ inline T unchecked_factorial_imp(unsigned i, const mpl::int_<N>&)
 }
 
 template <class T>
-inline T unchecked_factorial_imp(unsigned i, const mpl::int_<0>&)
+inline T unchecked_factorial_imp(unsigned i, const boost::integral_constant<int, 0>&)
 {
    BOOST_STATIC_ASSERT(!boost::is_integral<T>::value);
    // factorial<unsigned int>(n) is not implemented
@@ -775,27 +775,27 @@ inline T unchecked_factorial_imp(unsigned i, const mpl::int_<0>&)
 }
 
 template <class T>
-inline T unchecked_factorial_imp(unsigned i, const mpl::int_<std::numeric_limits<float>::digits>&)
+inline T unchecked_factorial_imp(unsigned i, const boost::integral_constant<int, std::numeric_limits<float>::digits>&)
 {
    return unchecked_factorial<float>(i);
 }
 
 template <class T>
-inline T unchecked_factorial_imp(unsigned i, const mpl::int_<std::numeric_limits<double>::digits>&)
+inline T unchecked_factorial_imp(unsigned i, const boost::integral_constant<int, std::numeric_limits<double>::digits>&)
 {
    return unchecked_factorial<double>(i);
 }
 
 #if DBL_MANT_DIG != LDBL_MANT_DIG
 template <class T>
-inline T unchecked_factorial_imp(unsigned i, const mpl::int_<LDBL_MANT_DIG>&)
+inline T unchecked_factorial_imp(unsigned i, const boost::integral_constant<int, LDBL_MANT_DIG>&)
 {
    return unchecked_factorial<long double>(i);
 }
 #endif
 #ifdef BOOST_MATH_USE_FLOAT128
 template <class T>
-inline T unchecked_factorial_imp(unsigned i, const mpl::int_<113>&)
+inline T unchecked_factorial_imp(unsigned i, const boost::integral_constant<int, 113>&)
 {
    return unchecked_factorial<BOOST_MATH_FLOAT128_TYPE>(i);
 }

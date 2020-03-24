@@ -187,7 +187,7 @@ a width of at least 32 bits.
 Minimum-width floating-point types are provided for all existing
 exact-width floating-point types on a given platform.
 
-For example, if a platfrom supports `float32_t` and `float64_t`,
+For example, if a platform supports `float32_t` and `float64_t`,
 then `float_least32_t` and `float_least64_t` will also be supported, etc.
 
 [endsect] [/section:fastest_typdefs Fastest minimum-width floating-point `typedef`s]

@@ -25,7 +25,7 @@ void confidence_limits_on_std_deviation(
    // For example if we set the confidence limit to
    // 0.95, we know that if we repeat the sampling
    // 100 times, then we expect that the true standard deviation
-   // will be between out limits on 95 occations.
+   // will be between out limits on 95 occasions.
    // Note: this is not the same as saying a 95%
    // confidence interval means that there is a 95%
    // probability that the interval contains the true standard deviation.
@@ -300,7 +300,7 @@ int main()
 
    // List confidence interval multipliers for standard deviation
    // for a range of numbers of observations from 2 to a million,
-   // and for a few alpha values, 0.1, 0.05, 0.01 for condfidences 90, 95, 99 %
+   // and for a few alpha values, 0.1, 0.05, 0.01 for confidences 90, 95, 99 %
    confidence_limits_on_std_deviation_alpha(1., 0.1);
    confidence_limits_on_std_deviation_alpha(1., 0.05);
    confidence_limits_on_std_deviation_alpha(1., 0.01);

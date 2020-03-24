@@ -127,7 +127,7 @@ T cbrt_noderiv(T x)
   T factor = 2;                                 // How big steps to take when searching.
 
   const boost::uintmax_t maxit = 20;            // Limit to maximum iterations.
-  boost::uintmax_t it = maxit;                  // Initally our chosen max iterations, but updated with actual.
+  boost::uintmax_t it = maxit;                  // Initially our chosen max iterations, but updated with actual.
   bool is_rising = true;                        // So if result if guess^3 is too low, then try increasing guess.
   int digits = std::numeric_limits<T>::digits;  // Maximum possible binary digits accuracy for type T.
   // Some fraction of digits is used to control how accurate to try to make the result.
@@ -341,7 +341,7 @@ If your differentiation is a little rusty
 then you can get help, for example from the invaluable
 [@http://www.wolframalpha.com/ WolframAlpha site.]
 
-For example, entering the commmand: `differentiate x ^ 5`
+For example, entering the command: `differentiate x ^ 5`
 
 or the Wolfram Language command: ` D[x ^ 5, x]`
 

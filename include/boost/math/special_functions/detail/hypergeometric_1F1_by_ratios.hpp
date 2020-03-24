@@ -148,7 +148,7 @@
      {
         //
         // There's no easy relation between a, b and z that tells us whether we're in the region
-        // where forwards recursion is stable, so use a lookup table, note that the minumum
+        // where forwards recursion is stable, so use a lookup table, note that the minimum
         // permissible z-value is decreasing with a, and increasing with |b|:
         //
         static const float data[][3] = {
@@ -613,7 +613,7 @@
      //
      // This next version is largely the same as above, but calculates the ratio for the b recurrence relation
      // which has a larger area of stability than the ab recurrence when a,b < 0.  We can then use a single
-     // recurrence step to convert this to the ratio for the ab recursion and proceed largly as before.
+     // recurrence step to convert this to the ratio for the ab recursion and proceed largely as before.
      // The routine is quite insensitive to the size of z, but requires |a| < |5b| for accuracy.
      // Fortunately the accuracy outside this domain falls off steadily rather than suddenly switching
      // to a different behaviour.

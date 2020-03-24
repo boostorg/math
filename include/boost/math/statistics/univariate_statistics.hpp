@@ -8,6 +8,8 @@
 
 #include <algorithm>
 #include <iterator>
+#include <tuple>
+#include <cmath>
 #include <boost/assert.hpp>
 
 namespace boost::math::statistics {
@@ -184,6 +186,7 @@ template<class ForwardIterator>
 auto skewness(ForwardIterator first, ForwardIterator last)
 {
     using Real = typename std::iterator_traits<ForwardIterator>::value_type;
+    using std::sqrt;
     BOOST_ASSERT_MSG(first != last, "At least one sample is required to compute skewness.");
     if constexpr (std::is_integral<Real>::value)
     {
@@ -461,6 +464,54 @@ inline auto median_absolute_deviation(RandomAccessContainer & v, typename Random
 {
     return median_absolute_deviation(v.begin(), v.end(), center);
 }
+
+template<class ForwardIterator>
+auto interquartile_range(ForwardIterator first, ForwardIterator last)
+{
+    using Real = typename std::iterator_traits<ForwardIterator>::value_type;
+    static_assert(!std::is_integral<Real>::value, "Integer values have not yet been implemented.");
+    auto m = std::distance(first,last);
+    BOOST_ASSERT_MSG(m >= 3, "At least 3 samples are required to compute the interquartile range.");
+    auto k = m/4;
+    auto j = m - (4*k);
+    // m = 4k+j.
+    // If j = 0 or j = 1, then there are an even number of samples below the median, and an even number above the median.
+    //    Then we must average adjacent elements to get the quartiles.
+    // If j = 2 or j = 3, there are an odd number of samples above and below the median, these elements may be directly extracted to get the quartiles.
+
+    if (j==2 || j==3)
+    {
+        auto q1 = first + k;
+        auto q3 = first + 3*k + j - 1;
+        std::nth_element(first, q1, last);
+        Real Q1 = *q1;
+        std::nth_element(q1, q3, last);
+        Real Q3 = *q3;
+        return Q3 - Q1;
+    } else {
+        // j == 0 or j==1:
+        auto q1 = first + k - 1;
+        auto q3 = first + 3*k - 1 + j;
+        std::nth_element(first, q1, last);
+        Real a = *q1;
+        std::nth_element(q1, q1 + 1, last);
+        Real b = *(q1 + 1);
+        Real Q1 = (a+b)/2;
+        std::nth_element(q1, q3, last);
+        a = *q3;
+        std::nth_element(q3, q3 + 1, last);
+        b = *(q3 + 1);
+        Real Q3 = (a+b)/2;
+        return Q3 - Q1;
+    }
+}
+
+template<class RandomAccessContainer>
+inline auto interquartile_range(RandomAccessContainer & v)
+{
+    return interquartile_range(v.begin(), v.end());
+}
+
 
 }
 #endif

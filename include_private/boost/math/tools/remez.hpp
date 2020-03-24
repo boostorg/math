@@ -26,7 +26,7 @@ namespace detail{
 //
 // The error function: the difference between F(x) and
 // the current approximation.  This is the function
-// for which we must find the extema.
+// for which we must find the extrema.
 //
 template <class T>
 struct remez_error_function
@@ -80,7 +80,7 @@ private:
 };
 //
 // This function adapts the error function so that it's minima
-// are the extema of the error function.  We can find the minima
+// are the extrema of the error function.  We can find the minima
 // with standard techniques.
 //
 template <class T>

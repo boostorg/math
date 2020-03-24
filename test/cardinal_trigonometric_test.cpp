@@ -169,19 +169,19 @@ void test_bump()
       Real expected = bump(t);
       Real computed = ct(t);
       if(!CHECK_MOLLIFIED_CLOSE(expected, computed, 2*std::numeric_limits<Real>::epsilon())) {
-          std::cerr << "  Problem occured at abscissa " << t << "\n";
+          std::cerr << "  Problem occurred at abscissa " << t << "\n";
       }
 
       expected = bump_prime(t);
       computed = ct.prime(t);
       if(!CHECK_MOLLIFIED_CLOSE(expected, computed, 4000*std::numeric_limits<Real>::epsilon())) {
-          std::cerr << "  Problem occured at abscissa " << t << "\n";
+          std::cerr << "  Problem occurred at abscissa " << t << "\n";
       }
 
       expected = bump_double_prime(t);
       computed = ct.double_prime(t);
       if(!CHECK_MOLLIFIED_CLOSE(expected, computed, 4000*4000*std::numeric_limits<Real>::epsilon())) {
-          std::cerr << "  Problem occured at abscissa " << t << "\n";
+          std::cerr << "  Problem occurred at abscissa " << t << "\n";
       }
 
 

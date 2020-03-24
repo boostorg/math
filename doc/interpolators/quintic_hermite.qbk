@@ -1,0 +1,121 @@
+[/
+Copyright (c) 2020 Nick Thompson
+Use, modification and distribution are subject to the
+Boost Software License, Version 1.0. (See accompanying file
+LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+]
+
+[section:quintic_hermite Quintic Hermite interpolation]
+
+[heading Synopsis]
+``
+#include <boost/math/interpolators/quintic_hermite.hpp>
+
+namespace boost::math::interpolators {
+
+template<class RandomAccessContainer>
+class quintic_hermite {
+public:
+    using Real = typename RandomAccessContainer::value_type;
+    quintic_hermite(RandomAccessContainer && x, RandomAccessContainer && y, RandomAccessContainer && dydx, RandomAccessContainer && d2ydx2)
+
+    Real operator()(Real x) const;
+
+    Real prime(Real x) const;
+
+    friend std::ostream& operator<<(std::ostream & os, const quintic_hermite & m);
+
+    void push_back(Real x, Real y, Real dydx, Real d2ydx2);
+};
+}
+``
+
+
+[heading Quintic Hermite Interpolation]
+
+The quintic Hermite interpolator takes a list of possibly non-uniformly spaced abscissas, ordinates, and their velocities and accelerations which are used to construct a quintic interpolating polynomial between segments.
+The interpolant is /C/[super 2] and its evaluation has [bigo](log(/N/)) complexity.
+An example usage is as follows:
+
+    std::vector<double> x{1,2,3, 4, 5, 6};
+    std::vector<double> y{7,8,9,10,11,12};
+    std::vector<double> dydx{1,1,1,1,1,1};
+    std::vector<double> d2ydx2{0,0,0,0,0,0};
+
+    using boost::math::interpolators::quintic_hermite;
+    auto spline = quintic_hermite(std::move(x), std::move(y), std::move(dydx), std::move(d2ydx2));
+    // evaluate at a point:
+    double z = spline(3.4);
+    // evaluate derivative at a point:
+    double zprime = spline.prime(3.4);
+
+Periodically, it is helpful to see what data the interpolator has.
+This can be achieved via
+
+    std::cout << spline << "\n";
+
+Note that the interpolator is pimpl'd, so that copying the class is cheap, and hence it can be shared between threads.
+(The call operator and `.prime()` are threadsafe.)
+
+The interpolator can be updated in constant time.
+Hence we can use `boost::circular_buffer` to do real-time interpolation.
+
+
+    #include <boost/circular_buffer.hpp>
+    ...
+    boost::circular_buffer<double> initial_x{1,2,3,4};
+    boost::circular_buffer<double> initial_y{4,5,6,7};
+    boost::circular_buffer<double> initial_dydx{1,1,1,1};
+    boost::circular_buffer<double> initial_d2ydx2{0,0,0,0};
+    auto circular_akima = quintic_hermite(std::move(initial_x), std::move(initial_y), std::move(initial_dydx), std::move(initial_d2ydx2));
+    // interpolate via call operation:
+    double y = circular_akima(3.5);
+    // add new data:
+    circular_akima.push_back(5, 8, 1, 0);
+    // interpolate at 4.5:
+    y = circular_akima(4.5);
+
+[$../graphs/quintic_sine_approximation.svg]
+
+[heading Complexity and Performance]
+
+The following google benchmark demonstrates the cost of the call operator for this interpolator:
+
+```
+Run on (16 X 4300 MHz CPU s)
+CPU Caches:
+  L1 Data 32K (x8)
+  L1 Instruction 32K (x8)
+  L2 Unified 1024K (x8)
+  L3 Unified 11264K (x1)
+Load Average: 0.92, 0.64, 0.35
+-----------------------------------------------
+Benchmark                                  Time
+-----------------------------------------------
+BMQuinticHermite<double>/8              8.14 ns
+BMQuinticHermite<double>/16             8.69 ns
+BMQuinticHermite<double>/32             9.42 ns
+BMQuinticHermite<double>/64             9.90 ns
+BMQuinticHermite<double>/128            10.4 ns
+BMQuinticHermite<double>/256            10.9 ns
+BMQuinticHermite<double>/512            11.6 ns
+BMQuinticHermite<double>/1024           12.3 ns
+BMQuinticHermite<double>/2048           12.8 ns
+BMQuinticHermite<double>/4096           13.6 ns
+BMQuinticHermite<double>/8192           14.6 ns
+BMQuinticHermite<double>/16384          15.5 ns
+BMQuinticHermite<double>/32768          17.4 ns
+BMQuinticHermite<double>/65536          18.5 ns
+BMQuinticHermite<double>/131072         18.8 ns
+BMQuinticHermite<double>/262144         19.8 ns
+BMQuinticHermite<double>/524288         20.5 ns
+BMQuinticHermite<double>/1048576        21.6 ns
+BMQuinticHermite<double>/2097152        22.5 ns
+BMQuinticHermite<double>/4194304        24.2 ns
+BMQuinticHermite<double>/8388608        26.6 ns
+BMQuinticHermite<double>/16777216       26.7 ns
+BMQuinticHermite<double>_BigO           1.14 lgN
+```
+
+[endsect]
+[/section:quintic_hermite]

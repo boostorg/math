@@ -20,7 +20,7 @@
 namespace boost{ namespace math{ namespace detail{
 
 template <class T, class Policy>
-inline typename tools::promote_args<T>::type trunc(const T& v, const Policy& pol, const mpl::false_&)
+inline typename tools::promote_args<T>::type trunc(const T& v, const Policy& pol, const boost::false_type&)
 {
    BOOST_MATH_STD_USING
    typedef typename tools::promote_args<T>::type result_type;
@@ -30,7 +30,7 @@ inline typename tools::promote_args<T>::type trunc(const T& v, const Policy& pol
 }
 
 template <class T, class Policy>
-inline typename tools::promote_args<T>::type trunc(const T& v, const Policy&, const mpl::true_&)
+inline typename tools::promote_args<T>::type trunc(const T& v, const Policy&, const boost::true_type&)
 {
    return v;
 }
@@ -40,7 +40,7 @@ inline typename tools::promote_args<T>::type trunc(const T& v, const Policy&, co
 template <class T, class Policy>
 inline typename tools::promote_args<T>::type trunc(const T& v, const Policy& pol)
 {
-   return detail::trunc(v, pol, mpl::bool_<detail::is_integer_for_rounding<T>::value>());
+   return detail::trunc(v, pol, boost::integral_constant<bool, detail::is_integer_for_rounding<T>::value>());
 }
 template <class T>
 inline typename tools::promote_args<T>::type trunc(const T& v)
@@ -49,7 +49,7 @@ inline typename tools::promote_args<T>::type trunc(const T& v)
 }
 //
 // The following functions will not compile unless T has an
-// implicit convertion to the integer types.  For user-defined
+// implicit conversion to the integer types.  For user-defined
 // number types this will likely not be the case.  In that case
 // these functions should either be specialized for the UDT in
 // question, or else overloads should be placed in the same

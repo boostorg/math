@@ -145,9 +145,13 @@ auto tanh_sinh<Real, Policy>::integrate(const F f, Real a, Real b, Real toleranc
 
        if ((boost::math::isfinite)(a) && (boost::math::isfinite)(b))
        {
-          if (b <= a)
+          if (a == b)
           {
-             return policies::raise_domain_error(function, "Arguments to integrate are in wrong order; integration over [a,b] must have b > a.", a, Policy());
+             return result_type(0);
+          }
+          if (b < a)
+          {
+             return -this->integrate(f, b, a, tolerance, error, L1, levels);
           }
           Real avg = (a + b)*half<Real>();
           Real diff = (b - a)*half<Real>();

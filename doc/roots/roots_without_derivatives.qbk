@@ -249,7 +249,7 @@ brackets.
 Note that this routine can only be used when:
 
 * ['f(x)] is monotonic in the half of the real axis containing ['guess].
-* The value of the inital guess must have the same sign as the root: the function
+* The value of the initial guess must have the same sign as the root: the function
 will ['never cross the origin] when searching for the root.
 * The location of the root should be known at least approximately,
 if the location of the root differs by many orders of magnitude

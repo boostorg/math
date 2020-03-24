@@ -104,7 +104,7 @@
            // Forward recursion on a is stable as long as 2a-b+z > 0.
            // If 2a-b+z < 0 then backwards recursion is stable even though
            // the function may be strictly increasing with a.  Potentially
-           // we may need to split the recurrnce in 2 sections - one using 
+           // we may need to split the recurrence in 2 sections - one using 
            // forward recursion, and one backwards.
            //
            // We will get the next seed value from the ratio
@@ -136,7 +136,7 @@
               T first = 1;
               T second = ((1 + crossover_a - b_local) / crossover_a) + ((b_local - 1) / crossover_a) / b_ratio;
               //
-              // Recurse down to a_local, compare values and re-nomralise first and second:
+              // Recurse down to a_local, compare values and re-normalise first and second:
               //
               boost::math::detail::hypergeometric_1F1_recurrence_a_coefficients<T> a_coef(crossover_a, b_local, x);
               int backwards_scale = 0;
@@ -404,7 +404,7 @@
         BOOST_MATH_STD_USING
         //
         // This is the selection logic to pick the "best" method.
-        // We have a,b,z >> 0 and need to comute the approximate cost of each method
+        // We have a,b,z >> 0 and need to compute the approximate cost of each method
         // and then select whichever wins out.
         //
         enum method
@@ -456,7 +456,7 @@
         // but that's not clear...
         // Also need to add on a fudge factor to the cost to account for the fact that we need
         // to calculate the Bessel functions, this is not quite as high as the gamma function 
-        // method above as this is generally more accurate and so prefered if the methods are close:
+        // method above as this is generally more accurate and so preferred if the methods are close:
         //
         cost = 50 + fabs(b - a);
         if((b > 1) && (cost <= current_cost) && (z < tools::log_max_value<T>()) && (z < 11356) && (b - a != 0.5f))

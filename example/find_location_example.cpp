@@ -30,7 +30,7 @@ the algorithms to find location (and some std output of course).
 #include <boost/math/distributions/find_location.hpp>
   using boost::math::find_location; // for mean
 #include <boost/math/distributions/find_scale.hpp>
-  using boost::math::find_scale; // for standard devation
+  using boost::math::find_scale; // for standard deviation
   using boost::math::complement; // Needed if you want to use the complement version.
   using boost::math::policies::policy;
 

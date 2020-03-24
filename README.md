@@ -29,7 +29,7 @@ A comprehensive tutorial is provided, along with a series of worked examples ill
 
 Provides a small number of high quality special functions; initially these were concentrated on functions used in statistical applications along with those in the Technical Report on C++ Library Extensions.
 
-The function families currently implemented are the gamma, beta & error functions along with the incomplete gamma and beta functions (four variants of each) and all the possible inverses of these, plus the digamma, various factorial functions, Bessel functions, elliptic integrals, sinus cardinals (along with their hyperbolic variants), inverse hyperbolic functions, Legrendre/Laguerre/Hermite/Chebyshev polynomials and various special power and logarithmic functions.
+The function families currently implemented are the gamma, beta & error functions along with the incomplete gamma and beta functions (four variants of each) and all the possible inverses of these, plus the digamma, various factorial functions, Bessel functions, elliptic integrals, hypergeometrics, sinus cardinals (along with their hyperbolic variants), inverse hyperbolic functions, Legrendre/Laguerre/Hermite/Chebyshev polynomials and various special power and logarithmic functions.
 
 All the implementations are fully generic and support the use of arbitrary "real-number" types, including Boost.Multiprecision, although they are optimised for use with types with known significand (or mantissa) sizes: typically float, double or long double.
 
@@ -47,11 +47,11 @@ Tools for manipulating polynomials and for efficient evaluation of rationals or 
 
 ### Interpolation
 
-Function interpolation via barycentric rational interpolation, compactly supported cubic B-splines, and the Chebyshev transform.
+Function interpolation via barycentric rational interpolation, compactly supported quadartic, cubic, and quintic B-splines, the Chebyshev transform, trigonometric polynomials, Makima, pchip, and cubic Hermite splines.
 
 ### Numerical Integration and Differentiation
 
-A reasonably comprehensive set of routines for integration (trapezoidal, Gauss-Legendre, Gauss-Kronrod, Gauss-Chebyshev, double-exponential, and Monte-Carlo) and differentiation (Chebyshev transform, finite difference, and the complex step derivative).
+A reasonably comprehensive set of routines for integration (trapezoidal, Gauss-Legendre, Gauss-Kronrod, Gauss-Chebyshev, double-exponential, and Monte-Carlo) and differentiation (Chebyshev transform, finite difference, the complex step derivative, and forward-mode automatic differentiation).
 
 The integration routines are usable for functions returning complex results - and hence can be used for computation of  contour integrals.
 
@@ -70,7 +70,7 @@ The full documentation is available on [boost.org](http://www.boost.org/doc/libs
 
 ## Support, bugs and feature requests ##
 
-Bugs and feature requests can be reported through the [Gitub issue tracker](https://github.com/boostorg/math/issues)
+Bugs and feature requests can be reported through the [GitHub issue tracker](https://github.com/boostorg/math/issues)
 (see [open issues](https://github.com/boostorg/math/issues) and
 [closed issues](https://github.com/boostorg/math/issues?utf8=%E2%9C%93&q=is%3Aissue+is%3Aclosed)).
 

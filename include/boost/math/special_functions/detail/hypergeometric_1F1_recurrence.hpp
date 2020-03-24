@@ -137,7 +137,7 @@
   };
 #if 0
   //
-  // These next few recurrence relations are archived for future refernece, some of them are novel, though all
+  // These next few recurrence relations are archived for future reference, some of them are novel, though all
   // are trivially derived from the existing well known relations:
   //
   // Recurrence relation for double-stepping on both a and b:

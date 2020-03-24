@@ -639,9 +639,9 @@ namespace boost
 
    namespace detail{
 
-      typedef mpl::int_<0> bessel_no_int_tag;      // No integer optimisation possible.
-      typedef mpl::int_<1> bessel_maybe_int_tag;   // Maybe integer optimisation.
-      typedef mpl::int_<2> bessel_int_tag;         // Definite integer optimistaion.
+      typedef boost::integral_constant<int, 0> bessel_no_int_tag;      // No integer optimisation possible.
+      typedef boost::integral_constant<int, 1> bessel_maybe_int_tag;   // Maybe integer optimisation.
+      typedef boost::integral_constant<int, 2> bessel_int_tag;         // Definite integer optimisation.
 
       template <class T1, class T2, class Policy>
       struct bessel_traits
@@ -656,8 +656,8 @@ namespace boost
 
          typedef typename mpl::if_<
             mpl::or_<
-               mpl::less_equal<precision_type, mpl::int_<0> >,
-               mpl::greater<precision_type, mpl::int_<64> > >,
+               mpl::less_equal<precision_type, boost::integral_constant<int, 0> >,
+               mpl::greater<precision_type, boost::integral_constant<int, 64> > >,
             bessel_no_int_tag,
             typename mpl::if_<
                is_integral<T1>,
@@ -667,8 +667,8 @@ namespace boost
          >::type optimisation_tag;
          typedef typename mpl::if_<
             mpl::or_<
-               mpl::less_equal<precision_type, mpl::int_<0> >,
-               mpl::greater<precision_type, mpl::int_<113> > >,
+               mpl::less_equal<precision_type, boost::integral_constant<int, 0> >,
+               mpl::greater<precision_type, boost::integral_constant<int, 113> > >,
             bessel_no_int_tag,
             typename mpl::if_<
                is_integral<T1>,

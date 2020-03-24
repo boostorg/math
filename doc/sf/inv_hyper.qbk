@@ -23,7 +23,7 @@
 
 [section:inv_hyper_over Inverse Hyperbolic Functions Overview]
 
-The exponential funtion is defined, for all objects for which this makes sense, 
+The exponential function is defined, for all objects for which this makes sense, 
 as the power series 
 [equation special_functions_blurb1]
 with ['[^n! = 1x2x3x4x5...xn]] (and ['[^0! = 1]] by definition) being the factorial of ['[^n]]. 
@@ -194,7 +194,7 @@ For 0.5 > x > [epsilon] the following rearrangement of the primary definition is
 
 [equation asinh4]
 
-Otherwise evalution is via the 
+Otherwise evaluation is via the 
 [@http://functions.wolfram.com/ElementaryFunctions/ArcSinh/02/ 
 primary definition]:
 

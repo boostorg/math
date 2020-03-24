@@ -4,7 +4,7 @@
 <title>Root-finding using Boost.Multiprecision</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
-<link rel="home" href="../../index.html" title="Math Toolkit 2.11.0">
+<link rel="home" href="../../index.html" title="Math Toolkit 2.12.0">
 <link rel="up" href="../root_finding_examples.html" title="Examples of Root-Finding (with and without derivatives)">
 <link rel="prev" href="5th_root_eg.html" title="Computing the Fifth Root">
 <link rel="next" href="nth_root.html" title="Generalizing to Compute the nth root">
@@ -194,7 +194,7 @@
 <span class="identifier">r</span> <span class="special">=</span> <span class="identifier">cbrt_2deriv</span><span class="special">(</span><span class="keyword">static_cast</span><span class="special">&lt;</span><span class="identifier">cpp_dec_float_50</span><span class="special">&gt;(</span><span class="number">2.</span><span class="special">));</span> <span class="comment">// Passing a cpp_dec_float_50, </span>
 <span class="comment">// so will compute a cpp_dec_float_50 precision result.</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"cbrt("</span> <span class="special">&lt;&lt;</span> <span class="identifier">two</span> <span class="special">&lt;&lt;</span> <span class="string">") = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">r</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
-<span class="identifier">r</span> <span class="special">=</span> <span class="identifier">cbrt_2deriv</span><span class="special">&lt;</span><span class="identifier">cpp_dec_float_50</span><span class="special">&gt;(</span><span class="number">2.</span><span class="special">);</span> <span class="comment">// Explictly a cpp_dec_float_50, so will compute a cpp_dec_float_50 precision result.</span>
+<span class="identifier">r</span> <span class="special">=</span> <span class="identifier">cbrt_2deriv</span><span class="special">&lt;</span><span class="identifier">cpp_dec_float_50</span><span class="special">&gt;(</span><span class="number">2.</span><span class="special">);</span> <span class="comment">// Explicitly a cpp_dec_float_50, so will compute a cpp_dec_float_50 precision result.</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"cbrt("</span> <span class="special">&lt;&lt;</span> <span class="identifier">two</span> <span class="special">&lt;&lt;</span> <span class="string">") = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">r</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
 <span class="comment">// cpp_dec_float_50 1.2599210498948731647672106072782283505702514647015</span>
 </pre>

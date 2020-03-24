@@ -200,7 +200,7 @@ BOOST_AUTO_TEST_CASE( test_main )
    // Very slow, but debuggable:
    //test_values(boost::multiprecision::number<boost::multiprecision::debug_adaptor<boost::multiprecision::cpp_dec_float_50::backend_type> >(0), "cpp_dec_float_50");
    
-   // Faster, but no good for diagnising the cause of any issues:
+   // Faster, but no good for diagnosing the cause of any issues:
    test_values(boost::multiprecision::cpp_dec_float_50(0), "cpp_dec_float_50");
 }
 

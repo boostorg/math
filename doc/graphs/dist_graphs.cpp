@@ -35,24 +35,24 @@
 
 template <class Dist>
 struct is_discrete_distribution
-   : public boost::mpl::false_{}; // Default is continuous distribution.
+   : public boost::false_type{}; // Default is continuous distribution.
 
 // Some discrete distributions.
 template<class T, class P>
 struct is_discrete_distribution<boost::math::bernoulli_distribution<T,P> >
-   : public boost::mpl::true_{};
+   : public boost::true_type{};
 template<class T, class P>
 struct is_discrete_distribution<boost::math::binomial_distribution<T,P> >
-   : public boost::mpl::true_{};
+   : public boost::true_type{};
 template<class T, class P>
 struct is_discrete_distribution<boost::math::negative_binomial_distribution<T,P> >
-   : public boost::mpl::true_{};
+   : public boost::true_type{};
 template<class T, class P>
 struct is_discrete_distribution<boost::math::poisson_distribution<T,P> >
-   : public boost::mpl::true_{};
+   : public boost::true_type{};
 template<class T, class P>
 struct is_discrete_distribution<boost::math::hypergeometric_distribution<T,P> >
-   : public boost::mpl::true_{};
+   : public boost::true_type{};
 
 
 template <class Dist>
@@ -87,7 +87,7 @@ public:
       double a, b;
       std::tr1::tie(a, b) = support(d);
       //
-      // PDF maximimum is at the mode (probably):
+      // PDF maximum is at the mode (probably):
       double mod;
       try
       {
@@ -312,7 +312,7 @@ public:
             ++color_index;
             color_index = color_index % (sizeof(colors)/sizeof(colors[0]));
          }
-      } // descrete
+      } // discrete
       plot.write(file);
    } // void plot(const std::string& title, const std::string& file)
 

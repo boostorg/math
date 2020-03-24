@@ -33,17 +33,22 @@ auto trapezoidal(F f, Real a, Real b, Real tol, std::size_t max_refinements, Rea
     // In many math texts, K represents the field of real or complex numbers.
     // Too bad we can't put blackboard bold into C++ source!
     typedef decltype(f(a)) K;
-    if(a >= b)
-    {
-       return static_cast<K>(boost::math::policies::raise_domain_error(function, "a < b for integration over the region [a, b] is required, but got a = %1%.\n", a, pol));
-    }
     if (!(boost::math::isfinite)(a))
     {
        return static_cast<K>(boost::math::policies::raise_domain_error(function, "Left endpoint of integration must be finite for adaptive trapezoidal integration but got a = %1%.\n", a, pol));
     }
     if (!(boost::math::isfinite)(b))
     {
-       return static_cast<K>(boost::math::policies::raise_domain_error(function, "Right endpoint of integration must be finite for adaptive trapedzoidal integration but got b = %1%.\n", b, pol));
+       return static_cast<K>(boost::math::policies::raise_domain_error(function, "Right endpoint of integration must be finite for adaptive trapezoidal integration but got b = %1%.\n", b, pol));
+    }
+
+    if (a == b)
+    {
+        return static_cast<K>(0);
+    }
+    if(a > b)
+    {
+        return -trapezoidal(f, b, a, tol, max_refinements, error_estimate, L1, pol);
     }
 
 
@@ -103,7 +108,7 @@ auto trapezoidal(F f, Real a, Real b, Real tol, std::size_t max_refinements, Rea
     return static_cast<K>(I1);
 }
 #if BOOST_WORKAROUND(BOOST_MSVC, < 1800)
-// Template argument dedcution failure otherwise:
+// Template argument deduction failure otherwise:
 template<class F, class Real>
 auto trapezoidal(F f, Real a, Real b, Real tol = 0, std::size_t max_refinements = 12, Real* error_estimate = 0, Real* L1 = 0)->decltype(std::declval<F>()(std::declval<Real>()))
 #elif !defined(BOOST_NO_CXX11_NULLPTR)
