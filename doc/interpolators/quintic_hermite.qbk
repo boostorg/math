@@ -19,14 +19,49 @@ public:
     using Real = typename RandomAccessContainer::value_type;
     quintic_hermite(RandomAccessContainer && x, RandomAccessContainer && y, RandomAccessContainer && dydx, RandomAccessContainer && d2ydx2)
 
-    Real operator()(Real x) const;
+    inline Real operator()(Real x) const;
 
-    Real prime(Real x) const;
+    inline Real prime(Real x) const;
+
+    inline Real double_prime(Real x) const;
+
+    std::pair<Real, Real> domain() const;
 
     friend std::ostream& operator<<(std::ostream & os, const quintic_hermite & m);
 
     void push_back(Real x, Real y, Real dydx, Real d2ydx2);
 };
+
+template<class RandomAccessContainer>
+class cardinal_quintic_hermite {
+public:
+    using Real = typename RandomAccessContainer::value_type;
+    cardinal_quintic_hermite(RandomAccessContainer && y, RandomAccessContainer && dydx, RandomAccessContainer && d2ydx2, Real x0, Real dx);
+
+    inline Real operator()(Real x) const;
+
+    inline Real prime(Real x) const;
+
+    inline Real double_prime(Real x) const;
+
+    std::pair<Real, Real> domain() const;
+};
+
+template<class RandomAccessContainer>
+class cardinal_quintic_hermite_aos {
+public:
+    using Point = typename RandomAccessContainer::value_type;
+    using Real = typename Point::value_type;
+    cardinal_quintic_hermite_aos(RandomAccessContainer && data, Real x0, Real dx)
+
+    inline Real operator()(Real x) const;
+
+    inline Real prime(Real x) const;
+
+    inline Real double_prime(Real x) const;
+
+    std::pair<Real, Real> domain() const;
+
 }
 ``
 
@@ -34,6 +69,7 @@ public:
 [heading Quintic Hermite Interpolation]
 
 The quintic Hermite interpolator takes a list of possibly non-uniformly spaced abscissas, ordinates, and their velocities and accelerations which are used to construct a quintic interpolating polynomial between segments.
+This is useful for taking solution skeletons from ODE steppers and turning them into a continuous function, provided that the right-hand side /f/(/x/, /y/) is differentiable along the solution path.
 The interpolant is /C/[super 2] and its evaluation has [bigo](log(/N/)) complexity.
 An example usage is as follows:
 
@@ -77,6 +113,9 @@ Hence we can use `boost::circular_buffer` to do real-time interpolation.
 
 [$../graphs/quintic_sine_approximation.svg]
 
+For equispaced data, we can use `cardinal_quintic_hermite` or `cardinal_quintic_hermite_aos` to get constant-time evaluation.
+This is useful in memory-constrained or performance critical applications where data is equispaced.
+
 [heading Complexity and Performance]
 
 The following google benchmark demonstrates the cost of the call operator for this interpolator:
@@ -89,33 +128,62 @@ CPU Caches:
   L2 Unified 1024K (x8)
   L3 Unified 11264K (x1)
 Load Average: 0.92, 0.64, 0.35
------------------------------------------------
+--------------------------------------------------
 Benchmark                                  Time
------------------------------------------------
-BMQuinticHermite<double>/8              8.14 ns
-BMQuinticHermite<double>/16             8.69 ns
-BMQuinticHermite<double>/32             9.42 ns
-BMQuinticHermite<double>/64             9.90 ns
-BMQuinticHermite<double>/128            10.4 ns
-BMQuinticHermite<double>/256            10.9 ns
-BMQuinticHermite<double>/512            11.6 ns
-BMQuinticHermite<double>/1024           12.3 ns
-BMQuinticHermite<double>/2048           12.8 ns
-BMQuinticHermite<double>/4096           13.6 ns
-BMQuinticHermite<double>/8192           14.6 ns
-BMQuinticHermite<double>/16384          15.5 ns
-BMQuinticHermite<double>/32768          17.4 ns
-BMQuinticHermite<double>/65536          18.5 ns
-BMQuinticHermite<double>/131072         18.8 ns
-BMQuinticHermite<double>/262144         19.8 ns
-BMQuinticHermite<double>/524288         20.5 ns
-BMQuinticHermite<double>/1048576        21.6 ns
-BMQuinticHermite<double>/2097152        22.5 ns
-BMQuinticHermite<double>/4194304        24.2 ns
-BMQuinticHermite<double>/8388608        26.6 ns
-BMQuinticHermite<double>/16777216       26.7 ns
-BMQuinticHermite<double>_BigO           1.14 lgN
+--------------------------------------------------
+QuinticHermite<double>/8                   8.14 ns
+QuinticHermite<double>/16                  8.69 ns
+QuinticHermite<double>/32                  9.42 ns
+QuinticHermite<double>/64                  9.90 ns
+QuinticHermite<double>/128                 10.4 ns
+QuinticHermite<double>/256                 10.9 ns
+QuinticHermite<double>/512                 11.6 ns
+QuinticHermite<double>/1024                12.3 ns
+QuinticHermite<double>/2048                12.8 ns
+QuinticHermite<double>/4096                13.6 ns
+QuinticHermite<double>/8192                14.6 ns
+QuinticHermite<double>/16384               15.5 ns
+QuinticHermite<double>/32768               17.4 ns
+QuinticHermite<double>/65536               18.5 ns
+QuinticHermite<double>/131072              18.8 ns
+QuinticHermite<double>/262144              19.8 ns
+QuinticHermite<double>/524288              20.5 ns
+QuinticHermite<double>/1048576             21.6 ns
+QuinticHermite<double>/2097152             22.5 ns
+QuinticHermite<double>/4194304             24.2 ns
+QuinticHermite<double>/8388608             26.6 ns
+QuinticHermite<double>/16777216            26.7 ns
+QuinticHermite<double>_BigO                1.14 lgN
+CardinalQuinticHermite<double>/256         5.22 ns
+CardinalQuinticHermite<double>/512         5.21 ns
+CardinalQuinticHermite<double>/1024        5.21 ns
+CardinalQuinticHermite<double>/2048        5.32 ns
+CardinalQuinticHermite<double>/4096        5.33 ns
+CardinalQuinticHermite<double>/8192        5.50 ns
+CardinalQuinticHermite<double>/16384       5.74 ns
+CardinalQuinticHermite<double>/32768       7.74 ns
+CardinalQuinticHermite<double>/65536       10.6 ns
+CardinalQuinticHermite<double>/131072      10.7 ns
+CardinalQuinticHermite<double>/262144      10.6 ns
+CardinalQuinticHermite<double>/524288      10.5 ns
+CardinalQuinticHermite<double>/1048576     10.6 ns
+CardinalQuinticHermite<double>_BigO        7.57 (1)
+CardinalQuinticHermiteAOS<double>/256      5.27 ns
+CardinalQuinticHermiteAOS<double>/512      5.26 ns
+CardinalQuinticHermiteAOS<double>/1024     5.26 ns
+CardinalQuinticHermiteAOS<double>/2048     5.28 ns
+CardinalQuinticHermiteAOS<double>/4096     5.30 ns
+CardinalQuinticHermiteAOS<double>/8192     5.41 ns
+CardinalQuinticHermiteAOS<double>/16384    5.89 ns
+CardinalQuinticHermiteAOS<double>/32768    5.97 ns
+CardinalQuinticHermiteAOS<double>/65536    5.96 ns
+CardinalQuinticHermiteAOS<double>/131072   5.92 ns
+CardinalQuinticHermiteAOS<double>/262144   5.94 ns
+CardinalQuinticHermiteAOS<double>/524288   5.96 ns
+CardinalQuinticHermiteAOS<double>/1048576  5.93 ns
+CardinalQuinticHermiteAOS<double>_BigO     5.64 (1)
 ```
+
 
 [endsect]
 [/section:quintic_hermite]
