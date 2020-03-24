@@ -683,6 +683,8 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [include sf/inv_hyper.qbk]
 
 [include sf/owens_t.qbk]
+[include sf/daubechies.qbk]
+
 
 [endmathpart] [/section:special Special Functions]
 
@@ -725,9 +727,14 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [include quadrature/double_exponential.qbk]
 [include quadrature/ooura_fourier_integrals.qbk]
 [include quadrature/naive_monte_carlo.qbk]
+[include quadrature/wavelet_transforms.qbk]
 [include differentiation/numerical_differentiation.qbk]
 [include differentiation/autodiff.qbk]
 [include differentiation/lanczos_smoothing.qbk]
+[endmathpart]
+
+[mathpart filters Filters]
+[include filters/daubechies.qbk]
 [endmathpart]
 
 [include complex/complex-tr1.qbk]
