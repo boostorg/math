@@ -338,6 +338,7 @@ void test_quadratures()
         // so one-off it is.
         Real h = Real(1)/Real(256);
         auto phi = boost::math::daubechies_scaling<Real, p>();
+        std::cout << "Scaling functor size is " << phi.bytes() << " bytes" << std::endl;
         Real t = 0;
         Real Q = 0;
         while (t < 3) {
@@ -374,7 +375,8 @@ void test_quadratures()
     else if constexpr (p > 2)
     {
         auto phi = boost::math::daubechies_scaling<Real, p>();
-        
+        std::cout << "Scaling functor size is " << phi.bytes() << " bytes" << std::endl;
+
         Real tol = std::numeric_limits<Real>::epsilon();
         Real error_estimate = std::numeric_limits<Real>::quiet_NaN();
         Real L1 = std::numeric_limits<Real>::quiet_NaN();
