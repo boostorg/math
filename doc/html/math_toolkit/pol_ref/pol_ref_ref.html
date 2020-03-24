@@ -3,8 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Policy Class Reference</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
-<link rel="home" href="../../index.html" title="Math Toolkit 2.11.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<link rel="home" href="../../index.html" title="Math Toolkit 2.12.0">
 <link rel="up" href="../pol_ref.html" title="Policy Reference">
 <link rel="prev" href="namespace_pol.html" title="Setting Polices at Namespace Scope">
 <link rel="next" href="../../perf.html" title="Chapter&#160;21.&#160;Performance">
@@ -163,7 +163,8 @@
 <p>
         Specifies the internal precision to use in binary digits (uses zero to represent
         whatever the default precision is). Will be an instance of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">digits2</span><span class="special">&lt;</span><span class="identifier">N</span><span class="special">&gt;</span></code> which
-        in turn inherits from <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">int_</span><span class="special">&lt;</span><span class="identifier">N</span><span class="special">&gt;</span></code>.
+        in turn inherits from <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">integral_constant</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span>
+        <span class="identifier">N</span><span class="special">&gt;</span></code>.
       </p>
 <pre class="programlisting"><span class="identifier">policy</span><span class="special">&lt;...&gt;::</span><span class="identifier">promote_float_type</span>
 </pre>
@@ -171,7 +172,8 @@
         Specifies whether or not to promote <code class="computeroutput"><span class="keyword">float</span></code>
         arguments to <code class="computeroutput"><span class="keyword">double</span></code> precision
         internally. Will be an instance of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">promote_float</span><span class="special">&lt;</span><span class="identifier">B</span><span class="special">&gt;</span></code>
-        which in turn inherits from <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">bool_</span><span class="special">&lt;</span><span class="identifier">B</span><span class="special">&gt;</span></code>.
+        which in turn inherits from <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">integral_constant</span><span class="special">&lt;</span><span class="keyword">bool</span><span class="special">,</span>
+        <span class="identifier">B</span><span class="special">&gt;</span></code>.
       </p>
 <pre class="programlisting"><span class="identifier">policy</span><span class="special">&lt;...&gt;::</span><span class="identifier">promote_double_type</span>
 </pre>
@@ -179,7 +181,8 @@
         Specifies whether or not to promote <code class="computeroutput"><span class="keyword">double</span></code>
         arguments to <code class="computeroutput"><span class="keyword">long</span> <span class="keyword">double</span></code>
         precision internally. Will be an instance of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">promote_float</span><span class="special">&lt;</span><span class="identifier">B</span><span class="special">&gt;</span></code>
-        which in turn inherits from <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">bool_</span><span class="special">&lt;</span><span class="identifier">B</span><span class="special">&gt;</span></code>.
+        which in turn inherits from <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">integral_constant</span><span class="special">&lt;</span><span class="keyword">bool</span><span class="special">,</span>
+        <span class="identifier">B</span><span class="special">&gt;</span></code>.
       </p>
 <pre class="programlisting"><span class="identifier">policy</span><span class="special">&lt;...&gt;::</span><span class="identifier">discrete_quantile_type</span>
 </pre>
@@ -193,7 +196,8 @@
 <p>
         Specifies whether mathematically-undefined properties are asserted as compile-time
         errors, or treated as runtime errors instead. Will be an instance of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">assert_undefined</span><span class="special">&lt;</span><span class="identifier">B</span><span class="special">&gt;</span></code> which
-        in turn inherits from <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">bool_</span><span class="special">&lt;</span><span class="identifier">B</span><span class="special">&gt;</span></code>.
+        in turn inherits from <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">integral_constant</span><span class="special">&lt;</span><span class="keyword">bool</span><span class="special">,</span>
+        <span class="identifier">B</span><span class="special">&gt;</span></code>.
       </p>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;...</span><span class="identifier">argument</span> <span class="identifier">list</span><span class="special">...&gt;</span>
 <span class="keyword">typename</span> <span class="identifier">normalise</span><span class="special">&lt;</span><span class="identifier">policy</span><span class="special">&lt;&gt;,</span> <span class="identifier">A1</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">make_policy</span><span class="special">(...</span><span class="identifier">argument</span> <span class="identifier">list</span><span class="special">..);</span>

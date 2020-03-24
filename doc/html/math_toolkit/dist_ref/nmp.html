@@ -3,8 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Non-Member Properties</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
-<link rel="home" href="../../index.html" title="Math Toolkit 2.11.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<link rel="home" href="../../index.html" title="Math Toolkit 2.12.0">
 <link rel="up" href="../dist_ref.html" title="Statistical Distributions Reference">
 <link rel="prev" href="../dist_ref.html" title="Statistical Distributions Reference">
 <link rel="next" href="dists.html" title="Distributions">
@@ -97,6 +97,9 @@
 <li class="listitem">
             <a class="link" href="nmp.html#math_toolkit.dist_ref.nmp.variance">variance</a>.
           </li>
+<li class="listitem">
+            entropy.
+          </li>
 </ul></div>
 <h5>
 <a name="math_toolkit.dist_ref.nmp.h1"></a>
@@ -188,6 +191,9 @@
           </li>
 <li class="listitem">
             <a class="link" href="nmp.html#math_toolkit.dist_ref.nmp.variance">variance</a>.
+          </li>
+<li class="listitem">
+            entropy
           </li>
 </ul></div>
 <h5>
@@ -541,7 +547,7 @@
         <span class="emphasis"><em>dist</em></span>.
       </p>
 <p>
-        kertosis = &#946;<sub>2</sub>= &#956;<sub>4</sub> / &#956;<sub>2</sub><sup>2</sup>
+        kurtosis = &#946;<sub>2</sub>= &#956;<sub>4</sub> / &#956;<sub>2</sub><sup>2</sup>
       </p>
 <p>
         Where &#956;<sub>i</sub> is the i'th central moment of the distribution, and in particular
@@ -687,6 +693,25 @@
 <p>
         Refer to the <a class="link" href="nmp.html#math_toolkit.dist_ref.nmp.ccdf">Complement of
         the Cumulative Distribution Function</a>.
+      </p>
+<h5>
+<a name="math_toolkit.dist_ref.nmp.h27"></a>
+        <span class="phrase"><a name="math_toolkit.dist_ref.nmp.entropy"></a></span><a class="link" href="nmp.html#math_toolkit.dist_ref.nmp.entropy">Entropy</a>
+      </h5>
+<p>
+        The entropy (or differential entropy) of a continuous probability distribution
+        <span class="emphasis"><em>p</em></span> is defined as
+      </p>
+<p>
+        <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../graphs/differential_entropy.svg" width="311" height="43"></object></span>
+      </p>
+<p>
+        Note that the "natural" properties of the differential entropy
+        do not uniquely specify a log base. In the Boost library, we <span class="emphasis"><em>always</em></span>
+        use the natural logarithm to compute differential entropy. This choice of
+        log base for entropy is sometimes referred to as "entropy measured in
+        nats". See <a href="https://doi.org/10.1109/TIT.1978.1055832" target="_top">On
+        the entropy of continuous probability distributions</a> for more information.
       </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
