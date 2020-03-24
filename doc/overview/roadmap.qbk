@@ -15,7 +15,8 @@ Recent issues on GitHub [@https://github.com/boostorg/math/issues?utf8=%E2%9C%93
 * Added [link math_toolkit.makima Modified Akima Interpolation.]
 * Added [link math_toolkit.pchip PCHIP Interpolation.]
 * Added [link math_toolkit.quintic_hermite Quintic Hermite Interpolation.]
-* Allow trivial quadrature case where the two end points are equal.
+* Added entropy to numerous distributions.
+* Allow trivial quadrature case where the two end points are equal, and in addition allow bounds to be interchanged.
 * Fix exp_sinh quadrature to work with complex types over a non-native range.
 * Fix miscellaneous compiler warnings in factorial.hpp.
 * Use std::chrono rather than boost::chrono in timed pFq calculations.
