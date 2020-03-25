@@ -183,17 +183,17 @@ void test_linear()
     while (i++ < samples)
     {
         CHECK_ULP_CLOSE(Real(tlo), csh(tlo), 2);
-        CHECK_ULP_CLOSE(Real(thi), csh(thi), 5);
+        CHECK_ULP_CLOSE(Real(thi), csh(thi), 8);
         CHECK_ULP_CLOSE(Real(tlo), csh_aos(tlo), 2);
-        CHECK_ULP_CLOSE(Real(thi), csh_aos(thi), 5);
+        CHECK_ULP_CLOSE(Real(thi), csh_aos(thi), 8);
         CHECK_ULP_CLOSE(Real(1), csh.prime(tlo), 2);
-        CHECK_ULP_CLOSE(Real(1), csh.prime(thi), 580);
+        CHECK_ULP_CLOSE(Real(1), csh.prime(thi), 700);
         CHECK_ULP_CLOSE(Real(1), csh_aos.prime(tlo), 2);
-        CHECK_ULP_CLOSE(Real(1), csh_aos.prime(thi), 580);
+        CHECK_ULP_CLOSE(Real(1), csh_aos.prime(thi), 700);
         CHECK_MOLLIFIED_CLOSE(Real(0), csh.double_prime(tlo), std::numeric_limits<Real>::epsilon());
-        CHECK_MOLLIFIED_CLOSE(Real(0), csh.double_prime(thi), 1000*std::numeric_limits<Real>::epsilon());
+        CHECK_MOLLIFIED_CLOSE(Real(0), csh.double_prime(thi), 1200*std::numeric_limits<Real>::epsilon());
         CHECK_MOLLIFIED_CLOSE(Real(0), csh_aos.double_prime(tlo), std::numeric_limits<Real>::epsilon());
-        CHECK_MOLLIFIED_CLOSE(Real(0), csh_aos.double_prime(thi), 1000*std::numeric_limits<Real>::epsilon());
+        CHECK_MOLLIFIED_CLOSE(Real(0), csh_aos.double_prime(thi), 1200*std::numeric_limits<Real>::epsilon());
 
         tlo = boost::math::nextafter(tlo, std::numeric_limits<Real>::max());
         thi = boost::math::nextafter(thi, std::numeric_limits<Real>::lowest());
