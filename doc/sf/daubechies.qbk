@@ -120,6 +120,13 @@ For this reason, we have provided `.support()` so that you can check our convent
 
 For definiteness though, for the scaling function, the support is always [0, /2p/ - 1], and the support of the wavelet is [ -/p/ + 1, /p/].
 
+
+[$../graphs/daubechies_2_scaling.svg]
+The 2 vanishing moment scaling function.
+
+[$../graphs/daubechies_8_scaling.svg]
+The 8 vanishing moment scaling function.
+
 [heading References]
 
 * Daubechies, Ingrid. ['Ten Lectures on Wavelets.] Vol. 61. Siam, 1992.
