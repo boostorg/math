@@ -21,6 +21,7 @@
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/policies/error_handling.hpp>
+#include <boost/math/tools/cxx03_warn.hpp>
 
 namespace boost{ namespace math{ namespace quadrature {
 

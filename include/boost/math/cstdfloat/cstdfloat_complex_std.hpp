@@ -19,6 +19,7 @@
 
   #include <complex>
   #include <boost/math/constants/constants.hpp>
+  #include <boost/math/tools/cxx03_warn.hpp>
 
   namespace std
   {

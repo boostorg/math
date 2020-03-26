@@ -17,6 +17,7 @@
 
 
 #include <boost/config.hpp>
+#include <boost/math/tools/cxx03_warn.hpp>
 #include <boost/math/distributions/complement.hpp>
 #include <boost/math/distributions/detail/common_error_handling.hpp>
 #include <boost/math/distributions/exponential.hpp>
