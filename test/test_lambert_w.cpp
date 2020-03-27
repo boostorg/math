@@ -1031,20 +1031,24 @@ BOOST_AUTO_TEST_CASE( test_range_of_double_values )
     BOOST_MATH_TEST_VALUE(RealType, -0.99999997649828679),
     5e7 * tolerance);// diff 2.30785e-09 v 2.2204460492503131e-16
 
-  // Compare with previous PB/FK computations at double precision.
-  RealType w0 = lambert_w0(BOOST_MATH_TEST_VALUE(RealType, -0.36787944117144228));
-  RealType w0_prime = boost::math::lambert_w0_prime(BOOST_MATH_TEST_VALUE(RealType, -0.36787944117144228));
-  BOOST_CHECK_CLOSE_FRACTION(  // Check float_next(-exp(-1) )
+   // Compare with previous PB/FK computations at double precision.
+   using std::abs;
+   RealType x = BOOST_MATH_TEST_VALUE(RealType, -0.36787944117144228);
+   RealType w0 = lambert_w0(x);
+   RealType w0_prime = boost::math::lambert_w0_prime(x);
+   RealType mu = std::numeric_limits<RealType>::epsilon()/2;
+   BOOST_CHECK_CLOSE_FRACTION(  // Check float_next(-exp(-1) )
     w0,
     BOOST_MATH_TEST_VALUE(RealType, -0.9999999849621573837115797120602890516186071783122773515945338502828025975466699519609633476854139977),
-    tolerance*abs(w0_prime/w0)); // diff 6.03558e-09 v 2.2204460492503131e-16
+    mu*abs(x*w0_prime/w0)); // diff 6.03558e-09 v 2.2204460492503131e-16
 
-  w0 = lambert_w0(BOOST_MATH_TEST_VALUE(RealType, -0.36787944117144222));
-  w0_prime = boost::math::lambert_w0_prime(BOOST_MATH_TEST_VALUE(RealType, -0.36787944117144222));
-  BOOST_CHECK_CLOSE_FRACTION(  // Check  float_next(float_next(-exp(-1) ))
+   x = BOOST_MATH_TEST_VALUE(RealType, -0.36787944117144222);
+   w0 = lambert_w0(x);
+   w0_prime = boost::math::lambert_w0_prime(x);
+   BOOST_CHECK_CLOSE_FRACTION(  // Check  float_next(float_next(-exp(-1) ))
     w0,
     BOOST_MATH_TEST_VALUE(RealType, -0.99999997419043196),
-    tolerance*abs(w0_prime/w0));// diff 2.30785e-09 v 2.2204460492503131e-16
+    mu*abs(x*w0_prime/w0));// diff 2.30785e-09 v 2.2204460492503131e-16
 
                // z increasingly close to singularity.
   BOOST_CHECK_CLOSE_FRACTION(lambert_w0(BOOST_MATH_TEST_VALUE(RealType, -0.36)),
