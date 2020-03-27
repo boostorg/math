@@ -532,7 +532,9 @@ inline RealType mean(const von_mises_distribution<RealType, Policy>& dist)
 template <class RealType, class Policy>
 inline RealType standard_deviation(const von_mises_distribution<RealType, Policy>& dist)
 {
-   return dist.concentration();
+  RealType bessel_quot = cyl_bessel_i(1, dist.concentration(), Policy()) 
+                       / cyl_bessel_i(0, dist.concentration(), Policy());
+  return std::sqrt(-2 * std::log(bessel_quot));
 }
 
 template <class RealType, class Policy>
@@ -546,6 +548,7 @@ inline RealType median(const von_mises_distribution<RealType, Policy>& dist)
 {
    return dist.mean();
 }
+
 namespace detail {
 // float version of variance_impl
 template <typename RealType, typename Policy>
@@ -821,7 +824,9 @@ inline RealType entropy(const von_mises_distribution<RealType, Policy> & dist)
 {
    using std::log;
    RealType arg = constants::two_pi<RealType>() * cyl_bessel_i(0, dist.concentration(), Policy());
-   return log(arg) - dist.concentration() * cyl_bessel_i(1, dist.concentration(), Policy()) / cyl_bessel_i(0, dist.concentration(), Policy());
+   RealType bessel_quot = cyl_bessel_i(1, dist.concentration(), Policy()) 
+                        / cyl_bessel_i(0, dist.concentration(), Policy());
+   return log(arg) - dist.concentration() * bessel_quot;
 }
 
 } // namespace math

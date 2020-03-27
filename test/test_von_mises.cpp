@@ -270,12 +270,11 @@ void test_spots(RealType)
   //~ BOOST_CHECK_CLOSE(
        //~ variance(von_mises_distribution<RealType>(2, 125))
        //~ , static_cast<RealType>(0.004008064813593637057963834031301840442156903531539609019L), tol2);
-  return;
        
   // std deviation:
   BOOST_CHECK_CLOSE(
        standard_deviation(dist)
-       , static_cast<RealType>(3), tol2);
+       , static_cast<RealType>(0.649213658343262740252572725779410261163523458085389547123L), tol2);
   // hazard:
   BOOST_CHECK_CLOSE(
        hazard(dist, x)
@@ -291,11 +290,11 @@ void test_spots(RealType)
   // mode:
   BOOST_CHECK_CLOSE(
        mode(dist)
-       , static_cast<RealType>(8), tol2);
+       , static_cast<RealType>(2), tol2);
 
   BOOST_CHECK_CLOSE(
        median(dist)
-       , static_cast<RealType>(8), tol2);
+       , static_cast<RealType>(2), tol2);
 
   // skewness:
   BOOST_CHECK_CLOSE(
@@ -310,10 +309,9 @@ void test_spots(RealType)
       // kurtosis_excess(dist)
       // , static_cast<RealType>(0), tol2);
 
-  RealType expected_entropy = log(boost::math::constants::two_pi<RealType>()*boost::math::constants::e<RealType>()*9)/2;
   BOOST_CHECK_CLOSE(
        entropy(dist)
-       ,expected_entropy, tol2);
+       , 0.993228806353252817873771736349142645476889275244864748502L, tol2);
 
   von_mises_distribution<RealType> norm01(0, 1); // Test default (0, 1)
   BOOST_CHECK_CLOSE(
@@ -330,15 +328,9 @@ void test_spots(RealType)
        mean(def_norm01),
        static_cast<RealType>(0), 0); // Mean == zero
 
-  BOOST_CHECK_CLOSE(
-       standard_deviation(def_norm01),
-       static_cast<RealType>(1), 0); // Mean == zero
-
   // Error tests:
   check_out_of_range<boost::math::von_mises_distribution<RealType> >(0, 1); // (All) valid constructor parameter values.
     
-  BOOST_MATH_CHECK_THROW(pdf(von_mises_distribution<RealType>(0, 0), 0), std::domain_error);
-  BOOST_MATH_CHECK_THROW(pdf(von_mises_distribution<RealType>(0, -1), 0), std::domain_error);
   BOOST_MATH_CHECK_THROW(quantile(von_mises_distribution<RealType>(0, 1), -1), std::domain_error);
   BOOST_MATH_CHECK_THROW(quantile(von_mises_distribution<RealType>(0, 1), 2), std::domain_error);
 } // template <class RealType>void test_spots(RealType)
