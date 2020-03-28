@@ -195,6 +195,7 @@ bool check_conditioned_error(Real abscissa, PreciseReal expected1, PreciseReal e
 
     Real mu = std::numeric_limits<Real>::epsilon()/2;
     Real expected = Real(expected1);
+    // Relative error is undefined. Therefore we must use |f(x(1+eps))| le mu|xf'(x)|.
     if (expected == 0)
     {
         Real tol = acceptable_badness*mu*abs(abscissa*expected_derivative);
@@ -212,12 +213,17 @@ bool check_conditioned_error(Real abscissa, PreciseReal expected1, PreciseReal e
             return false;            
         }
     }
+    // 1 ULP accuracy * acceptable_badness is always acceptable, independent of condition number:
+    if (abs(boost::math::float_distance(Real(expected), computed)) <= acceptable_badness)
+    {
+        return true;
+    }
     Real expected_prime = Real(expected_derivative);
     PreciseReal precise_abscissa = abscissa;
     PreciseReal cond = abs(precise_abscissa*expected_prime/expected);
     PreciseReal relative_error = abs((expected - PreciseReal(computed))/expected);
     // If the condition number is small, then we revert to allowing 1ULP accuracy, i.e., one incorrect bit.
-    Real tol = (max)(Real(cond)*mu, 2*mu);
+    Real tol = cond*mu;
     tol *= acceptable_badness;
     if (relative_error > tol)
     {
