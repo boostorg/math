@@ -658,6 +658,23 @@ T float_distance_imp(const T& a, const T& b, const boost::false_type&, const Pol
 template <class T, class U, class Policy>
 inline typename tools::promote_args<T, U>::type float_distance(const T& a, const U& b, const Policy& pol)
 {
+   if (!std::is_same<T, U>::value)
+   {
+      if (std::is_integral<T>::value)
+      {
+         return float_distance_imp(static_cast<U>(a), b, pol);
+      }
+      if (std::is_integral<U>::value)
+      {
+         return float_distance_impl(a, static_cast<T>(b), pol);
+      }
+      if (std::is_floating_point<T>::value && std::is_floating_point<U>::value)
+      {
+         return policies::raise_domain_error<T>(
+         "float_next",
+         "Requested float distance between two different floating point types", std::numeric_limits<T>::quiet_NaN(), pol);
+      }
+   }
    typedef typename tools::promote_args<T, U>::type result_type;
    return detail::float_distance_imp(detail::normalize_value(static_cast<result_type>(a), typename detail::has_hidden_guard_digits<result_type>::type()), detail::normalize_value(static_cast<result_type>(b), typename detail::has_hidden_guard_digits<result_type>::type()), boost::integral_constant<bool, !std::numeric_limits<result_type>::is_specialized || (std::numeric_limits<result_type>::radix == 2)>(), pol);
 }
