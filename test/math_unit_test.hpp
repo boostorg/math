@@ -119,6 +119,52 @@ bool check_ulp_close(PreciseReal expected1, Real computed, size_t ulps, std::str
     return true;
 }
 
+template<typename Real>
+bool check_le(Real lesser, Real greater, std::string const & filename, std::string const & function, int line)
+{
+    using std::max;
+    using std::abs;
+    using std::isnan;
+
+    if (isnan(lesser))
+    {
+        std::ios_base::fmtflags f( std::cerr.flags() );
+        std::cerr << std::setprecision(3);
+        std::cerr << "\033[0;31mError at " << filename << ":" << function << ":" << line << ":\n"
+                  << " \033[0m Lesser value is a nan\n";
+        std::cerr.flags(f);
+        ++detail::global_error_count;
+        return false;
+    }
+
+    if (isnan(greater))
+    {
+        std::ios_base::fmtflags f( std::cerr.flags() );
+        std::cerr << std::setprecision(3);
+        std::cerr << "\033[0;31mError at " << filename << ":" << function << ":" << line << ":\n"
+                  << " \033[0m Greater value is a nan\n";
+        std::cerr.flags(f);
+        ++detail::global_error_count;
+        return false;
+    }
+
+    if (lesser > greater)
+    {
+        std::ios_base::fmtflags f( std::cerr.flags() );
+        std::cerr << std::setprecision(3);
+        std::cerr << "\033[0;31mError at " << filename << ":" << function << ":" << line << ":\n"
+                  << " \033[0m Expected " << lesser << " <= " << greater << " in " << boost::core::demangle(typeid(Real).name()) << " precision.\n";
+        std::cerr << std::setprecision(std::numeric_limits<Real>::max_digits10) << std::showpos
+                  << "  \"Lesser\" : " << std::defaultfloat << std::fixed << lesser << std::hexfloat << " = " << lesser << "\n"
+                  << "  \"Greater\": " << std::defaultfloat << std::fixed << greater << std::hexfloat << " = " << greater << "\n"
+                  << std::defaultfloat;
+        std::cerr.flags(f);
+        ++detail::global_error_count;
+        return false;
+    }
+    return true;
+}
+
 
 int report_errors()
 {
@@ -146,5 +192,7 @@ int report_errors()
 #define CHECK_MOLLIFIED_CLOSE(X, Y, Z) boost::math::test::check_mollified_close< typename std::remove_reference<decltype((Y))>::type>((X), (Y), (Z), __FILE__, __func__, __LINE__)
 
 #define CHECK_ULP_CLOSE(X, Y, Z) boost::math::test::check_ulp_close((X), (Y), (Z), __FILE__, __func__, __LINE__)
+
+#define CHECK_LE(X, Y) boost::math::test::check_le((X), (Y), __FILE__, __func__, __LINE__)
 
 #endif
