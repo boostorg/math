@@ -1040,7 +1040,7 @@ BOOST_AUTO_TEST_CASE( test_range_of_double_values )
    BOOST_CHECK_CLOSE_FRACTION(  // Check float_next(-exp(-1) )
     w0,
     BOOST_MATH_TEST_VALUE(RealType, -0.9999999849621573837115797120602890516186071783122773515945338502828025975466699519609633476854139977),
-    mu*abs(x*w0_prime/w0)); // diff 6.03558e-09 v 2.2204460492503131e-16
+    2*mu*abs(x*w0_prime/w0)); // diff 6.03558e-09 v 2.2204460492503131e-16
 
    x = BOOST_MATH_TEST_VALUE(RealType, -0.36787944117144222);
    w0 = lambert_w0(x);
@@ -1048,7 +1048,7 @@ BOOST_AUTO_TEST_CASE( test_range_of_double_values )
    BOOST_CHECK_CLOSE_FRACTION(  // Check  float_next(float_next(-exp(-1) ))
     w0,
     BOOST_MATH_TEST_VALUE(RealType, -0.99999997419043196),
-    mu*abs(x*w0_prime/w0));// diff 2.30785e-09 v 2.2204460492503131e-16
+    2*mu*abs(x*w0_prime/w0));// diff 2.30785e-09 v 2.2204460492503131e-16
 
                // z increasingly close to singularity.
   BOOST_CHECK_CLOSE_FRACTION(lambert_w0(BOOST_MATH_TEST_VALUE(RealType, -0.36)),
