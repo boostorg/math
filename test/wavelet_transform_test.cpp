@@ -103,6 +103,31 @@ void test_wavelet_transform()
 
         }
     }
+
+    if (p > 5)
+    {
+        // Wavelet transform of a constant is zero.
+        // The quadrature sum is horribly ill-conditioned (technically infinite),
+        // so we'll only test on the more rapidly converging sums.
+        auto g = [](Real x) { return Real(7); };
+        auto Wg = daubechies_wavelet_transform(g, psi);
+        for (double s = -10; s < 10; s += 0.1)
+        {
+            for (double t = -10; t < 10; t+= 0.1)
+            {
+                Real w = Wg(s, t);
+                if (!CHECK_LE(abs(w), 10*sqrt(std::numeric_limits<Real>::epsilon())))
+                {
+                    std::cerr << "  Wavelet transform of constant with respect to " << p << " vanishing moment Daubechies wavelet is insufficiently small\n";
+                }
+
+            }
+        }
+        // Wavelet transform of psi evaluated at s = 1, t = 0 is L2 norm of psi:
+        auto Wpsi = daubechies_wavelet_transform(psi, psi);
+        CHECK_MOLLIFIED_CLOSE(Real(1), Wpsi(1,0), 2*sqrt(std::numeric_limits<Real>::epsilon()));
+    }
+
 }
 
 int main()
