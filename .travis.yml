@@ -28,6 +28,18 @@ matrix:
 
   include:
     - os: linux
+      env: TOOLSET=gcc COMPILER=g++-6 CXXSTD=c++03 TEST_SUITE=special_fun
+      addons:
+        apt:
+          packages:
+            - g++-6
+            - libgmp-dev
+            - libmpfr-dev
+            - libfftw3-dev
+          sources:
+            - ubuntu-toolchain-r-test
+
+    - os: linux
       env: TOOLSET=gcc COMPILER=g++-6 CXXSTD=c++11 TEST_SUITE=special_fun
       addons:
         apt:
@@ -64,6 +76,18 @@ matrix:
             - ubuntu-toolchain-r-test
 
     - os: linux
+      env: TOOLSET=gcc COMPILER=g++-6 CXXSTD=c++03 TEST_SUITE=distribution_tests
+      addons:
+        apt:
+          packages:
+            - g++-6
+            - libgmp-dev
+            - libmpfr-dev
+            - libfftw3-dev
+          sources:
+            - ubuntu-toolchain-r-test
+
+    - os: linux
       env: TOOLSET=gcc COMPILER=g++-6 CXXSTD=c++11 TEST_SUITE=distribution_tests
       addons:
         apt:
@@ -89,6 +113,18 @@ matrix:
 
     - os: linux
       env: TOOLSET=gcc COMPILER=g++-6 CXXSTD=c++1z TEST_SUITE=distribution_tests
+      addons:
+        apt:
+          packages:
+            - g++-6
+            - libgmp-dev
+            - libmpfr-dev
+            - libfftw3-dev
+          sources:
+            - ubuntu-toolchain-r-test
+
+    - os: linux
+      env: TOOLSET=gcc COMPILER=g++-6 CXXSTD=c++03 TEST_SUITE=quadrature
       addons:
         apt:
           packages:
@@ -148,6 +184,18 @@ matrix:
             - ubuntu-toolchain-r-test
 
     - os: linux
+      env: TOOLSET=gcc COMPILER=g++-6 CXXSTD=c++03 TEST_SUITE=float128_tests
+      addons:
+        apt:
+          packages:
+            - g++-6
+            - libgmp-dev
+            - libmpfr-dev
+            - libfftw3-dev
+          sources:
+            - ubuntu-toolchain-r-test
+
+    - os: linux
       env: TOOLSET=gcc COMPILER=g++-6 CXXSTD=c++11 TEST_SUITE=float128_tests
       addons:
         apt:
@@ -185,6 +233,18 @@ matrix:
 
     - os: linux
       env: TOOLSET=gcc COMPILER=g++-6 CXXSTD=c++1z TEST_SUITE=float128_tests
+      addons:
+        apt:
+          packages:
+            - g++-6
+            - libgmp-dev
+            - libmpfr-dev
+            - libfftw3-dev
+          sources:
+            - ubuntu-toolchain-r-test
+
+    - os: linux
+      env: TOOLSET=gcc COMPILER=g++-6 CXXSTD=c++03 TEST_SUITE=../example//examples
       addons:
         apt:
           packages:
@@ -374,6 +434,72 @@ matrix:
       dist: trusty
       compiler: g++-8
       env: TOOLSET=gcc COMPILER=g++-8 CXXSTD=c++14 TEST_SUITE=../example//examples
+      addons:
+        apt:
+          packages:
+            - g++-8
+          sources:
+            - ubuntu-toolchain-r-test
+
+    - os: linux
+      dist: trusty
+      compiler: g++-8
+      env: TOOLSET=gcc COMPILER=g++-8 CXXSTD=gnu++03 TEST_SUITE=special_fun
+      addons:
+        apt:
+          packages:
+            - g++-8
+          sources:
+            - ubuntu-toolchain-r-test
+
+    - os: linux
+      dist: trusty
+      compiler: g++-8
+      env: TOOLSET=gcc COMPILER=g++-8 CXXSTD=gnu++03 TEST_SUITE=distribution_tests
+      addons:
+        apt:
+          packages:
+            - g++-8
+          sources:
+            - ubuntu-toolchain-r-test
+
+    - os: linux
+      dist: trusty
+      compiler: g++-8
+      env: TOOLSET=gcc COMPILER=g++-8 CXXSTD=gnu++03 TEST_SUITE=misc
+      addons:
+        apt:
+          packages:
+            - g++-8
+          sources:
+            - ubuntu-toolchain-r-test
+
+    - os: linux
+      dist: trusty
+      compiler: g++-8
+      env: TOOLSET=gcc COMPILER=g++-8 CXXSTD=gnu++03 TEST_SUITE=quadrature
+      addons:
+        apt:
+          packages:
+            - g++-8
+          sources:
+            - ubuntu-toolchain-r-test
+
+    - os: linux
+      dist: trusty
+      compiler: g++-8
+      env: TOOLSET=gcc COMPILER=g++-8 CXXSTD=gnu++03 TEST_SUITE=float128_tests
+      addons:
+        apt:
+          packages:
+            - g++-8
+          sources:
+            - ubuntu-toolchain-r-test
+
+    - os: linux
+      dist: trusty
+      compiler: g++-8
+      env: TOOLSET=gcc COMPILER=g++-8 CXXSTD=gnu++03 TEST_SUITE=../example//examples
       addons:
         apt:
           packages:
