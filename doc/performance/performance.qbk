@@ -91,7 +91,7 @@ However, an easier option might be:
    //
    // Define a Policy for fast evaluation:
    //
-   using namespace boost::math::policies;
+   using namespace boost::math::policies[
    typedef policy<promote_double<false> > fast_policy;
    //
    // Invoke BOOST_MATH_DECLARE_SPECIAL_FUNCTIONS:
@@ -259,9 +259,9 @@ the following tables show the results for MSVC-14.0 and GCC-5.1.0 (Linux).  Ther
 the various methods, but generally loop-unrolled methods perform better.  Interestingly, ordering the code
 to try and "second guess" possible optimizations seems not to be such a good idea (method 3 below).
 
-[table_Polynomial_Method_Comparison_with_Microsoft_Visual_C_version_14_0_on_Windows_x64]
+[table_Polynomial_Method_Comparison_with_Microsoft_Visual_C_version_14_2_on_Windows_x64]
 
-[table_Rational_Method_Comparison_with_Microsoft_Visual_C_version_14_0_on_Windows_x64]
+[table_Rational_Method_Comparison_with_Microsoft_Visual_C_version_14_2_on_Windows_x64]
 
 [table_Polynomial_Method_Comparison_with_GNU_C_version_5_1_0_on_linux]
 
@@ -302,7 +302,7 @@ numerical stability.
 
 The first results compare standard library functions to Boost equivalents with MSVC-14.0:
 
-[table_Library_Comparison_with_Microsoft_Visual_C_version_14_0_on_Windows_x64]
+[table_Library_Comparison_with_Microsoft_Visual_C_version_14_2_on_Windows_x64]
 
 On Linux with GCC, we can also compare to the TR1 functions, and to GSL and RMath:
 
