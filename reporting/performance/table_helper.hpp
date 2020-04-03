@@ -70,7 +70,7 @@ extern "C" {
    extern void cdfnor(int*, double*, double*, double*, double*, double*, int*, double*);
    extern void cdfpoi(int*, double*, double*, double*, double*, int*, double*);
    extern void cdft(int*, double*, double*, double*, double*, int*, double*);
-   extern void cdftnc(int*, double*, double*, double*, double*, double*, int*, double*);
+   //extern void cdftnc(int*, double*, double*, double*, double*, double*, int*, double*);
 }
 
 inline double dcdflib_beta_cdf(double x, double a, double b)
@@ -272,7 +272,7 @@ inline double dcdflib_t_quantile(double p, double param)
    cdft(&what, &p, &q, &x, &param, &status, &bound);
    return x;
 }
-
+/*
 inline double dcdflib_t_n_cdf(double x, double param, double nc)
 {
    int what = 1;
@@ -290,7 +290,7 @@ inline double dcdflib_t_n_quantile(double p, double param, double nc)
    cdftnc(&what, &p, &q, &x, &param, &nc, &status, &bound);
    return x;
 }
-
+*/
 #endif
 
 extern std::vector<std::vector<double> > data;
