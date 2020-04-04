@@ -153,7 +153,7 @@ One can do a similar thing with the distribution classes:
 
 Here's how these options change the relative performance of the distributions on Linux:
 
-[table_Distribution_performance_comparison_for_different_performance_options_with_GNU_C_version_5_1_0_on_linux]
+[table_Distribution_performance_comparison_for_different_performance_options_with_GNU_C_version_9_2_1_20191008_on_linux]
 
 [endsect] [/section:tradoffs Trading Accuracy for Performance]
 
@@ -263,9 +263,17 @@ to try and "second guess" possible optimizations seems not to be such a good ide
 
 [table_Rational_Method_Comparison_with_Microsoft_Visual_C_version_14_2_on_Windows_x64]
 
-[table_Polynomial_Method_Comparison_with_GNU_C_version_5_1_0_on_linux]
+[table_Polynomial_Method_Comparison_with_GNU_C_version_9_2_1_20191008_on_linux]
 
-[table_Rational_Method_Comparison_with_GNU_C_version_5_1_0_on_linux]
+[table_Rational_Method_Comparison_with_GNU_C_version_9_2_1_20191008_on_linux]
+
+[table_Polynomial_Method_Comparison_with_Clang_version_9_0_0_tags_RELEASE_900_final_on_linux]
+
+[table_Rational_Method_Comparison_with_Clang_version_9_0_0_tags_RELEASE_900_final_on_linux]
+
+[table_Polynomial_Method_Comparison_with_Intel_C_C_0x_mode_version_1910_on_linux]
+
+[table_Rational_Method_Comparison_with_Intel_C_C_0x_mode_version_1910_on_linux]
 
 [endsect] [/section:tuning Performance Tuning Macros]
 
@@ -306,11 +314,11 @@ The first results compare standard library functions to Boost equivalents with M
 
 On Linux with GCC, we can also compare to the TR1 functions, and to GSL and RMath:
 
-[table_Library_Comparison_with_GNU_C_version_5_3_0_on_linux]
+[table_Library_Comparison_with_GNU_C_version_9_2_1_20191008_on_linux]
 
 And finally we can compare the statistical distributions to GSL, RMath and DCDFLIB:
 
-[table_Distribution_performance_comparison_with_GNU_C_version_5_3_0_on_linux]
+[table_Distribution_performance_comparison_with_GNU_C_version_9_2_1_20191008_on_linux]
 
 [endsect] [/section:comparisons Comparisons to Other Open Source Libraries]
 
