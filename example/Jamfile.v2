@@ -55,17 +55,17 @@ test-suite examples :
    [ run brent_minimise_example.cpp  : : : [ requires cxx11_hdr_tuple ] ]
 
    [ run c_error_policy_example.cpp  ]
-   [ run chi_square_std_dev_test.cpp : : : <exception-handling>off:<build>no  ]
-   [ run distribution_construction.cpp : : : <exception-handling>off:<build>no  ]
+   [ run chi_square_std_dev_test.cpp : : : [ requires cxx11_numeric_limits cxx11_hdr_tuple cxx11_auto_declarations ] <exception-handling>off:<build>no  ]
+   [ run distribution_construction.cpp : : : [ requires cxx11_numeric_limits cxx11_hdr_tuple cxx11_auto_declarations ] <exception-handling>off:<build>no  ]
    [ run error_handling_example.cpp : : : <exception-handling>off:<build>no  ]
-   [ run error_policies_example.cpp  ]
-   [ run error_policy_example.cpp : : : <exception-handling>off:<build>no  ]
+   [ run error_policies_example.cpp : : : [ requires cxx11_numeric_limits cxx11_hdr_tuple cxx11_auto_declarations ] ]
+   [ run error_policy_example.cpp : : : [ requires cxx11_numeric_limits cxx11_hdr_tuple cxx11_auto_declarations ] <exception-handling>off:<build>no  ]
    [ run f_test.cpp  ]
    # [ run fft_sines_table.cpp  : : : [ requires cxx11_numeric_limits ] ]
    # No need to re-run this routinely as it only creates a table of sines for a documentation example.
 
    [ run find_location_example.cpp : : : <exception-handling>off:<build>no  ]
-   [ run find_mean_and_sd_normal.cpp : : : <exception-handling>off:<build>no  ]
+   [ run find_mean_and_sd_normal.cpp : : : [ requires cxx11_numeric_limits cxx11_hdr_tuple cxx11_auto_declarations ] <exception-handling>off:<build>no  ]
    [ run find_root_example.cpp : : : <exception-handling>off:<build>no  ]
    [ run find_scale_example.cpp : : : <exception-handling>off:<build>no  ]
    [ run geometric_examples.cpp : : : <exception-handling>off:<build>no  ]
