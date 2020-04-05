@@ -164,6 +164,169 @@ inline Real chebyshev_clenshaw_recurrence(const Real* const c, size_t length, co
     return x*b1 - b2 + half<Real>()*c[0];
 }
 
+template<class Real>
+inline Real translated_chebyshev_clenshaw_recurrence(const Real* const c, size_t length, const Real a, const Real b, const Real x)
+{
+    if (x < a || x > b)
+    {
+        throw std::domain_error("x in [a, b] is required.");
+    }
+    Real t;
+    if (x - a < b - x )
+    {
+        t = 2*(x-a)/(b-a) - 1;
+    }
+    else
+    {
+        t = 2*(b-x)/(b-a) + 1;
+    }
+
+    if (length < 2)
+    {
+        if (length == 0)
+        {
+            return 0;
+        }
+        return c[0]/2;
+    }
+    Real b2 = 0;
+    Real b1 = c[length -1];
+    for(size_t j = length - 2; j >= 1; --j)
+    {
+        Real tmp = 2*t*b1 - b2 + c[j];
+        b2 = b1;
+        b1 = tmp;
+    }
+    return t*b1 - b2 + c[0]/2;
+}
+
+template<class Real>
+inline Real modified_chebyshev_clenshaw_recurrence(const Real* const c, size_t length, const Real& x)
+{
+    using std::abs;
+    if (length < 2)
+    {
+        if (length == 0)
+        {
+            return 0;
+        }
+        return c[0]/2;
+    }
+    // This cutoff is not super well defined, but it's a good estimate.
+    // See "An Error Analysis of the Modified Clenshaw Method for Evaluating Chebyshev and Fourier Series"
+    // J. OLIVER, IMA Journal of Applied Mathematics, Volume 20, Issue 3, November 1977, Pages 379–391
+    // https://doi.org/10.1093/imamat/20.3.379
+    Real cutoff = 0.0;
+    if (abs(x) <= cutoff)
+    {
+        Real b2 = 0;
+        Real b1 = c[length -1];
+        for(size_t j = length - 2; j >= 1; --j)
+        {
+            Real tmp = 2*x*b1 - b2 + c[j];
+            b2 = b1;
+            b1 = tmp;
+        }
+        return x*b1 - b2 + c[0]/2;
+    }
+    else if (x > cutoff)
+    {
+        Real b = c[length -1];
+        Real d = b;
+        Real b2 = b;
+        for (size_t r = length - 2; r >= 1; --r)
+        {
+            d = 2*(x-1)*b + d + c[r];
+            b2 = b;
+            b = d + b;
+        }
+        return x*b - b2 + c[0]/2;
+    }
+    else
+    {
+        Real b = c[length -1];
+        Real d = b;
+        Real b2 = b;
+        for (size_t r = length - 2; r >= 1; --r)
+        {
+            d = 2*(x+1)*b - d + c[r];
+            b2 = b;
+            b = d - b;
+        }
+        return x*b - b2 + c[0]/2;
+    }
+}
+
+template<class Real>
+inline Real translated_modified_chebyshev_clenshaw_recurrence(const Real* const c, size_t length, const Real & a, const Real & b, const Real& x)
+{
+    using std::abs;
+    if (length < 2)
+    {
+        if (length == 0)
+        {
+            return 0;
+        }
+        return c[0]/2;
+    }
+    Real t;
+    Real u;
+    if (x - a < b - x)
+    {
+        u = 2*(x-a)/(b-a);
+        t = u - 1;
+
+    }
+    else
+    {
+        u = 2*(b-x)/(b-a);
+        t = u + 1;
+    }
+    // This cutoff is not super well defined, but it's a good estimate.
+    // See "An Error Analysis of the Modified Clenshaw Method for Evaluating Chebyshev and Fourier Series"
+    // J. OLIVER, IMA Journal of Applied Mathematics, Volume 20, Issue 3, November 1977, Pages 379–391
+    // https://doi.org/10.1093/imamat/20.3.379
+    Real cutoff = 0.6;
+    if (abs(t) <= cutoff)
+    {
+        Real b2 = 0;
+        Real b1 = c[length -1];
+        for(size_t j = length - 2; j >= 1; --j)
+        {
+            Real tmp = 2*t*b1 - b2 + c[j];
+            b2 = b1;
+            b1 = tmp;
+        }
+        return t*b1 - b2 + c[0]/2;
+    }
+    else if (t > cutoff)
+    {
+        Real b = c[length -1];
+        Real d = b;
+        Real b2 = b;
+        for (size_t r = length - 2; r >= 1; --r)
+        {
+            d = 2*u*b + d + c[r];
+            b2 = b;
+            b = d + b;
+        }
+        return t*b - b2 + c[0]/2;
+    }
+    else
+    {
+        Real b = c[length -1];
+        Real d = b;
+        Real b2 = b;
+        for (size_t r = length - 2; r >= 1; --r)
+        {
+            d = 2*u*b - d + c[r];
+            b2 = b;
+            b = d - b;
+        }
+        return t*b - b2 + c[0]/2;
+    }
+}
+
 
 }}
 #endif
