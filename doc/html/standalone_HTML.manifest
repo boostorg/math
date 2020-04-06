@@ -272,6 +272,7 @@ math_toolkit/inv_hyper/acosh.html
 math_toolkit/inv_hyper/asinh.html
 math_toolkit/inv_hyper/atanh.html
 math_toolkit/owens_t.html
+math_toolkit/daubechies.html
 extern_c.html
 math_toolkit/main_tr1.html
 math_toolkit/c99.html
@@ -332,9 +333,12 @@ math_toolkit/double_exponential/de_caveats.html
 math_toolkit/double_exponential/de_refes.html
 math_toolkit/fourier_integrals.html
 math_toolkit/naive_monte_carlo.html
+math_toolkit/wavelet_transforms.html
 math_toolkit/diff.html
 math_toolkit/autodiff.html
 math_toolkit/diff0.html
+filters.html
+math_toolkit/daubechies_filters.html
 inverse_complex.html
 math_toolkit/complex_implementation.html
 math_toolkit/asin.html
