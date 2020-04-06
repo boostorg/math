@@ -13,8 +13,6 @@
 #include <boost/math/special_functions/chebyshev.hpp>
 #include <boost/math/special_functions/chebyshev_transform.hpp>
 #include <boost/math/special_functions/sinc.hpp>
-#include <boost/multiprecision/cpp_bin_float.hpp>
-#include <boost/multiprecision/cpp_dec_float.hpp>
 
 #if !defined(TEST1) && !defined(TEST2) && !defined(TEST3) && !defined(TEST4)
 #  define TEST1
@@ -23,9 +21,6 @@
 #  define TEST4
 #endif
 
-using boost::multiprecision::cpp_bin_float_quad;
-using boost::multiprecision::cpp_bin_float_50;
-using boost::multiprecision::cpp_bin_float_100;
 using boost::math::chebyshev_t;
 using boost::math::chebyshev_t_prime;
 using boost::math::chebyshev_u;
