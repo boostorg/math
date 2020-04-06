@@ -174,9 +174,8 @@ public:
         }
     }
 
-    Real operator()(Real x) const
+    inline Real operator()(Real x) const
     {
-        using boost::math::constants::half;
         if (x > m_b || x < m_a)
         {
             throw std::domain_error("x not in [a, b]\n");

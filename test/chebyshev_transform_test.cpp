@@ -133,6 +133,8 @@ template<class Real>
 void test_atap_examples()
 {
     using std::sin;
+    using std::exp;
+    using std::sqrt;
     using boost::math::constants::half;
     using boost::math::sinc_pi;
     using boost::math::chebyshev_transform;
@@ -146,7 +148,7 @@ void test_atap_examples()
 
     auto f3 = [](Real x) { return sin(6*x) + sin(60*exp(x)); };
 
-    auto f4 = [](Real x) { return 1/(1+1000*(x+half<Real>())*(x+half<Real>())) + 1/sqrt(1+1000*(x-.5)*(x-0.5));};
+    auto f4 = [](Real x) { return 1/(1+1000*(x+half<Real>())*(x+half<Real>())) + 1/sqrt(1+1000*(x-Real(1)/Real(2))*(x-Real(1)/Real(2)));};
     Real a = -1;
     Real b = 1;
     chebyshev_transform<Real> cheb1(f1, a, b);
