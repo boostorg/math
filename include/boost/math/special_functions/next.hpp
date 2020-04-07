@@ -9,7 +9,8 @@
 #ifdef _MSC_VER
 #pragma once
 #endif
-#include <type_traits>
+#include <boost/type_traits/is_same.hpp>
+#include <boost/type_traits/is_integral.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
@@ -658,27 +659,35 @@ T float_distance_imp(const T& a, const T& b, const boost::false_type&, const Pol
 template <class T, class U, class Policy>
 inline typename tools::promote_args<T, U>::type float_distance(const T& a, const U& b, const Policy& pol)
 {
-   // The mind boggles: I cannot get the to pass with T = int and U = double
-   //constexpr const bool both_integral = std::is_integral<T>::value && std::is_integral<U>::value;
-   //static_assert(!both_integral,
-    //             "Float distance between two integral types is undefined.");
+   //
+   // We allow ONE of a and b to be an integer type, otherwise both must be the SAME type.
+   //
+   BOOST_STATIC_ASSERT_MSG(
+      (boost::is_same<T, U>::value 
+      || (boost::is_integral<T>::value && !boost::is_integral<U>::value) 
+      || (!boost::is_integral<T>::value && boost::is_integral<U>::value)
+      || (std::numeric_limits<T>::is_specialized && std::numeric_limits<U>::is_specialized
+         && (std::numeric_limits<T>::digits == std::numeric_limits<U>::digits)
+         && (std::numeric_limits<T>::radix == std::numeric_limits<U>::radix)
+         && !std::numeric_limits<T>::is_integer && !std::numeric_limits<U>::is_integer)),
+      "Float distance between two different floating point types is undefined.");
 
-   static_assert(!(!std::is_same<T, U>::value && std::is_floating_point<T>::value && std::is_floating_point<U>::value),
-                 "Float distance between two different floating point types is undefined.");
-
-   if (!std::is_same<T, U>::value)
+   BOOST_IF_CONSTEXPR (!boost::is_same<T, U>::value)
    {
-      if (std::is_integral<T>::value)
+      BOOST_IF_CONSTEXPR(boost::is_integral<T>::value)
       {
          return float_distance(static_cast<U>(a), b, pol);
       }
-      if (std::is_integral<U>::value)
+      else
       {
          return float_distance(a, static_cast<T>(b), pol);
       }
    }
-   typedef typename tools::promote_args<T, U>::type result_type;
-   return detail::float_distance_imp(detail::normalize_value(static_cast<result_type>(a), typename detail::has_hidden_guard_digits<result_type>::type()), detail::normalize_value(static_cast<result_type>(b), typename detail::has_hidden_guard_digits<result_type>::type()), boost::integral_constant<bool, !std::numeric_limits<result_type>::is_specialized || (std::numeric_limits<result_type>::radix == 2)>(), pol);
+   else
+   {
+      typedef typename tools::promote_args<T, U>::type result_type;
+      return detail::float_distance_imp(detail::normalize_value(static_cast<result_type>(a), typename detail::has_hidden_guard_digits<result_type>::type()), detail::normalize_value(static_cast<result_type>(b), typename detail::has_hidden_guard_digits<result_type>::type()), boost::integral_constant<bool, !std::numeric_limits<result_type>::is_specialized || (std::numeric_limits<result_type>::radix == 2)>(), pol);
+   }
 }
 
 template <class T, class U>
