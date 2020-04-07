@@ -116,7 +116,7 @@ public:
     template<class F>
     chebyshev_transform(const F& f, Real a, Real b,
        Real tol = 500 * std::numeric_limits<Real>::epsilon(),
-       size_t max_refinements = 15) : m_a(a), m_b(b)
+       size_t max_refinements = 16) : m_a(a), m_b(b)
     {
         if (a >= b)
         {

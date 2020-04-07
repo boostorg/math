@@ -236,9 +236,55 @@ bool check_conditioned_error(Real abscissa, PreciseReal expected1, PreciseReal e
                   << "  This exceeds the tolerance " << tol << "\n"
                   << std::showpos
                   << "  Expected: " << std::defaultfloat << std::fixed << expected << " = " << std::scientific << expected << std::hexfloat << " = " << expected << "\n"
-                  << "  Computed: " << std::defaultfloat << std::fixed << computed << " = " << std::scientific << expected << std::hexfloat << " = " << computed << "\n"
+                  << "  Computed: " << std::defaultfloat << std::fixed << computed << " = " << std::scientific << computed << std::hexfloat << " = " << computed << "\n"
                   << "  Condition number of function evaluation: " << std::noshowpos << std::defaultfloat << std::scientific << cond  << " = " << std::fixed << cond << "\n"
                   << "  Badness scale required to make this message go away: " << std::defaultfloat << relative_error/(cond*mu) << "\n";
+        std::cerr.flags(f);
+        ++detail::global_error_count;
+        return false;
+    }
+    return true;
+}
+
+template<class PreciseReal, class Real>
+bool check_absolute_error(PreciseReal expected1, Real computed, Real acceptable_error, std::string const & filename, std::string const & function, int line)
+{
+    using std::max;
+    using std::abs;
+    using std::isnan;
+    // Of course integers can be expected values, and they are exact:
+    if (!std::is_integral<PreciseReal>::value) {
+        BOOST_ASSERT_MSG(sizeof(PreciseReal) >= sizeof(Real),
+                         "The expected number must be computed in higher (or equal) precision than the number being tested.");
+        BOOST_ASSERT_MSG(!isnan(expected1), "Expected value cannot be a nan.");
+    }
+    BOOST_ASSERT_MSG(acceptable_error > 0, "Error must be > 0.");
+
+    if (isnan(computed))
+    {
+        std::ios_base::fmtflags f(std::cerr.flags());
+        std::cerr << std::setprecision(3);
+        std::cerr << "\033[0;31mError at " << filename << ":" << function << ":" << line << ":\n"
+                  << " \033[0m Computed value is a nan\n";
+        std::cerr.flags(f);
+        ++detail::global_error_count;
+        return false;
+    }
+
+    Real expected = Real(expected1);
+    Real error = abs(expected - computed);
+    if (error > acceptable_error)
+    {
+        std::ios_base::fmtflags f( std::cerr.flags() );
+        std::cerr << std::setprecision(3);
+        std::cerr << "\033[0;31mError at " << filename << ":" << function << ":" << line << "\n";
+        std::cerr << std::setprecision(std::numeric_limits<Real>::max_digits10);
+        std::cerr << "\033[0m  The absolute error in " << boost::core::demangle(typeid(Real).name()) << " precision is " << std::scientific << error << "\n"
+                  << "  This exceeds the acceptable error " << acceptable_error << "\n"
+                  << std::showpos
+                  << "  Expected: " << std::defaultfloat << std::fixed << expected << " = " << std::scientific << expected << std::hexfloat << " = " << expected << "\n"
+                  << "  Computed: " << std::defaultfloat << std::fixed << computed << " = " << std::scientific << computed<< std::hexfloat << " = " << computed << "\n"
+                  << "  Error/Acceptable error: " << std::defaultfloat << error/acceptable_error << "\n";
         std::cerr.flags(f);
         ++detail::global_error_count;
         return false;
@@ -277,4 +323,7 @@ int report_errors()
 #define CHECK_LE(X, Y) boost::math::test::check_le((X), (Y), __FILE__, __func__, __LINE__)
 
 #define CHECK_CONDITIONED_ERROR(V, W, X, Y, Z) boost::math::test::check_conditioned_error((V), (W), (X), (Y), (Z), __FILE__, __func__, __LINE__)
+
+#define CHECK_ABSOLUTE_ERROR(X, Y, Z) boost::math::test::check_absolute_error((X), (Y), (Z), __FILE__, __func__, __LINE__)
+
 #endif
