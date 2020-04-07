@@ -63,7 +63,6 @@ int main()
     using boost::math::policies::evaluation_error;
     using boost::math::policies::domain_error;
     using boost::math::policies::overflow_error;
-    using boost::math::policies::domain_error;
     using boost::math::policies::throw_on_error;
 
 //[lambert_w_precision_reference_w

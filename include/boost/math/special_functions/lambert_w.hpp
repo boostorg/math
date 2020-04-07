@@ -62,6 +62,7 @@ BOOST_MATH_INSTRUMENT_LAMBERT_W_SMALL_Z_SERIES_ITERATIONS  // Show evaluation of
 #include <boost/type_traits/is_integral.hpp>
 #include <boost/math/tools/precision.hpp> // boost::math::tools::max_value().
 #include <boost/math/tools/big_constant.hpp>
+#include <boost/math/tools/cxx03_warn.hpp>
 
 #include <limits>
 #include <cmath>

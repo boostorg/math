@@ -735,8 +735,8 @@ int main()
       students_t.run_timed_tests([](const std::vector<double>& v, double x) {  return dcdflib_t_cdf(x, v[0]); }, "CDF", "DCDFLIB");
       students_t.run_timed_tests([](const std::vector<double>& v, double x) {  return dcdflib_t_quantile(x, v[0]); }, "quantile", "DCDFLIB", true);
 
-      non_central_t.run_timed_tests([](const std::vector<double>& v, double x) {  return dcdflib_t_n_cdf(x, v[0], v[1]); }, "CDF", "DCDFLIB");
-      non_central_t.run_timed_tests([](const std::vector<double>& v, double x) {  return dcdflib_t_n_quantile(x, v[0], v[1]); }, "quantile", "DCDFLIB", true);
+      //non_central_t.run_timed_tests([](const std::vector<double>& v, double x) {  return dcdflib_t_n_cdf(x, v[0], v[1]); }, "CDF", "DCDFLIB");
+      //non_central_t.run_timed_tests([](const std::vector<double>& v, double x) {  return dcdflib_t_n_quantile(x, v[0], v[1]); }, "quantile", "DCDFLIB", true);
 #endif
 
    }

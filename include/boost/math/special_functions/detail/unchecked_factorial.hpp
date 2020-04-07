@@ -22,6 +22,7 @@
 #endif
 #include <cmath>
 #include <boost/math/special_functions/math_fwd.hpp>
+#include <boost/math/tools/cxx03_warn.hpp>
 
 #ifdef BOOST_MATH_HAVE_CONSTEXPR_TABLES
 #include <array>

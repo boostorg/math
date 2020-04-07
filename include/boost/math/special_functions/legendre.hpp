@@ -17,6 +17,7 @@
 #include <boost/math/special_functions/factorials.hpp>
 #include <boost/math/tools/roots.hpp>
 #include <boost/math/tools/config.hpp>
+#include <boost/math/tools/cxx03_warn.hpp>
 
 namespace boost{
 namespace math{

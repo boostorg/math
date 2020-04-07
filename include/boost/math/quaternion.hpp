@@ -25,6 +25,7 @@
 
 #include <boost/math/special_functions/sinc.hpp>    // for the Sinus cardinal
 #include <boost/math/special_functions/sinhc.hpp>    // for the Hyperbolic Sinus cardinal
+#include <boost/math/tools/cxx03_warn.hpp>
 
 #if defined(BOOST_NO_CXX11_NOEXCEPT) || defined(BOOST_NO_CXX11_RVALUE_REFERENCES) || defined(BOOST_NO_SFINAE_EXPR)
 #include <boost/type_traits/is_pod.hpp>

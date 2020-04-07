@@ -15,6 +15,7 @@
 
 #include <boost/assert.hpp>
 #include <boost/config.hpp>
+#include <boost/math/tools/cxx03_warn.hpp>
 #ifdef BOOST_NO_CXX11_LAMBDAS
 #include <boost/lambda/lambda.hpp>
 #endif

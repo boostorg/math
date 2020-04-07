@@ -42,7 +42,7 @@ if $(is_unix)
 lib gsl ;
 lib gslcblas ;
 lib Rmath ;
-obj has_libstdcxx_tr1 : has_libstdcxx_tr1.cpp ;
+obj has_libstdcxx_tr1 : ../accuracy/has_libstdcxx_tr1.cpp ;
 explicit has_libstdcxx_tr1 ;
 obj has_c99_cmath : has_c99_cmath.cpp ;
 explicit has_c99_cmath ;
@@ -104,7 +104,7 @@ rule all-tests {
         result += [ run $(source) /boost/regex//boost_regex /boost/system /boost/chrono /boost/filesystem table_helper
         : : : release <include>../../test 
         [ check-target-builds ../accuracy//has_c99_cmath : <define>TEST_C99 ] 
-        [ check-target-builds ../accuracy//has_libstdcxx_tr1 : <define>TEST_LIBSTDCXX ] 
+        [ check-target-builds has_libstdcxx_tr1 : <define>TEST_LIBSTDCXX ] 
         [ check-target-builds ../accuracy//has_gsl : <define>TEST_GSL <source>gsl <source>gslcblas ]
         [ check-target-builds ../accuracy//has_rmath : <define>TEST_RMATH <source>Rmath ]
        # [ check-target-builds is_intel_win : <build>no : ]

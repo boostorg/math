@@ -10,6 +10,10 @@
 #include <boost/array.hpp>
 #include <boost/chrono.hpp>
 #include <boost/regex.hpp>
+#include <iostream>
+#include <iomanip>
+
+extern std::vector<std::vector<double> > data;
 
 template <class Array>
 void add_data(const Array& a)
