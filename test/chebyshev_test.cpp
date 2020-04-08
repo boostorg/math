@@ -5,18 +5,16 @@
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  */
 
-
+#include <random>
+#include <iostream>
 #include <boost/type_index.hpp>
-#include "math_unit_test.hpp"
 #include <boost/math/special_functions/chebyshev.hpp>
 #include <boost/math/special_functions/sinc.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
-#include <boost/multiprecision/cpp_dec_float.hpp>
 #include <boost/array.hpp>
+#include "math_unit_test.hpp"
 
 using boost::multiprecision::cpp_bin_float_quad;
-using boost::multiprecision::cpp_bin_float_50;
-using boost::multiprecision::cpp_bin_float_100;
 using boost::math::chebyshev_t;
 using boost::math::chebyshev_t_prime;
 using boost::math::chebyshev_u;
@@ -123,6 +121,31 @@ void test_clenshaw_recurrence()
     }
 }
 
+template<typename Real>
+void test_translated_clenshaw_recurrence()
+{
+    using boost::math::chebyshev_clenshaw_recurrence;
+    std::mt19937_64 mt(123242);
+    std::uniform_real_distribution<Real> dis(-1,1);
+
+    std::vector<Real> c(32);
+    for (auto & d : c) {
+        d = dis(mt);
+    }
+    int samples = 0;
+    while (samples++ < 250) {
+        Real x = dis(mt);
+        Real expected = chebyshev_clenshaw_recurrence(c.data(), c.size(), x);
+        // The computed value, in this case, should actually be better, since it has more information to use.
+        // In any case, this test doesn't show Reinch's modification to the Clenshaw recurrence is better;
+        // it shows they are doing roughly the same thing.
+        Real computed = chebyshev_clenshaw_recurrence(c.data(), c.size(), Real(-1), Real(1), x);
+        if (!CHECK_ULP_CLOSE(expected, computed, 1000)) {
+            std::cerr << "  Problem occured at x = " << x << "\n";
+        }
+    }
+}
+
 int main()
 {
     test_polynomials<float>();
@@ -138,5 +161,7 @@ int main()
     test_clenshaw_recurrence<float>();
     test_clenshaw_recurrence<double>();
     test_clenshaw_recurrence<long double>();
+
+    test_translated_clenshaw_recurrence<double>();
     return boost::math::test::report_errors();
 }

@@ -209,7 +209,7 @@ inline Real unchecked_chebyshev_clenshaw_recurrence(const Real* const c, size_t 
     }
     else
     {
-        u = 2*(b-x)/(b-a);
+        u = -2*(b-x)/(b-a);
         t = u + 1;
         if (t < cutoff)
         {
