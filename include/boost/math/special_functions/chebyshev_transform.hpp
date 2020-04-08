@@ -176,13 +176,7 @@ public:
 
     inline Real operator()(Real x) const
     {
-        if (x > m_b || x < m_a)
-        {
-            throw std::domain_error("x not in [a, b]\n");
-        }
-
-        Real z = (2*x - m_a - m_b)/(m_b - m_a);
-        return chebyshev_clenshaw_recurrence(m_coeffs.data(), m_coeffs.size(), z);
+        return chebyshev_clenshaw_recurrence(m_coeffs.data(), m_coeffs.size(), m_a, m_b, x);
     }
 
     // Integral over entire domain [a, b]
