@@ -91,31 +91,56 @@ void test_clenshaw_recurrence()
     while (x <= 1)
     {
         Real y = chebyshev_clenshaw_recurrence(c0.data(), c0.size(), x);
-        CHECK_ULP_CLOSE(y, chebyshev_t(0, x), ulps);
+        Real expected = chebyshev_t(0, x);
+        CHECK_ULP_CLOSE(expected, y, ulps);
+        y = chebyshev_clenshaw_recurrence(c0.data(), c0.size(), Real(-1), Real(1), x);
+        CHECK_ULP_CLOSE(expected, y, ulps);
 
         y = chebyshev_clenshaw_recurrence(c01.data(), c01.size(), x);
-        CHECK_ULP_CLOSE(y, chebyshev_t(0, x), ulps);
+        CHECK_ULP_CLOSE(expected, y, ulps);
+        y = chebyshev_clenshaw_recurrence(c01.data(), c01.size(), Real(-1), Real(1), x);
+        CHECK_ULP_CLOSE(expected, y, ulps);
 
         y = chebyshev_clenshaw_recurrence(c02.data(), c02.size(), x);
-        CHECK_ULP_CLOSE(y, chebyshev_t(0, x), ulps);
+        CHECK_ULP_CLOSE(expected, y, ulps);
+        y = chebyshev_clenshaw_recurrence(c02.data(), c02.size(), Real(-1), Real(1), x);
+        CHECK_ULP_CLOSE(expected, y, ulps);
 
+        expected = chebyshev_t(1,x);
         y = chebyshev_clenshaw_recurrence(c1.data(), c1.size(), x);
-        CHECK_ULP_CLOSE(y, chebyshev_t(1, x), ulps);
+        CHECK_ULP_CLOSE(expected, y, ulps);
+        y = chebyshev_clenshaw_recurrence(c1.data(), c1.size(), Real(-1), Real(1), x);
+        CHECK_ULP_CLOSE(expected, y, ulps);
 
+        expected = chebyshev_t(2, x);
         y = chebyshev_clenshaw_recurrence(c2.data(), c2.size(), x);
-        CHECK_ULP_CLOSE(y, chebyshev_t(2, x), ulps);
+        CHECK_ULP_CLOSE(expected, y, ulps);
+        y = chebyshev_clenshaw_recurrence(c2.data(), c2.size(), Real(-1), Real(1), x);
+        CHECK_ULP_CLOSE(expected, y, ulps);
 
+        expected = chebyshev_t(3, x);
         y = chebyshev_clenshaw_recurrence(c3.data(), c3.size(), x);
-        CHECK_ULP_CLOSE(y, chebyshev_t(3, x), ulps);
+        CHECK_ULP_CLOSE(expected, y, ulps);
+        y = chebyshev_clenshaw_recurrence(c3.data(), c3.size(), Real(-1), Real(1), x);
+        CHECK_ULP_CLOSE(expected, y, ulps);
 
+        expected = chebyshev_t(4, x);
         y = chebyshev_clenshaw_recurrence(c4.data(), c4.size(), x);
-        CHECK_ULP_CLOSE(y, chebyshev_t(4, x), ulps);
+        CHECK_ULP_CLOSE(expected, y, ulps);
+        y = chebyshev_clenshaw_recurrence(c4.data(), c4.size(), Real(-1), Real(1), x);
+        CHECK_ULP_CLOSE(expected, y, ulps);
 
+        expected = chebyshev_t(5, x);
         y = chebyshev_clenshaw_recurrence(c5.data(), c5.size(), x);
-        CHECK_ULP_CLOSE(y, chebyshev_t(5, x), ulps);
+        CHECK_ULP_CLOSE(expected, y, ulps);
+        y = chebyshev_clenshaw_recurrence(c5.data(), c5.size(), Real(-1), Real(1), x);
+        CHECK_ULP_CLOSE(expected, y, ulps);
 
+        expected = chebyshev_t(6, x);
         y = chebyshev_clenshaw_recurrence(c6.data(), c6.size(), x);
-        CHECK_ULP_CLOSE(y, chebyshev_t(6, x), ulps);
+        CHECK_ULP_CLOSE(expected, y, ulps);
+        y = chebyshev_clenshaw_recurrence(c6.data(), c6.size(), Real(-1), Real(1), x);
+        CHECK_ULP_CLOSE(expected, y, ulps);
 
         x += static_cast<Real>(1)/static_cast<Real>(1 << 7);
     }
