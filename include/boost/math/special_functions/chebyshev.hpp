@@ -195,6 +195,9 @@ inline Real unchecked_chebyshev_clenshaw_recurrence(const Real* const c, size_t 
         }
         else
         {
+            if (length == 2) {
+                return c[0]/2 + c[1]*t;
+            }
             Real b = c[length -1];
             Real d = b;
             Real b2 = b;
@@ -225,6 +228,9 @@ inline Real unchecked_chebyshev_clenshaw_recurrence(const Real* const c, size_t 
         }
         else
         {
+            if (length == 2) {
+                return c[0]/2 + c[1]*t;
+            }
             Real b = c[length -1];
             Real d = b;
             Real b2 = b;
@@ -248,7 +254,6 @@ inline Real chebyshev_clenshaw_recurrence(const Real* const c, size_t length, co
     {
         throw std::domain_error("x in [a, b] is required.");
     }
-    using std::abs;
     if (length < 2)
     {
         if (length == 0)
