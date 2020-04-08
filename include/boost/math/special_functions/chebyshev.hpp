@@ -195,12 +195,9 @@ inline Real unchecked_chebyshev_clenshaw_recurrence(const Real* const c, size_t 
         }
         else
         {
-            if (length == 2) {
-                return c[0]/2 + c[1]*t;
-            }
             Real b = c[length -1];
             Real d = b;
-            Real b2 = b;
+            Real b2 = 0;
             for (size_t r = length - 2; r >= 1; --r)
             {
                 d = 2*u*b - d + c[r];
@@ -228,12 +225,9 @@ inline Real unchecked_chebyshev_clenshaw_recurrence(const Real* const c, size_t 
         }
         else
         {
-            if (length == 2) {
-                return c[0]/2 + c[1]*t;
-            }
             Real b = c[length -1];
             Real d = b;
-            Real b2 = b;
+            Real b2 = 0;
             for (size_t r = length - 2; r >= 1; --r)
             {
                 d = 2*u*b + d + c[r];
