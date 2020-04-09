@@ -62,96 +62,17 @@ template<class F, typename PreciseReal, typename CoarseReal>
 class ulp_plot {
 public:
     ulp_plot(F hi_acc_impl, CoarseReal a, CoarseReal b,
-             bool perturb_abscissas = true, size_t samples = 10000, int random_seed = -1)
-    {
-        static_assert(sizeof(PreciseReal) >= sizeof(CoarseReal), "PreciseReal must have larger size than CoarseReal");
-        if (samples < 10)
-        {
-            throw std::domain_error("Must have at least 10 samples, samples = " + std::to_string(samples));
-        }
-        if (b <= a)
-        {
-            throw std::domain_error("On interval [a,b], b > a is required.");
-        }
-        a_ = a;
-        b_ = b;
+             bool perturb_abscissas = true, size_t samples = 10000, int random_seed = -1);
 
-        std::mt19937_64 gen;
-        if (random_seed == -1)
-        {
-            std::random_device rd;
-            gen.seed(rd());
-        }
-        // Boost's uniform_real_distribution can generate quad and multiprecision random numbers; std's cannot:
-        boost::random::uniform_real_distribution<PreciseReal> dis(a, b);
-        precise_abscissas_.resize(samples);
-        coarse_abscissas_.resize(samples);
+    void set_clip(int clip);
 
-        if (perturb_abscissas)
-        {
-            for(size_t i = 0; i < samples; ++i)
-            {
-                precise_abscissas_[i] = dis(gen);
-            }
-            std::sort(precise_abscissas_.begin(), precise_abscissas_.end());
-            for (size_t i = 0; i < samples; ++i)
-            {
-                coarse_abscissas_[i] = static_cast<CoarseReal>(precise_abscissas_[i]);
-            }
-        }
-        else
-        {
-            for(size_t i = 0; i < samples; ++i)
-            {
-                coarse_abscissas_[i] = static_cast<CoarseReal>(dis(gen));
-            }
-            std::sort(coarse_abscissas_.begin(), coarse_abscissas_.end());
-            for (size_t i = 0; i < samples; ++i)
-            {
-                precise_abscissas_[i] = coarse_abscissas_[i];
-            }
-        }
+    void set_width(int width);
 
-        precise_ordinates_.resize(samples);
-        for (size_t i = 0; i < samples; ++i)
-        {
-            precise_ordinates_[i] = hi_acc_impl(precise_abscissas_[i]);
-        }
+    void set_envelope_color(std::string const & color);
 
-        cond_.resize(samples, std::numeric_limits<PreciseReal>::quiet_NaN());
-        for (size_t i = 0 ; i < samples; ++i)
-        {
-            PreciseReal y = precise_ordinates_[i];
-            if (y != 0)
-            {
-                cond_[i] = boost::math::tools::evaluation_condition_number(hi_acc_impl, precise_abscissas_[i]);
-                // Half-ULP accuracy is the correctly rounded result, so make sure the envelop doesn't go below this:
-                if (cond_[i] < 0.5)
-                {
-                    cond_[i] = 0.5;
-                }
-            }
-            // else leave it as nan.
-        }
-        clip_ = -1;
-        width_ = 1100;
-        envelope_color_ = "chartreuse";
-    }
+    void set_title(std::string const & title);
 
-    void set_clip(int clip)
-    {
-        clip_ = clip;
-    }
-
-    void set_width(int width)
-    {
-        width_ = width;
-    }
-
-    void set_envelope_color(std::string const & color)
-    {
-        envelope_color_ = color;
-    }
+    void write_ulp_envelope(bool write_ulp);
 
     template<class G>
     void add_fn(G g, std::string const & color = "steelblue")
@@ -172,8 +93,11 @@ public:
         return;
     }
 
-    void write(std::string const & filename, bool ulp_envelope = true, std::string const & title = "",
-               int horizontal_lines = 8, int vertical_lines = 10)
+    void set_horizontal_lines(int horizontal_lines);
+
+    void set_vertical_lines(int vertical_lines);
+
+    void write(std::string const & filename)
     {
         using std::abs;
         using std::floor;
@@ -224,7 +148,7 @@ public:
         int height = floor(double(width_)/1.61803);
         int margin_top = 40;
         int margin_left = 25;
-        if (title.size() == 0)
+        if (title_.size() == 0)
         {
             margin_top = 10;
             margin_left = 15;
@@ -253,12 +177,12 @@ public:
            << height << "'>\n"
            << "<style>svg { background-color: black; }\n"
            << "</style>\n";
-        if (title.size() > 0)
+        if (title_.size() > 0)
         {
             fs << "<text x='" << floor(width_/2)
                << "' y='" << floor(margin_top/2)
                << "' font-family='Palatino' font-size='25' fill='white'  alignment-baseline='middle' text-anchor='middle'>"
-               << title
+               << title_
                << "</text>\n";
         }
 
@@ -274,7 +198,7 @@ public:
 
         if (worst_ulp_distance > 3)
         {
-            detail::write_gridlines(fs, horizontal_lines, vertical_lines, x_scale, y_scale, a_, b_,
+            detail::write_gridlines(fs, horizontal_lines_, vertical_lines_, x_scale, y_scale, a_, b_,
                                     static_cast<CoarseReal>(min_y), static_cast<CoarseReal>(max_y), graph_width, graph_height, margin_left);
         }
         else
@@ -296,9 +220,9 @@ public:
                        <<  std::setprecision(4) << y_cord_dataspace << "</text>\n";
                 }
             }
-            for (int i = 1; i <= vertical_lines; ++i)
+            for (int i = 1; i <= vertical_lines_; ++i)
             {
-                CoarseReal x_cord_dataspace = a_ +  ((b_ - a_)*i)/vertical_lines;
+                CoarseReal x_cord_dataspace = a_ +  ((b_ - a_)*i)/vertical_lines_;
                 CoarseReal x = x_scale(x_cord_dataspace);
                 fs << "<line x1='" << x << "' y1='0' x2='" << x
                    << "' y2='" << graph_height
@@ -330,7 +254,7 @@ public:
             }
         }
 
-        if (ulp_envelope)
+        if (ulp_envelope_)
         {
             write_ulp_envelope(fs, x_scale, y_scale);
         }
@@ -426,7 +350,137 @@ private:
     int clip_;
     int width_;
     std::string envelope_color_;
+    bool ulp_envelope_;
+    int horizontal_lines_;
+    int vertical_lines_;
+    std::string title_;
 };
+
+template<class F, typename PreciseReal, typename CoarseReal>
+void ulp_plot<F, PreciseReal, CoarseReal>::set_envelope_color(std::string const & color)
+{
+    envelope_color_ = color;
+}
+
+template<class F, typename PreciseReal, typename CoarseReal>
+void ulp_plot<F, PreciseReal, CoarseReal>::set_clip(int clip)
+{
+    clip_ = clip;
+}
+
+template<class F, typename PreciseReal, typename CoarseReal>
+void ulp_plot<F, PreciseReal, CoarseReal>::set_width(int width)
+{
+    width_ = width;
+}
+
+template<class F, typename PreciseReal, typename CoarseReal>
+void ulp_plot<F, PreciseReal, CoarseReal>::set_horizontal_lines(int horizontal_lines)
+{
+    horizontal_lines_ = horizontal_lines;
+}
+
+template<class F, typename PreciseReal, typename CoarseReal>
+void ulp_plot<F, PreciseReal, CoarseReal>::set_vertical_lines(int vertical_lines)
+{
+    vertical_lines_ = vertical_lines;
+}
+
+template<class F, typename PreciseReal, typename CoarseReal>
+void ulp_plot<F, PreciseReal, CoarseReal>::set_title(std::string const & title)
+{
+    title_ = title;
+}
+
+template<class F, typename PreciseReal, typename CoarseReal>
+void ulp_plot<F, PreciseReal, CoarseReal>::write_ulp_envelope(bool write_ulp_envelope)
+{
+    ulp_envelope_ = write_ulp_envelope;
+}
+
+template<class F, typename PreciseReal, typename CoarseReal>
+ulp_plot<F, PreciseReal, CoarseReal>::ulp_plot(F hi_acc_impl, CoarseReal a, CoarseReal b,
+             bool perturb_abscissas, size_t samples, int random_seed)
+{
+    static_assert(sizeof(PreciseReal) >= sizeof(CoarseReal), "PreciseReal must have larger size than CoarseReal");
+    if (samples < 10)
+    {
+        throw std::domain_error("Must have at least 10 samples, samples = " + std::to_string(samples));
+    }
+    if (b <= a)
+    {
+        throw std::domain_error("On interval [a,b], b > a is required.");
+    }
+    a_ = a;
+    b_ = b;
+
+    std::mt19937_64 gen;
+    if (random_seed == -1)
+    {
+        std::random_device rd;
+        gen.seed(rd());
+    }
+    // Boost's uniform_real_distribution can generate quad and multiprecision random numbers; std's cannot:
+    boost::random::uniform_real_distribution<PreciseReal> dis(a, b);
+    precise_abscissas_.resize(samples);
+    coarse_abscissas_.resize(samples);
+
+    if (perturb_abscissas)
+    {
+        for(size_t i = 0; i < samples; ++i)
+        {
+            precise_abscissas_[i] = dis(gen);
+        }
+        std::sort(precise_abscissas_.begin(), precise_abscissas_.end());
+        for (size_t i = 0; i < samples; ++i)
+        {
+            coarse_abscissas_[i] = static_cast<CoarseReal>(precise_abscissas_[i]);
+        }
+    }
+    else
+    {
+        for(size_t i = 0; i < samples; ++i)
+        {
+            coarse_abscissas_[i] = static_cast<CoarseReal>(dis(gen));
+        }
+        std::sort(coarse_abscissas_.begin(), coarse_abscissas_.end());
+        for (size_t i = 0; i < samples; ++i)
+        {
+            precise_abscissas_[i] = coarse_abscissas_[i];
+        }
+    }
+
+    precise_ordinates_.resize(samples);
+    for (size_t i = 0; i < samples; ++i)
+    {
+        precise_ordinates_[i] = hi_acc_impl(precise_abscissas_[i]);
+    }
+
+    cond_.resize(samples, std::numeric_limits<PreciseReal>::quiet_NaN());
+    for (size_t i = 0 ; i < samples; ++i)
+    {
+        PreciseReal y = precise_ordinates_[i];
+        if (y != 0)
+        {
+            cond_[i] = boost::math::tools::evaluation_condition_number(hi_acc_impl, precise_abscissas_[i]);
+            // Half-ULP accuracy is the correctly rounded result, so make sure the envelop doesn't go below this:
+            if (cond_[i] < 0.5)
+            {
+                cond_[i] = 0.5;
+            }
+        }
+        // else leave it as nan.
+    }
+    clip_ = -1;
+    width_ = 1100;
+    envelope_color_ = "chartreuse";
+    ulp_envelope_ = true;
+    horizontal_lines_ = 8;
+    vertical_lines_ = 10;
+    title_ = "";
+}
+
+
 
 } // namespace boost::math::tools
 #endif
