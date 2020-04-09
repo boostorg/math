@@ -5,6 +5,7 @@
 #ifndef BOOST_MATH_TOOLS_ULP_PLOT_HPP
 #define BOOST_MATH_TOOLS_ULP_PLOT_HPP
 #include <algorithm>
+#include <iostream>
 #include <iomanip>
 #include <cassert>
 #include <vector>
@@ -13,8 +14,10 @@
 #include <string>
 #include <list>
 #include <random>
+#include <stdexcept>
 #include <boost/math/tools/condition_numbers.hpp>
 #include <boost/random/uniform_real_distribution.hpp>
+#include <boost/algorithm/string/predicate.hpp>
 
 
 // Design of this function comes from:
@@ -26,7 +29,7 @@ namespace boost::math::tools {
 
 namespace detail {
 template<class F1, class F2, class Real>
-void write_gridlines(std::ofstream& fs, int horizontal_lines, int vertical_lines,
+void write_gridlines(std::ostream& fs, int horizontal_lines, int vertical_lines,
                      F1 x_scale, F2 y_scale, Real min_x, Real max_x, Real min_y, Real max_y,
                      int graph_width, int graph_height, int margin_left)
 {
@@ -97,24 +100,26 @@ public:
 
     void set_vertical_lines(int vertical_lines);
 
-    void write(std::string const & filename)
+    void write(std::string const & filename) const;
+
+    friend std::ostream& operator<<(std::ostream& fs, ulp_plot const & plot)
     {
         using std::abs;
         using std::floor;
         using std::isnan;
-        if (ulp_list_.size() == 0)
+        if (plot.ulp_list_.size() == 0)
         {
             throw std::domain_error("No functions added for comparison.");
         }
-        if (width_ <= 1)
+        if (plot.width_ <= 1)
         {
-            throw std::domain_error("Width = " + std::to_string(width_) + ", which is too small.");
+            throw std::domain_error("Width = " + std::to_string(plot.width_) + ", which is too small.");
         }
 
         PreciseReal worst_ulp_distance = 0;
         PreciseReal min_y = std::numeric_limits<PreciseReal>::max();
         PreciseReal max_y = std::numeric_limits<PreciseReal>::lowest();
-        for (auto const & ulp_vec : ulp_list_)
+        for (auto const & ulp_vec : plot.ulp_list_)
         {
             for (auto const & ulp : ulp_vec)
             {
@@ -133,22 +138,22 @@ public:
             }
         }
 
-        if (clip_ > 0)
+        if (plot.clip_ > 0)
         {
-            if (max_y > clip_)
+            if (max_y > plot.clip_)
             {
-                max_y = clip_;
+                max_y = plot.clip_;
             }
-            if (min_y < -clip_)
+            if (min_y < -plot.clip_)
             {
-                min_y = -clip_;
+                min_y = -plot.clip_;
             }
         }
 
-        int height = floor(double(width_)/1.61803);
+        int height = floor(double(plot.width_)/1.61803);
         int margin_top = 40;
         int margin_left = 25;
-        if (title_.size() == 0)
+        if (plot.title_.size() == 0)
         {
             margin_top = 10;
             margin_left = 15;
@@ -156,12 +161,12 @@ public:
         int margin_bottom = 20;
         int margin_right = 20;
         int graph_height = height - margin_bottom - margin_top;
-        int graph_width = width_ - margin_left - margin_right;
+        int graph_width = plot.width_ - margin_left - margin_right;
 
         // Maps [a,b] to [0, graph_width]
         auto x_scale = [&](CoarseReal x)->CoarseReal
         {
-            return ((x-a_)/(b_ - a_))*static_cast<CoarseReal>(graph_width);
+            return ((x-plot.a_)/(plot.b_ - plot.a_))*static_cast<CoarseReal>(graph_width);
         };
 
         auto y_scale = [&](PreciseReal y)->PreciseReal
@@ -169,20 +174,18 @@ public:
             return ((max_y - y)/(max_y - min_y) )*static_cast<PreciseReal>(graph_height);
         };
 
-        std::ofstream fs;
-        fs.open(filename);
         fs << "<?xml version=\"1.0\" encoding='UTF-8' ?>\n"
            << "<svg xmlns='http://www.w3.org/2000/svg' width='"
-           << width_ << "' height='"
+           << plot.width_ << "' height='"
            << height << "'>\n"
            << "<style>svg { background-color: black; }\n"
            << "</style>\n";
-        if (title_.size() > 0)
+        if (plot.title_.size() > 0)
         {
-            fs << "<text x='" << floor(width_/2)
+            fs << "<text x='" << floor(plot.width_/2)
                << "' y='" << floor(margin_top/2)
                << "' font-family='Palatino' font-size='25' fill='white'  alignment-baseline='middle' text-anchor='middle'>"
-               << title_
+               << plot.title_
                << "</text>\n";
         }
 
@@ -198,7 +201,7 @@ public:
 
         if (worst_ulp_distance > 3)
         {
-            detail::write_gridlines(fs, horizontal_lines_, vertical_lines_, x_scale, y_scale, a_, b_,
+            detail::write_gridlines(fs, plot.horizontal_lines_, plot.vertical_lines_, x_scale, y_scale, plot.a_, plot.b_,
                                     static_cast<CoarseReal>(min_y), static_cast<CoarseReal>(max_y), graph_width, graph_height, margin_left);
         }
         else
@@ -220,9 +223,9 @@ public:
                        <<  std::setprecision(4) << y_cord_dataspace << "</text>\n";
                 }
             }
-            for (int i = 1; i <= vertical_lines_; ++i)
+            for (int i = 1; i <= plot.vertical_lines_; ++i)
             {
-                CoarseReal x_cord_dataspace = a_ +  ((b_ - a_)*i)/vertical_lines_;
+                CoarseReal x_cord_dataspace = plot.a_ +  ((plot.b_ - plot.a_)*i)/plot.vertical_lines_;
                 CoarseReal x = x_scale(x_cord_dataspace);
                 fs << "<line x1='" << x << "' y1='0' x2='" << x
                    << "' y2='" << graph_height
@@ -235,107 +238,103 @@ public:
         }
 
         int color_idx = 0;
-        for (auto const & ulp : ulp_list_)
+        for (auto const & ulp : plot.ulp_list_)
         {
-            std::string color = colors_[color_idx++];
+            std::string color = plot.colors_[color_idx++];
             for (size_t j = 0; j < ulp.size(); ++j)
             {
                 if (isnan(ulp[j]))
                 {
                     continue;
                 }
-                if (clip_ > 0 && abs(ulp[j]) > clip_)
+                if (plot.clip_ > 0 && abs(ulp[j]) > plot.clip_)
                 {
                     continue;
                 }
-                CoarseReal x = x_scale(coarse_abscissas_[j]);
+                CoarseReal x = x_scale(plot.coarse_abscissas_[j]);
                 PreciseReal y = y_scale(ulp[j]);
-                fs << "<circle cx='" << x << "' cy='" << y << "' r='1' fill='" << color << "'/>";
+                fs << "<circle cx='" << x << "' cy='" << y << "' r='1' fill='" << color << "'/>\n";
             }
         }
 
-        if (ulp_envelope_)
+        if (plot.ulp_envelope_)
         {
-            write_ulp_envelope(fs, x_scale, y_scale);
+            std::string close_path = "' stroke='"  + plot.envelope_color_ + "' stroke-width='1' fill='none'></path>\n";
+            size_t jstart = 0;
+            if (plot.clip_ > 0)
+            {
+                while (plot.cond_[jstart] > plot.clip_)
+                {
+                    ++jstart;
+                    if (jstart >= plot.cond_.size())
+                    {
+                        goto done;
+                    }
+                }
+            }
+            size_t jmin = jstart;
+        new_top_path:
+            if (jmin >= plot.cond_.size())
+            {
+                goto start_bottom_paths;
+            }
+            fs << "<path d='M" << x_scale(plot.coarse_abscissas_[jmin]) << " " << y_scale(plot.cond_[jmin]);
+
+            for (size_t j = jmin + 1; j < plot.coarse_abscissas_.size(); ++j)
+            {
+                bool bad = isnan(plot.cond_[j]) || (plot.clip_ > 0 && plot.cond_[j] > plot.clip_);
+                if (bad)
+                {
+                    ++j;
+                    while ( (j < plot.coarse_abscissas_.size() - 2) && bad)
+                    {
+                        bad = isnan(plot.cond_[j]) || (plot.clip_ > 0 && plot.cond_[j] > plot.clip_);
+                        ++j;
+                    }
+                    jmin = j;
+                    fs << close_path;
+                    goto new_top_path;
+                }
+
+                CoarseReal t = x_scale(plot.coarse_abscissas_[j]);
+                PreciseReal y = y_scale(plot.cond_[j]);
+                fs << " L" << t << " " << y;
+            }
+            fs << close_path;
+        start_bottom_paths:
+            jmin = jstart;
+        new_bottom_path:
+            if (jmin >= plot.cond_.size())
+            {
+                goto done;
+            }
+            fs << "<path d='M" << x_scale(plot.coarse_abscissas_[jmin]) << " " << y_scale(-plot.cond_[jmin]);
+
+            for (size_t j = jmin + 1; j < plot.coarse_abscissas_.size(); ++j)
+            {
+                bool bad = isnan(plot.cond_[j]) || (plot.clip_ > 0 && plot.cond_[j] > plot.clip_);
+                if (bad)
+                {
+                    ++j;
+                    while ( (j < plot.coarse_abscissas_.size() - 2) && bad)
+                    {
+                        bad = isnan(plot.cond_[j]) || (plot.clip_ > 0 && plot.cond_[j] > plot.clip_);
+                        ++j;
+                    }
+                    jmin = j;
+                    fs << close_path;
+                    goto new_bottom_path;
+                }
+                CoarseReal t = x_scale(plot.coarse_abscissas_[j]);
+                PreciseReal y = y_scale(-plot.cond_[j]);
+                fs << " L" << t << " " << y;
+            }
+            fs << close_path;
         }
+    done:
         fs << "</g>\n"
            << "</svg>\n";
-        fs.close();
-    }
-
-    void write_ulp_envelope(std::ofstream & fs, std::function<CoarseReal(CoarseReal)> x_scale, std::function<PreciseReal(PreciseReal)> y_scale)
-    {
-        std::string close_path = "' stroke='"  + envelope_color_ + "' stroke-width='1' fill='none'></path>\n";
-        size_t jstart = 0;
-        if (clip_ > 0)
-        {
-            while (cond_[jstart] > clip_)
-            {
-                ++jstart;
-                if (jstart >= cond_.size())
-                {
-                    return;
-                }
-            }
-        }
-        size_t jmin = jstart;
-new_top_path:
-        if (jmin >= cond_.size())
-        {
-            goto start_bottom_paths;
-        }
-        fs << "<path d='M" << x_scale(coarse_abscissas_[jmin]) << " " << y_scale(cond_[jmin]);
-
-        for (size_t j = jmin + 1; j < coarse_abscissas_.size(); ++j)
-        {
-            bool bad = isnan(cond_[j]) || (clip_ > 0 && cond_[j] > clip_);
-            if (bad)
-            {
-                ++j;
-                while ( (j < coarse_abscissas_.size() - 2) && bad)
-                {
-                    bad = isnan(cond_[j]) || (clip_ > 0 && cond_[j] > clip_);
-                    ++j;
-                }
-                jmin = j;
-                fs << close_path;
-                goto new_top_path;
-            }
-
-            CoarseReal t = x_scale(coarse_abscissas_[j]);
-            PreciseReal y = y_scale(cond_[j]);
-            fs << " L" << t << " " << y;
-        }
-        fs << close_path;
-start_bottom_paths:
-        jmin = jstart;
-new_bottom_path:
-        if (jmin >= cond_.size())
-        {
-            return;
-        }
-        fs << "<path d='M" << x_scale(coarse_abscissas_[jmin]) << " " << y_scale(-cond_[jmin]);
-
-        for (size_t j = jmin + 1; j < coarse_abscissas_.size(); ++j)
-        {
-            bool bad = isnan(cond_[j]) || (clip_ > 0 && cond_[j] > clip_);
-            if (bad)
-            {
-                ++j;
-                while ( (j < coarse_abscissas_.size() - 2) && bad)
-                {
-                    bad = isnan(cond_[j]) || (clip_ > 0 && cond_[j] > clip_);
-                    ++j;
-                }
-                jmin = j;
-                fs << close_path;
-                goto new_bottom_path;
-            }
-            CoarseReal t = x_scale(coarse_abscissas_[j]);
-            PreciseReal y = y_scale(-cond_[j]);
-            fs << " L" << t << " " << y;
-        }
-        fs << close_path;
+        return fs;
     }
 
 private:
@@ -397,6 +396,19 @@ void ulp_plot<F, PreciseReal, CoarseReal>::write_ulp_envelope(bool write_ulp_env
 {
     ulp_envelope_ = write_ulp_envelope;
 }
+
+template<class F, typename PreciseReal, typename CoarseReal>
+void ulp_plot<F, PreciseReal, CoarseReal>::write(std::string const & filename) const
+{
+    if (!boost::algorithm::ends_with(filename, ".svg"))
+    {
+        throw std::logic_error("Only svg files are supported at this time.");
+    }
+    std::ofstream fs(filename);
+    fs << *this;
+    fs.close();
+}
+
 
 template<class F, typename PreciseReal, typename CoarseReal>
 ulp_plot<F, PreciseReal, CoarseReal>::ulp_plot(F hi_acc_impl, CoarseReal a, CoarseReal b,
