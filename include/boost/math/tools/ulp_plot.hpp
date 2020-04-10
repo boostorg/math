@@ -250,17 +250,15 @@ public:
         {
             std::string close_path = "' stroke='"  + plot.envelope_color_ + "' stroke-width='1' fill='none'></path>\n";
             size_t jstart = 0;
-            if (plot.clip_ > 0)
+            while (plot.cond_[jstart] > max_y)
             {
-                while (plot.cond_[jstart] > plot.clip_)
+                ++jstart;
+                if (jstart >= plot.cond_.size())
                 {
-                    ++jstart;
-                    if (jstart >= plot.cond_.size())
-                    {
-                        goto done;
-                    }
+                    goto done;
                 }
             }
+
             size_t jmin = jstart;
         new_top_path:
             if (jmin >= plot.cond_.size())
@@ -271,13 +269,13 @@ public:
 
             for (size_t j = jmin + 1; j < plot.coarse_abscissas_.size(); ++j)
             {
-                bool bad = isnan(plot.cond_[j]) || (plot.clip_ > 0 && plot.cond_[j] > plot.clip_);
+                bool bad = isnan(plot.cond_[j]) || (plot.cond_[j] > max_y);
                 if (bad)
                 {
                     ++j;
                     while ( (j < plot.coarse_abscissas_.size() - 2) && bad)
                     {
-                        bad = isnan(plot.cond_[j]) || (plot.clip_ > 0 && plot.cond_[j] > plot.clip_);
+                        bad = isnan(plot.cond_[j]) || (plot.cond_[j] > max_y);
                         ++j;
                     }
                     jmin = j;
@@ -301,13 +299,13 @@ public:
 
             for (size_t j = jmin + 1; j < plot.coarse_abscissas_.size(); ++j)
             {
-                bool bad = isnan(plot.cond_[j]) || (plot.clip_ > 0 && plot.cond_[j] > plot.clip_);
+                bool bad = isnan(plot.cond_[j]) || (-plot.cond_[j] < min_y);
                 if (bad)
                 {
                     ++j;
                     while ( (j < plot.coarse_abscissas_.size() - 2) && bad)
                     {
-                        bad = isnan(plot.cond_[j]) || (plot.clip_ > 0 && plot.cond_[j] > plot.clip_);
+                        bad = isnan(plot.cond_[j]) || (-plot.cond_[j] < min_y);
                         ++j;
                     }
                     jmin = j;
