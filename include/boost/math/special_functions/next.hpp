@@ -9,7 +9,8 @@
 #ifdef _MSC_VER
 #pragma once
 #endif
-
+#include <boost/type_traits/is_same.hpp>
+#include <boost/type_traits/is_integral.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
@@ -658,8 +659,35 @@ T float_distance_imp(const T& a, const T& b, const boost::false_type&, const Pol
 template <class T, class U, class Policy>
 inline typename tools::promote_args<T, U>::type float_distance(const T& a, const U& b, const Policy& pol)
 {
-   typedef typename tools::promote_args<T, U>::type result_type;
-   return detail::float_distance_imp(detail::normalize_value(static_cast<result_type>(a), typename detail::has_hidden_guard_digits<result_type>::type()), detail::normalize_value(static_cast<result_type>(b), typename detail::has_hidden_guard_digits<result_type>::type()), boost::integral_constant<bool, !std::numeric_limits<result_type>::is_specialized || (std::numeric_limits<result_type>::radix == 2)>(), pol);
+   //
+   // We allow ONE of a and b to be an integer type, otherwise both must be the SAME type.
+   //
+   BOOST_STATIC_ASSERT_MSG(
+      (boost::is_same<T, U>::value 
+      || (boost::is_integral<T>::value && !boost::is_integral<U>::value) 
+      || (!boost::is_integral<T>::value && boost::is_integral<U>::value)
+      || (std::numeric_limits<T>::is_specialized && std::numeric_limits<U>::is_specialized
+         && (std::numeric_limits<T>::digits == std::numeric_limits<U>::digits)
+         && (std::numeric_limits<T>::radix == std::numeric_limits<U>::radix)
+         && !std::numeric_limits<T>::is_integer && !std::numeric_limits<U>::is_integer)),
+      "Float distance between two different floating point types is undefined.");
+
+   BOOST_IF_CONSTEXPR (!boost::is_same<T, U>::value)
+   {
+      BOOST_IF_CONSTEXPR(boost::is_integral<T>::value)
+      {
+         return float_distance(static_cast<U>(a), b, pol);
+      }
+      else
+      {
+         return float_distance(a, static_cast<T>(b), pol);
+      }
+   }
+   else
+   {
+      typedef typename tools::promote_args<T, U>::type result_type;
+      return detail::float_distance_imp(detail::normalize_value(static_cast<result_type>(a), typename detail::has_hidden_guard_digits<result_type>::type()), detail::normalize_value(static_cast<result_type>(b), typename detail::has_hidden_guard_digits<result_type>::type()), boost::integral_constant<bool, !std::numeric_limits<result_type>::is_specialized || (std::numeric_limits<result_type>::radix == 2)>(), pol);
+   }
 }
 
 template <class T, class U>
