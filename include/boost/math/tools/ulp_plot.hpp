@@ -82,23 +82,7 @@ public:
     void write_ulp_envelope(bool write_ulp);
 
     template<class G>
-    void add_fn(G g, std::string const & color = "steelblue")
-    {
-        using std::abs;
-        size_t samples = precise_abscissas_.size();
-        std::vector<CoarseReal> ulps(samples);
-        for (size_t i = 0; i < samples; ++i)
-        {
-            PreciseReal y_hi_acc = precise_ordinates_[i];
-            PreciseReal y_lo_acc = g(coarse_abscissas_[i]);
-            PreciseReal absy = abs(y_hi_acc);
-            PreciseReal dist = nextafter(static_cast<CoarseReal>(absy), std::numeric_limits<CoarseReal>::max()) - static_cast<CoarseReal>(absy);
-            ulps[i] = static_cast<CoarseReal>((y_lo_acc - y_hi_acc)/dist);
-        }
-        ulp_list_.emplace_back(ulps);
-        colors_.emplace_back(color);
-        return;
-    }
+    void add_fn(G g, std::string const & color = "steelblue");
 
     void set_horizontal_lines(int horizontal_lines);
 
@@ -513,6 +497,27 @@ ulp_plot<F, PreciseReal, CoarseReal>::ulp_plot(F hi_acc_impl, CoarseReal a, Coar
     background_color_ = "black";
     font_color_ = "white";
 }
+
+template<class F, typename PreciseReal, typename CoarseReal>
+template<class G>
+void ulp_plot<F, PreciseReal, CoarseReal>::add_fn(G g, std::string const & color)
+{
+    using std::abs;
+    size_t samples = precise_abscissas_.size();
+    std::vector<CoarseReal> ulps(samples);
+    for (size_t i = 0; i < samples; ++i)
+    {
+        PreciseReal y_hi_acc = precise_ordinates_[i];
+        PreciseReal y_lo_acc = g(coarse_abscissas_[i]);
+        PreciseReal absy = abs(y_hi_acc);
+        PreciseReal dist = nextafter(static_cast<CoarseReal>(absy), std::numeric_limits<CoarseReal>::max()) - static_cast<CoarseReal>(absy);
+        ulps[i] = static_cast<CoarseReal>((y_lo_acc - y_hi_acc)/dist);
+    }
+    ulp_list_.emplace_back(ulps);
+    colors_.emplace_back(color);
+    return;
+}
+
 
 
 
