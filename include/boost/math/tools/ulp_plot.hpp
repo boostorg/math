@@ -31,7 +31,7 @@ namespace detail {
 template<class F1, class F2, class Real>
 void write_gridlines(std::ostream& fs, int horizontal_lines, int vertical_lines,
                      F1 x_scale, F2 y_scale, Real min_x, Real max_x, Real min_y, Real max_y,
-                     int graph_width, int graph_height, int margin_left)
+                     int graph_width, int graph_height, int margin_left, std::string const & font_color)
 {
   // Make a grid:
   for (int i = 1; i <= horizontal_lines; ++i) {
@@ -42,21 +42,21 @@ void write_gridlines(std::ostream& fs, int horizontal_lines, int vertical_lines,
          << "' stroke='gray' stroke-width='1' opacity='0.5' stroke-dasharray='4' />\n";
 
       fs << "<text x='" <<  -margin_left/4 + 5 << "' y='" << y - 3
-         << "' font-family='times' font-size='10' fill='white' transform='rotate(-90 "
+         << "' font-family='times' font-size='10' fill='" << font_color << "' transform='rotate(-90 "
          << -margin_left/4 + 8 << " " << y + 5 << ")'>"
          << std::setprecision(4) << y_cord_dataspace << "</text>\n";
    }
 
-   for (int i = 1; i <= vertical_lines; ++i) {
-       Real x_cord_dataspace = min_x +  ((max_x - min_x)*i)/vertical_lines;
-       Real x = x_scale(x_cord_dataspace);
-       fs << "<line x1='" << x << "' y1='0' x2='" << x
-          << "' y2='" << graph_height
-          << "' stroke='gray' stroke-width='1' opacity='0.5' stroke-dasharray='4' />\n";
+    for (int i = 1; i <= vertical_lines; ++i) {
+        Real x_cord_dataspace = min_x +  ((max_x - min_x)*i)/vertical_lines;
+        Real x = x_scale(x_cord_dataspace);
+        fs << "<line x1='" << x << "' y1='0' x2='" << x
+           << "' y2='" << graph_height
+           << "' stroke='gray' stroke-width='1' opacity='0.5' stroke-dasharray='4' />\n";
 
         fs << "<text x='" <<  x - 10  << "' y='" << graph_height + 10
-             << "' font-family='times' font-size='10' fill='white'>"
-             << std::setprecision(4) << x_cord_dataspace << "</text>\n";
+           << "' font-family='times' font-size='10' fill='" << font_color << "'>"
+           << std::setprecision(4) << x_cord_dataspace << "</text>\n";
     }
 }
 }
@@ -74,6 +74,10 @@ public:
     void set_envelope_color(std::string const & color);
 
     void set_title(std::string const & title);
+
+    void set_background_color(std::string const & background_color);
+
+    void set_font_color(std::string const & font_color);
 
     void write_ulp_envelope(bool write_ulp);
 
@@ -178,13 +182,14 @@ public:
            << "<svg xmlns='http://www.w3.org/2000/svg' width='"
            << plot.width_ << "' height='"
            << height << "'>\n"
-           << "<style>svg { background-color: black; }\n"
+           << "<style>\nsvg { background-color:" << plot.background_color_ << "; }\n"
            << "</style>\n";
         if (plot.title_.size() > 0)
         {
             fs << "<text x='" << floor(plot.width_/2)
                << "' y='" << floor(margin_top/2)
-               << "' font-family='Palatino' font-size='25' fill='white'  alignment-baseline='middle' text-anchor='middle'>"
+               << "' font-family='Palatino' font-size='25' fill='"
+               << plot.font_color_  << "'  alignment-baseline='middle' text-anchor='middle'>"
                << plot.title_
                << "</text>\n";
         }
@@ -202,7 +207,7 @@ public:
         if (worst_ulp_distance > 3)
         {
             detail::write_gridlines(fs, plot.horizontal_lines_, plot.vertical_lines_, x_scale, y_scale, plot.a_, plot.b_,
-                                    static_cast<CoarseReal>(min_y), static_cast<CoarseReal>(max_y), graph_width, graph_height, margin_left);
+                                    static_cast<CoarseReal>(min_y), static_cast<CoarseReal>(max_y), graph_width, graph_height, margin_left, plot.font_color_);
         }
         else
         {
@@ -218,7 +223,7 @@ public:
                        << "' stroke='gray' stroke-width='1' opacity='0.5' stroke-dasharray='4' />\n";
 
                     fs << "<text x='" <<  -margin_left/2 << "' y='" << y - 3
-                       << "' font-family='times' font-size='10' fill='white' transform='rotate(-90 "
+                       << "' font-family='times' font-size='10' fill='" << plot.font_color_ << "' transform='rotate(-90 "
                        << -margin_left/2 + 11 << " " << y + 5 << ")'>"
                        <<  std::setprecision(4) << y_cord_dataspace << "</text>\n";
                 }
@@ -232,7 +237,7 @@ public:
                    << "' stroke='gray' stroke-width='1' opacity='0.5' stroke-dasharray='4' />\n";
 
                 fs << "<text x='" <<  x - 10  << "' y='" << graph_height + 10
-                   << "' font-family='times' font-size='10' fill='white'>"
+                   << "' font-family='times' font-size='10' fill='" << plot.font_color_ << "'>"
                    << std::setprecision(4) << x_cord_dataspace << "</text>\n";
             }
         }
@@ -353,6 +358,8 @@ private:
     int horizontal_lines_;
     int vertical_lines_;
     std::string title_;
+    std::string background_color_;
+    std::string font_color_;
 };
 
 template<class F, typename PreciseReal, typename CoarseReal>
@@ -389,6 +396,18 @@ template<class F, typename PreciseReal, typename CoarseReal>
 void ulp_plot<F, PreciseReal, CoarseReal>::set_title(std::string const & title)
 {
     title_ = title;
+}
+
+template<class F, typename PreciseReal, typename CoarseReal>
+void ulp_plot<F, PreciseReal, CoarseReal>::set_background_color(std::string const & background_color)
+{
+    background_color_ = background_color;
+}
+
+template<class F, typename PreciseReal, typename CoarseReal>
+void ulp_plot<F, PreciseReal, CoarseReal>::set_font_color(std::string const & font_color)
+{
+    font_color_ = font_color;
 }
 
 template<class F, typename PreciseReal, typename CoarseReal>
@@ -490,6 +509,8 @@ ulp_plot<F, PreciseReal, CoarseReal>::ulp_plot(F hi_acc_impl, CoarseReal a, Coar
     horizontal_lines_ = 8;
     vertical_lines_ = 10;
     title_ = "";
+    background_color_ = "black";
+    font_color_ = "white";
 }
 
 

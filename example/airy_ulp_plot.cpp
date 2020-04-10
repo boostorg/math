@@ -22,6 +22,11 @@ int main() {
     plot.set_title(title);
     plot.set_vertical_lines(6);
     plot.add_fn(ai_coarse);
-    std::cout << plot << "\n";
+    std::cout << plot;
+    plot.write(filename);
+
+    plot.set_background_color("white");
+    plot.set_font_color("black");
+    filename =  "airy_ai_" + boost::core::demangle(typeid(CoarseReal).name()) + "_white.svg";
     plot.write(filename);
 }
