@@ -493,7 +493,8 @@ ulp_plot<F, PreciseReal, CoarseReal>::ulp_plot(F hi_acc_impl, CoarseReal a, Coar
         PreciseReal y = precise_ordinates_[i];
         if (y != 0)
         {
-            cond_[i] = boost::math::tools::evaluation_condition_number(hi_acc_impl, precise_abscissas_[i]);
+            // Maybe cond_ is badly names; should it be half_cond_?
+            cond_[i] = boost::math::tools::evaluation_condition_number(hi_acc_impl, precise_abscissas_[i])/2;
             // Half-ULP accuracy is the correctly rounded result, so make sure the envelop doesn't go below this:
             if (cond_[i] < 0.5)
             {
