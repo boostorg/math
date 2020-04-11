@@ -3,11 +3,11 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 #include <iostream>
-#include <boost/math/tools/ulp_plot.hpp>
+#include <boost/math/tools/ulps_plot.hpp>
 #include <boost/core/demangle.hpp>
 #include <boost/math/special_functions/airy.hpp>
 
-using boost::math::tools::ulp_plot;
+using boost::math::tools::ulps_plot;
 
 int main() {
     using PreciseReal = long double;
@@ -27,7 +27,7 @@ int main() {
     // Or should we compute both the high precision and low precision function at a low precision representable x̂?
     // If we are displaying an ULP envelope, it makes sense to perturb the abscissas.
     bool perturb_abscissas = true;
-    auto plot = ulp_plot<decltype(ai_precise), PreciseReal, CoarseReal>(ai_precise, CoarseReal(-3), CoarseReal(3), perturb_abscissas, samples);
+    auto plot = ulps_plot<decltype(ai_precise), PreciseReal, CoarseReal>(ai_precise, CoarseReal(-3), CoarseReal(3), samples, perturb_abscissas);
     plot.set_clip(clip);
     plot.set_width(width);
     // Sometimes it's useful to set a title, but in many cases it's more useful to just use a caption (then no title required)
@@ -36,7 +36,7 @@ int main() {
     plot.set_vertical_lines(6);
     plot.add_fn(ai_coarse);
     // You can write the plot to a stream:
-    std::cout << plot;
+    //std::cout << plot;
     // Or to a file:
     plot.write(filename);
 

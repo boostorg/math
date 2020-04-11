@@ -23,7 +23,7 @@
 // Design of this function comes from:
 // https://blogs.mathworks.com/cleve/2017/01/23/ulps-plots-reveal-math-function-accurary/
 
-// The envelope is the condition number of function evaluation.
+// The envelope is the maximum of 1/2 and half the condition number of function evaluation.
 
 namespace boost::math::tools {
 
@@ -62,10 +62,10 @@ void write_gridlines(std::ostream& fs, int horizontal_lines, int vertical_lines,
 }
 
 template<class F, typename PreciseReal, typename CoarseReal>
-class ulp_plot {
+class ulps_plot {
 public:
-    ulp_plot(F hi_acc_impl, CoarseReal a, CoarseReal b,
-             bool perturb_abscissas = true, size_t samples = 10000, int random_seed = -1);
+    ulps_plot(F hi_acc_impl, CoarseReal a, CoarseReal b,
+             size_t samples = 10000, bool perturb_abscissas = true, int random_seed = -1);
 
     void set_clip(int clip);
 
@@ -90,7 +90,7 @@ public:
 
     void write(std::string const & filename) const;
 
-    friend std::ostream& operator<<(std::ostream& fs, ulp_plot const & plot)
+    friend std::ostream& operator<<(std::ostream& fs, ulps_plot const & plot)
     {
         using std::abs;
         using std::floor;
@@ -345,61 +345,61 @@ private:
 };
 
 template<class F, typename PreciseReal, typename CoarseReal>
-void ulp_plot<F, PreciseReal, CoarseReal>::set_envelope_color(std::string const & color)
+void ulps_plot<F, PreciseReal, CoarseReal>::set_envelope_color(std::string const & color)
 {
     envelope_color_ = color;
 }
 
 template<class F, typename PreciseReal, typename CoarseReal>
-void ulp_plot<F, PreciseReal, CoarseReal>::set_clip(int clip)
+void ulps_plot<F, PreciseReal, CoarseReal>::set_clip(int clip)
 {
     clip_ = clip;
 }
 
 template<class F, typename PreciseReal, typename CoarseReal>
-void ulp_plot<F, PreciseReal, CoarseReal>::set_width(int width)
+void ulps_plot<F, PreciseReal, CoarseReal>::set_width(int width)
 {
     width_ = width;
 }
 
 template<class F, typename PreciseReal, typename CoarseReal>
-void ulp_plot<F, PreciseReal, CoarseReal>::set_horizontal_lines(int horizontal_lines)
+void ulps_plot<F, PreciseReal, CoarseReal>::set_horizontal_lines(int horizontal_lines)
 {
     horizontal_lines_ = horizontal_lines;
 }
 
 template<class F, typename PreciseReal, typename CoarseReal>
-void ulp_plot<F, PreciseReal, CoarseReal>::set_vertical_lines(int vertical_lines)
+void ulps_plot<F, PreciseReal, CoarseReal>::set_vertical_lines(int vertical_lines)
 {
     vertical_lines_ = vertical_lines;
 }
 
 template<class F, typename PreciseReal, typename CoarseReal>
-void ulp_plot<F, PreciseReal, CoarseReal>::set_title(std::string const & title)
+void ulps_plot<F, PreciseReal, CoarseReal>::set_title(std::string const & title)
 {
     title_ = title;
 }
 
 template<class F, typename PreciseReal, typename CoarseReal>
-void ulp_plot<F, PreciseReal, CoarseReal>::set_background_color(std::string const & background_color)
+void ulps_plot<F, PreciseReal, CoarseReal>::set_background_color(std::string const & background_color)
 {
     background_color_ = background_color;
 }
 
 template<class F, typename PreciseReal, typename CoarseReal>
-void ulp_plot<F, PreciseReal, CoarseReal>::set_font_color(std::string const & font_color)
+void ulps_plot<F, PreciseReal, CoarseReal>::set_font_color(std::string const & font_color)
 {
     font_color_ = font_color;
 }
 
 template<class F, typename PreciseReal, typename CoarseReal>
-void ulp_plot<F, PreciseReal, CoarseReal>::write_ulp_envelope(bool write_ulp_envelope)
+void ulps_plot<F, PreciseReal, CoarseReal>::write_ulp_envelope(bool write_ulp_envelope)
 {
     ulp_envelope_ = write_ulp_envelope;
 }
 
 template<class F, typename PreciseReal, typename CoarseReal>
-void ulp_plot<F, PreciseReal, CoarseReal>::write(std::string const & filename) const
+void ulps_plot<F, PreciseReal, CoarseReal>::write(std::string const & filename) const
 {
     if (!boost::algorithm::ends_with(filename, ".svg"))
     {
@@ -412,8 +412,8 @@ void ulp_plot<F, PreciseReal, CoarseReal>::write(std::string const & filename) c
 
 
 template<class F, typename PreciseReal, typename CoarseReal>
-ulp_plot<F, PreciseReal, CoarseReal>::ulp_plot(F hi_acc_impl, CoarseReal a, CoarseReal b,
-             bool perturb_abscissas, size_t samples, int random_seed)
+ulps_plot<F, PreciseReal, CoarseReal>::ulps_plot(F hi_acc_impl, CoarseReal a, CoarseReal b,
+             size_t samples, bool perturb_abscissas, int random_seed)
 {
     static_assert(sizeof(PreciseReal) >= sizeof(CoarseReal), "PreciseReal must have larger size than CoarseReal");
     if (samples < 10)
@@ -498,7 +498,7 @@ ulp_plot<F, PreciseReal, CoarseReal>::ulp_plot(F hi_acc_impl, CoarseReal a, Coar
 
 template<class F, typename PreciseReal, typename CoarseReal>
 template<class G>
-void ulp_plot<F, PreciseReal, CoarseReal>::add_fn(G g, std::string const & color)
+void ulps_plot<F, PreciseReal, CoarseReal>::add_fn(G g, std::string const & color)
 {
     using std::abs;
     size_t samples = precise_abscissas_.size();

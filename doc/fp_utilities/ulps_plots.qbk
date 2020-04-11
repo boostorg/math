@@ -5,19 +5,19 @@
   http://www.boost.org/LICENSE_1_0.txt).
 ]
 
-[section:ulp_plots ULP Plots]
+[section:ulps_plots ULPs Plots]
 
 [h4 Synopsis]
 
-    #include <boost/math/tools/ulp_plot.hpp>
+    #include <boost/math/tools/ulps_plot.hpp>
 
     namespace boost::math::tools {
 
     template<class F, typename PreciseReal, typename CoarseReal>
-    class ulp_plot {
+    class ulps_plot {
     public:
-        ulp_plot(F hi_acc_impl, CoarseReal a, CoarseReal b,
-                bool perturb_abscissas = true, size_t samples = 10000, int random_seed = -1);
+        ulps_plot(F hi_acc_impl, CoarseReal a, CoarseReal b,
+                 size_t samples = 10000, bool perturb_abscissas = true, int random_seed = -1);
 
         void set_clip(int clip);
 
@@ -40,7 +40,7 @@
         template<class G>
         void add_fn(G g, std::string const & color = "steelblue");
 
-        friend std::ostream& operator<<(std::ostream& fs, ulp_plot const & plot)
+        friend std::ostream& operator<<(std::ostream& fs, ulps_plot const & plot)
 
         void write(std::string const & filename) const;
 
@@ -49,13 +49,13 @@
     } // namespaces
 
 
-A ULP plot measures the accuracy of an implementation of a function implemented in floating point arithmetic.
+An ULPs plot measures the accuracy of an implementation of a function implemented in floating point arithmetic.
 ULP stands for /unit in the last place/; i.e., we create a unit system that normalizes the distance between one representable and the next greater representable to 1.
 
 So for example, the ULP distance between `1.0` and `1.0 + std::numeric_limits<double>::epsilon()` is 1, the ulp distance between `1.0` and `1.0 + 2*std::numeric_limits<double>::epsilon()` is 2.
 A key concept of this measurement is /semi-scale invariance/: The ULP distance between `2.0` and `2.0 + 2*std::numeric_limits<double>::epsilon()` is 1, not 2.
 
-A ULP plot gives us an idea of how efficiently we are using the floating point number system we have chosen.
+An ULPs plot gives us an idea of how efficiently we are using the floating point number system we have chosen.
 To compute a ULP plot, we need a higher precision implementation; for example we can test a 32 bit floating point implementation against an 80-bit long double implementation.
 The higher precision value is computed in the template type `PreciseReal`, and the lower precision value is computed in type `CoarseReal`.
 For simplicity, we will refer to the result of the higher precision implementation the exact value, which we will denote by /y/,
@@ -66,7 +66,7 @@ The ULP distance between /y/ and ŷ is then
 
 where μ is the unit roundoff of the `CoarseReal` type.
 
-If every sample in a ULP plot is bounded by ±½, then we have good evidence that we have used our floating point number as efficiently as we can possibly expect:
+If every sample in an ULPs plot is bounded by ±½, then we have good evidence that we have used our floating point number as efficiently as we can possibly expect:
 We are getting the correctly rounded result.
 However, the converse is not true: If there exists samples that are well above the unit roundoff, we do not have evidence that the function is poorly implemented.
 Considering the /y/=0 case makes this obvious, but another more subtle issue is at play.
@@ -87,7 +87,7 @@ We see only a few evaluations outside the ULP envelope.
 Note how the condition number of function evaluation becomes unbounded at the roots of the Airy Ai function.
 
 
-A minimal working example which reproduces the plot above is given [@../../example/airy_ulp_plot.cpp here].
+A minimal working example which reproduces the plot above is given [@../../example/airy_ulps_plot.cpp here].
 
 Note that the graph is written as an SVG. We use `firefox foo.svg` or `open -a Firefox foo.svg` to display these files.
 
