@@ -89,6 +89,15 @@ Note how the condition number of function evaluation becomes unbounded at the ro
 
 A minimal working example which reproduces the plot above is given [@../../example/airy_ulps_plot.cpp here].
 
+Note that you can compare two different implementations of a single function by calling `add_fn` multiple times.
+This will give you a graphical answer to which one is more accurate.
+For example:
+
+    auto plot = ulps_plot<decltype(f), long double, float>(f, 1.0f, 2.0f);
+    plot.add_fn(impl1, "steelblue");
+    plot.add_fn(impl2, "orange");
+
+
 Note that the graph is written as an SVG. We use `firefox foo.svg` or `open -a Firefox foo.svg` to display these files.
 
 [heading References]
