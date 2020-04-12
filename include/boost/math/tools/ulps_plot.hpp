@@ -67,7 +67,7 @@ public:
     ulps_plot(F hi_acc_impl, CoarseReal a, CoarseReal b,
              size_t samples = 10000, bool perturb_abscissas = false, int random_seed = -1);
 
-    ulps_plot& clip(int clip);
+    ulps_plot& clip(PreciseReal clip);
 
     ulps_plot& width(int width);
 
@@ -124,6 +124,15 @@ public:
                     max_y = ulp;
                 }
             }
+        }
+
+        // half-ulp accuracy is the best that can be expected; sometimes we can get less, but barely less.
+        // then the axes don't show up; painful!
+        if (max_y < 0.5) {
+            max_y = 0.5;
+        }
+        if (min_y > -0.5) {
+            min_y = -0.5;
         }
 
         if (plot.clip_ > 0)
@@ -208,7 +217,7 @@ public:
 
                     fs << "<text x='" <<  -margin_left/2 << "' y='" << y - 3
                        << "' font-family='times' font-size='10' fill='" << plot.font_color_ << "' transform='rotate(-90 "
-                       << -margin_left/2 + 11 << " " << y + 5 << ")'>"
+                       << -margin_left/2 + 7 << " " << y << ")'>"
                        <<  std::setprecision(4) << y_cord_dataspace << "</text>\n";
                 }
             }
@@ -333,7 +342,7 @@ private:
     std::vector<std::string> colors_;
     CoarseReal a_;
     CoarseReal b_;
-    int clip_;
+    PreciseReal clip_;
     int width_;
     std::string envelope_color_;
     bool ulp_envelope_;
@@ -352,7 +361,7 @@ ulps_plot<F, PreciseReal, CoarseReal>& ulps_plot<F, PreciseReal, CoarseReal>::en
 }
 
 template<class F, typename PreciseReal, typename CoarseReal>
-ulps_plot<F, PreciseReal, CoarseReal>& ulps_plot<F, PreciseReal, CoarseReal>::clip(int clip)
+ulps_plot<F, PreciseReal, CoarseReal>& ulps_plot<F, PreciseReal, CoarseReal>::clip(PreciseReal clip)
 {
     clip_ = clip;
     return *this;

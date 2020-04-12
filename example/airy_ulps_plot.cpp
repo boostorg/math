@@ -30,7 +30,7 @@ int main() {
     // How many pixels wide do you want your .svg?
     int width = 700;
     // Near a root, we have unbounded relative error. So for functions with roots, we define an ULP clip:
-    int clip = 20;
+    PreciseReal clip = 2.5;
     // Should we perturb the abscissas? i.e., should we compute the high precision function f at x,
     // and the low precision function at the nearest representable x̂ to x?
     // Or should we compute both the high precision and low precision function at a low precision representable x̂?
