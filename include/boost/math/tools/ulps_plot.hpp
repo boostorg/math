@@ -65,28 +65,28 @@ template<class F, typename PreciseReal, typename CoarseReal>
 class ulps_plot {
 public:
     ulps_plot(F hi_acc_impl, CoarseReal a, CoarseReal b,
-             size_t samples = 10000, bool perturb_abscissas = true, int random_seed = -1);
+             size_t samples = 10000, bool perturb_abscissas = false, int random_seed = -1);
 
-    void set_clip(int clip);
+    ulps_plot& clip(int clip);
 
-    void set_width(int width);
+    ulps_plot& width(int width);
 
-    void set_envelope_color(std::string const & color);
+    ulps_plot& envelope_color(std::string const & color);
 
-    void set_title(std::string const & title);
+    ulps_plot& title(std::string const & title);
 
-    void set_background_color(std::string const & background_color);
+    ulps_plot& background_color(std::string const & background_color);
 
-    void set_font_color(std::string const & font_color);
+    ulps_plot& font_color(std::string const & font_color);
 
-    void write_ulp_envelope(bool write_ulp);
+    ulps_plot& ulp_envelope(bool write_ulp);
 
     template<class G>
-    void add_fn(G g, std::string const & color = "steelblue");
+    ulps_plot& add_fn(G g, std::string const & color = "steelblue");
 
-    void set_horizontal_lines(int horizontal_lines);
+    ulps_plot& horizontal_lines(int horizontal_lines);
 
-    void set_vertical_lines(int vertical_lines);
+    ulps_plot& vertical_lines(int vertical_lines);
 
     void write(std::string const & filename) const;
 
@@ -345,57 +345,66 @@ private:
 };
 
 template<class F, typename PreciseReal, typename CoarseReal>
-void ulps_plot<F, PreciseReal, CoarseReal>::set_envelope_color(std::string const & color)
+ulps_plot<F, PreciseReal, CoarseReal>& ulps_plot<F, PreciseReal, CoarseReal>::envelope_color(std::string const & color)
 {
     envelope_color_ = color;
+    return *this;
 }
 
 template<class F, typename PreciseReal, typename CoarseReal>
-void ulps_plot<F, PreciseReal, CoarseReal>::set_clip(int clip)
+ulps_plot<F, PreciseReal, CoarseReal>& ulps_plot<F, PreciseReal, CoarseReal>::clip(int clip)
 {
     clip_ = clip;
+    return *this;
 }
 
 template<class F, typename PreciseReal, typename CoarseReal>
-void ulps_plot<F, PreciseReal, CoarseReal>::set_width(int width)
+ulps_plot<F, PreciseReal, CoarseReal>& ulps_plot<F, PreciseReal, CoarseReal>::width(int width)
 {
     width_ = width;
+    return *this;
 }
 
 template<class F, typename PreciseReal, typename CoarseReal>
-void ulps_plot<F, PreciseReal, CoarseReal>::set_horizontal_lines(int horizontal_lines)
+ulps_plot<F, PreciseReal, CoarseReal>& ulps_plot<F, PreciseReal, CoarseReal>::horizontal_lines(int horizontal_lines)
 {
     horizontal_lines_ = horizontal_lines;
+    return *this;
 }
 
 template<class F, typename PreciseReal, typename CoarseReal>
-void ulps_plot<F, PreciseReal, CoarseReal>::set_vertical_lines(int vertical_lines)
+ulps_plot<F, PreciseReal, CoarseReal>& ulps_plot<F, PreciseReal, CoarseReal>::vertical_lines(int vertical_lines)
 {
     vertical_lines_ = vertical_lines;
+    return *this;
 }
 
 template<class F, typename PreciseReal, typename CoarseReal>
-void ulps_plot<F, PreciseReal, CoarseReal>::set_title(std::string const & title)
+ulps_plot<F, PreciseReal, CoarseReal>& ulps_plot<F, PreciseReal, CoarseReal>::title(std::string const & title)
 {
     title_ = title;
+    return *this;
 }
 
 template<class F, typename PreciseReal, typename CoarseReal>
-void ulps_plot<F, PreciseReal, CoarseReal>::set_background_color(std::string const & background_color)
+ulps_plot<F, PreciseReal, CoarseReal>& ulps_plot<F, PreciseReal, CoarseReal>::background_color(std::string const & background_color)
 {
     background_color_ = background_color;
+    return *this;
 }
 
 template<class F, typename PreciseReal, typename CoarseReal>
-void ulps_plot<F, PreciseReal, CoarseReal>::set_font_color(std::string const & font_color)
+ulps_plot<F, PreciseReal, CoarseReal>& ulps_plot<F, PreciseReal, CoarseReal>::font_color(std::string const & font_color)
 {
     font_color_ = font_color;
+    return *this;
 }
 
 template<class F, typename PreciseReal, typename CoarseReal>
-void ulps_plot<F, PreciseReal, CoarseReal>::write_ulp_envelope(bool write_ulp_envelope)
+ulps_plot<F, PreciseReal, CoarseReal>& ulps_plot<F, PreciseReal, CoarseReal>::ulp_envelope(bool write_ulp_envelope)
 {
     ulp_envelope_ = write_ulp_envelope;
+    return *this;
 }
 
 template<class F, typename PreciseReal, typename CoarseReal>
@@ -498,7 +507,7 @@ ulps_plot<F, PreciseReal, CoarseReal>::ulps_plot(F hi_acc_impl, CoarseReal a, Co
 
 template<class F, typename PreciseReal, typename CoarseReal>
 template<class G>
-void ulps_plot<F, PreciseReal, CoarseReal>::add_fn(G g, std::string const & color)
+ulps_plot<F, PreciseReal, CoarseReal>& ulps_plot<F, PreciseReal, CoarseReal>::add_fn(G g, std::string const & color)
 {
     using std::abs;
     size_t samples = precise_abscissas_.size();
@@ -513,7 +522,7 @@ void ulps_plot<F, PreciseReal, CoarseReal>::add_fn(G g, std::string const & colo
     }
     ulp_list_.emplace_back(ulps);
     colors_.emplace_back(color);
-    return;
+    return *this;
 }
 
 
