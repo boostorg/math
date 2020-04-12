@@ -17,28 +17,28 @@
     class ulps_plot {
     public:
         ulps_plot(F hi_acc_impl, CoarseReal a, CoarseReal b,
-                 size_t samples = 10000, bool perturb_abscissas = true, int random_seed = -1);
+                  size_t samples = 10000, bool perturb_abscissas = false, int random_seed = -1);
 
-        void set_clip(int clip);
+        ulps_plot& clip(int clip);
 
-        void set_width(int width);
+        ulps_plot& width(int width);
 
-        void set_envelope_color(std::string const & color);
+        ulps_plot& envelope_color(std::string const & color);
 
-        void set_title(std::string const & title);
+        ulps_plot& title(std::string const & title);
 
-        void set_background_color(std::string const & background_color);
+        ulps_plot& background_color(std::string const & background_color);
 
-        void set_font_color(std::string const & font_color);
+        ulps_plot& font_color(std::string const & font_color);
 
-        void write_ulp_envelope(bool write_ulp);
+        ulps_plot& ulp_envelope(bool write_ulp);
 
-        void set_horizontal_lines(int horizontal_lines);
+        ulps_plot& horizontal_lines(int horizontal_lines);
 
-        void set_vertical_lines(int vertical_lines);
+        ulps_plot& vertical_lines(int vertical_lines);
 
         template<class G>
-        void add_fn(G g, std::string const & color = "steelblue");
+        ulps_plot& add_fn(G g, std::string const & color = "steelblue");
 
         friend std::ostream& operator<<(std::ostream& fs, ulps_plot const & plot)
 
@@ -84,10 +84,19 @@ Since, in addition, we cannot expect better than half-ULP accuracy, we can creat
 
 The graph shows the ULP accuracy of Boost's implementation of the Airy Ai function.
 We see only a few evaluations outside the ULP envelope.
-Note how the condition number of function evaluation becomes unbounded at the roots of the Airy Ai function.
+Note how the condition number of function evaluation becomes unbounded at the roots.
 
 
 A minimal working example which reproduces the plot above is given [@../../example/airy_ulps_plot.cpp here].
+
+Note that you can compare two different implementations of a single function by calling `add_fn` multiple times.
+This will give you a graphical answer to which one is more accurate.
+For example:
+
+    auto plot = ulps_plot<decltype(f), long double, float>(f, 1.0f, 2.0f);
+    plot.add_fn(impl1, "steelblue");
+    plot.add_fn(impl2, "orange");
+
 
 Note that the graph is written as an SVG. We use `firefox foo.svg` or `open -a Firefox foo.svg` to display these files.
 

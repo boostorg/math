@@ -13,27 +13,35 @@ int main() {
     using PreciseReal = long double;
     using CoarseReal = float;
 
-    auto ai_coarse = boost::math::airy_ai<CoarseReal>;
-    auto ai_precise = boost::math::airy_ai<PreciseReal>;
+    typedef boost::math::policies::policy<
+      boost::math::policies::promote_float<false>,
+      boost::math::policies::promote_double<false> >
+      no_promote_policy;
+
+    auto ai_coarse = [](CoarseReal x) {
+        return boost::math::airy_ai<CoarseReal>(x, no_promote_policy());
+    };
+    auto ai_precise = [](PreciseReal x) {
+        return boost::math::airy_ai<PreciseReal>(x, no_promote_policy());
+    };
 
     std::string filename = "airy_ai_" + boost::core::demangle(typeid(CoarseReal).name()) + ".svg";
     int samples = 10000;
     // How many pixels wide do you want your .svg?
     int width = 700;
-    // Near a root, we have unbounded relative error. So for functions with roots, we define a ULP clip:
+    // Near a root, we have unbounded relative error. So for functions with roots, we define an ULP clip:
     int clip = 20;
     // Should we perturb the abscissas? i.e., should we compute the high precision function f at x,
     // and the low precision function at the nearest representable x̂ to x?
     // Or should we compute both the high precision and low precision function at a low precision representable x̂?
-    // If we are displaying an ULP envelope, it makes sense to perturb the abscissas.
-    bool perturb_abscissas = true;
+    bool perturb_abscissas = false;
     auto plot = ulps_plot<decltype(ai_precise), PreciseReal, CoarseReal>(ai_precise, CoarseReal(-3), CoarseReal(3), samples, perturb_abscissas);
-    plot.set_clip(clip);
-    plot.set_width(width);
-    // Sometimes it's useful to set a title, but in many cases it's more useful to just use a caption (then no title required)
+    // Note the argument chaining:
+    plot.clip(clip).width(width);
+    // Sometimes it's useful to set a title, but in many cases it's more useful to just use a caption.
     //std::string title = "Airy Ai ULP plot at " + boost::core::demangle(typeid(CoarseReal).name()) + " precision";
-    //plot.set_title(title);
-    plot.set_vertical_lines(6);
+    //plot.title(title);
+    plot.vertical_lines(6);
     plot.add_fn(ai_coarse);
     // You can write the plot to a stream:
     //std::cout << plot;
@@ -41,13 +49,12 @@ int main() {
     plot.write(filename);
 
     // Don't like the default dark theme?
-    plot.set_background_color("white");
-    plot.set_font_color("black");
+    plot.background_color("white").font_color("black");
     filename =  "airy_ai_" + boost::core::demangle(typeid(CoarseReal).name()) + "_white.svg";
     plot.write(filename);
 
     // Don't like the envelope?
-    plot.write_ulp_envelope(false);
+    plot.ulp_envelope(false);
     filename =  "airy_ai_" + boost::core::demangle(typeid(CoarseReal).name()) + "_white_no_envelope.svg";
     plot.write(filename);
 }
