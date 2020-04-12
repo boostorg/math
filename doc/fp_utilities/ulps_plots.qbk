@@ -19,7 +19,7 @@
         ulps_plot(F hi_acc_impl, CoarseReal a, CoarseReal b,
                   size_t samples = 10000, bool perturb_abscissas = false, int random_seed = -1);
 
-        ulps_plot& clip(int clip);
+        ulps_plot& clip(PreciseReal clip);
 
         ulps_plot& width(int width);
 
