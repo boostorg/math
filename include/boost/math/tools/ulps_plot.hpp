@@ -147,7 +147,7 @@ public:
             }
         }
 
-        int height = floor(double(plot.width_)/1.61803);
+        int height = static_cast<int>(floor(double(plot.width_)/1.61803));
         int margin_top = 40;
         int margin_left = 25;
         if (plot.title_.size() == 0)

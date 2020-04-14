@@ -100,6 +100,11 @@ For example:
 
 Note that the graph is written as an SVG. We use `firefox foo.svg` or `open -a Firefox foo.svg` to display these files.
 
+There is a subtle issue about the "correct" value.
+Note that if the function evaluated in `PreciseReal` is not accurate, the plot is worthless.
+But just how accurate it needs to be is more difficult to determine.
+We recommend using at least `long double` to test `float` precision, and `boost::multiprecision::float128` to test `double` precision values.
+
 [heading References]
 
 * Cleve Moler. ['Ulps Plots Reveal Math Function Accuracy], https://blogs.mathworks.com/cleve/2017/01/23/ulps-plots-reveal-math-function-accurary/
