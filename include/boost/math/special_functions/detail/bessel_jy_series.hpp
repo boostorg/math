@@ -62,7 +62,7 @@ inline T bessel_j_small_z_series(T v, T x, const Policy& pol)
 
    bessel_j_small_z_series_term<T, Policy> s(v, x);
    boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
-#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
+#if BOOST_WORKAROUND(BOOST_BORLANDC, BOOST_TESTED_AT(0x582))
    T zero = 0;
    T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter, zero);
 #else
@@ -179,7 +179,7 @@ inline T bessel_y_small_z_series(T v, T x, T* pscale, const Policy& pol)
    bessel_y_small_z_series_term_a<T, Policy> s(v, x);
    boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
    *pscale = scale;
-#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
+#if BOOST_WORKAROUND(BOOST_BORLANDC, BOOST_TESTED_AT(0x582))
    T zero = 0;
    T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter, zero);
 #else
@@ -200,7 +200,7 @@ inline T bessel_y_small_z_series(T v, T x, T* pscale, const Policy& pol)
    }
    bessel_y_small_z_series_term_b<T, Policy> s2(v, x);
    max_iter = policies::get_max_series_iterations<Policy>();
-#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
+#if BOOST_WORKAROUND(BOOST_BORLANDC, BOOST_TESTED_AT(0x582))
    T b = boost::math::tools::sum_series(s2, boost::math::policies::get_epsilon<T, Policy>(), max_iter, zero);
 #else
    T b = boost::math::tools::sum_series(s2, boost::math::policies::get_epsilon<T, Policy>(), max_iter);

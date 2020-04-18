@@ -29,7 +29,7 @@ using ::std::tuple_element;
 
 }}
 
-#elif (defined(__BORLANDC__) && (__BORLANDC__ <= 0x600)) || defined(__IBMCPP__)
+#elif (defined(BOOST_BORLANDC) && (BOOST_BORLANDC <= 0x600)) || defined(__IBMCPP__)
 
 #include <boost/tuple/tuple.hpp>
 #include <boost/tuple/tuple_comparison.hpp>
@@ -57,7 +57,7 @@ struct tuple_element
    typedef typename boost::tuples::element<I,T>::type type;
 };
 
-#if !BOOST_WORKAROUND(__BORLANDC__, < 0x0582)
+#if !BOOST_WORKAROUND(BOOST_BORLANDC, < 0x0582)
 // [6.1.3.4] Element access
 using ::boost::get;
 #endif

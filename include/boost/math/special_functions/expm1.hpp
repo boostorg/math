@@ -135,7 +135,7 @@ T expm1_imp(T x, const boost::integral_constant<int, 0>&, const Policy& pol)
       return x;
    detail::expm1_series<T> s(x);
    boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582)) && !BOOST_WORKAROUND(__EDG_VERSION__, <= 245)
+#if !BOOST_WORKAROUND(BOOST_BORLANDC, BOOST_TESTED_AT(0x582)) && !BOOST_WORKAROUND(__EDG_VERSION__, <= 245)
    T result = tools::sum_series(s, policies::get_epsilon<T, Policy>(), max_iter);
 #else
    T zero = 0;
@@ -319,7 +319,7 @@ inline typename tools::promote_args<T>::type expm1(T x)
    return expm1(x, policies::policy<>());
 }
 
-#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+#if BOOST_WORKAROUND(BOOST_BORLANDC, BOOST_TESTED_AT(0x564))
 inline float expm1(float z)
 {
    return expm1<float>(z);

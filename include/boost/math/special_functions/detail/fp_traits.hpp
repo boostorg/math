@@ -191,7 +191,7 @@ template<> struct fp_traits_non_native<float, single_precision>
 // ieee_tag version, double (64 bits) ----------------------------------------------
 
 #if defined(BOOST_NO_INT64_T) || defined(BOOST_NO_INCLASS_MEMBER_INITIALIZATION) \
-   || defined(__BORLANDC__) || defined(__CODEGEAR__)
+   || defined(BOOST_BORLANDC) || defined(__CODEGEAR__)
 
 template<> struct fp_traits_non_native<double, double_precision>
 {
@@ -251,7 +251,7 @@ template<> struct fp_traits_non_native<double, double_precision>
 // long double (64 bits) -------------------------------------------------------
 
 #if defined(BOOST_NO_INT64_T) || defined(BOOST_NO_INCLASS_MEMBER_INITIALIZATION)\
-   || defined(__BORLANDC__) || defined(__CODEGEAR__)
+   || defined(BOOST_BORLANDC) || defined(__CODEGEAR__)
 
 template<> struct fp_traits_non_native<long double, double_precision>
 {
