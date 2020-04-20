@@ -10,7 +10,18 @@
 #include <cmath>
 #include <stdexcept>
 
-namespace boost{ namespace math{ namespace interpolators{ namespace detail{
+namespace boost{ namespace math{ 
+   
+namespace tools
+{
+   // Forward declaration only, we don't need the formatter's
+   // definition to be able to define a print function (only if
+   // we actually use it).
+   template <class charT, class Traits>
+   class basic_numeric_printer_base;
+}
+   
+namespace interpolators{ namespace detail{
 
 template <class Real>
 Real b2_spline(Real x) {
@@ -74,7 +85,7 @@ public:
 
         using std::isnan;
         Real a;
-        if (isnan(left_endpoint_derivative)) {
+        if ((isnan)(left_endpoint_derivative)) {
             // http://web.media.mit.edu/~crtaylor/calculator.html
             a = -3*y[0] + 4*y[1] - y[2];
         }
@@ -83,7 +94,7 @@ public:
         }
 
         Real b;
-        if (isnan(right_endpoint_derivative)) {
+        if ((isnan)(right_endpoint_derivative)) {
             b = 3*y[n-1] - 4*y[n-2] + y[n-3];
         }
         else {
@@ -197,6 +208,85 @@ public:
     Real t_max() const {
         return m_t0 + (m_alpha.size()-3)/m_inv_h;
     }
+
+    template <class charT, class Traits>
+    friend void print(boost::math::tools::basic_numeric_printer_base<charT, Traits>& os, const cardinal_quadratic_b_spline_detail<Real>& spline)
+    {
+       typedef boost::math::tools::basic_numeric_printer_base<charT, Traits> printer_t;
+       //
+       // scoped_prolog is responsible for writing the prolog/epilog code
+       // to the stream, if the output format requires it.  Not a number in it's own
+       // right, but an expression, so set the name to the empty string and let each
+       // individual number style itself.
+       //
+       typename printer_t::scoped_prolog prolog(&os, "");
+       //
+       // scoped_parenthesis instructs nested types to wrap themselves in ()
+       // if they are compound rather than atomic number types (for example complex numbers):
+       //
+       typename printer_t::scoped_parenthesis param(&os);
+
+       bool have_first = false;
+
+       for (size_t j = 0; j < spline.m_alpha.size(); ++j)
+       {
+          auto alpha = spline.m_alpha[j];
+          if (have_first)
+          {
+             if (alpha < 0)
+             {
+                alpha = -alpha;
+                os.stream() << " - ";
+             }
+             else
+                os.stream() << " + ";
+          }
+          else
+             have_first = true;
+
+          auto sa = os.part_as_plain_text(alpha);
+          if (sa == "1") { }
+          else if (sa == "-1")
+          {
+             os.stream() << "-";
+          }
+          else
+          {
+             print(os, alpha);
+             os.print_times();
+          }
+          os.print_name("B");
+          os.print_subscript("2");
+          os.stream() << "(";
+          print(os, spline.m_inv_h);
+          os.stream() << "(";
+          os.print_variable('x');
+          if (spline.m_t0 < 0)
+          {
+             os.stream() << " + ";
+             print(os, -spline.m_t0);
+          }
+          else
+          {
+             os.stream() << " - ";
+             print(os, spline.m_t0);
+          }
+          os.stream() << ")";
+          std::ptrdiff_t k = 1 - j;
+          if (k < 0)
+          {
+             os.stream() << " - ";
+             print(os, -k);
+          }
+          else if (k > 0)
+          {
+             os.stream() << " + ";
+             print(os, k);
+          }
+          os.stream() << ")";
+       }
+    }
+
 
 private:
     std::vector<Real> m_alpha;

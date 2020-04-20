@@ -574,6 +574,7 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [include fp_utilities/float_next.qbk]
 [include fp_utilities/float_comparison.qbk]
 [include fp_utilities/condition_numbers.qbk]
+[include fp_utilities/formatting.qbk]
 [endmathpart]
 
 [mathpart cstdfloat..Specified-width floating-point typedefs]

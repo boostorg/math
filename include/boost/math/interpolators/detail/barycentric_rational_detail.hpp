@@ -16,7 +16,18 @@
 #include <boost/core/demangle.hpp>
 #include <boost/assert.hpp>
 
-namespace boost{ namespace math{ namespace detail{
+namespace boost{ namespace math{ 
+   
+namespace tools
+{
+   // Forward declaration only, we don't need the formatter's
+   // definition to be able to define a print function (only if
+   // we actually use it).
+   template <class charT, class Traits>
+   class basic_numeric_printer_base;
+}
+
+namespace detail{
 
 template<class Real>
 class barycentric_rational_imp
@@ -42,6 +53,161 @@ public:
     std::vector<Real>&& return_y()
     {
         return std::move(m_y);
+    }
+
+    template <class charT, class Traits>
+    friend void print(boost::math::tools::basic_numeric_printer_base<charT, Traits>& os, const barycentric_rational_imp<Real>& bar)
+    {
+       typedef boost::math::tools::basic_numeric_printer_base<charT, Traits> printer_t;
+       //
+       // scoped_prolog is responsible for writing the prolog/epilog code
+       // to the stream, if the output format requires it.  Not a number in it's own
+       // right, but an expression, so set the name to the empty string and let each
+       // individual number style itself.
+       //
+       typename printer_t::scoped_prolog prolog(&os, "");
+       //
+       // scoped_parenthesis instructs nested types to wrap themselves in ()
+       // if they are compound rather than atomic number types (for example complex numbers):
+       //
+       typename printer_t::scoped_parenthesis param(&os);
+
+       {
+          // This just prints:
+          // P(x) / Q(x)
+          std::basic_stringstream<charT, Traits> ss;
+          ss.copyfmt(os.stream());
+          ss.imbue(os.stream().getloc());
+          ss.width(0);
+          std::unique_ptr<boost::math::tools::basic_numeric_printer_base<charT, Traits> > fmt(os.clone(ss));
+          fmt->print_name("P");
+          fmt->stream() << "(";
+          fmt->print_variable('x');
+          fmt->stream() << ")";
+          
+          std::basic_stringstream<charT, Traits> ss2;
+          ss2.copyfmt(os.stream());
+          ss2.imbue(os.stream().getloc());
+          ss2.width(0);
+          std::unique_ptr<boost::math::tools::basic_numeric_printer_base<charT, Traits> > fmt2(os.clone(ss2));
+          fmt2->print_name("Q");
+          fmt2->stream() << "(";
+          fmt2->print_variable('x');
+          fmt2->stream() << ")";
+          
+          os.print_fraction(ss.str(), ss2.str());
+       }
+       // " ; P(x) = "
+       os.stream() << " ; ";
+       os.print_name("P");
+       os.stream() << "(";
+       os.print_variable('x');
+       os.stream() << ") = ";
+
+       for (size_t i = 0; i < bar.m_x.size(); ++i)
+       {
+          auto y = bar.m_y[i];
+          if (i)
+          {
+             if (y > 0)
+                os.stream() << " + ";
+             else
+             {
+                y = -y;
+                os.stream() << " - ";
+             }
+          }
+          std::basic_string<charT, Traits> num, denom;
+          {
+             // m_y[i] * m_w[i]
+             // 
+             std::basic_stringstream<charT, Traits> ss;
+             ss.copyfmt(os.stream());
+             ss.imbue(os.stream().getloc());
+             ss.width(0);
+             std::unique_ptr<boost::math::tools::basic_numeric_printer_base<charT, Traits> > fmt(os.clone(ss));
+             print(*fmt, y);
+             fmt->print_times();
+             print(*fmt, bar.m_w[i]);
+             num = ss.str();
+          }
+          {
+             // (x - m_x[i])
+             // 
+             auto x = bar.m_x[i];
+             std::basic_stringstream<charT, Traits> ss;
+             ss.copyfmt(os.stream());
+             ss.imbue(os.stream().getloc());
+             ss.width(0);
+             std::unique_ptr<boost::math::tools::basic_numeric_printer_base<charT, Traits> > fmt(os.clone(ss));
+             ss << "(";
+             fmt->print_variable('x');
+             if (x < 0)
+             {
+                x = -x;
+                ss << " + ";
+             }
+             else
+               ss << " - ";
+             print(*fmt, x);
+             ss << ")";
+             denom = ss.str();
+          }
+          os.print_fraction(num, denom);
+       }
+       // " Q(x) = "
+       os.stream() << " ";
+       os.print_special_character(0x2227);
+       os.stream() << " ";
+       os.print_name("Q");
+       os.stream() << "(";
+       os.print_variable('x');
+       os.stream() << ") = ";
+
+       for (size_t i = 0; i < bar.m_x.size(); ++i)
+       {
+          auto y = bar.m_y[i];
+          if (i)
+          {
+             if (y > 0)
+                os.stream() << " + ";
+             else
+             {
+                y = -y;
+                os.stream() << " - ";
+             }
+          }
+          std::basic_string<charT, Traits> num, denom;
+          num = os.part_as_string(y);
+          {
+             // (x - m_x[i])
+             // 
+             auto x = bar.m_x[i];
+             std::basic_stringstream<charT, Traits> ss;
+             ss.copyfmt(os.stream());
+             ss.imbue(os.stream().getloc());
+             ss.width(0);
+             std::unique_ptr<boost::math::tools::basic_numeric_printer_base<charT, Traits> > fmt(os.clone(ss));
+             ss << "(";
+             fmt->print_variable('x');
+             if (x < 0)
+             {
+                x = -x;
+                ss << " + ";
+             }
+             else
+               ss << " - ";
+             print(*fmt, x);
+             ss << ")";
+             denom = ss.str();
+          }
+          os.print_fraction(num, denom);
+       }
+#if 0
+       Real t = m_w[i] / (x - m_x[i]);
+       numerator += t * m_y[i];
+       denominator += t;
+#endif
     }
 
 private:

@@ -56,6 +56,11 @@ public:
         return m_imp->return_y();
     }
 
+    template <class charT, class Traits>
+    friend void print(boost::math::tools::basic_numeric_printer_base<charT, Traits>& os, const barycentric_rational<Real>& bar)
+    {
+       print(os, *bar.m_imp);
+    }
 private:
     std::shared_ptr<detail::barycentric_rational_imp<Real>> m_imp;
 };

@@ -11,7 +11,19 @@
 #include <utility>
 #include <boost/math/special_functions/cardinal_b_spline.hpp>
 
-namespace boost{ namespace math{ namespace interpolators{ namespace detail{
+namespace boost{ namespace math{ 
+   
+namespace tools
+{
+   // Forward declaration only, we don't need the formatter's
+   // definition to be able to define a print function (only if
+   // we actually use it).
+   template <class charT, class Traits>
+   class basic_numeric_printer_base;
+}
+
+
+namespace interpolators{ namespace detail{
 
 
 template <class Real>
@@ -42,19 +54,19 @@ public:
         using std::isnan;
         // This interpolator has error of order h^6, so the derivatives should be estimated with the same error.
         // See: https://en.wikipedia.org/wiki/Finite_difference_coefficient
-        if (isnan(left_endpoint_derivatives.first)) {
+        if ((isnan)(left_endpoint_derivatives.first)) {
             Real tmp = -49*y[0]/20 + 6*y[1] - 15*y[2]/2 + 20*y[3]/3 - 15*y[4]/4 + 6*y[5]/5 - y[6]/6;
             left_endpoint_derivatives.first = tmp/h;
         }
-        if (isnan(right_endpoint_derivatives.first)) {
+        if ((isnan)(right_endpoint_derivatives.first)) {
             Real tmp = 49*y[n-1]/20 - 6*y[n-2] + 15*y[n-3]/2 - 20*y[n-4]/3 + 15*y[n-5]/4 - 6*y[n-6]/5 + y[n-7]/6;
             right_endpoint_derivatives.first = tmp/h;
         }
-        if(isnan(left_endpoint_derivatives.second)) {
+        if((isnan)(left_endpoint_derivatives.second)) {
             Real tmp = 469*y[0]/90 - 223*y[1]/10 + 879*y[2]/20 - 949*y[3]/18 + 41*y[4] - 201*y[5]/10 + 1019*y[6]/180 - 7*y[7]/10;
             left_endpoint_derivatives.second = tmp/(h*h);
         }
-        if (isnan(right_endpoint_derivatives.second)) {
+        if ((isnan)(right_endpoint_derivatives.second)) {
             Real tmp = 469*y[n-1]/90 - 223*y[n-2]/10 + 879*y[n-3]/20 - 949*y[n-4]/18 + 41*y[n-5] - 201*y[n-6]/10 + 1019*y[n-7]/180 - 7*y[n-8]/10;
             right_endpoint_derivatives.second = tmp/(h*h);
         }
@@ -184,6 +196,84 @@ public:
             s += m_alpha[j]*cardinal_b_spline<5, Real>(x - j + 2);
         }
         return s;
+    }
+
+    template <class charT, class Traits>
+    friend void print(boost::math::tools::basic_numeric_printer_base<charT, Traits>& os, const cardinal_quintic_b_spline_detail<Real>& spline)
+    {
+       typedef boost::math::tools::basic_numeric_printer_base<charT, Traits> printer_t;
+       //
+       // scoped_prolog is responsible for writing the prolog/epilog code
+       // to the stream, if the output format requires it.  Not a number in it's own
+       // right, but an expression, so set the name to the empty string and let each
+       // individual number style itself.
+       //
+       typename printer_t::scoped_prolog prolog(&os, "");
+       //
+       // scoped_parenthesis instructs nested types to wrap themselves in ()
+       // if they are compound rather than atomic number types (for example complex numbers):
+       //
+       typename printer_t::scoped_parenthesis param(&os);
+
+       bool have_first = false;
+
+       for (size_t j = 0; j < spline.m_alpha.size(); ++j)
+       {
+          auto alpha = spline.m_alpha[j];
+          if (have_first)
+          {
+             if (alpha < 0)
+             {
+                alpha = -alpha;
+                os.stream() << " - ";
+             }
+             else
+                os.stream() << " + ";
+          }
+          else
+             have_first = true;
+
+          auto sa = os.part_as_plain_text(alpha);
+          if (sa == "1") {}
+          else if (sa == "-1")
+          {
+             os.stream() << "-";
+          }
+          else
+          {
+             print(os, alpha);
+             os.print_times();
+          }
+          os.print_name("B");
+          os.print_subscript("5");
+          os.stream() << "(";
+          print(os, spline.m_inv_h);
+          os.stream() << "(";
+          os.print_variable('x');
+          if (spline.m_t0 < 0)
+          {
+             os.stream() << " + ";
+             print(os, -spline.m_t0);
+          }
+          else
+          {
+             os.stream() << " - ";
+             print(os, spline.m_t0);
+          }
+          os.stream() << ")";
+          std::ptrdiff_t k = j + 2;
+          if (k < 0)
+          {
+             os.stream() << " - ";
+             print(os, -k);
+          }
+          else if (k > 0)
+          {
+             os.stream() << " + ";
+             print(os, k);
+          }
+          os.stream() << ")";
+       }
     }
 
     Real prime(Real t) const {

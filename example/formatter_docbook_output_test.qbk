@@ -1,0 +1,26 @@
+
+[article Docbook Formatting Test
+    [quickbook 1.7]
+    [copyright 2019 John Maddock]
+    [license
+        Distributed under the Boost Software License, Version 1.0.
+        (See accompanying file LICENSE_1_0.txt or copy at
+        [@http://www.boost.org/LICENSE_1_0.txt])
+    ]
+    [authors [Maddock, John]]
+    [/last-revision $Date$]
+]
+
+[import formatter_docbook_output.qbk]
+
+[integer_formatting_examples]
+
+[float_formatting_examples]
+
+[complex_formatting_examples]
+
+[complex_formatting_examples_2]
+
+[polynomial_formatting_examples]
+
+[rational_formatting_examples]

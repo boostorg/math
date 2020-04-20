@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<body>
+<style>  span.number { font-weight:bold; } span.integer { color:red; } span.float { color:blue; } span.complex { color:green; } span.polynomial { color:Olive; } span.rational {color:gray; } td {  text-align:right; } th { text-align:right; } </style>
+<h2>Synopsis</h2>
+<para>Sample HTML output for various number types, these are then styled in bold, and various (somewhat untasteful!) colors just because we can, and to check that our markup generation is working correctly.</para>
+<h2>Basic Integers Values:</h2>
+<table style="width:90%"><tr><th>Value</th><th>Base</th><th>Result</th></tr><tr><td>0</td><td>default</td><td><span class="number"><span class="integer">0</span></span></td></tr>
+<tr><td>-23</td><td>default</td><td><span class="number"><span class="integer">-23</span></span></td></tr>
+<tr><td>23</td><td>hex</td><td><span class="number"><span class="integer">17</span></span></td></tr>
+<tr><td>23</td><td>oct</td><td><span class="number"><span class="integer">27</span></span></td></tr>
+</table>
+
+<h2>Basic Floating Point Values:</h2>
+
+<table style="width:90%"><tr><th>Value</th><th>Precision</th><th>Format</th><th>Result</th></tr><tr><td>3</td><td>default</td><td>default</td><td><span class="number"><span class="float">3</span></span></td></tr>
+<tr><td>3.14</td><td>default</td><td>default</td><td><span class="number"><span class="float">3.14</span></span></td></tr>
+<tr><td>-1.23457e-24</td><td>default</td><td>default</td><td><span class="number"><span class="float">-1.23457&#xd7;10<sup>-24</sup></span></span></td></tr>
+<tr><td>-1.23457e-24</td><td>3</td><td>scientific</td><td><span class="number"><span class="float">-1.235&#xd7;10<sup>-24</sup></span></span></td></tr>
+<tr><td>-1.235e-24</td><td>default</td><td>multiply_x</td><td><span class="number"><span class="float">-1.235x10<sup>-24</sup></span></span></td></tr>
+<tr><td>-1.235e-24</td><td>3</td><td>scientific + multiply_x</td><td><span class="number"><span class="float">-1.235x10<sup>-24</sup></span></span></td></tr>
+<tr><td>-1.235e-24</td><td>default</td><td>multiply_dot</td><td><span class="number"><span class="float">-1.235&#x22c5;10<sup>-24</sup></span></span></td></tr>
+<tr><td>-1.235e-24</td><td>3</td><td>scientific + multiply_dot</td><td><span class="number"><span class="float">-1.235&#x22c5;10<sup>-24</sup></span></span></td></tr>
+<tr><td>inf</td><td>default</td><td>default</td><td><span class="number"><span class="float">&#x221e;</span></span></td></tr>
+<tr><td>-inf</td><td>default</td><td>default</td><td><span class="number"><span class="float">-&#x221e;</span></span></td></tr>
+<tr><td>nan</td><td>default</td><td>default</td><td><span class="number"><span class="float">NaN</span></span></td></tr>
+<tr><td>0</td><td>default</td><td>default</td><td><span class="number"><span class="float">0</span></span></td></tr>
+<tr><td>-0</td><td>default</td><td>default</td><td><span class="number"><span class="float">-0</span></span></td></tr>
+</table>
+
+<h2>Complex Values:</h2>
+
+<table style="width:90%"><tr><th>Value</th><th>Precision</th><th>Format</th><th>Result</th></tr><tr><td>(3.25,4.67)</td><td>default</td><td>default</td><td><span class="number"><span class="complex">3.25 + 4.67i</span></span></td></tr>
+<tr><td>(3.14,0)</td><td>default</td><td>default</td><td><span class="number"><span class="complex">3.14</span></span></td></tr>
+<tr><td>(1.23,-1.23e-24)</td><td>default</td><td>default</td><td><span class="number"><span class="complex">1.23 - 1.23&#xd7;10<sup>-24</sup>i</span></span></td></tr>
+<tr><td>(1.23,-1.23e-24)</td><td>3</td><td>scientific</td><td><span class="number"><span class="complex">1.230&#xd7;10<sup>+00</sup> - 1.235&#xd7;10<sup>-24</sup>i</span></span></td></tr>
+<tr><td>(1.230e+00,-1.235e-24)</td><td>12</td><td>default + slanted_i</td><td><span class="number"><span class="complex">1.23 - 1.2345678765&#xd7;10<sup>-24</sup><I>i</I></span></span></td></tr>
+<tr><td>(1.23,-1.2345678765e-24)</td><td>12</td><td>default + doublestruck_i</td><td><span class="number"><span class="complex">1.23 - 1.2345678765&#xd7;10<sup>-24</sup>&#x2148;</span></span></td></tr>
+<tr><td>(1.23,-1.2345678765e-24)</td><td>12</td><td>default + doublestruck_i + multiply_x</td><td><span class="number"><span class="complex">1.23 - 1.2345678765x10<sup>-24</sup>&#x2148;</span></span></td></tr>
+<tr><td>(1.23,-1.2345678765e-24)</td><td>12</td><td>default + doublestruck_i + multiply_dot</td><td><span class="number"><span class="complex">1.23 - 1.2345678765&#x22c5;10<sup>-24</sup>&#x2148;</span></span></td></tr>
+
+</table>
+
+<h2>Complex Special Values:</h2>
+
+<table style="width:90%"><tr><th>Value</th><th>Precision</th><th>Format</th><th>Result</th></tr><tr><td>(0,0)</td><td>default</td><td>default</td><td><span class="number"><span class="complex">0</span></span></td></tr>
+<tr><td>(0,0)</td><td>default</td><td>show_zero_components</td><td><span class="number"><span class="complex">0 + 0i</span></span></td></tr>
+<tr><td>(3.14,0)</td><td>default</td><td>default</td><td><span class="number"><span class="complex">3.14</span></span></td></tr>
+<tr><td>(3.14,0)</td><td>default</td><td>show_zero_components</td><td><span class="number"><span class="complex">3.14 + 0i</span></span></td></tr>
+<tr><td>(-3.14,0)</td><td>default</td><td>default</td><td><span class="number"><span class="complex">-3.14</span></span></td></tr>
+<tr><td>(-3.14,0)</td><td>default</td><td>show_zero_components</td><td><span class="number"><span class="complex">-3.14 + 0i</span></span></td></tr>
+<tr><td>(0,25.5)</td><td>default</td><td>default</td><td><span class="number"><span class="complex">25.5i</span></span></td></tr>
+<tr><td>(0,25.5)</td><td>default</td><td>show_zero_components</td><td><span class="number"><span class="complex">0 + 25.5i</span></span></td></tr>
+<tr><td>(0,-25.5)</td><td>default</td><td>default</td><td><span class="number"><span class="complex">-25.5i</span></span></td></tr>
+<tr><td>(0,-25.5)</td><td>default</td><td>show_zero_components</td><td><span class="number"><span class="complex">0 - 25.5i</span></span></td></tr>
+<tr><td>(inf,0)</td><td>default</td><td>default</td><td><span class="number"><span class="complex">&#8734;&#x0303;</span></span></td></tr>
+<tr><td>(-inf,0)</td><td>default</td><td>default</td><td><span class="number"><span class="complex">&#8734;&#x0303;</span></span></td></tr>
+<tr><td>(25.5,inf)</td><td>default</td><td>default</td><td><span class="number"><span class="complex">&#8734;&#x0303;</span></span></td></tr>
+<tr><td>(25.5,-inf)</td><td>default</td><td>default</td><td><span class="number"><span class="complex">&#8734;&#x0303;</span></span></td></tr>
+<tr><td>(nan,0)</td><td>default</td><td>default</td><td><span class="number"><span class="complex">NaN</span></span></td></tr>
+<tr><td>(-nan(ind),0)</td><td>default</td><td>default</td><td><span class="number"><span class="complex">NaN</span></span></td></tr>
+<tr><td>(25.5,nan)</td><td>default</td><td>default</td><td><span class="number"><span class="complex">NaN</span></span></td></tr>
+<tr><td>(25.5,-nan(ind))</td><td>default</td><td>default</td><td><span class="number"><span class="complex">NaN</span></span></td></tr>
+<tr><td>(nan,inf)</td><td>default</td><td>default</td><td><span class="number"><span class="complex">NaN</span></span></td></tr>
+<tr><td>(-nan(ind),inf)</td><td>default</td><td>default</td><td><span class="number"><span class="complex">NaN</span></span></td></tr>
+<tr><td>(inf,nan)</td><td>default</td><td>default</td><td><span class="number"><span class="complex">NaN</span></span></td></tr>
+<tr><td>(inf,-nan(ind))</td><td>default</td><td>default</td><td><span class="number"><span class="complex">NaN</span></span></td></tr>
+
+</table>
+
+<h2>Rationals:</h2>
+
+<table style="width:90%"><tr><th>Value</th><th>Result</th></tr><tr><td>1/3</td><td><span class="number"><span class="rational"><sup>1</sup>&#x2044;<sub>3</sub></span></span></td></tr>
+<tr><td>-1/3</td><td><span class="number"><span class="rational">-<sup>1</sup>&#x2044;<sub>3</sub></span></span></td></tr>
+<tr><td>-345634/1695</td><td><span class="number"><span class="rational">-<sup>345634</sup>&#x2044;<sub>1695</sub></span></span></td></tr>
+<tr><td>0/1</td><td><span class="number"><span class="rational">0</span></span></td></tr>
+<tr><td>-23/1</td><td><span class="number"><span class="rational">-23</span></span></td></tr>
+<tr><td>46189/262144</td><td><span class="number"><span class="rational"><sup>46189</sup>&#x2044;<sub>262144</sub></span></span></td></tr>
+
+</table>
+
+<h2>Polynomials:</h2>
+
+<table style="width:90%"><tr><th>Type</th><th>Result</th></tr><tr><td>Integer</td><td><span class="number"><span class="polynomial">2 - 3<I>x</I> + 4<I>x</I><sup>2</sup> + 5<I>x</I><sup>3</sup></span></span></td></tr>
+<tr><td>Float</td><td><span class="number"><span class="polynomial">2.4 - 34.25<I>x</I> + 4.2&#xd7;10<sup>-06</sup><I>x</I><sup>2</sup> - 5.34&#xd7;10<sup>-67</sup><I>x</I><sup>3</sup></span></span></td></tr>
+<tr><td>Complex</td><td><span class="number"><span class="polynomial">(2.4 + 3.25i) - 34.25<I>x</I> + 4.2&#xd7;10<sup>-06</sup>i<I>x</I><sup>2</sup> - (5.34&#xd7;10<sup>-67</sup> - 4.65&#xd7;10<sup>-20</sup>i)<I>x</I><sup>3</sup></span></span></td></tr>
+<tr><td>Polynomial</td><td><span class="number"><span class="polynomial">(<sup>2</sup>&#x2044;<sub>3</sub>) - (<sup>3</sup>&#x2044;<sub>23</sub>)<I>x</I> + (<sup>1</sup>&#x2044;<sub>14</sub>)<I>x</I><sup>2</sup> + (<sup>5</sup>&#x2044;<sub>32</sub>)<I>x</I><sup>3</sup></span></span></td></tr>
+
+</table>
+
+</body></html>
+

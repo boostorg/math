@@ -47,6 +47,12 @@ public:
 
     Real double_prime(Real x) const;
 
+    template <class charT, class Traits>
+    friend void print(boost::math::tools::basic_numeric_printer_base<charT, Traits>& os, const cardinal_cubic_b_spline<Real>& v)
+    {
+       print(os, *v.m_imp);
+    }
+
 private:
     std::shared_ptr<detail::cardinal_cubic_b_spline_imp<Real>> m_imp;
 };

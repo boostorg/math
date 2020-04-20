@@ -1,0 +1,510 @@
+[section:formatting Numeric Formatters (Pretty Printers)]
+
+[heading Synopsis]
+
+   #include <boost/math/tools/formatting.hpp>
+
+   enum output_format_t
+   {
+      text_format,
+      docbook_format,
+      latex_format,
+      html_format
+   };
+
+   template <output_format_t Format = text_format, class charT = char, class Traits = std::char_traits<char> >
+   class basic_numeric_printer;
+
+   typedef basic_numeric_printer<> text_printer;
+   typedef basic_numeric_printer<docbook_format> docbook_printer;
+   typedef basic_numeric_printer<latex_format> latex_printer;
+   typedef basic_numeric_printer<html_format> html_printer;
+
+   typedef basic_numeric_printer<text_format, wchar_t> wtext_printer;
+   typedef basic_numeric_printer<docbook_format, wchar_t> wdocbook_printer;
+   typedef basic_numeric_printer<latex_format, wchar_t> wlatex_printer;
+   typedef basic_numeric_printer<html_format, wchar_t> whtml_printer;
+
+[heading Description]
+
+The class `basic_numeric_printer` provides "pretty printing" capabilities for numeric data.
+Its use mirrors that of the `iostream` library, but fulfills a very different role:
+There is no "input streaming" and the output is human readable--and not intended for machine consumption.
+
+Supported types are integers, floating point numbers, complex numbers, rationals, polynomials, intervals
+and containers thereof(TODO).
+Other types, plus all the standard library manipulators can also be streamed to `basic_numeric_printer`
+but are simply forwarded to the underlying stream.
+
+Output formats include plain text (including formatted output to console), Docbook XML markup, HTML markup, and Latex.  MathML may come later(TODO).
+
+Integer values have the same representation as the underlying stream would give them,
+but can have styling applied to their XML wrapper in HTML and Docbook output modes.
+
+Floats in scientific mode are styled somewhat differently from the underlying `iostream`: '''<phrase role="number">-1.23457&#x00D7;10<superscript>-24</superscript></phrase>'''
+and can be customised to change the default multiplication operator: '''<phrase role="number">-1.235&#x22C5;10<superscript>-24</superscript></phrase>'''.
+
+Complex numbers inherit all the properties of floats, and in addition allow the unit "i" to be customised, for example
+'''<phrase role="number">1.23 - 1.23&#x00D7;10<superscript>-24</superscript><phrase role="imaginary_i">i</phrase></phrase>''' or
+'''<phrase role="number"><phrase role="complex">1.23 - 1.2345678765&#x22C5;10<superscript>-24</superscript><phrase role="imaginary_i">&#x2148;</phrase></phrase></phrase>'''.
+
+Polynomials can be polynomials of integers, floats, or complex numbers and inherit all the properties of each of those:
+'''<phrase role="number"><phrase role="polynomial"><phrase role="number"><phrase role="complex">(2.4 + 3.25<phrase role="imaginary_i">i</phrase>)</phrase></phrase> - <phrase role="number"><phrase role="complex">34.25</phrase></phrase><emphasis>x</emphasis> + <phrase role="number"><phrase role="complex">4.2&#x00D7;10<superscript>-06</superscript><phrase role="imaginary_i">i</phrase></phrase></phrase><emphasis>x</emphasis><superscript>2</superscript> - <phrase role="number"><phrase role="complex">(5.34&#x00D7;10<superscript>-67</superscript> - 4.65&#x00D7;10<superscript>-20</superscript><phrase role="imaginary_i">i</phrase>)</phrase></phrase><emphasis>x</emphasis><superscript>3</superscript></phrase></phrase>'''.
+
+[import ../../example/formatter_snips.cpp]
+
+[formatting_eg1]
+
+[formatting_eg2]
+
+[formatting_eg3]
+ 
+Here's the revised result:
+
+[$../images/polynomial_latex_2.svg]
+
+
+[h4 Examples:]
+
+[heading Class `basic_numeric_printer`]
+
+   enum output_format_t
+   {
+      text_format,
+      docbook_format,
+      latex_format,
+      html_format
+   };
+
+   template <output_format_t Format = text_format, class charT = char, class Traits = std::char_traits<char> >
+   class basic_numeric_printer
+   {
+      basic_numeric_printer(std::basic_ostream<charT, Traits>& os);
+      std::basic_ostream<charT, Traits>& stream();
+   };
+
+   template <output_format_t Format, class charT, class Traits, class Unspecified>
+   basic_numeric_printer<Format, charT, Traits>& operator << (basic_numeric_printer<Format, charT, Traits>& os, const Unspecified& data);
+
+   typedef basic_numeric_printer<> text_printer;
+   typedef basic_numeric_printer<docbook_format> docbook_printer;
+   typedef basic_numeric_printer<latex_format> latex_printer;
+   typedef basic_numeric_printer<html_format> html_printer;
+
+   typedef basic_numeric_printer<text_format, wchar_t> wtext_printer;
+   typedef basic_numeric_printer<docbook_format, wchar_t> wdocbook_printer;
+   typedef basic_numeric_printer<latex_format, wchar_t> wlatex_printer;
+   typedef basic_numeric_printer<html_format, wchar_t> whtml_printer;
+
+Class `basic_numeric_printer` is a `std::basic_ostream` lookalike which is constructible from an underlying
+stream, and has a single public member function which returns a reference to the underlying stream.
+
+Its usage via `<<` manipulators is identical to that of `std::basic_ostream`: anything that `basic_numeric_printer` doesn't
+understand is passed unchanged to the underlying stream, while numeric data alone is intercepted and pretty-formatted.
+
+[heading Manipulators]
+
+There are some stream manipulators which are specific to `basic_numeric_printer` and control how the "pretty printing" is conduced:
+
+   enum styling_level_t
+   {
+      no_styling = 0,
+      minimal_styling = 1,
+      full_styling = 6
+   };
+
+Controls the level of styling applied to XML based output formats.
+
+[variablelist
+    [[no_styling] [As it's name suggests, results in no styling applied to the output.]]
+    [[minimal_styling] [Adds minimal styling to the output: for Docbook this wraps the number in `<phrase role="number">...</phrase>`
+    and for HTML it adds `<span class="number">...</span>` around each number.]]
+    [[full_styling] [This is the default.  It adds styling around each complete number, plus styling to indicate the type of number, and styling
+    around some individual components.  In HTML, an integer would be formatted as `<span class="number"><span class="integer">-23</span></span>`,
+    the inner class name changes to "float" or "complex" depending on the number type, and the XML container to `<phrase>` in Docbook.  In addition
+    complex numbers get the "i" wrapped in `<span class="imaginary_i">...</span>`.]]
+]
+
+   enum multiplyer_t
+   {
+      multiply_times = 0,
+      multiply_dot = 1,
+      multiply_x = 2
+   };
+
+Controls the character used for the multiplication symbol:
+
+[variablelist
+    [[multiply_times] [The default.  Uses the character U+x00D7 (or [^$\times\$] in Latex): \u00D7.]]
+    [[multiply_dot] [Uses the character U+x22C5 (or [^$\cdot\$] in Latex): \u22C5.]]
+    [[multiply_x] [Uses a literal `x` character, this is generally not such a good choice, but is the only one available for plain text output.]]
+]
+
+   enum imaginary_i_t
+   {
+      upright_i = 0,
+      slanted_i = 1,
+      doublestruck_i = 2
+   };
+
+Controls how the imaginary unit is formatted (plain text output ignores this option):
+
+[variablelist
+    [[upright_i] [The default.  Formats "i" as a regular upright character, this matches "ISO 80000-2:2009, Quantities and units---part2: Mathematical signs and symbols to be used in the natural sciences and technology".]]
+    [[slanted_i] [Uses an italic character ['"i"], this style has strong historical precedent.]]
+    [[doublestruck_i] [Uses the double struct letter i: \u2148.  This is the form used by Mathematica.  This is not available in Latex output.]]
+]
+
+   constexpr const unspecified latex_as_equation;
+   constexpr const unspecified latex_as_text;
+
+Controls how Latex output is handled: the default is to format all numbers in equation mode, but streaming `latex_as_text` to the stream
+will result in numbers being formatted in text mode instead.
+Note that even in text mode some entities need to drop into math mode temporarily for example to access symbols such as `\times`.
+
+[heading Format Gallery]
+
+The following section (using Docbook output format) illustrates how each of the number categories are formatted with various options:
+
+[import ../../example/formatter_docbook_output.qbk]
+
+[integer_formatting_examples]
+
+[float_formatting_examples]
+
+[complex_formatting_examples]
+
+[complex_formatting_examples_2]
+
+[rational_formatting_examples]
+
+[polynomial_formatting_examples]
+
+[table:intervals Interval Values
+[[Value][Result]]
+[[`boost::math::constants::pi<number<mpfi_floatbackend<20>>>()`]['''<phrase role="number"><phrase role="interval">3.1415926535897932385 &#xb1; 6.7762635780344027125&#xd7;10<superscript>-21</superscript></phrase></phrase>''']]
+[[Polynomial of `number<mpfi_floatbackend<20>>`]['''<phrase role="number"><phrase role="polynomial">2 - (1.6666666666666666667 &#xb1; 3.3881317890172013563&#xd7;10<superscript>-21</superscript>)<emphasis>x</emphasis> + (0.66666666666666666666 &#xb1; 1.6940658945086006781&#xd7;10<superscript>-21</superscript>)<emphasis>x</emphasis><superscript>2</superscript> + 15<emphasis>x</emphasis><superscript>3</superscript> + 11<emphasis>x</emphasis><superscript>4</superscript> - (14.666666666666666667 &#xb1; 2.710505431213761085&#xd7;10<superscript>-20</superscript>)<emphasis>x</emphasis><superscript>5</superscript> - (5.6666666666666666667 &#xb1; 1.3552527156068805425&#xd7;10<superscript>-20</superscript>)<emphasis>x</emphasis><superscript>6</superscript> + (9.3333333333333333334 &#xb1; 2.710505431213761085&#xd7;10<superscript>-20</superscript>)<emphasis>x</emphasis><superscript>7</superscript> + 20<emphasis>x</emphasis><superscript>8</superscript></phrase></phrase>''']]
+]
+
+[table:misc Misc Types
+[[Type][Comments][Result]]
+[[cardinal_quadratic_b_spline][Formatted output of this type is primarily for debugging purposes since 
+                        despite appearances, only a few terms of the sum are nonzero, since the basis function B_n has compact support.]
+                        ['''-B<subscript>2</subscript>(<phrase role="number"><phrase role="float">10</phrase></phrase>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">5</phrase></phrase>) + <phrase role="number"><phrase role="integer">1</phrase></phrase>) + <phrase role="number"><phrase role="float">5</phrase></phrase>&#xd7;B<subscript>2</subscript>(<phrase role="number"><phrase role="float">10</phrase></phrase>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">5</phrase></phrase>)) + <phrase role="number"><phrase role="float">11</phrase></phrase>&#xd7;B<subscript>2</subscript>(<phrase role="number"><phrase role="float">10</phrase></phrase>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">5</phrase></phrase>) - <phrase role="number"><phrase role="integer">1</phrase></phrase>) + <phrase role="number"><phrase role="float">17</phrase></phrase>&#xd7;B<subscript>2</subscript>(<phrase role="number"><phrase role="float">10</phrase></phrase>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">5</phrase></phrase>) - <phrase role="number"><phrase role="integer">2</phrase></phrase>) + <phrase role="number"><phrase role="float">23</phrase></phrase>&#xd7;B<subscript>2</subscript>(<phrase role="number"><phrase role="float">10</phrase></phrase>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">5</phrase></phrase>) - <phrase role="number"><phrase role="integer">3</phrase></phrase>) + <phrase role="number"><phrase role="float">29</phrase></phrase>&#xd7;B<subscript>2</subscript>(<phrase role="number"><phrase role="float">10</phrase></phrase>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">5</phrase></phrase>) - <phrase role="number"><phrase role="integer">4</phrase></phrase>) + <phrase role="number"><phrase role="float">35</phrase></phrase>&#xd7;B<subscript>2</subscript>(<phrase role="number"><phrase role="float">10</phrase></phrase>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">5</phrase></phrase>) - <phrase role="number"><phrase role="integer">5</phrase></phrase>) + <phrase role="number"><phrase role="float">41</phrase></phrase>&#xd7;B<subscript>2</subscript>(<phrase role="number"><phrase role="float">10</phrase></phrase>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">5</phrase></phrase>) - <phrase role="number"><phrase role="integer">6</phrase></phrase>) + <phrase role="number"><phrase role="float">47</phrase></phrase>&#xd7;B<subscript>2</subscript>(<phrase role="number"><phrase role="float">10</phrase></phrase>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">5</phrase></phrase>) - <phrase role="number"><phrase role="integer">7</phrase></phrase>) + <phrase role="number"><phrase role="float">53</phrase></phrase>&#xd7;B<subscript>2</subscript>(<phrase role="number"><phrase role="float">10</phrase></phrase>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">5</phrase></phrase>) - <phrase role="number"><phrase role="integer">8</phrase></phrase>) + <phrase role="number"><phrase role="float">59</phrase></phrase>&#xd7;B<subscript>2</subscript>(<phrase role="number"><phrase role="float">10</phrase></phrase>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">5</phrase></phrase>) - <phrase role="number"><phrase role="integer">9</phrase></phrase>) + <phrase role="number"><phrase role="float">65</phrase></phrase>&#xd7;B<subscript>2</subscript>(<phrase role="number"><phrase role="float">10</phrase></phrase>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">5</phrase></phrase>) - <phrase role="number"><phrase role="integer">10</phrase></phrase>)''']]
+[[cardinal_cubic_b_spline][Formatted output of this type is primarily for debugging purposes since 
+                        despite appearances, only a few terms of the sum are nonzero, since the basis function B_n has compact support.]
+                        ['''<phrase role="number"><phrase role="float">32</phrase></phrase> - <phrase role="number"><phrase role="float">33</phrase></phrase>&#xd7;B<subscript>3</subscript>(<phrase role="number"><phrase role="float">10</phrase></phrase>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">5</phrase></phrase>) + <phrase role="number"><phrase role="integer">1</phrase></phrase>) - <phrase role="number"><phrase role="float">27</phrase></phrase>&#xd7;B<subscript>3</subscript>(<phrase role="number"><phrase role="float">10</phrase></phrase>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">5</phrase></phrase>)) - <phrase role="number"><phrase role="float">21</phrase></phrase>&#xd7;B<subscript>3</subscript>(<phrase role="number"><phrase role="float">10</phrase></phrase>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">5</phrase></phrase>) - <phrase role="number"><phrase role="integer">1</phrase></phrase>) - <phrase role="number"><phrase role="float">15</phrase></phrase>&#xd7;B<subscript>3</subscript>(<phrase role="number"><phrase role="float">10</phrase></phrase>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">5</phrase></phrase>) - <phrase role="number"><phrase role="integer">2</phrase></phrase>) - <phrase role="number"><phrase role="float">9</phrase></phrase>&#xd7;B<subscript>3</subscript>(<phrase role="number"><phrase role="float">10</phrase></phrase>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">5</phrase></phrase>) - <phrase role="number"><phrase role="integer">3</phrase></phrase>) - <phrase role="number"><phrase role="float">3</phrase></phrase>&#xd7;B<subscript>3</subscript>(<phrase role="number"><phrase role="float">10</phrase></phrase>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">5</phrase></phrase>) - <phrase role="number"><phrase role="integer">4</phrase></phrase>) + <phrase role="number"><phrase role="float">3</phrase></phrase>&#xd7;B<subscript>3</subscript>(<phrase role="number"><phrase role="float">10</phrase></phrase>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">5</phrase></phrase>) - <phrase role="number"><phrase role="integer">5</phrase></phrase>) + <phrase role="number"><phrase role="float">9</phrase></phrase>&#xd7;B<subscript>3</subscript>(<phrase role="number"><phrase role="float">10</phrase></phrase>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">5</phrase></phrase>) - <phrase role="number"><phrase role="integer">6</phrase></phrase>) + <phrase role="number"><phrase role="float">15</phrase></phrase>&#xd7;B<subscript>3</subscript>(<phrase role="number"><phrase role="float">10</phrase></phrase>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">5</phrase></phrase>) - <phrase role="number"><phrase role="integer">7</phrase></phrase>) + <phrase role="number"><phrase role="float">21</phrase></phrase>&#xd7;B<subscript>3</subscript>(<phrase role="number"><phrase role="float">10</phrase></phrase>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">5</phrase></phrase>) - <phrase role="number"><phrase role="integer">8</phrase></phrase>) + <phrase role="number"><phrase role="float">27</phrase></phrase>&#xd7;B<subscript>3</subscript>(<phrase role="number"><phrase role="float">10</phrase></phrase>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">5</phrase></phrase>) - <phrase role="number"><phrase role="integer">9</phrase></phrase>) + <phrase role="number"><phrase role="float">33</phrase></phrase>&#xd7;B<subscript>3</subscript>(<phrase role="number"><phrase role="float">10</phrase></phrase>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">5</phrase></phrase>) - <phrase role="number"><phrase role="integer">10</phrase></phrase>)''']]
+[[cardinal_quintic_b_spline][Formatted output of this type is primarily for debugging purposes since 
+                        despite appearances, only a few terms of the sum are nonzero, since the basis function B_n has compact support.]
+                        ['''<phrase role="number"><phrase role="float">-7</phrase></phrase>&#xd7;B<subscript>5</subscript>(<phrase role="number"><phrase role="float">10</phrase></phrase>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">5</phrase></phrase>) + <phrase role="number"><phrase role="integer">2</phrase></phrase>) - B<subscript>5</subscript>(<phrase role="number"><phrase role="float">10</phrase></phrase>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">5</phrase></phrase>) + <phrase role="number"><phrase role="integer">3</phrase></phrase>) + <phrase role="number"><phrase role="float">5</phrase></phrase>&#xd7;B<subscript>5</subscript>(<phrase role="number"><phrase role="float">10</phrase></phrase>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">5</phrase></phrase>) + <phrase role="number"><phrase role="integer">4</phrase></phrase>) + <phrase role="number"><phrase role="float">11</phrase></phrase>&#xd7;B<subscript>5</subscript>(<phrase role="number"><phrase role="float">10</phrase></phrase>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">5</phrase></phrase>) + <phrase role="number"><phrase role="integer">5</phrase></phrase>) + <phrase role="number"><phrase role="float">17</phrase></phrase>&#xd7;B<subscript>5</subscript>(<phrase role="number"><phrase role="float">10</phrase></phrase>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">5</phrase></phrase>) + <phrase role="number"><phrase role="integer">6</phrase></phrase>) + <phrase role="number"><phrase role="float">23</phrase></phrase>&#xd7;B<subscript>5</subscript>(<phrase role="number"><phrase role="float">10</phrase></phrase>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">5</phrase></phrase>) + <phrase role="number"><phrase role="integer">7</phrase></phrase>) + <phrase role="number"><phrase role="float">29</phrase></phrase>&#xd7;B<subscript>5</subscript>(<phrase role="number"><phrase role="float">10</phrase></phrase>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">5</phrase></phrase>) + <phrase role="number"><phrase role="integer">8</phrase></phrase>) + <phrase role="number"><phrase role="float">35</phrase></phrase>&#xd7;B<subscript>5</subscript>(<phrase role="number"><phrase role="float">10</phrase></phrase>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">5</phrase></phrase>) + <phrase role="number"><phrase role="integer">9</phrase></phrase>) + <phrase role="number"><phrase role="float">41</phrase></phrase>&#xd7;B<subscript>5</subscript>(<phrase role="number"><phrase role="float">10</phrase></phrase>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">5</phrase></phrase>) + <phrase role="number"><phrase role="integer">10</phrase></phrase>) + <phrase role="number"><phrase role="float">47</phrase></phrase>&#xd7;B<subscript>5</subscript>(<phrase role="number"><phrase role="float">10</phrase></phrase>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">5</phrase></phrase>) + <phrase role="number"><phrase role="integer">11</phrase></phrase>) + <phrase role="number"><phrase role="float">53</phrase></phrase>&#xd7;B<subscript>5</subscript>(<phrase role="number"><phrase role="float">10</phrase></phrase>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">5</phrase></phrase>) + <phrase role="number"><phrase role="integer">12</phrase></phrase>) + <phrase role="number"><phrase role="float">59</phrase></phrase>&#xd7;B<subscript>5</subscript>(<phrase role="number"><phrase role="float">10</phrase></phrase>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">5</phrase></phrase>) + <phrase role="number"><phrase role="integer">13</phrase></phrase>) + <phrase role="number"><phrase role="float">65</phrase></phrase>&#xd7;B<subscript>5</subscript>(<phrase role="number"><phrase role="float">10</phrase></phrase>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">5</phrase></phrase>) + <phrase role="number"><phrase role="integer">14</phrase></phrase>) + <phrase role="number"><phrase role="float">71</phrase></phrase>&#xd7;B<subscript>5</subscript>(<phrase role="number"><phrase role="float">10</phrase></phrase>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">5</phrase></phrase>) + <phrase role="number"><phrase role="integer">15</phrase></phrase>)''']]
+[[barycentric_rational][While usefule for debugging purposes, the formatted output can be rather verbose,
+                        users may find it convenient to output to LaTex and cut and paste into an online processor for improved display.]
+                        [Docbook:
+                        
+                        '''<superscript>P(<emphasis>x</emphasis>)</superscript>&#x2044;<subscript>Q(<emphasis>x</emphasis>)</subscript> ; P(<emphasis>x</emphasis>) = <superscript><phrase role="number"><phrase role="float">5.727</phrase></phrase>&#xd7;<phrase role="number"><phrase role="float">-20833.3</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">0.02</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">5.544</phrase></phrase>&#xd7;<phrase role="number"><phrase role="float">83333.3</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">0.04</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">5.45</phrase></phrase>&#xd7;<phrase role="number"><phrase role="float">-145833</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">0.06</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">5.351</phrase></phrase>&#xd7;<phrase role="number"><phrase role="float">166667</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">0.08</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">5.253</phrase></phrase>&#xd7;<phrase role="number"><phrase role="float">-166667</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">0.1</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">5.157</phrase></phrase>&#xd7;<phrase role="number"><phrase role="float">166667</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">0.12</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">5.058</phrase></phrase>&#xd7;<phrase role="number"><phrase role="float">-166667</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">0.14</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">4.96</phrase></phrase>&#xd7;<phrase role="number"><phrase role="float">161458</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">0.16</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">4.862</phrase></phrase>&#xd7;<phrase role="number"><phrase role="float">-133333</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">0.18</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">4.762</phrase></phrase>&#xd7;<phrase role="number"><phrase role="float">70312.5</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">0.2</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">4.563</phrase></phrase>&#xd7;<phrase role="number"><phrase role="float">-26041.7</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">0.24</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">4.36</phrase></phrase>&#xd7;<phrase role="number"><phrase role="float">21354.2</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">0.28</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">4.1584</phrase></phrase>&#xd7;<phrase role="number"><phrase role="float">-20833.3</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">0.32</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">3.9463</phrase></phrase>&#xd7;<phrase role="number"><phrase role="float">20833.3</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">0.36</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">3.736</phrase></phrase>&#xd7;<phrase role="number"><phrase role="float">-20833.3</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">0.4</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">3.5429</phrase></phrase>&#xd7;<phrase role="number"><phrase role="float">20833.3</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">0.44</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">3.3797</phrase></phrase>&#xd7;<phrase role="number"><phrase role="float">-20833.3</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">0.48</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">3.2417</phrase></phrase>&#xd7;<phrase role="number"><phrase role="float">20182.3</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">0.52</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">3.1209</phrase></phrase>&#xd7;<phrase role="number"><phrase role="float">-16666.7</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">0.56</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">3.0138</phrase></phrase>&#xd7;<phrase role="number"><phrase role="float">8789.06</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">0.6</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">2.8342</phrase></phrase>&#xd7;<phrase role="number"><phrase role="float">-3255.21</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">0.68</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">2.6881</phrase></phrase>&#xd7;<phrase role="number"><phrase role="float">2669.27</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">0.76</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">2.5662</phrase></phrase>&#xd7;<phrase role="number"><phrase role="float">-2604.17</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">0.84</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">2.4242</phrase></phrase>&#xd7;<phrase role="number"><phrase role="float">2604.17</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">0.92</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">2.3766</phrase></phrase>&#xd7;<phrase role="number"><phrase role="float">-2604.17</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">1</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">2.3058</phrase></phrase>&#xd7;<phrase role="number"><phrase role="float">2604.17</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">1.08</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">2.2458</phrase></phrase>&#xd7;<phrase role="number"><phrase role="float">-2604.17</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">1.16</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">2.2035</phrase></phrase>&#xd7;<phrase role="number"><phrase role="float">2604.17</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">1.24</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">2.1661</phrase></phrase>&#xd7;<phrase role="number"><phrase role="float">-2522.79</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">1.32</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">2.135</phrase></phrase>&#xd7;<phrase role="number"><phrase role="float">2083.33</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">1.4</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">2.109</phrase></phrase>&#xd7;<phrase role="number"><phrase role="float">-1098.63</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">1.48</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">2.0697</phrase></phrase>&#xd7;<phrase role="number"><phrase role="float">406.901</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">1.64</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">2.0466</phrase></phrase>&#xd7;<phrase role="number"><phrase role="float">-333.659</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">1.8</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">2.0325</phrase></phrase>&#xd7;<phrase role="number"><phrase role="float">325.521</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">1.96</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">2.0288</phrase></phrase>&#xd7;<phrase role="number"><phrase role="float">-325.521</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">2.12</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">2.0292</phrase></phrase>&#xd7;<phrase role="number"><phrase role="float">325.521</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">2.28</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">2.0228</phrase></phrase>&#xd7;<phrase role="number"><phrase role="float">-325.521</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">2.44</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">2.0124</phrase></phrase>&#xd7;<phrase role="number"><phrase role="float">325.521</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">2.6</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">2.0065</phrase></phrase>&#xd7;<phrase role="number"><phrase role="float">-325.521</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">2.76</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">2.0031</phrase></phrase>&#xd7;<phrase role="number"><phrase role="float">325.521</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">2.92</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">2.0015</phrase></phrase>&#xd7;<phrase role="number"><phrase role="float">-325.521</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">3.08</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">2.0008</phrase></phrase>&#xd7;<phrase role="number"><phrase role="float">325.521</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">3.24</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">2.0004</phrase></phrase>&#xd7;<phrase role="number"><phrase role="float">-284.831</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">3.4</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">2.0002</phrase></phrase>&#xd7;<phrase role="number"><phrase role="float">162.76</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">3.56</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">2.0001</phrase></phrase>&#xd7;<phrase role="number"><phrase role="float">-40.6901</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">3.72</phrase></phrase>)</subscript> &#x2227; Q(<emphasis>x</emphasis>) = <superscript><phrase role="number"><phrase role="float">5.727</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">0.02</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">5.544</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">0.04</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">5.45</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">0.06</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">5.351</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">0.08</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">5.253</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">0.1</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">5.157</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">0.12</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">5.058</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">0.14</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">4.96</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">0.16</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">4.862</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">0.18</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">4.762</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">0.2</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">4.563</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">0.24</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">4.36</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">0.28</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">4.1584</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">0.32</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">3.9463</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">0.36</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">3.736</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">0.4</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">3.5429</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">0.44</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">3.3797</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">0.48</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">3.2417</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">0.52</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">3.1209</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">0.56</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">3.0138</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">0.6</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">2.8342</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">0.68</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">2.6881</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">0.76</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">2.5662</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">0.84</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">2.4242</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">0.92</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">2.3766</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">1</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">2.3058</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">1.08</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">2.2458</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">1.16</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">2.2035</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">1.24</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">2.1661</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">1.32</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">2.135</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">1.4</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">2.109</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">1.48</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">2.0697</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">1.64</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">2.0466</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">1.8</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">2.0325</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">1.96</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">2.0288</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">2.12</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">2.0292</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">2.28</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">2.0228</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">2.44</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">2.0124</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">2.6</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">2.0065</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">2.76</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">2.0031</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">2.92</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">2.0015</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">3.08</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">2.0008</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">3.24</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">2.0004</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">3.4</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">2.0002</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">3.56</phrase></phrase>)</subscript> + <superscript><phrase role="number"><phrase role="float">2.0001</phrase></phrase></superscript>&#x2044;<subscript>(<emphasis>x</emphasis> - <phrase role="number"><phrase role="float">3.72</phrase></phrase>)</subscript>'''
+                        
+                        Latex:
+                        
+                        [$../images/barycentric_latex.svg]]]
+]
+
+[heading Output Format Gallery]
+
+The above tables of sample output are available in various other formats
+
+[@../../example/formatter_html_output.html HTML sample page], generated with [@../../example/formatter_html_output.cpp formatter_html_output.cpp].
+
+[@../../example/formatter_text_output.txt Plain text sample page], generated with [@../../example/formatter_text_output.cpp formatter_text_output.cpp].
+
+[@../../example/formatter_latex_output.tex Latex source output], generated with [@../../example/formatter_latex_output.cpp formatter_latex_output.cpp].
+
+[@../../example/formatter_latex_output.pdf Latex PDF output], generated with [@../../example/formatter_latex_output.cpp formatter_latex_output.cpp] and then converted to PDF.
+
+[heading Extender Manual]
+
+This component is (somewhat) extendable to other output formats and other numeric types.
+
+The class `basic_numeric_printer` inherits from `basic_numeric_printer_base` like so:
+
+         template <output_print_t Format, class charT, class Traits>
+         class basic_numeric_printer<text_format, charT, Traits> : public basic_numeric_printer_base<charT, Traits> {/*details*/ };
+
+The task of enabling a new output format is to define a partial specialisation of `basic_numeric_printer` which inherits from
+`basic_numeric_printer_base` and overrides it's virtual member functions to tailor the output.  Conversely, the task
+of enabling support for a new number type, is to provide a free function `print`:
+
+   template <class charT, class Traits>
+   void print(basic_numeric_printer_base<charT, Traits>& os, MyNumber const& value);
+
+Which can be found via ADL, and which calls `basic_numeric_printer_base`'s member functions to
+perform the formatted output, it may also make unqualified calls to `print` where the sub-type
+is already supported (integers, floats, complex numbers, polynomials).  This is prefered to overloading `operator<<` directly, since the 
+default `operator<<` will handle stream padding (as a result of `std::setw()`) for you.
+
+Note that it is not required to include the header `<boost/math/tools/formtter.hpp>`, a simple forward declaration 
+of `basic_numeric_printer_base` will suffice:
+
+   namespace boost { namespace math{ namespace tools{  template <class charT, class Traits> class basic_numeric_printer_base; }}}
+
+Details of the public interface of `basic_numeric_printer_base` are as follows:
+
+         template <class charT, class Traits>
+         class basic_numeric_printer_base
+         {
+         public:
+            // Manipulator support:
+            void styling(styling_level_t i);
+            styling_level_t styling()const;
+
+            void imaginary_style(imaginary_i_t i);
+            imaginary_i_t imaginary_style()const;
+
+            void multiply(multiplyer_t t);
+            multiplyer_t multiply()const;
+
+            void parenthesis(std::size_t b);
+            std::size_t parenthesis()const;
+
+            void show_zero_components(bool b);
+            bool show_zero_components()const;
+
+            void use_unicode(bool b);
+            bool use_unicode()const;
+
+            bool latex_as_equation()const;
+            void latex_as_equation(bool);
+            
+            // stream access:
+            std::basic_ostream<charT, Traits>& stream();
+
+            // scoped helper objects
+            struct scoped_parenthesis
+            {
+               scoped_parenthesis(basic_numeric_printer_base<charT, Traits>* formatter);
+               ~scoped_parenthesis();
+            };
+            struct scoped_styling
+            {
+               scoped_styling(basic_numeric_printer_base<charT, Traits>* formatter);
+               ~scoped_styling();
+            };
+            struct scoped_prolog
+            {
+               scoped_prolog(basic_numeric_printer_base<charT, Traits>* formatter, const char* number_type);
+               ~scoped_prolog();
+            };
+
+            // virtual functions overridden in derived classes:
+            virtual void print_prolog(const char*);
+            virtual void print_epilog(const char*);
+            virtual void print_special_character(boost::uint32_t unicode_value);
+            virtual void print_times();
+            virtual void print_superscript(const std::basic_string<charT, Traits>& s);
+            virtual void print_imaginary_unit();
+            virtual void print_complex_infinity();
+            virtual void print_variable(charT c);
+            virtual void print_name(const std::basic_string<charT, Traits>& s);
+            virtual void print_fraction(const std::basic_string<charT, Traits>& s1, const std::basic_string<charT, Traits>& s2);
+            virtual void print_subscript(const std::basic_string<charT, Traits>& s);
+            virtual std::unique_ptr<basic_numeric_printer_base> clone(std::basic_ostream<charT, Traits>& os) = 0;
+
+            template <class Value>
+            std::basic_string<charT, Traits> part_as_string(const Value& value);
+            template <class Value>
+            std::basic_string<charT, Traits> part_as_plain_text(const Value& value);
+         };
+
+Details are as follows:
+
+            void styling(styling_level_t i);
+            styling_level_t styling()const;
+
+Gets and sets the XML styling level.
+
+            void imaginary_style(imaginary_i_t i);
+            imaginary_i_t imaginary_style()const;
+
+Gets and sets the character used for the imaginary unit /i/.
+
+            void multiply(multiplyer_t t);
+            multiplyer_t multiply()const;
+
+Gets and sets the character used as the multiplication symbol.
+
+            void parenthesis(std::size_t b);
+            std::size_t parenthesis()const;
+
+Gets and sets the current parenthesis level, should typically only be set via `scoped_parenthesis`.
+
+Compound types should always check the current parenthesis level and if it is greater than zero, wrap themselves in
+parenthesis.  They should do this before constructing a `scoped_parenthesis` of course.
+
+            void show_zero_components(bool b);
+            bool show_zero_components()const;
+
+Gets and sets whether zero sub-components are displayed or not.
+
+            void use_unicode(bool b);
+            bool use_unicode()const;
+
+Gets and sets whether plain text shoud use Unicode output or not: when `true` then the output is UTF-N where
+N is either 8, 16 or 32 and is determined by the size of `charT`.
+
+            bool latex_as_equation()const;
+            void latex_as_equation(bool);
+
+Gets and sets whether latex output formats numbers using math mode.
+
+            std::basic_ostream<charT, Traits>& stream();
+
+Returns the underlying output stream.
+
+            struct scoped_parenthesis
+            {
+               scoped_parenthesis(basic_numeric_printer_base<charT, Traits>* formatter);
+               ~scoped_parenthesis();
+            };
+
+A scoped parenthesis object should be constructed, whenever sub-objects need to wrap themselves in parenthesis if
+they themselves contain sub-objects.  For example the `print` function for polynomials declares a `scoped_parenthesis`
+right at it's start, if the coefficients are "atomic" types such as integers then they ignore the parenthesis level
+and are printed normally.  Compound coefficients such as complex numbers will make use of the parenthesis level though
+and wrap themselves in parenthesis.
+
+            struct scoped_styling
+            {
+               scoped_styling(basic_numeric_printer_base<charT, Traits>* formatter);
+               ~scoped_styling();
+            };
+
+XML output will wrap numbers in styling tags - for example `<span class="number">...</span>` in html output.
+If the current type being formatted should be treated as a single number then a `scoped_styling` object should be 
+constructed at the start of the types `print` function.  This will then suppress styling tags being added to
+any printed sub-objects.
+
+            struct scoped_prolog
+            {
+               scoped_prolog(basic_numeric_printer_base<charT, Traits>* formatter, const char* number_type);
+               ~scoped_prolog();
+            };
+
+Any type that provides a `print` function should construct a `scoped_prolog` object at it's start - it calls
+`print_prolog` during construction and `print_epilog` during destruction.  Set `number_type` to the empty
+string if you're printing an expression that contains multiple sub-components, and you're not constructing
+a `scoped_styling` object.  ie if sub-objects are styled, but this object is not.
+
+            virtual void print_prolog(const char*);
+
+Prints any prolog to the formatted output - for example styling tags in HTML/XML output.  
+
+`basic_numeric_printer_base<>::print_prolog` does nothing, specializations of `basic_numeric_printer`
+override that behaviour according to need.
+
+            virtual void print_epilog(const char*);
+
+Prints any epilog to the formatted output - for example closing styling tags in HTML/XML output.  
+
+`basic_numeric_printer_base<>::print_epilog` does nothing, specializations of `basic_numeric_printer`
+override that behaviour according to need.
+
+            virtual void print_special_character(boost::uint32_t unicode_value);
+
+Prints a special math character denoted by it's unicode code point.
+
+`basic_numeric_printer_base<>::print_special_character` outputs the character as UTF-N where N is determined by
+the size of `charT` if `use_unicode()` is true, otherwise prints the closest plain text approximation, 
+specializations of `basic_numeric_printer`
+override that behaviour according to need.
+
+
+            virtual void print_times();
+
+Prints the multiplication character.
+
+`basic_numeric_printer_base<>::print_times` outputs the character as UTF-N where N is determined by
+the size of `charT` if `use_unicode()` is true, otherwise prints an "x", specializations of `basic_numeric_printer`
+override that behaviour according to need.
+
+            virtual void print_superscript(const std::basic_string<charT, Traits>& s);
+
+Prints `s` as superscript.
+
+`basic_numeric_printer_base<>::print_superscript` outputs the characters as UTF-N superscript where N is determined by
+the size of `charT` if `use_unicode()` is true, otherwise prints a "^" followed by `s`, specializations of `basic_numeric_printer`
+override that behaviour according to need.
+
+            virtual void print_imaginary_unit();
+
+Prints the imaginary unit i.
+
+`basic_numeric_printer_base<>::print_imaginary_unit` outputs the character as UTF-N where N is determined by
+the size of `charT` if `use_unicode()` is true, otherwise prints a literal "i", specializations of `basic_numeric_printer`
+override that behaviour according to need.
+
+            virtual void print_complex_infinity();
+
+Prints complex infinity.
+
+`basic_numeric_printer_base<>::print_complex_infinity` outputs the infinity symbol as UTF-N where N is determined by
+the size of `charT` if `use_unicode()` is true, otherwise prints a literal "INFINITY", specializations of `basic_numeric_printer`
+override that behaviour according to need.
+
+            virtual void print_variable(charT c);
+
+Prints a character `c` that represents a named variable, typically rendered in italic text.
+
+`basic_numeric_printer_base<>::print_variable` outputs the character "as is", specializations of `basic_numeric_printer`
+override that behaviour according to need.
+
+            virtual void print_name(const std::basic_string<charT, Traits>& s);
+
+Prints a string name `s` that represents a named quantity, typically rendered in upright (non-italic) text.
+
+`basic_numeric_printer_base<>::print_variable` outputs the string "as is", specializations of `basic_numeric_printer`
+override that behaviour according to need.
+
+            virtual void print_fraction(const std::basic_string<charT, Traits>& s1, const std::basic_string<charT, Traits>& s2);
+
+Prints the fraction `s1/s2`.
+
+`basic_numeric_printer_base<>::print_fraction` outputs the fraction as plain text s1/s2, specializations of `basic_numeric_printer`
+override that behaviour according to need.
+
+            virtual void print_subscript(const std::basic_string<charT, Traits>& s);
+
+Prints `s` as subscript.
+
+`basic_numeric_printer_base<>::print_subscript` outputs the characters as UTF-N subscript where N is determined by
+the size of `charT` if `use_unicode()` is true, otherwise prints a "_" followed by `s`, specializations of `basic_numeric_printer`
+override that behaviour according to need.
+
+            virtual std::unique_ptr<basic_numeric_printer_base> clone(std::basic_ostream<charT, Traits>& os);
+
+Returns a (smart-) pointer to a copy of this object but which uses `os` as the underlying output stream.
+
+All derived classes must override this method.
+
+            template <class Value>
+            std::basic_string<charT, Traits> part_as_string(const Value& value);
+
+Helper function.  Returns `value` as a string.  Uses a copy of `this` which contains the same formatting flags (on both itself and
+the std::ostream it points to) but which outputs to a `std::basic_ostringstream` and then returns the result.
+
+Typically used to format numerator and denominator of a fraction.
+
+            template <class Value>
+            std::basic_string<charT, Traits> part_as_plain_text(const Value& value);
+
+Helper function.  Returns `value` as a string.  Differs from `part_as_string` in that it uses a plain text printer
+internally with `use_unicode()` set to `false`.
+
+Typically used to check if a value will be "trivial" such as "1" or "0" once printed to current precision.
+
+[endsect] [/section:formatting]
+
+
+[/  Copyright 2019 John Maddock.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
