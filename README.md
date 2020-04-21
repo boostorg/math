@@ -1,6 +1,9 @@
 Boost Math Library [![Build Status](https://travis-ci.org/boostorg/math.svg?branch=develop)](https://travis-ci.org/boostorg/math)
 ==================
 
+>ANNOUNCEMENT: Support for C++03 is now deprecated in this library and will be supported in existing features
+>only until March 2021.  New features will require *at least* C++11, as will existing features from next year.
+
 This library is divided into several interconnected parts:
 
 ### Floating Point Utilities
