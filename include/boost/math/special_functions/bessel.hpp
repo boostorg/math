@@ -206,7 +206,7 @@ T cyl_bessel_i_imp(T v, T x, const Policy& pol)
       }
       return sqrt(2 / (x * constants::pi<T>())) * sinh(x);
    }
-   if(policies::digits<T, Policy>() <= 113)
+   if((policies::digits<T, Policy>() <= 113) && (std::numeric_limits<T>::digits <= 113) && (std::numeric_limits<T>::radix == 2))
    {
       if(v == 0)
       {
