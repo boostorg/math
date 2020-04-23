@@ -77,7 +77,19 @@ T ellint_e_imp(T phi, T k, const Policy& pol)
     }
     else if(fabs(k) == 1)
     {
-       return invert ? T(-sin(phi)) : T(sin(phi));
+       //
+       // For k = 1 ellipse actually turns to a line and every pi/2 in phi is exactly 1 in arc length
+       // Periodicity though is in pi, curve follows sin(pi) for 0 <= phi <= pi/2 and then
+       // 2 - sin(pi- phi) = 2 + sin(phi - pi) for pi/2 <= phi <= pi, so general form is:
+       //
+       // 2n + sin(phi - n * pi) ; |phi - n * pi| <= pi / 2
+       //
+       T m = boost::math::round(phi / boost::math::constants::pi<T>());
+       T remains = phi - m * boost::math::constants::pi<T>();
+       T value = 2 * m + sin(remains);
+
+       // negative arc length for negative phi
+       return invert ? -value : value;
     }
     else
     {
