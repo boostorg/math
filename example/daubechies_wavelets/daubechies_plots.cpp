@@ -11,8 +11,8 @@
 
 #include <boost/multiprecision/float128.hpp>
 #include <boost/math/special_functions/daubechies_scaling.hpp>
+#include <boost/math/tools/ulp_plot.hpp>
 #include <quicksvg/graph_fn.hpp>
-#include <quicksvg/ulp_plot.hpp>
 
 
 using boost::multiprecision::float128;
@@ -135,11 +135,16 @@ void do_ulp(int coarse_refinements, PhiPrecise phi_precise)
     title = "";
 
     std::string filename = "daubechies_" + std::to_string(p) + "_" + boost::core::demangle(typeid(CoarseReal).name()) + "_" + std::to_string(coarse_refinements) + "_refinements.svg";
-    int samples = 20000;
+    int samples = 1000000;
     int clip = 20;
     int horizontal_lines = 8;
     int vertical_lines = 2*p - 1;
-    quicksvg::ulp_plot<decltype(phi_coarse), CoarseReal, decltype(phi_precise), PreciseReal>(phi_coarse, phi_precise, CoarseReal(0), phi_coarse.support().second, title, filename, samples, GRAPH_WIDTH, clip, horizontal_lines, vertical_lines);
+    auto [a, b] = phi_coarse.support();
+    auto plot = boost::math::tools::ulp_plot<decltype(phi_precise), PreciseReal, CoarseReal>(phi_precise, a, b, samples);
+    plot.set_clip(clip);
+    plot.set_width(GRAPH_WIDTH);
+    plot.add_fn(phi_coarse);
+    plot.write(filename, true, title, horizontal_lines, vertical_lines);
 }
 
 
@@ -151,9 +156,9 @@ int main()
     boost::hana::for_each(std::make_index_sequence<18>(), [&](auto i){ plot_convergence<double, i+2>(); });
 
     using PreciseReal = float128;
-    using CoarseReal = double;
+    using CoarseReal = float;
     int precise_refinements = 22;
-    constexpr const int p = 8;
+    constexpr const int p = 14;
     std::cout << "Computing precise scaling function in " << boost::core::demangle(typeid(PreciseReal).name()) << " precision.\n";
     auto phi_precise = boost::math::daubechies_scaling<PreciseReal, p>(precise_refinements);
     std::cout << "Beginning comparison with functions computed in " << boost::core::demangle(typeid(CoarseReal).name()) << " precision.\n";
