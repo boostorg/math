@@ -379,7 +379,7 @@ void SepticHermite(benchmark::State & state)
     boost::random::uniform_real_distribution<Real> dis(Real(0), Real(1));
     Real x0 = dis(rd);
     x[0] = x0;
-    for (size_t i = 1; i < n; ++i)
+    for (decltype(n) i = 1; i < n; ++i)
     {
         x[i] = x[i-1] + dis(rd);
     }
