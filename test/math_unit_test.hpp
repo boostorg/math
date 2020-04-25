@@ -246,6 +246,7 @@ bool check_conditioned_error(Real abscissa, PreciseReal expected1, PreciseReal e
     return true;
 }
 
+
 template<class PreciseReal, class Real>
 bool check_absolute_error(PreciseReal expected1, Real computed, Real acceptable_error, std::string const & filename, std::string const & function, int line)
 {
