@@ -50,6 +50,7 @@ but you should never use `using` statements globally in header files).]
 #include <boost/math/special_functions/next.hpp> // For float_distance.
 #include <tuple> // for std::tuple and std::make_tuple.
 #include <boost/math/special_functions/cbrt.hpp> // For boost::math::cbrt.
+#include <boost/math/special_functions/pow.hpp> // boost::math::pow<5,double>
 
 //] [/root_finding_include_1]
 
