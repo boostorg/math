@@ -77,6 +77,9 @@ void set_output_precision(T, std::ostream& os)
    {
       os << std::setprecision(std::numeric_limits<T>::digits10 + 2);
    }
+   else
+      os << std::setprecision(22); // and hope for the best!
+
 #ifdef BOOST_MSVC
 #pragma warning(pop)
 #endif
