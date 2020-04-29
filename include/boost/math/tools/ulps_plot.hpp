@@ -65,7 +65,7 @@ template<class F, typename PreciseReal, typename CoarseReal>
 class ulps_plot {
 public:
     ulps_plot(F hi_acc_impl, CoarseReal a, CoarseReal b,
-             size_t samples = 10000, bool perturb_abscissas = false, int random_seed = -1);
+             size_t samples = 1000, bool perturb_abscissas = false, int random_seed = -1);
 
     ulps_plot& clip(PreciseReal clip);
 
