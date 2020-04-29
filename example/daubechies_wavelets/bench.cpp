@@ -66,17 +66,12 @@ template<typename Real, int p>
 void ScalingEvaluation(benchmark::State & state)
 {
     auto phi = boost::math::daubechies_scaling<Real, p>();
-    Real xmax = phi.support().second;
     Real x = 0;
-    Real step = uniform()/2048;
+    Real step = std::numeric_limits<Real>::epsilon();
     for (auto _ : state)
     {
         benchmark::DoNotOptimize(phi(x));
         x += step;
-        if (x > xmax) {
-            x = 0;
-            step = uniform()/2048;
-        }
     }
 }
 
@@ -95,6 +90,21 @@ BENCHMARK_TEMPLATE(ScalingEvaluation, double, 12);
 BENCHMARK_TEMPLATE(ScalingEvaluation, double, 13);
 BENCHMARK_TEMPLATE(ScalingEvaluation, double, 14);
 BENCHMARK_TEMPLATE(ScalingEvaluation, double, 15);
+
+BENCHMARK_TEMPLATE(ScalingEvaluation, float, 2);
+BENCHMARK_TEMPLATE(ScalingEvaluation, float, 3);
+BENCHMARK_TEMPLATE(ScalingEvaluation, float, 4);
+BENCHMARK_TEMPLATE(ScalingEvaluation, float, 5);
+BENCHMARK_TEMPLATE(ScalingEvaluation, float, 6);
+BENCHMARK_TEMPLATE(ScalingEvaluation, float, 7);
+BENCHMARK_TEMPLATE(ScalingEvaluation, float, 8);
+BENCHMARK_TEMPLATE(ScalingEvaluation, float, 9);
+BENCHMARK_TEMPLATE(ScalingEvaluation, float, 10);
+BENCHMARK_TEMPLATE(ScalingEvaluation, float, 11);
+BENCHMARK_TEMPLATE(ScalingEvaluation, float, 12);
+BENCHMARK_TEMPLATE(ScalingEvaluation, float, 13);
+BENCHMARK_TEMPLATE(ScalingEvaluation, float, 14);
+BENCHMARK_TEMPLATE(ScalingEvaluation, float, 15);
 
 
 template<typename Real, int p>
