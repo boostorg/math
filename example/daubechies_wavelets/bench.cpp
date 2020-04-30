@@ -10,6 +10,7 @@
 #include <benchmark/benchmark.h>
 #include <boost/random/uniform_real_distribution.hpp>
 #include <boost/math/special_functions/daubechies_scaling.hpp>
+#include <boost/math/quadrature/wavelet_transforms.hpp>
 #include <boost/math/interpolators/cubic_hermite.hpp>
 #include <boost/math/interpolators/detail/quintic_hermite_detail.hpp>
 #include <boost/math/interpolators/detail/septic_hermite_detail.hpp>
@@ -495,5 +496,46 @@ void CardinalSepticHermiteAOS(benchmark::State & state)
 
 BENCHMARK_TEMPLATE(CardinalSepticHermiteAOS, double)->RangeMultiplier(2)->Range(1<<8, 1<<20)->Complexity();
 
+
+template<typename Real, int p>
+void WaveletTransform(benchmark::State & state)
+{
+    auto psi = boost::math::daubechies_wavelet<Real, p>();
+    auto f = [](Real t) {
+        return std::exp(-t*t);
+    };
+
+    auto Wf = boost::math::quadrature::daubechies_wavelet_transform(f, psi);
+    for (auto _ : state)
+    {
+        Real s = 1 + uniform();
+        Real t = uniform();
+        benchmark::DoNotOptimize(Wf(s, t));
+    }
+}
+
+BENCHMARK_TEMPLATE(WaveletTransform, float, 3);
+BENCHMARK_TEMPLATE(WaveletTransform, float, 4);
+BENCHMARK_TEMPLATE(WaveletTransform, float, 5);
+BENCHMARK_TEMPLATE(WaveletTransform, float, 6);
+BENCHMARK_TEMPLATE(WaveletTransform, float, 7);
+BENCHMARK_TEMPLATE(WaveletTransform, float, 8);
+BENCHMARK_TEMPLATE(WaveletTransform, float, 9);
+BENCHMARK_TEMPLATE(WaveletTransform, float, 10);
+BENCHMARK_TEMPLATE(WaveletTransform, float, 11);
+BENCHMARK_TEMPLATE(WaveletTransform, float, 12);
+BENCHMARK_TEMPLATE(WaveletTransform, float, 13);
+BENCHMARK_TEMPLATE(WaveletTransform, float, 14);
+BENCHMARK_TEMPLATE(WaveletTransform, float, 15);
+BENCHMARK_TEMPLATE(WaveletTransform, float, 16);
+BENCHMARK_TEMPLATE(WaveletTransform, float, 17);
+BENCHMARK_TEMPLATE(WaveletTransform, float, 18);
+BENCHMARK_TEMPLATE(WaveletTransform, float, 19);
+
+BENCHMARK_TEMPLATE(WaveletTransform, double, 4);
+BENCHMARK_TEMPLATE(WaveletTransform, double, 8);
+BENCHMARK_TEMPLATE(WaveletTransform, double, 12);
+BENCHMARK_TEMPLATE(WaveletTransform, double, 15);
+BENCHMARK_TEMPLATE(WaveletTransform, double, 19);
 
 BENCHMARK_MAIN();
