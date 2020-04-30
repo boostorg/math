@@ -84,6 +84,12 @@ void test_spots(T, const char* type_name)
     BOOST_MATH_STD_USING
     // Function values calculated on http://functions.wolfram.com/
     // Note that Mathematica's EllipticE accepts k^2 as the second parameter.
+    //
+    // We can't use these for variable precision types as the test values dependent on Pi
+    // get initialized once, and thereafter have the "wrong" precision when the function is
+    // called a second time.
+    //
+#ifndef TEST_UDT
     static const boost::array<boost::array<T, 3>, 28> data1 = {{
         {{ SC_(0.0), SC_(0.0), SC_(0.0) }},
         {{ SC_(-10.0), SC_(0.0), SC_(-10.0) }},
@@ -117,6 +123,7 @@ void test_spots(T, const char* type_name)
     }};
 
     do_test_ellint_e2<T>(data1, type_name, "Elliptic Integral E: Mathworld Data");
+#endif
 
 #include "ellint_e2_data.ipp"
 
