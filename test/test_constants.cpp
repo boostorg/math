@@ -25,7 +25,6 @@
 #include <boost/test/tools/floating_point_comparison.hpp>
 
 #include <boost/math/constants/constants.hpp>
-#include <boost/math/tools/test.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/utility/enable_if.hpp>
 
