@@ -279,7 +279,7 @@ void check_spots(const T&)
    bool test_infinity = std::numeric_limits<T>::has_infinity;
    T nan = 0;
    bool test_nan = false;
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+#if !BOOST_WORKAROUND(BOOST_BORLANDC, BOOST_TESTED_AT(0x564))
    // numeric_limits reports that a quiet NaN is present
    // but an attempt to access it will terminate the program!!!!
    if(std::numeric_limits<T>::has_quiet_NaN)
