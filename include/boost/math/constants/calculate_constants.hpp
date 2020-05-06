@@ -319,14 +319,6 @@ inline T constant_four_minus_pi<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SP
    return static_cast<T>(4) - pi<T, policies::policy<policies::digits2<N> > >();
 }
 
-//template <class T>
-//template<int N>
-//inline T constant_pow23_four_minus_pi<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC((boost::integral_constant<int, N>)))
-//{
-//   BOOST_MATH_STD_USING
-//   return pow(four_minus_pi<T, policies::policy<policies::digits2<N> > >(), static_cast<T>(1.5));
-//}
-
 template <class T>
 template<int N>
 inline T constant_exp_minus_half<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC((boost::integral_constant<int, N>)))
@@ -388,7 +380,6 @@ inline T constant_half_pi<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC((bo
    return pi<T, policies::policy<policies::digits2<N> > >()  / static_cast<T>(2);
 }
 
-
 template <class T>
 template<int N>
 inline T constant_third_pi<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC((boost::integral_constant<int, N>)))
@@ -447,7 +438,6 @@ inline T constant_pi_sqr_div_six<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_S
    *      pi<T, policies::policy<policies::digits2<N> > >()
    / static_cast<T>(6); //
 }
-
 
 template <class T>
 template<int N>
@@ -579,9 +569,9 @@ template<int N>
 inline T constant_ln_phi<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC((boost::integral_constant<int, N>)))
 {
    BOOST_MATH_STD_USING
-   //return  log(phi<T, policies::policy<policies::digits2<N> > >()); // ???
    return log((static_cast<T>(1) + sqrt(static_cast<T>(5)) )/static_cast<T>(2) );
 }
+
 template <class T>
 template<int N>
 inline T constant_one_div_ln_phi<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC((boost::integral_constant<int, N>)))
@@ -1004,6 +994,14 @@ template<int N>
 inline T constant_two_div_root_pi<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC((boost::integral_constant<int, N>)))
 {
    return 2 * boost::math::constants::one_div_root_pi<T>();
+}
+
+template <class T>
+template<int N>
+inline T constant_feigenbaum<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC((boost::integral_constant<int, N>)))
+{
+   static_assert(N < 1018, "The Feigenbaum constant cannot be computed at runtime; it is too expensive. It is known to 1018 decimal digits; you must request less than than.");
+   return std::numeric_limits<T>::quiet_NaN();
 }
 
 }
