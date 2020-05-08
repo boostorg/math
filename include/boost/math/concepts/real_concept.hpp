@@ -189,10 +189,6 @@ inline real_concept atan2(real_concept a, real_concept b)
 { return std::atan2(a.value(), b.value()); }
 inline real_concept ceil(real_concept a)
 { return std::ceil(a.value()); }
-inline bool isnan(real_concept a)
-{ return std::isnan(a.value()); }
-inline real_concept max(real_concept a, real_concept b)
-{ return std::max(a.value(), b.value()); }
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 // I've seen std::fmod(long double) crash on some platforms
 // so use fmodl instead:

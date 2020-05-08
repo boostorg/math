@@ -771,9 +771,9 @@ void test_feigenbaum()
    CHECK_ULP_CLOSE(static_cast<double>(f), f64, 0);
    auto g = boost::lexical_cast<Real100>("4.6692016091029906718532038204662016172581855774757686327456513430041343302113147371386897440239480138171659848551898151344086271420279325223124429888908908599449354632367134115324817142199474556443658237932020095610583305754586176522220703854106467494942849814533917262005687556659523398756038256372256480040951071283890611844702775854285419801113440175002428585382498335715522052236087250291678860362674527213399057131606875345083433934446103706309452019115876972432273589838903794946257251289097948986768334611626889116563123474460575179539122045562472807095202198199094558581946136877445617396074115614074243754435499204869180982648652368438702799649017397793425134723808737136211601860128186102056381818354097598477964173900328936171432159878240789776614391395764037760537119096932066998361984288981837003229412030210655743295550388845849737034727532121925706958414074661841981961006129640161487712944415901405467941800198133253378592493365883070459999938375411726563553016862529032210862320550634510679399023341675");
    CHECK_ULP_CLOSE(f, g, 0);
-   //using Real1000 = boost::multiprecision::number<cpp_bin_float<1000>>;
-   //auto f1000 = boost::math::constants::feigenbaum<Real1000>();
-   //CHECK_ULP_CLOSE(static_cast<Real100>(f), f1000, 0);
+   using Real1000 = boost::multiprecision::number<cpp_bin_float<1000>>;
+   auto f1000 = boost::math::constants::feigenbaum<Real1000>();
+   CHECK_ULP_CLOSE(static_cast<Real100>(f), f1000, 0);
    //using Real10000 = boost::multiprecision::number<cpp_bin_float<10000>>;
    //auto f10000 = boost::math::constants::feigenbaum<Real10000>();
    
@@ -791,10 +791,10 @@ int main()
 #endif
    test_constexpr();
 
-   //test_real_concept_policy(real_concept_policy_1());
-   //test_real_concept_policy(real_concept_policy_2()); // Increased precision forcing construction from string.
-   //test_real_concept_policy(real_concept_policy_3()); // Increased precision forcing caching of computed values.
-   //test_real_concept_policy(boost::math::policies::policy<>()); // Default.
+   test_real_concept_policy(real_concept_policy_1());
+   test_real_concept_policy(real_concept_policy_2()); // Increased precision forcing construction from string.
+   test_real_concept_policy(real_concept_policy_3()); // Increased precision forcing caching of computed values.
+   test_real_concept_policy(boost::math::policies::policy<>()); // Default.
 #endif
    // (Parameter value, arbitrarily zero, only communicates the floating-point type).
    test_spots(0.0F); // Test float.
