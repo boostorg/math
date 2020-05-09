@@ -74,9 +74,14 @@ bool check_ulp_close(PreciseReal expected1, Real computed, size_t ulps, std::str
     using boost::math::itrunc;
     // Of course integers can be expected values, and they are exact:
     if (!std::is_integral<PreciseReal>::value) {
-        BOOST_ASSERT_MSG(sizeof(PreciseReal) >= sizeof(Real),
-                         "The expected number must be computed in higher (or equal) precision than the number being tested.");
         BOOST_ASSERT_MSG(!isnan(expected1), "Expected value cannot be a nan.");
+        if (sizeof(PreciseReal) < sizeof(Real)) {
+            std::ostringstream err;
+            err << "\n\tThe expected number must be computed in higher (or equal) precision than the number being tested.\n";
+            err << "\tType of expected is " << boost::core::demangle(typeid(PreciseReal).name()) << ", which occupies " << sizeof(PreciseReal) << " bytes.\n";
+            err << "\tType of computed is " << boost::core::demangle(typeid(Real).name()) << ", which occupies " << sizeof(Real) << " bytes.\n";
+            throw std::logic_error(err.str());
+        }
     }
 
     if (isnan(computed))

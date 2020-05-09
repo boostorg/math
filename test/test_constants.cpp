@@ -791,10 +791,10 @@ int main()
 #endif
    test_constexpr();
 
-   test_real_concept_policy(real_concept_policy_1());
-   test_real_concept_policy(real_concept_policy_2()); // Increased precision forcing construction from string.
-   test_real_concept_policy(real_concept_policy_3()); // Increased precision forcing caching of computed values.
-   test_real_concept_policy(boost::math::policies::policy<>()); // Default.
+   //test_real_concept_policy(real_concept_policy_1());
+   //test_real_concept_policy(real_concept_policy_2()); // Increased precision forcing construction from string.
+   //test_real_concept_policy(real_concept_policy_3()); // Increased precision forcing caching of computed values.
+   //test_real_concept_policy(boost::math::policies::policy<>()); // Default.
 #endif
    // (Parameter value, arbitrarily zero, only communicates the floating-point type).
    test_spots(0.0F); // Test float.
@@ -802,7 +802,7 @@ int main()
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_spots(0.0L); // Test long double.
 #if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x0582))
-   test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
+   //test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
    //test_spots(boost::math::concepts::big_real_concept(0.)); // Test real concept.
 #endif
 #endif
