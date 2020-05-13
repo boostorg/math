@@ -1,3 +1,4 @@
+// Copyright Philipp C. J. Münster 2020.
 // Copyright Paul A. Bristow 2010.
 // Copyright John Maddock 2007.
 
@@ -12,8 +13,6 @@
 // From MathWorld--A Wolfram Web Resource.
 // http://mathworld.wolfram.com/VonMisesDistribution.html
 
-#include <pch.hpp> // include directory /libs/math/src/tr1/ is needed.
-
 #ifdef _MSC_VER
 #  pragma warning (disable: 4127) // conditional expression is constant
 // caused by using   if(std::numeric_limits<RealType>::has_infinity)
@@ -27,8 +26,9 @@
 #include <boost/test/tools/floating_point_comparison.hpp>
 
 #include <boost/math/distributions/von_mises.hpp>
-    using boost::math::von_mises_distribution;
+   using boost::math::von_mises_distribution;
 #include <boost/math/tools/test.hpp>
+#include "math_unit_test.hpp"
 #include "test_out_of_range.hpp"
 
 #include <iostream>
@@ -37,7 +37,7 @@
    using std::endl;
    using std::setprecision;
 #include <limits>
-  using std::numeric_limits;
+   using std::numeric_limits;
 
 template <class RealType>
 void check_von_mises(RealType mean, RealType conc, RealType x, RealType p, RealType q, RealType tol)
@@ -73,9 +73,9 @@ void check_von_mises(RealType mean, RealType conc, RealType x, RealType p, RealT
 template <class RealType>
 void test_spots(RealType)
 {
-  // Basic sanity checks  
+  // Basic sanity checks
   // Check some bad parameters to the distribution,
-#ifndef BOOST_NO_EXCEPTIONS   
+#ifndef BOOST_NO_EXCEPTIONS
   BOOST_MATH_CHECK_THROW(boost::math::von_mises_distribution<RealType> nbad1(0, -1), std::domain_error); // negative conc
 #else
   BOOST_MATH_CHECK_THROW(boost::math::von_mises_distribution<RealType>(0, -1), std::domain_error); // negative conc
@@ -96,7 +96,7 @@ void test_spots(RealType)
     BOOST_MATH_CHECK_THROW(boost::math::von_mises_distribution<RealType> nbad1(std::numeric_limits<RealType>::infinity(), static_cast<RealType>(1)), std::domain_error); // +infinite mean
     BOOST_MATH_CHECK_THROW(boost::math::von_mises_distribution<RealType> nbad1(-std::numeric_limits<RealType>::infinity(),  static_cast<RealType>(1)), std::domain_error); // -infinite mean
     BOOST_MATH_CHECK_THROW(boost::math::von_mises_distribution<RealType> nbad1(static_cast<RealType>(0), std::numeric_limits<RealType>::infinity()), std::domain_error); // infinite conc
-#else     
+#else
     BOOST_MATH_CHECK_THROW(boost::math::von_mises_distribution<RealType>(std::numeric_limits<RealType>::infinity(), static_cast<RealType>(1)), std::domain_error); // +infinite mean
     BOOST_MATH_CHECK_THROW(boost::math::von_mises_distribution<RealType>(-std::numeric_limits<RealType>::infinity(),  static_cast<RealType>(1)), std::domain_error); // -infinite mean
     BOOST_MATH_CHECK_THROW(boost::math::von_mises_distribution<RealType>(static_cast<RealType>(0), std::numeric_limits<RealType>::infinity()), std::domain_error); // infinite conc
@@ -116,7 +116,7 @@ void test_spots(RealType)
   //
   // Tests for PDF: we know that the peak value is at e/(2*pi*I0(1)
   //
-  RealType tolerance = boost::math::tools::epsilon<RealType>() * 5 * 100; // 5 eps as a percentage  
+  RealType tolerance = boost::math::tools::epsilon<RealType>() * 5 * 100; // 5 eps as a percentage
   BOOST_CHECK_CLOSE(
       pdf(von_mises_distribution<RealType>(), static_cast<RealType>(0)),
       static_cast<RealType>(0.34171048862346315949457814754706159394027L),  // e/(2*pi*I0(1))
@@ -133,24 +133,33 @@ void test_spots(RealType)
       pdf(von_mises_distribution<RealType>(3, 5), static_cast<RealType>(3)),
       static_cast<RealType>(0.86713652854235200257351846969777045343907L),  // e^5/(2*pi*I0(5))
       tolerance);
-  // Tests with larger numbers whose bessel function value exceeds the representable range
   BOOST_CHECK_CLOSE(
       pdf(von_mises_distribution<RealType>(3, 25), static_cast<RealType>(3)),
       static_cast<RealType>(1.98455543847726689510475504795539869409664L),  // e^25/(2*pi*I0(25))
       tolerance);
-  BOOST_CHECK_CLOSE(
-      pdf(von_mises_distribution<RealType>(3, 125), static_cast<RealType>(3)),
-      static_cast<RealType>(4.45583423571762164664231477348923797078210L),  // e^125/(2*pi*I0(125))
+	// edge case for single point precision
+	BOOST_CHECK_CLOSE(
+      pdf(von_mises_distribution<RealType>(3, 86), static_cast<RealType>(3)),
+      static_cast<RealType>(3.69423343123704539549725123346713237943413L),
       tolerance);
   BOOST_CHECK_CLOSE(
-      pdf(von_mises_distribution<RealType>(3, 1250), static_cast<RealType>(3)),
-      static_cast<RealType>(14.1033286206525302447068654967513214217021L),  // e^1250/(2*pi*I0(1250))
+      pdf(von_mises_distribution<RealType>(3, 87), static_cast<RealType>(3)),
+      static_cast<RealType>(3.71571226458759536792289974309199255119626L),
+      tolerance);
+	// edge case for double point precision
+  BOOST_CHECK_CLOSE(
+      pdf(von_mises_distribution<RealType>(3, 708), static_cast<RealType>(3)),
+      static_cast<RealType>(10.6132883625399035032551439553585260831760L),
+      tolerance);
+	BOOST_CHECK_CLOSE(
+      pdf(von_mises_distribution<RealType>(3, 709), static_cast<RealType>(3)),
+      static_cast<RealType>(10.6207836264247647802343430545802569228891L),
       tolerance);
 
-  tolerance = 1e-3f; // 1e-5 (as %)
-  // Some tests only pass at 1e-5 because values generated by
+  tolerance = 2e-3f; // 2e-5 (as %)
 
-  cout << "Tolerance for type " << typeid(RealType).name()  << " is " << tolerance << " %" << endl;
+  cout << "Tolerance for type " << typeid(RealType).name()
+       << " is " << tolerance << " %" << endl;
 
   // test CDF for mean and interval edges
   check_von_mises(
@@ -160,7 +169,7 @@ void test_spots(RealType)
       static_cast<RealType>(0.5L),
       static_cast<RealType>(0.5L),
       tolerance);
-      
+
   check_von_mises(
       static_cast<RealType>(0),
       static_cast<RealType>(1),
@@ -184,8 +193,8 @@ void test_spots(RealType)
       static_cast<RealType>(1),
       static_cast<RealType>(0.794355307434683479987678129735260058645499262629455722769L),
       static_cast<RealType>(0.205644692565316520012321870264739941354500737370544277230L),
-      tolerance);      
-      
+      tolerance);
+
   check_von_mises(
       static_cast<RealType>(0),
       static_cast<RealType>(1),
@@ -200,8 +209,8 @@ void test_spots(RealType)
       static_cast<RealType>(1),
       static_cast<RealType>(0.98096204546814689054581384796251763480020360394758184271L),
       static_cast<RealType>(0.01903795453185310945418615203748236519979639605241815729L),
-      tolerance);      
-      
+      tolerance);
+
   check_von_mises(
       static_cast<RealType>(0),
       static_cast<RealType>(5),
@@ -209,7 +218,7 @@ void test_spots(RealType)
       static_cast<RealType>(0.01903795453185310945418615203748236519979639605241815729L),
       static_cast<RealType>(0.98096204546814689054581384796251763480020360394758184271L),
       tolerance);
-      
+
   // test CDF for high concentrations
   //~ check_von_mises(
       //~ static_cast<RealType>(0),
@@ -217,8 +226,8 @@ void test_spots(RealType)
       //~ static_cast<RealType>(1),
       //~ static_cast<RealType>(0.999999062404464440452233504489299782776166264467210572765L),
       //~ static_cast<RealType>(9.37595535559547766495510700217223833735532789427234e-7L),
-      //~ tolerance);      
-      
+      //~ tolerance);
+
   //~ check_von_mises(
       //~ static_cast<RealType>(0),
       //~ static_cast<RealType>(25),
@@ -226,15 +235,15 @@ void test_spots(RealType)
       //~ static_cast<RealType>(9.37595535559547766495510700217223833735532789427234e-7L),
       //~ static_cast<RealType>(0.999999062404464440452233504489299782776166264467210572765L),
       //~ tolerance);
-  
+
   //~ check_von_mises(
       //~ static_cast<RealType>(0),
       //~ static_cast<RealType>(125),
       //~ static_cast<RealType>(1),
       //~ static_cast<RealType>(0.99999999999999999996645363431349332910951002333081490389L),
       //~ static_cast<RealType>(3.3546365686506670890489976669185096109e-20L),
-      //~ tolerance);      
-      
+      //~ tolerance);
+
   //~ check_von_mises(
       //~ static_cast<RealType>(0),
       //~ static_cast<RealType>(125),
@@ -242,7 +251,7 @@ void test_spots(RealType)
       //~ static_cast<RealType>(3.3546365686506670890489976669185096109e-20L),
       //~ static_cast<RealType>(0.99999999999999999996645363431349332910951002333081490389L),
       //~ tolerance);
-  
+
 
   RealType tol2 = boost::math::tools::epsilon<RealType>() * 500;
   von_mises_distribution<RealType> dist(2, 3);
@@ -254,7 +263,7 @@ void test_spots(RealType)
   BOOST_CHECK_CLOSE(
        mean(dist)
        , static_cast<RealType>(2), tol2);
-  // variance:  
+  // variance:
   BOOST_CHECK_CLOSE(
        variance(von_mises_distribution<RealType>(2, 0))
        , static_cast<RealType>(1), tol2);
@@ -270,7 +279,7 @@ void test_spots(RealType)
   //~ BOOST_CHECK_CLOSE(
        //~ variance(von_mises_distribution<RealType>(2, 125))
        //~ , static_cast<RealType>(0.004008064813593637057963834031301840442156903531539609019L), tol2);
-       
+
   // std deviation:
   BOOST_CHECK_CLOSE(
        standard_deviation(dist)
@@ -300,14 +309,6 @@ void test_spots(RealType)
   BOOST_CHECK_CLOSE(
        skewness(dist)
        , static_cast<RealType>(0), tol2);
-  // kurtosis:
-  // BOOST_CHECK_CLOSE(
-      // kurtosis(dist)
-      // , static_cast<RealType>(3), tol2);
-  // kurtosis excess:
-  // BOOST_CHECK_CLOSE(
-      // kurtosis_excess(dist)
-      // , static_cast<RealType>(0), tol2);
 
   BOOST_CHECK_CLOSE(
        entropy(dist)
@@ -330,10 +331,28 @@ void test_spots(RealType)
 
   // Error tests:
   check_out_of_range<boost::math::von_mises_distribution<RealType> >(0, 1); // (All) valid constructor parameter values.
-    
+
   BOOST_MATH_CHECK_THROW(quantile(von_mises_distribution<RealType>(0, 1), -1), std::domain_error);
   BOOST_MATH_CHECK_THROW(quantile(von_mises_distribution<RealType>(0, 1), 2), std::domain_error);
 } // template <class RealType>void test_spots(RealType)
+
+template <typename RealType>
+void test_symmetry(RealType)
+{
+	RealType const pi = boost::math::constants::pi<RealType>();
+	RealType delta = 1.0 / (1 << 4);
+  for (RealType mean = 0; mean < pi; mean += delta) {
+    for (RealType conc = 0; conc < 100; conc = (conc + 1) * 1.5 - 1) {
+      von_mises_distribution<RealType> dist(mean, conc);
+      for (RealType x = 0; x < pi; x += delta) {
+        CHECK_ULP_CLOSE(pdf(dist, mean + x),
+                        pdf(dist, mean - x), 2);
+        CHECK_ULP_CLOSE(cdf(dist, mean + x) - static_cast<RealType>(0.5),
+                        static_cast<RealType>(0.5) - cdf(dist, mean - x), 32);
+      }
+    }
+  }
+}
 
 BOOST_AUTO_TEST_CASE( test_main )
 {
@@ -351,8 +370,13 @@ BOOST_AUTO_TEST_CASE( test_main )
   // (Parameter value, arbitrarily zero, only communicates the floating point type).
   test_spots(0.0F);   // Test float. OK at decdigits = 0 tolerance = 0.0001 %
   test_spots(0.0);    // Test double. OK at decdigits 7, tolerance = 1e07 %
+  // Check symmetry of PDF and CDF
+  test_symmetry(0.0F);
+  test_symmetry(0.0);
+
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-  //test_spots(0.0L); // Test long double.
+  test_spots(0.0L); // Test long double.
+  //test_symmetry(0.0L);
 #if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x0582))
   //test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
 #endif
@@ -363,7 +387,7 @@ BOOST_AUTO_TEST_CASE( test_main )
       "to pass.</note>" << std::endl;
 #endif
 
-   
+
 } // BOOST_AUTO_TEST_CASE( test_main )
 
 /*
