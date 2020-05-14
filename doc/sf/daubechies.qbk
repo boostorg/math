@@ -131,7 +131,7 @@ The 8 vanishing moment scaling function.
 
 * Daubechies, Ingrid. ['Ten Lectures on Wavelets.] Vol. 61. Siam, 1992.
 * Mallat, Stephane. ['A Wavelet Tour of Signal Processing: the sparse way] Academic press, 2008.
-
+* Thompson, Nicholas, Maddock, John et al. ['Towards 1ULP Evaluation of Daubechies Wavelets] https://arxiv.org/ftp/arxiv/papers/2005/2005.05424.pdf
 
 
 [endsect]
