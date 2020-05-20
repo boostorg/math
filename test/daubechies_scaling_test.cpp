@@ -15,11 +15,9 @@
 #include <boost/hana/for_each.hpp>
 #include <boost/hana/ext/std/integer_sequence.hpp>
 #include <boost/math/tools/condition_numbers.hpp>
-#include <boost/math/differentiation/finite_difference.hpp>
 #include <boost/math/special_functions/daubechies_scaling.hpp>
 #include <boost/math/filters/daubechies.hpp>
 #include <boost/math/special_functions/detail/daubechies_scaling_integer_grid.hpp>
-#include <boost/math/constants/constants.hpp>
 #include <boost/math/quadrature/trapezoidal.hpp>
 #include <boost/math/special_functions/next.hpp>
 
@@ -28,10 +26,7 @@
 using boost::multiprecision::float128;
 #endif
 
-
-using boost::math::constants::pi;
-using boost::math::constants::root_two;
-
+using std::sqrt;
 // Mallat, Theorem 7.4, characterization number 3:
 // A conjugate mirror filter has p vanishing moments iff h^{(n)}(pi) = 0 for 0 <= n < p.
 template<class Real, unsigned p>
@@ -55,7 +50,7 @@ void test_daubechies_filters()
     {
         H0 += h[j];
     }
-    CHECK_MOLLIFIED_CLOSE(root_two<Real>(), H0, tol);
+    CHECK_MOLLIFIED_CLOSE(sqrt(static_cast<Real>(2)), H0, tol);
 
     // This is implied if we choose the scaling function to be an orthonormal basis of V0.
     Real scaling = 0;
