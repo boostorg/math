@@ -28,14 +28,14 @@
 namespace boost::math::tools {
 
 namespace detail {
-template<class F1, class F2, class Real>
+template<class F1, class F2, class CoarseReal, class PreciseReal>
 void write_gridlines(std::ostream& fs, int horizontal_lines, int vertical_lines,
-                     F1 x_scale, F2 y_scale, Real min_x, Real max_x, Real min_y, Real max_y,
+                     F1 x_scale, F2 y_scale, CoarseReal min_x, CoarseReal max_x, PreciseReal min_y, PreciseReal max_y,
                      int graph_width, int graph_height, int margin_left, std::string const & font_color)
 {
   // Make a grid:
   for (int i = 1; i <= horizontal_lines; ++i) {
-      Real y_cord_dataspace = min_y +  ((max_y - min_y)*i)/horizontal_lines;
+      PreciseReal y_cord_dataspace = min_y +  ((max_y - min_y)*i)/horizontal_lines;
       auto y = y_scale(y_cord_dataspace);
       fs << "<line x1='0' y1='" << y << "' x2='" << graph_width
          << "' y2='" << y
@@ -48,8 +48,8 @@ void write_gridlines(std::ostream& fs, int horizontal_lines, int vertical_lines,
    }
 
     for (int i = 1; i <= vertical_lines; ++i) {
-        Real x_cord_dataspace = min_x +  ((max_x - min_x)*i)/vertical_lines;
-        Real x = x_scale(x_cord_dataspace);
+        CoarseReal x_cord_dataspace = min_x +  ((max_x - min_x)*i)/vertical_lines;
+        CoarseReal x = x_scale(x_cord_dataspace);
         fs << "<line x1='" << x << "' y1='0' x2='" << x
            << "' y2='" << graph_height
            << "' stroke='gray' stroke-width='1' opacity='0.5' stroke-dasharray='4' />\n";
@@ -111,17 +111,17 @@ public:
         {
             for (auto const & ulp : ulp_vec)
             {
-                if (abs(ulp) > worst_ulp_distance)
+                if (static_cast<PreciseReal>(abs(ulp)) > worst_ulp_distance)
                 {
-                    worst_ulp_distance = abs(ulp);
+                    worst_ulp_distance = static_cast<PreciseReal>(abs(ulp));
                 }
-                if (ulp < min_y)
+                if (static_cast<PreciseReal>(ulp) < min_y)
                 {
-                    min_y = ulp;
+                    min_y = static_cast<PreciseReal>(ulp);
                 }
-                if (ulp > max_y)
+                if (static_cast<PreciseReal>(ulp) > max_y)
                 {
-                    max_y = ulp;
+                    max_y = static_cast<PreciseReal>(ulp);
                 }
             }
         }
@@ -200,7 +200,7 @@ public:
         if (worst_ulp_distance > 3)
         {
             detail::write_gridlines(fs, plot.horizontal_lines_, plot.vertical_lines_, x_scale, y_scale, plot.a_, plot.b_,
-                                    static_cast<CoarseReal>(min_y), static_cast<CoarseReal>(max_y), graph_width, graph_height, margin_left, plot.font_color_);
+                                    min_y, max_y, graph_width, graph_height, margin_left, plot.font_color_);
         }
         else
         {
@@ -245,12 +245,12 @@ public:
                 {
                     continue;
                 }
-                if (plot.clip_ > 0 && abs(ulp[j]) > plot.clip_)
+                if (plot.clip_ > 0 && static_cast<PreciseReal>(abs(ulp[j])) > plot.clip_)
                 {
                     continue;
                 }
                 CoarseReal x = x_scale(plot.coarse_abscissas_[j]);
-                PreciseReal y = y_scale(ulp[j]);
+                PreciseReal y = y_scale(static_cast<PreciseReal>(ulp[j]));
                 fs << "<circle cx='" << x << "' cy='" << y << "' r='1' fill='" << color << "'/>\n";
             }
         }
