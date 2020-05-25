@@ -452,7 +452,7 @@ ulps_plot<F, PreciseReal, CoarseReal>::ulps_plot(F hi_acc_impl, CoarseReal a, Co
         gen.seed(rd());
     }
     // Boost's uniform_real_distribution can generate quad and multiprecision random numbers; std's cannot:
-    boost::random::uniform_real_distribution<PreciseReal> dis(a, b);
+    boost::random::uniform_real_distribution<PreciseReal> dis(static_cast<PreciseReal>(a), static_cast<PreciseReal>(b));
     precise_abscissas_.resize(samples);
     coarse_abscissas_.resize(samples);
 
@@ -477,7 +477,7 @@ ulps_plot<F, PreciseReal, CoarseReal>::ulps_plot(F hi_acc_impl, CoarseReal a, Co
         std::sort(coarse_abscissas_.begin(), coarse_abscissas_.end());
         for (size_t i = 0; i < samples; ++i)
         {
-            precise_abscissas_[i] = coarse_abscissas_[i];
+            precise_abscissas_[i] = static_cast<PreciseReal>(coarse_abscissas_[i]);
         }
     }
 
@@ -524,9 +524,9 @@ ulps_plot<F, PreciseReal, CoarseReal>& ulps_plot<F, PreciseReal, CoarseReal>::ad
     for (size_t i = 0; i < samples; ++i)
     {
         PreciseReal y_hi_acc = precise_ordinates_[i];
-        PreciseReal y_lo_acc = g(coarse_abscissas_[i]);
+        PreciseReal y_lo_acc = static_cast<PreciseReal>(g(coarse_abscissas_[i]));
         PreciseReal absy = abs(y_hi_acc);
-        PreciseReal dist = nextafter(static_cast<CoarseReal>(absy), std::numeric_limits<CoarseReal>::max()) - static_cast<CoarseReal>(absy);
+        PreciseReal dist = static_cast<PreciseReal>(nextafter(static_cast<CoarseReal>(absy), std::numeric_limits<CoarseReal>::max()) - static_cast<CoarseReal>(absy));
         ulps[i] = static_cast<CoarseReal>((y_lo_acc - y_hi_acc)/dist);
     }
     ulp_list_.emplace_back(ulps);
