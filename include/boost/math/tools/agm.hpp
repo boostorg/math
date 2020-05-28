@@ -11,6 +11,7 @@
 namespace boost::math::tools {
 
 namespace detail {
+    #pragma GCC diagnostic ignored "-Wstrict-aliasing"
     int32_t fast_float_distance(float x, float y) {
         static_assert(sizeof(float) == sizeof(int32_t), "float is incorrect size.");
         int32_t xi = *reinterpret_cast<int32_t*>(&x);
@@ -24,7 +25,7 @@ namespace detail {
         int64_t yi = *reinterpret_cast<int64_t*>(&y);
         return yi - xi;
     }
-
+    #pragma GCC diagnostic pop
 }
 template<typename Real>
 Real agm(Real a, Real g)
