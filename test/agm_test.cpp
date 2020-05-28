@@ -51,5 +51,14 @@ int main()
     test_gauss_constant<float>();
     test_gauss_constant<double>();
     test_gauss_constant<long double>();
+
+    test_scaling<float>();
+    test_scaling<double>();
+    test_scaling<long double>();
+
+    #ifdef BOOST_HAS_FLOAT128
+    test_gauss_constant<float128>();
+    test_scaling<float128>();
+    #endif
     return boost::math::test::report_errors();
 }
