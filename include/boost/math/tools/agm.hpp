@@ -18,14 +18,20 @@ namespace detail {
     #pragma GCC diagnostic push
     #pragma GCC diagnostic ignored "-Wstrict-aliasing"
     int32_t fast_float_distance(float x, float y) {
-        static_assert(sizeof(float) == sizeof(int32_t), "float is incorrect size.");
+        static_assert(std::numeric_limits<float>::is_iec559,
+                      "The float on your system is not iec559.");
+        static_assert(sizeof(float) == sizeof(int32_t),
+                      "The float on your system is not 32 bits.");
         int32_t xi = *reinterpret_cast<int32_t*>(&x);
         int32_t yi = *reinterpret_cast<int32_t*>(&y);
         return yi - xi;
     }
 
     int64_t fast_float_distance(double x, double y) {
-        static_assert(sizeof(double) == sizeof(int64_t), "double is incorrect size.");
+        static_assert(std::numeric_limits<double>::is_iec559,
+                      "The double on your system is not iec559.");
+        static_assert(sizeof(double) == sizeof(int64_t),
+                      "The double on your system is not 64 bits.");
         int64_t xi = *reinterpret_cast<int64_t*>(&x);
         int64_t yi = *reinterpret_cast<int64_t*>(&y);
         return yi - xi;
@@ -33,7 +39,10 @@ namespace detail {
 
 #ifdef BOOST_HAS_FLOAT128
     __int128_t fast_float_distance(boost::multiprecision::float128 x, boost::multiprecision::float128 y) {
-        static_assert(sizeof(boost::multiprecision::float128) == sizeof(__int128_t), "double is incorrect size.");
+        static_assert(std::numeric_limits<boost::multiprecision::float128>::is_iec559,
+                      "The quad on your system is not iec559.");
+        static_assert(sizeof(boost::multiprecision::float128) == sizeof(__int128_t),
+                      "The quad on your system is not 128 bits.");
         __int128_t xi = *reinterpret_cast<__int128_t*>(&x);
         __int128_t yi = *reinterpret_cast<__int128_t*>(&y);
         return yi - xi;
@@ -59,7 +68,7 @@ Real agm(Real a, Real g)
     }
 
     // a > g:
-    if constexpr (std::is_same_v<float, Real> || std::is_same_v<double, Real> || std::is_same_v<boost::multiprecision::float128, Real>)
+    if constexpr (std::is_same_v<float, Real> || std::is_same_v<double, Real>)
     {
         while (detail::fast_float_distance(g, a) > 2000)
         {
@@ -68,6 +77,17 @@ Real agm(Real a, Real g)
             a = anp1;
         }
     }
+#ifdef BOOST_HAS_FLOAT128
+    else if constexpr (std::is_same_v<boost::multiprecision::float128, Real>)
+    {
+        while (detail::fast_float_distance(g, a) > 2000)
+        {
+            Real anp1 = (a + g)/2;
+            g = sqrt(a*g);
+            a = anp1;
+        }
+    }
+#endif
     else
     {
         while (boost::math::float_distance(g, a) > 2000)
