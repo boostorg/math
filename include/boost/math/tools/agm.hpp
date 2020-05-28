@@ -8,6 +8,9 @@
 #include <boost/math/special_functions/next.hpp>
 #include <cmath>
 #include <stdexcept>
+#ifdef BOOST_HAS_FLOAT128
+#include <boost/multiprecision/float128.hpp>
+#endif
 
 namespace boost::math::tools {
 
@@ -27,6 +30,15 @@ namespace detail {
         int64_t yi = *reinterpret_cast<int64_t*>(&y);
         return yi - xi;
     }
+
+#ifdef BOOST_HAS_FLOAT128
+    __int128_t fast_float_distance(boost::multiprecision::float128 x, boost::multiprecision::float128 y) {
+        static_assert(sizeof(boost::multiprecision::float128) == sizeof(__int128_t), "double is incorrect size.");
+        __int128_t xi = *reinterpret_cast<__int128_t*>(&x);
+        __int128_t yi = *reinterpret_cast<__int128_t*>(&y);
+        return yi - xi;
+    }
+#endif
     #pragma GCC diagnostic pop
 }
 template<typename Real>
@@ -47,7 +59,7 @@ Real agm(Real a, Real g)
     }
 
     // a > g:
-    if constexpr (std::is_same_v<float, Real> || std::is_same_v<double, Real>)
+    if constexpr (std::is_same_v<float, Real> || std::is_same_v<double, Real> || std::is_same_v<boost::multiprecision::float128, Real>)
     {
         while (detail::fast_float_distance(g, a) > 2000)
         {

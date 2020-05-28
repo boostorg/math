@@ -11,7 +11,7 @@ using boost::math::tools::ulps_plot;
 using boost::math::tools::agm;
 
 int main() {
-    using PreciseReal = long double;
+    using PreciseReal = boost::multiprecision::float128;
     using CoarseReal = float;
 
     auto agm_coarse = [](CoarseReal x) {
