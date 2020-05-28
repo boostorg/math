@@ -11,6 +11,7 @@
 namespace boost::math::tools {
 
 namespace detail {
+    #pragma GCC diagnostic push
     #pragma GCC diagnostic ignored "-Wstrict-aliasing"
     int32_t fast_float_distance(float x, float y) {
         static_assert(sizeof(float) == sizeof(int32_t), "float is incorrect size.");
