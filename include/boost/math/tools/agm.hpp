@@ -7,6 +7,7 @@
 #define BOOST_MATH_TOOLS_AGM_HPP
 #include <boost/math/special_functions/next.hpp>
 #include <cmath>
+#include <stdexcept>
 
 namespace boost::math::tools {
 
