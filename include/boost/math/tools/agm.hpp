@@ -10,6 +10,22 @@
 
 namespace boost::math::tools {
 
+namespace detail {
+    int32_t fast_float_distance(float x, float y) {
+        static_assert(sizeof(float) == sizeof(int32_t), "float is incorrect size.");
+        int32_t xi = *reinterpret_cast<int32_t*>(&x);
+        int32_t yi = *reinterpret_cast<int32_t*>(&y);
+        return yi - xi;
+    }
+
+    int64_t fast_float_distance(double x, double y) {
+        static_assert(sizeof(double) == sizeof(int64_t), "double is incorrect size.");
+        int64_t xi = *reinterpret_cast<int64_t*>(&x);
+        int64_t yi = *reinterpret_cast<int64_t*>(&y);
+        return yi - xi;
+    }
+
+}
 template<typename Real>
 Real agm(Real a, Real g)
 {
@@ -28,10 +44,23 @@ Real agm(Real a, Real g)
     }
 
     // a > g:
-    while (boost::math::float_distance(g, a) > 2000) {
-        Real anp1 = (a + g)/2;
-        g = sqrt(a*g);
-        a = anp1;
+    if constexpr (std::is_same_v<float, Real> || std::is_same_v<double, Real>)
+    {
+        while (detail::fast_float_distance(g, a) > 2000)
+        {
+            Real anp1 = (a + g)/2;
+            g = sqrt(a*g);
+            a = anp1;
+        }
+    }
+    else
+    {
+        while (boost::math::float_distance(g, a) > 2000)
+        {
+            Real anp1 = (a + g)/2;
+            g = sqrt(a*g);
+            a = anp1;
+        }
     }
 
     // Final cleanup iteration recovers down to ~2ULPs:
