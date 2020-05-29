@@ -55,8 +55,8 @@ Real agm(Real a, Real g)
 {
     if (a < g)
     {
-        throw std::domain_error("a >= g is required");
-        return std::numeric_limits<Real>::quiet_NaN();
+        // Mathematica, mpfr, and mpmath are all symmetric functions:
+        return agm(g, a);
     }
     // Use: M(rx, ry) = rM(x,y)
     if (a <= 0 || g <= 0) {

@@ -36,8 +36,8 @@ shows that
 
 [$../equations/agm_bound.svg]
 
-We use this condition internally to measure convergence, and hence it is a requirement that `a0 >= g0`.
-In addition, both arguments must be non-negative, as the sequence becomes complex for negative arguments.
+We use this condition internally to measure convergence; however, there is no need to worry about putting arguments in the correct order since we extend `agm` to a symmetric function by definition.
+Both arguments must be non-negative, as the sequence becomes complex for negative arguments.
 (We have not implemented the complex-valued AGM sequence.)
 The function `agm` is "essentially" one-dimensional, as the scale invariance `agm(k*x, k*y) == k*agm(x,y)` always allows us to take one argument to be unity.
 The following ULP plot has been generated with the function `agm(x, Real(1))`:

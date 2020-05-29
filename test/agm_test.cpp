@@ -66,12 +66,25 @@ void test_scaling()
         std::cerr << "  agm(7, 7) != 1.\n";
     }
 
+    // Properties I found at: https://mathworld.wolfram.com/Arithmetic-GeometricMean.html
+    // agm(x,y) = agm((x+y)/2, sqrt(xy))
+    expected = agm(Real(3), Real(1));
+    computed = agm(Real(2), sqrt(Real(3)));
+    if(!CHECK_ULP_CLOSE(expected, computed, 0)) {
+        std::cerr << "  agm(x, y) != agm((x+y)/2, sqrt(xy)).\n";
+    }
 
     //computed = agm(std::numeric_limits<Real>::infinity(), Real(7));
     //std::cout << "Computed at infinity = " << computed << "\n";
 
+    for (Real x = 0; x < 1; x += Real(1)/128) {
+        expected = agm(Real(1), sqrt(1-x*x));
+        computed = agm(1+x, 1-x);
+        if(!CHECK_ULP_CLOSE(expected, computed, 0)) {
+            std::cerr << "  agm(1, sqrt(1-x^2) != agm(1+x,1-x).\n";
+        }
+    }
 }
-
 
 
 int main()
