@@ -22,13 +22,13 @@ int main() {
     };
 
     std::string filename = "agm_" + boost::core::demangle(typeid(CoarseReal).name()) + ".svg";
-    int samples = 50000;
-    int width = 1400;
+    int samples = 2500;
+    int width = 1100;
     PreciseReal clip = 100;
     auto plot = ulps_plot<decltype(agm_precise), PreciseReal, CoarseReal>(agm_precise, CoarseReal(1), CoarseReal(10000), samples);
     plot.clip(clip).width(width);
     std::string title = "AGM ULP plot at " + boost::core::demangle(typeid(CoarseReal).name()) + " precision";
-    plot.title(title);
+    //plot.title(title);
     plot.vertical_lines(10);
     plot.add_fn(agm_coarse);
     plot.write(filename);

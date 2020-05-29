@@ -1,0 +1,57 @@
+[/
+  Copyright Nick Thompson, John Maddock, 2020
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+
+[section:agm Arithmetic-Geometric Mean]
+
+[h4 Synopsis]
+
+    #include <boost/math/tools/agm.hpp>
+
+    namespace boost::math::tools {
+
+    template<typename Real>
+    Real agm(Real a0, Real g0);
+ 
+    } // namespaces
+
+
+The function `agm` produces the limiting value of the sequence
+
+[$../equations/agm_sequence.svg]
+
+
+A basic usage is
+
+    double G = boost::math::tools::agm(sqrt(2.0), 1.0);
+
+The AGM inequality
+
+[$../equations/agm_sequence.svg]
+
+shows that
+
+[$../equations/agm_bound.svg]
+
+We use this condition internally to measure convergence, and hence it is a requirement that `a0 >= g0`.
+In addition, both arguments must be non-negative, as the sequence becomes complex for negative arguments.
+(We have not implemented the complex-valued AGM sequence.)
+The function `agm` is "essentially" one-dimensional, as the scale invariance `agm(k*x, k*y) == k*agm(x,y)` always allows us to take one argument to be unity.
+The following ULP plot has been generated with the function `agm(x, Real(1))`:
+
+[$../graphs/agm_ulps_plot.svg]
+
+The graph above shows an ulps plot of the Boost implementation of  `agm(x, Real(1))`.
+An ~2 ULP bound is to be expected.
+
+A google benchmark for various types is available in `boost/libs/math/reporting/performance/test_agm.cpp`.
+
+[heading References]
+
+* Steven R. Finch. ['Mathematical Constants] Cambridge, 2003.
+
+
+[endsect]
