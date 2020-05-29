@@ -47,7 +47,24 @@ The following ULP plot has been generated with the function `agm(x, Real(1))`:
 The graph above shows an ulps plot of the Boost implementation of  `agm(x, Real(1))`.
 An ~2 ULP bound is to be expected.
 
-A google benchmark for various types is available in `boost/libs/math/reporting/performance/test_agm.cpp`.
+A google benchmark for various types is available in `boost/libs/math/reporting/performance/test_agm.cpp`; some results on a consumer laptop are provided for convenience:
+
+```
+Run on (16 X 2300 MHz CPU s)
+CPU Caches:
+  L1 Data 32K (x8)
+  L1 Instruction 32K (x8)
+  L2 Unified 262K (x8)
+  L3 Unified 16777K (x1)
+Load Average: 2.02, 2.14, 2.00
+-------------------------------------------------------------------------------
+Benchmark                                     Time             CPU   Iterations
+-------------------------------------------------------------------------------
+AGM<float>                                 8.52 ns         8.51 ns     59654685
+AGM<double>                                13.5 ns         13.5 ns     51709746
+AGM<long double>                           30.6 ns         30.6 ns     18745247
+AGM<boost::multiprecision::float128>       2332 ns         2332 ns       299303
+```
 
 If any inputs are NaNs, the result is a NaN.
 If any inputs are +∞, the result is +∞, unless the other argument fails NaN or negative validation.

@@ -6,6 +6,7 @@
 #include <random>
 #include <benchmark/benchmark.h>
 #include <boost/math/tools/agm.hpp>
+#include <boost/multiprecision/float128.hpp>
 
 using boost::math::tools::agm;
 template<class Real>
