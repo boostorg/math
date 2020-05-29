@@ -49,6 +49,9 @@ An ~2 ULP bound is to be expected.
 
 A google benchmark for various types is available in `boost/libs/math/reporting/performance/test_agm.cpp`.
 
+If any inputs are NaNs, the result is a NaN.
+If any inputs are +∞, the result is +∞, unless the other argument fails NaN or negative validation.
+
 [heading References]
 
 * Steven R. Finch. ['Mathematical Constants] Cambridge, 2003.

@@ -42,6 +42,34 @@ void test_scaling()
     if(!CHECK_ULP_CLOSE(expected, computed, 2)) {
         std::cerr << "  Scaling property agm(kx,ky) = k*agm(x, y) is violated.\n";
     }
+
+    expected = 0;
+    computed = agm(a, Real(0));
+    if(!CHECK_ULP_CLOSE(expected, computed, 0)) {
+        std::cerr << "  agm(a, 0) != 0.\n";
+    }
+
+    computed = agm(Real(0), Real(0));
+    if(!CHECK_ULP_CLOSE(expected, computed, 0)) {
+        std::cerr << "  agm(0, 0) != 0.\n";
+    }
+
+    expected = 1;
+    computed = agm(Real(1), Real(1));
+    if(!CHECK_ULP_CLOSE(expected, computed, 0)) {
+        std::cerr << "  agm(1, 1) != 1.\n";
+    }
+
+    expected = 7;
+    computed = agm(Real(7), Real(7));
+    if(!CHECK_ULP_CLOSE(expected, computed, 0)) {
+        std::cerr << "  agm(7, 7) != 1.\n";
+    }
+
+
+    //computed = agm(std::numeric_limits<Real>::infinity(), Real(7));
+    //std::cout << "Computed at infinity = " << computed << "\n";
+
 }
 
 
