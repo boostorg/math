@@ -19,7 +19,7 @@
     } // namespaces
 
 
-The function `rsqrt` computes the reciprocal square root 1/[sqrt](/x/).
+The function `rsqrt` computes the reciprocal square root 1/[sqrt]/x/.
 Those in the game programming community might suspect this is a fast, low precision wrapper around the [@https://www.felixcloutier.com/x86/rsqrtss rsqrtss] instruction.
 This is not correct: We /tried/ this instruction, but found no performance benefit to using it.
 However, the /trick/ of computing a low precision reciprocal square root and then bootstrapping to higher precision via Newton's method /does/ work, but it only yields a performance benefit for quad and higher precision.
@@ -44,27 +44,28 @@ Performance:
 
 ```
 Running ./reporting/performance/rsqrt_performance.x
-Run on (4 X 2700 MHz CPU s)
+Run on (16 X 4300 MHz CPU s)
 CPU Caches:
-  L1 Data 32K (x2)
-  L1 Instruction 32K (x2)
-  L2 Unified 262K (x2)
-  L3 Unified 3145K (x1)
-Load Average: 2.10, 2.41, 2.57
+  L1 Data 32 KiB (x8)
+  L1 Instruction 32 KiB (x8)
+  L2 Unified 1024 KiB (x8)
+  L3 Unified 11264 KiB (x1)
+Load Average: 0.43, 0.49, 0.46
 ----------------------------------------------------------------------------------
 Benchmark                                        Time             CPU   Iterations
 ----------------------------------------------------------------------------------
-Rsqrt<float>                                  2.28 ns         2.22 ns    316014248
-Rsqrt<double>                                 4.14 ns         4.03 ns    173393939
-Rsqrt<long double>                            4.99 ns         4.78 ns    146698242
-Rsqrt<float128>                                214 ns          203 ns      3384504
-Rsqrt<number<mpfr_float_backend<100>>>         675 ns          649 ns      1047324
-Rsqrt<number<mpfr_float_backend<200>>>         899 ns          881 ns       780214
-Rsqrt<number<mpfr_float_backend<300>>>        1162 ns         1147 ns       598332
-Rsqrt<number<mpfr_float_backend<400>>>        1555 ns         1511 ns       471361
-Rsqrt<number<mpfr_float_backend<1000>>>       4974 ns         4855 ns       137844
-Rsqrt<cpp_bin_float_50>                       6961 ns         6854 ns        99866
-Rsqrt<cpp_bin_float_100>                     15044 ns        14754 ns        45869
+Rsqrt<float>                                  1.35 ns         1.35 ns    503364351
+Rsqrt<double>                                 2.25 ns         2.25 ns    309753242
+Rsqrt<long double>                            2.68 ns         2.68 ns    261382652
+Rsqrt<float128>                                182 ns          182 ns      3756956
+Rsqrt<number<mpfr_float_backend<100>>>         299 ns          299 ns      2494027
+Rsqrt<number<mpfr_float_backend<200>>>         412 ns          412 ns      1589284
+Rsqrt<number<mpfr_float_backend<300>>>         617 ns          617 ns      1067473
+Rsqrt<number<mpfr_float_backend<400>>>         812 ns          812 ns       830564
+Rsqrt<number<mpfr_float_backend<1000>>>       3183 ns         3183 ns       221079
+Rsqrt<cpp_bin_float_50>                       4321 ns         4321 ns       163243
+Rsqrt<cpp_bin_float_100>                      9393 ns         9393 ns        72967
 ```
+
 
 [endsect]
