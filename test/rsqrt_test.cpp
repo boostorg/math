@@ -67,8 +67,12 @@ void test_rsqrt()
     x = std::numeric_limits<Real>::max();
     expected = 1/sqrt(x);
     computed = rsqrt(x);
-    if (!CHECK_ULP_CLOSE(expected, computed, 0)) {
+    if (!CHECK_EQUAL(expected, computed)) {
         std::cerr << "Reciprocal square root of std::numeric_limits<Real>::max() not correctly computed.\n";
+    }
+
+    if (!CHECK_NAN(rsqrt(std::numeric_limits<Real>::quiet_NaN()))) {
+        std::cerr << "Reciprocal square root of std::numeric_limits<Real>::quiet_NaN() is not a NaN.\n";
     }
 }
 
