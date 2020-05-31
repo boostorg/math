@@ -1,0 +1,70 @@
+[/
+  Copyright Nick Thompson 2020
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+
+[section:rsqrt Reciprocal square root]
+
+[h4 Synopsis]
+
+    #include <boost/math/special_functions/rsqrt.hpp>
+
+    namespace boost::math {
+
+    template<class Real>
+    Real rsqrt(Real const & x);
+
+    } // namespaces
+
+
+The function `rsqrt` computes the reciprocal square root 1/[sqrt](/x/).
+Those in the game programming community might suspect this is a fast, low precision wrapper around the [@https://www.felixcloutier.com/x86/rsqrtss rsqrtss] instruction.
+This is not correct: We /tried/ this instruction, but found no performance benefit to using it.
+However, the /trick/ of computing a low precision reciprocal square root and then bootstrapping to higher precision via Newton's method /does/ work, but it only yields a performance benefit for quad and higher precision.
+We do of course allow you to use `rsqrt` for `float`, `double`, and `long double`, but be aware there is no performance benefit to doing so.
+However, the savings for quad precision and higher are very significant.
+
+
+The use is
+
+    using boost::multiprecision::float128;
+    float128 x = 0.1Q;
+    float128 y = boost::math::rsqrt(x);
+
+
+
+[$../graphs/rsqrt_quad_0_100.svg]
+
+
+
+
+Performance:
+
+```
+Running ./reporting/performance/rsqrt_performance.x
+Run on (4 X 2700 MHz CPU s)
+CPU Caches:
+  L1 Data 32K (x2)
+  L1 Instruction 32K (x2)
+  L2 Unified 262K (x2)
+  L3 Unified 3145K (x1)
+Load Average: 2.10, 2.41, 2.57
+----------------------------------------------------------------------------------
+Benchmark                                        Time             CPU   Iterations
+----------------------------------------------------------------------------------
+Rsqrt<float>                                  2.28 ns         2.22 ns    316014248
+Rsqrt<double>                                 4.14 ns         4.03 ns    173393939
+Rsqrt<long double>                            4.99 ns         4.78 ns    146698242
+Rsqrt<float128>                                214 ns          203 ns      3384504
+Rsqrt<number<mpfr_float_backend<100>>>         675 ns          649 ns      1047324
+Rsqrt<number<mpfr_float_backend<200>>>         899 ns          881 ns       780214
+Rsqrt<number<mpfr_float_backend<300>>>        1162 ns         1147 ns       598332
+Rsqrt<number<mpfr_float_backend<400>>>        1555 ns         1511 ns       471361
+Rsqrt<number<mpfr_float_backend<1000>>>       4974 ns         4855 ns       137844
+Rsqrt<cpp_bin_float_50>                       6961 ns         6854 ns        99866
+Rsqrt<cpp_bin_float_100>                     15044 ns        14754 ns        45869
+```
+
+[endsect]
