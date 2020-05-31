@@ -266,7 +266,7 @@ bool check_absolute_error(PreciseReal expected1, Real computed, Real acceptable_
     if (!std::is_integral<PreciseReal>::value) {
         BOOST_ASSERT_MSG(sizeof(PreciseReal) >= sizeof(Real),
                          "The expected number must be computed in higher (or equal) precision than the number being tested.");
-        BOOST_ASSERT_MSG(!isnan(expected1), "Expected value cannot be a nan.");
+        BOOST_ASSERT_MSG(!isnan(expected1), "Expected value cannot be a nan (use CHECK_NAN if this is your intention).");
     }
     BOOST_ASSERT_MSG(acceptable_error > 0, "Error must be > 0.");
 
@@ -302,6 +302,38 @@ bool check_absolute_error(PreciseReal expected1, Real computed, Real acceptable_
     return true;
 }
 
+template<class Real>
+bool check_nan(Real x, std::string const & filename, std::string const & function, int line)
+{
+    using std::isnan;
+    if (!isnan(x)) {
+      std::ios_base::fmtflags f( std::cerr.flags() );
+      std::cerr << "\033[0;31mError at " << filename << ":" << function << ":" << line << "\n";
+      std::cerr << "\033[0m  The computed value should be a nan, but is instead " << std::defaultfloat << std::fixed << x << " = " << std::scientific << x << std::hexfloat << " = " << x << "\n";
+      std::cerr.flags(f);
+      ++detail::global_error_count;
+      return false;
+    }
+    return true;
+}
+
+template<class Real>
+bool check_equal(Real x, Real y, std::string const & filename, std::string const & function, int line)
+{
+  using std::isnan;
+  if (x != y) {
+    std::ios_base::fmtflags f( std::cerr.flags() );
+    std::cerr << "\033[0;31mError at " << filename << ":" << function << ":" << line << "\n";
+    std::cerr << "\033[0m  Expected " << x << " == " << y << " but:\n";
+    std::cerr << "  Expected =  " << std::defaultfloat << std::fixed << x << " = " << std::scientific << x << std::hexfloat << " = " << x << "\n";
+    std::cerr << "  Computed =  " << std::defaultfloat << std::fixed << y << " = " << std::scientific << y << std::hexfloat << " = " << y << "\n";
+    std::cerr.flags(f);
+    ++detail::global_error_count;
+    return false;
+  }
+  return true;
+}
+
 
 int report_errors()
 {
@@ -331,6 +363,10 @@ int report_errors()
 #define CHECK_ULP_CLOSE(X, Y, Z) boost::math::test::check_ulp_close((X), (Y), (Z), __FILE__, __func__, __LINE__)
 
 #define CHECK_LE(X, Y) boost::math::test::check_le((X), (Y), __FILE__, __func__, __LINE__)
+
+#define CHECK_NAN(X) boost::math::test::check_nan((X), __FILE__, __func__, __LINE__)
+
+#define CHECK_EQUAL(X, Y) boost::math::test::check_equal((X), (Y), __FILE__, __func__, __LINE__)
 
 #define CHECK_CONDITIONED_ERROR(V, W, X, Y, Z) boost::math::test::check_conditioned_error((V), (W), (X), (Y), (Z), __FILE__, __func__, __LINE__)
 

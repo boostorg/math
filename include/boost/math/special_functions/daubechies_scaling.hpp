@@ -13,7 +13,6 @@
 #include <thread>
 #include <future>
 #include <iostream>
-#include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/detail/daubechies_scaling_integer_grid.hpp>
 #include <boost/math/filters/daubechies.hpp>
 #include <boost/math/interpolators/detail/cubic_hermite_detail.hpp>
@@ -26,8 +25,9 @@ template<class Real, int p, int order>
 std::vector<Real> daubechies_scaling_dyadic_grid(int64_t j_max)
 {
     using std::isnan;
+    using std::sqrt;
     auto c = boost::math::filters::daubechies_scaling_filter<Real, p>();
-    Real scale = boost::math::constants::root_two<Real>()*(1 << order);
+    Real scale = sqrt(static_cast<Real>(2))*(1 << order);
     for (auto & x : c)
     {
         x *= scale;

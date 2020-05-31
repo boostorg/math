@@ -154,7 +154,7 @@ namespace boost { namespace math {
 
             // modified Lentz's method, see
             // Lentz, Applied Optics, vol 15, 668 (1976)
-            tolerance = 2 * policies::get_epsilon<T, Policy>();;
+            tolerance = 2 * policies::get_epsilon<T, Policy>();
          tiny = sqrt(tools::min_value<T>());
          C = f = tiny;                           // b0 = 0, replace with tiny
          D = 0;
@@ -586,4 +586,3 @@ namespace boost { namespace math {
 }} // namespaces
 
 #endif // BOOST_MATH_BESSEL_JY_HPP
-
