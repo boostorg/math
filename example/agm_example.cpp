@@ -5,15 +5,14 @@
 #include <iostream>
 #include <boost/math/tools/agm.hpp>
 #include <boost/math/constants/constants.hpp>
-#include <boost/multiprecision/float128.hpp>
+#include <boost/multiprecision/cpp_bin_float.hpp>
 
 // This example computes the lemniscate constant to high precision using the agm:
 using boost::math::tools::agm;
 using boost::math::constants::pi;
-using boost::multiprecision::float128;
 
 int main() {
-    using Real = float128;
+    using Real = boost::multiprecision::cpp_bin_float_100;
     Real G = agm(sqrt(Real(2)), Real(1));
     std::cout << std::setprecision(std::numeric_limits<Real>::max_digits10);
     std::cout << " Gauss's lemniscate constant = " << pi<Real>()/G << "\n";
