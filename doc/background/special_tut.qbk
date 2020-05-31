@@ -367,7 +367,7 @@ Now we just need to write the test driver program, at it's most basic it looks s
    #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
       test(0.1L, "long double");
    #ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
-   #if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
+   #if !BOOST_WORKAROUND(BOOST_BORLANDC, BOOST_TESTED_AT(0x582))
       test(boost::math::concepts::real_concept(0.1), "real_concept");
    #endif
    #endif

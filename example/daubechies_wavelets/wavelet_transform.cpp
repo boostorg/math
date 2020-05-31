@@ -7,7 +7,6 @@
 #include <cstdint>
 #include <cmath>
 #include <boost/math/quadrature/wavelet_transforms.hpp>
-#include <Eigen/Dense>
 
 
 int main()
@@ -23,10 +22,8 @@ int main()
 
     auto Wf = daubechies_wavelet_transform<decltype(f), double, 8>(f);
 
-    Eigen::MatrixXd grid(512, 512);
     double s = 7;
     double t = 0;
-    grid(0,0) = Wf(s, t);
 
     auto g = [&a](double t)->std::complex<double> {
         if (t==0) {

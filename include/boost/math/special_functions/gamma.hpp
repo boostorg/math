@@ -1,4 +1,3 @@
-
 //  Copyright John Maddock 2006-7, 2013-14.
 //  Copyright Paul A. Bristow 2007, 2013-14.
 //  Copyright Nikhar Agrawal 2013-14
@@ -1200,7 +1199,7 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert,
       return exp(result);
    }
 
-   BOOST_ASSERT((p_derivative == 0) || (normalised == true));
+   BOOST_ASSERT((p_derivative == 0) || normalised);
 
    bool is_int, is_half_int;
    bool is_small_a = (a < 30) && (a <= x + 1) && (x < tools::log_max_value<T>());
@@ -1331,14 +1330,14 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert,
    case 0:
       {
          result = finite_gamma_q(a, x, pol, p_derivative);
-         if(normalised == false)
+         if(!normalised)
             result *= boost::math::tgamma(a, pol);
          break;
       }
    case 1:
       {
          result = finite_half_gamma_q(a, x, p_derivative, pol);
-         if(normalised == false)
+         if(!normalised)
             result *= boost::math::tgamma(a, pol);
          if(p_derivative && (*p_derivative == 0))
             *p_derivative = regularised_gamma_prefix(a, x, pol, lanczos_type());
@@ -2173,7 +2172,3 @@ inline typename tools::promote_args<T1, T2>::type
 #include <boost/math/special_functions/erf.hpp>
 
 #endif // BOOST_MATH_SF_GAMMA_HPP
-
-
-
-

@@ -106,7 +106,7 @@ T log1p_imp(T const & x, const Policy& pol, const boost::integral_constant<int, 
       return x;
    detail::log1p_series<result_type> s(x);
    boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582)) && !BOOST_WORKAROUND(__EDG_VERSION__, <= 245)
+#if !BOOST_WORKAROUND(BOOST_BORLANDC, BOOST_TESTED_AT(0x582)) && !BOOST_WORKAROUND(__EDG_VERSION__, <= 245)
    result_type result = tools::sum_series(s, policies::get_epsilon<result_type, Policy>(), max_iter);
 #else
    result_type zero = 0;
@@ -325,7 +325,7 @@ inline typename tools::promote_args<T>::type log1p(T x, const Policy&)
       detail::log1p_imp(static_cast<value_type>(x), forwarding_policy(), tag_type()), "boost::math::log1p<%1%>(%1%)");
 }
 
-#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+#if BOOST_WORKAROUND(BOOST_BORLANDC, BOOST_TESTED_AT(0x564))
 // These overloads work around a type deduction bug:
 inline float log1p(float z)
 {
@@ -482,7 +482,7 @@ inline typename tools::promote_args<T>::type
    boost::math::detail::log1p_series<T> s(x);
    s();
    boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
-#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
+#if BOOST_WORKAROUND(BOOST_BORLANDC, BOOST_TESTED_AT(0x582))
    T zero = 0;
    T result = boost::math::tools::sum_series(s, policies::get_epsilon<T, Policy>(), max_iter, zero);
 #else

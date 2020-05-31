@@ -90,7 +90,7 @@ inline T get_smallest_value(boost::true_type const&)
    //
    static const T m = std::numeric_limits<T>::denorm_min();
 #ifdef BOOST_MATH_CHECK_SSE2
-   return (_mm_getcsr() & (_MM_FLUSH_ZERO_ON | 0x40)) ? tools::min_value<T>() : m;;
+   return (_mm_getcsr() & (_MM_FLUSH_ZERO_ON | 0x40)) ? tools::min_value<T>() : m;
 #else
    return ((tools::min_value<T>() / 2) == 0) ? tools::min_value<T>() : m;
 #endif
@@ -883,4 +883,3 @@ inline typename tools::promote_args<T>::type float_advance(const T& val, int dis
 }} // boost math namespaces
 
 #endif // BOOST_MATH_SPECIAL_NEXT_HPP
-

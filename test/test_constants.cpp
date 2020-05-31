@@ -766,7 +766,7 @@ void test_feigenbaum()
    auto f = boost::math::constants::first_feigenbaum<Real100>();
    CHECK_ULP_CLOSE(static_cast<double>(f), f64, 0);
    Real100 g{"4.6692016091029906718532038204662016172581855774757686327456513430041343302113147371386897440239480138171659848551898151344086271420279325223124429888908908599449354632367134115324817142199474556443658237932020095610583305754586176522220703854106467494942849814533917262005687556659523398756038256372256480040951071283890611844702775854285419801113440175002428585382498335715522052236087250291678860362674527213399057131606875345083433934446103706309452019115876972432273589838903794946257251289097948986768334611626889116563123474460575179539122045562472807095202198199094558581946136877445617396074115614074243754435499204869180982648652368438702799649017397793425134723808737136211601860128186102056381818354097598477964173900328936171432159878240789776614391395764037760537119096932066998361984288981837003229412030210655743295550388845849737034727532121925706958414074661841981961006129640161487712944415901405467941800198133253378592493365883070459999938375411726563553016862529032210862320550634510679399023341675"};
-   CHECK_ULP_CLOSE(f, g, 0);   
+   CHECK_ULP_CLOSE(f, g, 0);
 }
 
 void test_plastic()
@@ -774,7 +774,8 @@ void test_plastic()
     using Real = boost::multiprecision::cpp_bin_float_100;
     Real P = boost::math::constants::plastic<Real>();
     Real residual = P*P*P - P -1;
-    CHECK_LE(residual, std::numeric_limits<Real>::epsilon());
+    using std::abs;
+    CHECK_LE(abs(residual), std::numeric_limits<Real>::epsilon());
 }
 
 int main()
@@ -782,28 +783,17 @@ int main()
    // Basic sanity-check spot values.
    test_float_spots(); // Test float_constants, like boost::math::float_constants::pi;
    test_double_spots(); // Test double_constants.
-#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_long_double_spots(); // Test long_double_constants.
 #ifdef BOOST_MATH_USE_FLOAT128
    test_float128();
 #endif
    test_constexpr();
 
-   //test_real_concept_policy(real_concept_policy_1());
-   //test_real_concept_policy(real_concept_policy_2()); // Increased precision forcing construction from string.
-   //test_real_concept_policy(real_concept_policy_3()); // Increased precision forcing caching of computed values.
-   //test_real_concept_policy(boost::math::policies::policy<>()); // Default.
-#endif
    // (Parameter value, arbitrarily zero, only communicates the floating-point type).
    test_spots(0.0F); // Test float.
    test_spots(0.0); // Test double.
-#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_spots(0.0L); // Test long double.
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x0582))
-   //test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
-   //test_spots(boost::math::concepts::big_real_concept(0.)); // Test real concept.
-#endif
-#endif
+
    test_feigenbaum();
    test_plastic();
    return boost::math::test::report_errors();
