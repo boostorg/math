@@ -57,6 +57,19 @@ void test_rsqrt()
         x += 1000*std::numeric_limits<Real>::epsilon();
     }
 
+    x = std::numeric_limits<Real>::infinity();
+    Real expected = 1/sqrt(x);
+    Real computed = rsqrt(x);
+    if (!CHECK_ULP_CLOSE(expected, computed, 0)) {
+        std::cerr << "Reciprocal square root of infinity not correctly computed.\n";
+    }
+
+    x = std::numeric_limits<Real>::max();
+    expected = 1/sqrt(x);
+    computed = rsqrt(x);
+    if (!CHECK_ULP_CLOSE(expected, computed, 0)) {
+        std::cerr << "Reciprocal square root of std::numeric_limits<Real>::max() not correctly computed.\n";
+    }
 }
 
 

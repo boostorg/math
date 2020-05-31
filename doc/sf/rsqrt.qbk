@@ -33,11 +33,9 @@ The use is
     float128 x = 0.1Q;
     float128 y = boost::math::rsqrt(x);
 
-
+The reciprocal square root of +\u221E is zero, and the reciprocal square root of a NaN is a NaN.
 
 [$../graphs/rsqrt_quad_0_100.svg]
-
-
 
 
 Performance:
@@ -66,6 +64,5 @@ Rsqrt<number<mpfr_float_backend<1000>>>       3183 ns         3183 ns       2210
 Rsqrt<cpp_bin_float_50>                       4321 ns         4321 ns       163243
 Rsqrt<cpp_bin_float_100>                      9393 ns         9393 ns        72967
 ```
-
 
 [endsect]

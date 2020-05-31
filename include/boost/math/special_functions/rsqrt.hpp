@@ -21,7 +21,7 @@ inline Real rsqrt(Real const & x)
     {
         // if it's so tiny it rounds to 0 as long double,
         // no performance gains are possible:
-        if (x < std::numeric_limits<long double>::denorm_min()) {
+        if (x < std::numeric_limits<long double>::denorm_min() || x > std::numeric_limits<long double>::max()) {
             return 1/sqrt(x);
         }
         Real x0 = 1/sqrt(static_cast<long double>(x));
