@@ -433,6 +433,8 @@ template<class F, typename PreciseReal, typename CoarseReal>
 ulps_plot<F, PreciseReal, CoarseReal>::ulps_plot(F hi_acc_impl, CoarseReal a, CoarseReal b,
              size_t samples, bool perturb_abscissas, int random_seed)
 {
+    // This fails for heap allocated types like MPFR.
+    // Got to think on what to do about it.
     static_assert(sizeof(PreciseReal) >= sizeof(CoarseReal), "PreciseReal must have larger size than CoarseReal");
     if (samples < 10)
     {
