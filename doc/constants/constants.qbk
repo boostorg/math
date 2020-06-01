@@ -628,22 +628,9 @@ Apart from the built-in floating-point types `float`, `double`, `long double`,
 there are several arbitrary precision floating-point classes available,
 but most are not licensed for commercial use.
 
-[h5  Boost.Multiprecision by Christopher Kormanyos]
+[h5  Boost.Multiprecision by Christopher Kormanyos and John Maddock]
 
-This work is based on an earlier work called e-float:
-Algorithm 910: A Portable C++ Multiple-Precision System for Special-Function Calculations,
-in ACM TOMS, {VOL 37, ISSUE 4, (February 2011)} (C) ACM, 2011.
-[@http://doi.acm.org/10.1145/1916461.1916469]
-[@https://svn.boost.org/svn/boost/sandbox/e_float/ e_float]
-but is now re-factored and available under the Boost license in the Boost-sandbox at
-[@https://svn.boost.org/svn/boost/sandbox/multiprecision/ multiprecision]
-where it is being refined and prepared for review.
-
-[h5 Boost.cpp_float by John Maddock using Expression Templates]
-
-[@https://svn.boost.org/svn/boost/sandbox/big_number/ Big Number]
-which is a reworking of [@https://svn.boost.org/svn/boost/sandbox/e_float/ e_float]
-by Christopher Kormanyos to use expression templates for faster execution.
+This is a well-maintained and fully featured library which provides numerous high-precision types, as well as wrappers to other popular libraries like MPFR.
 
 [h5 NTL class quad_float]
 
@@ -696,12 +683,12 @@ and are [*not licensed for commercial use].
 
 A review concluded that the way in which the constants were presented did not meet many peoples needs.
 None of the methods proposed met many users' essential requirement to allow writing simply `pi` rather than `pi()`.
-Many science and engineering equations look difficult to read when because function call brackets can be confused
+Many science and engineering equations look difficult to read because function call brackets can be confused
 with the many other brackets often needed.  All the methods then proposed of avoiding the brackets failed to meet all needs,
 often on grounds of complexity and lack of applicability to various realistic scenarios.
 
 So the simple namespace method, proposed on its own, but rejected at the first review,
-has been added to allow users to have convenient access to float, double and long double values,
+has been added to allow users to have convenient access to `float`, `double` and `long double` values,
 but combined with template struct and functions to allow simultaneous use
 with other non-built-in floating-point types.
 
@@ -730,11 +717,11 @@ and CALC100 100 decimal digit Complex Variable Calculator Program, a DOS utility
 
 [h4 Where are Physical Constants?]
 
-Not here in this Boost.Math collection, because physical constants:
+Not here, because physical constants:
 
 * Are measurements, not truly constants.
-* Are not truly constant and keeping changing as mensuration technology improves.
-* Have a intrinsic uncertainty.
+* Are not truly constant and keeping changing as metrology improves.
+* Have intrinsic uncertainty.
 * Mathematical constants are stored and represented at varying precision, but should never be inaccurate.
 
 Some physical constants may be available in Boost.Units.
