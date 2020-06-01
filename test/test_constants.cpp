@@ -724,7 +724,7 @@ void test_real_concept_policy(const Policy&)
 
 } // template <class boost::math::concepts::real_concept>void test_spots(boost::math::concepts::real_concept)
 
-#ifdef BOOST_MATH_USE_FLOAT128
+#ifdef BOOST_MATH_HAS_FLOAT128
 void test_float128()
 {
    __float128 p = boost::math::constants::pi<__float128>();
@@ -769,13 +769,13 @@ void test_feigenbaum()
    CHECK_ULP_CLOSE(f, g, 0);
 }
 
+template<typename Real>
 void test_plastic()
 {
-    using Real = boost::multiprecision::cpp_bin_float_100;
     Real P = boost::math::constants::plastic<Real>();
     Real residual = P*P*P - P -1;
     using std::abs;
-    CHECK_LE(abs(residual), std::numeric_limits<Real>::epsilon());
+    CHECK_LE(abs(residual), 4*std::numeric_limits<Real>::epsilon());
 }
 
 int main()
@@ -784,7 +784,7 @@ int main()
    test_float_spots(); // Test float_constants, like boost::math::float_constants::pi;
    test_double_spots(); // Test double_constants.
    test_long_double_spots(); // Test long_double_constants.
-#ifdef BOOST_MATH_USE_FLOAT128
+#ifdef BOOST_MATH_HAS_FLOAT128
    test_float128();
 #endif
    test_constexpr();
@@ -795,6 +795,8 @@ int main()
    test_spots(0.0L); // Test long double.
 
    test_feigenbaum();
-   test_plastic();
+   test_plastic<float>();
+   test_plastic<double>();
+   test_plastic<boost::multiprecision::number<boost::multiprecision::cpp_bin_float<400>>>();
    return boost::math::test::report_errors();
 }
