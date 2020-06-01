@@ -460,10 +460,8 @@ Failing to do this will result in surprising compile errors:
 ``
 ]
 
-2. [*You will need an arbitrary precision type to use to calculate the value]. This library
-currently supports either `cpp_float`, `NTL::RR` or `mpfr_class` used via the bindings in `boost/math/bindings`.
-The default is to use `NTL::RR` unless you define an alternate macro, for example,
-`USE_MPFR` or `USE_CPP_FLOAT` at the start of your program.
+2. [*You will need an arbitrary precision type to use to calculate the value].
+Boost.Multiprecision has a large number of arbitrary precision floating point types to aid with this.
 
 3. It is necessary to link to the Boost.Regex library,
 and probably to your chosen arbitrary precision type library.
