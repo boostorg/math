@@ -21,14 +21,16 @@
 #include <boost/math/constants/constants.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
+#ifdef BOOST_MATH_HAS_FLOAT128
 #include <boost/multiprecision/float128.hpp>
+#endif
 
-
+#if __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1900)
 // Check at compile time that the construction method for constants of type float, is "construct from a float", or "construct from a double", ...
-static_assert((boost::is_same<boost::math::constants::construction_traits<float, boost::math::policies::policy<> >::type, boost::integral_constant<int, boost::math::constants::construct_from_float> >::value));
-static_assert((boost::is_same<boost::math::constants::construction_traits<double, boost::math::policies::policy<> >::type, boost::integral_constant<int, boost::math::constants::construct_from_double> >::value));
-static_assert((boost::is_same<boost::math::constants::construction_traits<long double, boost::math::policies::policy<> >::type, boost::integral_constant<int, (sizeof(double) == sizeof(long double) ? boost::math::constants::construct_from_double : boost::math::constants::construct_from_long_double)> >::value));
-static_assert((boost::is_same<boost::math::constants::construction_traits<boost::math::concepts::real_concept, boost::math::policies::policy<> >::type, boost::integral_constant<int, 0> >::value));
+static_assert((boost::is_same<boost::math::constants::construction_traits<float, boost::math::policies::policy<> >::type, boost::integral_constant<int, boost::math::constants::construct_from_float> >::value), "Need to be able to construct from float");
+static_assert((boost::is_same<boost::math::constants::construction_traits<double, boost::math::policies::policy<> >::type, boost::integral_constant<int, boost::math::constants::construct_from_double> >::value), "Need to be able to construct from double");
+static_assert((boost::is_same<boost::math::constants::construction_traits<long double, boost::math::policies::policy<> >::type, boost::integral_constant<int, (sizeof(double) == sizeof(long double) ? boost::math::constants::construct_from_double : boost::math::constants::construct_from_long_double)> >::value), "Need to be able to construct from long double");
+static_assert((boost::is_same<boost::math::constants::construction_traits<boost::math::concepts::real_concept, boost::math::policies::policy<> >::type, boost::integral_constant<int, 0> >::value), "Need to be able to construct from real_concept");
 
 // Policy to set precision at maximum possible using long double.
 typedef boost::math::policies::policy<boost::math::policies::digits2<std::numeric_limits<long double>::digits> > real_concept_policy_1;
@@ -43,10 +45,10 @@ typedef boost::math::policies::policy<boost::math::policies::digits2<std::numeri
 // Policy with precision greater than the string representations, forces computation of values (i.e. different code path):
 typedef boost::math::policies::policy<boost::math::policies::digits2<400> > real_concept_policy_3;
 
-static_assert((boost::is_same<boost::math::constants::construction_traits<boost::math::concepts::real_concept, real_concept_policy_1 >::type, boost::integral_constant<int, (sizeof(double) == sizeof(long double) ? boost::math::constants::construct_from_double : boost::math::constants::construct_from_long_double) > >::value));
-static_assert((boost::is_same<boost::math::constants::construction_traits<boost::math::concepts::real_concept, real_concept_policy_2 >::type, boost::integral_constant<int, boost::math::constants::construct_from_string> >::value));
-static_assert((boost::math::constants::construction_traits<boost::math::concepts::real_concept, real_concept_policy_3>::type::value >= 5));
-
+static_assert((boost::is_same<boost::math::constants::construction_traits<boost::math::concepts::real_concept, real_concept_policy_1 >::type, boost::integral_constant<int, (sizeof(double) == sizeof(long double) ? boost::math::constants::construct_from_double : boost::math::constants::construct_from_long_double) > >::value), "Need to be able to construct from long double");
+static_assert((boost::is_same<boost::math::constants::construction_traits<boost::math::concepts::real_concept, real_concept_policy_2 >::type, boost::integral_constant<int, boost::math::constants::construct_from_string> >::value), "Need to be able to construct integer from string");
+static_assert((boost::math::constants::construction_traits<boost::math::concepts::real_concept, real_concept_policy_3>::type::value >= 5), "Nee 5 digits");
+#endif // C++11
 
 // We need to declare a conceptual type whose precision is unknown at
 // compile time, and is so enormous when checked at runtime,
@@ -755,14 +757,15 @@ void test_constexpr()
 #endif
 }
 
+#if __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1900)
 void test_feigenbaum()
 {
    // This constant takes weeks to calculate.
    // So if the requested precision > precomputed precision, we need an error message.
    using boost::multiprecision::cpp_bin_float;
-   using boost::multiprecision::cpp_bin_float_100;
+   using boost::multiprecision::number;
    auto f64 = boost::math::constants::first_feigenbaum<double>();
-   using Real100 = boost::multiprecision::number<cpp_bin_float<300>>;
+   using Real100 = number<cpp_bin_float<300>>;
    auto f = boost::math::constants::first_feigenbaum<Real100>();
    CHECK_ULP_CLOSE(static_cast<double>(f), f64, 0);
    Real100 g{"4.6692016091029906718532038204662016172581855774757686327456513430041343302113147371386897440239480138171659848551898151344086271420279325223124429888908908599449354632367134115324817142199474556443658237932020095610583305754586176522220703854106467494942849814533917262005687556659523398756038256372256480040951071283890611844702775854285419801113440175002428585382498335715522052236087250291678860362674527213399057131606875345083433934446103706309452019115876972432273589838903794946257251289097948986768334611626889116563123474460575179539122045562472807095202198199094558581946136877445617396074115614074243754435499204869180982648652368438702799649017397793425134723808737136211601860128186102056381818354097598477964173900328936171432159878240789776614391395764037760537119096932066998361984288981837003229412030210655743295550388845849737034727532121925706958414074661841981961006129640161487712944415901405467941800198133253378592493365883070459999938375411726563553016862529032210862320550634510679399023341675"};
@@ -777,6 +780,7 @@ void test_plastic()
     using std::abs;
     CHECK_LE(abs(residual), 4*std::numeric_limits<Real>::epsilon());
 }
+#endif
 
 int main()
 {
@@ -794,9 +798,11 @@ int main()
    test_spots(0.0); // Test double.
    test_spots(0.0L); // Test long double.
 
+#if __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1900)
    test_feigenbaum();
    test_plastic<float>();
    test_plastic<double>();
    test_plastic<boost::multiprecision::number<boost::multiprecision::cpp_bin_float<400>>>();
+#endif
    return boost::math::test::report_errors();
 }
