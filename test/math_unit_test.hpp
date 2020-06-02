@@ -70,7 +70,6 @@ bool check_ulp_close(PreciseReal expected1, Real computed, size_t ulps, std::str
     using std::max;
     using std::abs;
     using std::isnan;
-    using boost::math::isnan; // for real_concept
     using boost::math::itrunc;
     // Of course integers can be expected values, and they are exact:
     if (!std::is_integral<PreciseReal>::value) {
