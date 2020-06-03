@@ -13,6 +13,7 @@
 #include <string>
 #include <vector>
 #include <cmath>
+#include <sstream>
 
 #include <boost/config/no_tr1/cmath.hpp>
 #include <boost/cstdint.hpp>
@@ -284,14 +285,48 @@ inline typename detail::fraction_traits<Gen>::result_type continued_fraction_a(G
 }
 
 template<typename Real, typename Z = int64_t>
-std::vector<Z> to_simple_continued_fraction(Real const & x)
+std::vector<Z> to_simple_continued_fraction(Real x)
 {
+    using std::floor;
+    using std::abs;
+    using std::sqrt;
     std::vector<Z> a;
     a.reserve(50);
-    using std::floor;
+    int i = 0;
+    while (i++ < 50)
+    {
+       Real flx = floor(x);
+       a.push_back(static_cast<Z>(flx));
+       if (abs(x - flx) < sqrt(std::numeric_limits<Real>::epsilon())) {
+          a.shrink_to_fit();
+          return a;
+       }
+       x = 1/(x-flx);
+    }
     a.shrink_to_fit();
     return a;
 }
+
+template<typename Real, typename Z = int64_t>
+std::string to_printable_simple_continued_fraction(Real x)
+{
+
+    std::vector<Z> a = to_simple_continued_fraction(x);
+    
+    std::ostringstream oss;
+    if (a.size() == 1) {
+       oss << "[" << a[0] << "]\n";
+       return oss.str();
+    }
+    oss << "[" << a[0] << "; ";
+    for (size_t i = 1; i < a.size() - 1; ++i)
+    {
+       oss << a[i] << ", ";
+    }
+    oss << a.back() << "]";
+    return oss.str();
+}
+
 
 } // namespace tools
 } // namespace math
