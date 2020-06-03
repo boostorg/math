@@ -10,6 +10,10 @@
 #pragma once
 #endif
 
+#include <string>
+#include <vector>
+#include <cmath>
+
 #include <boost/config/no_tr1/cmath.hpp>
 #include <boost/cstdint.hpp>
 #include <boost/type_traits/integral_constant.hpp>
@@ -277,6 +281,16 @@ inline typename detail::fraction_traits<Gen>::result_type continued_fraction_a(G
 
    result_type factor = ldexp(1.0f, 1-bits); // 1 / pow(result_type(2), bits);
    return continued_fraction_a(g, factor, max_terms);
+}
+
+template<typename Real, typename Z = int64_t>
+std::vector<Z> to_simple_continued_fraction(Real const & x)
+{
+    std::vector<Z> a;
+    a.reserve(50);
+    using std::floor;
+    a.shrink_to_fit();
+    return a;
 }
 
 } // namespace tools
