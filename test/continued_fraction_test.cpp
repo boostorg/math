@@ -29,17 +29,49 @@ void test_fraction()
     CHECK_EQUAL(a[2], int64_t(6));
     CHECK_EQUAL(a[3], int64_t(7));
 
+    std::cout << "Testing x = 0\n";
     x = 0;
     a = to_simple_continued_fraction(x);
     CHECK_EQUAL(static_cast<int64_t>(a.size()), int64_t(1));
     CHECK_EQUAL(a[0], int64_t(0));
 
+    std::cout << "Testing x = 1\n";
     x = 1;
     a = to_simple_continued_fraction(x);
     CHECK_EQUAL(static_cast<int64_t>(a.size()), int64_t(1));
     CHECK_EQUAL(a[0], int64_t(1));
 
-    // need a negative number to test:
+    // need to test some negative numbers:
+    x = -1;
+    a = to_simple_continued_fraction(x);
+    CHECK_EQUAL(static_cast<int64_t>(a.size()), int64_t(1));
+    CHECK_EQUAL(a[0], int64_t(-1));
+
+    // -1.5 = -2 + 1/2
+    x = -3/Real(2);
+    a = to_simple_continued_fraction(x);
+    CHECK_EQUAL(static_cast<int64_t>(a.size()), int64_t(2));
+    CHECK_EQUAL(a[0], int64_t(-2));
+    CHECK_EQUAL(a[1], int64_t(2));
+
+    // First integer is zero:
+    x = 1/Real(2);
+    a = to_simple_continued_fraction(x);
+    CHECK_EQUAL(static_cast<int64_t>(a.size()), int64_t(2));
+    CHECK_EQUAL(a[0], int64_t(0));
+    CHECK_EQUAL(a[1], int64_t(2));
+
+
+    // Less trivial:
+
+    x = Real(649)/200;
+    a = to_simple_continued_fraction(x);
+    CHECK_EQUAL(static_cast<int64_t>(a.size()), int64_t(4));
+    CHECK_EQUAL(a[0], int64_t(3));
+    CHECK_EQUAL(a[1], int64_t(4));
+    CHECK_EQUAL(a[2], int64_t(12));
+    CHECK_EQUAL(a[3], int64_t(4));
+
 
 }
 

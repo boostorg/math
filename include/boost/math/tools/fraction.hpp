@@ -287,6 +287,11 @@ inline typename detail::fraction_traits<Gen>::result_type continued_fraction_a(G
 template<typename Real, typename Z = int64_t>
 std::vector<Z> to_simple_continued_fraction(Real x)
 {
+    // Rules: All terms are positive integers with the exception of the first.
+    // Under the assumption of faithful rounding, the absolute error is roughly |x|ε.
+    // For a convergent h_n/k_n, the absolute error is less than 1/k_nk_{n+1}.
+    // So once 1/k_n k_{n+1} < |x|ε, the rest of the digits are garbage.
+
     using std::floor;
     using std::abs;
     using std::sqrt;
@@ -326,7 +331,6 @@ std::string to_printable_simple_continued_fraction(Real x)
     oss << a.back() << "]";
     return oss.str();
 }
-
 
 } // namespace tools
 } // namespace math
