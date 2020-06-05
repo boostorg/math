@@ -7,7 +7,7 @@
 #define BOOST_MATH_TOOLS_AGM_HPP
 #include <cmath>
 
-namespace boost::math::tools {
+namespace boost { namespace math { namespace tools {
 
 template<typename Real>
 Real agm(Real a, Real g)
@@ -40,5 +40,5 @@ Real agm(Real a, Real g)
 }
 
 
-}
+}}}
 #endif

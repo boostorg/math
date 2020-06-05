@@ -9,7 +9,6 @@
 #define BOOST_MATH_CALCULATE_CONSTANTS_CONSTANTS_INCLUDED
 #include <boost/static_assert.hpp>
 #include <boost/math/special_functions/trunc.hpp>
-
 namespace boost{ namespace math{ namespace constants{ namespace detail{
 
 template <class T>
@@ -1019,6 +1018,26 @@ inline T constant_plastic<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC((bo
    using std::sqrt;
    return (cbrt(9-sqrt(T(69))) + cbrt(9+sqrt(T(69))))/cbrt(T(18));
 }
+
+
+template <class T>
+template<int N>
+inline T constant_gauss<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC((boost::integral_constant<int, N>)))
+{
+   using std::sqrt;
+   T a = sqrt(T(2));
+   T g = 1;
+   const T scale = sqrt(std::numeric_limits<T>::epsilon())/512;
+   while (a-g > scale*g)
+   {
+      T anp1 = (a + g)/2;
+      g = sqrt(a*g);
+      a = anp1;
+   }
+
+   return 2/(a + g);
+}
+
 #endif
 
 }
