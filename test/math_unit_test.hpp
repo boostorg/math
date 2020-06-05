@@ -12,6 +12,7 @@
 #include <cmath> // for std::isnan
 #include <boost/assert.hpp>
 #include <boost/math/special_functions/next.hpp>
+#include <boost/math/special_functions/trunc.hpp>
 #include <boost/core/demangle.hpp>
 
 namespace boost { namespace math { namespace  test {
@@ -69,11 +70,17 @@ bool check_ulp_close(PreciseReal expected1, Real computed, size_t ulps, std::str
     using std::max;
     using std::abs;
     using std::isnan;
+    using boost::math::itrunc;
     // Of course integers can be expected values, and they are exact:
     if (!std::is_integral<PreciseReal>::value) {
-        BOOST_ASSERT_MSG(sizeof(PreciseReal) >= sizeof(Real),
-                         "The expected number must be computed in higher (or equal) precision than the number being tested.");
         BOOST_ASSERT_MSG(!isnan(expected1), "Expected value cannot be a nan.");
+        if (sizeof(PreciseReal) < sizeof(Real)) {
+            std::ostringstream err;
+            err << "\n\tThe expected number must be computed in higher (or equal) precision than the number being tested.\n";
+            err << "\tType of expected is " << boost::core::demangle(typeid(PreciseReal).name()) << ", which occupies " << sizeof(PreciseReal) << " bytes.\n";
+            err << "\tType of computed is " << boost::core::demangle(typeid(Real).name()) << ", which occupies " << sizeof(Real) << " bytes.\n";
+            throw std::logic_error(err.str());
+        }
     }
 
     if (isnan(computed))
@@ -91,8 +98,9 @@ bool check_ulp_close(PreciseReal expected1, Real computed, size_t ulps, std::str
     Real dist = abs(boost::math::float_distance(expected, computed));
     if (dist > ulps)
     {
-        detail::total_ulp_distance += static_cast<int64_t>(dist);
-        Real denom = (max)(abs(expected), Real(1));
+        detail::total_ulp_distance += static_cast<int64_t>(itrunc(dist));
+        Real abs_expected = abs(expected);
+        Real denom = (max)(abs_expected, Real(1));
         Real mollified_relative_error = abs(expected - computed)/denom;
         std::ios_base::fmtflags f( std::cerr.flags() );
         std::cerr << std::setprecision(3);

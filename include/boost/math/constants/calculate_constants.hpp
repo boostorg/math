@@ -7,7 +7,7 @@
 
 #ifndef BOOST_MATH_CALCULATE_CONSTANTS_CONSTANTS_INCLUDED
 #define BOOST_MATH_CALCULATE_CONSTANTS_CONSTANTS_INCLUDED
-
+#include <boost/static_assert.hpp>
 #include <boost/math/special_functions/trunc.hpp>
 
 namespace boost{ namespace math{ namespace constants{ namespace detail{
@@ -319,14 +319,6 @@ inline T constant_four_minus_pi<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SP
    return static_cast<T>(4) - pi<T, policies::policy<policies::digits2<N> > >();
 }
 
-//template <class T>
-//template<int N>
-//inline T constant_pow23_four_minus_pi<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC((boost::integral_constant<int, N>)))
-//{
-//   BOOST_MATH_STD_USING
-//   return pow(four_minus_pi<T, policies::policy<policies::digits2<N> > >(), static_cast<T>(1.5));
-//}
-
 template <class T>
 template<int N>
 inline T constant_exp_minus_half<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC((boost::integral_constant<int, N>)))
@@ -388,7 +380,6 @@ inline T constant_half_pi<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC((bo
    return pi<T, policies::policy<policies::digits2<N> > >()  / static_cast<T>(2);
 }
 
-
 template <class T>
 template<int N>
 inline T constant_third_pi<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC((boost::integral_constant<int, N>)))
@@ -447,7 +438,6 @@ inline T constant_pi_sqr_div_six<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_S
    *      pi<T, policies::policy<policies::digits2<N> > >()
    / static_cast<T>(6); //
 }
-
 
 template <class T>
 template<int N>
@@ -579,9 +569,9 @@ template<int N>
 inline T constant_ln_phi<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC((boost::integral_constant<int, N>)))
 {
    BOOST_MATH_STD_USING
-   //return  log(phi<T, policies::policy<policies::digits2<N> > >()); // ???
    return log((static_cast<T>(1) + sqrt(static_cast<T>(5)) )/static_cast<T>(2) );
 }
+
 template <class T>
 template<int N>
 inline T constant_one_div_ln_phi<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC((boost::integral_constant<int, N>)))
@@ -1005,6 +995,31 @@ inline T constant_two_div_root_pi<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_
 {
    return 2 * boost::math::constants::one_div_root_pi<T>();
 }
+
+#if __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1900)
+template <class T>
+template<int N>
+inline T constant_first_feigenbaum<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC((boost::integral_constant<int, N>)))
+{
+   // We know the constant to 1018 decimal digits.
+   // See:  http://www.plouffe.fr/simon/constants/feigenbaum.txt
+   // Also: https://oeis.org/A006890
+   // N is in binary digits; so we multiply by log_2(10)
+
+   BOOST_STATIC_ASSERT_MSG(N < 3.321*1018, "\nThe first Feigenbaum constant cannot be computed at runtime; it is too expensive. It is known to 1018 decimal digits; you must request less than that.");
+   T alpha{"4.6692016091029906718532038204662016172581855774757686327456513430041343302113147371386897440239480138171659848551898151344086271420279325223124429888908908599449354632367134115324817142199474556443658237932020095610583305754586176522220703854106467494942849814533917262005687556659523398756038256372256480040951071283890611844702775854285419801113440175002428585382498335715522052236087250291678860362674527213399057131606875345083433934446103706309452019115876972432273589838903794946257251289097948986768334611626889116563123474460575179539122045562472807095202198199094558581946136877445617396074115614074243754435499204869180982648652368438702799649017397793425134723808737136211601860128186102056381818354097598477964173900328936171432159878240789776614391395764037760537119096932066998361984288981837003229412030210655743295550388845849737034727532121925706958414074661841981961006129640161487712944415901405467941800198133253378592493365883070459999938375411726563553016862529032210862320550634510679399023341675"};
+   return alpha;
+}
+
+template <class T>
+template<int N>
+inline T constant_plastic<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC((boost::integral_constant<int, N>)))
+{
+   using std::cbrt;
+   using std::sqrt;
+   return (cbrt(9-sqrt(T(69))) + cbrt(9+sqrt(T(69))))/cbrt(T(18));
+}
+#endif
 
 }
 }
