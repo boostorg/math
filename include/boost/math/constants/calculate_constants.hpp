@@ -8,7 +8,7 @@
 #ifndef BOOST_MATH_CALCULATE_CONSTANTS_CONSTANTS_INCLUDED
 #define BOOST_MATH_CALCULATE_CONSTANTS_CONSTANTS_INCLUDED
 #include <boost/static_assert.hpp>
-#include <boost/math/special_functions/trunc.hpp>
+
 namespace boost{ namespace math{ namespace constants{ namespace detail{
 
 template <class T>
@@ -808,7 +808,6 @@ T zeta_series_derivative_2(unsigned digits)
    // Derivative of the series part, evaluated at 2:
    BOOST_MATH_STD_USING
    int n = digits * 301 * 13 / 10000;
-   boost::math::itrunc((std::numeric_limits<T>::digits10 + 1) * 1.3);
    T d = pow(3 + sqrt(T(8)), n);
    d = (d + 1 / d) / 2;
    T b = -1;
