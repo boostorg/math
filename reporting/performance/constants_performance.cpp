@@ -20,7 +20,7 @@ void Pi(benchmark::State& state)
     state.SetComplexityN(state.range(0));
 }
 
-BENCHMARK(Pi)->RangeMultiplier(2)->Range(512, 1<<22)->Complexity()->Unit(benchmark::kMicrosecond);
+BENCHMARK(Pi)->RangeMultiplier(2)->Range(512, 1<<20)->Complexity()->Unit(benchmark::kMicrosecond);
 
 void Gauss(benchmark::State& state)
 {
@@ -32,9 +32,9 @@ void Gauss(benchmark::State& state)
     state.SetComplexityN(state.range(0));
 }
 
-BENCHMARK(Gauss)->RangeMultiplier(2)->Range(512, 1<<22)->Complexity()->Unit(benchmark::kMicrosecond);
+BENCHMARK(Gauss)->RangeMultiplier(2)->Range(512, 1<<20)->Complexity()->Unit(benchmark::kMicrosecond);
 
-void E(benchmark::State& state)
+void Exp1(benchmark::State& state)
 {
     mpfr_float::default_precision(state.range(0));
     for (auto _ : state)
@@ -44,7 +44,7 @@ void E(benchmark::State& state)
     state.SetComplexityN(state.range(0));
 }
 
-BENCHMARK(E)->RangeMultiplier(2)->Range(512, 1<<22)->Complexity()->Unit(benchmark::kMicrosecond);
+BENCHMARK(Exp1)->RangeMultiplier(2)->Range(512, 1<<20)->Complexity()->Unit(benchmark::kMicrosecond);
 
 void Catalan(benchmark::State& state)
 {
@@ -56,7 +56,7 @@ void Catalan(benchmark::State& state)
     state.SetComplexityN(state.range(0));
 }
 
-BENCHMARK(Catalan)->RangeMultiplier(2)->Range(512, 1<<22)->Complexity()->Unit(benchmark::kMicrosecond);
+BENCHMARK(Catalan)->RangeMultiplier(2)->Range(512, 1<<20)->Complexity()->Unit(benchmark::kMicrosecond);
 
 void Plastic(benchmark::State& state)
 {
@@ -68,7 +68,7 @@ void Plastic(benchmark::State& state)
     state.SetComplexityN(state.range(0));
 }
 
-BENCHMARK(Plastic)->RangeMultiplier(2)->Range(512, 1<<22)->Complexity()->Unit(benchmark::kMicrosecond);
+BENCHMARK(Plastic)->RangeMultiplier(2)->Range(512, 1<<20)->Complexity()->Unit(benchmark::kMicrosecond);
 
 void RootTwo(benchmark::State& state)
 {
@@ -80,7 +80,7 @@ void RootTwo(benchmark::State& state)
     state.SetComplexityN(state.range(0));
 }
 
-BENCHMARK(RootTwo)->RangeMultiplier(2)->Range(512, 1<<22)->Complexity()->Unit(benchmark::kMicrosecond);
+BENCHMARK(RootTwo)->RangeMultiplier(2)->Range(512, 1<<20)->Complexity()->Unit(benchmark::kMicrosecond);
 
 void ZetaThree(benchmark::State& state)
 {
@@ -92,7 +92,46 @@ void ZetaThree(benchmark::State& state)
     state.SetComplexityN(state.range(0));
 }
 
-BENCHMARK(ZetaThree)->RangeMultiplier(2)->Range(512, 1<<22)->Complexity()->Unit(benchmark::kMicrosecond);
+BENCHMARK(ZetaThree)->RangeMultiplier(2)->Range(512, 1<<20)->Complexity()->Unit(benchmark::kMicrosecond);
+
+
+void Euler(benchmark::State& state)
+{
+    mpfr_float::default_precision(state.range(0));
+    for (auto _ : state)
+    {
+        benchmark::DoNotOptimize(euler<mpfr_float>());
+    }
+    state.SetComplexityN(state.range(0));
+}
+
+BENCHMARK(Euler)->RangeMultiplier(2)->Range(512, 1<<20)->Complexity()->Unit(benchmark::kMicrosecond);
+
+
+void LnTwo(benchmark::State& state)
+{
+    mpfr_float::default_precision(state.range(0));
+    for (auto _ : state)
+    {
+        benchmark::DoNotOptimize(ln_two<mpfr_float>());
+    }
+    state.SetComplexityN(state.range(0));
+}
+
+BENCHMARK(LnTwo)->RangeMultiplier(2)->Range(512, 1<<20)->Complexity()->Unit(benchmark::kMicrosecond);
+
+void Glaisher(benchmark::State& state)
+{
+    mpfr_float::default_precision(state.range(0));
+    for (auto _ : state)
+    {
+        benchmark::DoNotOptimize(glaisher<mpfr_float>());
+    }
+    state.SetComplexityN(state.range(0));
+}
+
+BENCHMARK(Glaisher)->RangeMultiplier(2)->Range(512, 4096)->Complexity()->Unit(benchmark::kMicrosecond);
+
 
 void Khinchin(benchmark::State& state)
 {
@@ -106,43 +145,5 @@ void Khinchin(benchmark::State& state)
 
 // There is a performance bug in the Khinchin constant:
 BENCHMARK(Khinchin)->RangeMultiplier(2)->Range(512, 512)->Complexity()->Unit(benchmark::kMicrosecond);
-
-void Glaisher(benchmark::State& state)
-{
-    mpfr_float::default_precision(state.range(0));
-    for (auto _ : state)
-    {
-        benchmark::DoNotOptimize(glaisher<mpfr_float>());
-    }
-    state.SetComplexityN(state.range(0));
-}
-
-BENCHMARK(Glaisher)->RangeMultiplier(2)->Range(512, 1<<22)->Complexity()->Unit(benchmark::kMicrosecond);
-
-void Euler(benchmark::State& state)
-{
-    mpfr_float::default_precision(state.range(0));
-    for (auto _ : state)
-    {
-        benchmark::DoNotOptimize(euler<mpfr_float>());
-    }
-    state.SetComplexityN(state.range(0));
-}
-
-BENCHMARK(Euler)->RangeMultiplier(2)->Range(512, 1<<22)->Complexity()->Unit(benchmark::kMicrosecond);
-
-
-void LnTwo(benchmark::State& state)
-{
-    mpfr_float::default_precision(state.range(0));
-    for (auto _ : state)
-    {
-        benchmark::DoNotOptimize(ln_two<mpfr_float>());
-    }
-    state.SetComplexityN(state.range(0));
-}
-
-BENCHMARK(LnTwo)->RangeMultiplier(2)->Range(512, 1<<22)->Complexity()->Unit(benchmark::kMicrosecond);
-
 
 BENCHMARK_MAIN();
