@@ -26,6 +26,7 @@
 #endif
 
 #if __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1900)
+#include <boost/math/tools/agm.hpp>
 // Check at compile time that the construction method for constants of type float, is "construct from a float", or "construct from a double", ...
 static_assert((boost::is_same<boost::math::constants::construction_traits<float, boost::math::policies::policy<> >::type, boost::integral_constant<int, boost::math::constants::construct_from_float> >::value), "Need to be able to construct from float");
 static_assert((boost::is_same<boost::math::constants::construction_traits<double, boost::math::policies::policy<> >::type, boost::integral_constant<int, boost::math::constants::construct_from_double> >::value), "Need to be able to construct from double");
@@ -780,6 +781,19 @@ void test_plastic()
     using std::abs;
     CHECK_LE(abs(residual), 4*std::numeric_limits<Real>::epsilon());
 }
+
+template<typename Real>
+void test_gauss()
+{
+    using boost::math::tools::agm;
+    using std::sqrt;
+    Real G_computed = boost::math::constants::gauss<Real>();
+    Real G_expected = Real(1)/agm(sqrt(Real(2)), Real(1));
+    CHECK_ULP_CLOSE(G_expected, G_computed, 1);
+    CHECK_LE(G_computed, Real(0.8347));
+    CHECK_LE(Real(0.8346), G_computed);
+}
+
 #endif
 
 int main()
@@ -803,6 +817,11 @@ int main()
    test_plastic<float>();
    test_plastic<double>();
    test_plastic<boost::multiprecision::number<boost::multiprecision::cpp_bin_float<400>>>();
+   test_gauss<float>();
+   test_gauss<double>();
+   test_gauss<long double>();
+   test_gauss<boost::multiprecision::number<boost::multiprecision::cpp_bin_float<400>>>();
+
 #endif
    return boost::math::test::report_errors();
 }
