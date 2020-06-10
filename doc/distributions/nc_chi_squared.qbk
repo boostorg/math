@@ -39,8 +39,8 @@
    }} // namespaces
 
 The noncentral chi-squared distribution is a generalization of the
-__chi_squared_distrib. If ['X[sub i]] are /[nu]/ independent, normally
-distributed random variables with means /[mu][sub i]/ and variances
+__chi_squared_distrib. If ['X[sub i]] are [nu] independent, normally
+distributed random variables with means [mu][sub i] and variances
 ['[sigma][sub i][super 2]], then the random variable
 
 [equation nc_chi_squ_ref1]
@@ -48,7 +48,7 @@ distributed random variables with means /[mu][sub i]/ and variances
 is distributed according to the noncentral chi-squared distribution.
 
 The noncentral chi-squared distribution has two parameters:
-/[nu]/ which specifies the number of degrees of freedom
+[nu] which specifies the number of degrees of freedom
 (i.e. the number of ['X[sub i])], and [lambda] which is related to the
 mean of the random variables ['X[sub i]] by:
 
@@ -72,7 +72,7 @@ for different values of [lambda]:
 
       non_central_chi_squared_distribution(RealType v, RealType lambda);
 
-Constructs a Chi-Squared distribution with /v/ degrees of freedom
+Constructs a Chi-Squared distribution with v degrees of freedom
 and non-centrality parameter /lambda/.
 
 Requires v > 0 and lambda >= 0, otherwise calls __domain_error.
