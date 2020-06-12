@@ -20,7 +20,7 @@
       // Constructor:
       non_central_chi_squared_distribution(RealType v, RealType lambda);
 
-      // Accessor to degrees of freedom parameter v:
+      // Accessor to degrees of freedom parameter [nu]:
       RealType degrees_of_freedom()const;
 
       // Accessor to non centrality parameter lambda:
@@ -75,11 +75,11 @@ for different values of [lambda]:
 Constructs a Chi-Squared distribution with [nu] degrees of freedom
 and non-centrality parameter /lambda/.
 
-Requires v > 0 and lambda >= 0, otherwise calls __domain_error.
+Requires [nu] > 0 and lambda >= 0, otherwise calls __domain_error.
 
       RealType degrees_of_freedom()const;
 
-Returns the parameter v from which this object was constructed.
+Returns the parameter [nu] from which this object was constructed.
 
       RealType non_centrality()const;
 
