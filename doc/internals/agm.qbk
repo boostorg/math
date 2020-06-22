@@ -16,6 +16,9 @@
     template<typename Real>
     Real agm(Real a0, Real g0);
  
+    template<typename Real, typename ``__Policy``>
+    Real agm(Real a0, Real g0, const Policy& pol);
+
     } // namespaces
 
 

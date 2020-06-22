@@ -5,17 +5,18 @@
 
 #ifndef BOOST_MATH_TOOLS_AGM_HPP
 #define BOOST_MATH_TOOLS_AGM_HPP
+#include <boost/math/policies/policy.hpp>
 #include <cmath>
 
 namespace boost { namespace math { namespace tools {
 
-template<typename Real>
-Real agm(Real a, Real g)
+template<typename Real, typename Policy>
+Real agm(Real a, Real g, const Policy& pol)
 {
     if (a < g)
     {
         // Mathematica, mpfr, and mpmath are all symmetric functions:
-        return agm(g, a);
+        return agm(g, a, pol);
     }
     // Use: M(rx, ry) = rM(x,y)
     if (a <= 0 || g <= 0) {
@@ -27,7 +28,7 @@ Real agm(Real a, Real g)
 
     // The number of correct digits doubles on each iteration.
     // Divide by 512 for some leeway:
-    const Real scale = sqrt(std::numeric_limits<Real>::epsilon())/512;
+    const Real scale = sqrt(policies::get_epsilon<Real, Policy>())/Real(512);
     while (a-g > scale*g)
     {
         Real anp1 = (a + g)/2;
@@ -39,6 +40,11 @@ Real agm(Real a, Real g)
     return (a + g)/2;
 }
 
+template<typename Real>
+Real agm(Real a, Real g)
+{
+    return boost::math::tools::agm(a, g, policies::policy<>());
+}
 
 }}}
 #endif
