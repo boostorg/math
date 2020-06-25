@@ -14,6 +14,8 @@
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/tools/atomic.hpp>
 #include <boost/detail/lightweight_mutex.hpp>
+#include <boost/math/policies/error_handling.hpp>
+#include <boost/math/special_functions/trunc.hpp>
 
 namespace boost{ namespace math{ namespace quadrature { namespace detail{
 
