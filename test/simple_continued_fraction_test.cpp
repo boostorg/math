@@ -7,6 +7,7 @@
 
 #include "math_unit_test.hpp"
 #include <boost/math/tools/simple_continued_fraction.hpp>
+#include <boost/math/constants/constants.hpp>
 #ifdef BOOST_HAS_FLOAT128
 #include <boost/multiprecision/float128.hpp>
 using boost::multiprecision::float128;
@@ -15,6 +16,7 @@ using boost::multiprecision::float128;
 
 using boost::math::tools::simple_continued_fraction;
 using boost::multiprecision::cpp_bin_float_100;
+using boost::math::constants::pi;
 
 template<class Real>
 void test_integral()
@@ -110,6 +112,24 @@ void test_simple()
 
 }
 
+template<typename Real>
+void test_khinchin()
+{
+    // These are simply sanity checks; the convergence is too slow otherwise:
+    auto cfrac = simple_continued_fraction(pi<Real>());
+    auto K0 = cfrac.khinchin_geometric_mean();
+    CHECK_MOLLIFIED_CLOSE(Real(2.6854520010), K0, 0.1);
+    auto Km1 = cfrac.khinchin_harmonic_mean();
+    CHECK_MOLLIFIED_CLOSE(Real(1.74540566240), Km1, 0.1);
+    
+    using std::sqrt;
+    auto rt_cfrac = simple_continued_fraction(sqrt(static_cast<Real>(2)));
+    K0 = rt_cfrac.khinchin_geometric_mean();
+    CHECK_ULP_CLOSE(Real(2), K0, 10);
+    Km1 = rt_cfrac.khinchin_harmonic_mean();
+    CHECK_ULP_CLOSE(Real(2), Km1, 10);
+}
+
 
 int main()
 {
@@ -128,10 +148,13 @@ int main()
     test_simple<long double>();
     test_simple<cpp_bin_float_100>();
     
+    test_khinchin<cpp_bin_float_100>();
+    
     #ifdef BOOST_HAS_FLOAT128
     test_integral<float128>();
     test_halves<float128>();
     test_simple<float128>();
+    test_khinchin<float128>();
     #endif
     return boost::math::test::report_errors();
 }

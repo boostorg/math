@@ -21,7 +21,7 @@ int main()
     std::cout << "φ ≈ " << phi_cfrac << "\n\n";
 
     auto pi_cfrac = simple_continued_fraction(pi<Real>());
-    std::cout << "π    ≈ " << pi_cfrac << "\n";
+    std::cout << "π ≈ " << pi_cfrac << "\n";
     std::cout << "Known: [3; 7, 15, 1, 292, 1, 1, 1, 2, 1, 3, 1, 14, 2, 1, 1, 2, 2, 2, 2, 1, 84, 2, 1, 1, 15, 3, 13, 1, 4, 2, 6, 6, 99, 1, 2, 2, 6, 3, 5, 1, 1, 6, 8, 1, 7, 1, 2, 3, 7, 1, 2, 1, 1, 12, 1, 1, 1, 3, 1, 1, 8, 1, 1, 2, 1, 6, 1, 1, 5, 2, 2, 3, 1, 2, 4, 4, 16, 1, 161, 45, 1, 22, 1, 2, 2, 1, 4, 1, 2, 24, 1, 2, 1, 3, 1, 2, 1, ...]\n\n";
 
     auto rt_cfrac = simple_continued_fraction(root_two<Real>());

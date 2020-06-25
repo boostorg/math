@@ -43,7 +43,7 @@ public:
         Real D = 0;
         int i = 0;
         // the 1 + i++ let's the error bound grow slowly with the number of convergents.
-        // I have not worked out the error propagation of the Modified Lentz's method to see if it does indeed grow at this rate/
+        // I have not worked out the error propagation of the Modified Lentz's method to see if it does indeed grow at this rate.
         // Numerical Recipes claims that no one has worked out the error analysis of the modified Lentz's method.
         while (abs(f - x_) >= (1 + i++)*std::numeric_limits<Real>::epsilon()*abs(x_))
         {
@@ -86,13 +86,36 @@ public:
         if (b_.size() == 1) { 
          return std::numeric_limits<Real>::quiet_NaN();
         }
+         using std::log;
+         using std::exp;
+         // Precompute the most probable logarithms. See the Gauss-Kuzmin distribution for details.
+         // Example: b_i = 1 has probability -log_2(3/4) ≈ .415:
+         // A random partial denominator has ~80% chance of being in this table:
+         const std::array<Real, 7> logs{std::numeric_limits<Real>::quiet_NaN(), Real(0), log(static_cast<Real>(2)), log(static_cast<Real>(3)), log(static_cast<Real>(4)), log(static_cast<Real>(5)), log(static_cast<Real>(6))};
+         Real log_prod = 0;
+         for (size_t i = 1; i < b_.size(); ++i) {
+            if (b_[i] < static_cast<Z>(logs.size())) {
+               log_prod += logs[b_[i]];
+            }
+            else
+            {
+               log_prod += log(static_cast<Real>(b_[i]));
+            }
+         }
+         log_prod /= (b_.size()-1);
+         return exp(log_prod);
     }
     
-    Real khinchine_harmonic_mean() const {
+    Real khinchin_harmonic_mean() const {
         if (b_.size() == 1) {
           return std::numeric_limits<Real>::quiet_NaN();
         }
-        
+        Real n = b_.size() - 1;
+        Real denom = 0;
+        for (size_t i = 1; i < b_.size(); ++i) {
+            denom += 1/static_cast<Real>(b_[i]);
+        }
+        return n/denom;
     }
     
     const std::vector<Z>& partial_denominators() const {
