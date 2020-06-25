@@ -42,7 +42,7 @@ public:
         Real C = f;
         Real D = 0;
         int i = 0;
-        // the 1 + i++ let's the error bound grow slowly with the number of convergents.
+        // the "1 + i++" lets the error bound grow slowly with the number of convergents.
         // I have not worked out the error propagation of the Modified Lentz's method to see if it does indeed grow at this rate.
         // Numerical Recipes claims that no one has worked out the error analysis of the modified Lentz's method.
         while (abs(f - x_) >= (1 + i++)*std::numeric_limits<Real>::epsilon()*abs(x_))
