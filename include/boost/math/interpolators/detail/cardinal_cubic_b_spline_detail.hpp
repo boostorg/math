@@ -13,6 +13,7 @@
 #include <memory>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
+#include <boost/math/special_functions/trunc.hpp>
 
 namespace boost{ namespace math{ namespace interpolators{ namespace detail{
 
