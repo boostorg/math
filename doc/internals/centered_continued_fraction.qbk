@@ -32,7 +32,14 @@ Here's a minimal working example:
     using boost::math::tools::centered_continued_fraction;
     auto cfrac = centered_continued_fraction(pi<long double>());
     std::cout << "π ≈ " << cfrac << "\n";
+    // Prints:
+    // π ≈ [3; 7, 16, -294, 3, -4, 5, -15, -3, 2, 2]
 
+This function achieves the same end as the Maple syntax
+
+   [$../images/maple_cfrac.png]
+
+You should convince yourself that the Maple output and the notation we use are in fact the same thing.
 
 The class computes partial denominators which simultaneously computing convergents with the modified Lentz's algorithm.
 Once a convergent is within a few ulps of the input value, the computation stops.
