@@ -37,7 +37,7 @@ Here's a minimal working example:
 
 This function achieves the same end as the Maple syntax
 
-   [$../images/maple_cfrac.png]
+[$../images/maple_cfrac.png]
 
 You should convince yourself that the Maple output and the notation we use are in fact the same thing.
 
