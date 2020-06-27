@@ -92,6 +92,7 @@ public:
         }
         using std::log;
         using std::exp;
+        using std::abs;
         const std::array<Real, 7> logs{std::numeric_limits<Real>::quiet_NaN(), Real(0), log(static_cast<Real>(2)), log(static_cast<Real>(3)), log(static_cast<Real>(4)), log(static_cast<Real>(5)), log(static_cast<Real>(6))};
         Real log_prod = 0;
         for (size_t i = 1; i < b_.size(); ++i)
