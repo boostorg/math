@@ -140,7 +140,7 @@ std::ostream& operator<<(std::ostream& out, simple_continued_fraction<Real, Z2>&
       out << std::setprecision(p);
    }
    
-   out << scf.x_ << " ≈ [" << scf.b_.front();
+   out << "[" << scf.b_.front();
    if (scf.b_.size() > 1)
    {
       out << "; ";
