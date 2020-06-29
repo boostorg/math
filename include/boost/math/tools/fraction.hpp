@@ -73,7 +73,7 @@ namespace detail
    struct tiny_value
    {
       static T get() {
-         return tools::min_value<T>(); 
+         return 16*tools::min_value<T>();
       }
    };
    template <class T>
@@ -81,7 +81,7 @@ namespace detail
    {
       typedef typename T::value_type value_type;
       static T get() {
-         return tools::min_value<value_type>();
+         return 16*tools::min_value<value_type>();
       }
    };
 
@@ -128,7 +128,6 @@ inline typename detail::fraction_traits<Gen>::result_type continued_fraction_b(G
    D = 0;
 
    boost::uintmax_t counter(max_terms);
-
    do{
       v = g();
       D = traits::b(v) + traits::a(v) * D;
