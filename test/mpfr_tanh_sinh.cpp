@@ -26,9 +26,8 @@ void test_linear()
 {
     using std::sqrt;
     std::cout << "Testing linear functions are integrated properly by tanh_sinh on type " << boost::core::demangle(typeid(Real).name()) << "\n";
-    Real tol = 10*boost::math::tools::epsilon<Real>();
     auto integrator = get_integrator<Real>();
-    auto f = [](const Real& x)
+    auto f = [](const Real& x)->Real
     {
        return 5*x + 7;
     };
@@ -39,7 +38,8 @@ void test_linear()
     CHECK_ULP_CLOSE(expected, Q, 10);
     CHECK_ULP_CLOSE(expected, L1, 10);
     Q = integrator.integrate(f, (Real) 1, (Real) 0,sqrt(std::numeric_limits<Real>::epsilon()), &error, &L1);
-    CHECK_ULP_CLOSE(-expected, Q, 10);
+    Real negated = -expected;
+    CHECK_ULP_CLOSE(negated, Q, 10);
     CHECK_ULP_CLOSE(expected, L1, 10);
     Q = integrator.integrate(f, (Real) 1, (Real) 1, sqrt(std::numeric_limits<Real>::epsilon()), &error, &L1);
     CHECK_EQUAL(Real(0), Q);
