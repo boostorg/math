@@ -72,6 +72,9 @@ namespace detail
    template <class T, bool = is_complex_type<T>::value>
    struct tiny_value
    {
+      // For float, double, and long double, 1/min_value<T>() is finite.
+      // But for mpfr_float and cpp_bin_float, 1/min_value<T>() is inf.
+      // Multiply the min by 16 so that the reciprocal doesn't overflow.
       static T get() {
          return 16*tools::min_value<T>();
       }
@@ -102,7 +105,7 @@ namespace detail
 // Note that the first a0 returned by generator Gen is discarded.
 //
 template <class Gen, class U>
-inline typename detail::fraction_traits<Gen>::result_type continued_fraction_b(Gen& g, const U& factor, boost::uintmax_t& max_terms) 
+inline typename detail::fraction_traits<Gen>::result_type continued_fraction_b(Gen& g, const U& factor, boost::uintmax_t& max_terms)
       BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(typename detail::fraction_traits<Gen>::result_type) && noexcept(std::declval<Gen>()()))
 {
    BOOST_MATH_STD_USING // ADL of std names
@@ -283,4 +286,3 @@ inline typename detail::fraction_traits<Gen>::result_type continued_fraction_a(G
 } // namespace boost
 
 #endif // BOOST_MATH_TOOLS_FRACTION_INCLUDED
-
