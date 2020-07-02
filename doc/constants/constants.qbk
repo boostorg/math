@@ -382,6 +382,7 @@ This section lists the mathematical constants, their use(s) (and sometimes ratio
 [[first_feigenbaum] [] [4.6692016] [[@https://en.wikipedia.org/wiki/Feigenbaum_constants First Feigenbaum constant]] ]
 [[plastic] [Real solution of x[super 3] = x + 1] [1.324717957] [[@https://en.wikipedia.org/wiki/Plastic_number Plastic constant]] ]
 [[gauss] [Reciprocal of agm(1, [radic]2)] [0.8346268] [[@https://en.wikipedia.org/wiki/Gauss%27s_constant Gauss's constant]] ]
+[[soldner] [Root of li(x)] [1.4513692348833810502839684] [[@https://en.wikipedia.org/wiki/Ramanujan%E2%80%93Soldner_constant Soldner's constant]] ]
 ] [/table]
 
 
