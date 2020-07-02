@@ -1068,7 +1068,14 @@ inline T constant_soldner<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC((bo
    return x;
 }
 
-
+template <class T>
+template<int N>
+inline T constant_gompertz<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC((boost::integral_constant<int, N>)))
+{
+   using boost::math::expint;
+   using boost::math::constants::e;
+   return -e<T>()*expint(static_cast<T>(-1));
+}
 #endif
 
 }

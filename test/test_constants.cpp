@@ -804,6 +804,17 @@ void test_soldner()
    CHECK_ULP_CLOSE(expected, computed, 1);
 }
 
+template<typename Real>
+void test_gompertz()
+{
+   using boost::math::constants::gompertz;
+
+   Real computed = gompertz<Real>();
+   // Taken from https://oeis.org/A073003/constant
+   Real expected = boost::lexical_cast<Real>(".596347362323194074341078499369279376074177860152548781573484910482327219114874417470430497093612760344237");
+   CHECK_ULP_CLOSE(expected, computed, 1);
+}
+
 #endif
 
 int main()
@@ -835,6 +846,10 @@ int main()
    test_soldner<double>();
    test_soldner<long double>();
    test_soldner<boost::multiprecision::number<boost::multiprecision::cpp_bin_float<98>>>();
+   test_gompertz<float>();
+   test_gompertz<double>();
+   test_gompertz<long double>();
+   test_gompertz<boost::multiprecision::number<boost::multiprecision::cpp_bin_float<98>>>();
 #endif
    return boost::math::test::report_errors();
 }
