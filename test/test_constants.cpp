@@ -794,6 +794,16 @@ void test_gauss()
     CHECK_LE(Real(0.8346), G_computed);
 }
 
+template<typename Real>
+void test_soldner()
+{
+   using boost::math::constants::soldner;
+   Real computed = soldner<Real>();
+   // Only testing 100 digits, max.
+   Real expected = boost::lexical_cast<Real>("1.45136923488338105028396848589202744949303228364801586309300455766242559575451783565953135771108682884");
+   CHECK_ULP_CLOSE(expected, computed, 1);
+}
+
 #endif
 
 int main()
@@ -821,7 +831,10 @@ int main()
    test_gauss<double>();
    test_gauss<long double>();
    test_gauss<boost::multiprecision::number<boost::multiprecision::cpp_bin_float<400>>>();
-
+   test_soldner<float>();
+   test_soldner<double>();
+   test_soldner<long double>();
+   test_soldner<boost::multiprecision::number<boost::multiprecision::cpp_bin_float<98>>>();
 #endif
    return boost::math::test::report_errors();
 }
