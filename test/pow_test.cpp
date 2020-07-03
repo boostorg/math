@@ -194,6 +194,8 @@ BOOST_AUTO_TEST_CASE( test_main )
     test_with_big_exponents<boost::math::concepts::real_concept, -1>();
 #endif
 
+    static_assert(boost::math::pow<8>(2)==256, "Pow is not constexpr");
+
     test_return_types();
 
     test_error_policy();
