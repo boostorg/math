@@ -11,6 +11,7 @@
 #include <tuple>
 #include <cmath>
 #include <boost/assert.hpp>
+#include <boost/math/tools/precision.hpp>
 
 namespace boost::math::statistics {
 
@@ -512,6 +513,58 @@ inline auto interquartile_range(RandomAccessContainer & v)
     return interquartile_range(v.begin(), v.end());
 }
 
+template<class RandomAccessIterator>
+auto mode(RandomAccessIterator first, RandomAccessIterator last)
+{
+    using Real = typename std::iterator_traits<RandomAccessIterator>::value_type;
+    using Size = typename std::iterator_traits<RandomAccessIterator>::difference_type;
+
+    std::vector<Real> sorted(first, last);
+    std::sort(sorted.begin(), sorted.end());
+
+    std::vector<Real> modes {};
+    Size max_counter {};
+    Real previous_search {boost::math::tools::max_value<Real>()};
+
+    if(sorted.front() == sorted.back())
+    {
+        modes.push_back(sorted.front());
+        return modes;
+    }
+
+    for(const Real i : sorted)
+    {
+        if(i == previous_search)
+        {
+            continue;
+        }
+        
+        Size current_count {std::count(sorted.begin(), sorted.end(), i)};
+        if(current_count > max_counter)
+        {
+            modes.clear();
+            modes.push_back(i);
+            max_counter = current_count;
+        }
+
+        else if(current_count == max_counter)
+        {
+            modes.push_back(i);
+        }
+
+        previous_search = i;
+    }
+
+    BOOST_ASSERT_MSG(max_counter > 1, "Mode is undefined");
+
+    return modes;
+}
+
+template<class RandomAccessContainer>
+inline auto mode(RandomAccessContainer & v)
+{
+    return mode(v.begin(), v.end());
+}
 
 }
 #endif

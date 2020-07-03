@@ -833,6 +833,39 @@ void test_interquartile_range()
     BOOST_TEST_EQ(iqr, 6);
 }
 
+template<class Real>
+void test_mode()
+{
+    std::vector<Real> v {1, 2, 2, 3, 4, 5};
+    const Real ref = 2;
+
+    // Does iterator call work?
+    std::vector<Real> test = boost::math::statistics::mode(v.begin(), v.end());
+    BOOST_TEST(ref == test[0]);
+
+    // Does container call work?
+    test = boost::math::statistics::mode(v);
+    BOOST_TEST(ref == test[0]);
+
+    // Does it work with part of a vector?
+    test = boost::math::statistics::mode(v.begin(), v.begin() + 3);
+    BOOST_TEST(ref == test[0]);
+
+    // Does it work with const qualification?
+    test = boost::math::statistics::mode(v.cbegin(), v.cend());
+    BOOST_TEST(ref == test[0]);
+
+    // Does it work with std::array?
+    std::array<Real, 6> u {1, 2, 2, 3, 4, 5};
+    test = boost::math::statistics::mode(u);
+    BOOST_TEST(ref == test[0]);
+
+    // Does it work with a bi-modal distribuition?
+    std::vector<Real> w {1, 2, 2, 3, 3, 4, 5};
+    test = boost::math::statistics::mode(w.begin(), w.end());
+    BOOST_TEST(test.size() == 2);
+}
+
 int main()
 {
     test_mean<float>();
@@ -902,5 +935,12 @@ int main()
 
     test_interquartile_range<double>();
     test_interquartile_range<cpp_bin_float_50>();
+
+    test_mode<float>();
+    test_mode<double>();
+    test_mode<long double>();
+    test_mode<cpp_bin_float_50>();
+    test_mode<int>();
+
     return boost::report_errors();
 }
