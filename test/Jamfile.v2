@@ -1151,6 +1151,7 @@ test-suite quadrature :
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] :
    tanh_sinh_quadrature_test_9 ]
 
+   [ run tanh_sinh_mpfr.cpp : : : <linkflags>-lgmp <linkflags>-lmpfr [ check-target-builds ../config//has_mpfr : : <build>no ] [ requires cxx11_hdr_initializer_list cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_smart_ptr ] release <toolset>clang:<cxxflags>-Wno-literal-range ]
    [ run sinh_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
      : : : release [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] ]
    [ run exp_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
