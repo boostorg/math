@@ -32,7 +32,7 @@ void test_mode(benchmark::State& state)
 template <class Z>
 void sequential_test_mode(benchmark::State& state)
 {
-    using boost::math::statistics::mode;
+    using boost::math::statistics::sorted_mode;
 
     std::vector<Z> v(state.range(0));
     
@@ -46,7 +46,7 @@ void sequential_test_mode(benchmark::State& state)
 
     for (auto _ : state)
     {
-        benchmark::DoNotOptimize(mode(v));
+        benchmark::DoNotOptimize(sorted_mode(v));
     }
 
     state.SetComplexityN(state.range(0));
@@ -55,7 +55,7 @@ void sequential_test_mode(benchmark::State& state)
 template <class Z>
 void sequential_pairs_test_mode(benchmark::State& state)
 {
-    using boost::math::statistics::mode;
+    using boost::math::statistics::sorted_mode;
 
     std::vector<Z> v(state.range(0));
     
@@ -75,7 +75,7 @@ void sequential_pairs_test_mode(benchmark::State& state)
 
     for (auto _ : state)
     {
-        benchmark::DoNotOptimize(mode(v));
+        benchmark::DoNotOptimize(sorted_mode(v));
     }
 
     state.SetComplexityN(state.range(0));
@@ -84,7 +84,7 @@ void sequential_pairs_test_mode(benchmark::State& state)
 template <class Z>
 void sequential_multiple_test_mode(benchmark::State& state)
 {
-    using boost::math::statistics::mode;
+    using boost::math::statistics::sorted_mode;
 
     std::vector<Z> v(state.range(0));
     
@@ -104,27 +104,27 @@ void sequential_multiple_test_mode(benchmark::State& state)
 
     for (auto _ : state)
     {
-        benchmark::DoNotOptimize(mode(v));
+        benchmark::DoNotOptimize(sorted_mode(v));
     }
 
     state.SetComplexityN(state.range(0));
 }
 
-BENCHMARK_TEMPLATE(test_mode, int)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity(benchmark::oN);
-BENCHMARK_TEMPLATE(test_mode, int32_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity(benchmark::oN);
-BENCHMARK_TEMPLATE(test_mode, int64_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity(benchmark::oN);
-BENCHMARK_TEMPLATE(test_mode, u_int32_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity(benchmark::oN);
-BENCHMARK_TEMPLATE(sequential_test_mode, int)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity(benchmark::oN);
-BENCHMARK_TEMPLATE(sequential_test_mode, int32_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity(benchmark::oN);
-BENCHMARK_TEMPLATE(sequential_test_mode, int64_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity(benchmark::oN);
-BENCHMARK_TEMPLATE(sequential_test_mode, u_int32_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity(benchmark::oN);
-BENCHMARK_TEMPLATE(sequential_pairs_test_mode, int)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity(benchmark::oN);
-BENCHMARK_TEMPLATE(sequential_pairs_test_mode, int32_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity(benchmark::oN);
-BENCHMARK_TEMPLATE(sequential_pairs_test_mode, int64_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity(benchmark::oN);
-BENCHMARK_TEMPLATE(sequential_pairs_test_mode, u_int32_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity(benchmark::oN);
-BENCHMARK_TEMPLATE(sequential_multiple_test_mode, int)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity(benchmark::oN);
-BENCHMARK_TEMPLATE(sequential_multiple_test_mode, int32_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity(benchmark::oN);
-BENCHMARK_TEMPLATE(sequential_multiple_test_mode, int64_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity(benchmark::oN);
-BENCHMARK_TEMPLATE(sequential_multiple_test_mode, u_int32_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity(benchmark::oN);
+BENCHMARK_TEMPLATE(test_mode, int)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity();
+BENCHMARK_TEMPLATE(test_mode, int32_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity();
+BENCHMARK_TEMPLATE(test_mode, int64_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity();
+BENCHMARK_TEMPLATE(test_mode, u_int32_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity();
+BENCHMARK_TEMPLATE(sequential_test_mode, int)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity();
+BENCHMARK_TEMPLATE(sequential_test_mode, int32_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity();
+BENCHMARK_TEMPLATE(sequential_test_mode, int64_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity();
+BENCHMARK_TEMPLATE(sequential_test_mode, u_int32_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity();
+BENCHMARK_TEMPLATE(sequential_pairs_test_mode, int)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity();
+BENCHMARK_TEMPLATE(sequential_pairs_test_mode, int32_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity();
+BENCHMARK_TEMPLATE(sequential_pairs_test_mode, int64_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity();
+BENCHMARK_TEMPLATE(sequential_pairs_test_mode, u_int32_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity();
+BENCHMARK_TEMPLATE(sequential_multiple_test_mode, int)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity();
+BENCHMARK_TEMPLATE(sequential_multiple_test_mode, int32_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity();
+BENCHMARK_TEMPLATE(sequential_multiple_test_mode, int64_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity();
+BENCHMARK_TEMPLATE(sequential_multiple_test_mode, u_int32_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity();
 
 BENCHMARK_MAIN();

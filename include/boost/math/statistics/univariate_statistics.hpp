@@ -513,19 +513,13 @@ inline auto interquartile_range(RandomAccessContainer & v)
 }
 
 template<class RandomAccessIterator>
-auto mode(RandomAccessIterator first, RandomAccessIterator last) -> std::vector<typename std::iterator_traits<RandomAccessIterator>::value_type>
+auto sorted_mode(RandomAccessIterator first, RandomAccessIterator last) -> std::vector<typename std::iterator_traits<RandomAccessIterator>::value_type>
 {
     using Z = typename std::iterator_traits<RandomAccessIterator>::value_type;
     static_assert(std::is_integral<Z>::value, "Floating point values have not yet been implemented.");
     using Size = typename std::iterator_traits<RandomAccessIterator>::difference_type;
 
     std::vector<Z> sorted(first, last);
-    
-    if(!std::is_sorted(sorted.begin(), sorted.end()))
-    {
-        std::sort(sorted.begin(), sorted.end());
-    }
-
     std::vector<Z> modes {};
     Size max_counter {0};
     Z previous_search {std::numeric_limits<Z>::max()};
@@ -578,6 +572,22 @@ auto mode(RandomAccessIterator first, RandomAccessIterator last) -> std::vector<
     }
 
     return modes;
+}
+
+template<class RandomAccessContainer>
+inline auto sorted_mode(RandomAccessContainer & v)
+{
+    return sorted_mode(v.begin(), v.end());
+}
+
+template<class RandomAccessIterator>
+auto mode(RandomAccessIterator first, RandomAccessIterator last)
+{
+    using Z = typename std::iterator_traits<RandomAccessIterator>::value_type;
+    std::vector<Z> sorted(first, last);
+    std::sort(sorted.begin(), sorted.end());
+
+    return sorted_mode(sorted.begin(), sorted.end());
 }
 
 template<class RandomAccessContainer>
