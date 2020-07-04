@@ -11,7 +11,6 @@
 #include <tuple>
 #include <cmath>
 #include <boost/assert.hpp>
-#include <boost/math/tools/precision.hpp>
 
 namespace boost::math::statistics {
 
@@ -514,48 +513,64 @@ inline auto interquartile_range(RandomAccessContainer & v)
 }
 
 template<class RandomAccessIterator>
-auto mode(RandomAccessIterator first, RandomAccessIterator last)
+auto mode(RandomAccessIterator first, RandomAccessIterator last) -> std::vector<typename std::iterator_traits<RandomAccessIterator>::value_type>
 {
-    using Real = typename std::iterator_traits<RandomAccessIterator>::value_type;
+    using Z = typename std::iterator_traits<RandomAccessIterator>::value_type;
     using Size = typename std::iterator_traits<RandomAccessIterator>::difference_type;
 
-    std::vector<Real> sorted(first, last);
+    std::vector<Z> sorted(first, last);
     std::sort(sorted.begin(), sorted.end());
 
-    std::vector<Real> modes {};
-    Size max_counter {};
-    Real previous_search {boost::math::tools::max_value<Real>()};
+    std::vector<Z> modes {};
+    Size max_counter {0};
+    Z previous_search {std::numeric_limits<Z>::max()};
 
     if(sorted.front() == sorted.back())
     {
         modes.push_back(sorted.front());
         return modes;
     }
-
-    for(const Real i : sorted)
+    
+    for(auto it {sorted.begin()}; it != sorted.end(); ++it)
     {
-        if(i == previous_search)
+        if(*it == previous_search)
         {
             continue;
         }
         
-        Size current_count {std::count(sorted.begin(), sorted.end(), i)};
+        Size current_count {0};
+        auto end_it {it};
+        while(*end_it == *it)
+        {
+            ++current_count;
+
+            if(end_it == sorted.end())
+            {
+                break;
+            }
+
+            ++end_it;
+        }
+
         if(current_count > max_counter)
         {
             modes.clear();
-            modes.push_back(i);
+            modes.push_back(*it);
             max_counter = current_count;
         }
 
         else if(current_count == max_counter)
         {
-            modes.push_back(i);
+            modes.push_back(*it);
         }
 
-        previous_search = i;
+        previous_search = *it;
     }
 
-    BOOST_ASSERT_MSG(max_counter > 1, "Mode is undefined");
+    if(max_counter == 1) // Return an empty vector if mode is undefined
+    {
+        modes.clear();
+    }
 
     return modes;
 }
