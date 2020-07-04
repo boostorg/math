@@ -5,10 +5,7 @@
 
 #include <random>
 #include <boost/math/statistics/univariate_statistics.hpp>
-#include <boost/multiprecision/cpp_bin_float.hpp>
 #include <benchmark/benchmark.h>
-
-using boost::multiprecision::cpp_bin_float_50;
 
 template <class Z>
 void test_mode(benchmark::State& state)
@@ -21,19 +18,113 @@ void test_mode(benchmark::State& state)
 
     auto gen = [&dist, &mt](){return dist(mt);};
 
-    std::vector<Z> v(100);
+    std::vector<Z> v(state.range(0));
     std::generate(v.begin(), v.end(), gen);
 
     for (auto _ : state)
     {
         benchmark::DoNotOptimize(mode(v));
     }
+
+    state.SetComplexityN(state.range(0));
 }
 
-BENCHMARK_TEMPLATE(test_mode, float);
-BENCHMARK_TEMPLATE(test_mode, double);
-BENCHMARK_TEMPLATE(test_mode, long double);
-BENCHMARK_TEMPLATE(test_mode, int);
-BENCHMARK_TEMPLATE(test_mode, cpp_bin_float_50);
+template <class Z>
+void sequential_test_mode(benchmark::State& state)
+{
+    using boost::math::statistics::mode;
+
+    std::vector<Z> v(state.range(0));
+    
+    size_t current_num {1};
+    // produces {1, 2, 3, 4, 5...}
+    for(size_t i {}; i < v.size(); ++i)
+    {
+        v[i] = current_num;
+        ++current_num;
+    }
+
+    for (auto _ : state)
+    {
+        benchmark::DoNotOptimize(mode(v));
+    }
+
+    state.SetComplexityN(state.range(0));
+}
+
+template <class Z>
+void sequential_pairs_test_mode(benchmark::State& state)
+{
+    using boost::math::statistics::mode;
+
+    std::vector<Z> v(state.range(0));
+    
+    size_t current_num {1};
+    size_t current_num_counter {};
+    // produces {1, 1, 2, 2, 3, 3, ...}
+    for(size_t i {}; i < v.size(); ++i)
+    {
+        v[i] = current_num;
+        ++current_num_counter;
+        if(current_num_counter > 2)
+        {
+            ++current_num;
+            current_num_counter = 0;
+        }
+    }
+
+    for (auto _ : state)
+    {
+        benchmark::DoNotOptimize(mode(v));
+    }
+
+    state.SetComplexityN(state.range(0));
+}
+
+template <class Z>
+void sequential_multiple_test_mode(benchmark::State& state)
+{
+    using boost::math::statistics::mode;
+
+    std::vector<Z> v(state.range(0));
+    
+    size_t current_num {1};
+    size_t current_num_counter {};
+    // produces {1, 2, 2, 3, 3, 3, 4, 4, 4, 4, ...}
+    for(size_t i {}; i < v.size(); ++i)
+    {
+        v[i] = current_num;
+        ++current_num_counter;
+        if(current_num_counter > current_num)
+        {
+            ++current_num;
+            current_num_counter = 0;
+        }
+    }
+
+    for (auto _ : state)
+    {
+        benchmark::DoNotOptimize(mode(v));
+    }
+
+    state.SetComplexityN(state.range(0));
+}
+
+BENCHMARK_TEMPLATE(test_mode, int)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity(benchmark::oN);
+BENCHMARK_TEMPLATE(test_mode, int32_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity(benchmark::oN);
+BENCHMARK_TEMPLATE(test_mode, int64_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity(benchmark::oN);
+BENCHMARK_TEMPLATE(test_mode, u_int32_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity(benchmark::oN);
+BENCHMARK_TEMPLATE(sequential_test_mode, int)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity(benchmark::oN);
+BENCHMARK_TEMPLATE(sequential_test_mode, int32_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity(benchmark::oN);
+BENCHMARK_TEMPLATE(sequential_test_mode, int64_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity(benchmark::oN);
+BENCHMARK_TEMPLATE(sequential_test_mode, u_int32_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity(benchmark::oN);
+BENCHMARK_TEMPLATE(sequential_pairs_test_mode, int)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity(benchmark::oN);
+BENCHMARK_TEMPLATE(sequential_pairs_test_mode, int32_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity(benchmark::oN);
+BENCHMARK_TEMPLATE(sequential_pairs_test_mode, int64_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity(benchmark::oN);
+BENCHMARK_TEMPLATE(sequential_pairs_test_mode, u_int32_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity(benchmark::oN);
+BENCHMARK_TEMPLATE(sequential_multiple_test_mode, int)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity(benchmark::oN);
+BENCHMARK_TEMPLATE(sequential_multiple_test_mode, int32_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity(benchmark::oN);
+BENCHMARK_TEMPLATE(sequential_multiple_test_mode, int64_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity(benchmark::oN);
+BENCHMARK_TEMPLATE(sequential_multiple_test_mode, u_int32_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity(benchmark::oN);
 
 BENCHMARK_MAIN();

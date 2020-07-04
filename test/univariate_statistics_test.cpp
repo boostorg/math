@@ -936,11 +936,10 @@ int main()
     test_interquartile_range<double>();
     test_interquartile_range<cpp_bin_float_50>();
 
-    test_mode<float>();
-    test_mode<double>();
-    test_mode<long double>();
-    test_mode<cpp_bin_float_50>();
     test_mode<int>();
+    test_mode<int32_t>();
+    test_mode<int64_t>();
+    test_mode<u_int32_t>();
 
     return boost::report_errors();
 }

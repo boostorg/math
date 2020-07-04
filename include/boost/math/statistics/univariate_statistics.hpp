@@ -516,10 +516,15 @@ template<class RandomAccessIterator>
 auto mode(RandomAccessIterator first, RandomAccessIterator last) -> std::vector<typename std::iterator_traits<RandomAccessIterator>::value_type>
 {
     using Z = typename std::iterator_traits<RandomAccessIterator>::value_type;
+    static_assert(std::is_integral<Z>::value, "Floating point values have not yet been implemented.");
     using Size = typename std::iterator_traits<RandomAccessIterator>::difference_type;
 
     std::vector<Z> sorted(first, last);
-    std::sort(sorted.begin(), sorted.end());
+    
+    if(!std::is_sorted(sorted.begin(), sorted.end()))
+    {
+        std::sort(sorted.begin(), sorted.end());
+    }
 
     std::vector<Z> modes {};
     Size max_counter {0};
@@ -554,8 +559,8 @@ auto mode(RandomAccessIterator first, RandomAccessIterator last) -> std::vector<
 
         if(current_count > max_counter)
         {
-            modes.clear();
-            modes.push_back(*it);
+            modes.resize(1);
+            modes[0] = *it;
             max_counter = current_count;
         }
 
