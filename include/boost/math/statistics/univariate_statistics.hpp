@@ -538,15 +538,9 @@ auto sorted_mode(const ForwardIterator first, const ForwardIterator last) -> std
         
         Size current_count {0};
         auto end_it {it};
-        while(*end_it == *it)
+        while(end_it != last && *end_it == *it)
         {
             ++current_count;
-
-            if(end_it == last)
-            {
-                break;
-            }
-
             ++end_it;
         }
 
