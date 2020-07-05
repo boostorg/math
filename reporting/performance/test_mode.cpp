@@ -1,4 +1,4 @@
-//  (C) Copyright Nick Thompson 2020.
+//  (C) Copyright Nick Thompson and Matt Borland 2020.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -110,21 +110,17 @@ void sequential_multiple_test_mode(benchmark::State& state)
     state.SetComplexityN(state.range(0));
 }
 
-BENCHMARK_TEMPLATE(test_mode, int)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity();
 BENCHMARK_TEMPLATE(test_mode, int32_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity();
 BENCHMARK_TEMPLATE(test_mode, int64_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity();
-BENCHMARK_TEMPLATE(test_mode, u_int32_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity();
-BENCHMARK_TEMPLATE(sequential_test_mode, int)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity();
+BENCHMARK_TEMPLATE(test_mode, uint32_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity();
 BENCHMARK_TEMPLATE(sequential_test_mode, int32_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity();
 BENCHMARK_TEMPLATE(sequential_test_mode, int64_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity();
-BENCHMARK_TEMPLATE(sequential_test_mode, u_int32_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity();
-BENCHMARK_TEMPLATE(sequential_pairs_test_mode, int)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity();
+BENCHMARK_TEMPLATE(sequential_test_mode, uint32_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity();
 BENCHMARK_TEMPLATE(sequential_pairs_test_mode, int32_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity();
 BENCHMARK_TEMPLATE(sequential_pairs_test_mode, int64_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity();
-BENCHMARK_TEMPLATE(sequential_pairs_test_mode, u_int32_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity();
-BENCHMARK_TEMPLATE(sequential_multiple_test_mode, int)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity();
+BENCHMARK_TEMPLATE(sequential_pairs_test_mode, uint32_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity();
 BENCHMARK_TEMPLATE(sequential_multiple_test_mode, int32_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity();
 BENCHMARK_TEMPLATE(sequential_multiple_test_mode, int64_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity();
-BENCHMARK_TEMPLATE(sequential_multiple_test_mode, u_int32_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity();
+BENCHMARK_TEMPLATE(sequential_multiple_test_mode, uint32_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity();
 
 BENCHMARK_MAIN();
