@@ -1049,7 +1049,7 @@ inline T constant_soldner<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC((bo
    using std::log;
    using std::abs;
    // Initial guess from https://oeis.org/A070769/constant
-   T x = 1.45136923488338105028396848589202744949303228364801586309300455766242559575451783565953135771108682884;
+   T x{"1.45136923488338105028396848589202744949303228364801586309300455766242559575451783565953135771108682884"};
    T y = expint(log(x));
    // If x is the root, then
    // li(x(1+μ)) = xμli'(x) + Ο(μ²) ≈ xμ/log(x),
@@ -1074,6 +1074,9 @@ inline T constant_gompertz<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC((b
 {
    using boost::math::expint;
    using boost::math::constants::e;
+   // Using the fast converging series of Ramanujan:
+   T exp1 = e<T>();
+   T gamma = euler<T>();
    return -e<T>()*expint(static_cast<T>(-1));
 }
 #endif
