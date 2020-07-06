@@ -520,6 +520,7 @@ auto sorted_mode(const ForwardIterator first, const ForwardIterator last) -> std
     using Size = typename std::iterator_traits<ForwardIterator>::difference_type;
 
     std::vector<Z> modes {};
+    modes.reserve(16);
     Size max_counter {0};
     Z previous_search {std::numeric_limits<Z>::max()};
 
@@ -552,7 +553,7 @@ auto sorted_mode(const ForwardIterator first, const ForwardIterator last) -> std
 
         else if(current_count == max_counter)
         {
-            modes.push_back(*it);
+            modes.emplace_back(*it);
         }
 
         previous_search = *it;

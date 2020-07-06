@@ -18,8 +18,7 @@ void test_mode(benchmark::State& state)
 
     auto gen = [&dist, &mt](){return dist(mt);};
 
-    std::vector<Z> v;
-    v.reserve(state.range(0));
+    std::vector<Z> v(state.range(0));
     std::generate(v.begin(), v.end(), gen);
 
     for (auto _ : state)
