@@ -199,7 +199,9 @@ install generate_test_values_install : generate_test_values : <location>bin ;
 exe igamma_temme_large_coef : igamma_temme_large_coef.cpp ;
 install igamma_temme_large_coef_install : igamma_temme_large_coef : <location>bin ;
 
-exe lanczos_generator : lanczos_generator.cpp ../../chrono/build//boost_chrono ../../system/build//boost_system : [ check-target-builds ../../multiprecision/config//has_float128 : <source>quadmath : <build>no ] ;
+exe lanczos_generator : lanczos_generator.cpp ../../chrono/build//boost_chrono ../../system/build//boost_system : 
+[ check-target-builds ../../multiprecision/config//has_float128 : <source>quadmath : <build>no ] 
+[ requires cxx11_nullptr ] ;
 install lanczos_generator_install : lanczos_generator : <location>bin ;
 
 exe factorial_tables : factorial_tables.cpp ;

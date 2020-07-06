@@ -4,7 +4,7 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include "mp_t.hpp"
-#include <boost/math/special_functions/hypergeometric_2f0.hpp>
+#include <boost/math/special_functions/hypergeometric_2F0.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/lexical_cast.hpp>
 #include <fstream>
