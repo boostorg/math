@@ -90,6 +90,17 @@ namespace boost{ namespace math{ namespace statistics {
     template<class ForwardIterator>
     auto sample_gini_coefficient(ForwardIterator first, ForwardIterator last);
 
+    template<class ForwardIterator>
+    auto sorted_mode(const ForwardIterator first, const ForwardIterator last) -> std::vector<typename std::iterator_traits<ForwardIterator>::value_type>
+
+    template<class Container>
+    inline auto sorted_mode(const Container & v)
+
+    template<class RandomAccessIterator>
+    auto mode(RandomAccessIterator first, RandomAccessIterator last)
+
+    template<class RandomAccessContainer>
+    inline auto mode(RandomAccessContainer & v)
 }}}
 ``
 
@@ -251,6 +262,32 @@ However, a use case (measuring wealth inequality when some people have negative 
 You should have /very/ good cause to pass negative values to the Gini coefficient calculator.
 Another use case is found in signal processing, but the sorting is by magnitude and hence has a different implementation.
 See `absolute_gini_coefficient` for details.
+
+[heading Mode]
+
+Compute the mode(s) of a data set:
+
+    std::vector<int> v {1, 3, 2, 2, 5, 4};
+    std::vector<int> modes = boost::math::statistics::mode(v);
+    // Mode is 2, modes.size() == 1
+    std::array<int, 7> w {2, 2, 3, 1, 5, 4, 4};
+    modes = boost::math::statistics::mode(w);
+    // Modes are 2 and 4, modes.size() == 2
+
+/Nota bene/: The input data is altered: in particular, it is sorted. Makes a call to `std::sort`, and as such requires random access iterators.
+
+If your data is sorted, the following function can be used instead:
+
+    std::list<int> v {1, 2, 2, 3, 4, 5};
+    std::vector<int> modes = boost::math::statistics::sorted_mode(v);
+    // Mode is 2, modes.size() == 1
+    std::forward_list<int> w {1, 2, 2, 3, 4, 4, 5};
+    modes = boost::math::statistics::sorted_mode(w);
+    // Modes are 2 and 4, modes.size() == 2    
+
+/Nota bene/: The requirements for sorted_mode are reduced to forward iterators because there is no call to `std::sort`.
+
+For both mode, and sorted_mode the dataset must be of an integer type.
 
 [heading References]
 

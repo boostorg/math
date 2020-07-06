@@ -842,49 +842,49 @@ void test_mode()
 
     // Does iterator call work?
     std::vector<Z> test = boost::math::statistics::mode(v.begin(), v.end());
-    BOOST_TEST(ref == test[0]);
+    BOOST_TEST_EQ(ref, test[0]);
 
     // Does container call work?
     test = boost::math::statistics::mode(v);
-    BOOST_TEST(ref == test[0]);
+    BOOST_TEST_EQ(ref, test[0]);
 
     // Does it work with part of a vector?
     test = boost::math::statistics::mode(v.begin(), v.begin() + 3);
-    BOOST_TEST(ref == test[0]);
+    BOOST_TEST_EQ(ref, test[0]);
 
     // Does it work with const qualification? Only if pre-sorted
     test = boost::math::statistics::sorted_mode(v.cbegin(), v.cend());
-    BOOST_TEST(ref == test[0]);
+    BOOST_TEST_EQ(ref, test[0]);
 
     // Does it work with std::array?
     std::array<Z, 6> u {1, 2, 2, 3, 4, 5};
     test = boost::math::statistics::mode(u);
-    BOOST_TEST(ref == test[0]);
+    BOOST_TEST_EQ(ref, test[0]);
 
     // Does it work with a bi-modal distribuition?
     std::vector<Z> w {1, 2, 2, 3, 3, 4, 5};
     test = boost::math::statistics::mode(w.begin(), w.end());
-    BOOST_TEST(test.size() == 2);
+    BOOST_TEST_EQ(test.size(), 2);
 
     // Does it work with an empty vector?
     std::vector<Z> x {};
     test = boost::math::statistics::mode(x);
-    BOOST_TEST(test.size() == 0);
+    BOOST_TEST_EQ(test.size(), 0);
 
     // Does it work with a one item vector
     x.push_back(2);
     test = boost::math::statistics::mode(x);
-    BOOST_TEST(ref == test[0]);
+    BOOST_TEST_EQ(ref, test[0]);
 
     // Does it work with a doubly linked list
     std::list<Z> dl {1, 2, 2, 3, 4, 5};
     test = boost::math::statistics::sorted_mode(dl);
-    BOOST_TEST(ref == test[0]);
+    BOOST_TEST_EQ(ref, test[0]);
 
     // Does it work with a singly linked list
     std::forward_list<Z> fl {1, 2, 2, 3, 4, 5};
     test = boost::math::statistics::sorted_mode(fl);
-    BOOST_TEST(ref == test[0]);
+    BOOST_TEST_EQ(ref, test[0]);
 }
 
 int main()
@@ -960,7 +960,7 @@ int main()
     test_mode<int>();
     test_mode<int32_t>();
     test_mode<int64_t>();
-    test_mode<u_int32_t>();
+    test_mode<uint32_t>();
 
     return boost::report_errors();
 }

@@ -10,7 +10,7 @@
 template <class Z>
 void test_mode(benchmark::State& state)
 {
-    using boost::math::statistics::mode;
+    using boost::math::statistics::sorted_mode;
     
     std::random_device rd;
     std::mt19937_64 mt(rd());
@@ -18,12 +18,13 @@ void test_mode(benchmark::State& state)
 
     auto gen = [&dist, &mt](){return dist(mt);};
 
-    std::vector<Z> v(state.range(0));
+    std::vector<Z> v;
+    v.reserve(state.range(0));
     std::generate(v.begin(), v.end(), gen);
 
     for (auto _ : state)
     {
-        benchmark::DoNotOptimize(mode(v));
+        benchmark::DoNotOptimize(sorted_mode(v));
     }
 
     state.SetComplexityN(state.range(0));
@@ -110,6 +111,9 @@ void sequential_multiple_test_mode(benchmark::State& state)
     state.SetComplexityN(state.range(0));
 }
 
+BENCHMARK_TEMPLATE(test_mode, int32_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity();
+BENCHMARK_TEMPLATE(test_mode, int64_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity();
+BENCHMARK_TEMPLATE(test_mode, uint32_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity();
 BENCHMARK_TEMPLATE(sequential_test_mode, int32_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity();
 BENCHMARK_TEMPLATE(sequential_test_mode, int64_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity();
 BENCHMARK_TEMPLATE(sequential_test_mode, uint32_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity();
