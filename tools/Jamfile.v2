@@ -145,7 +145,9 @@ install hyp_1f1_reg_big_data_install : hyp_1f1_reg_big_data : <location>bin ;
 exe ibeta_invab_data : ibeta_invab_data.cpp : [ check-target-builds ../../multiprecision/config//has_float128 : <source>quadmath : <build>no ] ;
 install ibeta_invab_data_install : ibeta_invab_data : <location>bin ;
 
-exe tgamma_large_data : tgamma_large_data.cpp : [ check-target-builds ../../multiprecision/config//mpfr : <source>mpfr : <build>no ] [ check-target-builds ../../multiprecision/config//gmp : <source>gmp : <build>no ] ;
+exe tgamma_large_data : tgamma_large_data.cpp : 
+[ check-target-builds ../../multiprecision/config//has_gmp : <source>gmp : <build>no ] 
+[ check-target-builds ../../multiprecision/config//has_mpfr : <source>mpfr : <build>no ] ;
 install tgamma_large_data_install : tgamma_large_data : <location>bin ;
 
 exe ellint_d_data : ellint_d_data.cpp ;
