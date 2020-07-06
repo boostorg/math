@@ -521,6 +521,8 @@ matrix:
         apt:
           packages:
             - g++-8
+            - libgmp-dev
+            - libmpfr-dev
           sources:
             - ubuntu-toolchain-r-test
 
@@ -598,6 +600,8 @@ matrix:
         apt:
           packages:
             - g++-8
+            - libgmp-dev
+            - libmpfr-dev
           sources:
             - ubuntu-toolchain-r-test
 
@@ -664,6 +668,8 @@ matrix:
         apt:
           packages:
             - g++-8
+            - libgmp-dev
+            - libmpfr-dev
           sources:
             - ubuntu-toolchain-r-test
 
@@ -729,6 +735,8 @@ matrix:
         apt:
           packages:
             - clang-6.0
+            - libgmp-dev
+            - libmpfr-dev
           sources:
             - ubuntu-toolchain-r-test
             - llvm-toolchain-xenial-6.0
@@ -755,10 +763,6 @@ matrix:
 
     - os: osx
       env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=../example//examples
-      osx_image: xcode11
-
-    - os: osx
-      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=../tools
       osx_image: xcode11
 
 
