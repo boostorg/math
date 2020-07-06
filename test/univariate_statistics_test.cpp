@@ -7,6 +7,7 @@
 
 #include <vector>
 #include <array>
+#include <list>
 #include <forward_list>
 #include <algorithm>
 #include <random>
@@ -873,6 +874,16 @@ void test_mode()
     // Does it work with a one item vector
     x.push_back(2);
     test = boost::math::statistics::mode(x);
+    BOOST_TEST(ref == test[0]);
+
+    // Does it work with a doubly linked list
+    std::list<Z> dl {1, 2, 2, 3, 4, 5};
+    test = boost::math::statistics::sorted_mode(dl);
+    BOOST_TEST(ref == test[0]);
+
+    // Does it work with a singly linked list
+    std::forward_list<Z> fl {1, 2, 2, 3, 4, 5};
+    test = boost::math::statistics::sorted_mode(fl);
     BOOST_TEST(ref == test[0]);
 }
 
