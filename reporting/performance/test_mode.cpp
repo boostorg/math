@@ -14,7 +14,7 @@ void test_mode(benchmark::State& state)
     
     std::random_device rd;
     std::mt19937_64 mt(rd());
-    std::uniform_real_distribution<double> dist {1, 10};
+    std::uniform_int_distribution<> dist {1, 10};
 
     auto gen = [&dist, &mt](){return dist(mt);};
 
@@ -110,9 +110,6 @@ void sequential_multiple_test_mode(benchmark::State& state)
     state.SetComplexityN(state.range(0));
 }
 
-BENCHMARK_TEMPLATE(test_mode, int32_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity();
-BENCHMARK_TEMPLATE(test_mode, int64_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity();
-BENCHMARK_TEMPLATE(test_mode, uint32_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity();
 BENCHMARK_TEMPLATE(sequential_test_mode, int32_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity();
 BENCHMARK_TEMPLATE(sequential_test_mode, int64_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity();
 BENCHMARK_TEMPLATE(sequential_test_mode, uint32_t)->RangeMultiplier(2)->Range(1<<1, 1<<22)->Complexity();

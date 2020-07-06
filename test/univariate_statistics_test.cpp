@@ -833,14 +833,14 @@ void test_interquartile_range()
     BOOST_TEST_EQ(iqr, 6);
 }
 
-template<class Real>
+template<class Z>
 void test_mode()
 {
-    std::vector<Real> v {1, 2, 2, 3, 4, 5};
-    const Real ref = 2;
+    std::vector<Z> v {1, 2, 2, 3, 4, 5};
+    const Z ref = 2;
 
     // Does iterator call work?
-    std::vector<Real> test = boost::math::statistics::mode(v.begin(), v.end());
+    std::vector<Z> test = boost::math::statistics::mode(v.begin(), v.end());
     BOOST_TEST(ref == test[0]);
 
     // Does container call work?
@@ -851,19 +851,29 @@ void test_mode()
     test = boost::math::statistics::mode(v.begin(), v.begin() + 3);
     BOOST_TEST(ref == test[0]);
 
-    // Does it work with const qualification?
-    test = boost::math::statistics::mode(v.cbegin(), v.cend());
+    // Does it work with const qualification? Only if pre-sorted
+    test = boost::math::statistics::sorted_mode(v.cbegin(), v.cend());
     BOOST_TEST(ref == test[0]);
 
     // Does it work with std::array?
-    std::array<Real, 6> u {1, 2, 2, 3, 4, 5};
+    std::array<Z, 6> u {1, 2, 2, 3, 4, 5};
     test = boost::math::statistics::mode(u);
     BOOST_TEST(ref == test[0]);
 
     // Does it work with a bi-modal distribuition?
-    std::vector<Real> w {1, 2, 2, 3, 3, 4, 5};
+    std::vector<Z> w {1, 2, 2, 3, 3, 4, 5};
     test = boost::math::statistics::mode(w.begin(), w.end());
     BOOST_TEST(test.size() == 2);
+
+    // Does it work with an empty vector?
+    std::vector<Z> x {};
+    test = boost::math::statistics::mode(x);
+    BOOST_TEST(test.size() == 0);
+
+    // Does it work with a one item vector
+    x.push_back(2);
+    test = boost::math::statistics::mode(x);
+    BOOST_TEST(ref == test[0]);
 }
 
 int main()

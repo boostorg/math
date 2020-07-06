@@ -525,7 +525,6 @@ auto sorted_mode(const ForwardIterator first, const ForwardIterator last) -> std
 
     if(first == last)
     {
-        modes.push_back(*first);
         return modes;
     }
     
