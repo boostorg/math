@@ -412,6 +412,16 @@ inline void test_watsons_identities(RealType z, RealType w, RealType q, RealType
             - jacobi_theta2(z + w, q * q) * jacobi_theta2(z - w, q * q),
             jacobi_theta3(z + w, q * q) * jacobi_theta3(z - w, q * q),
             eps);
+
+    _check_close( // MathWorld Eqn. 48
+            jacobi_theta3(z, q) - jacobi_theta2(z + z, q*q*q*q),
+            jacobi_theta3(z + z, q*q*q*q),
+            eps);
+
+    _check_close( // MathWorld Eqn. 49
+            jacobi_theta4(z, q) + jacobi_theta2(z + z, q*q*q*q),
+            jacobi_theta3(z + z, q*q*q*q),
+            eps);
 }
 
 template <typename RealType>
