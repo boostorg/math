@@ -837,54 +837,64 @@ void test_interquartile_range()
 template<class Z>
 void test_mode()
 {
+    std::vector<Z> modes;
     std::vector<Z> v {1, 2, 2, 3, 4, 5};
     const Z ref = 2;
 
     // Does iterator call work?
-    std::vector<Z> test = boost::math::statistics::mode(v.begin(), v.end());
-    BOOST_TEST_EQ(ref, test[0]);
+    boost::math::statistics::mode(v.begin(), v.end(), std::back_inserter(modes));
+    BOOST_TEST_EQ(ref, modes[0]);
 
     // Does container call work?
-    test = boost::math::statistics::mode(v);
-    BOOST_TEST_EQ(ref, test[0]);
+    modes.clear();
+    boost::math::statistics::mode(v, std::back_inserter(modes));
+    BOOST_TEST_EQ(ref, modes[0]);
 
     // Does it work with part of a vector?
-    test = boost::math::statistics::mode(v.begin(), v.begin() + 3);
-    BOOST_TEST_EQ(ref, test[0]);
+    modes.clear();
+    boost::math::statistics::mode(v.begin(), v.begin() + 3, std::back_inserter(modes));
+    BOOST_TEST_EQ(ref, modes[0]);
 
     // Does it work with const qualification? Only if pre-sorted
-    test = boost::math::statistics::sorted_mode(v.cbegin(), v.cend());
-    BOOST_TEST_EQ(ref, test[0]);
+    modes.clear();
+    boost::math::statistics::sorted_mode(v.cbegin(), v.cend(), std::back_inserter(modes));
+    BOOST_TEST_EQ(ref, modes[0]);
 
     // Does it work with std::array?
+    modes.clear();
     std::array<Z, 6> u {1, 2, 2, 3, 4, 5};
-    test = boost::math::statistics::mode(u);
-    BOOST_TEST_EQ(ref, test[0]);
+    boost::math::statistics::mode(u, std::back_inserter(modes));
+    BOOST_TEST_EQ(ref, modes[0]);
 
     // Does it work with a bi-modal distribuition?
+    modes.clear();
     std::vector<Z> w {1, 2, 2, 3, 3, 4, 5};
-    test = boost::math::statistics::mode(w.begin(), w.end());
-    BOOST_TEST_EQ(test.size(), 2);
+    boost::math::statistics::mode(w.begin(), w.end(), std::back_inserter(modes));
+    BOOST_TEST_EQ(modes.size(), 2);
 
     // Does it work with an empty vector?
+    modes.clear();
     std::vector<Z> x {};
-    test = boost::math::statistics::mode(x);
-    BOOST_TEST_EQ(test.size(), 0);
+    boost::math::statistics::mode(x, std::back_inserter(modes));
+    BOOST_TEST_EQ(modes.size(), 0);
 
     // Does it work with a one item vector
+    modes.clear();
     x.push_back(2);
-    test = boost::math::statistics::mode(x);
-    BOOST_TEST_EQ(ref, test[0]);
+    boost::math::statistics::mode(x, std::back_inserter(modes));
+    BOOST_TEST_EQ(ref, modes[0]);
 
     // Does it work with a doubly linked list
+    modes.clear();
     std::list<Z> dl {1, 2, 2, 3, 4, 5};
-    test = boost::math::statistics::sorted_mode(dl);
-    BOOST_TEST_EQ(ref, test[0]);
+    boost::math::statistics::sorted_mode(dl, std::back_inserter(modes));
+    BOOST_TEST_EQ(ref, modes[0]);
 
     // Does it work with a singly linked list
+    modes.clear();
     std::forward_list<Z> fl {1, 2, 2, 3, 4, 5};
-    test = boost::math::statistics::sorted_mode(fl);
-    BOOST_TEST_EQ(ref, test[0]);
+    boost::math::statistics::sorted_mode(fl, std::back_inserter(modes));
+    BOOST_TEST_EQ(ref, modes[0]);
 }
 
 int main()

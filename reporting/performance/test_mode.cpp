@@ -23,7 +23,8 @@ void test_mode(benchmark::State& state)
 
     for (auto _ : state)
     {
-        benchmark::DoNotOptimize(sorted_mode(v));
+        std::vector<Z> modes;
+        benchmark::DoNotOptimize(sorted_mode(v.begin(), v.end(), std::back_inserter(modes)));
     }
 
     state.SetComplexityN(state.range(0));
@@ -46,7 +47,8 @@ void sequential_test_mode(benchmark::State& state)
 
     for (auto _ : state)
     {
-        benchmark::DoNotOptimize(sorted_mode(v));
+        std::vector<Z> modes;
+        benchmark::DoNotOptimize(sorted_mode(v, std::back_inserter(modes)));
     }
 
     state.SetComplexityN(state.range(0));
@@ -75,7 +77,8 @@ void sequential_pairs_test_mode(benchmark::State& state)
 
     for (auto _ : state)
     {
-        benchmark::DoNotOptimize(sorted_mode(v));
+        std::vector<Z> modes;
+        benchmark::DoNotOptimize(sorted_mode(v, std::back_inserter(modes)));
     }
 
     state.SetComplexityN(state.range(0));
@@ -104,7 +107,8 @@ void sequential_multiple_test_mode(benchmark::State& state)
 
     for (auto _ : state)
     {
-        benchmark::DoNotOptimize(sorted_mode(v));
+        std::vector<Z> modes;
+        benchmark::DoNotOptimize(sorted_mode(v, std::back_inserter(modes)));
     }
 
     state.SetComplexityN(state.range(0));

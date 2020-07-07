@@ -512,8 +512,8 @@ inline auto interquartile_range(RandomAccessContainer & v)
     return interquartile_range(v.begin(), v.end());
 }
 
-template<class ForwardIterator>
-auto sorted_mode(const ForwardIterator first, const ForwardIterator last) -> std::vector<typename std::iterator_traits<ForwardIterator>::value_type>
+template<class ForwardIterator, class OutputIterator>
+auto sorted_mode(ForwardIterator first, ForwardIterator last, OutputIterator output) -> decltype(output)
 {
     using Z = typename std::iterator_traits<ForwardIterator>::value_type;
     static_assert(std::is_integral<Z>::value, "Floating point values have not yet been implemented.");
@@ -522,20 +522,15 @@ auto sorted_mode(const ForwardIterator first, const ForwardIterator last) -> std
     std::vector<Z> modes {};
     modes.reserve(16);
     Size max_counter {0};
-    Z previous_search {std::numeric_limits<Z>::max()};
+    auto it {first};
 
     if(first == last)
     {
-        return modes;
+        return output;
     }
     
-    for(auto it {first}; it != last; ++it)
+    while(it != last)
     {
-        if(*it == previous_search)
-        {
-            continue;
-        }
-        
         Size current_count {0};
         auto end_it {it};
         while(end_it != last && *end_it == *it)
@@ -556,7 +551,7 @@ auto sorted_mode(const ForwardIterator first, const ForwardIterator last) -> std
             modes.emplace_back(*it);
         }
 
-        previous_search = *it;
+        it = end_it;
     }
 
     if(max_counter == 1) // Return an empty vector if mode is undefined
@@ -564,26 +559,26 @@ auto sorted_mode(const ForwardIterator first, const ForwardIterator last) -> std
         modes.clear();
     }
 
-    return modes;
+    return std::move(modes.begin(), modes.end(), output);
 }
 
-template<class Container>
-inline auto sorted_mode(const Container & v)
+template<class Container, class OutputIterator>
+inline auto sorted_mode(Container & v, OutputIterator output) -> decltype(output)
 {
-    return sorted_mode(v.begin(), v.end());
+    return sorted_mode(v.begin(), v.end(), output);
 }
 
-template<class RandomAccessIterator>
-auto mode(RandomAccessIterator first, RandomAccessIterator last)
+template<class RandomAccessIterator, class OutputIterator>
+auto mode(RandomAccessIterator first, RandomAccessIterator last, OutputIterator output) -> decltype(output)
 {
     std::sort(first, last);
-    return sorted_mode(first, last);
+    return sorted_mode(first, last, output);
 }
 
-template<class RandomAccessContainer>
-inline auto mode(RandomAccessContainer & v)
+template<class RandomAccessContainer, class OutputIterator>
+inline auto mode(RandomAccessContainer & v, OutputIterator output) -> decltype(output)
 {
-    return mode(v.begin(), v.end());
+    return mode(v.begin(), v.end(), output);
 }
 
 }
