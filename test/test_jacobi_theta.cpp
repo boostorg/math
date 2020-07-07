@@ -1,0 +1,92 @@
+
+#include <pch_light.hpp>
+#include "test_jacobi_theta.hpp"
+
+// Test file for the Jacobi Theta functions, a.k.a the four horsemen of the
+// Jacobi elliptic integrals. At the moment only Wolfrma Alpha spot checks are
+// used. We should generate extra-precise numbers with NTL::RR or some such.
+
+void expected_results()
+{
+   //
+   // Define the max and mean errors expected for
+   // various compilers and platforms.
+   //
+   //
+   // Catch all cases come last:
+   //
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      ".*",                          // platform
+      ".*",                  // test type(s)
+      ".*",      // test data group
+      ".*", 5, 2);  // test function
+   //
+   // Finish off by printing out the compiler/stdlib/platform names,
+   // we do this to make it easier to mark up expected error rates.
+   //
+   std::cout << "Tests run with " << BOOST_COMPILER << ", "
+      << BOOST_STDLIB << ", " << BOOST_PLATFORM << std::endl;
+}
+
+BOOST_AUTO_TEST_CASE( test_main )
+{
+    expected_results();
+    BOOST_MATH_CONTROL_FP;
+
+    using namespace boost::math;
+
+    BOOST_CHECK_THROW(jacobi_theta1(0.0, 0.0), std::domain_error);
+    BOOST_CHECK_THROW(jacobi_theta1(0.0, 1.0), std::domain_error);
+
+    BOOST_CHECK_THROW(jacobi_theta2(0.0, 0.0), std::domain_error);
+    BOOST_CHECK_THROW(jacobi_theta2(0.0, 1.0), std::domain_error);
+
+    BOOST_CHECK_THROW(jacobi_theta3(0.0, 0.0), std::domain_error);
+    BOOST_CHECK_THROW(jacobi_theta3(0.0, 1.0), std::domain_error);
+
+    BOOST_CHECK_THROW(jacobi_theta4(0.0, 0.0), std::domain_error);
+    BOOST_CHECK_THROW(jacobi_theta4(0.0, 1.0), std::domain_error);
+
+    BOOST_CHECK_THROW(jacobi_theta1tau(0.0, 0.0), std::domain_error);
+    BOOST_CHECK_THROW(jacobi_theta1tau(0.0, -1.0), std::domain_error);
+
+    BOOST_CHECK_THROW(jacobi_theta2tau(0.0, 0.0), std::domain_error);
+    BOOST_CHECK_THROW(jacobi_theta2tau(0.0, -1.0), std::domain_error);
+
+    BOOST_CHECK_THROW(jacobi_theta3tau(0.0, 0.0), std::domain_error);
+    BOOST_CHECK_THROW(jacobi_theta3tau(0.0, -1.0), std::domain_error);
+
+    BOOST_CHECK_THROW(jacobi_theta4tau(0.0, 0.0), std::domain_error);
+    BOOST_CHECK_THROW(jacobi_theta4tau(0.0, -1.0), std::domain_error);
+
+    for (double q=0.0078125; q<1.0; q += 0.0078125) { // = 1/128
+        for (double z=-8.0; z<=8.0; z += 0.125) {
+            double eps = std::numeric_limits<double>::epsilon();
+            test_periodicity(z, q, sqrt(eps));
+            test_argument_translation(z, q, 1.1 * sqrt(eps));
+            test_sums_of_squares(z, q, sqrt(eps));
+            // The addition formula is complicated, cut it some extra slack
+            test_addition_formulas(z, M_LN2, q, sqrt(sqrt(eps)));
+            test_duplication_formula(z, q, sqrt(eps));
+            test_transformations_of_nome(z, q, sqrt(eps));
+            test_watsons_identities(z, 0.5, q, sqrt(eps));
+            test_landen_transformations(z, -log(q)/M_PI, sqrt(eps));
+        }
+    }
+
+    test_spots(0.0F, "float");
+    test_spots(0.0, "double");
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+    test_spots(0.0L, "long double");
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
+    test_spots(boost::math::concepts::real_concept(0), "real_concept");
+#endif
+#else
+   std::cout << "<note>The long double tests have been disabled on this platform "
+      "either because the long double overloads of the usual math functions are "
+      "not available at all, or because they are too inaccurate for these tests "
+      "to pass.</note>" << std::endl;
+#endif
+}

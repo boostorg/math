@@ -29,6 +29,7 @@
 #include <boost/math/special_functions/ellint_2.hpp>
 #include <boost/math/special_functions/ellint_3.hpp>
 #include <boost/math/special_functions/ellint_d.hpp>
+#include <boost/math/special_functions/jacobi_theta.hpp>
 #include <boost/math/special_functions/jacobi_zeta.hpp>
 #include <boost/math/special_functions/heuman_lambda.hpp>
 #include <boost/math/special_functions/ellint_rc.hpp>
