@@ -48,7 +48,7 @@ int cpp_main(int argc, char*argv [])
          return 1;
       arg1.type |= dummy_param;
 
-      typedef boost::math::tuple<mp_type, mp_type, mp_type>(&proc_type)(mp_type);
+      typedef boost::math::tuple<mp_type, mp_type, mp_type>(*proc_type)(mp_type);
 
       proc_type p = &generate;
 
