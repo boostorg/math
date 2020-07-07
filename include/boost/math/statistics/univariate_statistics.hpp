@@ -522,18 +522,12 @@ auto sorted_mode(ForwardIterator first, ForwardIterator last, OutputIterator out
     std::vector<Z> modes {};
     modes.reserve(16);
     Size max_counter {0};
-    auto it {first};
 
-    if(first == last)
-    {
-        return output;
-    }
-    
-    while(it != last)
+    while(first != last)
     {
         Size current_count {0};
-        auto end_it {it};
-        while(end_it != last && *end_it == *it)
+        auto end_it {first};
+        while(end_it != last && *end_it == *first)
         {
             ++current_count;
             ++end_it;
@@ -542,21 +536,16 @@ auto sorted_mode(ForwardIterator first, ForwardIterator last, OutputIterator out
         if(current_count > max_counter)
         {
             modes.resize(1);
-            modes[0] = *it;
+            modes[0] = *first;
             max_counter = current_count;
         }
 
         else if(current_count == max_counter)
         {
-            modes.emplace_back(*it);
+            modes.emplace_back(*first);
         }
 
-        it = end_it;
-    }
-
-    if(max_counter == 1) // Return an empty vector if mode is undefined
-    {
-        modes.clear();
+        first = end_it;
     }
 
     return std::move(modes.begin(), modes.end(), output);
