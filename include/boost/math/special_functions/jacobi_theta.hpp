@@ -166,10 +166,25 @@ template <class RealType, class Policy>
 inline RealType jacobi_theta4m1tau(RealType z, RealType tau, const Policy& pol);
 
 #ifdef __JACOBI_THETA_USE_IMAGINARY
+// The following _IMAGINARY theta functions assume imaginary z and are for
+// internal use only. The z argument is scaled by tau, and sines and cosines
+// are replaced with hyperbolic sines and cosines to accommodate the imaginary
+// argument. (Recall sinh=(exp(x)-exp(-x))/2 and cosh=(exp(x)+exp(-x))/2)
+//
+// The return values are scaled by exp(-tau*z²/π)/sqrt(tau).
+//
+// Using the convention τ'=-1/τ and noting that both τ and τ' are always
+// imaginary (at least in our applications), the _IMAGINARY functions are used
+// to implement the following four relations:
+//
+// [20.7.30] sqrt(-iτ)θ₁(z|τ) = -i*exp(iτ'z²/π)*θ₁(zτ'|τ')
+// [20.7.31] sqrt(-iτ)θ₂(z|τ) =    exp(iτ'z²/π)*θ₄(zτ'|τ')
+// [20.7.32] sqrt(-iτ)θ₃(z|τ) =    exp(iτ'z²/π)*θ₃(zτ'|τ')
+// [20.7.33] sqrt(-iτ)θ₄(z|τ) =    exp(iτ'z²/π)*θ₂(zτ'|τ')
 template <class RealType, class Policy>
 inline RealType
 _IMAGINARY_jacobi_theta1tau(RealType z, RealType tau, const Policy& pol) {
-   BOOST_MATH_STD_USING
+    BOOST_MATH_STD_USING
     unsigned n = 0;
     RealType eps = policies::get_epsilon<RealType, Policy>();
     RealType /* q_n, */ delta, delta1, delta2, result = RealType(0);
@@ -200,7 +215,7 @@ _IMAGINARY_jacobi_theta1tau(RealType z, RealType tau, const Policy& pol) {
 template <class RealType, class Policy>
 inline RealType
 _IMAGINARY_jacobi_theta2tau(RealType z, RealType tau, const Policy& pol) {
-   BOOST_MATH_STD_USING
+    BOOST_MATH_STD_USING
     unsigned n = 0;
     RealType eps = policies::get_epsilon<RealType, Policy>();
     RealType /* q_n, */ delta, delta1, delta2, result = RealType(0);
@@ -227,7 +242,7 @@ _IMAGINARY_jacobi_theta2tau(RealType z, RealType tau, const Policy& pol) {
 template <class RealType, class Policy>
 inline RealType
 _IMAGINARY_jacobi_theta3tau(RealType z, RealType tau, const Policy& pol) {
-   BOOST_MATH_STD_USING
+    BOOST_MATH_STD_USING
     unsigned n = 1;
     RealType eps = policies::get_epsilon<RealType, Policy>();
     RealType /* q_n, */ delta, delta1, delta2, result = exp(-z*z*tau/constants::pi<RealType>());
@@ -254,7 +269,7 @@ _IMAGINARY_jacobi_theta3tau(RealType z, RealType tau, const Policy& pol) {
 template <class RealType, class Policy>
 inline RealType
 _IMAGINARY_jacobi_theta4tau(RealType z, RealType tau, const Policy& pol) {
-   BOOST_MATH_STD_USING
+    BOOST_MATH_STD_USING
     unsigned n = 1;
     RealType eps = policies::get_epsilon<RealType, Policy>();
     RealType /* q_n, */ delta, delta1, delta2, result = exp(-z*z*tau/constants::pi<RealType>());
@@ -289,7 +304,7 @@ template <class RealType, class Policy>
 inline RealType
 jacobi_theta1tau(RealType z, RealType tau, const Policy& pol)
 {
-   BOOST_MATH_STD_USING
+    BOOST_MATH_STD_USING
     unsigned n = 0;
     RealType eps = policies::get_epsilon<RealType, Policy>();
     RealType q_n, delta, result = RealType(0);
@@ -341,6 +356,7 @@ inline T jacobi_theta1tau(T z, T tau) {
 template <class RealType, class Policy>
 inline RealType
 jacobi_theta1(RealType z, RealType q, const Policy& pol) {
+    BOOST_MATH_STD_USING
     if (q <= 0.0 || q >= 1.0) {
         return policies::raise_domain_error<RealType>("boost::math::jacobi_theta1<%1%>(%1%)",
                 "q must be greater than 0 and less than 1 but got %1%.", q, pol);
@@ -359,7 +375,7 @@ template <class RealType, class Policy>
 inline RealType
 jacobi_theta2tau(RealType z, RealType tau, const Policy& pol)
 {
-   BOOST_MATH_STD_USING
+    BOOST_MATH_STD_USING
     unsigned n = 0;
     RealType eps = policies::get_epsilon<RealType, Policy>();
     RealType q_n, delta, result = RealType(0);
@@ -407,6 +423,7 @@ inline T jacobi_theta2tau(T z, T tau) {
 template <class RealType, class Policy>
 inline RealType
 jacobi_theta2(RealType z, RealType q, const Policy& pol) {
+    BOOST_MATH_STD_USING
     if (q <= 0.0 || q >= 1.0) {
         return policies::raise_domain_error<RealType>("boost::math::jacobi_theta2<%1%>(%1%)",
                 "q must be greater than 0 and less than 1 but got %1%.", q, pol);
@@ -458,6 +475,7 @@ template <class RealType, class Policy>
 inline RealType
 jacobi_theta3tau(RealType z, RealType tau, const Policy& pol)
 {
+    BOOST_MATH_STD_USING
     if (tau <= 0.0) {
         return policies::raise_domain_error<RealType>("boost::math::jacobi_theta3tau<%1%>(%1%)",
                 "tau must be greater than 0 but got %1%.", tau, pol);
@@ -488,6 +506,7 @@ inline T jacobi_theta3tau(T z, T tau) {
 template <class RealType, class Policy>
 inline RealType
 jacobi_theta3m1(RealType z, RealType q, const Policy& pol) {
+    BOOST_MATH_STD_USING
     if (q <= 0.0 || q >= 1.0) {
         return policies::raise_domain_error<RealType>("boost::math::jacobi_theta3m1<%1%>(%1%)",
                 "q must be greater than 0 and less than 1 but got %1%.", q, pol);
@@ -505,6 +524,7 @@ inline T jacobi_theta3m1(T z, T q) {
 template <class RealType, class Policy>
 inline RealType
 jacobi_theta3(RealType z, RealType q, const Policy& pol) {
+    BOOST_MATH_STD_USING
     if (q <= 0.0 || q >= 1.0) {
         return policies::raise_domain_error<RealType>("boost::math::jacobi_theta3<%1%>(%1%)",
                 "q must be greater than 0 and less than 1 but got %1%.", q, pol);
@@ -524,7 +544,7 @@ template <class RealType, class Policy>
 inline RealType
 jacobi_theta4m1tau(RealType z, RealType tau, const Policy& pol)
 {
-   BOOST_MATH_STD_USING
+    BOOST_MATH_STD_USING
 
     RealType eps = policies::get_epsilon<RealType, Policy>();
     RealType q_n, delta, result = RealType(0);
@@ -557,6 +577,7 @@ template <class RealType, class Policy>
 inline RealType
 jacobi_theta4tau(RealType z, RealType tau, const Policy& pol)
 {
+    BOOST_MATH_STD_USING
     if (tau <= 0.0) {
         return policies::raise_domain_error<RealType>("boost::math::jacobi_theta4tau<%1%>(%1%)",
                 "tau must be greater than 0 but got %1%.", tau, pol);
@@ -589,6 +610,7 @@ inline T jacobi_theta4tau(T z, T tau) {
 template <class RealType, class Policy>
 inline RealType
 jacobi_theta4m1(RealType z, RealType q, const Policy& pol) {
+    BOOST_MATH_STD_USING
     if (q <= 0.0 || q >= 1.0) {
         return policies::raise_domain_error<RealType>("boost::math::jacobi_theta4m1<%1%>(%1%)",
                 "q must be greater than 0 and less than 1 but got %1%.", q, pol);
@@ -606,6 +628,7 @@ inline T jacobi_theta4m1(T z, T q) {
 template <class RealType, class Policy>
 inline RealType
 jacobi_theta4(RealType z, RealType q, const Policy& pol) {
+    BOOST_MATH_STD_USING
     if (abs(q) >= 1.0 || abs(q) == 0.0) {
         return policies::raise_domain_error<RealType>("boost::math::jacobi_theta4<%1%>(%1%)",
             "|q| must be greater than zero and less than 1, but got %1%.", q, pol);

@@ -1,5 +1,6 @@
 
 #include <pch_light.hpp>
+#include <boost/math/concepts/real_concept.hpp>
 #include "test_jacobi_theta.hpp"
 
 // Test file for the Jacobi Theta functions, a.k.a the four horsemen of the
@@ -34,6 +35,7 @@ BOOST_AUTO_TEST_CASE( test_main )
 {
     expected_results();
     BOOST_MATH_CONTROL_FP;
+    BOOST_MATH_STD_USING
 
     using namespace boost::math;
 
@@ -61,27 +63,29 @@ BOOST_AUTO_TEST_CASE( test_main )
     BOOST_CHECK_THROW(jacobi_theta4tau(0.0, 0.0), std::domain_error);
     BOOST_CHECK_THROW(jacobi_theta4tau(0.0, -1.0), std::domain_error);
 
+    double eps = std::numeric_limits<double>::epsilon();
     for (double q=0.0078125; q<1.0; q += 0.0078125) { // = 1/128
         for (double z=-8.0; z<=8.0; z += 0.125) {
-            double eps = std::numeric_limits<double>::epsilon();
             test_periodicity(z, q, sqrt(eps));
             test_argument_translation(z, q, 1.1 * sqrt(eps));
             test_sums_of_squares(z, q, sqrt(eps));
             // The addition formula is complicated, cut it some extra slack
-            test_addition_formulas(z, M_LN2, q, sqrt(sqrt(eps)));
+            test_addition_formulas(z, constants::ln_two<double>(), q, sqrt(sqrt(eps)));
             test_duplication_formula(z, q, sqrt(eps));
             test_transformations_of_nome(z, q, sqrt(eps));
             test_watsons_identities(z, 0.5, q, sqrt(eps));
-            test_landen_transformations(z, -log(q)/M_PI, sqrt(eps));
+            test_landen_transformations(z, -log(q)/constants::pi<double>(), sqrt(eps));
         }
     }
+
+    test_special_values(eps);
 
     test_spots(0.0F, "float");
     test_spots(0.0, "double");
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_spots(0.0L, "long double");
 #ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
-    test_spots(boost::math::concepts::real_concept(0), "real_concept");
+    test_spots(concepts::real_concept(0), "real_concept");
 #endif
 #else
    std::cout << "<note>The long double tests have been disabled on this platform "

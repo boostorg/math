@@ -1,6 +1,5 @@
 // Copyright John Maddock 2006.
 // Copyright Evan Miller 2020
-// #include <boost/math/concepts/real_concept.hpp>
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
@@ -476,5 +475,33 @@ inline void test_landen_transformations(RealType z, RealType tau, RealType eps) 
             * jacobi_theta4tau(constants::quarter_pi<RealType>() - z, tau)
             * jacobi_theta4tau(constants::quarter_pi<RealType>() + z, tau)
             * jacobi_theta3tau(z, tau),
+            eps);
+}
+
+template <typename RealType>
+inline void test_special_values(RealType eps) {
+    // https://mathworld.wolfram.com/JacobiThetaFunctions.html (Eq. 45)
+    using namespace boost::math;
+    BOOST_MATH_STD_USING
+
+    _check_close(
+            tgamma(RealType(0.75)) * jacobi_theta3tau(RealType(0), RealType(1)),
+            sqrt(constants::root_pi<RealType>()),
+            eps);
+
+    _check_close(
+            tgamma(RealType(1.25))
+            * constants::root_pi<RealType>()
+            * sqrt(sqrt(constants::root_two<RealType>()))
+            * jacobi_theta3tau(RealType(0), constants::root_two<RealType>()),
+            tgamma(RealType(1.125))
+            * sqrt(tgamma(RealType(0.25))),
+            eps);
+
+    _check_close(
+            tgamma(RealType(0.75))
+            * sqrt(constants::root_two<RealType>())
+            * jacobi_theta4tau(RealType(0), RealType(1)),
+            sqrt(constants::root_pi<RealType>()),
             eps);
 }
