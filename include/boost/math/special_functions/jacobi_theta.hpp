@@ -94,13 +94,6 @@
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/constants/constants.hpp>
 
-// In order to preserve accuracy with large q, __JACOBI_THETA_USE_IMAGINARY
-// will switch over to the imaginary version of functions for |q| > 0.85. This
-// cuts down on the number of required iterations, and improves accuracy for
-// large q, but comes at the cost of precision. Maybe someone smarter than me
-// can fix the precision issues with the orgy of exponentials.
-#define __JACOBI_THETA_USE_IMAGINARY
-
 namespace boost{ namespace math{
 
 // Simple functions - parameterized by q
@@ -165,47 +158,59 @@ inline RealType jacobi_theta3m1tau(RealType z, RealType tau, const Policy& pol);
 template <class RealType, class Policy>
 inline RealType jacobi_theta4m1tau(RealType z, RealType tau, const Policy& pol);
 
-#ifdef __JACOBI_THETA_USE_IMAGINARY
 // The following _IMAGINARY theta functions assume imaginary z and are for
-// internal use only. The z argument is scaled by tau, and sines and cosines
-// are replaced with hyperbolic sines and cosines to accommodate the imaginary
-// argument. (Recall sinh=(exp(x)-exp(-x))/2 and cosh=(exp(x)+exp(-x))/2)
+// internal use only. They are designed to increase accuracy and reduce the
+// number of iterations required for convergence for large |q|. The z argument
+// is scaled by tau, and the summations are rewritten to be double-sided
+// following DLMF 20.13.4 and 20.13.5. The return values are scaled by
+// exp(-tau*z²/π)/sqrt(tau).
 //
-// The return values are scaled by exp(-tau*z²/π)/sqrt(tau).
+// These functions are triggered when tau < 1, i.e. |q| > exp(-π) ≅ 0.043
 //
-// Using the convention τ'=-1/τ and noting that both τ and τ' are always
-// imaginary (at least in our applications), the _IMAGINARY functions are used
-// to implement the following four relations:
-//
-// [20.7.30] sqrt(-iτ)θ₁(z|τ) = -i*exp(iτ'z²/π)*θ₁(zτ'|τ')
-// [20.7.31] sqrt(-iτ)θ₂(z|τ) =    exp(iτ'z²/π)*θ₄(zτ'|τ')
-// [20.7.32] sqrt(-iτ)θ₃(z|τ) =    exp(iτ'z²/π)*θ₃(zτ'|τ')
-// [20.7.33] sqrt(-iτ)θ₄(z|τ) =    exp(iτ'z²/π)*θ₂(zτ'|τ')
+// Note that jacobi_theta4 uses the imaginary version of jacobi_theta2 (and
+// vice-versa). jacobi_theta1 and jacobi_theta3 use the imaginary versions of
+// themselves, following DLMF 20.7.30 - 20.7.33.
 template <class RealType, class Policy>
 inline RealType
 _IMAGINARY_jacobi_theta1tau(RealType z, RealType tau, const Policy& pol) {
     BOOST_MATH_STD_USING
     unsigned n = 0;
     RealType eps = policies::get_epsilon<RealType, Policy>();
-    RealType /* q_n, */ delta, delta1, delta2, result = RealType(0);
+    RealType delta, result = RealType(0);
+
+    RealType result1 = RealType(0);
+    RealType result2 = RealType(0);
+
+    RealType z_n = z + constants::half_pi<RealType>();
+    n = 0;
 
     do {
-        delta1 = exp(tau*(z*(RealType(2*n+1) - z/constants::pi<RealType>())
-                    -constants::pi<RealType>() * RealType(n + 0.5)*RealType(n + 0.5)));
-        // q_n = exp(-tau * constants::pi<RealType>() * RealType(n + 0.5)*RealType(n + 0.5) );
-        delta2 = exp(tau*(z*(-RealType(2*n+1) - z/constants::pi<RealType>())
-                    -constants::pi<RealType>() * RealType(n + 0.5)*RealType(n + 0.5)));
-
+        delta = exp(-tau*z_n*z_n/constants::pi<RealType>());
         if (n%2) {
-            delta = delta2 - delta1;
+            result1 -= delta;
         } else {
-            delta = delta1 - delta2;
+            result1 += delta;
         }
-
-        result += delta;
+        z_n += constants::pi<RealType>();
         n++;
-    } while (abs(delta * sqrt(tau)) > eps || (abs(result * sqrt(tau)) > eps * eps && abs(delta/result) > eps));
-    
+    } while (abs(delta) > eps || (abs(result1) > eps * eps && abs(delta/result1) > eps));
+
+    z_n = z - constants::half_pi<RealType>();
+    n = 1;
+
+    do {
+        delta = exp(-tau*z_n*z_n/constants::pi<RealType>());
+        if (n%2) {
+            result2 -= delta;
+        } else {
+            result2 += delta;
+        }
+        z_n -= constants::pi<RealType>();
+        n++;
+    } while (abs(delta) > eps || (abs(result2) > eps * eps && abs(delta/result2) > eps));
+
+    result -= result1 + result2;
+
     if (abs(result) < eps * eps)
         return RealType(0);
 
@@ -216,23 +221,30 @@ template <class RealType, class Policy>
 inline RealType
 _IMAGINARY_jacobi_theta2tau(RealType z, RealType tau, const Policy& pol) {
     BOOST_MATH_STD_USING
-    unsigned n = 0;
     RealType eps = policies::get_epsilon<RealType, Policy>();
-    RealType /* q_n, */ delta, delta1, delta2, result = RealType(0);
+    RealType delta, result = RealType(0);
+
+    RealType result1 = RealType(0);
+    RealType result2 = RealType(0);
+
+    RealType z_n = z + constants::half_pi<RealType>();
 
     do {
-        delta1 = exp(tau*(z*(RealType(2*n+1) - z/constants::pi<RealType>())
-                    -constants::pi<RealType>() * RealType(n + 0.5)*RealType(n + 0.5)));
-        // q_n = exp(-tau * constants::pi<RealType>() * RealType(n + 0.5)*RealType(n + 0.5) );
-        delta2 = exp(tau*(z*(-RealType(2*n+1) - z/constants::pi<RealType>())
-                    -constants::pi<RealType>() * RealType(n + 0.5)*RealType(n + 0.5)));
+        delta = exp(-tau*z_n*z_n/constants::pi<RealType>());
+        result1 += delta;
+        z_n += constants::pi<RealType>();
+    } while (abs(delta) > eps || (abs(result1) > eps * eps && abs(delta/result1) > eps));
 
-        delta = delta1 + delta2;
+    z_n = z - constants::half_pi<RealType>();
 
-        result += delta;
-        n++;
-    } while (abs(delta * sqrt(tau)) > eps || (abs(result * sqrt(tau)) > eps * eps && abs(delta/result) > eps));
-    
+    do {
+        delta = exp(-tau*z_n*z_n/constants::pi<RealType>());
+        result2 += delta;
+        z_n -= constants::pi<RealType>();
+    } while (abs(delta) > eps || (abs(result2) > eps * eps && abs(delta/result2) > eps));
+
+    result += result1 + result2;
+
     if (abs(result) < eps * eps)
         return RealType(0);
 
@@ -243,23 +255,30 @@ template <class RealType, class Policy>
 inline RealType
 _IMAGINARY_jacobi_theta3tau(RealType z, RealType tau, const Policy& pol) {
     BOOST_MATH_STD_USING
-    unsigned n = 1;
     RealType eps = policies::get_epsilon<RealType, Policy>();
-    RealType /* q_n, */ delta, delta1, delta2, result = exp(-z*z*tau/constants::pi<RealType>());
+    RealType delta, result = exp(-z*z*tau/constants::pi<RealType>());
+
+    RealType result1 = RealType(0);
+    RealType result2 = RealType(0);
+
+    RealType z_n = z + constants::pi<RealType>();
 
     do {
-        delta1 = exp(tau*(z*(RealType(2*n) - z/constants::pi<RealType>())
-                    -constants::pi<RealType>() * RealType(n)*RealType(n)));
-        // q_n = exp(-tau * constants::pi<RealType>() * RealType(n + 0.5)*RealType(n + 0.5) );
-        delta2 = exp(tau*(z*(-RealType(2*n) - z/constants::pi<RealType>())
-                    -constants::pi<RealType>() * RealType(n)*RealType(n)));
+        delta = exp(-tau*z_n*z_n/constants::pi<RealType>());
+        result1 += delta;
+        z_n += constants::pi<RealType>();
+    } while (abs(delta) > eps || (abs(result1) > eps * eps && abs(delta/result1) > eps));
 
-        delta = delta1 + delta2;
+    z_n = z - constants::pi<RealType>();
 
-        result += delta;
-        n++;
-    } while (abs(delta * sqrt(tau)) > eps || (abs(result * sqrt(tau)) > eps * eps && abs(delta/result) > eps));
-    
+    do {
+        delta = exp(-tau*z_n*z_n/constants::pi<RealType>());
+        result2 += delta;
+        z_n -= constants::pi<RealType>();
+    } while (abs(delta) > eps || (abs(result2) > eps * eps && abs(delta/result2) > eps));
+
+    result += result1 + result2;
+
     if (abs(result) < eps * eps)
         return RealType(0);
 
@@ -272,31 +291,48 @@ _IMAGINARY_jacobi_theta4tau(RealType z, RealType tau, const Policy& pol) {
     BOOST_MATH_STD_USING
     unsigned n = 1;
     RealType eps = policies::get_epsilon<RealType, Policy>();
-    RealType /* q_n, */ delta, delta1, delta2, result = exp(-z*z*tau/constants::pi<RealType>());
+    RealType delta, result = exp(-z*z*tau/constants::pi<RealType>());
+
+    RealType result1 = RealType(0);
+    RealType result2 = RealType(0);
+
+    RealType z_n = z + constants::pi<RealType>();
+    n = 1;
 
     do {
-        delta1 = exp(tau*(z*(RealType(2*n) - z/constants::pi<RealType>())
-                -constants::pi<RealType>() * RealType(n)*RealType(n)));
-        // q_n = exp(-tau * constants::pi<RealType>() * RealType(n + 0.5)*RealType(n + 0.5) );
-        delta2 = exp(tau*(z*(-RealType(2*n) - z/constants::pi<RealType>())
-                -constants::pi<RealType>() * RealType(n)*RealType(n)));
-
+        delta = exp(-tau*z_n*z_n/constants::pi<RealType>());
         if (n%2) {
-            delta = -(delta1 + delta2);
+            result1 -= delta;
         } else {
-            delta = delta1 + delta2;
+            result1 += delta;
         }
-
-        result += delta;
+        z_n += constants::pi<RealType>();
         n++;
-    } while (abs(delta * sqrt(tau)) > eps || (abs(result * sqrt(tau)) > eps * eps && abs(delta/result) > eps));
-    
+    } while (abs(delta) > eps || (abs(result1) > eps * eps && abs(delta/result1) > eps));
+
+    z_n = z - constants::pi<RealType>();
+    n = 1;
+
+    do {
+        delta = exp(-tau*z_n*z_n/constants::pi<RealType>());
+        if (n%2) {
+            result2 -= delta;
+        } else {
+            result2 += delta;
+        }
+        z_n -= constants::pi<RealType>();
+        n++;
+    } while (abs(delta) > eps || (abs(result2) > eps * eps && abs(delta/result2) > eps));
+
+    result += result1 + result2;
+
     if (abs(result) < eps * eps)
         return RealType(0);
 
     return result * sqrt(tau);
 }
-#endif
+
+// Begin public API
 
 // First Jacobi theta function (Parameterized by tau - assumed imaginary)
 // = 2 * Σ (-1)^n * exp(iπτ*(n+1/2)^2) * sin((2n+1)z)
@@ -316,8 +352,7 @@ jacobi_theta1tau(RealType z, RealType tau, const Policy& pol)
     if (abs(z) == 0.0)
         return result;
 
-#ifdef __JACOBI_THETA_USE_IMAGINARY
-    if (exp(-tau*constants::pi<RealType>()) > 0.85) {
+    if (tau < 1.0) {
         z = fmod(z, constants::two_pi<RealType>());
         while (z > constants::pi<RealType>()) {
             z -= constants::two_pi<RealType>();
@@ -328,7 +363,6 @@ jacobi_theta1tau(RealType z, RealType tau, const Policy& pol)
 
         return _IMAGINARY_jacobi_theta1tau(z, 1/tau, pol);
     }
-#endif
 
     do {
         q_n = exp(-tau * constants::pi<RealType>() * RealType(n + 0.5)*RealType(n + 0.5) );
@@ -385,8 +419,7 @@ jacobi_theta2tau(RealType z, RealType tau, const Policy& pol)
                 "tau must be greater than 0 but got %1%.", tau, pol);
     } else if (tau < 1.0 && abs(z) == 0.0) {
         return jacobi_theta4tau(z, 1/tau, pol) / sqrt(tau);
-#ifdef __JACOBI_THETA_USE_IMAGINARY // DLMF 20.7.31
-    } else if (exp(-tau*constants::pi<RealType>()) > 0.85) {
+    } else if (tau < 1.0) { // DLMF 20.7.31
         z = fmod(z, constants::two_pi<RealType>());
         while (z > constants::pi<RealType>()) {
             z -= constants::two_pi<RealType>();
@@ -396,7 +429,6 @@ jacobi_theta2tau(RealType z, RealType tau, const Policy& pol)
         }
 
         return _IMAGINARY_jacobi_theta4tau(z, 1/tau, pol);
-#endif
     }
 
     do {
@@ -404,7 +436,6 @@ jacobi_theta2tau(RealType z, RealType tau, const Policy& pol)
         delta = q_n * cos(RealType(2*n+1)*z);
         result += RealType(2) * delta;
         n++;
-    //} while (abs(q_n) > eps);
     } while (abs(q_n) > eps || (abs(result) > eps * eps && abs(q_n/result) > eps));
 
     if (abs(result) < eps * eps)
@@ -455,7 +486,6 @@ jacobi_theta3m1tau(RealType z, RealType tau, const Policy& pol)
         delta = q_n * cos(RealType(2*n)*z);
         result += RealType(2) * delta;
         n++;
-    // } while (abs(q_n) > eps);
     } while (abs(q_n) > eps || (abs(result) > eps * eps && abs(q_n/result) > eps));
 
     if (abs(result) < eps * eps)
@@ -481,8 +511,7 @@ jacobi_theta3tau(RealType z, RealType tau, const Policy& pol)
                 "tau must be greater than 0 but got %1%.", tau, pol);
     } else if (tau < 1.0 && abs(z) == 0.0) {
         return jacobi_theta3tau(z, 1/tau, pol) / sqrt(tau);
-#ifdef __JACOBI_THETA_USE_IMAGINARY // DLMF 20.7.32
-    } else if (exp(-tau*constants::pi<RealType>()) > 0.85) {
+    } else if (tau < 1.0) { // DLMF 20.7.32
         z = fmod(z, constants::pi<RealType>());
         while (z > constants::half_pi<RealType>()) {
             z -= constants::pi<RealType>();
@@ -491,7 +520,6 @@ jacobi_theta3tau(RealType z, RealType tau, const Policy& pol)
             z += constants::pi<RealType>();
         }
         return _IMAGINARY_jacobi_theta3tau(z, 1/tau, pol);
-#endif
     }
     return RealType(1) + jacobi_theta3m1tau(z, tau, pol);
 }
@@ -583,8 +611,7 @@ jacobi_theta4tau(RealType z, RealType tau, const Policy& pol)
                 "tau must be greater than 0 but got %1%.", tau, pol);
     } else if (tau < 1.0 && abs(z) == 0.0) {
         return jacobi_theta2tau(z, 1/tau, pol) / sqrt(tau);
-#ifdef __JACOBI_THETA_USE_IMAGINARY // DLMF 20.7.33
-    } else if (exp(-tau*constants::pi<RealType>()) > 0.85) {
+    } else if (tau < 1.0) { // DLMF 20.7.33
         z = fmod(z, constants::pi<RealType>());
         while (z > constants::half_pi<RealType>()) {
             z -= constants::pi<RealType>();
@@ -593,7 +620,6 @@ jacobi_theta4tau(RealType z, RealType tau, const Policy& pol)
             z += constants::pi<RealType>();
         }
         return _IMAGINARY_jacobi_theta2tau(z, 1/tau, pol);
-#endif
     }
 
     return RealType(1) + jacobi_theta4m1tau(z, tau, pol);
