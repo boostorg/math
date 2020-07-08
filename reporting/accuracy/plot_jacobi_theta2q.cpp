@@ -7,14 +7,14 @@
 using boost::math::tools::ulps_plot;
 
 int main() {
-    using PreciseReal = long double; // boost::multiprecision::float128;
-    using CoarseReal = double;
+    using PreciseReal = long double;
+    using CoarseReal = float;
 
     auto jacobi_theta_coarse = [](CoarseReal q) {
-        return boost::math::jacobi_theta2<CoarseReal>(0.0, q);
+        return boost::math::jacobi_theta2<CoarseReal>(1.0, q);
     };
     auto jacobi_theta_precise = [](PreciseReal q) {
-        return boost::math::jacobi_theta2<PreciseReal>(0.0, q);
+        return boost::math::jacobi_theta2<PreciseReal>(1.0, q);
     };
 
     std::string filename = "jacobi_theta2q_" + boost::core::demangle(typeid(CoarseReal).name()) + ".svg";

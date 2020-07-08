@@ -7,15 +7,14 @@
 using boost::math::tools::ulps_plot;
 
 int main() {
-    using PreciseReal = long double; // boost::multiprecision::float128;
-    using CoarseReal = double;
+    using PreciseReal = long double;
+    using CoarseReal = float;
 
-    // TODO Small q is fine but larger q has pretty bad ULPs
     auto jacobi_theta_coarse = [](CoarseReal z) {
-        return boost::math::jacobi_theta2<CoarseReal>(z, 0.05);
+        return boost::math::jacobi_theta2<CoarseReal>(z, 0.9);
     };
     auto jacobi_theta_precise = [](PreciseReal z) {
-        return boost::math::jacobi_theta2<PreciseReal>(z, 0.05);
+        return boost::math::jacobi_theta2<PreciseReal>(z, 0.9);
     };
 
     std::string filename = "jacobi_theta2_" + boost::core::demangle(typeid(CoarseReal).name()) + ".svg";
@@ -25,7 +24,7 @@ int main() {
     auto plot = ulps_plot<decltype(jacobi_theta_precise), PreciseReal, CoarseReal>(jacobi_theta_precise, CoarseReal(-10.0), CoarseReal(10.0), samples);
     plot.clip(clip).width(width);
     std::string title = "jacobi_theta2 ULP plot at " + boost::core::demangle(typeid(CoarseReal).name()) + " precision";
-    //plot.title(title);
+    plot.title(title);
     plot.vertical_lines(10);
     plot.add_fn(jacobi_theta_coarse);
     plot.write(filename);

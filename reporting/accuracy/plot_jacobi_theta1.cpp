@@ -7,8 +7,8 @@
 using boost::math::tools::ulps_plot;
 
 int main() {
-    using PreciseReal = long double; // boost::multiprecision::float128;
-    using CoarseReal = double;
+    using PreciseReal = long double;
+    using CoarseReal = float;
 
     auto jacobi_theta1_coarse = [](CoarseReal z) {
         return boost::math::jacobi_theta1<CoarseReal>(z, 0.5);
@@ -24,7 +24,7 @@ int main() {
     auto plot = ulps_plot<decltype(jacobi_theta1_precise), PreciseReal, CoarseReal>(jacobi_theta1_precise, -10.0, 10.0, samples);
     plot.clip(clip).width(width);
     std::string title = "jacobi_theta1 ULP plot at " + boost::core::demangle(typeid(CoarseReal).name()) + " precision";
-    //plot.title(title);
+    plot.title(title);
     plot.vertical_lines(10);
     plot.add_fn(jacobi_theta1_coarse);
     plot.write(filename);

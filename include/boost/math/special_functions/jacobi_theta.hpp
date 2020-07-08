@@ -1,6 +1,10 @@
 // Jacobi theta functions
 // Copyright Evan Miller 2020
 //
+// Use, modification and distribution are subject to the
+// Boost Software License, Version 1.0. (See accompanying file
+// LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+//
 // Four main theta functions with various flavors of parameterization,
 // floating-point policies, and bonus "minus 1" versions of functions 3 and 4
 // designed to preserve accuracy for small q. Twenty-four C++ functions are
@@ -158,6 +162,16 @@ inline RealType jacobi_theta3m1tau(RealType z, RealType tau, const Policy& pol);
 template <class RealType, class Policy>
 inline RealType jacobi_theta4m1tau(RealType z, RealType tau, const Policy& pol);
 
+// Internal convergence criterion:
+// If the delta is more than an absolute epsilon, keep going.
+// If the delta is more than an relative epsilon, and the denominator
+// is non-zero, keep going.
+template <class RealType>
+inline bool
+_jacobi_theta_converged(RealType result, RealType delta, RealType eps) {
+    return abs(delta) < eps && (abs(result) == 0.0 || abs(delta/result) < eps);
+}
+
 // The following _IMAGINARY theta functions assume imaginary z and are for
 // internal use only. They are designed to increase accuracy and reduce the
 // number of iterations required for convergence for large |q|. The z argument
@@ -193,7 +207,7 @@ _IMAGINARY_jacobi_theta1tau(RealType z, RealType tau, const Policy& pol) {
         }
         z_n += constants::pi<RealType>();
         n++;
-    } while (abs(delta) > eps || (abs(result1) > eps * eps && abs(delta/result1) > eps));
+    } while (!_jacobi_theta_converged(result1, delta, eps));
 
     z_n = z - constants::half_pi<RealType>();
     n = 1;
@@ -207,12 +221,9 @@ _IMAGINARY_jacobi_theta1tau(RealType z, RealType tau, const Policy& pol) {
         }
         z_n -= constants::pi<RealType>();
         n++;
-    } while (abs(delta) > eps || (abs(result2) > eps * eps && abs(delta/result2) > eps));
+    } while (!_jacobi_theta_converged(result2, delta, eps));
 
     result -= result1 + result2;
-
-    if (abs(result) < eps * eps)
-        return RealType(0);
 
     return result * sqrt(tau);
 }
@@ -233,7 +244,7 @@ _IMAGINARY_jacobi_theta2tau(RealType z, RealType tau, const Policy& pol) {
         delta = exp(-tau*z_n*z_n/constants::pi<RealType>());
         result1 += delta;
         z_n += constants::pi<RealType>();
-    } while (abs(delta) > eps || (abs(result1) > eps * eps && abs(delta/result1) > eps));
+    } while (!_jacobi_theta_converged(result1, delta, eps));
 
     z_n = z - constants::half_pi<RealType>();
 
@@ -241,12 +252,9 @@ _IMAGINARY_jacobi_theta2tau(RealType z, RealType tau, const Policy& pol) {
         delta = exp(-tau*z_n*z_n/constants::pi<RealType>());
         result2 += delta;
         z_n -= constants::pi<RealType>();
-    } while (abs(delta) > eps || (abs(result2) > eps * eps && abs(delta/result2) > eps));
+    } while (!_jacobi_theta_converged(result2, delta, eps));
 
     result += result1 + result2;
-
-    if (abs(result) < eps * eps)
-        return RealType(0);
 
     return result * sqrt(tau);
 }
@@ -267,7 +275,7 @@ _IMAGINARY_jacobi_theta3tau(RealType z, RealType tau, const Policy& pol) {
         delta = exp(-tau*z_n*z_n/constants::pi<RealType>());
         result1 += delta;
         z_n += constants::pi<RealType>();
-    } while (abs(delta) > eps || (abs(result1) > eps * eps && abs(delta/result1) > eps));
+    } while (!_jacobi_theta_converged(result1, delta, eps));
 
     z_n = z - constants::pi<RealType>();
 
@@ -275,12 +283,9 @@ _IMAGINARY_jacobi_theta3tau(RealType z, RealType tau, const Policy& pol) {
         delta = exp(-tau*z_n*z_n/constants::pi<RealType>());
         result2 += delta;
         z_n -= constants::pi<RealType>();
-    } while (abs(delta) > eps || (abs(result2) > eps * eps && abs(delta/result2) > eps));
+    } while (!_jacobi_theta_converged(result2, delta, eps));
 
     result += result1 + result2;
-
-    if (abs(result) < eps * eps)
-        return RealType(0);
 
     return result * sqrt(tau);
 }
@@ -308,7 +313,7 @@ _IMAGINARY_jacobi_theta4tau(RealType z, RealType tau, const Policy& pol) {
         }
         z_n += constants::pi<RealType>();
         n++;
-    } while (abs(delta) > eps || (abs(result1) > eps * eps && abs(delta/result1) > eps));
+    } while (!_jacobi_theta_converged(result1, delta, eps));
 
     z_n = z - constants::pi<RealType>();
     n = 1;
@@ -322,12 +327,9 @@ _IMAGINARY_jacobi_theta4tau(RealType z, RealType tau, const Policy& pol) {
         }
         z_n -= constants::pi<RealType>();
         n++;
-    } while (abs(delta) > eps || (abs(result2) > eps * eps && abs(delta/result2) > eps));
+    } while (!_jacobi_theta_converged(result2, delta, eps));
 
     result += result1 + result2;
-
-    if (abs(result) < eps * eps)
-        return RealType(0);
 
     return result * sqrt(tau);
 }
@@ -370,12 +372,9 @@ jacobi_theta1tau(RealType z, RealType tau, const Policy& pol)
         if (n%2)
             delta = -delta;
 
-        result += RealType(2) * delta;
+        result += delta + delta;
         n++;
-    } while (abs(q_n) > eps || (abs(result) > eps * eps && abs(q_n/result) > eps));
-
-    if (abs(result) < eps * eps)
-        return RealType(0);
+    } while (!_jacobi_theta_converged(result, q_n, eps));
 
     return result;
 }
@@ -434,12 +433,9 @@ jacobi_theta2tau(RealType z, RealType tau, const Policy& pol)
     do {
         q_n = exp(-tau * constants::pi<RealType>() * RealType(n + 0.5)*RealType(n + 0.5));
         delta = q_n * cos(RealType(2*n+1)*z);
-        result += RealType(2) * delta;
+        result += delta + delta;
         n++;
-    } while (abs(q_n) > eps || (abs(result) > eps * eps && abs(q_n/result) > eps));
-
-    if (abs(result) < eps * eps)
-        return RealType(0);
+    } while (!_jacobi_theta_converged(result, q_n, eps));
 
     return result;
 }
@@ -484,9 +480,9 @@ jacobi_theta3m1tau(RealType z, RealType tau, const Policy& pol)
     do {
         q_n = exp(-tau * constants::pi<RealType>() * RealType(n)*RealType(n));
         delta = q_n * cos(RealType(2*n)*z);
-        result += RealType(2) * delta;
+        result += delta + delta;
         n++;
-    } while (abs(q_n) > eps || (abs(result) > eps * eps && abs(q_n/result) > eps));
+    } while (!_jacobi_theta_converged(result, q_n, eps));
 
     if (abs(result) < eps * eps)
         return RealType(0);
@@ -584,12 +580,9 @@ jacobi_theta4m1tau(RealType z, RealType tau, const Policy& pol)
         if (n%2)
             delta = -delta;
 
-        result += RealType(2) * delta;
+        result += delta + delta;
         n++;
-    } while (abs(q_n) > eps || (abs(result) > eps * eps && abs(q_n/result) > eps));
-
-    if (abs(result) < eps * eps)
-        return RealType(0);
+    } while (!_jacobi_theta_converged(result, q_n, eps));
 
     return result;
 }
