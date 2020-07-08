@@ -20,6 +20,7 @@ public:
           Real left_endpoint_derivative = std::numeric_limits<Real>::quiet_NaN(),
           Real right_endpoint_derivative = std::numeric_limits<Real>::quiet_NaN())
     {
+        using std::isnan;
         if (x.size() < 4)
         {
             throw std::domain_error("Must be at least four data points.");
