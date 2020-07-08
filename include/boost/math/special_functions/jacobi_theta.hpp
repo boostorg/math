@@ -477,6 +477,9 @@ jacobi_theta3m1tau(RealType z, RealType tau, const Policy& pol)
     RealType q_n, delta, result = RealType(0);
     unsigned n = 1;
 
+    if (tau < 1.0)
+        return jacobi_theta3tau(z, tau, pol) - RealType(1);
+
     do {
         q_n = exp(-tau * constants::pi<RealType>() * RealType(n)*RealType(n));
         delta = q_n * cos(RealType(2*n)*z);
@@ -573,6 +576,9 @@ jacobi_theta4m1tau(RealType z, RealType tau, const Policy& pol)
     RealType eps = policies::get_epsilon<RealType, Policy>();
     RealType q_n, delta, result = RealType(0);
     unsigned n = 1;
+
+    if (tau < 1.0)
+        return jacobi_theta4tau(z, tau, pol) - RealType(1);
 
     do {
         q_n = exp(-tau * constants::pi<RealType>() * RealType(n)*RealType(n));

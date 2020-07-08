@@ -66,19 +66,23 @@ BOOST_AUTO_TEST_CASE( test_main )
     double eps = std::numeric_limits<double>::epsilon();
     for (double q=0.0078125; q<1.0; q += 0.0078125) { // = 1/128
         for (double z=-8.0; z<=8.0; z += 0.125) {
-            test_periodicity(z, q, sqrt(eps));
-            test_argument_translation(z, q, 1.1 * sqrt(eps));
-            test_sums_of_squares(z, q, sqrt(eps));
+            test_periodicity(z, q, 100 * eps);
+            test_argument_translation(z, q, 100 * eps);
+            test_sums_of_squares(z, q, 100 * eps);
             // The addition formula is complicated, cut it some extra slack
             test_addition_formulas(z, constants::ln_two<double>(), q, sqrt(sqrt(eps)));
-            test_duplication_formula(z, q, sqrt(eps));
-            test_transformations_of_nome(z, q, sqrt(eps));
-            test_watsons_identities(z, 0.5, q, sqrt(eps));
+            test_duplication_formula(z, q, 100 * eps);
+            test_transformations_of_nome(z, q, 100 * eps);
+            test_watsons_identities(z, 0.5, q, 101 * eps);
             test_landen_transformations(z, -log(q)/constants::pi<double>(), sqrt(eps));
         }
     }
 
     test_special_values(eps);
+
+    for (double s=2.125; s<5.0; s+=0.125) {
+        test_mellin_transforms(s, eps, 3 * eps);
+    }
 
     test_spots(0.0F, "float");
     test_spots(0.0, "double");

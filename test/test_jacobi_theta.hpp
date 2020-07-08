@@ -4,7 +4,9 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/special_functions/jacobi_theta.hpp>
+#include <boost/math/special_functions/zeta.hpp>
 #include <boost/math/constants/constants.hpp>
+#include <boost/math/quadrature/exp_sinh.hpp>
 #include <boost/type_traits/is_floating_point.hpp>
 #include <boost/array.hpp>
 #include "functor.hpp"
@@ -236,7 +238,7 @@ void test_spots(T, const char* type_name)
 
 #define _check_close(a, b, eps) \
     if (abs(a) < 2 * eps * eps || abs(b) < 2 * eps * eps) { \
-        BOOST_CHECK_SMALL((a) - (b), 2 * eps * eps); \
+        BOOST_CHECK_SMALL((a) - (b), eps); \
     } else { \
         BOOST_CHECK_CLOSE_FRACTION(a, b, eps); \
     }
@@ -514,4 +516,57 @@ inline void test_special_values(RealType eps) {
             * jacobi_theta4tau(RealType(0), RealType(1)),
             sqrt(constants::root_pi<RealType>()),
             eps);
+}
+
+template <typename RealType>
+inline void test_mellin_transforms(RealType s, RealType integration_eps, RealType result_eps) {
+    using namespace boost::math;
+    BOOST_MATH_STD_USING
+
+    boost::math::quadrature::exp_sinh<RealType> integrator;
+
+    auto f2 = [&, s](RealType t)
+    {
+        if (t*t == 0.f)
+            return RealType(0);
+        if (t > sqrt(sqrt(std::numeric_limits<RealType>::max())))
+            return RealType(0);
+
+        return pow(t, s-1) * jacobi_theta2tau(RealType(0), t*t);
+    };
+
+    auto f3 = [&, s](RealType t)
+    {
+        if (t*t == 0.f)
+            return RealType(0);
+        if (t > sqrt(sqrt(std::numeric_limits<RealType>::max())))
+            return RealType(0);
+
+        return pow(t, s-1) * jacobi_theta3m1tau(RealType(0), t*t);
+    };
+
+    auto f4 = [&, s](RealType t)
+    {
+        if (t*t == 0.f)
+            return RealType(0);
+        if (t > sqrt(sqrt(std::numeric_limits<RealType>::max())))
+            return RealType(0);
+
+        return -pow(t, s-1) * jacobi_theta4m1tau(RealType(0), t*t);
+    };
+
+    _check_close( // DLMF 20.10.1
+            integrator.integrate(f2, integration_eps),
+            (pow(RealType(2), s) - 1) * pow(constants::pi<RealType>(), -0.5*s) * tgamma(0.5*s) * zeta(s),
+            result_eps);
+
+    _check_close( // DLMF 20.10.2
+            integrator.integrate(f3, integration_eps),
+            pow(constants::pi<RealType>(), -0.5*s) * tgamma(0.5*s) * zeta(s),
+            result_eps);
+
+    _check_close( // DLMF 20.10.3
+            integrator.integrate(f4, integration_eps),
+            (1 - pow(RealType(2), 1 - s)) * pow(constants::pi<RealType>(), -0.5*s) * tgamma(0.5*s) * zeta(s),
+            result_eps);
 }

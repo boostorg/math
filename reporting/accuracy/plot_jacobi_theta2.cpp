@@ -11,10 +11,10 @@ int main() {
     using CoarseReal = float;
 
     auto jacobi_theta_coarse = [](CoarseReal z) {
-        return boost::math::jacobi_theta2<CoarseReal>(z, 0.9);
+        return boost::math::jacobi_theta2<CoarseReal>(z, 0.9375);
     };
     auto jacobi_theta_precise = [](PreciseReal z) {
-        return boost::math::jacobi_theta2<PreciseReal>(z, 0.9);
+        return boost::math::jacobi_theta2<PreciseReal>(z, 0.9375);
     };
 
     std::string filename = "jacobi_theta2_" + boost::core::demangle(typeid(CoarseReal).name()) + ".svg";
