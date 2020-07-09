@@ -3,6 +3,8 @@
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
+#include <boost/math/special_functions/ellint_rf.hpp>
+#include <boost/math/special_functions/jacobi_elliptic.hpp>
 #include <boost/math/special_functions/jacobi_theta.hpp>
 #include <boost/math/special_functions/zeta.hpp>
 #include <boost/math/constants/constants.hpp>
@@ -569,4 +571,85 @@ inline void test_mellin_transforms(RealType s, RealType integration_eps, RealTyp
             integrator.integrate(f4, integration_eps),
             (1 - pow(RealType(2), 1 - s)) * pow(constants::pi<RealType>(), -0.5*s) * tgamma(0.5*s) * zeta(s),
             result_eps);
+}
+
+template <typename RealType>
+inline void test_elliptic_functions(RealType z, RealType q, RealType eps) {
+    using namespace boost::math;
+    BOOST_MATH_STD_USING
+
+    RealType t2 = jacobi_theta2(RealType(0), q);
+    RealType t3 = jacobi_theta3(RealType(0), q);
+    RealType t4 = jacobi_theta4(RealType(0), q);
+    RealType k = t2 * t2 / (t3 * t3);
+    RealType xi = z / (t3 * t3);
+
+    _check_close( // DLMF 22.2.4
+            jacobi_sn(k, z) *
+            t2 * jacobi_theta4(xi, q),
+            t3 * jacobi_theta1(xi, q),
+            eps);
+
+    _check_close( // DLMF 22.2.5
+            jacobi_cn(k, z) *
+            t2 * jacobi_theta4(xi, q),
+            t4 * jacobi_theta2(xi, q),
+            eps);
+
+    _check_close( // DLMF 22.2.6
+            jacobi_dn(k, z) *
+            t3 * jacobi_theta4(xi, q),
+            t4 * jacobi_theta3(xi, q),
+            eps);
+
+    _check_close( // DLMF 22.2.7
+            jacobi_sd(k, z) *
+            t2 * t4 * jacobi_theta3(xi, q),
+            t3 * t3 * jacobi_theta1(xi, q),
+            eps);
+
+    _check_close( // DLMF 22.2.8
+            jacobi_cd(k, z) *
+            t2 * jacobi_theta3(xi, q),
+            t3 * jacobi_theta2(xi, q),
+            eps);
+
+    _check_close( // DLMF 22.2.9
+            jacobi_cd(k, z) *
+            t2 * jacobi_theta3(xi, q),
+            t3 * jacobi_theta2(xi, q),
+            eps);
+
+    _check_close( // DLMF 22.2.9
+            jacobi_sc(k, z) *
+            t4 * jacobi_theta2(xi, q),
+            t3 * jacobi_theta1(xi, q),
+            eps);
+}
+
+template <typename RealType>
+inline void test_elliptic_integrals(RealType q, RealType eps) {
+    using namespace boost::math;
+    BOOST_MATH_STD_USING
+
+    RealType t2 = jacobi_theta2(RealType(0), q);
+    RealType t3 = jacobi_theta3(RealType(0), q);
+    RealType t4 = jacobi_theta4(RealType(0), q);
+    RealType k = t2*t2 / (t3*t3);
+    RealType k1= t4*t4 / (t3*t3);
+    
+    if (t3*t3*t3*t3 != 0.f && t4*t4*t4*t4 != 0.f) {
+        _check_close( // DLMF 20.9.4
+                ellint_rf(RealType(0), t3*t3*t3*t3, t4*t4*t4*t4),
+                constants::half_pi<RealType>(),
+                eps);
+    }
+
+    if (k*k != 0.f && k1*k1 != 0.f) {
+        _check_close( // DLMF 20.9.5
+                ellint_rf(RealType(0), k1*k1, RealType(1))
+                * log(q) / constants::pi<RealType>(),
+                -ellint_rf(RealType(0), k*k, RealType(1)),
+                eps);
+    }
 }

@@ -75,7 +75,9 @@ BOOST_AUTO_TEST_CASE( test_main )
             test_transformations_of_nome(z, q, 100 * eps);
             test_watsons_identities(z, 0.5, q, 101 * eps);
             test_landen_transformations(z, -log(q)/constants::pi<double>(), sqrt(eps));
+            test_elliptic_functions(z, q, 5 * sqrt(eps));
         }
+        test_elliptic_integrals(q, 10 * eps);
     }
 
     test_special_values(eps);
