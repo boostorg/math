@@ -4,8 +4,8 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <fstream>
-#include <boost/math/tools/test_data.hpp>
 #include "mp_t.hpp"
+#include <boost/math/tools/test_data.hpp>
 
 using namespace boost::math::tools;
 using namespace std;
