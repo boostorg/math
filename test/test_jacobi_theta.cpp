@@ -82,8 +82,9 @@ BOOST_AUTO_TEST_CASE( test_main )
 
     test_special_values(eps);
 
-    for (double s=2.125; s<5.0; s+=0.125) {
-        test_mellin_transforms(s, eps, 3 * eps);
+    for (double s=0.125; s<3.0; s+=0.125) {
+        test_mellin_transforms(2.0 + s, eps, 3 * eps);
+        test_laplace_transforms(s, eps, 4 * eps);
     }
 
     test_spots(0.0F, "float");

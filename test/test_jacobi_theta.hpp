@@ -574,6 +574,42 @@ inline void test_mellin_transforms(RealType s, RealType integration_eps, RealTyp
 }
 
 template <typename RealType>
+inline void test_laplace_transforms(RealType s, RealType integration_eps, RealType result_eps) {
+    using namespace boost::math;
+    BOOST_MATH_STD_USING
+
+    RealType beta = -0.5;
+    RealType l = sinh(abs(beta)) + 1.0;
+
+    boost::math::quadrature::exp_sinh<RealType> integrator;
+
+    auto f1 = [&, s, l, beta](RealType t)
+    {
+        return exp(-s*t) * jacobi_theta1tau(0.5 * beta * constants::pi<RealType>() / l,
+                constants::pi<RealType>() * t / l / l);
+    };
+
+    auto f4 = [&, s, l, beta](RealType t)
+    {
+        return exp(-s*t) * jacobi_theta4tau(0.5 * beta * constants::pi<RealType>() / l,
+                constants::pi<RealType>() * t / l / l);
+    };
+
+    _check_close( // DLMF 20.10.4 says the RHS should be negative?
+            integrator.integrate(f1, integration_eps),
+            l/sqrt(s)*sinh(beta*sqrt(s))/cosh(l*sqrt(s)),
+            result_eps);
+
+    _check_close( // DLMF 20.10.5
+            integrator.integrate(f4, integration_eps),
+            l/sqrt(s)*cosh(beta*sqrt(s))/sinh(l*sqrt(s)),
+            result_eps);
+
+    // TODO - DLMF defines two additional relations for theta2 and theta3, but
+    // these do not match the computed values at all.
+}
+
+template <typename RealType>
 inline void test_elliptic_functions(RealType z, RealType q, RealType eps) {
     using namespace boost::math;
     BOOST_MATH_STD_USING
