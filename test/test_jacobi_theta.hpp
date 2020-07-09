@@ -25,8 +25,8 @@ void do_test_jacobi_theta1(const T& data, const char* type_name, const char* tes
    typedef Real                   value_type;
    typedef value_type (*pg)(value_type, value_type);
    std::cout << "Testing: " << test_name << std::endl;
-#ifdef JACOBI_THETA_FUNCTION_TO_TEST
-   pg fp2 = JACOBI_THETA_FUNCTION_TO_TEST;
+#ifdef JACOBI_THETA1_FUNCTION_TO_TEST
+   pg fp2 = JACOBI_THETA1_FUNCTION_TO_TEST;
 #elif defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
    pg fp2 = boost::math::jacobi_theta1<value_type, value_type>;
 #else
@@ -48,8 +48,8 @@ void do_test_jacobi_theta2(const T& data, const char* type_name, const char* tes
    typedef Real                   value_type;
    typedef value_type (*pg)(value_type, value_type);
    std::cout << "Testing: " << test_name << std::endl;
-#ifdef JACOBI_THETA_FUNCTION_TO_TEST
-   pg fp2 = JACOBI_THETA_FUNCTION_TO_TEST;
+#ifdef JACOBI_THETA2_FUNCTION_TO_TEST
+   pg fp2 = JACOBI_THETA2_FUNCTION_TO_TEST;
 #elif defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
    pg fp2 = boost::math::jacobi_theta2<value_type, value_type>;
 #else
@@ -71,8 +71,8 @@ void do_test_jacobi_theta3(const T& data, const char* type_name, const char* tes
    typedef Real                   value_type;
    typedef value_type (*pg)(value_type, value_type);
    std::cout << "Testing: " << test_name << std::endl;
-#ifdef JACOBI_THETA_FUNCTION_TO_TEST
-   pg fp2 = JACOBI_THETA_FUNCTION_TO_TEST;
+#ifdef JACOBI_THETA3_FUNCTION_TO_TEST
+   pg fp2 = JACOBI_THETA3_FUNCTION_TO_TEST;
 #elif defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
    pg fp2 = boost::math::jacobi_theta3<value_type, value_type>;
 #else
@@ -94,8 +94,8 @@ void do_test_jacobi_theta4(const T& data, const char* type_name, const char* tes
    typedef Real                   value_type;
    typedef value_type (*pg)(value_type, value_type);
    std::cout << "Testing: " << test_name << std::endl;
-#ifdef JACOBI_THETA_FUNCTION_TO_TEST
-   pg fp2 = JACOBI_THETA_FUNCTION_TO_TEST;
+#ifdef JACOBI_THETA4_FUNCTION_TO_TEST
+   pg fp2 = JACOBI_THETA4_FUNCTION_TO_TEST;
 #elif defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
    pg fp2 = boost::math::jacobi_theta4<value_type, value_type>;
 #else
@@ -108,6 +108,55 @@ void do_test_jacobi_theta4(const T& data, const char* type_name, const char* tes
            extract_result<Real>(2));
    handle_test_result(result, data[result.worst()], result.worst(),
            type_name, "jacobi_theta4", test_name);
+
+   std::cout << std::endl;
+}
+
+template <class Real, class T>
+void do_test_jacobi_theta_tau(const T& data, const char* type_name, const char* test_name) {
+   typedef Real                   value_type;
+   typedef value_type (*pg)(value_type, value_type);
+   std::cout << "Testing: " << test_name << std::endl;
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+   pg fp1 = boost::math::jacobi_theta1tau<value_type, value_type>;
+   pg fp2 = boost::math::jacobi_theta2tau<value_type, value_type>;
+   pg fp3 = boost::math::jacobi_theta3tau<value_type, value_type>;
+   pg fp4 = boost::math::jacobi_theta4tau<value_type, value_type>;
+#else
+   pg fp1 = boost::math::jacobi_theta1tau;
+   pg fp2 = boost::math::jacobi_theta2tau;
+   pg fp3 = boost::math::jacobi_theta3tau;
+   pg fp4 = boost::math::jacobi_theta4tau;
+#endif
+   boost::math::tools::test_result<value_type> result;
+
+   result = boost::math::tools::test_hetero<Real>(
+           data,
+           bind_func<Real>(fp1, 0, 1),
+           extract_result<Real>(2));
+   handle_test_result(result, data[result.worst()], result.worst(),
+           type_name, "jacobi_theta1tau", test_name);
+
+   result = boost::math::tools::test_hetero<Real>(
+           data,
+           bind_func<Real>(fp2, 0, 1),
+           extract_result<Real>(3));
+   handle_test_result(result, data[result.worst()], result.worst(),
+           type_name, "jacobi_theta2tau", test_name);
+
+   result = boost::math::tools::test_hetero<Real>(
+           data,
+           bind_func<Real>(fp3, 0, 1),
+           extract_result<Real>(4));
+   handle_test_result(result, data[result.worst()], result.worst(),
+           type_name, "jacobi_theta3tau", test_name);
+
+   result = boost::math::tools::test_hetero<Real>(
+           data,
+           bind_func<Real>(fp4, 0, 1),
+           extract_result<Real>(5));
+   handle_test_result(result, data[result.worst()], result.worst(),
+           type_name, "jacobi_theta4tau", test_name);
 
    std::cout << std::endl;
 }
@@ -236,6 +285,10 @@ void test_spots(T, const char* type_name)
     do_test_jacobi_theta2<T>(data2, type_name, "Jacobi Theta 2: Wolfram Alpha Data");
     do_test_jacobi_theta3<T>(data3, type_name, "Jacobi Theta 3: Wolfram Alpha Data");
     do_test_jacobi_theta4<T>(data4, type_name, "Jacobi Theta 4: Wolfram Alpha Data");
+
+#include "jacobi_theta_data.ipp"
+
+    do_test_jacobi_theta_tau<T>(jacobi_theta_data, type_name, "Jacobi Theta: Random Data");
 }
 
 #define _check_close(a, b, eps) \
