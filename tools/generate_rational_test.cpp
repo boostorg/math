@@ -6,11 +6,11 @@
 #define BOOST_MATH_POLY_METHOD 0
 #define BOOST_MATH_RATIONAL_METHOD 0
 
+#include "mp_t.hpp"
 #include <boost/random.hpp>
 #include <boost/math/tools/rational.hpp>
 #include <iostream>
 #include <fstream>
-#include "mp_t.hpp"
 
 int main()
 {
