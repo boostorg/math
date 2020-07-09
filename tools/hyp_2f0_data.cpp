@@ -3,14 +3,14 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include <boost/math/special_functions/hypergeometric_2f0.hpp>
+#include "mp_t.hpp"
+#include <boost/math/special_functions/hypergeometric_2F0.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/lexical_cast.hpp>
 #include <fstream>
 #include <map>
 #include <boost/math/tools/test_data.hpp>
 #include <boost/random.hpp>
-#include "mp_t.hpp"
 
 using namespace boost::math::tools;
 using namespace boost::math;
@@ -21,7 +21,7 @@ struct hypergeometric_2f0_gen
    mp_t operator()(mp_t a1, mp_t a2, mp_t z)
    {
       std::cout << a1 << " " << a2 << " " << z << std::endl;
-      mp_t result = boost::math::detail::hypergeometric_2f0_generic_series(a1, a2, z, boost::math::policies::policy<>());
+      mp_t result = boost::math::detail::hypergeometric_2F0_generic_series(a1, a2, z, boost::math::policies::policy<>());
       std::cout << a1 << " " << a2 << " " << z << " " << result << std::endl;
       return result;
    }
@@ -31,7 +31,7 @@ struct hypergeometric_2f0_gen_spec1
 {
    boost::math::tuple<mp_t, mp_t, mp_t, mp_t> operator()(mp_t a1, mp_t z)
    {
-      mp_t result = boost::math::detail::hypergeometric_2f0_generic_series(a1, a1 + 0.5, z, boost::math::policies::policy<>());
+      mp_t result = boost::math::detail::hypergeometric_2F0_generic_series(a1, a1 + 0.5, z, boost::math::policies::policy<>());
       std::cout << a1 << " " << a1 + 0.5 << " " << z << " " << result << std::endl;
       return boost::math::make_tuple(a1, a1 + 0.5, z, result);
    }
