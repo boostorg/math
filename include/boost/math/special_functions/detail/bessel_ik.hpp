@@ -104,7 +104,7 @@ int temme_ik(T v, T x, T* K, T* K1, const Policy& pol)
     b = exp(v * a);
     sigma = -a * v;
     c = abs(v) < tools::epsilon<T>() ?
-       T(1) : T(boost::math::sin_pi(v) / (v * pi<T>()));
+       T(1) : T(boost::math::sin_pi(v, pol) / (v * pi<T>()));
     d = abs(sigma) < tools::epsilon<T>() ?
         T(1) : T(sinh(sigma) / sigma);
     gamma1 = abs(v) < tools::epsilon<T>() ?
@@ -424,7 +424,7 @@ int bessel_ik(T v, T x, T* I, T* K, int kind, const Policy& pol)
     if (reflect)
     {
         T z = (u + n % 2);
-        T fact = (2 / pi<T>()) * (boost::math::sin_pi(z) * Kv);
+        T fact = (2 / pi<T>()) * (boost::math::sin_pi(z, pol) * Kv);
         if(fact == 0)
            *I = Iv;
         else if(tools::max_value<T>() * scale < fact)

@@ -576,7 +576,7 @@ inline T log_gamma_near_1(const T& z, Policy const& pol)
 
    do
    {
-      term = power_term * boost::math::polygamma(n - 1, T(1));
+      term = power_term * boost::math::polygamma(n - 1, T(1), pol);
       result += term;
       ++n;
       power_term *= z / n;

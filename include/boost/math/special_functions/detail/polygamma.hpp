@@ -459,7 +459,7 @@ namespace boost { namespace math { namespace detail{
      if(s == 0)
         return sum * boost::math::policies::raise_overflow_error<T>(function, 0, pol);
      power_terms -= log(fabs(s)) * (n + 1);
-     power_terms += boost::math::lgamma(T(n));
+     power_terms += boost::math::lgamma(T(n), pol);
      power_terms += log(fabs(sum));
 
      if(power_terms > boost::math::tools::log_max_value<T>())
