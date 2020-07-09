@@ -65,11 +65,19 @@
 // jacobi_theta1(z, exp(-a)); // rather poor accuracy
 // jacobi_theta1tau(z, a / constants::pi<T>()); // better accuracy
 //
+// Similarly, if you have a precise (small positive) value for the complement
+// of q, you can obtain a more precise answer overall by passing the result of
+// `log1p` to the tau parameter:
+//
+// jacobi_theta1(z, 1-q_complement); // precision lost in subtraction
+// jacobi_theta1tau(z, -log1p(-q_complement) / constants::pi<T>()); // better!
+//
 // A third quartet of functions are provided for improving accuracy in cases
-// where q is small, e.g. |q| < exp(-π) ≅ 0.04. In this domain of q values,
-// the third and fourth theta functions always return values close to 1. So
-// the following "m1" functions are provided, similar in spirit to `expm1`,
-// which return one less than their regular counterparts:
+// where q is small, specifically |q| < exp(-π) ≅ 0.04 (or, equivalently, tau
+// greater than unity). In this domain of q values, the third and fourth theta
+// functions always return values close to 1. So the following "m1" functions
+// are provided, similar in spirit to `expm1`, which return one less than their
+// regular counterparts:
 //
 // template <class T> inline T jacobi_theta3m1(T z, T q);
 // template <class T> inline T jacobi_theta4m1(T z, T q);
