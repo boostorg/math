@@ -82,12 +82,15 @@ auto prime_range(Z lower_bound, Z upper_bound, OutputIterator output) -> decltyp
             {
                 primes.emplace_back(i);
             }
+
             ++counter;
             i = static_cast<Z>(boost::math::prime(counter));
         }
 
         return std::move(primes.begin(), primes.end(), output);
-    } else
+    }
+
+    else
     {
         return prime_sieve(lower_bound, upper_bound, output);
     }
