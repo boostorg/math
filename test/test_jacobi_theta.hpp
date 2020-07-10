@@ -289,6 +289,10 @@ void test_spots(T, const char* type_name)
 #include "jacobi_theta_data.ipp"
 
     do_test_jacobi_theta_tau<T>(jacobi_theta_data, type_name, "Jacobi Theta: Random Data");
+
+#include "jacobi_theta_small_tau.ipp"
+
+    do_test_jacobi_theta_tau<T>(jacobi_theta_small_tau_data, type_name, "Jacobi Theta: Random Data (Small Tau)");
 }
 
 #define _check_close(a, b, eps) \
