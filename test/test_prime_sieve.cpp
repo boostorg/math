@@ -5,9 +5,9 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include "../include/boost/math/special_functions/prime_functions.hpp"
-
+#include <boost/math/special_functions/prime_sieve.hpp>
 #include <boost/core/lightweight_test.hpp>
+#include <boost/multiprecision/cpp_int.hpp>
 #include <list>
 #include <deque>
 #include <array>
@@ -97,6 +97,16 @@ void test_prime_range()
     BOOST_TEST_EQ(primes.size(), ref);
 }
 
+template<typename Z>
+void test_prime_sieve_overflow()
+{
+    std::vector<Z> primes;
+
+    // Should die with call to BOOST_ASSERT
+    boost::math::prime_sieve(static_cast<Z>(2), static_cast<Z>(std::numeric_limits<Z>::max()),
+                             std::back_inserter(primes));
+}
+
 int main()
 {
     test_prime_sieve<int>();
@@ -108,6 +118,10 @@ int main()
     test_prime_range<int32_t>();
     test_prime_range<int64_t>();
     test_prime_range<uint32_t>();
+
+    test_prime_sieve<boost::multiprecision::cpp_int>();
+
+    //test_prime_sieve_overflow<int16_t>();
 
     boost::report_errors();
 }
