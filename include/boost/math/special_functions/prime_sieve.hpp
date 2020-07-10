@@ -5,8 +5,8 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef BOOST_MATH_SPECIAL_FUNCTIONS_PRIME_FUNCTIONS_HPP
-#define BOOST_MATH_SPECIAL_FUNCTIONS_PRIME_FUNCTIONS_HPP
+#ifndef BOOST_MATH_SPECIAL_FUNCTIONS_PRIME_SIEVE_HPP
+#define BOOST_MATH_SPECIAL_FUNCTIONS_PRIME_SIEVE_HPP
 
 #include <boost/math/special_functions/prime.hpp>
 #include <boost/assert.hpp>
@@ -105,4 +105,4 @@ inline auto prime_range(Z upper_bound, OutputIterator output) -> decltype(output
 }
 }}
 
-#endif //BOOST_MATH_SPECIAL_FUNCTIONS_PRIME_FUNCTIONS_HPP
+#endif //BOOST_MATH_SPECIAL_FUNCTIONS_PRIME_SIEVE_HPP
