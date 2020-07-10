@@ -24,25 +24,8 @@ template<class Z, class OutputIterator>
 auto prime_sieve(Z lower_bound, Z upper_bound, OutputIterator output) -> decltype(output)
 {
     static_assert(std::is_integral<Z>::value, "No primes for floating point types");
-    std::vector<Z> least_divisors;
+    std::vector<Z> least_divisors(upper_bound + 1, 0);
     std::deque<Z> primes;
-
-    try
-    {
-        least_divisors.reserve(upper_bound + 1);
-        for (size_t i{}; i < upper_bound + 1; ++i)
-        {
-            least_divisors.emplace_back(0);
-        }
-    }
-
-    catch (const std::exception &e)
-    {
-        // If exception is thrown it is most likely std::bad_alloc
-        std::cerr << e.what() << '\n';
-        throw;
-    }
-
 
     for (Z i{2}; i <= upper_bound; ++i)
     {
