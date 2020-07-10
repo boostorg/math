@@ -13,7 +13,6 @@
 #include <deque>
 #include <vector>
 #include <iterator>
-#include <iostream>
 
 namespace boost { namespace math
 {
@@ -42,17 +41,20 @@ auto prime_sieve(Z lower_bound, Z upper_bound, OutputIterator output) -> decltyp
                 break;
             }
 
-            if (primes[j] > least_divisors[i])
+            else if (primes[j] > least_divisors[i])
             {
                 break;
             }
 
-            if (i * primes[j] > upper_bound)
+            else if (i * primes[j] > upper_bound)
             {
                 break;
             }
 
-            least_divisors[i * primes[j]] = primes[j];
+            else
+            {
+                least_divisors[i * primes[j]] = primes[j];
+            }
         }
     }
 
