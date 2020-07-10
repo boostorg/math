@@ -13,6 +13,7 @@
 #include <deque>
 #include <vector>
 #include <iterator>
+#include <iostream>
 
 namespace boost { namespace math
 {
@@ -23,6 +24,7 @@ template<class Z, class OutputIterator>
 auto prime_sieve(Z lower_bound, Z upper_bound, OutputIterator output) -> decltype(output)
 {
     static_assert(std::is_integral<Z>::value, "No primes for floating point types");
+    BOOST_ASSERT_MSG(upper_bound + 1 < std::numeric_limits<Z>::max(), "Type Overflow");
     std::vector<Z> least_divisors(upper_bound + 1, 0);
     std::deque<Z> primes;
 
