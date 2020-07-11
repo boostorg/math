@@ -7,6 +7,7 @@
 
 #include <vector>
 #include <array>
+#include <list>
 #include <forward_list>
 #include <algorithm>
 #include <random>
@@ -833,6 +834,69 @@ void test_interquartile_range()
     BOOST_TEST_EQ(iqr, 6);
 }
 
+template<class Z>
+void test_mode()
+{
+    std::vector<Z> modes;
+    std::vector<Z> v {1, 2, 2, 3, 4, 5};
+    const Z ref = 2;
+
+    // Does iterator call work?
+    boost::math::statistics::mode(v.begin(), v.end(), std::back_inserter(modes));
+    BOOST_TEST_EQ(ref, modes[0]);
+
+    // Does container call work?
+    modes.clear();
+    boost::math::statistics::mode(v, std::back_inserter(modes));
+    BOOST_TEST_EQ(ref, modes[0]);
+
+    // Does it work with part of a vector?
+    modes.clear();
+    boost::math::statistics::mode(v.begin(), v.begin() + 3, std::back_inserter(modes));
+    BOOST_TEST_EQ(ref, modes[0]);
+
+    // Does it work with const qualification? Only if pre-sorted
+    modes.clear();
+    boost::math::statistics::sorted_mode(v.cbegin(), v.cend(), std::back_inserter(modes));
+    BOOST_TEST_EQ(ref, modes[0]);
+
+    // Does it work with std::array?
+    modes.clear();
+    std::array<Z, 6> u {1, 2, 2, 3, 4, 5};
+    boost::math::statistics::mode(u, std::back_inserter(modes));
+    BOOST_TEST_EQ(ref, modes[0]);
+
+    // Does it work with a bi-modal distribuition?
+    modes.clear();
+    std::vector<Z> w {1, 2, 2, 3, 3, 4, 5};
+    boost::math::statistics::mode(w.begin(), w.end(), std::back_inserter(modes));
+    BOOST_TEST_EQ(modes.size(), 2);
+
+    // Does it work with an empty vector?
+    modes.clear();
+    std::vector<Z> x {};
+    boost::math::statistics::mode(x, std::back_inserter(modes));
+    BOOST_TEST_EQ(modes.size(), 0);
+
+    // Does it work with a one item vector
+    modes.clear();
+    x.push_back(2);
+    boost::math::statistics::mode(x, std::back_inserter(modes));
+    BOOST_TEST_EQ(ref, modes[0]);
+
+    // Does it work with a doubly linked list
+    modes.clear();
+    std::list<Z> dl {1, 2, 2, 3, 4, 5};
+    boost::math::statistics::sorted_mode(dl, std::back_inserter(modes));
+    BOOST_TEST_EQ(ref, modes[0]);
+
+    // Does it work with a singly linked list
+    modes.clear();
+    std::forward_list<Z> fl {1, 2, 2, 3, 4, 5};
+    boost::math::statistics::sorted_mode(fl, std::back_inserter(modes));
+    BOOST_TEST_EQ(ref, modes[0]);
+}
+
 int main()
 {
     test_mean<float>();
@@ -902,5 +966,11 @@ int main()
 
     test_interquartile_range<double>();
     test_interquartile_range<cpp_bin_float_50>();
+
+    test_mode<int>();
+    test_mode<int32_t>();
+    test_mode<int64_t>();
+    test_mode<uint32_t>();
+
     return boost::report_errors();
 }

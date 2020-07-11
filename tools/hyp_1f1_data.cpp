@@ -5,6 +5,7 @@
 
 #define BOOST_MATH_MAX_SERIES_ITERATION_POLICY 10000000
 
+#include "mp_t.hpp"
 #include <boost/math/special_functions/hypergeometric_1f1.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/lexical_cast.hpp>
@@ -12,7 +13,6 @@
 #include <map>
 #include <boost/math/tools/test_data.hpp>
 #include <boost/random.hpp>
-#include "mp_t.hpp"
 
 using namespace boost::math::tools;
 using namespace boost::math;
@@ -22,10 +22,11 @@ struct hypergeometric_1f1_gen
 {
    mp_t operator()(mp_t a1, mp_t a2, mp_t z)
    {
+      int scaling = 0;
       std::cout << a1 << " " << a2 << " " << z << std::endl;
-      mp_t result = boost::math::detail::hypergeometric_1f1_generic_series(a1, a2, z, boost::math::policies::policy<>());
+      mp_t result = boost::math::detail::hypergeometric_1F1_generic_series(a1, a2, z, boost::math::policies::policy<>(), scaling, "");
       std::cout << a1 << " " << a2 << " " << z << " " << result << std::endl;
-      return result;
+      return ldexp(result, scaling);
    }
 };
 
@@ -33,7 +34,9 @@ struct hypergeometric_1f1_gen_2
 {
    mp_t operator()(mp_t a1, mp_t a2, mp_t z)
    {
-      mp_t result = boost::math::detail::hypergeometric_1f1_generic_series(a1, a2, z, boost::math::policies::policy<>());
+      int scaling = 0;
+      mp_t result = boost::math::detail::hypergeometric_1F1_generic_series(a1, a2, z, boost::math::policies::policy<>(), scaling, "");
+      result = ldexp(result, scaling);
       std::cout << a1 << " " << a2 << " " << z << " " << result << std::endl;
       if (fabs(result) > (std::numeric_limits<double>::max)())
       {

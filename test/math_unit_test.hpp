@@ -323,9 +323,15 @@ bool check_equal(Real x, Real y, std::string const & filename, std::string const
   if (x != y) {
     std::ios_base::fmtflags f( std::cerr.flags() );
     std::cerr << "\033[0;31mError at " << filename << ":" << function << ":" << line << "\n";
-    std::cerr << "\033[0m  Expected " << x << " == " << y << " but:\n";
-    std::cerr << "  Expected =  " << std::defaultfloat << std::fixed << x << " = " << std::scientific << x << std::hexfloat << " = " << x << "\n";
-    std::cerr << "  Computed =  " << std::defaultfloat << std::fixed << y << " = " << std::scientific << y << std::hexfloat << " = " << y << "\n";
+    std::cerr << "\033[0m  Condition '" << x << " == " << y << "' is not satisfied:\n";
+    if (std::is_floating_point<Real>::value) {
+      std::cerr << "  Expected =  " << std::defaultfloat << std::fixed << x << " = " << std::scientific << x << std::hexfloat << " = " << x << "\n";
+      std::cerr << "  Computed =  " << std::defaultfloat << std::fixed << y << " = " << std::scientific << y << std::hexfloat << " = " << y << "\n";
+    } else {
+      std::cerr << "  Expected: " << x << " = " << "0x" << std::hex << x << "\n";
+      std::cerr << std::dec;
+      std::cerr << "  Computed: " << y << " = " << "0x" << std::hex << y << "\n";
+    }
     std::cerr.flags(f);
     ++detail::global_error_count;
     return false;
