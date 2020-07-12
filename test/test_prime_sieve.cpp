@@ -122,5 +122,7 @@ int main()
 
     //test_prime_sieve_overflow<int16_t>();
 
+    test_prime_sieve<boost::multiprecision::cpp_int>();
+
     boost::report_errors();
 }
