@@ -21,45 +21,50 @@ auto fib_rec(unsigned long long n) -> std::pair<T, T> {
 static void recursive_slow(benchmark::State &state) {
     for (auto _ : state)
         benchmark::DoNotOptimize(fib_rec(state.range(0)).first);
+    state.SetComplexityN(state.range(0));
 }
 constexpr int bm_start = 1 << 3, bm_end = 1 << 22;
-BENCHMARK(recursive_slow)->Range(bm_start, bm_end);
+BENCHMARK(recursive_slow)->Range(bm_start, bm_end)->Complexity();
 
 static void iterative_fast(benchmark::State &state) {
     for (auto _ : state)
         benchmark::DoNotOptimize(boost::math::fibonacci<T>(state.range(0)));
+    state.SetComplexityN(state.range(0));
 }
-BENCHMARK(iterative_fast)->Range(bm_start, bm_end);
+BENCHMARK(iterative_fast)->Range(bm_start, bm_end)->Complexity();
 
 BENCHMARK_MAIN();
 
 /*
 Expected output:
 
-Run on (4 X 2400 MHz CPU s)
 CPU Caches:
   L1 Data 32K (x4)
   L1 Instruction 32K (x4)
   L2 Unified 256K (x4)
   L3 Unified 8192K (x4)
-Load Average: 0.53, 0.65, 0.80
+Load Average: 0.96, 0.80, 0.74
 -----------------------------------------------------------------
 Benchmark                       Time             CPU   Iterations
 -----------------------------------------------------------------
-recursive_slow/8             3525 ns         3521 ns       153697
-recursive_slow/64            6014 ns         6003 ns       118048
-recursive_slow/512           8802 ns         8784 ns        78288
-recursive_slow/4096         13661 ns        13660 ns        52241
-recursive_slow/32768        70636 ns        70632 ns         9678
-recursive_slow/262144     1217721 ns      1217522 ns          570
-recursive_slow/2097152   20469874 ns     20468924 ns           35
-recursive_slow/4194304   43150902 ns     43142089 ns           17
-iterative_fast/8             1419 ns         1419 ns       495748
-iterative_fast/64            2389 ns         2389 ns       285226
-iterative_fast/512           4168 ns         4167 ns       169008
-iterative_fast/4096          8288 ns         8288 ns        92749
-iterative_fast/32768        64556 ns        64555 ns        11057
-iterative_fast/262144     1200102 ns      1200053 ns          576
-iterative_fast/2097152   19781647 ns     19781013 ns           35
-iterative_fast/4194304   42263450 ns     42195817 ns           17
+recursive_slow/8             3669 ns         3594 ns       190414
+recursive_slow/64            6213 ns         6199 ns       116423
+recursive_slow/512           8999 ns         8990 ns        78773
+recursive_slow/4096         14529 ns        13984 ns        51206
+recursive_slow/32768        74183 ns        73039 ns         8539
+recursive_slow/262144     1297806 ns      1291304 ns          569
+recursive_slow/2097152   23166565 ns     22751898 ns           30
+recursive_slow/4194304   47038831 ns     46546938 ns           16
+recursive_slow_BigO          0.51 NlgN       0.51 NlgN 
+recursive_slow_RMS              5 %             5 %    
+iterative_fast/8             1413 ns         1399 ns       493692
+iterative_fast/64            2408 ns         2394 ns       298417
+iterative_fast/512           4181 ns         4132 ns       170957
+iterative_fast/4096          7627 ns         7558 ns        93554
+iterative_fast/32768        65080 ns        64791 ns        11289
+iterative_fast/262144     1207873 ns      1200725 ns          557
+iterative_fast/2097152   19627331 ns     19510132 ns           36
+iterative_fast/4194304   42351871 ns     42240620 ns           17
+iterative_fast_BigO          0.46 NlgN       0.45 NlgN 
+iterative_fast_RMS              5 %             5 %
 */
