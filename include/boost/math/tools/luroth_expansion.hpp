@@ -38,8 +38,10 @@ public:
         }
         x= x - dj;
         // now x in (0,1):
+        Real d1 = floor(1/x);
+        d_.push_back(static_cast<Z>(d1));
         auto T = [](Real z) { Real d = floor(1/z); return d*(d+1)*(z - 1/(d+1)); };
-
+        
         int n = 0;
         while ( n++ < 50) {
            x = T(x);
