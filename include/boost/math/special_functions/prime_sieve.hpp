@@ -13,7 +13,6 @@
 #include <deque>
 #include <vector>
 #include <iterator>
-#include <iostream>
 #include <cmath>
 #include <thread>
 
@@ -79,7 +78,7 @@ void prime_table(Z upper_bound, Container &c)
 template<class Z, class Container>
 void mask_sieve(Z lower_bound, Z upper_bound, Container &c)
 {
-    Z limit{static_cast<Z>(std::floor(std::sqrt(upper_bound))) + 1};
+    Z limit{static_cast<Z>(std::floor(std::sqrt(static_cast<double>(upper_bound)))) + 1};
     std::vector<Z> primes;
     primes.reserve(limit / std::log(limit));
 
@@ -159,7 +158,7 @@ template<class Z, class OutputIterator>
 auto prime_range(Z lower_bound, Z upper_bound, OutputIterator output) -> decltype(output)
 {
     std::vector<Z> primes;
-    primes.reserve(upper_bound / std::log(upper_bound));
+    primes.reserve(upper_bound / std::log(static_cast<double>(upper_bound)));
 
     boost::math::prime_sieve(upper_bound, std::back_inserter(primes));
 
