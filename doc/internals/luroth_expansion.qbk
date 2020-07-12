@@ -1,0 +1,53 @@
+[/
+  Copyright Nick Thompson, 2020
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+
+[section:luroth_expansion Luroth Expansions]
+
+    #include <boost/math/tools/luroth_expansion.hpp>
+    namespace boost::math::tools {
+
+    template<typename Real, typename Z = int64_t>
+    class luroth_expansion {
+    public:
+        luroth_expansion(Real x);
+
+        std::vector<Z> const & digits() const;
+
+        template<typename T, typename Z_>
+        friend std::ostream& operator<<(std::ostream& out, luroth_expansion<T, Z_>& luroth);
+    };
+    }
+
+
+The `luroth_expansion` class provided by Boost expands a floating point number into a Luroth representation, i.e.,
+
+[$../equations/luroth_expansion.svg]
+
+The numbers /d/[sub i] are called digits or denominators; we use the terminology digits, since technically in our notation /d/[sub 0] is not a denominator.
+
+Here's a minimal working example:
+
+    using boost::math::constants::pi;
+    using boost::math::tools::luroth_expansion;
+    auto luroth = luroth_expansion(pi<long double>());
+    std::cout << "π ≈ " << luroth << "\n";
+    // Prints:
+    // π ≈ ((3;..)
+
+The class computes denominators while simultaneously computing convergents.
+Once a convergent is within a few ulps of the input value, the computation stops.
+
+
+
+[heading References]
+
+* Kalpazidou, Sofia. "Khintchine's constant for Lüroth representation." Journal of Number Theory 29.2 (1988): 196-205.
+
+* Finch, Steven R. Mathematical constants. Cambridge university press, 2003.
+
+
+[endsect]
