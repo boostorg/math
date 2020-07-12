@@ -10,7 +10,7 @@
     #include <boost/math/tools/simple_continued_fraction.hpp>
     namespace boost::math::tools {
 
-    template<typename Real>
+    template<typename Real, typename Z = int64_t>
     class simple_continued_fraction {
     public:
         simple_continued_fraction(Real x);
