@@ -3,8 +3,8 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef BOOST_MATH_TOOLS_LUROTH_HPP
-#define BOOST_MATH_TOOLS_LUROTH_HPP
+#ifndef BOOST_MATH_TOOLS_LUROTH_EXPANSION_HPP
+#define BOOST_MATH_TOOLS_LUROTH_EXPANSION_HPP
 
 #include <vector>
 #include <ostream>
@@ -37,9 +37,15 @@ public:
            return;
         }
         x= x - dj;
-        auto T = [](Real z) { Real d = floor(1/z); };
-        // rem is now in (0,1):
+        // now x in (0,1):
+        auto T = [](Real z) { Real d = floor(1/z); return d*(d+1)*(z - 1/(d+1)); };
 
+        int n = 0;
+        while ( n++ < 50) {
+           x = T(x);
+           Real dn = floor(1/x);
+           d_.push_back(static_cast<Z>(dn));
+        }
     }
     
     

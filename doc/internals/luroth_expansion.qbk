@@ -41,6 +41,9 @@ Here's a minimal working example:
 The class computes denominators while simultaneously computing convergents.
 Once a convergent is within a few ulps of the input value, the computation stops.
 
+/Nota bene:/ There is an alternative definition of the Luroth representation where every digit is shifted by 1.
+We follow the definition given in Finch; with the modification that we do not constrain the input to be in the interval [0,1]
+and let the first digit be the floor of the input.
 
 
 [heading References]
