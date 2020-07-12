@@ -10,7 +10,6 @@
 
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/policies/error_handling.hpp>
-#include <boost/type_traits.hpp>
 #include <cmath>
 #include <limits>
 
@@ -29,7 +28,6 @@ template <typename T>
 inline T fibonacci_unchecked(unsigned long long n) {
     // This function is called by the rest and computes the actual nth fibonacci number
     // First few fibonacci numbers: 0 (0th), 1 (1st), 1 (2nd), 2 (3rd), 3 (4th), 5, 8, 13, 21, 34, 55 (10th), 89
-    static_assert(boost::is_arithmetic<T>::value, "Non-Arithmetic type detected. Needed: +, -, *.");
     if (n <= 2) return n == 0 ? 0 : 1;
     using ull = unsigned long long;
     ull mask = 1;
@@ -39,7 +37,7 @@ inline T fibonacci_unchecked(unsigned long long n) {
     for (mask >>= 1; mask; mask >>= 1) {
         T t1 = a * a;
         a = 2 * a * b - t1, b = b * b + t1;
-        if (mask & n) t1 = b, b += a, a = t1;
+        if (mask & n) t1 = b, b += a, a = t1; // equivalent to: swap(a,b), b += a;
     }
     return a;
 }
@@ -47,10 +45,11 @@ inline T fibonacci_unchecked(unsigned long long n) {
 template <typename T, class Policy>
 T inline fibonacci(unsigned long long n, const Policy &pol) {
     // check for overflow using approximation to binet's formula: F_n ~ phi^n / sqrt(5)
-    if (std::abs(n * detail::fib_bits_phi - detail::fib_bits_deno) > std::numeric_limits<T>::digits + std::numeric_limits<double>::epsilon())
+    if (n > 20 && n * detail::fib_bits_phi - detail::fib_bits_deno > std::numeric_limits<T>::digits)
         return policies::raise_overflow_error<T>("boost::math::fibonacci<%1%>(unsigned long long)", "Possible overflow detected.", pol);
     return fibonacci_unchecked<T>(n);
 }
+
 template <typename T>
 T inline fibonacci(unsigned long long n) {
     return fibonacci<T>(n, policies::policy<>());
