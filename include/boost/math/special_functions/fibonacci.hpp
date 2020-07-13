@@ -21,17 +21,17 @@ namespace boost {
 namespace math {
 namespace detail {
 // this should be constexpr in future
-const double fib_bits_phi = std::log2(boost::math::constants::phi<double>()),
-             fib_bits_deno = std::log2(5.0) / 2.0;
+const double log_2 = std::log(2.0),
+             fib_bits_phi = std::log(boost::math::constants::phi<double>()) / log_2,
+             fib_bits_deno = std::log(5.0) / 2.0 / log_2;
 } // namespace detail
 template <typename T>
 inline T fibonacci_unchecked(unsigned long long n) {
     // This function is called by the rest and computes the actual nth fibonacci number
     // First few fibonacci numbers: 0 (0th), 1 (1st), 1 (2nd), 2 (3rd), 3 (4th), 5, 8, 13, 21, 34, 55 (10th), 89
     if (n <= 2) return n == 0 ? 0 : 1;
-    using ull = unsigned long long;
-    ull mask = 1;
-    for (int ct = 1; ct != std::numeric_limits<ull>::digits && (mask << 1) <= n; ++ct, mask <<= 1)
+    unsigned long long mask = 1;
+    for (int ct = 1; ct != std::numeric_limits<unsigned long long>::digits && (mask << 1) <= n; ++ct, mask <<= 1)
         ;
     T a = 1, b = 1;
     for (mask >>= 1; mask; mask >>= 1) {

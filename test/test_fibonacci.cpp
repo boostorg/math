@@ -12,9 +12,14 @@
 #define BOOST_TEST_MODULE Fibonacci_Test_Module
 #include <boost/test/included/unit_test.hpp>
 
+using boost::math::fibonacci;
+using namespace boost::multiprecision;
+typedef mpz_int GMP;
+typedef cpp_int BST;
+typedef number<backends::cpp_int_backend<2048, 2048, unsigned_magnitude, unchecked>> BST_2048;
+
 // Some sanity checks using OEIS A000045
 BOOST_AUTO_TEST_CASE(sanity_checks) {
-    using boost::math::fibonacci;
     BOOST_TEST(fibonacci<char>(0) == 0);    // Base case
     BOOST_TEST(fibonacci<int>(1) == 1);     // Base case
     BOOST_TEST(fibonacci<int16_t>(2) == 1); // Base Case
@@ -28,18 +33,16 @@ BOOST_AUTO_TEST_CASE(sanity_checks) {
 // Tests fibonacci_unchecked by computing naively
 BOOST_AUTO_TEST_CASE(big_integer_check) {
     // GMP is used as type for fibonacci and cpp_int is for naive computation
-    using GMP = boost::multiprecision::mpz_int;
-    using BST = boost::multiprecision::cpp_int;
     BST val = 0, a = 0, b = 1;
     for (int i = 0; i <= 1e4; ++i) {
-        BOOST_TEST(boost::math::fibonacci<GMP>(i) == GMP(a));
+        BOOST_TEST(fibonacci<GMP>(i) == GMP(a));
         val = b, b += a, a = val;
     }
 }
 
 // Check for overflow throw using magic constants
 BOOST_AUTO_TEST_CASE(overflow_check) {
-    using boost::math::fibonacci;
+
     // 1. check for unsigned integer overflow
     BOOST_CHECK_NO_THROW(fibonacci<uint64_t>(93));
     BOOST_CHECK_THROW(fibonacci<uint64_t>(94), std::exception);
@@ -54,9 +57,7 @@ BOOST_AUTO_TEST_CASE(overflow_check) {
     BOOST_CHECK_THROW(fibonacci<double>(79), std::exception);
 
     // 4. check using boost's multiprecision unchecked integer
-    using namespace boost::multiprecision;
-    using T = number<backends::cpp_int_backend<2048, 2048, unsigned_magnitude, unchecked>>;
-    BOOST_CHECK_NO_THROW(fibonacci<T>(2950));
+    BOOST_CHECK_NO_THROW(fibonacci<BST_2048>(2950));
     // BOOST_CHECK_THROW(fibonacci<T>(2951), std::exception); // this should be the correct value but imprecisions
-    BOOST_CHECK_THROW(fibonacci<T>(2952), std::exception);
+    BOOST_CHECK_THROW(fibonacci<BST_2048>(2952), std::exception);
 }
