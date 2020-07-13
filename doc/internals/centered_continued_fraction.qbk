@@ -10,7 +10,7 @@
     #include <boost/math/tools/centered_continued_fraction.hpp>
     namespace boost::math::tools {
 
-    template<typename Real>
+    template<typename Real, typename Z = int64_t>
     class centered_continued_fraction {
     public:
         centered_continued_fraction(Real x);
@@ -18,7 +18,7 @@
         Real khinchin_geometric_mean() const;
 
         template<typename T, typename Z_>
-        friend std::ostream& operator<<(std::ostream& out, centered_continued_fraction<T, Z>& scf);
+        friend std::ostream& operator<<(std::ostream& out, centered_continued_fraction<T, Z_>& ccf);
     };
     }
 

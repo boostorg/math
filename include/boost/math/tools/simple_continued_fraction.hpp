@@ -150,7 +150,7 @@ std::ostream& operator<<(std::ostream& out, simple_continued_fraction<Real, Z2>&
       }
       out << scf.b_.back();
    }
-   out << "]\n";
+   out << "]";
    return out;
 }
 

@@ -54,6 +54,11 @@ void instantiate(RealType)
    using namespace boost;
    using namespace boost::math;
    using namespace boost::math::concepts;
+
+   long l;
+#ifdef BOOST_HAS_LONG_LONG
+   boost::long_long_type ll;
+#endif
 #ifdef TEST_GROUP_1
    function_requires<DistributionConcept<arcsine_distribution<RealType> > >();
    function_requires<DistributionConcept<bernoulli_distribution<RealType> > >();
@@ -353,12 +358,10 @@ void instantiate(RealType)
    boost::math::lround(v1);
    boost::math::modf(v1, &v1);
    boost::math::modf(v1, &i);
-   long l;
    boost::math::modf(v1, &l);
 #ifdef BOOST_HAS_LONG_LONG
    boost::math::lltrunc(v1);
    boost::math::llround(v1);
-   boost::long_long_type ll;
    boost::math::modf(v1, &ll);
 #endif
    boost::math::pow<2>(v1);

@@ -175,7 +175,7 @@ T airy_ai_zero_imp(int m, const Policy& pol)
    }
 
    // Set up the initial guess for the upcoming root-finding.
-   const T guess_root = boost::math::detail::airy_zero::airy_ai_zero_detail::initial_guess<T>(m);
+   const T guess_root = boost::math::detail::airy_zero::airy_ai_zero_detail::initial_guess<T>(m, pol);
 
    // Select the maximum allowed iterations based on the number
    // of decimal digits in the numeric type T, being at least 12.
@@ -227,7 +227,7 @@ T airy_bi_zero_imp(int m, const Policy& pol)
         "The requested rank of the zero is %1%, but must be 1 or more !", static_cast<T>(m), pol);
    }
    // Set up the initial guess for the upcoming root-finding.
-   const T guess_root = boost::math::detail::airy_zero::airy_bi_zero_detail::initial_guess<T>(m);
+   const T guess_root = boost::math::detail::airy_zero::airy_bi_zero_detail::initial_guess<T>(m, pol);
 
    // Select the maximum allowed iterations based on the number
    // of decimal digits in the numeric type T, being at least 12.
