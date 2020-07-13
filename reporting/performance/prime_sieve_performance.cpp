@@ -33,11 +33,11 @@ void prime_sieve_partial_range(benchmark::State& state)
     state.SetComplexityN(state.range(0));
 }
 
-BENCHMARK_TEMPLATE(prime_sieve, int32_t)->RangeMultiplier(2)->Range(1 << 1, 1 << 22)->Complexity();
-BENCHMARK_TEMPLATE(prime_sieve, int64_t)->RangeMultiplier(2)->Range(1 << 1, 1 << 22)->Complexity();
-BENCHMARK_TEMPLATE(prime_sieve, uint32_t)->RangeMultiplier(2)->Range(1 << 1, 1 << 22)->Complexity();
-BENCHMARK_TEMPLATE(prime_sieve_partial_range, int32_t)->RangeMultiplier(2)->Range(1 << 1, 1 << 22)->Complexity();
-BENCHMARK_TEMPLATE(prime_sieve_partial_range, int64_t)->RangeMultiplier(2)->Range(1 << 1, 1 << 22)->Complexity();
-BENCHMARK_TEMPLATE(prime_sieve_partial_range, uint32_t)->RangeMultiplier(2)->Range(1 << 1, 1 << 22)->Complexity();
+BENCHMARK_TEMPLATE(prime_sieve, int32_t)->RangeMultiplier(2)->Range(1 << 1, 1 << 22)->Complexity()->UseRealTime();
+BENCHMARK_TEMPLATE(prime_sieve, int64_t)->RangeMultiplier(2)->Range(1 << 1, 1 << 22)->Complexity()->UseRealTime();
+BENCHMARK_TEMPLATE(prime_sieve, uint32_t)->RangeMultiplier(2)->Range(1 << 1, 1 << 22)->Complexity()->UseRealTime();
+BENCHMARK_TEMPLATE(prime_sieve_partial_range, int32_t)->RangeMultiplier(2)->Range(1 << 1, 1 << 22)->Complexity()->UseRealTime();
+BENCHMARK_TEMPLATE(prime_sieve_partial_range, int64_t)->RangeMultiplier(2)->Range(1 << 1, 1 << 22)->Complexity()->UseRealTime();
+BENCHMARK_TEMPLATE(prime_sieve_partial_range, uint32_t)->RangeMultiplier(2)->Range(1 << 1, 1 << 22)->Complexity()->UseRealTime();
 
 BENCHMARK_MAIN();
