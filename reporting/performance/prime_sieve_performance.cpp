@@ -15,7 +15,7 @@ void prime_sieve(benchmark::State& state)
     for(auto _ : state)
     {
         std::vector<Z> primes;
-        benchmark::DoNotOptimize(boost::math::prime_sieve(upper, std::back_inserter(primes)));
+        benchmark::DoNotOptimize(boost::math::prime_sieve(std::execution::par, upper, std::back_inserter(primes)));
     }
     state.SetComplexityN(state.range(0));
 }
@@ -28,7 +28,7 @@ void prime_sieve_partial_range(benchmark::State& state)
     for(auto _ : state)
     {
         std::vector<Z> primes;
-        benchmark::DoNotOptimize(boost::math::prime_range(lower, upper, std::back_inserter(primes)));
+        benchmark::DoNotOptimize(boost::math::prime_range(std::execution::par, lower, upper, std::back_inserter(primes)));
     }
     state.SetComplexityN(state.range(0));
 }
