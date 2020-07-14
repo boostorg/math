@@ -66,17 +66,17 @@ void test_prime_range()
 
     // Does the upper bound call work
     primes.clear();
-    boost::math::prime_range(1000, std::back_inserter(primes));
+    boost::math::prime_range(2, 1000, std::back_inserter(primes));
     BOOST_TEST_EQ(primes.size(), ref);
 
     // Does it work with a deque?
     std::deque<Z> d_primes;
-    boost::math::prime_range(1000, std::back_inserter(d_primes));
+    boost::math::prime_range(2, 1000, std::back_inserter(d_primes));
     BOOST_TEST_EQ(d_primes.size(), ref);
 
     // Does it work with a list?
     std::list<Z> l_primes;
-    boost::math::prime_range(1000, std::front_inserter(l_primes));
+    boost::math::prime_range(2, 1000, std::front_inserter(l_primes));
     BOOST_TEST_EQ(l_primes.size(), ref);
 
     // Does the lower bound change the results?
@@ -93,7 +93,7 @@ void test_prime_range()
     // Will it call the sieve for large input
     ref = 78498; // Calculated with wolfram-alpha
     primes.clear();
-    boost::math::prime_range(1000000, std::back_inserter(primes));
+    boost::math::prime_range(2, 1000000, std::back_inserter(primes));
     BOOST_TEST_EQ(primes.size(), ref);
 }
 
@@ -105,6 +105,48 @@ void test_prime_sieve_overflow()
     // Should die with call to BOOST_ASSERT
     boost::math::prime_sieve(static_cast<Z>(2), static_cast<Z>(std::numeric_limits<Z>::max()),
                              std::back_inserter(primes));
+}
+
+template<typename Z>
+void test_par_prime_sieve()
+{
+    std::vector<Z> primes;
+    Z ref {168}; // Calculated with wolfram-alpha
+
+    // Does the function work with a vector
+    boost::math::prime_sieve(std::execution::par, 1000, std::back_inserter(primes));
+    BOOST_TEST_EQ(primes.size(), ref);
+
+    // Tests for correctness
+    // 100
+    primes.clear();
+    boost::math::prime_sieve(std::execution::par, 100, std::back_inserter(primes));
+    BOOST_TEST_EQ(primes.size(), 25);
+
+    // 10'000
+    primes.clear();
+    boost::math::prime_sieve(std::execution::par, 10000, std::back_inserter(primes));
+    BOOST_TEST_EQ(primes.size(), 1229);
+
+    // 100'000
+    primes.clear();
+    boost::math::prime_sieve(std::execution::par, 100000, std::back_inserter(primes));
+    BOOST_TEST_EQ(primes.size(), 9592);
+
+    // 1'000'000
+    primes.clear();
+    boost::math::prime_sieve(std::execution::par, 1000000, std::back_inserter(primes));
+    BOOST_TEST_EQ(primes.size(), 78498);
+
+    // Does the function work with a list?
+    std::list<Z> l_primes;
+    boost::math::prime_sieve(std::execution::par, 1000, std::back_inserter(l_primes));
+    BOOST_TEST_EQ(l_primes.size(), ref);
+
+    // Does the function work with a deque?
+    std::deque<Z> d_primes;
+    boost::math::prime_sieve(std::execution::par, 1000, std::back_inserter(d_primes));
+    BOOST_TEST_EQ(d_primes.size(), ref);
 }
 
 int main()
@@ -123,6 +165,11 @@ int main()
     //test_prime_sieve_overflow<int16_t>();
 
     test_prime_sieve<boost::multiprecision::cpp_int>();
+
+    test_par_prime_sieve<int>();
+    test_par_prime_sieve<int32_t>();
+    test_par_prime_sieve<int64_t>();
+    test_par_prime_sieve<uint32_t>();
 
     boost::report_errors();
 }

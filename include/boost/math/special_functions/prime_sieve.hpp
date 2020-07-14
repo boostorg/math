@@ -14,7 +14,11 @@
 #include <vector>
 #include <iterator>
 #include <cmath>
+
+#if __has_include(<execution>)
 #include <thread>
+#include <execution>
+#endif
 
 namespace boost { namespace math { namespace detail
 {
@@ -23,7 +27,7 @@ namespace boost { namespace math { namespace detail
 template<class Z, class Container>
 void linear_sieve(Z upper_bound, Container &c)
 {
-    Z least_divisors_size{upper_bound + 1};
+    size_t least_divisors_size{static_cast<size_t>(upper_bound + 1)};
     Z *least_divisors{new Z[least_divisors_size]{0}};
 
     for (Z i{2}; i <= upper_bound; ++i)
@@ -123,6 +127,68 @@ void mask_sieve(Z lower_bound, Z upper_bound, Container &c)
 }
 } // End namespace detail
 
+#if __has_include(<execution>)
+template<class ExecutionPolicy, typename Z, class OutputIterator>
+auto prime_sieve(ExecutionPolicy&& policy, Z upper_bound, OutputIterator output) -> decltype(output)
+{
+    static_assert(std::is_integral<Z>::value, "No primes for floating point types");
+    BOOST_ASSERT_MSG(upper_bound + 1 < std::numeric_limits<Z>::max(), "Type Overflow");
+
+    std::vector<Z> primes;
+    primes.reserve(upper_bound / std::log(upper_bound));
+
+    if (upper_bound <= 8192)
+    {
+        boost::math::detail::linear_sieve(upper_bound, primes);
+    }
+
+    else
+    {
+        if constexpr (std::is_same_v<decltype(policy), std::execution::sequenced_policy>)
+        {
+            boost::math::detail::mask_sieve(static_cast<Z>(2), upper_bound, primes);
+        }
+
+        else
+        {
+            std::vector<Z> small_primes;
+            small_primes.reserve(1000);
+
+            // Split into two vectors and merge after joined to avoid data races
+            std::thread t1([upper_bound, &small_primes] {
+                boost::math::detail::prime_table(static_cast<Z>(8192), small_primes);
+            });
+            std::thread t2([upper_bound, &primes] {
+                boost::math::detail::mask_sieve(static_cast<Z>(8192), upper_bound, primes);
+            });
+
+            t1.join();
+            t2.join();
+            primes.insert(primes.begin(), small_primes.begin(), small_primes.end());
+        }
+    }
+
+    return std::move(primes.begin(), primes.end(), output);
+}
+
+template<class ExecutionPolicy, class Z, class OutputIterator>
+auto prime_range(ExecutionPolicy&& policy, Z lower_bound, Z upper_bound, OutputIterator output) -> decltype(output)
+{
+    std::vector<Z> primes;
+    primes.reserve(upper_bound / std::log(static_cast<double>(upper_bound)));
+
+    boost::math::prime_sieve(policy, upper_bound, std::back_inserter(primes));
+
+    auto it{primes.begin()};
+    while(*it < lower_bound && it != primes.end())
+    {
+        ++it;
+    }
+
+    return std::move(it, primes.end(), output);
+}
+#endif //__has_include(<execution>)
+
 template<typename Z, class OutputIterator>
 auto prime_sieve(Z upper_bound, OutputIterator output) -> decltype(output)
 {
@@ -132,23 +198,14 @@ auto prime_sieve(Z upper_bound, OutputIterator output) -> decltype(output)
     std::vector<Z> primes;
     primes.reserve(upper_bound / std::log(upper_bound));
 
-    if (upper_bound <= 104729)
+    if (upper_bound <= 8192)
     {
-        boost::math::detail::prime_table(upper_bound, primes);
+        boost::math::detail::linear_sieve(upper_bound, primes);
     }
 
     else
     {
-        std::vector<Z> small_primes;
-        small_primes.reserve(1000);
-
-        // Spilt into two vectors and merge after joined to avoid data races
-        std::thread t1([upper_bound, &small_primes]{boost::math::detail::prime_table(static_cast<Z>(104729), small_primes);});
-        std::thread t2([upper_bound, &primes]{boost::math::detail::mask_sieve(static_cast<Z>(104729), upper_bound, primes);});
-
-        t1.join();
-        t2.join();
-        primes.insert(primes.begin(), small_primes.begin(), small_primes.end());
+        boost::math::detail::mask_sieve(static_cast<Z>(2), upper_bound, primes);
     }
 
     return std::move(primes.begin(), primes.end(), output);
@@ -169,12 +226,6 @@ auto prime_range(Z lower_bound, Z upper_bound, OutputIterator output) -> decltyp
     }
 
     return std::move(it, primes.end(), output);
-}
-
-template<class Z, class OutputIterator>
-inline auto prime_range(Z upper_bound, OutputIterator output) -> decltype(output)
-{
-    return prime_range(static_cast<Z>(2), upper_bound, output);
 }
 }}
 
