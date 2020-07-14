@@ -135,28 +135,39 @@ auto prime_sieve(ExecutionPolicy&& policy, Z upper_bound, OutputIterator output)
     BOOST_ASSERT_MSG(upper_bound + 1 < std::numeric_limits<Z>::max(), "Type Overflow");
 
     std::vector<Z> primes;
-    primes.reserve(upper_bound / std::log(upper_bound));
+    primes.reserve(upper_bound / std::log(static_cast<double>(upper_bound)));
 
-    if (upper_bound <= 8192)
+    // Range for when the linear sieve is no longer faster than threading
+    if (upper_bound < 8192)
     {
         boost::math::detail::linear_sieve(upper_bound, primes);
     }
 
+
+    else if (std::is_same_v<decltype(policy), std::execution::sequenced_policy>)
+    {
+        boost::math::detail::mask_sieve(static_cast<Z>(2), upper_bound, primes);
+    }
+
     else
     {
-        if constexpr (std::is_same_v<decltype(policy), std::execution::sequenced_policy>)
+        unsigned processor_count {std::thread::hardware_concurrency()};
+
+        // May return 0 when unable to detect
+        if(processor_count == 0)
         {
-            boost::math::detail::mask_sieve(static_cast<Z>(2), upper_bound, primes);
+            processor_count = 2;
         }
 
-        else
-        {
-            std::vector<Z> small_primes;
-            small_primes.reserve(1000);
+        std::vector<Z> small_primes;
+        small_primes.reserve(1000);
 
+        // Threshold for when 2 thread performance begins to be non-linear, or when the system can only support two threads
+        if(upper_bound <= 16777216 || processor_count == 2)
+        {
             // Split into two vectors and merge after joined to avoid data races
-            std::thread t1([upper_bound, &small_primes] {
-                boost::math::detail::prime_table(static_cast<Z>(8192), small_primes);
+            std::thread t1([&small_primes] {
+                boost::math::detail::linear_sieve(static_cast<Z>(8192), small_primes);
             });
             std::thread t2([upper_bound, &primes] {
                 boost::math::detail::mask_sieve(static_cast<Z>(8192), upper_bound, primes);
@@ -165,6 +176,60 @@ auto prime_sieve(ExecutionPolicy&& policy, Z upper_bound, OutputIterator output)
             t1.join();
             t2.join();
             primes.insert(primes.begin(), small_primes.begin(), small_primes.end());
+        }
+
+        //If sufficiently large upper bound spawn as many threads as the system has processors for
+        else
+        {
+            std::vector<std::thread> thread_manager;
+            std::vector<std::vector<Z>> prime_vectors(processor_count - 1);
+            const Z range_per_thread = upper_bound / (processor_count - 1);
+            Z current_lower_bound {8192};
+            Z current_upper_bound {current_lower_bound + range_per_thread};
+            Z primes_in_range {static_cast<Z>(current_upper_bound / std::log(static_cast<double>(current_upper_bound)) -
+                               current_lower_bound / std::log(static_cast<double>(current_lower_bound)))};
+
+            std::thread t1([upper_bound, &small_primes] {
+                boost::math::detail::linear_sieve(static_cast<Z>(8192), small_primes);
+            });
+            thread_manager.push_back(std::move(t1));
+
+            for(size_t i{1}; i < processor_count - 1; ++i)
+            {
+                std::vector<Z> temp;
+                temp.reserve(primes_in_range);
+                prime_vectors.emplace_back(temp);
+                std::thread t([current_lower_bound, current_upper_bound, &prime_vectors, i] {
+                    boost::math::detail::mask_sieve(current_lower_bound, current_upper_bound, prime_vectors[i]);
+                });
+
+                thread_manager.push_back(std::move(t));
+
+                current_lower_bound = current_upper_bound;
+                current_upper_bound += range_per_thread;
+                primes_in_range = static_cast<Z>(current_upper_bound / std::log(static_cast<double>(current_upper_bound)) -
+                                                 current_lower_bound / std::log(static_cast<double>(current_lower_bound)));
+            }
+
+            std::vector<Z> temp;
+            temp.reserve(primes_in_range);
+            prime_vectors.emplace_back(temp);
+            std::thread t([current_lower_bound, upper_bound, &prime_vectors] {
+                boost::math::detail::mask_sieve(current_lower_bound, upper_bound, prime_vectors.back());
+            });
+
+            thread_manager.push_back(std::move(t));
+
+            for(auto &thread : thread_manager)
+            {
+                thread.join();
+            }
+
+            primes.insert(primes.begin(), small_primes.begin(), small_primes.end());
+            for(auto &v : prime_vectors)
+            {
+                primes.insert(primes.begin(), v.begin(), v.end());
+            }
         }
     }
 
