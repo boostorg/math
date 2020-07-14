@@ -12,7 +12,6 @@
 #include <cmath>
 #include <limits>
 #include <stdexcept>
-#include <boost/core/demangle.hpp>
 
 namespace boost::math::tools {
 
@@ -27,26 +26,29 @@ public:
         using std::isfinite;
         if (!isfinite(x))
         {
-            throw std::domain_error("Cannot convert non-finites into a Luröth representation.");
+            throw std::domain_error("Cannot convert non-finites into a Lüroth representation.");
         }
         d_.reserve(50);
-        Real dj = floor(x);
-        d_.push_back(static_cast<Z>(dj));
-        if (dj == x) {
+        Real dn = floor(x);
+        d_.push_back(static_cast<Z>(dn));
+        if (dn == x) {
            d_.shrink_to_fit();
            return;
         }
-        x= x - dj;
-        // now x in (0,1):
-        Real d1 = floor(1/x);
-        d_.push_back(static_cast<Z>(d1));
-        auto T = [](Real z) { Real d = floor(1/z); return d*(d+1)*(z - 1/(d+1)); };
-        
-        int n = 0;
-        while ( n++ < 50) {
-           x = T(x);
+        // This attempts to follow the notation of:
+        // "Khinchine's constant for Luroth Representation", by Sophia Kalpazidou.
+        x = x - dn;
+        Real computed = dn;
+        Real prod = 1;
+        // Why scale by 2eps? Well, I tried it and this is a choice that rarely prints an incorrect digit.
+        while (abs(x_ - computed) > 2*std::numeric_limits<Real>::epsilon()*abs(x_))
+        {
            Real dn = floor(1/x);
            d_.push_back(static_cast<Z>(dn));
+           Real tmp = 1/(dn+1);
+           computed += prod*tmp;
+           prod *= tmp/dn;
+           x = dn*(dn+1)*(x - tmp);
         }
     }
     

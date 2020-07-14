@@ -36,7 +36,7 @@ Here's a minimal working example:
     auto luroth = luroth_expansion(pi<long double>());
     std::cout << "π ≈ " << luroth << "\n";
     // Prints:
-    // π ≈ ((3;..)
+    // π ≈ ((3; 7, 1, 1, 1, ..)
 
 The class computes denominators while simultaneously computing convergents.
 Once a convergent is within a few ulps of the input value, the computation stops.
