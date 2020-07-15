@@ -261,7 +261,7 @@ This function is `constexpr` only if the compiler supports C++14 constexpr funct
 
 [endsect] [/section:primes Prime Numbers]
 
-[section:primes Prime Sieve]
+[section:prime_sieve Prime Sieve]
 
 [h4 Synopsis]
 
@@ -301,7 +301,7 @@ and all available concurrency will be used. Additionally, the memory requirement
 
 /Nota bene:/ If `std::thread::hardware_concurrency()` returns 0 the max number of threads will be set to 2.
 
-Example:
+[h4 Examples]
     // To calculate primes 2 - 1,000,000 in parallel
     std::vector<int64_t> primes;
     boost::math::prime_sieve(std::execution::par, 1000000, std::back_inserter(primes));
@@ -310,19 +310,13 @@ Example:
     std::vector<int64_t> primes;
     boost::math::prime_range(100, 1000, std::back_inserter(primes));
 
-
-/Nota bene:/ For values larger than 2^24 the returned primes will not be sorted
-
-
 [h4 References]
 * Sorensen, Jonathan [@https://research.cs.wisc.edu/techreports/1990/TR909.pdf An Introduction to Prime Number Sieves]
 * Gries, David and Misra, Jayadev [@https://www.cs.utexas.edu/users/misra/scannedPdf.dir/linearSieve.pdf A Linear Sieve Algorithm for Finding Prime Numbers]
 
 [endsect] [/section:primes Prime Sieve]
 
-[endsect] [/section:primes]
-
-[endsect] [/Number Series]
+[endsect] [/section:number_series Number Series]
 
 [/
   Copyright 2013, 2014 Nikhar Agrawal, Christopher Kormanyos, John Maddock, Paul A. Bristow.

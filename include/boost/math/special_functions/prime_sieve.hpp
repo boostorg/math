@@ -228,7 +228,7 @@ auto prime_sieve(ExecutionPolicy&& policy, Z upper_bound, OutputIterator output)
             primes.insert(primes.begin(), small_primes.begin(), small_primes.end());
             for(auto &v : prime_vectors)
             {
-                primes.insert(primes.begin(), v.begin(), v.end());
+                primes.insert(primes.end(), v.begin(), v.end());
             }
         }
     }
