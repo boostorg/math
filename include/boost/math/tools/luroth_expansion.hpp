@@ -40,8 +40,11 @@ public:
         x = x - dn;
         Real computed = dn;
         Real prod = 1;
-        // Why scale by 2eps? Well, I tried it and this is a choice that rarely prints an incorrect digit.
-        while (abs(x_ - computed) > 2*std::numeric_limits<Real>::epsilon()*abs(x_))
+        // Let the error bound grow by 1 ULP/iteration.
+        // I haven't done the error analysis to show that this is an expected rate of error growth,
+        // but if you don't do this, you can easily get into an infinite loop.
+        int64_t i = 0;
+        while (abs(x_ - computed) > (1 + i++)*std::numeric_limits<Real>::epsilon()*abs(x_)/2)
         {
            Real dn = floor(1/x);
            d_.push_back(static_cast<Z>(dn));
