@@ -17,6 +17,8 @@
 
         std::vector<Z> const & digits() const;
 
+        Real digit_geometric_mean() const;
+
         template<typename T, typename Z_>
         friend std::ostream& operator<<(std::ostream& out, luroth_expansion<T, Z_>& luroth);
     };
@@ -45,6 +47,8 @@ Once a convergent is within a few ulps of the input value, the computation stops
 We follow the definition given in Finch; with the modification that we do not constrain the input to be in the interval [0,1]
 and let the first digit be the floor of the input.
 
+For almost all real numbers, the geometric mean of the digits converges to a constant which is approximately 2.2001610580.
+This is "Khinchin's constant" for the Luroth representation.
 
 [heading References]
 

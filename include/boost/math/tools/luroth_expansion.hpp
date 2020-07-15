@@ -56,6 +56,21 @@ public:
     const std::vector<Z>& digits() const {
       return d_;
     }
+
+    // Under the assumption of 'randomness', this mean converges to 2.2001610580.
+    // See Finch, Mathematical Constants, section 1.8.1.
+    Real digit_geometric_mean() const {
+        if (d_.size() == 1) {
+            return std::numeric_limits<Real>::quiet_NaN();
+        }
+        using std::log;
+        using std::exp;
+        Real g = 0;
+        for (size_t i = 1; i < d_.size(); ++i) {
+            g += log(static_cast<Real>(d_[i]));
+        }
+        return exp(g/(d_.size() - 1));
+    }
     
     template<typename T, typename Z2>
     friend std::ostream& operator<<(std::ostream& out, luroth_expansion<T, Z2>& scf);
@@ -78,7 +93,7 @@ std::ostream& operator<<(std::ostream& out, luroth_expansion<Real, Z2>& luroth)
    {
       out << std::setprecision(p);
    }
-   
+
    out << "((" << luroth.d_.front();
    if (luroth.d_.size() > 1)
    {
