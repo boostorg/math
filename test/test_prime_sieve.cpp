@@ -149,6 +149,17 @@ void test_par_prime_sieve()
     BOOST_TEST_EQ(d_primes.size(), ref);
 }
 
+template<typename Z>
+void test_par_prime_sieve_large()
+{
+    std::vector<Z> primes;
+    Z ref {1077871}; // Calculated with wolfram-alpha
+
+    // Force the sieve into the multi-threading section
+    boost::math::prime_sieve(std::execution::par, 16777217, std::back_inserter(primes));
+    BOOST_TEST_EQ(primes.size(), ref);
+}
+
 int main()
 {
 
@@ -170,6 +181,8 @@ int main()
     test_par_prime_sieve<int32_t>();
     test_par_prime_sieve<int64_t>();
     test_par_prime_sieve<uint32_t>();
+
+    //test_par_prime_sieve_large<int64_t>();
 
     boost::report_errors();
 }
