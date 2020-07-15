@@ -14,9 +14,9 @@
 #include <vector>
 #include <iterator>
 #include <cmath>
-
-#if __has_include(<execution>)
 #include <thread>
+
+#if __cplusplus >= 201703
 #include <execution>
 #endif
 
@@ -127,7 +127,7 @@ void mask_sieve(Z lower_bound, Z upper_bound, Container &c)
 }
 } // End namespace detail
 
-#if __has_include(<execution>)
+#if __cplusplus >= 201703
 template<class ExecutionPolicy, typename Z, class OutputIterator>
 auto prime_sieve(ExecutionPolicy&& policy, Z upper_bound, OutputIterator output) -> decltype(output)
 {
@@ -252,7 +252,7 @@ auto prime_range(ExecutionPolicy&& policy, Z lower_bound, Z upper_bound, OutputI
 
     return std::move(it, primes.end(), output);
 }
-#endif //__has_include(<execution>)
+#endif //__cplusplus >= 201703
 
 template<typename Z, class OutputIterator>
 auto prime_sieve(Z upper_bound, OutputIterator output) -> decltype(output)
