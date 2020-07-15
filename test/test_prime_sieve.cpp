@@ -107,6 +107,7 @@ void test_prime_sieve_overflow()
                              std::back_inserter(primes));
 }
 
+#if __cplusplus >= 201703
 template<typename Z>
 void test_par_prime_sieve()
 {
@@ -159,6 +160,7 @@ void test_par_prime_sieve_large()
     boost::math::prime_sieve(std::execution::par, 16777217, std::back_inserter(primes));
     BOOST_TEST_EQ(primes.size(), ref);
 }
+#endif //__cplusplus >= 201703
 
 int main()
 {
@@ -177,12 +179,14 @@ int main()
 
     test_prime_sieve<boost::multiprecision::cpp_int>();
 
+    #if __cplusplus >= 201703
     test_par_prime_sieve<int>();
     test_par_prime_sieve<int32_t>();
     test_par_prime_sieve<int64_t>();
     test_par_prime_sieve<uint32_t>();
 
     //test_par_prime_sieve_large<int64_t>();
+    #endif
 
     boost::report_errors();
 }
