@@ -292,11 +292,12 @@ There are two sets of functions available `prime_sieve` and `prime_range`. `prim
 range 2 to `upper_bound` inclusive. `prime_range` will return all the primes in the range `lower_bound` to `upper_bound`
 inclusive.
 
-If you have a C++17 compatible compiler you are able to pass an execution policy to both both functions. Any
-policy besides `std::execution::seq` will enable internal multi-threading.
+If you have a C++17 compatible compiler you are able to pass an execution policy to both functions. Any
+policy besides `std::execution::seq` will enable internal multi-threading. If your compiler is not C++17 compatible the
+sequential overloads will be used.
 
 For upper_bound <= 2^24 two threads will be used. For any value larger than 2^24 `std::thread::hardware_concurrency()` will be called,
-and all available concurrency will be used. Additionally, the memory requirements are `O(sqrt(N)`.
+and all available concurrency will be used. Additionally, the memory requirements are `O(sqrt(N))`.
 
 /Nota bene:/ If `std::thread::hardware_concurrency()` returns 0 the max number of threads will be set to 2.
 
