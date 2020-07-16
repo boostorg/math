@@ -34,7 +34,11 @@ void test_integral()
 template<class Real>
 void test_halves()
 {
-    // x = n + 1/k => lur(x) = ((n; k-1))
+    // x = n + 1/k => lur(x) = ((n; k - 1))
+    // Note that this is a bit different that Kalpazidou (examine the half-open interval of definition carefully).
+    // One way to examine this definition is correct for rationals (it never happens for irrationals)
+    // is to consider i + 1/3. If you follow Kalpazidou, then you get ((i, 3, 0)); a zero digit!
+    // That's bad since it destroys uniqueness and also breaks the computation of the geometric mean.
     for (int64_t i = -20; i < 20; ++i) {
         Real x = i + Real(1)/Real(2);
         auto luroth = luroth_expansion<Real>(x);
@@ -44,7 +48,6 @@ void test_halves()
         CHECK_EQUAL(int64_t(1), a.back());
     }
 
-    // We'll also test quarters; why not?
     for (int64_t i = -20; i < 20; ++i) {
         Real x = i + Real(1)/Real(4);
         auto luroth = luroth_expansion<Real>(x);
@@ -62,8 +65,14 @@ void test_halves()
         CHECK_EQUAL(i, a.front());
         CHECK_EQUAL(int64_t(7), a.back());
     }
+    // 1/3 is a pain because it's not representable:
+    Real x = Real(1)/Real(3);
+    auto luroth = luroth_expansion<Real>(x);
+    auto const & a = luroth.digits();
+    CHECK_EQUAL(size_t(2), a.size());
+    CHECK_EQUAL(int64_t(0), a.front());
+    CHECK_EQUAL(int64_t(2), a.back());
 }
-
 
 
 int main()

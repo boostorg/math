@@ -25,7 +25,7 @@
     }
 
 
-The `luroth_expansion` class provided by Boost expands a floating point number into a Luroth representation, i.e.,
+The `luroth_expansion` class provided by Boost expands a floating point number into a Lüroth representation, i.e.,
 
 [$../equations/luroth_expansion.svg]
 
@@ -38,17 +38,19 @@ Here's a minimal working example:
     auto luroth = luroth_expansion(pi<long double>());
     std::cout << "π ≈ " << luroth << "\n";
     // Prints:
-    // π ≈ ((3; 7, 1, 1, 1, ..)
+    // π ≈ ((3; 7, 1, 1, 1, 2, 1, 4, 23, 4, 1, 1, 1, 1, 80, 1, 1, 5))
 
 The class computes denominators while simultaneously computing convergents.
 Once a convergent is within a few ulps of the input value, the computation stops.
 
-/Nota bene:/ There is an alternative definition of the Luroth representation where every digit is shifted by 1.
-We follow the definition given in Finch; with the modification that we do not constrain the input to be in the interval [0,1]
+/Nota bene:/ There is an alternative definition of the Lüroth representation where every digit is shifted by 1.
+We follow the definition given in Kalpazidou; with the modification that we do not constrain the input to be in the interval [0,1]
 and let the first digit be the floor of the input.
 
 For almost all real numbers, the geometric mean of the digits converges to a constant which is approximately 2.2001610580.
-This is "Khinchin's constant" for the Luroth representation.
+This is "Khinchin's constant" for the Lüroth representation.
+
+
 
 [heading References]
 

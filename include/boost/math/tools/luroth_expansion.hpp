@@ -31,7 +31,8 @@ public:
         d_.reserve(50);
         Real dn = floor(x);
         d_.push_back(static_cast<Z>(dn));
-        if (dn == x) {
+        if (dn == x)
+        {
            d_.shrink_to_fit();
            return;
         }
@@ -43,16 +44,37 @@ public:
         // Let the error bound grow by 1 ULP/iteration.
         // I haven't done the error analysis to show that this is an expected rate of error growth,
         // but if you don't do this, you can easily get into an infinite loop.
-        int64_t i = 0;
-        while (abs(x_ - computed) > (1 + i++)*std::numeric_limits<Real>::epsilon()*abs(x_)/2)
+        Real i = 1;
+        Real scale = std::numeric_limits<Real>::epsilon()*abs(x_)/2;
+        while (abs(x_ - computed) > (i++)*scale)
         {
-           Real dn = floor(1/x);
+           Real recip = 1/x;
+           Real dn = floor(recip);
+           // x = n + 1/k => lur(x) = ((n; k - 1))
+           // Note that this is a bit different than Kalpazidou (examine the half-open interval of definition carefully).
+           // One way to examine this definition is better for rationals (it never happens for irrationals)
+           // is to consider i + 1/3. If you follow Kalpazidou, then you get ((i, 3, 0)); a zero digit!
+           // That's bad since it destroys uniqueness and also breaks the computation of the geometric mean.
+           if (recip == dn) {
+              d_.push_back(static_cast<Z>(dn - 1));
+              break;
+           }
            d_.push_back(static_cast<Z>(dn));
            Real tmp = 1/(dn+1);
            computed += prod*tmp;
            prod *= tmp/dn;
            x = dn*(dn+1)*(x - tmp);
         }
+
+        for (size_t i = 1; i < d_.size(); ++i)
+        {
+            // Sanity check:
+            if (d_[i] <= 0)
+            {
+                throw std::domain_error("Found a digit <= 0; this is an error.");
+            }
+        }
+        d_.shrink_to_fit();
     }
     
     
