@@ -6,7 +6,6 @@
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/fibonacci.hpp>
 #include <boost/multiprecision/cpp_int.hpp>
-#include <boost/multiprecision/gmp.hpp>
 #include <cstdint>
 #include <exception>
 #define BOOST_TEST_MODULE Fibonacci_Test_Module
@@ -14,7 +13,6 @@
 
 using boost::math::fibonacci;
 using namespace boost::multiprecision;
-typedef mpz_int GMP;
 typedef cpp_int BST;
 typedef number<backends::cpp_int_backend<2048, 2048, unsigned_magnitude, unchecked>> BST_2048;
 
@@ -35,7 +33,7 @@ BOOST_AUTO_TEST_CASE(big_integer_check) {
     // GMP is used as type for fibonacci and cpp_int is for naive computation
     BST val = 0, a = 0, b = 1;
     for (int i = 0; i <= 1e4; ++i) {
-        BOOST_TEST(fibonacci<GMP>(i) == GMP(a));
+        BOOST_TEST(fibonacci<BST>(i) == a);
         val = b, b += a, a = val;
     }
 }
