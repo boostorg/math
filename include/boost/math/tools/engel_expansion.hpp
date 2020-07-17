@@ -26,61 +26,59 @@ public:
         using std::isfinite;
         if (!isfinite(x))
         {
-            throw std::domain_error("Cannot convert non-finites into a Lüroth representation.");
+            throw std::domain_error("Cannot convert non-finites into an Engel expansion.");
         }
-        d_.reserve(50);
-        Real dn = floor(x);
-        d_.push_back(static_cast<Z>(dn));
-        if (dn == x)
+
+        if(x==0)
         {
-           d_.shrink_to_fit();
-           return;
+            throw std::domain_error("Zero does not have an Engel expansion.");
         }
-        x = x - dn;
-        Real computed = dn;
-        Real prod = 1;
+        a_.reserve(64);
         // Let the error bound grow by 1 ULP/iteration.
         // I haven't done the error analysis to show that this is an expected rate of error growth,
         // but if you don't do this, you can easily get into an infinite loop.
         Real i = 1;
+        Real computed = 0;
+        Real term = 1;
         Real scale = std::numeric_limits<Real>::epsilon()*abs(x_)/2;
+        Real u = x;
         while (abs(x_ - computed) > (i++)*scale)
         {
-           Real recip = 1/x;
-           Real dn = floor(recip);
-           if (recip == dn) {
-              d_.push_back(static_cast<Z>(dn - 1));
-              break;
-           }
-           d_.push_back(static_cast<Z>(dn));
-           Real tmp = 1/(dn+1);
-           computed += prod*tmp;
-           prod *= tmp/dn;
-           x = dn*(dn+1)*(x - tmp);
+            Real recip = 1/u;
+            Real ak = ceil(recip);
+            a_.push_back(static_cast<Z>(ak));
+            u = u*ak - 1;
+            if (u==0)
+            {
+                break;
+            }
+            term /= ak;
+            computed += term;
         }
 
-        for (size_t i = 1; i < d_.size(); ++i)
+        for (size_t i = 1; i < a_.size(); ++i)
         {
             // Sanity check:
-            if (d_[i] < d_[i-1])
+            if (a_[i] < a_[i-1])
             {
-                throw std::domain_error("The digits of an Engel expansion must form a non-decreasing sequence.");
+                throw std::domain_error("The digits of an Engel expansion must form a non-decreasing sequence; consider increasing the wide of the integer type.");
             }
         }
-        d_.shrink_to_fit();
+        a_.shrink_to_fit();
     }
     
     
-    const std::vector<Z>& digits() const {
-      return d_;
+    const std::vector<Z>& digits() const
+    {
+        return a_;
     }
 
     template<typename T, typename Z2>
     friend std::ostream& operator<<(std::ostream& out, engel_expansion<T, Z2>& eng);
 
 private:
-    const Real x_;
-    std::vector<Z> d_;
+    Real x_;
+    std::vector<Z> a_;
 };
 
 
@@ -98,11 +96,11 @@ std::ostream& operator<<(std::ostream& out, engel_expansion<Real, Z2>& engel)
     }
 
     out << "{";
-    for (size_t i = 0; i < engel.d_.size() - 1; ++i)
+    for (size_t i = 0; i < engel.a_.size() - 1; ++i)
     {
-        out << engel.d_[i] << ", ";
+        out << engel.a_[i] << ", ";
     }
-    out << engel.d_.back();
+    out << engel.a_.back();
     out << "}";
     return out;
 }
