@@ -21,6 +21,7 @@ With these techniques, the code could be simplified.
 #endif
 
 #include <cstring>
+#include <limits>
 
 #include <boost/assert.hpp>
 #include <boost/cstdint.hpp>

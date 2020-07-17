@@ -33,9 +33,12 @@ struct numeric_traits<__float128>
    static const int max_exponent = 16384;
    static const bool is_specialized = true;
 };
-#else
+#elif LDBL_DIG > DBL_DIG
 typedef long double largest_float;
 #define BOOST_MATH_LARGEST_FLOAT_C(x) x##L
+#else
+typedef double largest_float;
+#define BOOST_MATH_LARGEST_FLOAT_C(x) x
 #endif
 
 template <class T>
