@@ -15,9 +15,16 @@
 #include <iterator>
 #include <cmath>
 #include <thread>
+#include <memory>
 
+#ifdef _MSVC_LANG
+#if _MSVC_LANG >= 201703 // _MSVC_LANG == __cplusplus: https://devblogs.microsoft.com/cppblog/msvc-now-correctly-reports-__cplusplus/
+#include <execution>
+#endif
+#else
 #if __cplusplus >= 201703
 #include <execution>
+#endif
 #endif
 
 namespace boost { namespace math { namespace detail
@@ -28,7 +35,7 @@ template<class Z, class Container>
 void linear_sieve(Z upper_bound, Container &c)
 {
     size_t least_divisors_size{static_cast<size_t>(upper_bound + 1)};
-    Z *least_divisors{new Z[least_divisors_size]{0}};
+    std::unique_ptr<Z[]> least_divisors{new Z[least_divisors_size]{0}};
 
     for (Z i{2}; i <= upper_bound; ++i)
     {
@@ -61,8 +68,6 @@ void linear_sieve(Z upper_bound, Container &c)
             }
         }
     }
-
-    delete[] least_divisors;
 }
 
 template<class Z, class Container>
@@ -85,18 +90,12 @@ void mask_sieve(Z lower_bound, Z upper_bound, const PrimeContainer& primes, Cont
 {
     Z limit {static_cast<Z>(std::floor(std::sqrt(static_cast<double>(upper_bound)))) + 1};
 
-    size_t primes_size;
+    size_t primes_size {};
     auto it{primes.begin()};
-    while(*it < limit && it != primes.end())
+    while(it != primes.end() && *it < limit)
     {
         ++primes_size;
         ++it;
-    }
-
-    // Needed for thread sanitizer. Throws FPE without this check.
-    if(primes_size > primes.size())
-    {
-        primes_size = primes.size();
     }
 
     // Faster and safer than std::vector<bool> which does not behave like all other vectors
@@ -132,7 +131,7 @@ template<typename Z, class Container>
 void mask_sieve(Z lower_bound, Z upper_bound, Container &c)
 {
     Z limit{static_cast<Z>(std::floor(std::sqrt(static_cast<double>(upper_bound)))) + 1};
-    std::vector<Z> primes;
+    std::vector<Z> primes {};
     primes.reserve(limit / std::log(limit));
 
     boost::math::detail::linear_sieve(limit, primes);
@@ -146,7 +145,7 @@ template <typename Z, class PrimesContainer, class Container>
 void segmented_sieve(Z lower_bound, Z upper_bound, const PrimesContainer &primes, Container &c)
 {
     const Z L1_SIZE {32648};
-    const Z interval {static_cast<Z>(std::floor(L1_SIZE / sizeof(Z)))};
+    const Z interval {L1_SIZE * 4};
     Z current_lower_bound{lower_bound};
     Z current_upper_bound{current_lower_bound + interval};
 
@@ -169,7 +168,7 @@ template <typename Z, class Container>
 void segmented_sieve(Z lower_bound, Z upper_bound, Container &c)
 {
     Z limit{static_cast<Z>(std::floor(std::sqrt(static_cast<double>(upper_bound)))) + 1};
-    std::vector<Z> primes;
+    std::vector<Z> primes {};
     primes.reserve(limit / std::log(limit));
 
     // Prepare for max value so you do not have to calculate this again
@@ -194,7 +193,7 @@ auto prime_sieve(ExecutionPolicy&& policy, Z upper_bound, OutputIterator output)
     static_assert(std::is_integral<Z>::value, "No primes for floating point types");
     BOOST_ASSERT_MSG(upper_bound + 1 < std::numeric_limits<Z>::max(), "Type Overflow");
 
-    std::vector<Z> primes;
+    std::vector<Z> primes {};
     primes.reserve(upper_bound / std::log(static_cast<double>(upper_bound)));
 
     // Range for when the linear sieve is no longer faster than threading
@@ -219,7 +218,7 @@ auto prime_sieve(ExecutionPolicy&& policy, Z upper_bound, OutputIterator output)
             processor_count = 2;
         }
 
-        std::vector<Z> small_primes;
+        std::vector<Z> small_primes {};
         small_primes.reserve(1000);
 
         // Threshold for when 2 thread performance begins to be non-linear, or when the system can only support two threads
@@ -243,7 +242,7 @@ auto prime_sieve(ExecutionPolicy&& policy, Z upper_bound, OutputIterator output)
         {
             //Pre-generate all of the primes so that each thread does not have to
             Z limit{static_cast<Z>(std::floor(std::sqrt(static_cast<double>(upper_bound)))) + 1};
-            std::vector<Z> pre_generated_primes;
+            std::vector<Z> pre_generated_primes {};
             pre_generated_primes.reserve(limit / std::log(limit));
 
             if(limit < 8192)
@@ -265,7 +264,7 @@ auto prime_sieve(ExecutionPolicy&& policy, Z upper_bound, OutputIterator output)
                 pre_generated_primes.insert(pre_generated_primes.begin(), small_primes.begin(), small_primes.end());
             }
 
-            std::vector<std::thread> thread_manager;
+            std::vector<std::thread> thread_manager {};
             std::vector<std::vector<Z>> prime_vectors(processor_count - 1);
             const Z range_per_thread = upper_bound / (processor_count - 1);
             Z current_lower_bound {8192};
@@ -275,7 +274,7 @@ auto prime_sieve(ExecutionPolicy&& policy, Z upper_bound, OutputIterator output)
 
             for(size_t i{1}; i < processor_count - 1; ++i)
             {
-                std::vector<Z> temp;
+                std::vector<Z> temp {};
                 temp.reserve(primes_in_range);
                 prime_vectors.emplace_back(temp);
 
@@ -292,7 +291,7 @@ auto prime_sieve(ExecutionPolicy&& policy, Z upper_bound, OutputIterator output)
                                                  current_lower_bound / std::log(static_cast<double>(current_lower_bound)));
             }
 
-            std::vector<Z> temp;
+            std::vector<Z> temp {};
             temp.reserve(primes_in_range);
             prime_vectors.emplace_back(temp);
 
@@ -320,7 +319,7 @@ auto prime_sieve(ExecutionPolicy&& policy, Z upper_bound, OutputIterator output)
 template<class ExecutionPolicy, class Z, class OutputIterator>
 auto prime_range(ExecutionPolicy&& policy, Z lower_bound, Z upper_bound, OutputIterator output) -> decltype(output)
 {
-    std::vector<Z> primes;
+    std::vector<Z> primes {};
     primes.reserve(upper_bound / std::log(static_cast<double>(upper_bound)));
 
     boost::math::prime_sieve(policy, upper_bound, std::back_inserter(primes));
@@ -341,7 +340,7 @@ auto prime_sieve(Z upper_bound, OutputIterator output) -> decltype(output)
     static_assert(std::is_integral<Z>::value, "No primes for floating point types");
     BOOST_ASSERT_MSG(upper_bound + 1 < std::numeric_limits<Z>::max(), "Type Overflow");
 
-    std::vector<Z> primes;
+    std::vector<Z> primes{};
     primes.reserve(upper_bound / std::log(upper_bound));
 
     if (upper_bound <= 8192)
@@ -351,7 +350,7 @@ auto prime_sieve(Z upper_bound, OutputIterator output) -> decltype(output)
 
     else
     {
-        boost::math::detail::mask_sieve(static_cast<Z>(2), upper_bound, primes);
+        boost::math::detail::segmented_sieve(static_cast<Z>(2), upper_bound, primes);
     }
 
     return std::move(primes.begin(), primes.end(), output);
@@ -360,7 +359,7 @@ auto prime_sieve(Z upper_bound, OutputIterator output) -> decltype(output)
 template<class Z, class OutputIterator>
 auto prime_range(Z lower_bound, Z upper_bound, OutputIterator output) -> decltype(output)
 {
-    std::vector<Z> primes;
+    std::vector<Z> primes{};
     primes.reserve(upper_bound / std::log(static_cast<double>(upper_bound)));
 
     boost::math::prime_sieve(upper_bound, std::back_inserter(primes));
