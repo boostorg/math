@@ -85,11 +85,6 @@ void test_prime_range()
     boost::math::prime_range(100, 1000, std::back_inserter(primes));
     BOOST_TEST_EQ(primes.size(), ref);
 
-    // Does it work with 0 difference?
-    primes.clear();
-    boost::math::prime_range(2, 2, std::back_inserter(primes));
-    BOOST_TEST_EQ(primes.size(), 1);
-
     // Will it call the sieve for large input
     ref = 78498; // Calculated with wolfram-alpha
     primes.clear();
@@ -107,7 +102,7 @@ void test_prime_sieve_overflow()
                              std::back_inserter(primes));
 }
 
-#if __cplusplus >= 201703
+#if __cplusplus >= 201703 || _MSVC_LANG >= 201703
 template<typename Z>
 void test_par_prime_sieve()
 {
@@ -164,7 +159,6 @@ void test_par_prime_sieve_large()
 
 int main()
 {
-
     test_prime_sieve<int>();
     test_prime_sieve<int32_t>();
     test_prime_sieve<int64_t>();
@@ -179,7 +173,7 @@ int main()
 
     test_prime_sieve<boost::multiprecision::cpp_int>();
 
-    #if __cplusplus >= 201703
+    #if __cplusplus >= 201703 || _MSVC_LANG >= 201703
     test_par_prime_sieve<int>();
     test_par_prime_sieve<int32_t>();
     test_par_prime_sieve<int64_t>();
