@@ -289,8 +289,7 @@ namespace boost { namespace math {
 [h4 Description]
 
 There are two sets of functions available `prime_sieve` and `prime_range`. `prime_sieve` will return all primes in the
-range 2 to `upper_bound` inclusive. `prime_range` will return all the primes in the range `lower_bound` to `upper_bound`
-inclusive.
+range [2, `upper_bound`). `prime_range` will return all the primes in the range [lower_bound, upper_bound).
 
 If you have a C++17 compatible compiler you are able to pass an execution policy to both functions. Any
 policy besides `std::execution::seq` will enable internal multi-threading. If your compiler is not C++17 compatible the
