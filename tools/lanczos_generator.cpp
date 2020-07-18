@@ -3,6 +3,7 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#include "mp_t.hpp"
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/tools/polynomial.hpp>
@@ -17,7 +18,6 @@
 #include <boost/array.hpp>
 #include <boost/random.hpp>
 #include <boost/chrono.hpp>
-#include "mp_t.hpp"
 
 //
 // Define MP_TYPE
@@ -4848,7 +4848,7 @@ void print_code(const lanczos_info<T>& l, const char* name, int precision = std:
       "\n// Generated with compiler: " << BOOST_COMPILER << " on " << BOOST_PLATFORM << " at " << __DATE__ << "\n"
       "// Type precision was " << precision2 << " bits or " << precision << " max_digits10\n"
       "//\n"
-      "struct lanczos" << l.n << name << " : public mpl::int_<" << precision2 << ">\n"
+      "struct lanczos" << l.n << name << " : public boost::integral_constant<int, " << precision2 << ">\n"
       "{\n"
       "   template <class T>\n"
       "   static T lanczos_sum(const T& z)\n"

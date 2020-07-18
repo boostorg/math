@@ -10,6 +10,7 @@
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/tools/tuple.hpp>
 #include <boost/math/tools/fraction.hpp>
+#include <boost/math/tools/cxx03_warn.hpp>
 
 #ifdef BOOST_NO_CXX11_HDR_TUPLE
 #error "This header requires C++11 support"

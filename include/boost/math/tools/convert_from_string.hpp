@@ -23,7 +23,7 @@ namespace boost{ namespace math{ namespace tools{
    };
 
    template <class Real>
-   Real convert_from_string(const char* p, const mpl::false_&)
+   Real convert_from_string(const char* p, const boost::false_type&)
    {
 #ifdef BOOST_MATH_NO_LEXICAL_CAST
       // This function should not compile, we don't have the necessary functionality to support it:
@@ -33,7 +33,7 @@ namespace boost{ namespace math{ namespace tools{
 #endif
    }
    template <class Real>
-   BOOST_CONSTEXPR const char* convert_from_string(const char* p, const mpl::true_&) BOOST_NOEXCEPT
+   BOOST_CONSTEXPR const char* convert_from_string(const char* p, const boost::true_type&) BOOST_NOEXCEPT
    {
       return p;
    }

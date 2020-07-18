@@ -4,17 +4,11 @@
  * Boost Software License, Version 1.0. (See accompanying file
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  */
-#define BOOST_TEST_MODULE chebyshev_transform_test
-
-#include <boost/cstdfloat.hpp>
+#include "math_unit_test.hpp"
 #include <boost/type_index.hpp>
-#include <boost/test/included/unit_test.hpp>
-#include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/special_functions/chebyshev.hpp>
 #include <boost/math/special_functions/chebyshev_transform.hpp>
 #include <boost/math/special_functions/sinc.hpp>
-#include <boost/multiprecision/cpp_bin_float.hpp>
-#include <boost/multiprecision/cpp_dec_float.hpp>
 
 #if !defined(TEST1) && !defined(TEST2) && !defined(TEST3) && !defined(TEST4)
 #  define TEST1
@@ -23,9 +17,6 @@
 #  define TEST4
 #endif
 
-using boost::multiprecision::cpp_bin_float_quad;
-using boost::multiprecision::cpp_bin_float_50;
-using boost::multiprecision::cpp_bin_float_100;
 using boost::math::chebyshev_t;
 using boost::math::chebyshev_t_prime;
 using boost::math::chebyshev_u;
@@ -41,8 +32,8 @@ void test_sin_chebyshev_transform()
     using std::cos;
     using std::abs;
 
-    Real tol = 10*std::numeric_limits<Real>::epsilon();
-    auto f = [](Real x) { return sin(x); };
+    Real tol = std::numeric_limits<Real>::epsilon();
+    auto f = [](Real x)->Real { return sin(x); };
     Real a = 0;
     Real b = 1;
     chebyshev_transform<Real> cheb(f, a, b, tol);
@@ -52,29 +43,14 @@ void test_sin_chebyshev_transform()
     {
         Real s = sin(x);
         Real c = cos(x);
-        if (abs(s) < tol)
-        {
-            BOOST_CHECK_SMALL(cheb(x), 100*tol);
-            BOOST_CHECK_CLOSE_FRACTION(c, cheb.prime(x), 100*tol);
-        }
-        else
-        {
-            BOOST_CHECK_CLOSE_FRACTION(s, cheb(x), 100*tol);
-            if (abs(c) < tol)
-            {
-                BOOST_CHECK_SMALL(cheb.prime(x), 100*tol);
-            }
-            else
-            {
-                BOOST_CHECK_CLOSE_FRACTION(c, cheb.prime(x), 100*tol);
-            }
-        }
+        CHECK_ABSOLUTE_ERROR(s, cheb(x), tol);
+        CHECK_ABSOLUTE_ERROR(c, cheb.prime(x), 150*tol);
         x += static_cast<Real>(1)/static_cast<Real>(1 << 7);
     }
 
     Real Q = cheb.integrate();
 
-    BOOST_CHECK_CLOSE_FRACTION(1 - cos(static_cast<Real>(1)), Q, 100*tol);
+    CHECK_ABSOLUTE_ERROR(1 - cos(static_cast<Real>(1)), Q, 100*tol);
 }
 
 
@@ -88,7 +64,7 @@ void test_sinc_chebyshev_transform()
     using boost::math::chebyshev_transform;
     using boost::math::constants::half_pi;
 
-    Real tol = 500*std::numeric_limits<Real>::epsilon();
+    Real tol = 100*std::numeric_limits<Real>::epsilon();
     auto f = [](Real x) { return boost::math::sinc_pi(x); };
     Real a = 0;
     Real b = 1;
@@ -100,30 +76,16 @@ void test_sinc_chebyshev_transform()
         Real s = sinc_pi(x);
         Real ds = (cos(x)-sinc_pi(x))/x;
         if (x == 0) { ds = 0; }
-        if (s < tol)
-        {
-            BOOST_CHECK_SMALL(cheb(x), tol);
-        }
-        else
-        {
-            BOOST_CHECK_CLOSE_FRACTION(s, cheb(x), tol);
-        }
 
-        if (abs(ds) < tol)
-        {
-            BOOST_CHECK_SMALL(cheb.prime(x), 5 * tol);
-        }
-        else
-        {
-            BOOST_CHECK_CLOSE_FRACTION(ds, cheb.prime(x), 300*tol);
-        }
+        CHECK_ABSOLUTE_ERROR(s, cheb(x), tol);
+        CHECK_ABSOLUTE_ERROR(ds, cheb.prime(x), 10*tol);
         x += static_cast<Real>(1)/static_cast<Real>(1 << 7);
     }
 
     Real Q = cheb.integrate();
     //NIntegrate[Sinc[x], {x, 0, 1}, WorkingPrecision -> 200, AccuracyGoal -> 150, PrecisionGoal -> 150, MaxRecursion -> 150]
     Real Q_exp = boost::lexical_cast<Real>("0.94608307036718301494135331382317965781233795473811179047145477356668");
-    BOOST_CHECK_CLOSE_FRACTION(Q_exp, Q, tol);
+    CHECK_ABSOLUTE_ERROR(Q_exp, Q, tol);
 }
 
 
@@ -133,6 +95,8 @@ template<class Real>
 void test_atap_examples()
 {
     using std::sin;
+    using std::exp;
+    using std::sqrt;
     using boost::math::constants::half;
     using boost::math::sinc_pi;
     using boost::math::chebyshev_transform;
@@ -144,32 +108,36 @@ void test_atap_examples()
                            Real u = (0 < s) - (s < 0);
                            return t + u; };
 
-    auto f3 = [](Real x) { return sin(6*x) + sin(60*exp(x)); };
-
-    auto f4 = [](Real x) { return 1/(1+1000*(x+half<Real>())*(x+half<Real>())) + 1/sqrt(1+1000*(x-.5)*(x-0.5));};
+    //auto f3 = [](Real x) { return sin(6*x) + sin(60*exp(x)); };
+    //auto f4 = [](Real x) { return 1/(1+1000*(x+half<Real>())*(x+half<Real>())) + 1/sqrt(1+1000*(x-Real(1)/Real(2))*(x-Real(1)/Real(2)));};
     Real a = -1;
     Real b = 1;
-    chebyshev_transform<Real> cheb1(f1, a, b);
+    chebyshev_transform<Real> cheb1(f1, a, b, tol);
     chebyshev_transform<Real> cheb2(f2, a, b, tol);
     //chebyshev_transform<Real> cheb3(f3, a, b, tol);
 
     Real x = a;
     while (x < b)
     {
-        //Real s = f1(x);
-        if (sizeof(Real) == sizeof(float))
+        // f1 and f2 are not differentiable; standard convergence rate theorems don't apply.
+        // Basically, the max refinements are always hit; so the error is not related to the precision of the type.
+        Real acceptable_error = sqrt(tol);
+        Real acceptable_error_2 = 9e-4;
+        if (std::is_same<Real, long double>::value)
         {
-           BOOST_CHECK_CLOSE_FRACTION(f1(x), cheb1(x), 4e-3);
+            acceptable_error = 1.6e-5;
         }
-        else
+        if (std::is_same<Real, double>::value)
         {
-           BOOST_CHECK_CLOSE_FRACTION(f1(x), cheb1(x), 1.3e-5);
+            acceptable_error *= 500;
         }
-        BOOST_CHECK_CLOSE_FRACTION(f2(x), cheb2(x), 6e-3);
-        //BOOST_CHECK_CLOSE_FRACTION(f3(x), cheb3(x), 100*tol);
+        CHECK_ABSOLUTE_ERROR(f1(x), cheb1(x), acceptable_error);
+
+        CHECK_ABSOLUTE_ERROR(f2(x), cheb2(x), acceptable_error_2);
         x += static_cast<Real>(1)/static_cast<Real>(1 << 7);
     }
 }
+
 
 //Validate that the Chebyshev polynomials are well approximated by the Chebyshev transform.
 template<class Real>
@@ -179,58 +147,44 @@ void test_chebyshev_chebyshev_transform()
     // T_0 = 1:
     auto t0 = [](Real) { return 1; };
     chebyshev_transform<Real> cheb0(t0, -1, 1);
-    BOOST_CHECK_CLOSE_FRACTION(cheb0.coefficients()[0], 2, tol);
+    CHECK_ABSOLUTE_ERROR(2, cheb0.coefficients()[0], tol);
 
     Real x = -1;
     while (x < 1)
     {
-        BOOST_CHECK_CLOSE_FRACTION(cheb0(x), 1, tol);
-        BOOST_CHECK_SMALL(cheb0.prime(x), tol);
+        CHECK_ABSOLUTE_ERROR(1, cheb0(x), tol);
+        CHECK_ABSOLUTE_ERROR(Real(0), cheb0.prime(x), tol);
         x += static_cast<Real>(1)/static_cast<Real>(1 << 7);
     }
 
     // T_1 = x:
     auto t1 = [](Real x) { return x; };
     chebyshev_transform<Real> cheb1(t1, -1, 1);
-    BOOST_CHECK_CLOSE_FRACTION(cheb1.coefficients()[1], 1, tol);
+    CHECK_ABSOLUTE_ERROR(Real(1), cheb1.coefficients()[1], tol);
 
     x = -1;
     while (x < 1)
     {
-        if (x == 0)
-        {
-            BOOST_CHECK_SMALL(cheb1(x), tol);
-        }
-        else
-        {
-            BOOST_CHECK_CLOSE_FRACTION(cheb1(x), x, tol);
-        }
-        BOOST_CHECK_CLOSE_FRACTION(cheb1.prime(x), 1, tol);
+        CHECK_ABSOLUTE_ERROR(x, cheb1(x), tol);
+        CHECK_ABSOLUTE_ERROR(Real(1), cheb1.prime(x), tol);
         x += static_cast<Real>(1)/static_cast<Real>(1 << 7);
     }
 
 
     auto t2 = [](Real x) { return 2*x*x-1; };
     chebyshev_transform<Real> cheb2(t2, -1, 1);
-    BOOST_CHECK_CLOSE_FRACTION(cheb2.coefficients()[2], 1, tol);
+    CHECK_ABSOLUTE_ERROR(Real(1), cheb2.coefficients()[2], tol);
 
     x = -1;
     while (x < 1)
     {
-        BOOST_CHECK_CLOSE_FRACTION(cheb2(x), t2(x), tol);
-        if (x != 0)
-        {
-            BOOST_CHECK_CLOSE_FRACTION(cheb2.prime(x), 4*x, tol);
-        }
-        else
-        {
-            BOOST_CHECK_SMALL(cheb2.prime(x), tol);
-        }
+        CHECK_ABSOLUTE_ERROR(t2(x), cheb2(x), tol);
+        CHECK_ABSOLUTE_ERROR(4*x, cheb2.prime(x), tol);
         x += static_cast<Real>(1)/static_cast<Real>(1 << 7);
     }
 }
 
-BOOST_AUTO_TEST_CASE(chebyshev_transform_test)
+int main()
 {
 #ifdef TEST1
     test_chebyshev_chebyshev_transform<float>();
@@ -258,6 +212,8 @@ BOOST_AUTO_TEST_CASE(chebyshev_transform_test)
     test_sinc_chebyshev_transform<__float128>();
 #endif
 #endif
+
+    return boost::math::test::report_errors();
 }
 
 

@@ -20,6 +20,7 @@
 #include <boost/cstdint.hpp>
 #include <boost/assert.hpp>
 #include <boost/throw_exception.hpp>
+#include <boost/math/tools/cxx03_warn.hpp>
 
 #ifdef BOOST_MSVC
 #pragma warning(push)

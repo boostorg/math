@@ -33,30 +33,33 @@ struct numeric_traits<__float128>
    static const int max_exponent = 16384;
    static const bool is_specialized = true;
 };
-#else
+#elif LDBL_DIG > DBL_DIG
 typedef long double largest_float;
 #define BOOST_MATH_LARGEST_FLOAT_C(x) x##L
+#else
+typedef double largest_float;
+#define BOOST_MATH_LARGEST_FLOAT_C(x) x
 #endif
 
 template <class T>
-inline BOOST_CONSTEXPR_OR_CONST T make_big_value(largest_float v, const char*, mpl::true_ const&, mpl::false_ const&) BOOST_MATH_NOEXCEPT(T)
+inline BOOST_CONSTEXPR_OR_CONST T make_big_value(largest_float v, const char*, boost::true_type const&, boost::false_type const&) BOOST_MATH_NOEXCEPT(T)
 {
    return static_cast<T>(v);
 }
 template <class T>
-inline BOOST_CONSTEXPR_OR_CONST T make_big_value(largest_float v, const char*, mpl::true_ const&, mpl::true_ const&) BOOST_MATH_NOEXCEPT(T)
+inline BOOST_CONSTEXPR_OR_CONST T make_big_value(largest_float v, const char*, boost::true_type const&, boost::true_type const&) BOOST_MATH_NOEXCEPT(T)
 {
    return static_cast<T>(v);
 }
 #ifndef BOOST_MATH_NO_LEXICAL_CAST
 template <class T>
-inline T make_big_value(largest_float, const char* s, mpl::false_ const&, mpl::false_ const&)
+inline T make_big_value(largest_float, const char* s, boost::false_type const&, boost::false_type const&)
 {
    return boost::lexical_cast<T>(s);
 }
 #endif
 template <class T>
-inline BOOST_MATH_CONSTEXPR T make_big_value(largest_float, const char* s, mpl::false_ const&, mpl::true_ const&) BOOST_MATH_NOEXCEPT(T)
+inline BOOST_MATH_CONSTEXPR T make_big_value(largest_float, const char* s, boost::false_type const&, boost::true_type const&) BOOST_MATH_NOEXCEPT(T)
 {
    return T(s);
 }
@@ -68,7 +71,7 @@ inline BOOST_MATH_CONSTEXPR T make_big_value(largest_float, const char* s, mpl::
    boost::math::tools::make_big_value<T>(\
       BOOST_MATH_LARGEST_FLOAT_C(x), \
       BOOST_STRINGIZE(x), \
-      boost::mpl::bool_< (boost::is_convertible<boost::math::tools::largest_float, T>::value) && \
+      boost::integral_constant<bool, (boost::is_convertible<boost::math::tools::largest_float, T>::value) && \
       ((D <= boost::math::tools::numeric_traits<boost::math::tools::largest_float>::digits) \
           || boost::is_floating_point<T>::value \
           || (boost::math::tools::numeric_traits<T>::is_specialized && \
@@ -79,7 +82,7 @@ inline BOOST_MATH_CONSTEXPR T make_big_value(largest_float, const char* s, mpl::
 //
 #define BOOST_MATH_HUGE_CONSTANT(T, D, x)\
    boost::math::tools::make_big_value<T>(0.0L, BOOST_STRINGIZE(x), \
-   boost::mpl::bool_<boost::is_floating_point<T>::value || (boost::math::tools::numeric_traits<T>::is_specialized && boost::math::tools::numeric_traits<T>::max_exponent <= boost::math::tools::numeric_traits<boost::math::tools::largest_float>::max_exponent && boost::math::tools::numeric_traits<T>::digits <= boost::math::tools::numeric_traits<boost::math::tools::largest_float>::digits)>(), \
+   boost::integral_constant<bool, boost::is_floating_point<T>::value || (boost::math::tools::numeric_traits<T>::is_specialized && boost::math::tools::numeric_traits<T>::max_exponent <= boost::math::tools::numeric_traits<boost::math::tools::largest_float>::max_exponent && boost::math::tools::numeric_traits<T>::digits <= boost::math::tools::numeric_traits<boost::math::tools::largest_float>::digits)>(), \
    boost::is_constructible<T, const char*>())
 
 }}} // namespaces

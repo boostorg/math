@@ -144,7 +144,7 @@ is used to obtain the result.  Whether we're adding
 * [@http://www.itl.nist.gov/div898/handbook/eda/section3/eda3663.htm NIST Exploratory Data Analysis]
 * [@http://mathworld.wolfram.com/CauchyDistribution.html Weisstein, Eric W. "Cauchy Distribution." From MathWorld--A Wolfram Web Resource.]
 
-[endsect][/section:cauchy_dist Cauchi]
+[endsect][/section:cauchy_dist Cauchy]
 
 [/ cauchy.qbk
   Copyright 2006, 2007 John Maddock and Paul A. Bristow.

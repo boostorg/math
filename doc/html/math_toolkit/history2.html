@@ -3,10 +3,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>History and What's New</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
-<link rel="home" href="../index.html" title="Math Toolkit 2.11.0">
-<link rel="up" href="../status.html" title="Chapter&#160;23.&#160;Library Status">
-<link rel="prev" href="../status.html" title="Chapter&#160;23.&#160;Library Status">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<link rel="home" href="../index.html" title="Math Toolkit 2.12.0">
+<link rel="up" href="../status.html" title="Chapter&#160;24.&#160;Library Status">
+<link rel="prev" href="../status.html" title="Chapter&#160;24.&#160;Library Status">
 <link rel="next" href="issues.html" title="Known Issues, and TODO List">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -38,6 +38,48 @@
     </p>
 <h5>
 <a name="math_toolkit.history2.h0"></a>
+      <span class="phrase"><a name="math_toolkit.history2.math_2_12_0_boost_1_73"></a></span><a class="link" href="history2.html#math_toolkit.history2.math_2_12_0_boost_1_73">Math-2.12.0
+      (Boost-1.73)</a>
+    </h5>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+          IMPORTANT: C++03 support is now deprecated and will be removed from March
+          2021.
+        </li>
+<li class="listitem">
+          Added <a class="link" href="cubic_hermite.html" title="Cubic Hermite interpolation">Cubic Hermite Interpolation.</a>
+        </li>
+<li class="listitem">
+          Added <a class="link" href="makima.html" title="Modified Akima interpolation">Modified Akima Interpolation.</a>
+        </li>
+<li class="listitem">
+          Added <a class="link" href="pchip.html" title="PCHIP interpolation">PCHIP Interpolation.</a>
+        </li>
+<li class="listitem">
+          Added <a class="link" href="quintic_hermite.html" title="Quintic Hermite interpolation">Quintic Hermite Interpolation.</a>
+        </li>
+<li class="listitem">
+          Added entropy to numerous distributions.
+        </li>
+<li class="listitem">
+          Allow trivial quadrature case where the two end points are equal, and in
+          addition allow bounds to be interchanged.
+        </li>
+<li class="listitem">
+          Fix exp_sinh quadrature to work with complex types over a non-native range.
+        </li>
+<li class="listitem">
+          Fix miscellaneous compiler warnings in factorial.hpp.
+        </li>
+<li class="listitem">
+          Use std::chrono rather than boost::chrono in timed pFq calculations.
+        </li>
+<li class="listitem">
+          Remove much of the old boost::mpl dependencies to improve constexpr support.
+        </li>
+</ul></div>
+<h5>
+<a name="math_toolkit.history2.h1"></a>
       <span class="phrase"><a name="math_toolkit.history2.math_2_11_0_boost_1_72"></a></span><a class="link" href="history2.html#math_toolkit.history2.math_2_11_0_boost_1_72">Math-2.11.0
       (Boost-1.72)</a>
     </h5>
@@ -99,7 +141,7 @@
         </li>
 </ul></div>
 <h5>
-<a name="math_toolkit.history2.h1"></a>
+<a name="math_toolkit.history2.h2"></a>
       <span class="phrase"><a name="math_toolkit.history2.math_2_10_0_boost_1_71"></a></span><a class="link" href="history2.html#math_toolkit.history2.math_2_10_0_boost_1_71">Math-2.10.0
       (Boost-1.71)</a>
     </h5>
@@ -133,7 +175,7 @@
         </li>
 </ul></div>
 <h5>
-<a name="math_toolkit.history2.h2"></a>
+<a name="math_toolkit.history2.h3"></a>
       <span class="phrase"><a name="math_toolkit.history2.math_2_9_0_boost_1_70"></a></span><a class="link" href="history2.html#math_toolkit.history2.math_2_9_0_boost_1_70">Math-2.9.0
       (Boost-1.70)</a>
     </h5>
@@ -187,7 +229,7 @@
         </li>
 </ul></div>
 <h5>
-<a name="math_toolkit.history2.h3"></a>
+<a name="math_toolkit.history2.h4"></a>
       <span class="phrase"><a name="math_toolkit.history2.math_2_8_0_boost_1_69"></a></span><a class="link" href="history2.html#math_toolkit.history2.math_2_8_0_boost_1_69">Math-2.8.0
       (Boost-1.69)</a>
     </h5>
@@ -244,7 +286,7 @@
         </li>
 </ul></div>
 <h5>
-<a name="math_toolkit.history2.h4"></a>
+<a name="math_toolkit.history2.h5"></a>
       <span class="phrase"><a name="math_toolkit.history2.math_2_7_1_boost_1_68"></a></span><a class="link" href="history2.html#math_toolkit.history2.math_2_7_1_boost_1_68">Math-2.7.1
       (Boost-1.68)</a>
     </h5>
@@ -258,7 +300,7 @@
         </li>
 </ul></div>
 <h5>
-<a name="math_toolkit.history2.h5"></a>
+<a name="math_toolkit.history2.h6"></a>
       <span class="phrase"><a name="math_toolkit.history2.math_2_7_0_boost_1_66"></a></span><a class="link" href="history2.html#math_toolkit.history2.math_2_7_0_boost_1_66">Math-2.7.0
       (Boost-1.66)</a>
     </h5>
@@ -275,7 +317,7 @@
         </li>
 </ul></div>
 <h5>
-<a name="math_toolkit.history2.h6"></a>
+<a name="math_toolkit.history2.h7"></a>
       <span class="phrase"><a name="math_toolkit.history2.math_2_6_0_boost_1_65"></a></span><a class="link" href="history2.html#math_toolkit.history2.math_2_6_0_boost_1_65">Math-2.6.0
       (Boost-1.65)</a>
     </h5>
@@ -312,7 +354,7 @@
         </li>
 </ul></div>
 <h5>
-<a name="math_toolkit.history2.h7"></a>
+<a name="math_toolkit.history2.h8"></a>
       <span class="phrase"><a name="math_toolkit.history2.math_2_5_2_boost_1_64"></a></span><a class="link" href="history2.html#math_toolkit.history2.math_2_5_2_boost_1_64">Math-2.5.2
       (Boost-1.64)</a>
     </h5>
@@ -329,7 +371,7 @@
         </li>
 </ul></div>
 <h5>
-<a name="math_toolkit.history2.h8"></a>
+<a name="math_toolkit.history2.h9"></a>
       <span class="phrase"><a name="math_toolkit.history2.math_2_5_1_boost_1_63"></a></span><a class="link" href="history2.html#math_toolkit.history2.math_2_5_1_boost_1_63">Math-2.5.1
       (Boost-1.63)</a>
     </h5>
@@ -345,7 +387,7 @@
         </li>
 </ul></div>
 <h5>
-<a name="math_toolkit.history2.h9"></a>
+<a name="math_toolkit.history2.h10"></a>
       <span class="phrase"><a name="math_toolkit.history2.math_2_5_0_boost_1_62"></a></span><a class="link" href="history2.html#math_toolkit.history2.math_2_5_0_boost_1_62">Math-2.5.0
       (Boost-1.62)</a>
     </h5>
@@ -370,7 +412,7 @@
         </li>
 </ul></div>
 <h5>
-<a name="math_toolkit.history2.h10"></a>
+<a name="math_toolkit.history2.h11"></a>
       <span class="phrase"><a name="math_toolkit.history2.math_2_4_0_boost_1_61"></a></span><a class="link" href="history2.html#math_toolkit.history2.math_2_4_0_boost_1_61">Math-2.4.0
       (Boost-1.61)</a>
     </h5>
@@ -381,7 +423,7 @@
           Polynomial arithmetic added to tools.
         </li></ul></div>
 <h5>
-<a name="math_toolkit.history2.h11"></a>
+<a name="math_toolkit.history2.h12"></a>
       <span class="phrase"><a name="math_toolkit.history2.math_2_3_0_boost_1_60"></a></span><a class="link" href="history2.html#math_toolkit.history2.math_2_3_0_boost_1_60">Math-2.3.0
       (Boost-1.60)</a>
     </h5>
@@ -414,8 +456,9 @@
           See <a href="https://svn.boost.org/trac/boost/ticket/11556" target="_top">11556</a>.
         </li>
 <li class="listitem">
-          Stopped using hidden visibility library build with the Oracle compiler as
-          it leads to unresolved externals from the C++ standard library. See <a href="https://svn.boost.org/trac/boost/ticket/11547" target="_top">11547</a>.
+          Stopped using hidden visibility library build with the Oracle compiler
+          as it leads to unresolved externals from the C++ standard library. See
+          <a href="https://svn.boost.org/trac/boost/ticket/11547" target="_top">11547</a>.
         </li>
 <li class="listitem">
           Fix unintended use of __declspec when building with Oracle C++. See <a href="https://svn.boost.org/trac/boost/ticket/11546" target="_top">11546</a>.
@@ -459,7 +502,7 @@
         </li>
 </ul></div>
 <h5>
-<a name="math_toolkit.history2.h12"></a>
+<a name="math_toolkit.history2.h13"></a>
       <span class="phrase"><a name="math_toolkit.history2.math_2_2_1"></a></span><a class="link" href="history2.html#math_toolkit.history2.math_2_2_1">Math-2.2.1</a>
     </h5>
 <p>
@@ -478,7 +521,7 @@
         </li>
 </ul></div>
 <h5>
-<a name="math_toolkit.history2.h13"></a>
+<a name="math_toolkit.history2.h14"></a>
       <span class="phrase"><a name="math_toolkit.history2.math_2_2_0_boost_1_58_0"></a></span><a class="link" href="history2.html#math_toolkit.history2.math_2_2_0_boost_1_58_0">Math-2.2.0
       (boost-1.58.0)</a>
     </h5>
@@ -522,7 +565,7 @@
         </li>
 </ul></div>
 <h5>
-<a name="math_toolkit.history2.h14"></a>
+<a name="math_toolkit.history2.h15"></a>
       <span class="phrase"><a name="math_toolkit.history2.math_2_1_0_boost_1_57_0"></a></span><a class="link" href="history2.html#math_toolkit.history2.math_2_1_0_boost_1_57_0">Math-2.1.0
       (boost-1.57.0)</a>
     </h5>
@@ -548,7 +591,7 @@
         </li>
 </ul></div>
 <h5>
-<a name="math_toolkit.history2.h15"></a>
+<a name="math_toolkit.history2.h16"></a>
       <span class="phrase"><a name="math_toolkit.history2.math_2_0_0_boost_1_56_0"></a></span><a class="link" href="history2.html#math_toolkit.history2.math_2_0_0_boost_1_56_0">Math-2.0.0
       (Boost-1.56.0)</a>
     </h5>
@@ -599,7 +642,7 @@
         </li>
 </ul></div>
 <h5>
-<a name="math_toolkit.history2.h16"></a>
+<a name="math_toolkit.history2.h17"></a>
       <span class="phrase"><a name="math_toolkit.history2.math_1_9_1"></a></span><a class="link" href="history2.html#math_toolkit.history2.math_1_9_1">Math-1.9.1</a>
     </h5>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
@@ -614,7 +657,7 @@
         </li>
 </ul></div>
 <h5>
-<a name="math_toolkit.history2.h17"></a>
+<a name="math_toolkit.history2.h18"></a>
       <span class="phrase"><a name="math_toolkit.history2.math_1_9_0"></a></span><a class="link" href="history2.html#math_toolkit.history2.math_1_9_0">Math-1.9.0</a>
     </h5>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
@@ -681,7 +724,7 @@
         </li>
 </ul></div>
 <h5>
-<a name="math_toolkit.history2.h18"></a>
+<a name="math_toolkit.history2.h19"></a>
       <span class="phrase"><a name="math_toolkit.history2.boost_1_55"></a></span><a class="link" href="history2.html#math_toolkit.history2.boost_1_55">Boost-1.55</a>
     </h5>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
@@ -740,7 +783,7 @@
           and Accurate Parallel Inversion of the Gamma Distribution, Thomas Luu</a>
         </p>
 <h5>
-<a name="math_toolkit.history2.h19"></a>
+<a name="math_toolkit.history2.h20"></a>
           <span class="phrase"><a name="math_toolkit.history2.boost_1_54"></a></span><a class="link" href="history2.html#math_toolkit.history2.boost_1_54">Boost-1.54</a>
         </h5>
 </li>
@@ -794,7 +837,7 @@
         </li>
 </ul></div>
 <h5>
-<a name="math_toolkit.history2.h20"></a>
+<a name="math_toolkit.history2.h21"></a>
       <span class="phrase"><a name="math_toolkit.history2.boost_1_53"></a></span><a class="link" href="history2.html#math_toolkit.history2.boost_1_53">Boost-1.53</a>
     </h5>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
@@ -829,7 +872,7 @@
         </li>
 </ul></div>
 <h5>
-<a name="math_toolkit.history2.h21"></a>
+<a name="math_toolkit.history2.h22"></a>
       <span class="phrase"><a name="math_toolkit.history2.boost_1_52"></a></span><a class="link" href="history2.html#math_toolkit.history2.boost_1_52">Boost-1.52</a>
     </h5>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
@@ -876,14 +919,14 @@ by switching to use the Students t distribution (or Normal distribution
         </li>
 </ul></div>
 <h5>
-<a name="math_toolkit.history2.h22"></a>
+<a name="math_toolkit.history2.h23"></a>
       <span class="phrase"><a name="math_toolkit.history2.boost_1_51"></a></span><a class="link" href="history2.html#math_toolkit.history2.boost_1_51">Boost-1.51</a>
     </h5>
 <p>
       See Boost-1.52 - some items were added but not listed in time for the release.
     </p>
 <h5>
-<a name="math_toolkit.history2.h23"></a>
+<a name="math_toolkit.history2.h24"></a>
       <span class="phrase"><a name="math_toolkit.history2.boost_1_50"></a></span><a class="link" href="history2.html#math_toolkit.history2.boost_1_50">Boost-1.50</a>
     </h5>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
@@ -920,7 +963,7 @@ by switching to use the Students t distribution (or Normal distribution
         </li>
 </ul></div>
 <h5>
-<a name="math_toolkit.history2.h24"></a>
+<a name="math_toolkit.history2.h25"></a>
       <span class="phrase"><a name="math_toolkit.history2.boost_1_49"></a></span><a class="link" href="history2.html#math_toolkit.history2.boost_1_49">Boost-1.49</a>
     </h5>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
@@ -964,7 +1007,7 @@ by switching to use the Students t distribution (or Normal distribution
         </li>
 </ul></div>
 <h5>
-<a name="math_toolkit.history2.h25"></a>
+<a name="math_toolkit.history2.h26"></a>
       <span class="phrase"><a name="math_toolkit.history2.boost_1_48"></a></span><a class="link" href="history2.html#math_toolkit.history2.boost_1_48">Boost-1.48</a>
     </h5>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
@@ -1015,7 +1058,7 @@ by switching to use the Students t distribution (or Normal distribution
         </li>
 </ul></div>
 <h5>
-<a name="math_toolkit.history2.h26"></a>
+<a name="math_toolkit.history2.h27"></a>
       <span class="phrase"><a name="math_toolkit.history2.boost_1_47"></a></span><a class="link" href="history2.html#math_toolkit.history2.boost_1_47">Boost-1.47</a>
     </h5>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
@@ -1032,7 +1075,7 @@ by switching to use the Students t distribution (or Normal distribution
         </li>
 </ul></div>
 <h5>
-<a name="math_toolkit.history2.h27"></a>
+<a name="math_toolkit.history2.h28"></a>
       <span class="phrase"><a name="math_toolkit.history2.boost_1_46_1"></a></span><a class="link" href="history2.html#math_toolkit.history2.boost_1_46_1">Boost-1.46.1</a>
     </h5>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
@@ -1040,7 +1083,7 @@ by switching to use the Students t distribution (or Normal distribution
           <a href="https://svn.boost.org/trac/boost/ticket/5095" target="_top">#5113</a>.
         </li></ul></div>
 <h5>
-<a name="math_toolkit.history2.h28"></a>
+<a name="math_toolkit.history2.h29"></a>
       <span class="phrase"><a name="math_toolkit.history2.boost_1_46_0"></a></span><a class="link" href="history2.html#math_toolkit.history2.boost_1_46_0">Boost-1.46.0</a>
     </h5>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
@@ -1055,7 +1098,7 @@ by switching to use the Students t distribution (or Normal distribution
         </li>
 </ul></div>
 <h5>
-<a name="math_toolkit.history2.h29"></a>
+<a name="math_toolkit.history2.h30"></a>
       <span class="phrase"><a name="math_toolkit.history2.boost_1_45_0"></a></span><a class="link" href="history2.html#math_toolkit.history2.boost_1_45_0">Boost-1.45.0</a>
     </h5>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
@@ -1072,7 +1115,7 @@ by switching to use the Students t distribution (or Normal distribution
         </li>
 </ul></div>
 <h5>
-<a name="math_toolkit.history2.h30"></a>
+<a name="math_toolkit.history2.h31"></a>
       <span class="phrase"><a name="math_toolkit.history2.boost_1_44_0"></a></span><a class="link" href="history2.html#math_toolkit.history2.boost_1_44_0">Boost-1.44.0</a>
     </h5>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
@@ -1086,7 +1129,7 @@ by switching to use the Students t distribution (or Normal distribution
         </li>
 </ul></div>
 <h5>
-<a name="math_toolkit.history2.h31"></a>
+<a name="math_toolkit.history2.h32"></a>
       <span class="phrase"><a name="math_toolkit.history2.boost_1_41_0"></a></span><a class="link" href="history2.html#math_toolkit.history2.boost_1_41_0">Boost-1.41.0</a>
     </h5>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
@@ -1094,7 +1137,7 @@ by switching to use the Students t distribution (or Normal distribution
           its inverse.
         </li></ul></div>
 <h5>
-<a name="math_toolkit.history2.h32"></a>
+<a name="math_toolkit.history2.h33"></a>
       <span class="phrase"><a name="math_toolkit.history2.boost_1_40_0"></a></span><a class="link" href="history2.html#math_toolkit.history2.boost_1_40_0">Boost-1.40.0</a>
     </h5>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
@@ -1130,7 +1173,7 @@ by switching to use the Students t distribution (or Normal distribution
         </li>
 </ul></div>
 <h5>
-<a name="math_toolkit.history2.h33"></a>
+<a name="math_toolkit.history2.h34"></a>
       <span class="phrase"><a name="math_toolkit.history2.boost_1_38_0"></a></span><a class="link" href="history2.html#math_toolkit.history2.boost_1_38_0">Boost-1.38.0</a>
     </h5>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
@@ -1142,14 +1185,14 @@ by switching to use the Students t distribution (or Normal distribution
         </li>
 </ul></div>
 <h5>
-<a name="math_toolkit.history2.h34"></a>
+<a name="math_toolkit.history2.h35"></a>
       <span class="phrase"><a name="math_toolkit.history2.boost_1_37_0"></a></span><a class="link" href="history2.html#math_toolkit.history2.boost_1_37_0">Boost-1.37.0</a>
     </h5>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
           Improved accuracy and testing of the inverse hypergeometric functions.
         </li></ul></div>
 <h5>
-<a name="math_toolkit.history2.h35"></a>
+<a name="math_toolkit.history2.h36"></a>
       <span class="phrase"><a name="math_toolkit.history2.boost_1_36_0"></a></span><a class="link" href="history2.html#math_toolkit.history2.boost_1_36_0">Boost-1.36.0</a>
     </h5>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
@@ -1182,7 +1225,7 @@ by switching to use the Students t distribution (or Normal distribution
         </li>
 </ul></div>
 <h5>
-<a name="math_toolkit.history2.h36"></a>
+<a name="math_toolkit.history2.h37"></a>
       <span class="phrase"><a name="math_toolkit.history2.boost_1_35_0_post_review_first_o"></a></span><a class="link" href="history2.html#math_toolkit.history2.boost_1_35_0_post_review_first_o">Boost-1.35.0:
       Post Review First Official Release</a>
     </h5>
@@ -1194,7 +1237,7 @@ by switching to use the Students t distribution (or Normal distribution
 <li class="listitem">
           <span class="bold"><strong>Breaking change:</strong></span> Changed default behaviour
           for domain, pole and overflow errors to throw an exception (based on review
-          feedback), this behaviour can be customised using <a class="link" href="../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>'s.
+          feedback), this behaviour can be customised using <a class="link" href="../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>'s.
         </li>
 <li class="listitem">
           <span class="bold"><strong>Breaking change:</strong></span> Changed exception thrown
@@ -1203,7 +1246,7 @@ by switching to use the Students t distribution (or Normal distribution
 <li class="listitem">
           <span class="bold"><strong>Breaking change:</strong></span> Changed discrete quantiles
           to return an integer result: this is anything up to 20 times faster than
-          finding the true root, this behaviour can be customised using <a class="link" href="../policy.html" title="Chapter&#160;20.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>'s.
+          finding the true root, this behaviour can be customised using <a class="link" href="../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>'s.
         </li>
 <li class="listitem">
           Polynomial/rational function evaluation is now customisable and hopefully
@@ -1214,7 +1257,7 @@ by switching to use the Students t distribution (or Normal distribution
         </li>
 </ul></div>
 <h5>
-<a name="math_toolkit.history2.h37"></a>
+<a name="math_toolkit.history2.h38"></a>
       <span class="phrase"><a name="math_toolkit.history2.milestone_4_second_review_candid"></a></span><a class="link" href="history2.html#math_toolkit.history2.milestone_4_second_review_candid">Milestone
       4: Second Review Candidate (1st March 2007)</a>
     </h5>
@@ -1228,7 +1271,7 @@ by switching to use the Students t distribution (or Normal distribution
         </li>
 </ul></div>
 <h5>
-<a name="math_toolkit.history2.h38"></a>
+<a name="math_toolkit.history2.h39"></a>
       <span class="phrase"><a name="math_toolkit.history2.milestone_3_first_review_candida"></a></span><a class="link" href="history2.html#math_toolkit.history2.milestone_3_first_review_candida">Milestone
       3: First Review Candidate (31st Dec 2006)</a>
     </h5>
@@ -1256,7 +1299,7 @@ by switching to use the Students t distribution (or Normal distribution
         </li>
 </ul></div>
 <h5>
-<a name="math_toolkit.history2.h39"></a>
+<a name="math_toolkit.history2.h40"></a>
       <span class="phrase"><a name="math_toolkit.history2.milestone_2_released_september_1"></a></span><a class="link" href="history2.html#math_toolkit.history2.milestone_2_released_september_1">Milestone
       2: Released September 10th 2006</a>
     </h5>
@@ -1292,7 +1335,7 @@ by switching to use the Students t distribution (or Normal distribution
         </li>
 </ul></div>
 <h5>
-<a name="math_toolkit.history2.h40"></a>
+<a name="math_toolkit.history2.h41"></a>
       <span class="phrase"><a name="math_toolkit.history2.milestone_1_released_march_31st_"></a></span><a class="link" href="history2.html#math_toolkit.history2.milestone_1_released_march_31st_">Milestone
       1: Released March 31st 2006</a>
     </h5>

@@ -3,8 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Generic operations common to all distributions are non-member functions</title>
 <link rel="stylesheet" href="../../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
-<link rel="home" href="../../../index.html" title="Math Toolkit 2.11.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<link rel="home" href="../../../index.html" title="Math Toolkit 2.12.0">
 <link rel="up" href="../overview.html" title="Overview of Statistical Distributions">
 <link rel="prev" href="objects.html" title="Distributions are Objects">
 <link rel="next" href="complements.html" title="Complements are supported too - and when to use them">
@@ -213,12 +213,12 @@
             The quantile functions for these distributions are hard to specify in
             a manner that will satisfy everyone all of the time. The default behaviour
             is to return an integer result, that has been rounded <span class="emphasis"><em>outwards</em></span>:
-            that is to say, lower quantiles - where the probability is less than 0.5
-            are rounded down, while upper quantiles - where the probability is greater
-            than 0.5 - are rounded up. This behaviour ensures that if an X% quantile
-            is requested, then <span class="emphasis"><em>at least</em></span> the requested coverage
-            will be present in the central region, and <span class="emphasis"><em>no more than</em></span>
-            the requested coverage will be present in the tails.
+            that is to say, lower quantiles - where the probability is less than
+            0.5 are rounded down, while upper quantiles - where the probability is
+            greater than 0.5 - are rounded up. This behaviour ensures that if an
+            X% quantile is requested, then <span class="emphasis"><em>at least</em></span> the requested
+            coverage will be present in the central region, and <span class="emphasis"><em>no more
+            than</em></span> the requested coverage will be present in the tails.
           </p>
 <p>
             This behaviour can be changed so that the quantile functions are rounded

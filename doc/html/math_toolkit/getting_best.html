@@ -3,9 +3,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Getting the Best Performance from this Library: Compiler and Compiler Options</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
-<link rel="home" href="../index.html" title="Math Toolkit 2.11.0">
-<link rel="up" href="../perf.html" title="Chapter&#160;21.&#160;Performance">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<link rel="home" href="../index.html" title="Math Toolkit 2.12.0">
+<link rel="up" href="../perf.html" title="Chapter&#160;22.&#160;Performance">
 <link rel="prev" href="interp.html" title="Interpreting these Results">
 <link rel="next" href="tradoffs.html" title="Trading Accuracy for Performance">
 </head>
@@ -35,10 +35,9 @@
       switching to a different compiler (Intel C++ 15 in this example).
     </p>
 <div class="table">
-<a name="math_toolkit.getting_best.table_Compiler_Option_Comparison_on_Windows_x64"></a><p class="title"><b>Table&#160;21.1.&#160;Compiler Option Comparison on Windows x64</b></p>
+<a name="math_toolkit.getting_best.table_Compiler_Option_Comparison_on_Windows_x64"></a><p class="title"><b>Table&#160;22.1.&#160;Compiler Option Comparison on Windows x64</b></p>
 <div class="table-contents"><table class="table" summary="Compiler Option Comparison on Windows x64">
 <colgroup>
-<col>
 <col>
 <col>
 <col>
@@ -65,11 +64,6 @@
                 cl /Ox (x64 build)
               </p>
             </th>
-<th>
-              <p>
-                icl /Ox (x64 build)
-              </p>
-            </th>
 </tr></thead>
 <tbody>
 <tr>
@@ -80,22 +74,17 @@
             </td>
 <td>
               <p>
-                <span class="red">18.29<br> (256ns)</span>
+                <span class="red">5.05<br> (202ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="red">4.29<br> (60ns)</span>
+                <span class="green">1.20<br> (48ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="red">3.14<br> (44ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (14ns)</span>
+                <span class="green">1.00<br> (40ns)</span>
               </p>
             </td>
 </tr>
@@ -107,22 +96,17 @@
             </td>
 <td>
               <p>
-                <span class="red">10.03<br> (742ns)</span>
+                <span class="red">4.38<br> (530ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="blue">1.77<br> (131ns)</span>
+                <span class="green">1.00<br> (121ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="blue">1.36<br> (101ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (74ns)</span>
+                <span class="green">1.02<br> (124ns)</span>
               </p>
             </td>
 </tr>
@@ -134,22 +118,17 @@
             </td>
 <td>
               <p>
-                <span class="red">4.32<br> (6583ns)</span>
+                <span class="red">4.52<br> (8277ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="blue">1.29<br> (1963ns)</span>
+                <span class="green">1.11<br> (2042ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="blue">1.28<br> (1957ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (1523ns)</span>
+                <span class="green">1.00<br> (1833ns)</span>
               </p>
             </td>
 </tr>

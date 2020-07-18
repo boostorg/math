@@ -73,6 +73,8 @@ test-suite examples :
    [ run hyperexponential_more_snips.cpp  ]
    [ run inverse_chi_squared_example.cpp  ]
    [ run legendre_stieltjes_example.cpp : : : [ requires cxx11_auto_declarations cxx11_defaulted_functions cxx11_lambdas ]  ]
+   [ run airy_ulps_plot.cpp : : : [ requires cxx17_std_apply cxx17_if_constexpr ]  ]
+   [ run agm_example.cpp  : : : [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] [ requires cxx17_std_apply cxx17_if_constexpr ] ]
    #[ # run inverse_chi_squared_find_df_example.cpp  ]
    #[ run lambert_w_basic_example.cpp ]
    [ run lambert_w_basic_example.cpp  : : : [ requires cxx11_numeric_limits ] ]

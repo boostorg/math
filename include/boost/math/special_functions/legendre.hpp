@@ -1,4 +1,3 @@
-
 //  (C) Copyright John Maddock 2006.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
@@ -17,6 +16,7 @@
 #include <boost/math/special_functions/factorials.hpp>
 #include <boost/math/tools/roots.hpp>
 #include <boost/math/tools/config.hpp>
+#include <boost/math/tools/cxx03_warn.hpp>
 
 namespace boost{
 namespace math{
@@ -148,7 +148,7 @@ struct legendre_p_zero_func
       T Pn;
       T Pn_prime = detail::legendre_p_prime_imp(n, x, pol, &Pn);
       return std::pair<T, T>(Pn, Pn_prime); 
-   };
+   }
 };
 
 template <class T, class Policy>

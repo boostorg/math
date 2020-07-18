@@ -34,7 +34,7 @@ typedef boost::multiprecision::number<boost::multiprecision::cpp_dec_float<500> 
 typedef ntl::RR generator_type;
 #endif
 
-inline void print_constant(const char* name, generator_type(*f)(const mpl::int_<0>&))
+inline void print_constant(const char* name, generator_type(*f)(const boost::integral_constant<int, 0>&))
 {
 #ifdef USE_MPFR
    mpfr_class::set_dprec(((200 + 1) * 1000L) / 301L);
@@ -46,7 +46,7 @@ inline void print_constant(const char* name, generator_type(*f)(const mpl::int_<
    ntl::RR::SetPrecision(((200 + 1) * 1000L) / 301L);
    ntl::RR::SetOutputPrecision(102);
 #endif
-   generator_type value = f(boost::mpl::int_<0>());
+   generator_type value = f(boost::integral_constant<int, 0>());
    std::stringstream os;
    os << std::setprecision(110) << std::scientific;
    os << value;

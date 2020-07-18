@@ -8,9 +8,8 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 [section:pchip PCHIP interpolation]
 
 [heading Synopsis]
-``
-  #include <boost/math/interpolators/pchip.hpp>
-``
+
+    #include <boost/math/interpolators/pchip.hpp>
 
     namespace boost::math::interpolators {
 
@@ -82,11 +81,7 @@ Hence we can use `boost::circular_buffer` to do real-time interpolation:
 
 [heading Complexity and Performance]
 
-The call to the constructor requires [bigo](/N/) operations to compute the weighted slopes.
-Each call to the interpolant is [bigo](log(/N/)), where /N/ is the number of points to interpolate.
-
-A google benchmark demonstrating the performance of evaluating the spline is given below:
-
+This interpolator chooses the slopes and forwards data to the cubic Hermite interpolator, so the performance is stated in the documentation for `cubic_hermite.hpp`.
 
 
 [endsect]

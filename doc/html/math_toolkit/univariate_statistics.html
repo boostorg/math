@@ -3,8 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Univariate Statistics</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
-<link rel="home" href="../index.html" title="Math Toolkit 2.11.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<link rel="home" href="../index.html" title="Math Toolkit 2.12.0">
 <link rel="up" href="../statistics.html" title="Chapter&#160;6.&#160;Statistics">
 <link rel="prev" href="../statistics.html" title="Chapter&#160;6.&#160;Statistics">
 <link rel="next" href="bivariate_statistics.html" title="Bivariate Statistics">
@@ -90,6 +90,12 @@
 
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RandomAccessContainer</span><span class="special">&gt;</span>
     <span class="keyword">auto</span> <span class="identifier">median_absolute_deviation</span><span class="special">(</span><span class="identifier">RandomAccessContainer</span> <span class="identifier">v</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">RandomAccessContainer</span><span class="special">::</span><span class="identifier">value_type</span> <span class="identifier">center</span><span class="special">=</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">Real</span><span class="special">&gt;::</span><span class="identifier">quiet_NaN</span><span class="special">());</span>
+
+    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RandomAccessIterator</span><span class="special">&gt;</span>
+    <span class="keyword">auto</span> <span class="identifier">interquartile_range</span><span class="special">(</span><span class="identifier">ForwardIterator</span> <span class="identifier">first</span><span class="special">,</span> <span class="identifier">ForwardIterator</span> <span class="identifier">last</span><span class="special">);</span>
+
+    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RandomAccessContainer</span><span class="special">&gt;</span>
+    <span class="keyword">auto</span> <span class="identifier">interquartile_range</span><span class="special">(</span><span class="identifier">RandomAccessContainer</span> <span class="identifier">v</span><span class="special">);</span>
 
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Container</span><span class="special">&gt;</span>
     <span class="keyword">auto</span> <span class="identifier">gini_coefficient</span><span class="special">(</span><span class="identifier">Container</span> <span class="special">&amp;</span> <span class="identifier">c</span><span class="special">);</span>
@@ -284,6 +290,27 @@
     </p>
 <h4>
 <a name="math_toolkit.univariate_statistics.h9"></a>
+      <span class="phrase"><a name="math_toolkit.univariate_statistics.interquartile_range"></a></span><a class="link" href="univariate_statistics.html#math_toolkit.univariate_statistics.interquartile_range">Interquartile
+      Range</a>
+    </h4>
+<p>
+      Computes the <a href="https://en.wikipedia.org/wiki/Interquartile_range" target="_top">interquartile
+      range</a> of a dataset:
+    </p>
+<pre class="programlisting"><span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">v</span><span class="special">{</span><span class="number">1</span><span class="special">,</span><span class="number">2</span><span class="special">,</span><span class="number">3</span><span class="special">,</span><span class="number">4</span><span class="special">,</span><span class="number">5</span><span class="special">};</span>
+<span class="keyword">double</span> <span class="identifier">iqr</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">statistics</span><span class="special">::</span><span class="identifier">interquartile_range</span><span class="special">(</span><span class="identifier">v</span><span class="special">);</span>
+<span class="comment">// Q1 = 1.5, Q3 = 4.5 =&gt; iqr = 3</span>
+</pre>
+<p>
+      For a vector of length <span class="emphasis"><em>2n+1</em></span> or <span class="emphasis"><em>2n</em></span>,
+      the first quartile <span class="emphasis"><em>Q</em></span><sub>1</sub> is the median of the <span class="emphasis"><em>n</em></span>
+      smallest values, and the third quartile <span class="emphasis"><em>Q</em></span><sub>3</sub> is the median
+      of the <span class="emphasis"><em>n</em></span> largest values. The interquartile range is then
+      <span class="emphasis"><em>Q</em></span><sub>3</sub> - <span class="emphasis"><em>Q</em></span><sub>1</sub>. The function <code class="computeroutput"><span class="identifier">interquartile_range</span></code>, like the <code class="computeroutput"><span class="identifier">median</span></code>, calls into <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">nth_element</span></code>,
+      and hence partially sorts the data.
+    </p>
+<h4>
+<a name="math_toolkit.univariate_statistics.h10"></a>
       <span class="phrase"><a name="math_toolkit.univariate_statistics.gini_coefficient"></a></span><a class="link" href="univariate_statistics.html#math_toolkit.univariate_statistics.gini_coefficient">Gini
       Coefficient</a>
     </h4>
@@ -319,7 +346,7 @@
       for details.
     </p>
 <h4>
-<a name="math_toolkit.univariate_statistics.h10"></a>
+<a name="math_toolkit.univariate_statistics.h11"></a>
       <span class="phrase"><a name="math_toolkit.univariate_statistics.references"></a></span><a class="link" href="univariate_statistics.html#math_toolkit.univariate_statistics.references">References</a>
     </h4>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">

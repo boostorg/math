@@ -6,6 +6,7 @@
 #ifndef BOOST_MATH_SPECIAL_CHEBYSHEV_HPP
 #define BOOST_MATH_SPECIAL_CHEBYSHEV_HPP
 #include <cmath>
+#include <boost/math/policies/error_handling.hpp>
 #include <boost/math/constants/constants.hpp>
 
 #if (__cplusplus > 201103) || (defined(_CPPLIB_VER) && (_CPPLIB_VER >= 610))
@@ -162,6 +163,101 @@ inline Real chebyshev_clenshaw_recurrence(const Real* const c, size_t length, co
         b1 = tmp;
     }
     return x*b1 - b2 + half<Real>()*c[0];
+}
+
+
+
+namespace detail {
+template<class Real>
+inline Real unchecked_chebyshev_clenshaw_recurrence(const Real* const c, size_t length, const Real & a, const Real & b, const Real& x)
+{
+    Real t;
+    Real u;
+    // This cutoff is not super well defined, but it's a good estimate.
+    // See "An Error Analysis of the Modified Clenshaw Method for Evaluating Chebyshev and Fourier Series"
+    // J. OLIVER, IMA Journal of Applied Mathematics, Volume 20, Issue 3, November 1977, Pages 379–391
+    // https://doi.org/10.1093/imamat/20.3.379
+    const Real cutoff = 0.6;
+    if (x - a < b - x)
+    {
+        u = 2*(x-a)/(b-a);
+        t = u - 1;
+        if (t > -cutoff)
+        {
+            Real b2 = 0;
+            Real b1 = c[length -1];
+            for(size_t j = length - 2; j >= 1; --j)
+            {
+                Real tmp = 2*t*b1 - b2 + c[j];
+                b2 = b1;
+                b1 = tmp;
+            }
+            return t*b1 - b2 + c[0]/2;
+        }
+        else
+        {
+            Real b = c[length -1];
+            Real d = b;
+            Real b2 = 0;
+            for (size_t r = length - 2; r >= 1; --r)
+            {
+                d = 2*u*b - d + c[r];
+                b2 = b;
+                b = d - b;
+            }
+            return t*b - b2 + c[0]/2;
+        }
+    }
+    else
+    {
+        u = -2*(b-x)/(b-a);
+        t = u + 1;
+        if (t < cutoff)
+        {
+            Real b2 = 0;
+            Real b1 = c[length -1];
+            for(size_t j = length - 2; j >= 1; --j)
+            {
+                Real tmp = 2*t*b1 - b2 + c[j];
+                b2 = b1;
+                b1 = tmp;
+            }
+            return t*b1 - b2 + c[0]/2;
+        }
+        else
+        {
+            Real b = c[length -1];
+            Real d = b;
+            Real b2 = 0;
+            for (size_t r = length - 2; r >= 1; --r)
+            {
+                d = 2*u*b + d + c[r];
+                b2 = b;
+                b = d + b;
+            }
+            return t*b - b2 + c[0]/2;
+        }
+    }
+}
+
+} // namespace detail
+
+template<class Real>
+inline Real chebyshev_clenshaw_recurrence(const Real* const c, size_t length, const Real & a, const Real & b, const Real& x)
+{
+    if (x < a || x > b)
+    {
+        throw std::domain_error("x in [a, b] is required.");
+    }
+    if (length < 2)
+    {
+        if (length == 0)
+        {
+            return 0;
+        }
+        return c[0]/2;
+    }
+    return detail::unchecked_chebyshev_clenshaw_recurrence(c, length, a, b, x);
 }
 
 

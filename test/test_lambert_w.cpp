@@ -216,7 +216,7 @@ void wolfram_test_small_neg()
 }
 
 template <class T>
-void wolfram_test_large(const boost::mpl::true_&)
+void wolfram_test_large(const boost::true_type&)
 {
    //
    // Spots near the singularity from http://www.wolframalpha.com/input/?i=TABLE%5B%5BN%5B-1%2Fe%2B2%5E-i,+50%5D,+N%5BLambertW%5B-1%2Fe+%2B+2%5E-i%5D,+50%5D%5D,+%7Bi,+2,+40%7D%5D
@@ -234,12 +234,12 @@ void wolfram_test_large(const boost::mpl::true_&)
    }
 }
 template <class T>
-void wolfram_test_large(const boost::mpl::false_&){}
+void wolfram_test_large(const boost::false_type&){}
 
 template <class T>
 void wolfram_test_large() 
 {
-   wolfram_test_large<T>(boost::mpl::bool_<(std::numeric_limits<T>::max_exponent10 > 1000)>());
+   wolfram_test_large<T>(boost::integral_constant<bool, (std::numeric_limits<T>::max_exponent10 > 1000)>());
 }
 
 
@@ -1031,16 +1031,24 @@ BOOST_AUTO_TEST_CASE( test_range_of_double_values )
     BOOST_MATH_TEST_VALUE(RealType, -0.99999997649828679),
     5e7 * tolerance);// diff 2.30785e-09 v 2.2204460492503131e-16
 
-  // Compare with previous PB/FK computations at double precision.
-  BOOST_CHECK_CLOSE_FRACTION(  // Check float_next(-exp(-1) )
-    lambert_w0(BOOST_MATH_TEST_VALUE(RealType, -0.36787944117144228)),
-    BOOST_MATH_TEST_VALUE(RealType, -0.99999997892657588),
-    tolerance); // diff 6.03558e-09 v 2.2204460492503131e-16
+   // Compare with previous PB/FK computations at double precision.
+   using std::abs;
+   RealType x = BOOST_MATH_TEST_VALUE(RealType, -0.36787944117144228);
+   RealType w0 = lambert_w0(x);
+   RealType w0_prime = boost::math::lambert_w0_prime(x);
+   RealType mu = std::numeric_limits<RealType>::epsilon()/2;
+   BOOST_CHECK_CLOSE_FRACTION(  // Check float_next(-exp(-1) )
+    w0,
+    BOOST_MATH_TEST_VALUE(RealType, -0.9999999849621573837115797120602890516186071783122773515945338502828025975466699519609633476854139977),
+    2*mu*abs(x*w0_prime/w0)); // diff 6.03558e-09 v 2.2204460492503131e-16
 
-  BOOST_CHECK_CLOSE_FRACTION(  // Check  float_next(float_next(-exp(-1) ))
-    lambert_w0(BOOST_MATH_TEST_VALUE(RealType, -0.36787944117144222)),
+   x = BOOST_MATH_TEST_VALUE(RealType, -0.36787944117144222);
+   w0 = lambert_w0(x);
+   w0_prime = boost::math::lambert_w0_prime(x);
+   BOOST_CHECK_CLOSE_FRACTION(  // Check  float_next(float_next(-exp(-1) ))
+    w0,
     BOOST_MATH_TEST_VALUE(RealType, -0.99999997419043196),
-    tolerance);// diff 2.30785e-09 v 2.2204460492503131e-16
+    2*mu*abs(x*w0_prime/w0));// diff 2.30785e-09 v 2.2204460492503131e-16
 
                // z increasingly close to singularity.
   BOOST_CHECK_CLOSE_FRACTION(lambert_w0(BOOST_MATH_TEST_VALUE(RealType, -0.36)),

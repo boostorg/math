@@ -5,6 +5,7 @@
 
 //#define BOOST_MATH_INSTRUMENT
 
+#include "mp_t.hpp"
 #include <boost/math/distributions/hypergeometric.hpp>
 #include <boost/math/special_functions/trunc.hpp>
 #include <boost/math/constants/constants.hpp>
@@ -12,7 +13,6 @@
 #include <boost/random/uniform_int.hpp>
 #include <fstream>
 #include <boost/math/tools/test_data.hpp>
-#include "mp_t.hpp"
 
 using namespace boost::math::tools;
 

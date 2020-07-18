@@ -68,7 +68,7 @@ BOOST_AUTO_TEST_CASE( test_main )
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_trig(0.1L, "long double");
 #ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
+#if !BOOST_WORKAROUND(BOOST_BORLANDC, BOOST_TESTED_AT(0x582))
    test_trig(boost::math::concepts::real_concept(0.1), "real_concept");
 #endif
 #endif

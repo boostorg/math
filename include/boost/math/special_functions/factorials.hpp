@@ -166,7 +166,7 @@ inline T falling_factorial_imp(T x, unsigned n, const Policy& pol)
 {
    BOOST_STATIC_ASSERT(!boost::is_integral<T>::value);
    BOOST_MATH_STD_USING // ADL of std names
-   if((x == 0) && (n >= 0))
+   if(x == 0)
       return 0;
    if(x < 0)
    {

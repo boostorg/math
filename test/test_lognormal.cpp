@@ -225,11 +225,11 @@ void test_spots(RealType)
    BOOST_CHECK_CLOSE(
     skewness(dist)
     , static_cast<RealType>(729551.38304660255658441529235697L), tolerance);
-   // kertosis:
+   // kurtosis:
    BOOST_CHECK_CLOSE(
     kurtosis(dist)
     , static_cast<RealType>(4312295840576303.2363383232038251L), tolerance);
-   // kertosis excess:
+   // kurtosis excess:
    BOOST_CHECK_CLOSE(
     kurtosis_excess(dist)
     , static_cast<RealType>(4312295840576300.2363383232038251L), tolerance);
@@ -286,7 +286,7 @@ BOOST_AUTO_TEST_CASE( test_main )
   test_spots(0.0); // Test double. OK at decdigits 7, tolerance = 1e07 %
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
   test_spots(0.0L); // Test long double.
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x0582))
+#if !BOOST_WORKAROUND(BOOST_BORLANDC, BOOST_TESTED_AT(0x0582))
   test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
 #endif
 #else
