@@ -16,6 +16,7 @@
 #include <cmath>
 #include <thread>
 #include <memory>
+#include <future>
 
 #ifdef _MSVC_LANG
 #if _MSVC_LANG >= 201703 // _MSVC_LANG == __cplusplus: https://devblogs.microsoft.com/cppblog/msvc-now-correctly-reports-__cplusplus/
@@ -136,8 +137,6 @@ void mask_sieve(Z lower_bound, Z upper_bound, Container &c)
     boost::math::detail::mask_sieve(lower_bound, upper_bound, primes, c);
 }
 
-
-
 template <typename Z, class PrimesContainer, class Container>
 void segmented_sieve(Z lower_bound, Z upper_bound, const PrimesContainer &primes, Container &c)
 {
@@ -151,14 +150,43 @@ void segmented_sieve(Z lower_bound, Z upper_bound, const PrimesContainer &primes
         current_upper_bound = upper_bound;
     }
 
-    while(current_upper_bound < (upper_bound - interval))
+    size_t ranges {static_cast<size_t>((upper_bound - lower_bound) / interval)};
+
+    std::vector<std::vector<Z>> prime_vectors(ranges + 1);
+    std::vector<std::future<void>> future_manager(ranges);
+
+    Z primes_in_range {static_cast<Z>(current_upper_bound / std::log(static_cast<double>(current_upper_bound)) -
+                                      current_lower_bound / std::log(static_cast<double>(current_lower_bound)))};
+
+    for(size_t i {}; i < ranges; ++i)
     {
-        boost::math::detail::mask_sieve(current_lower_bound, current_upper_bound, primes, c);
+        prime_vectors[i].reserve(primes_in_range);
+
+        future_manager.emplace_back(std::async([current_lower_bound, current_upper_bound, &primes, &prime_vectors, i]{
+            boost::math::detail::mask_sieve(current_lower_bound, current_upper_bound, primes, prime_vectors[i]);
+        }));
+
         current_lower_bound = current_upper_bound + 1;
         current_upper_bound += interval;
     }
 
-    boost::math::detail::mask_sieve(current_lower_bound, upper_bound, primes, c);
+    prime_vectors[ranges].reserve(primes_in_range);
+    future_manager.emplace_back(std::async([current_lower_bound, upper_bound, &primes, &prime_vectors]{
+        boost::math::detail::mask_sieve(current_lower_bound, upper_bound, primes, prime_vectors.back());
+    }));
+
+    for(auto &&future : future_manager)
+    {
+        if(future.valid())
+        {
+            future.get();
+        }
+    }
+
+    for(auto &v : prime_vectors)
+    {
+        c.insert(c.end(), v.begin(), v.end());
+    }
 }
 
 template <typename Z, class Container>
