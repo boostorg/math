@@ -58,10 +58,15 @@ public:
 
         for (size_t i = 1; i < a_.size(); ++i)
         {
-            // Sanity check:
+            // Sanity check: This should only happen when wraparound occurs:
             if (a_[i] < a_[i-1])
             {
                 throw std::domain_error("The digits of an Engel expansion must form a non-decreasing sequence; consider increasing the wide of the integer type.");
+            }
+            // Watch out for saturating behavior:
+            if (a_[i] == std::numeric_limits<Z>::max())
+            {
+                throw std::domain_error("The integer type Z does not have enough width to hold the terms of the Engel expansion; please widen the type.");
             }
         }
         a_.shrink_to_fit();

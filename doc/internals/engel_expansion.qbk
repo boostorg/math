@@ -35,9 +35,10 @@ Here's a minimal working example:
     // e ≈ {1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16}
 
 
-The digits of an Engel expansion tend to grow exponentially, so the integer template option migh need to be utilized.
+The digits of an Engel expansion tend to grow exponentially, so the integer template option might need to be utilized.
 For example, we can use a wider integer type via
 
-    auto engel = engel_expansion<__float128, __int128>(pi<__float128>());
+    using boost::multiprecision::checked_int1024_t;
+    auto engel = engel_expansion<__float128, checked_int1024_t>(pi<__float128>());
 
 [endsect]
