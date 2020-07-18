@@ -19,8 +19,11 @@
 // and   if (std::numeric_limits<RealType>::has_quiet_NaN)
 #endif
 
-#include <boost/math/tools/test.hpp>
+#include <boost/cstdfloat.hpp>
+#include <boost/multiprecision/float128.hpp>
+   using boost::multiprecision::float128;
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
+
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp> // Boost.Test
 #include <boost/test/tools/floating_point_comparison.hpp>
@@ -28,7 +31,9 @@
 #include <boost/math/distributions/von_mises.hpp>
    using boost::math::von_mises_distribution;
 #include <boost/math/tools/test.hpp>
+
 #include "math_unit_test.hpp"
+#include "pch.hpp"
 #include "test_out_of_range.hpp"
 
 #include <iostream>
@@ -370,34 +375,23 @@ BOOST_AUTO_TEST_CASE( test_main )
   // (Parameter value, arbitrarily zero, only communicates the floating point type).
   test_spots(0.0F);   // Test float. OK at decdigits = 0 tolerance = 0.0001 %
   test_spots(0.0);    // Test double. OK at decdigits 7, tolerance = 1e07 %
+  test_spots(0.0L); // Test long double.
+  test_spots(static_cast<float128>(0));
+
   // Check symmetry of PDF and CDF
   test_symmetry(0.0F);
   test_symmetry(0.0);
-
-#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-  test_spots(0.0L); // Test long double.
-  //test_symmetry(0.0L);
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x0582))
-  //test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
-#endif
-#else
-  std::cout << "<note>The long double tests have been disabled on this platform "
-      "either because the long double overloads of the usual math functions are "
-      "not available at all, or because they are too inaccurate for these tests "
-      "to pass.</note>" << std::endl;
-#endif
-
-
+  test_symmetry(0.0L);
+  test_symmetry(static_cast<float128>(0));
 } // BOOST_AUTO_TEST_CASE( test_main )
 
 /*
-
+./test_von_mises.exe
 Output:
 
-Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\test_von_mises.exe"
 Running 1 test case...
-Tolerance for type float is 0.01 %
-Tolerance for type double is 0.01 %
-Tolerance for type long double is 0.01 %
-Tolerance for type class boost::math::concepts::real_concept is 0.01 %
+Tolerance for type f is 0.002 %
+Tolerance for type d is 0.002 %
+Tolerance for type e is 0.002 %
+
 *** No errors detected */

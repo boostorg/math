@@ -118,9 +118,9 @@ inline RealType pdf_impl(const von_mises_distribution<RealType, Policy>& dist, R
     RealType bessel_i0 = cyl_bessel_i(0, conc, Policy());
     return exp(conc * cos(x - mean)) / bessel_i0 / boost::math::constants::two_pi<RealType>();
   }
-  else 	// exp(88) > MAX_FLOAT
+  else  // exp(88) > MAX_FLOAT
   {
-		// we make use of I0(conc) = exp(conc) * P(conc), with polynomial P
+    // we make use of I0(conc) = exp(conc) * P(conc), with polynomial P
     // polynomial coefficients from boost/math/special_functions/detail/bessel_i0.hpp
     static const float P[] = {
         3.98942280401432677e-01f,
@@ -177,39 +177,10 @@ inline RealType pdf_impl(const von_mises_distribution<RealType, Policy>& dist, R
   RealType conc = dist.concentration();
 
   BOOST_MATH_STD_USING
-  if (conc < 15)
+  if (conc < 1000)
   {
     RealType bessel_i0 = cyl_bessel_i(0, conc, Policy());
     return exp(conc * cos(x - mean)) / bessel_i0 / boost::math::constants::two_pi<RealType>();
-  }
-  else if (conc < 50)
-  {
-    // Max error in interpolated form: 1.035e-21
-    // Max Error found at float80 precision = Poly: 1.885872e-21
-    static const RealType Y = 4.011702537536621093750e-01f;
-    static const RealType P[] = {
-        BOOST_MATH_BIG_CONSTANT(RealType, 64, -2.227973351806078464328e-03),
-        BOOST_MATH_BIG_CONSTANT(RealType, 64, 4.986778486088017419036e-02),
-        BOOST_MATH_BIG_CONSTANT(RealType, 64, 2.805066823812285310011e-02),
-        BOOST_MATH_BIG_CONSTANT(RealType, 64, 2.921443721160964964623e-02),
-        BOOST_MATH_BIG_CONSTANT(RealType, 64, 4.517504941996594744052e-02),
-        BOOST_MATH_BIG_CONSTANT(RealType, 64, 6.316922639868793684401e-02),
-        BOOST_MATH_BIG_CONSTANT(RealType, 64, 1.535891099168810015433e+00),
-        BOOST_MATH_BIG_CONSTANT(RealType, 64, -4.706078229522448308087e+01),
-        BOOST_MATH_BIG_CONSTANT(RealType, 64, 1.351015763079160914632e+03),
-        BOOST_MATH_BIG_CONSTANT(RealType, 64, -2.948809013999277355098e+04),
-        BOOST_MATH_BIG_CONSTANT(RealType, 64, 4.967598958582595361757e+05),
-        BOOST_MATH_BIG_CONSTANT(RealType, 64, -6.346924657995383019558e+06),
-        BOOST_MATH_BIG_CONSTANT(RealType, 64, 5.998794574259956613472e+07),
-        BOOST_MATH_BIG_CONSTANT(RealType, 64, -4.016371355801690142095e+08),
-        BOOST_MATH_BIG_CONSTANT(RealType, 64, 1.768791455631826490838e+09),
-        BOOST_MATH_BIG_CONSTANT(RealType, 64, -4.441995678177349895640e+09),
-        BOOST_MATH_BIG_CONSTANT(RealType, 64, 4.482292669974971387738e+09)
-    };
-    RealType result = exp(conc * (cos(x - mean) - 1.0));
-    result /= (boost::math::tools::evaluate_polynomial(P, RealType(1.0 / conc)) + Y) / sqrt(conc)
-              * boost::math::constants::two_pi<RealType>();
-    return result;
   }
   else
   {
@@ -241,6 +212,16 @@ inline RealType pdf_impl(const von_mises_distribution<RealType, Policy>& dist, R
               * boost::math::constants::two_pi<RealType>();
     return result;
   }
+}
+template <typename RealType, class Policy>
+inline RealType pdf_impl(const von_mises_distribution<RealType, Policy>& dist, RealType x,
+                         const boost::integral_constant<int, 113>&)
+{
+  BOOST_MATH_STD_USING  // for ADL of std functions
+  RealType mean = dist.mean();
+  RealType conc = dist.concentration();
+  RealType bessel_i0 = cyl_bessel_i(0, conc, Policy());
+  return exp(conc * cos(x - mean)) / bessel_i0 / boost::math::constants::two_pi<RealType>();
 }
 } // namespace detail
 
@@ -487,9 +468,10 @@ inline RealType mean(const von_mises_distribution<RealType, Policy>& dist)
 template <class RealType, class Policy>
 inline RealType standard_deviation(const von_mises_distribution<RealType, Policy>& dist)
 {
+  BOOST_MATH_STD_USING
   RealType bessel_quot = cyl_bessel_i(1, dist.concentration(), Policy())
                        / cyl_bessel_i(0, dist.concentration(), Policy());
-  return std::sqrt(-2 * std::log(bessel_quot));
+  return sqrt(-2 * log(bessel_quot));
 }
 
 template <class RealType, class Policy>
@@ -666,43 +648,18 @@ inline RealType variance_impl(const von_mises_distribution<RealType, Policy>& di
   }
 }
 
-//~ // long double version of variance_impl
+// long double version of variance_impl
 template <typename RealType, class Policy>
 inline RealType variance_impl(const von_mises_distribution<RealType, Policy>& dist,
                               const boost::integral_constant<int, 64>&)
 {
   BOOST_MATH_STD_USING
   RealType conc = dist.concentration();
-  if (conc < 15)
+  if (conc < 50)
   {
     RealType bessel_i0 = cyl_bessel_i(0, conc, Policy());
     RealType bessel_i1 = cyl_bessel_i(1, conc, Policy());
     return 1 - bessel_i1 / bessel_i0;
-  }
-  else if (conc < 50)
-  {
-    static const RealType Y = 4.011702537536621093750e-01f;
-    static const RealType P[] = {
-        BOOST_MATH_BIG_CONSTANT(RealType, 64, -2.227973351806078464328e-03),
-        BOOST_MATH_BIG_CONSTANT(RealType, 64, 4.986778486088017419036e-02),
-        BOOST_MATH_BIG_CONSTANT(RealType, 64, 2.805066823812285310011e-02),
-        BOOST_MATH_BIG_CONSTANT(RealType, 64, 2.921443721160964964623e-02),
-        BOOST_MATH_BIG_CONSTANT(RealType, 64, 4.517504941996594744052e-02),
-        BOOST_MATH_BIG_CONSTANT(RealType, 64, 6.316922639868793684401e-02),
-        BOOST_MATH_BIG_CONSTANT(RealType, 64, 1.535891099168810015433e+00),
-        BOOST_MATH_BIG_CONSTANT(RealType, 64, -4.706078229522448308087e+01),
-        BOOST_MATH_BIG_CONSTANT(RealType, 64, 1.351015763079160914632e+03),
-        BOOST_MATH_BIG_CONSTANT(RealType, 64, -2.948809013999277355098e+04),
-        BOOST_MATH_BIG_CONSTANT(RealType, 64, 4.967598958582595361757e+05),
-        BOOST_MATH_BIG_CONSTANT(RealType, 64, -6.346924657995383019558e+06),
-        BOOST_MATH_BIG_CONSTANT(RealType, 64, 5.998794574259956613472e+07),
-        BOOST_MATH_BIG_CONSTANT(RealType, 64, -4.016371355801690142095e+08),
-        BOOST_MATH_BIG_CONSTANT(RealType, 64, 1.768791455631826490838e+09),
-        BOOST_MATH_BIG_CONSTANT(RealType, 64, -4.441995678177349895640e+09),
-        BOOST_MATH_BIG_CONSTANT(RealType, 64, 4.482292669974971387738e+09)
-    };
-
-    return 0;
   }
   else
   {
@@ -727,6 +684,68 @@ inline RealType variance_impl(const von_mises_distribution<RealType, Policy>& di
         BOOST_MATH_BIG_CONSTANT(RealType, 64, -6.64365417189215599168817064e+10)
     };
     return 0;
+  }
+}
+
+// quad version of variance_impl
+template <typename RealType, class Policy>
+inline RealType variance_impl(const von_mises_distribution<RealType, Policy>& dist,
+                              const boost::integral_constant<int, 113>&)
+{
+  BOOST_MATH_STD_USING
+  RealType conc = dist.concentration();
+  if (conc < 100)
+  {
+    RealType bessel_i0 = cyl_bessel_i(0, conc, Policy());
+    RealType bessel_i1 = cyl_bessel_i(1, conc, Policy());
+    return 1 - bessel_i1 / bessel_i0;
+  }
+  else
+  {
+    // Polynomial for Bessel I0 / exp(conc) / sqrt(conc)
+    static const RealType P_denom[] = {
+      BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.9894228040143267793994605993438166526772e-01),
+      BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.9867785050179084742493257495245185241487e-02),
+      BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.8050629090725735167652437695397756897920e-02),
+      BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.9219405302839307466358297347675795965363e-02),
+      BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.4742214369972689474366968442268908028204e-02),
+      BOOST_MATH_BIG_CONSTANT(RealType, 113, 9.0602984099194778006610058410222616383078e-02),
+      BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.2839502241666629677015839125593079416327e-01),
+      BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.8926354981801627920292655818232972385750e-01),
+      BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.4231921590621824187100989532173995000655e+00),
+      BOOST_MATH_BIG_CONSTANT(RealType, 113, 9.7264260959693775207585700654645245723497e+00),
+      BOOST_MATH_BIG_CONSTANT(RealType, 113, 4.3890136225398811195878046856373030127018e+01),
+      BOOST_MATH_BIG_CONSTANT(RealType, 113, 2.1999720924619285464910452647408431234369e+02),
+      BOOST_MATH_BIG_CONSTANT(RealType, 113, 1.2076909538525038580501368530598517194748e+03),
+      BOOST_MATH_BIG_CONSTANT(RealType, 113, 7.5684635141332367730007149159063086133399e+03),
+      BOOST_MATH_BIG_CONSTANT(RealType, 113, 3.5178192543258299267923025833141286569141e+04),
+      BOOST_MATH_BIG_CONSTANT(RealType, 113, 6.2966297919851965784482163987240461837728e+05)
+    };
+
+    // Polynomial for (Bessel I0 - Bessel I1) / exp(conc) / sqrt(x)
+    static const RealType P_numer[] = {
+       BOOST_MATH_BIG_CONSTANT(RealType, 113, -3.368165e-34),
+       BOOST_MATH_BIG_CONSTANT(RealType, 113, +0.1994711402007163389699730299733589146073),
+       BOOST_MATH_BIG_CONSTANT(RealType, 113, +0.07480167757526862711373984952175456888896),
+       BOOST_MATH_BIG_CONSTANT(RealType, 113, +0.07012657272681433791923412617430580227103),
+       BOOST_MATH_BIG_CONSTANT(RealType, 113, +0.10226791855993757596915805134093796837369),
+       BOOST_MATH_BIG_CONSTANT(RealType, 113, +0.2013399646648772644282448264813045181469),
+       BOOST_MATH_BIG_CONSTANT(RealType, 113, +0.4983164125454637874163933874417571110056),
+       BOOST_MATH_BIG_CONSTANT(RealType, 113, +1.4845676457582822590839158984567308297366),
+       BOOST_MATH_BIG_CONSTANT(RealType, 113, +5.169476606935535670414552625141409318434),
+       BOOST_MATH_BIG_CONSTANT(RealType, 113, +20.59713743665130419014001937211862931161),
+       BOOST_MATH_BIG_CONSTANT(RealType, 113, +92.40031163861578044111910646492625263225),
+       BOOST_MATH_BIG_CONSTANT(RealType, 113, +460.9440321063085921197536056693132597443),
+       BOOST_MATH_BIG_CONSTANT(RealType, 113, +2.520575547528944544570101030955801999019e+03),
+       BOOST_MATH_BIG_CONSTANT(RealType, 113, +1.5734053646329490893326466550032992462076e+04),
+       BOOST_MATH_BIG_CONSTANT(RealType, 113, +7.319778356894459435808347175389511056370e+04),
+       BOOST_MATH_BIG_CONSTANT(RealType, 113, +1.2997438696903014448182029282439919466883e+06),
+    };
+    RealType x = 1 / conc;
+    RealType numer = boost::math::tools::evaluate_polynomial(P_numer, x);
+    RealType denom = boost::math::tools::evaluate_polynomial(P_denom, x);
+
+    return numer / denom;
   }
 }
 } // namespace detail
@@ -757,7 +776,7 @@ inline RealType skewness(const von_mises_distribution<RealType, Policy>& /*dist*
 template <class RealType, class Policy>
 inline RealType entropy(const von_mises_distribution<RealType, Policy> & dist)
 {
-   using std::log;
+   BOOST_MATH_STD_USING
    RealType arg = constants::two_pi<RealType>() * cyl_bessel_i(0, dist.concentration(), Policy());
    RealType bessel_quot = cyl_bessel_i(1, dist.concentration(), Policy())
                         / cyl_bessel_i(0, dist.concentration(), Policy());
