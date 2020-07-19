@@ -103,9 +103,11 @@ void mask_sieve(Z lower_bound, Z upper_bound, const PrimeContainer& primes, Cont
     std::unique_ptr<bool[]> is_prime {new bool[n]};
     memset(is_prime.get(), true, sizeof(*is_prime.get()) * (n));
 
-    for(auto i : primes)
+    for(size_t i{}; i < primes_size; ++i)
     {
-        for(Z j {std::max(i * i, (lower_bound + i - 1) / i * i)}; j <= upper_bound; j += i)
+        Z current_prime{primes[i]};
+        for(Z j {std::max(current_prime * current_prime, (lower_bound + current_prime - 1) / current_prime * current_prime)};
+            j <= upper_bound; j += current_prime)
         {
             is_prime[j - lower_bound] = false;
         }
