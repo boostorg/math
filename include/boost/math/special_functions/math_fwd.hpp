@@ -1510,10 +1510,10 @@ template <class OutputIterator, class T>\
    { boost::math::cyl_neumann_zero(v, start_index, number_of_zeros, out_it, Policy()); }\
 \
    template <class T>\
-   inline typename boost::math::tools::promote_args<T>::type sin_pi(T x){ return boost::math::sin_pi(x); }\
+   inline typename boost::math::tools::promote_args<T>::type sin_pi(T x){ return boost::math::sin_pi(x, Policy()); }\
 \
    template <class T>\
-   inline typename boost::math::tools::promote_args<T>::type cos_pi(T x){ return boost::math::cos_pi(x); }\
+   inline typename boost::math::tools::promote_args<T>::type cos_pi(T x){ return boost::math::cos_pi(x, Policy()); }\
 \
    using boost::math::fpclassify;\
    using boost::math::isfinite;\
