@@ -431,7 +431,7 @@ inline T expint_as_series(unsigned n, T z, const Policy& pol)
    }
    BOOST_MATH_INSTRUMENT_VARIABLE(result)
    result += pow(-z, static_cast<T>(n - 1)) 
-      * (boost::math::digamma(static_cast<T>(n)) - log(z)) / fact;
+      * (boost::math::digamma(static_cast<T>(n), pol) - log(z)) / fact;
    BOOST_MATH_INSTRUMENT_VARIABLE(result)
 
    expint_series<T> s(k, z, x_k, denom, fact);
@@ -1498,31 +1498,31 @@ struct expint_i_initializer
       static void do_init(const boost::integral_constant<int, 0>&){}
       static void do_init(const boost::integral_constant<int, 53>&)
       {
-         boost::math::expint(T(5));
-         boost::math::expint(T(7));
-         boost::math::expint(T(18));
-         boost::math::expint(T(38));
-         boost::math::expint(T(45));
+         boost::math::expint(T(5), Policy());
+         boost::math::expint(T(7), Policy());
+         boost::math::expint(T(18), Policy());
+         boost::math::expint(T(38), Policy());
+         boost::math::expint(T(45), Policy());
       }
       static void do_init(const boost::integral_constant<int, 64>&)
       {
-         boost::math::expint(T(5));
-         boost::math::expint(T(7));
-         boost::math::expint(T(18));
-         boost::math::expint(T(38));
-         boost::math::expint(T(45));
+         boost::math::expint(T(5), Policy());
+         boost::math::expint(T(7), Policy());
+         boost::math::expint(T(18), Policy());
+         boost::math::expint(T(38), Policy());
+         boost::math::expint(T(45), Policy());
       }
       static void do_init(const boost::integral_constant<int, 113>&)
       {
-         boost::math::expint(T(5));
-         boost::math::expint(T(7));
-         boost::math::expint(T(17));
-         boost::math::expint(T(25));
-         boost::math::expint(T(40));
-         boost::math::expint(T(50));
-         boost::math::expint(T(80));
-         boost::math::expint(T(200));
-         boost::math::expint(T(220));
+         boost::math::expint(T(5), Policy());
+         boost::math::expint(T(7), Policy());
+         boost::math::expint(T(17), Policy());
+         boost::math::expint(T(25), Policy());
+         boost::math::expint(T(40), Policy());
+         boost::math::expint(T(50), Policy());
+         boost::math::expint(T(80), Policy());
+         boost::math::expint(T(200), Policy());
+         boost::math::expint(T(220), Policy());
       }
       void force_instantiate()const{}
    };
@@ -1548,19 +1548,19 @@ struct expint_1_initializer
       static void do_init(const boost::integral_constant<int, 0>&){}
       static void do_init(const boost::integral_constant<int, 53>&)
       {
-         boost::math::expint(1, T(0.5));
-         boost::math::expint(1, T(2));
+         boost::math::expint(1, T(0.5), Policy());
+         boost::math::expint(1, T(2), Policy());
       }
       static void do_init(const boost::integral_constant<int, 64>&)
       {
-         boost::math::expint(1, T(0.5));
-         boost::math::expint(1, T(2));
+         boost::math::expint(1, T(0.5), Policy());
+         boost::math::expint(1, T(2), Policy());
       }
       static void do_init(const boost::integral_constant<int, 113>&)
       {
-         boost::math::expint(1, T(0.5));
-         boost::math::expint(1, T(2));
-         boost::math::expint(1, T(6));
+         boost::math::expint(1, T(0.5), Policy());
+         boost::math::expint(1, T(2), Policy());
+         boost::math::expint(1, T(6), Policy());
       }
       void force_instantiate()const{}
    };
