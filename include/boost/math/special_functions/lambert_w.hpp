@@ -1006,8 +1006,8 @@ inline T do_get_near_singularity_param(T z)
 template <class T, class Policy>
 inline T get_near_singularity_param(T z, const Policy)
 {
-   typedef typename policies::precision<T, Policy>::type precision_type;
-   return static_cast<T>(get_near_singularity_param((precision_type)z));
+   typedef typename policies::evaluation<T, Policy>::type value_type;
+   return static_cast<T>(do_get_near_singularity_param(static_cast<value_type>(z)));
 }
 
 // Forward declarations:
