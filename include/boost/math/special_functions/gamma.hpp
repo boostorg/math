@@ -725,7 +725,7 @@ T tgammap1m1_imp(T dz, Policy const& pol, const Lanczos& l)
       {
          // Use expm1 on lgamma:
          result = boost::math::expm1(-boost::math::log1p(dz, pol) 
-            + lgamma_small_imp<T>(dz+2, dz + 1, dz, tag_type(), pol, l));
+            + lgamma_small_imp<T>(dz+2, dz + 1, dz, tag_type(), pol, l), pol);
          BOOST_MATH_INSTRUMENT_CODE(result);
       }
    }
