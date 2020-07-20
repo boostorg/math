@@ -10,7 +10,6 @@
 
 #include <boost/math/special_functions/prime.hpp>
 #include <boost/assert.hpp>
-#include <deque>
 #include <vector>
 #include <iterator>
 #include <cmath>
@@ -198,7 +197,7 @@ void segmented_sieve(Z lower_bound, Z upper_bound, Container &c)
     primes.reserve(limit / std::log(limit));
 
     // Prepare for max value so you do not have to calculate this again
-    if(limit < 8192)
+    if(limit < 4096)
     {
         boost::math::detail::linear_sieve(limit, primes);
     }
@@ -368,7 +367,7 @@ auto prime_sieve(Z upper_bound, OutputIterator output) -> decltype(output)
     std::vector<Z> primes{};
     primes.reserve(upper_bound / std::log(upper_bound));
 
-    if (upper_bound <= 8192)
+    if (upper_bound <= 4096)
     {
         boost::math::detail::linear_sieve(upper_bound, primes);
     }
