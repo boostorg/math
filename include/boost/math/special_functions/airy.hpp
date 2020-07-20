@@ -75,7 +75,7 @@ T airy_bi_imp(T x, const Policy& pol)
    {
       T tg = boost::math::tgamma(constants::twothirds<T>(), pol);
       //T ai = 1 / (pow(T(3), constants::twothirds<T>()) * tg);
-      T bi = 1 / (sqrt(boost::math::cbrt(T(3))) * tg);
+      T bi = 1 / (sqrt(boost::math::cbrt(T(3), pol)) * tg);
       return bi;
    }
    else
@@ -106,7 +106,7 @@ T airy_ai_prime_imp(T x, const Policy& pol)
    else if(fabs(x * x) / 2 < tools::epsilon<T>())
    {
       T tg = boost::math::tgamma(constants::third<T>(), pol);
-      T aip = 1 / (boost::math::cbrt(T(3)) * tg);
+      T aip = 1 / (boost::math::cbrt(T(3), pol) * tg);
       return -aip;
    }
    else
@@ -141,7 +141,7 @@ T airy_bi_prime_imp(T x, const Policy& pol)
    else if(fabs(x * x) / 2 < tools::epsilon<T>())
    {
       T tg = boost::math::tgamma(constants::third<T>(), pol);
-      T bip = sqrt(boost::math::cbrt(T(3))) / tg;
+      T bip = sqrt(boost::math::cbrt(T(3), pol)) / tg;
       return bip;
    }
    else
