@@ -514,7 +514,7 @@ T ibeta_power_terms(T a,
          if ((boost::math::isnormal)(bet))
             log_result -= log(bet);
          else
-            log_result += boost::math::lgamma(c, pol) - boost::math::lgamma(a) - boost::math::lgamma(c, pol);
+            log_result += boost::math::lgamma(c, pol) - boost::math::lgamma(a) - boost::math::lgamma(b, pol);
          return exp(log_result);
       }
    }
