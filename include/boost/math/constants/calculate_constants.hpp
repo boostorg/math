@@ -1037,6 +1037,45 @@ inline T constant_gauss<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC((boos
    return 2/(a + g);
 }
 
+template <class T>
+template<int N>
+inline T constant_dottie<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC((boost::integral_constant<int, N>)))
+{
+  // Error analysis: cos(x(1+d)) - x(1+d) = -(sin(x)+1)xd; plug in x = 0.739 gives -1.236d; take d as half an ulp gives the termination criteria we want.
+  using std::cos;
+  using std::abs;
+  using std::sin;
+  T x{".739085133215160641655312087673873404013411758900757464965680635773284654883547594599376106931766531849801246"};
+  T residual = cos(x) - x;
+  do {
+    x += residual/(sin(x)+1);
+    residual = cos(x) - x;
+  } while(abs(residual) > std::numeric_limits<T>::epsilon());
+  return x;
+}
+
+
+template <class T>
+template<int N>
+inline T constant_reciprocal_fibonacci<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC((boost::integral_constant<int, N>)))
+{
+  // Wikipedia says Gosper has deviced a faster algorithm for this, but I read the linked paper and couldn't see it!
+  // In any case, k bits per iteration is fine, though it would be better to sum from smallest to largest.
+  // That said, the condition number is unity, so it should be fine.
+  T x0 = 1;
+  T x1 = 1;
+  T sum = 2;
+  T diff = 1;
+  while (diff > std::numeric_limits<T>::epsilon()) {
+    T tmp = x1 + x0;
+    diff = 1/tmp;
+    sum += diff;
+    x0 = x1;
+    x1 = tmp;
+  }
+  return sum;
+}
+
 #endif
 
 }

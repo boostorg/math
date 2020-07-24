@@ -794,6 +794,22 @@ void test_gauss()
     CHECK_LE(Real(0.8346), G_computed);
 }
 
+template<typename Real>
+void test_dottie()
+{
+   using boost::math::constants::dottie;
+   using std::cos;
+   CHECK_ULP_CLOSE(dottie<Real>(), cos(dottie<Real>()), 1);
+}
+
+template<typename Real>
+void test_reciprocal_fibonacci()
+{
+   using boost::math::constants::reciprocal_fibonacci;
+   CHECK_LE(reciprocal_fibonacci<Real>(), Real(3.36));
+   CHECK_LE(Real(3.35), reciprocal_fibonacci<Real>());
+}
+
 #endif
 
 int main()
@@ -821,7 +837,10 @@ int main()
    test_gauss<double>();
    test_gauss<long double>();
    test_gauss<boost::multiprecision::number<boost::multiprecision::cpp_bin_float<400>>>();
-
+   test_dottie<float>();
+   test_dottie<double>();
+   test_dottie<long double>();
+   test_dottie<boost::multiprecision::number<boost::multiprecision::cpp_bin_float<400>>>();
 #endif
    return boost::math::test::report_errors();
 }
