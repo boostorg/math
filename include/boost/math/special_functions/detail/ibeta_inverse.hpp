@@ -697,7 +697,7 @@ T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T* py)
       }
       if (overflow || !(boost::math::isfinite)(bet))
       {
-         xg = exp((boost::math::lgamma(a + 1, pol) + boost::math::lgamma(b + 1, pol) - boost::math::lgamma(a + b + 1, pol) + log(p) - log(b) + log(a + b)) / a);
+         xg = exp((boost::math::lgamma(a + 1, pol) + boost::math::lgamma(b, pol) - boost::math::lgamma(a + b, pol) + log(p)) / a);
       }
       else
          xg = pow(a * p * bet, 1/a);

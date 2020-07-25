@@ -240,7 +240,7 @@ T lgamma_imp(T z, const Policy& pol, const Lanczos& l, int* sign = 0)
    {
       if (0 == z)
          return policies::raise_pole_error<T>(function, "Evaluation of lgamma at %1%.", z, pol);
-      if (fabs(z) < 1 / tools::max_value<T>())
+      if (4 * fabs(z) < tools::epsilon<T>())
          result = -log(fabs(z));
       else
          result = log(fabs(1 / z - constants::euler<T>()));
