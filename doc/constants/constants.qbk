@@ -382,6 +382,8 @@ This section lists the mathematical constants, their use(s) (and sometimes ratio
 [[first_feigenbaum] [] [4.6692016] [[@https://en.wikipedia.org/wiki/Feigenbaum_constants First Feigenbaum constant]] ]
 [[plastic] [Real solution of x[super 3] = x + 1] [1.324717957] [[@https://en.wikipedia.org/wiki/Plastic_number Plastic constant]] ]
 [[gauss] [Reciprocal of agm(1, [radic]2)] [0.8346268] [[@https://en.wikipedia.org/wiki/Gauss%27s_constant Gauss's constant]] ]
+[[dottie] [Solution of cos(x) = x] [0.739085] [[@https://en.wikipedia.org/wiki/Dottie_number Dottie's number]] ]
+[[reciprocal_fibonacci] [Sum of reciprocals of Fibonacci numbers] [3.359885666] [[@https://en.wikipedia.org/wiki/Reciprocal_Fibonacci_constant Reciprocal Fibonacci constant]] ]
 ] [/table]
 
 
