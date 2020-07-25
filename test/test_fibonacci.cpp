@@ -59,3 +59,30 @@ BOOST_AUTO_TEST_CASE(overflow_check) {
     // BOOST_CHECK_THROW(fibonacci<T>(2951), std::exception); // this should be the correct value but imprecisions
     BOOST_CHECK_THROW(fibonacci<BST_2048>(2952), std::exception);
 }
+
+BOOST_AUTO_TEST_CASE(generator_check) {
+    // first 5 values
+    boost::math::fibonacci_next<BST_2048> gen;
+    for (int i : {0, 1, 1, 2, 3, 5, 8, 13, 21}) {
+        BOOST_TEST(gen() == i);
+    }
+
+    // test whether the generator is set correctly to the given index --- next
+    const int next = 1000; // next <=2950 (checked from test above)
+    gen.set(next);
+    BST_2048 a = fibonacci<BST_2048>(next), b = fibonacci<BST_2048>(next + 1);
+    for (int i = next; i < next + 50; ++i) {
+        BOOST_TEST(gen() == a);
+        swap(a, b);
+        b += a;
+    }
+
+    // shift the generator back to next and check again
+    a = fibonacci<BST_2048>(next), b = fibonacci<BST_2048>(next + 1);
+    gen.set(next);
+    for (int i = next; i < next + 50; ++i) {
+        BOOST_TEST(gen() == a);
+        swap(a, b);
+        b += a;
+    }
+}

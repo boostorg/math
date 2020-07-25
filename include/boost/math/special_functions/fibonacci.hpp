@@ -54,6 +54,31 @@ template <typename T>
 T inline fibonacci(unsigned long long n) {
     return fibonacci<T>(n, policies::policy<>());
 }
+
+// generator for next fibonacci number (see examples/reciprocal_fibonacci_constant.hpp)
+template <typename T>
+class fibonacci_next {
+  public:
+    // return next fibonacci number
+    T operator()() {
+        T ret = a;
+        a = b, b += ret; // could've simply: swap(a, b), b += a;
+        return ret;
+    }
+
+    // after set(nth), subsequent calls to the generator returns consecutive
+    // fibonacci numbers starting with the nth fibonacci number
+    void set(unsigned long long nth) {
+        n = nth;
+        a = fibonacci<T>(n);
+        b = fibonacci<T>(n + 1);
+    }
+
+  private:
+    unsigned long long n = 0;
+    T a = 0, b = 1;
+};
+
 } // namespace math
 } // namespace boost
 
