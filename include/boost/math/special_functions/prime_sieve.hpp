@@ -16,6 +16,9 @@
 #include <thread>
 #include <memory>
 #include <future>
+#include <deque>
+#include <numeric>
+#include <iostream>
 
 #ifdef _MSVC_LANG
 #if _MSVC_LANG >= 201703 // _MSVC_LANG == __cplusplus: https://devblogs.microsoft.com/cppblog/msvc-now-correctly-reports-__cplusplus/
@@ -89,8 +92,8 @@ void mask_sieve(Z lower_bound, Z upper_bound, const PrimeContainer& primes, Cont
     memset(is_prime.get(), true, sizeof(*is_prime.get()) * (n));
 
     #if __cplusplus >= 201703 || _MSVC_LANG >= 201703
-    // Enable use of thread pool, and vectorization if supported
-    std::for_each(std::execution::par_unseq, primes.begin(), it, [&is_prime, lower_bound, upper_bound](auto prime)
+    // Enable use of thread pool, not SIMD compatible
+    std::for_each(std::execution::par, primes.begin(), it, [&is_prime, lower_bound, upper_bound](auto prime)
     {
         for(Z j {std::max(prime * prime, (lower_bound + prime - 1) / prime * prime)}; j <= upper_bound; j += prime)
         {
@@ -124,6 +127,223 @@ void mask_sieve(Z lower_bound, Z upper_bound, const PrimeContainer& primes, Cont
         }
     }
 }
+
+// https://minds.wisconsin.edu/bitstream/handle/1793/59248/TR909.pdf?sequence=1
+// Implementing S
+template<class Z>
+class SetS
+{
+private:
+    std::deque<Z> srec_;
+    size_t i_ = 0;
+
+public:
+    SetS() = default;
+
+    constexpr Z next(const Z x)
+    {
+        if(srec_[i_ + 1] > x && srec_[i_] <= x)
+        {
+            ++i_;
+            return srec_[i_];
+        }
+        
+        for(size_t i {}; i < srec_.size(); ++i)
+        {
+            if(srec_[i] > x)
+            {
+                i_ = i;
+                return srec_[i];
+            }
+        }
+
+        return srec_.back();
+    }
+
+    constexpr Z prev(const Z x)
+    {
+        if(srec_[i_ + 1] > x && srec_[i_ - 1] < x)
+        {
+            --i_;
+            return srec_[i_];
+        }
+        
+        for(size_t i {}; i < srec_.size(); ++i)
+        {
+            if(srec_[i] > x)
+            {
+                i_ = i;
+                return srec_[i - 1];
+            }
+        }
+
+        return srec_.front();
+    }
+
+    constexpr Z max() noexcept
+    {
+        return srec_.back();
+    }
+
+    void remove(const Z x)
+    {
+        for(size_t i {}; i < srec_.size(); ++i)
+        {
+            if(srec_[i] == x)
+            {
+                srec_.erase(srec_.begin() + i);
+            }
+        }
+    }
+
+    void insert(Z x)
+    {
+        srec_.push_back(x);
+    }
+
+    constexpr Z operator[] (const Z index)
+    {
+        return srec_[index];
+    }
+
+    constexpr size_t size() noexcept
+    {
+        return srec_.size();
+    }
+};
+
+template<class Z>
+constexpr bool is_prime(const Z n)
+{
+    if(n <= 1)
+    {
+        return false;
+    }
+
+    for(Z factor{2}; factor * factor <= n; ++factor)
+    {
+        if(n % factor == 0)
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+//https://minds.wisconsin.edu/bitstream/handle/1793/59248/TR909.pdf?sequence=1
+// 7 - A segmented Wheel Sieve [Pritchard '87]
+template<class Z, class Container>
+void sub_linear_wheel_sieve(Z upper_bound, Container &resultant_primes)
+{
+    Z limit{static_cast<Z>(std::floor(std::sqrt(static_cast<double>(upper_bound)))) + 1};
+
+    // Step 1 - Compute the wheel
+    Z Mk {1};
+    Z k {2};
+    for(; true; ++k)
+    {
+        if(is_prime(k))
+        {
+            if(Mk * k > limit)
+            {
+                break;
+            }
+
+            else
+            {
+                Mk *= k;
+                resultant_primes.emplace_back(k);
+            }
+            
+        }
+    }
+
+    // Initialze wheel wk
+    std::vector<Z> wk;
+    wk.emplace_back(static_cast<Z>(0));
+    for(Z i{1}; i < Mk; ++i)
+    {
+        // If the number is not prime
+        if(std::gcd(i, Mk) != 1)
+        {
+            wk.emplace_back(static_cast<Z>(0));
+        }
+
+        else
+        {
+            wk.emplace_back(static_cast<Z>(1));
+        }
+    }
+
+    // Part 3 of init wheel
+    wk.back() = static_cast<Z>(2);
+    for(Z x{Mk - 2}; x > 0; --x)
+    {
+        if(wk[x] == 0)
+        {
+            continue;
+        }
+        
+        else
+        {
+            Z i{x + 1};
+            while(wk[i] == 0)
+            {
+                ++i;
+            }
+            wk[x] = i - x;
+        }
+    }
+
+    // Step 2 - Init set S to the kth wheel extended to n
+    Z d {1};
+    SetS<Z> S;
+    while(d < upper_bound)
+    {
+        S.insert(d);
+        d += wk[d % Mk];
+    }
+
+    // Step 3 - Run the linear algorithm starting with p := next(S, 1), which is p_k+1
+    // 4 - A linear Algorithm
+    Z p {2};
+
+    while(p * p <= upper_bound)
+    {
+        //Remove Multiples
+        Z f {p};
+        while(p * f <= upper_bound)
+        {
+            f = S.next(f);
+        }
+
+        // Loop down through the values of f
+        while(f >= p)
+        {
+            S.remove(p * f);
+            f = S.prev(f);
+        }
+
+        p = S.next(p);
+    }
+
+    // Step 4 - Write S - {1} and the first k primes to resultant_primes
+    for(size_t i{1}; i < S.size(); ++i)
+    {
+        resultant_primes.emplace_back(S[i]);
+    }
+}
+
+/*
+//https://minds.wisconsin.edu/bitstream/handle/1793/59248/TR909.pdf?sequence=1
+// 8 - A segmented Wheel Sieve [Pritchard '83]
+template<class Z, class PrimeContainer, class Container>
+void linear_segmented_wheel_sieve(Z lower_bound, Z upper_bound, const PrimeContainer& primes, Container &resultant_primes)
+{
+
+}
+*/
 
 template<class Z, class Container>
 void mask_sieve(Z lower_bound, Z upper_bound, Container &c)
