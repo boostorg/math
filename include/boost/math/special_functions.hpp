@@ -81,4 +81,12 @@
 #include <boost/math/special_functions/relative_difference.hpp>
 #include <boost/math/special_functions/lambert_w.hpp>
 
+#ifndef BOOST_NO_CXX11_HDR_TYPE_TRAITS
+#include <boost/math/special_functions/gegenbauer.hpp>
+#endif
+#ifndef BOOST_NO_CXX11_STATIC_ASSERT
+#include <boost/math/special_functions/jacobi.hpp>
+#endif
+#include <boost/math/special_functions/legendre_stieltjes.hpp>
+
 #endif // BOOST_MATH_SPECIAL_FUNCTIONS_HPP
