@@ -5,7 +5,8 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include <boost/math/special_functions/prime_sieve.hpp>
+#include "../include/boost/math/special_functions/prime_sieve.hpp"
+//#include <boost/math/special_functions/prime_sieve.hpp>
 #include <boost/core/lightweight_test.hpp>
 #include <boost/multiprecision/cpp_int.hpp>
 #include <list>
@@ -23,6 +24,11 @@ void test_prime_sieve()
     BOOST_TEST_EQ(primes.size(), ref);
 
     // Tests for correctness
+    // 2
+    primes.clear();
+    boost::math::prime_sieve(2, std::back_inserter(primes));
+    BOOST_TEST_EQ(primes.size(), 0);
+
     // 100
     primes.clear();
     boost::math::prime_sieve(100, std::back_inserter(primes));
@@ -93,6 +99,51 @@ void test_prime_range()
 }
 
 template<typename Z>
+void test_sub_linear_prime_sieve()
+{
+    std::vector<Z> primes;
+
+    // Does the function work with a vector
+    boost::math::detail::sub_linear_wheel_sieve(100, primes);
+    BOOST_TEST_EQ(primes.size(), 25);
+
+    // 1'000
+    primes.clear();
+    boost::math::detail::sub_linear_wheel_sieve(1'000, primes);
+    BOOST_TEST_EQ(primes.size(), 168);
+
+    // 10'000
+    primes.clear();
+    boost::math::detail::sub_linear_wheel_sieve(10'000, primes);
+    BOOST_TEST_EQ(primes.size(), 1229);
+}
+
+template<typename Z>
+void test_linear_segmented_sieve()
+{
+    std::vector<Z> primes;
+
+    // 10 - 20: Tests only step 1
+    boost::math::detail::linear_segmented_wheel_sieve(10, 20, primes);
+    BOOST_TEST_EQ(primes.size(), 4);
+
+    // 100 - 200: Tests step 2
+    primes.clear();
+    boost::math::detail::linear_segmented_wheel_sieve(100, 200, primes);
+    BOOST_TEST_EQ(primes.size(), 21);
+
+    // 100 - 1'000
+    primes.clear();
+    boost::math::detail::linear_segmented_wheel_sieve(100, 1'000, primes);
+    BOOST_TEST_EQ(primes.size(), 143);
+
+    // 1'000 - 10'000
+    primes.clear();
+    boost::math::detail::linear_segmented_wheel_sieve(1'000, 10'000, primes);
+    BOOST_TEST_EQ(primes.size(), 1061);
+}
+
+template<typename Z>
 void test_prime_sieve_overflow()
 {
     std::vector<Z> primes;
@@ -159,6 +210,17 @@ void test_par_prime_sieve_large()
 
 int main()
 {
+    test_sub_linear_prime_sieve<int>();
+    test_sub_linear_prime_sieve<int32_t>();
+    test_sub_linear_prime_sieve<int64_t>();
+    test_sub_linear_prime_sieve<uint32_t>();
+
+    test_linear_segmented_sieve<int>();
+    test_linear_segmented_sieve<int32_t>();
+    test_linear_segmented_sieve<int64_t>();
+    test_linear_segmented_sieve<uint32_t>();
+
+    /*
     test_prime_sieve<int>();
     test_prime_sieve<int32_t>();
     test_prime_sieve<int64_t>();
@@ -181,6 +243,6 @@ int main()
 
     //test_par_prime_sieve_large<int64_t>();
     #endif
-
+    */
     boost::report_errors();
 }
