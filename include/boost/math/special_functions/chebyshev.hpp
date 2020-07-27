@@ -137,11 +137,17 @@ chebyshev_t_prime(unsigned n, Real const & x, const Policy&)
 {
    typedef typename tools::promote_args<Real>::type result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
+   typedef typename policies::normalise<
+      Policy,
+      policies::promote_float<false>,
+      policies::promote_double<false>,
+      policies::discrete_quantile<>,
+      policies::assert_undefined<> >::type forwarding_policy;
    if (n == 0)
    {
       return result_type(0);
    }
-   return policies::checked_narrowing_cast<result_type, Policy>(n * detail::chebyshev_imp<value_type, true>(n - 1, static_cast<value_type>(x)), "boost::math::chebyshev_t_prime<%1%>(unsigned, %1%)");
+   return policies::checked_narrowing_cast<result_type, Policy>(n * detail::chebyshev_imp<value_type, true>(n - 1, static_cast<value_type>(x), forwarding_policy()), "boost::math::chebyshev_t_prime<%1%>(unsigned, %1%)");
 }
 
 template<class Real>
