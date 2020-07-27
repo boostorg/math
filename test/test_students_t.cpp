@@ -381,6 +381,13 @@ void test_spots(RealType)
                boost::math::quantile(
                   students_t_distribution<RealType>(static_cast<RealType>(0x0fffffff)), static_cast<RealType>(0.25f))), 
             static_cast<RealType>(0.25f), tolerance);
+         //
+         // Bug cases:
+         //
+         if (std::numeric_limits<RealType>::is_specialized && std::numeric_limits<RealType>::has_denorm)
+         {
+            BOOST_CHECK_THROW(boost::math::quantile(students_t_distribution<RealType>((std::numeric_limits<RealType>::min)() / 2), static_cast<RealType>(0.0025f)), std::overflow_error);
+         }
       }
 
   // Student's t pdf tests.

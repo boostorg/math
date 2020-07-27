@@ -333,5 +333,17 @@ void test_spots(T, const char* name)
       BOOST_CHECK_CLOSE(::boost::math::lgamma(ldexp(static_cast<T>(11103367432951928LL), 62)), static_cast<T>(4.0411767712186990905102512019058204792570873633363159e36L), tolerance);
       BOOST_CHECK_CLOSE(::boost::math::lgamma(ldexp(static_cast<T>(11103367432951928LL), 326)), static_cast<T>(3.9754720509185529233002820161357111676582583112671658e116L), tolerance);
    }
+   //
+   // Super small values may cause spurious overflow:
+   //
+   if (std::numeric_limits<T>::is_specialized && std::numeric_limits<T>::has_denorm)
+   {
+      T value = (std::numeric_limits<T>::min)();
+      while (value != 0)
+      {
+         BOOST_CHECK((boost::math::isfinite)(boost::math::lgamma(value)));
+         value /= 2;
+      }
+   }
 }
 

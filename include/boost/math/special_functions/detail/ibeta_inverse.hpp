@@ -673,7 +673,34 @@ T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T* py)
          invert = !invert;
          xs = 1 - xs;
       }
-      T xg = pow(a * p * boost::math::beta(a, b, pol), 1/a);
+      if (a < tools::min_value<T>())
+      {
+         if (py)
+         {
+            *py = invert ? 0 : 1;
+         }
+         return invert ? 1 : 0; // nothing interesting going on here.
+      }
+      //
+      // The call to beta may overflow, plus the alternative using lgamma may do the same
+      // if T is a type where 1/T is infinite for small values (denorms for example).
+      //
+      T bet = 0;
+      T xg;
+      bool overflow = false;
+      try {
+         bet = boost::math::beta(a, b, pol);
+      }
+      catch (const std::runtime_error&)
+      {
+         overflow = true;
+      }
+      if (overflow || !(boost::math::isfinite)(bet))
+      {
+         xg = exp((boost::math::lgamma(a + 1, pol) + boost::math::lgamma(b, pol) - boost::math::lgamma(a + b, pol) + log(p)) / a);
+      }
+      else
+         xg = pow(a * p * bet, 1/a);
       x = xg / (1 + xg);
       y = 1 / (1 + xg);
       //
