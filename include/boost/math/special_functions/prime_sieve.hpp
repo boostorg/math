@@ -18,6 +18,7 @@
 #include <future>
 #include <deque>
 #include <numeric>
+#include <iostream>
 
 #ifdef _MSVC_LANG
 #if _MSVC_LANG >= 201703 // _MSVC_LANG == __cplusplus: https://devblogs.microsoft.com/cppblog/msvc-now-correctly-reports-__cplusplus/
@@ -134,49 +135,95 @@ class SetS
 {
 private:
     std::deque<Z> srec_;
-    size_t i_ = 0;
-
+    
 public:
     SetS() = default;
 
-    constexpr Z next(const Z x)
+    constexpr Z next(const Z x) noexcept
     {
-        if(srec_[i_ + 1] > x && srec_[i_] <= x)
-        {
-            ++i_;
-            return srec_[i_];
-        }
+        const Z length {static_cast<Z>(srec_.size()) - 1};
+        Z low {0};
+        Z high {length};
         
-        for(size_t i {}; i < srec_.size(); ++i)
+        while(low <= high)
         {
-            if(srec_[i] > x)
+            Z mid {low + ((high - low) / 2)};
+
+            if(srec_[mid] < x)
             {
-                i_ = i;
-                return srec_[i];
+                low = mid + 1;
+            }
+
+            else if(srec_[mid] > x)
+            {
+                high = mid - 1;
+            }
+
+            else
+            {
+                return srec_[mid + 1];
             }
         }
 
-        return srec_.back();
+        if(high < 0)
+        {
+            return srec_.front();
+        }
+
+        else if(low > length)
+        {
+            return srec_.back();
+        }
+
+        else
+        {
+            return (low < high) ? srec_[low + 1] : srec_[high + 1];
+        }
     }
 
-    constexpr Z prev(const Z x)
+    constexpr Z prev(const Z x) noexcept
     {
-        if(srec_[i_ + 1] > x && srec_[i_ - 1] < x)
+        const Z length {static_cast<Z>(srec_.size()) - 1};
+        Z low {0};
+        Z high {length};
+
+        while(high >= low)
         {
-            --i_;
-            return srec_[i_];
-        }
-        
-        for(size_t i {}; i < srec_.size(); ++i)
-        {
-            if(srec_[i] > x)
+            Z mid {low + (high - low) / 2};
+
+            if(srec_[mid] < x)
             {
-                i_ = i;
-                return srec_[i - 1];
+                low = mid + 1;
+            }
+
+            else if(srec_[mid] > x)
+            {
+                high = mid - 1;
+            }
+
+            else
+            {
+                return srec_[mid - 1];    
             }
         }
 
-        return srec_.front();
+        if(high < 0)
+        {
+            return srec_.front();
+        }
+
+        else
+        {
+            if(low > length)
+            {
+                return srec_.back();
+            }
+
+            else
+            {
+                return (low < high) ? srec_[low] : srec_[high + 1];
+            }
+        }
     }
 
     constexpr Z max() noexcept
@@ -186,11 +233,28 @@ public:
 
     void remove(const Z x)
     {
-        for(size_t i {}; i < srec_.size(); ++i)
+        const Z length {static_cast<Z>(srec_.size()) - 1};
+        Z low {0};
+        Z high {length};
+
+        while(high >= low)
         {
-            if(srec_[i] == x)
+            Z mid {low + ((high - low) / 2)};
+
+            if(srec_[mid] < x)
             {
-                srec_.erase(srec_.begin() + i);
+                low = mid + 1;
+            }
+
+            else if(srec_[mid] > x)
+            {
+                high = mid - 1;
+            }
+
+            else
+            {
+                srec_.erase(srec_.begin() + mid);
+                return;
             }
         }
     }
@@ -236,11 +300,13 @@ template<class Z, class Container>
 void sub_linear_wheel_sieve(Z upper_bound, Container &resultant_primes)
 {
     Z limit{static_cast<Z>(std::floor(std::sqrt(static_cast<double>(upper_bound)))) + 1};
+    resultant_primes.reserve(upper_bound / std::log(upper_bound));
 
     // Step 1 - Compute the wheel
-    Z Mk {1};
-    Z k {2};
-    for(; true; ++k)
+    Z Mk {2};
+    Z k {3};
+    resultant_primes.emplace_back(static_cast<Z>(2));
+    for(; true; k += 2)
     {
         if(is_prime(k))
         {
@@ -254,13 +320,14 @@ void sub_linear_wheel_sieve(Z upper_bound, Container &resultant_primes)
                 Mk *= k;
                 resultant_primes.emplace_back(k);
             }
-            
         }
     }
 
     // Initialze wheel wk
     std::vector<Z> wk;
+    wk.reserve(Mk);
     wk.emplace_back(static_cast<Z>(0));
+
     for(Z i{1}; i < Mk; ++i)
     {
         // If the number is not prime
@@ -346,7 +413,7 @@ void linear_segmented_wheel_sieve(Z lower_bound, Z upper_bound, Container &resul
     // 1
     Z Mk {1};
     Z k {2};
-    Z counter{};
+    Z k_index{};
 
     for(; true; ++k)
     {
@@ -362,14 +429,14 @@ void linear_segmented_wheel_sieve(Z lower_bound, Z upper_bound, Container &resul
                 else
                 {
                     Mk *= k;
-                    ++counter;
+                    ++k_index;
                 }
             }
 
             else
             {
                 Mk *= k;
-                ++counter;
+                ++k_index;
             }
         }
     }
@@ -417,7 +484,7 @@ void linear_segmented_wheel_sieve(Z lower_bound, Z upper_bound, Container &resul
 
     // Pre-processing step 3
     std::vector<Z> factor;
-    for(size_t i{static_cast<size_t>(counter)}; i < primes.size(); ++i)
+    for(size_t i{static_cast<size_t>(k_index)}; i < primes.size(); ++i)
     {
         factor.emplace_back(primes[i]);
     }
