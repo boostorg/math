@@ -306,22 +306,13 @@ void sub_linear_wheel_sieve(Z upper_bound, Container &resultant_primes)
     Z Mk {2};
     Z k {3};
     resultant_primes.emplace_back(static_cast<Z>(2));
-    for(; true; k += 2)
-    {
-        if(is_prime(k))
-        {
-            if(Mk * k > limit)
-            {
-                break;
-            }
 
-            else
-            {
-                Mk *= k;
-                resultant_primes.emplace_back(k);
-            }
-        }
-    }
+    while(Mk * k <= limit)
+    {
+        Mk *= k;
+        resultant_primes.emplace_back(k);
+        k += 2;
+    }  
 
     // Initialze wheel wk
     std::vector<Z> wk;
@@ -372,8 +363,9 @@ void sub_linear_wheel_sieve(Z upper_bound, Container &resultant_primes)
     }
 
     // Step 3 - Run the linear algorithm starting with p := next(S, 1), which is p_k+1
+    // next(S, 1) = S[1]
     // 4 - A linear Algorithm
-    Z p {2};
+    Z p {S[1]};
 
     while(p * p <= upper_bound)
     {
