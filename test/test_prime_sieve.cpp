@@ -107,6 +107,11 @@ void test_sub_linear_prime_sieve()
     boost::math::detail::sub_linear_wheel_sieve(100, primes);
     BOOST_TEST_EQ(primes.size(), 25);
 
+    // 2
+    primes.clear();
+    boost::math::detail::sub_linear_wheel_sieve(2, primes);
+    BOOST_TEST_EQ(primes.size(), 1);
+
     // 1'000
     primes.clear();
     boost::math::detail::sub_linear_wheel_sieve(1'000, primes);
@@ -123,7 +128,12 @@ void test_linear_segmented_sieve()
 {
     std::vector<Z> primes;
 
+    // 2 - 20:
+    boost::math::detail::linear_segmented_wheel_sieve(2, 20, primes);    
+    BOOST_TEST_EQ(primes.size(), 8);
+
     // 10 - 20: Tests only step 1
+    primes.clear();
     boost::math::detail::linear_segmented_wheel_sieve(10, 20, primes);
     BOOST_TEST_EQ(primes.size(), 4);
 
@@ -141,6 +151,12 @@ void test_linear_segmented_sieve()
     primes.clear();
     boost::math::detail::linear_segmented_wheel_sieve(1'000, 10'000, primes);
     BOOST_TEST_EQ(primes.size(), 1061);
+
+    // 2 - 10'000
+    primes.clear();
+    primes.clear();
+    boost::math::detail::linear_segmented_wheel_sieve(2, 10'000, primes);
+    BOOST_TEST_EQ(primes.size(), 1229);
 }
 
 template<typename Z>

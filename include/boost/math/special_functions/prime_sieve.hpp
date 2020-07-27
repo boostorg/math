@@ -307,6 +307,11 @@ void sub_linear_wheel_sieve(Z upper_bound, Container &resultant_primes)
     Z k {3};
     resultant_primes.emplace_back(static_cast<Z>(2));
 
+    if(upper_bound == 2)
+    {
+        return;
+    }
+
     while(Mk * k <= limit)
     {
         Mk *= k;
@@ -400,6 +405,21 @@ void linear_segmented_wheel_sieve(Z lower_bound, Z upper_bound, Container &resul
 {
     const Z limit{static_cast<Z>(std::floor(std::sqrt(static_cast<double>(upper_bound)))) + 1};
     const Z interval {upper_bound - lower_bound};
+
+    // Solves small cases for benchmark, but needs better remedy
+    if(lower_bound == 2 && upper_bound <= 10)
+    {
+        boost::math::detail::sub_linear_wheel_sieve(upper_bound, resultant_primes);
+        return;
+    }
+
+    else if(lower_bound == 2 && upper_bound > 10)
+    {
+        boost::math::detail::sub_linear_wheel_sieve(static_cast<Z>(10), resultant_primes);
+        boost::math::detail::linear_segmented_wheel_sieve(static_cast<Z>(11), upper_bound, resultant_primes);
+        return;
+    }
+    
 
     // Pre-processing
     // 1
