@@ -1076,6 +1076,32 @@ inline T constant_reciprocal_fibonacci<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_
   return sum;
 }
 
+template <class T>
+template<int N>
+inline T constant_laplace_limit<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC((boost::integral_constant<int, N>)))
+{
+  // If x is the exact root, then the approximate root is given by x(1+delta).
+  // Plugging this into the equation for the Laplace limit gives the residual of approximately
+  // 2.6389delta. Take delta as half an epsilon and give some leeway so we don't get caught in an infinite loop,
+  // gives a termination condition as 2eps.
+  using std::abs;
+  using std::exp;
+  using std::sqrt;
+  T x{"0.66274341934918158097474209710925290705623354911502241752039253499097185308651127724965480259895818168"};
+  T tmp = sqrt(1+x*x);
+  T etmp = exp(tmp);
+  T residual = x*exp(tmp) - 1 - tmp;
+  T df = etmp -x/tmp + etmp*x*x/tmp;
+  do {
+    x -= residual/df;
+    tmp = sqrt(1+x*x);
+    etmp = exp(tmp);
+    residual = x*exp(tmp) - 1 - tmp;
+    df = etmp -x/tmp + etmp*x*x/tmp;    
+  } while(abs(residual) > 2*std::numeric_limits<T>::epsilon());
+  return x;
+}
+
 #endif
 
 }
