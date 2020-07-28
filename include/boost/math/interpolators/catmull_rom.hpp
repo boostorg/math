@@ -18,7 +18,7 @@
 
 namespace std_workaround {
 
-#if defined(__cpp_lib_nonmember_container_access) || (defined(BOOST_MSVC) && (BOOST_MSVC >= 1900))
+#if __cplusplus >= 201703 || (defined(BOOST_MSVC) && (BOOST_MSVC >= 1900))
    using std::size;
 #else
    template <class C>
