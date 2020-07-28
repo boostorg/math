@@ -87,6 +87,8 @@
 #ifndef BOOST_NO_CXX11_STATIC_ASSERT
 #include <boost/math/special_functions/jacobi.hpp>
 #endif
+#ifndef BOOST_NO_CXX11_AUTO_DECLARATIONS
 #include <boost/math/special_functions/legendre_stieltjes.hpp>
+#endif
 
 #endif // BOOST_MATH_SPECIAL_FUNCTIONS_HPP
