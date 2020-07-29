@@ -19,6 +19,7 @@
 #include <deque>
 #include <numeric>
 #include <iostream>
+#include <algorithm>
 
 #ifdef _MSVC_LANG
 #if _MSVC_LANG >= 201703 // _MSVC_LANG == __cplusplus: https://devblogs.microsoft.com/cppblog/msvc-now-correctly-reports-__cplusplus/
@@ -139,93 +140,16 @@ private:
 public:
     SetS() = default;
 
-    constexpr Z next(const Z x) const noexcept
+    constexpr Z next(const Z x) const
     {
-        const Z length {static_cast<Z>(srec_.size()) - 1};
-        Z low {0};
-        Z high {length};
-        
-        while(low <= high)
-        {
-            Z mid {low + ((high - low) / 2)};
-
-            if(srec_[mid] < x)
-            {
-                low = mid + 1;
-            }
-
-            else if(srec_[mid] > x)
-            {
-                high = mid - 1;
-            }
-
-            else
-            {
-                return srec_[mid + 1];
-            }
-        }
-
-        if(high < 0)
-        {
-            return srec_.front();
-        }
-
-        else if(low > length)
-        {
-            return srec_.back();
-        }
-
-        else
-        {
-            return (low < high) ? srec_[low + 1] : srec_[high + 1];
-        }
+        return *std::upper_bound(srec_.begin(), srec_.end(), x);
     }
 
-    constexpr Z prev(const Z x) const noexcept
+    constexpr Z prev(const Z x) const
     {
-        const Z length {static_cast<Z>(srec_.size()) - 1};
-        Z low {0};
-        Z high {length};
-
-        while(high >= low)
-        {
-            Z mid {low + (high - low) / 2};
-
-            if(srec_[mid] < x)
-            {
-                low = mid + 1;
-            }
-
-            else if(srec_[mid] > x)
-            {
-                high = mid - 1;
-            }
-
-            else
-            {
-                return srec_[mid - 1];    
-            }
-        }
-
-        if(high < 0)
-        {
-            return srec_.front();
-        }
-
-        else
-        {
-            if(low > length)
-            {
-                return srec_.back();
-            }
-
-            else
-            {
-                return (low < high) ? srec_[low] : srec_[high + 1];
-            }
-        }
+        return *--std::lower_bound(srec_.begin(), srec_.end(), x);
     }
-
+    
     constexpr Z max() const noexcept
     {
         return srec_.back();
@@ -233,29 +157,11 @@ public:
 
     void remove(const Z x)
     {
-        const Z length {static_cast<Z>(srec_.size()) - 1};
-        Z low {0};
-        Z high {length};
-
-        while(high >= low)
+        auto index {std::lower_bound(srec_.begin(), srec_.end(), x)};
+        
+        if(index != srec_.end() && !(x < *index))
         {
-            Z mid {low + ((high - low) / 2)};
-
-            if(srec_[mid] < x)
-            {
-                low = mid + 1;
-            }
-
-            else if(srec_[mid] > x)
-            {
-                high = mid - 1;
-            }
-
-            else
-            {
-                srec_.erase(srec_.begin() + mid);
-                return;
-            }
+            srec_.erase(index);
         }
     }
 
