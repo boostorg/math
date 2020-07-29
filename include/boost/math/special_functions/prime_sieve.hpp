@@ -100,8 +100,8 @@ void mask_sieve(Z lower_bound, Z upper_bound, const PrimeContainer& primes, Cont
             is_prime[j - lower_bound] = false;
         }
     });
-
     #else
+
     for(size_t i{}; i < primes_size; ++i)
     {
         Z current_prime{primes[i]};
@@ -139,7 +139,7 @@ private:
 public:
     SetS() = default;
 
-    constexpr Z next(const Z x) noexcept
+    constexpr Z next(const Z x) const noexcept
     {
         const Z length {static_cast<Z>(srec_.size()) - 1};
         Z low {0};
@@ -181,7 +181,7 @@ public:
         }
     }
 
-    constexpr Z prev(const Z x) noexcept
+    constexpr Z prev(const Z x) const noexcept
     {
         const Z length {static_cast<Z>(srec_.size()) - 1};
         Z low {0};
@@ -226,7 +226,7 @@ public:
         }
     }
 
-    constexpr Z max() noexcept
+    constexpr Z max() const noexcept
     {
         return srec_.back();
     }
@@ -259,17 +259,17 @@ public:
         }
     }
 
-    void insert(Z x)
+    void insert(const Z x)
     {
-        srec_.push_back(x);
+        srec_.emplace_back(x);
     }
 
-    constexpr Z operator[] (const Z index)
+    constexpr Z operator[] (const Z index) const
     {
         return srec_[index];
     }
 
-    constexpr size_t size() noexcept
+    constexpr size_t size() const noexcept
     {
         return srec_.size();
     }
@@ -409,50 +409,35 @@ void linear_segmented_wheel_sieve(Z lower_bound, Z upper_bound, Container &resul
     // Solves small cases for benchmark, but needs better remedy
     if(lower_bound == 2 && upper_bound <= 10)
     {
-        boost::math::detail::sub_linear_wheel_sieve(upper_bound, resultant_primes);
+        //boost::math::detail::sub_linear_wheel_sieve(upper_bound, resultant_primes);
+        boost::math::detail::linear_sieve(upper_bound, resultant_primes);
         return;
     }
 
     else if(lower_bound == 2 && upper_bound > 10)
     {
-        boost::math::detail::sub_linear_wheel_sieve(static_cast<Z>(10), resultant_primes);
+        //boost::math::detail::sub_linear_wheel_sieve(static_cast<Z>(10), resultant_primes);
+        boost::math::detail::linear_sieve(static_cast<Z>(10), resultant_primes);
         boost::math::detail::linear_segmented_wheel_sieve(static_cast<Z>(11), upper_bound, resultant_primes);
         return;
     }
-    
 
     // Pre-processing
     // 1
-    Z Mk {1};
-    Z k {2};
-    Z k_index{};
+    std::vector<Z> primes;
+    boost::math::detail::linear_sieve(limit, primes); 
 
-    for(; true; ++k)
+    Z Mk {2};
+    Z k {3};
+    Z k_index {1};
+
+    while(Mk * k <= limit)
     {
-        if(is_prime(k))
-        {
-            if(Mk * k > limit)
-            {
-                if(Mk * k - limit > limit - Mk)
-                {
-                    break;
-                }
-
-                else
-                {
-                    Mk *= k;
-                    ++k_index;
-                }
-            }
-
-            else
-            {
-                Mk *= k;
-                ++k_index;
-            }
-        }
+        Mk *= k;
+        ++k_index;
+        k = primes[k_index];
     }
-
+    
     // Initialze wheel wk
     std::vector<Z> wk;
     wk.emplace_back(static_cast<Z>(0));
@@ -491,8 +476,7 @@ void linear_segmented_wheel_sieve(Z lower_bound, Z upper_bound, Container &resul
     }
 
     // Pre-processing step 2
-    std::vector<Z> primes;
-    boost::math::detail::sub_linear_wheel_sieve(limit, primes);
+    // Done as part of step 1 for performance improvement
 
     // Pre-processing step 3
     std::vector<Z> factor;
