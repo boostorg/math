@@ -1,13 +1,13 @@
 [book Math Toolkit
     [quickbook 1.7]
-    [copyright 2006-2019 Nikhar Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Matthew Pulver, Johan Råde, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg, Daryle Walker and Xiaogang Zhang]
+    [copyright 2006-2020 Nikhar Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Evan Miller, Jeremy Murphy, Matthew Pulver, Johan Råde, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg, Daryle Walker and Xiaogang Zhang]
     [/purpose ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22]
     [license
         Distributed under the Boost Software License, Version 1.0.
         (See accompanying file LICENSE_1_0.txt or copy at
         [@http://www.boost.org/LICENSE_1_0.txt])
     ]
-    [authors [Agrawal, Nikhar], [Bikineev, Anton], [Bristow, Paul A.], [Holin, Hubert], [Guazzone, Marco], [Kormanyos, Christopher], [Lalande, Bruno], [Maddock, John], [Murphy, Jeremy W.], [Pulver, Matthew], [Råde, Johan], [Sobotta, Benjamin], [Sewani, Gautam], [Thompson, Nicholas], [van den Berg, Thijs], [Walker, Daryle], [Zhang, Xiaogang]]
+    [authors [Agrawal, Nikhar], [Bikineev, Anton], [Bristow, Paul A.], [Holin, Hubert], [Guazzone, Marco], [Kormanyos, Christopher], [Lalande, Bruno], [Maddock, John], [Miller, Evan], [Murphy, Jeremy W.], [Pulver, Matthew], [Råde, Johan], [Sobotta, Benjamin], [Sewani, Gautam], [Thompson, Nicholas], [van den Berg, Thijs], [Walker, Daryle], [Zhang, Xiaogang]]
     [/last-revision $Date$]
     [version 2.12.0]
 ]
@@ -267,6 +267,20 @@ and use the function's name as the link text.]
 [def __jacobi_sd [link math_toolkit.jacobi.jacobi_sd jacobi_sd]]
 [def __jacobi_sn [link math_toolkit.jacobi.jacobi_sn jacobi_sn]]
 [def __jacobi_sc [link math_toolkit.jacobi.jacobi_sc jacobi_sc]]
+
+[/Jacobi Theta Functions]
+[def __jacobi_theta1 [link math_toolkit.jacobi_theta.jacobi_theta1 jacobi_theta1]]
+[def __jacobi_theta1tau [link math_toolkit.jacobi_theta.jacobi_theta1 jacobi_theta1tau]]
+[def __jacobi_theta2 [link math_toolkit.jacobi_theta.jacobi_theta2 jacobi_theta2]]
+[def __jacobi_theta2tau [link math_toolkit.jacobi_theta.jacobi_theta2 jacobi_theta2tau]]
+[def __jacobi_theta3 [link math_toolkit.jacobi_theta.jacobi_theta3 jacobi_theta3]]
+[def __jacobi_theta3tau [link math_toolkit.jacobi_theta.jacobi_theta3 jacobi_theta3tau]]
+[def __jacobi_theta3m1 [link math_toolkit.jacobi_theta.jacobi_theta3 jacobi_theta3m1]]
+[def __jacobi_theta3m1tau [link math_toolkit.jacobi_theta.jacobi_theta3 jacobi_theta3m1tau]]
+[def __jacobi_theta4 [link math_toolkit.jacobi_theta.jacobi_theta4 jacobi_theta4]]
+[def __jacobi_theta4tau [link math_toolkit.jacobi_theta.jacobi_theta4 jacobi_theta4tau]]
+[def __jacobi_theta4m1 [link math_toolkit.jacobi_theta.jacobi_theta4 jacobi_theta4m1]]
+[def __jacobi_theta4m1tau [link math_toolkit.jacobi_theta.jacobi_theta4 jacobi_theta4m1tau]]
 
 [/sinus cardinals]
 [def __sinc_pi  [link math_toolkit.sinc.sinc_pi sinc_pi]]
@@ -667,7 +681,11 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [include sf/ellint_legendre.qbk]
 [endsect] [/section:ellint Elliptic Integrals]
 
+[/Jacobi Elliptic Functions]
 [include sf/jacobi_elliptic.qbk]
+
+[/Jacobi Theta Functions]
+[include sf/jacobi_theta.qbk]
 
 [/ Lambert W function]
 [include sf/lambert_w.qbk]

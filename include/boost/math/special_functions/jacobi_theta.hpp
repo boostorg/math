@@ -19,7 +19,7 @@
 // θ₁(z,q) = 2 Σ (-1)ⁿ * q^(n+1/2)² * sin((2n+1)z)
 // θ₂(z,q) = 2 Σ q^(n+1/2)² * cos((2n+1)z)
 // θ₃(z,q) = 1 + 2 Σ q^n² * cos(2nz)
-// θ₄(z,q) = 1 + 2 Σ q^n² * cos(2nz)
+// θ₄(z,q) = 1 + 2 Σ (-1)ⁿ * q^n² * cos(2nz)
 //
 // Appropriately multiplied and divided, these four theta functions can be used
 // to implement the famous Jacabi elliptic functions - but this is not really
