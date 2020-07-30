@@ -21,6 +21,10 @@ Mathematically, the functions are described by:
 [equation jacobi_theta3]
 [equation jacobi_theta4]
 
+Graphically, setting /q/=0.15:
+
+[graph jacobi_theta]
+
 Appropriately multiplied and divided, these four theta functions can be used
 to implement the [link math_toolkit.jacobi.jac_over Jacobi elliptic functions]; but this is not really
 recommended, as the existing Boost implementations are likely faster and
@@ -48,7 +52,7 @@ It is more accurate to use `__log1p` and pass in the result to the [tau] version
 
   jacobi_theta1tau(x, -boost::math::log1p(-q_complement) / boost::math::constants::pi<T>());
 
-Additional "minus 1" versions of the third and fourth theta functions are provided. Similar in spirit to __expm1, these functions return one less than the evaluated function, and yield increased accuracy when /q/ is small.
+Additional "minus 1" versions of the third and fourth theta functions are provided. Similar in spirit to `__expm1`, these functions return one less than the evaluated function, and yield increased accuracy when /q/ is small.
 
 [endsect] [/section:jacobi_theta_overview Overview of the Jacobi Theta Functions]
 
@@ -83,6 +87,10 @@ The functions calculate the value of first [link math_toolkit.jacobi_theta.jacob
 Or in terms of an imaginary [tau]:
 
 [equation jacobi_theta1tau]
+
+The nome /q/ is restricted to the domain (0, 1). The following graph shows the theta function at various values of /q/:
+
+[graph jacobi_theta1]
 
 [optional_policy]
 
@@ -119,6 +127,10 @@ The functions calculate the value of second [link math_toolkit.jacobi_theta.jaco
 Or in terms of an imaginary [tau]:
 
 [equation jacobi_theta2tau]
+
+The nome /q/ is restricted to the domain (0, 1). The following graph shows the theta function at various values of /q/:
+
+[graph jacobi_theta2]
 
 [optional_policy]
 
@@ -167,6 +179,10 @@ The functions calculate the value of third [link math_toolkit.jacobi_theta.jacob
 Or in terms of an imaginary [tau]:
 
 [equation jacobi_theta3tau]
+
+The nome /q/ is restricted to the domain (0, 1). The following graph shows the theta function at various values of /q/:
+
+[graph jacobi_theta3]
 
 [optional_policy]
 
@@ -217,6 +233,10 @@ The functions calculate the value of fourth [link math_toolkit.jacobi_theta.jaco
 Or in terms of an imaginary [tau]:
 
 [equation jacobi_theta4tau]
+
+The nome /q/ is restricted to the domain (0, 1). The following graph shows the theta function at various values of /q/:
+
+[graph jacobi_theta4]
 
 [optional_policy]
 
