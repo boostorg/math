@@ -14,6 +14,22 @@ void expected_results()
    // various compilers and platforms.
    //
    //
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      ".*",                          // platform
+      ".*",                  // test type(s)
+      ".*Small Tau.*",      // test data group
+      ".*", 1000, 200);  // test function
+
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      ".*",                          // platform
+      ".*",                  // test type(s)
+      ".*Wolfram Alpha.*",      // test data group
+      ".*", 60, 15);  // test function
+
    // Catch all cases come last:
    //
    add_expected_result(
@@ -22,7 +38,7 @@ void expected_results()
       ".*",                          // platform
       ".*",                  // test type(s)
       ".*",      // test data group
-      ".*", 5, 2);  // test function
+      ".*", 20, 5);  // test function
    //
    // Finish off by printing out the compiler/stdlib/platform names,
    // we do this to make it easier to mark up expected error rates.
