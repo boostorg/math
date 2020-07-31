@@ -135,19 +135,34 @@ template<class Z>
 class SetS
 {
 private:
-    std::deque<Z> srec_;
+    std::vector<Z> srec_;
     
 public:
     SetS() = default;
 
-    constexpr Z next(const Z x) const
+    constexpr explicit SetS(const Z limit)
     {
-        return *std::upper_bound(srec_.begin(), srec_.end(), x);
+        srec_.reserve(limit);
     }
 
-    constexpr Z prev(const Z x) const
+    constexpr Z next(const Z x) const noexcept
     {
-        return *--std::lower_bound(srec_.begin(), srec_.end(), x);
+        return *std::upper_bound(srec_.cbegin(), srec_.cend(), x);
+    }
+
+    constexpr auto next_it(const Z x) const noexcept
+    {
+        return std::upper_bound(srec_.cbegin(), srec_.cend(), x);
+    }
+
+    constexpr Z prev(const Z x) const noexcept
+    {
+        return *--std::lower_bound(srec_.cbegin(), srec_.cend(), x);
+    }
+
+    constexpr auto prev_it(const Z x) const noexcept
+    {
+        return --std::lower_bound(srec_.cbegin(), srec_.cend(), x);
     }
     
     constexpr Z max() const noexcept
@@ -155,22 +170,22 @@ public:
         return srec_.back();
     }
 
-    void remove(const Z x)
+    void remove(const Z x) noexcept
     {
-        auto index {std::lower_bound(srec_.begin(), srec_.end(), x)};
+        auto index {std::lower_bound(srec_.cbegin(), srec_.cend(), x)};
         
-        if(index != srec_.end() && !(x < *index))
+        if(index != srec_.cend() && !(x < *index))
         {
             srec_.erase(index);
         }
     }
 
-    void insert(const Z x)
+    void insert(const Z x) noexcept
     {
         srec_.emplace_back(x);
     }
 
-    constexpr Z operator[] (const Z index) const
+    constexpr Z operator[] (const Z index) const noexcept
     {
         return srec_[index];
     }
@@ -225,35 +240,23 @@ void sub_linear_wheel_sieve(Z upper_bound, Container &resultant_primes)
         k += 2;
     }  
 
-    // Initialze wheel wk
-    std::vector<Z> wk;
-    wk.reserve(Mk);
-    wk.emplace_back(static_cast<Z>(0));
+    // Initialze wheel wk   
+    std::unique_ptr<Z[]> wk{new Z[Mk]{0}};
 
     for(Z i{1}; i < Mk; ++i)
     {
-        // If the number is not prime
-        if(std::gcd(i, Mk) != 1)
+        if(std::gcd(i, Mk) == 1)
         {
-            wk.emplace_back(static_cast<Z>(0));
-        }
-
-        else
-        {
-            wk.emplace_back(static_cast<Z>(1));
+            wk[i] = 1;
         }
     }
 
     // Part 3 of init wheel
-    wk.back() = static_cast<Z>(2);
+    wk[Mk - 1] = static_cast<Z>(2);
+
     for(Z x{Mk - 2}; x > 0; --x)
     {
-        if(wk[x] == 0)
-        {
-            continue;
-        }
-        
-        else
+        if(wk[x] == 1)
         {
             Z i{x + 1};
             while(wk[i] == 0)
@@ -266,7 +269,8 @@ void sub_linear_wheel_sieve(Z upper_bound, Container &resultant_primes)
 
     // Step 2 - Init set S to the kth wheel extended to n
     Z d {1};
-    SetS<Z> S;
+    SetS S(upper_bound);
+
     while(d < upper_bound)
     {
         S.insert(d);
@@ -277,24 +281,27 @@ void sub_linear_wheel_sieve(Z upper_bound, Container &resultant_primes)
     // next(S, 1) = S[1]
     // 4 - A linear Algorithm
     Z p {S[1]};
+    size_t p_index {1};
 
     while(p * p <= upper_bound)
     {
         //Remove Multiples
         Z f {p};
+        size_t f_index {p_index};
+
         while(p * f <= upper_bound)
         {
-            f = S.next(f);
+            f = S[++f_index];
         }
 
         // Loop down through the values of f
         while(f >= p)
         {
             S.remove(p * f);
-            f = S.prev(f);
+            f = S[--f_index];
         }
 
-        p = S.next(p);
+        p = S[++p_index];
     }
 
     // Step 4 - Write S - {1} and the first k primes to resultant_primes
@@ -404,7 +411,7 @@ void linear_segmented_wheel_sieve(Z lower_bound, Z upper_bound, Container &resul
     }
 
     // Step 2
-    for(Z p {}; p < static_cast<Z>(factor.size()); ++p)
+    for(Z p {0}; p < static_cast<Z>(factor.size()); ++p)
     {
         Z f {factor[p]};
         Z current_prime{factor[p]};
@@ -428,7 +435,6 @@ void linear_segmented_wheel_sieve(Z lower_bound, Z upper_bound, Container &resul
         }
     }
 }
-
 
 template<class Z, class Container>
 void mask_sieve(Z lower_bound, Z upper_bound, Container &c)
