@@ -339,7 +339,7 @@
               //
               // Convert to relative error after exp:
               //
-              loop_error_scale = fabs(expm1(loop_error_scale));
+              loop_error_scale = fabs(expm1(loop_error_scale, pol));
               //
               // Convert to multiplier for the error term:
               //

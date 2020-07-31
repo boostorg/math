@@ -187,13 +187,13 @@ inline T falling_factorial_imp(T x, unsigned n, const Policy& pol)
       {
          // If the two end of the range are far apart we have a ratio of two very large
          // numbers, split the calculation up into two blocks:
-         T t1 = x * boost::math::falling_factorial(x - 1, max_factorial<T>::value - 2);
-         T t2 = boost::math::falling_factorial(x - max_factorial<T>::value + 1, n - max_factorial<T>::value + 1);
+         T t1 = x * boost::math::falling_factorial(x - 1, max_factorial<T>::value - 2, pol);
+         T t2 = boost::math::falling_factorial(x - max_factorial<T>::value + 1, n - max_factorial<T>::value + 1, pol);
          if(tools::max_value<T>() / fabs(t1) < fabs(t2))
             return boost::math::sign(t1) * boost::math::sign(t2) * policies::raise_overflow_error<T>("boost::math::falling_factorial<%1%>", 0, pol);
          return t1 * t2;
       }
-      return x * boost::math::falling_factorial(x - 1, n - 1);
+      return x * boost::math::falling_factorial(x - 1, n - 1, pol);
    }
    if(x <= n - 1)
    {

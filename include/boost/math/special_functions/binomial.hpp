@@ -61,7 +61,7 @@ T binomial_coefficient(unsigned n, unsigned k, const Policy& pol)
 // we'll promote to double:
 //
 template <>
-inline float binomial_coefficient<float, policies::policy<> >(unsigned n, unsigned k, const policies::policy<>& pol)
+inline float binomial_coefficient<float, policies::policy<> >(unsigned n, unsigned k, const policies::policy<>&)
 {
    typedef policies::normalise<
        policies::policy<>,

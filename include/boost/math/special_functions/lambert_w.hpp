@@ -996,20 +996,18 @@ T lambert_w0_approx(T z)
 //! and then refined using Halley iterations.
 
 template <class T>
-inline T get_near_singularity_param(T z)
+inline T do_get_near_singularity_param(T z)
 {
    BOOST_MATH_STD_USING
    const T p2 = 2 * (boost::math::constants::e<T>() * z + 1);
    const T p = sqrt(p2);
    return p;
 }
-inline float get_near_singularity_param(float z)
+template <class T, class Policy>
+inline T get_near_singularity_param(T z, const Policy)
 {
-   return static_cast<float>(get_near_singularity_param((double)z));
-}
-inline double get_near_singularity_param(double z)
-{
-   return static_cast<double>(get_near_singularity_param((long double)z));
+   typedef typename policies::evaluation<T, Policy>::type value_type;
+   return static_cast<T>(do_get_near_singularity_param(static_cast<value_type>(z)));
 }
 
 // Forward declarations:
@@ -1220,7 +1218,7 @@ T lambert_w_negative_rational_float(T z, const Policy& pol)
    else
    {
       // z is very close (within 0.01) of the singularity at e^-1.
-      return lambert_w_singularity_series(get_near_singularity_param(z));
+      return lambert_w_singularity_series(get_near_singularity_param(z, pol));
    }
 }
 

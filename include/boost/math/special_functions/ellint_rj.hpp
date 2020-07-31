@@ -65,7 +65,7 @@ T ellint_rc1p_imp(T y, const Policy& pol)
       if(y > -0.5)
       {
          T arg = sqrt(-y);
-         result = (boost::math::log1p(arg) - boost::math::log1p(-arg)) / (2 * sqrt(-y));
+         result = (boost::math::log1p(arg, pol) - boost::math::log1p(-arg, pol)) / (2 * sqrt(-y));
       }
       else
       {

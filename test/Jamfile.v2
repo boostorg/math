@@ -1092,7 +1092,8 @@ test-suite misc :
        quaternion_mi2.cpp
        ../../test/build//boost_unit_test_framework ]
 
-   [ run __temporary_test.cpp test_instances//test_instances : : : <test-info>always_show_run_output <pch>off ]
+#   [ run __temporary_test.cpp test_instances//test_instances : : : <test-info>always_show_run_output <pch>off ]
+   [ compile test_no_long_double_policy.cpp ]
 ;
 
 test-suite quadrature :
