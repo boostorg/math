@@ -36,6 +36,8 @@ Most applications will want to use the /q/ parameterization of the functions: `_
 
 Note that Boost assumes that [tau] is a purely imaginary number. This assumption is not required by the mathematics, but it does cover the most common application domains.
 
+[heading Accuracy considerations]
+
 The purpose of the [tau] parameterization is to provide increased accuracy either when /q/ is expressible as an exponential or is very close to unity. For example, instead of:
 
   jacobi_theta1(x, exp(-a));
@@ -53,6 +55,10 @@ It is more accurate to use `__log1p` and pass in the result to the [tau] version
   jacobi_theta1tau(x, -boost::math::log1p(-q_complement) / boost::math::constants::pi<T>());
 
 Additional "minus 1" versions of the third and fourth theta functions are provided. Similar in spirit to `__expm1`, these functions return one less than the evaluated function, and yield increased accuracy when /q/ is small.
+
+[heading Tests]
+
+Results of the theta functions are tested against Wolfram Alpha data, as well as random values computed at high precision. In addition, the tests verify the majority of the identities described in [@https://dlmf.nist.gov/20.7 DLMF Chapter 20.7].
 
 [endsect] [/section:jacobi_theta_overview Overview of the Jacobi Theta Functions]
 
@@ -94,6 +100,16 @@ The nome /q/ is restricted to the domain (0, 1). The following graph shows the t
 
 [optional_policy]
 
+[heading Implementation]
+
+The /q/ parameterization is implemented using the [tau] parameterization, where [tau]=-log(/q/)/[pi].
+
+If [tau] is greater than or equal to 1, the summation in the section above is used as-is. However if [tau] < 1, the following identity [@https://dlmf.nist.gov/20.7#viii DLMF 20.7.30] is used, defining [tau]'=-1/[tau]:
+
+[equation jacobi_theta1_imaginary]
+
+This transformation of variables ensures that the function will always converge in a small number of iterations.
+
 [endsect] [/section:jacobi_theta1 Jacobi Theta Function [theta][sub 1]]
 
 [section:jacobi_theta2 Jacobi Theta Function [theta][sub 2]]
@@ -133,6 +149,16 @@ The nome /q/ is restricted to the domain (0, 1). The following graph shows the t
 [graph jacobi_theta2]
 
 [optional_policy]
+
+[heading Implementation]
+
+The /q/ parameterization is implemented using the [tau] parameterization, where [tau]=-log(/q/)/[pi].
+
+If [tau] is greater than or equal to 1, the summation in the section above is used as-is. However if [tau] < 1, the following identity [@https://dlmf.nist.gov/20.7#viii DLMF 20.7.31] is used, defining [tau]'=-1/[tau]:
+
+[equation jacobi_theta2_imaginary]
+
+This transformation of variables ensures that the function will always converge in a small number of iterations.
 
 [endsect] [/section:jacobi_theta2 Jacobi Theta Function [theta][sub 2]]
 
@@ -188,6 +214,16 @@ The nome /q/ is restricted to the domain (0, 1). The following graph shows the t
 
 A second quartet of functions (functions containing `m1`) compute one less than the value of the third theta function. These versions of the functions provide increased accuracy when the result is close to unity.
 
+[heading Implementation]
+
+The /q/ parameterization is implemented using the [tau] parameterization, where [tau]=-log(/q/)/[pi].
+
+If [tau] is greater than or equal to 1, the summation in the section above is used as-is. However if [tau] < 1, the following identity [@https://dlmf.nist.gov/20.7#viii DLMF 20.7.32] is used, defining [tau]'=-1/[tau]:
+
+[equation jacobi_theta3_imaginary]
+
+This transformation of variables ensures that the function will always converge in a small number of iterations.
+
 [endsect] [/section:jacobi_theta3 Jacobi Theta Function [theta][sub 3]]
 
 [section:jacobi_theta4 Jacobi Theta Function [theta][sub 4]]
@@ -241,6 +277,16 @@ The nome /q/ is restricted to the domain (0, 1). The following graph shows the t
 [optional_policy]
 
 A second quartet of functions (functions containing `m1`) compute one less than the value of the fourth theta function. These versions of the functions provide increased accuracy when the result is close to unity.
+
+[heading Implementation]
+
+The /q/ parameterization is implemented using the [tau] parameterization, where [tau]=-log(/q/)/[pi].
+
+If [tau] is greater than or equal to 1, the summation in the section above is used as-is. However if [tau] < 1, the following identity [@https://dlmf.nist.gov/20.7#viii DLMF 20.7.33] is used, defining [tau]'=-1/[tau]:
+
+[equation jacobi_theta4_imaginary]
+
+This transformation of variables ensures that the function will always converge in a small number of iterations.
 
 [endsect] [/section:jacobi_theta4 Jacobi Theta Function [theta][sub 4]]
 
