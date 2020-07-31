@@ -10,6 +10,18 @@
 using namespace boost::math::constants;
 using boost::multiprecision::mpfr_float;
 
+void LaplaceLimit(benchmark::State& state)
+{
+    mpfr_float::default_precision(state.range(0));
+    for (auto _ : state)
+    {
+        benchmark::DoNotOptimize(laplace_limit<mpfr_float>());
+    }
+    state.SetComplexityN(state.range(0));
+}
+
+BENCHMARK(LaplaceLimit)->RangeMultiplier(2)->Range(128, 1<<20)->Complexity()->Unit(benchmark::kMicrosecond);
+
 void Dottie(benchmark::State& state)
 {
     mpfr_float::default_precision(state.range(0));

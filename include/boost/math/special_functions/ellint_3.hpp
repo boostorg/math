@@ -212,7 +212,7 @@ T ellint_pi_imp(T v, T phi, T k, T vc, const Policy& pol)
    if(k == 1)
    {
       // See http://functions.wolfram.com/08.06.03.0013.01
-      result = sqrt(v) * atanh(sqrt(v) * sin(phi)) - log(1 / cos(phi) + tan(phi));
+      result = sqrt(v) * atanh(sqrt(v) * sin(phi), pol) - log(1 / cos(phi) + tan(phi));
       result /= v - 1;
       return result;
    }

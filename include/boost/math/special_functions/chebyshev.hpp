@@ -27,13 +27,15 @@ inline typename tools::promote_args<T1, T2, T3>::type chebyshev_next(T1 const & 
 
 namespace detail {
 
-template<class Real, bool second>
-inline Real chebyshev_imp(unsigned n, Real const & x)
+template<class Real, bool second, class Policy>
+inline Real chebyshev_imp(unsigned n, Real const & x, const Policy&)
 {
 #ifdef BOOST_MATH_CHEB_USE_STD_ACOSH
     using std::acosh;
+#define BOOST_MATH_ACOSH_POLICY
 #else
    using boost::math::acosh;
+#define BOOST_MATH_ACOSH_POLICY , Policy()
 #endif
     using std::cosh;
     using std::pow;
@@ -53,17 +55,17 @@ inline Real chebyshev_imp(unsigned n, Real const & x)
     {
         if (x > 1)
         {
-            return cosh(n*acosh(x));
+            return cosh(n*acosh(x BOOST_MATH_ACOSH_POLICY));
         }
         if (x < -1)
         {
             if (n & 1)
             {
-                return -cosh(n*acosh(-x));
+                return -cosh(n*acosh(-x BOOST_MATH_ACOSH_POLICY));
             }
             else
             {
-                return cosh(n*acosh(-x));
+                return cosh(n*acosh(-x BOOST_MATH_ACOSH_POLICY));
             }
         }
         T1 = x;
@@ -91,7 +93,14 @@ chebyshev_t(unsigned n, Real const & x, const Policy&)
 {
    typedef typename tools::promote_args<Real>::type result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
-   return policies::checked_narrowing_cast<result_type, Policy>(detail::chebyshev_imp<value_type, false>(n, static_cast<value_type>(x)), "boost::math::chebyshev_t<%1%>(unsigned, %1%)");
+   typedef typename policies::normalise<
+      Policy,
+      policies::promote_float<false>,
+      policies::promote_double<false>,
+      policies::discrete_quantile<>,
+      policies::assert_undefined<> >::type forwarding_policy;
+
+   return policies::checked_narrowing_cast<result_type, Policy>(detail::chebyshev_imp<value_type, false>(n, static_cast<value_type>(x), forwarding_policy()), "boost::math::chebyshev_t<%1%>(unsigned, %1%)");
 }
 
 template<class Real>
@@ -106,7 +115,14 @@ chebyshev_u(unsigned n, Real const & x, const Policy&)
 {
    typedef typename tools::promote_args<Real>::type result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
-   return policies::checked_narrowing_cast<result_type, Policy>(detail::chebyshev_imp<value_type, true>(n, static_cast<value_type>(x)), "boost::math::chebyshev_u<%1%>(unsigned, %1%)");
+   typedef typename policies::normalise<
+      Policy,
+      policies::promote_float<false>,
+      policies::promote_double<false>,
+      policies::discrete_quantile<>,
+      policies::assert_undefined<> >::type forwarding_policy;
+
+   return policies::checked_narrowing_cast<result_type, Policy>(detail::chebyshev_imp<value_type, true>(n, static_cast<value_type>(x), forwarding_policy()), "boost::math::chebyshev_u<%1%>(unsigned, %1%)");
 }
 
 template<class Real>
@@ -121,11 +137,17 @@ chebyshev_t_prime(unsigned n, Real const & x, const Policy&)
 {
    typedef typename tools::promote_args<Real>::type result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
+   typedef typename policies::normalise<
+      Policy,
+      policies::promote_float<false>,
+      policies::promote_double<false>,
+      policies::discrete_quantile<>,
+      policies::assert_undefined<> >::type forwarding_policy;
    if (n == 0)
    {
       return result_type(0);
    }
-   return policies::checked_narrowing_cast<result_type, Policy>(n * detail::chebyshev_imp<value_type, true>(n - 1, static_cast<value_type>(x)), "boost::math::chebyshev_t_prime<%1%>(unsigned, %1%)");
+   return policies::checked_narrowing_cast<result_type, Policy>(n * detail::chebyshev_imp<value_type, true>(n - 1, static_cast<value_type>(x), forwarding_policy()), "boost::math::chebyshev_t_prime<%1%>(unsigned, %1%)");
 }
 
 template<class Real>

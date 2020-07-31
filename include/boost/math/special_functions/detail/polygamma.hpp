@@ -51,7 +51,7 @@ namespace boost { namespace math { namespace detail{
         if(n == 1) return 1 / x;
         T nlx = n * log(x);
         if((nlx < tools::log_max_value<T>()) && (n < (int)max_factorial<T>::value))
-           return ((n & 1) ? 1 : -1) * boost::math::factorial<T>(n - 1) * pow(x, -n);
+           return ((n & 1) ? 1 : -1) * boost::math::factorial<T>(n - 1, pol) * pow(x, -n);
         else
          return ((n & 1) ? 1 : -1) * exp(boost::math::lgamma(T(n), pol) - n * log(x));
      }
@@ -161,7 +161,7 @@ namespace boost { namespace math { namespace detail{
           sum0 += z_plus_k_pow_minus_m_minus_one;
           z += 1;
        }
-       sum0 *= boost::math::factorial<T>(n);
+       sum0 *= boost::math::factorial<T>(n, pol);
     }
     else
     {
