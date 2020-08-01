@@ -56,7 +56,7 @@ It is more accurate to use `__log1p` and pass in the result to the [tau] version
 
 Additional "minus 1" versions of the third and fourth theta functions are provided. Similar in spirit to `__expm1`, these functions return one less than the evaluated function, and yield increased accuracy when /q/ is small.
 
-[heading Tests]
+[heading Testing]
 
 Results of the theta functions are tested against Wolfram Alpha data, as well as random values computed at high precision. In addition, the tests verify the majority of the identities described in [@https://dlmf.nist.gov/20.7 DLMF Chapter 20.7].
 
@@ -94,17 +94,31 @@ Or in terms of an imaginary [tau]:
 
 [equation jacobi_theta1tau]
 
-The nome /q/ is restricted to the domain (0, 1). The following graph shows the theta function at various values of /q/:
+The nome /q/ is restricted to the domain (0, 1), returning the result of __domain_error otherwise. The following graph shows the theta function at various values of /q/:
 
 [graph jacobi_theta1]
 
 [optional_policy]
 
+[heading Accuracy]
+
+The following [link math_toolkit.ulps_plots ULPs plot] is representative, fixing /q/=0.5 and varying /x/ from 0 to 2[pi]:
+
+[graph jacobi_theta1_float]
+
+The envelope represents the function's [link math_toolkit.cond condition number]. Note that relative accuracy degenerates periodically near [theta][sub 1]=0.
+
+Fixing /x/=5 and varying /q/, the ULPs plot looks like:
+
+[graph jacobi_theta1q_float]
+
+Accuracy tends to degenerate near /q/=1 (small [tau]).
+
 [heading Implementation]
 
 The /q/ parameterization is implemented using the [tau] parameterization, where [tau]=-log(/q/)/[pi].
 
-If [tau] is greater than or equal to 1, the summation in the section above is used as-is. However if [tau] < 1, the following identity [@https://dlmf.nist.gov/20.7#viii DLMF 20.7.30] is used, defining [tau]'=-1/[tau]:
+If [tau] is greater than or equal to 1, the summation above is used as-is. However if [tau] < 1, the following identity [@https://dlmf.nist.gov/20.7#viii DLMF 20.7.30] is used, defining [tau]'=-1/[tau]:
 
 [equation jacobi_theta1_imaginary]
 
@@ -144,17 +158,31 @@ Or in terms of an imaginary [tau]:
 
 [equation jacobi_theta2tau]
 
-The nome /q/ is restricted to the domain (0, 1). The following graph shows the theta function at various values of /q/:
+The nome /q/ is restricted to the domain (0, 1), returning the result of __domain_error otherwise. The following graph shows the theta function at various values of /q/:
 
 [graph jacobi_theta2]
 
 [optional_policy]
 
+[heading Accuracy]
+
+The following [link math_toolkit.ulps_plots ULPs plot] is representative, fixing /q/=0.5 and varying /x/ from 0 to 2[pi]:
+
+[graph jacobi_theta2_float]
+
+The envelope represents the function's [link math_toolkit.cond condition number]. Note that relative accuracy degenerates periodically near [theta][sub 2]=0.
+
+Fixing /x/=0.4 and varying /q/, the ULPs plot looks like:
+
+[graph jacobi_theta2q_float]
+
+Accuracy tends to degenerate near /q/=1 (small [tau]).
+
 [heading Implementation]
 
 The /q/ parameterization is implemented using the [tau] parameterization, where [tau]=-log(/q/)/[pi].
 
-If [tau] is greater than or equal to 1, the summation in the section above is used as-is. However if [tau] < 1, the following identity [@https://dlmf.nist.gov/20.7#viii DLMF 20.7.31] is used, defining [tau]'=-1/[tau]:
+If [tau] is greater than or equal to 1, the summation above is used as-is. However if [tau] < 1, the following identity [@https://dlmf.nist.gov/20.7#viii DLMF 20.7.31] is used, defining [tau]'=-1/[tau]:
 
 [equation jacobi_theta2_imaginary]
 
@@ -206,7 +234,7 @@ Or in terms of an imaginary [tau]:
 
 [equation jacobi_theta3tau]
 
-The nome /q/ is restricted to the domain (0, 1). The following graph shows the theta function at various values of /q/:
+The nome /q/ is restricted to the domain (0, 1), returning the result of __domain_error otherwise. The following graph shows the theta function at various values of /q/:
 
 [graph jacobi_theta3]
 
@@ -214,11 +242,25 @@ The nome /q/ is restricted to the domain (0, 1). The following graph shows the t
 
 A second quartet of functions (functions containing `m1`) compute one less than the value of the third theta function. These versions of the functions provide increased accuracy when the result is close to unity.
 
+[heading Accuracy]
+
+The following [link math_toolkit.ulps_plots ULPs plot] is representative, fixing /q/=0.5 and varying /x/ from 0 to 2[pi]:
+
+[graph jacobi_theta3_float]
+
+The envelope represents the function's [link math_toolkit.cond condition number]. Note that relative accuracy degenerates periodically near [theta][sub 3]=1.
+
+Fixing /x/=0.4 and varying /q/, the ULPs plot looks like:
+
+[graph jacobi_theta3q_float]
+
+Accuracy tends to degenerate near /q/=1 (small [tau]).
+
 [heading Implementation]
 
 The /q/ parameterization is implemented using the [tau] parameterization, where [tau]=-log(/q/)/[pi].
 
-If [tau] is greater than or equal to 1, the summation in the section above is used as-is. However if [tau] < 1, the following identity [@https://dlmf.nist.gov/20.7#viii DLMF 20.7.32] is used, defining [tau]'=-1/[tau]:
+If [tau] is greater than or equal to 1, the summation above is used as-is. However if [tau] < 1, the following identity [@https://dlmf.nist.gov/20.7#viii DLMF 20.7.32] is used, defining [tau]'=-1/[tau]:
 
 [equation jacobi_theta3_imaginary]
 
@@ -270,7 +312,7 @@ Or in terms of an imaginary [tau]:
 
 [equation jacobi_theta4tau]
 
-The nome /q/ is restricted to the domain (0, 1). The following graph shows the theta function at various values of /q/:
+The nome /q/ is restricted to the domain (0, 1), returning the result of __domain_error otherwise. The following graph shows the theta function at various values of /q/:
 
 [graph jacobi_theta4]
 
@@ -278,11 +320,25 @@ The nome /q/ is restricted to the domain (0, 1). The following graph shows the t
 
 A second quartet of functions (functions containing `m1`) compute one less than the value of the fourth theta function. These versions of the functions provide increased accuracy when the result is close to unity.
 
+[heading Accuracy]
+
+The following [link math_toolkit.ulps_plots ULPs plot] is representative, fixing /q/=0.5 and varying /x/ from 0 to 2[pi]:
+
+[graph jacobi_theta4_float]
+
+The envelope represents the function's [link math_toolkit.cond condition number]. Note that relative accuracy degenerates periodically near [theta][sub 4]=1.
+
+Fixing /x/=5 and varying /q/, the ULPs plot looks like:
+
+[graph jacobi_theta4q_float]
+
+Accuracy tends to degenerate near /q/=1 (small [tau]).
+
 [heading Implementation]
 
 The /q/ parameterization is implemented using the [tau] parameterization, where [tau]=-log(/q/)/[pi].
 
-If [tau] is greater than or equal to 1, the summation in the section above is used as-is. However if [tau] < 1, the following identity [@https://dlmf.nist.gov/20.7#viii DLMF 20.7.33] is used, defining [tau]'=-1/[tau]:
+If [tau] is greater than or equal to 1, the summation above is used as-is. However if [tau] < 1, the following identity [@https://dlmf.nist.gov/20.7#viii DLMF 20.7.33] is used, defining [tau]'=-1/[tau]:
 
 [equation jacobi_theta4_imaginary]
 
