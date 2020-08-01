@@ -593,7 +593,7 @@ auto prime_sieve(ExecutionPolicy&& policy, Z upper_bound, OutputIterator output)
                     boost::math::detail::linear_sieve(static_cast<Z>(4096), small_primes);
                 });
                 std::thread t2([limit, &pre_generated_primes] {
-                    boost::math::detail::segmented_sieve(static_cast<Z>(4096), limit, pre_generated_primes);
+                    boost::math::detail::segmented_sieve(static_cast<Z>(4097), limit, pre_generated_primes);
                 });
 
                 t1.join();
@@ -604,7 +604,7 @@ auto prime_sieve(ExecutionPolicy&& policy, Z upper_bound, OutputIterator output)
             std::vector<std::thread> thread_manager {};
             std::vector<std::vector<Z>> prime_vectors(processor_count);
             const Z range_per_thread = upper_bound / (processor_count);
-            Z current_lower_bound {limit};
+            Z current_lower_bound {limit + 1};
             Z current_upper_bound {current_lower_bound + range_per_thread};
             Z primes_in_range {static_cast<Z>(current_upper_bound / std::log(static_cast<double>(current_upper_bound)) -
                                current_lower_bound / std::log(static_cast<double>(current_lower_bound)))};
