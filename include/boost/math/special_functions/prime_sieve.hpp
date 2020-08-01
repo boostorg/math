@@ -20,6 +20,7 @@
 #include <numeric>
 #include <iostream>
 #include <algorithm>
+#include <omp.h>
 
 #ifdef _MSVC_LANG
 #if _MSVC_LANG >= 201703 // _MSVC_LANG == __cplusplus: https://devblogs.microsoft.com/cppblog/msvc-now-correctly-reports-__cplusplus/
@@ -215,6 +216,13 @@ constexpr bool is_prime(const Z n)
     return true;
 }
 
+//https://www.youtube.com/watch?v=nXaxk27zwlk&feature=youtu.be&t=56m34s
+template<class Z>
+constexpr Z fast_mod(const Z input, const Z ceil)
+{
+    return input >= ceil ? input % ceil : input;
+}
+
 //https://minds.wisconsin.edu/bitstream/handle/1793/59248/TR909.pdf?sequence=1
 // 7 - A segmented Wheel Sieve [Pritchard '87]
 template<class Z, class Container>
@@ -352,32 +360,22 @@ void linear_segmented_wheel_sieve(Z lower_bound, Z upper_bound, Container &resul
     }
     
     // Initialze wheel wk
-    std::vector<Z> wk;
-    wk.emplace_back(static_cast<Z>(0));
+    std::unique_ptr<Z[]> wk{new Z[Mk]{0}};
+
     for(Z i{1}; i < Mk; ++i)
     {
-        // If the number is not prime
-        if(std::gcd(i, Mk) != 1)
+        if(std::gcd(i, Mk) == 1)
         {
-            wk.emplace_back(static_cast<Z>(0));
-        }
-
-        else
-        {
-            wk.emplace_back(static_cast<Z>(1));
+            wk[i] = 1;
         }
     }
 
     // Part 3 of init wheel
-    wk.back() = static_cast<Z>(2);
+    wk[Mk - 1] = static_cast<Z>(2);
+
     for(Z x{Mk - 2}; x > 0; --x)
     {
-        if(wk[x] == 0)
-        {
-            continue;
-        }
-        
-        else
+        if(wk[x] == 1)
         {
             Z i{x + 1};
             while(wk[i] == 0)
@@ -392,26 +390,28 @@ void linear_segmented_wheel_sieve(Z lower_bound, Z upper_bound, Container &resul
     // Done as part of step 1 for performance improvement
 
     // Pre-processing step 3
-    std::vector<Z> factor;
+    size_t factor_size {primes.size() - k_index};
+    std::unique_ptr<Z[]> factor{new Z [factor_size]};
+
     for(size_t i{static_cast<size_t>(k_index)}; i < primes.size(); ++i)
     {
-        factor.emplace_back(primes[i]);
+        factor[i - k_index] = primes[i];
     }
 
     // Sieving the interval
     // Step 1
     std::unique_ptr<bool[]> mark {new bool [static_cast<size_t>(interval + 1)]};
-
-    for(Z x {lower_bound}, i {}; x <= upper_bound; ++x, ++i)
+    
+    for(Z x = lower_bound; x <= upper_bound; ++x)
     {
         if(std::gcd(Mk, x) == 1)
         {
-            mark[i] = 1;
+            mark[x - lower_bound] = 1;
         }
     }
 
     // Step 2
-    for(Z p {0}; p < static_cast<Z>(factor.size()); ++p)
+    for(Z p = 0; p < static_cast<Z>(factor_size); ++p)
     {
         Z f {factor[p]};
         Z current_prime{factor[p]};
@@ -422,12 +422,12 @@ void linear_segmented_wheel_sieve(Z lower_bound, Z upper_bound, Container &resul
                 mark[f * current_prime - lower_bound] = 0;
             }
 
-            f += wk[f % Mk];
+            f += wk[fast_mod(f, Mk)];
         }
         factor[p] = f;
     }
 
-    for(Z i {}; i < interval; ++i)
+    for(Z i {0}; i < interval; ++i)
     {
         if(mark[i] == 1)
         {
