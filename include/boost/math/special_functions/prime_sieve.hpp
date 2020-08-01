@@ -170,14 +170,14 @@ public:
         return srec_.back();
     }
 
-    void remove(const Z x) noexcept
-    {
-        auto index {std::lower_bound(srec_.cbegin(), srec_.cend(), x)};
-        
-        if(index != srec_.cend() && !(x < *index))
+    void remove(const size_t current_index, const Z x) noexcept
+    { 
+        auto index {std::lower_bound(srec_.cbegin() + current_index + 1, srec_.cend(), x)};
+
+        if(index != srec_.cend() && *index == x)
         {
-            srec_.erase(index);
-        }
+            srec_.erase(index); 
+        } 
     }
 
     void insert(const Z x) noexcept
@@ -297,7 +297,7 @@ void sub_linear_wheel_sieve(Z upper_bound, Container &resultant_primes)
         // Loop down through the values of f
         while(f >= p)
         {
-            S.remove(p * f);
+            S.remove(f_index, p * f);
             f = S[--f_index];
         }
 
@@ -306,7 +306,7 @@ void sub_linear_wheel_sieve(Z upper_bound, Container &resultant_primes)
 
     // Step 4 - Write S - {1} and the first k primes to resultant_primes
     for(size_t i{1}; i < S.size(); ++i)
-    {
+    {   
         resultant_primes.emplace_back(S[i]);
     }
 }
