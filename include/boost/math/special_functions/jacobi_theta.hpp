@@ -599,7 +599,7 @@ template <class RealType, class Policy>
 inline RealType
 jacobi_theta4(RealType z, RealType q, const Policy& pol) {
     BOOST_MATH_STD_USING
-    if (abs(q) >= 1.0 || abs(q) == 0.0) {
+    if (q <= 0.0 || q >= 1.0) {
         return policies::raise_domain_error<RealType>("boost::math::jacobi_theta4<%1%>(%1%)",
             "|q| must be greater than zero and less than 1, but got %1%.", q, pol);
     }
