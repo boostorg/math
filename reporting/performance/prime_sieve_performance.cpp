@@ -5,152 +5,106 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include "../../include/boost/math/special_functions/prime_sieve.hpp"
-//#include <boost/math/special_functions/prime_sieve.hpp>
+#include <boost/math/special_functions/prime_sieve.hpp>
 #include <benchmark/benchmark.h>
 #include <primesieve.hpp>
 #include <vector>
 
 // Individual Algos
-// Linear
-template<class Z>
-inline auto linear_sieve_helper(Z upper_bound, std::vector<Z> c) -> std::vector<Z>
+template<class Integer>
+inline auto linear_sieve_helper(Integer upper_bound, std::vector<Integer> primes) -> std::vector<Integer>
 {
-    boost::math::detail::linear_sieve(upper_bound, c);
-    return c;
+    boost::math::detail::linear_sieve(upper_bound, primes);
+    return primes;
 }
 
-template<class Z>
+template<class Integer>
 void linear_sieve(benchmark::State& state)
 {
-    Z upper = static_cast<Z>(state.range(0));
+    Integer upper = static_cast<Integer>(state.range(0));
     for(auto _ : state)
     {
-        std::vector<Z> primes;
+        std::vector<Integer> primes;
         benchmark::DoNotOptimize(linear_sieve_helper(upper, primes));
     }
     state.SetComplexityN(state.range(0));
 }
 
-template<class Z>
-inline auto sub_linear_sieve_helper(Z upper_bound, std::vector<Z> c) -> std::vector<Z>
+template<class Integer>
+inline auto mask_sieve_helper(Integer lower_bound, Integer upper_bound, std::vector<Integer> primes) -> std::vector<Integer>
 {
-    boost::math::detail::sub_linear_wheel_sieve(upper_bound, c);
-    return c;
+    boost::math::detail::mask_sieve(lower_bound, upper_bound, primes);
+    return primes;
 }
 
-template<class Z>
-void sub_linear_sieve(benchmark::State& state)
-{
-    Z upper = static_cast<Z>(state.range(0));
-    for(auto _ : state)
-    {
-        std::vector<Z> primes;
-        benchmark::DoNotOptimize(sub_linear_sieve_helper(upper, primes));
-    }
-    state.SetComplexityN(state.range(0));
-}
-
-// Segmented
-template<class Z>
-inline auto mask_sieve_helper(Z lower_bound, Z upper_bound, std::vector<Z> c) -> std::vector<Z>
-{
-    boost::math::detail::mask_sieve(lower_bound, upper_bound, c);
-    return c;
-}
-
-template<class Z>
+template<class Integer>
 void mask_sieve(benchmark::State& state)
 {
-    Z lower = static_cast<Z>(2);
-    Z upper = static_cast<Z>(state.range(0));
+    Integer lower = static_cast<Integer>(2);
+    Integer upper = static_cast<Integer>(state.range(0));
     for(auto _ : state)
     {
-        std::vector<Z> primes;
+        std::vector<Integer> primes;
         benchmark::DoNotOptimize(mask_sieve_helper(lower, upper, primes));
     }
     state.SetComplexityN(state.range(0));
 }
 
-template<class Z>
-inline auto segmented_wheel_sieve_helper(Z lower_bound, Z upper_bound, std::vector<Z> c) -> std::vector<Z>
+template<class ExecuitionPolicy, class Integer, class Container>
+inline auto prime_sieve_helper(ExecuitionPolicy policy, Integer upper, Container primes)
 {
-    boost::math::detail::linear_segmented_wheel_sieve(lower_bound, upper_bound, c);
-    return c;
-}
-
-template<class Z>
-void segmented_wheel_sieve(benchmark::State& state)
-{
-    Z lower = static_cast<Z>(2);
-    Z upper = static_cast<Z>(state.range(0));
-    for(auto _ : state)
-    {
-        std::vector<Z> primes;
-        benchmark::DoNotOptimize(segmented_wheel_sieve_helper(lower, upper, primes));
-    }
-    state.SetComplexityN(state.range(0));
+    boost::math::prime_sieve(policy, upper, primes);
+    return primes;
 }
 
 // Complete Implementations
-template <class Z>
+template <class Integer>
 void prime_sieve(benchmark::State& state)
 {
-    Z upper = static_cast<Z>(state.range(0));
+    Integer upper = static_cast<Integer>(state.range(0));
     for(auto _ : state)
     {
-        std::vector<Z> primes;
-        benchmark::DoNotOptimize(boost::math::prime_sieve(std::execution::par, upper, std::back_inserter(primes)));
+        std::vector<Integer> primes;
+        benchmark::DoNotOptimize(prime_sieve_helper(std::execution::par, upper, primes));
     }
     state.SetComplexityN(state.range(0));
 }
 
-template <class Z>
-void prime_sieve_partial_range(benchmark::State& state)
+template <class Integer>
+inline auto kimwalish_primes_helper(Integer upper, std::vector<Integer> primes) -> std::vector<Integer>
 {
-    Z upper = static_cast<Z>(state.range(0));
-    Z lower = static_cast<Z>(state.range(0)) > 2 ? static_cast<Z>(state.range(0)) : 2;
-    for(auto _ : state)
-    {
-        std::vector<Z> primes;
-        benchmark::DoNotOptimize(boost::math::prime_range(std::execution::par, lower, upper, std::back_inserter(primes)));
-    }
-    state.SetComplexityN(state.range(0));
+    primesieve::generate_primes(upper, &primes);
+    return primes;
 }
 
-template <class Z>
+template <class Integer>
 void kimwalish_primes(benchmark::State& state)
 {
 
-    Z upper = static_cast<Z>(state.range(0));
+    Integer upper = static_cast<Integer>(state.range(0));
     for (auto _ : state)
     {
-        std::vector<Z> primes;
-        primesieve::generate_primes(upper, &primes);
-        benchmark::DoNotOptimize(primes.back());
+        std::vector<Integer> primes;
+        benchmark::DoNotOptimize(kimwalish_primes_helper(upper, primes));
     }
     state.SetComplexityN(state.range(0));
 }
 
-// Individual Algos
-
+// Invidiual Implementations
 // Linear
+BENCHMARK_TEMPLATE(linear_sieve, int32_t)->RangeMultiplier(2)->Range(1 << 1, 1 << 16)->Complexity(benchmark::oN);
 BENCHMARK_TEMPLATE(linear_sieve, int64_t)->RangeMultiplier(2)->Range(1 << 1, 1 << 16)->Complexity(benchmark::oN);
-BENCHMARK_TEMPLATE(sub_linear_sieve, int64_t)->RangeMultiplier(2)->Range(1 << 1, 1 << 16)->Complexity();
-
+BENCHMARK_TEMPLATE(linear_sieve, uint32_t)->RangeMultiplier(2)->Range(1 << 1, 1 << 16)->Complexity(benchmark::oN);
 
 // Segmented
+BENCHMARK_TEMPLATE(mask_sieve, int32_t)->RangeMultiplier(2)->Range(1 << 2, 2 << 22)->Complexity(benchmark::oNLogN);
 BENCHMARK_TEMPLATE(mask_sieve, int64_t)->RangeMultiplier(2)->Range(1 << 2, 2 << 22)->Complexity(benchmark::oNLogN);
-BENCHMARK_TEMPLATE(segmented_wheel_sieve, int64_t)->RangeMultiplier(2)->Range(1 << 2, 2 << 22)->Complexity();
+BENCHMARK_TEMPLATE(mask_sieve, uint32_t)->RangeMultiplier(2)->Range(1 << 2, 2 << 22)->Complexity(benchmark::oNLogN);
 
-/*
-// Complete Implementations
-BENCHMARK_TEMPLATE(prime_sieve, int32_t)->RangeMultiplier(2)->Range(1 << 1, 1 << 22)->Complexity()->UseRealTime();
+// Complete Implemenations
+BENCHMARK_TEMPLATE(prime_sieve, int32_t)->RangeMultiplier(2)->Range(1 << 1, 1 << 22)->Complexity(benchmark::oN)->UseRealTime();
 BENCHMARK_TEMPLATE(prime_sieve, int64_t)->RangeMultiplier(2)->Range(1 << 1, 1 << 30)->Complexity(benchmark::oN)->UseRealTime();
-BENCHMARK_TEMPLATE(kimwalish_primes, int64_t)->RangeMultiplier(2)->Range(1 << 1, 1 << 30)->Complexity(benchmark::oN)->UseRealTime();
-BENCHMARK_TEMPLATE(prime_sieve, uint32_t)->RangeMultiplier(2)->Range(1 << 1, 1 << 22)->Complexity()->UseRealTime();
-BENCHMARK_TEMPLATE(prime_sieve_partial_range, int32_t)->RangeMultiplier(2)->Range(1 << 1, 1 << 22)->Complexity()->UseRealTime();
-BENCHMARK_TEMPLATE(prime_sieve_partial_range, int64_t)->RangeMultiplier(2)->Range(1 << 1, 1 << 22)->Complexity()->UseRealTime();
-BENCHMARK_TEMPLATE(prime_sieve_partial_range, uint32_t)->RangeMultiplier(2)->Range(1 << 1, 1 << 22)->Complexity()->UseRealTime();
-*/
+BENCHMARK_TEMPLATE(kimwalish_primes, int64_t)->RangeMultiplier(2)->Range(1 << 1, 1 << 30)->Complexity(benchmark::oN)->UseRealTime(); // Benchmark
+BENCHMARK_TEMPLATE(prime_sieve, uint32_t)->RangeMultiplier(2)->Range(1 << 1, 1 << 22)->Complexity(benchmark::oN)->UseRealTime();
+
 BENCHMARK_MAIN();
