@@ -9,6 +9,7 @@
 #define BOOST_MATH_SPECIAL_FUNCTIONS_PRIME_SIEVE_HPP
 
 #include <boost/math/special_functions/prime.hpp>
+#include <boost/math/common_factor.hpp>
 #include <boost/assert.hpp>
 #include <vector>
 #include <iterator>
@@ -92,7 +93,7 @@ void mask_sieve(Z lower_bound, Z upper_bound, const PrimeContainer& primes, Cont
     const size_t n {static_cast<size_t>(upper_bound - lower_bound + 1)};
     std::unique_ptr<bool[]> is_prime {new bool[n]};
     memset(is_prime.get(), true, sizeof(*is_prime.get()) * (n));
-
+ 
     #if __cplusplus >= 201703 || _MSVC_LANG >= 201703
     // Enable use of thread pool, not SIMD compatible
     std::for_each(std::execution::par, primes.begin(), it, [&is_prime, lower_bound, upper_bound](auto prime)
@@ -128,6 +129,26 @@ void mask_sieve(Z lower_bound, Z upper_bound, const PrimeContainer& primes, Cont
             c.emplace_back(i);
         }
     }
+}
+
+template<class Z, class Container>
+constexpr void prime_table(size_t min_index, Z upper_bound, Container &c)
+{
+    size_t current_index {min_index};
+    Z current_prime {2};
+
+    while(current_prime < upper_bound)
+    {
+        c.emplace_back(current_prime);
+        ++current_index;
+        current_prime = prime(current_index);
+    }
+}
+
+template<class Z, class Container>
+constexpr void prime_table(Z upper_bound, Container &c)
+{
+    prime_table(0, upper_bound, c);
 }
 
 // https://minds.wisconsin.edu/bitstream/handle/1793/59248/TR909.pdf?sequence=1
@@ -253,7 +274,7 @@ void sub_linear_wheel_sieve(Z upper_bound, Container &resultant_primes)
 
     for(Z i{1}; i < Mk; ++i)
     {
-        if(std::gcd(i, Mk) == 1)
+        if(boost::math::gcd(i, Mk) == 1)
         {
             wk[i] = 1;
         }
@@ -364,7 +385,7 @@ void linear_segmented_wheel_sieve(Z lower_bound, Z upper_bound, Container &resul
 
     for(Z i{1}; i < Mk; ++i)
     {
-        if(std::gcd(i, Mk) == 1)
+        if(boost::math::gcd(i, Mk) == 1)
         {
             wk[i] = 1;
         }
@@ -401,16 +422,18 @@ void linear_segmented_wheel_sieve(Z lower_bound, Z upper_bound, Container &resul
     // Sieving the interval
     // Step 1
     std::unique_ptr<bool[]> mark {new bool [static_cast<size_t>(interval + 1)]};
-    
+   
+    #pragma omp parallel for shared(mark) 
     for(Z x = lower_bound; x <= upper_bound; ++x)
     {
-        if(std::gcd(Mk, x) == 1)
+        if(boost::math::gcd(Mk, x) == 1)
         {
             mark[x - lower_bound] = 1;
         }
     }
 
     // Step 2
+    #pragma omp parallel for shared(mark)
     for(Z p = 0; p < static_cast<Z>(factor_size); ++p)
     {
         Z f {factor[p]};
@@ -473,7 +496,7 @@ void segmented_sieve(Z lower_bound, Z upper_bound, const PrimesContainer &primes
     {
         prime_vectors[i].reserve(primes_in_range);
 
-        future_manager.emplace_back(std::async([current_lower_bound, current_upper_bound, &primes, &prime_vectors, i]{
+        future_manager.emplace_back(std::async(std::launch::async, [current_lower_bound, current_upper_bound, &primes, &prime_vectors, i]{
             boost::math::detail::mask_sieve(current_lower_bound, current_upper_bound, primes, prime_vectors[i]);
         }));
 
@@ -482,7 +505,7 @@ void segmented_sieve(Z lower_bound, Z upper_bound, const PrimesContainer &primes
     }
 
     prime_vectors[ranges].reserve(primes_in_range);
-    future_manager.emplace_back(std::async([current_lower_bound, upper_bound, &primes, &prime_vectors]{
+    future_manager.emplace_back(std::async(std::launch::async, [current_lower_bound, upper_bound, &primes, &prime_vectors]{
         boost::math::detail::mask_sieve(current_lower_bound, upper_bound, primes, prime_vectors.back());
     }));
 
@@ -534,11 +557,11 @@ auto prime_sieve(ExecutionPolicy&& policy, Z upper_bound, OutputIterator output)
     std::vector<Z> primes {};
     primes.reserve(upper_bound / std::log(static_cast<double>(upper_bound)));
 
-    // Range for when the linear sieve is no longer faster than threading
-    if (upper_bound < 4096)
+    if(upper_bound <= 32768)
     {
-        boost::math::detail::linear_sieve(upper_bound, primes);
+        boost::math::detail::prime_table(upper_bound, primes);
     }
+
 
     else if (std::is_same_v<decltype(policy), std::execution::sequenced_policy>)
     {
@@ -556,21 +579,38 @@ auto prime_sieve(ExecutionPolicy&& policy, Z upper_bound, OutputIterator output)
         }
 
         std::vector<Z> small_primes {};
-        small_primes.reserve(1000);
+        small_primes.reserve(1028);
 
         // Threshold for when 2 thread performance begins to be non-linear, or when the system can only support two threads
         if(upper_bound < 16777216 || processor_count == 2)
         {
             // Split into two vectors and merge after joined to avoid data races
-            std::thread t1([&small_primes] {
-                boost::math::detail::linear_sieve(static_cast<Z>(8192), small_primes);
-            });
-            std::thread t2([upper_bound, &primes] {
-                boost::math::detail::segmented_sieve(static_cast<Z>(8192), upper_bound, primes);
-            });
+            if(upper_bound <= 104729)
+            {
+                std::thread t1([&small_primes]{
+                        boost::math::detail::prime_table(static_cast<Z>(32768), small_primes);
+                        });
 
-            t1.join();
-            t2.join();
+                std::thread t2([upper_bound, &primes]{
+                        boost::math::detail::prime_table(3512, upper_bound, primes);
+                        });
+
+                t1.join();
+                t2.join();
+            }
+            
+            else
+            {
+                std::thread t1([&small_primes] {
+                    boost::math::detail::prime_table(static_cast<Z>(104729), small_primes);
+                });
+                std::thread t2([upper_bound, &primes] {
+                    boost::math::detail::segmented_sieve(static_cast<Z>(104729), upper_bound, primes);
+                });
+        
+                t1.join();
+                t2.join();
+            }
             primes.insert(primes.begin(), small_primes.begin(), small_primes.end());
         }
 
@@ -581,19 +621,34 @@ auto prime_sieve(ExecutionPolicy&& policy, Z upper_bound, OutputIterator output)
             Z limit{static_cast<Z>(std::floor(std::sqrt(static_cast<double>(upper_bound)))) + 1};
             std::vector<Z> pre_generated_primes {};
             pre_generated_primes.reserve(limit / std::log(limit));
-
-            if(limit < 4096)
+            
+            if(limit <= 32768)
             {
-                boost::math::detail::linear_sieve(limit, pre_generated_primes);
+                boost::math::detail::prime_table(limit, pre_generated_primes);
+            }
+
+            else if(limit <= 104729)
+            {
+                std::thread t1([&small_primes]{
+                        boost::math::detail::prime_table(static_cast<Z>(32768), small_primes);
+                        });
+
+                std::thread t2([limit, &pre_generated_primes]{
+                        boost::math::detail::prime_table(3512, limit, pre_generated_primes);
+                        });
+
+                t1.join();
+                t2.join();
+                pre_generated_primes.insert(pre_generated_primes.begin(), small_primes.begin(), small_primes.end());
             }
 
             else
             {
                 std::thread t1([&small_primes] {
-                    boost::math::detail::linear_sieve(static_cast<Z>(4096), small_primes);
+                    boost::math::detail::prime_table(static_cast<Z>(104729), small_primes);
                 });
                 std::thread t2([limit, &pre_generated_primes] {
-                    boost::math::detail::segmented_sieve(static_cast<Z>(4097), limit, pre_generated_primes);
+                    boost::math::detail::segmented_sieve(static_cast<Z>(104729), limit, pre_generated_primes);
                 });
 
                 t1.join();
