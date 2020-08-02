@@ -14,31 +14,38 @@ The Jacobi Theta functions are a set of four inter-related periodic functions of
 [footnote [@https://mathworld.wolfram.com/JacobiThetaFunctions.html Weisstein, Eric W. "Jacobi Theta Functions." From MathWorld - A Wolfram Web Resource.]]
 [footnote [@https://dlmf.nist.gov/20 Digital Library of Mathematical Functions: Theta Functions, Reinhardt, W. P.,  Walker, P. L.]].
 
-Mathematically, the functions are described by:
+They are
 
-[equation jacobi_theta1] [/ \theta_1(x, q) = 2 \sum_{n=0}^\infty (-1)^n q^{(n+\frac{1}{2})^2} \sin((2n+1)x) ]
-[equation jacobi_theta2] [/ \theta_2(x, q) = 2 \sum_{n=0}^\infty q^{(n+\frac{1}{2})^2} \cos((2n+1)x) ]
-[equation jacobi_theta3] [/ \theta_3(x, q) = 1 + 2 \sum_{n=1}^\infty q^{n^2} \cos(2nx) ]
-[equation jacobi_theta4] [/ \theta_4(x, q) = 1 + 2 \sum_{n=1}^\infty (-1)^n q^{n^2} \cos(2nx) ]
-
-Graphically, setting /q/=0.15:
+[equation jacobi_theta1] [/ \theta_1(x, q) := 2 \sum_{n=0}^\infty (-1)^n q^{(n+\frac{1}{2})^2} \sin((2n+1)x) ]
+[equation jacobi_theta2] [/ \theta_2(x, q) := 2 \sum_{n=0}^\infty q^{(n+\frac{1}{2})^2} \cos((2n+1)x) ]
+[equation jacobi_theta3] [/ \theta_3(x, q) := 1 + 2 \sum_{n=1}^\infty q^{n^2} \cos(2nx) ]
+[equation jacobi_theta4] [/ \theta_4(x, q) := 1 + 2 \sum_{n=1}^\infty (-1)^n q^{n^2} \cos(2nx) ]
 
 [graph jacobi_theta]
+
+Plots of the four theta functions for /q/=0.15.
 
 Appropriately multiplied and divided, these four theta functions can be used
 to implement the [link math_toolkit.jacobi.jac_over Jacobi elliptic functions]; but this is not really
 recommended, as the existing Boost implementations are likely faster and
 more accurate.
 
-Most applications will want to use the /q/ parameterization of the functions: `__jacobi_theta1`, `__jacobi_theta2`, `__jacobi_theta3`, and `__jacobi_theta4`, where /q/ is restricted to the domain (0, 1). However, a second [tau] parameterization is provided for all four functions, where
+Most applications will want to use the /q/ parameterization of the functions: `__jacobi_theta1`, `__jacobi_theta2`, `__jacobi_theta3`, and `__jacobi_theta4`, where /q/ is restricted to the domain (0, 1).
+These four functions are equivalent to Mathematica's [@https://reference.wolfram.com/language/ref/EllipticTheta.html EllipticTheta] function (whose first argument is the function number).
+
+A second [tau] parameterization is also provided for all four functions, where
 
 [equation jacobi_theta_nome] [/ q = \exp(i\pi\tau) ]
 
-Note that Boost assumes that [tau] is a purely imaginary number. This assumption is not required by the mathematics, but it does cover the most common application domains.
+Note that there is a slight difference between [tau] in the equation above and the `tau` in the Boost function signatures.
+The mathematical [tau] is assumed to be a purely imaginary number, but the Boost argument is real-valued.
+Boost treats its real-valued argument as an imaginary number; that is, it implicitly multiplies the argument by /i/.
+This assumption of [tau]'s imaginarity is not required by the mathematics, but it does cover the most common application domains.
 
 [heading Accuracy considerations]
 
-The purpose of the [tau] parameterization is to provide increased accuracy either when /q/ is expressible as an exponential or is very close to unity. For example, instead of:
+The purpose of the [tau] parameterization is to provide increased accuracy either when /q/ is expressible as an exponential or is very close to unity.
+For example, instead of:
 
   jacobi_theta1(x, exp(-a));
 
@@ -46,7 +53,8 @@ A more accurate computation will take advantage of [tau]:
 
   jacobi_theta1tau(x, a / boost::math::constants::pi<T>());
 
-Internally, Boost implements the /q/ parameterization by taking the logarithm of /q/ and passing it to the [tau] parameterization; as such, using the [tau] parameterization directly will generally yield greater precision. As another example, if the complement of /q/ is known with great accuracy, then instead of:
+Internally, Boost implements the /q/ parameterization by taking the logarithm of /q/ and passing it to the [tau] parameterization; as such, using the [tau] parameterization directly will generally yield greater precision.
+As another example, if the complement of /q/ is known with great accuracy, then instead of:
 
   jacobi_theta1(x, 1-q_complement);
 
@@ -58,7 +66,8 @@ Additional "minus 1" versions of the third and fourth theta functions are provid
 
 [heading Testing]
 
-Results of the theta functions are tested against Wolfram Alpha data, as well as random values computed at high precision. In addition, the tests verify the majority of the identities described in [@https://dlmf.nist.gov/20.7 DLMF Chapter 20.7].
+Results of the theta functions are tested against Wolfram Alpha data, as well as random values computed at high precision.
+In addition, the tests verify the majority of the identities described in [@https://dlmf.nist.gov/20.7 DLMF Chapter 20.7].
 
 [endsect] [/section:jacobi_theta_overview Overview of the Jacobi Theta Functions]
 
@@ -88,11 +97,11 @@ Results of the theta functions are tested against Wolfram Alpha data, as well as
 
 The functions calculate the value of first [link math_toolkit.jacobi_theta.jacobi_theta_overview Jacobi Theta function], parameterized either in terms of the nome /q/:
 
-[equation jacobi_theta1] [/ \theta_1(x, q) = 2 \sum_{n=0}^\infty (-1)^n q^{(n+\frac{1}{2})^2} \sin((2n+1)x) ]
+[equation jacobi_theta1] [/ \theta_1(x, q) := 2 \sum_{n=0}^\infty (-1)^n q^{(n+\frac{1}{2})^2} \sin((2n+1)x) ]
 
 Or in terms of an imaginary [tau]:
 
-[equation jacobi_theta1tau] [/ \theta_1(x|\tau) = 2 \sum_{n=0}^\infty (-1)^n \exp(i\pi\tau{(n+0.5)^2}) \sin((2n+1)x) ]
+[equation jacobi_theta1tau] [/ \theta_1(x|\tau) := 2 \sum_{n=0}^\infty (-1)^n \exp(i\pi\tau{(n+0.5)^2}) \sin((2n+1)x) ]
 
 The nome /q/ is restricted to the domain (0, 1), returning the result of __domain_error otherwise. The following graph shows the theta function at various values of /q/:
 
@@ -106,7 +115,8 @@ The following [link math_toolkit.ulps_plots ULPs plot] is representative, fixing
 
 [graph jacobi_theta1_float]
 
-The envelope represents the function's [link math_toolkit.cond condition number]. Note that relative accuracy degenerates periodically near [theta][sub 1]=0.
+The envelope represents the function's [@https://en.wikipedia.org/wiki/Condition_number#One_variable condition number].
+Note that relative accuracy degenerates periodically near [theta][sub 1]=0.
 
 Fixing /x/=5 and varying /q/, the ULPs plot looks like:
 
@@ -118,7 +128,8 @@ Accuracy tends to degenerate near /q/=1 (small [tau]).
 
 The /q/ parameterization is implemented using the [tau] parameterization, where [tau]=-log(/q/)/[pi].
 
-If [tau] is greater than or equal to 1, the summation above is used as-is. However if [tau] < 1, the following identity [@https://dlmf.nist.gov/20.7#viii DLMF 20.7.30] is used, defining [tau]'=-1/[tau]:
+If [tau] is greater than or equal to 1, the summation above is used as-is.
+However if [tau] < 1, the following identity [@https://dlmf.nist.gov/20.7#viii DLMF 20.7.30] is used, defining [tau]'=-1/[tau]:
 
 [equation jacobi_theta1_imaginary] [/ (-i\tau)^{1/2}\theta_1(x|\tau)=-i\exp(i\tau'x^2/\pi)\theta_1(x\tau'|\tau') ]
 
@@ -152,13 +163,14 @@ This transformation of variables ensures that the function will always converge 
 
 The functions calculate the value of second [link math_toolkit.jacobi_theta.jacobi_theta_overview Jacobi Theta function], parameterized either in terms of the nome /q/:
 
-[equation jacobi_theta2] [/ \theta_2(x, q) = 2 \sum_{n=0}^\infty q^{(n+\frac{1}{2})^2} \cos((2n+1)x) ]
+[equation jacobi_theta2] [/ \theta_2(x, q) := 2 \sum_{n=0}^\infty q^{(n+\frac{1}{2})^2} \cos((2n+1)x) ]
 
 Or in terms of an imaginary [tau]:
 
-[equation jacobi_theta2tau] [/ \theta_2(x|\tau) = 2 \sum_{n=0}^\infty \exp(i\pi\tau{(n+0.5)^2}) \cos((2n+1)x) ]
+[equation jacobi_theta2tau] [/ \theta_2(x|\tau) := 2 \sum_{n=0}^\infty \exp(i\pi\tau{(n+0.5)^2}) \cos((2n+1)x) ]
 
-The nome /q/ is restricted to the domain (0, 1), returning the result of __domain_error otherwise. The following graph shows the theta function at various values of /q/:
+The nome /q/ is restricted to the domain (0, 1), returning the result of __domain_error otherwise.
+The following graph shows the theta function at various values of /q/:
 
 [graph jacobi_theta2]
 
@@ -170,7 +182,8 @@ The following [link math_toolkit.ulps_plots ULPs plot] is representative, fixing
 
 [graph jacobi_theta2_float]
 
-The envelope represents the function's [link math_toolkit.cond condition number]. Note that relative accuracy degenerates periodically near [theta][sub 2]=0.
+The envelope represents the function's [@https://en.wikipedia.org/wiki/Condition_number#One_variable condition number].
+Note that relative accuracy degenerates periodically near [theta][sub 2]=0.
 
 Fixing /x/=0.4 and varying /q/, the ULPs plot looks like:
 
@@ -182,7 +195,8 @@ Accuracy tends to degenerate near /q/=1 (small [tau]).
 
 The /q/ parameterization is implemented using the [tau] parameterization, where [tau]=-log(/q/)/[pi].
 
-If [tau] is greater than or equal to 1, the summation above is used as-is. However if [tau] < 1, the following identity [@https://dlmf.nist.gov/20.7#viii DLMF 20.7.31] is used, defining [tau]'=-1/[tau]:
+If [tau] is greater than or equal to 1, the summation above is used as-is.
+However if [tau] < 1, the following identity [@https://dlmf.nist.gov/20.7#viii DLMF 20.7.31] is used, defining [tau]'=-1/[tau]:
 
 [equation jacobi_theta2_imaginary] [/ (-i\tau)^{1/2}\theta_2(x|\tau)=\exp(i\tau'x^2/\pi)\theta_4(x\tau'|\tau') ]
 
@@ -228,19 +242,21 @@ This transformation of variables ensures that the function will always converge 
 
 The functions calculate the value of third [link math_toolkit.jacobi_theta.jacobi_theta_overview Jacobi Theta function], parameterized either in terms of the nome /q/:
 
-[equation jacobi_theta3] [/ \theta_3(x, q) = 1 + 2 \sum_{n=1}^\infty q^{n^2} \cos(2nx) ]
+[equation jacobi_theta3] [/ \theta_3(x, q) := 1 + 2 \sum_{n=1}^\infty q^{n^2} \cos(2nx) ]
 
 Or in terms of an imaginary [tau]:
 
-[equation jacobi_theta3tau] [/ \theta_3(x|\tau) = 1 + 2 \sum_{n=1}^\infty \exp(i\pi\tau{n^2}) \cos(2nx) ]
+[equation jacobi_theta3tau] [/ \theta_3(x|\tau) := 1 + 2 \sum_{n=1}^\infty \exp(i\pi\tau{n^2}) \cos(2nx) ]
 
-The nome /q/ is restricted to the domain (0, 1), returning the result of __domain_error otherwise. The following graph shows the theta function at various values of /q/:
+The nome /q/ is restricted to the domain (0, 1), returning the result of __domain_error otherwise.
+The following graph shows the theta function at various values of /q/:
 
 [graph jacobi_theta3]
 
 [optional_policy]
 
-A second quartet of functions (functions containing `m1`) compute one less than the value of the third theta function. These versions of the functions provide increased accuracy when the result is close to unity.
+A second quartet of functions (functions containing `m1`) compute one less than the value of the third theta function.
+These versions of the functions provide increased accuracy when the result is close to unity.
 
 [heading Accuracy]
 
@@ -248,7 +264,8 @@ The following [link math_toolkit.ulps_plots ULPs plot] is representative, fixing
 
 [graph jacobi_theta3_float]
 
-The envelope represents the function's [link math_toolkit.cond condition number]. Note that relative accuracy degenerates periodically near [theta][sub 3]=1.
+The envelope represents the function's [@https://en.wikipedia.org/wiki/Condition_number#One_variable condition number].
+Note that relative accuracy degenerates periodically near [theta][sub 3]=1.
 
 Fixing /x/=0.4 and varying /q/, the ULPs plot looks like:
 
@@ -260,7 +277,8 @@ Accuracy tends to degenerate near /q/=1 (small [tau]).
 
 The /q/ parameterization is implemented using the [tau] parameterization, where [tau]=-log(/q/)/[pi].
 
-If [tau] is greater than or equal to 1, the summation above is used as-is. However if [tau] < 1, the following identity [@https://dlmf.nist.gov/20.7#viii DLMF 20.7.32] is used, defining [tau]'=-1/[tau]:
+If [tau] is greater than or equal to 1, the summation above is used as-is.
+However if [tau] < 1, the following identity [@https://dlmf.nist.gov/20.7#viii DLMF 20.7.32] is used, defining [tau]'=-1/[tau]:
 
 [equation jacobi_theta3_imaginary] [/ (-i\tau)^{1/2}\theta_3(x|\tau)=\exp(i\tau'x^2/\pi)\theta_3(x\tau'|\tau') ]
 
@@ -306,19 +324,21 @@ This transformation of variables ensures that the function will always converge 
 
 The functions calculate the value of fourth [link math_toolkit.jacobi_theta.jacobi_theta_overview Jacobi Theta function], parameterized either in terms of the nome /q/:
 
-[equation jacobi_theta4] [/ \theta_4(x, q) = 1 + 2 \sum_{n=1}^\infty (-1)^n q^{n^2} \cos(2nx) ]
+[equation jacobi_theta4] [/ \theta_4(x, q) := 1 + 2 \sum_{n=1}^\infty (-1)^n q^{n^2} \cos(2nx) ]
 
 Or in terms of an imaginary [tau]:
 
-[equation jacobi_theta4tau] [/ \theta_4(x|\tau) = 1 + 2 \sum_{n=1}^\infty (-1)^n \exp(i\pi\tau{n^2}) \cos(2nx) ]
+[equation jacobi_theta4tau] [/ \theta_4(x|\tau) := 1 + 2 \sum_{n=1}^\infty (-1)^n \exp(i\pi\tau{n^2}) \cos(2nx) ]
 
-The nome /q/ is restricted to the domain (0, 1), returning the result of __domain_error otherwise. The following graph shows the theta function at various values of /q/:
+The nome /q/ is restricted to the domain (0, 1), returning the result of __domain_error otherwise.
+The following graph shows the theta function at various values of /q/:
 
 [graph jacobi_theta4]
 
 [optional_policy]
 
-A second quartet of functions (functions containing `m1`) compute one less than the value of the fourth theta function. These versions of the functions provide increased accuracy when the result is close to unity.
+A second quartet of functions (functions containing `m1`) compute one less than the value of the fourth theta function.
+These versions of the functions provide increased accuracy when the result is close to unity.
 
 [heading Accuracy]
 
@@ -326,7 +346,8 @@ The following [link math_toolkit.ulps_plots ULPs plot] is representative, fixing
 
 [graph jacobi_theta4_float]
 
-The envelope represents the function's [link math_toolkit.cond condition number]. Note that relative accuracy degenerates periodically near [theta][sub 4]=1.
+The envelope represents the function's [@https://en.wikipedia.org/wiki/Condition_number#One_variable condition number].
+Note that relative accuracy degenerates periodically near [theta][sub 4]=1.
 
 Fixing /x/=5 and varying /q/, the ULPs plot looks like:
 
@@ -338,7 +359,8 @@ Accuracy tends to degenerate near /q/=1 (small [tau]).
 
 The /q/ parameterization is implemented using the [tau] parameterization, where [tau]=-log(/q/)/[pi].
 
-If [tau] is greater than or equal to 1, the summation above is used as-is. However if [tau] < 1, the following identity [@https://dlmf.nist.gov/20.7#viii DLMF 20.7.33] is used, defining [tau]'=-1/[tau]:
+If [tau] is greater than or equal to 1, the summation above is used as-is.
+However if [tau] < 1, the following identity [@https://dlmf.nist.gov/20.7#viii DLMF 20.7.33] is used, defining [tau]'=-1/[tau]:
 
 [equation jacobi_theta4_imaginary] [/ (-i\tau)^{1/2}\theta_4(x|\tau)=\exp(i\tau'x^2/\pi)\theta_2(x\tau'|\tau') ]
 

@@ -35,7 +35,7 @@
 <a href="#ftn.math_toolkit.jacobi_theta.jacobi_theta_overview.f0" class="footnote" name="math_toolkit.jacobi_theta.jacobi_theta_overview.f0"><sup class="footnote">[5]</sup></a> <a href="#ftn.math_toolkit.jacobi_theta.jacobi_theta_overview.f1" class="footnote" name="math_toolkit.jacobi_theta.jacobi_theta_overview.f1"><sup class="footnote">[6]</sup></a> <a href="#ftn.math_toolkit.jacobi_theta.jacobi_theta_overview.f2" class="footnote" name="math_toolkit.jacobi_theta.jacobi_theta_overview.f2"><sup class="footnote">[7]</sup></a>.
       </p>
       <p>
-        Mathematically, the functions are described by:
+        They are
       </p>
       <div class="blockquote"><blockquote class="blockquote">
         <p>
@@ -61,15 +61,15 @@
 
         </p>
       </blockquote></div>
-      <p>
-        Graphically, setting <span class="emphasis"><em>q</em></span>=0.15:
-      </p>
       <div class="blockquote"><blockquote class="blockquote">
         <p>
           <span class="inlinemediaobject"><img src="../../../graphs/jacobi_theta.svg" align="middle"></span>
 
         </p>
       </blockquote></div>
+      <p>
+        Plots of the four theta functions for <span class="emphasis"><em>q</em></span>=0.15.
+      </p>
       <p>
         Appropriately multiplied and divided, these four theta functions can be used
         to implement the <a class="link" href="../jacobi/jac_over.html" title="Overview of the Jacobi Elliptic Functions">Jacobi elliptic
@@ -82,8 +82,12 @@
         <code class="computeroutput"><a class="link" href="jacobi_theta2.html" title="Jacobi Theta Function θ2">jacobi_theta2</a></code>,
         <code class="computeroutput"><a class="link" href="jacobi_theta3.html" title="Jacobi Theta Function θ3">jacobi_theta3</a></code>,
         and <code class="computeroutput"><a class="link" href="jacobi_theta4.html" title="Jacobi Theta Function θ4">jacobi_theta4</a></code>,
-        where <span class="emphasis"><em>q</em></span> is restricted to the domain (0, 1). However,
-        a second τ parameterization is provided for all four functions, where
+        where <span class="emphasis"><em>q</em></span> is restricted to the domain (0, 1). These four
+        functions are equivalent to Mathematica's <a class="ulink" href="https://reference.wolfram.com/language/ref/EllipticTheta.html" target="_top">EllipticTheta</a>
+        function (whose first argument is the function number).
+      </p>
+      <p>
+        A second τ parameterization is also provided for all four functions, where
       </p>
       <div class="blockquote"><blockquote class="blockquote">
         <p>
@@ -92,9 +96,13 @@
         </p>
       </blockquote></div>
       <p>
-        Note that Boost assumes that τ is a purely imaginary number. This assumption
-        is not required by the mathematics, but it does cover the most common application
-        domains.
+        Note that there is a slight difference between τ in the equation above and
+        the <code class="computeroutput"><span class="identifier">tau</span></code> in the Boost function
+        signatures. The mathematical τ is assumed to be a purely imaginary number,
+        but the Boost argument is real-valued. Boost treats its real-valued argument
+        as an imaginary number; that is, it implicitly multiplies the argument by
+        <span class="emphasis"><em>i</em></span>. This assumption of τ's imaginarity is not required
+        by the mathematics, but it does cover the most common application domains.
       </p>
       <h5>
 <a name="math_toolkit.jacobi_theta.jacobi_theta_overview.h0"></a>
