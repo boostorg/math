@@ -432,9 +432,6 @@ jacobi_theta3m1tau(RealType z, RealType tau, const Policy& pol)
         n++;
     } while (!_jacobi_theta_converged(result, q_n, eps));
 
-    if (abs(result) < eps * eps)
-        return RealType(0);
-
     return result;
 }
 
