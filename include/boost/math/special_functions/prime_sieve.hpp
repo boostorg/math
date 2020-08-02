@@ -545,17 +545,39 @@ void segmented_sieve(Z lower_bound, Z upper_bound, Container &c)
 }
 } // End namespace detail
 
+template<typename T>
+struct IsVector
+{
+    using type = T;
+    constexpr static bool value = false;
+};
+
+template<typename T>
+struct IsVector<std::vector<T>>
+{
+    using type = std::vector<T>;
+    constexpr static bool value = true;
+};
+
+template<typename T>
+constexpr bool is_vector_v = IsVector<T>::value;
+
 #if __cplusplus >= 201703 || _MSVC_LANG >= 201703
-template<class ExecutionPolicy, class Z, class OutputIterator>
-auto prime_sieve(ExecutionPolicy&& policy, Z upper_bound, OutputIterator output) -> decltype(output)
+//template<class ExecutionPolicy, class Z, class OutputIterator>
+//auto prime_sieve(ExecutionPolicy&& policy, Z upper_bound, OutputIterator output) -> decltype(output)
+template<class ExecutionPolicy, class Z, class Container>
+void prime_sieve(ExecutionPolicy&& policy, Z upper_bound, Container &primes)
 {
     static_assert(std::is_integral<Z>::value, "No primes for floating point types");
     BOOST_ASSERT_MSG(upper_bound + 1 < std::numeric_limits<Z>::max(), "Type Overflow");
 
     --upper_bound; // Not inclusive, but several methods in boost::math::detail need to be
 
-    std::vector<Z> primes {};
-    primes.reserve(upper_bound / std::log(static_cast<double>(upper_bound)));
+    //std::vector<Z> primes {};
+    if(is_vector_v<decltype(primes)>)
+    {
+        primes.reserve(upper_bound / std::log(static_cast<double>(upper_bound)));
+    }
 
     if(upper_bound <= 32768)
     {
@@ -701,7 +723,7 @@ auto prime_sieve(ExecutionPolicy&& policy, Z upper_bound, OutputIterator output)
         }
     }
 
-    return std::move(primes.begin(), primes.end(), output);
+    //return std::move(primes.begin(), primes.end(), output);
 }
 
 template<class ExecutionPolicy, class Z, class OutputIterator>
