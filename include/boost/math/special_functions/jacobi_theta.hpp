@@ -11,7 +11,7 @@
 // provided in all.
 //
 // The functions take a real argument z and a parameter known as q, or its close
-// relative tau. 
+// relative tau.
 //
 // The mathematical functions are best understood in terms of their Fourier
 // series. Using the q parameterization, and summing from n = 0 to ∞:
@@ -52,7 +52,7 @@
 // However, the τ in the equation above is *not* identical to the tau in the function
 // signature. Instead, `tau` is the imaginary component of τ. Mathematically, τ can
 // be complex - but practically, most applications call for a purely imaginary τ.
-// Rather than provide a full complex-number API, the author decided to treat the 
+// Rather than provide a full complex-number API, the author decided to treat the
 // parameter `tau` as an imaginary number. So in computational terms, the
 // relationship between `q` and `tau` is given by:
 //
@@ -109,66 +109,66 @@
 namespace boost{ namespace math{
 
 // Simple functions - parameterized by q
-template <class T>
-inline T jacobi_theta1(T z, T q);
-template <class T>
-inline T jacobi_theta2(T z, T q);
-template <class T>
-inline T jacobi_theta3(T z, T q);
-template <class T>
-inline T jacobi_theta4(T z, T q);
+template <class T, class U>
+inline typename tools::promote_args<T, U>::type jacobi_theta1(T z, U q);
+template <class T, class U>
+inline typename tools::promote_args<T, U>::type jacobi_theta2(T z, U q);
+template <class T, class U>
+inline typename tools::promote_args<T, U>::type jacobi_theta3(T z, U q);
+template <class T, class U>
+inline typename tools::promote_args<T, U>::type jacobi_theta4(T z, U q);
 
 // Simple functions - parameterized by tau (assumed imaginary)
 // q = exp(iπτ)
 // tau = -log(q)/π
-template <class T>
-inline T jacobi_theta1tau(T z, T tau);
-template <class T>
-inline T jacobi_theta2tau(T z, T tau);
-template <class T>
-inline T jacobi_theta3tau(T z, T tau);
-template <class T>
-inline T jacobi_theta4tau(T z, T tau);
+template <class T, class U>
+inline typename tools::promote_args<T, U>::type jacobi_theta1tau(T z, U tau);
+template <class T, class U>
+inline typename tools::promote_args<T, U>::type jacobi_theta2tau(T z, U tau);
+template <class T, class U>
+inline typename tools::promote_args<T, U>::type jacobi_theta3tau(T z, U tau);
+template <class T, class U>
+inline typename tools::promote_args<T, U>::type jacobi_theta4tau(T z, U tau);
 
 // Minus one versions for small q / large tau
-template <class T>
-inline T jacobi_theta3m1(T z, T q);
-template <class T>
-inline T jacobi_theta4m1(T z, T q);
-template <class T>
-inline T jacobi_theta3m1tau(T z, T tau);
-template <class T>
-inline T jacobi_theta4m1tau(T z, T tau);
+template <class T, class U>
+inline typename tools::promote_args<T, U>::type jacobi_theta3m1(T z, U q);
+template <class T, class U>
+inline typename tools::promote_args<T, U>::type jacobi_theta4m1(T z, U q);
+template <class T, class U>
+inline typename tools::promote_args<T, U>::type jacobi_theta3m1tau(T z, U tau);
+template <class T, class U>
+inline typename tools::promote_args<T, U>::type jacobi_theta4m1tau(T z, U tau);
 
 // Policied versions - parameterized by q
-template <class RealType, class Policy>
-inline RealType jacobi_theta1(RealType z, RealType q, const Policy& pol);
-template <class RealType, class Policy>
-inline RealType jacobi_theta2(RealType z, RealType q, const Policy& pol);
-template <class RealType, class Policy>
-inline RealType jacobi_theta3(RealType z, RealType q, const Policy& pol);
-template <class RealType, class Policy>
-inline RealType jacobi_theta4(RealType z, RealType q, const Policy& pol);
+template <class T, class U, class Policy>
+inline typename tools::promote_args<T, U>::type jacobi_theta1(T z, U q, const Policy& pol);
+template <class T, class U, class Policy>
+inline typename tools::promote_args<T, U>::type jacobi_theta2(T z, U q, const Policy& pol);
+template <class T, class U, class Policy>
+inline typename tools::promote_args<T, U>::type jacobi_theta3(T z, U q, const Policy& pol);
+template <class T, class U, class Policy>
+inline typename tools::promote_args<T, U>::type jacobi_theta4(T z, U q, const Policy& pol);
 
 // Policied versions - parameterized by tau
-template <class RealType, class Policy>
-inline RealType jacobi_theta1tau(RealType z, RealType tau, const Policy& pol);
-template <class RealType, class Policy>
-inline RealType jacobi_theta2tau(RealType z, RealType tau, const Policy& pol);
-template <class RealType, class Policy>
-inline RealType jacobi_theta3tau(RealType z, RealType tau, const Policy& pol);
-template <class RealType, class Policy>
-inline RealType jacobi_theta4tau(RealType z, RealType tau, const Policy& pol);
+template <class T, class U, class Policy>
+inline typename tools::promote_args<T, U>::type jacobi_theta1tau(T z, U tau, const Policy& pol);
+template <class T, class U, class Policy>
+inline typename tools::promote_args<T, U>::type jacobi_theta2tau(T z, U tau, const Policy& pol);
+template <class T, class U, class Policy>
+inline typename tools::promote_args<T, U>::type jacobi_theta3tau(T z, U tau, const Policy& pol);
+template <class T, class U, class Policy>
+inline typename tools::promote_args<T, U>::type jacobi_theta4tau(T z, U tau, const Policy& pol);
 
 // Policied m1 functions
-template <class RealType, class Policy>
-inline RealType jacobi_theta3m1(RealType z, RealType q, const Policy& pol);
-template <class RealType, class Policy>
-inline RealType jacobi_theta4m1(RealType z, RealType q, const Policy& pol);
-template <class RealType, class Policy>
-inline RealType jacobi_theta3m1tau(RealType z, RealType tau, const Policy& pol);
-template <class RealType, class Policy>
-inline RealType jacobi_theta4m1tau(RealType z, RealType tau, const Policy& pol);
+template <class T, class U, class Policy>
+inline typename tools::promote_args<T, U>::type jacobi_theta3m1(T z, U q, const Policy& pol);
+template <class T, class U, class Policy>
+inline typename tools::promote_args<T, U>::type jacobi_theta4m1(T z, U q, const Policy& pol);
+template <class T, class U, class Policy>
+inline typename tools::promote_args<T, U>::type jacobi_theta3m1tau(T z, U tau, const Policy& pol);
+template <class T, class U, class Policy>
+inline typename tools::promote_args<T, U>::type jacobi_theta4m1tau(T z, U tau, const Policy& pol);
 
 // Internal convergence criterion:
 // If the delta is more than an absolute epsilon, keep going.
@@ -279,13 +279,11 @@ _IMAGINARY_jacobi_theta4tau(RealType z, RealType tau, const Policy& pol) {
     return result * sqrt(tau);
 }
 
-// Begin public API
-
 // First Jacobi theta function (Parameterized by tau - assumed imaginary)
 // = 2 * Σ (-1)^n * exp(iπτ*(n+1/2)^2) * sin((2n+1)z)
 template <class RealType, class Policy>
 inline RealType
-jacobi_theta1tau(RealType z, RealType tau, const Policy& pol)
+jacobi_theta1tau_imp(RealType z, RealType tau, const Policy& pol, const char *function)
 {
     BOOST_MATH_STD_USING
     unsigned n = 0;
@@ -293,7 +291,7 @@ jacobi_theta1tau(RealType z, RealType tau, const Policy& pol)
     RealType q_n, delta, result = RealType(0);
 
     if (tau <= 0.0)
-        return policies::raise_domain_error<RealType>("boost::math::jacobi_theta1tau<%1%>(%1%)",
+        return policies::raise_domain_error<RealType>(function,
                 "tau must be greater than 0 but got %1%.", tau, pol);
 
     if (abs(z) == 0.0)
@@ -324,34 +322,24 @@ jacobi_theta1tau(RealType z, RealType tau, const Policy& pol)
     return result;
 }
 
-template <class T>
-inline T jacobi_theta1tau(T z, T tau) {
-    return jacobi_theta1tau(z, tau, policies::policy<>());
-}
-
 // First Jacobi theta function (Parameterized by q)
 // = 2 * Σ (-1)^n * q^(n+1/2)^2 * sin((2n+1)z)
 template <class RealType, class Policy>
 inline RealType
-jacobi_theta1(RealType z, RealType q, const Policy& pol) {
+jacobi_theta1_imp(RealType z, RealType q, const Policy& pol, const char *function) {
     BOOST_MATH_STD_USING
     if (q <= 0.0 || q >= 1.0) {
-        return policies::raise_domain_error<RealType>("boost::math::jacobi_theta1<%1%>(%1%)",
+        return policies::raise_domain_error<RealType>(function,
                 "q must be greater than 0 and less than 1 but got %1%.", q, pol);
     }
-    return jacobi_theta1tau(z, -log(q)/constants::pi<RealType>(), pol);
-}
-
-template <class T>
-inline T jacobi_theta1(T z, T q) {
-    return jacobi_theta1(z, q, policies::policy<>());
+    return jacobi_theta1tau_imp(z, -log(q)/constants::pi<RealType>(), pol, function);
 }
 
 // Second Jacobi theta function (Parameterized by tau - assumed imaginary)
 // = 2 * Σ exp(iπτ*(n+1/2)^2) * cos((2n+1)z)
 template <class RealType, class Policy>
 inline RealType
-jacobi_theta2tau(RealType z, RealType tau, const Policy& pol)
+jacobi_theta2tau_imp(RealType z, RealType tau, const Policy& pol, const char *function)
 {
     BOOST_MATH_STD_USING
     unsigned n = 0;
@@ -359,7 +347,7 @@ jacobi_theta2tau(RealType z, RealType tau, const Policy& pol)
     RealType q_n, delta, result = RealType(0);
 
     if (tau <= 0.0) {
-        return policies::raise_domain_error<RealType>("boost::math::jacobi_theta2tau<%1%>(%1%)",
+        return policies::raise_domain_error<RealType>(function,
                 "tau must be greater than 0 but got %1%.", tau, pol);
     } else if (tau < 1.0 && abs(z) == 0.0) {
         return jacobi_theta4tau(z, 1/tau, pol) / sqrt(tau);
@@ -385,27 +373,17 @@ jacobi_theta2tau(RealType z, RealType tau, const Policy& pol)
     return result;
 }
 
-template <class T>
-inline T jacobi_theta2tau(T z, T tau) {
-    return jacobi_theta2tau(z, tau, policies::policy<>());
-}
-
 // Second Jacobi theta function, parameterized by q
 // = 2 * Σ q^(n+1/2)^2 * cos((2n+1)z)
 template <class RealType, class Policy>
 inline RealType
-jacobi_theta2(RealType z, RealType q, const Policy& pol) {
+jacobi_theta2_imp(RealType z, RealType q, const Policy& pol, const char *function) {
     BOOST_MATH_STD_USING
     if (q <= 0.0 || q >= 1.0) {
-        return policies::raise_domain_error<RealType>("boost::math::jacobi_theta2<%1%>(%1%)",
+        return policies::raise_domain_error<RealType>(function,
                 "q must be greater than 0 and less than 1 but got %1%.", q, pol);
     }
-    return jacobi_theta2tau(z, -log(q)/constants::pi<RealType>(), pol);
-}
-
-template <class T>
-inline T jacobi_theta2(T z, T q) {
-    return jacobi_theta2(z, q, policies::policy<>());
+    return jacobi_theta2tau_imp(z, -log(q)/constants::pi<RealType>(), pol, function);
 }
 
 // Third Jacobi theta function, minus one (Parameterized by tau - assumed imaginary)
@@ -414,7 +392,7 @@ inline T jacobi_theta2(T z, T q) {
 // = 2 * Σ exp(iπτ*(n)^2) * cos(2nz)
 template <class RealType, class Policy>
 inline RealType
-jacobi_theta3m1tau(RealType z, RealType tau, const Policy& pol)
+jacobi_theta3m1tau_imp(RealType z, RealType tau, const Policy& pol)
 {
     BOOST_MATH_STD_USING
 
@@ -435,20 +413,15 @@ jacobi_theta3m1tau(RealType z, RealType tau, const Policy& pol)
     return result;
 }
 
-template <class T>
-inline T jacobi_theta3m1tau(T z, T tau) {
-    return jacobi_theta3m1tau(z, tau, policies::policy<>());
-}
-
 // Third Jacobi theta function, parameterized by tau
 // = 1 + 2 * Σ exp(iπτ*(n)^2) * cos(2nz)
 template <class RealType, class Policy>
 inline RealType
-jacobi_theta3tau(RealType z, RealType tau, const Policy& pol)
+jacobi_theta3tau_imp(RealType z, RealType tau, const Policy& pol, const char *function)
 {
     BOOST_MATH_STD_USING
     if (tau <= 0.0) {
-        return policies::raise_domain_error<RealType>("boost::math::jacobi_theta3tau<%1%>(%1%)",
+        return policies::raise_domain_error<RealType>(function,
                 "tau must be greater than 0 but got %1%.", tau, pol);
     } else if (tau < 1.0 && abs(z) == 0.0) {
         return jacobi_theta3tau(z, 1/tau, pol) / sqrt(tau);
@@ -462,48 +435,33 @@ jacobi_theta3tau(RealType z, RealType tau, const Policy& pol)
         }
         return _IMAGINARY_jacobi_theta3tau(z, 1/tau, pol);
     }
-    return RealType(1) + jacobi_theta3m1tau(z, tau, pol);
-}
-
-template <class T>
-inline T jacobi_theta3tau(T z, T tau) {
-    return jacobi_theta3tau(z, tau, policies::policy<>());
+    return RealType(1) + jacobi_theta3m1tau_imp(z, tau, pol);
 }
 
 // Third Jacobi theta function, minus one (parameterized by q)
 // = 2 * Σ q^n^2 * cos(2nz)
 template <class RealType, class Policy>
 inline RealType
-jacobi_theta3m1(RealType z, RealType q, const Policy& pol) {
+jacobi_theta3m1_imp(RealType z, RealType q, const Policy& pol, const char *function) {
     BOOST_MATH_STD_USING
     if (q <= 0.0 || q >= 1.0) {
-        return policies::raise_domain_error<RealType>("boost::math::jacobi_theta3m1<%1%>(%1%)",
+        return policies::raise_domain_error<RealType>(function,
                 "q must be greater than 0 and less than 1 but got %1%.", q, pol);
     }
-    return jacobi_theta3m1tau(z, -log(q)/constants::pi<RealType>(), pol);
-}
-
-template <class T>
-inline T jacobi_theta3m1(T z, T q) {
-    return jacobi_theta3m1(z, q, policies::policy<>());
+    return jacobi_theta3m1tau_imp(z, -log(q)/constants::pi<RealType>(), pol);
 }
 
 // Third Jacobi theta function (parameterized by q)
 // = 1 + 2 * Σ q^n^2 * cos(2nz)
 template <class RealType, class Policy>
 inline RealType
-jacobi_theta3(RealType z, RealType q, const Policy& pol) {
+jacobi_theta3_imp(RealType z, RealType q, const Policy& pol, const char *function) {
     BOOST_MATH_STD_USING
     if (q <= 0.0 || q >= 1.0) {
-        return policies::raise_domain_error<RealType>("boost::math::jacobi_theta3<%1%>(%1%)",
+        return policies::raise_domain_error<RealType>(function,
                 "q must be greater than 0 and less than 1 but got %1%.", q, pol);
     }
-    return jacobi_theta3tau(z, -log(q)/constants::pi<RealType>(), pol);
-}
-
-template <class T>
-inline T jacobi_theta3(T z, T q) {
-    return jacobi_theta3(z, q, policies::policy<>());
+    return jacobi_theta3tau_imp(z, -log(q)/constants::pi<RealType>(), pol, function);
 }
 
 // Fourth Jacobi theta function, minus one (Parameterized by tau)
@@ -511,7 +469,7 @@ inline T jacobi_theta3(T z, T q) {
 // = 2 * Σ (-1)^n exp(iπτ*(n)^2) * cos(2nz)
 template <class RealType, class Policy>
 inline RealType
-jacobi_theta4m1tau(RealType z, RealType tau, const Policy& pol)
+jacobi_theta4m1tau_imp(RealType z, RealType tau, const Policy& pol)
 {
     BOOST_MATH_STD_USING
 
@@ -535,20 +493,15 @@ jacobi_theta4m1tau(RealType z, RealType tau, const Policy& pol)
     return result;
 }
 
-template <class T>
-inline T jacobi_theta4m1tau(T z, T tau) {
-    return jacobi_theta4m1tau(z, tau, policies::policy<>());
-}
-
 // Fourth Jacobi theta function (Parameterized by tau)
 // = 1 + 2 * Σ (-1)^n exp(iπτ*(n)^2) * cos(2nz)
 template <class RealType, class Policy>
 inline RealType
-jacobi_theta4tau(RealType z, RealType tau, const Policy& pol)
+jacobi_theta4tau_imp(RealType z, RealType tau, const Policy& pol, const char *function)
 {
     BOOST_MATH_STD_USING
     if (tau <= 0.0) {
-        return policies::raise_domain_error<RealType>("boost::math::jacobi_theta4tau<%1%>(%1%)",
+        return policies::raise_domain_error<RealType>(function,
                 "tau must be greater than 0 but got %1%.", tau, pol);
     } else if (tau < 1.0 && abs(z) == 0.0) {
         return jacobi_theta2tau(z, 1/tau, pol) / sqrt(tau);
@@ -563,12 +516,7 @@ jacobi_theta4tau(RealType z, RealType tau, const Policy& pol)
         return _IMAGINARY_jacobi_theta2tau(z, 1/tau, pol);
     }
 
-    return RealType(1) + jacobi_theta4m1tau(z, tau, pol);
-}
-
-template <class T>
-inline T jacobi_theta4tau(T z, T tau) {
-    return jacobi_theta4tau(z, tau, policies::policy<>());
+    return RealType(1) + jacobi_theta4m1tau_imp(z, tau, pol);
 }
 
 // Fourth Jacobi theta function, minus one (Parameterized by q)
@@ -576,35 +524,304 @@ inline T jacobi_theta4tau(T z, T tau) {
 // = 2 * Σ q^n^2 * cos(2nz)
 template <class RealType, class Policy>
 inline RealType
-jacobi_theta4m1(RealType z, RealType q, const Policy& pol) {
+jacobi_theta4m1_imp(RealType z, RealType q, const Policy& pol, const char *function) {
     BOOST_MATH_STD_USING
     if (q <= 0.0 || q >= 1.0) {
-        return policies::raise_domain_error<RealType>("boost::math::jacobi_theta4m1<%1%>(%1%)",
+        return policies::raise_domain_error<RealType>(function,
                 "q must be greater than 0 and less than 1 but got %1%.", q, pol);
     }
-    return jacobi_theta4m1tau(z, -log(q)/constants::pi<RealType>(), pol);
-}
-
-template <class T>
-inline T jacobi_theta4m1(T z, T q) {
-    return jacobi_theta4m1(z, q, policies::policy<>());
+    return jacobi_theta4m1tau_imp(z, -log(q)/constants::pi<RealType>(), pol);
 }
 
 // Fourth Jacobi theta function, parameterized by q
 // = 1 + 2 * Σ q^n^2 * cos(2nz)
 template <class RealType, class Policy>
 inline RealType
-jacobi_theta4(RealType z, RealType q, const Policy& pol) {
+jacobi_theta4_imp(RealType z, RealType q, const Policy& pol, const char *function) {
     BOOST_MATH_STD_USING
     if (q <= 0.0 || q >= 1.0) {
-        return policies::raise_domain_error<RealType>("boost::math::jacobi_theta4<%1%>(%1%)",
+        return policies::raise_domain_error<RealType>(function,
             "|q| must be greater than zero and less than 1, but got %1%.", q, pol);
     }
-    return jacobi_theta4tau(z, -log(q)/constants::pi<RealType>(), pol);
+    return jacobi_theta4tau_imp(z, -log(q)/constants::pi<RealType>(), pol, function);
 }
 
-template <class T>
-inline T jacobi_theta4(T z, T q) {
+// Begin public API
+
+template <class T, class U, class Policy>
+inline typename tools::promote_args<T, U>::type jacobi_theta1tau(T z, U tau, const Policy& pol) {
+   BOOST_FPU_EXCEPTION_GUARD
+   typedef typename tools::promote_args<T, U>::type result_type;
+   typedef typename policies::normalise<
+      Policy,
+      policies::promote_float<false>,
+      policies::promote_double<false>,
+      policies::discrete_quantile<>,
+      policies::assert_undefined<> >::type forwarding_policy;
+
+   static const char* function = "boost::math::jacobi_theta1tau<%1%>(%1%)";
+
+   return policies::checked_narrowing_cast<result_type, Policy>(
+           jacobi_theta1tau_imp(static_cast<result_type>(z), static_cast<result_type>(tau),
+               forwarding_policy(), function), function);
+}
+
+template <class T, class U>
+inline typename tools::promote_args<T, U>::type jacobi_theta1tau(T z, U tau) {
+    return jacobi_theta1tau(z, tau, policies::policy<>());
+}
+
+template <class T, class U, class Policy>
+inline typename tools::promote_args<T, U>::type jacobi_theta1(T z, U q, const Policy& pol) {
+   BOOST_FPU_EXCEPTION_GUARD
+   typedef typename tools::promote_args<T, U>::type result_type;
+   typedef typename policies::normalise<
+      Policy,
+      policies::promote_float<false>,
+      policies::promote_double<false>,
+      policies::discrete_quantile<>,
+      policies::assert_undefined<> >::type forwarding_policy;
+
+   static const char* function = "boost::math::jacobi_theta1<%1%>(%1%)";
+
+   return policies::checked_narrowing_cast<result_type, Policy>(
+           jacobi_theta1_imp(static_cast<result_type>(z), static_cast<result_type>(q),
+               forwarding_policy(), function), function);
+}
+
+template <class T, class U>
+inline typename tools::promote_args<T, U>::type jacobi_theta1(T z, U q) {
+    return jacobi_theta1(z, q, policies::policy<>());
+}
+
+template <class T, class U, class Policy>
+inline typename tools::promote_args<T, U>::type jacobi_theta2tau(T z, U tau, const Policy& pol) {
+   BOOST_FPU_EXCEPTION_GUARD
+   typedef typename tools::promote_args<T, U>::type result_type;
+   typedef typename policies::normalise<
+      Policy,
+      policies::promote_float<false>,
+      policies::promote_double<false>,
+      policies::discrete_quantile<>,
+      policies::assert_undefined<> >::type forwarding_policy;
+
+   static const char* function = "boost::math::jacobi_theta2tau<%1%>(%1%)";
+
+   return policies::checked_narrowing_cast<result_type, Policy>(
+           jacobi_theta2tau_imp(static_cast<result_type>(z), static_cast<result_type>(tau),
+               forwarding_policy(), function), function);
+}
+
+template <class T, class U>
+inline typename tools::promote_args<T, U>::type jacobi_theta2tau(T z, U tau) {
+    return jacobi_theta2tau(z, tau, policies::policy<>());
+}
+
+template <class T, class U, class Policy>
+inline typename tools::promote_args<T, U>::type jacobi_theta2(T z, U q, const Policy& pol) {
+   BOOST_FPU_EXCEPTION_GUARD
+   typedef typename tools::promote_args<T, U>::type result_type;
+   typedef typename policies::normalise<
+      Policy,
+      policies::promote_float<false>,
+      policies::promote_double<false>,
+      policies::discrete_quantile<>,
+      policies::assert_undefined<> >::type forwarding_policy;
+
+   static const char* function = "boost::math::jacobi_theta2<%1%>(%1%)";
+
+   return policies::checked_narrowing_cast<result_type, Policy>(
+           jacobi_theta2_imp(static_cast<result_type>(z), static_cast<result_type>(q),
+               forwarding_policy(), function), function);
+}
+
+template <class T, class U>
+inline typename tools::promote_args<T, U>::type jacobi_theta2(T z, U q) {
+    return jacobi_theta2(z, q, policies::policy<>());
+}
+
+template <class T, class U, class Policy>
+inline typename tools::promote_args<T, U>::type jacobi_theta3m1tau(T z, U tau, const Policy& pol) {
+   BOOST_FPU_EXCEPTION_GUARD
+   typedef typename tools::promote_args<T, U>::type result_type;
+   typedef typename policies::normalise<
+      Policy,
+      policies::promote_float<false>,
+      policies::promote_double<false>,
+      policies::discrete_quantile<>,
+      policies::assert_undefined<> >::type forwarding_policy;
+
+   static const char* function = "boost::math::jacobi_theta3m1tau<%1%>(%1%)";
+
+   return policies::checked_narrowing_cast<result_type, Policy>(
+           jacobi_theta3m1tau_imp(static_cast<result_type>(z), static_cast<result_type>(tau),
+               forwarding_policy()), function);
+}
+
+template <class T, class U>
+inline typename tools::promote_args<T, U>::type jacobi_theta3m1tau(T z, U tau) {
+    return jacobi_theta3m1tau(z, tau, policies::policy<>());
+}
+
+template <class T, class U, class Policy>
+inline typename tools::promote_args<T, U>::type jacobi_theta3tau(T z, U tau, const Policy& pol) {
+   BOOST_FPU_EXCEPTION_GUARD
+   typedef typename tools::promote_args<T, U>::type result_type;
+   typedef typename policies::normalise<
+      Policy,
+      policies::promote_float<false>,
+      policies::promote_double<false>,
+      policies::discrete_quantile<>,
+      policies::assert_undefined<> >::type forwarding_policy;
+
+   static const char* function = "boost::math::jacobi_theta3tau<%1%>(%1%)";
+
+   return policies::checked_narrowing_cast<result_type, Policy>(
+           jacobi_theta3tau_imp(static_cast<result_type>(z), static_cast<result_type>(tau),
+               forwarding_policy(), function), function);
+}
+
+template <class T, class U>
+inline typename tools::promote_args<T, U>::type jacobi_theta3tau(T z, U tau) {
+    return jacobi_theta3tau(z, tau, policies::policy<>());
+}
+
+
+template <class T, class U, class Policy>
+inline typename tools::promote_args<T, U>::type jacobi_theta3m1(T z, U q, const Policy& pol) {
+   BOOST_FPU_EXCEPTION_GUARD
+   typedef typename tools::promote_args<T, U>::type result_type;
+   typedef typename policies::normalise<
+      Policy,
+      policies::promote_float<false>,
+      policies::promote_double<false>,
+      policies::discrete_quantile<>,
+      policies::assert_undefined<> >::type forwarding_policy;
+
+   static const char* function = "boost::math::jacobi_theta3m1<%1%>(%1%)";
+
+   return policies::checked_narrowing_cast<result_type, Policy>(
+           jacobi_theta3m1_imp(static_cast<result_type>(z), static_cast<result_type>(q),
+               forwarding_policy(), function), function);
+}
+
+template <class T, class U>
+inline typename tools::promote_args<T, U>::type jacobi_theta3m1(T z, U q) {
+    return jacobi_theta3m1(z, q, policies::policy<>());
+}
+
+template <class T, class U, class Policy>
+inline typename tools::promote_args<T, U>::type jacobi_theta3(T z, U q, const Policy& pol) {
+   BOOST_FPU_EXCEPTION_GUARD
+   typedef typename tools::promote_args<T, U>::type result_type;
+   typedef typename policies::normalise<
+      Policy,
+      policies::promote_float<false>,
+      policies::promote_double<false>,
+      policies::discrete_quantile<>,
+      policies::assert_undefined<> >::type forwarding_policy;
+
+   static const char* function = "boost::math::jacobi_theta3<%1%>(%1%)";
+
+   return policies::checked_narrowing_cast<result_type, Policy>(
+           jacobi_theta3_imp(static_cast<result_type>(z), static_cast<result_type>(q),
+               forwarding_policy(), function), function);
+}
+
+template <class T, class U>
+inline typename tools::promote_args<T, U>::type jacobi_theta3(T z, U q) {
+    return jacobi_theta3(z, q, policies::policy<>());
+}
+
+template <class T, class U, class Policy>
+inline typename tools::promote_args<T, U>::type jacobi_theta4m1tau(T z, U tau, const Policy& pol) {
+   BOOST_FPU_EXCEPTION_GUARD
+   typedef typename tools::promote_args<T, U>::type result_type;
+   typedef typename policies::normalise<
+      Policy,
+      policies::promote_float<false>,
+      policies::promote_double<false>,
+      policies::discrete_quantile<>,
+      policies::assert_undefined<> >::type forwarding_policy;
+
+   static const char* function = "boost::math::jacobi_theta4m1tau<%1%>(%1%)";
+
+   return policies::checked_narrowing_cast<result_type, Policy>(
+           jacobi_theta4m1tau_imp(static_cast<result_type>(z), static_cast<result_type>(tau),
+               forwarding_policy()), function);
+}
+
+template <class T, class U>
+inline typename tools::promote_args<T, U>::type jacobi_theta4m1tau(T z, U tau) {
+    return jacobi_theta4m1tau(z, tau, policies::policy<>());
+}
+
+template <class T, class U, class Policy>
+inline typename tools::promote_args<T, U>::type jacobi_theta4tau(T z, U tau, const Policy& pol) {
+   BOOST_FPU_EXCEPTION_GUARD
+   typedef typename tools::promote_args<T, U>::type result_type;
+   typedef typename policies::normalise<
+      Policy,
+      policies::promote_float<false>,
+      policies::promote_double<false>,
+      policies::discrete_quantile<>,
+      policies::assert_undefined<> >::type forwarding_policy;
+
+   static const char* function = "boost::math::jacobi_theta4tau<%1%>(%1%)";
+
+   return policies::checked_narrowing_cast<result_type, Policy>(
+           jacobi_theta4tau_imp(static_cast<result_type>(z), static_cast<result_type>(tau),
+               forwarding_policy(), function), function);
+}
+
+template <class T, class U>
+inline typename tools::promote_args<T, U>::type jacobi_theta4tau(T z, U tau) {
+    return jacobi_theta4tau(z, tau, policies::policy<>());
+}
+
+template <class T, class U, class Policy>
+inline typename tools::promote_args<T, U>::type jacobi_theta4m1(T z, U q, const Policy& pol) {
+   BOOST_FPU_EXCEPTION_GUARD
+   typedef typename tools::promote_args<T, U>::type result_type;
+   typedef typename policies::normalise<
+      Policy,
+      policies::promote_float<false>,
+      policies::promote_double<false>,
+      policies::discrete_quantile<>,
+      policies::assert_undefined<> >::type forwarding_policy;
+
+   static const char* function = "boost::math::jacobi_theta4m1<%1%>(%1%)";
+
+   return policies::checked_narrowing_cast<result_type, Policy>(
+           jacobi_theta4m1_imp(static_cast<result_type>(z), static_cast<result_type>(q),
+               forwarding_policy(), function), function);
+}
+
+template <class T, class U>
+inline typename tools::promote_args<T, U>::type jacobi_theta4m1(T z, U q) {
+    return jacobi_theta4m1(z, q, policies::policy<>());
+}
+
+template <class T, class U, class Policy>
+inline typename tools::promote_args<T, U>::type jacobi_theta4(T z, U q, const Policy&) {
+   BOOST_FPU_EXCEPTION_GUARD
+   typedef typename tools::promote_args<T, U>::type result_type;
+   typedef typename policies::normalise<
+      Policy,
+      policies::promote_float<false>,
+      policies::promote_double<false>,
+      policies::discrete_quantile<>,
+      policies::assert_undefined<> >::type forwarding_policy;
+
+   static const char* function = "boost::math::jacobi_theta4<%1%>(%1%)";
+
+   return policies::checked_narrowing_cast<result_type, Policy>(
+           jacobi_theta4_imp(static_cast<result_type>(z), static_cast<result_type>(q),
+               forwarding_policy(), function), function);
+}
+
+template <class T, class U>
+inline typename tools::promote_args<T, U>::type jacobi_theta4(T z, U q) {
     return jacobi_theta4(z, q, policies::policy<>());
 }
 
