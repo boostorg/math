@@ -10,7 +10,7 @@ int main() {
     using PreciseReal = long double;
     using CoarseReal = float;
 
-    auto q = 0.5;
+    CoarseReal q = 0.5;
 
     auto jacobi_theta1_coarse = [=](CoarseReal z) {
         return boost::math::jacobi_theta1<CoarseReal>(z, q);
