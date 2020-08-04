@@ -170,26 +170,26 @@ inline typename tools::promote_args<T, U>::type jacobi_theta3m1tau(T z, U tau, c
 template <class T, class U, class Policy>
 inline typename tools::promote_args<T, U>::type jacobi_theta4m1tau(T z, U tau, const Policy& pol);
 
-// Internal convergence criterion:
-// If the delta is more than an absolute epsilon, keep going.
-// If the delta is more than an relative epsilon, and the denominator
-// is non-zero, keep going.
+// Compare the non-oscillating component of the delta to the previous delta.
+// Both are assumed to be non-negative.
 template <class RealType>
 inline bool
-_jacobi_theta_converged(RealType result, RealType delta, RealType eps) {
-    return abs(delta) < eps && (abs(result) == 0.0 || abs(delta/result) < eps);
+_jacobi_theta_converged(RealType last_delta, RealType delta, RealType eps) {
+    return delta == 0.0 || delta < eps*last_delta;
 }
 
 template <class RealType>
 inline RealType
 _jacobi_theta_sum(RealType tau, RealType z_n, RealType z_increment, RealType eps) {
-    RealType delta, partial_result = 0;
+    RealType delta = 0, partial_result = 0;
+    RealType last_delta = 0;
 
     do {
+        last_delta = delta;
         delta = exp(-tau*z_n*z_n/constants::pi<RealType>());
         partial_result += delta;
         z_n += z_increment;
-    } while (!_jacobi_theta_converged(partial_result, delta, eps));
+    } while (!_jacobi_theta_converged(last_delta, delta, eps));
 
     return partial_result;
 }
@@ -288,7 +288,7 @@ jacobi_theta1tau_imp(RealType z, RealType tau, const Policy& pol, const char *fu
     BOOST_MATH_STD_USING
     unsigned n = 0;
     RealType eps = policies::get_epsilon<RealType, Policy>();
-    RealType q_n, delta, result = RealType(0);
+    RealType q_n = 0, last_q_n, delta, result = 0;
 
     if (tau <= 0.0)
         return policies::raise_domain_error<RealType>(function,
@@ -310,6 +310,7 @@ jacobi_theta1tau_imp(RealType z, RealType tau, const Policy& pol, const char *fu
     }
 
     do {
+        last_q_n = q_n;
         q_n = exp(-tau * constants::pi<RealType>() * RealType(n + 0.5)*RealType(n + 0.5) );
         delta = q_n * sin(RealType(2*n+1)*z);
         if (n%2)
@@ -317,7 +318,7 @@ jacobi_theta1tau_imp(RealType z, RealType tau, const Policy& pol, const char *fu
 
         result += delta + delta;
         n++;
-    } while (!_jacobi_theta_converged(result, q_n, eps));
+    } while (!_jacobi_theta_converged(last_q_n, q_n, eps));
 
     return result;
 }
@@ -344,7 +345,7 @@ jacobi_theta2tau_imp(RealType z, RealType tau, const Policy& pol, const char *fu
     BOOST_MATH_STD_USING
     unsigned n = 0;
     RealType eps = policies::get_epsilon<RealType, Policy>();
-    RealType q_n, delta, result = RealType(0);
+    RealType q_n = 0, last_q_n, delta, result = 0;
 
     if (tau <= 0.0) {
         return policies::raise_domain_error<RealType>(function,
@@ -364,11 +365,12 @@ jacobi_theta2tau_imp(RealType z, RealType tau, const Policy& pol, const char *fu
     }
 
     do {
+        last_q_n = q_n;
         q_n = exp(-tau * constants::pi<RealType>() * RealType(n + 0.5)*RealType(n + 0.5));
         delta = q_n * cos(RealType(2*n+1)*z);
         result += delta + delta;
         n++;
-    } while (!_jacobi_theta_converged(result, q_n, eps));
+    } while (!_jacobi_theta_converged(last_q_n, q_n, eps));
 
     return result;
 }
@@ -397,18 +399,19 @@ jacobi_theta3m1tau_imp(RealType z, RealType tau, const Policy& pol)
     BOOST_MATH_STD_USING
 
     RealType eps = policies::get_epsilon<RealType, Policy>();
-    RealType q_n, delta, result = RealType(0);
+    RealType q_n = 0, last_q_n, delta, result = 0;
     unsigned n = 1;
 
     if (tau < 1.0)
         return jacobi_theta3tau(z, tau, pol) - RealType(1);
 
     do {
+        last_q_n = q_n;
         q_n = exp(-tau * constants::pi<RealType>() * RealType(n)*RealType(n));
         delta = q_n * cos(RealType(2*n)*z);
         result += delta + delta;
         n++;
-    } while (!_jacobi_theta_converged(result, q_n, eps));
+    } while (!_jacobi_theta_converged(last_q_n, q_n, eps));
 
     return result;
 }
@@ -474,13 +477,14 @@ jacobi_theta4m1tau_imp(RealType z, RealType tau, const Policy& pol)
     BOOST_MATH_STD_USING
 
     RealType eps = policies::get_epsilon<RealType, Policy>();
-    RealType q_n, delta, result = RealType(0);
+    RealType q_n = 0, last_q_n, delta, result = 0;
     unsigned n = 1;
 
     if (tau < 1.0)
         return jacobi_theta4tau(z, tau, pol) - RealType(1);
 
     do {
+        last_q_n = q_n;
         q_n = exp(-tau * constants::pi<RealType>() * RealType(n)*RealType(n));
         delta = q_n * cos(RealType(2*n)*z);
         if (n%2)
@@ -488,7 +492,7 @@ jacobi_theta4m1tau_imp(RealType z, RealType tau, const Policy& pol)
 
         result += delta + delta;
         n++;
-    } while (!_jacobi_theta_converged(result, q_n, eps));
+    } while (!_jacobi_theta_converged(last_q_n, q_n, eps));
 
     return result;
 }
