@@ -9,7 +9,6 @@
 #define BOOST_MATH_SPECIAL_FUNCTIONS_PRIME_SIEVE_HPP
 
 #include <boost/math/special_functions/prime.hpp>
-#include <boost/dynamic_bitset.hpp>
 #include <boost/assert.hpp>
 #include <vector>
 #include <iterator>
@@ -17,7 +16,6 @@
 #include <thread>
 #include <memory>
 #include <future>
-#include <deque>
 #include <numeric>
 #include <iostream>
 #include <algorithm>
@@ -66,83 +64,6 @@ void linear_sieve(Integer upper_bound, Container &resultant_primes)
     }
 }
 
-// WIP - Not segmented properly between lower bound and upper bound if lower bound > segment_size
-template<class Integer, class PrimeContainer, class Container>
-void segmented_bit_sieve(Integer lower_bound, Integer upper_bound, const PrimeContainer &primes, Container &resultant_primes)
-{
-    constexpr Integer L1D_CACHE_SIZE {32768};
-    const Integer limit{static_cast<Integer>(std::floor(std::sqrt(static_cast<double>(upper_bound))))};
-    const Integer segment_size = std::max(limit, L1D_CACHE_SIZE);
-
-    Integer n {lower_bound};
-    if(n % 2 == 0)
-    {
-        ++n;
-    }
-
-    boost::dynamic_bitset<> sieve(segment_size);
-    std::vector<Integer> current_primes;
-    std::vector<Integer> multiples;
-    auto prime_it {++primes.begin()}; // start at 3
-
-    for (Integer low {0}; low <= upper_bound; low += segment_size)
-    {
-        sieve.set();
-
-        // current segment = [low, high]
-        Integer high = low + segment_size - 1;
-        high = std::min(high, upper_bound);
-
-        while((*prime_it * *prime_it) <= high && prime_it != primes.end())
-        {
-            current_primes.emplace_back(*prime_it);
-            multiples.emplace_back((*prime_it * *prime_it) - low);
-            ++prime_it;
-        } 
-
-        // sieve the current segment
-        for (size_t i {}; i < current_primes.size(); i++)
-        {
-            Integer j {multiples[i]};
-            for (Integer k {current_primes[i] * 2}; j < segment_size; j += k)
-            {    
-                sieve[j] = 0;
-            }
-            multiples[i] = j - segment_size;
-        }
-
-        for (; n <= high; n += 2)
-        {
-            if (sieve[n - low])
-            {
-                if(n > lower_bound)
-                {
-                    resultant_primes.emplace_back(n);
-                }
-            }  
-        }
-    }
-    
-    if(lower_bound == 2)
-    {
-        resultant_primes.insert(resultant_primes.begin(), static_cast<Integer>(2));
-    }
-}
-
-
-template<class Integer, class Container>
-void segmented_bit_sieve(Integer lower_bound, Integer upper_bound, Container &resultant_primes)
-{
-    Integer limit{static_cast<Integer>(std::floor(std::sqrt(static_cast<double>(upper_bound)))) + 1};
-    std::vector<Integer> primes {};
-    primes.reserve(limit / std::log(limit));
-
-    boost::math::detail::linear_sieve(limit, primes);
-
-    boost::math::detail::segmented_bit_sieve(lower_bound, upper_bound, primes, resultant_primes);
-}
-
-
 template<class Integer, class PrimeContainer, class Container>
 void mask_sieve(Integer lower_bound, Integer upper_bound, const PrimeContainer& primes, Container &resultant_primes)
 {
@@ -159,7 +80,7 @@ void mask_sieve(Integer lower_bound, Integer upper_bound, const PrimeContainer& 
     const size_t n {static_cast<size_t>(upper_bound - lower_bound + 1)};
     std::unique_ptr<bool[]> is_prime {new bool[n]};
     memset(is_prime.get(), true, sizeof(*is_prime.get()) * (n));
- 
+     
     // Enable use of thread pool, not SIMD compatible
     std::for_each(std::execution::par, primes.begin(), it, [&is_prime, lower_bound, upper_bound](auto prime){
         for(Integer j {std::max(prime * prime, (lower_bound + prime - 1) / prime * prime)}; j <= upper_bound; j += prime)
