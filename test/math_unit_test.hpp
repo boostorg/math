@@ -70,7 +70,7 @@ bool check_ulp_close(PreciseReal expected1, Real computed, size_t ulps, std::str
     using std::max;
     using std::abs;
     using std::isnan;
-    using boost::math::itrunc;
+    using boost::math::lltrunc;
     // Of course integers can be expected values, and they are exact:
     if (!std::is_integral<PreciseReal>::value) {
         BOOST_ASSERT_MSG(!isnan(expected1), "Expected value cannot be a nan.");
@@ -98,7 +98,7 @@ bool check_ulp_close(PreciseReal expected1, Real computed, size_t ulps, std::str
     Real dist = abs(boost::math::float_distance(expected, computed));
     if (dist > ulps)
     {
-        detail::total_ulp_distance += static_cast<int64_t>(itrunc(dist));
+        detail::total_ulp_distance += static_cast<int64_t>(lltrunc(dist));
         Real abs_expected = abs(expected);
         Real denom = (max)(abs_expected, Real(1));
         Real mollified_relative_error = abs(expected - computed)/denom;
