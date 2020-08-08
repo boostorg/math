@@ -1,0 +1,34 @@
+[/
+Copyright (c) 2019 Nick Thompson
+Use, modification and distribution are subject to the
+Boost Software License, Version 1.0. (See accompanying file
+LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+]
+
+[section:qq_plot Quantile-quantile plots]
+
+[heading Synopsis]
+
+```
+#include <boost/math/statistics/qq_plot.hpp>
+
+namespace boost::math::statistics {
+
+template<typename RandomAccessContainer>
+class qq_plot {
+public:
+    qq_plot(RandomAccessContainer&& x, RandomAccessContainer&& y);
+
+    template<typename Real>
+    qq_plot(RandomAccessContainer&& x, boost::math::distribution<Real>const & dist);
+
+}
+}
+```
+
+[heading Background]
+
+A quantile-quantile plot graphically gives evidence as to whether two datasets are samples of the same distribution, or if a dataset is drawn from a given distribution.
+
+[endsect]
+[/section:qq_plot]
