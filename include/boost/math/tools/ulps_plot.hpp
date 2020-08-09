@@ -439,7 +439,7 @@ ulps_plot<F, PreciseReal, CoarseReal>::ulps_plot(F hi_acc_impl, CoarseReal a, Co
              size_t samples, bool perturb_abscissas, int random_seed)
 {
     // Use digits10 for this comparison in case the two types have differeing radixes:
-    static_assert(std::numeric_limits<PreciseReal>::digits10) >= std::numeric_limits<CoarseReal>::digits10), "PreciseReal must have higher precision that CoarseReal");
+    static_assert(std::numeric_limits<PreciseReal>::digits10 >= std::numeric_limits<CoarseReal>::digits10, "PreciseReal must have higher precision that CoarseReal");
     if (samples < 10)
     {
         throw std::domain_error("Must have at least 10 samples, samples = " + std::to_string(samples));
