@@ -247,11 +247,16 @@ public:
                 }
                 if (plot.clip_ > 0 && static_cast<PreciseReal>(abs(ulp[j])) > plot.clip_)
                 {
-                    continue;
+                   CoarseReal x = x_scale(plot.coarse_abscissas_[j]);
+                   PreciseReal y = y_scale(static_cast<PreciseReal>(ulp[j] < 0 ? -plot.clip_ : plot.clip_));
+                   fs << "<circle cx='" << x << "' cy='" << y << "' r='1' fill='" << color << "'/>\n";
                 }
-                CoarseReal x = x_scale(plot.coarse_abscissas_[j]);
-                PreciseReal y = y_scale(static_cast<PreciseReal>(ulp[j]));
-                fs << "<circle cx='" << x << "' cy='" << y << "' r='1' fill='" << color << "'/>\n";
+                else
+                {
+                   CoarseReal x = x_scale(plot.coarse_abscissas_[j]);
+                   PreciseReal y = y_scale(static_cast<PreciseReal>(ulp[j]));
+                   fs << "<circle cx='" << x << "' cy='" << y << "' r='1' fill='" << color << "'/>\n";
+                }
             }
         }
 
@@ -433,9 +438,8 @@ template<class F, typename PreciseReal, typename CoarseReal>
 ulps_plot<F, PreciseReal, CoarseReal>::ulps_plot(F hi_acc_impl, CoarseReal a, CoarseReal b,
              size_t samples, bool perturb_abscissas, int random_seed)
 {
-    // This fails for heap allocated types like MPFR.
-    // Got to think on what to do about it.
-    static_assert(sizeof(PreciseReal) >= sizeof(CoarseReal), "PreciseReal must have larger size than CoarseReal");
+    // Use digits10 for this comparison in case the two types have differeing radixes:
+    static_assert(std::numeric_limits<PreciseReal>::digits10) >= std::numeric_limits<CoarseReal>::digits10), "PreciseReal must have higher precision that CoarseReal");
     if (samples < 10)
     {
         throw std::domain_error("Must have at least 10 samples, samples = " + std::to_string(samples));
