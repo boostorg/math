@@ -72,7 +72,8 @@ Hence we recommend only playing with this parameter to /decrease/ the default nu
 
 [heading Performance]
 
-To see that Cohen acceleration is in fact faster than naive summation for the same level of relative accuracy, we can run the `reporting/performance/cohen_acceleration_performance.cpp` file:
+To see that Cohen acceleration is in fact faster than naive summation for the same level of relative accuracy, we can run the `reporting/performance/cohen_acceleration_performance.cpp` file.
+This benchmark computes the alternating Basel series discussed above:
 
 ```
 Running ./reporting/performance/cohen_acceleration_performance.x
