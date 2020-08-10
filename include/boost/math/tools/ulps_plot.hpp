@@ -79,6 +79,10 @@ public:
 
     ulps_plot& font_color(std::string const & font_color);
 
+    ulps_plot& crop_color(std::string const & color);
+
+    ulps_plot& nan_color(std::string const & color);
+
     ulps_plot& ulp_envelope(bool write_ulp);
 
     template<class G>
@@ -243,13 +247,21 @@ public:
             {
                 if (isnan(ulp[j]))
                 {
-                    continue;
+                    if(plot.nan_color_ == "")
+                        continue;
+                    CoarseReal x = x_scale(plot.coarse_abscissas_[j]);
+                    PreciseReal y = y_scale(static_cast<PreciseReal>(plot.clip_));
+                    fs << "<circle cx='" << x << "' cy='" << y << "' r='1' fill='" << plot.nan_color_ << "'/>\n";
+                    y = y_scale(static_cast<PreciseReal>(-plot.clip_));
+                    fs << "<circle cx='" << x << "' cy='" << y << "' r='1' fill='" << plot.nan_color_ << "'/>\n";
                 }
                 if (plot.clip_ > 0 && static_cast<PreciseReal>(abs(ulp[j])) > plot.clip_)
                 {
+                   if (plot.crop_color_ == "")
+                      continue;
                    CoarseReal x = x_scale(plot.coarse_abscissas_[j]);
                    PreciseReal y = y_scale(static_cast<PreciseReal>(ulp[j] < 0 ? -plot.clip_ : plot.clip_));
-                   fs << "<circle cx='" << x << "' cy='" << y << "' r='1' fill='" << color << "'/>\n";
+                   fs << "<circle cx='" << x << "' cy='" << y << "' r='1' fill='" << plot.crop_color_ << "'/>\n";
                 }
                 else
                 {
@@ -356,6 +368,8 @@ private:
     std::string title_;
     std::string background_color_;
     std::string font_color_;
+    std::string crop_color_;
+    std::string nan_color_;
 };
 
 template<class F, typename PreciseReal, typename CoarseReal>
@@ -415,6 +429,20 @@ ulps_plot<F, PreciseReal, CoarseReal>& ulps_plot<F, PreciseReal, CoarseReal>::fo
 }
 
 template<class F, typename PreciseReal, typename CoarseReal>
+ulps_plot<F, PreciseReal, CoarseReal>& ulps_plot<F, PreciseReal, CoarseReal>::crop_color(std::string const & color)
+{
+    crop_color_ = color;
+    return *this;
+}
+
+template<class F, typename PreciseReal, typename CoarseReal>
+ulps_plot<F, PreciseReal, CoarseReal>& ulps_plot<F, PreciseReal, CoarseReal>::nan_color(std::string const & color)
+{
+    nan_color_ = color;
+    return *this;
+}
+
+template<class F, typename PreciseReal, typename CoarseReal>
 ulps_plot<F, PreciseReal, CoarseReal>& ulps_plot<F, PreciseReal, CoarseReal>::ulp_envelope(bool write_ulp_envelope)
 {
     ulp_envelope_ = write_ulp_envelope;
@@ -436,7 +464,7 @@ void ulps_plot<F, PreciseReal, CoarseReal>::write(std::string const & filename) 
 
 template<class F, typename PreciseReal, typename CoarseReal>
 ulps_plot<F, PreciseReal, CoarseReal>::ulps_plot(F hi_acc_impl, CoarseReal a, CoarseReal b,
-             size_t samples, bool perturb_abscissas, int random_seed)
+             size_t samples, bool perturb_abscissas, int random_seed) : crop_color_("red")
 {
     // Use digits10 for this comparison in case the two types have differeing radixes:
     static_assert(std::numeric_limits<PreciseReal>::digits10 >= std::numeric_limits<CoarseReal>::digits10, "PreciseReal must have higher precision that CoarseReal");
