@@ -598,6 +598,7 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [include statistics/runs_test.qbk]
 [include statistics/ljung_box.qbk]
 [include statistics/linear_regression.qbk]
+[include statistics/qq_plot.qbk]
 [endmathpart] [/section:statistics Statistics]
 
 [mathpart vector_functionals Vector Functionals -  Norms]

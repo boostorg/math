@@ -14,21 +14,57 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 namespace boost::math::statistics {
 
-template<typename RandomAccessContainer>
+template<typename Real>
 class qq_plot {
 public:
-    qq_plot(RandomAccessContainer&& x, RandomAccessContainer&& y);
+    template<typename Container>
+    qq_plot(Container&& x, Container&& y);
 
-    template<typename Real>
-    qq_plot(RandomAccessContainer&& x, boost::math::distribution<Real>const & dist);
+    template<typename Container>
+    qq_plot(Container&& x, std::function<Real(Real)> icdf);
 
-}
+    qq_plot(std::function<Real(Real)> icdf1, std::function<Real(Real)> icdf2);
+
+    qq_plot& width(int width);
+
+    qq_plot& xlabel(std::string const & label);
+
+    qq_plot& ylabel(std::strong const & label)
+
+    qq_plot& title(std::string const & title);
+
+    qq_plot& background_color(std::string const & background_color);
+
+    qq_plot& font_color(std::string const & font_color);
+
+    qq_plot& horizontal_lines(int horizontal_lines);
+
+    qq_plot& vertical_lines(int vertical_lines);
+
+    friend std::ostream& operator<<(std::ostream& fs, qq_plot const & plot);
+    void write(std::filesystem::path const & filename) const;
+};
+
 }
 ```
 
 [heading Background]
 
-A quantile-quantile plot graphically gives evidence as to whether two datasets are samples of the same distribution, or if a dataset is drawn from a given distribution.
+A [@https://en.wikipedia.org/wiki/Q%E2%80%93Q_plot quantile-quantile plot] graphically gives evidence as to whether two datasets are sampled from the same distribution, if a dataset is drawn from a given distribution.
+If the quantile-quantile plot falls on the line /y = x/, then we have good evidence that the data are from the same distribution.
+If the plot falls on a line /y = mx+b/, then it might be that the data is from the same class of distribution, but with different parameters.
+If the plot does not form a straight line, then the data is probably not drawn from the same distribution.
+
+This function generates an SVG, which can be opened in a browser.
+Note that this function is a bit more general than the /QuantilePlot/ of Maple, or the `QuantileQuantile` plot of Mathematica.
+These functions compare if two datasets are drawn from the same distribution.
+However, another sensible question to ask is whether a single dataset is drawn from a theoretical distribution.
+Finally, we allow for the ability to generate QQ plots of two theoretical distributions.
+This is to examine how the qq plot of two datasets drawn from different distributions /should/ look.
+
+Let's now examine an example:
+
+    
 
 [endsect]
 [/section:qq_plot]
