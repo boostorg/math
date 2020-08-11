@@ -18,32 +18,60 @@
     public:
         ulps_plot(F hi_acc_impl, CoarseReal a, CoarseReal b,
                   size_t samples = 10000, bool perturb_abscissas = false, int random_seed = -1);
-
+        //
+        // Set a clip value to restrict the range of ULP's shown, values outside [-clip,clip]
+        // will be shown at the clip boundary and in a different color (red by default):
+        //
         ulps_plot& clip(PreciseReal clip);
-
+        //
+        // The width of the SVG:
+        //
         ulps_plot& width(int width);
-
+        //
+        // The color of the condition number envelope:
+        //
         ulps_plot& envelope_color(std::string const & color);
-
+        //
+        // Title:
+        //
         ulps_plot& title(std::string const & title);
-
+        //
+        // Background color:
+        //
         ulps_plot& background_color(std::string const & background_color);
-
+        //
+        // Font color:
+        //
         ulps_plot& font_color(std::string const & font_color);
-
+        //
+        // Sets the color of points which are cropped, or set to an empty
+        // string to hide them completely (default is "red"):
+        //
+        ulps_plot& crop_color(std::string const & font_color);
+        //
+        // Set's the color of points where one of the functions returned a NaN,
+        // or set to an empty string to hide completely (the default):
+        //
+        ulps_plot& nan_color(std::string const & font_color);
+        //
+        // Show ULP envelope true/false:
+        //
         ulps_plot& ulp_envelope(bool write_ulp);
-
+        //
+        // The number of horizontal/vertical lines to draw:
+        //
         ulps_plot& horizontal_lines(int horizontal_lines);
-
         ulps_plot& vertical_lines(int vertical_lines);
-
+        //
+        // Add a function, and plot color:
+        //
         template<class G>
         ulps_plot& add_fn(G g, std::string const & color = "steelblue");
-
+        //
+        // Write to stream or file:
+        //
         friend std::ostream& operator<<(std::ostream& fs, ulps_plot const & plot)
-
         void write(std::string const & filename) const;
-
     };
     
     } // namespaces
