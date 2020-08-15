@@ -1,0 +1,210 @@
+// Copyright 2020 Matt Borland and Jonathan Sorenson
+//
+// Use, modification and distribution are subject to the
+// Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt
+// or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+#ifndef BOOST_MATH_SPECIAL_FUNCTIONS_PRIME_WHEEL_HPP
+#define BOOST_MATH_SPECIAL_FUNCTIONS_PRIME_WHEEL_HPP
+
+#include <array>
+#include <memory>
+#include <iomanip>
+#include <iostream>
+
+namespace boost::math::detail
+{
+template<class Integer>
+class Wheel
+{    
+private:
+    struct Wheelrec
+    {
+        std::int_fast32_t rp;
+        std::int_fast32_t dist;
+        std::int_fast32_t pos;
+        std::int_fast32_t inv;
+    };
+
+    std::unique_ptr<Wheelrec[]> W_;
+    Integer M_;
+    Integer k_;
+    Integer phi_;
+
+    static constexpr std::array<Integer, 8> P_ {2, 3, 5, 7, 11, 13, 17, 19};
+
+    void build(Integer korsize);
+
+public:
+    Wheel() : W_{nullptr}, M_{0}, k_{0}, phi_{0} {};
+    explicit Wheel(Integer korsize) { build(korsize); }
+    explicit Wheel(const Wheel &x) { build(x.K()); }
+    ~Wheel() = default;
+
+    constexpr bool operator!() const noexcept { return W_ == nullptr; }
+    constexpr const Wheelrec& operator[](const Integer i) const noexcept { return W_[i % M_]; }
+    const Wheel& operator=(const Wheel &x)
+    {
+        if(this != &x)
+        {
+            build(x.K());
+        }
+        return *this;
+    }
+    
+    constexpr Integer Size() const noexcept { return M_; }
+    constexpr int K() const noexcept { return k_; }
+    constexpr Integer Phi() const noexcept { return phi_; }
+
+    constexpr Integer Next(const Integer i) const noexcept { return i + W_[i % M_].dist; }
+    constexpr Integer MakeRP(const Integer i) const noexcept
+    {
+        if(W[i % M].rp)
+        {
+            return i;
+        }
+        return Next(i);
+    } 
+    constexpr Integer Prev(const Integer i) const noexcept { return i - W_[(M_ - (i % M_)) % M_].dist; }
+    constexpr Integer Pos(const Integer i) const noexcept { return phi_ * (i / M_) + W_[i % M_].pos; }
+    constexpr Integer Inv(const Integer i) const noexcept { return M_ * (i / phi_) + W_[i % phi_].inv; }
+
+    void Print();
+};
+
+template<class Integer>
+void Wheel<Integer>::build(Integer korsize)
+{
+    // Calculate k_ and M_
+    if(korsize >= 10)
+    {
+        --korsize;
+        for(k_ = 0; korsize > 0; ++k_)
+        {
+            korsize /= P_[k_];
+        }
+    }
+    else
+    {
+        k_ = korsize;
+    }
+
+    Integer i {0};
+    Integer dist {0};
+    Integer pos {1};
+
+    for(M_ = 1; i < k_; ++i)
+    {
+        M_ *= P_[i];
+    }
+    
+    W_ = std::make_unique<Wheelrec[]>(M_);
+
+    // Compute the RP field
+    for(i = 0; i < M_; ++i)
+    {
+        W_[i].rp = 1;
+    }
+
+    for(i = 0; i < k_; ++i)
+    {
+        for(Integer j {0}; j < M_; j += P_[i])
+        {
+            W_[j].rp = 0;
+        }
+    }
+
+    // Compute the dist field
+    W_[M_- 1].dist = 2;
+    for(i = M_ - 2; i >= 0; --i)
+    {
+        W_[i].dist = ++dist;
+        if(W_[i].rp)
+        {
+            dist = 0;
+        }
+    }
+
+    // Copute pos and inv fields
+    for(i = 0; i < M_; ++i)
+    {
+        W_[i].inv = 0;
+        if(W_[i].rp)
+        {
+            W_[pos].inv = i;
+            W_[i].pos = pos++;
+        }
+        else
+        {
+            W_[i].pos = 0;
+        }
+        
+    }
+
+    W_[0].inv = -1;
+    phi_ = W_[M_- 1].pos;
+}
+
+template<class Integer>
+void Wheel<Integer>::Print()
+{
+    std::int_fast32_t i {};
+    std::cout << "Wheel size = " << this->Size()
+                << "\nk = " << this->K()
+                << "\nphi(M) = " << this->Phi() << std::endl;
+
+    // Verify size
+    for(i = 0; i < this->Size(); ++i)
+    {
+        std::cout << std::setw(4) << i;
+        if(i % 25 == 24)
+        {
+            std::cout << std::endl;
+        }
+    }
+
+    std::cout << "\n\nRP Field\n";
+    for(i = 0; i < this->Size(); ++i)
+    {
+        std::cout << std::setw(3) << W_[i].rp;
+        if(i % 25 == 24)
+        {
+            std::cout << std::endl;
+        }
+    }
+
+    std::cout << "\n\nDist Field\n";
+    for(i = 0; i < this->Size(); ++i)
+    {
+        std::cout << std::setw(3) << W_[i].dist;
+        if(i % 25 == 24)
+        {
+            std::cout << std::endl;
+        }
+    }
+
+    std::cout << "\n\nPos Field\n";
+    for(i = 0; i < this->Size(); ++i)
+    {
+        std::cout << std::setw(3) << W_[i].pos;
+        if(i % 25 == 24)
+        {
+            std::cout << std::endl;
+        }
+    }
+
+    std::cout << "\n\nInv Field\n";
+    for(i = 0; i < this->Size(); ++i)
+    {
+        std::cout << std::setw(4) << W_[i].inv;
+        if(i % 25 == 24)
+        {
+            std::cout << std::endl;
+        }
+    }
+    std::cout << std::endl;
+}
+}
+
+#endif //BOOST_MATH_SPECIAL_FUNCTIONS_PRIME_WHEEL_HPP
