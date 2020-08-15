@@ -701,6 +701,49 @@ int main()
     plot.add(boost::bind(f2, 1, _1), -2.5, 2.5, "k=1");
     plot.plot("Jacobi Elliptic sd", "jacobi_sd.svg", "k", "jacobi_sd(k, u)");
 
+    plot.clear();
+    f2 = boost::math::jacobi_theta1;
+    plot.add(boost::bind(f2, _1, 0.15), 0.0, boost::math::constants::two_pi<double>(), "\u03B8\u2081");
+    f2 = boost::math::jacobi_theta2;
+    plot.add(boost::bind(f2, _1, 0.15), 0.0, boost::math::constants::two_pi<double>(), "\u03B8\u2082");
+    f2 = boost::math::jacobi_theta3;
+    plot.add(boost::bind(f2, _1, 0.15), 0.0, boost::math::constants::two_pi<double>(), "\u03B8\u2083");
+    f2 = boost::math::jacobi_theta4;
+    plot.add(boost::bind(f2, _1, 0.15), 0.0, boost::math::constants::two_pi<double>(), "\u03B8\u2084");
+    plot.plot("Jacobi Theta Functions", "jacobi_theta.svg", "x", "jacobi_theta(x, q=0.15)");
+
+    f2 = boost::math::jacobi_theta1;
+    plot.clear();
+    plot.add(boost::bind(f2, _1, 0.05), 0.0, boost::math::constants::two_pi<double>(), "q=0.05");
+    plot.add(boost::bind(f2, _1, 0.5), 0.0, boost::math::constants::two_pi<double>(), "q=0.5");
+    plot.add(boost::bind(f2, _1, 0.7), 0.0, boost::math::constants::two_pi<double>(), "q=0.7");
+    plot.add(boost::bind(f2, _1, 0.9), 0.0, boost::math::constants::two_pi<double>(), "q=0.9");
+    plot.plot("Jacobi Theta Function \u03B8\u2081", "jacobi_theta1.svg", "x", "jacobi_theta1(x, q)");
+
+    f2 = boost::math::jacobi_theta2;
+    plot.clear();
+    plot.add(boost::bind(f2, _1, 0.05), 0.0, boost::math::constants::two_pi<double>(), "q=0.05");
+    plot.add(boost::bind(f2, _1, 0.5), 0.0, boost::math::constants::two_pi<double>(), "q=0.5");
+    plot.add(boost::bind(f2, _1, 0.7), 0.0, boost::math::constants::two_pi<double>(), "q=0.7");
+    plot.add(boost::bind(f2, _1, 0.9), 0.0, boost::math::constants::two_pi<double>(), "q=0.9");
+    plot.plot("Jacobi Theta Function \u03B8\u2082", "jacobi_theta2.svg", "x", "jacobi_theta2(x, q)");
+
+    f2 = boost::math::jacobi_theta3;
+    plot.clear();
+    plot.add(boost::bind(f2, _1, 0.05), 0.0, boost::math::constants::two_pi<double>(), "q=0.05");
+    plot.add(boost::bind(f2, _1, 0.5), 0.0, boost::math::constants::two_pi<double>(), "q=0.5");
+    plot.add(boost::bind(f2, _1, 0.7), 0.0, boost::math::constants::two_pi<double>(), "q=0.7");
+    plot.add(boost::bind(f2, _1, 0.9), 0.0, boost::math::constants::two_pi<double>(), "q=0.9");
+    plot.plot("Jacobi Theta Function \u03B8\u2083", "jacobi_theta3.svg", "x", "jacobi_theta3(x, q)");
+
+    f2 = boost::math::jacobi_theta4;
+    plot.clear();
+    plot.add(boost::bind(f2, _1, 0.05), 0.0, boost::math::constants::two_pi<double>(), "q=0.05");
+    plot.add(boost::bind(f2, _1, 0.5), 0.0, boost::math::constants::two_pi<double>(), "q=0.5");
+    plot.add(boost::bind(f2, _1, 0.7), 0.0, boost::math::constants::two_pi<double>(), "q=0.7");
+    plot.add(boost::bind(f2, _1, 0.9), 0.0, boost::math::constants::two_pi<double>(), "q=0.9");
+    plot.plot("Jacobi Theta Function \u03B8\u2084", "jacobi_theta4.svg", "x", "jacobi_theta4(x, q)");
+
     f = boost::math::airy_ai;
     plot.clear();
     plot.add(f, -20, 20, "");

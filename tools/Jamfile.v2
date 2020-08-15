@@ -189,6 +189,9 @@ install hermite_data_install : hermite_data : <location>bin ;
 exe hyp_2f1_data : hyp_2f1_data.cpp ;
 install hyp_2f1_data_install : hyp_2f1_data : <location>bin ;
 
+exe jacobi_theta_data : jacobi_theta_data.cpp ;
+install jacobi_theta_data_install : jacobi_theta_data : <location>bin ;
+
 exe jacobi_zeta_data : jacobi_zeta_data.cpp ;
 install jacobi_zeta_data_install : jacobi_zeta_data : <location>bin ;
 
