@@ -1511,11 +1511,7 @@ fvar<RealType, Order> log(fvar<RealType, Order> const& cr) {
   BOOST_IF_CONSTEXPR (order == 0)
     return fvar<RealType, Order>(d0);
   else {
-#ifndef BOOST_NO_CXX17_IF_CONSTEXPR
-    auto const d1 = make_fvar<root_type, order - 1>(static_cast<root_type>(cr)).inverse();  // log'(x) = 1 / x
-#else  // for compilers that compile this branch when order == 0.
-    auto const d1 = make_fvar<root_type, order - 0>(static_cast<root_type>(cr)).inverse();  // log'(x) = 1 / x
-#endif
+    auto const d1 = make_fvar<root_type, bool(order) ? order - 1 : 0>(static_cast<root_type>(cr)).inverse();  // log'(x) = 1 / x
     return cr.apply_coefficients_nonhorner(order, [&d0, &d1](size_t i) { return i ? d1[i - 1] / i : d0; });
   }
 }
@@ -1575,11 +1571,7 @@ fvar<RealType, Order> asin(fvar<RealType, Order> const& cr) {
   BOOST_IF_CONSTEXPR (order == 0)
     return fvar<RealType, Order>(d0);
   else {
-#ifndef BOOST_NO_CXX17_IF_CONSTEXPR
-    auto x = make_fvar<root_type, order - 1>(static_cast<root_type>(cr));
-#else  // for compilers that compile this branch when order == 0.
-    auto x = make_fvar<root_type, order - 0>(static_cast<root_type>(cr));
-#endif
+    auto x = make_fvar<root_type, bool(order) ? order - 1 : 0>(static_cast<root_type>(cr));
     auto const d1 = sqrt((x *= x).negate() += 1).inverse();  // asin'(x) = 1 / sqrt(1-x*x).
     return cr.apply_coefficients_nonhorner(order, [&d0, &d1](size_t i) { return i ? d1[i - 1] / i : d0; });
   }
@@ -1594,11 +1586,7 @@ fvar<RealType, Order> tan(fvar<RealType, Order> const& cr) {
   BOOST_IF_CONSTEXPR (order == 0)
     return fvar<RealType, Order>(d0);
   else {
-#ifndef BOOST_NO_CXX17_IF_CONSTEXPR
-    auto c = cos(make_fvar<root_type, order - 1>(static_cast<root_type>(cr)));
-#else  // for compilers that compile this branch when order == 0.
-    auto c = cos(make_fvar<root_type, order - 0>(static_cast<root_type>(cr)));
-#endif
+    auto c = cos(make_fvar<root_type, bool(order) ? order - 1 : 0>(static_cast<root_type>(cr)));
     auto const d1 = (c *= c).inverse();  // tan'(x) = 1 / cos(x)^2
     return cr.apply_coefficients_nonhorner(order, [&d0, &d1](size_t i) { return i ? d1[i - 1] / i : d0; });
   }
@@ -1613,11 +1601,7 @@ fvar<RealType, Order> atan(fvar<RealType, Order> const& cr) {
   BOOST_IF_CONSTEXPR (order == 0)
     return fvar<RealType, Order>(d0);
   else {
-#ifndef BOOST_NO_CXX17_IF_CONSTEXPR
-    auto x = make_fvar<root_type, order - 1>(static_cast<root_type>(cr));
-#else  // for compilers that compile this branch when order == 0.
-    auto x = make_fvar<root_type, order - 0>(static_cast<root_type>(cr));
-#endif
+    auto x = make_fvar<root_type, bool(order) ? order - 1 : 0>(static_cast<root_type>(cr));
     auto const d1 = ((x *= x) += 1).inverse();  // atan'(x) = 1 / (x*x+1).
     return cr.apply_coefficients(order, [&d0, &d1](size_t i) { return i ? d1[i - 1] / i : d0; });
   }
@@ -1633,11 +1617,7 @@ fvar<RealType, Order> atan2(fvar<RealType, Order> const& cr,
   BOOST_IF_CONSTEXPR (order == 0)
     return fvar<RealType, Order>(d0);
   else {
-#ifndef BOOST_NO_CXX17_IF_CONSTEXPR
-    auto y = make_fvar<root_type, order - 1>(static_cast<root_type>(cr));
-#else  // for compilers that compile this branch when order == 0.
-    auto y = make_fvar<root_type, order - 0>(static_cast<root_type>(cr));
-#endif
+    auto y = make_fvar<root_type, bool(order) ? order - 1 : 0>(static_cast<root_type>(cr));
     auto const d1 = ca / ((y *= y) += (ca * ca));  // (d/dy)atan2(y,x) = x / (y*y+x*x)
     return cr.apply_coefficients(order, [&d0, &d1](size_t i) { return i ? d1[i - 1] / i : d0; });
   }
@@ -1653,11 +1633,7 @@ fvar<RealType, Order> atan2(typename fvar<RealType, Order>::root_type const& ca,
   BOOST_IF_CONSTEXPR (order == 0)
     return fvar<RealType, Order>(d0);
   else {
-#ifndef BOOST_NO_CXX17_IF_CONSTEXPR
-    auto x = make_fvar<root_type, order - 1>(static_cast<root_type>(cr));
-#else  // for compilers that compile this branch when order == 0.
-    auto x = make_fvar<root_type, order - 0>(static_cast<root_type>(cr));
-#endif
+    auto x = make_fvar<root_type, bool(order) ? order - 1 : 0>(static_cast<root_type>(cr));
     auto const d1 = -ca / ((x *= x) += (ca * ca));  // (d/dx)atan2(y,x) = -y / (x*x+y*y)
     return cr.apply_coefficients(order, [&d0, &d1](size_t i) { return i ? d1[i - 1] / i : d0; });
   }
@@ -1766,11 +1742,7 @@ fvar<RealType, Order> acos(fvar<RealType, Order> const& cr) {
   BOOST_IF_CONSTEXPR (order == 0)
     return fvar<RealType, Order>(d0);
   else {
-#ifndef BOOST_NO_CXX17_IF_CONSTEXPR
-    auto x = make_fvar<root_type, order - 1>(static_cast<root_type>(cr));
-#else  // for compilers that compile this branch when order == 0.
-    auto x = make_fvar<root_type, order - 0>(static_cast<root_type>(cr));
-#endif
+    auto x = make_fvar<root_type, bool(order) ? order - 1 : 0>(static_cast<root_type>(cr));
     auto const d1 = sqrt((x *= x).negate() += 1).inverse().negate();  // acos'(x) = -1 / sqrt(1-x*x).
     return cr.apply_coefficients(order, [&d0, &d1](size_t i) { return i ? d1[i - 1] / i : d0; });
   }
@@ -1785,11 +1757,7 @@ fvar<RealType, Order> acosh(fvar<RealType, Order> const& cr) {
   BOOST_IF_CONSTEXPR (order == 0)
     return fvar<RealType, Order>(d0);
   else {
-#ifndef BOOST_NO_CXX17_IF_CONSTEXPR
-    auto x = make_fvar<root_type, order - 1>(static_cast<root_type>(cr));
-#else  // for compilers that compile this branch when order == 0.
-    auto x = make_fvar<root_type, order - 0>(static_cast<root_type>(cr));
-#endif
+    auto x = make_fvar<root_type, bool(order) ? order - 1 : 0>(static_cast<root_type>(cr));
     auto const d1 = sqrt((x *= x) -= 1).inverse();  // acosh'(x) = 1 / sqrt(x*x-1).
     return cr.apply_coefficients(order, [&d0, &d1](size_t i) { return i ? d1[i - 1] / i : d0; });
   }
@@ -1804,11 +1772,7 @@ fvar<RealType, Order> asinh(fvar<RealType, Order> const& cr) {
   BOOST_IF_CONSTEXPR (order == 0)
     return fvar<RealType, Order>(d0);
   else {
-#ifndef BOOST_NO_CXX17_IF_CONSTEXPR
-    auto x = make_fvar<root_type, order - 1>(static_cast<root_type>(cr));
-#else  // for compilers that compile this branch when order == 0.
-    auto x = make_fvar<root_type, order - 0>(static_cast<root_type>(cr));
-#endif
+    auto x = make_fvar<root_type, bool(order) ? order - 1 : 0>(static_cast<root_type>(cr));
     auto const d1 = sqrt((x *= x) += 1).inverse();  // asinh'(x) = 1 / sqrt(x*x+1).
     return cr.apply_coefficients(order, [&d0, &d1](size_t i) { return i ? d1[i - 1] / i : d0; });
   }
@@ -1823,11 +1787,7 @@ fvar<RealType, Order> atanh(fvar<RealType, Order> const& cr) {
   BOOST_IF_CONSTEXPR (order == 0)
     return fvar<RealType, Order>(d0);
   else {
-#ifndef BOOST_NO_CXX17_IF_CONSTEXPR
-    auto x = make_fvar<root_type, order - 1>(static_cast<root_type>(cr));
-#else  // for compilers that compile this branch when order == 0.
-    auto x = make_fvar<root_type, order - 0>(static_cast<root_type>(cr));
-#endif
+    auto x = make_fvar<root_type, bool(order) ? order - 1 : 0>(static_cast<root_type>(cr));
     auto const d1 = ((x *= x).negate() += 1).inverse();  // atanh'(x) = 1 / (1-x*x)
     return cr.apply_coefficients(order, [&d0, &d1](size_t i) { return i ? d1[i - 1] / i : d0; });
   }
@@ -1873,11 +1833,7 @@ fvar<RealType, Order> erf(fvar<RealType, Order> const& cr) {
   BOOST_IF_CONSTEXPR (order == 0)
     return fvar<RealType, Order>(d0);
   else {
-#ifndef BOOST_NO_CXX17_IF_CONSTEXPR
-    auto x = make_fvar<root_type, order - 1>(static_cast<root_type>(cr));  // d1 = 2/sqrt(pi)*exp(-x*x)
-#else  // for compilers that compile this branch when order == 0.
-    auto x = make_fvar<root_type, order - 0>(static_cast<root_type>(cr));  // d1 = 2/sqrt(pi)*exp(-x*x)
-#endif
+    auto x = make_fvar<root_type, bool(order) ? order - 1 : 0>(static_cast<root_type>(cr));  // d1 = 2/sqrt(pi)*exp(-x*x)
     auto const d1 = 2 * constants::one_div_root_pi<root_type>() * exp((x *= x).negate());
     return cr.apply_coefficients(order, [&d0, &d1](size_t i) { return i ? d1[i - 1] / i : d0; });
   }
@@ -1892,11 +1848,7 @@ fvar<RealType, Order> erfc(fvar<RealType, Order> const& cr) {
   BOOST_IF_CONSTEXPR (order == 0)
     return fvar<RealType, Order>(d0);
   else {
-#ifndef BOOST_NO_CXX17_IF_CONSTEXPR
-    auto x = make_fvar<root_type, order - 1>(static_cast<root_type>(cr));  // erfc'(x) = -erf'(x)
-#else  // for compilers that compile this branch when order == 0.
-    auto x = make_fvar<root_type, order - 0>(static_cast<root_type>(cr));  // erfc'(x) = -erf'(x)
-#endif
+    auto x = make_fvar<root_type, bool(order) ? order - 1 : 0>(static_cast<root_type>(cr));  // erfc'(x) = -erf'(x)
     auto const d1 = -2 * constants::one_div_root_pi<root_type>() * exp((x *= x).negate());
     return cr.apply_coefficients(order, [&d0, &d1](size_t i) { return i ? d1[i - 1] / i : d0; });
   }
