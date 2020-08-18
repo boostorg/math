@@ -181,6 +181,7 @@ _jacobi_theta_converged(RealType last_delta, RealType delta, RealType eps) {
 template <class RealType>
 inline RealType
 _jacobi_theta_sum(RealType tau, RealType z_n, RealType z_increment, RealType eps) {
+    BOOST_MATH_STD_USING
     RealType delta = 0, partial_result = 0;
     RealType last_delta = 0;
 
@@ -208,41 +209,41 @@ _jacobi_theta_sum(RealType tau, RealType z_n, RealType z_increment, RealType eps
 // themselves, following DLMF 20.7.30 - 20.7.33.
 template <class RealType, class Policy>
 inline RealType
-_IMAGINARY_jacobi_theta1tau(RealType z, RealType tau, const Policy& pol) {
+_IMAGINARY_jacobi_theta1tau(RealType z, RealType tau, const Policy&) {
     BOOST_MATH_STD_USING
     RealType eps = policies::get_epsilon<RealType, Policy>();
     RealType result = RealType(0);
 
     // n>=0 even
-    result -= _jacobi_theta_sum(tau, z + constants::half_pi<RealType>(), constants::two_pi<RealType>(), eps);
+    result -= _jacobi_theta_sum(tau, RealType(z + constants::half_pi<RealType>()), constants::two_pi<RealType>(), eps);
     // n>0 odd
-    result += _jacobi_theta_sum(tau, z + constants::half_pi<RealType>() + constants::pi<RealType>(), constants::two_pi<RealType>(), eps);
+    result += _jacobi_theta_sum(tau, RealType(z + constants::half_pi<RealType>() + constants::pi<RealType>()), constants::two_pi<RealType>(), eps);
     // n<0 odd
-    result += _jacobi_theta_sum(tau, z - constants::half_pi<RealType>(), -constants::two_pi<RealType>(), eps);
+    result += _jacobi_theta_sum(tau, RealType(z - constants::half_pi<RealType>()), RealType (-constants::two_pi<RealType>()), eps);
     // n<0 even
-    result -= _jacobi_theta_sum(tau, z - constants::half_pi<RealType>() - constants::pi<RealType>(), -constants::two_pi<RealType>(), eps);
+    result -= _jacobi_theta_sum(tau, RealType(z - constants::half_pi<RealType>() - constants::pi<RealType>()), RealType (-constants::two_pi<RealType>()), eps);
 
     return result * sqrt(tau);
 }
 
 template <class RealType, class Policy>
 inline RealType
-_IMAGINARY_jacobi_theta2tau(RealType z, RealType tau, const Policy& pol) {
+_IMAGINARY_jacobi_theta2tau(RealType z, RealType tau, const Policy&) {
     BOOST_MATH_STD_USING
     RealType eps = policies::get_epsilon<RealType, Policy>();
     RealType result = RealType(0);
 
     // n>=0
-    result += _jacobi_theta_sum(tau, z + constants::half_pi<RealType>(), constants::pi<RealType>(), eps);
+    result += _jacobi_theta_sum(tau, RealType(z + constants::half_pi<RealType>()), constants::pi<RealType>(), eps);
     // n<0
-    result += _jacobi_theta_sum(tau, z - constants::half_pi<RealType>(), -constants::pi<RealType>(), eps);
+    result += _jacobi_theta_sum(tau, RealType(z - constants::half_pi<RealType>()), RealType (-constants::pi<RealType>()), eps);
 
     return result * sqrt(tau);
 }
 
 template <class RealType, class Policy>
 inline RealType
-_IMAGINARY_jacobi_theta3tau(RealType z, RealType tau, const Policy& pol) {
+_IMAGINARY_jacobi_theta3tau(RealType z, RealType tau, const Policy&) {
     BOOST_MATH_STD_USING
     RealType eps = policies::get_epsilon<RealType, Policy>();
     RealType result = 0;
@@ -250,16 +251,16 @@ _IMAGINARY_jacobi_theta3tau(RealType z, RealType tau, const Policy& pol) {
     // n=0
     result += exp(-z*z*tau/constants::pi<RealType>());
     // n>0
-    result += _jacobi_theta_sum(tau, z + constants::pi<RealType>(), constants::pi<RealType>(), eps);
+    result += _jacobi_theta_sum(tau, RealType(z + constants::pi<RealType>()), constants::pi<RealType>(), eps);
     // n<0
-    result += _jacobi_theta_sum(tau, z - constants::pi<RealType>(), -constants::pi<RealType>(), eps);
+    result += _jacobi_theta_sum(tau, RealType(z - constants::pi<RealType>()), RealType(-constants::pi<RealType>()), eps);
 
     return result * sqrt(tau);
 }
 
 template <class RealType, class Policy>
 inline RealType
-_IMAGINARY_jacobi_theta4tau(RealType z, RealType tau, const Policy& pol) {
+_IMAGINARY_jacobi_theta4tau(RealType z, RealType tau, const Policy&) {
     BOOST_MATH_STD_USING
     RealType eps = policies::get_epsilon<RealType, Policy>();
     RealType result = 0;
@@ -268,13 +269,13 @@ _IMAGINARY_jacobi_theta4tau(RealType z, RealType tau, const Policy& pol) {
     result += exp(-z*z*tau/constants::pi<RealType>());
 
     // n > 0 odd
-    result -= _jacobi_theta_sum(tau, z + constants::pi<RealType>(), constants::two_pi<RealType>(), eps);
+    result -= _jacobi_theta_sum(tau, RealType(z + constants::pi<RealType>()), constants::two_pi<RealType>(), eps);
     // n < 0 odd
-    result -= _jacobi_theta_sum(tau, z - constants::pi<RealType>(), -constants::two_pi<RealType>(), eps);
+    result -= _jacobi_theta_sum(tau, RealType(z - constants::pi<RealType>()), RealType (-constants::two_pi<RealType>()), eps);
     // n > 0 even
-    result += _jacobi_theta_sum(tau, z + constants::two_pi<RealType>(), constants::two_pi<RealType>(), eps);
+    result += _jacobi_theta_sum(tau, RealType(z + constants::two_pi<RealType>()), constants::two_pi<RealType>(), eps);
     // n < 0 even
-    result += _jacobi_theta_sum(tau, z - constants::two_pi<RealType>(), -constants::two_pi<RealType>(), eps);
+    result += _jacobi_theta_sum(tau, RealType(z - constants::two_pi<RealType>()), RealType (-constants::two_pi<RealType>()), eps);
 
     return result * sqrt(tau);
 }
@@ -306,7 +307,7 @@ jacobi_theta1tau_imp(RealType z, RealType tau, const Policy& pol, const char *fu
             z += constants::two_pi<RealType>();
         }
 
-        return _IMAGINARY_jacobi_theta1tau(z, 1/tau, pol);
+        return _IMAGINARY_jacobi_theta1tau(z, RealType(1/tau), pol);
     }
 
     do {
@@ -333,7 +334,7 @@ jacobi_theta1_imp(RealType z, RealType q, const Policy& pol, const char *functio
         return policies::raise_domain_error<RealType>(function,
                 "q must be greater than 0 and less than 1 but got %1%.", q, pol);
     }
-    return jacobi_theta1tau_imp(z, -log(q)/constants::pi<RealType>(), pol, function);
+    return jacobi_theta1tau_imp(z, RealType (-log(q)/constants::pi<RealType>()), pol, function);
 }
 
 // Second Jacobi theta function (Parameterized by tau - assumed imaginary)
@@ -361,7 +362,7 @@ jacobi_theta2tau_imp(RealType z, RealType tau, const Policy& pol, const char *fu
             z += constants::two_pi<RealType>();
         }
 
-        return _IMAGINARY_jacobi_theta4tau(z, 1/tau, pol);
+        return _IMAGINARY_jacobi_theta4tau(z, RealType(1/tau), pol);
     }
 
     do {
@@ -385,7 +386,7 @@ jacobi_theta2_imp(RealType z, RealType q, const Policy& pol, const char *functio
         return policies::raise_domain_error<RealType>(function,
                 "q must be greater than 0 and less than 1 but got %1%.", q, pol);
     }
-    return jacobi_theta2tau_imp(z, -log(q)/constants::pi<RealType>(), pol, function);
+    return jacobi_theta2tau_imp(z, RealType (-log(q)/constants::pi<RealType>()), pol, function);
 }
 
 // Third Jacobi theta function, minus one (Parameterized by tau - assumed imaginary)
@@ -427,7 +428,7 @@ jacobi_theta3tau_imp(RealType z, RealType tau, const Policy& pol, const char *fu
         return policies::raise_domain_error<RealType>(function,
                 "tau must be greater than 0 but got %1%.", tau, pol);
     } else if (tau < 1.0 && abs(z) == 0.0) {
-        return jacobi_theta3tau(z, 1/tau, pol) / sqrt(tau);
+        return jacobi_theta3tau(z, RealType(1/tau), pol) / sqrt(tau);
     } else if (tau < 1.0) { // DLMF 20.7.32
         z = fmod(z, constants::pi<RealType>());
         while (z > constants::half_pi<RealType>()) {
@@ -436,7 +437,7 @@ jacobi_theta3tau_imp(RealType z, RealType tau, const Policy& pol, const char *fu
         while (z < -constants::half_pi<RealType>()) {
             z += constants::pi<RealType>();
         }
-        return _IMAGINARY_jacobi_theta3tau(z, 1/tau, pol);
+        return _IMAGINARY_jacobi_theta3tau(z, RealType(1/tau), pol);
     }
     return RealType(1) + jacobi_theta3m1tau_imp(z, tau, pol);
 }
@@ -451,7 +452,7 @@ jacobi_theta3m1_imp(RealType z, RealType q, const Policy& pol, const char *funct
         return policies::raise_domain_error<RealType>(function,
                 "q must be greater than 0 and less than 1 but got %1%.", q, pol);
     }
-    return jacobi_theta3m1tau_imp(z, -log(q)/constants::pi<RealType>(), pol);
+    return jacobi_theta3m1tau_imp(z, RealType (-log(q)/constants::pi<RealType>()), pol);
 }
 
 // Third Jacobi theta function (parameterized by q)
@@ -464,7 +465,7 @@ jacobi_theta3_imp(RealType z, RealType q, const Policy& pol, const char *functio
         return policies::raise_domain_error<RealType>(function,
                 "q must be greater than 0 and less than 1 but got %1%.", q, pol);
     }
-    return jacobi_theta3tau_imp(z, -log(q)/constants::pi<RealType>(), pol, function);
+    return jacobi_theta3tau_imp(z, RealType (-log(q)/constants::pi<RealType>()), pol, function);
 }
 
 // Fourth Jacobi theta function, minus one (Parameterized by tau)
@@ -517,7 +518,7 @@ jacobi_theta4tau_imp(RealType z, RealType tau, const Policy& pol, const char *fu
         while (z < -constants::half_pi<RealType>()) {
             z += constants::pi<RealType>();
         }
-        return _IMAGINARY_jacobi_theta2tau(z, 1/tau, pol);
+        return _IMAGINARY_jacobi_theta2tau(z, RealType(1/tau), pol);
     }
 
     return RealType(1) + jacobi_theta4m1tau_imp(z, tau, pol);
@@ -534,7 +535,7 @@ jacobi_theta4m1_imp(RealType z, RealType q, const Policy& pol, const char *funct
         return policies::raise_domain_error<RealType>(function,
                 "q must be greater than 0 and less than 1 but got %1%.", q, pol);
     }
-    return jacobi_theta4m1tau_imp(z, -log(q)/constants::pi<RealType>(), pol);
+    return jacobi_theta4m1tau_imp(z, RealType (-log(q)/constants::pi<RealType>()), pol);
 }
 
 // Fourth Jacobi theta function, parameterized by q
@@ -547,13 +548,13 @@ jacobi_theta4_imp(RealType z, RealType q, const Policy& pol, const char *functio
         return policies::raise_domain_error<RealType>(function,
             "|q| must be greater than zero and less than 1, but got %1%.", q, pol);
     }
-    return jacobi_theta4tau_imp(z, -log(q)/constants::pi<RealType>(), pol, function);
+    return jacobi_theta4tau_imp(z, RealType(-log(q)/constants::pi<RealType>()), pol, function);
 }
 
 // Begin public API
 
 template <class T, class U, class Policy>
-inline typename tools::promote_args<T, U>::type jacobi_theta1tau(T z, U tau, const Policy& pol) {
+inline typename tools::promote_args<T, U>::type jacobi_theta1tau(T z, U tau, const Policy&) {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename tools::promote_args<T, U>::type result_type;
    typedef typename policies::normalise<
@@ -576,7 +577,7 @@ inline typename tools::promote_args<T, U>::type jacobi_theta1tau(T z, U tau) {
 }
 
 template <class T, class U, class Policy>
-inline typename tools::promote_args<T, U>::type jacobi_theta1(T z, U q, const Policy& pol) {
+inline typename tools::promote_args<T, U>::type jacobi_theta1(T z, U q, const Policy&) {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename tools::promote_args<T, U>::type result_type;
    typedef typename policies::normalise<
@@ -599,7 +600,7 @@ inline typename tools::promote_args<T, U>::type jacobi_theta1(T z, U q) {
 }
 
 template <class T, class U, class Policy>
-inline typename tools::promote_args<T, U>::type jacobi_theta2tau(T z, U tau, const Policy& pol) {
+inline typename tools::promote_args<T, U>::type jacobi_theta2tau(T z, U tau, const Policy&) {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename tools::promote_args<T, U>::type result_type;
    typedef typename policies::normalise<
@@ -622,7 +623,7 @@ inline typename tools::promote_args<T, U>::type jacobi_theta2tau(T z, U tau) {
 }
 
 template <class T, class U, class Policy>
-inline typename tools::promote_args<T, U>::type jacobi_theta2(T z, U q, const Policy& pol) {
+inline typename tools::promote_args<T, U>::type jacobi_theta2(T z, U q, const Policy&) {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename tools::promote_args<T, U>::type result_type;
    typedef typename policies::normalise<
@@ -645,7 +646,7 @@ inline typename tools::promote_args<T, U>::type jacobi_theta2(T z, U q) {
 }
 
 template <class T, class U, class Policy>
-inline typename tools::promote_args<T, U>::type jacobi_theta3m1tau(T z, U tau, const Policy& pol) {
+inline typename tools::promote_args<T, U>::type jacobi_theta3m1tau(T z, U tau, const Policy&) {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename tools::promote_args<T, U>::type result_type;
    typedef typename policies::normalise<
@@ -668,7 +669,7 @@ inline typename tools::promote_args<T, U>::type jacobi_theta3m1tau(T z, U tau) {
 }
 
 template <class T, class U, class Policy>
-inline typename tools::promote_args<T, U>::type jacobi_theta3tau(T z, U tau, const Policy& pol) {
+inline typename tools::promote_args<T, U>::type jacobi_theta3tau(T z, U tau, const Policy&) {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename tools::promote_args<T, U>::type result_type;
    typedef typename policies::normalise<
@@ -692,7 +693,7 @@ inline typename tools::promote_args<T, U>::type jacobi_theta3tau(T z, U tau) {
 
 
 template <class T, class U, class Policy>
-inline typename tools::promote_args<T, U>::type jacobi_theta3m1(T z, U q, const Policy& pol) {
+inline typename tools::promote_args<T, U>::type jacobi_theta3m1(T z, U q, const Policy&) {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename tools::promote_args<T, U>::type result_type;
    typedef typename policies::normalise<
@@ -715,7 +716,7 @@ inline typename tools::promote_args<T, U>::type jacobi_theta3m1(T z, U q) {
 }
 
 template <class T, class U, class Policy>
-inline typename tools::promote_args<T, U>::type jacobi_theta3(T z, U q, const Policy& pol) {
+inline typename tools::promote_args<T, U>::type jacobi_theta3(T z, U q, const Policy&) {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename tools::promote_args<T, U>::type result_type;
    typedef typename policies::normalise<
@@ -738,7 +739,7 @@ inline typename tools::promote_args<T, U>::type jacobi_theta3(T z, U q) {
 }
 
 template <class T, class U, class Policy>
-inline typename tools::promote_args<T, U>::type jacobi_theta4m1tau(T z, U tau, const Policy& pol) {
+inline typename tools::promote_args<T, U>::type jacobi_theta4m1tau(T z, U tau, const Policy&) {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename tools::promote_args<T, U>::type result_type;
    typedef typename policies::normalise<
@@ -761,7 +762,7 @@ inline typename tools::promote_args<T, U>::type jacobi_theta4m1tau(T z, U tau) {
 }
 
 template <class T, class U, class Policy>
-inline typename tools::promote_args<T, U>::type jacobi_theta4tau(T z, U tau, const Policy& pol) {
+inline typename tools::promote_args<T, U>::type jacobi_theta4tau(T z, U tau, const Policy&) {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename tools::promote_args<T, U>::type result_type;
    typedef typename policies::normalise<
@@ -784,7 +785,7 @@ inline typename tools::promote_args<T, U>::type jacobi_theta4tau(T z, U tau) {
 }
 
 template <class T, class U, class Policy>
-inline typename tools::promote_args<T, U>::type jacobi_theta4m1(T z, U q, const Policy& pol) {
+inline typename tools::promote_args<T, U>::type jacobi_theta4m1(T z, U q, const Policy&) {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename tools::promote_args<T, U>::type result_type;
    typedef typename policies::normalise<
