@@ -105,6 +105,37 @@ inline T erf_asymptotic_limit()
    return erf_asymptotic_limit_N(tag_type());
 }
 
+template <class T>
+struct erf_series_near_zero
+{
+   typedef T result_type;
+   T         term;
+   T         zz;
+   int       k;
+   erf_series_near_zero(const T& z) : term(z), zz(-z * z), k(0) {}
+
+   T operator()()
+   {
+      T result = term / (2 * k + 1);
+      term *= zz / ++k;
+      return result;
+   }
+};
+
+template <class T, class Policy>
+T erf_series_near_zero_sum(const T& x, const Policy& pol)
+{
+   //
+   // We need Kahan summation here, otherwise the errors grow fairly quickly.
+   // This method is *much* faster than the alternatives even so.
+   //
+   erf_series_near_zero<T> sum(x);
+   boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
+   T result = constants::two_div_root_pi<T>() * tools::kahan_sum_series(sum, tools::digits<T>(), max_iter);
+   policies::check_series_iterations<T>("boost::math::erf<%1%>(%1%, %1%)", max_iter, pol);
+   return result;
+}
+
 template <class T, class Policy, class Tag>
 T erf_imp(T z, bool invert, const Policy& pol, const Tag& t)
 {
@@ -132,20 +163,12 @@ T erf_imp(T z, bool invert, const Policy& pol, const Tag& t)
    else
    {
       T x = z * z;
-      if(x < 0.6)
+      if(z < 1.3f)
       {
          // Compute P:
-         result = z * exp(-x);
-         result /= sqrt(boost::math::constants::pi<T>());
-         if(result != 0)
-            result *= 2 * detail::lower_gamma_series(T(0.5f), x, pol);
-      }
-      else if(x < 1.1f)
-      {
-         // Compute Q:
-         invert = !invert;
-         result = tgamma_small_upper_part(T(0.5f), x, pol);
-         result /= sqrt(boost::math::constants::pi<T>());
+         // This is actually good for z p to 2 or so, but the cutoff given seems
+         // to be the best compromise.  Performance wise, this is way quicker than anything else...
+         result = erf_series_near_zero_sum(z, pol);
       }
       else if(x > 1 / tools::epsilon<T>())
       {
