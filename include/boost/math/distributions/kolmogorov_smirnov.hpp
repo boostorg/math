@@ -447,5 +447,19 @@ inline RealType variance(const kolmogorov_smirnov_distribution<RealType, Policy>
     return 0.5 * (constants::pi_sqr_div_six<RealType>() 
             - constants::pi<RealType>() * constants::ln_two<RealType>() * constants::ln_two<RealType>()) / n;
 }
+
+template <class RealType, class Policy>
+inline RealType skewness(const kolmogorov_smirnov_distribution<RealType, Policy>& dist)
+{
+   static const char* function = "boost::math::skewness(const kolmogorov_smirnov_distribution<%1%>&)";
+    RealType n = dist.number_of_observations();
+    RealType error_result = 0;
+    if(false == detail::check_df(function, n, &error_result, Policy()))
+        return error_result;
+    RealType ex3 = 9.0 / 16.0 * constants::root_half_pi<RealType>() * constants::zeta_three<RealType>() / n / sqrt(n);
+    RealType mean = boost::math::mean(dist);
+    RealType var = boost::math::variance(dist);
+    return (ex3 - 3 * mean * var - mean * mean * mean) / var / sqrt(var);
+}
 }}
 #endif

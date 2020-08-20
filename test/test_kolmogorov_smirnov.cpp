@@ -59,16 +59,20 @@ void test_spots(RealType T)
     BOOST_TEST_CHECK(pdf(dist, mode) >= pdf(dist, mode - 100 * tol));
     BOOST_TEST_CHECK(pdf(dist, mode) >= pdf(dist, mode + 100 * tol));
 
-    // Test first three moments - pretty well covers the entire distribution
+    // Test first four moments - pretty well covers the entire distribution
     RealType mean = boost::math::mean(dist);
     RealType var = variance(dist);
+    RealType skew = skewness(dist);
     quadrature::exp_sinh<RealType> integrator;
     auto f_one = [&, dist](RealType t) { return pdf(dist, t); };
     auto f_mean = [&, dist](RealType t) { return pdf(dist, t) * t; };
     auto f_var = [&, dist, mean](RealType t) { return pdf(dist, t) * (t - mean) * (t - mean); };
+    auto f_skew = [&, dist, mean, var](RealType t) { return pdf(dist, t)
+        * (t - mean) * (t - mean) * (t - mean) / var / sqrt(var); };
     BOOST_CHECK_CLOSE_FRACTION(integrator.integrate(f_one, eps), RealType(1), tol);
     BOOST_CHECK_CLOSE_FRACTION(integrator.integrate(f_mean, eps), mean, tol);
     BOOST_CHECK_CLOSE_FRACTION(integrator.integrate(f_var, eps), var, tol);
+    BOOST_CHECK_CLOSE_FRACTION(integrator.integrate(f_skew, eps), skew, 4*tol);
 }
 
 BOOST_AUTO_TEST_CASE( test_main )
