@@ -59,20 +59,31 @@ void test_spots(RealType T)
     BOOST_TEST_CHECK(pdf(dist, mode) >= pdf(dist, mode - 100 * tol));
     BOOST_TEST_CHECK(pdf(dist, mode) >= pdf(dist, mode + 100 * tol));
 
-    // Test first four moments - pretty well covers the entire distribution
-    RealType mean = boost::math::mean(dist);
-    RealType var = variance(dist);
-    RealType skew = skewness(dist);
+    // Test the moments - each one integrates the entire distribution
     quadrature::exp_sinh<RealType> integrator;
+
     auto f_one = [&, dist](RealType t) { return pdf(dist, t); };
+    BOOST_CHECK_CLOSE_FRACTION(integrator.integrate(f_one, eps), RealType(1), tol);
+
+    RealType mean = boost::math::mean(dist);
     auto f_mean = [&, dist](RealType t) { return pdf(dist, t) * t; };
+    BOOST_CHECK_CLOSE_FRACTION(integrator.integrate(f_mean, eps), mean, tol);
+
+    RealType var = variance(dist);
     auto f_var = [&, dist, mean](RealType t) { return pdf(dist, t) * (t - mean) * (t - mean); };
+    BOOST_CHECK_CLOSE_FRACTION(integrator.integrate(f_var, eps), var, tol);
+
+    RealType skew = skewness(dist);
     auto f_skew = [&, dist, mean, var](RealType t) { return pdf(dist, t)
         * (t - mean) * (t - mean) * (t - mean) / var / sqrt(var); };
-    BOOST_CHECK_CLOSE_FRACTION(integrator.integrate(f_one, eps), RealType(1), tol);
-    BOOST_CHECK_CLOSE_FRACTION(integrator.integrate(f_mean, eps), mean, tol);
-    BOOST_CHECK_CLOSE_FRACTION(integrator.integrate(f_var, eps), var, tol);
     BOOST_CHECK_CLOSE_FRACTION(integrator.integrate(f_skew, eps), skew, 4*tol);
+
+    RealType kurt = kurtosis(dist);
+    auto f_kurt= [&, dist, mean, var](RealType t) { return pdf(dist, t)
+        * (t - mean) * (t - mean) * (t - mean) * (t - mean) / var / var; };
+    BOOST_CHECK_CLOSE_FRACTION(integrator.integrate(f_kurt, eps), kurt, 5*tol);
+
+    BOOST_CHECK_CLOSE_FRACTION(kurt, kurtosis_excess(dist) + 3, eps);
 }
 
 BOOST_AUTO_TEST_CASE( test_main )

@@ -423,6 +423,7 @@ inline RealType mode(const kolmogorov_smirnov_distribution<RealType, Policy>& di
     return r.first / sqrt(n);
 }
 
+// Mean and variance come directly from
 // https://www.jstatsoft.org/article/view/v008i18 Section 3
 template <class RealType, class Policy>
 inline RealType mean(const kolmogorov_smirnov_distribution<RealType, Policy>& dist)
@@ -448,6 +449,8 @@ inline RealType variance(const kolmogorov_smirnov_distribution<RealType, Policy>
             - constants::pi<RealType>() * constants::ln_two<RealType>() * constants::ln_two<RealType>()) / n;
 }
 
+// Skewness and kurtosis come from integrating the PDF
+// The alternating series pops out a Dirichlet eta function which is related to the zeta function
 template <class RealType, class Policy>
 inline RealType skewness(const kolmogorov_smirnov_distribution<RealType, Policy>& dist)
 {
@@ -456,10 +459,36 @@ inline RealType skewness(const kolmogorov_smirnov_distribution<RealType, Policy>
     RealType error_result = 0;
     if(false == detail::check_df(function, n, &error_result, Policy()))
         return error_result;
-    RealType ex3 = 9.0 / 16.0 * constants::root_half_pi<RealType>() * constants::zeta_three<RealType>() / n / sqrt(n);
+    RealType ex3 = 0.5625 * constants::root_half_pi<RealType>() * constants::zeta_three<RealType>() / n / sqrt(n);
     RealType mean = boost::math::mean(dist);
     RealType var = boost::math::variance(dist);
     return (ex3 - 3 * mean * var - mean * mean * mean) / var / sqrt(var);
+}
+
+template <class RealType, class Policy>
+inline RealType kurtosis(const kolmogorov_smirnov_distribution<RealType, Policy>& dist)
+{
+   static const char* function = "boost::math::kurtosis(const kolmogorov_smirnov_distribution<%1%>&)";
+    RealType n = dist.number_of_observations();
+    RealType error_result = 0;
+    if(false == detail::check_df(function, n, &error_result, Policy()))
+        return error_result;
+    RealType ex4 = 7.0 * constants::pi_sqr_div_six<RealType>() * constants::pi_sqr_div_six<RealType>() / 20.0 / n / n;
+    RealType mean = boost::math::mean(dist);
+    RealType var = boost::math::variance(dist);
+    RealType skew = boost::math::skewness(dist);
+    return (ex4 - 4 * mean * skew * var * sqrt(var) - 6 * mean * mean * var - mean * mean * mean * mean) / var / var;
+}
+
+template <class RealType, class Policy>
+inline RealType kurtosis_excess(const kolmogorov_smirnov_distribution<RealType, Policy>& dist)
+{
+   static const char* function = "boost::math::kurtosis_excess(const kolmogorov_smirnov_distribution<%1%>&)";
+    RealType n = dist.number_of_observations();
+    RealType error_result = 0;
+    if(false == detail::check_df(function, n, &error_result, Policy()))
+        return error_result;
+    return kurtosis(dist) - 3;
 }
 }}
 #endif
