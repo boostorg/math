@@ -120,7 +120,7 @@ namespace boost { namespace math {
 namespace detail {
 template <class RealType>
 inline RealType kolmogorov_smirnov_quantile_guess(RealType p) {
-    RealType k = 0.0;
+    RealType k = 0;
     // Choose a starting point for the Newton-Raphson iteration
     if (p > 0.9) {
         k = 1.8 - 5 * (1 - p);
@@ -135,8 +135,8 @@ inline RealType kolmogorov_smirnov_quantile_guess(RealType p) {
 // d/dk (theta2(0, 1/(2*k*k/M_PI))/sqrt(2*k*k*M_PI))
 template <class RealType, class Policy>
 RealType kolmogorov_smirnov_pdf_small_x(RealType x, RealType n, const Policy&) {
-    RealType value = 0.0, delta = 0.0, last_delta = 0.0;
-   RealType eps = policies::get_epsilon<RealType, Policy>();
+    RealType value = 0, delta = 0, last_delta = 0;
+    RealType eps = policies::get_epsilon<RealType, Policy>();
     int i = 0;
     RealType pi2 = constants::pi_sqr<RealType>();
     RealType x2n = x*x*n;
@@ -164,8 +164,8 @@ RealType kolmogorov_smirnov_pdf_small_x(RealType x, RealType n, const Policy&) {
 template <class RealType, class Policy>
 inline RealType kolmogorov_smirnov_pdf_large_x(RealType x, RealType n, const Policy&) {
     BOOST_MATH_STD_USING
-    RealType value = 0.0, delta = 0.0, last_delta = 0.0;
-   RealType eps = policies::get_epsilon<RealType, Policy>();
+    RealType value = 0, delta = 0, last_delta = 0;
+    RealType eps = policies::get_epsilon<RealType, Policy>();
     int i = 1;
     while (1) {
         delta = 8*x*i*i*exp(-2.0*i*i*x*x*n);
