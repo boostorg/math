@@ -120,7 +120,7 @@ namespace boost { namespace math {
 namespace detail {
 template <class RealType>
 inline RealType kolmogorov_smirnov_quantile_guess(RealType p) {
-    RealType k = RealType(0);
+    RealType k;
     // Choose a starting point for the Newton-Raphson iteration
     if (p > 0.9) {
         k = 1.8 - 5 * (1 - p);
@@ -135,6 +135,7 @@ inline RealType kolmogorov_smirnov_quantile_guess(RealType p) {
 // d/dk (theta2(0, 1/(2*k*k/M_PI))/sqrt(2*k*k*M_PI))
 template <class RealType, class Policy>
 RealType kolmogorov_smirnov_pdf_small_x(RealType x, RealType n, const Policy&) {
+    BOOST_MATH_STD_USING
     RealType value = RealType(0), delta = RealType(0), last_delta = RealType(0);
     RealType eps = policies::get_epsilon<RealType, Policy>();
     int i = 0;
@@ -385,6 +386,7 @@ inline RealType quantile(const kolmogorov_smirnov_distribution<RealType, Policy>
 
 template <class RealType, class Policy>
 inline RealType quantile(const complemented2_type<kolmogorov_smirnov_distribution<RealType, Policy>, RealType>& c) {
+    BOOST_MATH_STD_USING
    static const char* function = "boost::math::quantile(const kolmogorov_smirnov_distribution<%1%>&, %1%)";
    kolmogorov_smirnov_distribution<RealType, Policy> const& dist = c.dist;
    RealType n = dist.number_of_observations();
@@ -454,6 +456,7 @@ inline RealType variance(const kolmogorov_smirnov_distribution<RealType, Policy>
 template <class RealType, class Policy>
 inline RealType skewness(const kolmogorov_smirnov_distribution<RealType, Policy>& dist)
 {
+    BOOST_MATH_STD_USING
    static const char* function = "boost::math::skewness(const kolmogorov_smirnov_distribution<%1%>&)";
     RealType n = dist.number_of_observations();
     RealType error_result;
@@ -468,6 +471,7 @@ inline RealType skewness(const kolmogorov_smirnov_distribution<RealType, Policy>
 template <class RealType, class Policy>
 inline RealType kurtosis(const kolmogorov_smirnov_distribution<RealType, Policy>& dist)
 {
+    BOOST_MATH_STD_USING
    static const char* function = "boost::math::kurtosis(const kolmogorov_smirnov_distribution<%1%>&)";
     RealType n = dist.number_of_observations();
     RealType error_result;
