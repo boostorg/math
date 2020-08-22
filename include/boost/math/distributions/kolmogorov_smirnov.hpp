@@ -120,7 +120,7 @@ namespace boost { namespace math {
 namespace detail {
 template <class RealType>
 inline RealType kolmogorov_smirnov_quantile_guess(RealType p) {
-    RealType k = 0;
+    RealType k = RealType(0);
     // Choose a starting point for the Newton-Raphson iteration
     if (p > 0.9) {
         k = 1.8 - 5 * (1 - p);
@@ -135,7 +135,7 @@ inline RealType kolmogorov_smirnov_quantile_guess(RealType p) {
 // d/dk (theta2(0, 1/(2*k*k/M_PI))/sqrt(2*k*k*M_PI))
 template <class RealType, class Policy>
 RealType kolmogorov_smirnov_pdf_small_x(RealType x, RealType n, const Policy&) {
-    RealType value = 0, delta = 0, last_delta = 0;
+    RealType value = RealType(0), delta = RealType(0), last_delta = RealType(0);
     RealType eps = policies::get_epsilon<RealType, Policy>();
     int i = 0;
     RealType pi2 = constants::pi_sqr<RealType>();
@@ -164,7 +164,7 @@ RealType kolmogorov_smirnov_pdf_small_x(RealType x, RealType n, const Policy&) {
 template <class RealType, class Policy>
 inline RealType kolmogorov_smirnov_pdf_large_x(RealType x, RealType n, const Policy&) {
     BOOST_MATH_STD_USING
-    RealType value = 0, delta = 0, last_delta = 0;
+    RealType value = RealType(0), delta = RealType(0), last_delta = RealType(0);
     RealType eps = policies::get_epsilon<RealType, Policy>();
     int i = 1;
     while (1) {
@@ -324,7 +324,7 @@ inline RealType cdf(const kolmogorov_smirnov_distribution<RealType, Policy>& dis
       return error_result;
    if(false == detail::check_df(function, n, &error_result, Policy()))
       return error_result;
-   if((x < 0) || !(boost::math::isfinite(x))) {
+   if((x < 0) || !(boost::math::isfinite)(x)) {
       return policies::raise_domain_error<RealType>(
          function, "Random variable parameter was %1%, but must be between > 0 !", x, Policy());
    }
@@ -349,7 +349,7 @@ inline RealType cdf(const complemented2_type<kolmogorov_smirnov_distribution<Rea
    if(false == detail::check_df(function, n, &error_result, Policy()))
       return error_result;
 
-   if((x < 0) || !(boost::math::isfinite(x)))
+   if((x < 0) || !(boost::math::isfinite)(x))
       return policies::raise_domain_error<RealType>(
          function, "Random variable parameter was %1%, but must be between > 0 !", x, Policy());
 
@@ -368,7 +368,7 @@ inline RealType quantile(const kolmogorov_smirnov_distribution<RealType, Policy>
     BOOST_MATH_STD_USING
    static const char* function = "boost::math::quantile(const kolmogorov_smirnov_distribution<%1%>&, %1%)";
    // Error check:
-   RealType error_result = 0;
+   RealType error_result;
    RealType n = dist.number_of_observations();
    if(false == detail::check_probability(function, p, &error_result, Policy()))
       return error_result;
@@ -389,7 +389,7 @@ inline RealType quantile(const complemented2_type<kolmogorov_smirnov_distributio
    kolmogorov_smirnov_distribution<RealType, Policy> const& dist = c.dist;
    RealType n = dist.number_of_observations();
    // Error check:
-   RealType error_result = 0;
+   RealType error_result;
    RealType p = c.param;
 
    if(false == detail::check_probability(function, p, &error_result, Policy()))
@@ -413,7 +413,7 @@ inline RealType mode(const kolmogorov_smirnov_distribution<RealType, Policy>& di
     BOOST_MATH_STD_USING
    static const char* function = "boost::math::mode(const kolmogorov_smirnov_distribution<%1%>&)";
    RealType n = dist.number_of_observations();
-   RealType error_result = 0;
+   RealType error_result;
    if(false == detail::check_df(function, n, &error_result, Policy()))
       return error_result;
 
@@ -431,7 +431,7 @@ inline RealType mean(const kolmogorov_smirnov_distribution<RealType, Policy>& di
     BOOST_MATH_STD_USING
    static const char* function = "boost::math::mean(const kolmogorov_smirnov_distribution<%1%>&)";
     RealType n = dist.number_of_observations();
-    RealType error_result = 0;
+    RealType error_result;
     if(false == detail::check_df(function, n, &error_result, Policy()))
         return error_result;
     return constants::root_half_pi<RealType>() * constants::ln_two<RealType>() / sqrt(n);
@@ -442,7 +442,7 @@ inline RealType variance(const kolmogorov_smirnov_distribution<RealType, Policy>
 {
    static const char* function = "boost::math::variance(const kolmogorov_smirnov_distribution<%1%>&)";
     RealType n = dist.number_of_observations();
-    RealType error_result = 0;
+    RealType error_result;
     if(false == detail::check_df(function, n, &error_result, Policy()))
         return error_result;
     return 0.5 * (constants::pi_sqr_div_six<RealType>() 
@@ -456,7 +456,7 @@ inline RealType skewness(const kolmogorov_smirnov_distribution<RealType, Policy>
 {
    static const char* function = "boost::math::skewness(const kolmogorov_smirnov_distribution<%1%>&)";
     RealType n = dist.number_of_observations();
-    RealType error_result = 0;
+    RealType error_result;
     if(false == detail::check_df(function, n, &error_result, Policy()))
         return error_result;
     RealType ex3 = 0.5625 * constants::root_half_pi<RealType>() * constants::zeta_three<RealType>() / n / sqrt(n);
@@ -470,7 +470,7 @@ inline RealType kurtosis(const kolmogorov_smirnov_distribution<RealType, Policy>
 {
    static const char* function = "boost::math::kurtosis(const kolmogorov_smirnov_distribution<%1%>&)";
     RealType n = dist.number_of_observations();
-    RealType error_result = 0;
+    RealType error_result;
     if(false == detail::check_df(function, n, &error_result, Policy()))
         return error_result;
     RealType ex4 = 7.0 * constants::pi_sqr_div_six<RealType>() * constants::pi_sqr_div_six<RealType>() / 20.0 / n / n;
@@ -485,7 +485,7 @@ inline RealType kurtosis_excess(const kolmogorov_smirnov_distribution<RealType, 
 {
    static const char* function = "boost::math::kurtosis_excess(const kolmogorov_smirnov_distribution<%1%>&)";
     RealType n = dist.number_of_observations();
-    RealType error_result = 0;
+    RealType error_result;
     if(false == detail::check_df(function, n, &error_result, Policy()))
         return error_result;
     return kurtosis(dist) - 3;
