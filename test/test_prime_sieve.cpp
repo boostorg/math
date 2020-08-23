@@ -8,6 +8,7 @@
 #include <boost/math/special_functions/prime_sieve.hpp>
 #include <boost/core/lightweight_test.hpp>
 #include <boost/multiprecision/cpp_int.hpp>
+#include <boost/math/special_functions/interval_sieve.hpp>
 #include <list>
 #include <deque>
 #include <array>
