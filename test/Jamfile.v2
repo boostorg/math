@@ -630,7 +630,7 @@ test-suite distribution_tests :
    [ run test_inverse_chi_squared_distribution.cpp ../../test/build//boost_unit_test_framework  ]
    [ run test_inverse_gamma_distribution.cpp ../../test/build//boost_unit_test_framework  ]
    [ run test_inverse_gaussian.cpp ../../test/build//boost_unit_test_framework  ]
-   [ run test_kolmogorov_smirnov.cpp ../../test/build//boost_unit_test_framework ]
+   [ run test_kolmogorov_smirnov.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_hdr_initializer_list cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_smart_ptr ] ]
    [ run test_laplace.cpp ../../test/build//boost_unit_test_framework  ]
    [ run test_inv_hyp.cpp pch ../../test/build//boost_unit_test_framework  ]
    [ run test_logistic_dist.cpp ../../test/build//boost_unit_test_framework  ]
