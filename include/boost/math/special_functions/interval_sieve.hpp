@@ -55,7 +55,7 @@ private:
     };
 
     static constexpr pssentry pss_{};
-    boost::math::detail::MOD210Wheel<Integer> w_;
+    static constexpr boost::math::detail::MOD210Wheel<Integer> w_{};
     std::size_t tdlimit_;
 
     Integer delta_;
@@ -76,7 +76,8 @@ private:
     void WriteOutput(Container &resultant_primes) noexcept;
     
 public:
-    IntervalSieve(const Integer &left, const Integer &right, const PrimeContainer &primes, Container &resultant_primes);
+    IntervalSieve(const Integer &left, const Integer &right, const PrimeContainer &primes, Container &resultant_primes) noexcept;
+    void NewRange(const Integer &left, const Integer &right, Container &resultant_primes) noexcept;
 };
 
 template<class Integer, class PrimeContainer, class Container>
@@ -241,7 +242,7 @@ void IntervalSieve<Integer, PrimeContainer, Container>::Psstestall() noexcept
 }
 
 template<class Integer, class PrimeContainer, class Container>
-IntervalSieve<Integer, PrimeContainer, Container>::IntervalSieve(const Integer &left, const Integer &right, const PrimeContainer &primes, Container &resultant_primes) : 
+IntervalSieve<Integer, PrimeContainer, Container>::IntervalSieve(const Integer &left, const Integer &right, const PrimeContainer &primes, Container &resultant_primes) noexcept : 
     left_ {left}, right_ {right}, primes_ {primes}
 {
     delta_ = right_ - left_;
@@ -250,6 +251,26 @@ IntervalSieve<Integer, PrimeContainer, Container>::IntervalSieve(const Integer &
     Sieve();
     
     if(plimit_ != 0 )
+    {
+        Psstestall();
+    }
+    
+    WriteOutput(resultant_primes);
+}
+
+template<class Integer, class PrimeContainer, class Container>
+void IntervalSieve<Integer, PrimeContainer, Container>::NewRange(const Integer &left, const Integer &right, Container &resultant_primes) noexcept
+{
+    left_ = left;
+    right_ = right;
+    delta_ = right_ - left_;
+
+    b_.resize(delta_);
+    b_.set();
+    Settdlimit();
+    Sieve();
+    
+    if(plimit_ != 0)
     {
         Psstestall();
     }
