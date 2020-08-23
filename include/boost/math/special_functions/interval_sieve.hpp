@@ -15,18 +15,20 @@
 #include <memory>
 #include <array>
 #include <cstdint>
+#include <bitset>
 
 namespace boost::math::detail
 {
+template<class Integer, class PrimeContainer, class Container>
+class IntervalSieve
+{
+
 #ifdef __SIZEOF_INT128__   // Defined in GCC 4.6+, clang, intel. MSVC does not define. 
 using int_128t = __int128; // One machine word smaller than the boost equivalent
 #else
 using int_128t = boost::multiprecision::int128_t;
 #endif
 
-template<class Integer, class PrimeContainer, class Container>
-class IntervalSieve
-{
 private:
     // Table of pseudo-sqares (https://mathworld.wolfram.com/Pseudosquare.html)
     // This table is from page 421, table 16.3.1, Hugh Williams' book

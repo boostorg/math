@@ -9,6 +9,7 @@
 #define BOOST_MATH_SPECIAL_FUNCTIONS_PRIME_SIEVE_HPP
 
 #include <boost/math/special_functions/prime.hpp>
+#include <boost/math/special_functions/interval_sieve.hpp>
 #include <boost/assert.hpp>
 #include <vector>
 #include <iterator>
@@ -138,8 +139,8 @@ constexpr void prime_table(Integer upper_bound, Container &resultant_primes)
 template<class Integer, class PrimesContainer, class Container>
 void segmented_sieve(Integer lower_bound, Integer upper_bound, const PrimesContainer &primes, Container &resultant_primes)
 {
-    const Integer L1_SIZE {32648};
-    const Integer interval {L1_SIZE * 4};
+    const Integer L1_SIZE {32768};
+    const Integer interval {L1_SIZE * 8};
     Integer current_lower_bound{lower_bound};
     Integer current_upper_bound{current_lower_bound + interval};
 
@@ -160,8 +161,8 @@ void segmented_sieve(Integer lower_bound, Integer upper_bound, const PrimesConta
     {
         prime_vectors[i].reserve(primes_in_range);
 
-        future_manager.emplace_back(std::async(std::launch::async, [current_lower_bound, current_upper_bound, &primes, &prime_vectors, i]{
-            boost::math::detail::mask_sieve(current_lower_bound, current_upper_bound, primes, prime_vectors[i]);
+        future_manager.emplace_back(std::async(std::launch::async, [&current_lower_bound, &current_upper_bound, &primes, &prime_vectors, i]{
+            boost::math::detail::IntervalSieve sieve(current_lower_bound, current_upper_bound, primes, prime_vectors[i]);
         }));
 
         current_lower_bound = current_upper_bound + 1;
@@ -169,8 +170,8 @@ void segmented_sieve(Integer lower_bound, Integer upper_bound, const PrimesConta
     }
 
     prime_vectors[ranges].reserve(primes_in_range);
-    future_manager.emplace_back(std::async(std::launch::async, [current_lower_bound, upper_bound, &primes, &prime_vectors]{
-        boost::math::detail::mask_sieve(current_lower_bound, upper_bound, primes, prime_vectors.back());
+    future_manager.emplace_back(std::async(std::launch::async, [&current_lower_bound, &upper_bound, &primes, &prime_vectors]{
+        boost::math::detail::IntervalSieve sieve(current_lower_bound, upper_bound, primes, prime_vectors.back());
     }));
 
     for(auto &&future : future_manager)
