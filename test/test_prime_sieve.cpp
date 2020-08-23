@@ -12,6 +12,7 @@
 #include <list>
 #include <deque>
 #include <array>
+#include <vector>
 
 template<typename Integer>
 void test_prime_sieve()
@@ -123,8 +124,27 @@ void test_par_prime_sieve_large()
     BOOST_TEST_EQ(primes.size(), ref);
 }
 
+template<typename Integer>
+void test_interval_sieve()
+{
+    std::vector<Integer> pre_sieved_primes {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71};
+    std::vector<Integer> primes;
+
+    boost::math::detail::IntervalSieve sieve(1'000, 10'000, pre_sieved_primes, primes);
+    BOOST_TEST_EQ(primes.size(), 1'061);
+
+    primes.clear();
+    sieve.NewRange(10'000, 100'000, primes);
+    BOOST_TEST_EQ(primes.size(), 8'363);
+
+    primes.clear();
+    sieve.NewRange(100'000, 1'000'000, primes);
+    BOOST_TEST_EQ(primes.size(), 68'906);
+}
+
 int main()
 {
+    /*
     test_prime_sieve<int>();
     test_prime_sieve<int32_t>();
     test_prime_sieve<int64_t>();
@@ -134,6 +154,12 @@ int main()
     test_prime_range<int32_t>();
     test_prime_range<int64_t>();
     test_prime_range<uint32_t>();
+    */
+
+    test_interval_sieve<int>();
+    test_interval_sieve<int32_t>();
+    test_interval_sieve<int64_t>();
+    test_interval_sieve<uint32_t>();
 
     //test_prime_sieve_overflow<int16_t>();
 
