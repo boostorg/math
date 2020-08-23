@@ -65,7 +65,7 @@ private:
     // https://www.researchgate.net/publication/220803585_Performance_of_C_bit-vector_implementations
     boost::dynamic_bitset<> b_;
     
-    const Container& primes_;
+    const PrimeContainer& primes_;
     std::int_fast64_t plimit_;
 
     void Settdlimit() noexcept;
