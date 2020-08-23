@@ -76,7 +76,7 @@ void test_spots(RealType T)
     RealType skew = skewness(dist);
     auto f_skew = [&, dist, mean, var](RealType t) { return pdf(dist, t)
         * (t - mean) * (t - mean) * (t - mean) / var / sqrt(var); };
-    BOOST_CHECK_CLOSE_FRACTION(integrator.integrate(f_skew, eps), skew, 4*tol);
+    BOOST_CHECK_CLOSE_FRACTION(integrator.integrate(f_skew, eps), skew, 10*tol);
 
     RealType kurt = kurtosis(dist);
     auto f_kurt= [&, dist, mean, var](RealType t) { return pdf(dist, t)

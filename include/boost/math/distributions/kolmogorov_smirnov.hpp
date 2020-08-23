@@ -399,7 +399,7 @@ inline RealType quantile(const complemented2_type<kolmogorov_smirnov_distributio
    if(false == detail::check_df(function, n, &error_result, Policy()))
       return error_result;
 
-   RealType k = detail::kolmogorov_smirnov_quantile_guess(1-p) / sqrt(n);
+   RealType k = detail::kolmogorov_smirnov_quantile_guess(RealType(1-p)) / sqrt(n);
 
    const int get_digits = policies::digits<RealType, Policy>();// get digits from policy,
    boost::uintmax_t m = policies::get_max_root_iterations<Policy>(); // and max iterations.
