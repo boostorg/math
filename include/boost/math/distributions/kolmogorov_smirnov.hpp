@@ -120,16 +120,12 @@ namespace boost { namespace math {
 namespace detail {
 template <class RealType>
 inline RealType kolmogorov_smirnov_quantile_guess(RealType p) {
-    RealType k;
     // Choose a starting point for the Newton-Raphson iteration
-    if (p > 0.9) {
-        k = 1.8 - 5 * (1 - p);
-    } else if (p < 0.3) {
-        k = p + 0.45;
-    } else {
-        k = p + 0.3;
-    }
-    return k;
+    if (p > 0.9)
+        return RealType(1.8) - 5 * (1 - p);
+    if (p < 0.3)
+        return p + RealType(0.45);
+    return p + RealType(0.3);
 }
 
 // d/dk (theta2(0, 1/(2*k*k/M_PI))/sqrt(2*k*k*M_PI))
@@ -145,7 +141,7 @@ RealType kolmogorov_smirnov_pdf_small_x(RealType x, RealType n, const Policy&) {
         return static_cast<RealType>(0);
     }
     while (1) {
-        delta = exp(-0.5*(i+0.5)*(i+0.5)*pi2/x2n) * ((i+0.5)*(i+0.5)*pi2 - x2n);
+        delta = exp(-RealType(i+0.5)*RealType(i+0.5)*pi2/(2*x2n)) * (RealType(i+0.5)*RealType(i+0.5)*pi2 - x2n);
 
         if (delta == 0.0)
             break;
@@ -169,7 +165,7 @@ inline RealType kolmogorov_smirnov_pdf_large_x(RealType x, RealType n, const Pol
     RealType eps = policies::get_epsilon<RealType, Policy>();
     int i = 1;
     while (1) {
-        delta = 8*x*i*i*exp(-2.0*i*i*x*x*n);
+        delta = 8*x*i*i*exp(-2*i*i*x*x*n);
 
         if (delta == 0.0)
             break;
@@ -178,7 +174,7 @@ inline RealType kolmogorov_smirnov_pdf_large_x(RealType x, RealType n, const Pol
             break;
 
         if (i%2 == 0)
-            delta *= -1.0;
+            delta = -delta;
 
         value += delta;
         last_delta = delta;
@@ -447,8 +443,8 @@ inline RealType variance(const kolmogorov_smirnov_distribution<RealType, Policy>
     RealType error_result;
     if(false == detail::check_df(function, n, &error_result, Policy()))
         return error_result;
-    return 0.5 * (constants::pi_sqr_div_six<RealType>() 
-            - constants::pi<RealType>() * constants::ln_two<RealType>() * constants::ln_two<RealType>()) / n;
+    return (constants::pi_sqr_div_six<RealType>()
+            - constants::pi<RealType>() * constants::ln_two<RealType>() * constants::ln_two<RealType>()) / (2*n);
 }
 
 // Skewness and kurtosis come from integrating the PDF
@@ -462,7 +458,7 @@ inline RealType skewness(const kolmogorov_smirnov_distribution<RealType, Policy>
     RealType error_result;
     if(false == detail::check_df(function, n, &error_result, Policy()))
         return error_result;
-    RealType ex3 = 0.5625 * constants::root_half_pi<RealType>() * constants::zeta_three<RealType>() / n / sqrt(n);
+    RealType ex3 = RealType(0.5625) * constants::root_half_pi<RealType>() * constants::zeta_three<RealType>() / n / sqrt(n);
     RealType mean = boost::math::mean(dist);
     RealType var = boost::math::variance(dist);
     return (ex3 - 3 * mean * var - mean * mean * mean) / var / sqrt(var);
@@ -477,7 +473,7 @@ inline RealType kurtosis(const kolmogorov_smirnov_distribution<RealType, Policy>
     RealType error_result;
     if(false == detail::check_df(function, n, &error_result, Policy()))
         return error_result;
-    RealType ex4 = 7.0 * constants::pi_sqr_div_six<RealType>() * constants::pi_sqr_div_six<RealType>() / 20.0 / n / n;
+    RealType ex4 = 7 * constants::pi_sqr_div_six<RealType>() * constants::pi_sqr_div_six<RealType>() / 20 / n / n;
     RealType mean = boost::math::mean(dist);
     RealType var = boost::math::variance(dist);
     RealType skew = boost::math::skewness(dist);
