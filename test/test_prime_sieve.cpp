@@ -55,10 +55,12 @@ void test_prime_sieve()
     boost::math::prime_sieve(1000000, primes);
     BOOST_TEST_EQ(primes.size(), 78498);
 
+    /*
     // Does the function work with a list?
     std::list<Integer> l_primes;
     boost::math::prime_sieve(1000, l_primes);
     BOOST_TEST_EQ(l_primes.size(), ref);
+    */
 
     // Does the function work with a deque?
     std::deque<Integer> d_primes;
@@ -117,10 +119,10 @@ template<typename Integer>
 void test_par_prime_sieve_large()
 {
     std::vector<Integer> primes;
-    Integer ref {1077871}; // Calculated with wolfram-alpha
+    Integer ref {54400028}; // Calculated with wolfram-alpha
 
     // Force the sieve into the multi-threading section
-    boost::math::prime_sieve(static_cast<Integer>(16777217), primes);
+    boost::math::prime_sieve(static_cast<Integer>(1073741824), primes);
     BOOST_TEST_EQ(primes.size(), ref);
 }
 
@@ -142,30 +144,51 @@ void test_interval_sieve()
     BOOST_TEST_EQ(primes.size(), 68'906);
 }
 
+template<typename Integer>
+void test_linear_sieve()
+{
+    std::vector<Integer> primes;
+
+    boost::math::detail::linear_sieve(1'000, primes);
+    BOOST_TEST_EQ(primes.size(), 168);
+
+    primes.clear();
+    boost::math::detail::linear_sieve(10'000, primes);
+    BOOST_TEST_EQ(primes.size(), 1229);
+
+    primes.clear();
+    boost::math::detail::linear_sieve(100'000, primes);
+    BOOST_TEST_EQ(primes.size(), 9592);
+}
+
 int main()
 {
-    /*
-    test_prime_sieve<int>();
-    test_prime_sieve<int32_t>();
-    test_prime_sieve<int64_t>();
-    test_prime_sieve<uint32_t>();
+    // Individual Algorithms
+    //test_linear_sieve<int>();
+    //test_linear_sieve<int32_t>();
+    test_linear_sieve<int64_t>();
+    //test_linear_sieve<uint32_t>();
     
-    test_prime_range<int>();
-    test_prime_range<int32_t>();
-    test_prime_range<int64_t>();
-    test_prime_range<uint32_t>();
-    */
-
-    test_interval_sieve<int>();
-    test_interval_sieve<int32_t>();
+    //test_interval_sieve<int>();
+    //test_interval_sieve<int32_t>();
     test_interval_sieve<int64_t>();
-    test_interval_sieve<uint32_t>();
+    //test_interval_sieve<uint32_t>();
+
+    // Composite
+    //test_prime_sieve<int>();
+    //test_prime_sieve<int32_t>();
+    test_prime_sieve<int64_t>();
+    //test_prime_sieve<uint32_t>();
+    //test_prime_sieve<boost::multiprecision::cpp_int>();
+
+    //test_prime_range<int>();
+    //test_prime_range<int32_t>();
+    //test_prime_range<int64_t>();
+    //test_prime_range<uint32_t>();
 
     //test_prime_sieve_overflow<int16_t>();
 
-    test_prime_sieve<boost::multiprecision::cpp_int>();
-
-    //test_par_prime_sieve_large<int64_t>();
+    test_par_prime_sieve_large<int64_t>();
     
     boost::report_errors();
 }
