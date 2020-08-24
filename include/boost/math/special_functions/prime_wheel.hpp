@@ -60,7 +60,7 @@ public:
     constexpr Integer Next(const Integer i) const noexcept { return i + W_[i % M_].dist; }
     constexpr Integer MakeRP(const Integer i) const noexcept
     {
-        if(W[i % M].rp)
+        if(W_[i % M_].rp)
         {
             return i;
         }
@@ -278,15 +278,15 @@ public:
     constexpr auto Next(const Integer i) const noexcept { return i + dist_[i % M_]; }
     constexpr auto MakeRP(const Integer i) const noexcept
     {
-        if(rp_[i % M])
+        if(rp_[i % M_])
         {
             return i;
         }
         return Next(i);
     } 
     constexpr auto Prev(const Integer i) const noexcept { return i - dist_[(M_ - (i % M_)) % M_]; }
-    constexpr auto Pos(const Integer i) const noexcept { return phi_ * (i / M_) + W_[i % M_].pos; }
-    constexpr auto Inv(const Integer i) const noexcept { return M_ * (i / phi_) + W_[i % phi_].inv; }
+    constexpr auto Pos(const Integer i) const noexcept { return phi_ * (i / M_) + pos_[i % M_]; }
+    constexpr auto Inv(const Integer i) const noexcept { return M_ * (i / phi_) + inv_[i % phi_]; }
 };
 }
 

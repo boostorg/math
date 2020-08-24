@@ -19,10 +19,35 @@
 
 namespace boost::math::detail
 {
+
+#if defined(__MPIR_VERSION) || defined(__GNU_MP_VERSION)
+// GNU GMP C or MPIR
+inline double get_double(const mpz_t &x) noexcept
+{
+    return mpz_get_d(x);
+}
+#endif
+
+#if defined(__GNU_MP_VERSION)
+#if __has_include(<gmpxx.h>)
+// GNU GMP C++ bindings
+inline double get_double(const mpz_class &x) noexcept
+{
+    return x.get_d()
+}
+#endif
+#endif
+
+// boost::multiprecision and POD
+template<class Integer>
+inline double get_double(const Integer &x) noexcept
+{
+    return static_cast<double>(x);
+}
+
 template<class Integer, class PrimeContainer, class Container>
 class IntervalSieve
 {
-
 #ifdef __SIZEOF_INT128__   // Defined in GCC 4.6+, clang, intel. MSVC does not define. 
 using int_128t = __int128; // One machine word smaller than the boost equivalent
 #else
@@ -71,15 +96,15 @@ private:
     std::int_fast64_t plimit_;
 
     void Settdlimit() noexcept;
-    void SeiveLength(Integer d) noexcept;
+    void SeiveLength(const Integer d) noexcept;
     void Sieve() noexcept;
-    bool Psstest(std::size_t pos) noexcept;
+    bool Psstest(const std::size_t pos) noexcept;
     void Psstestall() noexcept;
     void WriteOutput(Container &resultant_primes) noexcept;
     
 public:
-    IntervalSieve(const Integer &left, const Integer &right, const PrimeContainer &primes, Container &resultant_primes) noexcept;
-    void NewRange(const Integer &left, const Integer &right, Container &resultant_primes) noexcept;
+    IntervalSieve(const Integer left, const Integer right, const PrimeContainer &primes, Container &resultant_primes) noexcept;
+    void NewRange(const Integer left, const Integer right, Container &resultant_primes) noexcept;
 };
 
 template<class Integer, class PrimeContainer, class Container>
@@ -128,7 +153,7 @@ void IntervalSieve<Integer, PrimeContainer, Container>::Settdlimit() noexcept
 }
 
 template<class Integer, class PrimeContainer, class Container>
-void IntervalSieve<Integer, PrimeContainer, Container>::SeiveLength(Integer d) noexcept
+void IntervalSieve<Integer, PrimeContainer, Container>::SeiveLength(const Integer d) noexcept
 {
     Integer r {left_ % d};
     Integer start {0};
@@ -244,7 +269,7 @@ void IntervalSieve<Integer, PrimeContainer, Container>::Psstestall() noexcept
 }
 
 template<class Integer, class PrimeContainer, class Container>
-IntervalSieve<Integer, PrimeContainer, Container>::IntervalSieve(const Integer &left, const Integer &right, const PrimeContainer &primes, Container &resultant_primes) noexcept : 
+IntervalSieve<Integer, PrimeContainer, Container>::IntervalSieve(const Integer left, const Integer right, const PrimeContainer &primes, Container &resultant_primes) noexcept : 
     left_ {left}, right_ {right}, primes_ {primes}
 {
     delta_ = right_ - left_;
@@ -261,7 +286,7 @@ IntervalSieve<Integer, PrimeContainer, Container>::IntervalSieve(const Integer &
 }
 
 template<class Integer, class PrimeContainer, class Container>
-void IntervalSieve<Integer, PrimeContainer, Container>::NewRange(const Integer &left, const Integer &right, Container &resultant_primes) noexcept
+void IntervalSieve<Integer, PrimeContainer, Container>::NewRange(const Integer left, const Integer right, Container &resultant_primes) noexcept
 {
     left_ = left;
     right_ = right;
@@ -278,31 +303,6 @@ void IntervalSieve<Integer, PrimeContainer, Container>::NewRange(const Integer &
     }
     
     WriteOutput(resultant_primes);
-}
-
-#if defined(__MPIR_VERSION) || defined(__GNU_MP_VERSION)
-// GNU GMP C or MPIR
-inline double get_double(const mpz_t &x) noexcept
-{
-    return mpz_get_d(x);
-}
-#endif
-
-#if defined(__GNU_MP_VERSION)
-#if __has_include(<gmpxx.h>)
-// GNU GMP C++ bindings
-inline double get_double(const mpz_class &x) noexcept
-{
-    return x.get_d()
-}
-#endif
-#endif
-
-// boost::multiprecision and POD
-template<class Integer>
-inline double get_double(const Integer &x) noexcept
-{
-    return static_cast<double>(x);
 }
 }
 
