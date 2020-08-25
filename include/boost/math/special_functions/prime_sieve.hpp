@@ -191,6 +191,39 @@ void segmented_sieve(Integer lower_bound, Integer upper_bound, Container &result
 
     boost::math::detail::segmented_sieve(lower_bound, upper_bound, primes, resultant_primes);
 }
+
+template<class Integer, class Container>
+void sequential_segmented_sieve(Integer lower_bound, Integer upper_bound, Container &resultant_primes)
+{
+    const Integer L1_SIZE {32768};
+    const Integer interval {L1_SIZE * 8};
+    Integer current_lower_bound{lower_bound};
+    Integer current_upper_bound{current_lower_bound + interval};
+
+    if(current_upper_bound > upper_bound)
+    {
+        current_upper_bound = upper_bound;
+    }
+
+    std::size_t ranges {static_cast<std::size_t>((upper_bound - lower_bound) / interval)};
+
+    boost::math::detail::IntervalSieve sieve(current_lower_bound, current_upper_bound, resultant_primes, resultant_primes);
+    if(ranges == 0)
+    {
+        return;
+    }
+
+    for(std::size_t i {}; i < ranges; ++i)
+    {
+        current_lower_bound = current_upper_bound;
+        current_upper_bound += interval;
+        if(current_upper_bound > upper_bound)
+        {
+            current_upper_bound = upper_bound;
+        }
+        sieve.NewRange(current_lower_bound, current_upper_bound, resultant_primes);
+    }
+}
 } // End namespace detail
 
 template<class Integer>
@@ -215,9 +248,10 @@ void prime_sieve(ExecutionPolicy&& policy, Integer upper_bound, Container &prime
         boost::math::detail::linear_sieve(upper_bound, primes);
     }
 
-    else if (std::is_same_v<decltype(policy), std::execution::sequenced_policy>)
+    else if(typeid(policy) == typeid(std::execution::seq))
     {
-        boost::math::detail::segmented_sieve(static_cast<Integer>(2), upper_bound, primes);
+        boost::math::detail::linear_sieve(static_cast<Integer>(4096), primes);
+        boost::math::detail::sequential_segmented_sieve(static_cast<Integer>(4096), upper_bound, primes);
     }
 
     else
