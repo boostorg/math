@@ -21,7 +21,6 @@
 #include <iostream>
 #include <algorithm>
 #include <execution>
-#include <valarray>
 
 namespace boost::math { namespace detail
 {
@@ -41,9 +40,10 @@ void linear_sieve(Integer upper_bound, Container &resultant_primes)
             resultant_primes.emplace_back(i);
         }
 
-        for (std::size_t j{}; i * resultant_primes[j] <= upper_bound && resultant_primes[j] <= least_divisors[i] && j < least_divisors_size; ++j)
+        for (std::size_t j{}; j < resultant_primes.size() && i * resultant_primes[j] <= upper_bound && 
+             resultant_primes[j] <= least_divisors[i] && j < least_divisors_size; ++j)
         {
-            least_divisors[i * resultant_primes[j]] = resultant_primes[j];
+            least_divisors[i * static_cast<std::size_t>(resultant_primes[j])] = resultant_primes[j];
         }
     }
 }
@@ -275,7 +275,7 @@ void prime_sieve(ExecutionPolicy&& policy, Integer upper_bound, Container &prime
 template<class Integer, class Container>
 void prime_sieve(Integer upper_bound, Container &primes)
 {
-    prime_sieve(std::execution::par, upper_bound, primes);
+    prime_sieve(std::execution::seq, upper_bound, primes);
 }
 
 
@@ -296,7 +296,7 @@ void prime_range(ExecutionPolicy&& policy, Integer lower_bound, Integer upper_bo
 template<class Integer, class Container>
 inline void prime_range(Integer lower_bound, Integer upper_bound, Container &primes)
 {
-    prime_range(std::execution::par, lower_bound, upper_bound, primes);
+    prime_range(std::execution::seq, lower_bound, upper_bound, primes);
 }
 }
 
