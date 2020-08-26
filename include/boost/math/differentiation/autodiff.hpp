@@ -394,6 +394,12 @@ class fvar {
   template <typename RealType2, size_t Order2>
   friend std::ostream& operator<<(std::ostream&, fvar<RealType2, Order2> const&);
 
+  template <typename RealType2, size_t Order2>
+  friend std::istream& operator>>(std::istream&, fvar<RealType2, Order2> &);
+
+  template <typename RealType2, size_t Order2>
+  friend std::wistream& operator>>(std::wistream&, fvar<RealType2, Order2> &);
+
   // C++11 Compatibility
 #ifdef BOOST_NO_CXX17_IF_CONSTEXPR
   template <typename RootType>
@@ -1738,6 +1744,22 @@ std::ostream& operator<<(std::ostream& out, fvar<RealType, Order> const& cr) {
   for (size_t i = 1; i <= Order; ++i)
     out << ',' << cr.v[i];
   return out << ')';
+}
+
+template <typename RealType, size_t Order>
+std::istream& operator>>(std::istream& in, fvar<RealType, Order> & cr) {
+  in >> cr.v.front();
+  BOOST_IF_CONSTEXPR (0 < Order)
+      std::fill(cr.v.begin()+1, cr.v.end(), static_cast<RealType>(0));
+  return in;
+}
+
+template <typename RealType, size_t Order>
+std::wistream& operator>>(std::wistream& in, fvar<RealType, Order> & cr) {
+  in >> cr.v.front();
+  BOOST_IF_CONSTEXPR (0 < Order)
+      std::fill(cr.v.begin()+1, cr.v.end(), static_cast<RealType>(0));
+  return in;
 }
 
 // Additional functions
