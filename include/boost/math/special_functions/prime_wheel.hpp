@@ -275,7 +275,7 @@ public:
     constexpr auto K() const noexcept { return k_; }
     constexpr auto Phi() const noexcept { return phi_; }
 
-    constexpr auto Next(const Integer i) const noexcept { return i + dist_[i % M_]; }
+    constexpr auto Next(const Integer i) const noexcept { return i + dist_[static_cast<std::size_t>(i % M_)]; }
     constexpr auto MakeRP(const Integer i) const noexcept
     {
         if(rp_[i % M_])
@@ -284,9 +284,9 @@ public:
         }
         return Next(i);
     } 
-    constexpr auto Prev(const Integer i) const noexcept { return i - dist_[(M_ - (i % M_)) % M_]; }
-    constexpr auto Pos(const Integer i) const noexcept { return phi_ * (i / M_) + pos_[i % M_]; }
-    constexpr auto Inv(const Integer i) const noexcept { return M_ * (i / phi_) + inv_[i % phi_]; }
+    constexpr auto Prev(const Integer i) const noexcept { return i - dist_[static_cast<std::size_t>((M_ - (i % M_)) % M_)]; }
+    constexpr auto Pos(const Integer i) const noexcept { return phi_ * (i / M_) + pos_[static_cast<std::size_t>(i % M_)]; }
+    constexpr auto Inv(const Integer i) const noexcept { return M_ * (i / phi_) + inv_[static_cast<std::size_t>(i % phi_)]; }
 };
 }
 

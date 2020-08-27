@@ -165,7 +165,7 @@ void IntervalSieve<Integer, PrimeContainer, Container>::SeiveLength(const Intege
 
     for(Integer i {start}; i >= 0 && i < b_.size(); i += d)
     {
-        b_[i] = 0;
+        b_[static_cast<std::size_t>(i)] = 0;
     }
 }
 
@@ -199,7 +199,7 @@ void IntervalSieve<Integer, PrimeContainer, Container>::Sieve() noexcept
 template<class Integer, class PrimeContainer, class Container>
 void IntervalSieve<Integer, PrimeContainer, Container>::WriteOutput(Container &resultant_primes) noexcept
 {
-    for(Integer i {0}; i < b_.size(); ++i)
+    for(std::size_t i {}; i < b_.size(); ++i)
     {
         if(b_[i])
         {
@@ -223,7 +223,7 @@ bool IntervalSieve<Integer, PrimeContainer, Container>::Psstest(const std::size_
     for(std::size_t i {}; i < primes_.size(); ++i)
     {
         Integer temp = primes_[i];
-        temp = std::pow(temp, n);
+        temp = static_cast<Integer>(std::pow(get_double(temp), get_double(n)));
 
         if(temp == 1)
         {
@@ -273,7 +273,7 @@ IntervalSieve<Integer, PrimeContainer, Container>::IntervalSieve(const Integer l
     left_ {left}, right_ {right}, primes_ {primes}
 {
     delta_ = right_ - left_;
-    b_.resize(delta_, 1);
+    b_.resize(static_cast<std::size_t>(delta_), 1);
     Settdlimit();
     Sieve();
     
@@ -292,7 +292,7 @@ void IntervalSieve<Integer, PrimeContainer, Container>::NewRange(const Integer l
     right_ = right;
     delta_ = right_ - left_;
 
-    b_.resize(delta_);
+    b_.resize(static_cast<std::size_t>(delta_));
     b_.set();
     Settdlimit();
     Sieve();
