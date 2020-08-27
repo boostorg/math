@@ -67,9 +67,10 @@ void mask_sieve(Integer lower_bound, Integer upper_bound, const PrimeContainer& 
      
     // Enable use of thread pool, not SIMD compatible
     std::for_each(std::execution::par, primes.begin(), it, [&is_prime, lower_bound, upper_bound](auto prime){
-        for(Integer j {std::max(prime * prime, (lower_bound + prime - 1) / prime * prime)}; j < upper_bound; j += prime)
+        for(Integer j {std::max(static_cast<std::size_t>(prime * prime), static_cast<std::size_t>((lower_bound + prime - 1) / prime * prime))}; 
+            j < upper_bound; j += prime)
         {
-            is_prime[j - lower_bound] = false;
+            is_prime[static_cast<std::size_t>(j - lower_bound)] = false;
         }
     });
 
@@ -80,7 +81,7 @@ void mask_sieve(Integer lower_bound, Integer upper_bound, const PrimeContainer& 
 
     for(Integer i{lower_bound}; i <= upper_bound; ++i)
     {
-        if(is_prime[i - lower_bound])
+        if(is_prime[static_cast<std::size_t>(i - lower_bound)])
         {
             resultant_primes.emplace_back(i);
         }
@@ -90,7 +91,7 @@ void mask_sieve(Integer lower_bound, Integer upper_bound, const PrimeContainer& 
 template<class Integer, class Container>
 void mask_sieve(Integer lower_bound, Integer upper_bound, Container &resultant_primes)
 {
-    Integer limit{static_cast<Integer>(std::floor(std::sqrt(static_cast<double>(upper_bound)))) + 1};
+    auto limit{std::floor(std::sqrt(static_cast<double>(upper_bound))) + 1};
     std::vector<Integer> primes {};
     primes.reserve(limit / std::log(limit));
 
@@ -137,8 +138,8 @@ void segmented_sieve(Integer lower_bound, Integer upper_bound, const PrimesConta
     std::vector<std::vector<Integer>> prime_vectors(ranges + 1);
     std::vector<std::future<void>> future_manager(ranges);
 
-    Integer primes_in_range {static_cast<Integer>(current_upper_bound / std::log(static_cast<double>(current_upper_bound)) -
-                             current_lower_bound / std::log(static_cast<double>(current_lower_bound)))};
+    auto primes_in_range {static_cast<std::size_t>(static_cast<double>(current_upper_bound) / std::log(static_cast<double>(current_upper_bound)) -
+                          static_cast<double>(current_lower_bound) / std::log(static_cast<double>(current_lower_bound)))};
 
     for(std::size_t i {}; i < ranges; ++i)
     {
@@ -176,17 +177,19 @@ void segmented_sieve(Integer lower_bound, Integer upper_bound, Container &result
 {
     Integer limit{static_cast<Integer>(std::floor(std::sqrt(static_cast<double>(upper_bound)))) + 1};
     std::vector<Integer> primes {};
-    primes.reserve(limit / std::log(limit));
+    primes.reserve(static_cast<double>(limit) / std::log(static_cast<double>(limit)));
 
     // Prepare for max value so you do not have to calculate this again
     if(limit < 4096)
     {
-        boost::math::detail::linear_sieve(limit, primes);
+        boost::math::detail::linear_sieve(static_cast<Integer>(limit), primes);
     }
 
     else
     {
-        boost::math::detail::mask_sieve(static_cast<Integer>(2), limit, primes);
+        //boost::math::detail::mask_sieve(static_cast<Integer>(2), limit, primes);
+        boost::math::detail::linear_sieve(static_cast<Integer>(4096), primes);
+        boost::math::detail::segmented_sieve(static_cast<Integer>(4096), limit, primes, primes);
     }
 
     boost::math::detail::segmented_sieve(lower_bound, upper_bound, primes, resultant_primes);
@@ -229,15 +232,12 @@ void sequential_segmented_sieve(Integer lower_bound, Integer upper_bound, Contai
 template<class Integer>
 constexpr void prime_reserve(Integer upper_bound, std::vector<Integer> &prime_container)
 {
-    prime_container.reserve(upper_bound / std::log(static_cast<double>(upper_bound)));
+    prime_container.reserve(static_cast<double>(upper_bound) / std::log(static_cast<double>(upper_bound)));
 }
 
 template<class ExecutionPolicy, class Integer, class Container>
 void prime_sieve(ExecutionPolicy&& policy, Integer upper_bound, Container &primes)
 {
-    static_assert(std::is_integral<Integer>::value, "No primes for floating point types");
-    BOOST_ASSERT_MSG(upper_bound + 1 < std::numeric_limits<Integer>::max(), "Type Overflow");
-
     if(upper_bound == 2)
     {
         return;
@@ -245,7 +245,7 @@ void prime_sieve(ExecutionPolicy&& policy, Integer upper_bound, Container &prime
 
     if(upper_bound <= 4096)
     {
-        boost::math::detail::linear_sieve(upper_bound, primes);
+        boost::math::detail::linear_sieve(static_cast<Integer>(upper_bound), primes);
     }
 
     else if(typeid(policy) == typeid(std::execution::seq))
