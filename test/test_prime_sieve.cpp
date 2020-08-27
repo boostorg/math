@@ -15,6 +15,7 @@
 #include <array>
 #include <vector>
 #include <iostream>
+#include <chrono>
 
 template<typename Integer>
 void test_prime_sieve()
@@ -188,12 +189,14 @@ int main()
     test_linear_sieve<int64_t>();
     test_linear_sieve<uint32_t>();
     test_linear_sieve<boost::multiprecision::cpp_int>();
+    test_linear_sieve<boost::multiprecision::mpz_int>();
     
     test_interval_sieve<int>();
     test_interval_sieve<int32_t>();
     test_interval_sieve<int64_t>();
     test_interval_sieve<uint32_t>();
     test_interval_sieve<boost::multiprecision::cpp_int>();
+    test_interval_sieve<boost::multiprecision::mpz_int>();
 
     // Composite
     test_prime_sieve<int>();
@@ -201,12 +204,14 @@ int main()
     test_prime_sieve<int64_t>();
     test_prime_sieve<uint32_t>();
     test_prime_sieve<boost::multiprecision::cpp_int>();
+    test_prime_sieve<boost::multiprecision::mpz_int>();
 
     test_sequential_prime_sieve<int>();
     test_sequential_prime_sieve<int32_t>();
     test_sequential_prime_sieve<int64_t>();
     test_sequential_prime_sieve<uint32_t>();
     test_sequential_prime_sieve<boost::multiprecision::cpp_int>();
+    test_sequential_prime_sieve<boost::multiprecision::mpz_int>();
 
     //test_prime_range<int>();
     //test_prime_range<int32_t>();
@@ -215,8 +220,24 @@ int main()
 
     //test_prime_sieve_overflow<int16_t>();
 
+    //std::cout << "Primes less than 2^30" << std::endl;
+    //auto int64_time_start {std::chrono::high_resolution_clock::now()};
     test_par_prime_sieve_large<int64_t>();
+    //auto int64_time_stop {std::chrono::high_resolution_clock::now()};
+    //auto int64_duration {std::chrono::duration_cast<std::chrono::milliseconds>(int64_time_stop - int64_time_start).count()};
+    //std::cout << "int64_t: " << int64_duration << " ms" << std::endl;
+
+    //auto cppint_time_start {std::chrono::high_resolution_clock::now()};
     test_par_prime_sieve_large<boost::multiprecision::cpp_int>();
+    //auto cppint_time_stop {std::chrono::high_resolution_clock::now()};
+    //auto cppint_duration{std::chrono::duration_cast<std::chrono::milliseconds>(cppint_time_stop - cppint_time_start).count()};
+    //std::cout << "cpp_int: " << cppint_duration << " ms" << std::endl;
+
+    //auto mpzint_time_start {std::chrono::high_resolution_clock::now()};
+    test_par_prime_sieve_large<boost::multiprecision::mpz_int>();
+    //auto mpzint_time_stop {std::chrono::high_resolution_clock::now()};
+    //auto mpzint_duration{std::chrono::duration_cast<std::chrono::milliseconds>(mpzint_time_stop - mpzint_time_start).count()};
+    //std::cout << "mpz_int: " << mpzint_duration << " ms" << std::endl;
     
     boost::report_errors();
 }
