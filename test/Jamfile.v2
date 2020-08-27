@@ -168,7 +168,7 @@ test-suite special_fun :
    [ run test_ellint_2.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
    [ run test_ellint_3.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
    [ run test_ellint_d.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
-   [ run test_jacobi_theta.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_lambdas ] ]
+   [ run test_jacobi_theta.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] ]
    [ run test_jacobi_zeta.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
    [ run test_heuman_lambda.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
    [ run test_erf.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
