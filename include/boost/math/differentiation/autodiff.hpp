@@ -19,6 +19,7 @@
 #include <boost/math/special_functions/lambert_w.hpp>
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/promotion.hpp>
+#include <boost/type_traits/decay.hpp>
 
 #include <algorithm>
 #include <array>
