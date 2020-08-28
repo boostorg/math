@@ -10,6 +10,7 @@
 #include <iterator>
 #include <tuple>
 #include <cmath>
+#include <vector>
 #include <boost/assert.hpp>
 
 namespace boost::math::statistics {
