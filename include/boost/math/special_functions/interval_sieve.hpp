@@ -216,7 +216,7 @@ bool IntervalSieve<Integer, PrimeContainer, Container>::Psstest(const std::size_
 {
     const Integer n {left_ + pos};
     const Integer exponent {(n - 1) / 2};
-    const std::int_fast64_t nmod8 = n % 8;
+    const std::int_fast64_t nmod8 = static_cast<std::int_fast64_t>(n % 8);
 
     std::int_fast64_t negative_one_count {0};
 

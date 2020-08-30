@@ -271,43 +271,100 @@ This function is `constexpr` only if the compiler supports C++14 constexpr funct
 
 namespace boost { namespace math {
 
-    template<class ExecutionPolicy, typename Z, class OutputIterator>
-    auto prime_sieve(ExecutionPolicy&& policy, Z upper_bound, OutputIterator output) -> decltype(output)
+    template<class ExecutionPolicy, typename Integer, class Container>
+    void prime_sieve(ExecutionPolicy&& policy, Integer upper_bound, Container &resultant_primes)
 
-    template<class ExecutionPolicy, class Z, class OutputIterator>
-    auto prime_range(ExecutionPolicy&& policy, Z lower_bound, Z upper_bound, OutputIterator output) -> decltype(output)
+    template<class ExecutionPolicy, class Integer, class Container>
+    void prime_range(ExecutionPolicy&& policy, Integer lower_bound, Integer upper_bound, Container &resultant_primes)
 
-    template<typename Z, class OutputIterator>
-    auto prime_sieve(Z upper_bound, OutputIterator output) -> decltype(output)
+    template<class Integer, class Container>
+    void prime_sieve(Integer upper_bound, Container &resultant_primes)
 
-    template<class Z, class OutputIterator>
-    auto prime_range(Z lower_bound, Z upper_bound, OutputIterator output) -> decltype(output)
+    template<class Integer, class Container>
+    void prime_range(Integer lower_bound, Integer upper_bound, Container &resultant_primes)
 
 
 }} // End namespaces
 
 [h4 Description]
 
-There are two sets of functions available `prime_sieve` and `prime_range`. `prime_sieve` will return all primes in the
-range [2, `upper_bound`). `prime_range` will return all the primes in the range [lower_bound, upper_bound).
+There are two sets of functions available: `prime_sieve` and `prime_range`. 
+`prime_sieve` will return all primes in the range [2, `upper_bound`). 
+`prime_range` will return all primes in the range [lower_bound, upper_bound).
+Both `prime_sieve` and `prime_range` can perform arbitrary precision calculations using `boost::multiprecision::cpp_int` or `boost::multiprecision::mpz_int`. 
 
-If you have a C++17 compatible compiler you are able to pass an execution policy to both functions. Any
-policy besides `std::execution::seq` will enable internal multi-threading. If your compiler is not C++17 compatible the
-sequential overloads will be used.
-
-For upper_bound <= 2[super 24] two threads will be used. For any value larger than 2[super 24] `std::thread::hardware_concurrency()` will be called,
-and all available concurrency will be used. Additionally, the memory requirements are `bigo[](sqrt(N))`.
-
-/Nota bene:/ If `std::thread::hardware_concurrency()` returns 0 the max number of threads will be set to 2.
+`prime_sieve` and `prime_range` both have a parameter for an execution policy.
+The policies `std::execution::par` or `std::execution::par_unseq` will enable internal multi-threading.
+All other policies or no policy will result in the `prime_sieve` and `prime_range` executing sequentially. 
 
 [h4 Examples]
-    // To calculate primes 2 - 1,000,000 in parallel
+    // To calculate primes [2, 1,000,000) in parallel
     std::vector<int64_t> primes;
-    boost::math::prime_sieve(std::execution::par, 1000000, std::back_inserter(primes));
+    boost::math::prime_sieve(std::execution::par, 1'000'000, primes);
 
-    // To calculate primes 100 - 1,000 sequentially
+    // To calculate primes [100, 1,000) sequentially
     std::vector<int64_t> primes;
-    boost::math::prime_range(100, 1000, std::back_inserter(primes));
+    boost::math::prime_range(100, 1'000, primes);
+
+[h4 Complexity]
+These functions were tested for complexity using [@https://github.com/google/benchmark google benchmark] on a system with the following specifications:
+* CPU: Intel i5-10500
+* OS: Red Hat Enterprise Linux 8.2
+* Compiler: gcc-g++ 10.2.0 (Compiled from source with GMP 6.2.0, MPC 1.2.0, and MPFR 4.1.0 using RHEL gcc-toolset-9)
+* Compiler flags: -Ofast -MMD -march=native -g -lbenchmark -lpthread -lgmp
+
+Range of test upper_bound: 2[super 1] - 2[super 30]
+
+<table xml:id="ex.htmltable">
+<caption>Complexity Calculations `bigo[](N)` </caption>
+<thead>
+  <tr>
+    <td>Type</td>
+    <td>Time Complexity</td>
+    <td>Time Complexity RMS</td>
+    <td>CPU Complexity</td>
+    <td>CPU Complexity RMS</td>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td>int32_t</td>
+    <td>0.72N</td>
+    <td>5%</td>
+    <td>0.02N</td>
+    <td>13%</td>
+  </tr>
+  <tr>
+    <td>int64_t</td>
+    <td>0.78N</td>
+    <td>16%</td>
+    <td>0.03N</td>
+    <td>6%</td>
+  </tr>
+  <tr>
+    <td>uint32_t</td>
+    <td>0.71N</td>
+    <td>10%</td>
+    <td>0.02N</td>
+    <td>14%</td>
+  </tr>
+  <tr>
+    <td>cpp_int</td>
+    <td>6.24N</td>
+    <td>44%</td>
+    <td>0.35N</td>
+    <td>4%</td>
+  </tr>
+  <tr>
+    <td>mpz_int</td>
+    <td>9.27N</td>
+    <td>11%</td>
+    <td>0.69N</td>
+    <td>8%</td>
+  </tr>
+</tbody>
+</table>
+
 
 [h4 References]
 * Sorensen, Jonathan [@https://research.cs.wisc.edu/techreports/1990/TR909.pdf An Introduction to Prime Number Sieves]
