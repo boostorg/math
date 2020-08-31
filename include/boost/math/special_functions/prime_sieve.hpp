@@ -48,6 +48,10 @@ void linear_sieve(Integer upper_bound, Container &resultant_primes)
     }
 }
 
+// 4096 is where benchmarked performance of linear_sieve begins to diverge
+template<class Integer>
+const Integer linear_sieve_limit = Integer(4096); // Constexpr does not work with boost::multiprecision types
+
 template<class Integer, class PrimeContainer, class Container>
 void mask_sieve(Integer lower_bound, Integer upper_bound, const PrimeContainer& primes, Container &resultant_primes)
 {
@@ -175,21 +179,22 @@ void segmented_sieve(Integer lower_bound, Integer upper_bound, const PrimesConta
 template<class Integer, class Container>
 void segmented_sieve(Integer lower_bound, Integer upper_bound, Container &resultant_primes)
 {
+    using boost::math::detail::linear_sieve_limit;
+    
     Integer limit{static_cast<Integer>(std::floor(std::sqrt(static_cast<double>(upper_bound)))) + 1};
     std::vector<Integer> primes {};
     primes.reserve(static_cast<double>(limit) / std::log(static_cast<double>(limit)));
 
     // Prepare for max value so you do not have to calculate this again
-    if(limit < 4096)
+    if(limit < linear_sieve_limit<Integer>)
     {
         boost::math::detail::linear_sieve(static_cast<Integer>(limit), primes);
     }
 
     else
     {
-        //boost::math::detail::mask_sieve(static_cast<Integer>(2), limit, primes);
-        boost::math::detail::linear_sieve(static_cast<Integer>(4096), primes);
-        boost::math::detail::segmented_sieve(static_cast<Integer>(4096), limit, primes, primes);
+        boost::math::detail::linear_sieve(linear_sieve_limit<Integer>, primes);
+        boost::math::detail::segmented_sieve(linear_sieve_limit<Integer>, limit, primes, primes);
     }
 
     boost::math::detail::segmented_sieve(lower_bound, upper_bound, primes, resultant_primes);
@@ -238,20 +243,22 @@ constexpr void prime_reserve(Integer upper_bound, std::vector<Integer> &prime_co
 template<class ExecutionPolicy, class Integer, class Container>
 void prime_sieve(ExecutionPolicy&& policy, Integer upper_bound, Container &primes)
 {
+    using boost::math::detail::linear_sieve_limit;
+
     if(upper_bound == 2)
     {
         return;
     }
 
-    if(upper_bound <= 4096)
+    if(upper_bound <= linear_sieve_limit<Integer>)
     {
         boost::math::detail::linear_sieve(static_cast<Integer>(upper_bound), primes);
     }
 
     else if(typeid(policy) == typeid(std::execution::seq))
     {
-        boost::math::detail::linear_sieve(static_cast<Integer>(4096), primes);
-        boost::math::detail::sequential_segmented_sieve(static_cast<Integer>(4096), upper_bound, primes);
+        boost::math::detail::linear_sieve(linear_sieve_limit<Integer>, primes);
+        boost::math::detail::sequential_segmented_sieve(linear_sieve_limit<Integer>, upper_bound, primes);
     }
 
     else
@@ -260,10 +267,10 @@ void prime_sieve(ExecutionPolicy&& policy, Integer upper_bound, Container &prime
         small_primes.reserve(1028);
 
         std::thread t1([&small_primes] {
-            boost::math::detail::linear_sieve(static_cast<Integer>(8192), small_primes);
+            boost::math::detail::linear_sieve(static_cast<Integer>(linear_sieve_limit<Integer> * 2), small_primes);
         });
         std::thread t2([upper_bound, &primes] {
-            boost::math::detail::segmented_sieve(static_cast<Integer>(8192), upper_bound, primes);
+            boost::math::detail::segmented_sieve(static_cast<Integer>(linear_sieve_limit<Integer> * 2), upper_bound, primes);
         });
 
         t1.join();
