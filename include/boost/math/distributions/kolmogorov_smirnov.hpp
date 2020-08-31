@@ -99,8 +99,8 @@
 // kolmogorov_smirnov_dist<>(100, 4) // N=100, order=4, i.e. Pelz-Good formula
 //
 // The exact distribution could be added to the API with a special order
-// parameter (e.g. 0 or INT_MAX), or a separate distribution type altogether
-// (e.g. kolmogorov_smirnov_exact_dist).
+// parameter (e.g. 0 or infinity), or a separate distribution type altogether
+// (e.g. kolmogorov_smirnov_exact_distribution).
 //
 #ifndef BOOST_STATS_KOLMOGOROV_ASYMPTOTIC_HPP
 #define BOOST_STATS_KOLMOGOROV_ASYMPTOTIC_HPP
