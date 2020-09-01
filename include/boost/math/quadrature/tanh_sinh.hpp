@@ -185,7 +185,7 @@ auto tanh_sinh<Real, Policy>::integrate(const F f, Real a, Real b, Real toleranc
                   return f(diff * (avg_over_diff_m1 - zc));
                 position = a - diff * zc;
              }
-             if (z > 0.5)
+             else if (z > 0.5)
              {
                 if(have_small_right)
                   return f(diff * (avg_over_diff_p1 - zc));

@@ -190,7 +190,7 @@ inline T bessel_y_small_z_series(T v, T x, T* pscale, const Policy& pol)
 
    if(!need_logs)
    {
-      prefix = boost::math::tgamma(-v, pol) * boost::math::cos_pi(v) * p / constants::pi<T>();
+      prefix = boost::math::tgamma(-v, pol) * boost::math::cos_pi(v, pol) * p / constants::pi<T>();
    }
    else
    {
@@ -240,7 +240,7 @@ T bessel_yn_small_z(int n, T z, T* scale, const Policy& pol)
    else
    {
       T p = pow(z / 2, n);
-      T result = -((boost::math::factorial<T>(n - 1) / constants::pi<T>()));
+      T result = -((boost::math::factorial<T>(n - 1, pol) / constants::pi<T>()));
       if(p * tools::max_value<T>() < result)
       {
          T div = tools::max_value<T>() / 8;

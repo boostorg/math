@@ -4,6 +4,7 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#include "mp_t.hpp"
 #include <boost/math/tools/test_data.hpp>
 #include <boost/test/included/prg_exec_monitor.hpp>
 #include <boost/math/special_functions/ellint_rj.hpp>
@@ -11,7 +12,6 @@
 #include <fstream>
 #include <boost/math/tools/test_data.hpp>
 #include <boost/random.hpp>
-#include "mp_t.hpp"
 
 float extern_val;
 // confuse the compilers optimiser, and force a truncation to float precision:

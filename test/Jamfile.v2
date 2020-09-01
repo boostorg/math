@@ -168,6 +168,7 @@ test-suite special_fun :
    [ run test_ellint_2.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
    [ run test_ellint_3.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
    [ run test_ellint_d.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
+   [ run test_jacobi_theta.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] ]
    [ run test_jacobi_zeta.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
    [ run test_heuman_lambda.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
    [ run test_erf.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
@@ -896,6 +897,8 @@ test-suite misc :
    [ run test_constants.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] ]
    [ run simple_continued_fraction_test.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] ]
    [ run centered_continued_fraction_test.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] ]
+   [ run luroth_expansion_test.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] ]
+   [ run engel_expansion_test.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] ]
    [ run test_classify.cpp pch ../../test/build//boost_unit_test_framework  ]
    [ run test_error_handling.cpp ../../test/build//boost_unit_test_framework  ]
    [ run legendre_stieltjes_test.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_range_based_for ] [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]  ]
@@ -949,6 +952,7 @@ test-suite misc :
    [ run wavelet_transform_test.cpp  : : : <toolset>msvc:<cxxflags>/bigobj [ requires cxx17_if_constexpr cxx17_std_apply ]  [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] ]
    [ run agm_test.cpp  : : : <toolset>msvc:<cxxflags>/bigobj [ requires cxx17_if_constexpr cxx17_std_apply ]  [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] ]
    [ run rsqrt_test.cpp  : : : <toolset>msvc:<cxxflags>/bigobj [ requires cxx17_if_constexpr cxx17_std_apply ]  [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] ]
+   [ run cohen_acceleration_test.cpp  : : : <toolset>msvc:<cxxflags>/bigobj [ requires cxx17_if_constexpr cxx17_std_apply ]  [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] ]
    [ compile compile_test/daubechies_filters_incl_test.cpp : [ requires cxx17_if_constexpr cxx17_std_apply ]  ]
    [ compile compile_test/daubechies_scaling_incl_test.cpp : [ requires cxx17_if_constexpr cxx17_std_apply ]  ]
    [ run whittaker_shannon_test.cpp : : :  [ requires cxx11_auto_declarations cxx11_constexpr cxx11_smart_ptr cxx11_defaulted_functions ] ]
@@ -1006,6 +1010,7 @@ test-suite misc :
    [ run  compile_test/sf_ellint_2_incl_test.cpp compile_test_main  ]
    [ run  compile_test/sf_ellint_3_incl_test.cpp compile_test_main  ]
    [ run  compile_test/sf_ellint_d_incl_test.cpp compile_test_main  ]
+   [ run  compile_test/sf_jacobi_theta_incl_test.cpp compile_test_main  ]
    [ run  compile_test/sf_jacobi_zeta_incl_test.cpp compile_test_main  ]
    [ run  compile_test/sf_heuman_lambda_incl_test.cpp compile_test_main  ]
    [ run  compile_test/sf_ellint_rc_incl_test.cpp compile_test_main  ]
@@ -1091,7 +1096,8 @@ test-suite misc :
        quaternion_mi2.cpp
        ../../test/build//boost_unit_test_framework ]
 
-   [ run __temporary_test.cpp test_instances//test_instances : : : <test-info>always_show_run_output <pch>off ]
+#   [ run __temporary_test.cpp test_instances//test_instances : : : <test-info>always_show_run_output <pch>off ]
+   [ compile test_no_long_double_policy.cpp ]
 ;
 
 test-suite quadrature :
@@ -1152,6 +1158,7 @@ test-suite quadrature :
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] :
    tanh_sinh_quadrature_test_9 ]
 
+   [ run tanh_sinh_mpfr.cpp ../tools//mpfr ../tools//gmp : : : [ check-target-builds ../config//has_mpfr : : <build>no ] [ requires cxx11_hdr_initializer_list cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_smart_ptr ] release <toolset>clang:<cxxflags>-Wno-literal-range ]
    [ run sinh_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
      : : : release [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] ]
    [ run exp_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
@@ -1347,7 +1354,7 @@ test-suite long-running-tests :
    [ run test_1F1_log.cpp ../../test/build//boost_unit_test_framework : : : release [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_smart_ptr ] <define>TEST=7 release <toolset>clang:<cxxflags>-Wno-literal-range : test_1F1_log_dec_40 ]
    [ run test_pFq.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_hdr_initializer_list cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_smart_ptr ] <define>TEST=6 release [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <define>BOOST_MATH_TEST_FLOAT128 <linkflags>"-Bstatic -lquadmath -Bdynamic" ] <toolset>clang:<cxxflags>-Wno-literal-range : test_pFq_quad ]
    [ run test_pFq.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_hdr_initializer_list cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_smart_ptr ] <define>TEST=7 release <toolset>clang:<cxxflags>-Wno-literal-range : test_pFq_dec_40 ]
-   [ run test_pFq_precision.cpp ../../test/build//boost_unit_test_framework /boost/system//boost_system /boost/chrono//boost_chrono : : : <linkflags>-lgmp <linkflags>-lmpfr [ check-target-builds ../config//has_mpfr : : <build>no ] [ requires cxx11_hdr_initializer_list cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_smart_ptr ] release <toolset>clang:<cxxflags>-Wno-literal-range ]
+   [ run test_pFq_precision.cpp ../tools//mpfr ../tools//gmp ../../test/build//boost_unit_test_framework /boost/system//boost_system /boost/chrono//boost_chrono : : : [ check-target-builds ../config//has_mpfr : : <build>no ] [ requires cxx11_hdr_initializer_list cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_smart_ptr ] release <toolset>clang:<cxxflags>-Wno-literal-range ]
    [ run test_constant_generate.cpp : : : release <define>USE_CPP_FLOAT=1 <exception-handling>off:<build>no  ]
 ;
 

@@ -161,7 +161,7 @@ private:
    {
       using std::log;
       using std::sqrt;
-      Real l = log(sqrt((2 - x) / x));
+      Real l = (log(2-x) - log(x))/2;
       return log((sqrt(4 * l * l + constants::pi<Real>() * constants::pi<Real>()) + 2 * l) / constants::pi<Real>());
    };
 
@@ -409,6 +409,7 @@ void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const boos
    using boost::math::constants::half_pi;
    using boost::math::constants::pi;
    using boost::math::constants::two_div_pi;
+   using boost::math::lltrunc;
 
    m_committed_refinements = 4;
    //
@@ -417,7 +418,7 @@ void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const boos
    // to ensure full precision as otherwise we chop off quite a chunk of the
    // range in *subsequent* rows.
    //
-   m_inital_row_length = itrunc(ceil(t_from_abscissa_complement(min_complement)));
+   m_inital_row_length = lltrunc(ceil(t_from_abscissa_complement(min_complement)));
    std::size_t first_complement = 0;
    m_t_max = m_inital_row_length;
    m_t_crossover = t_from_abscissa_complement(Real(0.5f));

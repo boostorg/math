@@ -794,6 +794,33 @@ void test_gauss()
     CHECK_LE(Real(0.8346), G_computed);
 }
 
+template<typename Real>
+void test_dottie()
+{
+   using boost::math::constants::dottie;
+   using std::cos;
+   CHECK_ULP_CLOSE(dottie<Real>(), cos(dottie<Real>()), 1);
+}
+
+template<typename Real>
+void test_reciprocal_fibonacci()
+{
+   using boost::math::constants::reciprocal_fibonacci;
+   CHECK_LE(reciprocal_fibonacci<Real>(), Real(3.36));
+   CHECK_LE(Real(3.35), reciprocal_fibonacci<Real>());
+}
+
+template<typename Real>
+void test_laplace_limit()
+{
+   using std::exp;
+   using std::sqrt;
+   using boost::math::constants::laplace_limit;
+   Real ll = laplace_limit<Real>();
+   Real tmp = sqrt(1+ll*ll);
+   CHECK_ULP_CLOSE(ll*exp(tmp), 1 + tmp, 1);
+}
+
 #endif
 
 int main()
@@ -821,7 +848,14 @@ int main()
    test_gauss<double>();
    test_gauss<long double>();
    test_gauss<boost::multiprecision::number<boost::multiprecision::cpp_bin_float<400>>>();
-
+   test_dottie<float>();
+   test_dottie<double>();
+   test_dottie<long double>();
+   test_dottie<boost::multiprecision::number<boost::multiprecision::cpp_bin_float<400>>>();
+   test_laplace_limit<float>();
+   test_laplace_limit<double>();
+   test_laplace_limit<long double>();
+   test_laplace_limit<boost::multiprecision::number<boost::multiprecision::cpp_bin_float<400>>>();
 #endif
    return boost::math::test::report_errors();
 }

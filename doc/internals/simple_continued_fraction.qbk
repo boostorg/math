@@ -10,7 +10,7 @@
     #include <boost/math/tools/simple_continued_fraction.hpp>
     namespace boost::math::tools {
 
-    template<typename Real>
+    template<typename Real, typename Z = int64_t>
     class simple_continued_fraction {
     public:
         simple_continued_fraction(Real x);
@@ -35,9 +35,9 @@ Here's a minimal working example:
     auto cfrac = simple_continued_fraction(pi<long double>());
     std::cout << "π ≈ " << cfrac << "\n";
     // Prints:
-    // π ≈ 3.14159265358979323851 ≈ [3; 7, 15, 1, 292, 1, 1, 1, 2, 1, 3, 1, 14, 2, 1, 1, 2]
+    // π ≈ [3; 7, 15, 1, 292, 1, 1, 1, 2, 1, 3, 1, 14, 2, 1, 1, 2]
 
-The class computes partial denominators which simultaneously computing convergents with the modified Lentz's algorithm.
+The class computes partial denominators while simultaneously computing convergents with the modified Lentz's algorithm.
 Once a convergent is within a few ulps of the input value, the computation stops.
 
 Note that every floating point number is a rational number, and this exact rational can be exactly converted to a finite continued fraction.

@@ -10,10 +10,10 @@ power of a run-time base.
     namespace boost { namespace math {
 
     template <int N, typename T>
-    ``__sf_result`` pow(T base);
+    constexpr ``__sf_result`` pow(T base);
 
     template <int N, typename T, class Policy>
-    ``__sf_result`` pow(T base, const Policy& policy);
+    constexpr ``__sf_result`` pow(T base, const Policy& policy);
 
     }}
 
@@ -59,6 +59,10 @@ For example:
 * If T is a `float`, the return type is a `float`.
 * If T is a `long double`, the return type is a `long double`.
 * Otherwise, the return type is a `double`.
+
+[h4 constexpr]
+
+This function is usable in `constexpr` contexts from C++14 onwards.
 
 [h4 Policies]
 
