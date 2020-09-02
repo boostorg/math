@@ -53,13 +53,6 @@ void test_prime_sieve()
     boost::math::prime_sieve(std::execution::par, static_cast<Integer>(1'000'000), primes);
     BOOST_TEST_EQ(primes.size(), 78498);
 
-    /*
-    // Does the function work with a list?
-    std::list<Integer> l_primes;
-    boost::math::prime_sieve(1000, l_primes);
-    BOOST_TEST_EQ(l_primes.size(), ref);
-    */
-
     // Does the function work with a deque?
     std::deque<Integer> d_primes;
     boost::math::prime_sieve(std::execution::par, static_cast<Integer>(1'000), d_primes);
@@ -94,44 +87,109 @@ void test_prime_range()
     Integer ref {168}; // Calculated with wolfram-alpha
 
     // Does the upper and lower bound call work
-    boost::math::prime_range(static_cast<Integer>(2), static_cast<Integer>(1000), primes);
+    boost::math::prime_range(std::execution::par, static_cast<Integer>(2), static_cast<Integer>(1'000), primes);
     BOOST_TEST_EQ(primes.size(), ref);
 
-    // Does the upper bound call work
+    // Does parallel version work
     primes.clear();
-    boost::math::prime_range(static_cast<Integer>(2), static_cast<Integer>(1000), primes);
+    boost::math::prime_range(std::execution::par, static_cast<Integer>(2), static_cast<Integer>(1'000), primes);
     BOOST_TEST_EQ(primes.size(), ref);
 
     // Does it work with a deque?
     std::deque<Integer> d_primes;
-    boost::math::prime_range(static_cast<Integer>(2), static_cast<Integer>(1000), d_primes);
+    boost::math::prime_range(std::execution::par, static_cast<Integer>(2), static_cast<Integer>(1'000), d_primes);
     BOOST_TEST_EQ(d_primes.size(), ref);
-
-    // Does it work with a list?
-    std::list<Integer> l_primes;
-    boost::math::prime_range(static_cast<Integer>(2), static_cast<Integer>(1000), l_primes);
-    BOOST_TEST_EQ(l_primes.size(), ref);
 
     // Does the lower bound change the results?
     ref = 143; // Calculated with wolfram-alpha
     primes.clear();
-    boost::math::prime_range(static_cast<Integer>(100), static_cast<Integer>(1000), primes);
+    boost::math::prime_range(std::execution::par, static_cast<Integer>(100), static_cast<Integer>(1'000), primes);
     BOOST_TEST_EQ(primes.size(), ref);
 
     // Will it call the sieve for large input
     ref = 78498; // Calculated with wolfram-alpha
     primes.clear();
-    boost::math::prime_range(static_cast<Integer>(2), static_cast<Integer>(1000000), primes);
+    boost::math::prime_range(std::execution::par, static_cast<Integer>(2), static_cast<Integer>(1'000'000), primes);
     BOOST_TEST_EQ(primes.size(), ref);
 }
 
 template<typename Integer>
-void test_prime_sieve_overflow()
+void test_prime_range_large()
 {
     std::vector<Integer> primes;
+    Integer ref;
 
-    // Should die with call to BOOST_ASSERT
-    boost::math::prime_sieve(static_cast<Integer>(2), static_cast<Integer>(std::numeric_limits<Integer>::max()), primes);
+    // Larger numbers
+    ref = 586'081; // Calculated with wolfram-alpha
+    primes.clear();
+    boost::math::prime_range(std::execution::par, static_cast<Integer>(1'000'000), static_cast<Integer>(10'000'000), primes);
+    BOOST_TEST_EQ(primes.size(), ref);
+
+    ref = 5'096'876; // Calculated with wolfram-alpha
+    primes.clear();
+    boost::math::prime_range(std::execution::par, static_cast<Integer>(10'000'000), static_cast<Integer>(100'000'000), primes);
+    BOOST_TEST_EQ(primes.size(), ref);
+
+    ref = 48'638'573;
+    primes.clear();
+    boost::math::prime_range(std::execution::par, static_cast<Integer>(100'000'000), static_cast<Integer>(1'073'741'824), primes);
+    BOOST_TEST_EQ(primes.size(), ref);
+}
+
+template<typename Integer>
+void test_prime_range_seq()
+{
+    std::vector<Integer> primes;
+    Integer ref {168}; // Calculated with wolfram-alpha
+
+    // Does the upper and lower bound call work
+    boost::math::prime_range(static_cast<Integer>(2), static_cast<Integer>(1'000), primes);
+    BOOST_TEST_EQ(primes.size(), ref);
+
+    // Does parallel version work
+    primes.clear();
+    boost::math::prime_range(static_cast<Integer>(2), static_cast<Integer>(1'000), primes);
+    BOOST_TEST_EQ(primes.size(), ref);
+
+    // Does it work with a deque?
+    std::deque<Integer> d_primes;
+    boost::math::prime_range(static_cast<Integer>(2), static_cast<Integer>(1'000), d_primes);
+    BOOST_TEST_EQ(d_primes.size(), ref);
+
+    // Does the lower bound change the results?
+    ref = 143; // Calculated with wolfram-alpha
+    primes.clear();
+    boost::math::prime_range(static_cast<Integer>(100), static_cast<Integer>(1'000), primes);
+    BOOST_TEST_EQ(primes.size(), ref);
+
+    // Will it call the sieve for large input
+    ref = 78498; // Calculated with wolfram-alpha
+    primes.clear();
+    boost::math::prime_range(static_cast<Integer>(2), static_cast<Integer>(1'000'000), primes);
+    BOOST_TEST_EQ(primes.size(), ref);
+}
+
+template<typename Integer>
+void test_prime_range_seq_large()
+{
+    std::vector<Integer> primes;
+    Integer ref;
+    
+    // Larger numbers
+    ref = 586'081; // Calculated with wolfram-alpha
+    primes.clear();
+    boost::math::prime_range(static_cast<Integer>(1'000'000), static_cast<Integer>(10'000'000), primes);
+    BOOST_TEST_EQ(primes.size(), ref);
+
+    ref = 5'096'876; // Calculated with wolfram-alpha
+    primes.clear();
+    boost::math::prime_range(static_cast<Integer>(10'000'000), static_cast<Integer>(100'000'000), primes);
+    BOOST_TEST_EQ(primes.size(), ref);
+
+    ref = 48'638'573;
+    primes.clear();
+    boost::math::prime_range(static_cast<Integer>(100'000'000), static_cast<Integer>(1'073'741'824), primes);
+    BOOST_TEST_EQ(primes.size(), ref);
 }
 
 template<typename Integer>
@@ -213,31 +271,41 @@ int main()
     test_sequential_prime_sieve<boost::multiprecision::cpp_int>();
     test_sequential_prime_sieve<boost::multiprecision::mpz_int>();
 
-    //test_prime_range<int>();
-    //test_prime_range<int32_t>();
-    //test_prime_range<int64_t>();
-    //test_prime_range<uint32_t>();
+    test_prime_range<int>();
+    test_prime_range<int32_t>();
+    test_prime_range<int64_t>();
+    test_prime_range<uint32_t>();
+    test_prime_range<boost::multiprecision::cpp_int>();
+    test_prime_range<boost::multiprecision::mpz_int>();
 
-    //test_prime_sieve_overflow<int16_t>();
+    test_prime_range_seq<int>();
+    test_prime_range_seq<int32_t>();
+    test_prime_range_seq<int64_t>();
+    test_prime_range_seq<uint32_t>();
+    test_prime_range_seq<boost::multiprecision::cpp_int>();
+    test_prime_range_seq<boost::multiprecision::mpz_int>();
 
-    //std::cout << "Primes less than 2^30" << std::endl;
-    //auto int64_time_start {std::chrono::high_resolution_clock::now()};
-    test_par_prime_sieve_large<int64_t>();
-    //auto int64_time_stop {std::chrono::high_resolution_clock::now()};
-    //auto int64_duration {std::chrono::duration_cast<std::chrono::milliseconds>(int64_time_stop - int64_time_start).count()};
-    //std::cout << "int64_t: " << int64_duration << " ms" << std::endl;
+    // Large composite tests (Commented out for CI)
+    //test_par_prime_sieve_large<int>();
+    //test_par_prime_sieve_large<int32_t>();
+    //test_par_prime_sieve_large<int64_t>();
+    //test_par_prime_sieve_large<uint32_t>();
+    //test_par_prime_sieve_large<boost::multiprecision::cpp_int>();
+    //test_par_prime_sieve_large<boost::multiprecision::mpz_int>();
 
-    //auto cppint_time_start {std::chrono::high_resolution_clock::now()};
-    test_par_prime_sieve_large<boost::multiprecision::cpp_int>();
-    //auto cppint_time_stop {std::chrono::high_resolution_clock::now()};
-    //auto cppint_duration{std::chrono::duration_cast<std::chrono::milliseconds>(cppint_time_stop - cppint_time_start).count()};
-    //std::cout << "cpp_int: " << cppint_duration << " ms" << std::endl;
+    //test_prime_range_large<int>();
+    //test_prime_range_large<int32_t>();
+    //test_prime_range_large<int64_t>();
+    //test_prime_range_large<uint32_t>();
+    //test_prime_range_large<boost::multiprecision::cpp_int>();
+    //test_prime_range_large<boost::multiprecision::mpz_int>();
 
-    //auto mpzint_time_start {std::chrono::high_resolution_clock::now()};
-    test_par_prime_sieve_large<boost::multiprecision::mpz_int>();
-    //auto mpzint_time_stop {std::chrono::high_resolution_clock::now()};
-    //auto mpzint_duration{std::chrono::duration_cast<std::chrono::milliseconds>(mpzint_time_stop - mpzint_time_start).count()};
-    //std::cout << "mpz_int: " << mpzint_duration << " ms" << std::endl;
+    //test_prime_range_seq_large<int>();
+    //test_prime_range_seq_large<int32_t>();
+    //test_prime_range_seq_large<int64_t>();
+    //test_prime_range_seq_large<uint32_t>();
+    //test_prime_range_seq_large<boost::multiprecision::cpp_int>();
+    //test_prime_range_seq_large<boost::multiprecision::mpz_int>();
     
     boost::report_errors();
 }

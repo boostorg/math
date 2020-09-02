@@ -19,25 +19,6 @@
 
 namespace boost::math::detail
 {
-
-#if defined(__MPIR_VERSION) || defined(__GNU_MP_VERSION)
-// GNU GMP C or MPIR
-inline double get_double(const mpz_t &x) noexcept
-{
-    return mpz_get_d(x);
-}
-#endif
-
-#if defined(__GNU_MP_VERSION)
-#if __has_include(<gmpxx.h>)
-// GNU GMP C++ bindings
-inline double get_double(const mpz_class &x) noexcept
-{
-    return x.get_d()
-}
-#endif
-#endif
-
 // boost::multiprecision and POD
 template<class Integer>
 inline double get_double(const Integer &x) noexcept
@@ -47,8 +28,9 @@ inline double get_double(const Integer &x) noexcept
 
 template<class Integer, class PrimeContainer, class Container>
 class IntervalSieve
-{
-#ifdef __SIZEOF_INT128__   // Defined in GCC 4.6+, clang, intel. MSVC does not define. 
+{  
+    
+#ifdef BOOST_HAS_INT128    // Defined in GCC 4.6+, clang, intel. MSVC does not define. 
 using int_128t = __int128; // One machine word smaller than the boost equivalent
 #else
 using int_128t = boost::multiprecision::int128_t;
