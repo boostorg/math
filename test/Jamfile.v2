@@ -970,7 +970,7 @@ test-suite misc :
    [ run compile_test/catmull_rom_concept_test.cpp compile_test_main   : : : [ requires cxx11_hdr_array cxx11_hdr_initializer_list ] ]
    [ run ooura_fourier_integral_test.cpp ../../test/build//boost_unit_test_framework : : :  [ requires cxx17_if_constexpr cxx17_std_apply ] ]
    [ run univariate_statistics_test.cpp ../../test/build//boost_unit_test_framework : : :  [ requires cxx17_if_constexpr cxx17_std_apply ] ]
-   [ run test_prime_sieve.cpp ../../test/build//boost_unit_test_framework : : :  [ requires cxx17_if_constexpr cxx17_std_apply ] ]
+   [ run test_prime_sieve.cpp ../../test/build//boost_unit_test_framework : : : <linkflags>-lgmp [ requires cxx17_if_constexpr cxx17_std_apply ] ]
    [ run empirical_cumulative_distribution_test.cpp  : : :  [ requires cxx17_if_constexpr cxx17_std_apply ] ]
    [ run norms_test.cpp ../../test/build//boost_unit_test_framework : : :  [ requires cxx17_if_constexpr cxx17_std_apply ] ]
    [ run signal_statistics_test.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
