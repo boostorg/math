@@ -283,12 +283,15 @@ namespace boost { namespace math {
     template<class Integer, class Container>
     void prime_range(Integer lower_bound, Integer upper_bound, Container &resultant_primes)
 
+    template<class Integer>
+    constexpr void prime_reserve(Integer upper_bound, std::vector<Integer> &prime_container)
+
 
 }} // End namespaces
 
 [h4 Description]
 
-There are two sets of functions available: `prime_sieve` and `prime_range`. 
+There are two sets of prime sieveing functions available: `prime_sieve` and `prime_range`. 
 `prime_sieve` will return all primes in the range [2, `upper_bound`). 
 `prime_range` will return all primes in the range [lower_bound, upper_bound).
 Both `prime_sieve` and `prime_range` can perform arbitrary precision calculations using `boost::multiprecision::cpp_int` or `boost::multiprecision::mpz_int`. 
@@ -297,9 +300,12 @@ Both `prime_sieve` and `prime_range` can perform arbitrary precision calculation
 The policies `std::execution::par` or `std::execution::par_unseq` will enable internal multi-threading.
 All other policies or no policy will result in the `prime_sieve` and `prime_range` executing sequentially. 
 
+`prime_reserve` uses the prime number theorem to reserve for approximately the correct number of primes given `upper_bound`.
+
 [h4 Examples]
-    // To calculate primes [2, 1,000,000) in parallel
+    // To reserve space and calculate primes [2, 1,000,000) in parallel
     std::vector<int64_t> primes;
+    boost::math::prime_reserve(1'000'000, primes);
     boost::math::prime_sieve(std::execution::par, 1'000'000, primes);
 
     // To calculate primes [100, 1,000) sequentially
@@ -315,56 +321,16 @@ These functions were tested for complexity using [@https://github.com/google/ben
 
 Range of test upper_bound: 2[super 1] - 2[super 30]
 
-<table xml:id="ex.htmltable">
-<caption>Complexity Calculations `bigo[](N)` </caption>
-<thead>
-  <tr>
-    <td>Type</td>
-    <td>Time Complexity</td>
-    <td>Time Complexity RMS</td>
-    <td>CPU Complexity</td>
-    <td>CPU Complexity RMS</td>
-  </tr>
-</thead>
-<tbody>
-  <tr>
-    <td>int32_t</td>
-    <td>0.72N</td>
-    <td>5%</td>
-    <td>0.02N</td>
-    <td>13%</td>
-  </tr>
-  <tr>
-    <td>int64_t</td>
-    <td>0.78N</td>
-    <td>16%</td>
-    <td>0.03N</td>
-    <td>6%</td>
-  </tr>
-  <tr>
-    <td>uint32_t</td>
-    <td>0.71N</td>
-    <td>10%</td>
-    <td>0.02N</td>
-    <td>14%</td>
-  </tr>
-  <tr>
-    <td>cpp_int</td>
-    <td>6.24N</td>
-    <td>44%</td>
-    <td>0.35N</td>
-    <td>4%</td>
-  </tr>
-  <tr>
-    <td>mpz_int</td>
-    <td>9.27N</td>
-    <td>11%</td>
-    <td>0.69N</td>
-    <td>8%</td>
-  </tr>
-</tbody>
-</table>
-
+[pre'''
+[table:id Complexity Calculations `bigo[](N)`
+  [[Type]     [Time Complexity]   [Time Complexity RMS]   [CPU Complexity]    [CPU Complexity RMS]]
+  [[int32_t]  [0.72N]             [5%]                    [0.02N]             [13%]]
+  [[int64_t]  [0.78N]             [16%]                   [0.03N]             [6%]]
+  [[uint32_t] [0.71N]             [10%]                   [0.02N]             [14%]]
+  [[cpp_int]  [6.24N]             [44%]                   [0.35N]             [4%]]
+  [[mpz_int]  [9.27N]             [11%]                   [0.69N]             [8%]]
+]
+''']
 
 [h4 References]
 * Sorensen, Jonathan [@https://research.cs.wisc.edu/techreports/1990/TR909.pdf An Introduction to Prime Number Sieves]
