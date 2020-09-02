@@ -84,8 +84,10 @@
 // arrived at by trial and error.
 //
 // The mean and variance are implemented using simple closed-form expressions.
-// The mode is calculated at run-time by maximizing the PDF. If you have an
-// analytical solution for the mode, feel free to plop it in.
+// Skewness and kurtosis use slightly more complicated closed-form expressions
+// that involve the zeta function. The mode is calculated at run-time by
+// maximizing the PDF. If you have an analytical solution for the mode, feel
+// free to plop it in.
 //
 // The CDF and PDF could almost certainly be re-implemented and sped up using a
 // polynomial or rational approximation, since the only meaningful argument is
@@ -102,8 +104,8 @@
 // parameter (e.g. 0 or infinity), or a separate distribution type altogether
 // (e.g. kolmogorov_smirnov_exact_distribution).
 //
-#ifndef BOOST_STATS_KOLMOGOROV_ASYMPTOTIC_HPP
-#define BOOST_STATS_KOLMOGOROV_ASYMPTOTIC_HPP
+#ifndef BOOST_MATH_DISTRIBUTIONS_KOLMOGOROV_SMIRNOV_HPP
+#define BOOST_MATH_DISTRIBUTIONS_KOLMOGOROV_SMIRNOV_HPP
 
 #include <boost/math/distributions/fwd.hpp>
 #include <boost/math/distributions/complement.hpp>
@@ -112,8 +114,6 @@
 #include <boost/math/tools/tuple.hpp>
 #include <boost/math/tools/roots.hpp> // Newton-Raphson
 #include <boost/math/tools/minima.hpp> // For the mode
-
-// #include <utility>
 
 namespace boost { namespace math {
 
@@ -194,21 +194,21 @@ template <class RealType = double, class Policy = policies::policy<> >
         typedef Policy policy_type;
 
         // Constructor
-    kolmogorov_smirnov_distribution( RealType n ) : n_obs(n)
+    kolmogorov_smirnov_distribution( RealType n ) : n_obs_(n)
     {
         RealType result;
         detail::check_df(
-                "boost::math::kolmogorov_smirnov_distribution<%1%>::kolmogorov_smirnov_distribution", n_obs, &result, Policy());
+                "boost::math::kolmogorov_smirnov_distribution<%1%>::kolmogorov_smirnov_distribution", n_obs_, &result, Policy());
     }
 
     RealType number_of_observations()const
     {
-        return n_obs;
+        return n_obs_;
     }
 
     private:
 
-    RealType n_obs; // positive integer
+    RealType n_obs_; // positive integer
 };
 
 typedef kolmogorov_smirnov_distribution<double> kolmogorov_k; // Convenience typedef for double version.

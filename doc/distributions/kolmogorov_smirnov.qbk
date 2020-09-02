@@ -54,7 +54,7 @@ determinazione empirica di una legge di distribuzione". G. Ist. Ital. Attuari.
 [/ \lim_{n \to \infty} F_n(x/\sqrt{n})=1+2\sum_{k=1}^\infty (-1)^k e^{-2k^2x^2} ]
 
 Note that while the exact distribution only has support over \[0, 1\], this
-limiting form has positive mass above unity, particlularly for small /n/. The
+limiting form has positive mass above unity, particularly for small /n/. The
 following graph illustrations how the distribution changes for different values
 of /n/:
 

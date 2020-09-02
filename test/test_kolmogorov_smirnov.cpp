@@ -13,8 +13,8 @@
 #include <boost/math/distributions/kolmogorov_smirnov.hpp>
 #include <boost/math/quadrature/exp_sinh.hpp>
 
-template <class RealType> // Any floating-point type RealType.
-void test_spots(RealType T)
+template <typename RealType> // Any floating-point type RealType.
+void test_spots(RealType)
 {
     using namespace boost::math;
     // Test quantiles, CDFs, and complements
