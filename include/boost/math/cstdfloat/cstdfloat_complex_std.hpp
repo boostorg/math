@@ -86,9 +86,9 @@
     public:
       typedef BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE value_type;
 
-      explicit complex(const complex<float>&);
-      explicit complex(const complex<double>&);
-      explicit complex(const complex<long double>&);
+      complex(const complex<float>&);
+      complex(const complex<double>&);
+      complex(const complex<long double>&);
 
       #if defined(BOOST_NO_CXX11_CONSTEXPR)
       complex(const value_type& r = value_type(),
@@ -96,7 +96,7 @@
                                                     im(i) { }
 
       template<typename X>
-      complex(const complex<X>& x) : re(x.real()),
+      explicit complex(const complex<X>& x) : re(x.real()),
                                      im(x.imag()) { }
 
       const value_type& real() const { return re; }
@@ -110,7 +110,7 @@
                                                                     im(i) { }
 
       template<typename X>
-      BOOST_CONSTEXPR complex(const complex<X>& x) : re(x.real()),
+      explicit BOOST_CONSTEXPR complex(const complex<X>& x) : re(x.real()),
                                                      im(x.imag()) { }
 
       value_type real() const { return re; }

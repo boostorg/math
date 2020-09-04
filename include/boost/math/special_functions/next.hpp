@@ -16,6 +16,7 @@
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/special_functions/sign.hpp>
 #include <boost/math/special_functions/trunc.hpp>
+#include <boost/math/tools/traits.hpp>
 
 #include <float.h>
 
@@ -169,11 +170,25 @@ inline T get_min_shift_value()
    return val;
 }
 
+template <class T, bool b = boost::math::tools::detail::has_backend_type<T>::value>
+struct exponent_type
+{
+   typedef int type;
+};
+
+template <class T>
+struct exponent_type<T, true>
+{
+   typedef typename T::backend_type::exponent_type type;
+};
+
 template <class T, class Policy>
 T float_next_imp(const T& val, const boost::true_type&, const Policy& pol)
 {
+   typedef typename exponent_type<T>::type exponent_type;
+   
    BOOST_MATH_STD_USING
-   int expon;
+   exponent_type expon;
    static const char* function = "float_next<%1%>(%1%)";
 
    int fpclass = (boost::math::fpclassify)(val);
@@ -216,11 +231,13 @@ T float_next_imp(const T& val, const boost::true_type&, const Policy& pol)
 template <class T, class Policy>
 T float_next_imp(const T& val, const boost::false_type&, const Policy& pol)
 {
+   typedef typename exponent_type<T>::type exponent_type;
+
    BOOST_STATIC_ASSERT(std::numeric_limits<T>::is_specialized);
    BOOST_STATIC_ASSERT(std::numeric_limits<T>::radix != 2);
 
    BOOST_MATH_STD_USING
-   boost::intmax_t expon;
+   exponent_type expon;
    static const char* function = "float_next<%1%>(%1%)";
 
    int fpclass = (boost::math::fpclassify)(val);
@@ -302,8 +319,10 @@ namespace detail{
 template <class T, class Policy>
 T float_prior_imp(const T& val, const boost::true_type&, const Policy& pol)
 {
+   typedef typename exponent_type<T>::type exponent_type;
+
    BOOST_MATH_STD_USING
-   int expon;
+   exponent_type expon;
    static const char* function = "float_prior<%1%>(%1%)";
 
    int fpclass = (boost::math::fpclassify)(val);
@@ -347,11 +366,13 @@ T float_prior_imp(const T& val, const boost::true_type&, const Policy& pol)
 template <class T, class Policy>
 T float_prior_imp(const T& val, const boost::false_type&, const Policy& pol)
 {
+   typedef typename exponent_type<T>::type exponent_type;
+
    BOOST_STATIC_ASSERT(std::numeric_limits<T>::is_specialized);
    BOOST_STATIC_ASSERT(std::numeric_limits<T>::radix != 2);
 
    BOOST_MATH_STD_USING
-   boost::intmax_t expon;
+   exponent_type expon;
    static const char* function = "float_prior<%1%>(%1%)";
 
    int fpclass = (boost::math::fpclassify)(val);

@@ -29,6 +29,7 @@
 #include <boost/math/special_functions/ellint_2.hpp>
 #include <boost/math/special_functions/ellint_3.hpp>
 #include <boost/math/special_functions/ellint_d.hpp>
+#include <boost/math/special_functions/jacobi_theta.hpp>
 #include <boost/math/special_functions/jacobi_zeta.hpp>
 #include <boost/math/special_functions/heuman_lambda.hpp>
 #include <boost/math/special_functions/ellint_rc.hpp>
@@ -80,5 +81,15 @@
 #include <boost/math/special_functions/ulp.hpp>
 #include <boost/math/special_functions/relative_difference.hpp>
 #include <boost/math/special_functions/lambert_w.hpp>
+
+#ifndef BOOST_NO_CXX11_HDR_TYPE_TRAITS
+#include <boost/math/special_functions/gegenbauer.hpp>
+#endif
+#ifndef BOOST_NO_CXX11_STATIC_ASSERT
+#include <boost/math/special_functions/jacobi.hpp>
+#endif
+#ifndef BOOST_NO_CXX11_AUTO_DECLARATIONS
+#include <boost/math/special_functions/legendre_stieltjes.hpp>
+#endif
 
 #endif // BOOST_MATH_SPECIAL_FUNCTIONS_HPP

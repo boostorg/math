@@ -193,7 +193,7 @@ inline T bessel_y_derivative_small_z_series(T v, T x, const Policy& pol)
    p = pow(x / 2, v - 1) / 2;
    if (!need_logs)
    {
-      prefix = boost::math::tgamma(-v, pol) * boost::math::cos_pi(v) * p / boost::math::constants::pi<T>();
+      prefix = boost::math::tgamma(-v, pol) * boost::math::cos_pi(v, pol) * p / boost::math::constants::pi<T>();
    }
    else
    {

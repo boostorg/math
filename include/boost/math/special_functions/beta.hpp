@@ -514,7 +514,7 @@ T ibeta_power_terms(T a,
          if ((boost::math::isnormal)(bet))
             log_result -= log(bet);
          else
-            log_result += boost::math::lgamma(c, pol) - boost::math::lgamma(a) - boost::math::lgamma(c, pol);
+            log_result += boost::math::lgamma(c, pol) - boost::math::lgamma(a, pol) - boost::math::lgamma(b, pol);
          return exp(log_result);
       }
    }
@@ -928,8 +928,8 @@ T beta_small_b_large_a_series(T a, T b, T x, T y, T s0, T mult, const Policy& po
 // For integer arguments we can relate the incomplete beta to the
 // complement of the binomial distribution cdf and use this finite sum.
 //
-template <class T>
-T binomial_ccdf(T n, T k, T x, T y)
+template <class T, class Policy>
+T binomial_ccdf(T n, T k, T x, T y, const Policy& pol)
 {
    BOOST_MATH_STD_USING // ADL of std names
 
@@ -951,14 +951,14 @@ T binomial_ccdf(T n, T k, T x, T y)
       int start = itrunc(n * x);
       if(start <= k + 1)
          start = itrunc(k + 2);
-      result = pow(x, start) * pow(y, n - start) * boost::math::binomial_coefficient<T>(itrunc(n), itrunc(start));
+      result = pow(x, start) * pow(y, n - start) * boost::math::binomial_coefficient<T>(itrunc(n), itrunc(start), pol);
       if(result == 0)
       {
          // OK, starting slightly above the mode didn't work,
          // we'll have to sum the terms the old fashioned way:
          for(unsigned i = start - 1; i > k; --i)
          {
-            result += pow(x, (int)i) * pow(y, n - i) * boost::math::binomial_coefficient<T>(itrunc(n), itrunc(i));
+            result += pow(x, (int)i) * pow(y, n - i) * boost::math::binomial_coefficient<T>(itrunc(n), itrunc(i), pol);
          }
       }
       else
@@ -1288,7 +1288,7 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
             // relate to the binomial distribution and use a finite sum:
             T k = a - 1;
             T n = b + k;
-            fract = binomial_ccdf(n, k, x, y);
+            fract = binomial_ccdf(n, k, x, y, pol);
             if(!normalised)
                fract *= boost::math::beta(a, b, pol);
             BOOST_MATH_INSTRUMENT_VARIABLE(fract);

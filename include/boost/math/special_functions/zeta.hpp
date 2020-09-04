@@ -956,7 +956,7 @@ T zeta_imp(T s, T sc, const Policy& pol, const Tag& tag)
                   return T(((v / 2 - 1) & 1) ? -1 : 1) * ldexp(T(1), v - 1) * pow(constants::pi<T, Policy>(), v) *
                      boost::math::unchecked_bernoulli_b2n<T>(v / 2) / boost::math::unchecked_factorial<T>(v);
                return T(((v / 2 - 1) & 1) ? -1 : 1) * ldexp(T(1), v - 1) * pow(constants::pi<T, Policy>(), v) *
-                  boost::math::bernoulli_b2n<T>(v / 2) / boost::math::factorial<T>(v);
+                  boost::math::bernoulli_b2n<T>(v / 2) / boost::math::factorial<T>(v, pol);
             }
             else
                return zeta_imp_odd_integer(v, sc, pol, boost::integral_constant<bool, (Tag::value <= 113) && Tag::value>());

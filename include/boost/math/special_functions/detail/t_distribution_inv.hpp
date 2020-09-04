@@ -284,7 +284,7 @@ T inverse_students_t(T df, T u, T v, const Policy& pol, bool* pexact = 0)
             // supplement:
             //
             T a = 4 * (u - u * u);//1 - 4 * (u - 0.5f) * (u - 0.5f);
-            T b = boost::math::cbrt(a);
+            T b = boost::math::cbrt(a, pol);
             static const T c = static_cast<T>(0.85498797333834849467655443627193);
             T p = 6 * (1 + c * (1 / b - 1));
             T p0;

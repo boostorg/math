@@ -151,7 +151,7 @@ namespace boost
 
       // compute Owen's T function, T(h,a), for arbitrary values of h and a
      template<typename RealType, class Policy>
-     inline RealType owens_t_T7(RealType h, RealType a, const Policy&)
+     inline RealType owens_t_T7(RealType h, RealType a, const Policy& pol)
      {
         BOOST_MATH_STD_USING
         // exploit that T(-h,a) == T(h,a)
@@ -174,15 +174,15 @@ namespace boost
         {
            if( h <= 0.67 )
            {
-              const RealType normh = owens_t_znorm1(h);
-              const RealType normah = owens_t_znorm1(fabs_ah);
+              const RealType normh = owens_t_znorm1(h, pol);
+              const RealType normah = owens_t_znorm1(fabs_ah, pol);
               val = static_cast<RealType>(1)/static_cast<RealType>(4) - normh*normah -
                  compute_owens_t_T7(fabs_ah, static_cast<RealType>(1 / fabs_a));
            } // if( h <= 0.67 )
            else
            {
-              const RealType normh = owens_t_znorm2(h);
-              const RealType normah = owens_t_znorm2(fabs_ah);
+              const RealType normh = owens_t_znorm2(h, pol);
+              const RealType normah = owens_t_znorm2(fabs_ah, pol);
               val = constants::half<RealType>()*(normh+normah) - normh*normah -
                  compute_owens_t_T7(fabs_ah, static_cast<RealType>(1 / fabs_a));
            } // else [if( h <= 0.67 )]
