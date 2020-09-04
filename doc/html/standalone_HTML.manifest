@@ -130,6 +130,7 @@ math_toolkit/dist_ref/dists/hypergeometric_dist.html
 math_toolkit/dist_ref/dists/inverse_chi_squared_dist.html
 math_toolkit/dist_ref/dists/inverse_gamma_dist.html
 math_toolkit/dist_ref/dists/inverse_gaussian_dist.html
+math_toolkit/dist_ref/dists/kolmogorov_smirnov_dist.html
 math_toolkit/dist_ref/dists/laplace_dist.html
 math_toolkit/dist_ref/dists/logistic_dist.html
 math_toolkit/dist_ref/dists/lognormal_dist.html
