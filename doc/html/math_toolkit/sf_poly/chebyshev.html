@@ -1,9 +1,9 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Chebyshev Polynomials</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../../index.html" title="Math Toolkit 2.12.0">
 <link rel="up" href="../sf_poly.html" title="Polynomials">
 <link rel="prev" href="hermite.html" title="Hermite Polynomials">
@@ -28,7 +28,7 @@
 </h3></div></div></div>
 <h5>
 <a name="math_toolkit.sf_poly.chebyshev.h0"></a>
-        <span class="phrase"><a name="math_toolkit.sf_poly.chebyshev.synopsis"></a></span><a class="link" href="chebyshev.html#math_toolkit.sf_poly.chebyshev.synopsis">Synopsis</a>
+        <span><a name="math_toolkit.sf_poly.chebyshev.synopsis"></a></span><a class="link" href="chebyshev.html#math_toolkit.sf_poly.chebyshev.synopsis">Synopsis</a>
       </h5>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">chebyshev</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
@@ -40,20 +40,23 @@
 <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Real</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">chebyshev_t</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">Real</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">x</span><span class="special">);</span>
 
-<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Real</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">chebyshev_t</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">Real</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Real</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">chebyshev_t</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">Real</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 
 <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Real</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">chebyshev_u</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">Real</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">x</span><span class="special">);</span>
 
-<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Real</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">chebyshev_u</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">Real</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Real</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">chebyshev_u</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">Real</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 
 <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Real</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">chebyshev_t_prime</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">Real</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">x</span><span class="special">);</span>
 
 <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Real1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Real2</span><span class="special">&gt;</span>
-<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">chebyshev_clenshaw_recurrence</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">Real</span><span class="special">*</span> <span class="keyword">const</span> <span class="identifier">c</span><span class="special">,</span> <span class="identifier">size_t</span> <span class="identifier">length</span><span class="special">,</span> <span class="identifier">Real2</span> <span class="identifier">x</span><span class="special">);</span>
+<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">chebyshev_clenshaw_recurrence</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">Real1</span><span class="special">*</span> <span class="keyword">const</span> <span class="identifier">c</span><span class="special">,</span> <span class="identifier">size_t</span> <span class="identifier">length</span><span class="special">,</span> <span class="identifier">Real2</span> <span class="identifier">x</span><span class="special">);</span>
+
+<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Real</span><span class="special">&gt;</span>
+<span class="identifier">Real</span> <span class="identifier">chebyshev_clenshaw_recurrence</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">Real</span><span class="special">*</span> <span class="keyword">const</span> <span class="identifier">c</span><span class="special">,</span> <span class="identifier">size_t</span> <span class="identifier">length</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">b</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">x</span><span class="special">);</span>
 
 <span class="special">}}</span> <span class="comment">// namespaces</span>
 </pre>
@@ -108,7 +111,7 @@
       </p>
 <pre class="programlisting"><span class="keyword">double</span> <span class="identifier">x</span> <span class="special">=</span> <span class="number">0.5</span><span class="special">;</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">c</span><span class="special">{</span><span class="number">14.2</span><span class="special">,</span> <span class="special">-</span><span class="number">13.7</span><span class="special">,</span> <span class="number">82.3</span><span class="special">,</span> <span class="number">96</span><span class="special">};</span>
-<span class="keyword">double</span> <span class="identifier">f</span> <span class="special">=</span> <span class="identifier">chebyshev_clenshaw_recurrence</span><span class="special">(</span><span class="identifier">c</span><span class="special">.</span><span class="identifier">data</span><span class="special">(),</span> <span class="identifier">c</span><span class="special">.</span><span class="identifier">size</span><span class="special">(),</span> <span class="identifier">Real</span> <span class="identifier">x</span><span class="special">);</span>
+<span class="keyword">double</span> <span class="identifier">f</span> <span class="special">=</span> <span class="identifier">chebyshev_clenshaw_recurrence</span><span class="special">(</span><span class="identifier">c</span><span class="special">.</span><span class="identifier">data</span><span class="special">(),</span> <span class="identifier">c</span><span class="special">.</span><span class="identifier">size</span><span class="special">(),</span> <span class="identifier">x</span><span class="special">);</span>
 </pre>
 <p>
         N.B.: There is factor of <span class="emphasis"><em>2</em></span> difference in our definition
@@ -116,20 +119,34 @@
         work. This is because two traditions exist in notation for the Chebyshev
         series expansion,
       </p>
-<div class="blockquote"><blockquote class="blockquote"><p>
-          <span class="emphasis"><em>f</em></span>(<span class="emphasis"><em>x</em></span>) &#8776; &#8721;<sub>n=0</sub><sup>N-1</sup> <span class="emphasis"><em>a</em></span><sub>n</sub><span class="emphasis"><em>T</em></span><sub>n</sub>(<span class="emphasis"><em>x</em></span>)
-        </p></blockquote></div>
+<p>
+        <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../graphs/chebyshev_convention_1.svg" width="149.424" height="54.056"></object></span>
+      </p>
 <p>
         and
       </p>
-<div class="blockquote"><blockquote class="blockquote"><p>
-          <span class="emphasis"><em>f</em></span>(<span class="emphasis"><em>x</em></span>) &#8776; <span class="emphasis"><em>c</em></span><sub>0</sub>/2
-          + &#8721;<sub>n=1</sub><sup>N-1</sup> <span class="emphasis"><em>c</em></span><sub>n</sub><span class="emphasis"><em>T</em></span><sub>n</sub>(<span class="emphasis"><em>x</em></span>)
-        </p></blockquote></div>
+<p>
+        <span class="inlinemediaobject"><object type="image/svg+xml" data="../../../graphs/chebyshev_convention_2.svg" width="192.92" height="54.056"></object></span>
+      </p>
 <p>
         <span class="emphasis"><em><span class="bold"><strong>boost math always uses the second convention,
         with the factor of 1/2 on the first coefficient.</strong></span></em></span>
       </p>
+<p>
+        Another common use case is when the polynomial must be evaluated on some
+        interval [<span class="emphasis"><em>a</em></span>, <span class="emphasis"><em>b</em></span>]. The translation
+        to the interval [-1, 1] causes a few accuracy problems and also gives us
+        some opportunities. For this case, we use <a href="https://doi.org/10.1093/imamat/20.3.379" target="_top">Reinch's
+        modification</a> to the Clenshaw recurrence, which is also discussed
+        <a href="https://archive.siam.org/books/ot99/OT99SampleChapter.pdf" target="_top">here</a>.
+        The usage is as follows:
+      </p>
+<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">x</span> <span class="special">=</span> <span class="number">9</span><span class="special">;</span>
+<span class="keyword">double</span> <span class="identifier">a</span> <span class="special">=</span> <span class="number">7</span><span class="special">;</span>
+<span class="keyword">double</span> <span class="identifier">b</span> <span class="special">=</span> <span class="number">12</span><span class="special">;</span>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">c</span><span class="special">{</span><span class="number">14.2</span><span class="special">,</span> <span class="special">-</span><span class="number">13.7</span><span class="special">,</span> <span class="number">82.3</span><span class="special">,</span> <span class="number">96</span><span class="special">};</span>
+<span class="keyword">double</span> <span class="identifier">f</span> <span class="special">=</span> <span class="identifier">chebyshev_clenshaw_recurrence</span><span class="special">(</span><span class="identifier">c</span><span class="special">.</span><span class="identifier">data</span><span class="special">(),</span> <span class="identifier">c</span><span class="special">.</span><span class="identifier">size</span><span class="special">(),</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">b</span><span class="special">,</span> <span class="identifier">x</span><span class="special">);</span>
+</pre>
 <p>
         Chebyshev polynomials of the second kind can be evaluated via <code class="computeroutput"><span class="identifier">chebyshev_u</span></code>:
       </p>
@@ -139,7 +156,7 @@
 <p>
         The evaluation of Chebyshev polynomials by a three-term recurrence is known
         to be <a href="https://link.springer.com/article/10.1007/s11075-014-9925-x" target="_top">mixed
-        forward-backward stable</a> for <span class="emphasis"><em>x</em></span> &#8714; [-1,
+        forward-backward stable</a> for <span class="emphasis"><em>x</em></span> ∊ [-1,
         1]. However, the author does not know of a similar result for <span class="emphasis"><em>x</em></span>
         outside [-1, 1]. For this reason, evaluation of Chebyshev polynomials outside
         of [-1, 1] is strongly discouraged. That said, small rounding errors in the
@@ -159,7 +176,7 @@
         But before we discuss the API, let's analyze why we might want to project
         a function onto a span of Chebyshev polynomials.
       </p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
 <li class="listitem">
             We want a numerically stable way to evaluate the function's derivative.
           </li>
@@ -219,7 +236,7 @@
         and link with <code class="computeroutput"><span class="special">-</span><span class="identifier">lfftw3</span></code>
         for double precision, <code class="computeroutput"><span class="special">-</span><span class="identifier">lfftw3f</span></code>
         for float precision, <code class="computeroutput"><span class="special">-</span><span class="identifier">lfftw3l</span></code>
-        for long double precision, and -lfftwq for quad (<code class="computeroutput"><span class="identifier">__float128</span></code>)
+        for long double precision, and <code class="computeroutput"><span class="special">-</span><span class="identifier">lfftw3q</span></code> for quad (<code class="computeroutput"><span class="identifier">__float128</span></code>)
         precision. After the coefficients of the Chebyshev series are known, the
         routine goes back through them and filters out all the coefficients whose
         absolute ratio to the largest coefficient are less than the tolerance requested
@@ -228,11 +245,10 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2019 Nikhar
-      Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos,
-      Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Matthew Pulver, Johan
-      R&#229;de, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg,
-      Daryle Walker and Xiaogang Zhang<p>
+<td align="right"><div class="copyright-footer">Copyright © 2006-2020 Nikhar Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher
+      Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Evan Miller, Jeremy Murphy,
+      Matthew Pulver, Johan Råde, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson,
+      Thijs van den Berg, Daryle Walker and Xiaogang Zhang<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

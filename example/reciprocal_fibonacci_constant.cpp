@@ -15,7 +15,7 @@
 
 int main() {
     using Real = boost::multiprecision::mpfr_float_1000;
-    boost::math::fibonacci_next<Real> gen;
+    boost::math::fibonacci_generator<Real> gen;
     gen.set(1); // start producing values from 1st fibonacci number
     Real ans = 0;
     const int ITR = 1000;

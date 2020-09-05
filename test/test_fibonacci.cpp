@@ -62,7 +62,7 @@ BOOST_AUTO_TEST_CASE(overflow_check) {
 
 BOOST_AUTO_TEST_CASE(generator_check) {
     // first 5 values
-    boost::math::fibonacci_next<BST_2048> gen;
+    boost::math::fibonacci_generator<BST_2048> gen;
     for (int i : {0, 1, 1, 2, 3, 5, 8, 13, 21}) {
         BOOST_TEST(gen() == i);
     }

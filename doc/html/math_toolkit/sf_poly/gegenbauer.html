@@ -1,9 +1,9 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Gegenbauer Polynomials</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../../index.html" title="Math Toolkit 2.12.0">
 <link rel="up" href="../sf_poly.html" title="Polynomials">
 <link rel="prev" href="cardinal_b_splines.html" title="Cardinal B-splines">
@@ -28,7 +28,7 @@
 </h3></div></div></div>
 <h5>
 <a name="math_toolkit.sf_poly.gegenbauer.h0"></a>
-        <span class="phrase"><a name="math_toolkit.sf_poly.gegenbauer.synopsis"></a></span><a class="link" href="gegenbauer.html#math_toolkit.sf_poly.gegenbauer.synopsis">Synopsis</a>
+        <span><a name="math_toolkit.sf_poly.gegenbauer.synopsis"></a></span><a class="link" href="gegenbauer.html#math_toolkit.sf_poly.gegenbauer.synopsis">Synopsis</a>
       </h5>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">gegenbauer</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
@@ -80,7 +80,7 @@
       </p>
 <h4>
 <a name="math_toolkit.sf_poly.gegenbauer.h1"></a>
-        <span class="phrase"><a name="math_toolkit.sf_poly.gegenbauer.implementation"></a></span><a class="link" href="gegenbauer.html#math_toolkit.sf_poly.gegenbauer.implementation">Implementation</a>
+        <span><a name="math_toolkit.sf_poly.gegenbauer.implementation"></a></span><a class="link" href="gegenbauer.html#math_toolkit.sf_poly.gegenbauer.implementation">Implementation</a>
       </h4>
 <p>
         The implementation uses the 3-term recurrence for the Gegenbauer polynomials,
@@ -88,7 +88,7 @@
       </p>
 <h4>
 <a name="math_toolkit.sf_poly.gegenbauer.h2"></a>
-        <span class="phrase"><a name="math_toolkit.sf_poly.gegenbauer.performance"></a></span><a class="link" href="gegenbauer.html#math_toolkit.sf_poly.gegenbauer.performance">Performance</a>
+        <span><a name="math_toolkit.sf_poly.gegenbauer.performance"></a></span><a class="link" href="gegenbauer.html#math_toolkit.sf_poly.gegenbauer.performance">Performance</a>
       </h4>
 <p>
         Double precision timing on a consumer x86 laptop is shown below. Included
@@ -129,7 +129,7 @@
 </pre>
 <h4>
 <a name="math_toolkit.sf_poly.gegenbauer.h3"></a>
-        <span class="phrase"><a name="math_toolkit.sf_poly.gegenbauer.accuracy"></a></span><a class="link" href="gegenbauer.html#math_toolkit.sf_poly.gegenbauer.accuracy">Accuracy</a>
+        <span><a name="math_toolkit.sf_poly.gegenbauer.accuracy"></a></span><a class="link" href="gegenbauer.html#math_toolkit.sf_poly.gegenbauer.accuracy">Accuracy</a>
       </h4>
 <p>
         Some representative ULP plots are shown below. The relative accuracy cannot
@@ -141,21 +141,20 @@
       </p>
 <h4>
 <a name="math_toolkit.sf_poly.gegenbauer.h4"></a>
-        <span class="phrase"><a name="math_toolkit.sf_poly.gegenbauer.caveats"></a></span><a class="link" href="gegenbauer.html#math_toolkit.sf_poly.gegenbauer.caveats">Caveats</a>
+        <span><a name="math_toolkit.sf_poly.gegenbauer.caveats"></a></span><a class="link" href="gegenbauer.html#math_toolkit.sf_poly.gegenbauer.caveats">Caveats</a>
       </h4>
 <p>
-        Some programs define the Gegenbauer polynomial with &#955; = 0 via renormalization
+        Some programs define the Gegenbauer polynomial with λ = 0 via renormalization
         (which makes them Chebyshev polynomials). We do not follow this convention:
         In this case, only the zeroth Gegenbauer polynomial is nonzero.
       </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2019 Nikhar
-      Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos,
-      Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Matthew Pulver, Johan
-      R&#229;de, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg,
-      Daryle Walker and Xiaogang Zhang<p>
+<td align="right"><div class="copyright-footer">Copyright © 2006-2020 Nikhar Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher
+      Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Evan Miller, Jeremy Murphy,
+      Matthew Pulver, Johan Råde, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson,
+      Thijs van den Berg, Daryle Walker and Xiaogang Zhang<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

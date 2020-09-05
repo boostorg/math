@@ -1,9 +1,9 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Polygamma</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../../index.html" title="Math Toolkit 2.12.0">
 <link rel="up" href="../sf_gamma.html" title="Gamma Functions">
 <link rel="prev" href="trigamma.html" title="Trigamma">
@@ -28,7 +28,7 @@
 </h3></div></div></div>
 <h5>
 <a name="math_toolkit.sf_gamma.polygamma.h0"></a>
-        <span class="phrase"><a name="math_toolkit.sf_gamma.polygamma.synopsis"></a></span><a class="link" href="polygamma.html#math_toolkit.sf_gamma.polygamma.synopsis">Synopsis</a>
+        <span><a name="math_toolkit.sf_gamma.polygamma.synopsis"></a></span><a class="link" href="polygamma.html#math_toolkit.sf_gamma.polygamma.synopsis">Synopsis</a>
       </h5>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">polygamma</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
@@ -37,14 +37,14 @@
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">polygamma</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">z</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">polygamma</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">polygamma</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 
 <span class="special">}}</span> <span class="comment">// namespaces</span>
 </pre>
 <h5>
 <a name="math_toolkit.sf_gamma.polygamma.h1"></a>
-        <span class="phrase"><a name="math_toolkit.sf_gamma.polygamma.description"></a></span><a class="link" href="polygamma.html#math_toolkit.sf_gamma.polygamma.description">Description</a>
+        <span><a name="math_toolkit.sf_gamma.polygamma.description"></a></span><a class="link" href="polygamma.html#math_toolkit.sf_gamma.polygamma.description">Description</a>
       </h5>
 <p>
         Returns the polygamma function of <span class="emphasis"><em>x</em></span>. Polygamma is defined
@@ -67,9 +67,9 @@
 
         </p></blockquote></div>
 <p>
-        The final <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
+        The final <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
         be used to control the behaviour of the function: how it handles errors,
-        what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">policy
+        what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">policy
         documentation for more details</a>.
       </p>
 <p>
@@ -79,7 +79,7 @@
       </p>
 <h5>
 <a name="math_toolkit.sf_gamma.polygamma.h2"></a>
-        <span class="phrase"><a name="math_toolkit.sf_gamma.polygamma.accuracy"></a></span><a class="link" href="polygamma.html#math_toolkit.sf_gamma.polygamma.accuracy">Accuracy</a>
+        <span><a name="math_toolkit.sf_gamma.polygamma.accuracy"></a></span><a class="link" href="polygamma.html#math_toolkit.sf_gamma.polygamma.accuracy">Accuracy</a>
       </h5>
 <p>
         The following table shows the peak errors (in units of epsilon) found on
@@ -87,7 +87,7 @@
         any floating point type that is narrower than the one shown will have <a class="link" href="../relative_error.html#math_toolkit.relative_error.zero_error">effectively zero error</a>.
       </p>
 <div class="table">
-<a name="math_toolkit.sf_gamma.polygamma.table_polygamma"></a><p class="title"><b>Table&#160;8.6.&#160;Error rates for polygamma</b></p>
+<a name="math_toolkit.sf_gamma.polygamma.table_polygamma"></a><p class="title"><b>Table 8.6. Error rates for polygamma</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for polygamma">
 <colgroup>
 <col>
@@ -129,24 +129,24 @@
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0.824&#949; (Mean = 0.0574&#949;)</span><br>
-                  <br> (<span class="emphasis"><em>GSL 2.1:</em></span> Max = 62.9&#949; (Mean = 12.8&#949;))<br>
-                  (<span class="emphasis"><em>Rmath 3.2.3:</em></span> Max = 108&#949; (Mean = 15.2&#949;))
+                  <span class="blue">Max = 0.824ε (Mean = 0.0574ε)</span><br>
+                  <br> (<span class="emphasis"><em>GSL 2.1:</em></span> Max = 62.9ε (Mean = 12.8ε))<br>
+                  (<span class="emphasis"><em>Rmath 3.2.3:</em></span> Max = 108ε (Mean = 15.2ε))
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 7.38&#949; (Mean = 1.84&#949;)</span>
+                  <span class="blue">Max = 7.38ε (Mean = 1.84ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 34.3&#949; (Mean = 7.65&#949;)</span>
+                  <span class="blue">Max = 34.3ε (Mean = 7.65ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 9.32&#949; (Mean = 1.95&#949;)</span>
+                  <span class="blue">Max = 9.32ε (Mean = 1.95ε)</span>
                 </p>
               </td>
 </tr>
@@ -158,26 +158,26 @@
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0.998&#949; (Mean = 0.0592&#949;)</span><br>
-                  <br> (<span class="emphasis"><em>GSL 2.1:</em></span> Max = 244&#949; (Mean = 32.8&#949;) <a class="link" href="../logs_and_tables/logs.html#errors_GNU_C_version_7_1_0_linux_double_polygamma_GSL_2_1_Mathematica_Data_large_arguments">And
+                  <span class="blue">Max = 0.998ε (Mean = 0.0592ε)</span><br>
+                  <br> (<span class="emphasis"><em>GSL 2.1:</em></span> Max = 244ε (Mean = 32.8ε) <a class="link" href="../logs_and_tables/logs.html#errors_GNU_C_version_7_1_0_linux_double_polygamma_GSL_2_1_Mathematica_Data_large_arguments">And
                   other failures.</a>)<br> (<span class="emphasis"><em>Rmath 3.2.3:</em></span>
-                  <span class="red">Max = 1.71e+56&#949; (Mean = 1.01e+55&#949;) <a class="link" href="../logs_and_tables/logs.html#errors_GNU_C_version_7_1_0_linux_double_polygamma_Rmath_3_2_3_Mathematica_Data_large_arguments">And
+                  <span class="red">Max = 1.71e+56ε (Mean = 1.01e+55ε) <a class="link" href="../logs_and_tables/logs.html#errors_GNU_C_version_7_1_0_linux_double_polygamma_Rmath_3_2_3_Mathematica_Data_large_arguments">And
                   other failures.</a>)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 2.23&#949; (Mean = 0.323&#949;)</span>
+                  <span class="blue">Max = 2.23ε (Mean = 0.323ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 11.1&#949; (Mean = 0.848&#949;)</span>
+                  <span class="blue">Max = 11.1ε (Mean = 0.848ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 150&#949; (Mean = 13.9&#949;)</span>
+                  <span class="blue">Max = 150ε (Mean = 13.9ε)</span>
                 </p>
               </td>
 </tr>
@@ -189,26 +189,26 @@
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0.516&#949; (Mean = 0.022&#949;)</span><br> <br>
-                  (<span class="emphasis"><em>GSL 2.1:</em></span> Max = 36.6&#949; (Mean = 3.04&#949;) <a class="link" href="../logs_and_tables/logs.html#errors_GNU_C_version_7_1_0_linux_double_polygamma_GSL_2_1_Mathematica_Data_negative_arguments">And
+                  <span class="blue">Max = 0.516ε (Mean = 0.022ε)</span><br> <br>
+                  (<span class="emphasis"><em>GSL 2.1:</em></span> Max = 36.6ε (Mean = 3.04ε) <a class="link" href="../logs_and_tables/logs.html#errors_GNU_C_version_7_1_0_linux_double_polygamma_GSL_2_1_Mathematica_Data_negative_arguments">And
                   other failures.</a>)<br> (<span class="emphasis"><em>Rmath 3.2.3:</em></span>
-                  Max = 0&#949; (Mean = 0&#949;) <a class="link" href="../logs_and_tables/logs.html#errors_GNU_C_version_7_1_0_linux_double_polygamma_Rmath_3_2_3_Mathematica_Data_negative_arguments">And
+                  Max = 0ε (Mean = 0ε) <a class="link" href="../logs_and_tables/logs.html#errors_GNU_C_version_7_1_0_linux_double_polygamma_Rmath_3_2_3_Mathematica_Data_negative_arguments">And
                   other failures.</a>)
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 269&#949; (Mean = 87.7&#949;)</span>
+                  <span class="blue">Max = 269ε (Mean = 87.7ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 269&#949; (Mean = 88.4&#949;)</span>
+                  <span class="blue">Max = 269ε (Mean = 88.4ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 497&#949; (Mean = 129&#949;)</span>
+                  <span class="blue">Max = 497ε (Mean = 129ε)</span>
                 </p>
               </td>
 </tr>
@@ -220,26 +220,26 @@
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0&#949; (Mean = 0&#949;)</span><br> <br> (<span class="emphasis"><em>GSL
-                  2.1:</em></span> Max = 1.79&#949; (Mean = 0.197&#949;) <a class="link" href="../logs_and_tables/logs.html#errors_GNU_C_version_7_1_0_linux_double_polygamma_GSL_2_1_Mathematica_Data_large_negative_arguments">And
+                  <span class="blue">Max = 0ε (Mean = 0ε)</span><br> <br> (<span class="emphasis"><em>GSL
+                  2.1:</em></span> Max = 1.79ε (Mean = 0.197ε) <a class="link" href="../logs_and_tables/logs.html#errors_GNU_C_version_7_1_0_linux_double_polygamma_GSL_2_1_Mathematica_Data_large_negative_arguments">And
                   other failures.</a>)<br> (<span class="emphasis"><em>Rmath 3.2.3:</em></span>
-                  Max = 0&#949; (Mean = 0&#949;) <a class="link" href="../logs_and_tables/logs.html#errors_GNU_C_version_7_1_0_linux_double_polygamma_Rmath_3_2_3_Mathematica_Data_large_negative_arguments">And
+                  Max = 0ε (Mean = 0ε) <a class="link" href="../logs_and_tables/logs.html#errors_GNU_C_version_7_1_0_linux_double_polygamma_Rmath_3_2_3_Mathematica_Data_large_negative_arguments">And
                   other failures.</a>)
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 155&#949; (Mean = 96.4&#949;)</span>
+                  <span class="blue">Max = 155ε (Mean = 96.4ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 155&#949; (Mean = 96.4&#949;)</span>
+                  <span class="blue">Max = 155ε (Mean = 96.4ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 162&#949; (Mean = 101&#949;)</span>
+                  <span class="blue">Max = 162ε (Mean = 101ε)</span>
                 </p>
               </td>
 </tr>
@@ -251,24 +251,24 @@
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0&#949; (Mean = 0&#949;)</span><br> <br> (<span class="emphasis"><em>GSL
-                  2.1:</em></span> Max = 15.2&#949; (Mean = 5.03&#949;))<br> (<span class="emphasis"><em>Rmath
-                  3.2.3:</em></span> Max = 106&#949; (Mean = 20&#949;))
+                  <span class="blue">Max = 0ε (Mean = 0ε)</span><br> <br> (<span class="emphasis"><em>GSL
+                  2.1:</em></span> Max = 15.2ε (Mean = 5.03ε))<br> (<span class="emphasis"><em>Rmath
+                  3.2.3:</em></span> Max = 106ε (Mean = 20ε))
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 3.33&#949; (Mean = 0.75&#949;)</span>
+                  <span class="blue">Max = 3.33ε (Mean = 0.75ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 3.33&#949; (Mean = 0.75&#949;)</span>
+                  <span class="blue">Max = 3.33ε (Mean = 0.75ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 3&#949; (Mean = 0.496&#949;)</span>
+                  <span class="blue">Max = 3ε (Mean = 0.496ε)</span>
                 </p>
               </td>
 </tr>
@@ -280,26 +280,26 @@
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0&#949; (Mean = 0&#949;)</span><br> <br> (<span class="emphasis"><em>GSL
-                  2.1:</em></span> Max = 151&#949; (Mean = 39.3&#949;) <a class="link" href="../logs_and_tables/logs.html#errors_GNU_C_version_7_1_0_linux_double_polygamma_GSL_2_1_Mathematica_Data_Large_orders_and_other_bug_cases">And
+                  <span class="blue">Max = 0ε (Mean = 0ε)</span><br> <br> (<span class="emphasis"><em>GSL
+                  2.1:</em></span> Max = 151ε (Mean = 39.3ε) <a class="link" href="../logs_and_tables/logs.html#errors_GNU_C_version_7_1_0_linux_double_polygamma_GSL_2_1_Mathematica_Data_Large_orders_and_other_bug_cases">And
                   other failures.</a>)<br> (<span class="emphasis"><em>Rmath 3.2.3:</em></span>
-                  <span class="red">Max = +INF&#949; (Mean = +INF&#949;) <a class="link" href="../logs_and_tables/logs.html#errors_GNU_C_version_7_1_0_linux_double_polygamma_Rmath_3_2_3_Mathematica_Data_Large_orders_and_other_bug_cases">And
+                  <span class="red">Max = +INFε (Mean = +INFε) <a class="link" href="../logs_and_tables/logs.html#errors_GNU_C_version_7_1_0_linux_double_polygamma_Rmath_3_2_3_Mathematica_Data_Large_orders_and_other_bug_cases">And
                   other failures.</a>)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 54.5&#949; (Mean = 13.3&#949;)</span>
+                  <span class="blue">Max = 54.5ε (Mean = 13.3ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 145&#949; (Mean = 55.9&#949;)</span>
+                  <span class="blue">Max = 145ε (Mean = 55.9ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 200&#949; (Mean = 57.2&#949;)</span>
+                  <span class="blue">Max = 200ε (Mean = 57.2ε)</span>
                 </p>
               </td>
 </tr>
@@ -311,7 +311,7 @@
         sized arguments. Error rates should stay low for exact inputs, however, please
         note that the function becomes exceptionally sensitive to small changes in
         input for large n and negative x, indeed for cases where <span class="emphasis"><em>n!</em></span>
-        would overflow, the function changes directly from -&#8734; to +&#8734; somewhere between
+        would overflow, the function changes directly from -∞ to +∞ somewhere between
         each negative integer - <span class="emphasis"><em>these cases are not handled correctly</em></span>.
       </p>
 <p>
@@ -320,14 +320,14 @@
       </p>
 <h5>
 <a name="math_toolkit.sf_gamma.polygamma.h3"></a>
-        <span class="phrase"><a name="math_toolkit.sf_gamma.polygamma.testing"></a></span><a class="link" href="polygamma.html#math_toolkit.sf_gamma.polygamma.testing">Testing</a>
+        <span><a name="math_toolkit.sf_gamma.polygamma.testing"></a></span><a class="link" href="polygamma.html#math_toolkit.sf_gamma.polygamma.testing">Testing</a>
       </h5>
 <p>
         Testing is against Mathematica generated spot values to 35 digit precision.
       </p>
 <h5>
 <a name="math_toolkit.sf_gamma.polygamma.h4"></a>
-        <span class="phrase"><a name="math_toolkit.sf_gamma.polygamma.implementation"></a></span><a class="link" href="polygamma.html#math_toolkit.sf_gamma.polygamma.implementation">Implementation</a>
+        <span><a name="math_toolkit.sf_gamma.polygamma.implementation"></a></span><a class="link" href="polygamma.html#math_toolkit.sf_gamma.polygamma.implementation">Implementation</a>
       </h5>
 <p>
         For x &lt; 0 the following reflection formula is used:
@@ -403,11 +403,10 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2019 Nikhar
-      Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos,
-      Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Matthew Pulver, Johan
-      R&#229;de, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg,
-      Daryle Walker and Xiaogang Zhang<p>
+<td align="right"><div class="copyright-footer">Copyright © 2006-2020 Nikhar Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher
+      Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Evan Miller, Jeremy Murphy,
+      Matthew Pulver, Johan Råde, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson,
+      Thijs van den Berg, Daryle Walker and Xiaogang Zhang<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

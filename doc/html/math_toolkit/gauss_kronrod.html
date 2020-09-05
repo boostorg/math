@@ -1,11 +1,11 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Gauss-Kronrod Quadrature</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../index.html" title="Math Toolkit 2.12.0">
-<link rel="up" href="../quadrature.html" title="Chapter&#160;13.&#160;Quadrature and Differentiation">
+<link rel="up" href="../quadrature.html" title="Chapter 13. Quadrature and Differentiation">
 <link rel="prev" href="gauss.html" title="Gauss-Legendre quadrature">
 <link rel="next" href="double_exponential.html" title="Double-exponential quadrature">
 </head>
@@ -28,7 +28,7 @@
 </h2></div></div></div>
 <h4>
 <a name="math_toolkit.gauss_kronrod.h0"></a>
-      <span class="phrase"><a name="math_toolkit.gauss_kronrod.overview"></a></span><a class="link" href="gauss_kronrod.html#math_toolkit.gauss_kronrod.overview">Overview</a>
+      <span><a name="math_toolkit.gauss_kronrod.overview"></a></span><a class="link" href="gauss_kronrod.html#math_toolkit.gauss_kronrod.overview">Overview</a>
     </h4>
 <p>
       Gauss-Kronrod quadrature is an extension of Gaussian quadrature which provides
@@ -66,7 +66,7 @@
     </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">quadrature</span><span class="special">/</span><span class="identifier">gauss_kronrod</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Real</span><span class="special">,</span> <span class="keyword">unsigned</span> <span class="identifier">N</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">policy</span><span class="special">&lt;&gt;</span> <span class="special">&gt;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Real</span><span class="special">,</span> <span class="keyword">unsigned</span> <span class="identifier">N</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">policy</span><span class="special">&lt;&gt;</span> <span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">gauss_kronrod</span>
 <span class="special">{</span>
    <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">RandomAccessContainer</span><span class="special">&amp;</span> <span class="identifier">abscissa</span><span class="special">();</span>
@@ -83,7 +83,7 @@
 </pre>
 <h4>
 <a name="math_toolkit.gauss_kronrod.h1"></a>
-      <span class="phrase"><a name="math_toolkit.gauss_kronrod.description"></a></span><a class="link" href="gauss_kronrod.html#math_toolkit.gauss_kronrod.description">Description</a>
+      <span><a name="math_toolkit.gauss_kronrod.description"></a></span><a class="link" href="gauss_kronrod.html#math_toolkit.gauss_kronrod.description">Description</a>
     </h4>
 <pre class="programlisting"><span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">RandomAccessContainer</span><span class="special">&amp;</span> <span class="identifier">abscissa</span><span class="special">();</span>
 <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">RandomAccessContainer</span><span class="special">&amp;</span> <span class="identifier">weights</span><span class="special">();</span>
@@ -130,7 +130,7 @@
     </p>
 <h4>
 <a name="math_toolkit.gauss_kronrod.h2"></a>
-      <span class="phrase"><a name="math_toolkit.gauss_kronrod.choosing_the_number_of_points"></a></span><a class="link" href="gauss_kronrod.html#math_toolkit.gauss_kronrod.choosing_the_number_of_points">Choosing
+      <span><a name="math_toolkit.gauss_kronrod.choosing_the_number_of_points"></a></span><a class="link" href="gauss_kronrod.html#math_toolkit.gauss_kronrod.choosing_the_number_of_points">Choosing
       the number of points</a>
     </h4>
 <p>
@@ -154,7 +154,7 @@
       cached for future use, which does incur a noticeable overhead. If this is likely
       to be an issue, then:
     </p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
 <li class="listitem">
           Defining BOOST_MATH_GAUSS_NO_COMPUTE_ON_DEMAND will result in a compile-time
           error, whenever a combination of number type and number of points is used
@@ -169,7 +169,7 @@
 </ul></div>
 <h4>
 <a name="math_toolkit.gauss_kronrod.h3"></a>
-      <span class="phrase"><a name="math_toolkit.gauss_kronrod.complex_quadrature"></a></span><a class="link" href="gauss_kronrod.html#math_toolkit.gauss_kronrod.complex_quadrature">Complex
+      <span><a name="math_toolkit.gauss_kronrod.complex_quadrature"></a></span><a class="link" href="gauss_kronrod.html#math_toolkit.gauss_kronrod.complex_quadrature">Complex
       Quadrature</a>
     </h4>
 <p>
@@ -179,10 +179,10 @@
     </p>
 <h4>
 <a name="math_toolkit.gauss_kronrod.h4"></a>
-      <span class="phrase"><a name="math_toolkit.gauss_kronrod.examples"></a></span><a class="link" href="gauss_kronrod.html#math_toolkit.gauss_kronrod.examples">Examples</a>
+      <span><a name="math_toolkit.gauss_kronrod.examples"></a></span><a class="link" href="gauss_kronrod.html#math_toolkit.gauss_kronrod.examples">Examples</a>
     </h4>
 <p>
-      We'll begin by integrating exp(-t<sup>2</sup>/2) over (0,+&#8734;) using a 7 term Gauss rule
+      We'll begin by integrating exp(-t<sup>2</sup>/2) over (0,+∞) using a 7 term Gauss rule
       and 15 term Kronrod rule, and begin by defining the function to integrate as
       a C++ lambda expression:
     </p>
@@ -230,7 +230,7 @@
     </p>
 <h4>
 <a name="math_toolkit.gauss_kronrod.h5"></a>
-      <span class="phrase"><a name="math_toolkit.gauss_kronrod.caveats"></a></span><a class="link" href="gauss_kronrod.html#math_toolkit.gauss_kronrod.caveats">Caveats</a>
+      <span><a name="math_toolkit.gauss_kronrod.caveats"></a></span><a class="link" href="gauss_kronrod.html#math_toolkit.gauss_kronrod.caveats">Caveats</a>
     </h4>
 <p>
       For essentially all analytic integrands bounded on the domain, the error estimates
@@ -251,9 +251,9 @@
     </p>
 <h4>
 <a name="math_toolkit.gauss_kronrod.h6"></a>
-      <span class="phrase"><a name="math_toolkit.gauss_kronrod.references"></a></span><a class="link" href="gauss_kronrod.html#math_toolkit.gauss_kronrod.references">References</a>
+      <span><a name="math_toolkit.gauss_kronrod.references"></a></span><a class="link" href="gauss_kronrod.html#math_toolkit.gauss_kronrod.references">References</a>
     </h4>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
 <li class="listitem">
           Kronrod, Aleksandr Semenovish (1965), <span class="emphasis"><em>Nodes and weights of quadrature
           formulas. Sixteen-place tables</em></span>, New York: Consultants Bureau
@@ -270,11 +270,10 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2019 Nikhar
-      Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos,
-      Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Matthew Pulver, Johan
-      R&#229;de, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg,
-      Daryle Walker and Xiaogang Zhang<p>
+<td align="right"><div class="copyright-footer">Copyright © 2006-2020 Nikhar Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher
+      Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Evan Miller, Jeremy Murphy,
+      Matthew Pulver, Johan Råde, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson,
+      Thijs van den Berg, Daryle Walker and Xiaogang Zhang<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

@@ -1,9 +1,9 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Inverse Chi-Squared Distribution Bayes Example</title>
 <link rel="stylesheet" href="../../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../../../index.html" title="Math Toolkit 2.12.0">
 <link rel="up" href="../weg.html" title="Worked Examples">
 <link rel="prev" href="normal_example/normal_misc.html" title="Some Miscellaneous Examples of the Normal (Gaussian) Distribution">
@@ -29,8 +29,8 @@
 </h4></div></div></div>
 <p>
           The scaled-inversed-chi-squared distribution is the conjugate prior distribution
-          for the variance (&#963;<sup>2</sup>) parameter of a normal distribution with known expectation
-          (&#956;). As such it has widespread application in Bayesian statistics:
+          for the variance (σ<sup>2</sup>) parameter of a normal distribution with known expectation
+          (μ). As such it has widespread application in Bayesian statistics:
         </p>
 <p>
           In <a href="http://en.wikipedia.org/wiki/Bayesian_inference" target="_top">Bayesian
@@ -46,7 +46,7 @@
 <p>
           For more general information on Bayesian type of analyses, see:
         </p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
 <li class="listitem">
               Andrew Gelman, John B. Carlin, Hal E. Stern, Donald B. Rubin, Bayesian
               Data Analysis, 2003, ISBN 978-1439840955.
@@ -62,17 +62,17 @@
         </p>
 <p>
           Consider precision machines which produce balls for a high-quality ball
-          bearing. Ideally each ball should have a diameter of precisely 3000 &#956;m (3
+          bearing. Ideally each ball should have a diameter of precisely 3000 μm (3
           mm). Assume that machines generally produce balls of that size on average
           (mean), but individual balls can vary slightly in either direction following
           (approximately) a normal distribution. Depending on various production
           conditions (e.g. raw material used for balls, workplace temperature and
           humidity, maintenance frequency and quality) some machines produce balls
-          tighter distributed around the target of 3000 &#956;m, while others produce balls
+          tighter distributed around the target of 3000 μm, while others produce balls
           with a wider distribution. Therefore the variance parameter of the normal
           distribution of the ball sizes varies from machine to machine. An extensive
           survey by the precision machinery manufacturer, however, has shown that
-          most machines operate with a variance between 15 and 50, and near 25 &#956;m<sup>2</sup> on
+          most machines operate with a variance between 15 and 50, and near 25 μm<sup>2</sup> on
           average.
         </p>
 <p>
@@ -80,7 +80,7 @@
           The variance is strictly positive, and therefore we look for a statistical
           distribution with support in the positive domain of the real numbers. Given
           the expectation of the normal distribution of the balls is known (3000
-          &#956;m), for reasons of conjugacy, it is customary practice in Bayesian statistics
+          μm), for reasons of conjugacy, it is customary practice in Bayesian statistics
           to model the variance to be scaled-inverse-chi-squared distributed.
         </p>
 <p>
@@ -97,7 +97,7 @@
         </p>
 <h6>
 <a name="math_toolkit.stat_tut.weg.inverse_chi_squared_eg.h0"></a>
-          <span class="phrase"><a name="math_toolkit.stat_tut.weg.inverse_chi_squared_eg.step_one_using_the_survey_inform"></a></span><a class="link" href="inverse_chi_squared_eg.html#math_toolkit.stat_tut.weg.inverse_chi_squared_eg.step_one_using_the_survey_inform">Step
+          <span><a name="math_toolkit.stat_tut.weg.inverse_chi_squared_eg.step_one_using_the_survey_inform"></a></span><a class="link" href="inverse_chi_squared_eg.html#math_toolkit.stat_tut.weg.inverse_chi_squared_eg.step_one_using_the_survey_inform">Step
           one: Using the survey information.</a>
         </h6>
 <p>
@@ -106,11 +106,11 @@
           Using the mathematical properties of the scaled-inverse-chi-squared distribution
           as guideline, we see that that both the mean and mode of the scaled-inverse-chi-squared
           distribution are approximately given by the scale parameter (s) of the
-          distribution. As the survey machines operated at a variance of 25 &#956;m<sup>2</sup> on
+          distribution. As the survey machines operated at a variance of 25 μm<sup>2</sup> on
           average, we hence set the scale parameter (s<sub>prior</sub>) of our prior distribution
           equal to this value. Using some trial-and-error and calls to the global
           quantile function, we also find that a value of 20 for the degrees-of-freedom
-          (&#957;<sub>prior</sub>) parameter is adequate so that most of the prior distribution mass
+          (ν<sub>prior</sub>) parameter is adequate so that most of the prior distribution mass
           is located between 15 and 50 (see figure below).
         </p>
 <p>
@@ -175,7 +175,7 @@
         </p>
 <h6>
 <a name="math_toolkit.stat_tut.weg.inverse_chi_squared_eg.h1"></a>
-          <span class="phrase"><a name="math_toolkit.stat_tut.weg.inverse_chi_squared_eg.step_2_investigate_a_single_mach"></a></span><a class="link" href="inverse_chi_squared_eg.html#math_toolkit.stat_tut.weg.inverse_chi_squared_eg.step_2_investigate_a_single_mach">Step
+          <span><a name="math_toolkit.stat_tut.weg.inverse_chi_squared_eg.step_2_investigate_a_single_mach"></a></span><a class="link" href="inverse_chi_squared_eg.html#math_toolkit.stat_tut.weg.inverse_chi_squared_eg.step_2_investigate_a_single_mach">Step
           2: Investigate a single machine</a>
         </h6>
 <p>
@@ -199,13 +199,13 @@
           posterior distribution parameters are given by the two expressions:
         </p>
 <p>
-          &#8192;&#8192; &#957;<sub>posterior</sub> = &#957;<sub>prior</sub> + n
+             ν<sub>posterior</sub> = ν<sub>prior</sub> + n
         </p>
 <p>
           which gives the posteriorDF below, and
         </p>
 <p>
-          &#8192;&#8192; s<sub>posterior</sub> = (&#957;<sub>prior</sub>s<sub>prior</sub> + &#931;<sup>n</sup><sub>i=1</sub>(x<sub>i</sub> - &#956;)<sup>2</sup>) / (&#957;<sub>prior</sub> + n)
+             s<sub>posterior</sub> = (ν<sub>prior</sub>s<sub>prior</sub> + Σ<sup>n</sup><sub>i=1</sub>(x<sub>i</sub> - μ)<sup>2</sup>) / (ν<sub>prior</sub> + n)
         </p>
 <p>
           which after some rearrangement gives the formula for the posteriorScale
@@ -213,12 +213,12 @@
         </p>
 <p>
           Machine-specific data consist of 100 balls which were accurately measured
-          and show the expected mean of 3000 &#956;m and a sample variance of 55 (calculated
+          and show the expected mean of 3000 μm and a sample variance of 55 (calculated
           for a sample mean defined to be 3000 exactly). From these data, the prior
-          parameterization, and noting that the term &#931;<sup>n</sup><sub>i=1</sub>(x<sub>i</sub> - &#956;)<sup>2</sup> equals the sample
+          parameterization, and noting that the term Σ<sup>n</sup><sub>i=1</sub>(x<sub>i</sub> - μ)<sup>2</sup> equals the sample
           variance multiplied by n - 1, it follows that the posterior distribution
           of the variance parameter is scaled-inverse-chi-squared distribution with
-          degrees-of-freedom (&#957;<sub>posterior</sub>) = 120 and scale (s<sub>posterior</sub>) = 49.54.
+          degrees-of-freedom (ν<sub>posterior</sub>) = 120 and scale (s<sub>posterior</sub>) = 49.54.
         </p>
 <pre class="programlisting"><span class="keyword">int</span> <span class="identifier">ballsSampleSize</span> <span class="special">=</span> <span class="number">100</span><span class="special">;</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span><span class="string">"balls sample size: "</span> <span class="special">&lt;&lt;</span> <span class="identifier">ballsSampleSize</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
@@ -344,11 +344,10 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2019 Nikhar
-      Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos,
-      Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Matthew Pulver, Johan
-      R&#229;de, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg,
-      Daryle Walker and Xiaogang Zhang<p>
+<td align="right"><div class="copyright-footer">Copyright © 2006-2020 Nikhar Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher
+      Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Evan Miller, Jeremy Murphy,
+      Matthew Pulver, Johan Råde, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson,
+      Thijs van den Berg, Daryle Walker and Xiaogang Zhang<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

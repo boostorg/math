@@ -1,11 +1,11 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>The Remez Method</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../index.html" title="Math Toolkit 2.12.0">
-<link rel="up" href="../backgrounders.html" title="Chapter&#160;23.&#160;Backgrounders">
+<link rel="up" href="../backgrounders.html" title="Chapter 23. Backgrounders">
 <link rel="prev" href="lanczos.html" title="The Lanczos Approximation">
 <link rel="next" href="refs.html" title="References">
 </head>
@@ -67,7 +67,7 @@
       Chebyshev showed that there is a unique minimax solution for <span class="emphasis"><em>R(x)</em></span>
       that has the following properties:
     </p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
 <li class="listitem">
           If <span class="emphasis"><em>R(x)</em></span> is a polynomial of degree <span class="emphasis"><em>N</em></span>,
           then there are <span class="emphasis"><em>N+2</em></span> unknowns: the <span class="emphasis"><em>N+1</em></span>
@@ -100,7 +100,7 @@
     </p>
 <h5>
 <a name="math_toolkit.remez.h0"></a>
-      <span class="phrase"><a name="math_toolkit.remez.the_remez_method"></a></span><a class="link" href="remez.html#math_toolkit.remez.the_remez_method">The
+      <span><a name="math_toolkit.remez.the_remez_method"></a></span><a class="link" href="remez.html#math_toolkit.remez.the_remez_method">The
       Remez Method</a>
     </h5>
 <p>
@@ -120,14 +120,14 @@
     </p>
 <p>
       In order to obtain the <span class="emphasis"><em>N+1</em></span> coefficients of the interpolated
-      polynomial we need N+1 points /(x<sub>0</sub>&#8230;x<sub>N</sub>): with our interpolated form passing through
+      polynomial we need N+1 points /(x<sub>0</sub>…x<sub>N</sub>): with our interpolated form passing through
       each of those points that yields <span class="emphasis"><em>N+1</em></span> simultaneous equations:
     </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-        <span class="serif_italic">f(x<sub>i</sub>) = P(x<sub>i</sub>) = c<sub>0</sub> + c<sub>1</sub>x<sub>i</sub> &#8230; + c<sub>N</sub>x<sub>i</sub><sup>N</sup></span>
+        <span class="serif_italic">f(x<sub>i</sub>) = P(x<sub>i</sub>) = c<sub>0</sub> + c<sub>1</sub>x<sub>i</sub> … + c<sub>N</sub>x<sub>i</sub><sup>N</sup></span>
       </p></blockquote></div>
 <p>
-      Which can be solved for the coefficients <span class="emphasis"><em>c<sub>0</sub> &#8230;c<sub>N</sub></em></span> in <span class="emphasis"><em>P(x)</em></span>.
+      Which can be solved for the coefficients <span class="emphasis"><em>c<sub>0</sub> …c<sub>N</sub></em></span> in <span class="emphasis"><em>P(x)</em></span>.
     </p>
 <p>
       Obviously this is not a minimax solution, indeed our only guarantee is that
@@ -180,7 +180,7 @@
 </table></div>
 <h5>
 <a name="math_toolkit.remez.h1"></a>
-      <span class="phrase"><a name="math_toolkit.remez.remez_step_1"></a></span><a class="link" href="remez.html#math_toolkit.remez.remez_step_1">Remez
+      <span><a name="math_toolkit.remez.remez_step_1"></a></span><a class="link" href="remez.html#math_toolkit.remez.remez_step_1">Remez
       Step 1</a>
     </h5>
 <p>
@@ -213,7 +213,7 @@
     </p>
 <h5>
 <a name="math_toolkit.remez.h2"></a>
-      <span class="phrase"><a name="math_toolkit.remez.remez_step_2"></a></span><a class="link" href="remez.html#math_toolkit.remez.remez_step_2">Remez
+      <span><a name="math_toolkit.remez.remez_step_2"></a></span><a class="link" href="remez.html#math_toolkit.remez.remez_step_2">Remez
       Step 2</a>
     </h5>
 <p>
@@ -241,7 +241,7 @@
     </p>
 <h5>
 <a name="math_toolkit.remez.h3"></a>
-      <span class="phrase"><a name="math_toolkit.remez.iteration"></a></span><a class="link" href="remez.html#math_toolkit.remez.iteration">Iteration</a>
+      <span><a name="math_toolkit.remez.iteration"></a></span><a class="link" href="remez.html#math_toolkit.remez.iteration">Iteration</a>
     </h5>
 <p>
       The Remez method then performs steps 1 and 2 above iteratively until the control
@@ -257,7 +257,7 @@
     </p>
 <h5>
 <a name="math_toolkit.remez.h4"></a>
-      <span class="phrase"><a name="math_toolkit.remez.rational_approximations"></a></span><a class="link" href="remez.html#math_toolkit.remez.rational_approximations">Rational
+      <span><a name="math_toolkit.remez.rational_approximations"></a></span><a class="link" href="remez.html#math_toolkit.remez.rational_approximations">Rational
       Approximations</a>
     </h5>
 <p>
@@ -310,7 +310,7 @@
     </p>
 <h5>
 <a name="math_toolkit.remez.h5"></a>
-      <span class="phrase"><a name="math_toolkit.remez.remez_practical"></a></span><a class="link" href="remez.html#math_toolkit.remez.remez_practical">Practical
+      <span><a name="math_toolkit.remez.remez_practical"></a></span><a class="link" href="remez.html#math_toolkit.remez.remez_practical">Practical
       Considerations</a>
     </h5>
 <p>
@@ -420,7 +420,7 @@
     </p>
 <h5>
 <a name="math_toolkit.remez.h6"></a>
-      <span class="phrase"><a name="math_toolkit.remez.remez_method_checklist"></a></span><a class="link" href="remez.html#math_toolkit.remez.remez_method_checklist">Remez
+      <span><a name="math_toolkit.remez.remez_method_checklist"></a></span><a class="link" href="remez.html#math_toolkit.remez.remez_method_checklist">Remez
       Method Checklist</a>
     </h5>
 <p>
@@ -428,7 +428,7 @@
       it is by no means an exhaustive list, but is provided in the hopes that it
       will prove useful.
     </p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
 <li class="listitem">
           Is the function smooth enough? Can it be better separated into a rapidly
           changing part, and an asymptotic part?
@@ -474,7 +474,7 @@
 </ul></div>
 <h5>
 <a name="math_toolkit.remez.h7"></a>
-      <span class="phrase"><a name="math_toolkit.remez.references"></a></span><a class="link" href="remez.html#math_toolkit.remez.references">References</a>
+      <span><a name="math_toolkit.remez.references"></a></span><a class="link" href="remez.html#math_toolkit.remez.references">References</a>
     </h5>
 <p>
       The original references for the Remez Method and its extension to rational
@@ -538,11 +538,10 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2019 Nikhar
-      Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos,
-      Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Matthew Pulver, Johan
-      R&#229;de, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg,
-      Daryle Walker and Xiaogang Zhang<p>
+<td align="right"><div class="copyright-footer">Copyright © 2006-2020 Nikhar Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher
+      Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Evan Miller, Jeremy Murphy,
+      Matthew Pulver, Johan Råde, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson,
+      Thijs van den Berg, Daryle Walker and Xiaogang Zhang<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

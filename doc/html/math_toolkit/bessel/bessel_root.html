@@ -1,9 +1,9 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Finding Zeros of Bessel Functions of the First and Second Kinds</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../../index.html" title="Math Toolkit 2.12.0">
 <link rel="up" href="../bessel.html" title="Bessel Functions">
 <link rel="prev" href="bessel_first.html" title="Bessel Functions of the First and Second Kinds">
@@ -29,7 +29,7 @@
 </h3></div></div></div>
 <h5>
 <a name="math_toolkit.bessel.bessel_root.h0"></a>
-        <span class="phrase"><a name="math_toolkit.bessel.bessel_root.synopsis"></a></span><a class="link" href="bessel_root.html#math_toolkit.bessel.bessel_root.synopsis">Synopsis</a>
+        <span><a name="math_toolkit.bessel.bessel_root.synopsis"></a></span><a class="link" href="bessel_root.html#math_toolkit.bessel.bessel_root.synopsis">Synopsis</a>
       </h5>
 <p>
         <code class="computeroutput"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">bessel</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>
@@ -70,7 +70,7 @@
                      <span class="identifier">OutputIterator</span> <span class="identifier">out_it</span><span class="special">);</span>    <span class="comment">// Destination for zeros.</span>
 </pre>
 <p>
-        There are also versions which allow control of the <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policies</a>
+        There are also versions which allow control of the <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policies</a>
         for error handling and precision.
       </p>
 <pre class="programlisting"> <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
@@ -104,24 +104,24 @@
 </pre>
 <h5>
 <a name="math_toolkit.bessel.bessel_root.h1"></a>
-        <span class="phrase"><a name="math_toolkit.bessel.bessel_root.description"></a></span><a class="link" href="bessel_root.html#math_toolkit.bessel.bessel_root.description">Description</a>
+        <span><a name="math_toolkit.bessel.bessel_root.description"></a></span><a class="link" href="bessel_root.html#math_toolkit.bessel.bessel_root.description">Description</a>
       </h5>
 <p>
-        Every real order &#957; cylindrical Bessel and Neumann functions have an infinite
+        Every real order ν cylindrical Bessel and Neumann functions have an infinite
         number of zeros on the positive real axis. The real zeros on the positive
         real axis can be found by solving for the roots of
       </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-          <span class="emphasis"><em>J<sub>&#957;</sub>(j<sub>&#957;, m</sub>) = 0</em></span>
+          <span class="emphasis"><em>J<sub>ν</sub>(j<sub>ν, m</sub>) = 0</em></span>
         </p></blockquote></div>
 <div class="blockquote"><blockquote class="blockquote"><p>
-          <span class="emphasis"><em>Y<sub>&#957;</sub>(y<sub>&#957;, m</sub>) = 0</em></span>
+          <span class="emphasis"><em>Y<sub>ν</sub>(y<sub>ν, m</sub>) = 0</em></span>
         </p></blockquote></div>
 <p>
-        Here, <span class="emphasis"><em>j<sub>&#957;, m</sub></em></span> represents the <span class="emphasis"><em>m<sup>th</sup></em></span> root
-        of the cylindrical Bessel function of order <span class="emphasis"><em>&#957;</em></span>, and <span class="emphasis"><em>y<sub>&#957;,
+        Here, <span class="emphasis"><em>j<sub>ν, m</sub></em></span> represents the <span class="emphasis"><em>m<sup>th</sup></em></span> root
+        of the cylindrical Bessel function of order <span class="emphasis"><em>ν</em></span>, and <span class="emphasis"><em>y<sub>ν,
         m</sub></em></span> represents the <span class="emphasis"><em>m<sup>th</sup></em></span> root of the cylindrical
-        Neumann function of order <span class="emphasis"><em>&#957;</em></span>.
+        Neumann function of order <span class="emphasis"><em>ν</em></span>.
       </p>
 <p>
         The zeros or roots (values of <code class="computeroutput"><span class="identifier">x</span></code>
@@ -169,7 +169,7 @@
         </p></blockquote></div>
 <h5>
 <a name="math_toolkit.bessel.bessel_root.h2"></a>
-        <span class="phrase"><a name="math_toolkit.bessel.bessel_root.examples_of_finding_bessel_and_n"></a></span><a class="link" href="bessel_root.html#math_toolkit.bessel.bessel_root.examples_of_finding_bessel_and_n">Examples
+        <span><a name="math_toolkit.bessel.bessel_root.examples_of_finding_bessel_and_n"></a></span><a class="link" href="bessel_root.html#math_toolkit.bessel.bessel_root.examples_of_finding_bessel_and_n">Examples
         of finding Bessel and Neumann zeros</a>
       </h5>
 <p>
@@ -325,7 +325,7 @@
 </pre>
 <h6>
 <a name="math_toolkit.bessel.bessel_root.h3"></a>
-        <span class="phrase"><a name="math_toolkit.bessel.bessel_root.using_output_iterator_to_sum_zer"></a></span><a class="link" href="bessel_root.html#math_toolkit.bessel.bessel_root.using_output_iterator_to_sum_zer">Using
+        <span><a name="math_toolkit.bessel.bessel_root.using_output_iterator_to_sum_zer"></a></span><a class="link" href="bessel_root.html#math_toolkit.bessel.bessel_root.using_output_iterator_to_sum_zer">Using
         Output Iterator to sum zeros of Bessel Functions</a>
       </h6>
 <p>
@@ -377,7 +377,7 @@
 </pre>
 <h6>
 <a name="math_toolkit.bessel.bessel_root.h4"></a>
-        <span class="phrase"><a name="math_toolkit.bessel.bessel_root.calculating_zeros_of_the_neumann"></a></span><a class="link" href="bessel_root.html#math_toolkit.bessel.bessel_root.calculating_zeros_of_the_neumann">Calculating
+        <span><a name="math_toolkit.bessel.bessel_root.calculating_zeros_of_the_neumann"></a></span><a class="link" href="bessel_root.html#math_toolkit.bessel.bessel_root.calculating_zeros_of_the_neumann">Calculating
         zeros of the Neumann function.</a>
       </h6>
 <p>
@@ -421,7 +421,7 @@
 </pre>
 <h6>
 <a name="math_toolkit.bessel.bessel_root.h5"></a>
-        <span class="phrase"><a name="math_toolkit.bessel.bessel_root.error_messages_from_bad_input"></a></span><a class="link" href="bessel_root.html#math_toolkit.bessel.bessel_root.error_messages_from_bad_input">Error
+        <span><a name="math_toolkit.bessel.bessel_root.error_messages_from_bad_input"></a></span><a class="link" href="bessel_root.html#math_toolkit.bessel.bessel_root.error_messages_from_bad_input">Error
         messages from 'bad' input</a>
       </h6>
 <p>
@@ -543,50 +543,50 @@
       </p>
 <h4>
 <a name="math_toolkit.bessel.bessel_root.h6"></a>
-        <span class="phrase"><a name="math_toolkit.bessel.bessel_root.implementation"></a></span><a class="link" href="bessel_root.html#math_toolkit.bessel.bessel_root.implementation">Implementation</a>
+        <span><a name="math_toolkit.bessel.bessel_root.implementation"></a></span><a class="link" href="bessel_root.html#math_toolkit.bessel.bessel_root.implementation">Implementation</a>
       </h4>
 <p>
-        Various methods are used to compute initial estimates for <span class="emphasis"><em>j<sub>&#957;, m</sub></em></span>
-        and <span class="emphasis"><em>y<sub>&#957;, m</sub></em></span> ; these are described in detail below.
+        Various methods are used to compute initial estimates for <span class="emphasis"><em>j<sub>ν, m</sub></em></span>
+        and <span class="emphasis"><em>y<sub>ν, m</sub></em></span> ; these are described in detail below.
       </p>
 <p>
         After finding the initial estimate of a given root, its precision is subsequently
         refined to the desired level using Newton-Raphson iteration from Boost.Math's
-        <a class="link" href="../roots_deriv.html" title="Root Finding With Derivatives: Newton-Raphson, Halley &amp; Schr&#246;der">root-finding with derivatives</a>
+        <a class="link" href="../roots_deriv.html" title="Root Finding With Derivatives: Newton-Raphson, Halley &amp; Schröder">root-finding with derivatives</a>
         utilities combined with the functions <a class="link" href="bessel_first.html" title="Bessel Functions of the First and Second Kinds">cyl_bessel_j</a>
         and <a class="link" href="bessel_first.html" title="Bessel Functions of the First and Second Kinds">cyl_neumann</a>.
       </p>
 <p>
-        Newton iteration requires both <span class="emphasis"><em>J<sub>&#957;</sub>(x)</em></span> or <span class="emphasis"><em>Y<sub>&#957;</sub>(x)</em></span>
-        as well as its derivative. The derivatives of <span class="emphasis"><em>J<sub>&#957;</sub>(x)</em></span> and
-        <span class="emphasis"><em>Y<sub>&#957;</sub>(x)</em></span> with respect to <span class="emphasis"><em>x</em></span> are given
+        Newton iteration requires both <span class="emphasis"><em>J<sub>ν</sub>(x)</em></span> or <span class="emphasis"><em>Y<sub>ν</sub>(x)</em></span>
+        as well as its derivative. The derivatives of <span class="emphasis"><em>J<sub>ν</sub>(x)</em></span> and
+        <span class="emphasis"><em>Y<sub>ν</sub>(x)</em></span> with respect to <span class="emphasis"><em>x</em></span> are given
         by M. Abramowitz and I. A. Stegun, Handbook of Mathematical Functions, NBS
         (1964). In particular,
       </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-          <span class="serif_italic">d/<sub>dx</sub> <span class="emphasis"><em>J<sub>&#957;</sub>(x)</em></span> = <span class="emphasis"><em>J<sub>&#957;-1</sub>(x)</em></span>
-          - &#957; J<sub>&#957;</sub>(x) / x</span>
+          <span class="serif_italic">d/<sub>dx</sub> <span class="emphasis"><em>J<sub>ν</sub>(x)</em></span> = <span class="emphasis"><em>J<sub>ν-1</sub>(x)</em></span>
+          - ν J<sub>ν</sub>(x) / x</span>
         </p></blockquote></div>
 <div class="blockquote"><blockquote class="blockquote"><p>
-          <span class="serif_italic">d/<sub>dx</sub> <span class="emphasis"><em>Y<sub>&#957;</sub>(x)</em></span> = <span class="emphasis"><em>Y<sub>&#957;-1</sub>(x)</em></span>
-          - &#957; Y<sub>&#957;</sub>(x) / x</span>
+          <span class="serif_italic">d/<sub>dx</sub> <span class="emphasis"><em>Y<sub>ν</sub>(x)</em></span> = <span class="emphasis"><em>Y<sub>ν-1</sub>(x)</em></span>
+          - ν Y<sub>ν</sub>(x) / x</span>
         </p></blockquote></div>
 <p>
         Enumeration of the rank of a root (in other words the index of a root) begins
-        with one and counts up, in other words <span class="emphasis"><em>m,=1,2,3,&#8230;</em></span> The
+        with one and counts up, in other words <span class="emphasis"><em>m,=1,2,3,…</em></span> The
         value of the first root is always greater than zero.
       </p>
 <p>
         For certain special parameters, cylindrical Bessel functions and cylindrical
-        Neumann functions have a root at the origin. For example, <span class="emphasis"><em>J<sub>&#957;</sub>(x)</em></span>
-        has a root at the origin for every positive order <span class="emphasis"><em>&#957; &gt; 0</em></span>,
-        and for every negative integer order <span class="emphasis"><em>&#957; = -n</em></span> with <span class="emphasis"><em>n
-        &#8712; &#8469; <sup>+</sup></em></span> and <span class="emphasis"><em>n &#8800; 0</em></span>.
+        Neumann functions have a root at the origin. For example, <span class="emphasis"><em>J<sub>ν</sub>(x)</em></span>
+        has a root at the origin for every positive order <span class="emphasis"><em>ν &gt; 0</em></span>,
+        and for every negative integer order <span class="emphasis"><em>ν = -n</em></span> with <span class="emphasis"><em>n
+        ∈ ℕ <sup>+</sup></em></span> and <span class="emphasis"><em>n ≠ 0</em></span>.
       </p>
 <p>
-        In addition, <span class="emphasis"><em>Y<sub>&#957;</sub>(x)</em></span> has a root at the origin for every
-        negative half-integer order <span class="emphasis"><em>&#957; = -n/2</em></span>, with <span class="emphasis"><em>n
-        &#8712; &#8469; <sup>+</sup></em></span> and and <span class="emphasis"><em>n &#8800; 0</em></span>.
+        In addition, <span class="emphasis"><em>Y<sub>ν</sub>(x)</em></span> has a root at the origin for every
+        negative half-integer order <span class="emphasis"><em>ν = -n/2</em></span>, with <span class="emphasis"><em>n
+        ∈ ℕ <sup>+</sup></em></span> and and <span class="emphasis"><em>n ≠ 0</em></span>.
       </p>
 <p>
         For these special parameter values, the origin with a value of <span class="emphasis"><em>x
@@ -599,89 +599,89 @@
         is made between positive order and negative order, and different methods
         are used for these. In addition, different algorithms are used for the first
         root <span class="emphasis"><em>m = 1</em></span> and for subsequent roots with higher rank
-        <span class="emphasis"><em>m &#8805; 2</em></span>. Furthermore, estimates of the roots for Bessel
-        functions with order above and below a cutoff at <span class="emphasis"><em>&#957; = 2.2</em></span>
+        <span class="emphasis"><em>m ≥ 2</em></span>. Furthermore, estimates of the roots for Bessel
+        functions with order above and below a cutoff at <span class="emphasis"><em>ν = 2.2</em></span>
         are calculated with different methods.
       </p>
 <p>
-        Calculations of the estimates of <span class="emphasis"><em>j<sub>&#957;,1</sub></em></span> and <span class="emphasis"><em>y<sub>&#957;,1</sub></em></span>
-        with <span class="emphasis"><em>0 &#8804; &#957; &lt; 2.2</em></span> use empirically tabulated values. The
+        Calculations of the estimates of <span class="emphasis"><em>j<sub>ν,1</sub></em></span> and <span class="emphasis"><em>y<sub>ν,1</sub></em></span>
+        with <span class="emphasis"><em>0 ≤ ν &lt; 2.2</em></span> use empirically tabulated values. The
         coefficients for these have been generated by a computer algebra system.
       </p>
 <p>
-        Calculations of the estimates of <span class="emphasis"><em>j<sub>&#957;,1</sub></em></span> and <span class="emphasis"><em>y<sub>&#957;,1</sub></em></span>
-        with <span class="emphasis"><em>&#957;&#8805; 2.2</em></span> use Eqs.9.5.14 and 9.5.15 in M. Abramowitz
+        Calculations of the estimates of <span class="emphasis"><em>j<sub>ν,1</sub></em></span> and <span class="emphasis"><em>y<sub>ν,1</sub></em></span>
+        with <span class="emphasis"><em>ν≥ 2.2</em></span> use Eqs.9.5.14 and 9.5.15 in M. Abramowitz
         and I. A. Stegun, Handbook of Mathematical Functions, NBS (1964).
       </p>
 <p>
         In particular,
       </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-          <span class="serif_italic">j<sub>&#957;,1</sub> &#8773; &#957; + 1.85575 &#957;<sup>&#8531;</sup> + 1.033150 &#957;<sup>-&#8531;</sup> - 0.00397 &#957;<sup>-1</sup> - 0.0908
-          &#957;<sup>-5/3</sup> + 0.043 &#957;<sup>-7/3</sup> + &#8230;</span>
+          <span class="serif_italic">j<sub>ν,1</sub> ≅ ν + 1.85575 ν<sup>⅓</sup> + 1.033150 ν<sup>-⅓</sup> - 0.00397 ν<sup>-1</sup> - 0.0908
+          ν<sup>-5/3</sup> + 0.043 ν<sup>-7/3</sup> + …</span>
         </p></blockquote></div>
 <p>
         and
       </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-          <span class="serif_italic">y<sub>&#957;,1</sub> &#8773; &#957; + 0.93157 &#957;<sup>&#8531;</sup> + 0.26035 &#957;<sup>-&#8531;</sup> + 0.01198 &#957;<sup>-1</sup> - 0.0060
-          &#957;<sup>-5/3</sup> - 0.001 &#957;<sup>-7/3</sup> + &#8230;</span>
+          <span class="serif_italic">y<sub>ν,1</sub> ≅ ν + 0.93157 ν<sup>⅓</sup> + 0.26035 ν<sup>-⅓</sup> + 0.01198 ν<sup>-1</sup> - 0.0060
+          ν<sup>-5/3</sup> - 0.001 ν<sup>-7/3</sup> + …</span>
         </p></blockquote></div>
 <p>
-        Calculations of the estimates of <span class="emphasis"><em>j<sub>&#957;, m</sub></em></span> and <span class="emphasis"><em>y<sub>&#957;,
-        m</sub></em></span> with rank <span class="emphasis"><em>m &gt; 2</em></span> and <span class="emphasis"><em>0 &#8804; &#957; &lt;
+        Calculations of the estimates of <span class="emphasis"><em>j<sub>ν, m</sub></em></span> and <span class="emphasis"><em>y<sub>ν,
+        m</sub></em></span> with rank <span class="emphasis"><em>m &gt; 2</em></span> and <span class="emphasis"><em>0 ≤ ν &lt;
         2.2</em></span> use McMahon's approximation, as described in M. Abramowitz
         and I. A. Stegan, Section 9.5 and 9.5.12. In particular,
       </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-          <span class="emphasis"><em>j<sub>&#957;,m</sub>, y<sub>&#957;,m</sub> &#8773;</em></span>
+          <span class="emphasis"><em>j<sub>ν,m</sub>, y<sub>ν,m</sub> ≅</em></span>
         </p></blockquote></div>
 <div class="blockquote"><blockquote class="blockquote"><div class="blockquote"><blockquote class="blockquote"><p>
-            &#946; - (&#956;-1) / 8&#946;
+            β - (μ-1) / 8β
           </p></blockquote></div></blockquote></div>
 <div class="blockquote"><blockquote class="blockquote"><div class="blockquote"><blockquote class="blockquote"><p>
-            <span class="emphasis"><em>- 4(&#956;-1)(7&#956; - 31) / 3(8&#946;)<sup>3</sup></em></span>
+            <span class="emphasis"><em>- 4(μ-1)(7μ - 31) / 3(8β)<sup>3</sup></em></span>
           </p></blockquote></div></blockquote></div>
 <div class="blockquote"><blockquote class="blockquote"><div class="blockquote"><blockquote class="blockquote"><p>
-            <span class="emphasis"><em>-32(&#956;-1)(83&#956;&#178; - 982&#956; + 3779) / 15(8&#946;)<sup>5</sup></em></span>
+            <span class="emphasis"><em>-32(μ-1)(83μ² - 982μ + 3779) / 15(8β)<sup>5</sup></em></span>
           </p></blockquote></div></blockquote></div>
 <div class="blockquote"><blockquote class="blockquote"><div class="blockquote"><blockquote class="blockquote"><p>
-            <span class="emphasis"><em>-64(&#956;-1)(6949&#956;<sup>3</sup> - 153855&#956;&#178; + 1585743&#956;- 6277237) / 105(8a)<sup>7</sup></em></span>
+            <span class="emphasis"><em>-64(μ-1)(6949μ<sup>3</sup> - 153855μ² + 1585743μ- 6277237) / 105(8a)<sup>7</sup></em></span>
           </p></blockquote></div></blockquote></div>
 <div class="blockquote"><blockquote class="blockquote"><div class="blockquote"><blockquote class="blockquote"><p>
-            <span class="emphasis"><em>- &#8230;</em></span> &#8193; (5)
+            <span class="emphasis"><em>- …</em></span>   (5)
           </p></blockquote></div></blockquote></div>
 <p>
-        where <span class="emphasis"><em>&#956; = 4&#957;<sup>2</sup></em></span> and <span class="emphasis"><em>&#946; = (m + &#189;&#957; - &#188;)&#960;</em></span> for
-        <span class="emphasis"><em>j<sub>&#957;,m</sub></em></span> and <span class="emphasis"><em>&#946; = (m + &#189;&#957; -&#190;)&#960; for <span class="emphasis"><em>y<sub>&#957;,m</sub></em></span></em></span>.
+        where <span class="emphasis"><em>μ = 4ν<sup>2</sup></em></span> and <span class="emphasis"><em>β = (m + ½ν - ¼)π</em></span> for
+        <span class="emphasis"><em>j<sub>ν,m</sub></em></span> and <span class="emphasis"><em>β = (m + ½ν -¾)π for <span class="emphasis"><em>y<sub>ν,m</sub></em></span></em></span>.
       </p>
 <p>
-        Calculations of the estimates of <span class="emphasis"><em>j<sub>&#957;, m</sub></em></span> and <span class="emphasis"><em>y<sub>&#957;,
-        m</sub></em></span> with <span class="emphasis"><em>&#957; &#8805; 2.2</em></span> use one term in the asymptotic
+        Calculations of the estimates of <span class="emphasis"><em>j<sub>ν, m</sub></em></span> and <span class="emphasis"><em>y<sub>ν,
+        m</sub></em></span> with <span class="emphasis"><em>ν ≥ 2.2</em></span> use one term in the asymptotic
         expansion given in Eq.9.5.22 and top line of Eq.9.5.26 combined with Eq.
         9.3.39, all in M. Abramowitz and I. A. Stegun, Handbook of Mathematical Functions,
         NBS (1964) explicit and easy-to-understand treatment for asymptotic expansion
         of zeros. The latter two equations are expressed for argument <span class="emphasis"><em>(x)</em></span>
         greater than one. (Olver also gives the series form of the equations in
-        <a href="http://dlmf.nist.gov/10.21#vi" target="_top">&#167;10.21(vi) McMahon's Asymptotic
+        <a href="http://dlmf.nist.gov/10.21#vi" target="_top">§10.21(vi) McMahon's Asymptotic
         Expansions for Large Zeros</a> - using slightly different variable names).
       </p>
 <p>
         In summary,
       </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-          <span class="serif_italic">j<sub>&#957;, m</sub> &#8764; &#957;x(-&#950;) + f<sub>1</sub>(-&#950;/&#957;)</span>
+          <span class="serif_italic">j<sub>ν, m</sub> ∼ νx(-ζ) + f<sub>1</sub>(-ζ/ν)</span>
         </p></blockquote></div>
 <p>
-        where <span class="emphasis"><em>-&#950; = &#957;<sup>-2/3</sup>a<sub>m</sub></em></span> and <span class="emphasis"><em>a<sub>m</sub></em></span> is the absolute
+        where <span class="emphasis"><em>-ζ = ν<sup>-2/3</sup>a<sub>m</sub></em></span> and <span class="emphasis"><em>a<sub>m</sub></em></span> is the absolute
         value of the <span class="emphasis"><em>m<sup>th</sup></em></span> root of <span class="emphasis"><em>Ai(x)</em></span>
         on the negative real axis.
       </p>
 <p>
-        Here <span class="emphasis"><em>x = x(-&#950;)</em></span> is the inverse of the function
+        Here <span class="emphasis"><em>x = x(-ζ)</em></span> is the inverse of the function
       </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-          <span class="serif_italic">&#8532;(-&#950;)<sup>3/2</sup> = &#8730;(x&#178; - 1) - cos&#8315;&#185;(1/x)</span>
+          <span class="serif_italic">⅔(-ζ)<sup>3/2</sup> = √(x² - 1) - cos⁻¹(1/x)</span>
         </p></blockquote></div>
 <p>
         (7)
@@ -690,48 +690,48 @@
         Furthermore,
       </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-          <span class="serif_italic">f<sub>1</sub>(-&#950;) = &#189;x(-&#950;) {h(-&#950;)}&#178; &#8901; b<sub>0</sub>(-&#950;)</span>
+          <span class="serif_italic">f<sub>1</sub>(-ζ) = ½x(-ζ) {h(-ζ)}² ⋅ b<sub>0</sub>(-ζ)</span>
         </p></blockquote></div>
 <p>
         where
       </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-          <span class="serif_italic">h(-&#950;) = {4(-&#950;) / (x&#178; - 1)}<sup>4</sup></span>
+          <span class="serif_italic">h(-ζ) = {4(-ζ) / (x² - 1)}<sup>4</sup></span>
         </p></blockquote></div>
 <p>
         and
       </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-          <span class="serif_italic">b<sub>0</sub>(-&#950;) = -5/(48&#950;&#178;) + 1/(-&#950;)<sup>&#189;</sup> &#8901; { 5/(24(x<sup>2</sup>-1)<sup>3/2</sup>) +
-          1/(8(x<sup>2</sup>-1)<sup>&#189;)</sup>}</span>
+          <span class="serif_italic">b<sub>0</sub>(-ζ) = -5/(48ζ²) + 1/(-ζ)<sup>½</sup> ⋅ { 5/(24(x<sup>2</sup>-1)<sup>3/2</sup>) +
+          1/(8(x<sup>2</sup>-1)<sup>½)</sup>}</span>
         </p></blockquote></div>
 <p>
-        When solving for <span class="emphasis"><em>x(-&#950;)</em></span> in Eq. 7 above, the right-hand-side
+        When solving for <span class="emphasis"><em>x(-ζ)</em></span> in Eq. 7 above, the right-hand-side
         is expanded to order 2 in a Taylor series for large <span class="emphasis"><em>x</em></span>.
         This results in
       </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-          <span class="serif_italic">&#8532;(-&#950;)<sup>3/2</sup> &#8776; x + 1/2x - &#960;/2</span>
+          <span class="serif_italic">⅔(-ζ)<sup>3/2</sup> ≈ x + 1/2x - π/2</span>
         </p></blockquote></div>
 <p>
         The positive root of the resulting quadratic equation is used to find an
-        initial estimate <span class="emphasis"><em>x(-&#950;)</em></span>. This initial estimate is subsequently
+        initial estimate <span class="emphasis"><em>x(-ζ)</em></span>. This initial estimate is subsequently
         refined with several steps of Newton-Raphson iteration in Eq. 7.
       </p>
 <p>
         Estimates of the roots of cylindrical Bessel functions of negative order
         on the positive real axis are found using interlacing relations. For example,
-        the <span class="emphasis"><em>m<sup>th</sup></em></span> root of the cylindrical Bessel function <span class="emphasis"><em>j<sub>-&#957;,m</sub></em></span>
+        the <span class="emphasis"><em>m<sup>th</sup></em></span> root of the cylindrical Bessel function <span class="emphasis"><em>j<sub>-ν,m</sub></em></span>
         is bracketed by the <span class="emphasis"><em>m<sup>th</sup></em></span> root and the <span class="emphasis"><em>(m+1)<sup>th</sup></em></span>
         root of the Bessel function of corresponding positive integer order. In other
         words,
       </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-          <span class="serif_italic">j<sub>n&#957;, m</sub> &lt; j<sub>-&#957;, m</sub> &lt; j<sub>n&#957;, m+1</sub></span>
+          <span class="serif_italic">j<sub>nν, m</sub> &lt; j<sub>-ν, m</sub> &lt; j<sub>nν, m+1</sub></span>
         </p></blockquote></div>
 <p>
-        where <span class="emphasis"><em>m &gt; 1</em></span> and <span class="emphasis"><em>n<sub>&#957;</sub></em></span> represents
-        the integral floor of the absolute value of <span class="emphasis"><em>|-&#957;|</em></span>.
+        where <span class="emphasis"><em>m &gt; 1</em></span> and <span class="emphasis"><em>n<sub>ν</sub></em></span> represents
+        the integral floor of the absolute value of <span class="emphasis"><em>|-ν|</em></span>.
       </p>
 <p>
         Similar bracketing relations are used to find estimates of the roots of Neumann
@@ -742,11 +742,11 @@
         Bracketing relations do not hold for the first root of cylindrical Bessel
         functions and cylindrical Neumann functions with negative order. Therefore,
         iterative algorithms combined with root-finding via bisection are used to
-        localize <span class="emphasis"><em>j<sub>-&#957;,1</sub></em></span> and <span class="emphasis"><em>y<sub>-&#957;,1</sub></em></span>.
+        localize <span class="emphasis"><em>j<sub>-ν,1</sub></em></span> and <span class="emphasis"><em>y<sub>-ν,1</sub></em></span>.
       </p>
 <h4>
 <a name="math_toolkit.bessel.bessel_root.h7"></a>
-        <span class="phrase"><a name="math_toolkit.bessel.bessel_root.testing"></a></span><a class="link" href="bessel_root.html#math_toolkit.bessel.bessel_root.testing">Testing</a>
+        <span><a name="math_toolkit.bessel.bessel_root.testing"></a></span><a class="link" href="bessel_root.html#math_toolkit.bessel.bessel_root.testing">Testing</a>
       </h4>
 <p>
         The precision of evaluation of zeros was tested at 50 decimal digits using
@@ -757,11 +757,10 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2019 Nikhar
-      Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos,
-      Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Matthew Pulver, Johan
-      R&#229;de, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg,
-      Daryle Walker and Xiaogang Zhang<p>
+<td align="right"><div class="copyright-footer">Copyright © 2006-2020 Nikhar Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher
+      Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Evan Miller, Jeremy Murphy,
+      Matthew Pulver, Johan Råde, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson,
+      Thijs van den Berg, Daryle Walker and Xiaogang Zhang<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

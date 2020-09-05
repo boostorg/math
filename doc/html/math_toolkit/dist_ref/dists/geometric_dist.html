@@ -1,9 +1,9 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Geometric Distribution</title>
 <link rel="stylesheet" href="../../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../../../index.html" title="Math Toolkit 2.12.0">
 <link rel="up" href="../dists.html" title="Distributions">
 <link rel="prev" href="gamma_dist.html" title="Gamma (and Erlang) Distribution">
@@ -31,12 +31,12 @@
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span>
-          <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
+          <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">geometric_distribution</span><span class="special">;</span>
 
 <span class="keyword">typedef</span> <span class="identifier">geometric_distribution</span><span class="special">&lt;&gt;</span> <span class="identifier">geometric</span><span class="special">;</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">geometric_distribution</span>
 <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
@@ -109,7 +109,7 @@
           </p></blockquote></div>
 <p>
           For example, when throwing a 6-face dice the success probability <span class="emphasis"><em>p</em></span>
-          = 1/6 = 0.1666&#8202;&#775;. Throwing repeatedly until a <span class="emphasis"><em>three</em></span>
+          = 1/6 = 0.1666 ̇. Throwing repeatedly until a <span class="emphasis"><em>three</em></span>
           appears, the probability distribution of the number of times <span class="emphasis"><em>not-a-three</em></span>
           is thrown is geometric.
         </p>
@@ -145,14 +145,14 @@
           </p></blockquote></div>
 <h5>
 <a name="math_toolkit.dist_ref.dists.geometric_dist.h0"></a>
-          <span class="phrase"><a name="math_toolkit.dist_ref.dists.geometric_dist.related_distributions"></a></span><a class="link" href="geometric_dist.html#math_toolkit.dist_ref.dists.geometric_dist.related_distributions">Related
+          <span><a name="math_toolkit.dist_ref.dists.geometric_dist.related_distributions"></a></span><a class="link" href="geometric_dist.html#math_toolkit.dist_ref.dists.geometric_dist.related_distributions">Related
           Distributions</a>
         </h5>
 <p>
           The geometric distribution is a special case of the <a class="link" href="negative_binomial_dist.html" title="Negative Binomial Distribution">Negative
           Binomial Distribution</a> with successes parameter <span class="emphasis"><em>r</em></span>
           = 1, so only one first and only success is required : thus by definition
-          &#8192;&#8192; <code class="computeroutput"><span class="identifier">geometric</span><span class="special">(</span><span class="identifier">p</span><span class="special">)</span> <span class="special">==</span>
+             <code class="computeroutput"><span class="identifier">geometric</span><span class="special">(</span><span class="identifier">p</span><span class="special">)</span> <span class="special">==</span>
           <span class="identifier">negative_binomial</span><span class="special">(</span><span class="number">1</span><span class="special">,</span> <span class="identifier">p</span><span class="special">)</span></code>
         </p>
 <pre class="programlisting"><span class="identifier">negative_binomial_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">r</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">success_fraction</span><span class="special">);</span>
@@ -203,12 +203,12 @@
 </table></div>
 <h5>
 <a name="math_toolkit.dist_ref.dists.geometric_dist.h1"></a>
-          <span class="phrase"><a name="math_toolkit.dist_ref.dists.geometric_dist.member_functions"></a></span><a class="link" href="geometric_dist.html#math_toolkit.dist_ref.dists.geometric_dist.member_functions">Member
+          <span><a name="math_toolkit.dist_ref.dists.geometric_dist.member_functions"></a></span><a class="link" href="geometric_dist.html#math_toolkit.dist_ref.dists.geometric_dist.member_functions">Member
           Functions</a>
         </h5>
 <h6>
 <a name="math_toolkit.dist_ref.dists.geometric_dist.h2"></a>
-          <span class="phrase"><a name="math_toolkit.dist_ref.dists.geometric_dist.constructor"></a></span><a class="link" href="geometric_dist.html#math_toolkit.dist_ref.dists.geometric_dist.constructor">Constructor</a>
+          <span><a name="math_toolkit.dist_ref.dists.geometric_dist.constructor"></a></span><a class="link" href="geometric_dist.html#math_toolkit.dist_ref.dists.geometric_dist.constructor">Constructor</a>
         </h6>
 <pre class="programlisting"><span class="identifier">geometric_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">p</span><span class="special">);</span>
 </pre>
@@ -223,7 +223,7 @@
         </p>
 <h6>
 <a name="math_toolkit.dist_ref.dists.geometric_dist.h3"></a>
-          <span class="phrase"><a name="math_toolkit.dist_ref.dists.geometric_dist.accessors"></a></span><a class="link" href="geometric_dist.html#math_toolkit.dist_ref.dists.geometric_dist.accessors">Accessors</a>
+          <span><a name="math_toolkit.dist_ref.dists.geometric_dist.accessors"></a></span><a class="link" href="geometric_dist.html#math_toolkit.dist_ref.dists.geometric_dist.accessors">Accessors</a>
         </h6>
 <pre class="programlisting"><span class="identifier">RealType</span> <span class="identifier">success_fraction</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span> <span class="comment">// successes / trials (0 &lt;= p &lt;= 1)</span>
 </pre>
@@ -250,7 +250,7 @@
         </p>
 <h6>
 <a name="math_toolkit.dist_ref.dists.geometric_dist.h4"></a>
-          <span class="phrase"><a name="math_toolkit.dist_ref.dists.geometric_dist.lower_bound_on_success_fraction_"></a></span><a class="link" href="geometric_dist.html#math_toolkit.dist_ref.dists.geometric_dist.lower_bound_on_success_fraction_">Lower
+          <span><a name="math_toolkit.dist_ref.dists.geometric_dist.lower_bound_on_success_fraction_"></a></span><a class="link" href="geometric_dist.html#math_toolkit.dist_ref.dists.geometric_dist.lower_bound_on_success_fraction_">Lower
           Bound on success_fraction Parameter <span class="emphasis"><em>p</em></span></a>
         </h6>
 <pre class="programlisting"><span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_lower_bound_on_p</span><span class="special">(</span>
@@ -262,7 +262,7 @@
         </p>
 <div class="variablelist">
 <p class="title"><b></b></p>
-<dl class="variablelist">
+<dl>
 <dt><span class="term">failures</span></dt>
 <dd><p>
                 The total number of failures before the 1st success.
@@ -304,7 +304,7 @@
         </p>
 <h6>
 <a name="math_toolkit.dist_ref.dists.geometric_dist.h5"></a>
-          <span class="phrase"><a name="math_toolkit.dist_ref.dists.geometric_dist.upper_bound_on_success_fraction_"></a></span><a class="link" href="geometric_dist.html#math_toolkit.dist_ref.dists.geometric_dist.upper_bound_on_success_fraction_">Upper
+          <span><a name="math_toolkit.dist_ref.dists.geometric_dist.upper_bound_on_success_fraction_"></a></span><a class="link" href="geometric_dist.html#math_toolkit.dist_ref.dists.geometric_dist.upper_bound_on_success_fraction_">Upper
           Bound on success_fraction Parameter p</a>
         </h6>
 <pre class="programlisting"><span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_upper_bound_on_p</span><span class="special">(</span>
@@ -317,7 +317,7 @@
         </p>
 <div class="variablelist">
 <p class="title"><b></b></p>
-<dl class="variablelist">
+<dl>
 <dt><span class="term">trials</span></dt>
 <dd><p>
                 The total number of trials conducted.
@@ -359,7 +359,7 @@
         </p>
 <h6>
 <a name="math_toolkit.dist_ref.dists.geometric_dist.h6"></a>
-          <span class="phrase"><a name="math_toolkit.dist_ref.dists.geometric_dist.estimating_number_of_trials_to_e"></a></span><a class="link" href="geometric_dist.html#math_toolkit.dist_ref.dists.geometric_dist.estimating_number_of_trials_to_e">Estimating
+          <span><a name="math_toolkit.dist_ref.dists.geometric_dist.estimating_number_of_trials_to_e"></a></span><a class="link" href="geometric_dist.html#math_toolkit.dist_ref.dists.geometric_dist.estimating_number_of_trials_to_e">Estimating
           Number of Trials to Ensure at Least a Certain Number of Failures</a>
         </h6>
 <pre class="programlisting"><span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_minimum_number_of_trials</span><span class="special">(</span>
@@ -374,7 +374,7 @@
         </p>
 <div class="variablelist">
 <p class="title"><b></b></p>
-<dl class="variablelist">
+<dl>
 <dt><span class="term">k</span></dt>
 <dd><p>
                 The target number of failures to be observed.
@@ -411,7 +411,7 @@
         </p>
 <h6>
 <a name="math_toolkit.dist_ref.dists.geometric_dist.h7"></a>
-          <span class="phrase"><a name="math_toolkit.dist_ref.dists.geometric_dist.estimating_number_of_trials_to_0"></a></span><a class="link" href="geometric_dist.html#math_toolkit.dist_ref.dists.geometric_dist.estimating_number_of_trials_to_0">Estimating
+          <span><a name="math_toolkit.dist_ref.dists.geometric_dist.estimating_number_of_trials_to_0"></a></span><a class="link" href="geometric_dist.html#math_toolkit.dist_ref.dists.geometric_dist.estimating_number_of_trials_to_0">Estimating
           Number of Trials to Ensure a Maximum Number of Failures or Less</a>
         </h6>
 <pre class="programlisting"><span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_maximum_number_of_trials</span><span class="special">(</span>
@@ -426,7 +426,7 @@
         </p>
 <div class="variablelist">
 <p class="title"><b></b></p>
-<dl class="variablelist">
+<dl>
 <dt><span class="term">k</span></dt>
 <dd><p>
                 The maximum number of failures to be observed.
@@ -459,7 +459,7 @@
         </p>
 <h5>
 <a name="math_toolkit.dist_ref.dists.geometric_dist.h8"></a>
-          <span class="phrase"><a name="math_toolkit.dist_ref.dists.geometric_dist.non_member_accessors"></a></span><a class="link" href="geometric_dist.html#math_toolkit.dist_ref.dists.geometric_dist.non_member_accessors">Non-member
+          <span><a name="math_toolkit.dist_ref.dists.geometric_dist.non_member_accessors"></a></span><a class="link" href="geometric_dist.html#math_toolkit.dist_ref.dists.geometric_dist.non_member_accessors">Non-member
           Accessors</a>
         </h5>
 <p>
@@ -479,7 +479,7 @@
           the context of this distribution:
         </p>
 <div class="table">
-<a name="math_toolkit.dist_ref.dists.geometric_dist.meaning_of_the_non_member_access"></a><p class="title"><b>Table&#160;5.2.&#160;Meaning of the non-member accessors.</b></p>
+<a name="math_toolkit.dist_ref.dists.geometric_dist.meaning_of_the_non_member_access"></a><p class="title"><b>Table 5.2. Meaning of the non-member accessors.</b></p>
 <div class="table-contents"><table class="table" summary="Meaning of the non-member accessors.">
 <colgroup>
 <col>
@@ -588,7 +588,7 @@
 </div>
 <br class="table-break"><h5>
 <a name="math_toolkit.dist_ref.dists.geometric_dist.h9"></a>
-          <span class="phrase"><a name="math_toolkit.dist_ref.dists.geometric_dist.accuracy"></a></span><a class="link" href="geometric_dist.html#math_toolkit.dist_ref.dists.geometric_dist.accuracy">Accuracy</a>
+          <span><a name="math_toolkit.dist_ref.dists.geometric_dist.accuracy"></a></span><a class="link" href="geometric_dist.html#math_toolkit.dist_ref.dists.geometric_dist.accuracy">Accuracy</a>
         </h5>
 <p>
           This distribution is implemented using the pow and exp functions, so most
@@ -599,7 +599,7 @@
         </p>
 <h5>
 <a name="math_toolkit.dist_ref.dists.geometric_dist.h10"></a>
-          <span class="phrase"><a name="math_toolkit.dist_ref.dists.geometric_dist.implementation"></a></span><a class="link" href="geometric_dist.html#math_toolkit.dist_ref.dists.geometric_dist.implementation">Implementation</a>
+          <span><a name="math_toolkit.dist_ref.dists.geometric_dist.implementation"></a></span><a class="link" href="geometric_dist.html#math_toolkit.dist_ref.dists.geometric_dist.implementation">Implementation</a>
         </h5>
 <p>
           In the following table, <span class="emphasis"><em>p</em></span> is the probability that
@@ -706,7 +706,7 @@
                 </td>
 <td>
                   <p>
-                    (1-p)/p&#178;
+                    (1-p)/p²
                   </p>
                 </td>
 </tr>
@@ -730,7 +730,7 @@
                 </td>
 <td>
                   <p>
-                    (2-p)/&#8730;q
+                    (2-p)/√q
                   </p>
                 </td>
 </tr>
@@ -742,7 +742,7 @@
                 </td>
 <td>
                   <p>
-                    9+p&#178;/q
+                    9+p²/q
                   </p>
                 </td>
 </tr>
@@ -754,7 +754,7 @@
                 </td>
 <td>
                   <p>
-                    6 +p&#178;/q
+                    6 +p²/q
                   </p>
                 </td>
 </tr>
@@ -828,11 +828,10 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2019 Nikhar
-      Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos,
-      Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Matthew Pulver, Johan
-      R&#229;de, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg,
-      Daryle Walker and Xiaogang Zhang<p>
+<td align="right"><div class="copyright-footer">Copyright © 2006-2020 Nikhar Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher
+      Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Evan Miller, Jeremy Murphy,
+      Matthew Pulver, Johan Råde, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson,
+      Thijs van den Berg, Daryle Walker and Xiaogang Zhang<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

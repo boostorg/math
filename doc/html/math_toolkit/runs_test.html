@@ -1,11 +1,11 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Runs tests</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../index.html" title="Math Toolkit 2.12.0">
-<link rel="up" href="../statistics.html" title="Chapter&#160;6.&#160;Statistics">
+<link rel="up" href="../statistics.html" title="Chapter 6. Statistics">
 <link rel="prev" href="t_test.html" title="t-tests">
 <link rel="next" href="ljung_box.html" title="The Ljung-Box Test">
 </head>
@@ -28,7 +28,7 @@
 </h2></div></div></div>
 <h4>
 <a name="math_toolkit.runs_test.h0"></a>
-      <span class="phrase"><a name="math_toolkit.runs_test.synopsis"></a></span><a class="link" href="runs_test.html#math_toolkit.runs_test.synopsis">Synopsis</a>
+      <span><a name="math_toolkit.runs_test.synopsis"></a></span><a class="link" href="runs_test.html#math_toolkit.runs_test.synopsis">Synopsis</a>
     </h4>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">statistics</span><span class="special">/</span><span class="identifier">runs_test</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 
@@ -44,7 +44,7 @@
 </pre>
 <h4>
 <a name="math_toolkit.runs_test.h1"></a>
-      <span class="phrase"><a name="math_toolkit.runs_test.background"></a></span><a class="link" href="runs_test.html#math_toolkit.runs_test.background">Background</a>
+      <span><a name="math_toolkit.runs_test.background"></a></span><a class="link" href="runs_test.html#math_toolkit.runs_test.background">Background</a>
     </h4>
 <p>
       The "runs above and below median test" tries to determine if a sequence
@@ -65,13 +65,13 @@
       tells us the expected number of runs and their variance:
     </p>
 <p>
-      <span class="inlinemediaobject"><object type="image/svg+xml" data="../../graphs/expected_runs_above_threshold.svg" width="418" height="45"></object></span>
+      <span class="inlinemediaobject"><object type="image/svg+xml" data="../../graphs/expected_runs_above_threshold.svg" width="418.224" height="45.32"></object></span>
     </p>
 <p>
       from which we derive the test statistic
     </p>
 <p>
-      <span class="inlinemediaobject"><object type="image/svg+xml" data="../../graphs/runs_test_statistic.svg" width="115" height="42"></object></span>
+      <span class="inlinemediaobject"><object type="image/svg+xml" data="../../graphs/runs_test_statistic.svg" width="115.4" height="41.824"></object></span>
     </p>
 <p>
       whose distribution we approximate as normal to extract a <span class="emphasis"><em>p</em></span>-value.
@@ -96,7 +96,7 @@
     </p>
 <h4>
 <a name="math_toolkit.runs_test.h2"></a>
-      <span class="phrase"><a name="math_toolkit.runs_test.performance"></a></span><a class="link" href="runs_test.html#math_toolkit.runs_test.performance">Performance</a>
+      <span><a name="math_toolkit.runs_test.performance"></a></span><a class="link" href="runs_test.html#math_toolkit.runs_test.performance">Performance</a>
     </h4>
 <p>
       There are two cases: Where the threshold (typically the median) has already
@@ -214,11 +214,10 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2019 Nikhar
-      Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos,
-      Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Matthew Pulver, Johan
-      R&#229;de, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg,
-      Daryle Walker and Xiaogang Zhang<p>
+<td align="right"><div class="copyright-footer">Copyright © 2006-2020 Nikhar Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher
+      Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Evan Miller, Jeremy Murphy,
+      Matthew Pulver, Johan Råde, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson,
+      Thijs van den Berg, Daryle Walker and Xiaogang Zhang<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

@@ -1,11 +1,11 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Locating Function Minima using Brent's algorithm</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../index.html" title="Math Toolkit 2.12.0">
-<link rel="up" href="../root_finding.html" title="Chapter&#160;10.&#160;Root Finding &amp; Minimization Algorithms">
+<link rel="up" href="../root_finding.html" title="Chapter 10. Root Finding &amp; Minimization Algorithms">
 <link rel="prev" href="bad_roots.html" title="Examples Where Root Finding Goes Wrong">
 <link rel="next" href="root_comparison.html" title="Comparison of Root Finding Algorithms">
 </head>
@@ -29,7 +29,7 @@
 </h2></div></div></div>
 <h5>
 <a name="math_toolkit.brent_minima.h0"></a>
-      <span class="phrase"><a name="math_toolkit.brent_minima.synopsis"></a></span><a class="link" href="brent_minima.html#math_toolkit.brent_minima.synopsis">Synopsis</a>
+      <span><a name="math_toolkit.brent_minima.synopsis"></a></span><a class="link" href="brent_minima.html#math_toolkit.brent_minima.synopsis">Synopsis</a>
     </h5>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">tools</span><span class="special">/</span><span class="identifier">minima</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
@@ -41,7 +41,7 @@
 </pre>
 <h5>
 <a name="math_toolkit.brent_minima.h1"></a>
-      <span class="phrase"><a name="math_toolkit.brent_minima.description"></a></span><a class="link" href="brent_minima.html#math_toolkit.brent_minima.description">Description</a>
+      <span><a name="math_toolkit.brent_minima.description"></a></span><a class="link" href="brent_minima.html#math_toolkit.brent_minima.description">Description</a>
     </h5>
 <p>
       These two functions locate the minima of the continuous function <span class="emphasis"><em>f</em></span>
@@ -55,7 +55,7 @@
     </p>
 <div class="variablelist">
 <p class="title"><b></b></p>
-<dl class="variablelist">
+<dl>
 <dt><span class="term">f</span></dt>
 <dd><p>
             The function to minimise: a function object (or C++ lambda) that should
@@ -74,7 +74,7 @@
 <dd><p>
             The number of bits precision to which the minima should be found.<br>
             Note that in principle, the minima can not be located to greater accuracy
-            than the square root of machine epsilon (for 64-bit double, sqrt(1e-16)&#8773;1e-8),
+            than the square root of machine epsilon (for 64-bit double, sqrt(1e-16)≅1e-8),
             therefore the value of <span class="emphasis"><em>bits</em></span> will be ignored if it's
             greater than half the number of bits in the mantissa of T.
           </p></dd>
@@ -113,7 +113,7 @@
 </table></div>
 <h5>
 <a name="math_toolkit.brent_minima.h2"></a>
-      <span class="phrase"><a name="math_toolkit.brent_minima.example"></a></span><a class="link" href="brent_minima.html#math_toolkit.brent_minima.example">Brent
+      <span><a name="math_toolkit.brent_minima.example"></a></span><a class="link" href="brent_minima.html#math_toolkit.brent_minima.example">Brent
       Minimisation Example</a>
     </h5>
 <p>
@@ -351,7 +351,7 @@
 </pre>
 <h6>
 <a name="math_toolkit.brent_minima.h3"></a>
-      <span class="phrase"><a name="math_toolkit.brent_minima.template"></a></span><a class="link" href="brent_minima.html#math_toolkit.brent_minima.template">Templating
+      <span><a name="math_toolkit.brent_minima.template"></a></span><a class="link" href="brent_minima.html#math_toolkit.brent_minima.template">Templating
       on floating-point type</a>
     </h6>
 <p>
@@ -480,7 +480,7 @@
 </pre>
 <h6>
 <a name="math_toolkit.brent_minima.h4"></a>
-      <span class="phrase"><a name="math_toolkit.brent_minima.quad_precision"></a></span><a class="link" href="brent_minima.html#math_toolkit.brent_minima.quad_precision">Quad
+      <span><a name="math_toolkit.brent_minima.quad_precision"></a></span><a class="link" href="brent_minima.html#math_toolkit.brent_minima.quad_precision">Quad
       128-bit precision</a>
     </h6>
 <p>
@@ -503,7 +503,7 @@
 </pre>
 <h6>
 <a name="math_toolkit.brent_minima.h5"></a>
-      <span class="phrase"><a name="math_toolkit.brent_minima.multiprecision"></a></span><a class="link" href="brent_minima.html#math_toolkit.brent_minima.multiprecision">Multiprecision</a>
+      <span><a name="math_toolkit.brent_minima.multiprecision"></a></span><a class="link" href="brent_minima.html#math_toolkit.brent_minima.multiprecision">Multiprecision</a>
     </h6>
 <p>
       If a higher precision than <code class="computeroutput"><span class="keyword">double</span></code>
@@ -610,14 +610,14 @@
     </p>
 <h5>
 <a name="math_toolkit.brent_minima.h6"></a>
-      <span class="phrase"><a name="math_toolkit.brent_minima.implementation"></a></span><a class="link" href="brent_minima.html#math_toolkit.brent_minima.implementation">Implementation</a>
+      <span><a name="math_toolkit.brent_minima.implementation"></a></span><a class="link" href="brent_minima.html#math_toolkit.brent_minima.implementation">Implementation</a>
     </h5>
 <p>
       This is a reasonably faithful implementation of Brent's algorithm.
     </p>
 <h5>
 <a name="math_toolkit.brent_minima.h7"></a>
-      <span class="phrase"><a name="math_toolkit.brent_minima.references"></a></span><a class="link" href="brent_minima.html#math_toolkit.brent_minima.references">References</a>
+      <span><a name="math_toolkit.brent_minima.references"></a></span><a class="link" href="brent_minima.html#math_toolkit.brent_minima.references">References</a>
     </h5>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
@@ -651,11 +651,10 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2019 Nikhar
-      Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos,
-      Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Matthew Pulver, Johan
-      R&#229;de, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg,
-      Daryle Walker and Xiaogang Zhang<p>
+<td align="right"><div class="copyright-footer">Copyright © 2006-2020 Nikhar Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher
+      Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Evan Miller, Jeremy Murphy,
+      Matthew Pulver, Johan Råde, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson,
+      Thijs van den Berg, Daryle Walker and Xiaogang Zhang<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

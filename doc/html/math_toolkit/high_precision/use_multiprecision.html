@@ -1,9 +1,9 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Using Boost.Multiprecision</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../../index.html" title="Math Toolkit 2.12.0">
 <link rel="up" href="../high_precision.html" title="Using Boost.Math with High-Precision Floating-Point Libraries">
 <link rel="prev" href="why_high_precision.html" title="Why use a high-precision library rather than built-in floating-point types?">
@@ -32,7 +32,7 @@
       </p>
 <h6>
 <a name="math_toolkit.high_precision.use_multiprecision.h0"></a>
-        <span class="phrase"><a name="math_toolkit.high_precision.use_multiprecision.using_boost_multiprecision_to_ge"></a></span><a class="link" href="use_multiprecision.html#math_toolkit.high_precision.use_multiprecision.using_boost_multiprecision_to_ge">Using
+        <span><a name="math_toolkit.high_precision.use_multiprecision.using_boost_multiprecision_to_ge"></a></span><a class="link" href="use_multiprecision.html#math_toolkit.high_precision.use_multiprecision.using_boost_multiprecision_to_ge">Using
         Boost.Multiprecision to generate a high-precision array of sine coefficients
         for use with FFT.</a>
       </h6>
@@ -92,17 +92,17 @@
 </pre>
 <p>
         A fast Fourier transform (FFT), for example, may use a table of the values
-        of sin((&#960;/2<sup>n</sup>) in its implementation details. In order to maximize the precision
+        of sin((π/2<sup>n</sup>) in its implementation details. In order to maximize the precision
         in the FFT implementation, the precision of the tabulated trigonometric values
         should exceed that of the built-in floating-point type used in the FFT.
       </p>
 <p>
-        The sample below computes a table of the values of sin(&#960;/2<sup>n</sup>) in the range
+        The sample below computes a table of the values of sin(π/2<sup>n</sup>) in the range
         1 &lt;= n &lt;= 31.
       </p>
 <p>
         This program makes use of, among other program elements, the data type <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">multiprecision</span><span class="special">::</span><span class="identifier">cpp_bin_float_50</span></code> for a precision of 50
-        decimal digits from Boost.Multiprecision, the value of constant &#960; retrieved
+        decimal digits from Boost.Multiprecision, the value of constant π retrieved
         from Boost.Math, guaranteed to be initialized with the very last bit of precision
         for the type, here <code class="computeroutput"><span class="identifier">cpp_bin_float_50</span></code>,
         and a C++11 lambda function combined with <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">for_each</span><span class="special">()</span></code>.
@@ -282,11 +282,10 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2019 Nikhar
-      Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos,
-      Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Matthew Pulver, Johan
-      R&#229;de, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg,
-      Daryle Walker and Xiaogang Zhang<p>
+<td align="right"><div class="copyright-footer">Copyright © 2006-2020 Nikhar Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher
+      Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Evan Miller, Jeremy Murphy,
+      Matthew Pulver, Johan Råde, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson,
+      Thijs van den Berg, Daryle Walker and Xiaogang Zhang<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

@@ -57,7 +57,7 @@ T inline fibonacci(unsigned long long n) {
 
 // generator for next fibonacci number (see examples/reciprocal_fibonacci_constant.hpp)
 template <typename T>
-class fibonacci_next {
+class fibonacci_generator {
   public:
     // return next fibonacci number
     T operator()() {

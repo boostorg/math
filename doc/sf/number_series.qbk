@@ -261,10 +261,68 @@ This function is `constexpr` only if the compiler supports C++14 constexpr funct
 
 [endsect] [/section:primes]
 
+[section:fibonacci_numbers Fibonacci Numbers]
+[@https://en.wikipedia.org/wiki/Fibonacci_number Fibonacci numbers] (F[sub n]) follows the linear recurrence F[sub n]=F[sub n-1]+F[sub n-2] starting with F[sub 0]=0, F[sub 1]=1.
+
+[h4 Synopsis]
+
+``
+#include <boost/math/special_functions/fibonacci.hpp>
+``
+
+  namespace boost { namespace math {
+
+  template <class T, class Policy>
+  T fibonacci(unsigned long long n) // Checked version (default policy)
+
+  template <class T, class Policy>
+  T fibonacci(unsigned long long n, const Policy &pol) // Checked version (policy for errors etc.)
+
+  template <typename T>
+  T fibonacci_unchecked(unsigned long long n); {  // Unchecked version (no policy).
+
+  }} // namespaces
+
+[h4 Description]
+The checked versions first checks for the overflow before starting the computation. If [^n] is so large that the result can not
+be represented in type [^T], it then calls __overflow_error. The overflow check is susceptible to off-by-one errors around the overflow limit. 
+
+[optional_policy]
+
+If in the checked version, the overflow check succeeds then the unchecked version is called which computes the desired F[sub n]. Checked version is slower because of the overhead involved in overflow check.
+
+[h4 Generator]
+
+``
+#include <boost/math/special_functions/fibonacci.hpp>
+``
+
+   template <typename T>
+   class fibonacci_generator {
+     // returns consecutive fibonacci number starting: 0, 1, 1, 2, ...
+     T operator()();
+     // reset the generator to start from nth fibonacci number
+     void set(unsigned long long n);
+   }
+
+[h4 Type Requirements]
+The type must be arithmetic type supporting +, -, *, += and should be initialized from trivial integers.
+
+[h4 Implementation]
+The time complexity for computating fibonacci number is O(log n), without considering the time complexities of multiplication and addition (where [^n] is the input parameter).
+The implementation is iterative version of [@http://www.cs.utexas.edu/users/EWD/ewd06xx/EWD654.PDF dijkstra's recursive formulas] method which simply walks down the bits of [^n].
+
+[h4 Binet's Formula]
+There is a closed form expression for computing fibonacci numbers but since it suffers from imprecision issues (using floating point computation), it is not implemented.
+
+However an approximate formula is used for the overflow checking in the checked version.
+
+[endsect] [/Fibonacci Numbers]
+
 [endsect] [/Number Series]
 
 [/
-  Copyright 2013, 2014 Nikhar Agrawal, Christopher Kormanyos, John Maddock, Paul A. Bristow.
+  Copyright 2013, 2014, 2020 Nikhar Agrawal, Christopher Kormanyos, John Maddock, Paul A. Bristow, Madhur Chauhan.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).

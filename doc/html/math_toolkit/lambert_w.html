@@ -1,12 +1,12 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Lambert W function</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
 <link rel="home" href="../index.html" title="Math Toolkit 2.12.0">
-<link rel="up" href="../special.html" title="Chapter&#160;8.&#160;Special Functions">
-<link rel="prev" href="jacobi/jacobi_sn.html" title="Jacobi Elliptic Function sn">
+<link rel="up" href="../special.html" title="Chapter 8. Special Functions">
+<link rel="prev" href="jacobi_theta/jacobi_theta4.html" title="Jacobi Theta Function θ4">
 <link rel="next" href="zetas.html" title="Zeta Functions">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -20,7 +20,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="jacobi/jacobi_sn.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../special.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="zetas.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="jacobi_theta/jacobi_theta4.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../special.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="zetas.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -29,7 +29,7 @@
 </h2></div></div></div>
 <h5>
 <a name="math_toolkit.lambert_w.h0"></a>
-      <span class="phrase"><a name="math_toolkit.lambert_w.synopsis"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.synopsis">Synopsis</a>
+      <span><a name="math_toolkit.lambert_w.synopsis"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.synopsis">Synopsis</a>
     </h5>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">lambert_w</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
@@ -44,21 +44,21 @@
   <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
   <a class="link" href="result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">lambert_wm1_prime</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">);</span>                 <span class="comment">// W-1 branch 1st derivative.</span>
 
-  <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-  <a class="link" href="result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">lambert_w0</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>         <span class="comment">// W0 with policy.</span>
-  <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-  <a class="link" href="result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">lambert_wm1</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>        <span class="comment">// W-1 with policy.</span>
-  <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-  <a class="link" href="result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">lambert_w0_prime</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>   <span class="comment">// W0 derivative with policy.</span>
-  <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-  <a class="link" href="result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">lambert_wm1_prime</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>  <span class="comment">// W-1 derivative with policy.</span>
+  <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+  <a class="link" href="result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">lambert_w0</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>         <span class="comment">// W0 with policy.</span>
+  <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+  <a class="link" href="result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">lambert_wm1</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>        <span class="comment">// W-1 with policy.</span>
+  <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+  <a class="link" href="result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">lambert_w0_prime</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>   <span class="comment">// W0 derivative with policy.</span>
+  <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+  <a class="link" href="result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">lambert_wm1_prime</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>  <span class="comment">// W-1 derivative with policy.</span>
 
  <span class="special">}</span> <span class="comment">// namespace boost</span>
  <span class="special">}</span> <span class="comment">// namespace math</span>
 </pre>
 <h5>
 <a name="math_toolkit.lambert_w.h1"></a>
-      <span class="phrase"><a name="math_toolkit.lambert_w.description"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.description">Description</a>
+      <span><a name="math_toolkit.lambert_w.description"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.description">Description</a>
     </h5>
 <p>
       The <a href="http://en.wikipedia.org/wiki/Lambert_W_function" target="_top">Lambert W
@@ -67,7 +67,7 @@
       <span class="emphasis"><em>f</em></span>(<span class="emphasis"><em>W</em></span>) = <span class="emphasis"><em>We</em></span><sup><span class="emphasis"><em>W</em></span></sup>.
     </p>
 <p>
-      On the interval [0, &#8734;), there is just one real solution. On the interval (-<span class="emphasis"><em>e</em></span><sup>-1</sup>,
+      On the interval [0, ∞), there is just one real solution. On the interval (-<span class="emphasis"><em>e</em></span><sup>-1</sup>,
       0), there are two real solutions, generating two branches which we will denote
       by <span class="emphasis"><em>W</em></span><sub>0</sub> and <span class="emphasis"><em>W</em></span><sub>-1</sub>. In Boost.Math, we call
       these principal branches <code class="computeroutput"><span class="identifier">lambert_w0</span></code>
@@ -92,7 +92,7 @@
 
       </p></blockquote></div>
 <p>
-      There is a singularity where the branches meet at <span class="emphasis"><em>e</em></span><sup>-1</sup> &#8773; <code class="literal">-0.367879</code>.
+      There is a singularity where the branches meet at <span class="emphasis"><em>e</em></span><sup>-1</sup> ≅ <code class="literal">-0.367879</code>.
       Approaching this point, the condition number of function evaluation tends to
       infinity, and the only method of recovering high accuracy is use of higher
       precision.
@@ -107,13 +107,13 @@ with the functions <code class="computeroutput"><span class="identifier">lambert
       arguments are not supported.
     </p>
 <p>
-      The final <a class="link" href="../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
-      be used to control how the function deals with errors. Refer to <a class="link" href="../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policies</a>
+      The final <a class="link" href="../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
+      be used to control how the function deals with errors. Refer to <a class="link" href="../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policies</a>
       for more details and see examples below.
     </p>
 <h6>
 <a name="math_toolkit.lambert_w.h2"></a>
-      <span class="phrase"><a name="math_toolkit.lambert_w.applications"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.applications">Applications
+      <span><a name="math_toolkit.lambert_w.applications"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.applications">Applications
       of the Lambert <span class="emphasis"><em>W</em></span> function</a>
     </h6>
 <p>
@@ -129,7 +129,7 @@ with the functions <code class="computeroutput"><span class="identifier">lambert
     </p>
 <h5>
 <a name="math_toolkit.lambert_w.h3"></a>
-      <span class="phrase"><a name="math_toolkit.lambert_w.examples"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.examples">Examples</a>
+      <span><a name="math_toolkit.lambert_w.examples"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.examples">Examples</a>
     </h5>
 <p>
       The most basic usage of the Lambert-<span class="emphasis"><em>W</em></span> function is demonstrated
@@ -322,7 +322,7 @@ with the functions <code class="computeroutput"><span class="identifier">lambert
     </p>
 <h6>
 <a name="math_toolkit.lambert_w.h4"></a>
-      <span class="phrase"><a name="math_toolkit.lambert_w.diode_resistance"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.diode_resistance">Diode
+      <span><a name="math_toolkit.lambert_w.diode_resistance"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.diode_resistance">Diode
       Resistance Example</a>
     </h6>
 <p>
@@ -346,7 +346,7 @@ with the functions <code class="computeroutput"><span class="identifier">lambert
       Banwell and Jakaumar equation 5
     </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-        <span class="serif_italic">I(V) = &#956; V<sub>T</sub>/ R <sub>S</sub> &#8228; W<sub>0</sub>(I<sub>0</sub> R<sub>S</sub> / (&#956; V<sub>T</sub>))</span>
+        <span class="serif_italic">I(V) = μ V<sub>T</sub>/ R <sub>S</sub> ․ W<sub>0</sub>(I<sub>0</sub> R<sub>S</sub> / (μ V<sub>T</sub>))</span>
       </p></blockquote></div>
 <p>
       Using these variables
@@ -413,7 +413,7 @@ with the functions <code class="computeroutput"><span class="identifier">lambert
     </p>
 <h6>
 <a name="math_toolkit.lambert_w.h5"></a>
-      <span class="phrase"><a name="math_toolkit.lambert_w.implementations"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.implementations">Existing
+      <span><a name="math_toolkit.lambert_w.implementations"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.implementations">Existing
       implementations</a>
     </h6>
 <p>
@@ -429,12 +429,12 @@ with the functions <code class="computeroutput"><span class="identifier">lambert
     </p>
 <h5>
 <a name="math_toolkit.lambert_w.h6"></a>
-      <span class="phrase"><a name="math_toolkit.lambert_w.precision"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.precision">Controlling
+      <span><a name="math_toolkit.lambert_w.precision"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.precision">Controlling
       the compromise between Precision and Speed</a>
     </h5>
 <h6>
 <a name="math_toolkit.lambert_w.h7"></a>
-      <span class="phrase"><a name="math_toolkit.lambert_w.small_floats"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.small_floats">Floating-point
+      <span><a name="math_toolkit.lambert_w.small_floats"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.small_floats">Floating-point
       types <code class="computeroutput"><span class="keyword">double</span></code> and <code class="computeroutput"><span class="keyword">float</span></code></a>
     </h6>
 <p>
@@ -454,7 +454,7 @@ with the functions <code class="computeroutput"><span class="identifier">lambert
     </p>
 <h6>
 <a name="math_toolkit.lambert_w.h8"></a>
-      <span class="phrase"><a name="math_toolkit.lambert_w.big_floats"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.big_floats">Floating-point
+      <span><a name="math_toolkit.lambert_w.big_floats"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.big_floats">Floating-point
       types larger than double</a>
     </h6>
 <p>
@@ -616,7 +616,7 @@ with the functions <code class="computeroutput"><span class="identifier">lambert
 </pre>
 <h6>
 <a name="math_toolkit.lambert_w.h9"></a>
-      <span class="phrase"><a name="math_toolkit.lambert_w.differences_distribution"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.differences_distribution">Distribution
+      <span><a name="math_toolkit.lambert_w.differences_distribution"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.differences_distribution">Distribution
       of differences from 'best' <code class="computeroutput"><span class="keyword">double</span></code>
       evaluations</a>
     </h6>
@@ -645,18 +645,18 @@ with the functions <code class="computeroutput"><span class="identifier">lambert
     </p>
 <h5>
 <a name="math_toolkit.lambert_w.h10"></a>
-      <span class="phrase"><a name="math_toolkit.lambert_w.edge_cases"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.edge_cases">Edge
+      <span><a name="math_toolkit.lambert_w.edge_cases"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.edge_cases">Edge
       and Corner cases</a>
     </h5>
 <h6>
 <a name="math_toolkit.lambert_w.h11"></a>
-      <span class="phrase"><a name="math_toolkit.lambert_w.w0_edges"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.w0_edges">The
+      <span><a name="math_toolkit.lambert_w.w0_edges"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.w0_edges">The
       <span class="emphasis"><em>W</em></span><sub>0</sub> Branch</a>
     </h6>
 <p>
-      The domain of <span class="emphasis"><em>W</em></span><sub>0</sub> is [-<span class="emphasis"><em>e</em></span><sup>-1</sup>, &#8734;). Numerically,
+      The domain of <span class="emphasis"><em>W</em></span><sub>0</sub> is [-<span class="emphasis"><em>e</em></span><sup>-1</sup>, ∞). Numerically,
     </p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
 <li class="listitem">
           <code class="computeroutput"><span class="identifier">lambert_w0</span><span class="special">(-</span><span class="number">1</span><span class="special">/</span><span class="identifier">e</span><span class="special">)</span></code> is exactly -1.
         </li>
@@ -679,18 +679,18 @@ with the functions <code class="computeroutput"><span class="identifier">lambert
     </p>
 <h6>
 <a name="math_toolkit.lambert_w.h12"></a>
-      <span class="phrase"><a name="math_toolkit.lambert_w.wm1_edges"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.wm1_edges"><span class="emphasis"><em>W</em></span><sub>-1</sub> Branch</a>
+      <span><a name="math_toolkit.lambert_w.wm1_edges"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.wm1_edges"><span class="emphasis"><em>W</em></span><sub>-1</sub> Branch</a>
     </h6>
 <p>
       The domain of <span class="emphasis"><em>W</em></span><sub>-1</sub> is [-<span class="emphasis"><em>e</em></span><sup>-1</sup>, 0). Numerically,
     </p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
 <li class="listitem">
           <code class="computeroutput"><span class="identifier">lambert_wm1</span><span class="special">(-</span><span class="number">1</span><span class="special">/</span><span class="identifier">e</span><span class="special">)</span></code> is exactly -1.
         </li>
 <li class="listitem">
           <code class="computeroutput"><span class="identifier">lambert_wm1</span><span class="special">(</span><span class="number">0</span><span class="special">)</span></code> returns
-          -&#8734; (or the nearest equivalent if <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">has_infinity</span>
+          -∞ (or the nearest equivalent if <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">has_infinity</span>
           <span class="special">==</span> <span class="keyword">false</span></code>).
         </li>
 <li class="listitem">
@@ -723,7 +723,7 @@ with the functions <code class="computeroutput"><span class="identifier">lambert
     </p>
 <h5>
 <a name="math_toolkit.lambert_w.h13"></a>
-      <span class="phrase"><a name="math_toolkit.lambert_w.compilers"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.compilers">Compilers</a>
+      <span><a name="math_toolkit.lambert_w.compilers"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.compilers">Compilers</a>
     </h5>
 <p>
       The <code class="computeroutput"><span class="identifier">lambert_w</span><span class="special">.</span><span class="identifier">hpp</span></code> code has been shown to work on most C++98
@@ -749,7 +749,7 @@ with the functions <code class="computeroutput"><span class="identifier">lambert
     </p>
 <h6>
 <a name="math_toolkit.lambert_w.h14"></a>
-      <span class="phrase"><a name="math_toolkit.lambert_w.diagnostics"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.diagnostics">Diagnostics
+      <span><a name="math_toolkit.lambert_w.diagnostics"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.diagnostics">Diagnostics
       Macros</a>
     </h6>
 <p>
@@ -788,7 +788,7 @@ with the functions <code class="computeroutput"><span class="identifier">lambert
 </pre>
 <h5>
 <a name="math_toolkit.lambert_w.h15"></a>
-      <span class="phrase"><a name="math_toolkit.lambert_w.implementation"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.implementation">Implementation</a>
+      <span><a name="math_toolkit.lambert_w.implementation"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.implementation">Implementation</a>
     </h5>
 <p>
       There are many previous implementations, each with increasing accuracy and/or
@@ -803,7 +803,7 @@ with the functions <code class="computeroutput"><span class="identifier">lambert
       step will suffice, but these rarely get to the best result possible. To get
       a better precision, additional refinements, probably iterative, are needed
       for example, using <a class="link" href="roots_deriv.html#math_toolkit.roots_deriv.halley">Halley</a>
-      or <a class="link" href="roots_deriv.html#math_toolkit.roots_deriv.schroder">Schr&#246;der</a> methods.
+      or <a class="link" href="roots_deriv.html#math_toolkit.roots_deriv.schroder">Schröder</a> methods.
     </p>
 <p>
       For C++, the most precise results possible, closest to the nearest <a href="http://en.wikipedia.org/wiki/Floating_point#Representable_numbers.2C_conversion_and_rounding" target="_top">representable</a>
@@ -840,7 +840,7 @@ with the functions <code class="computeroutput"><span class="identifier">lambert
     </p>
 <h6>
 <a name="math_toolkit.lambert_w.h16"></a>
-      <span class="phrase"><a name="math_toolkit.lambert_w.evolution_of_this_implementation"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.evolution_of_this_implementation">Evolution
+      <span><a name="math_toolkit.lambert_w.evolution_of_this_implementation"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.evolution_of_this_implementation">Evolution
       of this implementation</a>
     </h6>
 <p>
@@ -889,7 +889,7 @@ if (f(w) / f'</span><span class="special">(</span><span class="identifier">w</sp
 </pre>
 <h5>
 <a name="math_toolkit.lambert_w.h17"></a>
-      <span class="phrase"><a name="math_toolkit.lambert_w.compact_implementation"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.compact_implementation">Implementing
+      <span><a name="math_toolkit.lambert_w.compact_implementation"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.compact_implementation">Implementing
       Compact Algorithms</a>
     </h5>
 <p>
@@ -899,7 +899,7 @@ if (f(w) / f'</span><span class="special">(</span><span class="identifier">w</sp
     </p>
 <h5>
 <a name="math_toolkit.lambert_w.h18"></a>
-      <span class="phrase"><a name="math_toolkit.lambert_w.faster_implementation"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.faster_implementation">Implementing
+      <span><a name="math_toolkit.lambert_w.faster_implementation"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.faster_implementation">Implementing
       Faster Algorithms</a>
     </h5>
 <p>
@@ -977,7 +977,7 @@ if (f(w) / f'</span><span class="special">(</span><span class="identifier">w</sp
       z = 0.0501 to 703, in 0.001 step factor 1.05 when module 7 == 0
     </p>
 <div class="table">
-<a name="math_toolkit.lambert_w.lambert_w0_Fukushima"></a><p class="title"><b>Table&#160;8.73.&#160;Fukushima Lambert <span class="emphasis"><em>W</em></span><sub>0</sub> and typical improvement from
+<a name="math_toolkit.lambert_w.lambert_w0_Fukushima"></a><p class="title"><b>Table 8.73. Fukushima Lambert <span class="emphasis"><em>W</em></span><sub>0</sub> and typical improvement from
       a single Halley step.</b></p>
 <div class="table-contents"><table class="table" summary="Fukushima Lambert W0 and typical improvement from
       a single Halley step.">
@@ -1113,7 +1113,7 @@ if (f(w) / f'</span><span class="special">(</span><span class="identifier">w</sp
       bit different, and only 2 two-bits 'wrong'.
     </p>
 <div class="table">
-<a name="math_toolkit.lambert_w.lambert_w0_plus_halley"></a><p class="title"><b>Table&#160;8.74.&#160;Rational polynomial Lambert <span class="emphasis"><em>W</em></span><sub>0</sub> and typical improvement
+<a name="math_toolkit.lambert_w.lambert_w0_plus_halley"></a><p class="title"><b>Table 8.74. Rational polynomial Lambert <span class="emphasis"><em>W</em></span><sub>0</sub> and typical improvement
       from a single Halley step.</b></p>
 <div class="table-contents"><table class="table" summary="Rational polynomial Lambert W0 and typical improvement
       from a single Halley step.">
@@ -1254,7 +1254,7 @@ if (f(w) / f'</span><span class="special">(</span><span class="identifier">w</sp
       used.
     </p>
 <div class="table">
-<a name="math_toolkit.lambert_w.lambert_wm1_fukushima"></a><p class="title"><b>Table&#160;8.75.&#160;Lambert <span class="emphasis"><em>W</em></span><sub>-1</sub> using Fukushima algorithm.</b></p>
+<a name="math_toolkit.lambert_w.lambert_wm1_fukushima"></a><p class="title"><b>Table 8.75. Lambert <span class="emphasis"><em>W</em></span><sub>-1</sub> using Fukushima algorithm.</b></p>
 <div class="table-contents"><table class="table" summary="Lambert W-1 using Fukushima algorithm.">
 <colgroup>
 <col>
@@ -1382,7 +1382,7 @@ if (f(w) / f'</span><span class="special">(</span><span class="identifier">w</sp
 </div>
 <br class="table-break"><h6>
 <a name="math_toolkit.lambert_w.h19"></a>
-      <span class="phrase"><a name="math_toolkit.lambert_w.lookup_tables"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.lookup_tables">Lookup
+      <span><a name="math_toolkit.lambert_w.lookup_tables"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.lookup_tables">Lookup
       tables</a>
     </h6>
 <p>
@@ -1424,7 +1424,7 @@ if (f(w) / f'</span><span class="special">(</span><span class="identifier">w</sp
     </p>
 <h6>
 <a name="math_toolkit.lambert_w.h20"></a>
-      <span class="phrase"><a name="math_toolkit.lambert_w.higher_precision"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.higher_precision">Higher
+      <span><a name="math_toolkit.lambert_w.higher_precision"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.higher_precision">Higher
       precision</a>
     </h6>
 <p>
@@ -1483,7 +1483,7 @@ if (f(w) / f'</span><span class="special">(</span><span class="identifier">w</sp
     </p>
 <h6>
 <a name="math_toolkit.lambert_w.h21"></a>
-      <span class="phrase"><a name="math_toolkit.lambert_w.small_z"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.small_z">Small
+      <span><a name="math_toolkit.lambert_w.small_z"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.small_z">Small
       values of argument z near zero</a>
     </h6>
 <p>
@@ -1565,7 +1565,7 @@ if (f(w) / f'</span><span class="special">(</span><span class="identifier">w</sp
     </p>
 <h5>
 <a name="math_toolkit.lambert_w.h22"></a>
-      <span class="phrase"><a name="math_toolkit.lambert_w.near_singularity"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.near_singularity">Argument
+      <span><a name="math_toolkit.lambert_w.near_singularity"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.near_singularity">Argument
       z near the singularity at -1/e between branches <span class="emphasis"><em>W</em></span><sub>0</sub> and
       <span class="emphasis"><em>W</em></span><sub>-1</sub> </a>
     </h5>
@@ -1641,7 +1641,7 @@ if (f(w) / f'</span><span class="special">(</span><span class="identifier">w</sp
     </p>
 <h6>
 <a name="math_toolkit.lambert_w.h23"></a>
-      <span class="phrase"><a name="math_toolkit.lambert_w.wm1_near_zero"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.wm1_near_zero">Lambert
+      <span><a name="math_toolkit.lambert_w.wm1_near_zero"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.wm1_near_zero">Lambert
       <span class="emphasis"><em>W</em></span><sub>-1</sub> arguments values very near zero.</a>
     </h6>
 <p>
@@ -1684,7 +1684,7 @@ if (f(w) / f'</span><span class="special">(</span><span class="identifier">w</sp
     </p>
 <h6>
 <a name="math_toolkit.lambert_w.h24"></a>
-      <span class="phrase"><a name="math_toolkit.lambert_w.halley"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.halley">Halley
+      <span><a name="math_toolkit.lambert_w.halley"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.halley">Halley
       refinement</a>
     </h6>
 <p>
@@ -1698,7 +1698,7 @@ if (f(w) / f'</span><span class="special">(</span><span class="identifier">w</sp
     </p>
 <h6>
 <a name="math_toolkit.lambert_w.h25"></a>
-      <span class="phrase"><a name="math_toolkit.lambert_w.lambert_w_derivatives"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.lambert_w_derivatives">Lambert
+      <span><a name="math_toolkit.lambert_w.lambert_w_derivatives"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.lambert_w_derivatives">Lambert
       W Derivatives</a>
     </h6>
 <p>
@@ -1706,7 +1706,7 @@ if (f(w) / f'</span><span class="special">(</span><span class="identifier">w</sp
     </p>
 <h5>
 <a name="math_toolkit.lambert_w.h26"></a>
-      <span class="phrase"><a name="math_toolkit.lambert_w.testing"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.testing">Testing</a>
+      <span><a name="math_toolkit.lambert_w.testing"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.testing">Testing</a>
     </h5>
 <p>
       Initial testing of the algorithm was done using a small number of spot tests.
@@ -1774,7 +1774,7 @@ if (f(w) / f'</span><span class="special">(</span><span class="identifier">w</sp
     </p>
 <h6>
 <a name="math_toolkit.lambert_w.h27"></a>
-      <span class="phrase"><a name="math_toolkit.lambert_w.quadrature_testing"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.quadrature_testing">Testing
+      <span><a name="math_toolkit.lambert_w.quadrature_testing"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.quadrature_testing">Testing
       with quadrature</a>
     </h6>
 <p>
@@ -1782,13 +1782,13 @@ if (f(w) / f'</span><span class="special">(</span><span class="identifier">w</sp
       by Nick Thompson (cunningly also to test the recently written quadrature routines
       including <a href="../../../../../libs/multiprecision/doc/html/index.html" target="_top">Boost.Multiprecision</a>
       !). These are definite integral formulas involving the W function that are
-      exactly known constants, for example, LambertW0(1/(z&#178;) == &#8730;(2&#960;), see <a href="https://en.wikipedia.org/wiki/Lambert_W_function#Definite_integrals" target="_top">Definite
+      exactly known constants, for example, LambertW0(1/(z²) == √(2π), see <a href="https://en.wikipedia.org/wiki/Lambert_W_function#Definite_integrals" target="_top">Definite
       Integrals</a>. Some care was needed to avoid overflow and underflow as
       the integral function must evaluate to a finite result over the entire range.
     </p>
 <h6>
 <a name="math_toolkit.lambert_w.h28"></a>
-      <span class="phrase"><a name="math_toolkit.lambert_w.other_implementations"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.other_implementations">Other
+      <span><a name="math_toolkit.lambert_w.other_implementations"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.other_implementations">Other
       implementations</a>
     </h6>
 <p>
@@ -1806,9 +1806,9 @@ if (f(w) / f'</span><span class="special">(</span><span class="identifier">w</sp
     </p>
 <h5>
 <a name="math_toolkit.lambert_w.h29"></a>
-      <span class="phrase"><a name="math_toolkit.lambert_w.acknowledgements"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.acknowledgements">Acknowledgements</a>
+      <span><a name="math_toolkit.lambert_w.acknowledgements"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.acknowledgements">Acknowledgements</a>
     </h5>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
 <li class="listitem">
           Thanks to Wolfram for use of their invaluable online Wolfram Alpha service.
         </li>
@@ -1818,7 +1818,7 @@ if (f(w) / f'</span><span class="special">(</span><span class="identifier">w</sp
 </ul></div>
 <h5>
 <a name="math_toolkit.lambert_w.h30"></a>
-      <span class="phrase"><a name="math_toolkit.lambert_w.references"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.references">References</a>
+      <span><a name="math_toolkit.lambert_w.references"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.references">References</a>
     </h5>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
@@ -1878,7 +1878,7 @@ if (f(w) / f'</span><span class="special">(</span><span class="identifier">w</sp
           Ljubljana, Slovenia.
         </li>
 <li class="listitem">
-          Fran&#231;ois Chapeau-Blondeau and Abdelilah Monir, Numerical Evaluation of the
+          François Chapeau-Blondeau and Abdelilah Monir, Numerical Evaluation of the
           Lambert W Function and Application to Generation of Generalized Gaussian
           Noise With Exponent 1/2, IEEE Transactions on Signal Processing, 50(9)
           (2002) 2160 - 2165.
@@ -1909,11 +1909,10 @@ if (f(w) / f'</span><span class="special">(</span><span class="identifier">w</sp
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2019 Nikhar
-      Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos,
-      Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Matthew Pulver, Johan
-      R&#229;de, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg,
-      Daryle Walker and Xiaogang Zhang<p>
+<td align="right"><div class="copyright-footer">Copyright © 2006-2020 Nikhar Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher
+      Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Evan Miller, Jeremy Murphy,
+      Matthew Pulver, Johan Råde, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson,
+      Thijs van den Berg, Daryle Walker and Xiaogang Zhang<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>
@@ -1921,7 +1920,7 @@ if (f(w) / f'</span><span class="special">(</span><span class="identifier">w</sp
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="jacobi/jacobi_sn.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../special.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="zetas.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="jacobi_theta/jacobi_theta4.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../special.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="zetas.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>
