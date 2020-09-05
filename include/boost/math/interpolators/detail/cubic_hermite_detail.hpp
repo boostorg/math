@@ -13,7 +13,10 @@
 #include <sstream>
 #include <limits>
 
-namespace boost::math::interpolators::detail {
+namespace boost {
+namespace math {
+namespace interpolators {
+namespace detail {
 
 template<class RandomAccessContainer>
 class cubic_hermite_detail {
@@ -425,6 +428,8 @@ private:
     Real inv_dx_;
 };
 
-
+}
+}
+}
 }
 #endif
