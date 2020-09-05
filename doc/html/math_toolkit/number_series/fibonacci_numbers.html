@@ -29,7 +29,7 @@
 </h3></div></div></div>
 <p>
         <a href="https://en.wikipedia.org/wiki/Fibonacci_number" target="_top">Fibonacci numbers</a>
-        F<sub>n</sub> that follows the linear recurrence F<sub>n</sub>=F<sub>n-1</sub>+F<sub>n-2</sub> starting with F<sub>0</sub>=0, F<sub>1</sub>=1.
+        (F<sub>n</sub>) follows the linear recurrence F<sub>n</sub>=F<sub>n-1</sub>+F<sub>n-2</sub> starting with F<sub>0</sub>=0, F<sub>1</sub>=1.
       </p>
 <h5>
 <a name="math_toolkit.number_series.fibonacci_numbers.h0"></a>
@@ -46,20 +46,24 @@
 <span class="identifier">T</span> <span class="identifier">fibonacci</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span> <span class="identifier">n</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">Policy</span> <span class="special">&amp;</span><span class="identifier">pol</span><span class="special">)</span> <span class="comment">// Checked version (policy for errors etc.)</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<span class="identifier">T</span> <span class="identifier">fibonacci_unchecked</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span> <span class="identifier">n</span><span class="special">);</span> <span class="special">{</span>  <span class="comment">// Unchecked version (no policy).</span>
+<span class="keyword">constexpr</span> <span class="identifier">T</span> <span class="identifier">fibonacci_unchecked</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span> <span class="identifier">n</span><span class="special">);</span> <span class="special">{</span>  <span class="comment">// Unchecked version (no policy).</span>
 
 <span class="special">}}</span> <span class="comment">// namespaces</span>
 </pre>
+<p>
+        The functions return F<sub>n</sub> for a given input <code class="literal">n</code> having type
+        <code class="literal">T</code>.
+      </p>
 <h5>
 <a name="math_toolkit.number_series.fibonacci_numbers.h1"></a>
         <span><a name="math_toolkit.number_series.fibonacci_numbers.description"></a></span><a class="link" href="fibonacci_numbers.html#math_toolkit.number_series.fibonacci_numbers.description">Description</a>
       </h5>
 <p>
-        The checked versions first checks for the overflow before starting the computation.
+        The checked versions checks for the overflow before starting the computation.
         If <code class="literal">n</code> is so large that the result can not be represented
         in type <code class="literal">T</code>, it then calls <a class="link" href="../error_handling.html#math_toolkit.error_handling.overflow_error">overflow_error</a>.
         The overflow check is susceptible to off-by-one errors around the overflow
-        limit.
+        limit. See Binet's Formula below for more details on the check.
       </p>
 <p>
         The final <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
@@ -68,9 +72,9 @@
         documentation for more details</a>.
       </p>
 <p>
-        If in the checked version, the overflow check succeeds the unchecked version
-        is called which computes the desired F<sub>n</sub>. Checked version is slower because
-        of the overhead involved in overflow check.
+        If in the checked version, the overflow check succeeds then the unchecked
+        version is called which computes the desired F<sub>n</sub>. Checked version is slower
+        because of the overhead involved in overflow check.
       </p>
 <h5>
 <a name="math_toolkit.number_series.fibonacci_numbers.h2"></a>
@@ -80,35 +84,53 @@
 </pre>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">fibonacci_generator</span> <span class="special">{</span>
-  <span class="comment">// returns consecutive fibonacci number starting: 0, 1, 1, 2, ...</span>
+  <span class="comment">// returns consecutive fibonacci number starting from 0, 1, 1, 2, ...</span>
   <span class="identifier">T</span> <span class="keyword">operator</span><span class="special">()();</span>
   <span class="comment">// reset the generator to start from nth fibonacci number</span>
   <span class="keyword">void</span> <span class="identifier">set</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span> <span class="identifier">n</span><span class="special">);</span>
 <span class="special">}</span>
 </pre>
+<p>
+        The generator returns consecutive fibonacci numbers starting with 0, 1, 1,
+        2...
+      </p>
+<p>
+        The state of the generator can be modified using <code class="literal">set()</code>
+        which makes generator return consecutive fibonacci numbers starting from
+        <code class="literal">n</code>[sup th] fibonacci number.
+      </p>
+<pre class="programlisting"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">fibonacci_generator</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;</span> <span class="identifier">gen</span><span class="special">;</span>
+<span class="keyword">int</span> <span class="identifier">x</span> <span class="special">=</span> <span class="identifier">gen</span><span class="special">();</span> <span class="comment">// x is 0</span>
+<span class="keyword">int</span> <span class="identifier">y</span> <span class="special">=</span> <span class="identifier">gen</span><span class="special">();</span> <span class="comment">// y is 1</span>
+<span class="keyword">for</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">i</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span> <span class="identifier">i</span> <span class="special">&lt;</span> <span class="number">5</span><span class="special">;</span> <span class="special">++</span><span class="identifier">i</span><span class="special">)</span> <span class="comment">// this loop is same as gen.set(7);</span>
+    <span class="identifier">gen</span><span class="special">();</span>
+<span class="keyword">int</span> <span class="identifier">z</span> <span class="special">=</span> <span class="identifier">gen</span><span class="special">();</span> <span class="comment">// z is 13 </span>
+</pre>
+<p>
+        Generator is non-throwing and will not check for overflows.
+      </p>
 <h5>
 <a name="math_toolkit.number_series.fibonacci_numbers.h3"></a>
         <span><a name="math_toolkit.number_series.fibonacci_numbers.type_requirements"></a></span><a class="link" href="fibonacci_numbers.html#math_toolkit.number_series.fibonacci_numbers.type_requirements">Type
         Requirements</a>
       </h5>
 <p>
-        The type must be arithmetic type supporting +, -, *, += and should be initialized
-        from trivial integers.
+        The type must be an arithmetic type supporting +, -, * and can be initialized
+        from trivial integral types.
       </p>
 <h5>
 <a name="math_toolkit.number_series.fibonacci_numbers.h4"></a>
         <span><a name="math_toolkit.number_series.fibonacci_numbers.implementation"></a></span><a class="link" href="fibonacci_numbers.html#math_toolkit.number_series.fibonacci_numbers.implementation">Implementation</a>
       </h5>
 <p>
-        The time complexity for computating fibonacci number is O(log n), without
-        considering the time complexities of multiplication and addition (where
-        <code class="literal">n</code> is the input parameter). The implementation is iterative
-        version of <a href="http://www.cs.utexas.edu/users/EWD/ewd06xx/EWD654.PDF" target="_top">dijkstra's
-        recursive formulas</a> method which simply walks down the bits of <code class="literal">n</code>.
+        The time complexity for computing fibonacci number is O(log n), without considering
+        the time complexities of multiplication and addition (where <code class="literal">n</code>
+        is the input parameter). The implementation is iterative version of <a href="http://www.cs.utexas.edu/users/EWD/ewd06xx/EWD654.PDF" target="_top">Dijkstra's identities</a>
+        and which simply walks down the bits of <code class="literal">n</code>.
       </p>
 <h5>
 <a name="math_toolkit.number_series.fibonacci_numbers.h5"></a>
-        <span><a name="math_toolkit.number_series.fibonacci_numbers.binet_s_formula"></a></span><a class="link" href="fibonacci_numbers.html#math_toolkit.number_series.fibonacci_numbers.binet_s_formula">Binet's
+        <span><a name="math_toolkit.number_series.fibonacci_numbers.binet"></a></span><a class="link" href="fibonacci_numbers.html#math_toolkit.number_series.fibonacci_numbers.binet">Binet's
         Formula</a>
       </h5>
 <p>

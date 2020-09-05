@@ -6,12 +6,14 @@
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/fibonacci.hpp>
 #include <boost/multiprecision/cpp_int.hpp>
+#include <boost/test/tools/old/interface.hpp>
 #include <cstdint>
 #include <exception>
 #define BOOST_TEST_MODULE Fibonacci_Test_Module
 #include <boost/test/included/unit_test.hpp>
 
 using boost::math::fibonacci;
+using boost::math::fibonacci_unchecked;
 using namespace boost::multiprecision;
 typedef cpp_int BST;
 typedef number<backends::cpp_int_backend<2048, 2048, unsigned_magnitude, unchecked>> BST_2048;
@@ -44,20 +46,24 @@ BOOST_AUTO_TEST_CASE(overflow_check) {
     // 1. check for unsigned integer overflow
     BOOST_CHECK_NO_THROW(fibonacci<uint64_t>(93));
     BOOST_CHECK_THROW(fibonacci<uint64_t>(94), std::exception);
+    BOOST_CHECK_NO_THROW(fibonacci_unchecked<uint64_t>(94));
 
     // 2. check for signed integer overflow
     BOOST_CHECK_NO_THROW(fibonacci<int64_t>(91));
     // BOOST_CHECK_THROW(fibonacci<int64_t>(92), std::exception); // this should be the correct value but imprecisions
     BOOST_CHECK_THROW(fibonacci<int64_t>(93), std::exception);
+    BOOST_CHECK_NO_THROW(fibonacci_unchecked<int64_t>(93));
 
     // 3. check for floating point (double)
     BOOST_CHECK_NO_THROW(fibonacci<double>(78));
     BOOST_CHECK_THROW(fibonacci<double>(79), std::exception);
+    BOOST_CHECK_NO_THROW(fibonacci_unchecked<double>(79));
 
     // 4. check using boost's multiprecision unchecked integer
     BOOST_CHECK_NO_THROW(fibonacci<BST_2048>(2950));
     // BOOST_CHECK_THROW(fibonacci<T>(2951), std::exception); // this should be the correct value but imprecisions
     BOOST_CHECK_THROW(fibonacci<BST_2048>(2952), std::exception);
+    BOOST_CHECK_NO_THROW(fibonacci_unchecked<BST_2048>(2952));
 }
 
 BOOST_AUTO_TEST_CASE(generator_check) {
@@ -85,4 +91,15 @@ BOOST_AUTO_TEST_CASE(generator_check) {
         swap(a, b);
         b += a;
     }
+}
+
+BOOST_AUTO_TEST_CASE(constexpr_check) {
+    constexpr int x = boost::math::fibonacci_unchecked<int>(32);
+    BOOST_TEST(x == 2178309);
+
+    constexpr double y = boost::math::fibonacci_unchecked<double>(40);
+    BOOST_TEST(y == 102334155.0);
+
+    // checked fibonacci can't be constexpr because of non-constexpr
+    // dependency in detail::log_2, detail::fib_bits_phi, detail::fib_bits_deno
 }

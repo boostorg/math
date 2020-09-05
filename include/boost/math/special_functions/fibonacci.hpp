@@ -19,17 +19,25 @@
 
 namespace boost {
 namespace math {
+
 namespace detail {
 // this should be constexpr in future
 const double log_2 = std::log(2.0),
              fib_bits_phi = std::log(boost::math::constants::phi<double>()) / log_2,
              fib_bits_deno = std::log(5.0) / 2.0 / log_2;
 } // namespace detail
+
 template <typename T>
-inline T fibonacci_unchecked(unsigned long long n) {
+inline constexpr T fibonacci_unchecked(unsigned long long n) noexcept {
     // This function is called by the rest and computes the actual nth fibonacci number
-    // First few fibonacci numbers: 0 (0th), 1 (1st), 1 (2nd), 2 (3rd), 3 (4th), 5, 8, 13, 21, 34, 55 (10th), 89
+    // First few fibonacci numbers: 0 (0th), 1 (1st), 1 (2nd), 2 (3rd), ...
     if (n <= 2) return n == 0 ? 0 : 1;
+    /* 
+     * This is based on the following identities by Dijkstra:
+     *   F(2*n)   = F(n)^2 + F(n+1)^2
+     *   F(2*n+1) = (2 * F(n) + F(n+1)) * F(n+1)
+     * The implementation is iterative and is unrolled version of trivial recursive implementation.
+     */
     unsigned long long mask = 1;
     for (int ct = 1; ct != std::numeric_limits<unsigned long long>::digits && (mask << 1) <= n; ++ct, mask <<= 1)
         ;
@@ -37,7 +45,7 @@ inline T fibonacci_unchecked(unsigned long long n) {
     for (mask >>= 1; mask; mask >>= 1) {
         T t1 = a * a;
         a = 2 * a * b - t1, b = b * b + t1;
-        if (mask & n) t1 = b, b += a, a = t1; // equivalent to: swap(a,b), b += a;
+        if (mask & n) t1 = b, b = b + a, a = t1; // equivalent to: swap(a,b), b += a;
     }
     return a;
 }
@@ -60,18 +68,18 @@ template <typename T>
 class fibonacci_generator {
   public:
     // return next fibonacci number
-    T operator()() {
+    T operator()() noexcept {
         T ret = a;
-        a = b, b += ret; // could've simply: swap(a, b), b += a;
+        a = b, b = b + ret; // could've simply: swap(a, b), b += a;
         return ret;
     }
 
     // after set(nth), subsequent calls to the generator returns consecutive
     // fibonacci numbers starting with the nth fibonacci number
-    void set(unsigned long long nth) {
+    void set(unsigned long long nth) noexcept {
         n = nth;
-        a = fibonacci<T>(n);
-        b = fibonacci<T>(n + 1);
+        a = fibonacci_unchecked<T>(n);
+        b = fibonacci_unchecked<T>(n + 1);
     }
 
   private:
