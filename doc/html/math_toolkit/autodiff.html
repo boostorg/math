@@ -1,11 +1,11 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Automatic Differentiation</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
 <link rel="home" href="../index.html" title="Math Toolkit 2.12.0">
-<link rel="up" href="../quadrature.html" title="Chapter 13. Quadrature and Differentiation">
+<link rel="up" href="../quadrature.html" title="Chapter&#160;13.&#160;Quadrature and Differentiation">
 <link rel="prev" href="diff.html" title="Numerical Differentiation">
 <link rel="next" href="diff0.html" title="Lanczos Smoothing Derivatives">
 </head>
@@ -28,7 +28,7 @@
 </h2></div></div></div>
 <h2>
 <a name="math_toolkit.autodiff.h0"></a>
-      <span><a name="math_toolkit.autodiff.synopsis"></a></span><a class="link" href="autodiff.html#math_toolkit.autodiff.synopsis">Synopsis</a>
+      <span class="phrase"><a name="math_toolkit.autodiff.synopsis"></a></span><a class="link" href="autodiff.html#math_toolkit.autodiff.synopsis">Synopsis</a>
     </h2>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">differentiation</span><span class="special">/</span><span class="identifier">autodiff</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 
@@ -84,7 +84,7 @@
 </pre>
 <h2>
 <a name="math_toolkit.autodiff.h1"></a>
-      <span><a name="math_toolkit.autodiff.description"></a></span><a class="link" href="autodiff.html#math_toolkit.autodiff.description">Description</a>
+      <span class="phrase"><a name="math_toolkit.autodiff.description"></a></span><a class="link" href="autodiff.html#math_toolkit.autodiff.description">Description</a>
     </h2>
 <p>
       Autodiff is a header-only C++ library that facilitates the <a href="https://en.wikipedia.org/wiki/Automatic_differentiation" target="_top">automatic
@@ -102,9 +102,9 @@
 <p>
       The essential idea of autodiff is the substitution of numbers with polynomials
       in the evaluation of <span class="emphasis"><em>f(x<sub>0</sub>)</em></span>. By substituting the number
-      <span class="emphasis"><em>x<sub>0</sub></em></span> with the first-order polynomial <span class="emphasis"><em>x<sub>0</sub>+ε</em></span>,
-      and using the same algorithm to compute <span class="emphasis"><em>f(x<sub>0</sub>+ε)</em></span>,
-      the resulting polynomial in <span class="emphasis"><em>ε</em></span> contains the function's
+      <span class="emphasis"><em>x<sub>0</sub></em></span> with the first-order polynomial <span class="emphasis"><em>x<sub>0</sub>+&#949;</em></span>,
+      and using the same algorithm to compute <span class="emphasis"><em>f(x<sub>0</sub>+&#949;)</em></span>,
+      the resulting polynomial in <span class="emphasis"><em>&#949;</em></span> contains the function's
       derivatives <span class="emphasis"><em>f'(x<sub>0</sub>)</em></span>, <span class="emphasis"><em>f''(x<sub>0</sub>)</em></span>, <span class="emphasis"><em>f'''(x<sub>0</sub>)</em></span>,
       ... within the coefficients. Each coefficient is equal to the derivative of
       its respective order, divided by the factorial of the order.
@@ -112,8 +112,8 @@
 <p>
       In greater detail, assume one is interested in calculating the first <span class="emphasis"><em>N</em></span>
       derivatives of <span class="emphasis"><em>f</em></span> at <span class="emphasis"><em>x<sub>0</sub></em></span>. Without loss
-      of precision to the calculation of the derivatives, all terms <span class="emphasis"><em>O(ε<sup>N+1</sup>)</em></span>
-      that include powers of <span class="emphasis"><em>ε</em></span> greater than <span class="emphasis"><em>N</em></span>
+      of precision to the calculation of the derivatives, all terms <span class="emphasis"><em>O(&#949;<sup>N+1</sup>)</em></span>
+      that include powers of <span class="emphasis"><em>&#949;</em></span> greater than <span class="emphasis"><em>N</em></span>
       can be discarded. (This is due to the fact that each term in a polynomial depends
       only upon equal and lower-order terms under arithmetic operations.) Under these
       truncation rules, <span class="emphasis"><em>f</em></span> provides a polynomial-to-polynomial
@@ -126,10 +126,10 @@
       C++'s ability to overload operators and functions allows for the creation of
       a class <code class="computeroutput"><span class="identifier">fvar</span></code> (<span class="underline">f</span>orward-mode
       autodiff <span class="underline">var</span>iable) that represents polynomials
-      in <span class="emphasis"><em>ε</em></span>. Thus the same algorithm <span class="emphasis"><em>f</em></span>
+      in <span class="emphasis"><em>&#949;</em></span>. Thus the same algorithm <span class="emphasis"><em>f</em></span>
       that calculates the numeric value of <span class="emphasis"><em>y<sub>0</sub>=f(x<sub>0</sub>)</em></span>, when written
       to accept and return variables of a generic (template) type, is also used to
-      calculate the polynomial <span class="emphasis"><em>Σ<sub>n</sub>y<sub>n</sub>ε<sup>n</sup>=f(x<sub>0</sub>+ε)</em></span>.
+      calculate the polynomial <span class="emphasis"><em>&#931;<sub>n</sub>y<sub>n</sub>&#949;<sup>n</sup>=f(x<sub>0</sub>+&#949;)</em></span>.
       The derivatives <span class="emphasis"><em>f<sup>(n)</sup>(x<sub>0</sub>)</em></span> are then found from the product
       of the respective factorial <span class="emphasis"><em>n!</em></span> and coefficient <span class="emphasis"><em>y<sub>n</sub></em></span>:
     </p>
@@ -138,22 +138,22 @@
         </p></blockquote></div></blockquote></div>
 <h2>
 <a name="math_toolkit.autodiff.h2"></a>
-      <span><a name="math_toolkit.autodiff.examples"></a></span><a class="link" href="autodiff.html#math_toolkit.autodiff.examples">Examples</a>
+      <span class="phrase"><a name="math_toolkit.autodiff.examples"></a></span><a class="link" href="autodiff.html#math_toolkit.autodiff.examples">Examples</a>
     </h2>
 <h3>
 <a name="math_toolkit.autodiff.h3"></a>
-      <span><a name="math_toolkit.autodiff.example-single-variable"></a></span><a class="link" href="autodiff.html#math_toolkit.autodiff.example-single-variable">Example
+      <span class="phrase"><a name="math_toolkit.autodiff.example-single-variable"></a></span><a class="link" href="autodiff.html#math_toolkit.autodiff.example-single-variable">Example
       1: Single-variable derivatives</a>
     </h3>
 <h4>
 <a name="math_toolkit.autodiff.h4"></a>
-      <span><a name="math_toolkit.autodiff.calculate_derivatives_of_f_x_x_s"></a></span><a class="link" href="autodiff.html#math_toolkit.autodiff.calculate_derivatives_of_f_x_x_s">Calculate
+      <span class="phrase"><a name="math_toolkit.autodiff.calculate_derivatives_of_f_x_x_s"></a></span><a class="link" href="autodiff.html#math_toolkit.autodiff.calculate_derivatives_of_f_x_x_s">Calculate
       derivatives of <span class="emphasis"><em>f(x)=x<sup>4</sup></em></span> at <span class="emphasis"><em>x</em></span>=2.</a>
     </h4>
 <p>
       In this example, <code class="computeroutput"><span class="identifier">make_fvar</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span>
       <span class="identifier">Order</span><span class="special">&gt;(</span><span class="number">2.0</span><span class="special">)</span></code> instantiates
-      the polynomial 2+<span class="emphasis"><em>ε</em></span>. The <code class="computeroutput"><span class="identifier">Order</span><span class="special">=</span><span class="number">5</span></code> means that
+      the polynomial 2+<span class="emphasis"><em>&#949;</em></span>. The <code class="computeroutput"><span class="identifier">Order</span><span class="special">=</span><span class="number">5</span></code> means that
       enough space is allocated (on the stack) to hold a polynomial of up to degree
       5 during the proceeding computation.
     </p>
@@ -206,12 +206,12 @@ y.derivative(5) = 0
         </p></blockquote></div></blockquote></div>
 <h3>
 <a name="math_toolkit.autodiff.h5"></a>
-      <span><a name="math_toolkit.autodiff.example-multiprecision"></a></span><a class="link" href="autodiff.html#math_toolkit.autodiff.example-multiprecision">Example
+      <span class="phrase"><a name="math_toolkit.autodiff.example-multiprecision"></a></span><a class="link" href="autodiff.html#math_toolkit.autodiff.example-multiprecision">Example
       2: Multi-variable mixed partial derivatives with multi-precision data type</a>
     </h3>
 <h4>
 <a name="math_toolkit.autodiff.h6"></a>
-      <span><a name="math_toolkit.autodiff.calculate_autodiff_equation_mixe"></a></span><a class="link" href="autodiff.html#math_toolkit.autodiff.calculate_autodiff_equation_mixe">Calculate
+      <span class="phrase"><a name="math_toolkit.autodiff.calculate_autodiff_equation_mixe"></a></span><a class="link" href="autodiff.html#math_toolkit.autodiff.calculate_autodiff_equation_mixe">Calculate
       <span class="inlinemediaobject"><img src="../../equations/autodiff/mixed12.svg"></span> with a precision of about 50 decimal digits, where <span class="inlinemediaobject"><img src="../../equations/autodiff/example2f.svg"></span>.</a>
     </h4>
 <p>
@@ -268,12 +268,12 @@ relative error: 2.67e-50
 </pre>
 <h3>
 <a name="math_toolkit.autodiff.h7"></a>
-      <span><a name="math_toolkit.autodiff.example-black_scholes"></a></span><a class="link" href="autodiff.html#math_toolkit.autodiff.example-black_scholes">Example
+      <span class="phrase"><a name="math_toolkit.autodiff.example-black_scholes"></a></span><a class="link" href="autodiff.html#math_toolkit.autodiff.example-black_scholes">Example
       3: Black-Scholes Option Pricing with Greeks Automatically Calculated</a>
     </h3>
 <h4>
 <a name="math_toolkit.autodiff.h8"></a>
-      <span><a name="math_toolkit.autodiff.calculate_greeks_directly_from_t"></a></span><a class="link" href="autodiff.html#math_toolkit.autodiff.calculate_greeks_directly_from_t">Calculate
+      <span class="phrase"><a name="math_toolkit.autodiff.calculate_greeks_directly_from_t"></a></span><a class="link" href="autodiff.html#math_toolkit.autodiff.calculate_greeks_directly_from_t">Calculate
       greeks directly from the Black-Scholes pricing function.</a>
     </h4>
 <p>
@@ -349,18 +349,18 @@ put  gamma = 0.00199852
 </pre>
 <h2>
 <a name="math_toolkit.autodiff.h9"></a>
-      <span><a name="math_toolkit.autodiff.advantages_of_automatic_differen"></a></span><a class="link" href="autodiff.html#math_toolkit.autodiff.advantages_of_automatic_differen">Advantages
+      <span class="phrase"><a name="math_toolkit.autodiff.advantages_of_automatic_differen"></a></span><a class="link" href="autodiff.html#math_toolkit.autodiff.advantages_of_automatic_differen">Advantages
       of Automatic Differentiation</a>
     </h2>
 <p>
       The above examples illustrate some of the advantages of using autodiff:
     </p>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
           Elimination of code redundancy. The existence of <span class="emphasis"><em>N</em></span>
           separate functions to calculate derivatives is a form of code redundancy,
           with all the liabilities that come with it:
-          <div class="itemizedlist"><ul class="itemizedlist" type="circle">
+          <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem">
                 Changes to one function require <span class="emphasis"><em>N</em></span> additional
                 changes to other functions. In the 3rd example above, consider how
@@ -382,17 +382,17 @@ put  gamma = 0.00199852
         </li>
 <li class="listitem">
           Accuracy of derivatives over finite difference methods. Single-iteration
-          finite difference methods always include a <span class="emphasis"><em>Δx</em></span>
-          free variable that must be carefully chosen for each application. If <span class="emphasis"><em>Δx</em></span>
-          is too small, then numerical errors become large. If <span class="emphasis"><em>Δx</em></span>
+          finite difference methods always include a <span class="emphasis"><em>&#916;x</em></span>
+          free variable that must be carefully chosen for each application. If <span class="emphasis"><em>&#916;x</em></span>
+          is too small, then numerical errors become large. If <span class="emphasis"><em>&#916;x</em></span>
           is too large, then mathematical errors become large. With autodiff, there
           are no free variables to set and the accuracy of the answer is generally
-          superior to finite difference methods even with the best choice of <span class="emphasis"><em>Δx</em></span>.
+          superior to finite difference methods even with the best choice of <span class="emphasis"><em>&#916;x</em></span>.
         </li>
 </ul></div>
 <h2>
 <a name="math_toolkit.autodiff.h10"></a>
-      <span><a name="math_toolkit.autodiff.manual"></a></span><a class="link" href="autodiff.html#math_toolkit.autodiff.manual">Manual</a>
+      <span class="phrase"><a name="math_toolkit.autodiff.manual"></a></span><a class="link" href="autodiff.html#math_toolkit.autodiff.manual">Manual</a>
     </h2>
 <p>
       Additional details are in the <a href="../../differentiation/autodiff.pdf" target="_top">autodiff
@@ -401,10 +401,11 @@ put  gamma = 0.00199852
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright © 2006-2020 Nikhar Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher
-      Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Evan Miller, Jeremy Murphy,
-      Matthew Pulver, Johan Råde, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson,
-      Thijs van den Berg, Daryle Walker and Xiaogang Zhang<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2019 Nikhar
+      Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos,
+      Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Matthew Pulver, Johan
+      R&#229;de, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg,
+      Daryle Walker and Xiaogang Zhang<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

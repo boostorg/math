@@ -1,9 +1,9 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Riemann Zeta Function</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
 <link rel="home" href="../../index.html" title="Math Toolkit 2.12.0">
 <link rel="up" href="../zetas.html" title="Zeta Functions">
 <link rel="prev" href="../zetas.html" title="Zeta Functions">
@@ -28,7 +28,7 @@
 </h3></div></div></div>
 <h5>
 <a name="math_toolkit.zetas.zeta.h0"></a>
-        <span><a name="math_toolkit.zetas.zeta.synopsis"></a></span><a class="link" href="zeta.html#math_toolkit.zetas.zeta.synopsis">Synopsis</a>
+        <span class="phrase"><a name="math_toolkit.zetas.zeta.synopsis"></a></span><a class="link" href="zeta.html#math_toolkit.zetas.zeta.synopsis">Synopsis</a>
       </h5>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">zeta</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
@@ -37,8 +37,8 @@
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">zeta</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">zeta</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">zeta</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 
 <span class="special">}}</span> <span class="comment">// namespaces</span>
 </pre>
@@ -47,20 +47,20 @@
         type calculation rules</em></span></a>: the return type is <code class="computeroutput"><span class="keyword">double</span></code> if T is an integer type, and T otherwise.
       </p>
 <p>
-        The final <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
+        The final <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
         be used to control the behaviour of the function: how it handles errors,
-        what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">policy
+        what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">policy
         documentation for more details</a>.
       </p>
 <h5>
 <a name="math_toolkit.zetas.zeta.h1"></a>
-        <span><a name="math_toolkit.zetas.zeta.description"></a></span><a class="link" href="zeta.html#math_toolkit.zetas.zeta.description">Description</a>
+        <span class="phrase"><a name="math_toolkit.zetas.zeta.description"></a></span><a class="link" href="zeta.html#math_toolkit.zetas.zeta.description">Description</a>
       </h5>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">zeta</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">zeta</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">zeta</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 </pre>
 <p>
         Returns the <a href="http://mathworld.wolfram.com/RiemannZetaFunction.html" target="_top">zeta
@@ -80,7 +80,7 @@
         </p></blockquote></div>
 <h5>
 <a name="math_toolkit.zetas.zeta.h2"></a>
-        <span><a name="math_toolkit.zetas.zeta.accuracy"></a></span><a class="link" href="zeta.html#math_toolkit.zetas.zeta.accuracy">Accuracy</a>
+        <span class="phrase"><a name="math_toolkit.zetas.zeta.accuracy"></a></span><a class="link" href="zeta.html#math_toolkit.zetas.zeta.accuracy">Accuracy</a>
       </h5>
 <p>
         The following table shows the peak errors (in units of epsilon) found on
@@ -92,7 +92,7 @@
         zero error</a>.
       </p>
 <div class="table">
-<a name="math_toolkit.zetas.zeta.table_zeta"></a><p class="title"><b>Table 8.76. Error rates for zeta</b></p>
+<a name="math_toolkit.zetas.zeta.table_zeta"></a><p class="title"><b>Table&#160;8.76.&#160;Error rates for zeta</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for zeta">
 <colgroup>
 <col>
@@ -134,24 +134,24 @@
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0.846ε (Mean = 0.0833ε)</span><br>
-                  <br> (<span class="emphasis"><em>&lt;cmath&gt;:</em></span> Max = 5.45ε (Mean = 1ε))
+                  <span class="blue">Max = 0.846&#949; (Mean = 0.0833&#949;)</span><br>
+                  <br> (<span class="emphasis"><em>&lt;cmath&gt;:</em></span> Max = 5.45&#949; (Mean = 1&#949;))
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0ε (Mean = 0ε)</span><br> <br> (<span class="emphasis"><em>GSL
-                  2.1:</em></span> Max = 8.69ε (Mean = 1.03ε))
+                  <span class="blue">Max = 0&#949; (Mean = 0&#949;)</span><br> <br> (<span class="emphasis"><em>GSL
+                  2.1:</em></span> Max = 8.69&#949; (Mean = 1.03&#949;))
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0.846ε (Mean = 0.0833ε)</span>
+                  <span class="blue">Max = 0.846&#949; (Mean = 0.0833&#949;)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0.836ε (Mean = 0.093ε)</span>
+                  <span class="blue">Max = 0.836&#949; (Mean = 0.093&#949;)</span>
                 </p>
               </td>
 </tr>
@@ -163,24 +163,24 @@
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 7.03ε (Mean = 2.93ε)</span><br> <br>
-                  (<span class="emphasis"><em>&lt;cmath&gt;:</em></span> Max = 538ε (Mean = 59.3ε))
+                  <span class="blue">Max = 7.03&#949; (Mean = 2.93&#949;)</span><br> <br>
+                  (<span class="emphasis"><em>&lt;cmath&gt;:</em></span> Max = 538&#949; (Mean = 59.3&#949;))
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0ε (Mean = 0ε)</span><br> <br> (<span class="emphasis"><em>GSL
-                  2.1:</em></span> Max = 137ε (Mean = 13.8ε))
+                  <span class="blue">Max = 0&#949; (Mean = 0&#949;)</span><br> <br> (<span class="emphasis"><em>GSL
+                  2.1:</em></span> Max = 137&#949; (Mean = 13.8&#949;))
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 70.1ε (Mean = 17.1ε)</span>
+                  <span class="blue">Max = 70.1&#949; (Mean = 17.1&#949;)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 6.84ε (Mean = 3.12ε)</span>
+                  <span class="blue">Max = 6.84&#949; (Mean = 3.12&#949;)</span>
                 </p>
               </td>
 </tr>
@@ -192,24 +192,24 @@
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0.995ε (Mean = 0.5ε)</span><br> <br>
-                  (<span class="emphasis"><em>&lt;cmath&gt;:</em></span> Max = 1.9e+06ε (Mean = 5.11e+05ε))
+                  <span class="blue">Max = 0.995&#949; (Mean = 0.5&#949;)</span><br> <br>
+                  (<span class="emphasis"><em>&lt;cmath&gt;:</em></span> Max = 1.9e+06&#949; (Mean = 5.11e+05&#949;))
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0ε (Mean = 0ε)</span><br> <br> (<span class="emphasis"><em>GSL
-                  2.1:</em></span> Max = 7.73ε (Mean = 4.07ε))
+                  <span class="blue">Max = 0&#949; (Mean = 0&#949;)</span><br> <br> (<span class="emphasis"><em>GSL
+                  2.1:</em></span> Max = 7.73&#949; (Mean = 4.07&#949;))
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0.995ε (Mean = 0.5ε)</span>
+                  <span class="blue">Max = 0.995&#949; (Mean = 0.5&#949;)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0.994ε (Mean = 0.421ε)</span>
+                  <span class="blue">Max = 0.994&#949; (Mean = 0.421&#949;)</span>
                 </p>
               </td>
 </tr>
@@ -221,24 +221,24 @@
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0.998ε (Mean = 0.508ε)</span><br> <br>
-                  (<span class="emphasis"><em>&lt;cmath&gt;:</em></span> Max = 8.53e+06ε (Mean = 1.87e+06ε))
+                  <span class="blue">Max = 0.998&#949; (Mean = 0.508&#949;)</span><br> <br>
+                  (<span class="emphasis"><em>&lt;cmath&gt;:</em></span> Max = 8.53e+06&#949; (Mean = 1.87e+06&#949;))
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0ε (Mean = 0ε)</span><br> <br> (<span class="emphasis"><em>GSL
-                  2.1:</em></span> Max = 0.991ε (Mean = 0.28ε))
+                  <span class="blue">Max = 0&#949; (Mean = 0&#949;)</span><br> <br> (<span class="emphasis"><em>GSL
+                  2.1:</em></span> Max = 0.991&#949; (Mean = 0.28&#949;))
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0.998ε (Mean = 0.508ε)</span>
+                  <span class="blue">Max = 0.998&#949; (Mean = 0.508&#949;)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0.991ε (Mean = 0.375ε)</span>
+                  <span class="blue">Max = 0.991&#949; (Mean = 0.375&#949;)</span>
                 </p>
               </td>
 </tr>
@@ -250,24 +250,24 @@
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 9ε (Mean = 3.06ε)</span><br> <br>
-                  (<span class="emphasis"><em>&lt;cmath&gt;:</em></span> Max = 70.3ε (Mean = 17.4ε))
+                  <span class="blue">Max = 9&#949; (Mean = 3.06&#949;)</span><br> <br>
+                  (<span class="emphasis"><em>&lt;cmath&gt;:</em></span> Max = 70.3&#949; (Mean = 17.4&#949;))
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0ε (Mean = 0ε)</span><br> <br> (<span class="emphasis"><em>GSL
-                  2.1:</em></span> Max = 3.75ε (Mean = 1.1ε))
+                  <span class="blue">Max = 0&#949; (Mean = 0&#949;)</span><br> <br> (<span class="emphasis"><em>GSL
+                  2.1:</em></span> Max = 3.75&#949; (Mean = 1.1&#949;))
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 28ε (Mean = 5.62ε)</span>
+                  <span class="blue">Max = 28&#949; (Mean = 5.62&#949;)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 9ε (Mean = 3ε)</span>
+                  <span class="blue">Max = 9&#949; (Mean = 3&#949;)</span>
                 </p>
               </td>
 </tr>
@@ -294,7 +294,7 @@
         </p></blockquote></div>
 <h5>
 <a name="math_toolkit.zetas.zeta.h3"></a>
-        <span><a name="math_toolkit.zetas.zeta.testing"></a></span><a class="link" href="zeta.html#math_toolkit.zetas.zeta.testing">Testing</a>
+        <span class="phrase"><a name="math_toolkit.zetas.zeta.testing"></a></span><a class="link" href="zeta.html#math_toolkit.zetas.zeta.testing">Testing</a>
       </h5>
 <p>
         The tests for these functions come in two parts: basic sanity checks use
@@ -308,7 +308,7 @@
       </p>
 <h5>
 <a name="math_toolkit.zetas.zeta.h4"></a>
-        <span><a name="math_toolkit.zetas.zeta.implementation"></a></span><a class="link" href="zeta.html#math_toolkit.zetas.zeta.implementation">Implementation</a>
+        <span class="phrase"><a name="math_toolkit.zetas.zeta.implementation"></a></span><a class="link" href="zeta.html#math_toolkit.zetas.zeta.implementation">Implementation</a>
       </h5>
 <p>
         All versions of these functions first use the usual reflection formulas to
@@ -357,14 +357,14 @@
         For z &gt; 4 the approximating form is:
       </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-          <span class="serif_italic">ζ(z) = 1 + e<sup>R(z - n)</sup></span>
+          <span class="serif_italic">&#950;(z) = 1 + e<sup>R(z - n)</sup></span>
         </p></blockquote></div>
 <p>
         For a rational approximation <span class="emphasis"><em>R(z-n)</em></span> and integer <span class="emphasis"><em>n</em></span>,
         note that the accuracy required for <span class="emphasis"><em>R(z-n)</em></span> is not full
-        machine-precision, but an absolute error of: /ε<span class="emphasis"><em>R(0)</em></span>.
+        machine-precision, but an absolute error of: /&#949;<span class="emphasis"><em>R(0)</em></span>.
         This saves us quite a few digits when dealing with large <span class="emphasis"><em>z</em></span>,
-        especially when ε is small.
+        especially when &#949; is small.
       </p>
 <p>
         Finally, there are some special cases for integer arguments, there are closed
@@ -389,10 +389,11 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright © 2006-2020 Nikhar Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher
-      Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Evan Miller, Jeremy Murphy,
-      Matthew Pulver, Johan Råde, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson,
-      Thijs van den Berg, Daryle Walker and Xiaogang Zhang<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2019 Nikhar
+      Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos,
+      Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Matthew Pulver, Johan
+      R&#229;de, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg,
+      Daryle Walker and Xiaogang Zhang<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

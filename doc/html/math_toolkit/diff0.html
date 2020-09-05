@@ -1,13 +1,13 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Lanczos Smoothing Derivatives</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
 <link rel="home" href="../index.html" title="Math Toolkit 2.12.0">
-<link rel="up" href="../quadrature.html" title="Chapter 13. Quadrature and Differentiation">
+<link rel="up" href="../quadrature.html" title="Chapter&#160;13.&#160;Quadrature and Differentiation">
 <link rel="prev" href="autodiff.html" title="Automatic Differentiation">
-<link rel="next" href="../filters.html" title="Chapter 14. Filters">
+<link rel="next" href="../filters.html" title="Chapter&#160;14.&#160;Filters">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -28,7 +28,7 @@
 </h2></div></div></div>
 <h4>
 <a name="math_toolkit.diff0.h0"></a>
-      <span><a name="math_toolkit.diff0.synopsis"></a></span><a class="link" href="diff0.html#math_toolkit.diff0.synopsis">Synopsis</a>
+      <span class="phrase"><a name="math_toolkit.diff0.synopsis"></a></span><a class="link" href="diff0.html#math_toolkit.diff0.synopsis">Synopsis</a>
     </h4>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">differentiation</span><span class="special">/</span><span class="identifier">lanczos_smoothing</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 
@@ -57,7 +57,7 @@
 </pre>
 <h4>
 <a name="math_toolkit.diff0.h1"></a>
-      <span><a name="math_toolkit.diff0.description"></a></span><a class="link" href="diff0.html#math_toolkit.diff0.description">Description</a>
+      <span class="phrase"><a name="math_toolkit.diff0.description"></a></span><a class="link" href="diff0.html#math_toolkit.diff0.description">Description</a>
     </h4>
 <p>
       The <code class="computeroutput"><span class="identifier">discrete_lanczos_derivative</span></code>
@@ -98,12 +98,12 @@
 <span class="identifier">lanczos</span><span class="special">(</span><span class="identifier">v</span><span class="special">,</span> <span class="identifier">dvdt</span><span class="special">);</span>
 </pre>
 <p>
-      If the data has variance σ<sup>2</sup>, then the variance of the computed derivative
-      is roughly σ<sup>2</sup><span class="emphasis"><em>p</em></span><sup>3</sup> <span class="emphasis"><em>n</em></span><sup>-3</sup> Δ
+      If the data has variance &#963;<sup>2</sup>, then the variance of the computed derivative
+      is roughly &#963;<sup>2</sup><span class="emphasis"><em>p</em></span><sup>3</sup> <span class="emphasis"><em>n</em></span><sup>-3</sup> &#916;
       <span class="emphasis"><em>t</em></span><sup>-2</sup>, i.e., it increases cubically with the approximation
       order <span class="emphasis"><em>p</em></span>, linearly with the data variance, and decreases
       at the cube of the filter length <span class="emphasis"><em>n</em></span>. In addition, we must
-      not forget the discretization error which is <span class="emphasis"><em>O</em></span>(Δ
+      not forget the discretization error which is <span class="emphasis"><em>O</em></span>(&#916;
       <span class="emphasis"><em>t</em></span><sup><span class="emphasis"><em>p</em></span></sup>). You can play around with the
       approximation order <span class="emphasis"><em>p</em></span> and the filter length <span class="emphasis"><em>n</em></span>:
     </p>
@@ -169,7 +169,7 @@
     </p>
 <h4>
 <a name="math_toolkit.diff0.h2"></a>
-      <span><a name="math_toolkit.diff0.example"></a></span><a class="link" href="diff0.html#math_toolkit.diff0.example">Example</a>
+      <span class="phrase"><a name="math_toolkit.diff0.example"></a></span><a class="link" href="diff0.html#math_toolkit.diff0.example">Example</a>
     </h4>
 <p>
       We have extracted some data from the <a href="https://www.gw-openscience.org/data/" target="_top">LIGO
@@ -190,7 +190,7 @@
     </p>
 <h4>
 <a name="math_toolkit.diff0.h3"></a>
-      <span><a name="math_toolkit.diff0.caveats"></a></span><a class="link" href="diff0.html#math_toolkit.diff0.caveats">Caveats</a>
+      <span class="phrase"><a name="math_toolkit.diff0.caveats"></a></span><a class="link" href="diff0.html#math_toolkit.diff0.caveats">Caveats</a>
     </h4>
 <p>
       The computation of the filters is ill-conditioned for large <span class="emphasis"><em>p</em></span>.
@@ -213,9 +213,9 @@
     </p>
 <h4>
 <a name="math_toolkit.diff0.h4"></a>
-      <span><a name="math_toolkit.diff0.references"></a></span><a class="link" href="diff0.html#math_toolkit.diff0.references">References</a>
+      <span class="phrase"><a name="math_toolkit.diff0.references"></a></span><a class="link" href="diff0.html#math_toolkit.diff0.references">References</a>
     </h4>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
           Corless, Robert M., and Nicolas Fillion. <span class="emphasis"><em>A graduate introduction
           to numerical methods.</em></span> AMC 10 (2013): 12.
@@ -232,10 +232,11 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright © 2006-2020 Nikhar Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher
-      Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Evan Miller, Jeremy Murphy,
-      Matthew Pulver, Johan Råde, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson,
-      Thijs van den Berg, Daryle Walker and Xiaogang Zhang<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2019 Nikhar
+      Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos,
+      Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Matthew Pulver, Johan
+      R&#229;de, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg,
+      Daryle Walker and Xiaogang Zhang<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

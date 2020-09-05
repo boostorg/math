@@ -1,9 +1,9 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Gamma (and Erlang) Distribution</title>
 <link rel="stylesheet" href="../../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
 <link rel="home" href="../../../index.html" title="Math Toolkit 2.12.0">
 <link rel="up" href="../dists.html" title="Distributions">
 <link rel="prev" href="f_dist.html" title="F Distribution">
@@ -31,7 +31,7 @@
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span>
-          <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
+          <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">gamma_distribution</span>
 <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
@@ -75,7 +75,7 @@
 </td></tr>
 </table></div>
 <p>
-          For shape parameter <span class="emphasis"><em>k</em></span> and scale parameter θ it is defined
+          For shape parameter <span class="emphasis"><em>k</em></span> and scale parameter &#952; it is defined
           by the probability density function:
         </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
@@ -83,8 +83,8 @@
 
           </p></blockquote></div>
 <p>
-          Sometimes an alternative formulation is used: given parameters α = k and
-          β = 1 / θ, then the distribution can be defined by the PDF:
+          Sometimes an alternative formulation is used: given parameters &#945; = k and
+          &#946; = 1 / &#952;, then the distribution can be defined by the PDF:
         </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
             <span class="inlinemediaobject"><img src="../../../../equations/gamma_dist_ref2.svg"></span>
@@ -126,7 +126,7 @@
         </p>
 <h5>
 <a name="math_toolkit.dist_ref.dists.gamma_dist.h0"></a>
-          <span><a name="math_toolkit.dist_ref.dists.gamma_dist.member_functions"></a></span><a class="link" href="gamma_dist.html#math_toolkit.dist_ref.dists.gamma_dist.member_functions">Member
+          <span class="phrase"><a name="math_toolkit.dist_ref.dists.gamma_dist.member_functions"></a></span><a class="link" href="gamma_dist.html#math_toolkit.dist_ref.dists.gamma_dist.member_functions">Member
           Functions</a>
         </h5>
 <pre class="programlisting"><span class="identifier">gamma_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">shape</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">scale</span> <span class="special">=</span> <span class="number">1</span><span class="special">);</span>
@@ -151,7 +151,7 @@
         </p>
 <h5>
 <a name="math_toolkit.dist_ref.dists.gamma_dist.h1"></a>
-          <span><a name="math_toolkit.dist_ref.dists.gamma_dist.non_member_accessors"></a></span><a class="link" href="gamma_dist.html#math_toolkit.dist_ref.dists.gamma_dist.non_member_accessors">Non-member
+          <span class="phrase"><a name="math_toolkit.dist_ref.dists.gamma_dist.non_member_accessors"></a></span><a class="link" href="gamma_dist.html#math_toolkit.dist_ref.dists.gamma_dist.non_member_accessors">Non-member
           Accessors</a>
         </h5>
 <p>
@@ -167,11 +167,11 @@
           <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.range">range</a> and <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.support">support</a>.
         </p>
 <p>
-          The domain of the random variable is [0,+∞].
+          The domain of the random variable is [0,+&#8734;].
         </p>
 <h5>
 <a name="math_toolkit.dist_ref.dists.gamma_dist.h2"></a>
-          <span><a name="math_toolkit.dist_ref.dists.gamma_dist.accuracy"></a></span><a class="link" href="gamma_dist.html#math_toolkit.dist_ref.dists.gamma_dist.accuracy">Accuracy</a>
+          <span class="phrase"><a name="math_toolkit.dist_ref.dists.gamma_dist.accuracy"></a></span><a class="link" href="gamma_dist.html#math_toolkit.dist_ref.dists.gamma_dist.accuracy">Accuracy</a>
         </h5>
 <p>
           The gamma distribution is implemented in terms of the incomplete gamma
@@ -183,11 +183,11 @@
         </p>
 <h5>
 <a name="math_toolkit.dist_ref.dists.gamma_dist.h3"></a>
-          <span><a name="math_toolkit.dist_ref.dists.gamma_dist.implementation"></a></span><a class="link" href="gamma_dist.html#math_toolkit.dist_ref.dists.gamma_dist.implementation">Implementation</a>
+          <span class="phrase"><a name="math_toolkit.dist_ref.dists.gamma_dist.implementation"></a></span><a class="link" href="gamma_dist.html#math_toolkit.dist_ref.dists.gamma_dist.implementation">Implementation</a>
         </h5>
 <p>
           In the following table <span class="emphasis"><em>k</em></span> is the shape parameter of
-          the distribution, θ is its scale parameter, <span class="emphasis"><em>x</em></span> is the
+          the distribution, &#952; is its scale parameter, <span class="emphasis"><em>x</em></span> is the
           random variate, <span class="emphasis"><em>p</em></span> is the probability and <span class="emphasis"><em>q
           = 1-p</em></span>.
         </p>
@@ -218,7 +218,7 @@
 <td>
                   <p>
                     Using the relation: pdf = <a class="link" href="../../sf_gamma/gamma_derivatives.html" title="Derivative of the Incomplete Gamma Function">gamma_p_derivative</a>(k,
-                    x / θ) / θ
+                    x / &#952;) / &#952;
                   </p>
                 </td>
 </tr>
@@ -231,7 +231,7 @@
 <td>
                   <p>
                     Using the relation: p = <a class="link" href="../../sf_gamma/igamma.html" title="Incomplete Gamma Functions">gamma_p</a>(k,
-                    x / θ)
+                    x / &#952;)
                   </p>
                 </td>
 </tr>
@@ -244,7 +244,7 @@
 <td>
                   <p>
                     Using the relation: q = <a class="link" href="../../sf_gamma/igamma.html" title="Incomplete Gamma Functions">gamma_q</a>(k,
-                    x / θ)
+                    x / &#952;)
                   </p>
                 </td>
 </tr>
@@ -256,7 +256,7 @@
                 </td>
 <td>
                   <p>
-                    Using the relation: x = θ * <a class="link" href="../../sf_gamma/igamma_inv.html" title="Incomplete Gamma Function Inverses">gamma_p_inv</a>(k,
+                    Using the relation: x = &#952; * <a class="link" href="../../sf_gamma/igamma_inv.html" title="Incomplete Gamma Function Inverses">gamma_p_inv</a>(k,
                     p)
                   </p>
                 </td>
@@ -269,7 +269,7 @@
                 </td>
 <td>
                   <p>
-                    Using the relation: x = θ* <a class="link" href="../../sf_gamma/igamma_inv.html" title="Incomplete Gamma Function Inverses">gamma_q_inv</a>(k,
+                    Using the relation: x = &#952;* <a class="link" href="../../sf_gamma/igamma_inv.html" title="Incomplete Gamma Function Inverses">gamma_q_inv</a>(k,
                     p)
                   </p>
                 </td>
@@ -282,7 +282,7 @@
                 </td>
 <td>
                   <p>
-                    kθ
+                    k&#952;
                   </p>
                 </td>
 </tr>
@@ -294,7 +294,7 @@
                 </td>
 <td>
                   <p>
-                    kθ<sup>2</sup>
+                    k&#952;<sup>2</sup>
                   </p>
                 </td>
 </tr>
@@ -306,7 +306,7 @@
                 </td>
 <td>
                   <p>
-                    (k-1)θ for <span class="emphasis"><em>k&gt;1</em></span> otherwise a <a class="link" href="../../error_handling.html#math_toolkit.error_handling.domain_error">domain_error</a>
+                    (k-1)&#952; for <span class="emphasis"><em>k&gt;1</em></span> otherwise a <a class="link" href="../../error_handling.html#math_toolkit.error_handling.domain_error">domain_error</a>
                   </p>
                 </td>
 </tr>
@@ -351,10 +351,11 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright © 2006-2020 Nikhar Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher
-      Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Evan Miller, Jeremy Murphy,
-      Matthew Pulver, Johan Råde, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson,
-      Thijs van den Berg, Daryle Walker and Xiaogang Zhang<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2019 Nikhar
+      Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos,
+      Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Matthew Pulver, Johan
+      R&#229;de, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg,
+      Daryle Walker and Xiaogang Zhang<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

@@ -1,9 +1,9 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Log Gamma</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
 <link rel="home" href="../../index.html" title="Math Toolkit 2.12.0">
 <link rel="up" href="../sf_gamma.html" title="Gamma Functions">
 <link rel="prev" href="tgamma.html" title="Gamma">
@@ -28,7 +28,7 @@
 </h3></div></div></div>
 <h5>
 <a name="math_toolkit.sf_gamma.lgamma.h0"></a>
-        <span><a name="math_toolkit.sf_gamma.lgamma.synopsis"></a></span><a class="link" href="lgamma.html#math_toolkit.sf_gamma.lgamma.synopsis">Synopsis</a>
+        <span class="phrase"><a name="math_toolkit.sf_gamma.lgamma.synopsis"></a></span><a class="link" href="lgamma.html#math_toolkit.sf_gamma.lgamma.synopsis">Synopsis</a>
       </h5>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">gamma</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
@@ -37,20 +37,20 @@
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">lgamma</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">lgamma</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">lgamma</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">lgamma</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">int</span><span class="special">*</span> <span class="identifier">sign</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">lgamma</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">int</span><span class="special">*</span> <span class="identifier">sign</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">lgamma</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">int</span><span class="special">*</span> <span class="identifier">sign</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 
 <span class="special">}}</span> <span class="comment">// namespaces</span>
 </pre>
 <h5>
 <a name="math_toolkit.sf_gamma.lgamma.h1"></a>
-        <span><a name="math_toolkit.sf_gamma.lgamma.description"></a></span><a class="link" href="lgamma.html#math_toolkit.sf_gamma.lgamma.description">Description</a>
+        <span class="phrase"><a name="math_toolkit.sf_gamma.lgamma.description"></a></span><a class="link" href="lgamma.html#math_toolkit.sf_gamma.lgamma.description">Description</a>
       </h5>
 <p>
         The <a href="http://en.wikipedia.org/wiki/Gamma_function" target="_top">lgamma function</a>
@@ -65,9 +65,9 @@
         is set on output to the sign of tgamma(z).
       </p>
 <p>
-        The final <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
+        The final <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
         be used to control the behaviour of the function: how it handles errors,
-        what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">policy
+        what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">policy
         documentation for more details</a>.
       </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
@@ -81,7 +81,7 @@
       </p>
 <h5>
 <a name="math_toolkit.sf_gamma.lgamma.h2"></a>
-        <span><a name="math_toolkit.sf_gamma.lgamma.accuracy"></a></span><a class="link" href="lgamma.html#math_toolkit.sf_gamma.lgamma.accuracy">Accuracy</a>
+        <span class="phrase"><a name="math_toolkit.sf_gamma.lgamma.accuracy"></a></span><a class="link" href="lgamma.html#math_toolkit.sf_gamma.lgamma.accuracy">Accuracy</a>
       </h5>
 <p>
         The following table shows the peak errors (in units of epsilon) found on
@@ -97,7 +97,7 @@
         error can be guaranteed.
       </p>
 <div class="table">
-<a name="math_toolkit.sf_gamma.lgamma.table_lgamma"></a><p class="title"><b>Table 8.3. Error rates for lgamma</b></p>
+<a name="math_toolkit.sf_gamma.lgamma.table_lgamma"></a><p class="title"><b>Table&#160;8.3.&#160;Error rates for lgamma</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for lgamma">
 <colgroup>
 <col>
@@ -139,28 +139,28 @@
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0ε (Mean = 0ε)</span><br> <br> (<span class="emphasis"><em>GSL
-                  2.1:</em></span> Max = 33.6ε (Mean = 2.78ε))<br> (<span class="emphasis"><em>Rmath
-                  3.2.3:</em></span> Max = 1.55ε (Mean = 0.592ε))
+                  <span class="blue">Max = 0&#949; (Mean = 0&#949;)</span><br> <br> (<span class="emphasis"><em>GSL
+                  2.1:</em></span> Max = 33.6&#949; (Mean = 2.78&#949;))<br> (<span class="emphasis"><em>Rmath
+                  3.2.3:</em></span> Max = 1.55&#949; (Mean = 0.592&#949;))
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0.991ε (Mean = 0.308ε)</span><br> <br>
-                  (<span class="emphasis"><em>&lt;cmath&gt;:</em></span> Max = 1.67ε (Mean = 0.487ε))<br>
-                  (<span class="emphasis"><em>&lt;math.h&gt;:</em></span> Max = 1.67ε (Mean = 0.487ε))
+                  <span class="blue">Max = 0.991&#949; (Mean = 0.308&#949;)</span><br> <br>
+                  (<span class="emphasis"><em>&lt;cmath&gt;:</em></span> Max = 1.67&#949; (Mean = 0.487&#949;))<br>
+                  (<span class="emphasis"><em>&lt;math.h&gt;:</em></span> Max = 1.67&#949; (Mean = 0.487&#949;))
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0.991ε (Mean = 0.383ε)</span><br> <br>
-                  (<span class="emphasis"><em>&lt;math.h&gt;:</em></span> Max = 1.36ε (Mean = 0.476ε))
+                  <span class="blue">Max = 0.991&#949; (Mean = 0.383&#949;)</span><br> <br>
+                  (<span class="emphasis"><em>&lt;math.h&gt;:</em></span> Max = 1.36&#949; (Mean = 0.476&#949;))
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0.914ε (Mean = 0.175ε)</span><br> <br>
-                  (<span class="emphasis"><em>&lt;math.h&gt;:</em></span> Max = 0.958ε (Mean = 0.38ε))
+                  <span class="blue">Max = 0.914&#949; (Mean = 0.175&#949;)</span><br> <br>
+                  (<span class="emphasis"><em>&lt;math.h&gt;:</em></span> Max = 0.958&#949; (Mean = 0.38&#949;))
                 </p>
               </td>
 </tr>
@@ -172,28 +172,28 @@
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0ε (Mean = 0ε)</span><br> <br> (<span class="emphasis"><em>GSL
-                  2.1:</em></span> Max = 5.21ε (Mean = 1.57ε))<br> (<span class="emphasis"><em>Rmath
-                  3.2.3:</em></span> Max = 0ε (Mean = 0ε))
+                  <span class="blue">Max = 0&#949; (Mean = 0&#949;)</span><br> <br> (<span class="emphasis"><em>GSL
+                  2.1:</em></span> Max = 5.21&#949; (Mean = 1.57&#949;))<br> (<span class="emphasis"><em>Rmath
+                  3.2.3:</em></span> Max = 0&#949; (Mean = 0&#949;))
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 1.42ε (Mean = 0.566ε)</span><br> <br>
-                  (<span class="emphasis"><em>&lt;cmath&gt;:</em></span> Max = 0.964ε (Mean = 0.543ε))<br>
-                  (<span class="emphasis"><em>&lt;math.h&gt;:</em></span> Max = 0.964ε (Mean = 0.543ε))
+                  <span class="blue">Max = 1.42&#949; (Mean = 0.566&#949;)</span><br> <br>
+                  (<span class="emphasis"><em>&lt;cmath&gt;:</em></span> Max = 0.964&#949; (Mean = 0.543&#949;))<br>
+                  (<span class="emphasis"><em>&lt;math.h&gt;:</em></span> Max = 0.964&#949; (Mean = 0.543&#949;))
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 1.42ε (Mean = 0.566ε)</span><br> <br>
-                  (<span class="emphasis"><em>&lt;math.h&gt;:</em></span> Max = 0.964ε (Mean = 0.543ε))
+                  <span class="blue">Max = 1.42&#949; (Mean = 0.566&#949;)</span><br> <br>
+                  (<span class="emphasis"><em>&lt;math.h&gt;:</em></span> Max = 0.964&#949; (Mean = 0.543&#949;))
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0.964ε (Mean = 0.462ε)</span><br> <br>
-                  (<span class="emphasis"><em>&lt;math.h&gt;:</em></span> Max = 0.962ε (Mean = 0.372ε))
+                  <span class="blue">Max = 0.964&#949; (Mean = 0.462&#949;)</span><br> <br>
+                  (<span class="emphasis"><em>&lt;math.h&gt;:</em></span> Max = 0.962&#949; (Mean = 0.372&#949;))
                 </p>
               </td>
 </tr>
@@ -205,28 +205,28 @@
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0ε (Mean = 0ε)</span><br> <br> (<span class="emphasis"><em>GSL
-                  2.1:</em></span> Max = 442ε (Mean = 88.8ε))<br> (<span class="emphasis"><em>Rmath
-                  3.2.3:</em></span> Max = 7.99e+04ε (Mean = 1.68e+04ε))
+                  <span class="blue">Max = 0&#949; (Mean = 0&#949;)</span><br> <br> (<span class="emphasis"><em>GSL
+                  2.1:</em></span> Max = 442&#949; (Mean = 88.8&#949;))<br> (<span class="emphasis"><em>Rmath
+                  3.2.3:</em></span> Max = 7.99e+04&#949; (Mean = 1.68e+04&#949;))
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0.948ε (Mean = 0.36ε)</span><br> <br>
-                  (<span class="emphasis"><em>&lt;cmath&gt;:</em></span> Max = 0.615ε (Mean = 0.096ε))<br>
-                  (<span class="emphasis"><em>&lt;math.h&gt;:</em></span> Max = 0.615ε (Mean = 0.096ε))
+                  <span class="blue">Max = 0.948&#949; (Mean = 0.36&#949;)</span><br> <br>
+                  (<span class="emphasis"><em>&lt;cmath&gt;:</em></span> Max = 0.615&#949; (Mean = 0.096&#949;))<br>
+                  (<span class="emphasis"><em>&lt;math.h&gt;:</em></span> Max = 0.615&#949; (Mean = 0.096&#949;))
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0.948ε (Mean = 0.36ε)</span><br> <br>
-                  (<span class="emphasis"><em>&lt;math.h&gt;:</em></span> Max = 1.71ε (Mean = 0.581ε))
+                  <span class="blue">Max = 0.948&#949; (Mean = 0.36&#949;)</span><br> <br>
+                  (<span class="emphasis"><em>&lt;math.h&gt;:</em></span> Max = 1.71&#949; (Mean = 0.581&#949;))
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0.867ε (Mean = 0.468ε)</span><br> <br>
-                  (<span class="emphasis"><em>&lt;math.h&gt;:</em></span> Max = 0.906ε (Mean = 0.565ε))
+                  <span class="blue">Max = 0.867&#949; (Mean = 0.468&#949;)</span><br> <br>
+                  (<span class="emphasis"><em>&lt;math.h&gt;:</em></span> Max = 0.906&#949; (Mean = 0.565&#949;))
                 </p>
               </td>
 </tr>
@@ -238,28 +238,28 @@
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0ε (Mean = 0ε)</span><br> <br> (<span class="emphasis"><em>GSL
-                  2.1:</em></span> Max = 1.17e+03ε (Mean = 274ε))<br> (<span class="emphasis"><em>Rmath
-                  3.2.3:</em></span> Max = 2.63e+05ε (Mean = 5.84e+04ε))
+                  <span class="blue">Max = 0&#949; (Mean = 0&#949;)</span><br> <br> (<span class="emphasis"><em>GSL
+                  2.1:</em></span> Max = 1.17e+03&#949; (Mean = 274&#949;))<br> (<span class="emphasis"><em>Rmath
+                  3.2.3:</em></span> Max = 2.63e+05&#949; (Mean = 5.84e+04&#949;))
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0.878ε (Mean = 0.242ε)</span><br> <br>
-                  (<span class="emphasis"><em>&lt;cmath&gt;:</em></span> Max = 0.741ε (Mean = 0.263ε))<br>
-                  (<span class="emphasis"><em>&lt;math.h&gt;:</em></span> Max = 0.741ε (Mean = 0.263ε))
+                  <span class="blue">Max = 0.878&#949; (Mean = 0.242&#949;)</span><br> <br>
+                  (<span class="emphasis"><em>&lt;cmath&gt;:</em></span> Max = 0.741&#949; (Mean = 0.263&#949;))<br>
+                  (<span class="emphasis"><em>&lt;math.h&gt;:</em></span> Max = 0.741&#949; (Mean = 0.263&#949;))
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0.878ε (Mean = 0.242ε)</span><br> <br>
-                  (<span class="emphasis"><em>&lt;math.h&gt;:</em></span> Max = 0.598ε (Mean = 0.235ε))
+                  <span class="blue">Max = 0.878&#949; (Mean = 0.242&#949;)</span><br> <br>
+                  (<span class="emphasis"><em>&lt;math.h&gt;:</em></span> Max = 0.598&#949; (Mean = 0.235&#949;))
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0.591ε (Mean = 0.159ε)</span><br> <br>
-                  (<span class="emphasis"><em>&lt;math.h&gt;:</em></span> Max = 0.741ε (Mean = 0.473ε))
+                  <span class="blue">Max = 0.591&#949; (Mean = 0.159&#949;)</span><br> <br>
+                  (<span class="emphasis"><em>&lt;math.h&gt;:</em></span> Max = 0.741&#949; (Mean = 0.473&#949;))
                 </p>
               </td>
 </tr>
@@ -271,28 +271,28 @@
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0ε (Mean = 0ε)</span><br> <br> (<span class="emphasis"><em>GSL
-                  2.1:</em></span> Max = 24.9ε (Mean = 4.6ε))<br> (<span class="emphasis"><em>Rmath
-                  3.2.3:</em></span> Max = 4.22ε (Mean = 1.26ε))
+                  <span class="blue">Max = 0&#949; (Mean = 0&#949;)</span><br> <br> (<span class="emphasis"><em>GSL
+                  2.1:</em></span> Max = 24.9&#949; (Mean = 4.6&#949;))<br> (<span class="emphasis"><em>Rmath
+                  3.2.3:</em></span> Max = 4.22&#949; (Mean = 1.26&#949;))
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 3.81ε (Mean = 1.01ε)</span><br> <br>
-                  (<span class="emphasis"><em>&lt;cmath&gt;:</em></span> Max = 0.997ε (Mean = 0.412ε))<br>
-                  (<span class="emphasis"><em>&lt;math.h&gt;:</em></span> Max = 0.997ε (Mean = 0.412ε))
+                  <span class="blue">Max = 3.81&#949; (Mean = 1.01&#949;)</span><br> <br>
+                  (<span class="emphasis"><em>&lt;cmath&gt;:</em></span> Max = 0.997&#949; (Mean = 0.412&#949;))<br>
+                  (<span class="emphasis"><em>&lt;math.h&gt;:</em></span> Max = 0.997&#949; (Mean = 0.412&#949;))
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 3.81ε (Mean = 1.01ε)</span><br> <br>
-                  (<span class="emphasis"><em>&lt;math.h&gt;:</em></span> Max = 3.04ε (Mean = 1.01ε))
+                  <span class="blue">Max = 3.81&#949; (Mean = 1.01&#949;)</span><br> <br>
+                  (<span class="emphasis"><em>&lt;math.h&gt;:</em></span> Max = 3.04&#949; (Mean = 1.01&#949;))
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 4.22ε (Mean = 1.33ε)</span><br> <br>
-                  (<span class="emphasis"><em>&lt;math.h&gt;:</em></span> Max = 0.997ε (Mean = 0.444ε))
+                  <span class="blue">Max = 4.22&#949; (Mean = 1.33&#949;)</span><br> <br>
+                  (<span class="emphasis"><em>&lt;math.h&gt;:</em></span> Max = 0.997&#949; (Mean = 0.444&#949;))
                 </p>
               </td>
 </tr>
@@ -304,28 +304,28 @@
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0ε (Mean = 0ε)</span><br> <br> (<span class="emphasis"><em>GSL
-                  2.1:</em></span> Max = 7.02ε (Mean = 1.47ε))<br> (<span class="emphasis"><em>Rmath
-                  3.2.3:</em></span> Max = 250ε (Mean = 60.9ε))
+                  <span class="blue">Max = 0&#949; (Mean = 0&#949;)</span><br> <br> (<span class="emphasis"><em>GSL
+                  2.1:</em></span> Max = 7.02&#949; (Mean = 1.47&#949;))<br> (<span class="emphasis"><em>Rmath
+                  3.2.3:</em></span> Max = 250&#949; (Mean = 60.9&#949;))
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0.821ε (Mean = 0.513ε)</span><br> <br>
-                  (<span class="emphasis"><em>&lt;cmath&gt;:</em></span> Max = 1.58ε (Mean = 0.672ε))<br>
-                  (<span class="emphasis"><em>&lt;math.h&gt;:</em></span> Max = 1.58ε (Mean = 0.672ε))
+                  <span class="blue">Max = 0.821&#949; (Mean = 0.513&#949;)</span><br> <br>
+                  (<span class="emphasis"><em>&lt;cmath&gt;:</em></span> Max = 1.58&#949; (Mean = 0.672&#949;))<br>
+                  (<span class="emphasis"><em>&lt;math.h&gt;:</em></span> Max = 1.58&#949; (Mean = 0.672&#949;))
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 1.59ε (Mean = 0.587ε)</span><br> <br>
-                  (<span class="emphasis"><em>&lt;math.h&gt;:</em></span> Max = 0.821ε (Mean = 0.674ε))
+                  <span class="blue">Max = 1.59&#949; (Mean = 0.587&#949;)</span><br> <br>
+                  (<span class="emphasis"><em>&lt;math.h&gt;:</em></span> Max = 0.821&#949; (Mean = 0.674&#949;))
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0.821ε (Mean = 0.419ε)</span><br> <br>
-                  (<span class="emphasis"><em>&lt;math.h&gt;:</em></span> Max = 249ε (Mean = 43.1ε))
+                  <span class="blue">Max = 0.821&#949; (Mean = 0.419&#949;)</span><br> <br>
+                  (<span class="emphasis"><em>&lt;math.h&gt;:</em></span> Max = 249&#949; (Mean = 43.1&#949;))
                 </p>
               </td>
 </tr>
@@ -352,7 +352,7 @@
         </p></blockquote></div>
 <h5>
 <a name="math_toolkit.sf_gamma.lgamma.h3"></a>
-        <span><a name="math_toolkit.sf_gamma.lgamma.testing"></a></span><a class="link" href="lgamma.html#math_toolkit.sf_gamma.lgamma.testing">Testing</a>
+        <span class="phrase"><a name="math_toolkit.sf_gamma.lgamma.testing"></a></span><a class="link" href="lgamma.html#math_toolkit.sf_gamma.lgamma.testing">Testing</a>
       </h5>
 <p>
         The main tests for this function involve comparisons against the logs of
@@ -363,7 +363,7 @@
       </p>
 <h5>
 <a name="math_toolkit.sf_gamma.lgamma.h4"></a>
-        <span><a name="math_toolkit.sf_gamma.lgamma.implementation"></a></span><a class="link" href="lgamma.html#math_toolkit.sf_gamma.lgamma.implementation">Implementation</a>
+        <span class="phrase"><a name="math_toolkit.sf_gamma.lgamma.implementation"></a></span><a class="link" href="lgamma.html#math_toolkit.sf_gamma.lgamma.implementation">Implementation</a>
       </h5>
 <p>
         The generic version of this function is implemented using Sterling's approximation
@@ -478,10 +478,11 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright © 2006-2020 Nikhar Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher
-      Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Evan Miller, Jeremy Murphy,
-      Matthew Pulver, Johan Råde, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson,
-      Thijs van den Berg, Daryle Walker and Xiaogang Zhang<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2019 Nikhar
+      Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos,
+      Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Matthew Pulver, Johan
+      R&#229;de, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg,
+      Daryle Walker and Xiaogang Zhang<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

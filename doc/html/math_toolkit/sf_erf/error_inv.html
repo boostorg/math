@@ -1,9 +1,9 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Error Function Inverses</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
 <link rel="home" href="../../index.html" title="Math Toolkit 2.12.0">
 <link rel="up" href="../sf_erf.html" title="Error Functions">
 <link rel="prev" href="error_function.html" title="Error Function erf and complement erfc">
@@ -28,7 +28,7 @@
 </h3></div></div></div>
 <h5>
 <a name="math_toolkit.sf_erf.error_inv.h0"></a>
-        <span><a name="math_toolkit.sf_erf.error_inv.synopsis"></a></span><a class="link" href="error_inv.html#math_toolkit.sf_erf.error_inv.synopsis">Synopsis</a>
+        <span class="phrase"><a name="math_toolkit.sf_erf.error_inv.synopsis"></a></span><a class="link" href="error_inv.html#math_toolkit.sf_erf.error_inv.synopsis">Synopsis</a>
       </h5>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">erf</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
@@ -37,14 +37,14 @@
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">erf_inv</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">p</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">erf_inv</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">p</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">erf_inv</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">p</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">erfc_inv</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">p</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">erfc_inv</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">p</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">erfc_inv</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">p</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 
 <span class="special">}}</span> <span class="comment">// namespaces</span>
 </pre>
@@ -53,20 +53,20 @@
         type calculation rules</em></span></a>: the return type is <code class="computeroutput"><span class="keyword">double</span></code> if T is an integer type, and T otherwise.
       </p>
 <p>
-        The final <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
+        The final <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
         be used to control the behaviour of the function: how it handles errors,
-        what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">policy
+        what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">policy
         documentation for more details</a>.
       </p>
 <h5>
 <a name="math_toolkit.sf_erf.error_inv.h1"></a>
-        <span><a name="math_toolkit.sf_erf.error_inv.description"></a></span><a class="link" href="error_inv.html#math_toolkit.sf_erf.error_inv.description">Description</a>
+        <span class="phrase"><a name="math_toolkit.sf_erf.error_inv.description"></a></span><a class="link" href="error_inv.html#math_toolkit.sf_erf.error_inv.description">Description</a>
       </h5>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">erf_inv</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">erf_inv</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">erf_inv</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 </pre>
 <p>
         Returns the <a href="http://functions.wolfram.com/GammaBetaErf/InverseErf/" target="_top">inverse
@@ -82,8 +82,8 @@
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">erfc_inv</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">erfc_inv</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">erfc_inv</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 </pre>
 <p>
         Returns the inverse of the complement of the error function of z, that is
@@ -98,7 +98,7 @@
         </p></blockquote></div>
 <h5>
 <a name="math_toolkit.sf_erf.error_inv.h2"></a>
-        <span><a name="math_toolkit.sf_erf.error_inv.accuracy"></a></span><a class="link" href="error_inv.html#math_toolkit.sf_erf.error_inv.accuracy">Accuracy</a>
+        <span class="phrase"><a name="math_toolkit.sf_erf.error_inv.accuracy"></a></span><a class="link" href="error_inv.html#math_toolkit.sf_erf.error_inv.accuracy">Accuracy</a>
       </h5>
 <p>
         For types up to and including 80-bit long doubles the approximations used
@@ -107,7 +107,7 @@
         error functions</a>.
       </p>
 <div class="table">
-<a name="math_toolkit.sf_erf.error_inv.table_erf_inv"></a><p class="title"><b>Table 8.30. Error rates for erf_inv</b></p>
+<a name="math_toolkit.sf_erf.error_inv.table_erf_inv"></a><p class="title"><b>Table&#160;8.30.&#160;Error rates for erf_inv</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for erf_inv">
 <colgroup>
 <col>
@@ -148,29 +148,29 @@
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0ε (Mean = 0ε)</span>
+                  <span class="blue">Max = 0&#949; (Mean = 0&#949;)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0.996ε (Mean = 0.389ε)</span>
+                  <span class="blue">Max = 0.996&#949; (Mean = 0.389&#949;)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 1.08ε (Mean = 0.395ε)</span>
+                  <span class="blue">Max = 1.08&#949; (Mean = 0.395&#949;)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 1.09ε (Mean = 0.502ε)</span>
+                  <span class="blue">Max = 1.09&#949; (Mean = 0.502&#949;)</span>
                 </p>
               </td>
 </tr></tbody>
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="math_toolkit.sf_erf.error_inv.table_erfc_inv"></a><p class="title"><b>Table 8.31. Error rates for erfc_inv</b></p>
+<a name="math_toolkit.sf_erf.error_inv.table_erfc_inv"></a><p class="title"><b>Table&#160;8.31.&#160;Error rates for erfc_inv</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for erfc_inv">
 <colgroup>
 <col>
@@ -212,22 +212,22 @@
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0ε (Mean = 0ε)</span>
+                  <span class="blue">Max = 0&#949; (Mean = 0&#949;)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0.996ε (Mean = 0.397ε)</span>
+                  <span class="blue">Max = 0.996&#949; (Mean = 0.397&#949;)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 1.08ε (Mean = 0.403ε)</span>
+                  <span class="blue">Max = 1.08&#949; (Mean = 0.403&#949;)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 1ε (Mean = 0.491ε)</span>
+                  <span class="blue">Max = 1&#949; (Mean = 0.491&#949;)</span>
                 </p>
               </td>
 </tr>
@@ -241,12 +241,12 @@
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 1.62ε (Mean = 0.383ε)</span>
+                  <span class="blue">Max = 1.62&#949; (Mean = 0.383&#949;)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 1.62ε (Mean = 0.383ε)</span>
+                  <span class="blue">Max = 1.62&#949; (Mean = 0.383&#949;)</span>
                 </p>
               </td>
 <td>
@@ -275,12 +275,12 @@
         </p></blockquote></div>
 <h5>
 <a name="math_toolkit.sf_erf.error_inv.h3"></a>
-        <span><a name="math_toolkit.sf_erf.error_inv.testing"></a></span><a class="link" href="error_inv.html#math_toolkit.sf_erf.error_inv.testing">Testing</a>
+        <span class="phrase"><a name="math_toolkit.sf_erf.error_inv.testing"></a></span><a class="link" href="error_inv.html#math_toolkit.sf_erf.error_inv.testing">Testing</a>
       </h5>
 <p>
         There are two sets of tests:
       </p>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
             Basic sanity checks attempt to "round-trip" from <span class="emphasis"><em>x</em></span>
             to <span class="emphasis"><em>p</em></span> and back again. These tests have quite generous
@@ -297,7 +297,7 @@
 </ul></div>
 <h5>
 <a name="math_toolkit.sf_erf.error_inv.h4"></a>
-        <span><a name="math_toolkit.sf_erf.error_inv.implementation"></a></span><a class="link" href="error_inv.html#math_toolkit.sf_erf.error_inv.implementation">Implementation</a>
+        <span class="phrase"><a name="math_toolkit.sf_erf.error_inv.implementation"></a></span><a class="link" href="error_inv.html#math_toolkit.sf_erf.error_inv.implementation">Implementation</a>
       </h5>
 <p>
         These functions use a rational approximation <a class="link" href="../sf_implementation.html#math_toolkit.sf_implementation.rational_approximations_used">devised
@@ -360,10 +360,11 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright © 2006-2020 Nikhar Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher
-      Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Evan Miller, Jeremy Murphy,
-      Matthew Pulver, Johan Råde, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson,
-      Thijs van den Berg, Daryle Walker and Xiaogang Zhang<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2019 Nikhar
+      Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos,
+      Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Matthew Pulver, Johan
+      R&#229;de, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg,
+      Daryle Walker and Xiaogang Zhang<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

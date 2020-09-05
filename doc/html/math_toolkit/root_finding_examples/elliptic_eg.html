@@ -1,9 +1,9 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>A More complex example - Inverting the Elliptic Integrals</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
 <link rel="home" href="../../index.html" title="Math Toolkit 2.12.0">
 <link rel="up" href="../root_finding_examples.html" title="Examples of Root-Finding (with and without derivatives)">
 <link rel="prev" href="nth_root.html" title="Generalizing to Compute the nth root">
@@ -35,7 +35,7 @@
 <p>
         with:
       </p>
-<pre class="programlisting">k = √(1 - b<sup>2</sup>/a<sup>2</sup>)</pre>
+<pre class="programlisting">k = &#8730;(1 - b<sup>2</sup>/a<sup>2</sup>)</pre>
 <p>
         where <span class="emphasis"><em>E(k)</em></span> is the complete elliptic integral of the
         second kind - see <a class="link" href="../ellint/ellint_2.html" title="Elliptic Integrals of the Second Kind - Legendre Form">ellint_2</a>.
@@ -76,7 +76,7 @@
 <p>
         We'll also need a decent estimate to start searching from, the approximation:
       </p>
-<pre class="programlisting">L(a, b) ≈ 4√(a<sup>2</sup> + b<sup>2</sup>)</pre>
+<pre class="programlisting">L(a, b) &#8776; 4&#8730;(a<sup>2</sup> + b<sup>2</sup>)</pre>
 <p>
         Is easily inverted to give us what we need, which using derivative-free root
         finding leads to the algorithm:
@@ -255,10 +255,11 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright © 2006-2020 Nikhar Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher
-      Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Evan Miller, Jeremy Murphy,
-      Matthew Pulver, Johan Råde, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson,
-      Thijs van den Berg, Daryle Walker and Xiaogang Zhang<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2019 Nikhar
+      Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos,
+      Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Matthew Pulver, Johan
+      R&#229;de, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg,
+      Daryle Walker and Xiaogang Zhang<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

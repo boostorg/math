@@ -1,9 +1,9 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Laplace Distribution</title>
 <link rel="stylesheet" href="../../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
 <link rel="home" href="../../../index.html" title="Math Toolkit 2.12.0">
 <link rel="up" href="../dists.html" title="Distributions">
 <link rel="prev" href="inverse_gaussian_dist.html" title="Inverse Gaussian (or Inverse Normal) Distribution">
@@ -30,12 +30,12 @@
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span>
-          <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
+          <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">laplace_distribution</span><span class="special">;</span>
 
 <span class="keyword">typedef</span> <span class="identifier">laplace_distribution</span><span class="special">&lt;&gt;</span> <span class="identifier">laplace</span><span class="special">;</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">laplace_distribution</span>
 <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
@@ -56,7 +56,7 @@
           1972, p. 930). It is also called the double exponential distribution.
         </p>
 <p>
-          For location parameter <span class="emphasis"><em>μ</em></span> and scale parameter <span class="emphasis"><em>σ</em></span>,
+          For location parameter <span class="emphasis"><em>&#956;</em></span> and scale parameter <span class="emphasis"><em>&#963;</em></span>,
           it is defined by the probability density function:
         </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
@@ -68,8 +68,8 @@
           deviation of the normal or Gaussian distribution.
         </p>
 <p>
-          The following graph illustrates the effect of the parameters μ and σ on the
-          PDF. Note that the domain of the random variable remains [-∞,+∞] irrespective
+          The following graph illustrates the effect of the parameters &#956; and &#963; on the
+          PDF. Note that the domain of the random variable remains [-&#8734;,+&#8734;] irrespective
           of the value of the location parameter:
         </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
@@ -78,7 +78,7 @@
           </p></blockquote></div>
 <h5>
 <a name="math_toolkit.dist_ref.dists.laplace_dist.h0"></a>
-          <span><a name="math_toolkit.dist_ref.dists.laplace_dist.member_functions"></a></span><a class="link" href="laplace_dist.html#math_toolkit.dist_ref.dists.laplace_dist.member_functions">Member
+          <span class="phrase"><a name="math_toolkit.dist_ref.dists.laplace_dist.member_functions"></a></span><a class="link" href="laplace_dist.html#math_toolkit.dist_ref.dists.laplace_dist.member_functions">Member
           Functions</a>
         </h5>
 <pre class="programlisting"><span class="identifier">laplace_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">location</span> <span class="special">=</span> <span class="number">0</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">scale</span> <span class="special">=</span> <span class="number">1</span><span class="special">);</span>
@@ -110,7 +110,7 @@
         </p>
 <h5>
 <a name="math_toolkit.dist_ref.dists.laplace_dist.h1"></a>
-          <span><a name="math_toolkit.dist_ref.dists.laplace_dist.non_member_accessors"></a></span><a class="link" href="laplace_dist.html#math_toolkit.dist_ref.dists.laplace_dist.non_member_accessors">Non-member
+          <span class="phrase"><a name="math_toolkit.dist_ref.dists.laplace_dist.non_member_accessors"></a></span><a class="link" href="laplace_dist.html#math_toolkit.dist_ref.dists.laplace_dist.non_member_accessors">Non-member
           Accessors</a>
         </h5>
 <p>
@@ -126,11 +126,11 @@
           <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.range">range</a> and <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.support">support</a>.
         </p>
 <p>
-          The domain of the random variable is [-∞,+∞].
+          The domain of the random variable is [-&#8734;,+&#8734;].
         </p>
 <h5>
 <a name="math_toolkit.dist_ref.dists.laplace_dist.h2"></a>
-          <span><a name="math_toolkit.dist_ref.dists.laplace_dist.accuracy"></a></span><a class="link" href="laplace_dist.html#math_toolkit.dist_ref.dists.laplace_dist.accuracy">Accuracy</a>
+          <span class="phrase"><a name="math_toolkit.dist_ref.dists.laplace_dist.accuracy"></a></span><a class="link" href="laplace_dist.html#math_toolkit.dist_ref.dists.laplace_dist.accuracy">Accuracy</a>
         </h5>
 <p>
           The laplace distribution is implemented in terms of the standard library
@@ -138,10 +138,10 @@
         </p>
 <h5>
 <a name="math_toolkit.dist_ref.dists.laplace_dist.h3"></a>
-          <span><a name="math_toolkit.dist_ref.dists.laplace_dist.implementation"></a></span><a class="link" href="laplace_dist.html#math_toolkit.dist_ref.dists.laplace_dist.implementation">Implementation</a>
+          <span class="phrase"><a name="math_toolkit.dist_ref.dists.laplace_dist.implementation"></a></span><a class="link" href="laplace_dist.html#math_toolkit.dist_ref.dists.laplace_dist.implementation">Implementation</a>
         </h5>
 <p>
-          In the following table μ is the location parameter of the distribution, σ is
+          In the following table &#956; is the location parameter of the distribution, &#963; is
           its scale parameter, <span class="emphasis"><em>x</em></span> is the random variate, <span class="emphasis"><em>p</em></span>
           is the probability and its complement <span class="emphasis"><em>q = 1-p</em></span>.
         </p>
@@ -171,7 +171,7 @@
                 </td>
 <td>
                   <p>
-                    Using the relation: pdf = e<sup>-abs(x-μ) / σ</sup> / (2 * σ)
+                    Using the relation: pdf = e<sup>-abs(x-&#956;) / &#963;</sup> / (2 * &#963;)
                   </p>
                 </td>
 </tr>
@@ -186,10 +186,10 @@
                     Using the relations:
                   </p>
                   <p>
-                    x &lt; μ : p = e<sup>(x-μ)/σ </sup> / σ
+                    x &lt; &#956; : p = e<sup>(x-&#956;)/&#963; </sup> / &#963;
                   </p>
                   <p>
-                    x &gt;= μ : p = 1 - e<sup>(μ-x)/σ </sup> / σ
+                    x &gt;= &#956; : p = 1 - e<sup>(&#956;-x)/&#963; </sup> / &#963;
 
                   </p>
                 </td>
@@ -205,10 +205,10 @@
                     Using the relation:
                   </p>
                   <p>
-                    -x &lt; μ : q = e<sup>(-x-μ)/σ </sup> / σ
+                    -x &lt; &#956; : q = e<sup>(-x-&#956;)/&#963; </sup> / &#963;
                   </p>
                   <p>
-                    -x &gt;= μ : q = 1 - e<sup>(μ+x)/σ </sup> / σ
+                    -x &gt;= &#956; : q = 1 - e<sup>(&#956;+x)/&#963; </sup> / &#963;
 
                   </p>
                 </td>
@@ -224,10 +224,10 @@
                     Using the relations:
                   </p>
                   <p>
-                    p &lt; 0.5 : x = μ + σ * log(2*p)
+                    p &lt; 0.5 : x = &#956; + &#963; * log(2*p)
                   </p>
                   <p>
-                    p &gt;= 0.5 : x = μ - σ * log(2-2*p)
+                    p &gt;= 0.5 : x = &#956; - &#963; * log(2-2*p)
                   </p>
                 </td>
 </tr>
@@ -242,10 +242,10 @@
                     Using the relation:
                   </p>
                   <p>
-                    q &gt; 0.5: x = μ + σ*log(2-2*q)
+                    q &gt; 0.5: x = &#956; + &#963;*log(2-2*q)
                   </p>
                   <p>
-                    q &lt;=0.5: x = μ - σ*log( 2*q )
+                    q &lt;=0.5: x = &#956; - &#963;*log( 2*q )
                   </p>
                 </td>
 </tr>
@@ -257,7 +257,7 @@
                 </td>
 <td>
                   <p>
-                    μ
+                    &#956;
                   </p>
                 </td>
 </tr>
@@ -269,7 +269,7 @@
                 </td>
 <td>
                   <p>
-                    2 * σ<sup>2</sup>
+                    2 * &#963;<sup>2</sup>
                   </p>
                 </td>
 </tr>
@@ -281,7 +281,7 @@
                 </td>
 <td>
                   <p>
-                    μ
+                    &#956;
                   </p>
                 </td>
 </tr>
@@ -325,9 +325,9 @@
 </table></div>
 <h5>
 <a name="math_toolkit.dist_ref.dists.laplace_dist.h4"></a>
-          <span><a name="math_toolkit.dist_ref.dists.laplace_dist.references"></a></span><a class="link" href="laplace_dist.html#math_toolkit.dist_ref.dists.laplace_dist.references">References</a>
+          <span class="phrase"><a name="math_toolkit.dist_ref.dists.laplace_dist.references"></a></span><a class="link" href="laplace_dist.html#math_toolkit.dist_ref.dists.laplace_dist.references">References</a>
         </h5>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
               <a href="http://mathworld.wolfram.com/LaplaceDistribution.html" target="_top">Weisstein,
               Eric W. "Laplace Distribution."</a> From MathWorld--A
@@ -345,10 +345,11 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright © 2006-2020 Nikhar Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher
-      Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Evan Miller, Jeremy Murphy,
-      Matthew Pulver, Johan Råde, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson,
-      Thijs van den Berg, Daryle Walker and Xiaogang Zhang<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2019 Nikhar
+      Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos,
+      Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Matthew Pulver, Johan
+      R&#229;de, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg,
+      Daryle Walker and Xiaogang Zhang<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

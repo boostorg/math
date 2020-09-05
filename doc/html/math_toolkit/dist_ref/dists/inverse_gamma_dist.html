@@ -1,9 +1,9 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Inverse Gamma Distribution</title>
 <link rel="stylesheet" href="../../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
 <link rel="home" href="../../../index.html" title="Math Toolkit 2.12.0">
 <link rel="up" href="../dists.html" title="Distributions">
 <link rel="prev" href="inverse_chi_squared_dist.html" title="Inverse Chi Squared Distribution">
@@ -31,7 +31,7 @@
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span>
-          <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
+          <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">inverse_gamma_distribution</span>
 <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
@@ -91,17 +91,17 @@
 </td></tr>
 </table></div>
 <p>
-          For shape parameter α and scale parameter β, it is defined by the probability
+          For shape parameter &#945; and scale parameter &#946;, it is defined by the probability
           density function (PDF):
         </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-            <span class="serif_italic">f(x;α, β) = β<sup>α</sup> * (1/x) <sup>α+1</sup> exp(-β/x) / Γ(α)</span>
+            <span class="serif_italic">f(x;&#945;, &#946;) = &#946;<sup>&#945;</sup> * (1/x) <sup>&#945;+1</sup> exp(-&#946;/x) / &#915;(&#945;)</span>
           </p></blockquote></div>
 <p>
           and cumulative density function (CDF)
         </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-            <span class="serif_italic">F(x;α, β) = Γ(α, β/x) / Γ(α)</span>
+            <span class="serif_italic">F(x;&#945;, &#946;) = &#915;(&#945;, &#946;/x) / &#915;(&#945;)</span>
           </p></blockquote></div>
 <p>
           The following graphs illustrate how the PDF and CDF of the inverse gamma
@@ -117,13 +117,13 @@
           </p></blockquote></div>
 <h5>
 <a name="math_toolkit.dist_ref.dists.inverse_gamma_dist.h0"></a>
-          <span><a name="math_toolkit.dist_ref.dists.inverse_gamma_dist.member_functions"></a></span><a class="link" href="inverse_gamma_dist.html#math_toolkit.dist_ref.dists.inverse_gamma_dist.member_functions">Member
+          <span class="phrase"><a name="math_toolkit.dist_ref.dists.inverse_gamma_dist.member_functions"></a></span><a class="link" href="inverse_gamma_dist.html#math_toolkit.dist_ref.dists.inverse_gamma_dist.member_functions">Member
           Functions</a>
         </h5>
 <pre class="programlisting"><span class="identifier">inverse_gamma_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">shape</span> <span class="special">=</span> <span class="number">1</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">scale</span> <span class="special">=</span> <span class="number">1</span><span class="special">);</span>
 </pre>
 <p>
-          Constructs an inverse gamma distribution with shape α and scale β.
+          Constructs an inverse gamma distribution with shape &#945; and scale &#946;.
         </p>
 <p>
           Requires that the shape and scale parameters are greater than zero, otherwise
@@ -132,16 +132,16 @@
 <pre class="programlisting"><span class="identifier">RealType</span> <span class="identifier">shape</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
-          Returns the α shape parameter of this inverse gamma distribution.
+          Returns the &#945; shape parameter of this inverse gamma distribution.
         </p>
 <pre class="programlisting"><span class="identifier">RealType</span> <span class="identifier">scale</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
-          Returns the β scale parameter of this inverse gamma distribution.
+          Returns the &#946; scale parameter of this inverse gamma distribution.
         </p>
 <h5>
 <a name="math_toolkit.dist_ref.dists.inverse_gamma_dist.h1"></a>
-          <span><a name="math_toolkit.dist_ref.dists.inverse_gamma_dist.non_member_accessors"></a></span><a class="link" href="inverse_gamma_dist.html#math_toolkit.dist_ref.dists.inverse_gamma_dist.non_member_accessors">Non-member
+          <span class="phrase"><a name="math_toolkit.dist_ref.dists.inverse_gamma_dist.non_member_accessors"></a></span><a class="link" href="inverse_gamma_dist.html#math_toolkit.dist_ref.dists.inverse_gamma_dist.non_member_accessors">Non-member
           Accessors</a>
         </h5>
 <p>
@@ -157,7 +157,7 @@
           <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.range">range</a> and <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.support">support</a>.
         </p>
 <p>
-          The domain of the random variate is [0,+∞].
+          The domain of the random variate is [0,+&#8734;].
         </p>
 <div class="note"><table border="0" summary="Note">
 <tr>
@@ -171,7 +171,7 @@
 </table></div>
 <h5>
 <a name="math_toolkit.dist_ref.dists.inverse_gamma_dist.h2"></a>
-          <span><a name="math_toolkit.dist_ref.dists.inverse_gamma_dist.accuracy"></a></span><a class="link" href="inverse_gamma_dist.html#math_toolkit.dist_ref.dists.inverse_gamma_dist.accuracy">Accuracy</a>
+          <span class="phrase"><a name="math_toolkit.dist_ref.dists.inverse_gamma_dist.accuracy"></a></span><a class="link" href="inverse_gamma_dist.html#math_toolkit.dist_ref.dists.inverse_gamma_dist.accuracy">Accuracy</a>
         </h5>
 <p>
           The inverse gamma distribution is implemented in terms of the incomplete
@@ -185,10 +185,10 @@
         </p>
 <h5>
 <a name="math_toolkit.dist_ref.dists.inverse_gamma_dist.h3"></a>
-          <span><a name="math_toolkit.dist_ref.dists.inverse_gamma_dist.implementation"></a></span><a class="link" href="inverse_gamma_dist.html#math_toolkit.dist_ref.dists.inverse_gamma_dist.implementation">Implementation</a>
+          <span class="phrase"><a name="math_toolkit.dist_ref.dists.inverse_gamma_dist.implementation"></a></span><a class="link" href="inverse_gamma_dist.html#math_toolkit.dist_ref.dists.inverse_gamma_dist.implementation">Implementation</a>
         </h5>
 <p>
-          In the following table α is the shape parameter of the distribution, α is its
+          In the following table &#945; is the shape parameter of the distribution, &#945; is its
           scale parameter, <span class="emphasis"><em>x</em></span> is the random variate, <span class="emphasis"><em>p</em></span>
           is the probability and <span class="emphasis"><em>q = 1-p</em></span>.
         </p>
@@ -218,8 +218,8 @@
                 </td>
 <td>
                   <p>
-                    Using the relation: pdf = <a class="link" href="../../sf_gamma/gamma_derivatives.html" title="Derivative of the Incomplete Gamma Function">gamma_p_derivative</a>(α,
-                    β/ x, β) / x * x
+                    Using the relation: pdf = <a class="link" href="../../sf_gamma/gamma_derivatives.html" title="Derivative of the Incomplete Gamma Function">gamma_p_derivative</a>(&#945;,
+                    &#946;/ x, &#946;) / x * x
                   </p>
                 </td>
 </tr>
@@ -231,8 +231,8 @@
                 </td>
 <td>
                   <p>
-                    Using the relation: p = <a class="link" href="../../sf_gamma/igamma.html" title="Incomplete Gamma Functions">gamma_q</a>(α,
-                    β / x)
+                    Using the relation: p = <a class="link" href="../../sf_gamma/igamma.html" title="Incomplete Gamma Functions">gamma_q</a>(&#945;,
+                    &#946; / x)
                   </p>
                 </td>
 </tr>
@@ -244,8 +244,8 @@
                 </td>
 <td>
                   <p>
-                    Using the relation: q = <a class="link" href="../../sf_gamma/igamma.html" title="Incomplete Gamma Functions">gamma_p</a>(α,
-                    β / x)
+                    Using the relation: q = <a class="link" href="../../sf_gamma/igamma.html" title="Incomplete Gamma Functions">gamma_p</a>(&#945;,
+                    &#946; / x)
                   </p>
                 </td>
 </tr>
@@ -257,7 +257,7 @@
                 </td>
 <td>
                   <p>
-                    Using the relation: x = β/ <a class="link" href="../../sf_gamma/igamma_inv.html" title="Incomplete Gamma Function Inverses">gamma_q_inv</a>(α,
+                    Using the relation: x = &#946;/ <a class="link" href="../../sf_gamma/igamma_inv.html" title="Incomplete Gamma Function Inverses">gamma_q_inv</a>(&#945;,
                     p)
                   </p>
                 </td>
@@ -270,7 +270,7 @@
                 </td>
 <td>
                   <p>
-                    Using the relation: x = α/ <a class="link" href="../../sf_gamma/igamma_inv.html" title="Incomplete Gamma Function Inverses">gamma_p_inv</a>(α,
+                    Using the relation: x = &#945;/ <a class="link" href="../../sf_gamma/igamma_inv.html" title="Incomplete Gamma Function Inverses">gamma_p_inv</a>(&#945;,
                     q)
                   </p>
                 </td>
@@ -283,7 +283,7 @@
                 </td>
 <td>
                   <p>
-                    β / (α + 1)
+                    &#946; / (&#945; + 1)
                   </p>
                 </td>
 </tr>
@@ -307,7 +307,7 @@
                 </td>
 <td>
                   <p>
-                    β / (α - 1) for α &gt; 1, else a <a class="link" href="../../error_handling.html#math_toolkit.error_handling.domain_error">domain_error</a>
+                    &#946; / (&#945; - 1) for &#945; &gt; 1, else a <a class="link" href="../../error_handling.html#math_toolkit.error_handling.domain_error">domain_error</a>
                   </p>
                 </td>
 </tr>
@@ -319,7 +319,7 @@
                 </td>
 <td>
                   <p>
-                    (β * β) / ((α - 1) * (α - 1) * (α - 2)) for α &gt;2, else a <a class="link" href="../../error_handling.html#math_toolkit.error_handling.domain_error">domain_error</a>
+                    (&#946; * &#946;) / ((&#945; - 1) * (&#945; - 1) * (&#945; - 2)) for &#945; &gt;2, else a <a class="link" href="../../error_handling.html#math_toolkit.error_handling.domain_error">domain_error</a>
                   </p>
                 </td>
 </tr>
@@ -331,7 +331,7 @@
                 </td>
 <td>
                   <p>
-                    4 * sqrt (α -2) / (α -3) for α &gt;3, else a <a class="link" href="../../error_handling.html#math_toolkit.error_handling.domain_error">domain_error</a>
+                    4 * sqrt (&#945; -2) / (&#945; -3) for &#945; &gt;3, else a <a class="link" href="../../error_handling.html#math_toolkit.error_handling.domain_error">domain_error</a>
                   </p>
                 </td>
 </tr>
@@ -343,7 +343,7 @@
                 </td>
 <td>
                   <p>
-                    (30 * α - 66) / ((α-3)*(α - 4)) for α &gt;4, else a <a class="link" href="../../error_handling.html#math_toolkit.error_handling.domain_error">domain_error</a>
+                    (30 * &#945; - 66) / ((&#945;-3)*(&#945; - 4)) for &#945; &gt;4, else a <a class="link" href="../../error_handling.html#math_toolkit.error_handling.domain_error">domain_error</a>
                   </p>
                 </td>
 </tr>
@@ -352,10 +352,11 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright © 2006-2020 Nikhar Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher
-      Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Evan Miller, Jeremy Murphy,
-      Matthew Pulver, Johan Råde, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson,
-      Thijs van den Berg, Daryle Walker and Xiaogang Zhang<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2019 Nikhar
+      Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos,
+      Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Matthew Pulver, Johan
+      R&#229;de, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg,
+      Daryle Walker and Xiaogang Zhang<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

@@ -1,11 +1,11 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Signal Statistics</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
 <link rel="home" href="../index.html" title="Math Toolkit 2.12.0">
-<link rel="up" href="../statistics.html" title="Chapter 6. Statistics">
+<link rel="up" href="../statistics.html" title="Chapter&#160;6.&#160;Statistics">
 <link rel="prev" href="bivariate_statistics.html" title="Bivariate Statistics">
 <link rel="next" href="anderson_darling.html" title="The Anderson-Darling Test">
 </head>
@@ -28,7 +28,7 @@
 </h2></div></div></div>
 <h4>
 <a name="math_toolkit.signal_statistics.h0"></a>
-      <span><a name="math_toolkit.signal_statistics.synopsis"></a></span><a class="link" href="signal_statistics.html#math_toolkit.signal_statistics.synopsis">Synopsis</a>
+      <span class="phrase"><a name="math_toolkit.signal_statistics.synopsis"></a></span><a class="link" href="signal_statistics.html#math_toolkit.signal_statistics.synopsis">Synopsis</a>
     </h4>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">statistics</span><span class="special">/</span><span class="identifier">signal_statistics</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 
@@ -74,7 +74,7 @@
 </pre>
 <h4>
 <a name="math_toolkit.signal_statistics.h1"></a>
-      <span><a name="math_toolkit.signal_statistics.description"></a></span><a class="link" href="signal_statistics.html#math_toolkit.signal_statistics.description">Description</a>
+      <span class="phrase"><a name="math_toolkit.signal_statistics.description"></a></span><a class="link" href="signal_statistics.html#math_toolkit.signal_statistics.description">Description</a>
     </h4>
 <p>
       The file <code class="computeroutput"><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">statistics</span><span class="special">/</span><span class="identifier">signal_statistics</span><span class="special">.</span><span class="identifier">hpp</span></code> is a
@@ -91,7 +91,7 @@
     </p>
 <h4>
 <a name="math_toolkit.signal_statistics.h2"></a>
-      <span><a name="math_toolkit.signal_statistics.absolute_gini_coefficient"></a></span><a class="link" href="signal_statistics.html#math_toolkit.signal_statistics.absolute_gini_coefficient">Absolute
+      <span class="phrase"><a name="math_toolkit.signal_statistics.absolute_gini_coefficient"></a></span><a class="link" href="signal_statistics.html#math_toolkit.signal_statistics.absolute_gini_coefficient">Absolute
       Gini Coefficient</a>
     </h4>
 <p>
@@ -135,16 +135,16 @@
     </p>
 <h4>
 <a name="math_toolkit.signal_statistics.h3"></a>
-      <span><a name="math_toolkit.signal_statistics.hoyer_sparsity"></a></span><a class="link" href="signal_statistics.html#math_toolkit.signal_statistics.hoyer_sparsity">Hoyer
+      <span class="phrase"><a name="math_toolkit.signal_statistics.hoyer_sparsity"></a></span><a class="link" href="signal_statistics.html#math_toolkit.signal_statistics.hoyer_sparsity">Hoyer
       Sparsity</a>
     </h4>
 <p>
-      The Hoyer sparsity measures a normalized ratio of the ℓ<sup>1</sup> and ℓ<sup>2</sup> norms.
+      The Hoyer sparsity measures a normalized ratio of the &#8467;<sup>1</sup> and &#8467;<sup>2</sup> norms.
       As the name suggests, it is used to measure the sparsity of an expansion in
       some basis.
     </p>
 <p>
-      The Hoyer sparsity computes (√<span class="emphasis"><em>N</em></span> - ℓ<sup>1</sup>(v)/ℓ<sup>2</sup>(v))/(√N
+      The Hoyer sparsity computes (&#8730;<span class="emphasis"><em>N</em></span> - &#8467;<sup>1</sup>(v)/&#8467;<sup>2</sup>(v))/(&#8730;N
       -1). For details, see <a href="http://www.jmlr.org/papers/volume5/hoyer04a/hoyer04a.pdf" target="_top">Hoyer</a>
       as well as <a href="https://arxiv.org/pdf/0811.4706.pdf" target="_top">Hurley and Rickard</a>.
     </p>
@@ -173,17 +173,17 @@
     </p>
 <h4>
 <a name="math_toolkit.signal_statistics.h4"></a>
-      <span><a name="math_toolkit.signal_statistics.oracle_signal_to_noise_ratio"></a></span><a class="link" href="signal_statistics.html#math_toolkit.signal_statistics.oracle_signal_to_noise_ratio">Oracle
+      <span class="phrase"><a name="math_toolkit.signal_statistics.oracle_signal_to_noise_ratio"></a></span><a class="link" href="signal_statistics.html#math_toolkit.signal_statistics.oracle_signal_to_noise_ratio">Oracle
       Signal-to-noise ratio</a>
     </h4>
 <p>
       The function <code class="computeroutput"><span class="identifier">oracle_snr</span></code> computes
-      the ratio ‖ <span class="emphasis"><em>s</em></span> ‖<sub>2</sub><sup>2</sup> / ‖ <span class="emphasis"><em>s</em></span>
-      - <span class="emphasis"><em>x</em></span> ‖<sub>2</sub><sup>2</sup>, where <span class="emphasis"><em>s</em></span> is signal
+      the ratio &#8214; <span class="emphasis"><em>s</em></span> &#8214;<sub>2</sub><sup>2</sup> / &#8214; <span class="emphasis"><em>s</em></span>
+      - <span class="emphasis"><em>x</em></span> &#8214;<sub>2</sub><sup>2</sup>, where <span class="emphasis"><em>s</em></span> is signal
       and <span class="emphasis"><em>x</em></span> is a noisy signal. The function <code class="computeroutput"><span class="identifier">oracle_snr_db</span></code>
-      computes 10<code class="computeroutput"><span class="identifier">log</span></code><sub>10</sub>(‖
-      <span class="emphasis"><em>s</em></span> ‖<sup>2</sup> / ‖ <span class="emphasis"><em>s</em></span> - <span class="emphasis"><em>x</em></span>
-      ‖<sup>2</sup>). The functions are so named because in general, one does not know
+      computes 10<code class="computeroutput"><span class="identifier">log</span></code><sub>10</sub>(&#8214;
+      <span class="emphasis"><em>s</em></span> &#8214;<sup>2</sup> / &#8214; <span class="emphasis"><em>s</em></span> - <span class="emphasis"><em>x</em></span>
+      &#8214;<sup>2</sup>). The functions are so named because in general, one does not know
       how to decompose a real signal <span class="emphasis"><em>x</em></span> into <span class="emphasis"><em>s</em></span>
       + <span class="emphasis"><em>w</em></span> and as such <span class="emphasis"><em>s</em></span> is regarded as
       oracle information. Hence this function is mainly useful for unit testing other
@@ -205,7 +205,7 @@
     </p>
 <h4>
 <a name="math_toolkit.signal_statistics.h5"></a>
-      <span><a name="math_toolkit.signal_statistics.m_sub_2_m_sub_4_snr_estimation"></a></span><a class="link" href="signal_statistics.html#math_toolkit.signal_statistics.m_sub_2_m_sub_4_snr_estimation"><span class="emphasis"><em>M</em></span><sub>2</sub><span class="emphasis"><em>M</em></span><sub>4</sub> SNR
+      <span class="phrase"><a name="math_toolkit.signal_statistics.m_sub_2_m_sub_4_snr_estimation"></a></span><a class="link" href="signal_statistics.html#math_toolkit.signal_statistics.m_sub_2_m_sub_4_snr_estimation"><span class="emphasis"><em>M</em></span><sub>2</sub><span class="emphasis"><em>M</em></span><sub>4</sub> SNR
       Estimation</a>
     </h4>
 <p>
@@ -288,9 +288,9 @@
     </p>
 <h4>
 <a name="math_toolkit.signal_statistics.h6"></a>
-      <span><a name="math_toolkit.signal_statistics.references"></a></span><a class="link" href="signal_statistics.html#math_toolkit.signal_statistics.references">References</a>
+      <span class="phrase"><a name="math_toolkit.signal_statistics.references"></a></span><a class="link" href="signal_statistics.html#math_toolkit.signal_statistics.references">References</a>
     </h4>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
           Mallat, Stephane. <span class="emphasis"><em>A wavelet tour of signal processing: the sparse
           way.</em></span> Academic press, 2008.
@@ -318,10 +318,11 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright © 2006-2020 Nikhar Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher
-      Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Evan Miller, Jeremy Murphy,
-      Matthew Pulver, Johan Råde, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson,
-      Thijs van den Berg, Daryle Walker and Xiaogang Zhang<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2019 Nikhar
+      Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos,
+      Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Matthew Pulver, Johan
+      R&#229;de, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg,
+      Daryle Walker and Xiaogang Zhang<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

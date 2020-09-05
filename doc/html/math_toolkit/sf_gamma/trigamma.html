@@ -1,9 +1,9 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Trigamma</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
 <link rel="home" href="../../index.html" title="Math Toolkit 2.12.0">
 <link rel="up" href="../sf_gamma.html" title="Gamma Functions">
 <link rel="prev" href="digamma.html" title="Digamma">
@@ -28,7 +28,7 @@
 </h3></div></div></div>
 <h5>
 <a name="math_toolkit.sf_gamma.trigamma.h0"></a>
-        <span><a name="math_toolkit.sf_gamma.trigamma.synopsis"></a></span><a class="link" href="trigamma.html#math_toolkit.sf_gamma.trigamma.synopsis">Synopsis</a>
+        <span class="phrase"><a name="math_toolkit.sf_gamma.trigamma.synopsis"></a></span><a class="link" href="trigamma.html#math_toolkit.sf_gamma.trigamma.synopsis">Synopsis</a>
       </h5>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">trigamma</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
@@ -37,14 +37,14 @@
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">trigamma</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">x</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">trigamma</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">trigamma</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 
 <span class="special">}}</span> <span class="comment">// namespaces</span>
 </pre>
 <h5>
 <a name="math_toolkit.sf_gamma.trigamma.h1"></a>
-        <span><a name="math_toolkit.sf_gamma.trigamma.description"></a></span><a class="link" href="trigamma.html#math_toolkit.sf_gamma.trigamma.description">Description</a>
+        <span class="phrase"><a name="math_toolkit.sf_gamma.trigamma.description"></a></span><a class="link" href="trigamma.html#math_toolkit.sf_gamma.trigamma.description">Description</a>
       </h5>
 <p>
         Returns the trigamma function of <span class="emphasis"><em>x</em></span>. Trigamma is defined
@@ -59,9 +59,9 @@
 
         </p></blockquote></div>
 <p>
-        The final <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
+        The final <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
         be used to control the behaviour of the function: how it handles errors,
-        what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">policy
+        what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">policy
         documentation for more details</a>.
       </p>
 <p>
@@ -71,7 +71,7 @@
       </p>
 <h5>
 <a name="math_toolkit.sf_gamma.trigamma.h2"></a>
-        <span><a name="math_toolkit.sf_gamma.trigamma.accuracy"></a></span><a class="link" href="trigamma.html#math_toolkit.sf_gamma.trigamma.accuracy">Accuracy</a>
+        <span class="phrase"><a name="math_toolkit.sf_gamma.trigamma.accuracy"></a></span><a class="link" href="trigamma.html#math_toolkit.sf_gamma.trigamma.accuracy">Accuracy</a>
       </h5>
 <p>
         The following table shows the peak errors (in units of epsilon) found on
@@ -79,7 +79,7 @@
         any floating point type that is narrower than the one shown will have <a class="link" href="../relative_error.html#math_toolkit.relative_error.zero_error">effectively zero error</a>.
       </p>
 <div class="table">
-<a name="math_toolkit.sf_gamma.trigamma.table_trigamma"></a><p class="title"><b>Table 8.5. Error rates for trigamma</b></p>
+<a name="math_toolkit.sf_gamma.trigamma.table_trigamma"></a><p class="title"><b>Table&#160;8.5.&#160;Error rates for trigamma</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for trigamma">
 <colgroup>
 <col>
@@ -120,24 +120,24 @@
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0.998ε (Mean = 0.105ε)</span><br> <br>
-                  (<span class="emphasis"><em>GSL 2.1:</em></span> Max = 1.34e+04ε (Mean = 1.49e+03ε))<br>
-                  (<span class="emphasis"><em>Rmath 3.2.3:</em></span> Max = 1.34e+04ε (Mean = 1.51e+03ε))
+                  <span class="blue">Max = 0.998&#949; (Mean = 0.105&#949;)</span><br> <br>
+                  (<span class="emphasis"><em>GSL 2.1:</em></span> Max = 1.34e+04&#949; (Mean = 1.49e+03&#949;))<br>
+                  (<span class="emphasis"><em>Rmath 3.2.3:</em></span> Max = 1.34e+04&#949; (Mean = 1.51e+03&#949;))
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 1.28ε (Mean = 0.449ε)</span>
+                  <span class="blue">Max = 1.28&#949; (Mean = 0.449&#949;)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 1.28ε (Mean = 0.449ε)</span>
+                  <span class="blue">Max = 1.28&#949; (Mean = 0.449&#949;)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 1ε (Mean = 0.382ε)</span>
+                  <span class="blue">Max = 1&#949; (Mean = 0.382&#949;)</span>
                 </p>
               </td>
 </tr></tbody>
@@ -167,14 +167,14 @@
         </p></blockquote></div>
 <h5>
 <a name="math_toolkit.sf_gamma.trigamma.h3"></a>
-        <span><a name="math_toolkit.sf_gamma.trigamma.testing"></a></span><a class="link" href="trigamma.html#math_toolkit.sf_gamma.trigamma.testing">Testing</a>
+        <span class="phrase"><a name="math_toolkit.sf_gamma.trigamma.testing"></a></span><a class="link" href="trigamma.html#math_toolkit.sf_gamma.trigamma.testing">Testing</a>
       </h5>
 <p>
         Testing is against Mathematica generated spot values to 35 digit precision.
       </p>
 <h5>
 <a name="math_toolkit.sf_gamma.trigamma.h4"></a>
-        <span><a name="math_toolkit.sf_gamma.trigamma.implementation"></a></span><a class="link" href="trigamma.html#math_toolkit.sf_gamma.trigamma.implementation">Implementation</a>
+        <span class="phrase"><a name="math_toolkit.sf_gamma.trigamma.implementation"></a></span><a class="link" href="trigamma.html#math_toolkit.sf_gamma.trigamma.implementation">Implementation</a>
       </h5>
 <p>
         The arbitrary precision version of this function simply calls <a class="link" href="polygamma.html" title="Polygamma">polygamma</a>.
@@ -212,10 +212,11 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright © 2006-2020 Nikhar Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher
-      Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Evan Miller, Jeremy Murphy,
-      Matthew Pulver, Johan Råde, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson,
-      Thijs van den Berg, Daryle Walker and Xiaogang Zhang<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2019 Nikhar
+      Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos,
+      Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Matthew Pulver, Johan
+      R&#229;de, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg,
+      Daryle Walker and Xiaogang Zhang<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

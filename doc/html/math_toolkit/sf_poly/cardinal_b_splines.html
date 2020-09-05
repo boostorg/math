@@ -1,9 +1,9 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Cardinal B-splines</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
 <link rel="home" href="../../index.html" title="Math Toolkit 2.12.0">
 <link rel="up" href="../sf_poly.html" title="Polynomials">
 <link rel="prev" href="sph_harm.html" title="Spherical Harmonics">
@@ -28,7 +28,7 @@
 </h3></div></div></div>
 <h5>
 <a name="math_toolkit.sf_poly.cardinal_b_splines.h0"></a>
-        <span><a name="math_toolkit.sf_poly.cardinal_b_splines.synopsis"></a></span><a class="link" href="cardinal_b_splines.html#math_toolkit.sf_poly.cardinal_b_splines.synopsis">Synopsis</a>
+        <span class="phrase"><a name="math_toolkit.sf_poly.cardinal_b_splines.synopsis"></a></span><a class="link" href="cardinal_b_splines.html#math_toolkit.sf_poly.cardinal_b_splines.synopsis">Synopsis</a>
       </h5>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">cardinal_b_spline</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
@@ -57,8 +57,8 @@
         a box function: It takes the value one inside the interval [-1/2, 1/2], and
         is zero elsewhere. <span class="emphasis"><em>B</em></span>-splines of higher smoothness are
         constructed by iterative convolution, namely, <span class="emphasis"><em>B</em></span><sub>1</sub> :=
-        <span class="emphasis"><em>B</em></span><sub>0</sub> ∗ <span class="emphasis"><em>B</em></span><sub>0</sub>, and <span class="emphasis"><em>B</em></span><sub><span class="emphasis"><em>n</em></span>+1</sub> :=
-        <span class="emphasis"><em>B</em></span><sub><span class="emphasis"><em>n</em></span> </sub> ∗ <span class="emphasis"><em>B</em></span><sub>0</sub>.
+        <span class="emphasis"><em>B</em></span><sub>0</sub> &#8727; <span class="emphasis"><em>B</em></span><sub>0</sub>, and <span class="emphasis"><em>B</em></span><sub><span class="emphasis"><em>n</em></span>+1</sub> :=
+        <span class="emphasis"><em>B</em></span><sub><span class="emphasis"><em>n</em></span> </sub> &#8727; <span class="emphasis"><em>B</em></span><sub>0</sub>.
         For example, <span class="emphasis"><em>B</em></span><sub>1</sub>(<span class="emphasis"><em>x</em></span>) = 1 - |<span class="emphasis"><em>x</em></span>|
         for <span class="emphasis"><em>x</em></span> in [-1,1], and zero elsewhere, so it is a hat
         function.
@@ -70,13 +70,13 @@
 <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">cardinal_b_spline_prime</span><span class="special">;</span>
 <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">cardinal_b_spline_double_prime</span><span class="special">;</span>
 <span class="keyword">double</span> <span class="identifier">x</span> <span class="special">=</span> <span class="number">0.5</span><span class="special">;</span>
-<span class="comment">// B₀(x), the box function:</span>
+<span class="comment">// B&#8320;(x), the box function:</span>
 <span class="keyword">double</span> <span class="identifier">y</span> <span class="special">=</span> <span class="identifier">cardinal_b_spline</span><span class="special">&lt;</span><span class="number">0</span><span class="special">&gt;(</span><span class="identifier">x</span><span class="special">);</span>
-<span class="comment">// B₁(x), the hat function:</span>
+<span class="comment">// B&#8321;(x), the hat function:</span>
 <span class="identifier">y</span> <span class="special">=</span> <span class="identifier">cardinal_b_spline</span><span class="special">&lt;</span><span class="number">1</span><span class="special">&gt;(</span><span class="identifier">x</span><span class="special">);</span>
-<span class="comment">// First derivative of B₃:</span>
+<span class="comment">// First derivative of B&#8323;:</span>
 <span class="identifier">yp</span> <span class="special">=</span> <span class="identifier">cardinal_b_spline_prime</span><span class="special">&lt;</span><span class="number">3</span><span class="special">&gt;(</span><span class="identifier">x</span><span class="special">);</span>
-<span class="comment">// Second derivative of B₃:</span>
+<span class="comment">// Second derivative of B&#8323;:</span>
 <span class="identifier">ypp</span> <span class="special">=</span> <span class="identifier">cardinal_b_spline_double_prime</span><span class="special">&lt;</span><span class="number">3</span><span class="special">&gt;(</span><span class="identifier">x</span><span class="special">);</span>
 </pre>
 <p>
@@ -85,7 +85,7 @@
       </p>
 <h4>
 <a name="math_toolkit.sf_poly.cardinal_b_splines.h1"></a>
-        <span><a name="math_toolkit.sf_poly.cardinal_b_splines.caveats"></a></span><a class="link" href="cardinal_b_splines.html#math_toolkit.sf_poly.cardinal_b_splines.caveats">Caveats</a>
+        <span class="phrase"><a name="math_toolkit.sf_poly.cardinal_b_splines.caveats"></a></span><a class="link" href="cardinal_b_splines.html#math_toolkit.sf_poly.cardinal_b_splines.caveats">Caveats</a>
       </h4>
 <p>
         Numerous notational conventions for <span class="emphasis"><em>B</em></span>-splines exist.
@@ -112,7 +112,7 @@
       </p>
 <h4>
 <a name="math_toolkit.sf_poly.cardinal_b_splines.h2"></a>
-        <span><a name="math_toolkit.sf_poly.cardinal_b_splines.implementation"></a></span><a class="link" href="cardinal_b_splines.html#math_toolkit.sf_poly.cardinal_b_splines.implementation">Implementation</a>
+        <span class="phrase"><a name="math_toolkit.sf_poly.cardinal_b_splines.implementation"></a></span><a class="link" href="cardinal_b_splines.html#math_toolkit.sf_poly.cardinal_b_splines.implementation">Implementation</a>
       </h4>
 <p>
         The implementation follows Maurice Cox' 1972 paper 'The Numerical Evaluation
@@ -125,7 +125,7 @@
       </p>
 <h4>
 <a name="math_toolkit.sf_poly.cardinal_b_splines.h3"></a>
-        <span><a name="math_toolkit.sf_poly.cardinal_b_splines.performance"></a></span><a class="link" href="cardinal_b_splines.html#math_toolkit.sf_poly.cardinal_b_splines.performance">Performance</a>
+        <span class="phrase"><a name="math_toolkit.sf_poly.cardinal_b_splines.performance"></a></span><a class="link" href="cardinal_b_splines.html#math_toolkit.sf_poly.cardinal_b_splines.performance">Performance</a>
       </h4>
 <p>
         Double precision timing on a consumer x86 laptop is shown below:
@@ -169,7 +169,7 @@
       </p>
 <h4>
 <a name="math_toolkit.sf_poly.cardinal_b_splines.h4"></a>
-        <span><a name="math_toolkit.sf_poly.cardinal_b_splines.accuracy"></a></span><a class="link" href="cardinal_b_splines.html#math_toolkit.sf_poly.cardinal_b_splines.accuracy">Accuracy</a>
+        <span class="phrase"><a name="math_toolkit.sf_poly.cardinal_b_splines.accuracy"></a></span><a class="link" href="cardinal_b_splines.html#math_toolkit.sf_poly.cardinal_b_splines.accuracy">Accuracy</a>
       </h4>
 <p>
         Some representative ULP plots are shown below. The error grows linearly with
@@ -181,9 +181,9 @@
       </p>
 <h4>
 <a name="math_toolkit.sf_poly.cardinal_b_splines.h5"></a>
-        <span><a name="math_toolkit.sf_poly.cardinal_b_splines.references"></a></span><a class="link" href="cardinal_b_splines.html#math_toolkit.sf_poly.cardinal_b_splines.references">References</a>
+        <span class="phrase"><a name="math_toolkit.sf_poly.cardinal_b_splines.references"></a></span><a class="link" href="cardinal_b_splines.html#math_toolkit.sf_poly.cardinal_b_splines.references">References</a>
       </h4>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
             I.J. Schoenberg, <span class="emphasis"><em>Cardinal Spline Interpolation</em></span>,
             SIAM Volume 12, 1973
@@ -207,10 +207,11 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright © 2006-2020 Nikhar Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher
-      Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Evan Miller, Jeremy Murphy,
-      Matthew Pulver, Johan Råde, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson,
-      Thijs van den Berg, Daryle Walker and Xiaogang Zhang<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2019 Nikhar
+      Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos,
+      Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Matthew Pulver, Johan
+      R&#229;de, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg,
+      Daryle Walker and Xiaogang Zhang<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

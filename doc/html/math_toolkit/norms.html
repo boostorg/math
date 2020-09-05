@@ -1,13 +1,13 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Norms</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
 <link rel="home" href="../index.html" title="Math Toolkit 2.12.0">
-<link rel="up" href="../vector_functionals.html" title="Chapter 7. Vector Functionals - Norms">
-<link rel="prev" href="../vector_functionals.html" title="Chapter 7. Vector Functionals - Norms">
-<link rel="next" href="../special.html" title="Chapter 8. Special Functions">
+<link rel="up" href="../vector_functionals.html" title="Chapter&#160;7.&#160;Vector Functionals - Norms">
+<link rel="prev" href="../vector_functionals.html" title="Chapter&#160;7.&#160;Vector Functionals - Norms">
+<link rel="next" href="../special.html" title="Chapter&#160;8.&#160;Special Functions">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -28,7 +28,7 @@
 </h2></div></div></div>
 <h4>
 <a name="math_toolkit.norms.h0"></a>
-      <span><a name="math_toolkit.norms.synopsis"></a></span><a class="link" href="norms.html#math_toolkit.norms.synopsis">Synopsis</a>
+      <span class="phrase"><a name="math_toolkit.norms.synopsis"></a></span><a class="link" href="norms.html#math_toolkit.norms.synopsis">Synopsis</a>
     </h4>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">tools</span><span class="special">/</span><span class="identifier">norms</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 
@@ -104,7 +104,7 @@
 </pre>
 <h4>
 <a name="math_toolkit.norms.h1"></a>
-      <span><a name="math_toolkit.norms.description"></a></span><a class="link" href="norms.html#math_toolkit.norms.description">Description</a>
+      <span class="phrase"><a name="math_toolkit.norms.description"></a></span><a class="link" href="norms.html#math_toolkit.norms.description">Description</a>
     </h4>
 <p>
       The file <code class="computeroutput"><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">tools</span><span class="special">/</span><span class="identifier">norms</span><span class="special">.</span><span class="identifier">hpp</span></code> is a set of facilities for computing
@@ -121,7 +121,7 @@
     </p>
 <h4>
 <a name="math_toolkit.norms.h2"></a>
-      <span><a name="math_toolkit.norms.u2113_super_u221e_norm"></a></span><a class="link" href="norms.html#math_toolkit.norms.u2113_super_u221e_norm">ℓ<sup>∞</sup> norm</a>
+      <span class="phrase"><a name="math_toolkit.norms.u2113_super_u221e_norm"></a></span><a class="link" href="norms.html#math_toolkit.norms.u2113_super_u221e_norm">&#8467;<sup>&#8734;</sup> norm</a>
     </h4>
 <p>
       Computes the supremum norm of a dataset:
@@ -141,7 +141,7 @@
     </p>
 <h4>
 <a name="math_toolkit.norms.h3"></a>
-      <span><a name="math_toolkit.norms.u2113_super_u221e_distance"></a></span><a class="link" href="norms.html#math_toolkit.norms.u2113_super_u221e_distance">ℓ<sup>∞</sup> distance</a>
+      <span class="phrase"><a name="math_toolkit.norms.u2113_super_u221e_distance"></a></span><a class="link" href="norms.html#math_toolkit.norms.u2113_super_u221e_distance">&#8467;<sup>&#8734;</sup> distance</a>
     </h4>
 <p>
       Computes the supremum norm distance between two vectors:
@@ -158,7 +158,7 @@
     </p>
 <h4>
 <a name="math_toolkit.norms.h4"></a>
-      <span><a name="math_toolkit.norms.u2113_super_p_norm"></a></span><a class="link" href="norms.html#math_toolkit.norms.u2113_super_p_norm">ℓ<sup><span class="emphasis"><em>p</em></span></sup> norm</a>
+      <span class="phrase"><a name="math_toolkit.norms.u2113_super_p_norm"></a></span><a class="link" href="norms.html#math_toolkit.norms.u2113_super_p_norm">&#8467;<sup><span class="emphasis"><em>p</em></span></sup> norm</a>
     </h4>
 <pre class="programlisting"><span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">v</span><span class="special">{-</span><span class="number">8</span><span class="special">,</span> <span class="number">0</span><span class="special">,</span> <span class="number">0</span><span class="special">};</span>
 <span class="keyword">double</span> <span class="identifier">sup</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tools</span><span class="special">::</span><span class="identifier">lp_norm</span><span class="special">(</span><span class="identifier">v</span><span class="special">.</span><span class="identifier">cbegin</span><span class="special">(),</span> <span class="identifier">v</span><span class="special">.</span><span class="identifier">cend</span><span class="special">(),</span> <span class="number">7</span><span class="special">);</span>
@@ -175,12 +175,12 @@
     </p>
 <p>
       Only supports integral <span class="emphasis"><em>p</em></span> for two reasons: The computation
-      is much slower for real <span class="emphasis"><em>p</em></span>, and the non-integral ℓ<sup><span class="emphasis"><em>p</em></span></sup> norm
+      is much slower for real <span class="emphasis"><em>p</em></span>, and the non-integral &#8467;<sup><span class="emphasis"><em>p</em></span></sup> norm
       is rarely used.
     </p>
 <h4>
 <a name="math_toolkit.norms.h5"></a>
-      <span><a name="math_toolkit.norms.u2113_super_p_distance"></a></span><a class="link" href="norms.html#math_toolkit.norms.u2113_super_p_distance">ℓ<sup><span class="emphasis"><em>p</em></span></sup> distance</a>
+      <span class="phrase"><a name="math_toolkit.norms.u2113_super_p_distance"></a></span><a class="link" href="norms.html#math_toolkit.norms.u2113_super_p_distance">&#8467;<sup><span class="emphasis"><em>p</em></span></sup> distance</a>
     </h4>
 <pre class="programlisting"><span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">v</span><span class="special">{-</span><span class="number">8</span><span class="special">,</span> <span class="number">0</span><span class="special">,</span> <span class="number">0</span><span class="special">};</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">w</span><span class="special">{</span><span class="number">8</span><span class="special">,</span> <span class="number">0</span><span class="special">,</span> <span class="number">0</span><span class="special">};</span>
@@ -201,7 +201,7 @@
     </p>
 <h4>
 <a name="math_toolkit.norms.h6"></a>
-      <span><a name="math_toolkit.norms.u2113_super_0_pseudo_norm"></a></span><a class="link" href="norms.html#math_toolkit.norms.u2113_super_0_pseudo_norm">ℓ<sup>0</sup> pseudo-norm</a>
+      <span class="phrase"><a name="math_toolkit.norms.u2113_super_0_pseudo_norm"></a></span><a class="link" href="norms.html#math_toolkit.norms.u2113_super_0_pseudo_norm">&#8467;<sup>0</sup> pseudo-norm</a>
     </h4>
 <p>
       Counts the number of non-zero elements in a container.
@@ -218,7 +218,7 @@
     </p>
 <h4>
 <a name="math_toolkit.norms.h7"></a>
-      <span><a name="math_toolkit.norms.hamming_distance"></a></span><a class="link" href="norms.html#math_toolkit.norms.hamming_distance">Hamming
+      <span class="phrase"><a name="math_toolkit.norms.hamming_distance"></a></span><a class="link" href="norms.html#math_toolkit.norms.hamming_distance">Hamming
       Distance</a>
     </h4>
 <p>
@@ -236,10 +236,10 @@
     </p>
 <h4>
 <a name="math_toolkit.norms.h8"></a>
-      <span><a name="math_toolkit.norms.u2113_super_1_norm"></a></span><a class="link" href="norms.html#math_toolkit.norms.u2113_super_1_norm">ℓ<sup>1</sup> norm</a>
+      <span class="phrase"><a name="math_toolkit.norms.u2113_super_1_norm"></a></span><a class="link" href="norms.html#math_toolkit.norms.u2113_super_1_norm">&#8467;<sup>1</sup> norm</a>
     </h4>
 <p>
-      The ℓ<sup>1</sup> norm is a special case of the ℓ<sup><span class="emphasis"><em>p</em></span></sup> norm,
+      The &#8467;<sup>1</sup> norm is a special case of the &#8467;<sup><span class="emphasis"><em>p</em></span></sup> norm,
       but is much faster:
     </p>
 <pre class="programlisting"><span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">v</span><span class="special">{</span><span class="number">1</span><span class="special">,</span><span class="number">1</span><span class="special">,</span><span class="number">1</span><span class="special">};</span>
@@ -252,10 +252,10 @@
     </p>
 <h4>
 <a name="math_toolkit.norms.h9"></a>
-      <span><a name="math_toolkit.norms.u2113_super_1_distance"></a></span><a class="link" href="norms.html#math_toolkit.norms.u2113_super_1_distance">ℓ<sup>1</sup> distance</a>
+      <span class="phrase"><a name="math_toolkit.norms.u2113_super_1_distance"></a></span><a class="link" href="norms.html#math_toolkit.norms.u2113_super_1_distance">&#8467;<sup>1</sup> distance</a>
     </h4>
 <p>
-      Computes the ℓ<sup>1</sup> distance between two vectors:
+      Computes the &#8467;<sup>1</sup> distance between two vectors:
     </p>
 <pre class="programlisting"><span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">v</span><span class="special">{</span><span class="number">1</span><span class="special">,</span><span class="number">1</span><span class="special">,</span><span class="number">1</span><span class="special">};</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">w</span><span class="special">{</span><span class="number">1</span><span class="special">,</span><span class="number">1</span><span class="special">,</span><span class="number">1</span><span class="special">};</span>
@@ -269,10 +269,10 @@
     </p>
 <h4>
 <a name="math_toolkit.norms.h10"></a>
-      <span><a name="math_toolkit.norms.u2113_super_2_norm"></a></span><a class="link" href="norms.html#math_toolkit.norms.u2113_super_2_norm">ℓ<sup>2</sup> norm</a>
+      <span class="phrase"><a name="math_toolkit.norms.u2113_super_2_norm"></a></span><a class="link" href="norms.html#math_toolkit.norms.u2113_super_2_norm">&#8467;<sup>2</sup> norm</a>
     </h4>
 <p>
-      The ℓ<sup>2</sup> norm is again a special case of the ℓ<sup><span class="emphasis"><em>p</em></span></sup> norm,
+      The &#8467;<sup>2</sup> norm is again a special case of the &#8467;<sup><span class="emphasis"><em>p</em></span></sup> norm,
       but is much faster:
     </p>
 <pre class="programlisting"><span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">v</span><span class="special">{</span><span class="number">1</span><span class="special">,</span><span class="number">1</span><span class="special">,</span><span class="number">1</span><span class="special">};</span>
@@ -286,10 +286,10 @@
     </p>
 <h4>
 <a name="math_toolkit.norms.h11"></a>
-      <span><a name="math_toolkit.norms.u2113_super_2_distance"></a></span><a class="link" href="norms.html#math_toolkit.norms.u2113_super_2_distance">ℓ<sup>2</sup> distance</a>
+      <span class="phrase"><a name="math_toolkit.norms.u2113_super_2_distance"></a></span><a class="link" href="norms.html#math_toolkit.norms.u2113_super_2_distance">&#8467;<sup>2</sup> distance</a>
     </h4>
 <p>
-      Compute the ℓ<sup>2</sup> distance between two vectors <span class="emphasis"><em>w</em></span> and
+      Compute the &#8467;<sup>2</sup> distance between two vectors <span class="emphasis"><em>w</em></span> and
       <span class="emphasis"><em>v</em></span>:
     </p>
 <pre class="programlisting"><span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">v</span><span class="special">{</span><span class="number">1</span><span class="special">,</span><span class="number">1</span><span class="special">,</span><span class="number">1</span><span class="special">};</span>
@@ -304,7 +304,7 @@
     </p>
 <h4>
 <a name="math_toolkit.norms.h12"></a>
-      <span><a name="math_toolkit.norms.total_variation"></a></span><a class="link" href="norms.html#math_toolkit.norms.total_variation">Total
+      <span class="phrase"><a name="math_toolkit.norms.total_variation"></a></span><a class="link" href="norms.html#math_toolkit.norms.total_variation">Total
       Variation</a>
     </h4>
 <pre class="programlisting"><span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">v</span><span class="special">{</span><span class="number">1</span><span class="special">,</span><span class="number">1</span><span class="special">,</span><span class="number">1</span><span class="special">};</span>
@@ -334,9 +334,9 @@
     </p>
 <h4>
 <a name="math_toolkit.norms.h13"></a>
-      <span><a name="math_toolkit.norms.references"></a></span><a class="link" href="norms.html#math_toolkit.norms.references">References</a>
+      <span class="phrase"><a name="math_toolkit.norms.references"></a></span><a class="link" href="norms.html#math_toolkit.norms.references">References</a>
     </h4>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
           Higham, Nicholas J. <span class="emphasis"><em>Accuracy and stability of numerical algorithms.</em></span>
           Vol. 80. Siam, 2002.
@@ -353,10 +353,11 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright © 2006-2020 Nikhar Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher
-      Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Evan Miller, Jeremy Murphy,
-      Matthew Pulver, Johan Råde, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson,
-      Thijs van den Berg, Daryle Walker and Xiaogang Zhang<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2019 Nikhar
+      Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos,
+      Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Matthew Pulver, Johan
+      R&#229;de, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg,
+      Daryle Walker and Xiaogang Zhang<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

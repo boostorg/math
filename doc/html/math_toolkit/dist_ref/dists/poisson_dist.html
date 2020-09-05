@@ -1,9 +1,9 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Poisson Distribution</title>
 <link rel="stylesheet" href="../../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
 <link rel="home" href="../../../index.html" title="Math Toolkit 2.12.0">
 <link rel="up" href="../dists.html" title="Distributions">
 <link rel="prev" href="pareto.html" title="Pareto Distribution">
@@ -30,12 +30,12 @@
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span> <span class="special">{</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span>
-          <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
+          <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">poisson_distribution</span><span class="special">;</span>
 
 <span class="keyword">typedef</span> <span class="identifier">poisson_distribution</span><span class="special">&lt;&gt;</span> <span class="identifier">poisson</span><span class="special">;</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">poisson_distribution</span>
 <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
@@ -53,12 +53,12 @@
           distribution</a> is a well-known statistical discrete distribution.
           It expresses the probability of a number of events (or failures, arrivals,
           occurrences ...) occurring in a fixed period of time, provided these events
-          occur with a known mean rate λ
+          occur with a known mean rate &#955;
 (events/time), and are independent of the
           time since the last event.
         </p>
 <p>
-          The distribution was discovered by Siméon-Denis Poisson (1781 to 1840).
+          The distribution was discovered by Sim&#233;on-Denis Poisson (1781 to 1840).
         </p>
 <p>
           It has the Probability Mass Function:
@@ -68,10 +68,10 @@
 
           </p></blockquote></div>
 <p>
-          for k events, with an expected number of events λ.
+          for k events, with an expected number of events &#955;.
         </p>
 <p>
-          The following graph illustrates how the PDF varies with the parameter λ:
+          The following graph illustrates how the PDF varies with the parameter &#955;:
         </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
             <span class="inlinemediaobject"><img src="../../../../graphs/poisson_pdf_1.svg" align="middle"></span>
@@ -112,7 +112,7 @@
 </table></div>
 <h5>
 <a name="math_toolkit.dist_ref.dists.poisson_dist.h0"></a>
-          <span><a name="math_toolkit.dist_ref.dists.poisson_dist.member_functions"></a></span><a class="link" href="poisson_dist.html#math_toolkit.dist_ref.dists.poisson_dist.member_functions">Member
+          <span class="phrase"><a name="math_toolkit.dist_ref.dists.poisson_dist.member_functions"></a></span><a class="link" href="poisson_dist.html#math_toolkit.dist_ref.dists.poisson_dist.member_functions">Member
           Functions</a>
         </h5>
 <pre class="programlisting"><span class="identifier">poisson_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">mean</span> <span class="special">=</span> <span class="number">1</span><span class="special">);</span>
@@ -127,7 +127,7 @@
         </p>
 <h5>
 <a name="math_toolkit.dist_ref.dists.poisson_dist.h1"></a>
-          <span><a name="math_toolkit.dist_ref.dists.poisson_dist.non_member_accessors"></a></span><a class="link" href="poisson_dist.html#math_toolkit.dist_ref.dists.poisson_dist.non_member_accessors">Non-member
+          <span class="phrase"><a name="math_toolkit.dist_ref.dists.poisson_dist.non_member_accessors"></a></span><a class="link" href="poisson_dist.html#math_toolkit.dist_ref.dists.poisson_dist.non_member_accessors">Non-member
           Accessors</a>
         </h5>
 <p>
@@ -143,11 +143,11 @@
           <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.range">range</a> and <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.support">support</a>.
         </p>
 <p>
-          The domain of the random variable is [0, ∞].
+          The domain of the random variable is [0, &#8734;].
         </p>
 <h5>
 <a name="math_toolkit.dist_ref.dists.poisson_dist.h2"></a>
-          <span><a name="math_toolkit.dist_ref.dists.poisson_dist.accuracy"></a></span><a class="link" href="poisson_dist.html#math_toolkit.dist_ref.dists.poisson_dist.accuracy">Accuracy</a>
+          <span class="phrase"><a name="math_toolkit.dist_ref.dists.poisson_dist.accuracy"></a></span><a class="link" href="poisson_dist.html#math_toolkit.dist_ref.dists.poisson_dist.accuracy">Accuracy</a>
         </h5>
 <p>
           The Poisson distribution is implemented in terms of the incomplete gamma
@@ -161,10 +161,10 @@
         </p>
 <h5>
 <a name="math_toolkit.dist_ref.dists.poisson_dist.h3"></a>
-          <span><a name="math_toolkit.dist_ref.dists.poisson_dist.implementation"></a></span><a class="link" href="poisson_dist.html#math_toolkit.dist_ref.dists.poisson_dist.implementation">Implementation</a>
+          <span class="phrase"><a name="math_toolkit.dist_ref.dists.poisson_dist.implementation"></a></span><a class="link" href="poisson_dist.html#math_toolkit.dist_ref.dists.poisson_dist.implementation">Implementation</a>
         </h5>
 <p>
-          In the following table λ is the mean of the distribution, <span class="emphasis"><em>k</em></span>
+          In the following table &#955; is the mean of the distribution, <span class="emphasis"><em>k</em></span>
           is the random variable, <span class="emphasis"><em>p</em></span> is the probability and
           <span class="emphasis"><em>q = 1-p</em></span>.
         </p>
@@ -194,7 +194,7 @@
                 </td>
 <td>
                   <p>
-                    Using the relation: pdf = e<sup>-λ</sup> λ<sup>k</sup> / k!
+                    Using the relation: pdf = e<sup>-&#955;</sup> &#955;<sup>k</sup> / k!
                   </p>
                 </td>
 </tr>
@@ -206,8 +206,8 @@
                 </td>
 <td>
                   <p>
-                    Using the relation: p = Γ(k+1, λ) / k! = <a class="link" href="../../sf_gamma/igamma.html" title="Incomplete Gamma Functions">gamma_q</a>(k+1,
-                    λ)
+                    Using the relation: p = &#915;(k+1, &#955;) / k! = <a class="link" href="../../sf_gamma/igamma.html" title="Incomplete Gamma Functions">gamma_q</a>(k+1,
+                    &#955;)
                   </p>
                 </td>
 </tr>
@@ -220,7 +220,7 @@
 <td>
                   <p>
                     Using the relation: q = <a class="link" href="../../sf_gamma/igamma.html" title="Incomplete Gamma Functions">gamma_p</a>(k+1,
-                    λ)
+                    &#955;)
                   </p>
                 </td>
 </tr>
@@ -232,7 +232,7 @@
                 </td>
 <td>
                   <p>
-                    Using the relation: k = <a class="link" href="../../sf_gamma/igamma_inv.html" title="Incomplete Gamma Function Inverses">gamma_q_inva</a>(λ,
+                    Using the relation: k = <a class="link" href="../../sf_gamma/igamma_inv.html" title="Incomplete Gamma Function Inverses">gamma_q_inva</a>(&#955;,
                     p) - 1
                   </p>
                 </td>
@@ -245,7 +245,7 @@
                 </td>
 <td>
                   <p>
-                    Using the relation: k = <a class="link" href="../../sf_gamma/igamma_inv.html" title="Incomplete Gamma Function Inverses">gamma_p_inva</a>(λ,
+                    Using the relation: k = <a class="link" href="../../sf_gamma/igamma_inv.html" title="Incomplete Gamma Function Inverses">gamma_p_inva</a>(&#955;,
                     q) - 1
                   </p>
                 </td>
@@ -258,7 +258,7 @@
                 </td>
 <td>
                   <p>
-                    λ
+                    &#955;
                   </p>
                 </td>
 </tr>
@@ -270,7 +270,7 @@
                 </td>
 <td>
                   <p>
-                    floor (λ) or ⌊λ⌋
+                    floor (&#955;) or &#8970;&#955;&#8971;
                   </p>
                 </td>
 </tr>
@@ -282,7 +282,7 @@
                 </td>
 <td>
                   <p>
-                    1/√λ
+                    1/&#8730;&#955;
                   </p>
                 </td>
 </tr>
@@ -294,7 +294,7 @@
                 </td>
 <td>
                   <p>
-                    3 + 1/λ
+                    3 + 1/&#955;
                   </p>
                 </td>
 </tr>
@@ -306,7 +306,7 @@
                 </td>
 <td>
                   <p>
-                    1/λ
+                    1/&#955;
                   </p>
                 </td>
 </tr>
@@ -315,10 +315,11 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright © 2006-2020 Nikhar Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher
-      Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Evan Miller, Jeremy Murphy,
-      Matthew Pulver, Johan Råde, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson,
-      Thijs van den Berg, Daryle Walker and Xiaogang Zhang<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2019 Nikhar
+      Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos,
+      Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Matthew Pulver, Johan
+      R&#229;de, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg,
+      Daryle Walker and Xiaogang Zhang<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

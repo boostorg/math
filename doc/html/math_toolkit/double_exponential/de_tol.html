@@ -1,9 +1,9 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Setting the Termination Condition for Integration</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
 <link rel="home" href="../../index.html" title="Math Toolkit 2.12.0">
 <link rel="up" href="../double_exponential.html" title="Double-exponential quadrature">
 <link rel="prev" href="de_exp_sinh.html" title="exp_sinh">
@@ -38,20 +38,20 @@
       </p>
 <p>
         It is highly recommended that the tolerance be left at the default value
-        of √ε, or something similar. Since double exponential quadrature converges
+        of &#8730;&#949;, or something similar. Since double exponential quadrature converges
         exponentially fast for functions in Hardy spaces, then once the routine has
-        <span class="bold"><strong>proved</strong></span> that the error is ~√ε, then the error
-        should in fact be ~ε.
+        <span class="bold"><strong>proved</strong></span> that the error is ~&#8730;&#949;, then the error
+        should in fact be ~&#949;.
       </p>
 <p>
-        If you request that the error be ~ε, this tolerance might never be achieved
+        If you request that the error be ~&#949;, this tolerance might never be achieved
         (as the summation is not stabilized ala Kahan), and the routine will simply
         flounder, dividing the interval in half in order to increase the precision
         of the integrand, only to be thwarted by floating point roundoff.
       </p>
 <p>
         If for some reason, the default value doesn't quite achieve full precision,
-        then you could try something a little smaller such as √ε/4 or ε<sup>2/3</sup>. However,
+        then you could try something a little smaller such as &#8730;&#949;/4 or &#949;<sup>2/3</sup>. However,
         more likely, you need to check that your function to be integrated is able
         to return accurate values, and that there are no other issues with your integration
         scheme.
@@ -59,10 +59,11 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright © 2006-2020 Nikhar Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher
-      Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Evan Miller, Jeremy Murphy,
-      Matthew Pulver, Johan Råde, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson,
-      Thijs van den Berg, Daryle Walker and Xiaogang Zhang<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2019 Nikhar
+      Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos,
+      Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Matthew Pulver, Johan
+      R&#229;de, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg,
+      Daryle Walker and Xiaogang Zhang<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

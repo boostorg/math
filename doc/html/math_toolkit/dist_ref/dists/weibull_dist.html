@@ -1,9 +1,9 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Weibull Distribution</title>
 <link rel="stylesheet" href="../../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
 <link rel="home" href="../../../index.html" title="Math Toolkit 2.12.0">
 <link rel="up" href="../dists.html" title="Distributions">
 <link rel="prev" href="uniform_dist.html" title="Uniform Distribution">
@@ -30,12 +30,12 @@
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span>
-          <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
+          <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">weibull_distribution</span><span class="special">;</span>
 
 <span class="keyword">typedef</span> <span class="identifier">weibull_distribution</span><span class="special">&lt;&gt;</span> <span class="identifier">weibull</span><span class="special">;</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">weibull_distribution</span>
 <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
@@ -56,34 +56,34 @@
           density function</a>:
         </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-            <span class="serif_italic">f(x; α, β) = (α/β) * (x / β)<sup>α - 1</sup> * e<sup>-(x/β)<sup>α</sup></sup></span>
+            <span class="serif_italic">f(x; &#945;, &#946;) = (&#945;/&#946;) * (x / &#946;)<sup>&#945; - 1</sup> * e<sup>-(x/&#946;)<sup>&#945;</sup></sup></span>
           </p></blockquote></div>
 <p>
-          For shape parameter <span class="emphasis"><em>α</em></span> &gt; 0, and scale parameter
-          <span class="emphasis"><em>β</em></span> &gt; 0, and <span class="emphasis"><em>x</em></span> &gt; 0.
+          For shape parameter <span class="emphasis"><em>&#945;</em></span> &gt; 0, and scale parameter
+          <span class="emphasis"><em>&#946;</em></span> &gt; 0, and <span class="emphasis"><em>x</em></span> &gt; 0.
         </p>
 <p>
           The Weibull distribution is often used in the field of failure analysis;
           in particular it can mimic distributions where the failure rate varies
           over time. If the failure rate is:
         </p>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
-              constant over time, then <span class="emphasis"><em>α</em></span> = 1, suggests that items
+              constant over time, then <span class="emphasis"><em>&#945;</em></span> = 1, suggests that items
               are failing from random events.
             </li>
 <li class="listitem">
-              decreases over time, then <span class="emphasis"><em>α</em></span> &lt; 1, suggesting
+              decreases over time, then <span class="emphasis"><em>&#945;</em></span> &lt; 1, suggesting
               "infant mortality".
             </li>
 <li class="listitem">
-              increases over time, then <span class="emphasis"><em>α</em></span> &gt; 1, suggesting
+              increases over time, then <span class="emphasis"><em>&#945;</em></span> &gt; 1, suggesting
               "wear out" - more likely to fail as time goes by.
             </li>
 </ul></div>
 <p>
           The following graph illustrates how the PDF varies with the shape parameter
-          <span class="emphasis"><em>α</em></span>:
+          <span class="emphasis"><em>&#945;</em></span>:
         </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
             <span class="inlinemediaobject"><img src="../../../../graphs/weibull_pdf1.svg" align="middle"></span>
@@ -91,7 +91,7 @@
           </p></blockquote></div>
 <p>
           While this graph illustrates how the PDF varies with the scale parameter
-          <span class="emphasis"><em>β</em></span>:
+          <span class="emphasis"><em>&#946;</em></span>:
         </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
             <span class="inlinemediaobject"><img src="../../../../graphs/weibull_pdf2.svg" align="middle"></span>
@@ -99,13 +99,13 @@
           </p></blockquote></div>
 <h5>
 <a name="math_toolkit.dist_ref.dists.weibull_dist.h0"></a>
-          <span><a name="math_toolkit.dist_ref.dists.weibull_dist.related_distributions"></a></span><a class="link" href="weibull_dist.html#math_toolkit.dist_ref.dists.weibull_dist.related_distributions">Related
+          <span class="phrase"><a name="math_toolkit.dist_ref.dists.weibull_dist.related_distributions"></a></span><a class="link" href="weibull_dist.html#math_toolkit.dist_ref.dists.weibull_dist.related_distributions">Related
           distributions</a>
         </h5>
 <p>
-          When <span class="emphasis"><em>α</em></span> = 3, the <a href="http://en.wikipedia.org/wiki/Weibull_distribution" target="_top">Weibull
+          When <span class="emphasis"><em>&#945;</em></span> = 3, the <a href="http://en.wikipedia.org/wiki/Weibull_distribution" target="_top">Weibull
           distribution</a> appears similar to the <a href="http://en.wikipedia.org/wiki/Normal_distribution" target="_top">normal
-          distribution</a>. When <span class="emphasis"><em>α</em></span> = 1, the Weibull distribution
+          distribution</a>. When <span class="emphasis"><em>&#945;</em></span> = 1, the Weibull distribution
           reduces to the <a href="http://en.wikipedia.org/wiki/Exponential_distribution" target="_top">exponential
           distribution</a>. The relationship of the types of extreme value distributions,
           of which the Weibull is but one, is discussed by <a href="http://www.worldscibooks.com/mathematics/p191.html" target="_top">Extreme
@@ -114,7 +114,7 @@
         </p>
 <h5>
 <a name="math_toolkit.dist_ref.dists.weibull_dist.h1"></a>
-          <span><a name="math_toolkit.dist_ref.dists.weibull_dist.member_functions"></a></span><a class="link" href="weibull_dist.html#math_toolkit.dist_ref.dists.weibull_dist.member_functions">Member
+          <span class="phrase"><a name="math_toolkit.dist_ref.dists.weibull_dist.member_functions"></a></span><a class="link" href="weibull_dist.html#math_toolkit.dist_ref.dists.weibull_dist.member_functions">Member
           Functions</a>
         </h5>
 <pre class="programlisting"><span class="identifier">weibull_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">shape</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">scale</span> <span class="special">=</span> <span class="number">1</span><span class="special">);</span>
@@ -139,7 +139,7 @@
         </p>
 <h5>
 <a name="math_toolkit.dist_ref.dists.weibull_dist.h2"></a>
-          <span><a name="math_toolkit.dist_ref.dists.weibull_dist.non_member_accessors"></a></span><a class="link" href="weibull_dist.html#math_toolkit.dist_ref.dists.weibull_dist.non_member_accessors">Non-member
+          <span class="phrase"><a name="math_toolkit.dist_ref.dists.weibull_dist.non_member_accessors"></a></span><a class="link" href="weibull_dist.html#math_toolkit.dist_ref.dists.weibull_dist.non_member_accessors">Non-member
           Accessors</a>
         </h5>
 <p>
@@ -155,11 +155,11 @@
           <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.range">range</a> and <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.support">support</a>.
         </p>
 <p>
-          The domain of the random variable is [0, ∞].
+          The domain of the random variable is [0, &#8734;].
         </p>
 <h5>
 <a name="math_toolkit.dist_ref.dists.weibull_dist.h3"></a>
-          <span><a name="math_toolkit.dist_ref.dists.weibull_dist.accuracy"></a></span><a class="link" href="weibull_dist.html#math_toolkit.dist_ref.dists.weibull_dist.accuracy">Accuracy</a>
+          <span class="phrase"><a name="math_toolkit.dist_ref.dists.weibull_dist.accuracy"></a></span><a class="link" href="weibull_dist.html#math_toolkit.dist_ref.dists.weibull_dist.accuracy">Accuracy</a>
         </h5>
 <p>
           The Weibull distribution is implemented in terms of the standard library
@@ -170,11 +170,11 @@
         </p>
 <h5>
 <a name="math_toolkit.dist_ref.dists.weibull_dist.h4"></a>
-          <span><a name="math_toolkit.dist_ref.dists.weibull_dist.implementation"></a></span><a class="link" href="weibull_dist.html#math_toolkit.dist_ref.dists.weibull_dist.implementation">Implementation</a>
+          <span class="phrase"><a name="math_toolkit.dist_ref.dists.weibull_dist.implementation"></a></span><a class="link" href="weibull_dist.html#math_toolkit.dist_ref.dists.weibull_dist.implementation">Implementation</a>
         </h5>
 <p>
-          In the following table <span class="emphasis"><em>α</em></span> is the shape parameter of
-          the distribution, <span class="emphasis"><em>β</em></span> is its scale parameter, <span class="emphasis"><em>x</em></span>
+          In the following table <span class="emphasis"><em>&#945;</em></span> is the shape parameter of
+          the distribution, <span class="emphasis"><em>&#946;</em></span> is its scale parameter, <span class="emphasis"><em>x</em></span>
           is the random variate, <span class="emphasis"><em>p</em></span> is the probability and <span class="emphasis"><em>q
           = 1-p</em></span>.
         </p>
@@ -204,7 +204,7 @@
                 </td>
 <td>
                   <p>
-                    Using the relation: pdf = αβ<sup>-α </sup>x<sup>α - 1</sup> e<sup>-(x/beta)<sup>alpha</sup></sup>
+                    Using the relation: pdf = &#945;&#946;<sup>-&#945; </sup>x<sup>&#945; - 1</sup> e<sup>-(x/beta)<sup>alpha</sup></sup>
                   </p>
                 </td>
 </tr>
@@ -216,7 +216,7 @@
                 </td>
 <td>
                   <p>
-                    Using the relation: p = -<a class="link" href="../../powers/expm1.html" title="expm1">expm1</a>(-(x/β)<sup>α</sup>)
+                    Using the relation: p = -<a class="link" href="../../powers/expm1.html" title="expm1">expm1</a>(-(x/&#946;)<sup>&#945;</sup>)
                   </p>
                 </td>
 </tr>
@@ -228,7 +228,7 @@
                 </td>
 <td>
                   <p>
-                    Using the relation: q = e<sup>-(x/β)<sup>α</sup></sup>
+                    Using the relation: q = e<sup>-(x/&#946;)<sup>&#945;</sup></sup>
                   </p>
                 </td>
 </tr>
@@ -240,7 +240,7 @@
                 </td>
 <td>
                   <p>
-                    Using the relation: x = β * (-<a class="link" href="../../powers/log1p.html" title="log1p">log1p</a>(-p))<sup>1/α</sup>
+                    Using the relation: x = &#946; * (-<a class="link" href="../../powers/log1p.html" title="log1p">log1p</a>(-p))<sup>1/&#945;</sup>
                   </p>
                 </td>
 </tr>
@@ -252,7 +252,7 @@
                 </td>
 <td>
                   <p>
-                    Using the relation: x = β * (-log(q))<sup>1/α</sup>
+                    Using the relation: x = &#946; * (-log(q))<sup>1/&#945;</sup>
                   </p>
                 </td>
 </tr>
@@ -264,7 +264,7 @@
                 </td>
 <td>
                   <p>
-                    β * Γ(1 + 1/α)
+                    &#946; * &#915;(1 + 1/&#945;)
                   </p>
                 </td>
 </tr>
@@ -276,7 +276,7 @@
                 </td>
 <td>
                   <p>
-                    β<sup>2</sup>(Γ(1 + 2/α) - Γ<sup>2</sup>(1 + 1/α))
+                    &#946;<sup>2</sup>(&#915;(1 + 2/&#945;) - &#915;<sup>2</sup>(1 + 1/&#945;))
                   </p>
                 </td>
 </tr>
@@ -288,7 +288,7 @@
                 </td>
 <td>
                   <p>
-                    β((α - 1) / α)<sup>1/α</sup>
+                    &#946;((&#945; - 1) / &#945;)<sup>1/&#945;</sup>
                   </p>
                 </td>
 </tr>
@@ -338,9 +338,9 @@
 </table></div>
 <h5>
 <a name="math_toolkit.dist_ref.dists.weibull_dist.h5"></a>
-          <span><a name="math_toolkit.dist_ref.dists.weibull_dist.references"></a></span><a class="link" href="weibull_dist.html#math_toolkit.dist_ref.dists.weibull_dist.references">References</a>
+          <span class="phrase"><a name="math_toolkit.dist_ref.dists.weibull_dist.references"></a></span><a class="link" href="weibull_dist.html#math_toolkit.dist_ref.dists.weibull_dist.references">References</a>
         </h5>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
               <a href="http://en.wikipedia.org/wiki/Weibull_distribution" target="_top">http://en.wikipedia.org/wiki/Weibull_distribution</a>
             </li>
@@ -357,10 +357,11 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright © 2006-2020 Nikhar Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher
-      Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Evan Miller, Jeremy Murphy,
-      Matthew Pulver, Johan Råde, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson,
-      Thijs van den Berg, Daryle Walker and Xiaogang Zhang<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2019 Nikhar
+      Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos,
+      Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Matthew Pulver, Johan
+      R&#229;de, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg,
+      Daryle Walker and Xiaogang Zhang<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

@@ -1,9 +1,9 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Beta Distribution</title>
 <link rel="stylesheet" href="../../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
 <link rel="home" href="../../../index.html" title="Math Toolkit 2.12.0">
 <link rel="up" href="../dists.html" title="Distributions">
 <link rel="prev" href="bernoulli_dist.html" title="Bernoulli Distribution">
@@ -30,14 +30,14 @@
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
  <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span>
-           <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
+           <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">beta_distribution</span><span class="special">;</span>
 
 <span class="comment">// typedef beta_distribution&lt;double&gt; beta;</span>
 <span class="comment">// Note that this is deliberately NOT provided,</span>
 <span class="comment">// to avoid a clash with the function name beta.</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">beta_distribution</span>
 <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
@@ -102,17 +102,17 @@
           distribution</a> defined on the interval [0,1] is given by:
         </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-            <span class="serif_italic">f(x;α,β) = x<sup>α - 1</sup> (1 - x)<sup>β -1</sup> / B(α, β)</span>
+            <span class="serif_italic">f(x;&#945;,&#946;) = x<sup>&#945; - 1</sup> (1 - x)<sup>&#946; -1</sup> / B(&#945;, &#946;)</span>
           </p></blockquote></div>
 <p>
-          where <span class="serif_italic">B(α, β)</span> is the <a href="http://en.wikipedia.org/wiki/Beta_function" target="_top">beta
+          where <span class="serif_italic">B(&#945;, &#946;)</span> is the <a href="http://en.wikipedia.org/wiki/Beta_function" target="_top">beta
           function</a>, implemented in this library as <a class="link" href="../../sf_beta/beta_function.html" title="Beta">beta</a>.
           Division by the beta function ensures that the pdf is normalized to the
           range zero to unity.
         </p>
 <p>
           The following graph illustrates examples of the pdf for various values
-          of the shape parameters. Note the <span class="emphasis"><em>α = β = 2</em></span> (blue line)
+          of the shape parameters. Note the <span class="emphasis"><em>&#945; = &#946; = 2</em></span> (blue line)
           is dome-shaped, and might be approximated by a symmetrical triangular distribution.
         </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
@@ -120,21 +120,21 @@
 
           </p></blockquote></div>
 <p>
-          If α = β = 1, then it is a  
+          If &#945; = &#946; = 1, then it is a &#8195;
 <a href="http://en.wikipedia.org/wiki/Uniform_distribution_%28continuous%29" target="_top">uniform
           distribution</a>, equal to unity in the entire interval x = 0 to 1.
-          If α and β are &lt; 1, then the pdf is U-shaped. If α != β, then the shape is
+          If &#945; and &#946; are &lt; 1, then the pdf is U-shaped. If &#945; != &#946;, then the shape is
           asymmetric and could be approximated by a triangle whose apex is away from
           the centre (where x = half).
         </p>
 <h5>
 <a name="math_toolkit.dist_ref.dists.beta_dist.h0"></a>
-          <span><a name="math_toolkit.dist_ref.dists.beta_dist.member_functions"></a></span><a class="link" href="beta_dist.html#math_toolkit.dist_ref.dists.beta_dist.member_functions">Member
+          <span class="phrase"><a name="math_toolkit.dist_ref.dists.beta_dist.member_functions"></a></span><a class="link" href="beta_dist.html#math_toolkit.dist_ref.dists.beta_dist.member_functions">Member
           Functions</a>
         </h5>
 <h6>
 <a name="math_toolkit.dist_ref.dists.beta_dist.h1"></a>
-          <span><a name="math_toolkit.dist_ref.dists.beta_dist.constructor"></a></span><a class="link" href="beta_dist.html#math_toolkit.dist_ref.dists.beta_dist.constructor">Constructor</a>
+          <span class="phrase"><a name="math_toolkit.dist_ref.dists.beta_dist.constructor"></a></span><a class="link" href="beta_dist.html#math_toolkit.dist_ref.dists.beta_dist.constructor">Constructor</a>
         </h6>
 <pre class="programlisting"><span class="identifier">beta_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">alpha</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">beta</span><span class="special">);</span>
 </pre>
@@ -161,7 +161,7 @@
         </p>
 <h6>
 <a name="math_toolkit.dist_ref.dists.beta_dist.h2"></a>
-          <span><a name="math_toolkit.dist_ref.dists.beta_dist.parameter_accessors"></a></span><a class="link" href="beta_dist.html#math_toolkit.dist_ref.dists.beta_dist.parameter_accessors">Parameter
+          <span class="phrase"><a name="math_toolkit.dist_ref.dists.beta_dist.parameter_accessors"></a></span><a class="link" href="beta_dist.html#math_toolkit.dist_ref.dists.beta_dist.parameter_accessors">Parameter
           Accessors</a>
         </h6>
 <pre class="programlisting"><span class="identifier">RealType</span> <span class="identifier">alpha</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
@@ -185,21 +185,21 @@
 </pre>
 <h5>
 <a name="math_toolkit.dist_ref.dists.beta_dist.h3"></a>
-          <span><a name="math_toolkit.dist_ref.dists.beta_dist.parameter_estimators"></a></span><a class="link" href="beta_dist.html#math_toolkit.dist_ref.dists.beta_dist.parameter_estimators">Parameter
+          <span class="phrase"><a name="math_toolkit.dist_ref.dists.beta_dist.parameter_estimators"></a></span><a class="link" href="beta_dist.html#math_toolkit.dist_ref.dists.beta_dist.parameter_estimators">Parameter
           Estimators</a>
         </h5>
 <p>
           Two pairs of parameter estimators are provided.
         </p>
 <p>
-          One estimates either α  or β 
+          One estimates either &#945;  or &#946; 
 from presumed-known mean and variance.
         </p>
 <p>
-          The other pair estimates either α or β from the cdf and x.
+          The other pair estimates either &#945; or &#946; from the cdf and x.
         </p>
 <p>
-          It is also possible to estimate α and β  from 'known' mode &amp; quantile. For
+          It is also possible to estimate &#945; and &#946;  from 'known' mode &amp; quantile. For
           example, calculators are provided by the <a href="http://www.ausvet.com.au/pprev/content.php?page=PPscript" target="_top">Pooled
           Prevalence Calculator</a> and <a href="http://www.epi.ucdavis.edu/diagnostictests/betabuster.html" target="_top">Beta
           Buster</a> but this is not yet implemented here.
@@ -209,7 +209,7 @@ from presumed-known mean and variance.
   <span class="identifier">RealType</span> <span class="identifier">variance</span><span class="special">);</span> <span class="comment">// Expected value of variance.</span>
 </pre>
 <p>
-          Returns the unique value of α that corresponds to a beta distribution with
+          Returns the unique value of &#945; that corresponds to a beta distribution with
           mean <span class="emphasis"><em>mean</em></span> and variance <span class="emphasis"><em>variance</em></span>.
         </p>
 <pre class="programlisting"><span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_beta</span><span class="special">(</span>
@@ -217,7 +217,7 @@ from presumed-known mean and variance.
   <span class="identifier">RealType</span> <span class="identifier">variance</span><span class="special">);</span> <span class="comment">// Expected value of variance.</span>
 </pre>
 <p>
-          Returns the unique value of β that corresponds to a beta distribution with
+          Returns the unique value of &#946; that corresponds to a beta distribution with
           mean <span class="emphasis"><em>mean</em></span> and variance <span class="emphasis"><em>variance</em></span>.
         </p>
 <pre class="programlisting"><span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_alpha</span><span class="special">(</span>
@@ -226,7 +226,7 @@ from presumed-known mean and variance.
   <span class="identifier">RealType</span> <span class="identifier">probability</span><span class="special">);</span> <span class="comment">// probability cdf</span>
 </pre>
 <p>
-          Returns the value of α that gives: <code class="computeroutput"><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">beta_distribution</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;(</span><span class="identifier">alpha</span><span class="special">,</span> <span class="identifier">beta</span><span class="special">),</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">==</span> <span class="identifier">probability</span></code>.
+          Returns the value of &#945; that gives: <code class="computeroutput"><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">beta_distribution</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;(</span><span class="identifier">alpha</span><span class="special">,</span> <span class="identifier">beta</span><span class="special">),</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">==</span> <span class="identifier">probability</span></code>.
         </p>
 <pre class="programlisting"><span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_beta</span><span class="special">(</span>
   <span class="identifier">RealType</span> <span class="identifier">alpha</span><span class="special">,</span> <span class="comment">// alpha.</span>
@@ -234,11 +234,11 @@ from presumed-known mean and variance.
   <span class="identifier">RealType</span> <span class="identifier">probability</span><span class="special">);</span> <span class="comment">// probability cdf.</span>
 </pre>
 <p>
-          Returns the value of β that gives: <code class="computeroutput"><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">beta_distribution</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;(</span><span class="identifier">alpha</span><span class="special">,</span> <span class="identifier">beta</span><span class="special">),</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">==</span> <span class="identifier">probability</span></code>.
+          Returns the value of &#946; that gives: <code class="computeroutput"><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">beta_distribution</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;(</span><span class="identifier">alpha</span><span class="special">,</span> <span class="identifier">beta</span><span class="special">),</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">==</span> <span class="identifier">probability</span></code>.
         </p>
 <h5>
 <a name="math_toolkit.dist_ref.dists.beta_dist.h4"></a>
-          <span><a name="math_toolkit.dist_ref.dists.beta_dist.non_member_accessor_functions"></a></span><a class="link" href="beta_dist.html#math_toolkit.dist_ref.dists.beta_dist.non_member_accessor_functions">Non-member
+          <span class="phrase"><a name="math_toolkit.dist_ref.dists.beta_dist.non_member_accessor_functions"></a></span><a class="link" href="beta_dist.html#math_toolkit.dist_ref.dists.beta_dist.non_member_accessor_functions">Non-member
           Accessor Functions</a>
         </h5>
 <p>
@@ -260,7 +260,7 @@ from presumed-known mean and variance.
         </p>
 <h5>
 <a name="math_toolkit.dist_ref.dists.beta_dist.h5"></a>
-          <span><a name="math_toolkit.dist_ref.dists.beta_dist.applications"></a></span><a class="link" href="beta_dist.html#math_toolkit.dist_ref.dists.beta_dist.applications">Applications</a>
+          <span class="phrase"><a name="math_toolkit.dist_ref.dists.beta_dist.applications"></a></span><a class="link" href="beta_dist.html#math_toolkit.dist_ref.dists.beta_dist.applications">Applications</a>
         </h5>
 <p>
           The beta distribution can be used to model events constrained to take place
@@ -273,11 +273,11 @@ from presumed-known mean and variance.
         </p>
 <h5>
 <a name="math_toolkit.dist_ref.dists.beta_dist.h6"></a>
-          <span><a name="math_toolkit.dist_ref.dists.beta_dist.related_distributions"></a></span><a class="link" href="beta_dist.html#math_toolkit.dist_ref.dists.beta_dist.related_distributions">Related
+          <span class="phrase"><a name="math_toolkit.dist_ref.dists.beta_dist.related_distributions"></a></span><a class="link" href="beta_dist.html#math_toolkit.dist_ref.dists.beta_dist.related_distributions">Related
           distributions</a>
         </h5>
 <p>
-          The beta distribution with both α and β = 1 follows a <a href="http://en.wikipedia.org/wiki/Uniform_distribution_%28continuous%29" target="_top">uniform
+          The beta distribution with both &#945; and &#946; = 1 follows a <a href="http://en.wikipedia.org/wiki/Uniform_distribution_%28continuous%29" target="_top">uniform
           distribution</a>.
         </p>
 <p>
@@ -286,10 +286,10 @@ from presumed-known mean and variance.
         </p>
 <p>
           The <a href="http://en.wikipedia.org/wiki/Binomial_distribution" target="_top">binomial
-          distribution</a> is closely related when α and β  are integers.
+          distribution</a> is closely related when &#945; and &#946;  are integers.
         </p>
 <p>
-          With integer values of α  and β the distribution B(i, j) is that of the j-th
+          With integer values of &#945;  and &#946; the distribution B(i, j) is that of the j-th
           highest of a sample of i + j + 1 independent random variables uniformly
           distributed between 0 and 1. The cumulative probability from 0 to x is
           thus the probability that the j-th highest value is less than x. Or it
@@ -299,7 +299,7 @@ from presumed-known mean and variance.
         </p>
 <h5>
 <a name="math_toolkit.dist_ref.dists.beta_dist.h7"></a>
-          <span><a name="math_toolkit.dist_ref.dists.beta_dist.accuracy"></a></span><a class="link" href="beta_dist.html#math_toolkit.dist_ref.dists.beta_dist.accuracy">Accuracy</a>
+          <span class="phrase"><a name="math_toolkit.dist_ref.dists.beta_dist.accuracy"></a></span><a class="link" href="beta_dist.html#math_toolkit.dist_ref.dists.beta_dist.accuracy">Accuracy</a>
         </h5>
 <p>
           This distribution is implemented using the <a class="link" href="../../sf_beta/beta_function.html" title="Beta">beta
@@ -311,11 +311,11 @@ from presumed-known mean and variance.
         </p>
 <h5>
 <a name="math_toolkit.dist_ref.dists.beta_dist.h8"></a>
-          <span><a name="math_toolkit.dist_ref.dists.beta_dist.implementation"></a></span><a class="link" href="beta_dist.html#math_toolkit.dist_ref.dists.beta_dist.implementation">Implementation</a>
+          <span class="phrase"><a name="math_toolkit.dist_ref.dists.beta_dist.implementation"></a></span><a class="link" href="beta_dist.html#math_toolkit.dist_ref.dists.beta_dist.implementation">Implementation</a>
         </h5>
 <p>
           In the following table <span class="emphasis"><em>a</em></span> and <span class="emphasis"><em>b</em></span>
-          are the parameters α and β, <span class="emphasis"><em>x</em></span> is the random variable,
+          are the parameters &#945; and &#946;, <span class="emphasis"><em>x</em></span> is the random variable,
           <span class="emphasis"><em>p</em></span> is the probability and <span class="emphasis"><em>q = 1-p</em></span>.
         </p>
 <div class="informaltable"><table class="table">
@@ -344,7 +344,7 @@ from presumed-known mean and variance.
                 </td>
 <td>
                   <p>
-                    <span class="serif_italic">f(x;α,β) = x<sup>α - 1</sup> (1 - x)<sup>β -1</sup> / B(α, β)</span>
+                    <span class="serif_italic">f(x;&#945;,&#946;) = x<sup>&#945; - 1</sup> (1 - x)<sup>&#946; -1</sup> / B(&#945;, &#946;)</span>
                   </p>
                   <p>
                     Implemented using <a class="link" href="../../sf_beta/beta_derivative.html" title="Derivative of the Incomplete Beta Function">ibeta_derivative</a>(a,
@@ -586,7 +586,7 @@ from presumed-known mean and variance.
 </table></div>
 <h5>
 <a name="math_toolkit.dist_ref.dists.beta_dist.h9"></a>
-          <span><a name="math_toolkit.dist_ref.dists.beta_dist.references"></a></span><a class="link" href="beta_dist.html#math_toolkit.dist_ref.dists.beta_dist.references">References</a>
+          <span class="phrase"><a name="math_toolkit.dist_ref.dists.beta_dist.references"></a></span><a class="link" href="beta_dist.html#math_toolkit.dist_ref.dists.beta_dist.references">References</a>
         </h5>
 <p>
           <a href="http://en.wikipedia.org/wiki/Beta_distribution" target="_top">Wikipedia Beta
@@ -603,10 +603,11 @@ from presumed-known mean and variance.
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright © 2006-2020 Nikhar Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher
-      Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Evan Miller, Jeremy Murphy,
-      Matthew Pulver, Johan Råde, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson,
-      Thijs van den Berg, Daryle Walker and Xiaogang Zhang<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2019 Nikhar
+      Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos,
+      Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Matthew Pulver, Johan
+      R&#229;de, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg,
+      Daryle Walker and Xiaogang Zhang<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

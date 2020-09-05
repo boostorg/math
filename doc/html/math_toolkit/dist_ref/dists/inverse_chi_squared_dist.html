@@ -1,9 +1,9 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Inverse Chi Squared Distribution</title>
 <link rel="stylesheet" href="../../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
 <link rel="home" href="../../../index.html" title="Math Toolkit 2.12.0">
 <link rel="up" href="../dists.html" title="Distributions">
 <link rel="prev" href="hypergeometric_dist.html" title="Hypergeometric Distribution">
@@ -31,7 +31,7 @@
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span>
-          <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
+          <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">inverse_chi_squared_distribution</span>
 <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
@@ -82,7 +82,7 @@
 <p>
           See
         </p>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
               Inverse chi_squared distribution <a href="http://en.wikipedia.org/wiki/Inverse-chi-square_distribution" target="_top">http://en.wikipedia.org/wiki/Inverse-chi-square_distribution</a>
             </li>
@@ -107,7 +107,7 @@
 <p>
           The inverse_chi_squared distribution is used in <a href="http://en.wikipedia.org/wiki/Bayesian_statistics" target="_top">Bayesian
           statistics</a>: the scaled inverse chi-square is conjugate prior for
-          the normal distribution with known mean, model parameter σ² (variance).
+          the normal distribution with known mean, model parameter &#963;&#178; (variance).
         </p>
 <p>
           See <a href="http://en.wikipedia.org/wiki/Conjugate_prior" target="_top">conjugate
@@ -120,10 +120,10 @@
         </p>
 <p>
           The inverse_chi_squared distribution is a special case of a inverse_gamma
-          distribution with ν (degrees_of_freedom) shape (α) and scale (β) where
+          distribution with &#957; (degrees_of_freedom) shape (&#945;) and scale (&#946;) where
         </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-            <span class="serif_italic">α= ν /2 and β = ½</span>
+            <span class="serif_italic">&#945;= &#957; /2 and &#946; = &#189;</span>
           </p></blockquote></div>
 <div class="note"><table border="0" summary="Note">
 <tr>
@@ -147,36 +147,36 @@
 </td></tr>
 </table></div>
 <p>
-          For degrees of freedom parameter ν, the (<span class="bold"><strong>unscaled</strong></span>)
+          For degrees of freedom parameter &#957;, the (<span class="bold"><strong>unscaled</strong></span>)
           inverse chi_squared distribution is defined by the probability density
           function (PDF):
         </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-            <span class="serif_italic">f(x;ν) = 2<sup>-ν/2</sup> x<sup>-ν/2-1</sup> e<sup>-1/2x</sup> / Γ(ν/2)</span>
+            <span class="serif_italic">f(x;&#957;) = 2<sup>-&#957;/2</sup> x<sup>-&#957;/2-1</sup> e<sup>-1/2x</sup> / &#915;(&#957;/2)</span>
           </p></blockquote></div>
 <p>
           and Cumulative Density Function (CDF)
         </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-            <span class="serif_italic">F(x;ν) = Γ(ν/2, 1/2x) / Γ(ν/2)</span>
+            <span class="serif_italic">F(x;&#957;) = &#915;(&#957;/2, 1/2x) / &#915;(&#957;/2)</span>
           </p></blockquote></div>
 <p>
-          For degrees of freedom parameter ν and scale parameter ξ, the <span class="bold"><strong>scaled</strong></span>
+          For degrees of freedom parameter &#957; and scale parameter &#958;, the <span class="bold"><strong>scaled</strong></span>
           inverse chi_squared distribution is defined by the probability density
           function (PDF):
         </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-            <span class="serif_italic">f(x;ν, ξ) = (ξν/2)<sup>ν/2</sup> e<sup>-νξ/2x</sup> x<sup>-1-ν/2</sup> / Γ(ν/2)</span>
+            <span class="serif_italic">f(x;&#957;, &#958;) = (&#958;&#957;/2)<sup>&#957;/2</sup> e<sup>-&#957;&#958;/2x</sup> x<sup>-1-&#957;/2</sup> / &#915;(&#957;/2)</span>
           </p></blockquote></div>
 <p>
           and Cumulative Density Function (CDF)
         </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-            <span class="serif_italic">F(x;ν, ξ) = Γ(ν/2, νξ/2x) / Γ(ν/2)</span>
+            <span class="serif_italic">F(x;&#957;, &#958;) = &#915;(&#957;/2, &#957;&#958;/2x) / &#915;(&#957;/2)</span>
           </p></blockquote></div>
 <p>
           The following graphs illustrate how the PDF and CDF of the inverse chi_squared
-          distribution varies for a few values of parameters ν and ξ:
+          distribution varies for a few values of parameters &#957; and &#958;:
         </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
             <span class="inlinemediaobject"><img src="../../../../graphs/inverse_chi_squared_pdf.svg" align="middle"></span>
@@ -188,34 +188,34 @@
           </p></blockquote></div>
 <h5>
 <a name="math_toolkit.dist_ref.dists.inverse_chi_squared_dist.h0"></a>
-          <span><a name="math_toolkit.dist_ref.dists.inverse_chi_squared_dist.member_functions"></a></span><a class="link" href="inverse_chi_squared_dist.html#math_toolkit.dist_ref.dists.inverse_chi_squared_dist.member_functions">Member
+          <span class="phrase"><a name="math_toolkit.dist_ref.dists.inverse_chi_squared_dist.member_functions"></a></span><a class="link" href="inverse_chi_squared_dist.html#math_toolkit.dist_ref.dists.inverse_chi_squared_dist.member_functions">Member
           Functions</a>
         </h5>
 <pre class="programlisting"><span class="identifier">inverse_chi_squared_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">df</span> <span class="special">=</span> <span class="number">1</span><span class="special">);</span> <span class="comment">// Implicitly scaled 1/df.</span>
 <span class="identifier">inverse_chi_squared_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">df</span> <span class="special">=</span> <span class="number">1</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">scale</span><span class="special">);</span> <span class="comment">// Explicitly scaled.</span>
 </pre>
 <p>
-          Constructs an inverse chi_squared distribution with ν degrees of freedom
+          Constructs an inverse chi_squared distribution with &#957; degrees of freedom
           <span class="emphasis"><em>df</em></span>, and scale <span class="emphasis"><em>scale</em></span> with default
           value 1/df.
         </p>
 <p>
-          Requires that the degrees of freedom ν parameter is greater than zero, otherwise
+          Requires that the degrees of freedom &#957; parameter is greater than zero, otherwise
           calls <a class="link" href="../../error_handling.html#math_toolkit.error_handling.domain_error">domain_error</a>.
         </p>
 <pre class="programlisting"><span class="identifier">RealType</span> <span class="identifier">degrees_of_freedom</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
-          Returns the degrees_of_freedom ν parameter of this distribution.
+          Returns the degrees_of_freedom &#957; parameter of this distribution.
         </p>
 <pre class="programlisting"><span class="identifier">RealType</span> <span class="identifier">scale</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
-          Returns the scale ξ parameter of this distribution.
+          Returns the scale &#958; parameter of this distribution.
         </p>
 <h5>
 <a name="math_toolkit.dist_ref.dists.inverse_chi_squared_dist.h1"></a>
-          <span><a name="math_toolkit.dist_ref.dists.inverse_chi_squared_dist.non_member_accessors"></a></span><a class="link" href="inverse_chi_squared_dist.html#math_toolkit.dist_ref.dists.inverse_chi_squared_dist.non_member_accessors">Non-member
+          <span class="phrase"><a name="math_toolkit.dist_ref.dists.inverse_chi_squared_dist.non_member_accessors"></a></span><a class="link" href="inverse_chi_squared_dist.html#math_toolkit.dist_ref.dists.inverse_chi_squared_dist.non_member_accessors">Non-member
           Accessors</a>
         </h5>
 <p>
@@ -231,7 +231,7 @@
           <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.range">range</a> and <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.support">support</a>.
         </p>
 <p>
-          The domain of the random variate is [0,+∞].
+          The domain of the random variate is [0,+&#8734;].
         </p>
 <div class="note"><table border="0" summary="Note">
 <tr>
@@ -245,7 +245,7 @@
 </table></div>
 <h5>
 <a name="math_toolkit.dist_ref.dists.inverse_chi_squared_dist.h2"></a>
-          <span><a name="math_toolkit.dist_ref.dists.inverse_chi_squared_dist.accuracy"></a></span><a class="link" href="inverse_chi_squared_dist.html#math_toolkit.dist_ref.dists.inverse_chi_squared_dist.accuracy">Accuracy</a>
+          <span class="phrase"><a name="math_toolkit.dist_ref.dists.inverse_chi_squared_dist.accuracy"></a></span><a class="link" href="inverse_chi_squared_dist.html#math_toolkit.dist_ref.dists.inverse_chi_squared_dist.accuracy">Accuracy</a>
         </h5>
 <p>
           The inverse gamma distribution is implemented in terms of the incomplete
@@ -261,14 +261,14 @@
         </p>
 <h5>
 <a name="math_toolkit.dist_ref.dists.inverse_chi_squared_dist.h3"></a>
-          <span><a name="math_toolkit.dist_ref.dists.inverse_chi_squared_dist.implementation"></a></span><a class="link" href="inverse_chi_squared_dist.html#math_toolkit.dist_ref.dists.inverse_chi_squared_dist.implementation">Implementation</a>
+          <span class="phrase"><a name="math_toolkit.dist_ref.dists.inverse_chi_squared_dist.implementation"></a></span><a class="link" href="inverse_chi_squared_dist.html#math_toolkit.dist_ref.dists.inverse_chi_squared_dist.implementation">Implementation</a>
         </h5>
 <p>
-          In the following table ν is the degrees of freedom parameter and ξ is the scale
+          In the following table &#957; is the degrees of freedom parameter and &#958; is the scale
           parameter of the distribution, <span class="emphasis"><em>x</em></span> is the random variate,
           <span class="emphasis"><em>p</em></span> is the probability and <span class="emphasis"><em>q = 1-p</em></span>
-          its complement. Parameters α for shape and β for scale are used for the inverse
-          gamma function: α = ν/2 and β = ν * ξ/2.
+          its complement. Parameters &#945; for shape and &#946; for scale are used for the inverse
+          gamma function: &#945; = &#957;/2 and &#946; = &#957; * &#958;/2.
         </p>
 <div class="informaltable"><table class="table">
 <colgroup>
@@ -296,8 +296,8 @@
                 </td>
 <td>
                   <p>
-                    Using the relation: pdf = <a class="link" href="../../sf_gamma/gamma_derivatives.html" title="Derivative of the Incomplete Gamma Function">gamma_p_derivative</a>(α,
-                    β/ x, β) / x * x
+                    Using the relation: pdf = <a class="link" href="../../sf_gamma/gamma_derivatives.html" title="Derivative of the Incomplete Gamma Function">gamma_p_derivative</a>(&#945;,
+                    &#946;/ x, &#946;) / x * x
                   </p>
                 </td>
 </tr>
@@ -309,8 +309,8 @@
                 </td>
 <td>
                   <p>
-                    Using the relation: p = <a class="link" href="../../sf_gamma/igamma.html" title="Incomplete Gamma Functions">gamma_q</a>(α,
-                    β / x)
+                    Using the relation: p = <a class="link" href="../../sf_gamma/igamma.html" title="Incomplete Gamma Functions">gamma_q</a>(&#945;,
+                    &#946; / x)
                   </p>
                 </td>
 </tr>
@@ -322,8 +322,8 @@
                 </td>
 <td>
                   <p>
-                    Using the relation: q = <a class="link" href="../../sf_gamma/igamma.html" title="Incomplete Gamma Functions">gamma_p</a>(α,
-                    β / x)
+                    Using the relation: q = <a class="link" href="../../sf_gamma/igamma.html" title="Incomplete Gamma Functions">gamma_p</a>(&#945;,
+                    &#946; / x)
                   </p>
                 </td>
 </tr>
@@ -335,7 +335,7 @@
                 </td>
 <td>
                   <p>
-                    Using the relation: x = β/ <a class="link" href="../../sf_gamma/igamma_inv.html" title="Incomplete Gamma Function Inverses">gamma_q_inv</a>(α,
+                    Using the relation: x = &#946;/ <a class="link" href="../../sf_gamma/igamma_inv.html" title="Incomplete Gamma Function Inverses">gamma_q_inv</a>(&#945;,
                     p)
                   </p>
                 </td>
@@ -348,7 +348,7 @@
                 </td>
 <td>
                   <p>
-                    Using the relation: x = α/ <a class="link" href="../../sf_gamma/igamma_inv.html" title="Incomplete Gamma Function Inverses">gamma_p_inv</a>(α,
+                    Using the relation: x = &#945;/ <a class="link" href="../../sf_gamma/igamma_inv.html" title="Incomplete Gamma Function Inverses">gamma_p_inv</a>(&#945;,
                     q)
                   </p>
                 </td>
@@ -361,7 +361,7 @@
                 </td>
 <td>
                   <p>
-                    ν * ξ / (ν + 2)
+                    &#957; * &#958; / (&#957; + 2)
                   </p>
                 </td>
 </tr>
@@ -386,7 +386,7 @@
                 </td>
 <td>
                   <p>
-                    νξ / (ν - 2) for ν &gt; 2, else a <a class="link" href="../../error_handling.html#math_toolkit.error_handling.domain_error">domain_error</a>
+                    &#957;&#958; / (&#957; - 2) for &#957; &gt; 2, else a <a class="link" href="../../error_handling.html#math_toolkit.error_handling.domain_error">domain_error</a>
                   </p>
                 </td>
 </tr>
@@ -398,7 +398,7 @@
                 </td>
 <td>
                   <p>
-                    2 ν² ξ² / ((ν -2)² (ν -4)) for ν &gt;4, else a <a class="link" href="../../error_handling.html#math_toolkit.error_handling.domain_error">domain_error</a>
+                    2 &#957;&#178; &#958;&#178; / ((&#957; -2)&#178; (&#957; -4)) for &#957; &gt;4, else a <a class="link" href="../../error_handling.html#math_toolkit.error_handling.domain_error">domain_error</a>
                   </p>
                 </td>
 </tr>
@@ -410,7 +410,7 @@
                 </td>
 <td>
                   <p>
-                    4 √2 √(ν-4) /(ν-6) for ν &gt;6, else a <a class="link" href="../../error_handling.html#math_toolkit.error_handling.domain_error">domain_error</a>
+                    4 &#8730;2 &#8730;(&#957;-4) /(&#957;-6) for &#957; &gt;6, else a <a class="link" href="../../error_handling.html#math_toolkit.error_handling.domain_error">domain_error</a>
                   </p>
                 </td>
 </tr>
@@ -422,7 +422,7 @@
                 </td>
 <td>
                   <p>
-                    12 * (5ν - 22) / ((ν - 6) * (ν - 8)) for ν &gt;8, else a <a class="link" href="../../error_handling.html#math_toolkit.error_handling.domain_error">domain_error</a>
+                    12 * (5&#957; - 22) / ((&#957; - 6) * (&#957; - 8)) for &#957; &gt;8, else a <a class="link" href="../../error_handling.html#math_toolkit.error_handling.domain_error">domain_error</a>
                   </p>
                 </td>
 </tr>
@@ -434,7 +434,7 @@
                 </td>
 <td>
                   <p>
-                    3 + 12 * (5ν - 22) / ((ν - 6) * (ν-8)) for ν &gt;8, else a <a class="link" href="../../error_handling.html#math_toolkit.error_handling.domain_error">domain_error</a>
+                    3 + 12 * (5&#957; - 22) / ((&#957; - 6) * (&#957;-8)) for &#957; &gt;8, else a <a class="link" href="../../error_handling.html#math_toolkit.error_handling.domain_error">domain_error</a>
                   </p>
                 </td>
 </tr>
@@ -442,7 +442,7 @@
 </table></div>
 <h5>
 <a name="math_toolkit.dist_ref.dists.inverse_chi_squared_dist.h4"></a>
-          <span><a name="math_toolkit.dist_ref.dists.inverse_chi_squared_dist.references"></a></span><a class="link" href="inverse_chi_squared_dist.html#math_toolkit.dist_ref.dists.inverse_chi_squared_dist.references">References</a>
+          <span class="phrase"><a name="math_toolkit.dist_ref.dists.inverse_chi_squared_dist.references"></a></span><a class="link" href="inverse_chi_squared_dist.html#math_toolkit.dist_ref.dists.inverse_chi_squared_dist.references">References</a>
         </h5>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
@@ -458,10 +458,11 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright © 2006-2020 Nikhar Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher
-      Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Evan Miller, Jeremy Murphy,
-      Matthew Pulver, Johan Råde, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson,
-      Thijs van den Berg, Daryle Walker and Xiaogang Zhang<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2019 Nikhar
+      Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos,
+      Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Matthew Pulver, Johan
+      R&#229;de, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg,
+      Daryle Walker and Xiaogang Zhang<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>
