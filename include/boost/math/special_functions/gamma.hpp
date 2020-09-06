@@ -366,11 +366,21 @@ std::size_t highest_bernoulli_index()
 template<class T>
 int minimum_argument_for_bernoulli_recursion()
 {
-   const float digits10_of_type = (std::numeric_limits<T>::is_specialized
-                                      ? static_cast<float>(std::numeric_limits<T>::digits10)
-                                      : static_cast<float>(boost::math::tools::digits<T>() * 0.301F));
+   using std::ceil;
+   using std::ldexp;
+   using std::pow;
 
-   const float limit = std::ceil(std::pow(1.0f / std::ldexp(1.0f, 1-boost::math::tools::digits<T>()), 1.0f / 20.0f));
+   BOOST_CONSTEXPR_OR_CONST float digits10_of_type =
+     (std::numeric_limits<T>::is_specialized
+        ? static_cast<float>(std::numeric_limits<T>::digits10)
+        : static_cast<float>(float(boost::math::tools::digits<T>()) * 0.301F));
+
+   BOOST_CONSTEXPR_OR_CONST int argn_of_ldexp =
+     (std::numeric_limits<T>::is_specialized
+        ? 1 - std::numeric_limits<T>::digits10
+        : 1 - (int) ((long long) ((long long) boost::math::tools::digits<T>() * 301LL) / 1000LL));
+
+   const float limit = ceil(pow(1.0f / ldexp(1.0f, argn_of_ldexp), 1.0f / 20.0f));
 
    return (int)((std::min)(digits10_of_type * 1.7F, limit));
 }
