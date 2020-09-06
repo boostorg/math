@@ -20,6 +20,7 @@
 #include <numeric>
 #include <algorithm>
 #include <execution>
+#include <type_traits>
 
 namespace boost::math { namespace detail
 {
@@ -254,7 +255,8 @@ void prime_sieve(ExecutionPolicy&& policy, Integer upper_bound, Container &prime
         boost::math::detail::linear_sieve(static_cast<Integer>(upper_bound), primes);
     }
 
-    else if(typeid(policy) == typeid(std::execution::seq))
+    else if constexpr (std::is_same_v<std::remove_reference_t<decltype(policy)>, decltype(std::execution::seq)> || 
+                       std::is_same_v<std::remove_reference_t<decltype(policy)>, decltype(std::execution::unseq)>)
     {
         boost::math::detail::linear_sieve(linear_sieve_limit<Integer>, primes);
         boost::math::detail::sequential_segmented_sieve(linear_sieve_limit<Integer>, upper_bound, primes);
@@ -301,7 +303,8 @@ void prime_range(ExecutionPolicy&& policy, Integer lower_bound, Integer upper_bo
         boost::math::detail::linear_sieve(static_cast<Integer>(upper_bound), primes);
     }
 
-    else if(typeid(policy) == typeid(std::execution::seq))
+    else if constexpr (std::is_same_v<std::remove_reference_t<decltype(policy)>, decltype(std::execution::seq)> || 
+                       std::is_same_v<std::remove_reference_t<decltype(policy)>, decltype(std::execution::unseq)>)
     {
         if(limit <= linear_sieve_limit<Integer>)
         {   
