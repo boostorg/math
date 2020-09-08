@@ -366,23 +366,24 @@ std::size_t highest_bernoulli_index()
 template<class T>
 int minimum_argument_for_bernoulli_recursion()
 {
-   using std::ceil;
-   using std::ldexp;
-   using std::pow;
-
-   BOOST_CONSTEXPR_OR_CONST float digits10_of_type =
+   BOOST_CONSTEXPR_OR_CONST boost::uint32_t digits10_of_type =
      (std::numeric_limits<T>::is_specialized
-        ? static_cast<float>(std::numeric_limits<T>::digits10)
-        : static_cast<float>(float(boost::math::tools::digits<T>()) * 0.301F));
+       ? static_cast<boost::uint32_t>(std::numeric_limits<T>::digits10)
+       : static_cast<boost::uint32_t>((long long) ((long long) boost::math::tools::digits<T>() * 301LL) / 1000LL));
 
-   BOOST_CONSTEXPR_OR_CONST int argn_of_ldexp =
-     (std::numeric_limits<T>::is_specialized
-        ? 1 - std::numeric_limits<T>::digits10
-        : 1 - (int) ((long long) ((long long) boost::math::tools::digits<T>() * 301LL) / 1000LL));
+   BOOST_CONSTEXPR_OR_CONST boost::uint32_t digits2_of_type = boost::math::tools::digits<T>();
 
-   const float limit = ceil(pow(1.0f / ldexp(1.0f, argn_of_ldexp), 1.0f / 20.0f));
+   float min_arg = (float) digits10_of_type * 1.7F;
 
-   return (int)((std::min)(digits10_of_type * 1.7F, limit));
+   if(digits2_of_type <= 1261U)
+   {
+     const float check_min_arg_for_smaller_type =
+        (float) (boost::uint64_t(1ULL) << ((digits2_of_type - 1U) / 20U));
+
+     min_arg = (std::min)(min_arg, check_min_arg_for_smaller_type);
+   }
+
+   return (int) min_arg;
 }
 
 template <class T, class Policy>
