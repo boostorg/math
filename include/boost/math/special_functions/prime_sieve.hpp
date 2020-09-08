@@ -256,7 +256,10 @@ void prime_sieve(ExecutionPolicy&& policy, Integer upper_bound, Container &prime
     }
 
     else if constexpr (std::is_same_v<std::remove_reference_t<decltype(policy)>, decltype(std::execution::seq)> || 
-                       std::is_same_v<std::remove_reference_t<decltype(policy)>, decltype(std::execution::unseq)>)
+                       #if __cpp_lib_execution > 201900
+                       std::is_same_v<std::remove_reference_t<decltype(policy)>, decltype(std::execution::unseq)>
+                       #endif
+                       )
     {
         boost::math::detail::linear_sieve(linear_sieve_limit<Integer>, primes);
         boost::math::detail::sequential_segmented_sieve(linear_sieve_limit<Integer>, upper_bound, primes);
@@ -304,7 +307,10 @@ void prime_range(ExecutionPolicy&& policy, Integer lower_bound, Integer upper_bo
     }
 
     else if constexpr (std::is_same_v<std::remove_reference_t<decltype(policy)>, decltype(std::execution::seq)> || 
-                       std::is_same_v<std::remove_reference_t<decltype(policy)>, decltype(std::execution::unseq)>)
+                       #if __cpp_lib_execution > 201900
+                       std::is_same_v<std::remove_reference_t<decltype(policy)>, decltype(std::execution::unseq)>
+                       #endif
+                       )
     {
         if(limit <= linear_sieve_limit<Integer>)
         {   

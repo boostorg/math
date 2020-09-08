@@ -31,9 +31,9 @@ class IntervalSieve
 {  
     
 #ifdef BOOST_HAS_INT128    // Defined in GCC 4.6+, clang, intel. MSVC does not define. 
-using int_128t = __int128; // One machine word smaller than the boost equivalent
+using int_128t = unsigned __int128; // One machine word smaller than the boost equivalent
 #else
-using int_128t = boost::multiprecision::int128_t;
+using int_128t = boost::multiprecision::uint128_t;
 #endif
 
 private:
@@ -56,10 +56,17 @@ private:
             23'616'331'489, 85'157'610'409, 196'265'095'009, 2'871'842'842'801, 26'250'887'023'729, 112'434'732'901'969,
             178'936'222'537'081, 696'161'110'209'049, 2'854'909'648'103'881, 6'450'045'516'630'769, 11'641'399'247'947'921,
             190'621'428'905'186'449, 196'640'148'121'928'601, 712'624'335'095'093'521, 1'773'855'791'877'850'321,
-            2'327'687'064'124'474'441, 6'384'991'873'059'836'689, 8'019'204'661'305'419'761, 10'198'100'582'046'287'689,
-            69'848'288'320'900'186'969, 208'936'365'799'044'975'961, 533'552'663'339'828'203'681, 936'664'079'266'714'697'089,
-            2'142'202'860'370'269'916'129, 13'649'154'491'558'298'803'281, 34'594'858'801'670'127'778'801, 
-            99'492'945'930'479'213'334'049, 295'363'187'400'900'310'880'401
+            2'327'687'064'124'474'441, 6'384'991'873'059'836'689, 8'019'204'661'305'419'761, 10'198'100'582'046'287'689u,
+
+            (static_cast<int_128t>(0x3uLL) << 64) | 0xc956f827e0524359uLL,      // 69'848'288'320'900'186'969
+            (static_cast<int_128t>(0xbuLL) << 64) | 0x539315b3b1268d59uLL,      // 208'936'365'799'044'975'961
+            (static_cast<int_128t>(0x1cuLL) << 64) | 0xec87d86ca60b50a1uLL,     // 533'552'663'339'828'203'681
+            (static_cast<int_128t>(0x32uLL) << 64) | 0xc6d3496f20db3d81uLL,     // 936'664'079'266'714'697'089
+            (static_cast<int_128t>(0x74uLL) << 64) | 0x210967a12ba94be1uLL,     // 2'142'202'860'370'269'916'129
+            (static_cast<int_128t>(0x2e3uLL) << 64) | 0xec11ddc09fd65c51uLL,    // 13'649'154'491'558'298'803'281
+            (static_cast<int_128t>(0x753uLL) << 64) | 0x641c14b397c27bf1uLL,    // 34'594'858'801'670'127'778'801
+            (static_cast<int_128t>(0x1511uLL) << 64) | 0x85fdf38d1fc9ce21uLL,   // 99'492'945'930'479'213'334'049
+            (static_cast<int_128t>(0x3e8buLL) << 64) | 0xaba417e222ca5091uLL    // 295'363'187'400'900'310'880'401
         };
     };
 
@@ -126,7 +133,7 @@ void IntervalSieve<Integer, PrimeContainer, Container>::Settdlimit() noexcept
     }
     plimit_ = pss_.prime[i];
 
-    double tdlimit_guess = 1 + std::fmod(dr, pss_.ps[i]);
+    double tdlimit_guess = 1 + std::fmod(dr, static_cast<double>(pss_.ps[i]));
     if(tdlimit_guess * tdlimit_guess >= dr)
     {
         tdlimit_ = static_cast<std::size_t>(std::sqrt(dr));
@@ -196,7 +203,7 @@ void IntervalSieve<Integer, PrimeContainer, Container>::WriteOutput(Container &r
 template<class Integer, class PrimeContainer, class Container>
 bool IntervalSieve<Integer, PrimeContainer, Container>::Psstest(const std::size_t pos) noexcept
 {
-    const Integer n {left_ + pos};
+    const Integer n {static_cast<Integer>(left_ + pos)};
     const Integer exponent {(n - 1) / 2};
     const std::int_fast64_t nmod8 = static_cast<std::int_fast64_t>(n % 8);
 
