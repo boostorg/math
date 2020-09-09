@@ -5,8 +5,8 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef BOOST_MATH_SPECIAL_FUNCTIONS_LINEAR_PRIME_SIEVE_HPP
-#define BOOST_MATH_SPECIAL_FUNCTIONS_LINEAR_PRIME_SIEVE_HPP
+#ifndef BOOST_MATH_SPECIAL_FUNCTIONS_DETAIL_LINEAR_PRIME_SIEVE_HPP
+#define BOOST_MATH_SPECIAL_FUNCTIONS_DETAIL_LINEAR_PRIME_SIEVE_HPP
 
 #include <memory>
 
@@ -29,7 +29,7 @@ void linear_sieve(const Integer upper_bound, const ForwardIterator first, const 
             *current++ = i;
         }
 
-        for (std::size_t j{}; i * *(first + j) <= upper_bound && *(first + j) <= least_divisors[i] && j < least_divisors_size; ++j)
+        for (std::size_t j{}; (first + j) < last && i * *(first + j) <= upper_bound && *(first + j) <= least_divisors[i] && j < least_divisors_size; ++j)
         {
             least_divisors[i * static_cast<std::size_t>(*(first + j))] = *(first + j);
         }
@@ -41,4 +41,4 @@ template<typename Integer>
 static const Integer linear_sieve_limit = Integer(4'096); // Constexpr does not work with boost::multiprecision types
 }
 
-#endif // BOOST_MATH_SPECIAL_FUNCTIONS_LINEAR_PRIME_SIEVE_HPP
+#endif // BOOST_MATH_SPECIAL_FUNCTIONS_DETAIL_LINEAR_PRIME_SIEVE_HPP
