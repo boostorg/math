@@ -11,6 +11,8 @@
 #include <forward_list>
 #include <algorithm>
 #include <random>
+#include <execution>
+#include <iostream>
 #include <boost/core/lightweight_test.hpp>
 #include <boost/numeric/ublas/vector.hpp>
 #include <boost/math/constants/constants.hpp>
@@ -125,6 +127,31 @@ void test_integer_mean()
     BOOST_TEST(abs(m1 - m2) < tol*abs(m1));
 }
 
+template<class Z, class ExecutionPolicy>
+void test_integer_mean(ExecutionPolicy&& exec)
+{
+    double tol = 100*std::numeric_limits<double>::epsilon();
+    std::vector<Z> v{1,2,3,4,5};
+    double mu = boost::math::statistics::mean(exec, v);
+    BOOST_TEST(abs(mu - 3) < tol);
+
+    // Work with std::array?
+    std::array<Z, 5> w{1,2,3,4,5};
+    mu = boost::math::statistics::mean(exec, w);
+    BOOST_TEST(abs(mu - 3) < tol);
+
+    v = generate_random_vector<Z>(global_size, global_seed);
+    Z scale = 2;
+
+    double m1 = scale*boost::math::statistics::mean(exec, v);
+    for (auto & x : v)
+    {
+        x *= scale;
+    }
+    double m2 = boost::math::statistics::mean(exec, v);
+    BOOST_TEST(abs(m1 - m2) < tol*abs(m1));
+}
+
 template<class RandomAccessContainer>
 auto naive_mean(RandomAccessContainer const & v)
 {
@@ -203,6 +230,73 @@ void test_mean()
 
 }
 
+template<class Real, class ExecutionPolicy>
+void test_mean(ExecutionPolicy&& exec)
+{
+    Real tol = std::numeric_limits<Real>::epsilon();
+    std::vector<Real> v{1,2,3,4,5};
+    Real mu = boost::math::statistics::mean(exec, v.begin(), v.end());
+    BOOST_TEST(abs(mu - 3) < tol);
+
+    // Does range call work?
+    mu = boost::math::statistics::mean(exec, v);
+    BOOST_TEST(abs(mu - 3) < tol);
+
+    // Can we successfully average only part of the vector?
+    mu = boost::math::statistics::mean(exec, v.begin(), v.begin() + 3);
+    BOOST_TEST(abs(mu - 2) < tol);
+
+    // Does it work when we const qualify?
+    mu = boost::math::statistics::mean(exec, v.cbegin(), v.cend());
+    BOOST_TEST(abs(mu - 3) < tol);
+
+    // Does it work for std::array?
+    std::array<Real, 7> u{1,2,3,4,5,6,7};
+    mu = boost::math::statistics::mean(exec, u.begin(), u.end());
+    BOOST_TEST(abs(mu - 4) < 10*tol);
+
+    // Does it work for a forward iterator?
+    std::forward_list<Real> l{1,2,3,4,5,6,7};
+    mu = boost::math::statistics::mean(exec, l.begin(), l.end());
+    BOOST_TEST(abs(mu - 4) < tol);
+
+    // Does it work with ublas vectors?
+    boost::numeric::ublas::vector<Real> w(7);
+    for (size_t i = 0; i < w.size(); ++i)
+    {
+        w[i] = i+1;
+    }
+    mu = boost::math::statistics::mean(exec, w.cbegin(), w.cend());
+    BOOST_TEST(abs(mu - 4) < tol);
+
+    v = generate_random_vector<Real>(global_size, global_seed);
+    Real scale = 2;
+    Real m1 = scale*boost::math::statistics::mean(exec, v);
+    for (auto & x : v)
+    {
+        x *= scale;
+    }
+    Real m2 = boost::math::statistics::mean(exec, v);
+    BOOST_TEST(abs(m1 - m2) < tol*abs(m1));
+
+    // Stress test:
+    for (size_t i = 1; i < 30; ++i)
+    {
+        v = generate_random_vector<Real>(i, 12803);
+        auto naive_ = naive_mean(v);
+        auto higham_ = boost::math::statistics::mean(exec, v);
+        if (abs(higham_ - naive_) >= 100*tol*abs(naive_))
+        {
+            std::cout << std::hexfloat;
+            std::cout << "Terms = " << v.size() << "\n";
+            std::cout << "higham = " << higham_ << "\n";
+            std::cout << "naive_ = " << naive_ << "\n";
+        }
+        BOOST_TEST(abs(higham_ - naive_) < 100*tol*abs(naive_));
+    }
+
+}
+
 template<class Complex>
 void test_complex_mean()
 {
@@ -215,6 +309,22 @@ void test_complex_mean()
 
     // Does range work?
     mu = boost::math::statistics::mean(v);
+    BOOST_TEST(abs(mu.imag() - 3) < tol);
+    BOOST_TEST(abs(mu.real()) < tol);
+}
+
+template<class Complex, class ExecutionPolicy>
+void test_complex_mean(ExecutionPolicy&& exec)
+{
+    typedef typename Complex::value_type Real;
+    Real tol = std::numeric_limits<Real>::epsilon();
+    std::vector<Complex> v{{0,1},{0,2},{0,3},{0,4},{0,5}};
+    auto mu = boost::math::statistics::mean(exec, v.begin(), v.end());
+    BOOST_TEST(abs(mu.imag() - 3) < tol);
+    BOOST_TEST(abs(mu.real()) < tol);
+
+    // Does range work?
+    mu = boost::math::statistics::mean(exec, v);
     BOOST_TEST(abs(mu.imag() - 3) < tol);
     BOOST_TEST(abs(mu.real()) < tol);
 }
@@ -904,11 +1014,38 @@ int main()
     test_mean<long double>();
     test_mean<cpp_bin_float_50>();
 
+    test_mean<float>(std::execution::seq);
+    test_mean<float>(std::execution::par);
+    test_mean<float>(std::execution::par_unseq);
+    test_mean<double>(std::execution::seq);
+    test_mean<double>(std::execution::par);
+    test_mean<double>(std::execution::par_unseq);
+    test_mean<long double>(std::execution::seq);
+    test_mean<long double>(std::execution::par);
+    test_mean<long double>(std::execution::par_unseq);
+    test_mean<cpp_bin_float_50>(std::execution::seq);
+    test_mean<cpp_bin_float_50>(std::execution::par);
+    test_mean<cpp_bin_float_50>(std::execution::par_unseq);
+
     test_integer_mean<unsigned>();
     test_integer_mean<int>();
 
+    test_integer_mean<unsigned>(std::execution::seq);
+    test_integer_mean<unsigned>(std::execution::par);
+    test_integer_mean<unsigned>(std::execution::par_unseq);
+    test_integer_mean<int>(std::execution::seq);
+    test_integer_mean<int>(std::execution::par);
+    test_integer_mean<int>(std::execution::par_unseq);
+
     test_complex_mean<std::complex<float>>();
     test_complex_mean<cpp_complex_50>();
+
+    test_complex_mean<std::complex<float>>(std::execution::seq);
+    test_complex_mean<std::complex<float>>(std::execution::par);
+    test_complex_mean<std::complex<float>>(std::execution::par_unseq);
+    test_complex_mean<cpp_complex_50>(std::execution::seq);
+    test_complex_mean<cpp_complex_50>(std::execution::par);
+    test_complex_mean<cpp_complex_50>(std::execution::par_unseq);
 
     test_variance<float>();
     test_variance<double>();

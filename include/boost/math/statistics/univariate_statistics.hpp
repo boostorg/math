@@ -12,75 +12,101 @@
 #include <cmath>
 #include <vector>
 #include <boost/assert.hpp>
+#include <atomic>
+#include <type_traits>
+#include <execution>
+#include <numeric>
+#include <valarray>
 
 namespace boost::math::statistics {
 
-template<class ForwardIterator>
-auto mean(ForwardIterator first, ForwardIterator last)
+template<class ExecutionPolicy, class ForwardIterator>
+auto mean(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last)
 {
     using Real = typename std::iterator_traits<ForwardIterator>::value_type;
     BOOST_ASSERT_MSG(first != last, "At least one sample is required to compute the mean.");
-    if constexpr (std::is_integral<Real>::value)
+    if constexpr (std::is_integral_v<Real>)
     {
-        double mu = 0;
-        double i = 1;
-        for(auto it = first; it != last; ++it) {
-            mu = mu + (*it - mu)/i;
-            i += 1;
+        if constexpr (std::is_same_v<std::remove_reference_t<decltype(exec)>, decltype(std::execution::seq)>)
+        {
+            double mu = 0;
+            double i = 1;
+            for(auto it = first; it != last; ++it) {
+                mu = mu + (*it - mu)/i;
+                i += 1;
+            }
+            return mu;
         }
-        return mu;
+        else
+        {
+            return std::reduce(exec, first, last, 0.0) / std::distance(first, last);
+        }
     }
     else if constexpr (std::is_same_v<typename std::iterator_traits<ForwardIterator>::iterator_category, std::random_access_iterator_tag>)
     {
-        size_t elements = std::distance(first, last);
-        Real mu0 = 0;
-        Real mu1 = 0;
-        Real mu2 = 0;
-        Real mu3 = 0;
+        std::size_t elements {std::distance(first, last)};
+        std::valarray<Real> mu {0, 0, 0, 0};
+        std::valarray<Real> temp {0, 0, 0, 0};
         Real i = 1;
-        auto end = last - (elements % 4);
-        for(auto it = first; it != end;  it += 4) {
-            Real inv = Real(1)/i;
-            Real tmp0 = (*it - mu0);
-            Real tmp1 = (*(it+1) - mu1);
-            Real tmp2 = (*(it+2) - mu2);
-            Real tmp3 = (*(it+3) - mu3);
-            // please generate a vectorized fma here
-            mu0 += tmp0*inv;
-            mu1 += tmp1*inv;
-            mu2 += tmp2*inv;
-            mu3 += tmp3*inv;
+        auto end {last - (elements % 4)};
+
+        for(auto it {first}; it != end; it += 4)
+        {
+            const Real inv {Real(1) / i};
+            temp = {*it, *(it+1), *(it+2), *(it+3)};
+            temp -= mu;
+            mu += (temp *= inv);
             i += 1;
         }
+
         Real num1 = Real(elements  - (elements %4))/Real(4);
         Real num2 = num1 + Real(elements % 4);
 
         for (auto it = end; it != last; ++it)
         {
-            mu3 += (*it-mu3)/i;
+            mu[3] += (*it-mu[3])/i;
             i += 1;
         }
 
-        return (num1*(mu0+mu1+mu2) + num2*mu3)/Real(elements);
+        return (num1 * std::valarray<Real>(mu[std::slice(0,3,1)]).sum() + num2 * mu[3]) / Real(elements);
     }
     else
     {
-        auto it = first;
-        Real mu = *it;
-        Real i = 2;
-        while(++it != last)
+        if constexpr (std::is_same_v<std::remove_reference_t<decltype(exec)>, decltype(std::execution::seq)>)
         {
-            mu += (*it - mu)/i;
-            i += 1;
+            auto it = first;
+            Real mu = *it;
+            Real i = 2;
+            while(++it != last)
+            {
+                mu += (*it - mu)/i;
+                i += 1;
+            }
+            return mu;
         }
-        return mu;
+        else
+        {
+            return std::reduce(exec, first, last, static_cast<Real>(0.0)) / std::distance(first, last);
+        }
     }
+}
+
+template<class ExecutionPolicy, class Container>
+inline auto mean(ExecutionPolicy&& exec, Container const & v)
+{
+    return mean(exec, v.cbegin(), v.cend());
+}
+
+template<class ForwardIterator>
+inline auto mean(ForwardIterator first, ForwardIterator last)
+{
+    return mean(std::execution::seq, first, last);
 }
 
 template<class Container>
 inline auto mean(Container const & v)
 {
-    return mean(v.cbegin(), v.cend());
+    return mean(std::execution::seq, v.cbegin(), v.cend());
 }
 
 template<class ForwardIterator>
