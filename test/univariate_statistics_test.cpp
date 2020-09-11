@@ -409,6 +409,29 @@ void test_integer_variance()
     BOOST_TEST(abs(m1 - m2) < tol*abs(m1));
 }
 
+template<class Z, class ExecutionPolicy>
+void test_integer_variance(ExecutionPolicy&& exec)
+{
+    double tol = std::numeric_limits<double>::epsilon();
+    std::vector<Z> v{1,1,1,1,1,1};
+    double sigma_sq = boost::math::statistics::variance(exec, v);
+    BOOST_TEST(abs(sigma_sq) < tol);
+
+    std::forward_list<Z> l{0,1,0,1,0,1,0,1};
+    sigma_sq = boost::math::statistics::variance(exec, l.begin(), l.end());
+    BOOST_TEST(abs(sigma_sq - 1.0/4.0) < tol);
+
+    v = generate_random_vector<Z>(global_size, global_seed);
+    Z scale = 2;
+    double m1 = scale*scale*boost::math::statistics::variance(exec, v);
+    for (auto & x : v)
+    {
+        x *= scale;
+    }
+    double m2 = boost::math::statistics::variance(exec, v);
+    BOOST_TEST(abs(m1 - m2) < tol*abs(m1));
+}
+
 template<class Z>
 void test_integer_skewness()
 {
@@ -1054,6 +1077,13 @@ int main()
 
     test_integer_variance<int>();
     test_integer_variance<unsigned>();
+
+    test_integer_variance<unsigned>(std::execution::seq);
+    test_integer_variance<unsigned>(std::execution::par);
+    //test_integer_variance<unsigned>(std::execution::par_unseq);
+    //test_integer_variance<int>(std::execution::seq);
+    //test_integer_variance<int>(std::execution::par);
+    //test_integer_variance<int>(std::execution::par_unseq);
 
     test_skewness<float>();
     test_skewness<double>();

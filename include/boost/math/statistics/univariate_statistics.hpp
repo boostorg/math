@@ -31,7 +31,8 @@ auto mean(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last)
         {
             double mu = 0;
             double i = 1;
-            for(auto it = first; it != last; ++it) {
+            for(auto it = first; it != last; ++it) 
+            {
                 mu = mu + (*it - mu)/i;
                 i += 1;
             }
@@ -59,7 +60,7 @@ auto mean(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last)
             i += 1;
         }
 
-        Real num1 = Real(elements  - (elements %4))/Real(4);
+        Real num1 = Real(elements - (elements %4))/Real(4);
         Real num2 = num1 + Real(elements % 4);
 
         for (auto it = end; it != last; ++it)
@@ -109,25 +110,43 @@ inline auto mean(Container const & v)
     return mean(std::execution::seq, v.cbegin(), v.cend());
 }
 
-template<class ForwardIterator>
-auto variance(ForwardIterator first, ForwardIterator last)
+template<class ExecutionPolicy, class ForwardIterator>
+auto variance(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last)
 {
     using Real = typename std::iterator_traits<ForwardIterator>::value_type;
     BOOST_ASSERT_MSG(first != last, "At least one sample is required to compute mean and variance.");
     // Higham, Accuracy and Stability, equation 1.6a and 1.6b:
-    if constexpr (std::is_integral<Real>::value)
+    if constexpr (std::is_integral_v<Real>)
     {
-        double M = *first;
-        double Q = 0;
-        double k = 2;
-        for (auto it = std::next(first); it != last; ++it)
+        if constexpr (std::is_same_v<std::remove_reference_t<decltype(exec)>, decltype(std::execution::seq)>)
         {
-            double tmp = *it - M;
-            Q = Q + ((k-1)*tmp*tmp)/k;
-            M = M + tmp/k;
-            k += 1;
+            double M = *first;
+            double Q = 0;
+            double k = 2;
+            for (auto it = std::next(first); it != last; ++it)
+            {
+                double tmp = *it - M;
+                Q = Q + ((k-1)*tmp*tmp)/k;
+                M = M + tmp/k;
+                k += 1;
+            }
+            return Q/(k-1);
         }
-        return Q/(k-1);
+        else
+        {
+            std::atomic<double> M {*first};
+            std::atomic<double> Q {0};
+            std::atomic<double> k {2};
+
+            std::for_each(exec, ++first, last, [&M, &Q, &k](double val)
+            {
+                double tmp = val - M;
+                Q = Q + ((k-1)*tmp*tmp)/k;
+                M = M + tmp/k;
+                k = k + 1;
+            });
+            return Q/(k-1);
+        }
     }
     else
     {
@@ -143,6 +162,18 @@ auto variance(ForwardIterator first, ForwardIterator last)
         }
         return Q/(k-1);
     }
+}
+
+template<class ExecutionPolicy, class Container>
+inline auto variance(ExecutionPolicy&& exec, Container const & v)
+{
+    return variance(exec, v.cbegin(), v.cend());
+}
+
+template<class ForwardIterator>
+inline auto variance(ForwardIterator first, ForwardIterator last)
+{
+    return variance(std::execution::seq, first, last);
 }
 
 template<class Container>
