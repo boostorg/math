@@ -386,6 +386,64 @@ void test_variance()
 
 }
 
+template<class Real, class ExecutionPolicy>
+void test_variance(ExecutionPolicy&& exec)
+{
+    Real tol = std::numeric_limits<Real>::epsilon();
+    std::vector<Real> v{1,1,1,1,1,1};
+    Real sigma_sq = boost::math::statistics::variance(exec, v.begin(), v.end());
+    BOOST_TEST(abs(sigma_sq) < tol);
+
+    sigma_sq = boost::math::statistics::variance(exec, v);
+    BOOST_TEST(abs(sigma_sq) < tol);
+
+    Real s_sq = boost::math::statistics::sample_variance(exec, v);
+    BOOST_TEST(abs(s_sq) < tol);
+
+    // Fails with assertion
+    //std::vector<Real> u{1};
+    //sigma_sq = boost::math::statistics::variance(exec, u.cbegin(), u.cend());
+    //BOOST_TEST(abs(sigma_sq) < tol);
+
+    std::array<Real, 8> w{0,1,0,1,0,1,0,1};
+    sigma_sq = boost::math::statistics::variance(exec, w.begin(), w.end());
+    BOOST_TEST(abs(sigma_sq - 1.0/4.0) < tol);
+
+    sigma_sq = boost::math::statistics::variance(exec, w);
+    BOOST_TEST(abs(sigma_sq - 1.0/4.0) < tol);
+
+    std::forward_list<Real> l{0,1,0,1,0,1,0,1};
+    sigma_sq = boost::math::statistics::variance(exec, l.begin(), l.end());
+    BOOST_TEST(abs(sigma_sq - 1.0/4.0) < tol);
+
+    v = generate_random_vector<Real>(global_size, global_seed);
+    Real scale = 2;
+    Real m1 = scale*scale*boost::math::statistics::variance(exec, v);
+    for (auto & x : v)
+    {
+        x *= scale;
+    }
+    Real m2 = boost::math::statistics::variance(exec, v);
+    BOOST_TEST(abs(m1 - m2) < tol*abs(m1));
+
+    // Wikipedia example for a variance of N sided die:
+    // https://en.wikipedia.org/wiki/Variance
+    for (size_t j = 16; j < 2048; j *= 2)
+    {
+        v.resize(1024);
+        Real n = v.size();
+        for (size_t i = 0; i < v.size(); ++i)
+        {
+            v[i] = i + 1;
+        }
+
+        sigma_sq = boost::math::statistics::variance(exec, v);
+
+        BOOST_TEST(abs(sigma_sq - (n*n-1)/Real(12)) <= tol*sigma_sq);
+    }
+
+}
+
 template<class Z>
 void test_integer_variance()
 {
@@ -1075,15 +1133,28 @@ int main()
     test_variance<long double>();
     test_variance<cpp_bin_float_50>();
 
+    test_variance<float>(std::execution::seq);
+    test_variance<float>(std::execution::par);
+    test_variance<float>(std::execution::par_unseq);
+    test_variance<double>(std::execution::seq);
+    test_variance<double>(std::execution::par);
+    test_variance<double>(std::execution::par_unseq);
+    test_variance<long double>(std::execution::seq);
+    test_variance<long double>(std::execution::par);
+    test_variance<long double>(std::execution::par_unseq);
+    test_variance<cpp_bin_float_50>(std::execution::seq);
+    test_variance<cpp_bin_float_50>(std::execution::par);
+    test_variance<cpp_bin_float_50>(std::execution::par_unseq);
+
     test_integer_variance<int>();
     test_integer_variance<unsigned>();
 
     test_integer_variance<unsigned>(std::execution::seq);
     test_integer_variance<unsigned>(std::execution::par);
-    //test_integer_variance<unsigned>(std::execution::par_unseq);
-    //test_integer_variance<int>(std::execution::seq);
-    //test_integer_variance<int>(std::execution::par);
-    //test_integer_variance<int>(std::execution::par_unseq);
+    test_integer_variance<unsigned>(std::execution::par_unseq);
+    test_integer_variance<int>(std::execution::seq);
+    test_integer_variance<int>(std::execution::par);
+    test_integer_variance<int>(std::execution::par_unseq);
 
     test_skewness<float>();
     test_skewness<double>();

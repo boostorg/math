@@ -17,6 +17,8 @@
 #include <execution>
 #include <numeric>
 #include <valarray>
+#include <thread>
+#include <future>
 
 namespace boost::math::statistics {
 
@@ -95,7 +97,7 @@ auto mean(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last)
 template<class ExecutionPolicy, class Container>
 inline auto mean(ExecutionPolicy&& exec, Container const & v)
 {
-    return mean(exec, v.cbegin(), v.cend());
+    return mean(exec, std::cbegin(v), std::cend(v));
 }
 
 template<class ForwardIterator>
@@ -107,67 +109,103 @@ inline auto mean(ForwardIterator first, ForwardIterator last)
 template<class Container>
 inline auto mean(Container const & v)
 {
-    return mean(std::execution::seq, v.cbegin(), v.cend());
+    return mean(std::execution::seq, std::cbegin(v), std::cend(v));
 }
 
-template<class ExecutionPolicy, class ForwardIterator>
-auto variance(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last)
+namespace detail
+{
+template<class ForwardIterator>
+auto sequential_variance(ForwardIterator first, ForwardIterator last)
 {
     using Real = typename std::iterator_traits<ForwardIterator>::value_type;
     BOOST_ASSERT_MSG(first != last, "At least one sample is required to compute mean and variance.");
     // Higham, Accuracy and Stability, equation 1.6a and 1.6b:
     if constexpr (std::is_integral_v<Real>)
     {
-        if constexpr (std::is_same_v<std::remove_reference_t<decltype(exec)>, decltype(std::execution::seq)>)
+        double M = *first;
+        double Q = 0;
+        double k = 2;
+        double M2 = 0;
+        for (auto it = std::next(first); it != last; ++it)
         {
-            double M = *first;
-            double Q = 0;
-            double k = 2;
-            for (auto it = std::next(first); it != last; ++it)
-            {
-                double tmp = *it - M;
-                Q = Q + ((k-1)*tmp*tmp)/k;
-                M = M + tmp/k;
-                k += 1;
-            }
-            return Q/(k-1);
+            double delta_1 = *it - M;
+            Q = Q + ((k-1)*delta_1*delta_1)/k;
+            M = M + delta_1/k;
+            k += 1;
+            double delta_2 = *it - M;
+            M2 = M2 + (delta_1 * delta_2);
         }
-        else
-        {
-            std::atomic<double> M {*first};
-            std::atomic<double> Q {0};
-            std::atomic<double> k {2};
-
-            std::for_each(exec, ++first, last, [&M, &Q, &k](double val)
-            {
-                double tmp = val - M;
-                Q = Q + ((k-1)*tmp*tmp)/k;
-                M = M + tmp/k;
-                k = k + 1;
-            });
-            return Q/(k-1);
-        }
+        return std::make_tuple(M, M2, Q/(k-1));
     }
     else
     {
         Real M = *first;
         Real Q = 0;
         Real k = 2;
+        Real M2 = 0;
         for (auto it = std::next(first); it != last; ++it)
         {
             Real tmp = (*it - M)/k;
+            Real delta_1 = *it - M;
             Q += k*(k-1)*tmp*tmp;
             M += tmp;
             k += 1;
+            Real delta_2 = *it - M;
+            M2 = M2 + (delta_1 * delta_2);
         }
-        return Q/(k-1);
+        return std::make_tuple(M, M2, Q/(k-1));
+    }
+}
+
+// http://i.stanford.edu/pub/cstr/reports/cs/tr/79/773/CS-TR-79-773.pdf
+// http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.214.8508&rep=rep1&type=pdf
+template<class ForwardIterator>
+auto parallel_variance(ForwardIterator first, ForwardIterator last)
+{   
+    static std::atomic<unsigned> thread_counter {1};
+    
+    const auto elements {std::distance(first, last)};
+    const auto range_a {std::floor(elements / 2)};
+    const auto range_b {elements - range_a};
+
+    auto future_a {std::async(std::launch::async,[first, range_a]{return sequential_variance(first, std::next(first, range_a));})};
+    auto future_b {std::async(std::launch::async,[first, last, range_a]{return sequential_variance(std::next(first, range_a), last);})};
+    thread_counter.fetch_add(2); // TODO: recursively decompose problem until counter == supported threads or ranges become too small. Fixes test line #403
+
+    const auto results_a {future_a.get()};
+    const auto results_b {future_b.get()};
+
+    const auto mean_a = std::get<0>(results_a);
+    const auto M2_a = std::get<1>(results_a);
+    const auto mean_b = std::get<0>(results_b);
+    const auto M2_b = std::get<1>(results_b);
+
+    const auto n_ab = elements;
+    const auto delta = mean_b - mean_a;
+    const auto mean_ab = (range_a * mean_a + range_b * mean_b) / n_ab;
+    const auto M2_ab = M2_a + M2_b + delta * delta * (range_a * range_b / n_ab);
+
+    return M2_ab / n_ab;
+}
+}
+
+template<class ExecutionPolicy, class ForwardIterator>
+inline auto variance(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last)
+{
+    if constexpr (std::is_same_v<std::remove_reference_t<decltype(exec)>, decltype(std::execution::seq)>)
+    {
+        return std::get<2>(detail::sequential_variance(first, last));
+    }
+    else
+    {
+        return detail::parallel_variance(first, last);
     }
 }
 
 template<class ExecutionPolicy, class Container>
 inline auto variance(ExecutionPolicy&& exec, Container const & v)
 {
-    return variance(exec, v.cbegin(), v.cend());
+    return variance(exec, std::cbegin(v), std::cend(v));
 }
 
 template<class ForwardIterator>
@@ -179,23 +217,36 @@ inline auto variance(ForwardIterator first, ForwardIterator last)
 template<class Container>
 inline auto variance(Container const & v)
 {
-    return variance(v.cbegin(), v.cend());
+    return variance(std::execution::seq, std::cbegin(v), std::cend(v));
+}
+
+template<class ExecutionPolicy, class ForwardIterator>
+inline auto sample_variance(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last)
+{
+    const auto n = std::distance(first, last);
+    BOOST_ASSERT_MSG(n > 1, "At least two samples are required to compute the sample variance.");
+    return n*variance(exec, first, last)/(n-1);
+}
+
+template<class ExecutionPolicy, class Container>
+inline auto sample_variance(ExecutionPolicy&& exec, Container const & v)
+{
+    return sample_variance(exec, std::cbegin(v), std::cend(v));
 }
 
 template<class ForwardIterator>
-auto sample_variance(ForwardIterator first, ForwardIterator last)
+inline auto sample_variance(ForwardIterator first, ForwardIterator last)
 {
-    size_t n = std::distance(first, last);
-    BOOST_ASSERT_MSG(n > 1, "At least two samples are required to compute the sample variance.");
-    return n*variance(first, last)/(n-1);
+    return sample_variance(std::execution::seq, first, last);
 }
 
 template<class Container>
 inline auto sample_variance(Container const & v)
 {
-    return sample_variance(v.cbegin(), v.cend());
+    return sample_variance(std::execution::seq, std::cbegin(v), std::cend(v));
 }
 
+// TODO: Remove and redirect to sequential_variance
 template<class ForwardIterator>
 auto mean_and_sample_variance(ForwardIterator first, ForwardIterator last)
 {
@@ -214,7 +265,7 @@ auto mean_and_sample_variance(ForwardIterator first, ForwardIterator last)
             M = M + tmp/k;
             k += 1;
         }
-        return std::pair<double, double>{M, Q/(k-2)};
+        return std::make_pair(M, Q/(k-2));
     }
     else
     {
@@ -228,7 +279,7 @@ auto mean_and_sample_variance(ForwardIterator first, ForwardIterator last)
             M += tmp;
             k += 1;
         }
-        return std::pair<Real, Real>{M, Q/(k-2)};
+        return std::make_pair(M, Q/(k-2));
     }
 }
 
