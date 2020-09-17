@@ -12,7 +12,7 @@ Utility functions for dealing with floating point arithmetic, includes functions
 
 ### Specific Width Floating Point Types
 
-A set of typedefs similar to those provided by <cstdint> but for floating point types.
+A set of typedefs similar to those provided by `<cstdint>` but for floating point types.
 
 ### Mathematical Constants
 
