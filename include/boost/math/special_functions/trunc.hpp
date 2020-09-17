@@ -62,7 +62,7 @@ inline int itrunc(const T& v, const Policy& pol)
    BOOST_MATH_STD_USING
    typedef typename tools::promote_args<T>::type result_type;
    result_type r = boost::math::trunc(v, pol);
-   if((r > (std::numeric_limits<int>::max)()) || (r < (std::numeric_limits<int>::min)()))
+   if((r > (result_type)(std::numeric_limits<int>::max)()) || (r < (result_type)(std::numeric_limits<int>::min)()))
       return static_cast<int>(policies::raise_rounding_error("boost::math::itrunc<%1%>(%1%)", 0, static_cast<result_type>(v), 0, pol));
    return static_cast<int>(r);
 }
