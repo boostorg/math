@@ -84,8 +84,9 @@ public:
       m_distributions.push_back(std::make_pair(name, d));
       //
       // Get the extent of the distribution from the support:
-      double a, b;
-      std::tr1::tie(a, b) = support(d);
+      std::pair<double, double> r = support(d);
+      double a = r.first;
+      double b = r.second;
       //
       // PDF maximum is at the mode (probably):
       double mod;
@@ -253,7 +254,7 @@ public:
       if(!is_discrete_distribution<Dist>::value)
       {
          // Continuous distribution:
-         for(std::list<std::pair<std::string, Dist> >::const_iterator i = m_distributions.begin();
+         for(typename std::list<std::pair<std::string, Dist> >::const_iterator i = m_distributions.begin();
             i != m_distributions.end(); ++i)
          {
             double x = m_min_x;
@@ -280,7 +281,7 @@ public:
          // Discrete distribution:
          double x_width = 0.75 / m_distributions.size();
          double x_off = -0.5 * 0.75;
-         for(std::list<std::pair<std::string, Dist> >::const_iterator i = m_distributions.begin();
+         for(typename std::list<std::pair<std::string, Dist> >::const_iterator i = m_distributions.begin();
             i != m_distributions.end(); ++i)
          {
             double x = ceil(m_min_x);
@@ -468,6 +469,22 @@ int main()
    fisher_f_plotter.add(boost::math::fisher_f_distribution<>(10, 10), "n=10, m=10");
    fisher_f_plotter.add(boost::math::fisher_f_distribution<>(4, 10), "n=4, m=10");
    fisher_f_plotter.plot("F Distribution PDF", "fisher_f_pdf.svg");
+
+   distribution_plotter<boost::math::kolmogorov_smirnov_distribution<> >
+      kolmogorov_smirnov_cdf_plotter(false);
+   kolmogorov_smirnov_cdf_plotter.add(boost::math::kolmogorov_smirnov_distribution<>(1), "n=1");
+   kolmogorov_smirnov_cdf_plotter.add(boost::math::kolmogorov_smirnov_distribution<>(2), "n=2");
+   kolmogorov_smirnov_cdf_plotter.add(boost::math::kolmogorov_smirnov_distribution<>(5), "n=5");
+   kolmogorov_smirnov_cdf_plotter.add(boost::math::kolmogorov_smirnov_distribution<>(10), "n=10");
+   kolmogorov_smirnov_cdf_plotter.plot("Kolmogorov-Smirnov Distribution CDF", "kolmogorov_smirnov_cdf.svg");
+
+   distribution_plotter<boost::math::kolmogorov_smirnov_distribution<> >
+      kolmogorov_smirnov_pdf_plotter;
+   kolmogorov_smirnov_pdf_plotter.add(boost::math::kolmogorov_smirnov_distribution<>(1), "n=1");
+   kolmogorov_smirnov_pdf_plotter.add(boost::math::kolmogorov_smirnov_distribution<>(2), "n=2");
+   kolmogorov_smirnov_pdf_plotter.add(boost::math::kolmogorov_smirnov_distribution<>(5), "n=5");
+   kolmogorov_smirnov_pdf_plotter.add(boost::math::kolmogorov_smirnov_distribution<>(10), "n=10");
+   kolmogorov_smirnov_pdf_plotter.plot("Kolmogorov-Smirnov Distribution PDF", "kolmogorov_smirnov_pdf.svg");
 
    distribution_plotter<boost::math::lognormal_distribution<> >
       lognormal_plotter;
