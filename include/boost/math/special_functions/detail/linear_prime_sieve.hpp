@@ -14,8 +14,8 @@ namespace boost::math::detail::prime_sieve
 {
 // https://mathworld.wolfram.com/SieveofEratosthenes.html
 // https://www.cs.utexas.edu/users/misra/scannedPdf.dir/linearSieve.pdf
-template <typename Integer, typename ForwardIterator>
-void linear_sieve(const Integer upper_bound, const ForwardIterator first, const ForwardIterator last) noexcept
+template<typename Integer, typename ForwardIterator>
+void linear_sieve(const Integer upper_bound, ForwardIterator first, ForwardIterator last) noexcept
 {
     const std::size_t least_divisors_size{static_cast<std::size_t>(upper_bound + 1)};
     std::unique_ptr<Integer[]> least_divisors{new Integer[least_divisors_size]{0}};
@@ -34,6 +34,12 @@ void linear_sieve(const Integer upper_bound, const ForwardIterator first, const 
             least_divisors[i * static_cast<std::size_t>(*(first + j))] = *(first + j);
         }
     }
+}
+
+template<typename Integer, typename Container>
+inline void linear_sieve(const Integer upper_bound, Container& c)
+{
+    linear_sieve(upper_bound, std::begin(c), std::end(c));
 }
 
 // 4'096 is where benchmarked performance of linear_sieve begins to diverge
