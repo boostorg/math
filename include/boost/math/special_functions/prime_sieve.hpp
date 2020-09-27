@@ -10,6 +10,7 @@
 
 #include <boost/math/special_functions/prime.hpp>
 #include <boost/math/special_functions/interval_sieve.hpp>
+#include <boost/math/special_functions/prime_approximation.hpp>
 #include <boost/assert.hpp>
 #include <vector>
 #include <iterator>
@@ -233,25 +234,6 @@ void sequential_segmented_sieve(Integer lower_bound, Integer upper_bound, Contai
     }
 }
 } // End namespace detail
-
-template<class Integer>
-constexpr Integer prime_approximation(const Integer upper_bound)
-{
-    constexpr auto c = 30 * std::log(113) / 113; // Magic numbers from wikipedia
-    return static_cast<Integer>(std::floor(c * upper_bound / std::log(static_cast<double>(upper_bound))));
-}
-
-template<class Integer>
-constexpr Integer prime_approximation(const Integer lower_bound, const Integer upper_bound)
-{
-    return prime_approximation(upper_bound) - prime_approximation(lower_bound);
-}
-
-template<class Integer>
-constexpr void prime_reserve(Integer upper_bound, std::vector<Integer> &prime_container)
-{
-    prime_container.reserve(static_cast<double>(upper_bound) / std::log(static_cast<double>(upper_bound)));
-}
 
 template<class ExecutionPolicy, class Integer, class Container>
 void prime_sieve(ExecutionPolicy&& policy, Integer upper_bound, Container &primes)
