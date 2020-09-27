@@ -262,6 +262,9 @@ void test_linear_sieve_iterator()
 
 int main()
 {
+    // Test prime approximation for constexpr
+    static_assert(boost::math::prime_approximation(100) != 0, "Not constexpr");
+    
     // Individual Algorithms
     test_linear_sieve<int>();
     test_linear_sieve<int32_t>();
