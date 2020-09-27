@@ -32,7 +32,6 @@ decltype(auto) linear_sieve(const Integer upper_bound, OutputIterator resultant_
             }
         }
     }
-
     return resultant_primes;
 }
 
