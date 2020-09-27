@@ -10,12 +10,14 @@
 #include <boost/multiprecision/cpp_int.hpp>
 #include <boost/multiprecision/gmp.hpp>
 #include <boost/math/special_functions/interval_sieve.hpp>
+#include <boost/math/special_functions/detail/linear_prime_sieve.hpp>
 #include <list>
 #include <deque>
 #include <array>
 #include <vector>
 #include <iostream>
 #include <chrono>
+#include <algorithm>
 
 template<typename Integer>
 void test_prime_sieve()
@@ -239,6 +241,25 @@ void test_linear_sieve()
     BOOST_TEST_EQ(primes.size(), 9592);
 }
 
+template<typename Integer>
+void test_linear_sieve_iterator()
+{
+    constexpr std::size_t array_size {10'000};
+    std::array<Integer, array_size> primes;
+    std::fill(primes.begin(), primes.end(), 0);
+
+    boost::math::detail::prime_sieve::linear_sieve(static_cast<Integer>(1'000), primes.begin());
+    BOOST_TEST_EQ(array_size - std::count(primes.cbegin(), primes.cend(), 0), 168);
+
+    std::fill(primes.begin(), primes.end(), 0);
+    boost::math::detail::prime_sieve::linear_sieve(static_cast<Integer>(10'000), primes.begin());
+    BOOST_TEST_EQ(array_size - std::count(primes.cbegin(), primes.cend(), 0), 1'229);
+
+    std::fill(primes.begin(), primes.end(), 0);
+    boost::math::detail::prime_sieve::linear_sieve(static_cast<Integer>(100'000), primes.begin());
+    BOOST_TEST_EQ(array_size - std::count(primes.cbegin(), primes.cend(), 0), 9'592);
+}
+
 int main()
 {
     // Individual Algorithms
@@ -255,6 +276,14 @@ int main()
     test_interval_sieve<uint32_t>();
     test_interval_sieve<boost::multiprecision::cpp_int>();
     test_interval_sieve<boost::multiprecision::mpz_int>();
+
+    // Individual Algorithms with Iterators
+    test_linear_sieve_iterator<int>();
+    test_linear_sieve_iterator<int32_t>();
+    test_linear_sieve_iterator<int64_t>();
+    test_linear_sieve_iterator<uint32_t>();
+    test_linear_sieve_iterator<boost::multiprecision::cpp_int>();
+    test_linear_sieve_iterator<boost::multiprecision::mpz_int>();
 
     // Composite
     test_prime_sieve<int>();
