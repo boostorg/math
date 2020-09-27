@@ -235,10 +235,16 @@ void sequential_segmented_sieve(Integer lower_bound, Integer upper_bound, Contai
 } // End namespace detail
 
 template<class Integer>
-constexpr Integer prime_approximation(Integer upper_bound)
+constexpr Integer prime_approximation(const Integer upper_bound)
 {
     constexpr auto c = 30 * std::log(113) / 113; // Magic numbers from wikipedia
     return static_cast<Integer>(std::floor(c * upper_bound / std::log(static_cast<double>(upper_bound))));
+}
+
+template<class Integer>
+constexpr Integer prime_approximation(const Integer lower_bound, const Integer upper_bound)
+{
+    return prime_approximation(upper_bound) - prime_approximation(lower_bound);
 }
 
 template<class Integer>
