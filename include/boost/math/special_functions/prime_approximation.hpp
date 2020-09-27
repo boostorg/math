@@ -16,8 +16,8 @@ namespace boost::math
 template<typename Integer>
 constexpr Integer prime_approximation(const Integer upper_bound)
 {
-    constexpr auto c = 30 * std::log(113) / 113; // Magic numbers from wikipedia
-    return static_cast<Integer>(std::floor(c * upper_bound / std::log(static_cast<double>(upper_bound))));
+    constexpr auto c = 30 * ::log(113) / 113; // Magic numbers from wikipedia
+    return static_cast<Integer>(::floor(c * static_cast<double>(upper_bound) / ::log(static_cast<double>(upper_bound))));
 }
 
 template<typename Integer>
@@ -29,7 +29,7 @@ constexpr Integer prime_approximation(const Integer lower_bound, const Integer u
 template<typename Integer>
 inline void prime_reserve(Integer upper_bound, std::vector<Integer>& prime_container)
 {
-    prime_container.reserve(static_cast<double>(upper_bound) / std::log(static_cast<double>(upper_bound)));
+    prime_container.reserve(static_cast<std::size_t>(prime_approximation(upper_bound)));
 }
 } 
 
