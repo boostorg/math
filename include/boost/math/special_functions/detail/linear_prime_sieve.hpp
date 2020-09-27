@@ -12,34 +12,28 @@
 
 namespace boost::math::detail::prime_sieve 
 {
-// https://mathworld.wolfram.com/SieveofEratosthenes.html
-// https://www.cs.utexas.edu/users/misra/scannedPdf.dir/linearSieve.pdf
-template<typename Integer, typename ForwardIterator>
-void linear_sieve(const Integer upper_bound, ForwardIterator first, ForwardIterator last) noexcept
-{
-    const std::size_t least_divisors_size{static_cast<std::size_t>(upper_bound + 1)};
-    std::unique_ptr<Integer[]> least_divisors{new Integer[least_divisors_size]{0}};
-    auto current {first};
+template<typename Integer, typename OutputIterator>
+decltype(auto) linear_sieve(const Integer upper_bound, OutputIterator resultant_primes)
+{    
+    const std::size_t masks_size {static_cast<std::size_t>(upper_bound / 2 + 1)};
+    std::unique_ptr<bool[]> masks {new bool[masks_size]};
+    memset(masks.get(), true, sizeof(*masks.get()) * (masks_size));
 
-    for (std::size_t i{2}; i < upper_bound; ++i)
+    *resultant_primes++ = 2;
+
+    for(std::size_t index {1}; index < masks_size; ++index)
     {
-        if (least_divisors[i] == 0)
+        if(masks[index])
         {
-            least_divisors[i] = i;
-            *current++ = i;
-        }
-
-        for (std::size_t j{}; (first + j) < last && i * *(first + j) <= upper_bound && *(first + j) <= least_divisors[i] && j < least_divisors_size; ++j)
-        {
-            least_divisors[i * static_cast<std::size_t>(*(first + j))] = *(first + j);
+            *resultant_primes++ = static_cast<Integer>(2 * index + 1);
+            for(std::size_t clear {index * 3 + 1}; clear < masks_size; clear += index * 2 + 1)
+            {
+                masks[clear] = false;
+            }
         }
     }
-}
 
-template<typename Integer, typename Container>
-inline void linear_sieve(const Integer upper_bound, Container& c)
-{
-    linear_sieve(upper_bound, std::begin(c), std::end(c));
+    return resultant_primes;
 }
 
 // 4'096 is where benchmarked performance of linear_sieve begins to diverge
