@@ -24,7 +24,7 @@ template<typename Integer, typename OutputIterator>
 class IntervalSieve
 {  
     
-#ifdef BOOST_HAS_INT128    // Defined in GCC 4.6+, clang, intel. MSVC does not define. 
+#ifdef BOOST_HAS_INT128             // Defined in GCC 4.6+, clang, intel. MSVC does not define. 
 using int_128t = unsigned __int128; // One machine word smaller than the boost equivalent
 #else
 using int_128t = boost::multiprecision::uint128_t;
@@ -93,9 +93,9 @@ public:
 template<typename Integer, typename OutputIterator>
 void IntervalSieve<Integer, OutputIterator>::Settdlimit() noexcept
 {
-    const double dr = static_cast<double>(right_);
-    const double delta = static_cast<double>(delta_);
-    const double tdest = delta * std::log(dr);
+    const double dr {static_cast<double>(right_)};
+    const double delta {static_cast<double>(delta_)};
+    const double tdest {delta * std::log(dr)};
 
     // Small cases
     if(tdest * tdest >= dr)
@@ -168,26 +168,32 @@ void IntervalSieve<Integer, OutputIterator>::Sieve() noexcept
 
     // Sieve with pre-computed (or small) primes and then use the wheel for the remainder    
     std::size_t i {};
+    Integer j;
     if(plimit_ <= pss_.prime.back())
     {
+        SeiveLength(static_cast<Integer>(2));
         for(; pss_.prime[i] < primes_range; ++i)
         {
             SeiveLength(pss_.prime[i]);
         }
+
+        j = w_.Next(pss_.prime[--i]);
     }
+    
     else
     {
-        prime_reserve(primes_range, primes_);
+        prime_reserve(right_, primes_);
         linear_sieve(primes_range, primes_.begin());
-        primes_.shrink_to_fit();
 
         for(; primes_[i] < primes_range; ++i)
         {
             SeiveLength(primes_[i]);
         }
+
+        j = w_.Next(primes_[--i]);
     }
 
-    for(Integer j = w_.Next(primes_[--i]); j <= tdlimit_; j = w_.Next(j))
+    for(; j <= tdlimit_; j = w_.Next(j))
     {
         SeiveLength(j);
     }
@@ -216,7 +222,7 @@ bool IntervalSieve<Integer, OutputIterator>::Psstest(const std::size_t pos) noex
     const Integer exponent {(n - 1) / 2};
     const std::int_fast64_t nmod8 = static_cast<std::int_fast64_t>(n % 8);
 
-    std::int_fast64_t negative_one_count {0};
+    std::int_fast64_t negative_one_count {};
 
     for(std::size_t i {}; i < primes_.size(); ++i)
     {
@@ -275,7 +281,7 @@ IntervalSieve<Integer, OutputIterator>::IntervalSieve(const Integer left, const 
     Settdlimit();
     Sieve();
     
-    if(plimit_ != 0 )
+    if(plimit_ != 0)
     {
         Psstestall();
     }
