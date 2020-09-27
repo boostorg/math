@@ -255,8 +255,9 @@ void prime_sieve(ExecutionPolicy&& policy, Integer upper_bound, Container &prime
         boost::math::detail::linear_sieve(static_cast<Integer>(upper_bound), primes);
     }
 
-    else if constexpr (std::is_same_v<std::remove_reference_t<decltype(policy)>, decltype(std::execution::seq)> || 
+    else if constexpr (std::is_same_v<std::remove_reference_t<decltype(policy)>, decltype(std::execution::seq)>
                        #if __cpp_lib_execution > 201900
+                       ||
                        std::is_same_v<std::remove_reference_t<decltype(policy)>, decltype(std::execution::unseq)>
                        #endif
                        )
@@ -306,9 +307,9 @@ void prime_range(ExecutionPolicy&& policy, Integer lower_bound, Integer upper_bo
         boost::math::detail::linear_sieve(static_cast<Integer>(upper_bound), primes);
     }
 
-    else if constexpr (std::is_same_v<std::remove_reference_t<decltype(policy)>, decltype(std::execution::seq)> || 
+    else if constexpr (std::is_same_v<std::remove_reference_t<decltype(policy)>, decltype(std::execution::seq)>
                        #if __cpp_lib_execution > 201900
-                       std::is_same_v<std::remove_reference_t<decltype(policy)>, decltype(std::execution::unseq)>
+       || std::is_same_v<std::remove_reference_t<decltype(policy)>, decltype(std::execution::unseq)>
                        #endif
                        )
     {
