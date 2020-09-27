@@ -259,9 +259,86 @@ Passing a value greater than `max_prime` results in a __domain_error being raise
 
 This function is `constexpr` only if the compiler supports C++14 constexpr functions.
 
-[endsect] [/section:primes]
+[endsect] [/section:primes Prime Numbers]
 
-[endsect] [/Number Series]
+[section:prime_sieve Prime Sieve]
+
+[h4 Synopsis]
+
+``
+#include <boost/math/special_functions/prime_sieve.hpp>
+``
+
+namespace boost { namespace math {
+
+    template<class ExecutionPolicy, typename Integer, class Container>
+    void prime_sieve(ExecutionPolicy&& policy, Integer upper_bound, Container &resultant_primes)
+
+    template<class ExecutionPolicy, class Integer, class Container>
+    void prime_range(ExecutionPolicy&& policy, Integer lower_bound, Integer upper_bound, Container &resultant_primes)
+
+    template<class Integer, class Container>
+    void prime_sieve(Integer upper_bound, Container &resultant_primes)
+
+    template<class Integer, class Container>
+    void prime_range(Integer lower_bound, Integer upper_bound, Container &resultant_primes)
+
+    template<class Integer>
+    constexpr void prime_reserve(Integer upper_bound, std::vector<Integer> &prime_container)
+
+
+}} // End namespaces
+
+[h4 Description]
+
+There are two sets of prime sieveing functions available: `prime_sieve` and `prime_range`. 
+`prime_sieve` will return all primes in the range [2, `upper_bound`). 
+`prime_range` will return all primes in the range [lower_bound, upper_bound).
+Both `prime_sieve` and `prime_range` can perform arbitrary precision calculations using `boost::multiprecision::cpp_int` or `boost::multiprecision::mpz_int`. 
+
+`prime_sieve` and `prime_range` both have a parameter for an execution policy.
+The policies `std::execution::par` or `std::execution::par_unseq` will enable internal multi-threading.
+All other policies or no policy will result in the `prime_sieve` and `prime_range` executing sequentially. 
+
+`prime_reserve` uses the prime number theorem to reserve for approximately the correct number of primes given `upper_bound`.
+
+[h4 Examples]
+    // To reserve space and calculate primes [2, 1,000,000) in parallel
+    std::vector<int64_t> primes;
+    boost::math::prime_reserve(1'000'000, primes);
+    boost::math::prime_sieve(std::execution::par, 1'000'000, primes);
+
+    // To calculate primes [100, 1,000) sequentially
+    std::vector<int64_t> primes;
+    boost::math::prime_range(100, 1'000, primes);
+
+[h4 Complexity]
+These functions were tested for complexity using [@https://github.com/google/benchmark google benchmark] on a system with the following specifications:
+* CPU: Intel i5-10500
+* OS: Red Hat Enterprise Linux 8.2
+* Compiler: gcc-g++ 10.2.0 (Compiled from source with GMP 6.2.0, MPC 1.2.0, and MPFR 4.1.0 using RHEL gcc-toolset-9)
+* Compiler flags: -Ofast -MMD -march=native -g -lbenchmark -lpthread -lgmp
+
+Range of test upper_bound: 2[super 1] - 2[super 30]
+
+[pre'''
+[table:id Complexity Calculations `bigo[](N)`
+  [[Type]     [Time Complexity]   [Time Complexity RMS]   [CPU Complexity]    [CPU Complexity RMS]]
+  [[int32_t]  [0.72N]             [5%]                    [0.02N]             [13%]]
+  [[int64_t]  [0.78N]             [16%]                   [0.03N]             [6%]]
+  [[uint32_t] [0.71N]             [10%]                   [0.02N]             [14%]]
+  [[cpp_int]  [6.24N]             [44%]                   [0.35N]             [4%]]
+  [[mpz_int]  [9.27N]             [11%]                   [0.69N]             [8%]]
+]
+''']
+
+[h4 References]
+* Sorensen, Jonathan [@https://research.cs.wisc.edu/techreports/1990/TR909.pdf An Introduction to Prime Number Sieves]
+* Gries, David and Misra, Jayadev [@https://www.cs.utexas.edu/users/misra/scannedPdf.dir/linearSieve.pdf A Linear Sieve Algorithm for Finding Prime Numbers]
+
+[endsect] [/section:primes Prime Sieve]
+
+[endsect] [/section:number_series Number Series]
 
 [/
   Copyright 2013, 2014 Nikhar Agrawal, Christopher Kormanyos, John Maddock, Paul A. Bristow.
