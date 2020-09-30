@@ -72,6 +72,8 @@ private:
     Integer left_;
     Integer right_;
 
+    OutputIterator resultant_primes_;
+
     // https://www.researchgate.net/publication/220803585_Performance_of_C_bit-vector_implementations
     boost::dynamic_bitset<> b_;
     
@@ -83,10 +85,11 @@ private:
     void Sieve() noexcept;
     bool Psstest(const std::size_t pos) noexcept;
     void Psstestall() noexcept;
-    decltype(auto) WriteOutput(OutputIterator resultant_primes) noexcept;
+    decltype(auto) WriteOutput() noexcept;
     
 public:
     IntervalSieve(const Integer left, const Integer right, OutputIterator resultant_primes) noexcept;
+    decltype(auto) NewRange(const Integer left, const Integer right) noexcept;
     decltype(auto) NewRange(const Integer left, const Integer right, OutputIterator resultant_primes) noexcept;
 };
 
@@ -200,16 +203,16 @@ void IntervalSieve<Integer, OutputIterator>::Sieve() noexcept
 }
 
 template<typename Integer, typename OutputIterator>
-decltype(auto) IntervalSieve<Integer, OutputIterator>::WriteOutput(OutputIterator resultant_primes) noexcept
+decltype(auto) IntervalSieve<Integer, OutputIterator>::WriteOutput() noexcept
 {
     for(std::size_t i {}; i < b_.size(); ++i)
     {
         if(b_[i])
         {
-            *resultant_primes++ = left_ + i;
+            *resultant_primes_++ = left_ + i;
         }
     }
-    return resultant_primes;
+    return resultant_primes_;
 }
 
 // Performs the pseduosqaure prime test on n = left + pos
@@ -273,8 +276,8 @@ void IntervalSieve<Integer, OutputIterator>::Psstestall() noexcept
 }
 
 template<typename Integer, typename OutputIterator>
-IntervalSieve<Integer, OutputIterator>::IntervalSieve(const Integer left, const Integer right,  OutputIterator resultant_primes) noexcept : 
-    left_ {left}, right_ {right}
+IntervalSieve<Integer, OutputIterator>::IntervalSieve(const Integer left, const Integer right, OutputIterator resultant_primes) noexcept : 
+    left_ {left}, right_ {right}, resultant_primes_ {resultant_primes}
 {
     delta_ = right_ - left_;
     b_.resize(static_cast<std::size_t>(delta_), 1);
@@ -286,11 +289,11 @@ IntervalSieve<Integer, OutputIterator>::IntervalSieve(const Integer left, const 
         Psstestall();
     }
     
-    WriteOutput(resultant_primes);
+    WriteOutput();
 }
 
 template<typename Integer, typename OutputIterator>
-decltype(auto) IntervalSieve<Integer, OutputIterator>::NewRange(const Integer left, const Integer right, OutputIterator resultant_primes) noexcept
+decltype(auto) IntervalSieve<Integer, OutputIterator>::NewRange(const Integer left, const Integer right) noexcept
 {
     left_ = left;
     right_ = right;
@@ -306,7 +309,28 @@ decltype(auto) IntervalSieve<Integer, OutputIterator>::NewRange(const Integer le
         Psstestall();
     }
     
-    return WriteOutput(resultant_primes);
+    return WriteOutput();
+}
+
+template<typename Integer, typename OutputIterator>
+decltype(auto) IntervalSieve<Integer, OutputIterator>::NewRange(const Integer left, const Integer right, OutputIterator resultant_primes) noexcept
+{
+    resultant_primes_ = resultant_primes;
+    left_ = left;
+    right_ = right;
+    delta_ = right_ - left_;
+
+    b_.resize(static_cast<std::size_t>(delta_));
+    b_.set();
+    Settdlimit();
+    Sieve();
+    
+    if(plimit_ != 0)
+    {
+        Psstestall();
+    }
+    
+    return WriteOutput();
 }
 }
 
