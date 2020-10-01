@@ -13,7 +13,6 @@
 #include <boost/math/special_functions/prime_approximation.hpp>
 #include <execution>
 #include <cstdint>
-#include <iostream>
 #include <vector>
 #include <future>
 #include <thread>
@@ -68,7 +67,7 @@ decltype(auto) segmented_sieve(const Integer lower_bound, const Integer upper_bo
 
     for(std::size_t i {}; i < num_threads - 1; ++i)
     {
-        prime_vectors[i].reserve(static_cast<std::size_t>(prime_approximation(current_lower_bound, current_upper_bound)));
+        prime_vectors[i].resize(static_cast<std::size_t>(prime_approximation(current_lower_bound, current_upper_bound)));
 
         future_manager.emplace_back(std::async(std::launch::async, [current_lower_bound, current_upper_bound, &prime_vectors, i]{
             sequential_segmented_sieve(current_lower_bound, current_upper_bound, prime_vectors[i].begin());
@@ -78,7 +77,7 @@ decltype(auto) segmented_sieve(const Integer lower_bound, const Integer upper_bo
         current_upper_bound += thread_range;
     }
 
-    prime_vectors.back().reserve(static_cast<std::size_t>(prime_approximation(current_lower_bound, upper_bound)));
+    prime_vectors.back().resize(static_cast<std::size_t>(prime_approximation(current_lower_bound, upper_bound)));
     future_manager.emplace_back(std::async(std::launch::async, [current_lower_bound, upper_bound, &prime_vectors]{
             sequential_segmented_sieve(current_lower_bound, upper_bound, prime_vectors.back().begin());
     }));
@@ -88,7 +87,7 @@ decltype(auto) segmented_sieve(const Integer lower_bound, const Integer upper_bo
     {
         future.get(); // Blocks to maintain proper sorting
         
-        for(auto val : prime_vectors[i])
+        for(auto& val : prime_vectors[i])
         {
             *resultant_primes++ = val;
         }
