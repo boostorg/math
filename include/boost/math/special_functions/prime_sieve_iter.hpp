@@ -19,13 +19,12 @@
 
 namespace boost::math::detail::prime_sieve
 {
-// TODO(mborland): Allow this value to be changed once cache functions are integerated
-inline std::size_t L1_SIZE {32768};
+inline std::size_t L1D_SIZE {32'768};
 
 template<typename Integer, typename OutputIterator>
 decltype(auto) sequential_segmented_sieve(const Integer lower_bound, const Integer upper_bound, OutputIterator resultant_primes)
 {
-    const Integer interval {static_cast<Integer>(L1_SIZE * 8)};
+    const Integer interval {static_cast<Integer>(L1D_SIZE * 8)};
     Integer current_lower_bound {lower_bound};
     Integer current_upper_bound {current_lower_bound + interval};
 
@@ -138,6 +137,12 @@ template<typename Integer, typename OutputIterator>
 inline decltype(auto) prime_sieve_iter(const Integer upper_bound, OutputIterator resultant_primes)
 {
     return prime_sieve_iter(std::execution::seq, upper_bound, resultant_primes);
+}
+
+template<typename Integer>
+inline void set_l1d_size(const Integer size)
+{
+    detail::prime_sieve::L1D_SIZE = static_cast<std::size_t>(size);
 }
 }
 

@@ -437,6 +437,9 @@ int main()
     //test_prime_range_seq_large<uint32_t>();
     //test_prime_range_seq_large<boost::multiprecision::cpp_int>();
     //test_prime_range_seq_large<boost::multiprecision::mpz_int>();
+
+    boost::math::set_l1d_size(100'000);
+    BOOST_ASSERT_MSG(boost::math::detail::prime_sieve::L1D_SIZE == 100'000, "L1 Size not set");
     
     boost::report_errors();
 }
