@@ -88,7 +88,7 @@ decltype(auto) segmented_sieve(const Integer lower_bound, const Integer upper_bo
         
         for(auto& val : prime_vectors[i])
         {
-            *resultant_primes++ = val;
+            *resultant_primes++ = std::move(val);
         }
 
         ++i;
