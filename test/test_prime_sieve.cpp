@@ -6,11 +6,14 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/math/special_functions/prime_sieve.hpp>
+#include <boost/math/special_functions/prime_sieve_iter.hpp>
+#include <boost/math/special_functions/prime_approximation.hpp>
 #include <boost/core/lightweight_test.hpp>
 #include <boost/multiprecision/cpp_int.hpp>
 #include <boost/multiprecision/gmp.hpp>
 #include <boost/math/special_functions/interval_sieve.hpp>
 #include <boost/math/special_functions/detail/linear_prime_sieve.hpp>
+#include <boost/math/special_functions/detail/interval_prime_sieve.hpp>
 #include <list>
 #include <deque>
 #include <array>
@@ -18,6 +21,7 @@
 #include <iostream>
 #include <chrono>
 #include <algorithm>
+#include <execution>
 
 template<typename Integer>
 void test_prime_sieve()
@@ -80,6 +84,60 @@ void test_sequential_prime_sieve()
     primes.clear();
     boost::math::prime_sieve(static_cast<Integer>(1'000'000), primes);
     BOOST_TEST_EQ(primes.size(), 78498);
+}
+
+template<typename Integer>
+void test_sequential_prime_sieve_iter()
+{
+    constexpr std::size_t array_size {100'000};
+    std::array<Integer, array_size> primes;
+    std::fill(primes.begin(), primes.end(), 0);
+
+    // 1'000
+    boost::math::prime_sieve_iter(static_cast<Integer>(1'000), primes.begin());
+    BOOST_TEST_EQ(array_size - std::count(primes.cbegin(), primes.cend(), 0), 168);
+
+    // 10'000
+    std::fill(primes.begin(), primes.end(), 0);
+    boost::math::prime_sieve_iter(static_cast<Integer>(10'000), primes.begin());
+    BOOST_TEST_EQ(array_size - std::count(primes.cbegin(), primes.cend(), 0), 1'229);
+
+    // 100'000
+    std::fill(primes.begin(), primes.end(), 0);
+    boost::math::prime_sieve_iter(static_cast<Integer>(100'000), primes.begin());
+    BOOST_TEST_EQ(array_size - std::count(primes.cbegin(), primes.cend(), 0), 9'592);
+
+    // 1'000'000
+    std::fill(primes.begin(), primes.end(), 0);
+    boost::math::prime_sieve_iter(static_cast<Integer>(1'000'000), primes.begin());
+    BOOST_TEST_EQ(array_size - std::count(primes.cbegin(), primes.cend(), 0), 78'498);
+}
+
+template<typename Integer>
+void test_prime_sieve_iter()
+{
+    constexpr std::size_t array_size {100'000};
+    std::array<Integer, array_size> primes;
+    std::fill(primes.begin(), primes.end(), 0);
+
+    // 1'000
+    boost::math::prime_sieve_iter(std::execution::par, static_cast<Integer>(1'000), primes.begin());
+    BOOST_TEST_EQ(array_size - std::count(primes.cbegin(), primes.cend(), 0), 168);
+
+    // 10'000
+    std::fill(primes.begin(), primes.end(), 0);
+    boost::math::prime_sieve_iter(std::execution::par, static_cast<Integer>(10'000), primes.begin());
+    BOOST_TEST_EQ(array_size - std::count(primes.cbegin(), primes.cend(), 0), 1'229);
+
+    // 100'000
+    std::fill(primes.begin(), primes.end(), 0);
+    boost::math::prime_sieve_iter(std::execution::par, static_cast<Integer>(100'000), primes.begin());
+    BOOST_TEST_EQ(array_size - std::count(primes.cbegin(), primes.cend(), 0), 9'592);
+
+    // 1'000'000
+    std::fill(primes.begin(), primes.end(), 0);
+    boost::math::prime_sieve_iter(std::execution::par, static_cast<Integer>(1'000'000), primes.begin());
+    BOOST_TEST_EQ(array_size - std::count(primes.cbegin(), primes.cend(), 0), 78'498);
 }
 
 template<typename Integer>
@@ -225,6 +283,25 @@ void test_interval_sieve()
 }
 
 template<typename Integer>
+void test_interval_sieve_iterator()
+{
+    const std::size_t array_size {70'000};
+    std::array<Integer, array_size> primes;
+    std::fill(primes.begin(), primes.end(), 0);
+
+    boost::math::detail::prime_sieve::IntervalSieve sieve(static_cast<Integer>(1'000), static_cast<Integer>(10'000), primes.begin());
+    BOOST_TEST_EQ(array_size - std::count(primes.cbegin(), primes.cend(), 0), 1'061);
+
+    std::fill(primes.begin(), primes.end(), 0);
+    sieve.NewRange(static_cast<Integer>(10'000), static_cast<Integer>(100'000), primes.begin());
+    BOOST_TEST_EQ(array_size - std::count(primes.cbegin(), primes.cend(), 0), 8'363);
+
+    std::fill(primes.begin(), primes.end(), 0);
+    sieve.NewRange(static_cast<Integer>(100'000), static_cast<Integer>(1'000'000), primes.begin());
+    BOOST_TEST_EQ(array_size - std::count(primes.cbegin(), primes.cend(), 0), 68'906);
+}
+
+template<typename Integer>
 void test_linear_sieve()
 {
     std::vector<Integer> primes;
@@ -262,6 +339,9 @@ void test_linear_sieve_iterator()
 
 int main()
 {
+    // Test prime approximation for constexpr
+    static_assert(boost::math::prime_approximation(100) != 0, "log and/or floor is/are not constexpr");
+    
     // Individual Algorithms
     test_linear_sieve<int>();
     test_linear_sieve<int32_t>();
@@ -284,6 +364,13 @@ int main()
     test_linear_sieve_iterator<uint32_t>();
     test_linear_sieve_iterator<boost::multiprecision::cpp_int>();
     test_linear_sieve_iterator<boost::multiprecision::mpz_int>();
+
+    test_interval_sieve_iterator<int>();
+    test_interval_sieve_iterator<int32_t>();
+    test_interval_sieve_iterator<int64_t>();
+    test_interval_sieve_iterator<uint32_t>();
+    test_interval_sieve_iterator<boost::multiprecision::cpp_int>();
+    test_interval_sieve_iterator<boost::multiprecision::mpz_int>();
 
     // Composite
     test_prime_sieve<int>();
@@ -314,6 +401,21 @@ int main()
     test_prime_range_seq<boost::multiprecision::cpp_int>();
     test_prime_range_seq<boost::multiprecision::mpz_int>();
 
+    // Composite Algorithms with Iterators
+    test_sequential_prime_sieve_iter<int>();
+    test_sequential_prime_sieve_iter<int32_t>();
+    test_sequential_prime_sieve_iter<int64_t>();
+    test_sequential_prime_sieve_iter<uint32_t>();
+    test_sequential_prime_sieve_iter<boost::multiprecision::cpp_int>();
+    test_sequential_prime_sieve_iter<boost::multiprecision::mpz_int>();
+
+    test_prime_sieve_iter<int>();
+    test_prime_sieve_iter<int32_t>();
+    test_prime_sieve_iter<int64_t>();
+    test_prime_sieve_iter<uint32_t>();
+    test_prime_sieve_iter<boost::multiprecision::cpp_int>();
+    test_prime_sieve_iter<boost::multiprecision::mpz_int>();
+
     // Large composite tests (Commented out for CI)
     //test_par_prime_sieve_large<int>();
     //test_par_prime_sieve_large<int32_t>();
@@ -335,6 +437,9 @@ int main()
     //test_prime_range_seq_large<uint32_t>();
     //test_prime_range_seq_large<boost::multiprecision::cpp_int>();
     //test_prime_range_seq_large<boost::multiprecision::mpz_int>();
+
+    boost::math::set_l1d_size(100'000);
+    BOOST_ASSERT_MSG(boost::math::detail::prime_sieve::L1D_SIZE == 100'000, "L1 Size not set");
     
     boost::report_errors();
 }

@@ -6,6 +6,7 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/math/special_functions/prime_sieve.hpp>
+#include <boost/math/special_functions/prime_sieve_iter.hpp>
 #include <boost/math/special_functions/interval_sieve.hpp>
 #include <boost/math/special_functions/detail/linear_prime_sieve.hpp>
 #include <boost/multiprecision/cpp_int.hpp>
@@ -108,6 +109,26 @@ void prime_sieve(benchmark::State& state)
     state.SetComplexityN(state.range(0));
 }
 
+template<class ExecutionPolicy, class Integer, class OutputIterator>
+inline decltype(auto) prime_sieve_oi_helper(ExecutionPolicy policy, Integer upper, OutputIterator resultant_primes)
+{
+    return boost::math::prime_sieve_iter(policy, upper, resultant_primes);
+}
+
+template<class Integer>
+void prime_sieve_oi(benchmark::State& state)
+{
+    Integer upper = static_cast<Integer>(state.range(0));
+    std::vector<Integer> primes;
+    boost::math::prime_reserve(upper, primes);
+
+    for(auto _ : state)
+    {
+        benchmark::DoNotOptimize(prime_sieve_oi_helper(std::execution::par, upper, primes.begin()));
+    }
+    state.SetComplexityN(state.range(0));
+}
+
 template <class Integer>
 inline auto kimwalish_primes_helper(Integer upper, std::vector<Integer> primes) -> std::vector<Integer>
 {
@@ -130,10 +151,11 @@ void kimwalish_primes(benchmark::State& state)
 // Invidiual Implementations
 // Linear
 //BENCHMARK_TEMPLATE(linear_sieve, int32_t)->RangeMultiplier(2)->Range(1 << 1, 1 << 16)->Complexity(benchmark::oN);
-BENCHMARK_TEMPLATE(linear_sieve, int64_t)->RangeMultiplier(2)->Range(1 << 1, 1 << 16)->Complexity(benchmark::oN);
+//BENCHMARK_TEMPLATE(linear_sieve, int64_t)->RangeMultiplier(2)->Range(1 << 1, 1 << 16)->Complexity(benchmark::oN);
 //BENCHMARK_TEMPLATE(linear_sieve, uint32_t)->RangeMultiplier(2)->Range(1 << 1, 1 << 16)->Complexity(benchmark::oN);
 
-BENCHMARK_TEMPLATE(linear_sieve_oi, int64_t)->RangeMultiplier(2)->Range(1 << 1, 1 << 16)->Complexity(benchmark::oN);
+// Linear output iterator
+//BENCHMARK_TEMPLATE(linear_sieve_oi, int64_t)->RangeMultiplier(2)->Range(1 << 1, 1 << 16)->Complexity(benchmark::oN);
 
 // Segmented
 //BENCHMARK_TEMPLATE(mask_sieve, int32_t)->RangeMultiplier(2)->Range(1 << 2, 2 << 22)->Complexity(benchmark::oNLogN);
@@ -143,10 +165,11 @@ BENCHMARK_TEMPLATE(linear_sieve_oi, int64_t)->RangeMultiplier(2)->Range(1 << 1, 
 
 // Complete Implemenations
 //BENCHMARK_TEMPLATE(prime_sieve, int32_t)->RangeMultiplier(2)->Range(1 << 1, 1 << 30)->Complexity(benchmark::oN)->UseRealTime();
-//BENCHMARK_TEMPLATE(prime_sieve, int64_t)->RangeMultiplier(2)->Range(1 << 1, 1 << 30)->Complexity(benchmark::oN)->UseRealTime();
+BENCHMARK_TEMPLATE(prime_sieve, int64_t)->RangeMultiplier(2)->Range(1 << 1, 1 << 30)->Complexity(benchmark::oN)->UseRealTime();
+BENCHMARK_TEMPLATE(prime_sieve_oi, int64_t)->RangeMultiplier(2)->Range(1 << 1, 1 << 30)->Complexity(benchmark::oN)->UseRealTime();
 //BENCHMARK_TEMPLATE(kimwalish_primes, int64_t)->RangeMultiplier(2)->Range(1 << 1, 1 << 30)->Complexity(benchmark::oN)->UseRealTime(); // Benchmark
-BENCHMARK_TEMPLATE(prime_sieve, uint32_t)->RangeMultiplier(2)->Range(1 << 1, 1 << 30)->Complexity(benchmark::oN)->UseRealTime();
-BENCHMARK_TEMPLATE(prime_sieve, boost::multiprecision::cpp_int)->RangeMultiplier(2)->Range(1 << 1, 1 << 30)->Complexity(benchmark::oN)->UseRealTime();
-BENCHMARK_TEMPLATE(prime_sieve, boost::multiprecision::mpz_int)->RangeMultiplier(2)->Range(1 << 1, 1 << 30)->Complexity(benchmark::oN)->UseRealTime();
+//BENCHMARK_TEMPLATE(prime_sieve, uint32_t)->RangeMultiplier(2)->Range(1 << 1, 1 << 30)->Complexity(benchmark::oN)->UseRealTime();
+//BENCHMARK_TEMPLATE(prime_sieve, boost::multiprecision::cpp_int)->RangeMultiplier(2)->Range(1 << 1, 1 << 30)->Complexity(benchmark::oN)->UseRealTime();
+//BENCHMARK_TEMPLATE(prime_sieve, boost::multiprecision::mpz_int)->RangeMultiplier(2)->Range(1 << 1, 1 << 30)->Complexity(benchmark::oN)->UseRealTime();
 
 BENCHMARK_MAIN();
