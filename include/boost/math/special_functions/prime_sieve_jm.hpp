@@ -163,9 +163,92 @@ inline bool linear_sieve_classical_segment(Container& primes, Sieve& masks, Inte
    return true;
 }
 
+
 // 4096 is where benchmarked performance of linear_sieve begins to diverge
 template<class Integer>
 const Integer linear_sieve_limit = Integer(524288); // Constexpr does not work with boost::multiprecision types
+
+template<class Container, class Integer, class OutputIterator>
+inline bool linear_sieve_classical_segment_threaded(std::atomic<Integer>* current_max_processed_value, std::mutex* lock, Container* primes, Integer start_offset, Integer end_offset, Integer stride, OutputIterator out, bool output_to_container)
+{
+   simple_bitset<std::uint64_t> masks(linear_sieve_limit<Integer> / 2);
+
+   std::unique_lock<std::mutex> l(*lock);
+   std::size_t prime_count = primes->size();
+   l.unlock();
+
+   while (start_offset < end_offset)
+   {
+      Integer max_points = end_offset - start_offset > linear_sieve_limit<Integer> ? linear_sieve_limit<Integer> : end_offset - start_offset;
+      Integer limit = static_cast<Integer>(std::sqrt(static_cast<double>(start_offset + max_points)) + 1);
+      // Begin by striking out odd numbered multiples of all the primes we have so far.
+      // 1-based index, we only have odd numbers in the sieve so don't need to handle 2:
+      for (std::size_t i = 1; i < prime_count; ++i)
+      {
+         Integer prime = (*primes)[i];
+         if (prime > limit)
+            break;
+         Integer index = prime - start_offset % prime;
+         if ((index & 1) == 0)
+            index += prime;
+         index >>= 1;
+         for (; index < max_points / 2; index += prime)
+            masks.clear(index);
+      }
+      //
+      // Now we must wait until the previous thread has completed the segment before this one:
+      //
+      while (current_max_processed_value->load() != start_offset)
+         std::this_thread::yield();
+      //
+      // Maybe process all the primes we didn't have access to in the loop above:
+      //
+      if ((*primes)[prime_count - 1] < limit)
+      {
+         l.lock();
+         prime_count = primes->size();
+         l.unlock();
+         // Begin by striking out odd numbered multiples of all the primes we have so far.
+         // 1-based index, we only have odd numbers in the sieve so don't need to handle 2:
+         for (std::size_t i = 1; i < prime_count; ++i)
+         {
+            Integer prime = (*primes)[i];
+            if (prime > limit)
+               break;
+            Integer index = prime - start_offset % prime;
+            if ((index & 1) == 0)
+               index += prime;
+            index >>= 1;
+            for (; index < max_points / 2; index += prime)
+               masks.clear(index);
+         }
+      }
+      //
+      // Now walk through the sieve outputting primes.
+      //
+      l.lock();
+      for (Integer index = 0; index < max_points / 2; ++index)
+      {
+         if (masks.test(index))
+         {
+            *out++ = start_offset + 2 * index + 1;
+            if (output_to_container)
+               primes->push_back(start_offset + 2 * index + 1);
+            if (has_output_iterator_terminated(out))
+               return false;
+         }
+      }
+      prime_count = primes->size();
+      l.unlock();
+      //
+      // We're done on this segment, signal the next thread:
+      //
+      masks.reset();
+      *current_max_processed_value = start_offset + max_points;
+      start_offset += stride;
+   }
+   return true;
+}
 
 template<class ExecutionPolicy, class Integer, class Container, class OutputIterator>
 void prime_sieve_imp(ExecutionPolicy&& policy, Integer upper_bound, Container& primes, OutputIterator out, bool output_to_container)
@@ -203,25 +286,34 @@ void prime_sieve_imp(ExecutionPolicy&& policy, Integer upper_bound, Container& p
             return;
       }
    }
-#if 0
-
    else
    {
-      std::vector<Integer> small_primes{};
-      small_primes.reserve(1028);
+      unsigned hardware_concurrency = std::thread::hardware_concurrency();
+      if ((hardware_concurrency == 0) || (upper_bound <= linear_sieve_limit<Integer> * 2))
+      {
+         //
+         // No point in using threads as there's only one more segment to process:
+         //
+         linear_sieve_classical_segment(primes, sieve, linear_sieve_limit<Integer>, upper_bound - linear_sieve_limit<Integer>, out, output_to_container);
+      }
+      else
+      {
+         unsigned n_threads = (upper_bound - linear_sieve_limit<Integer>) / linear_sieve_limit<Integer> +((upper_bound - linear_sieve_limit<Integer>) % linear_sieve_limit<Integer> ? 1 : 0);
+         n_threads = (std::min)(n_threads, hardware_concurrency / 2);
 
-      std::thread t1([&small_primes] {
-         boost::math::detail::linear_sieve(static_cast<Integer>(linear_sieve_limit<Integer> * 2), small_primes);
-         });
-      std::thread t2([upper_bound, &primes] {
-         boost::math::detail::segmented_sieve(static_cast<Integer>(linear_sieve_limit<Integer> * 2), upper_bound, primes);
-         });
+         std::atomic<Integer> current_max_processed_value = linear_sieve_limit<Integer>;
+         std::vector<std::unique_ptr<std::thread>> threads(n_threads);
+         std::mutex mutex;
 
-      t1.join();
-      t2.join();
-      primes.insert(primes.begin(), small_primes.begin(), small_primes.end());
+         for (unsigned i = 0; i < n_threads; ++i)
+            threads[i].reset(new std::thread(linear_sieve_classical_segment_threaded<Container, Integer, OutputIterator>,
+               &current_max_processed_value, &mutex, &primes, linear_sieve_limit<Integer> * (i + 1), upper_bound,
+               linear_sieve_limit<Integer> * n_threads, out, output_to_container));
+
+         for (unsigned i = 0; i < n_threads; ++i)
+            threads[i]->join();
+      }
    }
-#endif
 }
 
 template <class OutputIterator>
