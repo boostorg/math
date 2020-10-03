@@ -119,8 +119,7 @@ template<class Integer>
 void prime_sieve_oi(benchmark::State& state)
 {
     Integer upper = static_cast<Integer>(state.range(0));
-    std::vector<Integer> primes;
-    boost::math::prime_reserve(upper, primes);
+    std::vector<Integer> primes(boost::math::prime_approximation(upper));
 
     for(auto _ : state)
     {
