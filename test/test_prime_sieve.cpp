@@ -403,6 +403,11 @@ int main()
     test_stepanov_sieve<int>();
 
     test_wheel_sieve_of_eratosthenes<int>();
+    test_wheel_sieve_of_eratosthenes<int32_t>();
+    test_wheel_sieve_of_eratosthenes<int64_t>();
+    test_wheel_sieve_of_eratosthenes<uint32_t>();
+    test_wheel_sieve_of_eratosthenes<boost::multiprecision::cpp_int>();
+    test_wheel_sieve_of_eratosthenes<boost::multiprecision::mpz_int>();
 
     // Composite
     test_prime_sieve<int>();
