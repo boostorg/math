@@ -114,6 +114,7 @@ decltype(auto) wheel_sieve_of_eratosthenes(const Integer upper_bound, OutputIter
     trial.set();
     std::array<Integer, 3> primes {2, 3, 5}; // Wheel basis
     std::array<Integer, 8> wheel {7, 11, 13, 17, 19, 23, 29, 31}; // MOD 30 wheel
+    const Integer wheel_mod {30};
 
     for(std::size_t i {}; i < primes.size(); ++i)
     {
@@ -122,26 +123,35 @@ decltype(auto) wheel_sieve_of_eratosthenes(const Integer upper_bound, OutputIter
     }
 
     // Last value in the wheel is the starting point for the next step
-    for(std::size_t i {}; i < wheel.size() - 1; ++i)
+    for(std::size_t i {}; i < wheel.size(); ++i)
     {
         mark_sieve(trial, wheel[i]);
         *resultant_primes++ = wheel[i];
     }
 
-    for(Integer i {wheel.back()}; i < sqrt_upper_bound; i += wheel.back() - 1)
+    Integer i {wheel_mod};
+    for(; (i + wheel.front()) < sqrt_upper_bound; i += wheel_mod)
     {
-        if(trial[static_cast<std::size_t>(i)] == true)
+        for(std::size_t j {}; j < wheel.size(); ++j)
         {
-            mark_sieve(trial, i);
-            *resultant_primes++ = i;
+            Integer spoke {i + wheel[j]};
+            if(trial[static_cast<std::size_t>(spoke)])
+            {
+                mark_sieve(trial, spoke);
+                *resultant_primes++ = std::move(spoke);
+            }
         }
     }
 
-    for(Integer i {sqrt_upper_bound % 2 == 0 ? sqrt_upper_bound + 1 : sqrt_upper_bound + 2}; i < upper_bound; i += 2)
+    for(; (i + wheel.front()) < upper_bound; i += wheel_mod)
     {
-        if(trial[static_cast<std::size_t>(i)])
+        for(std::size_t j {}; j < wheel.size(); ++j)
         {
-            *resultant_primes++ = i;
+            Integer spoke {i + wheel[j]};
+            if(trial[static_cast<std::size_t>(spoke)])
+            {
+                *resultant_primes++ = std::move(spoke); 
+            }
         }
     }
 
