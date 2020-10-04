@@ -8,9 +8,11 @@
 #ifndef BOOST_MATH_SPECIAL_FUNCTIONS_DETAIL_LINEAR_PRIME_SIEVE_HPP
 #define BOOST_MATH_SPECIAL_FUNCTIONS_DETAIL_LINEAR_PRIME_SIEVE_HPP
 
+#include <boost/dynamic_bitset.hpp>
 #include <memory>
 #include <algorithm>
 #include <array>
+#include <cmath>
 
 namespace boost::math::detail::prime_sieve 
 {
@@ -53,6 +55,15 @@ void mark_sieve(RandomAccessIterator first, RandomAccessIterator last, Integer f
     }
 }
 
+template<typename Bitset, typename Integer>
+inline void mark_sieve(Bitset& bits, Integer factor)
+{
+    for(Integer i {factor * factor}; i < bits.size(); i += factor)
+    {
+        bits[static_cast<std::size_t>(i)] = 0;
+    }
+}
+
 template<typename RandomAccessIterator, typename Integer>
 void sift(RandomAccessIterator first, Integer n)
 {
@@ -84,6 +95,48 @@ inline decltype(auto) stepanov_sieve(Integer upper_bound, OutputIterator resulta
     }
     
     sift(resultant_primes, upper_bound);
+    return resultant_primes;
+}
+
+// TODO(mborland): Pass in execution policy. mark_sieve can readily be converted to std::for_each, but dynamic_bitset would need replaced with something
+//                 that has iterators
+template<typename Integer, typename OutputIterator>
+decltype(auto) wheel_sieve_of_eratosthenes(Integer upper_bound, OutputIterator resultant_primes)
+{
+    const Integer sqrt_upper_bound {static_cast<Integer>(std::floor(std::sqrt(static_cast<double>(upper_bound)))) + 1};
+    boost::dynamic_bitset<> trial(static_cast<std::size_t>(upper_bound));
+    trial.set();
+    std::array<Integer, 3> primes {2, 3, 5}; // Wheel basis
+    std::array<Integer, 8> wheel {7, 11, 13, 17, 19, 23, 29, 31}; // MOD 30 wheel
+
+    for(auto& prime : primes)
+    {
+        mark_sieve(trial, prime);
+        *resultant_primes++ = prime;
+    }
+
+    for(auto& co_prime : wheel)
+    {
+        mark_sieve(trial, co_prime);
+        *resultant_primes++ = co_prime;
+    }
+
+    for(Integer i {wheel.back()}; i < static_cast<std::size_t>(sqrt_upper_bound); i += wheel.back() - 1)
+    {
+        if(trial[static_cast<std::size_t>(i)] == true)
+        {
+            mark_sieve(trial, i * i);
+        }
+    }
+
+    for(Integer i {wheel.back() + 2}; i < upper_bound; i += 2)
+    {
+        if(trial[static_cast<std::size_t>(i)])
+        {
+            *resultant_primes++ = i;
+        }
+    }
+
     return resultant_primes;
 }
 }
