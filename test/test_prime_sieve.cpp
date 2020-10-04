@@ -354,6 +354,17 @@ void test_stepanov_sieve()
     BOOST_TEST_EQ(array_size - std::count(primes.cbegin(), primes.cend(), 0), 167); // Skips 2
 }
 
+template<typename Integer>
+void test_wheel_sieve_of_eratosthenes()
+{
+    constexpr std::size_t array_size {10'000};
+    std::array<Integer, array_size> primes;
+    std::fill(primes.begin(), primes.end(), 0);
+
+    boost::math::detail::prime_sieve::wheel_sieve_of_eratosthenes(static_cast<Integer>(1'000), primes.begin());
+    BOOST_TEST_EQ(array_size - std::count(primes.cbegin(), primes.cend(), 0), 168);
+}
+
 int main()
 {
     // Test prime approximation for constexpr
@@ -390,6 +401,8 @@ int main()
     test_interval_sieve_iterator<boost::multiprecision::mpz_int>();
 
     test_stepanov_sieve<int>();
+
+    test_wheel_sieve_of_eratosthenes<int>();
 
     // Composite
     test_prime_sieve<int>();
