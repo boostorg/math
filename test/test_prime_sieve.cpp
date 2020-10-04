@@ -335,6 +335,23 @@ void test_linear_sieve_iterator()
     std::fill(primes.begin(), primes.end(), 0);
     boost::math::detail::prime_sieve::linear_sieve(static_cast<Integer>(100'000), primes.begin());
     BOOST_TEST_EQ(array_size - std::count(primes.cbegin(), primes.cend(), 0), 9'592);
+
+    std::vector<Integer> primes_v;
+    //boost::math::prime_reserve(static_cast<Integer>(100'000), primes_v); Prime reserve does not work with OI. Need to use resize.
+    primes_v.resize(10'000, 0);
+    boost::math::detail::prime_sieve::linear_sieve(static_cast<Integer>(100'000), primes_v.begin());
+    BOOST_TEST_EQ(array_size - std::count(primes_v.cbegin(), primes_v.cend(), 0), 9'592);
+
+}
+
+template<typename Integer>
+void test_stepanov_sieve()
+{
+    constexpr std::size_t array_size {500};
+    std::array<Integer, array_size> primes;
+
+    boost::math::detail::prime_sieve::stepanov_sieve(static_cast<Integer>(500), primes.begin());
+    BOOST_TEST_EQ(array_size - std::count(primes.cbegin(), primes.cend(), 0), 167); // Skips 2
 }
 
 int main()
@@ -371,6 +388,8 @@ int main()
     test_interval_sieve_iterator<uint32_t>();
     test_interval_sieve_iterator<boost::multiprecision::cpp_int>();
     test_interval_sieve_iterator<boost::multiprecision::mpz_int>();
+
+    test_stepanov_sieve<int>();
 
     // Composite
     test_prime_sieve<int>();
