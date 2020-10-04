@@ -363,6 +363,14 @@ void test_wheel_sieve_of_eratosthenes()
 
     boost::math::detail::prime_sieve::wheel_sieve_of_eratosthenes(static_cast<Integer>(1'000), primes.begin());
     BOOST_TEST_EQ(array_size - std::count(primes.cbegin(), primes.cend(), 0), 168);
+
+    std::fill(primes.begin(), primes.end(), 0);
+    boost::math::detail::prime_sieve::wheel_sieve_of_eratosthenes(static_cast<Integer>(10'000), primes.begin());
+    BOOST_TEST_EQ(array_size - std::count(primes.cbegin(), primes.cend(), 0), 1'229);
+
+    std::fill(primes.begin(), primes.end(), 0);
+    boost::math::detail::prime_sieve::wheel_sieve_of_eratosthenes(static_cast<Integer>(100'000), primes.begin());
+    BOOST_TEST_EQ(array_size - std::count(primes.cbegin(), primes.cend(), 0), 9'592);
 }
 
 int main()
