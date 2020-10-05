@@ -11,6 +11,7 @@
 #include <boost/math/special_functions/detail/linear_prime_sieve.hpp>
 #include <boost/math/special_functions/detail/interval_prime_sieve.hpp>
 #include <boost/math/special_functions/prime_approximation.hpp>
+#include <boost/math/special_functions/prime_sieve.hpp>
 #include <execution>
 #include <cstdint>
 #include <vector>
@@ -137,6 +138,17 @@ template<typename Integer, typename OutputIterator>
 inline decltype(auto) prime_sieve_iter(const Integer upper_bound, OutputIterator resultant_primes)
 {
     return prime_sieve_iter(std::execution::seq, upper_bound, resultant_primes);
+}
+
+
+template<typename ExecutionPolicy, typename Integer, typename OutputIterator>
+inline decltype(auto) prime_sieve_wrapper(ExecutionPolicy&& policy, Integer upper_bound, OutputIterator resultant_primes)
+{
+    std::vector<Integer> primes;
+    prime_reserve(upper_bound, primes);
+    prime_sieve(policy, upper_bound, primes);
+
+    return std::move(primes.begin(), primes.end(), resultant_primes);
 }
 
 template<typename Integer>

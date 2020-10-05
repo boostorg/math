@@ -141,6 +141,33 @@ void test_prime_sieve_iter()
 }
 
 template<typename Integer>
+void test_prime_sieve_wrapper()
+{
+    constexpr std::size_t array_size {100'000};
+    std::array<Integer, array_size> primes;
+    std::fill(primes.begin(), primes.end(), 0);
+
+    // 1'000
+    boost::math::prime_sieve_wrapper(std::execution::par, static_cast<Integer>(1'000), primes.begin());
+    BOOST_TEST_EQ(array_size - std::count(primes.cbegin(), primes.cend(), 0), 168);
+
+    // 10'000
+    std::fill(primes.begin(), primes.end(), 0);
+    boost::math::prime_sieve_wrapper(std::execution::par, static_cast<Integer>(10'000), primes.begin());
+    BOOST_TEST_EQ(array_size - std::count(primes.cbegin(), primes.cend(), 0), 1'229);
+
+    // 100'000
+    std::fill(primes.begin(), primes.end(), 0);
+    boost::math::prime_sieve_wrapper(std::execution::par, static_cast<Integer>(100'000), primes.begin());
+    BOOST_TEST_EQ(array_size - std::count(primes.cbegin(), primes.cend(), 0), 9'592);
+
+    // 1'000'000
+    std::fill(primes.begin(), primes.end(), 0);
+    boost::math::prime_sieve_wrapper(std::execution::par, static_cast<Integer>(1'000'000), primes.begin());
+    BOOST_TEST_EQ(array_size - std::count(primes.cbegin(), primes.cend(), 0), 78'498);
+}
+
+template<typename Integer>
 void test_prime_range()
 {
     std::vector<Integer> primes;
@@ -460,6 +487,13 @@ int main()
     test_prime_sieve_iter<uint32_t>();
     test_prime_sieve_iter<boost::multiprecision::cpp_int>();
     test_prime_sieve_iter<boost::multiprecision::mpz_int>();
+
+    test_prime_sieve_wrapper<int>();
+    test_prime_sieve_wrapper<int32_t>();
+    test_prime_sieve_wrapper<int64_t>();
+    test_prime_sieve_wrapper<uint32_t>();
+    test_prime_sieve_wrapper<boost::multiprecision::cpp_int>();
+    test_prime_sieve_wrapper<boost::multiprecision::mpz_int>();
 
     // Large composite tests (Commented out for CI)
     //test_par_prime_sieve_large<int>();
