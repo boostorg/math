@@ -310,38 +310,11 @@ inline decltype(auto) prime_sieve_wrapper(ExecutionPolicy&& policy, Integer uppe
 template<typename Integer, typename OutputIterator>
 inline decltype(auto) prime_sieve_wrapper(Integer upper_bound, OutputIterator resultant_primes)
 {
-    return test_prime_sieve_wrapper(std::execution::seq, upper_bound, resultant_primes);
-}
-} // End namespace detail
-
-
-
-
-
-template<typename ExecutionPolicy, typename Integer, typename T>
-inline decltype(auto) prime_sieve(ExecutionPolicy&& policy, Integer upper_bound, T output)
-{
-    if constexpr (detail::is_container<std::remove_pointer_t<T>>::value)
-    {
-        detail::prime_sieve_impl(policy, upper_bound, *output);
-        return;
-    }
-
-    else
-    {
-        detail::prime_sieve_wrapper(policy, upper_bound, output);
-        return output;
-    }
-}
-
-template<typename Integer, typename T>
-inline decltype(auto) prime_sieve(Integer upper_bound, T output)
-{
-    return prime_sieve(std::execution::seq, upper_bound, output);
+    return prime_sieve_wrapper(std::execution::seq, upper_bound, resultant_primes);
 }
 
 template<class ExecutionPolicy, class Integer, class Container>
-void prime_range(ExecutionPolicy&& policy, Integer lower_bound, Integer upper_bound, Container &primes)
+void prime_range_impl(ExecutionPolicy&& policy, Integer lower_bound, Integer upper_bound, Container &primes)
 {
     using boost::math::detail::linear_sieve_limit;
     Integer limit {static_cast<Integer>(std::floor(std::sqrt(static_cast<double>(upper_bound)))) + 1};
@@ -446,9 +419,75 @@ void prime_range(ExecutionPolicy&& policy, Integer lower_bound, Integer upper_bo
 }
 
 template<class Integer, class Container>
-inline void prime_range(Integer lower_bound, Integer upper_bound, Container &primes)
+inline void prime_range_impl(Integer lower_bound, Integer upper_bound, Container &primes)
 {
-    prime_range(std::execution::seq, lower_bound, upper_bound, primes);
+    prime_range_impl(std::execution::seq, lower_bound, upper_bound, primes);
+}
+
+template<typename ExecutionPolicy, typename Integer, typename OutputIterator>
+inline decltype(auto) prime_range_wrapper(ExecutionPolicy&& policy, Integer lower_bound, Integer upper_bound, OutputIterator resultant_primes)
+{
+    std::vector<Integer> primes;
+    prime_reserve(lower_bound, upper_bound, primes);
+    prime_range_impl(policy, lower_bound, upper_bound, primes);
+
+    return std::move(primes.begin(), primes.end(), resultant_primes);
+}
+
+template<typename Integer, typename OutputIterator>
+inline decltype(auto) prime_range_wrapper(Integer lower_bound, Integer upper_bound, OutputIterator resultant_primes)
+{
+    return prime_range_wrapper(std::execution::seq, lower_bound, upper_bound, resultant_primes);
+}
+
+} // End namespace detail
+
+
+
+
+
+template<typename ExecutionPolicy, typename Integer, typename T>
+inline decltype(auto) prime_sieve(ExecutionPolicy&& policy, Integer upper_bound, T output)
+{
+    if constexpr (detail::is_container<std::remove_pointer_t<T>>::value)
+    {
+        detail::prime_sieve_impl(policy, upper_bound, *output);
+        return;
+    }
+
+    else
+    {
+        detail::prime_sieve_wrapper(policy, upper_bound, output);
+        return output;
+    }
+}
+
+template<typename Integer, typename T>
+inline decltype(auto) prime_sieve(Integer upper_bound, T output)
+{
+    return prime_sieve(std::execution::seq, upper_bound, output);
+}
+
+template<typename ExecutionPolicy, typename Integer, typename T>
+inline decltype(auto) prime_range(ExecutionPolicy&& policy, Integer lower_bound, Integer upper_bound, T output)
+{
+    if constexpr (detail::is_container<std::remove_pointer_t<T>>::value)
+    {
+        detail::prime_range_impl(policy, lower_bound, upper_bound, *output);
+        return;
+    }
+
+    else
+    {
+        detail::prime_range_wrapper(policy, lower_bound, upper_bound, output);
+        return output;
+    }
+}
+
+template<typename Integer, typename T>
+inline decltype(auto) prime_range(Integer lower_bound, Integer upper_bound, T output)
+{
+    return prime_range(std::execution::seq, lower_bound, upper_bound, output);
 }
 }
 
