@@ -140,17 +140,6 @@ inline decltype(auto) prime_sieve_iter(const Integer upper_bound, OutputIterator
     return prime_sieve_iter(std::execution::seq, upper_bound, resultant_primes);
 }
 
-
-template<typename ExecutionPolicy, typename Integer, typename OutputIterator>
-inline decltype(auto) prime_sieve_wrapper(ExecutionPolicy&& policy, Integer upper_bound, OutputIterator resultant_primes)
-{
-    std::vector<Integer> primes;
-    prime_reserve(upper_bound, primes);
-    prime_sieve(policy, upper_bound, primes);
-
-    return std::move(primes.begin(), primes.end(), resultant_primes);
-}
-
 template<typename Integer>
 inline void set_l1d_size(const Integer size)
 {
