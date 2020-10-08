@@ -6,6 +6,7 @@
 #ifndef BOOST_MATH_STATISTICS_UNIVARIATE_STATISTICS_HPP
 #define BOOST_MATH_STATISTICS_UNIVARIATE_STATISTICS_HPP
 
+#include <boost/math/statistics/detail/single_pass.hpp>
 #include <algorithm>
 #include <iterator>
 #include <tuple>
@@ -112,94 +113,30 @@ inline auto mean(Container const & v)
     return mean(std::execution::seq, std::cbegin(v), std::cend(v));
 }
 
-namespace detail
-{
-template<class ForwardIterator>
-auto sequential_variance(ForwardIterator first, ForwardIterator last)
-{
-    using Real = typename std::iterator_traits<ForwardIterator>::value_type;
-    BOOST_ASSERT_MSG(first != last, "At least one sample is required to compute mean and variance.");
-    // Higham, Accuracy and Stability, equation 1.6a and 1.6b:
-    if constexpr (std::is_integral_v<Real>)
-    {
-        double M = *first;
-        double Q = 0;
-        double k = 2;
-        double M2 = 0;
-        for (auto it = std::next(first); it != last; ++it)
-        {
-            double delta_1 = *it - M;
-            Q = Q + ((k-1)*delta_1*delta_1)/k;
-            M = M + delta_1/k;
-            k += 1;
-            double delta_2 = *it - M;
-            M2 = M2 + (delta_1 * delta_2);
-        }
-        return std::make_tuple(M, M2, Q/(k-1));
-    }
-    else
-    {
-        Real M = *first;
-        Real Q = 0;
-        Real k = 2;
-        Real M2 = 0;
-        for (auto it = std::next(first); it != last; ++it)
-        {
-            Real tmp = (*it - M)/k;
-            Real delta_1 = *it - M;
-            Q += k*(k-1)*tmp*tmp;
-            M += tmp;
-            k += 1;
-            Real delta_2 = *it - M;
-            M2 = M2 + (delta_1 * delta_2);
-        }
-        return std::make_tuple(M, M2, Q/(k-1));
-    }
-}
-
-// http://i.stanford.edu/pub/cstr/reports/cs/tr/79/773/CS-TR-79-773.pdf
-// http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.214.8508&rep=rep1&type=pdf
-template<class ForwardIterator>
-auto parallel_variance(ForwardIterator first, ForwardIterator last)
-{   
-    static std::atomic<unsigned> thread_counter {1};
-    
-    const auto elements {std::distance(first, last)};
-    const auto range_a {std::floor(elements / 2)};
-    const auto range_b {elements - range_a};
-
-    auto future_a {std::async(std::launch::async,[first, range_a]{return sequential_variance(first, std::next(first, range_a));})};
-    auto future_b {std::async(std::launch::async,[first, last, range_a]{return sequential_variance(std::next(first, range_a), last);})};
-    thread_counter.fetch_add(2); // TODO: recursively decompose problem until counter == supported threads or ranges become too small. Fixes test line #403
-
-    const auto results_a {future_a.get()};
-    const auto results_b {future_b.get()};
-
-    const auto mean_a = std::get<0>(results_a);
-    const auto M2_a = std::get<1>(results_a);
-    const auto mean_b = std::get<0>(results_b);
-    const auto M2_b = std::get<1>(results_b);
-
-    const auto n_ab = elements;
-    const auto delta = mean_b - mean_a;
-    const auto mean_ab = (range_a * mean_a + range_b * mean_b) / n_ab;
-    const auto M2_ab = M2_a + M2_b + delta * delta * (range_a * range_b / n_ab);
-
-    return M2_ab / n_ab;
-}
-}
-
 template<class ExecutionPolicy, class ForwardIterator>
 inline auto variance(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last)
 {
-    if constexpr (std::is_same_v<std::remove_reference_t<decltype(exec)>, decltype(std::execution::seq)>)
+    using Real = typename std::iterator_traits<ForwardIterator>::value_type;
+    
+    if constexpr (std::is_integral_v<Real>)
     {
-        return std::get<2>(detail::sequential_variance(first, last));
+        if constexpr (std::is_same_v<std::remove_reference_t<decltype(exec)>, decltype(std::execution::seq)>)
+        {
+            const auto results = detail::variance_integeral_impl(first, last);
+            return std::get<2>(results);
+        }
+        else
+        {
+            const auto results = detail::parallel_variance_impl<std::tuple<double, double, double>>(first, last);
+            return std::get<2>(results) / std::get<0>(results);
+        }
     }
     else
     {
-        return detail::parallel_variance(first, last);
+        return std::get<2>(detail::variance_real_impl(first, last));
     }
+
+    //return std::get<2>(detail::variance_integeral_impl<decltype(first), std::tuple<double, double, double>>(first, last));
 }
 
 template<class ExecutionPolicy, class Container>
