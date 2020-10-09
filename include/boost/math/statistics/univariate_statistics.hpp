@@ -316,8 +316,8 @@ inline auto skewness(Container const & v)
     return skewness(v.cbegin(), v.cend());
 }
 
-template<class ForwardIterator>
-inline auto first_four_moments(ForwardIterator first, ForwardIterator last)
+template<class ExecutionPolicy, class ForwardIterator>
+inline auto first_four_moments(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last)
 {
     using Real = typename std::iterator_traits<ForwardIterator>::value_type;
 
@@ -335,10 +335,22 @@ inline auto first_four_moments(ForwardIterator first, ForwardIterator last)
     }
 }
 
+template<class ExecutionPolicy, class Container>
+inline auto first_four_moments(ExecutionPolicy&& exec, Container const & v)
+{
+    return first_four_moments(exec, std::cbegin(v), std::cend(v));
+}
+
+template<class ForwardIterator>
+inline auto first_four_moments(ForwardIterator first, ForwardIterator last)
+{
+    return first_four_moments(std::execution::seq, first, last);
+}
+
 template<class Container>
 inline auto first_four_moments(Container const & v)
 {
-    return first_four_moments(std::cbegin(v), std::cend(v));
+    return first_four_moments(std::execution::seq, std::cbegin(v), std::cend(v));
 }
 
 

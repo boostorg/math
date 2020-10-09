@@ -657,19 +657,19 @@ void test_integer_kurtosis()
     BOOST_TEST(abs(m1 - m2) < tol*abs(m1));
 }
 
-template<class Real>
-void test_first_four_moments()
+template<class Real, class ExecutionPolicy>
+void test_first_four_moments(ExecutionPolicy&& exec)
 {
     Real tol = 10*std::numeric_limits<Real>::epsilon();
     std::vector<Real> v{1,1,1};
-    auto [M1_1, M2_1, M3_1, M4_1] = boost::math::statistics::first_four_moments(v);
+    auto [M1_1, M2_1, M3_1, M4_1] = boost::math::statistics::first_four_moments(exec, v);
     BOOST_TEST(abs(M1_1 - 1) < tol);
     BOOST_TEST(abs(M2_1) < tol);
     BOOST_TEST(abs(M3_1) < tol);
     BOOST_TEST(abs(M4_1) < tol);
 
     v = {1, 2, 3, 4, 5};
-    auto [M1_2, M2_2, M3_2, M4_2] = boost::math::statistics::first_four_moments(v);
+    auto [M1_2, M2_2, M3_2, M4_2] = boost::math::statistics::first_four_moments(exec, v);
     BOOST_TEST(abs(M1_2 - 3) < tol);
     BOOST_TEST(abs(M2_2 - 2) < tol);
     BOOST_TEST(abs(M3_2) < tol);
@@ -1164,10 +1164,18 @@ int main()
     test_integer_skewness<int>();
     test_integer_skewness<unsigned>();
 
-    test_first_four_moments<float>();
-    test_first_four_moments<double>();
-    test_first_four_moments<long double>();
-    test_first_four_moments<cpp_bin_float_50>();
+    test_first_four_moments<float>(std::execution::seq);
+    test_first_four_moments<float>(std::execution::par);
+    //test_first_four_moments<float>(std::execution::par_unseq);
+    //test_first_four_moments<double>(std::execution::seq);
+    //test_first_four_moments<double>(std::execution::par);
+    //test_first_four_moments<double>(std::execution::par_unseq);
+    //test_first_four_moments<long double>(std::execution::seq);
+    //test_first_four_moments<long double>(std::execution::par);
+    //test_first_four_moments<long double>(std::execution::par_unseq);
+    //test_first_four_moments<cpp_bin_float_50>(std::execution::seq);
+    //test_first_four_moments<cpp_bin_float_50>(std::execution::par);
+    //test_first_four_moments<cpp_bin_float_50>(std::execution::par_unseq);
 
     test_kurtosis<float>();
     test_kurtosis<double>();
