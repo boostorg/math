@@ -510,38 +510,54 @@ inline auto sample_gini_coefficient(RandomAccessContainer & v)
     return sample_gini_coefficient(v.begin(), v.end());
 }
 
-template<class RandomAccessIterator>
-auto median_absolute_deviation(RandomAccessIterator first, RandomAccessIterator last, typename std::iterator_traits<RandomAccessIterator>::value_type center=std::numeric_limits<typename std::iterator_traits<RandomAccessIterator>::value_type>::quiet_NaN())
+template<class ExecutionPolicy, class RandomAccessIterator>
+auto median_absolute_deviation(ExecutionPolicy&& exec, RandomAccessIterator first, RandomAccessIterator last, 
+    typename std::iterator_traits<RandomAccessIterator>::value_type center=std::numeric_limits<typename std::iterator_traits<RandomAccessIterator>::value_type>::quiet_NaN())
 {
     using std::abs;
     using Real = typename std::iterator_traits<RandomAccessIterator>::value_type;
     using std::isnan;
     if (isnan(center))
     {
-        center = boost::math::statistics::median(first, last);
+        center = boost::math::statistics::median(exec, first, last);
     }
-    size_t num_elems = std::distance(first, last);
+    const auto num_elems = std::distance(first, last);
     BOOST_ASSERT_MSG(num_elems > 0, "The median of a zero-length vector is undefined.");
     auto comparator = [&center](Real a, Real b) { return abs(a-center) < abs(b-center);};
     if (num_elems & 1)
     {
         auto middle = first + (num_elems - 1)/2;
-        std::nth_element(first, middle, last, comparator);
+        std::nth_element(exec, first, middle, last, comparator);
         return abs(*middle);
     }
     else
     {
         auto middle = first + num_elems/2 - 1;
-        std::nth_element(first, middle, last, comparator);
-        std::nth_element(middle, middle+1, last, comparator);
+        std::nth_element(exec, first, middle, last, comparator);
+        std::nth_element(exec, middle, middle+1, last, comparator);
         return (abs(*middle) + abs(*(middle+1)))/abs(static_cast<Real>(2));
     }
 }
 
-template<class RandomAccessContainer>
-inline auto median_absolute_deviation(RandomAccessContainer & v, typename RandomAccessContainer::value_type center=std::numeric_limits<typename RandomAccessContainer::value_type>::quiet_NaN())
+template<class ExecutionPolicy, class RandomAccessContainer>
+inline auto median_absolute_deviation(ExecutionPolicy&& exec, RandomAccessContainer & v, 
+    typename RandomAccessContainer::value_type center=std::numeric_limits<typename RandomAccessContainer::value_type>::quiet_NaN())
 {
-    return median_absolute_deviation(v.begin(), v.end(), center);
+    return median_absolute_deviation(exec, std::begin(v), std::end(v), center);
+}
+
+template<class RandomAccessIterator>
+inline auto median_absolute_deviation(RandomAccessIterator first, RandomAccessIterator last, 
+    typename RandomAccessIterator::value_type center=std::numeric_limits<typename RandomAccessIterator::value_type>::quiet_NaN())
+{
+    return median_absolute_deviation(std::execution::seq, first, last, center);
+}
+
+template<class RandomAccessContainer>
+inline auto median_absolute_deviation(RandomAccessContainer & v, 
+    typename RandomAccessContainer::value_type center=std::numeric_limits<typename RandomAccessContainer::value_type>::quiet_NaN())
+{
+    return median_absolute_deviation(std::execution::seq, std::begin(v), std::end(v), center);
 }
 
 template<class ForwardIterator>

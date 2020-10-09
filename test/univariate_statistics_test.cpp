@@ -734,58 +734,58 @@ void test_median(ExecutionPolicy&& exec)
     BOOST_TEST_EQ(m, 2);
 }
 
-template<class Real>
-void test_median_absolute_deviation()
+template<class Real, class ExecutionPolicy>
+void test_median_absolute_deviation(ExecutionPolicy&& exec)
 {
     std::vector<Real> v{-1, 2, -3, 4, -5, 6, -7};
 
-    Real m = boost::math::statistics::median_absolute_deviation(v.begin(), v.end(), 0);
+    Real m = boost::math::statistics::median_absolute_deviation(exec, v.begin(), v.end(), 0);
     BOOST_TEST_EQ(m, 4);
 
     std::mt19937 g(12);
     std::shuffle(v.begin(), v.end(), g);
-    m = boost::math::statistics::median_absolute_deviation(v, 0);
+    m = boost::math::statistics::median_absolute_deviation(exec, v, 0);
     BOOST_TEST_EQ(m, 4);
 
     v = {1, -2, -3, 3, -4, -5};
-    m = boost::math::statistics::median_absolute_deviation(v.begin(), v.end(), 0);
+    m = boost::math::statistics::median_absolute_deviation(exec, v.begin(), v.end(), 0);
     BOOST_TEST_EQ(m, 3);
     std::shuffle(v.begin(), v.end(), g);
-    m = boost::math::statistics::median_absolute_deviation(v.begin(), v.end(), 0);
+    m = boost::math::statistics::median_absolute_deviation(exec, v.begin(), v.end(), 0);
     BOOST_TEST_EQ(m, 3);
 
     v = {-1};
-    m = boost::math::statistics::median_absolute_deviation(v.begin(), v.end(), 0);
+    m = boost::math::statistics::median_absolute_deviation(exec, v.begin(), v.end(), 0);
     BOOST_TEST_EQ(m, 1);
 
     v = {-1, 1};
-    m = boost::math::statistics::median_absolute_deviation(v.begin(), v.end(), 0);
+    m = boost::math::statistics::median_absolute_deviation(exec, v.begin(), v.end(), 0);
     BOOST_TEST_EQ(m, 1);
     // The median is zero, so coincides with the default:
-    m = boost::math::statistics::median_absolute_deviation(v.begin(), v.end());
+    m = boost::math::statistics::median_absolute_deviation(exec, v.begin(), v.end());
     BOOST_TEST_EQ(m, 1);
 
-    m = boost::math::statistics::median_absolute_deviation(v);
+    m = boost::math::statistics::median_absolute_deviation(exec, v);
     BOOST_TEST_EQ(m, 1);
 
 
     v = {2, -4};
-    m = boost::math::statistics::median_absolute_deviation(v.begin(), v.end(), 0);
+    m = boost::math::statistics::median_absolute_deviation(exec, v.begin(), v.end(), 0);
     BOOST_TEST_EQ(m, 3);
 
     v = {1, -1, 1};
-    m = boost::math::statistics::median_absolute_deviation(v.begin(), v.end(), 0);
+    m = boost::math::statistics::median_absolute_deviation(exec, v.begin(), v.end(), 0);
     BOOST_TEST_EQ(m, 1);
 
     v = {1, 2, -3};
-    m = boost::math::statistics::median_absolute_deviation(v.begin(), v.end(), 0);
+    m = boost::math::statistics::median_absolute_deviation(exec, v.begin(), v.end(), 0);
     BOOST_TEST_EQ(m, 2);
     std::shuffle(v.begin(), v.end(), g);
-    m = boost::math::statistics::median_absolute_deviation(v.begin(), v.end(), 0);
+    m = boost::math::statistics::median_absolute_deviation(exec, v.begin(), v.end(), 0);
     BOOST_TEST_EQ(m, 2);
 
     std::array<Real, 3> w{1, 2, -3};
-    m = boost::math::statistics::median_absolute_deviation(w, 0);
+    m = boost::math::statistics::median_absolute_deviation(exec, w, 0);
     BOOST_TEST_EQ(m, 2);
 
     // boost.ublas vector?
@@ -796,7 +796,7 @@ void test_median_absolute_deviation()
     u[3] = 1;
     u[4] = 2;
     u[5] = -3;
-    m = boost::math::statistics::median_absolute_deviation(u, 0);
+    m = boost::math::statistics::median_absolute_deviation(exec, u, 0);
     BOOST_TEST_EQ(m, 2);
 }
 
@@ -1194,10 +1194,18 @@ int main()
     test_median<int>(std::execution::par);
     test_median<int>(std::execution::par_unseq);
 
-    test_median_absolute_deviation<float>();
-    test_median_absolute_deviation<double>();
-    test_median_absolute_deviation<long double>();
-    test_median_absolute_deviation<cpp_bin_float_50>();
+    test_median_absolute_deviation<float>(std::execution::seq);
+    test_median_absolute_deviation<float>(std::execution::par);
+    test_median_absolute_deviation<float>(std::execution::par_unseq);
+    test_median_absolute_deviation<double>(std::execution::seq);
+    test_median_absolute_deviation<double>(std::execution::par);
+    test_median_absolute_deviation<double>(std::execution::par_unseq);
+    test_median_absolute_deviation<long double>(std::execution::seq);
+    test_median_absolute_deviation<long double>(std::execution::par);
+    test_median_absolute_deviation<long double>(std::execution::par_unseq);
+    test_median_absolute_deviation<cpp_bin_float_50>(std::execution::seq);
+    test_median_absolute_deviation<cpp_bin_float_50>(std::execution::par);
+    test_median_absolute_deviation<cpp_bin_float_50>(std::execution::par_unseq);
 
     test_gini_coefficient<float>();
     test_gini_coefficient<double>();
