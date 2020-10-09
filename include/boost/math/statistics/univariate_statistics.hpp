@@ -20,6 +20,7 @@
 #include <valarray>
 #include <thread>
 #include <future>
+#include <iostream>
 
 namespace boost::math::statistics {
 
@@ -127,16 +128,15 @@ inline auto variance(ExecutionPolicy&& exec, ForwardIterator first, ForwardItera
         }
         else
         {
+            detail::thread_counter = 1;
             const auto results = detail::parallel_variance_impl<std::tuple<double, double, double>>(first, last);
-            return std::get<2>(results) / std::get<0>(results);
+            return std::get<1>(results) / std::get<2>(results);
         }
     }
     else
     {
         return std::get<2>(detail::variance_real_impl(first, last));
     }
-
-    //return std::get<2>(detail::variance_integeral_impl<decltype(first), std::tuple<double, double, double>>(first, last));
 }
 
 template<class ExecutionPolicy, class Container>

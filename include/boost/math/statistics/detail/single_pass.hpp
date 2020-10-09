@@ -62,20 +62,22 @@ auto variance_real_impl(ForwardIterator first, ForwardIterator last) ->
     return std::make_tuple(M, M2, Q/(k-1));
 }
 
+// Global thread counter required for recursive calls. Reset before each parallel method is called
+static std::atomic<unsigned> thread_counter {1};
+
 // http://i.stanford.edu/pub/cstr/reports/cs/tr/79/773/CS-TR-79-773.pdf
 // http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.214.8508&rep=rep1&type=pdf
 template<typename ReturnType, typename ForwardIterator>
 ReturnType parallel_variance_impl(ForwardIterator first, ForwardIterator last)
 {
     using Real = typename std::iterator_traits<ForwardIterator>::value_type;
-    
-    static std::atomic<unsigned> thread_counter {1};
     static unsigned num_threads {std::thread::hardware_concurrency()};
 
     const auto elements {std::distance(first, last)};
     const auto range_a {std::floor(elements / 2)};
     const auto range_b {elements - range_a};
 
+    thread_counter.fetch_add(2);
     auto future_a {std::async(std::launch::async, [first, range_a, &thread_counter, num_threads]() -> ReturnType
     {
         if constexpr (std::is_integral_v<Real>)
@@ -110,7 +112,6 @@ ReturnType parallel_variance_impl(ForwardIterator first, ForwardIterator last)
                 return variance_real_impl(std::next(first, range_a), last);
         }
     })};
-    thread_counter.fetch_add(2);
 
     const auto results_a {future_a.get()};
     const auto results_b {future_b.get()};
@@ -125,7 +126,7 @@ ReturnType parallel_variance_impl(ForwardIterator first, ForwardIterator last)
     const auto mean_ab = (range_a * mean_a + range_b * mean_b) / n_ab;
     const auto M2_ab = M2_a + M2_b + delta * delta * (range_a * range_b / n_ab);
 
-    return std::make_tuple(n_ab, mean_ab, M2_ab);
+    return std::make_tuple(mean_ab, M2_ab, n_ab);
 }
 }
 
