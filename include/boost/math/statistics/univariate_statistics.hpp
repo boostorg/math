@@ -191,47 +191,57 @@ inline auto sample_variance(Container const & v)
     return sample_variance(std::execution::seq, std::cbegin(v), std::cend(v));
 }
 
-// TODO: Remove and redirect to sequential_variance
-template<class ForwardIterator>
-auto mean_and_sample_variance(ForwardIterator first, ForwardIterator last)
+template<class ExecutionPolicy, class ForwardIterator>
+inline auto mean_and_sample_variance(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last)
 {
     using Real = typename std::iterator_traits<ForwardIterator>::value_type;
-    BOOST_ASSERT_MSG(first != last, "At least one sample is required to compute mean and variance.");
-    // Higham, Accuracy and Stability, equation 1.6a and 1.6b:
-    if constexpr (std::is_integral<Real>::value)
+
+    if constexpr (std::is_integral_v<Real>)
     {
-        double M = *first;
-        double Q = 0;
-        double k = 2;
-        for (auto it = std::next(first); it != last; ++it)
+        if constexpr (std::is_same_v<std::remove_reference_t<decltype(exec)>, decltype(std::execution::seq)>)
         {
-            double tmp = *it - M;
-            Q = Q + ((k-1)*tmp*tmp)/k;
-            M = M + tmp/k;
-            k += 1;
+            const auto results = detail::variance_integeral_impl(first, last);
+            return std::make_pair(std::get<0>(results), std::get<2>(results));
         }
-        return std::make_pair(M, Q/(k-2));
+        else
+        {
+            detail::thread_counter = 1;
+            const auto results = detail::parallel_variance_impl<std::tuple<double, double, double>>(first, last);
+            return std::make_pair(std::get<0>(results), std::get<1>(results) / std::get<2>(results));
+        }
     }
     else
     {
-        Real M = *first;
-        Real Q = 0;
-        Real k = 2;
-        for (auto it = std::next(first); it != last; ++it)
+        if constexpr (std::is_same_v<std::remove_reference_t<decltype(exec)>, decltype(std::execution::seq)>)
         {
-            Real tmp = (*it - M)/k;
-            Q += k*(k-1)*tmp*tmp;
-            M += tmp;
-            k += 1;
+            const auto results = detail::variance_real_impl(first, last);
+            return std::make_pair(std::get<0>(results), std::get<2>(results));
         }
-        return std::make_pair(M, Q/(k-2));
+        else
+        {
+            detail::thread_counter = 1;
+            const auto results = detail::parallel_variance_impl<std::tuple<Real, Real, Real>>(first, last);
+            return std::make_pair(std::get<0>(results), std::get<1>(results) / std::get<2>(results));
+        }
     }
 }
 
-template<class Container>
-auto mean_and_sample_variance(Container const & v)
+template<class ExecutionPolicy, class Container>
+inline auto mean_and_sample_variance(ExecutionPolicy&& exec, Container const & v)
 {
-    return mean_and_sample_variance(v.begin(), v.end());
+    return mean_and_sample_variance(exec, std::cbegin(v), std::cend(v));
+}
+
+template<class ForwardIterator>
+inline auto mean_and_sample_variance(ForwardIterator first, ForwardIterator last)
+{
+    return mean_and_sample_variance(std::execution::seq, first, last);
+}
+
+template<class Container>
+inline auto mean_and_sample_variance(Container const & v)
+{
+    return mean_and_sample_variance(std::execution::seq, std::cbegin(v), std::cend(v));
 }
 
 // Follows equation 1.5 of:
