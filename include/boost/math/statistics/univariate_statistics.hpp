@@ -244,6 +244,9 @@ inline auto mean_and_sample_variance(Container const & v)
     return mean_and_sample_variance(std::execution::seq, std::cbegin(v), std::cend(v));
 }
 
+// TODO(mborland): find/try decompistion algo with impl split by type similar to variance
+//                 Should satisfy this, first four momenets, kurtosis, and excess kurtosis
+//
 // Follows equation 1.5 of:
 // https://prod.sandia.gov/techlib-noauth/access-control.cgi/2008/086212.pdf
 template<class ForwardIterator>
@@ -400,31 +403,43 @@ inline auto excess_kurtosis(Container const & v)
 }
 
 
-template<class RandomAccessIterator>
-auto median(RandomAccessIterator first, RandomAccessIterator last)
+template<class ExecutionPolicy, class RandomAccessIterator>
+auto median(ExecutionPolicy&& exec, RandomAccessIterator first, RandomAccessIterator last)
 {
-    size_t num_elems = std::distance(first, last);
+    const auto num_elems = std::distance(first, last);
     BOOST_ASSERT_MSG(num_elems > 0, "The median of a zero length vector is undefined.");
     if (num_elems & 1)
     {
         auto middle = first + (num_elems - 1)/2;
-        std::nth_element(first, middle, last);
+        std::nth_element(exec, first, middle, last);
         return *middle;
     }
     else
     {
         auto middle = first + num_elems/2 - 1;
-        std::nth_element(first, middle, last);
-        std::nth_element(middle, middle+1, last);
+        std::nth_element(exec, first, middle, last);
+        std::nth_element(exec, middle, middle+1, last);
         return (*middle + *(middle+1))/2;
     }
 }
 
 
+template<class ExecutionPolicy, class RandomAccessContainer>
+inline auto median(ExecutionPolicy&& exec, RandomAccessContainer & v)
+{
+    return median(exec, std::begin(v), std::end(v));
+}
+
+template<class RandomAccessIterator>
+inline auto median(RandomAccessIterator first, RandomAccessIterator last)
+{
+    return median(std::execution::seq, first, last);
+}
+
 template<class RandomAccessContainer>
 inline auto median(RandomAccessContainer & v)
 {
-    return median(v.begin(), v.end());
+    return median(std::execution::seq, std::begin(v), std::end(v));
 }
 
 template<class RandomAccessIterator>

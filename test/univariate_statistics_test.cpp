@@ -676,53 +676,53 @@ void test_first_four_moments()
     BOOST_TEST(abs(M4_2 - Real(34)/Real(5)) < tol);
 }
 
-template<class Real>
-void test_median()
+template<class Real, class ExecutionPolicy>
+void test_median(ExecutionPolicy&& exec)
 {
     std::mt19937 g(12);
     std::vector<Real> v{1,2,3,4,5,6,7};
 
-    Real m = boost::math::statistics::median(v.begin(), v.end());
+    Real m = boost::math::statistics::median(exec, v.begin(), v.end());
     BOOST_TEST_EQ(m, 4);
 
     std::shuffle(v.begin(), v.end(), g);
     // Does range call work?
-    m = boost::math::statistics::median(v);
+    m = boost::math::statistics::median(exec, v);
     BOOST_TEST_EQ(m, 4);
 
     v = {1,2,3,3,4,5};
-    m = boost::math::statistics::median(v.begin(), v.end());
+    m = boost::math::statistics::median(exec, v.begin(), v.end());
     BOOST_TEST_EQ(m, 3);
     std::shuffle(v.begin(), v.end(), g);
-    m = boost::math::statistics::median(v.begin(), v.end());
+    m = boost::math::statistics::median(exec, v.begin(), v.end());
     BOOST_TEST_EQ(m, 3);
 
     v = {1};
-    m = boost::math::statistics::median(v.begin(), v.end());
+    m = boost::math::statistics::median(exec, v.begin(), v.end());
     BOOST_TEST_EQ(m, 1);
 
     v = {1,1};
-    m = boost::math::statistics::median(v.begin(), v.end());
+    m = boost::math::statistics::median(exec, v.begin(), v.end());
     BOOST_TEST_EQ(m, 1);
 
     v = {2,4};
-    m = boost::math::statistics::median(v.begin(), v.end());
+    m = boost::math::statistics::median(exec, v.begin(), v.end());
     BOOST_TEST_EQ(m, 3);
 
     v = {1,1,1};
-    m = boost::math::statistics::median(v.begin(), v.end());
+    m = boost::math::statistics::median(exec, v.begin(), v.end());
     BOOST_TEST_EQ(m, 1);
 
     v = {1,2,3};
-    m = boost::math::statistics::median(v.begin(), v.end());
+    m = boost::math::statistics::median(exec, v.begin(), v.end());
     BOOST_TEST_EQ(m, 2);
     std::shuffle(v.begin(), v.end(), g);
-    m = boost::math::statistics::median(v.begin(), v.end());
+    m = boost::math::statistics::median(exec, v.begin(), v.end());
     BOOST_TEST_EQ(m, 2);
 
     // Does it work with std::array?
     std::array<Real, 3> w{1,2,3};
-    m = boost::math::statistics::median(w);
+    m = boost::math::statistics::median(exec, w);
     BOOST_TEST_EQ(m, 2);
 
     // Does it work with ublas?
@@ -730,7 +730,7 @@ void test_median()
     w1[0] = 1;
     w1[1] = 2;
     w1[2] = 3;
-    m = boost::math::statistics::median(w);
+    m = boost::math::statistics::median(exec, w);
     BOOST_TEST_EQ(m, 2);
 }
 
@@ -1178,11 +1178,21 @@ int main()
     test_integer_kurtosis<int>();
     test_integer_kurtosis<unsigned>();
 
-    test_median<float>();
-    test_median<double>();
-    test_median<long double>();
-    test_median<cpp_bin_float_50>();
-    test_median<int>();
+    test_median<float>(std::execution::seq);
+    test_median<float>(std::execution::par);
+    test_median<float>(std::execution::par_unseq);
+    test_median<double>(std::execution::seq);
+    test_median<double>(std::execution::par);
+    test_median<double>(std::execution::par_unseq);
+    test_median<long double>(std::execution::seq);
+    test_median<long double>(std::execution::par);
+    test_median<long double>(std::execution::par_unseq);
+    test_median<cpp_bin_float_50>(std::execution::seq);
+    test_median<cpp_bin_float_50>(std::execution::par);
+    test_median<cpp_bin_float_50>(std::execution::par_unseq);
+    test_median<int>(std::execution::seq);
+    test_median<int>(std::execution::par);
+    test_median<int>(std::execution::par_unseq);
 
     test_median_absolute_deviation<float>();
     test_median_absolute_deviation<double>();
