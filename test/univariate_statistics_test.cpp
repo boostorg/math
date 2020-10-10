@@ -807,31 +807,31 @@ void test_median_absolute_deviation(ExecutionPolicy&& exec)
 }
 
 
-template<class Real>
-void test_sample_gini_coefficient()
+template<class Real, class ExecutionPolicy>
+void test_sample_gini_coefficient(ExecutionPolicy&& exec)
 {
     Real tol = std::numeric_limits<Real>::epsilon();
     std::vector<Real> v{1,0,0};
-    Real gini = boost::math::statistics::sample_gini_coefficient(v.begin(), v.end());
+    Real gini = boost::math::statistics::sample_gini_coefficient(exec, v.begin(), v.end());
     BOOST_TEST(abs(gini - 1) < tol);
 
-    gini = boost::math::statistics::sample_gini_coefficient(v);
+    gini = boost::math::statistics::sample_gini_coefficient(exec, v);
     BOOST_TEST(abs(gini - 1) < tol);
 
     v[0] = 1;
     v[1] = 1;
     v[2] = 1;
-    gini = boost::math::statistics::sample_gini_coefficient(v.begin(), v.end());
+    gini = boost::math::statistics::sample_gini_coefficient(exec, v.begin(), v.end());
     BOOST_TEST(abs(gini) < tol);
 
     v[0] = 0;
     v[1] = 0;
     v[2] = 0;
-    gini = boost::math::statistics::sample_gini_coefficient(v.begin(), v.end());
+    gini = boost::math::statistics::sample_gini_coefficient(exec, v.begin(), v.end());
     BOOST_TEST(abs(gini) < tol);
 
     std::array<Real, 3> w{0,0,0};
-    gini = boost::math::statistics::sample_gini_coefficient(w);
+    gini = boost::math::statistics::sample_gini_coefficient(exec, w);
     BOOST_TEST(abs(gini) < tol);
 }
 
@@ -1243,10 +1243,16 @@ int main()
     test_integer_gini_coefficient<int>(std::execution::par);
     test_integer_gini_coefficient<int>(std::execution::par_unseq);
 
-    test_sample_gini_coefficient<float>();
-    test_sample_gini_coefficient<double>();
-    test_sample_gini_coefficient<long double>();
-    test_sample_gini_coefficient<cpp_bin_float_50>();
+    test_sample_gini_coefficient<float>(std::execution::seq);
+    test_sample_gini_coefficient<float>(std::execution::par);
+    test_sample_gini_coefficient<float>(std::execution::par_unseq);
+    test_sample_gini_coefficient<double>(std::execution::seq);
+    test_sample_gini_coefficient<double>(std::execution::par);
+    test_sample_gini_coefficient<double>(std::execution::par_unseq);
+
+    // Same policy restrictions as gini coefficient (see above)
+    test_sample_gini_coefficient<long double>(std::execution::seq);
+    test_sample_gini_coefficient<cpp_bin_float_50>(std::execution::seq);
 
     test_interquartile_range<double>(std::execution::seq);
     test_interquartile_range<double>(std::execution::par);

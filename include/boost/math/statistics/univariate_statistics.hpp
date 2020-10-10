@@ -485,17 +485,29 @@ inline auto gini_coefficient(RandomAccessContainer & v)
     return gini_coefficient(std::execution::seq, std::begin(v), std::end(v));
 }
 
+template<class ExecutionPolicy, class RandomAccessIterator>
+inline auto sample_gini_coefficient(ExecutionPolicy&& exec, RandomAccessIterator first, RandomAccessIterator last)
+{
+    const auto n = std::distance(first, last);
+    return n*gini_coefficient(exec, first, last)/(n-1);
+}
+
+template<class ExecutionPolicy, class RandomAccessContainer>
+inline auto sample_gini_coefficient(ExecutionPolicy&& exec, RandomAccessContainer & v)
+{
+    return sample_gini_coefficient(exec, std::begin(v), std::end(v));
+}
+
 template<class RandomAccessIterator>
 inline auto sample_gini_coefficient(RandomAccessIterator first, RandomAccessIterator last)
 {
-    size_t n = std::distance(first, last);
-    return n*gini_coefficient(first, last)/(n-1);
+    return sample_gini_coefficient(std::execution::seq, first, last);
 }
 
 template<class RandomAccessContainer>
 inline auto sample_gini_coefficient(RandomAccessContainer & v)
 {
-    return sample_gini_coefficient(v.begin(), v.end());
+    return sample_gini_coefficient(std::execution::seq, std::begin(v), std::end(v));
 }
 
 template<class ExecutionPolicy, class RandomAccessIterator>
