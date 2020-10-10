@@ -389,7 +389,7 @@ void test_variance()
 template<class Real, class ExecutionPolicy>
 void test_variance(ExecutionPolicy&& exec)
 {
-    Real tol = std::numeric_limits<Real>::epsilon();
+    Real tol = 2*std::numeric_limits<Real>::epsilon();
     std::vector<Real> v{1,1,1,1,1,1};
     Real sigma_sq = boost::math::statistics::variance(exec, v.begin(), v.end());
     BOOST_TEST(abs(sigma_sq) < tol);
@@ -470,7 +470,7 @@ void test_integer_variance()
 template<class Z, class ExecutionPolicy>
 void test_integer_variance(ExecutionPolicy&& exec)
 {
-    double tol = std::numeric_limits<double>::epsilon();
+    double tol = 2*std::numeric_limits<double>::epsilon();
     std::vector<Z> v{1,1,1,1,1,1};
     double sigma_sq = boost::math::statistics::variance(exec, v);
     BOOST_TEST(abs(sigma_sq) < tol);
@@ -1171,7 +1171,7 @@ int main()
     test_integer_skewness<unsigned>();
 
     test_first_four_moments<float>(std::execution::seq);
-    //test_first_four_moments<float>(std::execution::par);
+    test_first_four_moments<float>(std::execution::par);
     //test_first_four_moments<float>(std::execution::par_unseq);
     //test_first_four_moments<double>(std::execution::seq);
     //test_first_four_moments<double>(std::execution::par);

@@ -248,7 +248,7 @@ ReturnType parallel_first_four_moments_impl(ForwardIterator first, ForwardIterat
                        + 6 * delta * delta * (range_a * range_a * M2_b + range_b * range_b * M2_a) / (n_ab * n_ab) 
                        + 4 * delta * (range_a * M3_b - range_b * M3_a) / n_ab;
 
-    return std::make_tuple(M1_ab, M2_ab, M3_ab, M4_ab, n_ab-1);
+    return std::make_tuple(M1_ab, M2_ab, M3_ab, M4_ab, n_ab);
 }
 }
 

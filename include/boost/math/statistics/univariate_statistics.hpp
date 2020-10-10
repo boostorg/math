@@ -323,15 +323,33 @@ inline auto first_four_moments(ExecutionPolicy&& exec, ForwardIterator first, Fo
 
     if constexpr (std::is_integral_v<Real>)
     {
-        const auto results = detail::first_four_moments_integral_impl(first, last);
-        return std::make_tuple(std::get<0>(results), std::get<1>(results) / std::get<4>(results), std::get<2>(results) / std::get<4>(results), 
-                               std::get<3>(results) / std::get<4>(results));
+        if constexpr (std::is_same_v<std::remove_reference_t<decltype(exec)>, decltype(std::execution::seq)>)
+        {
+            const auto results = detail::first_four_moments_integral_impl(first, last);
+            return std::make_tuple(std::get<0>(results), std::get<1>(results) / std::get<4>(results), std::get<2>(results) / std::get<4>(results), 
+                                std::get<3>(results) / std::get<4>(results));
+        }
+        else
+        {
+            const auto results = detail::parallel_first_four_moments_impl<std::tuple<double, double, double, double, double>>(first, last);
+            return std::make_tuple(std::get<0>(results), std::get<1>(results) / std::get<4>(results), std::get<2>(results) / std::get<4>(results), 
+                                   std::get<3>(results) / std::get<4>(results));
+        }
     }
     else
     {
-        const auto results = detail::first_four_moments_real_impl(first, last);
-        return std::make_tuple(std::get<0>(results), std::get<1>(results) / std::get<4>(results), std::get<2>(results) / std::get<4>(results), 
-                               std::get<3>(results) / std::get<4>(results));
+        if constexpr (std::is_same_v<std::remove_reference_t<decltype(exec)>, decltype(std::execution::seq)>)
+        {
+            const auto results = detail::first_four_moments_real_impl(first, last);
+            return std::make_tuple(std::get<0>(results), std::get<1>(results) / std::get<4>(results), std::get<2>(results) / std::get<4>(results), 
+                                   std::get<3>(results) / std::get<4>(results));
+        }
+        else
+        {
+            const auto results = detail::parallel_first_four_moments_impl<std::tuple<Real, Real, Real, Real, Real>>(first, last);
+            return std::make_tuple(std::get<0>(results), std::get<1>(results) / std::get<4>(results), std::get<2>(results) / std::get<4>(results), 
+                                   std::get<3>(results) / std::get<4>(results));
+        }
     }
 }
 
