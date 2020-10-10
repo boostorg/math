@@ -443,6 +443,7 @@ inline auto median(RandomAccessContainer & v)
     return median(std::execution::seq, std::begin(v), std::end(v));
 }
 
+// https://htor.inf.ethz.ch/publications/img/atomic-bench.pdf
 template<class RandomAccessIterator>
 auto gini_coefficient(RandomAccessIterator first, RandomAccessIterator last)
 {
@@ -561,11 +562,11 @@ inline auto median_absolute_deviation(RandomAccessContainer & v,
     return median_absolute_deviation(std::execution::seq, std::begin(v), std::end(v), center);
 }
 
-template<class ForwardIterator>
-auto interquartile_range(ForwardIterator first, ForwardIterator last)
+template<class ExecutionPolicy, class ForwardIterator>
+auto interquartile_range(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last)
 {
     using Real = typename std::iterator_traits<ForwardIterator>::value_type;
-    static_assert(!std::is_integral<Real>::value, "Integer values have not yet been implemented.");
+    static_assert(!std::is_integral_v<Real>, "Integer values have not yet been implemented.");
     auto m = std::distance(first,last);
     BOOST_ASSERT_MSG(m >= 3, "At least 3 samples are required to compute the interquartile range.");
     auto k = m/4;
@@ -579,33 +580,45 @@ auto interquartile_range(ForwardIterator first, ForwardIterator last)
     {
         auto q1 = first + k;
         auto q3 = first + 3*k + j - 1;
-        std::nth_element(first, q1, last);
+        std::nth_element(exec, first, q1, last);
         Real Q1 = *q1;
-        std::nth_element(q1, q3, last);
+        std::nth_element(exec, q1, q3, last);
         Real Q3 = *q3;
         return Q3 - Q1;
     } else {
         // j == 0 or j==1:
         auto q1 = first + k - 1;
         auto q3 = first + 3*k - 1 + j;
-        std::nth_element(first, q1, last);
+        std::nth_element(exec, first, q1, last);
         Real a = *q1;
-        std::nth_element(q1, q1 + 1, last);
+        std::nth_element(exec, q1, q1 + 1, last);
         Real b = *(q1 + 1);
         Real Q1 = (a+b)/2;
-        std::nth_element(q1, q3, last);
+        std::nth_element(exec, q1, q3, last);
         a = *q3;
-        std::nth_element(q3, q3 + 1, last);
+        std::nth_element(exec, q3, q3 + 1, last);
         b = *(q3 + 1);
         Real Q3 = (a+b)/2;
         return Q3 - Q1;
     }
 }
 
+template<class ExecutionPolicy, class RandomAccessContainer>
+inline auto interquartile_range(ExecutionPolicy&& exec, RandomAccessContainer & v)
+{
+    return interquartile_range(exec, std::begin(v), std::end(v));
+}
+
+template<class RandomAccessIterator>
+inline auto interquartile_range(RandomAccessIterator first, RandomAccessIterator last)
+{
+    return interquartile_range(std::execution::seq, first, last);
+}
+
 template<class RandomAccessContainer>
 inline auto interquartile_range(RandomAccessContainer & v)
 {
-    return interquartile_range(v.begin(), v.end());
+    return interquartile_range(std::execution::seq, std::begin(v), std::end(v));
 }
 
 template<class ForwardIterator, class OutputIterator>
