@@ -10,6 +10,7 @@
 #include <tuple>
 #include <iterator>
 #include <atomic>
+#include <memory>
 #include <thread>
 #include <type_traits>
 #include <future>
@@ -250,6 +251,91 @@ ReturnType parallel_first_four_moments_impl(ForwardIterator first, ForwardIterat
 
     return std::make_tuple(M1_ab, M2_ab, M3_ab, M4_ab, n_ab);
 }
+
+// https://htor.inf.ethz.ch/publications/img/atomic-bench.pdf
+template<typename ReturnType, typename ExecutionPolicy, typename RandomAccessIterator>
+ReturnType gini_coefficient_parallel_impl(ExecutionPolicy&& exec, RandomAccessIterator first, RandomAccessIterator last)
+{
+    std::sort(exec, first, last);
+
+    std::atomic<ReturnType> i = 1;
+    std::atomic<ReturnType> num = 0;
+    std::atomic<ReturnType> denom = 0;
+    
+    // std::atomic<Floating>::fetch_add not added until C++20
+    #if __cplusplus > 201900
+    std::for_each(exec, first, last, [&i, &num, &denom](auto val)
+    {
+        num.fetch_add(val * i, std::memory_order_relaxed);
+        denom.fetch_add(val, std::memory_order_relaxed);
+        i.fetch_add(1, std::memory_order_relaxed);
+    });
+    #else
+    std::for_each(exec, first, last, [&i, &num, &denom](auto val)
+    {
+        num = num + val * i;
+        denom = denom + val;
+        i = i + 1;
+    });
+    #endif
+
+    if(denom == 0)
+    {
+        return ReturnType(0);
+    }
+
+    return ((2*num)/denom - i)/(i-1);
+}
+
+template<class RandomAccessIterator>
+auto gini_coefficient_sequential_impl(RandomAccessIterator first, RandomAccessIterator last)
+{
+    using Real = typename std::iterator_traits<RandomAccessIterator>::value_type;
+    BOOST_ASSERT_MSG(first != last && std::next(first) != last, "Computation of the Gini coefficient requires at least two samples.");
+
+    std::sort(first, last);
+    if constexpr (std::is_integral<Real>::value)
+    {
+        double i = 1;
+        double num = 0;
+        double denom = 0;
+        for (auto it = first; it != last; ++it)
+        {
+            num += *it*i;
+            denom += *it;
+            ++i;
+        }
+
+        // If the l1 norm is zero, all elements are zero, so every element is the same.
+        if (denom == 0)
+        {
+            return double(0);
+        }
+
+        return ((2*num)/denom - i)/(i-1);
+    }
+    else
+    {
+        Real i = 1;
+        Real num = 0;
+        Real denom = 0;
+        for (auto it = first; it != last; ++it)
+        {
+            num += *it*i;
+            denom += *it;
+            ++i;
+        }
+
+        // If the l1 norm is zero, all elements are zero, so every element is the same.
+        if (denom == 0)
+        {
+            return Real(0);
+        }
+
+        return ((2*num)/denom - i)/(i-1);
+    }
+}
+
 }
 
 #endif // BOOST_MATH_STATISTICS_UNIVARIATE_STATISTICS_DETAIL_SINGLE_PASS_HPP

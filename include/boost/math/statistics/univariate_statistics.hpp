@@ -6,6 +6,7 @@
 #ifndef BOOST_MATH_STATISTICS_UNIVARIATE_STATISTICS_HPP
 #define BOOST_MATH_STATISTICS_UNIVARIATE_STATISTICS_HPP
 
+#include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/math/statistics/detail/single_pass.hpp>
 #include <algorithm>
 #include <iterator>
@@ -443,60 +444,45 @@ inline auto median(RandomAccessContainer & v)
     return median(std::execution::seq, std::begin(v), std::end(v));
 }
 
-// https://htor.inf.ethz.ch/publications/img/atomic-bench.pdf
-template<class RandomAccessIterator>
-auto gini_coefficient(RandomAccessIterator first, RandomAccessIterator last)
+template<class ExecutionPolicy, class RandomAccessIterator>
+inline auto gini_coefficient(ExecutionPolicy&& exec, RandomAccessIterator first, RandomAccessIterator last)
 {
     using Real = typename std::iterator_traits<RandomAccessIterator>::value_type;
-    BOOST_ASSERT_MSG(first != last && std::next(first) != last, "Computation of the Gini coefficient requires at least two samples.");
 
-    std::sort(first, last);
-    if constexpr (std::is_integral<Real>::value)
+    if constexpr (std::is_same_v<std::remove_reference_t<decltype(exec)>, decltype(std::execution::seq)>)
     {
-        double i = 1;
-        double num = 0;
-        double denom = 0;
-        for (auto it = first; it != last; ++it)
-        {
-            num += *it*i;
-            denom += *it;
-            ++i;
-        }
-
-        // If the l1 norm is zero, all elements are zero, so every element is the same.
-        if (denom == 0)
-        {
-            return double(0);
-        }
-
-        return ((2*num)/denom - i)/(i-1);
+        return detail::gini_coefficient_sequential_impl(first, last);
     }
+    
+    else if constexpr (std::is_integral_v<Real>)
+    {
+        return detail::gini_coefficient_parallel_impl<double>(exec, first, last);
+    }
+
     else
     {
-        Real i = 1;
-        Real num = 0;
-        Real denom = 0;
-        for (auto it = first; it != last; ++it)
-        {
-            num += *it*i;
-            denom += *it;
-            ++i;
-        }
-
-        // If the l1 norm is zero, all elements are zero, so every element is the same.
-        if (denom == 0)
-        {
-            return Real(0);
-        }
-
-        return ((2*num)/denom - i)/(i-1);
+        static_assert(!std::is_same_v<Real, long double>, "Parallel execution Policies do not currently support long doubles");
+        static_assert(!std::is_same_v<Real, boost::multiprecision::cpp_bin_float_50>, "Parallel execution Policies do not currently support cpp_bin_float_50");
+        return detail::gini_coefficient_parallel_impl<Real>(exec, first, last);
     }
+}
+
+template<class ExecutionPolicy, class RandomAccessContainer>
+inline auto gini_coefficient(ExecutionPolicy&& exec, RandomAccessContainer & v)
+{
+    return gini_coefficient(exec, std::begin(v), std::end(v));
+}
+
+template<class RandomAccessIterator>
+inline auto gini_coefficient(RandomAccessIterator first, RandomAccessIterator last)
+{
+    return gini_coefficient(std::execution::seq, first, last);
 }
 
 template<class RandomAccessContainer>
 inline auto gini_coefficient(RandomAccessContainer & v)
 {
-    return gini_coefficient(v.begin(), v.end());
+    return gini_coefficient(std::execution::seq, std::begin(v), std::end(v));
 }
 
 template<class RandomAccessIterator>

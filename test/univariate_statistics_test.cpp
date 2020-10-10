@@ -836,39 +836,39 @@ void test_sample_gini_coefficient()
 }
 
 
-template<class Real>
-void test_gini_coefficient()
+template<class Real, class ExecutionPolicy>
+void test_gini_coefficient(ExecutionPolicy&& exec)
 {
     Real tol = std::numeric_limits<Real>::epsilon();
     std::vector<Real> v{1,0,0};
-    Real gini = boost::math::statistics::gini_coefficient(v.begin(), v.end());
+    Real gini = boost::math::statistics::gini_coefficient(exec, v.begin(), v.end());
     Real expected = Real(2)/Real(3);
     BOOST_TEST(abs(gini - expected) < tol);
 
-    gini = boost::math::statistics::gini_coefficient(v);
+    gini = boost::math::statistics::gini_coefficient(exec, v);
     BOOST_TEST(abs(gini - expected) < tol);
 
     v[0] = 1;
     v[1] = 1;
     v[2] = 1;
-    gini = boost::math::statistics::gini_coefficient(v.begin(), v.end());
+    gini = boost::math::statistics::gini_coefficient(exec, v.begin(), v.end());
     BOOST_TEST(abs(gini) < tol);
 
     v[0] = 0;
     v[1] = 0;
     v[2] = 0;
-    gini = boost::math::statistics::gini_coefficient(v.begin(), v.end());
+    gini = boost::math::statistics::gini_coefficient(exec, v.begin(), v.end());
     BOOST_TEST(abs(gini) < tol);
 
     std::array<Real, 3> w{0,0,0};
-    gini = boost::math::statistics::gini_coefficient(w);
+    gini = boost::math::statistics::gini_coefficient(exec, w);
     BOOST_TEST(abs(gini) < tol);
 
     boost::numeric::ublas::vector<Real> w1(3);
     w1[0] = 1;
     w1[1] = 1;
     w1[2] = 1;
-    gini = boost::math::statistics::gini_coefficient(w1);
+    gini = boost::math::statistics::gini_coefficient(exec, w1);
     BOOST_TEST(abs(gini) < tol);
 
     std::mt19937 gen(18);
@@ -880,44 +880,44 @@ void test_gini_coefficient()
     {
         v[i] = dis(gen);
     }
-    gini = boost::math::statistics::gini_coefficient(v);
+    gini = boost::math::statistics::gini_coefficient(exec, v);
     BOOST_TEST(abs(gini - expected) < 0.01);
 
 }
 
-template<class Z>
-void test_integer_gini_coefficient()
+template<class Z, class ExecutionPolicy>
+void test_integer_gini_coefficient(ExecutionPolicy&& exec)
 {
     double tol = std::numeric_limits<double>::epsilon();
     std::vector<Z> v{1,0,0};
-    double gini = boost::math::statistics::gini_coefficient(v.begin(), v.end());
+    double gini = boost::math::statistics::gini_coefficient(exec, v.begin(), v.end());
     double expected = 2.0/3.0;
     BOOST_TEST(abs(gini - expected) < tol);
 
-    gini = boost::math::statistics::gini_coefficient(v);
+    gini = boost::math::statistics::gini_coefficient(exec, v);
     BOOST_TEST(abs(gini - expected) < tol);
 
     v[0] = 1;
     v[1] = 1;
     v[2] = 1;
-    gini = boost::math::statistics::gini_coefficient(v.begin(), v.end());
+    gini = boost::math::statistics::gini_coefficient(exec, v.begin(), v.end());
     BOOST_TEST(abs(gini) < tol);
 
     v[0] = 0;
     v[1] = 0;
     v[2] = 0;
-    gini = boost::math::statistics::gini_coefficient(v.begin(), v.end());
+    gini = boost::math::statistics::gini_coefficient(exec, v.begin(), v.end());
     BOOST_TEST(abs(gini) < tol);
 
     std::array<Z, 3> w{0,0,0};
-    gini = boost::math::statistics::gini_coefficient(w);
+    gini = boost::math::statistics::gini_coefficient(exec, w);
     BOOST_TEST(abs(gini) < tol);
 
     boost::numeric::ublas::vector<Z> w1(3);
     w1[0] = 1;
     w1[1] = 1;
     w1[2] = 1;
-    gini = boost::math::statistics::gini_coefficient(w1);
+    gini = boost::math::statistics::gini_coefficient(exec, w1);
     BOOST_TEST(abs(gini) < tol);
 }
 
@@ -1221,13 +1221,27 @@ int main()
     test_median_absolute_deviation<cpp_bin_float_50>(std::execution::par);
     test_median_absolute_deviation<cpp_bin_float_50>(std::execution::par_unseq);
 
-    test_gini_coefficient<float>();
-    test_gini_coefficient<double>();
-    test_gini_coefficient<long double>();
-    test_gini_coefficient<cpp_bin_float_50>();
+    test_gini_coefficient<float>(std::execution::seq);
+    test_gini_coefficient<float>(std::execution::par);
+    test_gini_coefficient<float>(std::execution::par_unseq);
+    test_gini_coefficient<double>(std::execution::seq);
+    test_gini_coefficient<double>(std::execution::par);
+    test_gini_coefficient<double>(std::execution::par_unseq);
+    
+    // Atomic Types do not support the following:
+    test_gini_coefficient<long double>(std::execution::seq);
+    //test_gini_coefficient<long double>(std::execution::par);
+    //test_gini_coefficient<long double>(std::execution::par_unseq);
+    test_gini_coefficient<cpp_bin_float_50>(std::execution::seq);
+    //test_gini_coefficient<cpp_bin_float_50>(std::execution::par);
+    //test_gini_coefficient<long double>(std::execution::par_unseq);
 
-    test_integer_gini_coefficient<unsigned>();
-    test_integer_gini_coefficient<int>();
+    test_integer_gini_coefficient<unsigned>(std::execution::seq);
+    test_integer_gini_coefficient<unsigned>(std::execution::par);
+    test_integer_gini_coefficient<unsigned>(std::execution::par_unseq);
+    test_integer_gini_coefficient<int>(std::execution::seq);
+    test_integer_gini_coefficient<int>(std::execution::par);
+    test_integer_gini_coefficient<int>(std::execution::par_unseq);
 
     test_sample_gini_coefficient<float>();
     test_sample_gini_coefficient<double>();
