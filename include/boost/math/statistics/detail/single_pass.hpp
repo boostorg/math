@@ -242,7 +242,7 @@ ReturnType parallel_first_four_moments_impl(ForwardIterator first, ForwardIterat
     
     const auto M1_ab = (range_a * M1_a + range_b * M1_b) / n_ab;
     const auto M2_ab = M2_a + M2_b + delta * delta * (range_a * range_b / n_ab);
-    const auto M3_ab = M3_a + M3_ab + std::pow(delta, 3) * range_a * range_b * (range_a - range_b) / (n_ab * n_ab) 
+    const auto M3_ab = M3_a + M3_b + std::pow(delta, 3) * range_a * range_b * (range_a - range_b) / (n_ab * n_ab) 
                        + 3 * delta * (range_a * M2_b - range_b * M2_a) / n_ab;
     const auto M4_ab = M4_a + M4_b + std::pow(delta, 4) * range_a * range_b * (range_a * range_a - range_a * range_b + range_b * range_b) / std::pow(n_ab, 3) 
                        + 6 * delta * delta * (range_a * range_a * M2_b + range_b * range_b * M2_a) / (n_ab * n_ab) 
