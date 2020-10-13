@@ -185,7 +185,7 @@ void IntervalSieve<Integer, OutputIterator>::Sieve() noexcept
     
     else
     {
-        prime_reserve(right_, primes_);
+        primes_.resize(static_cast<std::size_t>(prime_approximation(right_)));
         linear_sieve(primes_range, primes_.begin());
 
         for(; primes_[i] < primes_range; ++i)

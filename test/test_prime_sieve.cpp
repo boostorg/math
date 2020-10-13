@@ -30,38 +30,38 @@ void test_prime_sieve()
     Integer ref {168}; // Calculated with wolfram-alpha
 
     // Does the function work with a vector
-    boost::math::prime_sieve(std::execution::par, static_cast<Integer>(1'000), primes);
+    boost::math::prime_sieve(std::execution::par, static_cast<Integer>(1'000), &primes);
     BOOST_TEST_EQ(primes.size(), ref);
 
     // Tests for correctness
     // 2
     primes.clear();
-    boost::math::prime_sieve(std::execution::par, static_cast<Integer>(2), primes);
+    boost::math::prime_sieve(std::execution::par, static_cast<Integer>(2), &primes);
     BOOST_TEST_EQ(primes.size(), 0);
 
     // 100
     primes.clear();
-    boost::math::prime_sieve(std::execution::par, static_cast<Integer>(100), primes);
+    boost::math::prime_sieve(std::execution::par, static_cast<Integer>(100), &primes);
     BOOST_TEST_EQ(primes.size(), 25);
 
     // 10'000
     primes.clear();
-    boost::math::prime_sieve(std::execution::par, static_cast<Integer>(10'000), primes);
+    boost::math::prime_sieve(std::execution::par, static_cast<Integer>(10'000), &primes);
     BOOST_TEST_EQ(primes.size(), 1229);
 
     // 100'000
     primes.clear();
-    boost::math::prime_sieve(std::execution::par, static_cast<Integer>(100'000), primes);
+    boost::math::prime_sieve(std::execution::par, static_cast<Integer>(100'000), &primes);
     BOOST_TEST_EQ(primes.size(), 9592);
 
     // 1'000'000
     primes.clear();
-    boost::math::prime_sieve(std::execution::par, static_cast<Integer>(1'000'000), primes);
+    boost::math::prime_sieve(std::execution::par, static_cast<Integer>(1'000'000), &primes);
     BOOST_TEST_EQ(primes.size(), 78498);
 
     // Does the function work with a deque?
     std::deque<Integer> d_primes;
-    boost::math::prime_sieve(std::execution::par, static_cast<Integer>(1'000), d_primes);
+    boost::math::prime_sieve(std::execution::par, static_cast<Integer>(1'000), &d_primes);
     BOOST_TEST_EQ(d_primes.size(), ref);
 }
 
@@ -72,17 +72,17 @@ void test_sequential_prime_sieve()
 
     // 10'000
     primes.clear();
-    boost::math::prime_sieve(static_cast<Integer>(10'000), primes);
+    boost::math::prime_sieve(static_cast<Integer>(10'000), &primes);
     BOOST_TEST_EQ(primes.size(), 1229);
 
     // 100'000
     primes.clear();
-    boost::math::prime_sieve(static_cast<Integer>(100'000), primes);
+    boost::math::prime_sieve(static_cast<Integer>(100'000), &primes);
     BOOST_TEST_EQ(primes.size(), 9592);
 
     // 1'000'000
     primes.clear();
-    boost::math::prime_sieve(static_cast<Integer>(1'000'000), primes);
+    boost::math::prime_sieve(static_cast<Integer>(1'000'000), &primes);
     BOOST_TEST_EQ(primes.size(), 78498);
 }
 
@@ -141,35 +141,62 @@ void test_prime_sieve_iter()
 }
 
 template<typename Integer>
+void test_prime_sieve_wrapper()
+{
+    constexpr std::size_t array_size {100'000};
+    std::array<Integer, array_size> primes;
+    std::fill(primes.begin(), primes.end(), 0);
+
+    // 1'000
+    boost::math::prime_sieve(std::execution::par, static_cast<Integer>(1'000), primes.begin());
+    BOOST_TEST_EQ(array_size - std::count(primes.cbegin(), primes.cend(), 0), 168);
+
+    // 10'000
+    std::fill(primes.begin(), primes.end(), 0);
+    boost::math::prime_sieve(std::execution::par, static_cast<Integer>(10'000), primes.begin());
+    BOOST_TEST_EQ(array_size - std::count(primes.cbegin(), primes.cend(), 0), 1'229);
+
+    // 100'000
+    std::fill(primes.begin(), primes.end(), 0);
+    boost::math::prime_sieve(std::execution::par, static_cast<Integer>(100'000), primes.begin());
+    BOOST_TEST_EQ(array_size - std::count(primes.cbegin(), primes.cend(), 0), 9'592);
+
+    // 1'000'000
+    std::fill(primes.begin(), primes.end(), 0);
+    boost::math::prime_sieve(std::execution::par, static_cast<Integer>(1'000'000), primes.begin());
+    BOOST_TEST_EQ(array_size - std::count(primes.cbegin(), primes.cend(), 0), 78'498);
+}
+
+template<typename Integer>
 void test_prime_range()
 {
     std::vector<Integer> primes;
     Integer ref {168}; // Calculated with wolfram-alpha
 
     // Does the upper and lower bound call work
-    boost::math::prime_range(std::execution::par, static_cast<Integer>(2), static_cast<Integer>(1'000), primes);
+    boost::math::prime_range(std::execution::par, static_cast<Integer>(2), static_cast<Integer>(1'000), &primes);
     BOOST_TEST_EQ(primes.size(), ref);
 
     // Does parallel version work
     primes.clear();
-    boost::math::prime_range(std::execution::par, static_cast<Integer>(2), static_cast<Integer>(1'000), primes);
+    boost::math::prime_range(std::execution::par, static_cast<Integer>(2), static_cast<Integer>(1'000), &primes);
     BOOST_TEST_EQ(primes.size(), ref);
 
     // Does it work with a deque?
     std::deque<Integer> d_primes;
-    boost::math::prime_range(std::execution::par, static_cast<Integer>(2), static_cast<Integer>(1'000), d_primes);
+    boost::math::prime_range(std::execution::par, static_cast<Integer>(2), static_cast<Integer>(1'000), &d_primes);
     BOOST_TEST_EQ(d_primes.size(), ref);
 
     // Does the lower bound change the results?
     ref = 143; // Calculated with wolfram-alpha
     primes.clear();
-    boost::math::prime_range(std::execution::par, static_cast<Integer>(100), static_cast<Integer>(1'000), primes);
+    boost::math::prime_range(std::execution::par, static_cast<Integer>(100), static_cast<Integer>(1'000), &primes);
     BOOST_TEST_EQ(primes.size(), ref);
 
     // Will it call the sieve for large input
     ref = 78498; // Calculated with wolfram-alpha
     primes.clear();
-    boost::math::prime_range(std::execution::par, static_cast<Integer>(2), static_cast<Integer>(1'000'000), primes);
+    boost::math::prime_range(std::execution::par, static_cast<Integer>(2), static_cast<Integer>(1'000'000), &primes);
     BOOST_TEST_EQ(primes.size(), ref);
 }
 
@@ -182,17 +209,17 @@ void test_prime_range_large()
     // Larger numbers
     ref = 586'081; // Calculated with wolfram-alpha
     primes.clear();
-    boost::math::prime_range(std::execution::par, static_cast<Integer>(1'000'000), static_cast<Integer>(10'000'000), primes);
+    boost::math::prime_range(std::execution::par, static_cast<Integer>(1'000'000), static_cast<Integer>(10'000'000), &primes);
     BOOST_TEST_EQ(primes.size(), ref);
 
     ref = 5'096'876; // Calculated with wolfram-alpha
     primes.clear();
-    boost::math::prime_range(std::execution::par, static_cast<Integer>(10'000'000), static_cast<Integer>(100'000'000), primes);
+    boost::math::prime_range(std::execution::par, static_cast<Integer>(10'000'000), static_cast<Integer>(100'000'000), &primes);
     BOOST_TEST_EQ(primes.size(), ref);
 
     ref = 48'638'573;
     primes.clear();
-    boost::math::prime_range(std::execution::par, static_cast<Integer>(100'000'000), static_cast<Integer>(1'073'741'824), primes);
+    boost::math::prime_range(std::execution::par, static_cast<Integer>(100'000'000), static_cast<Integer>(1'073'741'824), &primes);
     BOOST_TEST_EQ(primes.size(), ref);
 }
 
@@ -203,29 +230,29 @@ void test_prime_range_seq()
     Integer ref {168}; // Calculated with wolfram-alpha
 
     // Does the upper and lower bound call work
-    boost::math::prime_range(static_cast<Integer>(2), static_cast<Integer>(1'000), primes);
+    boost::math::prime_range(static_cast<Integer>(2), static_cast<Integer>(1'000), &primes);
     BOOST_TEST_EQ(primes.size(), ref);
 
     // Does parallel version work
     primes.clear();
-    boost::math::prime_range(static_cast<Integer>(2), static_cast<Integer>(1'000), primes);
+    boost::math::prime_range(static_cast<Integer>(2), static_cast<Integer>(1'000), &primes);
     BOOST_TEST_EQ(primes.size(), ref);
 
     // Does it work with a deque?
     std::deque<Integer> d_primes;
-    boost::math::prime_range(static_cast<Integer>(2), static_cast<Integer>(1'000), d_primes);
+    boost::math::prime_range(static_cast<Integer>(2), static_cast<Integer>(1'000), &d_primes);
     BOOST_TEST_EQ(d_primes.size(), ref);
 
     // Does the lower bound change the results?
     ref = 143; // Calculated with wolfram-alpha
     primes.clear();
-    boost::math::prime_range(static_cast<Integer>(100), static_cast<Integer>(1'000), primes);
+    boost::math::prime_range(static_cast<Integer>(100), static_cast<Integer>(1'000), &primes);
     BOOST_TEST_EQ(primes.size(), ref);
 
     // Will it call the sieve for large input
     ref = 78498; // Calculated with wolfram-alpha
     primes.clear();
-    boost::math::prime_range(static_cast<Integer>(2), static_cast<Integer>(1'000'000), primes);
+    boost::math::prime_range(static_cast<Integer>(2), static_cast<Integer>(1'000'000), &primes);
     BOOST_TEST_EQ(primes.size(), ref);
 }
 
@@ -238,17 +265,17 @@ void test_prime_range_seq_large()
     // Larger numbers
     ref = 586'081; // Calculated with wolfram-alpha
     primes.clear();
-    boost::math::prime_range(static_cast<Integer>(1'000'000), static_cast<Integer>(10'000'000), primes);
+    boost::math::prime_range(static_cast<Integer>(1'000'000), static_cast<Integer>(10'000'000), &primes);
     BOOST_TEST_EQ(primes.size(), ref);
 
     ref = 5'096'876; // Calculated with wolfram-alpha
     primes.clear();
-    boost::math::prime_range(static_cast<Integer>(10'000'000), static_cast<Integer>(100'000'000), primes);
+    boost::math::prime_range(static_cast<Integer>(10'000'000), static_cast<Integer>(100'000'000), &primes);
     BOOST_TEST_EQ(primes.size(), ref);
 
     ref = 48'638'573;
     primes.clear();
-    boost::math::prime_range(static_cast<Integer>(100'000'000), static_cast<Integer>(1'073'741'824), primes);
+    boost::math::prime_range(static_cast<Integer>(100'000'000), static_cast<Integer>(1'073'741'824), &primes);
     BOOST_TEST_EQ(primes.size(), ref);
 }
 
@@ -260,7 +287,7 @@ void test_par_prime_sieve_large()
 
     // Force the sieve into the multi-threading section and test reserve functionality
     boost::math::prime_reserve(static_cast<Integer>(1073741824), primes);
-    boost::math::prime_sieve(std::execution::par, static_cast<Integer>(1073741824), primes);
+    boost::math::prime_sieve(std::execution::par, static_cast<Integer>(1073741824), &primes);
     BOOST_TEST_EQ(primes.size(), ref);
 }
 
@@ -335,12 +362,53 @@ void test_linear_sieve_iterator()
     std::fill(primes.begin(), primes.end(), 0);
     boost::math::detail::prime_sieve::linear_sieve(static_cast<Integer>(100'000), primes.begin());
     BOOST_TEST_EQ(array_size - std::count(primes.cbegin(), primes.cend(), 0), 9'592);
+
+    std::vector<Integer> primes_v;
+    //boost::math::prime_reserve(static_cast<Integer>(100'000), primes_v); Prime reserve does not work with OI. Need to use resize.
+    primes_v.resize(10'000, 0);
+    boost::math::detail::prime_sieve::linear_sieve(static_cast<Integer>(100'000), primes_v.begin());
+    BOOST_TEST_EQ(array_size - std::count(primes_v.cbegin(), primes_v.cend(), 0), 9'592);
+
+}
+
+template<typename Integer>
+void test_stepanov_sieve()
+{
+    constexpr std::size_t array_size {500};
+    std::array<Integer, array_size> primes;
+
+    boost::math::detail::prime_sieve::stepanov_sieve(static_cast<Integer>(500), primes.begin());
+    BOOST_TEST_EQ(array_size - std::count(primes.cbegin(), primes.cend(), 0), 167); // Skips 2
+}
+
+template<typename Integer>
+void test_wheel_sieve_of_eratosthenes()
+{
+    constexpr std::size_t array_size {10'000};
+    std::array<Integer, array_size> primes;
+    std::fill(primes.begin(), primes.end(), 0);
+
+    boost::math::detail::prime_sieve::wheel_sieve_of_eratosthenes(static_cast<Integer>(1'000), primes.begin());
+    BOOST_TEST_EQ(array_size - std::count(primes.cbegin(), primes.cend(), 0), 168);
+
+    std::fill(primes.begin(), primes.end(), 0);
+    boost::math::detail::prime_sieve::wheel_sieve_of_eratosthenes(static_cast<Integer>(10'000), primes.begin());
+    BOOST_TEST_EQ(array_size - std::count(primes.cbegin(), primes.cend(), 0), 1'229);
+
+    std::fill(primes.begin(), primes.end(), 0);
+    boost::math::detail::prime_sieve::wheel_sieve_of_eratosthenes(static_cast<Integer>(100'000), primes.begin());
+    BOOST_TEST_EQ(array_size - std::count(primes.cbegin(), primes.cend(), 0), 9'592);
 }
 
 int main()
 {
     // Test prime approximation for constexpr
     static_assert(boost::math::prime_approximation(100) != 0, "log and/or floor is/are not constexpr");
+
+    // Test SFINAE
+    std::vector<int> test;
+    auto test_ref = &test;
+    static_assert(boost::math::detail::is_container<std::remove_pointer_t<decltype(test_ref)>>::value == 1, "INOP");
     
     // Individual Algorithms
     test_linear_sieve<int>();
@@ -371,6 +439,15 @@ int main()
     test_interval_sieve_iterator<uint32_t>();
     test_interval_sieve_iterator<boost::multiprecision::cpp_int>();
     test_interval_sieve_iterator<boost::multiprecision::mpz_int>();
+
+    test_stepanov_sieve<int>();
+
+    test_wheel_sieve_of_eratosthenes<int>();
+    test_wheel_sieve_of_eratosthenes<int32_t>();
+    test_wheel_sieve_of_eratosthenes<int64_t>();
+    test_wheel_sieve_of_eratosthenes<uint32_t>();
+    test_wheel_sieve_of_eratosthenes<boost::multiprecision::cpp_int>();
+    test_wheel_sieve_of_eratosthenes<boost::multiprecision::mpz_int>();
 
     // Composite
     test_prime_sieve<int>();
@@ -415,6 +492,13 @@ int main()
     test_prime_sieve_iter<uint32_t>();
     test_prime_sieve_iter<boost::multiprecision::cpp_int>();
     test_prime_sieve_iter<boost::multiprecision::mpz_int>();
+
+    test_prime_sieve_wrapper<int>();
+    test_prime_sieve_wrapper<int32_t>();
+    test_prime_sieve_wrapper<int64_t>();
+    test_prime_sieve_wrapper<uint32_t>();
+    test_prime_sieve_wrapper<boost::multiprecision::cpp_int>();
+    test_prime_sieve_wrapper<boost::multiprecision::mpz_int>();
 
     // Large composite tests (Commented out for CI)
     //test_par_prime_sieve_large<int>();
