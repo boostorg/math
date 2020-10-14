@@ -15,6 +15,8 @@
 #include <type_traits>
 #include <future>
 #include <cmath>
+#include <algorithm>
+#include <iostream>
 
 namespace boost::math::statistics::detail
 {
@@ -80,7 +82,7 @@ ReturnType parallel_variance_impl(ForwardIterator first, ForwardIterator last)
     const auto range_b {elements - range_a};
 
     thread_counter.fetch_add(2);
-    auto future_a {std::async(std::launch::async, [first, range_a, &thread_counter, num_threads]() -> ReturnType
+    auto future_a {std::async(std::launch::async, [first, range_a]() -> ReturnType
     {
         if constexpr (std::is_integral_v<Real>)
         {
@@ -97,7 +99,7 @@ ReturnType parallel_variance_impl(ForwardIterator first, ForwardIterator last)
                 return variance_real_impl(first, std::next(first, range_a));
         }
     })};
-    auto future_b {std::async(std::launch::async, [first, last, range_a, &thread_counter, num_threads]() -> ReturnType
+    auto future_b {std::async(std::launch::async, [first, last, range_a]() -> ReturnType
     {
         if constexpr (std::is_integral_v<Real>)
         {
@@ -190,7 +192,7 @@ ReturnType parallel_first_four_moments_impl(ForwardIterator first, ForwardIterat
     const auto range_b {elements - range_a};
 
     thread_counter.fetch_add(2);
-    auto future_a {std::async(std::launch::async, [first, range_a, &thread_counter, num_threads]() -> ReturnType
+    auto future_a {std::async(std::launch::async, [first, range_a]() -> ReturnType
     {
         if constexpr (std::is_integral_v<Real>)
         {
@@ -207,7 +209,7 @@ ReturnType parallel_first_four_moments_impl(ForwardIterator first, ForwardIterat
                 return first_four_moments_real_impl(first, std::next(first, range_a));
         }
     })};
-    auto future_b {std::async(std::launch::async, [first, last, range_a, &thread_counter, num_threads]() -> ReturnType
+    auto future_b {std::async(std::launch::async, [first, last, range_a]() -> ReturnType
     {
         if constexpr (std::is_integral_v<Real>)
         {
@@ -229,23 +231,23 @@ ReturnType parallel_first_four_moments_impl(ForwardIterator first, ForwardIterat
     const auto results_b {future_b.get()};
 
     const auto M1_a = std::get<0>(results_a);
-    const auto M2_a = std::get<0>(results_a);
-    const auto M3_a = std::get<0>(results_a);
-    const auto M4_a = std::get<0>(results_a);
+    const auto M2_a = std::get<1>(results_a);
+    const auto M3_a = std::get<2>(results_a);
+    const auto M4_a = std::get<3>(results_a);
 
     const auto M1_b = std::get<0>(results_b);
-    const auto M2_b = std::get<0>(results_b);
-    const auto M3_b = std::get<0>(results_b);
-    const auto M4_b = std::get<0>(results_b);
+    const auto M2_b = std::get<1>(results_b);
+    const auto M3_b = std::get<2>(results_b);
+    const auto M4_b = std::get<3>(results_b);
 
     const auto n_ab = elements;
     const auto delta = M1_b - M1_a;
     
     const auto M1_ab = (range_a * M1_a + range_b * M1_b) / n_ab;
     const auto M2_ab = M2_a + M2_b + delta * delta * (range_a * range_b / n_ab);
-    const auto M3_ab = M3_a + M3_b + std::pow(delta, 3) * range_a * range_b * (range_a - range_b) / (n_ab * n_ab) 
+    const auto M3_ab = M3_a + M3_b + (delta * delta * delta) * range_a * range_b * (range_a - range_b) / (n_ab * n_ab)    
                        + 3 * delta * (range_a * M2_b - range_b * M2_a) / n_ab;
-    const auto M4_ab = M4_a + M4_b + std::pow(delta, 4) * range_a * range_b * (range_a * range_a - range_a * range_b + range_b * range_b) / std::pow(n_ab, 3) 
+    const auto M4_ab = M4_a + M4_b + (delta * delta * delta * delta) * range_a * range_b * (range_a * range_a - range_a * range_b + range_b * range_b) / (n_ab * n_ab * n_ab)
                        + 6 * delta * delta * (range_a * range_a * M2_b + range_b * range_b * M2_a) / (n_ab * n_ab) 
                        + 4 * delta * (range_a * M3_b - range_b * M3_a) / n_ab;
 

@@ -25,6 +25,8 @@
 
 namespace boost::math::statistics {
 
+// TODO(mborland): Trivial parallel algo breaks for complex types. Consider using paralllel variance to solve
+// TODO(mborland): Benchmark nick's original impl vs current impl to pick which to be used as the sequential impl.
 template<class ExecutionPolicy, class ForwardIterator>
 auto mean(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last)
 {
@@ -348,6 +350,8 @@ inline auto first_four_moments(ExecutionPolicy&& exec, ForwardIterator first, Fo
         }
         else
         {
+            static_assert(!std::is_same_v<Real, long double>, "Error for parallel calculation using long double exceeds 100 Epsilon");
+            static_assert(!std::is_same_v<Real, boost::multiprecision::cpp_bin_float_50>, "Error for parallel calculation using multiprecision types exceeds 100 Epsilon");
             detail::thread_counter = 1;
             const auto results = detail::parallel_first_four_moments_impl<std::tuple<Real, Real, Real, Real, Real>>(first, last);
             return std::make_tuple(std::get<0>(results), std::get<1>(results) / std::get<4>(results), std::get<2>(results) / std::get<4>(results), 

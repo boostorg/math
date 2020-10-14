@@ -31,7 +31,7 @@ std::vector<T> generate_random_vector(std::size_t size, std::size_t seed)
         std::normal_distribution<T> dis(0, 1);
         for (size_t i = 0; i < v.size(); ++i)
         {
-         v[i] = dis(gen);
+            v[i] = dis(gen);
         }
         return v;
     }
@@ -41,7 +41,7 @@ std::vector<T> generate_random_vector(std::size_t size, std::size_t seed)
         std::uniform_int_distribution<T> dis(std::numeric_limits<T>::lowest()/2, (std::numeric_limits<T>::max)()/2);
         for (size_t i = 0; i < v.size(); ++i)
         {
-         v[i] = dis(gen);
+            v[i] = dis(gen);
         }
         return v;
     }
