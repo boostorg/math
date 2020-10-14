@@ -247,78 +247,6 @@ inline auto mean_and_sample_variance(Container const & v)
     return mean_and_sample_variance(std::execution::seq, std::cbegin(v), std::cend(v));
 }
 
-// TODO(mborland): find/try decompistion algo with impl split by type similar to variance
-//                 Should satisfy this, first four momenets, kurtosis, and excess kurtosis
-//
-// TODO(mborland): Reorder skewness below first four moments and call it like kurtosis does
-// Follows equation 1.5 of:
-// https://prod.sandia.gov/techlib-noauth/access-control.cgi/2008/086212.pdf
-template<class ForwardIterator>
-auto skewness(ForwardIterator first, ForwardIterator last)
-{
-    using Real = typename std::iterator_traits<ForwardIterator>::value_type;
-    using std::sqrt;
-    BOOST_ASSERT_MSG(first != last, "At least one sample is required to compute skewness.");
-    if constexpr (std::is_integral<Real>::value)
-    {
-        double M1 = *first;
-        double M2 = 0;
-        double M3 = 0;
-        double n = 2;
-        for (auto it = std::next(first); it != last; ++it)
-        {
-            double delta21 = *it - M1;
-            double tmp = delta21/n;
-            M3 = M3 + tmp*((n-1)*(n-2)*delta21*tmp - 3*M2);
-            M2 = M2 + tmp*(n-1)*delta21;
-            M1 = M1 + tmp;
-            n += 1;
-        }
-
-        double var = M2/(n-1);
-        if (var == 0)
-        {
-            // The limit is technically undefined, but the interpretation here is clear:
-            // A constant dataset has no skewness.
-            return double(0);
-        }
-        double skew = M3/(M2*sqrt(var));
-        return skew;
-    }
-    else
-    {
-        Real M1 = *first;
-        Real M2 = 0;
-        Real M3 = 0;
-        Real n = 2;
-        for (auto it = std::next(first); it != last; ++it)
-        {
-            Real delta21 = *it - M1;
-            Real tmp = delta21/n;
-            M3 += tmp*((n-1)*(n-2)*delta21*tmp - 3*M2);
-            M2 += tmp*(n-1)*delta21;
-            M1 += tmp;
-            n += 1;
-        }
-
-        Real var = M2/(n-1);
-        if (var == 0)
-        {
-            // The limit is technically undefined, but the interpretation here is clear:
-            // A constant dataset has no skewness.
-            return Real(0);
-        }
-        Real skew = M3/(M2*sqrt(var));
-        return skew;
-    }
-}
-
-template<class Container>
-inline auto skewness(Container const & v)
-{
-    return skewness(v.cbegin(), v.cend());
-}
-
 template<class ExecutionPolicy, class ForwardIterator>
 inline auto first_four_moments(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last)
 {
@@ -335,7 +263,7 @@ inline auto first_four_moments(ExecutionPolicy&& exec, ForwardIterator first, Fo
         else
         {
             detail::thread_counter = 1;
-            const auto results = detail::parallel_first_four_moments_impl<std::tuple<double, double, double, double, double>>(first, last);
+            const auto results = detail::parallel_first_four_moments_impl<std::tuple<double, double, double, double, std::size_t>>(first, last);
             return std::make_tuple(std::get<0>(results), std::get<1>(results) / std::get<4>(results), std::get<2>(results) / std::get<4>(results), 
                                    std::get<3>(results) / std::get<4>(results));
         }
@@ -353,7 +281,7 @@ inline auto first_four_moments(ExecutionPolicy&& exec, ForwardIterator first, Fo
             static_assert(!std::is_same_v<Real, long double>, "Error for parallel calculation using long double exceeds 100 Epsilon");
             static_assert(!std::is_same_v<Real, boost::multiprecision::cpp_bin_float_50>, "Error for parallel calculation using multiprecision types exceeds 100 Epsilon");
             detail::thread_counter = 1;
-            const auto results = detail::parallel_first_four_moments_impl<std::tuple<Real, Real, Real, Real, Real>>(first, last);
+            const auto results = detail::parallel_first_four_moments_impl<std::tuple<Real, Real, Real, Real, std::size_t>>(first, last);
             return std::make_tuple(std::get<0>(results), std::get<1>(results) / std::get<4>(results), std::get<2>(results) / std::get<4>(results), 
                                    std::get<3>(results) / std::get<4>(results));
         }
@@ -378,6 +306,59 @@ inline auto first_four_moments(Container const & v)
     return first_four_moments(std::execution::seq, std::cbegin(v), std::cend(v));
 }
 
+// https://prod.sandia.gov/techlib-noauth/access-control.cgi/2008/086212.pdf
+template<class ExecutionPolicy, class ForwardIterator>
+inline auto skewness(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last)
+{
+    using Real = typename std::iterator_traits<ForwardIterator>::value_type;
+
+    if constexpr (std::is_same_v<std::remove_reference_t<decltype(exec)>, decltype(std::execution::seq)>)
+    {
+        return detail::skewness_sequential_impl(first, last);
+    }
+    else 
+    {
+        const auto [M1, M2, M3, M4] = first_four_moments(exec, first, last);
+        const auto n = std::distance(first, last);
+        const auto var = M2/(n-1);
+
+        if (M2 == 0)
+        {
+            // The limit is technically undefined, but the interpretation here is clear:
+            // A constant dataset has no skewness.
+            if constexpr (std::is_integral_v<Real>)
+            {
+                return static_cast<double>(0);
+            }
+            else
+            {
+                return static_cast<Real>(0);
+            }
+        }
+        else
+        {
+            return M3/(M2*sqrt(var));
+        }
+    }
+}
+
+template<class ExecutionPolicy, class Container>
+inline auto skewness(ExecutionPolicy&& exec, Container & v)
+{
+    return skewness(exec, std::cbegin(v), std::cend(v));
+}
+
+template<class ForwardIterator>
+inline auto skewness(ForwardIterator first, ForwardIterator last)
+{
+    return skewness(std::execution::seq, first, last);
+}
+
+template<class Container>
+inline auto skewness(Container const & v)
+{
+    return skewness(std::execution::seq, std::cbegin(v), std::cend(v));
+}
 
 // Follows equation 1.6 of:
 // https://prod.sandia.gov/techlib-noauth/access-control.cgi/2008/086212.pdf

@@ -525,40 +525,40 @@ void test_integer_skewness()
 
 }
 
-template<class Real>
-void test_skewness()
+template<class Real, class ExecutionPolicy>
+void test_skewness(ExecutionPolicy&& exec)
 {
     Real tol = std::numeric_limits<Real>::epsilon();
     std::vector<Real> v{1,1,1};
-    Real skew = boost::math::statistics::skewness(v);
+    Real skew = boost::math::statistics::skewness(exec, v);
     BOOST_TEST(abs(skew) < tol);
 
     // Dataset is symmetric about the mean:
     v = {1,2,3,4,5};
-    skew = boost::math::statistics::skewness(v);
+    skew = boost::math::statistics::skewness(exec, v);
     BOOST_TEST(abs(skew) < tol);
 
     v = {0,0,0,0,5};
     // mu = 1, sigma^2 = 4, sigma = 2, skew = 3/2
-    skew = boost::math::statistics::skewness(v);
+    skew = boost::math::statistics::skewness(exec, v);
     BOOST_TEST(abs(skew - Real(3)/Real(2)) < tol);
 
     std::array<Real, 5> w1{0,0,0,0,5};
-    skew = boost::math::statistics::skewness(w1);
+    skew = boost::math::statistics::skewness(exec, w1);
     BOOST_TEST(abs(skew - Real(3)/Real(2)) < tol);
 
     std::forward_list<Real> w2{0,0,0,0,5};
-    skew = boost::math::statistics::skewness(w2);
+    skew = boost::math::statistics::skewness(exec, w2);
     BOOST_TEST(abs(skew - Real(3)/Real(2)) < tol);
 
     v = generate_random_vector<Real>(global_size, global_seed);
     Real scale = 2;
-    Real m1 = boost::math::statistics::skewness(v);
+    Real m1 = boost::math::statistics::skewness(exec, v);
     for (auto & x : v)
     {
         x *= scale;
     }
-    Real m2 = boost::math::statistics::skewness(v);
+    Real m2 = boost::math::statistics::skewness(exec, v);
     BOOST_TEST(abs(m1 - m2) < tol*abs(m1));
 }
 
@@ -1156,10 +1156,11 @@ int main()
     test_integer_variance<int>(std::execution::par);
     test_integer_variance<int>(std::execution::par_unseq);
 
-    test_skewness<float>();
-    test_skewness<double>();
-    test_skewness<long double>();
-    test_skewness<cpp_bin_float_50>();
+    test_skewness<float>(std::execution::seq);
+    test_skewness<float>(std::execution::par);
+    test_skewness<double>(std::execution::seq);
+    test_skewness<long double>(std::execution::seq);
+    test_skewness<cpp_bin_float_50>(std::execution::seq);
 
     test_integer_skewness<int>();
     test_integer_skewness<unsigned>();

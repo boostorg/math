@@ -254,6 +254,68 @@ ReturnType parallel_first_four_moments_impl(ForwardIterator first, ForwardIterat
     return std::make_tuple(M1_ab, M2_ab, M3_ab, M4_ab, n_ab);
 }
 
+// Follows equation 1.5 of:
+// https://prod.sandia.gov/techlib-noauth/access-control.cgi/2008/086212.pdf
+template<class ForwardIterator>
+auto skewness_sequential_impl(ForwardIterator first, ForwardIterator last)
+{
+    using Real = typename std::iterator_traits<ForwardIterator>::value_type;
+    using std::sqrt;
+    BOOST_ASSERT_MSG(first != last, "At least one sample is required to compute skewness.");
+    if constexpr (std::is_integral<Real>::value)
+    {
+        double M1 = *first;
+        double M2 = 0;
+        double M3 = 0;
+        double n = 2;
+        for (auto it = std::next(first); it != last; ++it)
+        {
+            double delta21 = *it - M1;
+            double tmp = delta21/n;
+            M3 = M3 + tmp*((n-1)*(n-2)*delta21*tmp - 3*M2);
+            M2 = M2 + tmp*(n-1)*delta21;
+            M1 = M1 + tmp;
+            n += 1;
+        }
+
+        double var = M2/(n-1);
+        if (var == 0)
+        {
+            // The limit is technically undefined, but the interpretation here is clear:
+            // A constant dataset has no skewness.
+            return double(0);
+        }
+        double skew = M3/(M2*sqrt(var));
+        return skew;
+    }
+    else
+    {
+        Real M1 = *first;
+        Real M2 = 0;
+        Real M3 = 0;
+        Real n = 2;
+        for (auto it = std::next(first); it != last; ++it)
+        {
+            Real delta21 = *it - M1;
+            Real tmp = delta21/n;
+            M3 += tmp*((n-1)*(n-2)*delta21*tmp - 3*M2);
+            M2 += tmp*(n-1)*delta21;
+            M1 += tmp;
+            n += 1;
+        }
+
+        Real var = M2/(n-1);
+        if (var == 0)
+        {
+            // The limit is technically undefined, but the interpretation here is clear:
+            // A constant dataset has no skewness.
+            return Real(0);
+        }
+        Real skew = M3/(M2*sqrt(var));
+        return skew;
+    }
+}
+
 // https://htor.inf.ethz.ch/publications/img/atomic-bench.pdf
 template<typename ReturnType, typename ExecutionPolicy, typename RandomAccessIterator>
 ReturnType gini_coefficient_parallel_impl(ExecutionPolicy&& exec, RandomAccessIterator first, RandomAccessIterator last)
