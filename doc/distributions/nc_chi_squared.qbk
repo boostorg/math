@@ -39,8 +39,8 @@
    }} // namespaces
 
 The noncentral chi-squared distribution is a generalization of the
-__chi_squared_distrib. If ['X[sub i]] are /[nu]/ independent, normally
-distributed random variables with means /[mu][sub i]/ and variances
+__chi_squared_distrib. If ['X[sub i]] are [nu] independent, normally
+distributed random variables with means [mu][sub i] and variances
 ['[sigma][sub i][super 2]], then the random variable
 
 [equation nc_chi_squ_ref1]
@@ -48,7 +48,7 @@ distributed random variables with means /[mu][sub i]/ and variances
 is distributed according to the noncentral chi-squared distribution.
 
 The noncentral chi-squared distribution has two parameters:
-/[nu]/ which specifies the number of degrees of freedom
+[nu] which specifies the number of degrees of freedom
 (i.e. the number of ['X[sub i])], and [lambda] which is related to the
 mean of the random variables ['X[sub i]] by:
 
@@ -60,7 +60,7 @@ This leads to a PDF of:
 
 [equation nc_chi_squ_ref3]
 
-where ['f(x;k)] is the central chi-squared distribution PDF, and
+where ['f(x;[nu])] is the central chi-squared distribution PDF, and
 ['I[sub v](x)] is a modified Bessel function of the first kind.
 
 The following graph illustrates how the distribution changes
@@ -72,14 +72,14 @@ for different values of [lambda]:
 
       non_central_chi_squared_distribution(RealType v, RealType lambda);
 
-Constructs a Chi-Squared distribution with /v/ degrees of freedom
+Constructs a Chi-Squared distribution with [nu] degrees of freedom
 and non-centrality parameter /lambda/.
 
-Requires v > 0 and lambda >= 0, otherwise calls __domain_error.
+Requires [nu] > 0 and lambda >= 0, otherwise calls __domain_error.
 
       RealType degrees_of_freedom()const;
 
-Returns the parameter /v/ from which this object was constructed.
+Returns the parameter [nu] from which this object was constructed.
 
       RealType non_centrality()const;
 
@@ -88,14 +88,14 @@ Returns the parameter /lambda/ from which this object was constructed.
 
    static RealType find_degrees_of_freedom(RealType lambda, RealType x, RealType p);
 
-This function returns the number of degrees of freedom /v/ such that:
+This function returns the number of degrees of freedom [nu] such that:
 `cdf(non_central_chi_squared<RealType, Policy>(v, lambda), x) == p`
 
    template <class A, class B, class C>
    static RealType find_degrees_of_freedom(const complemented3_type<A,B,C>& c);
 
 When called with argument `boost::math::complement(lambda, x, q)`
-this function returns the number of degrees of freedom /v/ such that:
+this function returns the number of degrees of freedom [nu] such that:
 
 `cdf(complement(non_central_chi_squared<RealType, Policy>(v, lambda), x)) == q`.
 
@@ -232,7 +232,7 @@ The PDF is computed directly using the relation:
 
 [equation nc_chi_squ_ref3]
 
-Where ['f(x; v)] is the PDF of the central __chi_squared_distrib and
+Where ['f(x;[nu])] is the PDF of the central __chi_squared_distrib and
 ['I[sub v](x)] is a modified Bessel function, see __cyl_bessel_i.
 For small values of the
 non-centrality parameter the relation in terms of __cyl_bessel_i

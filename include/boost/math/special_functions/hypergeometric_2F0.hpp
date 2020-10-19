@@ -94,7 +94,7 @@ namespace boost { namespace math { namespace detail {
          // http://functions.wolfram.com/07.31.03.0083.01
          int n = static_cast<int>(static_cast<boost::uintmax_t>(boost::math::lltrunc(-2 * a1)));
          T smz = sqrt(-z);
-         return pow(2 / smz, -n) * boost::math::hermite(n, 1 / smz);
+         return pow(2 / smz, -n) * boost::math::hermite(n, 1 / smz, pol);
       }
 
       if (is_a1_integer && is_a2_integer)

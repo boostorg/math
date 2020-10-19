@@ -265,7 +265,7 @@ struct FM2GP_trivial
 
 // Sanity checks to make sure I didn't break it.
 #ifdef TEST1
-typedef boost::mpl::list<char, short, int, long> integral_test_types;
+typedef boost::mpl::list<signed char, short, int, long> integral_test_types;
 typedef boost::mpl::list<int, long> large_integral_test_types;
 typedef boost::mpl::list<> mp_integral_test_types;
 #elif defined(TEST2)

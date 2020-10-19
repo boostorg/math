@@ -1,4 +1,3 @@
-
 //  Copyright John Maddock 2006-7, 2013-14.
 //  Copyright Paul A. Bristow 2007, 2013-14.
 //  Copyright Nikhar Agrawal 2013-14
@@ -241,7 +240,7 @@ T lgamma_imp(T z, const Policy& pol, const Lanczos& l, int* sign = 0)
    {
       if (0 == z)
          return policies::raise_pole_error<T>(function, "Evaluation of lgamma at %1%.", z, pol);
-      if (fabs(z) < 1 / tools::max_value<T>())
+      if (4 * fabs(z) < tools::epsilon<T>())
          result = -log(fabs(z));
       else
          result = log(fabs(1 / z - constants::euler<T>()));
@@ -577,7 +576,7 @@ inline T log_gamma_near_1(const T& z, Policy const& pol)
 
    do
    {
-      term = power_term * boost::math::polygamma(n - 1, T(1));
+      term = power_term * boost::math::polygamma(n - 1, T(1), pol);
       result += term;
       ++n;
       power_term *= z / n;
@@ -726,7 +725,7 @@ T tgammap1m1_imp(T dz, Policy const& pol, const Lanczos& l)
       {
          // Use expm1 on lgamma:
          result = boost::math::expm1(-boost::math::log1p(dz, pol) 
-            + lgamma_small_imp<T>(dz+2, dz + 1, dz, tag_type(), pol, l));
+            + lgamma_small_imp<T>(dz+2, dz + 1, dz, tag_type(), pol, l), pol);
          BOOST_MATH_INSTRUMENT_CODE(result);
       }
    }
@@ -1200,7 +1199,7 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert,
       return exp(result);
    }
 
-   BOOST_ASSERT((p_derivative == 0) || (normalised == true));
+   BOOST_ASSERT((p_derivative == 0) || normalised);
 
    bool is_int, is_half_int;
    bool is_small_a = (a < 30) && (a <= x + 1) && (x < tools::log_max_value<T>());
@@ -1331,14 +1330,14 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert,
    case 0:
       {
          result = finite_gamma_q(a, x, pol, p_derivative);
-         if(normalised == false)
+         if(!normalised)
             result *= boost::math::tgamma(a, pol);
          break;
       }
    case 1:
       {
          result = finite_half_gamma_q(a, x, p_derivative, pol);
-         if(normalised == false)
+         if(!normalised)
             result *= boost::math::tgamma(a, pol);
          if(p_derivative && (*p_derivative == 0))
             *p_derivative = regularised_gamma_prefix(a, x, pol, lanczos_type());
@@ -2173,7 +2172,3 @@ inline typename tools::promote_args<T1, T2>::type
 #include <boost/math/special_functions/erf.hpp>
 
 #endif // BOOST_MATH_SF_GAMMA_HPP
-
-
-
-

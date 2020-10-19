@@ -154,7 +154,7 @@ namespace boost { namespace math {
 
             // modified Lentz's method, see
             // Lentz, Applied Optics, vol 15, 668 (1976)
-            tolerance = 2 * policies::get_epsilon<T, Policy>();;
+            tolerance = 2 * policies::get_epsilon<T, Policy>();
          tiny = sqrt(tools::min_value<T>());
          C = f = tiny;                           // b0 = 0, replace with tiny
          D = 0;
@@ -376,13 +376,13 @@ namespace boost { namespace math {
          {
             if(kind&need_y)
             {
-               Yv = asymptotic_bessel_y_large_x_2(v, x);
+               Yv = asymptotic_bessel_y_large_x_2(v, x, pol);
             }
             else
                Yv = std::numeric_limits<T>::quiet_NaN(); // any value will do, we're not using it.
             if(kind&need_j)
             {
-               Jv = asymptotic_bessel_j_large_x_2(v, x);
+               Jv = asymptotic_bessel_j_large_x_2(v, x, pol);
             }
             else
                Jv = std::numeric_limits<T>::quiet_NaN(); // any value will do, we're not using it.
@@ -405,8 +405,8 @@ namespace boost { namespace math {
             T mod_v = fmod(T(v / 2 + 0.25f), T(2));
             T sx = sin(x);
             T cx = cos(x);
-            T sv = sin_pi(mod_v);
-            T cv = cos_pi(mod_v);
+            T sv = boost::math::sin_pi(mod_v, pol);
+            T cv = boost::math::cos_pi(mod_v, pol);
 
             T sc = sx * cv - sv * cx; // == sin(chi);
             T cc = cx * cv + sx * sv; // == cos(chi);
@@ -586,4 +586,3 @@ namespace boost { namespace math {
 }} // namespaces
 
 #endif // BOOST_MATH_BESSEL_JY_HPP
-

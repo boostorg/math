@@ -11,12 +11,12 @@
 
 #include <boost/multiprecision/float128.hpp>
 #include <boost/math/special_functions/daubechies_scaling.hpp>
+#include <boost/math/tools/ulps_plot.hpp>
 #include <quicksvg/graph_fn.hpp>
-#include <quicksvg/ulp_plot.hpp>
 
 
 using boost::multiprecision::float128;
-constexpr const int GRAPH_WIDTH = 700;
+constexpr const int GRAPH_WIDTH = 300;
 
 template<typename Real, int p>
 void plot_phi(int grid_refinements = -1)
@@ -71,7 +71,7 @@ void plot_convergence()
     title = "";
     std::string filename = "daubechies_" + std::to_string(p) + "_scaling_convergence.svg";
 
-    quicksvg::graph_fn daub(a, b, title, filename, 1024, GRAPH_WIDTH);
+    quicksvg::graph_fn daub(a, b, title, filename, 1024, 900);
     daub.set_stroke_width(1);
     daub.set_gridlines(8, 2*p-1);
 
@@ -136,10 +136,16 @@ void do_ulp(int coarse_refinements, PhiPrecise phi_precise)
 
     std::string filename = "daubechies_" + std::to_string(p) + "_" + boost::core::demangle(typeid(CoarseReal).name()) + "_" + std::to_string(coarse_refinements) + "_refinements.svg";
     int samples = 20000;
-    int clip = 20;
+    int clip = 10;
     int horizontal_lines = 8;
     int vertical_lines = 2*p - 1;
-    quicksvg::ulp_plot<decltype(phi_coarse), CoarseReal, decltype(phi_precise), PreciseReal>(phi_coarse, phi_precise, CoarseReal(0), phi_coarse.support().second, title, filename, samples, GRAPH_WIDTH, clip, horizontal_lines, vertical_lines);
+    auto [a, b] = phi_coarse.support();
+    auto plot = boost::math::tools::ulps_plot<decltype(phi_precise), PreciseReal, CoarseReal>(phi_precise, a, b, samples);
+    plot.clip(clip).width(GRAPH_WIDTH).horizontal_lines(horizontal_lines).vertical_lines(vertical_lines).ulp_envelope(false);
+
+    plot.background_color("white").font_color("black");
+    plot.add_fn(phi_coarse);
+    plot.write(filename);
 }
 
 
@@ -152,7 +158,7 @@ int main()
 
     using PreciseReal = float128;
     using CoarseReal = double;
-    int precise_refinements = 22;
+    int precise_refinements = 23;
     constexpr const int p = 8;
     std::cout << "Computing precise scaling function in " << boost::core::demangle(typeid(PreciseReal).name()) << " precision.\n";
     auto phi_precise = boost::math::daubechies_scaling<PreciseReal, p>(precise_refinements);

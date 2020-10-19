@@ -66,14 +66,29 @@ than the one shown will have __zero_error.
 
 [table_erfc]
 
-The following error plot are based on an exhaustive search of the functions domain, MSVC-15.5 at `double` precision, 
-and GCC-7.1/Ubuntu for `long double` and `__float128`.
+The following error plots are based on an exhaustive search of the functions domain, MSVC-16.7.1 at `double` precision, 
+and GCC-10/Mingw64 for `long double` and `__float128`.
 
-[graph erf__double]
+[$../../reporting/accuracy/erf_errors_double.png]
 
-[graph erf__80_bit_long_double]
+[$../../reporting/accuracy/erf_errors_long_double.png]
 
-[graph erf____float128]
+[$../../reporting/accuracy/erf_errors_float128.png]
+
+In the erfc case, error rates are almost entirely the error in calculating `exp(-x*x)`:
+
+[$../../reporting/accuracy/erfc_errors_double.png]
+
+[$../../reporting/accuracy/erfc_errors_long_double.png]
+
+[$../../reporting/accuracy/erfc_errors_float128.png]
+
+Multiprecision error rates are similar, albeit with a much larger error in calculating the exponent term for erfc:
+
+[$../../reporting/accuracy/erf_errors_cpp_bin_float_50.png]
+
+[$../../reporting/accuracy/erfc_errors_cpp_bin_float_50.png]
+
 
 [h4 Testing]
 

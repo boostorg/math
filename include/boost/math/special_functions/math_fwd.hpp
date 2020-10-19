@@ -1013,16 +1013,89 @@ namespace boost
    template <class T, class U>
    typename tools::promote_args<T, U>::type jacobi_cs(T k, U theta);
 
+   // Jacobi Theta Functions:
+   template <class T, class U, class Policy>
+   typename tools::promote_args<T, U>::type jacobi_theta1(T z, U q, const Policy& pol);
+
+   template <class T, class U>
+   typename tools::promote_args<T, U>::type jacobi_theta1(T z, U q);
+
+   template <class T, class U, class Policy>
+   typename tools::promote_args<T, U>::type jacobi_theta2(T z, U q, const Policy& pol);
+
+   template <class T, class U>
+   typename tools::promote_args<T, U>::type jacobi_theta2(T z, U q);
+
+   template <class T, class U, class Policy>
+   typename tools::promote_args<T, U>::type jacobi_theta3(T z, U q, const Policy& pol);
+
+   template <class T, class U>
+   typename tools::promote_args<T, U>::type jacobi_theta3(T z, U q);
+
+   template <class T, class U, class Policy>
+   typename tools::promote_args<T, U>::type jacobi_theta4(T z, U q, const Policy& pol);
+
+   template <class T, class U>
+   typename tools::promote_args<T, U>::type jacobi_theta4(T z, U q);
+
+   template <class T, class U, class Policy>
+   typename tools::promote_args<T, U>::type jacobi_theta1tau(T z, U tau, const Policy& pol);
+
+   template <class T, class U>
+   typename tools::promote_args<T, U>::type jacobi_theta1tau(T z, U tau);
+
+   template <class T, class U, class Policy>
+   typename tools::promote_args<T, U>::type jacobi_theta2tau(T z, U tau, const Policy& pol);
+
+   template <class T, class U>
+   typename tools::promote_args<T, U>::type jacobi_theta2tau(T z, U tau);
+
+   template <class T, class U, class Policy>
+   typename tools::promote_args<T, U>::type jacobi_theta3tau(T z, U tau, const Policy& pol);
+
+   template <class T, class U>
+   typename tools::promote_args<T, U>::type jacobi_theta3tau(T z, U tau);
+
+   template <class T, class U, class Policy>
+   typename tools::promote_args<T, U>::type jacobi_theta4tau(T z, U tau, const Policy& pol);
+
+   template <class T, class U>
+   typename tools::promote_args<T, U>::type jacobi_theta4tau(T z, U tau);
+
+   template <class T, class U, class Policy>
+   typename tools::promote_args<T, U>::type jacobi_theta3m1(T z, U q, const Policy& pol);
+
+   template <class T, class U>
+   typename tools::promote_args<T, U>::type jacobi_theta3m1(T z, U q);
+
+   template <class T, class U, class Policy>
+   typename tools::promote_args<T, U>::type jacobi_theta4m1(T z, U q, const Policy& pol);
+
+   template <class T, class U>
+   typename tools::promote_args<T, U>::type jacobi_theta4m1(T z, U q);
+
+   template <class T, class U, class Policy>
+   typename tools::promote_args<T, U>::type jacobi_theta3m1tau(T z, U tau, const Policy& pol);
+
+   template <class T, class U>
+   typename tools::promote_args<T, U>::type jacobi_theta3m1tau(T z, U tau);
+
+   template <class T, class U, class Policy>
+   typename tools::promote_args<T, U>::type jacobi_theta4m1tau(T z, U tau, const Policy& pol);
+
+   template <class T, class U>
+   typename tools::promote_args<T, U>::type jacobi_theta4m1tau(T z, U tau);
+
 
    template <class T>
    typename tools::promote_args<T>::type zeta(T s);
 
    // pow:
    template <int N, typename T, class Policy>
-   typename tools::promote_args<T>::type pow(T base, const Policy& policy);
+   BOOST_CXX14_CONSTEXPR typename tools::promote_args<T>::type pow(T base, const Policy& policy);
 
    template <int N, typename T>
-   typename tools::promote_args<T>::type pow(T base);
+   BOOST_CXX14_CONSTEXPR typename tools::promote_args<T>::type pow(T base);
 
    // next:
    template <class T, class U, class Policy>
@@ -1510,10 +1583,10 @@ template <class OutputIterator, class T>\
    { boost::math::cyl_neumann_zero(v, start_index, number_of_zeros, out_it, Policy()); }\
 \
    template <class T>\
-   inline typename boost::math::tools::promote_args<T>::type sin_pi(T x){ return boost::math::sin_pi(x); }\
+   inline typename boost::math::tools::promote_args<T>::type sin_pi(T x){ return boost::math::sin_pi(x, Policy()); }\
 \
    template <class T>\
-   inline typename boost::math::tools::promote_args<T>::type cos_pi(T x){ return boost::math::cos_pi(x); }\
+   inline typename boost::math::tools::promote_args<T>::type cos_pi(T x){ return boost::math::cos_pi(x, Policy()); }\
 \
    using boost::math::fpclassify;\
    using boost::math::isfinite;\
@@ -1641,6 +1714,54 @@ template <class OutputIterator, class T>\
    template <class T, class U>\
    inline typename boost::math::tools::promote_args<T, U>::type jacobi_cs(T k, U theta)\
    { return boost::math::jacobi_cs(k, theta, Policy()); }\
+   \
+   template <class T, class U>\
+   inline typename boost::math::tools::promote_args<T, U>::type jacobi_theta1(T z, U q)\
+   { return boost::math::jacobi_theta1(z, q, Policy()); }\
+   \
+   template <class T, class U>\
+   inline typename boost::math::tools::promote_args<T, U>::type jacobi_theta2(T z, U q)\
+   { return boost::math::jacobi_theta2(z, q, Policy()); }\
+   \
+   template <class T, class U>\
+   inline typename boost::math::tools::promote_args<T, U>::type jacobi_theta3(T z, U q)\
+   { return boost::math::jacobi_theta3(z, q, Policy()); }\
+   \
+   template <class T, class U>\
+   inline typename boost::math::tools::promote_args<T, U>::type jacobi_theta4(T z, U q)\
+   { return boost::math::jacobi_theta4(z, q, Policy()); }\
+   \
+   template <class T, class U>\
+   inline typename boost::math::tools::promote_args<T, U>::type jacobi_theta1tau(T z, U q)\
+   { return boost::math::jacobi_theta1tau(z, q, Policy()); }\
+   \
+   template <class T, class U>\
+   inline typename boost::math::tools::promote_args<T, U>::type jacobi_theta2tau(T z, U q)\
+   { return boost::math::jacobi_theta2tau(z, q, Policy()); }\
+   \
+   template <class T, class U>\
+   inline typename boost::math::tools::promote_args<T, U>::type jacobi_theta3tau(T z, U q)\
+   { return boost::math::jacobi_theta3tau(z, q, Policy()); }\
+   \
+   template <class T, class U>\
+   inline typename boost::math::tools::promote_args<T, U>::type jacobi_theta4tau(T z, U q)\
+   { return boost::math::jacobi_theta4tau(z, q, Policy()); }\
+   \
+   template <class T, class U>\
+   inline typename boost::math::tools::promote_args<T, U>::type jacobi_theta3m1(T z, U q)\
+   { return boost::math::jacobi_theta3m1(z, q, Policy()); }\
+   \
+   template <class T, class U>\
+   inline typename boost::math::tools::promote_args<T, U>::type jacobi_theta4m1(T z, U q)\
+   { return boost::math::jacobi_theta4m1(z, q, Policy()); }\
+   \
+   template <class T, class U>\
+   inline typename boost::math::tools::promote_args<T, U>::type jacobi_theta3m1tau(T z, U q)\
+   { return boost::math::jacobi_theta3m1tau(z, q, Policy()); }\
+   \
+   template <class T, class U>\
+   inline typename boost::math::tools::promote_args<T, U>::type jacobi_theta4m1tau(T z, U q)\
+   { return boost::math::jacobi_theta4m1tau(z, q, Policy()); }\
    \
    template <class T>\
    inline typename boost::math::tools::promote_args<T>::type airy_ai(T x)\

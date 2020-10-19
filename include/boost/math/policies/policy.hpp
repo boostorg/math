@@ -116,7 +116,7 @@ namespace policies{
 #define BOOST_MATH_MAX_ROOT_ITERATION_POLICY 200
 #endif
 
-#if !defined(__BORLANDC__)
+#if !defined(BOOST_BORLANDC)
 #define BOOST_MATH_META_INT(type, name, Default)\
    template <type N = Default> struct name : public boost::integral_constant<int, N>{};\
    namespace detail{\
@@ -266,7 +266,7 @@ struct precision
       digits2<((Digits10::value + 1) * 1000L) / 301L>
    >::type digits2_type;
 public:
-#ifdef __BORLANDC__
+#ifdef BOOST_BORLANDC
    typedef typename mpl::if_c<
       (Digits2::value > ::boost::math::policies::detail::precision<Digits10,Digits2>::digits2_type::value),
       Digits2, digits2_type>::type type;
@@ -796,7 +796,7 @@ template <class Real, class Policy>
 struct precision
 {
    BOOST_STATIC_ASSERT((::std::numeric_limits<Real>::radix == 2) || ((::std::numeric_limits<Real>::is_specialized == 0) || (::std::numeric_limits<Real>::digits == 0)));
-#ifndef __BORLANDC__
+#ifndef BOOST_BORLANDC
    typedef typename Policy::precision_type precision_type;
    typedef typename mpl::if_c<
       ((::std::numeric_limits<Real>::is_specialized == 0) || (::std::numeric_limits<Real>::digits == 0)),

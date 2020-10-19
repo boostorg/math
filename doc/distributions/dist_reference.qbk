@@ -21,6 +21,7 @@
 [include inverse_chi_squared.qbk]
 [include inverse_gamma.qbk]
 [include inverse_gaussian.qbk]
+[include kolmogorov_smirnov.qbk]
 [include laplace.qbk]
 [include logistic.qbk]
 [include lognormal.qbk]

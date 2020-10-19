@@ -39,9 +39,9 @@ void test_wavelet_transform()
         return abs(psi(x));
     };
     auto [a, b] = psi.support();
-    auto psil1 = trapezoidal(abs_psi, a, b);
+    auto psil1 = trapezoidal(abs_psi, a, b, 100*std::numeric_limits<Real>::epsilon());
     Real psi_sup_norm = 0;
-    for (double x = a; x < b; x += 0.0001)
+    for (double x = a; x < b; x += 0.00001)
     {
         Real y = psi(x);
         if (std::abs(y) > psi_sup_norm)
@@ -49,7 +49,6 @@ void test_wavelet_transform()
             psi_sup_norm = std::abs(y);
         }
     }
-    std::cout << "psi sup norm = " << psi_sup_norm << "\n";
     // An even function:
     auto f = [](Real x) {
         return std::exp(-abs(x));
@@ -57,8 +56,6 @@ void test_wavelet_transform()
     Real fmax = 1;
     Real fl2 = 1;
     Real fl1 = 2;
-    std::cout << "||f||_1 = " << fl1 << "\n";
-    std::cout << "||f||_2 = " << fl2 << "\n";
 
     auto Wf = daubechies_wavelet_transform(f, psi);
     for (double s = 0; s < 10; s += 0.01)
@@ -77,48 +74,70 @@ void test_wavelet_transform()
             Real w = Wf(s, t);
             // Integral inequality:
             Real r1 = sqrt(abs(s))*fmax*psil1;
-            if(abs(w) > r1)
+            if (!CHECK_LE(abs(w), r1))
             {
-                std::cerr << " Integral inequality | int fg| <= ||f||_infty ||psi||_1 is violated.\n";
+                std::cerr << "  Integral inequality |W[f](s,t)| <= ||f||_infty ||psi||_1 is violated.\n";
             }
-            if (s != 0)
+            if (!CHECK_LE(abs(w), fl2))
             {
-                Real r2 = fl1*psi_sup_norm/sqrt(abs(s));
-                if(abs(w) > r2)
-                {
-                    std::cerr << " Integral inequality | int fg| <= ||f||_1 ||psi||_infty/sqrt(|s|) is violated.\n";
-                    std::cerr << " Violation: " << abs(w) << " !<= " << r2 << "\n";
-                }
-                Real r3 = fmax*psil1/sqrt(abs(s));
-                if(abs(w) > r3)
-                {
-                    std::cerr << " Integral inequality | int fg| <= ||f||_infty ||psi||_1/sqrt(|s|) is violated.\n";
-                    std::cerr << " Computed = " << abs(w) << ", expected " << r3 << "\n";
-                }
-            }
-            if (abs(w) > fl2)
-            {
-                std::cerr << "  Integral inequality |f psi_s,t| <= ||f||_2 ||psi||2 violated.\n";
+                std::cerr << "  Integral inequality | int f psi_s,t| <= ||f||_2 ||psi||_2 violated.\n";
             }
             Real r4 = sqrt(abs(s))*fl1*psi_sup_norm;
-            if (abs(w) > r4)
+            if (!CHECK_LE(abs(w), r4))
             {
                 std::cerr << "  Integral inequality |W[f](s,t)| <= sqrt(|s|)||f||_1 ||psi||_infty is violated.\n";
             }
             Real r5 = sqrt(abs(s))*fmax*psil1;
-            if (abs(w) > r5)
+            if (!CHECK_LE(abs(w), r5))
             {
                 std::cerr << "  Integral inequality |W[f](s,t)| <= sqrt(|s|)||f||_infty ||psi||_1 is violated.\n";
+            }
+            if (s != 0)
+            {
+                Real r2 = fl1*psi_sup_norm/sqrt(abs(s));
+                if(!CHECK_LE(abs(w), r2))
+                {
+                    std::cerr << "  Integral inequality |W[f](s,t)| <= ||f||_1 ||psi||_infty/sqrt(|s|) is violated.\n";
+                }
             }
 
         }
     }
+
+    if (p > 5)
+    {
+        // Wavelet transform of a constant is zero.
+        // The quadrature sum is horribly ill-conditioned (technically infinite),
+        // so we'll only test on the more rapidly converging sums.
+        auto g = [](Real x) { return Real(7); };
+        auto Wg = daubechies_wavelet_transform(g, psi);
+        for (double s = -10; s < 10; s += 0.1)
+        {
+            for (double t = -10; t < 10; t+= 0.1)
+            {
+                Real w = Wg(s, t);
+                if (!CHECK_LE(abs(w), 10*sqrt(std::numeric_limits<Real>::epsilon())))
+                {
+                    std::cerr << "  Wavelet transform of constant with respect to " << p << " vanishing moment Daubechies wavelet is insufficiently small\n";
+                }
+
+            }
+        }
+        // Wavelet transform of psi evaluated at s = 1, t = 0 is L2 norm of psi:
+        auto Wpsi = daubechies_wavelet_transform(psi, psi);
+        CHECK_MOLLIFIED_CLOSE(Real(1), Wpsi(1,0), 2*sqrt(std::numeric_limits<Real>::epsilon()));
+    }
+
 }
 
 int main()
 {
-    boost::hana::for_each(std::make_index_sequence<17>(), [&](auto i) {
-        test_wavelet_transform<double, i+3>();
-    });
+    test_wavelet_transform<double, 2>();
+    test_wavelet_transform<double, 8>();
+    test_wavelet_transform<double, 16>();
+    // All these tests pass, but the compilation takes too long on CI:
+    //boost::hana::for_each(std::make_index_sequence<17>(), [&](auto i) {
+    //    test_wavelet_transform<double, i+3>();
+    //});
     return boost::math::test::report_errors();
 }

@@ -9,12 +9,14 @@
 #ifdef _MSC_VER
 #pragma once
 #endif
-
+#include <boost/type_traits/is_same.hpp>
+#include <boost/type_traits/is_integral.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/special_functions/sign.hpp>
 #include <boost/math/special_functions/trunc.hpp>
+#include <boost/math/tools/traits.hpp>
 
 #include <float.h>
 
@@ -89,7 +91,7 @@ inline T get_smallest_value(boost::true_type const&)
    //
    static const T m = std::numeric_limits<T>::denorm_min();
 #ifdef BOOST_MATH_CHECK_SSE2
-   return (_mm_getcsr() & (_MM_FLUSH_ZERO_ON | 0x40)) ? tools::min_value<T>() : m;;
+   return (_mm_getcsr() & (_MM_FLUSH_ZERO_ON | 0x40)) ? tools::min_value<T>() : m;
 #else
    return ((tools::min_value<T>() / 2) == 0) ? tools::min_value<T>() : m;
 #endif
@@ -168,11 +170,25 @@ inline T get_min_shift_value()
    return val;
 }
 
+template <class T, bool b = boost::math::tools::detail::has_backend_type<T>::value>
+struct exponent_type
+{
+   typedef int type;
+};
+
+template <class T>
+struct exponent_type<T, true>
+{
+   typedef typename T::backend_type::exponent_type type;
+};
+
 template <class T, class Policy>
 T float_next_imp(const T& val, const boost::true_type&, const Policy& pol)
 {
+   typedef typename exponent_type<T>::type exponent_type;
+   
    BOOST_MATH_STD_USING
-   int expon;
+   exponent_type expon;
    static const char* function = "float_next<%1%>(%1%)";
 
    int fpclass = (boost::math::fpclassify)(val);
@@ -215,11 +231,13 @@ T float_next_imp(const T& val, const boost::true_type&, const Policy& pol)
 template <class T, class Policy>
 T float_next_imp(const T& val, const boost::false_type&, const Policy& pol)
 {
+   typedef typename exponent_type<T>::type exponent_type;
+
    BOOST_STATIC_ASSERT(std::numeric_limits<T>::is_specialized);
    BOOST_STATIC_ASSERT(std::numeric_limits<T>::radix != 2);
 
    BOOST_MATH_STD_USING
-   boost::intmax_t expon;
+   exponent_type expon;
    static const char* function = "float_next<%1%>(%1%)";
 
    int fpclass = (boost::math::fpclassify)(val);
@@ -301,8 +319,10 @@ namespace detail{
 template <class T, class Policy>
 T float_prior_imp(const T& val, const boost::true_type&, const Policy& pol)
 {
+   typedef typename exponent_type<T>::type exponent_type;
+
    BOOST_MATH_STD_USING
-   int expon;
+   exponent_type expon;
    static const char* function = "float_prior<%1%>(%1%)";
 
    int fpclass = (boost::math::fpclassify)(val);
@@ -346,11 +366,13 @@ T float_prior_imp(const T& val, const boost::true_type&, const Policy& pol)
 template <class T, class Policy>
 T float_prior_imp(const T& val, const boost::false_type&, const Policy& pol)
 {
+   typedef typename exponent_type<T>::type exponent_type;
+
    BOOST_STATIC_ASSERT(std::numeric_limits<T>::is_specialized);
    BOOST_STATIC_ASSERT(std::numeric_limits<T>::radix != 2);
 
    BOOST_MATH_STD_USING
-   boost::intmax_t expon;
+   exponent_type expon;
    static const char* function = "float_prior<%1%>(%1%)";
 
    int fpclass = (boost::math::fpclassify)(val);
@@ -658,8 +680,35 @@ T float_distance_imp(const T& a, const T& b, const boost::false_type&, const Pol
 template <class T, class U, class Policy>
 inline typename tools::promote_args<T, U>::type float_distance(const T& a, const U& b, const Policy& pol)
 {
-   typedef typename tools::promote_args<T, U>::type result_type;
-   return detail::float_distance_imp(detail::normalize_value(static_cast<result_type>(a), typename detail::has_hidden_guard_digits<result_type>::type()), detail::normalize_value(static_cast<result_type>(b), typename detail::has_hidden_guard_digits<result_type>::type()), boost::integral_constant<bool, !std::numeric_limits<result_type>::is_specialized || (std::numeric_limits<result_type>::radix == 2)>(), pol);
+   //
+   // We allow ONE of a and b to be an integer type, otherwise both must be the SAME type.
+   //
+   BOOST_STATIC_ASSERT_MSG(
+      (boost::is_same<T, U>::value 
+      || (boost::is_integral<T>::value && !boost::is_integral<U>::value) 
+      || (!boost::is_integral<T>::value && boost::is_integral<U>::value)
+      || (std::numeric_limits<T>::is_specialized && std::numeric_limits<U>::is_specialized
+         && (std::numeric_limits<T>::digits == std::numeric_limits<U>::digits)
+         && (std::numeric_limits<T>::radix == std::numeric_limits<U>::radix)
+         && !std::numeric_limits<T>::is_integer && !std::numeric_limits<U>::is_integer)),
+      "Float distance between two different floating point types is undefined.");
+
+   BOOST_IF_CONSTEXPR (!boost::is_same<T, U>::value)
+   {
+      BOOST_IF_CONSTEXPR(boost::is_integral<T>::value)
+      {
+         return float_distance(static_cast<U>(a), b, pol);
+      }
+      else
+      {
+         return float_distance(a, static_cast<T>(b), pol);
+      }
+   }
+   else
+   {
+      typedef typename tools::promote_args<T, U>::type result_type;
+      return detail::float_distance_imp(detail::normalize_value(static_cast<result_type>(a), typename detail::has_hidden_guard_digits<result_type>::type()), detail::normalize_value(static_cast<result_type>(b), typename detail::has_hidden_guard_digits<result_type>::type()), boost::integral_constant<bool, !std::numeric_limits<result_type>::is_specialized || (std::numeric_limits<result_type>::radix == 2)>(), pol);
+   }
 }
 
 template <class T, class U>
@@ -855,4 +904,3 @@ inline typename tools::promote_args<T>::type float_advance(const T& val, int dis
 }} // boost math namespaces
 
 #endif // BOOST_MATH_SPECIAL_NEXT_HPP
-

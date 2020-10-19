@@ -1,4 +1,3 @@
-
 ///////////////////////////////////////////////////////////////////////////////
 //  Copyright 2014 Anton Bikineev
 //  Copyright 2014 Christopher Kormanyos
@@ -170,7 +169,7 @@
               //
               if (b_minus_1_plus_n > 0)
               {
-                 bessel_j_backwards_iterator<T> i(b_minus_1_plus_n + (int)cache_size - 1, 2 * sqrt(bessel_arg), arbitrary_small_value(last_value));
+                 bessel_j_backwards_iterator<T, Policy> i(b_minus_1_plus_n + (int)cache_size - 1, 2 * sqrt(bessel_arg), arbitrary_small_value(last_value));
 
                  for (int j = cache_size - 1; j >= 0; --j, ++i)
                  {
@@ -189,7 +188,7 @@
                           rescale = tools::max_value<T>();
                        for (int k = j; k < cache_size; ++k)
                           bessel_cache[k] /= rescale;
-                       bessel_j_backwards_iterator<T> ti(b_minus_1_plus_n + j, 2 * sqrt(bessel_arg), bessel_cache[j + 1], bessel_cache[j]);
+                       bessel_j_backwards_iterator<T, Policy> ti(b_minus_1_plus_n + j, 2 * sqrt(bessel_arg), bessel_cache[j + 1], bessel_cache[j]);
                        i = ti;
                     }
                  }
@@ -220,7 +219,7 @@
                     // We have crossed over into the region where backward recursion is the stable direction
                     // start from arbitrary value and recurse down to "pos" and normalise:
                     //
-                    bessel_j_backwards_iterator<T> i2(b_minus_1_plus_n + (int)cache_size - 1, 2 * sqrt(bessel_arg), arbitrary_small_value(bessel_cache[pos-1]));
+                    bessel_j_backwards_iterator<T, Policy> i2(b_minus_1_plus_n + (int)cache_size - 1, 2 * sqrt(bessel_arg), arbitrary_small_value(bessel_cache[pos-1]));
                     for (int loc = cache_size - 1; loc >= pos; --loc)
                        bessel_cache[loc] = *i2++;
                     ratio = bessel_cache[pos - 1] / *i2;
@@ -245,7 +244,7 @@
               //
               if (b_minus_1_plus_n > 0)
               {
-                 bessel_i_backwards_iterator<T> i(b_minus_1_plus_n + (int)cache_size - 1, 2 * sqrt(-bessel_arg), arbitrary_small_value(last_value));
+                 bessel_i_backwards_iterator<T, Policy> i(b_minus_1_plus_n + (int)cache_size - 1, 2 * sqrt(-bessel_arg), arbitrary_small_value(last_value));
 
                  for (int j = cache_size - 1; j >= 0; --j, ++i)
                  {
@@ -264,7 +263,7 @@
                           rescale = tools::max_value<T>();
                        for (int k = j; k < cache_size; ++k)
                           bessel_cache[k] /= rescale;
-                       i = bessel_i_backwards_iterator<T>(b_minus_1_plus_n + j, 2 * sqrt(-bessel_arg), bessel_cache[j + 1], bessel_cache[j]);
+                       i = bessel_i_backwards_iterator<T, Policy>(b_minus_1_plus_n + j, 2 * sqrt(-bessel_arg), bessel_cache[j + 1], bessel_cache[j]);
                     }
                  }
                  ratio = last_value / *i;
@@ -274,7 +273,7 @@
                  //
                  // Forwards iteration is stable:
                  //
-                 bessel_i_forwards_iterator<T> i(b_minus_1_plus_n, 2 * sqrt(-bessel_arg));
+                 bessel_i_forwards_iterator<T, Policy> i(b_minus_1_plus_n, 2 * sqrt(-bessel_arg));
                  int pos = 0;
                  while ((pos < cache_size) && (b_minus_1_plus_n + pos < 0.5))
                  {
@@ -286,7 +285,7 @@
                     // We have crossed over into the region where backward recursion is the stable direction
                     // start from arbitrary value and recurse down to "pos" and normalise:
                     //
-                    bessel_i_backwards_iterator<T> i2(b_minus_1_plus_n + (int)cache_size - 1, 2 * sqrt(-bessel_arg), arbitrary_small_value(last_value));
+                    bessel_i_backwards_iterator<T, Policy> i2(b_minus_1_plus_n + (int)cache_size - 1, 2 * sqrt(-bessel_arg), arbitrary_small_value(last_value));
                     for (int loc = cache_size - 1; loc >= pos; --loc)
                        bessel_cache[loc] = *i2++;
                     ratio = bessel_cache[pos - 1] / *i2;
@@ -531,7 +530,7 @@
            //
            cache_offset += cache_size;
            T last_value = bessel_i_cache.back();
-           bessel_i_backwards_iterator<T> i(b_minus_a + cache_offset + (int)cache_size - 1.5f, half_z, tools::min_value<T>() * (fabs(last_value) > 1 ? last_value : 1) / tools::epsilon<T>());
+           bessel_i_backwards_iterator<T, Policy> i(b_minus_a + cache_offset + (int)cache_size - 1.5f, half_z, tools::min_value<T>() * (fabs(last_value) > 1 ? last_value : 1) / tools::epsilon<T>());
 
            for (int j = cache_size - 1; j >= 0; --j, ++i)
            {
@@ -550,7 +549,7 @@
                     rescale = tools::max_value<T>();
                  for (int k = j; k < cache_size; ++k)
                     bessel_i_cache[k] /= rescale;
-                 i = bessel_i_backwards_iterator<T>(b_minus_a -0.5f + cache_offset + j, half_z, bessel_i_cache[j + 1], bessel_i_cache[j]);
+                 i = bessel_i_backwards_iterator<T, Policy>(b_minus_a -0.5f + cache_offset + j, half_z, bessel_i_cache[j + 1], bessel_i_cache[j]);
               }
            }
            T ratio = last_value / *i;
@@ -578,7 +577,7 @@
         boost::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
         T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
         boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1F1_AS_13_3_6<%1%>(%1%,%1%,%1%)", max_iter, pol);
-        result *= boost::math::tgamma(b_minus_a - 0.5f) * pow(z / 4, -b_minus_a + 0.5f);
+        result *= boost::math::tgamma(b_minus_a - 0.5f, pol) * pow(z / 4, -b_minus_a + 0.5f);
         int scale = itrunc(z / 2);
         log_scaling += scale;
         log_scaling += s.scaling();

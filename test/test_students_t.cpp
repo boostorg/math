@@ -381,6 +381,13 @@ void test_spots(RealType)
                boost::math::quantile(
                   students_t_distribution<RealType>(static_cast<RealType>(0x0fffffff)), static_cast<RealType>(0.25f))), 
             static_cast<RealType>(0.25f), tolerance);
+         //
+         // Bug cases:
+         //
+         if (std::numeric_limits<RealType>::is_specialized && std::numeric_limits<RealType>::has_denorm)
+         {
+            BOOST_CHECK_THROW(boost::math::quantile(students_t_distribution<RealType>((std::numeric_limits<RealType>::min)() / 2), static_cast<RealType>(0.0025f)), std::overflow_error);
+         }
       }
 
   // Student's t pdf tests.
@@ -748,7 +755,7 @@ BOOST_AUTO_TEST_CASE( test_main )
   test_spots(0.0); // Test double. OK at decdigits 7, tolerance = 1e07 %
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
   test_spots(0.0L); // Test long double.
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
+#if !BOOST_WORKAROUND(BOOST_BORLANDC, BOOST_TESTED_AT(0x582))
   test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
 #endif
 #else

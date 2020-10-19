@@ -34,7 +34,10 @@
    ``__sf_result`` chebyshev_t_prime(unsigned n, Real const & x);
 
    template<class Real1, class Real2>
-   ``__sf_result`` chebyshev_clenshaw_recurrence(const Real* const c, size_t length, Real2 x);
+   ``__sf_result`` chebyshev_clenshaw_recurrence(const Real1* const c, size_t length, Real2 x);
+
+   template<typename Real>
+   Real chebyshev_clenshaw_recurrence(const Real* const c, size_t length, Real a, Real b, Real x);
 
    }} // namespaces
 
@@ -78,19 +81,31 @@ and is implemented in boost as
 
     double x = 0.5;
     std::vector<double> c{14.2, -13.7, 82.3, 96};
-    double f = chebyshev_clenshaw_recurrence(c.data(), c.size(), Real x);
+    double f = chebyshev_clenshaw_recurrence(c.data(), c.size(), x);
 
 
 N.B.: There is factor of /2/ difference in our definition of the first coefficient in the Chebyshev series from Clenshaw's original work.
 This is because two traditions exist in notation for the Chebyshev series expansion,
 
-[:/f/(/x/) \u2248 \u2211[sub n=0][super N-1] /a/[sub n]/T/[sub n](/x/)]
+[$../graphs/chebyshev_convention_1.svg]
+
 
 and
 
-[:/f/(/x/) \u2248 /c/[sub 0]/2 + \u2211[sub n=1][super N-1] /c/[sub n]/T/[sub n](/x/)]
+[$../graphs/chebyshev_convention_2.svg]
 
 ['*boost math always uses the second convention, with the factor of 1/2 on the first coefficient.*]
+
+Another common use case is when the polynomial must be evaluated on some interval  \[/a/, /b/\].
+The translation to the interval  \[-1, 1\] causes a few accuracy problems and also gives us some opportunities.
+For this case, we use [@https://doi.org/10.1093/imamat/20.3.379 Reinch's modification] to the Clenshaw recurrence, which is also discussed [@https://archive.siam.org/books/ot99/OT99SampleChapter.pdf here].
+The usage is as follows:
+
+    double x = 9;
+    double a = 7;
+    double b = 12;
+    std::vector<double> c{14.2, -13.7, 82.3, 96};
+    double f = chebyshev_clenshaw_recurrence(c.data(), c.size(), a, b, x);
 
 Chebyshev polynomials of the second kind can be evaluated via `chebyshev_u`:
 
@@ -151,7 +166,7 @@ The notion of "very close" can be made rigorous; see Trefethen's "Approximation 
 
 The Chebyshev transform works by creating a vector of values by evaluating the input function at the Chebyshev points, and then performing a discrete cosine transform on the resulting vector.
 In order to do this efficiently, we have used [@http://www.fftw.org/ FFTW3].
-So to compile, you must have `FFTW3` installed, and link with `-lfftw3` for double precision, `-lfftw3f` for float precision, `-lfftw3l` for long double precision, and -lfftwq for quad (`__float128`) precision.
+So to compile, you must have `FFTW3` installed, and link with `-lfftw3` for double precision, `-lfftw3f` for float precision, `-lfftw3l` for long double precision, and `-lfftw3q` for quad (`__float128`) precision.
 After the coefficients of the Chebyshev series are known, the routine goes back through them and filters out all the coefficients whose absolute ratio to the largest coefficient are less than the tolerance requested in the constructor.
 
 [endsect] [/section:chebyshev Chebyshev Polynomials]

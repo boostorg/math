@@ -84,7 +84,13 @@ void test_spots(T, const char* type_name)
     BOOST_MATH_STD_USING
     // Function values calculated on http://functions.wolfram.com/
     // Note that Mathematica's EllipticE accepts k^2 as the second parameter.
-    static const boost::array<boost::array<typename table_type<T>::type, 3>, 12> data1 = {{
+    //
+    // We can't use these for variable precision types as the test values dependent on Pi
+    // get initialized once, and thereafter have the "wrong" precision when the function is
+    // called a second time.
+    //
+#ifndef TEST_UDT
+    static const boost::array<boost::array<T, 3>, 28> data1 = {{
         {{ SC_(0.0), SC_(0.0), SC_(0.0) }},
         {{ SC_(-10.0), SC_(0.0), SC_(-10.0) }},
         {{ SC_(-1.0), SC_(-1.0), SC_(-0.84147098480789650665250232163029899962256306079837) }},
@@ -97,9 +103,27 @@ void test_spots(T, const char* type_name)
         {{ SC_(9.3536104789177786765035829293842113257979682750464e49) /*static_cast<T>(ldexp(T(1), 166))*/, SC_(0.87890625) /*T(900) / 1024*/, SC_(7.1259011068364515942912094521783688927118026465790e49) }},
         {{ SC_(0.25), SC_(1.5), SC_(0.244087118441983436818717707617920319373286836562840) }},
         {{ SC_(0.125), SC_(4.5), SC_(0.118076756678411098995742003403224531993649663256045) }},
+        // Test k = 1, see https://github.com/boostorg/math/issues/321
+        {{ (boost::math::constants::pi<T>() * 9) / 10, SC_(1.0), SC_(1.69098300562505257589770658281718094113984541009711856893227568864736976859054877514639639790530443125762295596230) }},
+        {{ (boost::math::constants::pi<T>() * 11) / 10, SC_(1.0), SC_(2.30901699437494742410229341718281905886015458990288143106772431135263023140945122485360360209469556874237704403769) }},
+        {{ boost::math::constants::pi<T>(), SC_(1.0), SC_(2.0) }},
+        {{ boost::math::constants::pi<T>() / 2, SC_(1.0), SC_(1.0) }},
+        {{ (3 * boost::math::constants::pi<T>()) / 2, SC_(1.0), SC_(3.0) }},
+        {{ 2 * boost::math::constants::pi<T>(), SC_(1.0), SC_(4.0) }},
+        {{ (20 * boost::math::constants::pi<T>()) / 21, SC_(1.0), SC_(1.85095773382382555307064528472278244309033056100177750424044959888147151556780639619867349409562910808166870200808) }},
+        {{ (20 * boost::math::constants::pi<T>()) / 19, SC_(1.0), SC_(2.16459459028073389414365205908793841951217248335965412335147127404907690285247170629778731438009399303864259295133) }},
+        {{ -(boost::math::constants::pi<T>() * 9) / 10, SC_(1.0), SC_(-1.69098300562505257589770658281718094113984541009711856893227568864736976859054877514639639790530443125762295596230) }},
+        {{ -(boost::math::constants::pi<T>() * 11) / 10, SC_(1.0), SC_(-2.30901699437494742410229341718281905886015458990288143106772431135263023140945122485360360209469556874237704403769) }},
+        {{ -boost::math::constants::pi<T>(), SC_(1.0), SC_(-2.0) }},
+        {{ -boost::math::constants::pi<T>() / 2, SC_(1.0), SC_(-1.0) }},
+        {{ -(3 * boost::math::constants::pi<T>()) / 2, SC_(1.0), SC_(-3.0) }},
+        {{ -2 * boost::math::constants::pi<T>(), SC_(1.0), SC_(-4.0) }},
+        {{ -(20 * boost::math::constants::pi<T>()) / 21, SC_(1.0), SC_(-1.85095773382382555307064528472278244309033056100177750424044959888147151556780639619867349409562910808166870200808) }},
+        {{ -(20 * boost::math::constants::pi<T>()) / 19, SC_(1.0), SC_(-2.16459459028073389414365205908793841951217248335965412335147127404907690285247170629778731438009399303864259295133) }},
     }};
 
     do_test_ellint_e2<T>(data1, type_name, "Elliptic Integral E: Mathworld Data");
+#endif
 
 #include "ellint_e2_data.ipp"
 
