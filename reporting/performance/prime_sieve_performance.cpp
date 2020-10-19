@@ -10,7 +10,7 @@
 #include <boost/math/special_functions/interval_sieve.hpp>
 #include <boost/math/special_functions/detail/linear_prime_sieve.hpp>
 #include <boost/multiprecision/cpp_int.hpp>
-#include <boost/multiprecision/gmp.hpp>
+//#include <boost/multiprecision/gmp.hpp>
 #include <benchmark/benchmark.h>
 #include <primesieve.hpp>
 #include <vector>

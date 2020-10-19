@@ -21,6 +21,9 @@
 #include <execution>
 #include <type_traits>
 #include <boost/type_traits/has_post_increment.hpp>
+#include <boost/dynamic_bitset.hpp>
+
+#include <intrin.h>
 
 namespace jm { namespace detail
 {
@@ -49,9 +52,9 @@ struct simple_bitset
          static_cast<I>(1uLL << 49), static_cast<I>(1uLL << 50), static_cast<I>(1uLL << 51), static_cast<I>(1uLL << 52), static_cast<I>(1uLL << 53), static_cast<I>(1uLL << 54), static_cast<I>(1uLL << 55), static_cast<I>(1uLL << 56),
          static_cast<I>(1uLL << 57), static_cast<I>(1uLL << 58), static_cast<I>(1uLL << 59), static_cast<I>(1uLL << 60), static_cast<I>(1uLL << 61), static_cast<I>(1uLL << 62), static_cast<I>(1uLL << 63),
       };
-      I mask = (sizeof(I) * CHAR_BIT) - 1;
-      std::size_t shift = ln2(sizeof(I) * CHAR_BIT);
-      BOOST_ASSERT((n >> shift) < (m_size / (sizeof(I) * CHAR_BIT) + (m_size % (sizeof(I) * CHAR_BIT) ? 1 : 0)));
+      constexpr I mask = (sizeof(I) * CHAR_BIT) - 1;
+      constexpr std::size_t shift = ln2(sizeof(I) * CHAR_BIT);
+      //BOOST_ASSERT((n >> shift) < (m_size / (sizeof(I) * CHAR_BIT) + (m_size % (sizeof(I) * CHAR_BIT) ? 1 : 0)));
       return bits[n >> shift] & masks[n & mask];
    }
    void clear(std::size_t n)
@@ -67,12 +70,54 @@ struct simple_bitset
       };
       constexpr I mask = (sizeof(I) * CHAR_BIT) - 1;
       constexpr std::size_t shift = ln2(sizeof(I) * CHAR_BIT);
-      BOOST_ASSERT((n >> shift) < (m_size / (sizeof(I) * CHAR_BIT) + (m_size % (sizeof(I) * CHAR_BIT) ? 1 : 0)));
+      //BOOST_ASSERT((n >> shift) < (m_size / (sizeof(I) * CHAR_BIT) + (m_size % (sizeof(I) * CHAR_BIT) ? 1 : 0)));
       bits[n >> shift] &= masks[n & mask];
    }
    std::size_t size()const { return m_size; }
    void reset(){ std::memset(bits.get(), 0xff, m_size / CHAR_BIT + (m_size % CHAR_BIT ? 1 : 0)); }
 };
+
+template <>
+inline std::uint64_t simple_bitset<std::uint64_t>::test(std::size_t n)const
+{
+   constexpr std::uint64_t mask = 63;
+   constexpr std::size_t shift = 6;
+   return _bittest64(reinterpret_cast<long long*>(bits.get()) + (n >> shift), n & mask);
+}
+template <>
+inline void simple_bitset<std::uint64_t>::clear(std::size_t n)
+{
+   constexpr std::uint64_t mask = 63;
+   constexpr std::size_t shift = 6;
+   _bittestandreset64(reinterpret_cast<long long*>(bits.get()) + (n >> shift), n & mask);
+}
+
+struct dynamic_bitset_wrapper
+{
+   boost::dynamic_bitset<> data;
+
+   bool test(std::size_t n)const
+   {
+      return data.test(n);
+   }
+   void clear(std::size_t n)
+   {
+      data.set(n, false);
+   }
+
+   dynamic_bitset_wrapper(std::size_t n)
+   {
+      data.resize(n, true);
+   }
+   std::size_t size()const { return data.size(); }
+   void reset() 
+   {
+      data.set(0, data.size(), true);
+   }
+};
+
+typedef simple_bitset<std::uint64_t> bitmask_type;
+//typedef dynamic_bitset_wrapper bitmask_type;
 
 template <class T>
 constexpr bool has_output_iterator_terminated(const T&)
@@ -171,7 +216,7 @@ const Integer linear_sieve_limit = Integer(524288); // Constexpr does not work w
 template<class Container, class Integer, class OutputIterator>
 inline bool linear_sieve_classical_segment_threaded(std::atomic<Integer>* current_max_processed_value, std::mutex* lock, Container* primes, Integer start_offset, Integer end_offset, Integer stride, OutputIterator out, bool output_to_container)
 {
-   simple_bitset<std::uint64_t> masks(linear_sieve_limit<Integer> / 2);
+   bitmask_type masks(linear_sieve_limit<Integer> / 2);
 
    std::unique_lock<std::mutex> l(*lock);
    std::size_t prime_count = primes->size();
@@ -258,7 +303,7 @@ void prime_sieve_imp(ExecutionPolicy&& policy, Integer upper_bound, Container& p
       return;
    }
 
-   simple_bitset<std::uint64_t> sieve((upper_bound <= linear_sieve_limit<Integer> ? upper_bound : linear_sieve_limit<Integer>) / 2);
+   bitmask_type sieve((upper_bound <= linear_sieve_limit<Integer> ? upper_bound : linear_sieve_limit<Integer>) / 2);
 
    if (output_to_container && (upper_bound > linear_sieve_limit<Integer>))
    {

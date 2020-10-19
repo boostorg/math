@@ -16,7 +16,7 @@ namespace boost::math
 template<typename Integer>
 constexpr Integer prime_approximation(const Integer upper_bound) noexcept
 {
-    constexpr auto c = 30 * ::log(113) / 113; // Magic numbers from wikipedia
+    auto c = 30 * ::log(113) / 113; // Magic numbers from wikipedia
     return static_cast<Integer>(::floor(c * static_cast<double>(upper_bound) / ::log(static_cast<double>(upper_bound))));
 }
 
