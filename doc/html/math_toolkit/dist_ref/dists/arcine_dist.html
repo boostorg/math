@@ -1,10 +1,10 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Arcsine Distribution</title>
 <link rel="stylesheet" href="../../../math.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
-<link rel="home" href="../../../index.html" title="Math Toolkit 2.12.0">
+<link rel="home" href="../../../index.html" title="Math Toolkit 2.13.0">
 <link rel="up" href="../dists.html" title="Distributions">
 <link rel="prev" href="../dists.html" title="Distributions">
 <link rel="next" href="bernoulli_dist.html" title="Bernoulli Distribution">
@@ -30,12 +30,12 @@
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
  <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span>
-           <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
+           <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">arcsine_distribution</span><span class="special">;</span>
 
 <span class="keyword">typedef</span> <span class="identifier">arcsine_distribution</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">arcsine</span><span class="special">;</span> <span class="comment">// double precision standard arcsine distribution [0,1].</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">arcsine_distribution</span>
 <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
@@ -83,7 +83,7 @@
           is given by:
         </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-            <span class="serif_italic">f(x; x_min, x_max) = 1 /(&#960;&#8901;&#8730;((x - x_min)&#8901;(x_max
+            <span class="serif_italic">f(x; x_min, x_max) = 1 /(π⋅√((x - x_min)⋅(x_max
             - x_min))</span>
           </p></blockquote></div>
 <p>
@@ -122,8 +122,8 @@
           The Cumulative Distribution Function CDF is defined as
         </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-            <span class="serif_italic">F(x) = 2&#8901;arcsin(&#8730;((x-x_min)/(x_max - x))) /
-            &#960;</span>
+            <span class="serif_italic">F(x) = 2⋅arcsin(√((x-x_min)/(x_max - x))) /
+            π</span>
           </p></blockquote></div>
 <div class="blockquote"><blockquote class="blockquote"><p>
             <span class="inlinemediaobject"><img src="../../../../graphs/arcsine_cdf.svg" align="middle"></span>
@@ -259,7 +259,7 @@
 <span class="comment">// pdf has a minimum at x = 0.5</span>
 </pre>
 <p>
-          From the plot of PDF, it is clear that <span class="emphasis"><em>x</em></span> = &#189; is the
+          From the plot of PDF, it is clear that <span class="emphasis"><em>x</em></span> = ½ is the
           <span class="bold"><strong>minimum</strong></span> of the curve, so this is the
           <span class="bold"><strong>least likely</strong></span> scenario. (This is highly
           counter-intuitive, considering that fair tosses must <span class="bold"><strong>eventually</strong></span>
@@ -272,7 +272,7 @@
           = 1.
         </p>
 <p>
-          If fraction of time on the left is a &#188;, it is only slightly more likely
+          If fraction of time on the left is a ¼, it is only slightly more likely
           because the curve is quite flat bottomed.
         </p>
 <pre class="programlisting"><span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">pdf</span><span class="special">(</span><span class="identifier">as</span><span class="special">,</span> <span class="number">1.</span> <span class="special">/</span> <span class="number">4</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span> <span class="comment">// 0.735</span>
@@ -341,7 +341,7 @@
 <p>
           The arcsine distribution with <span class="emphasis"><em>x_min = 0</em></span> and <span class="emphasis"><em>x_max
           = 1</em></span> is special case of the <a class="link" href="beta_dist.html" title="Beta Distribution">Beta
-          Distribution</a> with &#945; = 1/2 and &#946; = 1/2.
+          Distribution</a> with α = 1/2 and β = 1/2.
         </p>
 <h5>
 <a name="math_toolkit.dist_ref.dists.arcine_dist.h5"></a>
@@ -410,7 +410,7 @@
                 </td>
 <td>
                   <p>
-                    x &#8712; [a, b], default x &#8712; [0, 1]
+                    x ∈ [a, b], default x ∈ [0, 1]
                   </p>
                 </td>
 </tr>
@@ -422,7 +422,7 @@
                 </td>
 <td>
                   <p>
-                    f(x; a, b) = 1/(&#960;&#8901;&#8730;(x - a)&#8901;(b - x))
+                    f(x; a, b) = 1/(π⋅√(x - a)⋅(b - x))
                   </p>
                 </td>
 </tr>
@@ -434,7 +434,7 @@
                 </td>
 <td>
                   <p>
-                    F(x) = 2/&#960;&#8901;sin<sup>-1</sup>(&#8730;(x - a) / (b - a) )
+                    F(x) = 2/π⋅sin<sup>-1</sup>(√(x - a) / (b - a) )
                   </p>
                 </td>
 </tr>
@@ -446,7 +446,7 @@
                 </td>
 <td>
                   <p>
-                    2/(&#960;&#8901;cos<sup>-1</sup>(&#8730;(x - a) / (b - a)))
+                    2/(π⋅cos<sup>-1</sup>(√(x - a) / (b - a)))
                   </p>
                 </td>
 </tr>
@@ -458,7 +458,7 @@
                 </td>
 <td>
                   <p>
-                    -a&#8901;sin<sup>2</sup>(&#189;&#960;&#8901;p) + a + b&#8901;sin<sup>2</sup>(&#189;&#960;&#8901;p)
+                    -a⋅sin<sup>2</sup>(½π⋅p) + a + b⋅sin<sup>2</sup>(½π⋅p)
                   </p>
                 </td>
 </tr>
@@ -470,7 +470,7 @@
                 </td>
 <td>
                   <p>
-                    -a&#8901;cos<sup>2</sup>(&#189;&#960;&#8901;p) + a + b&#8901;cos<sup>2</sup>(&#189;&#960;&#8901;q)
+                    -a⋅cos<sup>2</sup>(½π⋅p) + a + b⋅cos<sup>2</sup>(½π⋅q)
                   </p>
                 </td>
 </tr>
@@ -482,7 +482,7 @@
                 </td>
 <td>
                   <p>
-                    &#189;(a+b)
+                    ½(a+b)
                   </p>
                 </td>
 </tr>
@@ -494,7 +494,7 @@
                 </td>
 <td>
                   <p>
-                    &#189;(a+b)
+                    ½(a+b)
                   </p>
                 </td>
 </tr>
@@ -506,7 +506,7 @@
                 </td>
 <td>
                   <p>
-                    x &#8712; [a, b], so raises domain_error (returning NaN).
+                    x ∈ [a, b], so raises domain_error (returning NaN).
                   </p>
                 </td>
 </tr>
@@ -630,11 +630,10 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2019 Nikhar
-      Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos,
-      Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Matthew Pulver, Johan
-      R&#229;de, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg,
-      Daryle Walker and Xiaogang Zhang<p>
+<td align="right"><div class="copyright-footer">Copyright © 2006-2020 Nikhar Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher
+      Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Evan Miller, Jeremy Murphy,
+      Matthew Pulver, Johan Råde, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson,
+      Thijs van den Berg, Daryle Walker and Xiaogang Zhang<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

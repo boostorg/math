@@ -1,11 +1,11 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Gauss-Kronrod Quadrature</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
-<link rel="home" href="../index.html" title="Math Toolkit 2.12.0">
-<link rel="up" href="../quadrature.html" title="Chapter&#160;13.&#160;Quadrature and Differentiation">
+<link rel="home" href="../index.html" title="Math Toolkit 2.13.0">
+<link rel="up" href="../quadrature.html" title="Chapter 13. Quadrature and Differentiation">
 <link rel="prev" href="gauss.html" title="Gauss-Legendre quadrature">
 <link rel="next" href="double_exponential.html" title="Double-exponential quadrature">
 </head>
@@ -66,7 +66,7 @@
     </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">quadrature</span><span class="special">/</span><span class="identifier">gauss_kronrod</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Real</span><span class="special">,</span> <span class="keyword">unsigned</span> <span class="identifier">N</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">policy</span><span class="special">&lt;&gt;</span> <span class="special">&gt;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Real</span><span class="special">,</span> <span class="keyword">unsigned</span> <span class="identifier">N</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">policy</span><span class="special">&lt;&gt;</span> <span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">gauss_kronrod</span>
 <span class="special">{</span>
    <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">RandomAccessContainer</span><span class="special">&amp;</span> <span class="identifier">abscissa</span><span class="special">();</span>
@@ -182,7 +182,7 @@
       <span class="phrase"><a name="math_toolkit.gauss_kronrod.examples"></a></span><a class="link" href="gauss_kronrod.html#math_toolkit.gauss_kronrod.examples">Examples</a>
     </h4>
 <p>
-      We'll begin by integrating exp(-t<sup>2</sup>/2) over (0,+&#8734;) using a 7 term Gauss rule
+      We'll begin by integrating exp(-t<sup>2</sup>/2) over (0,+∞) using a 7 term Gauss rule
       and 15 term Kronrod rule, and begin by defining the function to integrate as
       a C++ lambda expression:
     </p>
@@ -270,11 +270,10 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2019 Nikhar
-      Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos,
-      Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Matthew Pulver, Johan
-      R&#229;de, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg,
-      Daryle Walker and Xiaogang Zhang<p>
+<td align="right"><div class="copyright-footer">Copyright © 2006-2020 Nikhar Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher
+      Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Evan Miller, Jeremy Murphy,
+      Matthew Pulver, Johan Råde, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson,
+      Thijs van den Berg, Daryle Walker and Xiaogang Zhang<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

@@ -1,10 +1,10 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Hyperexponential Distribution</title>
 <link rel="stylesheet" href="../../../math.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
-<link rel="home" href="../../../index.html" title="Math Toolkit 2.12.0">
+<link rel="home" href="../../../index.html" title="Math Toolkit 2.13.0">
 <link rel="up" href="../dists.html" title="Distributions">
 <link rel="prev" href="geometric_dist.html" title="Geometric Distribution">
 <link rel="next" href="hypergeometric_dist.html" title="Hypergeometric Distribution">
@@ -31,12 +31,12 @@
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span>
-          <span class="keyword">typename</span> <a class="link" href="../../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
+          <span class="keyword">typename</span> <a class="link" href="../../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">hyperexponential_distribution</span><span class="special">;</span>
 
 <span class="keyword">typedef</span> <span class="identifier">hyperexponential_distribution</span><span class="special">&lt;&gt;</span> <span class="identifier">hyperexponential</span><span class="special">;</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">typename</span> <a class="link" href="../../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">typename</span> <a class="link" href="../../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">hyperexponential_distribution</span>
 <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
@@ -102,8 +102,8 @@
 <p>
           A <span class="emphasis"><em>k</em></span>-phase hyperexponential distribution is characterized
           by two parameters, namely a <span class="emphasis"><em>phase probability vector</em></span>
-          <span class="emphasis"><em><span class="bold"><strong>&#945;</strong></span>=(&#945;<sub>1</sub>,...,&#945;<sub>k</sub>)</em></span> and a
-          <span class="emphasis"><em>rate vector</em></span> <span class="emphasis"><em><span class="bold"><strong>&#955;</strong></span>=(&#955;<sub>1</sub>,...,&#955;<sub>k</sub>)</em></span>.
+          <span class="emphasis"><em><span class="bold"><strong>α</strong></span>=(α<sub>1</sub>,...,α<sub>k</sub>)</em></span> and a
+          <span class="emphasis"><em>rate vector</em></span> <span class="emphasis"><em><span class="bold"><strong>λ</strong></span>=(λ<sub>1</sub>,...,λ<sub>k</sub>)</em></span>.
         </p>
 <p>
           The <a href="http://en.wikipedia.org/wiki/Probability_density_function" target="_top">probability
@@ -120,24 +120,24 @@
         </p>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-              <span class="emphasis"><em><span class="bold"><strong>&#945;</strong></span>=(1.0)</em></span> and <span class="emphasis"><em><span class="bold"><strong>&#955;</strong></span>=(1.0)</em></span> (which degenerates to a simple
+              <span class="emphasis"><em><span class="bold"><strong>α</strong></span>=(1.0)</em></span> and <span class="emphasis"><em><span class="bold"><strong>λ</strong></span>=(1.0)</em></span> (which degenerates to a simple
               exponential distribution),
             </li>
 <li class="listitem">
-              <span class="emphasis"><em><span class="bold"><strong>&#945;</strong></span>=(0.1, 0.9)</em></span> and
-              <span class="emphasis"><em><span class="bold"><strong>&#955;</strong></span>=(0.5, 1.5)</em></span>,
+              <span class="emphasis"><em><span class="bold"><strong>α</strong></span>=(0.1, 0.9)</em></span> and
+              <span class="emphasis"><em><span class="bold"><strong>λ</strong></span>=(0.5, 1.5)</em></span>,
             </li>
 <li class="listitem">
-              <span class="emphasis"><em><span class="bold"><strong>&#945;</strong></span>=(0.9, 0.1)</em></span> and
-              <span class="emphasis"><em><span class="bold"><strong>&#955;</strong></span>=(0.5, 1.5)</em></span>,
+              <span class="emphasis"><em><span class="bold"><strong>α</strong></span>=(0.9, 0.1)</em></span> and
+              <span class="emphasis"><em><span class="bold"><strong>λ</strong></span>=(0.5, 1.5)</em></span>,
             </li>
 <li class="listitem">
-              <span class="emphasis"><em><span class="bold"><strong>&#945;</strong></span>=(0.2, 0.3, 0.5)</em></span>
-              and <span class="emphasis"><em><span class="bold"><strong>&#955;</strong></span>=(0.5, 1.0, 1.5)</em></span>,
+              <span class="emphasis"><em><span class="bold"><strong>α</strong></span>=(0.2, 0.3, 0.5)</em></span>
+              and <span class="emphasis"><em><span class="bold"><strong>λ</strong></span>=(0.5, 1.0, 1.5)</em></span>,
             </li>
 <li class="listitem">
-              <span class="emphasis"><em><span class="bold"><strong>&#945;</strong></span>=(0.5, 0.3, 0.2)</em></span>
-              and <span class="emphasis"><em><span class="bold"><strong>&#955;</strong></span>=(0.5, 1.0, 1.5)</em></span>.
+              <span class="emphasis"><em><span class="bold"><strong>α</strong></span>=(0.5, 0.3, 0.2)</em></span>
+              and <span class="emphasis"><em><span class="bold"><strong>λ</strong></span>=(0.5, 1.0, 1.5)</em></span>.
             </li>
 </ol></div>
 <div class="blockquote"><blockquote class="blockquote"><p>
@@ -152,34 +152,34 @@
         </p>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-              <span class="emphasis"><em><span class="bold"><strong>&#945;</strong></span>=(0.1, 0.9)</em></span> and
-              <span class="emphasis"><em><span class="bold"><strong>&#955;</strong></span>=(0.5, 1.5)</em></span>,
+              <span class="emphasis"><em><span class="bold"><strong>α</strong></span>=(0.1, 0.9)</em></span> and
+              <span class="emphasis"><em><span class="bold"><strong>λ</strong></span>=(0.5, 1.5)</em></span>,
             </li>
 <li class="listitem">
-              <span class="emphasis"><em><span class="bold"><strong>&#945;</strong></span>=(0.6, 0.4)</em></span> and
-              <span class="emphasis"><em><span class="bold"><strong>&#955;</strong></span>=(0.5, 1.5)</em></span>,
+              <span class="emphasis"><em><span class="bold"><strong>α</strong></span>=(0.6, 0.4)</em></span> and
+              <span class="emphasis"><em><span class="bold"><strong>λ</strong></span>=(0.5, 1.5)</em></span>,
             </li>
 <li class="listitem">
-              <span class="emphasis"><em><span class="bold"><strong>&#945;</strong></span>=(0.9, 0.1)</em></span> and
-              <span class="emphasis"><em><span class="bold"><strong>&#955;</strong></span>=(0.5, 1.5)</em></span>,
+              <span class="emphasis"><em><span class="bold"><strong>α</strong></span>=(0.9, 0.1)</em></span> and
+              <span class="emphasis"><em><span class="bold"><strong>λ</strong></span>=(0.5, 1.5)</em></span>,
             </li>
 <li class="listitem">
-              Exponential distribution with parameter <span class="emphasis"><em>&#955;=0.5</em></span>,
+              Exponential distribution with parameter <span class="emphasis"><em>λ=0.5</em></span>,
             </li>
 <li class="listitem">
-              Exponential distribution with parameter <span class="emphasis"><em>&#955;=1.5</em></span>.
+              Exponential distribution with parameter <span class="emphasis"><em>λ=1.5</em></span>.
             </li>
 </ol></div>
 <p>
-          As expected, as the first element <span class="emphasis"><em>&#945;<sub>1</sub></em></span> of the <span class="emphasis"><em>phase
+          As expected, as the first element <span class="emphasis"><em>α<sub>1</sub></em></span> of the <span class="emphasis"><em>phase
           probability vector</em></span> approaches to <span class="emphasis"><em>1</em></span> (or,
-          equivalently, <span class="emphasis"><em>&#945;<sub>2</sub></em></span> approaches to <span class="emphasis"><em>0</em></span>),
+          equivalently, <span class="emphasis"><em>α<sub>2</sub></em></span> approaches to <span class="emphasis"><em>0</em></span>),
           the resulting hyperexponential distribution nears the exponential distribution
-          with parameter <span class="emphasis"><em>&#955;=0.5</em></span>. Conversely, as the first element
-          <span class="emphasis"><em>&#945;<sub>2</sub></em></span> of the <span class="emphasis"><em>phase probability vector</em></span>
-          approaches to <span class="emphasis"><em>1</em></span> (or, equivalently, <span class="emphasis"><em>&#945;<sub>1</sub></em></span>
+          with parameter <span class="emphasis"><em>λ=0.5</em></span>. Conversely, as the first element
+          <span class="emphasis"><em>α<sub>2</sub></em></span> of the <span class="emphasis"><em>phase probability vector</em></span>
+          approaches to <span class="emphasis"><em>1</em></span> (or, equivalently, <span class="emphasis"><em>α<sub>1</sub></em></span>
           approaches to <span class="emphasis"><em>0</em></span>), the resulting hyperexponential distribution
-          nears the exponential distribution with parameter <span class="emphasis"><em>&#955;=1.5</em></span>.
+          nears the exponential distribution with parameter <span class="emphasis"><em>λ=1.5</em></span>.
         </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
             <span class="inlinemediaobject"><img src="../../../../graphs/hyperexponential_pdf_samerate.svg" align="middle"></span>
@@ -192,16 +192,16 @@
         </p>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
-              <span class="emphasis"><em><span class="bold"><strong>&#945;</strong></span>=(1.0)</em></span> and <span class="emphasis"><em><span class="bold"><strong>&#955;</strong></span>=(2.0)</em></span> (which degenerates to a simple
+              <span class="emphasis"><em><span class="bold"><strong>α</strong></span>=(1.0)</em></span> and <span class="emphasis"><em><span class="bold"><strong>λ</strong></span>=(2.0)</em></span> (which degenerates to a simple
               exponential distribution),
             </li>
 <li class="listitem">
-              <span class="emphasis"><em><span class="bold"><strong>&#945;</strong></span>=(0.5, 0.5)</em></span> and
-              <span class="emphasis"><em><span class="bold"><strong>&#955;</strong></span>=(0.3, 1.5)</em></span>,
+              <span class="emphasis"><em><span class="bold"><strong>α</strong></span>=(0.5, 0.5)</em></span> and
+              <span class="emphasis"><em><span class="bold"><strong>λ</strong></span>=(0.3, 1.5)</em></span>,
             </li>
 <li class="listitem">
-              <span class="emphasis"><em><span class="bold"><strong>&#945;</strong></span>=(1.0/3.0, 1.0/3.0, 1.0/3.0)</em></span>
-              and <span class="emphasis"><em><span class="bold"><strong>&#955;</strong></span>=(0.2, 1.5, 3.0)</em></span>,
+              <span class="emphasis"><em><span class="bold"><strong>α</strong></span>=(1.0/3.0, 1.0/3.0, 1.0/3.0)</em></span>
+              and <span class="emphasis"><em><span class="bold"><strong>λ</strong></span>=(0.2, 1.5, 3.0)</em></span>,
             </li>
 </ol></div>
 <div class="blockquote"><blockquote class="blockquote"><p>
@@ -227,9 +227,9 @@
           theory</a> to model the distribution of the superposition of <span class="emphasis"><em>k</em></span>
           independent events, like, for instance, the service time distribution of
           a queueing station with <span class="emphasis"><em>k</em></span> servers in parallel where
-          the <span class="emphasis"><em>i</em></span>-th server is chosen with probability <span class="emphasis"><em>&#945;<sub>i</sub></em></span>
+          the <span class="emphasis"><em>i</em></span>-th server is chosen with probability <span class="emphasis"><em>α<sub>i</sub></em></span>
           and its service time distribution is an exponential distribution with rate
-          <span class="emphasis"><em>&#955;<sub>i</sub></em></span> (Allen,1990; Papadopolous et al.,1993; Trivedi,2002).
+          <span class="emphasis"><em>λ<sub>i</sub></em></span> (Allen,1990; Papadopolous et al.,1993; Trivedi,2002).
         </p>
 <p>
           For instance, CPUs service-time distribution in a computing system has
@@ -259,9 +259,9 @@
               Distribution</a>.
             </li>
 <li class="listitem">
-              When the <span class="emphasis"><em>k</em></span> rates are all equal to <span class="emphasis"><em>&#955;</em></span>,
+              When the <span class="emphasis"><em>k</em></span> rates are all equal to <span class="emphasis"><em>λ</em></span>,
               the hyperexponential distribution is simple an <a class="link" href="exp_dist.html" title="Exponential Distribution">Exponential
-              Distribution</a> with rate <span class="emphasis"><em>&#955;</em></span>.
+              Distribution</a> with rate <span class="emphasis"><em>λ</em></span>.
             </li>
 </ul></div>
 <h4>
@@ -279,8 +279,8 @@
           lifetime of 12 years. Assuming the lifetime of this appliance follows an
           exponential distribution, the lifetime distribution of the purchased appliance
           can be modeled as a hyperexponential distribution with phase probability
-          vector <span class="emphasis"><em><span class="bold"><strong>&#945;</strong></span>=(1/2,1/2)</em></span>
-          and rate vector <span class="emphasis"><em><span class="bold"><strong>&#955;</strong></span>=(1/10,1/12)</em></span>
+          vector <span class="emphasis"><em><span class="bold"><strong>α</strong></span>=(1/2,1/2)</em></span>
+          and rate vector <span class="emphasis"><em><span class="bold"><strong>λ</strong></span>=(1/10,1/12)</em></span>
           (Wolfram,2014).
         </p>
 <p>
@@ -503,20 +503,20 @@
                 </td>
 <td>
                   <p>
-                    <span class="emphasis"><em><span class="bold"><strong>&#945;</strong></span>=(0.34561,0.08648,0.56791),
-                    <span class="bold"><strong>&#955;</strong></span>=(0.008,0.00005,0.02894)</em></span>
+                    <span class="emphasis"><em><span class="bold"><strong>α</strong></span>=(0.34561,0.08648,0.56791),
+                    <span class="bold"><strong>λ</strong></span>=(0.008,0.00005,0.02894)</em></span>
                   </p>
                 </td>
 <td>
                   <p>
-                    <span class="emphasis"><em><span class="bold"><strong>&#945;</strong></span>=(0.24667,0.37948,0.37385),
-                    <span class="bold"><strong>&#955;</strong></span>=(0.00004,0.000002,0.00059)</em></span>
+                    <span class="emphasis"><em><span class="bold"><strong>α</strong></span>=(0.24667,0.37948,0.37385),
+                    <span class="bold"><strong>λ</strong></span>=(0.00004,0.000002,0.00059)</em></span>
                   </p>
                 </td>
 <td>
                   <p>
-                    <span class="emphasis"><em><span class="bold"><strong>&#945;</strong></span>=(0.09325,0.22251,0.68424),
-                    <span class="bold"><strong>&#955;</strong></span>=(0.000003,0.00109,0.00109)</em></span>
+                    <span class="emphasis"><em><span class="bold"><strong>α</strong></span>=(0.09325,0.22251,0.68424),
+                    <span class="bold"><strong>λ</strong></span>=(0.000003,0.00109,0.00109)</em></span>
                   </p>
                 </td>
 </tr>
@@ -528,20 +528,20 @@
                 </td>
 <td>
                   <p>
-                    <span class="emphasis"><em><span class="bold"><strong>&#945;</strong></span>=(0.38881,0.18227,0.42892),
-                    <span class="bold"><strong>&#955;</strong></span>=(0.000006,0.05228,0.00081)</em></span>
+                    <span class="emphasis"><em><span class="bold"><strong>α</strong></span>=(0.38881,0.18227,0.42892),
+                    <span class="bold"><strong>λ</strong></span>=(0.000006,0.05228,0.00081)</em></span>
                   </p>
                 </td>
 <td>
                   <p>
-                    <span class="emphasis"><em><span class="bold"><strong>&#945;</strong></span>=(0.42093,0.43960,0.13947),
-                    <span class="bold"><strong>&#955;</strong></span>=(0.00186,0.00008,0.0000008)</em></span>
+                    <span class="emphasis"><em><span class="bold"><strong>α</strong></span>=(0.42093,0.43960,0.13947),
+                    <span class="bold"><strong>λ</strong></span>=(0.00186,0.00008,0.0000008)</em></span>
                   </p>
                 </td>
 <td>
                   <p>
-                    <span class="emphasis"><em><span class="bold"><strong>&#945;</strong></span>=(0.44885,0.30675,0.2444),
-                    <span class="bold"><strong>&#955;</strong></span>=(0.00143,0.00005,0.0000004)</em></span>
+                    <span class="emphasis"><em><span class="bold"><strong>α</strong></span>=(0.44885,0.30675,0.2444),
+                    <span class="bold"><strong>λ</strong></span>=(0.00143,0.00005,0.0000004)</em></span>
                   </p>
                 </td>
 </tr>
@@ -553,20 +553,20 @@
                 </td>
 <td>
                   <p>
-                    <span class="emphasis"><em><span class="bold"><strong>&#945;</strong></span>=(0.39442,0.24644,0.35914),
-                    <span class="bold"><strong>&#955;</strong></span>=(0.00030,0.00003,0.00257)</em></span>
+                    <span class="emphasis"><em><span class="bold"><strong>α</strong></span>=(0.39442,0.24644,0.35914),
+                    <span class="bold"><strong>λ</strong></span>=(0.00030,0.00003,0.00257)</em></span>
                   </p>
                 </td>
 <td>
                   <p>
-                    <span class="emphasis"><em><span class="bold"><strong>&#945;</strong></span>=(0.37621,0.14838,0.47541),
-                    <span class="bold"><strong>&#955;</strong></span>=(0.00498,0.000005,0.00022)</em></span>
+                    <span class="emphasis"><em><span class="bold"><strong>α</strong></span>=(0.37621,0.14838,0.47541),
+                    <span class="bold"><strong>λ</strong></span>=(0.00498,0.000005,0.00022)</em></span>
                   </p>
                 </td>
 <td>
                   <p>
-                    <span class="emphasis"><em><span class="bold"><strong>&#945;</strong></span>=(0.34131,0.12544,0.53325),
-                    <span class="bold"><strong>&#955;</strong></span>=(0.000297,0.000003,0.00410)</em></span>
+                    <span class="emphasis"><em><span class="bold"><strong>α</strong></span>=(0.34131,0.12544,0.53325),
+                    <span class="bold"><strong>λ</strong></span>=(0.000297,0.000003,0.00410)</em></span>
                   </p>
                 </td>
 </tr>
@@ -1217,12 +1217,12 @@
         </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
-              <span class="emphasis"><em><span class="bold"><strong>&#945;</strong></span>=(&#945;<sub>1</sub>,...,&#945;<sub>k</sub>)</em></span> is
+              <span class="emphasis"><em><span class="bold"><strong>α</strong></span>=(α<sub>1</sub>,...,α<sub>k</sub>)</em></span> is
               the <span class="emphasis"><em>phase probability vector</em></span> parameter of the
               <span class="emphasis"><em>k</em></span>-phase hyperexponential distribution,
             </li>
 <li class="listitem">
-              <span class="emphasis"><em><span class="bold"><strong>&#955;</strong></span>=(&#955;<sub>1</sub>,...,&#955;<sub>k</sub>)</em></span> is
+              <span class="emphasis"><em><span class="bold"><strong>λ</strong></span>=(λ<sub>1</sub>,...,λ<sub>k</sub>)</em></span> is
               the <span class="emphasis"><em>rate vector</em></span> parameter of the <span class="emphasis"><em>k</em></span>-phase
               hyperexponential distribution,
             </li>
@@ -1256,7 +1256,7 @@
                 </td>
 <td>
                   <p>
-                    <span class="emphasis"><em>x</em></span> &#8712; [0,&#8734;)
+                    <span class="emphasis"><em>x</em></span> ∈ [0,∞)
                   </p>
                 </td>
 </tr>
@@ -1454,11 +1454,10 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2019 Nikhar
-      Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos,
-      Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Matthew Pulver, Johan
-      R&#229;de, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg,
-      Daryle Walker and Xiaogang Zhang<p>
+<td align="right"><div class="copyright-footer">Copyright © 2006-2020 Nikhar Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher
+      Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Evan Miller, Jeremy Murphy,
+      Matthew Pulver, Johan Råde, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson,
+      Thijs van den Berg, Daryle Walker and Xiaogang Zhang<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

@@ -1,11 +1,11 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Defining New Constants</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
-<link rel="home" href="../index.html" title="Math Toolkit 2.12.0">
-<link rel="up" href="../constants.html" title="Chapter&#160;4.&#160;Mathematical Constants">
+<link rel="home" href="../index.html" title="Math Toolkit 2.13.0">
+<link rel="up" href="../constants.html" title="Chapter 4. Mathematical Constants">
 <link rel="prev" href="constants.html" title="The Mathematical Constants">
 <link rel="next" href="constants_faq.html" title="Math Constants FAQs">
 </head>
@@ -64,7 +64,7 @@
 <span class="special">}}}</span>
 </pre>
 <p>
-      For example, to calculate &#960;/2, add to <code class="computeroutput"><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">constants</span><span class="special">/</span><span class="identifier">calculate_constants</span><span class="special">.</span><span class="identifier">hpp</span></code>
+      For example, to calculate π/2, add to <code class="computeroutput"><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">constants</span><span class="special">/</span><span class="identifier">calculate_constants</span><span class="special">.</span><span class="identifier">hpp</span></code>
     </p>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">int</span> <span class="identifier">N</span><span class="special">&gt;</span>
@@ -114,11 +114,8 @@
 </table></div>
 <p>
       2. <span class="bold"><strong>You will need an arbitrary precision type to use to
-      calculate the value</strong></span>. This library currently supports either <code class="computeroutput"><span class="identifier">cpp_float</span></code>, <code class="computeroutput"><span class="identifier">NTL</span><span class="special">::</span><span class="identifier">RR</span></code> or
-      <code class="computeroutput"><span class="identifier">mpfr_class</span></code> used via the bindings
-      in <code class="computeroutput"><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">bindings</span></code>.
-      The default is to use <code class="computeroutput"><span class="identifier">NTL</span><span class="special">::</span><span class="identifier">RR</span></code> unless you define an alternate macro,
-      for example, <code class="computeroutput"><span class="identifier">USE_MPFR</span></code> or <code class="computeroutput"><span class="identifier">USE_CPP_FLOAT</span></code> at the start of your program.
+      calculate the value</strong></span>. Boost.Multiprecision has a large number of
+      arbitrary precision floating point types to aid with this.
     </p>
 <p>
       3. It is necessary to link to the Boost.Regex library, and probably to your
@@ -249,11 +246,10 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2019 Nikhar
-      Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos,
-      Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Matthew Pulver, Johan
-      R&#229;de, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg,
-      Daryle Walker and Xiaogang Zhang<p>
+<td align="right"><div class="copyright-footer">Copyright © 2006-2020 Nikhar Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher
+      Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Evan Miller, Jeremy Murphy,
+      Matthew Pulver, Johan Råde, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson,
+      Thijs van den Berg, Daryle Walker and Xiaogang Zhang<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

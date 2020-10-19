@@ -40,6 +40,7 @@ math_toolkit/next_float/float_advance.html
 math_toolkit/next_float/ulp.html
 math_toolkit/float_comparison.html
 math_toolkit/cond.html
+math_toolkit/ulps_plots.html
 cstdfloat.html
 math_toolkit/specified_typedefs.html
 math_toolkit/rationale.html
@@ -269,6 +270,7 @@ math_toolkit/powers/sqrt1pm1.html
 math_toolkit/powers/powm1.html
 math_toolkit/powers/hypot.html
 math_toolkit/powers/ct_pow.html
+math_toolkit/powers/rsqrt.html
 math_toolkit/sinc.html
 math_toolkit/sinc/sinc_overview.html
 math_toolkit/sinc/sinc_pi.html
@@ -393,8 +395,14 @@ internals.html
 math_toolkit/internals_overview.html
 math_toolkit/internals.html
 math_toolkit/internals/series_evaluation.html
+math_toolkit/internals/agm.html
 math_toolkit/internals/cf.html
+math_toolkit/internals/simple_continued_fraction.html
+math_toolkit/internals/centered_continued_fraction.html
+math_toolkit/internals/luroth_expansion.html
+math_toolkit/internals/engel_expansion.html
 math_toolkit/internals/recurrence.html
+math_toolkit/internals/cohen_acceleration.html
 math_toolkit/internals/tuples.html
 math_toolkit/internals/minimax.html
 math_toolkit/internals/error_test.html

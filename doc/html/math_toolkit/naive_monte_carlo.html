@@ -1,11 +1,11 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Naive Monte Carlo Integration</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
-<link rel="home" href="../index.html" title="Math Toolkit 2.12.0">
-<link rel="up" href="../quadrature.html" title="Chapter&#160;13.&#160;Quadrature and Differentiation">
+<link rel="home" href="../index.html" title="Math Toolkit 2.13.0">
+<link rel="up" href="../quadrature.html" title="Chapter 13. Quadrature and Differentiation">
 <link rel="prev" href="fourier_integrals.html" title="Fourier Integrals">
 <link rel="next" href="wavelet_transforms.html" title="Wavelet Transforms">
 </head>
@@ -68,7 +68,7 @@
 <p>
       The class <code class="computeroutput"><span class="identifier">naive_monte_carlo</span></code>
       performs Monte-Carlo integration on a square integrable function <span class="emphasis"><em>f</em></span>
-      on a domain &#937;. The theoretical background of Monte-Carlo integration is nicely
+      on a domain Ω. The theoretical background of Monte-Carlo integration is nicely
       discussed at <a href="https://en.wikipedia.org/wiki/Monte_Carlo_integration" target="_top">Wikipedia</a>,
       and as such will not be discussed here. However, despite being "naive",
       it is a mistake to assume that naive Monte-Carlo integration is not powerful,
@@ -80,7 +80,7 @@
 <p>
       The naive Monte-Carlo integration provided by Boost exemplifies the programming
       techniques needed to cope with high-performance computing. For instance, since
-      the convergence is only &#119926;(N<sup>-1/2</sup>), the compute time is very sensitive to the
+      the convergence is only 𝑶(N<sup>-1/2</sup>), the compute time is very sensitive to the
       error goal. Users can easily specify an error goal which causes computation
       to last months-or just a few seconds. Without progress reporting, this situation
       is disorienting and causes the user to behave in a paranoid manner. Even with
@@ -180,13 +180,13 @@
       There is one additional "advanced" parameter: Whether or not the
       integrand is singular on the boundary. If the integrand is <span class="bold"><strong>not</strong></span>
       singular on the boundary, then the integrand is evaluated over the closed set
-      &#8719;<sub>i</sub> [ <span class="emphasis"><em>a</em></span><sub><span class="emphasis"><em>i</em></span></sub>, <span class="emphasis"><em>b</em></span><sub><span class="emphasis"><em>i</em></span></sub> ].
+      ∏<sub>i</sub> [ <span class="emphasis"><em>a</em></span><sub><span class="emphasis"><em>i</em></span></sub>, <span class="emphasis"><em>b</em></span><sub><span class="emphasis"><em>i</em></span></sub> ].
       If the integrand is singular (the default) then the integrand is evaluated
-      over the closed set &#8719;<sub>i</sub> [ /a(1+&#949;)/, /b(1-&#949;)/ ]. (Note that there is sadly
+      over the closed set ∏<sub>i</sub> [ /a(1+ε)/, /b(1-ε)/ ]. (Note that there is sadly
       no such thing as an open set in floating point arithmetic.) When does the difference
       matter? Recall the stricture to never peel a high-dimensional orange, because
       when you do, nothing is left. The same idea applied here. The fraction of the
-      volume within a distance &#949; of the boundary is approximately &#949;<span class="emphasis"><em>d</em></span>,
+      volume within a distance ε of the boundary is approximately ε<span class="emphasis"><em>d</em></span>,
       where <span class="emphasis"><em>d</em></span> is the number of dimensions. If the number of
       dimensions is large and the precision of the type is low, then it is possible
       that no correct digits will be obtained. If the integrand is singular on the
@@ -213,11 +213,10 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2019 Nikhar
-      Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos,
-      Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Matthew Pulver, Johan
-      R&#229;de, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg,
-      Daryle Walker and Xiaogang Zhang<p>
+<td align="right"><div class="copyright-footer">Copyright © 2006-2020 Nikhar Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher
+      Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Evan Miller, Jeremy Murphy,
+      Matthew Pulver, Johan Råde, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson,
+      Thijs van den Berg, Daryle Walker and Xiaogang Zhang<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

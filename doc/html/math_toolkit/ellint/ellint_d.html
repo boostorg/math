@@ -1,10 +1,10 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Elliptic Integral D - Legendre Form</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
-<link rel="home" href="../../index.html" title="Math Toolkit 2.12.0">
+<link rel="home" href="../../index.html" title="Math Toolkit 2.13.0">
 <link rel="up" href="../ellint.html" title="Elliptic Integrals">
 <link rel="prev" href="ellint_3.html" title="Elliptic Integrals of the Third Kind - Legendre Form">
 <link rel="next" href="jacobi_zeta.html" title="Jacobi Zeta Function">
@@ -38,14 +38,14 @@
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">ellint_d</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">k</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">phi</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">ellint_d</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">k</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">phi</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">ellint_d</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">k</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">phi</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">ellint_d</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">k</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">ellint_d</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">k</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">ellint_d</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">k</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 
 <span class="special">}}</span> <span class="comment">// namespaces</span>
 </pre>
@@ -54,8 +54,8 @@
         <span class="phrase"><a name="math_toolkit.ellint.ellint_d.description"></a></span><a class="link" href="ellint_d.html#math_toolkit.ellint.ellint_d.description">Description</a>
       </h5>
 <p>
-        These two functions evaluate the incomplete elliptic integral <span class="emphasis"><em>D(&#966;,
-        k)</em></span> and its complete counterpart <span class="emphasis"><em>D(k) = D(&#960;/2, k)</em></span>.
+        These two functions evaluate the incomplete elliptic integral <span class="emphasis"><em>D(φ,
+        k)</em></span> and its complete counterpart <span class="emphasis"><em>D(k) = D(π/2, k)</em></span>.
       </p>
 <p>
         The return type of these functions is computed using the <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>result
@@ -66,8 +66,8 @@
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">ellint_d</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">k</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">phi</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">ellint_3</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">k</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">phi</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">ellint_3</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">k</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">phi</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 </pre>
 <p>
         Returns the incomplete elliptic integral:
@@ -82,19 +82,19 @@
         (outside this range the result would be complex).
       </p>
 <p>
-        The final <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
+        The final <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
         be used to control the behaviour of the function: how it handles errors,
-        what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">policy
+        what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">policy
         documentation for more details</a>.
       </p>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">ellint_d</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">k</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">ellint_d</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">k</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">ellint_d</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">k</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 </pre>
 <p>
-        Returns the complete elliptic integral <span class="emphasis"><em>D(k) = D(&#960;/2, k)</em></span>
+        Returns the complete elliptic integral <span class="emphasis"><em>D(k) = D(π/2, k)</em></span>
       </p>
 <p>
         Requires <span class="emphasis"><em>-1 &lt;= k &lt;= 1</em></span> otherwise returns the result
@@ -102,9 +102,9 @@
         (outside this range the result would be complex).
       </p>
 <p>
-        The final <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
+        The final <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
         be used to control the behaviour of the function: how it handles errors,
-        what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">policy
+        what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">policy
         documentation for more details</a>.
       </p>
 <h5>
@@ -114,12 +114,12 @@
 <p>
         These functions are trivially computed in terms of other elliptic integrals
         and generally have very low error rates (a few epsilon) unless parameter
-        &#966;
+        φ
 is very large, in which case the usual trigonometric function argument-reduction
         issues apply.
       </p>
 <div class="table">
-<a name="math_toolkit.ellint.ellint_d.table_ellint_d_complete_"></a><p class="title"><b>Table&#160;8.66.&#160;Error rates for ellint_d (complete)</b></p>
+<a name="math_toolkit.ellint.ellint_d.table_ellint_d_complete_"></a><p class="title"><b>Table 8.66. Error rates for ellint_d (complete)</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for ellint_d (complete)">
 <colgroup>
 <col>
@@ -161,22 +161,22 @@ is very large, in which case the usual trigonometric function argument-reduction
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0.637&#949; (Mean = 0.368&#949;)</span>
+                  <span class="blue">Max = 0.637ε (Mean = 0.368ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 1.27&#949; (Mean = 0.735&#949;)</span>
+                  <span class="blue">Max = 1.27ε (Mean = 0.735ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 1.27&#949; (Mean = 0.735&#949;)</span>
+                  <span class="blue">Max = 1.27ε (Mean = 0.735ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0.637&#949; (Mean = 0.368&#949;)</span>
+                  <span class="blue">Max = 0.637ε (Mean = 0.368ε)</span>
                 </p>
               </td>
 </tr>
@@ -188,22 +188,22 @@ is very large, in which case the usual trigonometric function argument-reduction
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0&#949; (Mean = 0&#949;)</span>
+                  <span class="blue">Max = 0ε (Mean = 0ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 1.27&#949; (Mean = 0.334&#949;)</span>
+                  <span class="blue">Max = 1.27ε (Mean = 0.334ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 1.27&#949; (Mean = 0.334&#949;)</span>
+                  <span class="blue">Max = 1.27ε (Mean = 0.334ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 1.27&#949; (Mean = 0.355&#949;)</span>
+                  <span class="blue">Max = 1.27ε (Mean = 0.355ε)</span>
                 </p>
               </td>
 </tr>
@@ -211,7 +211,7 @@ is very large, in which case the usual trigonometric function argument-reduction
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="math_toolkit.ellint.ellint_d.table_ellint_d"></a><p class="title"><b>Table&#160;8.67.&#160;Error rates for ellint_d</b></p>
+<a name="math_toolkit.ellint.ellint_d.table_ellint_d"></a><p class="title"><b>Table 8.67. Error rates for ellint_d</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for ellint_d">
 <colgroup>
 <col>
@@ -253,23 +253,23 @@ is very large, in which case the usual trigonometric function argument-reduction
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0&#949; (Mean = 0&#949;)</span><br> <br> (<span class="emphasis"><em>GSL
-                  2.1:</em></span> Max = 0.862&#949; (Mean = 0.568&#949;))
+                  <span class="blue">Max = 0ε (Mean = 0ε)</span><br> <br> (<span class="emphasis"><em>GSL
+                  2.1:</em></span> Max = 0.862ε (Mean = 0.568ε))
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 1.3&#949; (Mean = 0.813&#949;)</span>
+                  <span class="blue">Max = 1.3ε (Mean = 0.813ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 1.3&#949; (Mean = 0.813&#949;)</span>
+                  <span class="blue">Max = 1.3ε (Mean = 0.813ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0.862&#949; (Mean = 0.457&#949;)</span>
+                  <span class="blue">Max = 0.862ε (Mean = 0.457ε)</span>
                 </p>
               </td>
 </tr>
@@ -281,23 +281,23 @@ is very large, in which case the usual trigonometric function argument-reduction
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0&#949; (Mean = 0&#949;)</span><br> <br> (<span class="emphasis"><em>GSL
-                  2.1:</em></span> Max = 3.01&#949; (Mean = 0.928&#949;))
+                  <span class="blue">Max = 0ε (Mean = 0ε)</span><br> <br> (<span class="emphasis"><em>GSL
+                  2.1:</em></span> Max = 3.01ε (Mean = 0.928ε))
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 2.51&#949; (Mean = 0.883&#949;)</span>
+                  <span class="blue">Max = 2.51ε (Mean = 0.883ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 2.51&#949; (Mean = 0.883&#949;)</span>
+                  <span class="blue">Max = 2.51ε (Mean = 0.883ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 2.87&#949; (Mean = 0.805&#949;)</span>
+                  <span class="blue">Max = 2.87ε (Mean = 0.805ε)</span>
                 </p>
               </td>
 </tr>
@@ -337,20 +337,20 @@ is very large, in which case the usual trigonometric function argument-reduction
         <span class="phrase"><a name="math_toolkit.ellint.ellint_d.implementation"></a></span><a class="link" href="ellint_d.html#math_toolkit.ellint.ellint_d.implementation">Implementation</a>
       </h5>
 <p>
-        The implementation for D(&#966;, k) first performs argument reduction using the
+        The implementation for D(φ, k) first performs argument reduction using the
         relations:
       </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-          <span class="serif_italic"><span class="emphasis"><em>D(-&#966;, k) = -D(&#966;, k)</em></span></span>
+          <span class="serif_italic"><span class="emphasis"><em>D(-φ, k) = -D(φ, k)</em></span></span>
         </p></blockquote></div>
 <p>
         and
       </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
-          <span class="serif_italic"><span class="emphasis"><em>D(n&#960;+&#966;, k) = 2nD(k) + D(&#966;, k)</em></span></span>
+          <span class="serif_italic"><span class="emphasis"><em>D(nπ+φ, k) = 2nD(k) + D(φ, k)</em></span></span>
         </p></blockquote></div>
 <p>
-        to move &#966; to the range [0, &#960;/2].
+        to move φ to the range [0, π/2].
       </p>
 <p>
         The functions are then implemented in terms of Carlson's integral R<sub>D</sub>
@@ -364,11 +364,10 @@ using
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2019 Nikhar
-      Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos,
-      Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Matthew Pulver, Johan
-      R&#229;de, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg,
-      Daryle Walker and Xiaogang Zhang<p>
+<td align="right"><div class="copyright-footer">Copyright © 2006-2020 Nikhar Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher
+      Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Evan Miller, Jeremy Murphy,
+      Matthew Pulver, Johan Råde, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson,
+      Thijs van den Berg, Daryle Walker and Xiaogang Zhang<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>
