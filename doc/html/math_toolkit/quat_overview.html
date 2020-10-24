@@ -1,12 +1,12 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Overview</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
-<link rel="home" href="../index.html" title="Math Toolkit 2.12.0">
-<link rel="up" href="../quaternions.html" title="Chapter&#160;16.&#160;Quaternions">
-<link rel="prev" href="../quaternions.html" title="Chapter&#160;16.&#160;Quaternions">
+<link rel="home" href="../index.html" title="Math Toolkit 2.13.0">
+<link rel="up" href="../quaternions.html" title="Chapter 16. Quaternions">
+<link rel="prev" href="../quaternions.html" title="Chapter 16. Quaternions">
 <link rel="next" href="quat_header.html" title="Header File">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -51,8 +51,8 @@
       (the usual three-dimensional space) and <span class="emphasis"><em><span class="bold"><strong>R<sup>4</sup></strong></span></em></span>.
     </p>
 <p>
-      In practical terms, a quaternion is simply a quadruple of real numbers (&#945;,&#946;,&#947;,&#948;),
-      which we can write in the form <span class="emphasis"><em><code class="literal">q = &#945; + &#946;i + &#947;j + &#948;k</code></em></span>,
+      In practical terms, a quaternion is simply a quadruple of real numbers (α,β,γ,δ),
+      which we can write in the form <span class="emphasis"><em><code class="literal">q = α + βi + γj + δk</code></em></span>,
       where <span class="emphasis"><em><code class="literal">i</code></em></span> is the same object as for complex
       numbers, and <span class="emphasis"><em><code class="literal">j</code></em></span> and <span class="emphasis"><em><code class="literal">k</code></em></span>
       are distinct objects which play essentially the same kind of role as <span class="emphasis"><em><code class="literal">i</code></em></span>.
@@ -62,7 +62,7 @@
       generalize their real and complex counterparts. The main novelty here is that
       <span class="bold"><strong>the multiplication is not commutative</strong></span> (i.e.
       there are quaternions <span class="emphasis"><em><code class="literal">x</code></em></span> and <span class="emphasis"><em><code class="literal">y</code></em></span>
-      such that <span class="emphasis"><em><code class="literal">xy &#8800; yx</code></em></span>). A good mnemotechnical
+      such that <span class="emphasis"><em><code class="literal">xy ≠ yx</code></em></span>). A good mnemotechnical
       way of remembering things is by using the formula <span class="emphasis"><em><code class="literal">i*i =
       j*j = k*k = -1</code></em></span>.
     </p>
@@ -79,11 +79,10 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2019 Nikhar
-      Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos,
-      Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Matthew Pulver, Johan
-      R&#229;de, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg,
-      Daryle Walker and Xiaogang Zhang<p>
+<td align="right"><div class="copyright-footer">Copyright © 2006-2020 Nikhar Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher
+      Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Evan Miller, Jeremy Murphy,
+      Matthew Pulver, Johan Råde, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson,
+      Thijs van den Berg, Daryle Walker and Xiaogang Zhang<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

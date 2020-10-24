@@ -1,11 +1,11 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Numerical Differentiation</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
-<link rel="home" href="../index.html" title="Math Toolkit 2.12.0">
-<link rel="up" href="../quadrature.html" title="Chapter&#160;13.&#160;Quadrature and Differentiation">
+<link rel="home" href="../index.html" title="Math Toolkit 2.13.0">
+<link rel="up" href="../quadrature.html" title="Chapter 13. Quadrature and Differentiation">
 <link rel="prev" href="wavelet_transforms.html" title="Wavelet Transforms">
 <link rel="next" href="autodiff.html" title="Automatic Differentiation">
 </head>
@@ -67,7 +67,7 @@
       There are two sources of error from finite differences: One, the truncation
       error arising from using a finite number of samples to cancel out higher order
       terms in the Taylor series. The second is the roundoff error involved in evaluating
-      the function. The truncation error goes to zero as <span class="emphasis"><em>h</em></span> &#8594;
+      the function. The truncation error goes to zero as <span class="emphasis"><em>h</em></span> →
       0, but the roundoff error becomes unbounded. By balancing these two sources
       of error, we can choose a value of <span class="emphasis"><em>h</em></span> that minimizes the
       maximum total error. For this reason boost's <code class="computeroutput"><span class="identifier">finite_difference_derivative</span></code>
@@ -118,12 +118,12 @@
     </p>
 <p>
       For a finite-difference method of order <span class="emphasis"><em>k</em></span>, the error is
-      <span class="emphasis"><em>C</em></span> &#949;<sup>k/k+1</sup>. In the limit <span class="emphasis"><em>k</em></span> &#8594;
-      &#8734;, we see that the error tends to &#949;, recovering the full precision
+      <span class="emphasis"><em>C</em></span> ε<sup>k/k+1</sup>. In the limit <span class="emphasis"><em>k</em></span> →
+      ∞, we see that the error tends to ε, recovering the full precision
       for the type. However, this ignores the fact that higher-order methods require
       subtracting more nearly-equal (perhaps noisy) terms, so the constant <span class="emphasis"><em>C</em></span>
       grows with <span class="emphasis"><em>k</em></span>. Since <span class="emphasis"><em>C</em></span> grows quickly
-      and &#949;<sup>k/k+1</sup> approaches &#949; slowly, we can see there is a compromise
+      and ε<sup>k/k+1</sup> approaches ε slowly, we can see there is a compromise
       between high-order accuracy and conditioning of the difference quotient. In
       practice we have found that <span class="emphasis"><em>k=6</em></span> seems to be a good compromise
       between the two (and have made this the default), but users are encouraged
@@ -131,7 +131,7 @@
       given problem.
     </p>
 <div class="table">
-<a name="math_toolkit.diff.id"></a><p class="title"><b>Table&#160;13.1.&#160;Cost of Finite-Difference Numerical Differentiation</b></p>
+<a name="math_toolkit.diff.id"></a><p class="title"><b>Table 13.1. Cost of Finite-Difference Numerical Differentiation</b></p>
 <div class="table-contents"><table class="table" summary="Cost of Finite-Difference Numerical Differentiation">
 <colgroup>
 <col>
@@ -181,7 +181,7 @@
             </td>
 <td>
               <p>
-                &#949;<sup>1/2</sup>
+                ε<sup>1/2</sup>
               </p>
             </td>
 <td>
@@ -208,7 +208,7 @@
             </td>
 <td>
               <p>
-                &#949;<sup>2/3</sup>
+                ε<sup>2/3</sup>
               </p>
             </td>
 <td>
@@ -235,7 +235,7 @@
             </td>
 <td>
               <p>
-                &#949;<sup>4/5</sup>
+                ε<sup>4/5</sup>
               </p>
             </td>
 <td>
@@ -262,7 +262,7 @@
             </td>
 <td>
               <p>
-                &#949;<sup>6/7</sup>
+                ε<sup>6/7</sup>
               </p>
             </td>
 <td>
@@ -289,7 +289,7 @@
             </td>
 <td>
               <p>
-                &#949;<sup>8/9</sup>
+                ε<sup>8/9</sup>
               </p>
             </td>
 <td>
@@ -314,9 +314,9 @@
       real line of a holomorphic function which takes real values at real argument,
       then the <span class="bold"><strong>complex step derivative</strong></span> can be used.
       The idea is very simple: Since <span class="emphasis"><em>f</em></span> is complex-differentiable,
-      <span class="emphasis"><em>f(x+&#8520; h) = f(x) + &#8520; hf'(x) - h<sup>2</sup>f''(x) + &#119926;(h<sup>3</sup>)</em></span>.
-      As long as <span class="emphasis"><em>f(x)</em></span> &#8712; &#8477;, then <span class="emphasis"><em>f'(x)
-      = &#8465; f(x+&#8520; h)/h + &#119926;(h<sup>2</sup>)</em></span>. This method requires a single
+      <span class="emphasis"><em>f(x+ⅈ h) = f(x) + ⅈ hf'(x) - h<sup>2</sup>f''(x) + 𝑶(h<sup>3</sup>)</em></span>.
+      As long as <span class="emphasis"><em>f(x)</em></span> ∈ ℝ, then <span class="emphasis"><em>f'(x)
+      = ℑ f(x+ⅈ h)/h + 𝑶(h<sup>2</sup>)</em></span>. This method requires a single
       complex function evaluation and is not subject to the catastrophic subtractive
       cancellation that plagues finite-difference calculations.
     </p>
@@ -348,11 +348,10 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2019 Nikhar
-      Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos,
-      Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Matthew Pulver, Johan
-      R&#229;de, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg,
-      Daryle Walker and Xiaogang Zhang<p>
+<td align="right"><div class="copyright-footer">Copyright © 2006-2020 Nikhar Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher
+      Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Evan Miller, Jeremy Murphy,
+      Matthew Pulver, Johan Råde, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson,
+      Thijs van den Berg, Daryle Walker and Xiaogang Zhang<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

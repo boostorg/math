@@ -1,10 +1,10 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Caveats</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
-<link rel="home" href="../../index.html" title="Math Toolkit 2.12.0">
+<link rel="home" href="../../index.html" title="Math Toolkit 2.13.0">
 <link rel="up" href="../double_exponential.html" title="Double-exponential quadrature">
 <link rel="prev" href="de_thread.html" title="Thread Safety">
 <link rel="next" href="de_refes.html" title="References">
@@ -35,7 +35,7 @@
         approaching the endpoint singularities. This allows lots of significant digits
         to be extracted, but also has another problem: Roundoff error can cause the
         function to be evaluated at the endpoints. A few ways to avoid this: Narrow
-        up the bounds of integration to say, [a + &#949;, b - &#949;], make sure (a+b)/2 and
+        up the bounds of integration to say, [a + ε, b - ε], make sure (a+b)/2 and
         (b-a)/2 are representable, and finally, if you think the compromise between
         accuracy an usability has gone too far in the direction of accuracy, file
         a ticket.
@@ -79,13 +79,13 @@
           <span class="serif_italic">1 / (1 +x^2)</span>
         </p></blockquote></div>
 <p>
-        Over (a, &#8734;). As long as <code class="computeroutput"><span class="identifier">a</span> <span class="special">&gt;=</span> <span class="number">0</span></code> both
+        Over (a, ∞). As long as <code class="computeroutput"><span class="identifier">a</span> <span class="special">&gt;=</span> <span class="number">0</span></code> both
         the tanh_sinh and the exp_sinh integrators will handle this just fine: in
         fact they provide a rather efficient method for this kind of integral. However,
         if we have <code class="computeroutput"><span class="identifier">a</span> <span class="special">&lt;</span>
         <span class="number">0</span></code> then we are forced to adapt the range
         in a way that produces abscissa values near zero that have an absolute error
-        of &#949;, and since all of the area of the integral is near zero both integrators
+        of ε, and since all of the area of the integral is near zero both integrators
         thrash around trying to reach the target accuracy, but never actually get
         there for <code class="computeroutput"><span class="identifier">a</span> <span class="special">&lt;&lt;</span>
         <span class="number">0</span></code>. On the other hand, the simple expedient
@@ -102,11 +102,11 @@
 <span class="keyword">auto</span> <span class="identifier">Q</span> <span class="special">=</span> <span class="identifier">integrator</span><span class="special">.</span><span class="identifier">integrate</span><span class="special">(</span><span class="identifier">f</span><span class="special">,</span> <span class="number">0</span><span class="special">,</span> <span class="identifier">constants</span><span class="special">::</span><span class="identifier">half_pi</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;());</span>
 </pre>
 <p>
-        The first problem with this function, is that the singularity is at &#960;/2, so
-        if we're integrating over (0, &#960;/2) then we can never approach closer to the
-        singularity than &#949;, and for p less than but close to 1, we need to get <span class="emphasis"><em>very</em></span>
+        The first problem with this function, is that the singularity is at π/2, so
+        if we're integrating over (0, π/2) then we can never approach closer to the
+        singularity than ε, and for p less than but close to 1, we need to get <span class="emphasis"><em>very</em></span>
         close to the singularity to find all the area under the function. If we recall
-        the identity <code class="literal">tan(&#960;/2 - x) == 1/tan(x)</code> then we can rewrite
+        the identity <code class="literal">tan(π/2 - x) == 1/tan(x)</code> then we can rewrite
         the function like this:
       </p>
 <pre class="programlisting"><span class="keyword">auto</span> <span class="identifier">f</span> <span class="special">=</span> <span class="special">[&amp;](</span><span class="keyword">double</span> <span class="identifier">x</span><span class="special">){</span> <span class="keyword">return</span> <span class="identifier">pow</span><span class="special">(</span><span class="identifier">tan</span><span class="special">(</span><span class="identifier">x</span><span class="special">),</span> <span class="special">-</span><span class="identifier">p</span><span class="special">);</span> <span class="special">};</span>
@@ -125,9 +125,9 @@
         type double, then we have to get smart.
       </p>
 <p>
-        The easiest method is to notice that for small x, then <code class="literal">tan(x) &#8773; x</code>,
+        The easiest method is to notice that for small x, then <code class="literal">tan(x) ≅ x</code>,
         and so we are simply integrating x<sup>-p</sup>. Therefore we can use this approximation
-        over (0, small), and integrate numerically from (small, &#960;/2), using &#949; as a suitable
+        over (0, small), and integrate numerically from (small, π/2), using ε as a suitable
         crossover point seems sensible:
       </p>
 <pre class="programlisting"><span class="keyword">double</span> <span class="identifier">p</span> <span class="special">=</span> <span class="identifier">some_value</span><span class="special">;</span>
@@ -145,7 +145,7 @@
         argument substitution, replacing <code class="computeroutput"><span class="identifier">x</span></code>
         by <code class="computeroutput"><span class="identifier">exp</span><span class="special">(-</span><span class="identifier">x</span><span class="special">)</span></code> (note
         that we must also multiply by the derivative of <code class="computeroutput"><span class="identifier">exp</span><span class="special">(-</span><span class="identifier">x</span><span class="special">)</span></code>).
-        Now the singularity at zero is moved to +&#8734;, and the &#960;/2 bound to -log(&#960;/2).
+        Now the singularity at zero is moved to +∞, and the π/2 bound to -log(π/2).
         Initially our argument substituted function looks like:
       </p>
 <pre class="programlisting"><span class="keyword">auto</span> <span class="identifier">f</span> <span class="special">=</span> <span class="special">[&amp;](</span><span class="keyword">double</span> <span class="identifier">x</span><span class="special">){</span> <span class="keyword">return</span> <span class="identifier">exp</span><span class="special">(-</span><span class="identifier">x</span><span class="special">)</span> <span class="special">*</span> <span class="identifier">pow</span><span class="special">(</span><span class="identifier">tan</span><span class="special">(</span><span class="identifier">exp</span><span class="special">(-</span><span class="identifier">x</span><span class="special">)),</span> <span class="special">-</span><span class="identifier">p</span><span class="special">);</span> <span class="special">};</span>
@@ -155,7 +155,7 @@
         before. However, if we replace <code class="computeroutput"><span class="identifier">tan</span><span class="special">(</span><span class="identifier">exp</span><span class="special">(-</span><span class="identifier">x</span><span class="special">))</span></code> by
         <code class="computeroutput"><span class="identifier">exp</span><span class="special">(-</span><span class="identifier">x</span><span class="special">)</span></code> for
         suitably small <code class="computeroutput"><span class="identifier">exp</span><span class="special">(-</span><span class="identifier">x</span><span class="special">)</span></code>, and
-        therefore <code class="literal">x &gt; -log(&#949;)</code>, we can greatly simplify the expression
+        therefore <code class="literal">x &gt; -log(ε)</code>, we can greatly simplify the expression
         and evaluate by logs:
       </p>
 <pre class="programlisting"><span class="keyword">auto</span> <span class="identifier">f</span> <span class="special">=</span> <span class="special">[&amp;](</span><span class="keyword">double</span> <span class="identifier">x</span><span class="special">)</span>
@@ -165,17 +165,16 @@
 <span class="special">};</span>
 </pre>
 <p>
-        This form integrates just fine over (-log(&#960;/2), +&#8734;) using either the <code class="computeroutput"><span class="identifier">tanh_sinh</span></code> or <code class="computeroutput"><span class="identifier">exp_sinh</span></code>
+        This form integrates just fine over (-log(π/2), +∞) using either the <code class="computeroutput"><span class="identifier">tanh_sinh</span></code> or <code class="computeroutput"><span class="identifier">exp_sinh</span></code>
         classes.
       </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2019 Nikhar
-      Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos,
-      Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Matthew Pulver, Johan
-      R&#229;de, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg,
-      Daryle Walker and Xiaogang Zhang<p>
+<td align="right"><div class="copyright-footer">Copyright © 2006-2020 Nikhar Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher
+      Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Evan Miller, Jeremy Murphy,
+      Matthew Pulver, Johan Råde, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson,
+      Thijs van den Berg, Daryle Walker and Xiaogang Zhang<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

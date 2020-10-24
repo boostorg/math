@@ -1,10 +1,10 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Testing</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
-<link rel="home" href="../../index.html" title="Math Toolkit 2.12.0">
+<link rel="home" href="../../index.html" title="Math Toolkit 2.13.0">
 <link rel="up" href="../special_tut.html" title="Tutorial: How to Write a New Special Function">
 <link rel="prev" href="special_tut_impl.html" title="Implementation">
 <link rel="next" href="../relative_error.html" title="Relative Error">
@@ -345,7 +345,7 @@
 <span class="preprocessor">#ifndef</span> <span class="identifier">BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS</span>
    <span class="identifier">test</span><span class="special">(</span><span class="number">0.1L</span><span class="special">,</span> <span class="string">"long double"</span><span class="special">);</span>
 <span class="preprocessor">#ifndef</span> <span class="identifier">BOOST_MATH_NO_REAL_CONCEPT_TESTS</span>
-<span class="preprocessor">#if</span> <span class="special">!</span><span class="identifier">BOOST_WORKAROUND</span><span class="special">(</span><span class="identifier">__BORLANDC__</span><span class="special">,</span> <span class="identifier">BOOST_TESTED_AT</span><span class="special">(</span><span class="number">0x582</span><span class="special">))</span>
+<span class="preprocessor">#if</span> <span class="special">!</span><span class="identifier">BOOST_WORKAROUND</span><span class="special">(</span><span class="identifier">BOOST_BORLANDC</span><span class="special">,</span> <span class="identifier">BOOST_TESTED_AT</span><span class="special">(</span><span class="number">0x582</span><span class="special">))</span>
    <span class="identifier">test</span><span class="special">(</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">concepts</span><span class="special">::</span><span class="identifier">real_concept</span><span class="special">(</span><span class="number">0.1</span><span class="special">),</span> <span class="string">"real_concept"</span><span class="special">);</span>
 <span class="preprocessor">#endif</span>
 <span class="preprocessor">#endif</span>
@@ -508,11 +508,10 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2019 Nikhar
-      Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos,
-      Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Matthew Pulver, Johan
-      R&#229;de, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg,
-      Daryle Walker and Xiaogang Zhang<p>
+<td align="right"><div class="copyright-footer">Copyright © 2006-2020 Nikhar Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher
+      Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Evan Miller, Jeremy Murphy,
+      Matthew Pulver, Johan Råde, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson,
+      Thijs van den Berg, Daryle Walker and Xiaogang Zhang<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>
