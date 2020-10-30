@@ -685,7 +685,7 @@ Names at http://www.w3.org/TR/2002/WD-css3-color-20020219/ 4.3. X11 color keywor
 Quickbook Usage: [role red Some red text]
 
 */
-span.red { inline-block; color: red; }
+span.red { display: inline-block; color: red; }
 span.green { color: green; }
 span.lime { color: #00FF00; }
 span.blue { color: blue; }
