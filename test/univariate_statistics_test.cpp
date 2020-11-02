@@ -528,7 +528,7 @@ void test_integer_skewness()
 template<class Real, class ExecutionPolicy>
 void test_skewness(ExecutionPolicy&& exec)
 {
-    Real tol = std::numeric_limits<Real>::epsilon();
+    Real tol = 2*std::numeric_limits<Real>::epsilon();
     std::vector<Real> v{1,1,1};
     Real skew = boost::math::statistics::skewness(exec, v);
     BOOST_TEST(abs(skew) < tol);
@@ -1158,9 +1158,16 @@ int main()
 
     test_skewness<float>(std::execution::seq);
     test_skewness<float>(std::execution::par);
+    test_skewness<float>(std::execution::par_unseq);
     test_skewness<double>(std::execution::seq);
+    test_skewness<double>(std::execution::par);
+    test_skewness<double>(std::execution::par_unseq);
     test_skewness<long double>(std::execution::seq);
+    //test_skewness<long double>(std::execution::par);
+    //test_skewness<long double>(std::execution::par_unseq);
     test_skewness<cpp_bin_float_50>(std::execution::seq);
+    //test_skewness<cpp_bin_float_50>(std::execution::par);
+    //test_skewness<cpp_bin_float_50>(std::execution::par_unseq);
 
     test_integer_skewness<int>();
     test_integer_skewness<unsigned>();

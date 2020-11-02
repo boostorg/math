@@ -337,7 +337,7 @@ inline auto skewness(ExecutionPolicy&& exec, ForwardIterator first, ForwardItera
         }
         else
         {
-            return M3/(M2*sqrt(var));
+            return M3/(M2*sqrt(var)) / Real(2);
         }
     }
 }
