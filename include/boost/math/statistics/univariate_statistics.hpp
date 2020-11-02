@@ -279,6 +279,8 @@ inline auto first_four_moments(ExecutionPolicy&& exec, ForwardIterator first, Fo
         else
         {
             static_assert(!std::is_same_v<Real, long double>, "Error for parallel calculation using long double exceeds 100 Epsilon");
+            
+            // TODO(mborland): Detection for all multiprecision float types
             static_assert(!std::is_same_v<Real, boost::multiprecision::cpp_bin_float_50>, "Error for parallel calculation using multiprecision types exceeds 100 Epsilon");
             detail::thread_counter = 1;
             const auto results = detail::parallel_first_four_moments_impl<std::tuple<Real, Real, Real, Real, std::size_t>>(first, last);
@@ -362,10 +364,10 @@ inline auto skewness(Container const & v)
 
 // Follows equation 1.6 of:
 // https://prod.sandia.gov/techlib-noauth/access-control.cgi/2008/086212.pdf
-template<class ForwardIterator>
-auto kurtosis(ForwardIterator first, ForwardIterator last)
+template<class ExecutionPolicy, class ForwardIterator>
+inline auto kurtosis(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last)
 {
-    auto [M1, M2, M3, M4] = first_four_moments(first, last);
+    const auto [M1, M2, M3, M4] = first_four_moments(exec, first, last);
     if (M2 == 0)
     {
         return M2;
@@ -373,22 +375,46 @@ auto kurtosis(ForwardIterator first, ForwardIterator last)
     return M4/(M2*M2);
 }
 
-template<class Container>
-inline auto kurtosis(Container const & v)
+template<class ExecutionPolicy, class Container>
+inline auto kurtosis(ExecutionPolicy&& exec, Container const & v)
 {
-    return kurtosis(v.cbegin(), v.cend());
+    return kurtosis(exec, std::cbegin(v), std::cend(v));
 }
 
 template<class ForwardIterator>
-auto excess_kurtosis(ForwardIterator first, ForwardIterator last)
+inline auto kurtosis(ForwardIterator first, ForwardIterator last)
 {
-    return kurtosis(first, last) - 3;
+    return kurtosis(std::execution::seq, first, last);
+}
+
+template<class Container>
+inline auto kurtosis(Container const & v)
+{
+    return kurtosis(std::execution::seq, std::cbegin(v), std::cend(v));
+}
+
+template<class ExecutionPolicy, class ForwardIterator>
+inline auto excess_kurtosis(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last)
+{
+    return kurtosis(exec, first, last) - 3;
+}
+
+template<class ExecutionPolicy, class Container>
+inline auto excess_kurtosis(ExecutionPolicy&& exec, Container const & v)
+{
+    return excess_kurtosis(exec, std::cbegin(v), std::cend(v));
+}
+
+template<class ForwardIterator>
+inline auto excess_kurtosis(ForwardIterator first, ForwardIterator last)
+{
+    return excess_kurtosis(std::execution::seq, first, last);
 }
 
 template<class Container>
 inline auto excess_kurtosis(Container const & v)
 {
-    return excess_kurtosis(v.cbegin(), v.cend());
+    return excess_kurtosis(std::execution::seq, std::cbegin(v), std::cend(v));
 }
 
 

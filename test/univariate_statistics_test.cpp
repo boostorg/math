@@ -561,30 +561,30 @@ void test_skewness(ExecutionPolicy&& exec)
     BOOST_TEST(abs(m1 - m2) < tol*abs(m1));
 }
 
-template<class Real>
-void test_kurtosis()
+template<class Real, class ExecutionPolicy>
+void test_kurtosis(ExecutionPolicy&& exec)
 {
-    Real tol = std::numeric_limits<Real>::epsilon();
+    Real tol = 10*std::numeric_limits<Real>::epsilon();
     std::vector<Real> v{1,1,1};
-    Real kurt = boost::math::statistics::kurtosis(v);
+    Real kurt = boost::math::statistics::kurtosis(exec, v);
     BOOST_TEST(abs(kurt) < tol);
 
     v = {1,2,3,4,5};
     // mu =1, sigma^2 = 2, kurtosis = 17/10
-    kurt = boost::math::statistics::kurtosis(v);
-    BOOST_TEST(abs(kurt - Real(17)/Real(10)) < 10*tol);
+    kurt = boost::math::statistics::kurtosis(exec, v);
+    BOOST_TEST(abs(kurt - Real(17)/Real(10)) < tol);
 
     v = {0,0,0,0,5};
     // mu = 1, sigma^2 = 4, sigma = 2, skew = 3/2, kurtosis = 13/4
-    kurt = boost::math::statistics::kurtosis(v);
+    kurt = boost::math::statistics::kurtosis(exec, v);
     BOOST_TEST(abs(kurt - Real(13)/Real(4)) < tol);
 
     std::array<Real, 5> v1{0,0,0,0,5};
-    kurt = boost::math::statistics::kurtosis(v1);
+    kurt = boost::math::statistics::kurtosis(exec, v1);
     BOOST_TEST(abs(kurt - Real(13)/Real(4)) < tol);
 
     std::forward_list<Real> v2{0,0,0,0,5};
-    kurt = boost::math::statistics::kurtosis(v2);
+    kurt = boost::math::statistics::kurtosis(exec, v2);
     BOOST_TEST(abs(kurt - Real(13)/Real(4)) < tol);
 
     std::vector<Real> v3(10000);
@@ -593,24 +593,24 @@ void test_kurtosis()
     for (size_t i = 0; i < v3.size(); ++i) {
         v3[i] = dis(gen);
     }
-    kurt = boost::math::statistics::kurtosis(v3);
+    kurt = boost::math::statistics::kurtosis(exec, v3);
     BOOST_TEST(abs(kurt - 3) < 0.1);
 
     std::uniform_real_distribution<long double> udis(-1, 3);
     for (size_t i = 0; i < v3.size(); ++i) {
         v3[i] = udis(gen);
     }
-    auto excess_kurtosis = boost::math::statistics::excess_kurtosis(v3);
+    auto excess_kurtosis = boost::math::statistics::excess_kurtosis(exec, v3);
     BOOST_TEST(abs(excess_kurtosis + 6.0/5.0) < 0.2);
 
     v = generate_random_vector<Real>(global_size, global_seed);
     Real scale = 2;
-    Real m1 = boost::math::statistics::kurtosis(v);
+    Real m1 = boost::math::statistics::kurtosis(exec, v);
     for (auto & x : v)
     {
         x *= scale;
     }
-    Real m2 = boost::math::statistics::kurtosis(v);
+    Real m2 = boost::math::statistics::kurtosis(exec, v);
     BOOST_TEST(abs(m1 - m2) < tol*abs(m1));
 
     // This test only passes when there are a large number of samples.
@@ -627,32 +627,32 @@ void test_kurtosis()
     //BOOST_TEST(abs(excess_kurtosis - 6.0) < 0.2);
 }
 
-template<class Z>
-void test_integer_kurtosis()
+template<class Z, class ExecutionPolicy>
+void test_integer_kurtosis(ExecutionPolicy&& exec)
 {
-    double tol = std::numeric_limits<double>::epsilon();
+    double tol = 10*std::numeric_limits<double>::epsilon();
     std::vector<Z> v{1,1,1};
-    double kurt = boost::math::statistics::kurtosis(v);
+    double kurt = boost::math::statistics::kurtosis(exec, v);
     BOOST_TEST(abs(kurt) < tol);
 
     v = {1,2,3,4,5};
     // mu =1, sigma^2 = 2, kurtosis = 17/10
-    kurt = boost::math::statistics::kurtosis(v);
-    BOOST_TEST(abs(kurt - 17.0/10.0) < 10*tol);
+    kurt = boost::math::statistics::kurtosis(exec, v);
+    BOOST_TEST(abs(kurt - 17.0/10.0) < tol);
 
     v = {0,0,0,0,5};
     // mu = 1, sigma^2 = 4, sigma = 2, skew = 3/2, kurtosis = 13/4
-    kurt = boost::math::statistics::kurtosis(v);
+    kurt = boost::math::statistics::kurtosis(exec, v);
     BOOST_TEST(abs(kurt - 13.0/4.0) < tol);
 
     v = generate_random_vector<Z>(global_size, global_seed);
     Z scale = 2;
-    double m1 = boost::math::statistics::kurtosis(v);
+    double m1 = boost::math::statistics::kurtosis(exec, v);
     for (auto & x : v)
     {
         x *= scale;
     }
-    double m2 = boost::math::statistics::kurtosis(v);
+    double m2 = boost::math::statistics::kurtosis(exec, v);
     BOOST_TEST(abs(m1 - m2) < tol*abs(m1));
 }
 
@@ -669,8 +669,8 @@ void test_first_four_moments(ExecutionPolicy&& exec)
 
     v = {1, 2, 3, 4, 5};
     auto [M1_2, M2_2, M3_2, M4_2] = boost::math::statistics::first_four_moments(exec, v);
-    BOOST_TEST(abs(M1_2 - 3) < tol);
-    BOOST_TEST(abs(M2_2 - 2) < tol);
+    BOOST_TEST(abs(M1_2 - Real(3)) < tol);
+    BOOST_TEST(abs(M2_2 - Real(2)) < tol);
     BOOST_TEST(abs(M3_2) < tol);
     BOOST_TEST(abs(M4_2 - Real(34)/Real(5)) < tol);
 }
@@ -1190,14 +1190,26 @@ int main()
     //test_first_four_moments<cpp_bin_float_50>(std::execution::par);
     //test_first_four_moments<cpp_bin_float_50>(std::execution::par_unseq);
 
-    test_kurtosis<float>();
-    test_kurtosis<double>();
-    test_kurtosis<long double>();
+    test_kurtosis<float>(std::execution::seq);
+    test_kurtosis<float>(std::execution::par);
+    test_kurtosis<float>(std::execution::par_unseq);
+    test_kurtosis<double>(std::execution::seq);
+    test_kurtosis<double>(std::execution::par);
+    test_kurtosis<double>(std::execution::par_unseq);
+    test_kurtosis<long double>(std::execution::seq);
+    //test_kurtosis<long double>(std::execution::par);
+    //test_kurtosis<long double>(std::execution::par_unseq);
     // Kinda expensive:
-    //test_kurtosis<cpp_bin_float_50>();
+    //test_kurtosis<cpp_bin_float_50>(std::execution::seq);
+    //test_kurtosis<cpp_bin_float_50>(std::execution::par);
+    //test_kurtosis<cpp_bin_float_50>(std::execution::par_unseq);
 
-    test_integer_kurtosis<int>();
-    test_integer_kurtosis<unsigned>();
+    test_integer_kurtosis<int>(std::execution::seq);
+    test_integer_kurtosis<int>(std::execution::par);
+    test_integer_kurtosis<int>(std::execution::par_unseq);
+    test_integer_kurtosis<unsigned>(std::execution::seq);
+    test_integer_kurtosis<unsigned>(std::execution::par);
+    test_integer_kurtosis<unsigned>(std::execution::par_unseq);
 
     test_median<float>(std::execution::seq);
     test_median<float>(std::execution::par);
