@@ -462,6 +462,12 @@ inline auto gini_coefficient(ExecutionPolicy&& exec, RandomAccessIterator first,
 {
     using Real = typename std::iterator_traits<RandomAccessIterator>::value_type;
 
+    // TODO: Can be made if constexpr with C++20
+    if(!std::is_sorted(exec, first, last))
+    {
+        std::sort(exec, first, last);
+    }
+
     if constexpr (std::is_same_v<std::remove_reference_t<decltype(exec)>, decltype(std::execution::seq)>)
     {
         return detail::gini_coefficient_sequential_impl(first, last);
@@ -474,8 +480,6 @@ inline auto gini_coefficient(ExecutionPolicy&& exec, RandomAccessIterator first,
 
     else
     {
-        static_assert(!std::is_same_v<Real, long double>, "Parallel execution Policies do not currently support long doubles");
-        static_assert(!std::is_same_v<Real, boost::multiprecision::cpp_bin_float_50>, "Parallel execution Policies do not currently support cpp_bin_float_50");
         return detail::gini_coefficient_parallel_impl<Real>(exec, first, last);
     }
 }

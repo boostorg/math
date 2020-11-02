@@ -1245,15 +1245,13 @@ int main()
     test_gini_coefficient<float>(std::execution::par_unseq);
     test_gini_coefficient<double>(std::execution::seq);
     test_gini_coefficient<double>(std::execution::par);
-    test_gini_coefficient<double>(std::execution::par_unseq);
-    
-    // Atomic Types do not support the following:
+    test_gini_coefficient<double>(std::execution::par_unseq); 
     test_gini_coefficient<long double>(std::execution::seq);
-    //test_gini_coefficient<long double>(std::execution::par);
-    //test_gini_coefficient<long double>(std::execution::par_unseq);
+    test_gini_coefficient<long double>(std::execution::par);
+    test_gini_coefficient<long double>(std::execution::par_unseq);
     test_gini_coefficient<cpp_bin_float_50>(std::execution::seq);
-    //test_gini_coefficient<cpp_bin_float_50>(std::execution::par);
-    //test_gini_coefficient<long double>(std::execution::par_unseq);
+    test_gini_coefficient<cpp_bin_float_50>(std::execution::par);
+    test_gini_coefficient<long double>(std::execution::par_unseq);
 
     test_integer_gini_coefficient<unsigned>(std::execution::seq);
     test_integer_gini_coefficient<unsigned>(std::execution::par);
@@ -1269,9 +1267,12 @@ int main()
     test_sample_gini_coefficient<double>(std::execution::par);
     test_sample_gini_coefficient<double>(std::execution::par_unseq);
 
-    // Same policy restrictions as gini coefficient (see above)
     test_sample_gini_coefficient<long double>(std::execution::seq);
+    test_sample_gini_coefficient<long double>(std::execution::par);
+    test_sample_gini_coefficient<long double>(std::execution::par_unseq);
     test_sample_gini_coefficient<cpp_bin_float_50>(std::execution::seq);
+    test_sample_gini_coefficient<cpp_bin_float_50>(std::execution::par);
+    test_sample_gini_coefficient<cpp_bin_float_50>(std::execution::par_unseq);
 
     test_interquartile_range<double>(std::execution::seq);
     test_interquartile_range<double>(std::execution::par);

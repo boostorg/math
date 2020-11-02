@@ -320,28 +320,16 @@ auto skewness_sequential_impl(ForwardIterator first, ForwardIterator last)
 template<typename ReturnType, typename ExecutionPolicy, typename RandomAccessIterator>
 ReturnType gini_coefficient_parallel_impl(ExecutionPolicy&& exec, RandomAccessIterator first, RandomAccessIterator last)
 {
-    std::sort(exec, first, last);
-
-    std::atomic<ReturnType> i = 1;
-    std::atomic<ReturnType> num = 0;
-    std::atomic<ReturnType> denom = 0;
+    ReturnType i = 1;
+    ReturnType num = 0;
+    ReturnType denom = 0;
     
-    // std::atomic<Floating>::fetch_add not added until C++20
-    #if __cplusplus > 201900
-    std::for_each(exec, first, last, [&i, &num, &denom](auto val)
-    {
-        num.fetch_add(val * i, std::memory_order_relaxed);
-        denom.fetch_add(val, std::memory_order_relaxed);
-        i.fetch_add(1, std::memory_order_relaxed);
-    });
-    #else
     std::for_each(exec, first, last, [&i, &num, &denom](auto val)
     {
         num = num + val * i;
         denom = denom + val;
         i = i + 1;
     });
-    #endif
 
     if(denom == 0)
     {
@@ -399,7 +387,6 @@ auto gini_coefficient_sequential_impl(RandomAccessIterator first, RandomAccessIt
         return ((2*num)/denom - i)/(i-1);
     }
 }
-
 }
 
 #endif // BOOST_MATH_STATISTICS_UNIVARIATE_STATISTICS_DETAIL_SINGLE_PASS_HPP
