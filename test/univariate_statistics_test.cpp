@@ -490,39 +490,38 @@ void test_integer_variance(ExecutionPolicy&& exec)
     BOOST_TEST(abs(m1 - m2) < tol*abs(m1));
 }
 
-template<class Z>
-void test_integer_skewness()
+template<class Z, class ExecutionPolicy>
+void test_integer_skewness(ExecutionPolicy&& exec)
 {
-    double tol = std::numeric_limits<double>::epsilon();
+    double tol = 2*std::numeric_limits<double>::epsilon();
     std::vector<Z> v{1,1,1};
-    double skew = boost::math::statistics::skewness(v);
+    double skew = boost::math::statistics::skewness(exec, v);
     BOOST_TEST(abs(skew) < tol);
 
     // Dataset is symmetric about the mean:
     v = {1,2,3,4,5};
-    skew = boost::math::statistics::skewness(v);
+    skew = boost::math::statistics::skewness(exec, v);
     BOOST_TEST(abs(skew) < tol);
 
     v = {0,0,0,0,5};
     // mu = 1, sigma^2 = 4, sigma = 2, skew = 3/2
-    skew = boost::math::statistics::skewness(v);
+    skew = boost::math::statistics::skewness(exec, v);
     BOOST_TEST(abs(skew - 3.0/2.0) < tol);
 
     std::forward_list<Z> v2{0,0,0,0,5};
-    skew = boost::math::statistics::skewness(v);
+    skew = boost::math::statistics::skewness(exec, v);
     BOOST_TEST(abs(skew - 3.0/2.0) < tol);
 
 
     v = generate_random_vector<Z>(global_size, global_seed);
     Z scale = 2;
-    double m1 = boost::math::statistics::skewness(v);
+    double m1 = boost::math::statistics::skewness(exec, v);
     for (auto & x : v)
     {
         x *= scale;
     }
-    double m2 = boost::math::statistics::skewness(v);
+    double m2 = boost::math::statistics::skewness(exec, v);
     BOOST_TEST(abs(m1 - m2) < tol*abs(m1));
-
 }
 
 template<class Real, class ExecutionPolicy>
@@ -1169,8 +1168,12 @@ int main()
     //test_skewness<cpp_bin_float_50>(std::execution::par);
     //test_skewness<cpp_bin_float_50>(std::execution::par_unseq);
 
-    test_integer_skewness<int>();
-    test_integer_skewness<unsigned>();
+    test_integer_skewness<int>(std::execution::seq);
+    test_integer_skewness<int>(std::execution::par);
+    test_integer_skewness<int>(std::execution::par_unseq);
+    test_integer_skewness<unsigned>(std::execution::seq);
+    test_integer_skewness<unsigned>(std::execution::par);
+    test_integer_skewness<unsigned>(std::execution::par_unseq);
 
     test_first_four_moments<float>(std::execution::seq);
     test_first_four_moments<float>(std::execution::par);
