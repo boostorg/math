@@ -13,6 +13,7 @@
 #include <random>
 #include <execution>
 #include <iostream>
+#include <iterator>
 
 template<class T>
 std::vector<T> generate_random_vector(std::size_t size, std::size_t seed)
@@ -135,9 +136,89 @@ void parallel_variance(benchmark::State& state)
     state.SetComplexityN(state.range(0));
 }
 
-// Skewness
-// First four moments
-// Kurtosis
+template<typename T>
+void skewness(benchmark::State& state)
+{
+    constexpr std::size_t seed {};
+    const std::size_t size = state.range(0);
+    std::vector<T> test_set = generate_random_vector<T>(size, seed);
+
+    for(auto _ : state)
+    {
+        benchmark::DoNotOptimize(boost::math::statistics::skewness(std::execution::seq, test_set));
+    }
+    state.SetComplexityN(state.range(0));
+}
+
+template<typename T>
+void parallel_skewness(benchmark::State& state)
+{
+    constexpr std::size_t seed {};
+    const std::size_t size = state.range(0);
+    std::vector<T> test_set = generate_random_vector<T>(size, seed);
+
+    for(auto _ : state)
+    {
+        benchmark::DoNotOptimize(boost::math::statistics::skewness(std::execution::par, test_set));
+    }
+    state.SetComplexityN(state.range(0));
+}
+
+template<typename T>
+void first_four_moments(benchmark::State& state)
+{
+    constexpr std::size_t seed {};
+    const std::size_t size = state.range(0);
+    std::vector<T> test_set = generate_random_vector<T>(size, seed);
+
+    for(auto _ : state)
+    {
+        benchmark::DoNotOptimize(boost::math::statistics::first_four_moments(std::execution::seq, test_set));
+    }
+    state.SetComplexityN(state.range(0));
+}
+
+template<typename T>
+void parallel_first_four_moments(benchmark::State& state)
+{
+    constexpr std::size_t seed {};
+    const std::size_t size = state.range(0);
+    std::vector<T> test_set = generate_random_vector<T>(size, seed);
+
+    for(auto _ : state)
+    {
+        benchmark::DoNotOptimize(boost::math::statistics::first_four_moments(std::execution::par, test_set));
+    }
+    state.SetComplexityN(state.range(0));
+}
+
+template<typename T>
+void kurtosis(benchmark::State& state)
+{
+    constexpr std::size_t seed {};
+    const std::size_t size = state.range(0);
+    std::vector<T> test_set = generate_random_vector<T>(size, seed);
+
+    for(auto _ : state)
+    {
+        benchmark::DoNotOptimize(boost::math::statistics::kurtosis(std::execution::seq, test_set));
+    }
+    state.SetComplexityN(state.range(0));
+}
+
+template<typename T>
+void parallel_kurtosis(benchmark::State& state)
+{
+    constexpr std::size_t seed {};
+    const std::size_t size = state.range(0);
+    std::vector<T> test_set = generate_random_vector<T>(size, seed);
+
+    for(auto _ : state)
+    {
+        benchmark::DoNotOptimize(boost::math::statistics::kurtosis(std::execution::par, test_set));
+    }
+    state.SetComplexityN(state.range(0));
+}
 
 template<typename T>
 void median(benchmark::State& state)
@@ -251,6 +332,36 @@ void parallel_interquartile_range(benchmark::State& state)
     state.SetComplexityN(state.range(0));
 }
 
+template<typename T>
+void mode(benchmark::State& state)
+{
+    constexpr std::size_t seed {};
+    const std::size_t size = state.range(0);
+    std::vector<T> test_set = generate_random_vector<T>(size, seed);
+    std::vector<T> modes;
+
+    for(auto _ : state)
+    {
+        benchmark::DoNotOptimize(boost::math::statistics::mode(std::execution::seq, test_set, std::back_inserter(modes)));
+    }
+    state.SetComplexityN(state.range(0));
+}
+
+template<typename T>
+void parallel_mode(benchmark::State& state)
+{
+    constexpr std::size_t seed {};
+    const std::size_t size = state.range(0);
+    std::vector<T> test_set = generate_random_vector<T>(size, seed);
+    std::vector<T> modes;
+
+    for(auto _ : state)
+    {
+        benchmark::DoNotOptimize(boost::math::statistics::mode(std::execution::par, test_set, std::back_inserter(modes)));
+    }
+    state.SetComplexityN(state.range(0));
+}
+
 // Mean
 BENCHMARK_TEMPLATE(mean, int)->RangeMultiplier(2)->Range(1 << 6, 1 << 20)->Complexity(benchmark::oN)->UseRealTime();
 BENCHMARK_TEMPLATE(parallel_mean, int)->RangeMultiplier(2)->Range(1 << 6, 1 << 20)->Complexity(benchmark::oN)->UseRealTime();
@@ -264,8 +375,22 @@ BENCHMARK_TEMPLATE(variance, double)->RangeMultiplier(2)->Range(1 << 6, 1 << 20)
 BENCHMARK_TEMPLATE(parallel_variance, double)->RangeMultiplier(2)->Range(1 << 6, 1 << 20)->Complexity(benchmark::oN)->UseRealTime();
 
 // Skewness
+BENCHMARK_TEMPLATE(skewness, int)->RangeMultiplier(2)->Range(1 << 6, 1 << 20)->Complexity(benchmark::oN)->UseRealTime();
+BENCHMARK_TEMPLATE(parallel_skewness, int)->RangeMultiplier(2)->Range(1 << 6, 1 << 20)->Complexity(benchmark::oN)->UseRealTime();
+BENCHMARK_TEMPLATE(skewness, double)->RangeMultiplier(2)->Range(1 << 6, 1 << 20)->Complexity(benchmark::oN)->UseRealTime();
+BENCHMARK_TEMPLATE(parallel_skewness, double)->RangeMultiplier(2)->Range(1 << 6, 1 << 20)->Complexity(benchmark::oN)->UseRealTime();
+
 // First four moments
+BENCHMARK_TEMPLATE(first_four_moments, int)->RangeMultiplier(2)->Range(1 << 6, 1 << 20)->Complexity(benchmark::oN)->UseRealTime();
+BENCHMARK_TEMPLATE(parallel_first_four_moments, int)->RangeMultiplier(2)->Range(1 << 6, 1 << 20)->Complexity(benchmark::oN)->UseRealTime();
+BENCHMARK_TEMPLATE(first_four_moments, double)->RangeMultiplier(2)->Range(1 << 6, 1 << 20)->Complexity(benchmark::oN)->UseRealTime();
+BENCHMARK_TEMPLATE(parallel_first_four_moments double)->RangeMultiplier(2)->Range(1 << 6, 1 << 20)->Complexity(benchmark::oN)->UseRealTime();
+
 // Kurtosis
+BENCHMARK_TEMPLATE(kurtosis, int)->RangeMultiplier(2)->Range(1 << 6, 1 << 20)->Complexity(benchmark::oN)->UseRealTime();
+BENCHMARK_TEMPLATE(parallel_kurtosis, int)->RangeMultiplier(2)->Range(1 << 6, 1 << 20)->Complexity(benchmark::oN)->UseRealTime();
+BENCHMARK_TEMPLATE(kurtosis, double)->RangeMultiplier(2)->Range(1 << 6, 1 << 20)->Complexity(benchmark::oN)->UseRealTime();
+BENCHMARK_TEMPLATE(parallel_kurtosis, double)->RangeMultiplier(2)->Range(1 << 6, 1 << 20)->Complexity(benchmark::oN)->UseRealTime();
 
 // Median
 BENCHMARK_TEMPLATE(median, int)->RangeMultiplier(2)->Range(1 << 6, 1 << 20)->Complexity(benchmark::oN)->UseRealTime();
@@ -290,5 +415,9 @@ BENCHMARK_TEMPLATE(interquartile_range, double)->RangeMultiplier(2)->Range(1 << 
 BENCHMARK_TEMPLATE(parallel_interquartile_range, double)->RangeMultiplier(2)->Range(1 << 6, 1 << 20)->Complexity(benchmark::oN)->UseRealTime();
 
 // Mode
+BENCHMARK_TEMPLATE(mode, int)->RangeMultiplier(2)->Range(1 << 6, 1 << 20)->Complexity(benchmark::oN)->UseRealTime();
+BENCHMARK_TEMPLATE(parallel_mode, int)->RangeMultiplier(2)->Range(1 << 6, 1 << 20)->Complexity(benchmark::oN)->UseRealTime();
+BENCHMARK_TEMPLATE(mode, double)->RangeMultiplier(2)->Range(1 << 6, 1 << 20)->Complexity(benchmark::oN)->UseRealTime();
+BENCHMARK_TEMPLATE(parallel_mode, double)->RangeMultiplier(2)->Range(1 << 6, 1 << 20)->Complexity(benchmark::oN)->UseRealTime();
 
 BENCHMARK_MAIN();
