@@ -1,4 +1,5 @@
 //  (C) Copyright Nick Thompson 2018.
+//  (C) Copyright Matt Borland 2020.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -21,80 +22,35 @@
 #include <valarray>
 #include <thread>
 #include <future>
-#include <iostream>
 
 namespace boost::math::statistics {
 
-// TODO(mborland): Trivial parallel algo breaks for complex types. Consider using paralllel variance to solve
-// TODO(mborland): Benchmark nick's original impl vs current impl to pick which to be used as the sequential impl.
 template<class ExecutionPolicy, class ForwardIterator>
-auto mean(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last)
+inline auto mean(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last)
 {
     using Real = typename std::iterator_traits<ForwardIterator>::value_type;
     BOOST_ASSERT_MSG(first != last, "At least one sample is required to compute the mean.");
+    
     if constexpr (std::is_integral_v<Real>)
     {
         if constexpr (std::is_same_v<std::remove_reference_t<decltype(exec)>, decltype(std::execution::seq)>)
         {
-            double mu = 0;
-            double i = 1;
-            for(auto it = first; it != last; ++it) 
-            {
-                mu = mu + (*it - mu)/i;
-                i += 1;
-            }
-            return mu;
+            return detail::mean_sequential_impl<double>(first, last);
         }
         else
         {
             return std::reduce(exec, first, last, 0.0) / std::distance(first, last);
         }
     }
-    else if constexpr (std::is_same_v<typename std::iterator_traits<ForwardIterator>::iterator_category, std::random_access_iterator_tag>)
-    {
-        std::size_t elements {std::distance(first, last)};
-        std::valarray<Real> mu {0, 0, 0, 0};
-        std::valarray<Real> temp {0, 0, 0, 0};
-        Real i = 1;
-        auto end {last - (elements % 4)};
-
-        for(auto it {first}; it != end; it += 4)
-        {
-            const Real inv {Real(1) / i};
-            temp = {*it, *(it+1), *(it+2), *(it+3)};
-            temp -= mu;
-            mu += (temp *= inv);
-            i += 1;
-        }
-
-        Real num1 = Real(elements - (elements %4))/Real(4);
-        Real num2 = num1 + Real(elements % 4);
-
-        for (auto it = end; it != last; ++it)
-        {
-            mu[3] += (*it-mu[3])/i;
-            i += 1;
-        }
-
-        return (num1 * std::valarray<Real>(mu[std::slice(0,3,1)]).sum() + num2 * mu[3]) / Real(elements);
-    }
     else
     {
         if constexpr (std::is_same_v<std::remove_reference_t<decltype(exec)>, decltype(std::execution::seq)>)
         {
-            auto it = first;
-            Real mu = *it;
-            Real i = 2;
-            while(++it != last)
-            {
-                mu += (*it - mu)/i;
-                i += 1;
-            }
-            return mu;
+            return detail::mean_sequential_impl<Real>(first, last);
         }
         else
         {
-            return std::reduce(exec, first, last, static_cast<Real>(0.0)) / std::distance(first, last);
+            return std::reduce(exec, first, last, Real(0.0)) / Real(std::distance(first, last));
         }
     }
 }

@@ -1,5 +1,6 @@
 /*
  *  (C) Copyright Nick Thompson 2018.
+ *  (C) Copyright Matt Borland 2020.
  *  Use, modification and distribution are subject to the
  *  Boost Software License, Version 1.0. (See accompanying file
  *  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -33,8 +34,8 @@ using boost::multiprecision::cpp_complex_50;
  */
 
  // To stress test, set global_seed = 0, global_size = huge.
- static const constexpr size_t global_seed = 0;
- static const constexpr size_t global_size = 128;
+ static constexpr size_t global_seed = 0;
+ static constexpr size_t global_size = 128;
 
 template<class T>
 std::vector<T> generate_random_vector(size_t size, size_t seed)
@@ -201,7 +202,6 @@ void test_mean(ExecutionPolicy&& exec)
         }
         BOOST_TEST(abs(higham_ - naive_) < 100*tol*abs(naive_));
     }
-
 }
 
 template<class Complex, class ExecutionPolicy>
