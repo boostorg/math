@@ -149,39 +149,17 @@ ReturnType parallel_variance_impl(ForwardIterator first, ForwardIterator last)
 }
 
 // https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance#Higher-order_statistics
-// Use first four moments of disjoint sets for policies with skewness and kurtosis
-template<typename ForwardIterator>
-auto first_four_moments_integral_impl(ForwardIterator first, ForwardIterator last)
+template<typename ReturnType, typename ForwardIterator>
+ReturnType first_four_moments_sequential_impl(ForwardIterator first, ForwardIterator last)
 {
-    double M1 = *first;
-    double M2 = 0;
-    double M3 = 0;
-    double M4 = 0;
-    double n = 2;
-    for (auto it = std::next(first); it != last; ++it)
-    {
-        double delta21 = *it - M1;
-        double tmp = delta21/n;
-        M4 = M4 + tmp*(tmp*tmp*delta21*((n-1)*(n*n-3*n+3)) + 6*tmp*M2 - 4*M3);
-        M3 = M3 + tmp*((n-1)*(n-2)*delta21*tmp - 3*M2);
-        M2 = M2 + tmp*(n-1)*delta21;
-        M1 = M1 + tmp;
-        n += 1;
-    }
-
-    return std::make_tuple(M1, M2, M3, M4, n-1);
-}
-
-template<typename ForwardIterator>
-auto first_four_moments_real_impl(ForwardIterator first, ForwardIterator last)
-{
-    using Real = typename std::iterator_traits<ForwardIterator>::value_type;
+    using Real = std::tuple_element_t<0, ReturnType>;
+    using Size = std::tuple_element_t<4, ReturnType>;
 
     Real M1 = *first;
     Real M2 = 0;
     Real M3 = 0;
     Real M4 = 0;
-    Real n = 2;
+    Size n = 2;
     for (auto it = std::next(first); it != last; ++it)
     {
         Real delta21 = *it - M1;
@@ -209,36 +187,24 @@ ReturnType parallel_first_four_moments_impl(ForwardIterator first, ForwardIterat
     thread_counter.fetch_add(2);
     auto future_a {std::async(std::launch::async, [first, range_a]() -> ReturnType
     {
-        if constexpr (std::is_integral_v<Real>)
+        if(thread_counter + 2 <= num_threads && range_a > 10)
         {
-            if(thread_counter + 2 <= num_threads && range_a > 10)
-                return parallel_first_four_moments_impl<ReturnType>(first, std::next(first, range_a));
-            else
-                return first_four_moments_integral_impl(first, std::next(first, range_a));
+            return parallel_first_four_moments_impl<ReturnType>(first, std::next(first, range_a));
         }
         else
         {
-            if(thread_counter + 2 <= num_threads && range_a > 10)
-                return parallel_first_four_moments_impl<ReturnType>(first, std::next(first, range_a));
-            else
-                return first_four_moments_real_impl(first, std::next(first, range_a));
+            return first_four_moments_sequential_impl<ReturnType>(first, std::next(first, range_a));
         }
     })};
     auto future_b {std::async(std::launch::async, [first, last, range_a]() -> ReturnType
     {
-        if constexpr (std::is_integral_v<Real>)
+        if(thread_counter + 2 <= num_threads && range_a > 10)
         {
-            if(thread_counter + 2 <= num_threads && range_a > 10)
-                return parallel_first_four_moments_impl<ReturnType>(std::next(first, range_a), last);
-            else
-                return first_four_moments_integral_impl(std::next(first, range_a), last);
+            return parallel_first_four_moments_impl<ReturnType>(std::next(first, range_a), last);
         }
         else
         {
-            if(thread_counter + 2 <= num_threads && range_a > 10)
-                return parallel_first_four_moments_impl<ReturnType>(std::next(first, range_a), last);
-            else
-                return first_four_moments_real_impl(std::next(first, range_a), last);
+            return first_four_moments_sequential_impl<ReturnType>(std::next(first, range_a), last);
         }
     })};
 
