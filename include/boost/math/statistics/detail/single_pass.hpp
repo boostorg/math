@@ -387,6 +387,37 @@ auto gini_coefficient_sequential_impl(RandomAccessIterator first, RandomAccessIt
         return ((2*num)/denom - i)/(i-1);
     }
 }
+
+template<typename ExecutionPolicy, typename ForwardIterator, typename OutputIterator>
+OutputIterator mode_impl(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last, OutputIterator output)
+{
+    using Real = typename std::iterator_traits<ForwardIterator>::value_type;
+    std::unordered_map<Real, unsigned> table;
+
+    std::for_each(exec, first, last, [&table](Real val){ table[val]++; });
+    
+    std::vector<Real> modes;
+    modes.reserve(16);
+    unsigned mode_freq {};
+
+    std::for_each(exec, table.begin(), table.end(), [&modes, &mode_freq](auto val)
+    { 
+        if(val.second > mode_freq)
+        {
+            modes.resize(1);
+            modes[0] = val.first;
+            mode_freq = val.second;
+        }
+        else if(val.second == mode_freq)
+        {
+            modes.emplace_back(val.first);
+        }
+    });
+
+    return std::move(modes.begin(), modes.end(), output);
+}
+
 }
 
 #endif // BOOST_MATH_STATISTICS_UNIVARIATE_STATISTICS_DETAIL_SINGLE_PASS_HPP
+

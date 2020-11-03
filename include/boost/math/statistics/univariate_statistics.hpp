@@ -636,6 +636,7 @@ inline auto interquartile_range(RandomAccessContainer & v)
     return interquartile_range(std::execution::seq, std::begin(v), std::end(v));
 }
 
+/*
 template<class ForwardIterator, class OutputIterator>
 auto sorted_mode(ForwardIterator first, ForwardIterator last, OutputIterator output) -> decltype(output)
 {
@@ -674,24 +675,30 @@ auto sorted_mode(ForwardIterator first, ForwardIterator last, OutputIterator out
 
     return std::move(modes.begin(), modes.end(), output);
 }
-
-template<class Container, class OutputIterator>
-inline auto sorted_mode(Container & v, OutputIterator output) -> decltype(output)
+*/
+template<class ExecutionPolicy, class ForwardIterator, class OutputIterator>
+inline OutputIterator mode(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last, OutputIterator output)
 {
-    return sorted_mode(v.begin(), v.end(), output);
+    output = detail::mode_impl(exec, first, last, output);
+    return output;
+}
+
+template<class ExecutionPolicy, class Container, class OutputIterator>
+inline OutputIterator mode(ExecutionPolicy&& exec, Container & v, OutputIterator output)
+{
+    return mode(exec, std::cbegin(v), std::cend(v), output);
 }
 
 template<class RandomAccessIterator, class OutputIterator>
-auto mode(RandomAccessIterator first, RandomAccessIterator last, OutputIterator output) -> decltype(output)
+inline OutputIterator mode(RandomAccessIterator first, RandomAccessIterator last, OutputIterator output)
 {
-    std::sort(first, last);
-    return sorted_mode(first, last, output);
+    return mode(std::execution::seq, first, last, output);
 }
 
 template<class RandomAccessContainer, class OutputIterator>
-inline auto mode(RandomAccessContainer & v, OutputIterator output) -> decltype(output)
+inline OutputIterator mode(RandomAccessContainer & v, OutputIterator output)
 {
-    return mode(v.begin(), v.end(), output);
+    return mode(std::execution::seq, std::cbegin(v), std::cend(v), output);
 }
 
 }

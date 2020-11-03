@@ -1024,67 +1024,83 @@ void test_interquartile_range(ExecutionPolicy&& exec)
     BOOST_TEST_EQ(iqr, 6);
 }
 
-template<class Z>
-void test_mode()
+template<class Z, class ExecutionPolicy>
+void test_integer_mode(ExecutionPolicy&& exec)
 {
     std::vector<Z> modes;
     std::vector<Z> v {1, 2, 2, 3, 4, 5};
     const Z ref = 2;
 
     // Does iterator call work?
-    boost::math::statistics::mode(v.begin(), v.end(), std::back_inserter(modes));
+    boost::math::statistics::mode(exec, v.begin(), v.end(), std::back_inserter(modes));
     BOOST_TEST_EQ(ref, modes[0]);
 
     // Does container call work?
     modes.clear();
-    boost::math::statistics::mode(v, std::back_inserter(modes));
+    boost::math::statistics::mode(exec, v, std::back_inserter(modes));
     BOOST_TEST_EQ(ref, modes[0]);
 
     // Does it work with part of a vector?
     modes.clear();
-    boost::math::statistics::mode(v.begin(), v.begin() + 3, std::back_inserter(modes));
+    boost::math::statistics::mode(exec, v.begin(), v.begin() + 3, std::back_inserter(modes));
     BOOST_TEST_EQ(ref, modes[0]);
 
     // Does it work with const qualification? Only if pre-sorted
     modes.clear();
-    boost::math::statistics::sorted_mode(v.cbegin(), v.cend(), std::back_inserter(modes));
+    boost::math::statistics::mode(exec, v.cbegin(), v.cend(), std::back_inserter(modes));
     BOOST_TEST_EQ(ref, modes[0]);
 
     // Does it work with std::array?
     modes.clear();
     std::array<Z, 6> u {1, 2, 2, 3, 4, 5};
-    boost::math::statistics::mode(u, std::back_inserter(modes));
+    boost::math::statistics::mode(exec, u, std::back_inserter(modes));
     BOOST_TEST_EQ(ref, modes[0]);
 
     // Does it work with a bi-modal distribuition?
     modes.clear();
     std::vector<Z> w {1, 2, 2, 3, 3, 4, 5};
-    boost::math::statistics::mode(w.begin(), w.end(), std::back_inserter(modes));
+    boost::math::statistics::mode(exec, w.begin(), w.end(), std::back_inserter(modes));
     BOOST_TEST_EQ(modes.size(), 2);
 
     // Does it work with an empty vector?
     modes.clear();
     std::vector<Z> x {};
-    boost::math::statistics::mode(x, std::back_inserter(modes));
+    boost::math::statistics::mode(exec, x, std::back_inserter(modes));
     BOOST_TEST_EQ(modes.size(), 0);
 
     // Does it work with a one item vector
     modes.clear();
     x.push_back(2);
-    boost::math::statistics::mode(x, std::back_inserter(modes));
+    boost::math::statistics::mode(exec, x, std::back_inserter(modes));
     BOOST_TEST_EQ(ref, modes[0]);
 
     // Does it work with a doubly linked list
     modes.clear();
     std::list<Z> dl {1, 2, 2, 3, 4, 5};
-    boost::math::statistics::sorted_mode(dl, std::back_inserter(modes));
+    boost::math::statistics::mode(exec, dl, std::back_inserter(modes));
     BOOST_TEST_EQ(ref, modes[0]);
 
     // Does it work with a singly linked list
     modes.clear();
     std::forward_list<Z> fl {1, 2, 2, 3, 4, 5};
-    boost::math::statistics::sorted_mode(fl, std::back_inserter(modes));
+    boost::math::statistics::mode(exec, fl, std::back_inserter(modes));
     BOOST_TEST_EQ(ref, modes[0]);
+}
+
+template<class Real, class ExecutionPolicy>
+void test_mode(ExecutionPolicy&& exec)
+{
+    std::vector<Real> v {Real(2.0), Real(2.0), Real(2.001), Real(3.2), Real(3.3), Real(2.1)};
+    std::vector<Real> modes;
+
+    boost::math::statistics::mode(exec, v, std::back_inserter(modes));
+    BOOST_TEST_EQ(Real(2.0), modes[0]);
+
+    // Bi-modal
+    modes.clear();
+    std::vector<Real> v2 {Real(2.0), Real(2.0), Real(2.0001), Real(2.0001), Real(3.2), Real(1.9999)};
+    boost::math::statistics::mode(exec, v2, std::back_inserter(modes));
+    BOOST_TEST_EQ(modes.size(), 2);
 }
 
 int main()
@@ -1201,6 +1217,7 @@ int main()
     //test_kurtosis<long double>(std::execution::par_unseq);
     // Kinda expensive:
     //test_kurtosis<cpp_bin_float_50>(std::execution::seq);
+    // Excessive error:
     //test_kurtosis<cpp_bin_float_50>(std::execution::par);
     //test_kurtosis<cpp_bin_float_50>(std::execution::par_unseq);
 
@@ -1281,10 +1298,28 @@ int main()
     test_interquartile_range<cpp_bin_float_50>(std::execution::par);
     test_interquartile_range<cpp_bin_float_50>(std::execution::par_unseq);
 
-    test_mode<int>();
-    test_mode<int32_t>();
-    test_mode<int64_t>();
-    test_mode<uint32_t>();
+    test_integer_mode<int>(std::execution::seq);
+    test_integer_mode<int>(std::execution::par);
+    test_integer_mode<int>(std::execution::par_unseq);
+    test_integer_mode<int32_t>(std::execution::seq);
+    test_integer_mode<int32_t>(std::execution::par);
+    test_integer_mode<int32_t>(std::execution::par_unseq);
+    test_integer_mode<int64_t>(std::execution::seq);
+    test_integer_mode<int64_t>(std::execution::par);
+    test_integer_mode<int64_t>(std::execution::par_unseq);
+    test_integer_mode<uint32_t>(std::execution::seq);
+    test_integer_mode<uint32_t>(std::execution::par);
+    test_integer_mode<uint32_t>(std::execution::par_unseq);
+
+    test_mode<float>(std::execution::seq);
+    test_mode<float>(std::execution::par);
+    test_mode<float>(std::execution::par_unseq);
+    test_mode<double>(std::execution::seq);
+    test_mode<double>(std::execution::par);
+    test_mode<double>(std::execution::par_unseq);
+    test_mode<cpp_bin_float_50>(std::execution::seq);
+    test_mode<cpp_bin_float_50>(std::execution::par);
+    test_mode<cpp_bin_float_50>(std::execution::par_unseq);
 
     return boost::report_errors();
 }
