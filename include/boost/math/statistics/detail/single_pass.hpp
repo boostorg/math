@@ -69,47 +69,27 @@ ReturnType mean_sequential_impl(ForwardIterator first, ForwardIterator last)
 
 // Higham, Accuracy and Stability, equation 1.6a and 1.6b:
 // Calculates Mean, M2, and variance
-template<typename ForwardIterator>
-auto variance_integeral_impl(ForwardIterator first, ForwardIterator last) -> std::tuple<double, double, double>
+template<typename ReturnType, typename ForwardIterator>
+ReturnType variance_sequential_impl(ForwardIterator first, ForwardIterator last)
 {
-    double M = *first;
-    double Q = 0;
-    double k = 2;
-    double M2 = 0;
-    for (auto it = std::next(first); it != last; ++it)
-    {
-        double delta_1 = *it - M;
-        Q = Q + ((k-1)*delta_1*delta_1)/k;
-        M = M + delta_1/k;
-        k += 1;
-        double delta_2 = *it - M;
-        M2 = M2 + (delta_1 * delta_2);
-    }
-    return std::make_tuple(M, M2, Q/(k-1));
-}
-
-template<typename ForwardIterator>
-auto variance_real_impl(ForwardIterator first, ForwardIterator last) ->
-    std::tuple<typename std::iterator_traits<ForwardIterator>::value_type,
-               typename std::iterator_traits<ForwardIterator>::value_type,
-               typename std::iterator_traits<ForwardIterator>::value_type>
-{
-    using Real = typename std::iterator_traits<ForwardIterator>::value_type;
+    using Real = std::tuple_element_t<0, ReturnType>;
 
     Real M = *first;
     Real Q = 0;
     Real k = 2;
     Real M2 = 0;
-    for (auto it = std::next(first); it != last; ++it)
+
+    for(auto it = std::next(first); it != last; ++it)
     {
-        Real tmp = (*it - M)/k;
+        Real tmp = (*it - M) / k;
         Real delta_1 = *it - M;
         Q += k*(k-1)*tmp*tmp;
         M += tmp;
         k += 1;
         Real delta_2 = *it - M;
-        M2 = M2 + (delta_1 * delta_2);
+        M2 += delta_1 * delta_2;
     }
+
     return std::make_tuple(M, M2, Q/(k-1));
 }
 
@@ -131,36 +111,24 @@ ReturnType parallel_variance_impl(ForwardIterator first, ForwardIterator last)
     thread_counter.fetch_add(2);
     auto future_a {std::async(std::launch::async, [first, range_a]() -> ReturnType
     {
-        if constexpr (std::is_integral_v<Real>)
+        if(thread_counter + 2 <= num_threads && range_a > 10)
         {
-            if(thread_counter + 2 <= num_threads && range_a > 10)
-                return parallel_variance_impl<ReturnType>(first, std::next(first, range_a));
-            else
-                return variance_integeral_impl(first, std::next(first, range_a));
+            return parallel_variance_impl<ReturnType>(first, std::next(first, range_a));
         }
         else
         {
-            if(thread_counter + 2 <= num_threads && range_a > 10)
-                return parallel_variance_impl<ReturnType>(first, std::next(first, range_a));
-            else
-                return variance_real_impl(first, std::next(first, range_a));
+            return variance_sequential_impl<ReturnType>(first, std::next(first, range_a));
         }
     })};
     auto future_b {std::async(std::launch::async, [first, last, range_a]() -> ReturnType
     {
-        if constexpr (std::is_integral_v<Real>)
+        if(thread_counter + 2 <= num_threads && range_a > 10)
         {
-            if(thread_counter + 2 <= num_threads && range_a > 10)
-                return parallel_variance_impl<ReturnType>(std::next(first, range_a), last);
-            else
-                return variance_integeral_impl(std::next(first, range_a), last);
+            return parallel_variance_impl<ReturnType>(std::next(first, range_a), last);
         }
         else
         {
-            if(thread_counter + 2 <= num_threads && range_a > 10)
-                return parallel_variance_impl<ReturnType>(std::next(first, range_a), last);
-            else
-                return variance_real_impl(std::next(first, range_a), last);
+            return variance_sequential_impl<ReturnType>(std::next(first, range_a), last);
         }
     })};
 

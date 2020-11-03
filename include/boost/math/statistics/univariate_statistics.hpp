@@ -82,7 +82,7 @@ inline auto variance(ExecutionPolicy&& exec, ForwardIterator first, ForwardItera
     {
         if constexpr (std::is_same_v<std::remove_reference_t<decltype(exec)>, decltype(std::execution::seq)>)
         {
-            return std::get<2>(detail::variance_integeral_impl(first, last));
+           return std::get<2>(detail::variance_sequential_impl<std::tuple<double, double, double>>(first, last));
         }
         else
         {
@@ -95,7 +95,7 @@ inline auto variance(ExecutionPolicy&& exec, ForwardIterator first, ForwardItera
     {
         if constexpr (std::is_same_v<std::remove_reference_t<decltype(exec)>, decltype(std::execution::seq)>)
         {
-            return std::get<2>(detail::variance_real_impl(first, last));
+            return std::get<2>(detail::variance_sequential_impl<std::tuple<Real, Real, Real>>(first, last));
         }
         else
         {
@@ -159,7 +159,7 @@ inline auto mean_and_sample_variance(ExecutionPolicy&& exec, ForwardIterator fir
     {
         if constexpr (std::is_same_v<std::remove_reference_t<decltype(exec)>, decltype(std::execution::seq)>)
         {
-            const auto results = detail::variance_integeral_impl(first, last);
+            const auto results = detail::variance_sequential_impl<std::tuple<double, double, double>>(first, last);
             return std::make_pair(std::get<0>(results), std::get<2>(results));
         }
         else
@@ -173,7 +173,7 @@ inline auto mean_and_sample_variance(ExecutionPolicy&& exec, ForwardIterator fir
     {
         if constexpr (std::is_same_v<std::remove_reference_t<decltype(exec)>, decltype(std::execution::seq)>)
         {
-            const auto results = detail::variance_real_impl(first, last);
+            const auto results = detail::variance_sequential_impl<std::tuple<Real, Real, Real>>(first, last);
             return std::make_pair(std::get<0>(results), std::get<2>(results));
         }
         else
