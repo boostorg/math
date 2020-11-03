@@ -101,32 +101,6 @@ std::vector<T> generate_random_vector(size_t size, size_t seed)
     }
 }
 
-
-template<class Z>
-void test_integer_mean()
-{
-    double tol = 100*std::numeric_limits<double>::epsilon();
-    std::vector<Z> v{1,2,3,4,5};
-    double mu = boost::math::statistics::mean(v);
-    BOOST_TEST(abs(mu - 3) < tol);
-
-    // Work with std::array?
-    std::array<Z, 5> w{1,2,3,4,5};
-    mu = boost::math::statistics::mean(w);
-    BOOST_TEST(abs(mu - 3) < tol);
-
-    v = generate_random_vector<Z>(global_size, global_seed);
-    Z scale = 2;
-
-    double m1 = scale*boost::math::statistics::mean(v);
-    for (auto & x : v)
-    {
-        x *= scale;
-    }
-    double m2 = boost::math::statistics::mean(v);
-    BOOST_TEST(abs(m1 - m2) < tol*abs(m1));
-}
-
 template<class Z, class ExecutionPolicy>
 void test_integer_mean(ExecutionPolicy&& exec)
 {
@@ -161,73 +135,6 @@ auto naive_mean(RandomAccessContainer const & v)
         sum += x;
     }
     return sum/v.size();
-}
-
-template<class Real>
-void test_mean()
-{
-    Real tol = std::numeric_limits<Real>::epsilon();
-    std::vector<Real> v{1,2,3,4,5};
-    Real mu = boost::math::statistics::mean(v.begin(), v.end());
-    BOOST_TEST(abs(mu - 3) < tol);
-
-    // Does range call work?
-    mu = boost::math::statistics::mean(v);
-    BOOST_TEST(abs(mu - 3) < tol);
-
-    // Can we successfully average only part of the vector?
-    mu = boost::math::statistics::mean(v.begin(), v.begin() + 3);
-    BOOST_TEST(abs(mu - 2) < tol);
-
-    // Does it work when we const qualify?
-    mu = boost::math::statistics::mean(v.cbegin(), v.cend());
-    BOOST_TEST(abs(mu - 3) < tol);
-
-    // Does it work for std::array?
-    std::array<Real, 7> u{1,2,3,4,5,6,7};
-    mu = boost::math::statistics::mean(u.begin(), u.end());
-    BOOST_TEST(abs(mu - 4) < 10*tol);
-
-    // Does it work for a forward iterator?
-    std::forward_list<Real> l{1,2,3,4,5,6,7};
-    mu = boost::math::statistics::mean(l.begin(), l.end());
-    BOOST_TEST(abs(mu - 4) < tol);
-
-    // Does it work with ublas vectors?
-    boost::numeric::ublas::vector<Real> w(7);
-    for (size_t i = 0; i < w.size(); ++i)
-    {
-        w[i] = i+1;
-    }
-    mu = boost::math::statistics::mean(w.cbegin(), w.cend());
-    BOOST_TEST(abs(mu - 4) < tol);
-
-    v = generate_random_vector<Real>(global_size, global_seed);
-    Real scale = 2;
-    Real m1 = scale*boost::math::statistics::mean(v);
-    for (auto & x : v)
-    {
-        x *= scale;
-    }
-    Real m2 = boost::math::statistics::mean(v);
-    BOOST_TEST(abs(m1 - m2) < tol*abs(m1));
-
-    // Stress test:
-    for (size_t i = 1; i < 30; ++i)
-    {
-        v = generate_random_vector<Real>(i, 12803);
-        auto naive_ = naive_mean(v);
-        auto higham_ = boost::math::statistics::mean(v);
-        if (abs(higham_ - naive_) >= 100*tol*abs(naive_))
-        {
-            std::cout << std::hexfloat;
-            std::cout << "Terms = " << v.size() << "\n";
-            std::cout << "higham = " << higham_ << "\n";
-            std::cout << "naive_ = " << naive_ << "\n";
-        }
-        BOOST_TEST(abs(higham_ - naive_) < 100*tol*abs(naive_));
-    }
-
 }
 
 template<class Real, class ExecutionPolicy>
@@ -297,22 +204,6 @@ void test_mean(ExecutionPolicy&& exec)
 
 }
 
-template<class Complex>
-void test_complex_mean()
-{
-    typedef typename Complex::value_type Real;
-    Real tol = std::numeric_limits<Real>::epsilon();
-    std::vector<Complex> v{{0,1},{0,2},{0,3},{0,4},{0,5}};
-    auto mu = boost::math::statistics::mean(v.begin(), v.end());
-    BOOST_TEST(abs(mu.imag() - 3) < tol);
-    BOOST_TEST(abs(mu.real()) < tol);
-
-    // Does range work?
-    mu = boost::math::statistics::mean(v);
-    BOOST_TEST(abs(mu.imag() - 3) < tol);
-    BOOST_TEST(abs(mu.real()) < tol);
-}
-
 template<class Complex, class ExecutionPolicy>
 void test_complex_mean(ExecutionPolicy&& exec)
 {
@@ -327,63 +218,6 @@ void test_complex_mean(ExecutionPolicy&& exec)
     mu = boost::math::statistics::mean(exec, v);
     BOOST_TEST(abs(mu.imag() - 3) < tol);
     BOOST_TEST(abs(mu.real()) < tol);
-}
-
-template<class Real>
-void test_variance()
-{
-    Real tol = std::numeric_limits<Real>::epsilon();
-    std::vector<Real> v{1,1,1,1,1,1};
-    Real sigma_sq = boost::math::statistics::variance(v.begin(), v.end());
-    BOOST_TEST(abs(sigma_sq) < tol);
-
-    sigma_sq = boost::math::statistics::variance(v);
-    BOOST_TEST(abs(sigma_sq) < tol);
-
-    Real s_sq = boost::math::statistics::sample_variance(v);
-    BOOST_TEST(abs(s_sq) < tol);
-
-    std::vector<Real> u{1};
-    sigma_sq = boost::math::statistics::variance(u.cbegin(), u.cend());
-    BOOST_TEST(abs(sigma_sq) < tol);
-
-    std::array<Real, 8> w{0,1,0,1,0,1,0,1};
-    sigma_sq = boost::math::statistics::variance(w.begin(), w.end());
-    BOOST_TEST(abs(sigma_sq - 1.0/4.0) < tol);
-
-    sigma_sq = boost::math::statistics::variance(w);
-    BOOST_TEST(abs(sigma_sq - 1.0/4.0) < tol);
-
-    std::forward_list<Real> l{0,1,0,1,0,1,0,1};
-    sigma_sq = boost::math::statistics::variance(l.begin(), l.end());
-    BOOST_TEST(abs(sigma_sq - 1.0/4.0) < tol);
-
-    v = generate_random_vector<Real>(global_size, global_seed);
-    Real scale = 2;
-    Real m1 = scale*scale*boost::math::statistics::variance(v);
-    for (auto & x : v)
-    {
-        x *= scale;
-    }
-    Real m2 = boost::math::statistics::variance(v);
-    BOOST_TEST(abs(m1 - m2) < tol*abs(m1));
-
-    // Wikipedia example for a variance of N sided die:
-    // https://en.wikipedia.org/wiki/Variance
-    for (size_t j = 16; j < 2048; j *= 2)
-    {
-        v.resize(1024);
-        Real n = v.size();
-        for (size_t i = 0; i < v.size(); ++i)
-        {
-            v[i] = i + 1;
-        }
-
-        sigma_sq = boost::math::statistics::variance(v);
-
-        BOOST_TEST(abs(sigma_sq - (n*n-1)/Real(12)) <= tol*sigma_sq);
-    }
-
 }
 
 template<class Real, class ExecutionPolicy>
@@ -442,29 +276,6 @@ void test_variance(ExecutionPolicy&& exec)
         BOOST_TEST(abs(sigma_sq - (n*n-1)/Real(12)) <= tol*sigma_sq);
     }
 
-}
-
-template<class Z>
-void test_integer_variance()
-{
-    double tol = std::numeric_limits<double>::epsilon();
-    std::vector<Z> v{1,1,1,1,1,1};
-    double sigma_sq = boost::math::statistics::variance(v);
-    BOOST_TEST(abs(sigma_sq) < tol);
-
-    std::forward_list<Z> l{0,1,0,1,0,1,0,1};
-    sigma_sq = boost::math::statistics::variance(l.begin(), l.end());
-    BOOST_TEST(abs(sigma_sq - 1.0/4.0) < tol);
-
-    v = generate_random_vector<Z>(global_size, global_seed);
-    Z scale = 2;
-    double m1 = scale*scale*boost::math::statistics::variance(v);
-    for (auto & x : v)
-    {
-        x *= scale;
-    }
-    double m2 = boost::math::statistics::variance(v);
-    BOOST_TEST(abs(m1 - m2) < tol*abs(m1));
 }
 
 template<class Z, class ExecutionPolicy>
@@ -1105,11 +916,6 @@ void test_mode(ExecutionPolicy&& exec)
 
 int main()
 {
-    test_mean<float>();
-    test_mean<double>();
-    test_mean<long double>();
-    test_mean<cpp_bin_float_50>();
-
     test_mean<float>(std::execution::seq);
     test_mean<float>(std::execution::par);
     test_mean<float>(std::execution::par_unseq);
@@ -1123,9 +929,6 @@ int main()
     test_mean<cpp_bin_float_50>(std::execution::par);
     test_mean<cpp_bin_float_50>(std::execution::par_unseq);
 
-    test_integer_mean<unsigned>();
-    test_integer_mean<int>();
-
     test_integer_mean<unsigned>(std::execution::seq);
     test_integer_mean<unsigned>(std::execution::par);
     test_integer_mean<unsigned>(std::execution::par_unseq);
@@ -1133,20 +936,12 @@ int main()
     test_integer_mean<int>(std::execution::par);
     test_integer_mean<int>(std::execution::par_unseq);
 
-    test_complex_mean<std::complex<float>>();
-    test_complex_mean<cpp_complex_50>();
-
     test_complex_mean<std::complex<float>>(std::execution::seq);
     test_complex_mean<std::complex<float>>(std::execution::par);
     test_complex_mean<std::complex<float>>(std::execution::par_unseq);
     test_complex_mean<cpp_complex_50>(std::execution::seq);
     test_complex_mean<cpp_complex_50>(std::execution::par);
     test_complex_mean<cpp_complex_50>(std::execution::par_unseq);
-
-    test_variance<float>();
-    test_variance<double>();
-    test_variance<long double>();
-    test_variance<cpp_bin_float_50>();
 
     test_variance<float>(std::execution::seq);
     test_variance<float>(std::execution::par);
@@ -1160,9 +955,6 @@ int main()
     test_variance<cpp_bin_float_50>(std::execution::seq);
     test_variance<cpp_bin_float_50>(std::execution::par);
     test_variance<cpp_bin_float_50>(std::execution::par_unseq);
-
-    test_integer_variance<int>();
-    test_integer_variance<unsigned>();
 
     test_integer_variance<unsigned>(std::execution::seq);
     test_integer_variance<unsigned>(std::execution::par);
@@ -1323,3 +1115,4 @@ int main()
 
     return boost::report_errors();
 }
+
