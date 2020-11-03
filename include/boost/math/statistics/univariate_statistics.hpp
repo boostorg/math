@@ -272,7 +272,14 @@ inline auto skewness(ExecutionPolicy&& exec, ForwardIterator first, ForwardItera
 
     if constexpr (std::is_same_v<std::remove_reference_t<decltype(exec)>, decltype(std::execution::seq)>)
     {
-        return detail::skewness_sequential_impl(first, last);
+        if constexpr (std::is_integral_v<Real>)
+        {
+            return detail::skewness_sequential_impl<double>(first, last);
+        }
+        else
+        {
+            return detail::skewness_sequential_impl<Real>(first, last);
+        }
     }
     else 
     {
@@ -286,11 +293,11 @@ inline auto skewness(ExecutionPolicy&& exec, ForwardIterator first, ForwardItera
             // A constant dataset has no skewness.
             if constexpr (std::is_integral_v<Real>)
             {
-                return static_cast<double>(0);
+                return double(0);
             }
             else
             {
-                return static_cast<Real>(0);
+                return Real(0);
             }
         }
         else
