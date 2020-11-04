@@ -10,3 +10,5 @@ test/cuda
 build/*
 *.json
 *.idx
+*.swp
+
