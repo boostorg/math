@@ -185,19 +185,19 @@ void test_spots(T, const char* t)
    //
    // m = l-1, see https://github.com/boostorg/math/issues/453:
    //
-   BOOST_CHECK_CLOSE_FRACTION(::boost::math::legendre_p(0, -1, 0.5), static_cast<T>(0.5773502691896257645091487805019574556476017512701268760186023264L), tolerance);
-   BOOST_CHECK_CLOSE_FRACTION(::boost::math::legendre_p(0, -1, 1), static_cast<T>(0), tolerance);
-   BOOST_CHECK_CLOSE_FRACTION(::boost::math::legendre_p(0, -1, 0), static_cast<T>(1), tolerance);
-   BOOST_CHECK_CLOSE_FRACTION(::boost::math::legendre_p(1, 0, 0.5), static_cast<T>(0.5), tolerance);
-   BOOST_CHECK_CLOSE_FRACTION(::boost::math::legendre_p(1, 0, 1), static_cast<T>(1), tolerance);
-   BOOST_CHECK_CLOSE_FRACTION(::boost::math::legendre_p(1, 0, 0), static_cast<T>(0), tolerance);
-   BOOST_CHECK_CLOSE_FRACTION(::boost::math::legendre_p(2, 1, 0.5), static_cast<T>(-1.2990381056766579701455847561294042752071039403577854710418552L), tolerance);
-   BOOST_CHECK_CLOSE_FRACTION(::boost::math::legendre_p(2, 1, 1), static_cast<T>(0), tolerance);
-   BOOST_CHECK_CLOSE_FRACTION(::boost::math::legendre_p(2, 1, 0), static_cast<T>(0), tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::legendre_p(0, -1, static_cast<T>(0.5)), static_cast<T>(0.5773502691896257645091487805019574556476017512701268760186023264L), tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::legendre_p(0, -1, static_cast<T>(1)), static_cast<T>(0), tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::legendre_p(0, -1, static_cast<T>(0)), static_cast<T>(1), tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::legendre_p(1, 0, static_cast<T>(0.5)), static_cast<T>(0.5), tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::legendre_p(1, 0, static_cast<T>(1)), static_cast<T>(1), tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::legendre_p(1, 0, static_cast<T>(0)), static_cast<T>(0), tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::legendre_p(2, 1, static_cast<T>(0.5)), static_cast<T>(-1.2990381056766579701455847561294042752071039403577854710418552L), tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::legendre_p(2, 1, static_cast<T>(1)), static_cast<T>(0), tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::legendre_p(2, 1, static_cast<T>(0)), static_cast<T>(0), tolerance);
 
-   BOOST_CHECK_CLOSE_FRACTION(::boost::math::legendre_p(2, -2, 0.5), static_cast<T>(0.09375), tolerance);
-   BOOST_CHECK_CLOSE_FRACTION(::boost::math::legendre_p(2, -2, 1), static_cast<T>(0), tolerance);
-   BOOST_CHECK_CLOSE_FRACTION(::boost::math::legendre_p(2, -2, 0), static_cast<T>(0.125), tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::legendre_p(2, -2, static_cast<T>(0.5)), static_cast<T>(0.09375L), tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::legendre_p(2, -2, static_cast<T>(1)), static_cast<T>(0), tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::legendre_p(2, -2, static_cast<T>(0)), static_cast<T>(0.125), tolerance);
 }
 
 template <class T>
