@@ -1442,7 +1442,23 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert,
       {
          // x is so small that P is necessarily very small too,
          // use http://functions.wolfram.com/GammaBetaErf/GammaRegularized/06/01/05/01/01/
-         result = !normalised ? pow(x, a) / (a) : pow(x, a) / boost::math::tgamma(a + 1, pol);
+         if(!normalised)
+            result = pow(x, a) / (a);
+         else
+         {
+#ifndef BOOST_NO_EXCEPTIONS
+            try 
+            {
+               result = pow(x, a) / boost::math::tgamma(a + 1, pol);
+            }
+            catch (const std::overflow_error&)
+            {
+               result = 0;
+            }
+#else
+            result = pow(x, a) / boost::math::tgamma(a + 1, pol);
+#endif
+         }
          result *= 1 - a * x / (a + 1);
          if (p_derivative)
             *p_derivative = regularised_gamma_prefix(a, x, pol, lanczos_type());
