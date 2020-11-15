@@ -384,7 +384,7 @@ BENCHMARK_TEMPLATE(parallel_skewness, double)->RangeMultiplier(2)->Range(1 << 6,
 BENCHMARK_TEMPLATE(first_four_moments, int)->RangeMultiplier(2)->Range(1 << 6, 1 << 20)->Complexity(benchmark::oN)->UseRealTime();
 BENCHMARK_TEMPLATE(parallel_first_four_moments, int)->RangeMultiplier(2)->Range(1 << 6, 1 << 20)->Complexity(benchmark::oN)->UseRealTime();
 BENCHMARK_TEMPLATE(first_four_moments, double)->RangeMultiplier(2)->Range(1 << 6, 1 << 20)->Complexity(benchmark::oN)->UseRealTime();
-BENCHMARK_TEMPLATE(parallel_first_four_moments double)->RangeMultiplier(2)->Range(1 << 6, 1 << 20)->Complexity(benchmark::oN)->UseRealTime();
+BENCHMARK_TEMPLATE(parallel_first_four_moments, double)->RangeMultiplier(2)->Range(1 << 6, 1 << 20)->Complexity(benchmark::oN)->UseRealTime();
 
 // Kurtosis
 BENCHMARK_TEMPLATE(kurtosis, int)->RangeMultiplier(2)->Range(1 << 6, 1 << 20)->Complexity(benchmark::oN)->UseRealTime();
