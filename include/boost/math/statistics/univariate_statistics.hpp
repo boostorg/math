@@ -599,17 +599,41 @@ inline auto interquartile_range(RandomAccessContainer & v)
     return interquartile_range(std::execution::seq, std::begin(v), std::end(v));
 }
 
-template<class ExecutionPolicy, class ForwardIterator, class OutputIterator>
-inline OutputIterator mode(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last, OutputIterator output)
+template<class ExecutionPolicy, class RandomAccessIterator, class OutputIterator>
+inline OutputIterator mode(ExecutionPolicy&& exec, RandomAccessIterator first, RandomAccessIterator last, OutputIterator output)
 {
-    output = detail::mode_impl(exec, first, last, output);
+    if constexpr (std::is_same_v<typename std::iterator_traits<RandomAccessIterator>::iterator_category(), std::random_access_iterator_tag>)
+    {
+        #if __cplusplus > 201900 || _MSVC_LANG > 201900
+        // Both is_sorted and sort can be executed at compile time with C++20 support
+        if constexpr (!std::is_sorted(exec, first, last))
+        {
+            std::sort(exec, first, last);
+        }
+        #else
+        if(!std::is_sorted(exec, first, last))
+        {
+            std::sort(exec, first, last);
+        }
+        #endif
+    }
+    
+    if constexpr (std::is_same_v<std::remove_reference_t<decltype(exec)>, decltype(std::execution::seq)>)
+    {
+        output = detail::mode_sequential_impl(first, last, output);
+    }
+    else
+    {
+        output = detail::mode_impl(exec, first, last, output);
+    }
+
     return output;
 }
 
 template<class ExecutionPolicy, class Container, class OutputIterator>
 inline OutputIterator mode(ExecutionPolicy&& exec, Container & v, OutputIterator output)
 {
-    return mode(exec, std::cbegin(v), std::cend(v), output);
+    return mode(exec, std::begin(v), std::end(v), output);
 }
 
 template<class RandomAccessIterator, class OutputIterator>
@@ -621,9 +645,8 @@ inline OutputIterator mode(RandomAccessIterator first, RandomAccessIterator last
 template<class RandomAccessContainer, class OutputIterator>
 inline OutputIterator mode(RandomAccessContainer & v, OutputIterator output)
 {
-    return mode(std::execution::seq, std::cbegin(v), std::cend(v), output);
+    return mode(std::execution::seq, std::begin(v), std::end(v), output);
 }
 
 }
 #endif
-

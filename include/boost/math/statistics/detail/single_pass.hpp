@@ -18,6 +18,8 @@
 #include <algorithm>
 #include <valarray>
 #include <mutex>
+#include <unordered_map>
+#include <map>
 
 namespace boost::math::statistics::detail
 {
@@ -346,13 +348,13 @@ template<typename ExecutionPolicy, typename ForwardIterator, typename OutputIter
 OutputIterator mode_impl(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last, OutputIterator output)
 {
     using Real = typename std::iterator_traits<ForwardIterator>::value_type;
-    std::unordered_map<Real, unsigned> table;
+    std::map<Real, unsigned> table;
 
     std::for_each(exec, first, last, [&table](Real val){ table[val]++; });
     
-    std::vector<Real> modes;
+    std::vector<Real> modes {};
     modes.reserve(16);
-    unsigned mode_freq {};
+    unsigned mode_freq {1};
 
     std::for_each(exec, table.begin(), table.end(), [&modes, &mode_freq](auto val)
     { 
@@ -371,7 +373,43 @@ OutputIterator mode_impl(ExecutionPolicy&& exec, ForwardIterator first, ForwardI
     return std::move(modes.begin(), modes.end(), output);
 }
 
+template<class ForwardIterator, class OutputIterator>
+OutputIterator mode_sequential_impl(ForwardIterator first, ForwardIterator last, OutputIterator output)
+{
+    using Z = typename std::iterator_traits<ForwardIterator>::value_type;
+    using Size = typename std::iterator_traits<ForwardIterator>::difference_type;
+
+    std::vector<Z> modes {};
+    modes.reserve(16);
+    Size max_counter {0};
+
+    while(first != last)
+    {
+        Size current_count {0};
+        auto end_it {first};
+        while(end_it != last && *end_it == *first)
+        {
+            ++current_count;
+            ++end_it;
+        }
+
+        if(current_count > max_counter)
+        {
+            modes.resize(1);
+            modes[0] = *first;
+            max_counter = current_count;
+        }
+
+        else if(current_count == max_counter)
+        {
+            modes.emplace_back(*first);
+        }
+
+        first = end_it;
+    }
+
+    return std::move(modes.begin(), modes.end(), output);
+}
 }
 
 #endif // BOOST_MATH_STATISTICS_UNIVARIATE_STATISTICS_DETAIL_SINGLE_PASS_HPP
-

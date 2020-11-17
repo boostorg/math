@@ -304,7 +304,7 @@ void test_integer_variance(ExecutionPolicy&& exec)
 template<class Z, class ExecutionPolicy>
 void test_integer_skewness(ExecutionPolicy&& exec)
 {
-    double tol = 2*std::numeric_limits<double>::epsilon();
+    double tol = 10*std::numeric_limits<double>::epsilon();
     std::vector<Z> v{1,1,1};
     double skew = boost::math::statistics::skewness(exec, v);
     BOOST_TEST(abs(skew) < tol);
@@ -338,7 +338,7 @@ void test_integer_skewness(ExecutionPolicy&& exec)
 template<class Real, class ExecutionPolicy>
 void test_skewness(ExecutionPolicy&& exec)
 {
-    Real tol = 2*std::numeric_limits<Real>::epsilon();
+    Real tol = 10*std::numeric_limits<Real>::epsilon();
     std::vector<Real> v{1,1,1};
     Real skew = boost::math::statistics::skewness(exec, v);
     BOOST_TEST(abs(skew) < tol);
@@ -1115,4 +1115,3 @@ int main()
 
     return boost::report_errors();
 }
-
