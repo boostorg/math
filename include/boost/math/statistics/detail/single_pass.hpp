@@ -19,7 +19,6 @@
 #include <valarray>
 #include <mutex>
 #include <unordered_map>
-#include <map>
 
 namespace boost::math::statistics::detail
 {
@@ -272,7 +271,6 @@ ReturnType skewness_sequential_impl(ForwardIterator first, ForwardIterator last)
     return skew;
 }
 
-// https://htor.inf.ethz.ch/publications/img/atomic-bench.pdf
 template<typename ReturnType, typename ExecutionPolicy, typename RandomAccessIterator>
 ReturnType gini_coefficient_parallel_impl(ExecutionPolicy&& exec, RandomAccessIterator first, RandomAccessIterator last)
 {
@@ -348,18 +346,20 @@ template<typename ExecutionPolicy, typename ForwardIterator, typename OutputIter
 OutputIterator mode_impl(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last, OutputIterator output)
 {
     using Real = typename std::iterator_traits<ForwardIterator>::value_type;
-    std::map<Real, unsigned> table;
+    std::unordered_map<Real, std::size_t> table;
 
-    std::for_each(exec, first, last, [&table](Real val){ table[val]++; });
+    std::for_each(exec, first, last, [&table](const Real& val){ table[val]++; });
     
     std::vector<Real> modes {};
     modes.reserve(16);
     unsigned mode_freq {1};
+    std::mutex mtx;
 
-    std::for_each(exec, table.begin(), table.end(), [&modes, &mode_freq](auto val)
+    std::for_each(exec, table.begin(), table.end(), [&modes, &mode_freq](const auto& val)
     { 
         if(val.second > mode_freq)
         {
+            std::scoped_lock(mtx);
             modes.resize(1);
             modes[0] = val.first;
             mode_freq = val.second;
@@ -373,7 +373,7 @@ OutputIterator mode_impl(ExecutionPolicy&& exec, ForwardIterator first, ForwardI
     return std::move(modes.begin(), modes.end(), output);
 }
 
-template<class ForwardIterator, class OutputIterator>
+template<typename ForwardIterator, typename OutputIterator>
 OutputIterator mode_sequential_impl(ForwardIterator first, ForwardIterator last, OutputIterator output)
 {
     using Z = typename std::iterator_traits<ForwardIterator>::value_type;
