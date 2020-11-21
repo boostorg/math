@@ -343,7 +343,7 @@ auto gini_coefficient_sequential_impl(RandomAccessIterator first, RandomAccessIt
 }
 
 template<typename ExecutionPolicy, typename ForwardIterator, typename OutputIterator>
-OutputIterator mode_impl(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last, OutputIterator output)
+OutputIterator mode_parallel_impl(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last, OutputIterator output)
 {
     using Real = typename std::iterator_traits<ForwardIterator>::value_type;
     std::unordered_map<Real, std::size_t> table;

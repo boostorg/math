@@ -599,32 +599,44 @@ inline auto interquartile_range(RandomAccessContainer & v)
     return interquartile_range(std::execution::seq, std::begin(v), std::end(v));
 }
 
-template<class ExecutionPolicy, class RandomAccessIterator, class OutputIterator>
-inline OutputIterator mode(ExecutionPolicy&& exec, RandomAccessIterator first, RandomAccessIterator last, OutputIterator output)
-{
-    if constexpr (std::is_same_v<typename std::iterator_traits<RandomAccessIterator>::iterator_category(), std::random_access_iterator_tag>)
+template<class ExecutionPolicy, class ForwardIterator, class OutputIterator>
+inline OutputIterator mode(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last, OutputIterator output)
+{   
+    if constexpr (std::is_same_v<std::remove_reference_t<decltype(exec)>, decltype(std::execution::seq)>)
     {
+        // Data only needs to be sorted for sequential impl
+        // C++20 enables constexpr std::is_sorted and compile time std::sort
         #if __cplusplus > 201900 || _MSVC_LANG > 201900
-        // Both is_sorted and sort can be executed at compile time with C++20 support
-        if constexpr (!std::is_sorted(exec, first, last))
+        if constexpr (!std::is_sorted(first, last))
         {
-            std::sort(exec, first, last);
+            if constexpr (std::is_same_v<typename std::iterator_traits<ForwardIterator>::iterator_category(), std::random_access_iterator_tag>)
+            {
+                std::sort(first, last);
+            }
+            else
+            {
+                BOOST_ASSERT("Data must be sorted for sequential mode calculation");
+            }
         }
         #else
         if(!std::is_sorted(exec, first, last))
         {
-            std::sort(exec, first, last);
+            if constexpr (std::is_same_v<typename std::iterator_traits<ForwardIterator>::iterator_category(), std::random_access_iterator_tag>)
+            {
+                std::sort(exec, first, last);
+            }
+            else
+            {
+                BOOST_ASSERT("Data must be sorted for sequential mode calculation");
+            }
         }
         #endif
-    }
-    
-    if constexpr (std::is_same_v<std::remove_reference_t<decltype(exec)>, decltype(std::execution::seq)>)
-    {
+        
         output = detail::mode_sequential_impl(first, last, output);
     }
     else
     {
-        output = detail::mode_impl(exec, first, last, output);
+        output = detail::mode_parallel_impl(exec, first, last, output);
     }
 
     return output;
@@ -636,14 +648,14 @@ inline OutputIterator mode(ExecutionPolicy&& exec, Container & v, OutputIterator
     return mode(exec, std::begin(v), std::end(v), output);
 }
 
-template<class RandomAccessIterator, class OutputIterator>
-inline OutputIterator mode(RandomAccessIterator first, RandomAccessIterator last, OutputIterator output)
+template<class ForwardIterator, class OutputIterator>
+inline OutputIterator mode(ForwardIterator first, ForwardIterator last, OutputIterator output)
 {
     return mode(std::execution::seq, first, last, output);
 }
 
-template<class RandomAccessContainer, class OutputIterator>
-inline OutputIterator mode(RandomAccessContainer & v, OutputIterator output)
+template<class Container, class OutputIterator>
+inline OutputIterator mode(Container & v, OutputIterator output)
 {
     return mode(std::execution::seq, std::begin(v), std::end(v), output);
 }
