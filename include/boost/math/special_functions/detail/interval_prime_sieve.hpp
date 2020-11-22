@@ -17,6 +17,7 @@
 #include <array>
 #include <cstdint>
 #include <vector>
+#include <algorithm>
 
 namespace boost::math::detail::prime_sieve
 {
@@ -74,8 +75,7 @@ private:
 
     OutputIterator resultant_primes_;
 
-    // https://www.researchgate.net/publication/220803585_Performance_of_C_bit-vector_implementations
-    boost::dynamic_bitset<> b_;
+    std::vector<bool> b_;
     
     std::vector<Integer> primes_;
     std::int_fast64_t plimit_;
@@ -300,7 +300,7 @@ decltype(auto) IntervalSieve<Integer, OutputIterator>::NewRange(const Integer le
     delta_ = right_ - left_;
 
     b_.resize(static_cast<std::size_t>(delta_));
-    b_.set();
+    std::fill(b_.begin(), b_.end(), true);
     Settdlimit();
     Sieve();
     
@@ -321,7 +321,7 @@ decltype(auto) IntervalSieve<Integer, OutputIterator>::NewRange(const Integer le
     delta_ = right_ - left_;
 
     b_.resize(static_cast<std::size_t>(delta_));
-    b_.set();
+    std::fill(b_.begin(), b_.end(), true);
     Settdlimit();
     Sieve();
     
