@@ -15,13 +15,10 @@
 #include <tuple>
 #include <cmath>
 #include <vector>
-#include <atomic>
 #include <type_traits>
 #include <execution>
 #include <numeric>
-#include <valarray>
-#include <thread>
-#include <future>
+#include <list>
 
 namespace boost::math::statistics {
 
@@ -425,11 +422,18 @@ inline auto gini_coefficient(ExecutionPolicy&& exec, RandomAccessIterator first,
 {
     using Real = typename std::iterator_traits<RandomAccessIterator>::value_type;
 
-    // TODO: Can be made if constexpr with C++20
+    // C++20 enables constexpr std::is_sorted and compile time std::sort
+    #if __cplusplus > 201900 || _MSVC_LANG > 201900
+    if constexpr (!std::is_sorted(first, last))
+    {
+        std::sort(first, last);
+    }
+    #else
     if(!std::is_sorted(exec, first, last))
     {
         std::sort(exec, first, last);
     }
+    #endif
 
     if constexpr (std::is_same_v<std::remove_reference_t<decltype(exec)>, decltype(std::execution::seq)>)
     {
@@ -605,7 +609,6 @@ inline OutputIterator mode(ExecutionPolicy&& exec, ForwardIterator first, Forwar
     if constexpr (std::is_same_v<std::remove_reference_t<decltype(exec)>, decltype(std::execution::seq)>)
     {
         // Data only needs to be sorted for sequential impl
-        // C++20 enables constexpr std::is_sorted and compile time std::sort
         #if __cplusplus > 201900 || _MSVC_LANG > 201900
         if constexpr (!std::is_sorted(first, last))
         {
@@ -660,5 +663,32 @@ inline OutputIterator mode(Container & v, OutputIterator output)
     return mode(std::execution::seq, std::begin(v), std::end(v), output);
 }
 
+// std::list is the return type for the proposed STL stats library
+
+template<class ExecutionPolicy, class ForwardIterator, class Real = typename std::iterator_traits<ForwardIterator>::value_type>
+inline auto mode(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last)
+{
+    std::list<Real> modes;
+    mode(exec, first, last, modes.begin());
+    return modes;
+}
+
+template<class ExecutionPolicy, class Container>
+inline auto mode(ExecutionPolicy&& exec, Container & v)
+{
+    return mode(exec, std::begin(v), std::end(v));
+}
+
+template<class ForwardIterator>
+inline auto mode(ForwardIterator first, ForwardIterator last)
+{
+    return mode(std::execution::seq, first, last);
+}
+
+template<class Container>
+inline auto mode(Container & v)
+{
+    return mode(std::execution::seq, std::begin(v), std::end(v));
+}
 }
 #endif
