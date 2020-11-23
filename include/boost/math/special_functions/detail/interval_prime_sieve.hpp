@@ -66,7 +66,7 @@ private:
     };
 
     static constexpr pssentry pss_{};
-    static constexpr boost::math::detail::prime_sieve::MOD210Wheel<Integer> w_{};
+    static constexpr boost::math::detail::prime_sieve::MOD30Wheel<Integer> w_{};
     std::size_t tdlimit_;
 
     Integer delta_;
