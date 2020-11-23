@@ -206,6 +206,31 @@ void Wheel<Integer>::Print()
     std::cout << std::endl;
 }
 
+// Pre-computed MOD 30 wheel
+template <typename Integer>
+class MOD30Wheel final
+{
+    static constexpr std::int_fast8_t M_ {30};
+    static constexpr std::int_fast8_t k_ {3};
+    static constexpr std::int_fast8_t phi_ {8};
+
+    static constexpr std::array<std::int_fast8_t, M_> dist_
+    {
+        1,  6,  5,  4,  3,  2,  1,  4,  3,  2,  1,  2,  1,  4,  3,  2,  1,  2,  1,  4,  3,  2,  1,  6,  5, 4,  
+        3,  2,  1,  2
+    };
+
+public:
+    constexpr MOD30Wheel() = default;
+    ~MOD30Wheel() = default;
+
+    constexpr auto Size() const noexcept { return M_; }
+    constexpr auto K() const noexcept { return k_; }
+    constexpr auto Phi() const noexcept { return phi_; }
+
+    constexpr auto Next(const Integer i) const noexcept { return i + dist_[static_cast<std::size_t>(i % M_)]; }
+};
+
 // Pre-computed MOD 210 wheel
 template <typename Integer>
 class MOD210Wheel final
