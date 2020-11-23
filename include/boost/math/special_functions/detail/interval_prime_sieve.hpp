@@ -13,6 +13,7 @@
 #include <boost/math/special_functions/prime_approximation.hpp>
 #include <boost/math/special_functions/detail/prime_wheel.hpp>
 #include <boost/math/special_functions/detail/linear_prime_sieve.hpp>
+#include <boost/math/special_functions/detail/simple_bitset.hpp>
 #include <cmath>
 #include <array>
 #include <cstdint>
