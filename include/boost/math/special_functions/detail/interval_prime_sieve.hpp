@@ -206,7 +206,7 @@ void IntervalSieve<Integer, OutputIterator>::Sieve() noexcept
 template<typename Integer, typename OutputIterator>
 decltype(auto) IntervalSieve<Integer, OutputIterator>::WriteOutput() noexcept
 {
-    for(std::size_t i {}; i < b_.size(); ++i)
+    for(std::size_t i {left_ % 2 == 0 ? 1 : 0}; i < b_.size(); i += 2)
     {
         if(b_[i])
         {
