@@ -1,10 +1,10 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Noncentral T Distribution</title>
 <link rel="stylesheet" href="../../../math.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
-<link rel="home" href="../../../index.html" title="Math Toolkit 2.12.0">
+<link rel="home" href="../../../index.html" title="Math Toolkit 2.13.0">
 <link rel="up" href="../dists.html" title="Distributions">
 <link rel="prev" href="nc_f_dist.html" title="Noncentral F Distribution">
 <link rel="next" href="normal_dist.html" title="Normal (Gaussian) Distribution">
@@ -31,12 +31,12 @@
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span>
-          <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
+          <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">non_central_t_distribution</span><span class="special">;</span>
 
 <span class="keyword">typedef</span> <span class="identifier">non_central_t_distribution</span><span class="special">&lt;&gt;</span> <span class="identifier">non_central_t</span><span class="special">;</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">non_central_t_distribution</span>
 <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
@@ -57,11 +57,11 @@
 </pre>
 <p>
           The noncentral T distribution is a generalization of the <a class="link" href="students_t_dist.html" title="Students t Distribution">Students
-          t Distribution</a>. Let X have a normal distribution with mean &#948; and variance
-          1, and let <span class="emphasis"><em>&#957; S<sup>2</sup></em></span> have a chi-squared distribution with
-          degrees of freedom &#957;. Assume that X and S<sup>2</sup> are independent. The distribution
-          of <span class="serif_italic">t<sub>&#957;</sub>(&#948;)=X/S</span> is called a noncentral
-          t distribution with degrees of freedom &#957; and noncentrality parameter &#948;.
+          t Distribution</a>. Let X have a normal distribution with mean δ and variance
+          1, and let <span class="emphasis"><em>ν S<sup>2</sup></em></span> have a chi-squared distribution with
+          degrees of freedom ν. Assume that X and S<sup>2</sup> are independent. The distribution
+          of <span class="serif_italic">t<sub>ν</sub>(δ)=X/S</span> is called a noncentral
+          t distribution with degrees of freedom ν and noncentrality parameter δ.
         </p>
 <p>
           This gives the following PDF:
@@ -76,7 +76,7 @@
         </p>
 <p>
           The following graph illustrates how the distribution changes for different
-          values of &#957; and &#948;:
+          values of ν and δ:
         </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
             <span class="inlinemediaobject"><img src="../../../../graphs/nc_t_pdf.svg" align="middle"></span>
@@ -131,7 +131,7 @@
           <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.range">range</a> and <a class="link" href="../nmp.html#math_toolkit.dist_ref.nmp.support">support</a>.
         </p>
 <p>
-          The domain of the random variable is [-&#8734;, +&#8734;].
+          The domain of the random variable is [-∞, +∞].
         </p>
 <h5>
 <a name="math_toolkit.dist_ref.dists.nc_t_dist.h2"></a>
@@ -145,7 +145,7 @@
           zero error</a>.
         </p>
 <div class="table">
-<a name="math_toolkit.dist_ref.dists.nc_t_dist.table_non_central_t_CDF"></a><p class="title"><b>Table&#160;5.8.&#160;Error rates for non central t CDF</b></p>
+<a name="math_toolkit.dist_ref.dists.nc_t_dist.table_non_central_t_CDF"></a><p class="title"><b>Table 5.8. Error rates for non central t CDF</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for non central t CDF">
 <colgroup>
 <col>
@@ -187,25 +187,25 @@
                 </td>
 <td>
                   <p>
-                    <span class="blue">Max = 0.796&#949; (Mean = 0.0691&#949;)</span><br>
+                    <span class="blue">Max = 0.796ε (Mean = 0.0691ε)</span><br>
                     <br> (<span class="emphasis"><em>Rmath 3.2.3:</em></span> <span class="red">Max
-                    = 5.28e+15&#949; (Mean = 8.49e+14&#949;) <a class="link" href="../../logs_and_tables/logs.html#errors_GNU_C_version_7_1_0_linux_double_non_central_t_CDF_Rmath_3_2_3_Non_Central_T">And
+                    = 5.28e+15ε (Mean = 8.49e+14ε) <a class="link" href="../../logs_and_tables/logs.html#errors_GNU_C_version_7_1_0_linux_double_non_central_t_CDF_Rmath_3_2_3_Non_Central_T">And
                     other failures.</a>)</span>
                   </p>
                 </td>
 <td>
                   <p>
-                    <span class="blue">Max = 139&#949; (Mean = 31&#949;)</span>
+                    <span class="blue">Max = 139ε (Mean = 31ε)</span>
                   </p>
                 </td>
 <td>
                   <p>
-                    <span class="blue">Max = 145&#949; (Mean = 30.9&#949;)</span>
+                    <span class="blue">Max = 145ε (Mean = 30.9ε)</span>
                   </p>
                 </td>
 <td>
                   <p>
-                    <span class="blue">Max = 135&#949; (Mean = 32.1&#949;)</span>
+                    <span class="blue">Max = 135ε (Mean = 32.1ε)</span>
                   </p>
                 </td>
 </tr>
@@ -217,23 +217,23 @@
                 </td>
 <td>
                   <p>
-                    <span class="blue">Max = 0&#949; (Mean = 0&#949;)</span><br> <br> (<span class="emphasis"><em>Rmath
-                    3.2.3:</em></span> Max = 2.09e+03&#949; (Mean = 244&#949;))
+                    <span class="blue">Max = 0ε (Mean = 0ε)</span><br> <br> (<span class="emphasis"><em>Rmath
+                    3.2.3:</em></span> Max = 2.09e+03ε (Mean = 244ε))
                   </p>
                 </td>
 <td>
                   <p>
-                    <span class="blue">Max = 3.86&#949; (Mean = 1.4&#949;)</span>
+                    <span class="blue">Max = 3.86ε (Mean = 1.4ε)</span>
                   </p>
                 </td>
 <td>
                   <p>
-                    <span class="blue">Max = 9.15&#949; (Mean = 2.13&#949;)</span>
+                    <span class="blue">Max = 9.15ε (Mean = 2.13ε)</span>
                   </p>
                 </td>
 <td>
                   <p>
-                    <span class="blue">Max = 6.17&#949; (Mean = 1.45&#949;)</span>
+                    <span class="blue">Max = 6.17ε (Mean = 1.45ε)</span>
                   </p>
                 </td>
 </tr>
@@ -245,23 +245,23 @@
                 </td>
 <td>
                   <p>
-                    <span class="blue">Max = 257&#949; (Mean = 72.1&#949;)</span><br> <br>
-                    (<span class="emphasis"><em>Rmath 3.2.3:</em></span> Max = 2.46&#949; (Mean = 0.657&#949;))
+                    <span class="blue">Max = 257ε (Mean = 72.1ε)</span><br> <br>
+                    (<span class="emphasis"><em>Rmath 3.2.3:</em></span> Max = 2.46ε (Mean = 0.657ε))
                   </p>
                 </td>
 <td>
                   <p>
-                    <span class="blue">Max = 5.26e+05&#949; (Mean = 1.48e+05&#949;)</span>
+                    <span class="blue">Max = 5.26e+05ε (Mean = 1.48e+05ε)</span>
                   </p>
                 </td>
 <td>
                   <p>
-                    <span class="blue">Max = 5.24e+05&#949; (Mean = 1.47e+05&#949;)</span>
+                    <span class="blue">Max = 5.24e+05ε (Mean = 1.47e+05ε)</span>
                   </p>
                 </td>
 <td>
                   <p>
-                    <span class="blue">Max = 286&#949; (Mean = 62.8&#949;)</span>
+                    <span class="blue">Max = 286ε (Mean = 62.8ε)</span>
                   </p>
                 </td>
 </tr>
@@ -269,7 +269,7 @@
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="math_toolkit.dist_ref.dists.nc_t_dist.table_non_central_t_CDF_complement"></a><p class="title"><b>Table&#160;5.9.&#160;Error rates for non central t CDF complement</b></p>
+<a name="math_toolkit.dist_ref.dists.nc_t_dist.table_non_central_t_CDF_complement"></a><p class="title"><b>Table 5.9. Error rates for non central t CDF complement</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for non central t CDF complement">
 <colgroup>
 <col>
@@ -311,25 +311,25 @@
                 </td>
 <td>
                   <p>
-                    <span class="blue">Max = 0.707&#949; (Mean = 0.0497&#949;)</span><br>
+                    <span class="blue">Max = 0.707ε (Mean = 0.0497ε)</span><br>
                     <br> (<span class="emphasis"><em>Rmath 3.2.3:</em></span> <span class="red">Max
-                    = 6.19e+15&#949; (Mean = 6.72e+14&#949;) <a class="link" href="../../logs_and_tables/logs.html#errors_GNU_C_version_7_1_0_linux_double_non_central_t_CDF_complement_Rmath_3_2_3_Non_Central_T">And
+                    = 6.19e+15ε (Mean = 6.72e+14ε) <a class="link" href="../../logs_and_tables/logs.html#errors_GNU_C_version_7_1_0_linux_double_non_central_t_CDF_complement_Rmath_3_2_3_Non_Central_T">And
                     other failures.</a>)</span>
                   </p>
                 </td>
 <td>
                   <p>
-                    <span class="blue">Max = 201&#949; (Mean = 31.7&#949;)</span>
+                    <span class="blue">Max = 201ε (Mean = 31.7ε)</span>
                   </p>
                 </td>
 <td>
                   <p>
-                    <span class="blue">Max = 340&#949; (Mean = 43.2&#949;)</span>
+                    <span class="blue">Max = 340ε (Mean = 43.2ε)</span>
                   </p>
                 </td>
 <td>
                   <p>
-                    <span class="blue">Max = 154&#949; (Mean = 32.1&#949;)</span>
+                    <span class="blue">Max = 154ε (Mean = 32.1ε)</span>
                   </p>
                 </td>
 </tr>
@@ -341,23 +341,23 @@
                 </td>
 <td>
                   <p>
-                    <span class="blue">Max = 0&#949; (Mean = 0&#949;)</span><br> <br> (<span class="emphasis"><em>Rmath
-                    3.2.3:</em></span> Max = 1.87e+03&#949; (Mean = 263&#949;))
+                    <span class="blue">Max = 0ε (Mean = 0ε)</span><br> <br> (<span class="emphasis"><em>Rmath
+                    3.2.3:</em></span> Max = 1.87e+03ε (Mean = 263ε))
                   </p>
                 </td>
 <td>
                   <p>
-                    <span class="blue">Max = 10.5&#949; (Mean = 2.13&#949;)</span>
+                    <span class="blue">Max = 10.5ε (Mean = 2.13ε)</span>
                   </p>
                 </td>
 <td>
                   <p>
-                    <span class="blue">Max = 10.5&#949; (Mean = 2.39&#949;)</span>
+                    <span class="blue">Max = 10.5ε (Mean = 2.39ε)</span>
                   </p>
                 </td>
 <td>
                   <p>
-                    <span class="blue">Max = 4.6&#949; (Mean = 1.63&#949;)</span>
+                    <span class="blue">Max = 4.6ε (Mean = 1.63ε)</span>
                   </p>
                 </td>
 </tr>
@@ -369,23 +369,23 @@
                 </td>
 <td>
                   <p>
-                    <span class="blue">Max = 478&#949; (Mean = 96.3&#949;)</span><br> <br>
-                    (<span class="emphasis"><em>Rmath 3.2.3:</em></span> Max = 2.24&#949; (Mean = 0.945&#949;))
+                    <span class="blue">Max = 478ε (Mean = 96.3ε)</span><br> <br>
+                    (<span class="emphasis"><em>Rmath 3.2.3:</em></span> Max = 2.24ε (Mean = 0.945ε))
                   </p>
                 </td>
 <td>
                   <p>
-                    <span class="blue">Max = 9.79e+05&#949; (Mean = 1.97e+05&#949;)</span>
+                    <span class="blue">Max = 9.79e+05ε (Mean = 1.97e+05ε)</span>
                   </p>
                 </td>
 <td>
                   <p>
-                    <span class="blue">Max = 9.79e+05&#949; (Mean = 1.97e+05&#949;)</span>
+                    <span class="blue">Max = 9.79e+05ε (Mean = 1.97e+05ε)</span>
                   </p>
                 </td>
 <td>
                   <p>
-                    <span class="blue">Max = 227&#949; (Mean = 50.4&#949;)</span>
+                    <span class="blue">Max = 227ε (Mean = 50.4ε)</span>
                   </p>
                 </td>
 </tr>
@@ -398,9 +398,9 @@
 <th align="left">Caution</th>
 </tr>
 <tr><td align="left" valign="top"><p>
-            The complexity of the current algorithm is dependent upon &#948;<sup>2</sup>: consequently
-            the time taken to evaluate the CDF increases rapidly for &#948; &gt; 500, likewise
-            the accuracy decreases rapidly for very large &#948;.
+            The complexity of the current algorithm is dependent upon δ<sup>2</sup>: consequently
+            the time taken to evaluate the CDF increases rapidly for δ &gt; 500, likewise
+            the accuracy decreases rapidly for very large δ.
           </p></td></tr>
 </table></div>
 <p>
@@ -431,14 +431,14 @@
           to at least 50 decimal places.
         </p>
 <p>
-          The cases of large (or infinite) &#957; and/or large &#948; has received special treatment
+          The cases of large (or infinite) ν and/or large δ has received special treatment
           to avoid catastrophic loss of accuracy. New tests have been added to confirm
           the improvement achieved.
         </p>
 <p>
-          From Boost 1.52, degrees of freedom &#957; can be +&#8734;
+          From Boost 1.52, degrees of freedom ν can be +∞
 when the normal distribution
-          located at &#948;
+          located at δ
 (equivalent to the central Student's t distribution) is used
           in place for accuracy and speed.
         </p>
@@ -461,16 +461,16 @@ when the normal distribution
 
           </p></blockquote></div>
 <p>
-          Where I<sub>x</sub>(a,b) is the incomplete beta function, and &#934;(x) is the normal CDF
+          Where I<sub>x</sub>(a,b) is the incomplete beta function, and Φ(x) is the normal CDF
           at x.
         </p>
 <p>
           Iteration starts at the largest of the Poisson weighting terms (at i =
-          &#948;<sup>2</sup> / 2) and then proceeds in both directions as per Benton and Krishnamoorthy's
+          δ<sup>2</sup> / 2) and then proceeds in both directions as per Benton and Krishnamoorthy's
           paper.
         </p>
 <p>
-          Alternatively, by considering what happens when t = &#8734;, we have x = 1, and
+          Alternatively, by considering what happens when t = ∞, we have x = 1, and
           therefore I<sub>x</sub>(a,b) = 1 and:
         </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
@@ -503,17 +503,17 @@ when the normal distribution
         </p>
 <p>
           For both the PDF and CDF we switch to approximating the distribution by
-          a Student's t distribution centred on &#948; when &#957; is very large. The crossover
-          location appears to be when &#948;/(4&#957;) &lt; &#949;, this location was estimated by
+          a Student's t distribution centred on δ when ν is very large. The crossover
+          location appears to be when δ/(4ν) &lt; ε, this location was estimated by
           inspection of equation 2.6 in "A Comparison of Approximations To Percentiles
           of the Noncentral t-Distribution". H. Sahai and M. M. Ojeda, Revista
           Investigacion Operacional Vol 21, No 2, 2000, page 123.
         </p>
 <p>
           Equation 2.6 is a Fisher-Cornish expansion by Eeden and Johnson. The second
-          term includes the ratio &#948;/(4&#957;), so when this term become negligible, this
+          term includes the ratio δ/(4ν), so when this term become negligible, this
           and following terms can be ignored, leaving just Student's t distribution
-          centred on &#948;.
+          centred on δ.
         </p>
 <p>
           This was also confirmed by experimental testing.
@@ -559,11 +559,10 @@ when the normal distribution
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2019 Nikhar
-      Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos,
-      Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Matthew Pulver, Johan
-      R&#229;de, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg,
-      Daryle Walker and Xiaogang Zhang<p>
+<td align="right"><div class="copyright-footer">Copyright © 2006-2020 Nikhar Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher
+      Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Evan Miller, Jeremy Murphy,
+      Matthew Pulver, Johan Råde, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson,
+      Thijs van den Berg, Daryle Walker and Xiaogang Zhang<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

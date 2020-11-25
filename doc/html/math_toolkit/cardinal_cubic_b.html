@@ -1,12 +1,12 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Cardinal Cubic B-spline interpolation</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
-<link rel="home" href="../index.html" title="Math Toolkit 2.12.0">
-<link rel="up" href="../interpolation.html" title="Chapter&#160;12.&#160;Interpolation">
-<link rel="prev" href="../interpolation.html" title="Chapter&#160;12.&#160;Interpolation">
+<link rel="home" href="../index.html" title="Math Toolkit 2.13.0">
+<link rel="up" href="../interpolation.html" title="Chapter 12. Interpolation">
+<link rel="prev" href="../interpolation.html" title="Chapter 12. Interpolation">
 <link rel="next" href="cardinal_quadratic_b.html" title="Cardinal Quadratic B-spline interpolation">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -156,9 +156,9 @@
       and Performance</a>
     </h4>
 <p>
-      The call to the constructor requires &#119926;(<span class="emphasis"><em>n</em></span>) operations, where
+      The call to the constructor requires 𝑶(<span class="emphasis"><em>n</em></span>) operations, where
       <span class="emphasis"><em>n</em></span> is the number of points to interpolate. Each call the
-      the interpolant is &#119926;(1) (constant time). On the author's Intel Xeon E3-1230,
+      the interpolant is 𝑶(1) (constant time). On the author's Intel Xeon E3-1230,
       this takes 21ns as long as the vector is small enough to fit in cache.
     </p>
 <h4>
@@ -167,8 +167,8 @@
     </h4>
 <p>
       Let <span class="emphasis"><em>h</em></span> be the stepsize. If <span class="emphasis"><em>f</em></span> is four-times
-      continuously differentiable, then the interpolant is <span class="emphasis"><em>&#119926;(h<sup>4</sup>)</em></span>
-      accurate and the derivative is <span class="emphasis"><em>&#119926;(h<sup>3</sup>)</em></span> accurate.
+      continuously differentiable, then the interpolant is <span class="emphasis"><em>𝑶(h<sup>4</sup>)</em></span>
+      accurate and the derivative is <span class="emphasis"><em>𝑶(h<sup>3</sup>)</em></span> accurate.
     </p>
 <h4>
 <a name="math_toolkit.cardinal_cubic_b.h4"></a>
@@ -313,11 +313,10 @@ Found in 3 iterations
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2019 Nikhar
-      Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos,
-      Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Matthew Pulver, Johan
-      R&#229;de, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg,
-      Daryle Walker and Xiaogang Zhang<p>
+<td align="right"><div class="copyright-footer">Copyright © 2006-2020 Nikhar Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher
+      Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Evan Miller, Jeremy Murphy,
+      Matthew Pulver, Johan Råde, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson,
+      Thijs van den Berg, Daryle Walker and Xiaogang Zhang<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>
