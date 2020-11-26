@@ -184,13 +184,13 @@ namespace boost::math::statistics {
     template<class ExecutionPolicy, class ForwardIterator, class Real = typename std::iterator_traits<ForwardIterator>::value_type>
     std::list<Real> mode(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last)
 
-    template<class ExecutionPolicy, class Container, class Real = typename std::iterator_traits<ForwardIterator>::value_type>
+    template<class ExecutionPolicy, class Container, class Real = typename std::iterator_traits<Container>::value_type>
     std::list<Real> mode(ExecutionPolicy&& exec, Container & c)
     
     template<class ForwardIterator, class Real = typename std::iterator_traits<ForwardIterator>::value_type>
     std::list<Real> mode(ForwardIterator first, ForwardIterator last)
 
-    template<class Container, class Real = typename std::iterator_traits<ForwardIterator>::value_type>
+    template<class Container, class Real = typename std::iterator_traits<Container>::value_type>
     std::list<Real> mode(Container & c)
 }}}
 ``

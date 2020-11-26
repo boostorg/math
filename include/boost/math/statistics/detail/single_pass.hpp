@@ -342,39 +342,8 @@ auto gini_coefficient_sequential_impl(RandomAccessIterator first, RandomAccessIt
     }
 }
 
-template<typename ExecutionPolicy, typename ForwardIterator, typename OutputIterator>
-OutputIterator mode_parallel_impl(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last, OutputIterator output)
-{
-    using Real = typename std::iterator_traits<ForwardIterator>::value_type;
-    std::unordered_map<Real, std::size_t> table;
-
-    std::for_each(exec, first, last, [&table](const Real& val){ table[val]++; });
-    
-    std::vector<Real> modes {};
-    modes.reserve(16);
-    unsigned mode_freq {1};
-    std::mutex mtx;
-
-    std::for_each(exec, table.begin(), table.end(), [&modes, &mode_freq](const auto& val)
-    { 
-        if(val.second > mode_freq)
-        {
-            std::scoped_lock(mtx);
-            modes.resize(1);
-            modes[0] = val.first;
-            mode_freq = val.second;
-        }
-        else if(val.second == mode_freq)
-        {
-            modes.emplace_back(val.first);
-        }
-    });
-
-    return std::move(modes.begin(), modes.end(), output);
-}
-
 template<typename ForwardIterator, typename OutputIterator>
-OutputIterator mode_sequential_impl(ForwardIterator first, ForwardIterator last, OutputIterator output)
+OutputIterator mode_impl(ForwardIterator first, ForwardIterator last, OutputIterator output)
 {
     using Z = typename std::iterator_traits<ForwardIterator>::value_type;
     using Size = typename std::iterator_traits<ForwardIterator>::difference_type;

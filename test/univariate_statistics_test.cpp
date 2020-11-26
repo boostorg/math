@@ -896,6 +896,13 @@ void test_integer_mode(ExecutionPolicy&& exec)
     std::forward_list<Z> fl {1, 2, 2, 3, 4, 5};
     boost::math::statistics::mode(exec, fl, std::back_inserter(modes));
     BOOST_TEST_EQ(ref, modes[0]);
+
+    // Does the returning a list work?
+    auto return_modes = boost::math::statistics::mode(exec, fl);
+    BOOST_TEST_EQ(ref, return_modes.front());
+
+    auto return_modes_2 = boost::math::statistics::mode(exec, fl.begin(), fl.end());
+    BOOST_TEST_EQ(ref, return_modes_2.front());
 }
 
 template<class Real, class ExecutionPolicy>
