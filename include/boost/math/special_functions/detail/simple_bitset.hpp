@@ -98,8 +98,11 @@ public:
 
     void resize(std::size_t n) noexcept
     {
-        m_size = n;
-        bits.reset(new I[n / (sizeof(I) * CHAR_BIT) + (n % (sizeof(I) * CHAR_BIT) ? 1 : 0)]);
+        if(n != m_size)
+        {
+            m_size = n;
+            bits.reset(new I[n / (sizeof(I) * CHAR_BIT) + (n % (sizeof(I) * CHAR_BIT) ? 1 : 0)]);
+        }
     }
 
     void reset() noexcept 
