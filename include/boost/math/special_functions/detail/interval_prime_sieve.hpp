@@ -76,7 +76,7 @@ private:
 
     OutputIterator resultant_primes_;
 
-    std::vector<bool> b_;
+    simple_bitset<std::uint64_t> b_;
     
     std::vector<Integer> primes_;
     std::int_fast64_t plimit_;
@@ -152,7 +152,7 @@ void IntervalSieve<Integer, OutputIterator>::SeiveLength(const Integer d) noexce
 
     for(Integer i {start}; i >= 0 && i < b_.size(); i += d)
     {
-        b_[static_cast<std::size_t>(i)] = 0;
+        b_.clear(static_cast<std::size_t>(i));
     }
 }
 
@@ -270,7 +270,7 @@ void IntervalSieve<Integer, OutputIterator>::Psstestall() noexcept
         {
             if(!Psstest(i))
             {
-                b_[i] = 0;
+                b_.clear(i);
             }
         }
     }
@@ -281,7 +281,8 @@ IntervalSieve<Integer, OutputIterator>::IntervalSieve(const Integer left, const 
     left_ {left}, right_ {right}, resultant_primes_ {resultant_primes}
 {
     delta_ = right_ - left_;
-    b_.resize(static_cast<std::size_t>(delta_), 1);
+    b_.resize(static_cast<std::size_t>(delta_));
+    b_.reset();
     Settdlimit();
     Sieve();
     
@@ -301,7 +302,7 @@ decltype(auto) IntervalSieve<Integer, OutputIterator>::NewRange(const Integer le
     delta_ = right_ - left_;
 
     b_.resize(static_cast<std::size_t>(delta_));
-    std::fill(b_.begin(), b_.end(), true);
+    b_.reset();
     Settdlimit();
     Sieve();
     
@@ -322,7 +323,7 @@ decltype(auto) IntervalSieve<Integer, OutputIterator>::NewRange(const Integer le
     delta_ = right_ - left_;
 
     b_.resize(static_cast<std::size_t>(delta_));
-    std::fill(b_.begin(), b_.end(), true);
+    b_.reset();
     Settdlimit();
     Sieve();
     
