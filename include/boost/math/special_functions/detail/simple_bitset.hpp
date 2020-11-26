@@ -12,6 +12,7 @@
 #include <cstring>
 #include <cstdint>
 #include <climits>
+#include <cstddef>
 
 namespace boost::math::detail::prime_sieve
 {
@@ -23,11 +24,12 @@ private:
     std::size_t m_size;
     
 public:
-    simple_bitset() = delete;
+    simple_bitset() noexcept : bits {nullptr}, m_size {} {};
     
-    explicit simple_bitset(std::size_t n) noexcept : bits(new I[n / (sizeof(I) * CHAR_BIT) + (n % (sizeof(I) * CHAR_BIT) ? 1 : 0)]), m_size(n)
+    explicit simple_bitset(std::size_t n) noexcept : bits {nullptr}, m_size {n}
     {
-        std::memset(bits.get(), 0xff, n / CHAR_BIT + (n % CHAR_BIT ? 1 : 0));
+        resize(n);
+        reset();
     }
 
     // Initialize with specific pattern:
@@ -93,6 +95,12 @@ public:
     }
 
     std::size_t size() const noexcept { return m_size; }
+
+    void resize(std::size_t n) noexcept
+    {
+        m_size = n;
+        bits.reset(new I[n / (sizeof(I) * CHAR_BIT) + (n % (sizeof(I) * CHAR_BIT) ? 1 : 0)]);
+    }
 
     void reset() noexcept 
     { 
