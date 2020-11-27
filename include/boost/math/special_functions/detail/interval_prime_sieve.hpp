@@ -27,9 +27,9 @@ class IntervalSieve
 {  
     
 #ifdef BOOST_HAS_INT128              // Defined in GCC 4.6+, clang, intel. MSVC does not define. 
-using uint_128t = unsigned __int128; // One machine word smaller than the boost equivalent
+using uint128_t = unsigned __int128; // One machine word smaller than the boost equivalent
 #else
-using uint_128t = boost::multiprecision::uint128_t;
+using uint128_t = boost::multiprecision::uint128_t;
 #endif
 
 private:
@@ -45,7 +45,7 @@ private:
             173, 181, 193, 197, 211, 227, 229, 233, 239, 241, 251, 257, 263, 277, 281, 283, 293, 311, 331, 337, 347, 353
         };
 
-        static constexpr std::array<uint_128t, len> ps
+        static constexpr std::array<uint128_t, len> ps
         {
             73, 241, 1'009, 2'641, 8'089, 18'001, 53'881, 87'481, 117'049, 515'761, 1'083'289, 3'206'641, 3'818'929,
             9'257'329, 22'000'801, 48'473'881, 175'244'281, 427'733'329, 898'716'289, 2'805'544'681, 10'310'263'441,
@@ -54,15 +54,15 @@ private:
             190'621'428'905'186'449, 196'640'148'121'928'601, 712'624'335'095'093'521, 1'773'855'791'877'850'321,
             2'327'687'064'124'474'441, 6'384'991'873'059'836'689, 8'019'204'661'305'419'761, 10'198'100'582'046'287'689u,
 
-            (static_cast<uint_128t>(0x3uLL) << 64) | 0xc956f827e0524359uLL,      // 69'848'288'320'900'186'969
-            (static_cast<uint_128t>(0xbuLL) << 64) | 0x539315b3b1268d59uLL,      // 208'936'365'799'044'975'961
-            (static_cast<uint_128t>(0x1cuLL) << 64) | 0xec87d86ca60b50a1uLL,     // 533'552'663'339'828'203'681
-            (static_cast<uint_128t>(0x32uLL) << 64) | 0xc6d3496f20db3d81uLL,     // 936'664'079'266'714'697'089
-            (static_cast<uint_128t>(0x74uLL) << 64) | 0x210967a12ba94be1uLL,     // 2'142'202'860'370'269'916'129
-            (static_cast<uint_128t>(0x2e3uLL) << 64) | 0xec11ddc09fd65c51uLL,    // 13'649'154'491'558'298'803'281
-            (static_cast<uint_128t>(0x753uLL) << 64) | 0x641c14b397c27bf1uLL,    // 34'594'858'801'670'127'778'801
-            (static_cast<uint_128t>(0x1511uLL) << 64) | 0x85fdf38d1fc9ce21uLL,   // 99'492'945'930'479'213'334'049
-            (static_cast<uint_128t>(0x3e8buLL) << 64) | 0xaba417e222ca5091uLL    // 295'363'187'400'900'310'880'401
+            (static_cast<uint128_t>(0x3uLL) << 64) | 0xc956f827e0524359uLL,      // 69'848'288'320'900'186'969
+            (static_cast<uint128_t>(0xbuLL) << 64) | 0x539315b3b1268d59uLL,      // 208'936'365'799'044'975'961
+            (static_cast<uint128_t>(0x1cuLL) << 64) | 0xec87d86ca60b50a1uLL,     // 533'552'663'339'828'203'681
+            (static_cast<uint128_t>(0x32uLL) << 64) | 0xc6d3496f20db3d81uLL,     // 936'664'079'266'714'697'089
+            (static_cast<uint128_t>(0x74uLL) << 64) | 0x210967a12ba94be1uLL,     // 2'142'202'860'370'269'916'129
+            (static_cast<uint128_t>(0x2e3uLL) << 64) | 0xec11ddc09fd65c51uLL,    // 13'649'154'491'558'298'803'281
+            (static_cast<uint128_t>(0x753uLL) << 64) | 0x641c14b397c27bf1uLL,    // 34'594'858'801'670'127'778'801
+            (static_cast<uint128_t>(0x1511uLL) << 64) | 0x85fdf38d1fc9ce21uLL,   // 99'492'945'930'479'213'334'049
+            (static_cast<uint128_t>(0x3e8buLL) << 64) | 0xaba417e222ca5091uLL    // 295'363'187'400'900'310'880'401
         };
     };
 
