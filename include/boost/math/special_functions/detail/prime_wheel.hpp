@@ -229,6 +229,10 @@ public:
     constexpr auto Phi() const noexcept { return phi_; }
 
     constexpr auto Next(const Integer i) const noexcept { return i + dist_[static_cast<std::size_t>(i % M_)]; }
+
+    // Magic number is the number of possible primes in each turn of the mod 30 wheel
+    // https://en.wikipedia.org/wiki/Wheel_factorization
+    constexpr auto PrimeRatio() const noexcept { return 8 / 30; }
 };
 
 // Pre-computed MOD 210 wheel
@@ -262,6 +266,10 @@ public:
     constexpr auto Phi() const noexcept { return phi_; }
 
     constexpr auto Next(const Integer i) const noexcept { return i + dist_[static_cast<std::size_t>(i % M_)]; }
+
+    // Magic number is the number of possible primes in each turn of the mod 30 wheel
+    // https://en.wikipedia.org/wiki/Wheel_factorization
+    constexpr auto PrimeRatio() const noexcept { return 48 / 210; }
 };
 }
 
