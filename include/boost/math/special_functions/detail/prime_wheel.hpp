@@ -232,7 +232,7 @@ public:
 
     // Magic number is the number of possible primes in each turn of the mod 30 wheel
     // https://en.wikipedia.org/wiki/Wheel_factorization
-    constexpr auto PrimeRatio() const noexcept { return 8 / 30; }
+    constexpr auto PrimeRatio() const noexcept { return 8.0 / 30.0; }
 };
 
 // Pre-computed MOD 210 wheel
@@ -269,7 +269,7 @@ public:
 
     // Magic number is the number of possible primes in each turn of the mod 30 wheel
     // https://en.wikipedia.org/wiki/Wheel_factorization
-    constexpr auto PrimeRatio() const noexcept { return 48 / 210; }
+    constexpr auto PrimeRatio() const noexcept { return 48.0 / 210.0; }
 };
 }
 
