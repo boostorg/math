@@ -87,6 +87,7 @@ private:
     bool Psstest(const std::size_t pos) noexcept;
     void Psstestall() noexcept;
     decltype(auto) WriteOutput() noexcept;
+    void Setup(const Integer left, const Integer right) noexcept;
     
 public:
     IntervalSieve(const Integer left, const Integer right, OutputIterator resultant_primes) noexcept;
@@ -277,15 +278,29 @@ void IntervalSieve<Integer, OutputIterator>::Psstestall() noexcept
 }
 
 template<typename Integer, typename OutputIterator>
-IntervalSieve<Integer, OutputIterator>::IntervalSieve(const Integer left, const Integer right, OutputIterator resultant_primes) noexcept : 
-    left_ {left}, right_ {right}, resultant_primes_ {resultant_primes}
+void IntervalSieve<Integer, OutputIterator>::Setup(const Integer left, const Integer right) noexcept
 {
+    left_ = left;
+    right_ = right;
     delta_ = right_ - left_;
+
     b_.resize(static_cast<std::size_t>(delta_));
     b_.reset();
     Settdlimit();
     Sieve();
     
+    if(plimit_ != 0)
+    {
+        Psstestall();
+    }
+}
+
+template<typename Integer, typename OutputIterator>
+IntervalSieve<Integer, OutputIterator>::IntervalSieve(const Integer left, const Integer right, OutputIterator resultant_primes) noexcept : 
+    resultant_primes_ {resultant_primes}
+{
+    Setup(left, right);
+
     if(plimit_ != 0)
     {
         Psstestall();
@@ -297,14 +312,7 @@ IntervalSieve<Integer, OutputIterator>::IntervalSieve(const Integer left, const 
 template<typename Integer, typename OutputIterator>
 decltype(auto) IntervalSieve<Integer, OutputIterator>::NewRange(const Integer left, const Integer right) noexcept
 {
-    left_ = left;
-    right_ = right;
-    delta_ = right_ - left_;
-
-    b_.resize(static_cast<std::size_t>(delta_));
-    b_.reset();
-    Settdlimit();
-    Sieve();
+    Setup(left, right);
     
     if(plimit_ != 0)
     {
@@ -318,14 +326,7 @@ template<typename Integer, typename OutputIterator>
 decltype(auto) IntervalSieve<Integer, OutputIterator>::NewRange(const Integer left, const Integer right, OutputIterator resultant_primes) noexcept
 {
     resultant_primes_ = resultant_primes;
-    left_ = left;
-    right_ = right;
-    delta_ = right_ - left_;
-
-    b_.resize(static_cast<std::size_t>(delta_));
-    b_.reset();
-    Settdlimit();
-    Sieve();
+    Setup(left, right);
     
     if(plimit_ != 0)
     {
