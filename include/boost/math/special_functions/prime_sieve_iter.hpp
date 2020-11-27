@@ -140,6 +140,70 @@ inline decltype(auto) prime_sieve_iter(const Integer upper_bound, OutputIterator
     return prime_sieve_iter(std::execution::seq, upper_bound, resultant_primes);
 }
 
+template<typename ExecutionPolicy, typename Integer, typename OutputIterator>
+decltype(auto) prime_range_iter(ExecutionPolicy&& policy, const Integer lower_bound, const Integer upper_bound, OutputIterator resultant_primes)
+{
+    if(lower_bound <= detail::prime_sieve::linear_sieve_limit<Integer> || upper_bound <= detail::prime_sieve::linear_sieve_limit<Integer>)
+    {
+        std::vector<Integer> primes;
+        primes.resize(static_cast<std::size_t>(prime_approximation(upper_bound)));
+        linear_sieve(upper_bound, primes_.begin());
+
+        auto it {primes.begin()};
+        while(*it < lower_bound)
+        {
+            ++it;
+        }
+
+        while(it != primes.end() && *it <= upper_bound)
+        {
+            *resultant_primes++ = std::move(*it++);
+        }
+    }
+
+    if(lower_bound <= detail::prime_sieve::linear_sieve_limit<Integer> && upper_bound > detail::prime_sieve::linear_sieve_limit<Integer>)
+    {
+        if constexpr (std::is_same_v<std::remove_reference_t<decltype(policy)>, decltype(std::execution::seq)> 
+                      #if __cpp_lib_execution > 201900
+                      || std::is_same_v<std::remove_reference_t<decltype(policy)>, decltype(std::execution::unseq)>
+                      #endif
+                     )
+        {
+            resultant_primes = detail::prime_sieve::sequential_segmented_sieve(detail::prime_sieve::linear_sieve_limit<Integer>, upper_bound, resultant_primes);
+        }
+
+        else
+        {
+            resultant_primes = detail::prime_sieve::segmented_sieve(detail::prime_sieve::linear_sieve_limit<Integer>, upper_bound, resultant_primes);
+        }
+    }
+
+    else
+    {
+        if constexpr (std::is_same_v<std::remove_reference_t<decltype(policy)>, decltype(std::execution::seq)> 
+                      #if __cpp_lib_execution > 201900
+                      || std::is_same_v<std::remove_reference_t<decltype(policy)>, decltype(std::execution::unseq)>
+                      #endif
+                     )
+        {
+            resultant_primes = detail::prime_sieve::sequential_segmented_sieve(lower_bound, upper_bound, resultant_primes);
+        }
+
+        else
+        {
+            resultant_primes = detail::prime_sieve::segmented_sieve(lower_bound, upper_bound, resultant_primes);
+        }
+    }
+
+    return resultant_primes;
+}
+
+template<typename Integer, typename OutputIterator>
+inline decltype(auto) prime_range_iter(const Integer lower_bound, const Integer upper_bound, OutputIterator resultant_primes)
+{
+    return prime_range_iter(std::execution::seq, lower_bound, upper_bound, resultant_primes);
+}
+
 template<typename Integer>
 inline void set_l1d_size(const Integer size)
 {
