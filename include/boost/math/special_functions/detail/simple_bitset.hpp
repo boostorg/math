@@ -8,12 +8,14 @@
 #ifndef BOOST_MATH_SPECIAL_FUNCTIONS_DETAIL_SIMPLE_BITSET_HPP
 #define BOOST_MATH_SPECIAL_FUNCTIONS_DETAIL_SIMPLE_BITSET_HPP
 
+#include <array>
 #include <memory>
+#include <type_traits>
+#include <cmath>
 #include <cstring>
 #include <cstdint>
 #include <climits>
 #include <cstddef>
-#include <type_traits>
 
 namespace boost::math::detail::prime_sieve
 {
@@ -21,6 +23,21 @@ template <typename I = std::uint64_t>
 class simple_bitset
 {
 private:
+    // https://www.chessprogramming.org/BitScan#De_Bruijn_Multiplication
+    static constexpr std::array<std::uint_fast8_t, 64> index64
+    {
+         0, 47,  1, 56, 48, 27,  2, 60,
+        57, 49, 41, 37, 28, 16,  3, 61,
+        54, 58, 35, 52, 50, 42, 21, 44,
+        38, 32, 29, 23, 17, 11,  4, 62,
+        46, 55, 26, 59, 40, 36, 15, 53,
+        34, 51, 20, 43, 31, 22, 10, 45,
+        25, 39, 14, 33, 19, 30,  9, 24,
+        13, 18,  8, 12,  7,  6,  5, 63
+    };
+
+    static constexpr std::uint64_t debruijn64 {0x03f79d71b4cb0a89};
+    
     std::unique_ptr<I[]> bits;
     std::size_t m_size;
     
@@ -143,6 +160,54 @@ public:
         }
 
         return counter;
+    }
+
+    std::size_t bit_scan_forward(std::size_t pos) const noexcept
+    {
+        pos = std::ceil(pos / 64.0);
+        
+        while(bits[pos] == 0 && pos < m_size)
+        {
+            ++pos;
+        }
+        
+        const std::uint64_t temp = bits[pos];
+        if(temp == 0)
+        {
+            return m_size;
+        }
+        else
+        {
+            return index64[((temp ^ (temp-1)) * debruijn64) >> 58] + pos * 64;
+        }
+    }
+
+    std::size_t bit_scan_reverse(std::size_t pos) const noexcept
+    {
+        pos = std::floor(pos / 64.0) - 1;
+        
+        while(bits[pos] == 0 && pos >= 0)
+        {
+            --pos;
+        }
+
+        std::uint64_t temp = bits[pos];
+        if(temp == 0)
+        {
+            return 0;
+        }
+        else
+        {
+            temp |= temp >> 1;
+            temp |= temp >> 1; 
+            temp |= temp >> 2;
+            temp |= temp >> 4;
+            temp |= temp >> 8;
+            temp |= temp >> 16;
+            temp |= temp >> 32;
+            
+            return index64[(temp * debruijn64) >> 58] + pos * 64;
+        }
     }
 };
 }
