@@ -147,7 +147,7 @@ decltype(auto) prime_range_iter(ExecutionPolicy&& policy, const Integer lower_bo
     {
         std::vector<Integer> primes;
         primes.resize(static_cast<std::size_t>(prime_approximation(upper_bound)));
-        linear_sieve(upper_bound, primes_.begin());
+        linear_sieve(upper_bound, primes.begin());
 
         auto it {primes.begin()};
         while(*it < lower_bound)

@@ -13,6 +13,7 @@
 #include <cstdint>
 #include <climits>
 #include <cstddef>
+#include <type_traits>
 
 namespace boost::math::detail::prime_sieve
 {
@@ -118,6 +119,30 @@ public:
     inline I operator[](const std::size_t n) const noexcept
     {
         return test(n);
+    }
+
+    // https://bisqwit.iki.fi/source/misc/bitcounting/
+    // WP3 - Uses hardcoded constants if type is U64
+    I count() const noexcept
+    {
+        static constexpr I m1 {std::is_same_v<I, std::uint64_t> ? 0x5555555555555555 : (~static_cast<I>(0)) / 3};
+        static constexpr I m2 {std::is_same_v<I, std::uint64_t> ? 0x3333333333333333 : (~static_cast<I>(0)) / 5};
+        static constexpr I m4 {std::is_same_v<I, std::uint64_t> ? 0x0f0f0f0f0f0f0f0f : (~static_cast<I>(0)) / 17};
+        static constexpr I h1 {std::is_same_v<I, std::uint64_t> ? 0x0101010101010101 : (~static_cast<I>(0)) / 255};
+
+        I counter {};
+
+        for(std::size_t i {}; i < m_size; ++i)
+        {
+            I x = bits[i];
+            x -= (x >> 1) & m1;
+            x = (x & m2) + ((x >> 2) & m2);
+            x = (x + (x >> 4)) & m4;
+
+            counter += (x * h1) >> 56;
+        }
+
+        return counter;
     }
 };
 }
