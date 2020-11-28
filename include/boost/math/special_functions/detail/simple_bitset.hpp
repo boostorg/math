@@ -22,7 +22,12 @@ namespace boost::math::detail::prime_sieve
 template <typename I = std::uint64_t>
 class simple_bitset
 {
-private:
+private:   
+    static constexpr std::size_t ln2(std::size_t n) noexcept
+    {
+        return n <= 1 ? 0 : 1 + ln2(n >> 1);
+    }
+    
     // https://www.chessprogramming.org/BitScan#De_Bruijn_Multiplication
     static constexpr std::array<std::uint_fast8_t, 64> index64
     {
@@ -37,6 +42,10 @@ private:
     };
 
     static constexpr std::uint64_t debruijn64 {0x03f79d71b4cb0a89};
+    
+    static constexpr auto num_bits {sizeof(I) * CHAR_BIT};
+    static constexpr I mask {num_bits - 1};
+    static constexpr std::size_t shift {ln2(num_bits)};
     
     std::unique_ptr<I[]> bits;
     std::size_t m_size;
@@ -53,7 +62,7 @@ public:
     // Initialize with specific pattern:
     simple_bitset(std::size_t n, const I* pattern, std::size_t len) noexcept
     {
-        const std::size_t block_count = n / (sizeof(I) * CHAR_BIT) + (n % (sizeof(I) * CHAR_BIT) ? 1 : 0);
+        const std::size_t block_count = n / num_bits + (n % num_bits ? 1 : 0);
         if (block_count <= len)
         {
             std::memcpy(bits.get(), pattern, block_count * sizeof(I));
@@ -81,45 +90,34 @@ public:
 
     ~simple_bitset() = default;
     
-    static constexpr std::size_t ln2(std::size_t n) noexcept
-    {
-        return n <= 1 ? 0 : 1 + ln2(n >> 1);
-    }
-    
-    I* limbs() noexcept
+    inline I* limbs() noexcept
     {
         return bits.get();
     }
 
-    I test(std::size_t n) const noexcept
+    inline I test(std::size_t n) const noexcept
     {
-        constexpr I mask = (sizeof(I) * CHAR_BIT) - 1;
-        constexpr std::size_t shift = ln2(sizeof(I) * CHAR_BIT);
         return bits[n >> shift] & (I(1u) << (n & mask));
     }
 
-    void clear(std::size_t n) noexcept
+    inline void clear(std::size_t n) noexcept
     {
-        constexpr I mask = (sizeof(I) * CHAR_BIT) - 1;
-        constexpr std::size_t shift = ln2(sizeof(I) * CHAR_BIT);
         bits[n >> shift] &= ~I(I(1u) << (n & mask));
     }
 
-    void set(std::size_t n) noexcept
+    inline void set(std::size_t n) noexcept
     {
-        constexpr I mask = (sizeof(I) * CHAR_BIT) - 1;
-        constexpr std::size_t shift = ln2(sizeof(I) * CHAR_BIT);
         bits[n >> shift] |= (I(1u) << (n & mask));
     }
 
-    std::size_t size() const noexcept { return m_size; }
+    inline std::size_t size() const noexcept { return m_size; }
 
     void resize(std::size_t n) noexcept
     {
         if(n != m_size)
         {
             m_size = n;
-            bits.reset(new I[n / (sizeof(I) * CHAR_BIT) + (n % (sizeof(I) * CHAR_BIT) ? 1 : 0)]);
+            bits.reset(new I[n / num_bits + (n % num_bits ? 1 : 0)]);
         }
     }
 
@@ -149,9 +147,9 @@ public:
 
         I counter {};
 
-        for(std::size_t i {}; i < m_size; ++i)
+        for(std::size_t i {}; i < m_size; i += num_bits)
         {
-            I x = bits[i];
+            I x = bits[std::floor(i / num_bits)];
             x -= (x >> 1) & m1;
             x = (x & m2) + ((x >> 2) & m2);
             x = (x + (x >> 4)) & m4;
@@ -162,6 +160,7 @@ public:
         return counter;
     }
 
+    template<std::enable_if_t<std::is_same_v<I, std::uint64_t>, bool> = true>
     std::size_t bit_scan_forward(std::size_t pos) const noexcept
     {
         pos = std::ceil(pos / 64.0);
@@ -182,6 +181,7 @@ public:
         }
     }
 
+    template<std::enable_if_t<std::is_same_v<I, std::uint64_t>, bool> = true>
     std::size_t bit_scan_reverse(std::size_t pos) const noexcept
     {
         pos = std::floor(pos / 64.0) - 1;
