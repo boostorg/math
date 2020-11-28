@@ -13,10 +13,13 @@
 #include <boost/math/special_functions/prime_approximation.hpp>
 #include <boost/math/special_functions/prime_sieve.hpp>
 #include <execution>
-#include <cstdint>
 #include <vector>
 #include <future>
 #include <thread>
+#include <limits>
+#include <type_traits>
+#include <iterator>
+#include <cstdint>
 
 namespace boost::math::detail::prime_sieve
 {
@@ -97,12 +100,9 @@ decltype(auto) segmented_sieve(const Integer lower_bound, const Integer upper_bo
     
     return resultant_primes;
 }
-}
 
-namespace boost::math
-{
 template<typename ExecutionPolicy, typename Integer, typename OutputIterator>
-decltype(auto) prime_sieve_iter(ExecutionPolicy&& policy, const Integer upper_bound, OutputIterator resultant_primes)
+decltype(auto) prime_sieve_iter_impl(ExecutionPolicy&& policy, const Integer upper_bound, OutputIterator resultant_primes)
 {
     if (upper_bound == 2)
     {
@@ -135,13 +135,13 @@ decltype(auto) prime_sieve_iter(ExecutionPolicy&& policy, const Integer upper_bo
 }
 
 template<typename Integer, typename OutputIterator>
-inline decltype(auto) prime_sieve_iter(const Integer upper_bound, OutputIterator resultant_primes)
+inline decltype(auto) prime_sieve_iter_impl(const Integer upper_bound, OutputIterator resultant_primes)
 {
-    return prime_sieve_iter(std::execution::seq, upper_bound, resultant_primes);
+    return prime_sieve_iter_impl(std::execution::seq, upper_bound, resultant_primes);
 }
 
 template<typename ExecutionPolicy, typename Integer, typename OutputIterator>
-decltype(auto) prime_range_iter(ExecutionPolicy&& policy, const Integer lower_bound, const Integer upper_bound, OutputIterator resultant_primes)
+decltype(auto) prime_range_iter_impl(ExecutionPolicy&& policy, const Integer lower_bound, const Integer upper_bound, OutputIterator resultant_primes)
 {
     if(lower_bound <= detail::prime_sieve::linear_sieve_limit<Integer> || upper_bound <= detail::prime_sieve::linear_sieve_limit<Integer>)
     {
@@ -199,9 +199,129 @@ decltype(auto) prime_range_iter(ExecutionPolicy&& policy, const Integer lower_bo
 }
 
 template<typename Integer, typename OutputIterator>
-inline decltype(auto) prime_range_iter(const Integer lower_bound, const Integer upper_bound, OutputIterator resultant_primes)
+inline decltype(auto) prime_range_iter_impl(const Integer lower_bound, const Integer upper_bound, OutputIterator resultant_primes)
 {
-    return prime_range_iter(std::execution::seq, lower_bound, upper_bound, resultant_primes);
+    return prime_range_iter_impl(std::execution::seq, lower_bound, upper_bound, resultant_primes);
+}
+
+// SFINAE for dual interface
+template<typename T>
+class is_container
+{
+private:
+    using yes = char; 
+    struct no { char x[2]; };
+
+    template<typename U>  
+    static yes test( decltype(&U::size) );
+    
+    template<typename U> 
+    static no test(...);    
+
+public:
+    enum { type = sizeof(test<T>(0)) == sizeof(char) };
+};
+
+// Add C++14/17esqe interface to is_container
+template<typename T>
+static constexpr auto is_container_t = is_container<T>::type;
+}
+
+namespace boost::math
+{
+template<typename ExecutionPolicy, typename Integer, typename T>
+inline decltype(auto) prime_sieve_iter(ExecutionPolicy&& exec, Integer upper_bound, T output)
+{
+    if constexpr (detail::prime_sieve::is_container_t<std::remove_pointer_t<T>>)
+    {
+        if constexpr (std::is_integral_v<Integer>)
+        {
+            return detail::prime_sieve::prime_sieve_iter_impl(exec, upper_bound, std::begin(*output));
+        }
+        else
+        {
+            if (upper_bound < static_cast<Integer>(std::numeric_limits<std::size_t>::max()))
+            {
+                return detail::prime_sieve::prime_sieve_iter_impl(exec, static_cast<std::size_t>(upper_bound), std::begin(*output));
+            }
+            else
+            {
+                return detail::prime_sieve::prime_sieve_iter_impl(exec, upper_bound, std::begin(*output));
+            }
+        }
+    }
+    else
+    {
+        if constexpr (std::is_integral_v<Integer>)
+        {
+            return detail::prime_sieve::prime_sieve_iter_impl(exec, upper_bound, output);
+        }
+        else
+        {
+            if (upper_bound < static_cast<Integer>(std::numeric_limits<std::size_t>::max()))
+            {
+                return detail::prime_sieve::prime_sieve_iter_impl(exec, static_cast<std::size_t>(upper_bound), output);
+            }
+            else
+            {
+                return detail::prime_sieve::prime_sieve_iter_impl(exec, upper_bound, output);
+            }
+        }
+    }
+}
+
+template<typename Integer, typename T>
+inline decltype(auto) prime_sieve_iter(Integer upper_bound, T output)
+{
+    return prime_sieve_iter(std::execution::seq, upper_bound, output);
+}
+
+template<typename ExecutionPolicy, typename Integer, typename T>
+inline decltype(auto) prime_range_iter(ExecutionPolicy&& exec, Integer upper_bound, Integer lower_bound, T output)
+{
+    if constexpr (detail::prime_sieve::is_container_t<std::remove_pointer_t<T>>)
+    {
+        if constexpr (std::is_integral_v<Integer>)
+        {
+            return detail::prime_sieve::prime_range_iter_impl(exec, lower_bound, upper_bound, std::begin(*output));
+        }
+        else
+        {
+            if (upper_bound < static_cast<Integer>(std::numeric_limits<std::size_t>::max()))
+            {
+                return detail::prime_sieve::prime_range_iter_impl(exec, static_cast<std::size_t>(lower_bound), 
+                                                                  static_cast<std::size_t>(upper_bound), std::begin(*output));
+            }
+            else
+            {
+                return detail::prime_sieve::prime_range_iter_impl(exec, lower_bound, upper_bound, std::begin(*output));
+            }
+        }
+    }
+    else
+    {
+        if constexpr (std::is_integral_v<Integer>)
+        {
+            return detail::prime_sieve::prime_range_iter_impl(exec, lower_bound, upper_bound, output);
+        }
+        else
+        {
+            if (upper_bound < static_cast<Integer>(std::numeric_limits<std::size_t>::max()))
+            {
+                return detail::prime_sieve::prime_range_iter_impl(exec, static_cast<std::size_t>(lower_bound), static_cast<std::size_t>(upper_bound), output);
+            }
+            else
+            {
+                return detail::prime_sieve::prime_range_iter_impl(exec, lower_bound, upper_bound, output);
+            }
+        }
+    }
+}
+
+template<typename Integer, typename T>
+inline decltype(auto) prime_range_iter(Integer lower_bound, Integer upper_bound, T output)
+{
+    return prime_range_iter(std::execution::seq, lower_bound, upper_bound, output);
 }
 
 template<typename Integer>
