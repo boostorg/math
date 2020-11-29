@@ -210,15 +210,22 @@ void Wheel<Integer>::Print()
 template <typename Integer>
 class MOD30Wheel final
 {
-    static constexpr std::int_fast8_t M_ {30};
-    static constexpr std::int_fast8_t k_ {3};
-    static constexpr std::int_fast8_t phi_ {8};
+    static constexpr std::uint_fast8_t M_ {30};
+    static constexpr std::uint_fast8_t k_ {3};
+    static constexpr std::uint_fast8_t phi_ {8};
 
-    static constexpr std::array<std::int_fast8_t, M_> dist_
+    static constexpr std::array<std::uint_fast8_t, M_> dist_
     {
         1,  6,  5,  4,  3,  2,  1,  4,  3,  2,  1,  2,  1,  4,  3,  2,  1,  2,  1,  4,  3,  2,  1,  6,  5, 4,  
         3,  2,  1,  2
     };
+    static constexpr std::array<std::uint_fast8_t, phi_> spokes_
+    {
+        2, 6, 4, 2, 4, 2, 4, 6
+    };
+
+    std::size_t current_index_;
+    Integer current_index_num_;
 
 public:
     constexpr MOD30Wheel() = default;
@@ -228,11 +235,60 @@ public:
     constexpr auto K() const noexcept { return k_; }
     constexpr auto Phi() const noexcept { return phi_; }
 
-    constexpr auto Next(const Integer i) const noexcept { return i + dist_[static_cast<std::size_t>(i % M_)]; }
+    constexpr Integer Next(const Integer i) const noexcept { return i + dist_[static_cast<std::size_t>(i % M_)]; }
+
+    // Avoid using modulus if scanning quickly through the wheel. Uses the stored values to generate the next number
+    inline Integer Next() noexcept 
+    { 
+        ++current_index_;
+        if(current_index_ == phi_)
+        {
+            current_index_ = 0;
+        }
+        return current_index_num_ += spokes_[current_index_];
+    }
+
+    inline auto SetCurrentIndex(const Integer i) noexcept 
+    {
+        current_index_num_ = Next(i - 1);
+        
+        const std::size_t temp {static_cast<std::size_t>(current_index_num_ % M_)};
+        switch (temp)
+        {
+        case 0: case 1:
+            current_index_ = 0;
+            break;
+        case 2: case 3: case 4: case 5: case 6: case 7:
+            current_index_ = 1;
+            break;
+        case 8: case 9: case 10: case 11:
+            current_index_ = 2;
+            break;
+        case 12: case 13:
+            current_index_ = 3;
+            break;
+        case 14: case 15: case 16: case 17:
+            current_index_ = 4;
+            break;
+        case 18: case 19:
+            current_index_ = 5;
+            break;
+        case 20: case 21: case 22: case 23:
+            current_index_ = 6;
+            break;
+        case 24: case 25: case 26: case 27: case 28: case 29:
+            current_index_ = 7;
+            break;
+        default:
+            break;
+        }
+
+        return current_index_num_;
+    }
 
     // Magic number is the number of possible primes in each turn of the mod 30 wheel
     // https://en.wikipedia.org/wiki/Wheel_factorization
-    constexpr auto PrimeRatio() const noexcept { return 8.0 / 30.0; }
+    constexpr auto PrimeRatio() const noexcept { return static_cast<double>(phi_) / M_; }
 };
 
 // Pre-computed MOD 210 wheel

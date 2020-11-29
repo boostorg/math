@@ -8,8 +8,6 @@
 #ifndef BOOST_MATH_SPECIAL_FUNCTIONS_DETAIL_INTERVAL_SIEVE_HPP
 #define BOOST_MATH_SPECIAL_FUNCTIONS_DETAIL_INTERVAL_SIEVE_HPP
 
-#include <boost/dynamic_bitset.hpp>
-#include <boost/multiprecision/cpp_int.hpp>
 #include <boost/math/special_functions/prime_approximation.hpp>
 #include <boost/math/special_functions/detail/prime_wheel.hpp>
 #include <boost/math/special_functions/detail/linear_prime_sieve.hpp>
@@ -29,6 +27,7 @@ class IntervalSieve
 #ifdef BOOST_HAS_INT128              // Defined in GCC 4.6+, clang, intel. MSVC does not define. 
 using uint128_t = unsigned __int128; // One machine word smaller than the boost equivalent
 #else
+#include <boost/multiprecision/cpp_int.hpp>
 using uint128_t = boost::multiprecision::uint128_t;
 #endif
 
@@ -67,15 +66,12 @@ private:
     };
 
     static constexpr pssentry pss_{};
-    static constexpr boost::math::detail::prime_sieve::MOD30Wheel<Integer> w_{};
+    boost::math::detail::prime_sieve::MOD30Wheel<Integer> w_{};
     std::size_t tdlimit_;
 
     Integer delta_;
     Integer left_;
     Integer right_;
-    
-    // The adjusted value of left that represent the beginning value of the bitset based off the next spoke in the wheel after left_
-    Integer mod_left_;
 
     OutputIterator resultant_primes_;
 
@@ -147,17 +143,21 @@ template<typename Integer, typename OutputIterator>
 void IntervalSieve<Integer, OutputIterator>::SeiveLength(const Integer d) noexcept
 {
     // Find the first multiple of d in the bitset to use as the entry point
-    Integer current_multiple {mod_left_};
-    Integer current_spoke {mod_left_};
+    Integer current_multiple {left_};
+    Integer current_spoke {left_};
     std::size_t i {};
+
+    current_multiple = w_.SetCurrentIndex(current_multiple);
     while(current_multiple % d != 0)
     {
-        ++current_multiple;
-        if(current_spoke < current_multiple)
-        {
-            current_spoke = w_.Next(current_spoke);
-            ++i;
-        }
+        current_multiple = w_.Next();
+    }
+
+    current_spoke = w_.SetCurrentIndex(current_spoke);
+    while(current_spoke < current_multiple)
+    {
+        current_spoke = w_.Next();
+        ++i;
     }
 
     while(i < b_.size())
@@ -170,7 +170,7 @@ void IntervalSieve<Integer, OutputIterator>::SeiveLength(const Integer d) noexce
         current_multiple += d;
         while(current_spoke < current_multiple)
         {
-            current_spoke = w_.Next(current_spoke);
+            current_spoke = w_.Next();
             ++i;
         }
     }
@@ -227,14 +227,14 @@ void IntervalSieve<Integer, OutputIterator>::Sieve() noexcept
 template<typename Integer, typename OutputIterator>
 decltype(auto) IntervalSieve<Integer, OutputIterator>::WriteOutput() noexcept
 {
-    Integer current_spoke {mod_left_};
+    Integer current_spoke {w_.SetCurrentIndex(left_)};
     for(std::size_t i {}; i < b_.size(); ++i)
     {
         if(b_[i])
         {
             *resultant_primes_++ = current_spoke;
         }
-        current_spoke = w_.Next(current_spoke);
+        current_spoke = w_.Next();
     }
     return resultant_primes_;
 }
@@ -246,10 +246,10 @@ template<typename Integer, typename OutputIterator>
 bool IntervalSieve<Integer, OutputIterator>::Psstest(const std::size_t pos) noexcept
 {
     // Convert a bitset position (pos) into the corresponding numerical value using the wheel
-    Integer n {mod_left_};
+    Integer n {w_.SetCurrentIndex(left_)};
     for(std::size_t i {}; i < pos; ++i)
     {
-        n = w_.Next(n);
+        n = w_.Next();
     }
 
     const Integer exponent {(n - 1) / 2};
@@ -311,7 +311,6 @@ void IntervalSieve<Integer, OutputIterator>::Setup(const Integer left, const Int
     left_ = left;
     right_ = right;
     delta_ = right_ - left_;
-    mod_left_ = w_.Next(left_ - 1); // Subtract one in the case that left_ resides on a spoke
 
     b_.resize(static_cast<std::size_t>(delta_) * w_.PrimeRatio());
     b_.reset();
@@ -329,12 +328,6 @@ IntervalSieve<Integer, OutputIterator>::IntervalSieve(const Integer left, const 
     resultant_primes_ {resultant_primes}
 {
     Setup(left, right);
-
-    if(plimit_ != 0)
-    {
-        Psstestall();
-    }
-    
     WriteOutput();
 }
 
@@ -342,12 +335,6 @@ template<typename Integer, typename OutputIterator>
 decltype(auto) IntervalSieve<Integer, OutputIterator>::NewRange(const Integer left, const Integer right) noexcept
 {
     Setup(left, right);
-    
-    if(plimit_ != 0)
-    {
-        Psstestall();
-    }
-    
     return WriteOutput();
 }
 
@@ -356,12 +343,6 @@ decltype(auto) IntervalSieve<Integer, OutputIterator>::NewRange(const Integer le
 {
     resultant_primes_ = resultant_primes;
     Setup(left, right);
-    
-    if(plimit_ != 0)
-    {
-        Psstestall();
-    }
-    
     return WriteOutput();
 }
 }
