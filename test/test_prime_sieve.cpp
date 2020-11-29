@@ -435,8 +435,9 @@ int main()
     // Test SFINAE
     std::vector<int> test;
     auto test_ref = &test;
-    static_assert(boost::math::detail::is_container<std::remove_pointer_t<decltype(test_ref)>>::value == 1, "INOP");
+    static_assert(boost::math::detail::prime_sieve::is_container_t<std::remove_pointer_t<decltype(test_ref)>> == 1, "INOP");
     
+    /*
     // Individual Algorithms
     test_linear_sieve<int>();
     test_linear_sieve<int32_t>();
@@ -459,14 +460,14 @@ int main()
     test_linear_sieve_iterator<uint32_t>();
     test_linear_sieve_iterator<boost::multiprecision::cpp_int>();
     test_linear_sieve_iterator<boost::multiprecision::mpz_int>();
-
+    */
     test_interval_sieve_iterator<int>();
     test_interval_sieve_iterator<int32_t>();
     test_interval_sieve_iterator<int64_t>();
     test_interval_sieve_iterator<uint32_t>();
     test_interval_sieve_iterator<boost::multiprecision::cpp_int>();
     test_interval_sieve_iterator<boost::multiprecision::mpz_int>();
-
+    /*
     test_stepanov_sieve<int>();
 
     test_wheel_sieve_of_eratosthenes<int>();
@@ -558,6 +559,6 @@ int main()
 
     boost::math::set_l1d_size(100'000);
     BOOST_ASSERT_MSG(boost::math::detail::prime_sieve::L1D_SIZE == 100'000, "L1 Size not set");
-    
+    */
     boost::report_errors();
 }
