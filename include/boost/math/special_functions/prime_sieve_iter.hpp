@@ -11,7 +11,6 @@
 #include <boost/math/special_functions/detail/linear_prime_sieve.hpp>
 #include <boost/math/special_functions/detail/interval_prime_sieve.hpp>
 #include <boost/math/special_functions/prime_approximation.hpp>
-#include <boost/math/special_functions/prime_sieve.hpp>
 #include <execution>
 #include <vector>
 #include <future>
