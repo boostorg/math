@@ -7,7 +7,6 @@
 #ifndef BOOST_MATH_STATISTICS_UNIVARIATE_STATISTICS_HPP
 #define BOOST_MATH_STATISTICS_UNIVARIATE_STATISTICS_HPP
 
-#include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/math/statistics/detail/single_pass.hpp>
 #include <boost/assert.hpp>
 #include <algorithm>
@@ -231,10 +230,9 @@ inline auto first_four_moments(ExecutionPolicy&& exec, ForwardIterator first, Fo
         }
         else
         {
-            static_assert(!std::is_same_v<Real, long double>, "Error for parallel calculation using long double exceeds 100 Epsilon");
+            static_assert(!std::is_same_v<Real, long double> ^ !std::is_trivially_constructible_v<Real>, 
+                          "Error for parallel calculation using long double or aribitrary precision types is excessivly large (>100 epsilon).");
             
-            // TODO(mborland): Detection for all multiprecision float types
-            static_assert(!std::is_same_v<Real, boost::multiprecision::cpp_bin_float_50>, "Error for parallel calculation using multiprecision types exceeds 100 Epsilon");
             detail::thread_counter = 1;
             const auto results = detail::parallel_first_four_moments_impl<std::tuple<Real, Real, Real, Real, std::size_t>>(first, last);
             return std::make_tuple(std::get<0>(results), std::get<1>(results) / std::get<4>(results), std::get<2>(results) / std::get<4>(results), 
