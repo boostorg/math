@@ -8,12 +8,13 @@
 #include <boost/math/special_functions/prime_sieve.hpp>
 #include <boost/math/special_functions/prime_sieve_iter.hpp>
 #include <boost/math/special_functions/prime_approximation.hpp>
-#include <boost/core/lightweight_test.hpp>
-#include <boost/multiprecision/cpp_int.hpp>
-#include <boost/multiprecision/gmp.hpp>
 #include <boost/math/special_functions/interval_sieve.hpp>
 #include <boost/math/special_functions/detail/linear_prime_sieve.hpp>
 #include <boost/math/special_functions/detail/interval_prime_sieve.hpp>
+#include <boost/math/special_functions/detail/small_primes.hpp>
+#include <boost/core/lightweight_test.hpp>
+#include <boost/multiprecision/cpp_int.hpp>
+#include <boost/multiprecision/gmp.hpp>
 #include <list>
 #include <deque>
 #include <array>
@@ -427,6 +428,20 @@ void test_wheel_sieve_of_eratosthenes()
     BOOST_TEST_EQ(array_size - std::count(primes.cbegin(), primes.cend(), 0), 9'592);
 }
 
+template<typename Integer>
+void test_small_primes()
+{
+    constexpr std::size_t array_size {293};
+    std::array<Integer, array_size> primes;
+    std::fill(primes.begin(), primes.end(), 0);
+
+    boost::math::detail::prime_sieve::small_primes(static_cast<Integer>(1'000), primes.begin());
+    BOOST_TEST_EQ(array_size - std::count(primes.cbegin(), primes.cend(), 0), 168);
+
+    boost::math::detail::prime_sieve::small_primes(static_cast<Integer>(1'920), primes.begin());
+    BOOST_TEST_EQ(array_size - std::count(primes.cbegin(), primes.cend(), 0), 293);
+}
+
 int main()
 {
     // Test prime approximation for constexpr
@@ -467,6 +482,13 @@ int main()
     test_interval_sieve_iterator<uint32_t>();
     test_interval_sieve_iterator<boost::multiprecision::cpp_int>();
     test_interval_sieve_iterator<boost::multiprecision::mpz_int>();
+    
+    test_small_primes<int>();
+    test_small_primes<int32_t>();
+    test_small_primes<int64_t>();
+    test_small_primes<uint32_t>();
+    test_small_primes<boost::multiprecision::cpp_int>();
+    test_small_primes<boost::multiprecision::mpz_int>();
     /*
     test_stepanov_sieve<int>();
 
