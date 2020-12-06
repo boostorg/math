@@ -391,8 +391,9 @@ Compute the mode(s) of a data set:
 [heading References]
 
 * Higham, Nicholas J. ['Accuracy and stability of numerical algorithms.] Vol. 80. Siam, 2002.
-* Philippe P. Pébay: ["Formulas for Robust, One-Pass Parallel Computation of Covariances and Arbitrary-Order Statistical Moments.] Technical Report SAND2008-6212, Sandia National Laboratories, September 2008.
-* Chan, Tony F.; Golub, Gene H.; LeVeque, Randall J. (1979), "Updating Formulae and a Pairwise Algorithm for Computing Sample Variances.", Technical Report STAN-CS-79-773, Department of Computer Science, Stanford University.
-* Pébaÿ, Philippe; Terriberry, Timothy; Kolla, Hemanth; Bennett, Janine (2016), "Numerically Stable, Scalable Formulas for Parallel and Online Computation of Higher-Order Multivariate Central Moments with Arbitrary Weights", Computational Statistics, Springer
+* Philippe P. Pebay. ['Formulas for Robust, One-Pass Parallel Computation of Covariances and Arbitrary-Order Statistical Moments.] Technical Report SAND2008-6212, Sandia National Laboratories, September 2008.
+* Tony F. Chan, Gene H. Golub, Randall J. LeVeque (1979), ['Updating Formulae and a Pairwise Algorithm for Computing Sample Variances.], Technical Report STAN-CS-79-773, Department of Computer Science, Stanford University.
+* Philippe Pebay, Timothy Terriberry, Hemanth Kolla, Janine Bennett (2016), ['Numerically Stable, Scalable Formulas for Parallel and Online Computation of Higher-Order Multivariate Central Moments with Arbitrary Weights], Computational Statistics, Springer
+
 [endsect]
 [/section:univariate_statistics Univariate Statistics]

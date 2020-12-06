@@ -5,6 +5,7 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/math/statistics/univariate_statistics.hpp>
 #include <boost/assert.hpp>
 #include <benchmark/benchmark.h>

@@ -102,7 +102,6 @@ static std::atomic<unsigned> thread_counter {1};
 template<typename ReturnType, typename ForwardIterator>
 ReturnType parallel_variance_impl(ForwardIterator first, ForwardIterator last)
 {
-    using Real = typename std::iterator_traits<ForwardIterator>::value_type;
     static unsigned num_threads {std::thread::hardware_concurrency()};
 
     const auto elements {std::distance(first, last)};
@@ -178,7 +177,6 @@ ReturnType first_four_moments_sequential_impl(ForwardIterator first, ForwardIter
 template<typename ReturnType, typename ForwardIterator>
 ReturnType parallel_first_four_moments_impl(ForwardIterator first, ForwardIterator last)
 {
-    using Real = typename std::iterator_traits<ForwardIterator>::value_type;
     static unsigned num_threads {std::thread::hardware_concurrency()};
 
     const auto elements {std::distance(first, last)};
