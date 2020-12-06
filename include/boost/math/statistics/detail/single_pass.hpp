@@ -177,6 +177,8 @@ ReturnType first_four_moments_sequential_impl(ForwardIterator first, ForwardIter
 template<typename ReturnType, typename ForwardIterator>
 ReturnType parallel_first_four_moments_impl(ForwardIterator first, ForwardIterator last)
 {
+    using Real = std::tuple_element_t<0, ReturnType>;
+    
     static unsigned num_threads {std::thread::hardware_concurrency()};
 
     const auto elements {std::distance(first, last)};
@@ -210,24 +212,24 @@ ReturnType parallel_first_four_moments_impl(ForwardIterator first, ForwardIterat
     const auto results_a {future_a.get()};
     const auto results_b {future_b.get()};
 
-    const auto M1_a = std::get<0>(results_a);
-    const auto M2_a = std::get<1>(results_a);
-    const auto M3_a = std::get<2>(results_a);
-    const auto M4_a = std::get<3>(results_a);
+    const Real M1_a = std::get<0>(results_a);
+    const Real M2_a = std::get<1>(results_a);
+    const Real M3_a = std::get<2>(results_a);
+    const Real M4_a = std::get<3>(results_a);
 
-    const auto M1_b = std::get<0>(results_b);
-    const auto M2_b = std::get<1>(results_b);
-    const auto M3_b = std::get<2>(results_b);
-    const auto M4_b = std::get<3>(results_b);
+    const Real M1_b = std::get<0>(results_b);
+    const Real M2_b = std::get<1>(results_b);
+    const Real M3_b = std::get<2>(results_b);
+    const Real M4_b = std::get<3>(results_b);
 
-    const auto n_ab = elements;
-    const auto delta = M1_b - M1_a;
+    const Real n_ab = elements;
+    const Real delta = M1_b - M1_a;
     
-    const auto M1_ab = (range_a * M1_a + range_b * M1_b) / n_ab;
-    const auto M2_ab = M2_a + M2_b + delta * delta * (range_a * range_b / n_ab);
-    const auto M3_ab = M3_a + M3_b + (delta * delta * delta) * range_a * range_b * (range_a - range_b) / (n_ab * n_ab)    
+    const Real M1_ab = (range_a * M1_a + range_b * M1_b) / n_ab;
+    const Real M2_ab = M2_a + M2_b + delta * delta * (range_a * range_b / n_ab);
+    const Real M3_ab = M3_a + M3_b + (delta * delta * delta) * range_a * range_b * (range_a - range_b) / (n_ab * n_ab)    
                        + 3 * delta * (range_a * M2_b - range_b * M2_a) / n_ab;
-    const auto M4_ab = M4_a + M4_b + (delta * delta * delta * delta) * range_a * range_b * (range_a * range_a - range_a * range_b + range_b * range_b) / (n_ab * n_ab * n_ab)
+    const Real M4_ab = M4_a + M4_b + (delta * delta * delta * delta) * range_a * range_b * (range_a * range_a - range_a * range_b + range_b * range_b) / (n_ab * n_ab * n_ab)
                        + 6 * delta * delta * (range_a * range_a * M2_b + range_b * range_b * M2_a) / (n_ab * n_ab) 
                        + 4 * delta * (range_a * M3_b - range_b * M3_a) / n_ab;
 

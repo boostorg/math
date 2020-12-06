@@ -977,11 +977,11 @@ int main()
     test_skewness<double>(std::execution::par);
     test_skewness<double>(std::execution::par_unseq);
     test_skewness<long double>(std::execution::seq);
-    //test_skewness<long double>(std::execution::par);
-    //test_skewness<long double>(std::execution::par_unseq);
+    test_skewness<long double>(std::execution::par);
+    test_skewness<long double>(std::execution::par_unseq);
     test_skewness<cpp_bin_float_50>(std::execution::seq);
-    //test_skewness<cpp_bin_float_50>(std::execution::par);
-    //test_skewness<cpp_bin_float_50>(std::execution::par_unseq);
+    test_skewness<cpp_bin_float_50>(std::execution::par);
+    test_skewness<cpp_bin_float_50>(std::execution::par_unseq);
 
     test_integer_skewness<int>(std::execution::seq);
     test_integer_skewness<int>(std::execution::par);
@@ -997,13 +997,12 @@ int main()
     test_first_four_moments<double>(std::execution::par);
     test_first_four_moments<double>(std::execution::par_unseq);
     
-    // Error for M2 is 5.55112e-17 with long double and cpp_bin_float_50
     test_first_four_moments<long double>(std::execution::seq);
-    //test_first_four_moments<long double>(std::execution::par);
-    //test_first_four_moments<long double>(std::execution::par_unseq);
+    test_first_four_moments<long double>(std::execution::par);
+    test_first_four_moments<long double>(std::execution::par_unseq);
     test_first_four_moments<cpp_bin_float_50>(std::execution::seq);
-    //test_first_four_moments<cpp_bin_float_50>(std::execution::par);
-    //test_first_four_moments<cpp_bin_float_50>(std::execution::par_unseq);
+    test_first_four_moments<cpp_bin_float_50>(std::execution::par);
+    test_first_four_moments<cpp_bin_float_50>(std::execution::par_unseq);
 
     test_kurtosis<float>(std::execution::seq);
     test_kurtosis<float>(std::execution::par);
@@ -1012,11 +1011,10 @@ int main()
     test_kurtosis<double>(std::execution::par);
     test_kurtosis<double>(std::execution::par_unseq);
     test_kurtosis<long double>(std::execution::seq);
-    //test_kurtosis<long double>(std::execution::par);
-    //test_kurtosis<long double>(std::execution::par_unseq);
+    test_kurtosis<long double>(std::execution::par);
+    test_kurtosis<long double>(std::execution::par_unseq);
     // Kinda expensive:
     //test_kurtosis<cpp_bin_float_50>(std::execution::seq);
-    // Excessive error:
     //test_kurtosis<cpp_bin_float_50>(std::execution::par);
     //test_kurtosis<cpp_bin_float_50>(std::execution::par_unseq);
 

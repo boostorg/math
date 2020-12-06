@@ -208,14 +208,14 @@ inline auto first_four_moments(ExecutionPolicy&& exec, ForwardIterator first, Fo
     {
         if constexpr (std::is_same_v<std::remove_reference_t<decltype(exec)>, decltype(std::execution::seq)>)
         {
-            const auto results = detail::first_four_moments_sequential_impl<std::tuple<double, double, double, double, std::size_t>>(first, last); 
+            const auto results = detail::first_four_moments_sequential_impl<std::tuple<double, double, double, double, double>>(first, last); 
             return std::make_tuple(std::get<0>(results), std::get<1>(results) / std::get<4>(results), std::get<2>(results) / std::get<4>(results), 
                                 std::get<3>(results) / std::get<4>(results));
         }
         else
         {
             detail::thread_counter = 1;
-            const auto results = detail::parallel_first_four_moments_impl<std::tuple<double, double, double, double, std::size_t>>(first, last);
+            const auto results = detail::parallel_first_four_moments_impl<std::tuple<double, double, double, double, double>>(first, last);
             return std::make_tuple(std::get<0>(results), std::get<1>(results) / std::get<4>(results), std::get<2>(results) / std::get<4>(results), 
                                    std::get<3>(results) / std::get<4>(results));
         }
@@ -224,17 +224,14 @@ inline auto first_four_moments(ExecutionPolicy&& exec, ForwardIterator first, Fo
     {
         if constexpr (std::is_same_v<std::remove_reference_t<decltype(exec)>, decltype(std::execution::seq)>)
         {
-            const auto results = detail::first_four_moments_sequential_impl<std::tuple<Real, Real, Real, Real, std::size_t>>(first, last);
+            const auto results = detail::first_four_moments_sequential_impl<std::tuple<Real, Real, Real, Real, Real>>(first, last);
             return std::make_tuple(std::get<0>(results), std::get<1>(results) / std::get<4>(results), std::get<2>(results) / std::get<4>(results), 
                                    std::get<3>(results) / std::get<4>(results));
         }
         else
         {
-            static_assert(!std::is_same_v<Real, long double> ^ !std::is_trivially_constructible_v<Real>, 
-                          "Error for parallel calculation using long double or aribitrary precision types is excessivly large (>100 epsilon).");
-            
             detail::thread_counter = 1;
-            const auto results = detail::parallel_first_four_moments_impl<std::tuple<Real, Real, Real, Real, std::size_t>>(first, last);
+            const auto results = detail::parallel_first_four_moments_impl<std::tuple<Real, Real, Real, Real, Real>>(first, last);
             return std::make_tuple(std::get<0>(results), std::get<1>(results) / std::get<4>(results), std::get<2>(results) / std::get<4>(results), 
                                    std::get<3>(results) / std::get<4>(results));
         }
