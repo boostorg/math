@@ -22,47 +22,33 @@ namespace boost::math::statistics::detail
 template<typename ReturnType, typename ForwardIterator>
 ReturnType mean_sequential_impl(ForwardIterator first, ForwardIterator last)
 {
-    if constexpr (std::is_same_v<typename std::iterator_traits<ForwardIterator>::iterator_category, std::random_access_iterator_tag>)
+    const std::size_t elements {std::distance(first, last)};
+    std::valarray<ReturnType> mu {0, 0, 0, 0};
+    std::valarray<ReturnType> temp {0, 0, 0, 0};
+    ReturnType i {1};
+    const auto end {std::next(first, elements - (elements % 4))};
+    auto it {first};
+
+    while(it != end)
     {
-        std::size_t elements {std::distance(first, last)};
-        std::valarray<ReturnType> mu {0, 0, 0, 0};
-        std::valarray<ReturnType> temp {0, 0, 0, 0};
-        ReturnType i = 1;
-        const auto end {last - (elements % 4)};
-
-        for(auto it {first}; it != end; it += 4)
-        {
-            const ReturnType inv {ReturnType(1) / i};
-            temp = {*it, *(it+1), *(it+2), *(it+3)};
-            temp -= mu;
-            mu += (temp *= inv);
-            i += 1;
-        }
-
-        const ReturnType num1 = ReturnType(elements - (elements %4))/ReturnType(4);
-        const ReturnType num2 = num1 + ReturnType(elements % 4);
-
-        for (auto it = end; it != last; ++it)
-        {
-            mu[3] += (*it-mu[3])/i;
-            i += 1;
-        }
-
-        return (num1 * std::valarray<ReturnType>(mu[std::slice(0,3,1)]).sum() + num2 * mu[3]) / ReturnType(elements);
+        const ReturnType inv {ReturnType(1) / i};
+        temp = {*it++, *it++, *it++, *it++};
+        temp -= mu;
+        mu += (temp *= inv);
+        i += 1;
     }
-    else
+
+    const ReturnType num1 {ReturnType(elements - (elements % 4))/ReturnType(4)};
+    const ReturnType num2 {num1 + ReturnType(elements % 4)};
+
+    while(it != last)
     {
-        auto it = first;
-        ReturnType mu = *it;
-        ReturnType i = 2;
-        while(++it != last)
-        {
-            mu += (*it - mu)/i;
-            i += 1;
-        }
-
-        return mu;
+        mu[3] += (*it-mu[3])/i;
+        i += 1;
+        ++it;
     }
+
+    return (num1 * std::valarray<ReturnType>(mu[std::slice(0,3,1)]).sum() + num2 * mu[3]) / ReturnType(elements);
 }
 
 // Higham, Accuracy and Stability, equation 1.6a and 1.6b:
