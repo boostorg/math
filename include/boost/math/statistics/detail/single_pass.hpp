@@ -10,15 +10,12 @@
 #include <tuple>
 #include <iterator>
 #include <atomic>
-#include <memory>
 #include <thread>
 #include <type_traits>
 #include <future>
 #include <cmath>
 #include <algorithm>
 #include <valarray>
-#include <mutex>
-#include <unordered_map>
 
 namespace boost::math::statistics::detail
 {
@@ -134,6 +131,7 @@ ReturnType parallel_variance_impl(ForwardIterator first, ForwardIterator last)
 
     const auto results_a {future_a.get()};
     const auto results_b {future_b.get()};
+    thread_counter.fetch_sub(2);
 
     const auto mean_a = std::get<0>(results_a);
     const auto M2_a = std::get<1>(results_a);
@@ -211,6 +209,7 @@ ReturnType parallel_first_four_moments_impl(ForwardIterator first, ForwardIterat
 
     const auto results_a {future_a.get()};
     const auto results_b {future_b.get()};
+    thread_counter.fetch_sub(2);
 
     const Real M1_a = std::get<0>(results_a);
     const Real M2_a = std::get<1>(results_a);
