@@ -365,7 +365,7 @@ Compute the Gini coefficient of a dataset:
 
 /Nota bene/: The input data is altered: in particular, it is sorted. Makes a call to `std::sort`, and as such requires random access iterators.
 
-The sample Gini coefficient lies in the range [0,1], whereas the population Gini coefficient is in the range [0, 1 - 1/ /n/].
+The sample Gini coefficient lies in the range \[0,1\], whereas the population Gini coefficient is in the range \[0, 1 - 1/ /n/\].
 
 /Nota bene:/ There is essentially no reason to pass negative values to the Gini coefficient function.
 However, a use case (measuring wealth inequality when some people have negative wealth) exists, so we do not throw an exception when negative values are encountered.
