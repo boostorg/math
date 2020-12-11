@@ -223,7 +223,7 @@ ReturnType parallel_first_four_moments_impl(ForwardIterator first, ForwardIterat
 
 // Follows equation 1.5 of:
 // https://prod.sandia.gov/techlib-noauth/access-control.cgi/2008/086212.pdf
-template<class ReturnType, class ForwardIterator>
+template<typename ReturnType, typename ForwardIterator>
 ReturnType skewness_sequential_impl(ForwardIterator first, ForwardIterator last)
 {
     BOOST_ASSERT_MSG(first != last, "At least one sample is required to compute skewness.");
@@ -278,51 +278,26 @@ ReturnType gini_coefficient_parallel_impl(ExecutionPolicy&& exec, RandomAccessIt
     return ((2*num)/denom - i)/(i-1);
 }
 
-template<class RandomAccessIterator>
-auto gini_coefficient_sequential_impl(RandomAccessIterator first, RandomAccessIterator last)
+template<typename ReturnType, typename ForwardIterator>
+ReturnType gini_coefficient_sequential_impl(ForwardIterator first, ForwardIterator last)
 {
-    using Real = typename std::iterator_traits<RandomAccessIterator>::value_type;
-    BOOST_ASSERT_MSG(first != last && std::next(first) != last, "Computation of the Gini coefficient requires at least two samples.");
-
-    std::sort(first, last);
-    if constexpr (std::is_integral<Real>::value)
+    ReturnType i = 1;
+    ReturnType num = 0;
+    ReturnType denom = 0;
+    for(auto it = first; it != last; ++it)
     {
-        double i = 1;
-        double num = 0;
-        double denom = 0;
-        for (auto it = first; it != last; ++it)
-        {
-            num += *it*i;
-            denom += *it;
-            ++i;
-        }
+        num += *it*i;
+        denom += *it;
+        ++i;
+    }
 
-        // If the l1 norm is zero, all elements are zero, so every element is the same.
-        if (denom == 0)
-        {
-            return double(0);
-        }
-
-        return ((2*num)/denom - i)/(i-1);
+    // If the l1 norm is zero, all elements are zero, so every element is the same.
+    if(denom == 0)
+    {
+        return ReturnType(0);
     }
     else
     {
-        Real i = 1;
-        Real num = 0;
-        Real denom = 0;
-        for (auto it = first; it != last; ++it)
-        {
-            num += *it*i;
-            denom += *it;
-            ++i;
-        }
-
-        // If the l1 norm is zero, all elements are zero, so every element is the same.
-        if (denom == 0)
-        {
-            return Real(0);
-        }
-
         return ((2*num)/denom - i)/(i-1);
     }
 }

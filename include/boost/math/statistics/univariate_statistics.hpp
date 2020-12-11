@@ -426,7 +426,14 @@ inline auto gini_coefficient(ExecutionPolicy&& exec, RandomAccessIterator first,
 
     if constexpr (std::is_same_v<std::remove_reference_t<decltype(exec)>, decltype(std::execution::seq)>)
     {
-        return detail::gini_coefficient_sequential_impl(first, last);
+        if constexpr (std::is_integral_v<Real>)
+        {
+            return detail::gini_coefficient_sequential_impl<double>(first, last);
+        }
+        else
+        {
+            return detail::gini_coefficient_sequential_impl<Real>(first, last);
+        }   
     }
     
     else if constexpr (std::is_integral_v<Real>)
