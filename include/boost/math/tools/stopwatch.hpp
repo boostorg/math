@@ -59,7 +59,7 @@ public:
         return std::chrono::duration_cast<std::chrono::duration<T>>(m_stop_ - m_start_).count();
     }
 
-    inline std::vector<T> laps() noexcept
+    inline std::vector<Time> laps() noexcept
     {
         return laps_;
     }
