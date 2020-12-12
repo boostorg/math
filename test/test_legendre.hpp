@@ -182,6 +182,22 @@ void test_spots(T, const char* t)
    BOOST_CHECK_CLOSE_FRACTION(::boost::math::legendre_q(4, static_cast<T>(0.5L)), static_cast<T>(0.4401745259867706044988642951843745400835L), tolerance);
    BOOST_CHECK_CLOSE_FRACTION(::boost::math::legendre_q(7, static_cast<T>(0.5L)), static_cast<T>(-0.3439152932669753451878700644212067616780L), tolerance);
    BOOST_CHECK_CLOSE_FRACTION(::boost::math::legendre_q(40, static_cast<T>(0.5L)), static_cast<T>(0.1493671665503550095010454949479907886011L), tolerance);
+   //
+   // m = l-1, see https://github.com/boostorg/math/issues/453:
+   //
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::legendre_p(0, -1, static_cast<T>(0.5)), static_cast<T>(0.5773502691896257645091487805019574556476017512701268760186023264L), tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::legendre_p(0, -1, static_cast<T>(1)), static_cast<T>(0), tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::legendre_p(0, -1, static_cast<T>(0)), static_cast<T>(1), tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::legendre_p(1, 0, static_cast<T>(0.5)), static_cast<T>(0.5), tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::legendre_p(1, 0, static_cast<T>(1)), static_cast<T>(1), tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::legendre_p(1, 0, static_cast<T>(0)), static_cast<T>(0), tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::legendre_p(2, 1, static_cast<T>(0.5)), static_cast<T>(-1.2990381056766579701455847561294042752071039403577854710418552L), tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::legendre_p(2, 1, static_cast<T>(1)), static_cast<T>(0), tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::legendre_p(2, 1, static_cast<T>(0)), static_cast<T>(0), tolerance);
+
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::legendre_p(2, -2, static_cast<T>(0.5)), static_cast<T>(0.09375L), tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::legendre_p(2, -2, static_cast<T>(1)), static_cast<T>(0), tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(::boost::math::legendre_p(2, -2, static_cast<T>(0)), static_cast<T>(0.125), tolerance);
 }
 
 template <class T>

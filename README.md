@@ -60,7 +60,7 @@ The integration routines are usable for functions returning complex results - an
 
 ### Quaternions and Octonions
 
-Quaternion and Octonians as class templates similar to std::complex.
+Quaternion and Octonians are class templates similar to std::complex.
 
 The full documentation is available on [boost.org](http://www.boost.org/doc/libs/release/libs/math).
 

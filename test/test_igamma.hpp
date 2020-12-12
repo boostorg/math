@@ -249,5 +249,10 @@ void test_spots(T)
       BOOST_CHECK_EQUAL(::boost::math::gamma_q(static_cast<T>(22.25), std::numeric_limits<T>::infinity()), 0);
       BOOST_CHECK_EQUAL(::boost::math::gamma_p(static_cast<T>(22.25), std::numeric_limits<T>::infinity()), 1);
    }
+   //
+   // Large arguments and small parameters, see https://github.com/boostorg/math/issues/451:
+   //
+   BOOST_CHECK_EQUAL(::boost::math::gamma_q(static_cast<T>(1770), static_cast<T>(1e-12)), 1);
+   BOOST_CHECK_EQUAL(::boost::math::gamma_p(static_cast<T>(1770), static_cast<T>(1e-12)), 0);
 }
 

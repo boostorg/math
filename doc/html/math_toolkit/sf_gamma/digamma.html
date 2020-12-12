@@ -1,10 +1,10 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Digamma</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
-<link rel="home" href="../../index.html" title="Math Toolkit 2.12.0">
+<link rel="home" href="../../index.html" title="Math Toolkit 2.13.0">
 <link rel="up" href="../sf_gamma.html" title="Gamma Functions">
 <link rel="prev" href="lgamma.html" title="Log Gamma">
 <link rel="next" href="trigamma.html" title="Trigamma">
@@ -37,8 +37,8 @@
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">digamma</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">digamma</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">digamma</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 
 <span class="special">}}</span> <span class="comment">// namespaces</span>
 </pre>
@@ -59,9 +59,9 @@
 
         </p></blockquote></div>
 <p>
-        The final <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
+        The final <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
         be used to control the behaviour of the function: how it handles errors,
-        what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">policy
+        what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">policy
         documentation for more details</a>.
       </p>
 <p>
@@ -79,7 +79,7 @@
         any floating point type that is narrower than the one shown will have <a class="link" href="../relative_error.html#math_toolkit.relative_error.zero_error">effectively zero error</a>.
       </p>
 <div class="table">
-<a name="math_toolkit.sf_gamma.digamma.table_digamma"></a><p class="title"><b>Table&#160;8.4.&#160;Error rates for digamma</b></p>
+<a name="math_toolkit.sf_gamma.digamma.table_digamma"></a><p class="title"><b>Table 8.4. Error rates for digamma</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for digamma">
 <colgroup>
 <col>
@@ -121,24 +121,24 @@
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0&#949; (Mean = 0&#949;)</span><br> <br> (<span class="emphasis"><em>GSL
-                  2.1:</em></span> Max = 1.84&#949; (Mean = 0.71&#949;))<br> (<span class="emphasis"><em>Rmath
-                  3.2.3:</em></span> Max = 1.18&#949; (Mean = 0.331&#949;))
+                  <span class="blue">Max = 0ε (Mean = 0ε)</span><br> <br> (<span class="emphasis"><em>GSL
+                  2.1:</em></span> Max = 1.84ε (Mean = 0.71ε))<br> (<span class="emphasis"><em>Rmath
+                  3.2.3:</em></span> Max = 1.18ε (Mean = 0.331ε))
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 1.39&#949; (Mean = 0.413&#949;)</span>
+                  <span class="blue">Max = 1.39ε (Mean = 0.413ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 1.39&#949; (Mean = 0.413&#949;)</span>
+                  <span class="blue">Max = 1.39ε (Mean = 0.413ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0.98&#949; (Mean = 0.369&#949;)</span>
+                  <span class="blue">Max = 0.98ε (Mean = 0.369ε)</span>
                 </p>
               </td>
 </tr>
@@ -150,24 +150,24 @@
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0.891&#949; (Mean = 0.0995&#949;)</span><br>
-                  <br> (<span class="emphasis"><em>GSL 2.1:</em></span> Max = 135&#949; (Mean = 11.9&#949;))<br>
-                  (<span class="emphasis"><em>Rmath 3.2.3:</em></span> Max = 2.02e+03&#949; (Mean = 256&#949;))
+                  <span class="blue">Max = 0.891ε (Mean = 0.0995ε)</span><br>
+                  <br> (<span class="emphasis"><em>GSL 2.1:</em></span> Max = 135ε (Mean = 11.9ε))<br>
+                  (<span class="emphasis"><em>Rmath 3.2.3:</em></span> Max = 2.02e+03ε (Mean = 256ε))
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 1.37&#949; (Mean = 0.477&#949;)</span>
+                  <span class="blue">Max = 1.37ε (Mean = 0.477ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 1.31&#949; (Mean = 0.471&#949;)</span>
+                  <span class="blue">Max = 1.31ε (Mean = 0.471ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0.997&#949; (Mean = 0.527&#949;)</span>
+                  <span class="blue">Max = 0.997ε (Mean = 0.527ε)</span>
                 </p>
               </td>
 </tr>
@@ -179,24 +179,24 @@
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0&#949; (Mean = 0&#949;)</span><br> <br> (<span class="emphasis"><em>GSL
-                  2.1:</em></span> Max = 0.953&#949; (Mean = 0.348&#949;))<br> (<span class="emphasis"><em>Rmath
-                  3.2.3:</em></span> Max = 1.17&#949; (Mean = 0.564&#949;))
+                  <span class="blue">Max = 0ε (Mean = 0ε)</span><br> <br> (<span class="emphasis"><em>GSL
+                  2.1:</em></span> Max = 0.953ε (Mean = 0.348ε))<br> (<span class="emphasis"><em>Rmath
+                  3.2.3:</em></span> Max = 1.17ε (Mean = 0.564ε))
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0.984&#949; (Mean = 0.361&#949;)</span>
+                  <span class="blue">Max = 0.984ε (Mean = 0.361ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0.984&#949; (Mean = 0.361&#949;)</span>
+                  <span class="blue">Max = 0.984ε (Mean = 0.361ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0.953&#949; (Mean = 0.337&#949;)</span>
+                  <span class="blue">Max = 0.953ε (Mean = 0.337ε)</span>
                 </p>
               </td>
 </tr>
@@ -208,24 +208,24 @@
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0&#949; (Mean = 0&#949;)</span><br> <br> (<span class="emphasis"><em>GSL
-                  2.1:</em></span> Max = 4.56e+04&#949; (Mean = 3.91e+03&#949;))<br> (<span class="emphasis"><em>Rmath
-                  3.2.3:</em></span> Max = 4.6e+04&#949; (Mean = 3.94e+03&#949;))
+                  <span class="blue">Max = 0ε (Mean = 0ε)</span><br> <br> (<span class="emphasis"><em>GSL
+                  2.1:</em></span> Max = 4.56e+04ε (Mean = 3.91e+03ε))<br> (<span class="emphasis"><em>Rmath
+                  3.2.3:</em></span> Max = 4.6e+04ε (Mean = 3.94e+03ε))
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 180&#949; (Mean = 13&#949;)</span>
+                  <span class="blue">Max = 180ε (Mean = 13ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 180&#949; (Mean = 13&#949;)</span>
+                  <span class="blue">Max = 180ε (Mean = 13ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 214&#949; (Mean = 16.1&#949;)</span>
+                  <span class="blue">Max = 214ε (Mean = 16.1ε)</span>
                 </p>
               </td>
 </tr>
@@ -237,24 +237,24 @@
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0&#949; (Mean = 0&#949;)</span><br> <br> (<span class="emphasis"><em>GSL
-                  2.1:</em></span> Max = 0.866&#949; (Mean = 0.387&#949;))<br> (<span class="emphasis"><em>Rmath
-                  3.2.3:</em></span> Max = 3.58e+05&#949; (Mean = 1.6e+05&#949;))
+                  <span class="blue">Max = 0ε (Mean = 0ε)</span><br> <br> (<span class="emphasis"><em>GSL
+                  2.1:</em></span> Max = 0.866ε (Mean = 0.387ε))<br> (<span class="emphasis"><em>Rmath
+                  3.2.3:</em></span> Max = 3.58e+05ε (Mean = 1.6e+05ε))
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 1&#949; (Mean = 0.592&#949;)</span>
+                  <span class="blue">Max = 1ε (Mean = 0.592ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 1&#949; (Mean = 0.592&#949;)</span>
+                  <span class="blue">Max = 1ε (Mean = 0.592ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0&#949; (Mean = 0&#949;)</span>
+                  <span class="blue">Max = 0ε (Mean = 0ε)</span>
                 </p>
               </td>
 </tr>
@@ -266,24 +266,24 @@
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0.992&#949; (Mean = 0.215&#949;)</span><br> <br>
-                  (<span class="emphasis"><em>GSL 2.1:</em></span> Max = 1.18&#949; (Mean = 0.607&#949;))<br>
-                  (<span class="emphasis"><em>Rmath 3.2.3:</em></span> Max = 4.33&#949; (Mean = 0.982&#949;))
+                  <span class="blue">Max = 0.992ε (Mean = 0.215ε)</span><br> <br>
+                  (<span class="emphasis"><em>GSL 2.1:</em></span> Max = 1.18ε (Mean = 0.607ε))<br>
+                  (<span class="emphasis"><em>Rmath 3.2.3:</em></span> Max = 4.33ε (Mean = 0.982ε))
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0.888&#949; (Mean = 0.403&#949;)</span>
+                  <span class="blue">Max = 0.888ε (Mean = 0.403ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0.888&#949; (Mean = 0.403&#949;)</span>
+                  <span class="blue">Max = 0.888ε (Mean = 0.403ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0.992&#949; (Mean = 0.452&#949;)</span>
+                  <span class="blue">Max = 0.992ε (Mean = 0.452ε)</span>
                 </p>
               </td>
 </tr>
@@ -295,24 +295,24 @@
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0&#949; (Mean = 0&#949;)</span><br> <br> (<span class="emphasis"><em>GSL
-                  2.1:</em></span> Max = 1.09&#949; (Mean = 0.531&#949;))<br> (<span class="emphasis"><em>Rmath
-                  3.2.3:</em></span> Max = 46.2&#949; (Mean = 7.24&#949;))
+                  <span class="blue">Max = 0ε (Mean = 0ε)</span><br> <br> (<span class="emphasis"><em>GSL
+                  2.1:</em></span> Max = 1.09ε (Mean = 0.531ε))<br> (<span class="emphasis"><em>Rmath
+                  3.2.3:</em></span> Max = 46.2ε (Mean = 7.24ε))
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0.906&#949; (Mean = 0.409&#949;)</span>
+                  <span class="blue">Max = 0.906ε (Mean = 0.409ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0.906&#949; (Mean = 0.409&#949;)</span>
+                  <span class="blue">Max = 0.906ε (Mean = 0.409ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0.78&#949; (Mean = 0.314&#949;)</span>
+                  <span class="blue">Max = 0.78ε (Mean = 0.314ε)</span>
                 </p>
               </td>
 </tr>
@@ -467,11 +467,10 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2019 Nikhar
-      Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos,
-      Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Matthew Pulver, Johan
-      R&#229;de, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg,
-      Daryle Walker and Xiaogang Zhang<p>
+<td align="right"><div class="copyright-footer">Copyright © 2006-2020 Nikhar Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher
+      Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Evan Miller, Jeremy Murphy,
+      Matthew Pulver, Johan Råde, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson,
+      Thijs van den Berg, Daryle Walker and Xiaogang Zhang<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>
