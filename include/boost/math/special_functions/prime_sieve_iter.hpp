@@ -109,13 +109,13 @@ decltype(auto) prime_sieve_iter_impl(ExecutionPolicy&& policy, const Integer upp
         return resultant_primes;
     }
 
-    else if (upper_bound <= small_prime_limit<Integer>)
+    else if (upper_bound <= small_prime_limit<Integer>())
     {
         small_primes(upper_bound, resultant_primes);
         return resultant_primes;
     }
     
-    resultant_primes = small_primes(small_prime_limit<Integer>, resultant_primes);
+    resultant_primes = small_primes(small_prime_limit<Integer>(), resultant_primes);
 
     if constexpr (std::is_same_v<std::remove_reference_t<decltype(policy)>, decltype(std::execution::seq)> 
                   #if __cpp_lib_execution > 201900
@@ -123,12 +123,12 @@ decltype(auto) prime_sieve_iter_impl(ExecutionPolicy&& policy, const Integer upp
                   #endif
                   )
     {
-        resultant_primes = sequential_segmented_sieve(small_prime_limit<Integer>, upper_bound, resultant_primes);
+        resultant_primes = sequential_segmented_sieve(small_prime_limit<Integer>(), upper_bound, resultant_primes);
     }
 
     else
     {
-        resultant_primes = segmented_sieve(small_prime_limit<Integer>, upper_bound, resultant_primes);
+        resultant_primes = segmented_sieve(small_prime_limit<Integer>(), upper_bound, resultant_primes);
     }
     
     return resultant_primes;
@@ -143,7 +143,7 @@ inline decltype(auto) prime_sieve_iter_impl(const Integer upper_bound, OutputIte
 template<typename ExecutionPolicy, typename Integer, typename OutputIterator>
 decltype(auto) prime_range_iter_impl(ExecutionPolicy&& policy, const Integer lower_bound, const Integer upper_bound, OutputIterator resultant_primes)
 {
-    if(lower_bound <= small_prime_limit<Integer> || upper_bound <= small_prime_limit<Integer>)
+    if(lower_bound <= small_prime_limit<Integer>() || upper_bound <= small_prime_limit<Integer>())
     {
         std::vector<Integer> primes;
         primes.resize(static_cast<std::size_t>(prime_approximation(upper_bound)));
@@ -161,7 +161,7 @@ decltype(auto) prime_range_iter_impl(ExecutionPolicy&& policy, const Integer low
         }
     }
 
-    if(lower_bound <= small_prime_limit<Integer> && upper_bound > small_prime_limit<Integer>)
+    if(lower_bound <= small_prime_limit<Integer>() && upper_bound > small_prime_limit<Integer>())
     {
         if constexpr (std::is_same_v<std::remove_reference_t<decltype(policy)>, decltype(std::execution::seq)> 
                       #if __cpp_lib_execution > 201900
@@ -169,12 +169,12 @@ decltype(auto) prime_range_iter_impl(ExecutionPolicy&& policy, const Integer low
                       #endif
                      )
         {
-            resultant_primes = detail::prime_sieve::sequential_segmented_sieve(small_prime_limit<Integer>, upper_bound, resultant_primes);
+            resultant_primes = detail::prime_sieve::sequential_segmented_sieve(small_prime_limit<Integer>(), upper_bound, resultant_primes);
         }
 
         else
         {
-            resultant_primes = detail::prime_sieve::segmented_sieve(small_prime_limit<Integer>, upper_bound, resultant_primes);
+            resultant_primes = detail::prime_sieve::segmented_sieve(small_prime_limit<Integer>(), upper_bound, resultant_primes);
         }
     }
 
