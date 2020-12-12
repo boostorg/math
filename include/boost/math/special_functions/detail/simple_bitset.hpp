@@ -49,6 +49,7 @@ private:
     
     std::unique_ptr<I[]> bits;
     std::size_t m_size;
+    std::size_t size_;
     
 public:
     simple_bitset() noexcept : bits {nullptr}, m_size {} {};
@@ -117,7 +118,8 @@ public:
         if(n != m_size)
         {
             m_size = n;
-            bits.reset(new I[n / num_bits + (n % num_bits ? 1 : 0)]);
+            size_ = n / num_bits + (n % num_bits ? 1 : 0);
+            bits.reset(new I[size_]);
         }
     }
 
@@ -162,15 +164,20 @@ public:
 
     template<std::enable_if_t<std::is_same_v<I, std::uint64_t>, bool> = true>
     std::size_t bit_scan_forward(std::size_t pos) const noexcept
-    {
+    {        
         pos = std::ceil(pos / 64.0);
         
-        while(bits[pos] == 0 && pos < m_size)
+        while(pos < size_ && bits[pos] == 0)
         {
             ++pos;
         }
+
+        if(pos == size_)
+        {
+            return m_size;
+        }
         
-        const std::uint64_t temp = bits[pos];
+        const std::uint64_t temp {bits[pos]};
         if(temp == 0)
         {
             return m_size;
@@ -179,6 +186,12 @@ public:
         {
             return index64[((temp ^ (temp-1)) * debruijn64) >> 58] + pos * 64;
         }
+    }
+
+    template<std::enable_if_t<std::is_same_v<I, std::uint64_t>, bool> = true>
+    inline std::size_t bit_scan_forward() const noexcept
+    {
+        return bit_scan_forward(0);
     }
 
     template<std::enable_if_t<std::is_same_v<I, std::uint64_t>, bool> = true>
@@ -191,7 +204,7 @@ public:
             --pos;
         }
 
-        std::uint64_t temp = bits[pos];
+        std::uint64_t temp {bits[pos]};
         if(temp == 0)
         {
             return 0;

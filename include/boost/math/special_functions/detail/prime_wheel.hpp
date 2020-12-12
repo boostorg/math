@@ -207,6 +207,7 @@ void Wheel<Integer>::Print()
 }
 
 // Pre-computed MOD 30 wheel
+// TODO(mborland): refactor capitalization of member functions
 template <typename Integer>
 class MOD30Wheel final
 {
@@ -247,6 +248,17 @@ public:
         }
         return current_index_num_ += spokes_[current_index_];
     }
+
+    inline Integer advance(const std::size_t dist) noexcept
+    {
+        for(std::size_t i {}; i < dist; ++i)
+        {
+            Next();
+        }
+        return current_index_num_;
+    }
+
+    inline std::size_t current_index() const noexcept { return current_index_; }
 
     inline auto SetCurrentIndex(const Integer i) noexcept 
     {

@@ -12,6 +12,7 @@
 #include <boost/math/special_functions/detail/prime_wheel.hpp>
 #include <boost/math/special_functions/detail/linear_prime_sieve.hpp>
 #include <boost/math/special_functions/detail/simple_bitset.hpp>
+#include <boost/math/special_functions/detail/fast_mod.hpp>
 #include <cmath>
 #include <array>
 #include <cstdint>
@@ -227,17 +228,44 @@ void IntervalSieve<Integer, OutputIterator>::Sieve() noexcept
 template<typename Integer, typename OutputIterator>
 decltype(auto) IntervalSieve<Integer, OutputIterator>::WriteOutput() noexcept
 {
+    std::size_t i {b_.bit_scan_forward()};
     Integer current_spoke {w_.SetCurrentIndex(left_)};
-    for(std::size_t i {}; i < b_.size(); ++i)
+    current_spoke = w_.advance(i);
+
+    while(i < b_.size())
     {
         if(b_[i])
         {
             *resultant_primes_++ = current_spoke;
         }
-        current_spoke = w_.Next();
+
+        // https://en.wikipedia.org/wiki/Prime_gap
+        // There are no prime gaps greater than 64 below p_n = 31397
+        if(right_ > 368'153)
+        {
+            if(modulo_power_of_two(i, 64) == 63)
+            {
+                const std::size_t temp {b_.bit_scan_forward(i)};
+                const std::size_t delta {temp - i};
+                i = temp;
+                current_spoke = w_.advance(delta);
+            }
+            else
+            {
+                current_spoke = w_.Next();
+                ++i;
+            }
+        }
+        else
+        {
+            current_spoke = w_.Next();
+            ++i;
+        }
     }
+
     return resultant_primes_;
 }
+
 
 // Performs the pseduosqaure prime test on n = left + pos
 // return 1 if prime or prime power, 0 otherwise
