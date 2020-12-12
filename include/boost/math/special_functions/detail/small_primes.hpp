@@ -52,6 +52,7 @@ decltype(auto) small_primes(const Integer upper_bound, OutputIterator out) noexc
     auto it {small_primes_set.cbegin()};
     ++it;
     Integer temp {11};
+    wheel_.Next();
     while(it != small_primes_set.cend() && temp < upper_bound)
     {
         if(*it)
