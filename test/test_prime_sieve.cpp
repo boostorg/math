@@ -12,6 +12,7 @@
 #include <boost/math/special_functions/detail/linear_prime_sieve.hpp>
 #include <boost/math/special_functions/detail/interval_prime_sieve.hpp>
 #include <boost/math/special_functions/detail/small_primes.hpp>
+#include <boost/math/tools/stopwatch.hpp>
 #include <boost/core/lightweight_test.hpp>
 #include <boost/multiprecision/cpp_int.hpp>
 #include <boost/multiprecision/gmp.hpp>
@@ -451,7 +452,9 @@ int main()
     std::vector<int> test;
     auto test_ref = &test;
     static_assert(boost::math::detail::prime_sieve::is_container_t<std::remove_pointer_t<decltype(test_ref)>> == 1, "INOP");
-    
+
+    boost::math::tools::stopwatch w;
+
     /*
     // Individual Algorithms
     test_linear_sieve<int>();
@@ -477,11 +480,18 @@ int main()
     test_linear_sieve_iterator<boost::multiprecision::mpz_int>();
     */
     test_interval_sieve_iterator<int>();
+    std::cout << "Duration: " << w.lap() << '\n';
     test_interval_sieve_iterator<int32_t>();
+    std::cout << "Duration: " << w.lap() << '\n';
     test_interval_sieve_iterator<int64_t>();
+    std::cout << "Duration: " << w.lap() << '\n';
     test_interval_sieve_iterator<uint32_t>();
+    std::cout << "Duration: " << w.lap() << '\n';
     test_interval_sieve_iterator<boost::multiprecision::cpp_int>();
+    std::cout << "Duration: " << w.lap() << '\n';
     test_interval_sieve_iterator<boost::multiprecision::mpz_int>();
+    std::cout << "Duration: " << w.lap() << '\n';
+    std::cout << "Total Duration: " << w.stop() << std::endl;
     
     test_small_primes<int>();
     test_small_primes<int32_t>();
@@ -502,7 +512,9 @@ int main()
     // Composite
     test_prime_sieve<int>();
     test_prime_sieve<int32_t>();
+    */
     test_prime_sieve<int64_t>();
+    /*
     test_prime_sieve<uint32_t>();
     test_prime_sieve<boost::multiprecision::cpp_int>();
     test_prime_sieve<boost::multiprecision::mpz_int>();
