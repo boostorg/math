@@ -366,24 +366,32 @@ std::size_t highest_bernoulli_index()
 template<class T>
 int minimum_argument_for_bernoulli_recursion()
 {
-   BOOST_CONSTEXPR_OR_CONST boost::uint32_t digits10_of_type =
-     (std::numeric_limits<T>::is_specialized
-       ? static_cast<boost::uint32_t>(std::numeric_limits<T>::digits10)
-       : static_cast<boost::uint32_t>((long long) ((long long) boost::math::tools::digits<T>() * 301LL) / 1000LL));
+   const float digits10_of_type = (std::numeric_limits<T>::is_specialized
+                                      ? static_cast<float>(std::numeric_limits<T>::digits10)
+                                      : static_cast<float>(boost::math::tools::digits<T>() * 0.301F));
 
-   BOOST_CONSTEXPR_OR_CONST boost::uint32_t digits2_of_type = boost::math::tools::digits<T>();
+   float min_arg_as_float = (float) digits10_of_type * 1.7F;
 
-   float min_arg = (float) digits10_of_type * 1.7F;
-
-   if(digits2_of_type <= 1261U)
+   if(digits10_of_type < 50.0F)
    {
-     const float check_min_arg_for_smaller_type =
-        (float) (boost::uint64_t(1ULL) << ((digits2_of_type - 1U) / 20U));
+     // The following code sequence has been modified
+     // within the context of issue 396.
 
-     min_arg = (std::min)(min_arg, check_min_arg_for_smaller_type);
+     // The calculation of the test-variable limit has now been
+     // made more clearly safe regarding overflow/underflow dangers.
+
+     // The previous line looked like this (and did underflow ldexp for multiprecision types):
+     // const float limit = std::ceil(std::pow(1.0f / std::ldexp(1.0f, 1-boost::math::tools::digits<T>()), 1.0f / 20.0f));
+
+     // The new safe versoin of the limit check is now here.
+     const float limit = std::exp(((digits10_of_type / 0.301F) * std::log(2.0F)) / 20.0F);
+
+     min_arg_as_float = (std::min)(min_arg_as_float, limit);
    }
 
-   return (int) min_arg;
+   const int min_arg = (int) std::ceil(min_arg_as_float);
+
+   return min_arg;
 }
 
 template <class T, class Policy>

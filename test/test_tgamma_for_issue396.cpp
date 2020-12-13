@@ -45,14 +45,14 @@ bool test_tgamma_for_issue396()
 {
   using floating_point_type = BigFloatType;
 
-  // Table[N[Gamma[(1/2) + (10^n)], 103], {n, 0, 3, 1}]
+  // Table[N[Gamma[(1/2) + (10^n)], 503], {n, 0, 3, 1}]
 
   const boost::array<floating_point_type, 4U> control =
   {{
-    floating_point_type("0.8862269254527580136490837416705725913987747280611935641069038949264556422955160906874753283692723327081"),
-    floating_point_type("1.133278388948785567334574165588892475560298308275159776608723414529483390056004153717630538727607290658E6"),
-    floating_point_type("9.320963104082716608349109809141910437906497038162361154016117519412076597761162355221807605383606022361E156"),
-    floating_point_type("1.272301195695055464182244180377444569506634709865527828393992983880480861838914363639331431733362215434E2566")
+    floating_point_type("0.88622692545275801364908374167057259139877472806119356410690389492645564229551609068747532836927233270811341181214128533311807643286221130126254685480139353423101884932655256142496258651447541311446604768963398140008731950767573986025835009509261700929272348724745632015696088776295310820270966625045319920380686673873757671683399489468292591820439772558258086938002953369671589566640492742312409245102732742609780662578082373375752136938052805399806355360503018602224183618264830685404716174941583421211"),
+    floating_point_type("1.1332783889487855673345741655888924755602983082751597766087234145294833900560041537176305387276072906583502717008932373348895801731780765775979953796646009714415152490764416630481375706606053932396039541459764525989187023837695167161085523804417015113740063535865261183579508922972990386756543208549178543857406373798865630303794109491220205170302558277398183764099268751365861892723863412249690833216320407918186480305202146014474770321625907339955121137559264239090240758401696425720048012081453338360E6"),
+    floating_point_type("9.3209631040827166083491098091419104379064970381623611540161175194120765977611623552218076053836060223609993676387199220631835256331102029826429784793420637988460945604451237342972023988743201341318701614328454618664952897316247603329530308777063116667275003586843755354841307657702809317290363831151480295446074722690100652644579131609996151999119113967501099655433566352849645431012667388627160383486515144610582794470005796689975604764040892168183647321540427819244511610500074895473959438490375652158E156"),
+    floating_point_type("1.2723011956950554641822441803774445695066347098655278283939929838804808618389143636393314317333622154343715992535881414698586440455330620652019981627229614973177953241634213768203151670660953863412381880742653187501307209325406338924004280546485392703623101051957976224599412003938216329590158926122017907280168159527761842471509358725974702333390709735919152262756462872191402491961250987725812831155116532550035967994387094267848607390288008530653715254376729558412833771092612838971719786622446726968E2566")
   }};
 
   boost::uint32_t ten_pow_n = UINT32_C(1);
@@ -79,58 +79,64 @@ bool test_tgamma_for_issue396()
 
 bool test_tgamma_for_issue396_cpp_dec_float()
 {
-  using cpp_dec_float_type_37 = boost::multiprecision::number<boost::multiprecision::cpp_dec_float<37U>, boost::multiprecision::et_off>;
-  using cpp_dec_float_type_38 = boost::multiprecision::number<boost::multiprecision::cpp_dec_float<38U>, boost::multiprecision::et_off>;
-  using cpp_dec_float_type_39 = boost::multiprecision::number<boost::multiprecision::cpp_dec_float<39U>, boost::multiprecision::et_off>;
-  using cpp_dec_float_type_40 = boost::multiprecision::number<boost::multiprecision::cpp_dec_float<40U>, boost::multiprecision::et_off>;
-  using cpp_dec_float_type_41 = boost::multiprecision::number<boost::multiprecision::cpp_dec_float<41U>, boost::multiprecision::et_off>;
-  using cpp_dec_float_type_42 = boost::multiprecision::number<boost::multiprecision::cpp_dec_float<42U>, boost::multiprecision::et_off>;
-  using cpp_dec_float_type_43 = boost::multiprecision::number<boost::multiprecision::cpp_dec_float<43U>, boost::multiprecision::et_off>;
+  using cpp_dec_float_type_020 = boost::multiprecision::number<boost::multiprecision::cpp_dec_float< 20U>, boost::multiprecision::et_off>;
+  using cpp_dec_float_type_030 = boost::multiprecision::number<boost::multiprecision::cpp_dec_float< 30U>, boost::multiprecision::et_off>;
+  using cpp_dec_float_type_040 = boost::multiprecision::number<boost::multiprecision::cpp_dec_float< 40U>, boost::multiprecision::et_off>;
+  using cpp_dec_float_type_049 = boost::multiprecision::number<boost::multiprecision::cpp_dec_float< 49U>, boost::multiprecision::et_off>;
+  using cpp_dec_float_type_050 = boost::multiprecision::number<boost::multiprecision::cpp_dec_float< 50U>, boost::multiprecision::et_off>;
+  using cpp_dec_float_type_051 = boost::multiprecision::number<boost::multiprecision::cpp_dec_float< 51U>, boost::multiprecision::et_off>;
+  using cpp_dec_float_type_101 = boost::multiprecision::number<boost::multiprecision::cpp_dec_float<101U>, boost::multiprecision::et_off>;
+  using cpp_dec_float_type_501 = boost::multiprecision::number<boost::multiprecision::cpp_dec_float<501U>, boost::multiprecision::et_off>;
 
-  const bool cpp_dec_float_37_is_ok = test_tgamma_for_issue396<cpp_dec_float_type_37>();
-  const bool cpp_dec_float_38_is_ok = test_tgamma_for_issue396<cpp_dec_float_type_38>();
-  const bool cpp_dec_float_39_is_ok = test_tgamma_for_issue396<cpp_dec_float_type_39>();
-  const bool cpp_dec_float_40_is_ok = test_tgamma_for_issue396<cpp_dec_float_type_40>();
-  const bool cpp_dec_float_41_is_ok = test_tgamma_for_issue396<cpp_dec_float_type_41>();
-  const bool cpp_dec_float_42_is_ok = test_tgamma_for_issue396<cpp_dec_float_type_42>();
-  const bool cpp_dec_float_43_is_ok = test_tgamma_for_issue396<cpp_dec_float_type_43>();
+  const bool cpp_dec_float_020_is_ok = test_tgamma_for_issue396<cpp_dec_float_type_020>();
+  const bool cpp_dec_float_030_is_ok = test_tgamma_for_issue396<cpp_dec_float_type_030>();
+  const bool cpp_dec_float_040_is_ok = test_tgamma_for_issue396<cpp_dec_float_type_040>();
+  const bool cpp_dec_float_049_is_ok = test_tgamma_for_issue396<cpp_dec_float_type_049>();
+  const bool cpp_dec_float_050_is_ok = test_tgamma_for_issue396<cpp_dec_float_type_050>();
+  const bool cpp_dec_float_051_is_ok = test_tgamma_for_issue396<cpp_dec_float_type_051>();
+  const bool cpp_dec_float_101_is_ok = test_tgamma_for_issue396<cpp_dec_float_type_101>();
+  const bool cpp_dec_float_501_is_ok = test_tgamma_for_issue396<cpp_dec_float_type_501>();
 
-  const bool cpp_dec_float_is_ok =    cpp_dec_float_37_is_ok
-                                   && cpp_dec_float_38_is_ok
-                                   && cpp_dec_float_39_is_ok
-                                   && cpp_dec_float_40_is_ok
-                                   && cpp_dec_float_41_is_ok
-                                   && cpp_dec_float_42_is_ok
-                                   && cpp_dec_float_43_is_ok;
+  const bool cpp_dec_float_is_ok =    cpp_dec_float_020_is_ok
+                                   && cpp_dec_float_030_is_ok
+                                   && cpp_dec_float_040_is_ok
+                                   && cpp_dec_float_049_is_ok
+                                   && cpp_dec_float_050_is_ok
+                                   && cpp_dec_float_051_is_ok
+                                   && cpp_dec_float_101_is_ok
+                                   && cpp_dec_float_501_is_ok;
 
   return cpp_dec_float_is_ok;
 }
 
 bool test_tgamma_for_issue396_cpp_bin_float()
 {
-  using cpp_bin_float_type_37 = boost::multiprecision::number<boost::multiprecision::cpp_bin_float<37U>, boost::multiprecision::et_off>;
-  using cpp_bin_float_type_38 = boost::multiprecision::number<boost::multiprecision::cpp_bin_float<38U>, boost::multiprecision::et_off>;
-  using cpp_bin_float_type_39 = boost::multiprecision::number<boost::multiprecision::cpp_bin_float<39U>, boost::multiprecision::et_off>;
-  using cpp_bin_float_type_40 = boost::multiprecision::number<boost::multiprecision::cpp_bin_float<40U>, boost::multiprecision::et_off>;
-  using cpp_bin_float_type_41 = boost::multiprecision::number<boost::multiprecision::cpp_bin_float<41U>, boost::multiprecision::et_off>;
-  using cpp_bin_float_type_42 = boost::multiprecision::number<boost::multiprecision::cpp_bin_float<42U>, boost::multiprecision::et_off>;
-  using cpp_bin_float_type_43 = boost::multiprecision::number<boost::multiprecision::cpp_bin_float<43U>, boost::multiprecision::et_off>;
+  using cpp_bin_float_type_020 = boost::multiprecision::number<boost::multiprecision::cpp_bin_float< 20U>, boost::multiprecision::et_off>;
+  using cpp_bin_float_type_030 = boost::multiprecision::number<boost::multiprecision::cpp_bin_float< 30U>, boost::multiprecision::et_off>;
+  using cpp_bin_float_type_040 = boost::multiprecision::number<boost::multiprecision::cpp_bin_float< 40U>, boost::multiprecision::et_off>;
+  using cpp_bin_float_type_049 = boost::multiprecision::number<boost::multiprecision::cpp_bin_float< 49U>, boost::multiprecision::et_off>;
+  using cpp_bin_float_type_050 = boost::multiprecision::number<boost::multiprecision::cpp_bin_float< 50U>, boost::multiprecision::et_off>;
+  using cpp_bin_float_type_051 = boost::multiprecision::number<boost::multiprecision::cpp_bin_float< 51U>, boost::multiprecision::et_off>;
+  using cpp_bin_float_type_101 = boost::multiprecision::number<boost::multiprecision::cpp_bin_float<101U>, boost::multiprecision::et_off>;
+  using cpp_bin_float_type_501 = boost::multiprecision::number<boost::multiprecision::cpp_bin_float<501U>, boost::multiprecision::et_off>;
 
-  const bool cpp_bin_float_37_is_ok = test_tgamma_for_issue396<cpp_bin_float_type_37>();
-  const bool cpp_bin_float_38_is_ok = test_tgamma_for_issue396<cpp_bin_float_type_38>();
-  const bool cpp_bin_float_39_is_ok = test_tgamma_for_issue396<cpp_bin_float_type_39>();
-  const bool cpp_bin_float_40_is_ok = test_tgamma_for_issue396<cpp_bin_float_type_40>();
-  const bool cpp_bin_float_41_is_ok = test_tgamma_for_issue396<cpp_bin_float_type_41>();
-  const bool cpp_bin_float_42_is_ok = test_tgamma_for_issue396<cpp_bin_float_type_42>();
-  const bool cpp_bin_float_43_is_ok = test_tgamma_for_issue396<cpp_bin_float_type_43>();
+  const bool cpp_bin_float_020_is_ok = test_tgamma_for_issue396<cpp_bin_float_type_020>();
+  const bool cpp_bin_float_030_is_ok = test_tgamma_for_issue396<cpp_bin_float_type_030>();
+  const bool cpp_bin_float_040_is_ok = test_tgamma_for_issue396<cpp_bin_float_type_040>();
+  const bool cpp_bin_float_049_is_ok = test_tgamma_for_issue396<cpp_bin_float_type_049>();
+  const bool cpp_bin_float_050_is_ok = test_tgamma_for_issue396<cpp_bin_float_type_050>();
+  const bool cpp_bin_float_051_is_ok = test_tgamma_for_issue396<cpp_bin_float_type_051>();
+  const bool cpp_bin_float_101_is_ok = test_tgamma_for_issue396<cpp_bin_float_type_101>();
+  const bool cpp_bin_float_501_is_ok = test_tgamma_for_issue396<cpp_bin_float_type_501>();
 
-  const bool cpp_bin_float_is_ok =    cpp_bin_float_37_is_ok
-                                   && cpp_bin_float_38_is_ok
-                                   && cpp_bin_float_39_is_ok
-                                   && cpp_bin_float_40_is_ok
-                                   && cpp_bin_float_41_is_ok
-                                   && cpp_bin_float_42_is_ok
-                                   && cpp_bin_float_43_is_ok;
+  const bool cpp_bin_float_is_ok =    cpp_bin_float_020_is_ok
+                                   && cpp_bin_float_030_is_ok
+                                   && cpp_bin_float_040_is_ok
+                                   && cpp_bin_float_049_is_ok
+                                   && cpp_bin_float_050_is_ok
+                                   && cpp_bin_float_051_is_ok
+                                   && cpp_bin_float_101_is_ok
+                                   && cpp_bin_float_501_is_ok;
 
   return cpp_bin_float_is_ok;
 }
