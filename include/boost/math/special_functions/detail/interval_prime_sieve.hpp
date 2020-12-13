@@ -143,37 +143,17 @@ void IntervalSieve<Integer, OutputIterator>::Settdlimit() noexcept
 template<typename Integer, typename OutputIterator>
 void IntervalSieve<Integer, OutputIterator>::SeiveLength(const Integer d) noexcept
 {
-    // Find the first multiple of d in the bitset to use as the entry point
-    Integer current_multiple {left_};
-    Integer current_spoke {left_};
-    std::size_t i {};
+    Integer r {left_ % d};
+    Integer start {0};
 
-    current_multiple = w_.SetCurrentIndex(current_multiple);
-    while(current_multiple % d != 0)
+    if(r != 0)
     {
-        current_multiple = w_.Next();
+        start = d - r;
     }
 
-    current_spoke = w_.SetCurrentIndex(current_spoke);
-    while(current_spoke < current_multiple)
+    for(Integer i {start}; i >= 0 && i < b_.size(); i += d)
     {
-        current_spoke = w_.Next();
-        ++i;
-    }
-
-    while(i < b_.size())
-    {
-        if(current_multiple == current_spoke)
-        {
-            b_.clear(i);
-        }
-        
-        current_multiple += d;
-        while(current_spoke < current_multiple)
-        {
-            current_spoke = w_.Next();
-            ++i;
-        }
+        b_.clear(static_cast<std::size_t>(i));
     }
 }
 
@@ -192,11 +172,11 @@ void IntervalSieve<Integer, OutputIterator>::Sieve() noexcept
     }
 
     // Sieve with pre-computed (or small) primes and then use the wheel for the remainder    
-    // Start with the first prime being 7 as the wheel basis (2,3,5) is not represented in b_
-    std::size_t i {2};
+    std::size_t i {};
     Integer j;
     if(plimit_ <= pss_.prime.back())
     {
+        SeiveLength(static_cast<Integer>(2));
         for(; pss_.prime[i] < primes_range; ++i)
         {
             SeiveLength(pss_.prime[i]);
@@ -207,7 +187,6 @@ void IntervalSieve<Integer, OutputIterator>::Sieve() noexcept
     
     else
     {
-        ++i; // linear_sieve begins with 2 whereas pss_.prime begins with 3
         primes_.resize(static_cast<std::size_t>(prime_approximation(right_)));
         linear_sieve(primes_range, primes_.begin());
 
@@ -228,44 +207,15 @@ void IntervalSieve<Integer, OutputIterator>::Sieve() noexcept
 template<typename Integer, typename OutputIterator>
 decltype(auto) IntervalSieve<Integer, OutputIterator>::WriteOutput() noexcept
 {
-    std::size_t i {b_.bit_scan_forward()};
-    Integer current_spoke {w_.SetCurrentIndex(left_)};
-    current_spoke = w_.advance(i);
-
-    while(i < b_.size())
+    for(std::size_t i {left_ % 2 == 0 ? 1 : 0}; i < b_.size(); i += 2)
     {
         if(b_[i])
         {
-            *resultant_primes_++ = current_spoke;
-        }
-
-        // https://en.wikipedia.org/wiki/Prime_gap
-        // There are no prime gaps greater than 64 below p_n = 31397
-        if(right_ > 368'153)
-        {
-            if(modulo_power_of_two(i, 64) == 63)
-            {
-                const std::size_t temp {b_.bit_scan_forward(i)};
-                const std::size_t delta {temp - i};
-                i = temp;
-                current_spoke = w_.advance(delta);
-            }
-            else
-            {
-                current_spoke = w_.Next();
-                ++i;
-            }
-        }
-        else
-        {
-            current_spoke = w_.Next();
-            ++i;
+            *resultant_primes_++ = left_ + i;
         }
     }
-
     return resultant_primes_;
 }
-
 
 // Performs the pseduosqaure prime test on n = left + pos
 // return 1 if prime or prime power, 0 otherwise
@@ -273,13 +223,7 @@ decltype(auto) IntervalSieve<Integer, OutputIterator>::WriteOutput() noexcept
 template<typename Integer, typename OutputIterator>
 bool IntervalSieve<Integer, OutputIterator>::Psstest(const std::size_t pos) noexcept
 {
-    // Convert a bitset position (pos) into the corresponding numerical value using the wheel
-    Integer n {w_.SetCurrentIndex(left_)};
-    for(std::size_t i {}; i < pos; ++i)
-    {
-        n = w_.Next();
-    }
-
+    const Integer n {static_cast<Integer>(left_ + pos)};
     const Integer exponent {(n - 1) / 2};
     const std::int_fast64_t nmod8 = static_cast<std::int_fast64_t>(n % 8);
 
@@ -340,7 +284,7 @@ void IntervalSieve<Integer, OutputIterator>::Setup(const Integer left, const Int
     right_ = right;
     delta_ = right_ - left_;
 
-    b_.resize(static_cast<std::size_t>(delta_) * w_.PrimeRatio());
+    b_.resize(static_cast<std::size_t>(delta_));
     b_.reset();
     Settdlimit();
     Sieve();
