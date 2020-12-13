@@ -15,10 +15,13 @@
 #include <cmath>
 #include <vector>
 #include <type_traits>
-#include <execution>
+#include <utility>
 #include <numeric>
 #include <list>
 
+#if (__cplusplus > 201200 || __MSVC_LANG > 201200) && defined __has_include
+#   if __has_include(<execution>)
+#       include <execution>
 namespace boost::math::statistics {
 
 template<class ExecutionPolicy, class ForwardIterator>
@@ -678,4 +681,488 @@ inline auto mode(Container & v)
     return mode(std::execution::seq, std::begin(v), std::end(v));
 }
 }
+    #endif
+#else // Backwards compatible bindings for C++11
+namespace boost { namespace math { namespace statistics {
+
+template<bool B, class T = void>
+using enable_if_t = typename std::enable_if<B, T>::type;
+
+template<class ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type, 
+         enable_if_t<std::is_integral<Real>::value, bool> = true>
+inline double mean(const ForwardIterator first, const ForwardIterator last)
+{
+    BOOST_ASSERT_MSG(first != last, "At least one sample is required to compute the mean.");
+    return detail::mean_sequential_impl<double>(first, last);
+}
+
+template<class Container, typename Real = typename std::iterator_traits<typename Container::iterator>::value_type, 
+         enable_if_t<std::is_integral<Real>::value, bool> = true>
+inline double mean(const Container& c)
+{
+    return mean(std::begin(c), std::end(c));
+}
+
+template<class ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type, 
+         enable_if_t<!std::is_integral<Real>::value, bool> = true>
+inline Real mean(const ForwardIterator first, const ForwardIterator last)
+{
+    BOOST_ASSERT_MSG(first != last, "At least one sample is required to compute the mean.");
+    return detail::mean_sequential_impl<Real>(first, last);
+}
+
+template<class Container, typename Real = typename std::iterator_traits<typename Container::iterator>::value_type, 
+         enable_if_t<!std::is_integral<Real>::value, bool> = true>
+inline Real mean(const Container& c)
+{
+    return mean(std::begin(c), std::end(c));
+}
+
+template<class ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type, 
+         enable_if_t<std::is_integral<Real>::value, bool> = true>
+inline double variance(const ForwardIterator first, const ForwardIterator last)
+{
+    return std::get<2>(detail::variance_sequential_impl<std::tuple<double, double, double>>(first, last));
+}
+
+template<class Container, typename Real = typename std::iterator_traits<typename Container::iterator>::value_type, 
+         enable_if_t<std::is_integral<Real>::value, bool> = true>
+inline double variance(const Container& c)
+{
+    return variance(std::begin(c), std::end(c));
+}
+
+template<class ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type, 
+         enable_if_t<!std::is_integral<Real>::value, bool> = true>
+inline Real variance(const ForwardIterator first, const ForwardIterator last)
+{
+    return std::get<2>(detail::variance_sequential_impl<std::tuple<Real, Real, Real>>(first, last));
+
+}
+
+template<class Container, typename Real = typename std::iterator_traits<typename Container::iterator>::value_type, 
+         enable_if_t<!std::is_integral<Real>::value, bool> = true>
+inline Real variance(const Container& c)
+{
+    return variance(std::begin(c), std::end(c));
+}
+
+template<class ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type, 
+         enable_if_t<std::is_integral<Real>::value, bool> = true>
+inline double sample_variance(const ForwardIterator first, const ForwardIterator last)
+{
+    const auto n = std::distance(first, last);
+    BOOST_ASSERT_MSG(n > 1, "At least two samples are required to compute the sample variance.");
+    return n*variance(first, last)/(n-1);
+}
+
+template<class Container, typename Real = typename std::iterator_traits<typename Container::iterator>::value_type, 
+         enable_if_t<std::is_integral<Real>::value, bool> = true>
+inline double sample_variance(const Container& c)
+{
+    return sample_variance(std::begin(c), std::end(c));
+}
+
+template<class ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type, 
+         enable_if_t<!std::is_integral<Real>::value, bool> = true>
+inline Real sample_variance(const ForwardIterator first, const ForwardIterator last)
+{
+    const auto n = std::distance(first, last);
+    BOOST_ASSERT_MSG(n > 1, "At least two samples are required to compute the sample variance.");
+    return n*variance(first, last)/(n-1);
+}
+
+template<class Container, typename Real = typename std::iterator_traits<typename Container::iterator>::value_type, 
+         enable_if_t<!std::is_integral<Real>::value, bool> = true>
+inline Real sample_variance(const Container& c)
+{
+    return sample_variance(std::begin(c), std::end(c));
+}
+
+template<class ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type, 
+         enable_if_t<std::is_integral<Real>::value, bool> = true>
+inline std::pair<double, double> mean_and_sample_variance(const ForwardIterator first, const ForwardIterator last)
+{
+    const auto results = detail::variance_sequential_impl<std::tuple<double, double, double>>(first, last);
+    return std::make_pair(std::get<0>(results), std::get<2>(results));
+}
+
+template<class Container, typename Real = typename std::iterator_traits<typename Container::iterator>::value_type, 
+         enable_if_t<std::is_integral<Real>::value, bool> = true>
+inline std::pair<double, double> mean_and_sample_variance(const Container& c)
+{
+    return mean_and_sample_variance(std::begin(c), std::end(c));
+}
+
+template<class ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type, 
+         enable_if_t<!std::is_integral<Real>::value, bool> = true>
+inline std::pair<Real, Real> mean_and_sample_variance(const ForwardIterator first, const ForwardIterator last)
+{
+    const auto results = detail::variance_sequential_impl<std::tuple<Real, Real, Real>>(first, last);
+    return std::make_pair(std::get<0>(results), std::get<2>(results));
+}
+
+template<class Container, typename Real = typename std::iterator_traits<typename Container::iterator>::value_type, 
+         enable_if_t<!std::is_integral<Real>::value, bool> = true>
+inline std::pair<Real, Real> mean_and_sample_variance(const Container& c)
+{
+    return mean_and_sample_variance(std::begin(c), std::end(c));
+}
+
+template<class ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type, 
+         enable_if_t<std::is_integral<Real>::value, bool> = true>
+inline std::tuple<double, double, double, double> first_four_moments(const ForwardIterator first, const ForwardIterator last)
+{
+    const auto results = detail::first_four_moments_sequential_impl<std::tuple<double, double, double, double, double>>(first, last); 
+    return std::make_tuple(std::get<0>(results), std::get<1>(results) / std::get<4>(results), std::get<2>(results) / std::get<4>(results), 
+                           std::get<3>(results) / std::get<4>(results));
+}
+
+template<class Container, typename Real = typename std::iterator_traits<typename Container::iterator>::value_type, 
+         enable_if_t<std::is_integral<Real>::value, bool> = true>
+inline std::tuple<double, double, double, double> first_four_moments(const Container& c)
+{
+    return first_four_moments(std::begin(c), std::end(c));
+}
+
+template<class ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type, 
+         enable_if_t<!std::is_integral<Real>::value, bool> = true>
+inline std::tuple<Real, Real, Real, Real> first_four_moments(const ForwardIterator first, const ForwardIterator last)
+{
+    const auto results = detail::first_four_moments_sequential_impl<std::tuple<Real, Real, Real, Real, Real>>(first, last);
+    return std::make_tuple(std::get<0>(results), std::get<1>(results) / std::get<4>(results), std::get<2>(results) / std::get<4>(results), 
+                           std::get<3>(results) / std::get<4>(results));
+}
+
+template<class Container, typename Real = typename std::iterator_traits<typename Container::iterator>::value_type, 
+         enable_if_t<!std::is_integral<Real>::value, bool> = true>
+inline std::tuple<Real, Real, Real, Real> first_four_moments(const Container& c)
+{
+    return first_four_moments(std::begin(c), std::end(c));
+}
+
+template<class ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type, 
+         enable_if_t<std::is_integral<Real>::value, bool> = true>
+inline double skewness(const ForwardIterator first, const ForwardIterator last)
+{
+    return detail::skewness_sequential_impl<double>(first, last);
+}
+
+template<class Container, typename Real = typename std::iterator_traits<typename Container::iterator>::value_type, 
+         enable_if_t<std::is_integral<Real>::value, bool> = true>
+inline double skewness(const Container& c)
+{
+    return skewness(std::begin(c), std::end(c));
+}
+
+template<class ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type, 
+         enable_if_t<!std::is_integral<Real>::value, bool> = true>
+inline Real skewness(const ForwardIterator first, const ForwardIterator last)
+{
+    return detail::skewness_sequential_impl<Real>(first, last);
+}
+
+template<class Container, typename Real = typename std::iterator_traits<typename Container::iterator>::value_type, 
+         enable_if_t<!std::is_integral<Real>::value, bool> = true>
+inline Real skewness(const Container& c)
+{
+    return skewness(std::begin(c), std::end(c));
+}
+
+template<class ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type, 
+         enable_if_t<std::is_integral<Real>::value, bool> = true>
+inline double kurtosis(const ForwardIterator first, const ForwardIterator last)
+{
+    std::tuple<double, double, double, double> M = first_four_moments(first, last);
+
+    if(std::get<1>(M) == 0)
+    {
+        return std::get<1>(M);
+    }
+    else
+    {
+        return std::get<3>(M)/(std::get<1>(M)*std::get<1>(M));
+    }
+}
+
+template<class Container, typename Real = typename std::iterator_traits<typename Container::iterator>::value_type, 
+         enable_if_t<std::is_integral<Real>::value, bool> = true>
+inline double kurtosis(const Container& c)
+{
+    return kurtosis(std::begin(c), std::end(c));
+}
+
+template<class ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type, 
+         enable_if_t<!std::is_integral<Real>::value, bool> = true>
+inline Real kurtosis(const ForwardIterator first, const ForwardIterator last)
+{
+    std::tuple<Real, Real, Real, Real> M = first_four_moments(first, last);
+    
+    if(std::get<1>(M) == 0)
+    {
+        return std::get<1>(M);
+    }
+    else
+    {
+        return std::get<3>(M)/(std::get<1>(M)*std::get<1>(M));
+    }
+}
+
+template<class Container, typename Real = typename std::iterator_traits<typename Container::iterator>::value_type, 
+         enable_if_t<!std::is_integral<Real>::value, bool> = true>
+inline Real kurtosis(const Container& c)
+{
+    return kurtosis(std::begin(c), std::end(c));
+}
+
+template<class ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type, 
+         enable_if_t<std::is_integral<Real>::value, bool> = true>
+inline double excess_kurtosis(const ForwardIterator first, const ForwardIterator last)
+{
+    return kurtosis(first, last) - 3;
+}
+
+template<class Container, typename Real = typename std::iterator_traits<typename Container::iterator>::value_type, 
+         enable_if_t<std::is_integral<Real>::value, bool> = true>
+inline double excess_kurtosis(const Container& c)
+{
+    return excess_kurtosis(std::begin(c), std::end(c));
+}
+
+template<class ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type, 
+         enable_if_t<!std::is_integral<Real>::value, bool> = true>
+inline Real excess_kurtosis(const ForwardIterator first, const ForwardIterator last)
+{
+    return kurtosis(first, last) - 3;
+}
+
+template<class Container, typename Real = typename std::iterator_traits<typename Container::iterator>::value_type, 
+         enable_if_t<!std::is_integral<Real>::value, bool> = true>
+inline Real excess_kurtosis(const Container& c)
+{
+    return excess_kurtosis(std::begin(c), std::end(c));
+}
+
+template<class RandomAccessIterator, typename Real = typename std::iterator_traits<RandomAccessIterator>::value_type>
+Real median(RandomAccessIterator first, RandomAccessIterator last)
+{
+    const auto num_elems = std::distance(first, last);
+    BOOST_ASSERT_MSG(num_elems > 0, "The median of a zero length vector is undefined.");
+    if (num_elems & 1)
+    {
+        auto middle = first + (num_elems - 1)/2;
+        std::nth_element(first, middle, last);
+        return *middle;
+    }
+    else
+    {
+        auto middle = first + num_elems/2 - 1;
+        std::nth_element(first, middle, last);
+        std::nth_element(middle, middle+1, last);
+        return (*middle + *(middle+1))/2;
+    }
+}
+
+template<class RandomAccessContainer, typename Real = typename std::iterator_traits<typename RandomAccessContainer::iterator>::value_type>
+inline Real median(RandomAccessContainer& c)
+{
+    return median(std::begin(c), std::end(c));
+}
+
+template<class RandomAccessIterator, typename Real = typename std::iterator_traits<RandomAccessIterator>::value_type, 
+         enable_if_t<std::is_integral<Real>::value, bool> = true>
+inline double gini_coefficient(RandomAccessIterator first, RandomAccessIterator last)
+{
+    if(!std::is_sorted(first, last))
+    {
+        std::sort(first, last);
+    }
+
+    return detail::gini_coefficient_sequential_impl<double>(first, last);
+}
+
+template<class RandomAccessContainer, typename Real = typename std::iterator_traits<typename RandomAccessContainer::iterator>::value_type, 
+         enable_if_t<std::is_integral<Real>::value, bool> = true>
+inline double gini_coefficient(RandomAccessContainer& c)
+{
+    return gini_coefficient(std::begin(c), std::end(c));
+}
+
+template<class RandomAccessIterator, typename Real = typename std::iterator_traits<RandomAccessIterator>::value_type, 
+         enable_if_t<!std::is_integral<Real>::value, bool> = true>
+inline Real gini_coefficient(RandomAccessIterator first, RandomAccessIterator last)
+{
+    if(!std::is_sorted(first, last))
+    {
+        std::sort(first, last);
+    }
+
+    return detail::gini_coefficient_sequential_impl<Real>(first, last);
+}
+
+template<class RandomAccessContainer, typename Real = typename std::iterator_traits<typename RandomAccessContainer::iterator>::value_type, 
+         enable_if_t<!std::is_integral<Real>::value, bool> = true>
+inline Real gini_coefficient(RandomAccessContainer& c)
+{
+    return gini_coefficient(std::begin(c), std::end(c));
+}
+
+template<class RandomAccessIterator, typename Real = typename std::iterator_traits<RandomAccessIterator>::value_type, 
+         enable_if_t<std::is_integral<Real>::value, bool> = true>
+inline double sample_gini_coefficient(RandomAccessIterator first, RandomAccessIterator last)
+{
+    const auto n = std::distance(first, last);
+    return n*gini_coefficient(first, last)/(n-1);
+}
+
+template<class RandomAccessContainer, typename Real = typename std::iterator_traits<typename RandomAccessContainer::iterator>::value_type, 
+         enable_if_t<std::is_integral<Real>::value, bool> = true>
+inline double sample_gini_coefficient(RandomAccessContainer& c)
+{
+    return sample_gini_coefficient(std::begin(c), std::end(c));
+}
+
+template<class RandomAccessIterator, typename Real = typename std::iterator_traits<RandomAccessIterator>::value_type, 
+         enable_if_t<!std::is_integral<Real>::value, bool> = true>
+inline Real sample_gini_coefficient(RandomAccessIterator first, RandomAccessIterator last)
+{
+    const auto n = std::distance(first, last);
+    return n*gini_coefficient(first, last)/(n-1);
+}
+
+template<class RandomAccessContainer, typename Real = typename std::iterator_traits<typename RandomAccessContainer::iterator>::value_type, 
+         enable_if_t<!std::is_integral<Real>::value, bool> = true>
+inline Real sample_gini_coefficient(RandomAccessContainer& c)
+{
+    return sample_gini_coefficient(std::begin(c), std::end(c));
+}
+
+template<class RandomAccessIterator, typename Real = typename std::iterator_traits<RandomAccessIterator>::value_type>
+Real median_absolute_deviation(RandomAccessIterator first, RandomAccessIterator last,
+    typename std::iterator_traits<RandomAccessIterator>::value_type center=std::numeric_limits<typename std::iterator_traits<RandomAccessIterator>::value_type>::quiet_NaN())
+{
+    using std::abs;
+    using std::isnan;
+    if (isnan(center))
+    {
+        center = boost::math::statistics::median(first, last);
+    }
+    const auto num_elems = std::distance(first, last);
+    BOOST_ASSERT_MSG(num_elems > 0, "The median of a zero-length vector is undefined.");
+    auto comparator = [&center](Real a, Real b) { return abs(a-center) < abs(b-center);};
+    if (num_elems & 1)
+    {
+        auto middle = first + (num_elems - 1)/2;
+        std::nth_element(first, middle, last, comparator);
+        return abs(*middle);
+    }
+    else
+    {
+        auto middle = first + num_elems/2 - 1;
+        std::nth_element(first, middle, last, comparator);
+        std::nth_element(middle, middle+1, last, comparator);
+        return (abs(*middle) + abs(*(middle+1)))/abs(static_cast<Real>(2));
+    }
+}
+
+template<class RandomAccessContainer, typename Real = typename std::iterator_traits<typename RandomAccessContainer::iterator>::value_type>
+inline Real median_absolute_deviation(RandomAccessContainer& c,
+    typename RandomAccessContainer::value_type center=std::numeric_limits<typename RandomAccessContainer::value_type>::quiet_NaN())
+{
+    return median_absolute_deviation(std::begin(c), std::end(c), center);
+}
+
+template<class ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type>
+Real interquartile_range(ForwardIterator first, ForwardIterator last)
+{
+    static_assert(!std::is_integral<Real>::value, "Integer values have not yet been implemented.");
+    auto m = std::distance(first,last);
+    BOOST_ASSERT_MSG(m >= 3, "At least 3 samples are required to compute the interquartile range.");
+    auto k = m/4;
+    auto j = m - (4*k);
+    // m = 4k+j.
+    // If j = 0 or j = 1, then there are an even number of samples below the median, and an even number above the median.
+    //    Then we must average adjacent elements to get the quartiles.
+    // If j = 2 or j = 3, there are an odd number of samples above and below the median, these elements may be directly extracted to get the quartiles.
+
+    if (j==2 || j==3)
+    {
+        auto q1 = first + k;
+        auto q3 = first + 3*k + j - 1;
+        std::nth_element(first, q1, last);
+        Real Q1 = *q1;
+        std::nth_element(q1, q3, last);
+        Real Q3 = *q3;
+        return Q3 - Q1;
+    } 
+    else 
+    {
+        // j == 0 or j==1:
+        auto q1 = first + k - 1;
+        auto q3 = first + 3*k - 1 + j;
+        std::nth_element(first, q1, last);
+        Real a = *q1;
+        std::nth_element(q1, q1 + 1, last);
+        Real b = *(q1 + 1);
+        Real Q1 = (a+b)/2;
+        std::nth_element(q1, q3, last);
+        a = *q3;
+        std::nth_element(q3, q3 + 1, last);
+        b = *(q3 + 1);
+        Real Q3 = (a+b)/2;
+        return Q3 - Q1;
+    }
+}
+
+template<class Container, typename Real = typename std::iterator_traits<typename Container::iterator>::value_type>
+Real interquartile_range(Container& c)
+{
+    return interquartile_range(std::begin(c), std::end(c));
+}
+
+template<class ForwardIterator, class OutputIterator, 
+    enable_if_t<std::is_same<typename std::iterator_traits<ForwardIterator>::iterator_category(), std::random_access_iterator_tag>::value, bool> = true>
+inline OutputIterator mode(ForwardIterator first, ForwardIterator last, OutputIterator output)
+{   
+    if(!std::is_sorted(first, last))
+    {
+        std::sort(first, last);
+    }
+
+    return detail::mode_impl(first, last, output);
+}
+
+template<class ForwardIterator, class OutputIterator, 
+    enable_if_t<!std::is_same<typename std::iterator_traits<ForwardIterator>::iterator_category(), std::random_access_iterator_tag>::value, bool> = true>
+inline OutputIterator mode(ForwardIterator first, ForwardIterator last, OutputIterator output)
+{   
+    if(!std::is_sorted(first, last))
+    {
+        BOOST_ASSERT("Data must be sorted for mode calculation");
+    }
+
+    return detail::mode_impl(first, last, output);
+}
+
+template<class Container, class OutputIterator>
+inline OutputIterator mode(Container& c, OutputIterator output)
+{
+    return mode(std::begin(c), std::end(c), output);
+}
+
+template<class ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type>
+inline std::list<Real> mode(ForwardIterator first, ForwardIterator last)
+{
+    std::list<Real> modes;
+    mode(first, last, modes.begin());
+    return modes;
+}
+
+template<class Container, typename Real = typename std::iterator_traits<typename Container::iterator>::value_type>
+inline std::list<Real> mode(Container& c)
+{
+    return mode(std::begin(c), std::end(c));
+}
+}}}
 #endif
+#endif // BOOST_MATH_STATISTICS_UNIVARIATE_STATISTICS_HPP

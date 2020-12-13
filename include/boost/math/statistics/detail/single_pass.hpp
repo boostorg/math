@@ -22,7 +22,7 @@ namespace boost::math::statistics::detail
 template<typename ReturnType, typename ForwardIterator>
 ReturnType mean_sequential_impl(ForwardIterator first, ForwardIterator last)
 {
-    const std::size_t elements {std::distance(first, last)};
+    const auto elements {std::distance(first, last)};
     std::valarray<ReturnType> mu {0, 0, 0, 0};
     std::valarray<ReturnType> temp {0, 0, 0, 0};
     ReturnType i {1};
@@ -32,7 +32,7 @@ ReturnType mean_sequential_impl(ForwardIterator first, ForwardIterator last)
     while(it != end)
     {
         const ReturnType inv {ReturnType(1) / i};
-        temp = {*it++, *it++, *it++, *it++};
+        temp = {static_cast<ReturnType>(*it++), static_cast<ReturnType>(*it++), static_cast<ReturnType>(*it++), static_cast<ReturnType>(*it++)};
         temp -= mu;
         mu += (temp *= inv);
         i += 1;
@@ -56,7 +56,7 @@ ReturnType mean_sequential_impl(ForwardIterator first, ForwardIterator last)
 template<typename ReturnType, typename ForwardIterator>
 ReturnType variance_sequential_impl(ForwardIterator first, ForwardIterator last)
 {
-    using Real = std::tuple_element_t<0, ReturnType>;
+    using Real = typename std::tuple_element<0, ReturnType>::type;
 
     Real M = *first;
     Real Q = 0;
@@ -136,8 +136,8 @@ ReturnType parallel_variance_impl(ForwardIterator first, ForwardIterator last)
 template<typename ReturnType, typename ForwardIterator>
 ReturnType first_four_moments_sequential_impl(ForwardIterator first, ForwardIterator last)
 {
-    using Real = std::tuple_element_t<0, ReturnType>;
-    using Size = std::tuple_element_t<4, ReturnType>;
+    using Real = typename std::tuple_element<0, ReturnType>::type;
+    using Size = typename std::tuple_element<4, ReturnType>::type;
 
     Real M1 = *first;
     Real M2 = 0;
@@ -161,7 +161,7 @@ ReturnType first_four_moments_sequential_impl(ForwardIterator first, ForwardIter
 template<typename ReturnType, typename ForwardIterator>
 ReturnType parallel_first_four_moments_impl(ForwardIterator first, ForwardIterator last)
 {
-    using Real = std::tuple_element_t<0, ReturnType>;
+    using Real = typename std::tuple_element<0, ReturnType>::type;
     
     static unsigned num_threads {std::thread::hardware_concurrency()};
 
@@ -259,11 +259,13 @@ ReturnType skewness_sequential_impl(ForwardIterator first, ForwardIterator last)
 template<typename ReturnType, typename ExecutionPolicy, typename RandomAccessIterator>
 ReturnType gini_coefficient_parallel_impl(ExecutionPolicy&& exec, RandomAccessIterator first, RandomAccessIterator last)
 {
+    using Real = typename std::iterator_traits<RandomAccessIterator>::value_type;
+    
     ReturnType i = 1;
     ReturnType num = 0;
     ReturnType denom = 0;
     
-    std::for_each(exec, first, last, [&i, &num, &denom](auto val)
+    std::for_each(exec, first, last, [&i, &num, &denom](const Real& val)
     {
         num = num + val * i;
         denom = denom + val;
@@ -284,6 +286,7 @@ ReturnType gini_coefficient_sequential_impl(ForwardIterator first, ForwardIterat
     ReturnType i = 1;
     ReturnType num = 0;
     ReturnType denom = 0;
+
     for(auto it = first; it != last; ++it)
     {
         num += *it*i;
