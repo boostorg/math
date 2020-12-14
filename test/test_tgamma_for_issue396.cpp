@@ -26,7 +26,7 @@ namespace detail {
 template<class BigFloatType>
 bool test_tgamma_for_issue396_value_checker()
 {
-  using floating_point_type = BigFloatType;
+  typedef BigFloatType floating_point_type;
 
   // Table[N[Gamma[(1/2) + (10^n)], 503], {n, 0, 3, 1}]
 
@@ -64,11 +64,11 @@ bool test_tgamma_for_issue396_value_checker()
 
 bool test_cdf____for_issue396_bug_report___()
 {
-  using b_dist_type = boost::math::beta_distribution<boost::multiprecision::cpp_dec_float_100>;
+  typedef boost::math::beta_distribution<boost::multiprecision::cpp_dec_float_100> b_dist_type;
 
   b_dist_type b_dist(1.0, 2.0);
 
-  auto test = -boost::math::cdf(boost::math::complement(b_dist, 0.5));
+  boost::multiprecision::cpp_dec_float_100 test = -boost::math::cdf(boost::math::complement(b_dist, 0.5));
 
   using std::fabs;
 
@@ -83,14 +83,14 @@ bool test_cdf____for_issue396_bug_report___()
 
 bool test_tgamma_for_issue396_cpp_dec_float()
 {
-  using cpp_dec_float_type_020 = boost::multiprecision::number<boost::multiprecision::cpp_dec_float< 20U>, boost::multiprecision::et_off>;
-  using cpp_dec_float_type_030 = boost::multiprecision::number<boost::multiprecision::cpp_dec_float< 30U>, boost::multiprecision::et_off>;
-  using cpp_dec_float_type_040 = boost::multiprecision::number<boost::multiprecision::cpp_dec_float< 40U>, boost::multiprecision::et_off>;
-  using cpp_dec_float_type_049 = boost::multiprecision::number<boost::multiprecision::cpp_dec_float< 49U>, boost::multiprecision::et_off>;
-  using cpp_dec_float_type_050 = boost::multiprecision::number<boost::multiprecision::cpp_dec_float< 50U>, boost::multiprecision::et_off>;
-  using cpp_dec_float_type_051 = boost::multiprecision::number<boost::multiprecision::cpp_dec_float< 51U>, boost::multiprecision::et_off>;
-  using cpp_dec_float_type_101 = boost::multiprecision::number<boost::multiprecision::cpp_dec_float<101U>, boost::multiprecision::et_off>;
-  using cpp_dec_float_type_501 = boost::multiprecision::number<boost::multiprecision::cpp_dec_float<501U>, boost::multiprecision::et_off>;
+  typedef boost::multiprecision::number<boost::multiprecision::cpp_dec_float< 20U>, boost::multiprecision::et_off> cpp_dec_float_type_020;
+  typedef boost::multiprecision::number<boost::multiprecision::cpp_dec_float< 30U>, boost::multiprecision::et_off> cpp_dec_float_type_030;
+  typedef boost::multiprecision::number<boost::multiprecision::cpp_dec_float< 40U>, boost::multiprecision::et_off> cpp_dec_float_type_040;
+  typedef boost::multiprecision::number<boost::multiprecision::cpp_dec_float< 49U>, boost::multiprecision::et_off> cpp_dec_float_type_049;
+  typedef boost::multiprecision::number<boost::multiprecision::cpp_dec_float< 50U>, boost::multiprecision::et_off> cpp_dec_float_type_050;
+  typedef boost::multiprecision::number<boost::multiprecision::cpp_dec_float< 51U>, boost::multiprecision::et_off> cpp_dec_float_type_051;
+  typedef boost::multiprecision::number<boost::multiprecision::cpp_dec_float<101U>, boost::multiprecision::et_off> cpp_dec_float_type_101;
+  typedef boost::multiprecision::number<boost::multiprecision::cpp_dec_float<501U>, boost::multiprecision::et_off> cpp_dec_float_type_501;
 
   const bool cpp_dec_float_020_is_ok = detail::test_tgamma_for_issue396_value_checker<cpp_dec_float_type_020>();
   const bool cpp_dec_float_030_is_ok = detail::test_tgamma_for_issue396_value_checker<cpp_dec_float_type_030>();
@@ -115,14 +115,14 @@ bool test_tgamma_for_issue396_cpp_dec_float()
 
 bool test_tgamma_for_issue396_cpp_bin_float()
 {
-  using cpp_bin_float_type_020 = boost::multiprecision::number<boost::multiprecision::cpp_bin_float< 20U>, boost::multiprecision::et_off>;
-  using cpp_bin_float_type_030 = boost::multiprecision::number<boost::multiprecision::cpp_bin_float< 30U>, boost::multiprecision::et_off>;
-  using cpp_bin_float_type_040 = boost::multiprecision::number<boost::multiprecision::cpp_bin_float< 40U>, boost::multiprecision::et_off>;
-  using cpp_bin_float_type_049 = boost::multiprecision::number<boost::multiprecision::cpp_bin_float< 49U>, boost::multiprecision::et_off>;
-  using cpp_bin_float_type_050 = boost::multiprecision::number<boost::multiprecision::cpp_bin_float< 50U>, boost::multiprecision::et_off>;
-  using cpp_bin_float_type_051 = boost::multiprecision::number<boost::multiprecision::cpp_bin_float< 51U>, boost::multiprecision::et_off>;
-  using cpp_bin_float_type_101 = boost::multiprecision::number<boost::multiprecision::cpp_bin_float<101U>, boost::multiprecision::et_off>;
-  using cpp_bin_float_type_501 = boost::multiprecision::number<boost::multiprecision::cpp_bin_float<501U>, boost::multiprecision::et_off>;
+  typedef boost::multiprecision::number<boost::multiprecision::cpp_bin_float< 20U>, boost::multiprecision::et_off> cpp_bin_float_type_020;
+  typedef boost::multiprecision::number<boost::multiprecision::cpp_bin_float< 30U>, boost::multiprecision::et_off> cpp_bin_float_type_030;
+  typedef boost::multiprecision::number<boost::multiprecision::cpp_bin_float< 40U>, boost::multiprecision::et_off> cpp_bin_float_type_040;
+  typedef boost::multiprecision::number<boost::multiprecision::cpp_bin_float< 49U>, boost::multiprecision::et_off> cpp_bin_float_type_049;
+  typedef boost::multiprecision::number<boost::multiprecision::cpp_bin_float< 50U>, boost::multiprecision::et_off> cpp_bin_float_type_050;
+  typedef boost::multiprecision::number<boost::multiprecision::cpp_bin_float< 51U>, boost::multiprecision::et_off> cpp_bin_float_type_051;
+  typedef boost::multiprecision::number<boost::multiprecision::cpp_bin_float<101U>, boost::multiprecision::et_off> cpp_bin_float_type_101;
+  typedef boost::multiprecision::number<boost::multiprecision::cpp_bin_float<501U>, boost::multiprecision::et_off> cpp_bin_float_type_501;
 
   const bool cpp_bin_float_020_is_ok = detail::test_tgamma_for_issue396_value_checker<cpp_bin_float_type_020>();
   const bool cpp_bin_float_030_is_ok = detail::test_tgamma_for_issue396_value_checker<cpp_bin_float_type_030>();
