@@ -366,9 +366,9 @@ std::size_t highest_bernoulli_index()
 template<class T>
 int minimum_argument_for_bernoulli_recursion()
 {
-   const float digits10_of_type = (std::numeric_limits<T>::is_specialized
-                                      ? static_cast<float>(std::numeric_limits<T>::digits10)
-                                      : static_cast<float>(boost::math::tools::digits<T>() * 0.301F));
+   BOOST_CONSTEXPR_OR_CONST float digits10_of_type =
+     (std::numeric_limits<T>::is_specialized ? (float) std::numeric_limits<T>::digits10
+                                             : (float) boost::math::tools::digits<T>() * 0.301F);
 
    float min_arg_as_float = (float) digits10_of_type * 1.7F;
 
@@ -377,14 +377,17 @@ int minimum_argument_for_bernoulli_recursion()
      // The following code sequence has been modified
      // within the context of issue 396.
 
-     // The calculation of the test-variable limit has now been
-     // made more clearly safe regarding overflow/underflow dangers.
+     // The calculation of the test-variable limit has now
+     // been protected against overflow/underflow dangers.
 
-     // The previous line looked like this (and did underflow ldexp for multiprecision types):
+     // The previous line looked like this and did, in fact,
+     // underflow ldexp when using certain multiprecision types.
+
      // const float limit = std::ceil(std::pow(1.0f / std::ldexp(1.0f, 1-boost::math::tools::digits<T>()), 1.0f / 20.0f));
 
-     // The new safe versoin of the limit check is now here.
-     const float limit = std::exp(((digits10_of_type / 0.301F) * std::log(2.0F)) / 20.0F);
+     // The new safe version of the limit check is now here.
+     const float digits2_of_type = (digits10_of_type + 1.0F) / 0.301F;
+     const float limit           = std::exp((digits2_of_type * std::log(2.0F)) / 20.0F);
 
      min_arg_as_float = (std::min)(min_arg_as_float, limit);
    }
