@@ -367,12 +367,13 @@ template<class T>
 int minimum_argument_for_bernoulli_recursion()
 {
    BOOST_CONSTEXPR_OR_CONST float digits10_of_type =
-     (std::numeric_limits<T>::is_specialized ? (float) std::numeric_limits<T>::digits10
-                                             : (float) boost::math::tools::digits<T>() * 0.301F);
+     (std::numeric_limits<T>::is_specialized
+       ? static_cast<float>(std::numeric_limits<T>::digits10)
+       : static_cast<float>(boost::math::tools::digits<T>() * 0.301F));
 
-   float min_arg_as_float = (float) digits10_of_type * 1.7F;
+   int min_arg = (int) (digits10_of_type * 1.7F);
 
-   if(digits10_of_type < 50.0F)
+   if(digits10_of_type < 50)
    {
      // The following code sequence has been modified
      // within the context of issue 396.
@@ -386,13 +387,11 @@ int minimum_argument_for_bernoulli_recursion()
      // const float limit = std::ceil(std::pow(1.0f / std::ldexp(1.0f, 1-boost::math::tools::digits<T>()), 1.0f / 20.0f));
 
      // The new safe version of the limit check is now here.
-     const float digits2_of_type = (digits10_of_type + 1.0F) / 0.301F;
-     const float limit           = std::exp((digits2_of_type * std::log(2.0F)) / 20.0F);
+     const float d2_minus_one = (float) (boost::math::tools::digits<T>() - 1);
+     const float limit        = std::ceil(std::exp((d2_minus_one * std::log(2.0F)) / 20.0F));
 
-     min_arg_as_float = (std::min)(min_arg_as_float, limit);
+     min_arg = (int) ((std::min)(digits10_of_type * 1.7F, limit));
    }
-
-   const int min_arg = (int) std::ceil(min_arg_as_float);
 
    return min_arg;
 }
