@@ -366,31 +366,32 @@ std::size_t highest_bernoulli_index()
 template<class T>
 int minimum_argument_for_bernoulli_recursion()
 {
-   BOOST_CONSTEXPR_OR_CONST float digits10_of_type =
-     (std::numeric_limits<T>::is_specialized
-       ? static_cast<float>(std::numeric_limits<T>::digits10)
-       : static_cast<float>(boost::math::tools::digits<T>() * 0.301F));
+   const float d2 = (float) boost::math::tools::digits<T>();
+
+   const float digits10_of_type = (std::numeric_limits<T>::is_specialized
+                                    ? (float) std::numeric_limits<T>::digits10
+                                    : (float) (d2 * 0.301F));
 
    int min_arg = (int) (digits10_of_type * 1.7F);
 
-   if(digits10_of_type < 50)
+   if(digits10_of_type < 50.0F)
    {
-     // The following code sequence has been modified
-     // within the context of issue 396.
+      // The following code sequence has been modified
+      // within the context of issue 396.
 
-     // The calculation of the test-variable limit has now
-     // been protected against overflow/underflow dangers.
+      // The calculation of the test-variable limit has now
+      // been protected against overflow/underflow dangers.
 
-     // The previous line looked like this and did, in fact,
-     // underflow ldexp when using certain multiprecision types.
+      // The previous line looked like this and did, in fact,
+      // underflow ldexp when using certain multiprecision types.
 
-     // const float limit = std::ceil(std::pow(1.0f / std::ldexp(1.0f, 1-boost::math::tools::digits<T>()), 1.0f / 20.0f));
+      // const float limit = std::ceil(std::pow(1.0f / std::ldexp(1.0f, 1-boost::math::tools::digits<T>()), 1.0f / 20.0f));
 
-     // The new safe version of the limit check is now here.
-     const float d2_minus_one = (float) (boost::math::tools::digits<T>() - 1);
-     const float limit        = std::ceil(std::exp((d2_minus_one * std::log(2.0F)) / 20.0F));
+      // The new safe version of the limit check is now here.
+      const float d2_minus_one = (d2 - 1.0F);
+      const float limit        = std::ceil(std::exp((d2_minus_one * std::log(2.0F)) / 20.0F));
 
-     min_arg = (int) ((std::min)(digits10_of_type * 1.7F, limit));
+      min_arg = (int) ((std::min)(digits10_of_type * 1.7F, limit));
    }
 
    return min_arg;

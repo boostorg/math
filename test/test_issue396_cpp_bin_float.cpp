@@ -6,8 +6,7 @@
 //  or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
-#define BOOST_MATH_DISABLE_DEPRECATED_03_WARNING
-
+#include <boost/array.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
@@ -41,7 +40,7 @@ bool test_issue396_value_checker()
 
   bool result_is_ok = true;
 
-  for(std::size_t i = 0U; i < control_values.size(); ++i)
+  for(unsigned i = 0U; i < control_values.size(); ++i)
   {
     const floating_point_type g = boost::math::tgamma(boost::math::constants::half<floating_point_type>() + ten_pow_n);
 
