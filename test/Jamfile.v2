@@ -477,9 +477,6 @@ test-suite special_fun :
    [ run cardinal_trigonometric_test.cpp ../config//fftw3q ../config//quadmath : : : <define>TEST4 [ requires cxx11_auto_declarations cxx11_range_based_for ] [ check-target-builds ../config//has_fftw3 "libfftw3" : : <build>no ] [ check-target-builds ../config//has_float128 "__float128" : : <build>no ] : cardinal_trigonometric_test_4 ]
 
 
-   [ run test_issue396_cpp_dec_float.cpp ../../test/build//boost_unit_test_framework : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj  ]
-   [ run test_issue396_cpp_bin_float.cpp ../../test/build//boost_unit_test_framework : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj  ]
-   [ run test_issue396_original_issue.cpp ../../test/build//boost_unit_test_framework  ]
    [ run test_ldouble_simple.cpp ../../test/build//boost_unit_test_framework  ]
    # Needs to run in release mode, as it's rather slow:
    [ run test_next.cpp pch ../../test/build//boost_unit_test_framework : : : release  ]
@@ -490,6 +487,8 @@ test-suite special_fun :
    [ run test_round.cpp pch ../../test/build//boost_unit_test_framework  ]
    [ run test_spherical_harmonic.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
    [ run test_sign.cpp ../../test/build//boost_unit_test_framework  ]
+   [ run test_tgamma_for_issue396_part1.cpp ../../test/build//boost_unit_test_framework : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj  ]
+   [ run test_tgamma_for_issue396_part2.cpp ../../test/build//boost_unit_test_framework : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj  ]
    [ run test_tgamma_ratio.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
    [ run test_trig.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
    [ run test_zeta.cpp ../../test/build//boost_unit_test_framework test_instances//test_instances pch_light  ]

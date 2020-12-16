@@ -366,11 +366,11 @@ std::size_t highest_bernoulli_index()
 template<class T>
 int minimum_argument_for_bernoulli_recursion()
 {
-   const float d2 = (float) boost::math::tools::digits<T>();
+   BOOST_MATH_STD_USING
 
    const float digits10_of_type = (std::numeric_limits<T>::is_specialized
                                     ? (float) std::numeric_limits<T>::digits10
-                                    : (float) (d2 * 0.301F));
+                                    : (float) (boost::math::tools::digits<T>() * 0.301F));
 
    int min_arg = (int) (digits10_of_type * 1.7F);
 
@@ -388,8 +388,8 @@ int minimum_argument_for_bernoulli_recursion()
       // const float limit = std::ceil(std::pow(1.0f / std::ldexp(1.0f, 1-boost::math::tools::digits<T>()), 1.0f / 20.0f));
 
       // The new safe version of the limit check is now here.
-      const float d2_minus_one = (d2 - 1.0F);
-      const float limit        = std::ceil(std::exp((d2_minus_one * std::log(2.0F)) / 20.0F));
+      const float d2_minus_one = ((digits10_of_type / 0.301F) - 1.0F);
+      const float limit        = ceil(exp((d2_minus_one * log(2.0F)) / 20.0F));
 
       min_arg = (int) ((std::min)(digits10_of_type * 1.7F, limit));
    }
