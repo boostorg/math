@@ -11,7 +11,11 @@
 #pragma once
 #endif
 
+#ifdef BOOST_MATH_USE_STD_FPCLASSIFY
+#include <cmath>
+#else
 #include <math.h>
+#endif
 #include <boost/config/no_tr1/cmath.hpp>
 #include <boost/limits.hpp>
 #include <boost/math/tools/real_cast.hpp>
