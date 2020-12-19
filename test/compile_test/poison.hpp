@@ -58,6 +58,10 @@
 // as it needs to be able to use them!
 //
 #include <boost/math/special_functions/fpclassify.hpp>
+//
+// lexical_cast uses macro unsafe isinf etc, so we have to include this as well:
+//
+#include <boost/lexical_cast.hpp>
 
 //
 // Poison all the function-like macros in C99 so if we accidentally call them
