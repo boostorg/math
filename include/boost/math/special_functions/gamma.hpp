@@ -1,7 +1,7 @@
-//  Copyright John Maddock 2006-7, 2013-14.
+//  Copyright John Maddock 2006-7, 2013-20.
 //  Copyright Paul A. Bristow 2007, 2013-14.
 //  Copyright Nikhar Agrawal 2013-14
-//  Copyright Christopher Kormanyos 2013-14
+//  Copyright Christopher Kormanyos 2013-14, 2020
 
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
