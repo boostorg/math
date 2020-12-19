@@ -13,6 +13,7 @@
 #include <boost/utility/enable_if.hpp>
 #include <boost/math/tools/toms748_solve.hpp>
 #include <boost/math/tools/cxx03_warn.hpp>
+#include <boost/math/special_functions/fpclassify.hpp>
 #include <vector>
 
 namespace boost{ namespace math{ namespace detail{
