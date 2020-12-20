@@ -562,8 +562,7 @@ BOOST_AUTO_TEST_CASE( test_main )
 
    // Check a few values using double.
    BOOST_CHECK_EQUAL(pdf(mybeta11, 1), 0);   // is uniform unity over (0, 1) 
-   BOOST_CHECK_EQUAL(pdf(mybeta11, 0.5), 1); // https://www.wolframalpha.com/input/?i=beta+distribution+pdf+alpha+%3D+1%2C+beta+%3D+1
-   BOOST_CHECK_EQUAL(pdf(mybeta11, 0), 0);
+   BOOST_CHECK_EQUAL(pdf(mybeta11, 0), 0);   // https://www.wolframalpha.com/input/?i=beta+distribution+pdf+alpha+%3D+1%2C+beta+%3D+1
    // Although these next three have an exact result, internally they're
    // *not* treated as special cases, and may be out by a couple of eps:
    BOOST_CHECK_CLOSE_FRACTION(pdf(mybeta11, 0.5), 1.0, 5*std::numeric_limits<double>::epsilon());
