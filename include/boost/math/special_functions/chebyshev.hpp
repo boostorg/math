@@ -6,6 +6,7 @@
 #ifndef BOOST_MATH_SPECIAL_CHEBYSHEV_HPP
 #define BOOST_MATH_SPECIAL_CHEBYSHEV_HPP
 #include <cmath>
+#include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/tools/promotion.hpp>
