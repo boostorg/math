@@ -91,14 +91,10 @@ int main()
 
    constexpr qt q10 = q1 + d1;
    constexpr qt q11 = d1 + q1;
-   constexpr qt q12 = c2 + q1;
-   constexpr qt q13 = q1 + c2;
    constexpr qt q14 = q1 + q2;
 
    constexpr qt q15 = q1 - d1;
    constexpr qt q16 = d1 - q1;
-   constexpr qt q17 = c2 - q1;
-   constexpr qt q18 = q1 - c2;
    constexpr qt q19 = q1 - q2;
 
    constexpr qt q20 = q1 * d1;
@@ -129,13 +125,9 @@ int main()
    (void)c3;
    (void)q10;
    (void)q11;
-   (void)q12;
-   (void)q13;
    (void)q14;
    (void)q15;
    (void)q16;
-   (void)q17;
-   (void)q18;
    (void)q19;
    (void)q20;
    (void)q21;
@@ -156,7 +148,18 @@ int main()
 
 #ifndef BOOST_NO_CXX14_CONSTEXPR
 
+   constexpr qt q12 = c2 + q1;
+   constexpr qt q13 = q1 + c2;
+   
+   constexpr qt q17 = c2 - q1;
+   constexpr qt q18 = q1 - c2;
+   
    constexpr qt q24 = full_constexpr_test(q5, q5 + 1, 3.2, q5.C_component_1());
+   
+   (void)q12;
+   (void)q13;
+   (void)q17;
+   (void)q18;
    (void)q24;
 
 #endif
