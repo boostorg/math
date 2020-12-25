@@ -17,8 +17,8 @@
 #include <algorithm>
 #include <valarray>
 
-namespace boost::math::statistics::detail
-{
+namespace boost { namespace math { namespace statistics { namespace detail {
+
 template<typename ReturnType, typename ForwardIterator>
 ReturnType mean_sequential_impl(ForwardIterator first, ForwardIterator last)
 {
@@ -342,6 +342,6 @@ OutputIterator mode_impl(ForwardIterator first, ForwardIterator last, OutputIter
 
     return std::move(modes.begin(), modes.end(), output);
 }
-}
+}}}}
 
 #endif // BOOST_MATH_STATISTICS_UNIVARIATE_STATISTICS_DETAIL_SINGLE_PASS_HPP
