@@ -14,6 +14,7 @@
 #include <tuple>
 #include <iterator>
 #include <limits>
+#include <stdexcept>
 #include <boost/math/statistics/univariate_statistics.hpp>
 #include <boost/math/statistics/bivariate_statistics.hpp>
 
@@ -54,8 +55,15 @@ template<typename RandomAccessContainer, typename Real = typename RandomAccessCo
 auto simple_ordinary_least_squares_with_R_squared(RandomAccessContainer const & x, RandomAccessContainer const & y)
     -> std::tuple<Real, Real, Real>
 {
-    BOOST_ASSERT_MSG(std::size(x) > 2, "At least 2 samples are required to perform a linear regression.");
-    BOOST_ASSERT_MSG(std::size(x) == std::size(y), "The same number of samples must be in the independent and dependent variable.");
+    if (std::size(x) <= 1)
+    {
+        throw std::domain_error("At least 2 samples are required to perform a linear regression.");
+    }
+
+    if (std::size(x) != std::size(y))
+    {
+        throw std::domain_error("The same number of samples must be in the independent and dependent variable.");
+    }
 
     const std::tuple<Real, Real, Real> temp = boost::math::statistics::means_and_covariance(x, y);
     const Real mu_x = std::get<0>(temp);
@@ -63,7 +71,10 @@ auto simple_ordinary_least_squares_with_R_squared(RandomAccessContainer const & 
     const Real cov_xy = std::get<2>(temp);
     const Real var_x = boost::math::statistics::variance(x);
 
-    BOOST_ASSERT_MSG(var_x > 0, "Independent variable has no variance; this breaks linear regression.");
+    if (var_x <= 0) 
+    {
+        throw std::domain_error("Independent variable has no variance; this breaks linear regression.");
+    }
 
     // c1 is over-estimated for all types without compensation
     const Real c1 = cov_xy/(var_x - std::numeric_limits<Real>::epsilon());
