@@ -19,7 +19,7 @@
 #include <numeric>
 #include <list>
 
-#if (__cplusplus > 201200 || __MSVC_LANG > 201200) && defined __has_include
+#if (__cplusplus > 201700 || __MSVC_LANG > 201700) && defined __has_include
 #   if __has_include(<execution>)
 #       include <execution>
 namespace boost::math::statistics {
@@ -647,7 +647,14 @@ inline OutputIterator mode(ForwardIterator first, ForwardIterator last, OutputIt
 }
 
 // Requires enable_if_t to not clash with impl that returns std::list
-template<class Container, class OutputIterator, std::enable_if_t<std::is_execution_policy_v<Container>, bool> = true>
+// Very ugly. std::is_execution_policy_v returns false for the std::execution objects and decltype of the objects (e.g. std::execution::seq)
+template<class Container, class OutputIterator, std::enable_if_t<!std::is_convertible_v<std::execution::sequenced_policy, Container> &&
+                                                                 !std::is_convertible_v<std::execution::parallel_unsequenced_policy, Container> &&
+                                                                 !std::is_convertible_v<std::execution::parallel_policy, Container>
+                                                                 #if __cpp_lib_execution > 201900
+                                                                 && !std::is_convertible_v<std::execution::unsequenced_policy, Container>
+                                                                 #endif
+                                                                 , bool> = true>
 inline OutputIterator mode(Container & v, OutputIterator output)
 {
     return mode(std::execution::seq, std::begin(v), std::end(v), output);
