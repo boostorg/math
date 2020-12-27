@@ -139,7 +139,7 @@ void test_round_number(T arg)
    T frac = boost::math::modf(arg, &r);
    check_modf_result(arg, frac, r);
 
-   if(abs(r) < (std::numeric_limits<int>::max)())
+   if(abs(r) < static_cast<T>(std::numeric_limits<int>::max()))
    {
       int i = iround(arg);
       check_within_half(arg, i);
@@ -159,7 +159,7 @@ void test_round_number(T arg)
       si = itrunc(static_cast<T>((std::numeric_limits<int>::min)()));
       check_trunc_result(static_cast<T>((std::numeric_limits<int>::min)()), T(si));
    }
-   if(abs(r) < (std::numeric_limits<long>::max)())
+   if(abs(r) < static_cast<T>(std::numeric_limits<long>::max()))
    {
       long l = lround(arg);
       check_within_half(arg, l);
@@ -181,7 +181,7 @@ void test_round_number(T arg)
    }
 
 #ifdef BOOST_HAS_LONG_LONG
-   if(abs(r) < (std::numeric_limits<boost::long_long_type>::max)())
+   if(abs(r) < static_cast<T>(std::numeric_limits<boost::long_long_type>::max()))
    {
       boost::long_long_type ll = llround(arg);
       check_within_half(arg, ll);
