@@ -56,14 +56,17 @@ inline typename tools::promote_args<T>::type trunc(const T& v)
 // namespace as the UDT: these will then be found via argument
 // dependent lookup.  See our concept archetypes for examples.
 //
+// Non-standard numeric limits syntax "(std::numeric_limits<int>::max)()" 
+// is to avoid macro substiution from MSVC
+// https://stackoverflow.com/questions/27442885/syntax-error-with-stdnumeric-limitsmax
+//
 template <class T, class Policy>
 inline int itrunc(const T& v, const Policy& pol)
 {
    BOOST_MATH_STD_USING
    typedef typename tools::promote_args<T>::type result_type;
    result_type r = boost::math::trunc(v, pol);
-   
-   if(r > static_cast<result_type>(std::numeric_limits<int>::max()) || r < static_cast<result_type>(std::numeric_limits<int>::min()))
+   if(r > static_cast<result_type>((std::numeric_limits<int>::max)()) || r < static_cast<result_type>((std::numeric_limits<int>::min)()))
       return static_cast<int>(policies::raise_rounding_error("boost::math::itrunc<%1%>(%1%)", 0, static_cast<result_type>(v), 0, pol));
    return static_cast<int>(r);
 }
@@ -79,7 +82,7 @@ inline long ltrunc(const T& v, const Policy& pol)
    BOOST_MATH_STD_USING
    typedef typename tools::promote_args<T>::type result_type;
    result_type r = boost::math::trunc(v, pol);
-   if(r > static_cast<result_type>(std::numeric_limits<long>::max()) || r < static_cast<result_type>(std::numeric_limits<long>::min()))
+   if(r > static_cast<result_type>((std::numeric_limits<long>::max)()) || r < static_cast<result_type>((std::numeric_limits<long>::min)()))
       return static_cast<long>(policies::raise_rounding_error("boost::math::ltrunc<%1%>(%1%)", 0, static_cast<result_type>(v), 0L, pol));
    return static_cast<long>(r);
 }
@@ -97,8 +100,8 @@ inline boost::long_long_type lltrunc(const T& v, const Policy& pol)
    BOOST_MATH_STD_USING
    typedef typename tools::promote_args<T>::type result_type;
    result_type r = boost::math::trunc(v, pol);
-   if(r > static_cast<result_type>(std::numeric_limits<boost::long_long_type>::max()) || 
-      r < static_cast<result_type>(std::numeric_limits<boost::long_long_type>::min()))
+   if(r > static_cast<result_type>((std::numeric_limits<boost::long_long_type>::max)()) || 
+      r < static_cast<result_type>((std::numeric_limits<boost::long_long_type>::min)()))
    {
       return static_cast<boost::long_long_type>(policies::raise_rounding_error("boost::math::lltrunc<%1%>(%1%)", 0, v, static_cast<boost::long_long_type>(0), pol));
    }
