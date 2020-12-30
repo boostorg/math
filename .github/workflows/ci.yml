@@ -215,7 +215,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        toolset: [ gcc, msvc-14.2 ]
+        toolset: [ gcc, msvc-14.0, msvc-14.2 ]
         standard: [ 11, 14, 17 ]
         suite: [ float128_tests, special_fun, distribution_tests, misc, quadrature, ../example//examples, ../tools ]
     steps:
