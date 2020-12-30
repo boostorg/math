@@ -181,7 +181,7 @@ void test_round_number(T arg)
    }
    
 #ifdef BOOST_HAS_LONG_LONG
-   if(abs(r) < static_cast<T>(std::numeric_limits<boost::long_long_type>::max()))
+   if(abs(r) < static_cast<T>((std::numeric_limits<boost::long_long_type>::max)()))
    {
       boost::long_long_type ll = llround(arg);
       check_within_half(arg, ll);
