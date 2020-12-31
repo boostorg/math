@@ -223,7 +223,7 @@ void test_complex_mean(ExecutionPolicy&& exec)
 template<class Real, class ExecutionPolicy>
 void test_variance(ExecutionPolicy&& exec)
 {
-    Real tol = 2*std::numeric_limits<Real>::epsilon();
+    Real tol = 10*std::numeric_limits<Real>::epsilon();
     std::vector<Real> v{1,1,1,1,1,1};
     Real sigma_sq = boost::math::statistics::variance(exec, v.begin(), v.end());
     BOOST_TEST(abs(sigma_sq) < tol);
@@ -281,7 +281,7 @@ void test_variance(ExecutionPolicy&& exec)
 template<class Z, class ExecutionPolicy>
 void test_integer_variance(ExecutionPolicy&& exec)
 {
-    double tol = 2*std::numeric_limits<double>::epsilon();
+    double tol = 10*std::numeric_limits<double>::epsilon();
     std::vector<Z> v{1,1,1,1,1,1};
     double sigma_sq = boost::math::statistics::variance(exec, v);
     BOOST_TEST(abs(sigma_sq) < tol);
@@ -332,7 +332,7 @@ void test_integer_skewness(ExecutionPolicy&& exec)
         x *= scale;
     }
     double m2 = boost::math::statistics::skewness(exec, v);
-    BOOST_TEST(abs(m1 - m2) < tol*abs(m1));
+    BOOST_TEST(abs(m1 - m2) < 2*tol*abs(m1));
 }
 
 template<class Real, class ExecutionPolicy>
@@ -369,7 +369,7 @@ void test_skewness(ExecutionPolicy&& exec)
         x *= scale;
     }
     Real m2 = boost::math::statistics::skewness(exec, v);
-    BOOST_TEST(abs(m1 - m2) < tol*abs(m1));
+    BOOST_TEST(abs(m1 - m2) < 2*tol*abs(m1));
 }
 
 template<class Real, class ExecutionPolicy>

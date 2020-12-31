@@ -22,12 +22,12 @@ namespace boost { namespace math { namespace statistics { namespace detail {
 template<typename ReturnType, typename ForwardIterator>
 ReturnType mean_sequential_impl(ForwardIterator first, ForwardIterator last)
 {
-    const auto elements {std::distance(first, last)};
+    const std::size_t elements {static_cast<std::size_t>(std::distance(first, last))};
     std::valarray<ReturnType> mu {0, 0, 0, 0};
     std::valarray<ReturnType> temp {0, 0, 0, 0};
     ReturnType i {1};
-    const auto end {std::next(first, elements - (elements % 4))};
-    auto it {first};
+    const ForwardIterator end {std::next(first, elements - (elements % 4))};
+    ForwardIterator it {first};
 
     while(it != end)
     {

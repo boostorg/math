@@ -212,7 +212,7 @@ void test_mean()
     boost::numeric::ublas::vector<Real> w(7);
     for (std::size_t i = 0; i < w.size(); ++i)
     {
-        w[i] = i+1;
+        w[i] = Real(i+1);
     }
     mu = boost::math::statistics::mean(w.cbegin(), w.cend());
     BOOST_TEST(abs(mu - 4) < tol);
@@ -307,7 +307,7 @@ void test_variance()
         Real n = v.size();
         for (std::size_t i = 0; i < v.size(); ++i)
         {
-            v[i] = i + 1;
+            v[i] = Real(i + 1);
         }
 
         sigma_sq = boost::math::statistics::variance(v);
@@ -440,14 +440,14 @@ void test_kurtosis()
 
     std::vector<Real> v3(10000);
     std::mt19937 gen(42);
-    std::normal_distribution<long double> dis(0, 1);
+    std::normal_distribution<Real> dis(0, 1);
     for (std::size_t i = 0; i < v3.size(); ++i) {
         v3[i] = dis(gen);
     }
     kurt = boost::math::statistics::kurtosis(v3);
     BOOST_TEST(abs(kurt - 3) < 0.1);
 
-    std::uniform_real_distribution<long double> udis(-1, 3);
+    std::uniform_real_distribution<Real> udis(-1, 3);
     for (std::size_t i = 0; i < v3.size(); ++i) {
         v3[i] = udis(gen);
     }

@@ -7,8 +7,6 @@ inspect.html
 test/cuda
 *.DS_Store
 /**/*.dSYM/
+**/.temps/*
 build/*
-*.json
-*.idx
-*.swp
-*/.temps/*
+.vscode/*

@@ -1161,7 +1161,7 @@ template<class ForwardIterator, typename Real = typename std::iterator_traits<Fo
 inline std::list<Real> mode(ForwardIterator first, ForwardIterator last)
 {
     std::list<Real> modes;
-    mode(first, last, modes.begin());
+    mode(first, last, std::inserter(modes, modes.begin()));
     return modes;
 }
 
