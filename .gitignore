@@ -7,3 +7,6 @@ inspect.html
 test/cuda
 *.DS_Store
 /**/*.dSYM/
+**/.temps/*
+build/*
+.vscode/*
