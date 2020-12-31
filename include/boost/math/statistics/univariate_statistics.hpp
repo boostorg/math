@@ -19,7 +19,7 @@
 #include <numeric>
 #include <list>
 
-#if (__cplusplus > 201700 || __MSVC_LANG > 201700) && defined __has_include
+#if (__cplusplus > 201700 || _MSVC_LANG > 201700) && defined __has_include
 #   if __has_include(<execution>)
 #       include <execution>
 namespace boost::math::statistics {
