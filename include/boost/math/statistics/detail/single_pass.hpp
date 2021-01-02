@@ -226,6 +226,7 @@ ReturnType parallel_first_four_moments_impl(ForwardIterator first, ForwardIterat
 template<typename ReturnType, typename ForwardIterator>
 ReturnType skewness_sequential_impl(ForwardIterator first, ForwardIterator last)
 {
+    using std::sqrt;
     BOOST_ASSERT_MSG(first != last, "At least one sample is required to compute skewness.");
     
     ReturnType M1 = *first;
@@ -318,7 +319,7 @@ OutputIterator mode_impl(ForwardIterator first, ForwardIterator last, OutputIter
     while(first != last)
     {
         Size current_count {0};
-        auto end_it {first};
+        ForwardIterator end_it {first};
         while(end_it != last && *end_it == *first)
         {
             ++current_count;

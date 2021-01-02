@@ -23,6 +23,7 @@
 
 using boost::multiprecision::cpp_bin_float_50;
 using boost::multiprecision::cpp_complex_50;
+using std::abs;
 
 /*
  * Test checklist:
