@@ -666,7 +666,7 @@ template<class ExecutionPolicy, class ForwardIterator, class Real = typename std
 inline auto mode(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last)
 {
     std::list<Real> modes;
-    mode(exec, first, last, modes.begin());
+    mode(exec, first, last, std::inserter(modes, modes.begin()));
     return modes;
 }
 
