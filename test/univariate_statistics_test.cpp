@@ -924,96 +924,98 @@ void test_mode(ExecutionPolicy&& exec)
 
 int main()
 {
+    // All std::execution::par_unseq tests are commented outto resolve Appveyor error where object file size is too large.
+    
     test_mean<float>(std::execution::seq);
     test_mean<float>(std::execution::par);
-    test_mean<float>(std::execution::par_unseq);
+    //test_mean<float>(std::execution::par_unseq);
     test_mean<double>(std::execution::seq);
     test_mean<double>(std::execution::par);
-    test_mean<double>(std::execution::par_unseq);
+    //test_mean<double>(std::execution::par_unseq);
     test_mean<long double>(std::execution::seq);
     test_mean<long double>(std::execution::par);
-    test_mean<long double>(std::execution::par_unseq);
+    //test_mean<long double>(std::execution::par_unseq);
     test_mean<cpp_bin_float_50>(std::execution::seq);
     test_mean<cpp_bin_float_50>(std::execution::par);
-    test_mean<cpp_bin_float_50>(std::execution::par_unseq);
+    //test_mean<cpp_bin_float_50>(std::execution::par_unseq);
 
     test_integer_mean<unsigned>(std::execution::seq);
     test_integer_mean<unsigned>(std::execution::par);
-    test_integer_mean<unsigned>(std::execution::par_unseq);
+    //test_integer_mean<unsigned>(std::execution::par_unseq);
     test_integer_mean<int>(std::execution::seq);
     test_integer_mean<int>(std::execution::par);
-    test_integer_mean<int>(std::execution::par_unseq);
+    //test_integer_mean<int>(std::execution::par_unseq);
 
     test_complex_mean<std::complex<float>>(std::execution::seq);
     test_complex_mean<std::complex<float>>(std::execution::par);
-    test_complex_mean<std::complex<float>>(std::execution::par_unseq);
+    //test_complex_mean<std::complex<float>>(std::execution::par_unseq);
     test_complex_mean<cpp_complex_50>(std::execution::seq);
     test_complex_mean<cpp_complex_50>(std::execution::par);
-    test_complex_mean<cpp_complex_50>(std::execution::par_unseq);
+    //test_complex_mean<cpp_complex_50>(std::execution::par_unseq);
 
     test_variance<float>(std::execution::seq);
     test_variance<float>(std::execution::par);
-    test_variance<float>(std::execution::par_unseq);
+    //test_variance<float>(std::execution::par_unseq);
     test_variance<double>(std::execution::seq);
     test_variance<double>(std::execution::par);
-    test_variance<double>(std::execution::par_unseq);
+    //test_variance<double>(std::execution::par_unseq);
     test_variance<long double>(std::execution::seq);
     test_variance<long double>(std::execution::par);
-    test_variance<long double>(std::execution::par_unseq);
+    //test_variance<long double>(std::execution::par_unseq);
     test_variance<cpp_bin_float_50>(std::execution::seq);
     test_variance<cpp_bin_float_50>(std::execution::par);
-    test_variance<cpp_bin_float_50>(std::execution::par_unseq);
+    //test_variance<cpp_bin_float_50>(std::execution::par_unseq);
 
     test_integer_variance<unsigned>(std::execution::seq);
     test_integer_variance<unsigned>(std::execution::par);
-    test_integer_variance<unsigned>(std::execution::par_unseq);
+    //test_integer_variance<unsigned>(std::execution::par_unseq);
     test_integer_variance<int>(std::execution::seq);
     test_integer_variance<int>(std::execution::par);
-    test_integer_variance<int>(std::execution::par_unseq);
+    //test_integer_variance<int>(std::execution::par_unseq);
 
     test_skewness<float>(std::execution::seq);
     test_skewness<float>(std::execution::par);
-    test_skewness<float>(std::execution::par_unseq);
+    //test_skewness<float>(std::execution::par_unseq);
     test_skewness<double>(std::execution::seq);
     test_skewness<double>(std::execution::par);
-    test_skewness<double>(std::execution::par_unseq);
+    //test_skewness<double>(std::execution::par_unseq);
     test_skewness<long double>(std::execution::seq);
     test_skewness<long double>(std::execution::par);
-    test_skewness<long double>(std::execution::par_unseq);
+    //test_skewness<long double>(std::execution::par_unseq);
     test_skewness<cpp_bin_float_50>(std::execution::seq);
     test_skewness<cpp_bin_float_50>(std::execution::par);
-    test_skewness<cpp_bin_float_50>(std::execution::par_unseq);
+    //test_skewness<cpp_bin_float_50>(std::execution::par_unseq);
 
     test_integer_skewness<int>(std::execution::seq);
     test_integer_skewness<int>(std::execution::par);
-    test_integer_skewness<int>(std::execution::par_unseq);
+    //test_integer_skewness<int>(std::execution::par_unseq);
     test_integer_skewness<unsigned>(std::execution::seq);
     test_integer_skewness<unsigned>(std::execution::par);
-    test_integer_skewness<unsigned>(std::execution::par_unseq);
+    //test_integer_skewness<unsigned>(std::execution::par_unseq);
 
     test_first_four_moments<float>(std::execution::seq);
     test_first_four_moments<float>(std::execution::par);
-    test_first_four_moments<float>(std::execution::par_unseq);
+    //test_first_four_moments<float>(std::execution::par_unseq);
     test_first_four_moments<double>(std::execution::seq);
     test_first_four_moments<double>(std::execution::par);
-    test_first_four_moments<double>(std::execution::par_unseq);
+    //test_first_four_moments<double>(std::execution::par_unseq);
     
     test_first_four_moments<long double>(std::execution::seq);
     test_first_four_moments<long double>(std::execution::par);
-    test_first_four_moments<long double>(std::execution::par_unseq);
+    //test_first_four_moments<long double>(std::execution::par_unseq);
     test_first_four_moments<cpp_bin_float_50>(std::execution::seq);
     test_first_four_moments<cpp_bin_float_50>(std::execution::par);
-    test_first_four_moments<cpp_bin_float_50>(std::execution::par_unseq);
+    //test_first_four_moments<cpp_bin_float_50>(std::execution::par_unseq);
 
     test_kurtosis<float>(std::execution::seq);
     test_kurtosis<float>(std::execution::par);
-    test_kurtosis<float>(std::execution::par_unseq);
+    //test_kurtosis<float>(std::execution::par_unseq);
     test_kurtosis<double>(std::execution::seq);
     test_kurtosis<double>(std::execution::par);
-    test_kurtosis<double>(std::execution::par_unseq);
+    //test_kurtosis<double>(std::execution::par_unseq);
     test_kurtosis<long double>(std::execution::seq);
     test_kurtosis<long double>(std::execution::par);
-    test_kurtosis<long double>(std::execution::par_unseq);
+    //test_kurtosis<long double>(std::execution::par_unseq);
     // Kinda expensive:
     //test_kurtosis<cpp_bin_float_50>(std::execution::seq);
     //test_kurtosis<cpp_bin_float_50>(std::execution::par);
@@ -1021,103 +1023,103 @@ int main()
 
     test_integer_kurtosis<int>(std::execution::seq);
     test_integer_kurtosis<int>(std::execution::par);
-    test_integer_kurtosis<int>(std::execution::par_unseq);
+    //test_integer_kurtosis<int>(std::execution::par_unseq);
     test_integer_kurtosis<unsigned>(std::execution::seq);
     test_integer_kurtosis<unsigned>(std::execution::par);
-    test_integer_kurtosis<unsigned>(std::execution::par_unseq);
+    //test_integer_kurtosis<unsigned>(std::execution::par_unseq);
 
     test_median<float>(std::execution::seq);
     test_median<float>(std::execution::par);
-    test_median<float>(std::execution::par_unseq);
+    //test_median<float>(std::execution::par_unseq);
     test_median<double>(std::execution::seq);
     test_median<double>(std::execution::par);
-    test_median<double>(std::execution::par_unseq);
+    //test_median<double>(std::execution::par_unseq);
     test_median<long double>(std::execution::seq);
     test_median<long double>(std::execution::par);
-    test_median<long double>(std::execution::par_unseq);
+    //test_median<long double>(std::execution::par_unseq);
     test_median<cpp_bin_float_50>(std::execution::seq);
     test_median<cpp_bin_float_50>(std::execution::par);
-    test_median<cpp_bin_float_50>(std::execution::par_unseq);
+    //test_median<cpp_bin_float_50>(std::execution::par_unseq);
     test_median<int>(std::execution::seq);
     test_median<int>(std::execution::par);
-    test_median<int>(std::execution::par_unseq);
+    //test_median<int>(std::execution::par_unseq);
 
     test_median_absolute_deviation<float>(std::execution::seq);
     test_median_absolute_deviation<float>(std::execution::par);
-    test_median_absolute_deviation<float>(std::execution::par_unseq);
+    //test_median_absolute_deviation<float>(std::execution::par_unseq);
     test_median_absolute_deviation<double>(std::execution::seq);
     test_median_absolute_deviation<double>(std::execution::par);
-    test_median_absolute_deviation<double>(std::execution::par_unseq);
+    //test_median_absolute_deviation<double>(std::execution::par_unseq);
     test_median_absolute_deviation<long double>(std::execution::seq);
     test_median_absolute_deviation<long double>(std::execution::par);
-    test_median_absolute_deviation<long double>(std::execution::par_unseq);
+    //test_median_absolute_deviation<long double>(std::execution::par_unseq);
     test_median_absolute_deviation<cpp_bin_float_50>(std::execution::seq);
     test_median_absolute_deviation<cpp_bin_float_50>(std::execution::par);
-    test_median_absolute_deviation<cpp_bin_float_50>(std::execution::par_unseq);
+    //test_median_absolute_deviation<cpp_bin_float_50>(std::execution::par_unseq);
 
     test_gini_coefficient<float>(std::execution::seq);
     test_gini_coefficient<float>(std::execution::par);
-    test_gini_coefficient<float>(std::execution::par_unseq);
+    //test_gini_coefficient<float>(std::execution::par_unseq);
     test_gini_coefficient<double>(std::execution::seq);
     test_gini_coefficient<double>(std::execution::par);
-    test_gini_coefficient<double>(std::execution::par_unseq); 
+    //test_gini_coefficient<double>(std::execution::par_unseq); 
     test_gini_coefficient<long double>(std::execution::seq);
     test_gini_coefficient<long double>(std::execution::par);
-    test_gini_coefficient<long double>(std::execution::par_unseq);
+    //test_gini_coefficient<long double>(std::execution::par_unseq);
     test_gini_coefficient<cpp_bin_float_50>(std::execution::seq);
     test_gini_coefficient<cpp_bin_float_50>(std::execution::par);
-    test_gini_coefficient<long double>(std::execution::par_unseq);
+    //test_gini_coefficient<cpp_bin_float_50>(std::execution::par_unseq);
 
     test_integer_gini_coefficient<unsigned>(std::execution::seq);
     test_integer_gini_coefficient<unsigned>(std::execution::par);
-    test_integer_gini_coefficient<unsigned>(std::execution::par_unseq);
+    //test_integer_gini_coefficient<unsigned>(std::execution::par_unseq);
     test_integer_gini_coefficient<int>(std::execution::seq);
     test_integer_gini_coefficient<int>(std::execution::par);
-    test_integer_gini_coefficient<int>(std::execution::par_unseq);
+    //test_integer_gini_coefficient<int>(std::execution::par_unseq);
 
     test_sample_gini_coefficient<float>(std::execution::seq);
     test_sample_gini_coefficient<float>(std::execution::par);
-    test_sample_gini_coefficient<float>(std::execution::par_unseq);
+    //test_sample_gini_coefficient<float>(std::execution::par_unseq);
     test_sample_gini_coefficient<double>(std::execution::seq);
     test_sample_gini_coefficient<double>(std::execution::par);
-    test_sample_gini_coefficient<double>(std::execution::par_unseq);
+    //test_sample_gini_coefficient<double>(std::execution::par_unseq);
 
     test_sample_gini_coefficient<long double>(std::execution::seq);
     test_sample_gini_coefficient<long double>(std::execution::par);
-    test_sample_gini_coefficient<long double>(std::execution::par_unseq);
+    //test_sample_gini_coefficient<long double>(std::execution::par_unseq);
     test_sample_gini_coefficient<cpp_bin_float_50>(std::execution::seq);
     test_sample_gini_coefficient<cpp_bin_float_50>(std::execution::par);
-    test_sample_gini_coefficient<cpp_bin_float_50>(std::execution::par_unseq);
+    //test_sample_gini_coefficient<cpp_bin_float_50>(std::execution::par_unseq);
 
     test_interquartile_range<double>(std::execution::seq);
     test_interquartile_range<double>(std::execution::par);
-    test_interquartile_range<double>(std::execution::par_unseq);
+    //test_interquartile_range<double>(std::execution::par_unseq);
     test_interquartile_range<cpp_bin_float_50>(std::execution::seq);
     test_interquartile_range<cpp_bin_float_50>(std::execution::par);
-    test_interquartile_range<cpp_bin_float_50>(std::execution::par_unseq);
+    //test_interquartile_range<cpp_bin_float_50>(std::execution::par_unseq);
 
     test_integer_mode<int>(std::execution::seq);
     test_integer_mode<int>(std::execution::par);
-    test_integer_mode<int>(std::execution::par_unseq);
+    //test_integer_mode<int>(std::execution::par_unseq);
     test_integer_mode<int32_t>(std::execution::seq);
     test_integer_mode<int32_t>(std::execution::par);
-    test_integer_mode<int32_t>(std::execution::par_unseq);
+    //test_integer_mode<int32_t>(std::execution::par_unseq);
     test_integer_mode<int64_t>(std::execution::seq);
     test_integer_mode<int64_t>(std::execution::par);
-    test_integer_mode<int64_t>(std::execution::par_unseq);
+    //test_integer_mode<int64_t>(std::execution::par_unseq);
     test_integer_mode<uint32_t>(std::execution::seq);
     test_integer_mode<uint32_t>(std::execution::par);
-    test_integer_mode<uint32_t>(std::execution::par_unseq);
+    //test_integer_mode<uint32_t>(std::execution::par_unseq);
 
     test_mode<float>(std::execution::seq);
     test_mode<float>(std::execution::par);
-    test_mode<float>(std::execution::par_unseq);
+    //test_mode<float>(std::execution::par_unseq);
     test_mode<double>(std::execution::seq);
     test_mode<double>(std::execution::par);
-    test_mode<double>(std::execution::par_unseq);
+    //test_mode<double>(std::execution::par_unseq);
     test_mode<cpp_bin_float_50>(std::execution::seq);
     test_mode<cpp_bin_float_50>(std::execution::par);
-    test_mode<cpp_bin_float_50>(std::execution::par_unseq);
+    //test_mode<cpp_bin_float_50>(std::execution::par_unseq);
 
     return boost::report_errors();
 }

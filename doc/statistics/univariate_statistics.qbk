@@ -203,7 +203,7 @@ compatible with C++11. In order to pass an ExecutionPolicy to the methods and ac
 Many of these functionals have trivial naive implementations, but experienced programmers will recognize that even trivial algorithms are easy to screw up, and that numerical instabilities often lurk in corner cases.
 We have attempted to do our "due diligence" to root out these problems-scouring the literature for numerically stable algorithms for even the simplest of functionals.
 
-/Nota bene/: Some similar functionality is provided in [@https://www.boost.org/doc/libs/1_68_0/doc/html/accumulators/user_s_guide.html Boost Accumulators Framework].
+/Nota bene/: Some similar functionality is provided in [@https://www.boost.org/doc/libs/1_75_0/doc/html/accumulators/user_s_guide.html Boost Accumulators Framework].
 These accumulators should be used in real-time applications; `univariate_statistics.hpp` should be used when CPU vectorization is needed.
 As a reminder, remember that to actually /get/ vectorization, compile with `-march=native -O3` flags.
 
@@ -214,7 +214,6 @@ These routines are usable in float, double, long double, and Boost.Multiprecisio
 For certain operations (total variation, for example) integer inputs are supported.
 
 /Nota bene/: The default execution policy for every function is std::execution::seq.
-The use of parallel execution policies (std::execution::par or par_unseq) generally doubles the error introduced in the computation, but is still minimal.
 
 [heading Mean]
 
@@ -388,6 +387,10 @@ Compute the mode(s) of a data set:
     // Modes are 2 and 4, d_modes.size() == 2
     // Alternative syntax if you want to use parallel execution:
     boost::math::statistics::mode(std::execution::par, w, std::back_inserter(d_modes));
+    // Additional syntax to have mode output a `std::list` of modes. The same execution policy syntax applies
+    auto list_modes = boost::math::statistics::mode(w);
+
+/Nota bene/: The input data must be sorted in order to pass a forward iterator. If data is not sorted random access iterators are required for a call to `std::sort`.
 
 [heading References]
 
