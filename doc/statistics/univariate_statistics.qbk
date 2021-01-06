@@ -203,7 +203,7 @@ compatible with C++11. In order to pass an ExecutionPolicy to the methods and ac
 Many of these functionals have trivial naive implementations, but experienced programmers will recognize that even trivial algorithms are easy to screw up, and that numerical instabilities often lurk in corner cases.
 We have attempted to do our "due diligence" to root out these problems-scouring the literature for numerically stable algorithms for even the simplest of functionals.
 
-/Nota bene/: Some similar functionality is provided in [@https://www.boost.org/doc/libs/1_75_0/doc/html/accumulators/user_s_guide.html Boost Accumulators Framework].
+/Nota bene/: Some similar functionality is provided in [@https://www.boost.org/doc/libs/release/doc/html/accumulators.html Boost Accumulators Framework].
 These accumulators should be used in real-time applications; `univariate_statistics.hpp` should be used when CPU vectorization is needed.
 As a reminder, remember that to actually /get/ vectorization, compile with `-march=native -O3` flags.
 
