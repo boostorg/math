@@ -8,6 +8,20 @@ All old bug reports including closed ones can be viewed on Trac
 
 Recent issues on GitHub [@https://github.com/boostorg/math/issues?utf8=%E2%9C%93&q=is%3Aissue here].
 
+[h4 Math-2.13.0 (Boost-1.75)]
+
+* Added [link math_toolkit.dist_ref.dists.kolmogorov_smirnov_dist Kolmogorov-Smirnov distribution].
+* Added [link math_toolkit.jacobi_theta Jacobi Theta functions].
+* Added [link math_toolkit.internals.cohen_acceleration methods to accelerate convergence of an alternating series] by a method designed by Cohen, Villegas, and Zagier.
+* Added simple tool for [link math_toolkit.ulps_plots ULP plots] of univariate functions.
+* Added Reinch's modification to Clenshaw recurrence for [link math_toolkit.sf_poly.chebyshev Chebyshev evaluation].
+* Improve mixed argument handling in `float_next`.
+* Correct behaviour of `ellint_2` when `k = 1`.  See [@https://github.com/boostorg/math/issues/321 #321].
+* Correct `cyl_bessel_i` in the multiprecision case, especially for decimal types.
+* Correct converting constructors for `std::complex<__float128>` in `<cstdfloat>`.  See [@https://github.com/boostorg/math/issues/350 #350].
+* Update multiprecision `erf` to improve performance and precision.
+* Minor improvements to `tanh_sinh` implementation.
+
 [h4 Math-2.12.0 (Boost-1.73)]
 
 * IMPORTANT: C++03 support is now deprecated and will be removed from March 2021.

@@ -1,10 +1,10 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Tables of the power function of the chi2 test.</title>
 <link rel="stylesheet" href="../../../../math.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
-<link rel="home" href="../../../../index.html" title="Math Toolkit 2.12.0">
+<link rel="home" href="../../../../index.html" title="Math Toolkit 2.13.0">
 <link rel="up" href="../nccs_eg.html" title="Non Central Chi Squared Example">
 <link rel="prev" href="../nccs_eg.html" title="Non Central Chi Squared Example">
 <link rel="next" href="../error_eg.html" title="Error Handling Example">
@@ -28,11 +28,11 @@
           of the power function of the chi<sup>2</sup> test.</a>
 </h5></div></div></div>
 <p>
-            This example computes a table of the power of the &#967;<sup>2</sup>
+            This example computes a table of the power of the χ<sup>2</sup>
 test at the 5% significance
             level, for various degrees of freedom and non-centrality parameters.
             The table is deliberately the same as Table 6 from "The Non-Central
-            &#967;<sup>2</sup> and F-Distributions and their applications.", P. B. Patnaik, Biometrika,
+            χ<sup>2</sup> and F-Distributions and their applications.", P. B. Patnaik, Biometrika,
             Vol. 36, No. 1/2 (June 1949), 202-232.
           </p>
 <p>
@@ -51,7 +51,7 @@ test at the 5% significance
 <span class="special">{</span>
 </pre>
 <p>
-            Create a table of the power of the &#967;<sup>2</sup> test at 5% significance level, start
+            Create a table of the power of the χ<sup>2</sup> test at 5% significance level, start
             with a table header:
           </p>
 <pre class="programlisting"><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"[table\n[[[nu]]"</span><span class="special">;</span>
@@ -75,13 +75,13 @@ test at the 5% significance
    <span class="special">{</span>
 </pre>
 <p>
-            Calculate the &#967;<sup>2</sup> statistic for a 5% significance:
+            Calculate the χ<sup>2</sup> statistic for a 5% significance:
           </p>
 <pre class="programlisting"><span class="keyword">double</span> <span class="identifier">cs</span> <span class="special">=</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">chi_squared</span><span class="special">(</span><span class="identifier">n</span><span class="special">),</span> <span class="number">0.05</span><span class="special">));</span>
 </pre>
 <p>
             The power of the test is given by the complement of the CDF of the non-central
-            &#967;<sup>2</sup> distribution:
+            χ<sup>2</sup> distribution:
           </p>
 <pre class="programlisting"><span class="keyword">double</span> <span class="identifier">beta</span> <span class="special">=</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">non_central_chi_squared</span><span class="special">(</span><span class="identifier">n</span><span class="special">,</span> <span class="identifier">lam</span><span class="special">),</span> <span class="identifier">cs</span><span class="special">));</span>
 </pre>
@@ -100,7 +100,7 @@ test at the 5% significance
             shown below.
           </p>
 <p>
-            We can interpret this as follows - for example if &#957;=10 and &#955;=10 then the
+            We can interpret this as follows - for example if ν=10 and λ=10 then the
             power of the test is 0.542 - so we have only a 54% chance of correctly
             detecting that our null hypothesis is false, and a 46% chance of incurring
             a type II error (failing to reject the null hypothesis when it is in
@@ -123,57 +123,57 @@ test at the 5% significance
 <thead><tr>
 <th>
                     <p>
-                      &#957;
+                      ν
                     </p>
                   </th>
 <th>
                     <p>
-                      &#955;=2
+                      λ=2
                     </p>
                   </th>
 <th>
                     <p>
-                      &#955;=4
+                      λ=4
                     </p>
                   </th>
 <th>
                     <p>
-                      &#955;=6
+                      λ=6
                     </p>
                   </th>
 <th>
                     <p>
-                      &#955;=8
+                      λ=8
                     </p>
                   </th>
 <th>
                     <p>
-                      &#955;=10
+                      λ=10
                     </p>
                   </th>
 <th>
                     <p>
-                      &#955;=12
+                      λ=12
                     </p>
                   </th>
 <th>
                     <p>
-                      &#955;=14
+                      λ=14
                     </p>
                   </th>
 <th>
                     <p>
-                      &#955;=16
+                      λ=16
                     </p>
                   </th>
 <th>
                     <p>
-                      &#955;=18
+                      λ=18
                     </p>
                   </th>
 <th>
                     <p>
-                      &#955;=20
+                      λ=20
                     </p>
                   </th>
 </tr></thead>
@@ -1270,11 +1270,10 @@ test at the 5% significance
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2019 Nikhar
-      Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos,
-      Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Matthew Pulver, Johan
-      R&#229;de, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg,
-      Daryle Walker and Xiaogang Zhang<p>
+<td align="right"><div class="copyright-footer">Copyright © 2006-2020 Nikhar Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher
+      Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Evan Miller, Jeremy Murphy,
+      Matthew Pulver, Johan Råde, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson,
+      Thijs van den Berg, Daryle Walker and Xiaogang Zhang<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

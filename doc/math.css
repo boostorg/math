@@ -126,20 +126,24 @@ span.alignjustify
 Names at http://www.w3.org/TR/2002/WD-css3-color-20020219/ 4.3. X11 color keywords.
 Quickbook Usage: [role red Some red text]
 
+inline-block - Flows a element inline with the text, but allows width and height to be specified.
+
+https://stackoverflow.com/questions/3043021/is-there-any-guide-on-when-to-use-displayblock-when-inline-and-when-inline-b#:~:text=The%20use%20cases%20for%20block,it%27s%20used%20naturally%20for%20images
+
 */
-span.red { inline-block; color: red; }
-span.green { color: green; }
-span.lime { color: #00FF00; }
-span.blue { color: blue; }
-span.navy { color: navy; }
-span.yellow { color: yellow; }
-span.magenta { color: magenta; }
-span.indigo { color: #4B0082; }
-span.cyan { color: cyan; }
-span.purple { color: purple; }
-span.gold { color: gold; }
-span.silver { color: silver; } /* lighter gray */
-span.gray { color: #808080; } /* light gray */
+span.red { display:inline-block; color: red; }
+span.green { display:inline-block; color: green; }
+span.lime { display:inline-block; color: #00FF00; }
+span.blue { display:inline-block; color: blue; }
+span.navy { display:inline-block; color: navy; }
+span.yellow { display:inline-block; color: yellow; }
+span.magenta { display:inline-block; color: magenta; }
+span.indigo { display:inline-block; color: #4B0082; }
+span.cyan { display:inline-block; color: cyan; }
+span.purple { display:inline-block; color: purple; }
+span.gold { display:inline-block; color: gold; }
+span.silver { display:inline-block; color: silver; } /* lighter gray */
+span.gray { display:inline-block; color: #808080; } /* light gray */
 
 /* role for inline Unicode mathematical equations,
     making font an italic (as is conventional for equations)
@@ -147,7 +151,7 @@ span.gray { color: #808080; } /* light gray */
     and a little bigger (* 125%) because the serif font appears smaller than the default sans serif fonts.
     Used, for example: [role serif_italic This is in serif font and italic].
     Used in turn by template for inline expressions to match equations as SVG or PNG images.
-
+    Can be combined with colors and bold.
 */
 span.serif_italic {
     font-family: serif;

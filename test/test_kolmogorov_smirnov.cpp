@@ -56,8 +56,9 @@ void test_spots(RealType)
     // Confirm mode is at least a local minimum
     RealType mode = boost::math::mode(dist);
 
-    BOOST_TEST_CHECK(pdf(dist, mode) >= pdf(dist, mode - sqrt(eps)));
-    BOOST_TEST_CHECK(pdf(dist, mode) >= pdf(dist, mode + sqrt(eps)));
+    using std::sqrt;
+    BOOST_TEST_CHECK(pdf(dist, mode) >= pdf(dist, RealType(mode - sqrt(eps))));
+    BOOST_TEST_CHECK(pdf(dist, mode) >= pdf(dist, RealType(mode + sqrt(eps))));
 
     // Test the moments - each one integrates the entire distribution
     quadrature::exp_sinh<RealType> integrator;

@@ -458,16 +458,16 @@ operator + (const T1& a, const quaternion<T2>& b)
    return quaternion<T2>(static_cast<T2>(b.R_component_1() + a), b.R_component_2(), b.R_component_3(), b.R_component_4());
 }
 template <class T1, class T2>
-inline BOOST_CONSTEXPR typename boost::enable_if_c<boost::is_convertible<T2, T1>::value, quaternion<T1> >::type
+inline BOOST_CXX14_CONSTEXPR typename boost::enable_if_c<boost::is_convertible<T2, T1>::value, quaternion<T1> >::type
 operator + (const quaternion<T1>& a, const std::complex<T2>& b)
 {
    return quaternion<T1>(a.R_component_1() + std::real(b), a.R_component_2() + std::imag(b), a.R_component_3(), a.R_component_4());
 }
 template <class T1, class T2>
-inline BOOST_CONSTEXPR typename boost::enable_if_c<boost::is_convertible<T1, T2>::value, quaternion<T2> >::type
+inline BOOST_CXX14_CONSTEXPR typename boost::enable_if_c<boost::is_convertible<T1, T2>::value, quaternion<T2> >::type
 operator + (const std::complex<T1>& a, const quaternion<T2>& b)
 {
-   return quaternion<T1>(b.R_component_1() + real(a), b.R_component_2() + imag(a), b.R_component_3(), b.R_component_4());
+   return quaternion<T1>(b.R_component_1() + std::real(a), b.R_component_2() + std::imag(a), b.R_component_3(), b.R_component_4());
 }
 template <class T>
 inline BOOST_CONSTEXPR quaternion<T> operator + (const quaternion<T>& a, const quaternion<T>& b)
@@ -488,16 +488,16 @@ operator - (const T1& a, const quaternion<T2>& b)
    return quaternion<T2>(static_cast<T2>(a - b.R_component_1()), -b.R_component_2(), -b.R_component_3(), -b.R_component_4());
 }
 template <class T1, class T2>
-inline BOOST_CONSTEXPR typename boost::enable_if_c<boost::is_convertible<T2, T1>::value, quaternion<T1> >::type
+inline BOOST_CXX14_CONSTEXPR typename boost::enable_if_c<boost::is_convertible<T2, T1>::value, quaternion<T1> >::type
 operator - (const quaternion<T1>& a, const std::complex<T2>& b)
 {
    return quaternion<T1>(a.R_component_1() - std::real(b), a.R_component_2() - std::imag(b), a.R_component_3(), a.R_component_4());
 }
 template <class T1, class T2>
-inline BOOST_CONSTEXPR typename boost::enable_if_c<boost::is_convertible<T1, T2>::value, quaternion<T2> >::type
+inline BOOST_CXX14_CONSTEXPR typename boost::enable_if_c<boost::is_convertible<T1, T2>::value, quaternion<T2> >::type
 operator - (const std::complex<T1>& a, const quaternion<T2>& b)
 {
-   return quaternion<T1>(real(a) - b.R_component_1(), imag(a) - b.R_component_2(), -b.R_component_3(), -b.R_component_4());
+   return quaternion<T1>(std::real(a) - b.R_component_1(), std::imag(a) - b.R_component_2(), -b.R_component_3(), -b.R_component_4());
 }
 template <class T>
 inline BOOST_CONSTEXPR quaternion<T> operator - (const quaternion<T>& a, const quaternion<T>& b)

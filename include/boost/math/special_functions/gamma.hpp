@@ -1,7 +1,7 @@
-//  Copyright John Maddock 2006-7, 2013-14.
+//  Copyright John Maddock 2006-7, 2013-20.
 //  Copyright Paul A. Bristow 2007, 2013-14.
 //  Copyright Nikhar Agrawal 2013-14
-//  Copyright Christopher Kormanyos 2013-14
+//  Copyright Christopher Kormanyos 2013-14, 2020
 
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
@@ -366,13 +366,35 @@ std::size_t highest_bernoulli_index()
 template<class T>
 int minimum_argument_for_bernoulli_recursion()
 {
+   BOOST_MATH_STD_USING
+
    const float digits10_of_type = (std::numeric_limits<T>::is_specialized
-                                      ? static_cast<float>(std::numeric_limits<T>::digits10)
-                                      : static_cast<float>(boost::math::tools::digits<T>() * 0.301F));
+                                    ? (float) std::numeric_limits<T>::digits10
+                                    : (float) (boost::math::tools::digits<T>() * 0.301F));
 
-   const float limit = std::ceil(std::pow(1.0f / std::ldexp(1.0f, 1-boost::math::tools::digits<T>()), 1.0f / 20.0f));
+   int min_arg = (int) (digits10_of_type * 1.7F);
 
-   return (int)((std::min)(digits10_of_type * 1.7F, limit));
+   if(digits10_of_type < 50.0F)
+   {
+      // The following code sequence has been modified
+      // within the context of issue 396.
+
+      // The calculation of the test-variable limit has now
+      // been protected against overflow/underflow dangers.
+
+      // The previous line looked like this and did, in fact,
+      // underflow ldexp when using certain multiprecision types.
+
+      // const float limit = std::ceil(std::pow(1.0f / std::ldexp(1.0f, 1-boost::math::tools::digits<T>()), 1.0f / 20.0f));
+
+      // The new safe version of the limit check is now here.
+      const float d2_minus_one = ((digits10_of_type / 0.301F) - 1.0F);
+      const float limit        = ceil(exp((d2_minus_one * log(2.0F)) / 20.0F));
+
+      min_arg = (int) ((std::min)(digits10_of_type * 1.7F, limit));
+   }
+
+   return min_arg;
 }
 
 template <class T, class Policy>
@@ -1442,7 +1464,23 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert,
       {
          // x is so small that P is necessarily very small too,
          // use http://functions.wolfram.com/GammaBetaErf/GammaRegularized/06/01/05/01/01/
-         result = !normalised ? pow(x, a) / (a) : pow(x, a) / boost::math::tgamma(a + 1, pol);
+         if(!normalised)
+            result = pow(x, a) / (a);
+         else
+         {
+#ifndef BOOST_NO_EXCEPTIONS
+            try 
+            {
+               result = pow(x, a) / boost::math::tgamma(a + 1, pol);
+            }
+            catch (const std::overflow_error&)
+            {
+               result = 0;
+            }
+#else
+            result = pow(x, a) / boost::math::tgamma(a + 1, pol);
+#endif
+         }
          result *= 1 - a * x / (a + 1);
          if (p_derivative)
             *p_derivative = regularised_gamma_prefix(a, x, pol, lanczos_type());

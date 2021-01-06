@@ -1,10 +1,10 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Incomplete Gamma Functions</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
-<link rel="home" href="../../index.html" title="Math Toolkit 2.12.0">
+<link rel="home" href="../../index.html" title="Math Toolkit 2.13.0">
 <link rel="up" href="../sf_gamma.html" title="Gamma Functions">
 <link rel="prev" href="gamma_ratios.html" title="Ratios of Gamma Functions">
 <link rel="next" href="igamma_inv.html" title="Incomplete Gamma Function Inverses">
@@ -37,26 +37,26 @@
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">gamma_p</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">gamma_p</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">gamma_p</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">gamma_q</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">gamma_q</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">gamma_q</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">tgamma_lower</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">tgamma_lower</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">tgamma_lower</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 
 <span class="special">}}</span> <span class="comment">// namespaces</span>
 </pre>
@@ -68,7 +68,7 @@
         There are four <a href="http://mathworld.wolfram.com/IncompleteGammaFunction.html" target="_top">incomplete
         gamma functions</a>: two are normalised versions (also known as <span class="emphasis"><em>regularized</em></span>
         incomplete gamma functions) that return values in the range [0, 1], and two
-        are non-normalised and return values in the range [0, &#915;(a)]. Users interested
+        are non-normalised and return values in the range [0, Γ(a)]. Users interested
         in statistical applications should use the <a href="http://mathworld.wolfram.com/RegularizedGammaFunction.html" target="_top">normalised
         versions (<code class="computeroutput"><span class="identifier">gamma_p</span></code> and <code class="computeroutput"><span class="identifier">gamma_q</span></code>)</a>.
       </p>
@@ -77,9 +77,9 @@
         &gt;= 0</em></span>, otherwise they return the result of <a class="link" href="../error_handling.html#math_toolkit.error_handling.domain_error">domain_error</a>.
       </p>
 <p>
-        The final <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
+        The final <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
         be used to control the behaviour of the function: how it handles errors,
-        what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">policy
+        what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">policy
         documentation for more details</a>.
       </p>
 <p>
@@ -91,7 +91,7 @@
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">gamma_p</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">);</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Policy</span><span class="special">&gt;</span>
-<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">gamma_p</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">gamma_p</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 </pre>
 <p>
         Returns the normalised lower incomplete gamma function of a and z:
@@ -110,8 +110,8 @@
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">gamma_q</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">gamma_q</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">gamma_q</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 </pre>
 <p>
         Returns the normalised upper incomplete gamma function of a and z:
@@ -130,8 +130,8 @@
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">tgamma_lower</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">tgamma_lower</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">tgamma_lower</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 </pre>
 <p>
         Returns the full (non-normalised) lower incomplete gamma function of a and
@@ -144,8 +144,8 @@
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
 <a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
-<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;21.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<a class="link" href="../result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter 21. Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 </pre>
 <p>
         Returns the full (non-normalised) upper incomplete gamma function of a and
@@ -181,7 +181,7 @@
         All values are in units of epsilon.
       </p>
 <div class="table">
-<a name="math_toolkit.sf_gamma.igamma.table_gamma_p"></a><p class="title"><b>Table&#160;8.9.&#160;Error rates for gamma_p</b></p>
+<a name="math_toolkit.sf_gamma.igamma.table_gamma_p"></a><p class="title"><b>Table 8.9. Error rates for gamma_p</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for gamma_p">
 <colgroup>
 <col>
@@ -223,24 +223,24 @@
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0.955&#949; (Mean = 0.05&#949;)</span><br> <br>
-                  (<span class="emphasis"><em>GSL 2.1:</em></span> Max = 342&#949; (Mean = 45.8&#949;))<br> (<span class="emphasis"><em>Rmath
-                  3.2.3:</em></span> Max = 389&#949; (Mean = 44&#949;))
+                  <span class="blue">Max = 0.955ε (Mean = 0.05ε)</span><br> <br>
+                  (<span class="emphasis"><em>GSL 2.1:</em></span> Max = 342ε (Mean = 45.8ε))<br> (<span class="emphasis"><em>Rmath
+                  3.2.3:</em></span> Max = 389ε (Mean = 44ε))
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 41.6&#949; (Mean = 8.09&#949;)</span>
+                  <span class="blue">Max = 41.6ε (Mean = 8.09ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 239&#949; (Mean = 30.2&#949;)</span>
+                  <span class="blue">Max = 239ε (Mean = 30.2ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 35.1&#949; (Mean = 6.98&#949;)</span>
+                  <span class="blue">Max = 35.1ε (Mean = 6.98ε)</span>
                 </p>
               </td>
 </tr>
@@ -252,24 +252,24 @@
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0&#949; (Mean = 0&#949;)</span><br> <br> (<span class="emphasis"><em>GSL
-                  2.1:</em></span> Max = 4.82&#949; (Mean = 0.758&#949;))<br> (<span class="emphasis"><em>Rmath
-                  3.2.3:</em></span> Max = 1.01&#949; (Mean = 0.306&#949;))
+                  <span class="blue">Max = 0ε (Mean = 0ε)</span><br> <br> (<span class="emphasis"><em>GSL
+                  2.1:</em></span> Max = 4.82ε (Mean = 0.758ε))<br> (<span class="emphasis"><em>Rmath
+                  3.2.3:</em></span> Max = 1.01ε (Mean = 0.306ε))
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 2&#949; (Mean = 0.464&#949;)</span>
+                  <span class="blue">Max = 2ε (Mean = 0.464ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 2&#949; (Mean = 0.461&#949;)</span>
+                  <span class="blue">Max = 2ε (Mean = 0.461ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 1.54&#949; (Mean = 0.439&#949;)</span>
+                  <span class="blue">Max = 1.54ε (Mean = 0.439ε)</span>
                 </p>
               </td>
 </tr>
@@ -281,24 +281,24 @@
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0&#949; (Mean = 0&#949;)</span><br> <br> (<span class="emphasis"><em>GSL
-                  2.1:</em></span> Max = 1.02e+03&#949; (Mean = 105&#949;))<br> (<span class="emphasis"><em>Rmath
-                  3.2.3:</em></span> Max = 1.11e+03&#949; (Mean = 67.5&#949;))
+                  <span class="blue">Max = 0ε (Mean = 0ε)</span><br> <br> (<span class="emphasis"><em>GSL
+                  2.1:</em></span> Max = 1.02e+03ε (Mean = 105ε))<br> (<span class="emphasis"><em>Rmath
+                  3.2.3:</em></span> Max = 1.11e+03ε (Mean = 67.5ε))
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 3.08e+04&#949; (Mean = 1.86e+03&#949;)</span>
+                  <span class="blue">Max = 3.08e+04ε (Mean = 1.86e+03ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 3.02e+04&#949; (Mean = 1.91e+03&#949;)</span>
+                  <span class="blue">Max = 3.02e+04ε (Mean = 1.91e+03ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 243&#949; (Mean = 20.2&#949;)</span>
+                  <span class="blue">Max = 243ε (Mean = 20.2ε)</span>
                 </p>
               </td>
 </tr>
@@ -310,24 +310,24 @@
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0&#949; (Mean = 0&#949;)</span><br> <br> (<span class="emphasis"><em>GSL
-                  2.1:</em></span> Max = 128&#949; (Mean = 22.6&#949;))<br> (<span class="emphasis"><em>Rmath
-                  3.2.3:</em></span> Max = 66.2&#949; (Mean = 12.2&#949;))
+                  <span class="blue">Max = 0ε (Mean = 0ε)</span><br> <br> (<span class="emphasis"><em>GSL
+                  2.1:</em></span> Max = 128ε (Mean = 22.6ε))<br> (<span class="emphasis"><em>Rmath
+                  3.2.3:</em></span> Max = 66.2ε (Mean = 12.2ε))
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 11.8&#949; (Mean = 2.66&#949;)</span>
+                  <span class="blue">Max = 11.8ε (Mean = 2.66ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 71.6&#949; (Mean = 9.47&#949;)</span>
+                  <span class="blue">Max = 71.6ε (Mean = 9.47ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 13&#949; (Mean = 2.97&#949;)</span>
+                  <span class="blue">Max = 13ε (Mean = 2.97ε)</span>
                 </p>
               </td>
 </tr>
@@ -335,7 +335,7 @@
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="math_toolkit.sf_gamma.igamma.table_gamma_q"></a><p class="title"><b>Table&#160;8.10.&#160;Error rates for gamma_q</b></p>
+<a name="math_toolkit.sf_gamma.igamma.table_gamma_q"></a><p class="title"><b>Table 8.10. Error rates for gamma_q</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for gamma_q">
 <colgroup>
 <col>
@@ -377,24 +377,24 @@
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0.927&#949; (Mean = 0.035&#949;)</span><br> <br>
-                  (<span class="emphasis"><em>GSL 2.1:</em></span> Max = 201&#949; (Mean = 13.5&#949;))<br> (<span class="emphasis"><em>Rmath
-                  3.2.3:</em></span> Max = 131&#949; (Mean = 12.7&#949;))
+                  <span class="blue">Max = 0.927ε (Mean = 0.035ε)</span><br> <br>
+                  (<span class="emphasis"><em>GSL 2.1:</em></span> Max = 201ε (Mean = 13.5ε))<br> (<span class="emphasis"><em>Rmath
+                  3.2.3:</em></span> Max = 131ε (Mean = 12.7ε))
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 32.3&#949; (Mean = 6.61&#949;)</span>
+                  <span class="blue">Max = 32.3ε (Mean = 6.61ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 199&#949; (Mean = 26.6&#949;)</span>
+                  <span class="blue">Max = 199ε (Mean = 26.6ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 23.7&#949; (Mean = 4&#949;)</span>
+                  <span class="blue">Max = 23.7ε (Mean = 4ε)</span>
                 </p>
               </td>
 </tr>
@@ -406,24 +406,24 @@
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0&#949; (Mean = 0&#949;)</span><br> <br> (<span class="emphasis"><em>GSL
-                  2.1:</em></span> <span class="red">Max = 1.38e+10&#949; (Mean = 1.05e+09&#949;))</span><br>
-                  (<span class="emphasis"><em>Rmath 3.2.3:</em></span> Max = 65.6&#949; (Mean = 11&#949;))
+                  <span class="blue">Max = 0ε (Mean = 0ε)</span><br> <br> (<span class="emphasis"><em>GSL
+                  2.1:</em></span> <span class="red">Max = 1.38e+10ε (Mean = 1.05e+09ε))</span><br>
+                  (<span class="emphasis"><em>Rmath 3.2.3:</em></span> Max = 65.6ε (Mean = 11ε))
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 2.45&#949; (Mean = 0.885&#949;)</span>
+                  <span class="blue">Max = 2.45ε (Mean = 0.885ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 2.45&#949; (Mean = 0.819&#949;)</span>
+                  <span class="blue">Max = 2.45ε (Mean = 0.819ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 2.26&#949; (Mean = 0.74&#949;)</span>
+                  <span class="blue">Max = 2.26ε (Mean = 0.74ε)</span>
                 </p>
               </td>
 </tr>
@@ -435,24 +435,24 @@
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0&#949; (Mean = 0&#949;)</span><br> <br> (<span class="emphasis"><em>GSL
-                  2.1:</em></span> Max = 2.71e+04&#949; (Mean = 2.16e+03&#949;))<br> (<span class="emphasis"><em>Rmath
-                  3.2.3:</em></span> Max = 1.02e+03&#949; (Mean = 62.7&#949;))
+                  <span class="blue">Max = 0ε (Mean = 0ε)</span><br> <br> (<span class="emphasis"><em>GSL
+                  2.1:</em></span> Max = 2.71e+04ε (Mean = 2.16e+03ε))<br> (<span class="emphasis"><em>Rmath
+                  3.2.3:</em></span> Max = 1.02e+03ε (Mean = 62.7ε))
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 6.82e+03&#949; (Mean = 414&#949;)</span>
+                  <span class="blue">Max = 6.82e+03ε (Mean = 414ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 1.15e+04&#949; (Mean = 733&#949;)</span>
+                  <span class="blue">Max = 1.15e+04ε (Mean = 733ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 469&#949; (Mean = 31.5&#949;)</span>
+                  <span class="blue">Max = 469ε (Mean = 31.5ε)</span>
                 </p>
               </td>
 </tr>
@@ -464,24 +464,24 @@
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0&#949; (Mean = 0&#949;)</span><br> <br> (<span class="emphasis"><em>GSL
-                  2.1:</em></span> Max = 118&#949; (Mean = 12.5&#949;))<br> (<span class="emphasis"><em>Rmath
-                  3.2.3:</em></span> Max = 138&#949; (Mean = 16.9&#949;))
+                  <span class="blue">Max = 0ε (Mean = 0ε)</span><br> <br> (<span class="emphasis"><em>GSL
+                  2.1:</em></span> Max = 118ε (Mean = 12.5ε))<br> (<span class="emphasis"><em>Rmath
+                  3.2.3:</em></span> Max = 138ε (Mean = 16.9ε))
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 11.1&#949; (Mean = 2.07&#949;)</span>
+                  <span class="blue">Max = 11.1ε (Mean = 2.07ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 54.7&#949; (Mean = 6.16&#949;)</span>
+                  <span class="blue">Max = 54.7ε (Mean = 6.16ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 8.72&#949; (Mean = 1.48&#949;)</span>
+                  <span class="blue">Max = 8.72ε (Mean = 1.48ε)</span>
                 </p>
               </td>
 </tr>
@@ -489,7 +489,7 @@
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="math_toolkit.sf_gamma.igamma.table_tgamma_lower"></a><p class="title"><b>Table&#160;8.11.&#160;Error rates for tgamma_lower</b></p>
+<a name="math_toolkit.sf_gamma.igamma.table_tgamma_lower"></a><p class="title"><b>Table 8.11. Error rates for tgamma_lower</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for tgamma_lower">
 <colgroup>
 <col>
@@ -531,23 +531,23 @@
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0.833&#949; (Mean = 0.0315&#949;)</span><br>
-                  <br> (<span class="emphasis"><em>GSL 2.1:</em></span> Max = 0.833&#949; (Mean = 0.0315&#949;))
+                  <span class="blue">Max = 0.833ε (Mean = 0.0315ε)</span><br>
+                  <br> (<span class="emphasis"><em>GSL 2.1:</em></span> Max = 0.833ε (Mean = 0.0315ε))
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 6.79&#949; (Mean = 1.46&#949;)</span>
+                  <span class="blue">Max = 6.79ε (Mean = 1.46ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 363&#949; (Mean = 63.8&#949;)</span>
+                  <span class="blue">Max = 363ε (Mean = 63.8ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 5.62&#949; (Mean = 1.49&#949;)</span>
+                  <span class="blue">Max = 5.62ε (Mean = 1.49ε)</span>
                 </p>
               </td>
 </tr>
@@ -559,23 +559,23 @@
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0&#949; (Mean = 0&#949;)</span><br> <br> (<span class="emphasis"><em>GSL
-                  2.1:</em></span> Max = 0&#949; (Mean = 0&#949;))
+                  <span class="blue">Max = 0ε (Mean = 0ε)</span><br> <br> (<span class="emphasis"><em>GSL
+                  2.1:</em></span> Max = 0ε (Mean = 0ε))
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 1.97&#949; (Mean = 0.555&#949;)</span>
+                  <span class="blue">Max = 1.97ε (Mean = 0.555ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 1.97&#949; (Mean = 0.558&#949;)</span>
+                  <span class="blue">Max = 1.97ε (Mean = 0.558ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 1.57&#949; (Mean = 0.525&#949;)</span>
+                  <span class="blue">Max = 1.57ε (Mean = 0.525ε)</span>
                 </p>
               </td>
 </tr>
@@ -587,23 +587,23 @@
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0&#949; (Mean = 0&#949;)</span><br> <br> (<span class="emphasis"><em>GSL
-                  2.1:</em></span> Max = 0&#949; (Mean = 0&#949;))
+                  <span class="blue">Max = 0ε (Mean = 0ε)</span><br> <br> (<span class="emphasis"><em>GSL
+                  2.1:</em></span> Max = 0ε (Mean = 0ε))
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 4.83&#949; (Mean = 1.15&#949;)</span>
+                  <span class="blue">Max = 4.83ε (Mean = 1.15ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 84.7&#949; (Mean = 17.5&#949;)</span>
+                  <span class="blue">Max = 84.7ε (Mean = 17.5ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 2.69&#949; (Mean = 0.849&#949;)</span>
+                  <span class="blue">Max = 2.69ε (Mean = 0.849ε)</span>
                 </p>
               </td>
 </tr>
@@ -611,7 +611,7 @@
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="math_toolkit.sf_gamma.igamma.table_tgamma_incomplete_"></a><p class="title"><b>Table&#160;8.12.&#160;Error rates for tgamma (incomplete)</b></p>
+<a name="math_toolkit.sf_gamma.igamma.table_tgamma_incomplete_"></a><p class="title"><b>Table 8.12. Error rates for tgamma (incomplete)</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for tgamma (incomplete)">
 <colgroup>
 <col>
@@ -653,23 +653,23 @@
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0&#949; (Mean = 0&#949;)</span><br> <br> (<span class="emphasis"><em>GSL
-                  2.1:</em></span> Max = 200&#949; (Mean = 13.3&#949;))
+                  <span class="blue">Max = 0ε (Mean = 0ε)</span><br> <br> (<span class="emphasis"><em>GSL
+                  2.1:</em></span> Max = 200ε (Mean = 13.3ε))
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 8.47&#949; (Mean = 1.9&#949;)</span>
+                  <span class="blue">Max = 8.47ε (Mean = 1.9ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 412&#949; (Mean = 95.5&#949;)</span>
+                  <span class="blue">Max = 412ε (Mean = 95.5ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 8.14&#949; (Mean = 1.76&#949;)</span>
+                  <span class="blue">Max = 8.14ε (Mean = 1.76ε)</span>
                 </p>
               </td>
 </tr>
@@ -681,24 +681,24 @@
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0.753&#949; (Mean = 0.0474&#949;)</span><br>
+                  <span class="blue">Max = 0.753ε (Mean = 0.0474ε)</span><br>
                   <br> (<span class="emphasis"><em>GSL 2.1:</em></span> <span class="red">Max =
-                  1.38e+10&#949; (Mean = 1.05e+09&#949;))</span>
+                  1.38e+10ε (Mean = 1.05e+09ε))</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 2.31&#949; (Mean = 0.775&#949;)</span>
+                  <span class="blue">Max = 2.31ε (Mean = 0.775ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 2.13&#949; (Mean = 0.717&#949;)</span>
+                  <span class="blue">Max = 2.13ε (Mean = 0.717ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 2.53&#949; (Mean = 0.66&#949;)</span>
+                  <span class="blue">Max = 2.53ε (Mean = 0.66ε)</span>
                 </p>
               </td>
 </tr>
@@ -710,23 +710,23 @@
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0&#949; (Mean = 0&#949;)</span><br> <br> (<span class="emphasis"><em>GSL
-                  2.1:</em></span> Max = 117&#949; (Mean = 12.5&#949;))
+                  <span class="blue">Max = 0ε (Mean = 0ε)</span><br> <br> (<span class="emphasis"><em>GSL
+                  2.1:</em></span> Max = 117ε (Mean = 12.5ε))
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 5.52&#949; (Mean = 1.48&#949;)</span>
+                  <span class="blue">Max = 5.52ε (Mean = 1.48ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 79.6&#949; (Mean = 20.9&#949;)</span>
+                  <span class="blue">Max = 79.6ε (Mean = 20.9ε)</span>
                 </p>
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 5.16&#949; (Mean = 1.33&#949;)</span>
+                  <span class="blue">Max = 5.16ε (Mean = 1.33ε)</span>
                 </p>
               </td>
 </tr>
@@ -789,7 +789,7 @@
 
         </p></blockquote></div>
 <p>
-        Or by subtraction of the upper integral from either &#915;(a) or 1 when <span class="emphasis"><em>x
+        Or by subtraction of the upper integral from either Γ(a) or 1 when <span class="emphasis"><em>x
         - (1</em></span>(3x)) &gt; a and x &gt; 1.1/.
       </p>
 <p>
@@ -804,7 +804,7 @@
         </p></blockquote></div>
 <p>
         When <span class="emphasis"><em>(x &gt; 1.1)</em></span> or by subtraction of the lower integral
-        from either &#915;(a) or 1 when <span class="emphasis"><em>x - (1</em></span>(3x)) &lt; a/.
+        from either Γ(a) or 1 when <span class="emphasis"><em>x - (1</em></span>(3x)) &lt; a/.
       </p>
 <p>
         For <span class="emphasis"><em>x &lt; 1.1</em></span> computation of the upper integral is
@@ -999,11 +999,10 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2019 Nikhar
-      Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos,
-      Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Matthew Pulver, Johan
-      R&#229;de, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg,
-      Daryle Walker and Xiaogang Zhang<p>
+<td align="right"><div class="copyright-footer">Copyright © 2006-2020 Nikhar Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher
+      Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Evan Miller, Jeremy Murphy,
+      Matthew Pulver, Johan Råde, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson,
+      Thijs van den Berg, Daryle Walker and Xiaogang Zhang<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>
