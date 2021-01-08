@@ -65,7 +65,7 @@ void test_divergent()
 {
     auto g = Divergent<Real>();
     Real x = -cohen_acceleration(g);
-    CHECK_ULP_CLOSE(log(pi<Real>()/2)/2, x, 80);
+    CHECK_ULP_CLOSE(log(pi<Real>()/2)/2, x, 135);
 }
 
 int main()
