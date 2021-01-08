@@ -1,15 +1,64 @@
 #include <Eigen/Core>
-#include <boost/math/differentiation/autodiff_eigen.hpp>
+#include <Eigen/Dense>
 
 #include "test_autodiff.hpp"
 
+namespace Eigen {
+template <typename RealType, size_t Order>
+struct NumTraits<boost::math::differentiation::autodiff_v1::detail::
+                     template fvar<RealType, Order>> : NumTraits<RealType> {
+  using fvar =
+      boost::math::differentiation::autodiff_v1::detail::template fvar<RealType,
+                                                                       Order>;
+
+  enum {
+    RequireInitialization = 1,
+    ReadCost = 1,
+    AddCost = 16,
+    MulCost = 16,
+  };
+};
+
+#define BOOST_AUTODIFF_EIGEN_SCALAR_TRAITS(A)                                 \
+  template <class RealType, size_t Order, typename BinaryOp>                  \
+  struct ScalarBinaryOpTraits<boost::math::differentiation::autodiff_v1::     \
+                                  detail::template fvar<RealType, Order>,     \
+                              A, BinaryOp> {                                  \
+    typedef boost::math::differentiation::autodiff_v1::detail::template fvar< \
+        RealType, Order>                                                      \
+        ReturnType;                                                           \
+  };                                                                          \
+  template <class RealType, size_t Order, typename BinaryOp>                  \
+  struct ScalarBinaryOpTraits<A,                                              \
+                              boost::math::differentiation::autodiff_v1::     \
+                                  detail::template fvar<RealType, Order>,     \
+                              BinaryOp> {                                     \
+    typedef boost::math::differentiation::autodiff_v1::detail::template fvar< \
+        RealType, Order>                                                      \
+        ReturnType;                                                           \
+  };
+
+BOOST_AUTODIFF_EIGEN_SCALAR_TRAITS(float);
+BOOST_AUTODIFF_EIGEN_SCALAR_TRAITS(double);
+BOOST_AUTODIFF_EIGEN_SCALAR_TRAITS(long double);
+BOOST_AUTODIFF_EIGEN_SCALAR_TRAITS(short);
+BOOST_AUTODIFF_EIGEN_SCALAR_TRAITS(unsigned short);
+BOOST_AUTODIFF_EIGEN_SCALAR_TRAITS(int);
+BOOST_AUTODIFF_EIGEN_SCALAR_TRAITS(unsigned int);
+BOOST_AUTODIFF_EIGEN_SCALAR_TRAITS(long);
+BOOST_AUTODIFF_EIGEN_SCALAR_TRAITS(unsigned long);
+
+}  // namespace Eigen
+
 BOOST_AUTO_TEST_SUITE(test_autodiff_9)
+
+using boost::math::differentiation::autodiff_v1::detail::fvar;
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(eigen_init, T, all_float_types) {
   constexpr int size = 5;
 
   constexpr std::size_t n = 5;
-  typedef typename fvar<T, n> fTn;
+  typedef fvar<T, n> fTn;
   Eigen::Matrix<fTn, size, 1> x;
   x[0] = fTn(1.5);
   x[1] = make_fvar<T, n - 1>(2.5);
@@ -18,19 +67,19 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(eigen_init, T, all_float_types) {
   x[4] = 5.5;
 
   constexpr std::size_t m = 2;
-  typedef typename fvar<T, n> fTm;
+  typedef fvar<T, m> fTm;
   Eigen::Matrix<fTm, size, 1> y;
-  y = x.template cast<fTn>();
+  y = x.template cast<fTm>();
   BOOST_CHECK_EQUAL(x[0].derivative(0), y[0].derivative(0));
   BOOST_CHECK_EQUAL(x[1].derivative(0), y[1].derivative(0));
   BOOST_CHECK_EQUAL(x[2].derivative(0), y[2].derivative(0));
   BOOST_CHECK_EQUAL(x[3].derivative(0), y[3].derivative(0));
   BOOST_CHECK_EQUAL(x[4].derivative(0), y[4].derivative(0));
 
-  constexpr std::size_t p = 3;
-  typedef typename fvar<T, p> fTp;
-  Eigen::Matrix<fTp, 1, size> z =
-      Eigen::Matrix<fTn, size, 1>::Random().transpose().template cast<fTp>();
+  // constexpr std::size_t p = 3;
+  // typedef fvar<T, p> fTp;
+  // Eigen::Matrix<fTp, 1, size> z =
+  //     Eigen::Matrix<fTn, size, 1>::Random().transpose().template cast<fTp>();
 }
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(eigen_general, T, all_float_types) {
@@ -40,23 +89,23 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(eigen_general, T, all_float_types) {
   using std::pow;
   using std::sin;
 
-  constexpr int dim = 3;
+  constexpr int dim = 4;
   constexpr std::size_t n = 2;
   constexpr double p = 3.456;
 
-  typedef typename fvar<T, n> fTn;
+  typedef fvar<T, n> fTn;
   Eigen::Matrix<fTn, dim, 1> x;
-  x[0] = -1;
-  x[1] = 0;
-  x[2] = 1;
-  x[3] = 5;
+  x[0] = make_fvar<T, n>(-1);
+  x[1] = make_fvar<T, n>(0);
+  x[2] = make_fvar<T, n>(1);
+  x[3] = make_fvar<T, n>(5);
 
   Eigen::Matrix<fTn, dim, 1> y1, y2, y3, y4, y5;
-  y1 = sin(x);
-  y2 = cos(x);
-  y3 = exp(x);
-  y4 = pow(x, p);
-  y5 = log(x);
+  y1 = x.array().sin();
+  y2 = x.array().cos();
+  y3 = x.array().exp();
+  y4 = x.array().pow(p);
+  y5 = x.array().log();
 
   // Check sin
   BOOST_CHECK_EQUAL(y1[0].derivative(0), sin(x[0].derivative(0)));
@@ -100,39 +149,37 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(eigen_general, T, all_float_types) {
   BOOST_CHECK_EQUAL(y3[2].derivative(2), exp(x[2].derivative(0)));
   BOOST_CHECK_EQUAL(y3[3].derivative(2), exp(x[3].derivative(0)));
 
-  // Check pow
-  BOOST_CHECK_EQUAL(y4[0].derivative(0), pow(x[0].derivative(0), p));
-  BOOST_CHECK_EQUAL(y4[1].derivative(0), pow(x[1].derivative(0), p));
-  BOOST_CHECK_EQUAL(y4[2].derivative(0), pow(x[2].derivative(0), p));
-  BOOST_CHECK_EQUAL(y4[3].derivative(0), pow(x[3].derivative(0), p));
-  BOOST_CHECK_EQUAL(y4[0].derivative(1), p * pow(x[0].derivative(0), p - 1));
-  BOOST_CHECK_EQUAL(y4[1].derivative(1), p * pow(x[1].derivative(0), p - 1));
-  BOOST_CHECK_EQUAL(y4[2].derivative(1), p * pow(x[2].derivative(0), p - 1));
-  BOOST_CHECK_EQUAL(y4[3].derivative(1), p * pow(x[3].derivative(0), p - 1));
-  BOOST_CHECK_EQUAL(y4[0].derivative(2),
-                    (p - 1) * p * pow(x[0].derivative(0), p - 2));
-  BOOST_CHECK_EQUAL(y4[1].derivative(2),
-                    (p - 1) * p * pow(x[1].derivative(0), p - 2));
-  BOOST_CHECK_EQUAL(y4[2].derivative(2),
-                    (p - 1) * p * pow(x[2].derivative(0), p - 2));
-  BOOST_CHECK_EQUAL(y4[3].derivative(2),
-                    (p - 1) * p * pow(x[3].derivative(0), p - 2));
+  // Check pow (without negative or zero)
+  T powTol = 1e-4;
+  BOOST_CHECK_CLOSE(y4[2].derivative(0), pow(x[2].derivative(0), p), powTol);
+  BOOST_CHECK_CLOSE(y4[3].derivative(0), pow(x[3].derivative(0), p), powTol);
+  BOOST_CHECK_CLOSE(y4[2].derivative(1), p * pow(x[2].derivative(0), p - 1),
+                    powTol);
+  BOOST_CHECK_CLOSE(y4[3].derivative(1), p * pow(x[3].derivative(0), p - 1),
+                    powTol);
+  BOOST_CHECK_CLOSE(y4[2].derivative(2),
+                    (p - 1) * p * pow(x[2].derivative(0), p - 2), powTol);
+  BOOST_CHECK_CLOSE(y4[3].derivative(2),
+                    (p - 1) * p * pow(x[3].derivative(0), p - 2), powTol);
 
-  // Check log
-  BOOST_CHECK_EQUAL(y5[2].derivative(0), log(x[0].derivative(0));
-  BOOST_CHECK_EQUAL(y5[3].derivative(0), log(x[3].derivative(0));
-  BOOST_CHECK_EQUAL(y5[2].derivative(1), 1/x[2].derivative(0));
-  BOOST_CHECK_EQUAL(y5[3].derivative(1), 1/x[3].derivative(0));
-  BOOST_CHECK_EQUAL(y5[2].derivative(2), -1/pow(x[2].derivative(0), 2));
-  BOOST_CHECK_EQUAL(y5[3].derivative(2), -1/pow(x[3].derivative(0), 2));
+  // Check log (without negative or zero)
+  T logTol = 1e-5;
+  BOOST_CHECK_CLOSE(y5[2].derivative(0), log(x[2].derivative(0)), logTol);
+  BOOST_CHECK_CLOSE(y5[3].derivative(0), log(x[3].derivative(0)), logTol);
+  BOOST_CHECK_CLOSE(y5[2].derivative(1), 1 / x[2].derivative(0), logTol);
+  BOOST_CHECK_CLOSE(y5[3].derivative(1), 1 / x[3].derivative(0), logTol);
+  BOOST_CHECK_CLOSE(y5[2].derivative(2), -1 / pow(x[2].derivative(0), 2),
+                    logTol);
+  BOOST_CHECK_CLOSE(y5[3].derivative(2), -1 / pow(x[3].derivative(0), 2),
+                    logTol);
 }
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(eigen_scalar, T, all_float_types) {
   constexpr int dim = 4;
   constexpr size_t n = 4;
 
-  typedef typename fvar<T, n> fTn;
-  fTn x = 4;
+  typedef fvar<T, n> fTn;
+  fTn x = make_fvar<T, n>(4);
   Eigen::Matrix<fTn, dim, 1> X;
   Eigen::Matrix<fTn, dim, 1> Z;
   Eigen::Matrix<fTn, dim, dim> I = Eigen::Matrix<fTn, dim, dim>::Identity();
@@ -170,8 +217,8 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(eigen_vector, T, all_float_types) {
   constexpr int dim = 3;
   constexpr size_t n = 4;
 
-  typedef typename fvar<T, n> fTn;
-  fTn x = 5;
+  typedef fvar<T, n> fTn;
+  fTn x = make_fvar<T, n>(5);
   T xD0 = x.derivative(0);
   Eigen::Matrix<fTn, dim, 1> X;
   X[0] = 1;
@@ -190,8 +237,10 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(eigen_vector, T, all_float_types) {
 
   Eigen::Matrix<fTn, dim, 1> Y = M * X;
 
+  T powTol = 1e-4;
+
   // Y[0] = 1 + 2*x + x*x*x
-  BOOST_CHECK_EQUAL(Y[0].derivative(0), 1 + 2 * xD0 + pow(xD0, 3));
+  BOOST_CHECK_CLOSE(Y[0].derivative(0), 1 + 2 * xD0 + pow(xD0, 3), powTol);
   BOOST_CHECK_EQUAL(Y[0].derivative(1), 2 + 3 * xD0 * xD0);
   BOOST_CHECK_EQUAL(Y[0].derivative(2), 6 * xD0);
   BOOST_CHECK_EQUAL(Y[0].derivative(3), 6);
@@ -200,30 +249,64 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(eigen_vector, T, all_float_types) {
   // Y[1] = 1/x + 4*x + 0
   BOOST_CHECK_EQUAL(Y[1].derivative(0), 1 / xD0 + 4 * xD0);
   BOOST_CHECK_EQUAL(Y[1].derivative(1), -1 / (xD0 * xD0) + 4);
-  BOOST_CHECK_EQUAL(Y[1].derivative(2), 2 / (pow(xD0, 3)));
-  BOOST_CHECK_EQUAL(Y[1].derivative(3), -6 / (pow(xD0, 3) * xD0));
-  BOOST_CHECK_EQUAL(Y[1].derivative(4), 24 / (pow(xD0, 3) * xD0 * xD0));
+  BOOST_CHECK_CLOSE(Y[1].derivative(2), 2 / (pow(xD0, 3)), powTol);
+  BOOST_CHECK_CLOSE(Y[1].derivative(3), -6 / (pow(xD0, 3) * xD0), powTol);
+  BOOST_CHECK_CLOSE(Y[1].derivative(4), 24 / (pow(xD0, 3) * xD0 * xD0), powTol);
 
   // Y[2] = 5 + x*sin(x) + x*x*cos(x*x)
   BOOST_CHECK_EQUAL(Y[2].derivative(0),
                     5 + xD0 * sin(xD0) + xD0 * xD0 * cos(xD0 * xD0));
-  BOOST_CHECK_EQUAL(Y[2].derivative(1), 2 * xD0 * cos(xD0 * xD0) -
-                                            2 * pow(xD0, 3) * sin(xD0 * xD0) +
-                                            sin(xD0) + xD0 * cos(xD0));
-  BOOST_CHECK_EQUAL(Y[2].derivative(2),
+  BOOST_CHECK_CLOSE(Y[2].derivative(1),
+                    2 * xD0 * cos(xD0 * xD0) -
+                        2 * pow(xD0, 3) * sin(xD0 * xD0) + sin(xD0) +
+                        xD0 * cos(xD0),
+                    powTol);
+  BOOST_CHECK_CLOSE(Y[2].derivative(2),
                     -xD0 * (10 * xD0 * sin(xD0 * xD0) + sin(xD0)) +
-                        (2 - 4 * pow(xD0, 4)) * cos(xD0 * xD0) + 2 * cos(xD0));
-  BOOST_CHECK_EQUAL(Y[2].derivative(3), -24 * xD0 * sin(xD0 * xD0) +
-                                            8 * pow(xD0, 5) * sin(xD0 * xD0) -
-                                            36 * pow(xD0, 3) * cos(xD0 * xD0) -
-                                            3 * sin(xD0) - xD0 * cos(xD0));
-  BOOST_CHECK_EQUAL(
+                        (2 - 4 * pow(xD0, 4)) * cos(xD0 * xD0) + 2 * cos(xD0),
+                    powTol);
+  BOOST_CHECK_CLOSE(
+      Y[2].derivative(3),
+      -24 * xD0 * sin(xD0 * xD0) + 8 * pow(xD0, 5) * sin(xD0 * xD0) -
+          36 * pow(xD0, 3) * cos(xD0 * xD0) - 3 * sin(xD0) - xD0 * cos(xD0),
+      powTol);
+  BOOST_CHECK_CLOSE(
       Y[2].derivative(4),
       -24 * sin(xD0 * xD0) + 112 * pow(xD0, 4) * sin(xD0 * xD0) +
           4 * (4 * pow(xD0, 4) - 39) * xD0 * xD0 * cos(xD0 * xD0) +
-          xD0 * sin(xD0) - 4 * cos(xD0));
+          xD0 * sin(xD0) - 4 * cos(xD0),
+      powTol);
 }
 
-// BOOST_AUTO_TEST_CASE_TEMPLATE(eigen_determinant, T, all_float_types) {
-//   constexpr int dim = 4;
-// }
+BOOST_AUTO_TEST_CASE_TEMPLATE(eigen_determinant, T, all_float_types) {
+  using std::cos;
+  using std::sin;
+  constexpr int dim = 4;
+  constexpr size_t n = 1;
+
+  typedef fvar<T, n> fTn;
+  fTn x = make_fvar<T, n>(3);
+  T xD0 = x.derivative(0);
+  Eigen::Matrix<fTn, dim, dim> M = 10 * Eigen::Matrix<fTn, dim, dim>::Random();
+  M(0, 3) = x;
+  M(1, 0) = 3 * x;
+  M(1, 2) = 1 / x;
+  M(2, 2) = x * x;
+  M(3, 1) = sin(x);
+  fTn y = M.determinant();
+
+  Eigen::Matrix<T, dim, dim> dMdx = Eigen::Matrix<T, dim, dim>::Zero();
+  dMdx(0, 3) = 1;
+  dMdx(1, 0) = 3;
+  dMdx(1, 2) = -1 / (xD0 * xD0);
+  dMdx(2, 2) = 2 * xD0;
+  dMdx(3, 1) = cos(xD0);
+
+  T detTol = 1e-3;
+
+  T ans = y.derivative(0) *
+          (M.inverse() * dMdx.template cast<fTn>()).trace().derivative(0);
+  BOOST_CHECK_CLOSE(y.derivative(1), ans, detTol);
+}
+
+BOOST_AUTO_TEST_SUITE_END()
