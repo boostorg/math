@@ -125,6 +125,7 @@ using get_type_at = typename type_at<RealType, Depth>::type;
 // https://www.boost.org/libs/math/doc/html/math_toolkit/real_concepts.html
 template <typename RealType, size_t Order>
 class fvar {
+ protected:
   std::array<RealType, Order + 1> v;
 
  public:
