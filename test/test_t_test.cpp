@@ -96,6 +96,22 @@ void test_agreement_with_mathematica()
 }
 
 template<typename Real>
+void test_two_sample_t()
+{
+    std::vector<Real> set_1 {301, 298, 295, 297, 304, 305, 309, 298, 291, 299, 293, 304};
+    std::vector<Real> set_2 {302, 309, 324, 313, 312, 310, 305, 298, 299, 300, 289, 294};
+
+    // https://www.statology.org/two-sample-t-test-calculator/
+    const double expected_statistic = -1.608761;
+    const double expected_pvalue = 0.121926;
+
+    auto [computed_statistic, computed_pvalue] = boost::math::statistics::two_sample_t_test(set_1, set_2);
+
+    CHECK_MOLLIFIED_CLOSE(expected_statistic, computed_statistic, 0.00001);
+    CHECK_MOLLIFIED_CLOSE(expected_pvalue, computed_pvalue, 0.00001);
+}
+
+template<typename Real>
 void test_paired_samples()
 {
     std::vector<Real> set_1 {301, 298, 295, 297, 304, 305, 309, 298, 291, 299, 293, 304};
@@ -120,6 +136,12 @@ int main()
     test_integer<int32_t>();
     test_integer<int64_t>();
     test_integer<uint32_t>();
+    test_two_sample_t<float>();
+    test_two_sample_t<double>();
+    test_two_sample_t<int>();
+    test_two_sample_t<int32_t>();
+    test_two_sample_t<int64_t>();
+    test_two_sample_t<uint32_t>();
     test_paired_samples<int>();
     test_paired_samples<int32_t>();
     test_paired_samples<int64_t>();

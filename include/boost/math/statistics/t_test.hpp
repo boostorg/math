@@ -51,6 +51,52 @@ ReturnType one_sample_t_test_impl(ForwardIterator begin, ForwardIterator end, ty
     return one_sample_t_test_impl<ReturnType>(mu, s_sq, Real(std::distance(begin, end)), Real(assumed_mean));
 }
 
+template<typename ReturnType, typename T, typename U = std::size_t>
+ReturnType two_sample_t_test_impl(T mean_1, T variance_1, U size_1, T mean_2, T variance_2, U size_2)
+{
+    using Real = typename std::tuple_element<0, ReturnType>::type;
+    using no_promote_policy = boost::math::policies::policy<boost::math::policies::promote_float<false>, boost::math::policies::promote_double<false>>;
+    using std::sqrt;
+
+    // TODO(mborland): Check if variance_1 > 2 * variance_2 or vice versa
+    // if so send to welch's t-test
+
+    Real dof = size_1 + size_2 - 2;
+    Real pooled_std_dev = sqrt(((size_1-1)*variance_1 + (size_2-1)*variance_2) / dof);
+    Real test_statistic = (mean_1-mean_2) / (pooled_std_dev*sqrt(1.0/static_cast<Real>(size_1) + 1.0/static_cast<Real>(size_2)));
+
+    auto student = boost::math::students_t_distribution<Real, no_promote_policy>(dof);
+    Real pvalue;
+    if (test_statistic > 0) 
+    {
+        pvalue = 2*boost::math::cdf<Real>(student, -test_statistic);;
+    }
+    else 
+    {
+        pvalue = 2*boost::math::cdf<Real>(student, test_statistic);
+    }
+
+    return std::make_pair(test_statistic, pvalue);
+}
+
+template<typename ReturnType, typename ForwardIterator>
+ReturnType two_sample_t_test_impl(ForwardIterator begin_1, ForwardIterator end_1, ForwardIterator begin_2, ForwardIterator end_2)
+{
+    using Real = typename std::tuple_element<0, ReturnType>::type;
+    auto n1 = std::distance(begin_1, end_1);
+    auto n2 = std::distance(begin_2, end_2);
+
+    ReturnType temp_1 = mean_and_sample_variance(begin_1, end_1);
+    Real mean_1 = std::get<0>(temp_1);
+    Real variance_1 = std::get<1>(temp_1);
+
+    ReturnType temp_2 = mean_and_sample_variance(begin_2, end_2);
+    Real mean_2 = std::get<0>(temp_2);
+    Real variance_2 = std::get<1>(temp_2);
+
+    return two_sample_t_test_impl<ReturnType>(mean_1, variance_1, n1, mean_2, variance_2, n2);
+}
+
 template<typename ReturnType, typename ForwardIterator>
 ReturnType paired_samples_t_test_impl(ForwardIterator begin_1, ForwardIterator end_1, ForwardIterator begin_2, ForwardIterator end_2)
 {
@@ -134,6 +180,32 @@ template<typename Container, typename Real = typename Container::value_type,
 inline auto one_sample_t_test(Container const & v, Real assumed_mean) -> std::pair<Real, Real>
 {
     return detail::one_sample_t_test_impl<std::pair<Real, Real>>(std::begin(v), std::end(v), assumed_mean);
+}
+
+template<typename ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type, 
+         typename std::enable_if<std::is_integral<Real>::value, bool>::type = true>
+inline auto two_sample_t_test(ForwardIterator begin_1, ForwardIterator end_1, ForwardIterator begin_2, ForwardIterator end_2) -> std::pair<double, double>
+{
+    return detail::two_sample_t_test_impl<std::pair<double, double>>(begin_1, end_1, begin_2, end_2);
+}
+
+template<typename ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type, 
+         typename std::enable_if<!std::is_integral<Real>::value, bool>::type = true>
+inline auto two_sample_t_test(ForwardIterator begin_1, ForwardIterator end_1, ForwardIterator begin_2, ForwardIterator end_2) -> std::pair<Real, Real>
+{
+    return detail::two_sample_t_test_impl<std::pair<Real, Real>>(begin_1, end_1, begin_2, end_2);
+}
+
+template<typename Container, typename Real = typename Container::value_type, typename std::enable_if<std::is_integral<Real>::value, bool>::type = true>
+inline auto two_sample_t_test(Container const & u, Container const & v) -> std::pair<double, double>
+{
+    return detail::two_sample_t_test_impl<std::pair<double, double>>(std::begin(u), std::end(u), std::begin(v), std::end(v));
+}
+
+template<typename Container, typename Real = typename Container::value_type, typename std::enable_if<!std::is_integral<Real>::value, bool>::type = true>
+inline auto two_sample_t_test(Container const & u, Container const & v) -> std::pair<Real, Real>
+{
+    return detail::two_sample_t_test_impl<std::pair<Real, Real>>(std::begin(u), std::end(u), std::begin(v), std::end(v));
 }
 
 template<typename ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type, 
