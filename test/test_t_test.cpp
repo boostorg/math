@@ -95,6 +95,21 @@ void test_agreement_with_mathematica()
     }
 }
 
+template<typename Real>
+void test_paired_samples()
+{
+    std::vector<Real> set_1 {301, 298, 295, 297, 304, 305, 309, 298, 291, 299, 293, 304};
+    std::vector<Real> set_2 {302, 309, 324, 313, 312, 310, 305, 298, 299, 300, 289, 294};
+
+    // https://www.statology.org/paired-samples-t-test-calculator/
+    const double expected_statistic = -1.689533;
+    const double expected_pvalue = 0.119226;
+
+    auto [computed_statistic, computed_pvalue] = boost::math::statistics::paired_samples_t_test(set_1, set_2);
+
+    CHECK_MOLLIFIED_CLOSE(expected_statistic, computed_statistic, 0.000001);
+    CHECK_MOLLIFIED_CLOSE(expected_pvalue, computed_pvalue, 0.000001);
+}
 
 int main()
 {
@@ -105,5 +120,11 @@ int main()
     test_integer<int32_t>();
     test_integer<int64_t>();
     test_integer<uint32_t>();
+    test_paired_samples<int>();
+    test_paired_samples<int32_t>();
+    test_paired_samples<int64_t>();
+    test_paired_samples<uint32_t>();
+    test_paired_samples<float>();
+    test_paired_samples<double>();
     return boost::math::test::report_errors();
 }
