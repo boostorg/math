@@ -51,15 +51,43 @@ ReturnType one_sample_t_test_impl(ForwardIterator begin, ForwardIterator end, ty
     return one_sample_t_test_impl<ReturnType>(mu, s_sq, Real(std::distance(begin, end)), Real(assumed_mean));
 }
 
+// https://en.wikipedia.org/wiki/Student%27s_t-test#Equal_or_unequal_sample_sizes,_unequal_variances_(sX1_%3E_2sX2_or_sX2_%3E_2sX1)
+template<typename ReturnType, typename T, typename U = std::size_t>
+ReturnType welchs_t_test_impl(T mean_1, T variance_1, U size_1, T mean_2, T variance_2, U size_2)
+{
+    using Real = typename std::tuple_element<0, ReturnType>::type;
+    using no_promote_policy = boost::math::policies::policy<boost::math::policies::promote_float<false>, boost::math::policies::promote_double<false>>;
+    using std::sqrt;
+
+    Real dof_num = (variance_1/size_1 + variance_2/size_2) * (variance_1/size_1 + variance_2/size_2);
+    Real dof_denom = ((variance_1/size_1) * (variance_1/size_1))/(size_1 - 1) +
+                     ((variance_2/size_2) * (variance_2/size_2))/(size_2 - 1);
+    Real dof = dof_num / dof_denom;
+
+    Real s_estimator = sqrt((variance_1/size_1) + (variance_2/size_2));
+
+    Real test_statistic = (static_cast<Real>(mean_1) - static_cast<Real>(mean_2))/s_estimator;
+    auto student = boost::math::students_t_distribution<Real, no_promote_policy>(dof);
+    Real pvalue;
+    if (test_statistic > 0) 
+    {
+        pvalue = 2*boost::math::cdf<Real>(student, -test_statistic);;
+    }
+    else 
+    {
+        pvalue = 2*boost::math::cdf<Real>(student, test_statistic);
+    }
+
+    return std::make_pair(test_statistic, pvalue);
+}
+
+// https://en.wikipedia.org/wiki/Student%27s_t-test#Equal_or_unequal_sample_sizes,_similar_variances_(1/2_%3C_sX1/sX2_%3C_2)
 template<typename ReturnType, typename T, typename U = std::size_t>
 ReturnType two_sample_t_test_impl(T mean_1, T variance_1, U size_1, T mean_2, T variance_2, U size_2)
 {
     using Real = typename std::tuple_element<0, ReturnType>::type;
     using no_promote_policy = boost::math::policies::policy<boost::math::policies::promote_float<false>, boost::math::policies::promote_double<false>>;
     using std::sqrt;
-
-    // TODO(mborland): Check if variance_1 > 2 * variance_2 or vice versa
-    // if so send to welch's t-test
 
     Real dof = size_1 + size_2 - 2;
     Real pooled_std_dev = sqrt(((size_1-1)*variance_1 + (size_2-1)*variance_2) / dof);
@@ -83,20 +111,31 @@ template<typename ReturnType, typename ForwardIterator>
 ReturnType two_sample_t_test_impl(ForwardIterator begin_1, ForwardIterator end_1, ForwardIterator begin_2, ForwardIterator end_2)
 {
     using Real = typename std::tuple_element<0, ReturnType>::type;
+    using std::sqrt;
     auto n1 = std::distance(begin_1, end_1);
     auto n2 = std::distance(begin_2, end_2);
 
     ReturnType temp_1 = mean_and_sample_variance(begin_1, end_1);
     Real mean_1 = std::get<0>(temp_1);
     Real variance_1 = std::get<1>(temp_1);
+    Real std_dev_1 = sqrt(variance_1);
 
     ReturnType temp_2 = mean_and_sample_variance(begin_2, end_2);
     Real mean_2 = std::get<0>(temp_2);
     Real variance_2 = std::get<1>(temp_2);
-
-    return two_sample_t_test_impl<ReturnType>(mean_1, variance_1, n1, mean_2, variance_2, n2);
+    Real std_dev_2 = sqrt(variance_2);
+    
+    if(std_dev_1 > 2 * std_dev_2 || std_dev_2 > 2 * std_dev_1)
+    {
+        return welchs_t_test_impl<ReturnType>(mean_1, variance_1, n1, mean_2, variance_2, n2);
+    }
+    else
+    {
+        return two_sample_t_test_impl<ReturnType>(mean_1, variance_1, n1, mean_2, variance_2, n2);
+    }
 }
 
+// https://en.wikipedia.org/wiki/Student%27s_t-test#Dependent_t-test_for_paired_samples
 template<typename ReturnType, typename ForwardIterator>
 ReturnType paired_samples_t_test_impl(ForwardIterator begin_1, ForwardIterator end_1, ForwardIterator begin_2, ForwardIterator end_2)
 {

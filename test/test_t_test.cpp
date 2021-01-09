@@ -112,6 +112,22 @@ void test_two_sample_t()
 }
 
 template<typename Real>
+void test_welch()
+{
+    std::vector<Real> set_1 {14, 15, 15, 15, 16, 18, 22, 23, 24, 25, 25};
+    std::vector<Real> set_2 {10, 12, 14, 15, 18, 22, 24, 27, 31, 33, 34, 34, 34};
+
+    // https://www.statology.org/welchs-t-test/
+    const double expected_statistic = -1.5379;
+    const double expected_pvalue = 0.1413;
+
+    auto [computed_statistic, computed_pvalue] = boost::math::statistics::two_sample_t_test(set_1, set_2);
+
+    CHECK_MOLLIFIED_CLOSE(expected_statistic, computed_statistic, 0.0001);
+    CHECK_MOLLIFIED_CLOSE(expected_pvalue, computed_pvalue, 0.0001);
+}
+
+template<typename Real>
 void test_paired_samples()
 {
     std::vector<Real> set_1 {301, 298, 295, 297, 304, 305, 309, 298, 291, 299, 293, 304};
@@ -142,6 +158,12 @@ int main()
     test_two_sample_t<int32_t>();
     test_two_sample_t<int64_t>();
     test_two_sample_t<uint32_t>();
+    test_welch<float>();
+    test_welch<double>();
+    test_welch<int>();
+    test_welch<int32_t>();
+    test_welch<int64_t>();
+    test_welch<uint32_t>();
     test_paired_samples<int>();
     test_paired_samples<int32_t>();
     test_paired_samples<int64_t>();
