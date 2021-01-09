@@ -1,5 +1,6 @@
 /*
  * Copyright Nick Thompson, 2019
+ * Copyright Matt Borland, 2021
  * Use, modification and distribution are subject to the
  * Boost Software License, Version 1.0. (See accompanying file
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -114,8 +115,8 @@ void test_integer_constant()
 {
     std::vector<Z> x(128);
     std::vector<Z> y(128);
-    Z expected_c0 = 7;
-    Z expected_c1 = 0;
+    double expected_c0 = 7;
+    double expected_c1 = 0;
     for (size_t i = 0; i < x.size(); ++i) {
         x[i] = i;
         y[i] = expected_c0 + expected_c1*x[i];
