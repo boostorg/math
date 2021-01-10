@@ -50,6 +50,7 @@ ReturnType one_sample_t_test_impl(ForwardIterator begin, ForwardIterator end, ty
     Real s_sq = std::get<1>(temp);
     return one_sample_t_test_impl<ReturnType>(mu, s_sq, Real(std::distance(begin, end)), Real(assumed_mean));
 }
+} // namespace detail
 
 // https://en.wikipedia.org/wiki/Student%27s_t-test#Equal_or_unequal_sample_sizes,_unequal_variances_(sX1_%3E_2sX2_or_sX2_%3E_2sX1)
 template<typename ReturnType, typename T, typename U = std::size_t>
