@@ -19,8 +19,8 @@
 
 namespace boost { namespace math { namespace statistics { namespace detail {
 
-template<typename ReturnType, typename T, typename U>
-ReturnType one_sample_t_test_impl(T sample_mean, T sample_variance, U num_samples, T assumed_mean) 
+template<typename ReturnType, typename T>
+ReturnType one_sample_t_test_impl(T sample_mean, T sample_variance, T num_samples, T assumed_mean) 
 {
     using Real = typename std::tuple_element<0, ReturnType>::type;
     using std::sqrt;
@@ -50,11 +50,10 @@ ReturnType one_sample_t_test_impl(ForwardIterator begin, ForwardIterator end, ty
     Real s_sq = std::get<1>(temp);
     return one_sample_t_test_impl<ReturnType>(mu, s_sq, Real(std::distance(begin, end)), Real(assumed_mean));
 }
-} // namespace detail
 
 // https://en.wikipedia.org/wiki/Student%27s_t-test#Equal_or_unequal_sample_sizes,_unequal_variances_(sX1_%3E_2sX2_or_sX2_%3E_2sX1)
-template<typename ReturnType, typename T, typename U = std::size_t>
-ReturnType welchs_t_test_impl(T mean_1, T variance_1, U size_1, T mean_2, T variance_2, U size_2)
+template<typename ReturnType, typename T>
+ReturnType welchs_t_test_impl(T mean_1, T variance_1, T size_1, T mean_2, T variance_2, T size_2)
 {
     using Real = typename std::tuple_element<0, ReturnType>::type;
     using no_promote_policy = boost::math::policies::policy<boost::math::policies::promote_float<false>, boost::math::policies::promote_double<false>>;
@@ -83,8 +82,8 @@ ReturnType welchs_t_test_impl(T mean_1, T variance_1, U size_1, T mean_2, T vari
 }
 
 // https://en.wikipedia.org/wiki/Student%27s_t-test#Equal_or_unequal_sample_sizes,_similar_variances_(1/2_%3C_sX1/sX2_%3C_2)
-template<typename ReturnType, typename T, typename U = std::size_t>
-ReturnType two_sample_t_test_impl(T mean_1, T variance_1, U size_1, T mean_2, T variance_2, U size_2)
+template<typename ReturnType, typename T>
+ReturnType two_sample_t_test_impl(T mean_1, T variance_1, T size_1, T mean_2, T variance_2, T size_2)
 {
     using Real = typename std::tuple_element<0, ReturnType>::type;
     using no_promote_policy = boost::math::policies::policy<boost::math::policies::promote_float<false>, boost::math::policies::promote_double<false>>;
@@ -128,11 +127,11 @@ ReturnType two_sample_t_test_impl(ForwardIterator begin_1, ForwardIterator end_1
     
     if(std_dev_1 > 2 * std_dev_2 || std_dev_2 > 2 * std_dev_1)
     {
-        return welchs_t_test_impl<ReturnType>(mean_1, variance_1, n1, mean_2, variance_2, n2);
+        return welchs_t_test_impl<ReturnType>(mean_1, variance_1, Real(n1), mean_2, variance_2, Real(n2));
     }
     else
     {
-        return two_sample_t_test_impl<ReturnType>(mean_1, variance_1, n1, mean_2, variance_2, n2);
+        return two_sample_t_test_impl<ReturnType>(mean_1, variance_1, Real(n1), mean_2, variance_2, Real(n2));
     }
 }
 
