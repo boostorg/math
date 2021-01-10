@@ -1,5 +1,6 @@
 /*
  * Copyright Nick Thompson, 2019
+ * Copyright Matt Borland, 2021
  * Use, modification and distribution are subject to the
  * Boost Software License, Version 1.0. (See accompanying file
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -31,6 +32,15 @@ void test_exact_mean()
 
     CHECK_MOLLIFIED_CLOSE(Real(0), computed_statistic, 10*std::numeric_limits<Real>::epsilon());
     CHECK_ULP_CLOSE(Real(1), computed_pvalue, 9);
+}
+
+template<typename Z>
+void test_integer()
+{
+    // https://www.wolframalpha.com/input/?i=t+test
+    auto [computed_statistic, computed_pvalue] = boost::math::statistics::one_sample_t_test(Z(12), Z(5*5), Z(25), Z(10));
+    CHECK_MOLLIFIED_CLOSE(2.0, computed_statistic, 10*std::numeric_limits<double>::epsilon());
+    CHECK_MOLLIFIED_CLOSE(0.02847*2, computed_pvalue, 0.00001);
 }
 
 void test_agreement_with_mathematica()
@@ -91,5 +101,9 @@ int main()
     test_agreement_with_mathematica();
     test_exact_mean<float>();
     test_exact_mean<double>();
+    test_integer<int>();
+    test_integer<int32_t>();
+    test_integer<int64_t>();
+    test_integer<uint32_t>();
     return boost::math::test::report_errors();
 }
