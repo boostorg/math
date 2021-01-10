@@ -19,8 +19,8 @@
 
 namespace boost { namespace math { namespace statistics { namespace detail {
 
-template<typename ReturnType, typename T>
-ReturnType one_sample_t_test_impl(T sample_mean, T sample_variance, T num_samples, T assumed_mean) 
+template<typename ReturnType, typename T, typename U>
+ReturnType one_sample_t_test_impl(T sample_mean, T sample_variance, U num_samples, T assumed_mean) 
 {
     using Real = typename std::tuple_element<0, ReturnType>::type;
     using std::sqrt;
