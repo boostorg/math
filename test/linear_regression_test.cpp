@@ -241,7 +241,7 @@ void test_scaling_relations()
     Real c1_ = std::get<1>(temp);
     Real Rsquared_ = std::get<2>(temp);
 
-    CHECK_ULP_CLOSE(c0, c0_, 50);
+    CHECK_ULP_CLOSE(c0, c0_, 70);
     CHECK_ULP_CLOSE(c1, c1_*lambda, 50);
     CHECK_ULP_CLOSE(Rsquared, Rsquared_, 50);
 
