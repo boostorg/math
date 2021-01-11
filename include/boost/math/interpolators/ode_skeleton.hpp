@@ -9,7 +9,11 @@
 // such as RK45. There are many very sophisticated ODE skeleton interpolators,
 // but many require the RHS of v' = f to be available during interpolation,
 // or require the intermediate values produced by the ODE stepper in a given step (which are discarded).
-// This particular interpolator is designed for a case I personally encountered:
+// These interpolators are generally used for *event* localization, for example,
+// when a ball traveling in a fluid strikes the ground.
+// The stepper has to be paranoid and try to identify the event using it's interpolator as the solution proceeds.
+
+// This particular interpolator is designed for a different use case I personally encountered:
 // Where v' = f is solved on an HPC system, and f is unavailable during visualization and analysis.
 // I hope it is useful for more scenarios, but obviously if you have f available or have knowledge of how
 // the solution is produced you can exploit it.
@@ -19,8 +23,8 @@
 // The computation of the curvature, torsion, and Frenet frame is not difficult once three derivatives are provided,
 // but nonetheless to avoid tedium I have exposed those quantities.
 
-#ifndef BOOST_MATH_INTERPOLATORS_ODE_SKELETON_HPP
-#define BOOST_MATH_INTERPOLATORS_ODE_SKELETON_HPP
+#ifndef BOOST_MATH_INTERPOLATORS_ODE_SKELETON_INTERPOLATOR_HPP
+#define BOOST_MATH_INTERPOLATORS_ODE_SKELETON_INTERPOLATOR_HPP
 #include <memory>
 #include <cmath>
 #include <boost/math/interpolators/detail/ode_skeleton_detail.hpp>
