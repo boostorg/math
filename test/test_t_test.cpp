@@ -11,6 +11,9 @@
 #include <random>
 #include <boost/math/statistics/univariate_statistics.hpp>
 #include <boost/math/statistics/t_test.hpp>
+#include <boost/multiprecision/cpp_bin_float.hpp>
+
+using quad = boost::multiprecision::cpp_bin_float_quad;
 
 template<typename Real>
 void test_exact_mean()
@@ -21,6 +24,24 @@ void test_exact_mean()
     // NumberForm[TTest[data3, Mean[data3], "PValue"], 16]
     std::mt19937 gen{5125122};
     std::normal_distribution<Real> dis{0,3};
+    std::vector<Real> v(1024);
+    for (auto & x : v) {
+      x = dis(gen);
+    }
+
+    Real mu = boost::math::statistics::mean(v);
+
+    auto [computed_statistic, computed_pvalue] = boost::math::statistics::one_sample_t_test(v, mu);
+
+    CHECK_MOLLIFIED_CLOSE(Real(0), computed_statistic, 10*std::numeric_limits<Real>::epsilon());
+    CHECK_ULP_CLOSE(Real(1), computed_pvalue, 9);
+}
+
+template<typename Real>
+void test_multiprecision_exact_mean()
+{
+    std::mt19937 gen{5125122};
+    std::normal_distribution<long double> dis{0,3};
     std::vector<Real> v(1024);
     for (auto & x : v) {
       x = dis(gen);
@@ -107,8 +128,12 @@ void test_two_sample_t()
 
     auto [computed_statistic, computed_pvalue] = boost::math::statistics::two_sample_t_test(set_1, set_2);
 
-    CHECK_MOLLIFIED_CLOSE(expected_statistic, computed_statistic, 0.00001);
-    CHECK_MOLLIFIED_CLOSE(expected_pvalue, computed_pvalue, 0.00001);
+    CHECK_MOLLIFIED_CLOSE(expected_statistic, computed_statistic, 0.000005);
+    CHECK_MOLLIFIED_CLOSE(expected_pvalue, computed_pvalue, 0.000005);
+
+    auto [computed_statistic_2, computed_pvalue_2] = boost::math::statistics::two_sample_t_test(set_1, set_1);
+    CHECK_ULP_CLOSE(Real(0), computed_statistic_2, 5);
+    CHECK_ULP_CLOSE(Real(1), computed_pvalue_2, 5);
 }
 
 template<typename Real>
@@ -123,8 +148,34 @@ void test_welch()
 
     auto [computed_statistic, computed_pvalue] = boost::math::statistics::two_sample_t_test(set_1, set_2);
 
-    CHECK_MOLLIFIED_CLOSE(expected_statistic, computed_statistic, 0.0001);
-    CHECK_MOLLIFIED_CLOSE(expected_pvalue, computed_pvalue, 0.0001);
+    CHECK_MOLLIFIED_CLOSE(expected_statistic, computed_statistic, 0.00005);
+    CHECK_MOLLIFIED_CLOSE(expected_pvalue, computed_pvalue, 0.00005);
+
+    auto [computed_statistic_2, computed_pvalue_2] = 
+        boost::math::statistics::detail::welchs_t_test_impl<std::pair<Real, Real>>(Real(10.0), Real(0.5), Real(20), Real(10.0), Real(0.5), Real(20));
+    CHECK_ULP_CLOSE(Real(0), computed_statistic_2, 5);
+    CHECK_ULP_CLOSE(Real(1), computed_pvalue_2, 5);
+}
+
+template<typename Z>
+void test_integer_welch()
+{
+    std::vector<Z> set_1 {14, 15, 15, 15, 16, 18, 22, 23, 24, 25, 25};
+    std::vector<Z> set_2 {10, 12, 14, 15, 18, 22, 24, 27, 31, 33, 34, 34, 34};
+
+    // https://www.statology.org/welchs-t-test/
+    const double expected_statistic = -1.5379;
+    const double expected_pvalue = 0.1413;
+
+    auto [computed_statistic, computed_pvalue] = boost::math::statistics::two_sample_t_test(set_1, set_2);
+
+    CHECK_MOLLIFIED_CLOSE(expected_statistic, computed_statistic, 0.00005);
+    CHECK_MOLLIFIED_CLOSE(expected_pvalue, computed_pvalue, 0.00005);
+
+    auto [computed_statistic_2, computed_pvalue_2] = 
+        boost::math::statistics::detail::welchs_t_test_impl<std::pair<double, double>>(10.0, 0.5, 20.0, 10.0, 0.5, 20.0);
+    CHECK_ULP_CLOSE(0.0, computed_statistic_2, 5);
+    CHECK_ULP_CLOSE(1.0, computed_pvalue_2, 5);
 }
 
 template<typename Real>
@@ -139,36 +190,47 @@ void test_paired_samples()
 
     auto [computed_statistic, computed_pvalue] = boost::math::statistics::paired_samples_t_test(set_1, set_2);
 
-    CHECK_MOLLIFIED_CLOSE(expected_statistic, computed_statistic, 0.000001);
-    CHECK_MOLLIFIED_CLOSE(expected_pvalue, computed_pvalue, 0.000001);
+    CHECK_MOLLIFIED_CLOSE(expected_statistic, computed_statistic, 0.0000005);
+    CHECK_MOLLIFIED_CLOSE(expected_pvalue, computed_pvalue, 0.0000005);
 }
 
 int main()
 {
     test_agreement_with_mathematica();
+
     test_exact_mean<float>();
     test_exact_mean<double>();
+    test_multiprecision_exact_mean<quad>();
+    
     test_integer<int>();
     test_integer<int32_t>();
     test_integer<int64_t>();
     test_integer<uint32_t>();
+    
     test_two_sample_t<float>();
     test_two_sample_t<double>();
+    test_two_sample_t<quad>();
     test_two_sample_t<int>();
     test_two_sample_t<int32_t>();
     test_two_sample_t<int64_t>();
     test_two_sample_t<uint32_t>();
+    
     test_welch<float>();
     test_welch<double>();
-    test_welch<int>();
-    test_welch<int32_t>();
-    test_welch<int64_t>();
-    test_welch<uint32_t>();
+    test_welch<quad>();
+    
+    test_integer_welch<int>();
+    test_integer_welch<int32_t>();
+    test_integer_welch<int64_t>();
+    test_integer_welch<uint32_t>();
+    
+    test_paired_samples<float>();
+    test_paired_samples<double>();
+    test_paired_samples<quad>();
     test_paired_samples<int>();
     test_paired_samples<int32_t>();
     test_paired_samples<int64_t>();
     test_paired_samples<uint32_t>();
-    test_paired_samples<float>();
-    test_paired_samples<double>();
+
     return boost::math::test::report_errors();
 }
