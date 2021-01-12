@@ -142,31 +142,29 @@ ReturnType paired_samples_t_test_impl(ForwardIterator begin_1, ForwardIterator e
     using Real = typename std::tuple_element<0, ReturnType>::type;
     using no_promote_policy = boost::math::policies::policy<boost::math::policies::promote_float<false>, boost::math::policies::promote_double<false>>;
     using std::sqrt;
-
-    auto n1 = std::distance(begin_1, end_1);
-    auto n2 = std::distance(begin_2, end_2);
-
-    if(n1 != n2)
-    {
-        throw std::domain_error("Both sets must have the same number of values.");
-    }
     
-    std::vector<Real> delta(n1);
+    std::vector<Real> delta;
     ForwardIterator it_1 = begin_1;
     ForwardIterator it_2 = begin_2;
-    std::size_t pos = 0;
-    while(it_1 != end_1)
+    std::size_t n = 0;
+    while(it_1 != end_1 && it_2 != end_2)
     {
-        delta[pos++] = static_cast<Real>(*it_1++) - static_cast<Real>(*it_2++);
+        delta.emplace_back(static_cast<Real>(*it_1++) - static_cast<Real>(*it_2++));
+        ++n;
+    }
+
+    if(it_1 != end_1 || it_2 != end_2)
+    {
+        throw std::domain_error("Both sets must have the same number of values.");
     }
 
     std::pair<Real, Real> temp = mean_and_sample_variance(delta.begin(), delta.end());
     Real delta_mean = std::get<0>(temp);
     Real delta_std_dev = sqrt(std::get<1>(temp));
 
-    Real test_statistic = delta_mean/(delta_std_dev/sqrt(n1));
+    Real test_statistic = delta_mean/(delta_std_dev/sqrt(n));
 
-    auto student = boost::math::students_t_distribution<Real, no_promote_policy>(n1 - 1);
+    auto student = boost::math::students_t_distribution<Real, no_promote_policy>(n - 1);
     Real pvalue;
     if (test_statistic > 0) 
     {

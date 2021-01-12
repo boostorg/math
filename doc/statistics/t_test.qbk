@@ -127,6 +127,8 @@ auto [t, p] = boost::math::statistics::two_sample_t_test(u, v);
 
 /Nota bene:/ The sample sizes for the two sets of data do not need to be equal.
 
+/Nota bene:/ std::distance is used in the implementation leading to lower performance with ForwardIterator than RandomAccessIterator.
+
 [heading Dependent /t/-test for paired samples]
 
 This test is used when the samples are dependent such as when one sample has been tested twice, or when two samples have been paired.
