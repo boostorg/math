@@ -8,7 +8,7 @@
 // An ODE skeleton is a list of samples {t_i, v_, dvdt_i} produced by an ODE stepper,
 // such as RK45. There are many very sophisticated ODE skeleton interpolators,
 // but many require the RHS of v' = f to be available during interpolation,
-// or require the intermediate values produced by the ODE stepper in a given step (which are discarded).
+// or require the stages in a given step (which are discarded).
 // These interpolators are generally used for *event* localization, for example,
 // when a ball traveling in a fluid strikes the ground.
 // The stepper has to be paranoid and try to identify the event using it's interpolator as the solution proceeds.
@@ -17,6 +17,12 @@
 // Where v' = f is solved on an HPC system, and f is unavailable during visualization and analysis.
 // I hope it is useful for more scenarios, but obviously if you have f available or have knowledge of how
 // the solution is produced you can exploit it.
+
+// One might wonder what this interpolator actually is.
+// It is PQHIP, which is the quintic version of PCHIP.
+// It is discussed in Corless, A Graduate Introduction to Numerical Methods, Exercise 8.40.
+// In addition, an implementation in matlab is found here:
+// http://www.nfillion.com/coderepository/Graduate_Introduction_to_Numerical_Methods/pqhip.m
 
 // This ODE interpolator is thrice continuously differentiable, as is required to analyze the differential geometry of the curve,
 // e.g., extracting the curvature and the torsion of the curve, as well as the Frenet frame.
