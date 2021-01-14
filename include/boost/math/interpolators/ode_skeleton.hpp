@@ -22,7 +22,7 @@
 // It is PQHIP, which is the quintic version of PCHIP.
 // It is discussed in Corless, A Graduate Introduction to Numerical Methods, Exercise 8.40.
 // In addition, an implementation in matlab is found here:
-// http://www.nfillion.com/coderepository/Graduate_Introduction_to_Numerical_Methods/pqhip.m
+// https://web.archive.org/web/20210113143506/http://www.nfillion.com/coderepository/Graduate_Introduction_to_Numerical_Methods/pqhip.m
 
 // This ODE interpolator is thrice continuously differentiable, as is required to analyze the differential geometry of the curve,
 // e.g., extracting the curvature and the torsion of the curve, as well as the Frenet frame.
