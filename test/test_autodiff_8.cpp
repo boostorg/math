@@ -8,8 +8,6 @@
 
 BOOST_AUTO_TEST_SUITE(test_autodiff_8)
 
-#if __clang_major__ > 5 || __GNUC__ > 5 || defined(_MSC_VER)
-
 BOOST_AUTO_TEST_CASE_TEMPLATE(hermite_hpp, T, all_float_types) {
   using test_constants = test_constants_t<T>;
   static constexpr auto m = test_constants::order;
