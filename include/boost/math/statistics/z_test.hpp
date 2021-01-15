@@ -22,7 +22,7 @@ ReturnType one_sample_z_test_impl(T sample_mean, T sample_variance, T sample_siz
     using std::sqrt;
     using no_promote_policy = boost::math::policies::policy<boost::math::policies::promote_float<false>, boost::math::policies::promote_double<false>>;
 
-    Real test_statistic = (sample_mean + assumed_mean) / (sample_variance / sqrt(sample_size));
+    Real test_statistic = (sample_mean - assumed_mean) / (sample_variance / sqrt(sample_size));
     auto z = boost::math::normal_distribution<Real, no_promote_policy>(sample_size - 1);
     Real pvalue;
     if(test_statistic > 0)
@@ -37,9 +37,10 @@ ReturnType one_sample_z_test_impl(T sample_mean, T sample_variance, T sample_siz
     return std::make_pair(test_statistic, pvalue);
 }
 
-template<typename ReturnType, typename ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type>
-ReturnType one_sample_z_test_impl(ForwardIterator begin, ForwardIterator end, Real assumed_mean)
+template<typename ReturnType, typename ForwardIterator>
+ReturnType one_sample_z_test_impl(ForwardIterator begin, ForwardIterator end, typename std::iterator_traits<ForwardIterator>::value_type assumed_mean) 
 {
+    using Real = typename std::tuple_element<0, ReturnType>::type;
     std::pair<Real, Real> temp = mean_and_sample_variance(begin, end);
     Real mu = std::get<0>(temp);
     Real s_sq = std::get<1>(temp);
@@ -79,12 +80,10 @@ ReturnType two_sample_z_test_impl(ForwardIterator begin_1, ForwardIterator end_1
     ReturnType temp_1 = mean_and_sample_variance(begin_1, end_1);
     Real mean_1 = std::get<0>(temp_1);
     Real variance_1 = std::get<1>(temp_1);
-    Real std_dev_1 = sqrt(variance_1);
 
     ReturnType temp_2 = mean_and_sample_variance(begin_2, end_2);
     Real mean_2 = std::get<0>(temp_2);
     Real variance_2 = std::get<1>(temp_2);
-    Real std_dev_2 = sqrt(variance_2);
 
     return two_sample_z_test_impl<ReturnType>(mean_1, variance_1, Real(n1), mean_2, variance_2, Real(n2));
 }
