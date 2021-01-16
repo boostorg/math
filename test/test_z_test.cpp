@@ -23,7 +23,7 @@ void test_one_sample_z()
     auto [computed_statistic_2, computed_pvalue_2] = boost::math::statistics::one_sample_z_test(Real(10), Real(2), Real(100), Real(5));
     CHECK_ULP_CLOSE(Real(25), computed_statistic_2, 5);
 
-    auto [computed_statistic_3, computed_pvalue_3] = boost::math::statistics::one_sample_z_test(Real(1.0/2.0), Real(10), Real(100), Real(1.0/3.0));
+    auto [computed_statistic_3, computed_pvalue_3] = boost::math::statistics::one_sample_z_test(Real(1)/2, Real(10), Real(100), Real(1)/3);
     CHECK_ULP_CLOSE(Real(1)/6, computed_statistic_3, 5);
 }
 
