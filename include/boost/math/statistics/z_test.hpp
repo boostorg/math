@@ -87,6 +87,7 @@ ReturnType two_sample_z_test_impl(ForwardIterator begin_1, ForwardIterator end_1
 
     return two_sample_z_test_impl<ReturnType>(mean_1, variance_1, Real(n1), mean_2, variance_2, Real(n2));
 }
+
 } // detail
 
 template<typename Real, typename std::enable_if<std::is_integral<Real>::value, bool>::type = true>
