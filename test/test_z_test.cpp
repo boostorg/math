@@ -30,11 +30,11 @@ template<typename Z>
 void test_integer_one_sample_z()
 {
     auto [computed_statistic, computed_pvalue] = boost::math::statistics::one_sample_z_test(Z(10), Z(2), Z(100), Z(10));
-    CHECK_ULP_CLOSE(Z(0), computed_statistic, 5);
-    CHECK_MOLLIFIED_CLOSE(Z(0), computed_pvalue, 1e-22);
+    CHECK_ULP_CLOSE(0, computed_statistic, 5);
+    CHECK_MOLLIFIED_CLOSE(0, computed_pvalue, 1e-22);
 
     auto [computed_statistic_2, computed_pvalue_2] = boost::math::statistics::one_sample_z_test(Z(10), Z(2), Z(100), Z(5));
-    CHECK_ULP_CLOSE(Z(25), computed_statistic_2, 5);
+    CHECK_ULP_CLOSE(25, computed_statistic_2, 5);
 }
 
 template<typename Real>
@@ -55,8 +55,8 @@ void test_integer_two_sample_z()
     std::vector<Z> set_2 {2,3,4,5,6};
 
     auto [computed_statistic, computed_pvalue] = boost::math::statistics::two_sample_z_test(set_2, set_1);
-    CHECK_ULP_CLOSE(Z(1), computed_statistic, 5);
-    CHECK_MOLLIFIED_CLOSE(Z(0), computed_pvalue, 1e-22);
+    CHECK_ULP_CLOSE(1, computed_statistic, 5);
+    CHECK_MOLLIFIED_CLOSE(0, computed_pvalue, 1e-22);
 }
 
 int main()
