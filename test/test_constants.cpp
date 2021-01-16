@@ -818,7 +818,7 @@ void test_laplace_limit()
    using boost::math::constants::laplace_limit;
    Real ll = laplace_limit<Real>();
    Real tmp = sqrt(1+ll*ll);
-   CHECK_ULP_CLOSE(ll*exp(tmp), 1 + tmp, 1);
+   CHECK_ULP_CLOSE(ll*exp(tmp), 1 + tmp, 2);
 }
 
 #endif
