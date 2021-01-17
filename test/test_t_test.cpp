@@ -171,12 +171,12 @@ void test_integer_welch()
     auto [computed_statistic, computed_pvalue] = 
         boost::math::statistics::detail::welchs_t_test_impl<std::pair<double, double>>(10.0, 4.0, 20.0, 5.0, 1.0, 20.0);
     
-    CHECK_ULP_CLOSE(Z(10), computed_statistic, 5);
+    CHECK_ULP_CLOSE(10.0, computed_statistic, 5);
     
     auto [computed_statistic_2, computed_pvalue_2] = 
         boost::math::statistics::detail::welchs_t_test_impl<std::pair<double, double>>(10.0, 0.5, 20.0, 10.0, 0.5, 20.0);
-    CHECK_ULP_CLOSE(Z(0), computed_statistic_2, 5);
-    CHECK_ULP_CLOSE(Z(1), computed_pvalue_2, 5);
+    CHECK_ULP_CLOSE(0.0, computed_statistic_2, 5);
+    CHECK_ULP_CLOSE(1.0, computed_pvalue_2, 5);
 }
 
 template<typename Real>
