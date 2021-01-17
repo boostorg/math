@@ -51,8 +51,8 @@ void test_multiprecision_exact_mean()
 
     auto [computed_statistic, computed_pvalue] = boost::math::statistics::one_sample_t_test(v, mu);
 
-    CHECK_MOLLIFIED_CLOSE(Real(0), computed_statistic, 10*std::numeric_limits<Real>::epsilon());
-    CHECK_ULP_CLOSE(Real(1), computed_pvalue, 9);
+    CHECK_MOLLIFIED_CLOSE(Real(0), computed_statistic, 15*std::numeric_limits<Real>::epsilon());
+    CHECK_ULP_CLOSE(Real(1), computed_pvalue, 25);
 }
 
 template<typename Z>
@@ -190,6 +190,17 @@ void test_paired_samples()
     CHECK_ULP_CLOSE(Real(3), computed_statistic, 5);
 }
 
+template<typename Z>
+void test_integer_paired_samples()
+{
+    std::vector<Z> set_1 {2,4};
+    std::vector<Z> set_2 {1,2};
+
+    auto [computed_statistic, computed_pvalue] = boost::math::statistics::paired_samples_t_test(set_1, set_2);
+
+    CHECK_ULP_CLOSE(3.0, computed_statistic, 5);
+}
+
 int main()
 {
     test_agreement_with_mathematica();
@@ -223,10 +234,10 @@ int main()
     
     test_paired_samples<float>();
     test_paired_samples<double>();
-    test_paired_samples<int>();
-    test_paired_samples<int32_t>();
-    test_paired_samples<int64_t>();
-    test_paired_samples<uint32_t>();
+    test_integer_paired_samples<int>();
+    test_integer_paired_samples<int32_t>();
+    test_integer_paired_samples<int64_t>();
+    test_integer_paired_samples<uint32_t>();
 
     return boost::math::test::report_errors();
 }
