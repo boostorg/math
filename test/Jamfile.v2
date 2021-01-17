@@ -979,6 +979,7 @@ test-suite misc :
    [ run anderson_darling_test.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
    [ run ljung_box_test.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
    [ run test_t_test.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
+   [ run test_z_test.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
    [ run bivariate_statistics_test.cpp : : : [ requires cxx11_hdr_forward_list cxx11_hdr_tuple cxx11_sfinae_expr ] ]
    [ run linear_regression_test.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
    [ run test_runs_test.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
