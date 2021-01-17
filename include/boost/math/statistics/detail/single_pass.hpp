@@ -77,61 +77,6 @@ ReturnType variance_sequential_impl(ForwardIterator first, ForwardIterator last)
     return std::make_tuple(M, M2, Q/(k-1));
 }
 
-// Global thread counter required for recursive calls. Reset before each parallel method is called
-static std::atomic<unsigned> thread_counter {1};
-
-// http://i.stanford.edu/pub/cstr/reports/cs/tr/79/773/CS-TR-79-773.pdf
-// http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.214.8508&rep=rep1&type=pdf
-template<typename ReturnType, typename ForwardIterator>
-ReturnType parallel_variance_impl(ForwardIterator first, ForwardIterator last)
-{
-    static unsigned num_threads {std::thread::hardware_concurrency()};
-
-    const auto elements {std::distance(first, last)};
-    const auto range_a {std::floor(elements / 2)};
-    const auto range_b {elements - range_a};
-
-    thread_counter.fetch_add(2);
-    auto future_a {std::async(std::launch::async, [first, range_a]() -> ReturnType
-    {
-        if(thread_counter + 2 <= num_threads && range_a > 10)
-        {
-            return parallel_variance_impl<ReturnType>(first, std::next(first, range_a));
-        }
-        else
-        {
-            return variance_sequential_impl<ReturnType>(first, std::next(first, range_a));
-        }
-    })};
-    auto future_b {std::async(std::launch::async, [first, last, range_a]() -> ReturnType
-    {
-        if(thread_counter + 2 <= num_threads && range_a > 10)
-        {
-            return parallel_variance_impl<ReturnType>(std::next(first, range_a), last);
-        }
-        else
-        {
-            return variance_sequential_impl<ReturnType>(std::next(first, range_a), last);
-        }
-    })};
-
-    const auto results_a {future_a.get()};
-    const auto results_b {future_b.get()};
-    thread_counter.fetch_sub(2);
-
-    const auto mean_a = std::get<0>(results_a);
-    const auto M2_a = std::get<1>(results_a);
-    const auto mean_b = std::get<0>(results_b);
-    const auto M2_b = std::get<1>(results_b);
-
-    const auto n_ab = elements;
-    const auto delta = mean_b - mean_a;
-    const auto mean_ab = (range_a * mean_a + range_b * mean_b) / n_ab;
-    const auto M2_ab = M2_a + M2_b + delta * delta * (range_a * range_b / n_ab);
-
-    return std::make_tuple(mean_ab, M2_ab, n_ab);
-}
-
 // https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance#Higher-order_statistics
 template<typename ReturnType, typename ForwardIterator>
 ReturnType first_four_moments_sequential_impl(ForwardIterator first, ForwardIterator last)
@@ -158,6 +103,8 @@ ReturnType first_four_moments_sequential_impl(ForwardIterator first, ForwardIter
     return std::make_tuple(M1, M2, M3, M4, n-1);
 }
 
+// TODO(mborland): replace recursive decomposition with linear
+// TODO(mborland): refactor name to match the rest e.g. first_four_moments_parallel_impl
 template<typename ReturnType, typename ForwardIterator>
 ReturnType parallel_first_four_moments_impl(ForwardIterator first, ForwardIterator last)
 {
@@ -168,9 +115,9 @@ ReturnType parallel_first_four_moments_impl(ForwardIterator first, ForwardIterat
     const auto elements {std::distance(first, last)};
     const auto range_a {std::floor(elements / 2)};
     const auto range_b {elements - range_a};
-
+    static std::atomic<unsigned> thread_counter {};
     thread_counter.fetch_add(2);
-    auto future_a {std::async(std::launch::async, [first, range_a]() -> ReturnType
+    auto future_a {std::async(std::launch::async | std::launch::deferred, [first, range_a]() -> ReturnType
     {
         if(thread_counter + 2 <= num_threads && range_a > 10)
         {
@@ -181,7 +128,7 @@ ReturnType parallel_first_four_moments_impl(ForwardIterator first, ForwardIterat
             return first_four_moments_sequential_impl<ReturnType>(first, std::next(first, range_a));
         }
     })};
-    auto future_b {std::async(std::launch::async, [first, last, range_a]() -> ReturnType
+    auto future_b {std::async(std::launch::async | std::launch::deferred, [first, last, range_a]() -> ReturnType
     {
         if(thread_counter + 2 <= num_threads && range_a > 10)
         {
