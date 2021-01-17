@@ -12,7 +12,7 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ```
 #include <boost/math/statistics/z_test.hpp>
 
-namespace boost::math::statistics {
+namespace boost { namespace math { namespace statistics {
 
 template<typename Real>
 std::pair<Real, Real> one_sample_z_test(Real sample_mean, Real sample_variance, Real num_samples, Real assumed_mean);
@@ -35,7 +35,7 @@ std::pair<Real, Real> paired_samples_z_test(ForwardIterator begin_1, ForwardIter
 template<typename Container, typename Real = typename Container::value_type>
 std::pair<Real, Real> paired_samples_z_test(Container const & u, Container const & v);
 
-}
+}}}
 ```
 
 [heading Background]
@@ -85,8 +85,9 @@ The test statistic is the first element of the pair, and the /p/-value is the se
 
 A two-sample /z/-test determines if the means of two sets of data have a statistically significant difference from each other.
 
-[$../graphs/two_sample_z_statistic.gif]
-
+[$../graphs/two_sample_z_statistic.svg]
+[/Z=\frac{(\bar{X_1}-\bar{X_2})-(\mu_1-\mu_2)}{\sqrt{\sigma_{\bar{X_1}}^2+\sigma_{\bar{X_2}}^2}} = 
+\frac{(\bar{X_1}-\bar{X_2})-(\mu_1-\mu_2)}{\sqrt{\frac{\sigma_1^2}{n_1}+\frac{\sigma_1^2}{n_2}}}]
 An example of usage is as follows:
 
 ```
