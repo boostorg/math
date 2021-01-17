@@ -251,5 +251,5 @@ jobs:
         run: config_info_travis
         working-directory: ../boost-root/libs/config/test
       - name: Test
-        run: ..\..\..\b2 -j3 --hash %ARGS% define=CI_SUPPRESS_KNOWN_ISSUES ${{ matrix.suite }} cxxflags="/bigobj"
+        run: ..\..\..\b2 -j3 --hash %ARGS% define=CI_SUPPRESS_KNOWN_ISSUES ${{ matrix.suite }}
         working-directory: ../boost-root/libs/math/test
