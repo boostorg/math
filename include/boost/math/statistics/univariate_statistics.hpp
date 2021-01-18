@@ -19,9 +19,9 @@
 #include <numeric>
 #include <list>
 
-#if (__cplusplus > 201700 || _MSVC_LANG > 201700) && defined __has_include
-#   if __has_include(<execution>)
-#       include <execution>
+#if (__cplusplus > 201700 || _MSVC_LANG > 201700) && defined __has_include && __has_include(<execution>)
+#include <execution>
+
 namespace boost::math::statistics {
 
 template<class ExecutionPolicy, class ForwardIterator>
@@ -414,18 +414,10 @@ inline auto gini_coefficient(ExecutionPolicy&& exec, RandomAccessIterator first,
 {
     using Real = typename std::iterator_traits<RandomAccessIterator>::value_type;
 
-    // C++20 enables constexpr std::is_sorted and compile time std::sort
-    #if __cplusplus > 201900 || _MSVC_LANG > 201900
-    if constexpr (!std::is_sorted(first, last))
-    {
-        std::sort(first, last);
-    }
-    #else
     if(!std::is_sorted(exec, first, last))
     {
         std::sort(exec, first, last);
     }
-    #endif
 
     if constexpr (std::is_same_v<std::remove_reference_t<decltype(exec)>, decltype(std::execution::seq)>)
     {
@@ -605,19 +597,6 @@ inline auto interquartile_range(RandomAccessContainer & v)
 template<class ExecutionPolicy, class ForwardIterator, class OutputIterator>
 inline OutputIterator mode(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last, OutputIterator output)
 {   
-    #if __cplusplus > 201900 || _MSVC_LANG > 201900
-    if constexpr (!std::is_sorted(first, last))
-    {
-        if constexpr (std::is_same_v<typename std::iterator_traits<ForwardIterator>::iterator_category(), std::random_access_iterator_tag>)
-        {
-            std::sort(first, last);
-        }
-        else
-        {
-            BOOST_ASSERT("Data must be sorted for sequential mode calculation");
-        }
-    }
-    #else
     if(!std::is_sorted(exec, first, last))
     {
         if constexpr (std::is_same_v<typename std::iterator_traits<ForwardIterator>::iterator_category(), std::random_access_iterator_tag>)
@@ -629,7 +608,6 @@ inline OutputIterator mode(ExecutionPolicy&& exec, ForwardIterator first, Forwar
             BOOST_ASSERT("Data must be sorted for sequential mode calculation");
         }
     }
-    #endif
 
     return detail::mode_impl(first, last, output);
 }
@@ -687,9 +665,11 @@ inline auto mode(Container & v)
 {
     return mode(std::execution::seq, std::begin(v), std::end(v));
 }
-}
-    #endif
+
+} // Namespace boost::math::statistics
+
 #else // Backwards compatible bindings for C++11
+
 namespace boost { namespace math { namespace statistics {
 
 template<bool B, class T = void>
