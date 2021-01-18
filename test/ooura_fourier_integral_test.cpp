@@ -295,7 +295,7 @@ void test_cos_integral2()
         for(Real omega = 1; omega < 5; ++omega) {
             auto [Is, err] = integrator.integrate(f, omega);
             Real exact = a/(a*a+omega*omega);
-            BOOST_CHECK_CLOSE_FRACTION(Is, exact, 10*tol);
+            BOOST_CHECK_CLOSE_FRACTION(Is, exact, 50*tol);
         }
     }
 }

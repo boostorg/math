@@ -165,6 +165,7 @@ void test_interpolation_condition()
 
 int main()
 {
+#if (__GNUC__ > 7) || defined(_MSC_VER) || defined(__clang__)
     test_constant<float>();
     test_linear<float>();
     test_interpolation_condition<float>();
@@ -181,6 +182,6 @@ int main()
     test_constant<float128>();
     test_linear<float128>();
 #endif
-
+#endif
     return boost::math::test::report_errors();
 }
