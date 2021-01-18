@@ -449,7 +449,6 @@ void test_quadratures()
 
 int main()
 {
-    #ifndef __MINGW32__ // bigobj CI failure with GCC cxxstd=17
     boost::hana::for_each(std::make_index_sequence<18>(), [&](auto i){
       test_quadratures<float, i+2>();
       test_quadratures<double, i+2>();
@@ -529,6 +528,5 @@ int main()
         test_daubechies_filters<float128, i+1>();
     });
     #endif
-    #endif // compiler guard
     return boost::math::test::report_errors();
 }
