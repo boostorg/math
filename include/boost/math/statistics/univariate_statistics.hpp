@@ -85,7 +85,7 @@ inline auto variance(ExecutionPolicy&& exec, ForwardIterator first, ForwardItera
         }
         else
         {
-            const auto results = detail::parallel_first_four_moments_impl<std::tuple<double, double, double, double, double>>(first, last);
+            const auto results = detail::first_four_moments_parallel_impl<std::tuple<double, double, double, double, double>>(first, last);
             return std::get<1>(results) / std::get<4>(results);
         }
     }
@@ -97,7 +97,7 @@ inline auto variance(ExecutionPolicy&& exec, ForwardIterator first, ForwardItera
         }
         else
         {
-            const auto results = detail::parallel_first_four_moments_impl<std::tuple<Real, Real, Real, Real, Real>>(first, last);
+            const auto results = detail::first_four_moments_parallel_impl<std::tuple<Real, Real, Real, Real, Real>>(first, last);
             return std::get<1>(results) / std::get<4>(results);
         }
     }
@@ -161,7 +161,7 @@ inline auto mean_and_sample_variance(ExecutionPolicy&& exec, ForwardIterator fir
         }
         else
         {
-            const auto results = detail::parallel_first_four_moments_impl<std::tuple<double, double, double, double, double>>(first, last);
+            const auto results = detail::first_four_moments_parallel_impl<std::tuple<double, double, double, double, double>>(first, last);
             return std::make_pair(std::get<0>(results), std::get<1>(results) / std::get<4>(results));
         }
     }
@@ -174,7 +174,7 @@ inline auto mean_and_sample_variance(ExecutionPolicy&& exec, ForwardIterator fir
         }
         else
         {
-            const auto results = detail::parallel_first_four_moments_impl<std::tuple<Real, Real, Real, Real, Real>>(first, last);
+            const auto results = detail::first_four_moments_parallel_impl<std::tuple<Real, Real, Real, Real, Real>>(first, last);
             return std::make_pair(std::get<0>(results), std::get<1>(results) / std::get<4>(results));
         }
     }
@@ -213,7 +213,7 @@ inline auto first_four_moments(ExecutionPolicy&& exec, ForwardIterator first, Fo
         }
         else
         {
-            const auto results = detail::parallel_first_four_moments_impl<std::tuple<double, double, double, double, double>>(first, last);
+            const auto results = detail::first_four_moments_parallel_impl<std::tuple<double, double, double, double, double>>(first, last);
             return std::make_tuple(std::get<0>(results), std::get<1>(results) / std::get<4>(results), std::get<2>(results) / std::get<4>(results), 
                                    std::get<3>(results) / std::get<4>(results));
         }
@@ -228,7 +228,7 @@ inline auto first_four_moments(ExecutionPolicy&& exec, ForwardIterator first, Fo
         }
         else
         {
-            const auto results = detail::parallel_first_four_moments_impl<std::tuple<Real, Real, Real, Real, Real>>(first, last);
+            const auto results = detail::first_four_moments_parallel_impl<std::tuple<Real, Real, Real, Real, Real>>(first, last);
             return std::make_tuple(std::get<0>(results), std::get<1>(results) / std::get<4>(results), std::get<2>(results) / std::get<4>(results), 
                                    std::get<3>(results) / std::get<4>(results));
         }

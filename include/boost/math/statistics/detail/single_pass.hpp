@@ -103,10 +103,9 @@ ReturnType first_four_moments_sequential_impl(ForwardIterator first, ForwardIter
     return std::make_tuple(M1, M2, M3, M4, n-1);
 }
 
-// TODO(mborland): replace recursive decomposition with linear
-// TODO(mborland): refactor name to match the rest e.g. first_four_moments_parallel_impl
+/*
 template<typename ReturnType, typename ForwardIterator>
-ReturnType parallel_first_four_moments_impl(ForwardIterator first, ForwardIterator last)
+ReturnType first_four_moments_parallel_impl(ForwardIterator first, ForwardIterator last)
 {
     using Real = typename std::tuple_element<0, ReturnType>::type;
     
@@ -116,12 +115,13 @@ ReturnType parallel_first_four_moments_impl(ForwardIterator first, ForwardIterat
     const auto range_a {std::floor(elements / 2)};
     const auto range_b {elements - range_a};
     static std::atomic<unsigned> thread_counter {};
+    
     thread_counter.fetch_add(2);
     auto future_a {std::async(std::launch::async | std::launch::deferred, [first, range_a]() -> ReturnType
     {
         if(thread_counter + 2 <= num_threads && range_a > 10)
         {
-            return parallel_first_four_moments_impl<ReturnType>(first, std::next(first, range_a));
+            return first_four_moments_parallel_impl<ReturnType>(first, std::next(first, range_a));
         }
         else
         {
@@ -132,7 +132,7 @@ ReturnType parallel_first_four_moments_impl(ForwardIterator first, ForwardIterat
     {
         if(thread_counter + 2 <= num_threads && range_a > 10)
         {
-            return parallel_first_four_moments_impl<ReturnType>(std::next(first, range_a), last);
+            return first_four_moments_parallel_impl<ReturnType>(std::next(first, range_a), last);
         }
         else
         {
@@ -160,13 +160,79 @@ ReturnType parallel_first_four_moments_impl(ForwardIterator first, ForwardIterat
     const Real M1_ab = (range_a * M1_a + range_b * M1_b) / n_ab;
     const Real M2_ab = M2_a + M2_b + delta * delta * (range_a * range_b / n_ab);
     const Real M3_ab = M3_a + M3_b + (delta * delta * delta) * range_a * range_b * (range_a - range_b) / (n_ab * n_ab)    
-                       + 3 * delta * (range_a * M2_b - range_b * M2_a) / n_ab;
+                       + Real(3) * delta * (range_a * M2_b - range_b * M2_a) / n_ab;
     const Real M4_ab = M4_a + M4_b + (delta * delta * delta * delta) * range_a * range_b * (range_a * range_a - range_a * range_b + range_b * range_b) / (n_ab * n_ab * n_ab)
-                       + 6 * delta * delta * (range_a * range_a * M2_b + range_b * range_b * M2_a) / (n_ab * n_ab) 
-                       + 4 * delta * (range_a * M3_b - range_b * M3_a) / n_ab;
+                       + Real(6) * delta * delta * (range_a * range_a * M2_b + range_b * range_b * M2_a) / (n_ab * n_ab) 
+                       + Real(4) * delta * (range_a * M3_b - range_b * M3_a) / n_ab;
 
     return std::make_tuple(M1_ab, M2_ab, M3_ab, M4_ab, n_ab);
 }
+*/
+
+template<typename ReturnType, typename ForwardIterator>
+ReturnType first_four_moments_parallel_impl(ForwardIterator first, ForwardIterator last)
+{
+    using Real = typename std::tuple_element<0, ReturnType>::type;
+
+    const auto elements = std::distance(first, last);
+    static unsigned num_threads;
+    if(elements/10 >= std::thread::hardware_concurrency())
+    {
+        num_threads = std::thread::hardware_concurrency();
+    }
+    else if(elements < 20)
+    {
+        return detail::first_four_moments_sequential_impl<ReturnType>(first, last);
+    }
+    else
+    {
+        num_threads = elements/10;
+    }
+
+    std::vector<std::future<ReturnType>> future_manager;
+    const auto elements_per_thread = std::ceil(static_cast<double>(elements) / num_threads);
+
+    auto it = first;
+    for(std::size_t i {}; i < num_threads - 1; ++i)
+    {
+        future_manager.emplace_back(std::async(std::launch::async | std::launch::deferred, [it, elements_per_thread]() -> ReturnType
+        {
+            return first_four_moments_sequential_impl<ReturnType>(it, std::next(it, elements_per_thread));
+        }));
+        it = std::next(it, elements_per_thread);
+    }
+
+    future_manager.emplace_back(std::async(std::launch::async | std::launch::deferred, [it, last]() -> ReturnType
+    {
+        return first_four_moments_sequential_impl<ReturnType>(it, last);
+    }));
+
+    Real M1 = 0;
+    Real M2 = 0;
+    Real M3 = 0;
+    Real M4 = 0;
+    Real n = 0;
+
+    for(auto&& future : future_manager)
+    {
+        auto temp = future.get();
+        const Real M1_a = std::get<0>(temp);
+        const Real M2_a = std::get<1>(temp);
+        const Real M3_a = std::get<2>(temp);
+        const Real M4_a = std::get<3>(temp);
+        const Real n_a = std::get<4>(temp);
+        const Real delta = M1 - M1_a;
+
+        M1 = (n_a * M1_a + n * M1) / (n + n_a);
+        M2 = M2_a + M2 + delta * delta * (n * n_a / (n + n_a));
+        M3 = M3_a + M3 + (delta * delta * delta) * n_a * n * (n_a - n) / ((n + n_a) * (n + n_a)) + Real(3) * delta * (n_a * M2 - n * M2_a) / (n + n_a);
+        M4 = M4_a + M4 + (delta * delta * delta * delta) * n_a * n * (n_a * n_a - n_a * n + n * n) / ((n + n_a) * (n + n_a) * (n + n_a))
+             + Real(6) * delta * delta * (n_a * n_a * M2 + n * n * M2_a) / ((n + n_a) * (n + n_a)) + Real(4) * delta * (n_a * M3 - n * M3_a) / (n + n_a);
+    }
+
+    return std::make_tuple(M1, M2, M3, M4, n);
+}
+
 
 // Follows equation 1.5 of:
 // https://prod.sandia.gov/techlib-noauth/access-control.cgi/2008/086212.pdf
