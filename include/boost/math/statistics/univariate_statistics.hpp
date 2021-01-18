@@ -81,7 +81,7 @@ inline auto variance(ExecutionPolicy&& exec, ForwardIterator first, ForwardItera
     {
         if constexpr (std::is_same_v<std::remove_reference_t<decltype(exec)>, decltype(std::execution::seq)>)
         {
-           return std::get<2>(detail::variance_sequential_impl<std::tuple<double, double, double>>(first, last));
+           return std::get<2>(detail::variance_sequential_impl<std::tuple<double, double, double, double>>(first, last));
         }
         else
         {
@@ -93,7 +93,7 @@ inline auto variance(ExecutionPolicy&& exec, ForwardIterator first, ForwardItera
     {
         if constexpr (std::is_same_v<std::remove_reference_t<decltype(exec)>, decltype(std::execution::seq)>)
         {
-            return std::get<2>(detail::variance_sequential_impl<std::tuple<Real, Real, Real>>(first, last));
+            return std::get<2>(detail::variance_sequential_impl<std::tuple<Real, Real, Real, Real>>(first, last));
         }
         else
         {
@@ -156,26 +156,26 @@ inline auto mean_and_sample_variance(ExecutionPolicy&& exec, ForwardIterator fir
     {
         if constexpr (std::is_same_v<std::remove_reference_t<decltype(exec)>, decltype(std::execution::seq)>)
         {
-            const auto results = detail::variance_sequential_impl<std::tuple<double, double, double>>(first, last);
-            return std::make_pair(std::get<0>(results), std::get<2>(results));
+            const auto results = detail::variance_sequential_impl<std::tuple<double, double, double, double>>(first, last);
+            return std::make_pair(std::get<0>(results), std::get<2>(results)*std::get<3>(results)/(std::get<3>(results)-1.0));
         }
         else
         {
             const auto results = detail::first_four_moments_parallel_impl<std::tuple<double, double, double, double, double>>(first, last);
-            return std::make_pair(std::get<0>(results), std::get<1>(results) / std::get<4>(results));
+            return std::make_pair(std::get<0>(results), std::get<1>(results) / (std::get<4>(results)-1.0));
         }
     }
     else
     {
         if constexpr (std::is_same_v<std::remove_reference_t<decltype(exec)>, decltype(std::execution::seq)>)
         {
-            const auto results = detail::variance_sequential_impl<std::tuple<Real, Real, Real>>(first, last);
-            return std::make_pair(std::get<0>(results), std::get<2>(results));
+            const auto results = detail::variance_sequential_impl<std::tuple<Real, Real, Real, Real>>(first, last);
+            return std::make_pair(std::get<0>(results), std::get<2>(results)*std::get<3>(results)/(std::get<3>(results)-Real(1)));
         }
         else
         {
             const auto results = detail::first_four_moments_parallel_impl<std::tuple<Real, Real, Real, Real, Real>>(first, last);
-            return std::make_pair(std::get<0>(results), std::get<1>(results) / std::get<4>(results));
+            return std::make_pair(std::get<0>(results), std::get<1>(results) / (std::get<4>(results)-Real(1)));
         }
     }
 }
@@ -729,7 +729,7 @@ template<class ForwardIterator, typename Real = typename std::iterator_traits<Fo
          enable_if_t<std::is_integral<Real>::value, bool> = true>
 inline double variance(const ForwardIterator first, const ForwardIterator last)
 {
-    return std::get<2>(detail::variance_sequential_impl<std::tuple<double, double, double>>(first, last));
+    return std::get<2>(detail::variance_sequential_impl<std::tuple<double, double, double, double>>(first, last));
 }
 
 template<class Container, typename Real = typename Container::value_type, 
@@ -743,7 +743,7 @@ template<class ForwardIterator, typename Real = typename std::iterator_traits<Fo
          enable_if_t<!std::is_integral<Real>::value, bool> = true>
 inline Real variance(const ForwardIterator first, const ForwardIterator last)
 {
-    return std::get<2>(detail::variance_sequential_impl<std::tuple<Real, Real, Real>>(first, last));
+    return std::get<2>(detail::variance_sequential_impl<std::tuple<Real, Real, Real, Real>>(first, last));
 
 }
 
@@ -790,8 +790,8 @@ template<class ForwardIterator, typename Real = typename std::iterator_traits<Fo
          enable_if_t<std::is_integral<Real>::value, bool> = true>
 inline std::pair<double, double> mean_and_sample_variance(const ForwardIterator first, const ForwardIterator last)
 {
-    const auto results = detail::variance_sequential_impl<std::tuple<double, double, double>>(first, last);
-    return std::make_pair(std::get<0>(results), std::get<2>(results));
+    const auto results = detail::variance_sequential_impl<std::tuple<double, double, double, double>>(first, last);
+    return std::make_pair(std::get<0>(results), std::get<3>(results)*std::get<2>(results)/(std::get<3>(results)-1.0));
 }
 
 template<class Container, typename Real = typename Container::value_type, 
@@ -805,8 +805,8 @@ template<class ForwardIterator, typename Real = typename std::iterator_traits<Fo
          enable_if_t<!std::is_integral<Real>::value, bool> = true>
 inline std::pair<Real, Real> mean_and_sample_variance(const ForwardIterator first, const ForwardIterator last)
 {
-    const auto results = detail::variance_sequential_impl<std::tuple<Real, Real, Real>>(first, last);
-    return std::make_pair(std::get<0>(results), std::get<2>(results));
+    const auto results = detail::variance_sequential_impl<std::tuple<Real, Real, Real, Real>>(first, last);
+    return std::make_pair(std::get<0>(results), std::get<3>(results)*std::get<2>(results)/(std::get<3>(results)-Real(1)));
 }
 
 template<class Container, typename Real = typename Container::value_type, 

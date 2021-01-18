@@ -12,7 +12,6 @@
 #include <forward_list>
 #include <algorithm>
 #include <random>
-#include <execution>
 #include <iostream>
 #include <boost/core/lightweight_test.hpp>
 #include <boost/numeric/ublas/vector.hpp>
@@ -924,6 +923,10 @@ void test_mode(ExecutionPolicy&& exec)
 
 int main()
 {
+    #ifdef __has_include
+    #if __has_include(<execution>) // For CI in lieu of a definition for cxx17_hdr_execution
+    #include <execution>
+    
     test_mean<float>(std::execution::seq);
     test_mean<float>(std::execution::par);
     test_mean<double>(std::execution::seq);
@@ -1060,6 +1063,9 @@ int main()
     test_mode<double>(std::execution::par);
     test_mode<cpp_bin_float_50>(std::execution::seq);
     test_mode<cpp_bin_float_50>(std::execution::par);
+
+    #endif
+    #endif // CI guard
 
     return boost::report_errors();
 }

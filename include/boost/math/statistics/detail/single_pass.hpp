@@ -63,6 +63,7 @@ ReturnType variance_sequential_impl(ForwardIterator first, ForwardIterator last)
     Real Q = 0;
     Real k = 2;
     Real M2 = 0;
+    std::size_t n = 1;
 
     for(auto it = std::next(first); it != last; ++it)
     {
@@ -73,9 +74,10 @@ ReturnType variance_sequential_impl(ForwardIterator first, ForwardIterator last)
         k += 1;
         Real delta_2 = *it - M;
         M2 += delta_1 * delta_2;
+        ++n;
     }
 
-    return std::make_tuple(M, M2, Q/(k-1));
+    return std::make_tuple(M, M2, Q/(k-1), Real(n));
 }
 
 // https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance#Higher-order_statistics
