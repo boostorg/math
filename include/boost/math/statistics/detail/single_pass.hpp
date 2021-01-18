@@ -106,72 +106,8 @@ ReturnType first_four_moments_sequential_impl(ForwardIterator first, ForwardIter
     return std::make_tuple(M1, M2, M3, M4, n-1);
 }
 
-/* Recursive impl
-template<typename ReturnType, typename ForwardIterator>
-ReturnType first_four_moments_parallel_impl(ForwardIterator first, ForwardIterator last)
-{
-    using Real = typename std::tuple_element<0, ReturnType>::type;
-    
-    static unsigned num_threads {std::thread::hardware_concurrency()};
-
-    const auto elements {std::distance(first, last)};
-    const auto range_a {std::floor(elements / 2)};
-    const auto range_b {elements - range_a};
-    static std::atomic<unsigned> thread_counter {};
-    
-    thread_counter.fetch_add(2);
-    auto future_a {std::async(std::launch::async | std::launch::deferred, [first, range_a]() -> ReturnType
-    {
-        if(thread_counter + 2 <= num_threads && range_a > 10)
-        {
-            return first_four_moments_parallel_impl<ReturnType>(first, std::next(first, range_a));
-        }
-        else
-        {
-            return first_four_moments_sequential_impl<ReturnType>(first, std::next(first, range_a));
-        }
-    })};
-    auto future_b {std::async(std::launch::async | std::launch::deferred, [first, last, range_a]() -> ReturnType
-    {
-        if(thread_counter + 2 <= num_threads && range_a > 10)
-        {
-            return first_four_moments_parallel_impl<ReturnType>(std::next(first, range_a), last);
-        }
-        else
-        {
-            return first_four_moments_sequential_impl<ReturnType>(std::next(first, range_a), last);
-        }
-    })};
-
-    const auto results_a {future_a.get()};
-    const auto results_b {future_b.get()};
-    thread_counter.fetch_sub(2);
-
-    const Real M1_a = std::get<0>(results_a);
-    const Real M2_a = std::get<1>(results_a);
-    const Real M3_a = std::get<2>(results_a);
-    const Real M4_a = std::get<3>(results_a);
-
-    const Real M1_b = std::get<0>(results_b);
-    const Real M2_b = std::get<1>(results_b);
-    const Real M3_b = std::get<2>(results_b);
-    const Real M4_b = std::get<3>(results_b);
-
-    const Real n_ab = elements;
-    const Real delta = M1_b - M1_a;
-    
-    const Real M1_ab = (range_a * M1_a + range_b * M1_b) / n_ab;
-    const Real M2_ab = M2_a + M2_b + delta * delta * (range_a * range_b / n_ab);
-    const Real M3_ab = M3_a + M3_b + (delta * delta * delta) * range_a * range_b * (range_a - range_b) / (n_ab * n_ab)    
-                       + Real(3) * delta * (range_a * M2_b - range_b * M2_a) / n_ab;
-    const Real M4_ab = M4_a + M4_b + (delta * delta * delta * delta) * range_a * range_b * (range_a * range_a - range_a * range_b + range_b * range_b) / (n_ab * n_ab * n_ab)
-                       + Real(6) * delta * delta * (range_a * range_a * M2_b + range_b * range_b * M2_a) / (n_ab * n_ab) 
-                       + Real(4) * delta * (range_a * M3_b - range_b * M3_a) / n_ab;
-
-    return std::make_tuple(M1_ab, M2_ab, M3_ab, M4_ab, n_ab);
-}
-*/
-
+// https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance#Higher-order_statistics
+// EQN 3.1: https://www.osti.gov/servlets/purl/1426900
 template<typename ReturnType, typename ForwardIterator>
 ReturnType first_four_moments_parallel_impl(ForwardIterator first, ForwardIterator last)
 {
@@ -179,17 +115,19 @@ ReturnType first_four_moments_parallel_impl(ForwardIterator first, ForwardIterat
 
     const auto elements = std::distance(first, last);
     static unsigned num_threads;
-    if(elements/10 >= std::thread::hardware_concurrency())
+    
+    // https://lemire.me/blog/2020/01/30/cost-of-a-thread-in-c-under-linux/
+    if(elements/2000 >= std::thread::hardware_concurrency())
     {
         num_threads = std::thread::hardware_concurrency();
     }
-    else if(elements < 20)
+    else if(elements < 4000)
     {
         return detail::first_four_moments_sequential_impl<ReturnType>(first, last);
     }
     else
     {
-        num_threads = elements/10;
+        num_threads = elements/2000;
     }
 
     std::vector<std::future<ReturnType>> future_manager;
