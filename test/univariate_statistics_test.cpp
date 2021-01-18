@@ -333,7 +333,7 @@ void test_integer_skewness(ExecutionPolicy&& exec)
         x *= scale;
     }
     double m2 = boost::math::statistics::skewness(exec, v);
-    BOOST_TEST(abs(m1 - m2) < 5*tol*abs(m1));
+    BOOST_TEST(abs(m1 - m2) < 2*tol*abs(m1));
 }
 
 template<class Real, class ExecutionPolicy>
@@ -485,19 +485,6 @@ void test_first_four_moments(ExecutionPolicy&& exec)
     BOOST_TEST(abs(M2_2 - Real(2)) < tol);
     BOOST_TEST(abs(M3_2) < tol);
     BOOST_TEST(abs(M4_2 - Real(34)/Real(5)) < tol);
-
-    // Compare sequential run to parallel run
-    std::vector<Real> v2 = generate_random_vector<Real>(global_size, global_seed);
-    auto [M1_a, M2_a, M3_a, M4_a] = boost::math::statistics::first_four_moments(v2);
-    auto [M1_b, M2_b, M3_b, M4_b] = boost::math::statistics::first_four_moments(exec, v2);
-    BOOST_TEST(abs(M1_a - M1_b) < tol);
-    std::cout << std::setprecision(5) << std::fixed << "M1: " << M1_a << ", " << M1_b << '\n';
-    BOOST_TEST(abs(M2_a - M2_b) < tol);
-    std::cout << "M2: " << M2_a << ", " << M2_b << '\n';
-    BOOST_TEST(abs(M3_a - M3_b) < tol);
-    std::cout << "M3: " << M3_a << ", " << M3_b << '\n';
-    BOOST_TEST(abs(M4_a - M4_b) < tol);
-    std::cout << "M4: " << M4_a << ", " << M4_b << '\n' << std::endl;
 }
 
 template<class Real, class ExecutionPolicy>
@@ -937,7 +924,6 @@ void test_mode(ExecutionPolicy&& exec)
 
 int main()
 {
-    /*
     test_mean<float>(std::execution::seq);
     test_mean<float>(std::execution::par);
     test_mean<double>(std::execution::seq);
@@ -984,7 +970,7 @@ int main()
     test_integer_skewness<int>(std::execution::par);
     test_integer_skewness<unsigned>(std::execution::seq);
     test_integer_skewness<unsigned>(std::execution::par);
-    */
+
     test_first_four_moments<float>(std::execution::seq);
     test_first_four_moments<float>(std::execution::par);
     test_first_four_moments<double>(std::execution::seq);
@@ -994,7 +980,7 @@ int main()
     test_first_four_moments<long double>(std::execution::par);
     test_first_four_moments<cpp_bin_float_50>(std::execution::seq);
     test_first_four_moments<cpp_bin_float_50>(std::execution::par);
-    /*
+
     test_kurtosis<float>(std::execution::seq);
     test_kurtosis<float>(std::execution::par);
     test_kurtosis<double>(std::execution::seq);
@@ -1074,6 +1060,6 @@ int main()
     test_mode<double>(std::execution::par);
     test_mode<cpp_bin_float_50>(std::execution::seq);
     test_mode<cpp_bin_float_50>(std::execution::par);
-    */
+
     return boost::report_errors();
 }

@@ -16,6 +16,7 @@
 #include <cmath>
 #include <algorithm>
 #include <valarray>
+#include <stdexcept>
 
 namespace boost { namespace math { namespace statistics { namespace detail {
 
@@ -103,7 +104,7 @@ ReturnType first_four_moments_sequential_impl(ForwardIterator first, ForwardIter
     return std::make_tuple(M1, M2, M3, M4, n-1);
 }
 
-/*
+/* Recursive impl
 template<typename ReturnType, typename ForwardIterator>
 ReturnType first_four_moments_parallel_impl(ForwardIterator first, ForwardIterator last)
 {
@@ -207,30 +208,36 @@ ReturnType first_four_moments_parallel_impl(ForwardIterator first, ForwardIterat
         return first_four_moments_sequential_impl<ReturnType>(it, last);
     }));
 
-    Real M1 = 0;
-    Real M2 = 0;
-    Real M3 = 0;
-    Real M4 = 0;
-    Real n = 0;
+    auto temp = future_manager[0].get();
+    Real M1_a = std::get<0>(temp);
+    Real M2_a = std::get<1>(temp);
+    Real M3_a = std::get<2>(temp);
+    Real M4_a = std::get<3>(temp);
+    Real range_a = std::get<4>(temp);
 
-    for(auto&& future : future_manager)
+    for(std::size_t i = 1; i < future_manager.size(); ++i)
     {
-        auto temp = future.get();
-        const Real M1_a = std::get<0>(temp);
-        const Real M2_a = std::get<1>(temp);
-        const Real M3_a = std::get<2>(temp);
-        const Real M4_a = std::get<3>(temp);
-        const Real n_a = std::get<4>(temp);
-        const Real delta = M1 - M1_a;
+        temp = future_manager[i].get();
+        Real M1_b = std::get<0>(temp);
+        Real M2_b = std::get<1>(temp);
+        Real M3_b = std::get<2>(temp);
+        Real M4_b = std::get<3>(temp);
+        Real range_b = std::get<4>(temp);
 
-        M1 = (n_a * M1_a + n * M1) / (n + n_a);
-        M2 = M2_a + M2 + delta * delta * (n * n_a / (n + n_a));
-        M3 = M3_a + M3 + (delta * delta * delta) * n_a * n * (n_a - n) / ((n + n_a) * (n + n_a)) + Real(3) * delta * (n_a * M2 - n * M2_a) / (n + n_a);
-        M4 = M4_a + M4 + (delta * delta * delta * delta) * n_a * n * (n_a * n_a - n_a * n + n * n) / ((n + n_a) * (n + n_a) * (n + n_a))
-             + Real(6) * delta * delta * (n_a * n_a * M2 + n * n * M2_a) / ((n + n_a) * (n + n_a)) + Real(4) * delta * (n_a * M3 - n * M3_a) / (n + n_a);
+        const Real n_ab = range_a + range_b;
+        const Real delta = M1_b - M1_a;
+        
+        M1_a = (range_a * M1_a + range_b * M1_b) / n_ab;
+        M2_a = M2_a + M2_b + delta * delta * (range_a * range_b / n_ab);
+        M3_a = M3_a + M3_b + (delta * delta * delta) * range_a * range_b * (range_a - range_b) / (n_ab * n_ab)    
+               + Real(3) * delta * (range_a * M2_b - range_b * M2_a) / n_ab;
+        M4_a = M4_a + M4_b + (delta * delta * delta * delta) * range_a * range_b * (range_a * range_a - range_a * range_b + range_b * range_b) / (n_ab * n_ab * n_ab)
+               + Real(6) * delta * delta * (range_a * range_a * M2_b + range_b * range_b * M2_a) / (n_ab * n_ab) 
+               + Real(4) * delta * (range_a * M3_b - range_b * M3_a) / n_ab;
+        range_a = n_ab;
     }
 
-    return std::make_tuple(M1, M2, M3, M4, n);
+    return std::make_tuple(M1_a, M2_a, M3_a, M4_a, elements);
 }
 
 
