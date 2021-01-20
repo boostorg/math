@@ -20,6 +20,10 @@
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/multiprecision/cpp_complex.hpp>
 
+#if __GNUC__ > 9 || __clang_major__ > 9 || _MSC_VER > 1927 // G++10, Clang 10, MSVC 14.2
+#include <execution>
+#endif
+
 using boost::multiprecision::cpp_bin_float_50;
 using boost::multiprecision::cpp_complex_50;
 using std::abs;
@@ -923,9 +927,7 @@ void test_mode(ExecutionPolicy&& exec)
 
 int main()
 {
-    #ifdef __has_include
-    #if __has_include(<execution>) // For CI in lieu of a definition for cxx17_hdr_execution
-    #include <execution>
+    #if __GNUC__ > 9 || __clang_major__ > 9 || _MSC_VER > 1927 // G++10, Clang 10, MSVC 14.2
     
     test_mean<float>(std::execution::seq);
     test_mean<float>(std::execution::par);
@@ -1064,7 +1066,6 @@ int main()
     test_mode<cpp_bin_float_50>(std::execution::seq);
     test_mode<cpp_bin_float_50>(std::execution::par);
 
-    #endif
     #endif // CI guard
 
     return boost::report_errors();

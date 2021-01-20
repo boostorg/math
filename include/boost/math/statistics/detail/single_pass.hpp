@@ -17,6 +17,7 @@
 #include <algorithm>
 #include <valarray>
 #include <stdexcept>
+#include <functional>
 
 namespace boost { namespace math { namespace statistics { namespace detail {
 
@@ -114,20 +115,32 @@ ReturnType first_four_moments_parallel_impl(ForwardIterator first, ForwardIterat
     using Real = typename std::tuple_element<0, ReturnType>::type;
 
     const auto elements = std::distance(first, last);
-    static unsigned num_threads;
+    const unsigned max_concurrency = std::thread::hardware_concurrency() == 0 ? 2u : std::thread::hardware_concurrency();
+    unsigned num_threads = 2u;
     
+    // Threading is faster for: 10 + 5.13e-3 N/j <= 5.13e-3N => N >= 10^4j/5.13(j-1).
+    const auto parallel_lower_bound = 10e4*max_concurrency/(5.13*(max_concurrency-1));
+    const auto parallel_upper_bound = 10e4*2/5.13; // j = 2
+
     // https://lemire.me/blog/2020/01/30/cost-of-a-thread-in-c-under-linux/
-    if(elements/2000 >= std::thread::hardware_concurrency())
-    {
-        num_threads = std::thread::hardware_concurrency();
-    }
-    else if(elements < 4000)
+    if(elements < parallel_lower_bound)
     {
         return detail::first_four_moments_sequential_impl<ReturnType>(first, last);
     }
+    else if(elements >= parallel_upper_bound)
+    {
+        num_threads = max_concurrency;
+    }
     else
     {
-        num_threads = elements/2000;
+        for(unsigned i = 3; i < max_concurrency; ++i)
+        {
+            if(parallel_lower_bound < 10e4*i/(5.13*(i-1)))
+            {
+                num_threads = i;
+                break;
+            }
+        }
     }
 
     std::vector<std::future<ReturnType>> future_manager;
