@@ -124,7 +124,8 @@ matrix:
             - ubuntu-toolchain-r-test
 
     - os: linux
-      env: TOOLSET=gcc COMPILER=g++-6 CXXSTD=c++03 TEST_SUITE=quadrature
+      dist: bionic
+      env: TOOLSET=gcc COMPILER=g++-6 CXXSTD=c++03 TEST_SUITE="quadrature include=/usr/include/eigen3"
       addons:
         apt:
           packages:
@@ -132,11 +133,13 @@ matrix:
             - libgmp-dev
             - libmpfr-dev
             - libfftw3-dev
+            - libeigen3-dev
           sources:
             - ubuntu-toolchain-r-test
 
     - os: linux
-      env: TOOLSET=gcc COMPILER=g++-6 CXXSTD=c++11 TEST_SUITE=quadrature
+      dist: bionic
+      env: TOOLSET=gcc COMPILER=g++-6 CXXSTD=c++11 TEST_SUITE="quadrature include=/usr/include/eigen3"
       addons:
         apt:
           packages:
@@ -144,11 +147,13 @@ matrix:
             - libgmp-dev
             - libmpfr-dev
             - libfftw3-dev
+            - libeigen3-dev
           sources:
             - ubuntu-toolchain-r-test
 
     - os: linux
-      env: TOOLSET=gcc COMPILER=g++-6 CXXSTD=c++14 TEST_SUITE=quadrature
+      dist: bionic
+      env: TOOLSET=gcc COMPILER=g++-6 CXXSTD=c++14 TEST_SUITE="quadrature include=/usr/include/eigen3"
       addons:
         apt:
           packages:
@@ -156,11 +161,13 @@ matrix:
             - libgmp-dev
             - libmpfr-dev
             - libfftw3-dev
+            - libeigen3-dev
           sources:
             - ubuntu-toolchain-r-test
 
     - os: linux
-      env: TOOLSET=gcc COMPILER=g++-6 CXXSTD=gnu++14 TEST_SUITE=quadrature
+      dist: bionic
+      env: TOOLSET=gcc COMPILER=g++-6 CXXSTD=gnu++14 TEST_SUITE="quadrature include=/usr/include/eigen3"
       addons:
         apt:
           packages:
@@ -168,11 +175,13 @@ matrix:
             - libgmp-dev
             - libmpfr-dev
             - libfftw3-dev
+            - libeigen3-dev
           sources:
             - ubuntu-toolchain-r-test
 
     - os: linux
-      env: TOOLSET=gcc COMPILER=g++-6 CXXSTD=c++1z TEST_SUITE=quadrature
+      dist: bionic
+      env: TOOLSET=gcc COMPILER=g++-6 CXXSTD=c++1z TEST_SUITE="quadrature include=/usr/include/eigen3"
       addons:
         apt:
           packages:
@@ -180,6 +189,7 @@ matrix:
             - libgmp-dev
             - libmpfr-dev
             - libfftw3-dev
+            - libeigen3-dev
           sources:
             - ubuntu-toolchain-r-test
 
@@ -400,7 +410,8 @@ matrix:
             - ubuntu-toolchain-r-test
 
     - os: linux
-      env: TOOLSET=gcc COMPILER=g++-5 CXXSTD=c++14 TEST_SUITE=quadrature
+      dist: bionic
+      env: TOOLSET=gcc COMPILER=g++-5 CXXSTD=c++14 TEST_SUITE="quadrature include=/usr/include/eigen3"
       addons:
         apt:
           packages:
@@ -408,6 +419,7 @@ matrix:
             - libgmp-dev
             - libmpfr-dev
             - libfftw3-dev
+            - libeigen3-dev
           sources:
             - ubuntu-toolchain-r-test
 
@@ -470,7 +482,7 @@ matrix:
             - ubuntu-toolchain-r-test
 
     - os: linux
-      dist: trusty
+      dist: bionic
       compiler: g++-8
       env: TOOLSET=gcc COMPILER=g++-8 CXXSTD=c++14 TEST_SUITE=misc
       addons:
@@ -481,13 +493,14 @@ matrix:
             - ubuntu-toolchain-r-test
 
     - os: linux
-      dist: trusty
+      dist: bionic
       compiler: g++-8
-      env: TOOLSET=gcc COMPILER=g++-8 CXXSTD=c++14 TEST_SUITE=quadrature
+      env: TOOLSET=gcc COMPILER=g++-8 CXXSTD=c++14 TEST_SUITE="quadrature include=/usr/include/eigen3"
       addons:
         apt:
           packages:
             - g++-8
+            - libeigen3-dev
           sources:
             - ubuntu-toolchain-r-test
 
@@ -549,7 +562,7 @@ matrix:
             - ubuntu-toolchain-r-test
 
     - os: linux
-      dist: trusty
+      dist: bionic
       compiler: g++-8
       env: TOOLSET=gcc COMPILER=g++-8 CXXSTD=gnu++03 TEST_SUITE=misc
       addons:
@@ -560,13 +573,14 @@ matrix:
             - ubuntu-toolchain-r-test
 
     - os: linux
-      dist: trusty
+      dist: bionic
       compiler: g++-8
-      env: TOOLSET=gcc COMPILER=g++-8 CXXSTD=gnu++03 TEST_SUITE=quadrature
+      env: TOOLSET=gcc COMPILER=g++-8 CXXSTD=gnu++03 TEST_SUITE="quadrature include=/usr/include/eigen3"
       addons:
         apt:
           packages:
             - g++-8
+            - libeigen3-dev
           sources:
             - ubuntu-toolchain-r-test
 
@@ -617,7 +631,7 @@ matrix:
             - ubuntu-toolchain-r-test
 
     - os: linux
-      dist: trusty
+      dist: bionic
       compiler: g++-8
       env: TOOLSET=gcc COMPILER=g++-8 CXXSTD=gnu++17 TEST_SUITE=distribution_tests
       addons:
@@ -628,13 +642,14 @@ matrix:
             - ubuntu-toolchain-r-test
 
     - os: linux
-      dist: trusty
+      dist: bionic
       compiler: g++-8
-      env: TOOLSET=gcc COMPILER=g++-8 CXXSTD=gnu++17 TEST_SUITE=quadrature
+      env: TOOLSET=gcc COMPILER=g++-8 CXXSTD=gnu++17 TEST_SUITE="quadrature include=/usr/include/eigen3"
       addons:
         apt:
           packages:
             - g++-8
+            - libeigen3-dev
           sources:
             - ubuntu-toolchain-r-test
 
@@ -707,12 +722,14 @@ matrix:
             - llvm-toolchain-xenial-6.0
 
     - os: linux
+      dist: bionic
       compiler: clang++-6.0
-      env: TOOLSET=clang COMPILER=clang++-6.0 CXXSTD=c++11 TEST_SUITE=quadrature
+      env: TOOLSET=clang COMPILER=clang++-6.0 CXXSTD=c++11 TEST_SUITE="quadrature include=/usr/include/eigen3"
       addons:
         apt:
           packages:
             - clang-6.0
+            - libeigen3-dev
           sources:
             - ubuntu-toolchain-r-test
             - llvm-toolchain-xenial-6.0
@@ -754,8 +771,12 @@ matrix:
       osx_image: xcode11
 
     - os: osx
-      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=quadrature
+      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE="quadrature include=/usr/local/include/eigen3"
       osx_image: xcode11
+      addons:
+        homebrew:
+          packages:
+            eigen
 
     - os: osx
       env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=float128_tests

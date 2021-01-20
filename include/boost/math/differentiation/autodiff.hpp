@@ -146,15 +146,15 @@ class fvar {
   // RealType(ca) | RealType | RealType is copy constructible from the arithmetic types.
   explicit fvar(root_type const&);  // Initialize a constant. (No epsilon terms.)
 
-  template <typename RealType2>
+  template <typename RealType2, typename std::enable_if<std::is_convertible<RealType2, RealType>::value>::type* = nullptr>
   fvar(RealType2 const& ca);  // Supports any RealType2 for which static_cast<root_type>(ca) compiles.
 
   // r = cr | RealType& | Assignment operator.
   fvar& operator=(fvar const&) = default;
 
   // r = ca | RealType& | Assignment operator from the arithmetic types.
-  // Handled by constructor that takes a single parameter of generic type.
-  // fvar& operator=(root_type const&); // Set a constant.
+  template<typename RealType2>
+  typename std::enable_if<std::is_convertible<RealType2, RealType>::value, fvar&>::type& operator=(RealType2 const&);
 
   // r += cr | RealType& | Adds cr to r.
   template <typename RealType2, size_t Order2>
@@ -393,6 +393,12 @@ class fvar {
 
   template <typename RealType2, size_t Order2>
   friend std::ostream& operator<<(std::ostream&, fvar<RealType2, Order2> const&);
+
+  template <typename RealType2, size_t Order2>
+  friend std::istream& operator>>(std::istream&, fvar<RealType2, Order2> &);
+
+  template <typename RealType2, size_t Order2>
+  friend std::wistream& operator>>(std::wistream&, fvar<RealType2, Order2> &);
 
   // C++11 Compatibility
 #ifdef BOOST_NO_CXX17_IF_CONSTEXPR
@@ -679,19 +685,18 @@ fvar<RealType, Order>::fvar(root_type const& ca) : v{{static_cast<RealType>(ca)}
 
 // Can cause compiler error if RealType2 cannot be cast to root_type.
 template <typename RealType, size_t Order>
-template <typename RealType2>
+template <typename RealType2, typename std::enable_if<std::is_convertible<RealType2, RealType>::value>::type*>
 fvar<RealType, Order>::fvar(RealType2 const& ca) : v{{static_cast<RealType>(ca)}} {}
 
-/*
 template<typename RealType, size_t Order>
-fvar<RealType,Order>& fvar<RealType,Order>::operator=(root_type const& ca)
+template<typename RealType2>
+typename std::enable_if<std::is_convertible<RealType2, RealType>::value, fvar<RealType, Order>&>::type&  fvar<RealType,Order>::operator=(RealType2 const& ca)
 {
     v.front() = static_cast<RealType>(ca);
-    if constexpr (0 < Order)
+    BOOST_IF_CONSTEXPR (0 < Order)
         std::fill(v.begin()+1, v.end(), static_cast<RealType>(0));
     return *this;
 }
-*/
 
 template <typename RealType, size_t Order>
 template <typename RealType2, size_t Order2>
@@ -1739,6 +1744,22 @@ std::ostream& operator<<(std::ostream& out, fvar<RealType, Order> const& cr) {
   for (size_t i = 1; i <= Order; ++i)
     out << ',' << cr.v[i];
   return out << ')';
+}
+
+template <typename RealType, size_t Order>
+std::istream& operator>>(std::istream& in, fvar<RealType, Order> & cr) {
+  in >> cr.v.front();
+  BOOST_IF_CONSTEXPR (0 < Order)
+      std::fill(cr.v.begin()+1, cr.v.end(), static_cast<RealType>(0));
+  return in;
+}
+
+template <typename RealType, size_t Order>
+std::wistream& operator>>(std::wistream& in, fvar<RealType, Order> & cr) {
+  in >> cr.v.front();
+  BOOST_IF_CONSTEXPR (0 < Order)
+      std::fill(cr.v.begin()+1, cr.v.end(), static_cast<RealType>(0));
+  return in;
 }
 
 // Additional functions

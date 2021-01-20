@@ -16,97 +16,95 @@ platform:
 
 environment:
   matrix:
-    - ARGS: --toolset=msvc-9.0  address-model=32
-      TEST_SUITE: special_fun distribution_tests
-    - ARGS: --toolset=msvc-10.0 address-model=32
-      TEST_SUITE: special_fun distribution_tests
-    - ARGS: --toolset=msvc-11.0 address-model=32
-      TEST_SUITE: special_fun distribution_tests
-    - ARGS: --toolset=msvc-12.0 address-model=32
-      TEST_SUITE: special_fun distribution_tests
-    - ARGS: --toolset=msvc-14.0 address-model=32
-      TEST_SUITE: special_fun distribution_tests
-    - ARGS: --toolset=msvc-9.0  address-model=32
+    # - ARGS: --toolset=msvc-9.0  address-model=32
+    #   TEST_SUITE: special_fun distribution_tests
+    # - ARGS: --toolset=msvc-10.0 address-model=32
+    #   TEST_SUITE: special_fun distribution_tests
+    # - ARGS: --toolset=msvc-11.0 address-model=32
+    #   TEST_SUITE: special_fun distribution_tests
+    # - ARGS: --toolset=msvc-12.0 address-model=32
+    #   TEST_SUITE: special_fun distribution_tests
+    # - ARGS: --toolset=msvc-14.0 address-model=32
+    #   TEST_SUITE: special_fun distribution_tests
+    - ARGS: --include=/c/tools/vcpkg/installed/eigen3_x86-windows --toolset=msvc-9.0 address-model=32
       TEST_SUITE: misc quadrature ../example//examples
     - ARGS: --toolset=msvc-10.0 address-model=32
       TEST_SUITE: misc quadrature ../example//examples
-    - ARGS: --toolset=msvc-11.0 address-model=32
+    - ARGS: --toolset=msvc-11.0 address-model=32 include=/c/tools/vcpkg/installed/eigen3_x86-windows
       TEST_SUITE: misc quadrature ../example//examples
-    - ARGS: --toolset=msvc-12.0 address-model=32
+    - ARGS: --toolset=msvc-12.0 address-model=32 --include=/c/tools/vcpkg/installed/eigen3_x86-windows
       TEST_SUITE: misc quadrature ../example//examples
-    - ARGS: --toolset=msvc-14.0 address-model=32
+    - ARGS: --toolset=msvc-14.0 address-model=32 --include=/c/tools/vcpkg/installed/eigen3_x86-windows
       TEST_SUITE: misc quadrature ../example//examples
-    - ARGS: --toolset=msvc-12.0 address-model=64
-      TEST_SUITE: special_fun distribution_tests
-    - ARGS: --toolset=msvc-12.0 address-model=64
+    # - ARGS: --toolset=msvc-12.0 address-model=64
+    #   TEST_SUITE: special_fun distribution_tests
+    - ARGS: --toolset=msvc-12.0 address-model=64 --include=/c/tools/vcpkg/installed/eigen3_x86-windows
       TEST_SUITE: misc quadrature ../example//examples
-    - ARGS: --toolset=msvc-14.0 address-model=64
-      TEST_SUITE: special_fun
-    - ARGS: --toolset=msvc-14.0 address-model=64
-      TEST_SUITE: distribution_tests
-    - ARGS: --toolset=msvc-14.0 address-model=64
+    # - ARGS: --toolset=msvc-14.0 address-model=64
+    #   TEST_SUITE: special_fun
+    # - ARGS: --toolset=msvc-14.0 address-model=64
+    #   TEST_SUITE: distribution_tests
+    - ARGS: --toolset=msvc-14.0 address-model=64 --include=/c/tools/vcpkg/installed/eigen3_x86-windows
       TEST_SUITE: misc quadrature ../example//examples
+
+    # - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+    #   ARGS: --toolset=msvc-14.1 address-model=64 cxxstd=17
+    #   TEST_SUITE: special_fun distribution_tests
 
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-      ARGS: --toolset=msvc-14.1 address-model=64 cxxstd=17
-      TEST_SUITE: special_fun distribution_tests
-
-    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-      ARGS: --toolset=msvc-14.1 address-model=64 cxxstd=17
+      ARGS: --toolset=msvc-14.1 address-model=64 cxxstd=17 --include=/c/tools/vcpkg/installed/eigen3_x86-windows
       TEST_SUITE: misc quadrature ../example//examples
 
-    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-      ARGS: --toolset=msvc-14.1 address-model=32
-      TEST_SUITE: special_fun
+    # - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+    #   ARGS: --toolset=msvc-14.1 address-model=32
+    #   TEST_SUITE: special_fun
+
+    # - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+    #   ARGS: --toolset=msvc-14.1 address-model=32
+    #   TEST_SUITE: distribution_tests
 
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-      ARGS: --toolset=msvc-14.1 address-model=32
-      TEST_SUITE: distribution_tests
-
-    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-      ARGS: --toolset=msvc-14.1 address-model=32
+      ARGS: --toolset=msvc-14.1 address-model=32 --include=/c/tools/vcpkg/installed/eigen3_x86-windows
       TEST_SUITE: misc quadrature ../example//examples
 
-    - ARGS: --toolset=gcc address-model=64
-      TEST_SUITE: float128_tests
-      PATH: C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin;%PATH%
+    # - ARGS: --toolset=gcc address-model=64
+    #   TEST_SUITE: float128_tests
+    #   PATH: C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin;%PATH%
 
-    - ARGS: --toolset=gcc address-model=64 cxxflags=-std=gnu++1z
-      TEST_SUITE: float128_tests
-      PATH: C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin;%PATH%
+    # - ARGS: --toolset=gcc address-model=64 cxxflags=-std=gnu++1z
+    #   TEST_SUITE: float128_tests
+    #   PATH: C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin;%PATH%
 
-    - ARGS: --toolset=gcc address-model=64
-      TEST_SUITE: special_fun
-      PATH: C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin;%PATH%
+    # - ARGS: --toolset=gcc address-model=64
+    #   TEST_SUITE: special_fun
+    #   PATH: C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin;%PATH%
 
-    - ARGS: --toolset=gcc address-model=64 cxxflags=-std=gnu++1z
-      TEST_SUITE: special_fun
-      PATH: C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin;%PATH%
+    # - ARGS: --toolset=gcc address-model=64 cxxflags=-std=gnu++1z
+    #   TEST_SUITE: special_fun
+    #   PATH: C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin;%PATH%
 
-    - ARGS: --toolset=gcc address-model=64
-      TEST_SUITE: distribution_tests
-      PATH: C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin;%PATH%
+    # - ARGS: --toolset=gcc address-model=64
+    #   TEST_SUITE: distribution_tests
+    #   PATH: C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin;%PATH%
 
-    - ARGS: --toolset=gcc address-model=64 cxxflags=-std=gnu++1z
-      TEST_SUITE: distribution_tests
-      PATH: C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin;%PATH%
+    # - ARGS: --toolset=gcc address-model=64 cxxflags=-std=gnu++1z
+    #   TEST_SUITE: distribution_tests
+    #   PATH: C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin;%PATH%
 
-    - ARGS: --toolset=gcc address-model=64
-      TEST_SUITE: misc
-      PATH: C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin;%PATH%
+    # - ARGS: --toolset=gcc address-model=64
+    #   TEST_SUITE: misc
+    #   PATH: C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin;%PATH%
 
-    - ARGS: --toolset=gcc address-model=64 cxxflags=-std=gnu++1z
+    - ARGS: --toolset=gcc address-model=64 cxxflags=-std=gnu++1z --include=/c/tools/vcpkg/installed/eigen3_x86-windows
       TEST_SUITE: quadrature
       PATH: C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin;%PATH%
 
-    - ARGS: --toolset=gcc address-model=64
-      TEST_SUITE: ../example//examples
-      PATH: C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin;%PATH%
-
-    - ARGS: --toolset=gcc address-model=64 cxxflags=-std=gnu++1z
-      TEST_SUITE: ../example//examples
-      PATH: C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin;%PATH%
-
+    # - ARGS: --toolset=gcc address-model=64
+    #   TEST_SUITE: ../example//examples
+    #   PATH: C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin;%PATH%
+    # - ARGS: --toolset=gcc address-model=64 cxxflags=-std=gnu++1z
+    #   TEST_SUITE: ../example//examples
+    #   PATH: C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin;%PATH%
 
 install:
   - cd ..
@@ -122,6 +120,8 @@ install:
   - xcopy /s /e /q %APPVEYOR_BUILD_FOLDER% libs\math
   - git submodule update --init tools/boostdep
   - python tools/boostdep/depinst/depinst.py math
+  - vcpkg install eigen3
+  - vcpkg integrate install
   - bootstrap
   - b2 headers
 
