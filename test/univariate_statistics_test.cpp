@@ -20,7 +20,9 @@
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/multiprecision/cpp_complex.hpp>
 
-#if __GNUC__ > 9 || __clang_major__ > 9 || _MSC_VER > 1927 // G++10, Clang 10, MSVC 14.2
+// Support compilers with P0024R2 implemented without linking TBB
+// https://en.cppreference.com/w/cpp/compiler_support
+#if (__GNUC__ > 9 || (__clang_major__ > 9 && defined __GLIBCXX__)  || _MSC_VER > 1927)
 #include <execution>
 #endif
 
@@ -689,7 +691,7 @@ void test_gini_coefficient(ExecutionPolicy&& exec)
         v[i] = dis(gen);
     }
     gini = boost::math::statistics::gini_coefficient(exec, v);
-    BOOST_TEST(abs(gini - expected) < 0.01);
+    BOOST_TEST(abs(gini - expected) < 0.02);
 
 }
 
@@ -927,7 +929,9 @@ void test_mode(ExecutionPolicy&& exec)
 
 int main()
 {
-    #if __GNUC__ > 9 || __clang_major__ > 9 || _MSC_VER > 1927 // G++10, Clang 10, MSVC 14.2
+    // Support compilers with P0024R2 implemented without linking TBB
+    // https://en.cppreference.com/w/cpp/compiler_support
+    #if (__GNUC__ > 9 || (__clang_major__ > 9 && defined __GLIBCXX__)  || _MSC_VER > 1927)
     
     test_mean<float>(std::execution::seq);
     test_mean<float>(std::execution::par);
@@ -1066,7 +1070,7 @@ int main()
     test_mode<cpp_bin_float_50>(std::execution::seq);
     test_mode<cpp_bin_float_50>(std::execution::par);
 
-    #endif // CI guard
+    #endif // Compiler guard
 
     return boost::report_errors();
 }
