@@ -59,7 +59,6 @@ T ellint_rd_imp(T x, T y, T z, const Policy& pol)
    //
    // Special cases from http://dlmf.nist.gov/19.20#iv
    //
-   using std::swap;
    if(x == z)
       swap(x, y);
    if(y == z)

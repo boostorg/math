@@ -79,6 +79,7 @@ namespace boost
 }
 
 #undef BOOST_MATH_STD_USING
+#if __cplusplus < 202002L
 #define BOOST_MATH_STD_USING BOOST_MATH_STD_USING_CORE\
    using boost::math::round;\
    using boost::math::iround;\
@@ -87,6 +88,15 @@ namespace boost
    using boost::math::itrunc;\
    using boost::math::ltrunc;\
    using boost::math::modf;
+#else
+#define BOOST_MATH_STD_USING BOOST_MATH_STD_USING_CORE\
+   using boost::math::round;\
+   using boost::math::iround;\
+   using boost::math::lround;\
+   using boost::math::trunc;\
+   using boost::math::itrunc;\
+   using boost::math::ltrunc;
+#endif
 
 
 #endif // BOOST_MATH_SPECIAL_ROUND_FWD_HPP
