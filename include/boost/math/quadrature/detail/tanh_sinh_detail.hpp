@@ -161,8 +161,8 @@ private:
    {
       using std::log;
       using std::sqrt;
-      Real l = (log(2-x) - log(x))/2;
-      return log((sqrt(4 * l * l + constants::pi<Real>() * constants::pi<Real>()) + 2 * l) / constants::pi<Real>());
+      Real l = log(2-x) - log(x);
+      return log((sqrt(l * l + constants::pi<Real>() * constants::pi<Real>()) + l) / constants::pi<Real>());
    };
 
 
