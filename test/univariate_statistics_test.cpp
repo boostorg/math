@@ -22,7 +22,7 @@
 
 // Support compilers with P0024R2 implemented without linking TBB
 // https://en.cppreference.com/w/cpp/compiler_support
-#if (__GNUC__ > 9 || (__clang_major__ > 9 && defined __GLIBCXX__)  || _MSC_VER > 1927)
+#if (__cplusplus > 201700 || _MSVC_LANG > 201700) && (__GNUC__ > 9 || (__clang_major__ > 9 && defined __GLIBCXX__)  || _MSC_VER > 1927)
 #include <execution>
 #endif
 
@@ -931,7 +931,7 @@ int main()
 {
     // Support compilers with P0024R2 implemented without linking TBB
     // https://en.cppreference.com/w/cpp/compiler_support
-    #if (__GNUC__ > 9 || (__clang_major__ > 9 && defined __GLIBCXX__)  || _MSC_VER > 1927)
+    #if (__cplusplus > 201700 || _MSVC_LANG > 201700) && (__GNUC__ > 9 || (__clang_major__ > 9 && defined __GLIBCXX__)  || _MSC_VER > 1927)
     
     test_mean<float>(std::execution::seq);
     test_mean<float>(std::execution::par);
