@@ -10,31 +10,39 @@
 #include <limits>
 #include <vector>
 #include <random>
+#include <utility>
 
 using quad = boost::multiprecision::cpp_bin_float_quad;
 
 template<typename Real>
 void test_one_sample_z()
 {
-    auto [computed_statistic, computed_pvalue] = boost::math::statistics::one_sample_z_test(Real(10), Real(2), Real(100), Real(10));
+    std::pair<Real, Real> temp = boost::math::statistics::one_sample_z_test(Real(10), Real(2), Real(100), Real(10));
+    Real computed_statistic = std::get<0>(temp);
+    Real computed_pvalue = std::get<1>(temp);
     CHECK_ULP_CLOSE(Real(0), computed_statistic, 5);
     CHECK_MOLLIFIED_CLOSE(Real(0), computed_pvalue, 5*std::numeric_limits<Real>::epsilon());
 
-    auto [computed_statistic_2, computed_pvalue_2] = boost::math::statistics::one_sample_z_test(Real(10), Real(2), Real(100), Real(5));
+    temp = boost::math::statistics::one_sample_z_test(Real(10), Real(2), Real(100), Real(5));
+    Real computed_statistic_2 = std::get<0>(temp);
     CHECK_ULP_CLOSE(Real(25), computed_statistic_2, 5);
 
-    auto [computed_statistic_3, computed_pvalue_3] = boost::math::statistics::one_sample_z_test(Real(1)/2, Real(10), Real(100), Real(1)/3);
+    temp = boost::math::statistics::one_sample_z_test(Real(1)/2, Real(10), Real(100), Real(1)/3);
+    Real computed_statistic_3 = std::get<0>(temp);
     CHECK_ULP_CLOSE(Real(1)/6, computed_statistic_3, 5);
 }
 
 template<typename Z>
 void test_integer_one_sample_z()
 {
-    auto [computed_statistic, computed_pvalue] = boost::math::statistics::one_sample_z_test(Z(10), Z(2), Z(100), Z(10));
+    std::pair<double, double> temp = boost::math::statistics::one_sample_z_test(Z(10), Z(2), Z(100), Z(10));
+    double computed_statistic = std::get<0>(temp);
+    double computed_pvalue = std::get<1>(temp);
     CHECK_ULP_CLOSE(0.0, computed_statistic, 5);
     CHECK_MOLLIFIED_CLOSE(0.0, computed_pvalue, 5*std::numeric_limits<double>::epsilon());
 
-    auto [computed_statistic_2, computed_pvalue_2] = boost::math::statistics::one_sample_z_test(Z(10), Z(2), Z(100), Z(5));
+    temp = boost::math::statistics::one_sample_z_test(Z(10), Z(2), Z(100), Z(5));
+    double computed_statistic_2 = std::get<0>(temp);
     CHECK_ULP_CLOSE(25.0, computed_statistic_2, 5);
 }
 
@@ -44,7 +52,9 @@ void test_two_sample_z()
     std::vector<Real> set_1 {1,2,3,4,5};
     std::vector<Real> set_2 {2,3,4,5,6};
 
-    auto [computed_statistic, computed_pvalue] = boost::math::statistics::two_sample_z_test(set_2, set_1);
+    std::pair<Real, Real> temp = boost::math::statistics::two_sample_z_test(set_2, set_1);
+    Real computed_statistic = std::get<0>(temp);
+    Real computed_pvalue = std::get<1>(temp);
     CHECK_ULP_CLOSE(Real(1), computed_statistic, 5);
     CHECK_MOLLIFIED_CLOSE(Real(0), computed_pvalue, 5*std::numeric_limits<Real>::epsilon());
 }
@@ -55,7 +65,9 @@ void test_integer_two_sample_z()
     std::vector<Z> set_1 {1,2,3,4,5};
     std::vector<Z> set_2 {2,3,4,5,6};
 
-    auto [computed_statistic, computed_pvalue] = boost::math::statistics::two_sample_z_test(set_2, set_1);
+    std::pair<double, double> temp = boost::math::statistics::two_sample_z_test(set_2, set_1);
+    double computed_statistic = std::get<0>(temp);
+    double computed_pvalue = std::get<1>(temp);
     CHECK_ULP_CLOSE(1.0, computed_statistic, 5);
     CHECK_MOLLIFIED_CLOSE(0.0, computed_pvalue, 5*std::numeric_limits<double>::epsilon());
 }
