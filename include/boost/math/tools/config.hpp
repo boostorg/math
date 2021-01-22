@@ -470,6 +470,14 @@ namespace boost{ namespace math{
 #else
 #  define BOOST_MATH_THREAD_LOCAL
 #endif
+//
+// Some mingw flavours have issues with thread_local and types with non-trivial destructors
+// See https://sourceforge.net/p/mingw-w64/bugs/527/
+//
+#if !defined(BOOST_NO_CXX11_THREAD_LOCAL) && (defined(__MINGW32__) || defined(__MINGW64__)) && !defined(_REENTRANT)
+#  define BOOST_MATH_NO_THREAD_LOCAL_WITH_NO_TRIVIAL_TYPES
+#endif
+
 
 //
 // Can we have constexpr tables?
