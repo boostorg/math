@@ -52,7 +52,7 @@ environment:
       TEST_SUITE: special_fun distribution_tests
 
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-      ARGS: --toolset=msvc-14.1 address-model=64 cxxstd=17
+      ARGS: --toolset=msvc-14.1 address-model=64 cxxstd=17 cxxflags="/bigobj"
       TEST_SUITE: misc quadrature ../example//examples
 
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
