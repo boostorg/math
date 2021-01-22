@@ -888,6 +888,9 @@ T zeta_imp_odd_integer(int s, const T&, const Policy&, const true_type&)
 template <class T, class Policy>
 T zeta_imp_odd_integer(int s, const T& sc, const Policy& pol, const false_type&)
 {
+#ifdef BOOST_MATH_NO_THREAD_LOCAL_WITH_NO_TRIVIAL_TYPES
+   static_assert(std::is_trivially_destructible<T>::value, "Your platform does not support thread_local with non-trivial types, last checked with Mingw-x64-8.1, Jan 2021.  Please try a Mingw build with the POSIX threading model, see https://sourceforge.net/p/mingw-w64/bugs/527/");
+#endif
    static BOOST_MATH_THREAD_LOCAL bool is_init = false;
    static BOOST_MATH_THREAD_LOCAL T results[50] = {};
    static BOOST_MATH_THREAD_LOCAL int digits = tools::digits<T>();
