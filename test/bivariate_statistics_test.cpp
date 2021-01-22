@@ -21,11 +21,7 @@
 #include <boost/math/statistics/bivariate_statistics.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/multiprecision/cpp_complex.hpp>
-
-#if __cplusplus > 201700L || _MSVC_LANG > 201700L
 #include <boost/math/statistics/univariate_statistics.hpp>
-#define CPP17TESTS
-#endif
 
 using boost::multiprecision::cpp_bin_float_50;
 using boost::multiprecision::cpp_complex_50;
@@ -110,7 +106,6 @@ void test_covariance()
         v[i] = (Real) dis(gen);
     }
 
-    #ifdef CPP17TESTS
     Real mu_u = boost::math::statistics::mean(u);
     Real mu_v = boost::math::statistics::mean(v);
     Real sigma_u_sq = boost::math::statistics::variance(u);
@@ -131,7 +126,6 @@ void test_covariance()
     BOOST_TEST(abs(cov_uu - sigma_u_sq) < tol);
     Real cov_vv = covariance(v, v);
     BOOST_TEST(abs(cov_vv - sigma_v_sq) < tol);
-    #endif
 }
 
 template<class Z>
@@ -202,7 +196,6 @@ void test_integer_covariance()
         v[i] = (Z) dis(gen);
     }
 
-    #ifdef CPP17TESTS
     double mu_u = boost::math::statistics::mean(u);
     double mu_v = boost::math::statistics::mean(v);
     double sigma_u_sq = boost::math::statistics::variance(u);
@@ -223,7 +216,6 @@ void test_integer_covariance()
     BOOST_TEST(abs(cov_uu - sigma_u_sq) < tol);
     double cov_vv = covariance(v, v);
     BOOST_TEST(abs(cov_vv - sigma_v_sq) < tol);
-    #endif
 }
 
 template<class Real>
