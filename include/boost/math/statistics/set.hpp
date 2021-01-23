@@ -59,7 +59,8 @@ public:
     [[nodiscard]] inline T median() const noexcept { return median_; }
     [[nodiscard]] inline std::list<T> mode() const noexcept { return mode_; }
     [[nodiscard]] inline T stddev() const noexcept { return stddev_; }
-    [[nodiscard]] inline T variance() const noexcept {return variance_; }
+    [[nodiscard]] inline T variance() const noexcept { return variance_; }
+    [[nodiscard]] inline T skewness() const noexcept { return skewness_; }
     [[nodiscard]] inline std::tuple<T, T, T, T> first_four_moments() const noexcept { return first_four_moments_; }
 };
 
@@ -93,6 +94,11 @@ void stats_base<ExecutionPolicy, ForwardIterator, T>::calc_all()
         stddev_ = sqrt(variance_);
     }
     
+    if(skewness_ == T(0))
+    {
+        skewness_ = boost::math::statistics::skewness(exec_, first_, last_);
+    }
+
     if(first_four_moments_ == std::make_tuple(T(0), T(0), T(0), T(0)))
     {
         first_four_moments_ = boost::math::statistics::first_four_moments(exec_, first_, last_);

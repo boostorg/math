@@ -96,6 +96,32 @@ void test(ExecutionPolicy&& exec)
     BOOST_TEST(abs(std::get<0>(set.first_four_moments()) - std::get<0>(boost::math::statistics::first_four_moments(exec, test.begin(), test.end()))) < tol);
 }
 
+template<typename Z, typename ExecutionPolicy>
+void test_integer(ExecutionPolicy&& exec)
+{
+    using boost::math::statistics::metrics;
+    using std::sqrt;
+    
+    const double tol = 10*std::numeric_limits<double>::epsilon();
+
+    std::vector<double> test {generate_random_vector<double>(global_size, global_seed)};
+    // Add a pair of values to guarantee there is a mode
+    test.emplace_back(2.0);
+    test.emplace_back(2.0);
+
+    boost::math::statistics::stats set(exec, test.begin(), test.end());
+    set.calc(metrics::all);
+
+    BOOST_TEST(abs(set.mean() - boost::math::statistics::mean(exec, test.begin(), test.end())) < tol);
+    BOOST_TEST(abs(set.median() - boost::math::statistics::median(exec, test.begin(), test.end())) < tol);
+    BOOST_TEST(set.mode().size() != 0);
+    
+    const double var = boost::math::statistics::variance(exec, test.begin(), test.end());
+    BOOST_TEST(abs(set.stddev() - sqrt(var)) < tol);
+    BOOST_TEST(abs(set.variance() - var) < tol);
+    BOOST_TEST(abs(std::get<0>(set.first_four_moments()) - std::get<0>(boost::math::statistics::first_four_moments(exec, test.begin(), test.end()))) < tol);
+}
+
 int main(void)
 {   
     // Support compilers with P0024R2 implemented without linking TBB
@@ -111,6 +137,8 @@ int main(void)
     // Expensive using CI:
     //test<cpp_bin_float_50>(std::execution::seq);
     //test<cpp_bin_float_50>(std::execution::par);
+
+    //test<int>(std::execution::seq);
     
     #endif
     return boost::report_errors();
