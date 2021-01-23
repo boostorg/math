@@ -35,6 +35,8 @@ namespace detail
 template<typename ExecutionPolicy, typename ForwardIterator, typename T>
 class stats_base
 {
+// Differs in the case of integer stats where T = double but the underlying type is an integer
+using T2 = typename std::iterator_traits<ForwardIterator>::value_type;
 
 protected:
     ExecutionPolicy exec_;
@@ -42,7 +44,7 @@ protected:
     ForwardIterator last_;
     T mean_ = T(0);
     T median_= T(0);
-    std::list<T> mode_;
+    std::list<T2> mode_;
     T stddev_= T(0);
     T variance_= T(0);
     T skewness_= T(0);
@@ -57,7 +59,7 @@ public:
 
     [[nodiscard]] inline T mean() const noexcept { return mean_; }
     [[nodiscard]] inline T median() const noexcept { return median_; }
-    [[nodiscard]] inline std::list<T> mode() const noexcept { return mode_; }
+    [[nodiscard]] inline std::list<T2> mode() const noexcept { return mode_; }
     [[nodiscard]] inline T stddev() const noexcept { return stddev_; }
     [[nodiscard]] inline T variance() const noexcept { return variance_; }
     [[nodiscard]] inline T skewness() const noexcept { return skewness_; }
@@ -168,6 +170,18 @@ public:
        
     stats(ForwardIterator first, ForwardIterator last) : 
         detail::stats_base<decltype(std::execution::seq), ForwardIterator, T>(std::execution::seq, first, last) {}
+};
+
+template<typename ExecutionPolicy = decltype(std::execution::seq), typename ForwardIterator = void, 
+         typename T = typename std::iterator_traits<ForwardIterator>::value_type>
+class integer_stats : public detail::stats_base<ExecutionPolicy, ForwardIterator, double>
+{
+public:
+    integer_stats(ExecutionPolicy exec, ForwardIterator first, ForwardIterator last) : 
+        detail::stats_base<ExecutionPolicy, ForwardIterator, double>(exec, first, last) {}
+       
+    integer_stats(ForwardIterator first, ForwardIterator last) : 
+        detail::stats_base<decltype(std::execution::seq), ForwardIterator, double>(std::execution::seq, first, last) {}
 };
 
 } // namespace boost::math::statistics

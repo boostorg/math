@@ -109,7 +109,7 @@ void test_integer(ExecutionPolicy&& exec)
     test.emplace_back(2.0);
     test.emplace_back(2.0);
 
-    boost::math::statistics::stats set(exec, test.begin(), test.end());
+    boost::math::statistics::integer_stats set(exec, test.begin(), test.end());
     set.calc(metrics::all);
 
     BOOST_TEST(abs(set.mean() - boost::math::statistics::mean(exec, test.begin(), test.end())) < tol);
@@ -138,7 +138,14 @@ int main(void)
     //test<cpp_bin_float_50>(std::execution::seq);
     //test<cpp_bin_float_50>(std::execution::par);
 
-    //test<int>(std::execution::seq);
+    test_integer<int>(std::execution::seq);
+    test_integer<int>(std::execution::par);
+    test_integer<int32_t>(std::execution::seq);
+    test_integer<int32_t>(std::execution::par);
+    test_integer<int64_t>(std::execution::seq);
+    test_integer<int64_t>(std::execution::par);
+    test_integer<uint32_t>(std::execution::seq);
+    test_integer<uint32_t>(std::execution::par);
     
     #endif
     return boost::report_errors();
