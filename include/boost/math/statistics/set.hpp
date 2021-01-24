@@ -12,8 +12,12 @@
 #include <utility>
 #include <type_traits>
 #include <list>
-#include <execution>
 #include <cmath>
+
+// Support compilers with P0024R2 implemented without linking TBB
+// https://en.cppreference.com/w/cpp/compiler_support
+#if (__cplusplus > 201700 || _MSVC_LANG > 201700) && (__GNUC__ > 9 || (__clang_major__ > 9 && defined __GLIBCXX__)  || _MSC_VER > 1927)
+#include <execution>
 
 namespace boost::math::statistics
 {
@@ -53,6 +57,7 @@ protected:
     void calc_all();
 
 public:
+    stats_base(ExecutionPolicy exec, ForwardIterator first, ForwardIterator last, metrics metric) : exec_ {exec}, first_ {first}, last_ {last} { calc(metric); }
     stats_base(ExecutionPolicy exec, ForwardIterator first, ForwardIterator last) noexcept : exec_ {exec}, first_ {first}, last_ {last} {}
 
     void calc(metrics);
@@ -131,8 +136,7 @@ void stats_base<ExecutionPolicy, ForwardIterator, T>::calc(metrics metric)
         }
         case metrics::stddev:
         {
-            T temp = boost::math::statistics::variance(exec_, first_, last_);
-            stddev_ = sqrt(temp);
+            stddev_ = sqrt(boost::math::statistics::variance(exec_, first_, last_));
             break;
         }
         case metrics::variance:
@@ -165,9 +169,15 @@ template<typename ExecutionPolicy = decltype(std::execution::seq), typename Forw
 class stats : public detail::stats_base<ExecutionPolicy, ForwardIterator, T>
 {
 public:
+    stats(ExecutionPolicy exec, ForwardIterator first, ForwardIterator last, metrics metric) :
+        detail::stats_base<ExecutionPolicy, ForwardIterator, T>(exec, first, last, metric) {}
+    
     stats(ExecutionPolicy exec, ForwardIterator first, ForwardIterator last) : 
         detail::stats_base<ExecutionPolicy, ForwardIterator, T>(exec, first, last) {}
-       
+
+    stats(ForwardIterator first, ForwardIterator last, metrics metric) :
+        detail::stats_base<decltype(std::execution::seq), ForwardIterator, T>(std::execution::seq, first, last, metric) {}
+    
     stats(ForwardIterator first, ForwardIterator last) : 
         detail::stats_base<decltype(std::execution::seq), ForwardIterator, T>(std::execution::seq, first, last) {}
 };
@@ -177,13 +187,20 @@ template<typename ExecutionPolicy = decltype(std::execution::seq), typename Forw
 class integer_stats : public detail::stats_base<ExecutionPolicy, ForwardIterator, double>
 {
 public:
+    integer_stats(ExecutionPolicy exec, ForwardIterator first, ForwardIterator last, metrics metric) :
+        detail::stats_base<ExecutionPolicy, ForwardIterator, T>(exec, first, last, metric) {}
+
     integer_stats(ExecutionPolicy exec, ForwardIterator first, ForwardIterator last) : 
         detail::stats_base<ExecutionPolicy, ForwardIterator, double>(exec, first, last) {}
-       
+
+    integer_stats(ForwardIterator first, ForwardIterator last, metrics metric) : 
+        detail::stats_base<decltype(std::execution::seq), ForwardIterator, double>(std::execution::seq, first, last, metric) {}
+
     integer_stats(ForwardIterator first, ForwardIterator last) : 
         detail::stats_base<decltype(std::execution::seq), ForwardIterator, double>(std::execution::seq, first, last) {}
 };
 
 } // namespace boost::math::statistics
 
+#endif
 #endif // BOOST_MATH_STATISTICS_SET
