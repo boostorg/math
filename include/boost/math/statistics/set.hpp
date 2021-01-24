@@ -75,41 +75,23 @@ template<typename ExecutionPolicy, typename ForwardIterator, typename T>
 void stats_base<ExecutionPolicy, ForwardIterator, T>::calc_all()
 {
     using std::sqrt;
-    
-    if(mean_ == T(0))
+
+    first_four_moments_ = boost::math::statistics::first_four_moments(exec_, first_, last_);
+    mean_ = std::get<0>(first_four_moments_);
+    variance_ = std::get<1>(first_four_moments_);
+    stddev_ = sqrt(variance_);
+
+    // A constant dataset has no skewness
+    if(variance_ != 0)
     {
-        mean_ = boost::math::statistics::mean(exec_, first_, last_);
+        const auto n = std::distance(first_, last_);
+        const T var = variance_/(n-1);
+
+        skewness_ = std::get<2>(first_four_moments_)/(variance_*sqrt(var)) / T(2);
     }
 
-    if(median_ == T(0))
-    {
-        median_ = boost::math::statistics::median(exec_, first_, last_);
-    }
-    
-    if(mode_.empty())
-    {
-        boost::math::statistics::mode(exec_, first_, last_, std::inserter(mode_, mode_.begin()));
-    }
-    
-    if(variance_ == T(0))
-    {
-        variance_ = boost::math::statistics::variance(exec_, first_, last_);
-    }
-    
-    if(stddev_ == T(0))
-    {
-        stddev_ = sqrt(variance_);
-    }
-    
-    if(skewness_ == T(0))
-    {
-        skewness_ = boost::math::statistics::skewness(exec_, first_, last_);
-    }
-
-    if(first_four_moments_ == std::make_tuple(T(0), T(0), T(0), T(0)))
-    {
-        first_four_moments_ = boost::math::statistics::first_four_moments(exec_, first_, last_);
-    }
+    median_ = boost::math::statistics::median(exec_, first_, last_);
+    mode_ = boost::math::statistics::mode(exec_, first_, last_);
 }
 
 template<typename ExecutionPolicy, typename ForwardIterator, typename T>
