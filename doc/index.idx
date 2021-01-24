@@ -64,6 +64,8 @@ bug \<bug\w*\>
 
 GIT \<GIT\w*\>
 
+pow "" "math_toolkit\.powers\.ct_pow" function_name
+
 Trac
 directory
 file structure
