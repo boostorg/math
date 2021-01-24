@@ -14,14 +14,7 @@
 #include <list>
 #include <cmath>
 
-// Support compilers with P0024R2 implemented without linking TBB
-// https://en.cppreference.com/w/cpp/compiler_support
-#if (__cplusplus > 201700 || _MSVC_LANG > 201700) && (__GNUC__ > 9 || (__clang_major__ > 9 && defined __GLIBCXX__)  || _MSC_VER > 1927)
-#include <execution>
-
-namespace boost::math::statistics
-{
-
+namespace boost { namespace math { namespace statistics {
 enum class metrics : unsigned
 {
     mean = 0b0000001,
@@ -33,7 +26,15 @@ enum class metrics : unsigned
     first_four_moments = 0b1000000,
     all = 0b1111111
 };
+}}} // boost math statistics
 
+// Support compilers with P0024R2 implemented without linking TBB
+// https://en.cppreference.com/w/cpp/compiler_support
+#if (__cplusplus > 201700 || _MSVC_LANG > 201700) && (__GNUC__ > 9 || (__clang_major__ > 9 && defined __GLIBCXX__)  || _MSC_VER > 1927)
+#include <execution>
+
+namespace boost::math::statistics
+{
 namespace detail
 {
 template<typename ExecutionPolicy, typename ForwardIterator, typename T>
@@ -184,5 +185,141 @@ public:
 
 } // namespace boost::math::statistics
 
-#endif
+// C++11 bindings
+#else
+namespace boost { namespace math { namespace statistics {
+namespace detail
+{
+template<typename ForwardIterator, typename T>
+class stats_base
+{
+// Differs in the case of integer stats where T = double but the underlying type is an integer
+using T2 = typename std::iterator_traits<ForwardIterator>::value_type;
+
+protected:
+    ForwardIterator first_;
+    ForwardIterator last_;
+    T mean_ = T(0);
+    T median_= T(0);
+    std::list<T2> mode_;
+    T stddev_= T(0);
+    T variance_= T(0);
+    T skewness_= T(0);
+    std::tuple<T, T, T, T> first_four_moments_ = std::make_tuple(T(0), T(0), T(0), T(0));
+
+    void calc_all();
+
+public:
+    stats_base(ForwardIterator first, ForwardIterator last, metrics metric) : first_ {first}, last_ {last} { calc(metric); }
+    stats_base(ForwardIterator first, ForwardIterator last) noexcept : first_ {first}, last_ {last} {}
+
+    void calc(metrics);
+
+    inline T mean() const noexcept { return mean_; }
+    inline T median() const noexcept { return median_; }
+    inline std::list<T2> mode() const noexcept { return mode_; }
+    inline T stddev() const noexcept { return stddev_; }
+    inline T variance() const noexcept { return variance_; }
+    inline T skewness() const noexcept { return skewness_; }
+    inline std::tuple<T, T, T, T> first_four_moments() const noexcept { return first_four_moments_; }
+};
+
+template<typename ForwardIterator, typename T>
+void stats_base<ForwardIterator, T>::calc_all()
+{
+    using std::sqrt;
+
+    first_four_moments_ = boost::math::statistics::first_four_moments(first_, last_);
+    mean_ = std::get<0>(first_four_moments_);
+    variance_ = std::get<1>(first_four_moments_);
+    stddev_ = sqrt(variance_);
+
+    // A constant dataset has no skewness
+    if(variance_ != 0)
+    {
+        const auto n = std::distance(first_, last_);
+        const T var = variance_/(n-1);
+
+        skewness_ = std::get<2>(first_four_moments_)/(variance_*sqrt(var)) / T(2);
+    }
+
+    median_ = boost::math::statistics::median(first_, last_);
+    mode_ = boost::math::statistics::mode(first_, last_);
+}
+
+template<typename ForwardIterator, typename T>
+void stats_base<ForwardIterator, T>::calc(metrics metric)
+{
+    using std::sqrt;
+    
+    switch(metric)
+    {
+        case metrics::mean:
+        {
+            mean_ = boost::math::statistics::mean(first_, last_);
+            break;
+        }
+        case metrics::median:
+        {
+            median_ = boost::math::statistics::median(first_, last_);
+            break;
+        }
+        case metrics::mode:
+        {
+            boost::math::statistics::mode(first_, last_, std::inserter(mode_, mode_.begin()));
+            break;
+        }
+        case metrics::stddev:
+        {
+            stddev_ = sqrt(boost::math::statistics::variance(first_, last_));
+            break;
+        }
+        case metrics::variance:
+        {
+            variance_ = boost::math::statistics::variance(first_, last_);
+            break;
+        }
+        case metrics::skewness:
+        {
+            skewness_ = boost::math::statistics::skewness(first_, last_);
+            break;
+        }
+        case metrics::first_four_moments:
+        {
+            first_four_moments_ = boost::math::statistics::first_four_moments(first_, last_);
+            break;
+        }
+        case metrics::all:
+            // [[fallthrough]];
+        default:
+            calc_all();
+    }
+}
+
+} // End namespace detail
+
+// Allow multiple interfaces to base allowing an execution policy to be passed or not
+template<typename ForwardIterator = void, typename T = typename std::iterator_traits<ForwardIterator>::value_type>
+class stats : public detail::stats_base<ForwardIterator, T>
+{
+public:
+    stats(ForwardIterator first, ForwardIterator last, metrics metric) :
+        detail::stats_base<ForwardIterator, T>(first, last, metric) {}
+    
+    stats(ForwardIterator first, ForwardIterator last) : 
+        detail::stats_base<ForwardIterator, T>(first, last) {}
+};
+
+template<typename ForwardIterator = void, typename T = typename std::iterator_traits<ForwardIterator>::value_type>
+class integer_stats : public detail::stats_base<ForwardIterator, double>
+{
+public:
+    integer_stats(ForwardIterator first, ForwardIterator last, metrics metric) :
+        detail::stats_base<ForwardIterator, T>(first, last, metric) {}
+
+    integer_stats(ForwardIterator first, ForwardIterator last) : 
+        detail::stats_base<ForwardIterator, double>(first, last) {}
+};
+}}} // Namespaces
+#endif 
 #endif // BOOST_MATH_STATISTICS_SET

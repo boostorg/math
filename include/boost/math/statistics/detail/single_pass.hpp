@@ -19,6 +19,7 @@
 #include <valarray>
 #include <stdexcept>
 #include <functional>
+#include <vector>
 
 namespace boost { namespace math { namespace statistics { namespace detail {
 
