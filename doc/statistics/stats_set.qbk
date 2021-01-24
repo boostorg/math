@@ -1,0 +1,104 @@
+[/
+Copyright (c) 2021 Matt Borland
+Use, modification and distribution are subject to the
+Boost Software License, Version 1.0. (See accompanying file
+LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+]
+
+[section:stats_set Statistics Set]
+
+[heading Synopsis]
+
+```
+#include <boost/math/statistics/set.hpp>
+
+namespace boost::math::statistics {
+
+    enum class metrics
+    {
+        mean,
+        median,
+        mode,
+        stddev,
+        variance,
+        skewness,
+        first_four_moments,
+        all
+    };
+    
+    template<typename ExecutionPolicy, typename ForwardIterator, typename T,
+             typename T2 = typename std::iterator_traits<ForwardIterator>::value_type>
+    class stats
+    {
+    public:
+        stats(ExecutionPolicy exec, ForwardIterator first, ForwardIterator last, metrics metric);
+        stats(ExecutionPolicy exec, ForwardIterator first, ForwardIterator last);
+        stats(ForwardIterator first, ForwardIterator last, metrics metric);
+        stats(ForwardIterator first, ForwardIterator last);
+
+        // Getters
+        [[nodiscard]] inline T mean() const noexcept;
+        [[nodiscard]] inline T median() const noexcept;
+        [[nodiscard]] inline std::list<T2> mode() const noexcept;
+        [[nodiscard]] inline T stddev() const noexcept;
+        [[nodiscard]] inline T variance() const noexcept;
+        [[nodiscard]] inline T skewness() const noexcept;
+        [[nodiscard]] inline std::tuple<T, T, T, T> first_four_moments() const noexcept;
+
+        // Setter
+        void calc(metrics metric);
+    };
+}
+```
+
+[heading Description]
+The statistics set is a wrapper class around the core univariate statistics functions contained in boost.math.
+This class is compatible with C++11 and above. C++17 is required to utilize execution policies and class template argument deduction.
+See the documentation for univariate_statistics for additional information on each of the functions provided.
+
+/Nota bene:/ To use integer types replace the type stats with integer_stats. The type T will be deduced as a double precision type.
+
+[heading C++11 Example]
+
+```
+using boost::math::statistics::metrics;
+
+std::vector<double> test {...};
+
+boost::math::statistics::stats<decltype(test.begin()), double> set(test.begin(), test.end());
+set.calc(metrics::mean);
+
+double mean = set.mean();
+
+// With integers
+std::vector<int> int_test {...};
+
+boost::math::statistics::stats<decltype(int_test.begin()), int> int_set(int_test.begin(), int_test.end(), metrics::all);
+
+double variance = int_set.variance();
+```
+
+[heading C++17 Example]
+
+```
+using boost::math::statistics::metrics;
+
+std::vector<double> test {...};
+
+boost::math::statistics::stats set(std::execution::par, test.begin(), test.end());
+set.calc(metrics::mean);
+
+double mean = set.mean();
+
+// With integers
+std::vector<int> int_test {...};
+
+boost::math::statistics::stats int_set(int_test.begin(), int_test.end(), metrics::all);
+
+double variance = int_set.variance();
+```
+
+/Nota bene:/ In the C++17 case if an execution policy is not provided the defualt is sequential policy.
+
+[endsect]
+[/section:section:stats_set Statistics Set]

@@ -606,6 +606,7 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 
 [mathpart statistics Statistics ]
 [include statistics/univariate_statistics.qbk]
+[include statistics/stats_set.qbk]
 [include statistics/bivariate_statistics.qbk]
 [include statistics/signal_statistics.qbk]
 [include statistics/anderson_darling.qbk]
