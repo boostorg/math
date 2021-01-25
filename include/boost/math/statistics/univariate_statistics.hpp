@@ -260,6 +260,7 @@ template<class ExecutionPolicy, class ForwardIterator>
 inline auto skewness(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last)
 {
     using Real = typename std::iterator_traits<ForwardIterator>::value_type;
+    using std::sqrt;
 
     if constexpr (std::is_same_v<std::remove_reference_t<decltype(exec)>, decltype(std::execution::seq)>)
     {
