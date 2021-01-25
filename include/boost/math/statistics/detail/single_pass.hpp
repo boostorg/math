@@ -7,6 +7,7 @@
 #ifndef BOOST_MATH_STATISTICS_UNIVARIATE_STATISTICS_DETAIL_SINGLE_PASS_HPP
 #define BOOST_MATH_STATISTICS_UNIVARIATE_STATISTICS_DETAIL_SINGLE_PASS_HPP
 
+#include <boost/assert.hpp>
 #include <tuple>
 #include <iterator>
 #include <atomic>
@@ -18,6 +19,7 @@
 #include <valarray>
 #include <stdexcept>
 #include <functional>
+#include <vector>
 
 namespace boost { namespace math { namespace statistics { namespace detail {
 
