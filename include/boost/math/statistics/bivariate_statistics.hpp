@@ -27,12 +27,12 @@
 
 namespace boost{ namespace math{ namespace statistics { namespace detail {
 
+// See Equation III.9 of "Numerically Stable, Single-Pass, Parallel Statistics Algorithms", Bennet et al.
 template<typename ReturnType, typename ForwardIterator>
 ReturnType means_and_covariance_seq_impl(ForwardIterator u_begin, ForwardIterator u_end, ForwardIterator v_begin, ForwardIterator v_end)
 {
     using Real = typename std::tuple_element<0, ReturnType>::type;
 
-    // See Equation III.9 of "Numerically Stable, Single-Pass, Parallel Statistics Algorithms", Bennet et al.
     Real cov = 0;
     ForwardIterator u_it = u_begin;
     ForwardIterator v_it = v_begin;
@@ -148,31 +148,6 @@ ReturnType means_and_covariance_parallel_impl(ForwardIterator u_begin, ForwardIt
     }
 
     return std::make_tuple(mu_u_a, mu_v_a, cov_a, n_a);
-}
-
-template<typename ReturnType, typename Container>
-ReturnType means_and_covariance_impl(Container const & u, Container const & v)
-{
-    using Real = typename std::tuple_element<0, ReturnType>::type;
-
-    BOOST_ASSERT_MSG(u.size() == v.size(), "The size of each vector must be the same to compute covariance.");
-    BOOST_ASSERT_MSG(u.size() > 0, "Computing covariance requires at least one sample.");
-
-    // See Equation III.9 of "Numerically Stable, Single-Pass, Parallel Statistics Algorithms", Bennet et al.
-    Real cov = 0;
-    Real mu_u = u[0];
-    Real mu_v = v[0];
-
-    for(std::size_t i = 1; i < u.size(); ++i)
-    {
-        Real u_tmp = (u[i] - mu_u)/(i+1);
-        Real v_tmp = v[i] - mu_v;
-        cov += i*u_tmp*v_tmp;
-        mu_u = mu_u + u_tmp;
-        mu_v = mu_v + v_tmp/(i+1);
-    }
-
-    return std::make_tuple(mu_u, mu_v, cov/u.size());
 }
 
 template<typename ReturnType, typename Container>
