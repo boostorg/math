@@ -40,17 +40,17 @@ ReturnType means_and_covariance_seq_impl(ForwardIterator u_begin, ForwardIterato
     Real mu_v = *v_it++;
     std::size_t i = 1;
 
-    while(u_begin != u_end && v_begin != v_end)
+    while(u_it != u_end && v_it != v_end)
     {
         Real u_temp = (*u_it++ - mu_u)/(i+1);
         Real v_temp = *v_it++ - mu_v;
-        cov = i*u_temp*v_temp;
+        cov += i*u_temp*v_temp;
         mu_u = mu_u + u_temp;
         mu_v = mu_v + v_temp/(i+1);
         i = i + 1;
     }
 
-    if(u_begin != u_end || v_begin != v_end)
+    if(u_it != u_end || v_it != v_end)
     {
         throw std::domain_error("The size of each sample set must be the same to compute covariance");
     }
@@ -226,26 +226,32 @@ ReturnType correlation_coefficient_impl(Container const & u, Container const & v
 template<typename Container, typename Real = typename Container::value_type, typename std::enable_if<std::is_integral<Real>::value, bool>::type = true>
 inline auto means_and_covariance(Container const & u, Container const & v) -> std::tuple<double, double, double>
 {
-    return detail::means_and_covariance_impl<std::tuple<double, double, double>>(u, v);
+    using ReturnType = std::tuple<double, double, double, double>;
+    ReturnType temp = detail::means_and_covariance_seq_impl<ReturnType>(std::begin(u), std::end(u), std::begin(v), std::end(v));
+    return std::make_tuple(std::get<0>(temp), std::get<1>(temp), std::get<2>(temp));
 }
 
 template<typename Container, typename Real = typename Container::value_type, typename std::enable_if<!std::is_integral<Real>::value, bool>::type = true>
 inline auto means_and_covariance(Container const & u, Container const & v) -> std::tuple<Real, Real, Real>
 {
-    return detail::means_and_covariance_impl<std::tuple<Real, Real, Real>>(u, v);
+    using ReturnType = std::tuple<Real, Real, Real, Real>;
+    ReturnType temp = detail::means_and_covariance_seq_impl<ReturnType>(std::begin(u), std::end(u), std::begin(v), std::end(v));
+    return std::make_tuple(std::get<0>(temp), std::get<1>(temp), std::get<2>(temp));
 }
 
 template<typename Container, typename Real = typename Container::value_type, typename std::enable_if<std::is_integral<Real>::value, bool>::type = true>
 inline double covariance(Container const & u, Container const & v)
 {
-    std::tuple<double, double, double> temp = detail::means_and_covariance_impl<std::tuple<double, double, double>>(u, v);
+    using ReturnType = std::tuple<double, double, double, double>;
+    ReturnType temp = detail::means_and_covariance_seq_impl<ReturnType>(std::begin(u), std::end(u), std::begin(v), std::end(v));
     return std::get<2>(temp);
 }
 
 template<typename Container, typename Real = typename Container::value_type, typename std::enable_if<!std::is_integral<Real>::value, bool>::type = true>
 inline Real covariance(Container const & u, Container const & v)
 {
-    std::tuple<Real, Real, Real> temp = detail::means_and_covariance_impl<std::tuple<Real, Real, Real>>(u, v);
+    using ReturnType = std::tuple<Real, Real, Real, Real>;
+    ReturnType temp = detail::means_and_covariance_seq_impl<ReturnType>(std::begin(u), std::end(u), std::begin(v), std::end(v));
     return std::get<2>(temp);
 }
 
@@ -262,4 +268,5 @@ inline Real correlation_coefficient(Container const & u, Container const & v)
 }
 
 }}} // namespace boost::math::statistics
+
 #endif
