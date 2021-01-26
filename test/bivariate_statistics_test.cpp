@@ -125,14 +125,14 @@ void test_covariance(ExecutionPolicy&& exec)
     // Cauchy-Schwartz inequality:
     BOOST_TEST(cov_uv*cov_uv <= sigma_u_sq*sigma_v_sq);
     // cov(X, X) = sigma(X)^2:
-    Real cov_uu = covariance(u, u);
+    Real cov_uu = covariance(exec, u, u);
     BOOST_TEST(abs(cov_uu - sigma_u_sq) < tol);
-    Real cov_vv = covariance(v, v);
+    Real cov_vv = covariance(exec, v, v);
     BOOST_TEST(abs(cov_vv - sigma_v_sq) < tol);
 }
 
-template<typename Z>
-void test_integer_covariance()
+template<typename Z, typename ExecutionPolicy>
+void test_integer_covariance(ExecutionPolicy&& exec)
 {
     std::cout << std::setprecision(std::numeric_limits<double>::digits10+1);
     double tol = std::numeric_limits<double>::epsilon();
@@ -141,7 +141,7 @@ void test_integer_covariance()
     // Covariance of a single thing is zero:
     std::array<Z, 1> u1{8};
     std::array<Z, 1> v1{17};
-    std::tuple<double, double, double> temp = means_and_covariance(u1, v1);
+    std::tuple<double, double, double> temp = means_and_covariance(exec, u1, v1);
     double mu_u1 = std::get<0>(temp);
     double mu_v1 = std::get<1>(temp);
     double cov1 = std::get<2>(temp);
@@ -153,7 +153,7 @@ void test_integer_covariance()
 
     std::array<Z, 2> u2{8, 4};
     std::array<Z, 2> v2{3, 7};
-    temp = means_and_covariance(u2, v2);
+    temp = means_and_covariance(exec, u2, v2);
     double mu_u2 = std::get<0>(temp);
     double mu_v2 = std::get<1>(temp);
     double cov2 = std::get<2>(temp);
@@ -165,7 +165,7 @@ void test_integer_covariance()
     std::vector<Z> u3{1,2,3};
     std::vector<Z> v3{1,1,1};
 
-    temp = means_and_covariance(u3, v3);
+    temp = means_and_covariance(exec, u3, v3);
     double mu_u3 = std::get<0>(temp);
     double mu_v3 = std::get<1>(temp);
     double cov3 = std::get<2>(temp);
@@ -175,15 +175,15 @@ void test_integer_covariance()
     BOOST_TEST(abs(mu_u3 - 2) < tol);
     BOOST_TEST(abs(mu_v3 - 1) < tol);
     // Make sure we pull the correct symbol out of means_and_covariance:
-    cov3 = covariance(u3, v3);
+    cov3 = covariance(exec, u3, v3);
     BOOST_TEST(abs(cov3) < tol);
 
-    cov3 = covariance(v3, u3);
+    cov3 = covariance(exec, v3, u3);
     // Covariance is symmetric: cov(u,v) = cov(v,u)
     BOOST_TEST(abs(cov3) < tol);
 
     // cov(u,u) = sigma(u)^2:
-    cov3 = covariance(u3, u3);
+    cov3 = covariance(exec, u3, u3);
     double expected = double(2)/double(3);
 
     BOOST_TEST(abs(cov3 - expected) < tol);
@@ -204,7 +204,7 @@ void test_integer_covariance()
     double sigma_u_sq = boost::math::statistics::variance(u);
     double sigma_v_sq = boost::math::statistics::variance(v);
 
-    temp = means_and_covariance(u, v);
+    temp = means_and_covariance(exec, u, v);
     double mu_u_ = std::get<0>(temp);
     double mu_v_ = std::get<1>(temp);
     double cov_uv = std::get<2>(temp);
@@ -215,9 +215,9 @@ void test_integer_covariance()
     // Cauchy-Schwartz inequality:
     BOOST_TEST(cov_uv*cov_uv <= sigma_u_sq*sigma_v_sq);
     // cov(X, X) = sigma(X)^2:
-    double cov_uu = covariance(u, u);
+    double cov_uu = covariance(exec, u, u);
     BOOST_TEST(abs(cov_uu - sigma_u_sq) < tol);
-    double cov_vv = covariance(v, v);
+    double cov_vv = covariance(exec, v, v);
     BOOST_TEST(abs(cov_vv - sigma_v_sq) < tol);
 }
 /*
@@ -312,12 +312,17 @@ int main()
     test_covariance<long double>(std::execution::par);
     test_covariance<cpp_bin_float_50>(std::execution::seq);
     test_covariance<cpp_bin_float_50>(std::execution::par);
-    /*
-    test_integer_covariance<int>();
-    test_integer_covariance<int32_t>();
-    test_integer_covariance<int64_t>();
-    test_integer_covariance<uint32_t>();
+    
+    test_integer_covariance<int>(std::execution::seq);
+    test_integer_covariance<int>(std::execution::par);
+    test_integer_covariance<int32_t>(std::execution::seq);
+    test_integer_covariance<int32_t>(std::execution::par);
+    test_integer_covariance<int64_t>(std::execution::seq);
+    test_integer_covariance<int64_t>(std::execution::par);
+    test_integer_covariance<uint32_t>(std::execution::seq);
+    test_integer_covariance<uint32_t>(std::execution::par);
 
+    /*
     test_correlation_coefficient<float>();
     test_correlation_coefficient<double>();
     test_correlation_coefficient<long double>();
