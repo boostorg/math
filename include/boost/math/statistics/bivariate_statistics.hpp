@@ -85,7 +85,7 @@ ReturnType means_and_covariance_parallel_impl(ForwardIterator u_begin, ForwardIt
     // https://lemire.me/blog/2020/01/30/cost-of-a-thread-in-c-under-linux/
     if(u_elements < parallel_lower_bound)
     {
-        return means_and_covariance_seq_impl(u_begin, u_end, v_begin, v_end);
+        return means_and_covariance_seq_impl<ReturnType>(u_begin, u_end, v_begin, v_end);
     }
     else if(u_elements >= parallel_upper_bound)
     {
@@ -201,12 +201,12 @@ ReturnType correlation_coefficient_impl(Container const & u, Container const & v
 
 #ifdef EXEC_COMPATIBLE
 
-template<typename ExecutionPolicy, typename Container>
+template<typename ExecutionPolicy, typename Container, typename Real = typename Container::value_type>
 inline auto means_and_covariance(ExecutionPolicy&& exec, Container const & u, Container const & v)
 {
-    if constexpr (std::is_same_v<exec, decltype(std::execution::seq)>)
+    if constexpr (std::is_same_v<std::remove_reference_t<decltype(exec)>, decltype(std::execution::seq)>)
     {
-        if constexpr (std::is_integral_v<Container::value_type>)
+        if constexpr (std::is_integral_v<Real>)
         {
             using ReturnType = std::tuple<double, double, double, double>;
             ReturnType temp = detail::means_and_covariance_seq_impl<ReturnType>(std::begin(u), std::end(u), std::begin(v), std::end(v));
@@ -221,7 +221,7 @@ inline auto means_and_covariance(ExecutionPolicy&& exec, Container const & u, Co
     }
     else
     {
-        if constexpr (std::is_integral_v<Container::value_type>)
+        if constexpr (std::is_integral_v<Real>)
         {
             using ReturnType = std::tuple<double, double, double, double>;
             ReturnType temp = detail::means_and_covariance_parallel_impl<ReturnType>(std::begin(u), std::end(u), std::begin(v), std::end(v));
