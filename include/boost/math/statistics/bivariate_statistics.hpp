@@ -23,6 +23,7 @@
 // https://en.cppreference.com/w/cpp/compiler_support
 #if (__cplusplus > 201700 || _MSVC_LANG > 201700) && (__GNUC__ > 9 || (__clang_major__ > 9 && defined __GLIBCXX__)  || _MSC_VER > 1927)
 #include <execution>
+#define EXEC_COMPATIBLE
 #endif
 
 namespace boost{ namespace math{ namespace statistics { namespace detail {
@@ -198,6 +199,63 @@ ReturnType correlation_coefficient_impl(Container const & u, Container const & v
 }
 } // namespace detail
 
+#ifdef EXEC_COMPATIBLE
+
+template<typename ExecutionPolicy, typename Container>
+inline auto means_and_covariance(ExecutionPolicy&& exec, Container const & u, Container const & v)
+{
+    if constexpr (std::is_same_v<exec, decltype(std::execution::seq)>)
+    {
+        if constexpr (std::is_integral_v<Container::value_type>)
+        {
+            using ReturnType = std::tuple<double, double, double, double>;
+            ReturnType temp = detail::means_and_covariance_seq_impl<ReturnType>(std::begin(u), std::end(u), std::begin(v), std::end(v));
+            return std::make_tuple(std::get<0>(temp), std::get<1>(temp), std::get<2>(temp));
+        }
+        else
+        {
+            using ReturnType = std::tuple<Real, Real, Real, Real>;
+            ReturnType temp = detail::means_and_covariance_seq_impl<ReturnType>(std::begin(u), std::end(u), std::begin(v), std::end(v));
+            return std::make_tuple(std::get<0>(temp), std::get<1>(temp), std::get<2>(temp));
+        }
+    }
+    else
+    {
+        if constexpr (std::is_integral_v<Container::value_type>)
+        {
+            using ReturnType = std::tuple<double, double, double, double>;
+            ReturnType temp = detail::means_and_covariance_parallel_impl<ReturnType>(std::begin(u), std::end(u), std::begin(v), std::end(v));
+            return std::make_tuple(std::get<0>(temp), std::get<1>(temp), std::get<2>(temp));
+        }
+        else
+        {
+            using ReturnType = std::tuple<Real, Real, Real, Real>;
+            ReturnType temp = detail::means_and_covariance_parallel_impl<ReturnType>(std::begin(u), std::end(u), std::begin(v), std::end(v));
+            return std::make_tuple(std::get<0>(temp), std::get<1>(temp), std::get<2>(temp));
+        }
+    }
+}
+
+template<typename Container>
+inline auto means_and_covariance(Container const & u, Container const & v)
+{
+    return means_and_covariance(std::execution::seq, u, v);
+}
+
+template<typename ExecutionPolicy, typename Container>
+inline auto covariance(ExecutionPolicy&& exec, Container const & u, Container const & v)
+{
+    return std::get<2>(means_and_covariance(exec, u, v));
+}
+
+template<typename Container>
+inline auto covariance(Container const & u, Container const & v)
+{
+    return covariance(std::execution::seq, u, v);
+}
+
+#else // C++11 bindings
+
 template<typename Container, typename Real = typename Container::value_type, typename std::enable_if<std::is_integral<Real>::value, bool>::type = true>
 inline auto means_and_covariance(Container const & u, Container const & v) -> std::tuple<double, double, double>
 {
@@ -241,6 +299,8 @@ inline Real correlation_coefficient(Container const & u, Container const & v)
 {
     return detail::correlation_coefficient_impl<Real>(u, v);
 }
+
+#endif
 
 }}} // namespace boost::math::statistics
 
