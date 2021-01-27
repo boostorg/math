@@ -220,9 +220,9 @@ void test_integer_covariance(ExecutionPolicy&& exec)
     double cov_vv = covariance(exec, v, v);
     BOOST_TEST(abs(cov_vv - sigma_v_sq) < tol);
 }
-/*
-template<typename Real>
-void test_correlation_coefficient()
+
+template<typename Real, typename ExecutionPolicy>
+void test_correlation_coefficient(ExecutionPolicy&& exec)
 {
     using boost::math::statistics::correlation_coefficient;
     using std::abs;
@@ -231,41 +231,41 @@ void test_correlation_coefficient()
     Real tol = std::numeric_limits<Real>::epsilon();
     std::vector<Real> u{1};
     std::vector<Real> v{1};
-    Real rho_uv = correlation_coefficient(u, v);
+    Real rho_uv = correlation_coefficient(exec, u, v);
     BOOST_TEST(abs(rho_uv - 1) < tol);
 
     u = {1,1};
     v = {1,1};
-    rho_uv = correlation_coefficient(u, v);
+    rho_uv = correlation_coefficient(exec, u, v);
     BOOST_TEST(abs(rho_uv - 1) < tol);
 
     u = {1, 2, 3};
     v = {1, 2, 3};
-    rho_uv = correlation_coefficient(u, v);
+    rho_uv = correlation_coefficient(exec, u, v);
     BOOST_TEST(abs(rho_uv - 1) < tol);
 
     u = {1, 2, 3};
     v = {-1, -2, -3};
-    rho_uv = correlation_coefficient(u, v);
+    rho_uv = correlation_coefficient(exec, u, v);
     BOOST_TEST(abs(rho_uv + 1) < tol);
 
-    rho_uv = correlation_coefficient(v, u);
+    rho_uv = correlation_coefficient(exec, v, u);
     BOOST_TEST(abs(rho_uv + 1) < tol);
 
     u = {1, 2, 3};
     v = {0, 0, 0};
-    rho_uv = correlation_coefficient(v, u);
+    rho_uv = correlation_coefficient(exec, v, u);
     BOOST_TEST(abs(rho_uv) < tol);
 
     u = {1, 2, 3};
     v = {0, 0, 3};
-    rho_uv = correlation_coefficient(v, u);
+    rho_uv = correlation_coefficient(exec, v, u);
     // mu_u = 2, sigma_u^2 = 2/3, mu_v = 1, sigma_v^2 = 2, cov(u,v) = 1.
     BOOST_TEST(abs(rho_uv - sqrt(Real(3))/Real(2)) < tol);
 }
 
-template<typename Z>
-void test_integer_correlation_coefficient()
+template<typename Z, typename ExecutionPolicy>
+void test_integer_correlation_coefficient(ExecutionPolicy&& exec)
 {
     using boost::math::statistics::correlation_coefficient;
     using std::abs;
@@ -274,34 +274,34 @@ void test_integer_correlation_coefficient()
     double tol = std::numeric_limits<double>::epsilon();
     std::vector<Z> u{1};
     std::vector<Z> v{1};
-    double rho_uv = correlation_coefficient(u, v);
+    double rho_uv = correlation_coefficient(exec, u, v);
     BOOST_TEST(abs(rho_uv - 1.0) < tol);
 
     u = {1,1};
     v = {1,1};
-    rho_uv = correlation_coefficient(u, v);
+    rho_uv = correlation_coefficient(exec, u, v);
     BOOST_TEST(abs(rho_uv - 1.0) < tol);
 
     u = {1, 2, 3};
     v = {1, 2, 3};
-    rho_uv = correlation_coefficient(u, v);
+    rho_uv = correlation_coefficient(exec, u, v);
     BOOST_TEST(abs(rho_uv - 1.0) < tol);
 
-    rho_uv = correlation_coefficient(v, u);
+    rho_uv = correlation_coefficient(exec, v, u);
     BOOST_TEST(abs(rho_uv - 1.0) < tol);
 
     u = {1, 2, 3};
     v = {0, 0, 0};
-    rho_uv = correlation_coefficient(v, u);
+    rho_uv = correlation_coefficient(exec, v, u);
     BOOST_TEST(abs(rho_uv) < tol);
 
     u = {1, 2, 3};
     v = {0, 0, 3};
-    rho_uv = correlation_coefficient(v, u);
+    rho_uv = correlation_coefficient(exec, v, u);
     // mu_u = 2, sigma_u^2 = 2/3, mu_v = 1, sigma_v^2 = 2, cov(u,v) = 1.
     BOOST_TEST(abs(rho_uv - sqrt(double(3))/double(2)) < tol);
 }
-*/
+
 int main()
 {
     test_covariance<float>(std::execution::seq);
@@ -322,17 +322,24 @@ int main()
     test_integer_covariance<uint32_t>(std::execution::seq);
     test_integer_covariance<uint32_t>(std::execution::par);
 
-    /*
-    test_correlation_coefficient<float>();
-    test_correlation_coefficient<double>();
-    test_correlation_coefficient<long double>();
-    test_correlation_coefficient<cpp_bin_float_50>();
-
-    test_integer_correlation_coefficient<int>();
-    test_integer_correlation_coefficient<int32_t>();
-    test_integer_correlation_coefficient<int64_t>();
-    test_integer_correlation_coefficient<uint32_t>();
-    */
+    test_correlation_coefficient<float>(std::execution::seq);
+    test_correlation_coefficient<float>(std::execution::par);
+    test_correlation_coefficient<double>(std::execution::seq);
+    test_correlation_coefficient<double>(std::execution::par);
+    test_correlation_coefficient<long double>(std::execution::seq);
+    test_correlation_coefficient<long double>(std::execution::par);
+    test_correlation_coefficient<cpp_bin_float_50>(std::execution::seq);
+    test_correlation_coefficient<cpp_bin_float_50>(std::execution::par);
+    
+    test_integer_correlation_coefficient<int>(std::execution::seq);
+    test_integer_correlation_coefficient<int>(std::execution::par);
+    test_integer_correlation_coefficient<int32_t>(std::execution::seq);
+    test_integer_correlation_coefficient<int32_t>(std::execution::par);
+    test_integer_correlation_coefficient<int64_t>(std::execution::seq);
+    test_integer_correlation_coefficient<int64_t>(std::execution::par);
+    test_integer_correlation_coefficient<uint32_t>(std::execution::seq);
+    test_integer_correlation_coefficient<uint32_t>(std::execution::par);
+    
     return boost::report_errors();
 }
 

@@ -201,6 +201,11 @@ ReturnType correlation_coefficient_seq_impl(ForwardIterator u_begin, ForwardIter
     return std::make_tuple(mu_u, Qu, mu_v, Qv, cov, rho, i);
 }
 
+// Numerically stable parallel computation of (co-)variance:
+// https://dl.acm.org/doi/10.1145/3221269.3223036
+//
+// Parallel computation of variance:
+// http://i.stanford.edu/pub/cstr/reports/cs/tr/79/773/CS-TR-79-773.pdf
 template<typename ReturnType, typename ForwardIterator>
 ReturnType correlation_coefficient_parallel_impl(ForwardIterator u_begin, ForwardIterator u_end, ForwardIterator v_begin, ForwardIterator v_end)
 {
