@@ -181,14 +181,12 @@ ReturnType correlation_coefficient_seq_impl(ForwardIterator u_begin, ForwardIter
     // If both datasets are constant, then they are perfectly correlated.
     if (Qu == 0 && Qv == 0)
     {
-        //return Real(1);
-        return std::make_tuple(mu_u, mu_v, Real(1), i);
+        return std::make_tuple(mu_u, Qu, mu_v, Qv, cov, Real(1), i);
     }
     // If one dataset is constant and the other isn't, then they have no correlation:
     if (Qu == 0 || Qv == 0)
     {
-        // return Real(0);
-        return std::make_tuple(mu_u, mu_v, Real(0), i);
+        return std::make_tuple(mu_u, Qu, mu_v, Qv, cov, Real(0), i);
     }
 
     // Make sure rho in [-1, 1], even in the presence of numerical noise.
@@ -200,7 +198,7 @@ ReturnType correlation_coefficient_seq_impl(ForwardIterator u_begin, ForwardIter
         rho = -1;
     }
 
-    return std::make_tuple(mu_u, mu_v, rho, i);
+    return std::make_tuple(mu_u, Qu, mu_v, Qv, cov, rho, i);
 }
 } // namespace detail
 
@@ -294,15 +292,15 @@ inline Real covariance(Container const & u, Container const & v)
 template<typename Container, typename Real = typename Container::value_type, typename std::enable_if<std::is_integral<Real>::value, bool>::type = true>
 inline double correlation_coefficient(Container const & u, Container const & v)
 {
-    using ReturnType = std::tuple<double, double, double, double>;
-    return std::get<2>(detail::correlation_coefficient_seq_impl<ReturnType>(std::begin(u), std::end(u), std::begin(v), std::end(v)));
+    using ReturnType = std::tuple<double, double, double, double, double, double, double>;
+    return std::get<5>(detail::correlation_coefficient_seq_impl<ReturnType>(std::begin(u), std::end(u), std::begin(v), std::end(v)));
 }
 
 template<typename Container, typename Real = typename Container::value_type, typename std::enable_if<!std::is_integral<Real>::value, bool>::type = true>
 inline Real correlation_coefficient(Container const & u, Container const & v)
 {
-    using ReturnType = std::tuple<Real, Real, Real, Real>;
-    return std::get<2>(detail::correlation_coefficient_seq_impl<ReturnType>(std::begin(u), std::end(u), std::begin(v), std::end(v)));
+    using ReturnType = std::tuple<Real, Real, Real, Real, Real, Real, Real>;
+    return std::get<5>(detail::correlation_coefficient_seq_impl<ReturnType>(std::begin(u), std::end(u), std::begin(v), std::end(v)));
 }
 
 #endif
