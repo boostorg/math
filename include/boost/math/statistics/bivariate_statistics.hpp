@@ -200,6 +200,123 @@ ReturnType correlation_coefficient_seq_impl(ForwardIterator u_begin, ForwardIter
 
     return std::make_tuple(mu_u, Qu, mu_v, Qv, cov, rho, i);
 }
+
+template<typename ReturnType, typename ForwardIterator>
+ReturnType correlation_coefficient_parallel_impl(ForwardIterator u_begin, ForwardIterator u_end, ForwardIterator v_begin, ForwardIterator v_end)
+{
+    using Real = typename std::tuple_element<0, ReturnType>::type;
+
+    const auto u_elements = std::distance(u_begin, u_end);
+    const auto v_elements = std::distance(v_begin, v_end);
+
+    if(u_elements != v_elements)
+    {
+        throw std::domain_error("The size of each sample set must be the same to compute covariance");
+    }
+
+    const unsigned max_concurrency = std::thread::hardware_concurrency() == 0 ? 2u : std::thread::hardware_concurrency();
+    unsigned num_threads = 2u;
+    
+    // TODO(mborland): Benchmark and replace 5.13N with results
+    // Threading is faster for: 10 + 5.13e-3 N/j <= 5.13e-3N => N >= 10^4j/5.13(j-1).
+    const auto parallel_lower_bound = 10e4*max_concurrency/(5.13*(max_concurrency-1));
+    const auto parallel_upper_bound = 10e4*2/5.13; // j = 2
+
+    // https://lemire.me/blog/2020/01/30/cost-of-a-thread-in-c-under-linux/
+    if(u_elements < parallel_lower_bound)
+    {
+        return correlation_coefficient_seq_impl<ReturnType>(u_begin, u_end, v_begin, v_end);
+    }
+    else if(u_elements >= parallel_upper_bound)
+    {
+        num_threads = max_concurrency;
+    }
+    else
+    {
+        for(unsigned i = 3; i < max_concurrency; ++i)
+        {
+            if(parallel_lower_bound < 10e4*i/(5.13*(i-1)))
+            {
+                num_threads = i;
+                break;
+            }
+        }
+    }
+
+    std::vector<std::future<ReturnType>> future_manager;
+    const auto elements_per_thread = std::ceil(static_cast<double>(u_elements)/num_threads);
+
+    ForwardIterator u_it = u_begin;
+    ForwardIterator v_it = v_begin;
+
+    for(std::size_t i = 0; i < num_threads - 1; ++i)
+    {
+        future_manager.emplace_back(std::async(std::launch::async | std::launch::deferred, [u_it, v_it, elements_per_thread]() -> ReturnType
+        {
+            return correlation_coefficient_seq_impl<ReturnType>(u_it, std::next(u_it, elements_per_thread), v_it, std::next(v_it, elements_per_thread));
+        }));
+        u_it = std::next(u_it, elements_per_thread);
+        v_it = std::next(v_it, elements_per_thread);
+    }
+
+    future_manager.emplace_back(std::async(std::launch::async | std::launch::deferred, [u_it, u_end, v_it, v_end]() -> ReturnType
+    {
+        return correlation_coefficient_seq_impl<ReturnType>(u_it, u_end, v_it, v_end);
+    }));
+
+    ReturnType temp = future_manager[0].get();
+    Real mu_u_a = std::get<0>(temp);
+    Real Qu_a = std::get<1>(temp);
+    Real mu_v_a = std::get<2>(temp);
+    Real Qv_a = std::get<3>(temp);
+    Real cov_a = std::get<4>(temp);
+    Real n_a = std::get<6>(temp);
+
+    for(std::size_t i = 1; i < future_manager.size(); ++i)
+    {
+        temp = future_manager[i].get();
+        Real mu_u_b = std::get<0>(temp);
+        Real Qu_b = std::get<1>(temp);
+        Real mu_v_b = std::get<2>(temp);
+        Real Qv_b = std::get<3>(temp);
+        Real cov_b = std::get<4>(temp);
+        Real n_b = std::get<6>(temp);
+
+        const Real n_ab = n_a + n_b;
+        const Real delta_u = mu_u_b - mu_u_a;
+        const Real delta_v = mu_v_b - mu_v_a;
+
+        cov_a = cov_a + cov_b + (-delta_u)*(-delta_v)*((n_a*n_b)/n_ab);
+        mu_u_a = mu_u_a + delta_u*(n_b/n_ab);
+        mu_v_a = mu_v_a + delta_v*(n_b/n_ab);
+        Qu_a = Qu_a + Qu_b + delta_u*delta_u*((n_a*n_b)/n_ab);
+        Qv_b = Qv_a + Qv_b + delta_v*delta_v*((n_a*n_b)/n_ab);
+        n_a = n_ab;
+    }
+
+    // If both datasets are constant, then they are perfectly correlated.
+    if (Qu_a == 0 && Qv_a == 0)
+    {
+        return std::make_tuple(mu_u_a, Qu_a, mu_v_a, Qv_a, cov_a, Real(1), n_a);
+    }
+    // If one dataset is constant and the other isn't, then they have no correlation:
+    if (Qu_a == 0 || Qv_a == 0)
+    {
+        return std::make_tuple(mu_u_a, Qu_a, mu_v_a, Qv_a, cov_a, Real(0), n_a);
+    }
+
+    // Make sure rho in [-1, 1], even in the presence of numerical noise.
+    Real rho = cov_a/sqrt(Qu_a*Qv_a);
+    if (rho > 1) {
+        rho = 1;
+    }
+    if (rho < -1) {
+        rho = -1;
+    }
+
+    return std::make_tuple(mu_u_a, Qu_a, mu_v_a, Qv_a, cov_a, rho, n_a);
+}
+
 } // namespace detail
 
 #ifdef EXEC_COMPATIBLE
@@ -255,6 +372,43 @@ template<typename Container>
 inline auto covariance(Container const & u, Container const & v)
 {
     return covariance(std::execution::seq, u, v);
+}
+
+template<typename ExecutionPolicy, typename Container, typename Real = typename Container::value_type>
+inline auto correlation_coefficient(ExecutionPolicy&& exec, Container const & u, Container const & v)
+{
+    if constexpr (std::is_same_v<std::remove_reference_t<decltype(exec)>, decltype(std::execution::seq)>)
+    {
+        if constexpr (std::is_integral_v<Real>)
+        {
+            using ReturnType = std::tuple<double, double, double, double, double, double, double>;
+            return std::get<5>(detail::correlation_coefficient_seq_impl<ReturnType>(std::begin(u), std::end(u), std::begin(v), std::end(v)));
+        }
+        else
+        {
+            using ReturnType = std::tuple<Real, Real, Real, Real, Real, Real, Real>;
+            return std::get<5>(detail::correlation_coefficient_seq_impl<ReturnType>(std::begin(u), std::end(u), std::begin(v), std::end(v)));
+        }
+    }
+    else
+    {
+        if constexpr (std::is_integral_v<Real>)
+        {
+            using ReturnType = std::tuple<double, double, double, double, double, double, double>;
+            return std::get<5>(detail::correlation_coefficient_parallel_impl<ReturnType>(std::begin(u), std::end(u), std::begin(v), std::end(v)));
+        }
+        else
+        {
+            using ReturnType = std::tuple<Real, Real, Real, Real, Real, Real, Real>;
+            return std::get<5>(detail::correlation_coefficient_parallel_impl<ReturnType>(std::begin(u), std::end(u), std::begin(v), std::end(v)));
+        }
+    }
+}
+
+template<typename Container, typename Real = typename Container::value_type>
+inline auto correlation_coefficient(Container const & u, Container const & v)
+{
+    return correlation_coefficient(std::execution::seq, u, v);
 }
 
 #else // C++11 bindings
