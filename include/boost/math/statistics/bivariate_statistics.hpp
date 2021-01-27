@@ -151,40 +151,44 @@ ReturnType means_and_covariance_parallel_impl(ForwardIterator u_begin, ForwardIt
     return std::make_tuple(mu_u_a, mu_v_a, cov_a, n_a);
 }
 
-template<typename ReturnType, typename Container>
-ReturnType correlation_coefficient_impl(Container const & u, Container const & v)
+template<typename ReturnType, typename ForwardIterator>
+ReturnType correlation_coefficient_seq_impl(ForwardIterator u_begin, ForwardIterator u_end, ForwardIterator v_begin, ForwardIterator v_end)
 {
-    using Real = ReturnType;
+    using Real = typename std::tuple_element<0, ReturnType>::type;
     using std::sqrt;
-    BOOST_ASSERT_MSG(u.size() == v.size(), "The size of each vector must be the same to compute covariance.");
-    BOOST_ASSERT_MSG(u.size() > 0, "Computing covariance requires at least two samples.");
 
     Real cov = 0;
-    Real mu_u = u[0];
-    Real mu_v = v[0];
+    ForwardIterator u_it = u_begin;
+    ForwardIterator v_it = v_begin;
+    Real mu_u = *u_it++;
+    Real mu_v = *v_it++;
     Real Qu = 0;
     Real Qv = 0;
+    std::size_t i = 1;
 
-    for(std::size_t i = 1; i < u.size(); ++i)
+    while(u_it != u_end && v_it != v_end)
     {
-        Real u_tmp = u[i] - mu_u;
-        Real v_tmp = v[i] - mu_v;
+        Real u_tmp = *u_it++ - mu_u;
+        Real v_tmp = *v_it++ - mu_v;
         Qu = Qu + (i*u_tmp*u_tmp)/(i+1);
         Qv = Qv + (i*v_tmp*v_tmp)/(i+1);
         cov += i*u_tmp*v_tmp/(i+1);
         mu_u = mu_u + u_tmp/(i+1);
         mu_v = mu_v + v_tmp/(i+1);
+        ++i;
     }
 
     // If both datasets are constant, then they are perfectly correlated.
     if (Qu == 0 && Qv == 0)
     {
-        return Real(1);
+        //return Real(1);
+        return std::make_tuple(mu_u, mu_v, Real(1), i);
     }
     // If one dataset is constant and the other isn't, then they have no correlation:
     if (Qu == 0 || Qv == 0)
     {
-        return Real(0);
+        // return Real(0);
+        return std::make_tuple(mu_u, mu_v, Real(0), i);
     }
 
     // Make sure rho in [-1, 1], even in the presence of numerical noise.
@@ -195,7 +199,8 @@ ReturnType correlation_coefficient_impl(Container const & u, Container const & v
     if (rho < -1) {
         rho = -1;
     }
-    return rho;
+
+    return std::make_tuple(mu_u, mu_v, rho, i);
 }
 } // namespace detail
 
@@ -291,13 +296,15 @@ inline Real covariance(Container const & u, Container const & v)
 template<typename Container, typename Real = typename Container::value_type, typename std::enable_if<std::is_integral<Real>::value, bool>::type = true>
 inline double correlation_coefficient(Container const & u, Container const & v)
 {
-    return detail::correlation_coefficient_impl<double>(u, v);
+    using ReturnType = std::tuple<double, double, double, double>;
+    return std::get<2>(detail::correlation_coefficient_seq_impl<ReturnType>(std::begin(u), std::end(u), std::begin(v), std::end(v)));
 }
 
 template<typename Container, typename Real = typename Container::value_type, typename std::enable_if<!std::is_integral<Real>::value, bool>::type = true>
 inline Real correlation_coefficient(Container const & u, Container const & v)
 {
-    return detail::correlation_coefficient_impl<Real>(u, v);
+    using ReturnType = std::tuple<Real, Real, Real, Real>;
+    return std::get<2>(detail::correlation_coefficient_seq_impl<ReturnType>(std::begin(u), std::end(u), std::begin(v), std::end(v)));
 }
 
 #endif
