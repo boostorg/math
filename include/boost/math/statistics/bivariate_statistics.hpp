@@ -281,16 +281,14 @@ template<typename Container, typename Real = typename Container::value_type, typ
 inline double covariance(Container const & u, Container const & v)
 {
     using ReturnType = std::tuple<double, double, double, double>;
-    ReturnType temp = detail::means_and_covariance_seq_impl<ReturnType>(std::begin(u), std::end(u), std::begin(v), std::end(v));
-    return std::get<2>(temp);
+    return std::get<2>(detail::means_and_covariance_seq_impl<ReturnType>(std::begin(u), std::end(u), std::begin(v), std::end(v)));
 }
 
 template<typename Container, typename Real = typename Container::value_type, typename std::enable_if<!std::is_integral<Real>::value, bool>::type = true>
 inline Real covariance(Container const & u, Container const & v)
 {
     using ReturnType = std::tuple<Real, Real, Real, Real>;
-    ReturnType temp = detail::means_and_covariance_seq_impl<ReturnType>(std::begin(u), std::end(u), std::begin(v), std::end(v));
-    return std::get<2>(temp);
+    return std::get<2>(detail::means_and_covariance_seq_impl<ReturnType>(std::begin(u), std::end(u), std::begin(v), std::end(v)));
 }
 
 template<typename Container, typename Real = typename Container::value_type, typename std::enable_if<std::is_integral<Real>::value, bool>::type = true>
