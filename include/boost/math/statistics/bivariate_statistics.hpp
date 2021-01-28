@@ -77,10 +77,10 @@ ReturnType means_and_covariance_parallel_impl(ForwardIterator u_begin, ForwardIt
     const unsigned max_concurrency = std::thread::hardware_concurrency() == 0 ? 2u : std::thread::hardware_concurrency();
     unsigned num_threads = 2u;
     
-    // TODO(mborland): Benchmark and replace 5.13N with results
-    // Threading is faster for: 10 + 5.13e-3 N/j <= 5.13e-3N => N >= 10^4j/5.13(j-1).
-    const auto parallel_lower_bound = 10e4*max_concurrency/(5.13*(max_concurrency-1));
-    const auto parallel_upper_bound = 10e4*2/5.13; // j = 2
+    // 5.16 comes from benchmarking. See boost/math/reporting/performance/bivariate_statistics_performance.cpp
+    // Threading is faster for: 10 + 5.16e-3 N/j <= 5.16e-3N => N >= 10^4j/5.16(j-1).
+    const auto parallel_lower_bound = 10e4*max_concurrency/(5.16*(max_concurrency-1));
+    const auto parallel_upper_bound = 10e4*2/5.16; // j = 2
 
     // https://lemire.me/blog/2020/01/30/cost-of-a-thread-in-c-under-linux/
     if(u_elements < parallel_lower_bound)
@@ -95,7 +95,7 @@ ReturnType means_and_covariance_parallel_impl(ForwardIterator u_begin, ForwardIt
     {
         for(unsigned i = 3; i < max_concurrency; ++i)
         {
-            if(parallel_lower_bound < 10e4*i/(5.13*(i-1)))
+            if(parallel_lower_bound < 10e4*i/(5.16*(i-1)))
             {
                 num_threads = i;
                 break;
@@ -222,10 +222,10 @@ ReturnType correlation_coefficient_parallel_impl(ForwardIterator u_begin, Forwar
     const unsigned max_concurrency = std::thread::hardware_concurrency() == 0 ? 2u : std::thread::hardware_concurrency();
     unsigned num_threads = 2u;
     
-    // TODO(mborland): Benchmark and replace 5.13N with results
-    // Threading is faster for: 10 + 5.13e-3 N/j <= 5.13e-3N => N >= 10^4j/5.13(j-1).
-    const auto parallel_lower_bound = 10e4*max_concurrency/(5.13*(max_concurrency-1));
-    const auto parallel_upper_bound = 10e4*2/5.13; // j = 2
+    // 3.25 comes from benchmarking. See boost/math/reporting/performance/bivariate_statistics_performance.cpp
+    // Threading is faster for: 10 + 3.25e-3 N/j <= 3.25e-3N => N >= 10^4j/3.25(j-1).
+    const auto parallel_lower_bound = 10e4*max_concurrency/(3.25*(max_concurrency-1));
+    const auto parallel_upper_bound = 10e4*2/3.25; // j = 2
 
     // https://lemire.me/blog/2020/01/30/cost-of-a-thread-in-c-under-linux/
     if(u_elements < parallel_lower_bound)
@@ -240,7 +240,7 @@ ReturnType correlation_coefficient_parallel_impl(ForwardIterator u_begin, Forwar
     {
         for(unsigned i = 3; i < max_concurrency; ++i)
         {
-            if(parallel_lower_bound < 10e4*i/(5.13*(i-1)))
+            if(parallel_lower_bound < 10e4*i/(3.25*(i-1)))
             {
                 num_threads = i;
                 break;
