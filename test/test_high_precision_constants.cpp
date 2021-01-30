@@ -36,6 +36,17 @@ void test_e()
     BOOST_TEST(abs(old_e-new_e) < tol);
 }
 
+template<typename T>
+void test_log2e()
+{
+    const T tol = std::numeric_limits<T>::epsilon();
+
+    T old_log2e = boost::math::constants::log2_e<T>();
+    T new_log2e = boost::math::numbers::log2e_v<T>();
+
+    BOOST_TEST(abs(old_log2e - new_log2e) < tol);
+}
+
 int main(void)
 {
     test_pi<float>();
@@ -49,6 +60,12 @@ int main(void)
     test_e<long double>();
     test_e<cpp_bin_float_50>();
     test_e<cpp_bin_float_100>();
+
+    test_log2e<float>();
+    test_log2e<double>();
+    test_log2e<long double>();
+    test_log2e<cpp_bin_float_50>();
+    test_log2e<cpp_bin_float_100>();
 
     boost::report_errors();
 }
