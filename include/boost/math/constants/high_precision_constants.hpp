@@ -16,15 +16,15 @@ namespace boost { namespace math { namespace numbers {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 template<typename T, typename std::enable_if<std::is_trivially_constructible<T>::value, bool>::type = true>
-constexpr T pi_v() noexcept
+inline constexpr T pi_v() noexcept
 {
-    return T(3.1415926535897932385L);
+    return T(3.141592653589793238462643383279502884L);
 }
 
-constexpr double pi = pi_v<double>();
+BOOST_INLINE_VARIABLE constexpr double pi = pi_v<double>();
 
 template<typename T, typename std::enable_if<!std::is_trivially_constructible<T>::value, bool>::type = true>
-constexpr T pi_v() noexcept
+inline constexpr T pi_v() noexcept
 {
     return std::move(T("3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348\
 2534211706798214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038196442881\
