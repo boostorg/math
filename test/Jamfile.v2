@@ -898,6 +898,7 @@ test-suite misc :
       test_tr1_c_long_double
     ]
    [ run test_constants.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] ]
+   [ run test_high_precision_constants.cpp : : : [ requires cxx11_sfinae_expr ] ]
    [ run simple_continued_fraction_test.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] ]
    [ run centered_continued_fraction_test.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] ]
    [ run luroth_expansion_test.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] ]

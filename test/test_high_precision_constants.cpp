@@ -25,6 +25,17 @@ void test_pi()
     BOOST_TEST(abs(old_pi-new_pi) < tol);
 }
 
+template<typename T>
+void test_e()
+{
+    const T tol = std::numeric_limits<T>::epsilon();
+
+    T old_e = boost::math::constants::e<T>();
+    T new_e = boost::math::numbers::e_v<T>();
+
+    BOOST_TEST(abs(old_e-new_e) < tol);
+}
+
 int main(void)
 {
     test_pi<float>();
@@ -32,6 +43,12 @@ int main(void)
     test_pi<long double>();
     test_pi<cpp_bin_float_50>();
     test_pi<cpp_bin_float_100>();
+
+    test_e<float>();
+    test_e<double>();
+    test_e<long double>();
+    test_e<cpp_bin_float_50>();
+    test_e<cpp_bin_float_100>();
 
     boost::report_errors();
 }
