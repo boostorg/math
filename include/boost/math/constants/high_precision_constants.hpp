@@ -16,15 +16,13 @@ namespace boost { namespace math { namespace numbers {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 template<typename T, typename std::enable_if<std::is_trivially_constructible<T>::value, bool>::type = true>
-inline constexpr T pi_v() noexcept
+inline constexpr T pi_hp() noexcept
 {
     return T(3.141592653589793238462643383279502884L);
 }
 
-BOOST_INLINE_VARIABLE constexpr double pi = pi_v<double>();
-
 template<typename T, typename std::enable_if<!std::is_trivially_constructible<T>::value, bool>::type = true>
-inline constexpr T pi_v() noexcept
+inline constexpr T pi_hp() noexcept
 {
     return std::move(T(
     "3."
@@ -135,15 +133,13 @@ inline constexpr T pi_v() noexcept
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 template<typename T, typename std::enable_if<std::is_trivially_constructible<T>::value, bool>::type = true>
-inline constexpr T e_v() noexcept
+inline constexpr T e_hp() noexcept
 {
     return T(2.718281828459045235360287471352662497L);
 }
 
-BOOST_INLINE_VARIABLE constexpr double e = e_v<double>();
-
 template<typename T, typename std::enable_if<!std::is_trivially_constructible<T>::value, bool>::type = true>
-inline constexpr T e_v() noexcept
+inline constexpr T e_hp() noexcept
 {
     return std::move(T(
     "2."
@@ -250,15 +246,13 @@ inline constexpr T e_v() noexcept
 }
 
 template<typename T, typename std::enable_if<std::is_trivially_constructible<T>::value, bool>::type = true>
-inline constexpr T log2e_v() noexcept
+inline constexpr T log2e_hp() noexcept
 {
     return T(1.442695040888963407359924681001892137L);
 }
 
-BOOST_INLINE_VARIABLE constexpr double log2e = log2e_v<double>();
-
 template<typename T, typename std::enable_if<!std::is_trivially_constructible<T>::value, bool>::type = true>
-inline constexpr T log2e_v() noexcept
+inline constexpr T log2e_hp() noexcept
 {
     return std::move(T(
     "1."

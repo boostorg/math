@@ -20,7 +20,7 @@ void test_pi()
     const T tol = std::numeric_limits<T>::epsilon();
 
     T old_pi = boost::math::constants::pi<T>();
-    T new_pi = boost::math::numbers::pi_v<T>();
+    T new_pi = boost::math::numbers::pi_hp<T>();
 
     BOOST_TEST(abs(old_pi-new_pi) < tol);
 }
@@ -31,7 +31,7 @@ void test_e()
     const T tol = std::numeric_limits<T>::epsilon();
 
     T old_e = boost::math::constants::e<T>();
-    T new_e = boost::math::numbers::e_v<T>();
+    T new_e = boost::math::numbers::e_hp<T>();
 
     BOOST_TEST(abs(old_e-new_e) < tol);
 }
@@ -42,7 +42,7 @@ void test_log2e()
     const T tol = std::numeric_limits<T>::epsilon();
 
     T old_log2e = boost::math::constants::log2_e<T>();
-    T new_log2e = boost::math::numbers::log2e_v<T>();
+    T new_log2e = boost::math::numbers::log2e_hp<T>();
 
     BOOST_TEST(abs(old_log2e - new_log2e) < tol);
 }

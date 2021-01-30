@@ -331,6 +331,17 @@ namespace boost{ namespace math
 #endif
 
 } // namespace constants
+
+namespace numbers {
+#if __cplusplus > 201400L || _MSVC_LANG > 201400L
+
+template<typename T, typename std::enable_if<std::is_trivially_constructible<T>::value, bool>::type = true>
+BOOST_INLINE_VARIABLE constexpr T pi_v = boost::math::constants::pi<T>();
+
+BOOST_INLINE_VARIABLE constexpr double pi = pi_v<double>;
+
+#endif
+} // namespace numbers
 } // namespace math
 } // namespace boost
 
