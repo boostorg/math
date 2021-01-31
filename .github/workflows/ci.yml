@@ -11,8 +11,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        compiler: [ g++-9, g++-10, clang++-9, clang++-10 ]
-        standard: [ c++11, c++14, c++17, c++2a ]
+        compiler: [ g++-9, g++-10 ]
+        standard: [ c++11, c++14, c++17 ]
         suite: [ float128_tests, special_fun, misc, ../example//examples ]
     steps:
       - uses: actions/checkout@v2
@@ -23,7 +23,7 @@ jobs:
       - name: Add repository
         run: sudo apt-add-repository -y "ppa:ubuntu-toolchain-r/test"
       - name: Install packages
-        run: sudo apt install g++-9 g++-10 clang-9 clang-10 libgmp-dev libmpfr-dev libfftw3-dev
+        run: sudo apt install g++-9 g++-10 libquadmath0
       - name: Checkout main boost
         run: git clone -b develop --depth 1 https://github.com/boostorg/boost.git ../boost-root
       - name: Update tools/boostdep
@@ -51,48 +51,5 @@ jobs:
         run: ./config_info_travis
         working-directory: ../boost-root/libs/config/test
       - name: Test
-        run: ../../../b2 -j3 toolset=$TOOLSET ${{ matrix.suite }} define=CI_SUPPRESS_KNOWN_ISSUES define=SLOW_COMPILER
-        working-directory: ../boost-root/libs/math/test
-  windows:
-    runs-on: windows-latest
-    defaults:
-      run:
-        shell: cmd
-    env:
-      ARGS: toolset=${{ matrix.toolset }} address-model=64 cxxstd=${{ matrix.standard }}
-    strategy:
-      fail-fast: false
-      matrix:
-        toolset: [ gcc ]
-        standard: [ 11, 14, 17 ]
-        suite: [ float128_tests, special_fun, misc, ../example//examples ]
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: '0'
-      - name: Checkout main boost
-        run: git clone -b develop --depth 1 https://github.com/boostorg/boost.git ../boost-root
-      - name: Update tools/boostdep
-        run: git submodule update --init tools/boostdep
-        working-directory: ../boost-root
-      - name: Copy files
-        run: xcopy /s /e /q %GITHUB_WORKSPACE% libs\math
-        working-directory: ../boost-root
-      - name: Install deps
-        run: python tools/boostdep/depinst/depinst.py math
-        working-directory: ../boost-root
-      - name: Bootstrap
-        run: bootstrap
-        working-directory: ../boost-root
-      - name: Generate headers
-        run: b2 headers
-        working-directory: ../boost-root
-      - name: Config info install
-        run: ..\..\..\b2 config_info_travis_install %ARGS%
-        working-directory: ../boost-root/libs/config/test
-      - name: Config info
-        run: config_info_travis
-        working-directory: ../boost-root/libs/config/test
-      - name: Test
-        run: ..\..\..\b2 -j3 --hash %ARGS% define=CI_SUPPRESS_KNOWN_ISSUES ${{ matrix.suite }}
+        run: ../../../b2 -j3 toolset=$TOOLSET ${{ matrix.suite }} define=CI_SUPPRESS_KNOWN_ISSUES define=BOOST_MATH_TEST_FLOAT128
         working-directory: ../boost-root/libs/math/test
