@@ -13,7 +13,7 @@ jobs:
       matrix:
         compiler: [ g++ ]
         standard: [ gnu++11 ]
-        suite: [ float128_tests, special_fun, misc, ../example//examples ]
+        suite: [ float128_tests, special_fun, ../example//examples ]
     steps:
       - uses: actions/checkout@v2
         with:
