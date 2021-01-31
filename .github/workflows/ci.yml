@@ -11,8 +11,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        compiler: [ g++-9, g++-10 ]
-        standard: [ c++11, c++14, c++17 ]
+        compiler: [ g++ ]
+        standard: [ gnu++11 ]
         suite: [ float128_tests, special_fun, misc, ../example//examples ]
     steps:
       - uses: actions/checkout@v2
@@ -22,8 +22,6 @@ jobs:
         run: echo ${{ matrix.compiler }} | awk '/^g/ { print "TOOLSET=gcc" } /^clang/ { print "TOOLSET=clang" }' >> $GITHUB_ENV
       - name: Add repository
         run: sudo apt-add-repository -y "ppa:ubuntu-toolchain-r/test"
-      - name: Install packages
-        run: sudo apt install g++-9 g++-10 libquadmath0
       - name: Checkout main boost
         run: git clone -b develop --depth 1 https://github.com/boostorg/boost.git ../boost-root
       - name: Update tools/boostdep
