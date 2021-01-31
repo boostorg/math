@@ -517,14 +517,14 @@
       }
       else if(x < BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(0))
       {
-        using std::atan2;
+        using std::acos;
         using std::log;
 
         const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>
           cpx_lg_x
           (
             log(-x),
-            atan2(BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(0), BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(-1))
+            acos(BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(-1))
           );
 
         result = std::exp(a * cpx_lg_x);
