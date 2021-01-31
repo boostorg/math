@@ -49,5 +49,5 @@ jobs:
         run: ./config_info_travis
         working-directory: ../boost-root/libs/config/test
       - name: Test
-        run: ../../../b2 -j3 toolset=$TOOLSET ${{ matrix.suite }} define=CI_SUPPRESS_KNOWN_ISSUES define=BOOST_MATH_TEST_FLOAT128
+        run: ../../../b2 -j3 toolset=$TOOLSET ${{ matrix.suite }} define=CI_SUPPRESS_KNOWN_ISSUES
         working-directory: ../boost-root/libs/math/test
