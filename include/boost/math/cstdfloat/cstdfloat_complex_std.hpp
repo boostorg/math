@@ -509,7 +509,37 @@
     inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> pow(const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE& x,
                                                                     const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& a)
     {
-      return std::exp(a * std::log(x));
+      complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> result;
+
+      if(x > BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(0))
+      {
+        result = std::exp(a * std::log(x));
+      }
+      else if(x < BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(0))
+      {
+        using std::atan2;
+        using std::log;
+
+        const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>
+          cpx_lg_x
+          (
+            log(-x),
+            atan2(BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(0), BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(-1))
+          );
+
+        result = std::exp(a * cpx_lg_x);
+      }
+      else
+      {
+        result =
+          complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>
+          (
+            -std::numeric_limits<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>::infinity(),
+            BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(0)
+          );
+      }
+
+      return result;
     }
 
     inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> sinh(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x)
