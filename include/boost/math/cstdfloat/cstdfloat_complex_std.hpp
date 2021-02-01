@@ -510,9 +510,9 @@
                                                                     const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& a)
     {
       const bool x_isneg = (x < 0);
-      const bool x_isnan = (x.real() != x.real());
-      const bool x_isinf = ((!x_isneg) ? bool(+x.real() > (std::numeric_limits<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>::max)())
-                                        : bool(-x.real() > (std::numeric_limits<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>::max)()));
+      const bool x_isnan = (x != x);
+      const bool x_isinf = ((!x_isneg) ? bool(+x > (std::numeric_limits<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>::max)())
+                                       : bool(-x > (std::numeric_limits<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>::max)()));
 
       const bool a_re_isneg = (a.real() < 0);
       const bool a_re_isnan = (a.real() != a.real());
