@@ -52,7 +52,7 @@ using boost::math::constants::root_two_pi;
 using boost::math::constants::root_pi;
 using boost::math::quadrature::exp_sinh;
 
-#if !defined(TEST1) && !defined(TEST2) && !defined(TEST3) && !defined(TEST4) && !defined(TEST5) && !defined(TEST6) && !defined(TEST7) && !defined(TEST8) && !defined(TEST9)
+#if !defined(TEST1) && !defined(TEST2) && !defined(TEST3) && !defined(TEST4) && !defined(TEST5) && !defined(TEST6) && !defined(TEST7) && !defined(TEST8) && !defined(TEST9) && !defined(TEST10)
 #  define TEST1
 #  define TEST2
 #  define TEST3
@@ -62,6 +62,7 @@ using boost::math::quadrature::exp_sinh;
 #  define TEST7
 #  define TEST8
 #  define TEST9
+#  define TEST10
 #endif
 
 #ifdef BOOST_MSVC
@@ -620,18 +621,18 @@ BOOST_AUTO_TEST_CASE(exp_sinh_quadrature_test)
     test_complex_modified_bessel<std::complex<float>>();
     test_complex_modified_bessel<std::complex<double>>();
     test_complex_modified_bessel<std::complex<long double>>();
-    #ifdef BOOST_HAS_FLOAT128
-        test_complex_modified_bessel<boost::multiprecision::complex128>();
-    #endif
     test_complex_modified_bessel<boost::multiprecision::cpp_complex_quad>();
 #endif
 #ifdef TEST9
     test_complex_exponential_integral_E1<std::complex<float>>();
     test_complex_exponential_integral_E1<std::complex<double>>();
     test_complex_exponential_integral_E1<std::complex<long double>>();
-      #ifdef BOOST_HAS_FLOAT128
-         test_complex_exponential_integral_E1<boost::multiprecision::complex128>();
-      #endif
     test_complex_exponential_integral_E1<boost::multiprecision::cpp_complex_quad>();
+#endif
+#ifdef TEST10
+#ifdef BOOST_HAS_FLOAT128
+    test_complex_modified_bessel<boost::multiprecision::complex128>();
+    test_complex_exponential_integral_E1<boost::multiprecision::complex128>();
+#endif
 #endif
 }
