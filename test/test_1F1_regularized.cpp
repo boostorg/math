@@ -2,7 +2,9 @@
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-
+#if !defined(TEST) || (TEST == 7)
+#define TEST_MP
+#endif
 #include "test_1F1_regularized.hpp"
 
 #include <boost/multiprecision/cpp_bin_float.hpp>
