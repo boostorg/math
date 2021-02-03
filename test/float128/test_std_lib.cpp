@@ -8,6 +8,13 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
 #include <iostream>
+#include <complex>
+
+using std::real;
+using std::imag;
+using std::arg;
+using std::norm;
+using std::proj;
 
 BOOST_AUTO_TEST_CASE( test_main )
 {
