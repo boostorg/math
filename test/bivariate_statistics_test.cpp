@@ -38,7 +38,7 @@ using boost::multiprecision::cpp_complex_50;
 using  boost::math::statistics::means_and_covariance;
 using  boost::math::statistics::covariance;
 
-#if (__cplusplus > 201700 || _MSVC_LANG > 201700) && (__GNUC__ > 9 || (__clang_major__ > 9 && defined __GLIBCXX__)  || _MSC_VER > 1927)
+#ifndef BOOST_NO_CXX17_HDR_EXECUTION
 #include <execution>
 
 template<typename Real, typename ExecutionPolicy>
