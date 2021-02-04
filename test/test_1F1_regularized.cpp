@@ -2,7 +2,9 @@
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-
+#if !defined(TEST) || (TEST == 7)
+#define TEST_MP
+#endif
 #include "test_1F1_regularized.hpp"
 
 #include <boost/multiprecision/cpp_bin_float.hpp>
@@ -183,10 +185,10 @@ BOOST_AUTO_TEST_CASE( test_main )
 #endif
 #endif
 #endif
-#if !defined(TEST) || (TEST == 6)
+#if (!defined(TEST) || (TEST == 6)) && !defined(__clang__)
    test_spots(boost::multiprecision::cpp_bin_float_quad(), "cpp_bin_float_quad");
 #endif
-#if !defined(TEST) || (TEST == 7)
+#if (!defined(TEST) || (TEST == 7)) && !defined(__clang__)
    typedef boost::multiprecision::number<boost::multiprecision::cpp_bin_float<40> > dec_40;
    test_spots(dec_40(), "dec_40");
 #endif
