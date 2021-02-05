@@ -1,6 +1,6 @@
 Boost Math Library 
+[![Build Status](https://drone.cpp.al/api/badges/boostorg/math/status.svg)](https:/drone.cpp.al/boostorg/math)  
 [![Build Status](https://github.com/boostorg/math/workflows/CI/badge.svg?branch=develop)](https://github.com/boostorg/math/actions)
-[![Build Status](https://drone.cpp.al/api/badges/boostorg/math/status.svg)](https:/drone.cpp.al/boostorg/math)
 ==================
 
 >ANNOUNCEMENT: Support for C++03 is now deprecated in this library and will be supported in existing features
