@@ -27,7 +27,9 @@ jobs:
           # Set an output parameter `uname` for use in subsequent steps
           run: |
             uname -a
-            apt install build-essential
+            apt list
+            apt update
+            apt install gcc
             g++ --version
             ls
 
