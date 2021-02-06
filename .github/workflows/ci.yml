@@ -36,7 +36,7 @@ jobs:
             cd boost-root
             rm -rf libs/math/*
             cp -r $math/* libs/math
-            git submodule update --init tools/boostdep config
+            git submodule update --init tools/boostdep
             python tools/boostdep/depinst/depinst.py math
             ./bootstrap.sh
             ./b2 headers
