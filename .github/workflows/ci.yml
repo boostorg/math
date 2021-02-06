@@ -17,8 +17,8 @@ jobs:
         name: Run commands
         id: runcmd
         with:
-          arch: armv7
-          distro: ubuntu18.04
+          arch: ppc64le
+          distro: ubuntu20.04
 
           # Not required, but speeds up builds by storing container images in
           # a GitHub package registry.
@@ -41,7 +41,7 @@ jobs:
             ./bootstrap.sh
             ./b2 headers
             ./b2 libs/config/test//print_config_info libs/config/test//print_math_info
-            g++ -I. -g -std=c++14 t.cpp -o t
+            g++ -I. -g -std=c++14 libs/math/t.cpp -o t
             ./t
 
       - name: Get the output
