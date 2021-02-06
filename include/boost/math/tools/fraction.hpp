@@ -46,8 +46,8 @@ namespace detail
    template <typename Gen>
    struct fraction_traits_pair
    {
-      using result_type = typename Gen::result_type;
       using  value_type = typename Gen::result_type;
+      using result_type = typename value_type::first_type;
 
       static result_type a(const value_type& v) BOOST_MATH_NOEXCEPT(value_type)
       {
