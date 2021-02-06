@@ -28,21 +28,23 @@ jobs:
           run: |
             uname -a
             apt update
-            apt -y install gcc g++ git
+            apt -y install gcc g++ git python
             echo $PWD
             math=$PWD
             cd ..
             git clone -b develop --depth 1 https://github.com/boostorg/boost.git boost-root
             cd boost-root
-            git submodule update --init
-            tm -rf libs/math/*
+            rm -rf libs/math/*
             cp -r $math/* libs/math
+            git submodule update --init tools/boostdep config
+            python tools/boostdep/depinst/depinst.py math
             ./bootstrap.sh
             ./b2 headers
             g++ -I. -g -std=c++14 libs/config/config_info.cpp -o config_info
             g++ -I. -g -std=c++14 libs/config/math_info.cpp -o math_info
             ./config_info
             ./math_info
+            ./b2 libs/config//print_config_info libs/config//print_math_info
 
       - name: Get the output
         # Echo the `uname` output parameter from the `runcmd` step
