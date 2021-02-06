@@ -28,8 +28,8 @@ jobs:
           run: |
             uname -a
             echo ::set-output name=uname::$(uname -a)
-            apt uodate
-            apt install build-essential git
+            sudo apt-get uodate
+            sudo apt-get install build-essential git
             g++ --version
             ls
 
