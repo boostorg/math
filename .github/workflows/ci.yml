@@ -28,7 +28,7 @@ jobs:
           run: |
             uname -a
             apt update
-            apt -y install gcc
+            apt -y install gcc g++ git
             g++ --version
             ls
 
