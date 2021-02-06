@@ -27,9 +27,8 @@ jobs:
           # Set an output parameter `uname` for use in subsequent steps
           run: |
             uname -a
-            apt list
             apt update
-            apt install gcc
+            apt -y install gcc
             g++ --version
             ls
 
