@@ -40,7 +40,7 @@ jobs:
             python tools/boostdep/depinst/depinst.py math
             ./bootstrap.sh
             ./b2 headers
-            ./b2 libs/config//print_config_info libs/config//print_math_info
+            ./b2 libs/config/test//print_config_info libs/config/test//print_math_info
             g++ -I. -g -std=c++14 t.cpp -o t
             ./t
 
