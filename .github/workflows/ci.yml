@@ -28,7 +28,8 @@ jobs:
           run: |
             uname -a
             echo ::set-output name=uname::$(uname -a)
-            apt-get install gcc git
+            apt uodate
+            apt install build-essential git
             g++ --version
             ls
 
