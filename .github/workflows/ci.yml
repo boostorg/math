@@ -28,6 +28,7 @@ jobs:
           run: |
             uname -a
             echo ::set-output name=uname::$(uname -a)
+            apt-get install g++
             g++ --version
             ls
 
