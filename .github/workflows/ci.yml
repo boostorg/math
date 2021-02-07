@@ -41,8 +41,7 @@ jobs:
             ./bootstrap.sh
             ./b2 headers
             ./b2 libs/config/test//print_config_info libs/config/test//print_math_info
-            g++ -I. -g -std=c++14 libs/math/t.cpp -o t
-            ./t
+            ./b2 libs/math/test//special_fun
 
       - name: Get the output
         # Echo the `uname` output parameter from the `runcmd` step

@@ -70,6 +70,13 @@
 //
 #  define BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 #endif
+#if !defined(BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS) && (LDBL_MANT_DIG == 106) && (LDBL_MIN_EXP < DBL_MIN_EXP)
+//
+// Generic catch all case for gcc's "double-double" long double type.
+// We do not support this as it's not even remotely IEEE conforming:
+//
+#  define BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+#endif
 #if defined(unix) && defined(__INTEL_COMPILER) && (__INTEL_COMPILER <= 1000) && !defined(BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS)
 //
 // Intel compiler prior to version 10 has sporadic problems
