@@ -30,10 +30,10 @@
 #if __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1900)
 #include <boost/math/tools/agm.hpp>
 // Check at compile time that the construction method for constants of type float, is "construct from a float", or "construct from a double", ...
-static_assert((std::is_same<boost::math::constants::construction_traits<float, boost::math::policies::policy<>>::type, std::integral_constant<int, boost::math::constants::construct_from_float>>::value), "Need to be able to construct from float");
-static_assert((std::is_same<boost::math::constants::construction_traits<double, boost::math::policies::policy<>>::type, std::integral_constant<int, boost::math::constants::construct_from_double>>::value), "Need to be able to construct from double");
-static_assert((std::is_same<boost::math::constants::construction_traits<long double, boost::math::policies::policy<>>::type, std::integral_constant<int, (sizeof(double) == sizeof(long double) ? boost::math::constants::construct_from_double : boost::math::constants::construct_from_long_double)>>::value), "Need to be able to construct from long double");
-static_assert((std::is_same<boost::math::constants::construction_traits<boost::math::concepts::real_concept, boost::math::policies::policy<>>::type, std::integral_constant<int, 0>>::value), "Need to be able to construct from real_concept");
+static_assert((std::is_same<boost::math::constants::construction_traits<float, boost::math::policies::policy<>>::type, boost::integral_constant<int, boost::math::constants::construct_from_float>>::value), "Need to be able to construct from float");
+static_assert((std::is_same<boost::math::constants::construction_traits<double, boost::math::policies::policy<>>::type, boost::integral_constant<int, boost::math::constants::construct_from_double>>::value), "Need to be able to construct from double");
+static_assert((std::is_same<boost::math::constants::construction_traits<long double, boost::math::policies::policy<>>::type, boost::integral_constant<int, (sizeof(double) == sizeof(long double) ? boost::math::constants::construct_from_double : boost::math::constants::construct_from_long_double)>>::value), "Need to be able to construct from long double");
+static_assert((std::is_same<boost::math::constants::construction_traits<boost::math::concepts::real_concept, boost::math::policies::policy<>>::type, boost::integral_constant<int, 0>>::value), "Need to be able to construct from real_concept");
 
 // Policy to set precision at maximum possible using long double.
 using real_concept_policy_1 = boost::math::policies::policy<boost::math::policies::digits2<std::numeric_limits<long double>::digits>>;
@@ -48,8 +48,8 @@ using real_concept_policy_2 = boost::math::policies::policy<boost::math::policie
 // Policy with precision greater than the string representations, forces computation of values (i.e. different code path):
 using real_concept_policy_3 = boost::math::policies::policy<boost::math::policies::digits2<400>>;
 
-static_assert((std::is_same<boost::math::constants::construction_traits<boost::math::concepts::real_concept, real_concept_policy_1 >::type, std::integral_constant<int, (sizeof(double) == sizeof(long double) ? boost::math::constants::construct_from_double : boost::math::constants::construct_from_long_double) >>::value), "Need to be able to construct from long double");
-static_assert((std::is_same<boost::math::constants::construction_traits<boost::math::concepts::real_concept, real_concept_policy_2 >::type, std::integral_constant<int, boost::math::constants::construct_from_string>>::value), "Need to be able to construct integer from string");
+static_assert((std::is_same<boost::math::constants::construction_traits<boost::math::concepts::real_concept, real_concept_policy_1 >::type, boost::integral_constant<int, (sizeof(double) == sizeof(long double) ? boost::math::constants::construct_from_double : boost::math::constants::construct_from_long_double) >>::value), "Need to be able to construct from long double");
+static_assert((std::is_same<boost::math::constants::construction_traits<boost::math::concepts::real_concept, real_concept_policy_2 >::type, boost::integral_constant<int, boost::math::constants::construct_from_string>>::value), "Need to be able to construct integer from string");
 static_assert((boost::math::constants::construction_traits<boost::math::concepts::real_concept, real_concept_policy_3>::type::value >= 5), "Need 5 digits");
 #endif // C++11
 
