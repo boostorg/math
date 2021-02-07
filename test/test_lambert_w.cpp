@@ -14,6 +14,16 @@
 // #define BOOST_MATH_TEST_MULTIPRECISION  // Add tests for several multiprecision types (not just built-in).
 // #define BOOST_MATH_TEST_FLOAT128 // Add test using float128 type (GCC only, needing gnu++17 and quadmath library).
 
+#include <climits>
+#if defined(BOOST_MATH_TEST_FLOAT128) && (LDBL_MANT_DIG > 100)
+//
+// Mixing __float128 and long double results in:
+// error: __float128 and long double cannot be used in the same expression
+// whenever long double is a [possibly quasi-] quad precision type.
+// 
+#undef BOOST_MATH_TEST_FLOAT128
+#endif
+
 #ifdef BOOST_MATH_TEST_FLOAT128
 #include <boost/cstdfloat.hpp> // For float_64_t, float128_t. Must be first include!
 #endif // #ifdef #ifdef BOOST_MATH_TEST_FLOAT128

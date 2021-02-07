@@ -11,6 +11,8 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
+      matrix:
+        suite: [ special_fun, distribution_tests, misc, quadrature, interpolators, autodiff ]
     steps:
       - uses: actions/checkout@v2.1.0
       - uses: uraimo/run-on-arch-action@v2.0.5
@@ -41,9 +43,4 @@ jobs:
             ./bootstrap.sh
             ./b2 headers
             ./b2 libs/config/test//print_config_info libs/config/test//print_math_info
-            ./b2 libs/math/test//special_fun
-
-      - name: Get the output
-        # Echo the `uname` output parameter from the `runcmd` step
-        run: |
-          echo "The uname output was ${{ steps.runcmd.outputs.uname }}"
+            ./b2 libs/math/test//${{ matrix.suite }}

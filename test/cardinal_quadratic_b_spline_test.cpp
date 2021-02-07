@@ -117,14 +117,19 @@ int main()
 {
     test_constant<float>();
     test_constant<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_constant<long double>();
+#endif
 
     test_linear<float>();
     test_linear<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_linear<long double>();
+#endif
 
     test_quadratic<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_quadratic<long double>();
-
+#endif
     return boost::math::test::report_errors();
 }

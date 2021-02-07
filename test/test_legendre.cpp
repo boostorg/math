@@ -227,5 +227,7 @@ BOOST_AUTO_TEST_CASE( test_main )
    BOOST_CHECK(ulp_distance <= 2);
    test_legendre_p_zeros<float>();
    test_legendre_p_zeros<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_legendre_p_zeros<long double>();
+#endif
 }

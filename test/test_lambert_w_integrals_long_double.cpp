@@ -256,7 +256,9 @@ Real x;
   }
     */
 
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
   test_integrals<long double>();
+#endif
   }
   catch (std::exception& ex)
   {
