@@ -82,7 +82,7 @@ namespace boost{ namespace math
       using double_precision = typename policies::precision<double, Policy>::type;
       using long_double_precision = typename policies::precision<long double, Policy>::type;
    public:
-      using type = boost::integral_constant<int,
+      using type = std::integral_constant<int,
          (0 == real_precision::value) ? 0 :
          std::is_convertible<float, Real>::value && (real_precision::value <= float_precision::value)? construct_from_float :
          std::is_convertible<double, Real>::value && (real_precision::value <= double_precision::value)? construct_from_double :
@@ -135,7 +135,7 @@ namespace boost{ namespace math
       template <typename T, const T& (*F)()>
       typename constant_initializer<T, F>::initializer const constant_initializer<T, F>::init;
 
-      template <typename T, int N, const T& (*F)(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC((boost::integral_constant<int, N>)) BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(T))>
+      template <typename T, int N, const T& (*F)(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC((std::integral_constant<int, N>)) BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(T))>
       struct constant_initializer2
       {
          static void force_instantiate()
@@ -154,14 +154,14 @@ namespace boost{ namespace math
          static const initializer init;
       };
 
-      template <typename T, int N, const T& (*F)(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC((boost::integral_constant<int, N>)) BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(T))>
+      template <typename T, int N, const T& (*F)(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC((std::integral_constant<int, N>)) BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(T))>
       typename constant_initializer2<T, N, F>::initializer const constant_initializer2<T, N, F>::init;
 
    }
 
 #ifdef BOOST_MATH_USE_FLOAT128
 #  define BOOST_MATH_FLOAT128_CONSTANT_OVERLOAD(x) \
-   static inline BOOST_CONSTEXPR T get(const boost::integral_constant<int, construct_from_float128>&) BOOST_NOEXCEPT\
+   static inline BOOST_CONSTEXPR T get(const std::integral_constant<int, construct_from_float128>&) BOOST_NOEXCEPT\
    { return BOOST_JOIN(x, Q); }
 #else
 #  define BOOST_MATH_FLOAT128_CONSTANT_OVERLOAD(x)
@@ -184,8 +184,8 @@ namespace boost{ namespace math
       return result;\
    }\
    /* This one is for very high precision that is none the less known at compile time: */ \
-   template <int N> static T compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC((boost::integral_constant<int, N>)));\
-   template <int N> static inline const T& get_from_compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC((boost::integral_constant<int, N>)))\
+   template <int N> static T compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC((std::integral_constant<int, N>)));\
+   template <int N> static inline const T& get_from_compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC((std::integral_constant<int, N>)))\
    {\
       static const T result = compute<N>();\
       return result;\
@@ -204,25 +204,25 @@ namespace boost{ namespace math
    }\
    /* public getters come next */\
    public:\
-   static inline const T& get(const boost::integral_constant<int, construct_from_string>&)\
+   static inline const T& get(const std::integral_constant<int, construct_from_string>&)\
    {\
       constant_initializer<T, & BOOST_JOIN(constant_, name)<T>::get_from_string >::force_instantiate();\
       return get_from_string();\
    }\
-   static inline BOOST_CONSTEXPR T get(const boost::integral_constant<int, construct_from_float>) BOOST_NOEXCEPT\
+   static inline BOOST_CONSTEXPR T get(const std::integral_constant<int, construct_from_float>) BOOST_NOEXCEPT\
    { return BOOST_JOIN(x, F); }\
-   static inline BOOST_CONSTEXPR T get(const boost::integral_constant<int, construct_from_double>&) BOOST_NOEXCEPT\
+   static inline BOOST_CONSTEXPR T get(const std::integral_constant<int, construct_from_double>&) BOOST_NOEXCEPT\
    { return x; }\
-   static inline BOOST_CONSTEXPR T get(const boost::integral_constant<int, construct_from_long_double>&) BOOST_NOEXCEPT\
+   static inline BOOST_CONSTEXPR T get(const std::integral_constant<int, construct_from_long_double>&) BOOST_NOEXCEPT\
    { return BOOST_JOIN(x, L); }\
    BOOST_MATH_FLOAT128_CONSTANT_OVERLOAD(x) \
-   template <int N> static inline const T& get(const boost::integral_constant<int, N>&)\
+   template <int N> static inline const T& get(const std::integral_constant<int, N>&)\
    {\
       constant_initializer2<T, N, & BOOST_JOIN(constant_, name)<T>::template get_from_compute<N> >::force_instantiate();\
       return get_from_compute<N>(); \
    }\
    /* This one is for true arbitrary precision, which may well vary at runtime: */ \
-   static inline T get(const boost::integral_constant<int, 0>&)\
+   static inline T get(const std::integral_constant<int, 0>&)\
    {\
       BOOST_MATH_PRECOMPUTE_IF_NOT_LOCAL(constant_, name)\
       return get_from_variable_precision(); }\
