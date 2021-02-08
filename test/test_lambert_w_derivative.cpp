@@ -10,6 +10,7 @@
 //! \brief Basic sanity tests for Lambert W derivative.
 
 #include <climits>
+#include <cfloat>
 #if defined(BOOST_MATH_TEST_FLOAT128) && (LDBL_MANT_DIG > 100)
 //
 // Mixing __float128 and long double results in:

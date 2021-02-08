@@ -15,6 +15,7 @@
 // #define BOOST_MATH_TEST_FLOAT128 // Add test using float128 type (GCC only, needing gnu++17 and quadmath library).
 
 #include <climits>
+#include <cfloat>
 #if defined(BOOST_MATH_TEST_FLOAT128) && (LDBL_MANT_DIG > 100)
 //
 // Mixing __float128 and long double results in:
