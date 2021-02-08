@@ -610,7 +610,9 @@ int main()
 {
     test_covariance<float>();
     test_covariance<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_covariance<long double>();
+#endif
     test_covariance<cpp_bin_float_50>();
 
     test_integer_covariance<int>();
@@ -620,7 +622,9 @@ int main()
 
     test_correlation_coefficient<float>();
     test_correlation_coefficient<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_correlation_coefficient<long double>();
+#endif
     test_correlation_coefficient<cpp_bin_float_50>();
 
     test_integer_correlation_coefficient<int>();

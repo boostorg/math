@@ -578,10 +578,12 @@ BOOST_AUTO_TEST_CASE(exp_sinh_quadrature_test)
 #endif
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 #ifdef TEST3
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_left_limit_infinite<long double>();
     test_right_limit_infinite<long double>();
     test_nr_examples<long double>();
     test_crc<long double>();
+#endif
 #endif
 #endif
 #ifdef TEST4
@@ -620,13 +622,17 @@ BOOST_AUTO_TEST_CASE(exp_sinh_quadrature_test)
 #ifdef TEST8
     test_complex_modified_bessel<std::complex<float>>();
     test_complex_modified_bessel<std::complex<double>>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_complex_modified_bessel<std::complex<long double>>();
+#endif
     test_complex_modified_bessel<boost::multiprecision::cpp_complex_quad>();
 #endif
 #ifdef TEST9
     test_complex_exponential_integral_E1<std::complex<float>>();
     test_complex_exponential_integral_E1<std::complex<double>>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_complex_exponential_integral_E1<std::complex<long double>>();
+#endif
     test_complex_exponential_integral_E1<boost::multiprecision::cpp_complex_quad>();
 #endif
 #ifdef TEST10

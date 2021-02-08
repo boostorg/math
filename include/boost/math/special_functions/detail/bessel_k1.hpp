@@ -242,12 +242,25 @@ namespace boost { namespace math { namespace detail{
             2.27912927104139732e+00,
             2.50358186953478678e-02
          };
-         if(x < tools::log_max_value<T>())
-            return ((tools::evaluate_rational(P, Q, T(1 / x)) + Y) * exp(-x) / sqrt(x));
+         if (x < tools::log_max_value<T>())
+         {
+            T ex = exp(-x);
+            BOOST_MATH_INSTRUMENT_CODE(ex);
+            T sq = sqrt(x);
+            BOOST_MATH_INSTRUMENT_CODE(sq);
+            T rat = (tools::evaluate_rational(P, Q, T(1 / x)) + Y);
+            BOOST_MATH_INSTRUMENT_CODE(rat);
+            return (rat * ex / sq);
+         }
          else
          {
             T ex = exp(-x / 2);
-            return ((tools::evaluate_rational(P, Q, T(1 / x)) + Y) * ex / sqrt(x)) * ex;
+            BOOST_MATH_INSTRUMENT_CODE(ex);
+            T rat = (tools::evaluate_polynomial(P, T(1 / x)) / tools::evaluate_polynomial(Q, T(1 / x)) + Y);
+            BOOST_MATH_INSTRUMENT_CODE(rat);
+            T sq = sqrt(x);
+            BOOST_MATH_INSTRUMENT_CODE(sq);
+            return (rat * ex / sq) * ex;
          }
       }
    }
@@ -342,12 +355,25 @@ namespace boost { namespace math { namespace detail{
             BOOST_MATH_BIG_CONSTANT(T, 64, 2.748706060530351833346e+01),
             BOOST_MATH_BIG_CONSTANT(T, 64, 6.321900849331506946977e-01),
          };
-         if(x < tools::log_max_value<T>())
-            return ((tools::evaluate_polynomial(P, T(1 / x)) / tools::evaluate_polynomial(Q, T(1 / x)) + Y) * exp(-x) / sqrt(x));
+         if (x < tools::log_max_value<T>())
+         {
+            T ex = exp(-x);
+            BOOST_MATH_INSTRUMENT_CODE(ex);
+            T sq = sqrt(x);
+            BOOST_MATH_INSTRUMENT_CODE(sq);
+            T rat = (tools::evaluate_rational(P, Q, T(1 / x)) + Y);
+            BOOST_MATH_INSTRUMENT_CODE(rat);
+            return (rat * ex / sq);
+         }
          else
          {
             T ex = exp(-x / 2);
-            return ((tools::evaluate_polynomial(P, T(1 / x)) / tools::evaluate_polynomial(Q, T(1 / x)) + Y) * ex / sqrt(x)) * ex;
+            BOOST_MATH_INSTRUMENT_CODE(ex);
+            T rat = (tools::evaluate_polynomial(P, T(1 / x)) / tools::evaluate_polynomial(Q, T(1 / x)) + Y);
+            BOOST_MATH_INSTRUMENT_CODE(rat);
+            T sq = sqrt(x);
+            BOOST_MATH_INSTRUMENT_CODE(sq);
+            return (rat * ex / sq) * ex;
          }
       }
    }
@@ -507,11 +533,24 @@ namespace boost { namespace math { namespace detail{
             BOOST_MATH_BIG_CONSTANT(T, 113, 1.673233230356966539460728211412989843e+03)
          };
          if(x < tools::log_max_value<T>())
-            return ((tools::evaluate_polynomial(P, T(1 / x)) / tools::evaluate_polynomial(Q, T(1 / x)) + Y) * exp(-x) / sqrt(x));
+         {
+            T ex = exp(-x);
+            BOOST_MATH_INSTRUMENT_CODE(ex);
+            T sq = sqrt(x);
+            BOOST_MATH_INSTRUMENT_CODE(sq);
+            T rat = (tools::evaluate_rational(P, Q, T(1 / x)) + Y);
+            BOOST_MATH_INSTRUMENT_CODE(rat);
+            return (rat * ex / sq);
+         }
          else
          {
             T ex = exp(-x / 2);
-            return ((tools::evaluate_polynomial(P, T(1 / x)) / tools::evaluate_polynomial(Q, T(1 / x)) + Y) * ex / sqrt(x)) * ex;
+            BOOST_MATH_INSTRUMENT_CODE(ex);
+            T rat = (tools::evaluate_polynomial(P, T(1 / x)) / tools::evaluate_polynomial(Q, T(1 / x)) + Y);
+            BOOST_MATH_INSTRUMENT_CODE(rat);
+            T sq = sqrt(x);
+            BOOST_MATH_INSTRUMENT_CODE(sq);
+            return (rat * ex / sq) * ex;
          }
       }
     }
