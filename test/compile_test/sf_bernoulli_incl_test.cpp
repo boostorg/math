@@ -30,8 +30,10 @@ void compile_and_link_test()
 #ifdef BOOST_MATH_HAVE_CONSTEXPR_TABLES
    constexpr float ce_f = boost::math::unchecked_bernoulli_b2n<float>(2);
    constexpr float ce_d = boost::math::unchecked_bernoulli_b2n<double>(2);
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    constexpr float ce_l = boost::math::unchecked_bernoulli_b2n<long double>(2);
    std::ostream cnull(0);
    cnull << ce_f << ce_d << ce_l << std::endl;
+#endif
 #endif
 }

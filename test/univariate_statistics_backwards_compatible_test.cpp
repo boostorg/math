@@ -950,7 +950,9 @@ int main()
 {
     test_mean<float>();
     test_mean<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_mean<long double>();
+#endif
     test_mean<cpp_bin_float_50>();
 
     test_integer_mean<unsigned>();
@@ -961,7 +963,9 @@ int main()
 
     test_variance<float>();
     test_variance<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_variance<long double>();
+#endif
     test_variance<cpp_bin_float_50>();
 
     test_integer_variance<int>();
@@ -969,7 +973,9 @@ int main()
 
     test_skewness<float>();
     test_skewness<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_skewness<long double>();
+#endif
     test_skewness<cpp_bin_float_50>();
 
     test_integer_skewness<int>();
@@ -977,12 +983,16 @@ int main()
 
     test_first_four_moments<float>();
     test_first_four_moments<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_first_four_moments<long double>();
+#endif
     test_first_four_moments<cpp_bin_float_50>();
 
     test_kurtosis<float>();
     test_kurtosis<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_kurtosis<long double>();
+#endif
     // Kinda expensive:
     //test_kurtosis<cpp_bin_float_50>();
 
@@ -991,18 +1001,24 @@ int main()
 
     test_median<float>();
     test_median<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_median<long double>();
+#endif
     test_median<cpp_bin_float_50>();
     test_median<int>();
 
     test_median_absolute_deviation<float>();
     test_median_absolute_deviation<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_median_absolute_deviation<long double>();
+#endif
     test_median_absolute_deviation<cpp_bin_float_50>();
 
     test_gini_coefficient<float>();
     test_gini_coefficient<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_gini_coefficient<long double>();
+#endif
     test_gini_coefficient<cpp_bin_float_50>();
 
     test_integer_gini_coefficient<unsigned>();
@@ -1010,7 +1026,9 @@ int main()
 
     test_sample_gini_coefficient<float>();
     test_sample_gini_coefficient<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_sample_gini_coefficient<long double>();
+#endif
     test_sample_gini_coefficient<cpp_bin_float_50>();
 
     test_interquartile_range<double>();

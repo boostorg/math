@@ -227,60 +227,80 @@ BOOST_AUTO_TEST_CASE(trapezoidal_quadrature)
 {
     test_constant<float>();
     test_constant<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_constant<long double>();
+#endif
     test_constant<boost::math::concepts::real_concept>();
     test_constant<cpp_bin_float_50>();
     test_constant<cpp_bin_float_100>();
 
     test_rational_periodic<float>();
     test_rational_periodic<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_rational_periodic<long double>();
+#endif
     test_rational_periodic<boost::math::concepts::real_concept>();
     test_rational_periodic<cpp_bin_float_50>();
     test_rational_periodic<cpp_bin_float_100>();
 
     test_bump_function<float>();
     test_bump_function<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_bump_function<long double>();
+#endif
     test_rational_periodic<boost::math::concepts::real_concept>();
     test_rational_periodic<cpp_bin_float_50>();
 
     test_zero_function<float>();
     test_zero_function<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_zero_function<long double>();
+#endif
     test_zero_function<boost::math::concepts::real_concept>();
     test_zero_function<cpp_bin_float_50>();
     test_zero_function<cpp_bin_float_100>();
 
     test_sinsq<float>();
     test_sinsq<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_sinsq<long double>();
+#endif
     test_sinsq<boost::math::concepts::real_concept>();
     test_sinsq<cpp_bin_float_50>();
     test_sinsq<cpp_bin_float_100>();
 
     test_slowly_converging<float>();
     test_slowly_converging<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_slowly_converging<long double>();
+#endif
     test_slowly_converging<boost::math::concepts::real_concept>();
 
     test_rational_sin<float>();
     test_rational_sin<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_rational_sin<long double>();
+#endif
     //test_rational_sin<boost::math::concepts::real_concept>();
     test_rational_sin<cpp_bin_float_50>();
 
     test_complex_bessel<std::complex<float>>();
     test_complex_bessel<std::complex<double>>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_complex_bessel<std::complex<long double>>();
+#endif
     //test_complex_bessel<boost::multiprecision::mpc_complex_100>();
     test_I0_complex<std::complex<float>>();
     test_I0_complex<std::complex<double>>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_I0_complex<std::complex<long double>>();
+#endif
     //test_I0_complex<boost::multiprecision::mpc_complex_100>();
     test_erfc<std::complex<float>>();
     test_erfc<std::complex<double>>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_erfc<std::complex<long double>>();
+#endif
     //test_erfc<boost::multiprecision::number<boost::multiprecision::mpc_complex_backend<20>>>();
     //test_erfc<boost::multiprecision::number<boost::multiprecision::mpc_complex_backend<30>>>();
     //test_erfc<boost::multiprecision::mpc_complex_50>();

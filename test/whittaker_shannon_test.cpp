@@ -131,10 +131,14 @@ int main()
 {
     test_knots<float>();
     test_knots<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_knots<long double>();
+#endif
 
     test_bump<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_bump<long double>();
+#endif
 
     test_trivial<float>();
     test_trivial<double>();
