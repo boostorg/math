@@ -834,7 +834,9 @@ BOOST_AUTO_TEST_CASE( test_types )
   #else // BOOST_MATH_TEST_MULTIPRECISION
   // Multiprecision types:
 #if BOOST_MATH_TEST_MULTIPRECISION == 1
+#if (LDBL_MANT_DIG <= 64) // Otherwise we get inscrutable errors from multiprecision, which may or may not be a bug...
   test_spots(static_cast<boost::multiprecision::cpp_bin_float_double_extended>(0));
+#endif
 #endif
 #if BOOST_MATH_TEST_MULTIPRECISION == 2
   test_spots(static_cast<boost::multiprecision::cpp_bin_float_quad>(0));

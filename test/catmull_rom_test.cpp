@@ -406,7 +406,9 @@ BOOST_AUTO_TEST_CASE(catmull_rom_test)
     test_alpha_distance<double>();
 
     test_linear<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_linear<long double>();
+#endif
 
     test_circle<float>();
     test_circle<double>();
