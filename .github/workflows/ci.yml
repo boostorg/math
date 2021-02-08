@@ -40,6 +40,7 @@ jobs:
             cp -r $math/* libs/math
             git submodule update --init tools/boostdep
             python tools/boostdep/depinst/depinst.py math
+            (cd libs/multiprecision && git checkout develop && git fetch origin && git checkout -b ppc_float128_fix origin/ppc_float128_fix && git pull)
             ./bootstrap.sh
             ./b2 headers
             ./b2 libs/config/test//print_config_info libs/config/test//print_math_info
