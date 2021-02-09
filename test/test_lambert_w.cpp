@@ -14,6 +14,17 @@
 // #define BOOST_MATH_TEST_MULTIPRECISION  // Add tests for several multiprecision types (not just built-in).
 // #define BOOST_MATH_TEST_FLOAT128 // Add test using float128 type (GCC only, needing gnu++17 and quadmath library).
 
+#include <climits>
+#include <cfloat>
+#if defined(BOOST_MATH_TEST_FLOAT128) && (LDBL_MANT_DIG > 100)
+//
+// Mixing __float128 and long double results in:
+// error: __float128 and long double cannot be used in the same expression
+// whenever long double is a [possibly quasi-] quad precision type.
+// 
+#undef BOOST_MATH_TEST_FLOAT128
+#endif
+
 #ifdef BOOST_MATH_TEST_FLOAT128
 #include <boost/cstdfloat.hpp> // For float_64_t, float128_t. Must be first include!
 #endif // #ifdef #ifdef BOOST_MATH_TEST_FLOAT128
@@ -823,7 +834,9 @@ BOOST_AUTO_TEST_CASE( test_types )
   #else // BOOST_MATH_TEST_MULTIPRECISION
   // Multiprecision types:
 #if BOOST_MATH_TEST_MULTIPRECISION == 1
+#if (LDBL_MANT_DIG <= 64) // Otherwise we get inscrutable errors from multiprecision, which may or may not be a bug...
   test_spots(static_cast<boost::multiprecision::cpp_bin_float_double_extended>(0));
+#endif
 #endif
 #if BOOST_MATH_TEST_MULTIPRECISION == 2
   test_spots(static_cast<boost::multiprecision::cpp_bin_float_quad>(0));

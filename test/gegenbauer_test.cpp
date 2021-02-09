@@ -104,18 +104,26 @@ int main()
 {
     test_parity<float>();
     test_parity<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_parity<long double>();
+#endif
 
     test_quadratic<float>();
     test_quadratic<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_quadratic<long double>();
+#endif
 
     test_cubic<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_cubic<long double>();
+#endif
 
     test_derivative<float>();
     test_derivative<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_derivative<long double>();
+#endif
 
 #ifdef BOOST_HAS_FLOAT128
     test_quadratic<boost::multiprecision::float128>();

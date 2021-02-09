@@ -11,6 +11,17 @@
 
 #include <boost/config.hpp>   // for BOOST_MSVC definition etc.
 #include <boost/version.hpp>   // for BOOST_MSVC versions.
+#include <climits>
+
+#if defined(BOOST_HAS_FLOAT128) && (LDBL_MANT_DIG > 100)
+//
+// Mixing __float128 and long double results in:
+// error: __float128 and long double cannot be used in the same expression
+// whenever long double is a [possibly quasi-] quad precision type.
+// 
+#undef BOOST_HAS_FLOAT128
+#endif
+
 
 #ifdef BOOST_HAS_FLOAT128
 

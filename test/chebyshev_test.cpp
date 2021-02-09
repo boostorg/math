@@ -175,17 +175,23 @@ int main()
 {
     test_polynomials<float>();
     test_polynomials<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_polynomials<long double>();
+#endif
     test_polynomials<cpp_bin_float_quad>();
 
     test_derivatives<float>();
     test_derivatives<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_derivatives<long double>();
+#endif
     test_derivatives<cpp_bin_float_quad>();
 
     test_clenshaw_recurrence<float>();
     test_clenshaw_recurrence<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_clenshaw_recurrence<long double>();
+#endif
 
     test_translated_clenshaw_recurrence<double>();
     return boost::math::test::report_errors();

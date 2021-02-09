@@ -252,7 +252,9 @@ int main()
 {
     test_line<float>();
     test_line<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_line<long double>();
+#endif
     test_integer_line<int>();
     test_integer_line<int32_t>();
     test_integer_line<int64_t>();
@@ -260,7 +262,9 @@ int main()
 
     test_constant<float>();
     test_constant<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_constant<long double>();
+#endif
     test_integer_constant<int>();
     test_integer_constant<int32_t>();
     test_integer_constant<int64_t>();
@@ -268,10 +272,14 @@ int main()
 
     test_permutation_invariance<float>();
     test_permutation_invariance<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_permutation_invariance<long double>();
+#endif
 
     test_scaling_relations<float>();
     test_scaling_relations<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_scaling_relations<long double>();
+#endif
     return boost::math::test::report_errors();
 }

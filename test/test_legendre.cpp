@@ -221,11 +221,15 @@ BOOST_AUTO_TEST_CASE( test_main )
 
    test_legendre_p_prime<float>();
    test_legendre_p_prime<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_legendre_p_prime<long double>();
+#endif
 
    int ulp_distance = test_legendre_p_zeros_double_ulp(1, 100);
    BOOST_CHECK(ulp_distance <= 2);
    test_legendre_p_zeros<float>();
    test_legendre_p_zeros<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_legendre_p_zeros<long double>();
+#endif
 }
