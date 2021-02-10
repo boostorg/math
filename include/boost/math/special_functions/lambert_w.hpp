@@ -68,7 +68,6 @@ BOOST_MATH_INSTRUMENT_LAMBERT_W_SMALL_Z_SERIES_ITERATIONS  // Show evaluation of
 #include <limits>
 #include <exception>
 #include <type_traits>
-#include <string>
 #include <cstdint>
 
 // Needed for testing and diagnostics only.
@@ -1218,16 +1217,16 @@ T lambert_w_negative_rational_float(T z, const Policy& pol)
 template <typename T, typename Policy>
 inline T lambert_w0_imp(T z, const Policy& pol, const std::integral_constant<int, 1>&)
 {
-  static std::string function = "boost::math::lambert_w0<%1%>"; // For error messages.
+  static const char* function = "boost::math::lambert_w0<%1%>"; // For error messages.
   BOOST_MATH_STD_USING // Aid ADL of std functions.
 
   if ((boost::math::isnan)(z))
   {
-    return boost::math::policies::raise_domain_error<T>(function.c_str(), "Expected a value > -e^-1 (-0.367879...) but got %1%.", z, pol);
+    return boost::math::policies::raise_domain_error<T>(function, "Expected a value > -e^-1 (-0.367879...) but got %1%.", z, pol);
   }
   if ((boost::math::isinf)(z))
   {
-    return boost::math::policies::raise_overflow_error<T>(function.c_str(), "Expected a finite value but got %1%.", z, pol);
+    return boost::math::policies::raise_overflow_error<T>(function, "Expected a finite value but got %1%.", z, pol);
   }
 
    if (z >= 0.05) // Fukushima switch point.
@@ -1238,7 +1237,7 @@ inline T lambert_w0_imp(T z, const Policy& pol, const std::integral_constant<int
    else if (z <= -0.3678794411714423215955237701614608674458111310f)
    {
       if (z < -0.3678794411714423215955237701614608674458111310f)
-         return boost::math::policies::raise_domain_error<T>(function.c_str(), "Expected z >= -e^-1 (-0.367879...) but got %1%.", z, pol);
+         return boost::math::policies::raise_domain_error<T>(function, "Expected z >= -e^-1 (-0.367879...) but got %1%.", z, pol);
       return -1;
    }
    else // z < 0.05
@@ -1617,7 +1616,7 @@ T lambert_w_negative_rational_double(T z, const Policy& pol)
 template <typename T, typename Policy>
 inline T lambert_w0_imp(T z, const Policy& pol, const std::integral_constant<int, 2>&)
 {
-   static std::string function = "boost::math::lambert_w0<%1%>";
+   static const char* function = "boost::math::lambert_w0<%1%>";
    BOOST_MATH_STD_USING // Aid ADL of std functions.
 
    // Detect unusual case of 32-bit double with a wider/64-bit long double
@@ -1629,11 +1628,11 @@ inline T lambert_w0_imp(T z, const Policy& pol, const std::integral_constant<int
 
     if ((boost::math::isnan)(z))
     {
-      return boost::math::policies::raise_domain_error<T>(function.c_str(), "Expected a value > -e^-1 (-0.367879...) but got %1%.", z, pol);
+      return boost::math::policies::raise_domain_error<T>(function, "Expected a value > -e^-1 (-0.367879...) but got %1%.", z, pol);
     }
     if ((boost::math::isinf)(z))
     {
-      return boost::math::policies::raise_overflow_error<T>(function.c_str(), "Expected a finite value but got %1%.", z, pol);
+      return boost::math::policies::raise_overflow_error<T>(function, "Expected a finite value but got %1%.", z, pol);
     }
 
    if (z >= 0.05)
@@ -1644,7 +1643,7 @@ inline T lambert_w0_imp(T z, const Policy& pol, const std::integral_constant<int
    {
       if (z < -0.36787944117144232159552377016146086744581113103176804)
       {
-         return boost::math::policies::raise_domain_error<T>(function.c_str(), "Expected z >= -e^-1 (-0.367879...) but got %1%.", z, pol);
+         return boost::math::policies::raise_domain_error<T>(function, "Expected z >= -e^-1 (-0.367879...) but got %1%.", z, pol);
       }
       return -1;
    }
@@ -1661,13 +1660,13 @@ inline T lambert_w0_imp(T z, const Policy& pol, const std::integral_constant<int
 template <typename T, typename Policy>
 inline T lambert_w0_imp(T z, const Policy& pol, const std::integral_constant<int, 0>&)
 {
-   static std::string function = "boost::math::lambert_w0<%1%>";
+   static const char* function = "boost::math::lambert_w0<%1%>";
    BOOST_MATH_STD_USING // Aid ADL of std functions.
 
    // Filter out special cases first:
    if ((boost::math::isnan)(z))
    {
-      return boost::math::policies::raise_domain_error<T>(function.c_str(), "Expected z >= -e^-1 (-0.367879...) but got %1%.", z, pol);
+      return boost::math::policies::raise_domain_error<T>(function, "Expected z >= -e^-1 (-0.367879...) but got %1%.", z, pol);
    }
    if (fabs(z) <= 0.05f)
    {
@@ -1678,7 +1677,7 @@ inline T lambert_w0_imp(T z, const Policy& pol, const std::integral_constant<int
    {
       if ((boost::math::isinf)(z))
       {
-         return policies::raise_overflow_error<T>(function.c_str(), 0, pol);
+         return policies::raise_overflow_error<T>(function, 0, pol);
          // Or might return infinity if available else max_value,
          // but other Boost.Math special functions raise overflow.
       }
@@ -1699,7 +1698,7 @@ inline T lambert_w0_imp(T z, const Policy& pol, const std::integral_constant<int
          { // Exactly at the branch point singularity.
             return -1;
          }
-         return boost::math::policies::raise_domain_error<T>(function.c_str(), "Expected z >= -e^-1 (-0.367879...) but got %1%.", z, pol);
+         return boost::math::policies::raise_domain_error<T>(function, "Expected z >= -e^-1 (-0.367879...) but got %1%.", z, pol);
       }
       // z is very close (within 0.01) of the branch singularity at -e^-1
       // so use a series approximation proposed by Corless et al.
@@ -1750,19 +1749,19 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
 
   BOOST_MATH_STD_USING // Aid argument dependent lookup (ADL) of abs.
 
-  std::string function = "boost::math::lambert_wm1<RealType>(<RealType>)"; // Used for error messages.
+  const char* function = "boost::math::lambert_wm1<RealType>(<RealType>)"; // Used for error messages.
 
   // Check for edge and corner cases first:
   if ((boost::math::isnan)(z))
   {
-    return policies::raise_domain_error(function.c_str(),
+    return policies::raise_domain_error(function,
       "Argument z is NaN!",
       z, pol);
   } // isnan
 
   if ((boost::math::isinf)(z))
   {
-    return policies::raise_domain_error(function.c_str(),
+    return policies::raise_domain_error(function,
       "Argument z is infinite!",
       z, pol);
   } // isinf
@@ -1782,7 +1781,7 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
   { // All real types except arbitrary precision.
     if (!(boost::math::isnormal)(z))
     { // Almost zero - might also just return infinity like z == 0 or max_value?
-      return policies::raise_overflow_error(function.c_str(),
+      return policies::raise_overflow_error(function,
         "Argument z =  %1% is denormalized! (must be z > (std::numeric_limits<RealType>::min)() or z == 0)",
         z, pol);
     }
@@ -1790,7 +1789,7 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
 
   if (z > static_cast<T>(0))
   { //
-    return policies::raise_domain_error(function.c_str(),
+    return policies::raise_domain_error(function,
       "Argument z = %1% is out of range (z <= 0) for Lambert W-1 branch! (Try Lambert W0 branch?)",
       z, pol);
   }
@@ -1798,7 +1797,7 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
   { // z is denormalized, so cannot be computed.
     // -std::numeric_limits<T>::min() is smallest for type T,
     // for example, for double: lambert_wm1(-2.2250738585072014e-308) = -714.96865723796634
-    return policies::raise_overflow_error(function.c_str(),
+    return policies::raise_overflow_error(function,
       "Argument z = %1% is too small (z < -std::numeric_limits<T>::min so denormalized) for Lambert W-1 branch!",
       z, pol);
   }
@@ -1809,7 +1808,7 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
   // z is too negative for the W-1 (or W0) branch.
   if (z < -boost::math::constants::exp_minus_one<T>()) // > singularity/branch point z = -exp(-1) = -3.6787944.
   {
-    return policies::raise_domain_error(function.c_str(),
+    return policies::raise_domain_error(function,
       "Argument z = %1% is out of range (z < -exp(-1) = -3.6787944... <= 0) for Lambert W-1 (or W0) branch!",
       z, pol);
   }
@@ -1835,7 +1834,7 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
       return w_series;
     }
     // Should not get here.
-    return policies::raise_domain_error(function.c_str(),
+    return policies::raise_domain_error(function,
       "Argument z = %1% is out of range for Lambert W-1 branch. (Should not get here - please report!)",
       z, pol);
   } // if (z < -0.35)
@@ -1947,7 +1946,7 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
     }
     // else z < g[63] == -1.0264389699511303e-26, so Lambert W-1 integer part > 64.
     // This should not now occur (should be caught by test and code above) so should be a logic_error?
-    return policies::raise_domain_error(function.c_str(),
+    return policies::raise_domain_error(function,
       "Argument z = %1% is too small (< -1.026439e-26) (logic error - please report!)",
       z, pol);
   overshot:
