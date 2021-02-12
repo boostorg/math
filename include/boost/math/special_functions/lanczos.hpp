@@ -16,7 +16,6 @@
 #include <boost/math/policies/policy.hpp>
 #include <limits>
 #include <type_traits>
-#include <tuple>
 #include <cstdint>
 
 #if defined(__GNUC__) && defined(BOOST_MATH_USE_FLOAT128)
@@ -3228,7 +3227,7 @@ struct undefined_lanczos : public std::integral_constant<int, (std::numeric_limi
 template <class Real, class Policy>
 struct lanczos
 {
-   static constexpr auto target_precision = policies::precision<Real, Policy>::value;
+   static constexpr auto target_precision = policies::precision<Real, Policy>::type::value;
 
    using type = typename std::conditional<(target_precision == 24), lanczos6m24, 
                 typename std::conditional<(target_precision == 53), lanczos13m53,
