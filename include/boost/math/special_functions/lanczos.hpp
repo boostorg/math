@@ -12,10 +12,8 @@
 
 #include <boost/config.hpp>
 #include <boost/math/tools/big_constant.hpp>
-#include <boost/mpl/if.hpp>
 #include <boost/math/tools/rational.hpp>
 #include <boost/math/policies/policy.hpp>
-#include <boost/mpl/less_equal.hpp>
 #include <limits>
 #include <type_traits>
 #include <tuple>
@@ -3227,37 +3225,26 @@ struct undefined_lanczos : public std::integral_constant<int, (std::numeric_limi
 #endif
 #endif
 
-typedef mpl::list<
-   lanczos6m24, 
-/*   lanczos6, */
-   lanczos13m53, 
-/*   lanczos13, */
-   lanczos17m64, 
-   lanczos24m113, 
-   lanczos22,
-   lanczos32MP, 
-   lanczos35MP,
-   lanczos48MP,
-   lanczos49MP,
-   lanczos49MP_2,
-   lanczos58MP,
-   undefined_lanczos> lanczos_list;
-
 template <class Real, class Policy>
 struct lanczos
 {
-   typedef typename mpl::if_<
-      typename mpl::less_equal<
-         typename policies::precision<Real, Policy>::type,
-         std::integral_constant<int, 0>
-      >::type,
-      std::integral_constant<int, (std::numeric_limits<int>::max)() - 2>,
-      typename policies::precision<Real, Policy>::type
-   >::type target_precision;
+   static constexpr auto target_precision = policies::precision<Real, Policy>::value;
 
-   typedef typename mpl::deref<typename mpl::find_if<
-      lanczos_list, 
-      mpl::less_equal<target_precision, mpl::_1> >::type>::type type;
+   using type = typename std::conditional<(target_precision == 24), lanczos6m24, 
+                typename std::conditional<(target_precision == 53), lanczos13m53,
+                typename std::conditional<(target_precision == 60), lanczos11,
+                typename std::conditional<(target_precision == 64), lanczos17m64,
+                typename std::conditional<(target_precision == 72), lanczos13,
+                typename std::conditional<(target_precision == 113), lanczos24m113,
+                typename std::conditional<(target_precision == 120), lanczos22,
+                typename std::conditional<(target_precision == 134), lanczos32MP,
+                typename std::conditional<(target_precision == 168), lanczos35MP,
+                typename std::conditional<(target_precision == 201), lanczos48MP,
+                typename std::conditional<(target_precision == 234), lanczos49MP,
+                typename std::conditional<(target_precision == 267), lanczos49MP_2,
+                typename std::conditional<(target_precision == 334), lanczos58MP, undefined_lanczos>::type
+                >::type>::type>::type>::type>::type>::type>::type>::type>::type>::type>::type
+                >::type;
 };
 
 } // namespace lanczos
