@@ -3227,22 +3227,22 @@ struct undefined_lanczos : public std::integral_constant<int, (std::numeric_limi
 template <class Real, class Policy>
 struct lanczos
 {
-   static constexpr auto target_precision = policies::precision<Real, Policy>::type::value;
+   static constexpr auto target_precision = policies::precision<Real, Policy>::type::value <= 0 ? (std::numeric_limits<int>::max)()-2 : 
+                                                                                                   policies::precision<Real, Policy>::type::value;
 
-   using type = typename std::conditional<(target_precision == 24), lanczos6m24, 
-                typename std::conditional<(target_precision == 53), lanczos13m53,
-                typename std::conditional<(target_precision == 60), lanczos11,
-                typename std::conditional<(target_precision == 64), lanczos17m64,
-                typename std::conditional<(target_precision == 72), lanczos13,
-                typename std::conditional<(target_precision == 113), lanczos24m113,
-                typename std::conditional<(target_precision == 120), lanczos22,
-                typename std::conditional<(target_precision == 134), lanczos32MP,
-                typename std::conditional<(target_precision == 168), lanczos35MP,
-                typename std::conditional<(target_precision == 201), lanczos48MP,
-                typename std::conditional<(target_precision == 234), lanczos49MP,
-                typename std::conditional<(target_precision == 267), lanczos49MP_2,
-                typename std::conditional<(target_precision == 334), lanczos58MP, undefined_lanczos>::type
-                >::type>::type>::type>::type>::type>::type>::type>::type>::type>::type>::type
+   using type = typename std::conditional<(target_precision <= 24), lanczos6m24, 
+                typename std::conditional<(target_precision <= 53), lanczos13m53,
+                typename std::conditional<(target_precision <= 60), lanczos11,
+                typename std::conditional<(target_precision <= 64), lanczos17m64,
+                typename std::conditional<(target_precision <= 113), lanczos24m113,
+                typename std::conditional<(target_precision <= 120), lanczos22,
+                typename std::conditional<(target_precision <= 134), lanczos32MP,
+                typename std::conditional<(target_precision <= 168), lanczos35MP,
+                typename std::conditional<(target_precision <= 201), lanczos48MP,
+                typename std::conditional<(target_precision <= 234), lanczos49MP,
+                typename std::conditional<(target_precision <= 267), lanczos49MP_2,
+                typename std::conditional<(target_precision <= 334), lanczos58MP, undefined_lanczos>::type
+                >::type>::type>::type>::type>::type>::type>::type>::type>::type>::type
                 >::type;
 };
 
