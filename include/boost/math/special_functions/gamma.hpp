@@ -35,11 +35,8 @@
 #include <boost/math/special_functions/polygamma.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 #include <boost/assert.hpp>
-#include <boost/mpl/greater.hpp>
-#include <boost/mpl/equal_to.hpp>
-#include <boost/mpl/greater.hpp>
 
-#include <boost/config/no_tr1/cmath.hpp>
+#include <cmath>
 #include <algorithm>
 
 #ifdef BOOST_MSVC

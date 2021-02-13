@@ -13,14 +13,13 @@
 #include <boost/limits.hpp>
 #include <boost/assert.hpp>
 #include <boost/static_assert.hpp>
-#include <boost/mpl/int.hpp>
-#include <boost/mpl/bool.hpp>
-#include <boost/mpl/if.hpp>
 #include <boost/math/policies/policy.hpp>
-
-// These two are for LDBL_MAN_DIG:
-#include <limits.h>
-#include <math.h>
+#include <type_traits>
+#include <limits>
+#include <climits>
+#include <cmath>
+#include <cstdint>
+#include <cfloat> // LDBL_MANT_DIG
 
 namespace boost{ namespace math
 {
@@ -188,7 +187,7 @@ inline T epsilon(const boost::false_type& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TY
 template <class T>
 struct log_limit_traits
 {
-   typedef typename mpl::if_c<
+   typedef typename std::conditional<
       (std::numeric_limits<T>::radix == 2) &&
       (std::numeric_limits<T>::max_exponent == 128
          || std::numeric_limits<T>::max_exponent == 1024

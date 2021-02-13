@@ -12,7 +12,6 @@
 
 #include <boost/array.hpp>
 #include <boost/math/tools/config.hpp>
-#include <boost/mpl/int.hpp>
 
 #if BOOST_MATH_POLY_METHOD == 1
 #  define BOOST_HEADER() <BOOST_JOIN(boost/math/tools/detail/polynomial_horner1_, BOOST_MATH_MAX_POLY_ORDER).hpp>
