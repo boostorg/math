@@ -18,7 +18,6 @@
 #include <boost/math/tools/promotion.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/constants/constants.hpp>
-#include <boost/mpl/comparison.hpp>
 #include <boost/math/tools/big_constant.hpp>
 
 #if defined(__GNUC__) && defined(BOOST_MATH_USE_FLOAT128)
