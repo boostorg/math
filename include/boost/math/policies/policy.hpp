@@ -733,13 +733,13 @@ struct evaluation
 template <class Policy>
 struct evaluation<float, Policy>
 {
-   typedef typename mpl::if_<typename Policy::promote_float_type, double, float>::type type;
+   using type = typename std::conditional<Policy::promote_float_type::value, double, float>::type;
 };
 
 template <class Policy>
 struct evaluation<double, Policy>
 {
-   typedef typename mpl::if_<typename Policy::promote_double_type, long double, double>::type type;
+   using type = typename std::conditional<Policy::promote_double_type::value, long double, double>::type;
 };
 
 #ifdef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
@@ -757,20 +757,20 @@ template <class Real, class Policy>
 struct precision
 {
    static_assert(::std::numeric_limits<Real>::radix == 2, "::std::numeric_limits<Real>::radix == 2");
-   typedef typename Policy::precision_type precision_type;
-   typedef basic_digits<Real> digits_t;
-   typedef typename mpl::if_<
-      mpl::equal_to<digits_t, boost::integral_constant<int, 0> >,
+   using precision_type = typename Policy::precision_type;
+   using digits_t = basic_digits<Real>;
+   using type = typename std::conditional<
+      (digits_t::value == 0),
       // Possibly unknown precision:
       precision_type,
-      typename mpl::if_<
-         mpl::or_<mpl::less_equal<digits_t, precision_type>, mpl::less_equal<precision_type, boost::integral_constant<int, 0> > >,
+      typename std::conditional<
+         (digits_t::value <= precision_type || precision_type::value <= 0),
          // Default case, full precision for RealType:
          digits2< ::std::numeric_limits<Real>::digits>,
          // User customised precision:
          precision_type
       >::type
-   >::type type;
+   >::type;
 };
 
 template <class Policy>
@@ -812,21 +812,21 @@ struct precision
       >::type
    >::type;
 #else
-   typedef typename Policy::precision_type precision_type;
-   typedef boost::integral_constant<int, ::std::numeric_limits<Real>::digits> digits_t;
-   typedef boost::integral_constant<bool, ::std::numeric_limits<Real>::is_specialized> spec_t;
-   typedef typename mpl::if_<
-      mpl::or_<mpl::equal_to<spec_t, boost::true_type>, mpl::equal_to<digits_t, boost::integral_constant<int, 0> > >,
+   using precision_type = typename Policy::precision_type;
+   using digits_t = std::integral_constant<int, ::std::numeric_limits<Real>::digits>;
+   using spec_t = std::integral_constant<bool, ::std::numeric_limits<Real>::is_specialized>;
+   using type = typename std::conditional<
+      (spec_t::value == true std::true_type || digits_t::value == 0),
       // Possibly unknown precision:
       precision_type,
-      typename mpl::if_<
-         mpl::or_<mpl::less_equal<digits_t, precision_type>, mpl::less_equal<precision_type, boost::integral_constant<int, 0> > >,
+      typename std::conditional<
+         (digits_t::value <= precision_type::value || precision_type::value <= 0),
          // Default case, full precision for RealType:
          digits2< ::std::numeric_limits<Real>::digits>,
          // User customised precision:
          precision_type
       >::type
-   >::type type;
+   >::type;
 #endif
 };
 
