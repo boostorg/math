@@ -259,20 +259,20 @@ struct precision
    //
    // Now work out the precision:
    //
-   typedef typename mpl::if_c<
+   using digits2_type = typename std::conditional<
       (Digits10::value == 0),
       digits2<0>,
       digits2<((Digits10::value + 1) * 1000L) / 301L>
-   >::type digits2_type;
+   >::type;
 public:
 #ifdef BOOST_BORLANDC
-   typedef typename mpl::if_c<
+   using type = typename std::conditional<
       (Digits2::value > ::boost::math::policies::detail::precision<Digits10,Digits2>::digits2_type::value),
-      Digits2, digits2_type>::type type;
+      Digits2, digits2_type>::type;
 #else
-   typedef typename mpl::if_c<
+   using type = typename std::conditional<
       (Digits2::value > digits2_type::value),
-      Digits2, digits2_type>::type type;
+      Digits2, digits2_type>::type;
 #endif
 };
 
@@ -797,12 +797,12 @@ struct precision
    static_assert((::std::numeric_limits<Real>::radix == 2) || ((::std::numeric_limits<Real>::is_specialized == 0) || (::std::numeric_limits<Real>::digits == 0)),
    "(::std::numeric_limits<Real>::radix == 2) || ((::std::numeric_limits<Real>::is_specialized == 0) || (::std::numeric_limits<Real>::digits == 0))");
 #ifndef BOOST_BORLANDC
-   typedef typename Policy::precision_type precision_type;
-   typedef typename mpl::if_c<
+   using precision_type = typename Policy::precision_type;
+   using type = typename std::conditional<
       ((::std::numeric_limits<Real>::is_specialized == 0) || (::std::numeric_limits<Real>::digits == 0)),
       // Possibly unknown precision:
       precision_type,
-      typename mpl::if_c<
+      typename std::conditional<
          ((::std::numeric_limits<Real>::digits <= precision_type::value) 
          || (Policy::precision_type::value <= 0)),
          // Default case, full precision for RealType:
@@ -810,7 +810,7 @@ struct precision
          // User customised precision:
          precision_type
       >::type
-   >::type type;
+   >::type;
 #else
    typedef typename Policy::precision_type precision_type;
    typedef boost::integral_constant<int, ::std::numeric_limits<Real>::digits> digits_t;
@@ -990,21 +990,21 @@ struct is_policy : public boost::integral_constant<bool, ::boost::math::policies
 template <class Policy>
 struct constructor_error_check
 {
-   typedef typename Policy::domain_error_type domain_error_type;
-   typedef typename mpl::if_c<
+   using domain_error_type = typename Policy::domain_error_type;
+   using type = typename std::conditional<
       (domain_error_type::value == throw_on_error) || (domain_error_type::value == user_error) || (domain_error_type::value == errno_on_error),
       boost::true_type,
-      boost::false_type>::type type;
+      boost::false_type>::type;
 };
 
 template <class Policy>
 struct method_error_check
 {
-   typedef typename Policy::domain_error_type domain_error_type;
-   typedef typename mpl::if_c<
+   using domain_error_type = typename Policy::domain_error_type;
+   using type = typename std::conditional<
       (domain_error_type::value == throw_on_error) && (domain_error_type::value != user_error),
       boost::false_type,
-      boost::true_type>::type type;
+      boost::true_type>::type;
 };
 //
 // Does the Policy ever throw on error?
