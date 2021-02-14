@@ -12,14 +12,11 @@
 
 #include <boost/config.hpp>
 #include <boost/math/tools/big_constant.hpp>
-#include <boost/mpl/if.hpp>
-#include <boost/limits.hpp>
-#include <boost/cstdint.hpp>
 #include <boost/math/tools/rational.hpp>
 #include <boost/math/policies/policy.hpp>
-#include <boost/mpl/less_equal.hpp>
-
-#include <limits.h>
+#include <limits>
+#include <type_traits>
+#include <cstdint>
 
 #if defined(__GNUC__) && defined(BOOST_MATH_USE_FLOAT128)
 //
@@ -77,7 +74,7 @@ typename lanczos_initializer<Lanczos, T>::init const lanczos_initializer<Lanczos
 // Max experimental error (with arbitrary precision arithmetic) 9.516e-12
 // Generated with compiler: Microsoft Visual C++ version 8.0 on Win32 at Mar 23 2006
 //
-struct lanczos6 : public boost::integral_constant<int, 35>
+struct lanczos6 : public std::integral_constant<int, 35>
 {
    //
    // Produces slightly better than float precision when evaluated at
@@ -95,13 +92,13 @@ struct lanczos6 : public boost::integral_constant<int, 35>
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 35, 63.99951844938187085666201263218840287667)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 35, 2.506628274631006311133031631822390264407))
       };
-      static const BOOST_MATH_INT_TABLE_TYPE(T, boost::uint16_t) denom[6] = {
-         static_cast<boost::uint16_t>(0u),
-         static_cast<boost::uint16_t>(24u),
-         static_cast<boost::uint16_t>(50u),
-         static_cast<boost::uint16_t>(35u),
-         static_cast<boost::uint16_t>(10u),
-         static_cast<boost::uint16_t>(1u)
+      static const BOOST_MATH_INT_TABLE_TYPE(T, std::uint16_t) denom[6] = {
+         static_cast<std::uint16_t>(0u),
+         static_cast<std::uint16_t>(24u),
+         static_cast<std::uint16_t>(50u),
+         static_cast<std::uint16_t>(35u),
+         static_cast<std::uint16_t>(10u),
+         static_cast<std::uint16_t>(1u)
       };
       return boost::math::tools::evaluate_rational(num, denom, z);
    }
@@ -118,13 +115,13 @@ struct lanczos6 : public boost::integral_constant<int, 35>
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 35, 0.2412010548258800231126240760264822486599)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 35, 0.009446967704539249494420221613134244048319))
       };
-      static const BOOST_MATH_INT_TABLE_TYPE(T, boost::uint16_t) denom[6] = {
-         static_cast<boost::uint16_t>(0u),
-         static_cast<boost::uint16_t>(24u),
-         static_cast<boost::uint16_t>(50u),
-         static_cast<boost::uint16_t>(35u),
-         static_cast<boost::uint16_t>(10u),
-         static_cast<boost::uint16_t>(1u)
+      static const BOOST_MATH_INT_TABLE_TYPE(T, std::uint16_t) denom[6] = {
+         static_cast<std::uint16_t>(0u),
+         static_cast<std::uint16_t>(24u),
+         static_cast<std::uint16_t>(50u),
+         static_cast<std::uint16_t>(35u),
+         static_cast<std::uint16_t>(10u),
+         static_cast<std::uint16_t>(1u)
       };
       return boost::math::tools::evaluate_rational(num, denom, z);
    }
@@ -177,7 +174,7 @@ struct lanczos6 : public boost::integral_constant<int, 35>
 // Max experimental error (with arbitrary precision arithmetic) 2.16676e-19
 // Generated with compiler: Microsoft Visual C++ version 8.0 on Win32 at Mar 23 2006
 //
-struct lanczos11 : public boost::integral_constant<int, 60>
+struct lanczos11 : public std::integral_constant<int, 60>
 {
    //
    // Produces slightly better than double precision when evaluated at
@@ -200,18 +197,18 @@ struct lanczos11 : public boost::integral_constant<int, 60>
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 60, 261.6140441641668190791708576058805625502)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 60, 2.506628274631000502415573855452633787834))
       };
-      static const BOOST_MATH_INT_TABLE_TYPE(T, boost::uint32_t) denom[11] = {
-         static_cast<boost::uint32_t>(0u),
-         static_cast<boost::uint32_t>(362880u),
-         static_cast<boost::uint32_t>(1026576u),
-         static_cast<boost::uint32_t>(1172700u),
-         static_cast<boost::uint32_t>(723680u),
-         static_cast<boost::uint32_t>(269325u),
-         static_cast<boost::uint32_t>(63273u),
-         static_cast<boost::uint32_t>(9450u),
-         static_cast<boost::uint32_t>(870u),
-         static_cast<boost::uint32_t>(45u),
-         static_cast<boost::uint32_t>(1u)
+      static const BOOST_MATH_INT_TABLE_TYPE(T, std::uint32_t) denom[11] = {
+         static_cast<std::uint32_t>(0u),
+         static_cast<std::uint32_t>(362880u),
+         static_cast<std::uint32_t>(1026576u),
+         static_cast<std::uint32_t>(1172700u),
+         static_cast<std::uint32_t>(723680u),
+         static_cast<std::uint32_t>(269325u),
+         static_cast<std::uint32_t>(63273u),
+         static_cast<std::uint32_t>(9450u),
+         static_cast<std::uint32_t>(870u),
+         static_cast<std::uint32_t>(45u),
+         static_cast<std::uint32_t>(1u)
       };
       return boost::math::tools::evaluate_rational(num, denom, z);
    }
@@ -233,18 +230,18 @@ struct lanczos11 : public boost::integral_constant<int, 60>
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 60, 0.004826466289237661857584712046231435101741)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 60, 0.4624429436045378766270459638520555557321e-4))
       };
-      static const BOOST_MATH_INT_TABLE_TYPE(T, boost::uint32_t) denom[11] = {
-         static_cast<boost::uint32_t>(0u),
-         static_cast<boost::uint32_t>(362880u),
-         static_cast<boost::uint32_t>(1026576u),
-         static_cast<boost::uint32_t>(1172700u),
-         static_cast<boost::uint32_t>(723680u),
-         static_cast<boost::uint32_t>(269325u),
-         static_cast<boost::uint32_t>(63273u),
-         static_cast<boost::uint32_t>(9450u),
-         static_cast<boost::uint32_t>(870u),
-         static_cast<boost::uint32_t>(45u),
-         static_cast<boost::uint32_t>(1u)
+      static const BOOST_MATH_INT_TABLE_TYPE(T, std::uint32_t) denom[11] = {
+         static_cast<std::uint32_t>(0u),
+         static_cast<std::uint32_t>(362880u),
+         static_cast<std::uint32_t>(1026576u),
+         static_cast<std::uint32_t>(1172700u),
+         static_cast<std::uint32_t>(723680u),
+         static_cast<std::uint32_t>(269325u),
+         static_cast<std::uint32_t>(63273u),
+         static_cast<std::uint32_t>(9450u),
+         static_cast<std::uint32_t>(870u),
+         static_cast<std::uint32_t>(45u),
+         static_cast<std::uint32_t>(1u)
       };
       return boost::math::tools::evaluate_rational(num, denom, z);
    }
@@ -307,7 +304,7 @@ struct lanczos11 : public boost::integral_constant<int, 60>
 // Max experimental error (with arbitrary precision arithmetic) 9.2213e-23
 // Generated with compiler: Microsoft Visual C++ version 8.0 on Win32 at Mar 23 2006
 //
-struct lanczos13 : public boost::integral_constant<int, 72>
+struct lanczos13 : public std::integral_constant<int, 72>
 {
    //
    // Produces slightly better than extended-double precision when evaluated at
@@ -332,20 +329,20 @@ struct lanczos13 : public boost::integral_constant<int, 72>
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 72, 381.8801248632926870394389468349331394196)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 72, 2.506628274631000502415763426076722427007))
       };
-      static const BOOST_MATH_INT_TABLE_TYPE(T, boost::uint32_t) denom[13] = {
-         static_cast<boost::uint32_t>(0u),
-         static_cast<boost::uint32_t>(39916800u),
-         static_cast<boost::uint32_t>(120543840u),
-         static_cast<boost::uint32_t>(150917976u),
-         static_cast<boost::uint32_t>(105258076u),
-         static_cast<boost::uint32_t>(45995730u),
-         static_cast<boost::uint32_t>(13339535u),
-         static_cast<boost::uint32_t>(2637558u),
-         static_cast<boost::uint32_t>(357423u),
-         static_cast<boost::uint32_t>(32670u),
-         static_cast<boost::uint32_t>(1925u),
-         static_cast<boost::uint32_t>(66u),
-         static_cast<boost::uint32_t>(1u)
+      static const BOOST_MATH_INT_TABLE_TYPE(T, std::uint32_t) denom[13] = {
+         static_cast<std::uint32_t>(0u),
+         static_cast<std::uint32_t>(39916800u),
+         static_cast<std::uint32_t>(120543840u),
+         static_cast<std::uint32_t>(150917976u),
+         static_cast<std::uint32_t>(105258076u),
+         static_cast<std::uint32_t>(45995730u),
+         static_cast<std::uint32_t>(13339535u),
+         static_cast<std::uint32_t>(2637558u),
+         static_cast<std::uint32_t>(357423u),
+         static_cast<std::uint32_t>(32670u),
+         static_cast<std::uint32_t>(1925u),
+         static_cast<std::uint32_t>(66u),
+         static_cast<std::uint32_t>(1u)
       };
       return boost::math::tools::evaluate_rational(num, denom, z);
    }
@@ -369,20 +366,20 @@ struct lanczos13 : public boost::integral_constant<int, 72>
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 72, 0.0007469903808915448316510079585999893674101)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 72, 0.4903180573459871862552197089738373164184e-5))
       };
-      static const BOOST_MATH_INT_TABLE_TYPE(T, boost::uint32_t) denom[13] = {
-         static_cast<boost::uint32_t>(0u),
-         static_cast<boost::uint32_t>(39916800u),
-         static_cast<boost::uint32_t>(120543840u),
-         static_cast<boost::uint32_t>(150917976u),
-         static_cast<boost::uint32_t>(105258076u),
-         static_cast<boost::uint32_t>(45995730u),
-         static_cast<boost::uint32_t>(13339535u),
-         static_cast<boost::uint32_t>(2637558u),
-         static_cast<boost::uint32_t>(357423u),
-         static_cast<boost::uint32_t>(32670u),
-         static_cast<boost::uint32_t>(1925u),
-         static_cast<boost::uint32_t>(66u),
-         static_cast<boost::uint32_t>(1u)
+      static const BOOST_MATH_INT_TABLE_TYPE(T, std::uint32_t) denom[13] = {
+         static_cast<std::uint32_t>(0u),
+         static_cast<std::uint32_t>(39916800u),
+         static_cast<std::uint32_t>(120543840u),
+         static_cast<std::uint32_t>(150917976u),
+         static_cast<std::uint32_t>(105258076u),
+         static_cast<std::uint32_t>(45995730u),
+         static_cast<std::uint32_t>(13339535u),
+         static_cast<std::uint32_t>(2637558u),
+         static_cast<std::uint32_t>(357423u),
+         static_cast<std::uint32_t>(32670u),
+         static_cast<std::uint32_t>(1925u),
+         static_cast<std::uint32_t>(66u),
+         static_cast<std::uint32_t>(1u)
       };
       return boost::math::tools::evaluate_rational(num, denom, z);
    }
@@ -449,7 +446,7 @@ struct lanczos13 : public boost::integral_constant<int, 72>
 // Max experimental error (with arbitrary precision arithmetic) 2.9524e-38
 // Generated with compiler: Microsoft Visual C++ version 8.0 on Win32 at Mar 23 2006
 //
-struct lanczos22 : public boost::integral_constant<int, 120>
+struct lanczos22 : public std::integral_constant<int, 120>
 {
    //
    // Produces slightly better than 128-bit long-double precision when 
@@ -483,7 +480,7 @@ struct lanczos22 : public boost::integral_constant<int, 120>
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 120, 1167.501919472435718934219997431551246996)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 120, 2.50662827463100050241576528481104525333))
       };
-      static const BOOST_MATH_INT_TABLE_TYPE(T, boost::uint64_t) denom[22] = {
+      static const BOOST_MATH_INT_TABLE_TYPE(T, std::uint64_t) denom[22] = {
          BOOST_MATH_INT_VALUE_SUFFIX(0, uLL),
          BOOST_MATH_INT_VALUE_SUFFIX(2432902008176640000, uLL),
          BOOST_MATH_INT_VALUE_SUFFIX(8752948036761600000, uLL),
@@ -538,7 +535,7 @@ struct lanczos22 : public boost::integral_constant<int, 120>
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 120, 0.1753839324538447655939518484052327068859e-6)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 120, 0.3765495513732730583386223384116545391759e-9))
       };
-      static const BOOST_MATH_INT_TABLE_TYPE(T, boost::uint64_t) denom[22] = {
+      static const BOOST_MATH_INT_TABLE_TYPE(T, std::uint64_t) denom[22] = {
          BOOST_MATH_INT_VALUE_SUFFIX(0, uLL),
          BOOST_MATH_INT_VALUE_SUFFIX(2432902008176640000, uLL),
          BOOST_MATH_INT_VALUE_SUFFIX(8752948036761600000, uLL),
@@ -645,7 +642,7 @@ struct lanczos22 : public boost::integral_constant<int, 120>
 // Max experimental error (with arbitrary precision arithmetic) 8.111667e-8
 // Generated with compiler: Microsoft Visual C++ version 8.0 on Win32 at Mar 23 2006
 //
-struct lanczos6m24 : public boost::integral_constant<int, 24>
+struct lanczos6m24 : public std::integral_constant<int, 24>
 {
    //
    // Use for float precision, when evaluated as a float:
@@ -661,13 +658,13 @@ struct lanczos6m24 : public boost::integral_constant<int, 24>
          static_cast<T>(27.5192015197455403062503721613097825345L),
          static_cast<T>(2.50662858515256974113978724717473206342L)
       };
-      static const BOOST_MATH_INT_TABLE_TYPE(T, boost::uint16_t) denom[6] = {
-         static_cast<boost::uint16_t>(0u),
-         static_cast<boost::uint16_t>(24u),
-         static_cast<boost::uint16_t>(50u),
-         static_cast<boost::uint16_t>(35u),
-         static_cast<boost::uint16_t>(10u),
-         static_cast<boost::uint16_t>(1u)
+      static const BOOST_MATH_INT_TABLE_TYPE(T, std::uint16_t) denom[6] = {
+         static_cast<std::uint16_t>(0u),
+         static_cast<std::uint16_t>(24u),
+         static_cast<std::uint16_t>(50u),
+         static_cast<std::uint16_t>(35u),
+         static_cast<std::uint16_t>(10u),
+         static_cast<std::uint16_t>(1u)
       };
       return boost::math::tools::evaluate_rational(num, denom, z);
    }
@@ -683,13 +680,13 @@ struct lanczos6m24 : public boost::integral_constant<int, 24>
          static_cast<T>(6.595765571169314946316366571954421695196L),
          static_cast<T>(0.6007854010515290065101128585795542383721L)
       };
-      static const BOOST_MATH_INT_TABLE_TYPE(T, boost::uint16_t) denom[6] = {
-         static_cast<boost::uint16_t>(0u),
-         static_cast<boost::uint16_t>(24u),
-         static_cast<boost::uint16_t>(50u),
-         static_cast<boost::uint16_t>(35u),
-         static_cast<boost::uint16_t>(10u),
-         static_cast<boost::uint16_t>(1u)
+      static const BOOST_MATH_INT_TABLE_TYPE(T, std::uint16_t) denom[6] = {
+         static_cast<std::uint16_t>(0u),
+         static_cast<std::uint16_t>(24u),
+         static_cast<std::uint16_t>(50u),
+         static_cast<std::uint16_t>(35u),
+         static_cast<std::uint16_t>(10u),
+         static_cast<std::uint16_t>(1u)
       };
       return boost::math::tools::evaluate_rational(num, denom, z);
    }
@@ -740,7 +737,7 @@ struct lanczos6m24 : public boost::integral_constant<int, 24>
 // Max experimental error (with arbitrary precision arithmetic) 1.196214e-17
 // Generated with compiler: Microsoft Visual C++ version 8.0 on Win32 at Mar 23 2006
 //
-struct lanczos13m53 : public boost::integral_constant<int, 53>
+struct lanczos13m53 : public std::integral_constant<int, 53>
 {
    //
    // Use for double precision, when evaluated as a double:
@@ -763,20 +760,20 @@ struct lanczos13m53 : public boost::integral_constant<int, 53>
          static_cast<T>(210.8242777515793458725097339207133627117L),
          static_cast<T>(2.506628274631000270164908177133837338626L)
       };
-      static const BOOST_MATH_INT_TABLE_TYPE(T, boost::uint32_t) denom[13] = {
-         static_cast<boost::uint32_t>(0u),
-         static_cast<boost::uint32_t>(39916800u),
-         static_cast<boost::uint32_t>(120543840u),
-         static_cast<boost::uint32_t>(150917976u),
-         static_cast<boost::uint32_t>(105258076u),
-         static_cast<boost::uint32_t>(45995730u),
-         static_cast<boost::uint32_t>(13339535u),
-         static_cast<boost::uint32_t>(2637558u),
-         static_cast<boost::uint32_t>(357423u),
-         static_cast<boost::uint32_t>(32670u),
-         static_cast<boost::uint32_t>(1925u),
-         static_cast<boost::uint32_t>(66u),
-         static_cast<boost::uint32_t>(1u)
+      static const BOOST_MATH_INT_TABLE_TYPE(T, std::uint32_t) denom[13] = {
+         static_cast<std::uint32_t>(0u),
+         static_cast<std::uint32_t>(39916800u),
+         static_cast<std::uint32_t>(120543840u),
+         static_cast<std::uint32_t>(150917976u),
+         static_cast<std::uint32_t>(105258076u),
+         static_cast<std::uint32_t>(45995730u),
+         static_cast<std::uint32_t>(13339535u),
+         static_cast<std::uint32_t>(2637558u),
+         static_cast<std::uint32_t>(357423u),
+         static_cast<std::uint32_t>(32670u),
+         static_cast<std::uint32_t>(1925u),
+         static_cast<std::uint32_t>(66u),
+         static_cast<std::uint32_t>(1u)
       };
       return boost::math::tools::evaluate_rational(num, denom, z);
    }
@@ -799,20 +796,20 @@ struct lanczos13m53 : public boost::integral_constant<int, 53>
          static_cast<T>(0.5098416655656676188125178644804694509993L),
          static_cast<T>(0.006061842346248906525783753964555936883222L)
       };
-      static const BOOST_MATH_INT_TABLE_TYPE(T, boost::uint32_t) denom[13] = {
-         static_cast<boost::uint32_t>(0u),
-         static_cast<boost::uint32_t>(39916800u),
-         static_cast<boost::uint32_t>(120543840u),
-         static_cast<boost::uint32_t>(150917976u),
-         static_cast<boost::uint32_t>(105258076u),
-         static_cast<boost::uint32_t>(45995730u),
-         static_cast<boost::uint32_t>(13339535u),
-         static_cast<boost::uint32_t>(2637558u),
-         static_cast<boost::uint32_t>(357423u),
-         static_cast<boost::uint32_t>(32670u),
-         static_cast<boost::uint32_t>(1925u),
-         static_cast<boost::uint32_t>(66u),
-         static_cast<boost::uint32_t>(1u)
+      static const BOOST_MATH_INT_TABLE_TYPE(T, std::uint32_t) denom[13] = {
+         static_cast<std::uint32_t>(0u),
+         static_cast<std::uint32_t>(39916800u),
+         static_cast<std::uint32_t>(120543840u),
+         static_cast<std::uint32_t>(150917976u),
+         static_cast<std::uint32_t>(105258076u),
+         static_cast<std::uint32_t>(45995730u),
+         static_cast<std::uint32_t>(13339535u),
+         static_cast<std::uint32_t>(2637558u),
+         static_cast<std::uint32_t>(357423u),
+         static_cast<std::uint32_t>(32670u),
+         static_cast<std::uint32_t>(1925u),
+         static_cast<std::uint32_t>(66u),
+         static_cast<std::uint32_t>(1u)
       };
       return boost::math::tools::evaluate_rational(num, denom, z);
    }
@@ -877,7 +874,7 @@ struct lanczos13m53 : public boost::integral_constant<int, 53>
 // Max experimental error (with arbitrary precision arithmetic) 2.7699e-26
 // Generated with compiler: Microsoft Visual C++ version 8.0 on Win32 at Mar 23 2006
 //
-struct lanczos17m64 : public boost::integral_constant<int, 64>
+struct lanczos17m64 : public std::integral_constant<int, 64>
 {
    //
    // Use for extended-double precision, when evaluated as an extended-double:
@@ -905,7 +902,7 @@ struct lanczos17m64 : public boost::integral_constant<int, 64>
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 488.0063567520005730476791712814838113252)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 2.50662827463100050241576877135758834683))
       };
-      static const BOOST_MATH_INT_TABLE_TYPE(T, boost::uint64_t) denom[17] = {
+      static const BOOST_MATH_INT_TABLE_TYPE(T, std::uint64_t) denom[17] = {
          BOOST_MATH_INT_VALUE_SUFFIX(0, uLL),
          BOOST_MATH_INT_VALUE_SUFFIX(1307674368000, uLL),
          BOOST_MATH_INT_VALUE_SUFFIX(4339163001600, uLL),
@@ -950,7 +947,7 @@ struct lanczos17m64 : public boost::integral_constant<int, 64>
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 0.002393749522058449186690627996063983095463)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 0.1229541408909435212800785616808830746135e-4))
       };
-      static const BOOST_MATH_INT_TABLE_TYPE(T, boost::uint64_t) denom[17] = {
+      static const BOOST_MATH_INT_TABLE_TYPE(T, std::uint64_t) denom[17] = {
          BOOST_MATH_INT_VALUE_SUFFIX(0, uLL),
          BOOST_MATH_INT_VALUE_SUFFIX(1307674368000, uLL),
          BOOST_MATH_INT_VALUE_SUFFIX(4339163001600, uLL),
@@ -1042,7 +1039,7 @@ struct lanczos17m64 : public boost::integral_constant<int, 64>
 // Max experimental error (with arbitrary precision arithmetic) 1.0541e-38
 // Generated with compiler: Microsoft Visual C++ version 8.0 on Win32 at Mar 23 2006
 //
-struct lanczos24m113 : public boost::integral_constant<int, 113>
+struct lanczos24m113 : public std::integral_constant<int, 113>
 {
    //
    // Use for long-double precision, when evaluated as an long-double:
@@ -1250,7 +1247,7 @@ struct lanczos24m113 : public boost::integral_constant<int, 113>
 // Generated with compiler: Microsoft Visual C++ version 14.2 on Win32 at Oct 14 2019
 // Type precision was 134 bits or 43 max_digits10
 //
-struct lanczos32MP : public boost::integral_constant<int, 134>
+struct lanczos32MP : public std::integral_constant<int, 134>
 {
    template <class T>
    static T lanczos_sum(const T& z)
@@ -1499,7 +1496,7 @@ struct lanczos32MP : public boost::integral_constant<int, 134>
 // Generated with compiler: Microsoft Visual C++ version 14.2 on Win32 at Oct 14 2019
 // Type precision was 168 bits or 53 max_digits10
 //
-struct lanczos35MP : public boost::integral_constant<int, 168>
+struct lanczos35MP : public std::integral_constant<int, 168>
 {
    template <class T>
    static T lanczos_sum(const T& z)
@@ -1766,7 +1763,7 @@ struct lanczos35MP : public boost::integral_constant<int, 168>
 // Generated with compiler: Microsoft Visual C++ version 14.2 on Win32 at Oct 14 2019
 // Type precision was 201 bits or 63 max_digits10
 //
-struct lanczos48MP : public boost::integral_constant<int, 201>
+struct lanczos48MP : public std::integral_constant<int, 201>
 {
    template <class T>
    static T lanczos_sum(const T& z)
@@ -2110,7 +2107,7 @@ struct lanczos48MP : public boost::integral_constant<int, 201>
 // Generated with compiler: Microsoft Visual C++ version 14.2 on Win32 at Oct 14 2019
 // Type precision was 234 bits or 73 max_digits10
 //
-struct lanczos49MP : public boost::integral_constant<int, 234>
+struct lanczos49MP : public std::integral_constant<int, 234>
 {
    template <class T>
    static T lanczos_sum(const T& z)
@@ -2460,7 +2457,7 @@ struct lanczos49MP : public boost::integral_constant<int, 234>
 // Generated with compiler: Microsoft Visual C++ version 14.2 on Win32 at Oct 14 2019
 // Type precision was 267 bits or 83 max_digits10
 //
-struct lanczos49MP_2 : public boost::integral_constant<int, 267>
+struct lanczos49MP_2 : public std::integral_constant<int, 267>
 {
    template <class T>
    static T lanczos_sum(const T& z)
@@ -2810,7 +2807,7 @@ struct lanczos49MP_2 : public boost::integral_constant<int, 267>
 // Generated with compiler: Microsoft Visual C++ version 14.2 on Win32 at Oct 14 2019
 // Type precision was 334 bits or 103 max_digits10
 //
-struct lanczos58MP : public boost::integral_constant<int, 334>
+struct lanczos58MP : public std::integral_constant<int, 334>
 {
    template <class T>
    static T lanczos_sum(const T& z)
@@ -3213,7 +3210,7 @@ struct lanczos58MP : public boost::integral_constant<int, 334>
 //
 // placeholder for no lanczos info available:
 //
-struct undefined_lanczos : public boost::integral_constant<int, INT_MAX - 1> { };
+struct undefined_lanczos : public std::integral_constant<int, (std::numeric_limits<int>::max)() - 1> { };
 
 #if 0
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
@@ -3227,37 +3224,26 @@ struct undefined_lanczos : public boost::integral_constant<int, INT_MAX - 1> { }
 #endif
 #endif
 
-typedef mpl::list<
-   lanczos6m24, 
-/*   lanczos6, */
-   lanczos13m53, 
-/*   lanczos13, */
-   lanczos17m64, 
-   lanczos24m113, 
-   lanczos22,
-   lanczos32MP, 
-   lanczos35MP,
-   lanczos48MP,
-   lanczos49MP,
-   lanczos49MP_2,
-   lanczos58MP,
-   undefined_lanczos> lanczos_list;
-
 template <class Real, class Policy>
 struct lanczos
 {
-   typedef typename mpl::if_<
-      typename mpl::less_equal<
-         typename policies::precision<Real, Policy>::type,
-         boost::integral_constant<int, 0>
-      >::type,
-      boost::integral_constant<int, INT_MAX - 2>,
-      typename policies::precision<Real, Policy>::type
-   >::type target_precision;
+   static constexpr auto target_precision = policies::precision<Real, Policy>::type::value <= 0 ? (std::numeric_limits<int>::max)()-2 : 
+                                                                                                   policies::precision<Real, Policy>::type::value;
 
-   typedef typename mpl::deref<typename mpl::find_if<
-      lanczos_list, 
-      mpl::less_equal<target_precision, mpl::_1> >::type>::type type;
+   using type = typename std::conditional<(target_precision <= lanczos6m24::value), lanczos6m24, 
+                typename std::conditional<(target_precision <= lanczos13m53::value), lanczos13m53,
+                typename std::conditional<(target_precision <= lanczos11::value), lanczos11,
+                typename std::conditional<(target_precision <= lanczos17m64::value), lanczos17m64,
+                typename std::conditional<(target_precision <= lanczos24m113::value), lanczos24m113,
+                typename std::conditional<(target_precision <= lanczos22::value), lanczos22,
+                typename std::conditional<(target_precision <= lanczos32MP::value), lanczos32MP,
+                typename std::conditional<(target_precision <= lanczos35MP::value), lanczos35MP,
+                typename std::conditional<(target_precision <= lanczos48MP::value), lanczos48MP,
+                typename std::conditional<(target_precision <= lanczos49MP::value), lanczos49MP,
+                typename std::conditional<(target_precision <= lanczos49MP_2::value), lanczos49MP_2,
+                typename std::conditional<(target_precision <= lanczos58MP::value), lanczos58MP, undefined_lanczos>::type
+                >::type>::type>::type>::type>::type>::type>::type>::type>::type>::type
+                >::type;
 };
 
 } // namespace lanczos
