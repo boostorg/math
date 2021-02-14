@@ -17,7 +17,6 @@
 #include <boost/mpl/at.hpp>
 #include <boost/mpl/size.hpp>
 #include <boost/mpl/comparison.hpp>
-#include <boost/static_assert.hpp>
 #include <boost/math/tools/config.hpp>
 #include <limits>
 #include <type_traits>
@@ -403,19 +402,19 @@ private:
    //
    // Validate all our arguments:
    //
-   BOOST_STATIC_ASSERT(::boost::math::policies::detail::is_valid_policy<A1>::value);
-   BOOST_STATIC_ASSERT(::boost::math::policies::detail::is_valid_policy<A2>::value);
-   BOOST_STATIC_ASSERT(::boost::math::policies::detail::is_valid_policy<A3>::value);
-   BOOST_STATIC_ASSERT(::boost::math::policies::detail::is_valid_policy<A4>::value);
-   BOOST_STATIC_ASSERT(::boost::math::policies::detail::is_valid_policy<A5>::value);
-   BOOST_STATIC_ASSERT(::boost::math::policies::detail::is_valid_policy<A6>::value);
-   BOOST_STATIC_ASSERT(::boost::math::policies::detail::is_valid_policy<A7>::value);
-   BOOST_STATIC_ASSERT(::boost::math::policies::detail::is_valid_policy<A8>::value);
-   BOOST_STATIC_ASSERT(::boost::math::policies::detail::is_valid_policy<A9>::value);
-   BOOST_STATIC_ASSERT(::boost::math::policies::detail::is_valid_policy<A10>::value);
-   BOOST_STATIC_ASSERT(::boost::math::policies::detail::is_valid_policy<A11>::value);
-   BOOST_STATIC_ASSERT(::boost::math::policies::detail::is_valid_policy<A12>::value);
-   BOOST_STATIC_ASSERT(::boost::math::policies::detail::is_valid_policy<A13>::value);
+   static_assert(::boost::math::policies::detail::is_valid_policy<A1>::value, "::boost::math::policies::detail::is_valid_policy<A1>::value");
+   static_assert(::boost::math::policies::detail::is_valid_policy<A2>::value, "::boost::math::policies::detail::is_valid_policy<A2>::value");
+   static_assert(::boost::math::policies::detail::is_valid_policy<A3>::value, "::boost::math::policies::detail::is_valid_policy<A3>::value");
+   static_assert(::boost::math::policies::detail::is_valid_policy<A4>::value, "::boost::math::policies::detail::is_valid_policy<A4>::value");
+   static_assert(::boost::math::policies::detail::is_valid_policy<A5>::value, "::boost::math::policies::detail::is_valid_policy<A5>::value");
+   static_assert(::boost::math::policies::detail::is_valid_policy<A6>::value, "::boost::math::policies::detail::is_valid_policy<A6>::value");
+   static_assert(::boost::math::policies::detail::is_valid_policy<A7>::value, "::boost::math::policies::detail::is_valid_policy<A7>::value");
+   static_assert(::boost::math::policies::detail::is_valid_policy<A8>::value, "::boost::math::policies::detail::is_valid_policy<A8>::value");
+   static_assert(::boost::math::policies::detail::is_valid_policy<A9>::value, "::boost::math::policies::detail::is_valid_policy<A9>::value");
+   static_assert(::boost::math::policies::detail::is_valid_policy<A10>::value, "::boost::math::policies::detail::is_valid_policy<A10>::value");
+   static_assert(::boost::math::policies::detail::is_valid_policy<A11>::value, "::boost::math::policies::detail::is_valid_policy<A11>::value");
+   static_assert(::boost::math::policies::detail::is_valid_policy<A12>::value, "::boost::math::policies::detail::is_valid_policy<A12>::value");
+   static_assert(::boost::math::policies::detail::is_valid_policy<A13>::value, "::boost::math::policies::detail::is_valid_policy<A13>::value");
    //
    // Typelist of the arguments:
    //
@@ -757,7 +756,7 @@ struct basic_digits<long double> : public boost::integral_constant<int, LDBL_MAN
 template <class Real, class Policy>
 struct precision
 {
-   BOOST_STATIC_ASSERT( ::std::numeric_limits<Real>::radix == 2);
+   static_assert(::std::numeric_limits<Real>::radix == 2, "::std::numeric_limits<Real>::radix == 2");
    typedef typename Policy::precision_type precision_type;
    typedef basic_digits<Real> digits_t;
    typedef typename mpl::if_<
@@ -795,7 +794,8 @@ struct precision<long double, Policy>
 template <class Real, class Policy>
 struct precision
 {
-   BOOST_STATIC_ASSERT((::std::numeric_limits<Real>::radix == 2) || ((::std::numeric_limits<Real>::is_specialized == 0) || (::std::numeric_limits<Real>::digits == 0)));
+   static_assert((::std::numeric_limits<Real>::radix == 2) || ((::std::numeric_limits<Real>::is_specialized == 0) || (::std::numeric_limits<Real>::digits == 0)),
+   "(::std::numeric_limits<Real>::radix == 2) || ((::std::numeric_limits<Real>::is_specialized == 0) || (::std::numeric_limits<Real>::digits == 0))");
 #ifndef BOOST_BORLANDC
    typedef typename Policy::precision_type precision_type;
    typedef typename mpl::if_c<
@@ -848,7 +848,7 @@ template <class T, class Policy>
 inline BOOST_MATH_CONSTEXPR int digits_imp(boost::true_type const&) BOOST_NOEXCEPT
 {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-   BOOST_STATIC_ASSERT( ::std::numeric_limits<T>::is_specialized);
+   static_assert( ::std::numeric_limits<T>::is_specialized, "::std::numeric_limits<T>::is_specialized");
 #else
    assert(::std::numeric_limits<T>::is_specialized);
 #endif
@@ -930,8 +930,8 @@ template <class T, class Policy>
 inline BOOST_MATH_CONSTEXPR T get_epsilon_imp(boost::true_type const&) BOOST_MATH_NOEXCEPT(T)
 {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-   BOOST_STATIC_ASSERT( ::std::numeric_limits<T>::is_specialized);
-   BOOST_STATIC_ASSERT( ::std::numeric_limits<T>::radix == 2);
+   static_assert( ::std::numeric_limits<T>::is_specialized, "::std::numeric_limits<T>::is_specialized");
+   static_assert( ::std::numeric_limits<T>::radix == 2, "::std::numeric_limits<T>::radix == 2");
 #else
    assert(::std::numeric_limits<T>::is_specialized);
    assert(::std::numeric_limits<T>::radix == 2);
