@@ -1,4 +1,5 @@
 //  Copyright John Maddock 2007.
+//  Copyright Matt Borland 2021.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -16,17 +17,17 @@
 #include <boost/mpl/at.hpp>
 #include <boost/mpl/size.hpp>
 #include <boost/mpl/comparison.hpp>
-#include <boost/type_traits/is_same.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/assert.hpp>
 #include <boost/math/tools/config.hpp>
 #include <limits>
-// Sadly we do need the .h versions of these to be sure of getting
-// FLT_MANT_DIG etc.
-#include <limits.h>
-#include <stdlib.h>
-#include <stddef.h>
-#include <math.h>
+#include <type_traits>
+#include <climits>
+#include <cstdlib>
+#include <cstddef>
+#include <cmath>
+#include <cstdint>
+#include <cfloat> // FLT_MANT_DIG
 
 namespace boost{ namespace math{ 
 
@@ -297,7 +298,7 @@ private:
 public:
    typedef typename select_result<
       DefaultType, iter,
-      ::boost::is_same<iter, end_type>::value>::type type;
+      std::is_same<iter, end_type>::value>::type type;
 };
 
 double test_is_valid_arg(...);
