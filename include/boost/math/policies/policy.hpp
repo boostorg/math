@@ -18,7 +18,6 @@
 #include <boost/mpl/size.hpp>
 #include <boost/mpl/comparison.hpp>
 #include <boost/static_assert.hpp>
-#include <boost/assert.hpp>
 #include <boost/math/tools/config.hpp>
 #include <limits>
 #include <type_traits>
@@ -851,7 +850,7 @@ inline BOOST_MATH_CONSTEXPR int digits_imp(boost::true_type const&) BOOST_NOEXCE
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
    BOOST_STATIC_ASSERT( ::std::numeric_limits<T>::is_specialized);
 #else
-   BOOST_ASSERT(::std::numeric_limits<T>::is_specialized);
+   assert(::std::numeric_limits<T>::is_specialized);
 #endif
    typedef typename boost::math::policies::precision<T, Policy>::type p_t;
    return p_t::value;
@@ -934,8 +933,8 @@ inline BOOST_MATH_CONSTEXPR T get_epsilon_imp(boost::true_type const&) BOOST_MAT
    BOOST_STATIC_ASSERT( ::std::numeric_limits<T>::is_specialized);
    BOOST_STATIC_ASSERT( ::std::numeric_limits<T>::radix == 2);
 #else
-   BOOST_ASSERT(::std::numeric_limits<T>::is_specialized);
-   BOOST_ASSERT(::std::numeric_limits<T>::radix == 2);
+   assert(::std::numeric_limits<T>::is_specialized);
+   assert(::std::numeric_limits<T>::radix == 2);
 #endif
    typedef typename boost::math::policies::precision<T, Policy>::type p_t;
    typedef boost::integral_constant<bool, p_t::value <= std::numeric_limits<boost::uintmax_t>::digits> is_small_int;
