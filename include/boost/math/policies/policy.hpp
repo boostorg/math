@@ -914,7 +914,7 @@ struct series_factor_calc<T, Digits, std::true_type, std::false_type>
 {
    static constexpr T get() noexcept(std::is_floating_point<T>::value)
    {
-      return 1 / static_cast<T>(static_cast<boost::uintmax_t>(1u) << (Digits::value - 1));
+      return 1 / static_cast<T>(static_cast<std::uintmax_t>(1u) << (Digits::value - 1));
    }
 };
 template <class T, class Digits>
@@ -937,7 +937,7 @@ inline constexpr T get_epsilon_imp(std::true_type const&) noexcept(std::is_float
    assert(::std::numeric_limits<T>::radix == 2);
 #endif
    typedef typename boost::math::policies::precision<T, Policy>::type p_t;
-   typedef std::integral_constant<bool, p_t::value <= std::numeric_limits<boost::uintmax_t>::digits> is_small_int;
+   typedef std::integral_constant<bool, p_t::value <= std::numeric_limits<std::uintmax_t>::digits> is_small_int;
    typedef std::integral_constant<bool, p_t::value >= std::numeric_limits<T>::digits> is_default_value;
    return series_factor_calc<T, p_t, is_small_int, is_default_value>::get();
 }
