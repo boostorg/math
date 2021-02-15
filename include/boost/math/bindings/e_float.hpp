@@ -26,7 +26,7 @@
 #include <boost/math/bindings/detail/big_digamma.hpp>
 #include <boost/math/bindings/detail/big_lanczos.hpp>
 #include <boost/lexical_cast.hpp>
-
+#include <type_traits>
 
 namespace boost{ namespace math{ namespace ef{
 
@@ -509,7 +509,7 @@ struct precision< ::boost::math::ef::e_float, Policy>
 {
    typedef typename Policy::precision_type precision_type;
    typedef digits2<((::std::numeric_limits< ::boost::math::ef::e_float>::digits10 + 1) * 1000L) / 301L> digits_2;
-   typedef typename mpl::if_c<
+   typedef typename std::conditional<
       ((digits_2::value <= precision_type::value) 
       || (Policy::precision_type::value <= 0)),
       // Default case, full precision for RealType:
@@ -532,13 +532,13 @@ inline int digits< ::boost::math::ef::e_float>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE
 template <>
 inline  ::boost::math::ef::e_float root_epsilon< ::boost::math::ef::e_float>()
 {
-   return detail::root_epsilon_imp(static_cast< ::boost::math::ef::e_float const*>(0), boost::integral_constant<int, 0>());
+   return detail::root_epsilon_imp(static_cast< ::boost::math::ef::e_float const*>(0), std::integral_constant<int, 0>());
 }
 
 template <>
 inline  ::boost::math::ef::e_float forth_root_epsilon< ::boost::math::ef::e_float>()
 {
-   return detail::forth_root_epsilon_imp(static_cast< ::boost::math::ef::e_float const*>(0), boost::integral_constant<int, 0>());
+   return detail::forth_root_epsilon_imp(static_cast< ::boost::math::ef::e_float const*>(0), std::integral_constant<int, 0>());
 }
 
 }
@@ -548,16 +548,16 @@ namespace lanczos{
 template<class Policy>
 struct lanczos<boost::math::ef::e_float, Policy>
 {
-   typedef typename mpl::if_c<
+   typedef typename std::conditional<
       std::numeric_limits< ::e_float>::digits10 < 22,
       lanczos13UDT,
-      typename mpl::if_c<
+      typename std::conditional<
          std::numeric_limits< ::e_float>::digits10 < 36,
          lanczos22UDT,
-         typename mpl::if_c<
+         typename std::conditional<
             std::numeric_limits< ::e_float>::digits10 < 50,
             lanczos31UDT,
-            typename mpl::if_c<
+            typename std::conditional<
                std::numeric_limits< ::e_float>::digits10 < 110,
                lanczos61UDT,
                undefined_lanczos
@@ -614,7 +614,7 @@ namespace detail{
 // Version of Digamma accurate to ~100 decimal digits.
 //
 template <class Policy>
-boost::math::ef::e_float digamma_imp(boost::math::ef::e_float x, const boost::integral_constant<int, 0>* , const Policy& pol)
+boost::math::ef::e_float digamma_imp(boost::math::ef::e_float x, const std::integral_constant<int, 0>* , const Policy& pol)
 {
    //
    // This handles reflection of negative arguments, and all our

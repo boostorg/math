@@ -682,24 +682,24 @@ namespace boost {
 
             inline boost::math::cstdfloat::detail::float_internal128_t  fmax(boost::math::cstdfloat::detail::float_internal128_t x, boost::math::cstdfloat::detail::float_internal128_t y) { return ::BOOST_CSTDFLOAT_FLOAT128_FMAX(x, y); }
             template <class T>
-            inline typename boost::enable_if_c<
-               boost::is_convertible<T, boost::math::cstdfloat::detail::float_internal128_t>::value
+            inline typename std::enable_if<
+               std::is_convertible<T, boost::math::cstdfloat::detail::float_internal128_t>::value
                && !boost::is_same<T, boost::math::cstdfloat::detail::float_internal128_t>::value, boost::math::cstdfloat::detail::float_internal128_t>::type
                fmax(boost::math::cstdfloat::detail::float_internal128_t x, T y) { return ::BOOST_CSTDFLOAT_FLOAT128_FMAX(x, y); }
             template <class T>
-            inline typename boost::enable_if_c<
-               boost::is_convertible<T, boost::math::cstdfloat::detail::float_internal128_t>::value
+            inline typename std::enable_if<
+               std::is_convertible<T, boost::math::cstdfloat::detail::float_internal128_t>::value
                && !boost::is_same<T, boost::math::cstdfloat::detail::float_internal128_t>::value, boost::math::cstdfloat::detail::float_internal128_t>::type
                fmax(T x, boost::math::cstdfloat::detail::float_internal128_t y) { return ::BOOST_CSTDFLOAT_FLOAT128_FMAX(x, y); }
             inline boost::math::cstdfloat::detail::float_internal128_t  fmin(boost::math::cstdfloat::detail::float_internal128_t x, boost::math::cstdfloat::detail::float_internal128_t y) { return ::BOOST_CSTDFLOAT_FLOAT128_FMIN(x, y); }
             template <class T>
-            inline typename boost::enable_if_c<
-               boost::is_convertible<T, boost::math::cstdfloat::detail::float_internal128_t>::value
+            inline typename std::enable_if<
+               std::is_convertible<T, boost::math::cstdfloat::detail::float_internal128_t>::value
                && !boost::is_same<T, boost::math::cstdfloat::detail::float_internal128_t>::value, boost::math::cstdfloat::detail::float_internal128_t>::type
                fmin(boost::math::cstdfloat::detail::float_internal128_t x, T y) { return ::BOOST_CSTDFLOAT_FLOAT128_FMIN(x, y); }
             template <class T>
-            inline typename boost::enable_if_c<
-               boost::is_convertible<T, boost::math::cstdfloat::detail::float_internal128_t>::value
+            inline typename std::enable_if<
+               std::is_convertible<T, boost::math::cstdfloat::detail::float_internal128_t>::value
                && !boost::is_same<T, boost::math::cstdfloat::detail::float_internal128_t>::value, boost::math::cstdfloat::detail::float_internal128_t>::type
                fmin(T x, boost::math::cstdfloat::detail::float_internal128_t y) { return ::BOOST_CSTDFLOAT_FLOAT128_FMIN(x, y); }
 
@@ -715,13 +715,13 @@ namespace boost {
             inline boost::math::cstdfloat::detail::float_internal128_t  hypot(boost::math::cstdfloat::detail::float_internal128_t x, boost::math::cstdfloat::detail::float_internal128_t y, boost::math::cstdfloat::detail::float_internal128_t z) { return ::BOOST_CSTDFLOAT_FLOAT128_SQRT(x*x + y * y + z * z); }
             inline boost::math::cstdfloat::detail::float_internal128_t  hypot(boost::math::cstdfloat::detail::float_internal128_t x, boost::math::cstdfloat::detail::float_internal128_t y) { return ::BOOST_CSTDFLOAT_FLOAT128_HYPOT(x, y); }
             template <class T>
-            inline typename boost::enable_if_c<
-               boost::is_convertible<T, boost::math::cstdfloat::detail::float_internal128_t>::value
+            inline typename std::enable_if<
+               std::is_convertible<T, boost::math::cstdfloat::detail::float_internal128_t>::value
                && !boost::is_same<T, boost::math::cstdfloat::detail::float_internal128_t>::value, boost::math::cstdfloat::detail::float_internal128_t>::type
                hypot(boost::math::cstdfloat::detail::float_internal128_t x, T y) { return ::BOOST_CSTDFLOAT_FLOAT128_HYPOT(x, y); }
             template <class T>
-            inline typename boost::enable_if_c<
-               boost::is_convertible<T, boost::math::cstdfloat::detail::float_internal128_t>::value
+            inline typename std::enable_if<
+               std::is_convertible<T, boost::math::cstdfloat::detail::float_internal128_t>::value
                && !boost::is_same<T, boost::math::cstdfloat::detail::float_internal128_t>::value, boost::math::cstdfloat::detail::float_internal128_t>::type
                hypot(T x, boost::math::cstdfloat::detail::float_internal128_t y) { return ::BOOST_CSTDFLOAT_FLOAT128_HYPOT(x, y); }
 
@@ -772,13 +772,13 @@ namespace boost {
                return x > y;
             }
             template <class T>
-            inline typename boost::enable_if_c<
-               boost::is_convertible<T, boost::math::cstdfloat::detail::float_internal128_t>::value
+            inline typename std::enable_if<
+               std::is_convertible<T, boost::math::cstdfloat::detail::float_internal128_t>::value
                && !boost::is_same<T, boost::math::cstdfloat::detail::float_internal128_t>::value, boost::math::cstdfloat::detail::float_internal128_t>::type
                isgreater BOOST_PREVENT_MACRO_SUBSTITUTION(boost::math::cstdfloat::detail::float_internal128_t x, T y) { return isgreater BOOST_PREVENT_MACRO_SUBSTITUTION(x, (boost::math::cstdfloat::detail::float_internal128_t)y); }
             template <class T>
-            inline typename boost::enable_if_c<
-               boost::is_convertible<T, boost::math::cstdfloat::detail::float_internal128_t>::value
+            inline typename std::enable_if<
+               std::is_convertible<T, boost::math::cstdfloat::detail::float_internal128_t>::value
                && !boost::is_same<T, boost::math::cstdfloat::detail::float_internal128_t>::value, boost::math::cstdfloat::detail::float_internal128_t>::type
                isgreater BOOST_PREVENT_MACRO_SUBSTITUTION(T x, boost::math::cstdfloat::detail::float_internal128_t y) { return isgreater BOOST_PREVENT_MACRO_SUBSTITUTION((boost::math::cstdfloat::detail::float_internal128_t)x, y); }
 
@@ -789,13 +789,13 @@ namespace boost {
                return x >= y;
             }
             template <class T>
-            inline typename boost::enable_if_c<
-               boost::is_convertible<T, boost::math::cstdfloat::detail::float_internal128_t>::value
+            inline typename std::enable_if<
+               std::is_convertible<T, boost::math::cstdfloat::detail::float_internal128_t>::value
                && !boost::is_same<T, boost::math::cstdfloat::detail::float_internal128_t>::value, boost::math::cstdfloat::detail::float_internal128_t>::type
                isgreaterequal BOOST_PREVENT_MACRO_SUBSTITUTION(boost::math::cstdfloat::detail::float_internal128_t x, T y) { return isgreaterequal BOOST_PREVENT_MACRO_SUBSTITUTION(x, (boost::math::cstdfloat::detail::float_internal128_t)y); }
             template <class T>
-            inline typename boost::enable_if_c<
-               boost::is_convertible<T, boost::math::cstdfloat::detail::float_internal128_t>::value
+            inline typename std::enable_if<
+               std::is_convertible<T, boost::math::cstdfloat::detail::float_internal128_t>::value
                && !boost::is_same<T, boost::math::cstdfloat::detail::float_internal128_t>::value, boost::math::cstdfloat::detail::float_internal128_t>::type
                isgreaterequal BOOST_PREVENT_MACRO_SUBSTITUTION(T x, boost::math::cstdfloat::detail::float_internal128_t y) { return isgreaterequal BOOST_PREVENT_MACRO_SUBSTITUTION((boost::math::cstdfloat::detail::float_internal128_t)x, y); }
 
@@ -806,13 +806,13 @@ namespace boost {
                return x < y;
             }
             template <class T>
-            inline typename boost::enable_if_c<
-               boost::is_convertible<T, boost::math::cstdfloat::detail::float_internal128_t>::value
+            inline typename std::enable_if<
+               std::is_convertible<T, boost::math::cstdfloat::detail::float_internal128_t>::value
                && !boost::is_same<T, boost::math::cstdfloat::detail::float_internal128_t>::value, boost::math::cstdfloat::detail::float_internal128_t>::type
                isless BOOST_PREVENT_MACRO_SUBSTITUTION(boost::math::cstdfloat::detail::float_internal128_t x, T y) { return isless BOOST_PREVENT_MACRO_SUBSTITUTION(x, (boost::math::cstdfloat::detail::float_internal128_t)y); }
             template <class T>
-            inline typename boost::enable_if_c<
-               boost::is_convertible<T, boost::math::cstdfloat::detail::float_internal128_t>::value
+            inline typename std::enable_if<
+               std::is_convertible<T, boost::math::cstdfloat::detail::float_internal128_t>::value
                && !boost::is_same<T, boost::math::cstdfloat::detail::float_internal128_t>::value, boost::math::cstdfloat::detail::float_internal128_t>::type
                isless BOOST_PREVENT_MACRO_SUBSTITUTION(T x, boost::math::cstdfloat::detail::float_internal128_t y) { return isless BOOST_PREVENT_MACRO_SUBSTITUTION((boost::math::cstdfloat::detail::float_internal128_t)x, y); }
 
@@ -824,13 +824,13 @@ namespace boost {
                return x <= y;
             }
             template <class T>
-            inline typename boost::enable_if_c<
-               boost::is_convertible<T, boost::math::cstdfloat::detail::float_internal128_t>::value
+            inline typename std::enable_if<
+               std::is_convertible<T, boost::math::cstdfloat::detail::float_internal128_t>::value
                && !boost::is_same<T, boost::math::cstdfloat::detail::float_internal128_t>::value, boost::math::cstdfloat::detail::float_internal128_t>::type
                islessequal BOOST_PREVENT_MACRO_SUBSTITUTION(boost::math::cstdfloat::detail::float_internal128_t x, T y) { return islessequal BOOST_PREVENT_MACRO_SUBSTITUTION(x, (boost::math::cstdfloat::detail::float_internal128_t)y); }
             template <class T>
-            inline typename boost::enable_if_c<
-               boost::is_convertible<T, boost::math::cstdfloat::detail::float_internal128_t>::value
+            inline typename std::enable_if<
+               std::is_convertible<T, boost::math::cstdfloat::detail::float_internal128_t>::value
                && !boost::is_same<T, boost::math::cstdfloat::detail::float_internal128_t>::value, boost::math::cstdfloat::detail::float_internal128_t>::type
                islessequal BOOST_PREVENT_MACRO_SUBSTITUTION(T x, boost::math::cstdfloat::detail::float_internal128_t y) { return islessequal BOOST_PREVENT_MACRO_SUBSTITUTION((boost::math::cstdfloat::detail::float_internal128_t)x, y); }
 
@@ -842,26 +842,26 @@ namespace boost {
                return (x < y) || (x > y);
             }
             template <class T>
-            inline typename boost::enable_if_c<
-               boost::is_convertible<T, boost::math::cstdfloat::detail::float_internal128_t>::value
+            inline typename std::enable_if<
+               std::is_convertible<T, boost::math::cstdfloat::detail::float_internal128_t>::value
                && !boost::is_same<T, boost::math::cstdfloat::detail::float_internal128_t>::value, boost::math::cstdfloat::detail::float_internal128_t>::type
                islessgreater BOOST_PREVENT_MACRO_SUBSTITUTION(boost::math::cstdfloat::detail::float_internal128_t x, T y) { return islessgreater BOOST_PREVENT_MACRO_SUBSTITUTION(x, (boost::math::cstdfloat::detail::float_internal128_t)y); }
             template <class T>
-            inline typename boost::enable_if_c<
-               boost::is_convertible<T, boost::math::cstdfloat::detail::float_internal128_t>::value
+            inline typename std::enable_if<
+               std::is_convertible<T, boost::math::cstdfloat::detail::float_internal128_t>::value
                && !boost::is_same<T, boost::math::cstdfloat::detail::float_internal128_t>::value, boost::math::cstdfloat::detail::float_internal128_t>::type
                islessgreater BOOST_PREVENT_MACRO_SUBSTITUTION(T x, boost::math::cstdfloat::detail::float_internal128_t y) { return islessgreater BOOST_PREVENT_MACRO_SUBSTITUTION((boost::math::cstdfloat::detail::float_internal128_t)x, y); }
 
 
             inline bool                                      isunordered   BOOST_PREVENT_MACRO_SUBSTITUTION(boost::math::cstdfloat::detail::float_internal128_t x, boost::math::cstdfloat::detail::float_internal128_t y) { return ::BOOST_CSTDFLOAT_FLOAT128_ISNAN(x) || ::BOOST_CSTDFLOAT_FLOAT128_ISNAN(y); }
             template <class T>
-            inline typename boost::enable_if_c<
-               boost::is_convertible<T, boost::math::cstdfloat::detail::float_internal128_t>::value
+            inline typename std::enable_if<
+               std::is_convertible<T, boost::math::cstdfloat::detail::float_internal128_t>::value
                && !boost::is_same<T, boost::math::cstdfloat::detail::float_internal128_t>::value, boost::math::cstdfloat::detail::float_internal128_t>::type
                isunordered BOOST_PREVENT_MACRO_SUBSTITUTION(boost::math::cstdfloat::detail::float_internal128_t x, T y) { return isunordered BOOST_PREVENT_MACRO_SUBSTITUTION(x, (boost::math::cstdfloat::detail::float_internal128_t)y); }
             template <class T>
-            inline typename boost::enable_if_c<
-               boost::is_convertible<T, boost::math::cstdfloat::detail::float_internal128_t>::value
+            inline typename std::enable_if<
+               std::is_convertible<T, boost::math::cstdfloat::detail::float_internal128_t>::value
                && !boost::is_same<T, boost::math::cstdfloat::detail::float_internal128_t>::value, boost::math::cstdfloat::detail::float_internal128_t>::type
                isunordered BOOST_PREVENT_MACRO_SUBSTITUTION(T x, boost::math::cstdfloat::detail::float_internal128_t y) { return isunordered BOOST_PREVENT_MACRO_SUBSTITUTION((boost::math::cstdfloat::detail::float_internal128_t)x, y); }
 

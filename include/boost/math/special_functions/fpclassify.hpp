@@ -108,7 +108,7 @@ namespace math_detail{
 #endif
 
 template <class T>
-inline bool is_nan_helper(T t, const boost::true_type&)
+inline bool is_nan_helper(T t, const std::true_type&)
 {
 #ifdef isnan
    return isnan(t);
@@ -125,21 +125,21 @@ inline bool is_nan_helper(T t, const boost::true_type&)
 #endif
 
 template <class T>
-inline bool is_nan_helper(T, const boost::false_type&)
+inline bool is_nan_helper(T, const std::false_type&)
 {
    return false;
 }
 #if defined(BOOST_MATH_USE_FLOAT128) 
 #if defined(BOOST_MATH_HAS_QUADMATH_H)
-inline bool is_nan_helper(__float128 f, const boost::true_type&) { return ::isnanq(f); }
-inline bool is_nan_helper(__float128 f, const boost::false_type&) { return ::isnanq(f); }
+inline bool is_nan_helper(__float128 f, const std::true_type&) { return ::isnanq(f); }
+inline bool is_nan_helper(__float128 f, const std::false_type&) { return ::isnanq(f); }
 #elif defined(BOOST_GNU_STDLIB) && BOOST_GNU_STDLIB && \
       _GLIBCXX_USE_C99_MATH && !_GLIBCXX_USE_C99_FP_MACROS_DYNAMIC
-inline bool is_nan_helper(__float128 f, const boost::true_type&) { return std::isnan(static_cast<double>(f)); }
-inline bool is_nan_helper(__float128 f, const boost::false_type&) { return std::isnan(static_cast<double>(f)); }
+inline bool is_nan_helper(__float128 f, const std::true_type&) { return std::isnan(static_cast<double>(f)); }
+inline bool is_nan_helper(__float128 f, const std::false_type&) { return std::isnan(static_cast<double>(f)); }
 #else
-inline bool is_nan_helper(__float128 f, const boost::true_type&) { return ::isnan(static_cast<double>(f)); }
-inline bool is_nan_helper(__float128 f, const boost::false_type&) { return ::isnan(static_cast<double>(f)); }
+inline bool is_nan_helper(__float128 f, const std::true_type&) { return ::isnan(static_cast<double>(f)); }
+inline bool is_nan_helper(__float128 f, const std::false_type&) { return ::isnan(static_cast<double>(f)); }
 #endif
 #endif
 }
@@ -612,9 +612,9 @@ inline bool (isnan)(T x)
 }
 
 #ifdef isnan
-template <> inline bool isnan BOOST_NO_MACRO_EXPAND<float>(float t){ return ::boost::math_detail::is_nan_helper(t, boost::true_type()); }
-template <> inline bool isnan BOOST_NO_MACRO_EXPAND<double>(double t){ return ::boost::math_detail::is_nan_helper(t, boost::true_type()); }
-template <> inline bool isnan BOOST_NO_MACRO_EXPAND<long double>(long double t){ return ::boost::math_detail::is_nan_helper(t, boost::true_type()); }
+template <> inline bool isnan BOOST_NO_MACRO_EXPAND<float>(float t){ return ::boost::math_detail::is_nan_helper(t, std::true_type()); }
+template <> inline bool isnan BOOST_NO_MACRO_EXPAND<double>(double t){ return ::boost::math_detail::is_nan_helper(t, std::true_type()); }
+template <> inline bool isnan BOOST_NO_MACRO_EXPAND<long double>(long double t){ return ::boost::math_detail::is_nan_helper(t, std::true_type()); }
 #elif defined(BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS)
 template<>
 inline bool (isnan)(long double x)

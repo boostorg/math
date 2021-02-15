@@ -46,7 +46,7 @@ typedef long double largest_float;
 #endif
 
 template <class T, class T2>
-inline T create_test_value(largest_float val, const char*, const boost::true_type&, const T2&)
+inline T create_test_value(largest_float val, const char*, const std::true_type&, const T2&)
 { // Construct from long double or quad parameter val (ignoring string/const char* str).
   // (This is case for MPL parameters = true_ and T2 == false_,
   // and  MPL parameters = true_ and T2 == true_  cpp_bin_float)
@@ -64,7 +64,7 @@ inline T create_test_value(largest_float val, const char*, const boost::true_typ
 }
 
 template <class T>
-inline T create_test_value(largest_float, const char* str, const boost::false_type&, const boost::true_type&)
+inline T create_test_value(largest_float, const char* str, const std::false_type&, const std::true_type&)
 { // Construct from decimal digit string const char* @c str (ignoring long double parameter).
   // For example, extended precision or other User-Defined types which ARE constructible from a string
   // (but not from double, or long double without loss of precision).
@@ -76,7 +76,7 @@ inline T create_test_value(largest_float, const char* str, const boost::false_ty
 }
 
 template <class T>
-inline T create_test_value(largest_float, const char* str, const boost::false_type&, const boost::false_type&)
+inline T create_test_value(largest_float, const char* str, const std::false_type&, const std::false_type&)
 { // Create test value using from lexical cast of decimal digit string const char* str.
   // For example, extended precision or other User-Defined types which are NOT constructible from a string
   // (NOR constructible from a long double).
@@ -107,12 +107,12 @@ inline T create_test_value(largest_float, const char* str, const boost::false_ty
 #define BOOST_MATH_TEST_VALUE(T, x) create_test_value<T>(\
   BOOST_MATH_TEST_LARGEST_FLOAT_SUFFIX(x),\
   #x,\
-  boost::integral_constant<bool, \
+  std::integral_constant<bool, \
     std::numeric_limits<T>::is_specialized &&\
       (std::numeric_limits<T>::radix == 2)\
         && (std::numeric_limits<T>::digits <= BOOST_MATH_TEST_LARGEST_FLOAT_DIGITS)\
-        && boost::is_convertible<largest_float, T>::value>(),\
-  boost::integral_constant<bool, \
-    boost::is_constructible<T, const char*>::value>()\
+        && std::is_convertible<largest_float, T>::value>(),\
+  std::integral_constant<bool, \
+    std::is_constructible<T, const char*>::value>()\
 )
 #endif // TEST_VALUE_HPP
