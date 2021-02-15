@@ -126,7 +126,7 @@ namespace policies{
    {\
       template <type N> static char test(const name<N>*);\
       static double test(...);\
-      BOOST_STATIC_CONSTANT(bool, value = sizeof(test(static_cast<T*>(0))) == 1);\
+      static constexpr bool value = sizeof(test(static_cast<T*>(0))) == 1;\
    };\
    }\
    template <class T> struct is_##name : public boost::integral_constant<bool, ::boost::math::policies::detail::is_##name##_imp<T>::value>{};
@@ -141,7 +141,7 @@ namespace policies{
    {\
       template <bool N> static char test(const name<N>*);\
       static double test(...);\
-      BOOST_STATIC_CONSTANT(bool, value = sizeof(test(static_cast<T*>(0))) == 1);\
+      static constexpr bool value = sizeof(test(static_cast<T*>(0))) == 1;\
    };\
    }\
    template <class T> struct is_##name : public boost::integral_constant<bool, ::boost::math::policies::detail::is_##name##_imp<T>::value>{};
@@ -160,7 +160,7 @@ namespace policies{
    template <class T> struct is_##name##_imp\
    {\
       static T inst;\
-      BOOST_STATIC_CONSTANT(bool, value = sizeof( ::boost::math::policies::detail::is_##name##_tester<T>::test(inst)) == 1);\
+      static constexpr bool value = sizeof( ::boost::math::policies::detail::is_##name##_tester<T>::test(inst)) == 1;\
    };\
    }\
    template <class T> struct is_##name : public boost::integral_constant<bool, ::boost::math::policies::detail::is_##name##_imp<T>::value>\
@@ -182,7 +182,7 @@ namespace policies{
    template <class T> struct is_##name##_imp\
    {\
       static T inst;\
-      BOOST_STATIC_CONSTANT(bool, value = sizeof( ::boost::math::policies::detail::is_##name##_tester<T>::test(inst)) == 1);\
+      static constexpr bool value = sizeof( ::boost::math::policies::detail::is_##name##_tester<T>::test(inst)) == 1;\
    };\
    }\
    template <class T> struct is_##name : public boost::integral_constant<bool, ::boost::math::policies::detail::is_##name##_imp<T>::value>\
@@ -307,13 +307,13 @@ char test_is_default_arg(const default_policy*);
 template <class T>
 struct is_valid_policy_imp 
 {
-   BOOST_STATIC_CONSTANT(bool, value = sizeof(::boost::math::policies::detail::test_is_valid_arg(static_cast<T*>(0))) == 1);
+   static constexpr bool value = sizeof(::boost::math::policies::detail::test_is_valid_arg(static_cast<T*>(0))) == 1;
 };
 
 template <class T>
 struct is_default_policy_imp
 {
-   BOOST_STATIC_CONSTANT(bool, value = sizeof(::boost::math::policies::detail::test_is_default_arg(static_cast<T*>(0))) == 1);
+   static constexpr bool value = sizeof(::boost::math::policies::detail::test_is_default_arg(static_cast<T*>(0))) == 1;
 };
 
 template <class T> struct is_valid_policy 
@@ -976,7 +976,7 @@ double test_is_policy(...);
 template <class P>
 struct is_policy_imp
 {
-   BOOST_STATIC_CONSTANT(bool, value = (sizeof(::boost::math::policies::detail::test_is_policy(static_cast<P*>(0))) == 1));
+   static constexpr bool value = (sizeof(::boost::math::policies::detail::test_is_policy(static_cast<P*>(0))) == 1);
 };
 
 }
@@ -1021,7 +1021,7 @@ struct is_noexcept_error_policy
    typedef typename Policy::rounding_error_type             t7;
    typedef typename Policy::indeterminate_result_error_type t8;
 
-   BOOST_STATIC_CONSTANT(bool, value = 
+   static constexpr bool value = 
       ((t1::value != throw_on_error) && (t1::value != user_error)
       && (t2::value != throw_on_error) && (t2::value != user_error)
       && (t3::value != throw_on_error) && (t3::value != user_error)
@@ -1029,7 +1029,7 @@ struct is_noexcept_error_policy
       && (t5::value != throw_on_error) && (t5::value != user_error)
       && (t6::value != throw_on_error) && (t6::value != user_error)
       && (t7::value != throw_on_error) && (t7::value != user_error)
-      && (t8::value != throw_on_error) && (t8::value != user_error)));
+      && (t8::value != throw_on_error) && (t8::value != user_error));
 };
 
 }}} // namespaces
