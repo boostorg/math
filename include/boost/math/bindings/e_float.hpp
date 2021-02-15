@@ -1,18 +1,19 @@
 //  Copyright John Maddock 2012 - 2021.
-//  Copyright Christopher Kormanyos 2017 - 2021.
+//  Copyright Christopher Kormanyos 2016 - 2021.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
-// Wrapper that works with ::e_float-2021
-// See https://github.com/ckormanyos/::e_float-2021
+// Wrapper that works with e_float-2021, see also
+// https://github.com/ckormanyos/e_float-2021
 
 #ifndef E_FLOAT_2017_08_18_HPP_
   #define E_FLOAT_2017_08_18_HPP_
 
   #include <cstdint>
   #include <sstream>
+  #include <tuple>
   #include <type_traits>
 
   #include <e_float/e_float.h>
@@ -34,7 +35,7 @@
   // interacting as a backend with boost::muliprecision.
   template<>
   struct boost::multiprecision::number_category<boost::math::ef::e_float>
-    : public boost::mpl::int_<boost::multiprecision::number_kind_floating_point> { };
+    : public std::integral_constant<int, boost::multiprecision::number_kind_floating_point> { };
 
   namespace boost { namespace math { namespace ef {
 
@@ -42,16 +43,17 @@
   class e_float
   {
   public:
-    typedef boost::mpl::list<  signed long long> signed_types;
-    typedef boost::mpl::list<unsigned long long> unsigned_types;
-    typedef boost::mpl::list<long double>        float_types;
-    typedef std::int64_t                         exponent_type;
+    using   signed_types = std::tuple<  signed char,   signed short,   signed int,   signed long,   signed long long, std::intmax_t>;
+    using unsigned_types = std::tuple<unsigned char, unsigned short, unsigned int, unsigned long, unsigned long long, std::uintmax_t>;
+    using float_types    = std::tuple<float, double, long double>;
+    using exponent_type  = std::int64_t;
 
     e_float() : m_value() { }
 
     explicit e_float(const ::e_float& rep) : m_value(rep) { }
 
     e_float(const e_float& other) : m_value(other.m_value) { }
+    e_float(e_float&& other) : m_value(static_cast<::e_float&&>(other.m_value)) { }
 
     template<typename UnsignedIntegralType,
              typename std::enable_if<(   (std::is_integral<UnsignedIntegralType>::value == true)
@@ -71,11 +73,21 @@
 
     e_float(const std::string& str) : m_value(str) { }
 
-    virtual ~e_float();
+    ~e_float() { }
 
     e_float& operator=(const e_float& other)
     {
-      m_value = other.m_value;
+      if(this != &other)
+      {
+        m_value = other.m_value;
+      }
+
+      return *this;
+    }
+
+    e_float& operator=(e_float&& other)
+    {
+      m_value.operator=(static_cast<::e_float&&>(other.m_value));
 
       return *this;
     }
@@ -137,8 +149,6 @@
 
     e_float& operator=(const ::e_float&) = delete;
   };
-
-  e_float::~e_float() { }
 
   void eval_add(e_float& result, const e_float& x)
   {
@@ -267,7 +277,7 @@
                   const e_float&                         x,
                         typename e_float::exponent_type* expptr)
   {
-    typedef int local_exponent_type;
+    using local_exponent_type = int;
 
     local_exponent_type exp2;
 
@@ -276,9 +286,9 @@
     *expptr = static_cast<typename e_float::exponent_type>(exp2);
   }
 
-  void eval_frexp(e_float& result,
+  void eval_frexp(      e_float& result,
                   const e_float& x,
-                  int* expptr,
+                  int*           expptr,
                   typename std::enable_if<std::is_same<typename e_float::exponent_type, int>::value == false>::type const* = nullptr)
   {
     result.representation() = ::ef::frexp(x.crepresentation(), expptr);
@@ -288,17 +298,17 @@
                   const e_float& x,
                   const typename e_float::exponent_type exp_value)
   {
-    typedef int local_exponent_type;
+    using local_exponent_type = int;
 
     result.representation() = ::ef::ldexp(x.crepresentation(), local_exponent_type(exp_value));
   }
 
-  void eval_ldexp(e_float& result,
+  void eval_ldexp(      e_float& result,
                   const e_float& x,
-                  int exp_value,
+                  int            exp_value,
                   typename std::enable_if<std::is_same<typename e_float::exponent_type, int>::value == false>::type const* = nullptr)
   {
-    typedef int local_exponent_type;
+    using local_exponent_type = int;
 
     result.representation() = ::ef::ldexp(x.crepresentation(), local_exponent_type(exp_value));
   }
@@ -482,18 +492,13 @@
                                                  ExpressionTemplates>,
                    ThisPolicy>
   {
-    typedef typename ThisPolicy::precision_type precision_type;
+    using precision_type = typename ThisPolicy::precision_type;
 
-    typedef digits2<((::e_float::ef_digits10 + 1LL) * 1000LL) / 301LL> local_digits_2;
+    using local_digits_2 = digits2<((::e_float::ef_digits10 + 1LL) * 1000LL) / 301LL>;
 
-    typedef typename mpl::if_c
-      <
-        (   (local_digits_2::value <= precision_type::value)
-         || (precision_type::value <= 0)),
-        local_digits_2,
-        precision_type
-      >::type
-    type;
+    using type = typename std::conditional<((local_digits_2::value <= precision_type::value) || (precision_type::value <= 0)),
+                                           local_digits_2,
+                                           precision_type>::type;
   };
 
   } } } // namespaces boost::math::policies
