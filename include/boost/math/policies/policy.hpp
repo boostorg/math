@@ -739,55 +739,6 @@ struct evaluation<double, Policy>
    using type = typename std::conditional<Policy::promote_double_type::value, long double, double>::type;
 };
 
-#ifdef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-
-template <class Real>
-struct basic_digits : public std::integral_constant<int, 0>{ };
-template <>
-struct basic_digits<float> : public std::integral_constant<int, std::numeric_limits<float>::digits>{ };
-template <>
-struct basic_digits<double> : public std::integral_constant<int, std::numeric_limits<double>::digits>{ };
-template <>
-struct basic_digits<long double> : public std::integral_constant<int, std::numeric_limits<long double>::digits>{ };
-
-template <class Real, class Policy>
-struct precision
-{
-   static_assert(std::numeric_limits<Real>::radix == 2, "std::numeric_limits<Real>::radix == 2");
-   using precision_type = typename Policy::precision_type;
-   using digits_t = basic_digits<Real>;
-   using type = typename std::conditional<
-      (digits_t::value == 0),
-      // Possibly unknown precision:
-      precision_type,
-      typename std::conditional<
-         (digits_t::value <= precision_type || precision_type::value <= 0),
-         // Default case, full precision for RealType:
-         digits2< std::numeric_limits<Real>::digits>,
-         // User customised precision:
-         precision_type
-      >::type
-   >::type;
-};
-
-template <class Policy>
-struct precision<float, Policy>
-{
-   using type = digits2<std::numeric_limits<float>::digits>;
-};
-template <class Policy>
-struct precision<double, Policy>
-{
-   using type = digits2<std::numeric_limits<double>::digits>;
-};
-template <class Policy>
-struct precision<long double, Policy>
-{
-   using type = digits2<std::numeric_limits<long double>::digits>;
-};
-
-#else
-
 template <class Real, class Policy>
 struct precision
 {
@@ -827,8 +778,6 @@ struct precision
 #endif
 };
 
-#endif
-
 #ifdef BOOST_MATH_USE_FLOAT128
 
 template <class Policy>
@@ -844,11 +793,7 @@ namespace detail{
 template <class T, class Policy>
 inline constexpr int digits_imp(std::true_type const&) noexcept
 {
-#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
    static_assert( std::numeric_limits<T>::is_specialized, "std::numeric_limits<T>::is_specialized");
-#else
-   assert(std::numeric_limits<T>::is_specialized);
-#endif
    typedef typename boost::math::policies::precision<T, Policy>::type p_t;
    return p_t::value;
 }
@@ -926,13 +871,9 @@ struct series_factor_calc<T, Digits, std::false_type, std::true_type>
 template <class T, class Policy>
 inline constexpr T get_epsilon_imp(std::true_type const&) noexcept(std::is_floating_point<T>::value)
 {
-#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
    static_assert(std::numeric_limits<T>::is_specialized, "std::numeric_limits<T>::is_specialized");
    static_assert(std::numeric_limits<T>::radix == 2, "std::numeric_limits<T>::radix == 2");
-#else
-   assert(std::numeric_limits<T>::is_specialized);
-   assert(std::numeric_limits<T>::radix == 2);
-#endif
+
    typedef typename boost::math::policies::precision<T, Policy>::type p_t;
    typedef std::integral_constant<bool, p_t::value <= std::numeric_limits<std::uintmax_t>::digits> is_small_int;
    typedef std::integral_constant<bool, p_t::value >= std::numeric_limits<T>::digits> is_default_value;
