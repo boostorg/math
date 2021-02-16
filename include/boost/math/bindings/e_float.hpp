@@ -150,19 +150,24 @@
     e_float& operator=(const ::e_float&) = delete;
   };
 
-  void eval_add(e_float& result, const e_float& x)
+  inline void eval_add(e_float& result, const e_float& x)
   {
     result.representation() += x.crepresentation();
   }
 
-  void eval_subtract(e_float& result, const e_float& x)
+  inline void eval_subtract(e_float& result, const e_float& x)
   {
     result.representation() -= x.crepresentation();
   }
 
-  void eval_multiply(e_float& result, const e_float& x)
+  inline void eval_multiply(e_float& result, const e_float& x)
   {
     result.representation() *= x.crepresentation();
+  }
+
+  inline void eval_multiply(e_float& result, const e_float& x, const e_float& y)
+  {
+    result.representation() = x.crepresentation() * y.crepresentation();
   }
 
   template<typename SignedIntegralType,
@@ -173,7 +178,7 @@
     result.representation().mul_signed_long_long(static_cast<std::int64_t>(n));
   }
 
-  void eval_divide(e_float& result, const e_float& x)
+  inline void eval_divide(e_float& result, const e_float& x)
   {
     result.representation() /= x.crepresentation();
   }
@@ -186,7 +191,7 @@
     result.representation().div_signed_long_long(static_cast<std::int64_t>(n));
   }
 
-  bool eval_eq(const e_float& a, const e_float& b)
+  inline bool eval_eq(const e_float& a, const e_float& b)
   {
     return (a.compare(b) == 0);
   }
@@ -205,7 +210,7 @@
     return (e_float(a).compare(b) == 0);
   }
 
-  bool eval_gt(const e_float& a, const e_float& b)
+  inline bool eval_gt(const e_float& a, const e_float& b)
   {
     return (a.compare(b) == 1);
   }
@@ -224,7 +229,7 @@
     return (e_float(a).compare(b) == 1);
   }
 
-  bool eval_lt(const e_float& a, const e_float& b)
+  inline bool eval_lt(const e_float& a, const e_float& b)
   {
     return (a.compare(b) == -1);
   }
@@ -243,39 +248,39 @@
     return (e_float(a).compare(b) == -1);
   }
 
-  bool eval_is_zero(const e_float& x)
+  inline bool eval_is_zero(const e_float& x)
   {
     return x.crepresentation().iszero();
   }
 
-  int eval_get_sign(const e_float& x)
+  inline int eval_get_sign(const e_float& x)
   {
     if     (x.crepresentation().iszero()) { return  0; }
     else if(x.crepresentation().isneg ()) { return -1; }
     else                                  { return  1; }
   }
 
-  void eval_convert_to(unsigned long long* result,
-                       const e_float& val)
+  inline void eval_convert_to(unsigned long long* result,
+                              const e_float& val)
   {
     *result = (val.crepresentation()).extract_unsigned_long_long();
   }
 
-  void eval_convert_to(signed long long* result,
-                       const e_float& val)
+  inline void eval_convert_to(signed long long* result,
+                              const e_float& val)
   {
     *result = (val.crepresentation()).extract_signed_long_long();
   }
 
-  void eval_convert_to(long double* result,
-                       const e_float& val)
+  inline void eval_convert_to(long double* result,
+                              const e_float& val)
   {
     *result = (val.crepresentation()).extract_long_double();
   }
 
-  void eval_frexp(      e_float&                         result,
-                  const e_float&                         x,
-                        typename e_float::exponent_type* expptr)
+  inline void eval_frexp(      e_float&                         result,
+                         const e_float&                         x,
+                               typename e_float::exponent_type* expptr)
   {
     using local_exponent_type = int;
 
@@ -286,46 +291,83 @@
     *expptr = static_cast<typename e_float::exponent_type>(exp2);
   }
 
-  void eval_frexp(      e_float& result,
-                  const e_float& x,
-                  int*           expptr,
-                  typename std::enable_if<std::is_same<typename e_float::exponent_type, int>::value == false>::type const* = nullptr)
+  inline void eval_frexp(      e_float& result,
+                         const e_float& x,
+                         int*           expptr,
+                         typename std::enable_if<std::is_same<typename e_float::exponent_type, int>::value == false>::type const* = nullptr)
   {
     result.representation() = ::ef::frexp(x.crepresentation(), expptr);
   }
 
-  void eval_ldexp(      e_float& result,
-                  const e_float& x,
-                  const typename e_float::exponent_type exp_value)
+  inline void eval_ldexp(      e_float& result,
+                         const e_float& x,
+                         const typename e_float::exponent_type exp_value)
   {
     using local_exponent_type = int;
 
     result.representation() = ::ef::ldexp(x.crepresentation(), local_exponent_type(exp_value));
   }
 
-  void eval_ldexp(      e_float& result,
-                  const e_float& x,
-                  int            exp_value,
-                  typename std::enable_if<std::is_same<typename e_float::exponent_type, int>::value == false>::type const* = nullptr)
+  inline void eval_ldexp(      e_float& result,
+                         const e_float& x,
+                         int            exp_value,
+                         typename std::enable_if<std::is_same<typename e_float::exponent_type, int>::value == false>::type const* = nullptr)
   {
     using local_exponent_type = int;
 
     result.representation() = ::ef::ldexp(x.crepresentation(), local_exponent_type(exp_value));
   }
 
-  void eval_floor(      e_float& result,
-                  const e_float& x)
+  inline e_float::exponent_type eval_ilogb(const e_float& val)
+  {
+    if(val.crepresentation().iszero())
+    {
+      return (std::numeric_limits<e_float::exponent_type>::min)();
+    }
+
+    if ((val.crepresentation().isinf)())
+    {
+      return (std::numeric_limits<e_float::exponent_type>::max)();
+    }
+
+    if ((val.crepresentation().isnan)())
+    {
+      #if defined(FP_ILOGBNAN)
+      return FP_ILOGBNAN;
+      #else
+      return (std::numeric_limits<e_float::exponent_type>::max)();
+      #endif
+    }
+
+   // Set the result to base-10 exponent (order) of the value.
+   return val.crepresentation().order();
+  }
+
+  template<typename IntegralType,
+           typename std::enable_if<(   (std::is_fundamental<IntegralType>::value == true)
+                                    && (std::is_integral   <IntegralType>::value == true))>::type const* = nullptr>
+  void eval_scalbn(e_float& result, const e_float& val, IntegralType e)
+  {
+    const std::int64_t my_e = static_cast<std::int64_t>(e);
+
+    const e_float t(::e_float(1.0, e));
+
+    eval_multiply(result, val, t);
+  }
+
+  inline void eval_floor(      e_float& result,
+                         const e_float& x)
   {
     result.representation() = ::ef::floor(x.crepresentation());
   }
 
-  void eval_ceil(      e_float& result,
-                 const e_float& x)
+  inline void eval_ceil(      e_float& result,
+                        const e_float& x)
   {
     result.representation() = ::ef::ceil(x.crepresentation());
   }
 
-  int eval_fpclassify(const e_float& x)
+  inline int eval_fpclassify(const e_float& x)
   {
     if     ((x.crepresentation().isinf)()) { return FP_INFINITE; }
     else if((x.crepresentation().isnan)()) { return FP_NAN; }
@@ -333,14 +375,14 @@
     else                                   { return FP_NORMAL; }
   }
 
-  void eval_trunc(      e_float& result,
-                  const e_float& x)
+  inline void eval_trunc(      e_float& result,
+                         const e_float& x)
   {
     result.representation() = ::ef::integer_part(x.crepresentation());
   }
 
-  void eval_abs(      e_float& result,
-                const e_float& x)
+  inline void eval_abs(      e_float& result,
+                       const e_float& x)
   {
     result.representation() = x.crepresentation();
 
@@ -350,8 +392,8 @@
     }
   }
 
-  void eval_fabs(      e_float& result,
-                 const e_float& x)
+  inline void eval_fabs(      e_float& result,
+                        const e_float& x)
   {
     result.representation() = x.crepresentation();
 
@@ -361,94 +403,94 @@
     }
   }
 
-  void eval_sqrt(      e_float& result,
-                 const e_float& x)
+  inline void eval_sqrt(      e_float& result,
+                        const e_float& x)
   {
     result.representation() = ::ef::sqrt(x.crepresentation());
   }
 
-  void eval_sin(      e_float& result,
-                const e_float& x)
+  inline void eval_sin(      e_float& result,
+                       const e_float& x)
   {
     result.representation() = ::ef::sin(x.crepresentation());
   }
 
-  void eval_cos(      e_float& result,
-                const e_float& x)
+  inline void eval_cos(      e_float& result,
+                       const e_float& x)
   {
     result.representation() = ::ef::cos(x.crepresentation());
   }
 
-  void eval_tan(      e_float& result,
-                const e_float& x)
+  inline void eval_tan(      e_float& result,
+                       const e_float& x)
   {
     result.representation() = ::ef::tan(x.crepresentation());
   }
 
-  void eval_asin(      e_float& result,
-                 const e_float& x)
+  inline void eval_asin(      e_float& result,
+                        const e_float& x)
   {
     result.representation() = ::ef::asin(x.crepresentation());
   }
 
-  void eval_acos(      e_float& result,
-                 const e_float& x)
+  inline void eval_acos(      e_float& result,
+                        const e_float& x)
   {
     result.representation() = ::ef::acos(x.crepresentation());
   }
 
-  void eval_atan(      e_float& result,
-                 const e_float& x)
+  inline void eval_atan(      e_float& result,
+                        const e_float& x)
   {
     result.representation() = ::ef::atan(x.crepresentation());
   }
 
-  void eval_atan2(      e_float& result,
-                  const e_float& y,
-                  const e_float& x)
+  inline void eval_atan2(      e_float& result,
+                         const e_float& y,
+                         const e_float& x)
   {
     result.representation() = ::ef::atan2(y.crepresentation(), x.crepresentation());
   }
 
-  void eval_log(      e_float& result,
-                const e_float& x)
+  inline void eval_log(      e_float& result,
+                       const e_float& x)
   {
     result.representation() = ::ef::log(x.crepresentation());
   }
 
-  void eval_log10(      e_float& result,
-                  const e_float& x)
+  inline void eval_log10(      e_float& result,
+                         const e_float& x)
   {
     result.representation() = ::ef::log10(x.crepresentation());
   }
 
-  void eval_exp(      e_float& result,
-                const e_float& x)
+  inline void eval_exp(      e_float& result,
+                       const e_float& x)
   {
     result.representation() = ::ef::exp(x.crepresentation());
   }
 
-  void eval_sinh(      e_float& result,
-                 const e_float& x)
+  inline void eval_sinh(      e_float& result,
+                        const e_float& x)
   {
     result.representation() = ::ef::sinh(x.crepresentation());
   }
 
-  void eval_cosh(      e_float& result,
-                 const e_float& x)
+  inline void eval_cosh(      e_float& result,
+                        const e_float& x)
   {
     result.representation() = ::ef::cosh(x.crepresentation());
   }
 
-  void eval_tanh(      e_float& result,
-                 const e_float& x)
+  inline void eval_tanh(      e_float& result,
+                        const e_float& x)
   {
     result.representation() = ::ef::tanh(x.crepresentation());
   }
 
-  void eval_fmod(      e_float& result,
-                 const e_float& x,
-                 const e_float& y)
+  inline void eval_fmod(      e_float& result,
+                        const e_float& x,
+                        const e_float& y)
   {
     if(y.crepresentation().iszero())
     {
@@ -474,9 +516,9 @@
     }
   }
 
-  void eval_pow(      e_float& result,
-                const e_float& x,
-                const e_float& a)
+  inline void eval_pow(      e_float& result,
+                       const e_float& x,
+                       const e_float& a)
   {
     result.representation() = ::ef::pow(x.crepresentation(), a.crepresentation());
   }
@@ -546,7 +588,6 @@
       static constexpr boost::multiprecision::number<boost::math::ef::e_float, ExpressionTemplates> signaling_NaN() { return boost::math::ef::e_float(ef::zero()); }
       static constexpr boost::multiprecision::number<boost::math::ef::e_float, ExpressionTemplates> denorm_min   () { return boost::math::ef::e_float(ef::zero()); }
     };
-
   } // namespace std
 
 #endif // E_FLOAT_2017_08_18_HPP_
