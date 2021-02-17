@@ -10,11 +10,8 @@
 #include <boost/mp11.hpp>
 #include <boost/mp11/mpl.hpp>
 #include <boost/mpl/contains.hpp>
-#include <boost/mpl/if.hpp>
 #include <boost/mpl/find_if.hpp>
 #include <boost/mpl/remove_if.hpp>
-#include <boost/mpl/push_back.hpp>
-#include <boost/mpl/size.hpp>
 #include <boost/mpl/comparison.hpp>
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/mp.hpp>
@@ -331,14 +328,13 @@ template <class T> struct is_default_policy
 template <class Seq, class T, int N>
 struct append_N
 {
-   typedef typename mpl::push_back<Seq, T>::type new_seq;
-   typedef typename append_N<new_seq, T, N-1>::type type;
+   using type = typename append_N<mp_push_back<Seq, T>, T, N-1>::type;
 };
 
 template <class Seq, class T>
 struct append_N<Seq, T, 0>
 {
-   typedef Seq type;
+   using type = Seq;
 };
 
 //
