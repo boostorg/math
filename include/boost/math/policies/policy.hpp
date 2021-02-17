@@ -7,14 +7,13 @@
 #ifndef BOOST_MATH_POLICY_HPP
 #define BOOST_MATH_POLICY_HPP
 
-#include <boost/mpl/list.hpp>
+#include <boost/mp11.hpp>
+#include <boost/mp11/mpl.hpp>
 #include <boost/mpl/contains.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/find_if.hpp>
 #include <boost/mpl/remove_if.hpp>
-#include <boost/mpl/vector.hpp>
 #include <boost/mpl/push_back.hpp>
-#include <boost/mpl/at.hpp>
 #include <boost/mpl/size.hpp>
 #include <boost/mpl/comparison.hpp>
 #include <boost/math/tools/config.hpp>
@@ -23,6 +22,8 @@
 #include <type_traits>
 #include <cmath>
 #include <cstdint>
+
+using namespace boost::mp11;
 
 namespace boost{ namespace math{ 
 
@@ -415,7 +416,7 @@ private:
    //
    // Typelist of the arguments:
    //
-   typedef mpl::list<A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13> arg_list;
+   using arg_list = mp_list<A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13>;
 
 public:
    typedef typename detail::find_arg<arg_list, is_domain_error<mpl::_1>, domain_error<> >::type domain_error_type;
@@ -525,7 +526,7 @@ template <class Policy,
 struct normalise
 {
 private:
-   typedef mpl::list<A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13> arg_list;
+   using arg_list = mp_list<A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13>;
    typedef typename detail::find_arg<arg_list, is_domain_error<mpl::_1>, typename Policy::domain_error_type >::type domain_error_type;
    typedef typename detail::find_arg<arg_list, is_pole_error<mpl::_1>, typename Policy::pole_error_type >::type pole_error_type;
    typedef typename detail::find_arg<arg_list, is_overflow_error<mpl::_1>, typename Policy::overflow_error_type >::type overflow_error_type;
@@ -561,7 +562,7 @@ private:
    //
    // Define a typelist of the policies:
    //
-   typedef mpl::vector<
+   using result_list = mp_list<
       domain_error_type,
       pole_error_type,
       overflow_error_type,
@@ -576,7 +577,7 @@ private:
       discrete_quantile_type,
       assert_undefined_type,
       max_series_iterations_type,
-      max_root_iterations_type> result_list;
+      max_root_iterations_type>;
    //
    // Remove all the policies that are the same as the default:
    //
@@ -584,22 +585,23 @@ private:
    //
    // Pad out the list with defaults:
    //
-   typedef typename detail::append_N<reduced_list, default_policy, (14 - ::boost::mpl::size<reduced_list>::value)>::type result_type;
+   typedef typename detail::append_N<reduced_list, default_policy, (14UL - mp_size<reduced_list>::value)>::type result_type;
 public:
-   typedef policy<
-      typename mpl::at<result_type, std::integral_constant<int, 0> >::type,
-      typename mpl::at<result_type, std::integral_constant<int, 1> >::type,
-      typename mpl::at<result_type, std::integral_constant<int, 2> >::type,
-      typename mpl::at<result_type, std::integral_constant<int, 3> >::type,
-      typename mpl::at<result_type, std::integral_constant<int, 4> >::type,
-      typename mpl::at<result_type, std::integral_constant<int, 5> >::type,
-      typename mpl::at<result_type, std::integral_constant<int, 6> >::type,
-      typename mpl::at<result_type, std::integral_constant<int, 7> >::type,
-      typename mpl::at<result_type, std::integral_constant<int, 8> >::type,
-      typename mpl::at<result_type, std::integral_constant<int, 9> >::type,
-      typename mpl::at<result_type, std::integral_constant<int, 10> >::type,
-      typename mpl::at<result_type, std::integral_constant<int, 11> >::type,
-      typename mpl::at<result_type, std::integral_constant<int, 12> >::type > type;
+   using type = policy<
+      mp_at_c<result_type, 0>,
+      mp_at_c<result_type, 1>,
+      mp_at_c<result_type, 2>,
+      mp_at_c<result_type, 3>,
+      mp_at_c<result_type, 4>,
+      mp_at_c<result_type, 5>,
+      mp_at_c<result_type, 6>,
+      mp_at_c<result_type, 7>,
+      mp_at_c<result_type, 8>,
+      mp_at_c<result_type, 9>,
+      mp_at_c<result_type, 10>,
+      mp_at_c<result_type, 11>,
+      mp_at_c<result_type, 12>
+      >;
 };
 //
 // Full specialisation to speed up compilation of the common case:
