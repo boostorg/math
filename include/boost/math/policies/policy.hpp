@@ -904,16 +904,22 @@ template <class A1,
 char test_is_policy(const policy<A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11>*);
 double test_is_policy(...);
 
-template <class P>
-struct is_policy_imp
+template <typename P>
+class is_policy_imp
 {
-   static constexpr bool value = (sizeof(::boost::math::policies::detail::test_is_policy(static_cast<P*>(0))) == 1);
+public:
+   static constexpr bool value = (sizeof(::boost::math::policies::detail::test_is_policy(static_cast<P*>(0))) == sizeof(char));
 };
 
 }
 
-template <class P>
-struct is_policy : public std::integral_constant<bool, ::boost::math::policies::detail::is_policy_imp<P>::value> {};
+template <typename P>
+class is_policy
+{
+public:
+   static constexpr bool value = boost::math::policies::detail::is_policy_imp<P>::value;
+   using type = std::integral_constant<bool, value>;
+};
 
 //
 // Helper traits class for distribution error handling:
