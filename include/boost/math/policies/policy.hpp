@@ -109,12 +109,12 @@ namespace policies{
 #define BOOST_MATH_MAX_ROOT_ITERATION_POLICY 200
 #endif
 
-#define BOOST_MATH_META_INT(type, name, Default)                                                \
-   template <type N = Default>                                                                  \
+#define BOOST_MATH_META_INT(Type, name, Default)                                               \
+   template <Type N = Default>                                                                 \
    class name : public std::integral_constant<int, N>{};                                        \
                                                                                                 \
    namespace detail{                                                                            \
-   template <type N>                                                                            \
+   template <Type N>                                                                           \
    char test_is_valid_arg(const name<N>* = nullptr);                                            \
    char test_is_default_arg(const name<Default>* = nullptr);                                    \
                                                                                                 \
@@ -122,7 +122,7 @@ namespace policies{
    class is_##name##_imp                                                                        \
    {                                                                                            \
    private:                                                                                     \
-      template <type N>                                                                         \
+      template <Type N>                                                                        \
       static char test(const name<N>* = nullptr);                                               \
       static double test(...);                                                                  \
    public:                                                                                      \
@@ -135,6 +135,7 @@ namespace policies{
    {                                                                                            \
    public:                                                                                      \
       static constexpr bool value = boost::math::policies::detail::is_##name##_imp<T>::value;   \
+      using type = std::integral_constant<bool, value>;                                         \
    };
 
 #define BOOST_MATH_META_BOOL(name, Default)                                                     \
@@ -163,6 +164,7 @@ namespace policies{
    {                                                                                            \
    public:                                                                                      \
       static constexpr bool value = boost::math::policies::detail::is_##name##_imp<T>::value;   \
+      using type = std::integral_constant<bool, value>;                                         \
    };
 
 //
