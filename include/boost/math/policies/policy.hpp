@@ -421,17 +421,18 @@ private:
       using type = mp_at<arg_list, B>;
    };
 
+   template<typename Fn, typename Default>
+   class arg_type
+   {
+   private:
+      using index = mp_find_if_q<arg_list, Fn>;
+      static constexpr bool end = (index::value >= arg_list_size);
+   public:
+      using type = typename pick_arg<Default, index, end>::type;
+   };
+
 public:
-   using domain_error_type = typename detail::find_arg<arg_list, is_domain_error<mpl::_1>, domain_error<> >::type;
-
-   // Now try to calculate the same domain error type using MP11
-   using domain_error_fn = mp_quote_trait<is_domain_error>;
-   using domain_error_index = mp_find_if_q<arg_list, domain_error_fn>;
-   static constexpr bool end = (domain_error_index::value >= arg_list_size);
-   using new_domain_error_type = typename pick_arg<domain_error<>, domain_error_index, end>::type;
-
-   static_assert(std::is_same<domain_error_type, new_domain_error_type>::value, "MP11 is incorrect");
-
+   using domain_error_type = typename arg_type<mp_quote_trait<is_domain_error>, domain_error<>>::type;
    typedef typename detail::find_arg<arg_list, is_pole_error<mpl::_1>, pole_error<> >::type pole_error_type;
    typedef typename detail::find_arg<arg_list, is_overflow_error<mpl::_1>, overflow_error<> >::type overflow_error_type;
    typedef typename detail::find_arg<arg_list, is_underflow_error<mpl::_1>, underflow_error<> >::type underflow_error_type;
