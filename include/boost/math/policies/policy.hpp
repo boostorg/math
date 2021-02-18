@@ -409,14 +409,26 @@ private:
    using arg_list = mp_list<A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13>;
    static constexpr std::size_t arg_list_size = mp_size<arg_list>::value;
 
+   template<typename A, typename B, bool b>
+   struct pick_arg
+   {
+      using type = A;
+   };
+
+   template<typename A, typename B>
+   struct pick_arg<A, B, false>
+   {
+      using type = mp_at<arg_list, B>;
+   };
+
 public:
    using domain_error_type = typename detail::find_arg<arg_list, is_domain_error<mpl::_1>, domain_error<> >::type;
 
    // Now try to calculate the same domain error type using MP11
    using domain_error_fn = mp_quote_trait<is_domain_error>;
    using domain_error_index = mp_find_if_q<arg_list, domain_error_fn>;
-   static constexpr std::size_t domain_error_index_adjusted = domain_error_index::value >= arg_list_size ? domain_error_index::value - 1 : domain_error_index::value;
-   using new_domain_error_type = typename std::conditional<domain_error_index_adjusted != arg_list_size, mp_at_c<arg_list, domain_error_index_adjusted>, domain_error<>>::type;
+   static constexpr bool end = (domain_error_index::value >= arg_list_size);
+   using new_domain_error_type = typename pick_arg<domain_error<>, domain_error_index, end>::type;
 
    static_assert(std::is_same<domain_error_type, new_domain_error_type>::value, "MP11 is incorrect");
 
