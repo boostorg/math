@@ -110,81 +110,62 @@ namespace policies{
 #define BOOST_MATH_MAX_ROOT_ITERATION_POLICY 200
 #endif
 
-#if !defined(BOOST_BORLANDC)
-#define BOOST_MATH_META_INT(type, name, Default)\
-   template <type N = Default> struct name : public std::integral_constant<int, N>{};\
-   namespace detail{\
-   template <type N>\
-   char test_is_valid_arg(const name<N>*);\
-   char test_is_default_arg(const name<Default>*);\
-   template <class T> struct is_##name##_imp\
-   {\
-      template <type N> static char test(const name<N>*);\
-      static double test(...);\
-      static constexpr bool value = sizeof(test(static_cast<T*>(0))) == 1;\
-   };\
-   }\
-   template <class T> struct is_##name : public std::integral_constant<bool, ::boost::math::policies::detail::is_##name##_imp<T>::value>{};
-
-#define BOOST_MATH_META_BOOL(name, Default)\
-   template <bool N = Default> struct name : public std::integral_constant<bool, N>{};\
-   namespace detail{\
-   template <bool N>\
-   char test_is_valid_arg(const name<N>*);\
-   char test_is_default_arg(const name<Default>*);\
-   template <class T> struct is_##name##_imp\
-   {\
-      template <bool N> static char test(const name<N>*);\
-      static double test(...);\
-      static constexpr bool value = sizeof(test(static_cast<T*>(0))) == 1;\
-   };\
-   }\
-   template <class T> struct is_##name : public std::integral_constant<bool, ::boost::math::policies::detail::is_##name##_imp<T>::value>{};
-#else
-#define BOOST_MATH_META_INT(Type, name, Default)\
-   template <Type N = Default> struct name : public std::integral_constant<int, N>{};\
-   namespace detail{\
-   template <Type N>\
-   char test_is_valid_arg(const name<N>*);\
-   char test_is_default_arg(const name<Default>*);\
-   template <class T> struct is_##name##_tester\
-   {\
-      template <Type N> static char test(const name<N>&);\
-      static double test(...);\
-   };\
-   template <class T> struct is_##name##_imp\
-   {\
-      static T inst;\
-      static constexpr bool value = sizeof( ::boost::math::policies::detail::is_##name##_tester<T>::test(inst)) == 1;\
-   };\
-   }\
-   template <class T> struct is_##name : public std::integral_constant<bool, ::boost::math::policies::detail::is_##name##_imp<T>::value>\
-   {\
-      template <class U> struct apply{ typedef is_##name<U> type; };\
+#define BOOST_MATH_META_INT(type, name, Default)                                                \
+   template <type N = Default>                                                                  \
+   class name : public std::integral_constant<int, N>{};                                        \
+                                                                                                \
+   namespace detail{                                                                            \
+   template <type N>                                                                            \
+   char test_is_valid_arg(const name<N>* = nullptr);                                            \
+   char test_is_default_arg(const name<Default>* = nullptr);                                    \
+                                                                                                \
+   template <typename T>                                                                        \
+   class is_##name##_imp                                                                        \
+   {                                                                                            \
+   private:                                                                                     \
+      template <type N>                                                                         \
+      static char test(const name<N>* = nullptr);                                               \
+      static double test(...);                                                                  \
+   public:                                                                                      \
+      static constexpr bool value = sizeof(test(static_cast<T*>(0))) == sizeof(char);           \
+   };                                                                                           \
+   }                                                                                            \
+                                                                                                \
+   template <typename T>                                                                        \
+   class is_##name                                                                              \
+   {                                                                                            \
+   public:                                                                                      \
+      static constexpr bool value = boost::math::policies::detail::is_##name##_imp<T>::value;   \
    };
 
-#define BOOST_MATH_META_BOOL(name, Default)\
-   template <bool N = Default> struct name : public std::integral_constant<bool, N>{};\
-   namespace detail{\
-   template <bool N>\
-   char test_is_valid_arg(const name<N>*);\
-   char test_is_default_arg(const name<Default>*);\
-   template <class T> struct is_##name##_tester\
-   {\
-      template <bool N> static char test(const name<N>&);\
-      static double test(...);\
-   };\
-   template <class T> struct is_##name##_imp\
-   {\
-      static T inst;\
-      static constexpr bool value = sizeof( ::boost::math::policies::detail::is_##name##_tester<T>::test(inst)) == 1;\
-   };\
-   }\
-   template <class T> struct is_##name : public std::integral_constant<bool, ::boost::math::policies::detail::is_##name##_imp<T>::value>\
-   {\
-      template <class U> struct apply{ typedef is_##name<U> type;  };\
+#define BOOST_MATH_META_BOOL(name, Default)                                                     \
+   template <bool N = Default>                                                                  \
+   class name : public std::integral_constant<bool, N>{};                                       \
+                                                                                                \
+   namespace detail{                                                                            \
+   template <bool N>                                                                            \
+   char test_is_valid_arg(const name<N>* = nullptr);                                            \
+   char test_is_default_arg(const name<Default>* = nullptr);                                    \
+                                                                                                \
+   template <typename T>                                                                        \
+   class is_##name##_imp                                                                        \
+   {                                                                                            \
+   private:                                                                                     \
+      template <bool N>                                                                         \
+      static char test(const name<N>* = nullptr);                                               \
+      static double test(...);                                                                  \
+   public:                                                                                      \
+      static constexpr bool value = sizeof(test(static_cast<T*>(0))) == sizeof(char);           \
+   };                                                                                           \
+   }                                                                                            \
+                                                                                                \
+   template <typename T>                                                                        \
+   class is_##name                                                                              \
+   {                                                                                            \
+   public:                                                                                      \
+      static constexpr bool value = boost::math::policies::detail::is_##name##_imp<T>::value;   \
    };
-#endif
+
 //
 // Begin by defining policy types for error handling:
 //
