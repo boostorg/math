@@ -8,10 +8,6 @@
 #define BOOST_MATH_POLICY_HPP
 
 #include <boost/mp11.hpp>
-#include <boost/mp11/mpl.hpp>
-#include <boost/mpl/contains.hpp>
-#include <boost/mpl/find_if.hpp>
-#include <boost/mpl/comparison.hpp>
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/mp.hpp>
 #include <limits>
@@ -251,32 +247,6 @@ public:
       (Digits2::value > digits2_type::value),
       Digits2, digits2_type>::type;
 #endif
-};
-
-template <class A, class B, bool b>
-struct select_result
-{
-   using type = A;
-};
-
-// Type that underlying the iterator position (e.g. std::iterator_traits<B>::value_type)
-template <class A, class B>
-struct select_result<A, B, false>
-{
-   using type = typename mpl::deref<B>::type;
-};
-
-// Select the argument based on if the found iterator is the end
-// If true: use the default type
-// If false: use the underlying type from the iterator position
-template <class Seq, class Pred, class DefaultType>
-struct find_arg
-{
-private:
-   using iter = typename mpl::find_if<Seq, Pred>::type;
-   using end_type = typename mpl::end<Seq>::type;
-public:
-   using type = typename select_result<DefaultType, iter, std::is_same<iter, end_type>::value>::type;
 };
 
 double test_is_valid_arg(...);
