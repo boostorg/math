@@ -109,12 +109,12 @@ namespace policies{
 #define BOOST_MATH_MAX_ROOT_ITERATION_POLICY 200
 #endif
 
-#define BOOST_MATH_META_INT(Type, name, Default)                                               \
-   template <Type N = Default>                                                                 \
+#define BOOST_MATH_META_INT(Type, name, Default)                                                \
+   template <Type N = Default>                                                                  \
    class name : public std::integral_constant<int, N>{};                                        \
                                                                                                 \
    namespace detail{                                                                            \
-   template <Type N>                                                                           \
+   template <Type N>                                                                            \
    char test_is_valid_arg(const name<N>* = nullptr);                                            \
    char test_is_default_arg(const name<Default>* = nullptr);                                    \
                                                                                                 \
@@ -122,7 +122,7 @@ namespace policies{
    class is_##name##_imp                                                                        \
    {                                                                                            \
    private:                                                                                     \
-      template <Type N>                                                                        \
+      template <Type N>                                                                         \
       static char test(const name<N>* = nullptr);                                               \
       static double test(...);                                                                  \
    public:                                                                                      \
@@ -407,9 +407,19 @@ private:
    // Typelist of the arguments:
    //
    using arg_list = mp_list<A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13>;
+   static constexpr std::size_t arg_list_size = mp_size<arg_list>::value;
 
 public:
-   typedef typename detail::find_arg<arg_list, is_domain_error<mpl::_1>, domain_error<> >::type domain_error_type;
+   using domain_error_type = typename detail::find_arg<arg_list, is_domain_error<mpl::_1>, domain_error<> >::type;
+
+   // Now try to calculate the same domain error type using MP11
+   using domain_error_fn = mp_quote_trait<is_domain_error>;
+   using domain_error_index = mp_find_if_q<arg_list, domain_error_fn>;
+   static constexpr std::size_t domain_error_index_adjusted = domain_error_index::value >= arg_list_size ? domain_error_index::value - 1 : domain_error_index::value;
+   using new_domain_error_type = typename std::conditional<domain_error_index_adjusted != arg_list_size, mp_at_c<arg_list, domain_error_index_adjusted>, domain_error<>>::type;
+
+   static_assert(std::is_same<domain_error_type, new_domain_error_type>::value, "MP11 is incorrect");
+
    typedef typename detail::find_arg<arg_list, is_pole_error<mpl::_1>, pole_error<> >::type pole_error_type;
    typedef typename detail::find_arg<arg_list, is_overflow_error<mpl::_1>, overflow_error<> >::type overflow_error_type;
    typedef typename detail::find_arg<arg_list, is_underflow_error<mpl::_1>, underflow_error<> >::type underflow_error_type;
@@ -576,7 +586,7 @@ private:
    //
    // Pad out the list with defaults:
    //
-   using result_type = typename detail::append_N<reduced_list, default_policy, (15UL - mp_size<reduced_list>::value)>::type;
+   using result_type = typename detail::append_N<reduced_list, default_policy, (14UL - mp_size<reduced_list>::value)>::type;
 public:
    using type = policy<
       mp_at_c<result_type, 0>,

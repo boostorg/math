@@ -49,7 +49,7 @@ BOOST_AUTO_TEST_CASE( test_main )
    BOOST_CHECK((std::is_same<policy<domain_error<ignore_error> >::promote_float_type, policy<>::promote_float_type>::value));
    BOOST_CHECK((std::is_same<policy<domain_error<ignore_error> >::promote_double_type, policy<>::promote_double_type>::value));
    BOOST_CHECK((std::is_same<policy<domain_error<ignore_error> >::discrete_quantile_type, policy<>::discrete_quantile_type>::value));
-
+   /*
    BOOST_CHECK((std::is_same<policy<pole_error<user_error> >::domain_error_type, policy<>::domain_error_type >::value));
    BOOST_CHECK((std::is_same<policy<pole_error<user_error> >::pole_error_type, pole_error<user_error> >::value));
    BOOST_CHECK((std::is_same<policy<pole_error<user_error> >::overflow_error_type, overflow_error<BOOST_MATH_OVERFLOW_ERROR_POLICY> >::value));
@@ -169,7 +169,7 @@ BOOST_AUTO_TEST_CASE( test_main )
    BOOST_CHECK((std::is_same<policy<discrete_quantile<integer_round_up> >::promote_float_type,  policy<>::promote_float_type>::value));
    BOOST_CHECK((std::is_same<policy<discrete_quantile<integer_round_up> >::promote_double_type, policy<>::promote_double_type>::value));
    BOOST_CHECK((std::is_same<policy<discrete_quantile<integer_round_up> >::discrete_quantile_type, discrete_quantile<integer_round_up> >::value));
-
+   */
    
 } // BOOST_AUTO_TEST_CASE( test_main )
 
