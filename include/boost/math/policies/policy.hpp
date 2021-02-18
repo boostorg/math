@@ -11,7 +11,6 @@
 #include <boost/mp11/mpl.hpp>
 #include <boost/mpl/contains.hpp>
 #include <boost/mpl/find_if.hpp>
-#include <boost/mpl/remove_if.hpp>
 #include <boost/mpl/comparison.hpp>
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/mp.hpp>
@@ -255,24 +254,27 @@ public:
 template <class A, class B, bool b>
 struct select_result
 {
-   typedef A type;
+   using type = A;
 };
+
+// Type that underlying the iterator position (e.g. std::iterator_traits<B>::value_type)
 template <class A, class B>
 struct select_result<A, B, false>
 {
-   typedef typename mpl::deref<B>::type type;
+   using type = typename mpl::deref<B>::type;
 };
 
+// Select the argument based on if the found iterator is the end
+// If true: use the default type
+// If false: use the underlying type from the iterator position
 template <class Seq, class Pred, class DefaultType>
 struct find_arg
 {
 private:
-   typedef typename mpl::find_if<Seq, Pred>::type iter;
-   typedef typename mpl::end<Seq>::type end_type;
+   using iter = typename mpl::find_if<Seq, Pred>::type;
+   using end_type = typename mpl::end<Seq>::type;
 public:
-   typedef typename select_result<
-      DefaultType, iter,
-      std::is_same<iter, end_type>::value>::type type;
+   using type = typename select_result<DefaultType, iter, std::is_same<iter, end_type>::value>::type;
 };
 
 double test_is_valid_arg(...);
@@ -280,33 +282,42 @@ double test_is_default_arg(...);
 char test_is_valid_arg(const default_policy*);
 char test_is_default_arg(const default_policy*);
 
-template <class T>
-struct is_valid_policy_imp 
+template <typename T>
+class is_valid_policy_imp 
 {
-   static constexpr bool value = sizeof(::boost::math::policies::detail::test_is_valid_arg(static_cast<T*>(0))) == 1;
+public:
+   static constexpr bool value = sizeof(boost::math::policies::detail::test_is_valid_arg(static_cast<T*>(0))) == sizeof(char);
 };
 
-template <class T>
-struct is_default_policy_imp
+template <typename T> 
+class is_valid_policy 
 {
-   static constexpr bool value = sizeof(::boost::math::policies::detail::test_is_default_arg(static_cast<T*>(0))) == 1;
+public:
+   static constexpr bool value = boost::math::policies::detail::is_valid_policy_imp<T>::value;
 };
 
-template <class T> struct is_valid_policy 
-: public std::integral_constant<bool, ::boost::math::policies::detail::is_valid_policy_imp<T>::value>
-{};
-
-template <class T> struct is_default_policy 
-: public std::integral_constant<bool, ::boost::math::policies::detail::is_default_policy_imp<T>::value>
+template <typename T>
+class is_default_policy_imp
 {
-   template <class U>
+public:
+   static constexpr bool value = sizeof(boost::math::policies::detail::test_is_default_arg(static_cast<T*>(0))) == sizeof(char);
+};
+
+template <typename T>
+class is_default_policy
+{
+public:
+   static constexpr bool value = boost::math::policies::detail::is_default_policy_imp<T>::value;
+   using type = std::integral_constant<bool, value>;
+
+   template <typename U>
    struct apply
    {
-      typedef is_default_policy<U> type;
+      using type = is_default_policy<U>;
    };
 };
 
-template <class Seq, class T, int N>
+template <class Seq, class T, std::size_t N>
 struct append_N
 {
    using type = typename append_N<mp_push_back<Seq, T>, T, N-1>::type;
@@ -558,11 +569,12 @@ private:
    //
    // Remove all the policies that are the same as the default:
    //
-   typedef typename mpl::remove_if<result_list, detail::is_default_policy<mpl::_> >::type reduced_list;
+   using fn = mp_quote_trait<detail::is_default_policy>;
+   using reduced_list = mp_remove_if_q<result_list, fn>;
    //
    // Pad out the list with defaults:
    //
-   typedef typename detail::append_N<reduced_list, default_policy, (14UL - mp_size<reduced_list>::value)>::type result_type;
+   using result_type = typename detail::append_N<reduced_list, default_policy, (15UL - mp_size<reduced_list>::value)>::type;
 public:
    using type = policy<
       mp_at_c<result_type, 0>,
