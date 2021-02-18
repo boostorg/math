@@ -367,24 +367,25 @@ typedef default_args<BOOST_MATH_PROMOTE_FLOAT_POLICY, BOOST_MATH_PROMOTE_DOUBLE_
 typedef default_args<BOOST_MATH_PROMOTE_FLOAT_POLICY, BOOST_MATH_PROMOTE_DOUBLE_POLICY>::arg2 forwarding_arg2;
 
 } // detail
+
 //
 // Now define the policy type with enough arguments to handle all
 // the policies:
 //
-template <class A1 = default_policy, 
-          class A2 = default_policy, 
-          class A3 = default_policy,
-          class A4 = default_policy,
-          class A5 = default_policy,
-          class A6 = default_policy,
-          class A7 = default_policy,
-          class A8 = default_policy,
-          class A9 = default_policy,
-          class A10 = default_policy,
-          class A11 = default_policy,
-          class A12 = default_policy,
-          class A13 = default_policy>
-struct policy
+template <typename A1  = default_policy, 
+          typename A2  = default_policy, 
+          typename A3  = default_policy,
+          typename A4  = default_policy,
+          typename A5  = default_policy,
+          typename A6  = default_policy,
+          typename A7  = default_policy,
+          typename A8  = default_policy,
+          typename A9  = default_policy,
+          typename A10 = default_policy,
+          typename A11 = default_policy,
+          typename A12 = default_policy,
+          typename A13 = default_policy>
+class policy
 {
 private:
    //
@@ -431,95 +432,93 @@ private:
       using type = typename pick_arg<Default, index, end>::type;
    };
 
+   // Work out the base 2 and 10 precisions to calculate the public precision_type:
+   using digits10_type = typename arg_type<mp_quote_trait<is_digits10>, digits10<>>::type;
+   using bits_precision_type = typename arg_type<mp_quote_trait<is_digits2>, digits2<>>::type;
+
 public:
+
+   // Error Types:
    using domain_error_type = typename arg_type<mp_quote_trait<is_domain_error>, domain_error<>>::type;
-   typedef typename detail::find_arg<arg_list, is_pole_error<mpl::_1>, pole_error<> >::type pole_error_type;
-   typedef typename detail::find_arg<arg_list, is_overflow_error<mpl::_1>, overflow_error<> >::type overflow_error_type;
-   typedef typename detail::find_arg<arg_list, is_underflow_error<mpl::_1>, underflow_error<> >::type underflow_error_type;
-   typedef typename detail::find_arg<arg_list, is_denorm_error<mpl::_1>, denorm_error<> >::type denorm_error_type;
-   typedef typename detail::find_arg<arg_list, is_evaluation_error<mpl::_1>, evaluation_error<> >::type evaluation_error_type;
-   typedef typename detail::find_arg<arg_list, is_rounding_error<mpl::_1>, rounding_error<> >::type rounding_error_type;
-   typedef typename detail::find_arg<arg_list, is_indeterminate_result_error<mpl::_1>, indeterminate_result_error<> >::type indeterminate_result_error_type;
-private:
-   //
-   // Now work out the precision:
-   //
-   typedef typename detail::find_arg<arg_list, is_digits10<mpl::_1>, digits10<> >::type digits10_type;
-   typedef typename detail::find_arg<arg_list, is_digits2<mpl::_1>, digits2<> >::type bits_precision_type;
-public:
-   typedef typename detail::precision<digits10_type, bits_precision_type>::type precision_type;
-   //
+   using pole_error_type = typename arg_type<mp_quote_trait<is_pole_error>, pole_error<>>::type;
+   using overflow_error_type = typename arg_type<mp_quote_trait<is_overflow_error>, overflow_error<>>::type;
+   using underflow_error_type = typename arg_type<mp_quote_trait<is_underflow_error>, underflow_error<>>::type;
+   using denorm_error_type = typename arg_type<mp_quote_trait<is_denorm_error>, denorm_error<>>::type;
+   using evaluation_error_type = typename arg_type<mp_quote_trait<is_evaluation_error>, evaluation_error<>>::type;
+   using rounding_error_type = typename arg_type<mp_quote_trait<is_rounding_error>, rounding_error<>>::type;
+   using indeterminate_result_error_type = typename arg_type<mp_quote_trait<is_indeterminate_result_error>, indeterminate_result_error<>>::type;
+   
+   // Precision:
+   using precision_type = typename detail::precision<digits10_type, bits_precision_type>::type;
+
    // Internal promotion:
-   //
-   typedef typename detail::find_arg<arg_list, is_promote_float<mpl::_1>, promote_float<> >::type promote_float_type;
-   typedef typename detail::find_arg<arg_list, is_promote_double<mpl::_1>, promote_double<> >::type promote_double_type;
-   //
+   using promote_float_type = typename arg_type<mp_quote_trait<is_promote_float>, promote_float<>>::type;
+   using promote_double_type = typename arg_type<mp_quote_trait<is_promote_double>, promote_double<>>::type;
+
    // Discrete quantiles:
-   //
-   typedef typename detail::find_arg<arg_list, is_discrete_quantile<mpl::_1>, discrete_quantile<> >::type discrete_quantile_type;
-   //
+   using discrete_quantile_type = typename arg_type<mp_quote_trait<is_discrete_quantile>, discrete_quantile<>>::type;
+   
    // Mathematically undefined properties:
-   //
-   typedef typename detail::find_arg<arg_list, is_assert_undefined<mpl::_1>, assert_undefined<> >::type assert_undefined_type;
-   //
+   using assert_undefined_type = typename arg_type<mp_quote_trait<is_assert_undefined>, assert_undefined<>>::type;
+
    // Max iterations:
-   //
-   typedef typename detail::find_arg<arg_list, is_max_series_iterations<mpl::_1>, max_series_iterations<> >::type max_series_iterations_type;
-   typedef typename detail::find_arg<arg_list, is_max_root_iterations<mpl::_1>, max_root_iterations<> >::type max_root_iterations_type;
+   using max_series_iterations_type = typename arg_type<mp_quote_trait<is_max_series_iterations>, max_series_iterations<>>::type;
+   using max_root_iterations_type = typename arg_type<mp_quote_trait<is_max_root_iterations>, max_root_iterations<>>::type;
 };
+
 //
 // These full specializations are defined to reduce the amount of
 // template instantiations that have to take place when using the default
 // policies, they have quite a large impact on compile times:
 //
 template <>
-struct policy<default_policy, default_policy, default_policy, default_policy, default_policy, default_policy, default_policy, default_policy, default_policy, default_policy, default_policy>
+class policy<default_policy, default_policy, default_policy, default_policy, default_policy, default_policy, default_policy, default_policy, default_policy, default_policy, default_policy>
 {
 public:
-   typedef domain_error<> domain_error_type;
-   typedef pole_error<> pole_error_type;
-   typedef overflow_error<> overflow_error_type;
-   typedef underflow_error<> underflow_error_type;
-   typedef denorm_error<> denorm_error_type;
-   typedef evaluation_error<> evaluation_error_type;
-   typedef rounding_error<> rounding_error_type;
-   typedef indeterminate_result_error<> indeterminate_result_error_type;
+   using domain_error_type = domain_error<>;
+   using pole_error_type = pole_error<>;
+   using overflow_error_type = overflow_error<>;
+   using underflow_error_type = underflow_error<>;
+   using denorm_error_type = denorm_error<>;
+   using evaluation_error_type = evaluation_error<>;
+   using rounding_error_type = rounding_error<>;
+   using indeterminate_result_error_type = indeterminate_result_error<>;
 #if BOOST_MATH_DIGITS10_POLICY == 0
-   typedef digits2<> precision_type;
+   using precision_type = digits2<>;
 #else
-   typedef detail::precision<digits10<>, digits2<> >::type precision_type;
+   using precision_type = detail::precision<digits10<>, digits2<>>::type;
 #endif
-   typedef promote_float<> promote_float_type;
-   typedef promote_double<> promote_double_type;
-   typedef discrete_quantile<> discrete_quantile_type;
-   typedef assert_undefined<> assert_undefined_type;
-   typedef max_series_iterations<> max_series_iterations_type;
-   typedef max_root_iterations<> max_root_iterations_type;
+   using promote_float_type = promote_float<>;
+   using promote_double_type = promote_double<>;
+   using discrete_quantile_type = discrete_quantile<>;
+   using assert_undefined_type = assert_undefined<>;
+   using max_series_iterations_type = max_series_iterations<>;
+   using max_root_iterations_type = max_root_iterations<>;
 };
 
 template <>
 struct policy<detail::forwarding_arg1, detail::forwarding_arg2, default_policy, default_policy, default_policy, default_policy, default_policy, default_policy, default_policy, default_policy, default_policy>
 {
 public:
-   typedef domain_error<> domain_error_type;
-   typedef pole_error<> pole_error_type;
-   typedef overflow_error<> overflow_error_type;
-   typedef underflow_error<> underflow_error_type;
-   typedef denorm_error<> denorm_error_type;
-   typedef evaluation_error<> evaluation_error_type;
-   typedef rounding_error<> rounding_error_type;
-   typedef indeterminate_result_error<> indeterminate_result_error_type;
+   using domain_error_type = domain_error<>;
+   using pole_error_type = pole_error<>;
+   using overflow_error_type = overflow_error<>;
+   using underflow_error_type = underflow_error<>;
+   using denorm_error_type = denorm_error<>;
+   using evaluation_error_type = evaluation_error<>;
+   using rounding_error_type = rounding_error<>;
+   using indeterminate_result_error_type = indeterminate_result_error<>;
 #if BOOST_MATH_DIGITS10_POLICY == 0
-   typedef digits2<> precision_type;
+   using precision_type = digits2<>;
 #else
-   typedef detail::precision<digits10<>, digits2<> >::type precision_type;
+   using precision_type = detail::precision<digits10<>, digits2<>>::type;
 #endif
-   typedef promote_float<false> promote_float_type;
-   typedef promote_double<false> promote_double_type;
-   typedef discrete_quantile<> discrete_quantile_type;
-   typedef assert_undefined<> assert_undefined_type;
-   typedef max_series_iterations<> max_series_iterations_type;
-   typedef max_root_iterations<> max_root_iterations_type;
+   using promote_float_type = promote_float<false>;
+   using promote_double_type = promote_double<false>;
+   using discrete_quantile_type = discrete_quantile<>;
+   using assert_undefined_type = assert_undefined<>;
+   using max_series_iterations_type = max_series_iterations<>;
+   using max_root_iterations_type = max_root_iterations<>;
 };
 
 template <class Policy, 
