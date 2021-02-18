@@ -521,59 +521,78 @@ public:
    using max_root_iterations_type = max_root_iterations<>;
 };
 
-template <class Policy, 
-          class A1 = default_policy, 
-          class A2 = default_policy, 
-          class A3 = default_policy,
-          class A4 = default_policy,
-          class A5 = default_policy,
-          class A6 = default_policy,
-          class A7 = default_policy,
-          class A8 = default_policy,
-          class A9 = default_policy,
-          class A10 = default_policy,
-          class A11 = default_policy,
-          class A12 = default_policy,
-          class A13 = default_policy>
-struct normalise
+template <typename Policy, 
+          typename A1  = default_policy, 
+          typename A2  = default_policy, 
+          typename A3  = default_policy,
+          typename A4  = default_policy,
+          typename A5  = default_policy,
+          typename A6  = default_policy,
+          typename A7  = default_policy,
+          typename A8  = default_policy,
+          typename A9  = default_policy,
+          typename A10 = default_policy,
+          typename A11 = default_policy,
+          typename A12 = default_policy,
+          typename A13 = default_policy>
+class normalise
 {
 private:
    using arg_list = mp_list<A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13>;
-   typedef typename detail::find_arg<arg_list, is_domain_error<mpl::_1>, typename Policy::domain_error_type >::type domain_error_type;
-   typedef typename detail::find_arg<arg_list, is_pole_error<mpl::_1>, typename Policy::pole_error_type >::type pole_error_type;
-   typedef typename detail::find_arg<arg_list, is_overflow_error<mpl::_1>, typename Policy::overflow_error_type >::type overflow_error_type;
-   typedef typename detail::find_arg<arg_list, is_underflow_error<mpl::_1>, typename Policy::underflow_error_type >::type underflow_error_type;
-   typedef typename detail::find_arg<arg_list, is_denorm_error<mpl::_1>, typename Policy::denorm_error_type >::type denorm_error_type;
-   typedef typename detail::find_arg<arg_list, is_evaluation_error<mpl::_1>, typename Policy::evaluation_error_type >::type evaluation_error_type;
-   typedef typename detail::find_arg<arg_list, is_rounding_error<mpl::_1>, typename Policy::rounding_error_type >::type rounding_error_type;
-   typedef typename detail::find_arg<arg_list, is_indeterminate_result_error<mpl::_1>, typename Policy::indeterminate_result_error_type >::type indeterminate_result_error_type;
-   //
-   // Now work out the precision:
-   //
-   typedef typename detail::find_arg<arg_list, is_digits10<mpl::_1>, digits10<> >::type digits10_type;
-   typedef typename detail::find_arg<arg_list, is_digits2<mpl::_1>, typename Policy::precision_type >::type bits_precision_type;
-   typedef typename detail::precision<digits10_type, bits_precision_type>::type precision_type;
-   //
+   static constexpr std::size_t arg_list_size = mp_size<arg_list>::value;
+
+   template<typename A, typename B, bool b>
+   struct pick_arg
+   {
+      using type = A;
+   };
+
+   template<typename A, typename B>
+   struct pick_arg<A, B, false>
+   {
+      using type = mp_at<arg_list, B>;
+   };
+
+   template<typename Fn, typename Default>
+   class arg_type
+   {
+   private:
+      using index = mp_find_if_q<arg_list, Fn>;
+      static constexpr bool end = (index::value >= arg_list_size);
+   public:
+      using type = typename pick_arg<Default, index, end>::type;
+   };
+
+   // Error types:
+   using domain_error_type = typename arg_type<mp_quote_trait<is_domain_error>, typename Policy::domain_error_type>::type;
+   using pole_error_type = typename arg_type<mp_quote_trait<is_pole_error>, typename Policy::pole_error_type>::type;
+   using overflow_error_type = typename arg_type<mp_quote_trait<is_overflow_error>, typename Policy::overflow_error_type>::type;
+   using underflow_error_type = typename arg_type<mp_quote_trait<is_underflow_error>, typename Policy::underflow_error_type>::type;
+   using denorm_error_type = typename arg_type<mp_quote_trait<is_denorm_error>, typename Policy::denorm_error_type>::type;
+   using evaluation_error_type = typename arg_type<mp_quote_trait<is_evaluation_error>, typename Policy::evaluation_error_type>::type;
+   using rounding_error_type = typename arg_type<mp_quote_trait<is_rounding_error>, typename Policy::rounding_error_type>::type;
+   using indeterminate_result_error_type = typename arg_type<mp_quote_trait<is_indeterminate_result_error>, typename Policy::indeterminate_result_error_type>::type;
+
+   // Precision:
+   using digits10_type = typename arg_type<mp_quote_trait<is_digits10>, digits10<>>::type;
+   using bits_precision_type = typename arg_type<mp_quote_trait<is_digits2>, typename Policy::precision_type>::type;
+   using precision_type = typename detail::precision<digits10_type, bits_precision_type>::type;
+
    // Internal promotion:
-   //
-   typedef typename detail::find_arg<arg_list, is_promote_float<mpl::_1>, typename Policy::promote_float_type >::type promote_float_type;
-   typedef typename detail::find_arg<arg_list, is_promote_double<mpl::_1>, typename Policy::promote_double_type >::type promote_double_type;
-   //
+   using promote_float_type = typename arg_type<mp_quote_trait<is_promote_float>, typename Policy::promote_float_type>::type;
+   using promote_double_type = typename arg_type<mp_quote_trait<is_promote_double>, typename Policy::promote_double_type>::type;
+
    // Discrete quantiles:
-   //
-   typedef typename detail::find_arg<arg_list, is_discrete_quantile<mpl::_1>, typename Policy::discrete_quantile_type >::type discrete_quantile_type;
-   //
+   using discrete_quantile_type = typename arg_type<mp_quote_trait<is_discrete_quantile>, typename Policy::discrete_quantile_type>::type;
+
    // Mathematically undefined properties:
-   //
-   typedef typename detail::find_arg<arg_list, is_assert_undefined<mpl::_1>, typename Policy::assert_undefined_type >::type assert_undefined_type;
-   //
+   using assert_undefined_type = typename arg_type<mp_quote_trait<is_assert_undefined>, typename Policy::assert_undefined_type>::type;
+
    // Max iterations:
-   //
-   typedef typename detail::find_arg<arg_list, is_max_series_iterations<mpl::_1>, typename Policy::max_series_iterations_type>::type max_series_iterations_type;
-   typedef typename detail::find_arg<arg_list, is_max_root_iterations<mpl::_1>, typename Policy::max_root_iterations_type>::type max_root_iterations_type;
-   //
+   using max_series_iterations_type = typename arg_type<mp_quote_trait<is_max_series_iterations>, typename Policy::max_series_iterations_type>::type;
+   using max_root_iterations_type = typename arg_type<mp_quote_trait<is_max_root_iterations>, typename Policy::max_root_iterations_type>::type;
+
    // Define a typelist of the policies:
-   //
    using result_list = mp_list<
       domain_error_type,
       pole_error_type,
@@ -590,15 +609,14 @@ private:
       assert_undefined_type,
       max_series_iterations_type,
       max_root_iterations_type>;
-   //
+
    // Remove all the policies that are the same as the default:
-   //
    using fn = mp_quote_trait<detail::is_default_policy>;
    using reduced_list = mp_remove_if_q<result_list, fn>;
-   //
+   
    // Pad out the list with defaults:
-   //
    using result_type = typename detail::append_N<reduced_list, default_policy, (14UL - mp_size<reduced_list>::value)>::type;
+
 public:
    using type = policy<
       mp_at_c<result_type, 0>,
@@ -616,9 +634,8 @@ public:
       mp_at_c<result_type, 12>
       >;
 };
-//
+
 // Full specialisation to speed up compilation of the common case:
-//
 template <>
 struct normalise<policy<>, 
           promote_float<false>, 
@@ -633,7 +650,7 @@ struct normalise<policy<>,
           default_policy,
           default_policy>
 {
-   typedef policy<detail::forwarding_arg1, detail::forwarding_arg2> type;
+   using type = policy<detail::forwarding_arg1, detail::forwarding_arg2>;
 };
 
 template <>
@@ -650,7 +667,7 @@ struct normalise<policy<detail::forwarding_arg1, detail::forwarding_arg2>,
           default_policy,
           default_policy>
 {
-   typedef policy<detail::forwarding_arg1, detail::forwarding_arg2> type;
+   using type = policy<detail::forwarding_arg1, detail::forwarding_arg2>;
 };
 
 inline constexpr policy<> make_policy() noexcept
