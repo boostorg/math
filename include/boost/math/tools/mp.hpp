@@ -29,6 +29,13 @@ using mp_size_t = std::integral_constant<std::size_t, N>;
 template<bool B>
 using mp_bool = std::integral_constant<bool, B>;
 
+// Identity
+template<typename T>
+struct mp_identity
+{
+    using type = T;
+};
+
 // Turns struct into quoted metafunction
 template<template<typename...> class F> 
 struct mp_quote_trait
@@ -200,13 +207,32 @@ struct mp_push_front_impl<L<U...>, T...>
 template<typename L, typename... T> 
 using mp_push_front = typename detail::mp_push_front_impl<L, T...>::type;
 
-namespace detail {
-// Find if
-constexpr std::size_t find_index(const bool* first, const bool* last)
+namespace detail{
+// If
+template<bool C, typename T, typename... E>
+struct mp_if_c_impl{};
+
+template<typename T, typename... E>
+struct mp_if_c_impl<true, T, E...>
 {
-    return first == last || *first ? 0 : 1 + find_index(first + 1, last);
+    using type = T;
+};
+
+template<typename T, typename E>
+struct mp_if_c_impl<false, T, E>
+{
+    using type = E;
+};
 }
 
+template<bool C, typename T, typename... E> 
+using mp_if_c = typename detail::mp_if_c_impl<C, T, E...>::type;
+
+template<typename C, typename T, typename... E> 
+using mp_if = typename detail::mp_if_c_impl<static_cast<bool>(C::value), T, E...>::type;
+
+namespace detail {
+// Find if
 template<typename L, template<typename...> class P>
 struct mp_find_if_impl {};
 
@@ -216,11 +242,17 @@ struct mp_find_if_impl<L<>, P>
     using type = mp_size_t<0>;
 };
 
-template<template<typename...> class L, typename... T, template<typename...> class P> 
-struct mp_find_if_impl<L<T...>, P>
+template<typename L, template<typename...> class P> 
+struct mp_find_if_impl_2
 {
-    static constexpr bool v[] = {P<T>::value...};
-    using type = mp_size_t<find_index(v, v + sizeof...(T))>;
+    using r = typename mp_find_if_impl<L, P>::type;
+    using type = mp_size_t<1 + r::value>;
+};
+
+template<template<typename...> class L, typename T1, typename... T, template<typename...> class P> 
+struct mp_find_if_impl<L<T1, T...>, P>
+{
+    using type = typename mp_if<P<T1>, mp_identity<mp_size_t<0>>, mp_find_if_impl_2<mp_list<T...>, P>>::type;
 };
 }
 
@@ -278,30 +310,6 @@ struct mp_append_impl<L1<T1...>, L2<T2...>, L3<T3...>, L4<T4...>, L5<T5...>, Lr.
 
 template<typename... L> 
 using mp_append = typename detail::mp_append_impl<L...>::type;
-
-namespace detail{
-// If
-template<bool C, typename T, typename... E>
-struct mp_if_c_impl{};
-
-template<typename T, typename... E>
-struct mp_if_c_impl<true, T, E...>
-{
-    using type = T;
-};
-
-template<typename T, typename E>
-struct mp_if_c_impl<false, T, E>
-{
-    using type = E;
-};
-}
-
-template<bool C, typename T, typename... E> 
-using mp_if_c = typename detail::mp_if_c_impl<C, T, E...>::type;
-
-template<typename C, typename T, typename... E> 
-using mp_if = typename detail::mp_if_c_impl<static_cast<bool>(C::value), T, E...>::type;
 
 namespace detail {
 // Remove if
