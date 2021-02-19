@@ -11,22 +11,10 @@
 #pragma once
 #endif
 
-#if __cplusplus > 201100L || _MSVC_LANG > 201100L
+#include <limits>
+#include <type_traits>
 #include <cmath>
-namespace boost { namespace math {
-template<typename T>
-inline int fpclassify(T t)
-{
-   return std::fpclassify(t);
-}
-}}
-#else
-
-#include <math.h>
-#include <boost/config/no_tr1/cmath.hpp>
-#include <boost/limits.hpp>
 #include <boost/math/tools/real_cast.hpp>
-#include <boost/type_traits/is_floating_point.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/detail/fp_traits.hpp>
 /*!
@@ -174,10 +162,10 @@ inline int fpclassify_imp BOOST_NO_MACRO_EXPAND(T t, const generic_tag<true>&)
 
    // whenever possible check for Nan's first:
 #if defined(BOOST_HAS_FPCLASSIFY)  && !defined(BOOST_MATH_DISABLE_STD_FPCLASSIFY)
-   if(::boost::math_detail::is_nan_helper(t, ::boost::is_floating_point<T>()))
+   if(::boost::math_detail::is_nan_helper(t, typename std::is_floating_point<T>::type()))
       return FP_NAN;
 #elif defined(isnan)
-   if(boost::math_detail::is_nan_helper(t, ::boost::is_floating_point<T>()))
+   if(boost::math_detail::is_nan_helper(t, typename std::is_floating_point<T>::type()))
       return FP_NAN;
 #elif defined(_MSC_VER) || defined(BOOST_BORLANDC)
    if(::_isnan(boost::math::tools::real_cast<double>(t)))
@@ -646,6 +634,5 @@ inline bool (isnan)(__float128 x)
 
 } // namespace math
 } // namespace boost
-#endif
 #endif // BOOST_MATH_FPCLASSIFY_HPP
 
