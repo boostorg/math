@@ -68,21 +68,6 @@ template<typename T>
 using mp_front = typename detail::mp_front_impl<T>::type;
 
 namespace detail {
-// Back
-template<typename L>
-struct mp_back_impl {};
-
-template<template<typename...> class L, typename... T, typename B>
-struct mp_back_impl<L<T..., B>>
-{
-    using type = B;
-};
-}
-
-template<typename T>
-using mp_back = typename detail::mp_back_impl<T>::type;
-
-namespace detail {
 // At
 // TODO - Use tree based lookup for larger typelists
 // http://odinthenerd.blogspot.com/2017/04/tree-based-lookup-why-kvasirmpl-is.html
@@ -180,6 +165,10 @@ using mp_at_c = typename detail::mp_at_c<L, I>::type;
 
 template<typename L, typename I>
 using mp_at = typename detail::mp_at_c<L, I::value>::type;
+
+// Back
+template<typename L> 
+using mp_back = mp_at_c<L, mp_size<L>::value - 1>;
 
 namespace detail {
 // Push back
