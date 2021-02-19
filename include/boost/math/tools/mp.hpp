@@ -202,8 +202,7 @@ using mp_push_front = typename detail::mp_push_front_impl<L, T...>::type;
 
 namespace detail {
 // Find if
-template<typename Iter>
-constexpr std::size_t find_index(const Iter first, const Iter last)
+constexpr std::size_t find_index(const bool* first, const bool* last)
 {
     return first == last || *first ? 0 : 1 + find_index(first + 1, last);
 }
