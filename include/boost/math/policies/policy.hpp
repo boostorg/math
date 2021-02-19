@@ -16,7 +16,7 @@
 #include <cstdint>
 #include <cstddef>
 
-using namespace boost::mp11;
+namespace mp = boost::mp11;
 
 namespace boost{ namespace math{ 
 
@@ -293,7 +293,7 @@ public:
 template <class Seq, class T, std::size_t N>
 struct append_N
 {
-   using type = typename append_N<mp_push_back<Seq, T>, T, N-1>::type;
+   using type = typename append_N<mp::mp_push_back<Seq, T>, T, N-1>::type;
 };
 
 template <class Seq, class T>
@@ -378,8 +378,8 @@ private:
    //
    // Typelist of the arguments:
    //
-   using arg_list = mp_list<A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13>;
-   static constexpr std::size_t arg_list_size = mp_size<arg_list>::value;
+   using arg_list = mp::mp_list<A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13>;
+   static constexpr std::size_t arg_list_size = mp::mp_size<arg_list>::value;
 
    template<typename A, typename B, bool b>
    struct pick_arg
@@ -390,51 +390,51 @@ private:
    template<typename A, typename B>
    struct pick_arg<A, B, false>
    {
-      using type = mp_at<arg_list, B>;
+      using type = mp::mp_at<arg_list, B>;
    };
 
    template<typename Fn, typename Default>
    class arg_type
    {
    private:
-      using index = mp_find_if_q<arg_list, Fn>;
+      using index = mp::mp_find_if_q<arg_list, Fn>;
       static constexpr bool end = (index::value >= arg_list_size);
    public:
       using type = typename pick_arg<Default, index, end>::type;
    };
 
    // Work out the base 2 and 10 precisions to calculate the public precision_type:
-   using digits10_type = typename arg_type<mp_quote_trait<is_digits10>, digits10<>>::type;
-   using bits_precision_type = typename arg_type<mp_quote_trait<is_digits2>, digits2<>>::type;
+   using digits10_type = typename arg_type<mp::mp_quote_trait<is_digits10>, digits10<>>::type;
+   using bits_precision_type = typename arg_type<mp::mp_quote_trait<is_digits2>, digits2<>>::type;
 
 public:
 
    // Error Types:
-   using domain_error_type = typename arg_type<mp_quote_trait<is_domain_error>, domain_error<>>::type;
-   using pole_error_type = typename arg_type<mp_quote_trait<is_pole_error>, pole_error<>>::type;
-   using overflow_error_type = typename arg_type<mp_quote_trait<is_overflow_error>, overflow_error<>>::type;
-   using underflow_error_type = typename arg_type<mp_quote_trait<is_underflow_error>, underflow_error<>>::type;
-   using denorm_error_type = typename arg_type<mp_quote_trait<is_denorm_error>, denorm_error<>>::type;
-   using evaluation_error_type = typename arg_type<mp_quote_trait<is_evaluation_error>, evaluation_error<>>::type;
-   using rounding_error_type = typename arg_type<mp_quote_trait<is_rounding_error>, rounding_error<>>::type;
-   using indeterminate_result_error_type = typename arg_type<mp_quote_trait<is_indeterminate_result_error>, indeterminate_result_error<>>::type;
+   using domain_error_type = typename arg_type<mp::mp_quote_trait<is_domain_error>, domain_error<>>::type;
+   using pole_error_type = typename arg_type<mp::mp_quote_trait<is_pole_error>, pole_error<>>::type;
+   using overflow_error_type = typename arg_type<mp::mp_quote_trait<is_overflow_error>, overflow_error<>>::type;
+   using underflow_error_type = typename arg_type<mp::mp_quote_trait<is_underflow_error>, underflow_error<>>::type;
+   using denorm_error_type = typename arg_type<mp::mp_quote_trait<is_denorm_error>, denorm_error<>>::type;
+   using evaluation_error_type = typename arg_type<mp::mp_quote_trait<is_evaluation_error>, evaluation_error<>>::type;
+   using rounding_error_type = typename arg_type<mp::mp_quote_trait<is_rounding_error>, rounding_error<>>::type;
+   using indeterminate_result_error_type = typename arg_type<mp::mp_quote_trait<is_indeterminate_result_error>, indeterminate_result_error<>>::type;
    
    // Precision:
    using precision_type = typename detail::precision<digits10_type, bits_precision_type>::type;
 
    // Internal promotion:
-   using promote_float_type = typename arg_type<mp_quote_trait<is_promote_float>, promote_float<>>::type;
-   using promote_double_type = typename arg_type<mp_quote_trait<is_promote_double>, promote_double<>>::type;
+   using promote_float_type = typename arg_type<mp::mp_quote_trait<is_promote_float>, promote_float<>>::type;
+   using promote_double_type = typename arg_type<mp::mp_quote_trait<is_promote_double>, promote_double<>>::type;
 
    // Discrete quantiles:
-   using discrete_quantile_type = typename arg_type<mp_quote_trait<is_discrete_quantile>, discrete_quantile<>>::type;
+   using discrete_quantile_type = typename arg_type<mp::mp_quote_trait<is_discrete_quantile>, discrete_quantile<>>::type;
    
    // Mathematically undefined properties:
-   using assert_undefined_type = typename arg_type<mp_quote_trait<is_assert_undefined>, assert_undefined<>>::type;
+   using assert_undefined_type = typename arg_type<mp::mp_quote_trait<is_assert_undefined>, assert_undefined<>>::type;
 
    // Max iterations:
-   using max_series_iterations_type = typename arg_type<mp_quote_trait<is_max_series_iterations>, max_series_iterations<>>::type;
-   using max_root_iterations_type = typename arg_type<mp_quote_trait<is_max_root_iterations>, max_root_iterations<>>::type;
+   using max_series_iterations_type = typename arg_type<mp::mp_quote_trait<is_max_series_iterations>, max_series_iterations<>>::type;
+   using max_root_iterations_type = typename arg_type<mp::mp_quote_trait<is_max_root_iterations>, max_root_iterations<>>::type;
 };
 
 //
@@ -509,8 +509,8 @@ template <typename Policy,
 class normalise
 {
 private:
-   using arg_list = mp_list<A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13>;
-   static constexpr std::size_t arg_list_size = mp_size<arg_list>::value;
+   using arg_list = mp::mp_list<A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13>;
+   static constexpr std::size_t arg_list_size = mp::mp_size<arg_list>::value;
 
    template<typename A, typename B, bool b>
    struct pick_arg
@@ -521,50 +521,50 @@ private:
    template<typename A, typename B>
    struct pick_arg<A, B, false>
    {
-      using type = mp_at<arg_list, B>;
+      using type = mp::mp_at<arg_list, B>;
    };
 
    template<typename Fn, typename Default>
    class arg_type
    {
    private:
-      using index = mp_find_if_q<arg_list, Fn>;
+      using index = mp::mp_find_if_q<arg_list, Fn>;
       static constexpr bool end = (index::value >= arg_list_size);
    public:
       using type = typename pick_arg<Default, index, end>::type;
    };
 
    // Error types:
-   using domain_error_type = typename arg_type<mp_quote_trait<is_domain_error>, typename Policy::domain_error_type>::type;
-   using pole_error_type = typename arg_type<mp_quote_trait<is_pole_error>, typename Policy::pole_error_type>::type;
-   using overflow_error_type = typename arg_type<mp_quote_trait<is_overflow_error>, typename Policy::overflow_error_type>::type;
-   using underflow_error_type = typename arg_type<mp_quote_trait<is_underflow_error>, typename Policy::underflow_error_type>::type;
-   using denorm_error_type = typename arg_type<mp_quote_trait<is_denorm_error>, typename Policy::denorm_error_type>::type;
-   using evaluation_error_type = typename arg_type<mp_quote_trait<is_evaluation_error>, typename Policy::evaluation_error_type>::type;
-   using rounding_error_type = typename arg_type<mp_quote_trait<is_rounding_error>, typename Policy::rounding_error_type>::type;
-   using indeterminate_result_error_type = typename arg_type<mp_quote_trait<is_indeterminate_result_error>, typename Policy::indeterminate_result_error_type>::type;
+   using domain_error_type = typename arg_type<mp::mp_quote_trait<is_domain_error>, typename Policy::domain_error_type>::type;
+   using pole_error_type = typename arg_type<mp::mp_quote_trait<is_pole_error>, typename Policy::pole_error_type>::type;
+   using overflow_error_type = typename arg_type<mp::mp_quote_trait<is_overflow_error>, typename Policy::overflow_error_type>::type;
+   using underflow_error_type = typename arg_type<mp::mp_quote_trait<is_underflow_error>, typename Policy::underflow_error_type>::type;
+   using denorm_error_type = typename arg_type<mp::mp_quote_trait<is_denorm_error>, typename Policy::denorm_error_type>::type;
+   using evaluation_error_type = typename arg_type<mp::mp_quote_trait<is_evaluation_error>, typename Policy::evaluation_error_type>::type;
+   using rounding_error_type = typename arg_type<mp::mp_quote_trait<is_rounding_error>, typename Policy::rounding_error_type>::type;
+   using indeterminate_result_error_type = typename arg_type<mp::mp_quote_trait<is_indeterminate_result_error>, typename Policy::indeterminate_result_error_type>::type;
 
    // Precision:
-   using digits10_type = typename arg_type<mp_quote_trait<is_digits10>, digits10<>>::type;
-   using bits_precision_type = typename arg_type<mp_quote_trait<is_digits2>, typename Policy::precision_type>::type;
+   using digits10_type = typename arg_type<mp::mp_quote_trait<is_digits10>, digits10<>>::type;
+   using bits_precision_type = typename arg_type<mp::mp_quote_trait<is_digits2>, typename Policy::precision_type>::type;
    using precision_type = typename detail::precision<digits10_type, bits_precision_type>::type;
 
    // Internal promotion:
-   using promote_float_type = typename arg_type<mp_quote_trait<is_promote_float>, typename Policy::promote_float_type>::type;
-   using promote_double_type = typename arg_type<mp_quote_trait<is_promote_double>, typename Policy::promote_double_type>::type;
+   using promote_float_type = typename arg_type<mp::mp_quote_trait<is_promote_float>, typename Policy::promote_float_type>::type;
+   using promote_double_type = typename arg_type<mp::mp_quote_trait<is_promote_double>, typename Policy::promote_double_type>::type;
 
    // Discrete quantiles:
-   using discrete_quantile_type = typename arg_type<mp_quote_trait<is_discrete_quantile>, typename Policy::discrete_quantile_type>::type;
+   using discrete_quantile_type = typename arg_type<mp::mp_quote_trait<is_discrete_quantile>, typename Policy::discrete_quantile_type>::type;
 
    // Mathematically undefined properties:
-   using assert_undefined_type = typename arg_type<mp_quote_trait<is_assert_undefined>, typename Policy::assert_undefined_type>::type;
+   using assert_undefined_type = typename arg_type<mp::mp_quote_trait<is_assert_undefined>, typename Policy::assert_undefined_type>::type;
 
    // Max iterations:
-   using max_series_iterations_type = typename arg_type<mp_quote_trait<is_max_series_iterations>, typename Policy::max_series_iterations_type>::type;
-   using max_root_iterations_type = typename arg_type<mp_quote_trait<is_max_root_iterations>, typename Policy::max_root_iterations_type>::type;
+   using max_series_iterations_type = typename arg_type<mp::mp_quote_trait<is_max_series_iterations>, typename Policy::max_series_iterations_type>::type;
+   using max_root_iterations_type = typename arg_type<mp::mp_quote_trait<is_max_root_iterations>, typename Policy::max_root_iterations_type>::type;
 
    // Define a typelist of the policies:
-   using result_list = mp_list<
+   using result_list = mp::mp_list<
       domain_error_type,
       pole_error_type,
       overflow_error_type,
@@ -582,27 +582,27 @@ private:
       max_root_iterations_type>;
 
    // Remove all the policies that are the same as the default:
-   using fn = mp_quote_trait<detail::is_default_policy>;
-   using reduced_list = mp_remove_if_q<result_list, fn>;
+   using fn = mp::mp_quote_trait<detail::is_default_policy>;
+   using reduced_list = mp::mp_remove_if_q<result_list, fn>;
    
    // Pad out the list with defaults:
-   using result_type = typename detail::append_N<reduced_list, default_policy, (14UL - mp_size<reduced_list>::value)>::type;
+   using result_type = typename detail::append_N<reduced_list, default_policy, (14UL - mp::mp_size<reduced_list>::value)>::type;
 
 public:
    using type = policy<
-      mp_at_c<result_type, 0>,
-      mp_at_c<result_type, 1>,
-      mp_at_c<result_type, 2>,
-      mp_at_c<result_type, 3>,
-      mp_at_c<result_type, 4>,
-      mp_at_c<result_type, 5>,
-      mp_at_c<result_type, 6>,
-      mp_at_c<result_type, 7>,
-      mp_at_c<result_type, 8>,
-      mp_at_c<result_type, 9>,
-      mp_at_c<result_type, 10>,
-      mp_at_c<result_type, 11>,
-      mp_at_c<result_type, 12>
+      mp::mp_at_c<result_type, 0>,
+      mp::mp_at_c<result_type, 1>,
+      mp::mp_at_c<result_type, 2>,
+      mp::mp_at_c<result_type, 3>,
+      mp::mp_at_c<result_type, 4>,
+      mp::mp_at_c<result_type, 5>,
+      mp::mp_at_c<result_type, 6>,
+      mp::mp_at_c<result_type, 7>,
+      mp::mp_at_c<result_type, 8>,
+      mp::mp_at_c<result_type, 9>,
+      mp::mp_at_c<result_type, 10>,
+      mp::mp_at_c<result_type, 11>,
+      mp::mp_at_c<result_type, 12>
       >;
 };
 

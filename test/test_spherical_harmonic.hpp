@@ -9,8 +9,8 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
-#include <boost/type_traits/is_floating_point.hpp>
 #include <boost/array.hpp>
+#include <type_traits>
 #include "functor.hpp"
 
 #include "handle_test_result.hpp"
@@ -119,7 +119,7 @@ void test_spherical_harmonic(T, const char* name)
 
    do_test_spherical_harmonic<T>(spherical_harmonic, name, "Spherical Harmonics");
 
-   test_complex_spherical_harmonic<T>(spherical_harmonic, name, boost::is_floating_point<T>());
+   test_complex_spherical_harmonic<T>(spherical_harmonic, name, typename std::is_floating_point<T>::type());
 }
 
 template <class T>

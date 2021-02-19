@@ -7,6 +7,7 @@
 #define BOOST_MATH_TOOLS_NORMS_HPP
 #include <algorithm>
 #include <iterator>
+#include <cmath>
 #include <boost/assert.hpp>
 #include <boost/math/tools/complex.hpp>
 
@@ -157,6 +158,7 @@ auto l2_norm(ForwardIterator first, ForwardIterator last)
     using std::norm;
     using std::sqrt;
     using std::is_floating_point;
+    using std::isfinite;
     if constexpr (boost::math::tools::is_complex_type<T>::value)
     {
         typedef typename T::value_type Real;

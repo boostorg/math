@@ -33,6 +33,7 @@
 
 namespace mp11 = boost::mp11;
 namespace bmp = boost::multiprecision;
+namespace diff = boost::math::differentiation::autodiff_v1::detail;
 
 #if defined(BOOST_USE_VALGRIND) || defined(BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS)
 using bin_float_types = mp11::mp_list<float>;
@@ -153,7 +154,7 @@ static_assert(std::is_same<RandomSample<bmp::cpp_bin_float_50>::dist_t,
 }  // namespace test_detail
 
 template<typename T>
-auto isNearZero(const T& t) noexcept -> typename std::enable_if<!detail::is_fvar<T>::value, bool>::type
+auto isNearZero(const T& t) noexcept -> typename std::enable_if<!diff::is_fvar<T>::value, bool>::type
 {
   using std::sqrt;
   using bmp::sqrt;
@@ -167,7 +168,7 @@ auto isNearZero(const T& t) noexcept -> typename std::enable_if<!detail::is_fvar
 }
 
 template<typename T>
-auto isNearZero(const T& t) noexcept -> typename std::enable_if<detail::is_fvar<T>::value, bool>::type
+auto isNearZero(const T& t) noexcept -> typename std::enable_if<diff::is_fvar<T>::value, bool>::type
 {
   using root_type = typename T::root_type;
   return isNearZero(static_cast<root_type>(t));
