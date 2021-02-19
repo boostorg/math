@@ -11,6 +11,17 @@
 #pragma once
 #endif
 
+#if __cplusplus > 201100L || _MSVC_LANG > 201100L
+#include <cmath>
+namespace boost { namespace math {
+template<typename T>
+inline int fpclassify(T t)
+{
+   return std::fpclassify(t);
+}
+}}
+#else
+
 #include <math.h>
 #include <boost/config/no_tr1/cmath.hpp>
 #include <boost/limits.hpp>
@@ -635,6 +646,6 @@ inline bool (isnan)(__float128 x)
 
 } // namespace math
 } // namespace boost
-
+#endif
 #endif // BOOST_MATH_FPCLASSIFY_HPP
 
