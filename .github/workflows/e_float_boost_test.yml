@@ -62,10 +62,9 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: ckormanyos/e_float-2021
-          path: e_float
+          path: ../boost-root/libs/math/test/e_float
       - name: build test_boost
         run: |
-          echo ls ../../../../../../boost-root/libs/math/include
-          ls ../../../../../../boost-root/libs/math/include
-          ${{ matrix.compiler }} -Wall -Wextra -m64 -O3 -std=${{ matrix.standard }} -D${{ matrix.suite }} -I../../../libs/e_float/src -I../../../../../../boost-root/libs/math/include ../src/e_float/efx/e_float_efx.cpp ../src/e_float/e_float.cpp ../src/e_float/e_float_base.cpp ../src/functions/constants/constants.cpp ../src/functions/elementary/elementary_complex.cpp ../src/functions/elementary/elementary_hyper_g.cpp ../src/functions/elementary/elementary_math.cpp ../src/functions/elementary/elementary_trans.cpp ../src/functions/elementary/elementary_trig.cpp ../test_boost/test_boost.cpp ../test_boost/test_boost_real_concept.cpp ../test_boost/test_boost_sf.cpp -o e_float_boost_test.exe
-        working-directory: ./e_float/libs/e_float/build
+          ${{ matrix.compiler }} -Wall -Wextra -m64 -O3 -std=${{ matrix.standard }} -D${{ matrix.suite }} -Ie_float/libs/e_float/src e_float/libs/e_float/src/e_float/efx/e_float_efx.cpp e_float/libs/e_float/src/e_float/e_float.cpp e_float/libs/e_float/src/e_float/e_float_base.cpp e_float/libs/e_float/src/functions/constants/constants.cpp e_float/libs/e_float/src/functions/elementary/elementary_complex.cpp e_float/libs/e_float/src/functions/elementary/elementary_hyper_g.cpp e_float/libs/e_float/src/functions/elementary/elementary_math.cpp e_float/libs/e_float/src/functions/elementary/elementary_trans.cpp e_float/libs/e_float/src/functions/elementary/elementary_trig.cpp e_float/libs/e_float/test_boost/test_boost.cpp e_float/libs/e_float/test_boost/test_boost_real_concept.cpp e_float/libs/e_float/test_boost/test_boost_sf.cpp -o e_float_boost_test.exe
+          ls -la e_float_boost_test.exe
+        working-directory: ../boost-root/libs/math/test
