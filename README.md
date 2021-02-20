@@ -107,10 +107,10 @@ You can either run all the tests listed in `Jamfile.v2` or run a single test:
 ### Continuous Integration ###
 The default action for a PR or commit to a PR is for CI to run the full complement of tests. The following can be appended to the end of a commit message to modify behavior:
 
-    * [CI SKIP] to skip all tests
-    * [LINUX] to test using GCC Versions 5-10 and Clang Versions 5-10 on Ubuntu LTS versions 16.04-20.04.
-    * [APPLE] to test Apple Clang on the latest version of MacOS.
-    * [WINDOWS] to test MSVC-14.0, MSVC-14.2 and mingw on the latest version of Windows.
+    * [ci skip] to skip all tests
+    * [linux] to test using GCC Versions 5-10 and Clang Versions 5-10 on Ubuntu LTS versions 16.04-20.04.
+    * [apple] to test Apple Clang on the latest version of MacOS.
+    * [windows] to test MSVC-14.0, MSVC-14.2 and mingw on the latest version of Windows.
      
 ### Building documentation ###
 
