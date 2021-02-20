@@ -22,7 +22,7 @@
 
 // Support compilers with P0024R2 implemented without linking TBB
 // https://en.cppreference.com/w/cpp/compiler_support
-#ifndef BOOST_NO_CXX17_HDR_EXECUTION
+#if !defined(BOOST_NO_CXX17_HDR_EXECUTION) && (__cplusplus > 201700L || _MSVC_LANG > 201700L)
 #include <execution>
 
 namespace boost::math::statistics {

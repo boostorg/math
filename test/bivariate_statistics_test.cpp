@@ -38,7 +38,7 @@ using boost::multiprecision::cpp_complex_50;
 using  boost::math::statistics::means_and_covariance;
 using  boost::math::statistics::covariance;
 
-#ifndef BOOST_NO_CXX17_HDR_EXECUTION
+#if !defined(BOOST_NO_CXX17_HDR_EXECUTION) && (__cplusplus > 201700L || _MSVC_LANG > 201700L)
 #include <execution>
 
 template<typename Real, typename ExecutionPolicy>
