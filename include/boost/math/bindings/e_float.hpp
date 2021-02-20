@@ -350,7 +350,7 @@
   {
     const std::int64_t my_e = static_cast<std::int64_t>(e);
 
-    const e_float t(::e_float(1.0, e));
+    const e_float t(::e_float(1.0, my_e));
 
     eval_multiply(result, val, t);
   }
