@@ -9,6 +9,7 @@
 #include <numeric>
 #include <utility>
 #include <random>
+#include <cmath>
 #include <boost/lexical_cast.hpp>
 #include <boost/core/demangle.hpp>
 #include <boost/math/tools/agm.hpp>
@@ -18,6 +19,7 @@ using boost::multiprecision::float128;
 #endif
 
 using boost::math::tools::agm;
+using std::sqrt;
 
 template<class Real>
 void test_gauss_constant()

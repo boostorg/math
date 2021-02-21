@@ -18,41 +18,41 @@ namespace boost
             {
             static const T result
                = detail::convert_from_string<T>("3.14159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214808651e+00",
-               boost::is_convertible<const char*, T>());
+               std::is_convertible<const char*, T>());
               return result;
             }
             template <int N> static T compute();
 
           public:
             // Default implementations from string of decimal digits:
-            static inline T get(const boost::integral_constant<int, construct_from_string>&)
+            static inline T get(const std::integral_constant<int, construct_from_string>&)
             {
               constant_initializer<T, & constant_pi<T>::get_from_string >::do_nothing();
               return get_from_string();
             }
             // Float, double and long double versions:
-            static inline T get(const boost::integral_constant<int, construct_from_float>)
+            static inline T get(const std::integral_constant<int, construct_from_float>)
             {
               return 3.141592653589793238462643383279502884e+00F;
             }
-            static inline  T get(const boost::integral_constant<int, construct_from_double>&)
+            static inline  T get(const std::integral_constant<int, construct_from_double>&)
             {
               return 3.141592653589793238462643383279502884e+00;
             }
-            static inline  T get(const boost::integral_constant<int, construct_from_long_double>&)
+            static inline  T get(const std::integral_constant<int, construct_from_long_double>&)
             {
               return 3.141592653589793238462643383279502884e+00L;
             }
             // For very high precision that is nonetheless can be calculated at compile time:
-            template <int N> static inline T get(const boost::integral_constant<int, N>& n)
+            template <int N> static inline T get(const std::integral_constant<int, N>& n)
             {
               constant_initializer2<T, N, & constant_pi<T>::template compute<N> >::do_nothing();
               return compute<N>();
             }
             //For true arbitrary precision, which may well vary at runtime.
-            static inline T get(const boost::integral_constant<int, 0>&)
+            static inline T get(const std::integral_constant<int, 0>&)
             {
-              return tools::digits<T>() > max_string_digits ? compute<0>() : get(boost::integral_constant<int, construct_from_string>());
+              return tools::digits<T>() > max_string_digits ? compute<0>() : get(std::integral_constant<int, construct_from_string>());
             }
          }; // template <class T> struct constant_pi
       } //  namespace detail

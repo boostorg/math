@@ -209,7 +209,7 @@ the traits class `construction_traits`:
    template <class T, class Policy>
    struct construction_traits
    {
-      typedef boost::integral_constant<int, N> type;
+      typedef std::integral_constant<int, N> type;
    };
 
    }}} // namespaces
@@ -240,7 +240,7 @@ mechanism.  We can achieve this by specialising the class template `boost::math:
    struct constant_pi<mpfr_class>
    {
       template<int N>
-      static mpfr_class get(const boost::integral_constant<int, N>&)
+      static mpfr_class get(const std::integral_constant<int, N>&)
       {
          // The template param N is one of the values in the table above,
          // we can either handle all cases in one as is the case here,
@@ -413,7 +413,7 @@ The function should look like this:
 
   template <class Real>
   template <int N>
-  Real constant_my_constant<Real>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC((boost::integral_constant<int, N>)))
+  Real constant_my_constant<Real>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC((std::integral_constant<int, N>)))
   {
     int required_precision = N ? N : tools::digits<Real>();
     Real result = /* value computed to required_precision bits */ ;
@@ -435,7 +435,7 @@ For example, to calculate [pi]/2, add to `boost/math/constants/calculate_constan
 
   template <class T>
   template<int N>
-  inline T constant_half_pi<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC((boost::integral_constant<int, N>)))
+  inline T constant_half_pi<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC((std::integral_constant<int, N>)))
   {
      BOOST_MATH_STD_USING
      return pi<T, policies::policy<policies::digits2<N> > >() / static_cast<T>(2);

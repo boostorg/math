@@ -123,17 +123,17 @@ namespace boost
          } // unsigned short owens_t_compute_code(const RealType h, const RealType a)
 
          template<typename RealType>
-         inline unsigned short owens_t_get_order_imp(const unsigned short icode, RealType, const boost::integral_constant<int, 53>&)
+         inline unsigned short owens_t_get_order_imp(const unsigned short icode, RealType, const std::integral_constant<int, 53>&)
          {
             static const unsigned short ord[] = {2, 3, 4, 5, 7, 10, 12, 18, 10, 20, 30, 0, 4, 7, 8, 20, 0, 0}; // 18 entries
 
             BOOST_ASSERT(icode<18);
 
             return ord[icode];
-         } // unsigned short owens_t_get_order(const unsigned short icode, RealType, boost::integral_constant<int, 53> const&)
+         } // unsigned short owens_t_get_order(const unsigned short icode, RealType, std::integral_constant<int, 53> const&)
 
          template<typename RealType>
-         inline unsigned short owens_t_get_order_imp(const unsigned short icode, RealType, const boost::integral_constant<int, 64>&)
+         inline unsigned short owens_t_get_order_imp(const unsigned short icode, RealType, const std::integral_constant<int, 64>&)
         {
            // method ================>>>       {1, 1, 1, 1, 1,  1,  1,  1,  2,  2,  2,  3, 4,  4,  4,  4,  5, 6}
            static const unsigned short ord[] = {3, 4, 5, 6, 8, 11, 13, 19, 10, 20, 30,  0, 7, 10, 11, 23,  0, 0}; // 18 entries
@@ -141,13 +141,13 @@ namespace boost
           BOOST_ASSERT(icode<18);
 
           return ord[icode];
-        } // unsigned short owens_t_get_order(const unsigned short icode, RealType, boost::integral_constant<int, 64> const&)
+        } // unsigned short owens_t_get_order(const unsigned short icode, RealType, std::integral_constant<int, 64> const&)
 
          template<typename RealType, typename Policy>
          inline unsigned short owens_t_get_order(const unsigned short icode, RealType r, const Policy&)
          {
             typedef typename policies::precision<RealType, Policy>::type precision_type;
-            typedef boost::integral_constant<int,
+            typedef std::integral_constant<int,
                precision_type::value <= 0 ? 64 :
                precision_type::value <= 53 ? 53 : 64
             > tag_type;
@@ -193,7 +193,7 @@ namespace boost
 
          // compute the value of Owen's T function with method T2 from the reference paper
          template<typename RealType, class Policy>
-         inline RealType owens_t_T2(const RealType h, const RealType a, const unsigned short m, const RealType ah, const Policy& pol, const boost::false_type&)
+         inline RealType owens_t_T2(const RealType h, const RealType a, const unsigned short m, const RealType ah, const Policy& pol, const std::false_type&)
          {
             BOOST_MATH_STD_USING
             using namespace boost::math::constants;
@@ -226,7 +226,7 @@ namespace boost
 
          // compute the value of Owen's T function with method T3 from the reference paper
          template<typename RealType, class Policy>
-         inline RealType owens_t_T3_imp(const RealType h, const RealType a, const RealType ah, const boost::integral_constant<int, 53>&, const Policy& pol)
+         inline RealType owens_t_T3_imp(const RealType h, const RealType a, const RealType ah, const std::integral_constant<int, 53>&, const Policy& pol)
          {
             BOOST_MATH_STD_USING
             using namespace boost::math::constants;
@@ -278,7 +278,7 @@ namespace boost
 
         // compute the value of Owen's T function with method T3 from the reference paper
         template<class RealType, class Policy>
-        inline RealType owens_t_T3_imp(const RealType h, const RealType a, const RealType ah, const boost::integral_constant<int, 64>&, const Policy& pol)
+        inline RealType owens_t_T3_imp(const RealType h, const RealType a, const RealType ah, const std::integral_constant<int, 64>&, const Policy& pol)
         {
           BOOST_MATH_STD_USING
           using namespace boost::math::constants;
@@ -352,7 +352,7 @@ namespace boost
         inline RealType owens_t_T3(const RealType h, const RealType a, const RealType ah, const Policy& pol)
         {
             typedef typename policies::precision<RealType, Policy>::type precision_type;
-            typedef boost::integral_constant<int,
+            typedef std::integral_constant<int,
                precision_type::value <= 0 ? 64 :
                precision_type::value <= 53 ? 53 : 64
             > tag_type;
@@ -391,7 +391,7 @@ namespace boost
 
          // compute the value of Owen's T function with method T5 from the reference paper
          template<typename RealType>
-         inline RealType owens_t_T5_imp(const RealType h, const RealType a, const boost::integral_constant<int, 53>&)
+         inline RealType owens_t_T5_imp(const RealType h, const RealType a, const std::integral_constant<int, 53>&)
          {
             BOOST_MATH_STD_USING
             /*
@@ -437,7 +437,7 @@ namespace boost
 
         // compute the value of Owen's T function with method T5 from the reference paper
         template<typename RealType>
-        inline RealType owens_t_T5_imp(const RealType h, const RealType a, const boost::integral_constant<int, 64>&)
+        inline RealType owens_t_T5_imp(const RealType h, const RealType a, const std::integral_constant<int, 64>&)
         {
           BOOST_MATH_STD_USING
             /*
@@ -511,7 +511,7 @@ namespace boost
         inline RealType owens_t_T5(const RealType h, const RealType a, const Policy&)
         {
             typedef typename policies::precision<RealType, Policy>::type precision_type;
-            typedef boost::integral_constant<int,
+            typedef std::integral_constant<int,
                precision_type::value <= 0 ? 64 :
                precision_type::value <= 53 ? 53 : 64
             > tag_type;
@@ -621,7 +621,7 @@ namespace boost
          }
 
          template<typename RealType, class Policy>
-         inline RealType owens_t_T2(const RealType h, const RealType a, const unsigned short m, const RealType ah, const Policy& pol, const boost::true_type&)
+         inline RealType owens_t_T2(const RealType h, const RealType a, const unsigned short m, const RealType ah, const Policy& pol, const std::true_type&)
          {
             BOOST_MATH_STD_USING
             using namespace boost::math::constants;
@@ -776,7 +776,7 @@ namespace boost
          //
          // Note there are different versions for different precisions....
          template<typename RealType, typename Policy>
-         inline RealType owens_t_dispatch(const RealType h, const RealType a, const RealType ah, const Policy& pol, boost::integral_constant<int, 64> const&)
+         inline RealType owens_t_dispatch(const RealType h, const RealType a, const RealType ah, const Policy& pol, std::integral_constant<int, 64> const&)
          {
             // Simple main case for 64-bit precision or less, this is as per the Patefield-Tandy paper:
             BOOST_MATH_STD_USING
@@ -813,7 +813,7 @@ namespace boost
                break;
             case 2: // T2
                typedef typename policies::precision<RealType, Policy>::type precision_type;
-               typedef boost::integral_constant<bool, (precision_type::value == 0) || (precision_type::value > 64)> tag_type;
+               typedef std::integral_constant<bool, (precision_type::value == 0) || (precision_type::value > 64)> tag_type;
                val = owens_t_T2(h, a, m, ah, pol, tag_type());
                break;
             case 3: // T3
@@ -835,7 +835,7 @@ namespace boost
          }
 
          template<typename RealType, typename Policy>
-         inline RealType owens_t_dispatch(const RealType h, const RealType a, const RealType ah, const Policy& pol, const boost::integral_constant<int, 65>&)
+         inline RealType owens_t_dispatch(const RealType h, const RealType a, const RealType ah, const Policy& pol, const std::integral_constant<int, 65>&)
          {
             // Arbitrary precision version:
             BOOST_MATH_STD_USING
@@ -956,22 +956,22 @@ namespace boost
             //
             // We give up - no arbitrary precision versions succeeded!
             //
-            return owens_t_dispatch(h, a, ah, pol, boost::integral_constant<int, 64>());
+            return owens_t_dispatch(h, a, ah, pol, std::integral_constant<int, 64>());
          } // RealType owens_t_dispatch(RealType h, RealType a, RealType ah)
          template<typename RealType, typename Policy>
-         inline RealType owens_t_dispatch(const RealType h, const RealType a, const RealType ah, const Policy& pol, const boost::integral_constant<int, 0>&)
+         inline RealType owens_t_dispatch(const RealType h, const RealType a, const RealType ah, const Policy& pol, const std::integral_constant<int, 0>&)
          {
             // We don't know what the precision is until runtime:
             if(tools::digits<RealType>() <= 64)
-               return owens_t_dispatch(h, a, ah, pol, boost::integral_constant<int, 64>());
-            return owens_t_dispatch(h, a, ah, pol, boost::integral_constant<int, 65>());
+               return owens_t_dispatch(h, a, ah, pol, std::integral_constant<int, 64>());
+            return owens_t_dispatch(h, a, ah, pol, std::integral_constant<int, 65>());
          }
          template<typename RealType, typename Policy>
          inline RealType owens_t_dispatch(const RealType h, const RealType a, const RealType ah, const Policy& pol)
          {
             // Figure out the precision and forward to the correct version:
             typedef typename policies::precision<RealType, Policy>::type precision_type;
-            typedef boost::integral_constant<int,
+            typedef std::integral_constant<int,
                precision_type::value <= 0 ? 0 :
                precision_type::value <= 64 ? 64 : 65
             > tag_type;
@@ -1036,8 +1036,8 @@ namespace boost
                   do_init(tag());
                }
                template <int N>
-               static void do_init(const boost::integral_constant<int, N>&){}
-               static void do_init(const boost::integral_constant<int, 64>&)
+               static void do_init(const std::integral_constant<int, N>&){}
+               static void do_init(const std::integral_constant<int, 64>&)
                {
                   boost::math::owens_t(static_cast<T>(7), static_cast<T>(0.96875), Policy());
                   boost::math::owens_t(static_cast<T>(2), static_cast<T>(0.5), Policy());
@@ -1062,7 +1062,7 @@ namespace boost
          typedef typename tools::promote_args<T1, T2>::type result_type;
          typedef typename policies::evaluation<result_type, Policy>::type value_type;
          typedef typename policies::precision<value_type, Policy>::type precision_type;
-         typedef boost::integral_constant<int,
+         typedef std::integral_constant<int,
             precision_type::value <= 0 ? 0 :
             precision_type::value <= 64 ? 64 : 65
          > tag_type;
