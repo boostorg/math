@@ -14,12 +14,12 @@ on:
   release:
     types: [published, created, edited]
 jobs:
-  ubuntu-focal:
+  gcc-clang-native-efx:
     runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
       matrix:
-        compiler: [ g++ ]
+        compiler: [ g++, clang++ ]
         standard: [ gnu++11, gnu++14, gnu++17, gnu++2a ]
         suite: [ E_FLOAT_TYPE_EFX ]
     steps:
@@ -30,8 +30,6 @@ jobs:
         run: echo ${{ matrix.compiler }} | awk '/^g/ { print "TOOLSET=gcc" } /^clang/ { print "TOOLSET=clang" }' >> $GITHUB_ENV
       - name: Add repository
         run: sudo apt-add-repository -y "ppa:ubuntu-toolchain-r/test"
-      - name: Install packages
-        run: sudo apt install libgmp-dev libmpfr-dev
       - name: Checkout main boost
         run: git clone -b develop --depth 1 https://github.com/boostorg/boost.git ../boost-root
       - name: Update tools/boostdep
@@ -63,10 +61,68 @@ jobs:
         with:
           repository: ckormanyos/e_float-2021
           path: e_float
-      - name: build test_boost
+      - name: build-run-e_float_boost_test-efx
         run: |
           echo compile and link to e_float_boost_test.exe
           ${{ matrix.compiler }} -Wall -Wextra -m64 -O3 -std=${{ matrix.standard }} -D${{ matrix.suite }} -I../../../libs/e_float/src -I../../../../include -I../../../../../boost-root ../src/e_float/efx/e_float_efx.cpp ../src/e_float/e_float.cpp ../src/e_float/e_float_base.cpp ../src/functions/constants/constants.cpp ../src/functions/elementary/elementary_complex.cpp ../src/functions/elementary/elementary_hyper_g.cpp ../src/functions/elementary/elementary_math.cpp ../src/functions/elementary/elementary_trans.cpp ../src/functions/elementary/elementary_trig.cpp ../test_boost/test_boost.cpp ../test_boost/test_boost_real_concept.cpp ../test_boost/test_boost_sf.cpp -o e_float_boost_test.exe
+          echo ls -la e_float_boost_test.exe
+          ls -la e_float_boost_test.exe
+          echo run e_float_boost_test.exe
+          ./e_float_boost_test.exe
+        working-directory: ./e_float/libs/e_float/build
+  gcc-clang-native-gmp:
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler: [ g++, clang++ ]
+        standard: [ gnu++11, gnu++14, gnu++17, gnu++2a ]
+        suite: [ E_FLOAT_TYPE_GMP ]
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+      - name: Set TOOLSET
+        run: echo ${{ matrix.compiler }} | awk '/^g/ { print "TOOLSET=gcc" } /^clang/ { print "TOOLSET=clang" }' >> $GITHUB_ENV
+      - name: Add repository
+        run: sudo apt-add-repository -y "ppa:ubuntu-toolchain-r/test"
+      - name: Install packages
+        run: sudo apt install libgmp-dev
+      - name: Checkout main boost
+        run: git clone -b develop --depth 1 https://github.com/boostorg/boost.git ../boost-root
+      - name: Update tools/boostdep
+        run: git submodule update --init tools/boostdep
+        working-directory: ../boost-root
+      - name: Copy files
+        run: cp -r $GITHUB_WORKSPACE/* libs/math
+        working-directory: ../boost-root
+      - name: Install deps
+        run: python tools/boostdep/depinst/depinst.py math
+        working-directory: ../boost-root
+      - name: Bootstrap
+        run: ./bootstrap.sh
+        working-directory: ../boost-root
+      - name: Generate headers
+        run: ./b2 headers
+        working-directory: ../boost-root
+      - name: Generate user config
+        run: 'echo "using $TOOLSET : : ${{ matrix.compiler }} : <cxxflags>-std=${{ matrix.standard }} ;" > ~/user-config.jam'
+        working-directory: ../boost-root
+      - name: Config info install
+        run: ../../../b2 config_info_travis_install toolset=$TOOLSET
+        working-directory: ../boost-root/libs/config/test
+      - name: Config info
+        run: ./config_info_travis
+        working-directory: ../boost-root/libs/config/test
+      - name: Checkout e_float repo
+        uses: actions/checkout@v2
+        with:
+          repository: ckormanyos/e_float-2021
+          path: e_float
+      - name: build-run-e_float_boost_test-gmp
+        run: |
+          echo compile and link to e_float_boost_test.exe
+          ${{ matrix.compiler }} -Wall -Wextra -m64 -O3 -std=${{ matrix.standard }} -D${{ matrix.suite }} -I../../../libs/e_float/src -I../../../../include -I../../../../../boost-root ../src/e_float/efx/e_float_efx.cpp ../src/e_float/e_float.cpp ../src/e_float/e_float_base.cpp ../src/functions/constants/constants.cpp ../src/functions/elementary/elementary_complex.cpp ../src/functions/elementary/elementary_hyper_g.cpp ../src/functions/elementary/elementary_math.cpp ../src/functions/elementary/elementary_trans.cpp ../src/functions/elementary/elementary_trig.cpp ../test_boost/test_boost.cpp ../test_boost/test_boost_real_concept.cpp ../test_boost/test_boost_sf.cpp -lgmp -o e_float_boost_test.exe
           echo ls -la e_float_boost_test.exe
           ls -la e_float_boost_test.exe
           echo run e_float_boost_test.exe
