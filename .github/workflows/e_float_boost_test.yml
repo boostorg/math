@@ -122,7 +122,7 @@ jobs:
       - name: build-run-e_float_boost_test-gmp
         run: |
           echo compile and link to e_float_boost_test.exe
-          ${{ matrix.compiler }} -Wall -Wextra -m64 -O3 -std=${{ matrix.standard }} -D${{ matrix.suite }} -I../../../libs/e_float/src -I../../../../include -I../../../../../boost-root ../src/e_float/efx/e_float_efx.cpp ../src/e_float/e_float.cpp ../src/e_float/e_float_base.cpp ../src/functions/constants/constants.cpp ../src/functions/elementary/elementary_complex.cpp ../src/functions/elementary/elementary_hyper_g.cpp ../src/functions/elementary/elementary_math.cpp ../src/functions/elementary/elementary_trans.cpp ../src/functions/elementary/elementary_trig.cpp ../test_boost/test_boost.cpp ../test_boost/test_boost_real_concept.cpp ../test_boost/test_boost_sf.cpp -lgmp -o e_float_boost_test.exe
+          ${{ matrix.compiler }} -Wall -Wextra -m64 -O3 -std=${{ matrix.standard }} -D${{ matrix.suite }} -I../../../libs/e_float/src -I../../../../include -I../../../../../boost-root ../src/e_float/gmp/e_float_gmp.cpp ../src/e_float/e_float.cpp ../src/e_float/e_float_base.cpp ../src/functions/constants/constants.cpp ../src/functions/elementary/elementary_complex.cpp ../src/functions/elementary/elementary_hyper_g.cpp ../src/functions/elementary/elementary_math.cpp ../src/functions/elementary/elementary_trans.cpp ../src/functions/elementary/elementary_trig.cpp ../test_boost/test_boost.cpp ../test_boost/test_boost_real_concept.cpp ../test_boost/test_boost_sf.cpp -lgmp -o e_float_boost_test.exe
           echo ls -la e_float_boost_test.exe
           ls -la e_float_boost_test.exe
           echo run e_float_boost_test.exe
