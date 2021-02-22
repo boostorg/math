@@ -638,9 +638,9 @@ namespace boost
 
    namespace detail{
 
-      typedef boost::integral_constant<int, 0> bessel_no_int_tag;      // No integer optimisation possible.
-      typedef boost::integral_constant<int, 1> bessel_maybe_int_tag;   // Maybe integer optimisation.
-      typedef boost::integral_constant<int, 2> bessel_int_tag;         // Definite integer optimisation.
+      typedef std::integral_constant<int, 0> bessel_no_int_tag;      // No integer optimisation possible.
+      typedef std::integral_constant<int, 1> bessel_maybe_int_tag;   // Maybe integer optimisation.
+      typedef std::integral_constant<int, 2> bessel_int_tag;         // Definite integer optimisation.
 
       template <class T1, class T2, class Policy>
       struct bessel_traits

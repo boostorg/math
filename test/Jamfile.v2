@@ -944,6 +944,7 @@ test-suite misc :
    [ run test_policy_7.cpp ../../test/build//boost_unit_test_framework  ]
    [ run test_policy_8.cpp ../../test/build//boost_unit_test_framework  ]
    [ compile test_policy_9.cpp  ]
+   [ run test_policy_10.cpp ../../test/build//boost_unit_test_framework  ]
    [ run test_policy_sf.cpp ../../test/build//boost_unit_test_framework  ]
    [ run test_long_double_support.cpp ../../test/build//boost_unit_test_framework
       : : : [ check-target-builds ../config//has_long_double_support "long double support" : : <build>no ] ]

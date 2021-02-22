@@ -29,15 +29,9 @@ BOOST_AUTO_TEST_CASE( test_main )
    using namespace boost::math::policies;
    using namespace boost;
 
-   BOOST_CHECK(check_same(make_policy(), policy<>()));
-   BOOST_CHECK(check_same(make_policy(denorm_error<ignore_error>()), normalise<policy<denorm_error<ignore_error> > >::type()));
-   BOOST_CHECK(check_same(make_policy(digits2<20>()), normalise<policy<digits2<20> > >::type()));
-   BOOST_CHECK(check_same(make_policy(promote_float<false>()), normalise<policy<promote_float<false> > >::type()));
-   BOOST_CHECK(check_same(make_policy(domain_error<ignore_error>()), normalise<policy<domain_error<ignore_error> > >::type()));
-   BOOST_CHECK(check_same(make_policy(pole_error<ignore_error>()), normalise<policy<pole_error<ignore_error> > >::type()));
-   BOOST_CHECK(check_same(make_policy(indeterminate_result_error<ignore_error>()), normalise<policy<indeterminate_result_error<ignore_error> > >::type()));
-
-   
+   BOOST_CHECK(check_same(make_policy(denorm_error<ignore_error>(), digits2<20>()), make_policy(digits2<20>(), denorm_error<ignore_error>())));
+   BOOST_CHECK(check_same(make_policy(denorm_error<ignore_error>(), promote_float<false>()), make_policy(promote_float<false>(), denorm_error<ignore_error>())));
+   BOOST_CHECK(check_same(make_policy(denorm_error<ignore_error>(), indeterminate_result_error<ignore_error>(), promote_float<false>()), make_policy(indeterminate_result_error<ignore_error>(), promote_float<false>(), denorm_error<ignore_error>())));
 } // BOOST_AUTO_TEST_CASE( test_main )
 
 

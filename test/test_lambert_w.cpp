@@ -227,7 +227,7 @@ void wolfram_test_small_neg()
 }
 
 template <class T>
-void wolfram_test_large(const boost::true_type&)
+void wolfram_test_large(const std::true_type&)
 {
    //
    // Spots near the singularity from http://www.wolframalpha.com/input/?i=TABLE%5B%5BN%5B-1%2Fe%2B2%5E-i,+50%5D,+N%5BLambertW%5B-1%2Fe+%2B+2%5E-i%5D,+50%5D%5D,+%7Bi,+2,+40%7D%5D
@@ -245,12 +245,12 @@ void wolfram_test_large(const boost::true_type&)
    }
 }
 template <class T>
-void wolfram_test_large(const boost::false_type&){}
+void wolfram_test_large(const std::false_type&){}
 
 template <class T>
 void wolfram_test_large() 
 {
-   wolfram_test_large<T>(boost::integral_constant<bool, (std::numeric_limits<T>::max_exponent10 > 1000)>());
+   wolfram_test_large<T>(std::integral_constant<bool, (std::numeric_limits<T>::max_exponent10 > 1000)>());
 }
 
 

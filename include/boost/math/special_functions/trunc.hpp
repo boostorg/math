@@ -20,7 +20,7 @@
 namespace boost{ namespace math{ namespace detail{
 
 template <class T, class Policy>
-inline typename tools::promote_args<T>::type trunc(const T& v, const Policy& pol, const boost::false_type&)
+inline typename tools::promote_args<T>::type trunc(const T& v, const Policy& pol, const std::false_type&)
 {
    BOOST_MATH_STD_USING
    typedef typename tools::promote_args<T>::type result_type;
@@ -30,7 +30,7 @@ inline typename tools::promote_args<T>::type trunc(const T& v, const Policy& pol
 }
 
 template <class T, class Policy>
-inline typename tools::promote_args<T>::type trunc(const T& v, const Policy&, const boost::true_type&)
+inline typename tools::promote_args<T>::type trunc(const T& v, const Policy&, const std::true_type&)
 {
    return v;
 }
@@ -40,7 +40,7 @@ inline typename tools::promote_args<T>::type trunc(const T& v, const Policy&, co
 template <class T, class Policy>
 inline typename tools::promote_args<T>::type trunc(const T& v, const Policy& pol)
 {
-   return detail::trunc(v, pol, boost::integral_constant<bool, detail::is_integer_for_rounding<T>::value>());
+   return detail::trunc(v, pol, std::integral_constant<bool, detail::is_integer_for_rounding<T>::value>());
 }
 template <class T>
 inline typename tools::promote_args<T>::type trunc(const T& v)
@@ -116,14 +116,14 @@ inline boost::long_long_type lltrunc(const T& v)
 #endif
 
 template <class T, class Policy>
-inline typename boost::enable_if_c<boost::is_constructible<int, T>::value, int>::type
+inline typename std::enable_if<std::is_constructible<int, T>::value, int>::type
    iconvert(const T& v, const Policy&) 
 {
    return static_cast<int>(v);
 }
 
 template <class T, class Policy>
-inline typename boost::disable_if_c<boost::is_constructible<int, T>::value, int>::type
+inline typename boost::disable_if_c<std::is_constructible<int, T>::value, int>::type
    iconvert(const T& v, const Policy& pol) 
 {
    using boost::math::itrunc;
@@ -131,14 +131,14 @@ inline typename boost::disable_if_c<boost::is_constructible<int, T>::value, int>
 }
 
 template <class T, class Policy>
-inline typename boost::enable_if_c<boost::is_constructible<long, T>::value, long>::type
+inline typename std::enable_if<std::is_constructible<long, T>::value, long>::type
    lconvert(const T& v, const Policy&) 
 {
    return static_cast<long>(v);
 }
 
 template <class T, class Policy>
-inline typename boost::disable_if_c<boost::is_constructible<long, T>::value, long>::type
+inline typename boost::disable_if_c<std::is_constructible<long, T>::value, long>::type
    lconvert(const T& v, const Policy& pol) 
 {
    using boost::math::ltrunc;
@@ -148,14 +148,14 @@ inline typename boost::disable_if_c<boost::is_constructible<long, T>::value, lon
 #ifdef BOOST_HAS_LONG_LONG
 
 template <class T, class Policy>
-inline typename boost::enable_if_c<boost::is_constructible<boost::long_long_type, T>::value, boost::long_long_type>::type
+inline typename std::enable_if<std::is_constructible<boost::long_long_type, T>::value, boost::long_long_type>::type
    llconvertert(const T& v, const Policy&) 
 {
    return static_cast<boost::long_long_type>(v);
 }
 
 template <class T, class Policy>
-inline typename boost::disable_if_c<boost::is_constructible<boost::long_long_type, T>::value, boost::long_long_type>::type
+inline typename boost::disable_if_c<std::is_constructible<boost::long_long_type, T>::value, boost::long_long_type>::type
    llconvertert(const T& v, const Policy& pol) 
 {
    using boost::math::lltrunc;

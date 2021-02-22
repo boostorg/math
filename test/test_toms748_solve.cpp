@@ -71,7 +71,7 @@ struct toms748tester
       case 7:
          return (1 + (1 - ip) * (1 - ip)) * x - (1 - ip * x) * (1 - ip * x);
       case 8:
-         return x * x - pow(1 - x, a);
+         return x * x - pow(1 - x, ip);
       case 9:
          return (1 + (1 - ip) * (1 - ip) * (1 - ip) * (1 - ip)) * x - (1 - ip * x) * (1 - ip * x) * (1 - ip * x) * (1 - ip * x);
       case 10:
