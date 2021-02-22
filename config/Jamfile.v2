@@ -8,7 +8,6 @@ import path ;
 
 local ntl-path = [ modules.peek : NTL_PATH ] ;
 local gmp_path = [ modules.peek : GMP_PATH ] ;
-local e_float_path = [ modules.peek : E_FLOAT_PATH ] ;
 
 lib quadmath ;
 lib fftw3 ;
@@ -26,7 +25,6 @@ obj has_gmpxx : has_gmpxx.cpp :
       <include>$(gmp_path) <include>$(gmp_path)/mpfr <include>$(gmp_path)/gmpfrxx ;
 obj has_gcc_visibility : has_gcc_visibility.cpp :
       <toolset>gcc:<cxxflags>-fvisibility=hidden <toolset>gcc:<cxxflags>-Werror ;
-obj has_e_float : has_e_float.cpp : <include>$(e_float_path) ;
 exe has_float128 : has_float128.cpp quadmath ;
 exe has_fftw3 : has_fftw3.cpp fftw3 fftw3f fftw3l ;
 exe has_intel_quad : has_intel_quad.cpp : <cxxflags>-Qoption,cpp,--extended_float_type ;
@@ -44,7 +42,6 @@ explicit has_mpreal ;
 explicit has_ntl_rr ;
 explicit has_gmpxx ;
 explicit has_gcc_visibility ;
-explicit has_e_float ;
 explicit has_float128 ;
 explicit has_intel_quad ;
 explicit has_128bit_floatmax_t ;

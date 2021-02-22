@@ -861,7 +861,6 @@ test-suite mp :
    [ compile ntl_concept_check.cpp : [ check-target-builds ../config//has_ntl_rr : : <build>no ] <debug-symbols>off  ]
    [ compile mpfr_concept_check.cpp : [ check-target-builds ../config//has_mpfr_class : : <build>no ] <debug-symbols>off  ]
    [ compile mpreal_concept_check.cpp : [ check-target-builds ../config//has_mpreal : : <build>no ] <debug-symbols>off  ]
-   [ compile e_float_concept_check.cpp : [ check-target-builds ../config//has_e_float : : <build>no ] <debug-symbols>off  ]
 ;
 
 test-suite misc :
