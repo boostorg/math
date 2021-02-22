@@ -29,12 +29,13 @@
      // we require z > 0 and so apply Kummer's relation for z < 0.
      //
      template <class T, class Policy>
-     inline T hypergeometric_1F1_asym_large_z_series(T a, const T& b, T z, const Policy& pol, int& log_scaling)
+     inline T hypergeometric_1F1_asym_large_z_series(T a, const T& b, T z, const Policy& pol, long long& log_scaling)
      {
         BOOST_MATH_STD_USING
         static const char* function = "boost::math::hypergeometric_1F1_asym_large_z_series<%1%>(%1%, %1%, %1%)";
         T prefix;
-        int e, s;
+        long long e;
+        int s;
         if (z < 0)
         {
            a = b - a;
@@ -43,7 +44,7 @@
         }
         else
         {
-           e = z > INT_MAX ? INT_MAX : itrunc(z, pol);
+           e = z > (std::numeric_limits<long long>::max)() ? (std::numeric_limits<long long>::max)() : lltrunc(z, pol);
            log_scaling += e;
            prefix = exp(z - e);
         }
@@ -54,17 +55,17 @@
         else
         {
            T t = log(z) * (a - b);
-           e = itrunc(t, pol);
+           e = lltrunc(t, pol);
            log_scaling += e;
            prefix *= exp(t - e);
 
            t = boost::math::lgamma(b, &s, pol);
-           e = itrunc(t, pol);
+           e = lltrunc(t, pol);
            log_scaling += e;
            prefix *= s * exp(t - e);
 
            t = boost::math::lgamma(a, &s, pol);
-           e = itrunc(t, pol);
+           e = lltrunc(t, pol);
            log_scaling -= e;
            prefix /= s * exp(t - e);
         }
