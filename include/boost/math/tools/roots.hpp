@@ -12,7 +12,7 @@
 
 #include <iostream>
 #include <utility>
-#include <cmath.hpp>
+#include <cmath>
 #include <stdexcept>
 
 #include <boost/math/tools/config.hpp>
