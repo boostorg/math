@@ -9,11 +9,10 @@
 #ifdef _MSC_VER
 #pragma once
 #endif
-#include <boost/math/tools/complex.hpp> // test for multiprecision types.
 
 #include <iostream>
 #include <utility>
-#include <boost/config/no_tr1/cmath.hpp>
+#include <cmath.hpp>
 #include <stdexcept>
 
 #include <boost/math/tools/config.hpp>
@@ -498,7 +497,7 @@ namespace detail {
 
 #ifdef BOOST_MATH_INSTRUMENT
         std::cout << "Second order root iteration, guess = " << guess << ", min = " << min << ", max = " << max
-        << ", digits = " << digits << ", max_iter = " << max_iter << std::endl;
+        << ", digits = " << digits << ", max_iter = " << max_iter << "\n";
 #endif
       static const char* function = "boost::math::tools::halley_iterate<%1%>";
       if (min >= max)
@@ -517,7 +516,7 @@ namespace detail {
       bool out_of_bounds_sentry = false;
 
    #ifdef BOOST_MATH_INSTRUMENT
-      std::cout << "Second order root iteration, limit = " << factor << std::endl;
+      std::cout << "Second order root iteration, limit = " << factor << "\n";
    #endif
 
       //
@@ -551,9 +550,6 @@ namespace detail {
          if (f1 == 0)
          {
             // Oops zero derivative!!!
-   #ifdef BOOST_MATH_INSTRUMENT
-            std::cout << "Second order root iteration, zero derivative found!" << std::endl;
-   #endif
             detail::handle_zero_derivative(f, last_f0, f0, delta, result, guess, min, max);
          }
          else
@@ -581,7 +577,7 @@ namespace detail {
                delta = f0 / f1;
          }
    #ifdef BOOST_MATH_INSTRUMENT
-         std::cout << "Second order root iteration, delta = " << delta << std::endl;
+         std::cout << "Second order root iteration, delta = " << delta << ", residual = " << f0 << "\n";
    #endif
          T convergence = fabs(delta / delta2);
          if ((convergence > 0.8) && (convergence < 2))
@@ -679,7 +675,7 @@ namespace detail {
       max_iter -= count;
 
    #ifdef BOOST_MATH_INSTRUMENT
-      std::cout << "Second order root finder, final iteration count = " << max_iter << std::endl;
+      std::cout << "Second order root finder required " << max_iter << " iterations.\n";
    #endif
 
       return result;
