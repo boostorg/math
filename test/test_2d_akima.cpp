@@ -21,6 +21,5 @@ int main(void)
 
     std::vector<std::vector<double>> xyz {x, y, z};
 
-    boost::math::interpolators::akima test_1(x, y, z, 10);
-    boost::math::interpolators::akima test_2(xyz[0], xyz[1], xyz[2], 10);
+    boost::math::interpolators::akima_2d_uniform test_1(std::move(xyz), 10);
 }
