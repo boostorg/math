@@ -10,29 +10,16 @@
 #pragma once
 #endif
 
-#include <iostream>
 #include <utility>
 #include <cmath>
-#include <stdexcept>
+#include <tuple>
 
 #include <boost/math/tools/config.hpp>
 #include <boost/cstdint.hpp>
-#include <boost/assert.hpp>
-#include <boost/throw_exception.hpp>
 #include <boost/math/tools/cxx03_warn.hpp>
-
-#ifdef BOOST_MSVC
-#pragma warning(push)
-#pragma warning(disable: 4512)
-#endif
-#include <boost/math/tools/tuple.hpp>
-#ifdef BOOST_MSVC
-#pragma warning(pop)
-#endif
 
 #include <boost/math/special_functions/sign.hpp>
 #include <boost/math/special_functions/next.hpp>
-#include <boost/math/tools/toms748_solve.hpp>
 #include <boost/math/policies/error_handling.hpp>
 
 namespace boost {
