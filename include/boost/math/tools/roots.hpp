@@ -9,6 +9,7 @@
 #ifdef _MSC_VER
 #pragma once
 #endif
+#include <boost/math/tools/complex.hpp> // test for multiprecision types in complex Newton
 
 #include <utility>
 #include <cmath>
