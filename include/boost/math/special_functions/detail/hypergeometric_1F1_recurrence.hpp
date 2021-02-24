@@ -24,7 +24,7 @@
   inline T hypergeometric_1F1_imp(const T& a, const T& b, const T& z, const Policy& pol);
 
   template <class T, class Policy>
-  inline T hypergeometric_1F1_imp(const T& a, const T& b, const T& z, const Policy& pol, int& log_scaling);
+  inline T hypergeometric_1F1_imp(const T& a, const T& b, const T& z, const Policy& pol, long long& log_scaling);
 
   template <class T>
   struct hypergeometric_1F1_recurrence_a_coefficients
@@ -277,7 +277,7 @@
 #endif
 
   template <class T, class Policy>
-  inline T hypergeometric_1F1_backward_recurrence_for_negative_a(const T& a, const T& b, const T& z, const Policy& pol, const char* function, int& log_scaling)
+  inline T hypergeometric_1F1_backward_recurrence_for_negative_a(const T& a, const T& b, const T& z, const Policy& pol, const char* function, long long& log_scaling)
   {
     BOOST_MATH_STD_USING // modf, frexp, fabs, pow
 
@@ -304,7 +304,7 @@
     }
     else
     {
-       int scaling1(0), scaling2(0);
+       long long scaling1(0), scaling2(0);
        first = detail::hypergeometric_1F1_imp(ak, b, z, pol, scaling1);
        ak -= 1;
        second = detail::hypergeometric_1F1_imp(ak, b, z, pol, scaling2);
@@ -326,7 +326,7 @@
 
 
   template <class T, class Policy>
-  T hypergeometric_1F1_backwards_recursion_on_b_for_negative_a(const T& a, const T& b, const T& z, const Policy& pol, const char*, int& log_scaling)
+  T hypergeometric_1F1_backwards_recursion_on_b_for_negative_a(const T& a, const T& b, const T& z, const Policy& pol, const char*, long long& log_scaling)
   {
      using std::swap;
      BOOST_MATH_STD_USING // modf, frexp, fabs, pow
@@ -409,7 +409,7 @@
      }
 
      T first, second;
-     int scale1(0), scale2(0);
+     long long scale1(0), scale2(0);
      first = boost::math::detail::hypergeometric_1F1_imp(T(a + a_shift), T(b + b_shift), z, pol, scale1);
      //
      // It would be good to compute "second" from first and the ratio - unfortunately we are right on the cusp

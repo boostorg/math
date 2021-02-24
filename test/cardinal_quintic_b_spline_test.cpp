@@ -267,24 +267,35 @@ void test_quadratic_estimate_derivatives()
 int main()
 {
     test_constant<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_constant<long double>();
+#endif
 
     test_constant_estimate_derivatives<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_constant_estimate_derivatives<long double>();
+#endif
 
     test_linear<float>();
     test_linear<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_linear<long double>();
+#endif
 
     test_linear_estimate_derivatives<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_linear_estimate_derivatives<long double>();
+#endif
 
     test_quadratic<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_quadratic<long double>();
+#endif
 
     test_quadratic_estimate_derivatives<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_quadratic_estimate_derivatives<long double>();
-
+#endif
 
     #ifdef BOOST_HAS_FLOAT128
         test_constant<float128>();

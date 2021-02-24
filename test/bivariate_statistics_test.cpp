@@ -38,7 +38,7 @@ using boost::multiprecision::cpp_complex_50;
 using  boost::math::statistics::means_and_covariance;
 using  boost::math::statistics::covariance;
 
-#if (__cplusplus > 201700 || _MSVC_LANG > 201700) && (__GNUC__ > 9 || (__clang_major__ > 9 && defined __GLIBCXX__)  || _MSC_VER > 1927)
+#ifndef BOOST_NO_CXX17_HDR_EXECUTION
 #include <execution>
 
 template<typename Real, typename ExecutionPolicy>
@@ -610,7 +610,9 @@ int main()
 {
     test_covariance<float>();
     test_covariance<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_covariance<long double>();
+#endif
     test_covariance<cpp_bin_float_50>();
 
     test_integer_covariance<int>();
@@ -620,7 +622,9 @@ int main()
 
     test_correlation_coefficient<float>();
     test_correlation_coefficient<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_correlation_coefficient<long double>();
+#endif
     test_correlation_coefficient<cpp_bin_float_50>();
 
     test_integer_correlation_coefficient<int>();

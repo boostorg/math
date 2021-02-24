@@ -16,7 +16,7 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
     #include <boost/math/quadrature/exp_sinh.hpp>
     #include <boost/math/quadrature/sinh_sinh.hpp>
 
-    namespace boost{ namespace math{
+    namespace boost{ namespace math{ namespace quadrature {
 
     template<class Real>
     class tanh_sinh
@@ -74,7 +74,7 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
                        size_t* levels = nullptr)->decltype(std::declval<F>()(std::declval<Real>())) const;
     };
 
-}}
+}}}
 ``
 
 These three integration routines provide robust general purpose quadrature, each having a "native" range over which

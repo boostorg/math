@@ -116,7 +116,7 @@
      }
 
      template <class Seq, class Real, class Policy, class Terminal>
-     std::pair<Real, Real> hypergeometric_pFq_checked_series_impl(const Seq& aj, const Seq& bj, const Real& z, const Policy& pol, const Terminal& termination, int& log_scale)
+     std::pair<Real, Real> hypergeometric_pFq_checked_series_impl(const Seq& aj, const Seq& bj, const Real& z, const Policy& pol, const Terminal& termination, long long& log_scale)
      {
         BOOST_MATH_STD_USING
         Real result = 1;
@@ -127,10 +127,10 @@
         boost::uintmax_t k = 0;
         Real upper_limit(sqrt(boost::math::tools::max_value<Real>())), diff;
         Real lower_limit(1 / upper_limit);
-        int log_scaling_factor = itrunc(boost::math::tools::log_max_value<Real>()) - 2;
+        long long log_scaling_factor = lltrunc(boost::math::tools::log_max_value<Real>()) - 2;
         Real scaling_factor = exp(Real(log_scaling_factor));
         Real term_m1;
-        int local_scaling = 0;
+        long long local_scaling = 0;
 
         if ((aj.size() == 1) && (bj.size() == 0))
         {
@@ -274,7 +274,7 @@
               //
               Real loop_result = 0;
               Real loop_abs_result = 0;
-              int loop_scale = 0;
+              long long loop_scale = 0;
               //
               // loop_error_scale will be used to increase the size of the error
               // estimate (absolute sum), based on the errors inherent in calculating 
@@ -288,7 +288,7 @@
               //
               unsigned s = crossover_locations[n];
               boost::uintmax_t backstop = k;
-              int s1(1), s2(1);
+              long long s1(1), s2(1);
               term = 0;
               for (auto ai = aj.begin(); ai != aj.end(); ++ai)
               {
@@ -351,7 +351,7 @@
               if (term <= tools::log_min_value<Real>())
               {
                  // rescale if we can:
-                 int scale = itrunc(floor(term - tools::log_min_value<Real>()) - 2);
+                 long long scale = lltrunc(floor(term - tools::log_min_value<Real>()) - 2);
                  term -= scale;
                  loop_scale += scale;
               }
@@ -367,7 +367,7 @@
                //std::cout << "loop_scale = " << loop_scale << std::endl;
                k = s;
                term0 = term;
-               int saved_loop_scale = loop_scale;
+               long long saved_loop_scale = loop_scale;
                bool terms_are_growing = true;
                bool trivial_small_series_check = false;
                do
@@ -425,7 +425,7 @@
                      Real d; 
                      if (loop_scale > local_scaling)
                      {
-                        int rescale = local_scaling - loop_scale;
+                        long long rescale = local_scaling - loop_scale;
                         if (rescale < tools::log_min_value<Real>())
                            d = 1;  // arbitrary value, we want to keep going
                         else
@@ -433,7 +433,7 @@
                      }
                      else
                      {
-                        int rescale = loop_scale - local_scaling;
+                        long long rescale = loop_scale - local_scaling;
                         if (rescale < tools::log_min_value<Real>())
                            d = 0;  // terminate this loop
                         else
@@ -457,7 +457,7 @@
                   //
                   // Need to shrink previous result:
                   //
-                  int rescale = local_scaling - loop_scale;
+                  long long rescale = local_scaling - loop_scale;
                   local_scaling = loop_scale;
                   log_scale -= rescale;
                   Real ex = exp(Real(rescale));
@@ -471,7 +471,7 @@
                   //
                   // Need to shrink local result:
                   //
-                  int rescale = loop_scale - local_scaling;
+                  long long rescale = loop_scale - local_scaling;
                   Real ex = exp(Real(rescale));
                   loop_result *= ex;
                   loop_abs_result *= ex;
@@ -527,7 +527,7 @@
                      Real d;
                      if (loop_scale > local_scaling)
                      {
-                        int rescale = local_scaling - loop_scale;
+                        long long rescale = local_scaling - loop_scale;
                         if (rescale < tools::log_min_value<Real>())
                            d = 1;  // keep going
                         else
@@ -535,7 +535,7 @@
                      }
                      else
                      {
-                        int rescale = loop_scale - local_scaling;
+                        long long rescale = loop_scale - local_scaling;
                         if (rescale < tools::log_min_value<Real>())
                            d = 0;  // stop, underflow
                         else
@@ -576,7 +576,7 @@
                   //
                   // Need to shrink previous result:
                   //
-                  int rescale = local_scaling - loop_scale;
+                  long long rescale = local_scaling - loop_scale;
                   local_scaling = loop_scale;
                   log_scale -= rescale;
                   Real ex = exp(Real(rescale));
@@ -590,7 +590,7 @@
                   //
                   // Need to shrink local result:
                   //
-                  int rescale = loop_scale - local_scaling;
+                  long long rescale = loop_scale - local_scaling;
                   Real ex = exp(Real(rescale));
                   loop_result *= ex;
                   loop_abs_result *= ex;
@@ -622,7 +622,7 @@
      };
 
      template <class Seq, class Real, class Policy>
-     Real hypergeometric_pFq_checked_series_impl(const Seq& aj, const Seq& bj, const Real& z, const Policy& pol, int& log_scale)
+     Real hypergeometric_pFq_checked_series_impl(const Seq& aj, const Seq& bj, const Real& z, const Policy& pol, long long& log_scale)
      {
         BOOST_MATH_STD_USING
         iteration_terminator term(boost::math::policies::get_max_series_iterations<Policy>());
@@ -639,7 +639,7 @@
      }
 
      template <class Real, class Policy>
-     inline Real hypergeometric_1F1_checked_series_impl(const Real& a, const Real& b, const Real& z, const Policy& pol, int& log_scale)
+     inline Real hypergeometric_1F1_checked_series_impl(const Real& a, const Real& b, const Real& z, const Policy& pol, long long& log_scale)
      {
         boost::array<Real, 1> aj = { a };
         boost::array<Real, 1> bj = { b };

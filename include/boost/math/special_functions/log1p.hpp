@@ -83,7 +83,7 @@ namespace detail
 // it performs no better than log(1+x): which is to say not very well at all.
 //
 template <class T, class Policy>
-T log1p_imp(T const & x, const Policy& pol, const boost::integral_constant<int, 0>&)
+T log1p_imp(T const & x, const Policy& pol, const std::integral_constant<int, 0>&)
 { // The function returns the natural logarithm of 1 + x.
    typedef typename tools::promote_args<T>::type result_type;
    BOOST_MATH_STD_USING
@@ -117,7 +117,7 @@ T log1p_imp(T const & x, const Policy& pol, const boost::integral_constant<int, 
 }
 
 template <class T, class Policy>
-T log1p_imp(T const& x, const Policy& pol, const boost::integral_constant<int, 53>&)
+T log1p_imp(T const& x, const Policy& pol, const std::integral_constant<int, 53>&)
 { // The function returns the natural logarithm of 1 + x.
    BOOST_MATH_STD_USING
 
@@ -170,7 +170,7 @@ T log1p_imp(T const& x, const Policy& pol, const boost::integral_constant<int, 5
 }
 
 template <class T, class Policy>
-T log1p_imp(T const& x, const Policy& pol, const boost::integral_constant<int, 64>&)
+T log1p_imp(T const& x, const Policy& pol, const std::integral_constant<int, 64>&)
 { // The function returns the natural logarithm of 1 + x.
    BOOST_MATH_STD_USING
 
@@ -225,7 +225,7 @@ T log1p_imp(T const& x, const Policy& pol, const boost::integral_constant<int, 6
 }
 
 template <class T, class Policy>
-T log1p_imp(T const& x, const Policy& pol, const boost::integral_constant<int, 24>&)
+T log1p_imp(T const& x, const Policy& pol, const std::integral_constant<int, 24>&)
 { // The function returns the natural logarithm of 1 + x.
    BOOST_MATH_STD_USING
 
@@ -280,8 +280,8 @@ struct log1p_initializer
          do_init(tag());
       }
       template <int N>
-      static void do_init(const boost::integral_constant<int, N>&){}
-      static void do_init(const boost::integral_constant<int, 64>&)
+      static void do_init(const std::integral_constant<int, N>&){}
+      static void do_init(const std::integral_constant<int, 64>&)
       {
          boost::math::log1p(static_cast<T>(0.25), Policy());
       }
@@ -313,7 +313,7 @@ inline typename tools::promote_args<T>::type log1p(T x, const Policy&)
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
 
-   typedef boost::integral_constant<int,
+   typedef std::integral_constant<int,
       precision_type::value <= 0 ? 0 :
       precision_type::value <= 53 ? 53 :
       precision_type::value <= 64 ? 64 : 0

@@ -482,7 +482,7 @@ __TOMS748 is described in detail in:
 
 ['Algorithm 748: Enclosing Zeros of Continuous Functions,
 G. E. Alefeld, F. A. Potra and Yixun Shi,
-ACM Transactions on Mathematica1 Software, Vol. 21. No. 3. September 1995.
+ACM Transactions on Mathematical Software, Vol. 21. No. 3. September 1995.
 Pages 327-344.]
 
 The implementation here is a faithful translation of this paper into C++.

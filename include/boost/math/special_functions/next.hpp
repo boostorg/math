@@ -41,24 +41,24 @@ namespace detail{
 template <class T>
 struct has_hidden_guard_digits;
 template <>
-struct has_hidden_guard_digits<float> : public boost::false_type {};
+struct has_hidden_guard_digits<float> : public std::false_type {};
 template <>
-struct has_hidden_guard_digits<double> : public boost::false_type {};
+struct has_hidden_guard_digits<double> : public std::false_type {};
 template <>
-struct has_hidden_guard_digits<long double> : public boost::false_type {};
+struct has_hidden_guard_digits<long double> : public std::false_type {};
 #ifdef BOOST_HAS_FLOAT128
 template <>
-struct has_hidden_guard_digits<__float128> : public boost::false_type {};
+struct has_hidden_guard_digits<__float128> : public std::false_type {};
 #endif
 template <>
-struct has_hidden_guard_digits<boost::math::concepts::real_concept> : public boost::false_type {};
+struct has_hidden_guard_digits<boost::math::concepts::real_concept> : public std::false_type {};
 template <>
-struct has_hidden_guard_digits<boost::math::concepts::std_real_concept> : public boost::false_type {};
+struct has_hidden_guard_digits<boost::math::concepts::std_real_concept> : public std::false_type {};
 
 template <class T, bool b>
-struct has_hidden_guard_digits_10 : public boost::false_type {};
+struct has_hidden_guard_digits_10 : public std::false_type {};
 template <class T>
-struct has_hidden_guard_digits_10<T, true> : public boost::integral_constant<bool, (std::numeric_limits<T>::digits10 != std::numeric_limits<T>::max_digits10)> {};
+struct has_hidden_guard_digits_10<T, true> : public std::integral_constant<bool, (std::numeric_limits<T>::digits10 != std::numeric_limits<T>::max_digits10)> {};
 
 template <class T>
 struct has_hidden_guard_digits 
@@ -68,9 +68,9 @@ struct has_hidden_guard_digits
 {};
 
 template <class T>
-inline const T& normalize_value(const T& val, const boost::false_type&) { return val; }
+inline const T& normalize_value(const T& val, const std::false_type&) { return val; }
 template <class T>
-inline T normalize_value(const T& val, const boost::true_type&) 
+inline T normalize_value(const T& val, const std::true_type&) 
 {
    BOOST_STATIC_ASSERT(std::numeric_limits<T>::is_specialized);
    BOOST_STATIC_ASSERT(std::numeric_limits<T>::radix != 2);
@@ -82,7 +82,7 @@ inline T normalize_value(const T& val, const boost::true_type&)
 }
 
 template <class T>
-inline T get_smallest_value(boost::true_type const&)
+inline T get_smallest_value(std::true_type const&)
 {
    //
    // numeric_limits lies about denorms being present - particularly
@@ -98,7 +98,7 @@ inline T get_smallest_value(boost::true_type const&)
 }
 
 template <class T>
-inline T get_smallest_value(boost::false_type const&)
+inline T get_smallest_value(std::false_type const&)
 {
    return tools::min_value<T>();
 }
@@ -107,9 +107,9 @@ template <class T>
 inline T get_smallest_value()
 {
 #if defined(BOOST_MSVC) && (BOOST_MSVC <= 1310)
-   return get_smallest_value<T>(boost::integral_constant<bool, std::numeric_limits<T>::is_specialized && (std::numeric_limits<T>::has_denorm == 1)>());
+   return get_smallest_value<T>(std::integral_constant<bool, std::numeric_limits<T>::is_specialized && (std::numeric_limits<T>::has_denorm == 1)>());
 #else
-   return get_smallest_value<T>(boost::integral_constant<bool, std::numeric_limits<T>::is_specialized && (std::numeric_limits<T>::has_denorm == std::denorm_present)>());
+   return get_smallest_value<T>(std::integral_constant<bool, std::numeric_limits<T>::is_specialized && (std::numeric_limits<T>::has_denorm == std::denorm_present)>());
 #endif
 }
 
@@ -146,13 +146,13 @@ template <class T>
 const typename min_shift_initializer<T>::init min_shift_initializer<T>::initializer;
 
 template <class T>
-inline T calc_min_shifted(const boost::true_type&)
+inline T calc_min_shifted(const std::true_type&)
 {
    BOOST_MATH_STD_USING
    return ldexp(tools::min_value<T>(), tools::digits<T>() + 1);
 }
 template <class T>
-inline T calc_min_shifted(const boost::false_type&)
+inline T calc_min_shifted(const std::false_type&)
 {
    BOOST_STATIC_ASSERT(std::numeric_limits<T>::is_specialized);
    BOOST_STATIC_ASSERT(std::numeric_limits<T>::radix != 2);
@@ -164,7 +164,7 @@ inline T calc_min_shifted(const boost::false_type&)
 template <class T>
 inline T get_min_shift_value()
 {
-   static const T val = calc_min_shifted<T>(boost::integral_constant<bool, !std::numeric_limits<T>::is_specialized || std::numeric_limits<T>::radix == 2>());
+   static const T val = calc_min_shifted<T>(std::integral_constant<bool, !std::numeric_limits<T>::is_specialized || std::numeric_limits<T>::radix == 2>());
    min_shift_initializer<T>::force_instantiate();
 
    return val;
@@ -183,7 +183,7 @@ struct exponent_type<T, true>
 };
 
 template <class T, class Policy>
-T float_next_imp(const T& val, const boost::true_type&, const Policy& pol)
+T float_next_imp(const T& val, const std::true_type&, const Policy& pol)
 {
    typedef typename exponent_type<T>::type exponent_type;
    
@@ -229,7 +229,7 @@ T float_next_imp(const T& val, const boost::true_type&, const Policy& pol)
 // Special version for some base other than 2:
 //
 template <class T, class Policy>
-T float_next_imp(const T& val, const boost::false_type&, const Policy& pol)
+T float_next_imp(const T& val, const std::false_type&, const Policy& pol)
 {
    typedef typename exponent_type<T>::type exponent_type;
 
@@ -282,7 +282,7 @@ template <class T, class Policy>
 inline typename tools::promote_args<T>::type float_next(const T& val, const Policy& pol)
 {
    typedef typename tools::promote_args<T>::type result_type;
-   return detail::float_next_imp(detail::normalize_value(static_cast<result_type>(val), typename detail::has_hidden_guard_digits<result_type>::type()), boost::integral_constant<bool, !std::numeric_limits<result_type>::is_specialized || (std::numeric_limits<result_type>::radix == 2)>(), pol);
+   return detail::float_next_imp(detail::normalize_value(static_cast<result_type>(val), typename detail::has_hidden_guard_digits<result_type>::type()), std::integral_constant<bool, !std::numeric_limits<result_type>::is_specialized || (std::numeric_limits<result_type>::radix == 2)>(), pol);
 }
 
 #if 0 //def BOOST_MSVC
@@ -317,7 +317,7 @@ inline typename tools::promote_args<T>::type float_next(const T& val)
 namespace detail{
 
 template <class T, class Policy>
-T float_prior_imp(const T& val, const boost::true_type&, const Policy& pol)
+T float_prior_imp(const T& val, const std::true_type&, const Policy& pol)
 {
    typedef typename exponent_type<T>::type exponent_type;
 
@@ -364,7 +364,7 @@ T float_prior_imp(const T& val, const boost::true_type&, const Policy& pol)
 // Special version for bases other than 2:
 //
 template <class T, class Policy>
-T float_prior_imp(const T& val, const boost::false_type&, const Policy& pol)
+T float_prior_imp(const T& val, const std::false_type&, const Policy& pol)
 {
    typedef typename exponent_type<T>::type exponent_type;
 
@@ -418,7 +418,7 @@ template <class T, class Policy>
 inline typename tools::promote_args<T>::type float_prior(const T& val, const Policy& pol)
 {
    typedef typename tools::promote_args<T>::type result_type;
-   return detail::float_prior_imp(detail::normalize_value(static_cast<result_type>(val), typename detail::has_hidden_guard_digits<result_type>::type()), boost::integral_constant<bool, !std::numeric_limits<result_type>::is_specialized || (std::numeric_limits<result_type>::radix == 2)>(), pol);
+   return detail::float_prior_imp(detail::normalize_value(static_cast<result_type>(val), typename detail::has_hidden_guard_digits<result_type>::type()), std::integral_constant<bool, !std::numeric_limits<result_type>::is_specialized || (std::numeric_limits<result_type>::radix == 2)>(), pol);
 }
 
 #if 0 //def BOOST_MSVC
@@ -466,7 +466,7 @@ inline typename tools::promote_args<T, U>::type nextafter(const T& val, const U&
 namespace detail{
 
 template <class T, class Policy>
-T float_distance_imp(const T& a, const T& b, const boost::true_type&, const Policy& pol)
+T float_distance_imp(const T& a, const T& b, const std::true_type&, const Policy& pol)
 {
    BOOST_MATH_STD_USING
    //
@@ -571,7 +571,7 @@ T float_distance_imp(const T& a, const T& b, const boost::true_type&, const Poli
 // Special versions for bases other than 2:
 //
 template <class T, class Policy>
-T float_distance_imp(const T& a, const T& b, const boost::false_type&, const Policy& pol)
+T float_distance_imp(const T& a, const T& b, const std::false_type&, const Policy& pol)
 {
    BOOST_STATIC_ASSERT(std::numeric_limits<T>::is_specialized);
    BOOST_STATIC_ASSERT(std::numeric_limits<T>::radix != 2);
@@ -707,7 +707,7 @@ inline typename tools::promote_args<T, U>::type float_distance(const T& a, const
    else
    {
       typedef typename tools::promote_args<T, U>::type result_type;
-      return detail::float_distance_imp(detail::normalize_value(static_cast<result_type>(a), typename detail::has_hidden_guard_digits<result_type>::type()), detail::normalize_value(static_cast<result_type>(b), typename detail::has_hidden_guard_digits<result_type>::type()), boost::integral_constant<bool, !std::numeric_limits<result_type>::is_specialized || (std::numeric_limits<result_type>::radix == 2)>(), pol);
+      return detail::float_distance_imp(detail::normalize_value(static_cast<result_type>(a), typename detail::has_hidden_guard_digits<result_type>::type()), detail::normalize_value(static_cast<result_type>(b), typename detail::has_hidden_guard_digits<result_type>::type()), std::integral_constant<bool, !std::numeric_limits<result_type>::is_specialized || (std::numeric_limits<result_type>::radix == 2)>(), pol);
    }
 }
 
@@ -720,7 +720,7 @@ typename tools::promote_args<T, U>::type float_distance(const T& a, const U& b)
 namespace detail{
 
 template <class T, class Policy>
-T float_advance_imp(T val, int distance, const boost::true_type&, const Policy& pol)
+T float_advance_imp(T val, int distance, const std::true_type&, const Policy& pol)
 {
    BOOST_MATH_STD_USING
    //
@@ -803,7 +803,7 @@ T float_advance_imp(T val, int distance, const boost::true_type&, const Policy& 
 // Special version for bases other than 2:
 //
 template <class T, class Policy>
-T float_advance_imp(T val, int distance, const boost::false_type&, const Policy& pol)
+T float_advance_imp(T val, int distance, const std::false_type&, const Policy& pol)
 {
    BOOST_STATIC_ASSERT(std::numeric_limits<T>::is_specialized);
    BOOST_STATIC_ASSERT(std::numeric_limits<T>::radix != 2);
@@ -892,7 +892,7 @@ template <class T, class Policy>
 inline typename tools::promote_args<T>::type float_advance(T val, int distance, const Policy& pol)
 {
    typedef typename tools::promote_args<T>::type result_type;
-   return detail::float_advance_imp(detail::normalize_value(static_cast<result_type>(val), typename detail::has_hidden_guard_digits<result_type>::type()), distance, boost::integral_constant<bool, !std::numeric_limits<result_type>::is_specialized || (std::numeric_limits<result_type>::radix == 2)>(), pol);
+   return detail::float_advance_imp(detail::normalize_value(static_cast<result_type>(val), typename detail::has_hidden_guard_digits<result_type>::type()), distance, std::integral_constant<bool, !std::numeric_limits<result_type>::is_specialized || (std::numeric_limits<result_type>::radix == 2)>(), pol);
 }
 
 template <class T>

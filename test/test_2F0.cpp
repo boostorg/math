@@ -28,6 +28,7 @@ void expected_results()
    largest_type = "(long\\s+)?double|cpp_bin_float_quad|dec_40";
 #endif
 
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    if (boost::math::policies::digits<double, boost::math::policies::policy<> >() != boost::math::policies::digits<long double, boost::math::policies::policy<> >())
    {
       add_expected_result(
@@ -45,7 +46,8 @@ void expected_results()
          "a1 = a2 \\+ 0\\.5",           // test data group
          ".*", 10, 5);                  // test function
    }
-   
+#endif
+
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib

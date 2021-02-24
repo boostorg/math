@@ -96,15 +96,21 @@ void test_derivative()
 int main()
 {
     test_to_quadratic<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_to_quadratic<long double>();
+#endif
 
     test_symmetry<float>();
     test_symmetry<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_symmetry<long double>();
+#endif
 
     test_derivative<float>();
     test_derivative<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_derivative<long double>();
+#endif
 
 #ifdef BOOST_HAS_FLOAT128
     test_to_quadratic<boost::multiprecision::float128>();
