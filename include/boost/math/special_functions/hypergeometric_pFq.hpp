@@ -9,11 +9,7 @@
 #define BOOST_MATH_HYPERGEOMETRIC_PFQ_HPP
 
 #include <boost/config.hpp>
-
-#if defined(BOOST_NO_CXX11_AUTO_DECLARATIONS) || defined(BOOST_NO_CXX11_LAMBDAS) || defined(BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX) || defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST) || defined(BOOST_NO_CXX11_HDR_CHRONO)
-# error "hypergeometric_pFq requires a C++11 compiler"
-#endif
-
+#include <boost/math/tools/cxx03_warn.hpp>
 #include <boost/math/special_functions/detail/hypergeometric_pFq_checked_series.hpp>
 #include <chrono>
 #include <initializer_list>

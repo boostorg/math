@@ -35,10 +35,8 @@
 #include <numeric>
 #include <utility>
 #include <vector>
+#include <initializer_list>
 
-#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
-# include <initializer_list>
-#endif
 
 #ifdef _MSC_VER
 # pragma warning (push)
@@ -320,7 +318,6 @@ class hyperexponential_distribution
                                     PolicyT());
     }
 
-#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
       // Initializer list constructor: allows for construction from array literals:
 public: hyperexponential_distribution(std::initializer_list<RealT> l1, std::initializer_list<RealT> l2)
       : probs_(l1.begin(), l1.end()),
@@ -349,7 +346,6 @@ public: hyperexponential_distribution(std::initializer_list<RealT> l1)
             &err,
             PolicyT());
       }
-#endif // !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
 
     // Single argument constructor: argument must be a range.
     public: template <typename RateRangeT>

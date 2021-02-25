@@ -11,11 +11,7 @@
 #define BOOST_MATH_HYPERGEOMETRIC_1F1_HPP
 
 #include <boost/config.hpp>
-
-#if defined(BOOST_NO_CXX11_AUTO_DECLARATIONS) || defined(BOOST_NO_CXX11_LAMBDAS) || defined(BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX)
-# error "hypergeometric_1F1 requires a C++11 compiler"
-#endif
-
+#include <boost/math/tools/cxx03_warn.hpp>
 #include <boost/math/policies/policy.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/detail/hypergeometric_series.hpp>
@@ -590,14 +586,8 @@ namespace boost { namespace math { namespace detail {
       //
       // Actual result will be result * e^log_scaling.
       //
-#ifndef BOOST_NO_CXX11_THREAD_LOCAL
-    static const thread_local long long max_scaling = lltrunc(boost::math::tools::log_max_value<T>()) - 2;
-    static const thread_local T max_scale_factor = exp(T(max_scaling));
-#else
-    long long max_scaling = lltrunc(boost::math::tools::log_max_value<T>()) - 2;
-    T max_scale_factor = exp(T(max_scaling));
-#endif
-
+      static const thread_local long long max_scaling = lltrunc(boost::math::tools::log_max_value<T>()) - 2;
+      static const thread_local T max_scale_factor = exp(T(max_scaling));
       while (log_scaling > max_scaling)
       {
          result *= max_scale_factor;
@@ -634,15 +624,11 @@ namespace boost { namespace math { namespace detail {
       //
       // Actual result will be result * e^log_scaling / tgamma(b).
       //
-    int result_sign = 1;
-    T scale = log_scaling - boost::math::lgamma(b, &result_sign, pol);
-#ifndef BOOST_NO_CXX11_THREAD_LOCAL
+      int result_sign = 1;
+      T scale = log_scaling - boost::math::lgamma(b, &result_sign, pol);
+
       static const thread_local T max_scaling = boost::math::tools::log_max_value<T>() - 2;
-    static const thread_local T max_scale_factor = exp(max_scaling);
-#else
-    T max_scaling = boost::math::tools::log_max_value<T>() - 2;
-    T max_scale_factor = exp(max_scaling);
-#endif
+      static const thread_local T max_scale_factor = exp(max_scaling);
 
       while (scale > max_scaling)
       {

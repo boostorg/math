@@ -55,8 +55,7 @@ BOOST_MATH_INSTRUMENT_LAMBERT_W_SMALL_Z_SERIES_ITERATIONS  // Show evaluation of
 #include <boost/math/special_functions/log1p.hpp> // for log (1 + x)
 #include <boost/math/constants/constants.hpp> // For exp_minus_one == 3.67879441171442321595523770161460867e-01.
 #include <boost/math/special_functions/pow.hpp> // powers with compile time exponent, used in arbitrary precision code.
-#include <boost/math/tools/series.hpp> // series functor.
-//#include <boost/math/tools/polynomial.hpp>  // polynomial.
+#include <boost/math/tools/series.hpp> // series functor
 #include <boost/math/tools/rational.hpp>  // evaluate_polynomial.
 #include <boost/type_traits/is_integral.hpp>
 #include <boost/math/tools/precision.hpp> // boost::math::tools::max_value().
@@ -510,20 +509,12 @@ T lambert_w0_small_z(T x, const Policy&, std::integral_constant<int, 5> const&);
 template <typename T, typename Policy>
 T lambert_w0_small_z(T x, const Policy& pol)
 { //std::numeric_limits<T>::max_digits10 == 36 ? 3 : // 128-bit long double.
-  using tag_type = std::integral_constant<int,
-     std::numeric_limits<T>::is_specialized == 0 ? 5 :
-#ifndef BOOST_NO_CXX11_NUMERIC_LIMITS
+    using tag_type = std::integral_constant<int,
+    std::numeric_limits<T>::is_specialized == 0 ? 5 :
     std::numeric_limits<T>::max_digits10 <=  9 ? 0 : // for float 32-bit.
     std::numeric_limits<T>::max_digits10 <= 17 ? 1 : // for double 64-bit.
     std::numeric_limits<T>::max_digits10 <= 22 ? 2 : // for 80-bit double extended.
     std::numeric_limits<T>::max_digits10 <  37 ? 4  // for both 128-bit long double (3) and 128-bit quad suffix Q type (4).
-#else
-     std::numeric_limits<T>::radix != 2 ? 5 :
-     std::numeric_limits<T>::digits <= 24 ? 0 : // for float 32-bit.
-     std::numeric_limits<T>::digits <= 53 ? 1 : // for double 64-bit.
-     std::numeric_limits<T>::digits <= 64 ? 2 : // for 80-bit double extended.
-     std::numeric_limits<T>::digits <= 113 ? 4  // for both 128-bit long double (3) and 128-bit quad suffix Q type (4).
-#endif
       :  5>;                                           // All Generic multiprecision types.
   // std::cout << "\ntag type = " << tag_type << std::endl; // error C2275: 'tag_type': illegal use of this type as an expression.
   return lambert_w0_small_z(x, pol, tag_type());

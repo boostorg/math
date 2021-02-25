@@ -116,13 +116,11 @@ namespace boost
                b(a_recopier.R_component_2()),
                c(a_recopier.R_component_3()),
                d(a_recopier.R_component_4()) {}
-#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
             BOOST_CONSTEXPR quaternion(quaternion && a_recopier)
                : a(std::move(a_recopier.R_component_1())),
                b(std::move(a_recopier.R_component_2())),
                c(std::move(a_recopier.R_component_3())),
                d(std::move(a_recopier.R_component_4())) {}
-#endif
             
             // templated copy constructor
             
