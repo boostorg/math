@@ -335,6 +335,108 @@ using mp_remove_if = typename detail::mp_remove_if_impl<L, P>::type;
 template<typename L, typename Q> 
 using mp_remove_if_q = mp_remove_if<L, Q::template fn>;
 
+// Index sequence
+// Use C++14 index sequence if available
+#ifndef BOOST_NO_CXX14_VARIABLE_TEMPLATES
+#include <utility>
+template<std::size_t... I>
+using index_sequence = std::index_sequence<I...>;
+
+template<std::size_t N>
+using make_index_sequence = std::make_index_sequence<N>;
+
+template<typename... T>
+using index_sequence_for = std::index_sequence_for<T...>;
+
+#else
+
+template<typename T, T... I>
+struct integer_sequence {};
+
+template<std::size_t... I>
+using index_sequence = integer_sequence<std::size_t, I...>;
+
+namespace detail {
+
+template<bool C, typename T, typename E>
+struct iseq_if_c_impl {};
+
+template<typename T, typename F>
+struct iseq_if_c_impl<true, T, F>
+{
+    using type = T;
+};
+
+template<typename T, typename F>
+struct iseq_if_c_impl<false, T, F>
+{
+    using type = F;
+};
+
+template<bool C, typename T, typename F>
+using iseq_if_c = typename iseq_if_c_impl<C, T, F>::type;
+
+template<typename T>
+struct iseq_identity
+{
+    using type = T;
+};
+
+template<typename T1, typename T2>
+struct append_integer_sequence {};
+
+template<typename T, T... I, T... J>
+struct append_integer_sequence<integer_sequence<T, I...>, integer_sequence<T, J...>>
+{
+    using type = integer_sequence<T, I..., (J + sizeof(I))...>;
+};
+
+template<typename T, T N>
+struct make_integer_sequence_impl;
+
+template<typename T, T N>
+class make_integer_sequence_impl_
+{
+private:
+    static_assert(N >= 0, "N must not be negative");
+
+    static constexpr T M = N / 2;
+    static constexpr T R = N % 2;
+
+    using seq1 = typename make_integer_sequence_impl<T, M>::type;
+    using seq2 = typename append_integer_sequence<seq1, seq1>::type;
+    using seq3 = typename make_integer_sequence_impl<T, R>::type;
+    using seq4 = typename append_integer_sequence<seq2, seq3>::type;
+
+public:
+    using type = seq4;
+};
+
+template<typename T, T N>
+struct make_integer_sequence_impl
+{
+    using type = typename iseq_if_c<N == 0, 
+                                    iseq_identity<integer_sequence<T>>, 
+                                    iseq_if_c<N == 1, iseq_identity<integer_sequence<T, 0>>, 
+                                    make_integer_sequence_impl_<T, N>>>::type;
+};
+
+} // namespace detail
+
+template<typename T, T N>
+using make_integer_sequence = typename detail::make_integer_sequence_impl<T, N>::type;
+
+template<std::size_t... I>
+using index_sequence = integer_sequence<std::size_t, I...>;
+
+template<std::size_t N>
+using make_index_sequence = make_integer_sequence<std::size_t, N>;
+
+template<typename... T>
+using index_sequence_for = make_integer_sequence<std::size_t, sizeof...(T)>;
+
+#endif 
+
 }}}} // namespaces
 
 #endif // BOOST_MATH_TOOLS_MP
