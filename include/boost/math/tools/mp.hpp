@@ -337,7 +337,7 @@ using mp_remove_if_q = mp_remove_if<L, Q::template fn>;
 
 // Index sequence
 // Use C++14 index sequence if available
-#ifndef BOOST_NO_CXX14_VARIABLE_TEMPLATES
+#if defined(__cpp_lib_integer_sequence) && (__cpp_lib_integer_sequence >= 201304)
 #include <utility>
 template<std::size_t... I>
 using index_sequence = std::index_sequence<I...>;
