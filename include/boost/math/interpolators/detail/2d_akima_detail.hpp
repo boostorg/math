@@ -20,9 +20,8 @@
 
 namespace boost { namespace math { namespace interpolators { namespace detail {
 
-// The polynomial coefficients
 template <typename Real>
-struct coefficients
+struct polynomial_coefficients
 {
     Real p00;
     Real p10;
@@ -184,15 +183,15 @@ std::tuple<Real, Real, Real, Real> transform_coefficients(std::tuple<Real, Real,
 
 // Determine the coefficients of the polynomial. EQNs A-20 through 25 calculated in sequential order
 template <typename Real>
-coefficients polynomial_coefficient(Real z00, std::tuple<Real, Real, Real, Real, Real> z00_partial_derivatives,
-                                    Real z10, std::tuple<Real, Real, Real, Real, Real> z10_partial_derivatives,
-                                    Real z01, std::tuple<Real, Real, Real, Real, Real> z01_partial_derivatives,
-                                    std::tuple<Real, Real, Real, Real> transformed_coefficients,
-                                    std::tuple<Real, Real, Real> vectors)
+polynomial_coefficients calc_polynomial_coefficient(Real z00, std::tuple<Real, Real, Real, Real, Real> z00_partial_derivatives,
+                                                    Real z10, std::tuple<Real, Real, Real, Real, Real> z10_partial_derivatives,
+                                                    Real z01, std::tuple<Real, Real, Real, Real, Real> z01_partial_derivatives,
+                                                    std::tuple<Real, Real, Real, Real> transformed_coefficients,
+                                                    std::tuple<Real, Real, Real> vectors)
 {
     using std::cos;
     
-    coefficients<Real> c;
+    polynomial_coefficients<Real> c;
 
     // EQN A-20
     const Real zu00  = std::get<0>(z00_partial_derivatives);
