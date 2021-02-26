@@ -13,13 +13,14 @@
 #include <stdexcept>
 #include <utility>
 #include <algorithm>
+#include <tuple>
 #include <iostream>
 #include <cstddef>
 #include <cmath>
 
 namespace boost { namespace math { namespace interpolators { namespace detail {
 
-// The 18 polynomial Coefficients
+// The polynomial coefficients
 template <typename Real>
 struct coefficients
 {
@@ -41,6 +42,9 @@ struct coefficients
     Real p31;
     Real p12;
     Real p13;
+    Real p22;
+    Real p32;
+    Real p23;
 };
 
 template <typename Matrix, typename VectorType = typename Matrix::value_type, typename Real = typename VectorType::value_type>
@@ -178,11 +182,12 @@ std::tuple<Real, Real, Real, Real> transform_coefficients(std::tuple<Real, Real,
     return std::make_tuple(A, B, C, D);
 }
 
-// Determine the Coefficients of the Polynomial. EQNs A-20 through 25 calculated in sequential order
+// Determine the coefficients of the polynomial. EQNs A-20 through 25 calculated in sequential order
 template <typename Real>
 coefficients polynomial_coefficient(Real z00, std::tuple<Real, Real, Real, Real, Real> z00_partial_derivatives,
                                     Real z10, std::tuple<Real, Real, Real, Real, Real> z10_partial_derivatives,
                                     Real z01, std::tuple<Real, Real, Real, Real, Real> z01_partial_derivatives,
+                                    std::tuple<Real, Real, Real, Real> transformed_coefficients,
                                     std::tuple<Real, Real, Real> vectors)
 {
     using std::cos;
@@ -240,6 +245,27 @@ coefficients polynomial_coefficient(Real z00, std::tuple<Real, Real, Real, Real,
     // EQN A-25
     c.p12 = 3*zu01 - zuv01 - 3*c.p10 - 2*c.p11 + c.p14;
     c.p13 = -2*zu01 + zuv01 + 2*c.p10 + c.p11 - 2*c.p14;
+
+    // EQN A-27
+    const Real A = std::get<0>(transformed_coefficients);
+    const Real B = std::get<1>(transformed_coefficients);
+    const Real C = std::get<2>(transformed_coefficients);
+    const Real D = std::get<3>(transformed_coefficients);
+
+    const Real g1 = A*A*C*(3*B*C + 2*A*D);
+    const Real g2 = A*C*C*(2*B*C + 3*A*D);
+    const Real h1 = -5*A*A*A*A*B*c.p50 - A*A*A*(4*B*C+A*D)*c.p41 - C*C*C*(B*C + 4*A*D)*c.p14 - 5*C*C*C*C*D*c.p05;
+
+    // EQN A-29
+    const Real h2 = (Real(1)/2)*zvv10 - c.p02 - c.p12;
+
+    // EQN A-31
+    const Real h3 = (Real(1)/2)*zuu01 - c.p20 - c.p21;
+
+    // EQN A-32
+    c.p22 = (g1*h2 + g2*h3 - h1) / (g1 + g2);
+    c.p32 = h2 - c.p22;
+    c.p23 = h3 - c.p22;
 
     return c;
 }
