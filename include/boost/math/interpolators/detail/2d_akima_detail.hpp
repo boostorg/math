@@ -21,6 +21,17 @@
 namespace boost { namespace math { namespace interpolators { namespace detail {
 
 template <typename Real>
+struct transform_coefficients
+{
+    Real a;
+    Real b;
+    Real c;
+    Real d;
+    Real x0;
+    Real y0;
+};
+
+template <typename Real>
 struct polynomial_coefficients
 {
     Real p00;
@@ -111,27 +122,35 @@ VectorType akima_2d_uniform_impl<Matrix, VectorType, Real>::apply_uniform_grid(c
     return grid;
 }
 
+//
+// Procedure for calculation of polynomial coefficients 
+//
+
 // EQN A-4
 template <typename Real>
-std::tuple<Real, Real, Real, Real> coordinate_transform(Real x1, Real y1, Real x2, Real y2, Real x3, Real y3)
+transform_coefficients coordinate_transform(Real x1, Real y1, Real x2, Real y2, Real x3, Real y3)
 {
-    const Real a = x2 - x1;
-    const Real b = x3 - x1;
-    const Real c = y2 - y1;
-    const Real d = y3 - y1;
+    transform_coefficients<Real> coeffs;
 
-    return std::make_tuple(a, b, c, d);
+    coeffs.a = x2 - x1;
+    coeffs.b = x3 - x1;
+    coeffs.c = y2 - y1;
+    coeffs.d = y3 - y1;
+    coeffs.x0 = x1;
+    coeffs.y0 = y1;
+
+    return coeffs;
 }
 
 // EQN A-6
 template <typename Real>
-std::tuple<Real, Real, Real, Real, Real> parital_derivative_transform(std::tuple<Real, Real, Real, Real> coefficients, 
+std::tuple<Real, Real, Real, Real, Real> parital_derivative_transform(const transform_coefficients<Real>& coefficients, 
                                                                       Real zx, Real zy, Real zxx, Real zxy, Real zyy)
 {
-    const Real a = std::get<0>(coefficients);
-    const Real b = std::get<1>(coefficients);
-    const Real c = std::get<2>(coefficients);
-    const Real d = std::get<3>(coefficients);
+    const Real a = coefficients.a;
+    const Real b = coefficients.b;
+    const Real c = coefficients.c;
+    const Real d = coefficients.d;
 
     const Real zu = a*zx + c*zy;
     const Real zv = b*zx + d*zy;
@@ -144,14 +163,14 @@ std::tuple<Real, Real, Real, Real, Real> parital_derivative_transform(std::tuple
 
 // EQN A-9
 template <typename Real>
-std::tuple<Real, Real, Real> unit_vectors(std::tuple<Real, Real, Real, Real> coefficients)
+std::tuple<Real, Real, Real> unit_vectors(const transform_coefficients<Real>& coefficients)
 {
     using std::atan;
     
-    const Real a = std::get<0>(coefficients);
-    const Real b = std::get<1>(coefficients);
-    const Real c = std::get<2>(coefficients);
-    const Real d = std::get<3>(coefficients);
+    const Real a = coefficients.a;
+    const Real b = coefficients.b;
+    const Real c = coefficients.c;
+    const Real d = coefficients.d;
 
     const Real lu = a*a + c*c;
     const Real lv = b*b + d*d;
@@ -162,7 +181,7 @@ std::tuple<Real, Real, Real> unit_vectors(std::tuple<Real, Real, Real, Real> coe
 
 // EQN A-17
 template <typename Real>
-std::tuple<Real, Real, Real, Real> transform_coefficients(std::tuple<Real, Real, Real, Real> uv)
+std::tuple<Real, Real, Real, Real> calc_transformed_coefficients(std::tuple<Real, Real, Real, Real> uv)
 {
     using std::sin;
     using std::cos;
@@ -267,6 +286,25 @@ polynomial_coefficients calc_polynomial_coefficient(Real z00, std::tuple<Real, R
     c.p23 = h3 - c.p22;
 
     return c;
+}
+
+//
+// Procedure for interpolation for a given point (x,y) in the triangle
+//
+
+// EQN A-5
+template <typename Real>
+std::pair<Real, Real> transform_coordinates(const transform_coefficients<Real>& coefficients, Real x, Real y)
+{
+    const Real a  = coefficients.a;
+    const Real b  = coefficients.b;
+    const Real c  = coefficients.c;
+    const Real d  = coefficients.d;
+    const Real x0 = coefficients.x0;
+    const Real y0 = coefficients.y0;
+
+    const Real u = (d*(x-x0) - b*(y-y0)) / (a*d - b*c);
+    const Real v = (-c*(x-x0) + a(y-y0)) / (a*d - b*c);
 }
 
 }}}} // namespaces
