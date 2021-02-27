@@ -33,15 +33,15 @@ std::unique_ptr<T> make_unique(Args&&... args)
 
 } // Namespace detail
 
-template <typename Matrix, typename VectorType = typename Matrix::value_type, typename Real = typename VectorType::value_type>
+template <typename Matrix, typename Real = typename Matrix::value_type>
 class akima_2d_uniform
 {
 private:
-    std::unique_ptr<detail::akima_2d_uniform_impl<Matrix, VectorType, Real>> impl_;
+    std::unique_ptr<detail::akima_2d_uniform_impl<Matrix, Real>> impl_;
 
 public:
-    akima_2d_uniform(Matrix&& data, const std::size_t n) : 
-        impl_ {detail::make_unique<detail::akima_2d_uniform_impl<Matrix, VectorType, Real>>(std::move(data), n)} {}
+    akima_2d_uniform(Matrix&& data, Real origin_x, Real origin_y, Real dx, Real dy) : 
+        impl_ {detail::make_unique<detail::akima_2d_uniform_impl<Matrix, Real>>(std::move(data), origin_x, origin_y, dx, dy)} {}
 };
 
 }}} // namespaces

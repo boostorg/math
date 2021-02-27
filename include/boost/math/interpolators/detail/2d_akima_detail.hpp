@@ -57,52 +57,36 @@ struct polynomial_coefficients
     Real p23;
 };
 
-template <typename Matrix, typename VectorType = typename Matrix::value_type, typename Real = typename VectorType::value_type>
+template <typename Matrix, typename Real = typename Matrix::value_type>
 class akima_2d_uniform_impl
 {
 private:    
     const Matrix data_;
-    const std::size_t n_interpolation_points_;
-    VectorType x_interpolation_points_;
-    VectorType y_interpolation_points_;
-    VectorType z_interpolation_points_;
+    const Real origin_x_;
+    const Real origin_y_;
+    const Real dx_;
+    const Real dy_;
 
     void validate_inputs() const;
-    VectorType apply_uniform_grid(const VectorType& vals);
 
 public:
-    akima_2d_uniform_impl(Matrix&& data, std::size_t n) : data_{std::move(data)}, n_interpolation_points_{n}
+    akima_2d_uniform_impl(Matrix&& data, Real origin_x, Real origin_y, Real dx, Real dy) 
+        : data_{std::move(data)}, origin_x_ {origin_x}, origin_y_ {origin_y}, dx_ {dx}, dy_ {dy}
     {
         validate_inputs();
-        x_interpolation_points_ = apply_uniform_grid(data_[0]);
-        y_interpolation_points_ = apply_uniform_grid(data_[1]);
-        z_interpolation_points_.reserve(n_interpolation_points_);
     }
 };
 
-template <typename Matrix, typename VectorType, typename Real>
-void akima_2d_uniform_impl<Matrix, VectorType, Real>::validate_inputs() const
+template <typename Matrix, typename Real>
+void akima_2d_uniform_impl<Matrix, Real>::validate_inputs() const
 {
-    const auto data_x_size = std::size(data_[0]);
-    const auto data_y_size = std::size(data_[1]);
-    const auto data_z_size = std::size(data_[2]);
-
-    if(data_x_size != data_y_size || data_x_size != data_z_size || data_y_size != data_z_size)
-    {
-        throw std::domain_error("X, Y, and Z must all be of the same size");
-    }
-
-    if(data_x_size < 4)
+    if(data_.size2() < 4)
     {
         throw std::domain_error("X, Y, and Z must all have at least 4 values");
     }
-
-    if(n_interpolation_points_ == 0)
-    {
-        throw std::domain_error("N must be at least 1");
-    }
 }
 
+/*
 // Generates a uniform grid in the x-y plane of the dataset
 template <typename Matrix, typename VectorType, typename Real>
 VectorType akima_2d_uniform_impl<Matrix, VectorType, Real>::apply_uniform_grid(const VectorType& vals)
@@ -121,6 +105,7 @@ VectorType akima_2d_uniform_impl<Matrix, VectorType, Real>::apply_uniform_grid(c
 
     return grid;
 }
+*/
 
 //
 // Procedure for calculation of polynomial coefficients 
@@ -128,7 +113,7 @@ VectorType akima_2d_uniform_impl<Matrix, VectorType, Real>::apply_uniform_grid(c
 
 // EQN A-4
 template <typename Real>
-transform_coefficients coordinate_transform(Real x1, Real y1, Real x2, Real y2, Real x3, Real y3)
+transform_coefficients<Real> coordinate_transform(Real x1, Real y1, Real x2, Real y2, Real x3, Real y3)
 {
     transform_coefficients<Real> coeffs;
 
@@ -202,11 +187,11 @@ std::tuple<Real, Real, Real, Real> calc_transformed_coefficients(std::tuple<Real
 
 // Determine the coefficients of the polynomial. EQNs A-20 through 25, 27, 29, 31, 32 calculated in sequential order
 template <typename Real>
-polynomial_coefficients calc_polynomial_coefficient(Real z00, std::tuple<Real, Real, Real, Real, Real> z00_partial_derivatives,
-                                                    Real z10, std::tuple<Real, Real, Real, Real, Real> z10_partial_derivatives,
-                                                    Real z01, std::tuple<Real, Real, Real, Real, Real> z01_partial_derivatives,
-                                                    std::tuple<Real, Real, Real, Real> transformed_coefficients,
-                                                    std::tuple<Real, Real, Real> vectors)
+polynomial_coefficients<Real> calc_polynomial_coefficient(Real z00, std::tuple<Real, Real, Real, Real, Real> z00_partial_derivatives,
+                                                          Real z10, std::tuple<Real, Real, Real, Real, Real> z10_partial_derivatives,
+                                                          Real z01, std::tuple<Real, Real, Real, Real, Real> z01_partial_derivatives,
+                                                          std::tuple<Real, Real, Real, Real> transformed_coefficients,
+                                                          std::tuple<Real, Real, Real> vectors)
 {
     using std::cos;
     

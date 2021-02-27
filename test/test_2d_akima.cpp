@@ -5,7 +5,12 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <vector>
+#include <cstddef>
+#include <boost/numeric/ublas/matrix.hpp>
+#include <boost/numeric/ublas/io.hpp>
 #include <boost/math/interpolators/2d_akima.hpp>
+
+using namespace boost::numeric::ublas;
 
 int main(void)
 {
@@ -19,7 +24,14 @@ int main(void)
     std::vector<double> z {22.15,  2.83,  7.97, 22.33, 16.83, 34.60,  5.74, 14.72, 21.59, 15.61, 61.77,  6.31, 35.74,  4.40, 21.70,
                            58.20,  4.73, 40.36, 13.62, 12.57,  8.74, 12.00, 14.81, 21.60, 26.50, 53.10, 49.43,  0.60,  5.52, 44.08};
 
-    std::vector<std::vector<double>> xyz {x, y, z};
+    matrix<double> m (3, 30);
 
-    boost::math::interpolators::akima_2d_uniform test_1(std::move(xyz), 10);
+    for(std::size_t i = 0; i < m.size1(); ++i)
+    {
+        m(0, i) = x[i];
+        m(1, i) = y[i];
+        m(2, i) = z[i];
+    }
+
+    boost::math::interpolators::akima_2d_uniform test_1(std::move(m), 0, 0, 0, 0);
 }
