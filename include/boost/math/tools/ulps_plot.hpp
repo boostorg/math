@@ -15,7 +15,6 @@
 #include <list>
 #include <random>
 #include <stdexcept>
-#include <filesystem>
 #include <boost/math/tools/condition_numbers.hpp>
 #include <boost/random/uniform_real_distribution.hpp>
 
@@ -449,10 +448,20 @@ ulps_plot<F, PreciseReal, CoarseReal>& ulps_plot<F, PreciseReal, CoarseReal>::ul
     return *this;
 }
 
+bool ends_with(std::string const& filename, std::string const& suffix)
+{
+    if(filename.size() < suffix.size())
+    {
+        return false;
+    }
+
+    return std::equal(std::begin(suffix), std::end(suffix), std::end(filename) - suffix.size());
+}
+
 template<class F, typename PreciseReal, typename CoarseReal>
 void ulps_plot<F, PreciseReal, CoarseReal>::write(std::string const & filename) const
 {
-    if(std::filesystem::path(filename).extension() != ".svg")
+    if(!ends_with(filename, ".svg"))
     {
         throw std::logic_error("Only svg files are supported at this time.");
     }
