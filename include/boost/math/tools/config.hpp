@@ -249,20 +249,9 @@
 //
 // noexcept support:
 //
-#ifndef BOOST_NO_CXX11_NOEXCEPT
-#ifndef BOOST_NO_CXX11_HDR_TYPE_TRAITS
 #include <type_traits>
-#  define BOOST_MATH_NOEXCEPT(T) noexcept(std::is_floating_point<T>::value)
-#  define BOOST_MATH_IS_FLOAT(T) (std::is_floating_point<T>::value)
-#else
-#include <boost/type_traits/is_floating_point.hpp>
-#  define BOOST_MATH_NOEXCEPT(T) noexcept(boost::is_floating_point<T>::value)
-#  define BOOST_MATH_IS_FLOAT(T) (boost::is_floating_point<T>::value)
-#endif
-#else
-#  define BOOST_MATH_NOEXCEPT(T)
-#  define BOOST_MATH_IS_FLOAT(T) false
-#endif
+#define BOOST_MATH_NOEXCEPT(T) noexcept(std::is_floating_point<T>::value)
+#define BOOST_MATH_IS_FLOAT(T) (std::is_floating_point<T>::value)
 
 //
 // The maximum order of polynomial that will be evaluated 
