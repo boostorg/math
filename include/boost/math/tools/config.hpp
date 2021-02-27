@@ -12,11 +12,9 @@
 
 #include <boost/config.hpp>
 #include <boost/predef/architecture/x86.h>
-#include <boost/cstdint.hpp> // for boost::uintmax_t
 #include <boost/detail/workaround.hpp>
-#include <boost/type_traits/is_integral.hpp>
 #include <algorithm>  // for min and max
-#include <boost/config/no_tr1/cmath.hpp>
+#include <cmath>
 #include <climits>
 #include <cfloat>
 #if (defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__))
@@ -387,7 +385,7 @@ namespace detail{
 template <class T>
 struct is_integer_for_rounding
 {
-   static const bool value = boost::is_integral<T>::value
+   static const bool value = std::is_integral<T>::value
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
       || (std::numeric_limits<T>::is_specialized && std::numeric_limits<T>::is_integer)
 #endif
@@ -412,7 +410,7 @@ struct is_integer_for_rounding
 // Much more information in this message thread: https://groups.google.com/forum/#!topic/boost-list/ZT99wtIFlb4
 //
 
-   #include <boost/detail/fenv.hpp>
+#include <cfenv>
 
 #  ifdef FE_ALL_EXCEPT
 
