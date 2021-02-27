@@ -200,7 +200,7 @@ std::tuple<Real, Real, Real, Real> calc_transformed_coefficients(std::tuple<Real
     return std::make_tuple(A, B, C, D);
 }
 
-// Determine the coefficients of the polynomial. EQNs A-20 through 25 calculated in sequential order
+// Determine the coefficients of the polynomial. EQNs A-20 through 25, 27, 29, 31, 32 calculated in sequential order
 template <typename Real>
 polynomial_coefficients calc_polynomial_coefficient(Real z00, std::tuple<Real, Real, Real, Real, Real> z00_partial_derivatives,
                                                     Real z10, std::tuple<Real, Real, Real, Real, Real> z10_partial_derivatives,
@@ -305,6 +305,103 @@ std::pair<Real, Real> transform_coordinates(const transform_coefficients<Real>& 
 
     const Real u = (d*(x-x0) - b*(y-y0)) / (a*d - b*c);
     const Real v = (-c*(x-x0) + a(y-y0)) / (a*d - b*c);
+}
+
+// EQN A-7
+template <typename Real>
+Real interpolate(const polynomial_coefficients<Real>& coefficients, std::pair<Real, Real> uv_coords)
+{
+    const Real u = uv_coords.first;
+    const Real v = uv_coords.second;
+    
+    Real z = 0;
+    
+    //
+    // j = 0
+    //
+
+    // k = 0
+    z += coefficients.p00;
+
+    // k = 1
+    z += coefficients.p01 * v;
+
+    // k = 2
+    z += coefficients.p02 * v * v;
+
+    // k = 3
+    z += coefficients.p03 * v * v * v;
+
+    // k = 4
+    z += coefficients.p04 * v * v * v * v;
+
+    // k = 5
+    z += coefficients.p05 * v * v * v * v * v;
+
+    //
+    // j = 1
+    //
+    
+    // k = 0
+    z += coefficients.p10 * u;
+
+    // k = 1
+    z += coefficients.p11 * u * v;
+
+    // k = 2
+    z += coefficients.p12 * u * v * v;
+
+    // k = 3
+    z += coefficients.p13 * u * v * v * v;
+    
+    // k = 4
+    z += coefficients.p14 * u * v * v * v * v;
+
+    //
+    // j = 2
+    //
+
+    // k = 0
+    z += coefficients.p20 * u * u;
+
+    // k = 1
+    z += coefficients.p21 * u * u * v;
+
+    // k = 2
+    z += coefficients.p22 * u * u * v * v;
+
+    // k = 3
+    z += coefficients.p23 * u * u * v * v * v;
+
+    //
+    // j = 3
+    //
+
+    // k = 0
+    z += coefficients.p30 * u * u * u;
+
+    // k = 1
+    z += coefficients.p31 * u * u * u * v;
+
+    // k = 2
+    z += coefficients.p32 * u * u * u * v * v;
+
+    //
+    // j = 4
+    //
+
+    // k = 0
+    z += coefficients.p40 * u * u * u * u;
+
+    // k = 1
+    z += coefficients.p41 * u * u * u * u * v;
+
+    //
+    // j = 5
+    //
+
+    // k = 0
+    z += coefficients.p50 * u * u * u * u * u;
 }
 
 }}}} // namespaces
