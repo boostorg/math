@@ -38,7 +38,7 @@ public:
                       Real error_goal,
                       bool singular = true,
                       uint64_t threads = std::thread::hardware_concurrency(),
-                      uint64_t seed = 0): m_num_threads{threads}, m_seed{seed}
+                      uint64_t seed = 0) noexcept : m_num_threads{threads}, m_seed{seed}
     {
         using std::numeric_limits;
         using std::sqrt;
