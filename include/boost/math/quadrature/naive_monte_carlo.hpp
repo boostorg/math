@@ -10,6 +10,7 @@
 #include <algorithm>
 #include <vector>
 #include <atomic>
+#include <memory>
 #include <functional>
 #include <future>
 #include <thread>
@@ -443,11 +444,11 @@ private:
     std::atomic<uint64_t> m_total_calls;
     // I wanted these to be vectors rather than maps,
     // but you can't resize a vector of atomics.
-    std::unique_ptr<std::atomic<uint64_t>[]> m_thread_calls;
+    std::shared_ptr<std::atomic<uint64_t>[]> m_thread_calls;
     std::atomic<Real> m_variance;
-    std::unique_ptr<std::atomic<Real>[]> m_thread_Ss;
+    std::shared_ptr<std::atomic<Real>[]> m_thread_Ss;
     std::atomic<Real> m_avg;
-    std::unique_ptr<std::atomic<Real>[]> m_thread_averages;
+    std::shared_ptr<std::atomic<Real>[]> m_thread_averages;
     std::chrono::time_point<std::chrono::system_clock> m_start;
     std::exception_ptr m_exception;
 };
