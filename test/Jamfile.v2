@@ -843,6 +843,7 @@ test-suite distribution_tests :
 
 test-suite mp :
 
+   [ run test_nc_t_quad.cpp  pch ../../test/build//boost_unit_test_framework : : : release ]
    [ run test_polynomial.cpp ../../test/build//boost_unit_test_framework : : : <define>TEST1 : test_polynomial_1  ]
    [ run test_polynomial.cpp ../../test/build//boost_unit_test_framework : : : <define>TEST2 : test_polynomial_2  ]
    [ run test_polynomial.cpp ../../test/build//boost_unit_test_framework : : : <define>TEST3 : test_polynomial_3  ]
