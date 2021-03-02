@@ -76,8 +76,9 @@ BOOST_AUTO_TEST_CASE( test_main )
   BOOST_MATH_CONTROL_FP;
    // Basic sanity-check spot values.
    expected_results();
-
+#if !BOOST_WORKAROUND(BOOST_MSVC, < 1920)
    test_spots(boost::multiprecision::cpp_bin_float_quad(0));
+#endif
    test_accuracy(boost::multiprecision::cpp_bin_float_quad(0), "cpp_bin_float_quad");
    // double precision tests only:
    //test_big_df(boost::multiprecision::cpp_bin_float_quad(0));
