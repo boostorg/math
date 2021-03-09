@@ -1555,9 +1555,17 @@ T tgamma_delta_ratio_imp_lanczos(T z, T delta, const Policy& pol, const Lanczos&
    T result;
    if(z + delta == z)
    {
-      if(fabs(delta) < 10)
-         result = exp((constants::half<T>() - z) * boost::math::log1p(delta / zgh, pol));
+      if (fabs(delta / zgh) < boost::math::tools::epsilon<T>())
+      {
+         // We have:
+         // result = exp((constants::half<T>() - z) * boost::math::log1p(delta / zgh, pol));
+         // 0.5 - z == -z
+         // log1p(delta / zgh) = delta / zgh = delta / z
+         // multiplying we get -delta.
+         result = exp(-delta);
+      }
       else
+         // from the pow formula below... but this may actually be wrong, we just can't really calculate it :(
          result = 1;
    }
    else
