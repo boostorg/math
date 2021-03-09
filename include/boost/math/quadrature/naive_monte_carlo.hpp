@@ -19,6 +19,7 @@
 #include <random>
 #include <chrono>
 #include <map>
+#include <type_traits>
 #include <boost/math/policies/error_handling.hpp>
 
 namespace boost { namespace math { namespace quadrature {
@@ -30,7 +31,8 @@ namespace detail {
                                    DOUBLE_INFINITE};
 }
 
-template<class Real, class F, class RandomNumberGenerator = std::mt19937_64, class Policy = boost::math::policies::policy<>>
+template<class Real, class F, class RandomNumberGenerator = std::mt19937_64, class Policy = boost::math::policies::policy<>,
+         typename std::enable_if<std::is_trivially_copyable<Real>::value, bool>::type = true>
 class naive_monte_carlo
 {
 public:

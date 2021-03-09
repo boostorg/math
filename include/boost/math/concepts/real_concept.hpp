@@ -60,34 +60,34 @@ class real_concept
 {
 public:
    // Constructors:
-   real_concept() noexcept : m_value(0){}
-   real_concept(char c) noexcept : m_value(c){}
+   real_concept() : m_value(0){}
+   real_concept(char c) : m_value(c){}
 #ifndef BOOST_NO_INTRINSIC_WCHAR_T
-   real_concept(wchar_t c) noexcept : m_value(c){}
+   real_concept(wchar_t c) : m_value(c){}
 #endif
-   real_concept(unsigned char c) noexcept : m_value(c){}
-   real_concept(signed char c) noexcept : m_value(c){}
-   real_concept(unsigned short c) noexcept : m_value(c){}
-   real_concept(short c) noexcept : m_value(c){}
-   real_concept(unsigned int c) noexcept : m_value(c){}
-   real_concept(int c) noexcept : m_value(c){}
-   real_concept(unsigned long c) noexcept : m_value(c){}
-   real_concept(long c) noexcept : m_value(c){}
+   real_concept(unsigned char c) : m_value(c){}
+   real_concept(signed char c) : m_value(c){}
+   real_concept(unsigned short c) : m_value(c){}
+   real_concept(short c) : m_value(c){}
+   real_concept(unsigned int c) : m_value(c){}
+   real_concept(int c) : m_value(c){}
+   real_concept(unsigned long c) : m_value(c){}
+   real_concept(long c) : m_value(c){}
 #if defined(__DECCXX) || defined(__SUNPRO_CC)
-   real_concept(unsigned long long c) noexcept : m_value(static_cast<real_concept_base_type>(c)){}
-   real_concept(long long c) noexcept : m_value(static_cast<real_concept_base_type>(c)){}
+   real_concept(unsigned long long c) : m_value(static_cast<real_concept_base_type>(c)){}
+   real_concept(long long c) : m_value(static_cast<real_concept_base_type>(c)){}
 #elif defined(BOOST_HAS_LONG_LONG)
-   real_concept(boost::ulong_long_type c) noexcept : m_value(static_cast<real_concept_base_type>(c)){}
-   real_concept(boost::long_long_type c) noexcept : m_value(static_cast<real_concept_base_type>(c)){}
+   real_concept(boost::ulong_long_type c) : m_value(static_cast<real_concept_base_type>(c)){}
+   real_concept(boost::long_long_type c) : m_value(static_cast<real_concept_base_type>(c)){}
 #elif defined(BOOST_HAS_MS_INT64)
-   real_concept(unsigned __int64 c) noexcept : m_value(static_cast<real_concept_base_type>(c)){}
-   real_concept(__int64 c) noexcept : m_value(static_cast<real_concept_base_type>(c)){}
+   real_concept(unsigned __int64 c) : m_value(static_cast<real_concept_base_type>(c)){}
+   real_concept(__int64 c) : m_value(static_cast<real_concept_base_type>(c)){}
 #endif
-   real_concept(float c) noexcept : m_value(c){}
-   real_concept(double c) noexcept : m_value(c){}
-   real_concept(long double c) noexcept : m_value(c){}
+   real_concept(float c) : m_value(c){}
+   real_concept(double c) : m_value(c){}
+   real_concept(long double c) : m_value(c){}
 #ifdef BOOST_MATH_USE_FLOAT128
-   real_concept(BOOST_MATH_FLOAT128_TYPE c) noexcept : m_value(c){}
+   real_concept(BOOST_MATH_FLOAT128_TYPE c)  : m_value(c){}
 #endif
 
    // Assignment:
@@ -377,7 +377,7 @@ inline concepts::real_concept epsilon<concepts::real_concept>(BOOST_MATH_EXPLICI
 }
 
 template <>
-inline BOOST_MATH_CONSTEXPR int digits<concepts::real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept)) BOOST_NOEXCEPT
+inline BOOST_MATH_CONSTEXPR int digits<concepts::real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept)) BOOST_
 {
    // Assume number of significand bits is same as real_concept_base_type,
    // unless std::numeric_limits<T>::is_specialized to provide digits.
