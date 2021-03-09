@@ -87,7 +87,7 @@ public:
    real_concept(double c) : m_value(c){}
    real_concept(long double c) : m_value(c){}
 #ifdef BOOST_MATH_USE_FLOAT128
-   real_concept(BOOST_MATH_FLOAT128_TYPE c)  : m_value(c){}
+   real_concept(BOOST_MATH_FLOAT128_TYPE c) : m_value(c){}
 #endif
 
    // Assignment:
@@ -377,7 +377,7 @@ inline concepts::real_concept epsilon<concepts::real_concept>(BOOST_MATH_EXPLICI
 }
 
 template <>
-inline BOOST_MATH_CONSTEXPR int digits<concepts::real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept)) BOOST_
+inline BOOST_MATH_CONSTEXPR int digits<concepts::real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept)) BOOST_NOEXCEPT
 {
    // Assume number of significand bits is same as real_concept_base_type,
    // unless std::numeric_limits<T>::is_specialized to provide digits.
