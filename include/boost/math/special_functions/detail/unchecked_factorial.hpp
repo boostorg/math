@@ -23,12 +23,8 @@
 #include <cmath>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/tools/cxx03_warn.hpp>
-
-#ifdef BOOST_MATH_HAVE_CONSTEXPR_TABLES
 #include <array>
-#else
-#include <boost/array.hpp>
-#endif
+#include <type_traits>
 
 #if defined(__GNUC__) && defined(BOOST_MATH_USE_FLOAT128)
 //
@@ -53,7 +49,7 @@ inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION float unchecked_factorial<float>(unsi
 #ifdef BOOST_MATH_HAVE_CONSTEXPR_TABLES
    constexpr std::array<float, 35> factorials = { {
 #else
-   static const boost::array<float, 35> factorials = {{
+   static const std::array<float, 35> factorials = {{
 #endif
       1.0F,
       1.0F,
@@ -107,7 +103,7 @@ inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION double unchecked_factorial<double>(un
 #ifdef BOOST_MATH_HAVE_CONSTEXPR_TABLES
    constexpr std::array<double, 171> factorials = { {
 #else
-   static const boost::array<double, 171> factorials = {{
+   static const std::array<double, 171> factorials = {{
 #endif
       1.0,
       1.0,
@@ -297,7 +293,7 @@ inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION long double unchecked_factorial<long 
 #ifdef BOOST_MATH_HAVE_CONSTEXPR_TABLES
    constexpr std::array<long double, 171> factorials = { {
 #else
-   static const boost::array<long double, 171> factorials = {{
+   static const std::array<long double, 171> factorials = {{
 #endif
       1L,
       1L,
@@ -489,7 +485,7 @@ inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION BOOST_MATH_FLOAT128_TYPE unchecked_fa
 #ifdef BOOST_MATH_HAVE_CONSTEXPR_TABLES
    constexpr std::array<BOOST_MATH_FLOAT128_TYPE, 171> factorials = { {
 #else
-   static const boost::array<BOOST_MATH_FLOAT128_TYPE, 171> factorials = { {
+   static const std::array<BOOST_MATH_FLOAT128_TYPE, 171> factorials = { {
 #endif
       1,
       1,
@@ -702,7 +698,7 @@ const typename unchecked_factorial_initializer<T>::init unchecked_factorial_init
 template <class T, int N>
 inline T unchecked_factorial_imp(unsigned i, const std::integral_constant<int, N>&)
 {
-   BOOST_STATIC_ASSERT(!boost::is_integral<T>::value);
+   BOOST_STATIC_ASSERT(!std::is_integral<T>::value);
    // factorial<unsigned int>(n) is not implemented
    // because it would overflow integral type T for too small n
    // to be useful. Use instead a floating-point type,
@@ -712,7 +708,7 @@ inline T unchecked_factorial_imp(unsigned i, const std::integral_constant<int, N
 
    unchecked_factorial_initializer<T>::force_instantiate();
 
-   static const boost::array<T, 101> factorials = {{
+   static const std::array<T, 101> factorials = {{
       T(boost::math::tools::convert_from_string<T>("1")),
       T(boost::math::tools::convert_from_string<T>("1")),
       T(boost::math::tools::convert_from_string<T>("2")),
@@ -822,7 +818,7 @@ inline T unchecked_factorial_imp(unsigned i, const std::integral_constant<int, N
 template <class T>
 inline T unchecked_factorial_imp(unsigned i, const std::integral_constant<int, 0>&)
 {
-   BOOST_STATIC_ASSERT(!boost::is_integral<T>::value);
+   BOOST_STATIC_ASSERT(!std::is_integral<T>::value);
    // factorial<unsigned int>(n) is not implemented
    // because it would overflow integral type T for too small n
    // to be useful. Use instead a floating-point type,
