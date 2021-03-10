@@ -11,6 +11,7 @@
 #endif
 
 #include <array>
+#include <cassert>
 #include <boost/math/tools/config.hpp>
 
 #if BOOST_MATH_POLY_METHOD == 1
@@ -187,7 +188,7 @@ inline V evaluate_polynomial_c_imp(const T* a, const V& val, const Tag*) BOOST_M
 template <class T, class U>
 inline U evaluate_polynomial(const T* poly, U const& z, std::size_t count) BOOST_MATH_NOEXCEPT(U)
 {
-   BOOST_ASSERT(count > 0);
+   assert(count > 0);
    U sum = static_cast<U>(poly[count - 1]);
    for(int i = static_cast<int>(count) - 2; i >= 0; --i)
    {
