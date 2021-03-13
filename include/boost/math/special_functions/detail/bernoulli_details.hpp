@@ -8,13 +8,13 @@
 #define BOOST_MATH_BERNOULLI_DETAIL_HPP
 
 #include <boost/config.hpp>
-#include <boost/detail/lightweight_mutex.hpp>
 #include <boost/math/tools/atomic.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <boost/math/tools/toms748_solve.hpp>
 #include <boost/math/tools/cxx03_warn.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <vector>
+#include <mutex>
 
 namespace boost{ namespace math{ namespace detail{
 //
@@ -423,7 +423,7 @@ public:
       //
       // We need to grab a mutex every time we get here, for both readers and writers:
       //
-      boost::detail::lightweight_mutex::scoped_lock l(m_mutex);
+      std::lock_guard<std::mutex> l(m_mutex);
       if(m_current_precision < boost::math::tools::digits<T>())
       {
          bn.clear();
@@ -453,7 +453,7 @@ public:
       if((static_cast<std::size_t>(m_counter.load(BOOST_MATH_ATOMIC_NS::memory_order_consume)) < start + n)
          || (static_cast<int>(m_current_precision.load(BOOST_MATH_ATOMIC_NS::memory_order_consume)) < boost::math::tools::digits<T>()))
       {
-         boost::detail::lightweight_mutex::scoped_lock l(m_mutex);
+         std::lock_guard<std::mutex> l(m_mutex);
 
          if((static_cast<std::size_t>(m_counter.load(BOOST_MATH_ATOMIC_NS::memory_order_consume)) < start + n)
             || (static_cast<int>(m_current_precision.load(BOOST_MATH_ATOMIC_NS::memory_order_consume)) < boost::math::tools::digits<T>()))
@@ -558,7 +558,7 @@ public:
       //
       // We need to grab a mutex every time we get here, for both readers and writers:
       //
-      boost::detail::lightweight_mutex::scoped_lock l(m_mutex);
+      std::lock_guard<std::mutex> l(m_mutex);
       if(m_current_precision < boost::math::tools::digits<T>())
       {
          bn.clear();
@@ -596,7 +596,7 @@ public:
       if((static_cast<std::size_t>(m_counter.load(BOOST_MATH_ATOMIC_NS::memory_order_consume)) < start + n)
          || (static_cast<int>(m_current_precision.load(BOOST_MATH_ATOMIC_NS::memory_order_consume)) < boost::math::tools::digits<T>()))
       {
-         boost::detail::lightweight_mutex::scoped_lock l(m_mutex);
+         std::lock_guard<std::mutex> l(m_mutex);
 
          if((static_cast<std::size_t>(m_counter.load(BOOST_MATH_ATOMIC_NS::memory_order_consume)) < start + n)
             || (static_cast<int>(m_current_precision.load(BOOST_MATH_ATOMIC_NS::memory_order_consume)) < boost::math::tools::digits<T>()))
@@ -649,10 +649,10 @@ private:
 #if !defined(BOOST_HAS_THREADS)
    int m_current_precision;
 #elif defined(BOOST_MATH_NO_ATOMIC_INT)
-   boost::detail::lightweight_mutex m_mutex;
+   std::mutex m_mutex;
    int m_current_precision;
 #else
-   boost::detail::lightweight_mutex m_mutex;
+   std::mutex m_mutex;
    atomic_counter_type m_counter, m_current_precision;
 #endif
 };
