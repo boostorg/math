@@ -9,12 +9,12 @@
 
 #include <boost/config.hpp>
 #include <boost/math/tools/atomic.hpp>
-#include <boost/utility/enable_if.hpp>
 #include <boost/math/tools/toms748_solve.hpp>
 #include <boost/math/tools/cxx03_warn.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <vector>
 #include <mutex>
+#include <type_traits>
 
 namespace boost{ namespace math{ namespace detail{
 //
@@ -130,14 +130,15 @@ std::size_t b2n_overflow_limit()
 // so to compute the Bernoulli numbers from the tangent numbers, we need to avoid spurious
 // overflow in the calculation, we can do this by scaling all the tangent number by some scale factor:
 //
-template <class T>
-inline typename enable_if_c<std::numeric_limits<T>::is_specialized && (std::numeric_limits<T>::radix == 2), T>::type tangent_scale_factor()
+template <class T, typename std::enable_if<std::numeric_limits<T>::is_specialized && (std::numeric_limits<T>::radix == 2), bool>::type = true>
+inline T tangent_scale_factor()
 {
    BOOST_MATH_STD_USING
    return ldexp(T(1), std::numeric_limits<T>::min_exponent + 5);
 }
-template <class T>
-inline typename disable_if_c<std::numeric_limits<T>::is_specialized && (std::numeric_limits<T>::radix == 2), T>::type tangent_scale_factor()
+
+template <class T, typename std::enable_if<!std::numeric_limits<T>::is_specialized || !(std::numeric_limits<T>::radix == 2), bool>::type = true>
+inline T tangent_scale_factor()
 {
    return tools::min_value<T>() * 16;
 }
