@@ -328,6 +328,18 @@ namespace boost{ namespace math
   BOOST_DEFINE_MATH_CONSTANT(laplace_limit, 0.662743419349181580974742097109252907056233549115022417, "0.66274341934918158097474209710925290705623354911502241752039253499097185308651127724965480259895818168")
 #endif
 
+template<typename T, typename std::enable_if<std::is_trivially_constructible<T>::value, bool>::type = true>
+constexpr T tau()
+{
+   return two_pi<T>();
+}
+
+template<typename T, typename std::enable_if<!std::is_trivially_constructible<T>::value, bool>::type = true>
+const T tau()
+{
+   return two_pi<T>();
+}
+
 } // namespace constants
 } // namespace math
 } // namespace boost
