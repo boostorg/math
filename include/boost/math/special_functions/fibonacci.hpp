@@ -28,7 +28,7 @@ const double log_2 = std::log(2.0),
 } // namespace detail
 
 template <typename T>
-inline constexpr T fibonacci_unchecked(unsigned long long n) noexcept {
+inline constexpr T unchecked_fibonacci(unsigned long long n) noexcept {
     // This function is called by the rest and computes the actual nth fibonacci number
     // First few fibonacci numbers: 0 (0th), 1 (1st), 1 (2nd), 2 (3rd), ...
     if (n <= 2) return n == 0 ? 0 : 1;
@@ -41,11 +41,12 @@ inline constexpr T fibonacci_unchecked(unsigned long long n) noexcept {
     unsigned long long mask = 1;
     for (int ct = 1; ct != std::numeric_limits<unsigned long long>::digits && (mask << 1) <= n; ++ct, mask <<= 1)
         ;
-    T a = 1, b = 1;
+    T a{1}, b{1};
     for (mask >>= 1; mask; mask >>= 1) {
         T t1 = a * a;
         a = 2 * a * b - t1, b = b * b + t1;
-        if (mask & n) t1 = b, b = b + a, a = t1; // equivalent to: swap(a,b), b += a;
+        if (mask & n) 
+            t1 = b, b = b + a, a = t1; // equivalent to: swap(a,b), b += a;
     }
     return a;
 }
@@ -55,7 +56,7 @@ T inline fibonacci(unsigned long long n, const Policy &pol) {
     // check for overflow using approximation to binet's formula: F_n ~ phi^n / sqrt(5)
     if (n > 20 && n * detail::fib_bits_phi - detail::fib_bits_deno > std::numeric_limits<T>::digits)
         return policies::raise_overflow_error<T>("boost::math::fibonacci<%1%>(unsigned long long)", "Possible overflow detected.", pol);
-    return fibonacci_unchecked<T>(n);
+    return unchecked_fibonacci<T>(n);
 }
 
 template <typename T>
@@ -78,8 +79,8 @@ class fibonacci_generator {
     // fibonacci numbers starting with the nth fibonacci number
     void set(unsigned long long nth) noexcept {
         n = nth;
-        a = fibonacci_unchecked<T>(n);
-        b = fibonacci_unchecked<T>(n + 1);
+        a = unchecked_fibonacci<T>(n);
+        b = unchecked_fibonacci<T>(n + 1);
     }
 
   private:
