@@ -5,6 +5,10 @@
 
 #ifdef BOOST_BUILD_PCH_ENABLED
 
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif 
+
 #define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/tools/test.hpp>

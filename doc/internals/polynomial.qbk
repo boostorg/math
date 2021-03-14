@@ -25,7 +25,7 @@
       polynomial(I first, I last);
       template <class U>
       explicit polynomial(const U& point, 
-            typename boost::enable_if<boost::is_convertible<U, T> >::type* = 0);
+            typename boost::enable_if<std::is_convertible<U, T> >::type* = 0);
       template <class Range>
       explicit polynomial(const Range& r, 
             typename boost::enable_if<boost::math::tools::detail::is_const_iterable<Range> >::type* = 0); // C++14

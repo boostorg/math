@@ -97,7 +97,41 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(pow, T, bin_float_types) {
                     eps);
 }
 
-// TODO Tests around x=0 or y=0: pow(x,y)
+BOOST_AUTO_TEST_CASE_TEMPLATE(pow0, T, bin_float_types) {
+  const T eps = 201 * std::numeric_limits<T>::epsilon(); // percent
+  using std::pow;
+  constexpr std::size_t m = 5;
+  constexpr std::size_t n = 4;
+  const T cx = 0.0;
+  {
+    const T cy = 3.0;
+    const auto x = make_fvar<T, m>(cx);
+    auto z0 = pow(x, cy);
+    BOOST_CHECK_EQUAL(z0.derivative(0u), pow(cx, cy));
+    BOOST_CHECK_EQUAL(z0.derivative(1u), cy * pow(cx, cy - 1));
+    BOOST_CHECK_EQUAL(z0.derivative(2u), cy * (cy - 1) * pow(cx, cy - 2));
+    BOOST_CHECK_EQUAL(z0.derivative(3u),
+                      cy * (cy - 1) * (cy - 2) * pow(cx, cy - 3));
+    BOOST_CHECK_EQUAL(z0.derivative(4u), 0u);
+    BOOST_CHECK_EQUAL(z0.derivative(5u), 0u);
+  }
+  {
+    const T cy = 3.5;
+    const auto x = make_fvar<T, m>(cx);
+    auto z0 = pow(x, cy);
+    BOOST_CHECK_EQUAL(z0.derivative(0u), pow(cx, cy));
+    BOOST_CHECK_EQUAL(z0.derivative(1u), cy * pow(cx, cy - 1));
+    BOOST_CHECK_EQUAL(z0.derivative(2u), cy * (cy - 1) * pow(cx, cy - 2));
+    BOOST_CHECK_EQUAL(z0.derivative(3u),
+                      cy * (cy - 1) * (cy - 2) * pow(cx, cy - 3));
+    BOOST_CHECK_EQUAL(z0.derivative(4u),
+                      cy * (cy - 1) * (cy - 2) * (cy - 3) * pow(cx, cy - 4));
+    BOOST_CHECK_EQUAL(z0.derivative(5u),
+                      cy * (cy - 1) * (cy - 2) * (cy - 3) * (cy - 4) * pow(cx, cy - 5));
+  }
+}
+
+// TODO Tests around y=0: pow(x,y)
 BOOST_AUTO_TEST_CASE_TEMPLATE(pow2, T, bin_float_types) {
   const T eps = 4000 * std::numeric_limits<T>::epsilon(); // percent
   using std::pow;

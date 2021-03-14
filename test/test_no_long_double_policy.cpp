@@ -90,8 +90,8 @@ long double sqrt(long double, void* = 0);
 
 
 
-#define TEST_GROUP_5
-#define TEST_GROUP_6
+#define TEST_GROUP_8
+#define TEST_GROUP_9
 #include "compile_test/instantiate.hpp"
 
 int main()

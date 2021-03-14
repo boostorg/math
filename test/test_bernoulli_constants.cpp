@@ -202,6 +202,7 @@ void test(const char* name)
 
 void test_real_concept_extra()
 {
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    boost::math::concepts::real_concept tol = boost::math::tools::epsilon<boost::math::concepts::real_concept>() * 20;
    for(unsigned i = 0; i <= boost::math::max_bernoulli_b2n<long double>::value; ++i)
    {
@@ -219,6 +220,7 @@ void test_real_concept_extra()
          BOOST_CHECK(r <= -boost::math::tools::max_value<boost::math::concepts::real_concept>());
       }
    }
+#endif
 }
 
 

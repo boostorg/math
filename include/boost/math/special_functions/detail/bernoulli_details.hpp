@@ -13,6 +13,7 @@
 #include <boost/utility/enable_if.hpp>
 #include <boost/math/tools/toms748_solve.hpp>
 #include <boost/math/tools/cxx03_warn.hpp>
+#include <boost/math/special_functions/fpclassify.hpp>
 #include <vector>
 
 namespace boost{ namespace math{ namespace detail{
@@ -92,7 +93,7 @@ private:
 };
 
 template <class T, class Policy>
-inline std::size_t find_bernoulli_overflow_limit(const boost::false_type&)
+inline std::size_t find_bernoulli_overflow_limit(const std::false_type&)
 {
    // Set a limit on how large the result can ever be:
    static const double max_result = static_cast<double>((std::numeric_limits<std::size_t>::max)() - 1000u);
@@ -109,7 +110,7 @@ inline std::size_t find_bernoulli_overflow_limit(const boost::false_type&)
 }
 
 template <class T, class Policy>
-inline std::size_t find_bernoulli_overflow_limit(const boost::true_type&)
+inline std::size_t find_bernoulli_overflow_limit(const std::true_type&)
 {
    return max_bernoulli_index<bernoulli_imp_variant<T>::value>::value;
 }
@@ -119,7 +120,7 @@ std::size_t b2n_overflow_limit()
 {
    // This routine is called at program startup if it's called at all:
    // that guarantees safe initialization of the static variable.
-   typedef boost::integral_constant<bool, (bernoulli_imp_variant<T>::value >= 1) && (bernoulli_imp_variant<T>::value <= 3)> tag_type;
+   typedef std::integral_constant<bool, (bernoulli_imp_variant<T>::value >= 1) && (bernoulli_imp_variant<T>::value <= 3)> tag_type;
    static const std::size_t lim = find_bernoulli_overflow_limit<T, Policy>(tag_type());
    return lim;
 }

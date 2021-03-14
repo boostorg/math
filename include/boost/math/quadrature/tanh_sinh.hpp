@@ -113,6 +113,10 @@ auto tanh_sinh<Real, Policy>::integrate(const F f, Real a, Real b, Real toleranc
           {
              *L1 *= 2;
           }
+          if (error)
+          {
+             *error *= 2;
+          }
 
           return Q;
        }
@@ -139,6 +143,10 @@ auto tanh_sinh<Real, Policy>::integrate(const F f, Real a, Real b, Real toleranc
           if (L1)
           {
              *L1 *= 2;
+          }
+          if (error)
+          {
+             *error *= 2;
           }
           return Q;
        }
@@ -203,6 +211,10 @@ auto tanh_sinh<Real, Policy>::integrate(const F f, Real a, Real b, Real toleranc
           {
              *L1 *= diff;
           }
+          if (error)
+          {
+             *error *= diff;
+          }
           return Q;
        }
     }
@@ -240,6 +252,10 @@ auto tanh_sinh<Real, Policy>::integrate(const F f, Real a, Real b, Real toleranc
       if (L1)
       {
          *L1 *= diff;
+      }
+      if (error)
+      {
+         *error *= diff;
       }
       return Q;
    }

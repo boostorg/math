@@ -1,6 +1,7 @@
 // Copyright John Maddock 2006.
 // Copyright Evan Miller 2020
 #define BOOST_TEST_MAIN
+#define NOMINMAX
 #include <boost/test/unit_test.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/special_functions/ellint_rf.hpp>

@@ -6,8 +6,10 @@
 #ifndef BOOST_MATH_SPECIAL_CHEBYSHEV_HPP
 #define BOOST_MATH_SPECIAL_CHEBYSHEV_HPP
 #include <cmath>
+#include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/constants/constants.hpp>
+#include <boost/math/tools/promotion.hpp>
 
 #if (__cplusplus > 201103) || (defined(_CPPLIB_VER) && (_CPPLIB_VER >= 610))
 #  define BOOST_MATH_CHEB_USE_STD_ACOSH

@@ -1283,7 +1283,7 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
 
       if(b < 40)
       {
-         if((floor(a) == a) && (floor(b) == b) && (a < (std::numeric_limits<int>::max)() - 100) && (y != 1))
+         if((floor(a) == a) && (floor(b) == b) && (a < static_cast<T>((std::numeric_limits<int>::max)() - 100)) && (y != 1))
          {
             // relate to the binomial distribution and use a finite sum:
             T k = a - 1;
@@ -1434,7 +1434,7 @@ T ibeta_derivative_imp(T a, T b, T x, const Policy& pol)
 //
 template <class RT1, class RT2, class Policy>
 inline typename tools::promote_args<RT1, RT2>::type
-   beta(RT1 a, RT2 b, const Policy&, const boost::true_type*)
+   beta(RT1 a, RT2 b, const Policy&, const std::true_type*)
 {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename tools::promote_args<RT1, RT2>::type result_type;
@@ -1451,7 +1451,7 @@ inline typename tools::promote_args<RT1, RT2>::type
 }
 template <class RT1, class RT2, class RT3>
 inline typename tools::promote_args<RT1, RT2, RT3>::type
-   beta(RT1 a, RT2 b, RT3 x, const boost::false_type*)
+   beta(RT1 a, RT2 b, RT3 x, const std::false_type*)
 {
    return boost::math::beta(a, b, x, policies::policy<>());
 }

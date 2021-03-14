@@ -175,7 +175,7 @@ void test_quadratic()
     for (Real t = x0; t <= xmax; t+= 0.0125)
     {
         CHECK_ULP_CLOSE(t*t/2, s(t), 5);
-        CHECK_ULP_CLOSE(t, s.prime(t), 65);
+        CHECK_ULP_CLOSE(t, s.prime(t), 138);
     }
 }
 

@@ -12,11 +12,9 @@
 
 #include <boost/config.hpp>
 #include <boost/predef/architecture/x86.h>
-#include <boost/cstdint.hpp> // for boost::uintmax_t
 #include <boost/detail/workaround.hpp>
-#include <boost/type_traits/is_integral.hpp>
 #include <algorithm>  // for min and max
-#include <boost/config/no_tr1/cmath.hpp>
+#include <cmath>
 #include <climits>
 #include <cfloat>
 #if (defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__))
@@ -67,6 +65,13 @@
 //
 // Darwin's rather strange "double double" is rather hard to
 // support, it should be possible given enough effort though...
+//
+#  define BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+#endif
+#if !defined(BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS) && (LDBL_MANT_DIG == 106) && (LDBL_MIN_EXP > DBL_MIN_EXP)
+//
+// Generic catch all case for gcc's "double-double" long double type.
+// We do not support this as it's not even remotely IEEE conforming:
 //
 #  define BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 #endif
@@ -244,20 +249,9 @@
 //
 // noexcept support:
 //
-#ifndef BOOST_NO_CXX11_NOEXCEPT
-#ifndef BOOST_NO_CXX11_HDR_TYPE_TRAITS
 #include <type_traits>
-#  define BOOST_MATH_NOEXCEPT(T) noexcept(std::is_floating_point<T>::value)
-#  define BOOST_MATH_IS_FLOAT(T) (std::is_floating_point<T>::value)
-#else
-#include <boost/type_traits/is_floating_point.hpp>
-#  define BOOST_MATH_NOEXCEPT(T) noexcept(boost::is_floating_point<T>::value)
-#  define BOOST_MATH_IS_FLOAT(T) (boost::is_floating_point<T>::value)
-#endif
-#else
-#  define BOOST_MATH_NOEXCEPT(T)
-#  define BOOST_MATH_IS_FLOAT(T) false
-#endif
+#define BOOST_MATH_NOEXCEPT(T) noexcept(std::is_floating_point<T>::value)
+#define BOOST_MATH_IS_FLOAT(T) (std::is_floating_point<T>::value)
 
 //
 // The maximum order of polynomial that will be evaluated 
@@ -380,7 +374,7 @@ namespace detail{
 template <class T>
 struct is_integer_for_rounding
 {
-   static const bool value = boost::is_integral<T>::value
+   static const bool value = std::is_integral<T>::value
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
       || (std::numeric_limits<T>::is_specialized && std::numeric_limits<T>::is_integer)
 #endif
@@ -405,7 +399,7 @@ struct is_integer_for_rounding
 // Much more information in this message thread: https://groups.google.com/forum/#!topic/boost-list/ZT99wtIFlb4
 //
 
-   #include <boost/detail/fenv.hpp>
+#include <cfenv>
 
 #  ifdef FE_ALL_EXCEPT
 
@@ -470,6 +464,14 @@ namespace boost{ namespace math{
 #else
 #  define BOOST_MATH_THREAD_LOCAL
 #endif
+//
+// Some mingw flavours have issues with thread_local and types with non-trivial destructors
+// See https://sourceforge.net/p/mingw-w64/bugs/527/
+//
+#if !defined(BOOST_NO_CXX11_THREAD_LOCAL) && (defined(__MINGW32__) || defined(__MINGW64__)) && !defined(_REENTRANT) && !defined(__clang__)
+#  define BOOST_MATH_NO_THREAD_LOCAL_WITH_NON_TRIVIAL_TYPES
+#endif
+
 
 //
 // Can we have constexpr tables?

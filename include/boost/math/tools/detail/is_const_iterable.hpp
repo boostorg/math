@@ -30,7 +30,7 @@ namespace boost {
 
             template <class T>
             struct is_const_iterable
-               : public boost::integral_constant<bool,
+               : public std::integral_constant<bool,
                boost::is_detected<begin_t, T>::value
                && boost::is_detected<end_t, T>::value
                && boost::is_detected<const_iterator_t, T>::value

@@ -22,8 +22,6 @@
   #include <boost/math/special_functions/sin_pi.hpp>
   #include <boost/math/special_functions/cos_pi.hpp>
   #include <boost/math/special_functions/pow.hpp>
-  #include <boost/mpl/if.hpp>
-  #include <boost/mpl/int.hpp>
   #include <boost/static_assert.hpp>
   #include <boost/type_traits/is_convertible.hpp>
 

@@ -15,10 +15,10 @@
    T function_ratio_from_forwards_recurrence(const Recurrence& r, const T& factor, boost::uintmax_t& max_iter);
 
    template <class NextCoefs, class T>
-   T apply_recurrence_relation_forward(const NextCoefs& get_coefs, unsigned number_of_steps, T first, T second, int* log_scaling = 0, T* previous = 0);
+   T apply_recurrence_relation_forward(const NextCoefs& get_coefs, unsigned number_of_steps, T first, T second, long long* log_scaling = 0, T* previous = 0);
 
    template <class T, class NextCoefs>
-   T apply_recurrence_relation_backward(const NextCoefs& get_coefs, unsigned number_of_steps, T first, T second, int* log_scaling = 0, T* previous = 0);
+   T apply_recurrence_relation_backward(const NextCoefs& get_coefs, unsigned number_of_steps, T first, T second, long long* log_scaling = 0, T* previous = 0);
 
    template <class Recurrence>
    struct forward_recurrence_iterator;
@@ -96,7 +96,7 @@ the recurrence relation, and should be no smaller than machine epsilon.  Argumen
 the maximum number of permitted iterations in the associated continued fraction.
 
    template <class NextCoefs, class T>
-   T apply_recurrence_relation_forward(const NextCoefs& get_coefs, unsigned number_of_steps, T first, T second, int* log_scaling = 0, T* previous = 0);
+   T apply_recurrence_relation_forward(const NextCoefs& get_coefs, unsigned number_of_steps, T first, T second, long long* log_scaling = 0, T* previous = 0);
 
 Applies a recurrence relation in a stable forward direction, starting with the values F[sub n-1] and F[sub n].
 
@@ -113,7 +113,7 @@ Applies a recurrence relation in a stable forward direction, starting with the v
 Returns F[sub n + number_of_steps].
 
    template <class NextCoefs, class T>
-   T apply_recurrence_relation_backward(const NextCoefs& get_coefs, unsigned number_of_steps, T first, T second, int* log_scaling = 0, T* previous = 0);
+   T apply_recurrence_relation_backward(const NextCoefs& get_coefs, unsigned number_of_steps, T first, T second, long long* log_scaling = 0, T* previous = 0);
 
 Applies a recurrence relation in a stable backward direction, starting with the values F[sub n+1] and F[sub n].
 

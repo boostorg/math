@@ -12,6 +12,7 @@
 
 #include <utility>
 #include <vector>
+#include <type_traits>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/factorials.hpp>
 #include <boost/math/tools/roots.hpp>
@@ -217,7 +218,7 @@ std::vector<T> legendre_p_zeros_imp(int n, const Policy& pol)
 } // namespace detail
 
 template <class T, class Policy>
-inline typename boost::enable_if_c<policies::is_policy<Policy>::value, typename tools::promote_args<T>::type>::type
+inline typename std::enable_if<policies::is_policy<Policy>::value, typename tools::promote_args<T>::type>::type
    legendre_p(int l, T x, const Policy& pol)
 {
    typedef typename tools::promote_args<T>::type result_type;
@@ -230,7 +231,7 @@ inline typename boost::enable_if_c<policies::is_policy<Policy>::value, typename 
 
 
 template <class T, class Policy>
-inline typename boost::enable_if_c<policies::is_policy<Policy>::value, typename tools::promote_args<T>::type>::type
+inline typename std::enable_if<policies::is_policy<Policy>::value, typename tools::promote_args<T>::type>::type
    legendre_p_prime(int l, T x, const Policy& pol)
 {
    typedef typename tools::promote_args<T>::type result_type;
@@ -272,7 +273,7 @@ inline std::vector<T> legendre_p_zeros(int l)
 }
 
 template <class T, class Policy>
-inline typename boost::enable_if_c<policies::is_policy<Policy>::value, typename tools::promote_args<T>::type>::type
+inline typename std::enable_if<policies::is_policy<Policy>::value, typename tools::promote_args<T>::type>::type
    legendre_q(unsigned l, T x, const Policy& pol)
 {
    typedef typename tools::promote_args<T>::type result_type;
@@ -301,6 +302,7 @@ namespace detail{
 template <class T, class Policy>
 T legendre_p_imp(int l, int m, T x, T sin_theta_power, const Policy& pol)
 {
+   BOOST_MATH_STD_USING
    // Error handling:
    if((x < -1) || (x > 1))
       return policies::raise_domain_error<T>(
@@ -310,6 +312,18 @@ T legendre_p_imp(int l, int m, T x, T sin_theta_power, const Policy& pol)
    // Handle negative arguments first:
    if(l < 0)
       return legendre_p_imp(-l-1, m, x, sin_theta_power, pol);
+   if ((l == 0) && (m == -1))
+   {
+      return sqrt((1 - x) / (1 + x));
+   }
+   if ((l == 1) && (m == 0))
+   {
+      return x;
+   }
+   if (-m == l)
+   {
+      return pow((1 - x * x) / 4, T(l) / 2) / boost::math::tgamma(l + 1, pol);
+   }
    if(m < 0)
    {
       int sign = (m&1) ? -1 : 1;

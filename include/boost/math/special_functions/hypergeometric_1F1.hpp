@@ -50,7 +50,7 @@ namespace boost { namespace math { namespace detail {
    }
 
    template <class T, class Policy>
-   T hypergeometric_1F1_divergent_fallback(const T& a, const T& b, const T& z, const Policy& pol, int& log_scaling)
+   T hypergeometric_1F1_divergent_fallback(const T& a, const T& b, const T& z, const Policy& pol, long long& log_scaling)
    {
       BOOST_MATH_STD_USING
       const char* function = "hypergeometric_1F1_divergent_fallback<%1%>(%1%,%1%,%1%)";
@@ -303,7 +303,7 @@ namespace boost { namespace math { namespace detail {
 
       
    template <class T, class Policy>
-   T hypergeometric_1F1_imp(const T& a, const T& b, const T& z, const Policy& pol, int& log_scaling)
+   T hypergeometric_1F1_imp(const T& a, const T& b, const T& z, const Policy& pol, long long& log_scaling)
    {
       BOOST_MATH_STD_USING // exp, fabs, sqrt
 
@@ -329,7 +329,7 @@ namespace boost { namespace math { namespace detail {
       // 0f0 a == b case;
       if (b_minus_a == 0)
       {
-         int scale = itrunc(z, pol);
+         long long scale = lltrunc(z, pol);
          log_scaling += scale;
          return exp(z - scale);
       }
@@ -358,7 +358,7 @@ namespace boost { namespace math { namespace detail {
             // a is tiny compared to b, and z < 0
             // 13.3.6 appears to be the most efficient and often the most accurate method.
             T r = boost::math::detail::hypergeometric_1F1_AS_13_3_6(b_minus_a, b, T(-z), a, pol, log_scaling);
-            int scale = itrunc(z, pol);
+            long long scale = lltrunc(z, pol);
             log_scaling += scale;
             return r * exp(z - scale);
          }
@@ -371,7 +371,7 @@ namespace boost { namespace math { namespace detail {
             {
                // Fractional parts of a and b are genuinely equal, we might as well
                // apply Kummer's relation and get a truncated series:
-               int scaling = itrunc(z);
+               long long scaling = lltrunc(z);
                T r = exp(z - scaling) * detail::hypergeometric_1F1_imp<T>(b_minus_a, b, -z, pol, log_scaling);
                log_scaling += scaling;
                return r;
@@ -389,7 +389,7 @@ namespace boost { namespace math { namespace detail {
             // We've got nothing left but 13.3.6, even though it may be initially divergent:
             //
             T r = boost::math::detail::hypergeometric_1F1_AS_13_3_6(b_minus_a, b, T(-z), a, pol, log_scaling);
-            int scale = itrunc(z, pol);
+            long long scale = lltrunc(z, pol);
             log_scaling += scale;
             return r * exp(z - scale);
          }
@@ -401,7 +401,7 @@ namespace boost { namespace math { namespace detail {
       //
       if (detail::hypergeometric_1F1_asym_region(a, b, z, pol))
       {
-         int saved_scale = log_scaling;
+         long long saved_scale = log_scaling;
          try
          {
             return hypergeometric_1F1_asym_large_z_series(a, b, z, pol, log_scaling);
@@ -444,7 +444,7 @@ namespace boost { namespace math { namespace detail {
          // Let's otherwise make z positive (almost always)
          // by Kummer's transformation
          // (we also don't transform if z belongs to [-1,0])
-         int scaling = itrunc(z);
+         long long scaling = lltrunc(z);
          T r = exp(z - scaling) * detail::hypergeometric_1F1_imp<T>(b_minus_a, b, -z, pol, log_scaling);
          log_scaling += scaling;
          return r;
@@ -564,7 +564,7 @@ namespace boost { namespace math { namespace detail {
          //
          if (is_convergent_negative_z_series(b_minus_a, b, T(-z), b_minus_a))
          {
-            int scaling = itrunc(z);
+            long long scaling = lltrunc(z);
             T r = exp(z - scaling) * detail::hypergeometric_1F1_checked_series_impl(b_minus_a, b, T(-z), pol, log_scaling);
             log_scaling += scaling;
             return r;
@@ -585,17 +585,17 @@ namespace boost { namespace math { namespace detail {
    inline T hypergeometric_1F1_imp(const T& a, const T& b, const T& z, const Policy& pol)
    {
       BOOST_MATH_STD_USING // exp, fabs, sqrt
-      int log_scaling = 0;
+      long long log_scaling = 0;
       T result = hypergeometric_1F1_imp(a, b, z, pol, log_scaling);
       //
       // Actual result will be result * e^log_scaling.
       //
 #ifndef BOOST_NO_CXX11_THREAD_LOCAL
-    static const thread_local int max_scaling = itrunc(boost::math::tools::log_max_value<T>()) - 2;
+    static const thread_local long long max_scaling = lltrunc(boost::math::tools::log_max_value<T>()) - 2;
     static const thread_local T max_scale_factor = exp(T(max_scaling));
 #else
-    int max_scaling = itrunc(boost::math::tools::log_max_value<T>()) - 2;
-      T max_scale_factor = exp(T(max_scaling));
+    long long max_scaling = lltrunc(boost::math::tools::log_max_value<T>()) - 2;
+    T max_scale_factor = exp(T(max_scaling));
 #endif
 
       while (log_scaling > max_scaling)
@@ -617,7 +617,7 @@ namespace boost { namespace math { namespace detail {
    inline T log_hypergeometric_1F1_imp(const T& a, const T& b, const T& z, int* sign, const Policy& pol)
    {
       BOOST_MATH_STD_USING // exp, fabs, sqrt
-      int log_scaling = 0;
+      long long log_scaling = 0;
       T result = hypergeometric_1F1_imp(a, b, z, pol, log_scaling);
       if (sign)
       *sign = result < 0 ? -1 : 1;
@@ -629,7 +629,7 @@ namespace boost { namespace math { namespace detail {
    inline T hypergeometric_1F1_regularized_imp(const T& a, const T& b, const T& z, const Policy& pol)
    {
       BOOST_MATH_STD_USING // exp, fabs, sqrt
-      int log_scaling = 0;
+      long long log_scaling = 0;
       T result = hypergeometric_1F1_imp(a, b, z, pol, log_scaling);
       //
       // Actual result will be result * e^log_scaling / tgamma(b).

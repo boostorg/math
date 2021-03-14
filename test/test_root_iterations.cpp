@@ -3,9 +3,7 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include <pch.hpp>
-
-#ifndef BOOST_NO_CXX11_HDR_TUPLE
+#include "pch.hpp"
 
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
@@ -301,7 +299,11 @@ BOOST_AUTO_TEST_CASE( test_main )
          result = ibeta_small_data[i][2];
          dr = boost::math::tools::halley_iterate(ibeta_roots_3<double, boost::math::policies::policy<> >(ibeta_small_data[i][0], ibeta_small_data[i][1], ibeta_small_data[i][5]), 0.5, 0.0, 1.0, 53, iters);
          BOOST_CHECK_CLOSE_FRACTION(dr, result, std::numeric_limits<double>::epsilon() * 200);
+#ifdef __PPC__
+         BOOST_CHECK_LE(iters, 55);
+#else
          BOOST_CHECK_LE(iters, 40);
+#endif
       }
       else if (1 == ibeta_small_data[i][5])
       {
@@ -318,8 +320,3 @@ BOOST_AUTO_TEST_CASE( test_main )
 
 }
 
-#else
-
-int main() { return 0; }
-
-#endif

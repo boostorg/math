@@ -410,6 +410,8 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(powm1_hpp, T, all_float_types) {
   }
 }
 
+#if __clang_major__ > 5 || __GNUC__ > 5 || defined(_MSC_VER)
+
 BOOST_AUTO_TEST_CASE_TEMPLATE(sin_pi_hpp, T, all_float_types) {
   using test_constants = test_constants_t<T>;
   static constexpr auto m = test_constants::order;
@@ -503,5 +505,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(trigamma_hpp, T, all_float_types) {
                    boost::math::trigamma(x)));
   }
 }
+
+#endif // Compiler guard
 
 BOOST_AUTO_TEST_SUITE_END()

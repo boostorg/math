@@ -40,7 +40,7 @@ class tanh_sinh_detail
 public:
     tanh_sinh_detail(size_t max_refinements, const Real& min_complement) : m_max_refinements(max_refinements)
     {
-       typedef boost::integral_constant<int, initializer_selector> tag_type;
+       typedef std::integral_constant<int, initializer_selector> tag_type;
        init(min_complement, tag_type());
     }
 
@@ -88,12 +88,12 @@ private:
       return m_first_complements[n];
    }
 
-   void init(const Real& min_complement, const boost::integral_constant<int, 0>&);
-   void init(const Real& min_complement, const boost::integral_constant<int, 1>&);
-   void init(const Real& min_complement, const boost::integral_constant<int, 2>&);
-   void init(const Real& min_complement, const boost::integral_constant<int, 3>&);
+   void init(const Real& min_complement, const std::integral_constant<int, 0>&);
+   void init(const Real& min_complement, const std::integral_constant<int, 1>&);
+   void init(const Real& min_complement, const std::integral_constant<int, 2>&);
+   void init(const Real& min_complement, const std::integral_constant<int, 3>&);
 #ifdef BOOST_HAS_FLOAT128
-   void init(const Real& min_complement, const boost::integral_constant<int, 4>&);
+   void init(const Real& min_complement, const std::integral_constant<int, 4>&);
 #endif
    void prune_to_min_complement(const Real& m);
    void extend_refinements()const
@@ -161,8 +161,8 @@ private:
    {
       using std::log;
       using std::sqrt;
-      Real l = (log(2-x) - log(x))/2;
-      return log((sqrt(4 * l * l + constants::pi<Real>() * constants::pi<Real>()) + 2 * l) / constants::pi<Real>());
+      Real l = log(2-x) - log(x);
+      return log((sqrt(l * l + constants::pi<Real>() * constants::pi<Real>()) + l) / constants::pi<Real>());
    };
 
 
@@ -399,7 +399,7 @@ decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) tanh_sin
 }
 
 template<class Real, class Policy>
-void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const boost::integral_constant<int, 0>&)
+void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const std::integral_constant<int, 0>&)
 {
    using std::tanh;
    using std::sinh;
@@ -480,7 +480,7 @@ void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const boos
 #endif
 
 template<class Real, class Policy>
-void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const boost::integral_constant<int, 1>&)
+void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const std::integral_constant<int, 1>&)
 {
    m_inital_row_length = 4;
    m_abscissas.reserve(m_max_refinements + 1);
@@ -533,7 +533,7 @@ void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const boos
 }
 
 template<class Real, class Policy>
-void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const boost::integral_constant<int, 2>&)
+void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const std::integral_constant<int, 2>&)
 {
    m_inital_row_length = 5;
    m_abscissas.reserve(m_max_refinements + 1);
@@ -585,7 +585,7 @@ void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const boos
 }
 
 template<class Real, class Policy>
-void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const boost::integral_constant<int, 3>&)
+void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const std::integral_constant<int, 3>&)
 {
    m_inital_row_length = 9;
    m_abscissas.reserve(m_max_refinements + 1);
@@ -639,7 +639,7 @@ void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const boos
 #ifdef BOOST_HAS_FLOAT128
 
 template<class Real, class Policy>
-void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const boost::integral_constant<int, 4>&)
+void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const std::integral_constant<int, 4>&)
 {
    m_inital_row_length = 9;
    m_abscissas.reserve(m_max_refinements + 1);

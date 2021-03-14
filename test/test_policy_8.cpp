@@ -7,19 +7,19 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/math/policies/policy.hpp>
-#include <boost/type_traits/is_same.hpp>
 #include <boost/test/unit_test.hpp> // for test_main
 #include <iostream>
+#include <type_traits>
 
 template <class P1, class P2>
 bool check_same(const P1&, const P2&)
 {
-   if(!boost::is_same<P1, P2>::value)
+   if(!std::is_same<P1, P2>::value)
    {
       std::cout << "P1 = " << typeid(P1).name() << std::endl;
       std::cout << "P2 = " << typeid(P2).name() << std::endl;
    }
-   return boost::is_same<P1, P2>::value;
+   return std::is_same<P1, P2>::value;
 }
 
 

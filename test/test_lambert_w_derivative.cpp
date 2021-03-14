@@ -9,6 +9,17 @@
 // test_lambert_w.cpp
 //! \brief Basic sanity tests for Lambert W derivative.
 
+#include <climits>
+#include <cfloat>
+#if defined(BOOST_MATH_TEST_FLOAT128) && (LDBL_MANT_DIG > 100)
+//
+// Mixing __float128 and long double results in:
+// error: __float128 and long double cannot be used in the same expression
+// whenever long double is a [possibly quasi-] quad precision type.
+// 
+#undef BOOST_MATH_TEST_FLOAT128
+#endif
+
 #ifdef BOOST_MATH_TEST_FLOAT128
 #include <boost/cstdfloat.hpp> // For float_64_t, float128_t. Must be first include!
 #endif // #ifdef #ifdef BOOST_MATH_TEST_FLOAT128

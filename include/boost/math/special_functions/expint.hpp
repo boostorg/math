@@ -41,7 +41,7 @@ inline typename tools::promote_args<T>::type
 namespace detail{
 
 template <class T>
-inline T expint_1_rational(const T& z, const boost::integral_constant<int, 0>&)
+inline T expint_1_rational(const T& z, const std::integral_constant<int, 0>&)
 {
    // this function is never actually called
    BOOST_ASSERT(0);
@@ -49,7 +49,7 @@ inline T expint_1_rational(const T& z, const boost::integral_constant<int, 0>&)
 }
 
 template <class T>
-T expint_1_rational(const T& z, const boost::integral_constant<int, 53>&)
+T expint_1_rational(const T& z, const std::integral_constant<int, 53>&)
 {
    BOOST_MATH_STD_USING
    T result;
@@ -123,7 +123,7 @@ T expint_1_rational(const T& z, const boost::integral_constant<int, 53>&)
 }
 
 template <class T>
-T expint_1_rational(const T& z, const boost::integral_constant<int, 64>&)
+T expint_1_rational(const T& z, const std::integral_constant<int, 64>&)
 {
    BOOST_MATH_STD_USING
    T result;
@@ -204,7 +204,7 @@ T expint_1_rational(const T& z, const boost::integral_constant<int, 64>&)
 }
 
 template <class T>
-T expint_1_rational(const T& z, const boost::integral_constant<int, 113>&)
+T expint_1_rational(const T& z, const std::integral_constant<int, 113>&)
 {
    BOOST_MATH_STD_USING
    T result;
@@ -525,7 +525,7 @@ T expint_i_imp(T z, const Policy& pol, const Tag& tag)
 }
 
 template <class T, class Policy>
-T expint_i_imp(T z, const Policy& pol, const boost::integral_constant<int, 53>& tag)
+T expint_i_imp(T z, const Policy& pol, const std::integral_constant<int, 53>& tag)
 {
    BOOST_MATH_STD_USING
    static const char* function = "boost::math::expint<%1%>(%1%)";
@@ -739,7 +739,7 @@ T expint_i_imp(T z, const Policy& pol, const boost::integral_constant<int, 53>& 
 }
 
 template <class T, class Policy>
-T expint_i_imp(T z, const Policy& pol, const boost::integral_constant<int, 64>& tag)
+T expint_i_imp(T z, const Policy& pol, const std::integral_constant<int, 64>& tag)
 {
    BOOST_MATH_STD_USING
    static const char* function = "boost::math::expint<%1%>(%1%)";
@@ -1383,7 +1383,7 @@ void expint_i_113h(T& result, const T& z)
 }
 
 template <class T, class Policy>
-T expint_i_imp(T z, const Policy& pol, const boost::integral_constant<int, 113>& tag)
+T expint_i_imp(T z, const Policy& pol, const std::integral_constant<int, 113>& tag)
 {
    BOOST_MATH_STD_USING
    static const char* function = "boost::math::expint<%1%>(%1%)";
@@ -1495,8 +1495,8 @@ struct expint_i_initializer
       {
          do_init(tag());
       }
-      static void do_init(const boost::integral_constant<int, 0>&){}
-      static void do_init(const boost::integral_constant<int, 53>&)
+      static void do_init(const std::integral_constant<int, 0>&){}
+      static void do_init(const std::integral_constant<int, 53>&)
       {
          boost::math::expint(T(5), Policy());
          boost::math::expint(T(7), Policy());
@@ -1504,7 +1504,7 @@ struct expint_i_initializer
          boost::math::expint(T(38), Policy());
          boost::math::expint(T(45), Policy());
       }
-      static void do_init(const boost::integral_constant<int, 64>&)
+      static void do_init(const std::integral_constant<int, 64>&)
       {
          boost::math::expint(T(5), Policy());
          boost::math::expint(T(7), Policy());
@@ -1512,7 +1512,7 @@ struct expint_i_initializer
          boost::math::expint(T(38), Policy());
          boost::math::expint(T(45), Policy());
       }
-      static void do_init(const boost::integral_constant<int, 113>&)
+      static void do_init(const std::integral_constant<int, 113>&)
       {
          boost::math::expint(T(5), Policy());
          boost::math::expint(T(7), Policy());
@@ -1545,18 +1545,18 @@ struct expint_1_initializer
       {
          do_init(tag());
       }
-      static void do_init(const boost::integral_constant<int, 0>&){}
-      static void do_init(const boost::integral_constant<int, 53>&)
+      static void do_init(const std::integral_constant<int, 0>&){}
+      static void do_init(const std::integral_constant<int, 53>&)
       {
          boost::math::expint(1, T(0.5), Policy());
          boost::math::expint(1, T(2), Policy());
       }
-      static void do_init(const boost::integral_constant<int, 64>&)
+      static void do_init(const std::integral_constant<int, 64>&)
       {
          boost::math::expint(1, T(0.5), Policy());
          boost::math::expint(1, T(2), Policy());
       }
-      static void do_init(const boost::integral_constant<int, 113>&)
+      static void do_init(const std::integral_constant<int, 113>&)
       {
          boost::math::expint(1, T(0.5), Policy());
          boost::math::expint(1, T(2), Policy());
@@ -1576,7 +1576,7 @@ const typename expint_1_initializer<T, Policy, tag>::init expint_1_initializer<T
 
 template <class T, class Policy>
 inline typename tools::promote_args<T>::type
-   expint_forwarder(T z, const Policy& /*pol*/, boost::true_type const&)
+   expint_forwarder(T z, const Policy& /*pol*/, std::true_type const&)
 {
    typedef typename tools::promote_args<T>::type result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
@@ -1587,7 +1587,7 @@ inline typename tools::promote_args<T>::type
       policies::promote_double<false>, 
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
-   typedef boost::integral_constant<int,
+   typedef std::integral_constant<int,
       precision_type::value <= 0 ? 0 :
       precision_type::value <= 53 ? 53 :
       precision_type::value <= 64 ? 64 :
@@ -1604,7 +1604,7 @@ inline typename tools::promote_args<T>::type
 
 template <class T>
 inline typename tools::promote_args<T>::type
-expint_forwarder(unsigned n, T z, const boost::false_type&)
+expint_forwarder(unsigned n, T z, const std::false_type&)
 {
    return boost::math::expint(n, z, policies::policy<>());
 }
@@ -1624,7 +1624,7 @@ inline typename tools::promote_args<T>::type
       policies::promote_double<false>, 
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
-   typedef boost::integral_constant<int,
+   typedef std::integral_constant<int,
       precision_type::value <= 0 ? 0 :
       precision_type::value <= 53 ? 53 :
       precision_type::value <= 64 ? 64 :

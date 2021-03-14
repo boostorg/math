@@ -19,36 +19,38 @@
 #include "math_unit_test.hpp"
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
 #include <boost/math/constants/constants.hpp>
-#include <boost/utility/enable_if.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #ifdef BOOST_MATH_HAS_FLOAT128
 #include <boost/multiprecision/float128.hpp>
 #endif
+#include <type_traits>
+#include <limits>
+#include <cmath>
 
 #if __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1900)
 #include <boost/math/tools/agm.hpp>
 // Check at compile time that the construction method for constants of type float, is "construct from a float", or "construct from a double", ...
-static_assert((boost::is_same<boost::math::constants::construction_traits<float, boost::math::policies::policy<> >::type, boost::integral_constant<int, boost::math::constants::construct_from_float> >::value), "Need to be able to construct from float");
-static_assert((boost::is_same<boost::math::constants::construction_traits<double, boost::math::policies::policy<> >::type, boost::integral_constant<int, boost::math::constants::construct_from_double> >::value), "Need to be able to construct from double");
-static_assert((boost::is_same<boost::math::constants::construction_traits<long double, boost::math::policies::policy<> >::type, boost::integral_constant<int, (sizeof(double) == sizeof(long double) ? boost::math::constants::construct_from_double : boost::math::constants::construct_from_long_double)> >::value), "Need to be able to construct from long double");
-static_assert((boost::is_same<boost::math::constants::construction_traits<boost::math::concepts::real_concept, boost::math::policies::policy<> >::type, boost::integral_constant<int, 0> >::value), "Need to be able to construct from real_concept");
+static_assert((std::is_same<boost::math::constants::construction_traits<float, boost::math::policies::policy<>>::type, std::integral_constant<int, boost::math::constants::construct_from_float>>::value), "Need to be able to construct from float");
+static_assert((std::is_same<boost::math::constants::construction_traits<double, boost::math::policies::policy<>>::type, std::integral_constant<int, boost::math::constants::construct_from_double>>::value), "Need to be able to construct from double");
+static_assert((std::is_same<boost::math::constants::construction_traits<long double, boost::math::policies::policy<>>::type, std::integral_constant<int, (sizeof(double) == sizeof(long double) ? boost::math::constants::construct_from_double : boost::math::constants::construct_from_long_double)>>::value), "Need to be able to construct from long double");
+static_assert((std::is_same<boost::math::constants::construction_traits<boost::math::concepts::real_concept, boost::math::policies::policy<>>::type, std::integral_constant<int, 0>>::value), "Need to be able to construct from real_concept");
 
 // Policy to set precision at maximum possible using long double.
-typedef boost::math::policies::policy<boost::math::policies::digits2<std::numeric_limits<long double>::digits> > real_concept_policy_1;
+using real_concept_policy_1 = boost::math::policies::policy<boost::math::policies::digits2<std::numeric_limits<long double>::digits>>;
 // Policy with precision +2 (could be any reasonable value),
 // forces the precision of the policy to be greater than
 // that of a long double, and therefore triggers different code (construct from string).
 #ifdef BOOST_MATH_USE_FLOAT128
-typedef boost::math::policies::policy<boost::math::policies::digits2<115> > real_concept_policy_2;
+using real_concept_policy_2 = boost::math::policies::policy<boost::math::policies::digits2<115>>;
 #else
-typedef boost::math::policies::policy<boost::math::policies::digits2<std::numeric_limits<long double>::digits + 2> > real_concept_policy_2;
+using real_concept_policy_2 = boost::math::policies::policy<boost::math::policies::digits2<std::numeric_limits<long double>::digits + 2>>;
 #endif
 // Policy with precision greater than the string representations, forces computation of values (i.e. different code path):
-typedef boost::math::policies::policy<boost::math::policies::digits2<400> > real_concept_policy_3;
+using real_concept_policy_3 = boost::math::policies::policy<boost::math::policies::digits2<400>>;
 
-static_assert((boost::is_same<boost::math::constants::construction_traits<boost::math::concepts::real_concept, real_concept_policy_1 >::type, boost::integral_constant<int, (sizeof(double) == sizeof(long double) ? boost::math::constants::construct_from_double : boost::math::constants::construct_from_long_double) > >::value), "Need to be able to construct from long double");
-static_assert((boost::is_same<boost::math::constants::construction_traits<boost::math::concepts::real_concept, real_concept_policy_2 >::type, boost::integral_constant<int, boost::math::constants::construct_from_string> >::value), "Need to be able to construct integer from string");
-static_assert((boost::math::constants::construction_traits<boost::math::concepts::real_concept, real_concept_policy_3>::type::value >= 5), "Nee 5 digits");
+static_assert((std::is_same<boost::math::constants::construction_traits<boost::math::concepts::real_concept, real_concept_policy_1 >::type, std::integral_constant<int, (sizeof(double) == sizeof(long double) ? boost::math::constants::construct_from_double : boost::math::constants::construct_from_long_double) >>::value), "Need to be able to construct from long double");
+static_assert((std::is_same<boost::math::constants::construction_traits<boost::math::concepts::real_concept, real_concept_policy_2 >::type, std::integral_constant<int, boost::math::constants::construct_from_string>>::value), "Need to be able to construct integer from string");
+static_assert((boost::math::constants::construction_traits<boost::math::concepts::real_concept, real_concept_policy_3>::type::value >= 5), "Need 5 digits");
 #endif // C++11
 
 // We need to declare a conceptual type whose precision is unknown at
@@ -61,8 +63,8 @@ class big_real_concept : public real_concept
 {
 public:
    big_real_concept() {}
-   template <class T>
-   big_real_concept(const T& t, typename enable_if<is_convertible<T, real_concept> >::type* = 0) : real_concept(t) {}
+   template <typename T>
+   big_real_concept(const T& t, typename enable_if<is_convertible<T, real_concept>>::type* = 0) : real_concept(t) {}
 };
 
 inline int itrunc(const big_real_concept& val)
@@ -82,7 +84,7 @@ inline BOOST_MATH_CONSTEXPR int digits<concepts::big_real_concept>(BOOST_MATH_EX
 
 }}}
 
-template <class RealType>
+template <typename RealType>
 void test_spots(RealType)
 {
    // Basic sanity checks for constants,
@@ -92,7 +94,7 @@ void test_spots(RealType)
    // Parameter RealType is only used to communicate the RealType,
    // and is an arbitrary zero for all tests.
 
-   //typedef typename boost::math::constants::construction_traits<RealType, boost::math::policies::policy<> >::type construction_type;
+   //typedef typename boost::math::constants::construction_traits<RealType, boost::math::policies::policy<>>::type construction_type;
    using namespace boost::math::constants;
    BOOST_MATH_STD_USING
 
@@ -224,7 +226,7 @@ void test_spots(RealType)
       CHECK_ULP_CLOSE(static_cast<RealType>(4. - 3.14159265358979323846264338327950288419716939937510L), four_minus_pi<RealType>(), 2);
       CHECK_ULP_CLOSE(static_cast<RealType>(0.14159265358979323846264338327950288419716939937510L), pi_minus_three<RealType>(), 2);
    }
-} // template <class RealType>void test_spots(RealType)
+} // template <typename RealType>void test_spots(RealType)
 
 void test_float_spots()
 {
@@ -342,7 +344,7 @@ void test_float_spots()
    CHECK_ULP_CLOSE(2.68545200106530644530971483548179569382038229399446295305115234555721885953715200280114117493184769799515F, khinchin, 4 ); // A002210 as a constant https://oeis.org/A002210/constant
    CHECK_ULP_CLOSE(1.2824271291006226368753425688697917277676889273250011F, glaisher, 4 ); // https://oeis.org/A074962/constant
    CHECK_ULP_CLOSE(4.66920160910299067185320382046620161725F, first_feigenbaum, 1);
-} // template <class RealType>void test_spots(RealType)
+} // template <typename RealType>void test_spots(RealType)
 
 void test_double_spots()
 {
@@ -460,7 +462,7 @@ void test_double_spots()
    CHECK_ULP_CLOSE(2.68545200106530644530971483548179569382038229399446295305115234555721885953715200280114117493184769799515, khinchin, 4 ); // A002210 as a constant https://oeis.org/A002210/constant
    CHECK_ULP_CLOSE(1.2824271291006226368753425688697917277676889273250011, glaisher, 4 ); // https://oeis.org/A074962/constant
 
-} // template <class RealType>void test_spots(RealType)
+} // template <typename RealType>void test_spots(RealType)
 
 void test_long_double_spots()
 {
@@ -585,16 +587,16 @@ void test_long_double_spots()
    CHECK_ULP_CLOSE(2.68545200106530644530971483548179569382038229399446295305115234555721885953715200280114117493184769799515L, khinchin, 4 ); // A002210 as a constant https://oeis.org/A002210/constant
    CHECK_ULP_CLOSE(1.2824271291006226368753425688697917277676889273250011L, glaisher, 4 ); // https://oeis.org/A074962/constant
 
-} // template <class RealType>void test_spots(RealType)
+} // template <typename RealType>void test_spots(RealType)
 
-template <class Policy>
+template <typename Policy>
 void test_real_concept_policy(const Policy&)
 {
    // Basic sanity checks for constants using real_concept.
    // Parameter Policy is used to control precision.
 
    using boost::math::concepts::real_concept;
-   //typedef typename boost::math::policies::precision<boost::math::concepts::real_concept, boost::math::policies::policy<> >::type t1;
+   //typedef typename boost::math::policies::precision<boost::math::concepts::real_concept, boost::math::policies::policy<>>::type t1;
    // A precision of zero means we don't know what the precision of this type is until runtime.
    //std::cout << "Precision for type " << typeid(boost::math::concepts::real_concept).name()  << " is " << t1::value << "." << std::endl;
 
@@ -725,7 +727,7 @@ void test_real_concept_policy(const Policy&)
       CHECK_ULP_CLOSE((static_cast<real_concept>(0.14159265358979323846264338327950288419716939937510L)), (pi_minus_three<real_concept, Policy>)(), 2);
    }
 
-} // template <class boost::math::concepts::real_concept>void test_spots(boost::math::concepts::real_concept)
+} // template <typename boost::math::concepts::real_concept>void test_spots(boost::math::concepts::real_concept)
 
 #ifdef BOOST_MATH_HAS_FLOAT128
 void test_float128()
@@ -818,7 +820,7 @@ void test_laplace_limit()
    using boost::math::constants::laplace_limit;
    Real ll = laplace_limit<Real>();
    Real tmp = sqrt(1+ll*ll);
-   CHECK_ULP_CLOSE(ll*exp(tmp), 1 + tmp, 1);
+   CHECK_ULP_CLOSE(ll*exp(tmp), 1 + tmp, 2);
 }
 
 #endif

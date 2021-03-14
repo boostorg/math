@@ -125,6 +125,7 @@ using get_type_at = typename type_at<RealType, Depth>::type;
 // https://www.boost.org/libs/math/doc/html/math_toolkit/real_concepts.html
 template <typename RealType, size_t Order>
 class fvar {
+ protected:
   std::array<RealType, Order + 1> v;
 
  public:
@@ -1406,14 +1407,23 @@ fvar<RealType, Order> exp(fvar<RealType, Order> const& cr) {
 template <typename RealType, size_t Order>
 fvar<RealType, Order> pow(fvar<RealType, Order> const& x,
                           typename fvar<RealType, Order>::root_type const& y) {
-  using std::pow;
+  BOOST_MATH_STD_USING
   using root_type = typename fvar<RealType, Order>::root_type;
   constexpr size_t order = fvar<RealType, Order>::order_sum;
   root_type const x0 = static_cast<root_type>(x);
   root_type derivatives[order + 1]{pow(x0, y)};
-  for (size_t i = 0; i < order && y - i != 0; ++i)
-    derivatives[i + 1] = (y - i) * derivatives[i] / x0;
-  return x.apply_derivatives(order, [&derivatives](size_t i) { return derivatives[i]; });
+  if (fabs(x0) < std::numeric_limits<root_type>::epsilon()) {
+    root_type coef = 1;
+    for (size_t i = 0; i < order && y - i != 0; ++i) {
+      coef *= y - i;
+      derivatives[i + 1] = coef * pow(x0, y - (i + 1));
+    }
+    return x.apply_derivatives_nonhorner(order, [&derivatives](size_t i) { return derivatives[i]; });
+  } else {
+    for (size_t i = 0; i < order && y - i != 0; ++i)
+      derivatives[i + 1] = (y - i) * derivatives[i] / x0;
+    return x.apply_derivatives(order, [&derivatives](size_t i) { return derivatives[i]; });
+  }
 }
 
 template <typename RealType, size_t Order>
