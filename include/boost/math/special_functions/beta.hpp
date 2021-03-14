@@ -549,7 +549,7 @@ T ibeta_series(T a, T b, T x, T s0, const Lanczos&, bool normalised, T* p_deriva
 
    T result;
 
-   BOOST_ASSERT((p_derivative == 0) || normalised);
+   BOOST_MATH_ASSERT((p_derivative == 0) || normalised);
 
    if(normalised)
    {
@@ -581,7 +581,7 @@ T ibeta_series(T a, T b, T x, T s0, const Lanczos&, bool normalised, T* p_deriva
          if(p_derivative)
          {
             *p_derivative = result * pow(y, b);
-            BOOST_ASSERT(*p_derivative >= 0);
+            BOOST_MATH_ASSERT(*p_derivative >= 0);
          }
       }
       else
@@ -617,7 +617,7 @@ T ibeta_series(T a, T b, T x, T s0, const boost::math::lanczos::undefined_lanczo
    BOOST_MATH_STD_USING
 
    T result;
-   BOOST_ASSERT((p_derivative == 0) || normalised);
+   BOOST_MATH_ASSERT((p_derivative == 0) || normalised);
 
    if(normalised)
    {
@@ -653,7 +653,7 @@ T ibeta_series(T a, T b, T x, T s0, const boost::math::lanczos::undefined_lanczo
       if(p_derivative)
       {
          *p_derivative = result * pow(y, b);
-         BOOST_ASSERT(*p_derivative >= 0);
+         BOOST_MATH_ASSERT(*p_derivative >= 0);
       }
    }
    else
@@ -711,7 +711,7 @@ inline T ibeta_fraction2(T a, T b, T x, T y, const Policy& pol, bool normalised,
    if(p_derivative)
    {
       *p_derivative = result;
-      BOOST_ASSERT(*p_derivative >= 0);
+      BOOST_MATH_ASSERT(*p_derivative >= 0);
    }
    if(result == 0)
       return result;
@@ -736,7 +736,7 @@ T ibeta_a_step(T a, T b, T x, T y, int k, const Policy& pol, bool normalised, T*
    if(p_derivative)
    {
       *p_derivative = prefix;
-      BOOST_ASSERT(*p_derivative >= 0);
+      BOOST_MATH_ASSERT(*p_derivative >= 0);
    }
    prefix /= a;
    if(prefix == 0)
@@ -1006,7 +1006,7 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
    T fract;
    T y = 1 - x;
 
-   BOOST_ASSERT((p_derivative == 0) || normalised);
+   BOOST_MATH_ASSERT((p_derivative == 0) || normalised);
 
    if(p_derivative)
       *p_derivative = -1; // value not set.

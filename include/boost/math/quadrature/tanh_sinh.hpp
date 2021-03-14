@@ -182,8 +182,8 @@ auto tanh_sinh<Real, Policy>::integrate(const F f, Real a, Real b, Real toleranc
           // factor to move left_min_complement and right_min_complement
           // further from the end points of the range.
           //
-          BOOST_ASSERT((left_min_complement * diff + a) > a);
-          BOOST_ASSERT((b - right_min_complement * diff) < b);
+          BOOST_MATH_ASSERT((left_min_complement * diff + a) > a);
+          BOOST_MATH_ASSERT((b - right_min_complement * diff) < b);
           auto u = [&](Real z, Real zc)->result_type
           { 
              Real position;
@@ -201,8 +201,8 @@ auto tanh_sinh<Real, Policy>::integrate(const F f, Real a, Real b, Real toleranc
              }
              else
                 position = avg + diff*z;
-             BOOST_ASSERT(position != a);
-             BOOST_ASSERT(position != b);
+             BOOST_MATH_ASSERT(position != a);
+             BOOST_MATH_ASSERT(position != b);
              return f(position);
           };
           result_type Q = diff*m_imp->integrate(u, error, L1, function, left_min_complement, right_min_complement, tolerance, levels);

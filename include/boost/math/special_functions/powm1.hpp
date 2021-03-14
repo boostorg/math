@@ -16,7 +16,7 @@
 #include <boost/math/special_functions/log1p.hpp>
 #include <boost/math/special_functions/expm1.hpp>
 #include <boost/math/special_functions/trunc.hpp>
-#include <boost/assert.hpp>
+#include <boost/math/tools/assert.hpp>
 
 namespace boost{ namespace math{ namespace detail{
 

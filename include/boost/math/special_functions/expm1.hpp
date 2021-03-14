@@ -23,7 +23,7 @@
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
 #  include <boost/static_assert.hpp>
 #else
-#  include <boost/assert.hpp>
+#  include <boost/math/tools/assert.hpp>
 #endif
 
 #if defined(__GNUC__) && defined(BOOST_MATH_USE_FLOAT128)

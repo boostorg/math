@@ -118,7 +118,7 @@ typename enable_if_c< std::numeric_limits<T>::is_integer, polynomial<T> >::type
 subresultant_gcd(polynomial<T> u, polynomial<T> v)
 {
     using std::swap;
-    BOOST_ASSERT(u || v);
+    BOOST_MATH_ASSERT(u || v);
 
     if (!u)
         return v;
@@ -135,7 +135,7 @@ subresultant_gcd(polynomial<T> u, polynomial<T> v)
     polynomial<T> r;
     while (true)
     {
-        BOOST_ASSERT(u.degree() >= v.degree());
+        BOOST_MATH_ASSERT(u.degree() >= v.degree());
         // Pseudo-division.
         r = u % v;
         if (!r)

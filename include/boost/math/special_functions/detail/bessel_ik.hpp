@@ -94,8 +94,8 @@ int temme_ik(T v, T x, T* K, T* K1, const Policy& pol)
 
     // |x| <= 2, Temme series converge rapidly
     // |x| > 2, the larger the |x|, the slower the convergence
-    BOOST_ASSERT(abs(x) <= 2);
-    BOOST_ASSERT(abs(v) <= 0.5f);
+    BOOST_MATH_ASSERT(abs(x) <= 2);
+    BOOST_MATH_ASSERT(abs(v) <= 0.5f);
 
     T gp = boost::math::tgamma1pm1(v, pol);
     T gm = boost::math::tgamma1pm1(-v, pol);
@@ -216,7 +216,7 @@ int CF2_ik(T v, T x, T* Kv, T* Kv1, const Policy& pol)
     // |x| >= |v|, CF2_ik converges rapidly
     // |x| -> 0, CF2_ik fails to converge
 
-    BOOST_ASSERT(abs(x) > 1);
+    BOOST_MATH_ASSERT(abs(x) > 1);
 
     // Steed's algorithm, see Thompson and Barnett,
     // Journal of Computational Physics, vol 64, 490 (1986)

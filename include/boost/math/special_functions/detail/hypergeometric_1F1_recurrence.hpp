@@ -351,7 +351,7 @@
      // to recurse on a and b together when we can.
      //
 
-     BOOST_ASSERT(a < -1); // Not tested nor taken for -1 < a < 0
+     BOOST_MATH_ASSERT(a < -1); // Not tested nor taken for -1 < a < 0
 
      int b_shift = itrunc(z - b) + 2;
 
@@ -395,9 +395,9 @@
         --leading_a_shift;
      }
 
-     BOOST_ASSERT(leading_a_shift > 1);
-     BOOST_ASSERT(a_b_shift + leading_a_shift + (a_b_shift == 0 ? 1 : 0) == a_shift);
-     BOOST_ASSERT(a_b_shift + trailing_b_shift == b_shift);
+     BOOST_MATH_ASSERT(leading_a_shift > 1);
+     BOOST_MATH_ASSERT(a_b_shift + leading_a_shift + (a_b_shift == 0 ? 1 : 0) == a_shift);
+     BOOST_MATH_ASSERT(a_b_shift + trailing_b_shift == b_shift);
 
      if ((trailing_b_shift == 0) && (fabs(b) < 0.5) && a_b_shift)
      {

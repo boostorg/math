@@ -11,7 +11,7 @@
 #endif
 
 #include <boost/limits.hpp>
-#include <boost/assert.hpp>
+#include <boost/math/tools/assert.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/math/policies/policy.hpp>
 #include <type_traits>
@@ -44,8 +44,8 @@ inline BOOST_MATH_CONSTEXPR int digits(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(T)
    BOOST_STATIC_ASSERT( ::std::numeric_limits<T>::is_specialized);
    BOOST_STATIC_ASSERT( ::std::numeric_limits<T>::radix == 2 || ::std::numeric_limits<T>::radix == 10);
 #else
-   BOOST_ASSERT(::std::numeric_limits<T>::is_specialized);
-   BOOST_ASSERT(::std::numeric_limits<T>::radix == 2 || ::std::numeric_limits<T>::radix == 10);
+   BOOST_MATH_ASSERT(::std::numeric_limits<T>::is_specialized);
+   BOOST_MATH_ASSERT(::std::numeric_limits<T>::radix == 2 || ::std::numeric_limits<T>::radix == 10);
 #endif
    return std::numeric_limits<T>::radix == 2 
       ? std::numeric_limits<T>::digits
@@ -58,7 +58,7 @@ inline BOOST_MATH_CONSTEXPR T max_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T))  B
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
    BOOST_STATIC_ASSERT( ::std::numeric_limits<T>::is_specialized);
 #else
-   BOOST_ASSERT(::std::numeric_limits<T>::is_specialized);
+   BOOST_MATH_ASSERT(::std::numeric_limits<T>::is_specialized);
 #endif
    return (std::numeric_limits<T>::max)();
 } // Also used as a finite 'infinite' value for - and +infinity, for example:
@@ -70,7 +70,7 @@ inline BOOST_MATH_CONSTEXPR T min_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T)) BO
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
    BOOST_STATIC_ASSERT( ::std::numeric_limits<T>::is_specialized);
 #else
-   BOOST_ASSERT(::std::numeric_limits<T>::is_specialized);
+   BOOST_MATH_ASSERT(::std::numeric_limits<T>::is_specialized);
 #endif
    return (std::numeric_limits<T>::min)();
 }
@@ -218,7 +218,7 @@ inline BOOST_MATH_CONSTEXPR T log_max_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T)
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
    return detail::log_max_value<T>(typename detail::log_limit_traits<T>::tag_type());
 #else
-   BOOST_ASSERT(::std::numeric_limits<T>::is_specialized);
+   BOOST_MATH_ASSERT(::std::numeric_limits<T>::is_specialized);
    BOOST_MATH_STD_USING
    static const T val = log((std::numeric_limits<T>::max)());
    return val;
@@ -231,7 +231,7 @@ inline BOOST_MATH_CONSTEXPR T log_min_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T)
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
    return detail::log_min_value<T>(typename detail::log_limit_traits<T>::tag_type());
 #else
-   BOOST_ASSERT(::std::numeric_limits<T>::is_specialized);
+   BOOST_MATH_ASSERT(::std::numeric_limits<T>::is_specialized);
    BOOST_MATH_STD_USING
    static const T val = log((std::numeric_limits<T>::min)());
    return val;

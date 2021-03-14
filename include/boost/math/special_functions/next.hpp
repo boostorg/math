@@ -502,8 +502,8 @@ T float_distance_imp(const T& a, const T& b, const std::true_type&, const Policy
    if(a < 0)
       return float_distance(static_cast<T>(-b), static_cast<T>(-a), pol);
 
-   BOOST_ASSERT(a >= 0);
-   BOOST_ASSERT(b >= a);
+   BOOST_MATH_ASSERT(a >= 0);
+   BOOST_MATH_ASSERT(b >= a);
 
    int expon;
    //
@@ -564,7 +564,7 @@ T float_distance_imp(const T& a, const T& b, const std::true_type&, const Policy
    //
    // Result must be an integer:
    //
-   BOOST_ASSERT(result == floor(result));
+   BOOST_MATH_ASSERT(result == floor(result));
    return result;
 } // float_distance_imp
 //
@@ -610,8 +610,8 @@ T float_distance_imp(const T& a, const T& b, const std::false_type&, const Polic
    if(a < 0)
       return float_distance(static_cast<T>(-b), static_cast<T>(-a), pol);
 
-   BOOST_ASSERT(a >= 0);
-   BOOST_ASSERT(b >= a);
+   BOOST_MATH_ASSERT(a >= 0);
+   BOOST_MATH_ASSERT(b >= a);
 
    boost::intmax_t expon;
    //
@@ -671,7 +671,7 @@ T float_distance_imp(const T& a, const T& b, const std::false_type&, const Polic
    //
    // Result must be an integer:
    //
-   BOOST_ASSERT(result == floor(result));
+   BOOST_MATH_ASSERT(result == floor(result));
    return result;
 } // float_distance_imp
 

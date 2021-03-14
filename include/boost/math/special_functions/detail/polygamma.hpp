@@ -435,8 +435,8 @@ namespace boost { namespace math { namespace detail{
            for(int column = 0; column <= max_columns; ++column)
            {
               int cos_order = 2 * column + offset;  // order of the cosine term in entry "column"
-              BOOST_ASSERT(column < (int)table[i].size());
-              BOOST_ASSERT((cos_order + 1) / 2 < (int)table[i + 1].size());
+              BOOST_MATH_ASSERT(column < (int)table[i].size());
+              BOOST_MATH_ASSERT((cos_order + 1) / 2 < (int)table[i + 1].size());
               table[i + 1][(cos_order + 1) / 2] += ((cos_order - sin_order) * table[i][column]) / (sin_order - 1);
               if(cos_order)
                 table[i + 1][(cos_order - 1) / 2] += (-cos_order * table[i][column]) / (sin_order - 1);

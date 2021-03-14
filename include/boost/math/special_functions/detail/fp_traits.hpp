@@ -23,7 +23,7 @@ With these techniques, the code could be simplified.
 #include <cstring>
 #include <limits>
 
-#include <boost/assert.hpp>
+#include <boost/math/tools/assert.hpp>
 #include <boost/cstdint.hpp>
 #include <boost/predef/other/endian.h>
 #include <boost/static_assert.hpp>

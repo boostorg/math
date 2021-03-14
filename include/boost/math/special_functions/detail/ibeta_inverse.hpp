@@ -119,9 +119,9 @@ T temme_method_1_ibeta_inverse(T a, T b, T z, const Policy& pol)
    else
       x = (1 + eta * sqrt((1 + c) / eta_2)) / 2;
 
-   BOOST_ASSERT(x >= 0);
-   BOOST_ASSERT(x <= 1);
-   BOOST_ASSERT(eta * (x - 0.5) >= 0);
+   BOOST_MATH_ASSERT(x >= 0);
+   BOOST_MATH_ASSERT(x <= 1);
+   BOOST_MATH_ASSERT(eta * (x - 0.5) >= 0);
 #ifdef BOOST_INSTRUMENT
    std::cout << "Estimating x with Temme method 1: " << x << std::endl;
 #endif
@@ -880,8 +880,8 @@ T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T* py)
    // We don't really want these asserts here, but they are useful for sanity
    // checking that we have the limits right, uncomment if you suspect bugs *only*.
    //
-   //BOOST_ASSERT(x != upper);
-   //BOOST_ASSERT((x != lower) || (x == boost::math::tools::min_value<T>()) || (x == boost::math::tools::epsilon<T>()));
+   //BOOST_MATH_ASSERT(x != upper);
+   //BOOST_MATH_ASSERT((x != lower) || (x == boost::math::tools::min_value<T>()) || (x == boost::math::tools::epsilon<T>()));
    //
    // Tidy up, if we "lower" was too high then zero is the best answer we have:
    //

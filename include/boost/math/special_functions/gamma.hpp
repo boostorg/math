@@ -34,7 +34,7 @@
 #include <boost/math/special_functions/bernoulli.hpp>
 #include <boost/math/special_functions/polygamma.hpp>
 #include <boost/type_traits/is_convertible.hpp>
-#include <boost/assert.hpp>
+#include <boost/math/tools/assert.hpp>
 
 #include <cmath>
 #include <algorithm>
@@ -97,7 +97,7 @@ T sinpx(T z)
    {
       dist = z - fl;
    }
-   BOOST_ASSERT(fl >= 0);
+   BOOST_MATH_ASSERT(fl >= 0);
    if(dist > 0.5)
       dist = 1 - dist;
    T result = sin(dist*boost::math::constants::pi<T>());
@@ -403,7 +403,7 @@ T scaled_tgamma_no_lanczos(const T& z, const Policy& pol, bool islog = false)
    // Requires that our argument is large enough for Sterling's approximation to hold.
    // Used internally when combining gamma's of similar magnitude without logarithms.
    //
-   BOOST_ASSERT(minimum_argument_for_bernoulli_recursion<T>() <= z);
+   BOOST_MATH_ASSERT(minimum_argument_for_bernoulli_recursion<T>() <= z);
 
    // Perform the Bernoulli series expansion of Stirling's approximation.
 
@@ -585,7 +585,7 @@ inline T log_gamma_near_1(const T& z, Policy const& pol)
    //
    BOOST_MATH_STD_USING // ADL of std names
 
-   BOOST_ASSERT(fabs(z) < 1);
+   BOOST_MATH_ASSERT(fabs(z) < 1);
 
    T result = -constants::euler<T>() * z;
 
@@ -1218,7 +1218,7 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert,
       return exp(result);
    }
 
-   BOOST_ASSERT((p_derivative == 0) || normalised);
+   BOOST_MATH_ASSERT((p_derivative == 0) || normalised);
 
    bool is_int, is_half_int;
    bool is_small_a = (a < 30) && (a <= x + 1) && (x < tools::log_max_value<T>());
