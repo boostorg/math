@@ -794,7 +794,7 @@ struct Pn_size
    static constexpr unsigned value =
       ::boost::math::max_factorial<T>::value >= 100 ? 50
    : ::boost::math::max_factorial<T>::value >= ::boost::math::max_factorial<double>::value ? 30
-   : ::boost::math::max_factorial<T>::value >= ::boost::math::max_factorial<float>::value ? 15 : 1);
+   : ::boost::math::max_factorial<T>::value >= ::boost::math::max_factorial<float>::value ? 15 : 1;
    static_assert(::boost::math::max_factorial<T>::value >= ::boost::math::max_factorial<float>::value, "Type does not provide for 35-50 digits of accuracy.");
 };
 template <>

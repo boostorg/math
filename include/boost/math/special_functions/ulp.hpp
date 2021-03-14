@@ -53,7 +53,7 @@ template <class T, class Policy>
 T ulp_imp(const T& val, const std::false_type&, const Policy& pol)
 {
    static_assert(std::numeric_limits<T>::is_specialized, "Type T must be specialized.");
-   static_assert(std::numeric_limits<T>::radix != 2, "Type T must be specialized.")
+   static_assert(std::numeric_limits<T>::radix != 2, "Type T must be specialized.");
    BOOST_MATH_STD_USING
    int expon;
    static const char* function = "ulp<%1%>(%1%)";

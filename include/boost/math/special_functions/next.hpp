@@ -155,7 +155,7 @@ template <class T>
 inline T calc_min_shifted(const std::false_type&)
 {
    static_assert(std::numeric_limits<T>::is_specialized, "Type T must be specialized.");
-   static_assert(std::numeric_limits<T>::radix != 2, "Type T must be specialized.")
+   static_assert(std::numeric_limits<T>::radix != 2, "Type T must be specialized.");
 
    return scalbn(tools::min_value<T>(), std::numeric_limits<T>::digits + 1);
 }
@@ -234,7 +234,7 @@ T float_next_imp(const T& val, const std::false_type&, const Policy& pol)
    typedef typename exponent_type<T>::type exponent_type;
 
    static_assert(std::numeric_limits<T>::is_specialized, "Type T must be specialized.");
-   static_assert(std::numeric_limits<T>::radix != 2, "Type T must be specialized.")
+   static_assert(std::numeric_limits<T>::radix != 2, "Type T must be specialized.");
 
    BOOST_MATH_STD_USING
    exponent_type expon;
@@ -369,7 +369,7 @@ T float_prior_imp(const T& val, const std::false_type&, const Policy& pol)
    typedef typename exponent_type<T>::type exponent_type;
 
    static_assert(std::numeric_limits<T>::is_specialized, "Type T must be specialized.");
-   static_assert(std::numeric_limits<T>::radix != 2, "Type T must be specialized.")
+   static_assert(std::numeric_limits<T>::radix != 2, "Type T must be specialized.");
 
    BOOST_MATH_STD_USING
    exponent_type expon;
@@ -574,7 +574,7 @@ template <class T, class Policy>
 T float_distance_imp(const T& a, const T& b, const std::false_type&, const Policy& pol)
 {
    static_assert(std::numeric_limits<T>::is_specialized, "Type T must be specialized.");
-   static_assert(std::numeric_limits<T>::radix != 2, "Type T must be specialized.")
+   static_assert(std::numeric_limits<T>::radix != 2, "Type T must be specialized.");
 
    BOOST_MATH_STD_USING
    //
@@ -806,7 +806,7 @@ template <class T, class Policy>
 T float_advance_imp(T val, int distance, const std::false_type&, const Policy& pol)
 {
    static_assert(std::numeric_limits<T>::is_specialized, "Type T must be specialized.");
-   static_assert(std::numeric_limits<T>::radix != 2, "Type T must be specialized.")
+   static_assert(std::numeric_limits<T>::radix != 2, "Type T must be specialized.");
 
    BOOST_MATH_STD_USING
    //
