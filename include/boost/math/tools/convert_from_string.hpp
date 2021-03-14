@@ -27,7 +27,7 @@ namespace boost{ namespace math{ namespace tools{
    {
 #ifdef BOOST_MATH_NO_LEXICAL_CAST
       // This function should not compile, we don't have the necessary functionality to support it:
-      BOOST_MATH_STATIC_ASSERT(sizeof(Real) == 0);
+      static_assert(sizeof(Real) == 0, "sizeof(Real) should not be 0");
 #else
       return boost::lexical_cast<Real>(p);
 #endif

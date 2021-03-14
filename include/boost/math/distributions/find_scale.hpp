@@ -40,8 +40,8 @@ namespace boost
       )
     {
 #if !defined(BOOST_NO_SFINAE) && !BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x590))
-      BOOST_MATH_STATIC_ASSERT(::boost::math::tools::is_distribution<Dist>::value); 
-      BOOST_MATH_STATIC_ASSERT(::boost::math::tools::is_scaled_distribution<Dist>::value); 
+      static_assert(::boost::math::tools::is_distribution<Dist>::value, "The provided distribution does not meet the conceptual requirements of a distribution."); 
+      static_assert(::boost::math::tools::is_scaled_distribution<Dist>::value, "The provided distribution does not meet the conceptual requirements of a scaled distribution."); 
 #endif
       static const char* function = "boost::math::find_scale<Dist, Policy>(%1%, %1%, %1%, Policy)";
 
@@ -112,8 +112,8 @@ namespace boost
       //  << endl;
 
 #if !defined(BOOST_NO_SFINAE) && !BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x590))
-      BOOST_MATH_STATIC_ASSERT(::boost::math::tools::is_distribution<Dist>::value); 
-      BOOST_MATH_STATIC_ASSERT(::boost::math::tools::is_scaled_distribution<Dist>::value); 
+      static_assert(::boost::math::tools::is_distribution<Dist>::value, "The provided distribution does not meet the conceptual requirements of a distribution."); 
+      static_assert(::boost::math::tools::is_scaled_distribution<Dist>::value, "The provided distribution does not meet the conceptual requirements of a scaled distribution."); 
 #endif
       static const char* function = "boost::math::find_scale<Dist, Policy>(complement(%1%, %1%, %1%, Policy))";
 
@@ -166,8 +166,8 @@ namespace boost
       //  << endl;
 
 #if !defined(BOOST_NO_SFINAE) && !BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x590))
-      BOOST_MATH_STATIC_ASSERT(::boost::math::tools::is_distribution<Dist>::value); 
-      BOOST_MATH_STATIC_ASSERT(::boost::math::tools::is_scaled_distribution<Dist>::value); 
+      static_assert(::boost::math::tools::is_distribution<Dist>::value, "The provided distribution does not meet the conceptual requirements of a distribution."); 
+      static_assert(::boost::math::tools::is_scaled_distribution<Dist>::value, "The provided distribution does not meet the conceptual requirements of a scaled distribution.");  
 #endif
       static const char* function = "boost::math::find_scale<Dist, Policy>(complement(%1%, %1%, %1%, Policy))";
 
