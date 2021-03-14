@@ -12,7 +12,7 @@
 # include <limits>
 # include <cmath>
 
-#include <boost/static_assert.hpp>
+#include <boost/math/tools/assert.hpp>
 #include <boost/type_traits/is_floating_point.hpp> 
 #include <boost/math/special_functions/next.hpp> // for float_distance
 
@@ -74,7 +74,7 @@ value_type derivative (const value_type x, const value_type dx, function_type fu
     \return derivative at x.
   */
 
-  BOOST_STATIC_ASSERT_MSG(false == std::numeric_limits<value_type>::is_integer, "value_type must be a floating-point type!");
+  BOOST_MATH_STATIC_ASSERT_MSG(false == std::numeric_limits<value_type>::is_integer, "value_type must be a floating-point type!");
 
   const value_type dx2(dx * 2U);
   const value_type dx3(dx * 3U);

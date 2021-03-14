@@ -26,7 +26,7 @@
 #include <type_traits>
 
 #ifdef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-#include <boost/static_assert.hpp>
+#include <boost/math/tools/assert.hpp>
 #endif
 
 namespace boost
@@ -135,7 +135,7 @@ namespace boost
          //
          // Guard against use of long double if it's not supported:
          //
-         BOOST_STATIC_ASSERT_MSG((0 == std::is_same<type, long double>::value), "Sorry, but this platform does not have sufficient long double support for the special functions to be reliably implemented.");
+         BOOST_MATH_STATIC_ASSERT_MSG((0 == std::is_same<type, long double>::value), "Sorry, but this platform does not have sufficient long double support for the special functions to be reliably implemented.");
 #endif
       };
 

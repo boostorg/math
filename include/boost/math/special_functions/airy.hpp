@@ -362,7 +362,7 @@ inline T airy_ai_zero(int m, const Policy& /*pol*/)
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
 
-   BOOST_STATIC_ASSERT_MSG(    false == std::numeric_limits<T>::is_specialized
+   BOOST_MATH_STATIC_ASSERT_MSG(    false == std::numeric_limits<T>::is_specialized
                            || (   true  == std::numeric_limits<T>::is_specialized
                                && false == std::numeric_limits<T>::is_integer),
                            "Airy value type must be a floating-point type.");
@@ -385,7 +385,7 @@ inline OutputIterator airy_ai_zero(
 {
    typedef T result_type;
 
-   BOOST_STATIC_ASSERT_MSG(    false == std::numeric_limits<T>::is_specialized
+   BOOST_MATH_STATIC_ASSERT_MSG(    false == std::numeric_limits<T>::is_specialized
                            || (   true  == std::numeric_limits<T>::is_specialized
                                && false == std::numeric_limits<T>::is_integer),
                            "Airy value type must be a floating-point type.");
@@ -419,7 +419,7 @@ inline T airy_bi_zero(int m, const Policy& /*pol*/)
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
 
-   BOOST_STATIC_ASSERT_MSG(    false == std::numeric_limits<T>::is_specialized
+   BOOST_MATH_STATIC_ASSERT_MSG(    false == std::numeric_limits<T>::is_specialized
                            || (   true  == std::numeric_limits<T>::is_specialized
                                && false == std::numeric_limits<T>::is_integer),
                            "Airy value type must be a floating-point type.");
@@ -442,7 +442,7 @@ inline OutputIterator airy_bi_zero(
 {
    typedef T result_type;
 
-   BOOST_STATIC_ASSERT_MSG(    false == std::numeric_limits<T>::is_specialized
+   BOOST_MATH_STATIC_ASSERT_MSG(    false == std::numeric_limits<T>::is_specialized
                            || (   true  == std::numeric_limits<T>::is_specialized
                                && false == std::numeric_limits<T>::is_integer),
                            "Airy value type must be a floating-point type.");

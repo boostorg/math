@@ -26,7 +26,7 @@ With these techniques, the code could be simplified.
 #include <boost/math/tools/assert.hpp>
 #include <boost/cstdint.hpp>
 #include <boost/predef/other/endian.h>
-#include <boost/static_assert.hpp>
+#include <boost/math/tools/assert.hpp>
 #include <boost/type_traits/is_floating_point.hpp>
 
 #ifdef BOOST_NO_STDC_NAMESPACE
@@ -222,7 +222,7 @@ private:
 #elif BOOST_ENDIAN_LITTLE_BYTE
     BOOST_STATIC_CONSTANT(int, offset_ = 4);
 #else
-    BOOST_STATIC_ASSERT(false);
+    BOOST_MATH_STATIC_ASSERT(false);
 #endif
 };
 
@@ -282,7 +282,7 @@ private:
 #elif BOOST_ENDIAN_LITTLE_BYTE
     BOOST_STATIC_CONSTANT(int, offset_ = 4);
 #else
-    BOOST_STATIC_ASSERT(false);
+    BOOST_MATH_STATIC_ASSERT(false);
 #endif
 };
 
@@ -396,7 +396,7 @@ private:
 #elif BOOST_ENDIAN_LITTLE_BYTE
     BOOST_STATIC_CONSTANT(int, offset_ = 12);
 #else
-    BOOST_STATIC_ASSERT(false);
+    BOOST_MATH_STATIC_ASSERT(false);
 #endif
 };
 
@@ -477,7 +477,7 @@ private:
 #elif BOOST_ENDIAN_LITTLE_BYTE
     BOOST_STATIC_CONSTANT(int, offset_ = 12);
 #else
-    BOOST_STATIC_ASSERT(false);
+    BOOST_MATH_STATIC_ASSERT(false);
 #endif
 };
 

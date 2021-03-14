@@ -702,7 +702,7 @@ const typename unchecked_factorial_initializer<T>::init unchecked_factorial_init
 template <class T, int N>
 inline T unchecked_factorial_imp(unsigned i, const std::integral_constant<int, N>&)
 {
-   BOOST_STATIC_ASSERT(!boost::is_integral<T>::value);
+   BOOST_MATH_STATIC_ASSERT(!boost::is_integral<T>::value);
    // factorial<unsigned int>(n) is not implemented
    // because it would overflow integral type T for too small n
    // to be useful. Use instead a floating-point type,
@@ -822,7 +822,7 @@ inline T unchecked_factorial_imp(unsigned i, const std::integral_constant<int, N
 template <class T>
 inline T unchecked_factorial_imp(unsigned i, const std::integral_constant<int, 0>&)
 {
-   BOOST_STATIC_ASSERT(!boost::is_integral<T>::value);
+   BOOST_MATH_STATIC_ASSERT(!boost::is_integral<T>::value);
    // factorial<unsigned int>(n) is not implemented
    // because it would overflow integral type T for too small n
    // to be useful. Use instead a floating-point type,

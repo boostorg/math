@@ -12,7 +12,7 @@
 #include <boost/math/distributions/complement.hpp>
 #include <boost/math/policies/policy.hpp>
 #include <boost/math/tools/traits.hpp>
-#include <boost/static_assert.hpp>
+#include <boost/math/tools/assert.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/policies/error_handling.hpp>
 // using boost::math::policies::policy;
@@ -26,7 +26,7 @@ namespace boost
   // Function to find location of random variable z
   // to give probability p (given scale)
   // Applies to normal, lognormal, extreme value, Cauchy, (and symmetrical triangular),
-  // enforced by BOOST_STATIC_ASSERT below.
+  // enforced by BOOST_MATH_STATIC_ASSERT below.
 
     template <class Dist, class Policy>
     inline
@@ -42,8 +42,8 @@ namespace boost
       // Will fail to compile here if try to use with a distribution without scale & location,
       // for example pareto, and many others.  These tests are disabled by the pp-logic
       // above if the compiler doesn't support the SFINAE tricks used in the traits class.
-      BOOST_STATIC_ASSERT(::boost::math::tools::is_distribution<Dist>::value); 
-      BOOST_STATIC_ASSERT(::boost::math::tools::is_scaled_distribution<Dist>::value);
+      BOOST_MATH_STATIC_ASSERT(::boost::math::tools::is_distribution<Dist>::value); 
+      BOOST_MATH_STATIC_ASSERT(::boost::math::tools::is_scaled_distribution<Dist>::value);
 #endif
       static const char* function = "boost::math::find_location<Dist, Policy>&, %1%)";
 

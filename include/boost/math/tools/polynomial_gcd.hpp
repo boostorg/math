@@ -177,7 +177,7 @@ template <typename T>
 typename enable_if_c<std::numeric_limits<T>::is_integer && std::numeric_limits<T>::is_bounded, polynomial<T> >::type
 gcd(polynomial<T> const &u, polynomial<T> const &v)
 {
-   BOOST_STATIC_ASSERT_MSG(sizeof(v) == 0, "GCD on polynomials of bounded integers is disallowed due to the excessive growth in the size of intermediate terms.");
+   BOOST_MATH_STATIC_ASSERT_MSG(sizeof(v) == 0, "GCD on polynomials of bounded integers is disallowed due to the excessive growth in the size of intermediate terms.");
    return subresultant_gcd(u, v);
 }
 // GCD over polynomials of floats can go via the Euclid algorithm:

@@ -12,7 +12,7 @@
 
 #include <boost/limits.hpp>
 #include <boost/math/tools/assert.hpp>
-#include <boost/static_assert.hpp>
+#include <boost/math/tools/assert.hpp>
 #include <boost/math/policies/policy.hpp>
 #include <type_traits>
 #include <limits>
@@ -41,8 +41,8 @@ template <class T>
 inline BOOST_MATH_CONSTEXPR int digits(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(T)) BOOST_NOEXCEPT
 {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-   BOOST_STATIC_ASSERT( ::std::numeric_limits<T>::is_specialized);
-   BOOST_STATIC_ASSERT( ::std::numeric_limits<T>::radix == 2 || ::std::numeric_limits<T>::radix == 10);
+   BOOST_MATH_STATIC_ASSERT( ::std::numeric_limits<T>::is_specialized);
+   BOOST_MATH_STATIC_ASSERT( ::std::numeric_limits<T>::radix == 2 || ::std::numeric_limits<T>::radix == 10);
 #else
    BOOST_MATH_ASSERT(::std::numeric_limits<T>::is_specialized);
    BOOST_MATH_ASSERT(::std::numeric_limits<T>::radix == 2 || ::std::numeric_limits<T>::radix == 10);
@@ -56,7 +56,7 @@ template <class T>
 inline BOOST_MATH_CONSTEXPR T max_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T))  BOOST_MATH_NOEXCEPT(T)
 {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-   BOOST_STATIC_ASSERT( ::std::numeric_limits<T>::is_specialized);
+   BOOST_MATH_STATIC_ASSERT( ::std::numeric_limits<T>::is_specialized);
 #else
    BOOST_MATH_ASSERT(::std::numeric_limits<T>::is_specialized);
 #endif
@@ -68,7 +68,7 @@ template <class T>
 inline BOOST_MATH_CONSTEXPR T min_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T)) BOOST_MATH_NOEXCEPT(T)
 {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-   BOOST_STATIC_ASSERT( ::std::numeric_limits<T>::is_specialized);
+   BOOST_MATH_STATIC_ASSERT( ::std::numeric_limits<T>::is_specialized);
 #else
    BOOST_MATH_ASSERT(::std::numeric_limits<T>::is_specialized);
 #endif
@@ -171,7 +171,7 @@ inline BOOST_MATH_CONSTEXPR long double epsilon<long double>(const std::true_typ
    //
    // This static assert fails for some unknown reason, so
    // disabled for now...
-   // BOOST_STATIC_ASSERT(std::numeric_limits<long double>::digits == 106);
+   // BOOST_MATH_STATIC_ASSERT(std::numeric_limits<long double>::digits == 106);
    return 2.4651903288156618919116517665087e-32L;
 }
 #endif
@@ -196,7 +196,7 @@ struct log_limit_traits
       std::integral_constant<int, 0>
    >::type tag_type;
    BOOST_STATIC_CONSTANT(bool, value = tag_type::value ? true : false);
-   BOOST_STATIC_ASSERT(::std::numeric_limits<T>::is_specialized || (value == 0));
+   BOOST_MATH_STATIC_ASSERT(::std::numeric_limits<T>::is_specialized || (value == 0));
 };
 
 template <class T, bool b> struct log_limit_noexcept_traits_imp : public log_limit_traits<T> {};

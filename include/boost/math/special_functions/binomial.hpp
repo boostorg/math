@@ -20,7 +20,7 @@ namespace boost{ namespace math{
 template <class T, class Policy>
 T binomial_coefficient(unsigned n, unsigned k, const Policy& pol)
 {
-   BOOST_STATIC_ASSERT(!boost::is_integral<T>::value);
+   BOOST_MATH_STATIC_ASSERT(!boost::is_integral<T>::value);
    BOOST_MATH_STD_USING
    static const char* function = "boost::math::binomial_coefficient<%1%>(unsigned, unsigned)";
    if(k > n)

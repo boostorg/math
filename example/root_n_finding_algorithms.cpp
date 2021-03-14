@@ -224,8 +224,8 @@ T nth_root_noderiv(T x)
 template <int N, class T = double>
 struct nth_root_functor_1deriv
 { // Functor also returning 1st derivative.
-  BOOST_STATIC_ASSERT_MSG(boost::is_integral<T>::value == false, "Only floating-point type types can be used!");
-  BOOST_STATIC_ASSERT_MSG((N > 0) == true, "root N must be > 0!");
+  BOOST_MATH_STATIC_ASSERT_MSG(boost::is_integral<T>::value == false, "Only floating-point type types can be used!");
+  BOOST_MATH_STATIC_ASSERT_MSG((N > 0) == true, "root N must be > 0!");
 
   nth_root_functor_1deriv(T const& to_find_root_of) : a(to_find_root_of)
   { // Constructor stores value a to find root of, for example:
@@ -247,9 +247,9 @@ T nth_root_1deriv(T x)
   using namespace std;  // Help ADL of std functions.
   using namespace boost::math::tools; // For newton_raphson_iterate.
 
-  BOOST_STATIC_ASSERT_MSG(boost::is_integral<T>::value == false, "Only floating-point type types can be used!");
-  BOOST_STATIC_ASSERT_MSG((N > 0) == true, "root N must be > 0!");
-  BOOST_STATIC_ASSERT_MSG((N > 1000) == false, "root N is too big!");
+  BOOST_MATH_STATIC_ASSERT_MSG(boost::is_integral<T>::value == false, "Only floating-point type types can be used!");
+  BOOST_MATH_STATIC_ASSERT_MSG((N > 0) == true, "root N must be > 0!");
+  BOOST_MATH_STATIC_ASSERT_MSG((N > 1000) == false, "root N is too big!");
 
   typedef double guess_type;
 
@@ -273,8 +273,8 @@ T nth_root_1deriv(T x)
 template <int N, class T = double>
 struct nth_root_functor_2deriv
 { // Functor returning both 1st and 2nd derivatives.
-  BOOST_STATIC_ASSERT_MSG(boost::is_integral<T>::value == false, "Only floating-point type types can be used!");
-  BOOST_STATIC_ASSERT_MSG((N > 0) == true, "root N must be > 0!");
+  BOOST_MATH_STATIC_ASSERT_MSG(boost::is_integral<T>::value == false, "Only floating-point type types can be used!");
+  BOOST_MATH_STATIC_ASSERT_MSG((N > 0) == true, "root N must be > 0!");
 
   nth_root_functor_2deriv(T const& to_find_root_of) : a(to_find_root_of)
   { // Constructor stores value a to find root of, for example:
@@ -299,9 +299,9 @@ T nth_root_2deriv(T x)
   using namespace std;  // Help ADL of std functions.
   using namespace boost::math::tools; // For halley_iterate.
 
-  BOOST_STATIC_ASSERT_MSG(boost::is_integral<T>::value == false, "Only floating-point type types can be used!");
-  BOOST_STATIC_ASSERT_MSG((N > 0) == true, "root N must be > 0!");
-  BOOST_STATIC_ASSERT_MSG((N > 1000) == false, "root N is too big!");
+  BOOST_MATH_STATIC_ASSERT_MSG(boost::is_integral<T>::value == false, "Only floating-point type types can be used!");
+  BOOST_MATH_STATIC_ASSERT_MSG((N > 0) == true, "root N must be > 0!");
+  BOOST_MATH_STATIC_ASSERT_MSG((N > 1000) == false, "root N is too big!");
 
   typedef double guess_type;
 
@@ -328,9 +328,9 @@ T nth_root_2deriv_s(T x)
   using namespace std;  // Help ADL of std functions.
   using namespace boost::math::tools; // For schroder_iterate.
 
-  BOOST_STATIC_ASSERT_MSG(boost::is_integral<T>::value == false, "Only floating-point type types can be used!");
-  BOOST_STATIC_ASSERT_MSG((N > 0) == true, "root N must be > 0!");
-  BOOST_STATIC_ASSERT_MSG((N > 1000) == false, "root N is too big!");
+  BOOST_MATH_STATIC_ASSERT_MSG(boost::is_integral<T>::value == false, "Only floating-point type types can be used!");
+  BOOST_MATH_STATIC_ASSERT_MSG((N > 0) == true, "root N must be > 0!");
+  BOOST_MATH_STATIC_ASSERT_MSG((N > 1000) == false, "root N is too big!");
 
   typedef double guess_type;
 

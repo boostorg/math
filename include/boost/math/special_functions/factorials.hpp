@@ -29,7 +29,7 @@ namespace boost { namespace math
 template <class T, class Policy>
 inline T factorial(unsigned i, const Policy& pol)
 {
-   BOOST_STATIC_ASSERT(!boost::is_integral<T>::value);
+   BOOST_MATH_STATIC_ASSERT(!boost::is_integral<T>::value);
    // factorial<unsigned int>(n) is not implemented
    // because it would overflow integral type T for too small n
    // to be useful. Use instead a floating-point type,
@@ -73,7 +73,7 @@ inline double factorial<double>(unsigned i)
 template <class T, class Policy>
 T double_factorial(unsigned i, const Policy& pol)
 {
-   BOOST_STATIC_ASSERT(!boost::is_integral<T>::value);
+   BOOST_MATH_STATIC_ASSERT(!boost::is_integral<T>::value);
    BOOST_MATH_STD_USING  // ADL lookup of std names
    if(i & 1)
    {
@@ -116,7 +116,7 @@ namespace detail{
 template <class T, class Policy>
 T rising_factorial_imp(T x, int n, const Policy& pol)
 {
-   BOOST_STATIC_ASSERT(!boost::is_integral<T>::value);
+   BOOST_MATH_STATIC_ASSERT(!boost::is_integral<T>::value);
    if(x < 0)
    {
       //
@@ -164,7 +164,7 @@ T rising_factorial_imp(T x, int n, const Policy& pol)
 template <class T, class Policy>
 inline T falling_factorial_imp(T x, unsigned n, const Policy& pol)
 {
-   BOOST_STATIC_ASSERT(!boost::is_integral<T>::value);
+   BOOST_MATH_STATIC_ASSERT(!boost::is_integral<T>::value);
    BOOST_MATH_STD_USING // ADL of std names
    if(x == 0)
       return 0;

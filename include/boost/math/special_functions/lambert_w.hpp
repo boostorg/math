@@ -1620,7 +1620,7 @@ inline T lambert_w0_imp(T z, const Policy& pol, const std::integral_constant<int
    BOOST_MATH_STD_USING // Aid ADL of std functions.
 
    // Detect unusual case of 32-bit double with a wider/64-bit long double
-   BOOST_STATIC_ASSERT_MSG(std::numeric_limits<double>::digits >= 53,
+   BOOST_MATH_STATIC_ASSERT_MSG(std::numeric_limits<double>::digits >= 53,
    "Our double precision coefficients will be truncated, "
    "please file a bug report with details of your platform's floating point types "
    "- or possibly edit the coefficients to have "
@@ -1744,7 +1744,7 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
   // Integral types should be promoted to double by user Lambert w functions.
   // If integral type provided to user function lambert_w0 or lambert_wm1,
   // then should already have been promoted to double.
-  BOOST_STATIC_ASSERT_MSG(!boost::is_integral<T>::value,
+  BOOST_MATH_STATIC_ASSERT_MSG(!boost::is_integral<T>::value,
     "Must be floating-point or fixed type (not integer type), for example: lambert_wm1(1.), not lambert_wm1(1)!");
 
   BOOST_MATH_STD_USING // Aid argument dependent lookup (ADL) of abs.

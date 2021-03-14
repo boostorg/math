@@ -22,7 +22,7 @@
   #include <boost/math/special_functions/sin_pi.hpp>
   #include <boost/math/special_functions/cos_pi.hpp>
   #include <boost/math/special_functions/pow.hpp>
-  #include <boost/static_assert.hpp>
+  #include <boost/math/tools/assert.hpp>
   #include <boost/type_traits/is_convertible.hpp>
 
 #ifdef _MSC_VER

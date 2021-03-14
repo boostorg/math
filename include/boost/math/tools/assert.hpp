@@ -9,14 +9,19 @@
 #ifndef BOOST_MATH_STANDALONE
 
 #include <boost/assert.hpp>
+#include <boost/static_assert.hpp>
 #define BOOST_MATH_ASSERT(expr) BOOST_ASSERT(expr)
 #define BOOST_MATH_ASSERT_MSG(expr, msg) BOOST_ASSERT_MSG(expr, msg)
+#define BOOST_MATH_STATIC_ASSERT(expr) BOOST_STATIC_ASSERT(expr)
+#define BOOST_MATH_STATIC_ASSERT_MSG(expr, msg) BOOST_STATIC_ASSERT_MSG(expr, msg)
 
 #else // Standalone mode - use cassert
 
 #include <cassert>
 #define BOOST_MATH_ASSERT(expr) assert(expr)
 #define BOOST_MATH_ASSERT_MSG(expr, msg) assert((expr)&&(msg))
+#define BOOST_MATH_STATIC_ASSERT(expr) static_assert(expr, #expr " failed")
+#define BOOST_MATH_STATIC_ASSERT_MSG(expr, msg) static_assert(expr, msg)
 
 #endif
 
