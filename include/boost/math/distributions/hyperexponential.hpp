@@ -274,12 +274,33 @@ class hyperexponential_distribution
                                     PolicyT());
     }
 
+    private: template <typename T>
+             class is_iterator
+             {
+             private:
+                using yes = char;
+                struct no { char x[2]; };
+
+                // Iterators only require pre-increment and dereference operator (24.2.2)
+                template <typename U, typename = decltype(*std::declval<U&>(), void(), ++std::declval<U&>(), void())>
+                static yes test(const U&&);
+                
+                template <typename U>
+                static no test(...);
+
+             public:
+                static constexpr bool value = (sizeof(test<T>(0)) == sizeof(char));
+             };
+    
+                
+             
+
     // Two arg constructor from 2 ranges, we SFINAE this out of existence if
     // either argument type is incrementable as in that case the type is
     // probably an iterator:
     public: template <typename ProbRangeT, typename RateRangeT, 
-                      typename std::enable_if<!std::is_pointer<ProbRangeT>::value && 
-                                              !std::is_pointer<RateRangeT>::value, bool>::type = true>
+                      typename std::enable_if<!is_iterator<ProbRangeT>::value && 
+                                              !is_iterator<RateRangeT>::value, bool>::type = true>
             hyperexponential_distribution(ProbRangeT const& prob_range,
                                           RateRangeT const& rate_range)
     : probs_(std::begin(prob_range), std::end(prob_range)),
@@ -300,8 +321,8 @@ class hyperexponential_distribution
     // Note that we allow different argument types here to allow for
     // construction from an array plus a pointer into that array.
     public: template <typename RateIterT, typename RateIterT2, 
-                      typename std::enable_if<std::is_pointer<RateIterT>::value || 
-                                              std::is_pointer<RateIterT2>::value, bool>::type = true>
+                      typename std::enable_if<is_iterator<RateIterT>::value || 
+                                              is_iterator<RateIterT2>::value, bool>::type = true>
             hyperexponential_distribution(RateIterT const& rate_first, 
                                           RateIterT2 const& rate_last)
     : probs_(std::distance(rate_first, rate_last), 1), // will be normalized below
