@@ -16,23 +16,16 @@
 #include <boost/assert.hpp>
 #include <boost/config.hpp>
 #include <boost/math/tools/cxx03_warn.hpp>
-#ifdef BOOST_NO_CXX11_LAMBDAS
-#include <boost/lambda/lambda.hpp>
-#endif
 #include <boost/math/tools/rational.hpp>
 #include <boost/math/tools/real_cast.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/binomial.hpp>
-#include <boost/core/enable_if.hpp>
-#include <boost/type_traits/is_convertible.hpp>
 #include <boost/math/tools/detail/is_const_iterable.hpp>
 
 #include <vector>
 #include <ostream>
 #include <algorithm>
-#ifndef BOOST_NO_CXX11_HDR_INITIALIZER_LIST
 #include <initializer_list>
-#endif
 
 namespace boost{ namespace math{ namespace tools{
 
@@ -304,25 +297,21 @@ public:
        normalize();
    }
 
-#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
    polynomial(std::vector<T>&& p) : m_data(std::move(p))
    {
       normalize();
    }
-#endif
 
-   template <class U>
-   explicit polynomial(const U& point, typename boost::enable_if<std::is_convertible<U, T> >::type* = 0)
+   template <class U, typename std::enable_if<std::is_convertible<U, T>::value, bool>::type = true>
+   explicit polynomial(const U& point)
    {
        if (point != U(0))
           m_data.push_back(point);
    }
 
-#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
    // move:
    polynomial(polynomial&& p) BOOST_NOEXCEPT
       : m_data(std::move(p.m_data)) { }
-#endif
 
    // copy:
    polynomial(const polynomial& p)
@@ -338,13 +327,12 @@ public:
       }
    }
 #ifdef BOOST_MATH_HAS_IS_CONST_ITERABLE
-    template <class Range>
-    explicit polynomial(const Range& r, typename boost::enable_if<boost::math::tools::detail::is_const_iterable<Range> >::type* = 0) 
+    template <class Range, typename std::enable_if<boost::math::tools::detail::is_const_iterable<Range>::value, bool>::type = true>
+    explicit polynomial(const Range& r) 
        : polynomial(r.begin(), r.end()) 
     {
     }
 #endif
-#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST) && !BOOST_WORKAROUND(BOOST_GCC_VERSION, < 40500)
     polynomial(std::initializer_list<T> l) : polynomial(std::begin(l), std::end(l))
     {
     }
@@ -356,7 +344,6 @@ public:
         normalize();
         return *this;
     }
-#endif
 
 
    // access:
@@ -400,7 +387,6 @@ public:
        return m_data;
    }
 
-#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
    polynomial<T> prime() const
    {
 #ifdef BOOST_MSVC
@@ -441,7 +427,7 @@ public:
        m_data = std::move(p.m_data);
        return *this;
    }
-#endif
+
    polynomial& operator =(const polynomial& p)
    {
        m_data = p.m_data;
@@ -586,12 +572,7 @@ public:
     *        non-zero coefficients of higher degree. */
    void normalize()
    {
-#ifndef BOOST_NO_CXX11_LAMBDAS
       m_data.erase(std::find_if(m_data.rbegin(), m_data.rend(), [](const T& x)->bool { return x != T(0); }).base(), m_data.end());
-#else
-       using namespace boost::lambda;
-       m_data.erase(std::find_if(m_data.rbegin(), m_data.rend(), _1 != T(0)).base(), m_data.end());
-#endif
    }
 
 private:
@@ -641,25 +622,15 @@ private:
     template <class U>
     polynomial& multiplication(const U& value)
     {
-#ifndef BOOST_NO_CXX11_LAMBDAS
        std::transform(m_data.begin(), m_data.end(), m_data.begin(), [&](const T& x)->T { return x * value; });
-#else
-        using namespace boost::lambda;
-        std::transform(m_data.begin(), m_data.end(), m_data.begin(), ret<T>(_1 * value));
-#endif
-        return *this;
+       return *this;
     }
 
     template <class U>
     polynomial& division(const U& value)
     {
-#ifndef BOOST_NO_CXX11_LAMBDAS
        std::transform(m_data.begin(), m_data.end(), m_data.begin(), [&](const T& x)->T { return x / value; });
-#else
-        using namespace boost::lambda;
-        std::transform(m_data.begin(), m_data.end(), m_data.begin(), ret<T>(_1 / value));
-#endif
-        return *this;
+       return *this;
     }
 
     std::vector<T> m_data;
@@ -673,7 +644,7 @@ inline polynomial<T> operator + (const polynomial<T>& a, const polynomial<T>& b)
    result += b;
    return result;
 }
-#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
+
 template <class T>
 inline polynomial<T> operator + (polynomial<T>&& a, const polynomial<T>& b)
 {
@@ -692,7 +663,6 @@ inline polynomial<T> operator + (polynomial<T>&& a, polynomial<T>&& b)
    a += b;
    return a;
 }
-#endif
 
 template <class T>
 inline polynomial<T> operator - (const polynomial<T>& a, const polynomial<T>& b)
@@ -701,7 +671,7 @@ inline polynomial<T> operator - (const polynomial<T>& a, const polynomial<T>& b)
    result -= b;
    return result;
 }
-#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
+
 template <class T>
 inline polynomial<T> operator - (polynomial<T>&& a, const polynomial<T>& b)
 {
@@ -720,7 +690,6 @@ inline polynomial<T> operator - (polynomial<T>&& a, polynomial<T>&& b)
    a -= b;
    return a;
 }
-#endif
 
 template <class T>
 inline polynomial<T> operator * (const polynomial<T>& a, const polynomial<T>& b)
