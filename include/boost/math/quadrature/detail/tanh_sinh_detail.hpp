@@ -9,9 +9,9 @@
 
 #include <cmath>
 #include <vector>
-#include <boost/math/tools/atomic.hpp>
-#include <boost/detail/lightweight_mutex.hpp>
 #include <typeinfo>
+#include <mutex>
+#include <boost/math/tools/atomic.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/next.hpp>
 
@@ -99,7 +99,7 @@ private:
    void extend_refinements()const
    {
 #ifndef BOOST_MATH_NO_ATOMIC_INT
-      boost::detail::lightweight_mutex::scoped_lock guard(m_mutex);
+      std::lock_guard<std::mutex> guard(m_mutex);
 #endif
       //
       // Check some other thread hasn't got here after we read the atomic variable, but before we got here:
@@ -172,7 +172,7 @@ private:
    std::size_t                       m_max_refinements, m_inital_row_length;
 #ifndef BOOST_MATH_NO_ATOMIC_INT
    mutable boost::math::detail::atomic_unsigned_type      m_committed_refinements;
-   mutable boost::detail::lightweight_mutex m_mutex;
+   mutable std::mutex m_mutex;
 #else
    mutable unsigned                  m_committed_refinements;
 #endif
