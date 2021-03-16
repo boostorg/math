@@ -318,6 +318,7 @@ This section lists the mathematical constants, their use(s) (and sometimes ratio
 [[quarter_pi] [[pi]/4] [0.78539816] [Equivalent to POSIX constant M_PI_4] ]
 [[sixth_pi] [[pi]/6] [0.523598] [] ]
 [[two_pi] [2[pi]] [6.28318] [Many uses, most simply, circumference of a circle]]
+[[tau] [[tau]] [6.28318] [@https://en.wikipedia.org/wiki/Turn_(angle)#Tau_proposals Many uses, most simply, circumference of a circle. Equal to two_pi.]]
 [[two_thirds_pi] [2/3 [pi]] [2.09439] [[@http://en.wikipedia.org/wiki/Sphere#Volume_of_a_sphere volume of a hemi-sphere] = 4/3 [pi] r[cubed]]]
 [[three_quarters_pi] [3/4 [pi]] [2.35619] [ = 3/4 [pi] ]]
 [[four_thirds_pi] [4/3 [pi]] [4.18879] [[@http://en.wikipedia.org/wiki/Sphere#Volume_of_a_sphere volume of a sphere] = 4/3 [pi] r[cubed]]]
