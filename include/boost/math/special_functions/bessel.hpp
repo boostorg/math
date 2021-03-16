@@ -645,7 +645,7 @@ inline typename detail::bessel_traits<T, T, Policy>::result_type cyl_bessel_j_ze
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
 
-   BOOST_MATH_STATIC_ASSERT_MSG(    false == std::numeric_limits<T>::is_specialized
+   static_assert(    false == std::numeric_limits<T>::is_specialized
                            || (   true  == std::numeric_limits<T>::is_specialized
                                && false == std::numeric_limits<T>::is_integer),
                            "Order must be a floating-point type.");
@@ -656,7 +656,7 @@ inline typename detail::bessel_traits<T, T, Policy>::result_type cyl_bessel_j_ze
 template <class T>
 inline typename detail::bessel_traits<T, T, policies::policy<> >::result_type cyl_bessel_j_zero(T v, int m)
 {
-   BOOST_MATH_STATIC_ASSERT_MSG(    false == std::numeric_limits<T>::is_specialized
+   static_assert(    false == std::numeric_limits<T>::is_specialized
                            || (   true  == std::numeric_limits<T>::is_specialized
                                && false == std::numeric_limits<T>::is_integer),
                            "Order must be a floating-point type.");
@@ -671,7 +671,7 @@ inline OutputIterator cyl_bessel_j_zero(T v,
                               OutputIterator out_it,
                               const Policy& pol)
 {
-   BOOST_MATH_STATIC_ASSERT_MSG(    false == std::numeric_limits<T>::is_specialized
+   static_assert(    false == std::numeric_limits<T>::is_specialized
                            || (   true  == std::numeric_limits<T>::is_specialized
                                && false == std::numeric_limits<T>::is_integer),
                            "Order must be a floating-point type.");
@@ -706,7 +706,7 @@ inline typename detail::bessel_traits<T, T, Policy>::result_type cyl_neumann_zer
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
 
-   BOOST_MATH_STATIC_ASSERT_MSG(    false == std::numeric_limits<T>::is_specialized
+   static_assert(    false == std::numeric_limits<T>::is_specialized
                            || (   true  == std::numeric_limits<T>::is_specialized
                                && false == std::numeric_limits<T>::is_integer),
                            "Order must be a floating-point type.");
@@ -717,7 +717,7 @@ inline typename detail::bessel_traits<T, T, Policy>::result_type cyl_neumann_zer
 template <class T>
 inline typename detail::bessel_traits<T, T, policies::policy<> >::result_type cyl_neumann_zero(T v, int m)
 {
-   BOOST_MATH_STATIC_ASSERT_MSG(    false == std::numeric_limits<T>::is_specialized
+   static_assert(    false == std::numeric_limits<T>::is_specialized
                            || (   true  == std::numeric_limits<T>::is_specialized
                                && false == std::numeric_limits<T>::is_integer),
                            "Order must be a floating-point type.");
@@ -732,7 +732,7 @@ inline OutputIterator cyl_neumann_zero(T v,
                              OutputIterator out_it,
                              const Policy& pol)
 {
-   BOOST_MATH_STATIC_ASSERT_MSG(    false == std::numeric_limits<T>::is_specialized
+   static_assert(    false == std::numeric_limits<T>::is_specialized
                            || (   true  == std::numeric_limits<T>::is_specialized
                                && false == std::numeric_limits<T>::is_integer),
                            "Order must be a floating-point type.");

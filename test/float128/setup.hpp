@@ -12,12 +12,11 @@
 #define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
 
 #include <boost/cstdfloat.hpp>
-#include <boost/math/tools/assert.hpp>
 
 #define ALL_TESTS    test(boost::floatmax_t(0), "boost::floatmax_t");
 typedef boost::floatmax_t test_type_1;
    
-BOOST_MATH_STATIC_ASSERT_MSG(std::numeric_limits<boost::floatmax_t>::digits == 113, "These tests should only be run for 128-bit floating point types.");
+static_assert(std::numeric_limits<boost::floatmax_t>::digits == 113, "These tests should only be run for 128-bit floating point types.");
 
 #ifndef BOOST_MATH_TEST_TYPE
 #define BOOST_TEST_MAIN

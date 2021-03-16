@@ -12,7 +12,6 @@
 #include <boost/math/distributions/complement.hpp>
 #include <boost/math/policies/policy.hpp>
 #include <boost/math/tools/traits.hpp>
-#include <boost/math/tools/assert.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/policies/error_handling.hpp>
 // using boost::math::policies::policy;
@@ -26,7 +25,7 @@ namespace boost
   // Function to find location of random variable z
   // to give probability p (given scale)
   // Applies to normal, lognormal, extreme value, Cauchy, (and symmetrical triangular),
-  // enforced by BOOST_MATH_STATIC_ASSERT below.
+  // enforced by static_assert below.
 
     template <class Dist, class Policy>
     inline

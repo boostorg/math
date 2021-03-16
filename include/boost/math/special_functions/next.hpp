@@ -683,7 +683,7 @@ inline typename tools::promote_args<T, U>::type float_distance(const T& a, const
    //
    // We allow ONE of a and b to be an integer type, otherwise both must be the SAME type.
    //
-   BOOST_MATH_STATIC_ASSERT_MSG(
+   static_assert(
       (boost::is_same<T, U>::value 
       || (boost::is_integral<T>::value && !boost::is_integral<U>::value) 
       || (!boost::is_integral<T>::value && boost::is_integral<U>::value)

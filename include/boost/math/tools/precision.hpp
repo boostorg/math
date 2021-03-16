@@ -12,7 +12,6 @@
 
 #include <boost/limits.hpp>
 #include <boost/math/tools/assert.hpp>
-#include <boost/math/tools/assert.hpp>
 #include <boost/math/policies/policy.hpp>
 #include <type_traits>
 #include <limits>
@@ -160,7 +159,7 @@ inline BOOST_MATH_CONSTEXPR long double epsilon<long double>(const std::true_typ
    //
    // This static assert fails for some unknown reason, so
    // disabled for now...
-   // BOOST_MATH_STATIC_ASSERT(std::numeric_limits<long double>::digits == 106);
+   // static_assert(std::numeric_limits<long double>::digits == 106);
    return 2.4651903288156618919116517665087e-32L;
 }
 #endif

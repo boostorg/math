@@ -17,7 +17,7 @@
 #include "compile_test/instantiate.hpp"
 #include <boost/math/tools/assert.hpp>
 
-//BOOST_MATH_STATIC_ASSERT((boost::is_same<mpfr::mpreal, boost::math::tools::promote_args<mpfr::mpreal>::type >::value));
+//static_assert((boost::is_same<mpfr::mpreal, boost::math::tools::promote_args<mpfr::mpreal>::type >::value));
 
 void foo()
 {
