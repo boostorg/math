@@ -46,7 +46,7 @@ void print_value(double x, std::ostream& os = std::cout)
    m = std::ldexp(m, 54);
    e -= 54;
    boost::int64_t val = (boost::int64_t)m;
-   BOOST_ASSERT(std::ldexp((double)val, e) == x);
+   BOOST_MATH_ASSERT(std::ldexp((double)val, e) == x);
    os << "std::ldexp((double)" << val << ", " << e << ")";
 }
 

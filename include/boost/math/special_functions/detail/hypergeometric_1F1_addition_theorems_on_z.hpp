@@ -78,7 +78,7 @@
      T hypergeometric_1f1_recurrence_on_z_minus_zero(const T& a, const T& b, const T& z, int k, const Policy& pol, long long& log_scaling)
      {
         BOOST_MATH_STD_USING
-           BOOST_ASSERT((z + k) / z > 0.5f);
+           BOOST_MATH_ASSERT((z + k) / z > 0.5f);
         hypergeometric_1f1_recurrence_on_z_minus_zero_series<T, Policy> s(a, b, z, k, pol);
         boost::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
         T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
@@ -162,7 +162,7 @@
      T hypergeometric_1f1_recurrence_on_z_zero_minus(const T& a, const T& b, const T& z, int k, const Policy& pol)
      {
         BOOST_MATH_STD_USING
-           BOOST_ASSERT(abs(k) < fabs(z));
+           BOOST_MATH_ASSERT(abs(k) < fabs(z));
         hypergeometric_1f1_recurrence_on_z_zero_minus_series<T, Policy> s(a, b, z, k, pol);
         boost::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
         T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
@@ -200,8 +200,8 @@
      T hypergeometric_1f1_recurrence_on_z_plus_zero(const T& a, const T& b, const T& z, int k, const Policy& pol)
      {
         BOOST_MATH_STD_USING
-           BOOST_ASSERT(k / z > -0.5f);
-        //BOOST_ASSERT(floor(a) != a || a > 0);
+           BOOST_MATH_ASSERT(k / z > -0.5f);
+        //BOOST_MATH_ASSERT(floor(a) != a || a > 0);
         hypergeometric_1f1_recurrence_on_z_plus_zero_series<T, Policy> s(a, b, z, k, pol);
         boost::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
         T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);

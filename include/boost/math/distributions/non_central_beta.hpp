@@ -800,7 +800,7 @@ namespace boost
       { // skewness = sqrt(l).
          const char* function = "boost::math::non_central_beta_distribution<%1%>::skewness()";
          typedef typename Policy::assert_undefined_type assert_type;
-         BOOST_STATIC_ASSERT(assert_type::value == 0);
+         static_assert(assert_type::value == 0, "Assert type is undefined.");
 
          return policies::raise_evaluation_error<RealType>(
             function,
@@ -813,7 +813,7 @@ namespace boost
       {
          const char* function = "boost::math::non_central_beta_distribution<%1%>::kurtosis_excess()";
          typedef typename Policy::assert_undefined_type assert_type;
-         BOOST_STATIC_ASSERT(assert_type::value == 0);
+         static_assert(assert_type::value == 0, "Assert type is undefined.");
 
          return policies::raise_evaluation_error<RealType>(
             function,

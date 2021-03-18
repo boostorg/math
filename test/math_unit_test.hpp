@@ -10,7 +10,7 @@
 #include <iostream>
 #include <iomanip>
 #include <cmath> // for std::isnan
-#include <boost/assert.hpp>
+#include <boost/math/tools/assert.hpp>
 #include <boost/math/special_functions/next.hpp>
 #include <boost/math/special_functions/trunc.hpp>
 #include <boost/core/demangle.hpp>
@@ -26,9 +26,9 @@ template<class Real>
 bool check_mollified_close(Real expected, Real computed, Real tol, std::string const & filename, std::string const & function, int line)
 {
     using std::isnan;
-    BOOST_ASSERT_MSG(!isnan(tol), "Tolerance cannot be a nan.");
-    BOOST_ASSERT_MSG(!isnan(expected), "Expected value cannot be a nan.");
-    BOOST_ASSERT_MSG(tol >= 0, "Tolerance must be non-negative.");
+    BOOST_MATH_ASSERT_MSG(!isnan(tol), "Tolerance cannot be a nan.");
+    BOOST_MATH_ASSERT_MSG(!isnan(expected), "Expected value cannot be a nan.");
+    BOOST_MATH_ASSERT_MSG(tol >= 0, "Tolerance must be non-negative.");
     if (isnan(computed)) {
         std::ios_base::fmtflags f( std::cerr.flags() );
         std::cerr << std::setprecision(3);
@@ -73,7 +73,7 @@ bool check_ulp_close(PreciseReal expected1, Real computed, size_t ulps, std::str
     using boost::math::lltrunc;
     // Of course integers can be expected values, and they are exact:
     if (!std::is_integral<PreciseReal>::value) {
-        BOOST_ASSERT_MSG(!isnan(expected1), "Expected value cannot be a nan.");
+        BOOST_MATH_ASSERT_MSG(!isnan(expected1), "Expected value cannot be a nan.");
         if (sizeof(PreciseReal) < sizeof(Real)) {
             std::ostringstream err;
             err << "\n\tThe expected number must be computed in higher (or equal) precision than the number being tested.\n";
@@ -182,13 +182,13 @@ bool check_conditioned_error(Real abscissa, PreciseReal expected1, PreciseReal e
     using std::isnan;
     // Of course integers can be expected values, and they are exact:
     if (!std::is_integral<PreciseReal>::value) {
-        BOOST_ASSERT_MSG(sizeof(PreciseReal) >= sizeof(Real),
+        BOOST_MATH_ASSERT_MSG(sizeof(PreciseReal) >= sizeof(Real),
                          "The expected number must be computed in higher (or equal) precision than the number being tested.");
-        BOOST_ASSERT_MSG(!isnan(abscissa), "Expected abscissa cannot be a nan.");
-        BOOST_ASSERT_MSG(!isnan(expected1), "Expected value cannot be a nan.");
-        BOOST_ASSERT_MSG(!isnan(expected_derivative), "Expected derivative cannot be a nan.");
+        BOOST_MATH_ASSERT_MSG(!isnan(abscissa), "Expected abscissa cannot be a nan.");
+        BOOST_MATH_ASSERT_MSG(!isnan(expected1), "Expected value cannot be a nan.");
+        BOOST_MATH_ASSERT_MSG(!isnan(expected_derivative), "Expected derivative cannot be a nan.");
     }
-    BOOST_ASSERT_MSG(acceptable_badness >= 1, "Acceptable badness scale must be >= 1, and in general should = 1 exactly.");
+    BOOST_MATH_ASSERT_MSG(acceptable_badness >= 1, "Acceptable badness scale must be >= 1, and in general should = 1 exactly.");
 
     if (isnan(computed))
     {
@@ -263,11 +263,11 @@ bool check_absolute_error(PreciseReal expected1, Real computed, Real acceptable_
     using std::isnan;
     // Of course integers can be expected values, and they are exact:
     if (!std::is_integral<PreciseReal>::value) {
-        BOOST_ASSERT_MSG(sizeof(PreciseReal) >= sizeof(Real),
+        BOOST_MATH_ASSERT_MSG(sizeof(PreciseReal) >= sizeof(Real),
                          "The expected number must be computed in higher (or equal) precision than the number being tested.");
-        BOOST_ASSERT_MSG(!isnan(expected1), "Expected value cannot be a nan (use CHECK_NAN if this is your intention).");
+        BOOST_MATH_ASSERT_MSG(!isnan(expected1), "Expected value cannot be a nan (use CHECK_NAN if this is your intention).");
     }
-    BOOST_ASSERT_MSG(acceptable_error > 0, "Error must be > 0.");
+    BOOST_MATH_ASSERT_MSG(acceptable_error > 0, "Error must be > 0.");
 
     if (isnan(computed))
     {

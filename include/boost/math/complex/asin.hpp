@@ -11,7 +11,7 @@
 #ifndef BOOST_MATH_LOG1P_INCLUDED
 #  include <boost/math/special_functions/log1p.hpp>
 #endif
-#include <boost/assert.hpp>
+#include <boost/math/tools/assert.hpp>
 
 #ifdef BOOST_NO_STDC_NAMESPACE
 namespace std{ using ::sqrt; using ::fabs; using ::acos; using ::asin; using ::atan; using ::atan2; }
@@ -209,7 +209,7 @@ inline std::complex<T> asin(const std::complex<T>& z)
             // but we have no way to test that here, so for now just assert
             // on the assumption:
             //
-            BOOST_ASSERT(x == 1);
+            BOOST_MATH_ASSERT(x == 1);
             real = half_pi - std::sqrt(y);
             imag = std::sqrt(y);
          }

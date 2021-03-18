@@ -53,11 +53,11 @@ private:
 #ifndef BOOST_MATH_NO_ATOMIC_INT
       if (m_committed_refinements.load() < n)
          extend_refinements();
-      BOOST_ASSERT(m_committed_refinements.load() >= n);
+      BOOST_MATH_ASSERT(m_committed_refinements.load() >= n);
 #else
       if (m_committed_refinements < n)
          extend_refinements();
-      BOOST_ASSERT(m_committed_refinements >= n);
+      BOOST_MATH_ASSERT(m_committed_refinements >= n);
 #endif
       return m_abscissas[n];
    }
@@ -66,11 +66,11 @@ private:
 #ifndef BOOST_MATH_NO_ATOMIC_INT
       if (m_committed_refinements.load() < n)
          extend_refinements();
-      BOOST_ASSERT(m_committed_refinements.load() >= n);
+      BOOST_MATH_ASSERT(m_committed_refinements.load() >= n);
 #else
       if (m_committed_refinements < n)
          extend_refinements();
-      BOOST_ASSERT(m_committed_refinements >= n);
+      BOOST_MATH_ASSERT(m_committed_refinements >= n);
 #endif
       return m_weights[n];
    }
@@ -79,11 +79,11 @@ private:
 #ifndef BOOST_MATH_NO_ATOMIC_INT
       if (m_committed_refinements.load() < n)
          extend_refinements();
-      BOOST_ASSERT(m_committed_refinements.load() >= n);
+      BOOST_MATH_ASSERT(m_committed_refinements.load() >= n);
 #else
       if (m_committed_refinements < n)
          extend_refinements();
-      BOOST_ASSERT(m_committed_refinements >= n);
+      BOOST_MATH_ASSERT(m_committed_refinements >= n);
 #endif
       return m_first_complements[n];
    }
@@ -222,8 +222,8 @@ decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) tanh_sin
     // ever decrement through the stored values that are complements (the negative ones), and
     // never ever hit the true abscissa values (positive stored values).
     //
-    BOOST_ASSERT(m_abscissas[0][max_left_position] < 0);
-    BOOST_ASSERT(m_abscissas[0][max_right_position] < 0);
+    BOOST_MATH_ASSERT(m_abscissas[0][max_left_position] < 0);
+    BOOST_MATH_ASSERT(m_abscissas[0][max_right_position] < 0);
     //
     // The type of the result:
     typedef decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) result_type;
@@ -320,12 +320,12 @@ decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) tanh_sin
             if (j >= first_complement_index)
             {
                // We have stored x - 1:
-               BOOST_ASSERT(x < 0);
+               BOOST_MATH_ASSERT(x < 0);
                x = 1 + xc;
             }
             else
             {
-               BOOST_ASSERT(x >= 0);
+               BOOST_MATH_ASSERT(x >= 0);
                xc = x - 1;
             }
 

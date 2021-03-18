@@ -13,7 +13,7 @@
 #pragma once
 #endif
 
-#include <boost/assert.hpp>
+#include <boost/math/tools/assert.hpp>
 #include <boost/config.hpp>
 #include <boost/math/tools/cxx03_warn.hpp>
 #include <boost/math/tools/rational.hpp>
@@ -43,7 +43,7 @@ T chebyshev_coefficient(unsigned n, unsigned m)
    unsigned r = n - m;
    r /= 2;
 
-   BOOST_ASSERT(n - 2 * r == m);
+   BOOST_MATH_ASSERT(n - 2 * r == m);
 
    if(r & 1)
       result = -result;
@@ -188,9 +188,9 @@ template <typename T>
 std::pair< polynomial<T>, polynomial<T> >
 division(polynomial<T> u, const polynomial<T>& v)
 {
-    BOOST_ASSERT(v.size() <= u.size());
-    BOOST_ASSERT(v);
-    BOOST_ASSERT(u);
+    BOOST_MATH_ASSERT(v.size() <= u.size());
+    BOOST_MATH_ASSERT(v);
+    BOOST_MATH_ASSERT(u);
 
     typedef typename polynomial<T>::size_type N;
 
@@ -265,7 +265,7 @@ template <typename T>
 std::pair< polynomial<T>, polynomial<T> >
 quotient_remainder(const polynomial<T>& dividend, const polynomial<T>& divisor)
 {
-    BOOST_ASSERT(divisor);
+    BOOST_MATH_ASSERT(divisor);
     if (dividend.size() < divisor.size())
         return std::make_pair(polynomial<T>(), dividend);
     return detail::division(dividend, divisor);
@@ -528,7 +528,7 @@ public:
    template <typename U>
    polynomial& operator >>=(U const &n)
    {
-       BOOST_ASSERT(n <= m_data.size());
+       BOOST_MATH_ASSERT(n <= m_data.size());
        m_data.erase(m_data.begin(), m_data.begin() + n);
        return *this;
    }

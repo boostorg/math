@@ -9,7 +9,7 @@
 #include <boost/type_traits/is_same.hpp>
 #include <boost/type_traits/is_floating_point.hpp>
 #include <boost/mpl/if.hpp>
-#include <boost/static_assert.hpp>
+#include <boost/math/tools/assert.hpp>
 #include <boost/math/complex.hpp>
 
 #include <iostream>

@@ -565,8 +565,8 @@
         while ((data[index][1] < b) && (data[index][2] > 1.25))
            --index;
         ++index;
-        BOOST_ASSERT(a > data[index][0]);
-        BOOST_ASSERT(-b < -data[index][1]);
+        BOOST_MATH_ASSERT(a > data[index][0]);
+        BOOST_MATH_ASSERT(-b < -data[index][1]);
         return z > data[index][2];
      }
      template <class T, class Policy>

@@ -87,7 +87,7 @@
           The source code <code class="computeroutput"><span class="keyword">static_assert</span></code>
           and comment just after the will be:
         </p>
-<pre class="programlisting"><span class="identifier">BOOST_STATIC_ASSERT</span><span class="special">(!</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">is_integral</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">value</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">static_assert</span><span class="special">(!</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">is_integral</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">value</span><span class="special">);</span>
 <span class="comment">// factorial&lt;unsigned int&gt;(n) is not implemented</span>
 <span class="comment">// because it would overflow integral type T for too small n</span>
 <span class="comment">// to be useful. Use instead a floating-point type,</span>

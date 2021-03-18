@@ -136,7 +136,7 @@ any_distribution::any_distribution(int t, double arg1, double arg2, double arg3)
 
    default:
       // TODO  Need some proper error handling here?
-      BOOST_ASSERT(0);
+      BOOST_MATH_ASSERT(0);
    }
    TRANSLATE_EXCEPTIONS_END
 } // any_distribution constructor.

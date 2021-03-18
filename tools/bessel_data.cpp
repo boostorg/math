@@ -302,7 +302,7 @@ int main(int argc, char* argv[])
          letter = "y";
       }
       else
-         BOOST_ASSERT(0);
+         BOOST_MATH_ASSERT(0);
    }
 
    bool cont;
@@ -327,7 +327,7 @@ int main(int argc, char* argv[])
       else if(functype == func_y)
          fp = sph_bessel_y_bare;
       else
-         BOOST_ASSERT(0);
+         BOOST_MATH_ASSERT(0);
 
       data.insert(fp, arg1, arg2);
 

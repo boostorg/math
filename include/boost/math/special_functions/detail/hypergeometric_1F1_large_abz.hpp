@@ -195,7 +195,7 @@
            // is the only stable direction as we will only iterate down until a ~ b, but we
            // will check this with an assert:
            //
-           BOOST_ASSERT(2 * a - b_local + x > 0);
+           BOOST_MATH_ASSERT(2 * a - b_local + x > 0);
            boost::math::detail::hypergeometric_1F1_recurrence_b_coefficients<T> b_coef(a, b_local, x);
            boost::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
            T b_ratio = boost::math::tools::function_ratio_from_backwards_recurrence(b_coef, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
@@ -281,7 +281,7 @@
            }
            else
            {
-              BOOST_ASSERT(!is_negative_integer(b - a));
+              BOOST_MATH_ASSERT(!is_negative_integer(b - a));
               boost::math::detail::hypergeometric_1F1_recurrence_b_coefficients<T> b_coef(a, b_local, x);
               boost::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
               second = h / boost::math::tools::function_ratio_from_backwards_recurrence(b_coef, boost::math::policies::get_epsilon<T, Policy>(), max_iter);

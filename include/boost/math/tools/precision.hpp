@@ -11,8 +11,7 @@
 #endif
 
 #include <boost/limits.hpp>
-#include <boost/assert.hpp>
-#include <boost/static_assert.hpp>
+#include <boost/math/tools/assert.hpp>
 #include <boost/math/policies/policy.hpp>
 #include <type_traits>
 #include <limits>
@@ -40,13 +39,9 @@ namespace tools
 template <class T>
 inline BOOST_MATH_CONSTEXPR int digits(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(T)) BOOST_NOEXCEPT
 {
-#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-   BOOST_STATIC_ASSERT( ::std::numeric_limits<T>::is_specialized);
-   BOOST_STATIC_ASSERT( ::std::numeric_limits<T>::radix == 2 || ::std::numeric_limits<T>::radix == 10);
-#else
-   BOOST_ASSERT(::std::numeric_limits<T>::is_specialized);
-   BOOST_ASSERT(::std::numeric_limits<T>::radix == 2 || ::std::numeric_limits<T>::radix == 10);
-#endif
+   static_assert( ::std::numeric_limits<T>::is_specialized, "Type T must be specialized");
+   static_assert( ::std::numeric_limits<T>::radix == 2 || ::std::numeric_limits<T>::radix == 10, "Type T must have a radix of 2 or 10");
+
    return std::numeric_limits<T>::radix == 2 
       ? std::numeric_limits<T>::digits
       : ((std::numeric_limits<T>::digits + 1) * 1000L) / 301L;
@@ -55,11 +50,7 @@ inline BOOST_MATH_CONSTEXPR int digits(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(T)
 template <class T>
 inline BOOST_MATH_CONSTEXPR T max_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T))  BOOST_MATH_NOEXCEPT(T)
 {
-#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-   BOOST_STATIC_ASSERT( ::std::numeric_limits<T>::is_specialized);
-#else
-   BOOST_ASSERT(::std::numeric_limits<T>::is_specialized);
-#endif
+   static_assert( ::std::numeric_limits<T>::is_specialized, "Type T must be specialized");
    return (std::numeric_limits<T>::max)();
 } // Also used as a finite 'infinite' value for - and +infinity, for example:
 // -max_value<double> = -1.79769e+308, max_value<double> = 1.79769e+308.
@@ -67,11 +58,8 @@ inline BOOST_MATH_CONSTEXPR T max_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T))  B
 template <class T>
 inline BOOST_MATH_CONSTEXPR T min_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T)) BOOST_MATH_NOEXCEPT(T)
 {
-#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-   BOOST_STATIC_ASSERT( ::std::numeric_limits<T>::is_specialized);
-#else
-   BOOST_ASSERT(::std::numeric_limits<T>::is_specialized);
-#endif
+   static_assert( ::std::numeric_limits<T>::is_specialized, "Type T must be specialized");
+
    return (std::numeric_limits<T>::min)();
 }
 
@@ -171,7 +159,7 @@ inline BOOST_MATH_CONSTEXPR long double epsilon<long double>(const std::true_typ
    //
    // This static assert fails for some unknown reason, so
    // disabled for now...
-   // BOOST_STATIC_ASSERT(std::numeric_limits<long double>::digits == 106);
+   // static_assert(std::numeric_limits<long double>::digits == 106);
    return 2.4651903288156618919116517665087e-32L;
 }
 #endif
@@ -196,7 +184,7 @@ struct log_limit_traits
       std::integral_constant<int, 0>
    >::type tag_type;
    BOOST_STATIC_CONSTANT(bool, value = tag_type::value ? true : false);
-   BOOST_STATIC_ASSERT(::std::numeric_limits<T>::is_specialized || (value == 0));
+   static_assert(::std::numeric_limits<T>::is_specialized || (value == 0), "Type T must be specialized or equal to 0");
 };
 
 template <class T, bool b> struct log_limit_noexcept_traits_imp : public log_limit_traits<T> {};
@@ -218,7 +206,7 @@ inline BOOST_MATH_CONSTEXPR T log_max_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T)
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
    return detail::log_max_value<T>(typename detail::log_limit_traits<T>::tag_type());
 #else
-   BOOST_ASSERT(::std::numeric_limits<T>::is_specialized);
+   BOOST_MATH_ASSERT(::std::numeric_limits<T>::is_specialized);
    BOOST_MATH_STD_USING
    static const T val = log((std::numeric_limits<T>::max)());
    return val;
@@ -231,7 +219,7 @@ inline BOOST_MATH_CONSTEXPR T log_min_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T)
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
    return detail::log_min_value<T>(typename detail::log_limit_traits<T>::tag_type());
 #else
-   BOOST_ASSERT(::std::numeric_limits<T>::is_specialized);
+   BOOST_MATH_ASSERT(::std::numeric_limits<T>::is_specialized);
    BOOST_MATH_STD_USING
    static const T val = log((std::numeric_limits<T>::min)());
    return val;

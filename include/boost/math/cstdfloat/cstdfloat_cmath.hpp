@@ -23,7 +23,7 @@
 #include <iostream>
 #include <type_traits>
 #include <memory>
-#include <boost/static_assert.hpp>
+#include <boost/math/tools/assert.hpp>
 #include <boost/throw_exception.hpp>
 
 #if defined(_WIN32) && defined(__GNUC__)
