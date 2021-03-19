@@ -59,7 +59,7 @@ using std::numeric_limits;
 #include <locale>
 using std::locale;
 
-#include <boost/assert.hpp>
+#include <boost/math/tools/assert.hpp>
 
 int main ()
 {
@@ -103,18 +103,18 @@ int main ()
   // Now try some 'round-tripping', 'reading' "inf".
   double x = boost::lexical_cast<double>("inf");
   // and check we get a floating-point infinity.
-  BOOST_ASSERT(x == std::numeric_limits<double>::infinity());
+  BOOST_MATH_ASSERT(x == std::numeric_limits<double>::infinity());
   cout << "boost::lexical_cast<double>(\"inf\") = " << x << endl;
 
   // Check we can convert the other way from floating-point infinity,
   string s = boost::lexical_cast<string>(numeric_limits<double>::infinity());
   // to a C99 string representation as "inf".
-  BOOST_ASSERT(s == "inf");
+  BOOST_MATH_ASSERT(s == "inf");
 
   // Finally try full 'round-tripping' (in both directions):
-  BOOST_ASSERT(lexical_cast<double>(lexical_cast<string>(numeric_limits<double>::infinity()))
+  BOOST_MATH_ASSERT(lexical_cast<double>(lexical_cast<string>(numeric_limits<double>::infinity()))
     == numeric_limits<double>::infinity());
-  BOOST_ASSERT(lexical_cast<string>(lexical_cast<double>("inf")) == "inf");
+  BOOST_MATH_ASSERT(lexical_cast<string>(lexical_cast<double>("inf")) == "inf");
 
     return 0;
 } // int main()

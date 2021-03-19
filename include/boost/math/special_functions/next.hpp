@@ -72,8 +72,8 @@ inline const T& normalize_value(const T& val, const std::false_type&) { return v
 template <class T>
 inline T normalize_value(const T& val, const std::true_type&) 
 {
-   BOOST_STATIC_ASSERT(std::numeric_limits<T>::is_specialized);
-   BOOST_STATIC_ASSERT(std::numeric_limits<T>::radix != 2);
+   static_assert(std::numeric_limits<T>::is_specialized, "Type T must be specialized.");
+   static_assert(std::numeric_limits<T>::radix != 2, "Type T must be specialized.");
 
    boost::intmax_t shift = (boost::intmax_t)std::numeric_limits<T>::digits - (boost::intmax_t)ilogb(val) - 1;
    T result = scalbn(val, shift);
@@ -154,8 +154,8 @@ inline T calc_min_shifted(const std::true_type&)
 template <class T>
 inline T calc_min_shifted(const std::false_type&)
 {
-   BOOST_STATIC_ASSERT(std::numeric_limits<T>::is_specialized);
-   BOOST_STATIC_ASSERT(std::numeric_limits<T>::radix != 2);
+   static_assert(std::numeric_limits<T>::is_specialized, "Type T must be specialized.");
+   static_assert(std::numeric_limits<T>::radix != 2, "Type T must be specialized.");
 
    return scalbn(tools::min_value<T>(), std::numeric_limits<T>::digits + 1);
 }
@@ -233,8 +233,8 @@ T float_next_imp(const T& val, const std::false_type&, const Policy& pol)
 {
    typedef typename exponent_type<T>::type exponent_type;
 
-   BOOST_STATIC_ASSERT(std::numeric_limits<T>::is_specialized);
-   BOOST_STATIC_ASSERT(std::numeric_limits<T>::radix != 2);
+   static_assert(std::numeric_limits<T>::is_specialized, "Type T must be specialized.");
+   static_assert(std::numeric_limits<T>::radix != 2, "Type T must be specialized.");
 
    BOOST_MATH_STD_USING
    exponent_type expon;
@@ -368,8 +368,8 @@ T float_prior_imp(const T& val, const std::false_type&, const Policy& pol)
 {
    typedef typename exponent_type<T>::type exponent_type;
 
-   BOOST_STATIC_ASSERT(std::numeric_limits<T>::is_specialized);
-   BOOST_STATIC_ASSERT(std::numeric_limits<T>::radix != 2);
+   static_assert(std::numeric_limits<T>::is_specialized, "Type T must be specialized.");
+   static_assert(std::numeric_limits<T>::radix != 2, "Type T must be specialized.");
 
    BOOST_MATH_STD_USING
    exponent_type expon;
@@ -502,8 +502,8 @@ T float_distance_imp(const T& a, const T& b, const std::true_type&, const Policy
    if(a < 0)
       return float_distance(static_cast<T>(-b), static_cast<T>(-a), pol);
 
-   BOOST_ASSERT(a >= 0);
-   BOOST_ASSERT(b >= a);
+   BOOST_MATH_ASSERT(a >= 0);
+   BOOST_MATH_ASSERT(b >= a);
 
    int expon;
    //
@@ -564,7 +564,7 @@ T float_distance_imp(const T& a, const T& b, const std::true_type&, const Policy
    //
    // Result must be an integer:
    //
-   BOOST_ASSERT(result == floor(result));
+   BOOST_MATH_ASSERT(result == floor(result));
    return result;
 } // float_distance_imp
 //
@@ -573,8 +573,8 @@ T float_distance_imp(const T& a, const T& b, const std::true_type&, const Policy
 template <class T, class Policy>
 T float_distance_imp(const T& a, const T& b, const std::false_type&, const Policy& pol)
 {
-   BOOST_STATIC_ASSERT(std::numeric_limits<T>::is_specialized);
-   BOOST_STATIC_ASSERT(std::numeric_limits<T>::radix != 2);
+   static_assert(std::numeric_limits<T>::is_specialized, "Type T must be specialized.");
+   static_assert(std::numeric_limits<T>::radix != 2, "Type T must be specialized.");
 
    BOOST_MATH_STD_USING
    //
@@ -610,8 +610,8 @@ T float_distance_imp(const T& a, const T& b, const std::false_type&, const Polic
    if(a < 0)
       return float_distance(static_cast<T>(-b), static_cast<T>(-a), pol);
 
-   BOOST_ASSERT(a >= 0);
-   BOOST_ASSERT(b >= a);
+   BOOST_MATH_ASSERT(a >= 0);
+   BOOST_MATH_ASSERT(b >= a);
 
    boost::intmax_t expon;
    //
@@ -671,7 +671,7 @@ T float_distance_imp(const T& a, const T& b, const std::false_type&, const Polic
    //
    // Result must be an integer:
    //
-   BOOST_ASSERT(result == floor(result));
+   BOOST_MATH_ASSERT(result == floor(result));
    return result;
 } // float_distance_imp
 
@@ -683,7 +683,7 @@ inline typename tools::promote_args<T, U>::type float_distance(const T& a, const
    //
    // We allow ONE of a and b to be an integer type, otherwise both must be the SAME type.
    //
-   BOOST_STATIC_ASSERT_MSG(
+   static_assert(
       (boost::is_same<T, U>::value 
       || (boost::is_integral<T>::value && !boost::is_integral<U>::value) 
       || (!boost::is_integral<T>::value && boost::is_integral<U>::value)
@@ -805,8 +805,8 @@ T float_advance_imp(T val, int distance, const std::true_type&, const Policy& po
 template <class T, class Policy>
 T float_advance_imp(T val, int distance, const std::false_type&, const Policy& pol)
 {
-   BOOST_STATIC_ASSERT(std::numeric_limits<T>::is_specialized);
-   BOOST_STATIC_ASSERT(std::numeric_limits<T>::radix != 2);
+   static_assert(std::numeric_limits<T>::is_specialized, "Type T must be specialized.");
+   static_assert(std::numeric_limits<T>::radix != 2, "Type T must be specialized.");
 
    BOOST_MATH_STD_USING
    //

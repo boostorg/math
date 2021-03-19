@@ -7,7 +7,7 @@
 #ifndef BOOST_MATH_STATISTICS_UNIVARIATE_STATISTICS_DETAIL_SINGLE_PASS_HPP
 #define BOOST_MATH_STATISTICS_UNIVARIATE_STATISTICS_DETAIL_SINGLE_PASS_HPP
 
-#include <boost/assert.hpp>
+#include <boost/math/tools/assert.hpp>
 #include <tuple>
 #include <iterator>
 #include <atomic>
@@ -202,7 +202,7 @@ template<typename ReturnType, typename ForwardIterator>
 ReturnType skewness_sequential_impl(ForwardIterator first, ForwardIterator last)
 {
     using std::sqrt;
-    BOOST_ASSERT_MSG(first != last, "At least one sample is required to compute skewness.");
+    BOOST_MATH_ASSERT_MSG(first != last, "At least one sample is required to compute skewness.");
     
     ReturnType M1 = *first;
     ReturnType M2 = 0;

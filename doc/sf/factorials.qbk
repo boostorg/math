@@ -45,7 +45,7 @@ and not an integer type - that would overflow far too easily for quite small val
 The source code `static_assert` and comment just after the  will be:
 
 ``
-   BOOST_STATIC_ASSERT(!boost::is_integral<T>::value);
+   static_assert(!std::is_integral<T>::value, "Type T must not be an integral type");
    // factorial<unsigned int>(n) is not implemented
    // because it would overflow integral type T for too small n
    // to be useful. Use instead a floating-point type,
@@ -155,7 +155,7 @@ and not an integer type - that would overflow far too easily!
 The source code `static_assert` and comment just after the  will be:
 
 ``
-   BOOST_STATIC_ASSERT(!boost::is_integral<T>::value);
+   static_assert(!std::is_integral<T>::value, "Type T must not be an integral type");
    // factorial<unsigned int>(n) is not implemented
    // because it would overflow integral type T for too small n
    // to be useful. Use instead a floating-point type,

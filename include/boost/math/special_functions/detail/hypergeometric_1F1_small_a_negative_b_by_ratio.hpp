@@ -53,7 +53,7 @@
          T first = 1;
          T second = 1 / ratio;
          long long scaling1 = 0;
-         BOOST_ASSERT(b + iterations != a);
+         BOOST_MATH_ASSERT(b + iterations != a);
          second = boost::math::tools::apply_recurrence_relation_forward(boost::math::detail::hypergeometric_1F1_recurrence_b_coefficients<T>(a, b + 1, z), iterations, first, second, &scaling1);
          long long scaling2 = 0;
          first = hypergeometric_1F1_imp(a, T(b + iterations + 1), z, pol, scaling2);

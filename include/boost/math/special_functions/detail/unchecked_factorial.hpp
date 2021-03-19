@@ -26,6 +26,8 @@
 #include <array>
 #include <type_traits>
 
+#include <type_traits>
+
 #if defined(__GNUC__) && defined(BOOST_MATH_USE_FLOAT128)
 //
 // This is the only way we can avoid
@@ -698,7 +700,7 @@ const typename unchecked_factorial_initializer<T>::init unchecked_factorial_init
 template <class T, int N>
 inline T unchecked_factorial_imp(unsigned i, const std::integral_constant<int, N>&)
 {
-   BOOST_STATIC_ASSERT(!std::is_integral<T>::value);
+   static_assert(!std::is_integral<T>::value, "Type T must not be a floating point type");
    // factorial<unsigned int>(n) is not implemented
    // because it would overflow integral type T for too small n
    // to be useful. Use instead a floating-point type,
@@ -818,7 +820,7 @@ inline T unchecked_factorial_imp(unsigned i, const std::integral_constant<int, N
 template <class T>
 inline T unchecked_factorial_imp(unsigned i, const std::integral_constant<int, 0>&)
 {
-   BOOST_STATIC_ASSERT(!std::is_integral<T>::value);
+   static_assert(!std::is_integral<T>::value, "Type T must not be a floating point type");
    // factorial<unsigned int>(n) is not implemented
    // because it would overflow integral type T for too small n
    // to be useful. Use instead a floating-point type,

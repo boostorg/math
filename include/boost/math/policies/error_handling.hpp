@@ -512,7 +512,7 @@ inline BOOST_MATH_CONSTEXPR TargetType raise_rounding_error(
 {
    // This may or may not do the right thing, but the user asked for the error
    // to be ignored so here we go anyway:
-   BOOST_STATIC_ASSERT(std::numeric_limits<TargetType>::is_specialized);
+   static_assert(std::numeric_limits<TargetType>::is_specialized, "The target type must be specialized.");
    return  val > 0 ? (std::numeric_limits<TargetType>::max)() : (std::numeric_limits<TargetType>::is_integer ? (std::numeric_limits<TargetType>::min)() : -(std::numeric_limits<TargetType>::max)());
 }
 
@@ -527,7 +527,7 @@ inline TargetType raise_rounding_error(
    errno = ERANGE;
    // This may or may not do the right thing, but the user asked for the error
    // to be silent so here we go anyway:
-   BOOST_STATIC_ASSERT(std::numeric_limits<TargetType>::is_specialized);
+   static_assert(std::numeric_limits<TargetType>::is_specialized, "The target type must be specialized.");
    return  val > 0 ? (std::numeric_limits<TargetType>::max)() : (std::numeric_limits<TargetType>::is_integer ? (std::numeric_limits<TargetType>::min)() : -(std::numeric_limits<TargetType>::max)());
 }
 

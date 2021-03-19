@@ -289,26 +289,26 @@ void test_legendre_p_zeros()
 
     // Check the trivial cases:
     std::vector<Real> zeros = legendre_p_zeros<Real>(1);
-    BOOST_ASSERT(zeros.size() == 1);
+    BOOST_MATH_ASSERT(zeros.size() == 1);
     BOOST_CHECK_SMALL(zeros[0], tol);
 
     zeros = legendre_p_zeros<Real>(2);
-    BOOST_ASSERT(zeros.size() == 1);
+    BOOST_MATH_ASSERT(zeros.size() == 1);
     BOOST_CHECK_CLOSE_FRACTION(zeros[0], (Real) 1/ sqrt(static_cast<Real>(3)), tol);
 
     zeros = legendre_p_zeros<Real>(3);
-    BOOST_ASSERT(zeros.size() == 2);
+    BOOST_MATH_ASSERT(zeros.size() == 2);
     BOOST_CHECK_SMALL(zeros[0], tol);
     BOOST_CHECK_CLOSE_FRACTION(zeros[1], sqrt(static_cast<Real>(3)/static_cast<Real>(5)), tol);
 
     zeros = legendre_p_zeros<Real>(4);
-    BOOST_ASSERT(zeros.size() == 2);
+    BOOST_MATH_ASSERT(zeros.size() == 2);
     BOOST_CHECK_CLOSE_FRACTION(zeros[0], sqrt( (15-2*sqrt(static_cast<Real>(30)))/static_cast<Real>(35) ), tol);
     BOOST_CHECK_CLOSE_FRACTION(zeros[1], sqrt( (15+2*sqrt(static_cast<Real>(30)))/static_cast<Real>(35) ), tol);
 
 
     zeros = legendre_p_zeros<Real>(5);
-    BOOST_ASSERT(zeros.size() == 3);
+    BOOST_MATH_ASSERT(zeros.size() == 3);
     BOOST_CHECK_SMALL(zeros[0], tol);
     BOOST_CHECK_CLOSE_FRACTION(zeros[1], third<Real>()*sqrt( (35 - 2*sqrt(static_cast<Real>(70)))/static_cast<Real>(7) ), 2*tol);
     BOOST_CHECK_CLOSE_FRACTION(zeros[2], third<Real>()*sqrt( (35 + 2*sqrt(static_cast<Real>(70)))/static_cast<Real>(7) ), 2*tol);
@@ -368,7 +368,7 @@ int test_legendre_p_zeros_double_ulp(int min_x, int max_n)
     {
         std::vector<double> double_zeros = legendre_p_zeros<double>(n);
         std::vector<cpp_bin_float_quad> quad_zeros   = legendre_p_zeros<cpp_bin_float_quad>(n);
-        BOOST_ASSERT(quad_zeros.size() == double_zeros.size());
+        BOOST_MATH_ASSERT(quad_zeros.size() == double_zeros.size());
         for (int k = 0; k < (int)double_zeros.size(); ++k)
         {
             double d = abs(float_distance(double_zeros[k], quad_zeros[k].convert_to<double>()));

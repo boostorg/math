@@ -494,6 +494,7 @@ test-suite special_fun :
    [ run test_trig.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
    [ run test_zeta.cpp ../../test/build//boost_unit_test_framework test_instances//test_instances pch_light  ]
    [ run test_sinc.cpp ../../test/build//boost_unit_test_framework pch_light ]
+   [ run test_fibonacci.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
 ;
 
 test-suite distribution_tests :
@@ -1114,7 +1115,7 @@ test-suite interpolators :
    [ run catmull_rom_test.cpp ../../test/build//boost_unit_test_framework : : : <define>TEST=3 [ requires cxx11_hdr_array cxx11_hdr_initializer_list ] : catmull_rom_test_3 ]
    [ run compile_test/catmull_rom_incl_test.cpp compile_test_main  : : : [ requires cxx11_hdr_array cxx11_hdr_initializer_list ] ]
    [ run compile_test/catmull_rom_concept_test.cpp compile_test_main   : : : [ requires cxx11_hdr_array cxx11_hdr_initializer_list ] ]
-
+   [ run test_standalone_asserts.cpp ]
 ;
 
 test-suite quadrature :
@@ -1332,10 +1333,6 @@ test-suite quadrature :
      <target-os>linux:<linkflags>"-pthread" : naive_monte_carlo_test_23
    ]
    [ compile compile_test/naive_monte_carlo_incl_test.cpp ../../atomic/build//boost_atomic :
-     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
-     <target-os>linux:<linkflags>"-pthread"
-   ]
-   [ compile compile_test/naive_monte_carlo_concept_test.cpp ../../atomic/build//boost_atomic :
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
      <target-os>linux:<linkflags>"-pthread"
    ]

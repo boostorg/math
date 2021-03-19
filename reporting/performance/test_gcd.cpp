@@ -273,8 +273,8 @@ T generate_random(unsigned bits_wanted)
 template <typename N>
 N gcd_stein(N m, N n)
 {
-   BOOST_ASSERT(m >= static_cast<N>(0));
-   BOOST_ASSERT(n >= static_cast<N>(0));
+   BOOST_MATH_ASSERT(m >= static_cast<N>(0));
+   BOOST_MATH_ASSERT(n >= static_cast<N>(0));
    if(m == N(0)) return n;
    if(n == N(0)) return m;
            // m > 0 && n > 0
