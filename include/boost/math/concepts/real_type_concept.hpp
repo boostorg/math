@@ -6,6 +6,7 @@
 #ifndef BOOST_MATH_REAL_TYPE_CONCEPT_HPP
 #define BOOST_MATH_REAL_TYPE_CONCEPT_HPP
 
+#include <cmath>
 #include <boost/config.hpp>
 #ifdef BOOST_MSVC
 #pragma warning(push)
@@ -13,7 +14,6 @@
 #pragma warning(disable: 4510)
 #pragma warning(disable: 4610)
 #endif
-#include <boost/concept_check.hpp>
 #ifdef BOOST_MSVC
 #pragma warning(pop)
 #endif
