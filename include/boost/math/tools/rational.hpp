@@ -10,7 +10,7 @@
 #pragma once
 #endif
 
-#include <boost/array.hpp>
+#include <array>
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/assert.hpp>
 
@@ -209,7 +209,7 @@ inline V evaluate_polynomial(const T(&a)[N], const V& val) BOOST_MATH_NOEXCEPT(V
 }
 
 template <std::size_t N, class T, class V>
-inline V evaluate_polynomial(const boost::array<T,N>& a, const V& val) BOOST_MATH_NOEXCEPT(V)
+inline V evaluate_polynomial(const std::array<T,N>& a, const V& val) BOOST_MATH_NOEXCEPT(V)
 {
    typedef std::integral_constant<int, N> tag_type;
    return detail::evaluate_polynomial_c_imp(static_cast<const T*>(a.data()), val, static_cast<tag_type const*>(0));
@@ -230,7 +230,7 @@ inline V evaluate_even_polynomial(const T(&a)[N], const V& z) BOOST_MATH_NOEXCEP
 }
 
 template <std::size_t N, class T, class V>
-inline V evaluate_even_polynomial(const boost::array<T,N>& a, const V& z) BOOST_MATH_NOEXCEPT(V)
+inline V evaluate_even_polynomial(const std::array<T,N>& a, const V& z) BOOST_MATH_NOEXCEPT(V)
 {
    return evaluate_polynomial(a, V(z*z));
 }
@@ -251,7 +251,7 @@ inline V evaluate_odd_polynomial(const T(&a)[N], const V& z) BOOST_MATH_NOEXCEPT
 }
 
 template <std::size_t N, class T, class V>
-inline V evaluate_odd_polynomial(const boost::array<T,N>& a, const V& z) BOOST_MATH_NOEXCEPT(V)
+inline V evaluate_odd_polynomial(const std::array<T,N>& a, const V& z) BOOST_MATH_NOEXCEPT(V)
 {
    typedef std::integral_constant<int, N-1> tag_type;
    return a[0] + z * detail::evaluate_polynomial_c_imp(static_cast<const T*>(a.data()) + 1, V(z*z), static_cast<tag_type const*>(0));
@@ -317,7 +317,7 @@ inline V evaluate_rational(const T(&a)[N], const U(&b)[N], const V& z) BOOST_MAT
 }
 
 template <std::size_t N, class T, class U, class V>
-inline V evaluate_rational(const boost::array<T,N>& a, const boost::array<U,N>& b, const V& z) BOOST_MATH_NOEXCEPT(V)
+inline V evaluate_rational(const std::array<T,N>& a, const std::array<U,N>& b, const V& z) BOOST_MATH_NOEXCEPT(V)
 {
    return detail::evaluate_rational_c_imp(a.data(), b.data(), z, static_cast<std::integral_constant<int, N>*>(0));
 }

@@ -13,7 +13,7 @@
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/special_functions/detail/unchecked_factorial.hpp>
-#include <boost/array.hpp>
+#include <array>
 #ifdef BOOST_MSVC
 #pragma warning(push) // Temporary until lexical cast fixed.
 #pragma warning(disable: 4127 4701)
@@ -21,7 +21,8 @@
 #ifdef BOOST_MSVC
 #pragma warning(pop)
 #endif
-#include <boost/config/no_tr1/cmath.hpp>
+#include <type_traits>
+#include <cmath>
 
 namespace boost { namespace math
 {

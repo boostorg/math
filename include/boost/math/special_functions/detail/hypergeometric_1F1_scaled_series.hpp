@@ -7,7 +7,8 @@
 #ifndef BOOST_MATH_HYPERGEOMETRIC_1F1_SCALED_SERIES_HPP
 #define BOOST_MATH_HYPERGEOMETRIC_1F1_SCALED_SERIES_HPP
 
-#include <boost/array.hpp>
+#include <array>
+#include <cstdint>
 
   namespace boost{ namespace math{ namespace detail{
 
@@ -25,7 +26,7 @@
         unsigned n = 0;
         long long log_scaling_factor = 1 - lltrunc(boost::math::tools::log_max_value<T>());
         T scaling_factor = exp(T(log_scaling_factor));
-        boost::intmax_t current_scaling = 0;
+        std::intmax_t current_scaling = 0;
 
         do
         {
