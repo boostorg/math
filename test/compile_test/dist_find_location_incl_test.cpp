@@ -6,6 +6,7 @@
 // Basic sanity check that header <boost/math/distributions/find_location.hpp>
 // #includes all the files that it needs to.
 //
+#include <type_traits>
 #include <boost/math/distributions/find_location.hpp>
 //
 // Note this header includes no other headers, this is
@@ -36,8 +37,8 @@ T quantile(const boost::math::complemented2_type<test_distribution<T, Policy>, T
 
 namespace boost{ namespace math{ namespace tools{
 
-   template <class T, class Policy> struct is_distribution<test_distribution<T, Policy> > : public true_type{};
-   template <class T, class Policy> struct is_scaled_distribution<test_distribution<T, Policy> > : public true_type{};
+   template <class T, class Policy> struct is_distribution<test_distribution<T, Policy> > : public std::true_type {};
+   template <class T, class Policy> struct is_scaled_distribution<test_distribution<T, Policy> > : public std::true_type {};
 
 }}}
 

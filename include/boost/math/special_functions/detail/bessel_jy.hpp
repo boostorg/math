@@ -20,7 +20,6 @@
 #include <boost/math/special_functions/detail/bessel_jy_series.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/policies/error_handling.hpp>
-#include <boost/type_traits/is_floating_point.hpp>
 #include <complex>
 
 // Bessel functions of the first and second kind of fractional order

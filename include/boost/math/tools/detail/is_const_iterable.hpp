@@ -9,11 +9,11 @@
 #include <boost/config.hpp>
 #include <boost/math/tools/cxx03_warn.hpp>
 
-#if !defined(BOOST_NO_CXX14_VARIABLE_TEMPLATES) && !defined(BOOST_NO_CXX11_DECLTYPE) && !defined(BOOST_NO_CXX11_SFINAE_EXPR)
+#if !defined(BOOST_NO_CXX14_VARIABLE_TEMPLATES)
 
 #define BOOST_MATH_HAS_IS_CONST_ITERABLE
 
-#include <boost/type_traits/is_detected.hpp>
+#include <boost/math/tools/is_detected.hpp>
 #include <utility>
 
 namespace boost {
@@ -31,9 +31,9 @@ namespace boost {
             template <class T>
             struct is_const_iterable
                : public std::integral_constant<bool,
-               boost::is_detected<begin_t, T>::value
-               && boost::is_detected<end_t, T>::value
-               && boost::is_detected<const_iterator_t, T>::value
+               is_detected<begin_t, T>::value
+               && is_detected<end_t, T>::value
+               && is_detected<const_iterator_t, T>::value
                > {};
 
 } } } }

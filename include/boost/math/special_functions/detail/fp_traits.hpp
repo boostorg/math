@@ -21,13 +21,12 @@ With these techniques, the code could be simplified.
 #endif
 
 #include <cstring>
+#include <cstdint>
 #include <limits>
-
+#include <type_traits>
 #include <boost/math/tools/assert.hpp>
-#include <boost/cstdint.hpp>
 #include <boost/predef/other/endian.h>
 #include <boost/math/tools/assert.hpp>
-#include <boost/type_traits/is_floating_point.hpp>
 
 #ifdef BOOST_NO_STDC_NAMESPACE
   namespace std{ using ::memcpy; }
@@ -526,7 +525,7 @@ template<> struct size_to_precision<16, true>
 template <class T>
 struct select_native
 {
-    typedef BOOST_DEDUCED_TYPENAME size_to_precision<sizeof(T), ::boost::is_floating_point<T>::value>::type precision;
+    typedef BOOST_DEDUCED_TYPENAME size_to_precision<sizeof(T), ::std::is_floating_point<T>::value>::type precision;
     typedef fp_traits_non_native<T, precision> type;
 };
 template<>
@@ -564,7 +563,7 @@ struct select_native<long double>
 
 template<class T> struct fp_traits
 {
-    typedef BOOST_DEDUCED_TYPENAME size_to_precision<sizeof(T), ::boost::is_floating_point<T>::value>::type precision;
+    typedef BOOST_DEDUCED_TYPENAME size_to_precision<sizeof(T), ::std::is_floating_point<T>::value>::type precision;
 #if defined(BOOST_MATH_USE_STD_FPCLASSIFY) && !defined(BOOST_MATH_DISABLE_STD_FPCLASSIFY)
     typedef typename select_native<T>::type type;
 #else

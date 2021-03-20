@@ -28,8 +28,8 @@
 
 #include <boost/cstdfloat.hpp> // For float_64_t, float128_t. Must be first include!
 #include <boost/lexical_cast.hpp>
-#include <boost/type_traits/is_constructible.hpp>
-#include <boost/type_traits/is_convertible.hpp>
+#include <limits>
+#include <type_traits>
 
 #ifdef BOOST_MATH_INSTRUMENT_CREATE_TEST_VALUE
 // global int create_type(0); must be defined before including this file.
