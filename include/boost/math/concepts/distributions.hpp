@@ -11,6 +11,8 @@
 #ifndef BOOST_MATH_DISTRIBUTION_CONCEPT_HPP
 #define BOOST_MATH_DISTRIBUTION_CONCEPT_HPP
 
+#ifndef BOOST_MATH_STANDALONE
+
 #include <boost/math/distributions/complement.hpp>
 #include <boost/math/distributions/fwd.hpp>
 #ifdef BOOST_MSVC
@@ -486,6 +488,10 @@ Distribution* DistributionConcept<Distribution>::pd = 0;
 } // namespace concepts
 } // namespace math
 } // namespace boost
+
+#else
+#error This header can not be used in standalone mode.
+#endif // BOOST_MATH_STANDALONE
 
 #endif // BOOST_MATH_DISTRIBUTION_CONCEPT_HPP
 
