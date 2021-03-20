@@ -25,6 +25,7 @@
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/tools/roots.hpp>
+#include <boost/math/tools/is_detected.hpp>
 #include <cstddef>
 #include <iterator>
 #include <limits>
@@ -273,27 +274,18 @@ class hyperexponential_distribution
                                     &err,
                                     PolicyT());
     }
-
-    private: template <typename T>
-             class is_iterator
+    private: template <typename T, typename = void>
+             struct is_iterator
              {
-             private:
-                using yes = char;
-                struct no { char x[2]; };
-
-                // Iterators only require pre-increment and dereference operator (24.2.2)
-                template <typename U, typename = decltype(*std::declval<U&>(), void(), ++std::declval<U&>(), void())>
-                static yes test(const U&&);
-                
-                template <typename U>
-                static no test(...);
-
-             public:
-                static constexpr bool value = (sizeof(test<T>(0)) == sizeof(char));
+                 static constexpr bool value = false;
              };
-    
-                
-             
+
+             template <typename T>
+             struct is_iterator<T, boost::math::tools::void_t<typename std::iterator_traits<T>::difference_type>>
+             {
+                 // std::iterator_traits<T>::difference_type returns void for invalid types
+                 static constexpr bool value = !std::is_same<typename std::iterator_traits<T>::difference_type, void>::value;
+             };
 
     // Two arg constructor from 2 ranges, we SFINAE this out of existence if
     // either argument type is incrementable as in that case the type is
