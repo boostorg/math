@@ -200,7 +200,7 @@ struct log_limit_noexcept_traits : public log_limit_noexcept_traits_imp<T, std::
 #endif
 
 template <class T>
-inline constexpr T log_max_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T)) noexcept_IF(detail::log_limit_noexcept_traits<T>::value)
+inline constexpr T log_max_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T)) noexcept(detail::log_limit_noexcept_traits<T>::value)
 {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
    return detail::log_max_value<T>(typename detail::log_limit_traits<T>::tag_type());
@@ -213,7 +213,7 @@ inline constexpr T log_max_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T)) noexcept_
 }
 
 template <class T>
-inline constexpr T log_min_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T)) noexcept_IF(detail::log_limit_noexcept_traits<T>::value)
+inline constexpr T log_min_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T)) noexcept(detail::log_limit_noexcept_traits<T>::value)
 {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
    return detail::log_min_value<T>(typename detail::log_limit_traits<T>::tag_type());

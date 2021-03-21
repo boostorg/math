@@ -61,7 +61,7 @@ inline T bessel_j_small_z_series(T v, T x, const Policy& pol)
       return prefix;
 
    bessel_j_small_z_series_term<T, Policy> s(v, x);
-   boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
+   std::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
 #if BOOST_WORKAROUND(BOOST_BORLANDC, BOOST_TESTED_AT(0x582))
    T zero = 0;
    T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter, zero);
@@ -177,7 +177,7 @@ inline T bessel_y_small_z_series(T v, T x, T* pscale, const Policy& pol)
       prefix = -exp(prefix);
    }
    bessel_y_small_z_series_term_a<T, Policy> s(v, x);
-   boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
+   std::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
    *pscale = scale;
 #if BOOST_WORKAROUND(BOOST_BORLANDC, BOOST_TESTED_AT(0x582))
    T zero = 0;

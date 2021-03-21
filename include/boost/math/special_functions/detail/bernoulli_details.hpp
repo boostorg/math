@@ -101,7 +101,7 @@ inline std::size_t find_bernoulli_overflow_limit(const std::false_type&)
    ulong_long_type t = lltrunc(boost::math::tools::log_max_value<T>());
    max_bernoulli_root_functor fun(t);
    boost::math::tools::equal_floor tol;
-   boost::uintmax_t max_iter = boost::math::policies::get_max_root_iterations<Policy>();
+   std::uintmax_t max_iter = boost::math::policies::get_max_root_iterations<Policy>();
    double result = boost::math::tools::toms748_solve(fun, sqrt(double(t)), double(t), tol, max_iter).first / 2;
    if (result > max_result)
       result = max_result;

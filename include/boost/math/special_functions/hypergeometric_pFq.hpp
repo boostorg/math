@@ -30,9 +30,9 @@ namespace boost {
 
          struct timed_iteration_terminator
          {
-            timed_iteration_terminator(boost::uintmax_t i, double t) : max_iter(i), max_time(t), start_time(std::chrono::system_clock::now()) {}
+            timed_iteration_terminator(std::uintmax_t i, double t) : max_iter(i), max_time(t), start_time(std::chrono::system_clock::now()) {}
 
-            bool operator()(boost::uintmax_t iter)const
+            bool operator()(std::uintmax_t iter)const
             {
                if (iter > max_iter)
                   boost::throw_exception(boost::math::detail::pFq_termination_exception("pFq exceeded maximum permitted iterations."));
@@ -41,7 +41,7 @@ namespace boost {
                return false;
             }
 
-            boost::uintmax_t max_iter;
+            std::uintmax_t max_iter;
             double max_time;
             std::chrono::system_clock::time_point start_time;
          };

@@ -196,7 +196,7 @@ void test_values(const T& val, const char* name)
    if (std::numeric_limits<T>::is_specialized && (std::numeric_limits<T>::digits < 30) && (std::numeric_limits<T>::radix == 2))
    {
       T left, right, dist, fresult;
-      boost::uintmax_t result;
+      std::uintmax_t result;
 
       left = static_cast<T>(0.1);
       right = left * static_cast<T>(4.2);

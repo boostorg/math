@@ -73,20 +73,20 @@ static const double denom[20] = {
    static_cast<double>(1u),
    0.0
 };
-static const boost::uint32_t denom_int[20] = {
-   static_cast<boost::uint32_t>(0u),
-   static_cast<boost::uint32_t>(39916800u),
-   static_cast<boost::uint32_t>(120543840u),
-   static_cast<boost::uint32_t>(150917976u),
-   static_cast<boost::uint32_t>(105258076u),
-   static_cast<boost::uint32_t>(45995730u),
-   static_cast<boost::uint32_t>(13339535u),
-   static_cast<boost::uint32_t>(2637558u),
-   static_cast<boost::uint32_t>(357423u),
-   static_cast<boost::uint32_t>(32670u),
-   static_cast<boost::uint32_t>(1925u),
-   static_cast<boost::uint32_t>(66u),
-   static_cast<boost::uint32_t>(1u),
+static const std::uint32_t denom_int[20] = {
+   static_cast<std::uint32_t>(0u),
+   static_cast<std::uint32_t>(39916800u),
+   static_cast<std::uint32_t>(120543840u),
+   static_cast<std::uint32_t>(150917976u),
+   static_cast<std::uint32_t>(105258076u),
+   static_cast<std::uint32_t>(45995730u),
+   static_cast<std::uint32_t>(13339535u),
+   static_cast<std::uint32_t>(2637558u),
+   static_cast<std::uint32_t>(357423u),
+   static_cast<std::uint32_t>(32670u),
+   static_cast<std::uint32_t>(1925u),
+   static_cast<std::uint32_t>(66u),
+   static_cast<std::uint32_t>(1u),
    0
 };
 

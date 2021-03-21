@@ -38,7 +38,7 @@ public:
    T max BOOST_PREVENT_MACRO_SUBSTITUTION()const{ return (stat.max)(); }
    T total()const{ return stat.total(); }
    T mean()const{ return stat.mean(); }
-   boost::uintmax_t count()const{ return stat.count(); }
+   std::uintmax_t count()const{ return stat.count(); }
    T variance()const{ return stat.variance(); }
    T variance1()const{ return stat.variance1(); }
    T rms()const{ return stat.rms(); }

@@ -57,10 +57,10 @@ void no_et()
 
   std::cout.setf(std::ios_base::boolalpha);
   
-   typedef number<backends::cpp_bin_float<113, backends::digit_base_2, void, boost::int16_t, -16382, 16383>, et_on> cpp_bin_float_quad_et_on;
-   typedef number<backends::cpp_bin_float<113, backends::digit_base_2, void, boost::int16_t, -16382, 16383>, et_off> cpp_bin_float_quad_et_off;
+   typedef number<backends::cpp_bin_float<113, backends::digit_base_2, void, std::int16_t, -16382, 16383>, et_on> cpp_bin_float_quad_et_on;
+   typedef number<backends::cpp_bin_float<113, backends::digit_base_2, void, std::int16_t, -16382, 16383>, et_off> cpp_bin_float_quad_et_off;
 
-   typedef number<backends::cpp_bin_float<113, backends::digit_base_2, void, boost::int16_t, -16382, 16383>, et_off> cpp_bin_float_oct;
+   typedef number<backends::cpp_bin_float<113, backends::digit_base_2, void, std::int16_t, -16382, 16383>, et_off> cpp_bin_float_oct;
 
 
   cpp_bin_float_quad  x("42.");

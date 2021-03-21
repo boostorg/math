@@ -78,7 +78,7 @@ typename Dist::value_type
       const typename Dist::value_type& multiplier,
       typename Dist::value_type adder,
       const Tolerance& tol,
-      boost::uintmax_t& max_iter)
+      std::uintmax_t& max_iter)
 {
    typedef typename Dist::value_type value_type;
    typedef typename Dist::policy_type policy_type;
@@ -100,7 +100,7 @@ typename Dist::value_type
       guess = min_bound;
 
    value_type fa = f(guess);
-   boost::uintmax_t count = max_iter - 1;
+   std::uintmax_t count = max_iter - 1;
    value_type fb(fa), a(guess), b =0; // Compiler warning C4701: potentially uninitialized local variable 'b' used
 
    if(fa == 0)
@@ -370,7 +370,7 @@ inline typename Dist::value_type
       const typename Dist::value_type& multiplier,
       const typename Dist::value_type& adder,
       const policies::discrete_quantile<policies::real>&,
-      boost::uintmax_t& max_iter)
+      std::uintmax_t& max_iter)
 {
    if(p > 0.5)
    {
@@ -401,7 +401,7 @@ inline typename Dist::value_type
       const typename Dist::value_type& multiplier,
       const typename Dist::value_type& adder,
       const policies::discrete_quantile<policies::integer_round_outwards>&,
-      boost::uintmax_t& max_iter)
+      std::uintmax_t& max_iter)
 {
    typedef typename Dist::value_type value_type;
    BOOST_MATH_STD_USING
@@ -444,7 +444,7 @@ inline typename Dist::value_type
       const typename Dist::value_type& multiplier,
       const typename Dist::value_type& adder,
       const policies::discrete_quantile<policies::integer_round_inwards>&,
-      boost::uintmax_t& max_iter)
+      std::uintmax_t& max_iter)
 {
    typedef typename Dist::value_type value_type;
    BOOST_MATH_STD_USING
@@ -487,7 +487,7 @@ inline typename Dist::value_type
       const typename Dist::value_type& multiplier,
       const typename Dist::value_type& adder,
       const policies::discrete_quantile<policies::integer_round_down>&,
-      boost::uintmax_t& max_iter)
+      std::uintmax_t& max_iter)
 {
    typedef typename Dist::value_type value_type;
    BOOST_MATH_STD_USING
@@ -515,7 +515,7 @@ inline typename Dist::value_type
       const typename Dist::value_type& multiplier,
       const typename Dist::value_type& adder,
       const policies::discrete_quantile<policies::integer_round_up>&,
-      boost::uintmax_t& max_iter)
+      std::uintmax_t& max_iter)
 {
    BOOST_MATH_STD_USING
    typename Dist::value_type pp = c ? 1 - p : p;
@@ -542,7 +542,7 @@ inline typename Dist::value_type
       const typename Dist::value_type& multiplier,
       const typename Dist::value_type& adder,
       const policies::discrete_quantile<policies::integer_round_nearest>&,
-      boost::uintmax_t& max_iter)
+      std::uintmax_t& max_iter)
 {
    typedef typename Dist::value_type value_type;
    BOOST_MATH_STD_USING

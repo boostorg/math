@@ -135,9 +135,9 @@ struct root_info
   int get_digits; // fraction of maximum possible accuracy required.
   // = digits * digits_accuracy
   // Vector of values (4) for each algorithm, TOMS748, Newton, Halley & Schroder.
-  //std::vector< boost::int_least64_t> times;  converted to int.
+  //std::vector< std::int_least64_t> times;  converted to int.
   std::vector<int> times; // arbitrary units (ticks).
-  //boost::int_least64_t min_time = std::numeric_limits<boost::int_least64_t>::max(); // Used to normalize times (as int).
+  //std::int_least64_t min_time = std::numeric_limits<std::int_least64_t>::max(); // Used to normalize times (as int).
   std::vector<double> normed_times;
   int min_time = (std::numeric_limits<int>::max)(); // Used to normalize times.
   std::vector<uintmax_t> iterations;
@@ -205,8 +205,8 @@ T nth_root_noderiv(T x)
 
   T factor = 2; // How big steps to take when searching.
 
-  const boost::uintmax_t maxit = 50; // Limit to maximum iterations.
-  boost::uintmax_t it = maxit; // Initially our chosen max iterations, but updated with actual.
+  const std::uintmax_t maxit = 50; // Limit to maximum iterations.
+  std::uintmax_t it = maxit; // Initially our chosen max iterations, but updated with actual.
   bool is_rising = true; // So if result if guess^3 is too low, then try increasing guess.
   // Some fraction of digits is used to control how accurate to try to make the result.
   int get_digits = std::numeric_limits<T>::digits - 2;
@@ -260,8 +260,8 @@ T nth_root_1deriv(T x)
 
   int digits = std::numeric_limits<T>::digits; // Maximum possible binary digits accuracy for type T.
   int get_digits = static_cast<int>(digits * 0.6);
-  const boost::uintmax_t maxit = 20;
-  boost::uintmax_t it = maxit;
+  const std::uintmax_t maxit = 20;
+  std::uintmax_t it = maxit;
   T result = newton_raphson_iterate(nth_root_functor_1deriv<N, T>(x), guess, min, max, get_digits, it);
   iters = it;
   return result;
@@ -312,8 +312,8 @@ T nth_root_2deriv(T x)
 
   int digits = std::numeric_limits<T>::digits; // Maximum possible binary digits accuracy for type T.
   int get_digits = static_cast<int>(digits * 0.4);
-  const boost::uintmax_t maxit = 20;
-  boost::uintmax_t it = maxit;
+  const std::uintmax_t maxit = 20;
+  std::uintmax_t it = maxit;
   T result = halley_iterate(nth_root_functor_2deriv<N, T>(x), guess, min, max, get_digits, it);
   iters = it;
 
@@ -340,8 +340,8 @@ T nth_root_2deriv_s(T x)
   T max = static_cast<T>(ldexp(static_cast<guess_type>(2.), exponent / N)); // Maximum possible value is twice our guess.
 
   int get_digits = static_cast<int>(std::numeric_limits<T>::digits * 0.4);
-  const boost::uintmax_t maxit = 20;
-  boost::uintmax_t it = maxit;
+  const std::uintmax_t maxit = 20;
+  std::uintmax_t it = maxit;
   T result = schroder_iterate(nth_root_functor_2deriv<N, T>(x), guess, min, max, get_digits, it);
   iters = it;
 

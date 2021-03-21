@@ -27,7 +27,7 @@ bool is_normalized_value(const T& val)
    //
    // Returns false if value has guard digits that are non-zero
    //
-   boost::intmax_t shift = std::numeric_limits<T>::digits - ilogb(val) - 1;
+   std::intmax_t shift = std::numeric_limits<T>::digits - ilogb(val) - 1;
    T shifted = scalbn(val, shift);
    return floor(shifted) == shifted;
 }

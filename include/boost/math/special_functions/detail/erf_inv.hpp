@@ -307,7 +307,7 @@ T erf_inv_imp(const T& p, const T& q, const Policy& pol, const std::integral_con
    //
    if(policies::digits<T, Policy>() > 64)
    {
-      boost::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
+      std::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
       if(p <= 0.5)
       {
          result = tools::halley_iterate(detail::erf_roots<typename remove_cv<T>::type, Policy>(p, 1), guess, static_cast<T>(0), tools::max_value<T>(), (policies::digits<T, Policy>() * 2) / 3, max_iter);

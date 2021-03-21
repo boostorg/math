@@ -94,7 +94,7 @@ namespace boost {
          // max_iter:   Maximum iterations to use solving the continued fraction.
          //
          template <class Recurrence, class T>
-         T function_ratio_from_backwards_recurrence(const Recurrence& r, const T& factor, boost::uintmax_t& max_iter)
+         T function_ratio_from_backwards_recurrence(const Recurrence& r, const T& factor, std::uintmax_t& max_iter)
          {
             detail::function_ratio_from_backwards_recurrence_fraction<Recurrence> f(r);
             return boost::math::tools::continued_fraction_a(f, factor, max_iter);
@@ -115,7 +115,7 @@ namespace boost {
          // max_iter:   Maximum iterations to use solving the continued fraction.
          //
          template <class Recurrence, class T>
-         T function_ratio_from_forwards_recurrence(const Recurrence& r, const T& factor, boost::uintmax_t& max_iter)
+         T function_ratio_from_forwards_recurrence(const Recurrence& r, const T& factor, std::uintmax_t& max_iter)
          {
             boost::math::tools::detail::function_ratio_from_backwards_recurrence_fraction<boost::math::tools::detail::recurrence_reverser<Recurrence, T> > f(r);
             return boost::math::tools::continued_fraction_a(f, factor, max_iter);
@@ -242,7 +242,7 @@ namespace boost {
             forward_recurrence_iterator(const Recurrence& r, value_type f_n)
                : f_n(f_n), coef(r), k(0)
             {
-               boost::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<boost::math::policies::policy<> >();
+               std::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<boost::math::policies::policy<> >();
                f_n_minus_1 = f_n * boost::math::tools::function_ratio_from_forwards_recurrence(detail::recurrence_offsetter<Recurrence>(r, -1), value_type(boost::math::tools::epsilon<value_type>() * 2), max_iter);
                boost::math::policies::check_series_iterations<value_type>("forward_recurrence_iterator<>::forward_recurrence_iterator", max_iter, boost::math::policies::policy<>());
             }
@@ -284,7 +284,7 @@ namespace boost {
             backward_recurrence_iterator(const Recurrence& r, value_type f_n)
                : f_n(f_n), coef(r), k(0)
             {
-               boost::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<boost::math::policies::policy<> >();
+               std::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<boost::math::policies::policy<> >();
                f_n_plus_1 = f_n * boost::math::tools::function_ratio_from_backwards_recurrence(detail::recurrence_offsetter<Recurrence>(r, 1), value_type(boost::math::tools::epsilon<value_type>() * 2), max_iter);
                boost::math::policies::check_series_iterations<value_type>("backward_recurrence_iterator<>::backward_recurrence_iterator", max_iter, boost::math::policies::policy<>());
             }

@@ -86,7 +86,7 @@ void test_spots(T, const char* name)
          // convergence is complete before we reach the origin.
          //
          v = 102.75;
-         boost::uintmax_t max_iter = 200;
+         std::uintmax_t max_iter = 200;
          T ratio = boost::math::tools::function_ratio_from_forwards_recurrence(bessel_jy_recurrence<T>(v, x), boost::math::tools::epsilon<T>(), max_iter);
          first = boost::math::cyl_neumann(v, x);
          second = boost::math::cyl_neumann(v + 1, x);
@@ -131,7 +131,7 @@ void test_spots(T, const char* name)
          ++it;
       }
 
-      boost::uintmax_t max_iter = 200;
+      std::uintmax_t max_iter = 200;
       T ratio = boost::math::tools::function_ratio_from_backwards_recurrence(bessel_jy_recurrence<T>(v, x), boost::math::tools::epsilon<T>(), max_iter);
       first = boost::math::cyl_bessel_j(v, x);
       second = boost::math::cyl_bessel_j(v - 1, x);

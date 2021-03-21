@@ -64,7 +64,7 @@ int main()
     }
 
     //template <class F, class T, class Tol, class Policy>std::pair<T, T> 
-    // bracket_and_solve_root(F f, const T& guess, T factor, bool rising, Tol tol, boost::uintmax_t& max_iter, const Policy& pol)
+    // bracket_and_solve_root(F f, const T& guess, T factor, bool rising, Tol tol, std::uintmax_t& max_iter, const Policy& pol)
 
 
     //double df = inverse_chi_squared_distribution<>::find_degrees_of_freedom(diff, alpha, beta, variance, 0);
