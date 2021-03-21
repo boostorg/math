@@ -8,8 +8,10 @@
 #ifndef BOOST_MATH_POLICY_ERROR_HANDLING_HPP
 #define BOOST_MATH_POLICY_ERROR_HANDLING_HPP
 
-#include <stdexcept>
-#include <iomanip>
+#define BOOST_NO_RTTI
+
+//#include <stdexcept>
+//#include <iomanip>
 #include <string>
 #include <cstring>
 #ifndef BOOST_NO_RTTI
@@ -79,15 +81,16 @@ namespace detail
 template <class T>
 std::string prec_format(const T& val)
 {
-   typedef typename boost::math::policies::precision<T, boost::math::policies::policy<> >::type prec_type;
-   std::stringstream ss;
-   if(prec_type::value)
-   {
-      int prec = 2 + (prec_type::value * 30103UL) / 100000UL;
-      ss << std::setprecision(prec);
-   }
-   ss << val;
-   return ss.str();
+   //typedef typename boost::math::policies::precision<T, boost::math::policies::policy<> >::type prec_type;
+   //std::stringstream ss;
+   //if(prec_type::value)
+   //{
+   //   int prec = 2 + (prec_type::value * 30103UL) / 100000UL;
+   //   ss << std::setprecision(prec);
+   //}
+   //ss << val;
+   //return ss.str();
+   return std::string();
 }
 
 inline void replace_all_in_string(std::string& result, const char* what, const char* with)
