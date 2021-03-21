@@ -30,7 +30,6 @@ Dover, New York, 4th ed., (1945), pages 180-188.
 #include <cmath>  // for pow function.
 #include <boost/math/special_functions.hpp> // For gamma function.
 //] [/cstdfloat_example_1]
-#include <boost/type_traits/is_same.hpp>
 
 #include <iostream>
 
