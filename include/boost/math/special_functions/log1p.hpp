@@ -13,7 +13,8 @@
 #endif
 
 #include <cmath>
-#include <boost/limits.hpp>
+#include <cstdint>
+#include <limits>
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/series.hpp>
 #include <boost/math/tools/rational.hpp>
@@ -99,7 +100,7 @@ T log1p_imp(T const & x, const Policy& pol, const std::integral_constant<int, 0>
    if(a < tools::epsilon<result_type>())
       return x;
    detail::log1p_series<result_type> s(x);
-   boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
+   std::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
 #if !BOOST_WORKAROUND(BOOST_BORLANDC, BOOST_TESTED_AT(0x582)) && !BOOST_WORKAROUND(__EDG_VERSION__, <= 245)
    result_type result = tools::sum_series(s, policies::get_epsilon<result_type, Policy>(), max_iter);
 #else
@@ -475,7 +476,7 @@ inline typename tools::promote_args<T>::type
       return -x * x / 2;
    boost::math::detail::log1p_series<T> s(x);
    s();
-   boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
+   std::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
 #if BOOST_WORKAROUND(BOOST_BORLANDC, BOOST_TESTED_AT(0x582))
    T zero = 0;
    T result = boost::math::tools::sum_series(s, policies::get_epsilon<T, Policy>(), max_iter, zero);

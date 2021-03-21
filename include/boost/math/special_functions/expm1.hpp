@@ -11,7 +11,8 @@
 #endif
 
 #include <cmath>
-#include <boost/limits.hpp>
+#include <cstdint>
+#include <limits>
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/series.hpp>
 #include <boost/math/tools/precision.hpp>
@@ -127,7 +128,7 @@ T expm1_imp(T x, const std::integral_constant<int, 0>&, const Policy& pol)
    if(a < tools::epsilon<T>())
       return x;
    detail::expm1_series<T> s(x);
-   boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
+   std::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
 #if !BOOST_WORKAROUND(BOOST_BORLANDC, BOOST_TESTED_AT(0x582)) && !BOOST_WORKAROUND(__EDG_VERSION__, <= 245)
    T result = tools::sum_series(s, policies::get_epsilon<T, Policy>(), max_iter);
 #else
