@@ -24,7 +24,6 @@
 #define BOOST_MATH_REAL_CONCEPT_HPP
 
 #include <boost/config.hpp>
-#include <boost/limits.hpp>
 #include <boost/math/special_functions/round.hpp>
 #include <boost/math/special_functions/trunc.hpp>
 #include <boost/math/special_functions/modf.hpp>
@@ -38,8 +37,8 @@
 #endif
 #include <ostream>
 #include <istream>
-#include <boost/config/no_tr1/cmath.hpp>
-#include <math.h> // fmodl
+#include <limits>
+#include <cmath>
 
 #if defined(__SGI_STL_PORT) || defined(_RWSTD_VER) || defined(__LIBCOMO__)
 #  include <cstdio>
@@ -377,7 +376,7 @@ inline concepts::real_concept epsilon<concepts::real_concept>(BOOST_MATH_EXPLICI
 }
 
 template <>
-inline BOOST_MATH_CONSTEXPR int digits<concepts::real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept)) BOOST_NOEXCEPT
+inline constexpr int digits<concepts::real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept)) BOOST_NOEXCEPT
 {
    // Assume number of significand bits is same as real_concept_base_type,
    // unless std::numeric_limits<T>::is_specialized to provide digits.
