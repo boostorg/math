@@ -74,6 +74,7 @@ project
       <search>$(gmp_path)
       <search>$(mpfr_path)
       <search>$(mpfr_path)/build.vc10/lib/Win32/Debug
+      [ requires cxx11_noexcept cxx11_rvalue_references sfinae_expr cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_tuple cxx11_hdr_initializer_list cxx11_hdr_chrono cxx11_thread_local cxx11_constexpr cxx11_nullptr cxx11_numeric_limits cxx11_decltype cxx11_hdr_array cxx11_hdr_atomic cxx11_hdr_type_traits cxx11_allocator cxx11_explicit_conversion_operators ]
     ;
 
 if $(ntl-path)
@@ -493,6 +494,7 @@ test-suite special_fun :
    [ run test_trig.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
    [ run test_zeta.cpp ../../test/build//boost_unit_test_framework test_instances//test_instances pch_light  ]
    [ run test_sinc.cpp ../../test/build//boost_unit_test_framework pch_light ]
+   [ run test_fibonacci.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
 ;
 
 test-suite distribution_tests :
@@ -842,6 +844,7 @@ test-suite distribution_tests :
 
 test-suite mp :
 
+   [ run test_nc_t_quad.cpp  pch ../../test/build//boost_unit_test_framework : : : release [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] ]
    [ run test_polynomial.cpp ../../test/build//boost_unit_test_framework : : : <define>TEST1 : test_polynomial_1  ]
    [ run test_polynomial.cpp ../../test/build//boost_unit_test_framework : : : <define>TEST2 : test_polynomial_2  ]
    [ run test_polynomial.cpp ../../test/build//boost_unit_test_framework : : : <define>TEST3 : test_polynomial_3  ]
@@ -860,7 +863,6 @@ test-suite mp :
    [ compile ntl_concept_check.cpp : [ check-target-builds ../config//has_ntl_rr : : <build>no ] <debug-symbols>off  ]
    [ compile mpfr_concept_check.cpp : [ check-target-builds ../config//has_mpfr_class : : <build>no ] <debug-symbols>off  ]
    [ compile mpreal_concept_check.cpp : [ check-target-builds ../config//has_mpreal : : <build>no ] <debug-symbols>off  ]
-   [ compile e_float_concept_check.cpp : [ check-target-builds ../config//has_e_float : : <build>no ] <debug-symbols>off  ]
 ;
 
 test-suite misc :
@@ -943,6 +945,7 @@ test-suite misc :
    [ run test_policy_7.cpp ../../test/build//boost_unit_test_framework  ]
    [ run test_policy_8.cpp ../../test/build//boost_unit_test_framework  ]
    [ compile test_policy_9.cpp  ]
+   [ run test_policy_10.cpp ../../test/build//boost_unit_test_framework  ]
    [ run test_policy_sf.cpp ../../test/build//boost_unit_test_framework  ]
    [ run test_long_double_support.cpp ../../test/build//boost_unit_test_framework
       : : : [ check-target-builds ../config//has_long_double_support "long double support" : : <build>no ] ]
@@ -1112,7 +1115,7 @@ test-suite interpolators :
    [ run catmull_rom_test.cpp ../../test/build//boost_unit_test_framework : : : <define>TEST=3 [ requires cxx11_hdr_array cxx11_hdr_initializer_list ] : catmull_rom_test_3 ]
    [ run compile_test/catmull_rom_incl_test.cpp compile_test_main  : : : [ requires cxx11_hdr_array cxx11_hdr_initializer_list ] ]
    [ run compile_test/catmull_rom_concept_test.cpp compile_test_main   : : : [ requires cxx11_hdr_array cxx11_hdr_initializer_list ] ]
-
+   [ run test_standalone_asserts.cpp ]
 ;
 
 test-suite quadrature :
@@ -1330,10 +1333,6 @@ test-suite quadrature :
      <target-os>linux:<linkflags>"-pthread" : naive_monte_carlo_test_23
    ]
    [ compile compile_test/naive_monte_carlo_incl_test.cpp ../../atomic/build//boost_atomic :
-     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
-     <target-os>linux:<linkflags>"-pthread"
-   ]
-   [ compile compile_test/naive_monte_carlo_concept_test.cpp ../../atomic/build//boost_atomic :
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
      <target-os>linux:<linkflags>"-pthread"
    ]

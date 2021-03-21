@@ -9,27 +9,15 @@
 #ifdef _MSC_VER
 #pragma once
 #endif
-#include <boost/math/tools/complex.hpp> // test for multiprecision types.
+#include <boost/math/tools/complex.hpp> // test for multiprecision types in complex Newton
 
-#include <iostream>
 #include <utility>
-#include <boost/config/no_tr1/cmath.hpp>
-#include <stdexcept>
+#include <cmath>
+#include <tuple>
 
 #include <boost/math/tools/config.hpp>
 #include <boost/cstdint.hpp>
-#include <boost/assert.hpp>
-#include <boost/throw_exception.hpp>
 #include <boost/math/tools/cxx03_warn.hpp>
-
-#ifdef BOOST_MSVC
-#pragma warning(push)
-#pragma warning(disable: 4512)
-#endif
-#include <boost/math/tools/tuple.hpp>
-#ifdef BOOST_MSVC
-#pragma warning(pop)
-#endif
 
 #include <boost/math/special_functions/sign.hpp>
 #include <boost/math/special_functions/next.hpp>
@@ -205,14 +193,7 @@ std::pair<T, T> bisect(F f, T min, T max, Tol tol, boost::uintmax_t& max_iter, c
    max_iter -= count;
 
 #ifdef BOOST_MATH_INSTRUMENT
-   std::cout << "Bisection iteration, final count = " << max_iter << std::endl;
-
-   static boost::uintmax_t max_count = 0;
-   if (max_iter > max_count)
-   {
-      max_count = max_iter;
-      std::cout << "Maximum iterations: " << max_iter << std::endl;
-   }
+   std::cout << "Bisection required " << max_iter << " iterations.\n";
 #endif
 
    return std::make_pair(min, max);
@@ -238,7 +219,7 @@ T newton_raphson_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_
    BOOST_MATH_STD_USING
 
    static const char* function = "boost::math::tools::newton_raphson_iterate<%1%>";
-   if (min >= max)
+   if (min > max)
    {
       return policies::raise_evaluation_error(function, "Range arguments in wrong order in boost::math::tools::newton_raphson_iterate(first arg=%1%)", min, boost::math::policies::policy<>());
    }
@@ -268,7 +249,7 @@ T newton_raphson_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_
 
 #ifdef BOOST_MATH_INSTRUMENT
    std::cout << "Newton_raphson_iterate, guess = " << guess << ", min = " << min << ", max = " << max
-      << ", digits = " << digits << ", max_iter = " << max_iter << std::endl;
+      << ", digits = " << digits << ", max_iter = " << max_iter << "\n";
 #endif
 
    do {
@@ -282,9 +263,6 @@ T newton_raphson_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_
       if (f1 == 0)
       {
          // Oops zero derivative!!!
-#ifdef BOOST_MATH_INSTRUMENT
-         std::cout << "Newton iteration, zero derivative found!" << std::endl;
-#endif
          detail::handle_zero_derivative(f, last_f0, f0, delta, result, guess, min, max);
       }
       else
@@ -292,7 +270,7 @@ T newton_raphson_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_
          delta = f0 / f1;
       }
 #ifdef BOOST_MATH_INSTRUMENT
-      std::cout << "Newton iteration " << max_iter - count << ", delta = " << delta << std::endl;
+      std::cout << "Newton iteration " << max_iter - count << ", delta = " << delta << ", residual = " << f0 << "\n";
 #endif
       if (fabs(delta * 2) > fabs(delta2))
       {
@@ -348,15 +326,7 @@ T newton_raphson_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_
    max_iter -= count;
 
 #ifdef BOOST_MATH_INSTRUMENT
-   std::cout << "Newton Raphson final iteration count = " << max_iter << std::endl;
-
-   static boost::uintmax_t max_count = 0;
-   if (max_iter > max_count)
-   {
-      max_count = max_iter;
-      // std::cout << "Maximum iterations: " << max_iter << std::endl;
-      // Puzzled what this tells us, so commented out for now?
-   }
+   std::cout << "Newton Raphson required " << max_iter << " iterations\n";
 #endif
 
    return result;
@@ -516,7 +486,7 @@ namespace detail {
 
 #ifdef BOOST_MATH_INSTRUMENT
         std::cout << "Second order root iteration, guess = " << guess << ", min = " << min << ", max = " << max
-        << ", digits = " << digits << ", max_iter = " << max_iter << std::endl;
+        << ", digits = " << digits << ", max_iter = " << max_iter << "\n";
 #endif
       static const char* function = "boost::math::tools::halley_iterate<%1%>";
       if (min >= max)
@@ -535,7 +505,7 @@ namespace detail {
       bool out_of_bounds_sentry = false;
 
    #ifdef BOOST_MATH_INSTRUMENT
-      std::cout << "Second order root iteration, limit = " << factor << std::endl;
+      std::cout << "Second order root iteration, limit = " << factor << "\n";
    #endif
 
       //
@@ -569,9 +539,6 @@ namespace detail {
          if (f1 == 0)
          {
             // Oops zero derivative!!!
-   #ifdef BOOST_MATH_INSTRUMENT
-            std::cout << "Second order root iteration, zero derivative found!" << std::endl;
-   #endif
             detail::handle_zero_derivative(f, last_f0, f0, delta, result, guess, min, max);
          }
          else
@@ -599,7 +566,7 @@ namespace detail {
                delta = f0 / f1;
          }
    #ifdef BOOST_MATH_INSTRUMENT
-         std::cout << "Second order root iteration, delta = " << delta << std::endl;
+         std::cout << "Second order root iteration, delta = " << delta << ", residual = " << f0 << "\n";
    #endif
          T convergence = fabs(delta / delta2);
          if ((convergence > 0.8) && (convergence < 2))
@@ -697,7 +664,7 @@ namespace detail {
       max_iter -= count;
 
    #ifdef BOOST_MATH_INSTRUMENT
-      std::cout << "Second order root finder, final iteration count = " << max_iter << std::endl;
+      std::cout << "Second order root finder required " << max_iter << " iterations.\n";
    #endif
 
       return result;

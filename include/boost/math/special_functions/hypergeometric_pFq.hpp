@@ -62,7 +62,7 @@ namespace boost {
 
          BOOST_MATH_STD_USING
 
-         int scale = 0;
+         long long scale = 0;
          std::pair<value_type, value_type> r = boost::math::detail::hypergeometric_pFq_checked_series_impl(aj, bj, value_type(z), pol, boost::math::detail::iteration_terminator(boost::math::policies::get_max_series_iterations<forwarding_policy>()), scale);
          r.first *= exp(Real(scale));
          r.second *= exp(Real(scale));
@@ -131,7 +131,7 @@ namespace boost {
             z.precision(current_precision);
             try
             {
-               int scale = 0;
+               long long scale = 0;
                std::pair<Real, Real> rp = boost::math::detail::hypergeometric_pFq_checked_series_impl(aa, bb, z, pol, boost::math::detail::timed_iteration_terminator(boost::math::policies::get_max_series_iterations<Policy>(), timeout), scale);
                rp.first *= exp(Real(scale));
                rp.second *= exp(Real(scale));

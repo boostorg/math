@@ -14,6 +14,17 @@
 // #define BOOST_MATH_TEST_MULTIPRECISION  // Add tests for several multiprecision types (not just built-in).
 // #define BOOST_MATH_TEST_FLOAT128 // Add test using float128 type (GCC only, needing gnu++17 and quadmath library).
 
+#include <climits>
+#include <cfloat>
+#if defined(BOOST_MATH_TEST_FLOAT128) && (LDBL_MANT_DIG > 100)
+//
+// Mixing __float128 and long double results in:
+// error: __float128 and long double cannot be used in the same expression
+// whenever long double is a [possibly quasi-] quad precision type.
+// 
+#undef BOOST_MATH_TEST_FLOAT128
+#endif
+
 #ifdef BOOST_MATH_TEST_FLOAT128
 #include <boost/cstdfloat.hpp> // For float_64_t, float128_t. Must be first include!
 #endif // #ifdef #ifdef BOOST_MATH_TEST_FLOAT128
@@ -216,7 +227,7 @@ void wolfram_test_small_neg()
 }
 
 template <class T>
-void wolfram_test_large(const boost::true_type&)
+void wolfram_test_large(const std::true_type&)
 {
    //
    // Spots near the singularity from http://www.wolframalpha.com/input/?i=TABLE%5B%5BN%5B-1%2Fe%2B2%5E-i,+50%5D,+N%5BLambertW%5B-1%2Fe+%2B+2%5E-i%5D,+50%5D%5D,+%7Bi,+2,+40%7D%5D
@@ -234,12 +245,12 @@ void wolfram_test_large(const boost::true_type&)
    }
 }
 template <class T>
-void wolfram_test_large(const boost::false_type&){}
+void wolfram_test_large(const std::false_type&){}
 
 template <class T>
 void wolfram_test_large() 
 {
-   wolfram_test_large<T>(boost::integral_constant<bool, (std::numeric_limits<T>::max_exponent10 > 1000)>());
+   wolfram_test_large<T>(std::integral_constant<bool, (std::numeric_limits<T>::max_exponent10 > 1000)>());
 }
 
 
@@ -823,7 +834,9 @@ BOOST_AUTO_TEST_CASE( test_types )
   #else // BOOST_MATH_TEST_MULTIPRECISION
   // Multiprecision types:
 #if BOOST_MATH_TEST_MULTIPRECISION == 1
+#if (LDBL_MANT_DIG <= 64) // Otherwise we get inscrutable errors from multiprecision, which may or may not be a bug...
   test_spots(static_cast<boost::multiprecision::cpp_bin_float_double_extended>(0));
+#endif
 #endif
 #if BOOST_MATH_TEST_MULTIPRECISION == 2
   test_spots(static_cast<boost::multiprecision::cpp_bin_float_quad>(0));

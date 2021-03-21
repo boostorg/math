@@ -47,7 +47,6 @@
 #include <boost/type_traits/is_floating_point.hpp>
 #include <boost/type_traits/is_integral.hpp>
 #include <boost/type_traits/is_same.hpp>
-#include <boost/mpl/if.hpp>
 
 #include <limits> // using std::numeric_limits;
 #include <utility>

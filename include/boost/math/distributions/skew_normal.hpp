@@ -21,7 +21,7 @@
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/tools/tuple.hpp>
 #include <boost/math/tools/roots.hpp> // Newton-Raphson
-#include <boost/assert.hpp>
+#include <boost/math/tools/assert.hpp>
 #include <boost/math/distributions/detail/generic_mode.hpp> // pdf max finder.
 
 #include <utility>
@@ -392,7 +392,7 @@ namespace boost{ namespace math{
         
         const diff_type d = std::distance(shapes, result_ptr);
         
-        BOOST_ASSERT(d > static_cast<diff_type>(0));
+        BOOST_MATH_ASSERT(d > static_cast<diff_type>(0));
 
         // refine
         if(d < static_cast<diff_type>(21)) // shape smaller 100
@@ -531,7 +531,7 @@ namespace boost{ namespace math{
     
     const diff_type d = std::distance(shapes, result_ptr);
     
-    BOOST_ASSERT(d > static_cast<diff_type>(0));
+    BOOST_MATH_ASSERT(d > static_cast<diff_type>(0));
 
     // TODO: make the search bounds smarter, depending on the shape parameter
     RealType search_min = 0; // below zero was caught above

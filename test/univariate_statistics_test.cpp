@@ -22,7 +22,7 @@
 
 // Support compilers with P0024R2 implemented without linking TBB
 // https://en.cppreference.com/w/cpp/compiler_support
-#if (__cplusplus > 201700 || _MSVC_LANG > 201700) && (__GNUC__ > 9 || (__clang_major__ > 9 && defined __GLIBCXX__)  || _MSC_VER > 1927)
+#ifndef BOOST_NO_CXX17_HDR_EXECUTION
 #include <execution>
 #endif
 
@@ -103,7 +103,7 @@ std::vector<T> generate_random_vector(size_t size, size_t seed)
     }
     else
     {
-        BOOST_ASSERT_MSG(false, "Could not identify type for random vector generation.");
+        BOOST_MATH_ASSERT_MSG(false, "Could not identify type for random vector generation.");
         return v;
     }
 }
@@ -931,8 +931,8 @@ int main()
 {
     // Support compilers with P0024R2 implemented without linking TBB
     // https://en.cppreference.com/w/cpp/compiler_support
-    #if (__cplusplus > 201700 || _MSVC_LANG > 201700) && (__GNUC__ > 9 || (__clang_major__ > 9 && defined __GLIBCXX__)  || _MSC_VER > 1927)
-    
+#ifndef BOOST_NO_CXX17_HDR_EXECUTION
+
     test_mean<float>(std::execution::seq);
     test_mean<float>(std::execution::par);
     test_mean<double>(std::execution::seq);

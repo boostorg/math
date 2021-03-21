@@ -28,7 +28,7 @@
   #include <sstream>
   #include <stdexcept>
   #include <string>
-  #include <boost/static_assert.hpp>
+  #include <boost/math/tools/assert.hpp>
   #include <boost/throw_exception.hpp>
 
 //  #if (0)

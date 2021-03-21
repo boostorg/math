@@ -7,7 +7,7 @@
 
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/math/statistics/univariate_statistics.hpp>
-#include <boost/assert.hpp>
+#include <boost/math/tools/assert.hpp>
 #include <benchmark/benchmark.h>
 #include <vector>
 #include <algorithm>
@@ -76,7 +76,7 @@ std::vector<T> generate_random_vector(std::size_t size, std::size_t seed)
     }
     else
     {
-        BOOST_ASSERT_MSG(false, "Could not identify type for random vector generation.");
+        BOOST_MATH_ASSERT_MSG(false, "Could not identify type for random vector generation.");
         return v;
     }
 }

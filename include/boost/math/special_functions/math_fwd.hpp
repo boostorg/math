@@ -24,12 +24,11 @@
 #endif
 
 #include <vector>
+#include <complex>
+#include <type_traits>
 #include <boost/math/special_functions/detail/round_fwd.hpp>
 #include <boost/math/tools/promotion.hpp> // for argument promotion.
 #include <boost/math/policies/policy.hpp>
-#include <boost/mpl/comparison.hpp>
-#include <boost/utility/enable_if.hpp>
-#include <boost/config/no_tr1/complex.hpp>
 
 #define BOOST_NO_MACRO_EXPAND /**/
 
@@ -195,10 +194,10 @@ namespace boost
 
 #if !BOOST_WORKAROUND(BOOST_MSVC, <= 1310)
    template <class T, class Policy>
-   typename boost::enable_if_c<policies::is_policy<Policy>::value, typename tools::promote_args<T>::type>::type
+   typename std::enable_if<policies::is_policy<Policy>::value, typename tools::promote_args<T>::type>::type
          legendre_p(int l, T x, const Policy& pol);
    template <class T, class Policy>
-   inline typename boost::enable_if_c<policies::is_policy<Policy>::value, typename tools::promote_args<T>::type>::type
+   inline typename std::enable_if<policies::is_policy<Policy>::value, typename tools::promote_args<T>::type>::type
       legendre_p_prime(int l, T x, const Policy& pol);
 #endif
    template <class T>
@@ -206,7 +205,7 @@ namespace boost
          legendre_q(unsigned l, T x);
 #if !BOOST_WORKAROUND(BOOST_MSVC, <= 1310)
    template <class T, class Policy>
-   typename boost::enable_if_c<policies::is_policy<Policy>::value, typename tools::promote_args<T>::type>::type
+   typename std::enable_if<policies::is_policy<Policy>::value, typename tools::promote_args<T>::type>::type
          legendre_q(unsigned l, T x, const Policy& pol);
 #endif
    template <class T1, class T2, class T3>
@@ -240,11 +239,11 @@ namespace boost
    template <class T1, class T2>
    struct laguerre_result
    {
-      typedef typename mpl::if_<
-         policies::is_policy<T2>,
+      using type = typename std::conditional<
+         policies::is_policy<T2>::value,
          typename tools::promote_args<T1>::type,
          typename tools::promote_args<T2>::type
-      >::type type;
+      >::type;
    };
 
    template <class T1, class T2>
@@ -396,11 +395,11 @@ namespace boost
    template <class T, class U, class V>
    struct ellint_3_result
    {
-      typedef typename mpl::if_<
-         policies::is_policy<V>,
+      using type = typename std::conditional<
+         policies::is_policy<V>::value,
          typename tools::promote_args<T, U>::type,
          typename tools::promote_args<T, U, V>::type
-      >::type type;
+      >::type;
    };
 
    } // namespace detail
@@ -639,43 +638,40 @@ namespace boost
 
    namespace detail{
 
-      typedef boost::integral_constant<int, 0> bessel_no_int_tag;      // No integer optimisation possible.
-      typedef boost::integral_constant<int, 1> bessel_maybe_int_tag;   // Maybe integer optimisation.
-      typedef boost::integral_constant<int, 2> bessel_int_tag;         // Definite integer optimisation.
+      typedef std::integral_constant<int, 0> bessel_no_int_tag;      // No integer optimisation possible.
+      typedef std::integral_constant<int, 1> bessel_maybe_int_tag;   // Maybe integer optimisation.
+      typedef std::integral_constant<int, 2> bessel_int_tag;         // Definite integer optimisation.
 
       template <class T1, class T2, class Policy>
       struct bessel_traits
       {
-         typedef typename mpl::if_<
-            is_integral<T1>,
+         using result_type = typename std::conditional<
+            std::is_integral<T1>::value,
             typename tools::promote_args<T2>::type,
             typename tools::promote_args<T1, T2>::type
-         >::type result_type;
+         >::type;
 
          typedef typename policies::precision<result_type, Policy>::type precision_type;
 
-         typedef typename mpl::if_<
-            mpl::or_<
-               mpl::less_equal<precision_type, boost::integral_constant<int, 0> >,
-               mpl::greater<precision_type, boost::integral_constant<int, 64> > >,
+         using optimisation_tag = typename std::conditional<
+            (precision_type::value <= 0 || precision_type::value > 64),
             bessel_no_int_tag,
-            typename mpl::if_<
-               is_integral<T1>,
+            typename std::conditional<
+               std::is_integral<T1>::value,
                bessel_int_tag,
                bessel_maybe_int_tag
             >::type
-         >::type optimisation_tag;
-         typedef typename mpl::if_<
-            mpl::or_<
-               mpl::less_equal<precision_type, boost::integral_constant<int, 0> >,
-               mpl::greater<precision_type, boost::integral_constant<int, 113> > >,
+         >::type;
+
+         using optimisation_tag128 = typename std::conditional<
+            (precision_type::value <= 0 || precision_type::value > 113),
             bessel_no_int_tag,
-            typename mpl::if_<
-               is_integral<T1>,
+            typename std::conditional<
+               std::is_integral<T1>::value,
                bessel_int_tag,
                bessel_maybe_int_tag
             >::type
-         >::type optimisation_tag128;
+         >::type;
       };
    } // detail
 
@@ -905,8 +901,8 @@ namespace boost
    template <class T, class U>
    struct expint_result
    {
-      typedef typename mpl::if_<
-         policies::is_policy<U>,
+      typedef typename std::conditional<
+         policies::is_policy<U>::value,
          typename tools::promote_args<T>::type,
          typename tools::promote_args<U>::type
       >::type type;

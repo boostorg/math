@@ -395,8 +395,8 @@ inline RR tanh(RR a)
          *exp -= 1;
          r.value().e += 1;
       }
-      BOOST_ASSERT(r < 1);
-      BOOST_ASSERT(r >= 0.5);
+      BOOST_MATH_ASSERT(r < 1);
+      BOOST_MATH_ASSERT(r >= 0.5);
       return r;
    }
    inline RR ldexp(RR r, int exp)
@@ -838,7 +838,7 @@ namespace ntl{
 namespace detail{
 
 template <class Policy>
-ntl::RR digamma_imp(ntl::RR x, const boost::integral_constant<int, 0>* , const Policy& pol)
+ntl::RR digamma_imp(ntl::RR x, const std::integral_constant<int, 0>* , const Policy& pol)
 {
    //
    // This handles reflection of negative arguments, and all our

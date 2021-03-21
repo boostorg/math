@@ -12,11 +12,6 @@
 #include <boost/math/tools/fraction.hpp>
 #include <boost/math/tools/cxx03_warn.hpp>
 
-#ifdef BOOST_NO_CXX11_HDR_TUPLE
-#error "This header requires C++11 support"
-#endif
-
-
 namespace boost {
    namespace math {
       namespace tools {
@@ -140,7 +135,7 @@ namespace boost {
          // second: w(0);
          //
          template <class NextCoefs, class T>
-         inline T apply_recurrence_relation_forward(const NextCoefs& get_coefs, unsigned number_of_steps, T first, T second, int* log_scaling = 0, T* previous = 0)
+         inline T apply_recurrence_relation_forward(const NextCoefs& get_coefs, unsigned number_of_steps, T first, T second, long long* log_scaling = 0, T* previous = 0)
          {
             BOOST_MATH_STD_USING
             using boost::math::tuple;
@@ -162,7 +157,7 @@ namespace boost {
 
                {
                   // Rescale everything:
-                  int log_scale = itrunc(log(fabs(second)));
+                  long long log_scale = lltrunc(log(fabs(second)));
                   T scale = exp(T(-log_scale));
                   second *= scale;
                   first *= scale;
@@ -170,7 +165,7 @@ namespace boost {
                }
                // scale each part separately to avoid spurious overflow:
                third = (a / -c) * first + (b / -c) * second;
-               BOOST_ASSERT((boost::math::isfinite)(third));
+               BOOST_MATH_ASSERT((boost::math::isfinite)(third));
 
 
                swap(first, second);
@@ -195,7 +190,7 @@ namespace boost {
          // second: w(0);
          //
          template <class T, class NextCoefs>
-         inline T apply_recurrence_relation_backward(const NextCoefs& get_coefs, unsigned number_of_steps, T first, T second, int* log_scaling = 0, T* previous = 0)
+         inline T apply_recurrence_relation_backward(const NextCoefs& get_coefs, unsigned number_of_steps, T first, T second, long long* log_scaling = 0, T* previous = 0)
          {
             BOOST_MATH_STD_USING
             using boost::math::tuple;
@@ -224,7 +219,7 @@ namespace boost {
                }
                // scale each part separately to avoid spurious overflow:
                next = (b / -a) * second + (c / -a) * first;
-               BOOST_ASSERT((boost::math::isfinite)(next));
+               BOOST_MATH_ASSERT((boost::math::isfinite)(next));
 
                swap(first, second);
                swap(second, next);

@@ -11,9 +11,9 @@
 #include <string>
 #include <vector>
 #include <typeinfo>
+#include <mutex>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/tools/atomic.hpp>
-#include <boost/detail/lightweight_mutex.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/trunc.hpp>
 
@@ -52,11 +52,11 @@ private:
 #ifndef BOOST_MATH_NO_ATOMIC_INT
       if (m_committed_refinements.load() < n)
          extend_refinements();
-      BOOST_ASSERT(m_committed_refinements.load() >= n);
+      BOOST_MATH_ASSERT(m_committed_refinements.load() >= n);
 #else
       if (m_committed_refinements < n)
          extend_refinements();
-      BOOST_ASSERT(m_committed_refinements >= n);
+      BOOST_MATH_ASSERT(m_committed_refinements >= n);
 #endif
       return m_abscissas[n];
    }
@@ -65,26 +65,26 @@ private:
 #ifndef BOOST_MATH_NO_ATOMIC_INT
       if (m_committed_refinements.load() < n)
          extend_refinements();
-      BOOST_ASSERT(m_committed_refinements.load() >= n);
+      BOOST_MATH_ASSERT(m_committed_refinements.load() >= n);
 #else
       if (m_committed_refinements < n)
          extend_refinements();
-      BOOST_ASSERT(m_committed_refinements >= n);
+      BOOST_MATH_ASSERT(m_committed_refinements >= n);
 #endif
       return m_weights[n];
    }
-   void init(const boost::integral_constant<int, 0>&);
-   void init(const boost::integral_constant<int, 1>&);
-   void init(const boost::integral_constant<int, 2>&);
-   void init(const boost::integral_constant<int, 3>&);
+   void init(const std::integral_constant<int, 0>&);
+   void init(const std::integral_constant<int, 1>&);
+   void init(const std::integral_constant<int, 2>&);
+   void init(const std::integral_constant<int, 3>&);
 #ifdef BOOST_HAS_FLOAT128
-   void init(const boost::integral_constant<int, 4>&);
+   void init(const std::integral_constant<int, 4>&);
 #endif
 
    void extend_refinements()const
    {
 #ifndef BOOST_MATH_NO_ATOMIC_INT
-      boost::detail::lightweight_mutex::scoped_lock guard(m_mutex);
+      std::lock_guard<std::mutex> guard(m_mutex);
 #endif
       //
       // Check some other thread hasn't got here after we read the atomic variable, but before we got here:
@@ -129,7 +129,7 @@ private:
    std::size_t                       m_max_refinements;
 #ifndef BOOST_MATH_NO_ATOMIC_INT
    mutable boost::math::detail::atomic_unsigned_type      m_committed_refinements;
-   mutable boost::detail::lightweight_mutex m_mutex;
+   mutable std::mutex m_mutex;
 #else
    mutable unsigned                  m_committed_refinements;
 #endif
@@ -139,7 +139,7 @@ template<class Real, class Policy>
 sinh_sinh_detail<Real, Policy>::sinh_sinh_detail(size_t max_refinements)
    : m_abscissas(max_refinements), m_weights(max_refinements), m_max_refinements(max_refinements)
 {
-   init(boost::integral_constant<int, initializer_selector>());
+   init(std::integral_constant<int, initializer_selector>());
 }
 
 template<class Real, class Policy>
@@ -270,7 +270,7 @@ auto sinh_sinh_detail<Real, Policy>::integrate(const F f, Real tolerance, Real* 
 }
 
 template<class Real, class Policy>
-void sinh_sinh_detail<Real, Policy>::init(const boost::integral_constant<int, 0>&)
+void sinh_sinh_detail<Real, Policy>::init(const std::integral_constant<int, 0>&)
 {
    using std::log;
    using std::sqrt;
@@ -316,7 +316,7 @@ void sinh_sinh_detail<Real, Policy>::init(const boost::integral_constant<int, 0>
 }
 
 template<class Real, class Policy>
-void sinh_sinh_detail<Real, Policy>::init(const boost::integral_constant<int, 1>&)
+void sinh_sinh_detail<Real, Policy>::init(const std::integral_constant<int, 1>&)
 {
    m_abscissas = {
       { 3.08828742e+00f, 1.48993185e+02f, 3.41228925e+06f, 2.06932577e+18f, },
@@ -356,7 +356,7 @@ void sinh_sinh_detail<Real, Policy>::init(const boost::integral_constant<int, 1>
 }
 
 template<class Real, class Policy>
-void sinh_sinh_detail<Real, Policy>::init(const boost::integral_constant<int, 2>&)
+void sinh_sinh_detail<Real, Policy>::init(const std::integral_constant<int, 2>&)
 {
    m_abscissas = {
       { 3.088287417976322866e+00, 1.489931846492091580e+02, 3.412289247883437102e+06, 2.069325766042617791e+18, 2.087002407609475560e+50, 2.019766160717908151e+137, },
@@ -397,7 +397,7 @@ void sinh_sinh_detail<Real, Policy>::init(const boost::integral_constant<int, 2>
 
 #if LDBL_MAX_EXP == 16384
 template<class Real, class Policy>
-void sinh_sinh_detail<Real, Policy>::init(const boost::integral_constant<int, 3>&)
+void sinh_sinh_detail<Real, Policy>::init(const std::integral_constant<int, 3>&)
 {
    m_abscissas = {
       { 3.08828741797632286606397498241221385e+00L, 1.48993184649209158013612709175719825e+02L, 3.41228924788343710247727162226946917e+06L, 2.06932576604261779073902718911207249e+18L, 2.08700240760947556038306635808129743e+50L, 2.01976616071790815078008252209994199e+137L, 5.67213444764437168603513205349222232e+373L, 3.06198394306784061113736467298565948e+1016L, },
@@ -438,7 +438,7 @@ void sinh_sinh_detail<Real, Policy>::init(const boost::integral_constant<int, 3>
 #endif
 #ifdef BOOST_HAS_FLOAT128
 template<class Real, class Policy>
-void sinh_sinh_detail<Real, Policy>::init(const boost::integral_constant<int, 4>&)
+void sinh_sinh_detail<Real, Policy>::init(const std::integral_constant<int, 4>&)
 {
    m_abscissas = {
       { 3.08828741797632286606397498241221385e+00Q, 1.48993184649209158013612709175719825e+02Q, 3.41228924788343710247727162226946917e+06Q, 2.06932576604261779073902718911207249e+18Q, 2.08700240760947556038306635808129743e+50Q, 2.01976616071790815078008252209994199e+137Q, 5.67213444764437168603513205349222232e+373Q, 3.06198394306784061113736467298565948e+1016Q, },

@@ -74,7 +74,7 @@ int main()
   double r;
   ss >> r; // Read back in.
 
-  BOOST_ASSERT(inf == r); // OK MSVC <= 10.0!
+  BOOST_MATH_ASSERT(inf == r); // OK MSVC <= 10.0!
 
 } // int main()
 

@@ -318,32 +318,44 @@ BOOST_AUTO_TEST_CASE(test_cubic_b_spline)
 {
     test_b3_spline<float>();
     test_b3_spline<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_b3_spline<long double>();
+#endif
     test_b3_spline<cpp_bin_float_50>();
 
     test_interpolation_condition<float>();
     test_interpolation_condition<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_interpolation_condition<long double>();
+#endif
     test_interpolation_condition<cpp_bin_float_50>();
 
     test_constant_function<float>();
     test_constant_function<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_constant_function<long double>();
+#endif
     test_constant_function<cpp_bin_float_50>();
 
     test_affine_function<float>();
     test_affine_function<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_affine_function<long double>();
+#endif
     test_affine_function<cpp_bin_float_50>();
 
     test_quadratic_function<float>();
     test_quadratic_function<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_quadratic_function<long double>();
+#endif
     test_affine_function<cpp_bin_float_50>();
 
     test_trig_function<float>();
     test_trig_function<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_trig_function<long double>();
+#endif
     test_trig_function<cpp_bin_float_50>();
 
     test_copy_move<double>();

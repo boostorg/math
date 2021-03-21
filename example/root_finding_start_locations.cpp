@@ -186,7 +186,7 @@ boost::uintmax_t elliptic_root_noderiv(T radius, T arc, T guess)
 template <class T = double>
 struct elliptic_root_functor_1deriv
 { // Functor also returning 1st derivative.
-   BOOST_STATIC_ASSERT_MSG(boost::is_integral<T>::value == false, "Only floating-point type types can be used!");
+   static_assert(boost::is_integral<T>::value == false, "Only floating-point type types can be used!");
 
    elliptic_root_functor_1deriv(T const& arc, T const& radius) : m_arc(arc), m_radius(radius)
    { // Constructor just stores value a to find root of.
@@ -220,7 +220,7 @@ boost::uintmax_t elliptic_root_1deriv(T radius, T arc, T guess)
    using namespace std;  // Help ADL of std functions.
    using namespace boost::math::tools; // For newton_raphson_iterate.
 
-   BOOST_STATIC_ASSERT_MSG(boost::is_integral<T>::value == false, "Only floating-point type types can be used!");
+   static_assert(boost::is_integral<T>::value == false, "Only floating-point type types can be used!");
 
    T min = 0;   // Minimum possible value is zero.
    T max = arc; // Maximum possible value is the arc length.
@@ -237,7 +237,7 @@ boost::uintmax_t elliptic_root_1deriv(T radius, T arc, T guess)
 template <class T = double>
 struct elliptic_root_functor_2deriv
 { // Functor returning both 1st and 2nd derivatives.
-   BOOST_STATIC_ASSERT_MSG(boost::is_integral<T>::value == false, "Only floating-point type types can be used!");
+   static_assert(boost::is_integral<T>::value == false, "Only floating-point type types can be used!");
 
    elliptic_root_functor_2deriv(T const& arc, T const& radius) : m_arc(arc), m_radius(radius) {}
    std::tuple<T, T, T> operator()(T const& x)
@@ -269,7 +269,7 @@ boost::uintmax_t elliptic_root_2deriv(T radius, T arc, T guess)
    using namespace std;                // Help ADL of std functions.
    using namespace boost::math::tools; // For halley_iterate.
 
-   BOOST_STATIC_ASSERT_MSG(boost::is_integral<T>::value == false, "Only floating-point type types can be used!");
+   static_assert(boost::is_integral<T>::value == false, "Only floating-point type types can be used!");
 
    T min = 0;                                   // Minimum possible value is zero.
    T max = arc;                                 // radius can't be larger than the arc length.
@@ -292,7 +292,7 @@ boost::uintmax_t elliptic_root_2deriv_s(T radius, T arc, T guess)
    using namespace std;  // Help ADL of std functions.
    using namespace boost::math::tools; // For schroder_iterate.
 
-   BOOST_STATIC_ASSERT_MSG(boost::is_integral<T>::value == false, "Only floating-point type types can be used!");
+   static_assert(boost::is_integral<T>::value == false, "Only floating-point type types can be used!");
 
    T min = 0; // Minimum possible value is zero.
    T max = arc; // radius can't be larger than the arc length.

@@ -16,7 +16,7 @@
 #ifdef __cplusplus
 
 #include <boost/config.hpp>
-#include <boost/static_assert.hpp>
+#include <boost/math/tools/assert.hpp>
 
 namespace boost{ namespace math{ namespace tr1{ extern "C"{
 
@@ -737,37 +737,37 @@ inline typename tools::promote_args<T>::type trunc BOOST_PREVENT_MACRO_SUBSTITUT
 # define NO_MACRO_EXPAND /**/
 // C99 macros defined as C++ templates
 template<class T> bool signbit NO_MACRO_EXPAND(T x)
-{ BOOST_STATIC_ASSERT(sizeof(T) == 0); return false; } // must not be instantiated
+{ static_assert(sizeof(T) == 0, "Undefined behavior; this template should never be instantiated"); return false; } // must not be instantiated
 template<> bool BOOST_MATH_TR1_DECL signbit<float> NO_MACRO_EXPAND(float x);
 template<> bool BOOST_MATH_TR1_DECL signbit<double> NO_MACRO_EXPAND(double x);
 template<> bool BOOST_MATH_TR1_DECL signbit<long double> NO_MACRO_EXPAND(long double x);
 
 template<class T> int fpclassify NO_MACRO_EXPAND(T x)
-{ BOOST_STATIC_ASSERT(sizeof(T) == 0); return false; } // must not be instantiated
+{ static_assert(sizeof(T) == 0, "Undefined behavior; this template should never be instantiated"); return false; } // must not be instantiated
 template<> int BOOST_MATH_TR1_DECL fpclassify<float> NO_MACRO_EXPAND(float x);
 template<> int BOOST_MATH_TR1_DECL fpclassify<double> NO_MACRO_EXPAND(double x);
 template<> int BOOST_MATH_TR1_DECL fpclassify<long double> NO_MACRO_EXPAND(long double x);
 
 template<class T> bool isfinite NO_MACRO_EXPAND(T x)
-{ BOOST_STATIC_ASSERT(sizeof(T) == 0); return false; } // must not be instantiated
+{ static_assert(sizeof(T) == 0, "Undefined behavior; this template should never be instantiated"); return false; } // must not be instantiated
 template<> bool BOOST_MATH_TR1_DECL isfinite<float> NO_MACRO_EXPAND(float x);
 template<> bool BOOST_MATH_TR1_DECL isfinite<double> NO_MACRO_EXPAND(double x);
 template<> bool BOOST_MATH_TR1_DECL isfinite<long double> NO_MACRO_EXPAND(long double x);
 
 template<class T> bool isinf NO_MACRO_EXPAND(T x)
-{ BOOST_STATIC_ASSERT(sizeof(T) == 0); return false; } // must not be instantiated
+{ static_assert(sizeof(T) == 0, "Undefined behavior; this template should never be instantiated"); return false; } // must not be instantiated
 template<> bool BOOST_MATH_TR1_DECL isinf<float> NO_MACRO_EXPAND(float x);
 template<> bool BOOST_MATH_TR1_DECL isinf<double> NO_MACRO_EXPAND(double x);
 template<> bool BOOST_MATH_TR1_DECL isinf<long double> NO_MACRO_EXPAND(long double x);
 
 template<class T> bool isnan NO_MACRO_EXPAND(T x)
-{ BOOST_STATIC_ASSERT(sizeof(T) == 0); return false; } // must not be instantiated
+{ static_assert(sizeof(T) == 0, "Undefined behavior; this template should never be instantiated"); return false; } // must not be instantiated
 template<> bool BOOST_MATH_TR1_DECL isnan<float> NO_MACRO_EXPAND(float x);
 template<> bool BOOST_MATH_TR1_DECL isnan<double> NO_MACRO_EXPAND(double x);
 template<> bool BOOST_MATH_TR1_DECL isnan<long double> NO_MACRO_EXPAND(long double x);
 
 template<class T> bool isnormal NO_MACRO_EXPAND(T x)
-{ BOOST_STATIC_ASSERT(sizeof(T) == 0); return false; } // must not be instantiated
+{ static_assert(sizeof(T) == 0, "Undefined behavior; this template should never be instantiated"); return false; } // must not be instantiated
 template<> bool BOOST_MATH_TR1_DECL isnormal<float> NO_MACRO_EXPAND(float x);
 template<> bool BOOST_MATH_TR1_DECL isnormal<double> NO_MACRO_EXPAND(double x);
 template<> bool BOOST_MATH_TR1_DECL isnormal<long double> NO_MACRO_EXPAND(long double x);

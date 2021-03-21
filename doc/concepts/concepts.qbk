@@ -197,18 +197,11 @@ There is a concept checking test program for mpfr support
 
 __multiprecision was a development from the __e_float library by Christopher Kormanyos.
 
-e_float can still be used with Boost.Math library via the header:
+The e_float library can still be used with Boost.Math.
+The [@http://github.com/ckormanyos/e_float-2021/blob/main/libs/math/include/boost/math/bindings/e_float.hpp/ e_float bindings header]
+has been relocated to the [@http://github/ckormanyos/e_float-2021/ e_float-2021 repository].
 
-   <boost/math/bindings/e_float.hpp>
-
-And the type `boost::math::ef::e_float`:
-this type is a thin wrapper class around ::e_float which provides the necessary
-syntactic sugar to make everything "just work".
-
-There is also a concept checking test program for e_float support
-[@../../../../libs/math/test/e_float_concept_check.cpp here].
-
-[*New projects are recommended to use __multiprecision with `cpp_float` backend instead.]
+[*New projects are recommended to use __multiprecision with one of its backends such as `cpp_bin_float` or `cpp_dec_float` instead.]
 
 [endsect] [/section:e_float Using e_float Library]
 

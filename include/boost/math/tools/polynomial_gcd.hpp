@@ -118,7 +118,7 @@ typename enable_if_c< std::numeric_limits<T>::is_integer, polynomial<T> >::type
 subresultant_gcd(polynomial<T> u, polynomial<T> v)
 {
     using std::swap;
-    BOOST_ASSERT(u || v);
+    BOOST_MATH_ASSERT(u || v);
 
     if (!u)
         return v;
@@ -135,7 +135,7 @@ subresultant_gcd(polynomial<T> u, polynomial<T> v)
     polynomial<T> r;
     while (true)
     {
-        BOOST_ASSERT(u.degree() >= v.degree());
+        BOOST_MATH_ASSERT(u.degree() >= v.degree());
         // Pseudo-division.
         r = u % v;
         if (!r)
@@ -177,7 +177,7 @@ template <typename T>
 typename enable_if_c<std::numeric_limits<T>::is_integer && std::numeric_limits<T>::is_bounded, polynomial<T> >::type
 gcd(polynomial<T> const &u, polynomial<T> const &v)
 {
-   BOOST_STATIC_ASSERT_MSG(sizeof(v) == 0, "GCD on polynomials of bounded integers is disallowed due to the excessive growth in the size of intermediate terms.");
+   static_assert(sizeof(v) == 0, "GCD on polynomials of bounded integers is disallowed due to the excessive growth in the size of intermediate terms.");
    return subresultant_gcd(u, v);
 }
 // GCD over polynomials of floats can go via the Euclid algorithm:

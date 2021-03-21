@@ -4643,8 +4643,8 @@ struct lanczos_rational
    T gamma(T z)
    {
       using namespace std;
-      BOOST_ASSERT(num.size() == denom.size());
-      BOOST_ASSERT(num.size() == N);
+      BOOST_MATH_ASSERT(num.size() == denom.size());
+      BOOST_MATH_ASSERT(num.size() == N);
       T zgh = z + g - T(0.5);
       T prefix = pow(zgh, T(z - 0.5)) / exp(zgh);
       T s1, s2;
@@ -4704,8 +4704,8 @@ struct lanczos_rational
       }
       //std::cout << l_num << std::endl;
       //std::cout << l_denom << std::endl;
-      BOOST_ASSERT(num.size() == l_num.degree()+1);
-      BOOST_ASSERT(denom.size() == l_denom.degree()+1);
+      BOOST_MATH_ASSERT(num.size() == l_num.degree()+1);
+      BOOST_MATH_ASSERT(denom.size() == l_denom.degree()+1);
       g = boost::math::tools::real_cast<T>(info.r);
       N = info.n;
       /*
@@ -4848,7 +4848,7 @@ void print_code(const lanczos_info<T>& l, const char* name, int precision = std:
       "\n// Generated with compiler: " << BOOST_COMPILER << " on " << BOOST_PLATFORM << " at " << __DATE__ << "\n"
       "// Type precision was " << precision2 << " bits or " << precision << " max_digits10\n"
       "//\n"
-      "struct lanczos" << l.n << name << " : public boost::integral_constant<int, " << precision2 << ">\n"
+      "struct lanczos" << l.n << name << " : public std::integral_constant<int, " << precision2 << ">\n"
       "{\n"
       "   template <class T>\n"
       "   static T lanczos_sum(const T& z)\n"

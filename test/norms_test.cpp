@@ -106,7 +106,7 @@ std::vector<T> generate_random_vector(size_t size, size_t seed)
     }
     else
     {
-        BOOST_ASSERT_MSG(false, "Could not identify type for random vector generation.");
+        BOOST_MATH_ASSERT_MSG(false, "Could not identify type for random vector generation.");
         return v;
     }
 }

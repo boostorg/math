@@ -12,8 +12,7 @@
 #pragma warning(disable:4702) // Unreachable code (release mode only warning)
 #endif
 
-#include <boost/config/no_tr1/cmath.hpp>
-#include <math.h> // platform's ::log1p
+#include <cmath>
 #include <boost/limits.hpp>
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/series.hpp>
@@ -21,12 +20,7 @@
 #include <boost/math/tools/big_constant.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
-
-#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-#  include <boost/static_assert.hpp>
-#else
-#  include <boost/assert.hpp>
-#endif
+#include <boost/math/tools/assert.hpp>
 
 #if defined(__GNUC__) && defined(BOOST_MATH_USE_FLOAT128)
 //
@@ -83,7 +77,7 @@ namespace detail
 // it performs no better than log(1+x): which is to say not very well at all.
 //
 template <class T, class Policy>
-T log1p_imp(T const & x, const Policy& pol, const boost::integral_constant<int, 0>&)
+T log1p_imp(T const & x, const Policy& pol, const std::integral_constant<int, 0>&)
 { // The function returns the natural logarithm of 1 + x.
    typedef typename tools::promote_args<T>::type result_type;
    BOOST_MATH_STD_USING
@@ -117,7 +111,7 @@ T log1p_imp(T const & x, const Policy& pol, const boost::integral_constant<int, 
 }
 
 template <class T, class Policy>
-T log1p_imp(T const& x, const Policy& pol, const boost::integral_constant<int, 53>&)
+T log1p_imp(T const& x, const Policy& pol, const std::integral_constant<int, 53>&)
 { // The function returns the natural logarithm of 1 + x.
    BOOST_MATH_STD_USING
 
@@ -170,7 +164,7 @@ T log1p_imp(T const& x, const Policy& pol, const boost::integral_constant<int, 5
 }
 
 template <class T, class Policy>
-T log1p_imp(T const& x, const Policy& pol, const boost::integral_constant<int, 64>&)
+T log1p_imp(T const& x, const Policy& pol, const std::integral_constant<int, 64>&)
 { // The function returns the natural logarithm of 1 + x.
    BOOST_MATH_STD_USING
 
@@ -225,7 +219,7 @@ T log1p_imp(T const& x, const Policy& pol, const boost::integral_constant<int, 6
 }
 
 template <class T, class Policy>
-T log1p_imp(T const& x, const Policy& pol, const boost::integral_constant<int, 24>&)
+T log1p_imp(T const& x, const Policy& pol, const std::integral_constant<int, 24>&)
 { // The function returns the natural logarithm of 1 + x.
    BOOST_MATH_STD_USING
 
@@ -280,8 +274,8 @@ struct log1p_initializer
          do_init(tag());
       }
       template <int N>
-      static void do_init(const boost::integral_constant<int, N>&){}
-      static void do_init(const boost::integral_constant<int, 64>&)
+      static void do_init(const std::integral_constant<int, N>&){}
+      static void do_init(const std::integral_constant<int, 64>&)
       {
          boost::math::log1p(static_cast<T>(0.25), Policy());
       }
@@ -313,7 +307,7 @@ inline typename tools::promote_args<T>::type log1p(T x, const Policy&)
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
 
-   typedef boost::integral_constant<int,
+   typedef std::integral_constant<int,
       precision_type::value <= 0 ? 0 :
       precision_type::value <= 53 ? 53 :
       precision_type::value <= 64 ? 64 : 0

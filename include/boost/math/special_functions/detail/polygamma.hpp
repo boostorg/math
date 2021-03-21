@@ -12,20 +12,17 @@
   #define _BOOST_POLYGAMMA_DETAIL_2013_07_30_HPP_
 
 #include <cmath>
-  #include <limits>
-  #include <boost/cstdint.hpp>
-  #include <boost/math/policies/policy.hpp>
-  #include <boost/math/special_functions/bernoulli.hpp>
-  #include <boost/math/special_functions/trunc.hpp>
-  #include <boost/math/special_functions/zeta.hpp>
-  #include <boost/math/special_functions/digamma.hpp>
-  #include <boost/math/special_functions/sin_pi.hpp>
-  #include <boost/math/special_functions/cos_pi.hpp>
-  #include <boost/math/special_functions/pow.hpp>
-  #include <boost/mpl/if.hpp>
-  #include <boost/mpl/int.hpp>
-  #include <boost/static_assert.hpp>
-  #include <boost/type_traits/is_convertible.hpp>
+#include <limits>
+#include <mutex>
+#include <boost/math/policies/policy.hpp>
+#include <boost/math/special_functions/bernoulli.hpp>
+#include <boost/math/special_functions/trunc.hpp>
+#include <boost/math/special_functions/zeta.hpp>
+#include <boost/math/special_functions/digamma.hpp>
+#include <boost/math/special_functions/sin_pi.hpp>
+#include <boost/math/special_functions/cos_pi.hpp>
+#include <boost/math/special_functions/pow.hpp>
+  #include <boost/math/tools/assert.hpp>
 
 #ifdef _MSC_VER
 #pragma once
@@ -405,8 +402,8 @@ namespace boost { namespace math { namespace detail{
      if((unsigned)n / 2u > policies::get_max_series_iterations<Policy>())
         return policies::raise_evaluation_error<T>(function, "The value of n is so large that we're unable to compute the result in reasonable time, best guess is %1%", 0, pol);
 #ifdef BOOST_HAS_THREADS
-     static boost::detail::lightweight_mutex m;
-     boost::detail::lightweight_mutex::scoped_lock l(m);
+     static std::mutex m;
+     std::lock_guard<std::mutex> l(m);
 #endif
      static int digits = tools::digits<T>();
      static std::vector<std::vector<T> > table(1, std::vector<T>(1, T(-1)));
@@ -437,8 +434,8 @@ namespace boost { namespace math { namespace detail{
            for(int column = 0; column <= max_columns; ++column)
            {
               int cos_order = 2 * column + offset;  // order of the cosine term in entry "column"
-              BOOST_ASSERT(column < (int)table[i].size());
-              BOOST_ASSERT((cos_order + 1) / 2 < (int)table[i + 1].size());
+              BOOST_MATH_ASSERT(column < (int)table[i].size());
+              BOOST_MATH_ASSERT((cos_order + 1) / 2 < (int)table[i + 1].size());
               table[i + 1][(cos_order + 1) / 2] += ((cos_order - sin_order) * table[i][column]) / (sin_order - 1);
               if(cos_order)
                 table[i + 1][(cos_order - 1) / 2] += (-cos_order * table[i][column]) / (sin_order - 1);

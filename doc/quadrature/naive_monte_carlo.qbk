@@ -12,7 +12,8 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
     #include <boost/math/quadrature/naive_monte_carlo.hpp>
     namespace boost { namespace math { namespace quadrature {
 
-    template<class Real, class F, class RNG = std::mt19937_64, class Policy = boost::math::policies::policy<>>
+    template<class Real, class F, class RNG = std::mt19937_64, class Policy = boost::math::policies::policy<>, 
+             typename std::enable_if<std::is_trivially_copyable<Real>::value, bool>::type = true>
     class naive_monte_carlo
     {
     public:
@@ -97,6 +98,9 @@ All these use cases are supported, so let's get to the code:
 
 First off, we define the function we wish to integrate.
 This function must accept a `std::vector<Real> const &`, and return a `Real`.
+
+/Nota bene/: `Real` must be a trivially copyable type.
+
 Next, we define the domain of integration.
 Infinite domains are indicated by the bound `std::numeric_limits<Real>::infinity()`.
 The call

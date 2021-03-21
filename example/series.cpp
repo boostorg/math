@@ -4,7 +4,7 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/math/tools/series.hpp>
-#include <boost/assert.hpp>
+#include <boost/math/tools/assert.hpp>
 
 #include <iostream>
 #include <complex>
@@ -42,7 +42,7 @@ template <class T>
 T log1p(T x)
 {
    // We really should add some error checking on x here!
-   BOOST_ASSERT(std::fabs(x) < 1);
+   BOOST_MATH_ASSERT(std::fabs(x) < 1);
 
    // Construct the series functor:
    log1p_series<T> s(x);
@@ -84,7 +84,7 @@ template <class T>
 std::complex<T> log1p(std::complex<T> x)
 {
    // We really should add some error checking on x here!
-   BOOST_ASSERT(abs(x) < 1);
+   BOOST_MATH_ASSERT(abs(x) < 1);
 
    // Construct the series functor:
    log1p_series<std::complex<T> > s(x);

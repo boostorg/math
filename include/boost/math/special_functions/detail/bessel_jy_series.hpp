@@ -218,8 +218,8 @@ T bessel_yn_small_z(int n, T z, T* scale, const Policy& pol)
    // Note that when called we assume that x < epsilon and n is a positive integer.
    //
    BOOST_MATH_STD_USING
-   BOOST_ASSERT(n >= 0);
-   BOOST_ASSERT((z < policies::get_epsilon<T, Policy>()));
+   BOOST_MATH_ASSERT(n >= 0);
+   BOOST_MATH_ASSERT((z < policies::get_epsilon<T, Policy>()));
 
    if(n == 0)
    {

@@ -257,7 +257,7 @@ BOOST_AUTO_TEST_CASE( test_main )
    test_values(1.0, "double");
    _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_OFF);
 #endif
-   BOOST_ASSERT((_mm_getcsr() & 0x40) == 0);
+   BOOST_MATH_ASSERT((_mm_getcsr() & 0x40) == 0);
    _mm_setcsr(_mm_getcsr() | 0x40);
    std::cout << "Testing again with Denormals-Are-Zero set" << std::endl;
    std::cout << "SSE2 control word is: " << std::hex << _mm_getcsr() << std::endl;
