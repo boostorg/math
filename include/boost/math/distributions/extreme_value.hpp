@@ -12,7 +12,6 @@
 #include <boost/math/special_functions/expm1.hpp>
 #include <boost/math/distributions/complement.hpp>
 #include <boost/math/distributions/detail/common_error_handling.hpp>
-#include <boost/config/no_tr1/cmath.hpp>
 
 //
 // This is the maximum extreme value distribution, see
@@ -22,6 +21,7 @@
 // distribution or a Gumbel distribution.
 
 #include <utility>
+#include <cmath>
 
 #ifdef BOOST_MSVC
 # pragma warning(push)

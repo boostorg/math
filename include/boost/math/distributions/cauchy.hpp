@@ -17,9 +17,8 @@
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/distributions/complement.hpp>
 #include <boost/math/distributions/detail/common_error_handling.hpp>
-#include <boost/config/no_tr1/cmath.hpp>
-
 #include <utility>
+#include <cmath>
 
 namespace boost{ namespace math
 {

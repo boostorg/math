@@ -17,14 +17,12 @@
 // compile if it std::whatever is in scope.
 
 #include <boost/config.hpp>
-#include <boost/limits.hpp>
 #include <boost/math/policies/policy.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
-
+#include <limits>
 #include <ostream>
 #include <istream>
-#include <boost/config/no_tr1/cmath.hpp>
-#include <math.h> // fmodl
+#include <cmath>
 
 #ifndef BOOST_MATH_STD_REAL_CONCEPT_HPP
 #define BOOST_MATH_STD_REAL_CONCEPT_HPP

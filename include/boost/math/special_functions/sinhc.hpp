@@ -18,13 +18,12 @@
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
-#include <boost/config/no_tr1/cmath.hpp>
-#include <boost/limits.hpp>
+#include <limits>
 #include <string>
 #include <stdexcept>
+#include <cmath>
 
 #include <boost/config.hpp>
-
 
 // These are the the "Hyperbolic Sinus Cardinal" functions.
 

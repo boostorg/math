@@ -11,16 +11,16 @@
 #pragma once
 #endif
 
+#include <cstdint>
+#include <cmath>
 #include <utility>
-#include <boost/config/no_tr1/cmath.hpp>
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/policies/policy.hpp>
-#include <boost/cstdint.hpp>
 
 namespace boost{ namespace math{ namespace tools{
 
 template <class F, class T>
-std::pair<T, T> brent_find_minima(F f, T min, T max, int bits, boost::uintmax_t& max_iter)
+std::pair<T, T> brent_find_minima(F f, T min, T max, int bits, std::uintmax_t& max_iter)
    BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(T) && noexcept(std::declval<F>()(std::declval<T>())))
 {
    BOOST_MATH_STD_USING
@@ -141,7 +141,7 @@ template <class F, class T>
 inline std::pair<T, T> brent_find_minima(F f, T min, T max, int digits)
    BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(T) && noexcept(std::declval<F>()(std::declval<T>())))
 {
-   boost::uintmax_t m = (std::numeric_limits<boost::uintmax_t>::max)();
+   std::uintmax_t m = (std::numeric_limits<std::uintmax_t>::max)();
    return brent_find_minima(f, min, max, digits, m);
 }
 

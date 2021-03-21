@@ -7,7 +7,6 @@
 #define BOOST_MATH_NTL_RR_HPP
 
 #include <boost/config.hpp>
-#include <boost/limits.hpp>
 #include <boost/math/tools/real_cast.hpp>
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/constants/constants.hpp>
@@ -15,10 +14,11 @@
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/bindings/detail/big_digamma.hpp>
 #include <boost/math/bindings/detail/big_lanczos.hpp>
-
+#include <stdexcept>
 #include <ostream>
 #include <istream>
-#include <boost/config/no_tr1/cmath.hpp>
+#include <cmath>
+#include <limits>
 #include <NTL/RR.h>
 
 namespace boost{ namespace math{

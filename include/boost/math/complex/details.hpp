@@ -10,20 +10,15 @@
 // inverse trig complex functions, it also contains all the includes
 // that we need to implement all these functions.
 //
-#include <boost/config.hpp>
+
+#include <cmath>
+#include <complex>
+#include <limits>
 #include <boost/detail/workaround.hpp>
-#include <boost/config/no_tr1/complex.hpp>
-#include <boost/limits.hpp>
-#include <math.h> // isnan where available
-#include <boost/config/no_tr1/cmath.hpp>
 #include <boost/math/special_functions/sign.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/special_functions/sign.hpp>
 #include <boost/math/constants/constants.hpp>
-
-#ifdef BOOST_NO_STDC_NAMESPACE
-namespace std{ using ::sqrt; }
-#endif
 
 namespace boost{ namespace math{ namespace detail{
 
