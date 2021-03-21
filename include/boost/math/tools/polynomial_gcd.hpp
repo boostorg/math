@@ -11,10 +11,10 @@
 #pragma once
 #endif
 
+#include <algorithm>
+#include <type_traits>
 #include <boost/math/tools/polynomial.hpp>
 #include <boost/integer/common_factor_rt.hpp>
-#include <boost/type_traits/is_pod.hpp>
-
 
 namespace boost{
 
@@ -114,7 +114,7 @@ namespace detail
 * @return       Greatest common divisor of polynomials u and v.
 */
 template <class T>
-typename enable_if_c< std::numeric_limits<T>::is_integer, polynomial<T> >::type
+typename std::enable_if< std::numeric_limits<T>::is_integer, polynomial<T> >::type
 subresultant_gcd(polynomial<T> u, polynomial<T> v)
 {
     using std::swap;
@@ -167,14 +167,14 @@ subresultant_gcd(polynomial<T> u, polynomial<T> v)
  * @tparam  T   A multi-precision integral type.
  */
 template <typename T>
-typename enable_if_c<std::numeric_limits<T>::is_integer && !std::numeric_limits<T>::is_bounded, polynomial<T> >::type
+typename std::enable_if<std::numeric_limits<T>::is_integer && !std::numeric_limits<T>::is_bounded, polynomial<T> >::type
 gcd(polynomial<T> const &u, polynomial<T> const &v)
 {
     return subresultant_gcd(u, v);
 }
 // GCD over bounded integers is not currently allowed:
 template <typename T>
-typename enable_if_c<std::numeric_limits<T>::is_integer && std::numeric_limits<T>::is_bounded, polynomial<T> >::type
+typename std::enable_if<std::numeric_limits<T>::is_integer && std::numeric_limits<T>::is_bounded, polynomial<T> >::type
 gcd(polynomial<T> const &u, polynomial<T> const &v)
 {
    static_assert(sizeof(v) == 0, "GCD on polynomials of bounded integers is disallowed due to the excessive growth in the size of intermediate terms.");
@@ -182,7 +182,7 @@ gcd(polynomial<T> const &u, polynomial<T> const &v)
 }
 // GCD over polynomials of floats can go via the Euclid algorithm:
 template <typename T>
-typename enable_if_c<!std::numeric_limits<T>::is_integer && (std::numeric_limits<T>::min_exponent != std::numeric_limits<T>::max_exponent) && !std::numeric_limits<T>::is_exact, polynomial<T> >::type
+typename std::enable_if<!std::numeric_limits<T>::is_integer && (std::numeric_limits<T>::min_exponent != std::numeric_limits<T>::max_exponent) && !std::numeric_limits<T>::is_exact, polynomial<T> >::type
 gcd(polynomial<T> const &u, polynomial<T> const &v)
 {
    return boost::integer::gcd_detail::Euclid_gcd(u, v);

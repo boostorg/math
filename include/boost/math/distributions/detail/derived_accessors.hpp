@@ -27,7 +27,7 @@
 // can find the definitions referred to herein.
 //
 
-#include <boost/type_traits/is_same.hpp>
+#include <cmath>
 #include <boost/math/tools/assert.hpp>
 
 #ifdef BOOST_MSVC

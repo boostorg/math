@@ -10,12 +10,11 @@
 #pragma once
 #endif
 
+#include <type_traits>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/tools/config.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
-#include <boost/type_traits/is_constructible.hpp>
-#include <boost/core/enable_if.hpp>
 
 namespace boost{ namespace math{ namespace detail{
 
@@ -123,7 +122,7 @@ inline typename std::enable_if<std::is_constructible<int, T>::value, int>::type
 }
 
 template <class T, class Policy>
-inline typename boost::disable_if_c<std::is_constructible<int, T>::value, int>::type
+inline typename std::enable_if<!std::is_constructible<int, T>::value, int>::type
    iconvert(const T& v, const Policy& pol) 
 {
    using boost::math::itrunc;
@@ -138,7 +137,7 @@ inline typename std::enable_if<std::is_constructible<long, T>::value, long>::typ
 }
 
 template <class T, class Policy>
-inline typename boost::disable_if_c<std::is_constructible<long, T>::value, long>::type
+inline typename std::enable_if<!std::is_constructible<long, T>::value, long>::type
    lconvert(const T& v, const Policy& pol) 
 {
    using boost::math::ltrunc;
@@ -155,7 +154,7 @@ inline typename std::enable_if<std::is_constructible<boost::long_long_type, T>::
 }
 
 template <class T, class Policy>
-inline typename boost::disable_if_c<std::is_constructible<boost::long_long_type, T>::value, boost::long_long_type>::type
+inline typename std::enable_if<!std::is_constructible<boost::long_long_type, T>::value, boost::long_long_type>::type
    llconvertert(const T& v, const Policy& pol) 
 {
    using boost::math::lltrunc;

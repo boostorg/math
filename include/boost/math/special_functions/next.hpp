@@ -9,16 +9,16 @@
 #ifdef _MSC_VER
 #pragma once
 #endif
-#include <boost/type_traits/is_same.hpp>
-#include <boost/type_traits/is_integral.hpp>
+
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/special_functions/sign.hpp>
 #include <boost/math/special_functions/trunc.hpp>
 #include <boost/math/tools/traits.hpp>
+#include <type_traits>
+#include <cfloat>
 
-#include <float.h>
 
 #if !defined(_CRAYC) && !defined(__CUDACC__) && (!defined(__GNUC__) || (__GNUC__ > 3) || ((__GNUC__ == 3) && (__GNUC_MINOR__ > 3)))
 #if (defined(_M_IX86_FP) && (_M_IX86_FP >= 2)) || defined(__SSE2__)
@@ -684,18 +684,18 @@ inline typename tools::promote_args<T, U>::type float_distance(const T& a, const
    // We allow ONE of a and b to be an integer type, otherwise both must be the SAME type.
    //
    static_assert(
-      (boost::is_same<T, U>::value 
-      || (boost::is_integral<T>::value && !boost::is_integral<U>::value) 
-      || (!boost::is_integral<T>::value && boost::is_integral<U>::value)
+      (std::is_same<T, U>::value 
+      || (std::is_integral<T>::value && !std::is_integral<U>::value) 
+      || (!std::is_integral<T>::value && std::is_integral<U>::value)
       || (std::numeric_limits<T>::is_specialized && std::numeric_limits<U>::is_specialized
          && (std::numeric_limits<T>::digits == std::numeric_limits<U>::digits)
          && (std::numeric_limits<T>::radix == std::numeric_limits<U>::radix)
          && !std::numeric_limits<T>::is_integer && !std::numeric_limits<U>::is_integer)),
       "Float distance between two different floating point types is undefined.");
 
-   BOOST_IF_CONSTEXPR (!boost::is_same<T, U>::value)
+   BOOST_IF_CONSTEXPR (!std::is_same<T, U>::value)
    {
-      BOOST_IF_CONSTEXPR(boost::is_integral<T>::value)
+      BOOST_IF_CONSTEXPR(std::is_integral<T>::value)
       {
          return float_distance(static_cast<U>(a), b, pol);
       }

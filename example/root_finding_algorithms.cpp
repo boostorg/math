@@ -15,9 +15,6 @@
 #include <boost/cstdlib.hpp>
 #include <boost/config.hpp>
 #include <boost/array.hpp>
-#include <boost/type_traits/is_floating_point.hpp>
-#include <boost/type_traits/is_fundamental.hpp>
-
 #include "table_type.hpp"
 // Copy of i:\modular-boost\libs\math\test\table_type.hpp
 // #include "handle_test_result.hpp"
@@ -55,6 +52,7 @@ using boost::multiprecision::cpp_bin_float_50;
 #include <fstream> // std::ofstream
 #include <cmath>
 #include <typeinfo> // for type name using typid(thingy).name();
+#include <type_traits>
 
 #ifndef BOOST_ROOT
 # define BOOST_ROOT i:/modular-boost/
@@ -203,7 +201,7 @@ T cbrt_noderiv(T x)
 
   // Maybe guess should be double, or use enable_if to avoid warning about conversion double to float here?
   T guess;
-  if (boost::is_fundamental<T>::value)
+  if (std::is_fundamental<T>::value)
   { 
     int exponent;
     frexp(x, &exponent); // Get exponent of z (ignore mantissa).
@@ -257,7 +255,7 @@ T cbrt_deriv(T x)
   using namespace boost::math::tools;
   int exponent;
   T guess;
-  if(boost::is_fundamental<T>::value)
+  if(std::is_fundamental<T>::value)
   {
      frexp(x, &exponent); // Get exponent of z (ignore mantissa).
      guess = ldexp(static_cast<T>(1), exponent / 3); // Rough guess is to divide the exponent by three.
@@ -301,7 +299,7 @@ T cbrt_2deriv(T x)
   using namespace boost::math::tools;
   int exponent;
   T guess;
-  if(boost::is_fundamental<T>::value)
+  if(std::is_fundamental<T>::value)
   {
      frexp(x, &exponent); // Get exponent of z (ignore mantissa).
      guess = ldexp(static_cast<T>(1), exponent / 3); // Rough guess is to divide the exponent by three.
@@ -328,7 +326,7 @@ T cbrt_2deriv_s(T x)
   using namespace boost::math::tools;
   int exponent;
   T guess;
-  if(boost::is_fundamental<T>::value)
+  if(std::is_fundamental<T>::value)
   {
      frexp(x, &exponent); // Get exponent of z (ignore mantissa).
      guess = ldexp(static_cast<T>(1), exponent / 3); // Rough guess is to divide the exponent by three.

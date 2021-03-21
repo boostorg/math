@@ -7,7 +7,10 @@
 #ifndef BOOST_MATH_QUADRATURE_DETAIL_TANH_SINH_CONSTANTS_HPP
 #define BOOST_MATH_QUADRATURE_DETAIL_TANH_SINH_CONSTANTS_HPP
 
-#include <boost/type_traits/is_constructible.hpp>
+#include <cmath>
+#include <cstddef>
+#include <vector>
+#include <type_traits>
 #include <boost/lexical_cast.hpp>
 
 namespace boost {

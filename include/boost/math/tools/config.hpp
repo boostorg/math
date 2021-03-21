@@ -11,7 +11,6 @@
 #endif
 
 #include <boost/config.hpp>
-#include <boost/predef/architecture/x86.h>
 #include <boost/detail/workaround.hpp>
 #include <algorithm>  // for min and max
 #include <cmath>
