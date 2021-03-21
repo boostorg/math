@@ -8,20 +8,20 @@
 #ifndef BOOST_MATH_POLICY_ERROR_HANDLING_HPP
 #define BOOST_MATH_POLICY_ERROR_HANDLING_HPP
 
-#include <stdexcept>
 #include <iomanip>
 #include <string>
 #include <cstring>
 #include <typeinfo>
 #include <cerrno>
-#include <boost/config/no_tr1/complex.hpp>
-#include <boost/config/no_tr1/cmath.hpp>
+#include <complex>
+#include <cmath>
+#include <cstdint>
 #include <stdexcept>
 #include <boost/math/tools/config.hpp>
 #include <boost/math/policies/policy.hpp>
 #include <boost/math/tools/precision.hpp>
-#include <boost/throw_exception.hpp>
-#include <boost/cstdint.hpp>
+#include <boost/math/tools/throw_exception.hpp>
+
 #ifdef BOOST_MSVC
 #  pragma warning(push) // Quiet warnings in boost/format.hpp
 #  pragma warning(disable: 4996) // _SCL_SECURE_NO_DEPRECATE
@@ -140,7 +140,7 @@ void raise_error(const char* pfunction, const char* message)
   msg += message;
 
   E e(msg);
-  boost::throw_exception(e);
+  BOOST_MATH_THROW_EXCEPTION(e)
 }
 
 template <class E, class T>
@@ -167,7 +167,7 @@ void raise_error(const char* pfunction, const char* pmessage, const T& val)
   msg += message;
 
   E e(msg);
-  boost::throw_exception(e);
+  BOOST_MATH_THROW_EXCEPTION(e)
 }
 
 template <class T>
@@ -804,7 +804,7 @@ inline R checked_narrowing_cast(T val, const char* function) BOOST_NOEXCEPT_IF(B
 }
 
 template <class T, class Policy>
-inline void check_series_iterations(const char* function, boost::uintmax_t max_iter, const Policy& pol) BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(T) && is_noexcept_error_policy<Policy>::value)
+inline void check_series_iterations(const char* function, std::uintmax_t max_iter, const Policy& pol) BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(T) && is_noexcept_error_policy<Policy>::value)
 {
    if(max_iter >= policies::get_max_series_iterations<Policy>())
       raise_evaluation_error<T>(
@@ -813,7 +813,7 @@ inline void check_series_iterations(const char* function, boost::uintmax_t max_i
 }
 
 template <class T, class Policy>
-inline void check_root_iterations(const char* function, boost::uintmax_t max_iter, const Policy& pol) BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(T) && is_noexcept_error_policy<Policy>::value)
+inline void check_root_iterations(const char* function, std::uintmax_t max_iter, const Policy& pol) BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(T) && is_noexcept_error_policy<Policy>::value)
 {
    if(max_iter >= policies::get_max_root_iterations<Policy>())
       raise_evaluation_error<T>(
