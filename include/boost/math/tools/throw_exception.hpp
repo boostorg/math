@@ -5,7 +5,7 @@
 
 #ifndef BOOST_MATH_TOOLS_THROW_EXCEPTION_HPP
 #define BOOST_MATH_TOOLS_THROW_EXCEPTION_HPP
-#define BOOST_MATH_STANDALONE
+
 #ifndef BOOST_MATH_STANDALONE
 
 #include <boost/throw_exception.hpp>
