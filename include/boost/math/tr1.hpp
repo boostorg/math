@@ -15,7 +15,6 @@
 
 #ifdef __cplusplus
 
-#include <boost/config.hpp>
 #include <boost/math/tools/assert.hpp>
 
 namespace boost{ namespace math{ namespace tr1{ extern "C"{
@@ -52,7 +51,10 @@ namespace boost{ namespace math{ namespace tr1{ extern "C"{
 
 //
 // Now set up the libraries to link against:
+// Not compatible with standalone mode
 //
+#ifndef BOOST_MATH_STANDALONE
+#include <boost/config.hpp>
 #if !defined(BOOST_MATH_TR1_NO_LIB) && !defined(BOOST_MATH_TR1_SOURCE) \
    && !defined(BOOST_ALL_NO_LIB) && defined(__cplusplus)
 #  define BOOST_LIB_NAME boost_math_c99
@@ -103,6 +105,9 @@ namespace boost{ namespace math{ namespace tr1{ extern "C"{
 #  endif
 #  include <boost/config/auto_link.hpp>
 #endif
+#else
+#error Auto linking not supported in standalone mode.
+#endif // BOOST_MATH_STANDALONE
 
 #if !(defined(BOOST_INTEL) && defined(__APPLE__)) && !(defined(__FLT_EVAL_METHOD__) && !defined(__cplusplus))
 #if !defined(FLT_EVAL_METHOD)
