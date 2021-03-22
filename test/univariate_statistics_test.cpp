@@ -620,7 +620,7 @@ void test_median_absolute_deviation(ExecutionPolicy&& exec)
 template<class Real, class ExecutionPolicy>
 void test_sample_gini_coefficient(ExecutionPolicy&& exec)
 {
-    Real tol = std::numeric_limits<Real>::epsilon();
+    Real tol = 10*std::numeric_limits<Real>::epsilon();
     std::vector<Real> v{1,0,0};
     Real gini = boost::math::statistics::sample_gini_coefficient(exec, v.begin(), v.end());
     BOOST_TEST(abs(gini - 1) < tol);
@@ -649,7 +649,7 @@ void test_sample_gini_coefficient(ExecutionPolicy&& exec)
 template<class Real, class ExecutionPolicy>
 void test_gini_coefficient(ExecutionPolicy&& exec)
 {
-    Real tol = std::numeric_limits<Real>::epsilon();
+    Real tol = 10*std::numeric_limits<Real>::epsilon();
     std::vector<Real> v{1,0,0};
     Real gini = boost::math::statistics::gini_coefficient(exec, v.begin(), v.end());
     Real expected = Real(2)/Real(3);
@@ -691,8 +691,7 @@ void test_gini_coefficient(ExecutionPolicy&& exec)
         v[i] = dis(gen);
     }
     gini = boost::math::statistics::gini_coefficient(exec, v);
-    BOOST_TEST(abs(gini - expected) < 0.02);
-
+    BOOST_TEST(abs(gini - expected) < Real(0.03));
 }
 
 template<class Z, class ExecutionPolicy>
