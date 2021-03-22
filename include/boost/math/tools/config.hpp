@@ -11,16 +11,13 @@
 #endif
 
 #include <boost/config.hpp>
-#include <boost/detail/workaround.hpp>
 #include <algorithm>  // for min and max
+#include <limits>
 #include <cmath>
 #include <climits>
 #include <cfloat>
 #if (defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__))
 #  include <math.h>
-#endif
-#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-#  include <limits>
 #endif
 
 #include <boost/math/tools/user.hpp>
@@ -30,17 +27,7 @@
    && !defined(BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS)
 #  define BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 #endif
-#if BOOST_WORKAROUND(BOOST_BORLANDC, BOOST_TESTED_AT(0x582))
-//
-// Borland post 5.8.2 uses Dinkumware's std C lib which
-// doesn't have true long double precision.  Earlier
-// versions are problematic too:
-//
-#  define BOOST_MATH_NO_REAL_CONCEPT_TESTS
-#  define BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-#  define BOOST_MATH_CONTROL_FP _control87(MCW_EM,MCW_EM)
-#  include <float.h>
-#endif
+
 #ifdef __IBMCPP__
 //
 // For reasons I don't understand, the tests with IMB's compiler all
@@ -130,7 +117,7 @@
 #  define BOOST_MATH_NO_NATIVE_LONG_DOUBLE_FP_CLASSIFY
 #endif
 
-#if BOOST_WORKAROUND(__SUNPRO_CC, <= 0x590)
+#if defined(__SUNPRO_CC) && (__SUNPRO_CC <= 0x590)
 
 #  include "boost/type.hpp"
 #  include "boost/non_type.hpp"
@@ -174,15 +161,6 @@
 #  define BOOST_MATH_SMALL_CONSTANT(x) x
 #endif
 
-
-#if BOOST_WORKAROUND(BOOST_MSVC, < 1400)
-//
-// Define if constants too large for a float cause "bad"
-// values to be stored in the data, rather than infinity
-// or a suitably large value.
-//
-#  define BOOST_MATH_BUGGY_LARGE_FLOAT_CONSTANTS
-#endif
 //
 // Tune performance options for specific compilers:
 //
@@ -222,27 +200,6 @@
 #  define BOOST_MATH_INT_VALUE_SUFFIX(RV, SUF) RV##.0L
 #endif
 
-#endif
-
-#if defined(BOOST_NO_LONG_LONG) && !defined(BOOST_MATH_INT_TABLE_TYPE)
-#  define BOOST_MATH_INT_TABLE_TYPE(RT, IT) RT
-#  define BOOST_MATH_INT_VALUE_SUFFIX(RV, SUF) RV##.0L
-#endif
-
-//
-// constexpr support, early GCC implementations can't cope so disable
-// constexpr for them:
-//
-#if !defined(__clang__) && defined(__GNUC__)
-#if (__GNUC__ * 100 + __GNUC_MINOR__) < 490
-#  define BOOST_MATH_DISABLE_CONSTEXPR
-#endif
-#endif
-
-#ifdef BOOST_MATH_DISABLE_CONSTEXPR
-#  define BOOST_MATH_CONSTEXPR
-#else
-#  define BOOST_MATH_CONSTEXPR BOOST_CONSTEXPR
 #endif
 
 //
@@ -475,7 +432,7 @@ namespace boost{ namespace math{
 //
 // Can we have constexpr tables?
 //
-#if (!defined(BOOST_NO_CXX11_HDR_ARRAY) && !defined(BOOST_NO_CXX14_CONSTEXPR)) || BOOST_WORKAROUND(BOOST_MSVC, >= 1910)
+#if (!defined(BOOST_NO_CXX11_HDR_ARRAY) && !defined(BOOST_NO_CXX14_CONSTEXPR)) || (defined(_MSC_VER) && _MSC_VER >= 1910)
 #define BOOST_MATH_HAVE_CONSTEXPR_TABLES
 #define BOOST_MATH_CONSTEXPR_TABLE_FUNCTION constexpr
 #else

@@ -192,22 +192,21 @@ namespace boost
    template <class T>
    inline std::vector<T> legendre_p_zeros(int l);
 
-#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1310)
    template <class T, class Policy>
    typename std::enable_if<policies::is_policy<Policy>::value, typename tools::promote_args<T>::type>::type
          legendre_p(int l, T x, const Policy& pol);
    template <class T, class Policy>
    inline typename std::enable_if<policies::is_policy<Policy>::value, typename tools::promote_args<T>::type>::type
       legendre_p_prime(int l, T x, const Policy& pol);
-#endif
+
    template <class T>
    typename tools::promote_args<T>::type
          legendre_q(unsigned l, T x);
-#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1310)
+
    template <class T, class Policy>
    typename std::enable_if<policies::is_policy<Policy>::value, typename tools::promote_args<T>::type>::type
          legendre_q(unsigned l, T x, const Policy& pol);
-#endif
+
    template <class T1, class T2, class T3>
    typename tools::promote_args<T1, T2, T3>::type
          legendre_next(unsigned l, unsigned m, T1 x, T2 Pl, T3 Plm1);

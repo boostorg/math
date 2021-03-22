@@ -10,6 +10,8 @@
 #pragma once
 #endif
 
+#include <cmath>
+#include <cstdint>
 #include <boost/math/special_functions/round.hpp>
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/special_functions/sin_pi.hpp>
@@ -68,12 +70,9 @@ inline T bessel_i_small_z_series(T v, T x, const Policy& pol)
 
    cyl_bessel_i_small_z<T, Policy> s(v, x);
    std::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
-#if BOOST_WORKAROUND(BOOST_BORLANDC, BOOST_TESTED_AT(0x582))
-   T zero = 0;
-   T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter, zero);
-#else
+   
    T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
-#endif
+
    policies::check_series_iterations<T>("boost::math::bessel_j_small_z_series<%1%>(%1%,%1%)", max_iter, pol);
    return prefix * result;
 }

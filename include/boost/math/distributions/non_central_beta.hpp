@@ -653,12 +653,9 @@ namespace boost
 
             hypergeometric_2F2_sum<value_type> s(a1, a2, b1, b2, z);
             std::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
-#if BOOST_WORKAROUND(BOOST_BORLANDC, BOOST_TESTED_AT(0x582))
-            value_type zero = 0;
-            value_type result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<value_type, Policy>(), max_iter, zero);
-#else
+
             value_type result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<value_type, Policy>(), max_iter);
-#endif
+
             policies::check_series_iterations<T>(function, max_iter, pol);
             return policies::checked_narrowing_cast<T, Policy>(result, function);
          }

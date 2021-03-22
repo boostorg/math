@@ -10,6 +10,8 @@
 #ifndef BOOST_MATH_DETAIL_HYPERGEOMETRIC_SERIES_HPP
 #define BOOST_MATH_DETAIL_HYPERGEOMETRIC_SERIES_HPP
 
+#include <cmath>
+#include <cstdint>
 #include <boost/math/tools/series.hpp>
 #include <boost/math/special_functions/trunc.hpp>
 #include <boost/math/policies/error_handling.hpp>
@@ -185,12 +187,9 @@
   {
     BOOST_MATH_STD_USING
     std::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
-#if BOOST_WORKAROUND(BOOST_BORLANDC, BOOST_TESTED_AT(0x582))
-    const T zero = 0;
-    const T result = boost::math::tools::sum_series(term, boost::math::policies::get_epsilon<T, Policy>(), max_iter, zero);
-#else
+
     const T result = boost::math::tools::sum_series(term, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
-#endif
+
     policies::check_series_iterations<T>("boost::math::hypergeometric_pFq_generic_series<%1%>(%1%,%1%,%1%)", max_iter, pol);
     return result;
   }
