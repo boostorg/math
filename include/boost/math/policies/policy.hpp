@@ -107,7 +107,7 @@ namespace policies{
 
 #define BOOST_MATH_META_INT(Type, name, Default)                                                \
    template <Type N = Default>                                                                  \
-   class name : public std::integral_constant<int, N>{};                                        \
+   class name : public std::integral_constant<int, int(N)>{};                                   \
                                                                                                 \
    namespace detail{                                                                            \
    template <Type N>                                                                            \

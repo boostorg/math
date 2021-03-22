@@ -98,7 +98,7 @@ T sinpx(T z)
       dist = z - fl;
    }
    BOOST_MATH_ASSERT(fl >= 0);
-   if(dist > 0.5)
+   if(dist > T(0.5F))
       dist = 1 - dist;
    T result = sin(dist*boost::math::constants::pi<T>());
    return sign*z*result;
@@ -152,13 +152,13 @@ T gamma_imp(T z, const Policy& pol, const Lanczos& l)
    BOOST_MATH_INSTRUMENT_VARIABLE(result);
    if((floor(z) == z) && (z < max_factorial<T>::value))
    {
-      result *= unchecked_factorial<T>(itrunc(z, pol) - 1);
+      result *= unchecked_factorial<T>(static_cast<unsigned>(itrunc(z, pol) - 1));
       BOOST_MATH_INSTRUMENT_VARIABLE(result);
    }
    else if (z < tools::root_epsilon<T>())
    {
       if (z < 1 / tools::max_value<T>())
-         result = policies::raise_overflow_error<T>(function, 0, pol);
+         result = policies::raise_overflow_error<T>(function, nullptr, pol);
       result *= 1 / z - constants::euler<T>();
    }
    else

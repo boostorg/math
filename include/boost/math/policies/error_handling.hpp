@@ -8,10 +8,8 @@
 #ifndef BOOST_MATH_POLICY_ERROR_HANDLING_HPP
 #define BOOST_MATH_POLICY_ERROR_HANDLING_HPP
 
-#define BOOST_NO_RTTI
-
-//#include <stdexcept>
-//#include <iomanip>
+#include <stdexcept>
+#include <iomanip>
 #include <string>
 #include <cstring>
 #ifndef BOOST_NO_RTTI
@@ -81,16 +79,15 @@ namespace detail
 template <class T>
 std::string prec_format(const T& val)
 {
-   //typedef typename boost::math::policies::precision<T, boost::math::policies::policy<> >::type prec_type;
-   //std::stringstream ss;
-   //if(prec_type::value)
-   //{
-   //   int prec = 2 + (prec_type::value * 30103UL) / 100000UL;
-   //   ss << std::setprecision(prec);
-   //}
-   //ss << val;
-   //return ss.str();
-   return std::string();
+   typedef typename boost::math::policies::precision<T, boost::math::policies::policy<> >::type prec_type;
+   std::stringstream ss;
+   if(prec_type::value)
+   {
+      int prec = 2 + (prec_type::value * 30103UL) / 100000UL;
+      ss << std::setprecision(prec);
+   }
+   ss << val;
+   return ss.str();
 }
 
 inline void replace_all_in_string(std::string& result, const char* what, const char* with)
@@ -709,7 +706,7 @@ inline bool check_overflow(T val, R* result, const char* function, const Policy&
    BOOST_MATH_STD_USING
    if(fabs(val) > tools::max_value<R>())
    {
-      boost::math::policies::detail::raise_overflow_error<R>(function, 0, pol);
+      boost::math::policies::detail::raise_overflow_error<R>(function, nullptr, pol);
       *result = static_cast<R>(val);
       return true;
    }
