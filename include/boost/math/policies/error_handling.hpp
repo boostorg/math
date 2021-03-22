@@ -12,19 +12,16 @@
 #include <iomanip>
 #include <string>
 #include <cstring>
-#ifndef BOOST_NO_RTTI
 #include <typeinfo>
-#endif
 #include <cerrno>
-
 #include <boost/config/no_tr1/complex.hpp>
 #include <boost/config/no_tr1/cmath.hpp>
+#include <stdexcept>
 #include <boost/math/tools/config.hpp>
 #include <boost/math/policies/policy.hpp>
 #include <boost/math/tools/precision.hpp>
 #include <boost/throw_exception.hpp>
 #include <boost/cstdint.hpp>
-
 #ifdef BOOST_MSVC
 #  pragma warning(push) // Quiet warnings in boost/format.hpp
 #  pragma warning(disable: 4996) // _SCL_SECURE_NO_DEPRECATE
@@ -706,7 +703,7 @@ inline bool check_overflow(T val, R* result, const char* function, const Policy&
    BOOST_MATH_STD_USING
    if(fabs(val) > tools::max_value<R>())
    {
-      boost::math::policies::detail::raise_overflow_error<R>(function, nullptr, pol);
+      boost::math::policies::detail::raise_overflow_error<R>(function, 0, pol);
       *result = static_cast<R>(val);
       return true;
    }
