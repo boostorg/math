@@ -12,6 +12,7 @@
 // important if this test is to be meaningful:
 //
 #include "test_compile_result.hpp"
+#include <cstdint>
 
 void compile_and_link_test()
 {
