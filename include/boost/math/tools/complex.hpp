@@ -17,18 +17,24 @@ namespace boost {
    namespace math {
       namespace tools {
 
+         namespace detail {
          template <typename T, typename = void>
-         struct is_complex_type
+         struct is_complex_type_impl
          {
             static constexpr bool value = false;
          };
 
          template <typename T>
-         struct is_complex_type<T, void_t<decltype(std::declval<T>().real()), 
-                                          decltype(std::declval<T>().imag())>>
+         struct is_complex_type_impl<T, void_t<decltype(std::declval<T>().real()), 
+                                               decltype(std::declval<T>().imag())>>
          {
             static constexpr bool value = true;
          };
+         } // Namespace detail
+
+         template <typename T>
+         struct is_complex_type : public detail::is_complex_type_impl<T> {};
+         
          //
          // Use this trait to typecast integer literals to something
          // that will interoperate with T:
