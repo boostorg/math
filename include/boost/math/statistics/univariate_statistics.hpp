@@ -8,7 +8,7 @@
 #define BOOST_MATH_STATISTICS_UNIVARIATE_STATISTICS_HPP
 
 #include <boost/math/statistics/detail/single_pass.hpp>
-#include <boost/config.hpp>
+#include <boost/math/tools/config.hpp>
 #include <boost/math/tools/assert.hpp>
 #include <algorithm>
 #include <iterator>

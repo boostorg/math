@@ -14,11 +14,12 @@
 #pragma once
 #endif
 
-#include <boost/config.hpp>
 #include <boost/math/tools/series.hpp>
 #include <boost/math/tools/fraction.hpp>
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/tools/promotion.hpp>
+#include <boost/math/tools/assert.hpp>
+#include <boost/math/tools/config.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
@@ -33,7 +34,6 @@
 #include <boost/math/special_functions/detail/lgamma_small.hpp>
 #include <boost/math/special_functions/bernoulli.hpp>
 #include <boost/math/special_functions/polygamma.hpp>
-#include <boost/math/tools/assert.hpp>
 
 #include <cmath>
 #include <algorithm>
@@ -1465,7 +1465,6 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert,
             result = pow(x, a) / (a);
          else
          {
-#ifndef BOOST_NO_EXCEPTIONS
             try 
             {
                result = pow(x, a) / boost::math::tgamma(a + 1, pol);
@@ -1474,9 +1473,6 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert,
             {
                result = 0;
             }
-#else
-            result = pow(x, a) / boost::math::tgamma(a + 1, pol);
-#endif
          }
          result *= 1 - a * x / (a + 1);
          if (p_derivative)

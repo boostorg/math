@@ -11,7 +11,6 @@
 #ifndef BOOST_MATH_MPREAL_BINDINGS_HPP
 #define BOOST_MATH_MPREAL_BINDINGS_HPP
 
-#include <boost/config.hpp>
 #include <boost/lexical_cast.hpp>
 #include <type_traits>
 
@@ -37,6 +36,7 @@
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/bindings/detail/big_digamma.hpp>
 #include <boost/math/bindings/detail/big_lanczos.hpp>
+#include <boost/math/tools/config.hpp>
 
 namespace mpfr{
 

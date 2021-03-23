@@ -7,10 +7,11 @@
 #ifndef BOOST_MATH_BERNOULLI_DETAIL_HPP
 #define BOOST_MATH_BERNOULLI_DETAIL_HPP
 
-#include <boost/config.hpp>
 #include <boost/math/tools/atomic.hpp>
 #include <boost/math/tools/toms748_solve.hpp>
 #include <boost/math/tools/cxx03_warn.hpp>
+#include <boost/math/tools/throw_exception.hpp>
+#include <boost/math/tools/config.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <vector>
 #include <mutex>
@@ -157,13 +158,11 @@ struct bernoulli_initializer
          // initialize our dymanic table:
          //
          boost::math::bernoulli_b2n<T>(2, Policy());
-#ifndef BOOST_NO_EXCEPTIONS
+
          try{
-#endif
             boost::math::bernoulli_b2n<T>(max_bernoulli_b2n<T>::value + 1, Policy());
-#ifndef BOOST_NO_EXCEPTIONS
          } catch(const std::overflow_error&){}
-#endif
+
          boost::math::tangent_t2n<T>(2, Policy());
       }
       void force_instantiate()const{}
@@ -202,18 +201,12 @@ struct fixed_vector : private std::allocator<T>
    }
    ~fixed_vector()
    {
-#ifdef BOOST_NO_CXX11_ALLOCATOR
-      for(unsigned i = 0; i < m_used; ++i)
-         this->destroy(&m_data[i]);
-      this->deallocate(m_data, m_capacity);
-#else
       typedef std::allocator<T> allocator_type;
       typedef std::allocator_traits<allocator_type> allocator_traits; 
       allocator_type& alloc = *this; 
       for(unsigned i = 0; i < m_used; ++i)
          allocator_traits::destroy(alloc, &m_data[i]);
       allocator_traits::deallocate(alloc, m_data, m_capacity);
-#endif
    }
    T& operator[](unsigned n) { BOOST_MATH_ASSERT(n < m_used); return m_data[n]; }
    const T& operator[](unsigned n)const { BOOST_MATH_ASSERT(n < m_used); return m_data[n]; }
@@ -223,7 +216,7 @@ struct fixed_vector : private std::allocator<T>
    {
       if(n > m_capacity)
       {
-         BOOST_THROW_EXCEPTION(std::runtime_error("Exhausted storage for Bernoulli numbers."));
+         BOOST_MATH_THROW_EXCEPTION(std::runtime_error("Exhausted storage for Bernoulli numbers."));
       }
       for(unsigned i = m_used; i < n; ++i)
          new (m_data + i) T(val);
@@ -246,9 +239,7 @@ class bernoulli_numbers_cache
 {
 public:
    bernoulli_numbers_cache() : m_overflow_limit((std::numeric_limits<std::size_t>::max)())
-#if defined(BOOST_HAS_THREADS) && !defined(BOOST_MATH_NO_ATOMIC_INT)
       , m_counter(0)
-#endif
       , m_current_precision(boost::math::tools::digits<T>())
    {}
 
@@ -398,53 +389,6 @@ public:
          }
          return out;
       }
-   #if !defined(BOOST_HAS_THREADS)
-      //
-      // Single threaded code, very simple:
-      //
-      if(m_current_precision < boost::math::tools::digits<T>())
-      {
-         bn.clear();
-         tn.clear();
-         m_intermediates.clear();
-         m_current_precision = boost::math::tools::digits<T>();
-      }
-      if(start + n >= bn.size())
-      {
-         std::size_t new_size = (std::min)((std::max)((std::max)(std::size_t(start + n), std::size_t(bn.size() + 20)), std::size_t(50)), std::size_t(bn.capacity()));
-         tangent_numbers_series(new_size);
-      }
-
-      for(std::size_t i = (std::max)(std::size_t(max_bernoulli_b2n<T>::value + 1), start); i < start + n; ++i)
-      {
-         *out = (i >= m_overflow_limit) ? policies::raise_overflow_error<T>("boost::math::bernoulli_b2n<%1%>(std::size_t)", 0, T(i), pol) : bn[i];
-         ++out;
-      }
-   #elif defined(BOOST_MATH_NO_ATOMIC_INT)
-      //
-      // We need to grab a mutex every time we get here, for both readers and writers:
-      //
-      std::lock_guard<std::mutex> l(m_mutex);
-      if(m_current_precision < boost::math::tools::digits<T>())
-      {
-         bn.clear();
-         tn.clear();
-         m_intermediates.clear();
-         m_current_precision = boost::math::tools::digits<T>();
-      }
-      if(start + n >= bn.size())
-      {
-         std::size_t new_size = (std::min)((std::max)((std::max)(std::size_t(start + n), std::size_t(bn.size() + 20)), std::size_t(50)), std::size_t(bn.capacity()));
-         tangent_numbers_series(new_size);
-      }
-
-      for(std::size_t i = (std::max)(std::size_t(max_bernoulli_b2n<T>::value + 1), start); i < start + n; ++i)
-      {
-         *out = (i >= m_overflow_limit) ? policies::raise_overflow_error<T>("boost::math::bernoulli_b2n<%1%>(std::size_t)", 0, T(i), pol) : bn[i];
-         ++out;
-      }
-
-   #else
       //
       // Double-checked locking pattern, lets us access cached already cached values
       // without locking:
@@ -482,7 +426,6 @@ public:
          ++out;
       }
 
-   #endif
       return out;
    }
 
@@ -525,69 +468,6 @@ public:
          }
          return out;
       }
-   #if !defined(BOOST_HAS_THREADS)
-      //
-      // Single threaded code, very simple:
-      //
-      if(m_current_precision < boost::math::tools::digits<T>())
-      {
-         bn.clear();
-         tn.clear();
-         m_intermediates.clear();
-         m_current_precision = boost::math::tools::digits<T>();
-      }
-      if(start + n >= bn.size())
-      {
-         std::size_t new_size = (std::min)((std::max)((std::max)(start + n, std::size_t(bn.size() + 20)), std::size_t(50)), std::size_t(bn.capacity()));
-         tangent_numbers_series(new_size);
-      }
-
-      for(std::size_t i = start; i < start + n; ++i)
-      {
-         if(i >= m_overflow_limit)
-            *out = policies::raise_overflow_error<T>("boost::math::bernoulli_b2n<%1%>(std::size_t)", 0, T(i), pol);
-         else
-         {
-            if(tools::max_value<T>() * tangent_scale_factor<T>() < tn[static_cast<typename container_type::size_type>(i)])
-               *out = policies::raise_overflow_error<T>("boost::math::bernoulli_b2n<%1%>(std::size_t)", 0, T(i), pol);
-            else
-               *out = tn[static_cast<typename container_type::size_type>(i)] / tangent_scale_factor<T>();
-         }
-         ++out;
-      }
-   #elif defined(BOOST_MATH_NO_ATOMIC_INT)
-      //
-      // We need to grab a mutex every time we get here, for both readers and writers:
-      //
-      std::lock_guard<std::mutex> l(m_mutex);
-      if(m_current_precision < boost::math::tools::digits<T>())
-      {
-         bn.clear();
-         tn.clear();
-         m_intermediates.clear();
-         m_current_precision = boost::math::tools::digits<T>();
-      }
-      if(start + n >= bn.size())
-      {
-         std::size_t new_size = (std::min)((std::max)((std::max)(start + n, std::size_t(bn.size() + 20)), std::size_t(50)), std::size_t(bn.capacity()));
-         tangent_numbers_series(new_size);
-      }
-
-      for(std::size_t i = start; i < start + n; ++i)
-      {
-         if(i >= m_overflow_limit)
-            *out = policies::raise_overflow_error<T>("boost::math::bernoulli_b2n<%1%>(std::size_t)", 0, T(i), pol);
-         else
-         {
-            if(tools::max_value<T>() * tangent_scale_factor<T>() < tn[static_cast<typename container_type::size_type>(i)])
-               *out = policies::raise_overflow_error<T>("boost::math::bernoulli_b2n<%1%>(std::size_t)", 0, T(i), pol);
-            else
-               *out = tn[static_cast<typename container_type::size_type>(i)] / tangent_scale_factor<T>();
-         }
-         ++out;
-      }
-
-   #else
       //
       // Double-checked locking pattern, lets us access cached already cached values
       // without locking:
@@ -633,7 +513,6 @@ public:
          ++out;
       }
 
-   #endif
       return out;
    }
 
@@ -647,15 +526,8 @@ private:
    std::vector<T> m_intermediates;
    // The value at which we know overflow has already occurred for the Bn:
    std::size_t m_overflow_limit;
-#if !defined(BOOST_HAS_THREADS)
-   int m_current_precision;
-#elif defined(BOOST_MATH_NO_ATOMIC_INT)
-   std::mutex m_mutex;
-   int m_current_precision;
-#else
    std::mutex m_mutex;
    atomic_counter_type m_counter, m_current_precision;
-#endif
 };
 
 template <class T, class Policy>

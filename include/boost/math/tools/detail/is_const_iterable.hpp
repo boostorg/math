@@ -6,10 +6,7 @@
 #ifndef BOOST_MATH_TOOLS_IS_CONST_ITERABLE_HPP
 #define BOOST_MATH_TOOLS_IS_CONST_ITERABLE_HPP
 
-#include <boost/config.hpp>
 #include <boost/math/tools/cxx03_warn.hpp>
-
-#if !defined(BOOST_NO_CXX14_VARIABLE_TEMPLATES)
 
 #define BOOST_MATH_HAS_IS_CONST_ITERABLE
 
@@ -37,7 +34,5 @@ namespace boost {
                > {};
 
 } } } }
-
-#endif
 
 #endif // BOOST_MATH_TOOLS_IS_CONST_ITERABLE_HPP

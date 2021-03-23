@@ -6,9 +6,9 @@
 #ifndef BOOST_MATH_NTL_RR_HPP
 #define BOOST_MATH_NTL_RR_HPP
 
-#include <boost/config.hpp>
 #include <boost/math/tools/real_cast.hpp>
 #include <boost/math/tools/precision.hpp>
+#include <boost/math/tools/config.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/tools/roots.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
@@ -41,12 +41,10 @@ public:
    {
       m_value = c;
    }
-#ifndef BOOST_NO_INTRINSIC_WCHAR_T
    RR(wchar_t c)
    {
       m_value = c;
    }
-#endif
    RR(unsigned char c)
    {
       m_value = c;
@@ -79,16 +77,14 @@ public:
    {
       assign_large_int(c);
    }
-#ifdef BOOST_HAS_LONG_LONG
-   RR(boost::ulong_long_type c)
+   RR(unsigned long long c)
    {
       assign_large_int(c);
    }
-   RR(boost::long_long_type c)
+   RR(long long c)
    {
       assign_large_int(c);
    }
-#endif
    RR(float c)
    {
       m_value = c;
@@ -106,19 +102,15 @@ public:
    RR& operator=(char c) { m_value = c; return *this; }
    RR& operator=(unsigned char c) { m_value = c; return *this; }
    RR& operator=(signed char c) { m_value = c; return *this; }
-#ifndef BOOST_NO_INTRINSIC_WCHAR_T
    RR& operator=(wchar_t c) { m_value = c; return *this; }
-#endif
    RR& operator=(short c) { m_value = c; return *this; }
    RR& operator=(unsigned short c) { m_value = c; return *this; }
    RR& operator=(int c) { assign_large_int(c); return *this; }
    RR& operator=(unsigned int c) { assign_large_int(c); return *this; }
    RR& operator=(long c) { assign_large_int(c); return *this; }
    RR& operator=(unsigned long c) { assign_large_int(c); return *this; }
-#ifdef BOOST_HAS_LONG_LONG
-   RR& operator=(boost::long_long_type c) { assign_large_int(c); return *this; }
-   RR& operator=(boost::ulong_long_type c) { assign_large_int(c); return *this; }
-#endif
+   RR& operator=(long long c) { assign_large_int(c); return *this; }
+   RR& operator=(unsigned long long c) { assign_large_int(c); return *this; }
    RR& operator=(float c) { m_value = c; return *this; }
    RR& operator=(double c) { m_value = c; return *this; }
    RR& operator=(long double c) { assign_large_real(c); return *this; }

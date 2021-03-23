@@ -77,7 +77,7 @@ inline int itrunc(const big_real_concept& val)
 namespace tools{
 
 template <>
-inline constexpr int digits<concepts::big_real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(T)) BOOST_NOEXCEPT
+inline constexpr int digits<concepts::big_real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(T)) noexcept
 {
    return 2 * boost::math::constants::max_string_digits;
 }

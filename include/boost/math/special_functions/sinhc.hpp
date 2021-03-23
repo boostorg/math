@@ -15,15 +15,12 @@
 #pragma once
 #endif
 
-#include <boost/math/tools/config.hpp>
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <limits>
 #include <string>
 #include <stdexcept>
 #include <cmath>
-
-#include <boost/config.hpp>
 
 // These are the the "Hyperbolic Sinus Cardinal" functions.
 
@@ -38,15 +35,9 @@ namespace boost
         template<typename T>
         inline T    sinhc_pi_imp(const T x)
         {
-#if defined(BOOST_NO_STDC_NAMESPACE) && !defined(__SUNPRO_CC)
-            using    ::abs;
-            using    ::sinh;
-            using    ::sqrt;
-#else    /* BOOST_NO_STDC_NAMESPACE */
             using    ::std::abs;
             using    ::std::sinh;
             using    ::std::sqrt;
-#endif    /* BOOST_NO_STDC_NAMESPACE */
 
             static T const    taylor_0_bound = tools::epsilon<T>();
             static T const    taylor_2_bound = sqrt(taylor_0_bound);
@@ -94,22 +85,12 @@ namespace boost
           return boost::math::sinhc_pi(x);
        }
 
-#ifdef    BOOST_NO_TEMPLATE_TEMPLATES
-#else    /* BOOST_NO_TEMPLATE_TEMPLATES */
         template<typename T, template<typename> class U>
         inline U<T>    sinhc_pi(const U<T> x)
         {
-#if defined(BOOST_FUNCTION_SCOPE_USING_DECLARATION_BREAKS_ADL) || defined(__GNUC__)
-            using namespace std;
-#elif    defined(BOOST_NO_STDC_NAMESPACE) && !defined(__SUNPRO_CC)
-            using    ::abs;
-            using    ::sinh;
-            using    ::sqrt;
-#else    /* BOOST_NO_STDC_NAMESPACE */
-            using    ::std::abs;
-            using    ::std::sinh;
-            using    ::std::sqrt;
-#endif    /* BOOST_NO_STDC_NAMESPACE */
+            using std::abs;
+            using std::sinh;
+            using std::sqrt;
 
             using    ::std::numeric_limits;
 
@@ -147,7 +128,6 @@ namespace boost
                 return(result);
             }
         }
-#endif    /* BOOST_NO_TEMPLATE_TEMPLATES */
     }
 }
 

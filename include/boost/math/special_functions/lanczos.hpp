@@ -10,7 +10,7 @@
 #pragma once
 #endif
 
-#include <boost/config.hpp>
+#include <boost/math/tools/config.hpp>
 #include <boost/math/tools/big_constant.hpp>
 #include <boost/math/tools/rational.hpp>
 #include <boost/math/policies/policy.hpp>
@@ -3211,18 +3211,6 @@ struct lanczos58MP : public std::integral_constant<int, 334>
 // placeholder for no lanczos info available:
 //
 struct undefined_lanczos : public std::integral_constant<int, (std::numeric_limits<int>::max)() - 1> { };
-
-#if 0
-#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-#define BOOST_MATH_FLT_DIGITS ::std::numeric_limits<float>::digits
-#define BOOST_MATH_DBL_DIGITS ::std::numeric_limits<double>::digits
-#define BOOST_MATH_LDBL_DIGITS ::std::numeric_limits<long double>::digits
-#else
-#define BOOST_MATH_FLT_DIGITS FLT_MANT_DIG
-#define BOOST_MATH_DBL_DIGITS DBL_MANT_DIG
-#define BOOST_MATH_LDBL_DIGITS LDBL_MANT_DIG
-#endif
-#endif
 
 template <class Real, class Policy>
 struct lanczos

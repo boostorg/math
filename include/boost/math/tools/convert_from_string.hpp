@@ -32,7 +32,7 @@ namespace boost{ namespace math{ namespace tools{
 #endif
    }
    template <class Real>
-   constexpr const char* convert_from_string(const char* p, const std::true_type&) BOOST_NOEXCEPT
+   constexpr const char* convert_from_string(const char* p, const std::true_type&) noexcept
    {
       return p;
    }
