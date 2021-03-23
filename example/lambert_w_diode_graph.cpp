@@ -61,8 +61,8 @@ https://en.wikipedia.org/wiki/Boltzmann_constant#Role_in_semiconductor_physics:_
 */
 const double v_thermal(double temperature)
 {
-  BOOST_CONSTEXPR const double boltzmann_k = 1.38e-23; // joules/kelvin.
-  BOOST_CONSTEXPR double charge_q = 1.6021766208e-19; // Charge of an electron (columb).
+  constexpr const double boltzmann_k = 1.38e-23; // joules/kelvin.
+  constexpr double charge_q = 1.6021766208e-19; // Charge of an electron (columb).
   double temp = +273; // Degrees C to K.
   return boltzmann_k * temp / charge_q;
 } // v_thermal

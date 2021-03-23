@@ -22,12 +22,12 @@ namespace std_workaround {
    using std::size;
 #else
    template <class C>
-   inline BOOST_CONSTEXPR std::size_t size(const C& c)
+   inline constexpr std::size_t size(const C& c)
    {
       return c.size();
    }
    template <class T, std::size_t N>
-   inline BOOST_CONSTEXPR std::size_t size(const T(&array)[N]) BOOST_NOEXCEPT
+   inline constexpr std::size_t size(const T(&array)[N]) BOOST_NOEXCEPT
    {
       return N;
    }
