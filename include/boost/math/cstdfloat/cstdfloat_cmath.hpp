@@ -24,7 +24,7 @@
 #include <type_traits>
 #include <memory>
 #include <boost/math/tools/assert.hpp>
-#include <boost/throw_exception.hpp>
+#include <boost/math/tools/throw_exception.hpp>
 
 #if defined(_WIN32) && defined(__GNUC__)
   // Several versions of Mingw and probably cygwin too have broken
@@ -988,7 +988,7 @@ namespace std
          v = quadmath_snprintf(&buf2[0], v_max + 3, format.c_str(), digits, m_value);
          if (v >= v_max + 3)
          {
-            BOOST_THROW_EXCEPTION(std::runtime_error("Formatting of float128_type failed."));
+            BOOST_MATH_THROW_EXCEPTION(std::runtime_error("Formatting of float128_type failed."));
          }
          s = &buf2[0];
       }

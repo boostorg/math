@@ -29,7 +29,7 @@
   #include <stdexcept>
   #include <string>
   #include <boost/math/tools/assert.hpp>
-  #include <boost/throw_exception.hpp>
+  #include <boost/math/tools/throw_exception.hpp>
 
 //  #if (0)
   #if defined(__GNUC__)
@@ -86,7 +86,7 @@
                                         my_digits,
                                         x);
 
-      if(v < 0) { BOOST_THROW_EXCEPTION(std::runtime_error("Formatting of boost::float128_t failed internally in quadmath_snprintf().")); }
+      if(v < 0) { BOOST_MATH_THROW_EXCEPTION(std::runtime_error("Formatting of boost::float128_t failed internally in quadmath_snprintf().")); }
 
       if(v >= static_cast<int>(sizeof(my_buffer) - 1U))
       {
@@ -106,7 +106,7 @@
         }
         catch(const std::bad_alloc&)
         {
-          BOOST_THROW_EXCEPTION(std::runtime_error("Formatting of boost::float128_t failed while allocating memory."));
+          BOOST_MATH_THROW_EXCEPTION(std::runtime_error("Formatting of boost::float128_t failed while allocating memory."));
         }
 #endif
         const int v2 = ::quadmath_snprintf(my_buffer2,
@@ -117,7 +117,7 @@
 
         if(v2 >= v + 3)
         {
-          BOOST_THROW_EXCEPTION(std::runtime_error("Formatting of boost::float128_t failed."));
+          BOOST_MATH_THROW_EXCEPTION(std::runtime_error("Formatting of boost::float128_t failed."));
         }
 
         static_cast<void>(ostr << my_buffer2);
@@ -152,7 +152,7 @@
 
         is.setstate(ios_base::failbit);
 
-        BOOST_THROW_EXCEPTION(std::runtime_error("Unable to interpret input string as a boost::float128_t"));
+        BOOST_MATH_THROW_EXCEPTION(std::runtime_error("Unable to interpret input string as a boost::float128_t"));
       }
 
       return is;
@@ -760,7 +760,7 @@
 
         is.setstate(ios_base::failbit);
 
-        BOOST_THROW_EXCEPTION(std::runtime_error("Unable to interpret input string as a boost::float128_t"));
+        BOOST_MATH_THROW_EXCEPTION(std::runtime_error("Unable to interpret input string as a boost::float128_t"));
       }
 
       return is;
