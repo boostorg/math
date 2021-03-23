@@ -96,7 +96,7 @@ inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION float unchecked_factorial<float>(unsi
 template <>
 struct max_factorial<float>
 {
-   BOOST_STATIC_CONSTANT(unsigned, value = 34);
+   static constexpr unsigned value = 34;
 };
 
 template <>
@@ -286,7 +286,7 @@ inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION double unchecked_factorial<double>(un
 template <>
 struct max_factorial<double>
 {
-   BOOST_STATIC_CONSTANT(unsigned, value = 170);
+   static constexpr unsigned value = 170;
 };
 
 template <>
@@ -476,7 +476,7 @@ inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION long double unchecked_factorial<long 
 template <>
 struct max_factorial<long double>
 {
-   BOOST_STATIC_CONSTANT(unsigned, value = 170);
+   static constexpr unsigned value = 170;
 };
 
 #ifdef BOOST_MATH_USE_FLOAT128
@@ -668,7 +668,7 @@ inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION BOOST_MATH_FLOAT128_TYPE unchecked_fa
 template <>
 struct max_factorial<BOOST_MATH_FLOAT128_TYPE>
 {
-   BOOST_STATIC_CONSTANT(unsigned, value = 170);
+   static constexpr unsigned value = 170;
 };
 
 #endif
@@ -992,12 +992,12 @@ inline T unchecked_factorial(unsigned i)
 template <class T>
 struct max_factorial
 {
-   BOOST_STATIC_CONSTANT(unsigned, value = 
+   static constexpr unsigned value = 
       std::numeric_limits<T>::digits == std::numeric_limits<float>::digits ? max_factorial<float>::value 
       : std::numeric_limits<T>::digits == std::numeric_limits<double>::digits ? max_factorial<double>::value 
       : std::numeric_limits<T>::digits == std::numeric_limits<long double>::digits ? max_factorial<long double>::value 
       BOOST_MATH_DETAIL_FLOAT128_MAX_FACTORIAL
-      : 100);
+      : 100;
 };
 
 #undef BOOST_MATH_DETAIL_FLOAT128_MAX_FACTORIAL
@@ -1013,7 +1013,7 @@ inline T unchecked_factorial(unsigned i BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE
 template <class T>
 struct max_factorial
 {
-   BOOST_STATIC_CONSTANT(unsigned, value = 0);
+   static constexpr unsigned value = 0;
 };
 
 #endif

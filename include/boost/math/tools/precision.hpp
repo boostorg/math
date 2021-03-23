@@ -182,7 +182,7 @@ struct log_limit_traits
       std::integral_constant<int, (std::numeric_limits<T>::max_exponent > INT_MAX ? INT_MAX : static_cast<int>(std::numeric_limits<T>::max_exponent))>,
       std::integral_constant<int, 0>
    >::type tag_type;
-   BOOST_STATIC_CONSTANT(bool, value = tag_type::value ? true : false);
+   static constexpr bool value = tag_type::value ? true : false;
    static_assert(::std::numeric_limits<T>::is_specialized || (value == 0), "Type T must be specialized or equal to 0");
 };
 
@@ -364,7 +364,7 @@ template <class T>
 struct root_epsilon_traits
 {
    typedef std::integral_constant<int, (::std::numeric_limits<T>::radix == 2) && (::std::numeric_limits<T>::digits != INT_MAX) ? std::numeric_limits<T>::digits : 0> tag_type;
-   BOOST_STATIC_CONSTANT(bool, has_noexcept = (tag_type::value == 113) || (tag_type::value == 64) || (tag_type::value == 53) || (tag_type::value == 24));
+   static constexpr bool, has_noexcept = (tag_type::value == 113) || (tag_type::value == 64) || (tag_type::value == 53) || (tag_type::value == 24);
 };
 
 }

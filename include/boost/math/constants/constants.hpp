@@ -71,7 +71,7 @@ namespace boost{ namespace math
    //
    // Max number of binary digits in the string representations of our constants:
    //
-   BOOST_STATIC_CONSTANT(int, max_string_digits = (101 * 1000L) / 301L);
+   static constexpr int max_string_digits = (101 * 1000L) / 301L;
 
    template <typename Real, typename Policy>
    struct construction_traits
