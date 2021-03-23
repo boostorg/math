@@ -8,13 +8,13 @@
 
 #include <cmath>
 #include <boost/config.hpp>
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(push)
 #pragma warning(disable: 4100)
 #pragma warning(disable: 4510)
 #pragma warning(disable: 4610)
 #endif
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(pop)
 #endif
 #include <boost/math/tools/config.hpp>

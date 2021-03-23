@@ -22,7 +22,7 @@
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/tools/throw_exception.hpp>
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #  pragma warning(push) // Quiet warnings in boost/format.hpp
 #  pragma warning(disable: 4996) // _SCL_SECURE_NO_DEPRECATE
 #  pragma warning(disable: 4512) // assignment operator could not be generated.
@@ -837,7 +837,7 @@ std::pair<T, T> pair_from_single(const T& val) BOOST_MATH_NOEXCEPT(T)
 
 }
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #  pragma warning(pop)
 #endif
 

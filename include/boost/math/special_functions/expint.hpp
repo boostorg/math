@@ -463,7 +463,7 @@ T expint_imp(unsigned n, T z, const Policy& pol, const Tag& tag)
    {
       f = z < (static_cast<T>(n - 2) / static_cast<T>(n - 1));
    }
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #  pragma warning(push)
 #  pragma warning(disable:4127) // conditional expression is constant
 #endif
@@ -477,7 +477,7 @@ T expint_imp(unsigned n, T z, const Policy& pol, const Tag& tag)
       result = expint_as_series(n, z, pol);
    else
       result = expint_as_fraction(n, z, pol);
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #  pragma warning(pop)
 #endif
 

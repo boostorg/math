@@ -95,7 +95,7 @@ namespace boost { namespace math {
    template <class RealType, class Policy>
    inline const std::pair<unsigned, unsigned> range(const hypergeometric_distribution<RealType, Policy>& dist)
    { // Range of permissible values for random variable x.
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #  pragma warning(push)
 #  pragma warning(disable:4267)
 #endif
@@ -105,7 +105,7 @@ namespace boost { namespace math {
       unsigned l = static_cast<unsigned>((std::max)(0, (int)(n + r) - (int)(N)));
       unsigned u = (std::min)(r, n);
       return std::pair<unsigned, unsigned>(l, u);
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #  pragma warning(pop)
 #endif
    }

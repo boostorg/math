@@ -390,7 +390,7 @@ public:
 
    polynomial<T> prime() const
    {
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
       // Disable int->float conversion warning:
 #pragma warning(push)
 #pragma warning(disable:4244)
@@ -405,7 +405,7 @@ public:
           p_data[i] = m_data[i+1]*static_cast<T>(i+1);
       }
       return polynomial<T>(std::move(p_data));
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(pop)
 #endif
    }

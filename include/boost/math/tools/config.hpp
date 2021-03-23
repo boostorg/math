@@ -164,7 +164,7 @@
 //
 // Tune performance options for specific compilers:
 //
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #  define BOOST_MATH_POLY_METHOD 2
 #if BOOST_MSVC <= 1900
 #  define BOOST_MATH_RATIONAL_METHOD 1

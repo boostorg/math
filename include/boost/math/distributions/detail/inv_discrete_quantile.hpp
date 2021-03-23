@@ -316,7 +316,7 @@ inline typename Dist::value_type round_to_floor(const Dist& d, typename Dist::va
    return result;
 }
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(push)
 #pragma warning(disable:4127)
 #endif
@@ -350,7 +350,7 @@ inline typename Dist::value_type round_to_ceil(const Dist& d, typename Dist::val
    return result;
 }
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(pop)
 #endif
 //

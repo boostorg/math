@@ -30,7 +30,7 @@ but does *not* check finite but out-of-range parameters to the constructor
 because these are specific to each distribution.
 */
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(push)
 #pragma warning(disable:4127)
 #endif
@@ -168,7 +168,7 @@ void check_out_of_range(typename Distro::value_type p1, typename Distro::value_t
    }
 }
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(pop)
 #endif
 

@@ -21,7 +21,7 @@
 
 #include <utility>
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 # pragma warning(push)
 # pragma warning(disable: 4702) // unreachable code (return after domain_error throw).
 #endif
@@ -494,7 +494,7 @@ inline RealType entropy(const students_t_distribution<RealType, Policy>& dist)
 } // namespace math
 } // namespace boost
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 # pragma warning(pop)
 #endif
 

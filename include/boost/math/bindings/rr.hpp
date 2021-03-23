@@ -206,7 +206,7 @@ private:
    template <class V>
    void assign_large_int(V a)
    {
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(push)
 #pragma warning(disable:4146)
 #endif
@@ -225,7 +225,7 @@ private:
       }
       if(neg)
          m_value = -m_value;
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(pop)
 #endif
    }

@@ -69,7 +69,7 @@ T relative_error(T a, T b)
 template <class T>
 void set_output_precision(T, std::ostream& os)
 {
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(push)
 #pragma warning(disable:4127)
 #endif
@@ -80,7 +80,7 @@ void set_output_precision(T, std::ostream& os)
    else
       os << std::setprecision(22); // and hope for the best!
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(pop)
 #endif
 }

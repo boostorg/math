@@ -30,7 +30,7 @@ T hypot_imp(T x, T y, const Policy& pol)
    x = fabs(x);
    y = fabs(y);
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(push) 
 #pragma warning(disable: 4127)
 #endif
@@ -39,7 +39,7 @@ T hypot_imp(T x, T y, const Policy& pol)
       && ((x == std::numeric_limits<T>::infinity())
       || (y == std::numeric_limits<T>::infinity())))
       return policies::raise_overflow_error<T>("boost::math::hypot<%1%>(%1%,%1%)", 0, pol);
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(pop)
 #endif
 

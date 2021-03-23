@@ -15,7 +15,7 @@
 #include <boost/lexical_cast.hpp>
 #include <type_traits>
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 //
 // We get a lot of warnings from the gmp, mpfr and gmpfrxx headers, 
 // disable them here, so we only see warnings from *our* code:
@@ -26,7 +26,7 @@
 
 #include <mpreal.h>
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(pop)
 #endif
 

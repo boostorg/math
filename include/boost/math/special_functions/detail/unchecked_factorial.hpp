@@ -10,14 +10,14 @@
 #pragma once
 #endif
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(push) // Temporary until lexical cast fixed.
 #pragma warning(disable: 4127 4701)
 #endif
 #ifndef BOOST_MATH_NO_LEXICAL_CAST
 #include <boost/lexical_cast.hpp>
 #endif
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(pop)
 #endif
 #include <cmath>

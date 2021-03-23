@@ -101,7 +101,7 @@ namespace boost{
 //
 namespace math_detail{
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(push)
 #pragma warning(disable:4800)
 #endif
@@ -119,7 +119,7 @@ inline bool is_nan_helper(T t, const std::true_type&)
 #endif
 }
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(pop)
 #endif
 

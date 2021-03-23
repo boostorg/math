@@ -17,7 +17,7 @@
 #include <iostream>
 #include <iomanip>
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(disable:4127)
 #endif
 

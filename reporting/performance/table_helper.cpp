@@ -365,7 +365,7 @@ std::string get_compiler_options_name()
 {
 #if defined(BOOST_MSVC) || defined(__ICL)
    std::string result;
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
    result = "cl ";
 #else
    result = "icl ";

@@ -39,7 +39,7 @@
 #include <algorithm>
 #include <type_traits>
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 # pragma warning(push)
 # pragma warning(disable: 4702) // unreachable code (return after domain_error throw).
 # pragma warning(disable: 4127) // conditional expression is constant.
@@ -2206,7 +2206,7 @@ inline typename tools::promote_args<T1, T2>::type
 } // namespace math
 } // namespace boost
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 # pragma warning(pop)
 #endif
 

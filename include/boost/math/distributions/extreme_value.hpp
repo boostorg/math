@@ -23,7 +23,7 @@
 #include <utility>
 #include <cmath>
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 # pragma warning(push)
 # pragma warning(disable: 4702) // unreachable code (return after domain_error throw).
 #endif
@@ -288,7 +288,7 @@ inline RealType kurtosis_excess(const extreme_value_distribution<RealType, Polic
 } // namespace math
 } // namespace boost
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 # pragma warning(pop)
 #endif
 

@@ -14,11 +14,11 @@
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/special_functions/detail/unchecked_factorial.hpp>
 #include <array>
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(push) // Temporary until lexical cast fixed.
 #pragma warning(disable: 4127 4701)
 #endif
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(pop)
 #endif
 #include <type_traits>

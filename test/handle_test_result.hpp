@@ -118,7 +118,7 @@ void handle_test_result(const boost::math::tools::test_result<T>& result,
                        const char* test_name, 
                        const char* group_name)
 {
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(push)
 #pragma warning(disable:4127)
 #endif
@@ -170,7 +170,7 @@ void handle_test_result(const boost::math::tools::test_result<T>& result,
       BOOST_CHECK(bounds.second >= mean_error_found);
    }
    std::cout << std::endl;
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(pop)
 #endif
 }

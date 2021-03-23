@@ -55,7 +55,7 @@ private:
 
 typedef chi_squared_distribution<double> chi_squared;
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(push)
 #pragma warning(disable:4127)
 #endif
@@ -74,7 +74,7 @@ inline const std::pair<RealType, RealType> range(const chi_squared_distribution<
   }
 }
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(pop)
 #endif
 

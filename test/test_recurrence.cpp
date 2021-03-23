@@ -16,7 +16,7 @@
 //#include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/concepts/real_concept.hpp>
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(disable:4127)
 #endif
 

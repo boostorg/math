@@ -194,7 +194,7 @@ struct log_limit_noexcept_traits : public log_limit_noexcept_traits_imp<T, std::
 
 } // namespace detail
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(push)
 #pragma warning(disable:4309)
 #endif
@@ -225,7 +225,7 @@ inline constexpr T log_min_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T)) noexcept(
 #endif
 }
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(pop)
 #endif
 

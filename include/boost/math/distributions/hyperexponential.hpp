@@ -631,7 +631,7 @@ RealT mode(hyperexponential_distribution<RealT,PolicyT> const& /*dist*/)
 
 }} // namespace boost::math
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning (pop)
 #endif
 // This include must be at the end, *after* the accessors
