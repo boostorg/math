@@ -176,7 +176,7 @@
 #  define BOOST_MATH_INT_VALUE_SUFFIX(RV, SUF) RV##.0L
 #endif
 
-#elif defined(BOOST_INTEL)
+#elif defined(__INTEL_COMPILER)
 #  define BOOST_MATH_POLY_METHOD 2
 #  define BOOST_MATH_RATIONAL_METHOD 1
 
@@ -330,11 +330,7 @@ namespace detail{
 template <class T>
 struct is_integer_for_rounding
 {
-   static const bool value = std::is_integral<T>::value
-#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-      || (std::numeric_limits<T>::is_specialized && std::numeric_limits<T>::is_integer)
-#endif
-      ;
+   static constexpr bool value = std::is_integral<T>::value || (std::numeric_limits<T>::is_specialized && std::numeric_limits<T>::is_integer);
 };
 
 }
@@ -415,16 +411,13 @@ namespace boost{ namespace math{
 //
 // Thread local storage:
 //
-#if !defined(BOOST_NO_CXX11_THREAD_LOCAL) && !defined(BOOST_INTEL)
-#  define BOOST_MATH_THREAD_LOCAL thread_local
-#else
-#  define BOOST_MATH_THREAD_LOCAL
-#endif
+#define BOOST_MATH_THREAD_LOCAL thread_local
+
 //
 // Some mingw flavours have issues with thread_local and types with non-trivial destructors
 // See https://sourceforge.net/p/mingw-w64/bugs/527/
 //
-#if !defined(BOOST_NO_CXX11_THREAD_LOCAL) && (defined(__MINGW32__) || defined(__MINGW64__)) && !defined(_REENTRANT) && !defined(__clang__)
+#if (defined(__MINGW32__) || defined(__MINGW64__)) && !defined(_REENTRANT) && !defined(__clang__)
 #  define BOOST_MATH_NO_THREAD_LOCAL_WITH_NON_TRIVIAL_TYPES
 #endif
 
@@ -432,7 +425,7 @@ namespace boost{ namespace math{
 //
 // Can we have constexpr tables?
 //
-#if (!defined(BOOST_NO_CXX11_HDR_ARRAY) && !defined(BOOST_NO_CXX14_CONSTEXPR)) || (defined(_MSC_VER) && _MSC_VER >= 1910)
+#if (!defined(BOOST_NO_CXX14_CONSTEXPR)) || (defined(_MSC_VER) && _MSC_VER >= 1910)
 #define BOOST_MATH_HAVE_CONSTEXPR_TABLES
 #define BOOST_MATH_CONSTEXPR_TABLE_FUNCTION constexpr
 #else
