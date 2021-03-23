@@ -10,7 +10,12 @@
 #pragma once
 #endif
 
+#ifndef BOOST_MATH_STANDALONE
 #include <boost/config.hpp>
+#else // Things from boost/config that are required, and easy to replicate
+#define BOOST_PREVENT_MACRO_SUBSTITUTION
+#endif // BOOST_MATH_STANDALONE
+
 #include <algorithm>  // for min and max
 #include <limits>
 #include <cmath>
@@ -110,7 +115,7 @@
 #  define BOOST_MATH_USE_C99
 #endif
 
-#if defined(__CYGWIN__) || defined(__HP_aCC) || defined(BOOST_INTEL) \
+#if defined(__CYGWIN__) || defined(__HP_aCC) || defined(__INTEL_COMPILER) \
   || defined(BOOST_NO_NATIVE_LONG_DOUBLE_FP_CLASSIFY) \
   || (defined(__GNUC__) && !defined(BOOST_MATH_USE_C99))\
   || defined(BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS)
@@ -252,7 +257,7 @@ struct non_type {};
 #  define BOOST_MATH_USE_FLOAT128
 #endif
 
-#  if defined(BOOST_INTEL) && defined(BOOST_INTEL_CXX_VERSION) && (BOOST_INTEL_CXX_VERSION >= 1310) && defined(__GNUC__)
+#  if defined(__INTEL_COMPILER) && defined(__GNUC__)
 #    if (__GNUC__ > 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 6))
 #      define BOOST_MATH_FLOAT128_TYPE __float128
 #    endif
@@ -348,7 +353,7 @@ struct is_integer_for_rounding
 #  endif
 #endif
 
-#if ((defined(__linux__) && !defined(__UCLIBC__) && !defined(BOOST_MATH_HAVE_FIXED_GLIBC)) || defined(__QNX__) || defined(__IBMCPP__)) && !defined(BOOST_NO_FENV_H)
+#if ((defined(__linux__) && !defined(__UCLIBC__) && !defined(BOOST_MATH_HAVE_FIXED_GLIBC)) || defined(__QNX__) || defined(__IBMCPP__))
 //
 // This code was introduced in response to this glibc bug: http://sourceware.org/bugzilla/show_bug.cgi?id=2445
 // Basically powl and expl can return garbage when the result is small and certain exception flags are set
@@ -404,7 +409,7 @@ namespace boost{ namespace math{
 
 #  define BOOST_MATH_INSTRUMENT_CODE(x) \
       std::cout << std::setprecision(35) << __FILE__ << ":" << __LINE__ << " " << x << std::endl;
-#  define BOOST_MATH_INSTRUMENT_VARIABLE(name) BOOST_MATH_INSTRUMENT_CODE(BOOST_STRINGIZE(name) << " = " << name)
+#  define BOOST_MATH_INSTRUMENT_VARIABLE(name) BOOST_MATH_INSTRUMENT_CODE(#name << " = " << name)
 
 #else
 
