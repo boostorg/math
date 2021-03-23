@@ -85,7 +85,7 @@
 #define BOOST_MATH_DISABLE_STD_FPCLASSIFY
 #endif
 
-#if defined(BOOST_MSVC) && !defined(_WIN32_WCE)
+#if defined(_MSC_VER) && !defined(_WIN32_WCE)
    // Better safe than sorry, our tests don't support hardware exceptions:
 #  define BOOST_MATH_CONTROL_FP _control87(MCW_EM,MCW_EM)
 #endif
@@ -119,13 +119,18 @@
 
 #if defined(__SUNPRO_CC) && (__SUNPRO_CC <= 0x590)
 
-#  include "boost/type.hpp"
-#  include "boost/non_type.hpp"
+namespace boost { namespace math { namespace tools { namespace detail {
+template <typename T>
+struct type {};
 
-#  define BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(t)         boost::type<t>* = 0
-#  define BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(t)    boost::type<t>*
-#  define BOOST_MATH_EXPLICIT_TEMPLATE_NON_TYPE(t, v)  boost::non_type<t, v>* = 0
-#  define BOOST_MATH_EXPLICIT_TEMPLATE_NON_TYPE_SPEC(t, v)  boost::non_type<t, v>*
+template <typename T, T n>
+struct non_type {};
+}}}} // Namespace boost, math tools, detail
+
+#  define BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(t)              boost::math::tools::detail::type<t>* = 0
+#  define BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(t)         boost::math::tools::detail::type<t>*
+#  define BOOST_MATH_EXPLICIT_TEMPLATE_NON_TYPE(t, v)       boost::math::tools::detail::non_type<t, v>* = 0
+#  define BOOST_MATH_EXPLICIT_TEMPLATE_NON_TYPE_SPEC(t, v)  boost::math::tools::detail::non_type<t, v>*
 
 #  define BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(t)         \
              , BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(t)
@@ -166,12 +171,12 @@
 //
 #ifdef _MSC_VER
 #  define BOOST_MATH_POLY_METHOD 2
-#if BOOST_MSVC <= 1900
+#if _MSC_VER <= 1900
 #  define BOOST_MATH_RATIONAL_METHOD 1
 #else
 #  define BOOST_MATH_RATIONAL_METHOD 2
 #endif
-#if BOOST_MSVC > 1900
+#if _MSC_VER > 1900
 #  define BOOST_MATH_INT_TABLE_TYPE(RT, IT) RT
 #  define BOOST_MATH_INT_VALUE_SUFFIX(RV, SUF) RV##.0L
 #endif
@@ -237,7 +242,7 @@
 //
 // And then the actual configuration:
 //
-#if defined(_GLIBCXX_USE_FLOAT128) && defined(BOOST_GCC) && !defined(__STRICT_ANSI__) \
+#if defined(_GLIBCXX_USE_FLOAT128) && defined(__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__) && !defined(__STRICT_ANSI__) \
    && !defined(BOOST_MATH_DISABLE_FLOAT128) || defined(BOOST_MATH_USE_FLOAT128)
 //
 // Only enable this when the compiler really is GCC as clang and probably 
