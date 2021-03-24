@@ -21,6 +21,7 @@
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/tools/assert.hpp>
+#include <boost/math/special_functions/fpclassify.hpp>
 
 #if defined(__GNUC__) && defined(BOOST_MATH_USE_FLOAT128)
 //
