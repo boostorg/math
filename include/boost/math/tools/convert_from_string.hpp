@@ -37,7 +37,7 @@ namespace boost{ namespace math{ namespace tools{
       return p;
    }
    template <class Real>
-   constexpr typename convert_from_string_result<Real>::type convert_from_string(const char* p) BOOST_NOEXCEPT_IF((std::is_constructible<Real, const char*>::value))
+   constexpr typename convert_from_string_result<Real>::type convert_from_string(const char* p) noexcept((std::is_constructible<Real, const char*>::value))
    {
       return convert_from_string<Real>(p, std::is_constructible<Real, const char*>());
    }

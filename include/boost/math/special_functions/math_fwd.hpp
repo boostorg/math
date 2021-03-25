@@ -1188,31 +1188,21 @@ namespace boost
     } // namespace math
 } // namespace boost
 
-#ifdef BOOST_HAS_LONG_LONG
 #define BOOST_MATH_DETAIL_LL_FUNC(Policy)\
    \
    template <class T>\
-   inline T modf(const T& v, boost::long_long_type* ipart){ using boost::math::modf; return modf(v, ipart, Policy()); }\
+   inline T modf(const T& v, long long* ipart){ using boost::math::modf; return modf(v, ipart, Policy()); }\
    \
    template <class T>\
-   inline boost::long_long_type lltrunc(const T& v){ using boost::math::lltrunc; return lltrunc(v, Policy()); }\
+   inline long long lltrunc(const T& v){ using boost::math::lltrunc; return lltrunc(v, Policy()); }\
    \
    template <class T>\
-   inline boost::long_long_type llround(const T& v){ using boost::math::llround; return llround(v, Policy()); }\
+   inline long long llround(const T& v){ using boost::math::llround; return llround(v, Policy()); }\
 
-#else
-#define BOOST_MATH_DETAIL_LL_FUNC(Policy)
-#endif
-
-#if !defined(BOOST_NO_CXX11_DECLTYPE) && !defined(BOOST_NO_CXX11_AUTO_DECLARATIONS) && !defined(BOOST_NO_CXX11_HDR_ARRAY)
 #  define BOOST_MATH_DETAIL_11_FUNC(Policy)\
    template <class T, class U, class V>\
    inline typename boost::math::tools::promote_args<T, U>::type hypergeometric_1F1(const T& a, const U& b, const V& z)\
    { return boost::math::hypergeometric_1F1(a, b, z, Policy()); }\
-
-#else
-#  define BOOST_MATH_DETAIL_11_FUNC(Policy)
-#endif
 
 #define BOOST_MATH_DECLARE_SPECIAL_FUNCTIONS(Policy)\
    \

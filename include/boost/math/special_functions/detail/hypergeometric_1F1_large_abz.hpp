@@ -11,7 +11,7 @@
 #include <boost/math/special_functions/detail/hypergeometric_1F1_bessel.hpp>
 #include <boost/math/special_functions/detail/hypergeometric_series.hpp>
 #include <boost/math/special_functions/gamma.hpp>
-
+#include <boost/math/special_functions/trunc.hpp>
 
   namespace boost { namespace math { namespace detail {
 

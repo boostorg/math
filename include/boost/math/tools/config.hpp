@@ -10,10 +10,22 @@
 #pragma once
 #endif
 
+#define BOOST_MATH_STANDALONE
 #ifndef BOOST_MATH_STANDALONE
 #include <boost/config.hpp>
 #else // Things from boost/config that are required, and easy to replicate
+
 #define BOOST_PREVENT_MACRO_SUBSTITUTION
+#define BOOST_MATH_NO_REAL_CONCEPT_TESTS
+#define BOOST_MATH_NO_DISTRIBUTION_CONCEPT_TESTS
+
+#if (__cplusplus > 201400L || _MSVC_LANG > 201400L)
+#define BOOST_CXX14_CONSTEXPR constexpr
+#else
+#define BOOST_CXX14_CONSTEXPR
+#define BOOST_NO_CXX14_CONSTEXPR
+#endif // BOOST_CXX14_CONSTEXPR
+
 #endif // BOOST_MATH_STANDALONE
 
 #include <algorithm>  // for min and max
@@ -38,7 +50,9 @@
 // For reasons I don't understand, the tests with IMB's compiler all
 // pass at long double precision, but fail with real_concept, those tests
 // are disabled for now.  (JM 2012).
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
 #  define BOOST_MATH_NO_REAL_CONCEPT_TESTS
+#endif // BOOST_MATH_NO_REAL_CONCEPT_TESTS
 #endif
 #ifdef sun
 // Any use of __float128 in program startup code causes a segfault  (tested JM 2015, Solaris 11).

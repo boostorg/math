@@ -610,7 +610,7 @@ inline T raise_indeterminate_result_error(
 }  // namespace detail
 
 template <class T, class Policy>
-inline constexpr T raise_domain_error(const char* function, const char* message, const T& val, const Policy&) BOOST_NOEXCEPT_IF(is_noexcept_error_policy<Policy>::value && BOOST_MATH_IS_FLOAT(T))
+inline constexpr T raise_domain_error(const char* function, const char* message, const T& val, const Policy&) noexcept(is_noexcept_error_policy<Policy>::value && BOOST_MATH_IS_FLOAT(T))
 {
    typedef typename Policy::domain_error_type policy_type;
    return detail::raise_domain_error(
@@ -619,7 +619,7 @@ inline constexpr T raise_domain_error(const char* function, const char* message,
 }
 
 template <class T, class Policy>
-inline constexpr T raise_pole_error(const char* function, const char* message, const T& val, const Policy&) BOOST_NOEXCEPT_IF(is_noexcept_error_policy<Policy>::value && BOOST_MATH_IS_FLOAT(T))
+inline constexpr T raise_pole_error(const char* function, const char* message, const T& val, const Policy&) noexcept(is_noexcept_error_policy<Policy>::value && BOOST_MATH_IS_FLOAT(T))
 {
    typedef typename Policy::pole_error_type policy_type;
    return detail::raise_pole_error(
@@ -628,7 +628,7 @@ inline constexpr T raise_pole_error(const char* function, const char* message, c
 }
 
 template <class T, class Policy>
-inline constexpr T raise_overflow_error(const char* function, const char* message, const Policy&) BOOST_NOEXCEPT_IF(is_noexcept_error_policy<Policy>::value && BOOST_MATH_IS_FLOAT(T))
+inline constexpr T raise_overflow_error(const char* function, const char* message, const Policy&) noexcept(is_noexcept_error_policy<Policy>::value && BOOST_MATH_IS_FLOAT(T))
 {
    typedef typename Policy::overflow_error_type policy_type;
    return detail::raise_overflow_error<T>(
@@ -637,7 +637,7 @@ inline constexpr T raise_overflow_error(const char* function, const char* messag
 }
 
 template <class T, class Policy>
-inline constexpr T raise_overflow_error(const char* function, const char* message, const T& val, const Policy&) BOOST_NOEXCEPT_IF(is_noexcept_error_policy<Policy>::value && BOOST_MATH_IS_FLOAT(T))
+inline constexpr T raise_overflow_error(const char* function, const char* message, const T& val, const Policy&) noexcept(is_noexcept_error_policy<Policy>::value && BOOST_MATH_IS_FLOAT(T))
 {
    typedef typename Policy::overflow_error_type policy_type;
    return detail::raise_overflow_error(
@@ -646,7 +646,7 @@ inline constexpr T raise_overflow_error(const char* function, const char* messag
 }
 
 template <class T, class Policy>
-inline constexpr T raise_underflow_error(const char* function, const char* message, const Policy&) BOOST_NOEXCEPT_IF(is_noexcept_error_policy<Policy>::value && BOOST_MATH_IS_FLOAT(T))
+inline constexpr T raise_underflow_error(const char* function, const char* message, const Policy&) noexcept(is_noexcept_error_policy<Policy>::value && BOOST_MATH_IS_FLOAT(T))
 {
    typedef typename Policy::underflow_error_type policy_type;
    return detail::raise_underflow_error<T>(
@@ -655,7 +655,7 @@ inline constexpr T raise_underflow_error(const char* function, const char* messa
 }
 
 template <class T, class Policy>
-inline constexpr T raise_denorm_error(const char* function, const char* message, const T& val, const Policy&) BOOST_NOEXCEPT_IF(is_noexcept_error_policy<Policy>::value && BOOST_MATH_IS_FLOAT(T))
+inline constexpr T raise_denorm_error(const char* function, const char* message, const T& val, const Policy&) noexcept(is_noexcept_error_policy<Policy>::value && BOOST_MATH_IS_FLOAT(T))
 {
    typedef typename Policy::denorm_error_type policy_type;
    return detail::raise_denorm_error<T>(
@@ -665,7 +665,7 @@ inline constexpr T raise_denorm_error(const char* function, const char* message,
 }
 
 template <class T, class Policy>
-inline constexpr T raise_evaluation_error(const char* function, const char* message, const T& val, const Policy&) BOOST_NOEXCEPT_IF(is_noexcept_error_policy<Policy>::value && BOOST_MATH_IS_FLOAT(T))
+inline constexpr T raise_evaluation_error(const char* function, const char* message, const T& val, const Policy&) noexcept(is_noexcept_error_policy<Policy>::value && BOOST_MATH_IS_FLOAT(T))
 {
    typedef typename Policy::evaluation_error_type policy_type;
    return detail::raise_evaluation_error(
@@ -674,7 +674,7 @@ inline constexpr T raise_evaluation_error(const char* function, const char* mess
 }
 
 template <class T, class TargetType, class Policy>
-inline constexpr TargetType raise_rounding_error(const char* function, const char* message, const T& val, const TargetType& t, const Policy&) BOOST_NOEXCEPT_IF(is_noexcept_error_policy<Policy>::value && BOOST_MATH_IS_FLOAT(T))
+inline constexpr TargetType raise_rounding_error(const char* function, const char* message, const T& val, const TargetType& t, const Policy&) noexcept(is_noexcept_error_policy<Policy>::value && BOOST_MATH_IS_FLOAT(T))
 {
    typedef typename Policy::rounding_error_type policy_type;
    return detail::raise_rounding_error(
@@ -683,7 +683,7 @@ inline constexpr TargetType raise_rounding_error(const char* function, const cha
 }
 
 template <class T, class R, class Policy>
-inline constexpr T raise_indeterminate_result_error(const char* function, const char* message, const T& val, const R& result, const Policy&) BOOST_NOEXCEPT_IF(is_noexcept_error_policy<Policy>::value && BOOST_MATH_IS_FLOAT(T))
+inline constexpr T raise_indeterminate_result_error(const char* function, const char* message, const T& val, const R& result, const Policy&) noexcept(is_noexcept_error_policy<Policy>::value && BOOST_MATH_IS_FLOAT(T))
 {
    typedef typename Policy::indeterminate_result_error_type policy_type;
    return detail::raise_indeterminate_result_error(
@@ -698,7 +698,7 @@ namespace detail
 {
 
 template <class R, class T, class Policy>
-inline bool check_overflow(T val, R* result, const char* function, const Policy& pol) BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(R) && BOOST_MATH_IS_FLOAT(T) && (Policy::value != throw_on_error) && (Policy::value != user_error))
+inline bool check_overflow(T val, R* result, const char* function, const Policy& pol) noexcept(BOOST_MATH_IS_FLOAT(R) && BOOST_MATH_IS_FLOAT(T) && (Policy::value != throw_on_error) && (Policy::value != user_error))
 {
    BOOST_MATH_STD_USING
    if(fabs(val) > tools::max_value<R>())
@@ -710,7 +710,7 @@ inline bool check_overflow(T val, R* result, const char* function, const Policy&
    return false;
 }
 template <class R, class T, class Policy>
-inline bool check_overflow(std::complex<T> val, R* result, const char* function, const Policy& pol) BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(R) && BOOST_MATH_IS_FLOAT(T) && (Policy::value != throw_on_error) && (Policy::value != user_error))
+inline bool check_overflow(std::complex<T> val, R* result, const char* function, const Policy& pol) noexcept(BOOST_MATH_IS_FLOAT(R) && BOOST_MATH_IS_FLOAT(T) && (Policy::value != throw_on_error) && (Policy::value != user_error))
 {
    typedef typename R::value_type r_type;
    r_type re, im;
@@ -720,7 +720,7 @@ inline bool check_overflow(std::complex<T> val, R* result, const char* function,
    return r;
 }
 template <class R, class T, class Policy>
-inline bool check_underflow(T val, R* result, const char* function, const Policy& pol) BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(R) && BOOST_MATH_IS_FLOAT(T) && (Policy::value != throw_on_error) && (Policy::value != user_error))
+inline bool check_underflow(T val, R* result, const char* function, const Policy& pol) noexcept(BOOST_MATH_IS_FLOAT(R) && BOOST_MATH_IS_FLOAT(T) && (Policy::value != throw_on_error) && (Policy::value != user_error))
 {
    if((val != 0) && (static_cast<R>(val) == 0))
    {
@@ -730,7 +730,7 @@ inline bool check_underflow(T val, R* result, const char* function, const Policy
    return false;
 }
 template <class R, class T, class Policy>
-inline bool check_underflow(std::complex<T> val, R* result, const char* function, const Policy& pol) BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(R) && BOOST_MATH_IS_FLOAT(T) && (Policy::value != throw_on_error) && (Policy::value != user_error))
+inline bool check_underflow(std::complex<T> val, R* result, const char* function, const Policy& pol) noexcept(BOOST_MATH_IS_FLOAT(R) && BOOST_MATH_IS_FLOAT(T) && (Policy::value != throw_on_error) && (Policy::value != user_error))
 {
    typedef typename R::value_type r_type;
    r_type re, im;
@@ -740,7 +740,7 @@ inline bool check_underflow(std::complex<T> val, R* result, const char* function
    return r;
 }
 template <class R, class T, class Policy>
-inline bool check_denorm(T val, R* result, const char* function, const Policy& pol) BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(R) && BOOST_MATH_IS_FLOAT(T) && (Policy::value != throw_on_error) && (Policy::value != user_error))
+inline bool check_denorm(T val, R* result, const char* function, const Policy& pol) noexcept(BOOST_MATH_IS_FLOAT(R) && BOOST_MATH_IS_FLOAT(T) && (Policy::value != throw_on_error) && (Policy::value != user_error))
 {
    BOOST_MATH_STD_USING
    if((fabs(val) < static_cast<T>(tools::min_value<R>())) && (static_cast<R>(val) != 0))
@@ -751,7 +751,7 @@ inline bool check_denorm(T val, R* result, const char* function, const Policy& p
    return false;
 }
 template <class R, class T, class Policy>
-inline bool check_denorm(std::complex<T> val, R* result, const char* function, const Policy& pol) BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(R) && BOOST_MATH_IS_FLOAT(T) && (Policy::value != throw_on_error) && (Policy::value != user_error))
+inline bool check_denorm(std::complex<T> val, R* result, const char* function, const Policy& pol) noexcept(BOOST_MATH_IS_FLOAT(R) && BOOST_MATH_IS_FLOAT(T) && (Policy::value != throw_on_error) && (Policy::value != user_error))
 {
    typedef typename R::value_type r_type;
    r_type re, im;
@@ -763,28 +763,28 @@ inline bool check_denorm(std::complex<T> val, R* result, const char* function, c
 
 // Default instantiations with ignore_error policy.
 template <class R, class T>
-inline constexpr bool check_overflow(T /* val */, R* /* result */, const char* /* function */, const overflow_error<ignore_error>&) BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(R) && BOOST_MATH_IS_FLOAT(T)) 
+inline constexpr bool check_overflow(T /* val */, R* /* result */, const char* /* function */, const overflow_error<ignore_error>&) noexcept(BOOST_MATH_IS_FLOAT(R) && BOOST_MATH_IS_FLOAT(T)) 
 { return false; }
 template <class R, class T>
-inline constexpr bool check_overflow(std::complex<T> /* val */, R* /* result */, const char* /* function */, const overflow_error<ignore_error>&) BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(R) && BOOST_MATH_IS_FLOAT(T)) 
+inline constexpr bool check_overflow(std::complex<T> /* val */, R* /* result */, const char* /* function */, const overflow_error<ignore_error>&) noexcept(BOOST_MATH_IS_FLOAT(R) && BOOST_MATH_IS_FLOAT(T)) 
 { return false; }
 template <class R, class T>
-inline constexpr bool check_underflow(T /* val */, R* /* result */, const char* /* function */, const underflow_error<ignore_error>&) BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(R) && BOOST_MATH_IS_FLOAT(T)) 
+inline constexpr bool check_underflow(T /* val */, R* /* result */, const char* /* function */, const underflow_error<ignore_error>&) noexcept(BOOST_MATH_IS_FLOAT(R) && BOOST_MATH_IS_FLOAT(T)) 
 { return false; }
 template <class R, class T>
-inline constexpr bool check_underflow(std::complex<T> /* val */, R* /* result */, const char* /* function */, const underflow_error<ignore_error>&) BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(R) && BOOST_MATH_IS_FLOAT(T)) 
+inline constexpr bool check_underflow(std::complex<T> /* val */, R* /* result */, const char* /* function */, const underflow_error<ignore_error>&) noexcept(BOOST_MATH_IS_FLOAT(R) && BOOST_MATH_IS_FLOAT(T)) 
 { return false; }
 template <class R, class T>
-inline constexpr bool check_denorm(T /* val */, R* /* result*/, const char* /* function */, const denorm_error<ignore_error>&) BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(R) && BOOST_MATH_IS_FLOAT(T)) 
+inline constexpr bool check_denorm(T /* val */, R* /* result*/, const char* /* function */, const denorm_error<ignore_error>&) noexcept(BOOST_MATH_IS_FLOAT(R) && BOOST_MATH_IS_FLOAT(T)) 
 { return false; }
 template <class R, class T>
-inline constexpr bool check_denorm(std::complex<T> /* val */, R* /* result*/, const char* /* function */, const denorm_error<ignore_error>&) BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(R) && BOOST_MATH_IS_FLOAT(T)) 
+inline constexpr bool check_denorm(std::complex<T> /* val */, R* /* result*/, const char* /* function */, const denorm_error<ignore_error>&) noexcept(BOOST_MATH_IS_FLOAT(R) && BOOST_MATH_IS_FLOAT(T)) 
 { return false; }
 
 } // namespace detail
 
 template <class R, class Policy, class T>
-inline R checked_narrowing_cast(T val, const char* function) BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(R) && BOOST_MATH_IS_FLOAT(T) && is_noexcept_error_policy<Policy>::value)
+inline R checked_narrowing_cast(T val, const char* function) noexcept(BOOST_MATH_IS_FLOAT(R) && BOOST_MATH_IS_FLOAT(T) && is_noexcept_error_policy<Policy>::value)
 {
    typedef typename Policy::overflow_error_type overflow_type;
    typedef typename Policy::underflow_error_type underflow_type;
@@ -804,7 +804,7 @@ inline R checked_narrowing_cast(T val, const char* function) BOOST_NOEXCEPT_IF(B
 }
 
 template <class T, class Policy>
-inline void check_series_iterations(const char* function, std::uintmax_t max_iter, const Policy& pol) BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(T) && is_noexcept_error_policy<Policy>::value)
+inline void check_series_iterations(const char* function, std::uintmax_t max_iter, const Policy& pol) noexcept(BOOST_MATH_IS_FLOAT(T) && is_noexcept_error_policy<Policy>::value)
 {
    if(max_iter >= policies::get_max_series_iterations<Policy>())
       raise_evaluation_error<T>(
@@ -813,7 +813,7 @@ inline void check_series_iterations(const char* function, std::uintmax_t max_ite
 }
 
 template <class T, class Policy>
-inline void check_root_iterations(const char* function, std::uintmax_t max_iter, const Policy& pol) BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(T) && is_noexcept_error_policy<Policy>::value)
+inline void check_root_iterations(const char* function, std::uintmax_t max_iter, const Policy& pol) noexcept(BOOST_MATH_IS_FLOAT(T) && is_noexcept_error_policy<Policy>::value)
 {
    if(max_iter >= policies::get_max_root_iterations<Policy>())
       raise_evaluation_error<T>(
