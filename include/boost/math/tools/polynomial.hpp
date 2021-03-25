@@ -26,6 +26,7 @@
 #include <ostream>
 #include <algorithm>
 #include <initializer_list>
+#include <type_traits>
 
 namespace boost{ namespace math{ namespace tools{
 
@@ -122,7 +123,7 @@ namespace detail {
 * subtlety of distinction.
 */
 template <typename T, typename N>
-BOOST_DEDUCED_TYPENAME disable_if_c<std::numeric_limits<T>::is_integer, void >::type
+BOOST_DEDUCED_TYPENAME std::enable_if<!std::numeric_limits<T>::is_integer, void >::type
 division_impl(polynomial<T> &q, polynomial<T> &u, const polynomial<T>& v, N n, N k)
 {
     q[k] = u[n + k] / v[n];
@@ -165,7 +166,7 @@ T integer_power(T t, N n)
 * don't currently have that subtlety of distinction.
 */
 template <typename T, typename N>
-BOOST_DEDUCED_TYPENAME enable_if_c<std::numeric_limits<T>::is_integer, void >::type
+BOOST_DEDUCED_TYPENAME std::enable_if<std::numeric_limits<T>::is_integer, void >::type
 division_impl(polynomial<T> &q, polynomial<T> &u, const polynomial<T>& v, N n, N k)
 {
     q[k] = u[n + k] * integer_power(v[n], k);

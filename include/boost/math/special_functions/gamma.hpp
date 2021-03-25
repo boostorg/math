@@ -33,11 +33,11 @@
 #include <boost/math/special_functions/detail/lgamma_small.hpp>
 #include <boost/math/special_functions/bernoulli.hpp>
 #include <boost/math/special_functions/polygamma.hpp>
-#include <boost/type_traits/is_convertible.hpp>
 #include <boost/math/tools/assert.hpp>
 
 #include <cmath>
 #include <algorithm>
+#include <type_traits>
 
 #ifdef BOOST_MSVC
 # pragma warning(push)

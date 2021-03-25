@@ -10,10 +10,10 @@
 # include <iostream>
 # include <iomanip>
 # include <limits>
+# include <type_traits>
 # include <cmath>
 
 #include <boost/math/tools/assert.hpp>
-#include <boost/type_traits/is_floating_point.hpp> 
 #include <boost/math/special_functions/next.hpp> // for float_distance
 
 //[numeric_derivative_example

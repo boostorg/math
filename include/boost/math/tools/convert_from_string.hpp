@@ -10,8 +10,7 @@
 #pragma once
 #endif
 
-#include <boost/type_traits/is_constructible.hpp>
-#include <boost/type_traits/conditional.hpp>
+#include <type_traits>
 #include <boost/lexical_cast.hpp>
 
 namespace boost{ namespace math{ namespace tools{
@@ -19,7 +18,7 @@ namespace boost{ namespace math{ namespace tools{
    template <class T>
    struct convert_from_string_result
    {
-      typedef typename boost::conditional<std::is_constructible<T, const char*>::value, const char*, T>::type type;
+      typedef typename std::conditional<std::is_constructible<T, const char*>::value, const char*, T>::type type;
    };
 
    template <class Real>

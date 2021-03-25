@@ -16,8 +16,6 @@
 
 #include <boost/cstdlib.hpp>
 #include <boost/config.hpp>
-#include <boost/array.hpp>
-#include <boost/type_traits/is_floating_point.hpp>
 #include <boost/math/tools/roots.hpp>
 #include <boost/math/special_functions/ellint_1.hpp>
 #include <boost/math/special_functions/ellint_2.hpp>
@@ -49,6 +47,7 @@ using boost::multiprecision::cpp_bin_float_50;
 #include <fstream> // std::ofstream
 #include <cmath>
 #include <typeinfo> // for type name using typid(thingy).name();
+#include <type_traits>
 
 #ifdef __FILE__
   std::string sourcefilename = __FILE__;
@@ -477,7 +476,7 @@ int test_root(cpp_bin_float_100 big_radius, cpp_bin_float_100 big_arc, cpp_bin_f
   using boost::timer::cpu_times;
   using boost::timer::cpu_timer;
 
-  long eval_count = boost::is_floating_point<T>::value ? 1000000 : 10000; // To give a sufficiently stable timing for the fast built-in types,
+  long eval_count = std::is_floating_point<T>::value ? 1000000 : 10000; // To give a sufficiently stable timing for the fast built-in types,
   // This takes an inconveniently long time for multiprecision cpp_bin_float_50 etc  types.
 
   cpu_times now; // Holds wall, user and system times.
