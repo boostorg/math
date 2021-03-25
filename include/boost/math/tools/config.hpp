@@ -11,8 +11,10 @@
 #endif
 
 #define BOOST_MATH_STANDALONE
+
 #ifndef BOOST_MATH_STANDALONE
 #include <boost/config.hpp>
+
 #else // Things from boost/config that are required, and easy to replicate
 
 #define BOOST_PREVENT_MACRO_SUBSTITUTION
@@ -25,6 +27,10 @@
 #define BOOST_CXX14_CONSTEXPR
 #define BOOST_NO_CXX14_CONSTEXPR
 #endif // BOOST_CXX14_CONSTEXPR
+
+#define BOOST_JOIN(X, Y) BOOST_DO_JOIN(X, Y)
+#define BOOST_DO_JOIN(X, Y) BOOST_DO_JOIN2(X,Y)
+#define BOOST_DO_JOIN2(X, Y) X##Y
 
 #endif // BOOST_MATH_STANDALONE
 
