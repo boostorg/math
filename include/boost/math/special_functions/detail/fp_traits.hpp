@@ -42,9 +42,17 @@ With these techniques, the code could be simplified.
 
 #else // Does not have compliant C++20
 
+#ifdef _WIN32
+
+#define BOOST_MATH_ENDIAN_BIG_BYTE 1
+#define BOOST_MATH_ENDIAN_LITTLE_BYTE 0
+
+#else
+
 #define BOOST_MATH_ENDIAN_BIG_BYTE (__BYTE_ORDER__ == __ORDER_BIG_ENDIAN__)
 #define BOOST_MATH_ENDIAN_LITTLE_BYTE (__BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__)
 
+#endif // Windows or POSIX
 #endif // Standalone mode 
 #endif // Endian
 
