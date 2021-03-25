@@ -1,4 +1,5 @@
 //  Copyright (c) 2006-7 John Maddock
+//  Copyright (c) 2021 Matt Borland
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -20,6 +21,7 @@
 #define BOOST_PREVENT_MACRO_SUBSTITUTION
 #define BOOST_MATH_NO_REAL_CONCEPT_TESTS
 #define BOOST_MATH_NO_DISTRIBUTION_CONCEPT_TESTS
+#define TEST_STD
 
 #if (__cplusplus > 201400L || _MSVC_LANG > 201400L)
 #define BOOST_CXX14_CONSTEXPR constexpr
@@ -27,6 +29,12 @@
 #define BOOST_CXX14_CONSTEXPR
 #define BOOST_NO_CXX14_CONSTEXPR
 #endif // BOOST_CXX14_CONSTEXPR
+
+#if (__cplusplus > 201700L || _MSVC_LANG > 201700L)
+#define BOOST_IF_CONSTEXPR if constexpr
+#else
+#define BOOST_IF_CONSTEXPR if 
+#endif
 
 #define BOOST_JOIN(X, Y) BOOST_DO_JOIN(X, Y)
 #define BOOST_DO_JOIN(X, Y) BOOST_DO_JOIN2(X,Y)
