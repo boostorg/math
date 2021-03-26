@@ -6,7 +6,7 @@
 #define BOOST_MATH_MAX_SERIES_ITERATION_POLICY 10000000
 
 #include "mp_t.hpp"
-#include <boost/math/special_functions/hypergeometric_1f1.hpp>
+#include <boost/math/special_functions/hypergeometric_1F1.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/lexical_cast.hpp>
 #include <fstream>
