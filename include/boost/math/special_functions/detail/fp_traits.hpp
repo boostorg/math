@@ -33,28 +33,25 @@ With these techniques, the code could be simplified.
 #define BOOST_MATH_ENDIAN_BIG_BYTE BOOST_ENDIAN_BIG_BYTE
 #define BOOST_MATH_ENDIAN_LITTLE_BYTE BOOST_ENDIAN_LITTLE_BYTE
 
-#else // Using standalone mode
-#if (__cplusplus > 202000L || _MSVC_LANG > 202000L) && __has_include(<bit>)
+#elif (__cplusplus > 202000L || _MSVC_LANG > 202000L) && __has_include(<bit>)
 
 #include <bit>
 #define BOOST_MATH_ENDIAN_BIG_BYTE (std::endian::native == std::endian::big)
 #define BOOST_MATH_ENDIAN_LITTLE_BYTE (std::endian::native == std::endian::little)
 
-#else // Does not have compliant C++20
-
-#ifdef _WIN32
+#elif defined(_WIN32)
 
 #define BOOST_MATH_ENDIAN_BIG_BYTE 1
 #define BOOST_MATH_ENDIAN_LITTLE_BYTE 0
 
-#else
+#elif defined(__BYTE_ORDER__)
 
 #define BOOST_MATH_ENDIAN_BIG_BYTE (__BYTE_ORDER__ == __ORDER_BIG_ENDIAN__)
 #define BOOST_MATH_ENDIAN_LITTLE_BYTE (__BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__)
 
-#endif // Windows or POSIX
-#endif // Standalone mode 
-#endif // Endian
+#else 
+#error Could not determine endian type. Please disable standalone mode, and file an issue at https://github.com/boostorg/math
+#endif // Determine endinaness
 
 #ifdef BOOST_NO_STDC_NAMESPACE
   namespace std{ using ::memcpy; }
