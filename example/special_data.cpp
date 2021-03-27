@@ -6,6 +6,8 @@
 
 //[special_data_example
 
+#ifndef BOOST_MATH_STANDALONE
+
 #include <boost/multiprecision/cpp_dec_float.hpp>
 #include <boost/math/tools/test_data.hpp>
 #include <boost/test/included/prg_exec_monitor.hpp>
@@ -82,3 +84,5 @@ int cpp_main(int argc, char*argv [])
 }
 
 //]
+
+#endif // BOOST_MATH_STANDALONE

@@ -27,6 +27,8 @@ http://www3.imperial.ac.uk/pls/portallive/docs/1/7292572.PDF
 
 */
 
+#ifndef BOOST_MATH_STANDALONE
+
 #include <boost/math/special_functions/lambert_w.hpp>
 using boost::math::lambert_w0;
 #include <boost/math/special_functions.hpp>
@@ -278,3 +280,4 @@ int main()
 
    //] [/lambert_w_output_1]
    */
+#endif // BOOST_MATH_STANDALONE

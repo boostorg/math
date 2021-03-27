@@ -38,7 +38,7 @@ int main()
     std::cout << "The exact integral is                        " << Q_expected << std::endl;
 
     // For an integral over the entire real line, use sinh-sinh quadrature:
-    sinh_sinh<double> sinh_integrator(tol, 10);
+    sinh_sinh<double> sinh_integrator(10);
     auto f2 = [](double t) { return cos(t)/cosh(t);};
     Q = sinh_integrator.integrate(f2);
     Q_expected = pi<double>()/cosh(half_pi<double>());
@@ -47,7 +47,7 @@ int main()
 
     // For half-infinite intervals, use exp-sinh.
     // Endpoint singularities are handled well:
-    exp_sinh<double> exp_integrator(tol, 10);
+    exp_sinh<double> exp_integrator(10);
     auto f3 = [](double t) { return exp(-t)/sqrt(t); };
     Q = exp_integrator.integrate(f3, 0, std::numeric_limits<double>::infinity());
     Q_expected = root_pi<double>();

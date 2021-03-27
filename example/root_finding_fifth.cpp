@@ -200,13 +200,13 @@ T fifth_noderiv(T x)
     cout << "Unable to locate solution in chosen iterations:"
       " Current best guess is between " << r.first << " and " << r.second << endl;
   }
-  T distance = float_distance(r.first, r.second);
+  T distance = boost::math::float_distance(r.first, r.second);
   if (distance > 0)
   { //
     std::cout << distance << " bits separate the bracketing values." << std::endl;
     for (int i = 0; i < distance; i++)
     { // Show all the values within the bracketing values.
-      std::cout << float_advance(r.first, i) << std::endl;
+      std::cout << boost::math::float_advance(r.first, i) << std::endl;
     }
   }
   else

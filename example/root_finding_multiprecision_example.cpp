@@ -10,6 +10,8 @@
 
 // Example of root finding using Boost.Multiprecision.
 
+#ifndef BOOST_MATH_STANDALONE
+
 #include <boost/math/tools/roots.hpp>
 //using boost::math::policies::policy;
 //using boost::math::tools::newton_raphson_iterate;
@@ -230,3 +232,5 @@ value = 2, cube root =1.2599210498948731647672106072782283505702514647015
 
 
 */
+
+#endif // BOOST_MATH_STANDALONE
