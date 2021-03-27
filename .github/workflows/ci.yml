@@ -210,7 +210,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        compiler: [ g++10 ]
+        compiler: [ g++-10 ]
         standard: [ c++17 ]
     steps:
       - uses: actions/checkout@v2
