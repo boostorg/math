@@ -6,5 +6,6 @@
 // Basic sanity check that header <boost/math/tools/solve.hpp>
 // #includes all the files that it needs to.
 //
+#ifndef BOOST_MATH_STANDALONE
 #include <boost/math/tools/solve.hpp>
-
+#endif
