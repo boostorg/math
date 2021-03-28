@@ -21,6 +21,11 @@
 #include <functional>
 #include <vector>
 
+#if !defined(BOOST_NO_CXX17_HDR_EXECUTION) && !defined(_MSC_VER)
+#include <mutex>
+#include <execution>
+#endif
+
 namespace boost { namespace math { namespace statistics { namespace detail {
 
 template<typename ReturnType, typename ForwardIterator>
@@ -241,12 +246,35 @@ ReturnType gini_coefficient_parallel_impl(ExecutionPolicy&& exec, RandomAccessIt
     ReturnType num = 0;
     ReturnType denom = 0;
     
+    #ifndef _MSC_VER
     std::for_each(exec, first, last, [&i, &num, &denom](const Real& val)
     {
         num = num + val * i;
         denom = denom + val;
         i = i + 1;
     });
+    #elif !defined(BOOST_NO_CXX17_HDR_EXECUTION)
+    if constexpr (std::is_same_v<std::remove_reference_t<decltype(exec)>, decltype(std::execution::par)>)
+    {
+        std::mutex m;
+        std::for_each(exec, first, last, [&i, &num, &denom](const Real& val)
+        {
+            std::lock_guard<std::mutex> guard(m);
+            num = num + val * i;
+            denom = denom + val;
+            i = i + 1;
+        });
+    }
+    else // // lock_guard constructor not allowed with std::execution::par_unseq (vectorization-unsafe)
+    {
+        std::for_each(exec, first, last, [&i, &num, &denom](const Real& val)
+        {
+            num = num + val * i;
+            denom = denom + val;
+            i = i + 1;
+        });
+    }
+    #endif
 
     if(denom == 0)
     {
