@@ -21,7 +21,7 @@
 #include <functional>
 #include <vector>
 
-#if !defined(BOOST_NO_CXX17_HDR_EXECUTION) && !defined(_MSC_VER)
+#if !defined(BOOST_NO_CXX17_HDR_EXECUTION) && defined(_MSC_VER)
 #include <mutex>
 #include <execution>
 #endif
