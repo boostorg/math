@@ -5,6 +5,10 @@
 
 #define BOOST_MATH_ASSERT_UNDEFINED_POLICY false
 
+#include <boost/math/tools/config.hpp>
+
+#ifndef BOOST_MATH_STANDALONE
+
 #include "poison.hpp"
 
 #include <boost/math/concepts/std_real_concept.hpp>
@@ -195,8 +199,6 @@ struct numeric_limits<boost::math::concepts::std_real_concept>
 }
 #endif
 
-
-
 int main(int argc, char*[])
 {
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
@@ -204,4 +206,10 @@ int main(int argc, char*[])
       instantiate(boost::math::concepts::std_real_concept(0));
 #endif
 }
+
+#else // Standalone mode
+
+int main(void) {}
+
+#endif
 

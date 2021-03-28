@@ -357,7 +357,7 @@
            prefix -= scale;
         }
         T result(0);
-        boost::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
+        std::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
         bool retry = false;
         long long series_scale = 0;
         try
@@ -448,7 +448,7 @@
      {
         BOOST_MATH_STD_USING
            cyl_bessel_i_large_x_sum<T> s(v, x);
-        boost::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
+        std::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
         T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
         boost::math::policies::check_series_iterations<T>("boost::math::cyl_bessel_i_large_x<%1%>(%1%,%1%)", max_iter, pol);
         long long scale = boost::math::lltrunc(x);
@@ -576,7 +576,7 @@
            return exp(z - scale);
         }
         hypergeometric_1F1_AS_13_3_6_series<T, Policy> s(a, b, z, b_minus_a, pol);
-        boost::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
+        std::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
         T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
         boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1F1_AS_13_3_6<%1%>(%1%,%1%,%1%)", max_iter, pol);
         result *= boost::math::tgamma(b_minus_a - 0.5f, pol) * pow(z / 4, -b_minus_a + 0.5f);
@@ -642,7 +642,7 @@
         BOOST_MATH_STD_USING
         T prefix = exp(h * z) * boost::math::tgamma(b);
         hypergeometric_1F1_AS_13_3_8_series<T, Policy> s(a, b, z, h, pol);
-        boost::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
+        std::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
         T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
         boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1F1_AS_13_3_8<%1%>(%1%,%1%,%1%)", max_iter, pol);
         result *= prefix;
@@ -712,7 +712,7 @@
         }
 
         hypergeometric_1f1_13_11_1_series<T, Policy> s(a, b, z, pol);
-        boost::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
+        std::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
         T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
         boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1f1_13_11_1<%1%>(%1%,%1%,%1%)", max_iter, pol);
         if (use_logs)

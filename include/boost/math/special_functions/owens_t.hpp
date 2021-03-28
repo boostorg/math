@@ -27,7 +27,7 @@
 #include <stdexcept>
 #include <cmath>
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(push)
 #pragma warning(disable:4127)
 #endif
@@ -1082,7 +1082,7 @@ namespace boost
    } // namespace math
 } // namespace boost
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(pop)
 #endif
 

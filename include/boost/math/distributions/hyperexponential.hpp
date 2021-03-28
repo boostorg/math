@@ -15,8 +15,6 @@
 #ifndef BOOST_MATH_DISTRIBUTIONS_HYPEREXPONENTIAL_HPP
 #define BOOST_MATH_DISTRIBUTIONS_HYPEREXPONENTIAL_HPP
 
-
-#include <boost/config.hpp>
 #include <boost/math/tools/cxx03_warn.hpp>
 #include <boost/math/distributions/complement.hpp>
 #include <boost/math/distributions/detail/common_error_handling.hpp>
@@ -631,7 +629,7 @@ RealT mode(hyperexponential_distribution<RealT,PolicyT> const& /*dist*/)
 
 }} // namespace boost::math
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning (pop)
 #endif
 // This include must be at the end, *after* the accessors

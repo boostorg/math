@@ -8,9 +8,9 @@
 #define BOOST_MATH_COMMON_FACTOR_RT_HPP
 
 #include <boost/integer/common_factor_rt.hpp>
-#include <boost/config/header_deprecated.hpp>
+#include <boost/math/tools/header_deprecated.hpp>
 
-BOOST_HEADER_DEPRECATED("<boost/integer/common_factor_rt.hpp>");
+BOOST_MATH_HEADER_DEPRECATED("<boost/integer/common_factor_rt.hpp>");
 
 namespace boost {
    namespace math {

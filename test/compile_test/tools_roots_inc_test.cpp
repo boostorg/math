@@ -26,7 +26,7 @@ void compile_and_link_test()
    typedef boost::math::tuple<double, double, double> (*F3)(double);
    typedef boost::math::tools::eps_tolerance<double> Tol;
    Tol tol(u);
-   boost::uintmax_t max_iter = 0;
+   std::uintmax_t max_iter = 0;
    F f = 0;
    F2 f2 = 0;
    F3 f3 = 0;

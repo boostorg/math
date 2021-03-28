@@ -7,6 +7,8 @@
 // #includes all the files that it needs to.
 //
 #include <array>
+
+#ifndef BOOST_MATH_STANDALONE
 #include <boost/math/tools/test.hpp>
 //
 // Note this header includes no other headers, this is
@@ -33,4 +35,4 @@ void compile_and_link_test()
       (boost::math::tools::test<A, F1, F2>(a, f1, f2));
 
 }
-
+#endif

@@ -21,7 +21,7 @@ inline float beta(float a, float b)
 { return betaf(a, b); }
 inline long double beta(long double a, long double b)
 {
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
    return beta((double)a, (double)b); 
 #else
    return betal(a, b); 
@@ -33,7 +33,7 @@ inline double ibeta(double a, double b, double x)
 { return incbet(a, b, x); }
 inline long double ibeta(long double a, long double b, long double x)
 {
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
    return incbet((double)a, (double)b, (double)x); 
 #else
    return incbetl(a, b); 

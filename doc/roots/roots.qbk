@@ -13,21 +13,21 @@
    T newton_raphson_iterate(F f, T guess, T min, T max, int digits);
 
    template <class F, class T>
-   T newton_raphson_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& max_iter);
+   T newton_raphson_iterate(F f, T guess, T min, T max, int digits, std::uintmax_t& max_iter);
 
    // Halley
    template <class F, class T>
    T halley_iterate(F f, T guess, T min, T max, int digits);
 
    template <class F, class T>
-   T halley_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& max_iter);
+   T halley_iterate(F f, T guess, T min, T max, int digits, std::uintmax_t& max_iter);
 
    // Schr'''&#xf6;'''der
    template <class F, class T>
    T schroder_iterate(F f, T guess, T min, T max, int digits);
 
    template <class F, class T>
-   T schroder_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& max_iter);
+   T schroder_iterate(F f, T guess, T min, T max, int digits, std::uintmax_t& max_iter);
 
    template <class F, class Complex>
    Complex complex_newton(F f, Complex guess, int max_iterations = std::numeric_limits<typename Complex::value_type>::digits);
@@ -73,7 +73,7 @@ Schr'''&#xf6;'''der)
 
 When using these functions you should note that:
 
-* Default `max_iter = (std::numeric_limits<boost::uintmax_t>::max)()` is effectively 'iterate for ever'.
+* Default `max_iter = (std::numeric_limits<std::uintmax_t>::max)()` is effectively 'iterate for ever'.
 * They may be very sensitive to the initial guess, typically they converge very rapidly
 if the initial guess has two or three decimal digits correct.  However convergence
 can be no better than __bisect, or in some rare cases, even worse than __bisect if the

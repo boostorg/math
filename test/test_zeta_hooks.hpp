@@ -20,7 +20,7 @@ inline double zeta(double a)
 { return 1 + zetac(a); }
 inline long double zeta(long double a)
 {
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
    return 1 + zetac((double)a); 
 #else
    return zetacl(a); 

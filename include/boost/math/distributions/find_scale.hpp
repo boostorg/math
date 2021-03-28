@@ -39,10 +39,8 @@ namespace boost
       const Policy& pol 
       )
     {
-#if !defined(BOOST_NO_SFINAE) && !BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x590))
       static_assert(::boost::math::tools::is_distribution<Dist>::value, "The provided distribution does not meet the conceptual requirements of a distribution."); 
       static_assert(::boost::math::tools::is_scaled_distribution<Dist>::value, "The provided distribution does not meet the conceptual requirements of a scaled distribution."); 
-#endif
       static const char* function = "boost::math::find_scale<Dist, Policy>(%1%, %1%, %1%, Policy)";
 
       if(!(boost::math::isfinite)(p) || (p < 0) || (p > 1))
@@ -111,10 +109,8 @@ namespace boost
       //  << quantile(Dist(), c.param1) //q
       //  << endl;
 
-#if !defined(BOOST_NO_SFINAE) && !BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x590))
       static_assert(::boost::math::tools::is_distribution<Dist>::value, "The provided distribution does not meet the conceptual requirements of a distribution."); 
       static_assert(::boost::math::tools::is_scaled_distribution<Dist>::value, "The provided distribution does not meet the conceptual requirements of a scaled distribution."); 
-#endif
       static const char* function = "boost::math::find_scale<Dist, Policy>(complement(%1%, %1%, %1%, Policy))";
 
       // Checks on arguments, as not complemented version,
@@ -165,10 +161,8 @@ namespace boost
       //  << quantile(Dist(), c.param1) //q
       //  << endl;
 
-#if !defined(BOOST_NO_SFINAE) && !BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x590))
       static_assert(::boost::math::tools::is_distribution<Dist>::value, "The provided distribution does not meet the conceptual requirements of a distribution."); 
       static_assert(::boost::math::tools::is_scaled_distribution<Dist>::value, "The provided distribution does not meet the conceptual requirements of a scaled distribution.");  
-#endif
       static const char* function = "boost::math::find_scale<Dist, Policy>(complement(%1%, %1%, %1%, Policy))";
 
       // Checks on arguments, as not complemented version,

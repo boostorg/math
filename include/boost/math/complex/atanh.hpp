@@ -47,7 +47,7 @@ std::complex<T> atanh(const std::complex<T>& z)
    static const T zero = static_cast<T>(0);
    static const T log_two = boost::math::constants::ln_two<T>();
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(push)
 #pragma warning(disable:4127)
 #endif
@@ -204,7 +204,7 @@ std::complex<T> atanh(const std::complex<T>& z)
          imag = (boost::math::changesign)(imag);
    }
    return std::complex<T>(real, imag);
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(pop)
 #endif
 }

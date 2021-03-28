@@ -134,9 +134,9 @@ struct root_info
   int get_digits; // fraction of maximum possible accuracy required.
   // = digits * digits_accuracy
   // Vector of values (4) for each algorithm, TOMS748, Newton, Halley & Schroder.
-  //std::vector< boost::int_least64_t> times;  converted to int.
+  //std::vector< std::int_least64_t> times;  converted to int.
   std::vector<int> times; // arbitrary units (ticks).
-  //boost::int_least64_t min_time = std::numeric_limits<boost::int_least64_t>::max(); // Used to normalize times (as int).
+  //std::int_least64_t min_time = std::numeric_limits<std::int_least64_t>::max(); // Used to normalize times (as int).
   std::vector<double> normed_times;
   int min_time = (std::numeric_limits<int>::max)(); // Used to normalize times.
   std::vector<uintmax_t> iterations;
@@ -203,8 +203,8 @@ T elliptic_root_noderiv(T radius, T arc)
    T guess = sqrt(arc * arc / 16 - radius * radius);
    T factor = 1.2;                     // How big steps to take when searching.
 
-   const boost::uintmax_t maxit = 50;  // Limit to maximum iterations.
-   boost::uintmax_t it = maxit;        // Initially our chosen max iterations, but updated with actual.
+   const std::uintmax_t maxit = 50;  // Limit to maximum iterations.
+   std::uintmax_t it = maxit;        // Initially our chosen max iterations, but updated with actual.
    bool is_rising = true;              // arc-length increases if one radii increases, so function is rising
    // Define a termination condition, stop when nearly all digits are correct, but allow for
    // the fact that we are returning a range, and must have some inaccuracy in the elliptic integral:
@@ -268,8 +268,8 @@ T elliptic_root_1deriv(T radius, T arc)
    // Accuracy doubles at each step, so stop when just over half of the digits are
    // correct, and rely on that step to polish off the remainder:
    int get_digits = static_cast<int>(std::numeric_limits<T>::digits * 0.6);
-   const boost::uintmax_t maxit = 20;
-   boost::uintmax_t it = maxit;
+   const std::uintmax_t maxit = 20;
+   std::uintmax_t it = maxit;
    T result = newton_raphson_iterate(elliptic_root_functor_1deriv<T>(arc, radius), guess, min, max, get_digits, it);
    //<-
    iters = it;
@@ -326,8 +326,8 @@ T elliptic_root_2deriv(T radius, T arc)
    // Accuracy triples at each step, so stop when just over one-third of the digits
    // are correct, and the last iteration will polish off the remaining digits:
    int get_digits = static_cast<int>(std::numeric_limits<T>::digits * 0.4);
-   const boost::uintmax_t maxit = 20;
-   boost::uintmax_t it = maxit;
+   const std::uintmax_t maxit = 20;
+   std::uintmax_t it = maxit;
    T result = halley_iterate(elliptic_root_functor_2deriv<T>(arc, radius), guess, min, max, get_digits, it);
    //<-
    iters = it;
@@ -352,8 +352,8 @@ T elliptic_root_2deriv_s(T arc, T radius)
 
   int digits = std::numeric_limits<T>::digits; // Maximum possible binary digits accuracy for type T.
   int get_digits = static_cast<int>(digits * digits_accuracy);
-  const boost::uintmax_t maxit = 20;
-  boost::uintmax_t it = maxit;
+  const std::uintmax_t maxit = 20;
+  std::uintmax_t it = maxit;
   T result = schroder_iterate(elliptic_root_functor_2deriv<T>(arc, radius), guess, min, max, get_digits, it);
   iters = it;
 

@@ -2028,8 +2028,8 @@ struct promote_args_2<RealType0, detail::autodiff_fvar_type<RealType1, Order1>> 
 };
 
 template <typename destination_t, typename RealType, std::size_t Order>
-inline BOOST_MATH_CONSTEXPR destination_t real_cast(detail::autodiff_fvar_type<RealType, Order> const& from_v)
-    BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(destination_t) && BOOST_MATH_IS_FLOAT(RealType)) {
+inline constexpr destination_t real_cast(detail::autodiff_fvar_type<RealType, Order> const& from_v)
+    noexcept(BOOST_MATH_IS_FLOAT(destination_t) && BOOST_MATH_IS_FLOAT(RealType)) {
   return real_cast<destination_t>(static_cast<detail::autodiff_root_type<RealType, Order>>(from_v));
 }
 

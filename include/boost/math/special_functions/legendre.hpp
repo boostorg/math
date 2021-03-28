@@ -198,7 +198,7 @@ std::vector<T> legendre_p_zeros_imp(int n, const Policy& pol)
         T sin_nk = sin(theta_nk);
         T x_nk_guess = (1 - inv_n_sq/static_cast<T>(8) + inv_n_sq /static_cast<T>(8*n) - (inv_n_sq*inv_n_sq/384)*(39  - 28 / (sin_nk*sin_nk) ) )*cos_nk;
 
-        boost::uintmax_t number_of_iterations = policies::get_max_root_iterations<Policy>();
+        std::uintmax_t number_of_iterations = policies::get_max_root_iterations<Policy>();
 
         legendre_p_zero_func<T, Policy> f(n, pol);
 

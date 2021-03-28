@@ -11,7 +11,7 @@
 #include <boost/math/tools/precision.hpp>
 
 template <class T>
-BOOST_CONSTEXPR int consume_constexpr(const T&)
+constexpr int consume_constexpr(const T&)
 {  return 0;  }
 
 void test()

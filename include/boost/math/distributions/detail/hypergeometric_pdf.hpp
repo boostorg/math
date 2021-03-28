@@ -270,7 +270,7 @@ struct hypergeometric_pdf_prime_loop_result_entry
    const hypergeometric_pdf_prime_loop_result_entry* next;
 };
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(push)
 #pragma warning(disable:4510 4512 4610)
 #endif
@@ -285,7 +285,7 @@ struct hypergeometric_pdf_prime_loop_data
    unsigned current_prime;
 };
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(pop)
 #endif
 

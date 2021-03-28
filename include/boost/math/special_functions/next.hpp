@@ -75,7 +75,7 @@ inline T normalize_value(const T& val, const std::true_type&)
    static_assert(std::numeric_limits<T>::is_specialized, "Type T must be specialized.");
    static_assert(std::numeric_limits<T>::radix != 2, "Type T must be specialized.");
 
-   boost::intmax_t shift = (boost::intmax_t)std::numeric_limits<T>::digits - (boost::intmax_t)ilogb(val) - 1;
+   std::intmax_t shift = (std::intmax_t)std::numeric_limits<T>::digits - (std::intmax_t)ilogb(val) - 1;
    T result = scalbn(val, shift);
    result = round(result);
    return scalbn(result, -shift); 
@@ -613,7 +613,7 @@ T float_distance_imp(const T& a, const T& b, const std::false_type&, const Polic
    BOOST_MATH_ASSERT(a >= 0);
    BOOST_MATH_ASSERT(b >= a);
 
-   boost::intmax_t expon;
+   std::intmax_t expon;
    //
    // Note that if a is a denorm then the usual formula fails
    // because we actually have fewer than tools::digits<T>()
@@ -628,7 +628,7 @@ T float_distance_imp(const T& a, const T& b, const std::false_type&, const Polic
    //
    if(b > upper)
    {
-      boost::intmax_t expon2 = 1 + ilogb(b);
+      std::intmax_t expon2 = 1 + ilogb(b);
       T upper2 = scalbn(T(1), expon2 - 1);
       result = float_distance(upper2, b);
       result += (expon2 - expon - 1) * scalbn(T(1), std::numeric_limits<T>::digits - 1);
@@ -848,7 +848,7 @@ T float_advance_imp(T val, int distance, const std::false_type&, const Policy& p
       return val;
    }
 
-   boost::intmax_t expon = 1 + ilogb(val);
+   std::intmax_t expon = 1 + ilogb(val);
    T limit = scalbn(T(1), distance < 0 ? expon - 1 : expon);
    if(val <= tools::min_value<T>())
    {

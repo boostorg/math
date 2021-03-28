@@ -127,8 +127,8 @@ T cbrt_noderiv(T x)
   T guess = ldexp(1., exponent/3);              // Rough guess is to divide the exponent by three.
   T factor = 2;                                 // How big steps to take when searching.
 
-  const boost::uintmax_t maxit = 20;            // Limit to maximum iterations.
-  boost::uintmax_t it = maxit;                  // Initially our chosen max iterations, but updated with actual.
+  const std::uintmax_t maxit = 20;            // Limit to maximum iterations.
+  std::uintmax_t it = maxit;                  // Initially our chosen max iterations, but updated with actual.
   bool is_rising = true;                        // So if result if guess^3 is too low, then try increasing guess.
   int digits = std::numeric_limits<T>::digits;  // Maximum possible binary digits accuracy for type T.
   // Some fraction of digits is used to control how accurate to try to make the result.
@@ -145,7 +145,7 @@ T cbrt_noderiv(T x)
 /*`
 
 [note The final parameter specifying a maximum number of iterations is optional.
-However, it defaults to `boost::uintmax_t maxit = (std::numeric_limits<boost::uintmax_t>::max)();`
+However, it defaults to `std::uintmax_t maxit = (std::numeric_limits<std::uintmax_t>::max)();`
 which is `18446744073709551615` and is more than anyone would wish to wait for!
 
 So it may be wise to chose some reasonable estimate of how many iterations may be needed, 
@@ -235,8 +235,8 @@ T cbrt_deriv(T x)
   const int digits = std::numeric_limits<T>::digits;  // Maximum possible binary digits accuracy for type T.
   int get_digits = static_cast<int>(digits * 0.6);    // Accuracy doubles with each step, so stop when we have
                                                       // just over half the digits correct.
-  const boost::uintmax_t maxit = 20;
-  boost::uintmax_t it = maxit;
+  const std::uintmax_t maxit = 20;
+  std::uintmax_t it = maxit;
   T result = newton_raphson_iterate(cbrt_functor_deriv<T>(x), guess, min, max, get_digits, it);
   return result;
 }
@@ -295,7 +295,7 @@ T cbrt_2deriv(T x)
   // digits used to control how accurate to try to make the result.
   int get_digits = static_cast<int>(digits * 0.4);    // Accuracy triples with each step, so stop when just
                                                       // over one third of the digits are correct.
-  boost::uintmax_t maxit = 20;
+  std::uintmax_t maxit = 20;
   T result = halley_iterate(cbrt_functor_2deriv<T>(x), guess, min, max, get_digits, maxit);
   return result;
 }
@@ -319,7 +319,7 @@ T cbrt_2deriv_lambda(T x)
    // digits used to control how accurate to try to make the result.
    int get_digits = static_cast<int>(digits * 0.4);    // Accuracy triples with each step, so stop when just
    // over one third of the digits are correct.
-   boost::uintmax_t maxit = 20;
+   std::uintmax_t maxit = 20;
    T result = halley_iterate(
       // lambda function:
       [x](const T& g){ return std::make_tuple(g * g * g - x, 3 * g * g, 6 * g); }, 
@@ -421,8 +421,8 @@ T fifth_2deriv(T x)
   T max = ldexp(2., exponent / 5);      // Maximum possible value is twice our guess.
   // Stop when slightly more than one of the digits are correct:
   const int digits = static_cast<int>(std::numeric_limits<T>::digits * 0.4); 
-  const boost::uintmax_t maxit = 50;
-  boost::uintmax_t it = maxit;
+  const std::uintmax_t maxit = 50;
+  std::uintmax_t it = maxit;
   T result = halley_iterate(fifth_functor_2deriv<T>(x), guess, min, max, digits, it);
   return result;
 }

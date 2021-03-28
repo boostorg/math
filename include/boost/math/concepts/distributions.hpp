@@ -15,7 +15,7 @@
 
 #include <boost/math/distributions/complement.hpp>
 #include <boost/math/distributions/fwd.hpp>
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(push)
 #pragma warning(disable: 4100)
 #pragma warning(disable: 4510)
@@ -23,7 +23,7 @@
 #pragma warning(disable: 4189) // local variable is initialized but not referenced.
 #endif
 #include <boost/concept_check.hpp>
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(pop)
 #endif
 #include <utility>

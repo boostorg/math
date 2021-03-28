@@ -11,11 +11,10 @@
 #ifndef BOOST_MATH_MPREAL_BINDINGS_HPP
 #define BOOST_MATH_MPREAL_BINDINGS_HPP
 
-#include <boost/config.hpp>
 #include <boost/lexical_cast.hpp>
 #include <type_traits>
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 //
 // We get a lot of warnings from the gmp, mpfr and gmpfrxx headers, 
 // disable them here, so we only see warnings from *our* code:
@@ -26,7 +25,7 @@
 
 #include <mpreal.h>
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(pop)
 #endif
 
@@ -37,6 +36,7 @@
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/bindings/detail/big_digamma.hpp>
 #include <boost/math/bindings/detail/big_lanczos.hpp>
+#include <boost/math/tools/config.hpp>
 
 namespace mpfr{
 

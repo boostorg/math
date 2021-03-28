@@ -4809,22 +4809,22 @@ void print_code(const lanczos_info<T>& l, const char* name, int precision = std:
    const char* denom_type;
    const char* cast_type;
    const char* suffix_type;
-   if(max_term < (std::numeric_limits<boost::uint16_t>::max)())
+   if(max_term < (std::numeric_limits<std::uint16_t>::max)())
    {
-      denom_type = "boost::uint16_t";
-      cast_type = "static_cast<boost::uint16_t>";
+      denom_type = "std::uint16_t";
+      cast_type = "static_cast<std::uint16_t>";
       suffix_type = "u";
    }
-   else if(max_term < (std::numeric_limits<boost::uint32_t>::max)())
+   else if(max_term < (std::numeric_limits<std::uint32_t>::max)())
    {
-      denom_type = "boost::uint32_t";
-      cast_type = "static_cast<boost::uint32_t>";
+      denom_type = "std::uint32_t";
+      cast_type = "static_cast<std::uint32_t>";
       suffix_type = "u";
    }
 #ifdef BOOST_HAS_LONG_LONG
-   else if(max_term < (std::numeric_limits<boost::uint64_t>::max)())
+   else if(max_term < (std::numeric_limits<std::uint64_t>::max)())
    {
-      denom_type = "boost::uint64_t";
+      denom_type = "std::uint64_t";
       cast_type = "";
       suffix_type = "uLL";
    }

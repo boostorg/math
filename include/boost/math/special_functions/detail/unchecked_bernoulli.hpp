@@ -27,37 +27,37 @@ namespace detail {
 template <unsigned N>
 struct max_bernoulli_index
 {
-   BOOST_STATIC_CONSTANT(unsigned, value = 17);
+   static constexpr unsigned value = 17;
 };
 
 template <>
 struct max_bernoulli_index<1>
 {
-   BOOST_STATIC_CONSTANT(unsigned, value = 32);
+   static constexpr unsigned value = 32;
 };
 
 template <>
 struct max_bernoulli_index<2>
 {
-   BOOST_STATIC_CONSTANT(unsigned, value = 129);
+   static constexpr unsigned value = 129;
 };
 
 template <>
 struct max_bernoulli_index<3>
 {
-   BOOST_STATIC_CONSTANT(unsigned, value = 1156);
+   static constexpr unsigned value = 1156;
 };
 
 template <>
 struct max_bernoulli_index<4>
 {
-   BOOST_STATIC_CONSTANT(unsigned, value = 11);
+   static constexpr unsigned value = 11;
 };
 
 template <class T>
 struct bernoulli_imp_variant
 {
-   static const unsigned value = 
+   static constexpr unsigned value = 
       (std::numeric_limits<T>::max_exponent == 128)
       && (std::numeric_limits<T>::radix == 2)
       && (std::numeric_limits<T>::digits <= std::numeric_limits<float>::digits)

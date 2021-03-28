@@ -59,7 +59,7 @@ inline T make_big_value(largest_float, const char* s, std::false_type const&, st
 }
 #endif
 template <class T>
-inline BOOST_MATH_CONSTEXPR T make_big_value(largest_float, const char* s, std::false_type const&, std::true_type const&) BOOST_MATH_NOEXCEPT(T)
+inline constexpr T make_big_value(largest_float, const char* s, std::false_type const&, std::true_type const&) BOOST_MATH_NOEXCEPT(T)
 {
    return T(s);
 }

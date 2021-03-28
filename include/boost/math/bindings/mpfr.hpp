@@ -11,11 +11,10 @@
 #ifndef BOOST_MATH_MPLFR_BINDINGS_HPP
 #define BOOST_MATH_MPLFR_BINDINGS_HPP
 
-#include <boost/config.hpp>
 #include <boost/lexical_cast.hpp>
 #include <type_traits>
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 //
 // We get a lot of warnings from the gmp, mpfr and gmpfrxx headers, 
 // disable them here, so we only see warnings from *our* code:
@@ -26,7 +25,7 @@
 
 #include <gmpfrxx.h>
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(pop)
 #endif
 
@@ -38,6 +37,7 @@
 #include <boost/math/bindings/detail/big_digamma.hpp>
 #include <boost/math/bindings/detail/big_lanczos.hpp>
 #include <boost/math/tools/big_constant.hpp>
+#include <boost/math/tools/config.hpp>
 
 inline mpfr_class fabs(const mpfr_class& v)
 {
@@ -298,7 +298,7 @@ struct promote_arg<__gmp_expr<T,U> >
 };
 
 template<>
-inline int digits<mpfr_class>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(mpfr_class)) BOOST_NOEXCEPT
+inline int digits<mpfr_class>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(mpfr_class)) noexcept
 {
    return mpfr_class::get_dprec();
 }

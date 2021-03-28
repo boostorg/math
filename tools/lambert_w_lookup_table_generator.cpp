@@ -34,17 +34,17 @@ using boost::multiprecision::cpp_bin_float_50;
 /*
 typedef double lookup_t; // Type for lookup table (double or float?)
 
-BOOST_STATIC_CONSTEXPR std::size_t noof_sqrts = 12;
-BOOST_STATIC_CONSTEXPR lookup_t a[noof_sqrts] = // 0.6065 0.7788, 0.8824 ... 0.9997, sqrt of previous elements.
+static constexpr std::size_t noof_sqrts = 12;
+static constexpr lookup_t a[noof_sqrts] = // 0.6065 0.7788, 0.8824 ... 0.9997, sqrt of previous elements.
 {
 0.60653065971263342, 0.77880078307140487, 0.8824969025845954, 0.93941306281347579, 0.96923323447634408, 0.98449643700540841,
 0.99221793826024351, 0.99610136947011749, 0.99804878110747547, 0.99902391418197566, 0.99951183793988937, 0.99975588917489722
 };
-BOOST_STATIC_CONSTEXPR  lookup_t b[noof_sqrts] = // 0.5 0.25 0.125, 0.0625 ...  0.0002441, halves of previous elements.
+static constexpr  lookup_t b[noof_sqrts] = // 0.5 0.25 0.125, 0.0625 ...  0.0002441, halves of previous elements.
 { 0.5, 0.25, 0.125, 0.0625, 0.03125, 0.015625, 0.0078125, 0.00390625, 0.001953125, 0.0009765625, 0.00048828125, 0.000244140625 };
 
-BOOST_STATIC_CONSTEXPR size_t noof_w0zs = 65;
-BOOST_STATIC_CONSTEXPR lookup_t g[noof_w0zs] = // lambert_w[k] for W0 branch. 0 2.7182 14.77 60.2566 ... 1.445e+29 3.990e+29.
+static constexpr size_t noof_w0zs = 65;
+static constexpr lookup_t g[noof_w0zs] = // lambert_w[k] for W0 branch. 0 2.7182 14.77 60.2566 ... 1.445e+29 3.990e+29.
 { 0., 2.7182818284590452, 14.7781121978613, 60.256610769563003, 218.39260013257696, 742.06579551288302, 2420.5727609564107, 7676.4321089992102,
 23847.663896333826, 72927.755348178456, 220264.65794806717, 658615.558867176, 1953057.4970280471, 5751374.0961159665, 16836459.978306875, 49035260.58708166,
 142177768.32812596, 410634196.81078007, 1181879444.4719492, 3391163718.300558, 9703303908.1958056, 27695130424.147509, 78868082614.895014, 224130479263.72476,
@@ -57,8 +57,8 @@ BOOST_STATIC_CONSTEXPR lookup_t g[noof_w0zs] = // lambert_w[k] for W0 branch. 0 
 5.2317811346197018e+28, 1.4450833904658542e+29, 3.9904954117194348e+29
 };
 
-BOOST_STATIC_CONSTEXPR std::size_t noof_wm1zs = 66;
-BOOST_STATIC_CONSTEXPR lookup_t e[noof_wm1zs] = // lambert_w[k] for W-1 branch. 2.7182 1. 0.3678 0.1353 0.04978 ... 4.359e-28 1.603e-28
+static constexpr std::size_t noof_wm1zs = 66;
+static constexpr lookup_t e[noof_wm1zs] = // lambert_w[k] for W-1 branch. 2.7182 1. 0.3678 0.1353 0.04978 ... 4.359e-28 1.603e-28
 {
 2.7182818284590452, 1., 0.36787944117144232, 0.13533528323661269, 0.049787068367863943, 0.01831563888873418, 0.0067379469990854671,
 0.0024787521766663584, 0.00091188196555451621, 0.00033546262790251184, 0.00012340980408667955, 4.5399929762484852e-05, 1.6701700790245659e-05,
@@ -171,20 +171,20 @@ int main()
 
     fout << "\nnamespace boost {\nnamespace math {\nnamespace lambert_w_detail {\nnamespace lambert_w_lookup\n{ \n";
 
-    BOOST_STATIC_CONSTEXPR std::size_t noof_sqrts = 12;
-    BOOST_STATIC_CONSTEXPR std::size_t noof_halves = 12;
-    fout << "BOOST_STATIC_CONSTEXPR std::size_t  noof_sqrts = " << noof_sqrts << ";" << std::endl;
-    fout << "BOOST_STATIC_CONSTEXPR std::size_t  noof_halves = " << noof_halves << ";" << std::endl; // Common to both branches.
+    static constexpr std::size_t noof_sqrts = 12;
+    static constexpr std::size_t noof_halves = 12;
+    fout << "static constexpr std::size_t  noof_sqrts = " << noof_sqrts << ";" << std::endl;
+    fout << "static constexpr std::size_t  noof_halves = " << noof_halves << ";" << std::endl; // Common to both branches.
 
-    BOOST_STATIC_CONSTEXPR std::size_t noof_w0zs = 65; // F[k] 0 <= k <= 64. f[0] = F[0], f[64] = F[64]
-    BOOST_STATIC_CONSTEXPR std::size_t noof_w0es = 66; //  noof_w0zs +1 for gratuitous extra power.
-    BOOST_STATIC_CONSTEXPR std::size_t noof_wm1zs = 64; // G[k] 1 <= k <= 64. (W-1 = 0 would be z = -infinity, so not stored in array) g[0] == G[1], g[63] = G[64]
-    BOOST_STATIC_CONSTEXPR std::size_t noof_wm1es = 64; //
+    static constexpr std::size_t noof_w0zs = 65; // F[k] 0 <= k <= 64. f[0] = F[0], f[64] = F[64]
+    static constexpr std::size_t noof_w0es = 66; //  noof_w0zs +1 for gratuitous extra power.
+    static constexpr std::size_t noof_wm1zs = 64; // G[k] 1 <= k <= 64. (W-1 = 0 would be z = -infinity, so not stored in array) g[0] == G[1], g[63] = G[64]
+    static constexpr std::size_t noof_wm1es = 64; //
 
-    fout << "BOOST_STATIC_CONSTEXPR std::size_t  noof_w0es = " << noof_w0zs << ";" << std::endl;
-    fout << "BOOST_STATIC_CONSTEXPR std::size_t  noof_w0zs = " << noof_w0zs << ";" << std::endl;
-    fout << "BOOST_STATIC_CONSTEXPR std::size_t  noof_wm1es = " << noof_wm1zs << ";" << std::endl;
-    fout << "BOOST_STATIC_CONSTEXPR std::size_t  noof_wm1zs = " << noof_wm1zs << ";" << std::endl;
+    fout << "static constexpr std::size_t  noof_w0es = " << noof_w0zs << ";" << std::endl;
+    fout << "static constexpr std::size_t  noof_w0zs = " << noof_w0zs << ";" << std::endl;
+    fout << "static constexpr std::size_t  noof_wm1es = " << noof_wm1zs << ";" << std::endl;
+    fout << "static constexpr std::size_t  noof_wm1zs = " << noof_wm1zs << ";" << std::endl;
 
     // Defining actual lookup table sqrts of e^k, e^-k = 1/e, etc.
     table_lookup_t halves[noof_halves]; // 0.5 0.25 0.125, 0.0625 ...  0.0002441, halves of previous elements.
@@ -306,11 +306,11 @@ int main()
     } // for j
 
     // Output values as C++ arrays,
-    // using BOOST_STATIC_CONSTEXPR as static and constexpr as possible for platform.
+    // using static constexpr as static and constexpr as possible for platform.
     fout << std::noshowpoint; // Do show NOT trailing zeros for halves and sqrts values.
 
     fout <<
-      "\n" "BOOST_STATIC_CONSTEXPR lookup_t halves[noof_halves] = " //
+      "\n" "static constexpr lookup_t halves[noof_halves] = " //
       "\n" "{ // Common to Lambert W0 and W-1 (and exactly representable)." << "\n  ";
       for (int i = 0; i != noof_halves; i++)
       {
@@ -327,7 +327,7 @@ int main()
       fout << "}; // halves, 0.5, 0.25, ... 0.000244140625, common to W0 and W-1." << std::endl;
 
       fout <<
-        "\n" "BOOST_STATIC_CONSTEXPR lookup_t sqrtw0s[noof_sqrts] = " //
+        "\n" "static constexpr lookup_t sqrtw0s[noof_sqrts] = " //
         "\n" "{  // For Lambert W0 only." << "\n  ";
       for (int i = 0; i != noof_sqrts; i++)
       {
@@ -344,7 +344,7 @@ int main()
       fout << "}; // sqrtw0s" << std::endl;
 
       fout <<
-        "\n" "BOOST_STATIC_CONSTEXPR lookup_t sqrtwm1s[noof_sqrts] = " //
+        "\n" "static constexpr lookup_t sqrtwm1s[noof_sqrts] = " //
         "\n" "{ // For Lambert W-1 only." << "\n  ";
       for (int i = 0; i != noof_sqrts; i++)
       {
@@ -367,7 +367,7 @@ int main()
 
       fout << // W0 e values.
         // Fukushima code generates an extra unused power, but it is not output by using noof_w0zs instead of noof_w0es.
-        "\n" "BOOST_STATIC_CONSTEXPR lookup_t w0es[noof_w0zs] = " //
+        "\n" "static constexpr lookup_t w0es[noof_w0zs] = " //
         "\n" "{ // Fukushima e powers array e[0] = 2.718, 1., e[2] = e^-1 = 0.135, e[3] = e^-2 = 0.133 ... e[64] = 4.3596100000630809736231248158884615452e-28." << "\n  ";
       for (int i = 0; i != noof_w0zs; i++)
       {
@@ -384,7 +384,7 @@ int main()
       fout << "\n}; // w0es" << std::endl;
 
       fout << // W0 z values for W[1], .
-        "\n" "BOOST_STATIC_CONSTEXPR lookup_t w0zs[noof_w0zs] = " //
+        "\n" "static constexpr lookup_t w0zs[noof_w0zs] = " //
         "\n" "{ // z values for W[0], W[1], W[2] ... W[64] (Fukushima array Fk). " << "\n  ";
       for (int i = 0; i != noof_w0zs; i++)
       {
@@ -403,7 +403,7 @@ int main()
       // Two arrays for w-1
 
       fout << // W-1 e values.
-        "\n" "BOOST_STATIC_CONSTEXPR lookup_t wm1es[noof_wm1es] = " //
+        "\n" "static constexpr lookup_t wm1es[noof_wm1es] = " //
         "\n" "{ // Fukushima e array e[0] = e^1 = 2.718, e[1] = e^2 = 7.39 ... e[64] = 4.60718e+28." << "\n  ";
       for (int i = 0; i != noof_wm1es; i++)
       {
@@ -420,7 +420,7 @@ int main()
       fout << "\n}; // wm1es" << std::endl;
 
       fout << // Wm1 z values for integral K.
-        "\n" "BOOST_STATIC_CONSTEXPR lookup_t wm1zs[noof_wm1zs] = " //
+        "\n" "static constexpr lookup_t wm1zs[noof_wm1zs] = " //
         "\n" "{ // Fukushima G array of z values for integral K, (Fukushima Gk) g[0] (k = -1) = 1 ... g[64] = -1.0264389699511303e-26." << "\n  ";
       for (int i = 0; i != noof_wm1zs; i++)
       {

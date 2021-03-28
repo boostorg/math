@@ -374,7 +374,7 @@ inline RealType quantile(const kolmogorov_smirnov_distribution<RealType, Policy>
 
    RealType k = detail::kolmogorov_smirnov_quantile_guess(p) / sqrt(n);
    const int get_digits = policies::digits<RealType, Policy>();// get digits from policy,
-   boost::uintmax_t m = policies::get_max_root_iterations<Policy>(); // and max iterations.
+   std::uintmax_t m = policies::get_max_root_iterations<Policy>(); // and max iterations.
 
    return tools::newton_raphson_iterate(detail::kolmogorov_smirnov_quantile_functor<RealType, Policy>(dist, p),
            k, RealType(0), boost::math::tools::max_value<RealType>(), get_digits, m);
@@ -398,7 +398,7 @@ inline RealType quantile(const complemented2_type<kolmogorov_smirnov_distributio
    RealType k = detail::kolmogorov_smirnov_quantile_guess(RealType(1-p)) / sqrt(n);
 
    const int get_digits = policies::digits<RealType, Policy>();// get digits from policy,
-   boost::uintmax_t m = policies::get_max_root_iterations<Policy>(); // and max iterations.
+   std::uintmax_t m = policies::get_max_root_iterations<Policy>(); // and max iterations.
 
    return tools::newton_raphson_iterate(
            detail::kolmogorov_smirnov_complementary_quantile_functor<RealType, Policy>(dist, p),

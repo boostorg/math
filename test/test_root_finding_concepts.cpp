@@ -131,7 +131,7 @@ BOOST_AUTO_TEST_CASE( test_main )
    //
    // bracket_and_solve_root:
    //
-   boost::uintmax_t max_iter = boost::math::policies::get_max_root_iterations<boost::math::policies::policy<> >();
+   std::uintmax_t max_iter = boost::math::policies::get_max_root_iterations<boost::math::policies::policy<> >();
    p = boost::math::tools::bracket_and_solve_root(f1, x, 2.0, true, t, max_iter);
    result = (p.first + p.second) / 2;
    BOOST_CHECK_CLOSE_FRACTION(expected, result, tolerance);

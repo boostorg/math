@@ -142,10 +142,9 @@ void test_values_f(const char* name)
    check_close_f(tgammaf(-0.125), -8.7172188593831756100190140408231437691829605421405f, 5000 * eps, __LINE__);
    check_close_f(tgammaf(-3.125), 1.1668538708507675587790157356605097019141636072094f, 5000 * eps, __LINE__);
 
-#ifdef BOOST_HAS_LONG_LONG
-   check(llroundf(2.5f) == 3fL, __LINE__);
-   check(llroundf(2.25f) == 2fL, __LINE__);
-#endif
+   check(llroundf(2.5f) == 3ll, __LINE__);
+   check(llroundf(2.25f) == 2ll, __LINE__);
+
    check(lroundf(2.5f) == 3.0f, __LINE__);
    check(lroundf(2.25f) == 2.0f, __LINE__);
    check(roundf(2.5f) == 3.0f, __LINE__);
