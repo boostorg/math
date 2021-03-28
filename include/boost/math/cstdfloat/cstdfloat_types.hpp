@@ -212,7 +212,7 @@
     namespace boost { namespace math { namespace cstdfloat { namespace detail {
     #if defined(__GNUC__)
       typedef __float128      float_internal128_t;
-    #elif defined(BOOST_INTEL)
+    #elif defined(__INTEL_COMPILER)
       typedef _Quad           float_internal128_t;
     #else
       #error "Sorry, the compiler is neither GCC, nor Intel, I don't know how to configure <boost/cstdfloat.hpp>."

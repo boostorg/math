@@ -11,7 +11,7 @@
 #endif
 
 #include <type_traits>
-#include <boost/lexical_cast.hpp>
+#include <boost/math/tools/lexical_cast.hpp>
 
 namespace boost{ namespace math{ namespace tools{
 
@@ -26,7 +26,7 @@ namespace boost{ namespace math{ namespace tools{
    {
 #ifdef BOOST_MATH_NO_LEXICAL_CAST
       // This function should not compile, we don't have the necessary functionality to support it:
-      static_assert(sizeof(Real) == 0, "sizeof(Real) should be 0");
+      static_assert(false, "boost.lexical_cast is not supported in standalone mode.");
 #else
       return boost::lexical_cast<Real>(p);
 #endif

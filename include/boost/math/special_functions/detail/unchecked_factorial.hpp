@@ -14,9 +14,7 @@
 #pragma warning(push) // Temporary until lexical cast fixed.
 #pragma warning(disable: 4127 4701)
 #endif
-#ifndef BOOST_MATH_NO_LEXICAL_CAST
-#include <boost/lexical_cast.hpp>
-#endif
+#include <boost/math/tools/lexical_cast.hpp>
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
@@ -24,8 +22,6 @@
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/tools/cxx03_warn.hpp>
 #include <array>
-#include <type_traits>
-
 #include <type_traits>
 
 #if defined(__GNUC__) && defined(BOOST_MATH_USE_FLOAT128)

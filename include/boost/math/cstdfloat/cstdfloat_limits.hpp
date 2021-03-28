@@ -30,7 +30,7 @@
 
     // Define the name of the global quadruple-precision function to be used for
     // calculating quiet_NaN() in the specialization of std::numeric_limits<>.
-    #if defined(BOOST_INTEL)
+    #if defined(__INTEL_COMPILER)
       #define BOOST_CSTDFLOAT_FLOAT128_SQRT   __sqrtq
     #elif defined(__GNUC__)
       #define BOOST_CSTDFLOAT_FLOAT128_SQRT   sqrtq
