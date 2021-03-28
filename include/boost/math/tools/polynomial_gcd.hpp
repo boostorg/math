@@ -1,5 +1,5 @@
 //  (C) Copyright Jeremy William Murphy 2016.
-
+//  (C) Copyright Matt Borland 2021.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -14,7 +14,56 @@
 #include <algorithm>
 #include <type_traits>
 #include <boost/math/tools/polynomial.hpp>
+
+#ifndef BOOST_MATH_STANDALONE
 #include <boost/integer/common_factor_rt.hpp>
+
+// std::gcd was introduced in C++17
+#elif (__cplusplus > 201700L || _MSVC_LANG > 201700L)
+
+#define BOOST_MATH_CXX17_NUMERIC
+#include <numeric>
+#include <utility>
+#include <iterator>
+#include <type_traits>
+#include <boost/math/tools/assert.hpp>
+
+namespace boost::integer {
+
+template <typename Iter, typename T = typename std::iterator_traits<I>::value_type>
+std::pair<T, Iter> gcd_range(Iter first, Iter last) noexcept(std::is_arithmetic_v<T>)
+{
+    using std::gcd;
+    BOOST_MATH_ASSERT(first != last);
+
+    T d = *first;
+    ++first;
+    while (d != T(1) && first != last)
+    {
+        d = gcd(d, *first);
+        ++first;
+    }
+    return std::make_pair(d, first);
+}
+
+namespace gcd_detail {
+
+template <typename EuclideanDomain>
+inline EuclideanDomain Euclid_gcd(EuclideanDomain a, EuclideanDomain b) noexcept(std::is_arithmetic_v<EuclideanDomain>)
+{
+    using std::swap;
+    while (b != EuclideanDomain(0))
+    {
+        a %= b;
+        swap(a, b);
+    }
+    return a;
+}
+
+} // namespace gcd_detail
+} // namespace boost::integer
+#error polynomial gcd can only be used in standalone mode with C++17 or higher
+#endif
 
 namespace boost{
 
@@ -35,8 +84,6 @@ namespace boost{
 
       }
 }
-
-
 
 namespace math{ namespace tools{
 
@@ -88,7 +135,14 @@ namespace detail
     template <class T>
     T reduce_to_primitive(polynomial<T> &u, polynomial<T> &v)
     {
+        #ifndef BOOST_MATH_STANDALONE
         using boost::integer::gcd;
+        #elif defined(BOOST_MATH_CXX17_NUMERIC)
+        using std::gcd;
+        #else
+        #error polynomial gcd can only be used in standalone mode with C++17 or higher
+        #endif
+
         T const u_cont = content(u), v_cont = content(v);
         u /= u_cont;
         v /= v_cont;
