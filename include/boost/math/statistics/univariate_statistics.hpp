@@ -413,6 +413,12 @@ inline auto median(RandomAccessContainer & v)
     return median(std::execution::seq, std::begin(v), std::end(v));
 }
 
+#if 0
+//
+// Parallel gini calculation is curently broken, see:
+// https://github.com/boostorg/math/issues/585
+// We will fix this at a later date, for now just use a serial implementation:
+//
 template<class ExecutionPolicy, class RandomAccessIterator>
 inline auto gini_coefficient(ExecutionPolicy&& exec, RandomAccessIterator first, RandomAccessIterator last)
 {
@@ -445,6 +451,27 @@ inline auto gini_coefficient(ExecutionPolicy&& exec, RandomAccessIterator first,
         return detail::gini_coefficient_parallel_impl<Real>(exec, first, last);
     }
 }
+#else
+template<class ExecutionPolicy, class RandomAccessIterator>
+inline auto gini_coefficient(ExecutionPolicy&& exec, RandomAccessIterator first, RandomAccessIterator last)
+{
+   using Real = typename std::iterator_traits<RandomAccessIterator>::value_type;
+
+   if (!std::is_sorted(exec, first, last))
+   {
+      std::sort(exec, first, last);
+   }
+
+   if constexpr (std::is_integral_v<Real>)
+   {
+      return detail::gini_coefficient_sequential_impl<double>(first, last);
+   }
+   else
+   {
+      return detail::gini_coefficient_sequential_impl<Real>(first, last);
+   }
+}
+#endif
 
 template<class ExecutionPolicy, class RandomAccessContainer>
 inline auto gini_coefficient(ExecutionPolicy&& exec, RandomAccessContainer & v)
