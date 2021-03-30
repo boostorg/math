@@ -26,7 +26,7 @@ public:
         using std::isfinite;
         if (!isfinite(x))
         {
-            throw std::domain_error("Cannot convert non-finites into a Lüroth representation.");
+            throw std::domain_error("Cannot convert non-finites into a Luroth representation.");
         }
         d_.reserve(50);
         Real dn = floor(x);

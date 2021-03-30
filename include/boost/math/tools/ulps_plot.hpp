@@ -108,7 +108,7 @@ public:
         }
 
         PreciseReal worst_ulp_distance = 0;
-        PreciseReal min_y = std::numeric_limits<PreciseReal>::max();
+        PreciseReal min_y = (std::numeric_limits<PreciseReal>::max)();
         PreciseReal max_y = std::numeric_limits<PreciseReal>::lowest();
         for (auto const & ulp_vec : plot.ulp_list_)
         {
@@ -571,7 +571,7 @@ ulps_plot<F, PreciseReal, CoarseReal>& ulps_plot<F, PreciseReal, CoarseReal>::ad
         PreciseReal y_hi_acc = precise_ordinates_[i];
         PreciseReal y_lo_acc = static_cast<PreciseReal>(g(coarse_abscissas_[i]));
         PreciseReal absy = abs(y_hi_acc);
-        PreciseReal dist = static_cast<PreciseReal>(nextafter(static_cast<CoarseReal>(absy), std::numeric_limits<CoarseReal>::max()) - static_cast<CoarseReal>(absy));
+        PreciseReal dist = static_cast<PreciseReal>(nextafter(static_cast<CoarseReal>(absy), (std::numeric_limits<CoarseReal>::max)()) - static_cast<CoarseReal>(absy));
         ulps[i] = static_cast<CoarseReal>((y_lo_acc - y_hi_acc)/dist);
     }
     ulp_list_.emplace_back(ulps);

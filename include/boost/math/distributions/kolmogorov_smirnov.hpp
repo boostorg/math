@@ -12,8 +12,8 @@
 // better. This file implements the limiting form of this distribution, first
 // identified by Andrey Kolmogorov in
 //
-// Kolmogorov, A. (1933) “Sulla Determinazione Empirica di una Legge di
-// Distribuzione.” Giornale dell’ Istituto Italiano degli Attuari
+// Kolmogorov, A. (1933) "Sulla Determinazione Empirica di una Legge di
+// Distribuzione." Giornale dell' Istituto Italiano degli Attuari
 //
 // This limiting form of the CDF is a first-order Taylor expansion that is
 // easily implemented by the fourth Jacobi Theta function (setting z=0). The
@@ -24,8 +24,8 @@
 //
 // A higher order order expansion is possible, and was first outlined by
 //
-// Pelz W, Good IJ (1976). “Approximating the Lower Tail-Areas of the
-// Kolmogorov-Smirnov One-sample Statistic.” Journal of the Royal Statistical
+// Pelz W, Good IJ (1976). "Approximating the Lower Tail-Areas of the
+// Kolmogorov-Smirnov One-sample Statistic." Journal of the Royal Statistical
 // Society B.
 //
 // The terms in this expansion get fairly complicated, and as far as I know the
@@ -36,8 +36,8 @@
 // A formula for an exact version of the Kolmogorov-Smirnov test is laid out in
 // Equation 2.4.4 of
 //
-// Durbin J (1973). “Distribution Theory for Tests Based on the Sample
-// Distribution Func- tion.” In SIAM CBMS-NSF Regional Conference Series in
+// Durbin J (1973). "Distribution Theory for Tests Based on the Sample
+// Distribution Func- tion." In SIAM CBMS-NSF Regional Conference Series in
 // Applied Mathematics. SIAM, Philadelphia, PA.
 //
 // which is available in book form from Amazon and others. This exact version
@@ -52,8 +52,8 @@
 // form, even though the exact form has trivial values for certain specific
 // values of x and n. For more on trivial values see
 //
-// Ruben H, Gambino J (1982). “The Exact Distribution of Kolmogorov’s Statistic
-// Dn for n ≤ 10.” Annals of the Institute of Statistical Mathematics.
+// Ruben H, Gambino J (1982). "The Exact Distribution of Kolmogorov's Statistic
+// Dn for n <= 10." Annals of the Institute of Statistical Mathematics.
 // 
 // For a good bibliography and overview of the various algorithms, including
 // both exact and asymptotic forms, see
@@ -74,7 +74,7 @@
 // As mentioned previously, the CDF is implemented using the \tau
 // parameterization of the fourth Jacobi Theta function as
 //
-// CDF=θ₄(0|2*x*x*n/pi)
+// CDF=theta_4(0|2*x*x*n/pi)
 //
 // The PDF is a hand-coded derivative of that function. Actually, there are two
 // (independent) derivatives, as separate code paths are used for "small x"

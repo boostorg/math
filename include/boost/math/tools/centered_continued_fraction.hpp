@@ -42,7 +42,7 @@ public:
         Real f = bj;
         if (bj == 0)
         {
-            f = 16*std::numeric_limits<Real>::min();
+            f = 16*(std::numeric_limits<Real>::min)();
         }
         Real C = f;
         Real D = 0;
@@ -54,12 +54,12 @@ public:
             x = 1/(x-bj);
             D += bj;
             if (D == 0) {
-                D = 16*std::numeric_limits<Real>::min();
+                D = 16*(std::numeric_limits<Real>::min)();
             }
             C = bj + 1/C;
             if (C==0)
             {
-                C = 16*std::numeric_limits<Real>::min();
+                C = 16*(std::numeric_limits<Real>::min)();
             }
             D = 1/D;
             f *= (C*D);

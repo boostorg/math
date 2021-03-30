@@ -64,7 +64,7 @@ public:
                 throw std::domain_error("The digits of an Engel expansion must form a non-decreasing sequence; consider increasing the wide of the integer type.");
             }
             // Watch out for saturating behavior:
-            if (a_[i] == std::numeric_limits<Z>::max())
+            if (a_[i] == (std::numeric_limits<Z>::max)())
             {
                 throw std::domain_error("The integer type Z does not have enough width to hold the terms of the Engel expansion; please widen the type.");
             }
