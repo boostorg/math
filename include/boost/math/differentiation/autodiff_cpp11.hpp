@@ -22,10 +22,11 @@
 #include <type_traits>
 #include <boost/math/tools/mp.hpp>
 
-namespace mp = boost::math::tools::meta_programming;
-
 namespace boost {
 namespace math {
+
+namespace mp = tools::meta_programming;
+
 namespace differentiation {
 inline namespace autodiff_v1 {
 namespace detail {
