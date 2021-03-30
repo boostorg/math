@@ -1,3 +1,10 @@
+//  (C) Copyright Nick Thompson 2020.
+//  Use, modification and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
+//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+//
+
+
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -7,6 +14,7 @@
 #include <iomanip>
 #include <boost/algorithm/string.hpp>
 #include <boost/math/statistics/linear_regression.hpp>
+#include <boost/assert.hpp>
 
 
 int main(int argc, char** argv)
@@ -84,49 +92,49 @@ int main(int argc, char** argv)
 
     std::cout << std::fixed << std::setprecision(16);
     auto q  = boost::math::statistics::simple_ordinary_least_squares_with_R_squared(r, matched_holder);
-    assert(std::get<1>(q) < 0);
+    BOOST_ASSERT(std::get<1>(q) < 0);
     std::cout << "Matched Holder    : " << std::get<0>(q) << " - " << std::abs(std::get<1>(q)) << "r, R^2 = " << std::get<2>(q) << "\n";
 
     q  = boost::math::statistics::simple_ordinary_least_squares_with_R_squared(r, linear);
-    assert(std::get<1>(q) < 0);
+    BOOST_ASSERT(std::get<1>(q) < 0);
     std::cout << "Linear            : " << std::get<0>(q) << " - " << std::abs(std::get<1>(q)) << "r, R^2 = " << std::get<2>(q) << "\n";
 
     q  = boost::math::statistics::simple_ordinary_least_squares_with_R_squared(r, quadratic_b_spline);
-    assert(std::get<1>(q) < 0);
+    BOOST_ASSERT(std::get<1>(q) < 0);
     std::cout << "Quadratic B-spline: " << std::get<0>(q) << " - " << std::abs(std::get<1>(q)) << "r, R^2 = " << std::get<2>(q) << "\n";
 
     q  = boost::math::statistics::simple_ordinary_least_squares_with_R_squared(r, cubic_b_spline);
-    assert(std::get<1>(q) < 0);
+    BOOST_ASSERT(std::get<1>(q) < 0);
     std::cout << "Cubic B-spline    : " << std::get<0>(q) << " - " << std::abs(std::get<1>(q)) << "r, R^2 = " << std::get<2>(q) << "\n";
 
     q  = boost::math::statistics::simple_ordinary_least_squares_with_R_squared(r, quintic_b_spline);
-    assert(std::get<1>(q) < 0);
+    BOOST_ASSERT(std::get<1>(q) < 0);
     std::cout << "Quintic B-spline  : " << std::get<0>(q) << " - " << std::abs(std::get<1>(q)) << "r, R^2 = " << std::get<2>(q) << "\n";
 
     q  = boost::math::statistics::simple_ordinary_least_squares_with_R_squared(r, cubic_hermite);
-    assert(std::get<1>(q) < 0);
+    BOOST_ASSERT(std::get<1>(q) < 0);
     std::cout << "Cubic Hermite     : " << std::get<0>(q) << " - " << std::abs(std::get<1>(q)) << "r, R^2 = " << std::get<2>(q) << "\n";
 
     q  = boost::math::statistics::simple_ordinary_least_squares_with_R_squared(r, pchip);
-    assert(std::get<1>(q) < 0);
+    BOOST_ASSERT(std::get<1>(q) < 0);
     std::cout << "PCHIP             : " << std::get<0>(q) << " - " << std::abs(std::get<1>(q)) << "r, R^2 = " << std::get<2>(q) << "\n";
 
     q  = boost::math::statistics::simple_ordinary_least_squares_with_R_squared(r, makima);
-    assert(std::get<1>(q) < 0);
+    BOOST_ASSERT(std::get<1>(q) < 0);
     std::cout << "Makima            : " << std::get<0>(q) << " - " << std::abs(std::get<1>(q)) << "r, R^2 = " << std::get<2>(q) << "\n";
 
     q  = boost::math::statistics::simple_ordinary_least_squares_with_R_squared(r, fotaylor);
-    assert(std::get<1>(q) < 0);
+    BOOST_ASSERT(std::get<1>(q) < 0);
     std::cout << "First-order Taylor: " << std::get<0>(q) << " - " << std::abs(std::get<1>(q)) << "r, R^2 = " << std::get<2>(q) << "\n";
 
     if (sotaylor.size() > 0)
     {
     q  = boost::math::statistics::simple_ordinary_least_squares_with_R_squared(r, quintic_hermite);
-    assert(std::get<1>(q) < 0);
+    BOOST_ASSERT(std::get<1>(q) < 0);
     std::cout << "Quintic Hermite   : " << std::get<0>(q) << " - " << std::abs(std::get<1>(q)) << "r, R^2 = " << std::get<2>(q) << "\n";
 
     q  = boost::math::statistics::simple_ordinary_least_squares_with_R_squared(r, sotaylor);
-    assert(std::get<1>(q) < 0);
+    BOOST_ASSERT(std::get<1>(q) < 0);
     std::cout << "2nd order Taylor  : " << std::get<0>(q) << " - " << std::abs(std::get<1>(q)) << "r, R^2 = " << std::get<2>(q) << "\n";
 
     }
@@ -134,11 +142,11 @@ int main(int argc, char** argv)
     if (totaylor.size() > 0)
     {
     q  = boost::math::statistics::simple_ordinary_least_squares_with_R_squared(r, totaylor);
-    assert(std::get<1>(q) < 0);
+    BOOST_ASSERT(std::get<1>(q) < 0);
     std::cout << "3rd order Taylor  : " << std::get<0>(q) << " - " << std::abs(std::get<1>(q)) << "r, R^2 = " << std::get<2>(q) << "\n";
 
     q  = boost::math::statistics::simple_ordinary_least_squares_with_R_squared(r, septic_hermite);
-    assert(std::get<1>(q) < 0);
+    BOOST_ASSERT(std::get<1>(q) < 0);
     std::cout << "Septic Hermite    : " << std::get<0>(q) << " - " << std::abs(std::get<1>(q)) << "r, R^2 = " << std::get<2>(q) << "\n";
 
     }

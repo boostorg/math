@@ -120,3 +120,10 @@ When 2*x*x*n > [pi]: -__jacobi_theta4m1tau(0, 2*x*x*n/[pi])]]
 ]
 
 [endsect] [/section:kolmogorov_smirnov_dist Kolmogorov-Smirnov]
+
+[/
+  Copyright Evan Miller 2020.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
