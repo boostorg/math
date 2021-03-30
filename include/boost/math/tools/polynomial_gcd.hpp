@@ -62,7 +62,6 @@ inline EuclideanDomain Euclid_gcd(EuclideanDomain a, EuclideanDomain b) noexcept
 
 } // namespace gcd_detail
 } // namespace boost::integer
-#error polynomial gcd can only be used in standalone mode with C++17 or higher
 #endif
 
 namespace boost{
@@ -101,6 +100,10 @@ namespace math{ namespace tools{
 template <class T>
 T content(polynomial<T> const &x)
 {
+    #if defined(BOOST_MATH_STANDALONE) && !defined(BOOST_MATH_CXX17_NUMERIC)
+    static_assert(sizeof(T) == 0, "polynomial gcd can only be used in standalone mode with C++17 or higher");
+    #endif
+
     return x ? boost::integer::gcd_range(x.data().begin(), x.data().end()).first : T(0);
 }
 
@@ -140,7 +143,7 @@ namespace detail
         #elif defined(BOOST_MATH_CXX17_NUMERIC)
         using std::gcd;
         #else
-        #error polynomial gcd can only be used in standalone mode with C++17 or higher
+        static_assert(sizeof(T) == 0, "polynomial gcd can only be used in standalone mode with C++17 or higher");
         #endif
 
         T const u_cont = content(u), v_cont = content(v);
@@ -239,6 +242,10 @@ template <typename T>
 typename std::enable_if<!std::numeric_limits<T>::is_integer && (std::numeric_limits<T>::min_exponent != std::numeric_limits<T>::max_exponent) && !std::numeric_limits<T>::is_exact, polynomial<T> >::type
 gcd(polynomial<T> const &u, polynomial<T> const &v)
 {
+   #if defined(BOOST_MATH_STANDALONE) && !defined(BOOST_MATH_CXX17_NUMERIC)
+   static_assert(sizeof(T) == 0, "polynomial gcd can only be used in standalone mode with C++17 or higher");
+   #endif
+   
    return boost::integer::gcd_detail::Euclid_gcd(u, v);
 }
 
