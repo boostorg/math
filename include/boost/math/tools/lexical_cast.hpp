@@ -18,7 +18,7 @@ namespace boost {
     template <typename T1, typename T2>
     inline T1 lexical_cast(const T2)
     {
-        static_assert(false, "boost.lexical_cast can not be used in standalone mode. Please disable standalone mode and try again");
+        static_assert(sizeof(T1) == 0, "boost.lexical_cast can not be used in standalone mode. Please disable standalone mode and try again");
         return T1(0);
     }
 }
