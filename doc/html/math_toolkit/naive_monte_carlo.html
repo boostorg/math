@@ -33,7 +33,8 @@
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">quadrature</span><span class="special">/</span><span class="identifier">naive_monte_carlo</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span> <span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">quadrature</span> <span class="special">{</span>
 
-<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Real</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">F</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">RNG</span> <span class="special">=</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">mt19937_64</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Policy</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">policy</span><span class="special">&lt;&gt;&gt;</span>
+<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Real</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">F</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">RNG</span> <span class="special">=</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">mt19937_64</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Policy</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">policy</span><span class="special">&lt;&gt;,</span>
+         <span class="keyword">typename</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">enable_if</span><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">is_trivially_copyable</span><span class="special">&lt;</span><span class="identifier">Real</span><span class="special">&gt;::</span><span class="identifier">value</span><span class="special">,</span> <span class="keyword">bool</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="special">=</span> <span class="keyword">true</span><span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">naive_monte_carlo</span>
 <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
@@ -127,9 +128,15 @@
 <p>
       First off, we define the function we wish to integrate. This function must
       accept a <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="identifier">Real</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span></code>,
-      and return a <code class="computeroutput"><span class="identifier">Real</span></code>. Next, we
-      define the domain of integration. Infinite domains are indicated by the bound
-      <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">Real</span><span class="special">&gt;::</span><span class="identifier">infinity</span><span class="special">()</span></code>.
+      and return a <code class="computeroutput"><span class="identifier">Real</span></code>.
+    </p>
+<p>
+      <span class="emphasis"><em>Nota bene</em></span>: <code class="computeroutput"><span class="identifier">Real</span></code>
+      must be a trivially copyable type.
+    </p>
+<p>
+      Next, we define the domain of integration. Infinite domains are indicated by
+      the bound <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">Real</span><span class="special">&gt;::</span><span class="identifier">infinity</span><span class="special">()</span></code>.
       The call
     </p>
 <pre class="programlisting"><span class="identifier">naive_monte_carlo</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="keyword">decltype</span><span class="special">(</span><span class="identifier">g</span><span class="special">)&gt;</span> <span class="identifier">mc</span><span class="special">(</span><span class="identifier">g</span><span class="special">,</span> <span class="identifier">bounds</span><span class="special">,</span> <span class="identifier">error_goal</span><span class="special">);</span>

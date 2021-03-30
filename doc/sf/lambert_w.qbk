@@ -42,7 +42,7 @@ In Boost.Math, we call these principal branches `lambert_w0` and `lambert_wm1`; 
 [import ../../example/lambert_w_graph.cpp]
 
 [graph lambert_w_graph]
-[graph lambert_w_graph_big_w]
+[graph lambert_w_graph_big_W]
 [graph lambert_w0_prime_graph]
 [graph lambert_wm1_prime_graph]
 
