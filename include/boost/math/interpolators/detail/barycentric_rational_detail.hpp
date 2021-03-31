@@ -15,12 +15,6 @@
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/tools/assert.hpp>
 
-#ifndef BOOST_MATH_STANDALONE
-#include <boost/math/tools/lexical_cast.hpp>
-#include <boost/core/demangle.hpp>
-#endif
-
-
 namespace boost{ namespace math{ namespace detail{
 
 template<class Real>
@@ -135,13 +129,8 @@ void barycentric_rational_imp<Real>::calculate_weights(size_t approximation_orde
                    std::string msg = std::string("Spacing between  x[")
                       + std::to_string(k) + std::string("] and x[")
                       + std::to_string(i) + std::string("] is ")
-                      #ifndef BOOST_MATH_STANDALONE
-                      + boost::lexical_cast<std::string>(diff) + std::string(", which is smaller than the epsilon of ")
-                      + boost::core::demangle(typeid(Real).name());
-                      #else
                       + std::string("smaller than the epsilon of ")
                       + std::string(typeid(Real).name());
-                      #endif
                     throw std::logic_error(msg);
                 }
                 inv_product *= diff;
