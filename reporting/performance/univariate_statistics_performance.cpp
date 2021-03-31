@@ -8,6 +8,7 @@
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/math/statistics/univariate_statistics.hpp>
 #include <boost/math/tools/assert.hpp>
+#include <boost/math/tools/complex.hpp>
 #include <benchmark/benchmark.h>
 #include <vector>
 #include <algorithm>
@@ -47,7 +48,7 @@ std::vector<T> generate_random_vector(std::size_t size, std::size_t seed)
         }
         return v;
     }
-    else if constexpr (boost::is_complex<T>::value)
+    else if constexpr (boost::math::tools::is_complex_type<T>::value)
     {
         std::normal_distribution<typename T::value_type> dis(0, 1);
         for (size_t i = 0; i < v.size(); ++i)
