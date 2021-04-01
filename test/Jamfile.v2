@@ -1144,11 +1144,11 @@ test-suite quadrature :
    tanh_sinh_quadrature_test_2a ]
    [ run  tanh_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
      : : : <toolset>msvc:<cxxflags>/bigobj <define>TEST3 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]
-     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] :
+     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] :
    tanh_sinh_quadrature_test_3 ]
    [ run  tanh_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
      : : : release <toolset>msvc:<cxxflags>/bigobj <define>TEST3A [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]
-     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] :
+     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] :
    tanh_sinh_quadrature_test_3a ]
    [ run  tanh_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
      : : : release <toolset>msvc:<cxxflags>/bigobj <define>TEST4 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]
@@ -1176,10 +1176,10 @@ test-suite quadrature :
    tanh_sinh_quadrature_test_8 ]
    [ run  tanh_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
      : : : release <toolset>msvc:<cxxflags>/bigobj <define>TEST9
-     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] :
+     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] :
    tanh_sinh_quadrature_test_9 ]
 
-   [ run tanh_sinh_mpfr.cpp ../tools//mpfr ../tools//gmp : : : [ check-target-builds ../config//has_mpfr : : <build>no ] [ requires cxx11_hdr_initializer_list cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_smart_ptr ] release <toolset>clang:<cxxflags>-Wno-literal-range ]
+   [ run tanh_sinh_mpfr.cpp ../tools//mpfr ../tools//gmp : : : [ check-target-builds ../config//has_mpfr : : <build>no ] [ requires cxx11_hdr_initializer_list cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_smart_ptr ] release <toolset>clang:<cxxflags>-Wno-literal-range [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ] 
    [ run sinh_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
      : : : release [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] ]
    [ run exp_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
@@ -1190,7 +1190,7 @@ test-suite quadrature :
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] : exp_sinh_quadrature_test_2 ]
    [ run exp_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
      : : : <define>TEST3 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]
-     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] : exp_sinh_quadrature_test_3 ]
+     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] : exp_sinh_quadrature_test_3 ]
    [ run exp_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
      : : : release <define>TEST4 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] : exp_sinh_quadrature_test_4 ]
@@ -1205,7 +1205,7 @@ test-suite quadrature :
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] : exp_sinh_quadrature_test_7 ]
    [ run exp_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
      : : : release <define>TEST8 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]
-     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] : exp_sinh_quadrature_test_8 ]
+     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] : exp_sinh_quadrature_test_8 ]
    [ run exp_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
      : : : release <define>TEST9 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] : exp_sinh_quadrature_test_9 ]
@@ -1213,9 +1213,9 @@ test-suite quadrature :
      : : : release <define>TEST10 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] : exp_sinh_quadrature_test_10 ]
 
-   [ run  compile_test/exp_sinh_incl_test.cpp compile_test_main : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] ]
-   [ run  compile_test/sinh_sinh_incl_test.cpp compile_test_main : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] ]
-   [ run  compile_test/tanh_sinh_incl_test.cpp compile_test_main : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] ]
+   [ run  compile_test/exp_sinh_incl_test.cpp compile_test_main : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
+   [ run  compile_test/sinh_sinh_incl_test.cpp compile_test_main : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
+   [ run  compile_test/tanh_sinh_incl_test.cpp compile_test_main : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ compile  compile_test/exp_sinh_concept_test.cpp : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ compile  compile_test/sinh_sinh_concept_test.cpp : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ compile  compile_test/tanh_sinh_concept_test.cpp : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
@@ -1223,25 +1223,25 @@ test-suite quadrature :
    [ run gauss_quadrature_test.cpp : : : <define>TEST1 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release : gauss_quadrature_test_1 ]
    [ run gauss_quadrature_test.cpp : : : <define>TEST2 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]
-     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release : gauss_quadrature_test_2 ]
+     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] : gauss_quadrature_test_2 ]
    [ run gauss_quadrature_test.cpp : : : <define>TEST3 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]
-     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release : gauss_quadrature_test_3 ]
+     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] : gauss_quadrature_test_3 ]
    [ run gauss_kronrod_quadrature_test.cpp : : : <define>TEST1 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release : gauss_kronrod_quadrature_test_1 ]
    [ run gauss_kronrod_quadrature_test.cpp : : : <define>TEST1A [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]
-     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release : gauss_kronrod_quadrature_test_1a ]
+     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] : gauss_kronrod_quadrature_test_1a ]
    [ run gauss_kronrod_quadrature_test.cpp : : : <define>TEST2 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] : gauss_kronrod_quadrature_test_2 ]
    [ run gauss_kronrod_quadrature_test.cpp : : : <define>TEST3 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]
-     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release : gauss_kronrod_quadrature_test_3 ]
+     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] : gauss_kronrod_quadrature_test_3 ]
    [ run adaptive_gauss_kronrod_quadrature_test.cpp : : : <define>TEST1 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release : adaptive_gauss_quadrature_test_1 ]
    [ run adaptive_gauss_kronrod_quadrature_test.cpp : : : <define>TEST1A [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]
-     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release : adaptive_gauss_quadrature_test_1a ]
+     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] : adaptive_gauss_quadrature_test_1a ]
    [ run adaptive_gauss_kronrod_quadrature_test.cpp : : : <define>TEST2 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] : adaptive_gauss_quadrature_test_2 ]
    [ run adaptive_gauss_kronrod_quadrature_test.cpp : : : <define>TEST3 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]
-     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release : adaptive_gauss_quadrature_test_3 ]
+     [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] : adaptive_gauss_quadrature_test_3 ]
 
    [ run naive_monte_carlo_test.cpp ../../atomic/build//boost_atomic : : :
      <toolset>msvc:<cxxflags>/bigobj <define>TEST=1  [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
