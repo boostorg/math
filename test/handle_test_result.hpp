@@ -14,7 +14,7 @@
 #include <iostream>
 #include <iomanip>
 
-#if defined(BOOST_INTEL)
+#if defined(__INTEL_COMPILER)
 #  pragma warning(disable:239)
 #  pragma warning(disable:264)
 #endif

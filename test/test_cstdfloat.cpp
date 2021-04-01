@@ -75,10 +75,10 @@ void sanity_check_##the_digits##_func()                                         
 {                                                                                                    \
   typedef boost::float##the_digits##_t float_type;                                                   \
                                                                                                      \
-  BOOST_CONSTEXPR_OR_CONST int my_digits10 = std::numeric_limits<float_type>::digits10;              \
+  constexpr int my_digits10 = std::numeric_limits<float_type>::digits10;              \
                                                                                                      \
   {                                                                                                  \
-    BOOST_CONSTEXPR_OR_CONST float_type x =                                                          \
+    constexpr float_type x =                                                          \
       BOOST_FLOAT##the_digits##_C(0.33333333333333333333333333333333333333333);                      \
     std::stringstream ss;                                                                            \
     ss << std::setprecision(my_digits10 - 1)                                                         \
@@ -88,7 +88,7 @@ void sanity_check_##the_digits##_func()                                         
     BOOST_CHECK_EQUAL( ss.str(), str );                                                              \
   }                                                                                                  \
   {                                                                                                  \
-    BOOST_CONSTEXPR_OR_CONST float_type x =                                                          \
+    constexpr float_type x =                                                          \
       BOOST_FLOAT##the_digits##_C(0.66666666666666666666666666666666666666666);                      \
     std::stringstream ss;                                                                            \
     ss << std::setprecision(my_digits10 - 1)                                                         \
@@ -499,9 +499,9 @@ namespace test_cstdfloat
    int minus_one;
 
 #if defined(BOOST_FLOATMAX_C)
-   BOOST_CONSTEXPR_OR_CONST int has_floatmax_t = 1;
+   constexpr int has_floatmax_t = 1;
 #else
-   BOOST_CONSTEXPR_OR_CONST int has_floatmax_t = 0;
+   constexpr int has_floatmax_t = 0;
 #endif
 
 #if defined(BOOST_FLOAT16_C)

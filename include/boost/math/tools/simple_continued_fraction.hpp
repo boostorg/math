@@ -12,7 +12,10 @@
 #include <cmath>
 #include <limits>
 #include <stdexcept>
+
+#ifndef BOOST_MATH_STANDALONE
 #include <boost/core/demangle.hpp>
+#endif
 
 namespace boost::math::tools {
 
@@ -74,7 +77,11 @@ public:
          if (b_[i] <= 0) {
             std::ostringstream oss;
             oss << "Found a negative partial denominator: b[" << i << "] = " << b_[i] << "."
+                #ifndef BOOST_MATH_STANDALONE
                 << " This means the integer type '" << boost::core::demangle(typeid(Z).name())
+                #else
+                << " This means the integer type '" << typeid(Z).name()
+                #endif
                 << "' has overflowed and you need to use a wider type,"
                 << " or there is a bug.";
             throw std::overflow_error(oss.str());
