@@ -10,6 +10,7 @@
 #ifndef BOOST_MATH_COMMON_FACTOR_CT_HPP
 #define BOOST_MATH_COMMON_FACTOR_CT_HPP
 
+#ifndef BOOST_MATH_STANDALONE
 #include <boost/integer/common_factor_ct.hpp>
 #include <boost/math/tools/header_deprecated.hpp>
 
@@ -26,6 +27,8 @@ namespace math
 
 }  // namespace math
 }  // namespace boost
-
+#else
+#error Common factor is not available in standalone mode because it requires boost.integer.
+#endif // BOOST_MATH_STANDALONE
 
 #endif  // BOOST_MATH_COMMON_FACTOR_CT_HPP
