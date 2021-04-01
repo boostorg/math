@@ -26,7 +26,8 @@ namespace boost{ namespace math{ namespace tools{
    {
 #ifdef BOOST_MATH_NO_LEXICAL_CAST
       // This function should not compile, we don't have the necessary functionality to support it:
-      static_assert(false, "boost.lexical_cast is not supported in standalone mode.");
+      static_assert(sizeof(Real) == 0, "boost.lexical_cast is not supported in standalone mode.");
+      return Real(0);
 #else
       return boost::lexical_cast<Real>(p);
 #endif

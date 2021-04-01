@@ -72,7 +72,7 @@ T t2n_asymptotic(int n)
 //
 struct max_bernoulli_root_functor
 {
-   max_bernoulli_root_functor(ulong_long_type t) : target(static_cast<double>(t)) {}
+   max_bernoulli_root_functor(unsigned long long t) : target(static_cast<double>(t)) {}
    double operator()(double n)
    {
       BOOST_MATH_STD_USING
@@ -99,7 +99,7 @@ inline std::size_t find_bernoulli_overflow_limit(const std::false_type&)
    // Set a limit on how large the result can ever be:
    static const double max_result = static_cast<double>((std::numeric_limits<std::size_t>::max)() - 1000u);
 
-   ulong_long_type t = lltrunc(boost::math::tools::log_max_value<T>());
+   unsigned long long t = lltrunc(boost::math::tools::log_max_value<T>());
    max_bernoulli_root_functor fun(t);
    boost::math::tools::equal_floor tol;
    std::uintmax_t max_iter = boost::math::policies::get_max_root_iterations<Policy>();

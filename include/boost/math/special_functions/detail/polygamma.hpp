@@ -14,6 +14,7 @@
 #include <cmath>
 #include <limits>
 #include <mutex>
+#include <string>
 #include <boost/math/policies/policy.hpp>
 #include <boost/math/special_functions/bernoulli.hpp>
 #include <boost/math/special_functions/trunc.hpp>
@@ -22,7 +23,8 @@
 #include <boost/math/special_functions/sin_pi.hpp>
 #include <boost/math/special_functions/cos_pi.hpp>
 #include <boost/math/special_functions/pow.hpp>
-  #include <boost/math/tools/assert.hpp>
+#include <boost/math/tools/assert.hpp>
+#include <boost/math/tools/config.hpp>
 
 #ifdef _MSC_VER
 #pragma once
@@ -141,7 +143,7 @@ namespace boost { namespace math { namespace detail{
     const int iter = N - itrunc(x);
 
     if(iter > (int)policies::get_max_series_iterations<Policy>())
-       return policies::raise_evaluation_error<T>(function, ("Exceeded maximum series evaluations evaluating at n = " + boost::lexical_cast<std::string>(n) + " and x = %1%").c_str(), x, pol);
+       return policies::raise_evaluation_error<T>(function, ("Exceeded maximum series evaluations evaluating at n = " + std::to_string(n) + " and x = %1%").c_str(), x, pol);
 
     const int minus_m_minus_one = -m - 1;
 

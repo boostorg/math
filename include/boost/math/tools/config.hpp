@@ -40,6 +40,9 @@
 #define BOOST_DO_JOIN(X, Y) BOOST_DO_JOIN2(X,Y)
 #define BOOST_DO_JOIN2(X, Y) X##Y
 
+#define BOOST_STRINGIZE(X) BOOST_DO_STRINGIZE(X)
+#define BOOST_DO_STRINGIZE(X) #X
+
 #endif // BOOST_MATH_STANDALONE
 
 #include <algorithm>  // for min and max

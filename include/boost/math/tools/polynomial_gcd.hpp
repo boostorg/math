@@ -30,7 +30,7 @@
 
 namespace boost::integer {
 
-template <typename Iter, typename T = typename std::iterator_traits<I>::value_type>
+template <typename Iter, typename T = typename std::iterator_traits<Iter>::value_type>
 std::pair<T, Iter> gcd_range(Iter first, Iter last) noexcept(std::is_arithmetic_v<T>)
 {
     using std::gcd;
@@ -59,6 +59,13 @@ inline EuclideanDomain Euclid_gcd(EuclideanDomain a, EuclideanDomain b) noexcept
     }
     return a;
 }
+
+enum method_type
+{
+    method_euclid = 0,
+    method_binary = 1,
+    method_mixed = 2
+};
 
 } // namespace gcd_detail
 } // namespace boost::integer
