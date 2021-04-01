@@ -23,7 +23,7 @@ def main(ctx):
 
   result = []
 
-  for suite in things_to_test:
+  for suite in sanitizer_test:
     #
     # Sanitizers:
     #
