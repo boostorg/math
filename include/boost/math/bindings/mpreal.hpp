@@ -404,7 +404,7 @@ inline mpfr::mpreal skewness(const extreme_value_distribution<mpfr::mpreal, Poli
    // See http://mathworld.wolfram.com/ExtremeValueDistribution.html
    //
    #ifdef BOOST_MATH_STANDALONE
-   static_assert(false, "mpreal skewness can not be calculated in standalone mode");
+   static_assert(sizeof(Policy) == 0, "mpreal skewness can not be calculated in standalone mode");
    #endif
 
    return boost::lexical_cast<mpfr::mpreal>("1.1395470994046486574927930193898461120875997958366");
@@ -415,7 +415,7 @@ inline mpfr::mpreal skewness(const rayleigh_distribution<mpfr::mpreal, Policy>& 
 {
   // using namespace boost::math::constants;
   #ifdef BOOST_MATH_STANDALONE
-  static_assert(false, "mpreal skewness can not be calculated in standalone mode");
+  static_assert(sizeof(Policy) == 0, "mpreal skewness can not be calculated in standalone mode");
   #endif
 
   return boost::lexical_cast<mpfr::mpreal>("0.63111065781893713819189935154422777984404221106391");
@@ -428,7 +428,7 @@ inline mpfr::mpreal kurtosis(const rayleigh_distribution<mpfr::mpreal, Policy>& 
 {
   // using namespace boost::math::constants;
   #ifdef BOOST_MATH_STANDALONE
-  static_assert(false, "mpreal kurtosis can not be calculated in standalone mode");
+  static_assert(sizeof(Policy) == 0, "mpreal kurtosis can not be calculated in standalone mode");
   #endif
 
   return boost::lexical_cast<mpfr::mpreal>("3.2450893006876380628486604106197544154170667057995");
@@ -443,7 +443,7 @@ inline mpfr::mpreal kurtosis_excess(const rayleigh_distribution<mpfr::mpreal, Po
   //using namespace boost::math::constants;
   // Computed using NTL at 150 bit, about 50 decimal digits.
   #ifdef BOOST_MATH_STANDALONE
-  static_assert(false, "mpreal excess kurtosis can not be calculated in standalone mode");
+  static_assert(sizeof(Policy) == 0, "mpreal excess kurtosis can not be calculated in standalone mode");
   #endif
 
   return boost::lexical_cast<mpfr::mpreal>("0.2450893006876380628486604106197544154170667057995");
@@ -756,7 +756,7 @@ mpfr::mpreal erf_inv_imp(const mpfr::mpreal& p, const mpfr::mpreal& q, const Pol
 inline mpfr::mpreal bessel_i0(mpfr::mpreal x)
 {
    #ifdef BOOST_MATH_STANDALONE
-   static_assert(false, "mpreal bessel_i0 can not be calculated in standalone mode");
+   static_assert(sizeof(x) == 0, "mpreal bessel_i0 can not be calculated in standalone mode");
    #endif
     
     static const mpfr::mpreal P1[] = {

@@ -246,7 +246,7 @@ private:
 #elif BOOST_MATH_ENDIAN_LITTLE_BYTE
     static constexpr int offset_ = 4;
 #else
-    static_assert(false, "Endian type could not be identified");
+    static_assert(sizeof(double_precision) == 0, "Endian type could not be identified");
 #endif
 };
 
@@ -306,7 +306,7 @@ private:
 #elif BOOST_MATH_ENDIAN_LITTLE_BYTE
     static constexpr int offset_ = 4;
 #else
-    static_assert(false, "Endian type could not be identified");
+    static_assert(sizeof(double_precision) == 0, "Endian type could not be identified");
 #endif
 };
 
@@ -420,7 +420,7 @@ private:
 #elif BOOST_MATH_ENDIAN_LITTLE_BYTE
     static constexpr int offset_ = 12;
 #else
-    static_assert(false, "Endian type could not be identified");
+    static_assert(sizeof(extended_double_precision) == 0, "Endian type could not be identified");
 #endif
 };
 
@@ -501,7 +501,7 @@ private:
 #elif BOOST_MATH_ENDIAN_LITTLE_BYTE
     static constexpr int offset_ = 12;
 #else
-    static_assert(false, "Endian type could not be identified");
+    static_assert(sizeof(extended_double_precision) == 0, "Endian type could not be identified");
 #endif
 };
 

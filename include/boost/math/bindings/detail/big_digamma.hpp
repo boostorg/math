@@ -286,7 +286,7 @@ T big_digamma(T x)
    BOOST_MATH_STD_USING
 
    #ifdef BOOST_MATH_STANDALONE
-   static_assert(false, "big_digamma can not be used in standalone mode");
+   static_assert(sizeof(T) == 0, "big_digamma can not be used in standalone mode");
    #endif
 
    if(x < 0)

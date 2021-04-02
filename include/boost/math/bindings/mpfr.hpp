@@ -457,7 +457,7 @@ inline mpfr_class skewness(const extreme_value_distribution<mpfr_class, Policy>&
    // See http://mathworld.wolfram.com/ExtremeValueDistribution.html
    //
    #ifdef BOOST_MATH_STANDALONE
-   static_assert(false, "mpfr skewness can not be calculated in standalone mode");
+   static_assert(sizeof(Policy) == 0, "mpfr skewness can not be calculated in standalone mode");
    #endif
 
    return boost::lexical_cast<mpfr_class>("1.1395470994046486574927930193898461120875997958366");
@@ -468,7 +468,7 @@ inline mpfr_class skewness(const rayleigh_distribution<mpfr_class, Policy>& /*di
 {
   // using namespace boost::math::constants;
   #ifdef BOOST_MATH_STANDALONE
-  static_assert(false, "mpfr skewness can not be calculated in standalone mode");
+  static_assert(sizeof(Policy) == 0, "mpfr skewness can not be calculated in standalone mode");
   #endif
 
   return boost::lexical_cast<mpfr_class>("0.63111065781893713819189935154422777984404221106391");
@@ -481,7 +481,7 @@ inline mpfr_class kurtosis(const rayleigh_distribution<mpfr_class, Policy>& /*di
 {
   // using namespace boost::math::constants;
   #ifdef BOOST_MATH_STANDALONE
-  static_assert(false, "mpfr kurtosis can not be calculated in standalone mode");
+  static_assert(sizeof(Policy) == 0, "mpfr kurtosis can not be calculated in standalone mode");
   #endif
 
   return boost::lexical_cast<mpfr_class>("3.2450893006876380628486604106197544154170667057995");
@@ -496,7 +496,7 @@ inline mpfr_class kurtosis_excess(const rayleigh_distribution<mpfr_class, Policy
   //using namespace boost::math::constants;
   // Computed using NTL at 150 bit, about 50 decimal digits.
   #ifdef BOOST_MATH_STANDALONE
-  static_assert(false, "mpfr excess kurtosis can not be calculated in standalone mode");
+  static_assert(sizeof(Policy) == 0, "mpfr excess kurtosis can not be calculated in standalone mode");
   #endif
 
   return boost::lexical_cast<mpfr_class>("0.2450893006876380628486604106197544154170667057995");
@@ -809,7 +809,7 @@ inline mpfr_class erf_inv_imp(const mpfr_class& p, const mpfr_class& q, const Po
 inline mpfr_class bessel_i0(mpfr_class x)
 {
    #ifdef BOOST_MATH_STANDALONE
-   static_assert(false, "mpfr bessel_i0 can not be calculated in standalone mode");
+   static_assert(sizeof(x) == 0, "mpfr bessel_i0 can not be calculated in standalone mode");
    #endif
     
     static const mpfr_class P1[] = {

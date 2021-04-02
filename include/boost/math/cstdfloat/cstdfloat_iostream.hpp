@@ -333,7 +333,7 @@
       str.append(1U, 'e');
 
       #ifdef BOOST_MATH_STANDALONE
-      static_assert(false, "IO streams for intel compilers using _Quad types can not be used in standalone mode");
+      static_assert(sizeof(string_type), "IO streams for intel compilers using _Quad types can not be used in standalone mode");
       #else
       string_type e = boost::lexical_cast<string_type>(std::abs(my_exp));
       #endif
