@@ -25,7 +25,7 @@ void test_rsqrt()
 {
     std::cout << "Testing rsqrt on type " << boost::core::demangle(typeid(Real).name()) << "\n";
     using std::sqrt;
-    Real x = std::numeric_limits<Real>::min();
+    Real x = (std::numeric_limits<Real>::min)();
     while (x < 10000*std::numeric_limits<Real>::epsilon()) {
         Real expected = 1/sqrt(x);
         Real computed = rsqrt(x);
@@ -64,7 +64,7 @@ void test_rsqrt()
         std::cerr << "Reciprocal square root of infinity not correctly computed.\n";
     }
 
-    x = std::numeric_limits<Real>::max();
+    x = (std::numeric_limits<Real>::max)();
     expected = 1/sqrt(x);
     computed = rsqrt(x);
     if (!CHECK_EQUAL(expected, computed)) {

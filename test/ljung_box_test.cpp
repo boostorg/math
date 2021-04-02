@@ -20,7 +20,7 @@ void test_trivial()
   // Validate in R:
   // > v <- c(1,2)
   // > Box.test(v, lag=1, "Ljung")
-  //	Box-Ljung test
+  // Box-Ljung test
   // data:  v
   // X-squared = 2, df = 1, p-value = 0.1573
 
