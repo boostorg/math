@@ -113,9 +113,9 @@ struct type_at {
 
 template <typename RealType, size_t Order, size_t Depth>
 struct type_at<fvar<RealType, Order>, Depth> {
-  using type = typename conditional<Depth == 0,
-                                    fvar<RealType, Order>,
-                                    typename type_at<RealType, Depth - 1>::type>::type;
+  using type = typename std::conditional<Depth == 0,
+                                         fvar<RealType, Order>,
+                                         typename type_at<RealType, Depth - 1>::type>::type;
 };
 
 template <typename RealType, size_t Depth>
@@ -2041,13 +2041,13 @@ template <class Policy, std::size_t Order>
 using fvar_t = differentiation::detail::fvar<Policy, Order>;
 template <class Policy, std::size_t Order>
 struct evaluation<fvar_t<float, Order>, Policy> {
-  using type = fvar_t<typename conditional<Policy::promote_float_type::value, double, float>::type, Order>;
+  using type = fvar_t<typename std::conditional<Policy::promote_float_type::value, double, float>::type, Order>;
 };
 
 template <class Policy, std::size_t Order>
 struct evaluation<fvar_t<double, Order>, Policy> {
   using type =
-      fvar_t<typename conditional<Policy::promote_double_type::value, long double, double>::type, Order>;
+      fvar_t<typename std::conditional<Policy::promote_double_type::value, long double, double>::type, Order>;
 };
 
 }  // namespace policies
