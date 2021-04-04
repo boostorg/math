@@ -31,9 +31,13 @@
 
 #if (__cplusplus > 201700L || _MSVC_LANG > 201700L)
 #define BOOST_IF_CONSTEXPR if constexpr
+#if !__has_include(<execution>)
+#define BOOST_NO_CXX17_HDR_EXECUTION
+#endif
 #else
 #define BOOST_IF_CONSTEXPR if
 #define BOOST_NO_CXX17_IF_CONSTEXPR
+#define BOOST_NO_CXX17_HDR_EXECUTION
 #endif
 
 #define BOOST_JOIN(X, Y) BOOST_DO_JOIN(X, Y)
