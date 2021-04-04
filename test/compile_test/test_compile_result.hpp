@@ -23,9 +23,7 @@ inline void check_result_imp(double, double){}
 inline void check_result_imp(long double, long double){}
 inline void check_result_imp(int, int){}
 inline void check_result_imp(long, long){}
-#ifdef BOOST_HAS_LONG_LONG
-inline void check_result_imp(boost::long_long_type, boost::long_long_type){}
-#endif
+inline void check_result_imp(long long, long long){}
 inline void check_result_imp(bool, bool){}
 
 //
@@ -78,9 +76,7 @@ union max_align_type
    long l;
    double d;
    long double ld;
-#ifdef BOOST_HAS_LONG_LONG
    long long ll;
-#endif
 };
 
 template <class Distribution>

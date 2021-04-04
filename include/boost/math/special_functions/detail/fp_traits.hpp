@@ -33,11 +33,13 @@ With these techniques, the code could be simplified.
 #define BOOST_MATH_ENDIAN_BIG_BYTE BOOST_ENDIAN_BIG_BYTE
 #define BOOST_MATH_ENDIAN_LITTLE_BYTE BOOST_ENDIAN_LITTLE_BYTE
 
-#elif (__cplusplus > 202000L || _MSVC_LANG > 202000L) && __has_include(<bit>)
+#elif (__cplusplus > 202000L || _MSVC_LANG > 202000L)
 
+#if __has_include(<bit>)
 #include <bit>
 #define BOOST_MATH_ENDIAN_BIG_BYTE (std::endian::native == std::endian::big)
 #define BOOST_MATH_ENDIAN_LITTLE_BYTE (std::endian::native == std::endian::little)
+#endif
 
 #elif defined(_WIN32)
 
@@ -246,7 +248,7 @@ private:
 #elif BOOST_MATH_ENDIAN_LITTLE_BYTE
     static constexpr int offset_ = 4;
 #else
-    static_assert(false, "Endian type could not be identified");
+    static_assert(sizeof(double_precision) == 0, "Endian type could not be identified");
 #endif
 };
 
@@ -306,7 +308,7 @@ private:
 #elif BOOST_MATH_ENDIAN_LITTLE_BYTE
     static constexpr int offset_ = 4;
 #else
-    static_assert(false, "Endian type could not be identified");
+    static_assert(sizeof(double_precision) == 0, "Endian type could not be identified");
 #endif
 };
 
@@ -420,7 +422,7 @@ private:
 #elif BOOST_MATH_ENDIAN_LITTLE_BYTE
     static constexpr int offset_ = 12;
 #else
-    static_assert(false, "Endian type could not be identified");
+    static_assert(sizeof(extended_double_precision) == 0, "Endian type could not be identified");
 #endif
 };
 
@@ -501,7 +503,7 @@ private:
 #elif BOOST_MATH_ENDIAN_LITTLE_BYTE
     static constexpr int offset_ = 12;
 #else
-    static_assert(false, "Endian type could not be identified");
+    static_assert(sizeof(extended_double_precision) == 0, "Endian type could not be identified");
 #endif
 };
 
@@ -580,7 +582,7 @@ struct select_native<long double>
    && !defined(__SGI_STL_PORT) && !defined(_STLPORT_VERSION)\
    && !defined(__FAST_MATH__)\
    && !defined(BOOST_MATH_DISABLE_STD_FPCLASSIFY)\
-   && !defined(BOOST_INTEL)\
+   && !defined(__INTEL_COMPILER)\
    && !defined(sun)\
    && !defined(__VXWORKS__)
 #  define BOOST_MATH_USE_STD_FPCLASSIFY

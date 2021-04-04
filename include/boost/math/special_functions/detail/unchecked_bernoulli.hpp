@@ -71,7 +71,7 @@ struct bernoulli_imp_variant
             (std::numeric_limits<T>::max_exponent == 16384)
             && (std::numeric_limits<T>::radix == 2)
             && (std::numeric_limits<T>::digits <= std::numeric_limits<long double>::digits)
-            && (std::is_convertible<long double, T>::value) ? 3 : (!is_convertible<std::int64_t, T>::value ? 4 : 0)
+            && (std::is_convertible<long double, T>::value) ? 3 : (!std::is_convertible<std::int64_t, T>::value ? 4 : 0)
          )
       );
 };

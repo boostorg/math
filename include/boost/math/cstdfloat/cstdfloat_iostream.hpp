@@ -160,7 +160,7 @@
   }
 
 //  #elif defined(__GNUC__)
-  #elif defined(BOOST_INTEL)
+  #elif defined(__INTEL_COMPILER)
 
   // The section for I/O stream support for the ICC compiler is particularly
   // long, because these functions must be painstakingly synthesized from
@@ -173,7 +173,7 @@
 
   #include <cstring>
   #include <cctype>
-  #include <boost/lexical_cast.hpp>
+  #include <boost/math/tools/lexical_cast.hpp>
 
   namespace boost { namespace math { namespace cstdfloat { namespace detail {
 
@@ -331,7 +331,12 @@
       }
 
       str.append(1U, 'e');
+
+      #ifdef BOOST_MATH_STANDALONE
+      static_assert(sizeof(string_type), "IO streams for intel compilers using _Quad types can not be used in standalone mode");
+      #else
       string_type e = boost::lexical_cast<string_type>(std::abs(my_exp));
+      #endif
 
       if(e.size() < 2U)
       {
@@ -576,12 +581,12 @@
     bool is_neg       = false;
     bool is_neg_expon = false;
 
-    BOOST_CONSTEXPR_OR_CONST int ten = 10;
+    constexpr int ten = 10;
 
     int expon       = 0;
     int digits_seen = 0;
 
-    BOOST_CONSTEXPR_OR_CONST int max_digits = std::numeric_limits<float_type>::max_digits10 + 1;
+    constexpr int max_digits = std::numeric_limits<float_type>::max_digits10 + 1;
 
     if(*p == static_cast<char>('+'))
     {
@@ -767,7 +772,7 @@
     }
   }
 
-  #endif // Use __GNUC__ or BOOST_INTEL libquadmath
+  #endif // Use __GNUC__ or __INTEL_COMPILER libquadmath
 
   #endif // Not BOOST_CSTDFLOAT_NO_LIBQUADMATH_SUPPORT (i.e., the user would like to have libquadmath support)
 

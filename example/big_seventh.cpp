@@ -179,8 +179,7 @@ As one would expect, the variable can be `const` (but sadly [*not yet `constexpr
 
 // constexpr cpp_bin_float_50 seventh_constexpr (cpp_bin_float_50(1) / 7);
 // std::cout << "seventh_constexpr = " << seventh_constexpr << std::endl; //
-// nor use the macro BOOST_CONSTEXPR_OR_CONST unless it returns `const`
-// BOOST_CONSTEXPR_OR_CONST cpp_bin_float_50 seventh_constexpr(seventh_const);
+// constexpr cpp_bin_float_50 seventh_constexpr(seventh_const);
 
 //]  [/big_seventh_example_constexpr
 

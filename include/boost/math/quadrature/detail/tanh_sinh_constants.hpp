@@ -11,7 +11,6 @@
 #include <cstddef>
 #include <vector>
 #include <type_traits>
-#include <boost/lexical_cast.hpp>
 
 namespace boost {
    namespace math {

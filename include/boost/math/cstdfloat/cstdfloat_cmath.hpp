@@ -118,7 +118,7 @@ namespace boost {
 } // boost::math::cstdfloat::detail
 
 // We will now define preprocessor symbols representing quadruple-precision <cmath> functions.
-#if defined(BOOST_INTEL)
+#if defined(__INTEL_COMPILER)
 #define BOOST_CSTDFLOAT_FLOAT128_LDEXP  __ldexpq
 #define BOOST_CSTDFLOAT_FLOAT128_FREXP  __frexpq
 #define BOOST_CSTDFLOAT_FLOAT128_FABS   __fabsq
@@ -462,7 +462,7 @@ inline boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT
    typedef boost::math::cstdfloat::detail::float_internal128_t float_type;
 
    // Scale the argument x to the range (-ln2 < x < ln2).
-   BOOST_CONSTEXPR_OR_CONST float_type one_over_ln2 = float_type(BOOST_FLOAT128_C(1.44269504088896340735992468100189213742664595415299));
+   constexpr float_type one_over_ln2 = float_type(BOOST_FLOAT128_C(1.44269504088896340735992468100189213742664595415299));
    const float_type x_over_ln2 = x * one_over_ln2;
 
    std::int_fast32_t n;
@@ -592,7 +592,7 @@ inline boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT
       // Take the reflection checks (slightly adapted) from <boost/math/gamma.hpp>.
       const bool floor_of_z_is_equal_to_z = (positive_x == ::BOOST_CSTDFLOAT_FLOAT128_FLOOR(positive_x));
 
-      BOOST_CONSTEXPR_OR_CONST float_type my_pi = BOOST_FLOAT128_C(3.14159265358979323846264338327950288419716939937511);
+      constexpr float_type my_pi = BOOST_FLOAT128_C(3.14159265358979323846264338327950288419716939937511);
 
       if (floor_of_z_is_equal_to_z)
       {

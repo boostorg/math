@@ -8,9 +8,7 @@
 #define BOOST_MATH_TOOLS_BIG_CONSTANT_HPP
 
 #include <boost/math/tools/config.hpp>
-#ifndef BOOST_MATH_NO_LEXICAL_CAST
-#include <boost/lexical_cast.hpp>
-#endif
+#include <boost/math/tools/lexical_cast.hpp>
 
 #include <type_traits>
 #include <limits>
@@ -42,12 +40,12 @@ typedef double largest_float;
 #endif
 
 template <class T>
-inline BOOST_CONSTEXPR_OR_CONST T make_big_value(largest_float v, const char*, std::true_type const&, std::false_type const&) BOOST_MATH_NOEXCEPT(T)
+inline constexpr T make_big_value(largest_float v, const char*, std::true_type const&, std::false_type const&) BOOST_MATH_NOEXCEPT(T)
 {
    return static_cast<T>(v);
 }
 template <class T>
-inline BOOST_CONSTEXPR_OR_CONST T make_big_value(largest_float v, const char*, std::true_type const&, std::true_type const&) BOOST_MATH_NOEXCEPT(T)
+inline constexpr T make_big_value(largest_float v, const char*, std::true_type const&, std::true_type const&) BOOST_MATH_NOEXCEPT(T)
 {
    return static_cast<T>(v);
 }

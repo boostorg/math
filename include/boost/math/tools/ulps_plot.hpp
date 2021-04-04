@@ -14,10 +14,13 @@
 #include <string>
 #include <list>
 #include <random>
+#include <limits>
 #include <stdexcept>
 #include <boost/math/tools/condition_numbers.hpp>
-#include <boost/random/uniform_real_distribution.hpp>
 
+#ifndef BOOST_MATH_STANDALONE
+#include <boost/random/uniform_real_distribution.hpp>
+#endif
 
 // Design of this function comes from:
 // https://blogs.mathworks.com/cleve/2017/01/23/ulps-plots-reveal-math-function-accurary/
@@ -496,8 +499,16 @@ ulps_plot<F, PreciseReal, CoarseReal>::ulps_plot(F hi_acc_impl, CoarseReal a, Co
         std::random_device rd;
         gen.seed(rd());
     }
+
     // Boost's uniform_real_distribution can generate quad and multiprecision random numbers; std's cannot:
+    #ifndef BOOST_MATH_STANDALONE
     boost::random::uniform_real_distribution<PreciseReal> dis(static_cast<PreciseReal>(a), static_cast<PreciseReal>(b));
+    #else
+    // Use std::random in standalone mode if it is a type that the standard library can support (float, double, or long double)
+    static_assert(std::numeric_limits<PreciseReal>::digits10 <= std::numeric_limits<long double>::digits10, "Standalone mode does not support types with precision that exceeds long double");
+    std::uniform_real_distribution<PreciseReal> dis(static_cast<PreciseReal>(a), static_cast<PreciseReal>(b));
+    #endif
+    
     precise_abscissas_.resize(samples);
     coarse_abscissas_.resize(samples);
 
