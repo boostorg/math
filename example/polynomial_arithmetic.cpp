@@ -213,6 +213,7 @@ catch (exception const &e)
 {
   cout << "\nMessage from thrown exception was:\n   " << e.what() << "\n";
 }
+return 0;
 } // int main()
 
 /*
