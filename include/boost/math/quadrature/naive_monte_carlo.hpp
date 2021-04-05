@@ -430,13 +430,14 @@ private:
         {
             // Signal the other threads that the computation is ruined:
             m_done = true; // relaxed store
+            std::lock_guard<std::mutex> lock(m_exception_mutex); // Scoped lock to prevent race writing to m_exception
             m_exception = std::current_exception();
         }
     }
 
     std::function<Real(std::vector<Real> &)> m_integrand;
     uint64_t m_num_threads;
-    uint64_t m_seed;
+    std::atomic<uint64_t> m_seed;
     std::atomic<Real> m_error_goal;
     std::atomic<bool> m_done;
     std::vector<Real> m_lbs;
@@ -453,6 +454,7 @@ private:
     std::unique_ptr<std::atomic<Real>[]> m_thread_averages;
     std::chrono::time_point<std::chrono::system_clock> m_start;
     std::exception_ptr m_exception;
+    std::mutex m_exception_mutex;
 };
 
 }}}
