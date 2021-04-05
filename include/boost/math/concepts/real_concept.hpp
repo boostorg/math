@@ -60,24 +60,24 @@ class real_concept
 {
 public:
    // Constructors:
-   real_concept() : m_value(0){}
-   real_concept(char c) : m_value(c){}
-   real_concept(wchar_t c) : m_value(c){}
-   real_concept(unsigned char c) : m_value(c){}
-   real_concept(signed char c) : m_value(c){}
-   real_concept(unsigned short c) : m_value(c){}
-   real_concept(short c) : m_value(c){}
-   real_concept(unsigned int c) : m_value(c){}
-   real_concept(int c) : m_value(c){}
-   real_concept(unsigned long c) : m_value(c){}
-   real_concept(long c) : m_value(c){}
-   real_concept(unsigned long long c) : m_value(static_cast<real_concept_base_type>(c)){}
-   real_concept(long long c) : m_value(static_cast<real_concept_base_type>(c)){}
-   real_concept(float c) : m_value(c){}
-   real_concept(double c) : m_value(c){}
-   real_concept(long double c) : m_value(c){}
+   constexpr real_concept() : m_value(0){}
+   constexpr real_concept(char c) : m_value(c){}
+   constexpr real_concept(wchar_t c) : m_value(c){}
+   constexpr real_concept(unsigned char c) : m_value(c){}
+   constexpr real_concept(signed char c) : m_value(c){}
+   constexpr real_concept(unsigned short c) : m_value(c){}
+   constexpr real_concept(short c) : m_value(c){}
+   constexpr real_concept(unsigned int c) : m_value(c){}
+   constexpr real_concept(int c) : m_value(c){}
+   constexpr real_concept(unsigned long c) : m_value(c){}
+   constexpr real_concept(long c) : m_value(c){}
+   constexpr real_concept(unsigned long long c) : m_value(static_cast<real_concept_base_type>(c)){}
+   constexpr real_concept(long long c) : m_value(static_cast<real_concept_base_type>(c)){}
+   constexpr real_concept(float c) : m_value(c){}
+   constexpr real_concept(double c) : m_value(c){}
+   constexpr real_concept(long double c) : m_value(c){}
 #ifdef BOOST_MATH_USE_FLOAT128
-   real_concept(BOOST_MATH_FLOAT128_TYPE c) : m_value(c){}
+   constexpr real_concept(BOOST_MATH_FLOAT128_TYPE c) : m_value(c){}
 #endif
 
    // Assignment:
@@ -319,37 +319,37 @@ namespace tools
 {
 
 template <>
-inline concepts::real_concept make_big_value<concepts::real_concept>(boost::math::tools::largest_float val, const char* , std::false_type const&, std::false_type const&)
+inline constexpr concepts::real_concept make_big_value<concepts::real_concept>(boost::math::tools::largest_float val, const char* , std::false_type const&, std::false_type const&)
 {
    return val;  // Can't use lexical_cast here, sometimes it fails....
 }
 
 template <>
-inline concepts::real_concept max_value<concepts::real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
+inline constexpr concepts::real_concept max_value<concepts::real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
 {
    return max_value<concepts::real_concept_base_type>();
 }
 
 template <>
-inline concepts::real_concept min_value<concepts::real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
+inline constexpr concepts::real_concept min_value<concepts::real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
 {
    return min_value<concepts::real_concept_base_type>();
 }
 
 template <>
-inline concepts::real_concept log_max_value<concepts::real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
+inline constexpr concepts::real_concept log_max_value<concepts::real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
 {
    return log_max_value<concepts::real_concept_base_type>();
 }
 
 template <>
-inline concepts::real_concept log_min_value<concepts::real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
+inline constexpr concepts::real_concept log_min_value<concepts::real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
 {
    return log_min_value<concepts::real_concept_base_type>();
 }
 
 template <>
-inline concepts::real_concept epsilon<concepts::real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
+inline constexpr concepts::real_concept epsilon<concepts::real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
 {
 #ifdef __SUNPRO_CC
    return std::numeric_limits<concepts::real_concept_base_type>::epsilon();
