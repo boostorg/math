@@ -116,10 +116,10 @@ void test_exception_from_integrand()
     std::vector<std::pair<Real, Real>> bounds{{ Real(0), Real(1)}, { Real(0), Real(1)}};
     naive_monte_carlo<Real, decltype(g)> mc(g, bounds, (Real) 0.0001);
 
-    auto task = mc.integrate();
     bool caught_exception = false;
     try
     {
+      auto task = mc.integrate();
       Real result = task.get();
       // Get rid of unused variable warning:
       std::ostream cnull(0);
