@@ -100,4 +100,8 @@
 #error Support for C++03 has been removed. The minimum requirement for this library is fully compliant C++11.
 #endif
 
+#ifdef BOOST_NO_CXX11_HDR_TYPE_TRAITS
+# pragma message "You compiler has an incomplete <type_traits> header, and use of this library may not function correctly in all cases."
+#endif
+
 #endif
