@@ -75,9 +75,9 @@ public:
    real_concept(long long c) : m_value(static_cast<real_concept_base_type>(c)){}
    real_concept(float c) : m_value(c){}
    real_concept(double c) : m_value(c){}
-   real_concept(long double c) : m_value(c){}
+   constexpr real_concept(long double c) : m_value(c){}
 #ifdef BOOST_MATH_USE_FLOAT128
-   real_concept(BOOST_MATH_FLOAT128_TYPE c) : m_value(c){}
+   constexpr real_concept(BOOST_MATH_FLOAT128_TYPE c) : m_value(c){}
 #endif
 
    // Assignment:
