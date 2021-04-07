@@ -371,6 +371,14 @@ inline constexpr int digits<concepts::real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE
    // and by Boost lexical cast and serialization causing loss of accuracy.
 }
 
+#if defined(__GNUC__) && (__GNUC__ < 5)
+template <typename T>
+struct is_complex_type;
+
+template<>
+struct is_complex_type<concepts::real_concept> : public std::false_type;
+#endif
+
 } // namespace tools
 } // namespace math
 } // namespace boost
