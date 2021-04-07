@@ -35,6 +35,7 @@
 #include <boost/math/constants/constants.hpp>
 
 #include <boost/math/special_functions/fpclassify.hpp> // isnan.
+#include <boost/math/tools/lexical_cast.hpp>
 
 #if defined (BOOST_MSVC)
 #  pragma warning(push)
@@ -85,7 +86,11 @@ namespace boost
       { // Check x_min < x_max
         if (x_min >= x_max)
         {
+          #ifndef BOOST_MATH_STANDALONE
           std::string msg = "x_max argument is %1%, but must be > x_min = " + lexical_cast<std::string>(x_min) + "!";
+          #else
+          std::string msg = "x_max argument is %1%, but must be > x_min";
+          #endif
           *result = policies::raise_domain_error<RealType>(
             function,
             msg.c_str(), x_max, pol);
@@ -94,6 +99,7 @@ namespace boost
           // But would require replication of all helpers functions in /policies/error_handling.hpp for two values,
           // as well as two value versions of raise_error, raise_domain_error and do_format ...
           // so use slightly hacky lexical_cast to string instead.
+          // TODO: lexcial_cast workaround does not work with standalone mode...
           return false;
         }
         return true;
