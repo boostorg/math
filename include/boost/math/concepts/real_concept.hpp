@@ -376,7 +376,7 @@ template <typename T>
 struct is_complex_type;
 
 template<>
-struct is_complex_type<concepts::real_concept> : public std::false_type;
+struct is_complex_type<concepts::real_concept> : public std::false_type {};
 #endif
 
 } // namespace tools
