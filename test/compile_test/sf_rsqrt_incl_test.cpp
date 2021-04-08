@@ -1,12 +1,12 @@
-//  Copyright Nick Thompson 2017.
+//  Copyright John Maddock 2006.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
-// Basic sanity check that header <boost/math/special_functions/gamma.hpp>
+// Basic sanity check that header <boost/math/special_functions/rsqrt.hpp>
 // #includes all the files that it needs to.
 //
-#include <boost/math/quadrature/sinh_sinh.hpp>
+#include <boost/math/special_functions/rsqrt.hpp>
 //
 // Note this header includes no other headers, this is
 // important if this test is to be meaningful:
@@ -15,7 +15,9 @@
 
 void compile_and_link_test()
 {
-    auto f = [](double x) { return 1/(1+x*x); };
-    boost::math::quadrature::sinh_sinh<double> integrator;
-    check_result<double>(integrator.integrate(f));
+   check_result<int>(boost::math::rsqrt<float>(f));
+   check_result<int>(boost::math::rsqrt<double>(d));
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+   check_result<int>(boost::math::rsqrt<long double>(l));
+#endif
 }

@@ -11,9 +11,11 @@
 
 void compile_and_link_test()
 {
+    boost::math::concepts::std_real_concept a = 0;
+    boost::math::concepts::std_real_concept b = 1;
     auto f = [](boost::math::concepts::std_real_concept x) { return x; };
     boost::math::quadrature::sinh_sinh<boost::math::concepts::std_real_concept> integrator;
-    integrator.integrate(f);
+    integrator.integrate(f, a, b);
 }
 
 #endif
