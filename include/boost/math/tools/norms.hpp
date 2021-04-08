@@ -7,6 +7,7 @@
 #define BOOST_MATH_TOOLS_NORMS_HPP
 #include <algorithm>
 #include <iterator>
+#include <complex>
 #include <cmath>
 #include <boost/math/tools/assert.hpp>
 #include <boost/math/tools/complex.hpp>
