@@ -12,6 +12,7 @@
 #include <cmath>
 #include <limits>
 #include <stdexcept>
+#include <sstream>
 
 #ifndef BOOST_MATH_STANDALONE
 #include <boost/core/demangle.hpp>
