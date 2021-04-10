@@ -6,4 +6,8 @@
 // Basic sanity check that header
 // #includes all the files that it needs to.
 //
+
+// Currently disabled because Apple Clang, MSVC, and Mingw all throw errors internal to their STL implementation (mborland 4/2021)
+#if 0
 #include <boost/math/tools/mp.hpp>
+#endif

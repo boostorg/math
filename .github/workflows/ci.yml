@@ -324,7 +324,7 @@ jobs:
           if: steps.retry1.outcome=='failure'
           run: sudo apt-add-repository -y "ppa:ubuntu-toolchain-r/test"
         - name: Install packages
-          run: sudo apt install g++-10
+          run: sudo apt install g++-10 libgmp-dev libmpfr-dev libfftw3-dev
         - name: Checkout main boost
           run: git clone -b develop --depth 1 https://github.com/boostorg/boost.git ../boost-root
         - name: Update tools/boostdep

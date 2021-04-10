@@ -7,6 +7,7 @@
 // #includes all the files that it needs to.
 //
 #include <boost/math/quadrature/ooura_fourier_integrals.hpp>
+#ifndef _MSC_VER
 //
 // Note this header includes no other headers, this is
 // important if this test is to be meaningful:
@@ -21,3 +22,4 @@ void compile_and_link_test()
     check_result<double>(sin_integrator.integrate(f, 1.0));
     check_result<double>(cos_integrator.integrate(f, 1.0));
 }
+#endif
