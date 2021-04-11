@@ -24,7 +24,7 @@
 
 namespace boost{ namespace math{
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #  pragma warning(push)
 #  pragma warning(disable:4127) // conditional expression is constant
 #endif
@@ -340,7 +340,7 @@ inline RealType entropy(const laplace_distribution<RealType, Policy> & dist)
    return log(2*dist.scale()*constants::e<RealType>());
 }
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #  pragma warning(pop)
 #endif
 

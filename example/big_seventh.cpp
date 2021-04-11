@@ -57,10 +57,10 @@ void no_et()
 
   std::cout.setf(std::ios_base::boolalpha);
   
-   typedef number<backends::cpp_bin_float<113, backends::digit_base_2, void, boost::int16_t, -16382, 16383>, et_on> cpp_bin_float_quad_et_on;
-   typedef number<backends::cpp_bin_float<113, backends::digit_base_2, void, boost::int16_t, -16382, 16383>, et_off> cpp_bin_float_quad_et_off;
+   typedef number<backends::cpp_bin_float<113, backends::digit_base_2, void, std::int16_t, -16382, 16383>, et_on> cpp_bin_float_quad_et_on;
+   typedef number<backends::cpp_bin_float<113, backends::digit_base_2, void, std::int16_t, -16382, 16383>, et_off> cpp_bin_float_quad_et_off;
 
-   typedef number<backends::cpp_bin_float<113, backends::digit_base_2, void, boost::int16_t, -16382, 16383>, et_off> cpp_bin_float_oct;
+   typedef number<backends::cpp_bin_float<113, backends::digit_base_2, void, std::int16_t, -16382, 16383>, et_off> cpp_bin_float_oct;
 
 
   cpp_bin_float_quad  x("42.");
@@ -179,8 +179,7 @@ As one would expect, the variable can be `const` (but sadly [*not yet `constexpr
 
 // constexpr cpp_bin_float_50 seventh_constexpr (cpp_bin_float_50(1) / 7);
 // std::cout << "seventh_constexpr = " << seventh_constexpr << std::endl; //
-// nor use the macro BOOST_CONSTEXPR_OR_CONST unless it returns `const`
-// BOOST_CONSTEXPR_OR_CONST cpp_bin_float_50 seventh_constexpr(seventh_const);
+// constexpr cpp_bin_float_50 seventh_constexpr(seventh_const);
 
 //]  [/big_seventh_example_constexpr
 

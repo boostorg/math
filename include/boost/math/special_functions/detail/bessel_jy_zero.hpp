@@ -130,9 +130,9 @@
 
         // Select the maximum allowed iterations based on the number
         // of decimal digits in the numeric type T, being at least 12.
-        const boost::uintmax_t iterations_allowed = static_cast<boost::uintmax_t>((std::max)(12, my_digits10 * 2));
+        const std::uintmax_t iterations_allowed = static_cast<std::uintmax_t>((std::max)(12, my_digits10 * 2));
 
-        boost::uintmax_t iterations_used = iterations_allowed;
+        std::uintmax_t iterations_used = iterations_allowed;
 
         // Calculate the root of z as a function of zeta.
         const T z = boost::math::tools::newton_raphson_iterate(
@@ -319,7 +319,7 @@
             }
 
             // Perform several steps of bisection iteration to refine the guess.
-            boost::uintmax_t number_of_iterations(12U);
+            std::uintmax_t number_of_iterations(12U);
 
             // Do the bisection iteration.
             const boost::math::tuple<T, T> guess_pair =
@@ -550,7 +550,7 @@
             }
 
             // Perform several steps of bisection iteration to refine the guess.
-            boost::uintmax_t number_of_iterations(12U);
+            std::uintmax_t number_of_iterations(12U);
 
             // Do the bisection iteration.
             const boost::math::tuple<T, T> guess_pair =

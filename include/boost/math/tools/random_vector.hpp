@@ -8,11 +8,6 @@
 #include <random>
 #include <type_traits>
 #include <cstddef>
-#include <boost/multiprecision/cpp_bin_float.hpp>
-#include <boost/multiprecision/cpp_complex.hpp>
-
-using boost::multiprecision::cpp_bin_float_50;
-using boost::multiprecision::cpp_complex_50;
 
 namespace boost { namespace math {
 
@@ -54,66 +49,6 @@ std::vector<T> generate_random_vector(std::size_t size, std::size_t seed)
 
     // Rescaling by larger than 2 is UB!
     std::uniform_int_distribution<T> dis(std::numeric_limits<T>::lowest()/2, (std::numeric_limits<T>::max)()/2);
-    for (std::size_t i = 0; i < v.size(); ++i)
-    {
-        v[i] = dis(gen);
-    }
-    return v;
-}
-
-template<typename T, typename std::enable_if<boost::is_complex<T>::value, bool>::type = true>
-std::vector<T> generate_random_vector(std::size_t size, std::size_t seed)
-{
-    if (seed == 0)
-    {
-        std::random_device rd;
-        seed = rd();
-    }
-    std::vector<T> v(size);
-
-    std::mt19937 gen(seed);
-    
-    std::normal_distribution<typename T::value_type> dis(0, 1);
-    for (std::size_t i = 0; i < v.size(); ++i)
-    {
-        v[i] = {dis(gen), dis(gen)};
-    }
-    return v;  
-}
-
-template<typename T, typename std::enable_if<std::is_same<T, cpp_complex_50>::value , bool>::type = true>
-std::vector<T> generate_random_vector(std::size_t size, std::size_t seed)
-{
-    if (seed == 0)
-    {
-        std::random_device rd;
-        seed = rd();
-    }
-    std::vector<T> v(size);
-
-    std::mt19937 gen(seed);
-    
-    std::normal_distribution<long double> dis(0, 1);
-    for (std::size_t i = 0; i < v.size(); ++i)
-    {
-        v[i] = {dis(gen), dis(gen)};
-    }
-    return v;
-}
-
-template<typename T, typename std::enable_if<std::is_same<T, cpp_bin_float_50>::value , bool>::type = true>
-std::vector<T> generate_random_vector(std::size_t size, std::size_t seed)
-{
-    if (seed == 0)
-    {
-        std::random_device rd;
-        seed = rd();
-    }
-    std::vector<T> v(size);
-
-    std::mt19937 gen(seed);
-
-    std::normal_distribution<long double> dis(0, 1);
     for (std::size_t i = 0; i < v.size(); ++i)
     {
         v[i] = dis(gen);

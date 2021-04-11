@@ -21,7 +21,7 @@
 #include <boost/multiprecision/mpfr.hpp>
 #include <boost/math/special_functions/relative_difference.hpp>
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(disable:4127)
 #endif
 

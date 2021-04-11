@@ -10,25 +10,19 @@
 #pragma once
 #endif
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(push) // Temporary until lexical cast fixed.
 #pragma warning(disable: 4127 4701)
 #endif
-#ifndef BOOST_MATH_NO_LEXICAL_CAST
-#include <boost/lexical_cast.hpp>
-#endif
-#ifdef BOOST_MSVC
+#include <boost/math/tools/lexical_cast.hpp>
+#ifdef _MSC_VER
 #pragma warning(pop)
 #endif
 #include <cmath>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/tools/cxx03_warn.hpp>
-
-#ifdef BOOST_MATH_HAVE_CONSTEXPR_TABLES
 #include <array>
-#else
-#include <boost/array.hpp>
-#endif
+#include <type_traits>
 
 #if defined(__GNUC__) && defined(BOOST_MATH_USE_FLOAT128)
 //
@@ -53,7 +47,7 @@ inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION float unchecked_factorial<float>(unsi
 #ifdef BOOST_MATH_HAVE_CONSTEXPR_TABLES
    constexpr std::array<float, 35> factorials = { {
 #else
-   static const boost::array<float, 35> factorials = {{
+   static const std::array<float, 35> factorials = {{
 #endif
       1.0F,
       1.0F,
@@ -98,7 +92,7 @@ inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION float unchecked_factorial<float>(unsi
 template <>
 struct max_factorial<float>
 {
-   BOOST_STATIC_CONSTANT(unsigned, value = 34);
+   static constexpr unsigned value = 34;
 };
 
 template <>
@@ -107,7 +101,7 @@ inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION double unchecked_factorial<double>(un
 #ifdef BOOST_MATH_HAVE_CONSTEXPR_TABLES
    constexpr std::array<double, 171> factorials = { {
 #else
-   static const boost::array<double, 171> factorials = {{
+   static const std::array<double, 171> factorials = {{
 #endif
       1.0,
       1.0,
@@ -288,7 +282,7 @@ inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION double unchecked_factorial<double>(un
 template <>
 struct max_factorial<double>
 {
-   BOOST_STATIC_CONSTANT(unsigned, value = 170);
+   static constexpr unsigned value = 170;
 };
 
 template <>
@@ -297,7 +291,7 @@ inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION long double unchecked_factorial<long 
 #ifdef BOOST_MATH_HAVE_CONSTEXPR_TABLES
    constexpr std::array<long double, 171> factorials = { {
 #else
-   static const boost::array<long double, 171> factorials = {{
+   static const std::array<long double, 171> factorials = {{
 #endif
       1L,
       1L,
@@ -478,7 +472,7 @@ inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION long double unchecked_factorial<long 
 template <>
 struct max_factorial<long double>
 {
-   BOOST_STATIC_CONSTANT(unsigned, value = 170);
+   static constexpr unsigned value = 170;
 };
 
 #ifdef BOOST_MATH_USE_FLOAT128
@@ -489,7 +483,7 @@ inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION BOOST_MATH_FLOAT128_TYPE unchecked_fa
 #ifdef BOOST_MATH_HAVE_CONSTEXPR_TABLES
    constexpr std::array<BOOST_MATH_FLOAT128_TYPE, 171> factorials = { {
 #else
-   static const boost::array<BOOST_MATH_FLOAT128_TYPE, 171> factorials = { {
+   static const std::array<BOOST_MATH_FLOAT128_TYPE, 171> factorials = { {
 #endif
       1,
       1,
@@ -670,7 +664,7 @@ inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION BOOST_MATH_FLOAT128_TYPE unchecked_fa
 template <>
 struct max_factorial<BOOST_MATH_FLOAT128_TYPE>
 {
-   BOOST_STATIC_CONSTANT(unsigned, value = 170);
+   static constexpr unsigned value = 170;
 };
 
 #endif
@@ -700,9 +694,9 @@ const typename unchecked_factorial_initializer<T>::init unchecked_factorial_init
 
 
 template <class T, int N>
-inline T unchecked_factorial_imp(unsigned i, const boost::integral_constant<int, N>&)
+inline T unchecked_factorial_imp(unsigned i, const std::integral_constant<int, N>&)
 {
-   BOOST_STATIC_ASSERT(!boost::is_integral<T>::value);
+   static_assert(!std::is_integral<T>::value, "Type T must not be a floating point type");
    // factorial<unsigned int>(n) is not implemented
    // because it would overflow integral type T for too small n
    // to be useful. Use instead a floating-point type,
@@ -712,7 +706,7 @@ inline T unchecked_factorial_imp(unsigned i, const boost::integral_constant<int,
 
    unchecked_factorial_initializer<T>::force_instantiate();
 
-   static const boost::array<T, 101> factorials = {{
+   static const std::array<T, 101> factorials = {{
       T(boost::math::tools::convert_from_string<T>("1")),
       T(boost::math::tools::convert_from_string<T>("1")),
       T(boost::math::tools::convert_from_string<T>("2")),
@@ -820,9 +814,9 @@ inline T unchecked_factorial_imp(unsigned i, const boost::integral_constant<int,
 }
 
 template <class T>
-inline T unchecked_factorial_imp(unsigned i, const boost::integral_constant<int, 0>&)
+inline T unchecked_factorial_imp(unsigned i, const std::integral_constant<int, 0>&)
 {
-   BOOST_STATIC_ASSERT(!boost::is_integral<T>::value);
+   static_assert(!std::is_integral<T>::value, "Type T must not be a floating point type");
    // factorial<unsigned int>(n) is not implemented
    // because it would overflow integral type T for too small n
    // to be useful. Use instead a floating-point type,
@@ -952,27 +946,27 @@ inline T unchecked_factorial_imp(unsigned i, const boost::integral_constant<int,
 }
 
 template <class T>
-inline T unchecked_factorial_imp(unsigned i, const boost::integral_constant<int, std::numeric_limits<float>::digits>&)
+inline T unchecked_factorial_imp(unsigned i, const std::integral_constant<int, std::numeric_limits<float>::digits>&)
 {
    return unchecked_factorial<float>(i);
 }
 
 template <class T>
-inline T unchecked_factorial_imp(unsigned i, const boost::integral_constant<int, std::numeric_limits<double>::digits>&)
+inline T unchecked_factorial_imp(unsigned i, const std::integral_constant<int, std::numeric_limits<double>::digits>&)
 {
    return unchecked_factorial<double>(i);
 }
 
 #if DBL_MANT_DIG != LDBL_MANT_DIG
 template <class T>
-inline T unchecked_factorial_imp(unsigned i, const boost::integral_constant<int, LDBL_MANT_DIG>&)
+inline T unchecked_factorial_imp(unsigned i, const std::integral_constant<int, LDBL_MANT_DIG>&)
 {
    return unchecked_factorial<long double>(i);
 }
 #endif
 #ifdef BOOST_MATH_USE_FLOAT128
 template <class T>
-inline T unchecked_factorial_imp(unsigned i, const boost::integral_constant<int, 113>&)
+inline T unchecked_factorial_imp(unsigned i, const std::integral_constant<int, 113>&)
 {
    return unchecked_factorial<BOOST_MATH_FLOAT128_TYPE>(i);
 }
@@ -994,12 +988,12 @@ inline T unchecked_factorial(unsigned i)
 template <class T>
 struct max_factorial
 {
-   BOOST_STATIC_CONSTANT(unsigned, value = 
+   static constexpr unsigned value = 
       std::numeric_limits<T>::digits == std::numeric_limits<float>::digits ? max_factorial<float>::value 
       : std::numeric_limits<T>::digits == std::numeric_limits<double>::digits ? max_factorial<double>::value 
       : std::numeric_limits<T>::digits == std::numeric_limits<long double>::digits ? max_factorial<long double>::value 
       BOOST_MATH_DETAIL_FLOAT128_MAX_FACTORIAL
-      : 100);
+      : 100;
 };
 
 #undef BOOST_MATH_DETAIL_FLOAT128_MAX_FACTORIAL
@@ -1015,7 +1009,7 @@ inline T unchecked_factorial(unsigned i BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE
 template <class T>
 struct max_factorial
 {
-   BOOST_STATIC_CONSTANT(unsigned, value = 0);
+   static constexpr unsigned value = 0;
 };
 
 #endif

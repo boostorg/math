@@ -71,7 +71,7 @@ struct toms748tester
       case 7:
          return (1 + (1 - ip) * (1 - ip)) * x - (1 - ip * x) * (1 - ip * x);
       case 8:
-         return x * x - pow(1 - x, a);
+         return x * x - pow(1 - x, ip);
       case 9:
          return (1 + (1 - ip) * (1 - ip) * (1 - ip) * (1 - ip)) * x - (1 - ip * x) * (1 - ip * x) * (1 - ip * x) * (1 - ip * x);
       case 10:
@@ -113,13 +113,13 @@ private:
 template <class T>
 unsigned toms748tester<T>::invocations = 0;
 
-boost::uintmax_t total = 0;
-boost::uintmax_t invocations = 0;
+std::uintmax_t total = 0;
+std::uintmax_t invocations = 0;
 
 template <class T>
 void run_test(T a, T b, int id)
 {
-   boost::uintmax_t c = 1000;
+   std::uintmax_t c = 1000;
    std::pair<double, double> r = toms748_solve(toms748tester<double>(id), 
       a, 
       b, 
@@ -135,7 +135,7 @@ void run_test(T a, T b, int id)
 template <class T>
 void run_test(T a, T b, int id, int p)
 {
-   boost::uintmax_t c = 1000;
+   std::uintmax_t c = 1000;
    std::pair<double, double> r = toms748_solve(toms748tester<double>(id, p), 
       a, 
       b, 
@@ -151,7 +151,7 @@ void run_test(T a, T b, int id, int p)
 template <class T>
 void run_test(T a, T b, int id, T p1, T p2)
 {
-   boost::uintmax_t c = 1000;
+   std::uintmax_t c = 1000;
    std::pair<double, double> r = toms748_solve(toms748tester<double>(id, p1, p2), 
       a, 
       b, 
@@ -257,7 +257,7 @@ BOOST_AUTO_TEST_CASE( test_main )
 
    for(int n = 4; n <= 12; n += 2)
    {
-      boost::uintmax_t c = 1000;
+      std::uintmax_t c = 1000;
       std::pair<double, double> r = bracket_and_solve_root(toms748tester<double>(4, 0.2, double(n)), 
          2.0, 
          2.0,

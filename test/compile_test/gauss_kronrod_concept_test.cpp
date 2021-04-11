@@ -3,9 +3,12 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
+
+// Test requires the use of lexical cast in tools/big_constant.hpp
+#ifndef BOOST_MATH_STANDALONE
+
 #include <boost/math/concepts/std_real_concept.hpp>
 #include <boost/math/quadrature/gauss_kronrod.hpp>
-
 
 void compile_and_link_test()
 {
@@ -15,3 +18,5 @@ void compile_and_link_test()
     boost::math::quadrature::gauss_kronrod<boost::math::concepts::std_real_concept, 7> integrator;
     integrator.integrate(f, a, b);
 }
+
+#endif

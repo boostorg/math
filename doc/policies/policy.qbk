@@ -815,19 +815,19 @@ values.
 Specifies the internal precision to use in binary digits (uses zero
 to represent whatever the default precision is).  Will be an instance
 of `boost::math::policies::digits2<N>` which in turn inherits from 
-`boost::boost::integral_constant<int, N>`.
+`boost::std::integral_constant<int, N>`.
 
    policy<...>::promote_float_type
    
 Specifies whether or not to promote `float` arguments to `double` precision
 internally.  Will be an instance of `boost::math::policies::promote_float<B>`
-which in turn inherits from `boost::integral_constant<bool, B>`.
+which in turn inherits from `std::integral_constant<bool, B>`.
 
    policy<...>::promote_double_type
    
 Specifies whether or not to promote `double` arguments to `long double` precision
 internally.  Will be an instance of `boost::math::policies::promote_float<B>`
-which in turn inherits from `boost::integral_constant<bool, B>`.
+which in turn inherits from `std::integral_constant<bool, B>`.
 
    policy<...>::discrete_quantile_type
    
@@ -840,7 +840,7 @@ the `discrete_quantile_policy_type` enumerated type.
 Specifies whether mathematically-undefined properties are
 asserted as compile-time errors, or treated as runtime errors
 instead.  Will be an instance of `boost::math::policies::assert_undefined<B>`
-which in turn inherits from `boost::integral_constant<bool, B>`.
+which in turn inherits from `std::integral_constant<bool, B>`.
 
 
    template <...argument list...>

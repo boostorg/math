@@ -157,7 +157,7 @@ Probability of getting > 10 right (to pass) is 0.000285239
 ]
 And we can check that these two, <= 10 and > 10,  add up to unity.
 */
-BOOST_ASSERT((cdf(quiz, 10) + cdf(complement(quiz, 10))) == 1.);
+BOOST_MATH_ASSERT((cdf(quiz, 10) + cdf(complement(quiz, 10))) == 1.);
 /*`
 If we want a < rather than a <= test, because the CDF is inclusive, we must subtract one from the score.
 */
@@ -179,7 +179,7 @@ outcome counted twice!
     << cdf(complement(quiz, pass_score-1))
     << ", only 1 in " << 1/cdf(complement(quiz, pass_score-1)) << endl;
 
-  BOOST_ASSERT((cdf(quiz, pass_score -1) + cdf(complement(quiz, pass_score-1))) == 1);
+  BOOST_MATH_ASSERT((cdf(quiz, pass_score -1) + cdf(complement(quiz, pass_score-1))) == 1);
 
 /*`
 [pre

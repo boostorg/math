@@ -6,7 +6,7 @@
 #define BOOST_MATH_MAX_SERIES_ITERATION_POLICY 10000000
 
 #include "mp_t.hpp"
-#include <boost/math/special_functions/hypergeometric_1f1.hpp>
+#include <boost/math/special_functions/hypergeometric_1F1.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/lexical_cast.hpp>
 #include <fstream>
@@ -22,7 +22,7 @@ struct hypergeometric_1f1_gen
 {
    mp_t operator()(mp_t a1, mp_t a2, mp_t z)
    {
-      int scaling = 0;
+      long long scaling = 0;
       std::cout << a1 << " " << a2 << " " << z << std::endl;
       mp_t result = boost::math::detail::hypergeometric_1F1_generic_series(a1, a2, z, boost::math::policies::policy<>(), scaling, "");
       std::cout << a1 << " " << a2 << " " << z << " " << result << std::endl;
@@ -34,7 +34,7 @@ struct hypergeometric_1f1_gen_2
 {
    mp_t operator()(mp_t a1, mp_t a2, mp_t z)
    {
-      int scaling = 0;
+      long long scaling = 0;
       mp_t result = boost::math::detail::hypergeometric_1F1_generic_series(a1, a2, z, boost::math::policies::policy<>(), scaling, "");
       result = ldexp(result, scaling);
       std::cout << a1 << " " << a2 << " " << z << " " << result << std::endl;

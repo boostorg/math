@@ -52,6 +52,9 @@ int main()
     cout << "diff = " << diff 
       << ", variance = " << variance << ", ratio = " << diff/variance
       << ", alpha = " << alpha << ", beta = " << beta << endl;
+
+    /* inverse_chi_square_df_estimator is not in the code base anymore?
+
     using boost::math::detail::inverse_chi_square_df_estimator;
     using boost::math::policies::default_policy;
     inverse_chi_square_df_estimator<> a_df(alpha, beta, variance, diff);
@@ -62,16 +65,15 @@ int main()
       double est_df = a_df(1);
       cout << df << "    " << a_df(df) << endl;
     }
+    */
 
     //template <class F, class T, class Tol, class Policy>std::pair<T, T> 
-    // bracket_and_solve_root(F f, const T& guess, T factor, bool rising, Tol tol, boost::uintmax_t& max_iter, const Policy& pol)
+    // bracket_and_solve_root(F f, const T& guess, T factor, bool rising, Tol tol, std::uintmax_t& max_iter, const Policy& pol)
 
 
+    // TODO: Not implemented
     //double df = inverse_chi_squared_distribution<>::find_degrees_of_freedom(diff, alpha, beta, variance, 0);
-  
-    double df = inverse_chi_squared::find_degrees_of_freedom(diff, alpha, beta, variance, 100);
-
-    cout << df << endl;
+    //cout << df << endl;
   }
   catch(const std::exception& e)
   { // Always useful to include try & catch blocks because default policies 

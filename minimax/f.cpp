@@ -152,7 +152,7 @@ mp_type f(const mp_type& x, int variant)
          // near the root.
          //
          static boost::math::tools::eps_tolerance<mp_type> tol(1000);
-         static boost::uintmax_t max_iter = 1000;
+         static std::uintmax_t max_iter = 1000;
          mp_type (*pdg)(mp_type) = &boost::math::digamma;
          static const mp_type root = boost::math::tools::bracket_and_solve_root(pdg, mp_type(1.4), mp_type(1.5), true, tol, max_iter).first;
 

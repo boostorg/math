@@ -87,6 +87,7 @@ void test_ooura_sin_nodes_and_weights()
 {
     using boost::math::quadrature::detail::ooura_sin_node_and_weight;
     using boost::math::quadrature::detail::ooura_eta;
+    using std::exp;
     std::cout << "Testing nodes and weights on type " << boost::typeindex::type_id<Real>().pretty_name()  << "\n";
     {
         long n = 1;

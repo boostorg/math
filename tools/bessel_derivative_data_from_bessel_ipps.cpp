@@ -204,7 +204,7 @@ int main(int argc, char*argv [])
          letter = "y";
       }
       else
-         BOOST_ASSERT(0);
+         BOOST_MATH_ASSERT(0);
    }
 
    ::processFiles(functype);

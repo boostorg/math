@@ -10,27 +10,27 @@
 #include <boost/lexical_cast.hpp>
 
 template <class T>
-std::vector<T> const& fibonacci_numbers(const boost::integral_constant<int, 16>&)
+std::vector<T> const& fibonacci_numbers(const std::integral_constant<int, 16>&)
 {
-   static const boost::uint16_t numbers[] = {
-      static_cast<boost::uint16_t>(21u),
-      static_cast<boost::uint16_t>(34u),
-      static_cast<boost::uint16_t>(55u),
-      static_cast<boost::uint16_t>(89u),
-      static_cast<boost::uint16_t>(144u),
-      static_cast<boost::uint16_t>(233u),
-      static_cast<boost::uint16_t>(377u),
-      static_cast<boost::uint16_t>(610u),
-      static_cast<boost::uint16_t>(987u),
-      static_cast<boost::uint16_t>(1597u),
-      static_cast<boost::uint16_t>(2584u),
-      static_cast<boost::uint16_t>(4181u),
-      static_cast<boost::uint16_t>(6765u),
-      static_cast<boost::uint16_t>(17711u),
-      static_cast<boost::uint16_t>(10946u),
-      static_cast<boost::uint16_t>(17711u),
-      static_cast<boost::uint16_t>(28657u),
-      static_cast<boost::uint16_t>(46368u)
+   static const std::uint16_t numbers[] = {
+      static_cast<std::uint16_t>(21u),
+      static_cast<std::uint16_t>(34u),
+      static_cast<std::uint16_t>(55u),
+      static_cast<std::uint16_t>(89u),
+      static_cast<std::uint16_t>(144u),
+      static_cast<std::uint16_t>(233u),
+      static_cast<std::uint16_t>(377u),
+      static_cast<std::uint16_t>(610u),
+      static_cast<std::uint16_t>(987u),
+      static_cast<std::uint16_t>(1597u),
+      static_cast<std::uint16_t>(2584u),
+      static_cast<std::uint16_t>(4181u),
+      static_cast<std::uint16_t>(6765u),
+      static_cast<std::uint16_t>(17711u),
+      static_cast<std::uint16_t>(10946u),
+      static_cast<std::uint16_t>(17711u),
+      static_cast<std::uint16_t>(28657u),
+      static_cast<std::uint16_t>(46368u)
    };
    static const std::vector<T> data(numbers, numbers + sizeof(numbers) / sizeof(numbers[0]));
 
@@ -38,9 +38,9 @@ std::vector<T> const& fibonacci_numbers(const boost::integral_constant<int, 16>&
 }
 
 template <class T>
-std::vector<T> const& fibonacci_numbers(const boost::integral_constant<int, 32>&)
+std::vector<T> const& fibonacci_numbers(const std::integral_constant<int, 32>&)
 {
-   static const boost::uint32_t numbers[] = {
+   static const std::uint32_t numbers[] = {
       21u,
       34u,
       55u,
@@ -88,9 +88,9 @@ std::vector<T> const& fibonacci_numbers(const boost::integral_constant<int, 32>&
 }
 
 template <class T>
-std::vector<T> const& fibonacci_numbers(const boost::integral_constant<int, 64>&)
+std::vector<T> const& fibonacci_numbers(const std::integral_constant<int, 64>&)
 {
-   static const boost::uint64_t numbers[] = {
+   static const std::uint64_t numbers[] = {
       21uLL,
       34uLL,
       55uLL,
@@ -184,7 +184,7 @@ std::vector<T> const& fibonacci_numbers(const boost::integral_constant<int, 64>&
 }
 
 template <class T>
-std::vector<T> const& fibonacci_numbers(const boost::integral_constant<int, 0>&)
+std::vector<T> const& fibonacci_numbers(const std::integral_constant<int, 0>&)
 {
    static const T numbers[] = {
       boost::lexical_cast<T>("21"),
@@ -1192,7 +1192,7 @@ std::vector<T> const& fibonacci_numbers(const boost::integral_constant<int, 0>&)
 template <class T>
 std::vector<std::pair<T, T> > const& fibonacci_numbers_permution_1()
 {
-   typedef boost::integral_constant<int,
+   typedef std::integral_constant<int,
       ((std::numeric_limits<T>::digits <= 16) ? 16 : ((std::numeric_limits<T>::digits <= 32) ? 32 : (std::numeric_limits<T>::digits <= 64) ? 64 : 0))
    > tag_type;
 
@@ -1210,7 +1210,7 @@ std::vector<std::pair<T, T> > const& fibonacci_numbers_permution_1()
 template <class T>
 std::vector<std::pair<T, T> > const& fibonacci_numbers_permution_2()
 {
-   typedef boost::integral_constant<int,
+   typedef std::integral_constant<int,
       ((std::numeric_limits<T>::digits <= 16) ? 16 : ((std::numeric_limits<T>::digits <= 32) ? 32 : (std::numeric_limits<T>::digits <= 64) ? 64 : 0))
    > tag_type;
 

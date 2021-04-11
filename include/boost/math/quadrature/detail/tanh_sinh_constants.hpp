@@ -7,8 +7,10 @@
 #ifndef BOOST_MATH_QUADRATURE_DETAIL_TANH_SINH_CONSTANTS_HPP
 #define BOOST_MATH_QUADRATURE_DETAIL_TANH_SINH_CONSTANTS_HPP
 
-#include <boost/type_traits/is_constructible.hpp>
-#include <boost/lexical_cast.hpp>
+#include <cmath>
+#include <cstddef>
+#include <vector>
+#include <type_traits>
 
 namespace boost {
    namespace math {
@@ -59,11 +61,11 @@ namespace boost {
             public:
                tanh_sinh_detail_constants(std::size_t max_refinements, std::size_t initial_commit = 4) : m_max_refinements(max_refinements), m_committed_refinements(initial_commit)
                {
-                  typedef boost::integral_constant<int, initializer_selector> tag_type;
+                  typedef std::integral_constant<int, initializer_selector> tag_type;
                   init(tag_type());
                }
 
-               void init(const boost::integral_constant<int, 0>&)
+               void init(const std::integral_constant<int, 0>&)
                {
                   using std::tanh;
                   using std::sinh;
@@ -121,7 +123,7 @@ namespace boost {
                      m_weights[row].swap(temp);
                   }
                }
-               void init(const boost::integral_constant<int, 1>&)
+               void init(const std::integral_constant<int, 1>&)
                {
                   m_inital_row_length = 4;
                   m_abscissas.reserve(m_max_refinements + 1);
@@ -190,21 +192,21 @@ namespace boost {
                {
                   if (m_committed_refinements < n)
                      extend_refinements();
-                  BOOST_ASSERT(m_committed_refinements >= n);
+                  BOOST_MATH_ASSERT(m_committed_refinements >= n);
                   return m_abscissas[n];
                }
                const std::vector<Real>& get_weight_row(std::size_t n)const
                {
                   if (m_committed_refinements < n)
                      extend_refinements();
-                  BOOST_ASSERT(m_committed_refinements >= n);
+                  BOOST_MATH_ASSERT(m_committed_refinements >= n);
                   return m_weights[n];
                }
                std::size_t get_first_complement_index(std::size_t n)const
                {
                   if (m_committed_refinements < n)
                      extend_refinements();
-                  BOOST_ASSERT(m_committed_refinements >= n);
+                  BOOST_MATH_ASSERT(m_committed_refinements >= n);
                   return m_first_complements[n];
                }
 

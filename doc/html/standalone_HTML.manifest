@@ -157,6 +157,7 @@ math_toolkit/bivariate_statistics.html
 math_toolkit/signal_statistics.html
 math_toolkit/anderson_darling.html
 math_toolkit/t_test.html
+math_toolkit/z_test.html
 math_toolkit/runs_test.html
 math_toolkit/ljung_box.html
 math_toolkit/linear_regression.html

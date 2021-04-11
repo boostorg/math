@@ -55,12 +55,12 @@ namespace boost
         return true;
       }
       template <class RealType, class Policy>
-      inline bool check_dist(const char* function, const RealType& p, RealType* result, const Policy& /* pol */, const boost::true_type&)
+      inline bool check_dist(const char* function, const RealType& p, RealType* result, const Policy& /* pol */, const std::true_type&)
       {
         return check_success_fraction(function, p, result, Policy());
       }
       template <class RealType, class Policy>
-      inline bool check_dist(const char* , const RealType& , RealType* , const Policy& /* pol */, const boost::false_type&)
+      inline bool check_dist(const char* , const RealType& , RealType* , const Policy& /* pol */, const std::false_type&)
       {
          return true;
       }

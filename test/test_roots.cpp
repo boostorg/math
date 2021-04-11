@@ -384,7 +384,7 @@ void test_inverses(const T& data)
          value_type inv = inverse_ibeta_halley(Real(data[i][0]), Real(data[i][1]), Real(data[i][5]));
          BOOST_CHECK_CLOSE_EX(Real(data[i][2]), inv, precision, i);
          inv = inverse_ibeta_halley_neg(Real(data[i][0]), Real(data[i][1]), Real(data[i][5]));
-         BOOST_ASSERT(boost::math::isfinite(inv));
+         BOOST_MATH_ASSERT(boost::math::isfinite(inv));
          BOOST_CHECK_CLOSE_EX(Real(data[i][2]), inv, precision, i);
          inv = inverse_ibeta_schroder(Real(data[i][0]), Real(data[i][1]), Real(data[i][5]));
          BOOST_CHECK_CLOSE_EX(Real(data[i][2]), inv, precision, i);

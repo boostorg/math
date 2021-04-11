@@ -65,7 +65,7 @@ using boost::math::quadrature::exp_sinh;
 #  define TEST10
 #endif
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning (disable:4127)
 #endif
 

@@ -16,7 +16,7 @@
 //#include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/concepts/real_concept.hpp>
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(disable:4127)
 #endif
 
@@ -62,7 +62,7 @@ void test_spots(T, const char* name)
       T prev;
       T first = boost::math::cyl_neumann(v - 1, x);
       T second = boost::math::cyl_neumann(v, x);
-      T sixth = boost::math::tools::apply_recurrence_relation_forward(coef, 6, first, second, (int*)0, &prev);
+      T sixth = boost::math::tools::apply_recurrence_relation_forward(coef, 6, first, second, (long long*)0, &prev);
       T expected1 = boost::math::cyl_neumann(v + 6, x);
       T expected2 = boost::math::cyl_neumann(v + 5, x);
       BOOST_CHECK_CLOSE_FRACTION(sixth, expected1, tol);
@@ -86,7 +86,7 @@ void test_spots(T, const char* name)
          // convergence is complete before we reach the origin.
          //
          v = 102.75;
-         boost::uintmax_t max_iter = 200;
+         std::uintmax_t max_iter = 200;
          T ratio = boost::math::tools::function_ratio_from_forwards_recurrence(bessel_jy_recurrence<T>(v, x), boost::math::tools::epsilon<T>(), max_iter);
          first = boost::math::cyl_neumann(v, x);
          second = boost::math::cyl_neumann(v + 1, x);
@@ -116,7 +116,7 @@ void test_spots(T, const char* name)
       T prev;
       T first = boost::math::cyl_bessel_j(v + 1, x);
       T second = boost::math::cyl_bessel_j(v, x);
-      T sixth = boost::math::tools::apply_recurrence_relation_backward(coef, 6, first, second, (int*)0, &prev);
+      T sixth = boost::math::tools::apply_recurrence_relation_backward(coef, 6, first, second, (long long*)0, &prev);
       T expected1 = boost::math::cyl_bessel_j(v - 6, x);
       T expected2 = boost::math::cyl_bessel_j(v - 5, x);
       BOOST_CHECK_CLOSE_FRACTION(sixth, expected1, tol);
@@ -131,7 +131,7 @@ void test_spots(T, const char* name)
          ++it;
       }
 
-      boost::uintmax_t max_iter = 200;
+      std::uintmax_t max_iter = 200;
       T ratio = boost::math::tools::function_ratio_from_backwards_recurrence(bessel_jy_recurrence<T>(v, x), boost::math::tools::epsilon<T>(), max_iter);
       first = boost::math::cyl_bessel_j(v, x);
       second = boost::math::cyl_bessel_j(v - 1, x);

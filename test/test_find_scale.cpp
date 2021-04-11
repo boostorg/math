@@ -97,7 +97,7 @@ void test_spots(RealType)
   // because they lack the scale and location attributes.
   // BOOST_MATH_CHECK_THROW(find_scale<pareto>(0., 0.5, 0.), std::domain_error);
   // correctly fails to compile in find_scale() at
-  // BOOST_STATIC_ASSERT(::boost::math::tools::is_scaled_distribution<Dist>::value); 
+  // static_assert(::boost::math::tools::is_scaled_distribution<Dist>::value); 
 
   // Check doesn't throw when an ignore_error for domain_error policy is used.
   using boost::math::policies::policy;

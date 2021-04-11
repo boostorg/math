@@ -15,9 +15,9 @@
 #include <boost/math/bindings/mpreal.hpp>
 #include <boost/math/concepts/real_type_concept.hpp>
 #include "compile_test/instantiate.hpp"
-#include <boost/static_assert.hpp>
+#include <boost/math/tools/assert.hpp>
 
-//BOOST_STATIC_ASSERT((boost::is_same<mpfr::mpreal, boost::math::tools::promote_args<mpfr::mpreal>::type >::value));
+//static_assert((boost::is_same<mpfr::mpreal, boost::math::tools::promote_args<mpfr::mpreal>::type >::value));
 
 void foo()
 {

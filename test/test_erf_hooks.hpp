@@ -47,7 +47,7 @@ inline float erf(float a)
 { return erff(a); }
 inline long double erf(long double a)
 {
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
    return erf((double)a); 
 #else
    return erfl(a); 
@@ -62,7 +62,7 @@ inline float erfc(float a)
 { return erfcf(a); }
 inline long double erfc(long double a)
 {
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
    return erfc((double)a); 
 #else
    return erfcl(a); 

@@ -65,6 +65,10 @@ Quaternion and Octonians are class templates similar to std::complex.
 
 The full documentation is available on [boost.org](http://www.boost.org/doc/libs/release/libs/math).
 
+### Standalone Mode (Beta)
+
+Defining BOOST_MATH_STANDALONE allows Boost.Math to be used without any Boost dependencies. Some functionality is reduced in this mode. A static_assert message will alert you if a particular feature has been disabled by standalone mode.
+
 ### Build Status
 
 |                  |  Master  |   Develop   |
@@ -111,6 +115,7 @@ The default action for a PR or commit to a PR is for CI to run the full compleme
     * [linux] to test using GCC Versions 5-10 and Clang Versions 5-10 on Ubuntu LTS versions 16.04-20.04.
     * [apple] to test Apple Clang on the latest version of MacOS.
     * [windows] to test MSVC-14.0, MSVC-14.2 and mingw on the latest version of Windows.
+    * [standalone] to run standalone mode commpile tests
      
 ### Building documentation ###
 

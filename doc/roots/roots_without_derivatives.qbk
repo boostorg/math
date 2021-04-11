@@ -16,7 +16,7 @@
          T min,
          T max,
          Tol tol,
-         boost::uintmax_t& max_iter);
+         std::uintmax_t& max_iter);
 
    template <class F, class T, class Tol>
    std::pair<T, T>
@@ -33,7 +33,7 @@
          T min,
          T max,
          Tol tol,
-         boost::uintmax_t& max_iter,
+         std::uintmax_t& max_iter,
          const ``__Policy``&);
 
    // Bracket and Solve Root
@@ -45,7 +45,7 @@
          const T& factor,
          bool rising,
          Tol tol,
-         boost::uintmax_t& max_iter);
+         std::uintmax_t& max_iter);
 
    template <class F, class T, class Tol, class ``__Policy``>
    std::pair<T, T>
@@ -55,7 +55,7 @@
          const T& factor,
          bool rising,
          Tol tol,
-         boost::uintmax_t& max_iter,
+         std::uintmax_t& max_iter,
          const ``__Policy``&);
 
   // TOMS 748 algorithm
@@ -66,7 +66,7 @@
          const T& a,
          const T& b,
          Tol tol,
-         boost::uintmax_t& max_iter);
+         std::uintmax_t& max_iter);
 
    template <class F, class T, class Tol, class ``__Policy``>
    std::pair<T, T>
@@ -75,7 +75,7 @@
          const T& a,
          const T& b,
          Tol tol,
-         boost::uintmax_t& max_iter,
+         std::uintmax_t& max_iter,
          const ``__Policy``&);
 
    template <class F, class T, class Tol>
@@ -87,7 +87,7 @@
          const T& fa,
          const T& fb,
          Tol tol,
-         boost::uintmax_t& max_iter);
+         std::uintmax_t& max_iter);
 
    template <class F, class T, class Tol, class ``__Policy``>
    std::pair<T, T>
@@ -98,7 +98,7 @@
          const T& fa,
          const T& fb,
          Tol tol,
-         boost::uintmax_t& max_iter,
+         std::uintmax_t& max_iter,
          const ``__Policy``&);
 
    // Termination conditions:
@@ -163,7 +163,7 @@ only rarely, but may be useful in some specific circumstances.
          T min,
          T max,
          Tol tol,
-         boost::uintmax_t& max_iter);
+         std::uintmax_t& max_iter);
 
    template <class F, class T, class Tol, class ``__Policy``>
    std::pair<T, T>
@@ -172,7 +172,7 @@ only rarely, but may be useful in some specific circumstances.
          T min,
          T max,
          Tol tol,
-         boost::uintmax_t& max_iter,
+         std::uintmax_t& max_iter,
          const ``__Policy``&);
 
 These functions locate the root using __bisection_wikipedia.
@@ -227,7 +227,7 @@ because the termination condition ['tol] was satisfied.
          const T& factor,
          bool rising,
          Tol tol,
-         boost::uintmax_t& max_iter);
+         std::uintmax_t& max_iter);
 
    template <class F, class T, class Tol, class ``__Policy``>
    std::pair<T, T>
@@ -237,7 +237,7 @@ because the termination condition ['tol] was satisfied.
          const T& factor,
          bool rising,
          Tol tol,
-         boost::uintmax_t& max_iter,
+         std::uintmax_t& max_iter,
          const ``__Policy``&);
 
 `bracket_and_solve_root` is a convenience function that calls __root_finding_TOMS748 internally
@@ -315,7 +315,7 @@ because the termination condition ['tol] was satisfied.
          const T& a,
          const T& b,
          Tol tol,
-         boost::uintmax_t& max_iter);
+         std::uintmax_t& max_iter);
 
    template <class F, class T, class Tol, class ``__Policy``>
    std::pair<T, T>
@@ -324,7 +324,7 @@ because the termination condition ['tol] was satisfied.
          const T& a,
          const T& b,
          Tol tol,
-         boost::uintmax_t& max_iter,
+         std::uintmax_t& max_iter,
          const ``__Policy``&);
 
    template <class F, class T, class Tol>
@@ -336,7 +336,7 @@ because the termination condition ['tol] was satisfied.
          const T& fa,
          const T& fb,
          Tol tol,
-         boost::uintmax_t& max_iter);
+         std::uintmax_t& max_iter);
 
    template <class F, class T, class Tol, class ``__Policy``>
    std::pair<T, T>
@@ -347,7 +347,7 @@ because the termination condition ['tol] was satisfied.
          const T& fa,
          const T& fb,
          Tol tol,
-         boost::uintmax_t& max_iter,
+         std::uintmax_t& max_iter,
          const ``__Policy``&);
 
 These functions implement TOMS Algorithm 748: it uses a mixture of
@@ -482,7 +482,7 @@ __TOMS748 is described in detail in:
 
 ['Algorithm 748: Enclosing Zeros of Continuous Functions,
 G. E. Alefeld, F. A. Potra and Yixun Shi,
-ACM Transactions on Mathematica1 Software, Vol. 21. No. 3. September 1995.
+ACM Transactions on Mathematical Software, Vol. 21. No. 3. September 1995.
 Pages 327-344.]
 
 The implementation here is a faithful translation of this paper into C++.

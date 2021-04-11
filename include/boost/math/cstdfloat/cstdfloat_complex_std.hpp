@@ -105,12 +105,12 @@
       value_type& real() { return re; }
       value_type& imag() { return im; }
       #else
-      BOOST_CONSTEXPR complex(const value_type& r = value_type(),
+      constexpr complex(const value_type& r = value_type(),
                               const value_type& i = value_type()) : re(r),
                                                                     im(i) { }
 
       template<typename X>
-      explicit BOOST_CONSTEXPR complex(const complex<X>& x) : re(x.real()),
+      explicit constexpr complex(const complex<X>& x) : re(x.real()),
                                                      im(x.imag()) { }
 
       value_type real() const { return re; }

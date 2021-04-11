@@ -35,24 +35,24 @@
 
 template <class Dist>
 struct is_discrete_distribution
-   : public boost::false_type{}; // Default is continuous distribution.
+   : public std::false_type{}; // Default is continuous distribution.
 
 // Some discrete distributions.
 template<class T, class P>
 struct is_discrete_distribution<boost::math::bernoulli_distribution<T,P> >
-   : public boost::true_type{};
+   : public std::true_type{};
 template<class T, class P>
 struct is_discrete_distribution<boost::math::binomial_distribution<T,P> >
-   : public boost::true_type{};
+   : public std::true_type{};
 template<class T, class P>
 struct is_discrete_distribution<boost::math::negative_binomial_distribution<T,P> >
-   : public boost::true_type{};
+   : public std::true_type{};
 template<class T, class P>
 struct is_discrete_distribution<boost::math::poisson_distribution<T,P> >
-   : public boost::true_type{};
+   : public std::true_type{};
 template<class T, class P>
 struct is_discrete_distribution<boost::math::hypergeometric_distribution<T,P> >
-   : public boost::true_type{};
+   : public std::true_type{};
 
 
 template <class Dist>
@@ -118,7 +118,7 @@ public:
       //
       if(a <= -(std::numeric_limits<double>::max)())
       {
-         boost::uintmax_t max_iter = 500;
+         std::uintmax_t max_iter = 500;
          double guess = mod;
          if((pdf(d, 0) > min_y) || (guess == 0))
             guess = -1e-3;
@@ -132,7 +132,7 @@ public:
       }
       if(b >= (std::numeric_limits<double>::max)())
       {
-         boost::uintmax_t max_iter = 500;
+         std::uintmax_t max_iter = 500;
          double guess = mod;
          if(a <= 0)
             if((pdf(d, 0) > min_y) || (guess == 0))
