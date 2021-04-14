@@ -5,6 +5,7 @@
 
 #ifndef BOOST_MATH_INTERPOLATORS_DETAIL_CARDINAL_TRIGONOMETRIC_HPP
 #define BOOST_MATH_INTERPOLATORS_DETAIL_CARDINAL_TRIGONOMETRIC_HPP
+#include <cstddef>
 #include <cmath>
 #include <stdexcept>
 #include <fftw3.h>
