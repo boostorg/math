@@ -515,7 +515,11 @@ inline bernoulli_numbers_cache<T, Policy>& get_bernoulli_numbers_cache_imp(const
    // make our cache thread local, that way we can have different threads operating
    // at differing precisions:
    //
-   static BOOST_MATH_THREAD_LOCAL bernoulli_numbers_cache<T, Policy> data;
+   static 
+#ifndef BOOST_MATH_NO_THREAD_LOCAL_WITH_NON_TRIVIAL_TYPES
+      BOOST_MATH_THREAD_LOCAL 
+#endif
+      bernoulli_numbers_cache<T, Policy> data;
    return data;
 }
 
