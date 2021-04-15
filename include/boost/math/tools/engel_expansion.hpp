@@ -6,10 +6,11 @@
 #ifndef BOOST_MATH_TOOLS_ENGEL_EXPANSION_HPP
 #define BOOST_MATH_TOOLS_ENGEL_EXPANSION_HPP
 
+#include <cmath>
+#include <cstdint>
 #include <vector>
 #include <ostream>
 #include <iomanip>
-#include <cmath>
 #include <limits>
 #include <stdexcept>
 

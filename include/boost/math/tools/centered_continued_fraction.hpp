@@ -6,13 +6,16 @@
 #ifndef BOOST_MATH_TOOLS_CENTERED_CONTINUED_FRACTION_HPP
 #define BOOST_MATH_TOOLS_CENTERED_CONTINUED_FRACTION_HPP
 
+#include <cmath>
+#include <cstdint>
 #include <vector>
 #include <ostream>
 #include <iomanip>
-#include <cmath>
 #include <limits>
 #include <stdexcept>
 #include <sstream>
+#include <array>
+#include <type_traits>
 
 #ifndef BOOST_MATH_STANDALONE
 #include <boost/core/demangle.hpp>

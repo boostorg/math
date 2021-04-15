@@ -56,4 +56,4 @@ std::vector<T> generate_random_vector(std::size_t size, std::size_t seed)
     return v;
 }
 
-}} // Namesapces
+}} // Namespaces
