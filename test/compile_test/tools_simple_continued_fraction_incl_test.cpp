@@ -15,14 +15,14 @@
 
 void compile_and_link_test()
 {
-    boost::math::tools::simple_continued_fraction f_test(f);
+    boost::math::tools::simple_continued_fraction<float> f_test(f);
     check_result<float>(f_test.khinchin_geometric_mean());
 
-    boost::math::tools::simple_continued_fraction test(0.0);
+    boost::math::tools::simple_continued_fraction<double> test(0.0);
     check_result<double>(test.khinchin_geometric_mean());
 
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-    boost::math::tools::simple_continued_fraction ld_test(static_cast<long double>(0));
+    boost::math::tools::simple_continued_fraction<long double> ld_test(l);
     check_result<long double>(ld_test.khinchin_geometric_mean());
 #endif
 }

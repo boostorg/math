@@ -6,6 +6,7 @@
 #ifndef BOOST_MATH_TOOLS_SIMPLE_CONTINUED_FRACTION_HPP
 #define BOOST_MATH_TOOLS_SIMPLE_CONTINUED_FRACTION_HPP
 
+#include <array>
 #include <vector>
 #include <ostream>
 #include <iomanip>
