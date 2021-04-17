@@ -15,14 +15,14 @@
 
 void compile_and_link_test()
 {
-    boost::math::tools::engel_expansion<float> f_test(0.0f);
+    boost::math::tools::engel_expansion<float> f_test(1.0f);
     check_result<float>(f_test.digits().front());
 
-    boost::math::tools::engel_expansion<double> d_test(0.0);
+    boost::math::tools::engel_expansion<double> d_test(1.0);
     check_result<double>(d_test.digits().front());
 
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-    boost::math::tools::engel_expansion<long double> ld_test(0.0l);
+    boost::math::tools::engel_expansion<long double> ld_test(1.0l);
     check_result<long double>(ld_test.digits().front());
 #endif
 }
