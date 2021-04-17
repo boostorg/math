@@ -143,39 +143,6 @@ inline T tangent_scale_factor()
 {
    return tools::min_value<T>() * 16;
 }
-//
-// Initializer: ensure all our constants are initialized prior to the first call of main:
-//
-template <class T, class Policy>
-struct bernoulli_initializer
-{
-   struct init
-   {
-      init()
-      {
-         //
-         // We call twice, once to initialize our static table, and once to
-         // initialize our dymanic table:
-         //
-         boost::math::bernoulli_b2n<T>(2, Policy());
-
-         try{
-            boost::math::bernoulli_b2n<T>(max_bernoulli_b2n<T>::value + 1, Policy());
-         } catch(const std::overflow_error&){}
-
-         boost::math::tangent_t2n<T>(2, Policy());
-      }
-      void force_instantiate()const{}
-   };
-   static const init initializer;
-   static void force_instantiate()
-   {
-      initializer.force_instantiate();
-   }
-};
-
-template <class T, class Policy>
-const typename bernoulli_initializer<T, Policy>::init bernoulli_initializer<T, Policy>::initializer;
 
 //
 // We need something to act as a cache for our calculated Bernoulli numbers.  In order to
@@ -537,10 +504,8 @@ inline bernoulli_numbers_cache<T, Policy>& get_bernoulli_numbers_cache()
    // Force this function to be called at program startup so all the static variables
    // get initialized then (thread safety).
    //
-   bernoulli_initializer<T, Policy>::force_instantiate();
    static 
 #ifndef BOOST_MATH_NO_THREAD_LOCAL_WITH_NON_TRIVIAL_TYPES
-#error 1
       BOOST_MATH_THREAD_LOCAL
 #endif
       bernoulli_numbers_cache<T, Policy> data;
