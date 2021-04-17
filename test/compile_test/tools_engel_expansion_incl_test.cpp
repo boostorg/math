@@ -15,6 +15,7 @@
 
 void compile_and_link_test()
 {
+    #ifndef _MSC_VER
     boost::math::tools::engel_expansion<float> f_test(1.0f);
     check_result<float>(f_test.digits().front());
 
@@ -25,4 +26,5 @@ void compile_and_link_test()
     boost::math::tools::engel_expansion<long double> ld_test(1.0l);
     check_result<long double>(ld_test.digits().front());
 #endif
+    #endif
 }
