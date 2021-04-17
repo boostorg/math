@@ -463,7 +463,7 @@ namespace boost{ namespace math{
 // Some mingw flavours have issues with thread_local and types with non-trivial destructors
 // See https://sourceforge.net/p/mingw-w64/bugs/527/
 //
-#if (defined(__MINGW32__) || defined(__MINGW64__)) && !defined(_REENTRANT) && !defined(__clang__)
+#if (defined(__MINGW32__) && (__GNUC__ < 9) && !defined(__clang__))
 #  define BOOST_MATH_NO_THREAD_LOCAL_WITH_NON_TRIVIAL_TYPES
 #endif
 

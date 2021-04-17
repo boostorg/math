@@ -538,7 +538,12 @@ inline bernoulli_numbers_cache<T, Policy>& get_bernoulli_numbers_cache()
    // get initialized then (thread safety).
    //
    bernoulli_initializer<T, Policy>::force_instantiate();
-   static bernoulli_numbers_cache<T, Policy> data;
+   static 
+#ifndef BOOST_MATH_NO_THREAD_LOCAL_WITH_NON_TRIVIAL_TYPES
+#error 1
+      BOOST_MATH_THREAD_LOCAL
+#endif
+      bernoulli_numbers_cache<T, Policy> data;
    return data;
 }
 
