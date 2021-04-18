@@ -7,3 +7,19 @@
 // #includes all the files that it needs to.
 //
 #include <boost/math/interpolators/whittaker_shannon.hpp>
+//
+// Note this header includes no other headers, this is
+// important if this test is to be meaningful:
+//
+#include "test_compile_result.hpp"
+//
+// This test includes <vector> becasue many of the interpolators are not compatible with pointers/c-style arrays
+//
+#include <vector>
+
+void compile_and_link_test()
+{
+   std::vector<double> data_y = {1, 2, 3};
+   boost::math::interpolators::whittaker_shannon<std::vector<double>> s(std::move(data_y), 3, 2);
+   check_result<double>(s(1.0));
+}

@@ -7,3 +7,15 @@
 // #includes all the files that it needs to.
 //
 #include <boost/math/tools/ulps_plot.hpp>
+//
+// Note this header includes no other headers, this is
+// important if this test is to be meaningful:
+//
+#include "test_compile_result.hpp"
+
+void compile_and_link_test()
+{
+    auto f = [](double x) { return x; };
+    boost::math::tools::ulps_plot<decltype(f), double, float> test(f, 1.0f, 2.0f);
+    auto dummy = test.width(1);
+}
