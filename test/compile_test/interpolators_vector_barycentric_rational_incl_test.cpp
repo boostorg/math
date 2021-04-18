@@ -23,5 +23,5 @@ void compile_and_link_test()
    std::vector<std::vector<double>> space = {{1}, {2}, {3}};
    boost::math::vector_barycentric_rational<decltype(time), decltype(space)> s(std::move(time), std::move(space));
 
-   check_result<double>(s(1.0));
+   check_result<std::vector<double>>(s(1.0));
 }
