@@ -16,10 +16,9 @@
 void compile_and_link_test()
 {
     #ifdef BOOST_FLOAT128_C
-    #define NOMINMAX
     check_result<bool>(std::numeric_limits<boost::float128_t>::is_specialized);
-    check_result<boost::float128_t>(std::numeric_limits<boost::float128_t>::min());
-    check_result<boost::float128_t>(std::numeric_limits<boost::float128_t>::max());
+    check_result<boost::float128_t>((std::numeric_limits<boost::float128_t>::min)());
+    check_result<boost::float128_t>((std::numeric_limits<boost::float128_t>::max)());
     check_result<boost::float128_t>(std::numeric_limits<boost::float128_t>::lowest());
     check_result<int>(std::numeric_limits<boost::float128_t>::digits);
     check_result<int>(std::numeric_limits<boost::float128_t>::digits10);
@@ -48,6 +47,5 @@ void compile_and_link_test()
     check_result<bool>(std::numeric_limits<boost::float128_t>::traps);
     check_result<bool>(std::numeric_limits<boost::float128_t>::tinyness_before);
     check_result<std::float_round_style>(std::numeric_limits<boost::float128_t>::round_style);
-    #undef NOMINMAX
     #endif
 }
