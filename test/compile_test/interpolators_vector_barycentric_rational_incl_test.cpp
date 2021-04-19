@@ -21,7 +21,7 @@ void compile_and_link_test()
 {
    std::vector<double> time = { 1, 2, 3 };
    std::vector<std::vector<double>> space = {{1}, {2}, {3}};
-   boost::math::vector_barycentric_rational<decltype(time), decltype(space)> s(std::move(time), std::move(space));
+   boost::math::interpolators::vector_barycentric_rational<decltype(time), decltype(space)> s(std::move(time), std::move(space));
 
    check_result<std::vector<double>>(s(1.0));
 }

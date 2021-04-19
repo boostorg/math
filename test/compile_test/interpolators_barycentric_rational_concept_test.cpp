@@ -13,7 +13,7 @@ void compile_and_link_test()
 {
    boost::math::concepts::std_real_concept x[] = { 1, 2, 3 };
    boost::math::concepts::std_real_concept y[] = { 13, 15, 17 };
-   boost::math::barycentric_rational<boost::math::concepts::std_real_concept> s(x, y, 3, 3);
+   boost::math::interpolators::barycentric_rational<boost::math::concepts::std_real_concept> s(x, y, 3, 3);
    s(1.0);
 }
 

@@ -22,6 +22,6 @@ void compile_and_link_test()
 {
    double data[] = { 1, 2, 3 };
    double y[] = { 34, 56, 67 };
-   boost::math::barycentric_rational<double> s(data, y, 3, 2);
+   boost::math::interpolators::barycentric_rational<double> s(data, y, 3, 2);
    check_result<double>(s(1.0));
 }
