@@ -12,6 +12,7 @@
 #include <vector>
 #include <utility> // for std::move
 #include <limits>
+#include <algorithm>
 #include <boost/math/tools/assert.hpp>
 
 namespace boost{ namespace math{ namespace detail{
