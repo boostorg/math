@@ -176,7 +176,9 @@ test-suite special_fun :
    [ run test_expint.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
    [ run test_factorials.cpp pch ../../test/build//boost_unit_test_framework  ]
    [ run test_gamma.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
-   [ run test_gamma_mp.cpp ../../test/build//boost_unit_test_framework : : : release ]
+   [ run test_gamma_mp.cpp ../../test/build//boost_unit_test_framework : : : release <define>TEST=1 : test_gamma_mp_1 ]
+   [ run test_gamma_mp.cpp ../../test/build//boost_unit_test_framework : : : release <define>TEST=2 : test_gamma_mp_2 ]
+   [ run test_gamma_mp.cpp ../../test/build//boost_unit_test_framework : : : release <define>TEST=3 : test_gamma_mp_3 ]
    [ run test_hankel.cpp ../../test/build//boost_unit_test_framework  ]
    [ run test_hermite.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
    [ run test_ibeta.cpp  test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework
