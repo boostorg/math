@@ -20,8 +20,8 @@ void compile_and_link_test()
 
     check_result<boost::float128_t>(ldexp(f128, 0));
     check_result<boost::float128_t>(frexp(f128, 0));
-    check_result<boost::float128_t>(fabs(f128));
-    check_result<boost::float128_t>(abs(f128));
+    check_result<boost::float128_t>(std::fabs(f128));
+    check_result<boost::float128_t>(std::abs(f128));
     check_result<boost::float128_t>(floor(f128));
     check_result<boost::float128_t>(ceil(f128));
     check_result<boost::float128_t>(sqrt(f128));
