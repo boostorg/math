@@ -79,7 +79,7 @@
         }
 
       private:
-        const equation_as_9_3_39_and_its_derivative& operator=(const equation_as_9_3_39_and_its_derivative&);
+        const equation_as_9_3_39_and_its_derivative& operator=(const equation_as_9_3_39_and_its_derivative&) = delete;
         const T zeta;
       };
 
@@ -195,7 +195,7 @@
         private:
           const T my_v;
           const Policy& my_pol;
-          const function_object_jv& operator=(const function_object_jv&);
+          const function_object_jv& operator=(const function_object_jv&) = delete;
         };
 
         template<class T, class Policy>
@@ -237,7 +237,7 @@
           const T my_v;
           const bool my_order_is_zero;
           const Policy& my_pol;
-          const function_object_jv_and_jv_prime& operator=(const function_object_jv_and_jv_prime&);
+          const function_object_jv_and_jv_prime& operator=(const function_object_jv_and_jv_prime&) = delete;
         };
 
         template<class T> bool my_bisection_unreachable_tolerance(const T&, const T&) { return false; }
@@ -413,7 +413,7 @@
         private:
           const T my_v;
           const Policy& my_pol;
-          const function_object_yv& operator=(const function_object_yv&);
+          const function_object_yv& operator=(const function_object_yv&) = delete;
         };
 
         template<class T, class Policy>
@@ -456,7 +456,7 @@
         private:
           const T my_v;
           const Policy& my_pol;
-          const function_object_yv_and_yv_prime& operator=(const function_object_yv_and_yv_prime&);
+          const function_object_yv_and_yv_prime& operator=(const function_object_yv_and_yv_prime&) = delete;
         };
 
         template<class T> bool my_bisection_unreachable_tolerance(const T&, const T&) { return false; }
