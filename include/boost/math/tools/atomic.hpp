@@ -10,7 +10,7 @@
 #include <boost/math/tools/cxx03_warn.hpp>
 
 #include <atomic>
-#define BOOST_MATH_ATOMIC_NS std
+
 namespace boost {
    namespace math {
       namespace detail {
@@ -37,7 +37,8 @@ namespace boost {
 #else
 #  define BOOST_MATH_NO_ATOMIC_INT
 #endif
-      }
-   }}
+      } // Namespace detail
+   } // Namespace math
+} // Namespace boost
 
 #endif // BOOST_MATH_ATOMIC_DETAIL_HPP

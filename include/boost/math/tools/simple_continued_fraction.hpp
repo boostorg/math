@@ -6,12 +6,14 @@
 #ifndef BOOST_MATH_TOOLS_SIMPLE_CONTINUED_FRACTION_HPP
 #define BOOST_MATH_TOOLS_SIMPLE_CONTINUED_FRACTION_HPP
 
+#include <array>
 #include <vector>
 #include <ostream>
 #include <iomanip>
 #include <cmath>
 #include <limits>
 #include <stdexcept>
+#include <sstream>
 
 #ifndef BOOST_MATH_STANDALONE
 #include <boost/core/demangle.hpp>

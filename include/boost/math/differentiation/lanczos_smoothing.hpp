@@ -6,10 +6,12 @@
 #ifndef BOOST_MATH_DIFFERENTIATION_LANCZOS_SMOOTHING_HPP
 #define BOOST_MATH_DIFFERENTIATION_LANCZOS_SMOOTHING_HPP
 #include <cmath> // for std::abs
+#include <cstddef>
 #include <limits> // to nan initialize
 #include <vector>
 #include <string>
 #include <stdexcept>
+#include <type_traits>
 #include <boost/math/tools/assert.hpp>
 
 namespace boost::math::differentiation {

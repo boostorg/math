@@ -14,6 +14,7 @@
 #include <algorithm>
 #include <iterator>
 #include <stdexcept>
+#include <limits>
 
 namespace std_workaround {
 

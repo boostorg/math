@@ -29,7 +29,7 @@
 #include <memory>
 #include <boost/math/interpolators/detail/barycentric_rational_detail.hpp>
 
-namespace boost{ namespace math{
+namespace boost{ namespace math{ namespace interpolators{
 
 template<class Real>
 class barycentric_rational
@@ -95,5 +95,5 @@ Real barycentric_rational<Real>::prime(Real x) const
 }
 
 
-}}
+}}}
 #endif

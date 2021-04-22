@@ -362,20 +362,20 @@ public:
       //
       // Get the counter and see if we need to calculate more constants:
       //
-      if((static_cast<std::size_t>(m_counter.load(BOOST_MATH_ATOMIC_NS::memory_order_consume)) < start + n)
-         || (static_cast<int>(m_current_precision.load(BOOST_MATH_ATOMIC_NS::memory_order_consume)) < boost::math::tools::digits<T>()))
+      if((static_cast<std::size_t>(m_counter.load(std::memory_order_consume)) < start + n)
+         || (static_cast<int>(m_current_precision.load(std::memory_order_consume)) < boost::math::tools::digits<T>()))
       {
          std::lock_guard<std::mutex> l(m_mutex);
 
-         if((static_cast<std::size_t>(m_counter.load(BOOST_MATH_ATOMIC_NS::memory_order_consume)) < start + n)
-            || (static_cast<int>(m_current_precision.load(BOOST_MATH_ATOMIC_NS::memory_order_consume)) < boost::math::tools::digits<T>()))
+         if((static_cast<std::size_t>(m_counter.load(std::memory_order_consume)) < start + n)
+            || (static_cast<int>(m_current_precision.load(std::memory_order_consume)) < boost::math::tools::digits<T>()))
          {
-            if(static_cast<int>(m_current_precision.load(BOOST_MATH_ATOMIC_NS::memory_order_consume)) < boost::math::tools::digits<T>())
+            if(static_cast<int>(m_current_precision.load(std::memory_order_consume)) < boost::math::tools::digits<T>())
             {
                bn.clear();
                tn.clear();
                m_intermediates.clear();
-               m_counter.store(0, BOOST_MATH_ATOMIC_NS::memory_order_release);
+               m_counter.store(0, std::memory_order_release);
                m_current_precision = boost::math::tools::digits<T>();
             }
             if(start + n >= bn.size())
@@ -383,7 +383,7 @@ public:
                std::size_t new_size = (std::min)((std::max)((std::max)(std::size_t(start + n), std::size_t(bn.size() + 20)), std::size_t(50)), std::size_t(bn.capacity()));
                tangent_numbers_series(new_size);
             }
-            m_counter.store(static_cast<atomic_integer_type>(bn.size()), BOOST_MATH_ATOMIC_NS::memory_order_release);
+            m_counter.store(static_cast<atomic_integer_type>(bn.size()), std::memory_order_release);
          }
       }
 
@@ -441,20 +441,20 @@ public:
       //
       // Get the counter and see if we need to calculate more constants:
       //
-      if((static_cast<std::size_t>(m_counter.load(BOOST_MATH_ATOMIC_NS::memory_order_consume)) < start + n)
-         || (static_cast<int>(m_current_precision.load(BOOST_MATH_ATOMIC_NS::memory_order_consume)) < boost::math::tools::digits<T>()))
+      if((static_cast<std::size_t>(m_counter.load(std::memory_order_consume)) < start + n)
+         || (static_cast<int>(m_current_precision.load(std::memory_order_consume)) < boost::math::tools::digits<T>()))
       {
          std::lock_guard<std::mutex> l(m_mutex);
 
-         if((static_cast<std::size_t>(m_counter.load(BOOST_MATH_ATOMIC_NS::memory_order_consume)) < start + n)
-            || (static_cast<int>(m_current_precision.load(BOOST_MATH_ATOMIC_NS::memory_order_consume)) < boost::math::tools::digits<T>()))
+         if((static_cast<std::size_t>(m_counter.load(std::memory_order_consume)) < start + n)
+            || (static_cast<int>(m_current_precision.load(std::memory_order_consume)) < boost::math::tools::digits<T>()))
          {
-            if(static_cast<int>(m_current_precision.load(BOOST_MATH_ATOMIC_NS::memory_order_consume)) < boost::math::tools::digits<T>())
+            if(static_cast<int>(m_current_precision.load(std::memory_order_consume)) < boost::math::tools::digits<T>())
             {
                bn.clear();
                tn.clear();
                m_intermediates.clear();
-               m_counter.store(0, BOOST_MATH_ATOMIC_NS::memory_order_release);
+               m_counter.store(0, std::memory_order_release);
                m_current_precision = boost::math::tools::digits<T>();
             }
             if(start + n >= bn.size())
@@ -462,7 +462,7 @@ public:
                std::size_t new_size = (std::min)((std::max)((std::max)(start + n, std::size_t(bn.size() + 20)), std::size_t(50)), std::size_t(bn.capacity()));
                tangent_numbers_series(new_size);
             }
-            m_counter.store(static_cast<atomic_integer_type>(bn.size()), BOOST_MATH_ATOMIC_NS::memory_order_release);
+            m_counter.store(static_cast<atomic_integer_type>(bn.size()), std::memory_order_release);
          }
       }
 

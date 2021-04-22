@@ -137,8 +137,8 @@ inline bool is_nan_helper(__float128 f, const std::false_type&) { return ::isnan
 inline bool is_nan_helper(__float128 f, const std::true_type&) { return std::isnan(static_cast<double>(f)); }
 inline bool is_nan_helper(__float128 f, const std::false_type&) { return std::isnan(static_cast<double>(f)); }
 #else
-inline bool is_nan_helper(__float128 f, const std::true_type&) { return ::isnan(static_cast<double>(f)); }
-inline bool is_nan_helper(__float128 f, const std::false_type&) { return ::isnan(static_cast<double>(f)); }
+inline bool is_nan_helper(__float128 f, const std::true_type&) { return boost::math::isnan(static_cast<double>(f)); }
+inline bool is_nan_helper(__float128 f, const std::false_type&) { return boost::math::isnan(static_cast<double>(f)); }
 #endif
 #endif
 }

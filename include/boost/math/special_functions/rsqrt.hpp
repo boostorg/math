@@ -6,6 +6,8 @@
 #ifndef BOOST_MATH_SPECIAL_FUNCTIONS_RSQRT_HPP
 #define BOOST_MATH_SPECIAL_FUNCTIONS_RSQRT_HPP
 #include <cmath>
+#include <type_traits>
+#include <limits>
 
 namespace boost::math {
 

@@ -296,7 +296,7 @@ jobs:
       - name: Test
         run: ..\..\..\b2 --hash %ARGS% define=CI_SUPPRESS_KNOWN_ISSUES ${{ matrix.suite }}
         working-directory: ../boost-root/libs/math/test
-  standalone:
+  standalone-gcc:
       runs-on: ubuntu-20.04
       strategy:
         fail-fast: false
@@ -324,7 +324,7 @@ jobs:
           if: steps.retry1.outcome=='failure'
           run: sudo apt-add-repository -y "ppa:ubuntu-toolchain-r/test"
         - name: Install packages
-          run: sudo apt install g++-10
+          run: sudo apt install g++-10 libgmp-dev libmpfr-dev libfftw3-dev
         - name: Checkout main boost
           run: git clone -b develop --depth 1 https://github.com/boostorg/boost.git ../boost-root
         - name: Update tools/boostdep
@@ -335,6 +335,49 @@ jobs:
           working-directory: ../boost-root
         - name: Run CMake
           run: cmake -DBUILD_TESTING=1 -DCMAKE_CXX_COMPILER=g++-10 .
+          working-directory: ../boost-root/libs/math
+        - name: Run Compile Tests
+          run: make -j$((`nproc`+1))
+          working-directory: ../boost-root/libs/math
+  standalone-clang:
+      runs-on: ubuntu-20.04
+      strategy:
+        fail-fast: false
+      steps:
+        - uses: actions/checkout@v2
+          with:
+            fetch-depth: '0'
+        - uses: mstachniuk/ci-skip@v1
+          with:
+            commit-filter: '[skip ci];[ci skip];[CI SKIP];[SKIP CI];***CI SKIP***;***SKIP CI***;[windows];[Windows];[WINDOWS];[apple];[Apple];[APPLE]'
+            commit-filter-separator: ';'
+            fail-fast: true
+        - name: Add repository
+          continue-on-error: true
+          id: addrepo
+          run: sudo apt-add-repository -y "ppa:ubuntu-toolchain-r/test"
+        - name: Retry Add Repo
+          continue-on-error: true
+          id: retry1
+          if: steps.addrepo.outcome=='failure'
+          run: sudo apt-add-repository -y "ppa:ubuntu-toolchain-r/test"
+        - name: Retry Add Repo 2
+          continue-on-error: true
+          id: retry2
+          if: steps.retry1.outcome=='failure'
+          run: sudo apt-add-repository -y "ppa:ubuntu-toolchain-r/test"
+        - name: Install packages
+          run: sudo apt install clang-10 libgmp-dev libmpfr-dev libfftw3-dev
+        - name: Checkout main boost
+          run: git clone -b develop --depth 1 https://github.com/boostorg/boost.git ../boost-root
+        - name: Update tools/boostdep
+          run: git submodule update --init tools/boostdep
+          working-directory: ../boost-root
+        - name: Copy files
+          run: cp -r $GITHUB_WORKSPACE/* libs/math
+          working-directory: ../boost-root
+        - name: Run CMake
+          run: cmake -DBUILD_TESTING=1 -DCMAKE_CXX_COMPILER=clang++-10 .
           working-directory: ../boost-root/libs/math
         - name: Run Compile Tests
           run: make -j$((`nproc`+1))

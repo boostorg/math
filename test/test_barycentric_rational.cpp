@@ -40,7 +40,7 @@ void test_interpolation_condition()
         y[i] = dis(gen);
     }
 
-    boost::math::barycentric_rational<Real> interpolator(x.data(), y.data(), y.size());
+    boost::math::interpolators::barycentric_rational<Real> interpolator(x.data(), y.data(), y.size());
 
     for (size_t i = 0; i < x.size(); ++i)
     {
@@ -51,7 +51,7 @@ void test_interpolation_condition()
     // Make sure that the move constructor does the same thing:
     std::vector<Real> x_copy = x;
     std::vector<Real> y_copy = y;
-    boost::math::barycentric_rational<Real> move_interpolator(std::move(x), std::move(y));
+    boost::math::interpolators::barycentric_rational<Real> move_interpolator(std::move(x), std::move(y));
 
     for (size_t i = 0; i < x_copy.size(); ++i)
     {
@@ -77,7 +77,7 @@ void test_interpolation_condition_high_order()
     }
 
     // Order 5 approximation:
-    boost::math::barycentric_rational<Real> interpolator(x.data(), y.data(), y.size(), 5);
+    boost::math::interpolators::barycentric_rational<Real> interpolator(x.data(), y.data(), y.size(), 5);
 
     for (size_t i = 0; i < x.size(); ++i)
     {
@@ -105,7 +105,7 @@ void test_constant()
         y[i] = y[0];
     }
 
-    boost::math::barycentric_rational<Real> interpolator(x.data(), y.data(), y.size());
+    boost::math::interpolators::barycentric_rational<Real> interpolator(x.data(), y.data(), y.size());
 
     for (size_t i = 0; i < x.size(); ++i)
     {
@@ -136,7 +136,7 @@ void test_constant_high_order()
     }
 
     // Set interpolation order to 7:
-    boost::math::barycentric_rational<Real> interpolator(x.data(), y.data(), y.size(), 7);
+    boost::math::interpolators::barycentric_rational<Real> interpolator(x.data(), y.data(), y.size(), 7);
 
     for (size_t i = 0; i < x.size(); ++i)
     {
@@ -165,7 +165,7 @@ void test_runge()
         y[i] = 1/(1+25*x[i]*x[i]);
     }
 
-    boost::math::barycentric_rational<Real> interpolator(x.data(), y.data(), y.size(), 5);
+    boost::math::interpolators::barycentric_rational<Real> interpolator(x.data(), y.data(), y.size(), 5);
 
     for (size_t i = 0; i < x.size(); ++i)
     {
@@ -218,7 +218,7 @@ void test_weights()
         y[i] = 1/(1+25*x[i]*x[i]);
     }
 
-    boost::math::detail::barycentric_rational_imp<Real> interpolator(x.data(), x.data() + x.size(), y.data(), 0);
+    boost::math::interpolators::detail::barycentric_rational_imp<Real> interpolator(x.data(), x.data() + x.size(), y.data(), 0);
 
     for (size_t i = 0; i < x.size(); ++i)
     {
@@ -234,7 +234,7 @@ void test_weights()
     }
 
     // d = 1:
-    interpolator = boost::math::detail::barycentric_rational_imp<Real>(x.data(), x.data() + x.size(), y.data(), 1);
+    interpolator = boost::math::interpolators::detail::barycentric_rational_imp<Real>(x.data(), x.data() + x.size(), y.data(), 1);
 
     for (size_t i = 1; i < x.size() -1; ++i)
     {

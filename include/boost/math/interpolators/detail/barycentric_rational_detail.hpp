@@ -15,7 +15,7 @@
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/tools/assert.hpp>
 
-namespace boost{ namespace math{ namespace detail{
+namespace boost{ namespace math{ namespace interpolators { namespace detail{
 
 template<class Real>
 class barycentric_rational_imp
@@ -210,5 +210,5 @@ Real barycentric_rational_imp<Real>::prime(Real x) const
 
     return numerator/denominator;
 }
-}}}
+}}}}
 #endif
