@@ -13,7 +13,7 @@
 
 #else // Standalone mode - use standard library facilities
 
-#define BOOST_MATH_THROW_EXCEPTION(expr) throw expr;
+#define BOOST_MATH_THROW_EXCEPTION(expr)
 
 #endif // BOOST_MATH_STANDALONE
 

@@ -32,7 +32,7 @@
 // Note that this only occurs when the compiler can deduce code is unreachable,
 // for example when policy macros are used to ignore errors rather than throw.
 #endif
-#include <sstream>
+//#include <sstream>
 
 namespace boost{ namespace math{
 
@@ -76,15 +76,16 @@ namespace detail
 template <class T>
 std::string prec_format(const T& val)
 {
-   typedef typename boost::math::policies::precision<T, boost::math::policies::policy<> >::type prec_type;
-   std::stringstream ss;
-   if(prec_type::value)
-   {
-      int prec = 2 + (prec_type::value * 30103UL) / 100000UL;
-      ss << std::setprecision(prec);
-   }
-   ss << val;
-   return ss.str();
+   //typedef typename boost::math::policies::precision<T, boost::math::policies::policy<> >::type prec_type;
+   //std::stringstream ss;
+   //if(prec_type::value)
+   //{
+   //   int prec = 2 + (prec_type::value * 30103UL) / 100000UL;
+   //   ss << std::setprecision(prec);
+   //}
+   //ss << val;
+   //return ss.str();
+   return std::string();
 }
 
 inline void replace_all_in_string(std::string& result, const char* what, const char* with)
@@ -123,6 +124,7 @@ inline const char* name_of<BOOST_MATH_FLOAT128_TYPE>()
 template <class E, class T>
 void raise_error(const char* pfunction, const char* message)
 {
+  #if 0
   if(pfunction == 0)
      pfunction = "Unknown function operating on type %1%";
   if(message == 0)
@@ -141,11 +143,13 @@ void raise_error(const char* pfunction, const char* message)
 
   E e(msg);
   BOOST_MATH_THROW_EXCEPTION(e)
+  #endif
 }
 
 template <class E, class T>
 void raise_error(const char* pfunction, const char* pmessage, const T& val)
 {
+  #if 0
   if(pfunction == 0)
      pfunction = "Unknown function operating on type %1%";
   if(pmessage == 0)
@@ -168,6 +172,7 @@ void raise_error(const char* pfunction, const char* pmessage, const T& val)
 
   E e(msg);
   BOOST_MATH_THROW_EXCEPTION(e)
+  #endif
 }
 
 template <class T>
@@ -177,7 +182,9 @@ inline T raise_domain_error(
            const T& val,
            const ::boost::math::policies::domain_error< ::boost::math::policies::throw_on_error>&)
 {
+   #if 0
    raise_error<std::domain_error, T>(function, message, val);
+   #endif
    // we never get here:
    return std::numeric_limits<T>::quiet_NaN();
 }

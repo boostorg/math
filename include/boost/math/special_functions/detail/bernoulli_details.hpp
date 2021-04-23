@@ -365,7 +365,7 @@ public:
       if((static_cast<std::size_t>(m_counter.load(std::memory_order_consume)) < start + n)
          || (static_cast<int>(m_current_precision.load(std::memory_order_consume)) < boost::math::tools::digits<T>()))
       {
-         std::lock_guard<std::mutex> l(m_mutex);
+         //std::lock_guard<std::mutex> l(m_mutex);
 
          if((static_cast<std::size_t>(m_counter.load(std::memory_order_consume)) < start + n)
             || (static_cast<int>(m_current_precision.load(std::memory_order_consume)) < boost::math::tools::digits<T>()))
@@ -444,7 +444,7 @@ public:
       if((static_cast<std::size_t>(m_counter.load(std::memory_order_consume)) < start + n)
          || (static_cast<int>(m_current_precision.load(std::memory_order_consume)) < boost::math::tools::digits<T>()))
       {
-         std::lock_guard<std::mutex> l(m_mutex);
+         //std::lock_guard<std::mutex> l(m_mutex);
 
          if((static_cast<std::size_t>(m_counter.load(std::memory_order_consume)) < start + n)
             || (static_cast<int>(m_current_precision.load(std::memory_order_consume)) < boost::math::tools::digits<T>()))
@@ -493,7 +493,7 @@ private:
    std::vector<T> m_intermediates;
    // The value at which we know overflow has already occurred for the Bn:
    std::size_t m_overflow_limit;
-   std::mutex m_mutex;
+   //std::mutex m_mutex;
    atomic_counter_type m_counter, m_current_precision;
 };
 
