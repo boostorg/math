@@ -81,7 +81,7 @@ const typename bessel_k0_initializer<T, tag>::init bessel_k0_initializer<T, tag>
 
 
 template <typename T, int N>
-T bessel_k0_imp(const T& x, const std::integral_constant<int, N>&)
+T bessel_k0_imp(const T&, const std::integral_constant<int, N>&)
 {
    BOOST_MATH_ASSERT(0);
    return 0;

@@ -44,7 +44,7 @@
 namespace boost { namespace math { namespace detail{
 
    template <typename T>
-   T bessel_k1(const T& x);
+   T bessel_k1(const T&);
 
    template <class T, class tag>
    struct bessel_k1_initializer
@@ -82,7 +82,7 @@ namespace boost { namespace math { namespace detail{
 
 
    template <typename T, int N>
-   inline T bessel_k1_imp(const T& x, const std::integral_constant<int, N>&)
+   inline T bessel_k1_imp(const T&, const std::integral_constant<int, N>&)
    {
       BOOST_MATH_ASSERT(0);
       return 0;

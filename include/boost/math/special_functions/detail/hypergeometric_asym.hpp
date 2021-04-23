@@ -44,7 +44,7 @@
         }
         else
         {
-           e = z > (std::numeric_limits<long long>::max)() ? (std::numeric_limits<long long>::max)() : lltrunc(z, pol);
+           e = z > static_cast<T>((std::numeric_limits<long long>::max)()) ? (std::numeric_limits<long long>::max)() : lltrunc(z, pol);
            log_scaling += e;
            prefix = exp(z - e);
         }
