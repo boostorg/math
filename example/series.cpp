@@ -47,7 +47,7 @@ T log1p(T x)
    // Construct the series functor:
    log1p_series<T> s(x);
    // Set a limit on how many iterations we permit:
-   boost::uintmax_t max_iter = 1000;
+   std::uintmax_t max_iter = 1000;
    // Add it up, with enough precision for full machine precision:
    return boost::math::tools::sum_series(s, std::numeric_limits<T>::epsilon(), max_iter);
 }
@@ -89,7 +89,7 @@ std::complex<T> log1p(std::complex<T> x)
    // Construct the series functor:
    log1p_series<std::complex<T> > s(x);
    // Set a limit on how many iterations we permit:
-   boost::uintmax_t max_iter = 1000;
+   std::uintmax_t max_iter = 1000;
    // Add it up, with enough precision for full machine precision:
    return boost::math::tools::sum_series(s, std::complex<T>(std::numeric_limits<T>::epsilon()), max_iter);
 }

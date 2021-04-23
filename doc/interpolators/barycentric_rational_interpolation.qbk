@@ -13,7 +13,7 @@
 ``
 #include <boost/math/interpolators/barycentric_rational.hpp>
 
-namespace boost{ namespace math{
+namespace boost{ namespace math{ namespace interpolators{
     template<class Real>
     class barycentric_rational
     {
@@ -34,7 +34,7 @@ namespace boost{ namespace math{
         std::vector<Real>&& return_y();
     };
 
-}}
+}}}
 ``
 
 
@@ -52,13 +52,13 @@ The call is trivial:
     std::vector<double> x(500);
     std::vector<double> y(500);
     // populate x, y, then:
-    boost::math::barycentric_rational<double> interpolant(std::move(x), std::move(y));
+    boost::math::interpolators::barycentric_rational<double> interpolant(std::move(x), std::move(y));
 
 This implicitly calls the constructor with approximation order 3, and hence the accuracy is [bigo](/h/[super 4]).
 In general, if you require an approximation order /d/, then the error is [bigo](/h/[super /d/+1]).
 A call to the constructor with an explicit approximation order is demonstrated below
 
-    boost::math::barycentric_rational<double> interpolant(std::move(x), std::move(y), 5);
+    boost::math::interpolators::barycentric_rational<double> interpolant(std::move(x), std::move(y), 5);
 
 To evaluate the interpolant, simply use
 

@@ -13,6 +13,6 @@
 
 typedef T (*F)(T);
 
-template std::pair<T, T> boost::math::tools::toms748_solve<F, T, Tol >(F, const T&, const T&, const T&, const T&, Tol, boost::uintmax_t&);
-template std::pair<T, T> boost::math::tools::toms748_solve<F, T, Tol>(F f, const T& ax, const T& bx, Tol tol, boost::uintmax_t& max_iter);
-template std::pair<T, T> boost::math::tools::bracket_and_solve_root<F, T, Tol>(F f, const T& guess, const T& factor, bool rising, Tol tol, boost::uintmax_t& max_iter);
+template std::pair<T, T> boost::math::tools::toms748_solve<F, T, Tol >(F, const T&, const T&, const T&, const T&, Tol, std::uintmax_t&);
+template std::pair<T, T> boost::math::tools::toms748_solve<F, T, Tol>(F f, const T& ax, const T& bx, Tol tol, std::uintmax_t& max_iter);
+template std::pair<T, T> boost::math::tools::bracket_and_solve_root<F, T, Tol>(F f, const T& guess, const T& factor, bool rising, Tol tol, std::uintmax_t& max_iter);

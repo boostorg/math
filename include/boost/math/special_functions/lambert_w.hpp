@@ -58,7 +58,6 @@ BOOST_MATH_INSTRUMENT_LAMBERT_W_SMALL_Z_SERIES_ITERATIONS  // Show evaluation of
 #include <boost/math/tools/series.hpp> // series functor.
 //#include <boost/math/tools/polynomial.hpp>  // polynomial.
 #include <boost/math/tools/rational.hpp>  // evaluate_polynomial.
-#include <boost/type_traits/is_integral.hpp>
 #include <boost/math/tools/precision.hpp> // boost::math::tools::max_value().
 #include <boost/math/tools/big_constant.hpp>
 #include <boost/math/tools/cxx03_warn.hpp>
@@ -1744,7 +1743,7 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
   // Integral types should be promoted to double by user Lambert w functions.
   // If integral type provided to user function lambert_w0 or lambert_wm1,
   // then should already have been promoted to double.
-  static_assert(!boost::is_integral<T>::value,
+  static_assert(!std::is_integral<T>::value,
     "Must be floating-point or fixed type (not integer type), for example: lambert_wm1(1.), not lambert_wm1(1)!");
 
   BOOST_MATH_STD_USING // Aid argument dependent lookup (ADL) of abs.

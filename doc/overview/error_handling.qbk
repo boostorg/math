@@ -12,6 +12,10 @@ Handling of errors by this library is split into two orthogonal parts:
 [warning The default error actions are to throw an exception with an informative error message.
 [role red If you do not try to catch the exception, you will not see the message!]]
 
+The default behavior is for exceptions to be thrown using boost::throw_exception.
+This facility has special handling for exception free environments.
+If BOOST_MATH_STANDALONE is defined standard library facilities (e.g. throw) are used for exception handling.
+
 The kinds of errors that can be raised are:
 
 [variablelist

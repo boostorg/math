@@ -14,11 +14,12 @@
 #pragma once
 #endif
 
-#include <boost/config.hpp>
 #include <boost/math/tools/series.hpp>
 #include <boost/math/tools/fraction.hpp>
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/tools/promotion.hpp>
+#include <boost/math/tools/assert.hpp>
+#include <boost/math/tools/config.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
@@ -33,13 +34,12 @@
 #include <boost/math/special_functions/detail/lgamma_small.hpp>
 #include <boost/math/special_functions/bernoulli.hpp>
 #include <boost/math/special_functions/polygamma.hpp>
-#include <boost/type_traits/is_convertible.hpp>
-#include <boost/math/tools/assert.hpp>
 
 #include <cmath>
 #include <algorithm>
+#include <type_traits>
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 # pragma warning(push)
 # pragma warning(disable: 4702) // unreachable code (return after domain_error throw).
 # pragma warning(disable: 4127) // conditional expression is constant.
@@ -338,7 +338,7 @@ inline T lower_gamma_series(T a, T z, const Policy& pol, T init_value = 0)
    // lower incomplete integral. Then divide by tgamma(a)
    // to get the normalised value.
    lower_incomplete_gamma_series<T> s(a, z);
-   boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
+   std::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
    T factor = policies::get_epsilon<T, Policy>();
    T result = boost::math::tools::sum_series(s, factor, max_iter, init_value);
    policies::check_series_iterations<T>("boost::math::detail::lower_gamma_series<%1%>(%1%)", max_iter, pol);
@@ -1028,7 +1028,7 @@ inline T tgamma_small_upper_part(T a, T x, const Policy& pol, T* pgam = 0, bool 
    result -= p;
    result /= a;
    detail::small_gamma2_series<T> s(a, x);
-   boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>() - 10;
+   std::uintmax_t max_iter = policies::get_max_series_iterations<Policy>() - 10;
    p += 1;
    if(pderivative)
       *pderivative = p / (*pgam * exp(x));
@@ -1128,7 +1128,7 @@ T incomplete_tgamma_large_x(const T& a, const T& x, const Policy& pol)
 {
    BOOST_MATH_STD_USING
    incomplete_tgamma_large_x_series<T> s(a, x);
-   boost::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
+   std::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
    T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
    boost::math::policies::check_series_iterations<T>("boost::math::tgamma<%1%>(%1%,%1%)", max_iter, pol);
    return result;
@@ -1465,7 +1465,6 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert,
             result = pow(x, a) / (a);
          else
          {
-#ifndef BOOST_NO_EXCEPTIONS
             try 
             {
                result = pow(x, a) / boost::math::tgamma(a + 1, pol);
@@ -1474,9 +1473,6 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert,
             {
                result = 0;
             }
-#else
-            result = pow(x, a) / boost::math::tgamma(a + 1, pol);
-#endif
          }
          result *= 1 - a * x / (a + 1);
          if (p_derivative)
@@ -2011,7 +2007,7 @@ inline typename tools::promote_args<T>::type
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
 
-   return policies::checked_narrowing_cast<typename remove_cv<result_type>::type, forwarding_policy>(detail::tgammap1m1_imp(static_cast<value_type>(z), forwarding_policy(), evaluation_type()), "boost::math::tgamma1pm1<%!%>(%1%)");
+   return policies::checked_narrowing_cast<typename std::remove_cv<result_type>::type, forwarding_policy>(detail::tgammap1m1_imp(static_cast<value_type>(z), forwarding_policy(), evaluation_type()), "boost::math::tgamma1pm1<%!%>(%1%)");
 }
 
 template <class T>
@@ -2206,7 +2202,7 @@ inline typename tools::promote_args<T1, T2>::type
 } // namespace math
 } // namespace boost
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 # pragma warning(pop)
 #endif
 

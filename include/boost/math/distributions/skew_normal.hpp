@@ -552,7 +552,7 @@ namespace boost{ namespace math{
     }
     
     const int get_digits = policies::digits<RealType, Policy>();// get digits from policy, 
-    boost::uintmax_t m = policies::get_max_root_iterations<Policy>(); // and max iterations.
+    std::uintmax_t m = policies::get_max_root_iterations<Policy>(); // and max iterations.
 
     skew_normal_distribution<RealType, Policy> helper(0, 1, shape);
 
@@ -671,7 +671,7 @@ namespace boost{ namespace math{
     const RealType search_max = range(dist).second;
 
     const int get_digits = policies::digits<RealType, Policy>();// get digits from policy, 
-    boost::uintmax_t m = policies::get_max_root_iterations<Policy>(); // and max iterations.
+    std::uintmax_t m = policies::get_max_root_iterations<Policy>(); // and max iterations.
 
     result = tools::newton_raphson_iterate(detail::skew_normal_quantile_functor<RealType, Policy>(dist, p), result,
       search_min, search_max, get_digits, m);

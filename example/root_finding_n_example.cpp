@@ -105,8 +105,8 @@ T nth_2deriv(T x)
 
   int digits = std::numeric_limits<T>::digits * 0.4;            // Accuracy triples with each step, so stop when
                                                                 // slightly more than one third of the digits are correct.
-  const boost::uintmax_t maxit = 20;
-  boost::uintmax_t it = maxit;
+  const std::uintmax_t maxit = 20;
+  std::uintmax_t it = maxit;
   T result = halley_iterate(nth_functor_2deriv<N, T>(x), guess, min, max, digits, it);
   return result;
 }

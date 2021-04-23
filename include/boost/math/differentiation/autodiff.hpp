@@ -113,9 +113,9 @@ struct type_at {
 
 template <typename RealType, size_t Order, size_t Depth>
 struct type_at<fvar<RealType, Order>, Depth> {
-  using type = typename conditional<Depth == 0,
-                                    fvar<RealType, Order>,
-                                    typename type_at<RealType, Depth - 1>::type>::type;
+  using type = typename std::conditional<Depth == 0,
+                                         fvar<RealType, Order>,
+                                         typename type_at<RealType, Depth - 1>::type>::type;
 };
 
 template <typename RealType, size_t Depth>
@@ -2028,8 +2028,8 @@ struct promote_args_2<RealType0, detail::autodiff_fvar_type<RealType1, Order1>> 
 };
 
 template <typename destination_t, typename RealType, std::size_t Order>
-inline BOOST_MATH_CONSTEXPR destination_t real_cast(detail::autodiff_fvar_type<RealType, Order> const& from_v)
-    BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(destination_t) && BOOST_MATH_IS_FLOAT(RealType)) {
+inline constexpr destination_t real_cast(detail::autodiff_fvar_type<RealType, Order> const& from_v)
+    noexcept(BOOST_MATH_IS_FLOAT(destination_t) && BOOST_MATH_IS_FLOAT(RealType)) {
   return real_cast<destination_t>(static_cast<detail::autodiff_root_type<RealType, Order>>(from_v));
 }
 
@@ -2041,13 +2041,13 @@ template <class Policy, std::size_t Order>
 using fvar_t = differentiation::detail::fvar<Policy, Order>;
 template <class Policy, std::size_t Order>
 struct evaluation<fvar_t<float, Order>, Policy> {
-  using type = fvar_t<typename conditional<Policy::promote_float_type::value, double, float>::type, Order>;
+  using type = fvar_t<typename std::conditional<Policy::promote_float_type::value, double, float>::type, Order>;
 };
 
 template <class Policy, std::size_t Order>
 struct evaluation<fvar_t<double, Order>, Policy> {
   using type =
-      fvar_t<typename conditional<Policy::promote_double_type::value, long double, double>::type, Order>;
+      fvar_t<typename std::conditional<Policy::promote_double_type::value, long double, double>::type, Order>;
 };
 
 }  // namespace policies

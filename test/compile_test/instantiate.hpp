@@ -11,6 +11,10 @@
 #  define BOOST_MATH_ASSERT_UNDEFINED_POLICY false
 #endif
 
+#include <boost/math/tools/config.hpp>
+
+#ifndef BOOST_MATH_NO_DISTRIBUTION_CONCEPT_TESTS
+
 #include <boost/math/distributions.hpp>
 
 #include <boost/math/special_functions.hpp>
@@ -1559,5 +1563,14 @@ void instantiate_mixed(RealType)
 #endif
 }
 
+#else // Standalone mode
+
+template <typename T>
+void instantiate(T) {}
+
+template <typename T>
+void instantiate_mixed(T) {}
+
+#endif // Standalone mode
 
 #endif // BOOST_LIBS_MATH_TEST_INSTANTIATE_HPP

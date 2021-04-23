@@ -72,7 +72,7 @@ private:
 template <class T>
 inline std::complex<T> expint_as_fraction(unsigned n, std::complex<T> const& z)
 {
-   boost::uintmax_t max_iter = 1000;
+   std::uintmax_t max_iter = 1000;
    expint_fraction<std::complex<T> > f(n, z);
    std::complex<T> result = boost::math::tools::continued_fraction_b(
       f,

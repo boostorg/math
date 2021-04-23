@@ -80,7 +80,7 @@
         BOOST_MATH_STD_USING
            BOOST_MATH_ASSERT((z + k) / z > 0.5f);
         hypergeometric_1f1_recurrence_on_z_minus_zero_series<T, Policy> s(a, b, z, k, pol);
-        boost::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
+        std::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
         T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
         log_scaling += s.scale();
         boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1f1_recurrence_on_z_plus_plus<%1%>(%1%,%1%,%1%)", max_iter, pol);
@@ -125,7 +125,7 @@
      T hypergeometric_1f1_recurrence_on_z_plus_plus(const T& a, const T& b, const T& z, int k, const Policy& pol)
      {
         hypergeometric_1f1_recurrence_on_z_plus_plus_series<T, Policy> s(a, b, z, k, pol);
-        boost::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
+        std::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
         T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
         boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1f1_recurrence_on_z_plus_plus<%1%>(%1%,%1%,%1%)", max_iter, pol);
         return result;
@@ -164,7 +164,7 @@
         BOOST_MATH_STD_USING
            BOOST_MATH_ASSERT(abs(k) < fabs(z));
         hypergeometric_1f1_recurrence_on_z_zero_minus_series<T, Policy> s(a, b, z, k, pol);
-        boost::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
+        std::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
         T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
         boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1f1_recurrence_on_z_plus_plus<%1%>(%1%,%1%,%1%)", max_iter, pol);
         return result * pow((z + k) / z, 1 - b);
@@ -203,7 +203,7 @@
            BOOST_MATH_ASSERT(k / z > -0.5f);
         //BOOST_MATH_ASSERT(floor(a) != a || a > 0);
         hypergeometric_1f1_recurrence_on_z_plus_zero_series<T, Policy> s(a, b, z, k, pol);
-        boost::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
+        std::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
         T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
         boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1f1_recurrence_on_z_plus_plus<%1%>(%1%,%1%,%1%)", max_iter, pol);
         return result * pow(z / (z + k), a);
@@ -241,7 +241,7 @@
      {
         BOOST_MATH_STD_USING
            hypergeometric_1f1_recurrence_on_z_zero_plus_series<T, Policy> s(a, b, z, k, pol);
-        boost::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
+        std::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
         T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
         boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1f1_recurrence_on_z_plus_plus<%1%>(%1%,%1%,%1%)", max_iter, pol);
         return result * exp(T(k));
@@ -281,7 +281,7 @@
      {
         BOOST_MATH_STD_USING
            hypergeometric_1f1_recurrence_on_z_minus_minus_series<T, Policy> s(a, b, z, k, pol);
-        boost::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
+        std::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
         T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
         boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1f1_recurrence_on_z_plus_plus<%1%>(%1%,%1%,%1%)", max_iter, pol);
         return result * exp(T(k)) * pow((z + k) / z, 1 - b);

@@ -7,9 +7,10 @@
 #define BOOST_MATH_NTL_DIGAMMA
 
 #include <boost/math/tools/rational.hpp>
+#include <boost/math/tools/config.hpp>
+#include <boost/math/tools/lexical_cast.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/constants/constants.hpp>
-#include <boost/lexical_cast.hpp>
 
 namespace boost{ namespace math{ namespace detail{
 
@@ -283,6 +284,11 @@ template <class T>
 T big_digamma(T x)
 {
    BOOST_MATH_STD_USING
+
+   #ifdef BOOST_MATH_STANDALONE
+   static_assert(sizeof(T) == 0, "big_digamma can not be used in standalone mode");
+   #endif
+
    if(x < 0)
    {
       return big_digamma_helper(static_cast<T>(1-x)) + constants::pi<T>() / tan(constants::pi<T>() * (1-x));

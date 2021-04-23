@@ -172,18 +172,18 @@ T fifth_noderiv(T x)
   // int digits =  3 * std::numeric_limits<T>::digits / 4; // 3/4 maximum possible binary digits accuracy for type T.
   int digits = std::numeric_limits<T>::digits; // Maximum possible binary digits accuracy for type T.
 
-  //boost::uintmax_t maxit = (std::numeric_limits<boost::uintmax_t>::max)();
-  // (std::numeric_limits<boost::uintmax_t>::max)() = 18446744073709551615
+  //std::uintmax_t maxit = (std::numeric_limits<std::uintmax_t>::max)();
+  // (std::numeric_limits<std::uintmax_t>::max)() = 18446744073709551615
   // which is more than anyone might wish to wait for!!!
   // so better to choose some reasonable estimate of how many iterations may be needed.
 
-  const boost::uintmax_t maxit = 50; // Chosen max iterations,
+  const std::uintmax_t maxit = 50; // Chosen max iterations,
   // but updated on exit with actual iteration count.
 
   // We could also have used a maximum iterations provided by any policy:
-  // boost::uintmax_t max_it = policies::get_max_root_iterations<Policy>();
+  // std::uintmax_t max_it = policies::get_max_root_iterations<Policy>();
 
-  boost::uintmax_t it = maxit; // Initially our chosen max iterations,
+  std::uintmax_t it = maxit; // Initially our chosen max iterations,
 
   bool is_rising = true; // So if result if guess^5 is too low, try increasing guess.
   eps_tolerance<double> tol(digits);
@@ -200,13 +200,13 @@ T fifth_noderiv(T x)
     cout << "Unable to locate solution in chosen iterations:"
       " Current best guess is between " << r.first << " and " << r.second << endl;
   }
-  T distance = float_distance(r.first, r.second);
+  T distance = boost::math::float_distance(r.first, r.second);
   if (distance > 0)
   { //
     std::cout << distance << " bits separate the bracketing values." << std::endl;
     for (int i = 0; i < distance; i++)
     { // Show all the values within the bracketing values.
-      std::cout << float_advance(r.first, i) << std::endl;
+      std::cout << boost::math::float_advance(r.first, i) << std::endl;
     }
   }
   else
@@ -289,8 +289,8 @@ T fifth_1deriv(T x)
   // digits used to control how accurate to try to make the result.
   int digits = std::numeric_limits<T>::digits; // Maximum possible binary digits accuracy for type T.
 
-  const boost::uintmax_t maxit = 20; // Optionally limit the number of iterations.
-  boost::uintmax_t it = maxit; // limit the number of iterations.
+  const std::uintmax_t maxit = 20; // Optionally limit the number of iterations.
+  std::uintmax_t it = maxit; // limit the number of iterations.
   //cout << "Max Iterations " << maxit << endl; //
   T result = newton_raphson_iterate(fifth_functor_1stderiv<T>(x), guess, min, max, digits, it);
   // Can check and show how many iterations (updated by newton_raphson_iterate).
@@ -302,8 +302,8 @@ T fifth_1deriv(T x)
 
 //  int get_digits = (digits * 2) /3; // Two thirds of maximum possible accuracy.
 
-//boost::uintmax_t maxit = (std::numeric_limits<boost::uintmax_t>::max)();
-// the default (std::numeric_limits<boost::uintmax_t>::max)() = 18446744073709551615
+//std::uintmax_t maxit = (std::numeric_limits<std::uintmax_t>::max)();
+// the default (std::numeric_limits<std::uintmax_t>::max)() = 18446744073709551615
 // which is more than we might wish to wait for!!!  so we can reduce it
 
 /*`
@@ -357,8 +357,8 @@ T fifth_2deriv(T x)
   T max = ldexp(2., exponent / 5); // Maximum possible value is twice our guess.
 
   int digits = std::numeric_limits<T>::digits / 2; // Half maximum possible binary digits accuracy for type T.
-  const boost::uintmax_t maxit = 50;
-  boost::uintmax_t it = maxit;
+  const std::uintmax_t maxit = 50;
+  std::uintmax_t it = maxit;
   T result = halley_iterate(fifth_functor_2deriv<T>(x), guess, min, max, digits, it);
   // Can show how many iterations (updated by halley_iterate).
   cout << it << " iterations (from max of " << maxit << ")" << endl;

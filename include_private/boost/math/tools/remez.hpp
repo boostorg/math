@@ -568,7 +568,7 @@ T remez_minimax<T>::iterate()
    for(unsigned i = 1; i < control_points.size(); ++i)
    {
       eps_tolerance<T> tol(m_precision);
-      boost::uintmax_t max_iter = 1000;
+      std::uintmax_t max_iter = 1000;
       std::pair<T, T> p = toms748_solve(
          Err, 
          control_points[i-1], 

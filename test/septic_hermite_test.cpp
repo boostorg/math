@@ -94,7 +94,7 @@ void test_constant()
         CHECK_ULP_CLOSE(Real(0), csh_aos.double_prime(tlo), 2);
         CHECK_ULP_CLOSE(Real(0), csh_aos.double_prime(thi), 2);
 
-        tlo = boost::math::nextafter(tlo, std::numeric_limits<Real>::max());
+        tlo = boost::math::nextafter(tlo, (std::numeric_limits<Real>::max)());
         thi = boost::math::nextafter(thi, std::numeric_limits<Real>::lowest());
     }
 
@@ -195,7 +195,7 @@ void test_linear()
         CHECK_MOLLIFIED_CLOSE(Real(0), csh_aos.double_prime(tlo), std::numeric_limits<Real>::epsilon());
         CHECK_MOLLIFIED_CLOSE(Real(0), csh_aos.double_prime(thi), 1200*std::numeric_limits<Real>::epsilon());
 
-        tlo = boost::math::nextafter(tlo, std::numeric_limits<Real>::max());
+        tlo = boost::math::nextafter(tlo, (std::numeric_limits<Real>::max)());
         thi = boost::math::nextafter(thi, std::numeric_limits<Real>::lowest());
     }
 

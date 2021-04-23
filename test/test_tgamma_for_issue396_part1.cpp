@@ -43,9 +43,9 @@ bool test_tgamma_for_issue396_value_checker()
     floating_point_type(issue396_control_string3)
   }};
 
-  boost::uint32_t ten_pow_n = (boost::uint32_t) (1);
+  std::uint32_t ten_pow_n = (std::uint32_t) (1);
 
-  const floating_point_type tol = std::numeric_limits<floating_point_type>::epsilon() * (boost::uint32_t) (5000);
+  const floating_point_type tol = std::numeric_limits<floating_point_type>::epsilon() * (std::uint32_t) (5000);
 
   bool result_is_ok = true;
 
@@ -53,7 +53,7 @@ bool test_tgamma_for_issue396_value_checker()
   {
     const floating_point_type g = boost::math::tgamma(boost::math::constants::half<floating_point_type>() + ten_pow_n);
 
-    ten_pow_n *= (boost::uint32_t) (10);
+    ten_pow_n *= (std::uint32_t) (10);
 
     const floating_point_type closeness = fabs(1 - (g / control[i]));
 

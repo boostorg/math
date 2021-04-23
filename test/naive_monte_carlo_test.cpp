@@ -116,10 +116,10 @@ void test_exception_from_integrand()
     std::vector<std::pair<Real, Real>> bounds{{ Real(0), Real(1)}, { Real(0), Real(1)}};
     naive_monte_carlo<Real, decltype(g)> mc(g, bounds, (Real) 0.0001);
 
-    auto task = mc.integrate();
     bool caught_exception = false;
     try
     {
+      auto task = mc.integrate();
       Real result = task.get();
       // Get rid of unused variable warning:
       std::ostream cnull(0);
@@ -138,7 +138,7 @@ void test_cancel_and_restart()
 {
     std::cout << "Testing that cancellation and restarting works on naive Monte-Carlo integration on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
     Real exact = boost::lexical_cast<Real>("1.3932039296856768591842462603255");
-    BOOST_CONSTEXPR const Real A = 1.0 / (pi<Real>() * pi<Real>() * pi<Real>());
+    constexpr const Real A = 1.0 / (pi<Real>() * pi<Real>() * pi<Real>());
     auto g = [&](std::vector<Real> const & x)->Real
     {
         return A / (1.0 - cos(x[0])*cos(x[1])*cos(x[2]));

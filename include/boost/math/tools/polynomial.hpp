@@ -14,7 +14,7 @@
 #endif
 
 #include <boost/math/tools/assert.hpp>
-#include <boost/config.hpp>
+#include <boost/math/tools/config.hpp>
 #include <boost/math/tools/cxx03_warn.hpp>
 #include <boost/math/tools/rational.hpp>
 #include <boost/math/tools/real_cast.hpp>
@@ -26,6 +26,7 @@
 #include <ostream>
 #include <algorithm>
 #include <initializer_list>
+#include <type_traits>
 
 namespace boost{ namespace math{ namespace tools{
 
@@ -122,7 +123,7 @@ namespace detail {
 * subtlety of distinction.
 */
 template <typename T, typename N>
-BOOST_DEDUCED_TYPENAME disable_if_c<std::numeric_limits<T>::is_integer, void >::type
+typename std::enable_if<!std::numeric_limits<T>::is_integer, void >::type
 division_impl(polynomial<T> &q, polynomial<T> &u, const polynomial<T>& v, N n, N k)
 {
     q[k] = u[n + k] / v[n];
@@ -165,7 +166,7 @@ T integer_power(T t, N n)
 * don't currently have that subtlety of distinction.
 */
 template <typename T, typename N>
-BOOST_DEDUCED_TYPENAME enable_if_c<std::numeric_limits<T>::is_integer, void >::type
+typename std::enable_if<std::numeric_limits<T>::is_integer, void >::type
 division_impl(polynomial<T> &q, polynomial<T> &u, const polynomial<T>& v, N n, N k)
 {
     q[k] = u[n + k] * integer_power(v[n], k);
@@ -310,7 +311,7 @@ public:
    }
 
    // move:
-   polynomial(polynomial&& p) BOOST_NOEXCEPT
+   polynomial(polynomial&& p) noexcept
       : m_data(std::move(p.m_data)) { }
 
    // copy:
@@ -389,7 +390,7 @@ public:
 
    polynomial<T> prime() const
    {
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
       // Disable int->float conversion warning:
 #pragma warning(push)
 #pragma warning(disable:4244)
@@ -404,7 +405,7 @@ public:
           p_data[i] = m_data[i+1]*static_cast<T>(i+1);
       }
       return polynomial<T>(std::move(p_data));
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(pop)
 #endif
    }
@@ -422,7 +423,7 @@ public:
    }
 
    // operators:
-   polynomial& operator =(polynomial&& p) BOOST_NOEXCEPT
+   polynomial& operator =(polynomial&& p) noexcept
    {
        m_data = std::move(p.m_data);
        return *this;
@@ -548,19 +549,10 @@ public:
    }
 
    // Conversion to bool.
-#ifdef BOOST_NO_CXX11_EXPLICIT_CONVERSION_OPERATORS
-   typedef bool (polynomial::*unmentionable_type)() const;
-
-   BOOST_FORCEINLINE operator unmentionable_type() const
-   {
-       return is_zero() ? false : &polynomial::is_zero;
-   }
-#else
-   BOOST_FORCEINLINE explicit operator bool() const
+   inline explicit operator bool() const
    {
        return !m_data.empty();
    }
-#endif
 
    // Fast way to set a polynomial to zero.
    void set_zero()

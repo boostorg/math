@@ -13,7 +13,8 @@
 #endif
 
 #include <cmath>
-#include <boost/limits.hpp>
+#include <cstdint>
+#include <limits>
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/series.hpp>
 #include <boost/math/tools/rational.hpp>
@@ -21,6 +22,7 @@
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/tools/assert.hpp>
+#include <boost/math/special_functions/fpclassify.hpp>
 
 #if defined(__GNUC__) && defined(BOOST_MATH_USE_FLOAT128)
 //
@@ -99,13 +101,10 @@ T log1p_imp(T const & x, const Policy& pol, const std::integral_constant<int, 0>
    if(a < tools::epsilon<result_type>())
       return x;
    detail::log1p_series<result_type> s(x);
-   boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
-#if !BOOST_WORKAROUND(BOOST_BORLANDC, BOOST_TESTED_AT(0x582)) && !BOOST_WORKAROUND(__EDG_VERSION__, <= 245)
+   std::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
+
    result_type result = tools::sum_series(s, policies::get_epsilon<result_type, Policy>(), max_iter);
-#else
-   result_type zero = 0;
-   result_type result = tools::sum_series(s, policies::get_epsilon<result_type, Policy>(), max_iter, zero);
-#endif
+
    policies::check_series_iterations<T>(function, max_iter, pol);
    return result;
 }
@@ -319,24 +318,6 @@ inline typename tools::promote_args<T>::type log1p(T x, const Policy&)
       detail::log1p_imp(static_cast<value_type>(x), forwarding_policy(), tag_type()), "boost::math::log1p<%1%>(%1%)");
 }
 
-#if BOOST_WORKAROUND(BOOST_BORLANDC, BOOST_TESTED_AT(0x564))
-// These overloads work around a type deduction bug:
-inline float log1p(float z)
-{
-   return log1p<float>(z);
-}
-inline double log1p(double z)
-{
-   return log1p<double>(z);
-}
-#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-inline long double log1p(long double z)
-{
-   return log1p<long double>(z);
-}
-#endif
-#endif
-
 #ifdef log1p
 #  ifndef BOOST_HAS_LOG1P
 #     define BOOST_HAS_LOG1P
@@ -475,13 +456,10 @@ inline typename tools::promote_args<T>::type
       return -x * x / 2;
    boost::math::detail::log1p_series<T> s(x);
    s();
-   boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
-#if BOOST_WORKAROUND(BOOST_BORLANDC, BOOST_TESTED_AT(0x582))
-   T zero = 0;
-   T result = boost::math::tools::sum_series(s, policies::get_epsilon<T, Policy>(), max_iter, zero);
-#else
+   std::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
+
    T result = boost::math::tools::sum_series(s, policies::get_epsilon<T, Policy>(), max_iter);
-#endif
+
    policies::check_series_iterations<T>(function, max_iter, pol);
    return result;
 }

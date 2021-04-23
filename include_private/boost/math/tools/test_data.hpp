@@ -12,14 +12,14 @@
 
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/assert.hpp>
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #  pragma warning(push)
 #  pragma warning(disable: 4127 4701 4512)
 #  pragma warning(disable: 4130) // '==' : logical operation on address of string constant.
 #endif
 #include <boost/algorithm/string/trim.hpp>
 #include <boost/lexical_cast.hpp>
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(pop)
 #endif
 #include <boost/type_traits/is_floating_point.hpp>
@@ -39,7 +39,7 @@ namespace random_ns = boost::random;
 #include <vector>
 #include <iostream>
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #  pragma warning(push)
 #  pragma warning(disable: 4130) // '==' : logical operation on address of string constant.
 // Used as a warning with BOOST_MATH_ASSERT
@@ -593,7 +593,7 @@ void test_data<T>::create_test_points(std::set<T>& points, const parameter_info<
 template <class T>
 bool get_user_parameter_info(parameter_info<T>& info, const char* param_name)
 {
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #  pragma warning(push)
 #  pragma warning(disable: 4127)
 #endif
@@ -865,7 +865,7 @@ bool get_user_parameter_info(parameter_info<T>& info, const char* param_name)
    }
 
    return true;
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #  pragma warning(pop)
 #endif
 }
@@ -957,7 +957,7 @@ std::ostream& write_code(std::ostream& os,
 } // namespace math
 } // namespace boost
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(pop)
 #endif
 

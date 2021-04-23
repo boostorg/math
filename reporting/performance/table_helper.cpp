@@ -20,7 +20,7 @@
 #include <iomanip>
 #include "table_helper.hpp"
 
-void add_cell(boost::intmax_t val, const std::string& table_name, const std::string& row_name, const std::string& column_heading);
+void add_cell(std::intmax_t val, const std::string& table_name, const std::string& row_name, const std::string& column_heading);
 void add_to_all_sections(const std::string& id, std::string list_name = "performance_all_sections");
 
 std::vector<std::vector<double> > data;
@@ -77,7 +77,7 @@ struct content_loader
       //
       for(auto i = items_to_add.begin(); i != items_to_add.end(); ++i)
       {
-         add_cell(static_cast<boost::uintmax_t>(std::get<0>(*i) / 1e-9), std::get<1>(*i), std::get<2>(*i), std::get<3>(*i));
+         add_cell(static_cast<std::uintmax_t>(std::get<0>(*i) / 1e-9), std::get<1>(*i), std::get<2>(*i), std::get<3>(*i));
       }
       //
       // Write out the results:
@@ -178,7 +178,7 @@ void add_to_all_sections(const std::string& id, std::string list_name)
    }
 }
 
-std::string get_colour(boost::uintmax_t val, boost::uintmax_t best)
+std::string get_colour(std::uintmax_t val, std::uintmax_t best)
 {
    if(val <= best * 1.2)
       return "green";
@@ -187,18 +187,18 @@ std::string get_colour(boost::uintmax_t val, boost::uintmax_t best)
    return "blue";
 }
 
-boost::intmax_t get_value_from_cell(const std::string& cell)
+std::intmax_t get_value_from_cell(const std::string& cell)
 {
    static const boost::regex time_e("(\\d+)ns");
    boost::smatch what;
    if(regex_search(cell, what, time_e))
    {
-      return boost::lexical_cast<boost::uintmax_t>(what.str(1));
+      return boost::lexical_cast<std::uintmax_t>(what.str(1));
    }
    return -1;
 }
 
-void add_cell(boost::intmax_t val, const std::string& table_name, const std::string& row_name, const std::string& column_heading)
+void add_cell(std::intmax_t val, const std::string& table_name, const std::string& row_name, const std::string& column_heading)
 {
    //
    // Load the table, add our data, and re-write:
@@ -265,8 +265,8 @@ void add_cell(boost::intmax_t val, const std::string& table_name, const std::str
       //
       // Find the best result in this row:
       //
-      boost::uintmax_t best = (std::numeric_limits<boost::uintmax_t>::max)();
-      std::vector<boost::intmax_t> values;
+      std::uintmax_t best = (std::numeric_limits<std::uintmax_t>::max)();
+      std::vector<std::intmax_t> values;
       for(unsigned i = 1; i < table_data[row_id].size(); ++i)
       {
          if(i == column_id)
@@ -278,7 +278,7 @@ void add_cell(boost::intmax_t val, const std::string& table_name, const std::str
          else
          {
             std::cout << "Existing cell value was " << table_data[row_id][i] << std::endl;
-            boost::uintmax_t cell_val = get_value_from_cell(table_data[row_id][i]);
+            std::uintmax_t cell_val = get_value_from_cell(table_data[row_id][i]);
             std::cout << "Extracted value: " << cell_val << std::endl;
             if(cell_val < best)
                best = cell_val;
@@ -358,14 +358,14 @@ void add_cell(boost::intmax_t val, const std::string& table_name, const std::str
 void report_execution_time(double t, std::string table, std::string row, std::string heading)
 {
    items_to_add.push_back(std::make_tuple(t, table, row, heading));
-   //add_cell(static_cast<boost::uintmax_t>(t / 1e-9), table, row, heading);
+   //add_cell(static_cast<std::uintmax_t>(t / 1e-9), table, row, heading);
 }
 
 std::string get_compiler_options_name()
 {
 #if defined(BOOST_MSVC) || defined(__ICL)
    std::string result;
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
    result = "cl ";
 #else
    result = "icl ";

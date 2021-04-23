@@ -17,17 +17,17 @@
 #endif
 
 #include <boost/math/special_functions/math_fwd.hpp>
-#include <boost/config/no_tr1/cmath.hpp>
 #include <boost/math/special_functions/erf.hpp>
 #include <boost/math/special_functions/expm1.hpp>
-#include <boost/throw_exception.hpp>
+#include <boost/math/tools/throw_exception.hpp>
 #include <boost/math/tools/assert.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/tools/big_constant.hpp>
 
 #include <stdexcept>
+#include <cmath>
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(push)
 #pragma warning(disable:4127)
 #endif
@@ -829,7 +829,7 @@ namespace boost
                val = owens_t_T6(h,a, pol);
                break;
             default:
-               BOOST_THROW_EXCEPTION(std::logic_error("selection routine in Owen's T function failed"));
+               BOOST_MATH_THROW_EXCEPTION(std::logic_error("selection routine in Owen's T function failed"));
             }
             return val;
          }
@@ -1082,7 +1082,7 @@ namespace boost
    } // namespace math
 } // namespace boost
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(pop)
 #endif
 

@@ -12,15 +12,15 @@
 #include <boost/math/special_functions/expm1.hpp>
 #include <boost/math/distributions/complement.hpp>
 #include <boost/math/distributions/detail/common_error_handling.hpp>
-#include <boost/config/no_tr1/cmath.hpp>
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 # pragma warning(push)
 # pragma warning(disable: 4127) // conditional expression is constant
 # pragma warning(disable: 4702) // unreachable code (return after domain_error throw).
 #endif
 
 #include <utility>
+#include <cmath>
 
 namespace boost{ namespace math{
 
@@ -270,7 +270,7 @@ inline RealType entropy(const exponential_distribution<RealType, Policy>& dist)
 } // namespace math
 } // namespace boost
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 # pragma warning(pop)
 #endif
 

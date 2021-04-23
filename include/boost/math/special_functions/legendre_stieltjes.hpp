@@ -206,7 +206,7 @@ public:
             auto p = boost::math::tools::bisect(g, lower_bound, upper_bound, tol);
 
             Real x_nk_guess = p.first + (p.second - p.first)*half<Real>();
-            boost::uintmax_t number_of_iterations = 500;
+            std::uintmax_t number_of_iterations = 500;
 
             auto f = [&] (Real x) { Real Pn = this->operator()(x);
                                     Real Pn_prime = this->prime(x);

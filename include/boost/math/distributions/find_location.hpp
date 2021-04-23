@@ -37,13 +37,8 @@ namespace boost
       const Policy& pol 
       )
     {
-#if !defined(BOOST_NO_SFINAE) && !BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x590))
-      // Will fail to compile here if try to use with a distribution without scale & location,
-      // for example pareto, and many others.  These tests are disabled by the pp-logic
-      // above if the compiler doesn't support the SFINAE tricks used in the traits class.
       static_assert(::boost::math::tools::is_distribution<Dist>::value, "The provided distribution does not meet the conceptual requirements of a distribution."); 
       static_assert(::boost::math::tools::is_scaled_distribution<Dist>::value, "The provided distribution does not meet the conceptual requirements of a scaled distribution."); 
-#endif
       static const char* function = "boost::math::find_location<Dist, Policy>&, %1%)";
 
       if(!(boost::math::isfinite)(p) || (p < 0) || (p > 1))

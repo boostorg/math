@@ -42,7 +42,7 @@ In Boost.Math, we call these principal branches `lambert_w0` and `lambert_wm1`; 
 [import ../../example/lambert_w_graph.cpp]
 
 [graph lambert_w_graph]
-[graph lambert_w_graph_big_w]
+[graph lambert_w_graph_big_W]
 [graph lambert_w0_prime_graph]
 [graph lambert_wm1_prime_graph]
 
@@ -503,7 +503,7 @@ and output as C++ arrays 37 decimal digit `long double` literals using `max_digi
   std::cout.precision(std::numeric_limits<cpp_bin_float_quad>::max_digits10);
 
 The arrays are as `const` and `constexpr` and `static` as possible (for the compiler version),
-using BOOST_STATIC_CONSTEXPR macro.
+using static constexpr macro.
 (See [@../../tools/lambert_w_lookup_table_generator.cpp  lambert_w_lookup_table_generator.cpp]
 The precision was chosen to ensure that if used as `long double` arrays,
 then the values output to

@@ -27,6 +27,8 @@ http://www3.imperial.ac.uk/pls/portallive/docs/1/7292572.PDF
 
 */
 
+#ifndef BOOST_MATH_STANDALONE
+
 #include <boost/math/special_functions/lambert_w.hpp>
 using boost::math::lambert_w0;
 #include <boost/math/special_functions.hpp>
@@ -61,8 +63,8 @@ https://en.wikipedia.org/wiki/Boltzmann_constant#Role_in_semiconductor_physics:_
 */
 const double v_thermal(double temperature)
 {
-  BOOST_CONSTEXPR const double boltzmann_k = 1.38e-23; // joules/kelvin.
-  BOOST_CONSTEXPR double charge_q = 1.6021766208e-19; // Charge of an electron (columb).
+  constexpr const double boltzmann_k = 1.38e-23; // joules/kelvin.
+  constexpr double charge_q = 1.6021766208e-19; // Charge of an electron (columb).
   double temp = +273; // Degrees C to K.
   return boltzmann_k * temp / charge_q;
 } // v_thermal
@@ -278,3 +280,4 @@ int main()
 
    //] [/lambert_w_output_1]
    */
+#endif // BOOST_MATH_STANDALONE
