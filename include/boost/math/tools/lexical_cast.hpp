@@ -6,6 +6,8 @@
 #ifndef BOOST_MATH_TOOLS_LEXICAL_CAST
 #define BOOST_MATH_TOOLS_LEXICAL_CAST
 
+#include <boost/math/tools/is_standalone.hpp>
+
 #ifndef BOOST_MATH_STANDALONE
 #include <boost/lexical_cast.hpp>
 #else

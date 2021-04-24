@@ -10,6 +10,8 @@
 #ifndef BOOST_MATH_TOOLS_ASSERT_HPP
 #define BOOST_MATH_TOOLS_ASSERT_HPP
 
+#include <boost/math/tools/is_standalone.hpp>
+
 #ifndef BOOST_MATH_STANDALONE
 
 #include <boost/assert.hpp>

@@ -13,6 +13,7 @@
 
 #include <algorithm>
 #include <type_traits>
+#include <boost/math/tools/is_standalone.hpp>
 #include <boost/math/tools/polynomial.hpp>
 
 #ifndef BOOST_MATH_STANDALONE

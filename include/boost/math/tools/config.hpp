@@ -11,6 +11,8 @@
 #pragma once
 #endif
 
+#include <boost/math/tools/is_standalone.hpp>
+
 #ifndef BOOST_MATH_STANDALONE
 #include <boost/config.hpp>
 

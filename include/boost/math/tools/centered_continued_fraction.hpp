@@ -16,6 +16,7 @@
 #include <sstream>
 #include <array>
 #include <type_traits>
+#include <boost/math/tools/is_standalone.hpp>
 
 #ifndef BOOST_MATH_STANDALONE
 #include <boost/core/demangle.hpp>
