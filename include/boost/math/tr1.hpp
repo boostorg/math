@@ -15,6 +15,7 @@
 
 #ifdef __cplusplus
 
+#include <boost/math/tools/is_standalone.hpp>
 #include <boost/math/tools/assert.hpp>
 
 namespace boost{ namespace math{ namespace tr1{ extern "C"{
