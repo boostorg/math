@@ -879,7 +879,8 @@ namespace std
    using boost::math::cstdfloat::detail::fabs;
 
 #if !(defined(_GLIBCXX_USE_FLOAT128) && defined(__GNUC__) && (__GNUC__ >= 7))
-#if defined(__clang__) && !(!defined(__STRICT_ANSI__) && defined(_GLIBCXX_USE_FLOAT128)) // workaround for clang using libstdc++
+#if (defined(__clang__) && !(!defined(__STRICT_ANSI__) && defined(_GLIBCXX_USE_FLOAT128))) || (__GNUC__ <= 6 && !defined(__clang__)) 
+   // workaround for clang using libstdc++ and old GCC
    using boost::math::cstdfloat::detail::abs;
 #endif
 #endif
