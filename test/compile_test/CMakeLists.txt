@@ -5,5 +5,9 @@
 file(GLOB SOURCES "*.cpp")
 add_library(boost_math-compile_tests ${SOURCES})
 target_compile_features(boost_math-compile_tests PRIVATE cxx_std_17)
-target_include_directories(boost_math-compile_tests PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
-target_include_directories(boost_math-compile_tests PRIVATE .)
+target_include_directories(boost_math-compile_tests PUBLIC ${CMAKE_SOURCE_DIR}/include)
+
+# For boost superproject CI testing
+if(EXISTS ${CMAKE_SOURCE_DIR}/libs/math)
+    target_include_directories(boost_math-compile_tests PUBLIC ${CMAKE_SOURCE_DIR}/libs/math/include)
+endif()
