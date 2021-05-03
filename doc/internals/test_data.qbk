@@ -356,7 +356,7 @@ for each element in the tuple (in addition to the input parameters):
          //
          // Now get the approximation at double precision, along with the number of
          // iterations required:
-         boost::uintmax_t iters = std::numeric_limits<boost::uintmax_t>::max();
+         std::uintmax_t iters = std::numeric_limits<std::uintmax_t>::max();
          upper_incomplete_gamma_fract<T> f2(val, val);
          T found_val = continued_fraction_a(f2, std::numeric_limits<T>::digits, iters);
          //

@@ -4,7 +4,7 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/math/tools/series.hpp>
-#include <boost/assert.hpp>
+#include <boost/math/tools/assert.hpp>
 
 #include <iostream>
 #include <complex>
@@ -42,12 +42,12 @@ template <class T>
 T log1p(T x)
 {
    // We really should add some error checking on x here!
-   BOOST_ASSERT(std::fabs(x) < 1);
+   BOOST_MATH_ASSERT(std::fabs(x) < 1);
 
    // Construct the series functor:
    log1p_series<T> s(x);
    // Set a limit on how many iterations we permit:
-   boost::uintmax_t max_iter = 1000;
+   std::uintmax_t max_iter = 1000;
    // Add it up, with enough precision for full machine precision:
    return boost::math::tools::sum_series(s, std::numeric_limits<T>::epsilon(), max_iter);
 }
@@ -84,12 +84,12 @@ template <class T>
 std::complex<T> log1p(std::complex<T> x)
 {
    // We really should add some error checking on x here!
-   BOOST_ASSERT(abs(x) < 1);
+   BOOST_MATH_ASSERT(abs(x) < 1);
 
    // Construct the series functor:
    log1p_series<std::complex<T> > s(x);
    // Set a limit on how many iterations we permit:
-   boost::uintmax_t max_iter = 1000;
+   std::uintmax_t max_iter = 1000;
    // Add it up, with enough precision for full machine precision:
    return boost::math::tools::sum_series(s, std::complex<T>(std::numeric_limits<T>::epsilon()), max_iter);
 }

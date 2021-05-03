@@ -239,9 +239,9 @@ refer to the __bernoulli_numbers documentation for details.
   namespace boost { namespace math {
 
   template <class Policy>
-  constexpr boost::uint32_t prime(unsigned n, const Policy& pol);
+  constexpr std::uint32_t prime(unsigned n, const Policy& pol);
 
-  constexpr boost::uint32_t prime(unsigned n);
+  constexpr std::uint32_t prime(unsigned n);
 
   static const unsigned max_prime = 10000;
 

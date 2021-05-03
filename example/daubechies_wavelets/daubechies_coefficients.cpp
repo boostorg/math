@@ -10,7 +10,7 @@
 #include <string>
 #include <complex>
 #include <bitset>
-#include <boost/assert.hpp>
+#include <boost/math/tools/assert.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/tools/polynomial.hpp>
@@ -45,7 +45,7 @@ template<class Complex>
 std::vector<std::pair<Complex, Complex>> find_roots(size_t p)
 {
     // Initialize the polynomial; see Mallat, A Wavelet Tour of Signal Processing, equation 7.96
-    BOOST_ASSERT(p>0);
+    BOOST_MATH_ASSERT(p>0);
     typedef typename Complex::value_type Real;
     std::vector<Complex> coeffs(p);
     for (size_t k = 0; k < coeffs.size(); ++k)
@@ -111,7 +111,7 @@ std::vector<std::pair<Complex, Complex>> find_roots(size_t p)
             throw std::logic_error("Donezo.");
         }
 
-        BOOST_ASSERT(i < roots.size());
+        BOOST_MATH_ASSERT(i < roots.size());
         roots[i] = r;
         ++i;
         polynomial<Complex> q{-r, {1,0}};
@@ -124,7 +124,7 @@ std::vector<std::pair<Complex, Complex>> find_roots(size_t p)
             // Then the complex conjugate is also a root:
             using std::conj;
             using std::norm;
-            BOOST_ASSERT(i < roots.size());
+            BOOST_MATH_ASSERT(i < roots.size());
             roots[i] = conj(r);
             ++i;
             q = polynomial<Complex>({{norm(r), 0}, {-2*r.real(),0}, {1,0}});
@@ -172,7 +172,7 @@ std::vector<typename Complex::value_type> daubechies_coefficients(std::vector<st
         }
         else
         {
-            BOOST_ASSERT(norm(Qroots[i].second) <= 1);
+            BOOST_MATH_ASSERT(norm(Qroots[i].second) <= 1);
             chosen_roots[i] = Qroots[i].second;
         }
     }
@@ -195,7 +195,7 @@ std::vector<typename Complex::value_type> daubechies_coefficients(std::vector<st
     for (size_t i = 0; i < result.size(); ++i)
     {
         Complex r = result[i];
-        BOOST_ASSERT(r.imag() < sqrt(std::numeric_limits<Real>::epsilon()));
+        BOOST_MATH_ASSERT(r.imag() < sqrt(std::numeric_limits<Real>::epsilon()));
         h[i] = r.real();
     }
 
@@ -207,8 +207,8 @@ std::vector<typename Complex::value_type> daubechies_coefficients(std::vector<st
         sum += h[i];
         scale += h[i]*h[i];
     }
-    BOOST_ASSERT(abs(scale -1) < sqrt(std::numeric_limits<Real>::epsilon()));
-    BOOST_ASSERT(abs(sum - root_two<Real>()) < sqrt(std::numeric_limits<Real>::epsilon()));
+    BOOST_MATH_ASSERT(abs(scale -1) < sqrt(std::numeric_limits<Real>::epsilon()));
+    BOOST_MATH_ASSERT(abs(sum - root_two<Real>()) < sqrt(std::numeric_limits<Real>::epsilon()));
     return h;
 }
 

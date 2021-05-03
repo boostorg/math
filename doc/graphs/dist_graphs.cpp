@@ -118,7 +118,7 @@ public:
       //
       if(a <= -(std::numeric_limits<double>::max)())
       {
-         boost::uintmax_t max_iter = 500;
+         std::uintmax_t max_iter = 500;
          double guess = mod;
          if((pdf(d, 0) > min_y) || (guess == 0))
             guess = -1e-3;
@@ -132,7 +132,7 @@ public:
       }
       if(b >= (std::numeric_limits<double>::max)())
       {
-         boost::uintmax_t max_iter = 500;
+         std::uintmax_t max_iter = 500;
          double guess = mod;
          if(a <= 0)
             if((pdf(d, 0) > min_y) || (guess == 0))

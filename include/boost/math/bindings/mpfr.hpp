@@ -11,11 +11,9 @@
 #ifndef BOOST_MATH_MPLFR_BINDINGS_HPP
 #define BOOST_MATH_MPLFR_BINDINGS_HPP
 
-#include <boost/config.hpp>
-#include <boost/lexical_cast.hpp>
 #include <type_traits>
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 //
 // We get a lot of warnings from the gmp, mpfr and gmpfrxx headers, 
 // disable them here, so we only see warnings from *our* code:
@@ -26,7 +24,7 @@
 
 #include <gmpfrxx.h>
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(pop)
 #endif
 
@@ -38,6 +36,8 @@
 #include <boost/math/bindings/detail/big_digamma.hpp>
 #include <boost/math/bindings/detail/big_lanczos.hpp>
 #include <boost/math/tools/big_constant.hpp>
+#include <boost/math/tools/config.hpp>
+#include <boost/math/tools/lexical_cast.hpp>
 
 inline mpfr_class fabs(const mpfr_class& v)
 {
@@ -298,7 +298,7 @@ struct promote_arg<__gmp_expr<T,U> >
 };
 
 template<>
-inline int digits<mpfr_class>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(mpfr_class)) BOOST_NOEXCEPT
+inline int digits<mpfr_class>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(mpfr_class)) noexcept
 {
    return mpfr_class::get_dprec();
 }
@@ -456,6 +456,10 @@ inline mpfr_class skewness(const extreme_value_distribution<mpfr_class, Policy>&
    // This is 12 * sqrt(6) * zeta(3) / pi^3:
    // See http://mathworld.wolfram.com/ExtremeValueDistribution.html
    //
+   #ifdef BOOST_MATH_STANDALONE
+   static_assert(sizeof(Policy) == 0, "mpfr skewness can not be calculated in standalone mode");
+   #endif
+
    return boost::lexical_cast<mpfr_class>("1.1395470994046486574927930193898461120875997958366");
 }
 
@@ -463,6 +467,10 @@ template <class Policy>
 inline mpfr_class skewness(const rayleigh_distribution<mpfr_class, Policy>& /*dist*/)
 {
   // using namespace boost::math::constants;
+  #ifdef BOOST_MATH_STANDALONE
+  static_assert(sizeof(Policy) == 0, "mpfr skewness can not be calculated in standalone mode");
+  #endif
+
   return boost::lexical_cast<mpfr_class>("0.63111065781893713819189935154422777984404221106391");
   // Computed using NTL at 150 bit, about 50 decimal digits.
   // return 2 * root_pi<RealType>() * pi_minus_three<RealType>() / pow23_four_minus_pi<RealType>();
@@ -472,6 +480,10 @@ template <class Policy>
 inline mpfr_class kurtosis(const rayleigh_distribution<mpfr_class, Policy>& /*dist*/)
 {
   // using namespace boost::math::constants;
+  #ifdef BOOST_MATH_STANDALONE
+  static_assert(sizeof(Policy) == 0, "mpfr kurtosis can not be calculated in standalone mode");
+  #endif
+
   return boost::lexical_cast<mpfr_class>("3.2450893006876380628486604106197544154170667057995");
   // Computed using NTL at 150 bit, about 50 decimal digits.
   // return 3 - (6 * pi<RealType>() * pi<RealType>() - 24 * pi<RealType>() + 16) /
@@ -483,6 +495,10 @@ inline mpfr_class kurtosis_excess(const rayleigh_distribution<mpfr_class, Policy
 {
   //using namespace boost::math::constants;
   // Computed using NTL at 150 bit, about 50 decimal digits.
+  #ifdef BOOST_MATH_STANDALONE
+  static_assert(sizeof(Policy) == 0, "mpfr excess kurtosis can not be calculated in standalone mode");
+  #endif
+
   return boost::lexical_cast<mpfr_class>("0.2450893006876380628486604106197544154170667057995");
   // return -(6 * pi<RealType>() * pi<RealType>() - 24 * pi<RealType>() + 16) /
   //   (four_minus_pi<RealType>() * four_minus_pi<RealType>());
@@ -792,6 +808,10 @@ inline mpfr_class erf_inv_imp(const mpfr_class& p, const mpfr_class& q, const Po
 
 inline mpfr_class bessel_i0(mpfr_class x)
 {
+   #ifdef BOOST_MATH_STANDALONE
+   static_assert(sizeof(x) == 0, "mpfr bessel_i0 can not be calculated in standalone mode");
+   #endif
+    
     static const mpfr_class P1[] = {
         boost::lexical_cast<mpfr_class>("-2.2335582639474375249e+15"),
         boost::lexical_cast<mpfr_class>("-5.5050369673018427753e+14"),

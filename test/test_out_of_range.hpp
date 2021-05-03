@@ -30,7 +30,7 @@ but does *not* check finite but out-of-range parameters to the constructor
 because these are specific to each distribution.
 */
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(push)
 #pragma warning(disable:4127)
 #endif
@@ -46,8 +46,8 @@ void check_support(const Distro& d, bool Infinite = false)
      if ((boost::math::isfinite)(range(d).first) && (range(d).first != -boost::math::tools::max_value<value_type>()))
      { // If possible, check that a random variable value just less than the bottom of the supported range throws domain errors.
        value_type m = (range(d).first == 0) ? -boost::math::tools::min_value<value_type>() : boost::math::float_prior(range(d).first);
-       BOOST_ASSERT(m != range(d).first);
-       BOOST_ASSERT(m < range(d).first);
+       BOOST_MATH_ASSERT(m != range(d).first);
+       BOOST_MATH_ASSERT(m < range(d).first);
        BOOST_MATH_CHECK_THROW(pdf(d, m), std::domain_error);
        BOOST_MATH_CHECK_THROW(cdf(d, m), std::domain_error);
        BOOST_MATH_CHECK_THROW(cdf(complement(d, m)), std::domain_error);
@@ -55,8 +55,8 @@ void check_support(const Distro& d, bool Infinite = false)
      if ((boost::math::isfinite)(range(d).second) && (range(d).second != boost::math::tools::max_value<value_type>()))
      { // If possible, check that a random variable value just more than the top of the supported range throws domain errors.
        value_type m = (range(d).second == 0) ? boost::math::tools::min_value<value_type>() : boost::math::float_next(range(d).second);
-       BOOST_ASSERT(m != range(d).first);
-       BOOST_ASSERT(m > range(d).first);
+       BOOST_MATH_ASSERT(m != range(d).first);
+       BOOST_MATH_ASSERT(m > range(d).first);
        BOOST_MATH_CHECK_THROW(pdf(d, m), std::domain_error);
        BOOST_MATH_CHECK_THROW(cdf(d, m), std::domain_error);
        BOOST_MATH_CHECK_THROW(cdf(complement(d, m)), std::domain_error);
@@ -168,7 +168,7 @@ void check_out_of_range(typename Distro::value_type p1, typename Distro::value_t
    }
 }
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(pop)
 #endif
 

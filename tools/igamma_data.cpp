@@ -67,7 +67,7 @@ struct igamma_data_generator
          z = truncate_to_float((std::max)(mp_t(100), a*100));
          break;
       default:
-         BOOST_ASSERT(0 == "Can't get here!!");
+         BOOST_MATH_ASSERT(0 == "Can't get here!!");
       }
 
       //mp_t g = boost::math::tgamma(a);

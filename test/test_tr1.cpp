@@ -7,6 +7,7 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/tools/precision.hpp>
+#include <boost/math/tools/config.hpp>
 #include <math.h>  // ldexpf
 #include <iostream>
 #include <iomanip>

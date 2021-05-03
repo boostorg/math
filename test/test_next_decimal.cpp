@@ -17,7 +17,7 @@
 #include <iostream>
 #include <iomanip>
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(disable:4127)
 #endif
 
@@ -27,7 +27,7 @@ bool is_normalized_value(const T& val)
    //
    // Returns false if value has guard digits that are non-zero
    //
-   boost::intmax_t shift = std::numeric_limits<T>::digits - ilogb(val) - 1;
+   std::intmax_t shift = std::numeric_limits<T>::digits - ilogb(val) - 1;
    T shifted = scalbn(val, shift);
    return floor(shifted) == shifted;
 }

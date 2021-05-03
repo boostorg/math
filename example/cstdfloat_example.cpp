@@ -30,7 +30,6 @@ Dover, New York, 4th ed., (1945), pages 180-188.
 #include <cmath>  // for pow function.
 #include <boost/math/special_functions.hpp> // For gamma function.
 //] [/cstdfloat_example_1]
-#include <boost/type_traits/is_same.hpp>
 
 #include <iostream>
 
@@ -251,9 +250,9 @@ BOOST_FLOAT128_C(123.4567890123456789012345678901234567890) = 123.45678901234567
 // Display the precisions available for floatmax_t
 
 #ifdef BOOST_FLOATMAX_C
-  BOOST_ASSERT(std::numeric_limits<boost::floatmax_t>::is_specialized == true);
-  BOOST_ASSERT(std::numeric_limits<boost::floatmax_t>::is_iec559 == true);
-  BOOST_ASSERT(BOOST_FLOATMAX_C(0.) == 0);
+  BOOST_MATH_ASSERT(std::numeric_limits<boost::floatmax_t>::is_specialized == true);
+  BOOST_MATH_ASSERT(std::numeric_limits<boost::floatmax_t>::is_iec559 == true);
+  BOOST_MATH_ASSERT(BOOST_FLOATMAX_C(0.) == 0);
 
   std::cout << "floatmax_t " << std::numeric_limits<boost::floatmax_t>::digits << " bits\n" // 113
     << std::numeric_limits<boost::floatmax_t>::digits10 << " decimal digits\n" // 34

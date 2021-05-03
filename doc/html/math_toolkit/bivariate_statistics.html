@@ -4,7 +4,7 @@
 <title>Bivariate Statistics</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
-<link rel="home" href="../index.html" title="Math Toolkit 2.13.0">
+<link rel="home" href="../index.html" title="Math Toolkit 3.0.0">
 <link rel="up" href="../statistics.html" title="Chapter 6. Statistics">
 <link rel="prev" href="univariate_statistics.html" title="Univariate Statistics">
 <link rel="next" href="signal_statistics.html" title="Signal Statistics">
@@ -34,13 +34,22 @@
 
 <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">statistics</span> <span class="special">{</span>
 
-    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Container</span><span class="special">&gt;</span>
+    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">ExecutionPolicy</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Container</span><span class="special">&gt;</span>
+    <span class="keyword">auto</span> <span class="identifier">covariance</span><span class="special">(</span><span class="identifier">ExecutionPolicy</span><span class="special">&amp;&amp;</span> <span class="identifier">exec</span><span class="special">,</span> <span class="identifier">Container</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">u</span><span class="special">,</span> <span class="identifier">Container</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">v</span><span class="special">);</span>
+
+    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Container</span><span class="special">&gt;</span>
     <span class="keyword">auto</span> <span class="identifier">covariance</span><span class="special">(</span><span class="identifier">Container</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">u</span><span class="special">,</span> <span class="identifier">Container</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">v</span><span class="special">);</span>
 
-    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Container</span><span class="special">&gt;</span>
+    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">ExecutionPolicy</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Container</span><span class="special">&gt;</span>
+    <span class="keyword">auto</span> <span class="identifier">means_and_covariance</span><span class="special">(</span><span class="identifier">ExecutionPolicy</span><span class="special">&amp;&amp;</span> <span class="identifier">exec</span><span class="special">,</span> <span class="identifier">Container</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">u</span><span class="special">,</span> <span class="identifier">Container</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">v</span><span class="special">);</span>
+
+    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Container</span><span class="special">&gt;</span>
     <span class="keyword">auto</span> <span class="identifier">means_and_covariance</span><span class="special">(</span><span class="identifier">Container</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">u</span><span class="special">,</span> <span class="identifier">Container</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">v</span><span class="special">);</span>
 
-    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Container</span><span class="special">&gt;</span>
+    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">ExecutionPolicy</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Container</span><span class="special">&gt;</span>
+    <span class="keyword">auto</span> <span class="identifier">correlation_coefficient</span><span class="special">(</span><span class="identifier">ExecutionPolicy</span><span class="special">&amp;&amp;</span> <span class="identifier">exec</span><span class="special">,</span> <span class="identifier">Container</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">u</span><span class="special">,</span> <span class="identifier">Container</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">v</span><span class="special">);</span>
+
+    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Container</span><span class="special">&gt;</span>
     <span class="keyword">auto</span> <span class="identifier">correlation_coefficient</span><span class="special">(</span><span class="identifier">Container</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">u</span><span class="special">,</span> <span class="identifier">Container</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">v</span><span class="special">);</span>
 
 <span class="special">}}}</span>
@@ -50,7 +59,9 @@
       <span class="phrase"><a name="math_toolkit.bivariate_statistics.description"></a></span><a class="link" href="bivariate_statistics.html#math_toolkit.bivariate_statistics.description">Description</a>
     </h4>
 <p>
-      This file provides functions for computing bivariate statistics.
+      This file provides functions for computing bivariate statistics. The functions
+      are C++11 compatible, but require C++17 to use execution policies. If an execution
+      policy is not passed to the function the default is std::execution::seq.
     </p>
 <h4>
 <a name="math_toolkit.bivariate_statistics.h2"></a>
@@ -65,8 +76,13 @@
 </pre>
 <p>
       The implementation follows <a href="https://doi.org/10.1109/CLUSTR.2009.5289161" target="_top">Bennet
-      et al</a>. The data is not modified. Requires a random-access container.
-      Works with real-valued inputs and does not work with complex-valued inputs.
+      et al</a>. The parallel implementation follows <a href="https://dl.acm.org/doi/10.1145/3221269.3223036" target="_top">Schubert
+      et al</a>. The data is not modified. Works with real-valued inputs and
+      does not work with complex-valued inputs.
+    </p>
+<p>
+      <span class="emphasis"><em>Nota bene:</em></span> If the input is an integer type the output
+      will be a double precision type.
     </p>
 <p>
       The algorithm used herein simultaneously generates the mean values of the input
@@ -94,7 +110,11 @@
 <span class="comment">// rho_uv = 1.</span>
 </pre>
 <p>
-      The data must be random access and cannot be complex.
+      Works with real-valued inputs and does not work with complex-valued inputs.
+    </p>
+<p>
+      <span class="emphasis"><em>Nota bene:</em></span> If the input is an integer type the output
+      will be a double precision type.
     </p>
 <p>
       If one or both of the datasets is constant, the correlation coefficient is
@@ -107,18 +127,26 @@
 <a name="math_toolkit.bivariate_statistics.h4"></a>
       <span class="phrase"><a name="math_toolkit.bivariate_statistics.references"></a></span><a class="link" href="bivariate_statistics.html#math_toolkit.bivariate_statistics.references">References</a>
     </h4>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
           Bennett, Janine, et al. <span class="emphasis"><em>Numerically stable, single-pass, parallel
           statistics algorithms.</em></span> Cluster Computing and Workshops, 2009.
           CLUSTER'09. IEEE International Conference on. IEEE, 2009.
-        </li></ul></div>
+        </li>
+<li class="listitem">
+          Schubert, Erich; Gertz, Michael <span class="emphasis"><em>Numerically stable parallel computation
+          of (co-)variance'</em></span> Proceedings of the 30th International Conference
+          on Scientific and Statistical Database Management, 2018.
+        </li>
+</ul></div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright © 2006-2020 Nikhar Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher
-      Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Evan Miller, Jeremy Murphy,
-      Matthew Pulver, Johan Råde, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson,
-      Thijs van den Berg, Daryle Walker and Xiaogang Zhang<p>
+<td align="right"><div class="copyright-footer">Copyright © 2006-2021 Nikhar Agrawal, Anton Bikineev, Matthew Borland,
+      Paul A. Bristow, Marco Guazzone, Christopher Kormanyos, Hubert Holin, Bruno
+      Lalande, John Maddock, Evan Miller, Jeremy Murphy, Matthew Pulver, Johan Råde,
+      Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg, Daryle
+      Walker and Xiaogang Zhang<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

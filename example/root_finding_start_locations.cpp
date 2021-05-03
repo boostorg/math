@@ -34,7 +34,7 @@ private:
 //] [/root_finding_noderiv_1
 
 template <class T>
-boost::uintmax_t cbrt_noderiv(T x, T guess)
+std::uintmax_t cbrt_noderiv(T x, T guess)
 {
    // return cube root of x using bracket_and_solve (no derivatives).
    using namespace std;                          // Help ADL of std functions.
@@ -42,8 +42,8 @@ boost::uintmax_t cbrt_noderiv(T x, T guess)
 
    T factor = 2;                                 // How big steps to take when searching.
 
-   const boost::uintmax_t maxit = 20;            // Limit to maximum iterations.
-   boost::uintmax_t it = maxit;                  // Initially our chosen max iterations, but updated with actual.
+   const std::uintmax_t maxit = 20;            // Limit to maximum iterations.
+   std::uintmax_t it = maxit;                  // Initially our chosen max iterations, but updated with actual.
    bool is_rising = true;                        // So if result if guess^3 is too low, then try increasing guess.
    int digits = std::numeric_limits<T>::digits;  // Maximum possible binary digits accuracy for type T.
    // Some fraction of digits is used to control how accurate to try to make the result.
@@ -75,7 +75,7 @@ private:
 };
 
 template <class T>
-boost::uintmax_t cbrt_deriv(T x, T guess)
+std::uintmax_t cbrt_deriv(T x, T guess)
 {
    // return cube root of x using 1st derivative and Newton_Raphson.
    using namespace boost::math::tools;
@@ -84,8 +84,8 @@ boost::uintmax_t cbrt_deriv(T x, T guess)
    const int digits = std::numeric_limits<T>::digits;  // Maximum possible binary digits accuracy for type T.
    int get_digits = static_cast<int>(digits * 0.6);    // Accuracy doubles with each step, so stop when we have
    // just over half the digits correct.
-   const boost::uintmax_t maxit = 20;
-   boost::uintmax_t it = maxit;
+   const std::uintmax_t maxit = 20;
+   std::uintmax_t it = maxit;
    newton_raphson_iterate(cbrt_functor_deriv<T>(x), guess, min, max, get_digits, it);
    return it;
 }
@@ -111,7 +111,7 @@ private:
 };
 
 template <class T>
-boost::uintmax_t cbrt_2deriv(T x, T guess)
+std::uintmax_t cbrt_2deriv(T x, T guess)
 { 
    // return cube root of x using 1st and 2nd derivatives and Halley.
    //using namespace std;  // Help ADL of std functions.
@@ -122,13 +122,13 @@ boost::uintmax_t cbrt_2deriv(T x, T guess)
    // digits used to control how accurate to try to make the result.
    int get_digits = static_cast<int>(digits * 0.4);    // Accuracy triples with each step, so stop when just
    // over one third of the digits are correct.
-   boost::uintmax_t maxit = 20;
+   std::uintmax_t maxit = 20;
    halley_iterate(cbrt_functor_2deriv<T>(x), guess, min, max, get_digits, maxit);
    return maxit;
 }
 
 template <class T>
-boost::uintmax_t cbrt_2deriv_s(T x, T guess)
+std::uintmax_t cbrt_2deriv_s(T x, T guess)
 { 
    // return cube root of x using 1st and 2nd derivatives and Halley.
    //using namespace std;  // Help ADL of std functions.
@@ -139,7 +139,7 @@ boost::uintmax_t cbrt_2deriv_s(T x, T guess)
    // digits used to control how accurate to try to make the result.
    int get_digits = static_cast<int>(digits * 0.4);    // Accuracy triples with each step, so stop when just
    // over one third of the digits are correct.
-   boost::uintmax_t maxit = 20;
+   std::uintmax_t maxit = 20;
    schroder_iterate(cbrt_functor_2deriv<T>(x), guess, min, max, get_digits, maxit);
    return maxit;
 }
@@ -165,15 +165,15 @@ private:
 }; // template <class T> struct elliptic_root_functor_noderiv
 
 template <class T = double>
-boost::uintmax_t elliptic_root_noderiv(T radius, T arc, T guess)
+std::uintmax_t elliptic_root_noderiv(T radius, T arc, T guess)
 { // return the other radius of an ellipse, given one radii and the arc-length
    using namespace std;  // Help ADL of std functions.
    using namespace boost::math::tools; // For bracket_and_solve_root.
 
    T factor = 2;                       // How big steps to take when searching.
 
-   const boost::uintmax_t maxit = 50;  // Limit to maximum iterations.
-   boost::uintmax_t it = maxit;        // Initially our chosen max iterations, but updated with actual.
+   const std::uintmax_t maxit = 50;  // Limit to maximum iterations.
+   std::uintmax_t it = maxit;        // Initially our chosen max iterations, but updated with actual.
    bool is_rising = true;              // arc-length increases if one radii increases, so function is rising
    // Define a termination condition, stop when nearly all digits are correct, but allow for
    // the fact that we are returning a range, and must have some inaccuracy in the elliptic integral:
@@ -186,7 +186,7 @@ boost::uintmax_t elliptic_root_noderiv(T radius, T arc, T guess)
 template <class T = double>
 struct elliptic_root_functor_1deriv
 { // Functor also returning 1st derivative.
-   BOOST_STATIC_ASSERT_MSG(boost::is_integral<T>::value == false, "Only floating-point type types can be used!");
+   static_assert(boost::is_integral<T>::value == false, "Only floating-point type types can be used!");
 
    elliptic_root_functor_1deriv(T const& arc, T const& radius) : m_arc(arc), m_radius(radius)
    { // Constructor just stores value a to find root of.
@@ -215,12 +215,12 @@ private:
 };  // struct elliptic_root__functor_1deriv
 
 template <class T = double>
-boost::uintmax_t elliptic_root_1deriv(T radius, T arc, T guess)
+std::uintmax_t elliptic_root_1deriv(T radius, T arc, T guess)
 {
    using namespace std;  // Help ADL of std functions.
    using namespace boost::math::tools; // For newton_raphson_iterate.
 
-   BOOST_STATIC_ASSERT_MSG(boost::is_integral<T>::value == false, "Only floating-point type types can be used!");
+   static_assert(boost::is_integral<T>::value == false, "Only floating-point type types can be used!");
 
    T min = 0;   // Minimum possible value is zero.
    T max = arc; // Maximum possible value is the arc length.
@@ -228,8 +228,8 @@ boost::uintmax_t elliptic_root_1deriv(T radius, T arc, T guess)
    // Accuracy doubles at each step, so stop when just over half of the digits are
    // correct, and rely on that step to polish off the remainder:
    int get_digits = static_cast<int>(std::numeric_limits<T>::digits * 0.6);
-   const boost::uintmax_t maxit = 20;
-   boost::uintmax_t it = maxit;
+   const std::uintmax_t maxit = 20;
+   std::uintmax_t it = maxit;
    newton_raphson_iterate(elliptic_root_functor_1deriv<T>(arc, radius), guess, min, max, get_digits, it);
    return it;
 }
@@ -237,7 +237,7 @@ boost::uintmax_t elliptic_root_1deriv(T radius, T arc, T guess)
 template <class T = double>
 struct elliptic_root_functor_2deriv
 { // Functor returning both 1st and 2nd derivatives.
-   BOOST_STATIC_ASSERT_MSG(boost::is_integral<T>::value == false, "Only floating-point type types can be used!");
+   static_assert(boost::is_integral<T>::value == false, "Only floating-point type types can be used!");
 
    elliptic_root_functor_2deriv(T const& arc, T const& radius) : m_arc(arc), m_radius(radius) {}
    std::tuple<T, T, T> operator()(T const& x)
@@ -264,12 +264,12 @@ private:
 };
 
 template <class T = double>
-boost::uintmax_t elliptic_root_2deriv(T radius, T arc, T guess)
+std::uintmax_t elliptic_root_2deriv(T radius, T arc, T guess)
 {
    using namespace std;                // Help ADL of std functions.
    using namespace boost::math::tools; // For halley_iterate.
 
-   BOOST_STATIC_ASSERT_MSG(boost::is_integral<T>::value == false, "Only floating-point type types can be used!");
+   static_assert(boost::is_integral<T>::value == false, "Only floating-point type types can be used!");
 
    T min = 0;                                   // Minimum possible value is zero.
    T max = arc;                                 // radius can't be larger than the arc length.
@@ -277,8 +277,8 @@ boost::uintmax_t elliptic_root_2deriv(T radius, T arc, T guess)
    // Accuracy triples at each step, so stop when just over one-third of the digits
    // are correct, and the last iteration will polish off the remaining digits:
    int get_digits = static_cast<int>(std::numeric_limits<T>::digits * 0.4);
-   const boost::uintmax_t maxit = 20;
-   boost::uintmax_t it = maxit;
+   const std::uintmax_t maxit = 20;
+   std::uintmax_t it = maxit;
    halley_iterate(elliptic_root_functor_2deriv<T>(arc, radius), guess, min, max, get_digits, it);
    return it;
 } // nth_2deriv Halley
@@ -286,21 +286,21 @@ boost::uintmax_t elliptic_root_2deriv(T radius, T arc, T guess)
 // Using 1st and 2nd derivatives using Schroder algorithm.
 
 template <class T = double>
-boost::uintmax_t elliptic_root_2deriv_s(T radius, T arc, T guess)
+std::uintmax_t elliptic_root_2deriv_s(T radius, T arc, T guess)
 { // return nth root of x using 1st and 2nd derivatives and Schroder.
 
    using namespace std;  // Help ADL of std functions.
    using namespace boost::math::tools; // For schroder_iterate.
 
-   BOOST_STATIC_ASSERT_MSG(boost::is_integral<T>::value == false, "Only floating-point type types can be used!");
+   static_assert(boost::is_integral<T>::value == false, "Only floating-point type types can be used!");
 
    T min = 0; // Minimum possible value is zero.
    T max = arc; // radius can't be larger than the arc length.
 
    int digits = std::numeric_limits<T>::digits; // Maximum possible binary digits accuracy for type T.
    int get_digits = static_cast<int>(digits * 0.4);
-   const boost::uintmax_t maxit = 20;
-   boost::uintmax_t it = maxit;
+   const std::uintmax_t maxit = 20;
+   std::uintmax_t it = maxit;
    schroder_iterate(elliptic_root_functor_2deriv<T>(arc, radius), guess, min, max, get_digits, it);
    return it;
 } // T elliptic_root_2deriv_s Schroder

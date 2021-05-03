@@ -4643,8 +4643,8 @@ struct lanczos_rational
    T gamma(T z)
    {
       using namespace std;
-      BOOST_ASSERT(num.size() == denom.size());
-      BOOST_ASSERT(num.size() == N);
+      BOOST_MATH_ASSERT(num.size() == denom.size());
+      BOOST_MATH_ASSERT(num.size() == N);
       T zgh = z + g - T(0.5);
       T prefix = pow(zgh, T(z - 0.5)) / exp(zgh);
       T s1, s2;
@@ -4704,8 +4704,8 @@ struct lanczos_rational
       }
       //std::cout << l_num << std::endl;
       //std::cout << l_denom << std::endl;
-      BOOST_ASSERT(num.size() == l_num.degree()+1);
-      BOOST_ASSERT(denom.size() == l_denom.degree()+1);
+      BOOST_MATH_ASSERT(num.size() == l_num.degree()+1);
+      BOOST_MATH_ASSERT(denom.size() == l_denom.degree()+1);
       g = boost::math::tools::real_cast<T>(info.r);
       N = info.n;
       /*
@@ -4809,22 +4809,22 @@ void print_code(const lanczos_info<T>& l, const char* name, int precision = std:
    const char* denom_type;
    const char* cast_type;
    const char* suffix_type;
-   if(max_term < (std::numeric_limits<boost::uint16_t>::max)())
+   if(max_term < (std::numeric_limits<std::uint16_t>::max)())
    {
-      denom_type = "boost::uint16_t";
-      cast_type = "static_cast<boost::uint16_t>";
+      denom_type = "std::uint16_t";
+      cast_type = "static_cast<std::uint16_t>";
       suffix_type = "u";
    }
-   else if(max_term < (std::numeric_limits<boost::uint32_t>::max)())
+   else if(max_term < (std::numeric_limits<std::uint32_t>::max)())
    {
-      denom_type = "boost::uint32_t";
-      cast_type = "static_cast<boost::uint32_t>";
+      denom_type = "std::uint32_t";
+      cast_type = "static_cast<std::uint32_t>";
       suffix_type = "u";
    }
 #ifdef BOOST_HAS_LONG_LONG
-   else if(max_term < (std::numeric_limits<boost::uint64_t>::max)())
+   else if(max_term < (std::numeric_limits<std::uint64_t>::max)())
    {
-      denom_type = "boost::uint64_t";
+      denom_type = "std::uint64_t";
       cast_type = "";
       suffix_type = "uLL";
    }

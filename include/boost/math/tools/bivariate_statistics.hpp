@@ -8,10 +8,10 @@
 
 #include <iterator>
 #include <tuple>
-#include <boost/assert.hpp>
-#include <boost/config/header_deprecated.hpp>
+#include <boost/math/tools/assert.hpp>
+#include <boost/math/tools/header_deprecated.hpp>
 
-BOOST_HEADER_DEPRECATED("<boost/math/statistics/bivariate_statistics.hpp>");
+BOOST_MATH_HEADER_DEPRECATED("<boost/math/statistics/bivariate_statistics.hpp>");
 
 namespace boost{ namespace math{ namespace tools {
 
@@ -20,8 +20,8 @@ auto means_and_covariance(Container const & u, Container const & v)
 {
     using Real = typename Container::value_type;
     using std::size;
-    BOOST_ASSERT_MSG(size(u) == size(v), "The size of each vector must be the same to compute covariance.");
-    BOOST_ASSERT_MSG(size(u) > 0, "Computing covariance requires at least one sample.");
+    BOOST_MATH_ASSERT_MSG(size(u) == size(v), "The size of each vector must be the same to compute covariance.");
+    BOOST_MATH_ASSERT_MSG(size(u) > 0, "Computing covariance requires at least one sample.");
 
     // See Equation III.9 of "Numerically Stable, Single-Pass, Parallel Statistics Algorithms", Bennet et al.
     Real cov = 0;
@@ -52,8 +52,8 @@ auto correlation_coefficient(Container const & u, Container const & v)
 {
     using Real = typename Container::value_type;
     using std::size;
-    BOOST_ASSERT_MSG(size(u) == size(v), "The size of each vector must be the same to compute covariance.");
-    BOOST_ASSERT_MSG(size(u) > 0, "Computing covariance requires at least two samples.");
+    BOOST_MATH_ASSERT_MSG(size(u) == size(v), "The size of each vector must be the same to compute covariance.");
+    BOOST_MATH_ASSERT_MSG(size(u) > 0, "Computing covariance requires at least two samples.");
 
     Real cov = 0;
     Real mu_u = u[0];

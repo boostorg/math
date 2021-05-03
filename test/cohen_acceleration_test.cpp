@@ -13,10 +13,12 @@
 using boost::multiprecision::float128;
 #endif
 #include <boost/multiprecision/cpp_bin_float.hpp>
+#include <cmath>
 
 using boost::math::tools::cohen_acceleration;
 using boost::multiprecision::cpp_bin_float_100;
 using boost::math::constants::pi;
+using std::log;
 
 template<typename Real>
 class G {

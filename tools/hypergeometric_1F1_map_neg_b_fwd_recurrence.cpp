@@ -73,7 +73,7 @@ int main()
                for (test_type z = 1; z < 1e10; z *= z_mult, z_mult *= 2)
                {
                   // std::cout << "z = " << z << std::endl;
-                  boost::uintmax_t max_iter = 1000;
+                  std::uintmax_t max_iter = 1000;
                   test_type calc = boost::math::tools::function_ratio_from_forwards_recurrence(boost::math::detail::hypergeometric_1F1_recurrence_a_and_b_coefficients<test_type>(a, b, z), std::numeric_limits<test_type>::epsilon() * 2, max_iter);
                   test_type reference = (test_type)(boost::math::hypergeometric_pFq_precision({ mpfr_float(a) }, { mpfr_float(b) }, mpfr_float(z), 50, time_limit) / boost::math::hypergeometric_pFq_precision({ mpfr_float(a + 1) }, { mpfr_float(b + 1) }, mpfr_float(z), std::numeric_limits<test_type>::digits10 * 2, time_limit));
                   double err = (double)boost::math::epsilon_difference(reference, calc);
@@ -106,7 +106,7 @@ int main()
                //
                z_limit = last_good == 0 ? 0 : boost::math::tools::bisect([&a, b, error_limit, time_limit](test_type z)
                {
-                  boost::uintmax_t max_iter = 1000;
+                  std::uintmax_t max_iter = 1000;
                   test_type calc = boost::math::tools::function_ratio_from_forwards_recurrence(boost::math::detail::hypergeometric_1F1_recurrence_a_and_b_coefficients<test_type>(a, b, z), std::numeric_limits<test_type>::epsilon() * 2, max_iter);
                   test_type reference = (test_type)(boost::math::hypergeometric_pFq_precision({ mpfr_float(a) }, { mpfr_float(b) }, mpfr_float(z), 50, time_limit + 20) / boost::math::hypergeometric_pFq_precision({ mpfr_float(a + 1) }, { mpfr_float(b + 1) }, mpfr_float(z), std::numeric_limits<test_type>::digits10 * 2, time_limit + 20));
                   test_type err = boost::math::epsilon_difference(reference, calc);
@@ -125,7 +125,7 @@ int main()
             {
                // std::cout << "z = " << z << std::endl;
                try {
-                  boost::uintmax_t max_iter = 1000;
+                  std::uintmax_t max_iter = 1000;
                   test_type calc = boost::math::tools::function_ratio_from_backwards_recurrence(boost::math::detail::hypergeometric_1F1_recurrence_a_and_b_coefficients<test_type>(a, b, z), std::numeric_limits<test_type>::epsilon() * 2, max_iter);
                   test_type reference = (test_type)(boost::math::hypergeometric_pFq_precision({ mpfr_float(a) }, { mpfr_float(b) }, mpfr_float(z), 50, time_limit) / boost::math::hypergeometric_pFq_precision({ mpfr_float(a - 1) }, { mpfr_float(b - 1) }, mpfr_float(z), std::numeric_limits<test_type>::digits10 * 2, time_limit));
                   test_type err = boost::math::epsilon_difference(reference, calc);
@@ -152,7 +152,7 @@ int main()
                lower_z_limit = 0;
             else if (last_good >= bad)
             {
-               boost::uintmax_t max_iter = 1000;
+               std::uintmax_t max_iter = 1000;
                test_type z = bad;
                test_type calc = boost::math::tools::function_ratio_from_forwards_recurrence(boost::math::detail::hypergeometric_1F1_recurrence_a_and_b_coefficients<test_type>(a, b, z), std::numeric_limits<test_type>::epsilon() * 2, max_iter);
                test_type reference = (test_type)(boost::math::hypergeometric_pFq_precision({ mpfr_float(a) }, { mpfr_float(b) }, mpfr_float(z), 50, time_limit) / boost::math::hypergeometric_pFq_precision({ mpfr_float(a + 1) }, { mpfr_float(b + 1) }, mpfr_float(z), std::numeric_limits<test_type>::digits10 * 2, time_limit));
@@ -171,7 +171,7 @@ int main()
                //
                lower_z_limit = last_good == 0 ? 0 : boost::math::tools::bisect([&a, b, error_limit, time_limit](test_type z)
                {
-                  boost::uintmax_t max_iter = 1000;
+                  std::uintmax_t max_iter = 1000;
                   test_type calc = boost::math::tools::function_ratio_from_backwards_recurrence(boost::math::detail::hypergeometric_1F1_recurrence_a_and_b_coefficients<test_type>(a, b, z), std::numeric_limits<test_type>::epsilon() * 2, max_iter);
                   test_type reference = (test_type)(boost::math::hypergeometric_pFq_precision({ mpfr_float(a) }, { mpfr_float(b) }, mpfr_float(z), 50, time_limit + 20) / boost::math::hypergeometric_pFq_precision({ mpfr_float(a - 1) }, { mpfr_float(b - 1) }, mpfr_float(z), std::numeric_limits<test_type>::digits10 * 2, time_limit + 20));
                   test_type err = boost::math::epsilon_difference(reference, calc);

@@ -44,7 +44,7 @@ template <class T>
 inline T expint_1_rational(const T& z, const std::integral_constant<int, 0>&)
 {
    // this function is never actually called
-   BOOST_ASSERT(0);
+   BOOST_MATH_ASSERT(0);
    return z;
 }
 
@@ -374,7 +374,7 @@ inline T expint_as_fraction(unsigned n, T z, const Policy& pol)
 {
    BOOST_MATH_STD_USING
    BOOST_MATH_INSTRUMENT_VARIABLE(z)
-   boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
+   std::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
    expint_fraction<T> f(n, z);
    T result = tools::continued_fraction_b(
       f, 
@@ -413,7 +413,7 @@ template <class T, class Policy>
 inline T expint_as_series(unsigned n, T z, const Policy& pol)
 {
    BOOST_MATH_STD_USING
-   boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
+   std::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
 
    BOOST_MATH_INSTRUMENT_VARIABLE(z)
 
@@ -463,7 +463,7 @@ T expint_imp(unsigned n, T z, const Policy& pol, const Tag& tag)
    {
       f = z < (static_cast<T>(n - 2) / static_cast<T>(n - 1));
    }
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #  pragma warning(push)
 #  pragma warning(disable:4127) // conditional expression is constant
 #endif
@@ -477,7 +477,7 @@ T expint_imp(unsigned n, T z, const Policy& pol, const Tag& tag)
       result = expint_as_series(n, z, pol);
    else
       result = expint_as_fraction(n, z, pol);
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #  pragma warning(pop)
 #endif
 
@@ -507,7 +507,7 @@ T expint_i_as_series(T z, const Policy& pol)
    T result = log(z); // (log(z) - log(1 / z)) / 2;
    result += constants::euler<T>();
    expint_i_series<T> s(z);
-   boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
+   std::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
    result = tools::sum_series(s, policies::get_epsilon<T, Policy>(), max_iter, result);
    policies::check_series_iterations<T>("boost::math::expint_i_series<%1%>(%1%)", max_iter, pol);
    return result;

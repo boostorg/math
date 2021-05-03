@@ -10,7 +10,7 @@
    
    template <class Gen, class U>
    typename detail::fraction_traits<Gen>::result_type 
-      continued_fraction_b(Gen& g, const U& tolerance, boost::uintmax_t& max_terms)
+      continued_fraction_b(Gen& g, const U& tolerance, std::uintmax_t& max_terms)
 
    template <class Gen, class U>
    typename detail::fraction_traits<Gen>::result_type 
@@ -18,7 +18,7 @@
 
    template <class Gen, class U>
    typename detail::fraction_traits<Gen>::result_type 
-      continued_fraction_a(Gen& g, const U& tolerance, boost::uintmax_t& max_terms)
+      continued_fraction_a(Gen& g, const U& tolerance, std::uintmax_t& max_terms)
 
    template <class Gen, class U>
    typename detail::fraction_traits<Gen>::result_type 
@@ -33,7 +33,7 @@
 
    template <class Gen>
    typename detail::fraction_traits<Gen>::result_type 
-      continued_fraction_b(Gen& g, int bits, boost::uintmax_t& max_terms);
+      continued_fraction_b(Gen& g, int bits, std::uintmax_t& max_terms);
 
    template <class Gen>
    typename detail::fraction_traits<Gen>::result_type 
@@ -41,7 +41,7 @@
       
    template <class Gen>
    typename detail::fraction_traits<Gen>::result_type 
-      continued_fraction_a(Gen& g, int bits, boost::uintmax_t& max_terms);
+      continued_fraction_a(Gen& g, int bits, std::uintmax_t& max_terms);
       
    }}} // namespaces
 

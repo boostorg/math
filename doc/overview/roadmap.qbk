@@ -8,6 +8,22 @@ All old bug reports including closed ones can be viewed on Trac
 
 Recent issues on GitHub [@https://github.com/boostorg/math/issues?utf8=%E2%9C%93&q=is%3Aissue here].
 
+[h4 Math-3.0.0 (Boost-1.76)]
+
+* [*Breaking Change:] C++03 support is now removed, a C++11 or later conformant compiler is now required to use this library.
+* Added [link math_toolkit.z_test Z-test].
+* Added execution policy support to univariate and bivariate statistics: enables parallel execution (requires C++17 and `<execution>`).
+* Big update/improvement on CI testing.
+* Bivariate statistics now have integer support.
+* T-Test now has integer support.
+* Linear regression now has integer support.
+* Correct PDF of the beta distribution at the endpoints.
+* Correct use of Stirling's approximation in certain multiprecision cases, fixes [@https://github.com/boostorg/math/issues/396 #396].
+* Eliminate -Wimplicit-int-float-conversion on clang.
+* Fix some constexpr issues in quaternion/octonion.
+* Minor performance fix to tanh_sinh integration.
+* Update hypergeometric functions internal scaling to allow for 64-bit (long long) exponents with multiprecision types.
+
 [h4 Math-2.13.0 (Boost-1.75)]
 
 * Added [link math_toolkit.dist_ref.dists.kolmogorov_smirnov_dist Kolmogorov-Smirnov distribution].

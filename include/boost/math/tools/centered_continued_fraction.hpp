@@ -6,13 +6,21 @@
 #ifndef BOOST_MATH_TOOLS_CENTERED_CONTINUED_FRACTION_HPP
 #define BOOST_MATH_TOOLS_CENTERED_CONTINUED_FRACTION_HPP
 
+#include <cmath>
+#include <cstdint>
 #include <vector>
 #include <ostream>
 #include <iomanip>
-#include <cmath>
 #include <limits>
 #include <stdexcept>
+#include <sstream>
+#include <array>
+#include <type_traits>
+#include <boost/math/tools/is_standalone.hpp>
+
+#ifndef BOOST_MATH_STANDALONE
 #include <boost/core/demangle.hpp>
+#endif
 
 namespace boost::math::tools {
 
@@ -42,7 +50,7 @@ public:
         Real f = bj;
         if (bj == 0)
         {
-            f = 16*std::numeric_limits<Real>::min();
+            f = 16*(std::numeric_limits<Real>::min)();
         }
         Real C = f;
         Real D = 0;
@@ -54,12 +62,12 @@ public:
             x = 1/(x-bj);
             D += bj;
             if (D == 0) {
-                D = 16*std::numeric_limits<Real>::min();
+                D = 16*(std::numeric_limits<Real>::min)();
             }
             C = bj + 1/C;
             if (C==0)
             {
-                C = 16*std::numeric_limits<Real>::min();
+                C = 16*(std::numeric_limits<Real>::min)();
             }
             D = 1/D;
             f *= (C*D);
@@ -77,7 +85,11 @@ public:
             if (b_[i] == 0) {
                 std::ostringstream oss;
                 oss << "Found a zero partial denominator: b[" << i << "] = " << b_[i] << "."
+                    #ifndef BOOST_MATH_STANDALONE
                     << " This means the integer type '" << boost::core::demangle(typeid(Z).name())
+                    #else
+                    << " This means the integer type '" << typeid(Z).name()
+                    #endif
                     << "' has overflowed and you need to use a wider type,"
                     << " or there is a bug.";
                 throw std::overflow_error(oss.str());

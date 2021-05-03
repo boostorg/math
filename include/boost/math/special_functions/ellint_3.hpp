@@ -253,8 +253,8 @@ T ellint_pi_imp(T v, T phi, T k, T vc, const Policy& pol)
    // by the time we get here phi should already have been
    // normalised above.
    //
-   BOOST_ASSERT(fabs(phi) < constants::half_pi<T>());
-   BOOST_ASSERT(phi >= 0);
+   BOOST_MATH_ASSERT(fabs(phi) < constants::half_pi<T>());
+   BOOST_MATH_ASSERT(phi >= 0);
    T x, y, z, p, t;
    T cosp = cos(phi);
    x = cosp * cosp;

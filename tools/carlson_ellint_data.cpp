@@ -88,7 +88,7 @@ T ellint_rj_old(T x, T y, T z, T p, const Policy& pol)
       T q = -p;
       T pmy = (z - y) * (y - x) / (y + q);  // p - y
 
-      BOOST_ASSERT(pmy >= 0);
+      BOOST_MATH_ASSERT(pmy >= 0);
 
       p = pmy + y;
       value = ellint_rj_old(x, y, z, p, pol);

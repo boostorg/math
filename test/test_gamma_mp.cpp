@@ -168,12 +168,18 @@ BOOST_AUTO_TEST_CASE(test_main)
 {
    expected_results();
    using namespace boost::multiprecision;
+#if !defined(TEST) || (TEST == 1)
    test_gamma(number<cpp_bin_float<38> >(0), "number<cpp_bin_float<38> >");
    test_gamma(number<cpp_bin_float<45> >(0), "number<cpp_bin_float<45> >");
+#endif
+#if !defined(TEST) || (TEST == 2)
    test_gamma(cpp_bin_float_50(0), "cpp_bin_float_50");
    test_gamma(number<cpp_bin_float<55> >(0), "number<cpp_bin_float<55> >");
    test_gamma(number<cpp_bin_float<65> >(0), "number<cpp_bin_float<65> >");
+#endif
+#if !defined(TEST) || (TEST == 3)
    test_gamma(number<cpp_bin_float<75> >(0), "number<cpp_bin_float<75> >");
    test_gamma(number<cpp_bin_float<85> >(0), "number<cpp_bin_float<85> >");
    test_gamma(cpp_bin_float_100(0), "cpp_bin_float_100");
+#endif
 }

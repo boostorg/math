@@ -6,10 +6,11 @@
 #ifndef BOOST_MATH_TOOLS_ENGEL_EXPANSION_HPP
 #define BOOST_MATH_TOOLS_ENGEL_EXPANSION_HPP
 
+#include <cmath>
+#include <cstdint>
 #include <vector>
 #include <ostream>
 #include <iomanip>
-#include <cmath>
 #include <limits>
 #include <stdexcept>
 
@@ -56,15 +57,15 @@ public:
             computed += term;
         }
 
-        for (size_t i = 1; i < a_.size(); ++i)
+        for (size_t j = 1; j < a_.size(); ++j)
         {
             // Sanity check: This should only happen when wraparound occurs:
-            if (a_[i] < a_[i-1])
+            if (a_[j] < a_[j-1])
             {
                 throw std::domain_error("The digits of an Engel expansion must form a non-decreasing sequence; consider increasing the wide of the integer type.");
             }
             // Watch out for saturating behavior:
-            if (a_[i] == std::numeric_limits<Z>::max())
+            if (a_[j] == (std::numeric_limits<Z>::max)())
             {
                 throw std::domain_error("The integer type Z does not have enough width to hold the terms of the Engel expansion; please widen the type.");
             }

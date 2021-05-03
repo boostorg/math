@@ -76,19 +76,19 @@ int main()
     // start by creating 2 ranges for the x and y values:
     auto x_range = boost::adaptors::keys(r);
     auto y_range = boost::adaptors::values(r);
-    boost::math::barycentric_rational<double> b(x_range.begin(), x_range.end(), y_range.begin());
+    boost::math::interpolators::barycentric_rational<double> b(x_range.begin(), x_range.end(), y_range.begin());
     //
     // We'll use a lambda expression to provide the functor to our root finder, since we want
     // the abscissa value that yields 3, not zero.  We pass the functor b by value to the
     // lambda expression since barycentric_rational is trivial to copy.
     // Here we're using simple bisection to find the root:
-    boost::uintmax_t iterations = (std::numeric_limits<boost::uintmax_t>::max)();
+    std::uintmax_t iterations = (std::numeric_limits<std::uintmax_t>::max)();
     double abscissa_3 = boost::math::tools::bisect([=](double x) { return b(x) - 3; }, 0.44, 1.24, boost::math::tools::eps_tolerance<double>(), iterations).first;
     std::cout << "Abscissa value that yields a potential of 3 = " << abscissa_3 << std::endl;
     std::cout << "Root was found in " << iterations << " iterations." << std::endl;
     //
     // However, we have a more efficient root finding algorithm than simple bisection:
-    iterations = (std::numeric_limits<boost::uintmax_t>::max)();
+    iterations = (std::numeric_limits<std::uintmax_t>::max)();
     abscissa_3 = boost::math::tools::bracket_and_solve_root([=](double x) { return b(x) - 3; }, 0.6, 1.2, false, boost::math::tools::eps_tolerance<double>(), iterations).first;
     std::cout << "Abscissa value that yields a potential of 3 = " << abscissa_3 << std::endl;
     std::cout << "Root was found in " << iterations << " iterations." << std::endl;

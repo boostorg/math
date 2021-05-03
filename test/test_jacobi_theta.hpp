@@ -1,5 +1,9 @@
-// Copyright John Maddock 2006.
-// Copyright Evan Miller 2020
+/*
+ * Copyright Evan Miller, 2020
+ * Use, modification and distribution are subject to the
+ * Boost Software License, Version 1.0. (See accompanying file
+ * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+ */
 #define BOOST_TEST_MAIN
 #define NOMINMAX
 #include <boost/test/unit_test.hpp>
@@ -589,7 +593,7 @@ inline void test_mellin_transforms(RealType s, RealType integration_eps, RealTyp
     {
         if (t*t == 0.f)
             return RealType(0);
-        if (t > sqrt(sqrt(std::numeric_limits<RealType>::max())))
+        if (t > sqrt(sqrt((std::numeric_limits<RealType>::max)())))
             return RealType(0);
 
         return pow(t, s-1) * jacobi_theta2tau(RealType(0), t*t);
@@ -599,7 +603,7 @@ inline void test_mellin_transforms(RealType s, RealType integration_eps, RealTyp
     {
         if (t*t == 0.f)
             return RealType(0);
-        if (t > sqrt(sqrt(std::numeric_limits<RealType>::max())))
+        if (t > sqrt(sqrt((std::numeric_limits<RealType>::max)())))
             return RealType(0);
 
         return pow(t, s-1) * jacobi_theta3m1tau(RealType(0), t*t);
@@ -609,7 +613,7 @@ inline void test_mellin_transforms(RealType s, RealType integration_eps, RealTyp
     {
         if (t*t == 0.f)
             return RealType(0);
-        if (t > sqrt(sqrt(std::numeric_limits<RealType>::max())))
+        if (t > sqrt(sqrt((std::numeric_limits<RealType>::max)())))
             return RealType(0);
 
         return -pow(t, s-1) * jacobi_theta4m1tau(RealType(0), t*t);

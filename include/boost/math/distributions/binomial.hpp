@@ -261,7 +261,7 @@ namespace boost
            factor = 2; // trials largish, but in far tails.
 
         typedef typename Policy::discrete_quantile_type discrete_quantile_type;
-        boost::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
+        std::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
         return detail::inverse_discrete_quantile(
             dist,
             comp ? q : p,

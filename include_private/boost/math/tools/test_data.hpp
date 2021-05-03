@@ -11,15 +11,15 @@
 #endif
 
 #include <boost/math/tools/config.hpp>
-#include <boost/assert.hpp>
-#ifdef BOOST_MSVC
+#include <boost/math/tools/assert.hpp>
+#ifdef _MSC_VER
 #  pragma warning(push)
 #  pragma warning(disable: 4127 4701 4512)
 #  pragma warning(disable: 4130) // '==' : logical operation on address of string constant.
 #endif
 #include <boost/algorithm/string/trim.hpp>
 #include <boost/lexical_cast.hpp>
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(pop)
 #endif
 #include <boost/type_traits/is_floating_point.hpp>
@@ -39,10 +39,10 @@ namespace random_ns = boost::random;
 #include <vector>
 #include <iostream>
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #  pragma warning(push)
 #  pragma warning(disable: 4130) // '==' : logical operation on address of string constant.
-// Used as a warning with BOOST_ASSERT
+// Used as a warning with BOOST_MATH_ASSERT
 #endif
 
 namespace boost{ namespace math{ namespace tools{
@@ -522,8 +522,8 @@ void test_data<T>::create_test_points(std::set<T>& points, const parameter_info<
    {
    case random_in_range:
       {
-         BOOST_ASSERT(arg1.z1 < arg1.z2);
-         BOOST_ASSERT(arg1.n1 > 0);
+         BOOST_MATH_ASSERT(arg1.z1 < arg1.z2);
+         BOOST_MATH_ASSERT(arg1.n1 > 0);
          typedef float random_type;
 
          random_ns::mt19937 rnd;
@@ -538,8 +538,8 @@ void test_data<T>::create_test_points(std::set<T>& points, const parameter_info<
       break;
    case periodic_in_range:
       {
-         BOOST_ASSERT(arg1.z1 < arg1.z2);
-         BOOST_ASSERT(arg1.n1 > 0);
+         BOOST_MATH_ASSERT(arg1.z1 < arg1.z2);
+         BOOST_MATH_ASSERT(arg1.n1 > 0);
          float interval = real_cast<float>((arg1.z2 - arg1.z1) / arg1.n1);
          T val = arg1.z1;
          while(val < arg1.z2)
@@ -551,7 +551,7 @@ void test_data<T>::create_test_points(std::set<T>& points, const parameter_info<
       break;
    case power_series:
       {
-         BOOST_ASSERT(arg1.n1 < arg1.n2);
+         BOOST_MATH_ASSERT(arg1.n1 < arg1.n2);
 
          typedef float random_type;
          typedef typename boost::mpl::if_<
@@ -581,7 +581,7 @@ void test_data<T>::create_test_points(std::set<T>& points, const parameter_info<
       break;
    }
    default:
-      BOOST_ASSERT(0 == "Invalid parameter_info object");
+      BOOST_MATH_ASSERT(0 == "Invalid parameter_info object");
       // Assert will fail if get here.
       // Triggers warning 4130) // '==' : logical operation on address of string constant.
    }
@@ -593,7 +593,7 @@ void test_data<T>::create_test_points(std::set<T>& points, const parameter_info<
 template <class T>
 bool get_user_parameter_info(parameter_info<T>& info, const char* param_name)
 {
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #  pragma warning(push)
 #  pragma warning(disable: 4127)
 #endif
@@ -861,11 +861,11 @@ bool get_user_parameter_info(parameter_info<T>& info, const char* param_name)
 
       break;
    default:
-      BOOST_ASSERT(0); // should never get here!!
+      BOOST_MATH_ASSERT(0); // should never get here!!
    }
 
    return true;
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #  pragma warning(pop)
 #endif
 }
@@ -918,7 +918,7 @@ std::ostream& write_code(std::ostream& os,
    typedef typename test_data<T>::value_type value_type;
    typedef typename value_type::const_iterator value_type_iterator;
 
-   BOOST_ASSERT(os.good());
+   BOOST_MATH_ASSERT(os.good());
 
    it_type a, b;
    a = data.begin();
@@ -957,7 +957,7 @@ std::ostream& write_code(std::ostream& os,
 } // namespace math
 } // namespace boost
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(pop)
 #endif
 

@@ -22,7 +22,7 @@ inline double cyl_bessel_j(double a, double x)
 { return jv(a, x); }
 inline long double cyl_bessel_j(long double a, long double x)
 {
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
    return jv((double)a, x); 
 #else
    return jvl(a, x); 
@@ -34,7 +34,7 @@ inline double cyl_neumann(double a, double x)
 { return yv(a, x); }
 inline long double cyl_neumann(long double a, long double x)
 {
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
    return yv((double)a, x); 
 #else
    return yvl(a, x); 

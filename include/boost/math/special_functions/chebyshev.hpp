@@ -199,7 +199,7 @@ inline Real unchecked_chebyshev_clenshaw_recurrence(const Real* const c, size_t 
     Real u;
     // This cutoff is not super well defined, but it's a good estimate.
     // See "An Error Analysis of the Modified Clenshaw Method for Evaluating Chebyshev and Fourier Series"
-    // J. OLIVER, IMA Journal of Applied Mathematics, Volume 20, Issue 3, November 1977, Pages 379–391
+    // J. OLIVER, IMA Journal of Applied Mathematics, Volume 20, Issue 3, November 1977, Pages 379-391
     // https://doi.org/10.1093/imamat/20.3.379
     const Real cutoff = 0.6;
     if (x - a < b - x)

@@ -150,7 +150,7 @@ public:
          std::cerr << "Aborting due to exception: " << e.what() << std::endl;
          std::cerr << "In " << distro_name + " (" + std::string(sub_name) + ")" << std::endl;
          report_execution_time(
-            (std::numeric_limits<boost::uintmax_t>::max)(),
+            (std::numeric_limits<std::uintmax_t>::max)(),
             std::string("Distribution performance comparison with ") + compiler_name() + std::string(" on ") + platform_name(),
             distro_name + " (" + std::string(sub_name) + ")",
             column);

@@ -17,7 +17,8 @@
 #include <algorithm>
 #include <cmath>
 #include <cstddef>
-#include <boost/assert.hpp>
+#include <boost/math/tools/assert.hpp>
+#include <boost/math/tools/config.hpp>
 
 // Support compilers with P0024R2 implemented without linking TBB
 // https://en.cppreference.com/w/cpp/compiler_support

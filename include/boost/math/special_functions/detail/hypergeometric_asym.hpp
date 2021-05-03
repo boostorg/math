@@ -13,7 +13,7 @@
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/special_functions/hypergeometric_2F0.hpp>
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(push)
 #pragma warning(disable:4127)
 #endif
@@ -44,7 +44,7 @@
         }
         else
         {
-           e = z > (std::numeric_limits<long long>::max)() ? (std::numeric_limits<long long>::max)() : lltrunc(z, pol);
+           e = z > static_cast<T>((std::numeric_limits<long long>::max)()) ? (std::numeric_limits<long long>::max)() : lltrunc(z, pol);
            log_scaling += e;
            prefix = exp(z - e);
         }
@@ -172,7 +172,7 @@
 
   } } } // namespaces
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(pop)
 #endif
 

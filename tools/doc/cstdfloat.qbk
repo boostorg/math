@@ -124,7 +124,7 @@ Based on the results of these queries, an attempt is made to automatically
 detect the presence of built-in floating-point types having specified widths.
 An unequivocal test regarding conformance with __IEEE754 (IEC599) based on
 [@ http://en.cppreference.com/w/cpp/types/numeric_limits/is_iec559 `std::numeric_limits<>::is_iec559`]
-is performed with `BOOST_STATIC_ASSERT`.
+is performed with `static_assert`.
 
 The header `<boost/cstdfloat.hpp>` makes the standardized floating-point
 `typedef`s safely available in `namespace boost` without placing any names

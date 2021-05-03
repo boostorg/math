@@ -14,20 +14,20 @@
 #include <algorithm>
 #include <iterator>
 #include <stdexcept>
-#include <boost/config.hpp>
+#include <limits>
 
 namespace std_workaround {
 
-#if defined(__cpp_lib_nonmember_container_access) || (defined(BOOST_MSVC) && (BOOST_MSVC >= 1900))
+#if defined(__cpp_lib_nonmember_container_access) || (defined(_MSC_VER) && (_MSC_VER >= 1900))
    using std::size;
 #else
    template <class C>
-   inline BOOST_CONSTEXPR std::size_t size(const C& c)
+   inline constexpr std::size_t size(const C& c)
    {
       return c.size();
    }
    template <class T, std::size_t N>
-   inline BOOST_CONSTEXPR std::size_t size(const T(&array)[N]) BOOST_NOEXCEPT
+   inline constexpr std::size_t size(const T(&array)[N]) noexcept
    {
       return N;
    }

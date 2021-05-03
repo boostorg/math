@@ -107,7 +107,7 @@
         // Let M3 = M(1+a-b + 1, 2-b + 1, z)
         // we can get to this from the ratio which is cheaper to calculate:
         //
-        boost::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
+        std::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
         boost::math::detail::hypergeometric_1F1_recurrence_a_and_b_coefficients<T> coef2(1 + a - b + 1, 2 - b + 1, z);
         T M3 = boost::math::tools::function_ratio_from_backwards_recurrence(coef2, boost::math::policies::get_epsilon<T, Policy>(), max_iter) * M2;
         boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1F1_from_function_ratio_negative_b_positive_a<%1%>(%1%,%1%,%1%)", max_iter, pol);
@@ -134,7 +134,7 @@
         //
         // Get the function ratio, M(a+1, b+1, z)/M(a,b,z):
         //
-        boost::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
+        std::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
         boost::math::detail::hypergeometric_1F1_recurrence_a_and_b_coefficients<T> coef(a + 1, b + 1, z);
         T ratio = boost::math::tools::function_ratio_from_backwards_recurrence(coef, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
         boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1F1_from_function_ratio_negative_b_positive_a<%1%>(%1%,%1%,%1%)", max_iter, pol);
@@ -565,8 +565,8 @@
         while ((data[index][1] < b) && (data[index][2] > 1.25))
            --index;
         ++index;
-        BOOST_ASSERT(a > data[index][0]);
-        BOOST_ASSERT(-b < -data[index][1]);
+        BOOST_MATH_ASSERT(a > data[index][0]);
+        BOOST_MATH_ASSERT(-b < -data[index][1]);
         return z > data[index][2];
      }
      template <class T, class Policy>
@@ -576,7 +576,7 @@
         //
         // Get the function ratio, M(a+1, b+1, z)/M(a,b,z):
         //
-        boost::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
+        std::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
         boost::math::detail::hypergeometric_1F1_recurrence_a_and_b_coefficients<T> coef(a, b, z);
         T ratio = 1 / boost::math::tools::function_ratio_from_forwards_recurrence(coef, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
         boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1F1_from_function_ratio_negative_b_positive_a<%1%>(%1%,%1%,%1%)", max_iter, pol);
@@ -625,7 +625,7 @@
         //
         // Get the function ratio, M(a+1, b+1, z)/M(a,b,z):
         //
-        boost::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
+        std::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
         boost::math::detail::hypergeometric_1F1_recurrence_b_coefficients<T> coef(a, b + 1, z);
         T ratio = boost::math::tools::function_ratio_from_backwards_recurrence(coef, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
         boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1F1_from_function_ratio_negative_b_positive_a<%1%>(%1%,%1%,%1%)", max_iter, pol);

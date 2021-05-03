@@ -17,6 +17,7 @@
 
 #include <cmath>
 #include <limits>
+#include <utility>
 #include <stdexcept>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
@@ -111,22 +112,10 @@ auto trapezoidal(F f, Real a, Real b, Real tol, std::size_t max_refinements, Rea
 
     return static_cast<K>(I1);
 }
-#if BOOST_WORKAROUND(BOOST_MSVC, < 1800)
-// Template argument deduction failure otherwise:
-template<class F, class Real>
-auto trapezoidal(F f, Real a, Real b, Real tol = 0, std::size_t max_refinements = 12, Real* error_estimate = 0, Real* L1 = 0)->decltype(std::declval<F>()(std::declval<Real>()))
-#elif !defined(BOOST_NO_CXX11_NULLPTR)
+
 template<class F, class Real>
 auto trapezoidal(F f, Real a, Real b, Real tol = boost::math::tools::root_epsilon<Real>(), std::size_t max_refinements = 12, Real* error_estimate = nullptr, Real* L1 = nullptr)->decltype(std::declval<F>()(std::declval<Real>()))
-#else
-template<class F, class Real>
-auto trapezoidal(F f, Real a, Real b, Real tol = boost::math::tools::root_epsilon<Real>(), std::size_t max_refinements = 12, Real* error_estimate = 0, Real* L1 = 0)->decltype(std::declval<F>()(std::declval<Real>()))
-#endif
 {
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 1600)
-   if (tol == 0)
-      tol = boost::math::tools::root_epsilon<Real>();
-#endif
    return trapezoidal(f, a, b, tol, max_refinements, error_estimate, L1, boost::math::policies::policy<>());
 }
 

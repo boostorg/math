@@ -17,6 +17,7 @@ the sensible ranges and axes are too different.
 One would get too small LambertW0 in top right and W-1 in bottom left.
 
 */
+#ifndef BOOST_MATH_STANDALONE
 
 #include <boost/math/special_functions/lambert_w.hpp>
 using boost::math::lambert_w0;
@@ -284,3 +285,5 @@ int main()
 
    //] [/lambert_w_graph_1_output]
    */
+
+#endif // BOOST_MATH_STANDALONE

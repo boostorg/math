@@ -7,8 +7,10 @@
 #ifndef BOOST_MATH_QUADRATURE_DETAIL_TANH_SINH_CONSTANTS_HPP
 #define BOOST_MATH_QUADRATURE_DETAIL_TANH_SINH_CONSTANTS_HPP
 
-#include <boost/type_traits/is_constructible.hpp>
-#include <boost/lexical_cast.hpp>
+#include <cmath>
+#include <cstddef>
+#include <vector>
+#include <type_traits>
 
 namespace boost {
    namespace math {
@@ -190,21 +192,21 @@ namespace boost {
                {
                   if (m_committed_refinements < n)
                      extend_refinements();
-                  BOOST_ASSERT(m_committed_refinements >= n);
+                  BOOST_MATH_ASSERT(m_committed_refinements >= n);
                   return m_abscissas[n];
                }
                const std::vector<Real>& get_weight_row(std::size_t n)const
                {
                   if (m_committed_refinements < n)
                      extend_refinements();
-                  BOOST_ASSERT(m_committed_refinements >= n);
+                  BOOST_MATH_ASSERT(m_committed_refinements >= n);
                   return m_weights[n];
                }
                std::size_t get_first_complement_index(std::size_t n)const
                {
                   if (m_committed_refinements < n)
                      extend_refinements();
-                  BOOST_ASSERT(m_committed_refinements >= n);
+                  BOOST_MATH_ASSERT(m_committed_refinements >= n);
                   return m_first_complements[n];
                }
 
