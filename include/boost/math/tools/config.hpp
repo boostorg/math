@@ -53,9 +53,11 @@
 #ifdef __has_include
 #  if !__has_include(<thread>) || !__has_include(<mutex>) || !__has_include(<future>) || !__has_include(<atomic>)
 #     define BOOST_DISABLE_THREADS
+#  else
+#     define BOOST_HAS_THREADS
 #  endif 
 #else
-#define BOOST_HAS_THREADS // The default assumption is that the machine has threads
+#  define BOOST_HAS_THREADS // The default assumption is that the machine has threads
 #endif // Thread Support
 
 #endif // BOOST_MATH_STANDALONE
