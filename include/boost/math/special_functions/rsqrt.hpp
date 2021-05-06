@@ -15,7 +15,7 @@ template<typename Real>
 inline Real rsqrt(Real const & x)
 {
     using std::sqrt;
-    if constexpr (std::is_same_v<Real, float> || std::is_same_v<Real, double> || std::is_same_v<Real, long double>)
+    if constexpr (std::is_floating_point_v<Real>)
     {
         return 1/sqrt(x);
     }
