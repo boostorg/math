@@ -49,8 +49,9 @@
 #define BOOST_STRINGIZE(X) BOOST_DO_STRINGIZE(X)
 #define BOOST_DO_STRINGIZE(X) #X
 
+#ifdef BOOST_DISABLE_THREADS // No threads, do nothing
 // Detect thread support via STL implementation
-#ifdef __has_include
+#elif defined(__has_include)
 #  if !__has_include(<thread>) || !__has_include(<mutex>) || !__has_include(<future>) || !__has_include(<atomic>)
 #     define BOOST_DISABLE_THREADS
 #  else
@@ -59,6 +60,13 @@
 #else
 #  define BOOST_HAS_THREADS // The default assumption is that the machine has threads
 #endif // Thread Support
+
+#ifdef BOOST_DISABLE_THREADS
+#  define BOOST_NO_CXX11_HDR_ATOMIC
+#  define BOOST_NO_CXX11_HDR_FUTURE
+#  define BOOST_NO_CXX11_HDR_THREAD
+#  define BOOST_NO_CXX11_THREAD_LOCAL
+#endif // BOOST_DISABLE_THREADS
 
 #endif // BOOST_MATH_STANDALONE
 
