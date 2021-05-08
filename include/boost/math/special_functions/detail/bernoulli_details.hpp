@@ -16,6 +16,7 @@
 #include <vector>
 #include <mutex>
 #include <type_traits>
+#undef BOOST_HAS_THREADS
 
 namespace boost{ namespace math{ namespace detail{
 //
@@ -356,6 +357,30 @@ public:
          }
          return out;
       }
+
+      #ifndef BOOST_HAS_THREADS
+      //
+      // Single threaded code, very simple:
+      //
+      if(m_current_precision < boost::math::tools::digits<T>())
+      {
+         bn.clear();
+         tn.clear();
+         m_intermediates.clear();
+         m_current_precision = boost::math::tools::digits<T>();
+      }
+      if(start + n >= bn.size())
+      {
+         std::size_t new_size = (std::min)((std::max)((std::max)(std::size_t(start + n), std::size_t(bn.size() + 20)), std::size_t(50)), std::size_t(bn.capacity()));
+         tangent_numbers_series(new_size);
+      }
+
+      for(std::size_t i = (std::max)(std::size_t(max_bernoulli_b2n<T>::value + 1), start); i < start + n; ++i)
+      {
+         *out = (i >= m_overflow_limit) ? policies::raise_overflow_error<T>("boost::math::bernoulli_b2n<%1%>(std::size_t)", 0, T(i), pol) : bn[i];
+         ++out;
+      }
+      #else
       //
       // Double-checked locking pattern, lets us access cached already cached values
       // without locking:
@@ -393,6 +418,7 @@ public:
          ++out;
       }
 
+      #endif // BOOST_HAS_THREADS
       return out;
    }
 
@@ -435,6 +461,38 @@ public:
          }
          return out;
       }
+
+      #ifndef BOOST_HAS_THREADS
+      //
+      // Single threaded code, very simple:
+      //
+      if(m_current_precision < boost::math::tools::digits<T>())
+      {
+         bn.clear();
+         tn.clear();
+         m_intermediates.clear();
+         m_current_precision = boost::math::tools::digits<T>();
+      }
+      if(start + n >= bn.size())
+      {
+         std::size_t new_size = (std::min)((std::max)((std::max)(start + n, std::size_t(bn.size() + 20)), std::size_t(50)), std::size_t(bn.capacity()));
+         tangent_numbers_series(new_size);
+      }
+
+      for(std::size_t i = start; i < start + n; ++i)
+      {
+         if(i >= m_overflow_limit)
+            *out = policies::raise_overflow_error<T>("boost::math::bernoulli_b2n<%1%>(std::size_t)", 0, T(i), pol);
+         else
+         {
+            if(tools::max_value<T>() * tangent_scale_factor<T>() < tn[static_cast<typename container_type::size_type>(i)])
+               *out = policies::raise_overflow_error<T>("boost::math::bernoulli_b2n<%1%>(std::size_t)", 0, T(i), pol);
+            else
+               *out = tn[static_cast<typename container_type::size_type>(i)] / tangent_scale_factor<T>();
+         }
+         ++out;
+      }
+      #else
       //
       // Double-checked locking pattern, lets us access cached already cached values
       // without locking:
@@ -480,6 +538,7 @@ public:
          ++out;
       }
 
+      #endif // BOOST_HAS_THREADS
       return out;
    }
 
@@ -493,8 +552,14 @@ private:
    std::vector<T> m_intermediates;
    // The value at which we know overflow has already occurred for the Bn:
    std::size_t m_overflow_limit;
+
+   #ifdef BOOST_HAS_THREADS
    std::mutex m_mutex;
    atomic_counter_type m_counter, m_current_precision;
+   #else
+   int m_counter;
+   int m_current_precision;
+   #endif // BOOST_HAS_THREADS
 };
 
 template <class T, class Policy>
