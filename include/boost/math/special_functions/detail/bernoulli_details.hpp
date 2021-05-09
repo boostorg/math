@@ -14,9 +14,11 @@
 #include <boost/math/tools/config.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <vector>
-#include <mutex>
 #include <type_traits>
-#undef BOOST_HAS_THREADS
+
+#ifdef BOOST_HAS_THREADS
+#include <mutex>
+#endif
 
 namespace boost{ namespace math{ namespace detail{
 //
