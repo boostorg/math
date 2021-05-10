@@ -7,10 +7,10 @@
 #define BOOST_MATH_COMPLEX_ACOSH_INCLUDED
 
 #ifndef BOOST_MATH_COMPLEX_DETAILS_INCLUDED
-#  include <boost/math/complex/details.hpp>
+#include <boost/math/complex/details.hpp>
 #endif
 #ifndef BOOST_MATH_COMPLEX_ATANH_INCLUDED
-#  include <boost/math/complex/acos.hpp>
+#include <boost/math/complex/acos.hpp>
 #endif
 
 namespace boost{ namespace math{
