@@ -7,8 +7,10 @@
 #ifndef BOOST_MATH_ATOMIC_DETAIL_HPP
 #define BOOST_MATH_ATOMIC_DETAIL_HPP
 
+#include <boost/math/tools/config.hpp>
 #include <boost/math/tools/cxx03_warn.hpp>
 
+#ifdef BOOST_HAS_THREADS
 #include <atomic>
 
 namespace boost {
@@ -40,5 +42,9 @@ namespace boost {
       } // Namespace detail
    } // Namespace math
 } // Namespace boost
+
+#else
+#  define BOOST_MATH_NO_ATOMIC_INT
+#endif // BOOST_HAS_THREADS
 
 #endif // BOOST_MATH_ATOMIC_DETAIL_HPP
