@@ -871,6 +871,7 @@ test-suite mp :
 ;
 
 test-suite misc :
+   [ run threading_sanity_check.cpp ]
    [ run test_tr1.cpp
    ../build//boost_math_tr1
    ../build//boost_math_tr1f
