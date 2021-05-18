@@ -222,6 +222,6 @@ install generate_rational_test_install : generate_rational_test : <location>bin 
 #}
 
 exe generate_rational_code : generate_rational_code.cpp ;
-exe process_perf_results : process_perf_results.cpp ../../regex/build//boost_regex ;
+exe process_perf_results : process_perf_results.cpp ;
 
 install bin : generate_rational_code process_perf_results ;

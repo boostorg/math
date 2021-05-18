@@ -59,7 +59,6 @@ project
       # <toolset>msvc:<cxxflags>/wd4506 has no effect?
       # suppress xstring(237) : warning C4506: no definition for inline function
       <include>../../..
-      <source>../../regex/build//boost_regex
       <exception-handling>off:<source>no_eh
       <link>shared:<define>BOOST_REGEX_DYN_LINK=1
       # For simplicities sake, make everything a static lib:
@@ -1297,99 +1296,99 @@ test-suite quadrature :
    [ run adaptive_gauss_kronrod_quadrature_test.cpp : : : <define>TEST3 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] : adaptive_gauss_quadrature_test_3 ]
 
-   [ run naive_monte_carlo_test.cpp ../../atomic/build//boost_atomic : : :
+   [ run naive_monte_carlo_test.cpp : : :
      <toolset>msvc:<cxxflags>/bigobj <define>TEST=1  [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
      <target-os>linux:<linkflags>"-pthread" : naive_monte_carlo_test_1
    ]
-   [ run naive_monte_carlo_test.cpp ../../atomic/build//boost_atomic : : :
+   [ run naive_monte_carlo_test.cpp : : :
      <toolset>msvc:<cxxflags>/bigobj <define>TEST=2  [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
      <target-os>linux:<linkflags>"-pthread" : naive_monte_carlo_test_2
    ]
-   [ run naive_monte_carlo_test.cpp ../../atomic/build//boost_atomic : : :
+   [ run naive_monte_carlo_test.cpp : : :
      <toolset>msvc:<cxxflags>/bigobj <define>TEST=3  [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
      <target-os>linux:<linkflags>"-pthread" : naive_monte_carlo_test_3
    ]
-   [ run naive_monte_carlo_test.cpp ../../atomic/build//boost_atomic : : :
+   [ run naive_monte_carlo_test.cpp : : :
      <toolset>msvc:<cxxflags>/bigobj <define>TEST=4  [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
      <target-os>linux:<linkflags>"-pthread" : naive_monte_carlo_test_4
    ]
-   [ run naive_monte_carlo_test.cpp ../../atomic/build//boost_atomic : : :
+   [ run naive_monte_carlo_test.cpp : : :
      <toolset>msvc:<cxxflags>/bigobj <define>TEST=5  [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
      <target-os>linux:<linkflags>"-pthread" : naive_monte_carlo_test_5
    ]
-   [ run naive_monte_carlo_test.cpp ../../atomic/build//boost_atomic : : :
+   [ run naive_monte_carlo_test.cpp : : :
      <toolset>msvc:<cxxflags>/bigobj <define>TEST=6  [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
      <target-os>linux:<linkflags>"-pthread" : naive_monte_carlo_test_6
    ]
-   [ run naive_monte_carlo_test.cpp ../../atomic/build//boost_atomic : : :
+   [ run naive_monte_carlo_test.cpp : : :
      <toolset>msvc:<cxxflags>/bigobj <define>TEST=7  [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
      <target-os>linux:<linkflags>"-pthread" : naive_monte_carlo_test_7
    ]
-   [ run naive_monte_carlo_test.cpp ../../atomic/build//boost_atomic : : :
+   [ run naive_monte_carlo_test.cpp : : :
      <toolset>msvc:<cxxflags>/bigobj <define>TEST=8  [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
      <target-os>linux:<linkflags>"-pthread" : naive_monte_carlo_test_8
    ]
-   [ run naive_monte_carlo_test.cpp ../../atomic/build//boost_atomic : : :
+   [ run naive_monte_carlo_test.cpp : : :
      <toolset>msvc:<cxxflags>/bigobj <define>TEST=9  [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
      <target-os>linux:<linkflags>"-pthread" : naive_monte_carlo_test_9
    ]
-   [ run naive_monte_carlo_test.cpp ../../atomic/build//boost_atomic : : :
+   [ run naive_monte_carlo_test.cpp : : :
      <toolset>msvc:<cxxflags>/bigobj <define>TEST=10  [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
      <target-os>linux:<linkflags>"-pthread" : naive_monte_carlo_test_10
    ]
-   [ run naive_monte_carlo_test.cpp ../../atomic/build//boost_atomic : : :
+   [ run naive_monte_carlo_test.cpp : : :
      <toolset>msvc:<cxxflags>/bigobj <define>TEST=11  [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
      <target-os>linux:<linkflags>"-pthread" : naive_monte_carlo_test_11
    ]
-   [ run naive_monte_carlo_test.cpp ../../atomic/build//boost_atomic : : :
+   [ run naive_monte_carlo_test.cpp : : :
      <toolset>msvc:<cxxflags>/bigobj <define>TEST=12  [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
      <target-os>linux:<linkflags>"-pthread" : naive_monte_carlo_test_12
    ]
-   [ run naive_monte_carlo_test.cpp ../../atomic/build//boost_atomic : : :
+   [ run naive_monte_carlo_test.cpp : : :
      <toolset>msvc:<cxxflags>/bigobj <define>TEST=13  [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
      <target-os>linux:<linkflags>"-pthread" : naive_monte_carlo_test_13
    ]
-   [ run naive_monte_carlo_test.cpp ../../atomic/build//boost_atomic : : :
+   [ run naive_monte_carlo_test.cpp : : :
      <toolset>msvc:<cxxflags>/bigobj <define>TEST=14  [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
      <target-os>linux:<linkflags>"-pthread" : naive_monte_carlo_test_14
    ]
-   [ run naive_monte_carlo_test.cpp ../../atomic/build//boost_atomic : : :
+   [ run naive_monte_carlo_test.cpp : : :
      <toolset>msvc:<cxxflags>/bigobj <define>TEST=15  [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
      <target-os>linux:<linkflags>"-pthread" : naive_monte_carlo_test_15
    ]
-   [ run naive_monte_carlo_test.cpp ../../atomic/build//boost_atomic : : :
+   [ run naive_monte_carlo_test.cpp : : :
      <toolset>msvc:<cxxflags>/bigobj <define>TEST=16  [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
      <target-os>linux:<linkflags>"-pthread" : naive_monte_carlo_test_16
    ]
-   [ run naive_monte_carlo_test.cpp ../../atomic/build//boost_atomic : : :
+   [ run naive_monte_carlo_test.cpp : : :
      <toolset>msvc:<cxxflags>/bigobj <define>TEST=17  [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
      <target-os>linux:<linkflags>"-pthread" : naive_monte_carlo_test_17
    ]
-   [ run naive_monte_carlo_test.cpp ../../atomic/build//boost_atomic : : :
+   [ run naive_monte_carlo_test.cpp : : :
      <toolset>msvc:<cxxflags>/bigobj <define>TEST=18  [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
      <target-os>linux:<linkflags>"-pthread" : naive_monte_carlo_test_18
    ]
-   [ run naive_monte_carlo_test.cpp ../../atomic/build//boost_atomic : : :
+   [ run naive_monte_carlo_test.cpp : : :
      <toolset>msvc:<cxxflags>/bigobj <define>TEST=19  [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
      <target-os>linux:<linkflags>"-pthread" : naive_monte_carlo_test_19
    ]
-   [ run naive_monte_carlo_test.cpp ../../atomic/build//boost_atomic : : :
+   [ run naive_monte_carlo_test.cpp : : :
      <toolset>msvc:<cxxflags>/bigobj <define>TEST=20  [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
      <target-os>linux:<linkflags>"-pthread" : naive_monte_carlo_test_20
    ]
-   [ run naive_monte_carlo_test.cpp ../../atomic/build//boost_atomic : : :
+   [ run naive_monte_carlo_test.cpp : : :
      <toolset>msvc:<cxxflags>/bigobj <define>TEST=21  [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
      <target-os>linux:<linkflags>"-pthread" : naive_monte_carlo_test_21
    ]
-   [ run naive_monte_carlo_test.cpp ../../atomic/build//boost_atomic : : :
+   [ run naive_monte_carlo_test.cpp : : :
      <toolset>msvc:<cxxflags>/bigobj <define>TEST=22  [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
      <target-os>linux:<linkflags>"-pthread" : naive_monte_carlo_test_22
    ]
-   [ run naive_monte_carlo_test.cpp ../../atomic/build//boost_atomic : : :
+   [ run naive_monte_carlo_test.cpp : : :
      <toolset>msvc:<cxxflags>/bigobj <define>TEST=23  [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
      <target-os>linux:<linkflags>"-pthread" : naive_monte_carlo_test_23
    ]
-   [ compile compile_test/quad_naive_monte_carlo_incl_test.cpp ../../atomic/build//boost_atomic :
+   [ compile compile_test/quad_naive_monte_carlo_incl_test.cpp :
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
      <target-os>linux:<linkflags>"-pthread" [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] 
    ]
@@ -1448,7 +1447,6 @@ rule get_float128_tests
      {
          result += [ run $(source)
             /boost/test//boost_unit_test_framework/<link>static
-            /boost/regex//boost_regex/<link>static
            : # command line
            : # input files
            : # requirements
