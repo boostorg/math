@@ -565,17 +565,27 @@ private:
 };
 
 template <class T, class Policy>
-inline bernoulli_numbers_cache<T, Policy>& get_bernoulli_numbers_cache()
+inline typename std::enable_if<std::numeric_limits<T>::digits == 0, bernoulli_numbers_cache<T, Policy>&>::type get_bernoulli_numbers_cache()
 {
    //
-   // Force this function to be called at program startup so all the static variables
-   // get initialized then (thread safety).
+   // When numeric_limits<>::digits is zero, the type has either not specialized numeric_limits at all
+   // or it's precision can vary at runtime.  So make the cache thread_local so that each thread can
+   // have it's own precision if required:
    //
    static 
 #ifndef BOOST_MATH_NO_THREAD_LOCAL_WITH_NON_TRIVIAL_TYPES
       BOOST_MATH_THREAD_LOCAL
 #endif
       bernoulli_numbers_cache<T, Policy> data;
+   return data;
+}
+template <class T, class Policy>
+inline typename std::enable_if<std::numeric_limits<T>::digits, bernoulli_numbers_cache<T, Policy>&>::type get_bernoulli_numbers_cache()
+{
+   //
+   // Note that we rely on C++11 thread-safe initialization here:
+   //
+   static bernoulli_numbers_cache<T, Policy> data;
    return data;
 }
 
