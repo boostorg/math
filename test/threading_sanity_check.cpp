@@ -10,6 +10,7 @@
 #include <random>
 #include <algorithm>
 #include <iostream>
+#include <boost/math/tools/config.hpp>
 
 std::atomic<int> counter{ 0 };
 
