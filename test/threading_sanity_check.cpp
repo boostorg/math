@@ -4,20 +4,22 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#include <boost/math/tools/config.hpp>
+
+#if !defined(BOOST_MATH_NO_THREAD_LOCAL_WITH_NON_TRIVIAL_TYPES) && defined(BOOST_HAS_THREADS)
+
 #include <vector>
 #include <atomic>
 #include <thread>
 #include <random>
 #include <algorithm>
 #include <iostream>
-#include <boost/math/tools/config.hpp>
 
 std::atomic<int> counter{ 0 };
 
 
 void thread_proc()
 {
-#ifndef BOOST_MATH_NO_THREAD_LOCAL_WITH_NON_TRIVIAL_TYPES
    static thread_local std::vector<double> list;
 
    std::default_random_engine rnd;
@@ -29,7 +31,6 @@ void thread_proc()
       ++counter;
    }
    std::sort(list.begin(), list.end());
-#endif
 }
 
 int main()
@@ -52,3 +53,9 @@ int main()
 
    return counter - 6000;
 }
+
+#else
+
+int main() { return 0; }
+
+#endif
