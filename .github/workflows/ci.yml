@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        compiler: [ g++-9, g++-10, clang++-9, clang++-10 ]
+        compiler: [ g++-9, g++-10, clang++-10 ]
         standard: [ c++11, c++14, c++17, c++2a ]
         suite: [ float128_tests, special_fun, distribution_tests, misc, quadrature, mp, interpolators, autodiff, ../example//examples, ../tools ]
     steps:
