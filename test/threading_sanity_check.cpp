@@ -16,6 +16,7 @@ std::atomic<int> counter{ 0 };
 
 void thread_proc()
 {
+#ifndef BOOST_MATH_NO_THREAD_LOCAL_WITH_NON_TRIVIAL_TYPES
    static thread_local std::vector<double> list;
 
    std::default_random_engine rnd;
@@ -27,6 +28,7 @@ void thread_proc()
       ++counter;
    }
    std::sort(list.begin(), list.end());
+#endif
 }
 
 int main()
