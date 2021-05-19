@@ -80,42 +80,42 @@ rule all-tests {
      local result ;
      for local source in [ glob test*.cpp ]
      {
-         result += [ run $(source) /boost/regex//boost_regex /boost/system /boost/filesystem /boost/test//boost_unit_test_framework 
+         result += [ run $(source) /boost/system /boost/filesystem /boost/test//boost_unit_test_framework 
          : : : 
           [ check-target-builds has_gsl : <define>ALWAYS_TEST_DOUBLE : ] 
           <target-os>linux:<linkflags>-lpthread
           <target-os>linux:<linkflags>-lrt
           <toolset>gcc:<linkflags>$(OTHERFLAGS) ]
          ;
-         result += [ run $(source) /boost/regex//boost_regex /boost/system /boost/filesystem /boost/test//boost_unit_test_framework 
+         result += [ run $(source) /boost/system /boost/filesystem /boost/test//boost_unit_test_framework 
          : : : [ check-target-builds has_cxx17_cmath : <define>TEST_CXX17_CMATH : <build>no ] 
           <target-os>linux:<linkflags>-lpthread
           <target-os>linux:<linkflags>-lrt
           <toolset>gcc:<linkflags>$(OTHERFLAGS)
           : $(source:B)_cxx17_cmath ] 
          ;
-         result += [ run $(source) /boost/regex//boost_regex /boost/system /boost/filesystem /boost/test//boost_unit_test_framework 
+         result += [ run $(source) /boost/system /boost/filesystem /boost/test//boost_unit_test_framework 
          : : : [ check-target-builds has_c99_cmath : <define>TEST_C99 : <build>no ] 
           <target-os>linux:<linkflags>-lpthread
           <target-os>linux:<linkflags>-lrt
           <toolset>gcc:<linkflags>$(OTHERFLAGS)
           : $(source:B)_c99 ] 
          ;
-         result += [ run $(source) /boost/regex//boost_regex /boost/system /boost/filesystem /boost/test//boost_unit_test_framework gsl gslcblas
+         result += [ run $(source) /boost/system /boost/filesystem /boost/test//boost_unit_test_framework gsl gslcblas
          : : : [ check-target-builds has_gsl : <define>TEST_GSL : <build>no ] 
           <target-os>linux:<linkflags>-lpthread
           <target-os>linux:<linkflags>-lrt
           <toolset>gcc:<linkflags>$(OTHERFLAGS)
           : $(source:B)_gsl ] 
          ;
-         result += [ run $(source) /boost/regex//boost_regex /boost/system /boost/filesystem /boost/test//boost_unit_test_framework Rmath
+         result += [ run $(source) /boost/system /boost/filesystem /boost/test//boost_unit_test_framework Rmath
          : : : [ check-target-builds has_rmath : <define>TEST_RMATH : <build>no ] 
           <target-os>linux:<linkflags>-lpthread
           <target-os>linux:<linkflags>-lrt
           <toolset>gcc:<linkflags>$(OTHERFLAGS)
           : $(source:B)_rmath ] 
          ;
-         result += [ run $(source) /boost/regex//boost_regex /boost/system /boost/filesystem /boost/test//boost_unit_test_framework cephes_double
+         result += [ run $(source) /boost/system /boost/filesystem /boost/test//boost_unit_test_framework cephes_double
          : : : [ check-target-builds $(here)/third_party/cephes_double/acosh.c : <define>TEST_CEPHES <source>cephes_double : <build>no ] 
           <target-os>linux:<linkflags>-lpthread
           <target-os>linux:<linkflags>-lrt
