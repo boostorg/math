@@ -285,7 +285,7 @@ ReturnType gini_range_fraction(ForwardIterator first, ForwardIterator last, std:
 #ifdef BOOST_HAS_THREADS
 
 template<typename ReturnType, typename ExecutionPolicy, typename ForwardIterator>
-ReturnType gini_coefficient_parallel_impl(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last)
+ReturnType gini_coefficient_parallel_impl(ExecutionPolicy&&, ForwardIterator first, ForwardIterator last)
 {
     using range_tuple = std::tuple<ReturnType, ReturnType, std::size_t>;
     

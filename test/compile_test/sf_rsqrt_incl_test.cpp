@@ -15,9 +15,9 @@
 
 void compile_and_link_test()
 {
-   check_result<int>(boost::math::rsqrt<float>(f));
-   check_result<int>(boost::math::rsqrt<double>(d));
+   check_result<float>(boost::math::rsqrt<float>(f));
+   check_result<double>(boost::math::rsqrt<double>(d));
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-   check_result<int>(boost::math::rsqrt<long double>(l));
+   check_result<long double>(boost::math::rsqrt<long double>(l));
 #endif
 }
