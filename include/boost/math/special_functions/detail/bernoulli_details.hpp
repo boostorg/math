@@ -565,7 +565,7 @@ private:
 };
 
 template <class T, class Policy>
-inline typename std::enable_if<std::numeric_limits<T>::digits == 0, bernoulli_numbers_cache<T, Policy>&>::type get_bernoulli_numbers_cache()
+inline typename std::enable_if<(std::numeric_limits<T>::digits == 0) || (std::numeric_limits<T>::digits >= INT_MAX), bernoulli_numbers_cache<T, Policy>&>::type get_bernoulli_numbers_cache()
 {
    //
    // When numeric_limits<>::digits is zero, the type has either not specialized numeric_limits at all
@@ -580,7 +580,7 @@ inline typename std::enable_if<std::numeric_limits<T>::digits == 0, bernoulli_nu
    return data;
 }
 template <class T, class Policy>
-inline typename std::enable_if<std::numeric_limits<T>::digits, bernoulli_numbers_cache<T, Policy>&>::type get_bernoulli_numbers_cache()
+inline typename std::enable_if<std::numeric_limits<T>::digits && (std::numeric_limits<T>::digits < INT_MAX), bernoulli_numbers_cache<T, Policy>&>::type get_bernoulli_numbers_cache()
 {
    //
    // Note that we rely on C++11 thread-safe initialization here:
