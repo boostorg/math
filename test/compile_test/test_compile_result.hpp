@@ -29,7 +29,7 @@ inline void check_result_imp(bool, bool){}
 //
 // If the compiler warns about unused typedefs then enable this:
 //
-#if defined(__GNUC__) && ((__GNUC__ > 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 7)))
+#if (defined(__GNUC__) && ((__GNUC__ > 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 7)))) || (defined(__clang__) && __clang_major__ > 4)
 #  define BOOST_MATH_ASSERT_UNUSED_ATTRIBUTE __attribute__((unused))
 #else
 #  define BOOST_MATH_ASSERT_UNUSED_ATTRIBUTE
