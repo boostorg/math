@@ -4554,7 +4554,7 @@ std::vector<std::vector<T> > const & get_test_data()
          fact = fact * T(k++);
          if (k > 500)
             break;
-      }while(std::numeric_limits<T>::max() / k > fact);
+      }while((std::numeric_limits<T>::max)() / k > fact);
 
       fact = 0.5;
       mp_t srpi = sqrt(boost::math::constants::pi<mp_t>());
