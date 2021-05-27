@@ -3,7 +3,7 @@
 # Distributed under the Boost Software License, Version 1.0.
 # https://www.boost.org/LICENSE_1_0.txt
 
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.5...3.16)
 
 project(boost_math VERSION "${BOOST_SUPERPROJECT_VERSION}" LANGUAGES CXX)
 
@@ -13,13 +13,18 @@ add_library(Boost::math ALIAS boost_math)
 
 target_include_directories(boost_math INTERFACE include)
 
-# Default to standalone mode if using CMake
-if(EXISTS BOOST_MATH_STANDALONE)
-else()
-  add_compile_definitions(BOOST_MATH_STANDALONE=1)
-endif()
+include(CMakeDependentOption)
 
-if(!BOOST_MATH_STANDALONE)
+cmake_dependent_option(BOOST_MATH_STANDALONE "Use Boost.Math in standalone mode" ON "NOT BOOST_SUPERPROJECT_VERSION" OFF)
+
+message(STATUS "Boost.Math: standalone mode ${BOOST_MATH_STANDALONE}")
+
+if(BOOST_MATH_STANDALONE)
+
+  target_compile_definitions(boost_math INTERFACE BOOST_MATH_STANDALONE=1)
+
+else()
+
   target_link_libraries(boost_math
     INTERFACE
       Boost::assert
@@ -33,6 +38,7 @@ if(!BOOST_MATH_STANDALONE)
       Boost::static_assert
       Boost::throw_exception
   )
+
 endif()
 
 if(BUILD_TESTING AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/test/CMakeLists.txt")
