@@ -41,8 +41,10 @@ else()
 
 endif()
 
-if(BUILD_TESTING AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/test/CMakeLists.txt")
+# Only enable tests when we're the root project
+if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
 
+  include(CTest)
   add_subdirectory(test)
 
 endif()
