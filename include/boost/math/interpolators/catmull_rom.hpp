@@ -160,7 +160,12 @@ Point catmull_rom<Point, RandomAccessContainer>::operator()(const typename Point
     typename Point::value_type s0s = m_s[i-1] - s;
     typename Point::value_type s1s = m_s[i] - s;
     typename Point::value_type s2s = m_s[i+1] - s;
-    typename Point::value_type s3s = m_s[i+2] - s;
+    size_t ip2 = i + 2;
+    // When the curve is closed and we evaluate at the end, the endpoint is in fact the startpoint.
+    if (ip2 == m_s.size()) {
+        ip2 = 0;
+    }
+    typename Point::value_type s3s = m_s[ip2] - s;
 
     Point A1_or_A3;
     typename Point::value_type denom = 1/(m_s[i] - m_s[i-1]);
@@ -182,14 +187,14 @@ Point catmull_rom<Point, RandomAccessContainer>::operator()(const typename Point
         B1_or_C[j] = denom*(s2s*A1_or_A3[j] - s0s*A2_or_B2[j]);
     }
 
-    denom = 1/(m_s[i+2] - m_s[i+1]);
+    denom = 1/(m_s[ip2] - m_s[i+1]);
     for(size_t j = 0; j < size(m_pnts[0]); ++j)
     {
-        A1_or_A3[j] = denom*(s3s*m_pnts[i+1][j] - s2s*m_pnts[i+2][j]);
+        A1_or_A3[j] = denom*(s3s*m_pnts[i+1][j] - s2s*m_pnts[ip2][j]);
     }
 
     Point B2;
-    denom = 1/(m_s[i+2] - m_s[i]);
+    denom = 1/(m_s[ip2] - m_s[i]);
     for(size_t j = 0; j < size(m_pnts[0]); ++j)
     {
         B2[j] = denom*(s3s*A2_or_B2[j] - s1s*A1_or_A3[j]);
