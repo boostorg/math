@@ -41,10 +41,15 @@ namespace boost { namespace math {
             }
         };
         
-        template<class Iterator>
-        void dft(Iterator beg1, Iterator end1, Iterator beg2)
+        template<class Iterator1, class Iterator2>
+        void dft(Iterator1 beg1, Iterator1 end1, Iterator2 beg2)
         {
-            using T = typename std::iterator_traits<Iterator>::value_type;
+            using T  = typename std::iterator_traits<Iterator1>::value_type;
+            using T2 = typename std::iterator_traits<Iterator2>::value_type;
+            
+            static_assert(std::is_same<T,T2>::value,
+                "Input and output types mismatch");
+            
             plan<T> P(std::distance(beg1,end1));
         }
         

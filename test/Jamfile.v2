@@ -1460,3 +1460,8 @@ rule get_float128_tests
 }
 
 test-suite float128_tests : [ get_float128_tests ] ;
+
+test-suite fft : 
+   [ compile fft_compile.cpp  ]
+   [ compile-fail fft_compile-fail.cpp  ]
+;
