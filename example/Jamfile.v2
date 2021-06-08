@@ -43,7 +43,6 @@ project
     ;
 
 test-suite examples :
-   [ run fft_ex01.cpp  ]
    [ run bessel_zeros_example_1.cpp : : : <exception-handling>off:<build>no  ]
    [ run bessel_zeros_interator_example.cpp : : : <exception-handling>off:<build>no  ]
    [ run neumann_zeros_example_1.cpp : : : <exception-handling>off:<build>no  ]

@@ -1462,6 +1462,7 @@ rule get_float128_tests
 test-suite float128_tests : [ get_float128_tests ] ;
 
 test-suite fft : 
-   [ compile fft_compile.cpp  ]
+   [ run fft_compile.cpp ../config//fftw3 ../config//fftw3f ../config//fftw3l ]
+   [ run fft_fftw.cpp ../config//fftw3 ../config//fftw3f ../config//fftw3l ]
    [ compile-fail fft_compile-fail.cpp  ]
 ;
