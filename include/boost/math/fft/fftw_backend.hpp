@@ -16,7 +16,6 @@ namespace fft {
     class fftw_traits<double>
     {
         public:
-        using value_type = std::complex<double>;
         using cvalue_type = fftw_complex;
         using plan_type  = fftw_plan;
         
@@ -39,7 +38,6 @@ namespace fft {
     class fftw_traits<float>
     {
         public:
-        using value_type = std::complex<float>;
         using cvalue_type = fftwf_complex;
         using plan_type  = fftwf_plan;
         
@@ -62,7 +60,6 @@ namespace fft {
     class fftw_traits<long double>
     {
         public:
-        using value_type = std::complex<long double>;
         using cvalue_type = fftwl_complex;
         using plan_type  = fftwl_plan;
         
@@ -94,6 +91,7 @@ namespace fft {
         
         using plan_type   = typename detail::fftw_traits<T>::plan_type;
         using cvalue_type = typename detail::fftw_traits<T>::cvalue_type;
+        using value_type  = std::complex<T>;
         
         unsigned int _size; 
         plan_type forward_plan;
@@ -102,6 +100,15 @@ namespace fft {
         template<class Iterator1, class Iterator2>
         void execute(const plan_type p, Iterator1 in, Iterator2 out) const
         {
+            using T1  = typename std::iterator_traits<Iterator1>::value_type;
+            using T2 = typename std::iterator_traits<Iterator2>::value_type;
+            
+            static_assert(std::is_same<T1,T2>::value,
+                "Input and output types mismatch");
+                
+            static_assert(std::is_same<value_type,T1>::value,
+                "Plan and Input types mismatch");
+                
             Iterator1 in_end{in};
             std::advance(in_end,size());
             std::copy(in,in_end,out);

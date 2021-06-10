@@ -126,21 +126,21 @@ int main()
         test_inverse<float>(i);
         test_inverse<double>(i);
         test_inverse<long double>(i);
-    
     }
     for(int i=1;i<=100'000; i*=10)
     {
         test_inverse<float>(i);
         test_inverse<double>(i);
         test_inverse<long double>(i);
-    
     }
     for(auto i : std::vector<int>{3,5,7,11,13,17,23})
     {
         test_inverse<float>(i);
         test_inverse<double>(i);
         test_inverse<long double>(i);
-    
     }
+    // TODO: can we print a useful compilation error message for the following
+    // illegal case?
+    // dft<std::complex<int>> P(3);   
     return boost::math::test::report_errors();
 }
