@@ -2,9 +2,12 @@
 #include <boost/math/fft.hpp>
 #include <boost/math/constants/constants.hpp>
 
+
+#include <complex>
 #include <vector>
 #include <limits>
 #include <cmath>
+#include <random>
 
 using namespace boost::math::fft;
 
@@ -55,10 +58,89 @@ void test_fixed_transforms()
     }
 }
 
+template<class T>
+void test_inverse(int N)
+{
+    const T tol = 4*std::numeric_limits<T>::epsilon();
+    std::mt19937 rng;
+    std::uniform_real_distribution<T> U(0.0,1.0);
+    {
+        std::vector<std::complex<T>> A(N),B(N),C(N);
+        
+        for(auto& x: A)
+        {
+            x.real( U(rng) );
+            x.imag( U(rng) );
+        }
+        dft_forward(A.begin(),A.end(),B.begin());
+        dft_backward(B.begin(),B.end(),C.begin());
+        
+        const T inverse_N = T{1.0}/N;
+        for(auto &x : C)
+            x *= inverse_N;
+        
+        T diff{0.0};
+        
+        for(size_t i=0;i<A.size();++i)
+        {
+            diff += std::norm(A[i]-C[i]);
+        }
+        diff = std::sqrt(diff)*inverse_N;
+        CHECK_MOLLIFIED_CLOSE(T{0.0},diff,tol);
+    }
+    
+    {
+        std::vector<std::complex<T>> A(N),B(N),C(N);
+        
+        for(auto& x: A)
+        {
+            x.real( 1.0 );
+            x.imag( 0.0 );
+        }
+        dft_forward(A.begin(),A.end(),B.begin());
+        dft_backward(B.begin(),B.end(),C.begin());
+        
+        const T inverse_N = T{1.0}/N;
+        for(auto &x : C)
+            x *= inverse_N;
+        
+        T diff{0.0};
+        
+        for(size_t i=0;i<A.size();++i)
+        {
+            diff += std::norm(A[i]-C[i]);
+        }
+        diff = std::sqrt(diff)*inverse_N;
+        CHECK_MOLLIFIED_CLOSE(T{0.0},diff,tol);
+    }
+}
+
 int main()
 {
     test_fixed_transforms<float>();
     test_fixed_transforms<double>();
     test_fixed_transforms<long double>();
+   
+    for(int i=1;i<=(1<<12); i*=2)
+    {
+        test_inverse<float>(i);
+        test_inverse<double>(i);
+        test_inverse<long double>(i);
+    
+    }
+    for(int i=1;i<=100'000; i*=10)
+    {
+        test_inverse<float>(i);
+        test_inverse<double>(i);
+        test_inverse<long double>(i);
+    
+    }
+    for(auto i : std::vector<int>{3,5,7,11,13,17,23})
+    {
+        test_inverse<float>(i);
+        test_inverse<double>(i);
+        test_inverse<long double>(i);
+    
+    }
     return boost::math::test::report_errors();
 }
