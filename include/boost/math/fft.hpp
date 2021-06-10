@@ -35,7 +35,7 @@ namespace fft {
             "Input and output types mismatch");
         
         dft<T> P(std::distance(input_begin,input_end));
-        P.forward(&*input_begin,&*output);
+        P.forward(input_begin,output);
     }
     
     // std::transform-like Fourier Transform API
@@ -49,7 +49,7 @@ namespace fft {
             "Input and output types mismatch");
         
         dft<T> P(std::distance(input_begin,input_end));
-        P.backward(&*input_begin,&*output);
+        P.backward(input_begin,output);
     }
 } // namespace fft
 } // namespace math

@@ -7,156 +7,140 @@
 namespace boost { namespace math { 
 namespace fft {
     
-    // 1-D fftw backend
+    namespace detail
+    {
     template<class T>
-    class fftw_dft;
-    
+    class fftw_traits;
     
     template<>
-    class fftw_dft< std::complex<double>  >
+    class fftw_traits<double>
     {
         public:
         using value_type = std::complex<double>;
-       
-        private:
-        unsigned int _size; 
-        fftw_plan forward_plan;
-        fftw_plan backward_plan;
+        using cvalue_type = fftw_complex;
+        using plan_type  = fftw_plan;
         
-        public:
-        
-        fftw_dft(unsigned int n):
-            _size{n},
-            forward_plan{
-                fftw_plan_dft_1d(_size,nullptr,nullptr,FFTW_FORWARD,
-                    FFTW_ESTIMATE | FFTW_PRESERVE_INPUT)},
-            backward_plan{
-                fftw_plan_dft_1d(_size,nullptr,nullptr,FFTW_BACKWARD,
-                    FFTW_ESTIMATE | FFTW_PRESERVE_INPUT)}
-        {}
-        
-        ~fftw_dft()
+        static plan_type plan_ctor(
+            int n, cvalue_type* in, cvalue_type* out, int sign, unsigned int flags)
         {
-            fftw_destroy_plan(forward_plan);
-            fftw_destroy_plan(backward_plan);
+            return fftw_plan_dft_1d(n,in,out,sign,flags);
         }
-        unsigned int size() const {return _size;}
-        
-        void forward(const value_type* in, value_type* out) const
+        static void plan_exec(
+            const plan_type p, cvalue_type* in, cvalue_type* out)
         {
-            std::copy(in,in+size(),out);
-            fftw_execute_dft(
-                forward_plan,
-                reinterpret_cast<fftw_complex*>(out),
-                reinterpret_cast<fftw_complex*>(out));
+            fftw_execute_dft(p,in,out);
         }
-        void backward(const value_type* in, value_type* out) const
+        static void plan_dtor(plan_type p)
         {
-            std::copy(in,in+size(),out);
-            fftw_execute_dft(
-                backward_plan,
-                reinterpret_cast<fftw_complex*>(out),
-                reinterpret_cast<fftw_complex*>(out));
+            fftw_destroy_plan(p);
         }
     };
-    
     template<>
-    class fftw_dft< std::complex<float>  >
+    class fftw_traits<float>
     {
         public:
         using value_type = std::complex<float>;
-       
-        private:
-        unsigned int _size; 
-        fftwf_plan forward_plan;
-        fftwf_plan backward_plan;
+        using cvalue_type = fftwf_complex;
+        using plan_type  = fftwf_plan;
         
-        public:
-        
-        fftw_dft(unsigned int n):
-            _size{n},
-            forward_plan{
-                fftwf_plan_dft_1d(_size,nullptr,nullptr,FFTW_FORWARD,
-                    FFTW_ESTIMATE | FFTW_PRESERVE_INPUT)},
-            backward_plan{
-                fftwf_plan_dft_1d(_size,nullptr,nullptr,FFTW_BACKWARD,
-                    FFTW_ESTIMATE | FFTW_PRESERVE_INPUT)}
-        {}
-        
-        ~fftw_dft()
+        static plan_type plan_ctor(
+            int n, cvalue_type* in, cvalue_type* out, int sign, unsigned int flags)
         {
-            fftwf_destroy_plan(forward_plan);
-            fftwf_destroy_plan(backward_plan);
+            return fftwf_plan_dft_1d(n,in,out,sign,flags);
         }
-        unsigned int size() const {return _size;}
-        
-        void forward(const value_type* in, value_type* out) const
+        static void plan_exec(
+            const plan_type p, cvalue_type* in, cvalue_type* out)
         {
-            std::copy(in,in+size(),out);
-            fftwf_execute_dft(
-                forward_plan,
-                reinterpret_cast<fftwf_complex*>(out),
-                reinterpret_cast<fftwf_complex*>(out));
+            fftwf_execute_dft(p,in,out);
         }
-        void backward(const value_type* in, value_type* out) const
+        static void plan_dtor(plan_type p)
         {
-            std::copy(in,in+size(),out);
-            fftwf_execute_dft(
-                backward_plan,
-                reinterpret_cast<fftwf_complex*>(out),
-                reinterpret_cast<fftwf_complex*>(out));
+            fftwf_destroy_plan(p);
         }
     };
-    
-    // I think 'long double' does not always mean 128bit float.
-    // but FFTW manual does support three types: 'float', 'double', 'long double'.
     template<>
-    class fftw_dft< std::complex<long double>  >
+    class fftw_traits<long double>
     {
         public:
         using value_type = std::complex<long double>;
-       
-        private:
-        unsigned int _size; 
-        fftwl_plan forward_plan;
-        fftwl_plan backward_plan;
+        using cvalue_type = fftwl_complex;
+        using plan_type  = fftwl_plan;
         
+        static plan_type plan_ctor(
+            int n, cvalue_type* in, cvalue_type* out, int sign, unsigned int flags)
+        {
+            return fftwl_plan_dft_1d(n,in,out,sign,flags);
+        }
+        static void plan_exec(
+            const plan_type p, cvalue_type* in, cvalue_type* out)
+        {
+            fftwl_execute_dft(p,in,out);
+        }
+        static void plan_dtor(plan_type p)
+        {
+            fftwl_destroy_plan(p);
+        }
+    };
+    } // namespace detail
+    
+    
+    template<class T>
+    class fftw_dft;
+    
+    template<class T>
+    class fftw_dft<std::complex<T> >
+    {
+        private:
+        
+        using plan_type   = typename detail::fftw_traits<T>::plan_type;
+        using cvalue_type = typename detail::fftw_traits<T>::cvalue_type;
+        
+        unsigned int _size; 
+        plan_type forward_plan;
+        plan_type backward_plan;
+        
+        template<class Iterator1, class Iterator2>
+        void execute(const plan_type p, Iterator1 in, Iterator2 out) const
+        {
+            Iterator1 in_end{in};
+            std::advance(in_end,size());
+            std::copy(in,in_end,out);
+            detail::fftw_traits<T>::plan_exec(
+                p,
+                reinterpret_cast<cvalue_type*>(&*out),
+                reinterpret_cast<cvalue_type*>(&*out));
+        }
         public:
         
         fftw_dft(unsigned int n):
             _size{n},
             forward_plan{
-                fftwl_plan_dft_1d(_size,nullptr,nullptr,FFTW_FORWARD,
+                detail::fftw_traits<T>::plan_ctor(_size,nullptr,nullptr,FFTW_FORWARD,
                     FFTW_ESTIMATE | FFTW_PRESERVE_INPUT)},
             backward_plan{
-                fftwl_plan_dft_1d(_size,nullptr,nullptr,FFTW_BACKWARD,
+                detail::fftw_traits<T>::plan_ctor(_size,nullptr,nullptr,FFTW_BACKWARD,
                     FFTW_ESTIMATE | FFTW_PRESERVE_INPUT)}
         {}
         
         ~fftw_dft()
         {
-            fftwl_destroy_plan(forward_plan);
-            fftwl_destroy_plan(backward_plan);
+            detail::fftw_traits<T>::plan_dtor(forward_plan);
+            detail::fftw_traits<T>::plan_dtor(backward_plan);
         }
         unsigned int size() const {return _size;}
         
-        void forward(const value_type* in, value_type* out) const
+        template<class Iterator1, class Iterator2>
+        void forward(Iterator1 in, Iterator2 out) const
         {
-            std::copy(in,in+size(),out);
-            fftwl_execute_dft(
-                forward_plan,
-                reinterpret_cast<fftwl_complex*>(out),
-                reinterpret_cast<fftwl_complex*>(out));
+            execute(forward_plan,in,out);
         }
-        void backward(const value_type* in, value_type* out) const
+        template<class Iterator1, class Iterator2>
+        void backward(Iterator1 in, Iterator2 out) const
         {
-            std::copy(in,in+size(),out);
-            fftwl_execute_dft(
-                backward_plan,
-                reinterpret_cast<fftwl_complex*>(out),
-                reinterpret_cast<fftwl_complex*>(out));
+            execute(backward_plan,in,out);
         }
     };
+    
     
 } // namespace fft
 } // namespace math
