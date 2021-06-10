@@ -17,12 +17,12 @@ void test_fixed_transforms()
     const T pi = boost::math::constants::pi<T>(); 
     const T tol = 4*std::numeric_limits<T>::epsilon();
     
-    // { TODO: error, fftw does nothing for n=1
-    //     std::vector< std::complex<T> > A{1.0},B(1);
-    //     dft_forward(A.begin(),A.end(),B.begin());
-    //     CHECK_MOLLIFIED_CLOSE(B[0].real(),T(1.0),0);
-    //     CHECK_MOLLIFIED_CLOSE(B[0].imag(),T(0.0),0);
-    // }
+    {
+        std::vector< std::complex<T> > A{1.0},B(1);
+        dft_forward(A.begin(),A.end(),B.begin());
+        CHECK_MOLLIFIED_CLOSE(B[0].real(),T(1.0),0);
+        CHECK_MOLLIFIED_CLOSE(B[0].imag(),T(0.0),0);
+    }
     {
         std::vector< std::complex<T> > A{1.0,1.0},B(2);
         dft_forward(A.begin(),A.end(),B.begin());
@@ -72,8 +72,8 @@ void test_inverse(int N)
             x.real( U(rng) );
             x.imag( U(rng) );
         }
-        dft_forward(A.begin(),A.end(),B.begin());
-        dft_backward(B.begin(),B.end(),C.begin());
+        dft_forward(A.cbegin(),A.cend(),B.begin());
+        dft_backward(B.cbegin(),B.cend(),C.begin());
         
         const T inverse_N = T{1.0}/N;
         for(auto &x : C)
@@ -97,8 +97,8 @@ void test_inverse(int N)
             x.real( 1.0 );
             x.imag( 0.0 );
         }
-        dft_forward(A.begin(),A.end(),B.begin());
-        dft_backward(B.begin(),B.end(),C.begin());
+        dft_forward(A.cbegin(),A.cend(),B.begin());
+        dft_backward(B.cbegin(),B.cend(),C.begin());
         
         const T inverse_N = T{1.0}/N;
         for(auto &x : C)
