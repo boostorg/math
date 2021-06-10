@@ -44,17 +44,19 @@ namespace fft {
         
         void forward(const value_type* in, value_type* out) const
         {
+            std::copy(in,in+size(),out);
             fftw_execute_dft(
                 forward_plan,
-                (fftw_complex*)in,// FFTW promised not to change the input!
-                (fftw_complex*)out);
+                reinterpret_cast<fftw_complex*>(out),
+                reinterpret_cast<fftw_complex*>(out));
         }
         void backward(const value_type* in, value_type* out) const
         {
+            std::copy(in,in+size(),out);
             fftw_execute_dft(
                 backward_plan,
-                (fftw_complex*)in, // FFTW promised not to change the input!
-                (fftw_complex*)out);
+                reinterpret_cast<fftw_complex*>(out),
+                reinterpret_cast<fftw_complex*>(out));
         }
     };
     
@@ -90,17 +92,19 @@ namespace fft {
         
         void forward(const value_type* in, value_type* out) const
         {
+            std::copy(in,in+size(),out);
             fftwf_execute_dft(
                 forward_plan,
-                (fftwf_complex*)in,// FFTW promised not to change the input!
-                (fftwf_complex*)out);
+                reinterpret_cast<fftwf_complex*>(out),
+                reinterpret_cast<fftwf_complex*>(out));
         }
         void backward(const value_type* in, value_type* out) const
         {
+            std::copy(in,in+size(),out);
             fftwf_execute_dft(
                 backward_plan,
-                (fftwf_complex*)in, // FFTW promised not to change the input!
-                (fftwf_complex*)out);
+                reinterpret_cast<fftwf_complex*>(out),
+                reinterpret_cast<fftwf_complex*>(out));
         }
     };
     
@@ -138,17 +142,19 @@ namespace fft {
         
         void forward(const value_type* in, value_type* out) const
         {
+            std::copy(in,in+size(),out);
             fftwl_execute_dft(
                 forward_plan,
-                (fftwl_complex*)in,// FFTW promised not to change the input!
-                (fftwl_complex*)out);
+                reinterpret_cast<fftwl_complex*>(out),
+                reinterpret_cast<fftwl_complex*>(out));
         }
         void backward(const value_type* in, value_type* out) const
         {
+            std::copy(in,in+size(),out);
             fftwl_execute_dft(
                 backward_plan,
-                (fftwl_complex*)in, // FFTW promised not to change the input!
-                (fftwl_complex*)out);
+                reinterpret_cast<fftwl_complex*>(out),
+                reinterpret_cast<fftwl_complex*>(out));
         }
     };
     
