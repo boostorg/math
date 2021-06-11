@@ -104,7 +104,7 @@ namespace fft {
         using cvalue_type = typename detail::fftw_traits<T>::cvalue_type;
         using value_type  = typename detail::fftw_traits<T>::value_type;
         
-        unsigned int _size; 
+        std::size_t _size; 
         plan_type forward_plan;
         plan_type backward_plan;
        
@@ -139,7 +139,7 @@ namespace fft {
         }
         public:
         
-        fftw_dft(unsigned int n):
+        fftw_dft(std::size_t n):
             _size{n},
             forward_plan{
                 detail::fftw_traits<T>::plan_ctor(_size,nullptr,nullptr,FFTW_FORWARD,
@@ -154,7 +154,7 @@ namespace fft {
             detail::fftw_traits<T>::plan_dtor(forward_plan);
             detail::fftw_traits<T>::plan_dtor(backward_plan);
         }
-        unsigned int size() const {return _size;}
+        std::size_t size() const {return _size;}
         
         template<class Iterator1, class Iterator2>
         void forward(Iterator1 in, Iterator2 out) const

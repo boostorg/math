@@ -1463,6 +1463,6 @@ test-suite float128_tests : [ get_float128_tests ] ;
 
 test-suite fft : 
    [ run fft_compile.cpp ../config//fftw3 ../config//fftw3f ../config//fftw3l ]
-   [ run fft_fftw.cpp ../config//fftw3 ../config//fftw3f ../config//fftw3l ]
+   [ run fft_fftw.cpp ../config//fftw3 ../config//fftw3f ../config//fftw3l ../config//gsl ]
    [ compile-fail fft_compile-fail.cpp  ]
 ;

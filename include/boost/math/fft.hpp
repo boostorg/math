@@ -3,6 +3,7 @@
 
 #include <iterator>
 #include <boost/math/fft/fftw_backend.hpp>
+#include <boost/math/fft/gsl_backend.hpp>
 
 namespace boost { namespace math { 
 namespace fft {
@@ -25,8 +26,13 @@ namespace fft {
     };
     
     // std::transform-like Fourier Transform API
-    template<class Iterator1, class Iterator2>
-    void dft_forward(Iterator1 input_begin, Iterator1 input_end, Iterator2 output)
+    template<
+        template<class U> class backend = fftw_dft,
+        class Iterator1, class Iterator2 >
+    void dft_forward(
+        Iterator1 input_begin, 
+        Iterator1 input_end, 
+        Iterator2 output)
     {
         using T  = typename std::iterator_traits<Iterator1>::value_type;
         using T2 = typename std::iterator_traits<Iterator2>::value_type;
@@ -34,13 +40,18 @@ namespace fft {
         static_assert(std::is_same<T,T2>::value,
             "Input and output types mismatch");
         
-        dft<T> P(std::distance(input_begin,input_end));
+        dft<T,backend> P(std::distance(input_begin,input_end));
         P.forward(input_begin,output);
     }
     
     // std::transform-like Fourier Transform API
-    template<class Iterator1, class Iterator2>
-    void dft_backward(Iterator1 input_begin, Iterator1 input_end, Iterator2 output)
+    template<
+        template<class U> class backend = fftw_dft,
+        class Iterator1, class Iterator2 >
+    void dft_backward(
+        Iterator1 input_begin, 
+        Iterator1 input_end, 
+        Iterator2 output)
     {
         using T  = typename std::iterator_traits<Iterator1>::value_type;
         using T2 = typename std::iterator_traits<Iterator2>::value_type;
@@ -48,7 +59,7 @@ namespace fft {
         static_assert(std::is_same<T,T2>::value,
             "Input and output types mismatch");
         
-        dft<T> P(std::distance(input_begin,input_end));
+        dft<T,backend> P(std::distance(input_begin,input_end));
         P.backward(input_begin,output);
     }
 } // namespace fft

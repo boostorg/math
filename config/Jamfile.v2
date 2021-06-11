@@ -14,6 +14,7 @@ lib fftw3 ;
 lib fftw3f ;
 lib fftw3l ;
 lib fftw3q ;
+lib gsl ;
 
 obj has_long_double_support : has_long_double_support.cpp ;
 obj has_mpfr_class : has_mpfr_class.cpp :
