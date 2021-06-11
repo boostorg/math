@@ -2,7 +2,7 @@
 #include <boost/math/fft.hpp>
 #include <boost/math/constants/constants.hpp>
 
-
+#include <type_traits>
 #include <complex>
 #include <vector>
 #include <limits>
@@ -56,7 +56,32 @@ void test_fixed_transforms()
             T(- std::sin(4*pi/3.0) - std::sin(8*pi/3.0)),
             tol);
     }
+    {
+        std::vector< std::complex<T> > A{1.0,1.0,1.0};
+        dft_forward(A.cbegin(),A.cend(),A.begin());
+        CHECK_MOLLIFIED_CLOSE(A[0].real(),T(3.0),tol);
+        CHECK_MOLLIFIED_CLOSE(A[0].imag(),T(0.0),tol);
+        
+        CHECK_MOLLIFIED_CLOSE(
+            A[1].real(),
+            T(1.0 + std::cos(2*pi/3.0) + std::cos(4*pi/3.0)),
+            tol);
+        CHECK_MOLLIFIED_CLOSE(
+            A[1].imag(),
+            T(- std::sin(2*pi/3.0) - std::sin(4*pi/3.0)),
+            tol);
+        
+        CHECK_MOLLIFIED_CLOSE(
+            A[2].real(),
+            T(1.0 + std::cos(4*pi/3.0) + std::cos(8*pi/3.0)),
+            tol);
+        CHECK_MOLLIFIED_CLOSE(
+            A[2].imag(),
+            T(- std::sin(4*pi/3.0) - std::sin(8*pi/3.0)),
+            tol);
+    }
 }
+
 
 template<class T>
 void test_inverse(int N)
@@ -120,7 +145,7 @@ int main()
     test_fixed_transforms<float>();
     test_fixed_transforms<double>();
     test_fixed_transforms<long double>();
-   
+    
     for(int i=1;i<=(1<<12); i*=2)
     {
         test_inverse<float>(i);

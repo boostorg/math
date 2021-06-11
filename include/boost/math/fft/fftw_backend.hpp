@@ -1,8 +1,9 @@
 #ifndef BOOST_MATH_FFT_FFTWBACKEND_HPP
 #define BOOST_MATH_FFT_FFTWBACKEND_HPP
 
-#include <fftw3.h>
 #include <complex>
+#include <fftw3.h>
+#include <memory>
 
 namespace boost { namespace math { 
 namespace fft {
@@ -12,12 +13,23 @@ namespace fft {
     template<class T>
     class fftw_traits;
     
+    
+    // We don't support fftw c-types, they are not assignable (std::copy breaks)
+    
+    // template<>
+    // class fftw_traits< fftw_complex >;
+    // template<>
+    // class fftw_traits< fftwf_complex >;
+    // template<>
+    // class fftw_traits< fftwl_complex >;
+    
     template<>
-    class fftw_traits<double>
+    class fftw_traits<std::complex< double> >
     {
         public:
         using cvalue_type = fftw_complex;
         using plan_type  = fftw_plan;
+        using value_type = std::complex<double>;
         
         static plan_type plan_ctor(
             int n, cvalue_type* in, cvalue_type* out, int sign, unsigned int flags)
@@ -35,11 +47,12 @@ namespace fft {
         }
     };
     template<>
-    class fftw_traits<float>
+    class fftw_traits< std::complex<float> >
     {
         public:
         using cvalue_type = fftwf_complex;
         using plan_type  = fftwf_plan;
+        using value_type = std::complex<float>;
         
         static plan_type plan_ctor(
             int n, cvalue_type* in, cvalue_type* out, int sign, unsigned int flags)
@@ -57,11 +70,12 @@ namespace fft {
         }
     };
     template<>
-    class fftw_traits<long double>
+    class fftw_traits< std::complex<long double> >
     {
         public:
         using cvalue_type = fftwl_complex;
         using plan_type  = fftwl_plan;
+        using value_type = std::complex<long double>;
         
         static plan_type plan_ctor(
             int n, cvalue_type* in, cvalue_type* out, int sign, unsigned int flags)
@@ -82,21 +96,19 @@ namespace fft {
     
     
     template<class T>
-    class fftw_dft;
-    
-    template<class T>
-    class fftw_dft<std::complex<T> >
+    class fftw_dft
     {
         private:
         
         using plan_type   = typename detail::fftw_traits<T>::plan_type;
         using cvalue_type = typename detail::fftw_traits<T>::cvalue_type;
-        using value_type  = std::complex<T>;
+        using value_type  = typename detail::fftw_traits<T>::value_type;
         
         unsigned int _size; 
         plan_type forward_plan;
         plan_type backward_plan;
-        
+       
+        // TODO: exceptions if size()!=container capacity 
         template<class Iterator1, class Iterator2>
         void execute(const plan_type p, Iterator1 in, Iterator2 out) const
         {
@@ -108,14 +120,22 @@ namespace fft {
                 
             static_assert(std::is_same<value_type,T1>::value,
                 "Plan and Input types mismatch");
-                
-            Iterator1 in_end{in};
-            std::advance(in_end,size());
-            std::copy(in,in_end,out);
+            
+            if(std::addressof(*in)!=std::addressof(*out))
+            {
+                // we avoid this extra step for in-place transforms
+                // notice that if in==out, the following code has
+                // undefined-behavior
+                Iterator1 in_end{in};
+                std::advance(in_end,size());
+                std::copy(in,in_end,out);
+            }
+            
+            // reinterpret_cast here ensures that the output is writable
             detail::fftw_traits<T>::plan_exec(
                 p,
-                reinterpret_cast<cvalue_type*>(&*out),
-                reinterpret_cast<cvalue_type*>(&*out));
+                reinterpret_cast<cvalue_type*>(std::addressof(*out)),
+                reinterpret_cast<cvalue_type*>(std::addressof(*out)));
         }
         public:
         
