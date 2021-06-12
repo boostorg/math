@@ -44,12 +44,12 @@
                    InputIterator  input_end,
                    OutputIterator output)
   {
-    using input_iterator_type  = typename std::iterator_traits<InputIterator >::value_type;
-    using output_iterator_type = typename std::iterator_traits<OutputIterator>::value_type;
+    using input_value_type  = typename std::iterator_traits<InputIterator >::value_type;
+    using output_value_type = typename std::iterator_traits<OutputIterator>::value_type;
 
-    static_assert(std::is_same<input_iterator_type, output_iterator_type>::value, "Input and output types mismatch");
+    static_assert(std::is_same<input_value_type, output_value_type>::value, "Input and output types mismatch");
 
-    dft<input_iterator_type, backend> plan(input_begin, input_end, output);
+    dft<input_value_type, backend> plan(input_begin, input_end, output);
 
     plan.forward(input_begin, output);
   }
@@ -62,12 +62,12 @@
                     InputIterator  input_end,
                     OutputIterator output)
   {
-    using input_iterator_type  = typename std::iterator_traits<InputIterator >::value_type;
-    using output_iterator_type = typename std::iterator_traits<OutputIterator>::value_type;
+    using input_value_type  = typename std::iterator_traits<InputIterator >::value_type;
+    using output_value_type = typename std::iterator_traits<OutputIterator>::value_type;
 
-    static_assert(std::is_same<input_iterator_type, output_iterator_type>::value, "Input and output types mismatch");
+    static_assert(std::is_same<input_value_type, output_value_type>::value, "Input and output types mismatch");
 
-    dft<input_iterator_type, backend> plan(input_begin, input_end, output);
+    dft<input_value_type, backend> plan(input_begin, input_end, output);
 
     plan.backward(input_begin, output);
   }
