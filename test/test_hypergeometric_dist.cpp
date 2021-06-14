@@ -468,7 +468,7 @@ void test_spots(RealType /*T*/, const char* type_name)
    BOOST_CHECK_CLOSE(mode(d), static_cast<RealType>(20), tolerance);
    BOOST_CHECK_CLOSE(variance(d), static_cast<RealType>(10.821643286573146292585170340681L), tolerance);
    BOOST_CHECK_CLOSE(skewness(d), static_cast<RealType>(0.048833071022952084732902910189366L), tolerance);
-   BOOST_CHECK_CLOSE(kurtosis_excess(d), static_cast<RealType>(2.5155486690782804816404001878293L), tolerance);
+   BOOST_CHECK_CLOSE(kurtosis_excess(d), static_cast<RealType>(2.969174035736058474901169623721804275002985337280263464L), tolerance);
    BOOST_CHECK_CLOSE(kurtosis(d), kurtosis_excess(d) + 3, tolerance);
    BOOST_CHECK_EQUAL(quantile(d, 0.5f), median(d));
 

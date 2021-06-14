@@ -1,5 +1,6 @@
 // Copyright 2008 Gautam Sewani
 // Copyright 2008 John Maddock
+// Copyright 2021 Paul A. Bristow
 //
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
@@ -231,6 +232,8 @@ namespace boost { namespace math {
       return static_cast<RealType>(detail::hypergeometric_quantile(RealType(1 - c.param), c.param, c.dist.defective(), c.dist.sample_count(), c.dist.total(), Policy()));
    } // quantile
 
+   // https://www.wolframalpha.com/input/?i=kurtosis+hypergeometric+distribution 
+
    template <class RealType, class Policy>
    inline RealType mean(const hypergeometric_distribution<RealType, Policy>& dist)
    {
@@ -269,13 +272,33 @@ namespace boost { namespace math {
    template <class RealType, class Policy>
    inline RealType kurtosis_excess(const hypergeometric_distribution<RealType, Policy>& dist)
    {
-      RealType r = static_cast<RealType>(dist.defective());
-      RealType n = static_cast<RealType>(dist.sample_count());
-      RealType N = static_cast<RealType>(dist.total());
-      RealType t1 = N * N * (N - 1) / (r * (N - 2) * (N - 3) * (N - r));
-      RealType t2 = (N * (N + 1) - 6 * N * (N - r)) / (n * (N - n))
-         + 3 * r * (N - r) * (N + 6) / (N * N) - 6;
-      return t1 * t2;
+      //RealType r = static_cast<RealType>(dist.defective());
+      //RealType n = static_cast<RealType>(dist.sample_count());
+      //RealType N = static_cast<RealType>(dist.total());
+      //RealType t1 = N * N * (N - 1) / (r * (N - 2) * (N - 3) * (N - r));
+      //RealType t2 = (N * (N + 1) - 6 * N * (N - r)) / (n * (N - n))
+      //   + 3 * r * (N - r) * (N + 6) / (N * N) - 6;
+      //return t1 * t2;
+
+      // https://www.wolframalpha.com/input/?i=kurtosis+hypergeometric+distribution shown as plain text:
+      //  mean | (m n)/N
+      //  standard deviation | sqrt((m n(N - m) (N - n))/(N - 1))/N
+      //  variance | (m n(1 - m/N) (N - n))/((N - 1) N)
+      //  skewness | (sqrt(N - 1) (N - 2 m) (N - 2 n))/((N - 2) sqrt(m n(N - m) (N - n)))
+      //  kurtosis | ((N - 1) N^2 ((3 m(N - m) (n^2 (-N) + (n - 2) N^2 + 6 n(N - n)))/N^2 - 6 n(N - n) + N(N + 1)))/(m n(N - 3) (N - 2) (N - m) (N - n))
+
+     // Kurtosis[HypergeometricDistribution[n, m, N]]
+      RealType m = static_cast<RealType>(dist.defective()); // Failures or success events. (Also symbols K or M are used).
+      RealType n = static_cast<RealType>(dist.sample_count()); // draws or trials.
+      RealType n2 = n * n; // n^2
+      RealType N = static_cast<RealType>(dist.total()); // Total population from which n draws or trials are made. 
+      RealType N2 = N * N; // N^2
+
+      // result = ((N - 1) N^2 ((3 m(N - m) (n^2 (-N) + (n - 2) N^2 + 6 n(N - n)))/N^2 - 6 n(N - n) + N(N + 1)))/(m n(N - 3) (N - 2) (N - m) (N - n));
+      RealType result = ((N-1)*N2*((3*m*(N-m)*(n2*(-N)+(n-2)*N2+6*n*(N-n)))/N2-6*n*(N-n)+N*(N+1)))/(m*n*(N-3)*(N-2)*(N-m)*(N-n));
+      // Agrees with kurtosis hypergeometric distribution(50,200,500) kurtosis = 2.96917 
+      // N[ kurtosis[hypergeometricdistribution(50,200,500)], 55]  2.969174035736058474901169623721804275002985337280263464
+      return result;
    } // RealType kurtosis_excess(const hypergeometric_distribution<RealType, Policy>& dist)
 
    template <class RealType, class Policy>
