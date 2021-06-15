@@ -30,9 +30,17 @@
 
     using complex_value_type = real_value_type[2U];
 
-    static plan_type plan_construct(int n, complex_value_type* in, complex_value_type* out, int sign, unsigned int flags) { return ::fftwf_plan_dft_1d(n, in, out, sign, flags); }
+    static plan_type plan_construct(
+      int n, complex_value_type* in, complex_value_type* out, int sign, unsigned int flags) 
+    { 
+      return ::fftwf_plan_dft_1d(n, in, out, sign, flags); 
+    }
 
-    static void plan_execute(plan_type plan, complex_value_type* in, complex_value_type* out) { ::fftwf_execute_dft(plan, in, out); }
+    static void plan_execute(
+      plan_type plan, complex_value_type* in, complex_value_type* out) 
+    { 
+      ::fftwf_execute_dft(plan, in, out); 
+    }
 
     static void plan_destroy(plan_type p) { ::fftwf_destroy_plan(p); }
   };
@@ -46,9 +54,17 @@
 
     using complex_value_type = real_value_type[2U];
 
-    static plan_type plan_construct(int n, complex_value_type* in, complex_value_type* out, int sign, unsigned int flags) { return ::fftw_plan_dft_1d(n, in, out, sign, flags); }
+    static plan_type plan_construct(
+      int n, complex_value_type* in, complex_value_type* out, int sign, unsigned int flags) 
+    { 
+      return ::fftw_plan_dft_1d(n, in, out, sign, flags); 
+    }
 
-    static void plan_execute(plan_type plan, complex_value_type* in, complex_value_type* out) { ::fftw_execute_dft(plan, in, out); }
+    static void plan_execute(
+      plan_type plan, complex_value_type* in, complex_value_type* out) 
+    { 
+      ::fftw_execute_dft(plan, in, out); 
+    }
 
     static void plan_destroy(plan_type p) { ::fftw_destroy_plan(p); }
   };
@@ -62,9 +78,17 @@
 
     using complex_value_type = real_value_type[2U];
 
-    static plan_type plan_construct(int n, complex_value_type* in, complex_value_type* out, int sign, unsigned int flags) { return ::fftwl_plan_dft_1d(n, in, out, sign, flags); }
+    static plan_type plan_construct(
+      int n, complex_value_type* in, complex_value_type* out, int sign, unsigned int flags) 
+    { 
+      return ::fftwl_plan_dft_1d(n, in, out, sign, flags); 
+    }
 
-    static void plan_execute(plan_type plan, complex_value_type* in, complex_value_type* out) { ::fftwl_execute_dft(plan, in, out); }
+    static void plan_execute(
+      plan_type plan, complex_value_type* in, complex_value_type* out) 
+    { 
+      ::fftwl_execute_dft(plan, in, out); 
+    }
 
     static void plan_destroy(plan_type p) { ::fftwl_destroy_plan(p); }
   };
@@ -81,9 +105,25 @@
 
   public:
     constexpr fftw_dft(std::ptrdiff_t n)
-      : my_size          { n },
-        my_forward_plan  { detail::fftw_traits_c_interface<real_value_type>::plan_construct(size(), nullptr, nullptr, FFTW_FORWARD,  FFTW_ESTIMATE | FFTW_PRESERVE_INPUT) },
-        my_backward_plan { detail::fftw_traits_c_interface<real_value_type>::plan_construct(size(), nullptr, nullptr, FFTW_BACKWARD, FFTW_ESTIMATE | FFTW_PRESERVE_INPUT) }
+      : my_size{ n },
+        my_forward_plan{ 
+          detail::fftw_traits_c_interface<real_value_type>::plan_construct
+          (
+            size(), 
+            nullptr, 
+            nullptr, 
+            FFTW_FORWARD,  
+            FFTW_ESTIMATE | FFTW_PRESERVE_INPUT
+          ) },
+        my_backward_plan { 
+          detail::fftw_traits_c_interface<real_value_type>::plan_construct
+          (
+            size(), 
+            nullptr, 
+            nullptr, 
+            FFTW_BACKWARD, 
+            FFTW_ESTIMATE | FFTW_PRESERVE_INPUT
+          ) }
     { }
 
     template<typename InputIteratorType,
