@@ -12,6 +12,7 @@
   #include <algorithm>
   #include <cmath>
   #include <complex>
+  #include <vector>
 
   #include <boost/math/constants/constants.hpp>
 
@@ -97,6 +98,88 @@
 
     static void plan_destroy(plan_type p) { ; }
   };
+  // TODO: use another power function
+  template <class T>
+  T power(const T& x, int n)
+  {
+    /*
+        for our use case n should always be >0.
+        However, if n==0 we would expect something
+        like 1.
+    */
+    // TODO: decide which exceptions to throw
+    if (n < 1)
+        throw std::domain_error("power(x,n) expects n>1.");
+
+    bool identity = true;
+    T r{}, aux{x};
+
+    for (; n; n >>= 1)
+    {
+      if (n & 1)
+      {
+        r = identity ? aux : r * aux;
+        identity = false;
+      }
+      aux *= aux;
+    }
+    return r;
+  }
+  template <class iter, class T>
+  void generic_dft_power2(iter first, iter last, const T e)
+  {
+    const int n = std::distance(first, last);
+    // TODO: determine power of two in a different way
+    if (__builtin_popcount(n) != 1)
+    // TODO: decide which exceptions to throw
+        throw std::domain_error(std::string(__func__) +
+                                 " n=" + std::to_string(n) +
+                                 " must be a power of 2");
+    if (n == 1)
+        return;
+
+    // const T _1 = power(e, n);
+    // const T f = power(e, n / 2);
+    const T _1 = T{1};
+    const T f = T{-1};
+    
+    int nbits = 0;
+    std::vector<T> e2{e};
+    for (int m = n / 2; m > 0; m >>= 1, ++nbits)
+      e2.push_back(e2.back() * e2.back());
+
+    std::reverse(e2.begin(), e2.end());
+
+    iter _i = first;
+    for (int i = 0; i < n; ++i, ++_i)
+    {
+      int ib = i, j = 0;
+      iter _j = first;
+
+      for (int b = 0; b < nbits; ib >>= 1, ++b)
+          j = (j << 1) | (ib & 1);
+
+      std::advance(_j, j);
+
+      if (i < j)
+          std::swap(*_i, *_j);
+    }
+    for (int len = 2, k = 1; len <= n; len <<= 1, ++k)
+    {
+      for (int i = 0; i < n; i += len)
+      {
+        T ej = _1;
+        for (int j = 0; j < len / 2; ++j)
+        {
+          iter u = first + i + j, v = first + i + j + len / 2;
+          T Bu = *u, Bv = *v * ej;
+          *u = Bu + Bv;
+          *v = Bu + Bv * f;
+          ej *= e2[k];
+        }
+      }
+    }
+  }
 
   } // namespace detail
 
@@ -205,6 +288,40 @@
           complex_value_type* my_mem;
           plan_type           my_forward_plan;
           plan_type           my_backward_plan;
+  };
+  
+  template<class NativeComplexType>
+  class generic_bsl_dft
+  {
+    using real_value_type = typename NativeComplexType::value_type;
+    static constexpr real_value_type pi = boost::math::constants::pi<real_value_type>();
+  public:
+    constexpr generic_bsl_dft(std::ptrdiff_t n)
+      : my_size{n}
+    { }
+
+    ~generic_bsl_dft()
+    {
+    }
+
+    constexpr std::ptrdiff_t size() const { return my_size; }
+
+    void forward(const NativeComplexType* in, NativeComplexType* out) const
+    {
+      std::copy(in, in + size(), out);
+      NativeComplexType w{std::cos(2*pi/size()),-std::sin(2*pi/size())};
+      detail::generic_dft_power2(out,out+size(),w);
+    }
+
+    void backward(const NativeComplexType* in, NativeComplexType* out) const
+    {
+      std::copy(in, in + size(), out);
+      NativeComplexType w{std::cos(2*pi/size()),std::sin(2*pi/size())};
+      detail::generic_dft_power2(out,out+size(),w);
+    }
+
+  private:
+    const std::ptrdiff_t my_size;
   };
 
   } } } // namespace boost::math::fft

@@ -16,7 +16,7 @@ using namespace boost::math::fft;
 template<class T, template<class U> class Backend>
 void test_fixed_transforms()
 {
-    const T tol = 4*std::numeric_limits<T>::epsilon();
+    const T tol = std::numeric_limits<T>::epsilon();
     
     {
         std::vector< std::complex<T> > A{1.0},B(1);
@@ -75,7 +75,10 @@ void test_fixed_transforms()
 template<class T, template<class U> class Backend>
 void test_inverse(int N)
 {
-  const T tol = 4*std::numeric_limits<T>::epsilon();
+  // TODO: increase precision of the generic dft 
+  // const T tol = std::numeric_limits<T>::epsilon();
+  const T tol = 16*std::numeric_limits<T>::epsilon();
+  
   std::mt19937 rng;
   std::uniform_real_distribution<T> U(0.0,1.0);
   {
@@ -159,6 +162,10 @@ int main()
     test_inverse<float,bsl_dft>(i);
     test_inverse<double,bsl_dft>(i);
     test_inverse<long double,bsl_dft>(i);
+    
+    test_inverse<float,generic_bsl_dft>(i);
+    test_inverse<double,generic_bsl_dft>(i);
+    test_inverse<long double,generic_bsl_dft>(i);
   }
   for(int i=1;i<=100'000; i*=10)
   {

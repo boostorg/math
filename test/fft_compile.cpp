@@ -59,9 +59,13 @@ int main()
     
     transform_api< std::complex<double>,3,boost::math::fft::gsl_dft >();
     
-    transform_api< std::complex<float>,      3,boost::math::fft::bsl_dft >();
-    transform_api< std::complex<double>,     3,boost::math::fft::bsl_dft >();
-    transform_api< std::complex<long double>,3,boost::math::fft::bsl_dft >();
+    transform_api< std::complex<float>,      4,boost::math::fft::bsl_dft >();
+    transform_api< std::complex<double>,     4,boost::math::fft::bsl_dft >();
+    transform_api< std::complex<long double>,4,boost::math::fft::bsl_dft >();
+    
+    transform_api< std::complex<float>,      4,boost::math::fft::generic_bsl_dft >();
+    transform_api< std::complex<double>,     4,boost::math::fft::generic_bsl_dft >();
+    transform_api< std::complex<long double>,4,boost::math::fft::generic_bsl_dft >();
     
     plan_api< std::complex<double>,      3, boost::math::fft::fftw_dft >();
     plan_api< std::complex<float>,       3, boost::math::fft::fftw_dft >();
@@ -69,8 +73,12 @@ int main()
     
     plan_api< std::complex<double>,3, boost::math::fft::gsl_dft >();
     
-    plan_api< std::complex<double>,      3, boost::math::fft::bsl_dft >();
-    plan_api< std::complex<float>,       3, boost::math::fft::bsl_dft >();
-    plan_api< std::complex<long double>, 3, boost::math::fft::bsl_dft >();
+    plan_api< std::complex<double>,      4, boost::math::fft::bsl_dft >();
+    plan_api< std::complex<float>,       4, boost::math::fft::bsl_dft >();
+    plan_api< std::complex<long double>, 4, boost::math::fft::bsl_dft >();
+    
+    plan_api< std::complex<double>,      4, boost::math::fft::generic_bsl_dft >();
+    plan_api< std::complex<float>,       4, boost::math::fft::generic_bsl_dft >();
+    plan_api< std::complex<long double>, 4, boost::math::fft::generic_bsl_dft >();
     return 0;
 }
