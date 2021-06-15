@@ -8,7 +8,7 @@
 
 #ifndef BOOST_MATH_FFT_FFTWBACKEND_HPP
   #define BOOST_MATH_FFT_FFTWBACKEND_HPP
-
+  
   #include <complex>
   #include <memory>
 
@@ -17,7 +17,7 @@
   namespace boost { namespace math {  namespace fft {
 
   namespace detail {
-
+  
   template<typename T>
   struct fftw_traits_c_interface;
 
@@ -126,18 +126,6 @@
           ) }
     { }
 
-    template<typename InputIteratorType,
-             typename OutputIteratorType>
-    fftw_dft(InputIteratorType  InFirst,
-             InputIteratorType  InLast,
-             OutputIteratorType OutFirst,
-             typename std::enable_if<(   (std::is_convertible<InputIteratorType,  const complex_value_type*>::value == true)
-                                      && (std::is_convertible<OutputIteratorType,       complex_value_type*>::value == true))>::type* = nullptr)
-      : my_size          { std::distance(InFirst, InLast) },
-        my_forward_plan  { detail::fftw_traits_c_interface<real_value_type>::plan_construct(size(), nullptr, nullptr, FFTW_FORWARD,  FFTW_ESTIMATE | FFTW_PRESERVE_INPUT) },
-        my_backward_plan { detail::fftw_traits_c_interface<real_value_type>::plan_construct(size(), nullptr, nullptr, FFTW_BACKWARD, FFTW_ESTIMATE | FFTW_PRESERVE_INPUT) }
-    { }
-
     ~fftw_dft()
     {
       detail::fftw_traits_c_interface<real_value_type>::plan_destroy(my_forward_plan);
@@ -145,7 +133,7 @@
     }
 
     constexpr std::ptrdiff_t size() const { return my_size; }
-
+    
     void forward(const complex_value_type* in, complex_value_type* out) const
     {
       using local_complex_type = typename detail::fftw_traits_c_interface<real_value_type>::complex_value_type;
