@@ -116,58 +116,6 @@
         my_backward_plan { detail::bsl_traits<real_value_type>::plan_construct(size(), -1) }
     { }
 
-    template<typename InputIteratorType,
-             typename OutputIteratorType>
-    bsl_dft(InputIteratorType  InFirst,
-            InputIteratorType  InLast,
-            OutputIteratorType OutFirst,
-            typename std::enable_if<(   (std::is_convertible<InputIteratorType,  const complex_value_type*>::value == true)
-                                     && (std::is_convertible<OutputIteratorType,       complex_value_type*>::value == true))>::type* = nullptr)
-      : my_size          { std::distance(InFirst, InLast) },
-        my_mem           { nullptr },
-        my_forward_plan  { detail::bsl_traits<real_value_type>::plan_construct(size(), +1) },
-        my_backward_plan { detail::bsl_traits<real_value_type>::plan_construct(size(), -1) }
-    { }
-
-    template<typename InputIteratorType,
-             typename OutputIteratorType>
-    constexpr bsl_dft(InputIteratorType  InFirst,
-                      InputIteratorType  InLast,
-                      OutputIteratorType OutFirst,
-                      typename std::enable_if<(   (std::is_convertible<InputIteratorType,  const complex_value_type*>::value == false)
-                                               && (std::is_convertible<OutputIteratorType,       complex_value_type*>::value == true))>::type* = nullptr)
-      : my_size          { std::distance(InFirst, InLast) },
-        my_mem           { nullptr },
-        my_forward_plan  { detail::bsl_traits<real_value_type>::plan_construct(size(), +1) },
-        my_backward_plan { detail::bsl_traits<real_value_type>::plan_construct(size(), -1) }
-    { }
-
-    template<typename InputIteratorType,
-             typename OutputIteratorType>
-    constexpr bsl_dft(InputIteratorType  InFirst,
-                      InputIteratorType  InLast,
-                      OutputIteratorType OutFirst,
-                      typename std::enable_if<(   (std::is_convertible<InputIteratorType,  const complex_value_type*>::value == true)
-                                               && (std::is_convertible<OutputIteratorType,       complex_value_type*>::value == false))>::type* = nullptr)
-      : my_size          { std::distance(InFirst, InLast) },
-        my_mem           { new complex_value_type[size()] },
-        my_forward_plan  { detail::bsl_traits<real_value_type>::plan_construct(size(), +1) },
-        my_backward_plan { detail::bsl_traits<real_value_type>::plan_construct(size(), -1) }
-    { }
-
-    template<typename InputIteratorType,
-             typename OutputIteratorType>
-    constexpr bsl_dft(InputIteratorType  InFirst,
-                      InputIteratorType  InLast,
-                      OutputIteratorType OutFirst,
-                      typename std::enable_if<(   (std::is_convertible<InputIteratorType,  const complex_value_type*>::value == false)
-                                               && (std::is_convertible<OutputIteratorType,       complex_value_type*>::value == false))>::type* = nullptr)
-      : my_size          { std::distance(InFirst, InLast) },
-        my_mem           { new complex_value_type[size()] },
-        my_forward_plan  { detail::bsl_traits<real_value_type>::plan_construct(size(), +1) },
-        my_backward_plan { detail::bsl_traits<real_value_type>::plan_construct(size(), -1) }
-    { }
-
     ~bsl_dft()
     {
       detail::bsl_traits<real_value_type>::plan_destroy(my_forward_plan);
