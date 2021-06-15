@@ -17,12 +17,30 @@
   namespace boost { namespace math { namespace fft {
 
   // fftw_plan-like Fourier Transform API
-  template<typename T,
-           template<class U> class BackendType>
-  class dft : public BackendType<T>
+  
+  /*
+    RingType axioms:
+    1. Abelian group addition (operator+)
+      -> closure
+      -> associativity
+      -> neutral element (0)
+      -> inverse (operator-)
+      -> commutativity
+    2. Monoid multiplication (operator*)
+      -> closure
+      -> associativity
+      -> neutral element (1)
+    3. addition and multiplication compatibility
+      -> left distributivity, ie. a*(b+c) == a*b + a*c
+      -> right distributivity, ie. (b+c)*a == b*a + c*a
+  */
+  
+  template<typename RingType,
+           template<class U> class BackendType = bsl_dft >
+  class dft : public BackendType<RingType>
   {
   public:
-    using backend_t = BackendType<T>;
+    using backend_t = BackendType<RingType>;
 
     using backend_t::forward;
     using backend_t::backward;
@@ -37,7 +55,7 @@
   };
 
   // std::transform-like Fourier Transform API
-  template<template<class U> class backend,
+  template<template<class U> class backend = bsl_dft,
            typename InputIterator,
            typename OutputIterator>
   void dft_forward(InputIterator  input_begin,
@@ -47,7 +65,8 @@
     using input_value_type  = typename std::iterator_traits<InputIterator >::value_type;
     using output_value_type = typename std::iterator_traits<OutputIterator>::value_type;
 
-    static_assert(std::is_same<input_value_type, output_value_type>::value, "Input and output types mismatch");
+    static_assert(std::is_same<input_value_type, output_value_type>::value,
+      "Input and output types mismatch");
 
     dft<input_value_type, backend> plan(input_begin, input_end, output);
 
@@ -55,7 +74,7 @@
   }
 
   // std::transform-like Fourier Transform API
-  template<template<class U> class backend,
+  template<template<class U> class backend = bsl_dft,
            class InputIterator,
            class OutputIterator>
   void dft_backward(InputIterator  input_begin,
@@ -65,7 +84,8 @@
     using input_value_type  = typename std::iterator_traits<InputIterator >::value_type;
     using output_value_type = typename std::iterator_traits<OutputIterator>::value_type;
 
-    static_assert(std::is_same<input_value_type, output_value_type>::value, "Input and output types mismatch");
+    static_assert(std::is_same<input_value_type, output_value_type>::value, 
+      "Input and output types mismatch");
 
     dft<input_value_type, backend> plan(input_begin, input_end, output);
 
