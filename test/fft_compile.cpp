@@ -7,7 +7,7 @@
 #include <array>
 
 template<class T,int N, template< class U> class Backend >
-void transform()
+void transform_api()
 {   
     // test same type of iterator
     std::vector<T> A(N),B(A.size());
@@ -41,36 +41,28 @@ void transform()
     boost::math::fft::dft_backward<Backend>(C.data(),C.data()+C.size(),B.data());
 }
 
-template<class T,int N>
-void back_ends()
+template<class T,int N, template<class U> class Backend >
+void plan_api()
 {
-    {
-        boost::math::fft::fftw_dft<T> P(N);    
-        std::vector<T> A(N),B(N);
-        P.forward(A.data(),B.data());
-        P.backward(A.data(),B.data());
-    }
-    //{
-    //    boost::math::fft::dft<T> P(N);    
-    //    std::vector<T> A(N),B(N);
-    //    P.forward(A.data(),B.data());
-    //    P.backward(A.data(),B.data());
-    //}
+    Backend<T> P(N);    
+    std::vector<T> A(N),B(N);
+    P.forward(A.data(),B.data());
+    P.backward(A.data(),B.data());
 }
 
 int main()
 {
   
-    transform< std::complex<float>,3,boost::math::fft::fftw_dft >();
-    transform< std::complex<double>,3,boost::math::fft::fftw_dft >();
-    transform< std::complex<long double>,3,boost::math::fft::fftw_dft >();
+    transform_api< std::complex<float>,      3,boost::math::fft::fftw_dft >();
+    transform_api< std::complex<double>,     3,boost::math::fft::fftw_dft >();
+    transform_api< std::complex<long double>,3,boost::math::fft::fftw_dft >();
     
-    // transform< std::complex<float>,3,boost::math::fft::gsl_dft >();
-    // transform< std::complex<double>,3,boost::math::fft::gsl_dft >();
-    // transform< std::complex<long double>,3,boost::math::fft::gsl_dft >();
+    transform_api< std::complex<double>,3,boost::math::fft::gsl_dft >();
     
-    back_ends< std::complex<double>, 3  >();
-    back_ends< std::complex<float>, 3  >();
-    back_ends< std::complex<long double>, 3  >();
+    plan_api< std::complex<double>,      3, boost::math::fft::fftw_dft >();
+    plan_api< std::complex<float>,       3, boost::math::fft::fftw_dft >();
+    plan_api< std::complex<long double>, 3, boost::math::fft::fftw_dft >();
+    
+    plan_api< std::complex<double>,3, boost::math::fft::gsl_dft >();
     return 0;
 }
