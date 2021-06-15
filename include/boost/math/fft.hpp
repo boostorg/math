@@ -51,7 +51,7 @@
              typename OutputIterator>
     constexpr dft(InputIterator  input_begin,
                   InputIterator  input_end,
-                  OutputIterator output) : backend_t{ input_begin, input_end, output } { }
+                  OutputIterator output) : backend_t(input_begin, input_end, output){}
   };
 
   // std::transform-like Fourier Transform API
