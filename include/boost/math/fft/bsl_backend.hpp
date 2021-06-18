@@ -138,10 +138,7 @@
     if (n == 1)
         return;
 
-    // const T _1 = power(e, n);
-    // const T f = power(e, n / 2);
-    const T _1 = T{1};
-    const T f = T{-1};
+    constexpr T _1 = T{1};
     
     int nbits = 0;
     std::vector<T> e2{e};
@@ -174,7 +171,7 @@
           iter u = first + i + j, v = first + i + j + len / 2;
           T Bu = *u, Bv = *v * ej;
           *u = Bu + Bv;
-          *v = Bu + Bv * f;
+          *v = Bu - Bv;
           ej *= e2[k];
         }
       }
