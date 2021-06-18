@@ -102,6 +102,21 @@
     using real_value_type    = typename NativeComplexType::value_type;
     using plan_type          = typename detail::fftw_traits_c_interface<real_value_type>::plan_type;
     using complex_value_type = std::complex<real_value_type>;
+   
+    void execute(plan_type plan, const complex_value_type* in, complex_value_type* out) const
+    {
+      using local_complex_type = typename detail::fftw_traits_c_interface<real_value_type>::complex_value_type;
+      
+      if(in!=out)
+        std::copy(in,in+size(),out);
+
+      detail::fftw_traits_c_interface<real_value_type>::plan_execute
+      (
+        plan,
+        reinterpret_cast<local_complex_type*>(out),
+        reinterpret_cast<local_complex_type*>(out)
+      );
+    }
 
   public:
     constexpr fftw_dft(std::ptrdiff_t n)
@@ -136,32 +151,12 @@
     
     void forward(const complex_value_type* in, complex_value_type* out) const
     {
-      using local_complex_type = typename detail::fftw_traits_c_interface<real_value_type>::complex_value_type;
-      
-      if(in!=out)
-        std::copy(in,in+size(),out);
-
-      detail::fftw_traits_c_interface<real_value_type>::plan_execute
-      (
-        my_forward_plan,
-        reinterpret_cast<local_complex_type*>(out),
-        reinterpret_cast<local_complex_type*>(out)
-      );
+      execute(my_forward_plan, in, out);  
     }
 
     void backward(const complex_value_type* in, complex_value_type* out) const
     {
-      using local_complex_type = typename detail::fftw_traits_c_interface<real_value_type>::complex_value_type;
-      
-      if(in!=out)
-        std::copy(in,in+size(),out);
-      
-      detail::fftw_traits_c_interface<real_value_type>::plan_execute
-      (
-        my_backward_plan,
-        reinterpret_cast<local_complex_type*>(out),
-        reinterpret_cast<local_complex_type*>(out)
-      );
+      execute(my_backward_plan, in, out);  
     }
 
   private:
