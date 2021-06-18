@@ -14,8 +14,8 @@
 
 // For clarity, the value f(x0 + i*dx, y0 + j*dy) must be stored in the f[j*cols + i] position.
 
-#ifndef BOOST_MATH_INTERPOLATORS_UNIFORM_BILINEAR_HPP
-#define BOOST_MATH_INTERPOLATORS_UNIFORM_BILINEAR_HPP
+#ifndef BOOST_MATH_INTERPOLATORS_BILINEAR_UNIFORM_HPP
+#define BOOST_MATH_INTERPOLATORS_BILINEAR_UNIFORM_HPP
 #include <stdexcept>
 
 namespace boost::math::interpolators {
