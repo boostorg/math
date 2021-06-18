@@ -11,8 +11,8 @@ void transform_api()
 {   
     // test same type of iterator
     std::vector<T> A(N),B(A.size());
-    // boost::math::fft::dft_forward<Backend>(A.begin(),A.end(),B.begin());
-    // boost::math::fft::dft_backward<Backend>(A.begin(),A.end(),B.begin());
+    boost::math::fft::dft_forward<Backend>(A.begin(),A.end(),B.begin());
+    boost::math::fft::dft_backward<Backend>(A.begin(),A.end(),B.begin());
     
     // test with raw pointers
     boost::math::fft::dft_forward<Backend>(A.data(),A.data()+A.size(),B.data());
@@ -20,8 +20,8 @@ void transform_api()
 
     const auto & cA = A;
     // const iterator as input
-    // boost::math::fft::dft_forward<Backend>(cA.begin(),cA.end(),B.begin());
-    // boost::math::fft::dft_backward<Backend>(cA.begin(),cA.end(),B.begin());
+    boost::math::fft::dft_forward<Backend>(cA.begin(),cA.end(),B.begin());
+    boost::math::fft::dft_backward<Backend>(cA.begin(),cA.end(),B.begin());
     
     // const pointer as input
     boost::math::fft::dft_forward<Backend>(cA.data(),cA.data()+cA.size(),B.data());
@@ -29,14 +29,14 @@ void transform_api()
     
     std::array<T,N> C;
     // input as vector::iterator, output as array::iterator
-    // boost::math::fft::dft_forward<Backend>(A.begin(),A.end(),C.begin());
-    // boost::math::fft::dft_backward<Backend>(A.begin(),A.end(),C.begin());
+    boost::math::fft::dft_forward<Backend>(A.begin(),A.end(),C.begin());
+    boost::math::fft::dft_backward<Backend>(A.begin(),A.end(),C.begin());
     boost::math::fft::dft_forward<Backend>(A.data(),A.data()+A.size(),C.data());
     boost::math::fft::dft_backward<Backend>(A.data(),A.data()+A.size(),C.data());
     
     // input as array::iterator, output as vector::iterator
-    // boost::math::fft::dft_forward<Backend>(C.begin(),C.end(),B.begin());
-    // boost::math::fft::dft_backward<Backend>(C.begin(),C.end(),B.begin());
+    boost::math::fft::dft_forward<Backend>(C.begin(),C.end(),B.begin());
+    boost::math::fft::dft_backward<Backend>(C.begin(),C.end(),B.begin());
     boost::math::fft::dft_forward<Backend>(C.data(),C.data()+C.size(),B.data());
     boost::math::fft::dft_backward<Backend>(C.data(),C.data()+C.size(),B.data());
 }

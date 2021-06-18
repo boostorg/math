@@ -20,14 +20,14 @@ void test_fixed_transforms()
     
     {
         std::vector< std::complex<T> > A{1.0},B(1);
-        //dft_forward<Backend>(A.begin(),A.end(),B.begin());
+        dft_forward<Backend>(A.begin(),A.end(),B.begin());
         dft_forward<Backend>(A.data(),A.data()+A.size(),B.data());
         CHECK_MOLLIFIED_CLOSE(T{1.0},B[0].real(),0);
         CHECK_MOLLIFIED_CLOSE(T{0.0},B[0].imag(),0);
     }
     {
         std::vector< std::complex<T> > A{1.0,1.0},B(2);
-        //dft_forward<Backend>(A.begin(),A.end(),B.begin());
+        dft_forward<Backend>(A.begin(),A.end(),B.begin());
         dft_forward<Backend>(A.data(),A.data()+A.size(),B.data());
         CHECK_MOLLIFIED_CLOSE(T{2.0},B[0].real(),tol);
         CHECK_MOLLIFIED_CLOSE(T{0.0},B[0].imag(),tol);
@@ -37,7 +37,7 @@ void test_fixed_transforms()
     }
     {
         std::vector< std::complex<T> > A{1.0,1.0,1.0},B(3);
-        //dft_forward<Backend>(A.begin(),A.end(),B.begin());
+        dft_forward<Backend>(A.begin(),A.end(),B.begin());
         dft_forward<Backend>(A.data(),A.data()+A.size(),B.data());
         CHECK_MOLLIFIED_CLOSE(T{3.0},B[0].real(),tol);
         CHECK_MOLLIFIED_CLOSE(T{0.0},B[0].imag(),tol);
@@ -54,7 +54,7 @@ void test_fixed_transforms()
     }
     {
         std::vector< std::complex<T> > A{1.0,1.0,1.0};
-        //dft_forward<Backend>(A.cbegin(),A.cend(),A.begin());
+        // dft_forward<Backend>(A.cbegin(),A.cend(),A.begin()); // TODO: why does this breaks??
         dft_forward<Backend>(A.data(),A.data()+A.size(),A.data());
         CHECK_MOLLIFIED_CLOSE(T{3.0},A[0].real(),tol);
         CHECK_MOLLIFIED_CLOSE(T{0.0},A[0].imag(),tol);
@@ -89,8 +89,8 @@ void test_inverse(int N)
         x.real( U(rng) );
         x.imag( U(rng) );
     }
-    //dft_forward<Backend>(A.cbegin(),A.cend(),B.begin());
-    //dft_backward<Backend>(B.cbegin(),B.cend(),C.begin());
+    dft_forward<Backend>(A.cbegin(),A.cend(),B.begin());
+    dft_backward<Backend>(B.cbegin(),B.cend(),C.begin());
     
     dft_forward<Backend>(A.data(),A.data()+A.size(),B.data());
     dft_backward<Backend>(B.data(),B.data()+B.size(),C.data());
@@ -117,8 +117,8 @@ void test_inverse(int N)
       x.real( 1.0 );
       x.imag( 0.0 );
     }
-    //dft_forward<Backend>(A.cbegin(),A.cend(),B.begin());
-    //dft_backward<Backend>(B.cbegin(),B.cend(),C.begin());
+    dft_forward<Backend>(A.cbegin(),A.cend(),B.begin());
+    dft_backward<Backend>(B.cbegin(),B.cend(),C.begin());
     
     dft_forward<Backend>(A.data(),A.data()+A.size(),B.data());
     dft_backward<Backend>(B.data(),B.data()+B.size(),C.data());

@@ -37,21 +37,108 @@
   
   template<typename RingType,
            template<class U> class BackendType = bsl_dft >
+           // typename Allocator = Default_Allocator 
   class dft : public BackendType<RingType>
   {
+    mutable std::vector<RingType> my_mem;
   public:
     using backend_t = BackendType<RingType>;
-
-    using backend_t::forward;
-    using backend_t::backward;
+    using backend_t::size;
 
     constexpr dft(unsigned int n) : backend_t{ n } { }
+    
+    template<typename InputIteratorType,
+             typename OutputIteratorType>
+    void forward(const InputIteratorType in,
+                 OutputIteratorType out,
+                 typename std::enable_if<(   (std::is_convertible<InputIteratorType,  const RingType*>::value == true)
+                                          && (std::is_convertible<OutputIteratorType,       RingType*>::value == true))>::type* = nullptr) const
+    {
+      backend_t::forward(in,out);
+    }
+    
+    template<typename InputIteratorType,
+             typename OutputIteratorType>
+    void forward(const InputIteratorType in,
+                 OutputIteratorType out,
+                 typename std::enable_if<(   (std::is_convertible<InputIteratorType,  const RingType*>::value == false)
+                                          && (std::is_convertible<OutputIteratorType,       RingType*>::value == true))>::type* = nullptr) const
+    {
+      std::copy(in, in + size(), out);
+      backend_t::forward(out,out);
+    }
 
-    template<typename InputIterator,
-             typename OutputIterator>
-    constexpr dft(InputIterator  input_begin,
-                  InputIterator  input_end,
-                  OutputIterator output) : backend_t(input_begin, input_end, output){}
+    template<typename InputIteratorType,
+             typename OutputIteratorType>
+    void forward(const InputIteratorType in,
+                 OutputIteratorType out,
+                 typename std::enable_if<(   (std::is_convertible<InputIteratorType,  const RingType*>::value == true)
+                                          && (std::is_convertible<OutputIteratorType,       RingType*>::value == false))>::type* = nullptr) const
+    {   
+      my_mem.resize(size());
+      backend_t::forward(in,my_mem.data());
+      std::copy(my_mem.data(), my_mem.data() + size(), out);
+    }
+
+    template<typename InputIteratorType,
+             typename OutputIteratorType>
+    void forward(const InputIteratorType in,
+                 OutputIteratorType out,
+                 typename std::enable_if<(   (std::is_convertible<InputIteratorType,  const RingType*>::value == false)
+                                          && (std::is_convertible<OutputIteratorType,       RingType*>::value == false))>::type* = nullptr) const
+    {
+      my_mem.resize(size());
+      std::copy(in, in + size(), my_mem.data());
+      backend_t::forward(my_mem.data(),my_mem.data());
+      std::copy(my_mem.data(), my_mem.data() + size(), out);
+    }
+    
+    template<typename InputIteratorType,
+             typename OutputIteratorType>
+    void backward(const InputIteratorType in,
+                 OutputIteratorType out,
+                 typename std::enable_if<(   (std::is_convertible<InputIteratorType,  const RingType*>::value == true)
+                                          && (std::is_convertible<OutputIteratorType,       RingType*>::value == true))>::type* = nullptr) const
+    {
+      backend_t::backward(in,out);
+    }
+    
+    template<typename InputIteratorType,
+             typename OutputIteratorType>
+    void backward(const InputIteratorType in,
+                 OutputIteratorType out,
+                 typename std::enable_if<(   (std::is_convertible<InputIteratorType,  const RingType*>::value == false)
+                                          && (std::is_convertible<OutputIteratorType,       RingType*>::value == true))>::type* = nullptr) const
+    {
+      std::copy(in, in + size(), out);
+      backend_t::backward(out,out);
+    }
+
+    template<typename InputIteratorType,
+             typename OutputIteratorType>
+    void backward(const InputIteratorType in,
+                 OutputIteratorType out,
+                 typename std::enable_if<(   (std::is_convertible<InputIteratorType,  const RingType*>::value == true)
+                                          && (std::is_convertible<OutputIteratorType,       RingType*>::value == false))>::type* = nullptr) const
+    {   
+      my_mem.resize(size());
+      backend_t::backward(in,my_mem.data());
+      std::copy(my_mem.data(), my_mem.data() + size(), out);
+    }
+
+    template<typename InputIteratorType,
+             typename OutputIteratorType>
+    void backward(const InputIteratorType in,
+                 OutputIteratorType out,
+                 typename std::enable_if<(   (std::is_convertible<InputIteratorType,  const RingType*>::value == false)
+                                          && (std::is_convertible<OutputIteratorType,       RingType*>::value == false))>::type* = nullptr) const
+    {
+      my_mem.resize(size());
+      std::copy(in, in + size(), my_mem.data());
+      backend_t::backward(my_mem.data(),my_mem.data());
+      std::copy(my_mem.data(), my_mem.data() + size(), out);
+    }
+    
   };
 
   // std::transform-like Fourier Transform API
@@ -68,7 +155,6 @@
     static_assert(std::is_same<input_value_type, output_value_type>::value,
       "Input and output types mismatch");
 
-    //dft<input_value_type, backend> plan(input_begin, input_end, output);
     dft<input_value_type, backend> plan(std::distance(input_begin, input_end));
 
     plan.forward(input_begin, output);
@@ -88,7 +174,6 @@
     static_assert(std::is_same<input_value_type, output_value_type>::value, 
       "Input and output types mismatch");
 
-    //dft<input_value_type, backend> plan(input_begin, input_end, output);
     dft<input_value_type, backend> plan(std::distance(input_begin, input_end));
 
     plan.backward(input_begin, output);
