@@ -62,7 +62,7 @@ boost::numeric::ublas::vector<T> solve(
 
       for(unsigned i = 0; i < delta.size(); ++i)
       {
-         T err = fabs(delta[i] / b[i]);
+         T err = std::abs(delta[i] / b[i]);
          if(err > max_error)
             max_error = err;
       }
