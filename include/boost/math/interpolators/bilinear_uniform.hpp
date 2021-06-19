@@ -40,6 +40,7 @@ public:
 
     friend std::ostream& operator<<(std::ostream& out, bilinear_uniform<RandomAccessContainer> const & bu) {
         out << *bu.m_imp;
+        return out;
     }
 
 private:

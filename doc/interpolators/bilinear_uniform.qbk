@@ -61,7 +61,7 @@ Note that the interpolator is pimpl'd, so that copying the class is cheap, and h
 
 [heading Complexity and Performance]
 
-The following google benchmark demonstrates the cost of the call operator for this interpolator:
+The google/benchmark in reporting/performance/bilinear_uniform_performance demonstrates the cost of the call operator for this interpolator:
 
 ```
 Run on (16 X 4300 MHz CPU s)
@@ -71,9 +71,17 @@ CPU Caches:
   L2 Unified 1024K (x8)
   L3 Unified 11264K (x1)
 Load Average: 0.92, 0.64, 0.35
---------------------------------------------------
-Benchmark                                  Time
---------------------------------------------------
+--------------------------------------
+Benchmark                      Time
+--------------------------------------
+Bilinear<double>/64            13.6 ns
+Bilinear<double>/128           13.3 ns
+Bilinear<double>/256           13.9 ns
+Bilinear<double>/512           13.7 ns
+Bilinear<double>/1024          13.2 ns
+Bilinear<double>/2048          13.1 ns
+Bilinear<double>/4096          13.2 ns
+Bilinear<double>/8192          13.2 ns
 ```
 
 

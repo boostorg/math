@@ -7,6 +7,7 @@
 #ifndef BOOST_MATH_INTERPOLATORS_BILINEAR_UNIFORM_DETAIL_HPP
 #define BOOST_MATH_INTERPOLATORS_BILINEAR_UNIFORM_DETAIL_HPP
 #include <stdexcept>
+#include <iostream>
 
 namespace boost::math::interpolators::detail {
 
