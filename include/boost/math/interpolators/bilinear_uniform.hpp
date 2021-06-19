@@ -46,8 +46,8 @@ public:
         y0_ = y0;
         dx_ = dx;
         dy_ = dy;
-        assert(dx_ != 0);
-        assert(dy_ != 0);
+        assert(dx_ > 0);
+        assert(dy_ > 0);
     }
 
     Real operator()(Real x, Real y) const
@@ -120,14 +120,14 @@ public:
     
 
     friend std::ostream& operator<<(std::ostream& out, bilinear_uniform<RandomAccessContainer> const & bu) {
-        out << "(x₀, y₀) = (" << bu.x0_ << ", " << bu.y0_ << "), (Δx, Δy) = (" << bu.dx_ << ", " << bu.dy_ << "),";
-        out << "(xf, yf) = (" << bu.x0_ + (bu.cols_ -1)*bu.dx_ << ", " << bu.y0_ + (bu.rows_ -1)*bu.dy_ << ")\n";
+        out << "(x₀, y₀) = (" << bu.x0_ << ", " << bu.y0_ << "), (Δx, Δy) = (" << bu.dx_ << ", " << bu.dy_ << "), ";
+        out << "(xf, yf) = (" << bu.x0_ + (bu.cols_ - 1)*bu.dx_ << ", " << bu.y0_ + (bu.rows_ - 1)*bu.dy_ << ")\n";
         for (decltype(bu.rows_) j = 0; j < bu.rows_; ++j) {
             out << "{";
             for (decltype(bu.cols_) i = 0; i < bu.cols_ - 1; ++i) {
-                out << bu.fieldData_[j*bu.rows_ + i] << ", ";
+                out << bu.fieldData_[j*bu.cols_ + i] << ", ";
             }
-            out << bu.fieldData_[j*bu.rows_ + bu.cols_ - 1] << "}\n";
+            out << bu.fieldData_[j*bu.cols_ + bu.cols_ - 1] << "}\n";
         }
         return out;
     }
