@@ -26,7 +26,7 @@ namespace fft {
       using complex_value_type = std::complex<real_value_type>;
       enum plan_type { forward_plan, backward_plan };
       
-      std::size_t _size; 
+      std::size_t my_size; 
       gsl_fft_complex_wavetable *wtable;
       gsl_fft_complex_workspace *wspace;
         
@@ -43,27 +43,45 @@ namespace fft {
         if(p==forward_plan)
         gsl_fft_complex_forward(
           reinterpret_cast<real_value_type*>(std::addressof(*out)),
-          1, _size, wtable, wspace);
+          1, my_size, wtable, wspace);
         else
         gsl_fft_complex_backward(
           reinterpret_cast<real_value_type*>(std::addressof(*out)),
-          1, _size, wtable, wspace);
+          1, my_size, wtable, wspace);
       }
-   public:
-      
-      gsl_dft(std::size_t n):
-          _size{n}
-      {
-        wtable = gsl_fft_complex_wavetable_alloc(n);
-        wspace = gsl_fft_complex_workspace_alloc(n);
-      }
-        
-      ~gsl_dft()
+      void free()
       {
         gsl_fft_complex_wavetable_free(wtable);
         gsl_fft_complex_workspace_free(wspace);
       }
-      std::size_t size() const {return _size;}
+      void alloc()
+      {
+        wtable = gsl_fft_complex_wavetable_alloc(size());
+        wspace = gsl_fft_complex_workspace_alloc(size());
+      }
+   public:
+      
+      gsl_dft(std::size_t n):
+          my_size{n}
+      {
+        alloc();
+      }
+        
+      ~gsl_dft()
+      {
+        free();
+      }
+      std::size_t size() const {return my_size;}
+      
+      void resize(std::size_t new_size)
+      {
+        if(size()!=new_size)
+        {
+          free();
+          my_size = new_size;
+          alloc();
+        }
+      }
         
       void forward(const complex_value_type* in, complex_value_type* out) const
       {

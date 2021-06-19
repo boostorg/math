@@ -117,37 +117,57 @@
         reinterpret_cast<local_complex_type*>(out)
       );
     }
-
-  public:
-    constexpr fftw_dft(std::ptrdiff_t n)
-      : my_size{ n },
-        my_forward_plan{ 
-          detail::fftw_traits_c_interface<real_value_type>::plan_construct
-          (
-            size(), 
-            nullptr, 
-            nullptr, 
-            FFTW_FORWARD,  
-            FFTW_ESTIMATE | FFTW_PRESERVE_INPUT
-          ) },
-        my_backward_plan { 
-          detail::fftw_traits_c_interface<real_value_type>::plan_construct
-          (
-            size(), 
-            nullptr, 
-            nullptr, 
-            FFTW_BACKWARD, 
-            FFTW_ESTIMATE | FFTW_PRESERVE_INPUT
-          ) }
-    { }
-
-    ~fftw_dft()
+    
+    void free()
     {
       detail::fftw_traits_c_interface<real_value_type>::plan_destroy(my_forward_plan);
       detail::fftw_traits_c_interface<real_value_type>::plan_destroy(my_backward_plan);
     }
+    void alloc()
+    {
+      my_forward_plan = 
+        detail::fftw_traits_c_interface<real_value_type>::plan_construct
+        (
+          size(), 
+          nullptr, 
+          nullptr, 
+          FFTW_FORWARD,  
+          FFTW_ESTIMATE | FFTW_PRESERVE_INPUT
+        );
+      my_backward_plan =
+        detail::fftw_traits_c_interface<real_value_type>::plan_construct
+        (
+          size(), 
+          nullptr, 
+          nullptr, 
+          FFTW_BACKWARD, 
+          FFTW_ESTIMATE | FFTW_PRESERVE_INPUT
+        );
+    }
 
-    constexpr std::ptrdiff_t size() const { return my_size; }
+  public:
+    constexpr fftw_dft(std::size_t n)
+      : my_size{ n }
+    {
+      alloc();
+    }
+
+    ~fftw_dft()
+    {
+      free();
+    }
+    
+    void resize(std::size_t new_size)
+    {
+      if(size()!=new_size)
+      {
+        free();
+        my_size = new_size;
+        alloc();
+      }
+    }
+
+    constexpr std::size_t size() const { return my_size; }
     
     void forward(const complex_value_type* in, complex_value_type* out) const
     {
@@ -160,9 +180,9 @@
     }
 
   private:
-    const std::ptrdiff_t my_size;
-          plan_type      my_forward_plan;
-          plan_type      my_backward_plan;
+    std::size_t my_size;
+    plan_type   my_forward_plan;
+    plan_type   my_backward_plan;
   };
 
   } } } // namespace boost::math::fft

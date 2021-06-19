@@ -162,17 +162,21 @@
 
       // Normalize for backwards transform (done externally).
     }
-
+    
   public:
-    constexpr bsl_dft(std::ptrdiff_t n)
+    constexpr bsl_dft(std::size_t n)
       : my_size          { n }
     { }
 
     ~bsl_dft()
     {
     }
-
-    constexpr std::ptrdiff_t size() const { return my_size; }
+    
+    void resize(std::size_t new_size)
+    {
+      my_size = new_size;
+    }
+    constexpr std::size_t size() const { return my_size; }
 
     void forward(const complex_value_type* in, complex_value_type* out) const
     {
@@ -189,7 +193,7 @@
     }
 
   private:
-    const std::ptrdiff_t      my_size;
+    std::size_t my_size;
   };
   
   template<class NativeComplexType>
@@ -198,7 +202,7 @@
     using real_value_type = typename NativeComplexType::value_type;
     static constexpr real_value_type pi = boost::math::constants::pi<real_value_type>();
   public:
-    constexpr generic_bsl_dft(std::ptrdiff_t n)
+    constexpr generic_bsl_dft(std::size_t n)
       : my_size{n}
     { }
 
@@ -206,7 +210,11 @@
     {
     }
 
-    constexpr std::ptrdiff_t size() const { return my_size; }
+    void resize(std::size_t new_size)
+    {
+      my_size = new_size;
+    }
+    constexpr std::size_t size() const { return my_size; }
 
     void forward(const NativeComplexType* in, NativeComplexType* out) const
     {
@@ -225,7 +233,7 @@
     }
 
   private:
-    const std::ptrdiff_t my_size;
+    std::size_t my_size;
   };
 
   } } } // namespace boost::math::fft
