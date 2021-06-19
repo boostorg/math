@@ -23,8 +23,6 @@ public:
     bilinear_uniform(RandomAccessContainer && fieldData, decltype(fieldData.size()) rows, decltype(fieldData.size()) cols, Real dx = 1, Real dy = 1, Real x0 = 0, Real y0 = 0)
 
     Real operator()(Real x, Real y) const;
-
-    std::array<Real,2> gradient(Real x, Real y) const;
 };
 ``
 
@@ -32,16 +30,15 @@ public:
 [heading Bilinear Uniform Interpolation]
 
 The bilinear uniform interpolator takes a grid of data points specified by a linear index and interpolates between each segment using a bilinear function.
-Note that "bilinear" does not mean linear-a product of two linear functions can be 
- /f/(/x/, /y/)
-The interpolant is /C/[super 2] and its evaluation has [bigo](log(/N/)) complexity.
+Note that "bilinear" does not mean linear-it is the product of two linear functions.
+The interpolant is continuous and its evaluation is constant time.
 An example usage is as follows:
 
-    std::vector<double> v{0.1, 0.2,
-                          0.3, 0.4};
+    std::vector<double> v{0.1, 0.2, 0.3,
+                          0.4, 0.5, 0.5};
     using boost::math::interpolators::bilinear_uniform;
     int rows = 2;
-    int cols = 2;
+    int cols = 3;
     double dx = 1;
     double dy = 1;
     double x0 = 0;
@@ -56,8 +53,10 @@ This can be achieved via
     std::cout << ub << "\n";
 
 Note that the interpolator is pimpl'd, so that copying the class is cheap, and hence it can be shared between threads.
-(The call operator and `.gradient()` are threadsafe.)
+(The call operator is threadsafe.)
 
+Note that the layout of the field data follows the convention found in laying out images: The first value is associated with (x0, y0), and the last value is associate with (x0 + (cols - 1)dx, y0 + (rows - 1)dy).
+This matches with how we think about laying out matrices in C order, but of course there is no canonical choice and conventions must be made.
 
 [heading Complexity and Performance]
 
