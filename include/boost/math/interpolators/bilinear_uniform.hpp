@@ -53,46 +53,32 @@ public:
     Real operator()(Real x, Real y) const
     {
         using std::floor;
+        if (x > x0_ + (cols_ - 1)*dx_ || x < x0_) {
+            std::cerr << __FILE__ << ":" << __LINE__ << ":" << __func__ << "\n";
+            std::cerr << "Querying the bilinear_uniform interpolator at (x,y) = (" << x << ", " << y << ") is not allowed.\n";
+            std::cerr << "x must lie in the interval [" << x0_ << ", " << x0_ + (cols_ -1)*dx_ << "]\n";
+            return std::numeric_limits<Real>::quiet_NaN();
+        }
+        if (y > y0_ + (rows_ - 1)*dy_ || y < y0_) {
+            std::cerr << __FILE__ << ":" << __LINE__ << ":" << __func__ << "\n";
+            std::cerr << "Querying the bilinear_uniform interpolator at (x,y) = (" << x << ", " << y << ") is not allowed.\n";
+            std::cerr << "y must lie in the interval [" << y0_ << ", " << y0_ + (rows_ -1)*dy_ << "]\n";
+            return std::numeric_limits<Real>::quiet_NaN(); 
+        }
+
         Real s = (x - x0_)/dx_;
         Real s0 = floor(s);
         Real t = (y - y0_)/dy_;
         Real t0 = floor(t);
-        if (s0 < 0) {
-            std::cerr << __FILE__ << ":" << __LINE__ << ":" << __func__ << "\n";
-            std::cerr << "Querying the bilinear_uniform interpolator at (x,y) = (" << x << ", " << y << ") generates an out-of-bounds access.\n";
-            std::cerr << "Given (dx, dy) = (" << dx_ << ", " << dy_ << ") and (x0, y0) = (" << x0_ << ", " << y0_ << "), we get (s,t) = (" << s << ", " << t << ")\n";
-            return std::numeric_limits<Real>::quiet_NaN();
-        }
-        if (t0 < 0) {
-            std::cerr << __FILE__ << ":" << __LINE__ << ":" << __func__ << "\n";
-            std::cerr << "Querying the bilinear_uniform interpolator at (x,y) = (" << x << ", " << y << ") generates an out-of-bounds access.\n";
-            std::cerr << "Given (dx, dy) = (" << dx_ << ", " << dy_ << ") and (x0, y0) = (" << x0_ << ", " << y0_ << "), we get (s,t) = (" << s << ", " << t << ")\n";
-            return std::numeric_limits<Real>::quiet_NaN();
-        }
-        if (s0 > rows_ - 1) {
-            std::cerr << __FILE__ << ":" << __LINE__ << ":" << __func__ << "\n";
-            std::cerr << "Querying the bilinear_uniform interpolator at (x,y) = (" << x << ", " << y << ") generates an out-of-bounds access.\n";
-            std::cerr << "Given (dx, dy) = (" << dx_ << ", " << dy_ << ") and (x0, y0) = (" << x0_ << ", " << y0_ << "), we get (s,t) = (" << s << ", " << t << ")\n";
-            return std::numeric_limits<Real>::quiet_NaN();
-        }
-        if (t0 > cols_ - 1) {
-            std::cerr << __FILE__ << ":" << __LINE__ << ":" << __func__ << "\n";
-            std::cerr << "Querying the bilinear_uniform interpolator at (x,y) = (" << x << ", " << y << ") generates an out-of-bounds access.\n";
-            std::cerr << "Given (dx, dy) = (" << dx_ << ", " << dy_ << ") and (x0, y0) = (" << x0_ << ", " << y0_ << "), we get (s,t) = (" << s << ", " << t << ")\n";
-            return std::numeric_limits<Real>::quiet_NaN();
-        }
         decltype(fieldData_.size()) xidx = s0;
         decltype(fieldData_.size()) yidx = t0;
         decltype(fieldData_.size()) idx = yidx*cols_  + xidx;
         Real alpha = s - s0;
         Real beta = t - t0;
 
-        //std::cout << "(x,y) = (" << x << ", " << y << "), (s,t) = (" << s << ", " << t << ") => (α,β) = (" << alpha << ", " << beta << ")\n";
-        //std::cout << "(xidx, yidx) = (" << xidx << ", " << yidx << "), idx = " << idx << " of " << fieldData_.size() << " elements partitioned in " << rows_ << " rows and " << cols_ << " columns\n";
-
         Real fhi;
         // If alpha = 0, then we can segfault by reading fieldData_[idx+1]:
-        if (alpha == 0) {
+        if (alpha <= 2*s0*std::numeric_limits<Real>::epsilon())  {
             fhi = fieldData_[idx];
         } else {
             fhi = (1 - alpha)*fieldData_[idx] + alpha*fieldData_[idx + 1];
@@ -100,23 +86,42 @@ public:
 
         // Again, we can get OOB access without this check.
         // This corresponds to interpolation over a line segment aligned with the axes.
-        if (beta == 0) {
+        if (beta <= 2*t0*std::numeric_limits<Real>::epsilon()) {
             return fhi;
         }
 
+#ifndef NDEBUG
+        if (idx + cols_ >= fieldData_.size()) {
+            std::cerr << __FILE__ << ":" << __LINE__ << " About to segfault!!!\n";
+            std::cerr << "idx + cols_ + 1 = " << idx + cols_ + 1 << ", but fieldData_.size() = " << fieldData_.size() << "\n";
+            std::cerr << "alpha = " << alpha << ", beta = " << beta << ", s = " << s << ", t = " << t << "\n";
+            std::cerr << *this;
+        }
+#endif
         auto bottom_left = fieldData_[idx + cols_];
         Real flo;
-        if (alpha == 0)  {
+        if (alpha <= 2*s0*std::numeric_limits<Real>::epsilon())  {
             flo = bottom_left;
         } else {
+#ifndef NDEBUG
+            if (idx + cols_ + 1 >= fieldData_.size())  {
+                std::cerr << __FILE__ << ":" << __LINE__ << ":" << __func__ << " Big trouble!\n";
+                std::cerr << "idx + cols_ + 1 = " << idx + cols_ + 1 << ", but fieldData_.size() = " << fieldData_.size() << "\n";
+                std::cerr << "alpha = " << alpha << ", beta = " << beta << "\n";
+                std::cerr << *this;
+            }
+#endif
             flo = (1 - alpha)*bottom_left + alpha*fieldData_[idx + cols_ + 1];
         }
         // Convex combination over vertical to get the value:
         return (1 - beta)*fhi + beta*flo;
     }
 
+    
+
     friend std::ostream& operator<<(std::ostream& out, bilinear_uniform<RandomAccessContainer> const & bu) {
-        out << "(x₀, y₀) = (" << bu.x0_ << ", " << bu.y0_ << "), (Δx, Δy) = (" << bu.dx_ << ", " << bu.dy_ << ")\n";
+        out << "(x₀, y₀) = (" << bu.x0_ << ", " << bu.y0_ << "), (Δx, Δy) = (" << bu.dx_ << ", " << bu.dy_ << "),";
+        out << "(xf, yf) = (" << bu.x0_ + (bu.cols_ -1)*bu.dx_ << ", " << bu.y0_ + (bu.rows_ -1)*bu.dy_ << ")\n";
         for (decltype(bu.rows_) j = 0; j < bu.rows_; ++j) {
             out << "{";
             for (decltype(bu.cols_) i = 0; i < bu.cols_ - 1; ++i) {

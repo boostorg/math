@@ -34,7 +34,6 @@ void test_four_values()
             CHECK_ULP_CLOSE(f, ub(x, y), 1);
         }
     }
-    std::cout << ub << "\n";
 
     // Now we test the unit square:
     std::random_device rd;
@@ -59,7 +58,6 @@ void test_four_values()
                 CHECK_ULP_CLOSE(f(x,y), ub(x, y), 3);
             }
         }
-        std::cout << ub << "\n";
     }
 }
 
@@ -73,13 +71,13 @@ void test_linear()
         return a[0] + a[1]*x + a[2]*y + a[3]*x*y;
     };
 
-    Real dx = dis(rd);
-    Real dy = dis(rd);
-    Real x0 = dis(rd);
-    Real y0 = dis(rd);
-    for (int rows = 2; rows < 10; ++rows) {
-        for (int cols = 2; cols < 10; ++cols) {
-            std::vector<Real> v(rows*cols);
+    for (int rows = 2; rows < 20; ++rows) {
+        for (int cols = 2; cols < 20; ++cols) {
+            Real dx = dis(rd);
+            Real dy = dis(rd);
+            Real x0 = dis(rd);
+            Real y0 = dis(rd);
+            std::vector<Real> v(rows*cols, std::numeric_limits<Real>::quiet_NaN());
             for (int i = 0; i < cols; ++i) {
                 for (int j = 0; j < rows; ++j) {
                     v[j*cols + i] = f(x0 + i*dx, y0 + j*dy);
@@ -87,9 +85,12 @@ void test_linear()
             }
             auto ub = bilinear_uniform<decltype(v)>(std::move(v), rows, cols, dx, dy, x0, y0);
 
-            for (Real x = x0; x <= x0 + cols*dx; x += dx/8) {
-                for (Real y = y0; y <= y0 + rows*dy; y += dy/8) {
-                    CHECK_ULP_CLOSE(f(x,y), ub(x, y), 3);
+           for (Real x = x0; x < x0 + (cols-1)*dx; x += dx/8) {
+                for (Real y = y0; y < y0 + (rows-1)*dy; y += dy/8) {
+                    if (!CHECK_ULP_CLOSE(f(x,y), ub(x, y), 13)) {
+                        std::cerr << " f(" << x << ", " << y << ") = " << f(x,y) << "\n";
+                        std::cerr << "ub(" << x << ", " << y << ") = " << ub(x,y) << "\n";
+                    }
                 }
             }
         }
@@ -101,6 +102,6 @@ int main()
     test_four_values<float>();
     test_four_values<double>();
     test_four_values<long double>();
-    test_linear<long double>();
+    test_linear<double>();
     return boost::math::test::report_errors();
 }
