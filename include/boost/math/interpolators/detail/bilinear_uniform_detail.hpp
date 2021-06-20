@@ -8,6 +8,7 @@
 #define BOOST_MATH_INTERPOLATORS_BILINEAR_UNIFORM_DETAIL_HPP
 #include <stdexcept>
 #include <iostream>
+#include <string>
 
 namespace boost::math::interpolators::detail {
 
@@ -37,8 +38,14 @@ public:
         y0_ = y0;
         dx_ = dx;
         dy_ = dy;
-        assert(dx_ > 0);
-        assert(dy_ > 0);
+        if (dx_ <= 0) {
+            std::string err = std::string(__FILE__) + ":" + std::to_string(__LINE__) + "dx = " + std::to_string(dx) + ", but dx > 0 is required. Are the arguments out of order?";
+            throw std::logic_error(err);
+        }
+        if (dy_ <= 0) {
+            std::string err = std::string(__FILE__) + ":" + std::to_string(__LINE__) + "dy = " + std::to_string(dy) + ", but dy > 0 is required. Are the arguments out of order?";
+            throw std::logic_error(err);
+        }
     }
 
     Real operator()(Real x, Real y) const
@@ -81,27 +88,12 @@ public:
             return fhi;
         }
 
-#ifndef NDEBUG
-        if (idx + cols_ >= fieldData_.size()) {
-            std::cerr << __FILE__ << ":" << __LINE__ << " About to segfault!!!\n";
-            std::cerr << "idx + cols_ + 1 = " << idx + cols_ + 1 << ", but fieldData_.size() = " << fieldData_.size() << "\n";
-            std::cerr << "alpha = " << alpha << ", beta = " << beta << ", s = " << s << ", t = " << t << "\n";
-            std::cerr << *this;
-        }
-#endif
         auto bottom_left = fieldData_[idx + cols_];
         Real flo;
-        if (alpha <= 2*s0*std::numeric_limits<Real>::epsilon())  {
+        if (alpha <= 2*s0*std::numeric_limits<Real>::epsilon()) {
             flo = bottom_left;
-        } else {
-#ifndef NDEBUG
-            if (idx + cols_ + 1 >= fieldData_.size())  {
-                std::cerr << __FILE__ << ":" << __LINE__ << ":" << __func__ << " Big trouble!\n";
-                std::cerr << "idx + cols_ + 1 = " << idx + cols_ + 1 << ", but fieldData_.size() = " << fieldData_.size() << "\n";
-                std::cerr << "alpha = " << alpha << ", beta = " << beta << "\n";
-                std::cerr << *this;
-            }
-#endif
+        }
+        else {
             flo = (1 - alpha)*bottom_left + alpha*fieldData_[idx + cols_ + 1];
         }
         // Convex combination over vertical to get the value:
@@ -111,7 +103,7 @@ public:
     
 
     friend std::ostream& operator<<(std::ostream& out, bilinear_uniform_imp<RandomAccessContainer> const & bu) {
-        out << "(x₀, y₀) = (" << bu.x0_ << ", " << bu.y0_ << "), (Δx, Δy) = (" << bu.dx_ << ", " << bu.dy_ << "), ";
+        out << "(x0, y0) = (" << bu.x0_ << ", " << bu.y0_ << "), (dx, dy) = (" << bu.dx_ << ", " << bu.dy_ << "), ";
         out << "(xf, yf) = (" << bu.x0_ + (bu.cols_ - 1)*bu.dx_ << ", " << bu.y0_ + (bu.rows_ - 1)*bu.dy_ << ")\n";
         for (decltype(bu.rows_) j = 0; j < bu.rows_; ++j) {
             out << "{";
