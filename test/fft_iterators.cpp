@@ -101,10 +101,6 @@ int main()
     test_inverse<float,bsl_dft>(i);
     test_inverse<double,bsl_dft>(i);
     test_inverse<long double,bsl_dft>(i);
-    
-    test_inverse<float,generic_bsl_dft>(i);
-    test_inverse<double,generic_bsl_dft>(i);
-    test_inverse<long double,generic_bsl_dft>(i);
   }
   return boost::math::test::report_errors();
 }

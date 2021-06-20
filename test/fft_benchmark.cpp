@@ -6,6 +6,8 @@
 #include <boost/math/fft/gsl_backend.hpp>
 #include <boost/math/constants/constants.hpp>
 
+#include "fft_test_helpers.hpp"
+
 std::default_random_engine gen;
 std::uniform_real_distribution<double> distribution;
 
@@ -25,7 +27,7 @@ void bench_bsl_dit(benchmark::State& state)
     for (auto _ : state)
     {
         using boost::math::fft::dft_forward;
-        dft_forward<boost::math::fft::generic_bsl_dft>(A.data(),A.data()+A.size(),A.data());
+        dft_forward<boost::math::fft::test_dft_power2_dit>(A.data(),A.data()+A.size(),A.data());
     }
     state.SetComplexityN(state.range(0));
 }
@@ -35,7 +37,7 @@ void bench_bsl_dif(benchmark::State& state)
     for (auto _ : state)
     {
         using boost::math::fft::dft_forward;
-        dft_forward<boost::math::fft::bsl_dft>(A.data(),A.data()+A.size(),A.data());
+        dft_forward<boost::math::fft::test_dft_power2_dif>(A.data(),A.data()+A.size(),A.data());
     }
     state.SetComplexityN(state.range(0));
 }

@@ -2,7 +2,10 @@
 #include <boost/math/fft.hpp>
 #include <boost/math/fft/fftw_backend.hpp>
 #include <boost/math/fft/gsl_backend.hpp>
+#include <boost/math/fft/algorithms.hpp>
 #include <boost/math/constants/constants.hpp>
+
+#include "fft_test_helpers.hpp"
 
 #include <type_traits>
 #include <complex>
@@ -13,10 +16,14 @@
 
 using namespace boost::math::fft;
 
+
+
 template<class T, template<class U> class Backend>
 void test_fixed_transforms()
 {
-    const T tol = std::numeric_limits<T>::epsilon();
+  // TODO: increase precision of the generic dft 
+  // const T tol = std::numeric_limits<T>::epsilon();
+    const T tol = 8*std::numeric_limits<T>::epsilon();
     
     {
         std::vector< std::complex<T> > A{1.0},B(1);
@@ -73,7 +80,7 @@ void test_inverse(int N)
 {
   // TODO: increase precision of the generic dft 
   // const T tol = std::numeric_limits<T>::epsilon();
-  const T tol = 16*std::numeric_limits<T>::epsilon();
+  const T tol = 32*std::numeric_limits<T>::epsilon();
   
   std::mt19937 rng;
   std::uniform_real_distribution<T> U(0.0,1.0);
@@ -112,11 +119,11 @@ int main()
   
   test_fixed_transforms<double,gsl_dft>();
   
-  //test_fixed_transforms<float,bsl_dft>();
-  //test_fixed_transforms<double,bsl_dft>();
-  //test_fixed_transforms<long double,bsl_dft>();
+  test_fixed_transforms<float,bsl_dft>();
+  test_fixed_transforms<double,bsl_dft>();
+  test_fixed_transforms<long double,bsl_dft>();
   
-  for(int i=1;i<=(1<<12); i*=2)
+  for(int i=1;i<=(1<<10); i*=2)
   {
     test_inverse<float,fftw_dft>(i);
     test_inverse<double,fftw_dft>(i);
@@ -128,11 +135,16 @@ int main()
     test_inverse<double,bsl_dft>(i);
     test_inverse<long double,bsl_dft>(i);
     
-    test_inverse<float,generic_bsl_dft>(i);
-    test_inverse<double,generic_bsl_dft>(i);
-    test_inverse<long double,generic_bsl_dft>(i);
+    test_inverse<float,test_dft_power2_dit>(i);
+    test_inverse<float,test_dft_power2_dif>(i);
+    
+    test_inverse<double,test_dft_power2_dit>(i);
+    test_inverse<double,test_dft_power2_dif>(i);
+    
+    test_inverse<long double,test_dft_power2_dit>(i);
+    test_inverse<long double,test_dft_power2_dif>(i);
   }
-  for(int i=1;i<=100'000; i*=10)
+  for(int i=1;i<=1000; i*=10)
   {
     test_inverse<float,fftw_dft>(i);
     test_inverse<double,fftw_dft>(i);
@@ -140,11 +152,11 @@ int main()
     
     test_inverse<double,gsl_dft>(i);
     
-  //  test_inverse<float,bsl_dft>(i);
-  //  test_inverse<double,bsl_dft>(i);
-  //  test_inverse<long double,bsl_dft>(i);
+    test_inverse<float,bsl_dft>(i);
+    test_inverse<double,bsl_dft>(i);
+    test_inverse<long double,bsl_dft>(i);
   }
-  for(auto i : std::vector<int>{3,5,7,11,13,17,23})
+  for(auto i : std::vector<int>{2,3,5,7,11,13,17,23,29,31})
   {
     test_inverse<float,fftw_dft>(i);
     test_inverse<double,fftw_dft>(i);
@@ -152,9 +164,17 @@ int main()
     
     test_inverse<double,gsl_dft>(i);
     
-  //  test_inverse<float,bsl_dft>(i);
-  //  test_inverse<double,bsl_dft>(i);
-  //  test_inverse<long double,bsl_dft>(i);
+    test_inverse<float,bsl_dft>(i);
+    test_inverse<double,bsl_dft>(i);
+    test_inverse<long double,bsl_dft>(i);
+    
+    test_inverse<float,test_dft_generic_prime_bruteForce>(i);
+    test_inverse<double,test_dft_generic_prime_bruteForce>(i);
+    test_inverse<long double,test_dft_generic_prime_bruteForce>(i);
+    
+    test_inverse<float,test_dft_complex_prime_bruteForce>(i);
+    test_inverse<double,test_dft_complex_prime_bruteForce>(i);
+    test_inverse<long double,test_dft_complex_prime_bruteForce>(i);
   }
   // TODO: can we print a useful compilation error message for the following
   // illegal case?
