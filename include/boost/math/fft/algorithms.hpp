@@ -137,7 +137,11 @@
       for(long j=1;j<N; ++j)
       {
         real_value_type phase = 2*signed_pi * i *j * inv_N;
-        sum += in_first[j] * complex_value_type{std::cos(phase),std::sin(phase)};
+
+        using std::cos;
+        using std::sin;
+
+        sum += in_first[j] * complex_value_type{cos(phase),sin(phase)};
       }
       work_space[i] = sum;
     }

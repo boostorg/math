@@ -34,13 +34,19 @@ public:
 
   void forward(const NativeComplexType* in, NativeComplexType* out) const
   {
-    NativeComplexType w{std::cos(2*pi/size()),-std::sin(2*pi/size())};
+    using std::cos;
+    using std::sin;
+
+    NativeComplexType w{cos(2*pi/size()),-sin(2*pi/size())};
     detail::dft_generic_prime_bruteForce(in,in+size(),out,w);
   }
 
   void backward(const NativeComplexType* in, NativeComplexType* out) const
   {
-    NativeComplexType w{std::cos(2*pi/size()),std::sin(2*pi/size())};
+    using std::cos;
+    using std::sin;
+
+    NativeComplexType w{cos(2*pi/size()),sin(2*pi/size())};
     detail::dft_generic_prime_bruteForce(in,in+size(),out,w);
   }
 
@@ -102,13 +108,19 @@ public:
 
   void forward(const NativeComplexType* in, NativeComplexType* out) const
   {
-    NativeComplexType w{std::cos(2*pi/size()),-std::sin(2*pi/size())};
+    using std::cos;
+    using std::sin;
+
+    NativeComplexType w{cos(2*pi/size()),-sin(2*pi/size())};
     detail::dft_power2_dit(in,in+size(),out,w);
   }
 
   void backward(const NativeComplexType* in, NativeComplexType* out) const
   {
-    NativeComplexType w{std::cos(2*pi/size()),std::sin(2*pi/size())};
+    using std::cos;
+    using std::sin;
+
+    NativeComplexType w{cos(2*pi/size()),sin(2*pi/size())};
     detail::dft_power2_dit(in,in+size(),out,w);
   }
 

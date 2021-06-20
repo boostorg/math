@@ -6,6 +6,7 @@
 */
 
 #include <boost/math/fft.hpp>
+#include <boost/math/fft/fftw_backend.hpp>
 
 #include <iostream>
 #include <vector>
@@ -29,12 +30,12 @@ int main()
     fft::dft< std::complex<double>, fft::fftw_dft > P(A.size());
     
     // forward transform, out-of-place
-    P.forward(A.cbegin(),B.begin());
+    P.forward(A.cbegin(),A.cend(),B.begin());
     
     print(B);
     
-    // bacward transform, in-place
-    P.backward(B.cbegin(),B.begin());
+    // backward transform, in-place
+    P.backward(B.cbegin(),B.cend(),B.begin());
     
     print(B);
     return 0;
