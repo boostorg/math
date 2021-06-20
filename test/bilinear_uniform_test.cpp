@@ -105,8 +105,5 @@ int main()
     test_four_values<double>();
     test_four_values<long double>();
     test_linear<double>();
-    #ifdef BOOST_HAS_FLOAT128
-    test_four_values<float128>();
-    #endif
     return boost::math::test::report_errors();
 }
