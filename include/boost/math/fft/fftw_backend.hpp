@@ -107,7 +107,7 @@
     {
       using local_complex_type = typename detail::fftw_traits_c_interface<real_value_type>::complex_value_type;
       
-      if(in!=out)
+      if(in!=out) // We have to copy, because fftw plan is forced to be in-place: from: nullptr, to: nullptr
         std::copy(in,in+size(),out);
 
       detail::fftw_traits_c_interface<real_value_type>::plan_execute
