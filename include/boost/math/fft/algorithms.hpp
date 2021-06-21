@@ -19,7 +19,31 @@
   namespace boost { namespace math {  namespace fft {
 
   namespace detail {
-  
+
+  // The const_helper (below) allows using constexpr whenever possible.
+  // The allow_constexpr decides about whether constexpr is possible.
+  // TODO: decide if we can find a better implementation for this.
+  template <class T>
+  constexpr bool allow_constexpr = (std::numeric_limits<T>::digits10 <= 15 and std::numeric_limits<T>::digits10 >= 6);
+
+  template <class T> struct constexpr_consts {
+    static constexpr T pi = boost::math::constants::pi<T>();
+    static constexpr T _1 = T{1};
+  };
+  template<class T> constexpr T constexpr_consts<T>::pi;
+  template<class T> constexpr T constexpr_consts<T>::_1;
+
+  template <class T> struct const_consts {
+    static const T pi;
+    static const T _1;
+  };
+  template<class T> const T const_consts<T>::pi = boost::math::constants::pi<T>();
+  template<class T> const T const_consts<T>::_1 = T{1};
+
+  template <class T>
+  using const_helper = typename std::conditional<allow_constexpr<T>, constexpr_consts<T>, const_consts<T>>::type;
+
+
   // TODO: use another power function
   template <class T>
   T power(const T& x, int n)
@@ -114,7 +138,7 @@
     using real_value_type = typename complex_value_type::value_type;
     const long N = std::distance(in_first,in_last);
     const real_value_type inv_N = real_value_type{1}/N;
-    const real_value_type signed_pi = sign * boost::math::constants::pi<real_value_type>();
+    const real_value_type signed_pi = sign * const_helper<real_value_type>::pi;
     if(N<=0)
       return;
     
@@ -166,7 +190,7 @@
     if (n == 1)
         return;
 
-    constexpr T _1 = T{1};
+    auto _1 = const_helper<T>::_1;
     
     int nbits = 0;
     std::vector<T> e2{e};
@@ -228,7 +252,7 @@
       std::copy(in_first, in_last, out);
 
     using local_float_type = typename complex_value_type::value_type;
-    const local_float_type signed_pi = sign * boost::math::constants::pi<local_float_type>();
+    const local_float_type signed_pi = sign * const_helper<local_float_type>::pi;
     // Recursive decimation in frequency.
     for(long m = my_n; m > 1; m /= 2)
     {
