@@ -21,9 +21,12 @@ public:
 
     bilinear_uniform_imp(RandomAccessContainer && fieldData, Z rows, Z cols, Real dx = 1, Real dy = 1, Real x0 = 0, Real y0 = 0)
     {
+        using std::to_string;
         if(fieldData.size() != rows*cols)
         {
-            throw std::logic_error("The field data must have rows*cols elements.");
+            std::string err = std::string(__FILE__) + ":" + to_string(__LINE__)
+               + " The field data must have rows*cols elements. There are " + to_string(rows)  + " rows and " + to_string(cols) + " columns but " + to_string(fieldData.size()) + " elements in the field data.";
+            throw std::logic_error(err);
         }
         if (rows < 2) {
             throw std::logic_error("There must be at least two rows of data for bilinear interpolation to be well-defined.");
@@ -41,11 +44,11 @@ public:
         dy_ = dy;
         using std::to_string;
         if (dx_ <= 0) {
-            std::string err = std::string(__FILE__) + ":" + to_string(__LINE__) + "dx = " + to_string(dx) + ", but dx > 0 is required. Are the arguments out of order?";
+            std::string err = std::string(__FILE__) + ":" + to_string(__LINE__) + " dx = " + to_string(dx) + ", but dx > 0 is required. Are the arguments out of order?";
             throw std::logic_error(err);
         }
         if (dy_ <= 0) {
-            std::string err = std::string(__FILE__) + ":" + to_string(__LINE__) + "dy = " + to_string(dy) + ", but dy > 0 is required. Are the arguments out of order?";
+            std::string err = std::string(__FILE__) + ":" + to_string(__LINE__) + " dy = " + to_string(dy) + ", but dy > 0 is required. Are the arguments out of order?";
             throw std::logic_error(err);
         }
     }
@@ -70,9 +73,9 @@ public:
         Real s0 = floor(s);
         Real t = (y - y0_)/dy_;
         Real t0 = floor(t);
-        decltype(fieldData_.size()) xidx = s0;
-        decltype(fieldData_.size()) yidx = t0;
-        decltype(fieldData_.size()) idx = yidx*cols_  + xidx;
+        Z xidx = s0;
+        Z yidx = t0;
+        Z idx = yidx*cols_  + xidx;
         Real alpha = s - s0;
         Real beta = t - t0;
 
