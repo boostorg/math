@@ -12,7 +12,6 @@
   #include <algorithm>
   #include <numeric>
   #include <cmath>
-  #include <complex>
   #include <vector>
   #include <boost/math/constants/constants.hpp>
 

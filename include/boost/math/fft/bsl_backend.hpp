@@ -11,10 +11,10 @@
 
   #include <algorithm>
   #include <cmath>
-  #include <complex>
   #include <vector>
 
   #include <boost/math/fft/algorithms.hpp>
+  #include <boost/math/fft/abstract_ring.hpp>
 
   namespace boost { namespace math {  namespace fft {
 
@@ -23,9 +23,9 @@
   {
   private:
     using real_value_type    = typename NativeComplexType::value_type;
-    using complex_value_type = typename std::complex<real_value_type>;
+    using complex_value_type = typename detail::select_complex<real_value_type>::type;
     enum plan_type { forward_plan , backward_plan};
-    static constexpr real_value_type pi = boost::math::constants::pi<real_value_type>();
+    //static constexpr real_value_type pi = boost::math::constants::pi<real_value_type>();
     
     void execute(plan_type plan, const complex_value_type * in, complex_value_type* out)const
     {
