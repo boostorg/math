@@ -17,8 +17,9 @@ class bilinear_uniform_imp
 {
 public:
     using Real = typename RandomAccessContainer::value_type;
+    using Z = typename RandomAccessContainer::size_type;
 
-    bilinear_uniform_imp(RandomAccessContainer && fieldData, decltype(fieldData.size()) rows, decltype(fieldData.size()) cols, Real dx = 1, Real dy = 1, Real x0 = 0, Real y0 = 0)
+    bilinear_uniform_imp(RandomAccessContainer && fieldData, Z rows, Z cols, Real dx = 1, Real dy = 1, Real x0 = 0, Real y0 = 0)
     {
         if(fieldData.size() != rows*cols)
         {
@@ -100,14 +101,12 @@ public:
         return (1 - beta)*fhi + beta*flo;
     }
 
-    
-
     friend std::ostream& operator<<(std::ostream& out, bilinear_uniform_imp<RandomAccessContainer> const & bu) {
         out << "(x0, y0) = (" << bu.x0_ << ", " << bu.y0_ << "), (dx, dy) = (" << bu.dx_ << ", " << bu.dy_ << "), ";
         out << "(xf, yf) = (" << bu.x0_ + (bu.cols_ - 1)*bu.dx_ << ", " << bu.y0_ + (bu.rows_ - 1)*bu.dy_ << ")\n";
-        for (decltype(bu.rows_) j = 0; j < bu.rows_; ++j) {
+        for (Z j = 0; j < bu.rows_; ++j) {
             out << "{";
-            for (decltype(bu.cols_) i = 0; i < bu.cols_ - 1; ++i) {
+            for (Z i = 0; i < bu.cols_ - 1; ++i) {
                 out << bu.fieldData_[j*bu.cols_ + i] << ", ";
             }
             out << bu.fieldData_[j*bu.cols_ + bu.cols_ - 1] << "}\n";
@@ -117,8 +116,8 @@ public:
 
 private:
     RandomAccessContainer fieldData_;
-    decltype(fieldData_.size()) rows_;
-    decltype(fieldData_.size()) cols_;
+    Z rows_;
+    Z cols_;
     Real x0_;
     Real y0_;
     Real dx_;

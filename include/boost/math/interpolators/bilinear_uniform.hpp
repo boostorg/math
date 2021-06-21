@@ -26,8 +26,9 @@ class bilinear_uniform
 {
 public:
     using Real = typename RandomAccessContainer::value_type;
+    using Z = typename RandomAccessContainer::size_type;
 
-    bilinear_uniform(RandomAccessContainer && fieldData, decltype(fieldData.size()) rows, decltype(fieldData.size()) cols, Real dx = 1, Real dy = 1, Real x0 = 0, Real y0 = 0)
+    bilinear_uniform(RandomAccessContainer && fieldData, Z rows, Z cols, Real dx = 1, Real dy = 1, Real x0 = 0, Real y0 = 0)
     : m_imp(std::make_shared<detail::bilinear_uniform_imp<RandomAccessContainer>>(std::move(fieldData), rows, cols, dx, dy, x0, y0))
     {
     }

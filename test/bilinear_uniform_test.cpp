@@ -25,13 +25,13 @@ void test_four_values()
     Real y0 = 0;
     Real dx = 1;
     Real dy = 1;
-    Real f = 1.5;
-    std::vector<Real> v(2*2, f);
+    Real value = 1.5;
+    std::vector<Real> v(2*2, value);
     auto v_copy = v;
     auto ub = bilinear_uniform<decltype(v)>(std::move(v_copy), 2, 2, dx, dy, x0, y0);
     for (Real x = x0; x <= x0 + dx; x += dx/8) {
         for (Real y = y0; y <= y0 + dx; y += dy/8) {
-            CHECK_ULP_CLOSE(f, ub(x, y), 1);
+            CHECK_ULP_CLOSE(value, ub(x, y), 1);
         }
     }
 
@@ -51,7 +51,7 @@ void test_four_values()
             return v[0]*(1-x)*(1-y) + v[1]*x*(1-y) + v[2]*(1-x)*y + v[3]*x*y;
         };
 
-        auto v_copy = v;
+        v_copy = v;
         ub = bilinear_uniform<decltype(v_copy)>(std::move(v_copy), 2, 2, dx, dy, x0, y0);
         for (Real x = x0; x <= x0 + dx; x += dx/16) {
             for (Real y = y0; y <= y0 + dx; y += dy/16) {
