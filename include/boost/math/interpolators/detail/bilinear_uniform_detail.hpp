@@ -39,12 +39,13 @@ public:
         y0_ = y0;
         dx_ = dx;
         dy_ = dy;
+        using std::to_string;
         if (dx_ <= 0) {
-            std::string err = std::string(__FILE__) + ":" + std::to_string(__LINE__) + "dx = " + std::to_string(dx) + ", but dx > 0 is required. Are the arguments out of order?";
+            std::string err = std::string(__FILE__) + ":" + to_string(__LINE__) + "dx = " + to_string(dx) + ", but dx > 0 is required. Are the arguments out of order?";
             throw std::logic_error(err);
         }
         if (dy_ <= 0) {
-            std::string err = std::string(__FILE__) + ":" + std::to_string(__LINE__) + "dy = " + std::to_string(dy) + ", but dy > 0 is required. Are the arguments out of order?";
+            std::string err = std::string(__FILE__) + ":" + to_string(__LINE__) + "dy = " + to_string(dy) + ", but dy > 0 is required. Are the arguments out of order?";
             throw std::logic_error(err);
         }
     }
