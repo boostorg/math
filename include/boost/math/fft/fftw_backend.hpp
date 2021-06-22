@@ -92,7 +92,7 @@
 
     static void plan_destroy(plan_type p) { ::fftwl_destroy_plan(p); }
   };
-  #ifdef BOOST_HAS_FLOAT128
+  #ifdef BOOST_MATH_USE_FLOAT128
   template<>
   struct fftw_traits_c_interface<boost::multiprecision::float128>
   {

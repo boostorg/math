@@ -23,7 +23,7 @@
   // Another solution: specialise the templates on ComplexType, not on the RealType.
   // Then ring axioms will be easier and select_complex will become unnecessary.
   //
-  #ifdef BOOST_HAS_FLOAT128
+  #ifdef BOOST_MATH_USE_FLOAT128
     #include <boost/multiprecision/complex128.hpp>
   #endif
   #include <boost/multiprecision/cpp_complex.hpp>
@@ -55,7 +55,7 @@
   template<> struct select_complex<float> { using type = std::complex<float>; };
   template<> struct select_complex<double> { using type = std::complex<double>; };
   template<> struct select_complex<long double> { using type = std::complex<long double>; };
-  #ifdef BOOST_HAS_FLOAT128
+  #ifdef BOOST_MATH_USE_FLOAT128
   template<> struct select_complex<boost::multiprecision::float128> { using type = boost::multiprecision::complex128; };
   #endif
   // TODO: discuss - use traits or something else to recognize all boost::multiprecision complex types

@@ -32,7 +32,7 @@ void print(const std::vector< T >& V)
 }
 template<class Complex>
 void test_bsl() {
-    std::cout << "default fft engine with " << boost::core::demangle(typeid(Complex).name()) << "\n";
+    std::cout << "BSL engine with " << boost::core::demangle(typeid(Complex).name()) << "\n";
     std::vector< Complex > A{1.0,2.0,3.0,4.0},B(A.size());
     // forward transform, out-of-place
     boost::math::fft::dft_forward(A.cbegin(),A.cend(),B.begin());
@@ -44,7 +44,7 @@ void test_bsl() {
 
 template<class Complex>
 void test_fftw() {
-    std::cout << "fftw engine with " << boost::core::demangle(typeid(Complex).name()) << "\n";
+    std::cout << "FFTW engine with " << boost::core::demangle(typeid(Complex).name()) << "\n";
     std::vector< Complex > A{1.0,2.0,3.0,4.0},B(A.size());
     // forward transform, out-of-place
     boost::math::fft::dft_forward<boost::math::fft::fftw_dft>(A.cbegin(),A.cend(),B.begin());
@@ -56,7 +56,7 @@ void test_fftw() {
 
 template<class Complex>
 void test_gsl() {
-    std::cout << "gsl engine with " << boost::core::demangle(typeid(Complex).name()) << "\n";
+    std::cout << "GSL engine with " << boost::core::demangle(typeid(Complex).name()) << "\n";
     std::vector< Complex > A{1.0,2.0,3.0,4.0},B(A.size());
     // forward transform, out-of-place
     boost::math::fft::dft_forward<boost::math::fft::gsl_dft>(A.cbegin(),A.cend(),B.begin());
