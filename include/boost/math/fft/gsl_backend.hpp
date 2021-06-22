@@ -19,75 +19,78 @@ namespace fft {
     class gsl_dft;
     
     template<>
-    class gsl_dft<std::complex<double> >
+    class gsl_dft< std::complex<double> >
     {
-        private:
+    private:
+      using real_value_type    = double;
+      using complex_value_type = std::complex<real_value_type>;
+      enum plan_type { forward_plan, backward_plan };
+      
+      std::size_t my_size; 
+      gsl_fft_complex_wavetable *wtable;
+      gsl_fft_complex_workspace *wspace;
         
-        using value_type  = std::complex<double>;
-        using cvalue_type = double;
-        enum plan_type { forward_plan, backward_plan };
-        
-        std::size_t _size; 
-        gsl_fft_complex_wavetable *wtable;
-        gsl_fft_complex_workspace *wspace;
-        
-        template<class Iterator1, class Iterator2>
-        void execute(plan_type p, Iterator1 in, Iterator2 out) const
+      void execute(plan_type p, const complex_value_type* in, complex_value_type* out) const
+      {
+        if(in!=out)
         {
-            using T1  = typename std::iterator_traits<Iterator1>::value_type;
-            using T2 = typename std::iterator_traits<Iterator2>::value_type;
-            
-            static_assert(std::is_same<T1,T2>::value,
-                "Input and output types mismatch");
-                
-            static_assert(std::is_same<value_type,T1>::value,
-                "Plan and Input types mismatch");
-                
-            if(std::addressof(*in)!=std::addressof(*out))
-            {
-                // we avoid this extra step for in-place transforms
-                // notice that if in==out, the following code has
-                // undefined-behavior
-                Iterator1 in_end{in};
-                std::advance(in_end,size());
-                std::copy(in,in_end,out);
-            }
-            
-            if(p==forward_plan)
-            gsl_fft_complex_forward(
-                reinterpret_cast<cvalue_type*>(std::addressof(*out)),
-                1, _size, wtable, wspace);
-            else
-            gsl_fft_complex_backward(
-                reinterpret_cast<cvalue_type*>(std::addressof(*out)),
-                1, _size, wtable, wspace);
-        }
-        public:
-        
-        gsl_dft(std::size_t n):
-            _size{n}
-        {
-            wtable = gsl_fft_complex_wavetable_alloc(n);
-            wspace = gsl_fft_complex_workspace_alloc(n);
+          // we avoid this extra step for in-place transforms
+          // notice that if in==out, the following code has
+          // undefined-behavior
+          std::copy(in,in+size(),out);
         }
         
-        ~gsl_dft()
-        {
-            gsl_fft_complex_wavetable_free(wtable);
-            gsl_fft_complex_workspace_free(wspace);
-        }
-        std::size_t size() const {return _size;}
+        if(p==forward_plan)
+        gsl_fft_complex_forward(
+          reinterpret_cast<real_value_type*>(std::addressof(*out)),
+          1, my_size, wtable, wspace);
+        else
+        gsl_fft_complex_backward(
+          reinterpret_cast<real_value_type*>(std::addressof(*out)),
+          1, my_size, wtable, wspace);
+      }
+      void free()
+      {
+        gsl_fft_complex_wavetable_free(wtable);
+        gsl_fft_complex_workspace_free(wspace);
+      }
+      void alloc()
+      {
+        wtable = gsl_fft_complex_wavetable_alloc(size());
+        wspace = gsl_fft_complex_workspace_alloc(size());
+      }
+   public:
+      
+      gsl_dft(std::size_t n):
+          my_size{n}
+      {
+        alloc();
+      }
         
-        template<class Iterator1, class Iterator2>
-        void forward(Iterator1 in, Iterator2 out) const
+      ~gsl_dft()
+      {
+        free();
+      }
+      std::size_t size() const {return my_size;}
+      
+      void resize(std::size_t new_size)
+      {
+        if(size()!=new_size)
         {
-            execute(forward_plan,in,out);
+          free();
+          my_size = new_size;
+          alloc();
         }
-        template<class Iterator1, class Iterator2>
-        void backward(Iterator1 in, Iterator2 out) const
-        {
-            execute(backward_plan,in,out);
-        }
+      }
+        
+      void forward(const complex_value_type* in, complex_value_type* out) const
+      {
+        execute(forward_plan,in,out);
+      }
+      void backward(const complex_value_type* in, complex_value_type* out) const
+      {
+        execute(backward_plan,in,out);
+      }
     };
     
     
