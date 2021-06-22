@@ -199,20 +199,15 @@
 
     std::reverse(e2.begin(), e2.end());
 
-    T* _i = out;
-    for (int i = 0; i < n; ++i, ++_i)
-    {
-      int ib = i, j = 0;
-      T* _j = out;
-
-      for (int b = 0; b < nbits; ib >>= 1, ++b)
-          j = (j << 1) | (ib & 1);
-
-      std::advance(_j, j);
-
-      if (i < j)
-          std::swap(*_i, *_j);
+    // Gold-Rader bit-reversal algorithm.
+    for(int i=0,j=0;i<n-1;++i)
+    { 
+      if(i<j)
+        std::swap(out[i],out[j]);
+      for(int k=n>>1;!( (j^=k)&k );k>>=1);
     }
+    
+    
     for (int len = 2, k = 1; len <= n; len <<= 1, ++k)
     {
       for (int i = 0; i < n; i += len)
