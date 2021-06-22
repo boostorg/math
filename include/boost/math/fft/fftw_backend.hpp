@@ -9,10 +9,10 @@
 #ifndef BOOST_MATH_FFT_FFTWBACKEND_HPP
   #define BOOST_MATH_FFT_FFTWBACKEND_HPP
   
-  #include <complex>
   #include <memory>
 
   #include <fftw3.h>
+  #include <boost/math/fft/abstract_ring.hpp>
 
   namespace boost { namespace math {  namespace fft {
 
@@ -92,6 +92,32 @@
 
     static void plan_destroy(plan_type p) { ::fftwl_destroy_plan(p); }
   };
+  #ifdef BOOST_HAS_FLOAT128
+  template<>
+  struct fftw_traits_c_interface<boost::multiprecision::float128>
+  {
+    using plan_type = fftwq_plan;
+
+    // Type casting for fftw:
+    using real_value_type = boost::float128_t;
+
+    using complex_value_type = boost::multiprecision::complex128;
+
+    static plan_type plan_construct(
+      int n, complex_value_type* in, complex_value_type* out, int sign, unsigned int flags)
+    {
+      return ::fftwq_plan_dft_1d(n, (real_value_type(*)[2])in, (real_value_type(*)[2])out, sign, flags);
+    }
+
+    static void plan_execute(
+      plan_type plan, complex_value_type* in, complex_value_type* out)
+    {
+      ::fftwq_execute_dft(plan, (real_value_type(*)[2])in, (real_value_type(*)[2])out);
+    }
+
+    static void plan_destroy(plan_type p) { ::fftwq_destroy_plan(p); }
+  };
+  #endif
 
   } // namespace detail
 
@@ -101,7 +127,7 @@
   private:
     using real_value_type    = typename NativeComplexType::value_type;
     using plan_type          = typename detail::fftw_traits_c_interface<real_value_type>::plan_type;
-    using complex_value_type = std::complex<real_value_type>;
+    using complex_value_type = typename detail::select_complex<real_value_type>::type;
    
     void execute(plan_type plan, const complex_value_type* in, complex_value_type* out) const
     {
