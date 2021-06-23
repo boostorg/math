@@ -19,7 +19,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        compiler: [ g++ ]
+        compiler: [ g++, clang++ ]
         standard: [ gnu++11, gnu++14, gnu++17, gnu++2a ]
         suite: [ fft ]
     steps:

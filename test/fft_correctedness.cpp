@@ -5,7 +5,9 @@
 #include <boost/math/fft/algorithms.hpp>
 #include <boost/math/fft/abstract_ring.hpp>
 #include <boost/math/constants/constants.hpp>
+#ifdef BOOST_MATH_USE_FLOAT128
 #include <boost/multiprecision/complex128.hpp>
+#endif
 #include <boost/multiprecision/cpp_complex.hpp>
 #include <boost/random.hpp>
 
@@ -82,7 +84,7 @@ void test_inverse(int N)
   using Complex = typename detail::select_complex<T>::type;
   // TODO: increase precision of the generic dft 
   // const T tol = std::numeric_limits<T>::epsilon();
-  const T tol = 32*std::numeric_limits<T>::epsilon();
+  const T tol = 128*std::numeric_limits<T>::epsilon();
   
   boost::random::mt19937 rng;
   boost::random::uniform_real_distribution<T> U(0.0,1.0);
@@ -120,29 +122,41 @@ int main()
   test_fixed_transforms<float,fftw_dft>();
   test_fixed_transforms<double,fftw_dft>();
   test_fixed_transforms<long double,fftw_dft>();
+#ifdef BOOST_MATH_USE_FLOAT128
   test_fixed_transforms<boost::multiprecision::float128,fftw_dft>();
+#endif
   
   test_fixed_transforms<double,gsl_dft>();
   
   test_fixed_transforms<float,bsl_dft>();
   test_fixed_transforms<double,bsl_dft>();
   test_fixed_transforms<long double,bsl_dft>();
+#ifdef BOOST_MATH_USE_FLOAT128
   test_fixed_transforms<boost::multiprecision::float128,bsl_dft>();
+#endif
   test_fixed_transforms<boost::multiprecision::cpp_bin_float_50,bsl_dft>();
+  test_fixed_transforms<boost::multiprecision::cpp_bin_float_100,bsl_dft>();
+  test_fixed_transforms<boost::multiprecision::cpp_bin_float_quad,bsl_dft>();
+  // TODO:
+  //test_fixed_transforms<boost::multiprecision::mpfr_float_100,bsl_dft>();
   
   for(int i=1;i<=(1<<10); i*=2)
   {
     test_inverse<float,fftw_dft>(i);
     test_inverse<double,fftw_dft>(i);
     test_inverse<long double,fftw_dft>(i);
+#ifdef BOOST_MATH_USE_FLOAT128
     test_inverse<boost::multiprecision::float128,fftw_dft>(i);
+#endif
     
     test_inverse<double,gsl_dft>(i);
     
     test_inverse<float,bsl_dft>(i);
     test_inverse<double,bsl_dft>(i);
     test_inverse<long double,bsl_dft>(i);
+#ifdef BOOST_MATH_USE_FLOAT128
     test_inverse<boost::multiprecision::float128,bsl_dft>(i);
+#endif
     test_inverse<boost::multiprecision::cpp_bin_float_50,bsl_dft>(i);
     
     test_inverse<float,test_dft_power2_dit>(i);
@@ -154,8 +168,10 @@ int main()
     test_inverse<long double,test_dft_power2_dit>(i);
     test_inverse<long double,test_dft_power2_dif>(i);
 
+#ifdef BOOST_MATH_USE_FLOAT128
     test_inverse<boost::multiprecision::float128,test_dft_power2_dit>(i);
     test_inverse<boost::multiprecision::float128,test_dft_power2_dif>(i);
+#endif
 
     test_inverse<boost::multiprecision::cpp_bin_float_50,test_dft_power2_dit>(i);
     test_inverse<boost::multiprecision::cpp_bin_float_50,test_dft_power2_dif>(i);
@@ -166,7 +182,9 @@ int main()
     test_inverse<double,fftw_dft>(i);
     test_inverse<long double,fftw_dft>(i);
     if(i <=10) {
+#ifdef BOOST_MATH_USE_FLOAT128
       test_inverse<boost::multiprecision::float128,fftw_dft>(i);
+#endif
     }
     
     test_inverse<double,gsl_dft>(i);
@@ -175,7 +193,9 @@ int main()
     test_inverse<double,bsl_dft>(i);
     test_inverse<long double,bsl_dft>(i);
     if(i <=10) {
+#ifdef BOOST_MATH_USE_FLOAT128
       test_inverse<boost::multiprecision::float128,bsl_dft>(i);
+#endif
       test_inverse<boost::multiprecision::cpp_bin_float_50,bsl_dft>(i);
     }
   }
@@ -184,30 +204,46 @@ int main()
     test_inverse<float,fftw_dft>(i);
     test_inverse<double,fftw_dft>(i);
     test_inverse<long double,fftw_dft>(i);
+#ifdef BOOST_MATH_USE_FLOAT128
     test_inverse<boost::multiprecision::float128,fftw_dft>(i);
+#endif
     
     test_inverse<double,gsl_dft>(i);
     
     test_inverse<float,bsl_dft>(i);
     test_inverse<double,bsl_dft>(i);
     test_inverse<long double,bsl_dft>(i);
+#ifdef BOOST_MATH_USE_FLOAT128
     test_inverse<boost::multiprecision::float128,bsl_dft>(i);
+#endif
     test_inverse<boost::multiprecision::cpp_bin_float_50,bsl_dft>(i);
     
     test_inverse<float,test_dft_generic_prime_bruteForce>(i);
     test_inverse<double,test_dft_generic_prime_bruteForce>(i);
     test_inverse<long double,test_dft_generic_prime_bruteForce>(i);
+#ifdef BOOST_MATH_USE_FLOAT128
     test_inverse<boost::multiprecision::float128,test_dft_generic_prime_bruteForce>(i);
+#endif
     test_inverse<boost::multiprecision::cpp_bin_float_50,test_dft_generic_prime_bruteForce>(i);
     
     test_inverse<float,test_dft_complex_prime_bruteForce>(i);
     test_inverse<double,test_dft_complex_prime_bruteForce>(i);
     test_inverse<long double,test_dft_complex_prime_bruteForce>(i);
+#ifdef BOOST_MATH_USE_FLOAT128
     test_inverse<boost::multiprecision::float128,test_dft_complex_prime_bruteForce>(i);
+#endif
     test_inverse<boost::multiprecision::cpp_bin_float_50,test_dft_complex_prime_bruteForce>(i);
   }
   // TODO: can we print a useful compilation error message for the following
   // illegal case?
   // dft<std::complex<int>> P(3);   
+  
+  for(int i=1;i<=100;++i)
+  {
+    test_inverse<float,test_dft_generic_composite>(i);
+    test_inverse<double,test_dft_generic_composite>(i);
+    test_inverse<long double,test_dft_generic_composite>(i);
+  }
+  
   return boost::math::test::report_errors();
 }

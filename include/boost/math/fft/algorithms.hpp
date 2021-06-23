@@ -60,6 +60,24 @@
     }
     return x;
   }
+    
+  std::vector<long> prime_factorization(long n)
+  {
+    std::vector<long> F;
+    for (long x = 2; x * x <= n;)
+      if (n % x == 0)
+      {
+        F.push_back(x);
+        n /= x;
+      }
+      else
+      {
+        ++x;
+      }
+    if (n > 1)
+      F.push_back(n);
+    return F;
+  }
   
   bool is_power2(long x) { return x == (x & -x);}
   
@@ -196,6 +214,67 @@
           *u = Bu + Bv;
           *v = Bu - Bv;
           ej *= e2[k];
+        }
+      }
+    }
+  }
+  
+  template <class T>
+  void dft_composite_dit(const T *in_first, const T *in_last, T* out, const T e)
+  {
+    /*
+      Cooley-Tukey mapping, intrinsically out-of-place, Decimation in Time
+      composite sizes.
+    */
+    const long n = std::distance(in_first,in_last);
+    if(n <=0 )
+      return;
+    
+    if (n == 1)
+    {
+        out[0]=in_first[0];
+        return;
+    }
+    auto prime_factors = prime_factorization(n);
+    
+    // reorder input
+    for (long i = 0; i < n; ++i)
+    {
+        long j = 0, k = i;
+        for (auto p : prime_factors)
+        {
+            j = j * p + k % p;
+            k /= p;
+        }
+        out[j] = in_first[i];
+    }
+    
+    std::reverse(prime_factors.begin(), prime_factors.end());
+    
+    // butterfly pattern
+    long len = 1;
+    for (auto p : prime_factors)
+    {
+      long len_old = len;
+      len *= p;
+      T w_len = power(e, n / len);
+      T w_p = power(e,n/p);
+      
+      std::vector<T> tmp(p);
+      for (long i = 0; i < n; i += len)
+      {
+        for(long k=0;k<len_old;++k)
+        {
+          for(long j=0;j<p;++j)
+            if(j==0 or k==0)
+              tmp[j] = out[i + j*len_old +k ];
+            else
+              tmp[j] = out[i + j*len_old +k ] * power(w_len,k*j);
+          
+          dft_generic_prime_bruteForce(tmp.data(),tmp.data()+p,tmp.data(),w_p);
+          
+          for(long j=0;j<p;++j)
+            out[i+ j*len_old + k] = tmp[j];
         }
       }
     }

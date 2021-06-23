@@ -13,7 +13,7 @@ std::uniform_real_distribution<double> distribution;
 
 
 typedef std::complex<double> cd;
-auto random_vec(size_t N)
+std::vector<cd> random_vec(size_t N)
 {
     std::vector<cd> V(N);
     for (auto& x : V)

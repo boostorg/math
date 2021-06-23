@@ -54,7 +54,9 @@ int main()
 {
   
     transform_api< std::complex<float>,      3,boost::math::fft::fftw_dft >();
+#if (not defined(__clang__))
     transform_api< std::complex<double>,     3,boost::math::fft::fftw_dft >();
+#endif
     transform_api< std::complex<long double>,3,boost::math::fft::fftw_dft >();
     
     transform_api< std::complex<double>,3,boost::math::fft::gsl_dft >();
