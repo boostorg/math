@@ -20,7 +20,7 @@ jobs:
       fail-fast: false
       matrix:
         compiler: [ g++, clang++ ]
-        standard: [ c++11, c++14, c++17, c++2a ]
+        standard: [ c++17, c++2a ]
         suite: [ fft ]
     steps:
       - uses: actions/checkout@v2
@@ -48,7 +48,7 @@ jobs:
         if: steps.retry1.outcome=='failure'
         run: sudo apt-add-repository -y "ppa:ubuntu-toolchain-r/test"
       - name: Install packages
-        run: sudo apt install libfftw3-dev
+        run: sudo apt install libfftw3-dev libgsl-dev
       - name: Checkout main boost
         run: git clone -b develop --depth 1 https://github.com/boostorg/boost.git ../boost-root
       - name: Update tools/boostdep
@@ -76,5 +76,5 @@ jobs:
         run: ./config_info_travis
         working-directory: ../boost-root/libs/config/test
       - name: Test
-        run: ../../../b2 toolset=$TOOLSET ${{ matrix.suite }} define=CI_SUPPRESS_KNOWN_ISSUES define=SLOW_COMPILER
+        run: ../../../b2 toolset=$TOOLSET ${{ matrix.suite }}
         working-directory: ../boost-root/libs/math/test
