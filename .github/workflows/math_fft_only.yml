@@ -20,7 +20,7 @@ jobs:
       fail-fast: false
       matrix:
         compiler: [ g++, clang++ ]
-        standard: [ c++17, c++2a ]
+        standard: [ gnu++17, gnu++2a ]
         suite: [ fft ]
     steps:
       - uses: actions/checkout@v2
