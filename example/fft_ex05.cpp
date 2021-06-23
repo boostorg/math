@@ -15,7 +15,9 @@
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/multiprecision/cpp_complex.hpp>
 //#include <boost/multiprecision/mpc.hpp>
+#ifdef BOOST_MATH_USE_FLOAT128
 #include <boost/multiprecision/complex128.hpp>
+#endif
 
 #include <boost/math/fft.hpp>
 #include <boost/math/fft/fftw_backend.hpp>
@@ -74,7 +76,9 @@ int main()
     test_bsl<std::complex<float>>();
     test_bsl<std::complex<double>>();
     test_bsl<std::complex<long double>>();
+#ifdef BOOST_MATH_USE_FLOAT128
     test_bsl<boost::multiprecision::complex128>();
+#endif
     test_bsl<boost::multiprecision::cpp_complex_50>();
     test_bsl<boost::multiprecision::cpp_complex_100>();
     test_bsl<boost::multiprecision::cpp_complex_quad>();
@@ -85,7 +89,9 @@ int main()
     test_fftw<std::complex<float>>();
     test_fftw<std::complex<double>>();
     test_fftw<std::complex<long double>>();
+#ifdef BOOST_MATH_USE_FLOAT128
     test_fftw<boost::multiprecision::complex128>();
+#endif
 
     test_gsl<std::complex<double>>();
     return 0;
