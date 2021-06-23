@@ -20,7 +20,6 @@ class test_dft_generic_prime_bruteForce
     Special backend for testing the dft_prime_bruteForce implementation
   */
   using real_value_type = typename NativeComplexType::value_type;
-  static constexpr real_value_type pi = boost::math::constants::pi<real_value_type>();
 public:
   constexpr test_dft_generic_prime_bruteForce(std::size_t n)
     : my_size{n}
@@ -36,8 +35,9 @@ public:
   {
     using std::cos;
     using std::sin;
+    using boost::math::constants::pi;
 
-    NativeComplexType w{cos(2*pi/size()),-sin(2*pi/size())};
+    NativeComplexType w{cos(2*pi<real_value_type>()/size()),-sin(2*pi<real_value_type>()/size())};
     detail::dft_generic_prime_bruteForce(in,in+size(),out,w);
   }
 
@@ -45,8 +45,9 @@ public:
   {
     using std::cos;
     using std::sin;
+    using boost::math::constants::pi;
 
-    NativeComplexType w{cos(2*pi/size()),sin(2*pi/size())};
+    NativeComplexType w{cos(2*pi<real_value_type>()/size()),sin(2*pi<real_value_type>()/size())};
     detail::dft_generic_prime_bruteForce(in,in+size(),out,w);
   }
 
@@ -61,7 +62,6 @@ class test_dft_complex_prime_bruteForce
     Special backend for testing the dft_prime_bruteForce implementation
   */
   using real_value_type = typename NativeComplexType::value_type;
-  static constexpr real_value_type pi = boost::math::constants::pi<real_value_type>();
 public:
   constexpr test_dft_complex_prime_bruteForce(std::size_t n)
     : my_size{n}
@@ -94,7 +94,6 @@ class test_dft_power2_dit
     Special backend for testing the dft_power2_dit implementation
   */
   using real_value_type = typename NativeComplexType::value_type;
-  static constexpr real_value_type pi = boost::math::constants::pi<real_value_type>();
 public:
   constexpr test_dft_power2_dit(std::size_t n)
     : my_size{n}
@@ -110,8 +109,9 @@ public:
   {
     using std::cos;
     using std::sin;
+    using boost::math::constants::pi;
 
-    NativeComplexType w{cos(2*pi/size()),-sin(2*pi/size())};
+    NativeComplexType w{cos(2*pi<real_value_type>()/size()),-sin(2*pi<real_value_type>()/size())};
     detail::dft_power2_dit(in,in+size(),out,w);
   }
 
@@ -119,8 +119,9 @@ public:
   {
     using std::cos;
     using std::sin;
+    using boost::math::constants::pi;
 
-    NativeComplexType w{cos(2*pi/size()),sin(2*pi/size())};
+    NativeComplexType w{cos(2*pi<real_value_type>()/size()),sin(2*pi<real_value_type>()/size())};
     detail::dft_power2_dit(in,in+size(),out,w);
   }
 

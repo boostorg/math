@@ -12,7 +12,6 @@
   #include <algorithm>
   #include <numeric>
   #include <cmath>
-  #include <complex>
   #include <vector>
   #include <boost/math/constants/constants.hpp>
 
@@ -20,7 +19,7 @@
   namespace boost { namespace math {  namespace fft {
 
   namespace detail {
-  
+
   // TODO: use another power function
   template <class T>
   T power(const T& x, int n)
@@ -115,7 +114,7 @@
     using real_value_type = typename complex_value_type::value_type;
     const long N = std::distance(in_first,in_last);
     const real_value_type inv_N = real_value_type{1}/N;
-    const real_value_type signed_pi = sign * boost::math::constants::pi<real_value_type>();
+    auto signed_pi = sign * boost::math::constants::pi<real_value_type>();
     if(N<=0)
       return;
     
@@ -167,7 +166,7 @@
     if (n == 1)
         return;
 
-    constexpr T _1 = T{1};
+    auto _1 = T{1};
     
     int nbits = 0;
     std::vector<T> e2{e};
@@ -176,20 +175,15 @@
 
     std::reverse(e2.begin(), e2.end());
 
-    T* _i = out;
-    for (int i = 0; i < n; ++i, ++_i)
-    {
-      int ib = i, j = 0;
-      T* _j = out;
-
-      for (int b = 0; b < nbits; ib >>= 1, ++b)
-          j = (j << 1) | (ib & 1);
-
-      std::advance(_j, j);
-
-      if (i < j)
-          std::swap(*_i, *_j);
+    // Gold-Rader bit-reversal algorithm.
+    for(int i=0,j=0;i<n-1;++i)
+    { 
+      if(i<j)
+        std::swap(out[i],out[j]);
+      for(int k=n>>1;!( (j^=k)&k );k>>=1);
     }
+    
+    
     for (int len = 2, k = 1; len <= n; len <<= 1, ++k)
     {
       for (int i = 0; i < n; i += len)

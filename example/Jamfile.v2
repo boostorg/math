@@ -47,6 +47,7 @@ test-suite examples :
    [ run fft_ex02.cpp ../config//gsl ../config//fftw3 ]
    [ run fft_ex03.cpp ../config//gsl ../config//fftw3 ]
    [ run fft_ex04.cpp ../config//fftw3 ]
+   [ run fft_ex05.cpp ../config//fftw3 ../config//gsl ../config//quadmath ../config//fftw3q ../config//fftw3l ../config//fftw3f : <include>../../multiprecision/include ]
    
    [ run bessel_zeros_example_1.cpp : : : <exception-handling>off:<build>no  ]
    [ run bessel_zeros_interator_example.cpp : : : <exception-handling>off:<build>no  ]
