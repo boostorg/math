@@ -129,6 +129,10 @@ int main()
   test_fixed_transforms<long double,bsl_dft>();
   test_fixed_transforms<boost::multiprecision::float128,bsl_dft>();
   test_fixed_transforms<boost::multiprecision::cpp_bin_float_50,bsl_dft>();
+  test_fixed_transforms<boost::multiprecision::cpp_bin_float_100,bsl_dft>();
+  test_fixed_transforms<boost::multiprecision::cpp_bin_float_quad,bsl_dft>();
+  // TODO:
+  //test_fixed_transforms<boost::multiprecision::mpfr_float_100,bsl_dft>();
   
   for(int i=1;i<=(1<<10); i*=2)
   {
