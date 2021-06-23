@@ -54,6 +54,46 @@ public:
 private:
   std::size_t my_size;
 };
+template<class NativeComplexType>
+class test_dft_generic_composite
+{
+  /*
+    Special backend for testing the dft_composite_dit
+  */
+  using real_value_type = typename NativeComplexType::value_type;
+  using const_ = boost::math::fft::detail::const_helper<real_value_type>;
+public:
+  constexpr test_dft_generic_composite(std::size_t n)
+    : my_size{n}
+  { }
+
+  void resize(std::size_t new_size)
+  {
+    my_size = new_size;
+  }
+  constexpr std::size_t size() const { return my_size; }
+
+  void forward(const NativeComplexType* in, NativeComplexType* out) const
+  {
+    using std::cos;
+    using std::sin;
+
+    NativeComplexType w{cos(2*const_::pi/size()),-sin(2*const_::pi/size())};
+    detail::dft_composite_dit(in,in+size(),out,w);
+  }
+
+  void backward(const NativeComplexType* in, NativeComplexType* out) const
+  {
+    using std::cos;
+    using std::sin;
+
+    NativeComplexType w{cos(2*const_::pi/size()),sin(2*const_::pi/size())};
+    detail::dft_composite_dit(in,in+size(),out,w);
+  }
+
+private:
+  std::size_t my_size;
+};
 
 template<class NativeComplexType>
 class test_dft_complex_prime_bruteForce
