@@ -1,0 +1,80 @@
+# Copyright 2020 Evan Miller
+# Copyright 2020 Matt Borland
+# Copyright 2021 John Maddock
+# Copyright 2021 Eduardo Quantana
+# Copyright 2021 Janek Kozicki
+# Copyright 2021 Christopher Kormanyos
+# Distributed under the Boost Software License, Version 1.0.
+# (See accompanying file LICENSE_1_0.txt or copy at http://boost.org/LICENSE_1_0.txt)
+
+name: math_fft_only
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+jobs:
+  gcc-clang-native:
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler: [ g++, clang++ ]
+        standard: [ c++11, c++14, c++17, c++2a ]
+        suite: [ fft ]
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+      - uses: mstachniuk/ci-skip@v1
+        with:
+          commit-filter: '[skip ci];[ci skip];[CI SKIP];[SKIP CI];***CI SKIP***;***SKIP CI***;[windows];[Windows];[WINDOWS];[apple];[Apple];[APPLE];[standalone];[STANDALONE]'
+          commit-filter-separator: ';'
+          fail-fast: true
+      - name: Set TOOLSET
+        run: echo ${{ matrix.compiler }} | awk '/^g/ { print "TOOLSET=gcc" } /^clang/ { print "TOOLSET=clang" }' >> $GITHUB_ENV
+      - name: Add repository
+        continue-on-error: true
+        id: addrepo
+        run: sudo apt-add-repository -y "ppa:ubuntu-toolchain-r/test"
+      - name: Retry Add Repo
+        continue-on-error: true
+        id: retry1
+        if: steps.addrepo.outcome=='failure'
+        run: sudo apt-add-repository -y "ppa:ubuntu-toolchain-r/test"
+      - name: Retry Add Repo 2
+        continue-on-error: true
+        id: retry2
+        if: steps.retry1.outcome=='failure'
+        run: sudo apt-add-repository -y "ppa:ubuntu-toolchain-r/test"
+      - name: Install packages
+        run: sudo apt install libfftw3-dev
+      - name: Checkout main boost
+        run: git clone -b develop --depth 1 https://github.com/boostorg/boost.git ../boost-root
+      - name: Update tools/boostdep
+        run: git submodule update --init tools/boostdep
+        working-directory: ../boost-root
+      - name: Copy files
+        run: cp -r $GITHUB_WORKSPACE/* libs/math
+        working-directory: ../boost-root
+      - name: Install deps
+        run: python tools/boostdep/depinst/depinst.py math
+        working-directory: ../boost-root
+      - name: Bootstrap
+        run: ./bootstrap.sh
+        working-directory: ../boost-root
+      - name: Generate headers
+        run: ./b2 headers
+        working-directory: ../boost-root
+      - name: Generate user config
+        run: 'echo "using $TOOLSET : : ${{ matrix.compiler }} : <cxxflags>-std=${{ matrix.standard }} ;" > ~/user-config.jam'
+        working-directory: ../boost-root
+      - name: Config info install
+        run: ../../../b2 config_info_travis_install toolset=$TOOLSET
+        working-directory: ../boost-root/libs/config/test
+      - name: Config info
+        run: ./config_info_travis
+        working-directory: ../boost-root/libs/config/test
+      - name: Test
+        run: ../../../b2 toolset=$TOOLSET ${{ matrix.suite }} define=CI_SUPPRESS_KNOWN_ISSUES define=SLOW_COMPILER
+        working-directory: ../boost-root/libs/math/test
