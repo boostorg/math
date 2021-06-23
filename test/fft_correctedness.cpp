@@ -82,7 +82,7 @@ void test_inverse(int N)
   using Complex = typename detail::select_complex<T>::type;
   // TODO: increase precision of the generic dft 
   // const T tol = std::numeric_limits<T>::epsilon();
-  const T tol = 32*std::numeric_limits<T>::epsilon();
+  const T tol = 128*std::numeric_limits<T>::epsilon();
   
   boost::random::mt19937 rng;
   boost::random::uniform_real_distribution<T> U(0.0,1.0);
@@ -209,5 +209,13 @@ int main()
   // TODO: can we print a useful compilation error message for the following
   // illegal case?
   // dft<std::complex<int>> P(3);   
+  
+  for(int i=1;i<=100;++i)
+  {
+    test_inverse<float,test_dft_generic_composite>(i);
+    test_inverse<double,test_dft_generic_composite>(i);
+    test_inverse<long double,test_dft_generic_composite>(i);
+  }
+  
   return boost::math::test::report_errors();
 }
