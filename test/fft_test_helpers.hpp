@@ -61,7 +61,6 @@ class test_dft_generic_composite
     Special backend for testing the dft_composite_dit
   */
   using real_value_type = typename NativeComplexType::value_type;
-  using const_ = boost::math::fft::detail::const_helper<real_value_type>;
 public:
   constexpr test_dft_generic_composite(std::size_t n)
     : my_size{n}
@@ -77,8 +76,9 @@ public:
   {
     using std::cos;
     using std::sin;
+    using boost::math::constants::pi;
 
-    NativeComplexType w{cos(2*const_::pi/size()),-sin(2*const_::pi/size())};
+    NativeComplexType w{cos(2*pi<real_value_type>()/size()),-sin(2*pi<real_value_type>()/size())};
     detail::dft_composite_dit(in,in+size(),out,w);
   }
 
@@ -86,8 +86,9 @@ public:
   {
     using std::cos;
     using std::sin;
+    using boost::math::constants::pi;
 
-    NativeComplexType w{cos(2*const_::pi/size()),sin(2*const_::pi/size())};
+    NativeComplexType w{cos(2*pi<real_value_type>()/size()),sin(2*pi<real_value_type>()/size())};
     detail::dft_composite_dit(in,in+size(),out,w);
   }
 

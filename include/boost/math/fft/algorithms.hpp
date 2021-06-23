@@ -61,7 +61,7 @@
     return x;
   }
     
-  auto prime_factorization(long n)
+  std::vector<long> prime_factorization(long n)
   {
     std::vector<long> F;
     for (long x = 2; x * x <= n;)
