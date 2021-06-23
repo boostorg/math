@@ -16,11 +16,13 @@
 using namespace boost::math::fft;
 
 template<class T>
-auto random_vector(int N)
+std::vector<std::complex<T>> random_vector(int N)
 {
+  using local_vector_complex_type = std::vector<std::complex<T>>;
+
   std::mt19937 rng;
   std::uniform_real_distribution<T> U(0.0,1.0);
-  std::vector< std::complex<T> > A(N);
+  local_vector_complex_type A(N);
   for(auto& x: A)
   {
     x.real( U(rng) );
@@ -29,7 +31,7 @@ auto random_vector(int N)
   return A;
 }
 template<class Container1, class Container2>
-auto difference(const Container1& A, const Container2& B)
+typename Container1::value_type::value_type difference(const Container1& A, const Container2& B)
 {
   BOOST_MATH_ASSERT_MSG( A.size()==B.size(), "Different container sizes.");
   using ComplexType = typename Container1::value_type;
