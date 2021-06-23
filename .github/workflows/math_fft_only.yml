@@ -19,8 +19,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        compiler: [ g++, clang++ ]
-        standard: [ gnu++17, gnu++2a ]
+        compiler: [ g++ ]
+        standard: [ gnu++11, gnu++14, gnu++17, gnu++2a ]
         suite: [ fft ]
     steps:
       - uses: actions/checkout@v2
