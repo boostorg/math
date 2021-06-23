@@ -172,9 +172,11 @@
     }
 
   public:
-    constexpr fftw_dft(std::size_t n)
+    fftw_dft(std::size_t n)
       : my_size{ n }
     {
+      // For C++11, this line needs to be constexpr-ified.
+      // Then we could restore the constexpr-ness of this constructor.
       alloc();
     }
 
