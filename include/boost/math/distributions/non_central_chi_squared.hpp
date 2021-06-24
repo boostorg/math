@@ -839,7 +839,7 @@ namespace boost
             Policy()))
                return (RealType)r;
          bool asymptotic_mode = k < l/4;
-         RealType starting_point = asymptotic_mode ? k + l - 3 : 1 + k;
+         RealType starting_point = asymptotic_mode ? k + l - RealType(3) : RealType(1) + k;
          return detail::generic_find_mode(dist, starting_point, function);
       }
 
