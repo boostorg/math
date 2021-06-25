@@ -14,6 +14,8 @@
   #include <cmath>
   #include <vector>
   #include <boost/math/constants/constants.hpp>
+  #include <boost/math/fft/abstract_ring.hpp>
+  
 
 
   namespace boost { namespace math {  namespace fft {
@@ -92,6 +94,47 @@
     }
     return r;
   }
+    
+  template<class ComplexType>
+  ComplexType complex_root_of_unity(long n,long p=1)
+  /*
+    Computes exp(-i 2 pi p/n)
+  */
+  {
+    using real_value_type = typename ComplexType::value_type;
+    p = modulo(p,n);
+    
+    if(p==0)
+      return ComplexType(1,0);
+    
+    long g = gcd(p,n); 
+    n/=g;
+    p/=g;
+    switch(n)
+    {
+      case 1:
+        return ComplexType(1,0);
+      case 2:
+        return p==0 ? ComplexType(1,0) : ComplexType(-1,0);
+      case 4:
+        return p==0 ? ComplexType(1,0) : 
+               p==1 ? ComplexType(0,-1) :
+               p==2 ? ComplexType(-1,0) :
+                      ComplexType(0,1) ;
+    }
+    using std::sin;
+    using std::cos;
+    real_value_type phase = -2*p*boost::math::constants::pi<real_value_type>()/n;
+    return ComplexType(cos(phase),sin(phase));
+  }
+  template<class ComplexType>
+  ComplexType complex_inverse_root_of_unity(long n,long p=1)
+  /*
+    Computes exp(i 2 pi p/n)
+  */
+  {
+    return complex_root_of_unity<ComplexType>(n,-p);
+  }
   
   long least_power2(long x)
   {
@@ -130,7 +173,7 @@
   bool is_power2(long x) { return x == (x & -x);}
   
   template<class T>
-  void dft_generic_prime_bruteForce(const T* in_first, const T* in_last, T* out, const T w)
+  void dft_prime_bruteForce(const T* in_first, const T* in_last, T* out, const T w)
   /*
     assumptions: 
     - allocated memory in out is enough to hold distance(in_first,in_last) element,
@@ -168,7 +211,7 @@
   }
   
   template<class complex_value_type>
-  void dft_complex_prime_bruteForce(
+  void complex_dft_prime_bruteForce(
     const complex_value_type* in_first, 
     const complex_value_type* in_last, 
     complex_value_type* out, int sign)
@@ -177,10 +220,7 @@
     - allocated memory in out is enough to hold distance(in_first,in_last) element,
   */
   {
-    using real_value_type = typename complex_value_type::value_type;
     const long N = std::distance(in_first,in_last);
-    const real_value_type inv_N = real_value_type{1}/N;
-    auto signed_pi = sign * boost::math::constants::pi<real_value_type>();
     if(N<=0)
       return;
     
@@ -201,12 +241,7 @@
       complex_value_type sum{in_first[0]};
       for(long j=1;j<N; ++j)
       {
-        real_value_type phase = 2*signed_pi * i *j * inv_N;
-
-        using std::cos;
-        using std::sin;
-
-        sum += in_first[j] * complex_value_type{cos(phase),sin(phase)};
+        sum += in_first[j] * complex_root_of_unity<complex_value_type>(N,i*j*sign);
       }
       work_space[i] = sum;
     }
@@ -215,60 +250,9 @@
       std::copy(work_space,work_space+N,out);
   }
   
-  template <class T>
-  void dft_power2_dit(const T *in_first, const T *in_last, T* out, const T e)
-  {
-    /*
-      Cooley-Tukey mapping, in-place Decimation in Time 
-    */
-    const long ptrdiff = std::distance(in_first,in_last);
-    if(ptrdiff <=0 )
-      return;
-    const long n = least_power2(ptrdiff);
-    
-    if(in_first!=out)
-      std::copy(in_first,in_last,out);
-    
-    if (n == 1)
-        return;
-
-    auto _1 = T{1};
-    
-    int nbits = 0;
-    std::vector<T> e2{e};
-    for (int m = n / 2; m > 0; m >>= 1, ++nbits)
-      e2.push_back(e2.back() * e2.back());
-
-    std::reverse(e2.begin(), e2.end());
-
-    // Gold-Rader bit-reversal algorithm.
-    for(int i=0,j=0;i<n-1;++i)
-    { 
-      if(i<j)
-        std::swap(out[i],out[j]);
-      for(int k=n>>1;!( (j^=k)&k );k>>=1);
-    }
-    
-    
-    for (int len = 2, k = 1; len <= n; len <<= 1, ++k)
-    {
-      for (int i = 0; i < n; i += len)
-      {
-        T ej = _1;
-        for (int j = 0; j < len / 2; ++j)
-        {
-          T* u = out + i + j, *v = out + i + j + len / 2;
-          T Bu = *u, Bv = *v * ej;
-          *u = Bu + Bv;
-          *v = Bu - Bv;
-          ej *= e2[k];
-        }
-      }
-    }
-  }
   
   template <class T>
-  void dft_composite_dit(const T *in_first, const T *in_last, T* out, const T e)
+  void dft_composite(const T *in_first, const T *in_last, T* out, const T e)
   {
     /*
       Cooley-Tukey mapping, intrinsically out-of-place, Decimation in Time
@@ -319,7 +303,7 @@
             else
               tmp[j] = out[i + j*len_old +k ] * power(w_len,k*j);
           
-          dft_generic_prime_bruteForce(tmp.data(),tmp.data()+p,tmp.data(),w_p);
+          dft_prime_bruteForce(tmp.data(),tmp.data()+p,tmp.data(),w_p);
           
           for(long j=0;j<p;++j)
             out[i+ j*len_old + k] = tmp[j];
@@ -328,8 +312,119 @@
     }
   }
   
+  template <class ComplexType>
+  void complex_dft_composite(const ComplexType *in_first, const ComplexType *in_last, ComplexType* out, int sign)
+  {
+    /*
+      Cooley-Tukey mapping, intrinsically out-of-place, Decimation in Time
+      composite sizes.
+    */
+    const long n = std::distance(in_first,in_last);
+    if(n <=0 )
+      return;
+    
+    if (n == 1)
+    {
+        out[0]=in_first[0];
+        return;
+    }
+    auto prime_factors = prime_factorization(n);
+    
+    // reorder input
+    for (long i = 0; i < n; ++i)
+    {
+        long j = 0, k = i;
+        for (auto p : prime_factors)
+        {
+            j = j * p + k % p;
+            k /= p;
+        }
+        out[j] = in_first[i];
+    }
+    
+    std::reverse(prime_factors.begin(), prime_factors.end());
+    
+    // butterfly pattern
+    long len = 1;
+    for (auto p : prime_factors)
+    {
+      long len_old = len;
+      len *= p;
+      
+      std::vector<ComplexType> tmp(p);
+      for (long i = 0; i < n; i += len)
+      {
+        for(long k=0;k<len_old;++k)
+        {
+          for(long j=0;j<p;++j)
+            if(j==0 or k==0)
+              tmp[j] = out[i + j*len_old +k ];
+            else
+              tmp[j] = out[i + j*len_old +k ] * complex_root_of_unity<ComplexType>(len,k*j*sign);
+          
+          complex_dft_prime_bruteForce(tmp.data(),tmp.data()+p,tmp.data(),sign);
+          
+          for(long j=0;j<p;++j)
+            out[i+ j*len_old + k] = tmp[j];
+        }
+      }
+    }
+  }
+  
+  template <class T>
+  void dft_power2(const T *in_first, const T *in_last, T* out, const T e)
+  {
+    /*
+      Cooley-Tukey mapping, in-place Decimation in Time 
+    */
+    const long ptrdiff = std::distance(in_first,in_last);
+    if(ptrdiff <=0 )
+      return;
+    const long n = least_power2(ptrdiff);
+    
+    if(in_first!=out)
+      std::copy(in_first,in_last,out);
+    
+    if (n == 1)
+        return;
+
+    auto _1 = T{1};
+    
+    int nbits = 0;
+    std::vector<T> e2{e};
+    for (int m = n / 2; m > 0; m >>= 1, ++nbits)
+      e2.push_back(e2.back() * e2.back());
+
+    std::reverse(e2.begin(), e2.end());
+
+    // Gold-Rader bit-reversal algorithm.
+    for(int i=0,j=0;i<n-1;++i)
+    { 
+      if(i<j)
+        std::swap(out[i],out[j]);
+      for(int k=n>>1;!( (j^=k)&k );k>>=1);
+    }
+    
+    
+    for (int len = 2, k = 1; len <= n; len <<= 1, ++k)
+    {
+      for (int i = 0; i < n; i += len)
+      {
+        T ej = _1;
+        for (int j = 0; j < len / 2; ++j)
+        {
+          T* u = out + i + j, *v = out + i + j + len / 2;
+          T Bu = *u, Bv = *v * ej;
+          *u = Bu + Bv;
+          *v = Bu - Bv;
+          ej *= e2[k];
+        }
+      }
+    }
+  }
+  
   template<class complex_value_type>
-  void dft_power2_dif(
+  void complex_dft_power2(
     const complex_value_type *in_first, 
     const complex_value_type *in_last, 
     complex_value_type* out, int sign)
@@ -349,23 +444,14 @@
     if(in_first!=out)
       std::copy(in_first, in_last, out);
 
-    using local_float_type = typename complex_value_type::value_type;
-    const local_float_type signed_pi = sign * boost::math::constants::pi<local_float_type>();
     // Recursive decimation in frequency.
     for(long m = my_n; m > 1; m /= 2)
     {
       long mh = m / 2;
-
-      const local_float_type phi = signed_pi / mh;
-
+      
       for(long j = 0; j < mh; ++j)
       {
-        const local_float_type p = phi * j;
-
-        using std::cos;
-        using std::sin;
-
-        complex_value_type cs(cos(p), sin(p));
+        complex_value_type cs{complex_root_of_unity<complex_value_type>(m,j*sign)};
 
         for (long t1=j; t1 < j + my_n; t1 += m)
         {

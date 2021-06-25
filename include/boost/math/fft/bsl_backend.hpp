@@ -51,21 +51,27 @@
       // select the implementation according to the type
       if(not has_root() and detail::is_complex<RingType>::value)
       {
-          const int sign = (plan == forward_plan ? -1 : 1);
+          const int sign = (plan == forward_plan ? 1 : -1);
           // select the implementation according to the DFT size
           if( detail::is_power2(size())  )
-            detail::dft_power2_dif(in,in+size(),out,sign);
+            detail::complex_dft_power2(in,in+size(),out,sign);
           else
-            detail::dft_complex_prime_bruteForce(in,in+size(),out,sign);
+          {
+            detail::complex_dft_composite(in,in+size(),out,sign);
+          }
       }else
       {
         const RingType w_execute = (plan==forward_plan ? root() : inverse_root());
         
         // select the implementation according to the DFT size
         if( detail::is_power2(size())  )
-          detail::dft_power2_dit(in,in+size(),out,w_execute);
+        {
+          detail::dft_power2(in,in+size(),out,w_execute);
+        }
         else
-          detail::dft_composite_dit(in,in+size(),out,w_execute);
+        {
+          detail::dft_composite(in,in+size(),out,w_execute);
+        }
       }
       
     }

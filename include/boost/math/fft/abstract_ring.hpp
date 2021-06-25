@@ -58,47 +58,6 @@
     using std::void_t;
     #endif
     
-    template<class ComplexType>
-    ComplexType complex_root_of_unity(long n,long p=1)
-    /*
-      Computes exp(-i 2 pi p/n)
-    */
-    {
-      using real_value_type = typename ComplexType::value_type;
-      p *= -2;
-      p = modulo(p,n);
-      
-      if(p==0)
-        return ComplexType(1,0);
-      
-      long g = gcd(p,n); 
-      n/=g;
-      p/=g;
-      switch(n)
-      {
-        case 1:
-          return ComplexType(1,0);
-        case 2:
-          return p==0 ? ComplexType(1,0) : ComplexType(-1,0);
-        case 4:
-          return p==0 ? ComplexType(1,0) : 
-                 p==1 ? ComplexType(0,1) :
-                 p==2 ? ComplexType(-1,0) :
-                        ComplexType(0,-1) ;
-      }
-      using std::sin;
-      using std::cos;
-      real_value_type phase = p*boost::math::constants::pi<real_value_type>()/n;
-      return ComplexType(cos(phase),sin(phase));
-    }
-    template<class ComplexType>
-    ComplexType complex_inverse_root_of_unity(long n,long p=1)
-    /*
-      Computes exp(i 2 pi p/n)
-    */
-    {
-      return complex_root_of_unity<ComplexType>(n,-p);
-    }
 
     template<class T, typename = void_t<> >
     struct is_complex : std::false_type

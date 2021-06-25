@@ -52,10 +52,10 @@ typename Container1::value_type::value_type difference(const Container1& A, cons
 }
 
 template<class RealType, template<class U> class Backend>
-void test_inverse(int N)
+void test_inverse(int N, int tolerance)
 {
   using ComplexType = std::complex<RealType>;
-  const RealType tol = 16*std::numeric_limits<RealType>::epsilon();
+  const RealType tol = tolerance*std::numeric_limits<RealType>::epsilon();
   const std::vector< ComplexType > A{random_vector<RealType>(N)};
   
   
@@ -94,15 +94,15 @@ int main()
 {
   for(int i=1;i<=(1<<12); i*=2)
   {
-    test_inverse<float,fftw_dft>(i);
-    test_inverse<double,fftw_dft>(i);
-    test_inverse<long double,fftw_dft>(i);
+    test_inverse<float,fftw_dft>(i,1);
+    test_inverse<double,fftw_dft>(i,1);
+    test_inverse<long double,fftw_dft>(i,1);
     
-    test_inverse<double,gsl_dft>(i);
+    test_inverse<double,gsl_dft>(i,1);
     
-    test_inverse<float,bsl_dft>(i);
-    test_inverse<double,bsl_dft>(i);
-    test_inverse<long double,bsl_dft>(i);
+    test_inverse<float,bsl_dft>(i,1);
+    test_inverse<double,bsl_dft>(i,1);
+    test_inverse<long double,bsl_dft>(i,1);
   }
   return boost::math::test::report_errors();
 }
