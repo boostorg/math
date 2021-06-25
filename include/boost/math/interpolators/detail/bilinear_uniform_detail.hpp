@@ -9,6 +9,9 @@
 #include <stdexcept>
 #include <iostream>
 #include <string>
+#include <limits>
+#include <cmath>
+#include <utility>
 
 namespace boost::math::interpolators::detail {
 
@@ -42,7 +45,7 @@ public:
         y0_ = y0;
         dx_ = dx;
         dy_ = dy;
-        using std::to_string;
+
         if (dx_ <= 0) {
             std::string err = std::string(__FILE__) + ":" + to_string(__LINE__) + " dx = " + to_string(dx) + ", but dx > 0 is required. Are the arguments out of order?";
             throw std::logic_error(err);
