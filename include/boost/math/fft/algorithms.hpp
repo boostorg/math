@@ -51,7 +51,7 @@
   long least_power2(long x)
   {
     /*
-      Returns the biggest power of two that is smaller or equal than x.
+      Returns the biggest power of two that is smaller than or equal to x.
     */
     for(long lsb = x & -x; lsb!=x;)
     {
@@ -63,6 +63,9 @@
     
   std::vector<long> prime_factorization(long n)
   {
+    /*
+        Naive O(sqrt(n)) prime factorization.
+    */
     std::vector<long> F;
     for (long x = 2; x * x <= n;)
       if (n % x == 0)
