@@ -19,7 +19,52 @@
   namespace boost { namespace math {  namespace fft {
 
   namespace detail {
+  
+  template <typename integer>
+  integer modulo(const integer a, const integer b)
+  {
+    return ( a%b + b ) % b;
+  }
+  
+  template <typename integer>
+  struct euclid_return
+  {
+    integer gcd, x, y;
+  };
 
+  template <typename integer>
+  euclid_return<integer> extended_euclid(const integer a, const integer b)
+  {
+   static_assert(std::numeric_limits<integer>::is_signed,
+                 "Signed integers are needed");
+   integer x = 1, y = 0, g = a;
+   for (integer x1 = 0, y1 = 1, g1 = b; g1;)
+   {
+     integer q = g / g1;
+     x = x - x1 * q;
+     std::swap(x, x1);
+     y = y - y1 * q;
+     std::swap(y, y1);
+     g = g - g1 * q;
+     std::swap(g, g1);
+   }
+   if(g<0)
+   {
+    g = -g;
+    x = -x;
+    y = -y;
+   }
+   return {g, x, y};
+  }
+  
+  template <typename integer>
+  integer gcd(const integer a, const integer b)
+  {
+    euclid_return<integer> ret = extended_euclid(a,b);
+    return ret.gcd;
+  }
+  
+  
   // TODO: use another power function
   template <class T>
   T power(const T& x, int n)
@@ -31,7 +76,7 @@
     */
     // TODO: decide which exceptions to throw
     if (n < 1)
-        throw std::domain_error("power(x,n) expects n>1.");
+        throw std::domain_error("power(x,n) expects n>=1.");
 
     bool identity = true;
     T r{}, aux{x};

@@ -26,9 +26,8 @@
     It handles RingTypes and it calls the appropriate specialized functions if
     the type is complex.
     
-    Definition:
-    A type is considered "complex" if it has ::value_type, and has sin() and cos()
-    free functions.
+    A type is considered "complex" if is_complex::value == true. A user-defined
+    type can become complex by specializing that trait.
     
     We have specialized algorithms for complex numbers and general purpose DFT
     that need the specification of a root of unity.
@@ -60,10 +59,7 @@
             detail::dft_complex_prime_bruteForce(in,in+size(),out,sign);
       }else
       {
-        const RingType w = root();
-        const RingType w_inverse = detail::power(w,size()-1);
-        
-        const RingType w_execute = (plan==forward_plan ? w : w_inverse);
+        const RingType w_execute = (plan==forward_plan ? root() : inverse_root());
         
         // select the implementation according to the DFT size
         if( detail::is_power2(size())  )
@@ -76,13 +72,15 @@
     
   public:
     constexpr bsl_dft(std::size_t n=0)
-      : my_size { n }
-    { }
+    {
+      resize(n);
+    }
     
     // the provided root of unity is used instead of exp(-i 2 pi/n)
     constexpr bsl_dft(std::size_t n, RingType /* root of unity = */ w)
-      : my_size { n }, _has_root{true}, my_root{w} , my_inverse_root{detail::power(w,n-1)}
-    { }
+    { 
+      resize(n,w);
+    }
 
     ~bsl_dft()
     {
@@ -103,7 +101,10 @@
       my_size = new_size;
       _has_root = true;
       my_root = w;
-      my_inverse_root = detail::power(w,new_size-1);
+      if(new_size<=1)
+        my_inverse_root = my_root;
+      else  
+        my_inverse_root = detail::power(my_root,new_size-1);
     }
     
     // non complex types
@@ -114,18 +115,29 @@
         std::runtime_error("no root has been defined for this DFT size");
       return my_root;
     }
+    template<typename U = RingType>
+    RingType inverse_root(typename std::enable_if< detail::is_complex<U>::value == false >::type* = nullptr) const
+    {
+      if(not has_root())
+        std::runtime_error("no root has been defined for this DFT size");
+      return my_inverse_root;
+    }
     // complex types
     template<typename U = RingType>
     RingType root(typename std::enable_if< detail::is_complex<U>::value == true >::type* = nullptr) const
     {
       if(has_root())
         return my_root;
-      using std::sin;
-      using std::cos;
-      using real_value_type = typename RingType::value_type;
-      real_value_type phase = 2*boost::math::constants::pi<real_value_type>()/size();
-      return RingType(cos(phase),-sin(phase));
+      return detail::complex_root_of_unity<RingType>(size());
     }
+    template<typename U = RingType>
+    RingType inverse_root(typename std::enable_if< detail::is_complex<U>::value == true >::type* = nullptr) const
+    {
+      if(has_root())
+        return my_root;
+      return detail::complex_inverse_root_of_unity<RingType>(size());
+    }
+    
     constexpr std::size_t size() const { return my_size; }
 
     void forward(const RingType* in, RingType* out) const
