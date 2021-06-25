@@ -27,6 +27,7 @@
     #include <boost/multiprecision/complex128.hpp>
   #endif
   #include <boost/multiprecision/complex_adaptor.hpp>
+  #include <boost/math/constants/constants.hpp>
 
   /*
     RingType axioms:
@@ -56,6 +57,7 @@
     #else
     using std::void_t;
     #endif
+    
 
     template<class T, typename = void_t<> >
     struct is_complex : std::false_type
@@ -65,10 +67,11 @@
     struct is_complex<T, 
         void_t<
             typename T::value_type,
-            decltype(sin( std::declval< typename T::value_type>() ) ),
-            decltype(cos( std::declval< typename T::value_type>() ) )
+            decltype(sin(std::declval<typename T::value_type>())),
+            decltype(cos(std::declval<typename T::value_type>()))
          > > : std::true_type
     {};
+    
 
   // Recognizes:
   // → fundamental types
