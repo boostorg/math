@@ -388,7 +388,7 @@
     if (n == 1)
         return;
 
-    auto _1 = T{1};
+    // auto _1 = T{1};
     
     int nbits = 0;
     std::vector<T> e2{e};
@@ -410,8 +410,16 @@
     {
       for (int i = 0; i < n; i += len)
       {
-        T ej = _1;
-        for (int j = 0; j < len / 2; ++j)
+        {
+          int j=0;
+          T* u = out + i + j, *v = out + i + j + len / 2;
+          T Bu = *u, Bv = *v;
+          *u = Bu + Bv;
+          *v = Bu - Bv;
+        }
+        
+        T ej = e2[k];
+        for (int j = 1; j < len / 2; ++j)
         {
           T* u = out + i + j, *v = out + i + j + len / 2;
           T Bu = *u, Bv = *v * ej;
