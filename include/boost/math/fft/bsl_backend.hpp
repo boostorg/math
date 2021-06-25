@@ -77,15 +77,16 @@
     }
     
   public:
-    constexpr bsl_dft(std::size_t n=0)
+    constexpr bsl_dft(std::size_t n=0):
+        my_size{n}
     {
-      resize(n);
     }
     
     // the provided root of unity is used instead of exp(-i 2 pi/n)
-    constexpr bsl_dft(std::size_t n, RingType /* root of unity = */ w)
+    constexpr bsl_dft(std::size_t n, RingType /* root of unity = */ w):
+        my_size{n}, _has_root{true}, my_root{w},
+        my_inverse_root{ my_size <=1 ? my_root : detail::power(my_root,my_size-1)}
     { 
-      resize(n,w);
     }
 
     ~bsl_dft()
