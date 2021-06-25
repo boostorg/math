@@ -46,7 +46,9 @@
   private:
     enum plan_type { forward_plan , backward_plan};
     
-    void execute(plan_type plan, const RingType * in, RingType* out)const
+    template<typename U = RingType>
+    typename std::enable_if< detail::is_complex<U>::value==true  >::type
+    execute(plan_type plan, const RingType * in, RingType* out)const
     {
       // select the implementation according to the type
       if((has_root() == false) && detail::is_complex<RingType>::value)
@@ -74,6 +76,23 @@
         }
       }
       
+    }
+    
+    template<typename U = RingType>
+    typename std::enable_if< detail::is_complex<U>::value==false  >::type
+    execute(plan_type plan, const RingType * in, RingType* out)const
+    {
+      const RingType w_execute = (plan==forward_plan ? root() : inverse_root());
+      
+      // select the implementation according to the DFT size
+      if( detail::is_power2(static_cast<long>(size())))
+      {
+        detail::dft_power2(in,in+size(),out,w_execute);
+      }
+      else
+      {
+        detail::dft_composite(in,in+size(),out,w_execute);
+      }
     }
     
   public:
