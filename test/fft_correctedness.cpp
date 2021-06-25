@@ -22,12 +22,10 @@ using namespace boost::math::fft;
 
 
 template<class T, template<class U> class Backend>
-void test_fixed_transforms()
+void test_fixed_transforms(int tolerance)
 {
   using Complex = typename detail::select_complex<T>::type;
-  // TODO: increase precision of the generic dft 
-  // const T tol = std::numeric_limits<T>::epsilon();
-    const T tol = 8*std::numeric_limits<T>::epsilon();
+    const T tol = tolerance*std::numeric_limits<T>::epsilon();
     {
         std::vector< Complex > A{1.0},B(1);
         dft_forward<Backend>(A.data(),A.data()+A.size(),B.data());
@@ -79,12 +77,10 @@ void test_fixed_transforms()
 
 
 template<class T, template<class U> class Backend>
-void test_inverse(int N)
+void test_inverse(int N, int tolerance)
 {
   using Complex = typename detail::select_complex<T>::type;
-  // TODO: increase precision of the generic dft 
-  // const T tol = std::numeric_limits<T>::epsilon();
-  const T tol = 128*std::numeric_limits<T>::epsilon();
+  const T tol = tolerance*std::numeric_limits<T>::epsilon();
   
   boost::random::mt19937 rng;
   boost::random::uniform_real_distribution<T> U(0.0,1.0);
@@ -119,130 +115,131 @@ void test_inverse(int N)
 
 int main()
 {
-  test_fixed_transforms<float,fftw_dft>();
-  test_fixed_transforms<double,fftw_dft>();
-  test_fixed_transforms<long double,fftw_dft>();
+  test_fixed_transforms<float,fftw_dft>(1);
+  test_fixed_transforms<double,fftw_dft>(1);
+  test_fixed_transforms<long double,fftw_dft>(1);
+  
+   
 #ifdef BOOST_MATH_USE_FLOAT128
-  test_fixed_transforms<boost::multiprecision::float128,fftw_dft>();
+  test_fixed_transforms<boost::multiprecision::float128,fftw_dft>(1);
 #endif
   
-  test_fixed_transforms<double,gsl_dft>();
+  test_fixed_transforms<double,gsl_dft>(1);
   
-  test_fixed_transforms<float,bsl_dft>();
-  test_fixed_transforms<double,bsl_dft>();
-  test_fixed_transforms<long double,bsl_dft>();
+  test_fixed_transforms<float,bsl_dft>(2);
+  test_fixed_transforms<double,bsl_dft>(4);
+  test_fixed_transforms<long double,bsl_dft>(8);
 #ifdef BOOST_MATH_USE_FLOAT128
-  test_fixed_transforms<boost::multiprecision::float128,bsl_dft>();
+  test_fixed_transforms<boost::multiprecision::float128,bsl_dft>(8);
 #endif
-  test_fixed_transforms<boost::multiprecision::cpp_bin_float_50,bsl_dft>();
-  test_fixed_transforms<boost::multiprecision::cpp_bin_float_100,bsl_dft>();
-  test_fixed_transforms<boost::multiprecision::cpp_bin_float_quad,bsl_dft>();
+  test_fixed_transforms<boost::multiprecision::cpp_bin_float_50,bsl_dft>(2);
+  test_fixed_transforms<boost::multiprecision::cpp_bin_float_100,bsl_dft>(4);
+  test_fixed_transforms<boost::multiprecision::cpp_bin_float_quad,bsl_dft>(8);
   // TODO:
-  //test_fixed_transforms<boost::multiprecision::mpfr_float_100,bsl_dft>();
+  //test_fixed_transforms<boost::multiprecision::mpfr_float_100,bsl_dft>(1);
   
   for(int i=1;i<=(1<<10); i*=2)
   {
-    test_inverse<float,fftw_dft>(i);
-    test_inverse<double,fftw_dft>(i);
-    test_inverse<long double,fftw_dft>(i);
+    test_inverse<float,fftw_dft>(i,1);
+    test_inverse<double,fftw_dft>(i,1);
+    test_inverse<long double,fftw_dft>(i,1);
 #ifdef BOOST_MATH_USE_FLOAT128
-    test_inverse<boost::multiprecision::float128,fftw_dft>(i);
+    test_inverse<boost::multiprecision::float128,fftw_dft>(i,1);
 #endif
     
-    test_inverse<double,gsl_dft>(i);
+    test_inverse<double,gsl_dft>(i,1);
     
-    test_inverse<float,bsl_dft>(i);
-    test_inverse<double,bsl_dft>(i);
-    test_inverse<long double,bsl_dft>(i);
+    test_inverse<float,bsl_dft>(i,1);
+    test_inverse<double,bsl_dft>(i,1);
+    test_inverse<long double,bsl_dft>(i,1);
 #ifdef BOOST_MATH_USE_FLOAT128
-    test_inverse<boost::multiprecision::float128,bsl_dft>(i);
+    test_inverse<boost::multiprecision::float128,bsl_dft>(i,1);
 #endif
-    test_inverse<boost::multiprecision::cpp_bin_float_50,bsl_dft>(i);
+    test_inverse<boost::multiprecision::cpp_bin_float_50,bsl_dft>(i,1);
     
-    test_inverse<float,test_dft_power2_dit>(i);
-    test_inverse<float,test_dft_power2_dif>(i);
+    test_inverse<float,test_dft_power2_dit>(i,8);
+    test_inverse<float,test_dft_power2_dif>(i,1);
     
-    test_inverse<double,test_dft_power2_dit>(i);
-    test_inverse<double,test_dft_power2_dif>(i);
+    test_inverse<double,test_dft_power2_dit>(i,8);
+    test_inverse<double,test_dft_power2_dif>(i,1);
     
-    test_inverse<long double,test_dft_power2_dit>(i);
-    test_inverse<long double,test_dft_power2_dif>(i);
+    test_inverse<long double,test_dft_power2_dit>(i,8);
+    test_inverse<long double,test_dft_power2_dif>(i,1);
 
 #ifdef BOOST_MATH_USE_FLOAT128
-    test_inverse<boost::multiprecision::float128,test_dft_power2_dit>(i);
-    test_inverse<boost::multiprecision::float128,test_dft_power2_dif>(i);
+    test_inverse<boost::multiprecision::float128,test_dft_power2_dit>(i,8);
+    test_inverse<boost::multiprecision::float128,test_dft_power2_dif>(i,1);
 #endif
 
-    test_inverse<boost::multiprecision::cpp_bin_float_50,test_dft_power2_dit>(i);
-    test_inverse<boost::multiprecision::cpp_bin_float_50,test_dft_power2_dif>(i);
+    test_inverse<boost::multiprecision::cpp_bin_float_50,test_dft_power2_dit>(i,32);
+    test_inverse<boost::multiprecision::cpp_bin_float_50,test_dft_power2_dif>(i,1);
   }
   for(int i=1;i<=1000; i*=10)
   {
-    test_inverse<float,fftw_dft>(i);
-    test_inverse<double,fftw_dft>(i);
-    test_inverse<long double,fftw_dft>(i);
-    if(i <=10) {
+    test_inverse<float,fftw_dft>(i,1);
+    test_inverse<double,fftw_dft>(i,1);
+    test_inverse<long double,fftw_dft>(i,1);
 #ifdef BOOST_MATH_USE_FLOAT128
-      test_inverse<boost::multiprecision::float128,fftw_dft>(i);
+    test_inverse<boost::multiprecision::float128,fftw_dft>(i,1);
 #endif
-    }
     
-    test_inverse<double,gsl_dft>(i);
+    test_inverse<double,gsl_dft>(i,1);
     
-    test_inverse<float,bsl_dft>(i);
-    test_inverse<double,bsl_dft>(i);
-    test_inverse<long double,bsl_dft>(i);
-    if(i <=10) {
+    test_inverse<float,bsl_dft>(i,32);
+    test_inverse<double,bsl_dft>(i,32);
+    test_inverse<long double,bsl_dft>(i,32);
+    
+    if(i<=10) {
 #ifdef BOOST_MATH_USE_FLOAT128
-      test_inverse<boost::multiprecision::float128,bsl_dft>(i);
+      test_inverse<boost::multiprecision::float128,bsl_dft>(i,2);
 #endif
-      test_inverse<boost::multiprecision::cpp_bin_float_50,bsl_dft>(i);
+      test_inverse<boost::multiprecision::cpp_bin_float_50,bsl_dft>(i,2);
     }
   }
   for(auto i : std::vector<int>{2,3,5,7,11,13,17,23,29,31})
   {
-    test_inverse<float,fftw_dft>(i);
-    test_inverse<double,fftw_dft>(i);
-    test_inverse<long double,fftw_dft>(i);
+    test_inverse<float,fftw_dft>(i,1);
+    test_inverse<double,fftw_dft>(i,1);
+    test_inverse<long double,fftw_dft>(i,1);
 #ifdef BOOST_MATH_USE_FLOAT128
-    test_inverse<boost::multiprecision::float128,fftw_dft>(i);
+    test_inverse<boost::multiprecision::float128,fftw_dft>(i,1);
 #endif
     
-    test_inverse<double,gsl_dft>(i);
+    test_inverse<double,gsl_dft>(i,1);
     
-    test_inverse<float,bsl_dft>(i);
-    test_inverse<double,bsl_dft>(i);
-    test_inverse<long double,bsl_dft>(i);
+    test_inverse<float,bsl_dft>(i,8);
+    test_inverse<double,bsl_dft>(i,8);
+    test_inverse<long double,bsl_dft>(i,8);
 #ifdef BOOST_MATH_USE_FLOAT128
-    test_inverse<boost::multiprecision::float128,bsl_dft>(i);
+    test_inverse<boost::multiprecision::float128,bsl_dft>(i,8);
 #endif
-    test_inverse<boost::multiprecision::cpp_bin_float_50,bsl_dft>(i);
+    test_inverse<boost::multiprecision::cpp_bin_float_50,bsl_dft>(i,8);
     
-    test_inverse<float,test_dft_generic_prime_bruteForce>(i);
-    test_inverse<double,test_dft_generic_prime_bruteForce>(i);
-    test_inverse<long double,test_dft_generic_prime_bruteForce>(i);
+    test_inverse<float,test_dft_generic_prime_bruteForce>(i,16);
+    test_inverse<double,test_dft_generic_prime_bruteForce>(i,16);
+    test_inverse<long double,test_dft_generic_prime_bruteForce>(i,16);
 #ifdef BOOST_MATH_USE_FLOAT128
-    test_inverse<boost::multiprecision::float128,test_dft_generic_prime_bruteForce>(i);
+    test_inverse<boost::multiprecision::float128,test_dft_generic_prime_bruteForce>(i,16);
 #endif
-    test_inverse<boost::multiprecision::cpp_bin_float_50,test_dft_generic_prime_bruteForce>(i);
+    test_inverse<boost::multiprecision::cpp_bin_float_50,test_dft_generic_prime_bruteForce>(i,16);
     
-    test_inverse<float,test_dft_complex_prime_bruteForce>(i);
-    test_inverse<double,test_dft_complex_prime_bruteForce>(i);
-    test_inverse<long double,test_dft_complex_prime_bruteForce>(i);
+    test_inverse<float,test_dft_complex_prime_bruteForce>(i,8);
+    test_inverse<double,test_dft_complex_prime_bruteForce>(i,8);
+    test_inverse<long double,test_dft_complex_prime_bruteForce>(i,8);
 #ifdef BOOST_MATH_USE_FLOAT128
-    test_inverse<boost::multiprecision::float128,test_dft_complex_prime_bruteForce>(i);
+    test_inverse<boost::multiprecision::float128,test_dft_complex_prime_bruteForce>(i,8);
 #endif
-    test_inverse<boost::multiprecision::cpp_bin_float_50,test_dft_complex_prime_bruteForce>(i);
+     test_inverse<boost::multiprecision::cpp_bin_float_50,test_dft_complex_prime_bruteForce>(i,8);
   }
-  // TODO: can we print a useful compilation error message for the following
-  // illegal case?
-  // dft<std::complex<int>> P(3);   
-  
+//   // TODO: can we print a useful compilation error message for the following
+//   // illegal case?
+//   // dft<std::complex<int>> P(3);   
+//   
   for(int i=1;i<=100;++i)
   {
-    test_inverse<float,test_dft_generic_composite>(i);
-    test_inverse<double,test_dft_generic_composite>(i);
-    test_inverse<long double,test_dft_generic_composite>(i);
+    test_inverse<float,test_dft_generic_composite>(i,128);
+    test_inverse<double,test_dft_generic_composite>(i,64);
+    test_inverse<long double,test_dft_generic_composite>(i,64);
   }
   
   return boost::math::test::report_errors();
