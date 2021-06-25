@@ -51,7 +51,7 @@ Tools for manipulating polynomials and for efficient evaluation of rationals or 
 
 ### Interpolation
 
-Function interpolation via barycentric rational interpolation, compactly supported quadartic, cubic, and quintic B-splines, the Chebyshev transform, trigonometric polynomials, Makima, pchip, and cubic Hermite splines.
+Function interpolation via barycentric rational interpolation, compactly supported quadratic, cubic, and quintic B-splines, the Chebyshev transform, trigonometric polynomials, Makima, pchip, cubic Hermite splines, and bilinear interpolation.
 
 ### Numerical Integration and Differentiation
 
