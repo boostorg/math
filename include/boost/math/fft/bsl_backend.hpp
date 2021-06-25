@@ -50,23 +50,23 @@
     void execute(plan_type plan, const RingType * in, RingType* out)const
     {
       // select the implementation according to the type
-      if(not has_root() and detail::is_complex<RingType>::value)
+      if((has_root() == false) && detail::is_complex<RingType>::value)
       {
           const int sign = (plan == forward_plan ? -1 : 1);
           // select the implementation according to the DFT size
-          if( detail::is_power2(size())  )
+          if( detail::is_power2(static_cast<long>(size())))
             detail::dft_power2_dif(in,in+size(),out,sign);
           else
             detail::dft_complex_prime_bruteForce(in,in+size(),out,sign);
       }else
       {
         const RingType w = root();
-        const RingType w_inverse = detail::power(w,size()-1);
+        const RingType w_inverse = detail::power(w,static_cast<int>(size()-1U));
         
         const RingType w_execute = (plan==forward_plan ? w : w_inverse);
         
         // select the implementation according to the DFT size
-        if( detail::is_power2(size())  )
+        if( detail::is_power2(static_cast<long>(size())))
           detail::dft_power2_dit(in,in+size(),out,w_execute);
         else
           detail::dft_composite_dit(in,in+size(),out,w_execute);

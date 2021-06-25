@@ -160,7 +160,7 @@
                    OutputIterator output)
   {
     using input_value_type  = typename std::iterator_traits<InputIterator >::value_type;
-    dft<input_value_type, backend> plan(std::distance(input_begin, input_end));
+    dft<input_value_type, backend> plan(static_cast<unsigned int>(std::distance(input_begin, input_end)));
     plan.forward(input_begin, input_end, output);
   }
 
@@ -174,7 +174,7 @@
                     OutputIterator output)
   {
     using input_value_type  = typename std::iterator_traits<InputIterator >::value_type;
-    dft<input_value_type, backend> plan(std::distance(input_begin, input_end));
+    dft<input_value_type, backend> plan(static_cast<unsigned int>(std::distance(input_begin, input_end)));
     plan.backward(input_begin, input_end, output);
   }
   

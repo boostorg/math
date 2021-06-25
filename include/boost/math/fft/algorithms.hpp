@@ -91,7 +91,7 @@
     - allocated memory in out is enough to hold distance(in_first,in_last) element,
   */
   {
-    const long N = std::distance(in_first,in_last);
+    const long N = static_cast<long>(std::distance(in_first,in_last));
     if(N<=0)
       return;
     
@@ -133,7 +133,7 @@
   */
   {
     using real_value_type = typename complex_value_type::value_type;
-    const long N = std::distance(in_first,in_last);
+    const long N = static_cast<long>(std::distance(in_first,in_last));
     const real_value_type inv_N = real_value_type{1}/N;
     auto signed_pi = sign * boost::math::constants::pi<real_value_type>();
     if(N<=0)
@@ -176,7 +176,7 @@
     /*
       Cooley-Tukey mapping, in-place Decimation in Time 
     */
-    const long ptrdiff = std::distance(in_first,in_last);
+    const long ptrdiff = static_cast<unsigned int>(std::distance(in_first,in_last));
     if(ptrdiff <=0 )
       return;
     const long n = least_power2(ptrdiff);
@@ -229,7 +229,7 @@
       Cooley-Tukey mapping, intrinsically out-of-place, Decimation in Time
       composite sizes.
     */
-    const long n = std::distance(in_first,in_last);
+    const long n = static_cast<long>(std::distance(in_first,in_last));
     if(n <=0 )
       return;
     
@@ -269,7 +269,7 @@
         for(long k=0;k<len_old;++k)
         {
           for(long j=0;j<p;++j)
-            if(j==0 or k==0)
+            if(j==0 || k==0)
               tmp[j] = out[i + j*len_old +k ];
             else
               tmp[j] = out[i + j*len_old +k ] * power(w_len,k*j);
@@ -290,7 +290,7 @@
     complex_value_type* out, int sign)
   {
     // Naive in-place complex DFT.
-    const long ptrdiff = std::distance(in_first,in_last);
+    const long ptrdiff = static_cast<long>(std::distance(in_first,in_last));
     if(ptrdiff <=0 )
       return;
     const long my_n = least_power2(ptrdiff);
