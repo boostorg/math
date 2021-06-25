@@ -124,7 +124,11 @@
     using backend_t::size;
     using backend_t::resize;
 
+    // complex types ctor. n: the size of the dft
     constexpr dft(unsigned int n) : backend_t{ n } { }
+    
+    // ring types ctor. n: the size of the dft, w: an n-root of unity
+    constexpr dft(unsigned int n, RingType w) : backend_t( n, w ) { }
     
     
     template<typename InputIteratorType,
@@ -147,6 +151,7 @@
   };
 
   // std::transform-like Fourier Transform API
+  // for complex types
   template<template<class U> class backend = bsl_dft,
            typename InputIterator,
            typename OutputIterator>
@@ -155,17 +160,12 @@
                    OutputIterator output)
   {
     using input_value_type  = typename std::iterator_traits<InputIterator >::value_type;
-    //using output_value_type = typename std::iterator_traits<OutputIterator>::value_type;
-
-    //static_assert(std::is_same<input_value_type, output_value_type>::value,
-    //  "Input and output types mismatch");
-
     dft<input_value_type, backend> plan(std::distance(input_begin, input_end));
-
     plan.forward(input_begin, input_end, output);
   }
 
   // std::transform-like Fourier Transform API
+  // for complex types
   template<template<class U> class backend = bsl_dft,
            class InputIterator,
            class OutputIterator>
@@ -174,13 +174,39 @@
                     OutputIterator output)
   {
     using input_value_type  = typename std::iterator_traits<InputIterator >::value_type;
-    //using output_value_type = typename std::iterator_traits<OutputIterator>::value_type;
-
-    //static_assert(std::is_same<input_value_type, output_value_type>::value, 
-    //  "Input and output types mismatch");
-
     dft<input_value_type, backend> plan(std::distance(input_begin, input_end));
+    plan.backward(input_begin, input_end, output);
+  }
+  
+  // std::transform-like Fourier Transform API
+  // for Ring types
+  template<template<class U> class backend = bsl_dft,
+           typename InputIterator,
+           typename OutputIterator,
+           typename value_type>
+  void dft_forward(InputIterator  input_begin,
+                   InputIterator  input_end,
+                   OutputIterator output,
+                   value_type w)
+  {
+    using input_value_type  = typename std::iterator_traits<InputIterator >::value_type;
+    dft<input_value_type, backend> plan(std::distance(input_begin, input_end),w);
+    plan.forward(input_begin, input_end, output);
+  }
 
+  // std::transform-like Fourier Transform API
+  // for Ring types
+  template<template<class U> class backend = bsl_dft,
+           class InputIterator,
+           class OutputIterator,
+           typename value_type>
+  void dft_backward(InputIterator  input_begin,
+                    InputIterator  input_end,
+                    OutputIterator output,
+                    value_type w)
+  {
+    using input_value_type  = typename std::iterator_traits<InputIterator >::value_type;
+    dft<input_value_type, backend> plan(std::distance(input_begin, input_end),w);
     plan.backward(input_begin, input_end, output);
   }
 
