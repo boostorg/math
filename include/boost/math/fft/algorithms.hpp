@@ -298,7 +298,7 @@
         for(long k=0;k<len_old;++k)
         {
           for(long j=0;j<p;++j)
-            if(j==0 or k==0)
+            if(j==0 || k==0)
               tmp[j] = out[i + j*len_old +k ];
             else
               tmp[j] = out[i + j*len_old +k ] * power(w_len,k*j);
@@ -377,7 +377,7 @@
     /*
       Cooley-Tukey mapping, in-place Decimation in Time 
     */
-    const long ptrdiff = std::distance(in_first,in_last);
+    const long ptrdiff = static_cast<long>(std::distance(in_first,in_last));
     if(ptrdiff <=0 )
       return;
     const long n = least_power2(ptrdiff);

@@ -154,14 +154,14 @@
     {
       if(has_root())
         return my_root;
-      return detail::complex_root_of_unity<RingType>(size());
+      return detail::complex_root_of_unity<RingType>(static_cast<long>(size()));
     }
     template<typename U = RingType>
     RingType inverse_root(typename std::enable_if< detail::is_complex<U>::value == true >::type* = nullptr) const
     {
       if(has_root())
         return my_root;
-      return detail::complex_inverse_root_of_unity<RingType>(size());
+      return detail::complex_inverse_root_of_unity<RingType>(static_cast<long>(size()));
     }
     
     constexpr std::size_t size() const { return my_size; }
