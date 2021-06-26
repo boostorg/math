@@ -58,8 +58,7 @@ void test_inverse(int N, int tolerance)
   using ComplexType = std::complex<RealType>;
   const RealType tol = tolerance*std::numeric_limits<RealType>::epsilon();
   const std::vector< ComplexType > A{random_vector<RealType>(N)};
-  
-  
+
   {
     std::vector<ComplexType> B(N), C(N);
     
@@ -72,24 +71,23 @@ void test_inverse(int N, int tolerance)
   {
     std::vector<ComplexType>  C(N);
     std::list<ComplexType> B;
-    
+
     dft_forward<Backend>(std::begin(A),std::end(A),std::back_inserter(B));
     dft_backward<Backend>(std::begin(B),std::end(B),std::begin(C));
-    
+
     RealType diff{difference(A,C)};
     CHECK_MOLLIFIED_CLOSE(RealType{0.0},diff,tol);
   }
   {
     std::list<ComplexType> C;
-    
+
     dft_forward<Backend>(std::begin(A),std::end(A),std::back_inserter(C));
     dft_backward<Backend>(std::begin(C),std::end(C),std::begin(C));
-    
+
     RealType diff{difference(A,C)};
     CHECK_MOLLIFIED_CLOSE(RealType{0.0},diff,tol);
   }
 }
-
 
 int main()
 {
@@ -107,4 +105,3 @@ int main()
   }
   return boost::math::test::report_errors();
 }
-

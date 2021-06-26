@@ -137,14 +137,14 @@
     template<typename U = RingType>
     RingType root(typename std::enable_if< detail::is_complex<U>::value == false >::type* = nullptr) const
     {
-      if(not has_root())
+      if(has_root() == false)
         std::runtime_error("no root has been defined for this DFT size");
       return my_root;
     }
     template<typename U = RingType>
     RingType inverse_root(typename std::enable_if< detail::is_complex<U>::value == false >::type* = nullptr) const
     {
-      if(not has_root())
+      if(has_root() == false)
         std::runtime_error("no root has been defined for this DFT size");
       return my_inverse_root;
     }
