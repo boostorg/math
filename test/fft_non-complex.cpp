@@ -10,6 +10,7 @@
   Use of DFT for Number Theoretical Transform.
 */
 #include <boost/math/fft.hpp>
+#include <boost/math/fft/bsl_backend.hpp>
 
 namespace fft = boost::math::fft;
 

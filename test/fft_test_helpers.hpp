@@ -10,7 +10,7 @@
   #define BOOST_MATH_FFT_TEST_HELPERS_HPP
 
 #include <boost/math/fft/algorithms.hpp>
-  
+
 namespace boost { namespace math { namespace fft {
 
 template<class NativeComplexType>

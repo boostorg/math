@@ -9,7 +9,9 @@
 #ifndef BOOST_MATH_FFT_HPP
   #define BOOST_MATH_FFT_HPP
 
+  #include <algorithm>
   #include <iterator>
+  #include <vector>
 
   namespace boost { namespace math { namespace fft {
 
