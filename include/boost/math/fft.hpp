@@ -10,9 +10,6 @@
   #define BOOST_MATH_FFT_HPP
 
   #include <iterator>
-  //#include <boost/math/fft/fftw_backend.hpp>
-  //#include <boost/math/fft/gsl_backend.hpp>
-  #include <boost/math/fft/bsl_backend.hpp>
 
   namespace boost { namespace math { namespace fft {
 
@@ -36,7 +33,7 @@
   */
   
   template<typename RingType,
-           template<class U> class BackendType = bsl_dft >
+           template<class U> class BackendType>
            // typename Allocator = Default_Allocator 
   class dft : public BackendType<RingType>
   {
@@ -86,15 +83,15 @@
       OutputIteratorType out,
       typename std::enable_if<(   (std::is_convertible<InputIteratorType,  const RingType*>::value == true)
                                && (std::is_convertible<OutputIteratorType,       RingType*>::value == false))>::type* = nullptr)
-    {   
+    {
       resize(std::distance(in_first,in_last));
       my_mem.resize(size());
-      
+
       if(ex==execution_type::backward)
         backend_t::backward(in_first,my_mem.data());
       else
         backend_t::forward(in_first,my_mem.data());
-      
+
       std::copy(std::begin(my_mem), std::end(my_mem), out);
     }
 
@@ -110,7 +107,7 @@
       resize(std::distance(in_first,in_last));
       my_mem.resize(size());
       std::copy(in_first, in_last, std::begin(my_mem));
-      
+
       if(ex==execution_type::backward)
         backend_t::backward(my_mem.data(),my_mem.data());
       else
@@ -118,7 +115,7 @@
         
       std::copy(std::begin(my_mem),std::end(my_mem), out);
     }
-    
+
   public:
     using backend_t = BackendType<RingType>;
     using backend_t::size;
@@ -126,11 +123,10 @@
 
     // complex types ctor. n: the size of the dft
     constexpr dft(unsigned int n) : backend_t{ n } { }
-    
+
     // ring types ctor. n: the size of the dft, w: an n-root of unity
     constexpr dft(unsigned int n, RingType w) : backend_t( n, w ) { }
-    
-    
+
     template<typename InputIteratorType,
              typename OutputIteratorType>
     void forward(
@@ -139,7 +135,7 @@
     {
       execute(execution_type::forward,in_first,in_last,out);
     }
-    
+
     template<typename InputIteratorType,
              typename OutputIteratorType>
     void backward(
@@ -152,7 +148,7 @@
 
   // std::transform-like Fourier Transform API
   // for complex types
-  template<template<class U> class backend = bsl_dft,
+  template<template<class U> class backend,
            typename InputIterator,
            typename OutputIterator>
   void dft_forward(InputIterator  input_begin,
@@ -166,7 +162,7 @@
 
   // std::transform-like Fourier Transform API
   // for complex types
-  template<template<class U> class backend = bsl_dft,
+  template<template<class U> class backend,
            class InputIterator,
            class OutputIterator>
   void dft_backward(InputIterator  input_begin,
@@ -180,7 +176,7 @@
   
   // std::transform-like Fourier Transform API
   // for Ring types
-  template<template<class U> class backend = bsl_dft,
+  template<template<class U> class backend,
            typename InputIterator,
            typename OutputIterator,
            typename value_type>
@@ -190,13 +186,13 @@
                    value_type w)
   {
     using input_value_type  = typename std::iterator_traits<InputIterator >::value_type;
-    dft<input_value_type, backend> plan(std::distance(input_begin, input_end),w);
+    dft<input_value_type, backend> plan(static_cast<unsigned int>(std::distance(input_begin, input_end)),w);
     plan.forward(input_begin, input_end, output);
   }
 
   // std::transform-like Fourier Transform API
   // for Ring types
-  template<template<class U> class backend = bsl_dft,
+  template<template<class U> class backend,
            class InputIterator,
            class OutputIterator,
            typename value_type>
@@ -206,7 +202,7 @@
                     value_type w)
   {
     using input_value_type  = typename std::iterator_traits<InputIterator >::value_type;
-    dft<input_value_type, backend> plan(std::distance(input_begin, input_end),w);
+    dft<input_value_type, backend> plan(static_cast<unsigned int>(std::distance(input_begin, input_end)),w);
     plan.backward(input_begin, input_end, output);
   }
 
