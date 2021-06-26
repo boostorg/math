@@ -39,7 +39,7 @@ A basic usage is demonstrated below:
     control_points[1] = {1,0,0};
     control_points[2] = {0,1,0};
     control_points[3] = {0,0,1};
-    bezier_polynomial<std::array<Real, 3>> bp(std::move(control_points));
+    auto bp = bezier_polynomial(std::move(control_points));
     // Interpolate at t = 0.1:
     auto point = bp(0.1);
 
@@ -52,13 +52,15 @@ At least two points must be passed; creating a polynomial of degree 1.
 Do not confuse the Bezier polynomial with a Bezier spline.
 A Bezier spline has a fixed polynomial order and subdivides the curve into low-order polynomial segments.
 /This is not a spline!/
-Passing /n/ control points to the `bezier_polynomial` class creates a polynomial of degree n-1.
+Passing /n/ control points to the `bezier_polynomial` class creates a polynomial of degree n-1, whereas a Bezier spline has a fixed order independent of the number of control points.
+
+Requires C++17.
 
 
 [heading Performance]
 
 The following performance numbers were generated for evaluating the Bezier-polynomial.
-We see that evaluation of the interpolant is [bigo](/N/).
+The evaluation of the interpolant is [bigo](/N/), as expected from de Casteljau's algorithm.
 
 
     Run on 2700 MHz CPU
@@ -70,27 +72,7 @@ We see that evaluation of the interpolant is [bigo](/N/).
     ---------------------------------------------------------
     Benchmark                              Time           CPU
     ---------------------------------------------------------
-    BM_CatmullRom<double>/4               20 ns         20 ns
-    BM_CatmullRom<double>/8               21 ns         21 ns
-    BM_CatmullRom<double>/16              23 ns         23 ns
-    BM_CatmullRom<double>/32              24 ns         24 ns
-    BM_CatmullRom<double>/64              27 ns         27 ns
-    BM_CatmullRom<double>/128             27 ns         27 ns
-    BM_CatmullRom<double>/256             30 ns         30 ns
-    BM_CatmullRom<double>/512             32 ns         31 ns
-    BM_CatmullRom<double>/1024            33 ns         33 ns
-    BM_CatmullRom<double>/2048            34 ns         34 ns
-    BM_CatmullRom<double>/4096            36 ns         36 ns
-    BM_CatmullRom<double>/8192            38 ns         38 ns
-    BM_CatmullRom<double>/16384           39 ns         39 ns
-    BM_CatmullRom<double>/32768           40 ns         40 ns
-    BM_CatmullRom<double>/65536           45 ns         44 ns
-    BM_CatmullRom<double>/131072          46 ns         46 ns
-    BM_CatmullRom<double>/262144          50 ns         50 ns
-    BM_CatmullRom<double>/524288          53 ns         52 ns
-    BM_CatmullRom<double>/1048576         58 ns         57 ns
-    BM_CatmullRom<double>_BigO          2.97 lgN       2.97 lgN
-    BM_CatmullRom<double>_RMS             19 %         19 %
+
 
 
 [heading Point types]
