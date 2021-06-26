@@ -9,7 +9,9 @@
 #ifdef __has_include
 #if !__has_include(<boost/config.hpp>) || !__has_include(<boost/assert.hpp>) || !__has_include(<boost/lexical_cast.hpp>) || \
     !__has_include(<boost/throw_exception.hpp>) || !__has_include(<boost/predef/other/endian.h>)
-#   define BOOST_MATH_STANDALONE
+#   ifndef BOOST_MATH_STANDALONE
+#       define BOOST_MATH_STANDALONE
+#   endif
 #endif
 #endif
 
