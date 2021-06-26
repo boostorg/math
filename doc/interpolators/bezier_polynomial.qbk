@@ -1,0 +1,138 @@
+[/
+  Copyright 2021 Nick Thompson
+
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+
+[section:bezier_polynomial Bezier Polynomials]
+
+[heading Synopsis]
+
+``
+#include <boost/math/interpolators/bezier_polynomials.hpp>
+
+namespace boost::math::interpolators {
+
+    template<RandomAccessContainer>
+    class bezier_polynomial
+    {
+    public:
+
+        bezier_polynomial(RandomAccessContainer&& control_points);
+
+        Real operator()(Real t) const;
+    };
+
+}}
+``
+
+[heading Description]
+
+B[eacute]zier polynomials are curves smooth curves which approximate a set of control points.
+They are commonly used in computer-aided geometric design.
+A basic usage is demonstrated below:
+
+    std::vector<std::array<Real, 3>> control_points(4);
+    control_points[0] = {0,0,0};
+    control_points[1] = {1,0,0};
+    control_points[2] = {0,1,0};
+    control_points[3] = {0,0,1};
+    bezier_polynomial<std::array<Real, 3>> bp(std::move(control_points));
+    // Interpolate at t = 0.1:
+    auto point = bp(0.1);
+
+The support of the interpolant is [0,1], and an error message will be written if attempting to evaluate the polynomial outside of these bounds.
+At least two points must be passed; creating a polynomial of degree 1.
+
+
+[heading Caveats]
+
+Do not confuse the Bezier polynomial with a Bezier spline.
+A Bezier spline has a fixed polynomial order and subdivides the curve into low-order polynomial segments.
+/This is not a spline!/
+Passing /n/ control points to the `bezier_polynomial` class creates a polynomial of degree n-1.
+
+
+[heading Performance]
+
+The following performance numbers were generated for evaluating the Bezier-polynomial.
+We see that evaluation of the interpolant is [bigo](/N/).
+
+
+    Run on 2700 MHz CPU
+    CPU Caches:
+      L1 Data 32K (x2)
+      L1 Instruction 32K (x2)
+      L2 Unified 262K (x2)
+      L3 Unified 3145K (x1)
+    ---------------------------------------------------------
+    Benchmark                              Time           CPU
+    ---------------------------------------------------------
+    BM_CatmullRom<double>/4               20 ns         20 ns
+    BM_CatmullRom<double>/8               21 ns         21 ns
+    BM_CatmullRom<double>/16              23 ns         23 ns
+    BM_CatmullRom<double>/32              24 ns         24 ns
+    BM_CatmullRom<double>/64              27 ns         27 ns
+    BM_CatmullRom<double>/128             27 ns         27 ns
+    BM_CatmullRom<double>/256             30 ns         30 ns
+    BM_CatmullRom<double>/512             32 ns         31 ns
+    BM_CatmullRom<double>/1024            33 ns         33 ns
+    BM_CatmullRom<double>/2048            34 ns         34 ns
+    BM_CatmullRom<double>/4096            36 ns         36 ns
+    BM_CatmullRom<double>/8192            38 ns         38 ns
+    BM_CatmullRom<double>/16384           39 ns         39 ns
+    BM_CatmullRom<double>/32768           40 ns         40 ns
+    BM_CatmullRom<double>/65536           45 ns         44 ns
+    BM_CatmullRom<double>/131072          46 ns         46 ns
+    BM_CatmullRom<double>/262144          50 ns         50 ns
+    BM_CatmullRom<double>/524288          53 ns         52 ns
+    BM_CatmullRom<double>/1048576         58 ns         57 ns
+    BM_CatmullRom<double>_BigO          2.97 lgN       2.97 lgN
+    BM_CatmullRom<double>_RMS             19 %         19 %
+
+
+[heading Point types]
+
+The `Point` type must satisfy certain conceptual requirements which are discussed in the documentation of the Catmull-Rom curve.
+However, we reiterate them here:
+
+    template<class Real>
+    class mypoint3d
+    {
+    public:
+        // Must define a value_type:
+        typedef Real value_type;
+
+        // Regular constructor--need not be of this form.
+        mypoint3d(Real x, Real y, Real z) {m_vec[0] = x; m_vec[1] = y; m_vec[2] = z; }
+
+        // Must define a default constructor:
+        mypoint3d() {}
+
+        // Must define array access:
+        Real operator[](size_t i) const
+        {
+            return m_vec[i];
+        }
+
+        // Must define array element assignment:
+        Real& operator[](size_t i)
+        {
+            return m_vec[i];
+        }
+
+    private:
+        std::array<Real, 3> m_vec;
+    };
+
+These conditions are satisfied by both `std::array` and `std::vector`.
+
+
+[heading References]
+
+* Rainer Kress, ['Numerical Analysis], Springer, 1998
+* David Salomon, ['Curves and Surfaces for Computer Graphics], Springer, 2005
+
+[endsect] [/section:bezier_polynomials Bezier Polynomials]
