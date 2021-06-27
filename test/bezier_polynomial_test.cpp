@@ -39,6 +39,13 @@ void test_linear()
         Real expected0 = (1-t)*control_points[0][0] + t*control_points[1][0];
         CHECK_ULP_CLOSE(expected0, bp(t)[0], 3);
     }
+
+    // P(1) = P_n:
+    std::array<Real, 2> endpoint{1,2};
+    bp.edit_control_point(endpoint, 1);
+    CHECK_ULP_CLOSE(endpoint[0], bp(1)[0], 3);
+    CHECK_ULP_CLOSE(endpoint[1], bp(1)[1], 3);
+
 }
 
 template<typename Real>

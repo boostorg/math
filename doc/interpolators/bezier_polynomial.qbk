@@ -21,13 +21,16 @@ namespace boost::math::interpolators {
     public:
         using Point = typename RandomAccessContainer::value_type;
         using Real = typename Point::value_type;
+        using Z = typename RandomAccessContainer::size_type;
 
         bezier_polynomial(RandomAccessContainer&& control_points);
 
         inline Point operator()(Real t) const;
+
+        void edit_control_point(Point cont & p, Z index);
     };
 
-}}
+}
 ``
 
 [heading Description]
@@ -36,18 +39,24 @@ B[eacute]zier polynomials are curves smooth curves which approximate a set of co
 They are commonly used in computer-aided geometric design.
 A basic usage is demonstrated below:
 
-    std::vector<std::array<Real, 3>> control_points(4);
+    std::vector<std::array<double, 3>> control_points(4);
     control_points[0] = {0,0,0};
     control_points[1] = {1,0,0};
     control_points[2] = {0,1,0};
     control_points[3] = {0,0,1};
     auto bp = bezier_polynomial(std::move(control_points));
     // Interpolate at t = 0.1:
-    std::array<Real, 3> point = bp(0.1);
+    std::array<double, 3> point = bp(0.1);
 
 The support of the interpolant is [0,1], and an error message will be written if attempting to evaluate the polynomial outside of these bounds.
 At least two points must be passed; creating a polynomial of degree 1.
 
+Control points may be modified via `edit_control_point`, for example:
+
+    std::array<double, 3> endpoint{0,1,1};
+    bp.edit_control_point(endpoint, 3);
+
+This replaces the last control point with `endpoint`.
 
 [heading Caveats]
 

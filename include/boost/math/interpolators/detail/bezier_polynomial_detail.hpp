@@ -75,6 +75,16 @@ public:
         return scratch_space[0];
     }
 
+    void edit_control_point(Point const & p, Z index)
+    {
+        if (index >= control_points_.size()) {
+            std::cerr << __FILE__ << ":" << __LINE__ << ":" << __func__ << "\n";
+            std::cerr << "Attempting to edit a control point outside the bounds of the container; requested edit of index " << index << ", but there are only " << control_points_.size() << " control points.\n";
+            return;
+        }
+        control_points_[index] = p;
+    }
+
 private:
 
     void decasteljau_recursion(RandomAccessContainer & points, Z n, Real t) const {

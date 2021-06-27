@@ -28,6 +28,11 @@ public:
         return (*m_imp)(t);
     }
 
+    void edit_control_point(Point const & p, Z index)
+    {
+        m_imp->edit_control_point(p, index);
+    }
+
 private:
     std::shared_ptr<detail::bezier_polynomial_imp<RandomAccessContainer>> m_imp;
 };
