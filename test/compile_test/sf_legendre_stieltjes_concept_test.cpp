@@ -7,7 +7,11 @@
 // #includes all the files that it needs to.
 //
 
+#ifndef BOOST_MATH_STANDALONE
+
 #include <boost/math/concepts/std_real_concept.hpp>
 #include <boost/math/special_functions/legendre_stieltjes.hpp>
 
 template class boost::math::legendre_stieltjes<boost::math::concepts::std_real_concept>;
+
+#endif

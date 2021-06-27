@@ -217,7 +217,7 @@ void test_spots(T, const char* name)
       BOOST_CHECK_CLOSE(::boost::math::tgamma(-4 - ldexp(static_cast<T>(1), -55)), static_cast<T>(-1.50119987579016527057843048200831672241827850458884790004313e15L), tolerance * extra_tol);
    }
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(push)
 #pragma warning(disable:4127)
 #endif
@@ -226,7 +226,7 @@ void test_spots(T, const char* name)
    {
       BOOST_CHECK_CLOSE(::boost::math::tgamma(static_cast<T>(142.75)), static_cast<T>(7.8029496083318133344429227511387928576820621466e244L), tolerance * 4);
    }
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(pop)
 #endif
    // An extra fudge factor for real_concept which has a less accurate tgamma:

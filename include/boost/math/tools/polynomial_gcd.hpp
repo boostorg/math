@@ -1,5 +1,5 @@
 //  (C) Copyright Jeremy William Murphy 2016.
-
+//  (C) Copyright Matt Borland 2021.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -11,10 +11,66 @@
 #pragma once
 #endif
 
+#include <algorithm>
+#include <type_traits>
+#include <boost/math/tools/is_standalone.hpp>
 #include <boost/math/tools/polynomial.hpp>
-#include <boost/integer/common_factor_rt.hpp>
-#include <boost/type_traits/is_pod.hpp>
 
+#ifndef BOOST_MATH_STANDALONE
+#include <boost/integer/common_factor_rt.hpp>
+
+// std::gcd was introduced in C++17
+#elif (__cplusplus > 201700L || _MSVC_LANG > 201700L)
+
+#define BOOST_MATH_CXX17_NUMERIC
+#include <numeric>
+#include <utility>
+#include <iterator>
+#include <type_traits>
+#include <boost/math/tools/assert.hpp>
+
+namespace boost::integer {
+
+template <typename Iter, typename T = typename std::iterator_traits<Iter>::value_type>
+std::pair<T, Iter> gcd_range(Iter first, Iter last) noexcept(std::is_arithmetic_v<T>)
+{
+    using std::gcd;
+    BOOST_MATH_ASSERT(first != last);
+
+    T d = *first;
+    ++first;
+    while (d != T(1) && first != last)
+    {
+        d = gcd(d, *first);
+        ++first;
+    }
+    return std::make_pair(d, first);
+}
+
+namespace gcd_detail {
+
+template <typename EuclideanDomain>
+inline EuclideanDomain Euclid_gcd(EuclideanDomain a, EuclideanDomain b) noexcept(std::is_arithmetic_v<EuclideanDomain>)
+{
+    using std::swap;
+    while (b != EuclideanDomain(0))
+    {
+        a %= b;
+        swap(a, b);
+    }
+    return a;
+}
+
+enum method_type
+{
+    method_euclid = 0,
+    method_binary = 1,
+    method_mixed = 2
+};
+
+} // namespace gcd_detail
+} // namespace boost::integer
+#endif
 
 namespace boost{
 
@@ -36,8 +92,6 @@ namespace boost{
       }
 }
 
-
-
 namespace math{ namespace tools{
 
 /* From Knuth, 4.6.1:
@@ -54,6 +108,10 @@ namespace math{ namespace tools{
 template <class T>
 T content(polynomial<T> const &x)
 {
+    #if defined(BOOST_MATH_STANDALONE) && !defined(BOOST_MATH_CXX17_NUMERIC)
+    static_assert(sizeof(T) == 0, "polynomial gcd can only be used in standalone mode with C++17 or higher");
+    #endif
+
     return x ? boost::integer::gcd_range(x.data().begin(), x.data().end()).first : T(0);
 }
 
@@ -88,7 +146,14 @@ namespace detail
     template <class T>
     T reduce_to_primitive(polynomial<T> &u, polynomial<T> &v)
     {
+        #ifndef BOOST_MATH_STANDALONE
         using boost::integer::gcd;
+        #elif defined(BOOST_MATH_CXX17_NUMERIC)
+        using std::gcd;
+        #else
+        static_assert(sizeof(T) == 0, "polynomial gcd can only be used in standalone mode with C++17 or higher");
+        #endif
+
         T const u_cont = content(u), v_cont = content(v);
         u /= u_cont;
         v /= v_cont;
@@ -114,11 +179,11 @@ namespace detail
 * @return       Greatest common divisor of polynomials u and v.
 */
 template <class T>
-typename enable_if_c< std::numeric_limits<T>::is_integer, polynomial<T> >::type
+typename std::enable_if< std::numeric_limits<T>::is_integer, polynomial<T> >::type
 subresultant_gcd(polynomial<T> u, polynomial<T> v)
 {
     using std::swap;
-    BOOST_ASSERT(u || v);
+    BOOST_MATH_ASSERT(u || v);
 
     if (!u)
         return v;
@@ -135,7 +200,7 @@ subresultant_gcd(polynomial<T> u, polynomial<T> v)
     polynomial<T> r;
     while (true)
     {
-        BOOST_ASSERT(u.degree() >= v.degree());
+        BOOST_MATH_ASSERT(u.degree() >= v.degree());
         // Pseudo-division.
         r = u % v;
         if (!r)
@@ -167,24 +232,28 @@ subresultant_gcd(polynomial<T> u, polynomial<T> v)
  * @tparam  T   A multi-precision integral type.
  */
 template <typename T>
-typename enable_if_c<std::numeric_limits<T>::is_integer && !std::numeric_limits<T>::is_bounded, polynomial<T> >::type
+typename std::enable_if<std::numeric_limits<T>::is_integer && !std::numeric_limits<T>::is_bounded, polynomial<T> >::type
 gcd(polynomial<T> const &u, polynomial<T> const &v)
 {
     return subresultant_gcd(u, v);
 }
 // GCD over bounded integers is not currently allowed:
 template <typename T>
-typename enable_if_c<std::numeric_limits<T>::is_integer && std::numeric_limits<T>::is_bounded, polynomial<T> >::type
+typename std::enable_if<std::numeric_limits<T>::is_integer && std::numeric_limits<T>::is_bounded, polynomial<T> >::type
 gcd(polynomial<T> const &u, polynomial<T> const &v)
 {
-   BOOST_STATIC_ASSERT_MSG(sizeof(v) == 0, "GCD on polynomials of bounded integers is disallowed due to the excessive growth in the size of intermediate terms.");
+   static_assert(sizeof(v) == 0, "GCD on polynomials of bounded integers is disallowed due to the excessive growth in the size of intermediate terms.");
    return subresultant_gcd(u, v);
 }
 // GCD over polynomials of floats can go via the Euclid algorithm:
 template <typename T>
-typename enable_if_c<!std::numeric_limits<T>::is_integer && (std::numeric_limits<T>::min_exponent != std::numeric_limits<T>::max_exponent) && !std::numeric_limits<T>::is_exact, polynomial<T> >::type
+typename std::enable_if<!std::numeric_limits<T>::is_integer && (std::numeric_limits<T>::min_exponent != std::numeric_limits<T>::max_exponent) && !std::numeric_limits<T>::is_exact, polynomial<T> >::type
 gcd(polynomial<T> const &u, polynomial<T> const &v)
 {
+   #if defined(BOOST_MATH_STANDALONE) && !defined(BOOST_MATH_CXX17_NUMERIC)
+   static_assert(sizeof(T) == 0, "polynomial gcd can only be used in standalone mode with C++17 or higher");
+   #endif
+   
    return boost::integer::gcd_detail::Euclid_gcd(u, v);
 }
 

@@ -103,7 +103,9 @@
         expansions etc) disabled. We have a set of <a class="link" href="../internals/test_data.html" title="Graphing, Profiling, and Generating Test Data for Special Functions">tools</a>
         to generate test data directly, here's a typical example:
       </p>
-<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">multiprecision</span><span class="special">/</span><span class="identifier">cpp_dec_float</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#ifndef</span> <span class="identifier">BOOST_MATH_STANDALONE</span>
+
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">multiprecision</span><span class="special">/</span><span class="identifier">cpp_dec_float</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">tools</span><span class="special">/</span><span class="identifier">test_data</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">test</span><span class="special">/</span><span class="identifier">included</span><span class="special">/</span><span class="identifier">prg_exec_monitor</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">fstream</span><span class="special">&gt;</span>
@@ -345,15 +347,13 @@
 <span class="preprocessor">#ifndef</span> <span class="identifier">BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS</span>
    <span class="identifier">test</span><span class="special">(</span><span class="number">0.1L</span><span class="special">,</span> <span class="string">"long double"</span><span class="special">);</span>
 <span class="preprocessor">#ifndef</span> <span class="identifier">BOOST_MATH_NO_REAL_CONCEPT_TESTS</span>
-<span class="preprocessor">#if</span> <span class="special">!</span><span class="identifier">BOOST_WORKAROUND</span><span class="special">(</span><span class="identifier">BOOST_BORLANDC</span><span class="special">,</span> <span class="identifier">BOOST_TESTED_AT</span><span class="special">(</span><span class="number">0x582</span><span class="special">))</span>
-   <span class="identifier">test</span><span class="special">(</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">concepts</span><span class="special">::</span><span class="identifier">real_concept</span><span class="special">(</span><span class="number">0.1</span><span class="special">),</span> <span class="string">"real_concept"</span><span class="special">);</span>
-<span class="preprocessor">#endif</span>
-<span class="preprocessor">#endif</span>
-<span class="preprocessor">#else</span>
-   <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"&lt;note&gt;The long double tests have been disabled on this platform "</span>
-      <span class="string">"either because the long double overloads of the usual math functions are "</span>
-      <span class="string">"not available at all, or because they are too inaccurate for these tests "</span>
-      <span class="string">"to pass.&lt;/note&gt;"</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span><span class="special">;</span>
+   <span class="identifier">test</span><span class="special">(</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">concepts</span><span class="special">::</span><span class="identifier">real_concept</span><span class="special">(</span><span class="number">0.1</span><span class="special">),</span> <span class="string">"real_concept);
+#endif
+#else
+   std::cout &lt;&lt; "</span><span class="special">&lt;</span><span class="identifier">note</span><span class="special">&gt;</span><span class="identifier">The</span> <span class="keyword">long</span> <span class="keyword">double</span> <span class="identifier">tests</span> <span class="identifier">have</span> <span class="identifier">been</span> <span class="identifier">disabled</span> <span class="identifier">on</span> <span class="keyword">this</span> <span class="identifier">platform</span> <span class="string">"
+      "</span><span class="identifier">either</span> <span class="identifier">because</span> <span class="identifier">the</span> <span class="keyword">long</span> <span class="keyword">double</span> <span class="identifier">overloads</span> <span class="identifier">of</span> <span class="identifier">the</span> <span class="identifier">usual</span> <span class="identifier">math</span> <span class="identifier">functions</span> <span class="identifier">are</span> <span class="string">"
+      "</span><span class="keyword">not</span> <span class="identifier">available</span> <span class="identifier">at</span> <span class="identifier">all</span><span class="special">,</span> <span class="keyword">or</span> <span class="identifier">because</span> <span class="identifier">they</span> <span class="identifier">are</span> <span class="identifier">too</span> <span class="identifier">inaccurate</span> <span class="keyword">for</span> <span class="identifier">these</span> <span class="identifier">tests</span> <span class="string">"
+      "</span><span class="identifier">to</span> <span class="identifier">pass</span><span class="special">.&lt;/</span><span class="identifier">note</span><span class="special">&gt;</span><span class="error">"</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span><span class="special">;</span>
 <span class="preprocessor">#endif</span>
 <span class="special">}</span>
 </pre>

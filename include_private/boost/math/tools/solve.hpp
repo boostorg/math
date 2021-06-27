@@ -11,9 +11,9 @@
 #endif
 
 #include <boost/config.hpp>
-#include <boost/assert.hpp>
+#include <boost/math/tools/assert.hpp>
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(push)
 #pragma warning(disable:4996 4267 4244)
 #endif
@@ -22,7 +22,7 @@
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/vector.hpp>
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(pop)
 #endif
 
@@ -40,7 +40,7 @@ boost::numeric::ublas::vector<T> solve(
           const boost::numeric::ublas::matrix<T>& A_,
           const boost::numeric::ublas::vector<T>& b_)
 {
-   //BOOST_ASSERT(A_.size() == b_.size());
+   //BOOST_MATH_ASSERT(A_.size() == b_.size());
 
    boost::numeric::ublas::matrix<T> A(A_);
    boost::numeric::ublas::vector<T> b(b_);
@@ -62,7 +62,8 @@ boost::numeric::ublas::vector<T> solve(
 
       for(unsigned i = 0; i < delta.size(); ++i)
       {
-         T err = fabs(delta[i] / b[i]);
+         using std::abs;
+         T err = abs(delta[i] / b[i]);
          if(err > max_error)
             max_error = err;
       }

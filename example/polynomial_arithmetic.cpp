@@ -19,7 +19,7 @@
 
 #include <boost/array.hpp>
 #include <boost/lexical_cast.hpp>
-#include <boost/assert.hpp>
+#include <boost/math/tools/assert.hpp>
 
 #include <iostream>
 #include <stdexcept>
@@ -161,8 +161,8 @@ to get both results together as a pair.
   pair< polynomial<double>, polynomial<double> > result;
   result = quotient_remainder(a, b);
 // Reassure ourselves that the result is the same.
-  BOOST_ASSERT(result.first == q);
-  BOOST_ASSERT(result.second == r);
+  BOOST_MATH_ASSERT(result.first == q);
+  BOOST_MATH_ASSERT(result.second == r);
 //] [/polynomial_arithmetic_4]
 //[polynomial_arithmetic_5
   /* 
@@ -213,6 +213,7 @@ catch (exception const &e)
 {
   cout << "\nMessage from thrown exception was:\n   " << e.what() << "\n";
 }
+return 0;
 } // int main()
 
 /*

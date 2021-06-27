@@ -25,7 +25,7 @@
 // create a lanczos approximation for that type.
 //
 
-#define MP_TYPE boost::multiprecision::number<boost::multiprecision::cpp_bin_float<100> >
+#define MP_TYPE boost::multiprecision::number<boost::multiprecision::cpp_bin_float<90> >
 
 //
 // this is a sort of recursive include, since this file
@@ -4477,6 +4477,38 @@ lanczos_info<T> generate_lanczos(unsigned n, T g)
 
    return result;
 }
+
+template <class T>
+T lanczos_conditioning_near_1(const lanczos_info<T>& l)
+{
+   using std::abs;
+
+   T sum{ 0 };
+   T abs_sum{ 0 };
+
+   for (unsigned i = 1; i <= l.c.size(); ++i)
+   {
+      sum += l.c[i - 1] / (i * i);
+      abs_sum += abs(l.c[i - 1] / (i * i));
+   }
+   return abs(abs_sum / sum);
+}
+template <class T>
+T lanczos_conditioning_near_2(const lanczos_info<T>& l)
+{
+   using std::abs;
+
+   T sum{ 0 };
+   T abs_sum{ 0 };
+
+   for (unsigned i = 1; i <= l.c.size(); ++i)
+   {
+      sum += l.c[i - 1] / (i * i);
+      abs_sum += abs(l.c[i - 1] / (1 + 2 * i + i * i));
+   }
+   return abs(abs_sum / sum);
+}
+
 //
 // Stopwatch for measuring performance:
 //
@@ -4520,7 +4552,9 @@ std::vector<std::vector<T> > const & get_test_data()
          data.back().push_back(static_cast<T>(fact));
          data.back().push_back(static_cast<T>(log(fact)));
          fact = fact * T(k++);
-      }while(k < 100);
+         if (k > 500)
+            break;
+      }while((std::numeric_limits<T>::max)() / k > fact);
 
       fact = 0.5;
       mp_t srpi = sqrt(boost::math::constants::pi<mp_t>());
@@ -4532,7 +4566,7 @@ std::vector<std::vector<T> > const & get_test_data()
          data.back().push_back(static_cast<T>(log(fact*srpi)));
          fact *= mul;
          mul += 1;
-      }while(mul < 100);
+      }while(mul < k);
    }
 
    return data;
@@ -4643,8 +4677,8 @@ struct lanczos_rational
    T gamma(T z)
    {
       using namespace std;
-      BOOST_ASSERT(num.size() == denom.size());
-      BOOST_ASSERT(num.size() == N);
+      BOOST_MATH_ASSERT(num.size() == denom.size());
+      BOOST_MATH_ASSERT(num.size() == N);
       T zgh = z + g - T(0.5);
       T prefix = pow(zgh, T(z - 0.5)) / exp(zgh);
       T s1, s2;
@@ -4704,8 +4738,8 @@ struct lanczos_rational
       }
       //std::cout << l_num << std::endl;
       //std::cout << l_denom << std::endl;
-      BOOST_ASSERT(num.size() == l_num.degree()+1);
-      BOOST_ASSERT(denom.size() == l_denom.degree()+1);
+      BOOST_MATH_ASSERT(num.size() == l_num.degree()+1);
+      BOOST_MATH_ASSERT(denom.size() == l_denom.degree()+1);
       g = boost::math::tools::real_cast<T>(info.r);
       N = info.n;
       /*
@@ -4809,22 +4843,22 @@ void print_code(const lanczos_info<T>& l, const char* name, int precision = std:
    const char* denom_type;
    const char* cast_type;
    const char* suffix_type;
-   if(max_term < (std::numeric_limits<boost::uint16_t>::max)())
+   if(max_term < (std::numeric_limits<std::uint16_t>::max)())
    {
-      denom_type = "boost::uint16_t";
-      cast_type = "static_cast<boost::uint16_t>";
+      denom_type = "std::uint16_t";
+      cast_type = "static_cast<std::uint16_t>";
       suffix_type = "u";
    }
-   else if(max_term < (std::numeric_limits<boost::uint32_t>::max)())
+   else if(max_term < (std::numeric_limits<std::uint32_t>::max)())
    {
-      denom_type = "boost::uint32_t";
-      cast_type = "static_cast<boost::uint32_t>";
+      denom_type = "std::uint32_t";
+      cast_type = "static_cast<std::uint32_t>";
       suffix_type = "u";
    }
 #ifdef BOOST_HAS_LONG_LONG
-   else if(max_term < (std::numeric_limits<boost::uint64_t>::max)())
+   else if(max_term < (std::numeric_limits<std::uint64_t>::max)())
    {
-      denom_type = "boost::uint64_t";
+      denom_type = "std::uint64_t";
       cast_type = "";
       suffix_type = "uLL";
    }
@@ -5019,7 +5053,7 @@ void find_best_lanczos(const char* name, T eps, int max_scan = 100)
       lanczos_info<mp_t> best;
       best.err = 100; // best case had better be better than this!
 
-      std::cout << std::setw(20) << std::right << "N" << std::setw(20) << std::right << "g" << std::setw(20) << std::right << "eps" << std::setw(20) << std::right << "time (ms)\n";
+      std::cout << std::setw(20) << std::right << "N" << std::setw(20) << std::right << "g" << std::setw(20) << std::right << "eps" << std::setw(20) << std::right << "c at 1" << std::setw(20) << std::right << "c at 2" << std::setw(20) << std::right << "time (ms)\n";
 
       for (int i = 0; i < sizeof(sweet_spots) / sizeof(sweet_spots[0]); ++i)
       {
@@ -5031,8 +5065,11 @@ void find_best_lanczos(const char* name, T eps, int max_scan = 100)
             {
                std::cout << std::setprecision(14) << std::fixed << std::setw(20) << std::right << sweet_spots[i].N
                   << std::setw(20) << std::right << sweet_spots[i].g << std::setw(20) << std::right << static_cast<int>(err / eps)
+                  << std::setw(20) << std::right << (unsigned)lanczos_conditioning_near_1(info) << std::setw(20) << std::right << (unsigned)lanczos_conditioning_near_2(info)
                   << std::setw(20) << std::right << (int)(exec_time * 1000) << std::endl;
             }
+            else
+               std::cout << "Skipping spot with error: " << std::setprecision(5) << err << std::endl;
             if (err < best.err)
             {
                best = info;
@@ -5042,7 +5079,7 @@ void find_best_lanczos(const char* name, T eps, int max_scan = 100)
       }
       std::cout << std::endl;
 
-      if (best.err < 100)
+      if (best.err / eps < 100)
          print_code(best, name, std::numeric_limits<T>::max_digits10, std::numeric_limits<T>::digits);
       else
          std::cout << "Sorry, no viable approximation was found!!" << std::endl;

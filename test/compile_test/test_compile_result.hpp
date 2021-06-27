@@ -23,15 +23,13 @@ inline void check_result_imp(double, double){}
 inline void check_result_imp(long double, long double){}
 inline void check_result_imp(int, int){}
 inline void check_result_imp(long, long){}
-#ifdef BOOST_HAS_LONG_LONG
-inline void check_result_imp(boost::long_long_type, boost::long_long_type){}
-#endif
+inline void check_result_imp(long long, long long){}
 inline void check_result_imp(bool, bool){}
 
 //
 // If the compiler warns about unused typedefs then enable this:
 //
-#if defined(__GNUC__) && ((__GNUC__ > 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 7)))
+#if (defined(__GNUC__) && ((__GNUC__ > 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 7)))) || (defined(__clang__) && __clang_major__ > 4)
 #  define BOOST_MATH_ASSERT_UNUSED_ATTRIBUTE __attribute__((unused))
 #else
 #  define BOOST_MATH_ASSERT_UNUSED_ATTRIBUTE
@@ -78,9 +76,7 @@ union max_align_type
    long l;
    double d;
    long double ld;
-#ifdef BOOST_HAS_LONG_LONG
    long long ll;
-#endif
 };
 
 template <class Distribution>

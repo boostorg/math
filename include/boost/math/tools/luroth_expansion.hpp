@@ -26,20 +26,20 @@ public:
         using std::isfinite;
         if (!isfinite(x))
         {
-            throw std::domain_error("Cannot convert non-finites into a Lüroth representation.");
+            throw std::domain_error("Cannot convert non-finites into a Luroth representation.");
         }
         d_.reserve(50);
-        Real dn = floor(x);
-        d_.push_back(static_cast<Z>(dn));
-        if (dn == x)
+        Real dn1 = floor(x);
+        d_.push_back(static_cast<Z>(dn1));
+        if (dn1 == x)
         {
            d_.shrink_to_fit();
            return;
         }
         // This attempts to follow the notation of:
         // "Khinchine's constant for Luroth Representation", by Sophia Kalpazidou.
-        x = x - dn;
-        Real computed = dn;
+        x = x - dn1;
+        Real computed = dn1;
         Real prod = 1;
         // Let the error bound grow by 1 ULP/iteration.
         // I haven't done the error analysis to show that this is an expected rate of error growth,

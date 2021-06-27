@@ -11,6 +11,7 @@
 #include <random>
 #include <boost/math/interpolators/pchip.hpp>
 #include <boost/circular_buffer.hpp>
+#include <boost/assert.hpp>
 #ifdef BOOST_HAS_FLOAT128
 #include <boost/multiprecision/float128.hpp>
 using boost::multiprecision::float128;
@@ -192,7 +193,7 @@ void test_monotonicity()
             CHECK_ULP_CLOSE(y[i], s(x[i]), 2);
             for (Real t = tmin; t < tmax; t += (tmax-tmin)/16) {
                 Real greater_val = s(t);
-                assert(val <= greater_val);
+                BOOST_ASSERT(val <= greater_val);
                 val = greater_val;
             }
         }
@@ -217,7 +218,7 @@ void test_monotonicity()
             CHECK_ULP_CLOSE(y[i], s(x[i]), 2);
             for (Real t = tmin; t < tmax; t += (tmax-tmin)/16) {
                 Real lesser_val = s(t);
-                assert(val >= lesser_val);
+                BOOST_ASSERT(val >= lesser_val);
                 val = lesser_val;
             }
         }

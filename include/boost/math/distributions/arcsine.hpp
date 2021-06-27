@@ -85,15 +85,14 @@ namespace boost
       { // Check x_min < x_max
         if (x_min >= x_max)
         {
-          std::string msg = "x_max argument is %1%, but must be > x_min = " + lexical_cast<std::string>(x_min) + "!";
+          std::string msg = "x_max argument is %1%, but must be > x_min";
           *result = policies::raise_domain_error<RealType>(
             function,
             msg.c_str(), x_max, pol);
-           // "x_max argument is %1%, but must be > x_min !", x_max, pol);
-            //  "x_max argument is %1%, but must be > x_min %2!", x_max, x_min, pol); would be better. 
-          // But would require replication of all helpers functions in /policies/error_handling.hpp for two values,
-          // as well as two value versions of raise_error, raise_domain_error and do_format ...
-          // so use slightly hacky lexical_cast to string instead.
+            // "x_max argument is %1%, but must be > x_min !", x_max, pol);
+            // "x_max argument is %1%, but must be > x_min %2!", x_max, x_min, pol); would be better. 
+            // But would require replication of all helpers functions in /policies/error_handling.hpp for two values,
+            // as well as two value versions of raise_error, raise_domain_error and do_format
           return false;
         }
         return true;

@@ -10,6 +10,8 @@
 
 // Example of root finding using Boost.Multiprecision.
 
+#ifndef BOOST_MATH_STANDALONE
+
 #include <boost/math/tools/roots.hpp>
 //using boost::math::policies::policy;
 //using boost::math::tools::newton_raphson_iterate;
@@ -69,8 +71,8 @@ T cbrt_2deriv(T x)
 #endif
 
   int digits = std::numeric_limits<T>::digits / 2; // Half maximum possible binary digits accuracy for type T.
-  const boost::uintmax_t maxit = 20;
-  boost::uintmax_t it = maxit;
+  const std::uintmax_t maxit = 20;
+  std::uintmax_t it = maxit;
   T result = halley_iterate(cbrt_functor_2deriv<T>(x), guess, min, max, digits, it);
   // Can show how many iterations (updated by halley_iterate).
   // std::cout << "Iterations " << it << " (from max of "<< maxit << ")." << std::endl;
@@ -135,8 +137,8 @@ T nth_2deriv(T x)
   T max = ldexp(static_cast<T>(2.), exponent / n);     // Maximum possible value is twice our guess.
 
   int digits = std::numeric_limits<T>::digits / 2;     // Half maximum possible binary digits accuracy for type T.
-  const boost::uintmax_t maxit = 50;
-  boost::uintmax_t it = maxit;
+  const std::uintmax_t maxit = 50;
+  std::uintmax_t it = maxit;
   T result = halley_iterate(nth_functor_2deriv<n, T>(x), guess, min, max, digits, it);
   // Can show how many iterations (updated by halley_iterate).
   std::cout << it << " iterations (from max of " << maxit << ")" << std::endl;
@@ -230,3 +232,5 @@ value = 2, cube root =1.2599210498948731647672106072782283505702514647015
 
 
 */
+
+#endif // BOOST_MATH_STANDALONE

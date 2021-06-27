@@ -11,7 +11,7 @@
 #include <boost/math/special_functions/detail/hypergeometric_1F1_bessel.hpp>
 #include <boost/math/special_functions/detail/hypergeometric_series.hpp>
 #include <boost/math/special_functions/gamma.hpp>
-
+#include <boost/math/special_functions/trunc.hpp>
 
   namespace boost { namespace math { namespace detail {
 
@@ -82,7 +82,7 @@
         }
         hypergeometric_1F1_igamma_series<T, Policy> s(b_minus_a, a - 1, x, pol);
         log_scaling += s.log_scaling;
-        boost::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
+        std::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
         T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
         boost::math::policies::check_series_iterations<T>("boost::math::tgamma<%1%>(%1%,%1%)", max_iter, pol);
         T log_prefix = x + boost::math::lgamma(b, pol) - boost::math::lgamma(a, pol);
@@ -124,7 +124,7 @@
                  crossover_shift = a_shift;
               crossover_a = a_local + crossover_shift;
               boost::math::detail::hypergeometric_1F1_recurrence_b_coefficients<T> b_coef(crossover_a, b_local, x);
-              boost::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
+              std::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
               T b_ratio = boost::math::tools::function_ratio_from_backwards_recurrence(b_coef, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
               boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1F1_large_abz<%1%>(%1%,%1%,%1%)", max_iter, pol);
               //
@@ -169,7 +169,7 @@
               // Regular case where forwards iteration is stable right from the start:
               //
               boost::math::detail::hypergeometric_1F1_recurrence_b_coefficients<T> b_coef(a_local, b_local, x);
-              boost::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
+              std::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
               T b_ratio = boost::math::tools::function_ratio_from_backwards_recurrence(b_coef, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
               boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1F1_large_abz<%1%>(%1%,%1%,%1%)", max_iter, pol);
               //
@@ -195,9 +195,9 @@
            // is the only stable direction as we will only iterate down until a ~ b, but we
            // will check this with an assert:
            //
-           BOOST_ASSERT(2 * a - b_local + x > 0);
+           BOOST_MATH_ASSERT(2 * a - b_local + x > 0);
            boost::math::detail::hypergeometric_1F1_recurrence_b_coefficients<T> b_coef(a, b_local, x);
-           boost::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
+           std::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
            T b_ratio = boost::math::tools::function_ratio_from_backwards_recurrence(b_coef, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
            boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1F1_large_abz<%1%>(%1%,%1%,%1%)", max_iter, pol);
            //
@@ -244,7 +244,7 @@
            // so grab the ratio and work backwards to b - b_shift and normalise.
            //
            boost::math::detail::hypergeometric_1F1_recurrence_b_coefficients<T> b_coef(a, b, x);
-           boost::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
+           std::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
 
            T first = 1;  // arbitrary value;
            T second = 1 / boost::math::tools::function_ratio_from_backwards_recurrence(b_coef, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
@@ -281,9 +281,9 @@
            }
            else
            {
-              BOOST_ASSERT(!is_negative_integer(b - a));
+              BOOST_MATH_ASSERT(!is_negative_integer(b - a));
               boost::math::detail::hypergeometric_1F1_recurrence_b_coefficients<T> b_coef(a, b_local, x);
-              boost::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
+              std::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
               second = h / boost::math::tools::function_ratio_from_backwards_recurrence(b_coef, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
               boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1F1_large_abz<%1%>(%1%,%1%,%1%)", max_iter, pol);
            }

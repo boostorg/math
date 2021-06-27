@@ -7,19 +7,22 @@
 #ifndef BOOST_MATH_STATISTICS_UNIVARIATE_STATISTICS_DETAIL_SINGLE_PASS_HPP
 #define BOOST_MATH_STATISTICS_UNIVARIATE_STATISTICS_DETAIL_SINGLE_PASS_HPP
 
-#include <boost/assert.hpp>
+#include <boost/math/tools/config.hpp>
+#include <boost/math/tools/assert.hpp>
 #include <tuple>
 #include <iterator>
-#include <atomic>
-#include <thread>
 #include <type_traits>
-#include <future>
 #include <cmath>
 #include <algorithm>
 #include <valarray>
 #include <stdexcept>
 #include <functional>
 #include <vector>
+
+#ifdef BOOST_HAS_THREADS
+#include <future>
+#include <thread>
+#endif
 
 namespace boost { namespace math { namespace statistics { namespace detail {
 
@@ -109,6 +112,8 @@ ReturnType first_four_moments_sequential_impl(ForwardIterator first, ForwardIter
     return std::make_tuple(M1, M2, M3, M4, n-1);
 }
 
+#ifdef BOOST_HAS_THREADS
+
 // https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance#Higher-order_statistics
 // EQN 3.1: https://www.osti.gov/servlets/purl/1426900
 template<typename ReturnType, typename ForwardIterator>
@@ -195,6 +200,7 @@ ReturnType first_four_moments_parallel_impl(ForwardIterator first, ForwardIterat
     return std::make_tuple(M1_a, M2_a, M3_a, M4_a, elements);
 }
 
+#endif // BOOST_HAS_THREADS
 
 // Follows equation 1.5 of:
 // https://prod.sandia.gov/techlib-noauth/access-control.cgi/2008/086212.pdf
@@ -202,7 +208,7 @@ template<typename ReturnType, typename ForwardIterator>
 ReturnType skewness_sequential_impl(ForwardIterator first, ForwardIterator last)
 {
     using std::sqrt;
-    BOOST_ASSERT_MSG(first != last, "At least one sample is required to compute skewness.");
+    BOOST_MATH_ASSERT_MSG(first != last, "At least one sample is required to compute skewness.");
     
     ReturnType M1 = *first;
     ReturnType M2 = 0;
@@ -232,30 +238,6 @@ ReturnType skewness_sequential_impl(ForwardIterator first, ForwardIterator last)
     return skew;
 }
 
-template<typename ReturnType, typename ExecutionPolicy, typename RandomAccessIterator>
-ReturnType gini_coefficient_parallel_impl(ExecutionPolicy&& exec, RandomAccessIterator first, RandomAccessIterator last)
-{
-    using Real = typename std::iterator_traits<RandomAccessIterator>::value_type;
-    
-    ReturnType i = 1;
-    ReturnType num = 0;
-    ReturnType denom = 0;
-    
-    std::for_each(exec, first, last, [&i, &num, &denom](const Real& val)
-    {
-        num = num + val * i;
-        denom = denom + val;
-        i = i + 1;
-    });
-
-    if(denom == 0)
-    {
-        return ReturnType(0);
-    }
-
-    return ((2*num)/denom - i)/(i-1);
-}
-
 template<typename ReturnType, typename ForwardIterator>
 ReturnType gini_coefficient_sequential_impl(ForwardIterator first, ForwardIterator last)
 {
@@ -280,6 +262,102 @@ ReturnType gini_coefficient_sequential_impl(ForwardIterator first, ForwardIterat
         return ((2*num)/denom - i)/(i-1);
     }
 }
+
+template<typename ReturnType, typename ForwardIterator>
+ReturnType gini_range_fraction(ForwardIterator first, ForwardIterator last, std::size_t starting_index)
+{
+    using Real = typename std::tuple_element<0, ReturnType>::type;
+
+    std::size_t i = starting_index + 1;
+    Real num = 0;
+    Real denom = 0;
+
+    for(auto it = first; it != last; ++it)
+    {
+        num += *it*i;
+        denom += *it;
+        ++i;
+    }
+
+    return std::make_tuple(num, denom, i);
+}
+
+#ifdef BOOST_HAS_THREADS
+
+template<typename ReturnType, typename ExecutionPolicy, typename ForwardIterator>
+ReturnType gini_coefficient_parallel_impl(ExecutionPolicy&&, ForwardIterator first, ForwardIterator last)
+{
+    using range_tuple = std::tuple<ReturnType, ReturnType, std::size_t>;
+    
+    const auto elements = std::distance(first, last);
+    const unsigned max_concurrency = std::thread::hardware_concurrency() == 0 ? 2u : std::thread::hardware_concurrency();
+    unsigned num_threads = 2u;
+    
+    // Threading is faster for: 10 + 10.12e-3 N/j <= 10.12e-3N => N >= 10^4j/10.12(j-1).
+    const auto parallel_lower_bound = 10e4*max_concurrency/(10.12*(max_concurrency-1));
+    const auto parallel_upper_bound = 10e4*2/10.12; // j = 2
+
+    // https://lemire.me/blog/2020/01/30/cost-of-a-thread-in-c-under-linux/
+    if(elements < parallel_lower_bound)
+    {
+        return gini_coefficient_sequential_impl<ReturnType>(first, last);
+    }
+    else if(elements >= parallel_upper_bound)
+    {
+        num_threads = max_concurrency;
+    }
+    else
+    {
+        for(unsigned i = 3; i < max_concurrency; ++i)
+        {
+            if(parallel_lower_bound < 10e4*i/(10.12*(i-1)))
+            {
+                num_threads = i;
+                break;
+            }
+        }
+    }
+
+    std::vector<std::future<range_tuple>> future_manager;
+    const auto elements_per_thread = std::ceil(static_cast<double>(elements) / num_threads);
+
+    auto it = first;
+    for(std::size_t i {}; i < num_threads - 1; ++i)
+    {
+        future_manager.emplace_back(std::async(std::launch::async | std::launch::deferred, [it, elements_per_thread, i]() -> range_tuple
+        {
+            return gini_range_fraction<range_tuple>(it, std::next(it, elements_per_thread), i*elements_per_thread);
+        }));
+        it = std::next(it, elements_per_thread);
+    }
+
+    future_manager.emplace_back(std::async(std::launch::async | std::launch::deferred, [it, last, num_threads, elements_per_thread]() -> range_tuple
+    {
+        return gini_range_fraction<range_tuple>(it, last, (num_threads - 1)*elements_per_thread);
+    }));
+
+    ReturnType num = 0;
+    ReturnType denom = 0;
+
+    for(std::size_t i = 0; i < future_manager.size(); ++i)
+    {
+        auto temp = future_manager[i].get();
+        num += std::get<0>(temp);
+        denom += std::get<1>(temp);
+    }
+
+    // If the l1 norm is zero, all elements are zero, so every element is the same.
+    if(denom == 0)
+    {
+        return ReturnType(0);
+    }
+    else
+    {
+        return ((2*num)/denom - elements)/(elements-1);
+    }
+}
+
+#endif // BOOST_HAS_THREADS
 
 template<typename ForwardIterator, typename OutputIterator>
 OutputIterator mode_impl(ForwardIterator first, ForwardIterator last, OutputIterator output)

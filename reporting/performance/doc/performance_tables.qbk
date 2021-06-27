@@ -236,7 +236,7 @@ boost 1.73]]
 
 [template table_Polynomial_Arithmetic_Intel_C_C_0x_mode_version_1910_linux_[]
 [table:table_Polynomial_Arithmetic_Intel_C_C_0x_mode_version_1910_linux_ Polynomial Arithmetic (Intel C++ C++0x mode version 1910, linux)
-[[Function][boost::uint64_t][double][cpp_int]]
+[[Function][std::uint64_t][double][cpp_int]]
 [[operator *][[role green 1.12[br](417ns)]][[role green 1.00[br](372ns)]][[role red 23.61[br](8782ns)]]]
 [[operator * (int)][[role green 1.04[br](103ns)]][[role green 1.00[br](99ns)]][[role red 12.15[br](1203ns)]]]
 [[operator *=][[role green 1.14[br](199820ns)]][[role green 1.00[br](175634ns)]][[role red 22.31[br](3918504ns)]]]
@@ -599,7 +599,7 @@ boost 1.73]]
 
 [template table_Polynomial_Arithmetic_Clang_version_9_0_0_tags_RELEASE_900_final_linux_[]
 [table:table_Polynomial_Arithmetic_Clang_version_9_0_0_tags_RELEASE_900_final_linux_ Polynomial Arithmetic (Clang version 9.0.0 (tags/RELEASE_900/final), linux)
-[[Function][boost::uint64_t][double][cpp_int]]
+[[Function][std::uint64_t][double][cpp_int]]
 [[operator *][[role blue 1.61[br](502ns)]][[role green 1.00[br](312ns)]][[role red 34.02[br](10615ns)]]]
 [[operator * (int)][[role green 1.09[br](118ns)]][[role green 1.00[br](108ns)]][[role red 10.12[br](1093ns)]]]
 [[operator *=][[role blue 1.73[br](215039ns)]][[role green 1.00[br](124223ns)]][[role red 34.02[br](4226250ns)]]]
@@ -962,7 +962,7 @@ boost 1.73]]
 
 [template table_Polynomial_Arithmetic_GNU_C_version_9_2_1_20191008_linux_[]
 [table:table_Polynomial_Arithmetic_GNU_C_version_9_2_1_20191008_linux_ Polynomial Arithmetic (GNU C++ version 9.2.1 20191008, linux)
-[[Function][boost::uint64_t][double][cpp_int]]
+[[Function][std::uint64_t][double][cpp_int]]
 [[operator *][[role blue 1.26[br](556ns)]][[role green 1.00[br](440ns)]][[role red 34.34[br](15111ns)]]]
 [[operator * (int)][[role blue 1.24[br](141ns)]][[role green 1.00[br](114ns)]][[role red 8.39[br](956ns)]]]
 [[operator *=][[role green 1.07[br](243123ns)]][[role green 1.00[br](226544ns)]][[role red 19.57[br](4434116ns)]]]
@@ -1150,7 +1150,7 @@ boost 1.73]]
 
 [template table_Polynomial_Arithmetic_GNU_C_version_9_2_0_Windows_x64_[]
 [table:table_Polynomial_Arithmetic_GNU_C_version_9_2_0_Windows_x64_ Polynomial Arithmetic (GNU C++ version 9.2.0, Windows x64)
-[[Function][boost::uint64_t][double][cpp_int]]
+[[Function][std::uint64_t][double][cpp_int]]
 [[operator *][[role green 1.00[br](503ns)]][[role green 1.00[br](502ns)]][[role red 15.20[br](7629ns)]]]
 [[operator * (int)][[role green 1.05[br](114ns)]][[role green 1.00[br](109ns)]][[role red 6.04[br](658ns)]]]
 [[operator *=][[role green 1.04[br](223824ns)]][[role green 1.00[br](215955ns)]][[role red 19.30[br](4168184ns)]]]
@@ -1491,7 +1491,7 @@ boost 1.73]]
 
 [template table_Polynomial_Arithmetic_Microsoft_Visual_C_version_14_2_Windows_x64_[]
 [table:table_Polynomial_Arithmetic_Microsoft_Visual_C_version_14_2_Windows_x64_ Polynomial Arithmetic (Microsoft Visual C++ version 14.2, Windows x64)
-[[Function][boost::uint64_t][double][cpp_int]]
+[[Function][std::uint64_t][double][cpp_int]]
 [[operator *][[role blue 1.54[br](951ns)]][[role green 1.00[br](617ns)]][[role red 15.22[br](9391ns)]]]
 [[operator * (int)][[role green 1.16[br](135ns)]][[role green 1.00[br](116ns)]][[role red 5.22[br](605ns)]]]
 [[operator *=][[role blue 1.30[br](371957ns)]][[role green 1.00[br](286462ns)]][[role red 17.11[br](4901613ns)]]]

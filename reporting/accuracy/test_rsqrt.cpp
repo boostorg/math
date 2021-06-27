@@ -22,7 +22,7 @@ int main()
         using boost::math::rsqrt;
         return rsqrt(x);
     };
-    auto plot03 = ulps_plot<decltype(f), PreciseReal, CoarseReal>(f, std::numeric_limits<CoarseReal>::min(), CoarseReal(100), samples);
+    auto plot03 = ulps_plot<decltype(f), PreciseReal, CoarseReal>(f, (std::numeric_limits<CoarseReal>::min)(), CoarseReal(100), samples);
     plot03.width(width);
     std::string title = "rsqrt ULPs plot at quad precision";
     plot03.title(title);

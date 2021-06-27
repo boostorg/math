@@ -11,7 +11,7 @@
    V evaluate_polynomial(const T(&poly)[N], const V& val);
 
    template <std::size_t N, class T, class V>
-   V evaluate_polynomial(const boost::array<T,N>& poly, const V& val);
+   V evaluate_polynomial(const std::array<T,N>& poly, const V& val);
 
    template <class T, class U>
    U evaluate_polynomial(const T* poly, U z, std::size_t count);
@@ -21,7 +21,7 @@
    V evaluate_even_polynomial(const T(&poly)[N], const V& z);
 
    template <std::size_t N, class T, class V>
-   V evaluate_even_polynomial(const boost::array<T,N>& poly, const V& z);
+   V evaluate_even_polynomial(const std::array<T,N>& poly, const V& z);
 
    template <class T, class U>
    U evaluate_even_polynomial(const T* poly, U z, std::size_t count);
@@ -31,7 +31,7 @@
    V evaluate_odd_polynomial(const T(&a)[N], const V& z);
 
    template <std::size_t N, class T, class V>
-   V evaluate_odd_polynomial(const boost::array<T,N>& a, const V& z);
+   V evaluate_odd_polynomial(const std::array<T,N>& a, const V& z);
 
    template <class T, class U>
    U evaluate_odd_polynomial(const T* poly, U z, std::size_t count);
@@ -41,7 +41,7 @@
    V evaluate_rational(const T(&a)[N], const T(&b)[N], const V& z);
 
    template <std::size_t N, class T, class V>
-   V evaluate_rational(const boost::array<T,N>& a, const boost::array<T,N>& b, const V& z);
+   V evaluate_rational(const std::array<T,N>& a, const std::array<T,N>& b, const V& z);
 
    template <class T, class U, class V>
    V evaluate_rational(const T* num, const U* denom, V z, unsigned count);
@@ -61,7 +61,7 @@ loop unrolling, and one hopes, optimal inline expansion.
    V evaluate_polynomial(const T(&poly)[N], const V& val);
 
    template <std::size_t N, class T, class V>
-   V evaluate_polynomial(const boost::array<T,N>& poly, const V& val);
+   V evaluate_polynomial(const std::array<T,N>& poly, const V& val);
 
    template <class T, class U>
    U evaluate_polynomial(const T* poly, U z, std::size_t count);
@@ -85,7 +85,7 @@ to be a table of integers if this is appropriate.
    V evaluate_even_polynomial(const T(&poly)[N], const V& z);
 
    template <std::size_t N, class T, class V>
-   V evaluate_even_polynomial(const boost::array<T,N>& poly, const V& z);
+   V evaluate_even_polynomial(const std::array<T,N>& poly, const V& z);
 
    template <class T, class U>
    U evaluate_even_polynomial(const T* poly, U z, std::size_t count);
@@ -98,7 +98,7 @@ of /z/ are even numbers.  Equivalent to calling
    V evaluate_odd_polynomial(const T(&a)[N], const V& z);
 
    template <std::size_t N, class T, class V>
-   V evaluate_odd_polynomial(const boost::array<T,N>& a, const V& z);
+   V evaluate_odd_polynomial(const std::array<T,N>& a, const V& z);
 
    template <class T, class U>
    U evaluate_odd_polynomial(const T* poly, U z, std::size_t count);
@@ -110,7 +110,7 @@ Equivalent to `evaluate_polynomial(poly+1, z*z, count-1) * z + poly[0]`.
    V evaluate_rational(const T(&num)[N], const U(&denom)[N], const V& z);
 
    template <std::size_t N, class T, class U, class V>
-   V evaluate_rational(const boost::array<T,N>& num, const boost::array<U,N>& denom, const V& z);
+   V evaluate_rational(const std::array<T,N>& num, const std::array<U,N>& denom, const V& z);
 
    template <class T, class U, class V>
    V evaluate_rational(const T* num, const U* denom, V z, unsigned count);

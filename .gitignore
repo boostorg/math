@@ -10,3 +10,11 @@ test/cuda
 **/.temps/*
 build/*
 .vscode/*
+
+# CMake Related Options
+*.a
+*.o
+cmake_install.cmake
+CMakeCache.txt
+Makefile
+**/CMakeFiles/**

@@ -27,9 +27,9 @@
 // Macro BOOST_MATH_INSTRUMENT_CREATE_TEST_VALUE provides a global diagnostic value for create_type.
 
 #include <boost/cstdfloat.hpp> // For float_64_t, float128_t. Must be first include!
-#include <boost/lexical_cast.hpp>
-#include <boost/type_traits/is_constructible.hpp>
-#include <boost/type_traits/is_convertible.hpp>
+#include <boost/math/tools/lexical_cast.hpp>
+#include <limits>
+#include <type_traits>
 
 #ifdef BOOST_MATH_INSTRUMENT_CREATE_TEST_VALUE
 // global int create_type(0); must be defined before including this file.
@@ -83,6 +83,8 @@ inline T create_test_value(largest_float, const char* str, const std::false_type
     // (This is case T1 = false_type and T2 == false_type).
   #ifdef BOOST_MATH_INSTRUMENT_CREATE_TEST_VALUE
   create_type = 3;
+  #elif defined(BOOST_MATH_STANDALONE)
+  static_assert(sizeof(T) == 0, "Can not create a test value using lexical cast of string in standalone mode");
   #endif
   return boost::lexical_cast<T>(str);
 }

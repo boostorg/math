@@ -45,8 +45,8 @@ void print_value(double x, std::ostream& os = std::cout)
    double m = std::frexp(x, &e);
    m = std::ldexp(m, 54);
    e -= 54;
-   boost::int64_t val = (boost::int64_t)m;
-   BOOST_ASSERT(std::ldexp((double)val, e) == x);
+   std::int64_t val = (std::int64_t)m;
+   BOOST_MATH_ASSERT(std::ldexp((double)val, e) == x);
    os << "std::ldexp((double)" << val << ", " << e << ")";
 }
 
@@ -64,10 +64,10 @@ void print_row(double a, double b, double z, mpfr_float result, std::ostream& os
 
 struct error_data
 {
-   error_data(double a, double b, double z, boost::intmax_t e)
+   error_data(double a, double b, double z, std::intmax_t e)
       : a(a), b(b), z(z), error(e) {}
    double a, b, z;
-   boost::intmax_t error;
+   std::intmax_t error;
    bool operator<(const error_data& other)const
    {
       return error < other.error;

@@ -840,7 +840,7 @@ Calculated using cpp_dec_float_50
   }
 
   BOOST_MATH_CHECK_THROW(airy_ai_zero<RealType>(-1), std::domain_error);
-  BOOST_CHECK_CLOSE_FRACTION(airy_ai_zero<RealType>((std::numeric_limits<boost::int32_t>::max)()), -static_cast<RealType>(4678579.33301973093739L), tolerance);
+  BOOST_CHECK_CLOSE_FRACTION(airy_ai_zero<RealType>((std::numeric_limits<std::int32_t>::max)()), -static_cast<RealType>(4678579.33301973093739L), tolerance);
 
   // Can't abuse with infinity because won't compile - no conversion.
   //if (std::numeric_limits<RealType>::has_infinity)
@@ -908,7 +908,7 @@ Calculated using cpp_dec_float_50
   }
 
   BOOST_MATH_CHECK_THROW(airy_bi_zero<RealType>(-1), std::domain_error);
-  BOOST_CHECK_CLOSE_FRACTION(airy_bi_zero<RealType>((std::numeric_limits<boost::int32_t>::max)()), -static_cast<RealType>(4678579.33229351984573L), tolerance * 300);
+  BOOST_CHECK_CLOSE_FRACTION(airy_bi_zero<RealType>((std::numeric_limits<std::int32_t>::max)()), -static_cast<RealType>(4678579.33229351984573L), tolerance * 300);
 
   // Can't abuse with infinity because won't compile - no conversion.
   //if (std::numeric_limits<RealType>::has_infinity)

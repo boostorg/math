@@ -234,7 +234,7 @@ template <class F>
 double find_end_point(F f, double x0, double target, bool rising, double x_off = 0)
 {
    boost::math::tools::eps_tolerance<double> tol(50);
-   boost::uintmax_t max_iter = 1000;
+   std::uintmax_t max_iter = 1000;
    return x_off + boost::math::tools::bracket_and_solve_root(
       location_finder<F>(f, target, x_off), 
       x0, 

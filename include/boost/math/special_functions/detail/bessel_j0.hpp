@@ -13,7 +13,7 @@
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/tools/rational.hpp>
 #include <boost/math/tools/big_constant.hpp>
-#include <boost/assert.hpp>
+#include <boost/math/tools/assert.hpp>
 
 #if defined(__GNUC__) && defined(BOOST_MATH_USE_FLOAT128)
 //
@@ -158,7 +158,7 @@ T bessel_j0(T x)
     if (x <= 4)                       // x in (0, 4]
     {
         T y = x * x;
-        BOOST_ASSERT(sizeof(P1) == sizeof(Q1));
+        BOOST_MATH_ASSERT(sizeof(P1) == sizeof(Q1));
         r = evaluate_rational(P1, Q1, y);
         factor = (x + x1) * ((x - x11/256) - x12);
         value = factor * r;
@@ -166,7 +166,7 @@ T bessel_j0(T x)
     else if (x <= 8.0)                  // x in (4, 8]
     {
         T y = 1 - (x * x)/64;
-        BOOST_ASSERT(sizeof(P2) == sizeof(Q2));
+        BOOST_MATH_ASSERT(sizeof(P2) == sizeof(Q2));
         r = evaluate_rational(P2, Q2, y);
         factor = (x + x2) * ((x - x21/256) - x22);
         value = factor * r;
@@ -175,8 +175,8 @@ T bessel_j0(T x)
     {
         T y = 8 / x;
         T y2 = y * y;
-        BOOST_ASSERT(sizeof(PC) == sizeof(QC));
-        BOOST_ASSERT(sizeof(PS) == sizeof(QS));
+        BOOST_MATH_ASSERT(sizeof(PC) == sizeof(QC));
+        BOOST_MATH_ASSERT(sizeof(PS) == sizeof(QS));
         rc = evaluate_rational(PC, QC, y2);
         rs = evaluate_rational(PS, QS, y2);
         factor = constants::one_div_root_pi<T>() / sqrt(x);

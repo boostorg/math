@@ -17,17 +17,17 @@
 #endif
 
 #include <boost/math/special_functions/math_fwd.hpp>
-#include <boost/config/no_tr1/cmath.hpp>
 #include <boost/math/special_functions/erf.hpp>
 #include <boost/math/special_functions/expm1.hpp>
-#include <boost/throw_exception.hpp>
-#include <boost/assert.hpp>
+#include <boost/math/tools/throw_exception.hpp>
+#include <boost/math/tools/assert.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/tools/big_constant.hpp>
 
 #include <stdexcept>
+#include <cmath>
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(push)
 #pragma warning(disable:4127)
 #endif
@@ -127,7 +127,7 @@ namespace boost
          {
             static const unsigned short ord[] = {2, 3, 4, 5, 7, 10, 12, 18, 10, 20, 30, 0, 4, 7, 8, 20, 0, 0}; // 18 entries
 
-            BOOST_ASSERT(icode<18);
+            BOOST_MATH_ASSERT(icode<18);
 
             return ord[icode];
          } // unsigned short owens_t_get_order(const unsigned short icode, RealType, std::integral_constant<int, 53> const&)
@@ -138,7 +138,7 @@ namespace boost
            // method ================>>>       {1, 1, 1, 1, 1,  1,  1,  1,  2,  2,  2,  3, 4,  4,  4,  4,  5, 6}
            static const unsigned short ord[] = {3, 4, 5, 6, 8, 11, 13, 19, 10, 20, 30,  0, 7, 10, 11, 23,  0, 0}; // 18 entries
 
-          BOOST_ASSERT(icode<18);
+          BOOST_MATH_ASSERT(icode<18);
 
           return ord[icode];
         } // unsigned short owens_t_get_order(const unsigned short icode, RealType, std::integral_constant<int, 64> const&)
@@ -260,7 +260,7 @@ namespace boost
 
             while( true )
             {
-               BOOST_ASSERT(i < 21);
+               BOOST_MATH_ASSERT(i < 21);
                val += zi*c2[i];
                if( m <= i ) // if( m < i+1 )
                {
@@ -332,7 +332,7 @@ namespace boost
 
           while( true )
           {
-              BOOST_ASSERT(i < 31);
+              BOOST_MATH_ASSERT(i < 31);
               val += zi*c2[i];
               if( m <= i ) // if( m < i+1 )
               {
@@ -427,7 +427,7 @@ namespace boost
             RealType val = 0;
             for(unsigned short i = 0; i < m; ++i)
             {
-               BOOST_ASSERT(i < 13);
+               BOOST_MATH_ASSERT(i < 13);
                const RealType r = static_cast<RealType>(1) + as*pts[i];
                val += wts[i] * exp( hs*r ) / r;
             } // for(unsigned short i = 0; i < m; ++i)
@@ -499,7 +499,7 @@ namespace boost
           RealType val = 0;
           for(unsigned short i = 0; i < m; ++i)
             {
-              BOOST_ASSERT(i < 19);
+              BOOST_MATH_ASSERT(i < 19);
               const RealType r = 1 + as*pts[i];
               val += wts[i] * exp( hs*r ) / r;
             } // for(unsigned short i = 0; i < m; ++i)
@@ -829,7 +829,7 @@ namespace boost
                val = owens_t_T6(h,a, pol);
                break;
             default:
-               BOOST_THROW_EXCEPTION(std::logic_error("selection routine in Owen's T function failed"));
+               BOOST_MATH_THROW_EXCEPTION(std::logic_error("selection routine in Owen's T function failed"));
             }
             return val;
          }
@@ -1082,7 +1082,7 @@ namespace boost
    } // namespace math
 } // namespace boost
 
-#ifdef BOOST_MSVC
+#ifdef _MSC_VER
 #pragma warning(pop)
 #endif
 

@@ -33,6 +33,7 @@ obj has_mpfr : has_mpfr.cpp :
       <include>$(gmp_path) <include>$(gmp_path)/mpfr <include>$(gmp_path)/gmpfrxx ;
 obj has_gmp : has_gmp.cpp :
       <include>$(gmp_path) <include>$(gmp_path)/mpfr <include>$(gmp_path)/gmpfrxx ;
+obj is_ci_sanitizer_run : is_ci_sanitizer_run.cpp ;
 
 explicit has_long_double_support ;
 explicit has_mpfr_class ;
@@ -46,4 +47,5 @@ explicit has_float128 ;
 explicit has_intel_quad ;
 explicit has_128bit_floatmax_t ;
 explicit has_fftw3 ;
+explicit is_ci_sanitizer_run ;
 

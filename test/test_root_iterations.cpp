@@ -150,7 +150,7 @@ BOOST_AUTO_TEST_CASE( test_main )
    int newton_limits = static_cast<int>(std::numeric_limits<double>::digits * 0.6);
 
    double arg = 1e-50;
-   boost::uintmax_t iters;
+   std::uintmax_t iters;
    double guess;
    double dr;
 

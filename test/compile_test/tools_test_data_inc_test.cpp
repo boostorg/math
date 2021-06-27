@@ -6,6 +6,7 @@
 // Basic sanity check that header <boost/math/tools/test_data.hpp>
 // #includes all the files that it needs to.
 //
+#ifndef BOOST_MATH_STANDALONE
 #include <boost/math/tools/test_data.hpp>
 
 #define T double
@@ -17,5 +18,4 @@ template boost::math::tools::parameter_info<T> boost::math::tools::make_power_pa
 template class boost::math::tools::test_data<T>;
 
 template bool boost::math::tools::get_user_parameter_info<T>(boost::math::tools::parameter_info<T>& info, const char* param_name);
-
-
+#endif

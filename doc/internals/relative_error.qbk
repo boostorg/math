@@ -47,7 +47,7 @@ caused the largest relative error.  Public members of type test_result are:
 [[`T min()const;`][Returns the smallest relative error found.]]
 [[`T max()const;`][Returns the largest relative error found.]]
 [[`T mean()const;`][Returns the mean error found.]]
-[[`boost::uintmax_t count()const;`][Returns the number of test cases.]]
+[[`std::uintmax_t count()const;`][Returns the number of test cases.]]
 [[`T variance()const;`][Returns the variance of the errors found.]]
 [[`T variance1()const;`][Returns the unbiased variance of the errors found.]]
 [[`T rms()const`][Returns the Root Mean Square, or quadratic mean of the errors.]]

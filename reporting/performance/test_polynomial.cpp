@@ -254,7 +254,7 @@ void test(const char* type)
 
 int main()
 {
-   test<boost::uint64_t>("boost::uint64_t");
+   test<std::uint64_t>("std::uint64_t");
    test<double>("double");
    max_reps = 100;
    test<boost::multiprecision::cpp_int>("cpp_int");

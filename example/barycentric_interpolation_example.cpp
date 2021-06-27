@@ -81,7 +81,7 @@ int main()
     //->
 
     // Now we want to interpolate this potential at any r:
-    boost::math::barycentric_rational<double> b(r.data(), mrV.data(), r.size());
+    boost::math::interpolators::barycentric_rational<double> b(r.data(), mrV.data(), r.size());
 
     for (size_t i = 1; i < 8; ++i)
     {

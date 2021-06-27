@@ -47,13 +47,13 @@
          // then recurse until b > 0, compute a reference value and normalize (Millers method).
          //
          int iterations = itrunc(-b, pol);
-         boost::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
+         std::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
          T ratio = boost::math::tools::function_ratio_from_forwards_recurrence(boost::math::detail::hypergeometric_1F1_recurrence_b_coefficients<T>(a, b, z), boost::math::tools::epsilon<T>(), max_iter);
          boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1F1_small_a_negative_b_by_ratio<%1%>(%1%,%1%,%1%)", max_iter, pol);
          T first = 1;
          T second = 1 / ratio;
          long long scaling1 = 0;
-         BOOST_ASSERT(b + iterations != a);
+         BOOST_MATH_ASSERT(b + iterations != a);
          second = boost::math::tools::apply_recurrence_relation_forward(boost::math::detail::hypergeometric_1F1_recurrence_b_coefficients<T>(a, b + 1, z), iterations, first, second, &scaling1);
          long long scaling2 = 0;
          first = hypergeometric_1F1_imp(a, T(b + iterations + 1), z, pol, scaling2);

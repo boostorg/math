@@ -3,6 +3,10 @@
  * Use, modification and distribution are subject to the
  * Boost Software License, Version 1.0. (See accompanying file
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+ * 
+ * We want to use c-style asserts in examples:
+ * 
+ * boost-no-inspect
  */
 
 #define BOOST_MATH_GENERATE_DAUBECHIES_GRID
@@ -26,7 +30,7 @@
 #include <boost/math/special_functions/factorials.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
 
-typedef boost::multiprecision::number<boost::multiprecision::cpp_bin_float<237, boost::multiprecision::backends::digit_base_2, std::allocator<char>, boost::int32_t, -262142, 262143>,  boost::multiprecision::et_off> octuple_type;
+typedef boost::multiprecision::number<boost::multiprecision::cpp_bin_float<237, boost::multiprecision::backends::digit_base_2, std::allocator<char>, std::int32_t, -262142, 262143>,  boost::multiprecision::et_off> octuple_type;
 
 #ifdef BOOST_HAS_FLOAT128
 typedef boost::multiprecision::float128 float128_t;

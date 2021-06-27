@@ -310,8 +310,8 @@
 <pre class="programlisting">  <span class="identifier">pair</span><span class="special">&lt;</span> <span class="identifier">polynomial</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;,</span> <span class="identifier">polynomial</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="identifier">result</span><span class="special">;</span>
   <span class="identifier">result</span> <span class="special">=</span> <span class="identifier">quotient_remainder</span><span class="special">(</span><span class="identifier">a</span><span class="special">,</span> <span class="identifier">b</span><span class="special">);</span>
 <span class="comment">// Reassure ourselves that the result is the same.</span>
-  <span class="identifier">BOOST_ASSERT</span><span class="special">(</span><span class="identifier">result</span><span class="special">.</span><span class="identifier">first</span> <span class="special">==</span> <span class="identifier">q</span><span class="special">);</span>
-  <span class="identifier">BOOST_ASSERT</span><span class="special">(</span><span class="identifier">result</span><span class="special">.</span><span class="identifier">second</span> <span class="special">==</span> <span class="identifier">r</span><span class="special">);</span>
+  <span class="identifier">BOOST_MATH_ASSERT</span><span class="special">(</span><span class="identifier">result</span><span class="special">.</span><span class="identifier">first</span> <span class="special">==</span> <span class="identifier">q</span><span class="special">);</span>
+  <span class="identifier">BOOST_MATH_ASSERT</span><span class="special">(</span><span class="identifier">result</span><span class="special">.</span><span class="identifier">second</span> <span class="special">==</span> <span class="identifier">r</span><span class="special">);</span>
 </pre>
 <p>
       The source code is at <a href="../../../example/polynomial_arithmetic.cpp" target="_top">polynomial_arithmetic.cpp</a>

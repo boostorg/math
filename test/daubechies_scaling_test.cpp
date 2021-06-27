@@ -11,6 +11,7 @@
 #include <iomanip>
 #include <iostream>
 #include <random>
+#include <boost/assert.hpp>
 #include <boost/core/demangle.hpp>
 #include <boost/hana/for_each.hpp>
 #include <boost/hana/ext/std/integer_sequence.hpp>
@@ -244,7 +245,7 @@ void test_dyadic_grid()
     {
         auto phijk = boost::math::daubechies_scaling_dyadic_grid<Real, i+2, 0>(0);
         auto phik = boost::math::detail::daubechies_scaling_integer_grid<Real, i+2, 0>();
-        assert(phik.size() == phijk.size());
+        BOOST_ASSERT(phik.size() == phijk.size());
 
         for (size_t k = 0; k < phik.size(); ++k)
         {
@@ -353,15 +354,15 @@ void test_quadratures()
             CHECK_ULP_CLOSE(Real(0), phi(xlo), 0);
             CHECK_ULP_CLOSE(Real(0), phi(xhi), 0);
             xlo = std::nextafter(xlo, std::numeric_limits<Real>::lowest());
-            xhi = std::nextafter(xhi, std::numeric_limits<Real>::max());
+            xhi = std::nextafter(xhi, (std::numeric_limits<Real>::max)());
         }
 
         xlo = a;
         xhi = b;
         for (int i = 0; i < samples; ++i) {
-            assert(abs(phi(xlo)) <= 5);
-            assert(abs(phi(xhi)) <= 5);
-            xlo = std::nextafter(xlo, std::numeric_limits<Real>::max());
+            BOOST_ASSERT(abs(phi(xlo)) <= 5);
+            BOOST_ASSERT(abs(phi(xhi)) <= 5);
+            xlo = std::nextafter(xlo, (std::numeric_limits<Real>::max)());
             xhi = std::nextafter(xhi, std::numeric_limits<Real>::lowest());
         }
 
@@ -392,7 +393,7 @@ void test_quadratures()
         }
 
         std::random_device rd;
-        Real t = static_cast<Real>(rd())/static_cast<Real>(rd.max());
+        Real t = static_cast<Real>(rd())/static_cast<Real>((rd.max)());
         Real S = phi(t);
         Real dS = phi.prime(t);
         while (t < b)
@@ -425,23 +426,23 @@ void test_quadratures()
             CHECK_ULP_CLOSE(Real(0), phi(xlo), 0);
             CHECK_ULP_CLOSE(Real(0), phi(xhi), 0);
             if constexpr (p > 2) {
-                assert(abs(phi.prime(xlo)) <= 5);
-                assert(abs(phi.prime(xhi)) <= 5);
+                BOOST_ASSERT(abs(phi.prime(xlo)) <= 5);
+                BOOST_ASSERT(abs(phi.prime(xhi)) <= 5);
                 if constexpr (p > 5) {
-                    assert(abs(phi.double_prime(xlo)) <= 5);
-                    assert(abs(phi.double_prime(xhi)) <= 5);
+                     BOOST_ASSERT(abs(phi.double_prime(xlo)) <= 5);
+                     BOOST_ASSERT(abs(phi.double_prime(xhi)) <= 5);
                 }
             }
             xlo = std::nextafter(xlo, std::numeric_limits<Real>::lowest());
-            xhi = std::nextafter(xhi, std::numeric_limits<Real>::max());
+            xhi = std::nextafter(xhi, (std::numeric_limits<Real>::max)());
         }
 
         xlo = a;
         xhi = b;
         for (int i = 0; i < samples; ++i) {
-            assert(abs(phi(xlo)) <= 5);
-            assert(abs(phi(xhi)) <= 5);
-            xlo = std::nextafter(xlo, std::numeric_limits<Real>::max());
+            BOOST_ASSERT(abs(phi(xlo)) <= 5);
+            BOOST_ASSERT(abs(phi(xhi)) <= 5);
+            xlo = std::nextafter(xlo, (std::numeric_limits<Real>::max)());
             xhi = std::nextafter(xhi, std::numeric_limits<Real>::lowest());
         }
     }

@@ -9,11 +9,15 @@
 
 #include <cmath>
 #include <vector>
-#include <boost/math/tools/atomic.hpp>
-#include <boost/detail/lightweight_mutex.hpp>
 #include <typeinfo>
+#include <boost/math/tools/atomic.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/next.hpp>
+#include <boost/math/tools/config.hpp>
+
+#ifdef BOOST_HAS_THREADS
+#include <mutex>
+#endif
 
 namespace boost{ namespace math{ namespace quadrature { namespace detail{
 
@@ -50,40 +54,40 @@ public:
 private:
    const std::vector<Real>& get_abscissa_row(std::size_t n)const
    {
-#ifndef BOOST_MATH_NO_ATOMIC_INT
+#if !defined(BOOST_MATH_NO_ATOMIC_INT) && defined(BOOST_HAS_THREADS)
       if (m_committed_refinements.load() < n)
          extend_refinements();
-      BOOST_ASSERT(m_committed_refinements.load() >= n);
+      BOOST_MATH_ASSERT(m_committed_refinements.load() >= n);
 #else
       if (m_committed_refinements < n)
          extend_refinements();
-      BOOST_ASSERT(m_committed_refinements >= n);
+      BOOST_MATH_ASSERT(m_committed_refinements >= n);
 #endif
       return m_abscissas[n];
    }
    const std::vector<Real>& get_weight_row(std::size_t n)const
    {
-#ifndef BOOST_MATH_NO_ATOMIC_INT
+#if !defined(BOOST_MATH_NO_ATOMIC_INT) && defined(BOOST_HAS_THREADS)
       if (m_committed_refinements.load() < n)
          extend_refinements();
-      BOOST_ASSERT(m_committed_refinements.load() >= n);
+      BOOST_MATH_ASSERT(m_committed_refinements.load() >= n);
 #else
       if (m_committed_refinements < n)
          extend_refinements();
-      BOOST_ASSERT(m_committed_refinements >= n);
+      BOOST_MATH_ASSERT(m_committed_refinements >= n);
 #endif
       return m_weights[n];
    }
    std::size_t get_first_complement_index(std::size_t n)const
    {
-#ifndef BOOST_MATH_NO_ATOMIC_INT
+#if !defined(BOOST_MATH_NO_ATOMIC_INT) && defined(BOOST_HAS_THREADS)
       if (m_committed_refinements.load() < n)
          extend_refinements();
-      BOOST_ASSERT(m_committed_refinements.load() >= n);
+      BOOST_MATH_ASSERT(m_committed_refinements.load() >= n);
 #else
       if (m_committed_refinements < n)
          extend_refinements();
-      BOOST_ASSERT(m_committed_refinements >= n);
+      BOOST_MATH_ASSERT(m_committed_refinements >= n);
 #endif
       return m_first_complements[n];
    }
@@ -98,13 +102,13 @@ private:
    void prune_to_min_complement(const Real& m);
    void extend_refinements()const
    {
-#ifndef BOOST_MATH_NO_ATOMIC_INT
-      boost::detail::lightweight_mutex::scoped_lock guard(m_mutex);
+#if !defined(BOOST_MATH_NO_ATOMIC_INT) && defined(BOOST_HAS_THREADS)
+      std::lock_guard<std::mutex> guard(m_mutex);
 #endif
       //
       // Check some other thread hasn't got here after we read the atomic variable, but before we got here:
       //
-#ifndef BOOST_MATH_NO_ATOMIC_INT
+#if !defined(BOOST_MATH_NO_ATOMIC_INT) && defined(BOOST_HAS_THREADS)
       if (m_committed_refinements.load() >= m_max_refinements)
          return;
 #else
@@ -115,7 +119,7 @@ private:
       using std::ldexp;
       using std::ceil;
       ++m_committed_refinements;
-#ifndef BOOST_MATH_NO_ATOMIC_INT
+#if !defined(BOOST_MATH_NO_ATOMIC_INT) && defined(BOOST_HAS_THREADS)
       std::size_t row = m_committed_refinements.load();
 #else
       std::size_t row = m_committed_refinements;
@@ -170,9 +174,9 @@ private:
    mutable std::vector<std::vector<Real>> m_weights;
    mutable std::vector<std::size_t>       m_first_complements;
    std::size_t                       m_max_refinements, m_inital_row_length;
-#ifndef BOOST_MATH_NO_ATOMIC_INT
+#if !defined(BOOST_MATH_NO_ATOMIC_INT) && defined(BOOST_HAS_THREADS)
    mutable boost::math::detail::atomic_unsigned_type      m_committed_refinements;
-   mutable boost::detail::lightweight_mutex m_mutex;
+   mutable std::mutex m_mutex;
 #else
    mutable unsigned                  m_committed_refinements;
 #endif
@@ -222,8 +226,8 @@ decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) tanh_sin
     // ever decrement through the stored values that are complements (the negative ones), and
     // never ever hit the true abscissa values (positive stored values).
     //
-    BOOST_ASSERT(m_abscissas[0][max_left_position] < 0);
-    BOOST_ASSERT(m_abscissas[0][max_right_position] < 0);
+    BOOST_MATH_ASSERT(m_abscissas[0][max_left_position] < 0);
+    BOOST_MATH_ASSERT(m_abscissas[0][max_right_position] < 0);
     //
     // The type of the result:
     typedef decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) result_type;
@@ -320,12 +324,12 @@ decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) tanh_sin
             if (j >= first_complement_index)
             {
                // We have stored x - 1:
-               BOOST_ASSERT(x < 0);
+               BOOST_MATH_ASSERT(x < 0);
                x = 1 + xc;
             }
             else
             {
-               BOOST_ASSERT(x >= 0);
+               BOOST_MATH_ASSERT(x >= 0);
                xc = x - 1;
             }
 
@@ -448,7 +452,7 @@ void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const std:
    temp[m_inital_row_length] = weight_at_t(m_t_max);
    m_weights[0].swap(temp);
 
-#ifndef BOOST_MATH_NO_ATOMIC_INT
+#if !defined(BOOST_MATH_NO_ATOMIC_INT) && defined(BOOST_HAS_THREADS)
    for (std::size_t row = 1; row <= m_committed_refinements.load(); ++row)
 #else
    for (std::size_t row = 1; row <= m_committed_refinements; ++row)
@@ -509,7 +513,7 @@ void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const std:
    m_first_complements = {
       1, 0, 1, 1, 3, 5, 11, 22,
    };
-#ifndef BOOST_MATH_NO_ATOMIC_INT
+#if !defined(BOOST_MATH_NO_ATOMIC_INT) && defined(BOOST_HAS_THREADS)
    m_committed_refinements = static_cast<boost::math::detail::atomic_unsigned_integer_type>(m_abscissas.size() - 1);
 #else
    m_committed_refinements = m_abscissas.size() - 1;
@@ -562,7 +566,7 @@ void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const std:
    m_first_complements = {
       1, 0, 1, 1, 3, 5, 11, 22,
    };
-#ifndef BOOST_MATH_NO_ATOMIC_INT
+#if !defined(BOOST_MATH_NO_ATOMIC_INT) && defined(BOOST_HAS_THREADS)
    m_committed_refinements = static_cast<boost::math::detail::atomic_unsigned_integer_type>(m_abscissas.size() - 1);
 #else
    m_committed_refinements = m_abscissas.size() - 1;
@@ -614,7 +618,7 @@ void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const std:
    m_first_complements = {
       1, 0, 1, 1, 3, 5, 11, 22,
    };
-#ifndef BOOST_MATH_NO_ATOMIC_INT
+#if !defined(BOOST_MATH_NO_ATOMIC_INT) && defined(BOOST_HAS_THREADS)
    m_committed_refinements = static_cast<boost::math::detail::atomic_unsigned_integer_type>(m_abscissas.size() - 1);
 #else
    m_committed_refinements = m_abscissas.size() - 1;
@@ -668,7 +672,7 @@ void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const std:
    m_first_complements = {
       1, 0, 1, 1, 3, 5, 11, 22,
    };
-#ifndef BOOST_MATH_NO_ATOMIC_INT
+#if !defined(BOOST_MATH_NO_ATOMIC_INT) && defined(BOOST_HAS_THREADS)
    m_committed_refinements = static_cast<boost::math::detail::atomic_unsigned_integer_type>(m_abscissas.size() - 1);
 #else
    m_committed_refinements = m_abscissas.size() - 1;
