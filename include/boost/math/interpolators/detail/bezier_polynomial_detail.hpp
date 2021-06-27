@@ -12,6 +12,15 @@
 
 namespace boost::math::interpolators::detail {
 
+namespace {
+    template <class RandomAccessContainer>
+    static RandomAccessContainer& get_storage()
+    {
+        static thread_local RandomAccessContainer the_storage;
+        return the_storage;
+    }
+}
+
 template <class RandomAccessContainer>
 class bezier_polynomial_imp
 {
@@ -37,6 +46,10 @@ public:
             }
         }
         control_points_ = std::move(control_points);
+        auto & storage = get_storage<RandomAccessContainer>();
+        if (storage.size() < control_points_.size() -1) {
+            storage.resize(control_points_.size() -1);
+        }
     }
 
     inline Point operator()(Real t) const
@@ -54,15 +67,16 @@ public:
         // I don't like that every call requires malloc'ing this container.
         // But we can't overwrite the control points.
         // We could make it a member of the class, but then this call operator wouldn't be threadsafe . . .
-        RandomAccessContainer first_recursion(control_points_.size() - 1);
-        for (Z i = 0; i < first_recursion.size(); ++i) {
+        auto & scratch_space = get_storage<RandomAccessContainer>();
+        assert(scratch_space.size() >= control_points_.size() - 1);
+        for (Z i = 0; i < scratch_space.size(); ++i) {
             for (Z j = 0; j < control_points_[0].size(); ++j) {
-                first_recursion[i][j] = (1-t)*control_points_[i][j] + t*control_points_[i+1][j];
+                scratch_space[i][j] = (1-t)*control_points_[i][j] + t*control_points_[i+1][j];
             }
         }
 
-        decasteljau_recursion(first_recursion, first_recursion.size(), t);
-        return first_recursion[0];
+        decasteljau_recursion(scratch_space, scratch_space.size(), t);
+        return scratch_space[0];
     }
 
 private:

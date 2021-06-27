@@ -1,5 +1,5 @@
 [/
-  Copyright 2021 Nick Thompson
+  Copyright 2021 Nick Thompson, John Maddock
 
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at
@@ -43,7 +43,7 @@ A basic usage is demonstrated below:
     control_points[3] = {0,0,1};
     auto bp = bezier_polynomial(std::move(control_points));
     // Interpolate at t = 0.1:
-    auto point = bp(0.1);
+    std::array<Real, 3> point = bp(0.1);
 
 The support of the interpolant is [0,1], and an error message will be written if attempting to evaluate the polynomial outside of these bounds.
 At least two points must be passed; creating a polynomial of degree 1.
@@ -65,34 +65,45 @@ The following performance numbers were generated for evaluating the Bezier-polyn
 The evaluation of the interpolant is [bigo](/N/^2), as expected from de Casteljau's algorithm.
 
 
-    Run on 2700 MHz CPU
+    Run on (16 X 2300 MHz CPU s)
     CPU Caches:
-      L1 Data 32K (x2)
-      L1 Instruction 32K (x2)
-      L2 Unified 262K (x2)
-      L3 Unified 3145K (x1)
+    L1 Data 32 KiB (x8)
+    L1 Instruction 32 KiB (x8)
+    L2 Unified 256 KiB (x8)
+    L3 Unified 16384 KiB (x1)
     ---------------------------------------------------------
     Benchmark                              Time           CPU
     ---------------------------------------------------------
-    BezierPolynomial<double>/2        71.7 ns         71.7 ns
-    BezierPolynomial<double>/3        76.7 ns         76.7 ns
-    BezierPolynomial<double>/4        81.7 ns         81.6 ns
-    BezierPolynomial<double>/5        89.1 ns         89.0 ns
-    BezierPolynomial<double>/6        91.8 ns         91.7 ns
-    BezierPolynomial<double>/7        96.0 ns         95.9 ns
-    BezierPolynomial<double>/8         105 ns          105 ns
-    BezierPolynomial<double>/9         113 ns          113 ns
-    BezierPolynomial<double>/10        127 ns          127 ns
-    BezierPolynomial<double>/11        135 ns          135 ns
-    BezierPolynomial<double>/12        194 ns          194 ns
-    BezierPolynomial<double>/13        209 ns          209 ns
-    BezierPolynomial<double>/14        222 ns          222 ns
-    BezierPolynomial<double>/15        231 ns          230 ns
-    BezierPolynomial<double>/16        264 ns          263 ns
-    BezierPolynomial<double>/17        269 ns          268 ns
-    BezierPolynomial<double>/18        298 ns          297 ns
-    BezierPolynomial<double>/19        286 ns          286 ns
-
+    BezierPolynomial<double>/2        9.07 ns         9.06 ns
+    BezierPolynomial<double>/3        13.2 ns         13.1 ns
+    BezierPolynomial<double>/4        17.5 ns         17.5 ns
+    BezierPolynomial<double>/5        21.7 ns         21.7 ns
+    BezierPolynomial<double>/6        27.4 ns         27.4 ns
+    BezierPolynomial<double>/7        32.4 ns         32.3 ns
+    BezierPolynomial<double>/8        40.4 ns         40.4 ns
+    BezierPolynomial<double>/9        51.9 ns         51.8 ns
+    BezierPolynomial<double>/10       65.9 ns         65.9 ns
+    BezierPolynomial<double>/11       79.1 ns         79.1 ns
+    BezierPolynomial<double>/12       83.0 ns         82.9 ns
+    BezierPolynomial<double>/13        108 ns          108 ns
+    BezierPolynomial<double>/14        119 ns          119 ns
+    BezierPolynomial<double>/15        140 ns          140 ns
+    BezierPolynomial<double>/16        137 ns          137 ns
+    BezierPolynomial<double>/17        151 ns          151 ns
+    BezierPolynomial<double>/18        171 ns          171 ns
+    BezierPolynomial<double>/19        194 ns          193 ns
+    BezierPolynomial<double>/20        213 ns          213 ns
+    BezierPolynomial<double>/21        220 ns          220 ns
+    BezierPolynomial<double>/22        260 ns          260 ns
+    BezierPolynomial<double>/23        266 ns          266 ns
+    BezierPolynomial<double>/24        293 ns          292 ns
+    BezierPolynomial<double>/25        319 ns          319 ns
+    BezierPolynomial<double>/26        336 ns          335 ns
+    BezierPolynomial<double>/27        370 ns          370 ns
+    BezierPolynomial<double>/28        429 ns          429 ns
+    BezierPolynomial<double>/29        443 ns          443 ns
+    BezierPolynomial<double>/30        421 ns          421 ns
+    BezierPolynomial<double>_BigO       0.52 N^2        0.51 N^2  
 
 [heading Point types]
 
