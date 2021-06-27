@@ -60,9 +60,27 @@ void test_quadratic()
     computed_point = bp(1);
     CHECK_ULP_CLOSE(control_points[2][0], computed_point[0], 3);
     CHECK_ULP_CLOSE(control_points[2][1], computed_point[1], 3);
-
 }
 
+// All points on a Bezier polynomial fall into the convex hull of the control polygon.
+template<typename Real>
+void test_convex_hull()
+{
+    std::vector<std::array<Real, 2>> control_points(4);
+    control_points[0] = {0.0, 0.0};
+    control_points[1] = {0.0, 1.0};
+    control_points[2] = {1.0, 1.0};
+    control_points[3] = {1.0, 0.0};
+    auto bp = bezier_polynomial(std::move(control_points));
+
+    for (Real t = 0; t < 1; t += Real(1)/32) {
+        auto p = bp(t);
+        CHECK_LE(p[0], Real(1));
+        CHECK_LE(Real(0), p[0]);
+        CHECK_LE(p[1], Real(1));
+        CHECK_LE(Real(0), p[1]);
+    }
+}
 
 int main()
 {
@@ -70,5 +88,12 @@ int main()
     test_linear<double>();
     test_quadratic<float>();
     test_quadratic<double>();
+    test_convex_hull<float>();
+    test_convex_hull<double>();
+#ifdef BOOST_HAS_FLOAT128
+    test_linear<float128>();
+    test_quadratic<float128>();
+    test_convex_hull<float128>();
+#endif
     return boost::math::test::report_errors();
 }
