@@ -27,12 +27,48 @@ void test_linear()
     auto control_points_copy = control_points;
     auto bp = bezier_polynomial(std::move(control_points_copy));
 
-    CHECK_ULP_CLOSE(bp(0)[0], control_points[0][0], 3);
-    CHECK_ULP_CLOSE(bp(0)[0], control_points[0][1], 3);
+    // P(0) = P_0:
+    CHECK_ULP_CLOSE(control_points[0][0], bp(0)[0], 3);
+    CHECK_ULP_CLOSE(control_points[0][1], bp(0)[1], 3);
+
+    // P(1) = P_n:
+    CHECK_ULP_CLOSE(control_points[1][0], bp(1)[0], 3);
+    CHECK_ULP_CLOSE(control_points[1][1], bp(1)[1], 3);
+
+    for (Real t = Real(1)/32; t < 1; t += Real(1)/32) {
+        Real expected0 = (1-t)*control_points[0][0] + t*control_points[1][0];
+        CHECK_ULP_CLOSE(expected0, bp(t)[0], 3);
+    }
 }
+
+template<typename Real>
+void test_quadratic()
+{
+    std::vector<std::array<Real, 2>> control_points(3);
+    control_points[0] = {0.0, 0.0};
+    control_points[1] = {1.0, 1.0};
+    control_points[2] = {2.0, 2.0};
+    auto control_points_copy = control_points;
+    auto bp = bezier_polynomial(std::move(control_points_copy));
+
+    // P(0) = P_0:
+    auto computed_point = bp(0);
+    CHECK_ULP_CLOSE(control_points[0][0], computed_point[0], 3);
+    CHECK_ULP_CLOSE(control_points[0][1], computed_point[1], 3);
+
+    // P(1) = P_n:
+    computed_point = bp(1);
+    CHECK_ULP_CLOSE(control_points[2][0], computed_point[0], 3);
+    CHECK_ULP_CLOSE(control_points[2][1], computed_point[1], 3);
+
+}
+
 
 int main()
 {
+    test_linear<float>();
     test_linear<double>();
+    test_quadratic<float>();
+    test_quadratic<double>();
     return boost::math::test::report_errors();
 }

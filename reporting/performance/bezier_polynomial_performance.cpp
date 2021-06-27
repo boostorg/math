@@ -37,6 +37,6 @@ void BezierPolynomial(benchmark::State& state)
      state.SetComplexityN(state.range(0));
 }
 
-BENCHMARK_TEMPLATE(BezierPolynomial, double)->RangeMultiplier(2)->Range(1 << 6, 1 << 18)->Complexity();
+BENCHMARK_TEMPLATE(BezierPolynomial, double)->DenseRange(2, 30)->Complexity();
 
 BENCHMARK_MAIN();

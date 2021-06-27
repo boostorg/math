@@ -28,6 +28,14 @@ public:
                + " At least two points are required to form a Bezier curve. Only " + to_string(control_points.size())  + " points have been provided.";
             throw std::logic_error(err);
         }
+        Z dimension = control_points[0].size();
+        for (Z i = 0; i < control_points.size(); ++i) {
+            if (control_points[i].size() != dimension) {
+                std::string err = std::string(__FILE__) + ":" + to_string(__LINE__)
+                + " All points passed to the Bezier polynomial must have the same dimension.";
+                throw std::logic_error(err);
+            }
+        }
         control_points_ = std::move(control_points);
     }
 
@@ -43,9 +51,18 @@ public:
             return p;
         }
 
-        auto P = control_points_[0];
+        // I don't like that every call requires malloc'ing this container.
+        // But we can't overwrite the control points.
+        // We could make it a member of the class, but then this call operator wouldn't be threadsafe . . .
+        RandomAccessContainer first_recursion(control_points_.size() - 1);
+        for (Z i = 0; i < first_recursion.size(); ++i) {
+            for (Z j = 0; j < control_points_[0].size(); ++j) {
+                first_recursion[i][j] = (1-t)*control_points_[i][j] + t*control_points_[i+1][j];
+            }
+        }
 
-        return P;
+        decasteljau_recursion(first_recursion, first_recursion.size(), t);
+        return first_recursion[0];
     }
 
     friend std::ostream& operator<<(std::ostream& out, bezier_polynomial_imp<RandomAccessContainer> const & bc) {
@@ -53,6 +70,19 @@ public:
     }
 
 private:
+
+    void decasteljau_recursion(RandomAccessContainer & points, Z n, Real t) const {
+        if (n <= 1) {
+            return;
+        }
+        for (Z i = 0; i < n - 1; ++i) {
+            for (Z j = 0; j < points[0].size(); ++j) {
+                points[i][j] = (1-t)*points[i][j] + t*points[i+1][j];
+            }
+        }
+        decasteljau_recursion(points, n - 1, t);
+    }
+
     RandomAccessContainer control_points_;
 };
 
