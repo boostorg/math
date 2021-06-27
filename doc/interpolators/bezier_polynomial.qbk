@@ -19,10 +19,12 @@ namespace boost::math::interpolators {
     class bezier_polynomial
     {
     public:
+        using Point = typename RandomAccessContainer::value_type;
+        using Real = typename Point::value_type;
 
         bezier_polynomial(RandomAccessContainer&& control_points);
 
-        Real operator()(Real t) const;
+        inline Point operator()(Real t) const;
     };
 
 }}
@@ -60,7 +62,7 @@ Requires C++17.
 [heading Performance]
 
 The following performance numbers were generated for evaluating the Bezier-polynomial.
-The evaluation of the interpolant is [bigo](/N/), as expected from de Casteljau's algorithm.
+The evaluation of the interpolant is [bigo](/N/^2), as expected from de Casteljau's algorithm.
 
 
     Run on 2700 MHz CPU
@@ -72,7 +74,24 @@ The evaluation of the interpolant is [bigo](/N/), as expected from de Casteljau'
     ---------------------------------------------------------
     Benchmark                              Time           CPU
     ---------------------------------------------------------
-
+    BezierPolynomial<double>/2        71.7 ns         71.7 ns
+    BezierPolynomial<double>/3        76.7 ns         76.7 ns
+    BezierPolynomial<double>/4        81.7 ns         81.6 ns
+    BezierPolynomial<double>/5        89.1 ns         89.0 ns
+    BezierPolynomial<double>/6        91.8 ns         91.7 ns
+    BezierPolynomial<double>/7        96.0 ns         95.9 ns
+    BezierPolynomial<double>/8         105 ns          105 ns
+    BezierPolynomial<double>/9         113 ns          113 ns
+    BezierPolynomial<double>/10        127 ns          127 ns
+    BezierPolynomial<double>/11        135 ns          135 ns
+    BezierPolynomial<double>/12        194 ns          194 ns
+    BezierPolynomial<double>/13        209 ns          209 ns
+    BezierPolynomial<double>/14        222 ns          222 ns
+    BezierPolynomial<double>/15        231 ns          230 ns
+    BezierPolynomial<double>/16        264 ns          263 ns
+    BezierPolynomial<double>/17        269 ns          268 ns
+    BezierPolynomial<double>/18        298 ns          297 ns
+    BezierPolynomial<double>/19        286 ns          286 ns
 
 
 [heading Point types]

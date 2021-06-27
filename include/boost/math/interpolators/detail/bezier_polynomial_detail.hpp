@@ -39,7 +39,7 @@ public:
         control_points_ = std::move(control_points);
     }
 
-    Point operator()(Real t) const
+    inline Point operator()(Real t) const
     {
         if (t < 0 || t > 1) {
             std::cerr << __FILE__ << ":" << __LINE__ << ":" << __func__ << "\n";
@@ -63,10 +63,6 @@ public:
 
         decasteljau_recursion(first_recursion, first_recursion.size(), t);
         return first_recursion[0];
-    }
-
-    friend std::ostream& operator<<(std::ostream& out, bezier_polynomial_imp<RandomAccessContainer> const & bc) {
-        return out;
     }
 
 private:

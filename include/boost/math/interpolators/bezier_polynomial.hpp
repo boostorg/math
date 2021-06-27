@@ -23,14 +23,9 @@ public:
     {
     }
 
-    Point operator()(Real t) const
+    inline Point operator()(Real t) const
     {
         return (*m_imp)(t);
-    }
-
-    friend std::ostream& operator<<(std::ostream& out, bezier_polynomial<RandomAccessContainer> const & bc) {
-        out << *bc.m_imp;
-        return out;
     }
 
 private:
