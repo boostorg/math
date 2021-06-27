@@ -21,14 +21,12 @@ namespace boost {
 namespace math {
 
 namespace detail {
-// this should be constexpr in future
-const double log_2 = std::log(2.0),
-             fib_bits_phi = std::log(boost::math::constants::phi<double>()) / log_2,
-             fib_bits_deno = std::log(5.0) / 2.0 / log_2;
+   constexpr double fib_bits_phi = 0.69424191363061730173879026;
+   constexpr double fib_bits_deno = 1.1609640474436811739351597;
 } // namespace detail
 
 template <typename T>
-inline constexpr T unchecked_fibonacci(unsigned long long n) noexcept {
+inline BOOST_CXX14_CONSTEXPR T unchecked_fibonacci(unsigned long long n) noexcept(std::is_fundamental<T>::value) {
     // This function is called by the rest and computes the actual nth fibonacci number
     // First few fibonacci numbers: 0 (0th), 1 (1st), 1 (2nd), 2 (3rd), ...
     if (n <= 2) return n == 0 ? 0 : 1;
@@ -52,7 +50,7 @@ inline constexpr T unchecked_fibonacci(unsigned long long n) noexcept {
 }
 
 template <typename T, class Policy>
-T inline fibonacci(unsigned long long n, const Policy &pol) {
+T inline BOOST_CXX14_CONSTEXPR fibonacci(unsigned long long n, const Policy &pol) {
     // check for overflow using approximation to binet's formula: F_n ~ phi^n / sqrt(5)
     if (n > 20 && n * detail::fib_bits_phi - detail::fib_bits_deno > std::numeric_limits<T>::digits)
         return policies::raise_overflow_error<T>("boost::math::fibonacci<%1%>(unsigned long long)", "Possible overflow detected.", pol);
@@ -60,7 +58,7 @@ T inline fibonacci(unsigned long long n, const Policy &pol) {
 }
 
 template <typename T>
-T inline fibonacci(unsigned long long n) {
+T inline BOOST_CXX14_CONSTEXPR fibonacci(unsigned long long n) {
     return fibonacci<T>(n, policies::policy<>());
 }
 
@@ -69,7 +67,7 @@ template <typename T>
 class fibonacci_generator {
   public:
     // return next fibonacci number
-    T operator()() noexcept {
+    T operator()() noexcept(std::is_fundamental<T>::value) {
         T ret = a;
         a = b, b = b + ret; // could've simply: swap(a, b), b += a;
         return ret;
@@ -77,7 +75,7 @@ class fibonacci_generator {
 
     // after set(nth), subsequent calls to the generator returns consecutive
     // fibonacci numbers starting with the nth fibonacci number
-    void set(unsigned long long nth) noexcept {
+    void set(unsigned long long nth) noexcept(std::is_fundamental<T>::value) {
         n = nth;
         a = unchecked_fibonacci<T>(n);
         b = unchecked_fibonacci<T>(n + 1);
