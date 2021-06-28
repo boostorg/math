@@ -239,10 +239,9 @@ mean & = \frac{rn}{N} \\
 mode & = \floor*{ \frac{(r+1)(n+1)}{N+2} }\\
 variance & = \frac{r(\frac{n}{N})(1-\frac{n}{N})(N-r)}{(N-1)}\\
 skewness & = \frac{(N-2n)\sqrt{(N-1)}(N-2r)}{\sqrt{rn(N-n)(N-r)}(N-2)}\\
-kertosis\:excess & = \frac{(N-1)N^2(N(N+1)-6r(N-r)-6n(N-n)+6nr(N-r)(N-n)(5N-6)}{nr(N-r)(N-n)(N-2)(N-3)}
+kurtosis & = \frac{((N - 1) N^2 ((3 r (N - r) (n^2 (-N) + (n - 2) N^2 + 6 n (N - n)))/N^2 - 6 n (N - n) + N (N + 1)))}{(r n (N - 3) (N - 2) (N - r) (N - n))}
 \end{split}
 \end{equation*}
-
 ]
 
 [equation hypergeometric6]
