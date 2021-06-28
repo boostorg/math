@@ -27,7 +27,11 @@ namespace boost::math::interpolators {
 
         inline Point operator()(Real t) const;
 
+        inline Point prime(Real t) const;
+
         void edit_control_point(Point cont & p, Z index);
+
+        RandomAccessContainer const & control_points() const;
     };
 
 }
@@ -57,6 +61,8 @@ Control points may be modified via `edit_control_point`, for example:
     bp.edit_control_point(endpoint, 3);
 
 This replaces the last control point with `endpoint`.
+
+Tangents are computed with the `.prime` member function, and the control points may be referenced with the `.control_points` member function.
 
 [heading Caveats]
 
@@ -114,6 +120,10 @@ The evaluation of the interpolant is [bigo](/N/^2), as expected from de Castelja
     BezierPolynomial<double>/30        421 ns          421 ns
     BezierPolynomial<double>_BigO       0.52 N^2        0.51 N^2  
 
+The Casteljau recurrence is indeed quadratic in the number of control points, and is chosen for numerical stability.
+See /Bezier and B-spline Techniques/, section 2.3 for a method to Hornerize the Berstein polynomials and perhaps produce speedups.
+
+
 [heading Point types]
 
 The `Point` type must satisfy certain conceptual requirements which are discussed in the documentation of the Catmull-Rom curve.
@@ -155,5 +165,6 @@ These conditions are satisfied by both `std::array` and `std::vector`.
 
 * Rainer Kress, ['Numerical Analysis], Springer, 1998
 * David Salomon, ['Curves and Surfaces for Computer Graphics], Springer, 2005
+* Prautzsch, Hartmut, Wolfgang Boehm, and Marco Paluszny. ['Bézier and B-spline techniques]. Springer Science & Business Media, 2002.
 
 [endsect] [/section:bezier_polynomials Bezier Polynomials]

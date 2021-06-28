@@ -28,9 +28,19 @@ public:
         return (*m_imp)(t);
     }
 
+    inline Point prime(Real t) const
+    {
+        return m_imp->prime(t);
+    }
+
     void edit_control_point(Point const & p, Z index)
     {
         m_imp->edit_control_point(p, index);
+    }
+
+    RandomAccessContainer const & control_points() const
+    {
+        return m_imp->control_points();
     }
 
 private:

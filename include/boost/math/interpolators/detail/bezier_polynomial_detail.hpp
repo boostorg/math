@@ -65,7 +65,7 @@ public:
         }
 
         auto & scratch_space = get_bezier_storage<RandomAccessContainer>();
-        for (Z i = 0; i < scratch_space.size(); ++i) {
+        for (Z i = 0; i < control_points_.size() - 1; ++i) {
             for (Z j = 0; j < control_points_[0].size(); ++j) {
                 scratch_space[i][j] = (1-t)*control_points_[i][j] + t*control_points_[i+1][j];
             }
@@ -75,6 +75,21 @@ public:
         return scratch_space[0];
     }
 
+    Point prime(Real t) {
+        auto & scratch_space = get_bezier_storage<RandomAccessContainer>();
+        for (Z i = 0; i < control_points_.size() - 1; ++i) {
+            for (Z j = 0; j < control_points_[0].size(); ++j) {
+                scratch_space[i][j] = control_points_[i+1][j] - control_points_[i][j];
+            }
+        }
+        decasteljau_recursion(scratch_space, control_points_.size() - 1, t);
+        for (Z j = 0; j < control_points_[0].size(); ++j) {
+            scratch_space[0][j] *= (control_points_.size()-1);
+        }
+        return scratch_space[0];
+    }
+
+
     void edit_control_point(Point const & p, Z index)
     {
         if (index >= control_points_.size()) {
@@ -83,6 +98,10 @@ public:
             return;
         }
         control_points_[index] = p;
+    }
+
+    RandomAccessContainer const & control_points() const {
+        return control_points_;
     }
 
 private:

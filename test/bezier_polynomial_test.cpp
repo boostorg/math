@@ -62,6 +62,9 @@ void test_quadratic()
     auto computed_point = bp(0);
     CHECK_ULP_CLOSE(control_points[0][0], computed_point[0], 3);
     CHECK_ULP_CLOSE(control_points[0][1], computed_point[1], 3);
+    auto computed_dp = bp.prime(0);
+    CHECK_ULP_CLOSE(2*(control_points[1][0] - control_points[0][0]), computed_dp[0], 3);
+    CHECK_ULP_CLOSE(2*(control_points[1][1] - control_points[0][1]), computed_dp[1], 3);
 
     // P(1) = P_n:
     computed_point = bp(1);
@@ -89,6 +92,44 @@ void test_convex_hull()
     }
 }
 
+// Linear precision: If all control points lie *equidistantly* on a line, then the Bezier curve falls on a line.
+// See Bezier and B-spline techniques, Section 2.8, Remark 8.
+template<typename Real>
+void test_linear_precision()
+{
+    std::vector<std::array<Real, 3>> control_points(10);
+    std::array<Real, 3> P0 = {1,1,1};
+    std::array<Real, 3> Pf = {2,2,2};
+    control_points[0] = P0;
+    control_points[9] = Pf;
+    for (size_t i = 1; i < 9; ++i) {
+        Real t = Real(i)/(control_points.size()-1);
+        control_points[i][0] = (1-t)*P0[0] + t*Pf[0];
+        control_points[i][1] = (1-t)*P0[1] + t*Pf[1];
+        control_points[i][2] = (1-t)*P0[2] + t*Pf[2];
+    }
+
+    auto bp = bezier_polynomial(std::move(control_points));
+    for (Real t = 0; t < 1; t += Real(1)/32) {
+        std::array<Real, 3> P;
+        P[0] = (1-t)*P0[0] + t*Pf[0];
+        P[1] = (1-t)*P0[1] + t*Pf[1];
+        P[2] = (1-t)*P0[2] + t*Pf[2];
+
+        auto computed = bp(t);
+        CHECK_ULP_CLOSE(P[0], computed[0], 3);
+        CHECK_ULP_CLOSE(P[1], computed[1], 3);
+        CHECK_ULP_CLOSE(P[2], computed[2], 3);
+
+        std::array<Real, 3> dP;
+        dP[0] = Pf[0] - P0[0];
+        dP[1] = Pf[1] - P0[1];
+        dP[2] = Pf[2] - P0[2];
+        auto dpComputed = bp.prime(t);
+        CHECK_ULP_CLOSE(dP[0], dpComputed[0], 5);
+    }
+}
+
 int main()
 {
     test_linear<float>();
@@ -97,6 +138,8 @@ int main()
     test_quadratic<double>();
     test_convex_hull<float>();
     test_convex_hull<double>();
+    test_linear_precision<float>();
+    test_linear_precision<double>();
 #ifdef BOOST_HAS_FLOAT128
     test_linear<float128>();
     test_quadratic<float128>();
