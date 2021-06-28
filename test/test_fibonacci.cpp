@@ -98,16 +98,16 @@ BOOST_AUTO_TEST_CASE(generator_check) {
 
 BOOST_AUTO_TEST_CASE(constexpr_check) {
     constexpr int x = boost::math::unchecked_fibonacci<int>(32);
-    static_assert(x == 2178309);
+    static_assert(x == 2178309, "constexpr check 1");
 
     constexpr double y = boost::math::unchecked_fibonacci<double>(40);
-    static_assert(y == 102334155.0);
+    static_assert(y == 102334155.0, "constexpr check 2");
 
     constexpr int xx = boost::math::fibonacci<int>(32);
-    static_assert(xx == 2178309);
+    static_assert(xx == 2178309, "constexpr check 3");
 
     constexpr double yy = boost::math::fibonacci<double>(40);
-    static_assert(yy == 102334155.0);
+    static_assert(yy == 102334155.0, "constexpr check 4");
 
 }
 
