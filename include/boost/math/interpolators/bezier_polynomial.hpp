@@ -43,6 +43,10 @@ public:
         return m_imp->control_points();
     }
 
+    bezier_polynomial<RandomAccessContainer> indefinite_integral() const {
+        return std::move(m_imp->indefinite_integral());
+    }
+
 private:
     std::shared_ptr<detail::bezier_polynomial_imp<RandomAccessContainer>> m_imp;
 };

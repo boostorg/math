@@ -104,6 +104,27 @@ public:
         return control_points_;
     }
 
+    // See "Bezier and B-spline techniques", section 2.7:
+    RandomAccessContainer indefinite_integral() const {
+        using std::fma;
+        // control_points_.size() == n + 1
+        RandomAccessContainer c(control_points_.size() + 1);
+        // This is the constant of integration, chosen arbitarily to be zero:
+        for (Z j = 0; j < control_points_[0].size(); ++j) {
+            c[0][j] = Real(0);
+        }
+
+        // Make the reciprocal approximation to unroll the iteration into a pile of fma's:
+        Real rnp1 = Real(1)/control_points_.size();
+        for (Z i = 1; i < c.size(); ++i) {
+            for (Z j = 0; j < control_points_[0].size(); ++j) {
+                //c[i][j] = c[i-1][j] + control_points_[i-1][j]*rnp1;
+                c[i][j] = fma(rnp1, control_points_[i-1][j], c[i-1][j]);
+            }
+        }
+        return c;
+    }
+
 private:
 
     void decasteljau_recursion(RandomAccessContainer & points, Z n, Real t) const {

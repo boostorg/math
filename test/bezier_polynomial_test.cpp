@@ -92,6 +92,33 @@ void test_convex_hull()
     }
 }
 
+// Reversal Symmetry: If q(t) is the Bezier polynomial which consumes the control points in reversed order from p(t),
+// then p(t) = q(1-t).
+template<typename Real>
+void test_reversal_symmetry()
+{
+    std::vector<std::array<Real, 3>> control_points(2);
+    std::uniform_real_distribution<Real> dis(-1,1);
+    std::mt19937_64 gen;
+    for (size_t i = 0; i < control_points.size(); ++i) {
+        for (size_t j = 0; j < 3; ++j) {
+            control_points[i][j] = dis(gen);
+        }
+    }
+
+    auto control_points_copy = control_points;
+    auto bp0 = bezier_polynomial(std::move(control_points_copy));
+
+    std::reverse(control_points.begin(), control_points.end());
+    auto bp1 = bezier_polynomial(std::move(control_points));
+
+    for (Real t = 0; t <= 1; t += 1.0/16) {
+        auto P0 = bp0(t);
+        auto P1 = bp1(1-t);
+        CHECK_ULP_CLOSE(P0[0], P1[0], 3);
+    }
+}
+
 // Linear precision: If all control points lie *equidistantly* on a line, then the Bezier curve falls on a line.
 // See Bezier and B-spline techniques, Section 2.8, Remark 8.
 template<typename Real>
@@ -130,6 +157,43 @@ void test_linear_precision()
     }
 }
 
+template<typename Real>
+void test_indefinite_integral()
+{
+    std::vector<std::array<Real, 3>> control_points(2);
+    std::uniform_real_distribution<Real> dis(-1,1);
+    std::mt19937_64 gen;
+    for (size_t i = 0; i < control_points.size(); ++i) {
+        for (size_t j = 0; j < 3; ++j) {
+            control_points[i][j] = dis(gen);
+        }
+    }
+
+    auto control_points_copy = control_points;
+    auto bp = bezier_polynomial(std::move(control_points_copy));
+    auto bp_int = bp.indefinite_integral();
+    for (Real t = 0; t < 1; t += Real(1)/64) {
+        auto expected = bp(t);
+        auto computed = bp_int.prime(t);
+        CHECK_ULP_CLOSE(expected[0], computed[0], 3);
+        CHECK_ULP_CLOSE(expected[1], computed[1], 3);
+        CHECK_ULP_CLOSE(expected[2], computed[2], 3);
+    }
+
+    auto I0 = bp_int(Real(0));
+    auto I1 = bp_int(Real(1));
+    std::array<Real, 3> avg;
+    for (size_t j = 0; j < 3; ++j) {
+        avg[j] = (control_points[0][j] + control_points[1][j])/2;
+    }
+    auto pnts = bp_int.control_points();
+    CHECK_EQUAL(pnts.size(), control_points.size() + 1);
+    /*std::cout << "I[bp](0) = {" << I0[0] << ", " << I0[1] << ", " << I0[2] << "}\n";
+    std::cout << "I[bp](1) = {" << I1[0] << ", " << I1[1] << ", " << I1[2] << "}\n";
+    std::cout << "avg      = {" << avg[0] << ", " << avg[1] << ", " << avg[2] << "}\n";
+    std::cout << "c[2] =     {" << pnts.back()[0] << ", " << pnts.back()[1] << ", " << pnts.back()[2] << "}\n";*/
+}
+
 int main()
 {
     test_linear<float>();
@@ -140,6 +204,10 @@ int main()
     test_convex_hull<double>();
     test_linear_precision<float>();
     test_linear_precision<double>();
+    test_reversal_symmetry<float>();
+    test_reversal_symmetry<double>();
+    test_indefinite_integral<float>();
+    test_indefinite_integral<double>();
 #ifdef BOOST_HAS_FLOAT128
     test_linear<float128>();
     test_quadratic<float128>();
