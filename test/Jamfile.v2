@@ -495,7 +495,7 @@ test-suite special_fun :
    [ run test_trig.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
    [ run test_zeta.cpp ../../test/build//boost_unit_test_framework test_instances//test_instances pch_light  ]
    [ run test_sinc.cpp ../../test/build//boost_unit_test_framework pch_light ]
-   [ run test_fibonacci.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
+   [ run test_fibonacci.cpp ../../test/build//boost_unit_test_framework ]
 ;
 
 test-suite distribution_tests :

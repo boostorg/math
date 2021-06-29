@@ -6,6 +6,7 @@ math_toolkit/conventions.html
 math_toolkit/hints.html
 math_toolkit/directories.html
 math_toolkit/namespaces.html
+math_toolkit/standalone.html
 math_toolkit/result_type.html
 math_toolkit/error_handling.html
 math_toolkit/compilers_overview.html
@@ -168,6 +169,7 @@ math_toolkit/number_series.html
 math_toolkit/number_series/bernoulli_numbers.html
 math_toolkit/number_series/tangent_numbers.html
 math_toolkit/number_series/primes.html
+math_toolkit/number_series/fibonacci_numbers.html
 math_toolkit/sf_gamma.html
 math_toolkit/sf_gamma/tgamma.html
 math_toolkit/sf_gamma/lgamma.html
@@ -326,6 +328,7 @@ math_toolkit/cubic_hermite.html
 math_toolkit/makima.html
 math_toolkit/pchip.html
 math_toolkit/quintic_hermite.html
+math_toolkit/bilinear_uniform.html
 quadrature.html
 math_toolkit/trapezoidal.html
 math_toolkit/gauss.html
