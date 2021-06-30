@@ -135,8 +135,19 @@
   {
     return complex_root_of_unity<ComplexType>(n,-p);
   }
+  inline bool is_power2(long x) { return x == (x & -x);}
   
-  long least_power2(long x)
+  inline long upper_bound_power2(long x)
+  {
+    /*
+      Returns the smallert power of two that is greater or equal to x.
+    */
+    long up=1;
+    for(;up<x;up<<=1);
+    return up;
+  }
+  
+  inline long lower_bound_power2(long x)
   {
     /*
       Returns the biggest power of two that is smaller than or equal to x.
@@ -170,7 +181,6 @@
     return F;
   }
   
-  bool is_power2(long x) { return x == (x & -x);}
   
   template<class T>
   void dft_prime_bruteForce(const T* in_first, const T* in_last, T* out, const T w)
@@ -380,7 +390,7 @@
     const long ptrdiff = static_cast<long>(std::distance(in_first,in_last));
     if(ptrdiff <=0 )
       return;
-    const long n = least_power2(ptrdiff);
+    const long n = lower_bound_power2(ptrdiff);
     
     if(in_first!=out)
       std::copy(in_first,in_last,out);
@@ -441,7 +451,7 @@
     const long ptrdiff = static_cast<long>(std::distance(in_first,in_last));
     if(ptrdiff <=0 )
       return;
-    const long my_n = least_power2(ptrdiff);
+    const long my_n = lower_bound_power2(ptrdiff);
     
     if(in_first!=out)
       std::copy(in_first,in_last,out);
