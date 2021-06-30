@@ -125,6 +125,23 @@ public:
         return c;
     }
 
+    friend std::ostream& operator<<(std::ostream& out, bezier_polynomial_imp<RandomAccessContainer> const & bp) {
+        out << "{";
+        for (Z i = 0; i < bp.control_points_.size() - 1; ++i) {
+            out << "(";
+            for (Z j = 0; j < bp.control_points_[0].size() - 1; ++j) {
+                out << bp.control_points_[i][j] << ", ";
+            }
+            out << bp.control_points_[i][bp.control_points_[0].size() - 1] << "), ";
+        }
+        out << "(";
+        for (Z j = 0; j < bp.control_points_[0].size() - 1; ++j) {
+            out << bp.control_points_.back()[j] << ", ";
+        }
+        out << bp.control_points_.back()[bp.control_points_[0].size() - 1] << ")}";
+        return out;
+    }
+
 private:
 
     void decasteljau_recursion(RandomAccessContainer & points, Z n, Real t) const {

@@ -32,6 +32,8 @@ namespace boost::math::interpolators {
         void edit_control_point(Point cont & p, Z index);
 
         RandomAccessContainer const & control_points() const;
+
+        friend std::ostream& operator<<(std::ostream& out, bezier_polynomial<RandomAccessContainer> const & bp);
     };
 
 }
@@ -63,6 +65,9 @@ Control points may be modified via `edit_control_point`, for example:
 This replaces the last control point with `endpoint`.
 
 Tangents are computed with the `.prime` member function, and the control points may be referenced with the `.control_points` member function.
+
+The overloaded operator /<</ is disappointing: The control points are simply printed.
+Rendering the Bezier and its convex hull seems to be the best "print" statement for it, but this is essentially impossible in modern terminals.
 
 [heading Caveats]
 

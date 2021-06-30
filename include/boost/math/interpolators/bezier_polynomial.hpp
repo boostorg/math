@@ -47,6 +47,11 @@ public:
         return std::move(m_imp->indefinite_integral());
     }
 
+    friend std::ostream& operator<<(std::ostream& out, bezier_polynomial<RandomAccessContainer> const & bp) {
+        out << *bp.m_imp;
+        return out;
+    }
+
 private:
     std::shared_ptr<detail::bezier_polynomial_imp<RandomAccessContainer>> m_imp;
 };
