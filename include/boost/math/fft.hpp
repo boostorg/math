@@ -13,6 +13,7 @@
   //#include <boost/math/fft/fftw_backend.hpp>
   //#include <boost/math/fft/gsl_backend.hpp>
   #include <boost/math/fft/bsl_backend.hpp>
+  #include <boost/math/fft/algorithms.hpp>
 
   namespace boost { namespace math { namespace fft {
 
@@ -209,7 +210,53 @@
     dft<input_value_type, backend> plan(std::distance(input_begin, input_end),w);
     plan.backward(input_begin, input_end, output);
   }
-
+  
+  template<template<class U> class backend = bsl_dft,
+           typename InputIterator1,
+           typename InputIterator2,
+           typename OutputIterator>
+  void convolution(InputIterator1 input1_begin,
+                   InputIterator1 input1_end,
+                   InputIterator2 input2_begin,
+                   OutputIterator output)
+  {
+    using input_value_type  = typename std::iterator_traits<InputIterator1>::value_type;
+    using real_value_type = typename input_value_type::value_type;
+    
+    const long N = std::distance(input1_begin,input1_end);
+    //const long N_extended = detail::is_power2(N) ? N : detail::upper_bound_power2(2*N-1);
+    const long N_extended = N;
+    
+    std::vector<input_value_type> In1(N_extended),In2(N_extended),Out(N_extended);
+    
+    std::copy(input1_begin,input1_end,In1.begin());
+    
+    InputIterator2 input2_end{input2_begin};
+    std::advance(input2_end,N_extended);
+    std::copy(input2_begin,input2_end,In2.begin());
+    
+    // padding
+    //for(int i=N;i<N_extended;++i)
+    //    In1[i]=input_value_type{0};
+    //for(int i=1;i<N;++i)
+    //    In2[N_extended-i] = In2[i];
+    
+    dft<input_value_type, backend> plan(static_cast<unsigned int>(N_extended));
+    plan.forward(In1.begin(),In1.end(),In1.begin());
+    plan.forward(In2.begin(),In2.end(),In2.begin());
+    
+    // direct convolution
+    std::transform(In1.begin(),In1.end(),In2.begin(),Out.begin(),std::multiplies<input_value_type>()); 
+    
+    plan.backward(Out.begin(),Out.end(),Out.begin());
+    
+    const real_value_type inv_N = real_value_type{1}/N_extended;
+    for(auto & x : Out)
+        x *= inv_N;
+    
+    std::copy(Out.begin(),Out.begin() + N,output);
+  }
+  
   } } } // namespace boost::math::fft
 
 #endif // BOOST_MATH_FFT_HPP
