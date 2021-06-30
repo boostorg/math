@@ -224,8 +224,7 @@
     using real_value_type = typename input_value_type::value_type;
     
     const long N = std::distance(input1_begin,input1_end);
-    //const long N_extended = detail::is_power2(N) ? N : detail::upper_bound_power2(2*N-1);
-    const long N_extended = N;
+    const long N_extended = detail::is_power2(N) ? N : detail::upper_bound_power2(2*N-1);
     
     std::vector<input_value_type> In1(N_extended),In2(N_extended),Out(N_extended);
     
@@ -236,10 +235,13 @@
     std::copy(input2_begin,input2_end,In2.begin());
     
     // padding
-    //for(int i=N;i<N_extended;++i)
-    //    In1[i]=input_value_type{0};
-    //for(int i=1;i<N;++i)
-    //    In2[N_extended-i] = In2[i];
+    for(long i=N;i<N_extended;++i)
+      In1[i]=In2[i]=input_value_type{0};
+    
+    // fake N-periodicity
+    if(N!=N_extended)
+    for(long i=1;i<N;++i)
+      In2[N_extended-N+i] = In2[i];
     
     dft<input_value_type, backend> plan(static_cast<unsigned int>(N_extended));
     plan.forward(In1.begin(),In1.end(),In1.begin());

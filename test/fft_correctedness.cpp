@@ -19,7 +19,63 @@
 
 using namespace boost::math::fft;
 
+template<class T>
+void convolution_brute_force(
+  const T* first1, const T* last1, 
+  const T* first2,
+  T* out)
+{
+  long N = std::distance(first1,last1);
+  for(long i=0;i<N;++i)
+  {
+    T sum{0};
+    for(int j=0;j<N;++j)
+    {
+      sum += first1[j] * first2[(i-j+N) % N];
+    }
+    out[i] = sum;
+  }
+}
 
+template<class T, template<class U> class Backend>
+void test_convolution(unsigned int N, int tolerance)
+{
+  using Complex = typename detail::select_complex<T>::type;
+  const T tol = tolerance*std::numeric_limits<T>::epsilon();
+  
+  // ...
+  boost::random::mt19937 rng;
+  boost::random::uniform_real_distribution<T> U(0.0,1.0);
+  {
+    std::vector<Complex> A(N),B(N),C(N);
+    
+    for(auto& x: A)
+    {
+        x.real( U(rng) );
+        x.imag( U(rng) );
+    }
+    for(auto& x: B)
+    {
+        x.real( U(rng) );
+        x.imag( U(rng) );
+    }
+    convolution_brute_force(A.data(),A.data()+N,B.data(),C.data());
+    
+    std::vector<Complex> C_candidate;
+    convolution(A.data(),A.data()+N,B.data(),std::back_inserter(C_candidate));
+    
+    T diff{0.0};
+    
+    for(size_t i=0;i<N;++i)
+    {
+        using std::norm;
+        diff += norm(C[i]-C_candidate[i]);
+    }
+    using std::sqrt;
+    diff = sqrt(diff)/N;
+    CHECK_MOLLIFIED_CLOSE(T{0.0},diff,tol);
+  }
+}
 
 template<class T, template<class U> class Backend>
 void test_fixed_transforms(int tolerance)
@@ -156,6 +212,8 @@ int main()
   
   for(int i=1;i<=(1<<10); i*=2)
   {
+    test_convolution<double,fftw_dft>(i,128);
+    
     test_inverse<float,fftw_dft>(i,1);
     test_inverse<double,fftw_dft>(i,1);
     test_inverse<long double,fftw_dft>(i,1);
@@ -247,8 +305,11 @@ int main()
 #endif
      test_inverse<boost::multiprecision::cpp_bin_float_50,test_complex_dft_prime_bruteForce>(i,i*1);
   }
+  
   for(int i=1;i<=100;++i)
   {
+    test_convolution<double,fftw_dft>(i,1024);
+    
     test_inverse<float,test_dft_composite>(i,1024);
     test_inverse<double,test_dft_composite>(i,1024);
     test_inverse<long double,test_dft_composite>(i,1024);
