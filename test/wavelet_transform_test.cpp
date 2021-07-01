@@ -109,7 +109,7 @@ void test_wavelet_transform()
         // Wavelet transform of a constant is zero.
         // The quadrature sum is horribly ill-conditioned (technically infinite),
         // so we'll only test on the more rapidly converging sums.
-        auto g = [](Real x) { return Real(7); };
+        auto g = [](Real ) { return Real(7); };
         auto Wg = daubechies_wavelet_transform(g, psi);
         for (double s = -10; s < 10; s += 0.1)
         {
@@ -141,8 +141,9 @@ int main()
        //    test_wavelet_transform<double, i+3>();
        //});
     }
-    catch (std::bad_alloc)
+    catch (std::bad_alloc const & e)
     {
+        std::cerr << "Ran out of memory in wavelet transform test: " << e.what() << "\n";
        // not much we can do about this, this test uses lots of memory!
     }
 
