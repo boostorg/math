@@ -234,6 +234,11 @@ void test_indefinite_integral()
 
 }
 
+#ifdef BOOST_MATH_NO_THREAD_LOCAL_WITH_NON_TRIVIAL_TYPES
+int main() {
+    return 0;
+}
+#else
 int main()
 {
     test_linear<float>();
@@ -255,3 +260,4 @@ int main()
 #endif
     return boost::math::test::report_errors();
 }
+#endif
