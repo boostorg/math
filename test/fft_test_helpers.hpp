@@ -14,6 +14,37 @@
 namespace boost { namespace math { namespace fft {
 
 template<class NativeComplexType>
+class test_complex_dft_prime_rader
+{
+  /*
+    Special backend for testing the complex_dft_prime_rader implementation
+  */
+  using real_value_type = typename NativeComplexType::value_type;
+public:
+  constexpr test_complex_dft_prime_rader(std::size_t n)
+    : my_size{n}
+  { }
+  
+  void resize(std::size_t new_size)
+  {
+    my_size = new_size;
+  }
+  constexpr std::size_t size() const { return my_size; }
+
+  void forward(const NativeComplexType* in, NativeComplexType* out) const
+  {
+    detail::complex_dft_prime_rader(in,in+size(),out,1);
+  }
+
+  void backward(const NativeComplexType* in, NativeComplexType* out) const
+  {
+    detail::complex_dft_prime_rader(in,in+size(),out,-1);
+  }
+private:
+  std::size_t my_size;
+};
+
+template<class NativeComplexType>
 class test_dft_prime_bruteForce
 {
   /*

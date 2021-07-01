@@ -56,7 +56,14 @@
           const int sign = (plan == forward_plan ? 1 : -1);
           // select the implementation according to the DFT size
           if( detail::is_power2(static_cast<long>(size())))
+          {
             detail::complex_dft_power2(in,in+size(),out,sign);
+          }
+          else if(detail::is_prime(static_cast<long>(size())))
+          {
+            // detail::complex_dft_prime_rader(in,in+size(),out,sign);
+            detail::complex_dft_prime_bruteForce(in,in+size(),out,sign);
+          }
           else
           {
             detail::complex_dft_composite(in,in+size(),out,sign);

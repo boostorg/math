@@ -305,7 +305,9 @@ int main()
     test_inverse<boost::multiprecision::float128,test_complex_dft_prime_bruteForce>(i,i*1);
 #endif
      test_inverse<boost::multiprecision::cpp_bin_float_50,test_complex_dft_prime_bruteForce>(i,i*1);
+    
   }
+  test_inverse<double,test_complex_dft_prime_rader>(29,1);
   
   for(int i=1;i<=100;++i)
   {

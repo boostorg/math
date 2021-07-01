@@ -19,6 +19,18 @@
 
 
   namespace boost { namespace math {  namespace fft {
+  
+  template<template<class U> class backend,
+           typename InputIterator1,
+           typename InputIterator2,
+           typename OutputIterator>
+  void convolution(InputIterator1 input1_begin,
+                   InputIterator1 input1_end,
+                   InputIterator2 input2_begin,
+                   OutputIterator output);
+  
+  template<class RingType>
+  class bsl_dft;
 
   namespace detail {
   
@@ -66,7 +78,6 @@
     return ret.gcd;
   }
   
-  
   // TODO: use another power function
   template <class T>
   T power(const T& x, int n)
@@ -94,7 +105,32 @@
     }
     return r;
   }
+  
+  inline long power_mod(long x, int n, long m)
+  /*
+    Computes x^n mod m
     
+    TODO: improve this algorithm, maybe we can use 'power'
+    with a special modular-int type.
+  */
+  {
+    if(n==0)
+      return 1;
+    long r{1}, aux{x};
+
+    for (; n; n >>= 1)
+    {
+      if (n & 1)
+      {
+        // TODO: use bitwise additive multiplication for large numbers
+        r = (r*aux) % m; 
+      }
+      // TODO: use bitwise additive multiplication for large numbers
+      aux = (aux*aux) % m;
+    }
+    return r;
+  }
+  
   template<class ComplexType>
   ComplexType complex_root_of_unity(long n,long p=1)
   /*
@@ -159,6 +195,7 @@
     }
     return x;
   }
+  
     
   std::vector<long> prime_factorization(long n)
   {
@@ -179,6 +216,81 @@
     if (n > 1)
       F.push_back(n);
     return F;
+  }
+  
+  inline bool is_prime(long n)
+  {
+    /*
+      Naive O(sqrt(n)) prime decision
+      
+      TODO: replace with something more sophisticated like Rabin-Miller's test
+    */
+    if(n<2)
+      return false;
+    if(n==2 || n==3)
+      return true;
+    for(long x=2;x*x<=n;++x)
+    {
+      if(n%x == 0)
+        return false;
+    }
+    return true;
+  }
+  
+  inline std::vector<long> prime_factorization_unique(long n)
+  {
+    std::vector<long> F{prime_factorization(n)};
+    std::sort(F.begin(),F.end());
+    std::vector<long> F_unique;
+    long last=-1;
+    for(auto p: F)
+    {
+      if(p==last)
+        continue;
+      
+      last=p;
+      F_unique.push_back(p);
+    }
+    return F_unique;
+  }
+ 
+  inline long euler_phi(long n)
+  {
+    long r = n;
+    std::vector<long> F = prime_factorization_unique(n);
+    for (long p : F)
+        r -= r / p;
+    return r;
+  }
+ 
+  inline long primitive_root(long n)
+  /*
+    it finds a primitive root r of n,
+    ie. r^phi(n) = 1 mod n
+  */
+  {
+    const long phi = euler_phi(n);
+    std::vector<long> F = prime_factorization_unique(n);
+    for(long i=1;i<n;++i)
+    {
+      long g = gcd(i,n);
+      if(g!=1) continue;
+      
+      bool ok = true;
+      
+      for(long p : F)
+      {
+        if(power_mod(i,phi/p,n)==1) // test fail
+        {
+          ok=false;
+          break;
+        }
+      }
+      
+      if(ok)
+        return i;
+    }
+    return 0; // no roots found
   }
   
   
@@ -258,6 +370,42 @@
     
     if(out != work_space)
       std::copy(work_space,work_space+N,out);
+  }
+  
+  /*
+    Rader's FFT on prime sizes
+  */
+  template<class complex_value_type>
+  void complex_dft_prime_rader(
+    const complex_value_type *in_first, 
+    const complex_value_type *in_last, 
+    complex_value_type* out, int sign)
+  // precondition: distance(in_first,in_last) is prime > 2
+  {
+    const long my_n = static_cast<long>(std::distance(in_first,in_last));
+    
+    std::vector<complex_value_type> A(my_n-1),W(my_n-1),B(my_n-1);
+    
+    const long g = primitive_root(my_n);
+    const long g_inv = power_mod(g,my_n-2,my_n);
+    
+    for(long i=0;i<my_n-1;++i)
+    {
+      W[i] = complex_root_of_unity<complex_value_type>(my_n,sign*power_mod(g_inv,i,my_n));
+      A[i] = in_first[ power_mod(g,i+1,my_n) ];
+    }
+    
+    ::boost::math::fft::convolution<bsl_dft>(A.begin(),A.end(),W.begin(),B.begin());
+    
+    for(long i=0;i<my_n;++i)
+    {
+      out[i]=in_first[0];
+    }
+    for(long i=1;i<my_n;++i)
+    {
+      out[0] += in_first[i];
+      out[ power_mod(g_inv,i,my_n) ] += B[i];
+    }
   }
   
   
@@ -372,6 +520,7 @@
             else
               tmp[j] = out[i + j*len_old +k ] * complex_root_of_unity<ComplexType>(len,k*j*sign);
           
+          // complex_dft_prime_rader(tmp.data(),tmp.data()+p,tmp.data(),sign);
           complex_dft_prime_bruteForce(tmp.data(),tmp.data()+p,tmp.data(),sign);
           
           for(long j=0;j<p;++j)
@@ -498,6 +647,7 @@
 
     // Normalize for backwards transform (done externally).
   }
+  
 
   } // namespace detail
 
