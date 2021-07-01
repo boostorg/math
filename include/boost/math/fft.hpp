@@ -229,7 +229,7 @@
     std::copy(input1_begin,input1_end,In1.begin());
     
     InputIterator2 input2_end{input2_begin};
-    std::advance(input2_end,N_extended);
+    std::advance(input2_end,N);
     std::copy(input2_begin,input2_end,In2.begin());
     
     // padding

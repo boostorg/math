@@ -106,7 +106,7 @@
     return r;
   }
   
-  inline long power_mod(long x, int n, long m)
+  inline long power_mod(long x, long n, long m)
   /*
     Computes x^n mod m
     
@@ -114,8 +114,12 @@
     with a special modular-int type.
   */
   {
-    if(n==0)
+    if(x==0 || x==1)
+        return x;
+    if(n<=0)
       return 1;
+    // n = modulo(n,euler_phi(m));
+    x = modulo(x,m);
     long r{1}, aux{x};
 
     for (; n; n >>= 1)
@@ -270,7 +274,8 @@
   */
   {
     const long phi = euler_phi(n);
-    std::vector<long> F = prime_factorization_unique(n);
+    
+    std::vector<long> F = prime_factorization_unique(phi);
     for(long i=1;i<n;++i)
     {
       long g = gcd(i,n);
@@ -293,6 +298,16 @@
     return 0; // no roots found
   }
   
+  template<class complex_value_type>
+  inline void complex_dft_2(
+    const complex_value_type* in, 
+    complex_value_type* out, int)
+  {
+    complex_value_type 
+        o1 = in[0]+in[1], o2 = in[0]-in[1] ;
+    out[0] = o1;
+    out[1] = o2;
+  }
   
   template<class T>
   void dft_prime_bruteForce(const T* in_first, const T* in_last, T* out, const T w)
@@ -397,14 +412,19 @@
     
     ::boost::math::fft::convolution<bsl_dft>(A.begin(),A.end(),W.begin(),B.begin());
     
-    for(long i=0;i<my_n;++i)
+    complex_value_type a0 = in_first[0];
+    complex_value_type sum_a {a0};
+    for(long i=1;i<my_n;++i)
+        sum_a += in_first[i];
+    
+    out[0] = sum_a;
+    for(long i=1;i<my_n;++i)
     {
-      out[i]=in_first[0];
+      out[i]=a0;
     }
     for(long i=1;i<my_n;++i)
     {
-      out[0] += in_first[i];
-      out[ power_mod(g_inv,i,my_n) ] += B[i];
+      out[ power_mod(g_inv,i,my_n) ] += B[i-1];
     }
   }
   
@@ -520,9 +540,13 @@
             else
               tmp[j] = out[i + j*len_old +k ] * complex_root_of_unity<ComplexType>(len,k*j*sign);
           
-          // complex_dft_prime_rader(tmp.data(),tmp.data()+p,tmp.data(),sign);
-          complex_dft_prime_bruteForce(tmp.data(),tmp.data()+p,tmp.data(),sign);
-          
+          if(p==2)
+            complex_dft_2(tmp.data(),tmp.data(),sign);
+          else
+          {
+          //  complex_dft_prime_bruteForce(tmp.data(),tmp.data()+p,tmp.data(),sign);
+            complex_dft_prime_rader(tmp.data(),tmp.data()+p,tmp.data(),sign);
+          }
           for(long j=0;j<p;++j)
             out[i+ j*len_old + k] = tmp[j];
         }

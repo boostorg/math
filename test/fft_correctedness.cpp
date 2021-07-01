@@ -306,8 +306,18 @@ int main()
 #endif
      test_inverse<boost::multiprecision::cpp_bin_float_50,test_complex_dft_prime_bruteForce>(i,i*1);
     
+    if(i>2)
+    {
+      // TODO: does rader algorithm works for p=2?
+      test_inverse<float,test_complex_dft_prime_rader>(i,2);
+      test_inverse<double,test_complex_dft_prime_rader>(i,2);
+      test_inverse<long double,test_complex_dft_prime_rader>(i,2);
+#ifdef BOOST_MATH_USE_FLOAT128
+      test_inverse<boost::multiprecision::float128,test_complex_dft_prime_rader>(i,2);
+#endif
+      test_inverse<boost::multiprecision::cpp_bin_float_50,test_complex_dft_prime_rader>(i,2);
+    }
   }
-  test_inverse<double,test_complex_dft_prime_rader>(29,1);
   
   for(int i=1;i<=100;++i)
   {
