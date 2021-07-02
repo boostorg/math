@@ -8,6 +8,10 @@
 #include <memory>
 #include <boost/math/interpolators/detail/bezier_polynomial_detail.hpp>
 
+#ifdef BOOST_MATH_NO_THREAD_LOCAL_WITH_NON_TRIVIAL_TYPES
+#error "Thread local storage support is necessary for the Bezier polynomial class to work."
+#endif
+
 namespace boost::math::interpolators {
 
 template <class RandomAccessContainer>
@@ -41,10 +45,6 @@ public:
     RandomAccessContainer const & control_points() const
     {
         return m_imp->control_points();
-    }
-
-    bezier_polynomial<RandomAccessContainer> indefinite_integral() const {
-        return std::move(m_imp->indefinite_integral());
     }
 
     friend std::ostream& operator<<(std::ostream& out, bezier_polynomial<RandomAccessContainer> const & bp) {
