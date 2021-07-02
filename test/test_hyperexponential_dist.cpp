@@ -396,8 +396,8 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(error_cases, RealT, test_types)
    std::array<RealT, 3> rates_array {1,2,3};
    BOOST_MATH_CHECK_THROW(dist_t(std::ranges::begin(probs_array), std::ranges::end(probs_array), std::ranges::begin(rates_array), std::ranges::end(rates_array)), std::domain_error);
 
-   const auto probs_range = probs_array | std::views::all;
-   const auto rates_range = rates_array | std::views::all;
+   const auto probs_range = probs_array | std::ranges::views::all;
+   const auto rates_range = rates_array | std::ranges::views::all;
 
    BOOST_MATH_CHECK_THROW(dist_t(probs_range, rates_range), std::domain_error);
    #endif
