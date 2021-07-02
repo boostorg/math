@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        compiler: [ g++-9, g++-10, clang++-10 ]
+        compiler: [ g++-9, g++-10, g++-11, clang++-10 ]
         standard: [ c++11, c++14, c++17, c++2a ]
         suite: [ float128_tests, special_fun, distribution_tests, misc, quadrature, mp, interpolators, autodiff, ../example//examples, ../tools ]
     steps:
@@ -47,7 +47,7 @@ jobs:
         if: steps.retry1.outcome=='failure'
         run: sudo apt-add-repository -y "ppa:ubuntu-toolchain-r/test"
       - name: Install packages
-        run: sudo apt install g++-9 g++-10 clang-9 clang-10 libgmp-dev libmpfr-dev libfftw3-dev
+        run: sudo apt install g++-9 g++-10 g++-11 clang-9 clang-10 libgmp-dev libmpfr-dev libfftw3-dev
       - name: Checkout main boost
         run: git clone -b develop --depth 1 https://github.com/boostorg/boost.git ../boost-root
       - name: Update tools/boostdep
