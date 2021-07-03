@@ -65,15 +65,17 @@
   
   template <typename T,typename integer>
   T power(const T& x, integer n)
+    // WARNING: 
+    // -> for n<0 we cannot decide the outcome, because we don't know the inverse of x
+    // -> for n=0 we cannot decide the outcome, because we don't know the
+    // multiplication neutral element of T.
   // precondition: n>0
   {
-    /* WARNING: the case n=0 works only if T{1} means the multiplicative neutral
-     * element in T */
     if(n<=0)
-      return T{1};
+      return x;
       
     bool identity = true;
-    T r{};
+    T r{x};
 
     for (T aux{x}; n; n /= 2)
     {
@@ -136,6 +138,141 @@
     integer up=1;
     for(;up<x;up<<=1);
     return up;
+  }
+  template <typename integer, typename Exp>
+  constexpr bool power_greater(integer A, integer B, Exp p)
+    // precondition: A,B,p > 0
+    // returns true if A^p > B
+  {
+    if (A == 1)
+      return 1 > B;
+    if (p > std::numeric_limits<integer>::digits)
+      return true;
+
+    while (p--)
+      B /= A;
+    return 1 > B;
+  }
+  template <typename integer, typename exp_t>
+  constexpr integer root(const integer N, const exp_t p)
+    // binary search to find the biggest r such that r^p <= N,
+    // ie. r = floor( pRoot(N)  )
+  {
+    if (p == 1)
+      return N;
+    // no overflow
+    integer down = 1, up = N;
+    while (up - down > 1)
+    {
+      integer mid = down + (up - down) / 2;
+      if (power_greater(mid, N, p))
+        up = mid;
+      else
+        down = mid;
+    }
+    return down;
+  }
+  template <typename integer>
+  class mint
+  /*
+    Helper class for modular arithmetics,
+    with modulo known at runtime.
+    WARNING: the big flaw is that there are no checks for the homogeneity
+    of the modulo, ie. you could a+b where a.mod != b.mod
+  */
+  {
+    static bool overflow_by_multiplication(integer m)
+    // checks if the give modular base 'm' can overflow the direct
+    // 'integer' multiplication
+    {
+      integer sqrt_max = root(std::numeric_limits<integer>::max(), 2);
+      return m - 1 > sqrt_max;
+    }
+  
+    const integer mod{};
+    integer x{};
+
+   public:
+    mint(){}
+    mint(integer m,integer _x) :  mod{m}, x{_x}
+    {
+      x = modulo(x,mod);
+    }
+    mint(const mint& that) : mod{that.mod}, x{that.x} {}
+
+    mint& operator=(const mint& that) { return x = that.x, *this; }
+
+    explicit operator bool() const { return x == integer{0}; }
+    operator integer() const { return x; }
+
+    mint& operator++() { return x = (x + 1) % mod, *this; }
+    mint& operator--() { return x = (mod + x - 1) % mod, *this;}
+    mint operator++(int)
+    { /*post*/
+      mint temp(*this);
+      this->operator++();
+      return temp;
+    }
+    mint operator--(int)
+    { /*post*/
+      mint temp(*this);
+      this->operator--();
+      return temp;
+    }
+    mint& operator+=(const mint& that){return x = (x + that.x) % mod, *this;} 
+    mint& operator-=(const mint& t){return x = (mod + x - t.x) % mod, *this;}
+
+    mint& operator*=(const mint& t)
+    {
+      if (overflow_by_multiplication(mod))
+      {
+        /// multiplication based on sums
+        integer res{0};
+        for (integer a = x, b = t.x; b; b /= 2)
+        {
+          if (b % 2)
+            res = (res + a) % mod;
+          a = (a + a) % mod;
+        }
+        x = res;
+        return *this;
+      }
+      // direct multiplication
+      x = (x * t.x) % mod;
+      return *this;
+    }
+
+    mint<integer> inverse() const
+    {
+        euclid_return<integer> ee = extended_euclid(x, mod);
+        if (ee.gcd != 1)
+            return mint<integer>(0,0); // no inverse found
+        integer inv_x = ee.x;
+        return mint(mod,inv_x);
+        // return power(*this,mod-2);
+    }
+    bool operator==(const mint& that) const { return x == that.x; }
+    bool operator<(const mint& that) const { return x < that.x; }
+  };
+  template <typename T>
+  mint<T> operator*(const mint<T>& A, const mint<T>& B)
+  {
+    mint<T> C{A};
+    return C *= B;
+  }
+  
+  template<typename integer>
+  integer power_mod(integer x, integer n, integer m)
+  // Computes x^n mod m
+  {
+    if(x==0 || x==1)
+        return x;
+    if(n<=0)
+      return 1;
+    mint<integer> xm(m,x);
+    // n = modulo(n,euler_phi(m));
+    xm = power(xm,n);
+    return integer(xm);
   }
 
   } // namespace detail

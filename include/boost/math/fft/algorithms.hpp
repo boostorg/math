@@ -35,35 +35,7 @@
 
   namespace detail {
   
-  
-  inline long power_mod(long x, long n, long m)
-  /*
-    Computes x^n mod m
     
-    TODO: improve this algorithm, maybe we can use 'power'
-    with a special modular-int type.
-  */
-  {
-    if(x==0 || x==1)
-        return x;
-    if(n<=0)
-      return 1;
-    // n = modulo(n,euler_phi(m));
-    x = modulo(x,m);
-    long r{1}, aux{x};
-
-    for (; n; n >>= 1)
-    {
-      if (n & 1)
-      {
-        // TODO: use bitwise additive multiplication for large numbers
-        r = (r*aux) % m; 
-      }
-      // TODO: use bitwise additive multiplication for large numbers
-      aux = (aux*aux) % m;
-    }
-    return r;
-  }
   
   template<class ComplexType>
   ComplexType complex_root_of_unity(long n,long p=1)
