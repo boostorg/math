@@ -9,7 +9,7 @@
 #include <boost/math/interpolators/detail/bezier_polynomial_detail.hpp>
 
 #ifdef BOOST_MATH_NO_THREAD_LOCAL_WITH_NON_TRIVIAL_TYPES
-#error "Thread local storage support is necessary for the Bezier polynomial class to work."
+#warning "Thread local storage support is necessary for the Bezier polynomial class to work."
 #endif
 
 namespace boost::math::interpolators {
