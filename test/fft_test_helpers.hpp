@@ -245,19 +245,6 @@ private:
 
 namespace my_modulo_lib
 {
-  template <class T, class Exp>
-  T power(const T& x, Exp n, const T& I = T{1})
-  {
-    T r{I};
-    const Exp two{2};
-    for (T aux = x; n; n /= two)
-    {
-        if (n % two)
-            r *= aux;
-        aux *= aux;
-    }
-    return r;
-  }
   template <typename T, T x>
   class field_modulo
   {
@@ -318,7 +305,7 @@ namespace my_modulo_lib
     bool operator==(const mint<Field>& that) const { return x == that.x; }
     bool operator!=(const mint<Field>& that) const { return x != that.x; }
 
-    mint<Field> inverse() const { return power(*this, Field::mod - 2); }
+    mint<Field> inverse() const { return ::boost::math::fft::detail::power(*this, Field::mod - 2); }
 
     friend std::ostream& operator<<<Field>(std::ostream& os,
                                            const mint<Field>& A);

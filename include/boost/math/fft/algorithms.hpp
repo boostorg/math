@@ -15,6 +15,7 @@
   #include <vector>
   #include <boost/math/constants/constants.hpp>
   #include <boost/math/fft/abstract_ring.hpp>
+  #include <boost/math/fft/discrete_maths.hpp>
   
 
 
@@ -34,77 +35,6 @@
 
   namespace detail {
   
-  template <typename integer>
-  integer modulo(const integer a, const integer b)
-  {
-    return ( a%b + b ) % b;
-  }
-  
-  template <typename integer>
-  struct euclid_return
-  {
-    integer gcd, x, y;
-  };
-
-  template <typename integer>
-  euclid_return<integer> extended_euclid(const integer a, const integer b)
-  {
-   static_assert(std::numeric_limits<integer>::is_signed,
-                 "Signed integers are needed");
-   integer x = 1, y = 0, g = a;
-   for (integer x1 = 0, y1 = 1, g1 = b; g1;)
-   {
-     integer q = g / g1;
-     x = x - x1 * q;
-     std::swap(x, x1);
-     y = y - y1 * q;
-     std::swap(y, y1);
-     g = g - g1 * q;
-     std::swap(g, g1);
-   }
-   if(g<0)
-   {
-    g = -g;
-    x = -x;
-    y = -y;
-   }
-   return {g, x, y};
-  }
-  
-  template <typename integer>
-  integer gcd(const integer a, const integer b)
-  {
-    euclid_return<integer> ret = extended_euclid(a,b);
-    return ret.gcd;
-  }
-  
-  // TODO: use another power function
-  template <class T>
-  T power(const T& x, int n)
-  {
-    /*
-        for our use case n should always be >0.
-        However, if n==0 we would expect something
-        like 1.
-    */
-    // TODO: decide which exceptions to throw
-    if (n < 1)
-        throw std::domain_error("power(x,n) expects n>=1.");
-
-    bool identity = true;
-    T r{}, aux{x};
-
-    for (; n; n >>= 1)
-    {
-      if (n & 1)
-      {
-        r = identity ? aux : r * aux;
-        identity = false;
-      }
-      aux *= aux;
-    }
-    return r;
-  }
   
   inline long power_mod(long x, long n, long m)
   /*
@@ -174,30 +104,6 @@
   */
   {
     return complex_root_of_unity<ComplexType>(n,-p);
-  }
-  inline bool is_power2(long x) { return x == (x & -x);}
-  
-  inline long upper_bound_power2(long x)
-  {
-    /*
-      Returns the smallert power of two that is greater or equal to x.
-    */
-    long up=1;
-    for(;up<x;up<<=1);
-    return up;
-  }
-  
-  inline long lower_bound_power2(long x)
-  {
-    /*
-      Returns the biggest power of two that is smaller than or equal to x.
-    */
-    for(long lsb = x & -x; lsb!=x;)
-    {
-      x-=lsb;
-      lsb = x&-x;
-    }
-    return x;
   }
   
     
