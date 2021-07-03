@@ -109,7 +109,7 @@
     if(x<=0)
       return 0;
       
-    for(long lsb = x & -x; lsb!=x;)
+    for(integer lsb = x & -x; lsb!=x;)
     {
       x-=lsb;
       lsb = x&-x;
@@ -273,6 +273,102 @@
     // n = modulo(n,euler_phi(m));
     xm = power(xm,n);
     return integer(xm);
+  }
+  
+  inline bool is_prime(int n)
+  {
+    // Naive O(sqrt(n)) prime decision
+    // TODO: replace with something more sophisticated like Rabin-Miller's test
+    
+    if(n<2)
+      return false;
+    if(n==2 || n==3)
+      return true;
+    
+    const int sqrt_n = root(n,2);
+    for(int x=2;x<=sqrt_n;++x)
+    {
+      if(n%x == 0)
+        return false;
+    }
+    return true;
+  }
+  
+  inline std::vector<int> prime_factorization(int n)
+  // Naive O(sqrt(n)) prime factorization.
+  // returns a list of prime numbers that when multiplied they give n
+  {
+    std::vector<int> F;
+    
+    const int sqrt_n = root(n,2);
+    for (int x = 2; x <= sqrt_n;)
+      if (n % x == 0)
+      {
+        F.push_back(x);
+        n /= x;
+      }
+      else
+      {
+        ++x;
+      }
+    if (n > 1)
+      F.push_back(n);
+    return F;
+  }
+  
+  inline std::vector<int> prime_factorization_unique(int n)
+  // returns the list of unique prime factors divisors of n
+  {
+    std::vector<int> F{prime_factorization(n)};
+    std::sort(F.begin(),F.end());
+    std::vector<int> F_unique;
+    int last=-1;
+    for(auto p: F)
+    {
+      if(p==last)
+        continue;
+      
+      last=p;
+      F_unique.push_back(p);
+    }
+    return F_unique;
+  }
+ 
+  inline int euler_phi(int n)
+  // Euler Phi function
+  {
+    int r = n;
+    std::vector<int> F = prime_factorization_unique(n);
+    for (auto p : F)
+        r -= r / p;
+    return r;
+  }
+  
+  inline int primitive_root(int n)
+  // it finds a primitive root r of n,
+  // ie. r^phi(n) = 1 mod n
+  {
+    const int phi = euler_phi(n);
+    std::vector<int> F = prime_factorization_unique(phi);
+    for(int i=1;i<n;++i)
+    {
+      int g = gcd(i,n);
+      if(g!=1) continue;
+      
+      bool ok = true;
+      for(auto p : F)
+      {
+        if(power_mod(i,phi/p,n)==1) // not a root
+        {
+          ok=false;
+          break;
+        }
+      }
+      
+      if(ok)
+        return i;
+    }
+    return 0; // no roots found
   }
 
   } // namespace detail

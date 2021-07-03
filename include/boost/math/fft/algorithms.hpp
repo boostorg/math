@@ -35,8 +35,6 @@
 
   namespace detail {
   
-    
-  
   template<class ComplexType>
   ComplexType complex_root_of_unity(long n,long p=1)
   /*
@@ -76,104 +74,6 @@
   */
   {
     return complex_root_of_unity<ComplexType>(n,-p);
-  }
-  
-    
-  std::vector<long> prime_factorization(long n)
-  {
-    /*
-        Naive O(sqrt(n)) prime factorization.
-    */
-    std::vector<long> F;
-    for (long x = 2; x * x <= n;)
-      if (n % x == 0)
-      {
-        F.push_back(x);
-        n /= x;
-      }
-      else
-      {
-        ++x;
-      }
-    if (n > 1)
-      F.push_back(n);
-    return F;
-  }
-  
-  inline bool is_prime(long n)
-  {
-    /*
-      Naive O(sqrt(n)) prime decision
-      
-      TODO: replace with something more sophisticated like Rabin-Miller's test
-    */
-    if(n<2)
-      return false;
-    if(n==2 || n==3)
-      return true;
-    for(long x=2;x*x<=n;++x)
-    {
-      if(n%x == 0)
-        return false;
-    }
-    return true;
-  }
-  
-  inline std::vector<long> prime_factorization_unique(long n)
-  {
-    std::vector<long> F{prime_factorization(n)};
-    std::sort(F.begin(),F.end());
-    std::vector<long> F_unique;
-    long last=-1;
-    for(auto p: F)
-    {
-      if(p==last)
-        continue;
-      
-      last=p;
-      F_unique.push_back(p);
-    }
-    return F_unique;
-  }
- 
-  inline long euler_phi(long n)
-  {
-    long r = n;
-    std::vector<long> F = prime_factorization_unique(n);
-    for (long p : F)
-        r -= r / p;
-    return r;
-  }
- 
-  inline long primitive_root(long n)
-  /*
-    it finds a primitive root r of n,
-    ie. r^phi(n) = 1 mod n
-  */
-  {
-    const long phi = euler_phi(n);
-    
-    std::vector<long> F = prime_factorization_unique(phi);
-    for(long i=1;i<n;++i)
-    {
-      long g = gcd(i,n);
-      if(g!=1) continue;
-      
-      bool ok = true;
-      
-      for(long p : F)
-      {
-        if(power_mod(i,phi/p,n)==1) // test fail
-        {
-          ok=false;
-          break;
-        }
-      }
-      
-      if(ok)
-        return i;
-    }
-    return 0; // no roots found
   }
   
   template<class complex_value_type>
