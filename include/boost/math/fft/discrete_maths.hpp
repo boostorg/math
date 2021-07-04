@@ -99,7 +99,6 @@
   }
   
   template<typename integer>
-  constexpr 
   typename std::enable_if<std::is_integral<integer>::value,integer>::type 
   // enabled only for builtin integer types
   lower_bound_power2(integer x)
@@ -119,7 +118,6 @@
   
   
   template<typename integer>
-  constexpr 
   typename std::enable_if<std::is_integral<integer>::value,integer>::type 
   // enabled only for builtin integer types
   upper_bound_power2(integer x)
@@ -130,7 +128,7 @@
     if(x<=1)
       return 1;
     
-    constexpr integer up_max = lower_bound_power2(
+    const integer up_max = lower_bound_power2(
       std::numeric_limits<integer>::max() );
     if(up_max<x)
       return 0;
@@ -140,7 +138,7 @@
     return up;
   }
   template <typename integer, typename Exp>
-  constexpr bool power_greater(integer A, integer B, Exp p)
+  bool power_greater(integer A, integer B, Exp p)
     // precondition: A,B,p > 0
     // returns true if A^p > B
   {
@@ -154,7 +152,7 @@
     return 1 > B;
   }
   template <typename integer, typename exp_t>
-  constexpr integer root(const integer N, const exp_t p)
+  integer root(const integer N, const exp_t p)
     // binary search to find the biggest r such that r^p <= N,
     // ie. r = floor( pRoot(N)  )
   {
