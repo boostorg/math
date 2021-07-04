@@ -6,9 +6,11 @@
 
 #ifndef BOOST_MATH_INTERPOLATORS_BEZIER_POLYNOMIAL_DETAIL_HPP
 #define BOOST_MATH_INTERPOLATORS_BEZIER_POLYNOMIAL_DETAIL_HPP
+
 #include <stdexcept>
 #include <iostream>
 #include <string>
+#include <limits>
 
 namespace boost::math::interpolators::detail {
 

@@ -4,6 +4,8 @@
  * Boost Software License, Version 1.0. (See accompanying file
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  */
+
+#include <boost/math/tools/config.hpp>
 #ifndef BOOST_MATH_NO_THREAD_LOCAL_WITH_NON_TRIVIAL_TYPES
 #include "math_unit_test.hpp"
 #include <numeric>
