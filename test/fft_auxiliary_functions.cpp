@@ -15,6 +15,12 @@ void test_is_prime()
   CHECK_EQUAL(false,detail::is_prime(8));
   CHECK_EQUAL(false,detail::is_prime(9));
   CHECK_EQUAL(false,detail::is_prime(10));
+  
+  // factorial primes 
+  CHECK_EQUAL(true,detail::is_prime(719));
+  CHECK_EQUAL(true,detail::is_prime(5039));
+  CHECK_EQUAL(true,detail::is_prime(39916801));
+  CHECK_EQUAL(true,detail::is_prime(479001599));
 }
 void test_primitive_root()
 {
