@@ -1,5 +1,6 @@
 #include "math_unit_test.hpp"
 #include <boost/math/fft.hpp>
+#include <boost/math/fft/bsl_backend.hpp>
 #include <boost/math/fft/fftw_backend.hpp>
 #include <boost/math/fft/gsl_backend.hpp>
 #include <boost/math/constants/constants.hpp>
@@ -52,13 +53,12 @@ typename Container1::value_type::value_type difference(const Container1& A, cons
 }
 
 template<class RealType, template<class U> class Backend>
-void test_inverse(int N)
+void test_inverse(int N, int tolerance)
 {
   using ComplexType = std::complex<RealType>;
-  const RealType tol = 16*std::numeric_limits<RealType>::epsilon();
+  const RealType tol = tolerance*std::numeric_limits<RealType>::epsilon();
   const std::vector< ComplexType > A{random_vector<RealType>(N)};
-  
-  
+
   {
     std::vector<ComplexType> B(N), C(N);
     
@@ -71,39 +71,37 @@ void test_inverse(int N)
   {
     std::vector<ComplexType>  C(N);
     std::list<ComplexType> B;
-    
+
     dft_forward<Backend>(std::begin(A),std::end(A),std::back_inserter(B));
     dft_backward<Backend>(std::begin(B),std::end(B),std::begin(C));
-    
+
     RealType diff{difference(A,C)};
     CHECK_MOLLIFIED_CLOSE(RealType{0.0},diff,tol);
   }
   {
     std::list<ComplexType> C;
-    
+
     dft_forward<Backend>(std::begin(A),std::end(A),std::back_inserter(C));
     dft_backward<Backend>(std::begin(C),std::end(C),std::begin(C));
-    
+
     RealType diff{difference(A,C)};
     CHECK_MOLLIFIED_CLOSE(RealType{0.0},diff,tol);
   }
 }
 
-
 int main()
 {
   for(int i=1;i<=(1<<12); i*=2)
   {
-    test_inverse<float,fftw_dft>(i);
-    test_inverse<double,fftw_dft>(i);
-    test_inverse<long double,fftw_dft>(i);
+    test_inverse<float,fftw_dft>(i,1);
+    test_inverse<double,fftw_dft>(i,1);
+    test_inverse<long double,fftw_dft>(i,1);
     
-    test_inverse<double,gsl_dft>(i);
+    test_inverse<double,gsl_dft>(i,1);
     
-    test_inverse<float,bsl_dft>(i);
-    test_inverse<double,bsl_dft>(i);
-    test_inverse<long double,bsl_dft>(i);
+    test_inverse<float,bsl_dft>(i,1);
+    test_inverse<double,bsl_dft>(i,1);
+    test_inverse<long double,bsl_dft>(i,1);
   }
   return boost::math::test::report_errors();
 }
-
