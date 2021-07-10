@@ -292,53 +292,57 @@
     return true;
   }
   
-  inline std::vector<int> prime_factorization(int n)
+  template<class Iterator>
+  int prime_factorization(int n,Iterator out, const bool unique=false)
   // Naive O(sqrt(n)) prime factorization.
   // returns a list of prime numbers that when multiplied they give n
   {
-    std::vector<int> F;
-    
+    int count{0};
     const int sqrt_n = root(n,2);
-    for (int x = 2; x <= sqrt_n;)
-      if (n % x == 0)
+    for (int x = 2; x <= sqrt_n;++x)
+    {
+      if(n % x == 0)
       {
-        F.push_back(x);
+        *out = x;
+        ++out;++count;
         n /= x;
       }
-      else
+      if(unique)
       {
-        ++x;
+        while(n % x == 0) n /= x;
+      }else
+      {
+        while(n % x == 0)
+        { 
+          *out = x;
+          ++out;++count;
+          n /= x;
+        }
       }
+    }
     if (n > 1)
-      F.push_back(n);
-    return F;
+    {
+      *out = n;
+      ++out;++count;
+    }
+    return count;
   }
   
-  inline std::vector<int> prime_factorization_unique(int n)
+  template<class Iterator>
+  int prime_factorization_unique(int n, Iterator out)
   // returns the list of unique prime factors divisors of n
   {
-    std::vector<int> F{prime_factorization(n)};
-    std::sort(F.begin(),F.end());
-    std::vector<int> F_unique;
-    int last=-1;
-    for(auto p: F)
-    {
-      if(p==last)
-        continue;
-      
-      last=p;
-      F_unique.push_back(p);
-    }
-    return F_unique;
+    return prime_factorization(n,out,true);
   }
- 
+
   inline int euler_phi(int n)
   // Euler Phi function
   {
     int r = n;
-    std::vector<int> F = prime_factorization_unique(n);
-    for (auto p : F)
-        r -= r / p;
+    std::array<int,32> F;
+    const int count = prime_factorization_unique(n,F.begin());
+    for (int i=0;i<count;++i)
+        r -= r / F[i];
     return r;
   }
   
@@ -347,16 +351,17 @@
   // ie. r^phi(n) = 1 mod n
   {
     const int phi = euler_phi(n);
-    std::vector<int> F = prime_factorization_unique(phi);
+    std::array<int,32> F;
+    const int count = prime_factorization_unique(phi,F.begin());
     for(int i=1;i<n;++i)
     {
       int g = gcd(i,n);
       if(g!=1) continue;
       
       bool ok = true;
-      for(auto p : F)
+      for(int j=0;j<count;++j)
       {
-        if(power_mod(i,phi/p,n)==1) // not a root
+        if(power_mod(i,phi/F[j],n)==1) // not a root
         {
           ok=false;
           break;
