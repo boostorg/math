@@ -8,30 +8,30 @@
 #include <boost/math/special_functions/sqrt.hpp>
 #include <boost/core/lightweight_test.hpp>
 
-template <typename T>
+template <typename Real>
 void test_float_sqrt()
 {
     using std::abs;
     
-    constexpr T tol = 2*std::numeric_limits<T>::epsilon();
+    constexpr Real tol = 2*std::numeric_limits<Real>::epsilon();
     
-    constexpr T test_val = boost::math::sqrt(T(2));
-    constexpr T dummy = 1;
+    constexpr Real test_val = boost::math::sqrt(Real(2));
+    constexpr Real dummy = 1;
     static_assert(test_val > dummy, "Not constexpr");
 
-    T known_val = std::sqrt(T(2));
+    Real known_val = std::sqrt(Real(2));
 
     BOOST_TEST(abs(test_val - known_val) < tol);
 }
 
-template <typename T>
+template <typename Z>
 void test_int_sqrt()
 {
     using std::abs;
 
     constexpr double tol = 2*std::numeric_limits<double>::epsilon();
 
-    constexpr double test_val = boost::math::sqrt(T(2));
+    constexpr double test_val = boost::math::sqrt(Z(2));
     constexpr double dummy = 1;
     static_assert(test_val > dummy, "Not constexpr");
 

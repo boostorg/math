@@ -5,29 +5,33 @@
 //
 //  Constexpr implementation of sqrt function
 
+#ifndef BOOST_MATH_SPECIAL_FUNCTIONS_SQRT
+#define BOOST_MATH_SPECIAL_FUNCTIONS_SQRT
+
 #include <type_traits>
 
 namespace boost { namespace math { 
 
 namespace detail {
 
-template <typename T>
-inline constexpr T sqrt_impl_2(T x, T s, T s2)
+template <typename Real>
+inline constexpr Real sqrt_impl_2(Real x, Real s, Real s2)
 {
     return !(s < s2) ? s2 : sqrt_impl_2(x, (x / s + s) / 2, s);
 }
 
-template <typename T>
-inline constexpr T sqrt_impl_1(T x, T s)
+template <typename Real>
+inline constexpr Real sqrt_impl_1(Real x, Real s)
 {
     return sqrt_impl_2(x, (x / s + s) / 2, s);
 }
 
-template <typename T>
-inline constexpr T sqrt_impl(T x)
+template <typename Real>
+inline constexpr Real sqrt_impl(Real x)
 {
-    return sqrt_impl_1(x, x > 1 ? x : T(1));
+    return sqrt_impl_1(x, x > 1 ? x : Real(1));
 }
+
 } // namespace detail
 
 template <typename Real, typename std::enable_if<std::is_floating_point<Real>::value, bool>::type = true>
@@ -44,3 +48,5 @@ inline constexpr double sqrt(Z x)
 
 } // namespace math
 } // namespace boost
+
+#endif // BOOST_MATH_SPECIAL_FUNCTIONS_SQRT
