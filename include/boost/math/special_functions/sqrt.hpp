@@ -32,12 +32,19 @@ inline constexpr Real sqrt_impl(Real x)
     return sqrt_impl_1(x, x > 1 ? x : Real(1));
 }
 
+// std::isnan is not constexpr according to the standard
+template <typename Real>
+inline constexpr bool is_nan(Real x)
+{
+    return x != x;
+}
+
 } // namespace detail
 
 template <typename Real, typename std::enable_if<std::is_floating_point<Real>::value, bool>::type = true>
 inline constexpr Real sqrt(Real x)
 {
-    return detail::sqrt_impl<Real>(x);
+    return detail::is_nan(x) ? NAN : detail::sqrt_impl<Real>(x);
 }
 
 template <typename Z, typename std::enable_if<std::is_integral<Z>::value, bool>::type = true>
