@@ -20,8 +20,22 @@ void test_float_sqrt()
     static_assert(test_val > dummy, "Not constexpr");
 
     Real known_val = std::sqrt(Real(2));
-
     BOOST_TEST(abs(test_val - known_val) < tol);
+
+    // 1000 eps
+    constexpr Real test_1000 = boost::math::sqrt(1000*std::numeric_limits<Real>::epsilon());
+    Real known_1000 = std::sqrt(1000*std::numeric_limits<Real>::epsilon());
+    BOOST_TEST(abs(test_1000 - known_1000) < tol);
+
+    // inf
+    constexpr Real test_inf = boost::math::sqrt(std::numeric_limits<Real>::infinity());
+    Real known_inf = std::sqrt(std::numeric_limits<Real>::infinity());
+    BOOST_TEST_EQ(test_inf, known_inf);
+
+    // NAN
+    constexpr Real test_nan = boost::math::sqrt(std::numeric_limits<Real>::quiet_NaN());
+    Real known_nan = std::sqrt(std::numeric_limits<Real>::quiet_NaN());
+    BOOST_TEST(std::isnan(test_nan) && std::isnan(known_nan));
 }
 
 template <typename Z>

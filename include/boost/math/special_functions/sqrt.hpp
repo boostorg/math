@@ -8,6 +8,7 @@
 #ifndef BOOST_MATH_SPECIAL_FUNCTIONS_SQRT
 #define BOOST_MATH_SPECIAL_FUNCTIONS_SQRT
 
+#include <limits>
 #include <type_traits>
 
 namespace boost { namespace math { 
@@ -39,12 +40,20 @@ inline constexpr bool is_nan(Real x)
     return x != x;
 }
 
+template <typename Real>
+inline constexpr bool is_inf(Real x)
+{
+    return x == std::numeric_limits<Real>::infinity() || -x == std::numeric_limits<Real>::infinity();
+}
+
 } // namespace detail
 
 template <typename Real, typename std::enable_if<std::is_floating_point<Real>::value, bool>::type = true>
 inline constexpr Real sqrt(Real x)
 {
-    return detail::is_nan(x) ? NAN : detail::sqrt_impl<Real>(x);
+    return detail::is_nan(x) ? std::numeric_limits<Real>::quiet_NaN() : 
+           detail::is_inf(x) ? std::numeric_limits<Real>::infinity() : 
+           detail::sqrt_impl<Real>(x);
 }
 
 template <typename Z, typename std::enable_if<std::is_integral<Z>::value, bool>::type = true>
