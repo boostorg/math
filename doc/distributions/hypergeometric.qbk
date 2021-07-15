@@ -229,17 +229,22 @@ gives the required CDF.
 The median is simply the quantile at 0.5, and the remaining properties are
 calculated via:
 
-[equation hypergeometric6]
+[/
+Requires amsmath and mathtools:
 
-[note The kurtosis formula above is not quite correct and kurtosis excess is now calculated 
-from
-[@https://www.wolframalpha.com/input/?i=kurtosis+hypergeometric+distribution Wolfram Alpha hypergeometric distribution kurtosis].
-(The hypergeometric distribution kurtosis excess is mentioned in
-[@https://mathworld.wolfram.com/HypergeometricDistribution.html Wolfram Hypergeometric distribution] 
-but coyly only described as ['\"the kurtosis excess is given by a complicated expression.\"]).
-This has been found numerically equivalent to the 
-[@https://en.wikipedia.org/wiki/Hypergeometric_distribution Wikipedia hypergeometric kurtosis excess formula].
+\DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}
+\begin{equation*}
+\begin{split}
+mean & = \frac{rn}{N} \\
+mode & = \floor*{ \frac{(r+1)(n+1)}{N+2} }\\
+variance & = \frac{r(\frac{n}{N})(1-\frac{n}{N})(N-r)}{(N-1)}\\
+skewness & = \frac{(N-2n)\sqrt{(N-1)}(N-2r)}{\sqrt{rn(N-n)(N-r)}(N-2)}\\
+kurtosis & = \frac{((N - 1) N^2 ((3 r (N - r) (n^2 (-N) + (n - 2) N^2 + 6 n (N - n)))/N^2 - 6 n (N - n) + N (N + 1)))}{(r n (N - 3) (N - 2) (N - r) (N - n))}
+\end{split}
+\end{equation*}
 ]
+
+[equation hypergeometric6]
 
 [endsect]
 
