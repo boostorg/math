@@ -5,8 +5,8 @@
 //
 //  Constexpr implementation of sqrt function
 
-#ifndef BOOST_MATH_SPECIAL_FUNCTIONS_SQRT
-#define BOOST_MATH_SPECIAL_FUNCTIONS_SQRT
+#ifndef BOOST_MATH_CCMATH_SQRT
+#define BOOST_MATH_CCMATH_SQRT
 
 #include <limits>
 #include <type_traits>
@@ -53,4 +53,4 @@ inline constexpr double sqrt(Z x)
 
 }}} // Namespaces
 
-#endif // BOOST_MATH_SPECIAL_FUNCTIONS_SQRT
+#endif // BOOST_MATH_CCMATH_SQRT

@@ -8,5 +8,7 @@
 #define BOOST_MATH_CCMATH
 
 #include <boost/math/ccmath/sqrt.hpp>
+#include <boost/math/ccmath/isinf.hpp>
+#include <boost/math/ccmath/isnan.hpp>
 
 #endif // BOOST_MATH_CCMATH
