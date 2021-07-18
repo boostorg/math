@@ -5,6 +5,7 @@
 
 #include <cmath>
 #include <limits>
+#include <type_traits>
 #include <boost/math/ccmath/sqrt.hpp>
 #include <boost/core/lightweight_test.hpp>
 
@@ -36,6 +37,19 @@ void test_float_sqrt()
     constexpr Real test_nan = boost::math::ccmath::sqrt(std::numeric_limits<Real>::quiet_NaN());
     Real known_nan = std::sqrt(std::numeric_limits<Real>::quiet_NaN());
     BOOST_TEST(std::isnan(test_nan) && std::isnan(known_nan));
+
+    // 100'000'000
+    constexpr Real test_100m = boost::math::ccmath::sqrt(100000000);
+    BOOST_TEST_EQ(test_100m, Real(10000));
+
+    // MAX / 2
+    // Only tests float since double and long double will exceed maximum template depth
+    if constexpr (std::is_same_v<float, Real>)
+    {
+        constexpr Real test_max = boost::math::ccmath::sqrt(std::numeric_limits<Real>::max() / 2);
+        Real known_max = std::sqrt(std::numeric_limits<Real>::max() / 2);
+        BOOST_TEST(abs(test_max - known_max) < tol);
+    }
 }
 
 template <typename Z>
