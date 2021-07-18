@@ -123,6 +123,7 @@ test-suite special_fun :
    [ run pow_test.cpp ../../test/build//boost_unit_test_framework ]
    [ run sqrt_test.cpp ../../test/build//boost_unit_test_framework ]
    [ run isinf_test.cpp ../../test/build//boost_unit_test_framework ]
+   [ run isnan_test.cpp ../../test/build//boost_unit_test_framework ]
    [ run log1p_expm1_test.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
    [ run powm1_sqrtp1m1_test.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
    [ run special_functions_test.cpp ../../test/build//boost_unit_test_framework  ]
