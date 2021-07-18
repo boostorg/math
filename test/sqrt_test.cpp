@@ -58,7 +58,10 @@ int main()
 {
     test_float_sqrt<float>();
     test_float_sqrt<double>();
+    
+    #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_float_sqrt<long double>();
+    #endif
 
     test_int_sqrt<int>();
     test_int_sqrt<unsigned>();
