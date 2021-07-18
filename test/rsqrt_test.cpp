@@ -67,7 +67,7 @@ void test_rsqrt()
     x = (std::numeric_limits<Real>::max)();
     expected = 1/sqrt(x);
     computed = rsqrt(x);
-    if (!CHECK_ULP_CLOSE(expected, computed, 2)) {
+    if (!CHECK_EQUAL(expected, computed)) {
         std::cerr << "Reciprocal square root of std::numeric_limits<Real>::max() not correctly computed.\n";
     }
 
