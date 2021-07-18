@@ -10,8 +10,10 @@
 
 #include <limits>
 #include <type_traits>
+#include <boost/math/ccmath/isnan.hpp>
+#include <boost/math/ccmath/isinf.hpp>
 
-namespace boost { namespace math { 
+namespace boost { namespace math { namespace ccmath { 
 
 namespace detail {
 
@@ -33,26 +35,13 @@ inline constexpr Real sqrt_impl(Real x)
     return sqrt_impl_1(x, x > 1 ? x : Real(1));
 }
 
-// std::isnan is not constexpr according to the standard
-template <typename Real>
-inline constexpr bool is_nan(Real x)
-{
-    return x != x;
-}
-
-template <typename Real>
-inline constexpr bool is_inf(Real x)
-{
-    return x == std::numeric_limits<Real>::infinity() || -x == std::numeric_limits<Real>::infinity();
-}
-
 } // namespace detail
 
 template <typename Real, typename std::enable_if<std::is_floating_point<Real>::value, bool>::type = true>
 inline constexpr Real sqrt(Real x)
 {
-    return detail::is_nan(x) ? std::numeric_limits<Real>::quiet_NaN() : 
-           detail::is_inf(x) ? std::numeric_limits<Real>::infinity() : 
+    return boost::math::ccmath::isnan(x) ? std::numeric_limits<Real>::quiet_NaN() : 
+           boost::math::ccmath::isinf(x) ? std::numeric_limits<Real>::infinity() : 
            detail::sqrt_impl<Real>(x);
 }
 
@@ -62,7 +51,6 @@ inline constexpr double sqrt(Z x)
     return detail::sqrt_impl<double>(static_cast<double>(x));
 }
 
-} // namespace math
-} // namespace boost
+}}} // Namespaces
 
 #endif // BOOST_MATH_SPECIAL_FUNCTIONS_SQRT

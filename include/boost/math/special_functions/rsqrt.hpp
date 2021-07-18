@@ -8,7 +8,7 @@
 #include <cmath>
 #include <type_traits>
 #include <limits>
-#include <boost/math/special_functions/sqrt.hpp>
+#include <boost/math/ccmath/sqrt.hpp>
 
 namespace boost { namespace math {
 
@@ -17,7 +17,7 @@ template <typename Real, typename std::enable_if<std::is_same<Real, float>::valu
                                                  std::is_same<Real, long double>::value, bool>::type = true>
 inline constexpr Real rsqrt(Real const & x)
 {
-    return 1 / boost::math::sqrt(x);
+    return 1 / boost::math::ccmath::sqrt(x);
 }
 
 template<typename Real, typename std::enable_if<!std::is_same<Real, float>::value &&
