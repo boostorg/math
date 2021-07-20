@@ -8,6 +8,7 @@
 
 #include <iterator>
 #include <tuple>
+#include <limits>
 #include <boost/math/tools/assert.hpp>
 #include <boost/math/tools/header_deprecated.hpp>
 
@@ -80,7 +81,7 @@ auto correlation_coefficient(Container const & u, Container const & v)
     // If one dataset is constant and the other isn't, then they have no correlation:
     if (Qu == 0 || Qv == 0)
     {
-        return Real(0);
+        return std::numeric_limits<Real>::quiet_NaN();
     }
 
     // Make sure rho in [-1, 1], even in the presence of numerical noise.
