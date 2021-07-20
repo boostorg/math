@@ -191,7 +191,7 @@ ReturnType correlation_coefficient_seq_impl(ForwardIterator u_begin, ForwardIter
     // If one dataset is constant and the other isn't, then they have no correlation:
     if (Qu == 0 || Qv == 0)
     {
-        return std::make_tuple(mu_u, Qu, mu_v, Qv, cov, Real(0), i);
+        return std::make_tuple(mu_u, Qu, mu_v, Qv, cov, std::numeric_limits<Real>::quiet_NaN(), i);
     }
 
     // Make sure rho in [-1, 1], even in the presence of numerical noise.
