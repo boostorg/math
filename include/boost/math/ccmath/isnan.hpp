@@ -8,8 +8,8 @@
 
 namespace boost { namespace math { namespace ccmath {
 
-template <typename Real>
-inline constexpr bool isnan(Real x)
+template <typename T>
+inline constexpr bool isnan(T x)
 {
     return x != x;
 }

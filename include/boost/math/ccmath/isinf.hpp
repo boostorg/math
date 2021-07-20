@@ -10,10 +10,10 @@
 
 namespace boost { namespace math { namespace ccmath {
 
-template <typename Real>
-inline constexpr bool isinf(Real x)
+template <typename T>
+inline constexpr bool isinf(T x)
 {
-    return x == std::numeric_limits<Real>::infinity() || -x == std::numeric_limits<Real>::infinity();
+    return x == std::numeric_limits<T>::infinity() || -x == std::numeric_limits<T>::infinity();
 }
 
 }}}
