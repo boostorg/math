@@ -186,12 +186,12 @@ ReturnType correlation_coefficient_seq_impl(ForwardIterator u_begin, ForwardIter
     // If both datasets are constant, then they are perfectly correlated.
     if (Qu == 0 && Qv == 0)
     {
-        return std::make_tuple(mu_u, Qu, mu_v, Qv, cov, Real(1), i);
+        return std::make_tuple(mu_u, Qu, mu_v, Qv, cov, Real(1), Real(i));
     }
     // If one dataset is constant and the other isn't, then they have no correlation:
     if (Qu == 0 || Qv == 0)
     {
-        return std::make_tuple(mu_u, Qu, mu_v, Qv, cov, Real(0), i);
+        return std::make_tuple(mu_u, Qu, mu_v, Qv, cov, Real(0), Real(i));
     }
 
     // Make sure rho in [-1, 1], even in the presence of numerical noise.
@@ -203,7 +203,7 @@ ReturnType correlation_coefficient_seq_impl(ForwardIterator u_begin, ForwardIter
         rho = -1;
     }
 
-    return std::make_tuple(mu_u, Qu, mu_v, Qv, cov, rho, i);
+    return std::make_tuple(mu_u, Qu, mu_v, Qv, cov, rho, Real(i));
 }
 
 #ifdef EXEC_COMPATIBLE
