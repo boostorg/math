@@ -46,8 +46,8 @@ void test_float_sqrt()
     // Only tests float since double and long double will exceed maximum template depth
     if constexpr (std::is_same_v<float, Real>)
     {
-        constexpr Real test_max = boost::math::ccmath::sqrt(std::numeric_limits<Real>::max() / 2);
-        Real known_max = std::sqrt(std::numeric_limits<Real>::max() / 2);
+        constexpr Real test_max = boost::math::ccmath::sqrt((std::numeric_limits<Real>::max)() / 2);
+        Real known_max = std::sqrt((std::numeric_limits<Real>::max)() / 2);
         BOOST_TEST(abs(test_max - known_max) < tol);
     }
 }

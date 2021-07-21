@@ -19,7 +19,11 @@ void test()
     BOOST_TEST(boost::math::ccmath::isnan(std::numeric_limits<T>::quiet_NaN()));
     BOOST_TEST(boost::math::ccmath::isnan(std::numeric_limits<T>::signaling_NaN()));
     BOOST_TEST(!boost::math::ccmath::isnan(std::numeric_limits<T>::infinity()));
+    
+    // Avoids error C2124 on MSVC CI platforms
+    #ifndef _MSC_VER
     BOOST_TEST(boost::math::ccmath::isnan(T(0)/T(0)));
+    #endif
 }
 
 int main()
