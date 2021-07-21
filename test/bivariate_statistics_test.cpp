@@ -536,12 +536,12 @@ void test_correlation_coefficient()
     std::vector<Real> u{1};
     std::vector<Real> v{1};
     Real rho_uv = correlation_coefficient(u, v);
-    CHECK_LE(abs(rho_uv - 1), tol);
+    CHECK_NAN(rho_uv);
 
     u = {1,1};
     v = {1,1};
     rho_uv = correlation_coefficient(u, v);
-    CHECK_LE(abs(rho_uv - 1), tol);
+    CHECK_NAN(rho_uv);
 
     u = {1, 2, 3};
     v = {1, 2, 3};
@@ -579,12 +579,12 @@ void test_integer_correlation_coefficient()
     std::vector<Z> u{1};
     std::vector<Z> v{1};
     double rho_uv = correlation_coefficient(u, v);
-    CHECK_LE(abs(rho_uv - 1.0), tol);
+    CHECK_NAN(rho_uv);
 
     u = {1,1};
     v = {1,1};
     rho_uv = correlation_coefficient(u, v);
-    CHECK_LE(abs(rho_uv - 1.0), tol);
+    CHECK_NAN(rho_uv);
 
     u = {1, 2, 3};
     v = {1, 2, 3};

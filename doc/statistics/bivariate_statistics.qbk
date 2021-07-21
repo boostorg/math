@@ -79,9 +79,8 @@ Works with real-valued inputs and does not work with complex-valued inputs.
 
 /Nota bene:/ If the input is an integer type the output will be a double precision type.
 
-If one or both of the datasets is constant, the correlation coefficient is an indeterminant form (0/0) and definitions must be introduced to assign it a value.
-We use the following: If both datasets are constant, then the correlation coefficient is 1.
-If one dataset is constant, and the other is not, then the correlation coefficient is zero.
+If one or both of the datasets is constant, the correlation coefficient is an indeterminant form (0/0).
+In this case the returned value is a `quiet_NaN()`.
 
 
 [heading References]

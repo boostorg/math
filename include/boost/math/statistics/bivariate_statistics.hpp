@@ -183,12 +183,10 @@ ReturnType correlation_coefficient_seq_impl(ForwardIterator u_begin, ForwardIter
         ++i;
     }
 
-    // If both datasets are constant, then they are perfectly correlated.
-    if (Qu == 0 && Qv == 0)
-    {
-        return std::make_tuple(mu_u, Qu, mu_v, Qv, cov, Real(1), i);
-    }
-    // If one dataset is constant and the other isn't, then they have no correlation:
+
+    // If one dataset is constant, then they have no correlation.
+    // See https://stats.stackexchange.com/questions/23676/normalized-correlation-with-a-constant-vector
+    // Thanks to zbjornson for pointing this out.
     if (Qu == 0 || Qv == 0)
     {
         return std::make_tuple(mu_u, Qu, mu_v, Qv, cov, std::numeric_limits<Real>::quiet_NaN(), i);
