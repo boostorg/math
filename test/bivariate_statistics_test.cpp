@@ -340,7 +340,7 @@ int main()
     test_integer_correlation_coefficient<uint32_t>(std::execution::seq);
     test_integer_correlation_coefficient<uint32_t>(std::execution::par);
     
-    return boost::report_errors();
+    return boost::math::test::report_errors();
 }
 
 #else
