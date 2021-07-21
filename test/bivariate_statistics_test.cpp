@@ -232,12 +232,12 @@ void test_correlation_coefficient(ExecutionPolicy&& exec)
     std::vector<Real> u{1};
     std::vector<Real> v{1};
     Real rho_uv = correlation_coefficient(exec, u, v);
-    CHECK_LE(abs(rho_uv - 1), tol);
+    CHECK_NAN(rho_uv);
 
     u = {1,1};
     v = {1,1};
     rho_uv = correlation_coefficient(exec, u, v);
-    CHECK_LE(abs(rho_uv - 1), tol);
+    CHECK_NAN(rho_uv);
 
     u = {1, 2, 3};
     v = {1, 2, 3};
@@ -255,7 +255,7 @@ void test_correlation_coefficient(ExecutionPolicy&& exec)
     u = {1, 2, 3};
     v = {0, 0, 0};
     rho_uv = correlation_coefficient(exec, v, u);
-    CHECK_LE(abs(rho_uv), tol);
+    CHECK_NAN(rho_uv);
 
     u = {1, 2, 3};
     v = {0, 0, 3};
@@ -275,12 +275,12 @@ void test_integer_correlation_coefficient(ExecutionPolicy&& exec)
     std::vector<Z> u{1};
     std::vector<Z> v{1};
     double rho_uv = correlation_coefficient(exec, u, v);
-    CHECK_LE(abs(rho_uv - 1.0), tol);
+    CHECK_NAN(rho_uv);
 
     u = {1,1};
     v = {1,1};
     rho_uv = correlation_coefficient(exec, u, v);
-    CHECK_LE(abs(rho_uv - 1.0), tol);
+    CHECK_NAN(rho_uv);
 
     u = {1, 2, 3};
     v = {1, 2, 3};
@@ -293,7 +293,7 @@ void test_integer_correlation_coefficient(ExecutionPolicy&& exec)
     u = {1, 2, 3};
     v = {0, 0, 0};
     rho_uv = correlation_coefficient(exec, v, u);
-    CHECK_LE(abs(rho_uv), tol);
+    CHECK_NAN(rho_uv);
 
     u = {1, 2, 3};
     v = {0, 0, 3};
