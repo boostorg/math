@@ -8,6 +8,7 @@
 
 #include <iterator>
 #include <tuple>
+#include <limits>
 #include <boost/math/tools/assert.hpp>
 #include <boost/math/tools/header_deprecated.hpp>
 
@@ -72,15 +73,12 @@ auto correlation_coefficient(Container const & u, Container const & v)
         mu_v = mu_v + v_tmp/(i+1);
     }
 
-    // If both datasets are constant, then they are perfectly correlated.
-    if (Qu == 0 && Qv == 0)
-    {
-        return Real(1);
-    }
-    // If one dataset is constant and the other isn't, then they have no correlation:
+    // If one dataset is constant, then they have no correlation:
+    // See https://stats.stackexchange.com/questions/23676/normalized-correlation-with-a-constant-vector
+    // Thanks to zbjornson for pointing this out.
     if (Qu == 0 || Qv == 0)
     {
-        return Real(0);
+        return std::numeric_limits<Real>::quiet_NaN();
     }
 
     // Make sure rho in [-1, 1], even in the presence of numerical noise.
