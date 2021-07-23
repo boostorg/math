@@ -6,7 +6,7 @@
 #ifndef BOOST_MATH_CCMATH_ISNAN
 #define BOOST_MATH_CCMATH_ISNAN
 
-namespace boost { namespace math { namespace ccmath {
+namespace boost::math::ccmath {
 
 template <typename T>
 inline constexpr bool isnan(T x)
@@ -14,6 +14,6 @@ inline constexpr bool isnan(T x)
     return x != x;
 }
 
-}}}
+}
 
 #endif // BOOST_MATH_CCMATH_ISNAN

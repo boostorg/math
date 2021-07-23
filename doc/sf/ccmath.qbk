@@ -9,14 +9,14 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 [heading Description]
 
-Constexpr implementations of the functionality found in `<cmath>`. The following functions require C++11 or greater.
+Constexpr implementations of the functionality found in `<cmath>`. The following functions require C++17 or greater.
 
 [heading Synopsis]
 
 ``
     #include <boost/math/ccmath/ccmath.hpp>
 ``
-    namespace boost { namspace math { namespace ccmath {
+    namespace boost::math::ccmath {
 
         template <typename T>
         inline constexpr bool isinf(T x);
@@ -28,23 +28,8 @@ Constexpr implementations of the functionality found in `<cmath>`. The following
         inline constexpr Real sqrt(Real x);
 
         template <typename Z>
-        inline constexpr double sqrt(Real x);
+        inline constexpr double sqrt(Z x);
 
-    }}} // Namespaces
-
-[/
-[heading Description]
-
-The following functions require C++14 or greater. Placeholder.
-
-[heading Synopsis]
-
-[heading Description]
-
-The following functions require C++17 or greater. Placeholder.
-
-[heading Synopsis]
-
-]
+    } // Namespaces
 
 [endsect] [/section:ccmath Constexpr CMath]

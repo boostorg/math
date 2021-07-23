@@ -13,7 +13,7 @@
 #include <boost/math/ccmath/isnan.hpp>
 #include <boost/math/ccmath/isinf.hpp>
 
-namespace boost { namespace math { namespace ccmath { 
+namespace boost::math::ccmath { 
 
 namespace detail {
 
@@ -51,6 +51,6 @@ inline constexpr double sqrt(Z x)
     return detail::sqrt_impl<double>(static_cast<double>(x));
 }
 
-}}} // Namespaces
+} // Namespaces
 
 #endif // BOOST_MATH_CCMATH_SQRT

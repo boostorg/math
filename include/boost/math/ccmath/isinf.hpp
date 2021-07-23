@@ -8,7 +8,7 @@
 
 #include <limits>
 
-namespace boost { namespace math { namespace ccmath {
+namespace boost::math::ccmath {
 
 template <typename T>
 inline constexpr bool isinf(T x)
@@ -16,6 +16,6 @@ inline constexpr bool isinf(T x)
     return x == std::numeric_limits<T>::infinity() || -x == std::numeric_limits<T>::infinity();
 }
 
-}}}
+}
 
 #endif // BOOST_MATH_CCMATH_ISINF
