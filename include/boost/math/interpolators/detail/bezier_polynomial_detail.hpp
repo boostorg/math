@@ -6,9 +6,11 @@
 
 #ifndef BOOST_MATH_INTERPOLATORS_BEZIER_POLYNOMIAL_DETAIL_HPP
 #define BOOST_MATH_INTERPOLATORS_BEZIER_POLYNOMIAL_DETAIL_HPP
+
 #include <stdexcept>
 #include <iostream>
 #include <string>
+#include <limits>
 
 namespace boost::math::interpolators::detail {
 
@@ -105,7 +107,8 @@ public:
     }
 
     // See "Bezier and B-spline techniques", section 2.7:
-    RandomAccessContainer indefinite_integral() const {
+    // I cannot figure out why this doesn't work.
+    /*RandomAccessContainer indefinite_integral() const {
         using std::fma;
         // control_points_.size() == n + 1
         RandomAccessContainer c(control_points_.size() + 1);
@@ -123,7 +126,7 @@ public:
             }
         }
         return c;
-    }
+    }*/
 
     friend std::ostream& operator<<(std::ostream& out, bezier_polynomial_imp<RandomAccessContainer> const & bp) {
         out << "{";

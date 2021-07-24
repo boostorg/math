@@ -76,7 +76,7 @@ A Bezier spline has a fixed polynomial order and subdivides the curve into low-o
 /This is not a spline!/
 Passing /n/ control points to the `bezier_polynomial` class creates a polynomial of degree n-1, whereas a Bezier spline has a fixed order independent of the number of control points.
 
-Requires C++17.
+Requires C++17 and support for threadlocal storage.
 
 
 [heading Performance]

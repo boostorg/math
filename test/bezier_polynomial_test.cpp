@@ -5,6 +5,8 @@
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  */
 
+#include <boost/math/tools/config.hpp>
+#ifndef BOOST_MATH_NO_THREAD_LOCAL_WITH_NON_TRIVIAL_TYPES
 #include "math_unit_test.hpp"
 #include <numeric>
 #include <random>
@@ -180,65 +182,6 @@ void test_linear_precision()
     }
 }
 
-template<typename Real>
-void test_indefinite_integral()
-{
-    std::vector<std::array<Real, 3>> control_points(2);
-    std::uniform_real_distribution<Real> dis(-1,1);
-    std::mt19937_64 gen;
-    for (size_t i = 0; i < control_points.size(); ++i) {
-        for (size_t j = 0; j < 3; ++j) {
-            control_points[i][j] = dis(gen);
-        }
-    }
-
-    auto control_points_copy = control_points;
-    auto bp = bezier_polynomial(std::move(control_points_copy));
-    auto bp_int = bp.indefinite_integral();
-    for (Real t = 0; t < 1; t += Real(1)/64) {
-        auto expected = bp(t);
-        auto computed = bp_int.prime(t);
-        CHECK_ULP_CLOSE(expected[0], computed[0], 3);
-        CHECK_ULP_CLOSE(expected[1], computed[1], 3);
-        CHECK_ULP_CLOSE(expected[2], computed[2], 3);
-    }
-
-    auto I0 = bp_int(Real(0));
-    auto I1 = bp_int(Real(1));
-    std::array<Real, 3> avg;
-    for (size_t j = 0; j < 3; ++j) {
-        avg[j] = (control_points[0][j] + control_points[1][j])/2;
-    }
-    auto pnts = bp_int.control_points();
-    CHECK_EQUAL(pnts.size(), control_points.size() + 1);
-    CHECK_ULP_CLOSE(pnts[0][0], avg[0], 3);
-    CHECK_ULP_CLOSE(pnts[0][1], avg[1], 3);
-    CHECK_ULP_CLOSE(pnts[0][2], avg[2], 3);
-
-    control_points.resize(12);
-    for (size_t i = 0; i < control_points.size(); ++i) {
-        for (size_t j = 0; j < 3; ++j) {
-            control_points[i][j] = dis(gen);
-        }
-    }
-    control_points_copy = control_points;
-    bp = bezier_polynomial(std::move(control_points_copy));
-    bp_int = bp.indefinite_integral();
-    for (Real t = 0; t < 1; t += Real(1)/64) {
-        auto expected = bp(t);
-        auto computed = bp_int.prime(t);
-        CHECK_ULP_CLOSE(expected[0], computed[0], 3);
-        CHECK_ULP_CLOSE(expected[1], computed[1], 3);
-        CHECK_ULP_CLOSE(expected[2], computed[2], 3);
-    }
-
-}
-
-#ifdef BOOST_MATH_NO_THREAD_LOCAL_WITH_NON_TRIVIAL_TYPES
-int main() {
-    return 0;
-}
-#else
 int main()
 {
     test_linear<float>();
@@ -251,13 +194,16 @@ int main()
     test_linear_precision<double>();
     test_reversal_symmetry<float>();
     test_reversal_symmetry<double>();
-    //test_indefinite_integral<float>();
-    //test_indefinite_integral<double>();
 #ifdef BOOST_HAS_FLOAT128
     test_linear<float128>();
     test_quadratic<float128>();
     test_convex_hull<float128>();
 #endif
     return boost::math::test::report_errors();
+}
+
+#else
+int main() {
+    return 0;
 }
 #endif
