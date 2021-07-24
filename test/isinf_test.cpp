@@ -20,6 +20,8 @@ void test()
     BOOST_TEST(boost::math::ccmath::isinf(std::exp(T(10'000'000))));
 }
 
+// Only test on platforms that provide BOOST_MATH_IS_CONSTANT_EVALUATED
+#ifdef BOOST_MATH_IS_CONSTANT_EVALUATED
 int main()
 {
     test<float>();
@@ -31,3 +33,9 @@ int main()
     
     return boost::report_errors();
 }
+#else
+int main()
+{
+    return 0;
+}
+#endif

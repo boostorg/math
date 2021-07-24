@@ -67,6 +67,8 @@ void test_int_sqrt()
     BOOST_TEST(abs(test_val - known_val) < tol);
 }
 
+// Only test on platforms that provide BOOST_MATH_IS_CONSTANT_EVALUATED
+#ifdef BOOST_MATH_IS_CONSTANT_EVALUATED
 int main()
 {
     test_float_sqrt<float>();
@@ -81,3 +83,9 @@ int main()
     
     return boost::report_errors();
 }
+#else
+int main()
+{
+    return 0;
+}
+#endif

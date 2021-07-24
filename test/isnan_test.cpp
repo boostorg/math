@@ -21,6 +21,8 @@ void test()
     static_assert(!boost::math::ccmath::isnan(T(0)), "Real 0 failed");
 }
 
+// Only test on platforms that provide BOOST_MATH_IS_CONSTANT_EVALUATED
+#ifdef BOOST_MATH_IS_CONSTANT_EVALUATED
 int main()
 {
     test<float>();
@@ -32,3 +34,9 @@ int main()
 
     return boost::report_errors();
 }
+#else
+int main()
+{
+    return 0;
+}
+#endif
