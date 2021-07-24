@@ -6,12 +6,23 @@
 #ifndef BOOST_MATH_CCMATH_ISNAN
 #define BOOST_MATH_CCMATH_ISNAN
 
+#include <cmath>
+#include <boost/math/tools/is_constant_evaluated.hpp>
+
 namespace boost::math::ccmath {
 
 template <typename T>
 inline constexpr bool isnan(T x)
 {
-    return x != x;
+    if(!BOOST_MATH_IS_CONSTANT_EVALUATED(x))
+    {
+        return x != x;
+    }
+    else
+    {
+        using std::isnan;
+        return isnan(x);
+    }
 }
 
 }

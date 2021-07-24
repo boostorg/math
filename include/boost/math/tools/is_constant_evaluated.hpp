@@ -37,13 +37,13 @@
 #endif
 
 #if defined(BOOST_MATH_HAS_IS_CONSTANT_EVALUATED) && !defined(BOOST_NO_CXX14_CONSTEXPR)
-#  define BOOST_MATH_IS_CONST_EVALUATED(x) std::is_constant_evaluated()
+#  define BOOST_MATH_IS_CONSTANT_EVALUATED(x) std::is_constant_evaluated()
 #elif defined(BOOST_MATH_HAS_BUILTIN_IS_CONSTANT_EVALUATED)
-#  define BOOST_MATH_IS_CONST_EVALUATED(x) __builtin_is_constant_evaluated()
+#  define BOOST_MATH_IS_CONSTANT_EVALUATED(x) __builtin_is_constant_evaluated()
 #elif !defined(BOOST_NO_CXX14_CONSTEXPR) && (__GNUC__ >= 6)
-#  define BOOST_MATH_IS_CONST_EVALUATED(x) __builtin_constant_p(x)
+#  define BOOST_MATH_IS_CONSTANT_EVALUATED(x) __builtin_constant_p(x)
 #else
 #  define BOOST_MATH_NO_CONSTEXPR_DETECTION
 #endif
 
-#endif // BOOST_MATH_IS_CONSTANT_EVALUATED
+#endif // BOOST_MATH_TOOLS_IS_CONSTANT_EVALUATED
