@@ -14,7 +14,7 @@ namespace boost::math::ccmath {
 template <typename T>
 inline constexpr bool isnan(T x)
 {
-    if(!BOOST_MATH_IS_CONSTANT_EVALUATED(x))
+    if(BOOST_MATH_IS_CONSTANT_EVALUATED(x))
     {
         return x != x;
     }

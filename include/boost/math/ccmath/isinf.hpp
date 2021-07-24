@@ -6,14 +6,24 @@
 #ifndef BOOST_MATH_CCMATH_ISINF
 #define BOOST_MATH_CCMATH_ISINF
 
+#include <cmath>
 #include <limits>
+#include <boost/math/tools/is_constant_evaluated.hpp>
 
 namespace boost::math::ccmath {
 
 template <typename T>
 inline constexpr bool isinf(T x)
 {
-    return x == std::numeric_limits<T>::infinity() || -x == std::numeric_limits<T>::infinity();
+    if(BOOST_MATH_IS_CONSTANT_EVALUATED(x))
+    {
+        return x == std::numeric_limits<T>::infinity() || -x == std::numeric_limits<T>::infinity();
+    }
+    else
+    {
+        using std::isinf;
+        return isinf(x);
+    }
 }
 
 }

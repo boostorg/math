@@ -8,10 +8,12 @@
 #ifndef BOOST_MATH_CCMATH_SQRT
 #define BOOST_MATH_CCMATH_SQRT
 
+#include <cmath>
 #include <limits>
 #include <type_traits>
 #include <boost/math/ccmath/isnan.hpp>
 #include <boost/math/ccmath/isinf.hpp>
+#include <boost/math/tools/is_constant_evaluated.hpp>
 
 namespace boost::math::ccmath { 
 
@@ -40,9 +42,17 @@ inline constexpr Real sqrt_impl(Real x)
 template <typename Real, typename std::enable_if<std::is_floating_point<Real>::value, bool>::type = true>
 inline constexpr Real sqrt(Real x)
 {
-    return boost::math::ccmath::isnan(x) ? std::numeric_limits<Real>::quiet_NaN() : 
-           boost::math::ccmath::isinf(x) ? std::numeric_limits<Real>::infinity() : 
-           detail::sqrt_impl<Real>(x);
+    if(BOOST_MATH_IS_CONSTANT_EVALUATED(x))
+    {
+        return boost::math::ccmath::isnan(x) ? std::numeric_limits<Real>::quiet_NaN() : 
+            boost::math::ccmath::isinf(x) ? std::numeric_limits<Real>::infinity() : 
+            detail::sqrt_impl<Real>(x);
+    }
+    else
+    {
+        using std::sqrt;
+        return sqrt(x);
+    }
 }
 
 template <typename Z, typename std::enable_if<std::is_integral<Z>::value, bool>::type = true>
