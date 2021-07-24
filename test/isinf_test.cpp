@@ -14,11 +14,10 @@ void test()
 {
     constexpr bool test_val = boost::math::ccmath::isinf(T(0));
     static_assert(!test_val, "Not constexpr");
-    BOOST_TEST(!test_val);
 
-    BOOST_TEST(!boost::math::ccmath::isinf(std::numeric_limits<T>::quiet_NaN()));
-    BOOST_TEST(boost::math::ccmath::isinf(std::numeric_limits<T>::infinity()));
-    BOOST_TEST(std::exp(T(1000)));
+    static_assert(!boost::math::ccmath::isinf(std::numeric_limits<T>::quiet_NaN()));
+    static_assert(boost::math::ccmath::isinf(std::numeric_limits<T>::infinity()));
+    BOOST_TEST(boost::math::ccmath::isinf(std::exp(T(10'000'000))));
 }
 
 int main()

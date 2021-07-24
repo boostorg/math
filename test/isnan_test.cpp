@@ -14,16 +14,11 @@ void test()
 {
     constexpr bool test_val = boost::math::ccmath::isnan(T(0));
     static_assert(!test_val, "Not constexpr");
-    
-    BOOST_TEST(!test_val);
-    BOOST_TEST(boost::math::ccmath::isnan(std::numeric_limits<T>::quiet_NaN()));
-    BOOST_TEST(boost::math::ccmath::isnan(std::numeric_limits<T>::signaling_NaN()));
-    BOOST_TEST(!boost::math::ccmath::isnan(std::numeric_limits<T>::infinity()));
-    
-    // Avoids error C2124 on MSVC CI platforms
-    #ifndef _MSC_VER
-    BOOST_TEST(boost::math::ccmath::isnan(T(0)/T(0)));
-    #endif
+
+    static_assert(boost::math::ccmath::isnan(std::numeric_limits<T>::quiet_NaN()), "Quiet NAN failed");
+    static_assert(boost::math::ccmath::isnan(std::numeric_limits<T>::signaling_NaN()), "Signaling NAN failed");
+    static_assert(!boost::math::ccmath::isnan(std::numeric_limits<T>::infinity()), "Infininty failed");
+    static_assert(!boost::math::ccmath::isnan(T(0)), "Real 0 failed");
 }
 
 int main()
