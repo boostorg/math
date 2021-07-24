@@ -17,8 +17,9 @@ void test_float_sqrt()
     constexpr Real tol = 2*std::numeric_limits<Real>::epsilon();
     
     constexpr Real test_val = boost::math::ccmath::sqrt(Real(2));
-    constexpr Real dummy = 1;
-    static_assert(test_val > dummy, "Not constexpr");
+    constexpr Real sqrt2 = Real(1.4142135623730950488016887l);
+    constexpr Real abs_test_error = (test_val - sqrt2) > 0 ? (test_val - sqrt2) : (sqrt2 - test_val);
+    static_assert(abs_test_error < tol, "Out of tolerance");
 
     Real known_val = std::sqrt(Real(2));
     BOOST_TEST(abs(test_val - known_val) < tol);
@@ -30,17 +31,15 @@ void test_float_sqrt()
 
     // inf
     constexpr Real test_inf = boost::math::ccmath::sqrt(std::numeric_limits<Real>::infinity());
-    Real known_inf = std::sqrt(std::numeric_limits<Real>::infinity());
-    BOOST_TEST_EQ(test_inf, known_inf);
+    static_assert(test_inf == std::numeric_limits<Real>::infinity(), "Not infinity");
 
     // NAN
     constexpr Real test_nan = boost::math::ccmath::sqrt(std::numeric_limits<Real>::quiet_NaN());
-    Real known_nan = std::sqrt(std::numeric_limits<Real>::quiet_NaN());
-    BOOST_TEST(std::isnan(test_nan) && std::isnan(known_nan));
+    static_assert(test_nan, "Not a NAN");
 
     // 100'000'000
     constexpr Real test_100m = boost::math::ccmath::sqrt(100000000);
-    BOOST_TEST_EQ(test_100m, Real(10000));
+    static_assert(test_100m == 10000, "Incorrect");
 
     // MAX / 2
     // Only tests float since double and long double will exceed maximum template depth
