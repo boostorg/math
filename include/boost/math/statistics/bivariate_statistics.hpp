@@ -11,19 +11,18 @@
 #include <tuple>
 #include <type_traits>
 #include <stdexcept>
+#include <future>
+#include <thread>
 #include <vector>
 #include <algorithm>
 #include <cmath>
 #include <cstddef>
-#include <boost/math/tools/assert.hpp>
-#include <boost/math/tools/config.hpp>
+#include <boost/assert.hpp>
 
 // Support compilers with P0024R2 implemented without linking TBB
 // https://en.cppreference.com/w/cpp/compiler_support
-#if !defined(BOOST_NO_CXX17_HDR_EXECUTION) && defined(BOOST_HAS_THREADS)
+#ifndef BOOST_NO_CXX17_HDR_EXECUTION
 #include <execution>
-#include <future>
-#include <thread>
 #define EXEC_COMPATIBLE
 #endif
 
@@ -59,8 +58,6 @@ ReturnType means_and_covariance_seq_impl(ForwardIterator u_begin, ForwardIterato
 
     return std::make_tuple(mu_u, mu_v, cov/i, i);
 }
-
-#ifdef EXEC_COMPATIBLE
 
 // Numerically stable parallel computation of (co-)variance
 // https://dl.acm.org/doi/10.1145/3221269.3223036
@@ -154,8 +151,6 @@ ReturnType means_and_covariance_parallel_impl(ForwardIterator u_begin, ForwardIt
     return std::make_tuple(mu_u_a, mu_v_a, cov_a, n_a);
 }
 
-#endif // EXEC_COMPATIBLE
-
 template<typename ReturnType, typename ForwardIterator>
 ReturnType correlation_coefficient_seq_impl(ForwardIterator u_begin, ForwardIterator u_end, ForwardIterator v_begin, ForwardIterator v_end)
 {
@@ -183,13 +178,15 @@ ReturnType correlation_coefficient_seq_impl(ForwardIterator u_begin, ForwardIter
         ++i;
     }
 
-
-    // If one dataset is constant, then the correlation coefficient is undefined.
-    // See https://stats.stackexchange.com/questions/23676/normalized-correlation-with-a-constant-vector
-    // Thanks to zbjornson for pointing this out.
+    // If both datasets are constant, then they are perfectly correlated.
+    if (Qu == 0 && Qv == 0)
+    {
+        return std::make_tuple(mu_u, Qu, mu_v, Qv, cov, Real(1), Real(i));
+    }
+    // If one dataset is constant and the other isn't, then they have no correlation:
     if (Qu == 0 || Qv == 0)
     {
-        return std::make_tuple(mu_u, Qu, mu_v, Qv, cov, std::numeric_limits<Real>::quiet_NaN(), i);
+        return std::make_tuple(mu_u, Qu, mu_v, Qv, cov, Real(0), Real(i));
     }
 
     // Make sure rho in [-1, 1], even in the presence of numerical noise.
@@ -201,10 +198,8 @@ ReturnType correlation_coefficient_seq_impl(ForwardIterator u_begin, ForwardIter
         rho = -1;
     }
 
-    return std::make_tuple(mu_u, Qu, mu_v, Qv, cov, rho, i);
+    return std::make_tuple(mu_u, Qu, mu_v, Qv, cov, rho, Real(i));
 }
-
-#ifdef EXEC_COMPATIBLE
 
 // Numerically stable parallel computation of (co-)variance:
 // https://dl.acm.org/doi/10.1145/3221269.3223036
@@ -304,12 +299,15 @@ ReturnType correlation_coefficient_parallel_impl(ForwardIterator u_begin, Forwar
         n_a = n_ab;
     }
 
-    // If one dataset is constant, then the correlation coefficient is undefined.
-    // See https://stats.stackexchange.com/questions/23676/normalized-correlation-with-a-constant-vector
-    // Thanks to zbjornson for pointing this out.
+    // If both datasets are constant, then they are perfectly correlated.
+    if (Qu_a == 0 && Qv_a == 0)
+    {
+        return std::make_tuple(mu_u_a, Qu_a, mu_v_a, Qv_a, cov_a, Real(1), n_a);
+    }
+    // If one dataset is constant and the other isn't, then they have no correlation:
     if (Qu_a == 0 || Qv_a == 0)
     {
-        return std::make_tuple(mu_u_a, Qu_a, mu_v_a, Qv_a, cov_a, std::numeric_limits<Real>::quiet_NaN(), n_a);
+        return std::make_tuple(mu_u_a, Qu_a, mu_v_a, Qv_a, cov_a, Real(0), n_a);
     }
 
     // Make sure rho in [-1, 1], even in the presence of numerical noise.
@@ -323,8 +321,6 @@ ReturnType correlation_coefficient_parallel_impl(ForwardIterator u_begin, Forwar
 
     return std::make_tuple(mu_u_a, Qu_a, mu_v_a, Qv_a, cov_a, rho, n_a);
 }
-
-#endif // EXEC_COMPATIBLE
 
 } // namespace detail
 
@@ -420,7 +416,7 @@ inline auto correlation_coefficient(Container const & u, Container const & v)
     return correlation_coefficient(std::execution::seq, u, v);
 }
 
-#else // C++11 and single threaded bindings
+#else // C++11 bindings
 
 template<typename Container, typename Real = typename Container::value_type, typename std::enable_if<std::is_integral<Real>::value, bool>::type = true>
 inline auto means_and_covariance(Container const & u, Container const & v) -> std::tuple<double, double, double>
