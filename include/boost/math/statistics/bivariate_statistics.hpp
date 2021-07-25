@@ -57,7 +57,7 @@ ReturnType means_and_covariance_seq_impl(ForwardIterator u_begin, ForwardIterato
         throw std::domain_error("The size of each sample set must be the same to compute covariance");
     }
 
-    return std::make_tuple(mu_u, mu_v, cov/i, i);
+    return std::make_tuple(mu_u, mu_v, cov/i, Real(i));
 }
 
 #ifdef EXEC_COMPATIBLE
@@ -189,7 +189,7 @@ ReturnType correlation_coefficient_seq_impl(ForwardIterator u_begin, ForwardIter
     // Thanks to zbjornson for pointing this out.
     if (Qu == 0 || Qv == 0)
     {
-        return std::make_tuple(mu_u, Qu, mu_v, Qv, cov, std::numeric_limits<Real>::quiet_NaN(), i);
+        return std::make_tuple(mu_u, Qu, mu_v, Qv, cov, std::numeric_limits<Real>::quiet_NaN(), Real(i));
     }
 
     // Make sure rho in [-1, 1], even in the presence of numerical noise.
@@ -201,7 +201,7 @@ ReturnType correlation_coefficient_seq_impl(ForwardIterator u_begin, ForwardIter
         rho = -1;
     }
 
-    return std::make_tuple(mu_u, Qu, mu_v, Qv, cov, rho, i);
+    return std::make_tuple(mu_u, Qu, mu_v, Qv, cov, rho, Real(i));
 }
 
 #ifdef EXEC_COMPATIBLE
