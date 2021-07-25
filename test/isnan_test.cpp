@@ -5,9 +5,15 @@
 
 #include <cmath>
 #include <cfloat>
+#include <cstdint>
 #include <limits>
 #include <boost/math/ccmath/isnan.hpp>
 #include <boost/core/lightweight_test.hpp>
+#include <boost/math/tools/config.hpp>
+
+#ifdef BOOST_HAS_FLOAT128
+#include <boost/multiprecision/float128.hpp>
+#endif
 
 template <typename T>
 void test()
@@ -15,8 +21,14 @@ void test()
     constexpr bool test_val = boost::math::ccmath::isnan(T(0));
     static_assert(!test_val, "Not constexpr");
 
-    static_assert(boost::math::ccmath::isnan(std::numeric_limits<T>::quiet_NaN()), "Quiet NAN failed");
-    static_assert(boost::math::ccmath::isnan(std::numeric_limits<T>::signaling_NaN()), "Signaling NAN failed");
+    if constexpr (std::numeric_limits<T>::has_quiet_NaN)
+    {
+        static_assert(boost::math::ccmath::isnan(std::numeric_limits<T>::quiet_NaN()), "Quiet NAN failed");
+    }
+    if constexpr (std::numeric_limits<T>::has_signaling_NaN)
+    {
+        static_assert(boost::math::ccmath::isnan(std::numeric_limits<T>::signaling_NaN()), "Signaling NAN failed");
+    }
     static_assert(!boost::math::ccmath::isnan(std::numeric_limits<T>::infinity()), "Infininty failed");
     static_assert(!boost::math::ccmath::isnan(T(0)), "Real 0 failed");
 }
@@ -32,6 +44,17 @@ int main()
     test<long double>();
     #endif
 
+    #ifdef BOOST_HAS_FLOAT128
+    test<boost::multiprecision::float128>();
+    #endif
+
+    test<int>();
+    test<unsigned>();
+    test<long>();
+    test<std::int32_t>();
+    test<std::int64_t>();
+    test<std::uint32_t>();
+    
     return boost::report_errors();
 }
 #else
