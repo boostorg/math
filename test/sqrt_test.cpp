@@ -9,6 +9,35 @@
 #include <boost/math/ccmath/sqrt.hpp>
 #include <boost/core/lightweight_test.hpp>
 
+#ifdef BOOST_HAS_FLOAT128
+#include <boost/multiprecision/float128.hpp>
+
+template <typename Real>
+void test_mp_sqrt()
+{
+    constexpr Real tol = 2*std::numeric_limits<Real>::epsilon();
+
+    // Sqrt(2)
+    constexpr Real test_val = boost::math::ccmath::sqrt(Real(2));
+    constexpr Real sqrt2 = Real(1.4142135623730950488016887242096980785696718753769480731766797379Q);
+    constexpr Real abs_test_error = (test_val - sqrt2) > 0 ? (test_val - sqrt2) : (sqrt2 - test_val);
+    static_assert(abs_test_error < tol, "Out of tolerance");
+
+    // inf
+    constexpr Real test_inf = boost::math::ccmath::sqrt(std::numeric_limits<Real>::infinity());
+    static_assert(test_inf == std::numeric_limits<Real>::infinity(), "Not infinity");
+
+    // NAN
+    constexpr Real test_nan = boost::math::ccmath::sqrt(std::numeric_limits<Real>::quiet_NaN());
+    static_assert(test_nan, "Not a NAN");
+
+    // 100'000'000
+    constexpr Real test_100m = boost::math::ccmath::sqrt(100000000);
+    static_assert(test_100m == 10000, "Incorrect");
+}
+
+#endif
+
 template <typename Real>
 void test_float_sqrt()
 {
@@ -78,9 +107,17 @@ int main()
     test_float_sqrt<long double>();
     #endif
 
+    #ifdef BOOST_HAS_FLOAT128
+    test_mp_sqrt<boost::multiprecision::float128>();
+    #endif
+
     test_int_sqrt<int>();
     test_int_sqrt<unsigned>();
-    
+    test_int_sqrt<long>();
+    test_int_sqrt<std::int32_t>();
+    test_int_sqrt<std::int64_t>();
+    test_int_sqrt<std::uint32_t>();
+
     return boost::report_errors();
 }
 #else

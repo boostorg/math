@@ -39,14 +39,14 @@ inline constexpr Real sqrt_impl(Real x)
 
 } // namespace detail
 
-template <typename Real, typename std::enable_if<std::is_floating_point<Real>::value, bool>::type = true>
+template <typename Real, typename std::enable_if<!std::is_integral<Real>::value, bool>::type = true>
 inline constexpr Real sqrt(Real x)
 {
     if(BOOST_MATH_IS_CONSTANT_EVALUATED(x))
     {
         return boost::math::ccmath::isnan(x) ? std::numeric_limits<Real>::quiet_NaN() : 
-            boost::math::ccmath::isinf(x) ? std::numeric_limits<Real>::infinity() : 
-            detail::sqrt_impl<Real>(x);
+               boost::math::ccmath::isinf(x) ? std::numeric_limits<Real>::infinity() : 
+               detail::sqrt_impl<Real>(x);
     }
     else
     {
