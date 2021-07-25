@@ -9,15 +9,33 @@
 #include <boost/math/ccmath/isinf.hpp>
 #include <boost/core/lightweight_test.hpp>
 
+#ifdef BOOST_HAS_FLOAT128
+#include <boost/multiprecision/float128.hpp>
+#endif
+
 template <typename T>
 void test()
 {
-    constexpr bool test_val = boost::math::ccmath::isinf(T(0));
-    static_assert(!test_val, "Not constexpr");
+    using std::exp;
 
-    static_assert(!boost::math::ccmath::isinf(std::numeric_limits<T>::quiet_NaN()));
+    // Integer types define infinity as 0
+    // https://en.cppreference.com/w/cpp/types/numeric_limits/infinity
+    if constexpr(std::is_integral_v<T>)
+    {
+        constexpr bool test_val = boost::math::ccmath::isinf(T(0));
+        static_assert(test_val, "Not constexpr");
+    }
+    else
+    {
+        constexpr bool test_val = boost::math::ccmath::isinf(T(0));
+        static_assert(!test_val, "Not constexpr");
+    }
+
+    if constexpr (std::numeric_limits<T>::has_quiet_NaN)
+    {
+        static_assert(!boost::math::ccmath::isinf(std::numeric_limits<T>::quiet_NaN()));
+    }
     static_assert(boost::math::ccmath::isinf(std::numeric_limits<T>::infinity()));
-    BOOST_TEST(boost::math::ccmath::isinf(std::exp(T(10'000'000))));
 }
 
 // Only test on platforms that provide BOOST_MATH_IS_CONSTANT_EVALUATED
@@ -31,6 +49,17 @@ int main()
     test<long double>();
     #endif
     
+    #ifdef BOOST_HAS_FLOAT128
+    test<boost::multiprecision::float128>();
+    #endif
+
+    test<int>();
+    test<unsigned>();
+    test<long>();
+    test<std::int32_t>();
+    test<std::int64_t>();
+    test<std::uint32_t>();
+
     return boost::report_errors();
 }
 #else
