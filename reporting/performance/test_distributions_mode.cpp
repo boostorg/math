@@ -53,7 +53,7 @@ BENCHMARK_TEMPLATE(test_mode_2param, long double, non_central_chi_squared_distri
 
 BENCHMARK_TEMPLATE(test_mode_2param, long double, non_central_chi_squared_distribution)->ArgsProduct({
     benchmark::CreateRange(4, 4096, /*multi=*/2),
-    {0, 30, 100, 500}
+    {1, 30, 100, 500}
 })->Name("fixed_nc");
 
 BENCHMARK_TEMPLATE(test_mode_2param, long double, non_central_chi_squared_distribution)
