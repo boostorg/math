@@ -36,9 +36,8 @@ void test_mode_2param(benchmark::State& state)
 }
 
 
-template<class T>
-static void fixed_ratio_2args(benchmark::internal::Benchmark* b, T left_div_right, std::vector<int64_t> lefts) {
-    for (const T &left: lefts) {
+static void fixed_ratio_2args(benchmark::internal::Benchmark* b, long double left_div_right, std::vector<int64_t> lefts) {
+    for (const long double &left: lefts) {
         b->Args({(int64_t)left, (int64_t)(left/left_div_right)});
     }
 }
@@ -58,17 +57,17 @@ BENCHMARK_TEMPLATE(test_mode_2param, long double, non_central_chi_squared_distri
 
 BENCHMARK_TEMPLATE(test_mode_2param, long double, non_central_chi_squared_distribution)
     -> Apply([](benchmark::internal::Benchmark*b) {
-                fixed_ratio_2args<long double>(b, 0.05L, benchmark::CreateRange(4, 4096, /*multi=*/2));
+                fixed_ratio_2args(b, 0.05, benchmark::CreateRange(4, 4096, /*multi=*/2));
     }) -> Name("fixed_scale_0_05");
 
 BENCHMARK_TEMPLATE(test_mode_2param, long double, non_central_chi_squared_distribution)
     -> Apply([](benchmark::internal::Benchmark*b) {
-                fixed_ratio_2args<long double>(b, 0.15L, benchmark::CreateRange(4, 4096, /*multi=*/2));
+                fixed_ratio_2args(b, 0.15, benchmark::CreateRange(4, 4096, /*multi=*/2));
     }) -> Name("fixed_scale_0_15");
 
 BENCHMARK_TEMPLATE(test_mode_2param, long double, non_central_chi_squared_distribution)
     -> Apply([](benchmark::internal::Benchmark*b) {
-                fixed_ratio_2args<long double>(b, 0.25L, benchmark::CreateRange(4, 4096, /*multi=*/2));
+                fixed_ratio_2args(b, 0.25, benchmark::CreateRange(4, 4096, /*multi=*/2));
     }) -> Name("fixed_scale_0_25");
 
 BENCHMARK_MAIN();
