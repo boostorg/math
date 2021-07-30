@@ -8,6 +8,7 @@
 
 #include <cmath>
 #include <limits>
+#include <type_traits>
 #include <boost/math/tools/is_constant_evaluated.hpp>
 
 namespace boost::math::ccmath {
@@ -22,7 +23,15 @@ inline constexpr bool isinf(T x)
     else
     {
         using std::isinf;
-        return isinf(x);
+        
+        if constexpr (!std::is_integral_v<T>)
+        {
+            return isinf(x);
+        }
+        else
+        {
+            return isinf(static_cast<double>(x));
+        }
     }
 }
 

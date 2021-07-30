@@ -7,6 +7,7 @@
 #define BOOST_MATH_CCMATH_ISNAN
 
 #include <cmath>
+#include <type_traits>
 #include <boost/math/tools/is_constant_evaluated.hpp>
 
 namespace boost::math::ccmath {
@@ -21,7 +22,15 @@ inline constexpr bool isnan(T x)
     else
     {
         using std::isnan;
-        return isnan(x);
+
+        if constexpr (!std::is_integral_v<T>)
+        {
+            return isnan(x);
+        }
+        else
+        {
+            return isnan(static_cast<double>(x));
+        }
     }
 }
 
