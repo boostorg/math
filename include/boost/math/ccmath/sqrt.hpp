@@ -39,7 +39,7 @@ inline constexpr Real sqrt_impl(Real x)
 
 } // namespace detail
 
-template <typename Real, typename std::enable_if<!std::is_integral<Real>::value, bool>::type = true>
+template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
 inline constexpr Real sqrt(Real x)
 {
     if(BOOST_MATH_IS_CONSTANT_EVALUATED(x))
@@ -55,7 +55,7 @@ inline constexpr Real sqrt(Real x)
     }
 }
 
-template <typename Z, typename std::enable_if<std::is_integral<Z>::value, bool>::type = true>
+template <typename Z, std::enable_if_t<std::is_integral_v<Z>, bool> = true>
 inline constexpr double sqrt(Z x)
 {
     return detail::sqrt_impl<double>(static_cast<double>(x));

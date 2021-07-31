@@ -49,7 +49,7 @@ int main()
     test<long double>();
     #endif
     
-    #ifdef BOOST_HAS_FLOAT128
+    #if defined(BOOST_HAS_FLOAT128) && !defined(BOOST_MATH_USING_BUILTIN_CONSTANT_P)
     test<boost::multiprecision::float128>();
     #endif
 
