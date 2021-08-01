@@ -10,5 +10,6 @@
 #include <boost/math/ccmath/sqrt.hpp>
 #include <boost/math/ccmath/isinf.hpp>
 #include <boost/math/ccmath/isnan.hpp>
+#include <boost/math/ccmath/abs.hpp>
 
 #endif // BOOST_MATH_CCMATH
