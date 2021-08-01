@@ -46,6 +46,10 @@ int main()
     test<std::int32_t>();
     test<std::int64_t>();
 
+    // Types that are convertible to int
+    test<short>();
+    test<char>();
+
     return 0;
 }
 #else
