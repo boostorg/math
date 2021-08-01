@@ -22,7 +22,11 @@ namespace detail {
 template <typename T> 
 inline constexpr T abs_impl(T x)
 {
-    return x > 0 ? x : -x;
+    return boost::math::ccmath::isnan(x) ? std::numeric_limits<T>::quiet_NaN() : 
+           boost::math::ccmath::isinf(x) ? std::numeric_limits<T>::infinity() : 
+           x == -0 ? T(0) :
+           x == (std::numeric_limits<T>::min)() ? std::numeric_limits<T>::quiet_NaN() : 
+           x > 0 ? x : -x;
 }
 
 } // Namespace detail
@@ -32,11 +36,7 @@ inline constexpr T abs(T x)
 {
     if(BOOST_MATH_IS_CONSTANT_EVALUATED(x))
     {
-        return boost::math::ccmath::isnan(x) ? std::numeric_limits<T>::quiet_NaN() : 
-               boost::math::ccmath::isinf(x) ? std::numeric_limits<T>::infinity() : 
-               x == -0 ? T(0) :
-               x == (std::numeric_limits<T>::min)() ? std::numeric_limits<T>::quiet_NaN() :
-               detail::abs_impl<T>(x);
+        return detail::abs_impl<T>(x);
     }
     else
     {
@@ -52,7 +52,7 @@ inline constexpr T abs(T x)
 {
     if constexpr (std::is_convertible_v<T, int>)
     {
-        return detail::abs_impl(static_cast<int>(x));
+        return detail::abs_impl<int>(static_cast<int>(x));
     }
     else
     {
