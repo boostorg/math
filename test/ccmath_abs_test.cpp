@@ -4,6 +4,7 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <limits>
+#include <type_traits>
 #include <boost/math/ccmath/abs.hpp>
 #include <boost/math/tools/config.hpp>
 
@@ -18,7 +19,11 @@ void test()
     static_assert(boost::math::ccmath::abs(T(-3)) == 3);
     static_assert(boost::math::ccmath::abs(T(-0)) == 0);
     static_assert(boost::math::ccmath::abs(-std::numeric_limits<T>::infinity()) == std::numeric_limits<T>::infinity());
-    static_assert(boost::math::ccmath::abs(-std::numeric_limits<T>::quiet_NaN()) != std::numeric_limits<T>::quiet_NaN());
+
+    if constexpr (std::numeric_limits<T>::has_quiet_NaN)
+    {
+        static_assert(boost::math::ccmath::abs(-std::numeric_limits<T>::quiet_NaN()) != std::numeric_limits<T>::quiet_NaN());
+    }
 }
 
 // Only test on platforms that provide BOOST_MATH_IS_CONSTANT_EVALUATED
@@ -26,7 +31,6 @@ void test()
 int main()
 {
     test<float>();
-    /*
     test<double>();
     
     #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
@@ -41,7 +45,7 @@ int main()
     test<long>();
     test<std::int32_t>();
     test<std::int64_t>();
-    */
+
     return 0;
 }
 #else
