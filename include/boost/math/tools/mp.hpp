@@ -426,9 +426,6 @@ struct make_integer_sequence_impl
 template<typename T, T N>
 using make_integer_sequence = typename detail::make_integer_sequence_impl<T, N>::type;
 
-template<std::size_t... I>
-using index_sequence = integer_sequence<std::size_t, I...>;
-
 template<std::size_t N>
 using make_index_sequence = make_integer_sequence<std::size_t, N>;
 
