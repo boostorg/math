@@ -838,7 +838,9 @@ namespace boost
             &r,
             Policy()))
                return (RealType)r;
-         return detail::generic_find_mode(dist, 1 + k, function);
+         bool asymptotic_mode = k < l/4;
+         RealType starting_point = asymptotic_mode ? k + l - RealType(3) : RealType(1) + k;
+         return detail::generic_find_mode(dist, starting_point, function);
       }
 
       template <class RealType, class Policy>
@@ -994,6 +996,3 @@ namespace boost
 #include <boost/math/distributions/detail/derived_accessors.hpp>
 
 #endif // BOOST_MATH_SPECIAL_NON_CENTRAL_CHI_SQUARE_HPP
-
-
-
