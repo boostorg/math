@@ -6,6 +6,7 @@
 #include <limits>
 #include <type_traits>
 #include <boost/math/ccmath/abs.hpp>
+#include <boost/math/ccmath/fabs.hpp>
 #include <boost/math/tools/config.hpp>
 
 #ifdef BOOST_HAS_FLOAT128
@@ -23,6 +24,20 @@ void test()
     if constexpr (std::numeric_limits<T>::has_quiet_NaN)
     {
         static_assert(boost::math::ccmath::abs(-std::numeric_limits<T>::quiet_NaN()) != std::numeric_limits<T>::quiet_NaN());
+    }
+}
+
+template <typename T>
+void fabs_test()
+{
+    static_assert(boost::math::ccmath::fabs(T(3)) == 3);
+    static_assert(boost::math::ccmath::fabs(T(-3)) == 3);
+    static_assert(boost::math::ccmath::fabs(T(-0)) == 0);
+    static_assert(boost::math::ccmath::fabs(-std::numeric_limits<T>::infinity()) == std::numeric_limits<T>::infinity());
+
+    if constexpr (std::numeric_limits<T>::has_quiet_NaN)
+    {
+        static_assert(boost::math::ccmath::fabs(-std::numeric_limits<T>::quiet_NaN()) != std::numeric_limits<T>::quiet_NaN());
     }
 }
 
@@ -49,6 +64,18 @@ int main()
     // Types that are convertible to int
     test<short>();
     test<char>();
+
+    // fabs
+    fabs_test<float>();
+    fabs_test<double>();
+
+    #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+    fabs_test<long double>();
+    #endif
+
+    #if defined(BOOST_HAS_FLOAT128) && !defined(BOOST_MATH_USING_BUILTIN_CONSTANT_P)
+    fabs_test<boost::multiprecision::float128>();
+    #endif
 
     return 0;
 }
