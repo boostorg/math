@@ -2,16 +2,21 @@
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-//
 
-#ifndef BOOST_MATH_CCMATH
-#define BOOST_MATH_CCMATH
+#ifndef BOOST_MATH_CCMATH_ISFINITE
+#define BOOST_MATH_CCMATH_ISFINITE
 
-#include <boost/math/ccmath/sqrt.hpp>
 #include <boost/math/ccmath/isinf.hpp>
 #include <boost/math/ccmath/isnan.hpp>
-#include <boost/math/ccmath/abs.hpp>
-#include <boost/math/ccmath/fabs.hpp>
-#include <boost/math/ccmath/isfinite.hpp>
 
-#endif // BOOST_MATH_CCMATH
+namespace boost::math::ccmath {
+
+template <typename T>
+inline constexpr bool isfinite(T x)
+{
+    return !boost::math::ccmath::isinf(x) && !boost::math::ccmath::isnan(x);
+}
+
+}
+
+#endif // BOOST_MATH_CCMATH_ISFINITE
