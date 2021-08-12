@@ -44,6 +44,7 @@
 #  define BOOST_MATH_IS_CONSTANT_EVALUATED(x) __builtin_constant_p(x)
 #  define BOOST_MATH_USING_BUILTIN_CONSTANT_P
 #else
+#  define BOOST_MATH_IS_CONSTANT_EVALUATED(x) false
 #  define BOOST_MATH_NO_CONSTEXPR_DETECTION
 #endif
 
