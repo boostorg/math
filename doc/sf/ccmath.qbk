@@ -45,6 +45,9 @@ All of the following functions require C++17 or greater.
         template <typename T>
         inline constexpr bool isfinite(T x);
 
+        template <typename T>
+        inline constexpr bool isnormal(T x);
+
     } // Namespaces
 
 [endsect] [/section:ccmath Constexpr CMath]

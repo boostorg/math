@@ -1,0 +1,36 @@
+//  (C) Copyright Matt Borland 2021.
+//  Use, modification and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
+//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+#ifndef BOOST_MATH_ISNORMAL_HPP
+#define BOOST_MATH_ISNORMAL_HPP
+
+#include <cmath>
+#include <limits>
+#include <boost/math/tools/is_constant_evaluated.hpp>
+#include <boost/math/ccmath/abs.hpp>
+#include <boost/math/ccmath/isinf.hpp>
+#include <boost/math/ccmath/isnan.hpp>
+
+namespace boost::math::ccmath {
+
+template <typename T>
+inline constexpr bool isnormal(T x)
+{
+    if(BOOST_MATH_TOOLS_IS_CONSTANT_EVALUATED(x))
+    {   
+        return x == T(0) ? false :
+               boost::math::ccmath::isinf(x) ? false :
+               boost::math::ccmath::isnan(x) ? false :
+               boost::math::ccmath::abs(x) < (std::numeric_limits<T>::min)() ? false : true;
+    }
+    else
+    {
+        using std::isnormal;
+        return isnormal(x);
+    }
+}
+}
+
+#endif // BOOST_MATH_ISNORMAL_HPP

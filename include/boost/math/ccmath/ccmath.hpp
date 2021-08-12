@@ -13,5 +13,6 @@
 #include <boost/math/ccmath/abs.hpp>
 #include <boost/math/ccmath/fabs.hpp>
 #include <boost/math/ccmath/isfinite.hpp>
+#include <boost/math/ccmath/isnormal.hpp>
 
 #endif // BOOST_MATH_CCMATH
