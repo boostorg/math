@@ -3,6 +3,7 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#include <cmath>
 #include <cstdint>
 #include <limits>
 #include <type_traits>
@@ -26,6 +27,18 @@ void test()
     {
         static_assert(boost::math::ccmath::abs(-std::numeric_limits<T>::quiet_NaN()) != std::numeric_limits<T>::quiet_NaN());
     }
+}
+
+template <typename T>
+void gpp_test()
+{
+    constexpr T tol = std::numeric_limits<T>::epsilon();
+
+    static_assert(std::sin(T(0)) == 0);
+    
+    constexpr T sin_1 = boost::math::ccmath::abs(std::sin(T(-1)));
+    static_assert(sin_1 > 0);
+    static_assert(boost::math::ccmath::abs(sin_1 - 0.8414709848078965066525l) < tol);
 }
 
 template <typename T>
@@ -77,6 +90,17 @@ int main()
     #if defined(BOOST_HAS_FLOAT128) && !defined(BOOST_MATH_USING_BUILTIN_CONSTANT_P)
     fabs_test<boost::multiprecision::float128>();
     #endif
+
+    // Tests using glibcxx extensions that allow for some constexpr cmath
+    #if __GNUC__ >= 10
+    gpp_test<float>();
+    gpp_test<double>();
+
+    #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+    gpp_test<long double>();
+    #endif
+    
+    #endif // glibcxx tests
 
     return 0;
 }
