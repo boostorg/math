@@ -32,13 +32,11 @@ void test()
 template <typename T>
 void gpp_test()
 {
-    constexpr T tol = std::numeric_limits<T>::epsilon();
-
     static_assert(std::sin(T(0)) == 0);
     
     constexpr T sin_1 = boost::math::ccmath::abs(std::sin(T(-1)));
     static_assert(sin_1 > 0);
-    static_assert(boost::math::ccmath::abs(sin_1 - 0.8414709848078965066525l) < tol);
+    static_assert(sin_1 == T(0.8414709848078965066525l));
 }
 
 template <typename T>
