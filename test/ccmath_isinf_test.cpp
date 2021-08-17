@@ -39,7 +39,7 @@ void test()
 }
 
 // Only test on platforms that provide BOOST_MATH_IS_CONSTANT_EVALUATED
-#ifdef BOOST_MATH_IS_CONSTANT_EVALUATED
+#ifndef BOOST_MATH_NO_CONSTEXPR_DETECTION
 int main()
 {
     test<float>();
