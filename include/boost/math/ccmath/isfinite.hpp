@@ -33,7 +33,15 @@ inline constexpr bool isfinite(T x)
     else
     {
         using std::isfinite;
-        return isfinite(x);
+
+        if constexpr (!std::is_integral_v<T>)
+        {
+            return isfinite(x);
+        }
+        else
+        {
+            return isfinite(static_cast<double>(x));
+        }
     }
 }
 

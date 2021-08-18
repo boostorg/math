@@ -8,6 +8,7 @@
 
 #include <cmath>
 #include <limits>
+#include <type_traits>
 #include <boost/math/tools/is_constant_evaluated.hpp>
 #include <boost/math/ccmath/abs.hpp>
 #include <boost/math/ccmath/isinf.hpp>
@@ -28,7 +29,15 @@ inline constexpr bool isnormal(T x)
     else
     {
         using std::isnormal;
-        return isnormal(x);
+
+        if constexpr (!std::is_integral_v<T>)
+        {
+            return isnormal(x);
+        }
+        else
+        {
+            return isnormal(static_cast<double>(x));
+        }
     }
 }
 }
