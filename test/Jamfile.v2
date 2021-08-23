@@ -874,6 +874,7 @@ test-suite mp :
 ;
 
 test-suite misc :
+   [ run header_deprecated_test.cpp ]
    [ run threading_sanity_check.cpp ]
    [ run test_tr1.cpp
    ../build//boost_math_tr1
