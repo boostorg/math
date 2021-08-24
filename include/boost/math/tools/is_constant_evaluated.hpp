@@ -3,8 +3,8 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef BOOST_MATH_TOOLS_IS_CONSTANT_EVALUATED
-#define BOOST_MATH_TOOLS_IS_CONSTANT_EVALUATED
+#ifndef BOOST_MATH_TOOLS_IS_CONSTANT_EVALUATED_HPP
+#define BOOST_MATH_TOOLS_IS_CONSTANT_EVALUATED_HPP
 
 #include <boost/math/tools/config.hpp>
 
@@ -48,4 +48,4 @@
 #  define BOOST_MATH_NO_CONSTEXPR_DETECTION
 #endif
 
-#endif // BOOST_MATH_TOOLS_IS_CONSTANT_EVALUATED
+#endif // BOOST_MATH_TOOLS_IS_CONSTANT_EVALUATED_HPP
