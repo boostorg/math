@@ -261,11 +261,100 @@ This function is `constexpr` only if the compiler supports C++14 constexpr funct
 
 [endsect] [/section:primes]
 
+[section:fibonacci_numbers Fibonacci Numbers]
+
+[@https://en.wikipedia.org/wiki/Fibonacci_number Fibonacci numbers] (F[sub n]) follows the linear recurrence F[sub n]=F[sub n-1]+F[sub n-2] starting with F[sub 0]=0, F[sub 1]=1.
+
+[h4 Synopsis]
+
+``
+#include <boost/math/special_functions/fibonacci.hpp>
+``
+
+  namespace boost { namespace math {
+
+  template <class T, class Policy>
+  constexpr T fibonacci(unsigned long long n) // Checked version (default policy)
+
+  template <class T, class Policy>
+  constexpr T fibonacci(unsigned long long n, const Policy &pol) // Checked version (policy for errors etc.)
+
+  template <typename T>
+  constexpr T unchecked_fibonacci(unsigned long long n) noexcept(std::is_fundamental<T>::value); {  // Unchecked version (no policy).
+
+  }} // namespaces
+
+The functions return F[sub n] for a given input [^n] having type [^T].
+
+[h4 Description]
+The checked versions checks for the overflow before starting the computation. If [^n] is so large that the result can not
+be represented in type [^T], it then calls __overflow_error. The overflow check is susceptible to off-by-one errors around the overflow limit. See Binet's Formula below for more details on the check.
+
+These functions are all `constexpr` from C++14 onwards, and in addition `unchecked_fibonacci` is `noexcept` when T is a fundamental type.
+
+[optional_policy]
+
+If in the checked version, the overflow check succeeds then the unchecked version is called which computes the desired F[sub n]. Checked version is slower because of the overhead involved in overflow check.
+
+[h4 Generator]
+
+``
+#include <boost/math/special_functions/fibonacci.hpp>
+``
+
+   template <typename T>
+   class fibonacci_generator {
+     // returns consecutive fibonacci number starting from 0, 1, 1, 2, ...
+     T operator()();
+     // reset the generator to start from nth fibonacci number
+     void set(unsigned long long n);
+   }
+
+The generator returns consecutive fibonacci numbers starting with 0, 1, 1, 2...
+
+The state of the generator can be modified using [^set()] which makes generator return consecutive fibonacci numbers starting from [^n][sup th] fibonacci number.
+
+   boost::math::fibonacci_generator<int> gen;
+   int x = gen(); // x is 0
+   int y = gen(); // y is 1
+   for(int i = 0; i < 5; ++i) // this loop is same as gen.set(7);
+       gen();
+   int z = gen(); // z is 13 
+
+
+Generator is non-throwing for all fundamental types and will not check for overflows.
+
+[h4 Type Requirements]
+
+The type must be an arithmetic type supporting +, -, * and can be initialized from trivial integral types.
+
+[h4 Example]
+
+The file [@../../example/reciprocal_fibonacci_constant.cpp reciprocal_fibonacci_constant.cpp] uses `fibonacci_generator` to calculate the
+reciprocal fibonacci constant to 1000 digit precision like so:
+
+[import ../../example/reciprocal_fibonacci_constant.cpp]
+
+[fibonacci_eg]
+
+[h4 Implementation]
+
+The time complexity for computing fibonacci number is O(log n), without considering the time complexities of multiplication and addition (where [^n] is the input parameter).
+The implementation is iterative version of [@http://www.cs.utexas.edu/users/EWD/ewd06xx/EWD654.PDF Dijkstra's identities] and which simply walks down the bits of [^n].
+
+[h4:binet Binet's Formula]
+
+There is a closed form expression for computing fibonacci numbers but since it suffers from imprecision issues (using floating point computation), it is not implemented.
+
+However an approximate formula is used for the overflow checking in the checked version.
+
+[endsect] [/Fibonacci Numbers]
+
 [endsect] [/Number Series]
 
 [/
   Copyright 2013, 2014 Nikhar Agrawal, Christopher Kormanyos, John Maddock, Paul A. Bristow.
-  Distributed under the Boost Software License, Version 1.0.
+  Copyright 2020 Madhur Chauhan.  Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
 ]

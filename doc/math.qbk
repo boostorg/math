@@ -9,7 +9,7 @@
     ]
     [authors [Agrawal, Nikhar], [Bikineev, Anton], [Borland, Matthew], [Bristow, Paul A.], [Holin, Hubert], [Guazzone, Marco], [Kormanyos, Christopher], [Lalande, Bruno], [Maddock, John], [Miller, Evan], [Murphy, Jeremy W.], [Pulver, Matthew], [Råde, Johan], [Sobotta, Benjamin], [Sewani, Gautam], [Thompson, Nicholas], [van den Berg, Thijs], [Walker, Daryle], [Zhang, Xiaogang]]
     [/last-revision $Date$]
-    [version 3.0.0]
+    [version 3.1.0]
 ]
 
 [template mathpart[id title]
@@ -554,6 +554,7 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [mathpart overview Overview]
 [include overview/overview.qbk]
 [include overview/structure.qbk] [/getting about, directory and file structure.]
+[include overview/standalone.qbk]
 [include overview/result_type_calc.qbk]
 [include overview/error_handling.qbk]
 
@@ -707,6 +708,7 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [include sf/owens_t.qbk]
 [include sf/daubechies.qbk]
 
+[include sf/ccmath.qbk]
 
 [endmathpart] [/section:special Special Functions]
 
@@ -735,11 +737,13 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [include interpolators/barycentric_rational_interpolation.qbk]
 [include interpolators/vector_barycentric_rational.qbk]
 [include interpolators/catmull_rom.qbk]
+[include interpolators/bezier_polynomial.qbk]
 [include interpolators/cardinal_trigonometric.qbk]
 [include interpolators/cubic_hermite.qbk]
 [include interpolators/makima.qbk]
 [include interpolators/pchip.qbk]
 [include interpolators/quintic_hermite.qbk]
+[include interpolators/bilinear_uniform.qbk]
 [endmathpart]
 
 [mathpart quadrature Quadrature and Differentiation]

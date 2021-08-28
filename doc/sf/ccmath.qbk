@@ -1,0 +1,56 @@
+[/
+Copyright (c) 2021 Matt Borland
+Use, modification and distribution are subject to the
+Boost Software License, Version 1.0. (See accompanying file
+LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+]
+
+[section:ccmath Constexpr CMath]
+
+[heading Description]
+
+`Constexpr` implementations of the functionality found in `<cmath>`.
+In a `constexpr` context the functions will use an implementation defined in boost.
+If the context is not `constexpr` the functionality will be directly from the STL implementation of `<cmath>` used by the compiler.
+All of the following functions require C++17 or greater.
+
+[heading Synopsis]
+
+``
+    #include <boost/math/ccmath/ccmath.hpp>
+``
+    namespace boost::math::ccmath {
+
+        template <typename T>
+        inline constexpr bool isinf(T x);
+
+        template <typename T>
+        inline constexpr bool isnan(T x);
+
+        template <typename Real>
+        inline constexpr Real sqrt(Real x);
+
+        template <typename Z>
+        inline constexpr double sqrt(Z x);
+
+        template <typename T>
+        inline constexpr T abs(T x);
+
+        template <typename T, std::enable_if_t<std::is_unsigned_v<T>, bool> = true>
+        inline constexpr int abs(T x);
+
+        template <typename T>
+        inline constexpr T fabs(T x);
+
+        template <typename T>
+        inline constexpr bool isfinite(T x);
+
+        template <typename T>
+        inline constexpr bool isnormal(T x);
+
+        template <typename T>
+        inline constexpr int fpclassify(T x);
+
+    } // Namespaces
+
+[endsect] [/section:ccmath Constexpr CMath]

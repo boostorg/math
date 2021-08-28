@@ -414,7 +414,7 @@ namespace boost {
         switch(peek_char(it, end, ct)) {
         case 'q':
         case 's':
-          if(flags_ && legacy)
+          if(flags_ & legacy)
             ++it;
           break;  // "nanq", "nans"
 

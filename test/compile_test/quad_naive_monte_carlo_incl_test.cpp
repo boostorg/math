@@ -17,7 +17,7 @@
 using boost::math::quadrature::naive_monte_carlo;
 void compile_and_link_test()
 {
-    auto g = [&](std::vector<double> const & x)
+    auto g = [&](std::vector<double> const &)
     {
         return 1.873;
     };

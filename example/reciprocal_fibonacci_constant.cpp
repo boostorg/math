@@ -8,6 +8,8 @@
 // This is an example to calculate Reciprocal Fibonacci Constant (A079586 in the OEIS)
 // compile with flags: -std=c++11 -lmpfr
 
+//[fibonacci_eg
+
 #include <boost/math/special_functions/fibonacci.hpp>
 #include <boost/multiprecision/mpfr.hpp>
 #include <iomanip>
@@ -25,3 +27,5 @@ int main() {
     std::cout << std::setprecision(1000) << "Reciprocal fibonacci constant after "
               << ITR << " iterations is: " << ans << std::endl;
 }
+
+//]

@@ -145,7 +145,7 @@ inline constexpr T epsilon(const std::true_type& BOOST_MATH_APPEND_EXPLICIT_TEMP
 
 #if defined(__GNUC__) && ((LDBL_MANT_DIG == 106) || (__LDBL_MANT_DIG__ == 106))
 template <>
-inline constexpr long double epsilon<long double>(const std::true_type& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(long double)) noexcept(long double)
+inline constexpr long double epsilon<long double>(const std::true_type& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(long double)) noexcept
 {
    // numeric_limits on Darwin (and elsewhere) tells lies here:
    // the issue is that long double on a few platforms is
