@@ -1,4 +1,5 @@
 //  Copyright John Maddock 2014.
+//  Copyright Christopher Kormanyos 2021.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -274,6 +275,36 @@ BOOST_AUTO_TEST_CASE( test_main )
    // N[(-25/10)^((25/10)+((35/10) I)), 64]
    BOOST_CHECK_CLOSE_FRACTION(real(pow(BOOST_FLOATMAX_C(-2.5), cm)), BOOST_FLOATMAX_C(0.0000108384213983921628818716620216475625862428265426558408687988615), 10*tol);
    BOOST_CHECK_CLOSE_FRACTION(imag(pow(BOOST_FLOATMAX_C(-2.5), cm)), BOOST_FLOATMAX_C(-0.0001654255694465738439289663540771804961844719634831318175904326223), 10*tol);
+
+   {
+      // Mixed real/imag pow() function.
+      // N[(12/10)^((34/10) + (56/10) I), 50]
+      const              boost::float128_t  x(BOOST_FLOAT128_C(1.2));
+      const std::complex<boost::float128_t> a(BOOST_FLOAT128_C(3.4), BOOST_FLOAT128_C(5.6));
+
+      BOOST_CHECK_CLOSE_FRACTION(real(pow(x, a)), BOOST_FLOAT128_C(0.9712103707801414302710397932181855534927504177229), 10*tol);
+      BOOST_CHECK_CLOSE_FRACTION(imag(pow(x, a)), BOOST_FLOAT128_C(1.5848111822975117880267429166819459873312076842905), 10*tol);
+   }
+
+   {
+      // Mixed real/imag pow() function.
+      // N[(12/10)^((34/10) + (56/10) I), 50]
+      const std::complex<boost::float128_t> x(BOOST_FLOAT128_C(1.2));
+      const std::complex<boost::float128_t> a(BOOST_FLOAT128_C(3.4), BOOST_FLOAT128_C(5.6));
+
+      BOOST_CHECK_CLOSE_FRACTION(real(pow(x, a)), BOOST_FLOAT128_C(0.9712103707801414302710397932181855534927504177229), 10*tol);
+      BOOST_CHECK_CLOSE_FRACTION(imag(pow(x, a)), BOOST_FLOAT128_C(1.5848111822975117880267429166819459873312076842905), 10*tol);
+   }
+
+   {
+      // Pure real pow() function.
+      // N[(12/10)^(34/10), 50]
+      const std::complex<boost::float128_t> x(BOOST_FLOAT128_C(1.2));
+      const std::complex<boost::float128_t> a(BOOST_FLOAT128_C(3.4));
+
+      BOOST_CHECK_CLOSE_FRACTION(real(pow(x, a)), BOOST_FLOAT128_C(1.8587296919794811670420219948905447113485339704757), 10*tol);
+      BOOST_CHECK_EQUAL(imag(pow(x, a)), 0);
+   }
 
    // Check x^a, where x is zero and a is finite.
    BOOST_CHECK_EQUAL(real(pow(BOOST_FLOATMAX_C(0.0), cm)), 0);

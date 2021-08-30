@@ -552,13 +552,39 @@
     inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> pow(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x,
                                                                     const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE& a)
     {
-      return std::exp(a * std::log(x));
+      const bool x_im_isneg  = (x.imag() < 0);
+      const bool x_im_iszero = ((x_im_isneg || (x.imag() > 0)) == false);
+
+      if(x_im_iszero)
+      {
+        using std::pow;
+
+        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE pxa = pow(x.real(), a);
+
+        return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>(pxa, BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(0));
+      }
+      else
+      {
+        return std::exp(a * std::log(x));
+      }
     }
 
     inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> pow(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x,
                                                                     const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& a)
     {
-      return std::exp(a * std::log(x));
+      const bool x_im_isneg  = (x.imag() < 0);
+      const bool x_im_iszero = ((x_im_isneg || (x.imag() > 0)) == false);
+
+      if(x_im_iszero)
+      {
+        using std::pow;
+
+        return pow(x.real(), a);
+      }
+      else
+      {
+        return std::exp(a * std::log(x));
+      }
     }
 
     inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> pow(const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE& x,
