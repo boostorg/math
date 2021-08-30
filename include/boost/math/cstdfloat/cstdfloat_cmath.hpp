@@ -82,7 +82,7 @@ namespace boost {
                         : +std::numeric_limits<float_type>::infinity());
                   }
 
-                  if (p == static_cast<integer_type>(2)) { return  (x * x); }
+                  if      (p == static_cast<integer_type>(2)) { return  (x * x); }
                   else if (p == static_cast<integer_type>(3)) { return ((x * x) * x); }
                   else if (p == static_cast<integer_type>(4)) { const float_type x2 = (x * x); return (x2 * x2); }
                   else
@@ -373,20 +373,8 @@ inline boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT
 {
    // Compute exp(x) - 1 for x small.
 
-   // Use an order-36 polynomial approximation of the exponential function
-   // in the range of (-ln2 < x < ln2). Scale the argument to this range
-   // and subsequently multiply the result by 2^n accordingly.
-
-   // Derive the polynomial coefficients with Mathematica(R) by generating
-   // a table of high-precision values of exp(x) in the range (-ln2 < x < ln2)
-   // and subsequently applying the built-in *Fit* function.
-
-   // Table[{x, Exp[x] - 1}, {x, -Log[2], Log[2], 1/180}]
-   // N[%, 120]
-   // Fit[%, {x, x^2, x^3, x^4, x^5, x^6, x^7, x^8, x^9, x^10, x^11, x^12,
-   //         x^13, x^14, x^15, x^16, x^17, x^18, x^19, x^20, x^21, x^22,
-   //         x^23, x^24, x^25, x^26, x^27, x^28, x^29, x^30, x^31, x^32,
-   //         x^33, x^34, x^35, x^36}, x]
+   // Use an order-12 Pade approximation of the exponential function.
+   // PadeApproximant[Exp[x] - 1, {x, 0, 12, 12}].
 
    typedef boost::math::cstdfloat::detail::float_internal128_t float_type;
 
@@ -398,43 +386,32 @@ inline boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT
    }
    else
    {
-      // Compute the polynomial approximation of exp(alpha).
-      sum = ((((((((((((((((((((((((((((((((((((float_type(BOOST_FLOAT128_C(2.69291698127774166063293705964720493864630783729857438187365E-42))  * x
-         + float_type(BOOST_FLOAT128_C(9.70937085471487654794114679403710456028986572118859594614033E-41))) * x
-         + float_type(BOOST_FLOAT128_C(3.38715585158055097155585505318085512156885389014410753080500E-39))) * x
-         + float_type(BOOST_FLOAT128_C(1.15162718532861050809222658798662695267019717760563645440433E-37))) * x
-         + float_type(BOOST_FLOAT128_C(3.80039074689434663295873584133017767349635602413675471702393E-36))) * x
-         + float_type(BOOST_FLOAT128_C(1.21612504934087520075905434734158045947460467096773246215239E-34))) * x
-         + float_type(BOOST_FLOAT128_C(3.76998762883139753126119821241037824830069851253295480396224E-33))) * x
-         + float_type(BOOST_FLOAT128_C(1.13099628863830344684998293828608215735777107850991029729440E-31))) * x
-         + float_type(BOOST_FLOAT128_C(3.27988923706982293204067897468714277771890104022419696770352E-30))) * x
-         + float_type(BOOST_FLOAT128_C(9.18368986379558482800593745627556950089950023355628325088207E-29))) * x
-         + float_type(BOOST_FLOAT128_C(2.47959626322479746949155352659617642905315302382639380521497E-27))) * x
-         + float_type(BOOST_FLOAT128_C(6.44695028438447337900255966737803112935639344283098705091949E-26))) * x
-         + float_type(BOOST_FLOAT128_C(1.61173757109611834904452725462599961406036904573072897122957E-24))) * x
-         + float_type(BOOST_FLOAT128_C(3.86817017063068403772269360016918092488847584660382953555804E-23))) * x
-         + float_type(BOOST_FLOAT128_C(8.89679139245057328674891109315654704307721758924206107351744E-22))) * x
-         + float_type(BOOST_FLOAT128_C(1.95729410633912612308475595397946731738088422488032228717097E-20))) * x
-         + float_type(BOOST_FLOAT128_C(4.11031762331216485847799061511674191805055663711439605760231E-19))) * x
-         + float_type(BOOST_FLOAT128_C(8.22063524662432971695598123977873600603370758794431071426640E-18))) * x
-         + float_type(BOOST_FLOAT128_C(1.56192069685862264622163643500633782667263448653185159383285E-16))) * x
-         + float_type(BOOST_FLOAT128_C(2.81145725434552076319894558300988749849555291507956994126835E-15))) * x
-         + float_type(BOOST_FLOAT128_C(4.77947733238738529743820749111754320727153728139716409114011E-14))) * x
-         + float_type(BOOST_FLOAT128_C(7.64716373181981647590113198578807092707697416852226691068627E-13))) * x
-         + float_type(BOOST_FLOAT128_C(1.14707455977297247138516979786821056670509688396295740818677E-11))) * x
-         + float_type(BOOST_FLOAT128_C(1.60590438368216145993923771701549479323291461578567184216302E-10))) * x
-         + float_type(BOOST_FLOAT128_C(2.08767569878680989792100903212014323125428376052986408239620E-09))) * x
-         + float_type(BOOST_FLOAT128_C(2.50521083854417187750521083854417187750523408006206780016659E-08))) * x
-         + float_type(BOOST_FLOAT128_C(2.75573192239858906525573192239858906525573195144226062684604E-07))) * x
-         + float_type(BOOST_FLOAT128_C(2.75573192239858906525573192239858906525573191310049321957902E-06))) * x
-         + float_type(BOOST_FLOAT128_C(0.00002480158730158730158730158730158730158730158730149317774)))     * x
-         + float_type(BOOST_FLOAT128_C(0.00019841269841269841269841269841269841269841269841293575920)))     * x
-         + float_type(BOOST_FLOAT128_C(0.00138888888888888888888888888888888888888888888888889071045)))     * x
-         + float_type(BOOST_FLOAT128_C(0.00833333333333333333333333333333333333333333333333332986595)))     * x
-         + float_type(BOOST_FLOAT128_C(0.04166666666666666666666666666666666666666666666666666664876)))     * x
-         + float_type(BOOST_FLOAT128_C(0.16666666666666666666666666666666666666666666666666666669048)))     * x
-         + float_type(BOOST_FLOAT128_C(0.50000000000000000000000000000000000000000000000000000000006)))     * x
-         + float_type(BOOST_FLOAT128_C(0.99999999999999999999999999999999999999999999999999999999995)))     * x);
+      const float_type x2 = (x * x);
+
+      const float_type top = (((((  float_type(BOOST_FLOAT128_C(2.4087176110456818621091195109360728010934088788572E-13))  * x2
+                                  + float_type(BOOST_FLOAT128_C(9.2735628025258751691201101171038802842096241836000E-10))) * x2
+                                  + float_type(BOOST_FLOAT128_C(9.0806726962333369656024118266681195742980640005812E-07))) * x2
+                                  + float_type(BOOST_FLOAT128_C(3.1055900621118012422360248447204968944099378881988E-04))) * x2
+                                  + float_type(BOOST_FLOAT128_C(3.6231884057971014492753623188405797101449275362319E-02))) * x2
+                                  + float_type(BOOST_FLOAT128_C(1.00000000000000000000000000000000000000000000000000000)))
+                                  ;
+
+      const float_type bot = ((((((((((((  float_type(BOOST_FLOAT128_C(+7.7202487533515444298369215094104897470942592271063E-16))  * x
+                                         + float_type(BOOST_FLOAT128_C(-1.2043588055228409310545597554680364005467044394286E-13))) * x
+                                         + float_type(BOOST_FLOAT128_C(+9.2735628025258751691201101171038802842096241836000E-12))) * x
+                                         + float_type(BOOST_FLOAT128_C(-4.6367814012629375845600550585519401421048120918000E-10))) * x
+                                         + float_type(BOOST_FLOAT128_C(+1.6692413044546575304416198210786984511577323530480E-08))) * x
+                                         + float_type(BOOST_FLOAT128_C(-4.5403363481166684828012059133340597871490320002906E-07))) * x
+                                         + float_type(BOOST_FLOAT128_C(+9.5347063310450038138825324180015255530129672006102E-06))) * x
+                                         + float_type(BOOST_FLOAT128_C(-1.5527950310559006211180124223602484472049689440994E-04))) * x
+                                         + float_type(BOOST_FLOAT128_C(+1.9409937888198757763975155279503105590062111801242E-03))) * x
+                                         + float_type(BOOST_FLOAT128_C(-1.8115942028985507246376811594202898550724637681159E-02))) * x
+                                         + float_type(BOOST_FLOAT128_C(+1.1956521739130434782608695652173913043478260869565E-01))) * x
+                                         + float_type(BOOST_FLOAT128_C(-0.50000000000000000000000000000000000000000000000000000))) * x
+                                         + float_type(BOOST_FLOAT128_C(+1.00000000000000000000000000000000000000000000000000000)))
+                                         ;
+
+      sum = (x * top) / bot;
    }
 
    return sum;
@@ -444,28 +421,13 @@ inline boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT
    // Patch the expq() function for a subset of broken GCC compilers
    // like GCC 4.7, 4.8 on MinGW.
 
-   // Use an order-36 polynomial approximation of the exponential function
-   // in the range of (-ln2 < x < ln2). Scale the argument to this range
-   // and subsequently multiply the result by 2^n accordingly.
-
-   // Derive the polynomial coefficients with Mathematica(R) by generating
-   // a table of high-precision values of exp(x) in the range (-ln2 < x < ln2)
-   // and subsequently applying the built-in *Fit* function.
-
-   // Table[{x, Exp[x] - 1}, {x, -Log[2], Log[2], 1/180}]
-   // N[%, 120]
-   // Fit[%, {x, x^2, x^3, x^4, x^5, x^6, x^7, x^8, x^9, x^10, x^11, x^12,
-   //         x^13, x^14, x^15, x^16, x^17, x^18, x^19, x^20, x^21, x^22,
-   //         x^23, x^24, x^25, x^26, x^27, x^28, x^29, x^30, x^31, x^32,
-   //         x^33, x^34, x^35, x^36}, x]
-
    typedef boost::math::cstdfloat::detail::float_internal128_t float_type;
 
    // Scale the argument x to the range (-ln2 < x < ln2).
    constexpr float_type one_over_ln2 = float_type(BOOST_FLOAT128_C(1.44269504088896340735992468100189213742664595415299));
    const float_type x_over_ln2 = x * one_over_ln2;
 
-   std::int_fast32_t n;
+   int n;
 
    if (x != x)
    {
@@ -475,12 +437,12 @@ inline boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT
    else if (::BOOST_CSTDFLOAT_FLOAT128_FABS(x) > BOOST_FLOAT128_C(+0.693147180559945309417232121458176568075500134360255))
    {
       // The absolute value of the argument exceeds ln2.
-      n = static_cast<std::int_fast32_t>(::BOOST_CSTDFLOAT_FLOAT128_FLOOR(x_over_ln2));
+      n = static_cast<int>(::BOOST_CSTDFLOAT_FLOAT128_FLOOR(x_over_ln2));
    }
    else if (::BOOST_CSTDFLOAT_FLOAT128_FABS(x) < BOOST_FLOAT128_C(+0.693147180559945309417232121458176568075500134360255))
    {
       // The absolute value of the argument is less than ln2.
-      n = static_cast<std::int_fast32_t>(0);
+      n = 0;
    }
    else
    {
