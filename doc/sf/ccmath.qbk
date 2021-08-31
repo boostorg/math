@@ -51,6 +51,12 @@ All of the following functions require C++17 or greater.
         template <typename T>
         inline constexpr int fpclassify(T x);
 
+        template <typename Real>
+        inline constexpr Real frexp(Real arg, int* exp);
+
+        template <typename Z>
+        inline constexpr double frexp(Z arg, int* exp);
+
     } // Namespaces
 
 [endsect] [/section:ccmath Constexpr CMath]

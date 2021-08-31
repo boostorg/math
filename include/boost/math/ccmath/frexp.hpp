@@ -29,7 +29,7 @@ inline constexpr Real frexp_zero_impl(Real arg, int* exp)
 template <typename Real>
 inline constexpr Real frexp_impl(Real arg, int* exp)
 {
-    constexpr bool negative_arg = arg < Real(0);
+    const bool negative_arg = (arg < 0);
     
     Real f = negative_arg ? -arg : arg;
     int e2 = 0;
@@ -57,39 +57,39 @@ inline constexpr Real frexp_impl(Real arg, int* exp)
 
 } // namespace detail
 
-template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> == true>
+template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
 inline constexpr Real frexp(Real arg, int* exp)
 {
     if(BOOST_MATH_IS_CONSTANT_EVALUATED(arg))
     {
-        return arg == T(0)  ? detail::frexp_zero_impl(arg, &exp) : 
-               arg == T(-0) ? detail::frexp_zero_impl(arg, &exp) :
-               boost::math::ccmath::isinf(arg) ? detail::frexp_zero_impl(arg, &exp) : 
-               boost::math::ccmath::isnan(arg) ? detail::frexp_zero_impl(arg, &exp) :
-               boost::math::ccmath::detail::frexp_impl(arg, &exp);
+        return arg == Real(0)  ? detail::frexp_zero_impl(arg, exp) : 
+               arg == Real(-0) ? detail::frexp_zero_impl(arg, exp) :
+               boost::math::ccmath::isinf(arg) ? detail::frexp_zero_impl(arg, exp) : 
+               boost::math::ccmath::isnan(arg) ? detail::frexp_zero_impl(arg, exp) :
+               boost::math::ccmath::detail::frexp_impl(arg, exp);
     }
     else
     {
         using std::frexp;
-        return frexp(arg, &exp);
+        return frexp(arg, exp);
     }
 }
 
-template <typename Z, std::enable_if_t<std::is_integral_v<Z>, bool> == true>
+template <typename Z, std::enable_if_t<std::is_integral_v<Z>, bool> = true>
 inline constexpr double frexp(Z arg, int* exp)
 {
-    return boost::math::ccmath::frexp(static_cast<double>(arg), &exp);
+    return boost::math::ccmath::frexp(static_cast<double>(arg), exp);
 }
 
 inline constexpr float frexpf(float arg, int* exp)
 {
-    return boost::math::ccmath::frexp(arg, &exp);
+    return boost::math::ccmath::frexp(arg, exp);
 }
 
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 inline constexpr float frexpl(long double arg, int* exp)
 {
-    return boost::math::ccmath::frexp(arg, &exp);
+    return boost::math::ccmath::frexp(arg, exp);
 }
 #endif
 
