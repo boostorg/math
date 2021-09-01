@@ -360,7 +360,7 @@ public:
          return out;
       }
 
-      #ifndef BOOST_HAS_THREADS
+      #if !defined(BOOST_HAS_THREADS) || defined(BOOST_MATH_BERNOULLI_UNTHREADED)
       //
       // Single threaded code, very simple:
       //
@@ -382,6 +382,8 @@ public:
          *out = (i >= m_overflow_limit) ? policies::raise_overflow_error<T>("boost::math::bernoulli_b2n<%1%>(std::size_t)", 0, T(i), pol) : bn[i];
          ++out;
       }
+      #elif defined(BOOST_MATH_NO_ATOMIC_INT)
+      static_assert(sizeof(T) == 1, "Unsupported configuration: your platform appears to have no atomic integers.  If you are happy with thread-unsafe code, then you may define BOOST_MATH_BERNOULLI_UNTHREADED to suppress this error.");
       #else
       //
       // Double-checked locking pattern, lets us access cached already cached values
@@ -464,7 +466,7 @@ public:
          return out;
       }
 
-      #ifndef BOOST_HAS_THREADS
+      #if !defined(BOOST_HAS_THREADS) || defined(BOOST_MATH_BERNOULLI_UNTHREADED)
       //
       // Single threaded code, very simple:
       //
@@ -494,6 +496,8 @@ public:
          }
          ++out;
       }
+      #elif defined(BOOST_MATH_NO_ATOMIC_INT)
+      static_assert(sizeof(T) == 1, "Unsupported configuration: your platform appears to have no atomic integers.  If you are happy with thread-unsafe code, then you may define BOOST_MATH_BERNOULLI_UNTHREADED to suppress this error.");
       #else
       //
       // Double-checked locking pattern, lets us access cached already cached values
@@ -555,7 +559,7 @@ private:
    // The value at which we know overflow has already occurred for the Bn:
    std::size_t m_overflow_limit;
 
-   #ifdef BOOST_HAS_THREADS
+   #if defined(BOOST_HAS_THREADS) && !defined(BOOST_MATH_NO_ATOMIC_INT)
    std::mutex m_mutex;
    atomic_counter_type m_counter, m_current_precision;
    #else
