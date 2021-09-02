@@ -29,7 +29,7 @@ inline constexpr Real frexp_zero_impl(Real arg, int* exp)
 template <typename Real>
 inline constexpr Real frexp_impl(Real arg, int* exp)
 {
-    const bool negative_arg = (arg < 0);
+    const bool negative_arg = (arg < Real(0));
     
     Real f = negative_arg ? -arg : arg;
     int e2 = 0;
