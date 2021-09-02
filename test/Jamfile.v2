@@ -1145,9 +1145,9 @@ test-suite misc :
 
 #   [ run __temporary_test.cpp test_instances//test_instances : : : <test-info>always_show_run_output <pch>off ]
    [ compile test_no_long_double_policy.cpp ]
-   [ compile compile_test/bernoulli_no_atomic_d.cpp ]
-   [ compile compile_test/bernoulli_no_atomic_mp.cpp ]
-   [ compile-fail compile_test/bernoulli_no_atomic_fail.cpp ]
+   [ compile bernoulli_no_atomic_d.cpp ]
+   [ compile bernoulli_no_atomic_mp.cpp ]
+   [ compile-fail bernoulli_no_atomic_fail.cpp ]
 ;
 
 test-suite interpolators :
