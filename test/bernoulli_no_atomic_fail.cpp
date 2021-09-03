@@ -7,7 +7,7 @@
 
 #include <boost/math/special_functions/bernoulli.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
-#include "test_compile_result.hpp"
+#include "compile_test/test_compile_result.hpp"
 
 void compile_and_link_test()
 {

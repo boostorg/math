@@ -6,7 +6,7 @@
 #define BOOST_MATH_NO_ATOMIC_INT
 
 #include <boost/math/special_functions/bernoulli.hpp>
-#include "test_compile_result.hpp"
+#include "compile_test/test_compile_result.hpp"
 
 void compile_and_link_test()
 {
