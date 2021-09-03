@@ -140,6 +140,8 @@ void test_spots(T)
    // Spot values are from http://functions.wolfram.com/webMathematica/FunctionEvaluation.jsp?name=BetaRegularized
    // using precision of 50 decimal digits.
    T tolerance = boost::math::tools::epsilon<T>() * 3000;
+   if (boost::math::tools::digits<T>() > 100)
+      tolerance *= 2;
    BOOST_CHECK_CLOSE(
       ::boost::math::ibeta(
          static_cast<T>(159) / 10000, //(0.015964560210704803L),

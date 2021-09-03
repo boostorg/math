@@ -174,9 +174,9 @@ void test_spots(T, const char*)
       if(0 != ldexp(T(1), -1074))
       {
          // This is denorm_min at double precision:
-         BOOST_CHECK_CLOSE_FRACTION(boost::math::tgamma_ratio(T(ldexp(T(1), -1074)), T(200)), T(5.13282785052571536804189023927976812551830809667482691717029e-50), tol * 50);
-         BOOST_CHECK_CLOSE_FRACTION(boost::math::tgamma_ratio(T(200), T(ldexp(T(1), -1074))), T(1.94824379293682687942882944294875087145333536754699303593931e49), tol * 10);
-         BOOST_CHECK_CLOSE_FRACTION(boost::math::tgamma_delta_ratio(T(ldexp(T(1), -1074)), T(200)), T(5.13282785052571536804189023927976812551830809667482691717029e-50), tol * 10);
+         BOOST_CHECK_CLOSE_FRACTION(boost::math::tgamma_ratio(T(ldexp(T(1), -1074)), T(200)), T(5.13282785052571536804189023927976812551830809667482691717029e-50L), tol * 50);
+         BOOST_CHECK_CLOSE_FRACTION(boost::math::tgamma_ratio(T(200), T(ldexp(T(1), -1074))), T(1.94824379293682687942882944294875087145333536754699303593931e49L), tol * 10);
+         BOOST_CHECK_CLOSE_FRACTION(boost::math::tgamma_delta_ratio(T(ldexp(T(1), -1074)), T(200)), T(5.13282785052571536804189023927976812551830809667482691717029e-50L), tol * 10);
          BOOST_CHECK_CLOSE_FRACTION(boost::math::tgamma_delta_ratio(T(200), T(ldexp(T(1), -1074))), T(1), tol);
       }
    }
