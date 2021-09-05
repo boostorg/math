@@ -17,17 +17,43 @@
 #endif
 
 template <typename T>
-void test()
+inline constexpr T base_helper(const T val)
 {
-    static int i;
+    int i = 0;
+    const T ans = boost::math::ccmath::frexp(val, &i);
+
+    return ans;
+}
+
+template <typename T>
+inline constexpr int exp_helper(const T val)
+{
+    int i = 0;
+    boost::math::ccmath::frexp(val, &i);
+
+    return i;
+}
+
+template <typename T>
+constexpr void test()
+{
     if constexpr (std::numeric_limits<T>::has_quiet_NaN)
     {
-        static_assert(boost::math::ccmath::isnan(boost::math::ccmath::frexp(std::numeric_limits<T>::quiet_NaN(), &i)));
+        static_assert(boost::math::ccmath::isnan(base_helper(std::numeric_limits<T>::quiet_NaN())), "If the arg is NaN, NaN is returned");
     }
 
-    static_assert(boost::math::ccmath::frexp(0, &i) == 0);
-    static_assert(boost::math::ccmath::isinf(boost::math::ccmath::frexp(std::numeric_limits<T>::infinity(), &i)));
-    static_assert(boost::math::ccmath::frexp(T(1024), &i) == T(0.5));
+    static_assert(!base_helper(T(0)), "If the arg is +- 0 the value is returned");
+    static_assert(!base_helper(T(-0)), "If the arg is +- 0 the value is returned");
+    static_assert(boost::math::ccmath::isinf(base_helper(std::numeric_limits<T>::infinity())), "If the arg is +- inf the value is returned");
+    static_assert(boost::math::ccmath::isinf(base_helper(-std::numeric_limits<T>::infinity())), "If the arg is +- inf the value is returned");
+
+    // N[125/32, 30]
+    // 3.90625000000000000000000000000
+    // 0.976562500000000000000000000000 * 2^2
+    constexpr T test_base = base_helper(T(125.0/32));
+    static_assert(test_base == T(0.9765625));
+    constexpr int test_exp = exp_helper(T(125.0/32));
+    static_assert(test_exp == 2);
 }
 
 #ifndef BOOST_MATH_NO_CONSTEXPR_DETECTION
