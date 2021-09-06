@@ -11,11 +11,9 @@
 #include <type_traits>
 #include <stdexcept>
 #include <boost/math/tools/is_constant_evaluated.hpp>
-#include <boost/math/special_functions/pow.hpp>
 #include <boost/math/ccmath/abs.hpp>
 #include <boost/math/ccmath/isinf.hpp>
 #include <boost/math/ccmath/isnan.hpp>
-#include <boost/math/ccmath/isfinite.hpp>
 
 namespace boost::math::ccmath {
 
@@ -37,7 +35,7 @@ inline constexpr T negative_exp(int exp)
         {
             throw std::underflow_error("Exponent leads to a value that is smaller than minimum positive subnormal value");
         }
-        
+
         result /= 2;
         --abs_exp;
     }
