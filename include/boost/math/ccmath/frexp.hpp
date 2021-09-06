@@ -87,7 +87,7 @@ inline constexpr float frexpf(float arg, int* exp)
 }
 
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-inline constexpr float frexpl(long double arg, int* exp)
+inline constexpr long double frexpl(long double arg, int* exp)
 {
     return boost::math::ccmath::frexp(arg, exp);
 }

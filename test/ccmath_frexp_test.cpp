@@ -56,7 +56,7 @@ constexpr void test()
     static_assert(test_exp == 2);
 }
 
-#ifndef BOOST_MATH_NO_CONSTEXPR_DETECTION
+#if !defined(BOOST_MATH_NO_CONSTEXPR_DETECTION) && !defined(BOOST_MATH_USING_BUILTIN_CONSTANT_P)
 int main()
 {
     test<float>();
@@ -66,7 +66,7 @@ int main()
     test<long double>();
     #endif
     
-    #if defined(BOOST_HAS_FLOAT128) && !defined(BOOST_MATH_USING_BUILTIN_CONSTANT_P)
+    #ifdef BOOST_HAS_FLOAT128
     test<boost::multiprecision::float128>();
     #endif
 
