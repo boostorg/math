@@ -4,8 +4,8 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
-#ifndef BOOST_MATH_CCMATH
-#define BOOST_MATH_CCMATH
+#ifndef BOOST_MATH_CCMATH_HPP
+#define BOOST_MATH_CCMATH_HPP
 
 #include <boost/math/ccmath/sqrt.hpp>
 #include <boost/math/ccmath/isinf.hpp>
@@ -16,5 +16,6 @@
 #include <boost/math/ccmath/isnormal.hpp>
 #include <boost/math/ccmath/fpclassify.hpp>
 #include <boost/math/ccmath/frexp.hpp>
+#include <boost/math/ccmath/div.hpp>
 
-#endif // BOOST_MATH_CCMATH
+#endif // BOOST_MATH_CCMATH_HPP
