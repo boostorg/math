@@ -61,8 +61,8 @@ All of the following functions require C++17 or greater.
         template <typename Real>
         inline constexpr Real ldexp(Real arg, int exp);
 
-        template <typename Z>
-        inline constexpr double ldexp(Z arg, int exp);
+        template <typename Integer>
+        inline constexpr double ldexp(Integer arg, int exp);
 
     } // Namespaces
 
