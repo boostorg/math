@@ -12,6 +12,7 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 `Constexpr` implementations of the functionality found in `<cmath>`.
 In a `constexpr` context the functions will use an implementation defined in boost.
 If the context is not `constexpr` the functionality will be directly from the STL implementation of `<cmath>` used by the compiler.
+All functions that take an `Integer` type and return a `double` simply cast the `Integer` argument to a `double`.
 All of the following functions require C++17 or greater.
 
 [heading Synopsis]
@@ -30,8 +31,8 @@ All of the following functions require C++17 or greater.
         template <typename Real>
         inline constexpr Real sqrt(Real x);
 
-        template <typename Z>
-        inline constexpr double sqrt(Z x);
+        template <typename Integer>
+        inline constexpr double sqrt(Integer x);
 
         template <typename T>
         inline constexpr T abs(T x);
@@ -54,8 +55,8 @@ All of the following functions require C++17 or greater.
         template <typename Real>
         inline constexpr Real frexp(Real arg, int* exp);
 
-        template <typename Z>
-        inline constexpr double frexp(Z arg, int* exp);
+        template <typename Integer>
+        inline constexpr double frexp(Integer arg, int* exp);
 
     } // Namespaces
 
