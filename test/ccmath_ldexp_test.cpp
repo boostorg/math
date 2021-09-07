@@ -44,7 +44,7 @@ constexpr void test()
     static_assert(boost::math::ccmath::ldexp(T(500), -2) == T(125));
 }
 
-#ifndef BOOST_MATH_NO_CONSTEXPR_DETECTION
+#if !defined(BOOST_MATH_NO_CONSTEXPR_DETECTION) && !defined(BOOST_MATH_USING_BUILTIN_CONSTANT_P)
 int main()
 {
     test<float>();
