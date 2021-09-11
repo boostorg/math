@@ -70,6 +70,7 @@ int main()
 
     test<int>();
     test<long>();
+    test<long long>();
     test<std::int32_t>();
     test<std::int64_t>();
 
