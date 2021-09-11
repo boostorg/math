@@ -10,7 +10,6 @@
 #include <cstdlib>
 #include <cinttypes>
 #include <cstdint>
-#include <stdexcept>
 #include <type_traits>
 #include <boost/math/tools/is_constant_evaluated.hpp>
 
@@ -19,16 +18,11 @@ namespace boost::math::ccmath {
 namespace detail {
 
 template <typename ReturnType, typename Z>
-inline constexpr ReturnType div_impl(const Z x, const Z y)
+inline constexpr ReturnType div_impl(const Z x, const Z y) noexcept
 {
     // std::div_t/ldiv_t/lldiv_t/imaxdiv_t can be defined as either { Z quot; Z rem; }; or { Z rem; Z quot; };
     // so don't use braced initialziation to guarantee compatibility
-    ReturnType ans;
-
-    if (y == 0)
-    {
-        throw std::domain_error("Divide by 0 error");
-    }
+    ReturnType ans {0, 0};
 
     ans.quot = x / y;
     ans.rem = x % y;
@@ -38,6 +32,7 @@ inline constexpr ReturnType div_impl(const Z x, const Z y)
 
 } // Namespace detail
 
+// Used for types other than built-ins (e.g. boost multiprecision)
 template <typename Z>
 struct div_t
 {
@@ -46,7 +41,7 @@ struct div_t
 };
 
 template <typename Z>
-inline constexpr auto div(Z x, Z y)
+inline constexpr auto div(Z x, Z y) noexcept
 {
     if constexpr (std::is_same_v<Z, int>)
     {
@@ -70,17 +65,17 @@ inline constexpr auto div(Z x, Z y)
     }
 }
 
-inline constexpr std::ldiv_t ldiv(long x, long y)
+inline constexpr std::ldiv_t ldiv(long x, long y) noexcept
 {
     return detail::div_impl<std::ldiv_t>(x, y);
 }
 
-inline constexpr std::lldiv_t lldiv(long long x, long long y)
+inline constexpr std::lldiv_t lldiv(long long x, long long y) noexcept
 {
     return detail::div_impl<std::lldiv_t>(x, y);
 }
 
-inline constexpr std::imaxdiv_t imaxdiv(std::intmax_t x, std::intmax_t y)
+inline constexpr std::imaxdiv_t imaxdiv(std::intmax_t x, std::intmax_t y) noexcept
 {
     return detail::div_impl<std::imaxdiv_t>(x, y);
 }
