@@ -58,6 +58,12 @@ All of the following functions require C++17 or greater.
         template <typename Integer>
         inline constexpr double frexp(Integer arg, int* exp);
 
+        template <typename Real>
+        inline constexpr Real ldexp(Real arg, int exp);
+
+        template <typename Integer>
+        inline constexpr double ldexp(Integer arg, int exp);
+
     } // Namespaces
 
 [endsect] [/section:ccmath Constexpr CMath]
