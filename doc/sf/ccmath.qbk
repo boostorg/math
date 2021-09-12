@@ -64,6 +64,12 @@ All of the following functions require C++17 or greater.
         template <typename Integer>
         inline constexpr double ldexp(Integer arg, int exp);
 
+        template <typename Integer>
+        struct div_t {Integer quot; Integer rem;};
+
+        template <typename Integer>
+        inline constexpr div_t<Integer> div(Integer x, Integer y);
+
     } // Namespaces
 
 [endsect] [/section:ccmath Constexpr CMath]
