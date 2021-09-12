@@ -11,7 +11,6 @@
 #include <cinttypes>
 #include <cstdint>
 #include <type_traits>
-#include <boost/math/tools/is_constant_evaluated.hpp>
 
 namespace boost::math::ccmath {
 
