@@ -6,6 +6,7 @@
 #include <cstdint>
 #include <cinttypes>
 #include <boost/math/ccmath/div.hpp>
+#include <boost/math/tools/is_constant_evaluated.hpp>
 #include <boost/multiprecision/cpp_int.hpp>
 
 template <typename Z>
