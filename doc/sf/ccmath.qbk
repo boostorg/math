@@ -70,6 +70,15 @@ All of the following functions require C++17 or greater.
         template <typename Integer>
         inline constexpr div_t<Integer> div(Integer x, Integer y);
 
+        template <typename Real>
+        inline constexpr Real logb(Real arg);
+
+        template <typename Integer>
+        inline constexpr double logb(Integer arg);
+
+        template <typename T>
+        inline constexpr int ilogb(T arg);
+
     } // Namespaces
 
 [endsect] [/section:ccmath Constexpr CMath]
