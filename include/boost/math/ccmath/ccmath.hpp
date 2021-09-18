@@ -17,5 +17,7 @@
 #include <boost/math/ccmath/fpclassify.hpp>
 #include <boost/math/ccmath/frexp.hpp>
 #include <boost/math/ccmath/div.hpp>
+#include <boost/math/ccmath/logb.hpp>
+#include <boost/math/ccmath/ilogb.hpp>
 
 #endif // BOOST_MATH_CCMATH_HPP
