@@ -19,5 +19,7 @@
 #include <boost/math/ccmath/div.hpp>
 #include <boost/math/ccmath/logb.hpp>
 #include <boost/math/ccmath/ilogb.hpp>
+#include <boost/math/ccmath/scalbn.hpp>
+#include <boost/math/ccmath/scalbln.hpp>
 
 #endif // BOOST_MATH_CCMATH_HPP
