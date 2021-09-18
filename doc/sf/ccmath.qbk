@@ -91,6 +91,12 @@ All of the following functions require C++17 or greater.
         template <typename Integer>
         inline constexpr double scalbln(Integer x, long exp) noexcept
 
+        template <typename Real>
+        inline constexpr Real floor(Real arg) noexcept
+
+        template <typename Integer>
+        inline constexpr double floor(Integer arg) noexcept
+
     } // Namespaces
 
 [endsect] [/section:ccmath Constexpr CMath]
