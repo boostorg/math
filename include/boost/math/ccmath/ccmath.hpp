@@ -21,5 +21,7 @@
 #include <boost/math/ccmath/ilogb.hpp>
 #include <boost/math/ccmath/scalbn.hpp>
 #include <boost/math/ccmath/scalbln.hpp>
+#include <boost/math/ccmath/floor.hpp>
+#include <boost/math/ccmath/ceil.hpp>
 
 #endif // BOOST_MATH_CCMATH_HPP
