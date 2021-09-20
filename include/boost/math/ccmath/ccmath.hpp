@@ -23,5 +23,6 @@
 #include <boost/math/ccmath/scalbln.hpp>
 #include <boost/math/ccmath/floor.hpp>
 #include <boost/math/ccmath/ceil.hpp>
+#include <boost/math/ccmath/trunc.hpp>
 
 #endif // BOOST_MATH_CCMATH_HPP
