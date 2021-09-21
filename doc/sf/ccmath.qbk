@@ -103,6 +103,12 @@ All of the following functions require C++17 or greater.
         template <typename Integer>
         inline constexpr double ceil(Integer arg) noexcept
 
+        template <typename Real>
+        inline constexpr Real trunc(Real arg) noexcept
+
+        template <typename Integer>
+        inline constexpr double trunc(Integer arg) noexcept
+
     } // Namespaces
 
 [endsect] [/section:ccmath Constexpr CMath]
