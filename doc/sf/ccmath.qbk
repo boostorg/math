@@ -109,6 +109,9 @@ All of the following functions require C++17 or greater.
         template <typename Integer>
         inline constexpr double trunc(Integer arg) noexcept
 
+        template <typename Real>
+        inline constexpr Real modf(Real x, Real* iptr) noexcept
+        
     } // Namespaces
 
 [endsect] [/section:ccmath Constexpr CMath]
