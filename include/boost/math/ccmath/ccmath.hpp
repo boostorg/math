@@ -25,5 +25,6 @@
 #include <boost/math/ccmath/ceil.hpp>
 #include <boost/math/ccmath/trunc.hpp>
 #include <boost/math/ccmath/modf.hpp>
+#include <boost/math/ccmath/round.hpp>
 
 #endif // BOOST_MATH_CCMATH_HPP

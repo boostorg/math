@@ -111,6 +111,18 @@ All of the following functions require C++17 or greater.
 
         template <typename Real>
         inline constexpr Real modf(Real x, Real* iptr) noexcept
+
+        template <typename Real>
+        inline constexpr Real round(Real arg) noexcept
+
+        template <typename Integer>
+        inline constexpr double round(Integer arg) noexcept
+
+        template <typename T>
+        inline constexpr long lround(T arg)
+
+        template <typename T>
+        inline constexpr long long llround(T arg)
         
     } // Namespaces
 
