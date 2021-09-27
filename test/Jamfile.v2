@@ -139,6 +139,7 @@ test-suite special_fun :
    [ run ccmath_ceil_test.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx17_if_constexpr ] ]
    [ run ccmath_trunc_test.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx17_if_constexpr ] ]
    [ run ccmath_modf_test.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx17_if_constexpr ] ]
+   [ run ccmath_round_test.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx17_if_constexpr ] ]
    [ run log1p_expm1_test.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
    [ run powm1_sqrtp1m1_test.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
    [ run special_functions_test.cpp ../../test/build//boost_unit_test_framework  ]
