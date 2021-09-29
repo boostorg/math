@@ -65,6 +65,8 @@ The basic usage is shown here:
     // Interpolate at s = 0.1:
     auto point = cr(0.1);
 
+Here, /s/ varies between 0 and /cr.max_parameter()/. The latter's value depends on the choice of /alpha/. In order to interpolate the curve between /points[i]/ and /points[i+1]/, /s/ should go from  /cr.parameter_at_point(i)/ and /cr.parameter_at_point(i+1)/.
+
 The spline can be either open or /closed/, closed meaning that there is some /s > 0/ such that /P(s) = P(0)/.
 The default is open, but this can be easily changed:
 
