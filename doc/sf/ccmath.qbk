@@ -123,6 +123,13 @@ All of the following functions require C++17 or greater.
 
         template <typename T>
         inline constexpr long long llround(T arg)
+
+        template <typename Real>
+        inline constexpr Real fmod(Real x, Real y) noexcept
+
+        template <typename Arithmetic1, typename Arithmetic2>
+        inline constexpr Promoted fmod(Arithmetic1 x, Arithmetic2 y) noexcept
+        The Promoted return type will have at least double prescision, but be up to the highest precision argument.
         
     } // Namespaces
 
