@@ -26,5 +26,6 @@
 #include <boost/math/ccmath/trunc.hpp>
 #include <boost/math/ccmath/modf.hpp>
 #include <boost/math/ccmath/round.hpp>
+#include <boost/math/ccmath/fmod.hpp>
 
 #endif // BOOST_MATH_CCMATH_HPP
