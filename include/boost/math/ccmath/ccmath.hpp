@@ -27,5 +27,6 @@
 #include <boost/math/ccmath/modf.hpp>
 #include <boost/math/ccmath/round.hpp>
 #include <boost/math/ccmath/fmod.hpp>
+#include <boost/math/ccmath/remainder.hpp>
 
 #endif // BOOST_MATH_CCMATH_HPP
