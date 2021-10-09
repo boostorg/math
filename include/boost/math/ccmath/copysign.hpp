@@ -35,7 +35,7 @@ inline constexpr T copysign_impl(const T mag, const T sgn) noexcept
 template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
 inline constexpr Real copysign(Real mag, Real sgn) noexcept
 {
-    if(BOOST_MATH_IS_CONSTANT_EVALUATED(x))
+    if(BOOST_MATH_IS_CONSTANT_EVALUATED(mag))
     {
         return boost::math::ccmath::detail::copysign_impl(mag, sgn);
     }
@@ -49,7 +49,7 @@ inline constexpr Real copysign(Real mag, Real sgn) noexcept
 template <typename T1, typename T2>
 inline constexpr auto copysign(T1 mag, T2 sgn) noexcept
 {
-    if(BOOST_MATH_IS_CONSTANT_EVALUATED(x))
+    if(BOOST_MATH_IS_CONSTANT_EVALUATED(mag))
     {
         // If the type is an integer (e.g. epsilon == 0) then set the epsilon value to 1 so that type is at a minimum 
         // cast to double
