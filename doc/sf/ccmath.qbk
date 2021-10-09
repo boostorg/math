@@ -137,6 +137,12 @@ All of the following functions require C++17 or greater.
         template <typename Arithmetic1, typename Arithmetic2>
         inline constexpr Promoted remainder(Arithmetic1 x, Arithmetic2 y) noexcept
 
+        template <typename Real>
+        inline constexpr Real copysign(Real mag, Real sgn) noexcept
+
+        template <typename Arithmetic1, typename Arithmetic2>
+        inline constexpr Promoted copysign(Arithmetic1 mag, Arithmetic2 sgn) noexcept
+
     } // Namespaces
 
 [endsect] [/section:ccmath Constexpr CMath]
