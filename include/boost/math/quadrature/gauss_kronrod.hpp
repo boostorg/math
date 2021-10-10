@@ -1871,6 +1871,8 @@ public:
    static auto integrate(F f, Real a, Real b, unsigned max_depth = 15, Real tol = tools::root_epsilon<Real>(), Real* error = nullptr, Real* pL1 = nullptr)->decltype(std::declval<F>()(std::declval<Real>()))
    {
       typedef decltype(f(a)) K;
+      static_assert(!std::is_integral<K>::value,
+                  "The return type cannot be integral, it must be either a real or complex floating point type.");
       static const char* function = "boost::math::quadrature::gauss_kronrod<%1%>::integrate(f, %1%, %1%)";
       if (!(boost::math::isnan)(a) && !(boost::math::isnan)(b))
       {

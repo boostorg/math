@@ -68,7 +68,8 @@ auto tanh_sinh<Real, Policy>::integrate(const F f, Real a, Real b, Real toleranc
     static const char* function = "tanh_sinh<%1%>::integrate";
 
     typedef decltype(std::declval<F>()(std::declval<Real>())) result_type;
-
+    static_assert(!std::is_integral<result_type>::value,
+                  "The return type cannot be integral, it must be either a real or complex floating point type.");
     if (!(boost::math::isnan)(a) && !(boost::math::isnan)(b))
     {
 
@@ -76,8 +77,8 @@ auto tanh_sinh<Real, Policy>::integrate(const F f, Real a, Real b, Real toleranc
        if ((a <= -tools::max_value<Real>()) && (b >= tools::max_value<Real>()))
        {
           auto u = [&](const Real& t, const Real& tc)->result_type
-          { 
-             Real t_sq = t*t; 
+          {
+             Real t_sq = t*t;
              Real inv;
              if (t > 0.5f)
                 inv = 1 / ((2 - tc) * tc);
@@ -85,7 +86,7 @@ auto tanh_sinh<Real, Policy>::integrate(const F f, Real a, Real b, Real toleranc
                 inv = 1 / ((2 + tc) * -tc);
              else
                 inv = 1 / (1 - t_sq);
-             return f(t*inv)*(1 + t_sq)*inv*inv; 
+             return f(t*inv)*(1 + t_sq)*inv*inv;
           };
           Real limit = sqrt(tools::min_value<Real>()) * 4;
           return m_imp->integrate(u, error, L1, function, limit, limit, tolerance, levels);
@@ -95,7 +96,7 @@ auto tanh_sinh<Real, Policy>::integrate(const F f, Real a, Real b, Real toleranc
        if ((boost::math::isfinite)(a) && (b >= tools::max_value<Real>()))
        {
           auto u = [&](const Real& t, const Real& tc)->result_type
-          { 
+          {
              Real z, arg;
              if (t > -0.5f)
                 z = 1 / (t + 1);
@@ -105,7 +106,7 @@ auto tanh_sinh<Real, Policy>::integrate(const F f, Real a, Real b, Real toleranc
                 arg = 2 * z + a - 1;
              else
                 arg = a + tc / (2 - tc);
-             return f(arg)*z*z; 
+             return f(arg)*z*z;
           };
           Real left_limit = sqrt(tools::min_value<Real>()) * 4;
           result_type Q = Real(2) * m_imp->integrate(u, error, L1, function, left_limit, tools::min_value<Real>(), tolerance, levels);
@@ -124,7 +125,7 @@ auto tanh_sinh<Real, Policy>::integrate(const F f, Real a, Real b, Real toleranc
        if ((boost::math::isfinite)(b) && (a <= -tools::max_value<Real>()))
        {
           auto v = [&](const Real& t, const Real& tc)->result_type
-          { 
+          {
              Real z;
              if (t > -0.5)
                 z = 1 / (t + 1);
@@ -185,7 +186,7 @@ auto tanh_sinh<Real, Policy>::integrate(const F f, Real a, Real b, Real toleranc
           BOOST_MATH_ASSERT((left_min_complement * diff + a) > a);
           BOOST_MATH_ASSERT((b - right_min_complement * diff) < b);
           auto u = [&](Real z, Real zc)->result_type
-          { 
+          {
              Real position;
              if (z < -0.5)
              {
