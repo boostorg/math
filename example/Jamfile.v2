@@ -150,7 +150,7 @@ test-suite examples :
    [ run ooura_fourier_integrals_example.cpp : : : [ requires cxx11_hdr_mutex cxx11_lambdas cxx11_inline_namespaces cxx11_auto_declarations ] ]
    [ run ooura_fourier_integrals_cosine_example.cpp : : : [ requires cxx11_hdr_mutex cxx11_inline_namespaces cxx11_auto_declarations cxx17_std_apply ] ]
    [ run ooura_fourier_integrals_multiprecision_example.cpp : : : [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] [ requires cxx11_hdr_mutex cxx11_inline_namespaces cxx11_auto_declarations cxx17_std_apply ] ]
-
+   [ run reciprocal_fibonacci_constant.cpp : : : [ check-target-builds ../config//has_mpfr "MPFR Support" : <linkflags>"-lmpfr -lgmp" : <build>no ] ]
 ;
 
 run root_elliptic_finding.cpp /boost/timer : : : release <link>static  [ requires cxx11_unified_initialization_syntax cxx11_defaulted_functions ] <target-os>freebsd:<linkflags>"-lrt" <target-os>linux:<linkflags>"-lrt -lpthread" ;

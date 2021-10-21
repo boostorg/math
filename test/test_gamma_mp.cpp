@@ -125,20 +125,6 @@ void expected_results()
       ".*",                          // compiler
       ".*",                          // stdlib
       ".*",                          // platform
-      "number<cpp_bin_float<65> >",           // test type(s)
-      ".*",                          // test data group
-      "lgamma", 9000, 4000);      // test function
-   add_expected_result(
-      ".*",                          // compiler
-      ".*",                          // stdlib
-      ".*",                          // platform
-      "number<cpp_bin_float<75> >",           // test type(s)
-      ".*",                          // test data group
-      "lgamma", 60000, 20000);      // test function
-   add_expected_result(
-      ".*",                          // compiler
-      ".*",                          // stdlib
-      ".*",                          // platform
       "cpp_bin_float_100|number<cpp_bin_float<85> >",           // test type(s)
       ".*",                          // test data group
       "lgamma", 600000, 300000);      // test function
@@ -146,16 +132,30 @@ void expected_results()
       ".*",                          // compiler
       ".*",                          // stdlib
       ".*",                          // platform
-      ".*",                          // test type(s)
+      "number<cpp_bin_float<[56]5> >",           // test type(s)
       ".*",                          // test data group
-      "lgamma", 4800, 2500);           // test function
+      "lgamma", 7000, 3000);      // test function
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      ".*",                          // platform
+      "number<cpp_bin_float<75> >",           // test type(s)
+      ".*",                          // test data group
+      "lgamma", 40000, 15000);      // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
       ".*",                          // platform
       ".*",                          // test type(s)
       ".*",                          // test data group
-      "[tl]gamma", 100, 50);            // test function
+      "lgamma", 600, 200);            // test function
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      ".*",                          // platform
+      ".*",                          // test type(s)
+      ".*",                          // test data group
+      "[tl]gamma", 120, 50);            // test function
    //
    // Finish off by printing out the compiler/stdlib/platform names,
    // we do this to make it easier to mark up expected error rates.

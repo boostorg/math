@@ -4,7 +4,7 @@
 <title>Hypergeometric Distribution</title>
 <link rel="stylesheet" href="../../../math.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
-<link rel="home" href="../../../index.html" title="Math Toolkit 3.0.0">
+<link rel="home" href="../../../index.html" title="Math Toolkit 3.1.0">
 <link rel="up" href="../dists.html" title="Distributions">
 <link rel="prev" href="hyperexponential_dist.html" title="Hyperexponential Distribution">
 <link rel="next" href="inverse_chi_squared_dist.html" title="Inverse Chi Squared Distribution">
@@ -41,7 +41,7 @@
    <span class="keyword">typedef</span> <span class="identifier">RealType</span> <span class="identifier">value_type</span><span class="special">;</span>
    <span class="keyword">typedef</span> <span class="identifier">Policy</span>   <span class="identifier">policy_type</span><span class="special">;</span>
    <span class="comment">// Construct:</span>
-   <span class="identifier">hypergeometric_distribution</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">r</span><span class="special">,</span> <span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="keyword">unsigned</span> <span class="identifier">N</span><span class="special">);</span>
+   <span class="identifier">hypergeometric_distribution</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">r</span><span class="special">,</span> <span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="keyword">unsigned</span> <span class="identifier">N</span><span class="special">);</span> <span class="comment">// r=defective/failures/success, n=trials/draws, N=total population.</span>
    <span class="comment">// Accessors:</span>
    <span class="keyword">unsigned</span> <span class="identifier">total</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
    <span class="keyword">unsigned</span> <span class="identifier">defective</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
@@ -128,6 +128,18 @@
           Returns the number of objects <span class="emphasis"><em>n</em></span> which are sampled
           from the population <span class="emphasis"><em>N</em></span>.
         </p>
+<div class="warning"><table border="0" summary="Warning">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="../../../../../../../doc/src/images/warning.png"></td>
+<th align="left">Warning</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+            Both naming/symbol and order of parameters is confusing with no two implementations
+            the same! See Wolfram Mathematica <a href="https://mathworld.wolfram.com/HypergeometricDistribution.html" target="_top">Hypergeometric
+            Distribution</a> and Wikipedia <a href="https://en.wikipedia.org/wiki/Hypergeometric_distribution" target="_top">Hypergeometric
+            Distribution</a> and Python <a href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.hypergeom.html#scipy.stats.hypergeom" target="_top">scipy.stats.hypergeom</a>.
+          </p></td></tr>
+</table></div>
 <h5>
 <a name="math_toolkit.dist_ref.dists.hypergeometric_dist.h1"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.hypergeometric_dist.non_member_accessors"></a></span><a class="link" href="hypergeometric_dist.html#math_toolkit.dist_ref.dists.hypergeometric_dist.non_member_accessors">Non-member
@@ -218,7 +230,10 @@
           We also sanity check our implementation against some spot values computed
           using the online calculator here <a href="http://stattrek.com/Tables/Hypergeometric.aspx" target="_top">http://stattrek.com/Tables/Hypergeometric.aspx</a>.
           Finally we test accuracy against some high precision test data using this
-          implementation and NTL::RR.
+          implementation and NTL::RR. Spot test values for moments (mean to kurtosis)
+          are from Mathematica <a href="https://mathworld.wolfram.com/HypergeometricDistribution.html" target="_top">Hypergeometric
+          Distribution</a> and agree with an implementation of Wikipedia <a href="https://en.wikipedia.org/wiki/Hypergeometric_distribution" target="_top">Hypergeometric
+          Distribution</a> and Python <a href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.hypergeom.html#scipy.stats.hypergeom" target="_top">scipy.stats.hypergeom</a>.
         </p>
 <h5>
 <a name="math_toolkit.dist_ref.dists.hypergeometric_dist.h4"></a>
@@ -299,7 +314,7 @@
           log<sub>10</sub>N decimal digits during the calculation in the worst case.
         </p>
 <p>
-          The CDF and its complement is calculated by directly summing the PDF's.
+          The CDF and its complement is calculated by directly summing the PDFs.
           We start by deciding whether the CDF, or its complement, is likely to be
           the smaller of the two and then calculate the PDF at <span class="emphasis"><em>k</em></span>
           (or <span class="emphasis"><em>k+1</em></span> if we're calculating the complement) and calculate

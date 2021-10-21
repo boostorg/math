@@ -4,7 +4,7 @@
 <title>Barycentric Rational Interpolation</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
-<link rel="home" href="../index.html" title="Math Toolkit 3.0.0">
+<link rel="home" href="../index.html" title="Math Toolkit 3.1.0">
 <link rel="up" href="../interpolation.html" title="Chapter 12. Interpolation">
 <link rel="prev" href="whittaker_shannon.html" title="Whittaker-Shannon interpolation">
 <link rel="next" href="vector_barycentric.html" title="Vector-valued Barycentric Rational Interpolation">
@@ -32,7 +32,7 @@
     </h4>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">interpolators</span><span class="special">/</span><span class="identifier">barycentric_rational</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 
-<span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
+<span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">interpolators</span><span class="special">{</span>
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Real</span><span class="special">&gt;</span>
     <span class="keyword">class</span> <span class="identifier">barycentric_rational</span>
     <span class="special">{</span>
@@ -53,7 +53,7 @@
         <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="identifier">Real</span><span class="special">&gt;&amp;&amp;</span> <span class="identifier">return_y</span><span class="special">();</span>
     <span class="special">};</span>
 
-<span class="special">}}</span>
+<span class="special">}}}</span>
 </pre>
 <h4>
 <a name="math_toolkit.barycentric.h1"></a>
@@ -78,7 +78,7 @@
 <pre class="programlisting"><span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">x</span><span class="special">(</span><span class="number">500</span><span class="special">);</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">y</span><span class="special">(</span><span class="number">500</span><span class="special">);</span>
 <span class="comment">// populate x, y, then:</span>
-<span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">barycentric_rational</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">interpolant</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">move</span><span class="special">(</span><span class="identifier">x</span><span class="special">),</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">move</span><span class="special">(</span><span class="identifier">y</span><span class="special">));</span>
+<span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">interpolators</span><span class="special">::</span><span class="identifier">barycentric_rational</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">interpolant</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">move</span><span class="special">(</span><span class="identifier">x</span><span class="special">),</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">move</span><span class="special">(</span><span class="identifier">y</span><span class="special">));</span>
 </pre>
 <p>
       This implicitly calls the constructor with approximation order 3, and hence
@@ -87,7 +87,7 @@
       A call to the constructor with an explicit approximation order is demonstrated
       below
     </p>
-<pre class="programlisting"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">barycentric_rational</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">interpolant</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">move</span><span class="special">(</span><span class="identifier">x</span><span class="special">),</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">move</span><span class="special">(</span><span class="identifier">y</span><span class="special">),</span> <span class="number">5</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">interpolators</span><span class="special">::</span><span class="identifier">barycentric_rational</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">interpolant</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">move</span><span class="special">(</span><span class="identifier">x</span><span class="special">),</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">move</span><span class="special">(</span><span class="identifier">y</span><span class="special">),</span> <span class="number">5</span><span class="special">);</span>
 </pre>
 <p>
       To evaluate the interpolant, simply use
@@ -168,7 +168,7 @@
     <span class="comment">// We'll skip the code for filling the above vectors with data for now...</span>
 
     <span class="comment">// Now we want to interpolate this potential at any r:</span>
-    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">barycentric_rational</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">b</span><span class="special">(</span><span class="identifier">r</span><span class="special">.</span><span class="identifier">data</span><span class="special">(),</span> <span class="identifier">mrV</span><span class="special">.</span><span class="identifier">data</span><span class="special">(),</span> <span class="identifier">r</span><span class="special">.</span><span class="identifier">size</span><span class="special">());</span>
+    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">interpolators</span><span class="special">::</span><span class="identifier">barycentric_rational</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">b</span><span class="special">(</span><span class="identifier">r</span><span class="special">.</span><span class="identifier">data</span><span class="special">(),</span> <span class="identifier">mrV</span><span class="special">.</span><span class="identifier">data</span><span class="special">(),</span> <span class="identifier">r</span><span class="special">.</span><span class="identifier">size</span><span class="special">());</span>
 
     <span class="keyword">for</span> <span class="special">(</span><span class="identifier">size_t</span> <span class="identifier">i</span> <span class="special">=</span> <span class="number">1</span><span class="special">;</span> <span class="identifier">i</span> <span class="special">&lt;</span> <span class="number">8</span><span class="special">;</span> <span class="special">++</span><span class="identifier">i</span><span class="special">)</span>
     <span class="special">{</span>
@@ -242,7 +242,7 @@
     <span class="comment">// start by creating 2 ranges for the x and y values:</span>
     <span class="keyword">auto</span> <span class="identifier">x_range</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">adaptors</span><span class="special">::</span><span class="identifier">keys</span><span class="special">(</span><span class="identifier">r</span><span class="special">);</span>
     <span class="keyword">auto</span> <span class="identifier">y_range</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">adaptors</span><span class="special">::</span><span class="identifier">values</span><span class="special">(</span><span class="identifier">r</span><span class="special">);</span>
-    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">barycentric_rational</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">b</span><span class="special">(</span><span class="identifier">x_range</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">x_range</span><span class="special">.</span><span class="identifier">end</span><span class="special">(),</span> <span class="identifier">y_range</span><span class="special">.</span><span class="identifier">begin</span><span class="special">());</span>
+    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">interpolators</span><span class="special">::</span><span class="identifier">barycentric_rational</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">b</span><span class="special">(</span><span class="identifier">x_range</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">x_range</span><span class="special">.</span><span class="identifier">end</span><span class="special">(),</span> <span class="identifier">y_range</span><span class="special">.</span><span class="identifier">begin</span><span class="special">());</span>
     <span class="comment">//</span>
     <span class="comment">// We'll use a lambda expression to provide the functor to our root finder, since we want</span>
     <span class="comment">// the abscissa value that yields 3, not zero.  We pass the functor b by value to the</span>

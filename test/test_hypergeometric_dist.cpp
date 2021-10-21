@@ -1,6 +1,6 @@
 // Copyright John Maddock 2008
-// Copyright Paul A. Bristow 
-// Copyright Gautam Sewani
+// Copyright Paul A. Bristow 2021
+// Copyright Gautam Sewani 2008
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
@@ -165,8 +165,8 @@ void do_test_hypergeometric(const T& data, const char* type_name, const char* te
    // test hypergeometric against data:
    //
    result = boost::math::tools::test_hetero<Real>(
-      data, 
-      bind_func<Real>(funcp, 0, 1, 2, 3), 
+      data,
+      bind_func<Real>(funcp, 0, 1, 2, 3),
       extract_result<Real>(4));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "hypergeometric PDF", test_name);
 
@@ -180,8 +180,8 @@ void do_test_hypergeometric(const T& data, const char* type_name, const char* te
    // test hypergeometric against data:
    //
    result = boost::math::tools::test_hetero<Real>(
-      data, 
-      bind_func<Real>(funcp, 0, 1, 2, 3), 
+      data,
+      bind_func<Real>(funcp, 0, 1, 2, 3),
       extract_result<Real>(5));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "hypergeometric CDF", test_name);
 
@@ -195,8 +195,8 @@ void do_test_hypergeometric(const T& data, const char* type_name, const char* te
    // test hypergeometric against data:
    //
    result = boost::math::tools::test_hetero<Real>(
-      data, 
-      bind_func<Real>(funcp, 0, 1, 2, 3), 
+      data,
+      bind_func<Real>(funcp, 0, 1, 2, 3),
       extract_result<Real>(6));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "hypergeometric CDF complement", test_name);
    std::cout << std::endl;
@@ -234,7 +234,7 @@ void do_test_hypergeometric_quantile(const T& data, const char* type_name, const
          (void)ccp;
 
 #if !defined(TEST_QUANT) || (TEST_QUANT == 1)
-         boost::math::hypergeometric_distribution<value_type, 
+         boost::math::hypergeometric_distribution<value_type,
             policy<discrete_quantile<integer_round_up> > > du(r, n, N);
 
          if((cp < 0.9) && (cp > boost::math::tools::min_value<value_type>()))
@@ -247,7 +247,7 @@ void do_test_hypergeometric_quantile(const T& data, const char* type_name, const
          }
 #endif
 #if !defined(TEST_QUANT) || (TEST_QUANT == 2)
-         boost::math::hypergeometric_distribution<value_type, 
+         boost::math::hypergeometric_distribution<value_type,
             policy<discrete_quantile<integer_round_down> > > dl(r, n, N);
          if((cp < 0.9) && (cp > boost::math::tools::min_value<value_type>()))
          {
@@ -259,7 +259,7 @@ void do_test_hypergeometric_quantile(const T& data, const char* type_name, const
          }
 #endif
 #if !defined(TEST_QUANT) || (TEST_QUANT == 3)
-         boost::math::hypergeometric_distribution<value_type, 
+         boost::math::hypergeometric_distribution<value_type,
             policy<discrete_quantile<integer_round_nearest> > > dn(r, n, N);
 
          if((cp < 0.9) && (cp > boost::math::tools::min_value<value_type>()))
@@ -272,7 +272,7 @@ void do_test_hypergeometric_quantile(const T& data, const char* type_name, const
          }
 #endif
 #if !defined(TEST_QUANT) || (TEST_QUANT == 4)
-         boost::math::hypergeometric_distribution<value_type, 
+         boost::math::hypergeometric_distribution<value_type,
             policy<discrete_quantile<integer_round_outwards> > > dou(r, n, N);
 
          if((cp < 0.9) && (cp > boost::math::tools::min_value<value_type>()))
@@ -299,7 +299,7 @@ void do_test_hypergeometric_quantile(const T& data, const char* type_name, const
          }
 #endif
 #if !defined(TEST_QUANT) || (TEST_QUANT == 5)
-         boost::math::hypergeometric_distribution<value_type, 
+         boost::math::hypergeometric_distribution<value_type,
             policy<discrete_quantile<integer_round_inwards> > > di(r, n, N);
 
          if((cp < 0.9) && (cp > boost::math::tools::min_value<value_type>()))
@@ -331,7 +331,7 @@ void do_test_hypergeometric_quantile(const T& data, const char* type_name, const
 
 
 template <class RealType>
-void test_spot(unsigned x, unsigned n, unsigned r, unsigned N, 
+void test_spot(unsigned x, unsigned n, unsigned r, unsigned N,
                RealType p, RealType cp, RealType ccp, RealType tol)
 {
    //
@@ -366,18 +366,18 @@ void test_spot(unsigned x, unsigned n, unsigned r, unsigned N,
    {
       using namespace boost::math::policies;
 
-      boost::math::hypergeometric_distribution<RealType, 
+      boost::math::hypergeometric_distribution<RealType,
          policy<discrete_quantile<integer_round_up> > > du(r, n, N);
 
       BOOST_CHECK_EX(quantile(du, cp) >= x);
       BOOST_CHECK_EX(quantile(complement(du, ccp)) >= x);
 
-      boost::math::hypergeometric_distribution<RealType, 
+      boost::math::hypergeometric_distribution<RealType,
          policy<discrete_quantile<integer_round_down> > > dl(r, n, N);
       BOOST_CHECK_EX(quantile(dl, cp) <= x);
       BOOST_CHECK_EX(quantile(complement(dl, ccp)) <= x);
 
-      boost::math::hypergeometric_distribution<RealType, 
+      boost::math::hypergeometric_distribution<RealType,
          policy<discrete_quantile<integer_round_nearest> > > dn(r, n, N);
 
       BOOST_CHECK_EX(quantile(dn, cp) == x);
@@ -443,7 +443,7 @@ void test_spots(RealType /*T*/, const char* type_name)
       static_cast<RealType>(2e-16L),    // limit of test data
       boost::math::tools::epsilon<RealType>());
    cout<<"Absolute tolerance:"<<tolerance<<endl;
-   
+
    tolerance *= 50 * 100; // 50eps as a percentage
    cout << "Tolerance for type " << typeid(RealType).name()  << " is " << tolerance << " %" << endl;
 
@@ -466,9 +466,17 @@ void test_spots(RealType /*T*/, const char* type_name)
    BOOST_CHECK_EQUAL(range(d).second, 50u);
    BOOST_CHECK_CLOSE(mean(d), static_cast<RealType>(20), tolerance);
    BOOST_CHECK_CLOSE(mode(d), static_cast<RealType>(20), tolerance);
-   BOOST_CHECK_CLOSE(variance(d), static_cast<RealType>(10.821643286573146292585170340681L), tolerance);
-   BOOST_CHECK_CLOSE(skewness(d), static_cast<RealType>(0.048833071022952084732902910189366L), tolerance);
-   BOOST_CHECK_CLOSE(kurtosis_excess(d), static_cast<RealType>(2.5155486690782804816404001878293L), tolerance);
+   // Test values and code revised to correct kurtosis using Mathematica algorithm and test values.
+   // Also checked using boost::multiprecision::cpp_bin_float_quad at 128-bit precision.
+   // And compared to an implementation of the Wikipedia equation at https://en.wikipedia.org/wiki/Hypergeometric_distribution.
+   // https://github.com/boostorg/math/issues/639  hypergeometric kurtosis differs from Wolfram and scipy and Wikipedia.
+   // N[variance[hypergeometricdistribution(200,50,500)], 55]
+   BOOST_CHECK_CLOSE(variance(d), static_cast<RealType>(10.82164328657314629258517034068136272545090180360721443L), tolerance);
+   // N[skewness[hypergeometricdistribution(200,50,500)], 55]
+   BOOST_CHECK_CLOSE(skewness(d), static_cast<RealType>(0.04883307102295208473290291018936563084537649911337978351L), tolerance);
+   // https://www.wolframalpha.com/input/?i=N%5Bkurtosis%5Bhypergeometricdistribution%28200%2C50%2C500%29%5D%2C+55%5D+
+   // N[kurtosis[hypergeometricdistribution(200,50,500)], 55] = 2.969174035736058474901169623721804275002985337280263464
+   BOOST_CHECK_CLOSE(kurtosis_excess(d), static_cast<RealType>(2.969174035736058474901169623721804275002985337280263464L), tolerance);
    BOOST_CHECK_CLOSE(kurtosis(d), kurtosis_excess(d) + 3, tolerance);
    BOOST_CHECK_EQUAL(quantile(d, 0.5f), median(d));
 
@@ -496,6 +504,6 @@ BOOST_AUTO_TEST_CASE( test_main )
       "to pass.</note>" << std::endl;
 #endif
 
-   
+
 } // BOOST_AUTO_TEST_CASE( test_main )
 

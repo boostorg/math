@@ -275,7 +275,9 @@ readers will have to refer to the code for the transitions between methods, as w
 In almost all cases where /z < 0/ we use [@https://en.wikipedia.org/wiki/Confluent_hypergeometric_function Kummer's relation]
 to make /z/ positive:
 
-[:[/\large  $$_1F_1(a, b; -z) = e^{-z} {_1F_1}(a, b; z)$$]
+[:[/\large  $$_1F_1(a, b; -z) = e^{-z} {_1F_1}(b-a, b; z)$$]
+[/ https://github.com/boostorg/math/issues/638]
+[/See https://dlmf.nist.gov/13.2#E39] 
 [$../equations/hypergeometric_1f1_12.svg]]
 
 The main series representation

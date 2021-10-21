@@ -94,13 +94,21 @@ BOOST_AUTO_TEST_CASE(generator_check) {
     }
 }
 
+#ifndef BOOST_NO_CXX14_CONSTEXPR
+
 BOOST_AUTO_TEST_CASE(constexpr_check) {
     constexpr int x = boost::math::unchecked_fibonacci<int>(32);
-    BOOST_TEST(x == 2178309);
+    static_assert(x == 2178309, "constexpr check 1");
 
     constexpr double y = boost::math::unchecked_fibonacci<double>(40);
-    BOOST_TEST(y == 102334155.0);
+    static_assert(y == 102334155.0, "constexpr check 2");
 
-    // checked fibonacci can't be constexpr because of non-constexpr
-    // dependency in detail::log_2, detail::fib_bits_phi, detail::fib_bits_deno
+    constexpr int xx = boost::math::fibonacci<int>(32);
+    static_assert(xx == 2178309, "constexpr check 3");
+
+    constexpr double yy = boost::math::fibonacci<double>(40);
+    static_assert(yy == 102334155.0, "constexpr check 4");
+
 }
+
+#endif

@@ -51,7 +51,7 @@ Tools for manipulating polynomials and for efficient evaluation of rationals or 
 
 ### Interpolation
 
-Function interpolation via barycentric rational interpolation, compactly supported quadartic, cubic, and quintic B-splines, the Chebyshev transform, trigonometric polynomials, Makima, pchip, and cubic Hermite splines.
+Function interpolation via barycentric rational interpolation, compactly supported quadratic, cubic, and quintic B-splines, the Chebyshev transform, trigonometric polynomials, Makima, pchip, cubic Hermite splines, and bilinear interpolation.
 
 ### Numerical Integration and Differentiation
 
@@ -82,7 +82,7 @@ The following compilers are tested with the CI system, and are known to work. St
 |                  |  Master  |   Develop   |
 |------------------|----------|-------------|
 | Github Actions | [![Build Status](https://github.com/boostorg/math/workflows/CI/badge.svg?branch=master)](https://github.com/boostorg/math/actions) | [![Build Status](https://github.com/boostorg/math/workflows/CI/badge.svg?branch=develop)](https://github.com/boostorg/math/actions) |
-|Drone | [![Build Status](https://drone.cpp.al/api/badges/boostorg/math/status.svg?ref=refs/heads/master)](https://drone.cpp.al/boostorg/math) | [![Build Status](https://drone.cpp.al/api/badges/boostorg/math/status.svg)](https:/drone.cpp.al/boostorg/math) |
+|Drone | [![Build Status](https://drone.cpp.al/api/badges/boostorg/math/status.svg?ref=refs/heads/master)](https://drone.cpp.al/boostorg/math) | [![Build Status](https://drone.cpp.al/api/badges/boostorg/math/status.svg)](https://drone.cpp.al/boostorg/math) |
 
 
 

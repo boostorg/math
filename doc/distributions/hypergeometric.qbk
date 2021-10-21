@@ -15,7 +15,7 @@
       typedef RealType value_type;
       typedef Policy   policy_type;
       // Construct:
-      hypergeometric_distribution(unsigned r, unsigned n, unsigned N);
+      hypergeometric_distribution(unsigned r, unsigned n, unsigned N); // r=defective/failures/success, n=trials/draws, N=total population.
       // Accessors:
       unsigned total()const;
       unsigned defective()const;
@@ -72,6 +72,15 @@ Returns the number of objects /r/ in population /N/ which are defective.
    unsigned sample_count()const;
 
 Returns the number of objects /n/ which are sampled from the population /N/.
+
+[warning Both naming/symbol and order of parameters is confusing with no two implementations the same!
+See Wolfram Mathematica
+[@https://mathworld.wolfram.com/HypergeometricDistribution.html Hypergeometric Distribution]
+and Wikipedia
+[@https://en.wikipedia.org/wiki/Hypergeometric_distribution Hypergeometric Distribution]
+and Python 
+[@https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.hypergeom.html#scipy.stats.hypergeom  scipy.stats.hypergeom].
+]
 
 [h4 Non-member Accessors]
 
@@ -137,6 +146,9 @@ our implementation against some spot values computed using the online calculator
 here [@http://stattrek.com/Tables/Hypergeometric.aspx http://stattrek.com/Tables/Hypergeometric.aspx].
 Finally we test accuracy against some high precision test data using
 this implementation and NTL::RR.
+Spot test values for moments (mean to kurtosis) are from Mathematica [@https://mathworld.wolfram.com/HypergeometricDistribution.html Hypergeometric Distribution]
+and agree with an implementation of Wikipedia [@https://en.wikipedia.org/wiki/Hypergeometric_distribution Hypergeometric Distribution]
+and Python [@https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.hypergeom.html#scipy.stats.hypergeom  scipy.stats.hypergeom].
 
 [h4 Implementation]
 
@@ -198,7 +210,7 @@ lgamma.  However, in this area where N > 104729, the user should expect
 to lose around log[sub 10]N decimal digits during the calculation in
 the worst case.
 
-The CDF and its complement is calculated by directly summing the PDF's.
+The CDF and its complement is calculated by directly summing the PDFs.
 We start by deciding whether the CDF, or its complement, is likely to be
 the smaller of the two and then calculate the PDF at /k/ (or /k+1/ if we're
 calculating the complement) and calculate successive PDF values via the
@@ -216,6 +228,21 @@ gives the required CDF.
 
 The median is simply the quantile at 0.5, and the remaining properties are
 calculated via:
+
+[/
+Requires amsmath and mathtools:
+
+\DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}
+\begin{equation*}
+\begin{split}
+mean & = \frac{rn}{N} \\
+mode & = \floor*{ \frac{(r+1)(n+1)}{N+2} }\\
+variance & = \frac{r(\frac{n}{N})(1-\frac{n}{N})(N-r)}{(N-1)}\\
+skewness & = \frac{(N-2n)\sqrt{(N-1)}(N-2r)}{\sqrt{rn(N-n)(N-r)}(N-2)}\\
+kurtosis & = \frac{((N - 1) N^2 ((3 r (N - r) (n^2 (-N) + (n - 2) N^2 + 6 n (N - n)))/N^2 - 6 n (N - n) + N (N + 1)))}{(r n (N - 3) (N - 2) (N - r) (N - n))}
+\end{split}
+\end{equation*}
+]
 
 [equation hypergeometric6]
 

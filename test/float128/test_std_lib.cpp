@@ -1,14 +1,16 @@
 //  Copyright John Maddock 2014.
+//  Copyright Christopher Kormanyos 2021.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+#include <complex>
+#include <iostream>
 
 #include <boost/cstdfloat.hpp>
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
-#include <iostream>
-#include <complex>
 
 using std::real;
 using std::imag;
@@ -21,8 +23,8 @@ BOOST_AUTO_TEST_CASE( test_main )
    //
    // Basic tests that the functions which provide std lib supported are correctly wrapped:
    //
-   boost::float128_t tol = std::numeric_limits<boost::float128_t>::epsilon() * 4;
-   boost::float128_t pi = BOOST_FLOAT128_C(3.14159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211);
+   const boost::float128_t tol = std::numeric_limits<boost::float128_t>::epsilon() * 4;
+   const boost::float128_t pi = BOOST_FLOAT128_C(3.14159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211);
 
 
    BOOST_CHECK_EQUAL(std::abs(BOOST_FLOAT128_C(-2.0)), BOOST_FLOAT128_C(2.0));
@@ -146,6 +148,7 @@ BOOST_AUTO_TEST_CASE( test_main )
    BOOST_CHECK_CLOSE_FRACTION(std::exp(BOOST_FLOAT128_C(-2000.0)), 1 / BOOST_FLOAT128_C(3.88118019428436857648232207537185146709138266970427068956343e868), tol * 500);
    BOOST_CHECK_CLOSE_FRACTION(std::pow(BOOST_FLOAT128_C(2.5), BOOST_FLOAT128_C(2.5)), BOOST_FLOAT128_C(9.88211768802618541249654232635224541787360981039130258392970), tol);
    BOOST_CHECK_CLOSE_FRACTION(std::pow(BOOST_FLOAT128_C(2.5), -BOOST_FLOAT128_C(2.5)), 1 / BOOST_FLOAT128_C(9.88211768802618541249654232635224541787360981039130258392970), tol);
+   BOOST_CHECK_CLOSE_FRACTION((std::pow(BOOST_FLOAT128_C(10.0), 30) - 1) / 9, BOOST_FLOAT128_C(1.1111111111111111111111111111100000000000000000000E29), tol);
 
    BOOST_CHECK_CLOSE_FRACTION(std::log(BOOST_FLOAT128_C(2.0)), BOOST_FLOAT128_C(0.693147180559945309417232121458176568075500134360255254120680), tol);
    BOOST_CHECK_CLOSE_FRACTION(std::log(BOOST_FLOAT128_C(2000.0)), BOOST_FLOAT128_C(7.60090245954208236147120648551126919087880460024657418222066), tol);
@@ -159,8 +162,8 @@ BOOST_AUTO_TEST_CASE( test_main )
    //
    // Basic tests of complex number support:
    //
-   std::complex<boost::floatmax_t> cm(2.5, 3.5);
-   std::complex<double> cd(2.5, 3.5);
+   const std::complex<boost::floatmax_t> cm(2.5, 3.5);
+   const std::complex<double> cd(2.5, 3.5);
    BOOST_CHECK_EQUAL(real(cm), BOOST_FLOATMAX_C(2.5));
    BOOST_CHECK_EQUAL(imag(cm), BOOST_FLOATMAX_C(3.5));
    BOOST_CHECK_CLOSE_FRACTION(abs(cm), std::sqrt(real(cm) * real(cm) + imag(cm) * imag(cm)), tol);
@@ -197,6 +200,44 @@ BOOST_AUTO_TEST_CASE( test_main )
       BOOST_CHECK_EQUAL(proj(std::complex<boost::floatmax_t>(2.5, -m)), std::complex<boost::floatmax_t>(2.5, -m));
       BOOST_CHECK_EQUAL(proj(std::complex<boost::floatmax_t>(-2.5, -m)), std::complex<boost::floatmax_t>(-2.5, -m));
    }
+   {
+      const boost::float128_t tol_10k = std::numeric_limits<boost::float128_t>::epsilon() * 10000;
+
+      // N[Exp[9999 + ((22/10) I)], 50]
+      const std::complex<boost::float128_t>
+      z
+      (
+         BOOST_FLOAT128_C(9999.0),
+         BOOST_FLOAT128_C(2.2)
+      );
+
+      using std::exp;
+      const std::complex<boost::float128_t> ez = exp(z);
+
+      BOOST_CHECK_CLOSE_FRACTION(real(ez), BOOST_FLOAT128_C(-1.9066537954254132323877604756887305075307215385948E4342), tol_10k);
+      BOOST_CHECK_CLOSE_FRACTION(imag(ez), BOOST_FLOAT128_C(2.6194049454311662369674807340752216260651805388678E4342), tol_10k);
+   }
+
+   {
+      // The real part of the argument overflows the real exp() function.
+      const std::complex<boost::float128_t>
+      z
+      (
+         BOOST_FLOAT128_C(100000.0),
+         BOOST_FLOAT128_C(2.2)
+      );
+
+      using std::exp;
+      const std::complex<boost::float128_t> ez = exp(z);
+
+      using std::isinf;
+      BOOST_CHECK_EQUAL((isinf)(real(ez)), true);
+      BOOST_CHECK_EQUAL((isinf)(imag(ez)), true);
+
+      BOOST_CHECK_EQUAL(real(ez), -std::numeric_limits<boost::float128_t>::infinity());
+      BOOST_CHECK_EQUAL(imag(ez),  std::numeric_limits<boost::float128_t>::infinity());
+   }
+
    BOOST_CHECK_CLOSE_FRACTION(real(cm), real(std::polar(abs(cm), arg(cm))), tol);
    BOOST_CHECK_CLOSE_FRACTION(imag(cm), imag(std::polar(abs(cm), arg(cm))), tol);
    BOOST_CHECK_CLOSE_FRACTION(real(sqrt(cm)), BOOST_FLOATMAX_C(1.84406651636014927478967924702313083926924795108746617689331), tol);
@@ -226,6 +267,49 @@ BOOST_AUTO_TEST_CASE( test_main )
    BOOST_CHECK_CLOSE_FRACTION(imag(pow(cm, 45)), BOOST_FLOATMAX_C(-3.03446103291767290317331113291188915967941284179687500000000e28), tol);
    BOOST_CHECK_CLOSE_FRACTION(real(pow(cm, BOOST_FLOATMAX_C(-6.25))), BOOST_FLOATMAX_C(0.0001033088262386741675929555572265687059620746178809486273109638), tol);
    BOOST_CHECK_CLOSE_FRACTION(imag(pow(cm, BOOST_FLOATMAX_C(-6.25))), BOOST_FLOATMAX_C(0.000036807924520680371147635577932953977554657684086220380643819), 10*tol);
+
+   // N[(25/10)^((25/10)+((35/10) I)), 64]
+   BOOST_CHECK_CLOSE_FRACTION(real(pow(BOOST_FLOATMAX_C(2.5), cm)), BOOST_FLOATMAX_C(-9.860975431021437225534259171616709024536334105813829385335979923), tol);
+   BOOST_CHECK_CLOSE_FRACTION(imag(pow(BOOST_FLOATMAX_C(2.5), cm)), BOOST_FLOATMAX_C(-0.646075497748970766828440914855071509282691334478027454136282670), 10*tol);
+
+   // N[(-25/10)^((25/10)+((35/10) I)), 64]
+   BOOST_CHECK_CLOSE_FRACTION(real(pow(BOOST_FLOATMAX_C(-2.5), cm)), BOOST_FLOATMAX_C(0.0000108384213983921628818716620216475625862428265426558408687988615), 10*tol);
+   BOOST_CHECK_CLOSE_FRACTION(imag(pow(BOOST_FLOATMAX_C(-2.5), cm)), BOOST_FLOATMAX_C(-0.0001654255694465738439289663540771804961844719634831318175904326223), 10*tol);
+
+   {
+      // Mixed real/imag pow() function.
+      // N[(12/10)^((34/10) + (56/10) I), 50]
+      const              boost::float128_t  x(BOOST_FLOAT128_C(1.2));
+      const std::complex<boost::float128_t> a(BOOST_FLOAT128_C(3.4), BOOST_FLOAT128_C(5.6));
+
+      BOOST_CHECK_CLOSE_FRACTION(real(pow(x, a)), BOOST_FLOAT128_C(0.9712103707801414302710397932181855534927504177229), 10*tol);
+      BOOST_CHECK_CLOSE_FRACTION(imag(pow(x, a)), BOOST_FLOAT128_C(1.5848111822975117880267429166819459873312076842905), 10*tol);
+   }
+
+   {
+      // Mixed real/imag pow() function.
+      // N[(12/10)^((34/10) + (56/10) I), 50]
+      const std::complex<boost::float128_t> x(BOOST_FLOAT128_C(1.2));
+      const std::complex<boost::float128_t> a(BOOST_FLOAT128_C(3.4), BOOST_FLOAT128_C(5.6));
+
+      BOOST_CHECK_CLOSE_FRACTION(real(pow(x, a)), BOOST_FLOAT128_C(0.9712103707801414302710397932181855534927504177229), 10*tol);
+      BOOST_CHECK_CLOSE_FRACTION(imag(pow(x, a)), BOOST_FLOAT128_C(1.5848111822975117880267429166819459873312076842905), 10*tol);
+   }
+
+   {
+      // Pure real pow() function.
+      // N[(12/10)^(34/10), 50]
+      const std::complex<boost::float128_t> x(BOOST_FLOAT128_C(1.2));
+      const std::complex<boost::float128_t> a(BOOST_FLOAT128_C(3.4));
+
+      BOOST_CHECK_CLOSE_FRACTION(real(pow(x, a)), BOOST_FLOAT128_C(1.8587296919794811670420219948905447113485339704757), 10*tol);
+      BOOST_CHECK_EQUAL(imag(pow(x, a)), 0);
+   }
+
+   // Check x^a, where x is zero and a is finite.
+   BOOST_CHECK_EQUAL(real(pow(BOOST_FLOATMAX_C(0.0), cm)), 0);
+   BOOST_CHECK_EQUAL(imag(pow(BOOST_FLOATMAX_C(0.0), cm)), 0);
+
    BOOST_CHECK_CLOSE_FRACTION(real(pow(BOOST_FLOATMAX_C(23.125), cm)), BOOST_FLOATMAX_C(-6.10574617260000071495777483951769228578270070743952693687), 500*tol);
    BOOST_CHECK_CLOSE_FRACTION(imag(pow(BOOST_FLOATMAX_C(23.125), cm)), BOOST_FLOATMAX_C(-2571.59829653692515304089117319850284971907684832627401081405), tol);
 
@@ -242,7 +326,38 @@ BOOST_AUTO_TEST_CASE( test_main )
    BOOST_CHECK_CLOSE_FRACTION(imag(acosh(cm)), BOOST_FLOATMAX_C(0.96315759301770700861895447623167518493151106853577817526710), tol);
    BOOST_CHECK_CLOSE_FRACTION(real(atanh(cm)), BOOST_FLOATMAX_C(0.131131117031038145756858363631111963444914136310244574499277), tol);
    BOOST_CHECK_CLOSE_FRACTION(imag(atanh(cm)), BOOST_FLOATMAX_C(1.380543138238714176079527733234534889849881842858502491699319), 12 * tol);
+
+   {
+      // Pure complex log() function.
+      const std::complex<boost::float128_t> z(BOOST_FLOAT128_C(0.0), BOOST_FLOAT128_C(+2.0));
+
+      using std::log;
+      const std::complex<boost::float128_t> lz = log(z);
+
+      BOOST_CHECK_CLOSE_FRACTION(real(lz), BOOST_FLOAT128_C(0.69314718055994530941723212145817656807550013436026), tol);
+      BOOST_CHECK_CLOSE_FRACTION(imag(lz), BOOST_FLOAT128_C(1.5707963267948966192313216916397514420985846996876), tol);
+   }
+   {
+      // Pure complex log() function.
+      const std::complex<boost::float128_t> z(BOOST_FLOAT128_C(0.0), BOOST_FLOAT128_C(-2.0));
+
+      using std::log;
+      const std::complex<boost::float128_t> lz = log(z);
+
+      BOOST_CHECK_CLOSE_FRACTION(real(lz), BOOST_FLOAT128_C(0.69314718055994530941723212145817656807550013436026), tol);
+      BOOST_CHECK_CLOSE_FRACTION(imag(lz), BOOST_FLOAT128_C(-1.5707963267948966192313216916397514420985846996876), tol);
+   }
+   {
+      // Complex log() of zero.
+      const std::complex<boost::float128_t> z(BOOST_FLOAT128_C(0.0), BOOST_FLOAT128_C(0.0));
+
+      using std::log;
+      const std::complex<boost::float128_t> lz = log(z);
+
+      using std::isinf;
+      BOOST_CHECK_EQUAL((isinf)(real(lz)), true);
+      BOOST_CHECK_EQUAL(imag(lz), BOOST_FLOAT128_C(0.0));
+
+      BOOST_CHECK_EQUAL(real(lz), -std::numeric_limits<boost::float128_t>::infinity());
+   }
 }
-
-
-
