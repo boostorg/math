@@ -24,7 +24,7 @@ inline typename tools::promote_args<T>::type trunc(const T& v, const Policy& pol
    BOOST_MATH_STD_USING
    typedef typename tools::promote_args<T>::type result_type;
    if(!(boost::math::isfinite)(v))
-      return policies::raise_rounding_error("boost::math::trunc<%1%>(%1%)", nullptr, static_cast<result_type>(v), static_cast<result_type>(v), pol);
+      return policies::raise_rounding_error("boost::math::trunc<%1%>(%1%)", 0, static_cast<result_type>(v), static_cast<result_type>(v), pol);
    return (v >= 0) ? static_cast<result_type>(floor(v)) : static_cast<result_type>(ceil(v));
 }
 
@@ -66,7 +66,7 @@ inline int itrunc(const T& v, const Policy& pol)
    typedef typename tools::promote_args<T>::type result_type;
    result_type r = boost::math::trunc(v, pol);
    if(r > static_cast<result_type>((std::numeric_limits<int>::max)()) || r < static_cast<result_type>((std::numeric_limits<int>::min)()))
-      return static_cast<int>(policies::raise_rounding_error("boost::math::itrunc<%1%>(%1%)", nullptr, static_cast<result_type>(v), 0, pol));
+      return static_cast<int>(policies::raise_rounding_error("boost::math::itrunc<%1%>(%1%)", 0, static_cast<result_type>(v), 0, pol));
    return static_cast<int>(r);
 }
 template <class T>

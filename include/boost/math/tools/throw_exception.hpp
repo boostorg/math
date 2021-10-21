@@ -6,6 +6,8 @@
 #ifndef BOOST_MATH_TOOLS_THROW_EXCEPTION_HPP
 #define BOOST_MATH_TOOLS_THROW_EXCEPTION_HPP
 
+#include <boost/math/tools/is_standalone.hpp>
+
 #ifndef BOOST_MATH_STANDALONE
 
 #include <boost/throw_exception.hpp>
@@ -13,7 +15,7 @@
 
 #else // Standalone mode - use standard library facilities
 
-#define BOOST_MATH_THROW_EXCEPTION(expr)
+#define BOOST_MATH_THROW_EXCEPTION(expr) throw expr;
 
 #endif // BOOST_MATH_STANDALONE
 

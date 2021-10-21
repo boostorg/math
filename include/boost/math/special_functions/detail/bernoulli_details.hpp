@@ -14,8 +14,11 @@
 #include <boost/math/tools/config.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <vector>
-#include <mutex>
 #include <type_traits>
+
+#ifdef BOOST_HAS_THREADS
+#include <mutex>
+#endif
 
 namespace boost{ namespace math{ namespace detail{
 //
@@ -356,6 +359,32 @@ public:
          }
          return out;
       }
+
+      #if !defined(BOOST_HAS_THREADS) || defined(BOOST_MATH_BERNOULLI_UNTHREADED)
+      //
+      // Single threaded code, very simple:
+      //
+      if(m_current_precision < boost::math::tools::digits<T>())
+      {
+         bn.clear();
+         tn.clear();
+         m_intermediates.clear();
+         m_current_precision = boost::math::tools::digits<T>();
+      }
+      if(start + n >= bn.size())
+      {
+         std::size_t new_size = (std::min)((std::max)((std::max)(std::size_t(start + n), std::size_t(bn.size() + 20)), std::size_t(50)), std::size_t(bn.capacity()));
+         tangent_numbers_series(new_size);
+      }
+
+      for(std::size_t i = (std::max)(std::size_t(max_bernoulli_b2n<T>::value + 1), start); i < start + n; ++i)
+      {
+         *out = (i >= m_overflow_limit) ? policies::raise_overflow_error<T>("boost::math::bernoulli_b2n<%1%>(std::size_t)", 0, T(i), pol) : bn[i];
+         ++out;
+      }
+      #elif defined(BOOST_MATH_NO_ATOMIC_INT)
+      static_assert(sizeof(T) == 1, "Unsupported configuration: your platform appears to have no atomic integers.  If you are happy with thread-unsafe code, then you may define BOOST_MATH_BERNOULLI_UNTHREADED to suppress this error.");
+      #else
       //
       // Double-checked locking pattern, lets us access cached already cached values
       // without locking:
@@ -365,7 +394,7 @@ public:
       if((static_cast<std::size_t>(m_counter.load(std::memory_order_consume)) < start + n)
          || (static_cast<int>(m_current_precision.load(std::memory_order_consume)) < boost::math::tools::digits<T>()))
       {
-         //std::lock_guard<std::mutex> l(m_mutex);
+         std::lock_guard<std::mutex> l(m_mutex);
 
          if((static_cast<std::size_t>(m_counter.load(std::memory_order_consume)) < start + n)
             || (static_cast<int>(m_current_precision.load(std::memory_order_consume)) < boost::math::tools::digits<T>()))
@@ -393,6 +422,7 @@ public:
          ++out;
       }
 
+      #endif // BOOST_HAS_THREADS
       return out;
    }
 
@@ -435,6 +465,40 @@ public:
          }
          return out;
       }
+
+      #if !defined(BOOST_HAS_THREADS) || defined(BOOST_MATH_BERNOULLI_UNTHREADED)
+      //
+      // Single threaded code, very simple:
+      //
+      if(m_current_precision < boost::math::tools::digits<T>())
+      {
+         bn.clear();
+         tn.clear();
+         m_intermediates.clear();
+         m_current_precision = boost::math::tools::digits<T>();
+      }
+      if(start + n >= bn.size())
+      {
+         std::size_t new_size = (std::min)((std::max)((std::max)(start + n, std::size_t(bn.size() + 20)), std::size_t(50)), std::size_t(bn.capacity()));
+         tangent_numbers_series(new_size);
+      }
+
+      for(std::size_t i = start; i < start + n; ++i)
+      {
+         if(i >= m_overflow_limit)
+            *out = policies::raise_overflow_error<T>("boost::math::bernoulli_b2n<%1%>(std::size_t)", 0, T(i), pol);
+         else
+         {
+            if(tools::max_value<T>() * tangent_scale_factor<T>() < tn[static_cast<typename container_type::size_type>(i)])
+               *out = policies::raise_overflow_error<T>("boost::math::bernoulli_b2n<%1%>(std::size_t)", 0, T(i), pol);
+            else
+               *out = tn[static_cast<typename container_type::size_type>(i)] / tangent_scale_factor<T>();
+         }
+         ++out;
+      }
+      #elif defined(BOOST_MATH_NO_ATOMIC_INT)
+      static_assert(sizeof(T) == 1, "Unsupported configuration: your platform appears to have no atomic integers.  If you are happy with thread-unsafe code, then you may define BOOST_MATH_BERNOULLI_UNTHREADED to suppress this error.");
+      #else
       //
       // Double-checked locking pattern, lets us access cached already cached values
       // without locking:
@@ -444,7 +508,7 @@ public:
       if((static_cast<std::size_t>(m_counter.load(std::memory_order_consume)) < start + n)
          || (static_cast<int>(m_current_precision.load(std::memory_order_consume)) < boost::math::tools::digits<T>()))
       {
-         //std::lock_guard<std::mutex> l(m_mutex);
+         std::lock_guard<std::mutex> l(m_mutex);
 
          if((static_cast<std::size_t>(m_counter.load(std::memory_order_consume)) < start + n)
             || (static_cast<int>(m_current_precision.load(std::memory_order_consume)) < boost::math::tools::digits<T>()))
@@ -480,6 +544,7 @@ public:
          ++out;
       }
 
+      #endif // BOOST_HAS_THREADS
       return out;
    }
 
@@ -493,22 +558,38 @@ private:
    std::vector<T> m_intermediates;
    // The value at which we know overflow has already occurred for the Bn:
    std::size_t m_overflow_limit;
-   //std::mutex m_mutex;
+
+   #if defined(BOOST_HAS_THREADS) && !defined(BOOST_MATH_NO_ATOMIC_INT)
+   std::mutex m_mutex;
    atomic_counter_type m_counter, m_current_precision;
+   #else
+   int m_counter;
+   int m_current_precision;
+   #endif // BOOST_HAS_THREADS
 };
 
 template <class T, class Policy>
-inline bernoulli_numbers_cache<T, Policy>& get_bernoulli_numbers_cache()
+inline typename std::enable_if<(std::numeric_limits<T>::digits == 0) || (std::numeric_limits<T>::digits >= INT_MAX), bernoulli_numbers_cache<T, Policy>&>::type get_bernoulli_numbers_cache()
 {
    //
-   // Force this function to be called at program startup so all the static variables
-   // get initialized then (thread safety).
+   // When numeric_limits<>::digits is zero, the type has either not specialized numeric_limits at all
+   // or it's precision can vary at runtime.  So make the cache thread_local so that each thread can
+   // have it's own precision if required:
    //
    static 
 #ifndef BOOST_MATH_NO_THREAD_LOCAL_WITH_NON_TRIVIAL_TYPES
       BOOST_MATH_THREAD_LOCAL
 #endif
       bernoulli_numbers_cache<T, Policy> data;
+   return data;
+}
+template <class T, class Policy>
+inline typename std::enable_if<std::numeric_limits<T>::digits && (std::numeric_limits<T>::digits < INT_MAX), bernoulli_numbers_cache<T, Policy>&>::type get_bernoulli_numbers_cache()
+{
+   //
+   // Note that we rely on C++11 thread-safe initialization here:
+   //
+   static bernoulli_numbers_cache<T, Policy> data;
    return data;
 }
 

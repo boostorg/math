@@ -246,14 +246,14 @@ inline U evaluate_odd_polynomial(const T* poly, U z, std::size_t count) BOOST_MA
 template <std::size_t N, class T, class V>
 inline V evaluate_odd_polynomial(const T(&a)[N], const V& z) BOOST_MATH_NOEXCEPT(V)
 {
-   typedef std::integral_constant<int, int(N-1U)> tag_type;
+   typedef std::integral_constant<int, int(N-1u)> tag_type;
    return a[0] + z * detail::evaluate_polynomial_c_imp(static_cast<const T*>(a) + 1, V(z*z), static_cast<tag_type const*>(0));
 }
 
 template <std::size_t N, class T, class V>
 inline V evaluate_odd_polynomial(const std::array<T,N>& a, const V& z) BOOST_MATH_NOEXCEPT(V)
 {
-   typedef std::integral_constant<int, int(N-1U)> tag_type;
+   typedef std::integral_constant<int, int(N-1u)> tag_type;
    return a[0] + z * detail::evaluate_polynomial_c_imp(static_cast<const T*>(a.data()) + 1, V(z*z), static_cast<tag_type const*>(0));
 }
 

@@ -11,6 +11,8 @@
 #pragma once
 #endif
 
+#include <boost/math/tools/is_standalone.hpp>
+
 #ifndef BOOST_MATH_STANDALONE
 #include <boost/config.hpp>
 
@@ -22,14 +24,14 @@
 #define BOOST_MATH_NO_LEXICAL_CAST
 #define TEST_STD
 
-#if (__cplusplus > 201400L || _MSVC_LANG > 201400L)
+#if (__cplusplus > 201400L || (defined(_MSVC_LANG) && (_MSVC_LANG > 201400L)))
 #define BOOST_CXX14_CONSTEXPR constexpr
 #else
 #define BOOST_CXX14_CONSTEXPR
 #define BOOST_NO_CXX14_CONSTEXPR
 #endif // BOOST_CXX14_CONSTEXPR
 
-#if (__cplusplus > 201700L || _MSVC_LANG > 201700L)
+#if (__cplusplus > 201700L || (defined(_MSVC_LANG) && (_MSVC_LANG > 201700L)))
 #define BOOST_IF_CONSTEXPR if constexpr
 #if !__has_include(<execution>)
 #define BOOST_NO_CXX17_HDR_EXECUTION
@@ -46,6 +48,25 @@
 
 #define BOOST_STRINGIZE(X) BOOST_DO_STRINGIZE(X)
 #define BOOST_DO_STRINGIZE(X) #X
+
+#ifdef BOOST_DISABLE_THREADS // No threads, do nothing
+// Detect thread support via STL implementation
+#elif defined(__has_include)
+#  if !__has_include(<thread>) || !__has_include(<mutex>) || !__has_include(<future>) || !__has_include(<atomic>)
+#     define BOOST_DISABLE_THREADS
+#  else
+#     define BOOST_HAS_THREADS
+#  endif 
+#else
+#  define BOOST_HAS_THREADS // The default assumption is that the machine has threads
+#endif // Thread Support
+
+#ifdef BOOST_DISABLE_THREADS
+#  define BOOST_NO_CXX11_HDR_ATOMIC
+#  define BOOST_NO_CXX11_HDR_FUTURE
+#  define BOOST_NO_CXX11_HDR_THREAD
+#  define BOOST_NO_CXX11_THREAD_LOCAL
+#endif // BOOST_DISABLE_THREADS
 
 #endif // BOOST_MATH_STANDALONE
 
@@ -457,7 +478,11 @@ namespace boost{ namespace math{
 //
 // Thread local storage:
 //
-#define BOOST_MATH_THREAD_LOCAL thread_local
+#ifndef BOOST_DISABLE_THREADS
+#  define BOOST_MATH_THREAD_LOCAL thread_local
+#else
+#  define BOOST_MATH_THREAD_LOCAL 
+#endif
 
 //
 // Some mingw flavours have issues with thread_local and types with non-trivial destructors

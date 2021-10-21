@@ -191,7 +191,7 @@ class gauss_kronrod_detail<T, 15, 3>
 public:
    static std::array<T, 8> const & abscissa()
    {
-      static constexpr std::array<T, 8> data = {
+      static const std::array<T, 8> data = {
          0.00000000000000000000000000000000000e+00Q,
          2.07784955007898467600689403773244913e-01Q,
          4.05845151377397166906606412076961463e-01Q,
@@ -205,7 +205,7 @@ public:
    }
    static std::array<T, 8> const & weights()
    {
-      static constexpr std::array<T, 8> data = {
+      static const std::array<T, 8> data = {
          2.09482141084727828012999174891714264e-01Q,
          2.04432940075298892414161999234649085e-01Q,
          1.90350578064785409913256402421013683e-01Q,
@@ -381,7 +381,7 @@ class gauss_kronrod_detail<T, 21, 3>
 public:
    static std::array<T, 11> const & abscissa()
    {
-      static constexpr std::array<T, 11> data = {
+      static const std::array<T, 11> data = {
          0.00000000000000000000000000000000000e+00Q,
          1.48874338981631210884826001129719985e-01Q,
          2.94392862701460198131126603103865566e-01Q,
@@ -398,7 +398,7 @@ public:
    }
    static std::array<T, 11> const & weights()
    {
-      static constexpr std::array<T, 11> data = {
+      static const std::array<T, 11> data = {
          1.49445554002916905664936468389821204e-01Q,
          1.47739104901338491374841515972068046e-01Q,
          1.42775938577060080797094273138717061e-01Q,
@@ -613,7 +613,7 @@ class gauss_kronrod_detail<T, 31, 3>
 public:
    static std::array<T, 16> const & abscissa()
    {
-      static constexpr std::array<T, 16> data = {
+      static const std::array<T, 16> data = {
          0.00000000000000000000000000000000000e+00Q,
          1.01142066918717499027074231447392339e-01Q,
          2.01194093997434522300628303394596208e-01Q,
@@ -635,7 +635,7 @@ public:
    }
    static std::array<T, 16> const & weights()
    {
-      static constexpr std::array<T, 16> data = {
+      static const std::array<T, 16> data = {
          1.01330007014791549017374792767492547e-01Q,
          1.00769845523875595044946662617569722e-01Q,
          9.91735987217919593323931734846031311e-02Q,
@@ -895,13 +895,18 @@ class gauss_kronrod_detail<T, 41, 3>
 public:
    static std::array<T, 21> const & abscissa()
    {
-      static constexpr std::array<T, 21> data = {
+      static const std::array<T, 21> data = {
          0.00000000000000000000000000000000000e+00Q,
          7.65265211334973337546404093988382110e-02Q,
          1.52605465240922675505220241022677528e-01Q,
          2.27785851141645078080496195368574625e-01Q,
          3.01627868114913004320555356858592261e-01Q,
-         3.73706088715419560672548177024927237e-01Q,array
+         3.73706088715419560672548177024927237e-01Q,
+         4.43593175238725103199992213492640108e-01Q,
+         5.10867001950827098004364050955250998e-01Q,
+         5.75140446819710315342946036586425133e-01Q,
+         6.36053680726515025452836696226285937e-01Q,
+         6.93237656334751384805490711845931533e-01Q,
          7.46331906460150792614305070355641590e-01Q,
          7.95041428837551198350638833272787943e-01Q,
          8.39116971822218823394529061701520685e-01Q,
@@ -917,7 +922,7 @@ public:
    }
    static std::array<T, 21> const & weights()
    {
-      static constexpr std::array<T, 21> data = {
+      static const std::array<T, 21> data = {
          7.66007119179996564450499015301017408e-02Q,
          7.63778676720807367055028350380610018e-02Q,
          7.57044976845566746595427753766165583e-02Q,
@@ -1222,7 +1227,7 @@ class gauss_kronrod_detail<T, 51, 3>
 public:
    static std::array<T, 26> const & abscissa()
    {
-      static constexpr std::array<T, 26> data = {
+      static const std::array<T, 26> data = {
          0.00000000000000000000000000000000000e+00Q,
          6.15444830056850788865463923667966313e-02Q,
          1.22864692610710396387359818808036806e-01Q,
@@ -1254,7 +1259,7 @@ public:
    }
    static std::array<T, 26> const & weights()
    {
-      static constexpr std::array<T, 26> data = {
+      static const std::array<T, 26> data = {
          6.15808180678329350787598242400645532e-02Q,
          6.14711898714253166615441319652641776e-02Q,
          6.11285097170530483058590304162927119e-02Q,
@@ -1604,7 +1609,7 @@ class gauss_kronrod_detail<T, 61, 3>
 public:
    static std::array<T, 31> const & abscissa()
    {
-      static constexpr std::array<T, 31> data = {
+      static const std::array<T, 31> data = {
          0.00000000000000000000000000000000000e+00Q,
          5.14718425553176958330252131667225737e-02Q,
          1.02806937966737030147096751318000592e-01Q,
@@ -1641,7 +1646,7 @@ public:
    }
    static std::array<T, 31> const & weights()
    {
-      static constexpr std::array<T, 31> data = {
+      static const std::array<T, 31> data = {
          5.14947294294515675583404336470993075e-02Q,
          5.14261285374590259338628792157812598e-02Q,
          5.12215478492587721706562826049442083e-02Q,
@@ -1866,6 +1871,8 @@ public:
    static auto integrate(F f, Real a, Real b, unsigned max_depth = 15, Real tol = tools::root_epsilon<Real>(), Real* error = nullptr, Real* pL1 = nullptr)->decltype(std::declval<F>()(std::declval<Real>()))
    {
       typedef decltype(f(a)) K;
+      static_assert(!std::is_integral<K>::value,
+                  "The return type cannot be integral, it must be either a real or complex floating point type.");
       static const char* function = "boost::math::quadrature::gauss_kronrod<%1%>::integrate(f, %1%, %1%)";
       if (!(boost::math::isnan)(a) && !(boost::math::isnan)(b))
       {
