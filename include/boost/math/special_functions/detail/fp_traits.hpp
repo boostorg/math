@@ -34,7 +34,7 @@ With these techniques, the code could be simplified.
 #define BOOST_MATH_ENDIAN_BIG_BYTE BOOST_ENDIAN_BIG_BYTE
 #define BOOST_MATH_ENDIAN_LITTLE_BYTE BOOST_ENDIAN_LITTLE_BYTE
 
-#elif (__cplusplus >= 202002L || (defined(_MSVC_LANG) && (_MSVC_LANG >= 202002L)))
+#elif (__cplusplus >= 202002L || _MSVC_LANG >= 202002L)
 
 #if __has_include(<bit>)
 #include <bit>
@@ -531,7 +531,7 @@ template<> struct size_to_precision<16, true>
 template <class T>
 struct select_native
 {
-    typedef typename size_to_precision<int(sizeof(T)), ::std::is_floating_point<T>::value>::type precision;
+    typedef typename size_to_precision<sizeof(T), ::std::is_floating_point<T>::value>::type precision;
     typedef fp_traits_non_native<T, precision> type;
 };
 template<>
@@ -569,7 +569,7 @@ struct select_native<long double>
 
 template<class T> struct fp_traits
 {
-    typedef typename size_to_precision<int(sizeof(T)), ::std::is_floating_point<T>::value>::type precision;
+    typedef typename size_to_precision<sizeof(T), ::std::is_floating_point<T>::value>::type precision;
 #if defined(BOOST_MATH_USE_STD_FPCLASSIFY) && !defined(BOOST_MATH_DISABLE_STD_FPCLASSIFY)
     typedef typename select_native<T>::type type;
 #else

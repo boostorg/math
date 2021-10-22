@@ -24,14 +24,14 @@
 #define BOOST_MATH_NO_LEXICAL_CAST
 #define TEST_STD
 
-#if (__cplusplus > 201400L || (defined(_MSVC_LANG) && (_MSVC_LANG > 201400L)))
+#if (__cplusplus > 201400L || _MSVC_LANG > 201400L)
 #define BOOST_CXX14_CONSTEXPR constexpr
 #else
 #define BOOST_CXX14_CONSTEXPR
 #define BOOST_NO_CXX14_CONSTEXPR
 #endif // BOOST_CXX14_CONSTEXPR
 
-#if (__cplusplus > 201700L || (defined(_MSVC_LANG) && (_MSVC_LANG > 201700L)))
+#if (__cplusplus > 201700L || _MSVC_LANG > 201700L)
 #define BOOST_IF_CONSTEXPR if constexpr
 #if !__has_include(<execution>)
 #define BOOST_NO_CXX17_HDR_EXECUTION
