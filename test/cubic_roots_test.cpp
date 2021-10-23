@@ -14,6 +14,7 @@ using boost::multiprecision::float128;
 #endif
 
 using boost::math::tools::cubic_roots;
+using boost::math::tools::cubic_root_residual;
 using std::cbrt;
 
 template<class Real>
@@ -98,13 +99,17 @@ void test_zero_coefficients()
 
         auto roots = cubic_roots(a, b, c, d);
         // I could check the condition number here, but this is fine right?
-        if(!CHECK_ULP_CLOSE(r[0], roots[0], 3)) {
+        if(!CHECK_ULP_CLOSE(r[0], roots[0], 25)) {
             std::cerr << "  Polynomial x^3 + " << b << "x^2 + " << c << "x + " << d << " has roots {";
             std::cerr << r[0] << ", " << r[1] << ", " << r[2] << "}, but the computed roots are {";
             std::cerr << roots[0] << ", " << roots[1] << ", " << roots[2] << "}\n";
         }
-        CHECK_ULP_CLOSE(r[1], roots[1], 3);
-        CHECK_ULP_CLOSE(r[2], roots[2], 3);
+        CHECK_ULP_CLOSE(r[1], roots[1], 25);
+        CHECK_ULP_CLOSE(r[2], roots[2], 25);
+        for (auto root : roots) {
+            auto res = cubic_root_residual(a, b,c,d, root);
+            CHECK_LE(abs(res[0]), 20*res[1]);
+        }
     }
 }
 
