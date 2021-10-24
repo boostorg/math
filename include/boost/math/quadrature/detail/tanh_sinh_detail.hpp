@@ -539,7 +539,7 @@ void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const std:
 template<class Real, class Policy>
 void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const std::integral_constant<int, 2>&)
 {
-   m_inital_row_length = 5;
+   m_inital_row_length = 6;
    m_abscissas.reserve(m_max_refinements + 1);
    m_weights.reserve(m_max_refinements + 1);
    m_first_complements.reserve(m_max_refinements + 1);
