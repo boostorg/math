@@ -194,6 +194,7 @@ test-suite special_fun :
    [ run test_jacobi_zeta.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
    [ run test_heuman_lambda.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
    [ run test_erf.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
+   [ run erf_limits_test.cpp ]
    [ run test_expint.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
    [ run test_factorials.cpp pch ../../test/build//boost_unit_test_framework  ]
    [ run test_gamma.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
