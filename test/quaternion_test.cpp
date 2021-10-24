@@ -397,7 +397,11 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(arithmetic_test, T, test_types)
 
    // using /= (const T &)
    q4 /= f0;
-   check_exact_quaternion_result(q4, -T(868) / 7, T(420) / 7, T(490) / 7, T(560) / 7);
+   if(std::numeric_limits<T>::radix == 2)
+      check_exact_quaternion_result(q4, -T(868) / 7, T(420) / 7, T(490) / 7, T(560) / 7);
+   else
+      // cpp_dec_float division is still inextact / not rounded:
+      check_approx_quaternion_result(q4, -T(868) / 7, T(420) / 7, T(490) / 7, T(560) / 7);
 
    q4 = q3;
    q4 /= boost::math::quaternion<T>(9, 4, 6, 2);
