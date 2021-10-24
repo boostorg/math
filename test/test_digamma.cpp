@@ -56,6 +56,16 @@ void expected_results()
       "real_concept",                // test type(s)
       ".*Half.*",                    // test data group
       ".*", 15, 10);                 // test function
+   if (std::numeric_limits<long double>::digits > 100)
+   {
+      add_expected_result(
+         ".*",                     // compiler
+         ".*",                          // stdlib
+         ".*",                          // platform
+         "real_concept",                // test type(s)
+         ".*Near Zero.*",                    // test data group
+         ".*", 15, 10);                 // test function
+   }
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
@@ -87,7 +97,7 @@ void test_spots(T, const char* t)
    BOOST_CHECK_CLOSE(::boost::math::digamma(static_cast<T>(0.5)), static_cast<T>(-1.9635100260214234794409763329987555671931596046604L), tolerance);
    BOOST_CHECK_CLOSE(::boost::math::digamma(static_cast<T>(1)), static_cast<T>(-0.57721566490153286060651209008240243104215933593992L), tolerance);
    BOOST_CHECK_CLOSE(::boost::math::digamma(static_cast<T>(1.5)), static_cast<T>(0.036489973978576520559023667001244432806840395339566L), tolerance * 40);
-   BOOST_CHECK_CLOSE(::boost::math::digamma(static_cast<T>(1.5) - static_cast<T>(1)/32), static_cast<T>(0.00686541147073577672813890866512415766586241385896200579891429L), tolerance * 100);
+   BOOST_CHECK_CLOSE(::boost::math::digamma(static_cast<T>(1.5) - static_cast<T>(1)/32), static_cast<T>(0.00686541147073577672813890866512415766586241385896200579891429L), tolerance * 200);
    BOOST_CHECK_CLOSE(::boost::math::digamma(static_cast<T>(2)), static_cast<T>(0.42278433509846713939348790991759756895784066406008L), tolerance);
    BOOST_CHECK_CLOSE(::boost::math::digamma(static_cast<T>(8)), static_cast<T>(2.0156414779556099965363450527747404261006978069172L), tolerance);
    BOOST_CHECK_CLOSE(::boost::math::digamma(static_cast<T>(12)), static_cast<T>(2.4426616799758120167383652547949424463027180089374L), tolerance);
