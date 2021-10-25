@@ -359,15 +359,75 @@ decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) tanh_sin
         //
         // If the error is increasing, and we're past level 4, something bad is very likely happening:
         //
-        if ((err > last_err) && (k > 4) && (++thrash_count > 1))
+        if ((err * 1.5 > last_err) && (k > 4))
         {
-           // We could raise an evaluation_error, but since we likely have some sort of result, just return the last one
-           // (ie before the error started going up)
-           I1 = I0;
-           L1_I1 = L1_I0;
-           --k;
-           err = last_err;
-           break;
+           bool terminate = false;
+           if ((++thrash_count > 1) && (last_err < 1e-3))
+              // Probably just thrashing, abort:
+              terminate = true;
+           else if(thrash_count > 2)
+              // OK, terrible error, but giving up anyway!
+              terminate = true;
+           else if (last_err < boost::math::tools::root_epsilon<Real>())
+              // Trying to squeeze precision that probably isn't there, abort:
+              terminate = true;
+           else
+           {
+              // Take a look at the end points, if there's significant new area being
+              // discovered, then we're not able to get close enough to the endpoints
+              // to ever find the integral:
+              std::size_t j1 = (std::min)(max_left_index, abscissa_row.size() - 1);
+              std::size_t j2 = (std::min)(max_right_index, abscissa_row.size() - 1);
+              Real x = abscissa_row[j1];
+              Real xc = x;
+              Real w = weight_row[j1];
+              if (j1 >= first_complement_index)
+              {
+                 // We have stored x - 1:
+                 BOOST_MATH_ASSERT(x < 0);
+                 x = 1 + xc;
+              }
+              else
+              {
+                 BOOST_MATH_ASSERT(x >= 0);
+                 xc = x - 1;
+              }
+
+              result_type ym = f(-x, xc);
+
+              x = abscissa_row[j2];
+              xc = x;
+              w = weight_row[j2];
+              if (j2 >= first_complement_index)
+              {
+                 // We have stored x - 1:
+                 BOOST_MATH_ASSERT(x < 0);
+                 x = 1 + xc;
+              }
+              else
+              {
+                 BOOST_MATH_ASSERT(x >= 0);
+                 xc = x - 1;
+              }
+              result_type yp = f(x, -xc);
+
+              result_type term = (yp + ym) * w;
+
+              if (abs(term / sum) > err)
+                 terminate = true;
+           }
+
+           if (terminate)
+           {
+              // We could raise an evaluation_error, but since we likely have some sort of result, just return the last one
+              // (ie before the error started going up)
+              I1 = I0;
+              L1_I1 = L1_I0;
+              --k;
+              err = last_err;
+              break;
+           }
+           // Fall through and keep going, assume we've discovered a new feature of f(x)....
         }
         //
         // Termination condition:
