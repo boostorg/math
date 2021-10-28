@@ -309,6 +309,7 @@ decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) tanh_sin
         h *= half<Real>();
         result_type sum = 0;
         Real absum = 0;
+        Real endpoint_error = 0;
         auto const& abscissa_row = this->get_abscissa_row(k);
         auto const& weight_row = this->get_weight_row(k);
         std::size_t first_complement_index = this->get_first_complement_index(k);
@@ -360,6 +361,17 @@ decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) tanh_sin
 
         sum += yp * weight_row[max_left_index] + ym * weight_row[max_right_index];
         absum += abs(yp * weight_row[max_left_index]) + abs(ym * weight_row[max_right_index]);
+        //
+        // We estimate the error due to truncation as the value contributed by the two most extreme points.
+        // In most cases this is tiny and can be ignored, if it is significant then either the area of the
+        // integral is so far our in the tails that our exponent range can't reach it (example x^-p at double
+        // precision and p ~ 1), or our function is truncated near epsilon, and we have had to narrow our endpoints.
+        // In this latter case we may over-estimate the error, but this is the best we can do.
+        // In any event, we do not add endpoint_error to the error estimate until we terminate the main loop,
+        // otherwise it can make things appear to be non-converged, when in reality, they are as converged as they
+        // will ever be.
+        //
+        endpoint_error = absum;
 
         for(size_t j = 0; j < weight_row.size(); ++j)
         {
@@ -425,44 +437,7 @@ decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) tanh_sin
               // Take a look at the end points, if there's significant new area being
               // discovered, then we're not able to get close enough to the endpoints
               // to ever find the integral:
-              std::size_t j1 = (std::min)(max_left_index, abscissa_row.size() - 1);
-              std::size_t j2 = (std::min)(max_right_index, abscissa_row.size() - 1);
-              Real x = abscissa_row[j1];
-              Real xc = x;
-              Real w = weight_row[j1];
-              if (j1 >= first_complement_index)
-              {
-                 // We have stored x - 1:
-                 BOOST_MATH_ASSERT(x < 0);
-                 x = 1 + xc;
-              }
-              else
-              {
-                 BOOST_MATH_ASSERT(x >= 0);
-                 xc = x - 1;
-              }
-
-              ym = f(-x, xc);
-
-              x = abscissa_row[j2];
-              xc = x;
-              w = weight_row[j2];
-              if (j2 >= first_complement_index)
-              {
-                 // We have stored x - 1:
-                 BOOST_MATH_ASSERT(x < 0);
-                 x = 1 + xc;
-              }
-              else
-              {
-                 BOOST_MATH_ASSERT(x >= 0);
-                 xc = x - 1;
-              }
-              yp = f(x, -xc);
-
-              result_type term = (yp + ym) * w;
-
-              if (abs(term / sum) > err)
+              if (abs(endpoint_error / sum) > err)
                  terminate = true;
            }
 
@@ -473,7 +448,7 @@ decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) tanh_sin
               I1 = I0;
               L1_I1 = L1_I0;
               --k;
-              err = last_err;
+              err = last_err + endpoint_error;
               break;
            }
            // Fall through and keep going, assume we've discovered a new feature of f(x)....
@@ -503,7 +478,6 @@ decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) tanh_sin
                {
                   return policies::raise_evaluation_error(function, "The tanh_sinh quadrature evaluated your function at a singular point and got %1%. Inetgration bounds were automatically narrowed, but the integral was found to be increasing at the new endpoint.  Please check your function, and consider providing a 2-argument functor.", I1, Policy());
                }
-               err += abs(yp);
             }
             if ((max_right_index < abscissa_row.size() - 1) && (abs(abscissa_row[max_right_index + 1]) > right_min_complement))
             {
@@ -513,9 +487,8 @@ decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) tanh_sin
                {
                   return policies::raise_evaluation_error(function, "The tanh_sinh quadrature evaluated your function at a singular point and got %1%. Inetgration bounds were automatically narrowed, but the integral was found to be increasing at the new endpoint.  Please check your function, and consider providing a 2-argument functor.", I1, Policy());
                }
-               err += abs(yp);
             }
-
+            err += endpoint_error;
             break;
         }
 
