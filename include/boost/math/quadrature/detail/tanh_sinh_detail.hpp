@@ -462,7 +462,7 @@ decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) tanh_sin
         // parameters.  We could keep hunting until we find something, but that would handicap
         // integrals which really are zero.... so a compromise then!
         //
-        if (err <= abs(tolerance*L1_I1))
+        if ((err <= abs(tolerance*L1_I1)) && (k >= 4))
         {
             //
             // A quick sanity check: have we at some point narrowed our boundaries as a result
