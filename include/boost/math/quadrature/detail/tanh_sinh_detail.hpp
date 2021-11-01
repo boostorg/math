@@ -240,6 +240,19 @@ decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) tanh_sin
           break;
        --max_left_position;
     } while (m_abscissas[0][max_left_position] < 0);
+    //
+    // Also remove points which are insignificant or zero:
+    //
+    while (fabs(m_abscissas[0][max_left_position]) < boost::math::tools::root_epsilon<Real>())
+    {
+       if (fabs(yp) > L1_I0 * boost::math::tools::epsilon<Real>())
+          break;
+       --max_left_position;
+       yp = f(-1 - m_abscissas[0][max_left_position], m_abscissas[0][max_left_position]);
+    }
+    //
+    // Over again for the right hand side:
+    //
     do
     {
        ym = f(1 + m_abscissas[0][max_right_position], -m_abscissas[0][max_right_position]);
@@ -247,6 +260,13 @@ decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) tanh_sin
           break;
        --max_right_position;
     } while (m_abscissas[0][max_right_position] < 0);
+    while (fabs(m_abscissas[0][max_right_position]) < boost::math::tools::root_epsilon<Real>())
+    {
+       if (fabs(ym) > L1_I0 * boost::math::tools::epsilon<Real>())
+          break;
+       --max_right_position;
+       yp = f(-1 - m_abscissas[0][max_right_position], m_abscissas[0][max_right_position]);
+    }
 
     if ((max_left_position == 0) && (max_right_position == 0))
     {
