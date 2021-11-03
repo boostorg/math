@@ -11,7 +11,7 @@
 
 namespace boost::math::tools {
 
-// Solves ax³ + bx² + cx + d = 0.
+// Solves ax^3 + bx^2 + cx + d = 0.
 // Only returns the real roots, as types get weird for real coefficients and complex roots.
 // Follows Numerical Recipes, Chapter 5, section 6.
 // NB: A better algorithm apparently exists:
@@ -29,7 +29,7 @@ std::array<Real, 3> cubic_roots(Real a, Real b, Real c, Real d) {
                                  std::numeric_limits<Real>::quiet_NaN(),
                                  std::numeric_limits<Real>::quiet_NaN()};
     if (a == 0) {
-        // bx² + cx + d = 0:
+        // bx^2 + cx + d = 0:
         if (b == 0) {
             // cx + d = 0:
             if (c == 0) {
@@ -64,7 +64,6 @@ std::array<Real, 3> cubic_roots(Real a, Real b, Real c, Real d) {
     Real Q = (p*p - 3*q)/9;
     Real R = (2*p*p*p - 9*p*q + 27*r)/54;
     if (R*R < Q*Q*Q) {
-        //std::cout << "In the R² < Q³ branch.\n";
         Real rtQ = sqrt(Q);
         Real theta = acos(R/(Q*rtQ))/3;
         Real st = sin(theta);
@@ -74,10 +73,10 @@ std::array<Real, 3> cubic_roots(Real a, Real b, Real c, Real d) {
         roots[2] = rtQ*(ct + sqrt(Real(3))*st) - p/3;
     } else {
         // In Numerical Recipes, Chapter 5, Section 6, it is claimed that we only have one real root
-        // if R² >= Q³. But this isn't true; we can even see this from equation 5.6.18.
+        // if R^2 >= Q^3. But this isn't true; we can even see this from equation 5.6.18.
         // The condition for having three real roots is that A = B.
         // It *is* the case that if we're in this branch, and we have 3 real roots, two are a double root.
-        // Take (x+1)²(x-2) = x³ - 3x -2 as an example. This clearly has a double root at x = -1,
+        // Take (x+1)^2(x-2) = x^3 - 3x -2 as an example. This clearly has a double root at x = -1,
         // and it gets sent into this branch.
         Real arg = R*R - Q*Q*Q;
         Real A = -boost::math::sign(R)*cbrt(abs(R) + sqrt(arg));
@@ -113,8 +112,8 @@ std::array<Real, 3> cubic_roots(Real a, Real b, Real c, Real d) {
     return roots;
 }
 
-// Computes the empirical residual p(r) (first element) and expected residual ε|rṗ(r)| (second element) for a root.
-// Recall that for a numerically computed root r satisfying r = r⁎(1+ε) of a function p, |p(r)| ≲ ε|rṗ(r)|.
+// Computes the empirical residual p(r) (first element) and expected residual eps*|rp'(r)| (second element) for a root.
+// Recall that for a numerically computed root r satisfying r = r_0(1+eps) of a function p, |p(r)| <= eps|rp'(r)|.
 template<typename Real>
 std::array<Real, 2> cubic_root_residual(Real a, Real b, Real c, Real d, Real root) {
     using std::fma;
