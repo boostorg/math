@@ -708,6 +708,7 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [include sf/owens_t.qbk]
 [include sf/daubechies.qbk]
 
+[include sf/ccmath.qbk]
 
 [endmathpart] [/section:special Special Functions]
 
@@ -736,6 +737,7 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [include interpolators/barycentric_rational_interpolation.qbk]
 [include interpolators/vector_barycentric_rational.qbk]
 [include interpolators/catmull_rom.qbk]
+[include interpolators/bezier_polynomial.qbk]
 [include interpolators/cardinal_trigonometric.qbk]
 [include interpolators/cubic_hermite.qbk]
 [include interpolators/makima.qbk]

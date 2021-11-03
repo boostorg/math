@@ -15,7 +15,7 @@
 #include <random>
 #include <tuple>
 #include <cmath>
-#include <boost/core/lightweight_test.hpp>
+#include "math_unit_test.hpp"
 #include <boost/numeric/ublas/vector.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/statistics/bivariate_statistics.hpp>
@@ -56,9 +56,9 @@ void test_covariance(ExecutionPolicy&& exec)
     Real mu_v1 = std::get<1>(temp);
     Real cov1 = std::get<2>(temp);
 
-    BOOST_TEST(abs(cov1) < tol);
-    BOOST_TEST(abs(mu_u1 - 8) < tol);
-    BOOST_TEST(abs(mu_v1 - 17) < tol);
+    CHECK_LE(abs(cov1), tol);
+    CHECK_LE(abs(mu_u1 - 8), tol);
+    CHECK_LE(abs(mu_v1 - 17), tol);
 
 
     std::array<Real, 2> u2{8, 4};
@@ -68,9 +68,9 @@ void test_covariance(ExecutionPolicy&& exec)
     Real mu_v2 = std::get<1>(temp);
     Real cov2 = std::get<2>(temp);
 
-    BOOST_TEST(abs(cov2+4) < tol);
-    BOOST_TEST(abs(mu_u2 - 6) < tol);
-    BOOST_TEST(abs(mu_v2 - 5) < tol);
+    CHECK_LE(abs(cov2+4), tol);
+    CHECK_LE(abs(mu_u2 - 6), tol);
+    CHECK_LE(abs(mu_v2 - 5), tol);
 
     std::vector<Real> u3{1,2,3};
     std::vector<Real> v3{1,1,1};
@@ -81,22 +81,22 @@ void test_covariance(ExecutionPolicy&& exec)
     Real cov3 = std::get<2>(temp);
 
     // Since v is constant, covariance(u,v) = 0 against everything any u:
-    BOOST_TEST(abs(cov3) < tol);
-    BOOST_TEST(abs(mu_u3 - 2) < tol);
-    BOOST_TEST(abs(mu_v3 - 1) < tol);
+    CHECK_LE(abs(cov3), tol);
+    CHECK_LE(abs(mu_u3 - 2), tol);
+    CHECK_LE(abs(mu_v3 - 1), tol);
     // Make sure we pull the correct symbol out of means_and_covariance:
     cov3 = covariance(exec, u3, v3);
-    BOOST_TEST(abs(cov3) < tol);
+    CHECK_LE(abs(cov3), tol);
 
     cov3 = covariance(exec, v3, u3);
     // Covariance is symmetric: cov(u,v) = cov(v,u)
-    BOOST_TEST(abs(cov3) < tol);
+    CHECK_LE(abs(cov3), tol);
 
     // cov(u,u) = sigma(u)^2:
     cov3 = covariance(exec, u3, u3);
     Real expected = Real(2)/Real(3);
 
-    BOOST_TEST(abs(cov3 - expected) < tol);
+    CHECK_LE(abs(cov3 - expected), tol);
 
     std::mt19937 gen(15);
     // Can't template standard library on multiprecision, so use double and cast back:
@@ -119,16 +119,16 @@ void test_covariance(ExecutionPolicy&& exec)
     Real mu_v_ = std::get<1>(temp);
     Real cov_uv = std::get<2>(temp);
 
-    BOOST_TEST(abs(mu_u - mu_u_) < tol);
-    BOOST_TEST(abs(mu_v - mu_v_) < tol);
+    CHECK_LE(abs(mu_u - mu_u_), tol);
+    CHECK_LE(abs(mu_v - mu_v_), tol);
 
     // Cauchy-Schwartz inequality:
-    BOOST_TEST(cov_uv*cov_uv <= sigma_u_sq*sigma_v_sq);
+    CHECK_LE(cov_uv*cov_uv, sigma_u_sq*sigma_v_sq);
     // cov(X, X) = sigma(X)^2:
     Real cov_uu = covariance(exec, u, u);
-    BOOST_TEST(abs(cov_uu - sigma_u_sq) < tol);
+    CHECK_LE(abs(cov_uu - sigma_u_sq), tol);
     Real cov_vv = covariance(exec, v, v);
-    BOOST_TEST(abs(cov_vv - sigma_v_sq) < tol);
+    CHECK_LE(abs(cov_vv - sigma_v_sq), tol);
 }
 
 template<typename Z, typename ExecutionPolicy>
@@ -146,9 +146,9 @@ void test_integer_covariance(ExecutionPolicy&& exec)
     double mu_v1 = std::get<1>(temp);
     double cov1 = std::get<2>(temp);
 
-    BOOST_TEST(abs(cov1) < tol);
-    BOOST_TEST(abs(mu_u1 - 8) < tol);
-    BOOST_TEST(abs(mu_v1 - 17) < tol);
+    CHECK_LE(abs(cov1), tol);
+    CHECK_LE(abs(mu_u1 - 8), tol);
+    CHECK_LE(abs(mu_v1 - 17), tol);
 
 
     std::array<Z, 2> u2{8, 4};
@@ -158,9 +158,9 @@ void test_integer_covariance(ExecutionPolicy&& exec)
     double mu_v2 = std::get<1>(temp);
     double cov2 = std::get<2>(temp);
 
-    BOOST_TEST(abs(cov2+4) < tol);
-    BOOST_TEST(abs(mu_u2 - 6) < tol);
-    BOOST_TEST(abs(mu_v2 - 5) < tol);
+    CHECK_LE(abs(cov2+4), tol);
+    CHECK_LE(abs(mu_u2 - 6), tol);
+    CHECK_LE(abs(mu_v2 - 5), tol);
 
     std::vector<Z> u3{1,2,3};
     std::vector<Z> v3{1,1,1};
@@ -171,22 +171,22 @@ void test_integer_covariance(ExecutionPolicy&& exec)
     double cov3 = std::get<2>(temp);
 
     // Since v is constant, covariance(u,v) = 0 against everything any u:
-    BOOST_TEST(abs(cov3) < tol);
-    BOOST_TEST(abs(mu_u3 - 2) < tol);
-    BOOST_TEST(abs(mu_v3 - 1) < tol);
+    CHECK_LE(abs(cov3), tol);
+    CHECK_LE(abs(mu_u3 - 2), tol);
+    CHECK_LE(abs(mu_v3 - 1), tol);
     // Make sure we pull the correct symbol out of means_and_covariance:
     cov3 = covariance(exec, u3, v3);
-    BOOST_TEST(abs(cov3) < tol);
+    CHECK_LE(abs(cov3), tol);
 
     cov3 = covariance(exec, v3, u3);
     // Covariance is symmetric: cov(u,v) = cov(v,u)
-    BOOST_TEST(abs(cov3) < tol);
+    CHECK_LE(abs(cov3), tol);
 
     // cov(u,u) = sigma(u)^2:
     cov3 = covariance(exec, u3, u3);
     double expected = double(2)/double(3);
 
-    BOOST_TEST(abs(cov3 - expected) < tol);
+    CHECK_LE(abs(cov3 - expected), tol);
 
     std::mt19937 gen(15);
     // Can't template standard library on multiprecision, so use double and cast back:
@@ -209,16 +209,16 @@ void test_integer_covariance(ExecutionPolicy&& exec)
     double mu_v_ = std::get<1>(temp);
     double cov_uv = std::get<2>(temp);
 
-    BOOST_TEST(abs(mu_u - mu_u_) < tol);
-    BOOST_TEST(abs(mu_v - mu_v_) < tol);
+    CHECK_LE(abs(mu_u - mu_u_), tol);
+    CHECK_LE(abs(mu_v - mu_v_), tol);
 
     // Cauchy-Schwartz inequality:
-    BOOST_TEST(cov_uv*cov_uv <= sigma_u_sq*sigma_v_sq);
+    CHECK_LE(cov_uv*cov_uv, sigma_u_sq*sigma_v_sq);
     // cov(X, X) = sigma(X)^2:
     double cov_uu = covariance(exec, u, u);
-    BOOST_TEST(abs(cov_uu - sigma_u_sq) < tol);
+    CHECK_LE(abs(cov_uu - sigma_u_sq), tol);
     double cov_vv = covariance(exec, v, v);
-    BOOST_TEST(abs(cov_vv - sigma_v_sq) < tol);
+    CHECK_LE(abs(cov_vv - sigma_v_sq), tol);
 }
 
 template<typename Real, typename ExecutionPolicy>
@@ -232,36 +232,36 @@ void test_correlation_coefficient(ExecutionPolicy&& exec)
     std::vector<Real> u{1};
     std::vector<Real> v{1};
     Real rho_uv = correlation_coefficient(exec, u, v);
-    BOOST_TEST(abs(rho_uv - 1) < tol);
+    CHECK_NAN(rho_uv);
 
     u = {1,1};
     v = {1,1};
     rho_uv = correlation_coefficient(exec, u, v);
-    BOOST_TEST(abs(rho_uv - 1) < tol);
+    CHECK_NAN(rho_uv);
 
     u = {1, 2, 3};
     v = {1, 2, 3};
     rho_uv = correlation_coefficient(exec, u, v);
-    BOOST_TEST(abs(rho_uv - 1) < tol);
+    CHECK_LE(abs(rho_uv - 1), tol);
 
     u = {1, 2, 3};
     v = {-1, -2, -3};
     rho_uv = correlation_coefficient(exec, u, v);
-    BOOST_TEST(abs(rho_uv + 1) < tol);
+    CHECK_LE(abs(rho_uv + 1), tol);
 
     rho_uv = correlation_coefficient(exec, v, u);
-    BOOST_TEST(abs(rho_uv + 1) < tol);
+    CHECK_LE(abs(rho_uv + 1), tol);
 
     u = {1, 2, 3};
     v = {0, 0, 0};
     rho_uv = correlation_coefficient(exec, v, u);
-    BOOST_TEST(abs(rho_uv) < tol);
+    CHECK_NAN(rho_uv);
 
     u = {1, 2, 3};
     v = {0, 0, 3};
     rho_uv = correlation_coefficient(exec, v, u);
     // mu_u = 2, sigma_u^2 = 2/3, mu_v = 1, sigma_v^2 = 2, cov(u,v) = 1.
-    BOOST_TEST(abs(rho_uv - sqrt(Real(3))/Real(2)) < tol);
+    CHECK_LE(abs(rho_uv - sqrt(Real(3))/Real(2)), tol);
 }
 
 template<typename Z, typename ExecutionPolicy>
@@ -275,31 +275,31 @@ void test_integer_correlation_coefficient(ExecutionPolicy&& exec)
     std::vector<Z> u{1};
     std::vector<Z> v{1};
     double rho_uv = correlation_coefficient(exec, u, v);
-    BOOST_TEST(abs(rho_uv - 1.0) < tol);
+    CHECK_NAN(rho_uv);
 
     u = {1,1};
     v = {1,1};
     rho_uv = correlation_coefficient(exec, u, v);
-    BOOST_TEST(abs(rho_uv - 1.0) < tol);
+    CHECK_NAN(rho_uv);
 
     u = {1, 2, 3};
     v = {1, 2, 3};
     rho_uv = correlation_coefficient(exec, u, v);
-    BOOST_TEST(abs(rho_uv - 1.0) < tol);
+    CHECK_LE(abs(rho_uv - 1.0), tol);
 
     rho_uv = correlation_coefficient(exec, v, u);
-    BOOST_TEST(abs(rho_uv - 1.0) < tol);
+    CHECK_LE(abs(rho_uv - 1.0), tol);
 
     u = {1, 2, 3};
     v = {0, 0, 0};
     rho_uv = correlation_coefficient(exec, v, u);
-    BOOST_TEST(abs(rho_uv) < tol);
+    CHECK_NAN(rho_uv);
 
     u = {1, 2, 3};
     v = {0, 0, 3};
     rho_uv = correlation_coefficient(exec, v, u);
     // mu_u = 2, sigma_u^2 = 2/3, mu_v = 1, sigma_v^2 = 2, cov(u,v) = 1.
-    BOOST_TEST(abs(rho_uv - sqrt(double(3))/double(2)) < tol);
+    CHECK_LE(abs(rho_uv - sqrt(double(3))/double(2)), tol);
 }
 
 int main()
@@ -340,7 +340,7 @@ int main()
     test_integer_correlation_coefficient<uint32_t>(std::execution::seq);
     test_integer_correlation_coefficient<uint32_t>(std::execution::par);
     
-    return boost::report_errors();
+    return boost::math::test::report_errors();
 }
 
 #else
@@ -360,9 +360,9 @@ void test_covariance()
     Real mu_v1 = std::get<1>(temp);
     Real cov1 = std::get<2>(temp);
 
-    BOOST_TEST(abs(cov1) < tol);
-    BOOST_TEST(abs(mu_u1 - 8) < tol);
-    BOOST_TEST(abs(mu_v1 - 17) < tol);
+    CHECK_LE(abs(cov1), tol);
+    CHECK_LE(abs(mu_u1 - 8), tol);
+    CHECK_LE(abs(mu_v1 - 17), tol);
 
 
     std::array<Real, 2> u2{8, 4};
@@ -372,9 +372,9 @@ void test_covariance()
     Real mu_v2 = std::get<1>(temp);
     Real cov2 = std::get<2>(temp);
 
-    BOOST_TEST(abs(cov2+4) < tol);
-    BOOST_TEST(abs(mu_u2 - 6) < tol);
-    BOOST_TEST(abs(mu_v2 - 5) < tol);
+    CHECK_LE(abs(cov2+4), tol);
+    CHECK_LE(abs(mu_u2 - 6), tol);
+    CHECK_LE(abs(mu_v2 - 5), tol);
 
     std::vector<Real> u3{1,2,3};
     std::vector<Real> v3{1,1,1};
@@ -385,22 +385,22 @@ void test_covariance()
     Real cov3 = std::get<2>(temp);
 
     // Since v is constant, covariance(u,v) = 0 against everything any u:
-    BOOST_TEST(abs(cov3) < tol);
-    BOOST_TEST(abs(mu_u3 - 2) < tol);
-    BOOST_TEST(abs(mu_v3 - 1) < tol);
+    CHECK_LE(abs(cov3), tol);
+    CHECK_LE(abs(mu_u3 - 2), tol);
+    CHECK_LE(abs(mu_v3 - 1), tol);
     // Make sure we pull the correct symbol out of means_and_covariance:
     cov3 = covariance(u3, v3);
-    BOOST_TEST(abs(cov3) < tol);
+    CHECK_LE(abs(cov3), tol);
 
     cov3 = covariance(v3, u3);
     // Covariance is symmetric: cov(u,v) = cov(v,u)
-    BOOST_TEST(abs(cov3) < tol);
+    CHECK_LE(abs(cov3), tol);
 
     // cov(u,u) = sigma(u)^2:
     cov3 = covariance(u3, u3);
     Real expected = Real(2)/Real(3);
 
-    BOOST_TEST(abs(cov3 - expected) < tol);
+    CHECK_LE(abs(cov3 - expected), tol);
 
     std::mt19937 gen(15);
     // Can't template standard library on multiprecision, so use double and cast back:
@@ -423,16 +423,16 @@ void test_covariance()
     Real mu_v_ = std::get<1>(temp);
     Real cov_uv = std::get<2>(temp);
 
-    BOOST_TEST(abs(mu_u - mu_u_) < tol);
-    BOOST_TEST(abs(mu_v - mu_v_) < tol);
+    CHECK_LE(abs(mu_u - mu_u_), tol);
+    CHECK_LE(abs(mu_v - mu_v_), tol);
 
     // Cauchy-Schwartz inequality:
-    BOOST_TEST(cov_uv*cov_uv <= sigma_u_sq*sigma_v_sq);
+    CHECK_LE(cov_uv*cov_uv, sigma_u_sq*sigma_v_sq);
     // cov(X, X) = sigma(X)^2:
     Real cov_uu = covariance(u, u);
-    BOOST_TEST(abs(cov_uu - sigma_u_sq) < tol);
+    CHECK_LE(abs(cov_uu - sigma_u_sq), tol);
     Real cov_vv = covariance(v, v);
-    BOOST_TEST(abs(cov_vv - sigma_v_sq) < tol);
+    CHECK_LE(abs(cov_vv - sigma_v_sq), tol);
 }
 
 template<typename Z>
@@ -450,9 +450,9 @@ void test_integer_covariance()
     double mu_v1 = std::get<1>(temp);
     double cov1 = std::get<2>(temp);
 
-    BOOST_TEST(abs(cov1) < tol);
-    BOOST_TEST(abs(mu_u1 - 8) < tol);
-    BOOST_TEST(abs(mu_v1 - 17) < tol);
+    CHECK_LE(abs(cov1), tol);
+    CHECK_LE(abs(mu_u1 - 8), tol);
+    CHECK_LE(abs(mu_v1 - 17), tol);
 
 
     std::array<Z, 2> u2{8, 4};
@@ -462,9 +462,9 @@ void test_integer_covariance()
     double mu_v2 = std::get<1>(temp);
     double cov2 = std::get<2>(temp);
 
-    BOOST_TEST(abs(cov2+4) < tol);
-    BOOST_TEST(abs(mu_u2 - 6) < tol);
-    BOOST_TEST(abs(mu_v2 - 5) < tol);
+    CHECK_LE(abs(cov2+4), tol);
+    CHECK_LE(abs(mu_u2 - 6), tol);
+    CHECK_LE(abs(mu_v2 - 5), tol);
 
     std::vector<Z> u3{1,2,3};
     std::vector<Z> v3{1,1,1};
@@ -475,22 +475,22 @@ void test_integer_covariance()
     double cov3 = std::get<2>(temp);
 
     // Since v is constant, covariance(u,v) = 0 against everything any u:
-    BOOST_TEST(abs(cov3) < tol);
-    BOOST_TEST(abs(mu_u3 - 2) < tol);
-    BOOST_TEST(abs(mu_v3 - 1) < tol);
+    CHECK_LE(abs(cov3), tol);
+    CHECK_LE(abs(mu_u3 - 2), tol);
+    CHECK_LE(abs(mu_v3 - 1), tol);
     // Make sure we pull the correct symbol out of means_and_covariance:
     cov3 = covariance(u3, v3);
-    BOOST_TEST(abs(cov3) < tol);
+    CHECK_LE(abs(cov3), tol);
 
     cov3 = covariance(v3, u3);
     // Covariance is symmetric: cov(u,v) = cov(v,u)
-    BOOST_TEST(abs(cov3) < tol);
+    CHECK_LE(abs(cov3), tol);
 
     // cov(u,u) = sigma(u)^2:
     cov3 = covariance(u3, u3);
     double expected = double(2)/double(3);
 
-    BOOST_TEST(abs(cov3 - expected) < tol);
+    CHECK_LE(abs(cov3 - expected), tol);
 
     std::mt19937 gen(15);
     // Can't template standard library on multiprecision, so use double and cast back:
@@ -513,16 +513,16 @@ void test_integer_covariance()
     double mu_v_ = std::get<1>(temp);
     double cov_uv = std::get<2>(temp);
 
-    BOOST_TEST(abs(mu_u - mu_u_) < tol);
-    BOOST_TEST(abs(mu_v - mu_v_) < tol);
+    CHECK_LE(abs(mu_u - mu_u_), tol);
+    CHECK_LE(abs(mu_v - mu_v_), tol);
 
     // Cauchy-Schwartz inequality:
-    BOOST_TEST(cov_uv*cov_uv <= sigma_u_sq*sigma_v_sq);
+    CHECK_LE(cov_uv*cov_uv, sigma_u_sq*sigma_v_sq);
     // cov(X, X) = sigma(X)^2:
     double cov_uu = covariance(u, u);
-    BOOST_TEST(abs(cov_uu - sigma_u_sq) < tol);
+    CHECK_LE(abs(cov_uu - sigma_u_sq), tol);
     double cov_vv = covariance(v, v);
-    BOOST_TEST(abs(cov_vv - sigma_v_sq) < tol);
+    CHECK_LE(abs(cov_vv - sigma_v_sq), tol);
 }
 
 template<typename Real>
@@ -536,36 +536,36 @@ void test_correlation_coefficient()
     std::vector<Real> u{1};
     std::vector<Real> v{1};
     Real rho_uv = correlation_coefficient(u, v);
-    BOOST_TEST(abs(rho_uv - 1) < tol);
+    CHECK_NAN(rho_uv);
 
     u = {1,1};
     v = {1,1};
     rho_uv = correlation_coefficient(u, v);
-    BOOST_TEST(abs(rho_uv - 1) < tol);
+    CHECK_NAN(rho_uv);
 
     u = {1, 2, 3};
     v = {1, 2, 3};
     rho_uv = correlation_coefficient(u, v);
-    BOOST_TEST(abs(rho_uv - 1) < tol);
+    CHECK_LE(abs(rho_uv - 1), tol);
 
     u = {1, 2, 3};
     v = {-1, -2, -3};
     rho_uv = correlation_coefficient(u, v);
-    BOOST_TEST(abs(rho_uv + 1) < tol);
+    CHECK_LE(abs(rho_uv + 1), tol);
 
     rho_uv = correlation_coefficient(v, u);
-    BOOST_TEST(abs(rho_uv + 1) < tol);
+    CHECK_LE(abs(rho_uv + 1), tol);
 
     u = {1, 2, 3};
     v = {0, 0, 0};
     rho_uv = correlation_coefficient(v, u);
-    BOOST_TEST(abs(rho_uv) < tol);
+    CHECK_NAN(rho_uv);
 
     u = {1, 2, 3};
     v = {0, 0, 3};
     rho_uv = correlation_coefficient(v, u);
     // mu_u = 2, sigma_u^2 = 2/3, mu_v = 1, sigma_v^2 = 2, cov(u,v) = 1.
-    BOOST_TEST(abs(rho_uv - sqrt(Real(3))/Real(2)) < tol);
+    CHECK_LE(abs(rho_uv - sqrt(Real(3))/Real(2)), tol);
 }
 
 template<typename Z>
@@ -579,31 +579,31 @@ void test_integer_correlation_coefficient()
     std::vector<Z> u{1};
     std::vector<Z> v{1};
     double rho_uv = correlation_coefficient(u, v);
-    BOOST_TEST(abs(rho_uv - 1.0) < tol);
+    CHECK_NAN(rho_uv);
 
     u = {1,1};
     v = {1,1};
     rho_uv = correlation_coefficient(u, v);
-    BOOST_TEST(abs(rho_uv - 1.0) < tol);
+    CHECK_NAN(rho_uv);
 
     u = {1, 2, 3};
     v = {1, 2, 3};
     rho_uv = correlation_coefficient(u, v);
-    BOOST_TEST(abs(rho_uv - 1.0) < tol);
+    CHECK_LE(abs(rho_uv - 1.0), tol);
 
     rho_uv = correlation_coefficient(v, u);
-    BOOST_TEST(abs(rho_uv - 1.0) < tol);
+    CHECK_LE(abs(rho_uv - 1.0), tol);
 
     u = {1, 2, 3};
     v = {0, 0, 0};
     rho_uv = correlation_coefficient(v, u);
-    BOOST_TEST(abs(rho_uv) < tol);
+    CHECK_NAN(rho_uv);
 
     u = {1, 2, 3};
     v = {0, 0, 3};
     rho_uv = correlation_coefficient(v, u);
     // mu_u = 2, sigma_u^2 = 2/3, mu_v = 1, sigma_v^2 = 2, cov(u,v) = 1.
-    BOOST_TEST(abs(rho_uv - sqrt(double(3))/double(2)) < tol);
+    CHECK_LE(abs(rho_uv - sqrt(double(3))/double(2)), tol);
 }
 
 int main()
@@ -632,7 +632,7 @@ int main()
     test_integer_correlation_coefficient<int64_t>();
     test_integer_correlation_coefficient<uint32_t>();
 
-    return boost::report_errors();
+    return boost::math::test::report_errors();
 }
 
 #endif

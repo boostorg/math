@@ -1179,6 +1179,8 @@ public:
      // In many math texts, K represents the field of real or complex numbers.
      // Too bad we can't put blackboard bold into C++ source!
       typedef decltype(f(Real(0))) K;
+      static_assert(!std::is_integral<K>::value,
+                   "The return type cannot be integral, it must be either a real or complex floating point type.");
       using std::abs;
       unsigned non_zero_start = 1;
       K result = Real(0);

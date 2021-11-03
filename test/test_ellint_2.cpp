@@ -53,6 +53,16 @@ void expected_results()
    largest_type = "(long\\s+)?double";
 #endif
 
+   if (std::numeric_limits<long double>::digits > 100)
+   {
+      add_expected_result(
+         ".*",                          // compiler
+         ".*",                          // stdlib
+         ".*",                          // platform
+         "long double|real_concept",    // test type(s)
+         ".*Mathworld.*",      // test data group
+         ".*", 40, 10);  // test function
+   }
    //
    // Catch all cases come last:
    //

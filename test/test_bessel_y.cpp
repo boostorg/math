@@ -183,6 +183,16 @@ void expected_results()
          ".*Yv.*",              // test data group
          ".*", 80, 70);         // test function
    }
+   else if (std::numeric_limits<long double>::digits >= 90)
+   {
+      add_expected_result(
+         ".*",                          // compiler
+         ".*",                          // stdlib
+         ".*",                          // platform
+         "double",                      // test type(s)
+         ".*Yv.*Mathworld.*",           // test data group
+         ".*", 20, 5);         // test function
+   }
 #endif
    //
    // defaults are based on MSVC-8 on Win32:
