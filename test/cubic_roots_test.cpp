@@ -52,8 +52,7 @@ void test_zero_coefficients()
     d = -2;
     // x^3 - 2 = 0
     roots = cubic_roots(a,b,c,d);
-    // Let's go for equality here!
-    CHECK_EQUAL(roots[0], cbrt(Real(2)));
+    CHECK_ULP_CLOSE(roots[0], cbrt(Real(2)), 2);
     CHECK_NAN(roots[1]);
     CHECK_NAN(roots[2]);
 
