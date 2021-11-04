@@ -15,6 +15,9 @@
 #include <boost/math/special_functions/next.hpp>
 #include <boost/math/tools/config.hpp>
 
+#ifdef BOOST_MATH_TANH_SINH_DEBUG
+#include <iostream>
+#endif
 #ifdef BOOST_HAS_THREADS
 #include <mutex>
 #endif
@@ -231,7 +234,7 @@ decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) tanh_sin
        --max_right_position;
     //
     // Check for non-finite values at the end points:
-    // 
+    //
     result_type yp, ym;
     do
     {
@@ -299,6 +302,10 @@ decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) tanh_sin
     //
     unsigned thrash_count = 0;
 
+#ifdef BOOST_MATH_TANH_SINH_DEBUG
+    std::cout << std::setprecision(std::numeric_limits<Real>::digits10 + 3);
+    std::cout << "I	L1	error	condition_number	level\n";
+#endif
     while (k < 4 || (k < m_weights.size() && k < m_max_refinements) )
     {
         I0 = I1;
@@ -411,7 +418,9 @@ decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) tanh_sin
         ++k;
         Real last_err = err;
         err = abs(I0 - I1);
-        // std::cout << "Estimate:        " << I1 << " Error estimate at level " << k  << " = " << err << std::endl;
+#ifdef BOOST_MATH_TANH_SINH_DEBUG
+        std::cout << I1 << "\t" << L1_I1 << "\t" << err << "\t" << abs(I1)/L1_I1 << "\t" << k << "\n";
+#endif
 
         if (!(boost::math::isfinite)(I1))
         {
