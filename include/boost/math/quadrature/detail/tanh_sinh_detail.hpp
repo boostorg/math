@@ -413,8 +413,6 @@ decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) tanh_sin
         err = abs(I0 - I1);
         // std::cout << "Estimate:        " << I1 << " Error estimate at level " << k  << " = " << err << std::endl;
 
-        std::cout << k << ";" << ::ev << ";" << boost::math::relative_difference(I1, Real(expected)) << std::endl;
-
         if (!(boost::math::isfinite)(I1))
         {
             return policies::raise_evaluation_error(function, "The tanh_sinh quadrature evaluated your function at a singular point and got %1%. Please narrow the bounds of integration or check your function for singularities.", I1, Policy());
