@@ -73,9 +73,9 @@ void test_zero_coefficients()
     // (x+1)^2(x-2) = x^3 - 3x - 2:
     // Note: This test is unstable wrt to perturbations!
     roots = cubic_roots(Real(1), Real(0), Real(-3), Real(-2));
-    CHECK_ULP_CLOSE(-1, roots[0], 2);
-    CHECK_ULP_CLOSE(-1, roots[1], 2);
-    CHECK_ULP_CLOSE(2, roots[2], 2);
+    CHECK_ULP_CLOSE(Real(-1), roots[0], 2);
+    CHECK_ULP_CLOSE(Real(-1), roots[1], 2);
+    CHECK_ULP_CLOSE(Real(2), roots[2], 2);
 
     std::uniform_real_distribution<Real> dis(-2,2);
     std::mt19937 gen(12345);
