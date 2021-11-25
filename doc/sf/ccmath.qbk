@@ -143,6 +143,12 @@ All of the following functions require C++17 or greater.
         template <typename Arithmetic1, typename Arithmetic2>
         inline constexpr Promoted copysign(Arithmetic1 mag, Arithmetic2 sgn) noexcept
 
+        template <typename Real>
+        inline constexpr Real hypot(Real x, Real y) noexcept
+
+        template <typename Arithmetic1, typename Arithmetic2>
+        inline constexpr Promoted hypot(Arithmetic1 x, Arithmetic2 y) noexcept
+
     } // Namespaces
 
 [endsect] [/section:ccmath Constexpr CMath]
