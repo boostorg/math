@@ -242,7 +242,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        standard: [ 11, 14, 17, 20 ]
+        standard: [ 14, 17, 20 ]
         suite: [ float128_tests, special_fun, distribution_tests, misc, quadrature, mp, interpolators, autodiff, ../example//examples, ../tools ]
     steps:
       - uses: actions/checkout@v2
