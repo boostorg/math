@@ -144,12 +144,14 @@ private:
    {
       using std::tanh;
       using std::sinh;
+      using boost::math::constants::half_pi;
       return tanh(half_pi<Real>()*sinh(t));
    }
    static inline Real weight_at_t(const Real& t)
    {
       using std::cosh;
       using std::sinh;
+      using boost::math::constants::half_pi;
       Real cs = cosh(half_pi<Real>() * sinh(t));
       return half_pi<Real>() * cosh(t) / (cs * cs);
    }
@@ -158,6 +160,7 @@ private:
       using std::cosh;
       using std::exp;
       using std::sinh;
+      using boost::math::constants::half_pi;
       Real u2 = half_pi<Real>() * sinh(t);
       return 1 / (exp(u2) *cosh(u2));
    }
@@ -165,6 +168,7 @@ private:
    {
       using std::log;
       using std::sqrt;
+      using boost::math::constants::pi;
       Real l = log(2-x) - log(x);
       return log((sqrt(l * l + pi<Real>() * pi<Real>()) + l) / pi<Real>());
    };
