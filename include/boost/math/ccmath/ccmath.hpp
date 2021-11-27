@@ -29,5 +29,6 @@
 #include <boost/math/ccmath/fmod.hpp>
 #include <boost/math/ccmath/remainder.hpp>
 #include <boost/math/ccmath/copysign.hpp>
+#include <boost/math/ccmath/hypot.hpp>
 
 #endif // BOOST_MATH_CCMATH_HPP
