@@ -20,3 +20,7 @@ Makefile
 **/CMakeFiles/**
 **CTestTestfile.cmake
 DartConfiguration.tcl
+
+# Modules
+*.gcm
+*.out
