@@ -27,7 +27,7 @@ jobs:
           fetch-depth: '0'
       - uses: mstachniuk/ci-skip@v1
         with:
-          commit-filter: '[skip ci];[ci skip];[CI SKIP];[SKIP CI];***CI SKIP***;***SKIP CI***;[windows];[Windows];[WINDOWS];[apple];[Apple];[APPLE];[standalone];[STANDALONE]'
+          commit-filter: '[skip ci];[ci skip];[CI SKIP];[SKIP CI];***CI SKIP***;***SKIP CI***;[windows];[Windows];[WINDOWS];[apple];[Apple];[APPLE];[standalone];[STANDALONE];[module];[MODULE]'
           commit-filter-separator: ';'
           fail-fast: true
       - name: Set TOOLSET
@@ -91,7 +91,7 @@ jobs:
           fetch-depth: '0'
       - uses: mstachniuk/ci-skip@v1
         with:
-          commit-filter: '[skip ci];[ci skip];[CI SKIP];[SKIP CI];***CI SKIP***;***SKIP CI***;[windows];[Windows];[WINDOWS];[apple];[Apple];[APPLE];[standalone];[STANDALONE]'
+          commit-filter: '[skip ci];[ci skip];[CI SKIP];[SKIP CI];***CI SKIP***;***SKIP CI***;[windows];[Windows];[WINDOWS];[apple];[Apple];[APPLE];[standalone];[STANDALONE];[module];[MODULE]'
           commit-filter-separator: ';'
           fail-fast: true
       - name: Set TOOLSET
@@ -155,7 +155,7 @@ jobs:
           fetch-depth: '0'
       - uses: mstachniuk/ci-skip@v1
         with:
-          commit-filter: '[skip ci];[ci skip];[CI SKIP];[SKIP CI];***CI SKIP***;***SKIP CI***;[windows];[Windows];[WINDOWS];[linux];[Linux];[LINUX];[standalone];[STANDALONE]'
+          commit-filter: '[skip ci];[ci skip];[CI SKIP];[SKIP CI];***CI SKIP***;***SKIP CI***;[windows];[Windows];[WINDOWS];[linux];[Linux];[LINUX];[standalone];[STANDALONE];[module];[MODULE]'
           commit-filter-separator: ';'
           fail-fast: true
       - name: Checkout main boost
@@ -203,7 +203,7 @@ jobs:
           fetch-depth: '0'
       - uses: mstachniuk/ci-skip@v1
         with:
-          commit-filter: '[skip ci];[ci skip];[CI SKIP];[SKIP CI];***CI SKIP***;***SKIP CI***;[apple];[Apple];[APPLE];[linux];[Linux];[LINUX];[standalone];[STANDALONE]'
+          commit-filter: '[skip ci];[ci skip];[CI SKIP];[SKIP CI];***CI SKIP***;***SKIP CI***;[apple];[Apple];[APPLE];[linux];[Linux];[LINUX];[standalone];[STANDALONE];[module];[MODULE]'
           commit-filter-separator: ';'
           fail-fast: true
       - name: Checkout main boost
@@ -242,7 +242,7 @@ jobs:
             fetch-depth: '0'
         - uses: mstachniuk/ci-skip@v1
           with:
-            commit-filter: '[skip ci];[ci skip];[CI SKIP];[SKIP CI];***CI SKIP***;***SKIP CI***;[windows];[Windows];[WINDOWS];[apple];[Apple];[APPLE]'
+            commit-filter: '[skip ci];[ci skip];[CI SKIP];[SKIP CI];***CI SKIP***;***SKIP CI***;[windows];[Windows];[WINDOWS];[apple];[Apple];[APPLE];[module];[MODULE]'
             commit-filter-separator: ';'
             fail-fast: true
         - name: Add repository
@@ -285,7 +285,7 @@ jobs:
             fetch-depth: '0'
         - uses: mstachniuk/ci-skip@v1
           with:
-            commit-filter: '[skip ci];[ci skip];[CI SKIP];[SKIP CI];***CI SKIP***;***SKIP CI***;[windows];[Windows];[WINDOWS];[apple];[Apple];[APPLE]'
+            commit-filter: '[skip ci];[ci skip];[CI SKIP];[SKIP CI];***CI SKIP***;***SKIP CI***;[windows];[Windows];[WINDOWS];[apple];[Apple];[APPLE];[module];[MODULE]'
             commit-filter-separator: ';'
             fail-fast: true
         - name: Add repository
@@ -318,3 +318,46 @@ jobs:
         - name: Run Compile Tests
           run: make -j$((`nproc`+1))
           working-directory: ../boost-root/libs/math
+  modules-gcc:
+      runs-on: ubuntu-20.04
+      strategy:
+        fail-fast: false
+      steps:
+        - uses: actions/checkout@v2
+          with:
+            fetch-depth: '0'
+        - uses: mstachniuk/ci-skip@v1
+          with:
+            commit-filter: '[skip ci];[ci skip];[CI SKIP];[SKIP CI];***CI SKIP***;***SKIP CI***;[windows];[Windows];[WINDOWS];[apple];[Apple];[APPLE];[standalone];[STANDALONE]'
+            commit-filter-separator: ';'
+            fail-fast: true
+        - name: Add repository
+          continue-on-error: true
+          id: addrepo
+          run: sudo apt-add-repository -y "ppa:ubuntu-toolchain-r/test"
+        - name: Retry Add Repo
+          continue-on-error: true
+          id: retry1
+          if: steps.addrepo.outcome=='failure'
+          run: sudo apt-add-repository -y "ppa:ubuntu-toolchain-r/test"
+        - name: Retry Add Repo 2
+          continue-on-error: true
+          id: retry2
+          if: steps.retry1.outcome=='failure'
+          run: sudo apt-add-repository -y "ppa:ubuntu-toolchain-r/test"
+        - name: Install packages
+          run: sudo apt install g++-11
+        - name: Checkout main boost
+          run: git clone -b develop --depth 1 https://github.com/boostorg/boost.git ../boost-root
+        - name: Update tools/boostdep
+          run: git submodule update --init tools/boostdep
+          working-directory: ../boost-root
+        - name: Copy files
+          run: cp -r $GITHUB_WORKSPACE/* libs/math
+          working-directory: ../boost-root
+        - name: Compile Module
+          run: g++ ../include/boost/math/ccmath/ccmath.cpp ccmath_module_test.cpp -std=c++20 -fmodules-ts
+          working-directory: ../boost-root/libs/math/test
+        - name: Run test
+          run: ./a.out
+          working-directory: ../boost-root/libs/math/test
