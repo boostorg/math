@@ -58,7 +58,11 @@ void expected_results()
       "Mac OS",                      // platform
       largest_type,                  // test type(s)
       ".*",                          // test data group
+#ifdef __arm__
+      ".*", 4000, 1500);               // test function
+#else
       ".*", 3500, 1500);               // test function
+#endif
    //
    // G++ on Linux, results vary a bit by processor type,
    // on Itanium results are *much* better than listed here,
