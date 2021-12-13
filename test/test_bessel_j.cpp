@@ -147,6 +147,7 @@ void expected_results()
       ".*", 4000000, 2000000);       // test function
 #else
       ".*", 3000000, 2000000);       // test function
+#endif
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
