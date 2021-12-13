@@ -143,6 +143,9 @@ void expected_results()
       "Mac OS",                          // platform
       largest_type,                  // test type(s)
       ".*J1.*Tricky.*",              // test data group
+#ifdef __aarch64__
+      ".*", 4000000, 2000000);       // test function
+#else
       ".*", 3000000, 2000000);       // test function
    add_expected_result(
       ".*",                          // compiler

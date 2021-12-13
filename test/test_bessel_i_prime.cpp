@@ -58,6 +58,9 @@ void expected_results()
       "Mac OS",                      // platform
       largest_type,                  // test type(s)
       ".*",                          // test data group
+#ifdef __aarch64__
+      ".*", 4000, 1500);               // test function
+#else
       ".*", 3500, 1500);               // test function
    //
    // G++ on Linux, results vary a bit by processor type,
