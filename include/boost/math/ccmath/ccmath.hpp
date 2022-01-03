@@ -31,5 +31,6 @@
 #include <boost/math/ccmath/copysign.hpp>
 #include <boost/math/ccmath/hypot.hpp>
 #include <boost/math/ccmath/fdim.hpp>
+#include <boost/math/ccmath/fmax.hpp>
 
 #endif // BOOST_MATH_CCMATH_HPP
