@@ -30,5 +30,6 @@
 #include <boost/math/ccmath/remainder.hpp>
 #include <boost/math/ccmath/copysign.hpp>
 #include <boost/math/ccmath/hypot.hpp>
+#include <boost/math/ccmath/fdim.hpp>
 
 #endif // BOOST_MATH_CCMATH_HPP
