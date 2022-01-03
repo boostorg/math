@@ -52,7 +52,7 @@ inline constexpr Real fdim(Real x, Real y) noexcept
 }
 
 template <typename T1, typename T2>
-inline constexpr auto fdim(T1 x, T1 y) noexcept
+inline constexpr auto fdim(T1 x, T2 y) noexcept
 {
     if (BOOST_MATH_IS_CONSTANT_EVALUATED(x))
     {
