@@ -13,6 +13,7 @@
 #include <utility>
 
 using quad = boost::multiprecision::cpp_bin_float_quad;
+using std::sqrt;
 
 template<typename Real>
 void test_one_sample_z()
@@ -56,7 +57,7 @@ void test_two_sample_z()
     Real computed_statistic = std::get<0>(temp);
     Real computed_pvalue = std::get<1>(temp);
     CHECK_ULP_CLOSE(Real(1), computed_statistic, 5);
-    CHECK_MOLLIFIED_CLOSE(Real(0), computed_pvalue, 5*std::numeric_limits<Real>::epsilon());
+    CHECK_MOLLIFIED_CLOSE(Real(0), computed_pvalue, sqrt(std::numeric_limits<Real>::epsilon()));
 }
 
 template<typename Z>
