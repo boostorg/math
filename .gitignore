@@ -11,6 +11,7 @@ test/cuda
 build/*
 .vscode/*
 *.svg
+tools/bin/**
 
 # CMake Related Options
 *.a
