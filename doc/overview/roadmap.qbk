@@ -8,6 +8,18 @@ All old bug reports including closed ones can be viewed on Trac
 
 Recent issues on GitHub [@https://github.com/boostorg/math/issues?utf8=%E2%9C%93&q=is%3Aissue here].
 
+[h4 Math-3.2.0 (Boost-1.78)]
+
+* Add support for [link math_toolkit.cubic_roots cubic roots].
+* Add support for `constexpr` versions of [link math_toolkit.ccmath various standard library math routines].
+* Add support for [link math_toolkit.bezier_polynomial Bezier polynomials].
+* Improve worst-case tanh-sinh integration performance.
+* Disable inadvertant use of integral types in integration routines.
+* Minor update for erf approximations when the result is with 2ulp of 1.
+* Allow Bernoulli code to be used on platforms with no atomic integers.
+* Improve the mode of the non-central Chi Squared distribution.
+* Improve certain edge cases for <cstdfloat> complex-valued elementary functions, see [@https://github.com/boostorg/math/issues/507 #507].
+
 [h4 Math-3.1.0 (Boost-1.77)]
 
 * This library can now be used entirely standalone, without the rest of Boost: either use a compiler

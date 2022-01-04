@@ -8,6 +8,7 @@
 #include "math_unit_test.hpp"
 #include <boost/math/tools/simple_continued_fraction.hpp>
 #include <boost/math/constants/constants.hpp>
+#include <boost/core/demangle.hpp>
 #ifdef BOOST_HAS_FLOAT128
 #include <boost/multiprecision/float128.hpp>
 using boost::multiprecision::float128;

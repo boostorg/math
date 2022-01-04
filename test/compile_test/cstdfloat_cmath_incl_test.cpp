@@ -53,7 +53,11 @@ void compile_and_link_test()
     check_result<boost::float128_t>(std::fmax(f128, f128));
     check_result<boost::float128_t>(std::fmin(f128, f128));
     check_result<boost::float128_t>(std::fdim(f128, f128));
-    check_result<boost::float128_t>(std::nanq(0));
+#if __LDBL_MANT_DIG__ == 113
+    check_result<boost::float128_t>(std::nanl(""));
+#else
+    check_result<boost::float128_t>(std::nanq(""));
+#endif
     check_result<boost::float128_t>(std::exp2(f128));
     check_result<boost::float128_t>(std::log2(f128));
     check_result<boost::float128_t>(std::log1p(f128));

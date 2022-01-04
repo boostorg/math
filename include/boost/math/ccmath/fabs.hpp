@@ -13,10 +13,22 @@
 namespace boost::math::ccmath {
 
 template <typename T>
-inline constexpr auto fabs(T x)
+inline constexpr auto fabs(T x) noexcept
 {
     return boost::math::ccmath::abs(x);
 }
+
+inline constexpr float fabsf(float x) noexcept
+{
+    return boost::math::ccmath::abs(x);
+}
+
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+inline constexpr long double fabsl(long double x) noexcept
+{
+    return boost::math::ccmath::abs(x);
+}
+#endif
 
 }
 

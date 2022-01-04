@@ -260,7 +260,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
          result = z * (Y + tools::evaluate_polynomial(P, zz) / tools::evaluate_polynomial(Q, zz));
       }
    }
-   else if(invert ? (z < 28) : (z < 5.8f))
+   else if(invert ? (z < 28) : (z < 5.93f))
    {
       //
       // We'll be calculating erfc:
@@ -483,7 +483,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
          result = z * (Y + tools::evaluate_polynomial(P, T(z * z)) / tools::evaluate_polynomial(Q, T(z * z)));
       }
    }
-   else if(invert ? (z < 110) : (z < 6.4f))
+   else if(invert ? (z < 110) : (z < 6.6f))
    {
       //
       // We'll be calculating erfc:

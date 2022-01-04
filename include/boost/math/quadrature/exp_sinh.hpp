@@ -44,6 +44,8 @@ template<class F>
 auto exp_sinh<Real, Policy>::integrate(const F& f, Real a, Real b, Real tolerance, Real* error, Real* L1, std::size_t* levels)->decltype(std::declval<F>()(std::declval<Real>()))  const
 {
     typedef decltype(f(a)) K;
+    static_assert(!std::is_integral<K>::value,
+                  "The return type cannot be integral, it must be either a real or complex floating point type.");
     using std::abs;
     using boost::math::constants::half;
     using boost::math::quadrature::detail::exp_sinh_detail;

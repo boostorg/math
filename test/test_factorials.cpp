@@ -44,6 +44,7 @@ T naive_falling_factorial(T x, unsigned n)
 template <class T>
 void test_spots(T)
 {
+   using std::ldexp;
    //
    // Basic sanity checks.
    //

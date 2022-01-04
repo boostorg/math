@@ -106,6 +106,14 @@ void expected_results()
       "double",                      // test type(s)
       "Bug.*",                     // test data group
       ".*", 300, 50);                 // test function
+#elif(LDBL_MANT_DIG != DBL_MANT_DIG)
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      ".*",                          // platform
+      "double",                      // test type(s)
+      ".*double limited precision.*", // test data group
+      ".*", 10, 5);                 // test function
 
 #endif
 
