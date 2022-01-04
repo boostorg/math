@@ -10,6 +10,7 @@
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/lexical_cast.hpp>
 
+#include <cstdlib>
 #include <type_traits>
 #include <limits>
 
@@ -54,6 +55,19 @@ template <class T>
 inline T make_big_value(largest_float, const char* s, std::false_type const&, std::false_type const&)
 {
    return boost::lexical_cast<T>(s);
+}
+#else
+template <typename T>
+inline T make_big_value(largest_float, const char* s, std::false_type const&, std::false_type const&)
+{
+   BOOST_IF_CONSTEXPR(std::is_same<largest_float, long double>::value)
+   {
+      return static_cast<T>(std::strtold(s, nullptr));
+   }
+   else // largest float is double
+   {
+      return static_cast<T>(std::strtod(s, nullptr));
+   }
 }
 #endif
 template <class T>

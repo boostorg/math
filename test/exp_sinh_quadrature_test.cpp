@@ -7,6 +7,7 @@
 #define BOOST_TEST_MODULE exp_sinh_quadrature_test
 
 #include <complex>
+#include <type_traits>
 #include <boost/multiprecision/cpp_complex.hpp>
 #include <boost/math/concepts/real_concept.hpp>
 #include <boost/test/included/unit_test.hpp>
@@ -406,7 +407,7 @@ void test_crc()
     // Since the integrand is oscillatory, we increase the tolerance:
     Real tol_mult = 10;
     // Multiprecision type have higher error rates, probably evaluation of f() is less accurate:
-    if (!boost::is_class<Real>::value)
+    if (!std::is_class<Real>::value)
     {
        // For high oscillation frequency, the quadrature sum is ill-conditioned.
        Q = integrator.integrate(f3, get_convergence_tolerance<Real>(), &error, &L1);

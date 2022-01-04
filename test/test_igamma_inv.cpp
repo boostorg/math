@@ -192,7 +192,7 @@ BOOST_AUTO_TEST_CASE( test_main )
    test_spots(0.0L, "long double");
 #endif
 #if !BOOST_WORKAROUND(BOOST_BORLANDC, BOOST_TESTED_AT(0x582))
-#ifdef TEST_REAL_CONCEPT
+#if defined(TEST_REAL_CONCEPT) && !defined(BOOST_MATH_NO_REAL_CONCEPT_TESTS)
    test_spots(boost::math::concepts::real_concept(0.1), "real_concept");
 #endif
 #endif
@@ -212,7 +212,7 @@ BOOST_AUTO_TEST_CASE( test_main )
 #endif
 #ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
 #if !BOOST_WORKAROUND(BOOST_BORLANDC, BOOST_TESTED_AT(0x582))
-#ifdef TEST_REAL_CONCEPT
+#if defined(TEST_REAL_CONCEPT) && !defined(BOOST_MATH_NO_REAL_CONCEPT_TESTS)
    test_gamma(boost::math::concepts::real_concept(0.1), "real_concept");
 #endif
 #endif

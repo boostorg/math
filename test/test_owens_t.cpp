@@ -139,7 +139,7 @@ BOOST_AUTO_TEST_CASE( test_main )
   test_spots(0.0); // Test double.
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
   test_spots(0.0L); // Test long double.
-#if !BOOST_WORKAROUND(BOOST_BORLANDC, BOOST_TESTED_AT(0x582))
+#if !BOOST_WORKAROUND(BOOST_BORLANDC, BOOST_TESTED_AT(0x582)) && !defined(BOOST_MATH_NO_REAL_CONCEPT_TESTS)
   test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
 #endif
 #endif
@@ -148,7 +148,7 @@ BOOST_AUTO_TEST_CASE( test_main )
   check_against_T7(0.0); // Test double.
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
   check_against_T7(0.0L); // Test long double.
-#if !BOOST_WORKAROUND(BOOST_BORLANDC, BOOST_TESTED_AT(0x582))
+#if !BOOST_WORKAROUND(BOOST_BORLANDC, BOOST_TESTED_AT(0x582)) && !defined(BOOST_MATH_NO_REAL_CONCEPT_TESTS)
   check_against_T7(boost::math::concepts::real_concept(0.)); // Test real concept.
 #endif
 #endif
@@ -157,11 +157,11 @@ BOOST_AUTO_TEST_CASE( test_main )
   test_owens_t(0.0, "double"); // Test double.
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
   test_owens_t(0.0L, "long double"); // Test long double.
-#if !BOOST_WORKAROUND(BOOST_BORLANDC, BOOST_TESTED_AT(0x582))
+#if !BOOST_WORKAROUND(BOOST_BORLANDC, BOOST_TESTED_AT(0x582)) && !defined(BOOST_MATH_NO_REAL_CONCEPT_TESTS)
   test_owens_t(boost::math::concepts::real_concept(0.), "real_concept"); // Test real concept.
 #endif
 #endif
-#ifdef TEST_CPP_DEC_FLOAT
+#if defined(TEST_CPP_DEC_FLOAT) && !defined(BOOST_MATH_STANDALONE)
   typedef boost::multiprecision::number<boost::multiprecision::cpp_dec_float<35> > cpp_dec_float_35;
   test_owens_t(cpp_dec_float_35(0), "cpp_dec_float_35"); // Test real concept.
   test_owens_t(boost::multiprecision::cpp_dec_float_50(0), "cpp_dec_float_50"); // Test real concept.

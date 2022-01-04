@@ -6,6 +6,7 @@
 #ifndef BOOST_MATH_TOOLS_RECURRENCE_HPP_
 #define BOOST_MATH_TOOLS_RECURRENCE_HPP_
 
+#include <type_traits>
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/tools/tuple.hpp>
@@ -30,7 +31,7 @@ namespace boost {
             template <class Recurrence>
             struct function_ratio_from_backwards_recurrence_fraction
             {
-               typedef typename boost::remove_reference<decltype(boost::math::get<0>(std::declval<Recurrence&>()(0)))>::type value_type;
+               typedef typename std::remove_reference<decltype(boost::math::get<0>(std::declval<Recurrence&>()(0)))>::type value_type;
                typedef std::pair<value_type, value_type> result_type;
                function_ratio_from_backwards_recurrence_fraction(const Recurrence& r) : r(r), k(0) {}
 
@@ -235,7 +236,7 @@ namespace boost {
          template <class Recurrence>
          struct forward_recurrence_iterator
          {
-            typedef typename boost::remove_reference<decltype(std::get<0>(std::declval<Recurrence&>()(0)))>::type value_type;
+            typedef typename std::remove_reference<decltype(std::get<0>(std::declval<Recurrence&>()(0)))>::type value_type;
 
             forward_recurrence_iterator(const Recurrence& r, value_type f_n_minus_1, value_type f_n)
                : f_n_minus_1(f_n_minus_1), f_n(f_n), coef(r), k(0) {}
@@ -277,7 +278,7 @@ namespace boost {
          template <class Recurrence>
          struct backward_recurrence_iterator
          {
-            typedef typename boost::remove_reference<decltype(std::get<0>(std::declval<Recurrence&>()(0)))>::type value_type;
+            typedef typename std::remove_reference<decltype(std::get<0>(std::declval<Recurrence&>()(0)))>::type value_type;
 
             backward_recurrence_iterator(const Recurrence& r, value_type f_n_plus_1, value_type f_n)
                : f_n_plus_1(f_n_plus_1), f_n(f_n), coef(r), k(0) {}

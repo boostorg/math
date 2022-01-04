@@ -828,20 +828,22 @@ BOOST_AUTO_TEST_CASE( test_types )
   { // Avoid pointless re-testing if double and long double are identical (for example, MSVC).
     test_spots(0.0L); // long double
   }
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
   test_spots(boost::math::concepts::real_concept(0));
+#endif
 #endif
 
   #else // BOOST_MATH_TEST_MULTIPRECISION
   // Multiprecision types:
-#if BOOST_MATH_TEST_MULTIPRECISION == 1
+#if BOOST_MATH_TEST_MULTIPRECISION == 1 && !defined(BOOST_MATH_NO_REAL_CONCEPT_TESTS)
 #if (LDBL_MANT_DIG <= 64) // Otherwise we get inscrutable errors from multiprecision, which may or may not be a bug...
   test_spots(static_cast<boost::multiprecision::cpp_bin_float_double_extended>(0));
 #endif
 #endif
-#if BOOST_MATH_TEST_MULTIPRECISION == 2
+#if BOOST_MATH_TEST_MULTIPRECISION == 2 && !defined(BOOST_MATH_NO_REAL_CONCEPT_TESTS)
   test_spots(static_cast<boost::multiprecision::cpp_bin_float_quad>(0));
 #endif
-#if BOOST_MATH_TEST_MULTIPRECISION == 3
+#if BOOST_MATH_TEST_MULTIPRECISION == 3 && !defined(BOOST_MATH_NO_REAL_CONCEPT_TESTS)
   test_spots(static_cast<boost::multiprecision::cpp_bin_float_50>(0));
 #endif
 #endif // ifdef BOOST_MATH_TEST_MULTIPRECISION

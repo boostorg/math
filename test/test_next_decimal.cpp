@@ -201,7 +201,9 @@ BOOST_AUTO_TEST_CASE( test_main )
    //test_values(boost::multiprecision::number<boost::multiprecision::debug_adaptor<boost::multiprecision::cpp_dec_float_50::backend_type> >(0), "cpp_dec_float_50");
    
    // Faster, but no good for diagnosing the cause of any issues:
+   #ifndef BOOST_MATH_STANDALONE
    test_values(boost::multiprecision::cpp_dec_float_50(0), "cpp_dec_float_50");
+   #endif
 }
 
 

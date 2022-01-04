@@ -6,6 +6,7 @@
 
 #define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
 
+#include <type_traits>
 #include <boost/math/concepts/real_concept.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 #define BOOST_TEST_MAIN
@@ -109,7 +110,7 @@ void test_spots5(T, const char* type_name)
    T tol = boost::math::tools::epsilon<T>() * 200;
    if (std::numeric_limits<T>::digits > std::numeric_limits<double>::digits)
       tol *= 2;
-   if (boost::is_class<T>::value)
+   if (std::is_class<T>::value)
       tol *= 4;
    // b = 2a
    T computed = hypergeometric_1F1(T(-12.25), T(2 * -12.25), T(6.75));
