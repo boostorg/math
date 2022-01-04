@@ -325,7 +325,7 @@ jobs:
       matrix:
         compiler: [ g++-10 ]
         standard: [ c++11, c++14, c++17, c++2a ]
-        suite: [ float128_tests, special_fun, distribution_tests, misc, quadrature, mp, interpolators, autodiff, ../example//examples, ../tools ]
+        suite: [ float128_tests, special_fun, distribution_tests, misc, quadrature, interpolators, autodiff, ../example//examples, ../tools ]
     steps:
       - uses: actions/checkout@v2
         with:
