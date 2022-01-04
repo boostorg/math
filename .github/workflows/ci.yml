@@ -27,7 +27,7 @@ jobs:
           fetch-depth: '0'
       - uses: mstachniuk/ci-skip@v1
         with:
-          commit-filter: '[skip ci];[ci skip];[CI SKIP];[SKIP CI];***CI SKIP***;***SKIP CI***;[windows];[Windows];[WINDOWS];[apple];[Apple];[APPLE];[standalone];[STANDALONE]'
+          commit-filter: '[skip ci];[ci skip];[CI SKIP];[SKIP CI];***CI SKIP***;***SKIP CI***;[windows];[Windows];[WINDOWS];[apple];[Apple];[APPLE];[standalone];[STANDALONE];[cygwin];[CYGWIN]'
           commit-filter-separator: ';'
           fail-fast: true
       - name: Set TOOLSET
@@ -91,7 +91,7 @@ jobs:
           fetch-depth: '0'
       - uses: mstachniuk/ci-skip@v1
         with:
-          commit-filter: '[skip ci];[ci skip];[CI SKIP];[SKIP CI];***CI SKIP***;***SKIP CI***;[windows];[Windows];[WINDOWS];[apple];[Apple];[APPLE];[standalone];[STANDALONE]'
+          commit-filter: '[skip ci];[ci skip];[CI SKIP];[SKIP CI];***CI SKIP***;***SKIP CI***;[windows];[Windows];[WINDOWS];[apple];[Apple];[APPLE];[standalone];[STANDALONE];[cygwin];[CYGWIN]'
           commit-filter-separator: ';'
           fail-fast: true
       - name: Set TOOLSET
@@ -155,7 +155,7 @@ jobs:
           fetch-depth: '0'
       - uses: mstachniuk/ci-skip@v1
         with:
-          commit-filter: '[skip ci];[ci skip];[CI SKIP];[SKIP CI];***CI SKIP***;***SKIP CI***;[windows];[Windows];[WINDOWS];[linux];[Linux];[LINUX];[standalone];[STANDALONE]'
+          commit-filter: '[skip ci];[ci skip];[CI SKIP];[SKIP CI];***CI SKIP***;***SKIP CI***;[windows];[Windows];[WINDOWS];[linux];[Linux];[LINUX];[standalone];[STANDALONE];[cygwin];[CYGWIN]'
           commit-filter-separator: ';'
           fail-fast: true
       - name: Checkout main boost
@@ -203,7 +203,7 @@ jobs:
           fetch-depth: '0'
       - uses: mstachniuk/ci-skip@v1
         with:
-          commit-filter: '[skip ci];[ci skip];[CI SKIP];[SKIP CI];***CI SKIP***;***SKIP CI***;[apple];[Apple];[APPLE];[linux];[Linux];[LINUX];[standalone];[STANDALONE]'
+          commit-filter: '[skip ci];[ci skip];[CI SKIP];[SKIP CI];***CI SKIP***;***SKIP CI***;[apple];[Apple];[APPLE];[linux];[Linux];[LINUX];[standalone];[STANDALONE];[cygwin];[CYGWIN]'
           commit-filter-separator: ';'
           fail-fast: true
       - name: Checkout main boost
@@ -282,7 +282,7 @@ jobs:
             fetch-depth: '0'
         - uses: mstachniuk/ci-skip@v1
           with:
-            commit-filter: '[skip ci];[ci skip];[CI SKIP];[SKIP CI];***CI SKIP***;***SKIP CI***;[windows];[Windows];[WINDOWS];[apple];[Apple];[APPLE]'
+            commit-filter: '[skip ci];[ci skip];[CI SKIP];[SKIP CI];***CI SKIP***;***SKIP CI***;[windows];[Windows];[WINDOWS];[apple];[Apple];[APPLE];[cygwin];[CYGWIN]'
             commit-filter-separator: ';'
             fail-fast: true
         - name: Add repository
@@ -325,7 +325,7 @@ jobs:
             fetch-depth: '0'
         - uses: mstachniuk/ci-skip@v1
           with:
-            commit-filter: '[skip ci];[ci skip];[CI SKIP];[SKIP CI];***CI SKIP***;***SKIP CI***;[windows];[Windows];[WINDOWS];[apple];[Apple];[APPLE]'
+            commit-filter: '[skip ci];[ci skip];[CI SKIP];[SKIP CI];***CI SKIP***;***SKIP CI***;[windows];[Windows];[WINDOWS];[apple];[Apple];[APPLE];[cygwin];[CYGWIN]'
             commit-filter-separator: ';'
             fail-fast: true
         - name: Add repository

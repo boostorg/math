@@ -10,6 +10,7 @@ test/cuda
 **/.temps/*
 build/*
 .vscode/*
+*.svg
 
 # CMake Related Options
 *.a
