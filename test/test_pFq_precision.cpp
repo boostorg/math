@@ -68,7 +68,7 @@ void test_spots_0F1()
    BOOST_CHECK_THROW(boost::math::hypergeometric_pFq_precision({}, { mp_type(-1) }, mp_type(-1), 20), std::domain_error);
    BOOST_CHECK_THROW(boost::math::hypergeometric_pFq_precision({}, { mp_type(-10) }, mp_type(-5), 20), std::domain_error);
 
-   static const boost::array<boost::array<mp_type, 3>, 35> hypergeometric_pFq_integer_data = { {
+   static const std::array<std::array<mp_type, 3>, 35> hypergeometric_pFq_integer_data = { {
       { SC_(4.0), SC_(-20.0),  SC_(-0.012889714201783047561923257996127233830940165138385) },
       { SC_(8.0), SC_(-20.0),  SC_(0.046498609282365144223175012935939437508273248399881) },
       { SC_(12.0), SC_(-20.0),  SC_(0.16608847431869756642136191351311569335145459224622) },

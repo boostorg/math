@@ -187,7 +187,7 @@ void test_inv_hyperbolics(T, const char* name)
 {
     // function values calculated on http://functions.wolfram.com/
     #define SC_(x) static_cast<typename table_type<T>::type>(BOOST_JOIN(x, L))
-    static const boost::array<boost::array<typename table_type<T>::type, 2>, 16> data1 = {{
+    static const std::array<std::array<typename table_type<T>::type, 2>, 16> data1 = {{
         {{ SC_(1.0), SC_(0.0) }},
         {{ SC_(18014398509481985.0)/SC_(18014398509481984.0), (SC_(18014398509481985.0)/SC_(18014398509481984.0) == 1 ? 0 : SC_(1.05367121277235078980001569764860129317209081216314559121044e-8)) }},
         {{ SC_(140737488355329.0)/SC_(140737488355328.0), (SC_(140737488355329.0)/SC_(140737488355328.0) == 1 ? 0 : SC_(1.19209289550781179413921062141751258430803882725295121500042e-7)) }},

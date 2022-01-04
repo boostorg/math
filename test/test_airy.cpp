@@ -33,7 +33,7 @@ void test_airy(T, const char* name)
 {
    std::cout << "Testing type " << name << std::endl;
 
-   static const boost::array<boost::array<T, 5>, 8> data = 
+   static const std::array<std::array<T, 5>, 8> data = 
    {{
       // Values are x, Ai, Bi, Ai', Bi'.
       // Calculated from functions.wolfram.com.

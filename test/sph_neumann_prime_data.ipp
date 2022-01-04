@@ -3,7 +3,7 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-   static const boost::array<boost::array<typename table_type<T>::type, 3>, 263> sph_neumann_prime_data = {{
+   static const std::array<std::array<typename table_type<T>::type, 3>, 263> sph_neumann_prime_data = {{
       {{ SC_(0.1e1), SC_(0.177219114266335964202880859375e-2), SC_(359333999.0655634324694531404939614737681147243398) }}, 
       {{ SC_(0.1e1), SC_(0.22177286446094512939453125e-2), SC_(183360074.96057352268211511791232035239121240115451) }}, 
       {{ SC_(0.1e1), SC_(0.7444499991834163665771484375e-2), SC_(4847562.2468641634106491550315653183518163006043786) }}, 

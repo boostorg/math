@@ -230,7 +230,9 @@ BOOST_AUTO_TEST_CASE(trapezoidal_quadrature)
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_constant<long double>();
 #endif
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
     test_constant<boost::math::concepts::real_concept>();
+#endif
     test_constant<cpp_bin_float_50>();
     test_constant<cpp_bin_float_100>();
 
@@ -239,7 +241,9 @@ BOOST_AUTO_TEST_CASE(trapezoidal_quadrature)
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_rational_periodic<long double>();
 #endif
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
     test_rational_periodic<boost::math::concepts::real_concept>();
+#endif
     test_rational_periodic<cpp_bin_float_50>();
     test_rational_periodic<cpp_bin_float_100>();
 
@@ -248,7 +252,9 @@ BOOST_AUTO_TEST_CASE(trapezoidal_quadrature)
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_bump_function<long double>();
 #endif
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
     test_rational_periodic<boost::math::concepts::real_concept>();
+#endif
     test_rational_periodic<cpp_bin_float_50>();
 
     test_zero_function<float>();
@@ -256,7 +262,9 @@ BOOST_AUTO_TEST_CASE(trapezoidal_quadrature)
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_zero_function<long double>();
 #endif
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
     test_zero_function<boost::math::concepts::real_concept>();
+#endif
     test_zero_function<cpp_bin_float_50>();
     test_zero_function<cpp_bin_float_100>();
 
@@ -265,7 +273,9 @@ BOOST_AUTO_TEST_CASE(trapezoidal_quadrature)
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_sinsq<long double>();
 #endif
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
     test_sinsq<boost::math::concepts::real_concept>();
+#endif
     test_sinsq<cpp_bin_float_50>();
     test_sinsq<cpp_bin_float_100>();
 
@@ -274,7 +284,9 @@ BOOST_AUTO_TEST_CASE(trapezoidal_quadrature)
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_slowly_converging<long double>();
 #endif
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
     test_slowly_converging<boost::math::concepts::real_concept>();
+#endif
 
     test_rational_sin<float>();
     test_rational_sin<double>();

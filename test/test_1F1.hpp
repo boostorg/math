@@ -161,7 +161,7 @@ void test_spots5(T, const char* type_name)
 template <class T>
 void test_spots6(T, const char* type_name)
 {
-   static const boost::array<boost::array<T, 4>, 91> hypergeometric_1F1_bugs = { {
+   static const std::array<std::array<T, 4>, 91> hypergeometric_1F1_bugs = { {
         { { static_cast<double>(17955.561660766602), static_cast<double>(9.6968994205831605e-09), static_cast<double>(-82.406154185533524), SC_(6.98056008378736714088730927132364938220428678e-11) }},
         { { static_cast<double>(17955.561660766602), static_cast<double>(-9.6968994205831605e-09), static_cast<double>(-82.406154185533524), SC_(-6.98055306629610746072607353939306734740549551e-11) }},
         { { static_cast<double>(-17955.561660766602), static_cast<double>(-9.6968994205831605e-09), static_cast<double>(82.406154185533524), SC_(-42897094853118832762870100.8669248353530950866) }} ,
@@ -287,7 +287,7 @@ void test_spots6(T, const char* type_name)
         { { (T)std::ldexp((double)-15233620754432000, -45), (T)std::ldexp((double)-12708283072512000, -46), (T)std::ldexp((double)10255461007360000, -46), SC_(-5.4344106361679075861859567858016187271235441673635e+125) }},
         { { (T)std::ldexp((double)-11241354149888000, -45), (T)std::ldexp((double)-9580579905536000, -45), (T)std::ldexp((double)12224976846848000, -47), SC_(12046856548470067405870726490464935201150430438.035) }},
    } };
-   static const boost::array<boost::array<T, 4>, 2> hypergeometric_1F1_big_bugs = { {
+   static const std::array<std::array<T, 4>, 2> hypergeometric_1F1_big_bugs = { {
 #if DBL_MAX_EXP == LDBL_MAX_EXP
          {{ static_cast<double>(7.8238229420435346e-05), static_cast<double>(-5485.3222503662109), static_cast<double>(1896.0561106204987), BOOST_MATH_HUGE_CONSTANT(T, 1000, 4.33129800901478785957996719992774682013355926e+668) }},
          {{ static_cast<double>(-7.8238229420435346e-05), static_cast<double>(-5485.3222503662109), static_cast<double>(1896.0561106204987), BOOST_MATH_HUGE_CONSTANT(T, 1000, -4.3248750673398590673783317624407455467680038e+668) }},

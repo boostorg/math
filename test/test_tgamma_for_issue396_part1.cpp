@@ -35,7 +35,7 @@ bool test_tgamma_for_issue396_value_checker()
 
   // Table[N[Gamma[(1/2) + (10^n)], 503], {n, 0, 3, 1}]
 
-  const boost::array<floating_point_type, 4U> control =
+  const std::array<floating_point_type, 4U> control =
   {{
     floating_point_type(issue396_control_string0),
     floating_point_type(issue396_control_string1),
@@ -49,7 +49,7 @@ bool test_tgamma_for_issue396_value_checker()
 
   bool result_is_ok = true;
 
-  for(typename boost::array<floating_point_type, 4U>::size_type i = 0U; i < control.size(); ++i)
+  for(typename std::array<floating_point_type, 4U>::size_type i = 0U; i < control.size(); ++i)
   {
     const floating_point_type g = boost::math::tgamma(boost::math::constants::half<floating_point_type>() + ten_pow_n);
 

@@ -17,7 +17,7 @@
 
 typedef double T;
 #define SC_(x) static_cast<double>(x)
-static const boost::array<boost::array<T, 3>, 21> jv_data = { {
+static const std::array<std::array<T, 3>, 21> jv_data = { {
       //SC_(-2.4), {{ SC_(0.0), std::numeric_limits<T>::infinity() }},
    { { T(22.5), T(0.0), SC_(0.0) } },
    { { T(2457.0) / 1024, T(1.0) / 1024, SC_(3.80739920118603335646474073457326714709615200130620574875292e-9) } },

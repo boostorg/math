@@ -780,7 +780,7 @@ BOOST_AUTO_TEST_CASE( test_main )
 #ifdef TEST_LDOUBLE
   test_spots(0.0L); // Test long double.
 #endif
-  #if !BOOST_WORKAROUND(BOOST_BORLANDC, BOOST_TESTED_AT(0x582))
+  #if !BOOST_WORKAROUND(BOOST_BORLANDC, BOOST_TESTED_AT(0x582)) && !defined(BOOST_MATH_NO_REAL_CONCEPT_TESTS)
 #if defined(TEST_REAL_CONCEPT) && !defined(BOOST_MATH_NO_REAL_CONCEPT_TESTS)
     test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
 #endif

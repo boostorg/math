@@ -4,7 +4,7 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #define SC_(x) static_cast<typename table_type<T>::type>(BOOST_JOIN(x, L))
-   static const boost::array<boost::array<T, 5>, 4032> binomial_quantile_data = {{
+   static const std::array<std::array<T, 5>, 4032> binomial_quantile_data = {{
       {{ SC_(2.0), SC_(0.12698681652545928955078125), SC_(0.12698681652545928955078125), SC_(0.0), SC_(0.28467385230321224203411154382440248724380832183117) }}, 
       {{ SC_(2.0), SC_(0.12698681652545928955078125), SC_(0.135477006435394287109375), SC_(0.0), SC_(0.25727865882740919932840773421531232758964168093055) }}, 
       {{ SC_(2.0), SC_(0.12698681652545928955078125), SC_(0.22103404998779296875), SC_(0.0), SC_(0.035694410305790976496105074803969225386555435216338) }}, 
