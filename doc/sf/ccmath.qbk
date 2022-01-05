@@ -149,6 +149,12 @@ All of the following functions require C++17 or greater.
         template <typename Arithmetic1, typename Arithmetic2>
         inline constexpr Promoted hypot(Arithmetic1 x, Arithmetic2 y) noexcept
 
+        template <typename Real>
+        inline constexpr Real fdim(Real x, Real y) noexcept
+
+        template <typename Arithmetic1, typename Arithmetic2>
+        inline constexpr Promoted fdim(Arithmetic1 x, Arithmetic2 y) noexcept
+
     } // Namespaces
 
 [endsect] [/section:ccmath Constexpr CMath]
