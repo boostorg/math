@@ -6,7 +6,7 @@
 
 #define BOOST_TEST_MODULE tanh_sinh_quadrature_test
 
-#include <boost/config.hpp>
+#include <boost/math/tools/config.hpp>
 #include <boost/detail/workaround.hpp>
 
 #if !defined(BOOST_NO_CXX11_DECLTYPE) && !defined(BOOST_NO_CXX11_TRAILING_RESULT_TYPES) && !defined(BOOST_NO_SFINAE_EXPR)
@@ -883,7 +883,9 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
     test_2_arg<float>();
 #endif
 #ifdef TEST1B
+    #ifndef BOOST_MATH_STANDALONE
     test_crc<float>();
+    #endif
 #endif
 #ifdef TEST2
     test_right_limit_infinite<double>();
@@ -901,7 +903,9 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
     test_2_arg<double>();
 #endif
 #ifdef TEST2A
+   #ifndef BOOST_MATH_STANDALONE
     test_crc<double>();
+   #endif
 #endif
 
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
@@ -922,12 +926,15 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
     test_2_arg<long double>();
 #endif
 #ifdef TEST3A
+   #ifndef BOOST_MATH_STANDALONE
     test_crc<long double>();
+   #endif
 
 #endif
 #endif
 
 #ifdef TEST4
+   #ifndef BOOST_MATH_NO_MP_TESTS
     test_right_limit_infinite<cpp_bin_float_quad>();
     test_left_limit_infinite<cpp_bin_float_quad>();
     test_linear<cpp_bin_float_quad>();
@@ -939,13 +946,12 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
     test_nr_examples<cpp_bin_float_quad>();
     test_early_termination<cpp_bin_float_quad>();
     test_crc<cpp_bin_float_quad>();
-    #ifndef BOOST_MATH_STANDALONE
     test_sf<cpp_bin_float_quad>();
     test_2_arg<cpp_bin_float_quad>();
-    #endif
+   #endif
 #endif
 #ifdef TEST5
-   #ifndef BOOST_MATH_STANDALONE
+   #ifndef BOOST_MATH_NO_MP_TESTS
     test_sf<cpp_bin_float_50>();
     test_sf<cpp_bin_float_100>();
     test_sf<boost::multiprecision::number<boost::multiprecision::cpp_bin_float<150> > >();
@@ -975,11 +981,11 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
 #endif
 #endif
 #ifdef TEST7
-    #ifndef BOOST_MATH_STANDALONE
+    #ifndef BOOST_MATH_NO_MP_TESTS
     test_sf<cpp_dec_float_50>();
     #endif
 #endif
-#if defined(TEST8) && defined(BOOST_HAS_FLOAT128)
+#if defined(TEST8) && defined(BOOST_HAS_FLOAT128) && !defined(BOOST_MATH_NO_MP_TESTS)
 
     test_right_limit_infinite<boost::multiprecision::float128>();
     test_left_limit_infinite<boost::multiprecision::float128>();
