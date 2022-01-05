@@ -10,12 +10,13 @@
 #include <boost/integer/common_factor_rt.hpp>
 #include <boost/mpl/list.hpp>
 #include <boost/mpl/joint_view.hpp>
-#include <boost/test/test_case_template.hpp>
 #include <boost/test/unit_test.hpp>
 #include <boost/multiprecision/cpp_int.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/multiprecision/cpp_dec_float.hpp>
 #include <utility>
+#include <array>
+#include <list>
 
 #if !defined(TEST1) && !defined(TEST2) && !defined(TEST3)
 #  define TEST1

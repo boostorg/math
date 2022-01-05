@@ -6,6 +6,9 @@
 //  or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
+#include <boost/math/tools/config.hpp>
+#ifndef BOOST_MATH_NO_MP_TESTS
+
 #if 0
 #define BOOST_TEST_MODULE test_tgamma_for_issue396
 #include <boost/test/included/unit_test.hpp>
@@ -14,7 +17,7 @@
 #include <boost/test/unit_test.hpp> // Boost.Test
 #endif
 
-#include <boost/array.hpp>
+#include <array>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
@@ -93,3 +96,6 @@ BOOST_AUTO_TEST_CASE(test_tgamma_for_issue396_part2_tag)
 
   BOOST_CHECK(b_101_through_501_is_ok == true);
 }
+#else // No mp tests
+int main(void) { return 0; }
+#endif

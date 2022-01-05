@@ -24,6 +24,9 @@
 #define BOOST_MATH_NO_LEXICAL_CAST
 #define TEST_STD
 
+// Since Boost.Multiprecision is in active development some tests do not fully cooperate yet.
+#define BOOST_MATH_NO_MP_TESTS
+
 #if (__cplusplus > 201400L || _MSVC_LANG > 201400L)
 #define BOOST_CXX14_CONSTEXPR constexpr
 #else
@@ -34,7 +37,8 @@
 #if (__cplusplus > 201700L || _MSVC_LANG > 201700L)
 #define BOOST_IF_CONSTEXPR if constexpr
 
-// Clang 13 on mac provides the execution header with none of the functionality. TODO: Check back on this
+// Clang on mac provides the execution header with none of the functionality. TODO: Check back on this
+// https://en.cppreference.com/w/cpp/compiler_support "Standardization of Parallelism TS"
 #if !__has_include(<execution>) || (defined(__APPLE__) && defined(__clang__))
 #define BOOST_NO_CXX17_HDR_EXECUTION
 #endif

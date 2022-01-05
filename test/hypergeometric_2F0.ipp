@@ -5,6 +5,8 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#include <array>
+
 #ifndef SC_
 #  define SC_(x) static_cast<T>(BOOST_JOIN(x, L))
 #endif

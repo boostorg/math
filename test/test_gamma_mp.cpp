@@ -4,6 +4,9 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#include <boost/math/tools/config.hpp>
+#ifndef BOOST_MATH_NO_MP_TESTS
+
 #define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
 
 #define BOOST_TEST_MAIN
@@ -14,7 +17,7 @@
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
-#include <boost/array.hpp>
+#include <array>
 #include "functor.hpp"
 
 #include "handle_test_result.hpp"
@@ -183,3 +186,6 @@ BOOST_AUTO_TEST_CASE(test_main)
    test_gamma(cpp_bin_float_100(0), "cpp_bin_float_100");
 #endif
 }
+#else // No mp tests
+int main(void) { return 0; }
+#endif

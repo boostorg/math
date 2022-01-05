@@ -6,6 +6,7 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <cmath>
+#include <array>
 #include <math.h>
 #include <limits.h>
 
