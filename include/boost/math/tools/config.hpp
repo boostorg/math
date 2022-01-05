@@ -33,7 +33,9 @@
 
 #if (__cplusplus > 201700L || _MSVC_LANG > 201700L)
 #define BOOST_IF_CONSTEXPR if constexpr
-#if !__has_include(<execution>)
+
+// Clang 13 on mac provides the execution header with none of the functionality. TODO: Check back on this
+#if !__has_include(<execution>) || (defined(__APPLE__) && defined(__clang__))
 #define BOOST_NO_CXX17_HDR_EXECUTION
 #endif
 #else

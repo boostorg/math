@@ -902,6 +902,8 @@ test-suite misc :
    ../build//boost_math_c99
    ../build//boost_math_c99f
    ../../test/build//boost_unit_test_framework
+   : : :
+   [ check-target-builds ../config//is_ci_standalone_run "Standalone CI run" : <build>no ]
      ]
 
    [ run test_tr1.cpp
@@ -910,7 +912,8 @@ test-suite misc :
       ../../test/build//boost_unit_test_framework
       : : :
       <define>TEST_LD=1
-      [ check-target-builds ../config//has_long_double_support "long double support" : : <build>no ]
+      [ check-target-builds ../config//has_long_double_support "long double support" : : <build>no ] 
+      [ check-target-builds ../config//is_ci_standalone_run "Standalone CI run" : <build>no ] 
       :
       test_tr1_long_double
      ]
@@ -922,6 +925,7 @@ test-suite misc :
       ../build//boost_math_c99f
       ../../test/build//boost_unit_test_framework
       : : : #requirements
+      [ check-target-builds ../config//is_ci_standalone_run "Standalone CI run" : <build>no ]
       :
       test_tr1_c
     ]
@@ -932,7 +936,8 @@ test-suite misc :
       ../../test/build//boost_unit_test_framework
       : : :
       <define>TEST_LD=1
-      [ check-target-builds ../config//has_long_double_support "long double support" : : <build>no ]
+      [ check-target-builds ../config//has_long_double_support "long double support" : : <build>no ] 
+      [ check-target-builds ../config//is_ci_standalone_run "Standalone CI run" : <build>no ] 
       :
       test_tr1_c_long_double
     ]

@@ -106,8 +106,12 @@ namespace boost{ namespace math{ namespace tr1{ extern "C"{
 #  endif
 #  include <boost/config/auto_link.hpp>
 #endif
-#else
-#error Auto linking not supported in standalone mode.
+#else // Standalone mode
+#  ifdef _MSC_VER
+#    __pragma("Auto linking of TR1 is not supported in standalone mode")
+#  else
+#    _Pragma(message "Auto linking of TR1 is not supported in standalone mode")
+#  endif
 #endif // BOOST_MATH_STANDALONE
 
 #if !(defined(__INTEL_COMPILER) && defined(__APPLE__)) && !(defined(__FLT_EVAL_METHOD__) && !defined(__cplusplus))
