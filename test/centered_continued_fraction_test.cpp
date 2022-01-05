@@ -8,7 +8,6 @@
 #include "math_unit_test.hpp"
 #include <boost/math/tools/centered_continued_fraction.hpp>
 #include <boost/math/constants/constants.hpp>
-#include <boost/core/demangle.hpp>
 #ifdef BOOST_HAS_FLOAT128
 #include <boost/multiprecision/float128.hpp>
 using boost::multiprecision::float128;
@@ -87,7 +86,7 @@ void test_halves()
 template<typename Real>
 void test_simple()
 {
-    std::cout << "Testing rational numbers on type " << boost::core::demangle(typeid(Real).name()) << "\n";
+    std::cout << "Testing rational numbers on type " << boost::math::test::detail::demangle(typeid(Real).name()) << "\n";
     {
         Real x = Real(649)/200;
         // ContinuedFraction[649/200] = [3; 4, 12, 4]
