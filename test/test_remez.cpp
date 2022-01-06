@@ -179,12 +179,8 @@ void test_rational()
 
 BOOST_AUTO_TEST_CASE( test_main )
 {
-   // Tests fail on M1 macs so disabled for now
-   // Interpolation error is shown as inifinity
-   #if !defined(__APPLE__) && !defined(__aarch64__)
    test_polynomial();
    test_rational();
-   #endif
 }
 
 

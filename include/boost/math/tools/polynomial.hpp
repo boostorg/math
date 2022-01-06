@@ -301,7 +301,7 @@ public:
 
    template <class I>
    polynomial(I first, unsigned length)
-      : m_data(first, std::next(first, length))
+      : m_data(first, std::next(first, length + 1))
    {
        normalize();
    }
