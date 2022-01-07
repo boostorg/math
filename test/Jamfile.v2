@@ -513,7 +513,7 @@ test-suite special_fun :
    [ run test_round.cpp pch ../../test/build//boost_unit_test_framework  ]
    [ run test_spherical_harmonic.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
    [ run test_sign.cpp ../../test/build//boost_unit_test_framework  ]
-   [ run test_tgamma_for_issue396_part1.cpp ../../test/build//boost_unit_test_framework : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj  ]
+   [ run test_tgamma_for_issue396_part1.cpp ../../test/build//boost_unit_test_framework : : : [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>"-Bstatic -lquadmath -Bdynamic" ] <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj  ]
    [ run test_tgamma_for_issue396_part2.cpp ../../test/build//boost_unit_test_framework : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj  ]
    [ run test_tgamma_ratio.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
    [ run test_trig.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
