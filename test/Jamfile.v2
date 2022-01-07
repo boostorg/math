@@ -148,6 +148,7 @@ test-suite special_fun :
    [ run ccmath_fmax_test.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx17_if_constexpr ] ]
    [ run ccmath_fmin_test.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx17_if_constexpr ] ]
    [ run ccmath_isgreater_test.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx17_if_constexpr ] ]
+   [ run ccmath_isgreaterequal_test.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx17_if_constexpr ] ]
    [ run log1p_expm1_test.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
    [ run powm1_sqrtp1m1_test.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
    [ run git_issue_705.cpp ../../test/build//boost_unit_test_framework  ]

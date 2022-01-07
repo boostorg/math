@@ -3,8 +3,8 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef BOOST_MATH_CCMATH_ISGREATER_HPP
-#define BOOST_MATH_CCMATH_ISGREATER_HPP
+#ifndef BOOST_MATH_CCMATH_ISGREATEREQUAL_HPP
+#define BOOST_MATH_CCMATH_ISGREATEREQUAL_HPP
 
 #include <cmath>
 #include <limits>
@@ -14,7 +14,7 @@
 namespace boost::math::ccmath {
 
 template <typename T1, typename T2 = T1>
-inline constexpr bool isgreater(T1 x, T2 y) noexcept
+inline constexpr bool isgreaterequal(T1 x, T2 y) noexcept
 {
     if (BOOST_MATH_IS_CONSTANT_EVALUATED(x))
     {
@@ -24,16 +24,16 @@ inline constexpr bool isgreater(T1 x, T2 y) noexcept
         }
         else
         {
-            return x > y;
+            return x >= y;
         }
     }
     else
     {
-        using std::isgreater;
-        return isgreater(x, y);
+        using std::isgreaterequal;
+        return isgreaterequal(x, y);
     }
 }
 
 } // Namespaces
 
-#endif // BOOST_MATH_CCMATH_ISGREATER_HPP
+#endif // BOOST_MATH_CCMATH_ISGREATEREQUAL_HPP
