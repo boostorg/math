@@ -32,6 +32,7 @@
 #include <boost/math/ccmath/hypot.hpp>
 #include <boost/math/ccmath/fdim.hpp>
 #include <boost/math/ccmath/fmax.hpp>
-#include <boost/math/ccmath/fmin
+#include <boost/math/ccmath/fmin.hpp>
+#include <boost/math/ccmath/isgreater.hpp>
 
 #endif // BOOST_MATH_CCMATH_HPP
