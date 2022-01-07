@@ -253,9 +253,7 @@ void test_dirichlet_eta()
   };
   Q = integrator.integrate(eta);
   // N[DirichletEta[1 + I], 150]
-  #ifdef BOOST_MATH_STANDALONE
-  BOOST_IF_CONSTEXPR (std::is_fundamental<Complex>::value)
-  #endif
+  #ifndef BOOST_MATH_STANDALONE
   {
     Complex Q_expected = {boost::lexical_cast<Real>("0.726559775062463263201495728547241386311129502735725787103568290594808442332084045617744978600192784188182345866652233650512117834307254514480657408096"),
                             boost::lexical_cast<Real>("0.158095863901207324355426285544321998253687969756843115763682522207208309489794631247865357375538028170751576870244296106203144195376645765556607038775")};
@@ -263,6 +261,7 @@ void test_dirichlet_eta()
     BOOST_CHECK_CLOSE_FRACTION(Q.real(), Q_expected.real(), tol);
     BOOST_CHECK_CLOSE_FRACTION(Q.imag(), Q_expected.imag(), tol);
   }
+  #endif
 }
 
 
