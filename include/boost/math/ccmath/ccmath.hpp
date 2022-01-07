@@ -36,5 +36,6 @@
 #include <boost/math/ccmath/isgreater.hpp>
 #include <boost/math/ccmath/isgreaterequal.hpp>
 #include <boost/math/ccmath/isless.hpp>
+#include <boost/math/ccmath/islessequal.hpp>
 
 #endif // BOOST_MATH_CCMATH_HPP
