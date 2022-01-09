@@ -105,10 +105,6 @@ namespace math{ namespace tools{
 template <class T>
 T content(polynomial<T> const &x)
 {
-    #if defined(BOOST_MATH_STANDALONE) && !defined(BOOST_MATH_CXX17_NUMERIC)
-    static_assert(sizeof(T) == 0, "polynomial gcd can only be used in standalone mode with C++17 or higher");
-    #endif
-
     return x ? boost::integer::gcd_range(x.data().begin(), x.data().end()).first : T(0);
 }
 
