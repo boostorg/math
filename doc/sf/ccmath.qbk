@@ -167,6 +167,18 @@ All of the following functions require C++17 or greater.
         template <typename Arithmetic1, typename Arithmetic2>
         inline constexpr Promoted fmin(Arithmetic1 x, Arithmetic2 y) noexcept
 
+        template <typename Arithmetic1, typename Arithmetic2 = Arithmetic1>
+        inline constexpr bool isgreater(Arithmetic1 x, Arithmetic2 y) noexcept
+
+        template <typename Arithmetic1, typename Arithmetic2 = Arithmetic1>
+        inline constexpr bool isgreaterequal(Arithmetic1 x, Arithmetic2 y) noexcept
+
+        template <typename Arithmetic1, typename Arithmetic2 = Arithmetic1>
+        inline constexpr bool isless(Arithmetic1 x, Arithmetic2 y) noexcept
+
+        template <typename Arithmetic1, typename Arithmetic2 = Arithmetic1>
+        inline constexpr bool islessequal(Arithmetic1 x, Arithmetic2 y) noexcept
+
     } // Namespaces
 
 [endsect] [/section:ccmath Constexpr CMath]
