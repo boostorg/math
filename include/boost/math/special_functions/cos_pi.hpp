@@ -11,6 +11,7 @@
 #endif
 
 #include <cmath>
+#include <limits>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/tools/config.hpp>
 #include <boost/math/special_functions/trunc.hpp>
@@ -33,8 +34,10 @@ T cos_pi_imp(T x, const Policy& pol)
       x = -x;
    }
    T rem = floor(x);
-   if(iconvert(rem, pol) & 1)
+   if(abs(floor(rem/2)*2 - rem) > std::numeric_limits<T>::epsilon())
+   {
       invert = !invert;
+   }
    rem = x - rem;
    if(rem > 0.5f)
    {
