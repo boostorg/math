@@ -25,6 +25,7 @@
 #include <iterator>
 #include <type_traits>
 #include <boost/math/tools/assert.hpp>
+#include <boost/math/tools/config.hpp>
 
 namespace boost { namespace integer {
 
@@ -60,7 +61,11 @@ std::pair<T, Iter> gcd_range(Iter first, Iter last) noexcept(std::is_arithmetic<
     ++first;
     while (d != T(1) && first != last)
     {
-        d = gcd_detail::Euclid_gcd(d, *first);   
+        #ifdef BOOST_MATH_HAS_CXX17_NUMERIC
+        d = std::gcd(d, *first);
+        #else
+        d = gcd_detail::Euclid_gcd(d, *first);
+        #endif
         ++first;
     }
     return std::make_pair(d, first);
@@ -139,12 +144,15 @@ namespace detail
     template <class T>
     T reduce_to_primitive(polynomial<T> &u, polynomial<T> &v)
     {
-        using boost::integer::gcd_detail::Euclid_gcd;
-
         T const u_cont = content(u), v_cont = content(v);
         u /= u_cont;
         v /= v_cont;
-        return Euclid_gcd(u_cont, v_cont);
+
+        #ifdef BOOST_MATH_HAS_CXX17_NUMERIC
+        return std::gcd(u_cont, v_cont);
+        #else
+        return boost::integer::gcd_detail::Euclid_gcd(u_cont, v_cont);
+        #endif
     }
 }
 
@@ -237,7 +245,7 @@ template <typename T>
 typename std::enable_if<!std::numeric_limits<T>::is_integer && (std::numeric_limits<T>::min_exponent != std::numeric_limits<T>::max_exponent) && !std::numeric_limits<T>::is_exact, polynomial<T> >::type
 gcd(polynomial<T> const &u, polynomial<T> const &v)
 {
-   return boost::integer::gcd_detail::Euclid_gcd(u, v);
+    return boost::integer::gcd_detail::Euclid_gcd(u, v);
 }
 
 }

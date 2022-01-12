@@ -60,14 +60,21 @@ inline T make_big_value(largest_float, const char* s, std::false_type const&, st
 template <typename T>
 inline T make_big_value(largest_float, const char* s, std::false_type const&, std::false_type const&)
 {
-   BOOST_IF_CONSTEXPR(std::is_same<largest_float, long double>::value)
-   {
-      return static_cast<T>(std::strtold(s, nullptr));
-   }
-   else // largest float is double
-   {
-      return static_cast<T>(std::strtod(s, nullptr));
-   }
+    #ifdef BOOST_MATH_USE_FLOAT128
+    BOOST_IF_CONSTEXPR (std::numeric_limits<largest_float>::digits > LDBL_DIG)
+    {
+        static_assert(sizeof(largest_float) == 1, "Type is unsupported in standalone mode. Please disable and try again.")
+    }
+    else
+    #endif
+    BOOST_IF_CONSTEXPR (std::is_same<largest_float, long double>::value)
+    {
+        return static_cast<T>(std::strtold(s, nullptr));
+    }
+    else // largest float is double
+    {
+        return static_cast<T>(std::strtod(s, nullptr));
+    }
 }
 #endif
 template <class T>

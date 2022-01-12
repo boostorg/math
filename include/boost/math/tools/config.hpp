@@ -48,6 +48,10 @@
 #define BOOST_NO_CXX17_HDR_EXECUTION
 #endif
 
+#if __cpp_lib_gcd_lcm >= 201606L
+#define BOOST_MATH_HAS_CXX17_NUMERIC
+#endif
+
 #define BOOST_JOIN(X, Y) BOOST_DO_JOIN(X, Y)
 #define BOOST_DO_JOIN(X, Y) BOOST_DO_JOIN2(X,Y)
 #define BOOST_DO_JOIN2(X, Y) X##Y
