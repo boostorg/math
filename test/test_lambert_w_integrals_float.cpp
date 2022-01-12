@@ -135,7 +135,7 @@ void test_integrals()
       return lambert_w0<Real>(z);
     };
     Real z = ts.integrate(f, a, b); // OK without any decltype(f)
-    BOOST_CHECK_CLOSE_FRACTION(z, boost::math::constants::e<Real>() - 1, tol);
+    BOOST_CHECK_CLOSE_FRACTION(z, boost::math::constants::e<Real>() - 1, tol * 3);
   }
   {
     // Integrate for function lambert_W0(z/(z sqrt(z)).
