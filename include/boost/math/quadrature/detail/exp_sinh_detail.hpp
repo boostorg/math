@@ -149,43 +149,60 @@ template<class Real, class Policy>
 template<class F>
 auto exp_sinh_detail<Real, Policy>::integrate(const F& f, Real* error, Real* L1, const char* function, Real tolerance, std::size_t* levels)->decltype(std::declval<F>()(std::declval<Real>())) const
 {
-    typedef decltype(f(Real(0))) K;
-    using std::abs;
-    using std::floor;
-    using std::tanh;
-    using std::sinh;
-    using std::sqrt;
-    using boost::math::constants::half;
-    using boost::math::constants::half_pi;
+   typedef decltype(f(Real(0))) K;
+   using std::abs;
+   using std::floor;
+   using std::tanh;
+   using std::sinh;
+   using std::sqrt;
+   using boost::math::constants::half;
+   using boost::math::constants::half_pi;
 
-    // This provided a nice error message for real valued integrals, but it's super awkward for complex-valued integrals:
-    /*K y_max = f(tools::max_value<Real>());
-    if(abs(y_max) > tools::epsilon<Real>() || !(boost::math::isfinite)(y_max))
-    {
-        K val = abs(y_max);
-        return static_cast<K>(policies::raise_domain_error(function, "The function you are trying to integrate does not go to zero at infinity, and instead evaluates to %1%", val, Policy()));
-    }*/
+   // This provided a nice error message for real valued integrals, but it's super awkward for complex-valued integrals:
+   /*K y_max = f(tools::max_value<Real>());
+   if(abs(y_max) > tools::epsilon<Real>() || !(boost::math::isfinite)(y_max))
+   {
+       K val = abs(y_max);
+       return static_cast<K>(policies::raise_domain_error(function, "The function you are trying to integrate does not go to zero at infinity, and instead evaluates to %1%", val, Policy()));
+   }*/
 
-    //std::cout << std::setprecision(5*std::numeric_limits<Real>::digits10);
+   //std::cout << std::setprecision(5*std::numeric_limits<Real>::digits10);
 
     // Get the party started with two estimates of the integral:
+    std::size_t first_i{ 0 }, last_i{ (std::numeric_limits<std::size_t>::max)() };
     K I0 = 0;
     Real L1_I0 = 0;
     for(size_t i = 0; i < m_abscissas[0].size(); ++i)
     {
         K y = f(m_abscissas[0][i]);
+        K I0_last = I0;
         I0 += y*m_weights[0][i];
         L1_I0 += abs(y)*m_weights[0][i];
+        if ((I0_last == I0) && I0)
+        {
+           // No change to I0, discard all other values, assumes our series smoothly converges!!
+           last_i = i;
+           break;
+        }
     }
 
     //std::cout << "First estimate : " << I0 << std::endl;
     K I1 = I0;
     Real L1_I1 = L1_I0;
-    for (size_t i = 0; i < m_abscissas[1].size(); ++i)
+    bool have_first_i = false;
+    for (size_t i = 0; i < (std::min)(m_abscissas[1].size(), last_i); ++i)
     {
         K y = f(m_abscissas[1][i]);
+        K I1_last = I1;
         I1 += y*m_weights[1][i];
         L1_I1 += abs(y)*m_weights[1][i];
+        if (!have_first_i && (I1_last == I1))
+        {
+           // No change to the sum, disregard these values on the LHS:
+           first_i = i + 1;
+        }
+        else
+           have_first_i = true;
     }
 
     I1 *= half<Real>();
@@ -196,6 +213,8 @@ auto exp_sinh_detail<Real, Policy>::integrate(const F& f, Real* error, Real* L1,
     size_t i = 2;
     for(; i < m_abscissas.size(); ++i)
     {
+        first_i *= 2;
+        last_i *= 2;
         I0 = I1;
         L1_I0 = L1_I1;
 
@@ -210,22 +229,13 @@ auto exp_sinh_detail<Real, Policy>::integrate(const F& f, Real* error, Real* L1,
 
         Real abterm1 = 1;
         Real eps = tools::epsilon<Real>()*L1_I1;
-        for(size_t j = 0; j < m_weights[i].size(); ++j)
+        for(size_t j = first_i ? first_i - 1 : 0; j < (std::min)(m_weights[i].size(), last_i); ++j)
         {
             Real x = abscissas_row[j];
             K y = f(x);
             sum += y*weight_row[j];
             Real abterm0 = abs(y)*weight_row[j];
             absum += abterm0;
-
-            // We require two consecutive terms to be < eps in case we hit a zero of f.
-            // Numerical experiments indicate that we should start this check at ~30 for floats,
-            // ~60 for doubles, and ~100 for long doubles.
-            // However, starting the check at x = 10 rather than x = 100 will only save two function evaluations.
-            if (x > (Real) 100 && abterm0 < eps && abterm1 < eps)
-            {
-                break;
-            }
             abterm1 = abterm0;
         }
 
