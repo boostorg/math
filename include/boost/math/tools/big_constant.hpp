@@ -63,7 +63,7 @@ inline T make_big_value(largest_float, const char* s, std::false_type const&, st
     #ifdef BOOST_MATH_USE_FLOAT128
     BOOST_IF_CONSTEXPR (std::numeric_limits<largest_float>::digits > LDBL_DIG)
     {
-        static_assert(sizeof(largest_float) == 1, "Type is unsupported in standalone mode. Please disable and try again.")
+        static_assert(sizeof(largest_float) == 1, "Type is unsupported in standalone mode. Please disable and try again.");
     }
     else
     #endif
