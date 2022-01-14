@@ -4,6 +4,9 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#include <boost/math/tools/config.hpp>
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
+
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
 #include <boost/math/constants/constants.hpp>
 
@@ -576,3 +579,6 @@ BOOST_AUTO_TEST_CASE( test_main )
    
 } // BOOST_AUTO_TEST_CASE( test_main )
 
+#else
+int main(void) { return 0; }
+#endif // BOOST_MATH_NO_REAL_CONCEPT_TESTS

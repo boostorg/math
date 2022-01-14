@@ -43,7 +43,7 @@ First we need some includes to access the normal distribution
 using boost::math::normal; // typedef provides default type is double.
 
 #include <boost/array.hpp>
-using boost::array;
+using std::array;
 
 #include <iostream>
   using std::cout; using std::endl; using std::left; using std::showpoint; using std::noshowpoint;

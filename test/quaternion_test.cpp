@@ -501,6 +501,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(arithmetic_test, T, test_types)
    q1 += 1;
    test_compare(q1, q3, false);
 
+   #ifndef BOOST_MATH_STANDALONE
    BOOST_CHECK_EQUAL(boost::lexical_cast<std::string>(q4), "(34,56,20,2)");
    q1 = boost::lexical_cast<boost::math::quaternion<T> >("(34,56,20,2)");
    check_exact_quaternion_result(q1, 34, 56, 20, 2);
@@ -538,6 +539,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(arithmetic_test, T, test_types)
    check_approx_quaternion_result(sinc_pi(q4), boost::lexical_cast<T>("-239180458943182912968898.352151239530846"), boost::lexical_cast<T>("-417903427539587405399855.0577257263862799"), boost::lexical_cast<T>("-149251224121281216214233.9491877594236714"), boost::lexical_cast<T>("-14925122412128121621423.39491877594236714"), 200);
    check_approx_quaternion_result(sinhc_pi(q4), boost::lexical_cast<T>("-1366603120232.604666248483234115586439226"), boost::lexical_cast<T>("3794799638667.255581055299959135992677524"), boost::lexical_cast<T>("1355285585238.305564662607128262854527687"), boost::lexical_cast<T>("135528558523.8305564662607128262854527687"), 200);
 #endif
+   #endif // BOOST_MATH_STANDALONE
    //
    // Construction variations:
    //
@@ -561,7 +563,11 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(arithmetic_test, T, test_types)
    T longitude = boost::math::constants::pi<T>() / 4;
    T latitude = boost::math::constants::pi<T>() / 3;
    q1 = ::boost::math::cylindrospherical(t, radius, longitude, latitude);
+
+   #ifndef BOOST_MATH_STANDALONE
    check_approx_quaternion_result(q1, 5, 0.5, 0.5, boost::lexical_cast<T>("1.224744871391589049098642037352945695983"), 10);
+   #endif
+   
    T r = boost::math::constants::root_two<T>();
    T angle = boost::math::constants::pi<T>() / 4;
    T h1 = 3;

@@ -910,6 +910,8 @@ test-suite misc :
    ../build//boost_math_c99
    ../build//boost_math_c99f
    ../../test/build//boost_unit_test_framework
+   : : :
+   [ check-target-builds ../config//is_ci_standalone_run "Standalone CI run" : <build>no ]
      ]
 
    [ run test_tr1.cpp
@@ -918,7 +920,8 @@ test-suite misc :
       ../../test/build//boost_unit_test_framework
       : : :
       <define>TEST_LD=1
-      [ check-target-builds ../config//has_long_double_support "long double support" : : <build>no ]
+      [ check-target-builds ../config//has_long_double_support "long double support" : : <build>no ] 
+      [ check-target-builds ../config//is_ci_standalone_run "Standalone CI run" : <build>no ] 
       :
       test_tr1_long_double
      ]
@@ -930,6 +933,7 @@ test-suite misc :
       ../build//boost_math_c99f
       ../../test/build//boost_unit_test_framework
       : : : #requirements
+      [ check-target-builds ../config//is_ci_standalone_run "Standalone CI run" : <build>no ]
       :
       test_tr1_c
     ]
@@ -940,7 +944,8 @@ test-suite misc :
       ../../test/build//boost_unit_test_framework
       : : :
       <define>TEST_LD=1
-      [ check-target-builds ../config//has_long_double_support "long double support" : : <build>no ]
+      [ check-target-builds ../config//has_long_double_support "long double support" : : <build>no ] 
+      [ check-target-builds ../config//is_ci_standalone_run "Standalone CI run" : <build>no ] 
       :
       test_tr1_c_long_double
     ]
@@ -1268,7 +1273,7 @@ test-suite quadrature :
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] :
    tanh_sinh_quadrature_test_9 ]
 
-   [ run tanh_sinh_mpfr.cpp ../tools//mpfr ../tools//gmp : : : [ check-target-builds ../config//has_mpfr : : <build>no ] [ requires cxx11_hdr_initializer_list cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_smart_ptr ] release <toolset>clang:<cxxflags>-Wno-literal-range [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ] 
+   [ run tanh_sinh_mpfr.cpp ../tools//mpfr ../tools//gmp : : : [ check-target-builds ../config//has_mpfr : : <build>no ] [ check-target-builds ../config//has_gmp : : <build>no ] [ requires cxx11_hdr_initializer_list cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_smart_ptr ] release <toolset>clang:<cxxflags>-Wno-literal-range [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ] 
    [ run sinh_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
      : : : release [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] ]
    [ run exp_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
@@ -1449,7 +1454,7 @@ test-suite autodiff :
    [ run test_autodiff_5.cpp ../../test/build//boost_unit_test_framework : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] [ requires cxx11_inline_namespaces ] ]
    [ run test_autodiff_6.cpp ../../test/build//boost_unit_test_framework : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] [ requires cxx11_inline_namespaces ] ]
    [ run test_autodiff_7.cpp ../../test/build//boost_unit_test_framework : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] [ requires cxx11_inline_namespaces ] ]
-   [ run test_autodiff_8.cpp ../../test/build//boost_unit_test_framework : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] [ requires cxx11_inline_namespaces ] ]
+   [ run test_autodiff_8.cpp ../../test/build//boost_unit_test_framework : : : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] [ check-target-builds ../config//is_ci_standalone_run "Standalone CI run" : <build>no ] [ requires cxx11_inline_namespaces ] ]
    [ compile compile_test/diff_autodiff_incl_test.cpp : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] [ requires cxx11_inline_namespaces ] ]
    [ compile compile_test/diff_finite_difference_incl_test.cpp : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] [ requires cxx11_inline_namespaces ] ]
    [ compile compile_test/diff_lanczos_smoothing_incl_test.cpp : <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release [ requires cxx17_if_constexpr cxx17_std_apply ] [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] [ requires cxx11_inline_namespaces ] ]

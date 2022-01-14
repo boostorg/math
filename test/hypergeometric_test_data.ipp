@@ -8,7 +8,7 @@
 // absolute error, not a low relative error.
 //
 #define SC_(x) static_cast<typename table_type<T>::type>(BOOST_JOIN(x, L))
-  static const boost::array<boost::array<T, 8>, 398-105> hypergeometric_test_data = {{
+  static const std::array<std::array<T, 8>, 398-105> hypergeometric_test_data = {{
      //{{SC_(1.0),SC_(1.0),SC_(2.0),SC_(1.0),SC_(0.5),SC_(1.0),SC_(0.e-40)}},
      {{SC_(5.0),SC_(4.0),SC_(6.0),SC_(3.0),SC_(0.6666666666666666666666666666666666666667),SC_(0.6666666666666666666666666666666666666667),SC_(0.3333333333333333333333333333333333333333)}},
      //{{SC_(5.0),SC_(3.0),SC_(13.0),SC_(3.0),SC_(0.03496503496503496503496503496503496503497),SC_(1.0),SC_(0.e-40)}},

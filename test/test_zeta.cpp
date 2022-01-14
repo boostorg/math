@@ -107,7 +107,9 @@ BOOST_AUTO_TEST_CASE( test_main )
    test_spots(0.0, "double");
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_spots(0.0L, "long double");
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
    test_spots(boost::math::concepts::real_concept(0.1), "real_concept");
+#endif
 #else
    std::cout << "<note>The long double tests have been disabled on this platform "
       "either because the long double overloads of the usual math functions are "
@@ -119,7 +121,9 @@ BOOST_AUTO_TEST_CASE( test_main )
    test_zeta(0.1, "double");
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_zeta(0.1L, "long double");
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
    test_zeta(boost::math::concepts::real_concept(0.1), "real_concept");
+#endif
 #else
    std::cout << "<note>The long double tests have been disabled on this platform "
       "either because the long double overloads of the usual math functions are "

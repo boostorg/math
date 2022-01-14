@@ -45,7 +45,7 @@ using bin_float_types = mp11::mp_list<float, double, long double>;
 /*using multiprecision_float_types =
     mp_list<bmp::cpp_dec_float_50, bmp::cpp_bin_float_50>;*/
 
-#if !defined(BOOST_VERSION) || BOOST_VERSION < 107000 || defined(BOOST_USE_VALGRIND) || defined(BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS) || defined(BOOST_NO_STRESS_TEST)
+#if !defined(BOOST_VERSION) || BOOST_VERSION < 107000 || defined(BOOST_USE_VALGRIND) || defined(BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS) || defined(BOOST_NO_STRESS_TEST) || defined(BOOST_MATH_STANDALONE)
 using multiprecision_float_types = mp11::mp_list<>;
 #else
 #define BOOST_AUTODIFF_TESTING_INCLUDE_MULTIPRECISION

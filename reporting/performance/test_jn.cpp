@@ -17,7 +17,7 @@
 
 typedef double T;
 #define SC_(x) static_cast<double>(x)
-static const boost::array<boost::array<typename table_type<T>::type, 3>, 8> j0_data = { {
+static const std::array<std::array<typename table_type<T>::type, 3>, 8> j0_data = { {
    { { SC_(0.0), SC_(0.0), SC_(1.0) } },
    { { SC_(0.0), SC_(1.0), SC_(0.7651976865579665514497175261026632209093) } },
    { { SC_(0.0), SC_(-2.0), SC_(0.2238907791412356680518274546499486258252) } },
@@ -27,7 +27,7 @@ static const boost::array<boost::array<typename table_type<T>::type, 3>, 8> j0_d
    { { SC_(0.0), SC_(1e-10), SC_(0.999999999999999999997500000000000000000) } },
    { { SC_(0.0), SC_(-1e+01), SC_(-0.2459357644513483351977608624853287538296) } },
    } };
-static const boost::array<boost::array<T, 3>, 6> j0_tricky = { {
+static const std::array<std::array<T, 3>, 6> j0_tricky = { {
       // Big numbers make the accuracy of std::sin the limiting factor:
    { { SC_(0.0), SC_(1e+03), SC_(0.02478668615242017456133073111569370878617) } },
    { { SC_(0.0), SC_(1e+05), SC_(-0.001719201116235972192570601477073201747532) } },
@@ -38,7 +38,7 @@ static const boost::array<boost::array<T, 3>, 6> j0_tricky = { {
    { { SC_(0.0), T(12364320.0) / (1024 * 1024), SC_(-3.53017140778223781420794006033810387155048392363051866610931e-9) } }
    } };
 
-static const boost::array<boost::array<typename table_type<T>::type, 3>, 8> j1_data = { {
+static const std::array<std::array<typename table_type<T>::type, 3>, 8> j1_data = { {
    { { SC_(1.0), SC_(0.0), SC_(0.0) } },
    { { SC_(1.0), SC_(1.0), SC_(0.4400505857449335159596822037189149131274) } },
    { { SC_(1.0), SC_(-2.0), SC_(-0.5767248077568733872024482422691370869203) } },
@@ -48,7 +48,7 @@ static const boost::array<boost::array<typename table_type<T>::type, 3>, 8> j1_d
    { { SC_(1.0), SC_(1e-10), SC_(4.999999999999999999993750000000000000000e-11) } },
    { { SC_(1.0), SC_(-1e+01), SC_(-4.347274616886143666974876802585928830627e-02) } },
    } };
-static const boost::array<boost::array<T, 3>, 5> j1_tricky = { {
+static const std::array<std::array<T, 3>, 5> j1_tricky = { {
       // Big numbers make the accuracy of std::sin the limiting factor:
    { { SC_(1.0), SC_(1e+03), SC_(4.728311907089523917576071901216916285418e-03) } },
    { { SC_(1.0), SC_(1e+05), SC_(1.846757562882567716362123967114215743694e-03) } },
@@ -58,7 +58,7 @@ static const boost::array<boost::array<T, 3>, 5> j1_tricky = { {
    { { SC_(1.0), T(10667654) / (1024 * 1024), SC_(1.24591331097191900488116495350277530373473085499043086981229e-7) } },
    } };
 
-static const boost::array<boost::array<typename table_type<T>::type, 3>, 17> jn_data = { {
+static const std::array<std::array<typename table_type<T>::type, 3>, 17> jn_data = { {
       // This first one is a modified test case from https://svn.boost.org/trac/boost/ticket/2733
    { { SC_(-1.0), SC_(1.25), SC_(-0.510623260319880467069474837274910375352924050139633057168856) } },
    { { SC_(2.0), SC_(0.0), SC_(0.0) } },

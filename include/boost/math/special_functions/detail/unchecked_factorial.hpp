@@ -979,6 +979,8 @@ inline T unchecked_factorial(unsigned i)
    return unchecked_factorial_imp<T>(i, tag_type());
 }
 
+#endif // BOOST_NO_LEXICAL_CAST
+
 #ifdef BOOST_MATH_USE_FLOAT128
 #define BOOST_MATH_DETAIL_FLOAT128_MAX_FACTORIAL : std::numeric_limits<T>::digits == 113 ? max_factorial<BOOST_MATH_FLOAT128_TYPE>::value
 #else
@@ -997,22 +999,6 @@ struct max_factorial
 };
 
 #undef BOOST_MATH_DETAIL_FLOAT128_MAX_FACTORIAL
-
-#else // BOOST_MATH_NO_LEXICAL_CAST
-
-template <class T>
-inline T unchecked_factorial(unsigned i BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(T))
-{
-   return 1;
-}
-
-template <class T>
-struct max_factorial
-{
-   static constexpr unsigned value = 0;
-};
-
-#endif
 
 #ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
 template <class T>

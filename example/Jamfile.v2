@@ -43,9 +43,9 @@ project
     ;
 
 test-suite examples :
-   [ run bessel_zeros_example_1.cpp : : : <exception-handling>off:<build>no  ]
+   [ run bessel_zeros_example_1.cpp : : : [ check-target-builds ../config//is_ci_standalone_run "Standalone CI run" : <build>no ] <exception-handling>off:<build>no ]
    [ run bessel_zeros_interator_example.cpp : : : <exception-handling>off:<build>no  ]
-   [ run neumann_zeros_example_1.cpp : : : <exception-handling>off:<build>no  ]
+   [ run neumann_zeros_example_1.cpp : : : [ check-target-builds ../config//is_ci_standalone_run "Standalone CI run" : <build>no ] <exception-handling>off:<build>no  ]
 
    [ run test_cpp_float_close_fraction.cpp ../../test/build//boost_unit_test_framework/<link>static : : : <exception-handling>off:<build>no  ]
    [ run binomial_coinflip_example.cpp : : : <exception-handling>off:<build>no  ]
@@ -145,8 +145,8 @@ test-suite examples :
    [ run autodiff_black_scholes_brief.cpp : : : [ requires cxx11_inline_namespaces ] ]
    [ run autodiff_black_scholes.cpp : : : [ requires cxx11_inline_namespaces ] ]
    [ run autodiff_fourth_power.cpp : : : [ requires cxx11_inline_namespaces ] ]
-   [ run autodiff_mixed_partials.cpp : : : [ requires cxx11_inline_namespaces ] ]
-   [ run autodiff_multiprecision.cpp : : : [ requires cxx11_inline_namespaces ] ]
+   [ run autodiff_mixed_partials.cpp : : : [ check-target-builds ../config//is_ci_standalone_run "Standalone CI run" : <build>no ] [ requires cxx11_inline_namespaces ] ]
+   [ run autodiff_multiprecision.cpp : : : [ check-target-builds ../config//is_ci_standalone_run "Standalone CI run" : <build>no ] [ requires cxx11_inline_namespaces ] ]
    [ run ooura_fourier_integrals_example.cpp : : : [ requires cxx11_hdr_mutex cxx11_lambdas cxx11_inline_namespaces cxx11_auto_declarations ] ]
    [ run ooura_fourier_integrals_cosine_example.cpp : : : [ requires cxx11_hdr_mutex cxx11_inline_namespaces cxx11_auto_declarations cxx17_std_apply ] ]
    [ run ooura_fourier_integrals_multiprecision_example.cpp : : : [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] [ requires cxx11_hdr_mutex cxx11_inline_namespaces cxx11_auto_declarations cxx17_std_apply ] ]

@@ -28,7 +28,7 @@ void write_table(unsigned max_exponent)
    // now write out the results to cout:
    //
    std::cout << std::scientific << std::setprecision(40);
-   std::cout << "   static const boost::array<T, " << factorials.size() << "> factorials = {\n";
+   std::cout << "   static const std::array<T, " << factorials.size() << "> factorials = {\n";
    for(unsigned j = 0; j < factorials.size(); ++j)
       std::cout << "      " << factorials[j] << "L,\n";
    std::cout << "   };\n\n";

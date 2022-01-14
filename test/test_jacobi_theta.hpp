@@ -171,7 +171,7 @@ void test_spots(T, const char* type_name)
 {
     // Function values calculated on https://wolframalpha.com/
     // EllipticTheta[1, z, q]
-    static const boost::array<boost::array<typename table_type<T>::type, 3>, 22> data1 = {{
+    static const std::array<std::array<typename table_type<T>::type, 3>, 22> data1 = {{
         {{ SC_(0.25), SC_(0.5), SC_(0.1540230688155610552510349122197994458164480291364308) }},
         {{ SC_(0.5), SC_(0.5), SC_(0.402768575854814314826394321410682828786027207014725) }},
         {{ SC_(1.0), SC_(0.5), SC_(1.330378498179274650272750199052730280058943456725878763411) }},
@@ -200,7 +200,7 @@ void test_spots(T, const char* type_name)
     }};
 
     // EllipticTheta[2, z, q]
-    static const boost::array<boost::array<typename table_type<T>::type, 3>, 22> data2 = {{
+    static const std::array<std::array<typename table_type<T>::type, 3>, 22> data2 = {{
         {{ SC_(0.25), SC_(0.5), SC_(1.945359087094512287818938605108992884433591043123906291186) }},
         {{ SC_(0.5), SC_(0.5), SC_(1.484216087659583107499509464625356597654932790316228596683) }},
         {{ SC_(1.0), SC_(0.5), SC_(0.500198138514456200618643558666164246520575297293771869190) }},
@@ -229,7 +229,7 @@ void test_spots(T, const char* type_name)
     }};
 
     // EllipticTheta[3, z, q]
-    static const boost::array<boost::array<typename table_type<T>::type, 3>, 22> data3 = {{
+    static const std::array<std::array<typename table_type<T>::type, 3>, 22> data3 = {{
         {{ SC_(0.25), SC_(0.5), SC_(1.945383919743612326705943032930976804537995814958244156964) }},
         {{ SC_(0.5), SC_(0.5), SC_(1.484396862425166928164115914328477415075581759665236164625) }},
         {{ SC_(1.0), SC_(0.5), SC_(0.505893885730484607919474452677852065978820023168006719298) }},
@@ -258,7 +258,7 @@ void test_spots(T, const char* type_name)
     }};
 
     // EllipticTheta[4, z, q]
-    static const boost::array<boost::array<typename table_type<T>::type, 3>, 20> data4 = {{
+    static const std::array<std::array<typename table_type<T>::type, 3>, 20> data4 = {{
         {{ SC_(0.25), SC_(0.5), SC_(0.189666257078605856907477593562312286776776156459895303534) }},
         {{ SC_(0.5), SC_(0.5), SC_(0.411526533253405515206323680892825857445581901774756902114) }},
         {{ SC_(1.0), SC_(0.5), SC_(1.330686328485433289294314954726283002076056588770122570003) }},

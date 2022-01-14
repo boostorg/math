@@ -58,7 +58,7 @@ void test_spots(T, const char* type_name)
     BOOST_MATH_STD_USING
     // Function values calculated on http://functions.wolfram.com/
     // Note that Mathematica's EllipticE accepts k^2 as the second parameter.
-    static const boost::array<boost::array<T, 3>, 5> data1 = {{
+    static const std::array<std::array<T, 3>, 5> data1 = {{
        { { SC_(0.25), SC_(0.5), SC_(0.231195544262270355901990821099667428154924832224446817213200) } },
        { { SC_(-0.25), SC_(0.5), SC_(-0.231195544262270355901990821099667428154924832224446817213200) } },
         { { SC_(0), SC_(0.5), SC_(0) } },

@@ -137,7 +137,7 @@ void test_bessel(T, const char* name)
    // three items, input value a, input value b and erf(a, b):
    // 
     // function values calculated on http://functions.wolfram.com/
-    static const boost::array<boost::array<typename table_type<T>::type, 3>, 8> j0_data = {{
+    static const std::array<std::array<typename table_type<T>::type, 3>, 8> j0_data = {{
        { { SC_(0.0), SC_(0.0), SC_(1.0) } },
        { { SC_(0.0), SC_(1.0), SC_(0.7651976865579665514497175261026632209093) } },
        { { SC_(0.0), SC_(-2.0), SC_(0.2238907791412356680518274546499486258252) } },
@@ -147,7 +147,7 @@ void test_bessel(T, const char* name)
         {{ SC_(0.0), SC_(1e-10), SC_(0.999999999999999999997500000000000000000) }},
         {{ SC_(0.0), SC_(-1e+01), SC_(-0.2459357644513483351977608624853287538296) }},
     }};
-    static const boost::array<boost::array<typename table_type<T>::type, 3>, 6> j0_tricky = {{
+    static const std::array<std::array<typename table_type<T>::type, 3>, 6> j0_tricky = {{
         // Big numbers make the accuracy of std::sin the limiting factor:
        { { SC_(0.0), SC_(1e+03), SC_(0.02478668615242017456133073111569370878617) } },
        { { SC_(0.0), SC_(1e+05), SC_(-0.001719201116235972192570601477073201747532) } },
@@ -158,7 +158,7 @@ void test_bessel(T, const char* name)
        { { SC_(0.0), SC_(11.791534423828125) /*T(12364320.0) / (1024 * 1024)*/, SC_(-3.53017140778223781420794006033810387155048392363051866610931e-9) } }
     }};    
 
-    static const boost::array<boost::array<typename table_type<T>::type, 3>, 8> j1_data = {{
+    static const std::array<std::array<typename table_type<T>::type, 3>, 8> j1_data = {{
        { { SC_(1.0), SC_(0.0), SC_(0.0) } },
        { { SC_(1.0), SC_(1.0), SC_(0.4400505857449335159596822037189149131274) } },
        { { SC_(1.0), SC_(-2.0), SC_(-0.5767248077568733872024482422691370869203) } },
@@ -168,7 +168,7 @@ void test_bessel(T, const char* name)
        { { SC_(1.0), SC_(1e-10), SC_(4.999999999999999999993750000000000000000e-11) } },
        { { SC_(1.0), SC_(-1e+01), SC_(-4.347274616886143666974876802585928830627e-02) } },
     }};
-    static const boost::array<boost::array<typename table_type<T>::type, 3>, 5> j1_tricky = {{
+    static const std::array<std::array<typename table_type<T>::type, 3>, 5> j1_tricky = {{
         // Big numbers make the accuracy of std::sin the limiting factor:
        { { SC_(1.0), SC_(1e+03), SC_(4.728311907089523917576071901216916285418e-03) } },
        { { SC_(1.0), SC_(1e+05), SC_(1.846757562882567716362123967114215743694e-03) } },
@@ -178,7 +178,7 @@ void test_bessel(T, const char* name)
        { { SC_(1.0), SC_(10.1734676361083984375) /*T(10667654) / (1024 * 1024)*/, SC_(1.24591331097191900488116495350277530373473085499043086981229e-7) } },
     }};
 
-    static const boost::array<boost::array<typename table_type<T>::type, 3>, 17> jn_data = {{
+    static const std::array<std::array<typename table_type<T>::type, 3>, 17> jn_data = {{
         // This first one is a modified test case from https://svn.boost.org/trac/boost/ticket/2733
        { { SC_(-1.0), SC_(1.25), SC_(-0.510623260319880467069474837274910375352924050139633057168856) } },
        { { SC_(2.0), SC_(0.0), SC_(0.0) } },
@@ -210,7 +210,7 @@ void test_bessel(T, const char* name)
     do_test_cyl_bessel_j_int<T>(j1_tricky, name, "Bessel J1: Mathworld Data (tricky cases) (Integer Version)");
     do_test_cyl_bessel_j_int<T>(jn_data, name, "Bessel JN: Mathworld Data (Integer Version)");
 
-    static const boost::array<boost::array<typename table_type<T>::type, 3>, 20> jv_data = {{
+    static const std::array<std::array<typename table_type<T>::type, 3>, 20> jv_data = {{
         //SC_(-2.4), {{ SC_(0.0), std::numeric_limits<T>::infinity() }},
        { { SC_(22.5), SC_(0.0), SC_(0.0) } },
        { { SC_(2.3994140625) /*2457.0 / 1024*/, SC_(0.0009765625) /* 1 / 1024*/, SC_(3.80739920118603335646474073457326714709615200130620574875292e-9) } },
@@ -235,7 +235,7 @@ void test_bessel(T, const char* name)
         {{ SC_(-8.5), SC_(12.566370614359172953850573533118011536788677597500423283899778369231265625144835994512139301368468271928592346053) /*Pi * 4*/, SC_(-0.257086543428224355151772807588810984369026142375675714560864) }},
     }};
     do_test_cyl_bessel_j<T>(jv_data, name, "Bessel J: Mathworld Data");
-    static const boost::array<boost::array<typename table_type<T>::type, 3>, 4> jv_large_data = {{
+    static const std::array<std::array<typename table_type<T>::type, 3>, 4> jv_large_data = {{
         // Bug report https://svn.boost.org/trac/boost/ticket/5560:
         {{ SC_(-0.5), SC_(1.2458993688871959419388378518880931736878259938089494331010226962863582408064841833232475731084062642684629e-206) /*static_cast<T>(std::ldexp(0.5, -683))*/, SC_(7.14823099969225685526188875418476476336424046896822867989728e102) }},
         { { SC_(256.0), SC_(512.0), SC_(0.00671672065717513246956991122723250578101154313313749938944675) } },

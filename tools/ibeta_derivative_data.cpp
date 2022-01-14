@@ -40,7 +40,7 @@ int main(int, char* [])
       "//  Boost Software License, Version 1.0. (See accompanying file\n"
       "//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)\n"
       "\n\n"
-      "static const boost::array<boost::array<typename table_type<T>::type, 4>, " << ibeta_int_data.size() << "> ibeta_derivative_small_data = { {\n";
+      "static const std::array<std::array<typename table_type<T>::type, 4>, " << ibeta_int_data.size() << "> ibeta_derivative_small_data = { {\n";
      
 
    for(unsigned i = 0; i < ibeta_int_data.size(); ++i)

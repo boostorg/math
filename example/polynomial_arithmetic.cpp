@@ -118,7 +118,7 @@ in descending order of degree, Boost.Math stores in [*ascending order of degree]
   Read/write for humans:    3x^3 - 4x^2 - 6x + 10
   Boost polynomial storage: [ 10, -6, -4, 3 ]
 */
-  boost::array<double, 4> const d3a = {{10, -6, -4, 3}};
+  std::array<double, 4> const d3a = {{10, -6, -4, 3}};
   polynomial<double> const a(d3a.begin(), d3a.end());
 
   // With C++11 and later, you can also use initializer_list construction.
