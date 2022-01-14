@@ -169,7 +169,7 @@ auto exp_sinh_detail<Real, Policy>::integrate(const F& f, Real* error, Real* L1,
    //std::cout << std::setprecision(5*std::numeric_limits<Real>::digits10);
 
     // Get the party started with two estimates of the integral:
-    std::size_t first_i{ 0 }, last_i{ (std::numeric_limits<std::size_t>::max)() };
+    Real min_abscissa{ 0 }, max_abscissa{ boost::math::tools::max_value<Real>() };
     K I0 = 0;
     Real L1_I0 = 0;
     for(size_t i = 0; i < m_abscissas[0].size(); ++i)
@@ -178,10 +178,9 @@ auto exp_sinh_detail<Real, Policy>::integrate(const F& f, Real* error, Real* L1,
         K I0_last = I0;
         I0 += y*m_weights[0][i];
         L1_I0 += abs(y)*m_weights[0][i];
-        if ((I0_last == I0) && I0)
+        if ((I0_last == I0) && (abs(I0) != 0))
         {
-           // No change to I0, discard all other values, assumes our series smoothly converges!!
-           last_i = i;
+           max_abscissa = m_abscissas[0][i];
            break;
         }
     }
@@ -189,20 +188,22 @@ auto exp_sinh_detail<Real, Policy>::integrate(const F& f, Real* error, Real* L1,
     //std::cout << "First estimate : " << I0 << std::endl;
     K I1 = I0;
     Real L1_I1 = L1_I0;
-    bool have_first_i = false;
-    for (size_t i = 0; i < (std::min)(m_abscissas[1].size(), last_i); ++i)
+    bool have_first_j = false;
+    std::size_t first_j = 0;
+    for (size_t i = 0; (i < m_abscissas[1].size()) && (m_abscissas[1][i] < max_abscissa); ++i)
     {
         K y = f(m_abscissas[1][i]);
         K I1_last = I1;
         I1 += y*m_weights[1][i];
         L1_I1 += abs(y)*m_weights[1][i];
-        if (!have_first_i && (I1_last == I1))
+        if (!have_first_j && (I1_last == I1))
         {
            // No change to the sum, disregard these values on the LHS:
-           first_i = i + 1;
+           min_abscissa = m_abscissas[1][i];
+           first_j = i;
         }
         else
-           have_first_i = true;
+           have_first_j = true;
     }
 
     I1 *= half<Real>();
@@ -213,8 +214,6 @@ auto exp_sinh_detail<Real, Policy>::integrate(const F& f, Real* error, Real* L1,
     size_t i = 2;
     for(; i < m_abscissas.size(); ++i)
     {
-        first_i *= 2;
-        last_i *= 2;
         I0 = I1;
         L1_I0 = L1_I1;
 
@@ -227,9 +226,12 @@ auto exp_sinh_detail<Real, Policy>::integrate(const F& f, Real* error, Real* L1,
         auto abscissas_row = get_abscissa_row(i);
         auto weight_row = get_weight_row(i);
 
+        first_j = first_j == 0 ? 0 : 2 * first_j - 1;  // appoximate location to start looking for lowest meaningful abscissa value
         Real abterm1 = 1;
-        Real eps = tools::epsilon<Real>()*L1_I1;
-        for(size_t j = first_i ? first_i - 1 : 0; j < (std::min)(m_weights[i].size(), last_i); ++j)
+        std::size_t j = first_j;
+        while (abscissas_row[j] < min_abscissa)
+           ++j;
+        for(; (j < m_weights[i].size()) && (abscissas_row[j] < max_abscissa); ++j)
         {
             Real x = abscissas_row[j];
             K y = f(x);
