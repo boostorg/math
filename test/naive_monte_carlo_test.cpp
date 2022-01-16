@@ -8,7 +8,7 @@
 #define BOOST_NAIVE_MONTE_CARLO_DEBUG_FAILURES
 #include <cmath>
 #include <ostream>
-#include <boost/lexical_cast.hpp>
+#include <boost/math/tools/test_value.hpp>
 #include <boost/type_index.hpp>
 #include <boost/test/included/unit_test.hpp>
 
@@ -137,7 +137,7 @@ template<class Real>
 void test_cancel_and_restart()
 {
     std::cout << "Testing that cancellation and restarting works on naive Monte-Carlo integration on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
-    Real exact = boost::lexical_cast<Real>("1.3932039296856768591842462603255");
+    Real exact = BOOST_MATH_TEST_VALUE(Real, 1.3932039296856768591842462603255);
     constexpr const Real A = 1.0 / (pi<Real>() * pi<Real>() * pi<Real>());
     auto g = [&](std::vector<Real> const & x)->Real
     {

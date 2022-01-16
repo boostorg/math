@@ -27,7 +27,9 @@
 // Macro BOOST_MATH_INSTRUMENT_CREATE_TEST_VALUE provides a global diagnostic value for create_type.
 
 #include <boost/cstdfloat.hpp> // For float_64_t, float128_t. Must be first include!
-#include <boost/math/tools/lexical_cast.hpp>
+#ifndef BOOST_MATH_STANDALONE
+#include <boost/lexical_cast.hpp>
+#endif
 #include <limits>
 #include <type_traits>
 

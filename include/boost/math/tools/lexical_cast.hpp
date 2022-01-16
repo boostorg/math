@@ -63,12 +63,6 @@ namespace boost {
         return std::to_string(v);
     }
 
-    template <typename T, typename T2, typename std::enable_if<(std::is_same<T, const char*>::value && std::is_arithmetic<T2>::value), bool>::type = true>
-    inline T lexical_cast(const T2 v)
-    {
-        const std::string temp = std::to_string(v);
-        return temp.c_str();
-    }
 }
 #endif // BOOST_MATH_STANDALONE
 #endif // BOOST_MATH_TOOLS_LEXICAL_CAST

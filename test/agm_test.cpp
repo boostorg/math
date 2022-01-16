@@ -10,7 +10,7 @@
 #include <utility>
 #include <random>
 #include <cmath>
-#include <boost/lexical_cast.hpp>
+#include <boost/math/tools/test_value.hpp>
 #include <boost/core/demangle.hpp>
 #include <boost/math/tools/agm.hpp>
 #ifdef BOOST_HAS_FLOAT128
@@ -25,7 +25,7 @@ template<class Real>
 void test_gauss_constant()
 {
     // http://oeis.org/A014549/constant
-    Real G_expected = boost::lexical_cast<Real>(".83462684167407318628142973279904680899399301349034700244982737010368199270952641186969116035127532412906785");
+    Real G_expected = BOOST_MATH_TEST_VALUE(Real, 0.83462684167407318628142973279904680899399301349034700244982737010368199270952641186969116035127532412906785);
 
     Real G_computed = 1/agm(sqrt(Real(2)), Real(1));
     if(!CHECK_ULP_CLOSE(G_expected, G_computed, 2)) {

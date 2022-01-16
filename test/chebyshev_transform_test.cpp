@@ -9,6 +9,7 @@
 #include <boost/math/special_functions/chebyshev.hpp>
 #include <boost/math/special_functions/chebyshev_transform.hpp>
 #include <boost/math/special_functions/sinc.hpp>
+#include <boost/math/tools/test_value.hpp>
 
 #if !defined(TEST1) && !defined(TEST2) && !defined(TEST3) && !defined(TEST4)
 #  define TEST1
@@ -84,7 +85,7 @@ void test_sinc_chebyshev_transform()
 
     Real Q = cheb.integrate();
     //NIntegrate[Sinc[x], {x, 0, 1}, WorkingPrecision -> 200, AccuracyGoal -> 150, PrecisionGoal -> 150, MaxRecursion -> 150]
-    Real Q_exp = boost::lexical_cast<Real>("0.94608307036718301494135331382317965781233795473811179047145477356668");
+    Real Q_exp = BOOST_MATH_TEST_VALUE(0.94608307036718301494135331382317965781233795473811179047145477356668);
     CHECK_ABSOLUTE_ERROR(Q_exp, Q, tol);
 }
 
