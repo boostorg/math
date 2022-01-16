@@ -301,6 +301,12 @@ void test_ca()
     auto f7 = [](const Real& t) { return sqrt(tan(t)); };
     Q = integrator.integrate(f7, (Real) 0 , (Real) half_pi<Real>(), get_convergence_tolerance<Real>(), &error, &L1);
     Q_expected = pi<Real>()/root_two<Real>();
+    //
+    // Slightly higher tolerance for type float, this marginal change was
+    // caused by no more than changing the order in which the terms are summed:
+    //
+    if (std::is_same<Real, float>::value)
+        tol *= 1.5;
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
     BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
 
