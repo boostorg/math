@@ -102,7 +102,7 @@ void print_row(const Seq& row, std::ostream& os = std::cout)
 }
 
 //
-// Function test accepts an matrix of input values (probably a 2D boost::array)
+// Function test accepts an matrix of input values (probably a 2D std::array)
 // and calls two functors for each row in the array - one calculates a value
 // to test, and one extracts the expected value from the array (or possibly
 // calculates it at high precision).  The two functors are usually simple lambda

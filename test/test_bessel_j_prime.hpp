@@ -136,7 +136,7 @@ void test_bessel_prime(T, const char* name)
    // three items, input value a, input value b and J'(a, b):
    // 
     // function values calculated on http://functions.wolfram.com/
-    static const boost::array<boost::array<typename table_type<T>::type, 3>, 8> j0_data = {{
+    static const std::array<std::array<typename table_type<T>::type, 3>, 8> j0_data = {{
        {{ SC_(0.0), SC_(0.0), SC_(0.0) }},
         {{ SC_(0.0), SC_(1.0), SC_(-0.440050585744933515959682203718914913127) }},
         {{ SC_(0.0), SC_(-2.0), SC_(0.576724807756873387202448242269137086920) }},
@@ -146,7 +146,7 @@ void test_bessel_prime(T, const char* name)
         {{ SC_(0.0), SC_(1e-10), SC_(-0.499999999999999999999375000000000000000000e-10) }},
         {{ SC_(0.0), SC_(-1e+01), SC_(0.0434727461688614366697487680258592883062724) }},
     }};
-    static const boost::array<boost::array<T, 3>, 6> j0_tricky = {{
+    static const std::array<std::array<T, 3>, 6> j0_tricky = {{
         // Big numbers make the accuracy of std::sin the limiting factor:
        {{ SC_(0.0), SC_(1e+03), SC_(-0.00472831190708952391757607190121691628542) }},
         {{ SC_(0.0), SC_(1e+05), SC_(-0.0018467575628825677163621239671142157437) }},
@@ -157,7 +157,7 @@ void test_bessel_prime(T, const char* name)
         {{ SC_(0.0), T(12364320)/(1024 * 1024), SC_(0.2324598316641066033541448467171088144257742) }}
     }};    
 
-    static const boost::array<boost::array<typename table_type<T>::type, 3>, 8> j1_data = {{
+    static const std::array<std::array<typename table_type<T>::type, 3>, 8> j1_data = {{
         {{ SC_(1.0), SC_(0.0), SC_(0.5) }},
         {{ SC_(1.0), SC_(1.0), SC_(0.325147100813033035490035322383748307781902) }},
         {{ SC_(1.0), SC_(-2.0), SC_(-0.064471624737201025549396666484619917634997) }},
@@ -167,7 +167,7 @@ void test_bessel_prime(T, const char* name)
         {{ SC_(1.0), SC_(1e-10), SC_(0.499999999999999999998125000000000000000001) }},
         {{ SC_(1.0), SC_(-1e+01), SC_(-0.250283039068234478864735739287914682660226) }},
     }};
-    static const boost::array<boost::array<T, 3>, 5> j1_tricky = {{
+    static const std::array<std::array<T, 3>, 5> j1_tricky = {{
         // Big numbers make the accuracy of std::sin the limiting factor:
         {{ SC_(1.0), SC_(1e+03), SC_(0.024781957840513085037413155043792491869881) }},
         {{ SC_(1.0), SC_(1e+05), SC_(-0.0017192195838116010182477650983128728897) }},
@@ -177,7 +177,7 @@ void test_bessel_prime(T, const char* name)
         {{ SC_(1.0), T(10667654)/(1024*1024), SC_(-0.2497048893045206718888096020236844196915626525879) }},
     }};
 
-    static const boost::array<boost::array<typename table_type<T>::type, 3>, 17> jn_data = {{
+    static const std::array<std::array<typename table_type<T>::type, 3>, 17> jn_data = {{
         {{ SC_(-1.0), SC_(1.25), SC_(-0.2374074770153809244011000600949046202003956) }},
         {{ SC_(2.0), SC_(0.0), SC_(0.0) }},
         {{ SC_(-2.0), SC_(0.0), SC_(0.0) }},
@@ -208,7 +208,7 @@ void test_bessel_prime(T, const char* name)
     do_test_cyl_bessel_j_prime_int<T>(j1_tricky, name, "Bessel J1': Mathworld Data (tricky cases) (Integer Version)");
     do_test_cyl_bessel_j_prime_int<T>(jn_data, name, "Bessel JN': Mathworld Data (Integer Version)");
 
-    static const boost::array<boost::array<T, 3>, 21> jv_data = {{
+    static const std::array<std::array<T, 3>, 21> jv_data = {{
          {{ T(22.5), T(0), SC_(0.0) }},
          {{ T(2457)/1024, T(1)/1024, SC_(9.35477929043111040277363766198320562099360690e-6) }},
          {{ SC_(5.5), T(3217)/1024, SC_(0.042165579369684463582791278988393873) }},
@@ -232,7 +232,7 @@ void test_bessel_prime(T, const char* name)
          {{ SC_(-8.5), boost::math::constants::pi<T>() * 4, SC_(-0.014516314554743677558496402742690038592728) }},
     }};
     do_test_cyl_bessel_j_prime<T>(jv_data, name, "Bessel J': Mathworld Data");
-    static const boost::array<boost::array<T, 3>, 4> jv_large_data = {{
+    static const std::array<std::array<T, 3>, 4> jv_large_data = {{
 #if LDBL_MAX_10_EXP > 308
       {{ SC_(-0.5), static_cast<T>(std::ldexp(0.5, -683)), SC_(-2.8687031947358902542073388638943588627056993e308) }},
 #else

@@ -7,6 +7,8 @@
 #define BOOST_TEST_MODULE exp_sinh_quadrature_test
 
 #include <complex>
+#include <type_traits>
+#include <boost/math/tools/config.hpp>
 #include <boost/multiprecision/cpp_complex.hpp>
 #include <boost/math/concepts/real_concept.hpp>
 #include <boost/test/included/unit_test.hpp>
@@ -197,31 +199,36 @@ void test_right_limit_infinite()
     // The integrand is strictly positive, so it coincides with the value of the integral:
     BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol * tol_mult);
 
-    auto f3 = [](Real t)->Real { Real z = exp(-t); if (z == 0) { return z; } return z*cos(t); };
-    Q = integrator.integrate(f3, get_convergence_tolerance<Real>(), &error, &L1);
-    Q_expected = half<Real>();
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
-    Q = integrator.integrate(f3, 10, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>(), get_convergence_tolerance<Real>(), &error, &L1);
-    Q_expected = boost::lexical_cast<Real>("-6.6976341310426674140007086979326069121526743314567805278252392932e-6");
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, 10 * tol);
-    // Integrating through zero risks precision loss:
-    Q = integrator.integrate(f3, -10, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>(), get_convergence_tolerance<Real>(), &error, &L1);
-    Q_expected = boost::lexical_cast<Real>("-15232.3213626280525704332288302799653087046646639974940243044623285817777006");
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, std::numeric_limits<Real>::digits10 > 30 ? 1000 * tol : tol);
+    #ifdef BOOST_MATH_STANDALONE
+    BOOST_IF_CONSTEXPR (std::is_fundamental<Real>::value)
+    #endif
+    {
+        auto f3 = [](Real t)->Real { Real z = exp(-t); if (z == 0) { return z; } return z*cos(t); };
+        Q = integrator.integrate(f3, get_convergence_tolerance<Real>(), &error, &L1);
+        Q_expected = half<Real>();
+        BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+        Q = integrator.integrate(f3, 10, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>(), get_convergence_tolerance<Real>(), &error, &L1);
+        Q_expected = boost::lexical_cast<Real>("-6.6976341310426674140007086979326069121526743314567805278252392932e-6");
+        BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, 10 * tol);
+        // Integrating through zero risks precision loss:
+        Q = integrator.integrate(f3, -10, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>(), get_convergence_tolerance<Real>(), &error, &L1);
+        Q_expected = boost::lexical_cast<Real>("-15232.3213626280525704332288302799653087046646639974940243044623285817777006");
+        BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, std::numeric_limits<Real>::digits10 > 30 ? 1000 * tol : tol);
 
-    auto f4 = [](Real t)->Real { return 1/(1+t*t); };
-    Q = integrator.integrate(f4, 1, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>(), get_convergence_tolerance<Real>(), &error, &L1);
-    Q_expected = pi<Real>()/4;
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
-    BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
-    Q = integrator.integrate(f4, 20, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>(), get_convergence_tolerance<Real>(), &error, &L1);
-    Q_expected = boost::lexical_cast<Real>("0.0499583957219427614100062870348448814912770804235071744108534548299835954767");
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
-    BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
-    Q = integrator.integrate(f4, 500, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>(), get_convergence_tolerance<Real>(), &error, &L1);
-    Q_expected = boost::lexical_cast<Real>("0.0019999973333397333150476759363217553199063513829126652556286269630");
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
-    BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
+        auto f4 = [](Real t)->Real { return 1/(1+t*t); };
+        Q = integrator.integrate(f4, 1, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>(), get_convergence_tolerance<Real>(), &error, &L1);
+        Q_expected = pi<Real>()/4;
+        BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+        BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
+        Q = integrator.integrate(f4, 20, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>(), get_convergence_tolerance<Real>(), &error, &L1);
+        Q_expected = boost::lexical_cast<Real>("0.0499583957219427614100062870348448814912770804235071744108534548299835954767");
+        BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+        BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
+        Q = integrator.integrate(f4, 500, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>(), get_convergence_tolerance<Real>(), &error, &L1);
+        Q_expected = boost::lexical_cast<Real>("0.0019999973333397333150476759363217553199063513829126652556286269630");
+        BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+        BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
+    }
 }
 
 template<class Real>
@@ -236,19 +243,24 @@ void test_left_limit_infinite()
     auto integrator = get_integrator<Real>();
 
     // Example 11:
-    auto f1 = [](const Real& t)->Real { return 1/(1+t*t);};
-    Q = integrator.integrate(f1, std::numeric_limits<Real>::has_infinity ? -std::numeric_limits<Real>::infinity() : -boost::math::tools::max_value<Real>(), 0, get_convergence_tolerance<Real>(), &error, &L1);
-    Q_expected = half_pi<Real>();
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
-    BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
-    Q = integrator.integrate(f1, std::numeric_limits<Real>::has_infinity ? -std::numeric_limits<Real>::infinity() : -boost::math::tools::max_value<Real>(), -20, get_convergence_tolerance<Real>(), &error, &L1);
-    Q_expected = boost::lexical_cast<Real>("0.0499583957219427614100062870348448814912770804235071744108534548299835954767");
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
-    BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
-    Q = integrator.integrate(f1, std::numeric_limits<Real>::has_infinity ? -std::numeric_limits<Real>::infinity() : -boost::math::tools::max_value<Real>(), -500, get_convergence_tolerance<Real>(), &error, &L1);
-    Q_expected = boost::lexical_cast<Real>("0.0019999973333397333150476759363217553199063513829126652556286269630");
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
-    BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
+    #ifdef BOOST_MATH_STANDALONE
+    BOOST_IF_CONSTEXPR (std::is_fundamental<Real>::value)
+    #endif
+    {
+        auto f1 = [](const Real& t)->Real { return 1/(1+t*t);};
+        Q = integrator.integrate(f1, std::numeric_limits<Real>::has_infinity ? -std::numeric_limits<Real>::infinity() : -boost::math::tools::max_value<Real>(), 0, get_convergence_tolerance<Real>(), &error, &L1);
+        Q_expected = half_pi<Real>();
+        BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+        BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
+        Q = integrator.integrate(f1, std::numeric_limits<Real>::has_infinity ? -std::numeric_limits<Real>::infinity() : -boost::math::tools::max_value<Real>(), -20, get_convergence_tolerance<Real>(), &error, &L1);
+        Q_expected = boost::lexical_cast<Real>("0.0499583957219427614100062870348448814912770804235071744108534548299835954767");
+        BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+        BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
+        Q = integrator.integrate(f1, std::numeric_limits<Real>::has_infinity ? -std::numeric_limits<Real>::infinity() : -boost::math::tools::max_value<Real>(), -500, get_convergence_tolerance<Real>(), &error, &L1);
+        Q_expected = boost::lexical_cast<Real>("0.0019999973333397333150476759363217553199063513829126652556286269630");
+        BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+        BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
+    }
 }
 
 
@@ -406,7 +418,7 @@ void test_crc()
     // Since the integrand is oscillatory, we increase the tolerance:
     Real tol_mult = 10;
     // Multiprecision type have higher error rates, probably evaluation of f() is less accurate:
-    if (!boost::is_class<Real>::value)
+    if (!std::is_class<Real>::value)
     {
        // For high oscillation frequency, the quadrature sum is ill-conditioned.
        Q = integrator.integrate(f3, get_convergence_tolerance<Real>(), &error, &L1);
@@ -511,10 +523,15 @@ void test_complex_modified_bessel()
     Complex K0 = integrator.integrate(f, get_convergence_tolerance<Real>(), &error, &L1);
 
     // Mathematica code: N[BesselK[0, 2 + 3 I], 140]
-    Real K0_x_expected = boost::lexical_cast<Real>("-0.08296852656762551490517953520589186885781541203818846830385526187936132191822538822296497597191327722262903004145527496422090506197776994");
-    Real K0_y_expected = boost::lexical_cast<Real>("0.027949603635183423629723306332336002340909030265538548521150904238352846705644065168365102147901993976999717171115546662967229050834575193041");
-    BOOST_CHECK_CLOSE_FRACTION(K0.real(), K0_x_expected, tol);
-    BOOST_CHECK_CLOSE_FRACTION(K0.imag(), K0_y_expected, tol);
+    #ifdef BOOST_MATH_STANDALONE
+    BOOST_IF_CONSTEXPR (std::is_fundamental<Complex>::value)
+    #endif
+    {
+        Real K0_x_expected = boost::lexical_cast<Real>("-0.08296852656762551490517953520589186885781541203818846830385526187936132191822538822296497597191327722262903004145527496422090506197776994");
+        Real K0_y_expected = boost::lexical_cast<Real>("0.027949603635183423629723306332336002340909030265538548521150904238352846705644065168365102147901993976999717171115546662967229050834575193041");
+        BOOST_CHECK_CLOSE_FRACTION(K0.real(), K0_x_expected, tol);
+        BOOST_CHECK_CLOSE_FRACTION(K0.imag(), K0_y_expected, tol);
+    }
 }
 
 template<typename Complex>
@@ -541,11 +558,15 @@ void test_complex_exponential_integral_E1(){
     Complex E1 = integrator.integrate(f,1,inf,get_convergence_tolerance<Real>(),&error,&L1);
 
    // Mathematica code: N[ExpIntegral[1,1.5 + 0.5 I],140]
-    Real E1_real_expected = boost::lexical_cast<Real>("0.071702995463938694845949672113596046091766639758473558841839765788732549949008866887694451956003503764943496943262401868244277788066634858393");
-    Real E1_imag_expected = boost::lexical_cast<Real>("-0.065138628279238400564373880665751377423524428792583839078600260273866805818117625959446311737353882269129094759883720722150048944193926087208");
-    BOOST_CHECK_CLOSE_FRACTION(E1.real(), E1_real_expected, tol);
-    BOOST_CHECK_CLOSE_FRACTION(E1.imag(), E1_imag_expected, tol);
-
+    #ifdef BOOST_MATH_STANDALONE
+    BOOST_IF_CONSTEXPR (std::is_fundamental<Complex>::value)
+    #endif
+    {
+        Real E1_real_expected = boost::lexical_cast<Real>("0.071702995463938694845949672113596046091766639758473558841839765788732549949008866887694451956003503764943496943262401868244277788066634858393");
+        Real E1_imag_expected = boost::lexical_cast<Real>("-0.065138628279238400564373880665751377423524428792583839078600260273866805818117625959446311737353882269129094759883720722150048944193926087208");
+        BOOST_CHECK_CLOSE_FRACTION(E1.real(), E1_real_expected, tol);
+        BOOST_CHECK_CLOSE_FRACTION(E1.imag(), E1_imag_expected, tol);
+    }
 }
 
 
@@ -586,14 +607,14 @@ BOOST_AUTO_TEST_CASE(exp_sinh_quadrature_test)
 #endif
 #endif
 #endif
-#ifdef TEST4
+#if defined(TEST4) && !defined(BOOST_MATH_NO_MP_TESTS)
     test_left_limit_infinite<cpp_bin_float_quad>();
     test_right_limit_infinite<cpp_bin_float_quad>();
     test_nr_examples<cpp_bin_float_quad>();
     test_crc<cpp_bin_float_quad>();
 #endif
 
-#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+#if !defined(BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS) && !defined(BOOST_MATH_NO_REAL_CONCEPT_TESTS)
 #ifdef TEST5
     test_left_limit_infinite<boost::math::concepts::real_concept>();
     test_right_limit_infinite<boost::math::concepts::real_concept>();
@@ -601,13 +622,13 @@ BOOST_AUTO_TEST_CASE(exp_sinh_quadrature_test)
     test_crc<boost::math::concepts::real_concept>();
 #endif
 #endif
-#ifdef TEST6
+#if defined(TEST6) && !defined(BOOST_MATH_NO_MP_TESTS)
     test_left_limit_infinite<boost::multiprecision::cpp_bin_float_50>();
     test_right_limit_infinite<boost::multiprecision::cpp_bin_float_50>();
     test_nr_examples<boost::multiprecision::cpp_bin_float_50>();
     test_crc<boost::multiprecision::cpp_bin_float_50>();
 #endif
-#ifdef TEST7
+#if defined(TEST7) && !defined(BOOST_MATH_NO_MP_TESTS)
     test_left_limit_infinite<boost::multiprecision::cpp_dec_float_50>();
     test_right_limit_infinite<boost::multiprecision::cpp_dec_float_50>();
     test_nr_examples<boost::multiprecision::cpp_dec_float_50>();
@@ -615,7 +636,7 @@ BOOST_AUTO_TEST_CASE(exp_sinh_quadrature_test)
     // This one causes stack overflows on the CI machine, but not locally,
     // assume it's due to restricted resources on the server, and <shrug> for now...
     //
-#if ! BOOST_WORKAROUND(BOOST_MSVC, == 1900)
+#if ! BOOST_WORKAROUND(BOOST_MSVC, == 1900) && !defined(BOOST_MATH_NO_MP_TESTS)
     test_crc<boost::multiprecision::cpp_dec_float_50>();
 #endif
 #endif
@@ -625,7 +646,9 @@ BOOST_AUTO_TEST_CASE(exp_sinh_quadrature_test)
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_complex_modified_bessel<std::complex<long double>>();
 #endif
+#ifndef BOOST_MATH_NO_MP_TESTS
     test_complex_modified_bessel<boost::multiprecision::cpp_complex_quad>();
+#endif
 #endif
 #ifdef TEST9
     test_complex_exponential_integral_E1<std::complex<float>>();
@@ -633,10 +656,12 @@ BOOST_AUTO_TEST_CASE(exp_sinh_quadrature_test)
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_complex_exponential_integral_E1<std::complex<long double>>();
 #endif
+#ifndef BOOST_MATH_NO_MP_TESTS
     test_complex_exponential_integral_E1<boost::multiprecision::cpp_complex_quad>();
 #endif
+#endif
 #ifdef TEST10
-#ifdef BOOST_HAS_FLOAT128
+#if defined(BOOST_HAS_FLOAT128) && !defined(BOOST_MATH_NO_MP_TESTS)
     test_complex_modified_bessel<boost::multiprecision::complex128>();
     test_complex_exponential_integral_E1<boost::multiprecision::complex128>();
 #endif

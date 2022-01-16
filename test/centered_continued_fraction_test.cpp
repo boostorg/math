@@ -13,6 +13,7 @@
 using boost::multiprecision::float128;
 #endif
 #include <boost/multiprecision/cpp_bin_float.hpp>
+#include <boost/core/demangle.hpp>
 
 using boost::math::tools::centered_continued_fraction;
 using boost::multiprecision::cpp_bin_float_100;

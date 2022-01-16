@@ -147,7 +147,7 @@ BOOST_AUTO_TEST_CASE( test_main )
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_tgamma_ratio(0.1L, "long double");
 #ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
-#if !BOOST_WORKAROUND(BOOST_BORLANDC, BOOST_TESTED_AT(0x582))
+#if !BOOST_WORKAROUND(BOOST_BORLANDC, BOOST_TESTED_AT(0x582)) && !defined(BOOST_MATH_NO_REAL_CONCEPT_TESTS)
    test_tgamma_ratio(boost::math::concepts::real_concept(0.1), "real_concept");
 #endif
 #endif

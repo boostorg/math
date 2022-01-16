@@ -17,6 +17,8 @@ There are several fully-worked __root_finding_examples, including:
 
 [include roots_without_derivatives.qbk]
 [include roots.qbk]
+[include cubic_roots.qbk]
+[include quartic_roots.qbk]
 [include root_finding_examples.qbk]
 [include minima.qbk]
 [include root_comparison.qbk]

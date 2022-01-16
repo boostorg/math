@@ -80,7 +80,6 @@ void expected_results()
 
 BOOST_AUTO_TEST_CASE( test_main )
 {
-   typedef boost::multiprecision::number<boost::multiprecision::cpp_dec_float<40> > dec_40;
    expected_results();
    BOOST_MATH_CONTROL_FP;
 
@@ -94,6 +93,10 @@ BOOST_AUTO_TEST_CASE( test_main )
    test_spots(boost::math::concepts::real_concept(0.1), "real_concept");
 #endif
 #endif
+
+#ifndef BOOST_MATH_NO_MP_TESTS
+   using dec_40 = boost::multiprecision::number<boost::multiprecision::cpp_dec_float<40>>;
    test_spots(boost::multiprecision::cpp_bin_float_quad(), "cpp_bin_float_quad");
    test_spots(dec_40(), "dec_40");
+#endif
 }

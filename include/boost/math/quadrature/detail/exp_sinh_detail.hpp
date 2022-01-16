@@ -105,10 +105,10 @@ private:
       using std::exp;
       std::size_t row  = ++m_committed_refinements;
 
-      Real h = ldexp(Real(1), -static_cast<int>(row));
+      Real h = ldexp(static_cast<Real>(1), -static_cast<int>(row));
       const Real t_max = m_t_min + m_abscissas[0].size() - 1;
 
-      size_t k = (size_t)boost::math::lltrunc(ceil((t_max - m_t_min) / (2 * h)));
+      size_t k = static_cast<size_t>(boost::math::lltrunc(ceil((t_max - m_t_min) / (2 * h))));
       m_abscissas[row].reserve(k);
       m_weights[row].reserve(k);
       Real arg = m_t_min;
@@ -149,14 +149,14 @@ template<class Real, class Policy>
 template<class F>
 auto exp_sinh_detail<Real, Policy>::integrate(const F& f, Real* error, Real* L1, const char* function, Real tolerance, std::size_t* levels)->decltype(std::declval<F>()(std::declval<Real>())) const
 {
-   typedef decltype(f(Real(0))) K;
-   using std::abs;
-   using std::floor;
-   using std::tanh;
-   using std::sinh;
-   using std::sqrt;
-   using boost::math::constants::half;
-   using boost::math::constants::half_pi;
+    typedef decltype(f(static_cast<Real>(0))) K;
+    using std::abs;
+    using std::floor;
+    using std::tanh;
+    using std::sinh;
+    using std::sqrt;
+    using boost::math::constants::half;
+    using boost::math::constants::half_pi;
 
    // This provided a nice error message for real valued integrals, but it's super awkward for complex-valued integrals:
    /*K y_max = f(tools::max_value<Real>());
@@ -219,7 +219,7 @@ auto exp_sinh_detail<Real, Policy>::integrate(const F& f, Real* error, Real* L1,
 
         I1 = half<Real>()*I0;
         L1_I1 = half<Real>()*L1_I0;
-        Real h = (Real) 1/ (Real) (1 << i);
+        Real h = static_cast<Real>(1)/static_cast<Real>(1 << i);
         K sum = 0;
         Real absum = 0;
 
@@ -306,8 +306,8 @@ void exp_sinh_detail<Real, Policy>::init(const std::integral_constant<int, 0>&)
 
    for (size_t i = 0; i <= m_committed_refinements; ++i)
    {
-      Real h = (Real)1 / (Real)(1 << i);
-      size_t k = (size_t)boost::math::lltrunc(ceil((t_max - m_t_min) / (2 * h)));
+      Real h = static_cast<Real>(1) / static_cast<Real>(1 << i);
+      size_t k = static_cast<size_t>(boost::math::lltrunc(ceil((t_max - m_t_min) / (2 * h))));
       m_abscissas[i].reserve(k);
       m_weights[i].reserve(k);
       Real arg = m_t_min;

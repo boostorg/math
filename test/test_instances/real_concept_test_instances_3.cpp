@@ -16,7 +16,7 @@
 #include <boost/math/tools/config.hpp>
 #include <boost/math/concepts/real_concept.hpp>
 
-#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+#if !defined(BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS) && !defined(BOOST_MATH_NO_REAL_CONCEPT_TESTS)
 
 #define BOOST_MATH_TEST_TYPE boost::math::concepts::real_concept
 #define TEST_GROUP_3

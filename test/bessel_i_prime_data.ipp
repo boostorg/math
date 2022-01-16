@@ -3,7 +3,7 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-   static const boost::array<boost::array<typename table_type<T>::type, 3>, 450
+   static const std::array<std::array<typename table_type<T>::type, 3>, 450
 #if LDBL_MAX_10_EXP < 370
       - 36
 #endif

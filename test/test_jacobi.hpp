@@ -89,7 +89,7 @@ void test_spots(T, const char* type_name)
     // Function values calculated on http://functions.wolfram.com/
     // Note that Mathematica's Sn/Cn/Dn accepts k^2 as the second parameter.
     // Arguments here are theta, k, sn, cn, dn
-    static const boost::array<boost::array<T, 5>, 36> data1 = {{
+    static const std::array<std::array<T, 5>, 36> data1 = {{
         {{ SC_(0.0), SC_(0.0), SC_(0.0), SC_(1.0), SC_(1.0) }},
         {{ ldexp(T(1), -25), ldexp(T(1), -25), SC_(2.98023223876953080883700663838486782870427050521881839342311e-8), SC_(0.99999999999999955591079014993741669975171697261290223678373), SC_(0.99999999999999999999999999999960556954738949421406900774443) }},
         {{ -ldexp(T(1), -25), ldexp(T(1), -25), SC_(-2.98023223876953080883700663838486782870427050521881839342311e-8), SC_(0.99999999999999955591079014993741669975171697261290223678373), SC_(0.99999999999999999999999999999960556954738949421406900774443) }},

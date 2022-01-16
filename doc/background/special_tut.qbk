@@ -196,7 +196,7 @@ for each code branch our implementation may take.  To slot these in nicely with 
 tabulate these like this:
 
     // function values calculated on http://functions.wolfram.com/
-    static const boost::array<boost::array<T, 3>, 10> my_special_data = {{
+    static const std::array<std::array<T, 3>, 10> my_special_data = {{
         {{ SC_(0), SC_(0), SC_(1) }},
         {{ SC_(0), SC_(1), SC_(1.26606587775200833559824462521471753760767031135496220680814) }},
         /* More values here... */
@@ -254,7 +254,7 @@ definition for the SC_ macro:
    #include <boost/test/tools/floating_point_comparison.hpp>
    // Our function to test:
    #include <boost/math/special_functions/my_special.hpp>
-   // We need boost::array for our test data, plus a few headers from
+   // We need std::array for our test data, plus a few headers from
    // libs/math/test that contain our testing machinery:
    #include <boost/array.hpp>
    #include "functor.hpp"

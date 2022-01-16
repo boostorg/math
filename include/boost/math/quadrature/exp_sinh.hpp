@@ -61,7 +61,7 @@ auto exp_sinh<Real, Policy>::integrate(const F& f, Real a, Real b, Real toleranc
     if ((boost::math::isfinite)(a) && (b >= boost::math::tools::max_value<Real>()))
     {
         // If a = 0, don't use an additional level of indirection:
-        if (a == (Real) 0)
+        if (a == static_cast<Real>(0))
         {
             return m_imp->integrate(f, error, L1, function, tolerance, levels);
         }

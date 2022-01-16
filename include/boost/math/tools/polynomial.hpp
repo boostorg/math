@@ -27,6 +27,7 @@
 #include <algorithm>
 #include <initializer_list>
 #include <type_traits>
+#include <iterator>
 
 namespace boost{ namespace math{ namespace tools{
 
@@ -293,7 +294,14 @@ public:
 
    template <class I>
    polynomial(I first, I last)
-   : m_data(first, last)
+      : m_data(first, last)
+   {
+       normalize();
+   }
+
+   template <class I>
+   polynomial(I first, unsigned length)
+      : m_data(first, std::next(first, length + 1))
    {
        normalize();
    }
@@ -641,7 +649,7 @@ template <class T>
 inline polynomial<T> operator + (polynomial<T>&& a, const polynomial<T>& b)
 {
    a += b;
-   return a;
+   return std::move(a);
 }
 template <class T>
 inline polynomial<T> operator + (const polynomial<T>& a, polynomial<T>&& b)

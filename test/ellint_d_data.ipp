@@ -6,7 +6,7 @@
 #ifndef SC_
 #  define SC_(x) static_cast<T>(BOOST_JOIN(x, L))
 #endif
-   static const boost::array<boost::array<typename table_type<T>::type, 2>, 125> ellint_d_data = {{
+   static const std::array<std::array<typename table_type<T>::type, 2>, 125> ellint_d_data = {{
       {{ SC_(4.2663944255221095139880438282681452852288e-38), SC_(7.8539816339744830961566084581987572104929e-01) }}, 
       {{ SC_(5.3389875064733255949510523157465792097624e-38), SC_(7.8539816339744830961566084581987572104929e-01) }}, 
       {{ SC_(1.7921979577002392819066727539424713436648e-37), SC_(7.8539816339744830961566084581987572104929e-01) }}, 

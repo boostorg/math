@@ -34,8 +34,10 @@
         }                                                                     \
     } while(false)
 
-#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+#if !defined(BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS) && !defined(BOOST_MATH_NO_REAL_CONCEPT_TESTS)
 using test_types = std::tuple<float, double, long double, boost::math::concepts::real_concept>;
+#elif !defined(BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS)
+using test_types = std::tuple<float, double, long double>;
 #else
 using test_types = std::tuple<float, double>;
 #endif
@@ -305,8 +307,8 @@ void f(T t)
 
 BOOST_AUTO_TEST_CASE(construct)
 {
-   boost::array<double, 3> da1 = { { 0.5, 1, 1.5 } };
-   boost::array<double, 3> da2 = { { 0.25, 0.5, 0.25 } };
+   std::array<double, 3> da1 = { { 0.5, 1, 1.5 } };
+   std::array<double, 3> da2 = { { 0.25, 0.5, 0.25 } };
    std::vector<double> v1(da1.begin(), da1.end());
    std::vector<double> v2(da2.begin(), da2.end());
 
@@ -375,9 +377,9 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(special_cases, RealT, test_types)
 BOOST_AUTO_TEST_CASE_TEMPLATE(error_cases, RealT, test_types)
 {
    typedef boost::math::hyperexponential_distribution<RealT> dist_t;
-   boost::array<RealT, 2> probs = { { 1, 2 } };
-   boost::array<RealT, 3> probs2 = { { 1, 2, 3 } };
-   boost::array<RealT, 3> rates = { { 1, 2, 3 } };
+   std::array<RealT, 2> probs = { { 1, 2 } };
+   std::array<RealT, 3> probs2 = { { 1, 2, 3 } };
+   std::array<RealT, 3> rates = { { 1, 2, 3 } };
    BOOST_MATH_CHECK_THROW(dist_t(probs.begin(), probs.end(), rates.begin(), rates.end()), std::domain_error);
    BOOST_MATH_CHECK_THROW(dist_t(probs, rates), std::domain_error);
    rates[1] = 0;

@@ -42,7 +42,7 @@ void test_hankel(T, const char* name)
 {
    std::cout << "Testing type " << name << std::endl;
 
-   static const boost::array<boost::array<std::complex<T>, 4>, 16> data = 
+   static const std::array<std::array<std::complex<T>, 4>, 16> data = 
    {{
       // Values are v, z, J, and Y.
       // H1 and H2 are calculated from functions.wolfram.com.

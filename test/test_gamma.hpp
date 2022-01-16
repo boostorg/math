@@ -115,22 +115,22 @@ void test_gamma(T, const char* name)
    // three items, input value, gamma and lgamma:
    //
    // gamma and lgamma at integer and half integer values:
-   // boost::array<boost::array<T, 3>, N> factorials;
+   // std::array<std::array<T, 3>, N> factorials;
    //
    // gamma and lgamma for z near 0:
-   // boost::array<boost::array<T, 3>, N> near_0;
+   // std::array<std::array<T, 3>, N> near_0;
    //
    // gamma and lgamma for z near 1:
-   // boost::array<boost::array<T, 3>, N> near_1;
+   // std::array<std::array<T, 3>, N> near_1;
    //
    // gamma and lgamma for z near 2:
-   // boost::array<boost::array<T, 3>, N> near_2;
+   // std::array<std::array<T, 3>, N> near_2;
    //
    // gamma and lgamma for z near -10:
-   // boost::array<boost::array<T, 3>, N> near_m10;
+   // std::array<std::array<T, 3>, N> near_m10;
    //
    // gamma and lgamma for z near -55:
-   // boost::array<boost::array<T, 3>, N> near_m55;
+   // std::array<std::array<T, 3>, N> near_m55;
    //
    // The last two cases are chosen more or less at random,
    // except that one is even and the other odd, and both are
