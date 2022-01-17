@@ -20,11 +20,11 @@
 
 namespace boost{ namespace math{ namespace tr1{ extern "C"{
 
-#else
-
-#define BOOST_PREVENT_MACRO_SUBSTITUTION /**/
-
 #endif // __cplusplus
+
+#ifndef BOOST_PREVENT_MACRO_SUBSTITUTION
+#define BOOST_PREVENT_MACRO_SUBSTITUTION /**/
+#endif
 
 // we need to import/export our code only if the user has specifically
 // asked for it by defining either BOOST_ALL_DYN_LINK if they want all boost

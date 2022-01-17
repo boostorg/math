@@ -18,6 +18,7 @@
 #include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/quadrature/gauss.hpp>
 #include <boost/math/special_functions/sinc.hpp>
+#include <boost/math/tools/test_value.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/multiprecision/cpp_complex.hpp>
 

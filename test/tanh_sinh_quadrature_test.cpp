@@ -91,6 +91,17 @@ using boost::math::constants::root_two;
 using boost::math::constants::root_two_pi;
 using boost::math::constants::root_pi;
 
+template <class Real>
+inline Real cast_mp_to_real(const cpp_bin_float_100& arg)
+{
+   return static_cast<Real>(arg);
+}
+template <>
+inline boost::math::concepts::real_concept cast_mp_to_real<boost::math::concepts::real_concept>(const cpp_bin_float_100& arg)
+{
+   return static_cast<boost::math::concepts::real_concept>(static_cast<long double>(arg));
+}
+
 template <class T>
 void print_levels(const T& v, const char* suffix)
 {
@@ -567,7 +578,7 @@ void test_crc()
                // Casting to cpp_bin_float_100 beforehand fixes most of them.
                cpp_bin_float_100 np1 = n + 1;
                cpp_bin_float_100 mp1 = m + 1;
-               Q_expected = static_cast<Real>(tgamma(np1)/pow(mp1, np1));
+               Q_expected = cast_mp_to_real<Real>(tgamma(np1)/pow(mp1, np1));
                BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
          }
       }
