@@ -119,4 +119,22 @@ inline T create_test_value(largest_float, const char* str, const std::false_type
   std::integral_constant<bool, \
     std::is_constructible<T, const char*>::value>()\
 )
+
+#if LDBL_MAX_10_EXP > DBL_MAX_10_EXP
+#define BOOST_MATH_TEST_HUGE_FLOAT_SUFFIX(x) BOOST_MATH_TEST_LARGEST_FLOAT_SUFFIX(x)
+#else
+#define BOOST_MATH_TEST_HUGE_FLOAT_SUFFIX(x) 0.0
+#endif
+
+#define BOOST_MATH_HUGE_TEST_VALUE(T, x) create_test_value<T>(\
+  BOOST_MATH_TEST_HUGE_FLOAT_SUFFIX(x),\
+  #x,\
+  std::integral_constant<bool, \
+    std::numeric_limits<T>::is_specialized &&\
+      (std::numeric_limits<T>::radix == 2)\
+        && (std::numeric_limits<T>::digits <= BOOST_MATH_TEST_LARGEST_FLOAT_DIGITS)\
+        && std::is_convertible<largest_float, T>::value>(),\
+  std::integral_constant<bool, \
+    std::is_constructible<T, const char*>::value>()\
+)
 #endif // TEST_VALUE_HPP

@@ -695,7 +695,7 @@ template <class T, int N>
 inline T unchecked_factorial_imp(unsigned i, const std::integral_constant<int, N>&)
 {
    static_assert(!std::is_integral<T>::value, "Type T must not be an integral type");
-   static_assert(!std::numeric_limits<T>::is_integral, "Type T must not be an integral type");
+   static_assert(!std::numeric_limits<T>::is_integer, "Type T must not be an integral type");
    // factorial<unsigned int>(n) is not implemented
    // because it would overflow integral type T for too small n
    // to be useful. Use instead a floating-point type,
@@ -815,7 +815,7 @@ template <class T>
 inline T unchecked_factorial_imp(unsigned i, const std::integral_constant<int, 0>&)
 {
    static_assert(!std::is_integral<T>::value, "Type T must not be an integral type");
-   static_assert(!std::numeric_limits<T>::is_integral, "Type T must not be an integral type");
+   static_assert(!std::numeric_limits<T>::is_integer, "Type T must not be an integral type");
    // factorial<unsigned int>(n) is not implemented
    // because it would overflow integral type T for too small n
    // to be useful. Use instead a floating-point type,
