@@ -124,7 +124,7 @@ private:
 #else
       std::size_t row = m_committed_refinements;
 #endif
-      Real h = ldexp(Real(1), -static_cast<int>(row));
+      Real h = ldexp(static_cast<Real>(1), -static_cast<int>(row));
       std::size_t first_complement = 0;
       std::size_t n = boost::math::itrunc(ceil((m_t_max - h) / (2 * h)));
       m_abscissas[row].reserve(n);
