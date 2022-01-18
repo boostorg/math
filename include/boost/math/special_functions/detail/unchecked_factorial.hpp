@@ -694,14 +694,19 @@ const typename unchecked_factorial_initializer<T>::init unchecked_factorial_init
 template <class T, int N>
 inline T unchecked_factorial_imp(unsigned i, const std::integral_constant<int, N>&)
 {
-   static_assert(!std::is_integral<T>::value, "Type T must not be an integral type");
-   static_assert(!std::numeric_limits<T>::is_integer, "Type T must not be an integral type");
-   // factorial<unsigned int>(n) is not implemented
+   //
+   // If you're foolish enough to instantiate factorial
+   // on an integer type then you end up here.  But this code is
+   // only intended for (fixed precision) multiprecision types.
+   // 
+   // Note, factorial<unsigned int>(n) is not implemented
    // because it would overflow integral type T for too small n
    // to be useful. Use instead a floating-point type,
    // and convert to an unsigned type if essential, for example:
    // unsigned int nfac = static_cast<unsigned int>(factorial<double>(n));
    // See factorial documentation for more detail.
+   //
+   static_assert(!std::is_integral<T>::value && !std::numeric_limits<T>::is_integer, "Type T must not be an integral type");
 
    // We rely on C++11 thread safe initialization here:
    static const std::array<T, 101> factorials = {{
@@ -814,14 +819,19 @@ inline T unchecked_factorial_imp(unsigned i, const std::integral_constant<int, N
 template <class T>
 inline T unchecked_factorial_imp(unsigned i, const std::integral_constant<int, 0>&)
 {
-   static_assert(!std::is_integral<T>::value, "Type T must not be an integral type");
-   static_assert(!std::numeric_limits<T>::is_integer, "Type T must not be an integral type");
-   // factorial<unsigned int>(n) is not implemented
+   //
+   // If you're foolish enough to instantiate factorial
+   // on an integer type then you end up here.  But this code is
+   // only intended for (variable precision) multiprecision types.
+   // 
+   // Note, factorial<unsigned int>(n) is not implemented
    // because it would overflow integral type T for too small n
    // to be useful. Use instead a floating-point type,
    // and convert to an unsigned type if essential, for example:
    // unsigned int nfac = static_cast<unsigned int>(factorial<double>(n));
    // See factorial documentation for more detail.
+   //
+   static_assert(!std::is_integral<T>::value && !std::numeric_limits<T>::is_integer, "Type T must not be an integral type");
 
    static const char* const factorial_strings[] = {
          "1",
