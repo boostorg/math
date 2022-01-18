@@ -157,7 +157,7 @@ auto sinh_sinh_detail<Real, Policy>::integrate(const F f, Real tolerance, Real* 
 
     static const char* function = "boost::math::quadrature::sinh_sinh<%1%>::integrate";
 
-    typedef decltype(f(Real(0))) K;
+    typedef decltype(f(static_cast<Real>(0))) K;
     static_assert(!std::is_integral<K>::value,
                   "The return type cannot be integral, it must be either a real or complex floating point type.");
     K y_max = f(boost::math::tools::max_value<Real>());
