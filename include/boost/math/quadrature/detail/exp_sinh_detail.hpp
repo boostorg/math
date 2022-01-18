@@ -108,7 +108,7 @@ private:
       Real h = ldexp(Real(1), -static_cast<int>(row));
       const Real t_max = m_t_min + m_abscissas[0].size() - 1;
 
-      size_t k = (size_t)boost::math::lltrunc(ceil((t_max - m_t_min) / (2 * h)));
+      size_t k = static_cast<size_t>(boost::math::lltrunc(ceil((t_max - m_t_min) / (2 * h))));
       m_abscissas[row].reserve(k);
       m_weights[row].reserve(k);
       Real arg = m_t_min;
@@ -201,7 +201,7 @@ auto exp_sinh_detail<Real, Policy>::integrate(const F& f, Real* error, Real* L1,
 
         I1 = half<Real>()*I0;
         L1_I1 = half<Real>()*L1_I0;
-        Real h = (Real) 1/ (Real) (1 << i);
+        Real h = static_cast<Real>(1) / static_cast<Real>(1 << i);
         K sum = 0;
         Real absum = 0;
 
@@ -222,7 +222,7 @@ auto exp_sinh_detail<Real, Policy>::integrate(const F& f, Real* error, Real* L1,
             // Numerical experiments indicate that we should start this check at ~30 for floats,
             // ~60 for doubles, and ~100 for long doubles.
             // However, starting the check at x = 10 rather than x = 100 will only save two function evaluations.
-            if (x > (Real) 100 && abterm0 < eps && abterm1 < eps)
+            if (x > static_cast<Real>(100) && abterm0 < eps && abterm1 < eps)
             {
                 break;
             }
@@ -294,8 +294,8 @@ void exp_sinh_detail<Real, Policy>::init(const std::integral_constant<int, 0>&)
 
    for (size_t i = 0; i <= m_committed_refinements; ++i)
    {
-      Real h = (Real)1 / (Real)(1 << i);
-      size_t k = (size_t)boost::math::lltrunc(ceil((t_max - m_t_min) / (2 * h)));
+      Real h = static_cast<Real>(1) / static_cast<Real>(1 << i);
+      size_t k = static_cast<size_t>(boost::math::lltrunc(ceil((t_max - m_t_min) / (2 * h))));
       m_abscissas[i].reserve(k);
       m_weights[i].reserve(k);
       Real arg = m_t_min;
