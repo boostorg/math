@@ -4,6 +4,7 @@
 //           https://www.boost.org/LICENSE_1_0.txt)
 
 #include "test_autodiff.hpp"
+#include <boost/math/tools/test_value.hpp>
 
 BOOST_AUTO_TEST_SUITE(test_autodiff_4)
 
@@ -72,9 +73,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(multiprecision, T, multiprecision_float_types) {
   const auto v =
       mixed_partials_f(w, x, y, z); // auto = autodiff_fvar<T,Nw,Nx,Ny,Nz>
   // Calculated from Mathematica symbolic differentiation.
-  const T answer = boost::lexical_cast<T>(
-      "1976.3196007477977177798818752904187209081211892187"
-      "5499076582535951111845769110560421820940516423255314");
+  const T answer = BOOST_MATH_TEST_VALUE(T, 1976.31960074779771777988187529041872090812118921875499076582535951111845769110560421820940516423255314);
   // BOOST_CHECK_CLOSE(v.derivative(Nw,Nx,Ny,Nz), answer, eps); // Doesn't work
   // for cpp_dec_float
   const T relative_error =

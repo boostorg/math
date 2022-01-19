@@ -22,7 +22,6 @@
 #define BOOST_MATH_NO_REAL_CONCEPT_TESTS
 #define BOOST_MATH_NO_DISTRIBUTION_CONCEPT_TESTS
 #define BOOST_MATH_NO_LEXICAL_CAST
-#define TEST_STD
 
 // Since Boost.Multiprecision is in active development some tests do not fully cooperate yet.
 #define BOOST_MATH_NO_MP_TESTS

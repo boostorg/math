@@ -14,6 +14,7 @@
 #include <boost/math/concepts/real_concept.hpp>
 #include <boost/test/included/unit_test.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
+#include <boost/math/tools/test_value.hpp>
 #include <boost/math/quadrature/tanh_sinh.hpp>
 #include <boost/math/special_functions/sinc.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
@@ -89,6 +90,17 @@ using boost::math::constants::ln_two;
 using boost::math::constants::root_two;
 using boost::math::constants::root_two_pi;
 using boost::math::constants::root_pi;
+
+template <class Real>
+inline Real cast_mp_to_real(const cpp_bin_float_100& arg)
+{
+   return static_cast<Real>(arg);
+}
+template <>
+inline boost::math::concepts::real_concept cast_mp_to_real<boost::math::concepts::real_concept>(const cpp_bin_float_100& arg)
+{
+   return static_cast<boost::math::concepts::real_concept>(static_cast<long double>(arg));
+}
 
 template <class T>
 void print_levels(const T& v, const char* suffix)
@@ -477,7 +489,7 @@ void test_horrible()
       auto f = [](Real x)->Real { return x*sin(2*exp(2*sin(2*exp(2*x) ) ) ); };
       Q = integrator.integrate(f, (Real) -1, (Real) 1, get_convergence_tolerance<Real>(), &error, &L1);
       // NIntegrate[x*Sin[2*Exp[2*Sin[2*Exp[2*x]]]], {x, -1, 1}, WorkingPrecision -> 130, MaxRecursion -> 100]
-      Q_expected = boost::lexical_cast<Real>("0.33673283478172753598559003181355241139806404130031017259552729882281");
+      Q_expected = BOOST_MATH_TEST_VALUE(Real, 0.33673283478172753598559003181355241139806404130031017259552729882281);
       BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
       // Over again without specifying the bounds:
       Q = integrator.integrate(f, get_convergence_tolerance<Real>(), &error, &L1);
@@ -559,7 +571,7 @@ void test_crc()
       auto f2 = [](Real x)->Real { return sqrt(cos(x)); };
       Q = integrator.integrate(f2, (Real) 0, (Real) half_pi<Real>(), get_convergence_tolerance<Real>(), &error, &L1);
       //Q_expected = pow(two_pi<Real>(), 3*half<Real>())/pow(boost::math::tgamma((Real) 1/ (Real) 4), 2);
-      Q_expected = boost::lexical_cast<Real>("1.198140234735592207439922492280323878227212663215651558263674952946405214143915670835885556489793389375907225");
+      Q_expected = BOOST_MATH_TEST_VALUE(Real, 1.1981402347355922074399224922803238782272126632156515582636749529);
       BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
     
 
@@ -572,7 +584,7 @@ void test_crc()
                // Casting to cpp_bin_float_100 beforehand fixes most of them.
                cpp_bin_float_100 np1 = n + 1;
                cpp_bin_float_100 mp1 = m + 1;
-               Q_expected = boost::lexical_cast<Real>((tgamma(np1)/pow(mp1, np1)).str());
+               Q_expected = cast_mp_to_real<Real>(tgamma(np1)/pow(mp1, np1));
                BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
          }
       }
@@ -836,8 +848,8 @@ void test_complex()
    BOOST_IF_CONSTEXPR (std::is_fundamental<Complex>::value)
    #endif
    {
-      Complex expected(boost::lexical_cast<value_type>("-0.2911081612888249710582867318081776512805281815037891183828405999609246645054069649838607112484426042883371996"),
-         boost::lexical_cast<value_type>("0.4507983563969959578849120188097153649211346293694903758252662015991543519595834937475296809912196906074655385"));
+      Complex expected(BOOST_MATH_TEST_VALUE(value_type, - 0.2911081612888249710582867318081776512805281815037891183828405999609246645054069649838607112484426042883371996),
+         BOOST_MATH_TEST_VALUE(value_type, 0.4507983563969959578849120188097153649211346293694903758252662015991543519595834937475296809912196906074655385));
 
       value_type error = abs(expected - Q);
       BOOST_CHECK_LE(error, tol);
@@ -851,8 +863,8 @@ void test_complex()
       };
       Q = integrator.integrate(f2, value_type(0), boost::math::constants::half_pi<value_type>(), get_convergence_tolerance<value_type>());
 
-      expected = Complex(boost::lexical_cast<value_type>("0.8893822921008980697856313681734926564752476188106405688951257340480164694708337246829840859633322683740376134733"),
-         -boost::lexical_cast<value_type>("2.381380802906111364088958767973164614925936185337231718483495612539455538280372745733208000514737758457795502168"));
+      expected = Complex(BOOST_MATH_TEST_VALUE(value_type, 0.8893822921008980697856313681734926564752476188106405688951257340480164694708337246829840859633322683740376134733),
+         -BOOST_MATH_TEST_VALUE(value_type, 2.381380802906111364088958767973164614925936185337231718483495612539455538280372745733208000514737758457795502168));
       expected -= boost::math::constants::half_pi<value_type>();
 
       error = abs(expected - Q);

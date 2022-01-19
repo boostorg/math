@@ -79,7 +79,7 @@ test-suite examples :
    #[ # run inverse_chi_squared_find_df_example.cpp  ]
    #[ run lambert_w_basic_example.cpp ]
    [ run lambert_w_basic_example.cpp  : : : [ requires cxx11_numeric_limits ] ]
-   [ run lambert_w_simple_examples.cpp  : : : [ requires cxx11_numeric_limits ] ]
+   [ run lambert_w_simple_examples.cpp  : : : [ requires cxx11_numeric_limits ] [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] ]
    [ run lambert_w_precision_example.cpp  : : : [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] [ requires cxx11_numeric_limits cxx11_explicit_conversion_operators ] ]
 
    [ run inverse_gamma_example.cpp  ]

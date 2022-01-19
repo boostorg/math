@@ -62,6 +62,10 @@ BOOST_MATH_INSTRUMENT_LAMBERT_W_SMALL_Z_SERIES_ITERATIONS  // Show evaluation of
 #include <boost/math/tools/big_constant.hpp>
 #include <boost/math/tools/cxx03_warn.hpp>
 
+#ifndef BOOST_MATH_STANDALONE
+#include <boost/lexical_cast.hpp>
+#endif
+
 #include <limits>
 #include <cmath>
 #include <limits>
@@ -179,7 +183,12 @@ inline double must_reduce_to_double(const T& z, const std::true_type&)
 template <typename T>
 inline double must_reduce_to_double(const T& z, const std::false_type&)
 { // try a lexical_cast and hope for the best:
+#ifndef BOOST_MATH_STANDALONE
    return boost::lexical_cast<double>(z);
+#else
+   static_assert(sizeof(T) == 0, "Unsupported in standalone mode: don't know how to cast your number type to a double.");
+   return 0.0;
+#endif
 }
 
 //! \brief Schroeder method, fifth-order update formula,

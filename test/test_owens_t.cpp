@@ -41,6 +41,7 @@ using boost::math::owens_t;
 #include "libs/math/test/handle_test_result.hpp"
 #include "libs/math/test/table_type.hpp"
 #include "libs/math/test/functor.hpp"
+#include "boost/math/tools/test_value.hpp"
 #include "test_owens_t.hpp"
 
 //
@@ -52,19 +53,8 @@ using boost::math::owens_t;
 #ifdef TEST_CPP_DEC_FLOAT
 #include <boost/multiprecision/cpp_dec_float.hpp>
 
-template <class R>
-inline R convert_to(const char* s)
-{
-   try{
-      return boost::lexical_cast<R>(s);
-   }
-   catch(const boost::bad_lexical_cast&)
-   {
-      return 0;
-   }
-}
 #undef SC_
-#define SC_(x) convert_to<T>(BOOST_STRINGIZE(x))
+#define SC_(x) BOOST_MATH_TEST_VALUE(x)
 #endif
 
 #include "owens_t_T7.hpp"

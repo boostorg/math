@@ -87,7 +87,7 @@ using boost::math::lambert_w0;
 #include "table_type.hpp"
 
 #ifndef SC_
-#  define SC_(x) boost::lexical_cast<typename table_type<T>::type>(BOOST_STRINGIZE(x))
+#  define SC_(x) BOOST_MATH_HUGE_TEST_VALUE(typename table_type<T>::type, x)
 #endif
 
 
