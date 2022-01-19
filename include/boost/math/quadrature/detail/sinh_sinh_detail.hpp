@@ -213,7 +213,7 @@ auto sinh_sinh_detail<Real, Policy>::integrate(const F f, Real tolerance, Real* 
 
         I1 = half<Real>()*I0;
         L1_I1 = half<Real>()*L1_I0;
-        Real h = (Real) 1/ (Real) (1 << i);
+        Real h = static_cast<Real>(1) / static_cast<Real>(1 << i);
         K sum = 0;
         Real absum = 0;
 
@@ -233,7 +233,7 @@ auto sinh_sinh_detail<Real, Policy>::integrate(const F f, Real tolerance, Real* 
             absum += abterm0;
 
             // We require two consecutive terms to be < eps in case we hit a zero of f.
-            if (x > (Real) 100 && abterm0 < eps && abterm1 < eps)
+            if (x > static_cast<Real>(100) && abterm0 < eps && abterm1 < eps)
             {
                 break;
             }
@@ -295,7 +295,7 @@ void sinh_sinh_detail<Real, Policy>::init(const std::integral_constant<int, 0>&)
 
    for (size_t i = 0; i <= 4; ++i)
    {
-      Real h = (Real)1 / (Real)(1 << i);
+      Real h = static_cast<Real>(1) / static_cast<Real>(1 << i);
       size_t k = static_cast<size_t>(boost::math::lltrunc(ceil(m_t_max / (2 * h))));
       m_abscissas[i].reserve(k);
       m_weights[i].reserve(k);
