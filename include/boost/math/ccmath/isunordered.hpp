@@ -15,7 +15,7 @@ namespace boost::math::ccmath {
 template <typename T>
 inline constexpr bool isunordered(const T x, const T y) noexcept
 {
-    if(BOOST_MATH_IS_CONSTANT_EVALUATED(arg))
+    if(BOOST_MATH_IS_CONSTANT_EVALUATED(x))
     {
         return boost::math::ccmath::isnan(x) || boost::math::ccmath::isnan(y);
     }
