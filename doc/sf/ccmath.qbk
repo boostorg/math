@@ -179,6 +179,9 @@ All of the following functions require C++17 or greater.
         template <typename Arithmetic1, typename Arithmetic2 = Arithmetic1>
         inline constexpr bool islessequal(Arithmetic1 x, Arithmetic2 y) noexcept
 
+        template <typename T>
+        inline constexpr bool isunordered(T x, T y) noexcept
+
     } // Namespaces
 
 [endsect] [/section:ccmath Constexpr CMath]
