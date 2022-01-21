@@ -260,11 +260,11 @@ template<> struct fp_traits_non_native<double, double_precision>
 {
     typedef ieee_copy_all_bits_tag method;
 
-    static constexpr uint64_t sign     = ((uint64_t)0x80000000u) << 32;
-    static constexpr uint64_t exponent = ((uint64_t)0x7ff00000) << 32;
+    static constexpr uint64_t sign     = static_cast<uint64_t>(0x80000000u) << 32;
+    static constexpr uint64_t exponent = static_cast<uint64_t>(0x7ff00000) << 32;
     static constexpr uint64_t flag     = 0;
     static constexpr uint64_t significand
-        = (((uint64_t)0x000fffff) << 32) + ((uint64_t)0xffffffffu);
+        = (static_cast<uint64_t>(0x000fffff) << 32) + static_cast<uint64_t>(0xffffffffu);
 
     typedef uint64_t bits;
     static void get_bits(double x, uint64_t& a) { std::memcpy(&a, &x, 8); }
@@ -313,11 +313,11 @@ template<> struct fp_traits_non_native<long double, double_precision>
 {
     typedef ieee_copy_all_bits_tag method;
 
-    static const uint64_t sign     = (uint64_t)0x80000000u << 32;
-    static const uint64_t exponent = (uint64_t)0x7ff00000 << 32;
+    static const uint64_t sign     = static_cast<uint64_t>(0x80000000u) << 32;
+    static const uint64_t exponent = static_cast<uint64_t>(0x7ff00000) << 32;
     static const uint64_t flag     = 0;
     static const uint64_t significand
-        = ((uint64_t)0x000fffff << 32) + (uint64_t)0xffffffffu;
+        = (static_cast<uint64_t>(0x000fffff) << 32) + static_cast<uint64_t>(0xffffffffu);
 
     typedef uint64_t bits;
     static void get_bits(long double x, uint64_t& a) { std::memcpy(&a, &x, 8); }

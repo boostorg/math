@@ -104,7 +104,7 @@ void barycentric_rational_imp<Real>::calculate_weights(size_t approximation_orde
     m_w.resize(n, 0);
     for(int64_t k = 0; k < n; ++k)
     {
-        int64_t i_min = (std::max)(k - (int64_t) approximation_order, (int64_t) 0);
+        int64_t i_min = (std::max)(k - static_cast<int64_t>(approximation_order), static_cast<int64_t>(0));
         int64_t i_max = k;
         if (k >= n - (std::ptrdiff_t)approximation_order)
         {
