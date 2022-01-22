@@ -38,7 +38,7 @@ void test_mode_2param(benchmark::State& state)
 
 static void fixed_ratio_2args(benchmark::internal::Benchmark* b, long double left_div_right, std::vector<int64_t> lefts) {
     for (const long double &left: lefts) {
-        b->Args({(int64_t)left, (int64_t)(left/left_div_right)});
+        b->Args({static_cast<int64_t>(left), static_cast<int64_t>((left/left_div_right))});
     }
 }
 

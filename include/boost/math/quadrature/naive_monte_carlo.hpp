@@ -163,7 +163,7 @@ public:
         RandomNumberGenerator gen(seed);
         Real inv_denom = 1/static_cast<Real>(((gen.max)()-(gen.min)()));
 
-        m_num_threads = (std::max)(m_num_threads, (uint64_t) 1);
+        m_num_threads = (std::max)(m_num_threads, static_cast<uint64_t>(1));
         m_thread_calls.reset(new std::atomic<uint64_t>[threads]);
         m_thread_Ss.reset(new std::atomic<Real>[threads]);
         m_thread_averages.reset(new std::atomic<Real>[threads]);
