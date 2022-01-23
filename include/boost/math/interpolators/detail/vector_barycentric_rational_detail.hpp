@@ -68,7 +68,7 @@ void vector_barycentric_rational_imp<TimeContainer, SpaceContainer>::calculate_w
     w_.resize(n, Real(0));
     for(int64_t k = 0; k < n; ++k)
     {
-        int64_t i_min = (std::max)(k - (int64_t) approximation_order, (int64_t) 0);
+        int64_t i_min = (std::max)(k - static_cast<int64_t>(approximation_order), static_cast<int64_t>(0));
         int64_t i_max = k;
         if (k >= n - (std::ptrdiff_t)approximation_order)
         {

@@ -20,11 +20,11 @@
 
 namespace boost{ namespace math{ namespace tr1{ extern "C"{
 
-#else
-
-#define BOOST_PREVENT_MACRO_SUBSTITUTION /**/
-
 #endif // __cplusplus
+
+#ifndef BOOST_PREVENT_MACRO_SUBSTITUTION
+#define BOOST_PREVENT_MACRO_SUBSTITUTION /**/
+#endif
 
 // we need to import/export our code only if the user has specifically
 // asked for it by defining either BOOST_ALL_DYN_LINK if they want all boost
@@ -106,8 +106,10 @@ namespace boost{ namespace math{ namespace tr1{ extern "C"{
 #  endif
 #  include <boost/config/auto_link.hpp>
 #endif
-#else
-#error Auto linking not supported in standalone mode.
+#else // Standalone mode
+#  if defined(_MSC_VER) && !defined(BOOST_ALL_NO_LIB)
+#    pragma message("Auto linking of TR1 is not supported in standalone mode")
+#  endif
 #endif // BOOST_MATH_STANDALONE
 
 #if !(defined(__INTEL_COMPILER) && defined(__APPLE__)) && !(defined(__FLT_EVAL_METHOD__) && !defined(__cplusplus))

@@ -60,7 +60,7 @@ Real b3_spline(Real x)
         Real y = 2 - absx;
         return boost::math::constants::sixth<Real>()*y*y*y;
     }
-    return (Real) 0;
+    return static_cast<Real>(0);
 }
 
 template<class Real>
@@ -79,7 +79,7 @@ Real b3_spline_prime(Real x)
     {
         return -boost::math::constants::half<Real>()*(2 - x)*(2 - x);
     }
-    return (Real) 0;
+    return static_cast<Real>(0);
 }
 
 template<class Real>
@@ -98,7 +98,7 @@ Real b3_spline_double_prime(Real x)
     {
         return (2 - x);
     }
-    return (Real) 0;
+    return static_cast<Real>(0);
 }
 
 
@@ -274,8 +274,8 @@ Real cardinal_cubic_b_spline_imp<Real>::operator()(Real x) const
     using std::ceil;
     using std::floor;
 
-    size_t k_min = (size_t) (max)(static_cast<long>(0), boost::math::ltrunc(ceil(t - 2)));
-    size_t k_max = (size_t) (max)((min)(static_cast<long>(m_beta.size() - 1), boost::math::ltrunc(floor(t + 2))), (long) 0);
+    size_t k_min = static_cast<size_t>((max)(static_cast<long>(0), boost::math::ltrunc(ceil(t - 2))));
+    size_t k_max = static_cast<size_t>((max)((min)(static_cast<long>(m_beta.size() - 1), boost::math::ltrunc(floor(t + 2))), 0l));
 
     for (size_t k = k_min; k <= k_max; ++k)
     {
@@ -296,8 +296,8 @@ Real cardinal_cubic_b_spline_imp<Real>::prime(Real x) const
     using std::ceil;
     using std::floor;
 
-    size_t k_min = (size_t) (max)(static_cast<long>(0), boost::math::ltrunc(ceil(t - 2)));
-    size_t k_max = (size_t) (min)(static_cast<long>(m_beta.size() - 1), boost::math::ltrunc(floor(t + 2)));
+    size_t k_min = static_cast<size_t>((max)(static_cast<long>(0), boost::math::ltrunc(ceil(t - 2))));
+    size_t k_max = static_cast<size_t>((min)(static_cast<long>(m_beta.size() - 1), boost::math::ltrunc(floor(t + 2))));
 
     for (size_t k = k_min; k <= k_max; ++k)
     {
@@ -317,8 +317,8 @@ Real cardinal_cubic_b_spline_imp<Real>::double_prime(Real x) const
     using std::ceil;
     using std::floor;
 
-    size_t k_min = (size_t) (max)(static_cast<long>(0), boost::math::ltrunc(ceil(t - 2)));
-    size_t k_max = (size_t) (min)(static_cast<long>(m_beta.size() - 1), boost::math::ltrunc(floor(t + 2)));
+    size_t k_min = static_cast<size_t>((max)(static_cast<long>(0), boost::math::ltrunc(ceil(t - 2))));
+    size_t k_max = static_cast<size_t>((min)(static_cast<long>(m_beta.size() - 1), boost::math::ltrunc(floor(t + 2))));
 
     for (size_t k = k_min; k <= k_max; ++k)
     {

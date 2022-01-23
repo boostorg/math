@@ -132,7 +132,7 @@ Returns F[sub n - number_of_steps].
    template <class Recurrence>
    struct forward_recurrence_iterator
    {
-      typedef typename boost::remove_reference<decltype(std::get<0>(std::declval<Recurrence&>()(0)))>::type value_type;
+      typedef typename std::remove_reference<decltype(std::get<0>(std::declval<Recurrence&>()(0)))>::type value_type;
 
       forward_recurrence_iterator(const Recurrence& r, value_type f_n_minus_1, value_type f_n);
       forward_recurrence_iterator(const Recurrence& r, value_type f_n);
@@ -146,7 +146,7 @@ only one value is provided, then the second is computed by using the recurrence 
    template <class Recurrence>
    struct backward_recurrence_iterator
    {
-      typedef typename boost::remove_reference<decltype(std::get<0>(std::declval<Recurrence&>()(0)))>::type value_type;
+      typedef typename std::remove_reference<decltype(std::get<0>(std::declval<Recurrence&>()(0)))>::type value_type;
 
       backward_recurrence_iterator(const Recurrence& r, value_type f_n_plus_1, value_type f_n);
       backward_recurrence_iterator(const Recurrence& r, value_type f_n);

@@ -124,7 +124,7 @@ private:
 #else
       std::size_t row = m_committed_refinements;
 #endif
-      Real h = ldexp(Real(1), -static_cast<int>(row));
+      Real h = ldexp(static_cast<Real>(1), -static_cast<int>(row));
       std::size_t first_complement = 0;
       std::size_t n = boost::math::itrunc(ceil((m_t_max - h) / (2 * h)));
       m_abscissas[row].reserve(n);
@@ -144,29 +144,33 @@ private:
    {
       using std::tanh;
       using std::sinh;
-      return tanh(constants::half_pi<Real>()*sinh(t));
+      using boost::math::constants::half_pi;
+      return tanh(half_pi<Real>()*sinh(t));
    }
    static inline Real weight_at_t(const Real& t)
    {
       using std::cosh;
       using std::sinh;
-      Real cs = cosh(constants::half_pi<Real>() * sinh(t));
-      return constants::half_pi<Real>() * cosh(t) / (cs * cs);
+      using boost::math::constants::half_pi;
+      Real cs = cosh(half_pi<Real>() * sinh(t));
+      return half_pi<Real>() * cosh(t) / (cs * cs);
    }
    static inline Real abscissa_complement_at_t(const Real& t)
    {
       using std::cosh;
       using std::exp;
       using std::sinh;
-      Real u2 = constants::half_pi<Real>() * sinh(t);
+      using boost::math::constants::half_pi;
+      Real u2 = half_pi<Real>() * sinh(t);
       return 1 / (exp(u2) *cosh(u2));
    }
    static inline Real t_from_abscissa_complement(const Real& x)
    {
       using std::log;
       using std::sqrt;
+      using boost::math::constants::pi;
       Real l = log(2-x) - log(x);
-      return log((sqrt(l * l + constants::pi<Real>() * constants::pi<Real>()) + l) / constants::pi<Real>());
+      return log((sqrt(l * l + pi<Real>() * pi<Real>()) + l) / pi<Real>());
    };
 
 
@@ -232,7 +236,7 @@ decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) tanh_sin
     //
     // Check for non-finite values at the end points:
     // 
-    result_type yp, ym;
+    result_type yp, ym, tail_tolerance((std::max)(boost::math::tools::epsilon<Real>(), Real(tolerance * tolerance)));
     do
     {
        yp = f(-1 - m_abscissas[0][max_left_position], m_abscissas[0][max_left_position]);
@@ -240,6 +244,19 @@ decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) tanh_sin
           break;
        --max_left_position;
     } while (m_abscissas[0][max_left_position] < 0);
+    //
+    // Also remove points which are insignificant or zero:
+    //
+    while (max_left_position > 1)
+    {
+       if (abs(yp * m_weights[0][max_left_position]) > abs(L1_I0 * tail_tolerance))
+          break;
+       --max_left_position;
+       yp = f(-1 - m_abscissas[0][max_left_position], m_abscissas[0][max_left_position]);
+    }
+    //
+    // Over again for the right hand side:
+    //
     do
     {
        ym = f(1 + m_abscissas[0][max_right_position], -m_abscissas[0][max_right_position]);
@@ -247,6 +264,13 @@ decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) tanh_sin
           break;
        --max_right_position;
     } while (m_abscissas[0][max_right_position] < 0);
+    while (max_right_position > 1)
+    {
+       if (abs(ym * m_weights[0][max_right_position]) > abs(L1_I0 * tail_tolerance))
+          break;
+       --max_right_position;
+       ym = f(1 + m_abscissas[0][max_right_position], -m_abscissas[0][max_right_position]);
+    }
 
     if ((max_left_position == 0) && (max_right_position == 0))
     {
@@ -350,6 +374,9 @@ decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) tanh_sin
            max_left_position -= 2;
            --max_left_index;
         } while (abscissa_row[max_left_index] < 0);
+        bool truncate_left(false), truncate_right(false);
+        if (abs(L1_I1 * tail_tolerance) > abs(yp * weight_row[max_left_index]))
+           truncate_left = true;
         do
         {
            ym = f(1 + abscissa_row[max_right_index], -abscissa_row[max_right_index]);
@@ -358,6 +385,8 @@ decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) tanh_sin
            --max_right_index;
            max_right_position -= 2;
         } while (abscissa_row[max_right_index] < 0);
+        if (abs(L1_I1 * tail_tolerance) > abs(ym * weight_row[max_right_index]))
+           truncate_right = true;
 
         sum += yp * weight_row[max_left_index] + ym * weight_row[max_right_index];
         absum += abs(yp * weight_row[max_left_index]) + abs(ym * weight_row[max_right_index]);
@@ -408,10 +437,10 @@ decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) tanh_sin
 
         I1 += sum*h;
         L1_I1 += absum*h;
+
         ++k;
         Real last_err = err;
         err = abs(I0 - I1);
-        // std::cout << "Estimate:        " << I1 << " Error estimate at level " << k  << " = " << err << std::endl;
 
         if (!(boost::math::isfinite)(I1))
         {
@@ -462,7 +491,7 @@ decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) tanh_sin
         // parameters.  We could keep hunting until we find something, but that would handicap
         // integrals which really are zero.... so a compromise then!
         //
-        if (err <= abs(tolerance*L1_I1))
+        if ((err <= abs(tolerance*L1_I1)) && (k >= 4))
         {
             //
             // A quick sanity check: have we at some point narrowed our boundaries as a result
@@ -476,21 +505,26 @@ decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) tanh_sin
                ym = f(-1 - abscissa_row[max_left_index - 1], abscissa_row[max_left_index - 1]) * weight_row[max_left_index - 1];
                if (abs(yp) > abs(ym))
                {
-                  return policies::raise_evaluation_error(function, "The tanh_sinh quadrature evaluated your function at a singular point and got %1%. Inetgration bounds were automatically narrowed, but the integral was found to be increasing at the new endpoint.  Please check your function, and consider providing a 2-argument functor.", I1, Policy());
+                  return policies::raise_evaluation_error(function, "The tanh_sinh quadrature evaluated your function at a singular point and got %1%. Integration bounds were automatically narrowed, but the integral was found to be increasing at the new endpoint.  Please check your function, and consider providing a 2-argument functor.", I1, Policy());
                }
             }
             if ((max_right_index < abscissa_row.size() - 1) && (abs(abscissa_row[max_right_index + 1]) > right_min_complement))
             {
-               yp = f(-1 - abscissa_row[max_right_index], abscissa_row[max_right_index]) * weight_row[max_right_index];
-               ym = f(-1 - abscissa_row[max_right_index - 1], abscissa_row[max_right_index - 1]) * weight_row[max_right_index - 1];
+               yp = f(1 + abscissa_row[max_right_index], -abscissa_row[max_right_index]) * weight_row[max_right_index];
+               ym = f(1 + abscissa_row[max_right_index - 1], -abscissa_row[max_right_index - 1]) * weight_row[max_right_index - 1];
                if (abs(yp) > abs(ym))
                {
-                  return policies::raise_evaluation_error(function, "The tanh_sinh quadrature evaluated your function at a singular point and got %1%. Inetgration bounds were automatically narrowed, but the integral was found to be increasing at the new endpoint.  Please check your function, and consider providing a 2-argument functor.", I1, Policy());
+                  return policies::raise_evaluation_error(function, "The tanh_sinh quadrature evaluated your function at a singular point and got %1%. Integration bounds were automatically narrowed, but the integral was found to be increasing at the new endpoint.  Please check your function, and consider providing a 2-argument functor.", I1, Policy());
                }
             }
             err += endpoint_error;
             break;
         }
+
+        if (truncate_left)
+           --max_left_position;
+        if (truncate_right)
+           --max_right_position;
 
     }
     if (error)

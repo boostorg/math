@@ -13,6 +13,7 @@
 #if !defined(BOOST_NO_CXX11_DECLTYPE) && !defined(BOOST_NO_CXX11_TRAILING_RESULT_TYPES) && !defined(BOOST_NO_SFINAE_EXPR)
 
 #include <boost/math/concepts/real_concept.hpp>
+#include <boost/math/tools/test_value.hpp>
 #include <boost/test/included/unit_test.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/quadrature/gauss_kronrod.hpp>
@@ -446,8 +447,8 @@ void test_complex_lambert_w()
     //N[ProductLog[2+3*I], 150]
     boost::math::quadrature::gauss_kronrod<Real, 61> integrator;
     Complex Q = integrator.integrate(lw, (Real) 0, pi<Real>());
-    BOOST_CHECK_CLOSE_FRACTION(Q.real(), boost::lexical_cast<Real>("1.09007653448579084630177782678166964987102108635357778056449870727913321296238687023915522935120701763447787503167111962008709116746523970476893277703"), tol);
-    BOOST_CHECK_CLOSE_FRACTION(Q.imag(), boost::lexical_cast<Real>("0.530139720774838801426860213574121741928705631382703178297940568794784362495390544411799468140433404536019992695815009036975117285537382995180319280835"), tol);
+    BOOST_CHECK_CLOSE_FRACTION(Q.real(), BOOST_MATH_TEST_VALUE(Real, 1.0900765344857908463017778267816696498710210863535777805644), tol);
+    BOOST_CHECK_CLOSE_FRACTION(Q.imag(), BOOST_MATH_TEST_VALUE(Real, 0.5301397207748388014268602135741217419287056313827031782979), tol);
 }
 
 BOOST_AUTO_TEST_CASE(gauss_quadrature_test)

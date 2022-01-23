@@ -10,6 +10,7 @@
 #include <iostream>
 #include <iomanip>
 #include <cmath> // for std::isnan
+#include <string>
 #include <boost/math/tools/assert.hpp>
 #include <boost/math/special_functions/next.hpp>
 #include <boost/math/special_functions/trunc.hpp>
@@ -29,12 +30,12 @@ namespace detail {
     {
         int status = 0;
         std::size_t size = 0;
-        std::string s = name;
 #if BOOST_MATH_HAS_CXX_ABI
-        return abi::__cxa_demangle( name, NULL, &size, &status );
+        std::string s {abi::__cxa_demangle( name, NULL, &size, &status )};
 #else
-        return name;
+        std::string s {name};
 #endif
+        return s;
     }
 }
 

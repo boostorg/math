@@ -6,6 +6,9 @@
 //  or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
+#include <boost/math/tools/config.hpp>
+#ifndef BOOST_MATH_NO_MP_TESTS
+
 #if 0
 #define BOOST_TEST_MODULE test_tgamma_for_issue396
 #include <boost/test/included/unit_test.hpp>
@@ -14,7 +17,7 @@
 #include <boost/test/unit_test.hpp> // Boost.Test
 #endif
 
-#include <boost/array.hpp>
+#include <array>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
@@ -35,7 +38,7 @@ bool test_tgamma_for_issue396_value_checker()
 
   // Table[N[Gamma[(1/2) + (10^n)], 503], {n, 0, 3, 1}]
 
-  const boost::array<floating_point_type, 4U> control =
+  const std::array<floating_point_type, 4U> control =
   {{
     floating_point_type(issue396_control_string0),
     floating_point_type(issue396_control_string1),
@@ -49,7 +52,7 @@ bool test_tgamma_for_issue396_value_checker()
 
   bool result_is_ok = true;
 
-  for(typename boost::array<floating_point_type, 4U>::size_type i = 0U; i < control.size(); ++i)
+  for(typename std::array<floating_point_type, 4U>::size_type i = 0U; i < control.size(); ++i)
   {
     const floating_point_type g = boost::math::tgamma(boost::math::constants::half<floating_point_type>() + ten_pow_n);
 
@@ -93,3 +96,6 @@ BOOST_AUTO_TEST_CASE(test_tgamma_for_issue396_part2_tag)
 
   BOOST_CHECK(b_101_through_501_is_ok == true);
 }
+#else // No mp tests
+int main(void) { return 0; }
+#endif

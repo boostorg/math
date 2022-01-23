@@ -11,6 +11,8 @@ test/cuda
 build/*
 .vscode/*
 *.svg
+tools/bin/**
+.idea/*
 
 # CMake Related Options
 *.a
@@ -21,3 +23,4 @@ Makefile
 **/CMakeFiles/**
 **CTestTestfile.cmake
 DartConfiguration.tcl
+cmake-build-debug/*

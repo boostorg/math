@@ -4286,7 +4286,7 @@ lanczos_spot_data sweet_spots[] = {
 //
 mp_t factorial(unsigned n)
 {
-   static boost::array<boost::array<mp_t, 1>, 201> result; 
+   static std::array<std::array<mp_t, 1>, 201> result; 
    static bool init = false;
    if(!init)
    {
@@ -5013,7 +5013,7 @@ void print_test_values(const std::vector<std::vector<mp_t> >& v, const char* nam
 {
    std::cout << std::setprecision(110);
    std::cout << 
-      "   static const boost::array<boost::array<T, 3>, " << v.size() << "> " << name << " = {\n";
+      "   static const std::array<std::array<T, 3>, " << v.size() << "> " << name << " = {\n";
    for(unsigned i = 0; i < v.size(); ++i)
    {
       std::cout << "      SC_(" << (v[i][0] + offset) << "), SC_(" << v[i][1] << "), SC_(" << v[i][2] << "),\n";

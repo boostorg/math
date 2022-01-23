@@ -8,7 +8,7 @@
 #ifndef SC_
 #  define SC_(x) static_cast<T>(BOOST_JOIN(x, L))
 #endif
-   static const boost::array<boost::array<T, 5>, 26> nct_asym = {{
+   static const std::array<std::array<T, 5>, 26> nct_asym = {{
          // Error in function boost::math::tgamma<N5boost14multiprecision6numberINS0_8backends18mpfr_float_backendILj200ELNS0_20mpfr_allocation_typeE1EEELNS0_26expression_template_optionE1EEE>(N5boost14multiprecision6numberINS0_8backends18mpfr_float_backendILj200ELNS0_20mpfr_allocation_typeE1EEELNS0_26expression_template_optionE1EEE): Overflow Error reverting to ibeta method
          {{ SC_(4536808851374080.0), SC_(0.45368087291717529296875), SC_(-0.481173217296600341796875), SC_(0.1749317497754352460810908541491372795961), SC_(0.8250682502245647539189091458508627204039) }},
          // Error in function boost::math::tgamma<N5boost14multiprecision6numberINS0_8backends18mpfr_float_backendILj200ELNS0_20mpfr_allocation_typeE1EEELNS0_26expression_template_optionE1EEE>(N5boost14multiprecision6numberINS0_8backends18mpfr_float_backendILj200ELNS0_20mpfr_allocation_typeE1EEELNS0_26expression_template_optionE1EEE): Overflow Error reverting to ibeta method

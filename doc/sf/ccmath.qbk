@@ -1,5 +1,5 @@
 [/
-Copyright (c) 2021 Matt Borland
+Copyright (c) 2021 - 2022 Matt Borland
 Use, modification and distribution are subject to the
 Boost Software License, Version 1.0. (See accompanying file
 LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -148,6 +148,39 @@ All of the following functions require C++17 or greater.
 
         template <typename Arithmetic1, typename Arithmetic2>
         inline constexpr Promoted hypot(Arithmetic1 x, Arithmetic2 y) noexcept
+
+        template <typename Real>
+        inline constexpr Real fdim(Real x, Real y) noexcept
+
+        template <typename Arithmetic1, typename Arithmetic2>
+        inline constexpr Promoted fdim(Arithmetic1 x, Arithmetic2 y) noexcept
+
+        template <typename Real>
+        inline constexpr Real fmax(Real x, Real y) noexcept
+
+        template <typename Arithmetic1, typename Arithmetic2>
+        inline constexpr Promoted fmax(Arithmetic1 x, Arithmetic2 y) noexcept
+
+        template <typename Real>
+        inline constexpr Real fmin(Real x, Real y) noexcept
+
+        template <typename Arithmetic1, typename Arithmetic2>
+        inline constexpr Promoted fmin(Arithmetic1 x, Arithmetic2 y) noexcept
+
+        template <typename Arithmetic1, typename Arithmetic2 = Arithmetic1>
+        inline constexpr bool isgreater(Arithmetic1 x, Arithmetic2 y) noexcept
+
+        template <typename Arithmetic1, typename Arithmetic2 = Arithmetic1>
+        inline constexpr bool isgreaterequal(Arithmetic1 x, Arithmetic2 y) noexcept
+
+        template <typename Arithmetic1, typename Arithmetic2 = Arithmetic1>
+        inline constexpr bool isless(Arithmetic1 x, Arithmetic2 y) noexcept
+
+        template <typename Arithmetic1, typename Arithmetic2 = Arithmetic1>
+        inline constexpr bool islessequal(Arithmetic1 x, Arithmetic2 y) noexcept
+
+        template <typename T>
+        inline constexpr bool isunordered(T x, T y) noexcept
 
     } // Namespaces
 

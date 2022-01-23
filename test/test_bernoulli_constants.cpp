@@ -6,6 +6,7 @@
 #define BOOST_TEST_MAIN
 #define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
 
+#include <boost/math/tools/config.hpp>
 #include <boost/test/unit_test.hpp>
 #include <boost/math/concepts/real_concept.hpp>
 #include <boost/math/special_functions/bernoulli.hpp>
@@ -202,7 +203,7 @@ void test(const char* name)
 
 void test_real_concept_extra()
 {
-#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+#if !defined(BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS) && !defined(BOOST_MATH_NO_REAL_CONCEPT_TESTS)
    boost::math::concepts::real_concept tol = boost::math::tools::epsilon<boost::math::concepts::real_concept>() * 20;
    for(unsigned i = 0; i <= boost::math::max_bernoulli_b2n<long double>::value; ++i)
    {
@@ -230,8 +231,10 @@ BOOST_AUTO_TEST_CASE( test_main )
    test<double>("double");
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test<long double>("long double");
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
    test<boost::math::concepts::real_concept>("real_concept");
    test_real_concept_extra();
+#endif
 #endif
 }
 
