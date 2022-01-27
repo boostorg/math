@@ -70,6 +70,15 @@
 #  define BOOST_HAS_THREADS // The default assumption is that the machine has threads
 #endif // Thread Support
 
+// MinGW-w64 using win32 thread model provides the <mutex> header without the required functionality
+// See: https://github.com/boostorg/math/issues/748
+#ifdef BOOST_HAS_THREADS
+#  ifdef __MINGW32__
+#    undef BOOST_HAS_THREADS
+#    define BOOST_DISABLE_THREADS
+#  endif
+#endif
+
 #ifdef BOOST_DISABLE_THREADS
 #  define BOOST_NO_CXX11_HDR_ATOMIC
 #  define BOOST_NO_CXX11_HDR_FUTURE
