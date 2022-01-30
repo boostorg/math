@@ -1,0 +1,35 @@
+[/
+  Copyright Nick Thompson, Matt Borland, 2022
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+
+[section:color_maps Color Maps]
+
+[h4 Synopsis]
+
+    #include <boost/math/tools/color_maps.hpp>
+
+    namespace boost::math::tools {
+
+    template<typename Real>
+    std::array<Real, 3> viridis(Real x);
+ 
+    } // namespaces
+
+
+Abstractly, a color map is any function which maps [0, 1] -> [0, 1]^3.
+As stated, this definition is too broad to be useful.
+Therefore, in Boost, we restrict our attention to the subset of color maps which are useful for the understanding of scientific data.
+[@https://www.kennethmoreland.com/color-advice/BadColorMaps.pdf Much research] has demonstrated that color maps differ wildly in their usefulness for interpreting quantitative data.
+The canonical reference is [@https://www.kennethmoreland.com/color-advice/ here].
+
+
+
+[heading References]
+
+* Ken Moreland. ['Why We Use Bad Color Maps and What You Can Do About it] .
+
+
+[endsect]
