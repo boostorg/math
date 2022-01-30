@@ -83,16 +83,6 @@ auto g(std::complex<Real> z)
 }
 
 template<typename Real>
-auto fifth_roots_halley(std::complex<Real> z)
-{
-    std::complex<Real> zcb = std::pow(z,3);
-    std::complex<Real> dw = Real(5)*zcb*z;
-    std::complex<Real> w = zcb*z*z - Real(1);
-    std::complex<Real> ddw = Real(20)*zcb;
-    return std::make_tuple(w, dw, ddw);
-}
-
-template<typename Real>
 std::complex<Real> complex_newton(std::function<std::pair<std::complex<Real>,std::complex<Real>>(std::complex<Real>)> f, std::complex<Real> z)
 {
     // f(x(1+e)) = f(x) + exf'(x)
@@ -102,20 +92,6 @@ std::complex<Real> complex_newton(std::function<std::pair<std::complex<Real>,std
         auto [y, dy] = f(z);
         z -= y/dy;
         close = (abs(y) <= 1.4*std::numeric_limits<Real>::epsilon()*abs(z*dy));
-    } while(!close);
-    return z;
-}
-
-template<typename Real>
-std::complex<Real> complex_halley(std::function<std::tuple<std::complex<Real>,std::complex<Real>,std::complex<Real>>(std::complex<Real>)> f, std::complex<Real> z)
-{
-    // f(x(1+e)) = f(x) + exf'(x)
-    bool close = false;
-    do
-    {
-        auto [y, dy, ddy] = f(z);
-        z -= (Real(2)*y*dy/(Real(2)*dy*dy - y*ddy));
-        close = (abs(y) <= std::numeric_limits<Real>::epsilon()*abs(z*dy)/2);
     } while(!close);
     return z;
 }
@@ -161,7 +137,7 @@ int main()
     constexpr int64_t image_height = 4096;
     std::vector<uint8_t> img(4*image_width*image_height, 0);
     plane_pixel_map<Real> map(image_width, image_height, Real(-2), Real(-2));
-    constexpr boost::math::tools::smooth_cool_warm_color_map<Real> smooth_cool_warm;
+    constexpr boost::math::tools::viridis_color_map<Real> viridis;
     constexpr Real two_pi = boost::math::constants::two_pi<Real>();
 
     for (int64_t j = 0; j < image_height; ++j)
@@ -169,7 +145,6 @@ int main()
         for (int64_t i = 0; i < image_width; ++i)
         {
             std::complex<Real> z0 = map.to_complex(i,j);
-            //auto rt = complex_halley<Real>(fifth_roots_halley<Real>, z0);
             auto rt = complex_newton<Real>(g<Real>, z0);
             // The root is one of exp(2πij/5). Therefore, it can be classified by angle.
             Real theta = std::atan2(rt.imag(), rt.real());
@@ -181,7 +156,7 @@ int main()
             if (std::isnan(theta)) {
                 std::cerr << "Theta is a nan!\n";
             }
-            auto c = to_8bit_rgba(smooth_cool_warm(theta));
+            auto c = to_8bit_rgba(viridis(theta));
             int64_t idx = 4 * image_width * (image_height - 1 - j) + 4 * i;
             img[idx + 0] = c[0];
             img[idx + 1] = c[1];
@@ -222,5 +197,5 @@ int main()
         }
     }
 
-    write_png("newton_fractal.png", img, image_width, image_height);
+    write_png("viridis_newton_fractal.png", img, image_width, image_height);
 }
