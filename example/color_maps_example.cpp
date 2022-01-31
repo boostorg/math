@@ -113,9 +113,9 @@ int main()
         {
             std::complex<Real> z0 = map.to_complex(i,j);
             auto rt = complex_newton<Real>(g<Real>, z0);
-            // The root is one of exp(2πij/5). Therefore, it can be classified by angle.
+            // The root is one of exp(2*pi*ij/5). Therefore, it can be classified by angle.
             Real theta = std::atan2(rt.imag(), rt.real());
-            // Now theta in [-π,π]. Get it into [0,2π]:
+            // Now theta in [-pi,pi]. Get it into [0,2pi]:
             if (theta < 0) {
                 theta += two_pi;
             }

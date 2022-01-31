@@ -9,27 +9,73 @@
 
 [h4 Synopsis]
 
-    #include <boost/math/tools/color_maps.hpp>
+``
+#include <boost/math/tools/color_maps.hpp>
 
-    namespace boost::math::tools {
+namespace boost::math::tools {
 
-    template<typename Real>
-    std::array<Real, 3> viridis(Real x);
+  template <typename Real>
+  class plasma_color_map
+  {
+  public:
+      constexpr plasma_color_map();
+      constexpr std::array<Real, 3> operator()(Real x);
+  }
+
+  template <typename Real>
+  class viridis_color_map;
+
+  template <typename Real>
+  class inferno_color_map;
+
+  template <typename Real>
+  class black_body_color_map;
+
+  template <typename Real>
+  class kindlmann_color_map;
+
+  template <typename Real>
+  class extended_kindlmann_color_map;
+
+  template <typename Real>
+  class smooth_cool_warm_color_map;
+
+  template <typename Real>
+  class grayscale_color_map;
+
+  template <typename Real = double, std::size_t N = 256>
+  class custom_color_map
+  {
+  public:
+      custom_color_map() = delete;
+
+      constexpr custom_color_map(const std::array<Real, N>& r, const std::array<Real, N>& g, const std::array<Real, N>& b);
+
+      constexpr custom_color_map(std::array<Real, N>&& r, std::array<Real, N>&& g, std::array<Real, N>&& b);
+
+      constexpr custom_color_map& operator=(const custom_color_map&) = default;
+
+      constexpr custom_color_map& operator=(custom_color_map&&) = default;
+
+      ~custom_color_map() = default;
+  };
  
-    } // namespaces
+} // namespaces
+``
 
+[heading Description]
 
 Abstractly, a color map is any function which maps [0, 1] -> [0, 1]^3.
 As stated, this definition is too broad to be useful.
 Therefore, in Boost, we restrict our attention to the subset of color maps which are useful for the understanding of scientific data.
 [@https://www.kennethmoreland.com/color-advice/BadColorMaps.pdf Much research] has demonstrated that color maps differ wildly in their usefulness for interpreting quantitative data.
 The canonical reference is [@https://www.kennethmoreland.com/color-advice/ here].
-
-
+For an example of how to use these facilites please refer to `example/color_maps_example.cpp`
+Note: To compile the examples directly you will need to have [@https://github.com/lvandeve/lodepng lodepng].
 
 [heading References]
 
 * Ken Moreland. ['Why We Use Bad Color Maps and What You Can Do About it] .
 
-
 [endsect]
+[/section:color_maps Color Maps]
