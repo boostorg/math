@@ -787,6 +787,7 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [include internals/minimax.qbk]
 [include internals/relative_error.qbk] [/ uncertainty of floating-point calculations.]
 [include internals/test_data.qbk]
+[include internals/color_maps.qbk]
 [endsect] [/section:internals]
 
 [endmathpart] [/mathpart internals Internal Details: Series, Rationals and Continued Fractions, Testing, and Development Tools]
