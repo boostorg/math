@@ -72,6 +72,9 @@ Therefore, in Boost, we restrict our attention to the subset of color maps which
 The canonical reference is [@https://www.kennethmoreland.com/color-advice/ here].
 For an example of how to use these facilites please refer to `example/color_maps_example.cpp`
 Note: To compile the examples directly you will need to have [@https://github.com/lvandeve/lodepng lodepng].
+An example of the viridis color map using [@https://en.wikipedia.org/wiki/Newton_fractal the newton fractal] is shown below:
+
+[$../images/viridis_newton_fractal.png]
 
 [heading References]
 
