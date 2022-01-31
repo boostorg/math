@@ -10,12 +10,10 @@
 #include <complex>
 #include <tuple>
 #include <iostream>
-#include <chrono>
 #include <vector>
 #include <limits>
 #include <boost/math/tools/color_maps.hpp>
 #include <boost/math/constants/constants.hpp>
-#include "lodepng.h"
 
 // Computes ab - cd.
 // See: https://pharr.org/matt/blog/2019/11/03/difference-of-floats.html
@@ -26,40 +24,6 @@ inline Real difference_of_products(Real a, Real b, Real c, Real d)
     Real err = std::fma(-c, d, cd);
     Real dop = std::fma(a, b, -cd);
     return dop + err;
-}
-
-template <typename Real, std::size_t dimension = 3>
-std::array<std::uint8_t, 4> to_8bit_rgba(const std::array<Real, dimension>& v)
-{
-    using std::sqrt;
-    static_assert(dimension == 3 || dimension == 4, "The color must be RGB[0,1] or RGBA[0,1]");
-    std::array<std::uint8_t, 4> pixel;
-    for (int64_t i = 0; i < dimension; ++i)
-    {
-        // Apply gamma correction here:
-        Real u = sqrt(v[i]);
-        // Clamp to [0, 1] or assert when v[i] \in \mathbb{R} \setminus [0,1]? OMG questions questions questions.
-        pixel[i] = 255*std::clamp(u, Real(0), Real(1));
-    }
-
-    if constexpr (dimension == 3)
-    {
-        pixel[3] = 255;
-    }
-
-    return pixel;
-}
-
-// In lodepng, the vector is expected to be row major, with the top row specified first.
-// Note that this is a bit confusing sometimes as it's more natural to let y increase moving *up*.
-unsigned write_png(std::string const & filename, std::vector<uint8_t> const & img, size_t width, size_t height)
-{
-    unsigned error = lodepng::encode(filename, img, width, height, LodePNGColorType::LCT_RGBA, 8);
-    if(error)
-    {
-        std::cerr << "Error encoding png: " << lodepng_error_text(error) << "\n";
-    }
-    return error;
 }
 
 template<typename Real>
@@ -133,12 +97,15 @@ private:
 int main()
 {
     using Real = long double;
+    using std::sqrt;
+
     constexpr int64_t image_width = 4096;
     constexpr int64_t image_height = 4096;
-    std::vector<uint8_t> img(4*image_width*image_height, 0);
-    plane_pixel_map<Real> map(image_width, image_height, Real(-2), Real(-2));
     constexpr boost::math::tools::viridis_color_map<Real> viridis;
     constexpr Real two_pi = boost::math::constants::two_pi<Real>();
+
+    std::vector<std::uint8_t> img(4*image_width*image_height, 0);
+    plane_pixel_map<Real> map(image_width, image_height, Real(-2), Real(-2));
 
     for (int64_t j = 0; j < image_height; ++j)
     {
@@ -156,7 +123,7 @@ int main()
             if (std::isnan(theta)) {
                 std::cerr << "Theta is a nan!\n";
             }
-            auto c = to_8bit_rgba(viridis(theta));
+            auto c = boost::math::tools::to_8bit_rgba(viridis(theta));
             int64_t idx = 4 * image_width * (image_height - 1 - j) + 4 * i;
             img[idx + 0] = c[0];
             img[idx + 1] = c[1];
@@ -197,5 +164,7 @@ int main()
         }
     }
 
-    write_png("viridis_newton_fractal.png", img, image_width, image_height);
+    // Requires lodepng.h
+    // See: https://github.com/lvandeve/lodepng for download and compilation instructions
+    boost::math::tools::write_png("viridis_newton_fractal.png", img, image_width, image_height);
 }

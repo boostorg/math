@@ -14,6 +14,32 @@
 #include <utility>
 #include <boost/math/tools/concepts.hpp>
 #include <boost/math/ccmath/floor.hpp>
+#include <boost/math/tools/assert.hpp>
+
+#if __has_include("lodepng.h")
+
+#include "lodepng.h"
+#include <string>
+#include <vector>
+#include <iostream>
+
+namespace boost::math::tools {
+
+// In lodepng, the vector is expected to be row major, with the top row specified first.
+// Note that this is a bit confusing sometimes as it's more natural to let y increase moving *up*.
+unsigned write_png(const std::string& filename, const std::vector<std::uint8_t>& img,
+                   std::size_t width, std::size_t height)
+{
+    unsigned error = lodepng::encode(filename, img, width, height, LodePNGColorType::LCT_RGBA, 8);
+    if(error)
+    {
+        std::cerr << "Error encoding png: " << lodepng_error_text(error) << "\n";
+    }
+    return error;
+}
+
+} // Namespace boost::math::tools
+#endif // __has_include("lodepng.h")
 
 namespace boost::math::tools {
 
@@ -28,7 +54,7 @@ private:
     std::array<Real, N> b_;
 
 public:
-    color_map() = delete;
+    constexpr color_map() = default;
 
     constexpr color_map(const std::array<Real, N>& r, const std::array<Real, N>& g, const std::array<Real, N>& b) :
         r_ {r}, g_ {g}, b_ {b} {}
@@ -151,6 +177,44 @@ public:
 
     ~custom_color_map() = default;
 };
+
+template <BOOST_MATH_FLOATING_POINT_TYPE Real = double, std::size_t N = 256>
+class grayscale_color_map : public detail::color_map<Real, N>
+{
+public:
+    constexpr grayscale_color_map() = default;
+
+    constexpr std::array<Real, 3> operator()(Real scalar) const noexcept
+    {
+        scalar = std::clamp(scalar, static_cast<Real>(0), static_cast<Real>(1));
+        return {scalar, scalar, scalar};
+    }
+};
+
+template <typename Container>
+std::array<std::uint8_t, 4> to_8bit_rgba(const Container& v)
+{
+    using std::sqrt;
+    using Real = typename Container::value_type;
+
+    BOOST_MATH_ASSERT_MSG(v.size() == 3 || v.size() == 4, "The color must be RGB[0,1] or RGBA[0,1]");
+
+    std::array<std::uint8_t, 4> pixel;
+    for (auto i = 0; i < v.size(); ++i)
+    {
+        // Apply gamma correction here:
+        Real u = sqrt(v[i]);
+        // Clamp to [0, 1] or assert when v[i] \in \mathbb{R} \setminus [0,1]? OMG questions questions questions.
+        pixel[i] = 255*std::clamp(u, static_cast<Real>(0), static_cast<Real>(1));
+    }
+
+    if (v.size() == 3)
+    {
+        pixel[3] = 255;
+    }
+
+    return pixel;
+}
 
 } // Namespace boost::math::tools
 
