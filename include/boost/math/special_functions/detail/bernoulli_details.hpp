@@ -362,7 +362,10 @@ public:
          return out;
       }
 
-      #if defined(BOOST_MATH_BERNOULLI_NOTHREADS)
+      #if defined(BOOST_HAS_THREADS) && defined(BOOST_MATH_BERNOULLI_NOTHREADS) && !defined(BOOST_MATH_BERNOULLI_UNTHREADED)
+      // Add a static_assert on instantiation if we have threads, but no C++11 threading support.
+      static_assert(sizeof(T) == 1, "Unsupported configuration: your platform appears to have either no atomic integers, or no std::mutex.  If you are happy with thread-unsafe code, then you may define BOOST_MATH_BERNOULLI_UNTHREADED to suppress this error.");
+      #elif defined(BOOST_MATH_BERNOULLI_NOTHREADS)
       //
       // Single threaded code, very simple:
       //
@@ -384,9 +387,6 @@ public:
          *out = (i >= m_overflow_limit) ? policies::raise_overflow_error<T>("boost::math::bernoulli_b2n<%1%>(std::size_t)", 0, T(i), pol) : bn[i];
          ++out;
       }
-      #elif defined(BOOST_HAS_THREADS) && defined(BOOST_MATH_BERNOULLI_NOTHREADS) && !defined(BOOST_MATH_BERNOULLI_UNTHREADED)
-      // Add a static_assert on instantiation if we have threads, but no C++11 threading support.
-      static_assert(sizeof(T) == 1, "Unsupported configuration: your platform appears to have either no atomic integers, or no std::mutex.  If you are happy with thread-unsafe code, then you may define BOOST_MATH_BERNOULLI_UNTHREADED to suppress this error.");
       #else
       //
       // Double-checked locking pattern, lets us access cached already cached values
