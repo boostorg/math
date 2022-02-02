@@ -16,6 +16,7 @@
 #include <boost/math/special_functions/fpclassify.hpp>
 
 #include <utility>
+#include <type_traits>
 
 namespace boost{ namespace math{
 
@@ -26,12 +27,21 @@ public:
    typedef RealType value_type;
    typedef Policy policy_type;
 
+   template <typename std::enable_if<!std::is_integral<RealType>::value, bool>::type = true>
    chi_squared_distribution(RealType i) : m_df(i)
    {
       RealType result;
       detail::check_df(
          "boost::math::chi_squared_distribution<%1%>::chi_squared_distribution", m_df, &result, Policy());
    } // chi_squared_distribution
+
+   template <typename Z, typename std::enable_if<std::is_integral<Z>::value, bool>::type = true>
+   chi_squared_distribution<double>(Z i) : m_df(static_cast<double>(i))
+   {
+      RealType result;
+      detail::check_df(
+         "boost::math::chi_squared_distribution<%1%>::chi_squared_distribution", m_df, &result, Policy());
+   }
 
    RealType degrees_of_freedom()const
    {
