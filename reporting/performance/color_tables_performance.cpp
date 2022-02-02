@@ -8,35 +8,22 @@
 #include <boost/math/tools/color_maps.hpp>
 #include <benchmark/benchmark.h>
 
-template <typename Table, typename Dist, typename Gen>
-int helper(const Table& table, Dist d, Gen gen, std::int64_t size)
-{
-    for (std::int64_t i = 0; i < size; ++i)
-    {
-        table(d(gen));
-    }
-
-    return 0;
-}
-
-template <typename T>
+template <typename Real>
 void color_table_benchmark(benchmark::State& state)
 {
     std::random_device rd;
     std::mt19937_64 gen(rd());
-    std::uniform_real_distribution<T> dist(0, 1);
+    std::uniform_real_distribution<Real> dist(0, 0.125);
     constexpr boost::math::tools::smooth_cool_warm_color_map smooth_cool_warm;
-    const std::int64_t size = state.range(0);
-
+    Real x = dist(gen);
     for (auto _ : state)
     {
-        benchmark::DoNotOptimize(helper(smooth_cool_warm, dist, gen, size));
+        benchmark::DoNotOptimize(smooth_cool_warm(x));
+	x += std::numeric_limits<Real>::epsilon();
     }
-    state.SetComplexityN(state.range(0));
 }
 
-BENCHMARK_TEMPLATE(color_table_benchmark, float)->RangeMultiplier(2)->Range(1 << 6, 1 << 20)->Complexity(benchmark::oN)->UseRealTime();
-BENCHMARK_TEMPLATE(color_table_benchmark, double)->RangeMultiplier(2)->Range(1 << 6, 1 << 20)->Complexity(benchmark::oN)->UseRealTime();
-BENCHMARK_TEMPLATE(color_table_benchmark, long double)->RangeMultiplier(2)->Range(1 << 6, 1 << 20)->Complexity(benchmark::oN)->UseRealTime();
+BENCHMARK_TEMPLATE(color_table_benchmark, float);
+BENCHMARK_TEMPLATE(color_table_benchmark, double);
 
 BENCHMARK_MAIN();

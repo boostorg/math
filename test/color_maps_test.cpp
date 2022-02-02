@@ -24,6 +24,7 @@ void test()
     static_assert(user_plasma(0.5)[0] == plasma(0.5)[0]);
 }
 
+#if !defined(BOOST_MATH_NO_CONSTEXPR_DETECTION) && !defined(BOOST_MATH_USING_BUILTIN_CONSTANT_P)
 int main()
 {
     test<float>();
@@ -32,3 +33,9 @@ int main()
 
     return 0;
 }
+#else
+int main()
+{
+    return 0;
+}
+#endif
