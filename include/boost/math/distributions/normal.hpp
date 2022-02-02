@@ -71,6 +71,20 @@ private:
 
 typedef normal_distribution<double> normal;
 
+//
+// Deduction guides, note we don't check the 
+// value of __cpp_deduction_guides, just assume
+// they work as advertised, even if this is pre-final C++17.
+//
+#ifdef __cpp_deduction_guides
+
+template <class RealType>
+normal_distribution(RealType, RealType)->normal_distribution<typename boost::math::tools::promote_args<RealType>::type>;
+template <class RealType>
+normal_distribution(RealType)->normal_distribution<typename boost::math::tools::promote_args<RealType>::type>;
+
+#endif
+
 #ifdef _MSC_VER
 #pragma warning(push)
 #pragma warning(disable:4127)
