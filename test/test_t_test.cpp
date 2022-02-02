@@ -10,11 +10,10 @@
 #include <vector>
 #include <random>
 #include <utility>
+#include <boost/math/tools/config.hpp>
 #include <boost/math/statistics/univariate_statistics.hpp>
 #include <boost/math/statistics/t_test.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
-
-using quad = boost::multiprecision::cpp_bin_float_quad;
 
 template<typename Real>
 void test_exact_mean()
@@ -225,7 +224,6 @@ int main()
 
     test_exact_mean<float>();
     test_exact_mean<double>();
-    test_multiprecision_exact_mean<quad>();
     
     test_integer<int>();
     test_integer<int32_t>();
@@ -234,7 +232,6 @@ int main()
     
     test_two_sample_t<float>();
     test_two_sample_t<double>();
-    test_two_sample_t<quad>();
     
     test_integer_two_sample_t<int>();
     test_integer_two_sample_t<int32_t>();
@@ -243,7 +240,6 @@ int main()
     
     test_welch<float>();
     test_welch<double>();
-    test_welch<quad>();
     
     test_integer_welch<int>();
     test_integer_welch<int32_t>();
@@ -256,6 +252,13 @@ int main()
     test_integer_paired_samples<int32_t>();
     test_integer_paired_samples<int64_t>();
     test_integer_paired_samples<uint32_t>();
+
+    #ifndef BOOST_MATH_NO_MP_TESTS
+    using quad = boost::multiprecision::cpp_bin_float_quad;
+    test_multiprecision_exact_mean<quad>();
+    test_two_sample_t<quad>();
+    test_welch<quad>();
+    #endif
 
     return boost::math::test::report_errors();
 }

@@ -120,7 +120,9 @@ BOOST_AUTO_TEST_CASE( test_main )
    test_spots(1.0, "double");
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_spots(1.0L, "long double");
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
    test_spots(boost::math::concepts::real_concept(), "real_concept");
+#endif
 #endif
 
    test_binomial(1.0F, "float");

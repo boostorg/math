@@ -10,12 +10,13 @@
 #include <boost/integer/common_factor_rt.hpp>
 #include <boost/mpl/list.hpp>
 #include <boost/mpl/joint_view.hpp>
-#include <boost/test/test_case_template.hpp>
 #include <boost/test/unit_test.hpp>
 #include <boost/multiprecision/cpp_int.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/multiprecision/cpp_dec_float.hpp>
 #include <utility>
+#include <array>
+#include <list>
 
 #if !defined(TEST1) && !defined(TEST2) && !defined(TEST3)
 #  define TEST1
@@ -40,17 +41,17 @@ struct answer
     polynomial<T> remainder;
 };
 
-boost::array<double, 4> const d3a = {{10, -6, -4, 3}};
-boost::array<double, 4> const d3b = {{-7, 5, 6, 1}};
+std::array<double, 4> const d3a = {{10, -6, -4, 3}};
+std::array<double, 4> const d3b = {{-7, 5, 6, 1}};
 
-boost::array<double, 2> const d1a = {{-2, 1}};
-boost::array<double, 1> const d0a = {{6}};
-boost::array<double, 2> const d0a1 = {{0, 6}};
-boost::array<double, 6> const d0a5 = {{0, 0, 0, 0, 0, 6}};
+std::array<double, 2> const d1a = {{-2, 1}};
+std::array<double, 1> const d0a = {{6}};
+std::array<double, 2> const d0a1 = {{0, 6}};
+std::array<double, 6> const d0a5 = {{0, 0, 0, 0, 0, 6}};
 
 
-boost::array<int, 9> const d8 = {{-5, 2, 8, -3, -3, 0, 1, 0, 1}};
-boost::array<int, 9> const d8b = {{0, 2, 8, -3, -3, 0, 1, 0, 1}};
+std::array<int, 9> const d8 = {{-5, 2, 8, -3, -3, 0, 1, 0, 1}};
+std::array<int, 9> const d8b = {{0, 2, 8, -3, -3, 0, 1, 0, 1}};
 
 
 
@@ -62,14 +63,14 @@ BOOST_AUTO_TEST_CASE(trivial)
 
 #ifdef TEST1
 
-boost::array<double, 4> const d3c = {{10.0/3.0, -2.0, -4.0/3.0, 1.0}};
-boost::array<double, 3> const d2a = {{-2, 2, 3}};
-boost::array<double, 3> const d2b = {{-7, 5, 6}};
-boost::array<double, 3> const d2c = {{31, -21, -22}};
-boost::array<double, 1> const d0b = {{3}};
-boost::array<int, 7> const d6 = {{21, -9, -4, 0, 5, 0, 3}};
-boost::array<int, 3> const d2 = {{-6, 0, 9}};
-boost::array<int, 6> const d5 = {{-9, 0, 3, 0, -15}};
+std::array<double, 4> const d3c = {{10.0/3.0, -2.0, -4.0/3.0, 1.0}};
+std::array<double, 3> const d2a = {{-2, 2, 3}};
+std::array<double, 3> const d2b = {{-7, 5, 6}};
+std::array<double, 3> const d2c = {{31, -21, -22}};
+std::array<double, 1> const d0b = {{3}};
+std::array<int, 7> const d6 = {{21, -9, -4, 0, 5, 0, 3}};
+std::array<int, 3> const d2 = {{-6, 0, 9}};
+std::array<int, 6> const d5 = {{-9, 0, 3, 0, -15}};
 
 
 BOOST_AUTO_TEST_CASE( test_construction )
@@ -198,9 +199,9 @@ struct FM2GP_Ex_8_3__1
 
     FM2GP_Ex_8_3__1()
     {
-        boost::array<T, 5> const x_data = {{105, 278, -88, -56, 16}};
-        boost::array<T, 5> const y_data = {{70, 232, -44, -64, 16}};
-        boost::array<T, 3> const z_data = {{35, -24, 4}};
+        std::array<T, 5> const x_data = {{105, 278, -88, -56, 16}};
+        std::array<T, 5> const y_data = {{70, 232, -44, -64, 16}};
+        std::array<T, 3> const z_data = {{35, -24, 4}};
         x = polynomial<T>(x_data.begin(), x_data.end());
         y = polynomial<T>(y_data.begin(), y_data.end());
         z = polynomial<T>(z_data.begin(), z_data.end());
@@ -216,9 +217,9 @@ struct FM2GP_Ex_8_3__2
 
     FM2GP_Ex_8_3__2()
     {
-        boost::array<T, 5> const x_data = {{1, -6, -8, 6, 7}};
-        boost::array<T, 5> const y_data = {{1, -5, -2, 15, 11}};
-        boost::array<T, 3> const z_data = {{1, 2, 1}};
+        std::array<T, 5> const x_data = {{1, -6, -8, 6, 7}};
+        std::array<T, 5> const y_data = {{1, -5, -2, 15, 11}};
+        std::array<T, 3> const z_data = {{1, 2, 1}};
         x = polynomial<T>(x_data.begin(), x_data.end());
         y = polynomial<T>(y_data.begin(), y_data.end());
         z = polynomial<T>(z_data.begin(), z_data.end());
@@ -235,9 +236,9 @@ struct FM2GP_mixed
 
     FM2GP_mixed()
     {
-        boost::array<T, 4> const x_data = {{-2.2, -3.3, 0, 1}};
-        boost::array<T, 3> const y_data = {{-4.4, 0, 1}};
-        boost::array<T, 2> const z_data= {{-2, 1}};
+        std::array<T, 4> const x_data = {{-2.2, -3.3, 0, 1}};
+        std::array<T, 3> const y_data = {{-4.4, 0, 1}};
+        std::array<T, 2> const z_data= {{-2, 1}};
         x = polynomial<T>(x_data.begin(), x_data.end());
         y = polynomial<T>(y_data.begin(), y_data.end());
         z = polynomial<T>(z_data.begin(), z_data.end());
@@ -254,9 +255,9 @@ struct FM2GP_trivial
 
     FM2GP_trivial()
     {
-        boost::array<T, 4> const x_data = {{-2, -3, 0, 1}};
-        boost::array<T, 3> const y_data = {{-4, 0, 1}};
-        boost::array<T, 2> const z_data= {{-2, 1}};
+        std::array<T, 4> const x_data = {{-2, -3, 0, 1}};
+        std::array<T, 3> const y_data = {{-4, 0, 1}};
+        std::array<T, 2> const z_data= {{-2, 1}};
         x = polynomial<T>(x_data.begin(), x_data.end());
         y = polynomial<T>(y_data.begin(), y_data.end());
         z = polynomial<T>(z_data.begin(), z_data.end());
@@ -389,7 +390,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( test_addition, T, all_test_types )
     polynomial<T> const zero;
 
     polynomial<T> result = a + b; // different degree
-    boost::array<T, 4> tmp = {{8, -5, -4, 3}};
+    std::array<T, 4> tmp = {{8, -5, -4, 3}};
     polynomial<T> expected(tmp.begin(), tmp.end());
     BOOST_CHECK_EQUAL(result, expected);
     BOOST_CHECK_EQUAL(a + zero, a);
@@ -413,7 +414,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( test_multiplication, T, all_test_types )
     polynomial<T> const a(d3a.begin(), d3a.end());
     polynomial<T> const b(d1a.begin(), d1a.end());
     polynomial<T> const zero;
-    boost::array<T, 7> const d3a_sq = {{100, -120, -44, 108, -20, -24, 9}};
+    std::array<T, 7> const d3a_sq = {{100, -120, -44, 108, -20, -24, 9}};
     polynomial<T> const a_sq(d3a_sq.begin(), d3a_sq.end());
 
     BOOST_CHECK_EQUAL(a * T(0), zero);
@@ -449,7 +450,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_non_integral_arithmetic_relations, T, non_int
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(test_cont_and_pp, T, integral_test_types)
 {
-    boost::array<polynomial<T>, 4> const q={{
+    std::array<polynomial<T>, 4> const q={{
         polynomial<T>(d8.begin(), d8.end()),
         polynomial<T>(d8b.begin(), d8b.end()),
         polynomial<T>(d3a.begin(), d3a.end()),
@@ -470,7 +471,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( test_self_multiply_assign, T, all_test_types )
 {
     polynomial<T> a(d3a.begin(), d3a.end());
     polynomial<T> const b(a);
-    boost::array<double, 7> const d3a_sq = {{100, -120, -44, 108, -20, -24, 9}};
+    std::array<double, 7> const d3a_sq = {{100, -120, -44, 108, -20, -24, 9}};
     polynomial<T> const asq(d3a_sq.begin(), d3a_sq.end());
 
     a *= a;
@@ -538,8 +539,8 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( test_pow, T, all_test_types )
       return;   // Invokes undefined behaviour
     polynomial<T> a(d3a.begin(), d3a.end());
     polynomial<T> const one(T(1));
-    boost::array<double, 7> const d3a_sqr = {{100, -120, -44, 108, -20, -24, 9}};
-    boost::array<double, 10> const d3a_cub =
+    std::array<double, 7> const d3a_sqr = {{100, -120, -44, 108, -20, -24, 9}};
+    std::array<double, 10> const d3a_cub =
         {{1000, -1800, -120, 2124, -1032, -684, 638, -18, -108, 27}};
     polynomial<T> const asqr(d3a_sqr.begin(), d3a_sqr.end());
     polynomial<T> const acub(d3a_cub.begin(), d3a_cub.end());

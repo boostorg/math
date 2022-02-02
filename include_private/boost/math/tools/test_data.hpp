@@ -927,7 +927,7 @@ std::ostream& write_code(std::ostream& os,
       return os;
 
    os << "#ifndef SC_\n#  define SC_(x) static_cast<T>(BOOST_JOIN(x, L))\n#endif\n"
-   "   static const boost::array<boost::array<T, "
+   "   static const std::array<std::array<T, "
    << a->size() << ">, " << data.size() << "> " << name << " = {{\n";
 
    while(a != b)

@@ -111,7 +111,7 @@ private:
       std::size_t row = ++m_committed_refinements;
 
       Real h = ldexp(Real(1), -static_cast<int>(row));
-      size_t k = (size_t)boost::math::lltrunc(ceil(m_t_max / (2 * h)));
+      size_t k = static_cast<size_t>(boost::math::lltrunc(ceil(m_t_max / (2 * h))));
       m_abscissas[row].reserve(k);
       m_weights[row].reserve(k);
       Real arg = h;
@@ -157,7 +157,7 @@ auto sinh_sinh_detail<Real, Policy>::integrate(const F f, Real tolerance, Real* 
 
     static const char* function = "boost::math::quadrature::sinh_sinh<%1%>::integrate";
 
-    typedef decltype(f(Real(0))) K;
+    typedef decltype(f(static_cast<Real>(0))) K;
     static_assert(!std::is_integral<K>::value,
                   "The return type cannot be integral, it must be either a real or complex floating point type.");
     K y_max = f(boost::math::tools::max_value<Real>());
@@ -213,7 +213,7 @@ auto sinh_sinh_detail<Real, Policy>::integrate(const F f, Real tolerance, Real* 
 
         I1 = half<Real>()*I0;
         L1_I1 = half<Real>()*L1_I0;
-        Real h = (Real) 1/ (Real) (1 << i);
+        Real h = static_cast<Real>(1) / static_cast<Real>(1 << i);
         K sum = 0;
         Real absum = 0;
 
@@ -233,7 +233,7 @@ auto sinh_sinh_detail<Real, Policy>::integrate(const F f, Real tolerance, Real* 
             absum += abterm0;
 
             // We require two consecutive terms to be < eps in case we hit a zero of f.
-            if (x > (Real) 100 && abterm0 < eps && abterm1 < eps)
+            if (x > static_cast<Real>(100) && abterm0 < eps && abterm1 < eps)
             {
                 break;
             }
@@ -295,8 +295,8 @@ void sinh_sinh_detail<Real, Policy>::init(const std::integral_constant<int, 0>&)
 
    for (size_t i = 0; i <= 4; ++i)
    {
-      Real h = (Real)1 / (Real)(1 << i);
-      size_t k = (size_t)boost::math::lltrunc(ceil(m_t_max / (2 * h)));
+      Real h = static_cast<Real>(1) / static_cast<Real>(1 << i);
+      size_t k = static_cast<size_t>(boost::math::lltrunc(ceil(m_t_max / (2 * h))));
       m_abscissas[i].reserve(k);
       m_weights[i].reserve(k);
       // We don't add 0 to the abscissas; that's treated as a special case.

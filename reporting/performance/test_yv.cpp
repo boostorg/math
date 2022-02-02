@@ -17,7 +17,7 @@
 
 typedef double T;
 #define SC_(x) static_cast<double>(x)
-static const boost::array<boost::array<T, 3>, 11> yv_data = { {
+static const std::array<std::array<T, 3>, 11> yv_data = { {
       //SC_(2.25), {{ SC_(1.0) / 1024, SC_(-1.01759203636941035147948317764932151601257765988969544340275e7) }},
    { { SC_(0.5), T(1) / (1024 * 1024), SC_(-817.033790261762580469303126467917092806755460418223776544122) } },
    { { SC_(5.5), SC_(3.125), SC_(-2.61489440328417468776474188539366752698192046890955453259866) } },
@@ -31,7 +31,7 @@ static const boost::array<boost::array<T, 3>, 11> yv_data = { {
    { { SC_(8.5), boost::math::constants::pi<T>() * 4, SC_(0.257086543428224355151772807588810984369026142375675714560864) } },
    { { SC_(-8.5), boost::math::constants::pi<T>() * 4, SC_(0.0436807946352780974532519564114026730332781693877984686758680) } },
    } };
-static const boost::array<boost::array<T, 3>, 7> yv_large_data = { {
+static const std::array<std::array<T, 3>, 7> yv_large_data = { {
       // Bug report https://svn.boost.org/trac/boost/ticket/5560:
    { { SC_(0.5), static_cast<T>(std::ldexp(0.5, -683)), SC_(-7.14823099969225685526188875418476476336424046896822867989728e102) } },
    { { SC_(-0.5), static_cast<T>(std::ldexp(0.5, -683)), SC_(8.90597649117647254543282704099383321071493400182381039079219e-104) } },

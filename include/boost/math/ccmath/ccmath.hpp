@@ -1,4 +1,4 @@
-//  (C) Copyright Matt Borland 2021.
+//  (C) Copyright Matt Borland 2021 - 2022.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -29,5 +29,14 @@
 #include <boost/math/ccmath/fmod.hpp>
 #include <boost/math/ccmath/remainder.hpp>
 #include <boost/math/ccmath/copysign.hpp>
+#include <boost/math/ccmath/hypot.hpp>
+#include <boost/math/ccmath/fdim.hpp>
+#include <boost/math/ccmath/fmax.hpp>
+#include <boost/math/ccmath/fmin.hpp>
+#include <boost/math/ccmath/isgreater.hpp>
+#include <boost/math/ccmath/isgreaterequal.hpp>
+#include <boost/math/ccmath/isless.hpp>
+#include <boost/math/ccmath/islessequal.hpp>
+#include <boost/math/ccmath/isunordered.hpp>
 
 #endif // BOOST_MATH_CCMATH_HPP

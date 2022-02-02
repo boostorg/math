@@ -40,7 +40,7 @@ inline T powm1_imp(const T x, const T y, const Policy& pol)
          // fall through....
       }
    }
-   else
+   else if (x < 0)
    {
       // y had better be an integer:
       if (boost::math::trunc(y) != y)

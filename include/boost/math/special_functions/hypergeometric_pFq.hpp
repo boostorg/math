@@ -9,6 +9,7 @@
 #define BOOST_MATH_HYPERGEOMETRIC_PFQ_HPP
 
 #include <boost/math/special_functions/detail/hypergeometric_pFq_checked_series.hpp>
+#include <boost/math/tools/throw_exception.hpp>
 #include <chrono>
 #include <initializer_list>
 
@@ -29,9 +30,9 @@ namespace boost {
             bool operator()(std::uintmax_t iter)const
             {
                if (iter > max_iter)
-                  boost::throw_exception(boost::math::detail::pFq_termination_exception("pFq exceeded maximum permitted iterations."));
+                  BOOST_MATH_THROW_EXCEPTION(boost::math::detail::pFq_termination_exception("pFq exceeded maximum permitted iterations."));
                if (std::chrono::duration<double>(std::chrono::system_clock::now() - start_time).count() > max_time)
-                  boost::throw_exception(boost::math::detail::pFq_termination_exception("pFq exceeded maximum permitted evaluation time."));
+                  BOOST_MATH_THROW_EXCEPTION(boost::math::detail::pFq_termination_exception("pFq exceeded maximum permitted evaluation time."));
                return false;
             }
 

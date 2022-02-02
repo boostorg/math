@@ -35,7 +35,6 @@
 #include <boost/test/tools/floating_point_comparison.hpp>
 
 #include <boost/array.hpp>
-#include <boost/lexical_cast.hpp>
 #include <boost/type_traits/is_constructible.hpp>
 
 #ifdef BOOST_MATH_TEST_MULTIPRECISION

@@ -46,7 +46,7 @@ std::vector<Real> daubechies_scaling_dyadic_grid(int64_t j_max)
     std::vector<Real> v(2*p + (2*p-1)*((1<<j_max) -1), std::numeric_limits<Real>::quiet_NaN());
     v[0] = 0;
     v[v.size()-1] = 0;
-    for (int64_t i = 0; i < (int64_t) phik.size(); ++i) {
+    for (int64_t i = 0; i < static_cast<int64_t>(phik.size()); ++i) {
         v[i*(1uLL<<j_max)] = phik[i];
     }
 
@@ -58,19 +58,19 @@ std::vector<Real> daubechies_scaling_dyadic_grid(int64_t j_max)
             // Where this value will go:
             int64_t delivery_idx = k*(1uLL << (j_max-j));
             // This is a nice check, but we've tested this exhaustively, and it's an expensive check:
-            //if (delivery_idx >= (int64_t) v.size()) {
+            //if (delivery_idx >= static_cast<int64_t>(v.size())) {
             //    std::cerr << "Delivery index out of range!\n";
             //    continue;
             //}
             Real term = 0;
-            for (int64_t l = 0; l < (int64_t) c.size(); ++l)
+            for (int64_t l = 0; l < static_cast<int64_t>(c.size()); ++l)
             {
                 int64_t idx = k*(int64_t(1) << (j_max - j + 1)) - l*(int64_t(1) << j_max);
                 if (idx < 0)
                 {
                     break;
                 }
-                if (idx < (int64_t) v.size())
+                if (idx < static_cast<int64_t>(v.size()))
                 {
                     term += c[l]*v[idx];
                 }

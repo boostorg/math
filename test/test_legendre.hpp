@@ -336,7 +336,7 @@ void test_legendre_p_zeros()
             Real next_zero = zeros[k];
             BOOST_CHECK(next_zero > previous_zero);
 
-            std::string err = "Tolerance failed for (n, k) = (" + boost::lexical_cast<std::string>(n) + "," + boost::lexical_cast<std::string>(k) + ")\n";
+            std::string err = "Tolerance failed for (n, k) = (" + std::to_string(n) + "," + std::to_string(k) + ")\n";
             if (n < 40)
             {
                 BOOST_CHECK_MESSAGE( abs(legendre_p(n, next_zero)) < 100*tol,

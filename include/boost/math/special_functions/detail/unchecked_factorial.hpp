@@ -14,7 +14,7 @@
 #pragma warning(push) // Temporary until lexical cast fixed.
 #pragma warning(disable: 4127 4701)
 #endif
-#include <boost/math/tools/lexical_cast.hpp>
+#include <boost/math/tools/convert_from_string.hpp>
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
@@ -669,8 +669,6 @@ struct max_factorial<BOOST_MATH_FLOAT128_TYPE>
 
 #endif
 
-#ifndef BOOST_MATH_NO_LEXICAL_CAST
-
 template <class T>
 struct unchecked_factorial_initializer
 {
@@ -696,16 +694,21 @@ const typename unchecked_factorial_initializer<T>::init unchecked_factorial_init
 template <class T, int N>
 inline T unchecked_factorial_imp(unsigned i, const std::integral_constant<int, N>&)
 {
-   static_assert(!std::is_integral<T>::value, "Type T must not be a floating point type");
-   // factorial<unsigned int>(n) is not implemented
+   //
+   // If you're foolish enough to instantiate factorial
+   // on an integer type then you end up here.  But this code is
+   // only intended for (fixed precision) multiprecision types.
+   // 
+   // Note, factorial<unsigned int>(n) is not implemented
    // because it would overflow integral type T for too small n
    // to be useful. Use instead a floating-point type,
    // and convert to an unsigned type if essential, for example:
    // unsigned int nfac = static_cast<unsigned int>(factorial<double>(n));
    // See factorial documentation for more detail.
+   //
+   static_assert(!std::is_integral<T>::value && !std::numeric_limits<T>::is_integer, "Type T must not be an integral type");
 
-   unchecked_factorial_initializer<T>::force_instantiate();
-
+   // We rely on C++11 thread safe initialization here:
    static const std::array<T, 101> factorials = {{
       T(boost::math::tools::convert_from_string<T>("1")),
       T(boost::math::tools::convert_from_string<T>("1")),
@@ -816,16 +819,20 @@ inline T unchecked_factorial_imp(unsigned i, const std::integral_constant<int, N
 template <class T>
 inline T unchecked_factorial_imp(unsigned i, const std::integral_constant<int, 0>&)
 {
-   static_assert(!std::is_integral<T>::value, "Type T must not be a floating point type");
-   // factorial<unsigned int>(n) is not implemented
+   //
+   // If you're foolish enough to instantiate factorial
+   // on an integer type then you end up here.  But this code is
+   // only intended for (variable precision) multiprecision types.
+   // 
+   // Note, factorial<unsigned int>(n) is not implemented
    // because it would overflow integral type T for too small n
    // to be useful. Use instead a floating-point type,
    // and convert to an unsigned type if essential, for example:
    // unsigned int nfac = static_cast<unsigned int>(factorial<double>(n));
    // See factorial documentation for more detail.
-#ifdef BOOST_NO_CXX11_THREAD_LOCAL
-   unchecked_factorial_initializer<T>::force_instantiate();
-#endif
+   //
+   static_assert(!std::is_integral<T>::value && !std::numeric_limits<T>::is_integer, "Type T must not be an integral type");
+
    static const char* const factorial_strings[] = {
          "1",
          "1",
@@ -929,7 +936,9 @@ inline T unchecked_factorial_imp(unsigned i, const std::integral_constant<int, 0
          "933262154439441526816992388562667004907159682643816214685929638952175999932299156089414639761565182862536979208272237582511852109168640000000000000000000000",
          "93326215443944152681699238856266700490715968264381621468592963895217599993229915608941463976156518286253697920827223758251185210916864000000000000000000000000",
       };
-
+      //
+      // we rely on C++11 thread safe initialization in the event that we have no thread locals:
+      //
       static BOOST_MATH_THREAD_LOCAL T factorials[sizeof(factorial_strings) / sizeof(factorial_strings[0])];
       static BOOST_MATH_THREAD_LOCAL int digits = 0;
 
@@ -997,22 +1006,6 @@ struct max_factorial
 };
 
 #undef BOOST_MATH_DETAIL_FLOAT128_MAX_FACTORIAL
-
-#else // BOOST_MATH_NO_LEXICAL_CAST
-
-template <class T>
-inline T unchecked_factorial(unsigned i BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(T))
-{
-   return 1;
-}
-
-template <class T>
-struct max_factorial
-{
-   static constexpr unsigned value = 0;
-};
-
-#endif
 
 #ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
 template <class T>

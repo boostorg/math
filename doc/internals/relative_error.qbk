@@ -62,7 +62,7 @@ dimensional array passed to function /test/, roughly that's
 Parameter /a/ is a matrix of test data: and must be a standard library Sequence type,
 that contains another Sequence type:
 typically it will be a two dimensional instance of 
-[^boost::array].  Each row
+[^std::array].  Each row
 of /a/ should contain all the parameters that are passed to the function 
 under test as well as the expected result.
 
@@ -87,7 +87,7 @@ two-dimensional matrix of test data, each row is one test case, and contains
 three elements: the input value, and the expected results for the `tgamma` and
 `lgamma` functions respectively.
 
-   static const boost::array<boost::array<TestType, 3>, NumberOfTests> 
+   static const std::array<std::array<TestType, 3>, NumberOfTests> 
       factorials = {
          /* big array of test data goes here */
       };

@@ -212,7 +212,7 @@ void updateTestCount(Lines& source_lines, std::size_t mult)
    using std::isdigit;
 
    const auto where = std::find_if(std::begin(source_lines), std::end(source_lines),
-      [](const std::string& str){ return str.find("boost::array") != std::string::npos; });
+      [](const std::string& str){ return str.find("std::array") != std::string::npos; });
    auto& str = *where;
    const auto pos = str.find(">, ") + 3;
    auto digits_length = 0;
