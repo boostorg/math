@@ -127,14 +127,10 @@ void test_zero_coefficients()
 
 int main()
 {
-// Quartic roots test hangs CI with MSVC-14.2 using C++17
-// See: https://github.com/boostorg/math/issues/750
-#if !defined(_MSC_VER) || (_MSC_VER != 1929)
     test_zero_coefficients<float>();
     test_zero_coefficients<double>();
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_zero_coefficients<long double>();
-#endif
 #endif
     return boost::math::test::report_errors();
 }
