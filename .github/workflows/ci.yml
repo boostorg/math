@@ -279,7 +279,7 @@ jobs:
       - name: Test
         run: ..\..\..\b2 --hash %ARGS% define=CI_SUPPRESS_KNOWN_ISSUES ${{ matrix.suite }}
         working-directory: ../boost-root/libs/math/test
-  standalone-gcc:
+  standalone-compile-tests-gcc:
       runs-on: ubuntu-20.04
       strategy:
         fail-fast: false
