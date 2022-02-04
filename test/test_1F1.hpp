@@ -6,12 +6,14 @@
 
 #define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
 
+#include <type_traits>
 #include <boost/math/concepts/real_concept.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/tools/stats.hpp>
+#include <boost/math/tools/test_value.hpp>
 #include <boost/math/tools/test.hpp>
 #include <boost/math/tools/big_constant.hpp>
 #include <boost/math/constants/constants.hpp>
@@ -109,32 +111,32 @@ void test_spots5(T, const char* type_name)
    T tol = boost::math::tools::epsilon<T>() * 200;
    if (std::numeric_limits<T>::digits > std::numeric_limits<double>::digits)
       tol *= 2;
-   if (boost::is_class<T>::value)
+   if (std::is_class<T>::value)
       tol *= 4;
    // b = 2a
    T computed = hypergeometric_1F1(T(-12.25), T(2 * -12.25), T(6.75));
-   T expected = boost::lexical_cast<T>("22.995348157760091167706081204212893687052775606591209203948675272473773725021024450870565197330528784707135828761");
+   T expected = BOOST_MATH_TEST_VALUE(T, 22.995348157760091167706081204212893687052775606591209203948675272473773725021024450870565197330528784707135828761);
    BOOST_CHECK_CLOSE(computed, expected, tol);
    computed = hypergeometric_1F1(T(12.25), T(2 * 12.25), T(6.75));
-   expected = boost::lexical_cast<T>("36.47281964229300610642392880149257389834650024065756742702265701321933782423217084029882132197130099355867287657");
+   expected = BOOST_MATH_TEST_VALUE(T, 36.47281964229300610642392880149257389834650024065756742702265701321933782423217084029882132197130099355867287657);
    BOOST_CHECK_CLOSE(computed, expected, tol);
    computed = hypergeometric_1F1(T(-11), T(-12), T(6.75));
-   expected = boost::lexical_cast<T>("376.3166426246459656334542608880377435064935064935064935064935064935064935064935064935064935064935064935064935064");
+   expected = BOOST_MATH_TEST_VALUE(T, 376.3166426246459656334542608880377435064935064935064935064935064935064935064935064935064935064935064935064935064);
    BOOST_CHECK_CLOSE(computed, expected, tol);
    computed = hypergeometric_1F1(T(-2), T(-12), T(6.75));
-   expected = boost::lexical_cast<T>("2.470170454545454545454545454545454545454545454545454545454545454545454545454545454545454545454545454545454545");
+   expected = BOOST_MATH_TEST_VALUE(T, 2.470170454545454545454545454545454545454545454545454545454545454545454545454545454545454545454545454545454545);
    BOOST_CHECK_CLOSE(computed, expected, tol);
    computed = hypergeometric_1F1(T(-224), T(-1205), T(6.75));
-   expected = boost::lexical_cast<T>("3.497033449657595724636676193024114597507981035316405619832857546161530808157860391434240068189887198094611519953");
+   expected = BOOST_MATH_TEST_VALUE(T, 3.497033449657595724636676193024114597507981035316405619832857546161530808157860391434240068189887198094611519953);
    BOOST_CHECK_CLOSE(computed, expected, tol);
    computed = hypergeometric_1F1(T(0.5), T(-1205.5), T(-6.75));
-   expected = boost::lexical_cast<T>("1.00281149043026925155096279505879868076290060374397866773878698584557482321961231721407215665017657501846692575");
+   expected = BOOST_MATH_TEST_VALUE(T, 1.00281149043026925155096279505879868076290060374397866773878698584557482321961231721407215665017657501846692575);
    BOOST_CHECK_CLOSE(computed, expected, tol);
    computed = hypergeometric_1F1(T(-0.5), T(-1205.5), T(-6.75));
-   expected = boost::lexical_cast<T>("0.99719639844965644594352920596780535220516138060108955206195178371227403775248888108818326220977962797312690");
+   expected = BOOST_MATH_TEST_VALUE(T, 0.99719639844965644594352920596780535220516138060108955206195178371227403775248888108818326220977962797312690);
    BOOST_CHECK_CLOSE(computed, expected, tol);
    computed = hypergeometric_1F1(T(-12), T(16.25), T(1043.75));
-   expected = boost::lexical_cast<T>("1.26527673505477678311707565502355407505496430400394171269315320194708537626079491650410923064978320042481912e20");
+   expected = BOOST_MATH_TEST_VALUE(T, 1.26527673505477678311707565502355407505496430400394171269315320194708537626079491650410923064978320042481912e20);
    BOOST_CHECK_CLOSE(computed, expected, tol * 3);
 
    computed = hypergeometric_1F1(T(3.5), T(3.5), T(36.25));
@@ -160,7 +162,7 @@ void test_spots5(T, const char* type_name)
 template <class T>
 void test_spots6(T, const char* type_name)
 {
-   static const boost::array<boost::array<T, 4>, 91> hypergeometric_1F1_bugs = { {
+   static const std::array<std::array<T, 4>, 91> hypergeometric_1F1_bugs = { {
         { { static_cast<double>(17955.561660766602), static_cast<double>(9.6968994205831605e-09), static_cast<double>(-82.406154185533524), SC_(6.98056008378736714088730927132364938220428678e-11) }},
         { { static_cast<double>(17955.561660766602), static_cast<double>(-9.6968994205831605e-09), static_cast<double>(-82.406154185533524), SC_(-6.98055306629610746072607353939306734740549551e-11) }},
         { { static_cast<double>(-17955.561660766602), static_cast<double>(-9.6968994205831605e-09), static_cast<double>(82.406154185533524), SC_(-42897094853118832762870100.8669248353530950866) }} ,
@@ -286,7 +288,7 @@ void test_spots6(T, const char* type_name)
         { { (T)std::ldexp((double)-15233620754432000, -45), (T)std::ldexp((double)-12708283072512000, -46), (T)std::ldexp((double)10255461007360000, -46), SC_(-5.4344106361679075861859567858016187271235441673635e+125) }},
         { { (T)std::ldexp((double)-11241354149888000, -45), (T)std::ldexp((double)-9580579905536000, -45), (T)std::ldexp((double)12224976846848000, -47), SC_(12046856548470067405870726490464935201150430438.035) }},
    } };
-   static const boost::array<boost::array<T, 4>, 2> hypergeometric_1F1_big_bugs = { {
+   static const std::array<std::array<T, 4>, 2> hypergeometric_1F1_big_bugs = { {
 #if DBL_MAX_EXP == LDBL_MAX_EXP
          {{ static_cast<double>(7.8238229420435346e-05), static_cast<double>(-5485.3222503662109), static_cast<double>(1896.0561106204987), BOOST_MATH_HUGE_CONSTANT(T, 1000, 4.33129800901478785957996719992774682013355926e+668) }},
          {{ static_cast<double>(-7.8238229420435346e-05), static_cast<double>(-5485.3222503662109), static_cast<double>(1896.0561106204987), BOOST_MATH_HUGE_CONSTANT(T, 1000, -4.3248750673398590673783317624407455467680038e+668) }},

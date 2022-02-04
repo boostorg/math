@@ -105,10 +105,10 @@ private:
       using std::exp;
       std::size_t row  = ++m_committed_refinements;
 
-      Real h = ldexp(Real(1), -static_cast<int>(row));
+      Real h = ldexp(static_cast<Real>(1), -static_cast<int>(row));
       const Real t_max = m_t_min + m_abscissas[0].size() - 1;
 
-      size_t k = (size_t)boost::math::lltrunc(ceil((t_max - m_t_min) / (2 * h)));
+      size_t k = static_cast<size_t>(boost::math::lltrunc(ceil((t_max - m_t_min) / (2 * h))));
       m_abscissas[row].reserve(k);
       m_weights[row].reserve(k);
       Real arg = m_t_min;
@@ -149,7 +149,7 @@ template<class Real, class Policy>
 template<class F>
 auto exp_sinh_detail<Real, Policy>::integrate(const F& f, Real* error, Real* L1, const char* function, Real tolerance, std::size_t* levels)->decltype(std::declval<F>()(std::declval<Real>())) const
 {
-    typedef decltype(f(Real(0))) K;
+    typedef decltype(f(static_cast<Real>(0))) K;
     using std::abs;
     using std::floor;
     using std::tanh;
@@ -158,34 +158,52 @@ auto exp_sinh_detail<Real, Policy>::integrate(const F& f, Real* error, Real* L1,
     using boost::math::constants::half;
     using boost::math::constants::half_pi;
 
-    // This provided a nice error message for real valued integrals, but it's super awkward for complex-valued integrals:
-    /*K y_max = f(tools::max_value<Real>());
-    if(abs(y_max) > tools::epsilon<Real>() || !(boost::math::isfinite)(y_max))
-    {
-        K val = abs(y_max);
-        return static_cast<K>(policies::raise_domain_error(function, "The function you are trying to integrate does not go to zero at infinity, and instead evaluates to %1%", val, Policy()));
-    }*/
+   // This provided a nice error message for real valued integrals, but it's super awkward for complex-valued integrals:
+   /*K y_max = f(tools::max_value<Real>());
+   if(abs(y_max) > tools::epsilon<Real>() || !(boost::math::isfinite)(y_max))
+   {
+       K val = abs(y_max);
+       return static_cast<K>(policies::raise_domain_error(function, "The function you are trying to integrate does not go to zero at infinity, and instead evaluates to %1%", val, Policy()));
+   }*/
 
-    //std::cout << std::setprecision(5*std::numeric_limits<Real>::digits10);
+   //std::cout << std::setprecision(5*std::numeric_limits<Real>::digits10);
 
     // Get the party started with two estimates of the integral:
+    Real min_abscissa{ 0 }, max_abscissa{ boost::math::tools::max_value<Real>() };
     K I0 = 0;
     Real L1_I0 = 0;
     for(size_t i = 0; i < m_abscissas[0].size(); ++i)
     {
         K y = f(m_abscissas[0][i]);
+        K I0_last = I0;
         I0 += y*m_weights[0][i];
         L1_I0 += abs(y)*m_weights[0][i];
+        if ((I0_last == I0) && (abs(I0) != 0))
+        {
+           max_abscissa = m_abscissas[0][i];
+           break;
+        }
     }
 
     //std::cout << "First estimate : " << I0 << std::endl;
     K I1 = I0;
     Real L1_I1 = L1_I0;
-    for (size_t i = 0; i < m_abscissas[1].size(); ++i)
+    bool have_first_j = false;
+    std::size_t first_j = 0;
+    for (size_t i = 0; (i < m_abscissas[1].size()) && (m_abscissas[1][i] < max_abscissa); ++i)
     {
         K y = f(m_abscissas[1][i]);
+        K I1_last = I1;
         I1 += y*m_weights[1][i];
         L1_I1 += abs(y)*m_weights[1][i];
+        if (!have_first_j && (I1_last == I1))
+        {
+           // No change to the sum, disregard these values on the LHS:
+           min_abscissa = m_abscissas[1][i];
+           first_j = i;
+        }
+        else
+           have_first_j = true;
     }
 
     I1 *= half<Real>();
@@ -201,31 +219,25 @@ auto exp_sinh_detail<Real, Policy>::integrate(const F& f, Real* error, Real* L1,
 
         I1 = half<Real>()*I0;
         L1_I1 = half<Real>()*L1_I0;
-        Real h = (Real) 1/ (Real) (1 << i);
+        Real h = static_cast<Real>(1)/static_cast<Real>(1 << i);
         K sum = 0;
         Real absum = 0;
 
         auto abscissas_row = get_abscissa_row(i);
         auto weight_row = get_weight_row(i);
 
+        first_j = first_j == 0 ? 0 : 2 * first_j - 1;  // appoximate location to start looking for lowest meaningful abscissa value
         Real abterm1 = 1;
-        Real eps = tools::epsilon<Real>()*L1_I1;
-        for(size_t j = 0; j < m_weights[i].size(); ++j)
+        std::size_t j = first_j;
+        while (abscissas_row[j] < min_abscissa)
+           ++j;
+        for(; (j < m_weights[i].size()) && (abscissas_row[j] < max_abscissa); ++j)
         {
             Real x = abscissas_row[j];
             K y = f(x);
             sum += y*weight_row[j];
             Real abterm0 = abs(y)*weight_row[j];
             absum += abterm0;
-
-            // We require two consecutive terms to be < eps in case we hit a zero of f.
-            // Numerical experiments indicate that we should start this check at ~30 for floats,
-            // ~60 for doubles, and ~100 for long doubles.
-            // However, starting the check at x = 10 rather than x = 100 will only save two function evaluations.
-            if (x > (Real) 100 && abterm0 < eps && abterm1 < eps)
-            {
-                break;
-            }
             abterm1 = abterm0;
         }
 
@@ -294,8 +306,8 @@ void exp_sinh_detail<Real, Policy>::init(const std::integral_constant<int, 0>&)
 
    for (size_t i = 0; i <= m_committed_refinements; ++i)
    {
-      Real h = (Real)1 / (Real)(1 << i);
-      size_t k = (size_t)boost::math::lltrunc(ceil((t_max - m_t_min) / (2 * h)));
+      Real h = static_cast<Real>(1) / static_cast<Real>(1 << i);
+      size_t k = static_cast<size_t>(boost::math::lltrunc(ceil((t_max - m_t_min) / (2 * h))));
       m_abscissas[i].reserve(k);
       m_weights[i].reserve(k);
       Real arg = m_t_min;

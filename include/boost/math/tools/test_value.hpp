@@ -27,7 +27,9 @@
 // Macro BOOST_MATH_INSTRUMENT_CREATE_TEST_VALUE provides a global diagnostic value for create_type.
 
 #include <boost/cstdfloat.hpp> // For float_64_t, float128_t. Must be first include!
-#include <boost/math/tools/lexical_cast.hpp>
+#ifndef BOOST_MATH_STANDALONE
+#include <boost/lexical_cast.hpp>
+#endif
 #include <limits>
 #include <type_traits>
 
@@ -80,13 +82,16 @@ inline T create_test_value(largest_float, const char* str, const std::false_type
 { // Create test value using from lexical cast of decimal digit string const char* str.
   // For example, extended precision or other User-Defined types which are NOT constructible from a string
   // (NOR constructible from a long double).
-    // (This is case T1 = false_type and T2 == false_type).
-  #ifdef BOOST_MATH_INSTRUMENT_CREATE_TEST_VALUE
+  // (This is case T1 = false_type and T2 == false_type).
+#ifdef BOOST_MATH_INSTRUMENT_CREATE_TEST_VALUE
   create_type = 3;
-  #elif defined(BOOST_MATH_STANDALONE)
+#endif
+#if defined(BOOST_MATH_STANDALONE)
   static_assert(sizeof(T) == 0, "Can not create a test value using lexical cast of string in standalone mode");
-  #endif
+  return T();
+#else
   return boost::lexical_cast<T>(str);
+#endif
 }
 
 // T real type, x a decimal digits representation of a floating-point, for example: 12.34.
@@ -108,6 +113,24 @@ inline T create_test_value(largest_float, const char* str, const std::false_type
 
 #define BOOST_MATH_TEST_VALUE(T, x) create_test_value<T>(\
   BOOST_MATH_TEST_LARGEST_FLOAT_SUFFIX(x),\
+  #x,\
+  std::integral_constant<bool, \
+    std::numeric_limits<T>::is_specialized &&\
+      (std::numeric_limits<T>::radix == 2)\
+        && (std::numeric_limits<T>::digits <= BOOST_MATH_TEST_LARGEST_FLOAT_DIGITS)\
+        && std::is_convertible<largest_float, T>::value>(),\
+  std::integral_constant<bool, \
+    std::is_constructible<T, const char*>::value>()\
+)
+
+#if LDBL_MAX_10_EXP > DBL_MAX_10_EXP
+#define BOOST_MATH_TEST_HUGE_FLOAT_SUFFIX(x) BOOST_MATH_TEST_LARGEST_FLOAT_SUFFIX(x)
+#else
+#define BOOST_MATH_TEST_HUGE_FLOAT_SUFFIX(x) 0.0
+#endif
+
+#define BOOST_MATH_HUGE_TEST_VALUE(T, x) create_test_value<T>(\
+  BOOST_MATH_TEST_HUGE_FLOAT_SUFFIX(x),\
   #x,\
   std::integral_constant<bool, \
     std::numeric_limits<T>::is_specialized &&\

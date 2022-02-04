@@ -84,7 +84,7 @@ void test_spots(T, const char* type_name)
 {
     // Function values calculated on http://functions.wolfram.com/
     // Note that Mathematica's EllipticF accepts k^2 as the second parameter.
-    static const boost::array<boost::array<typename table_type<T>::type, 3>, 22> data1 = {{
+    static const std::array<std::array<typename table_type<T>::type, 3>, 22> data1 = {{
         {{ SC_(0.0), SC_(0.0), SC_(0.0) }},
         {{ SC_(-10.0), SC_(0.0), SC_(-10.0) }},
         {{ SC_(-1.0), SC_(-1.0), SC_(-1.2261911708835170708130609674719067527242483502207) }},
@@ -118,7 +118,7 @@ void test_spots(T, const char* type_name)
 
     // Function values calculated on http://functions.wolfram.com/
     // Note that Mathematica's EllipticK accepts k^2 as the second parameter.
-    static const boost::array<boost::array<typename table_type<T>::type, 2>, 9> data2 = {{
+    static const std::array<std::array<typename table_type<T>::type, 2>, 9> data2 = {{
         {{ SC_(0.0), SC_(1.5707963267948966192313216916397514420985846996876) }},
         {{ SC_(0.125), SC_(1.5769867712158131421244030532288080803822271060839) }},
         {{ SC_(0.25), SC_(1.5962422221317835101489690714979498795055744578951) }},

@@ -87,7 +87,7 @@ void test_spots(T, const char* type_name)
 {
     BOOST_MATH_STD_USING
     // function values calculated on http://functions.wolfram.com/
-    static const boost::array<boost::array<typename table_type<T>::type, 4>, 70> data1 = {{
+    static const std::array<std::array<typename table_type<T>::type, 4>, 70> data1 = {{
         {{ SC_(1.0), SC_(-1.0), SC_(0.0), SC_(-1.557407724654902230506974807458360173087) }},
         {{ SC_(0.0), SC_(-4.0), SC_(0.4), SC_(-4.153623371196831087495427530365430979011) }},
         {{ SC_(0.0), SC_(8.0), SC_(-0.6), SC_(8.935930619078575123490612395578518914416) }},
@@ -185,7 +185,7 @@ void test_spots(T, const char* type_name)
     do_test_ellint_pi3<T>(ellint_pi3_large_data, type_name, "Elliptic Integral PI: Large Random Data");
 
     // function values calculated on http://functions.wolfram.com/
-    static const boost::array<boost::array<typename table_type<T>::type, 3>, 17> data2 = {{
+    static const std::array<std::array<typename table_type<T>::type, 3>, 17> data2 = {{
         {{ SC_(0.0), SC_(0.2), SC_(1.586867847454166237308008033828114192951) }},
         {{ SC_(0.0), SC_(0.4), SC_(1.639999865864511206865258329748601457626) }},
         {{ SC_(0.0), SC_(0.0), SC_(1.57079632679489661923132169163975144209858469968755291048747) }},

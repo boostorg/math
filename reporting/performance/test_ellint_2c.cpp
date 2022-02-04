@@ -17,7 +17,7 @@
 
 typedef double T;
 #define SC_(x) static_cast<double>(x)
-static const boost::array<boost::array<T, 2>, 10> data2 = { {
+static const std::array<std::array<T, 2>, 10> data2 = { {
    { { SC_(-1.0), SC_(1.0) } },
    { { SC_(0.0), SC_(1.5707963267948966192313216916397514420985846996876) } },
    { { T(100) / 1024, SC_(1.5670445330545086723323795143598956428788609133377) } },

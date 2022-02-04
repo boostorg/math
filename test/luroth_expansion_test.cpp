@@ -8,11 +8,11 @@
 #include "math_unit_test.hpp"
 #include <boost/math/tools/luroth_expansion.hpp>
 #include <boost/math/constants/constants.hpp>
+#include <boost/multiprecision/cpp_bin_float.hpp>
 #ifdef BOOST_HAS_FLOAT128
 #include <boost/multiprecision/float128.hpp>
 using boost::multiprecision::float128;
 #endif
-#include <boost/multiprecision/cpp_bin_float.hpp>
 
 using boost::math::tools::luroth_expansion;
 using boost::multiprecision::cpp_bin_float_100;

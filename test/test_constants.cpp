@@ -64,7 +64,7 @@ class big_real_concept : public real_concept
 public:
    big_real_concept() {}
    template <typename T>
-   big_real_concept(const T& t, typename enable_if<is_convertible<T, real_concept>>::type* = 0) : real_concept(t) {}
+   big_real_concept(const T& t, typename std::enable_if<std::is_convertible<T, real_concept>::value, bool>::type = false) : real_concept(t) {}
 };
 
 inline int itrunc(const big_real_concept& val)
