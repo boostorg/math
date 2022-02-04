@@ -232,7 +232,7 @@ jobs:
       - name: Test
         run: ..\..\..\b2 --hash %ARGS% define=CI_SUPPRESS_KNOWN_ISSUES ${{ matrix.suite }}
         working-directory: ../boost-root/libs/math/test
-  MSVC2022-BETA:
+  MSVC2022:
     runs-on: windows-2022
     defaults:
       run:
