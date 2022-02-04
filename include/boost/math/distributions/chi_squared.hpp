@@ -36,7 +36,7 @@ public:
    } // chi_squared_distribution
 
    template <typename Z, typename std::enable_if<std::is_integral<Z>::value, bool>::type = true>
-   chi_squared_distribution<double>(Z i) : m_df(static_cast<double>(i))
+   chi_squared_distribution(Z i) : m_df(static_cast<double>(i))
    {
       RealType result;
       detail::check_df(
