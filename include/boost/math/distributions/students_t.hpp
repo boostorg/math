@@ -62,6 +62,11 @@ private:
 
 typedef students_t_distribution<double> students_t; // Convenience typedef for double version.
 
+#ifdef __cpp_deduction_guides
+template <class RealType>
+students_t_distribution(RealType)->students_t_distribution<typename boost::math::tools::promote_args<RealType>::type>;
+#endif
+
 template <class RealType, class Policy>
 inline const std::pair<RealType, RealType> range(const students_t_distribution<RealType, Policy>& /*dist*/)
 { // Range of permissible values for random variable x.

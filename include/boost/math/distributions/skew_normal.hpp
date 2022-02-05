@@ -96,6 +96,15 @@ namespace boost{ namespace math{
 
   typedef skew_normal_distribution<double> skew_normal;
 
+  #ifdef __cpp_deduction_guides
+  template <class RealType>
+  skew_normal_distribution(RealType)->skew_normal_distribution<typename boost::math::tools::promote_args<RealType>::type>;
+  template <class RealType>
+  skew_normal_distribution(RealType,RealType)->skew_normal_distribution<typename boost::math::tools::promote_args<RealType>::type>;
+  template <class RealType>
+  skew_normal_distribution(RealType,RealType,RealType)->skew_normal_distribution<typename boost::math::tools::promote_args<RealType>::type>;
+  #endif
+
   template <class RealType, class Policy>
   inline const std::pair<RealType, RealType> range(const skew_normal_distribution<RealType, Policy>& /*dist*/)
   { // Range of permissible values for random variable x.

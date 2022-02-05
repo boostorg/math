@@ -877,7 +877,7 @@ test-suite distribution_tests :
    [ run test_signed_zero.cpp ../../test/build//boost_unit_test_framework  ]
    [ run complex_test.cpp ../../test/build//boost_unit_test_framework  ]
 
-   [ compile test_normal_dist_deduction_guides.cpp : [ requires cpp_deduction_guides ] ]
+   [ compile test_dist_deduction_guides.cpp : [ requires cpp_deduction_guides cpp_variadic_templates ] ]
 
 ;
 

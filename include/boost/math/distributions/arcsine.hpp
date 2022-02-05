@@ -194,6 +194,12 @@ namespace boost
     // Convenient typedef to construct double version.
     typedef arcsine_distribution<double> arcsine;
 
+    #ifdef __cpp_deduction_guides
+    template <class RealType>
+    arcsine_distribution(RealType)->arcsine_distribution<typename boost::math::tools::promote_args<RealType>::type>;
+    template <class RealType>
+    arcsine_distribution(RealType, RealType)->arcsine_distribution<typename boost::math::tools::promote_args<RealType>::type>;
+    #endif
 
     template <class RealType, class Policy>
     inline const std::pair<RealType, RealType> range(const arcsine_distribution<RealType, Policy>&  dist)

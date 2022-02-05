@@ -783,6 +783,11 @@ namespace boost
 
       typedef non_central_chi_squared_distribution<double> non_central_chi_squared; // Reserved name of type double.
 
+      #ifdef __cpp_deduction_guides
+      template <class RealType>
+      non_central_chi_squared_distribution(RealType,RealType)->non_central_chi_squared_distribution<typename boost::math::tools::promote_args<RealType>::type>;
+      #endif
+
       // Non-member functions to give properties of the distribution.
 
       template <class RealType, class Policy>
