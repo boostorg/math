@@ -58,30 +58,24 @@ int main()
 {
    using namespace boost::math;
 
-   test_deduction_guide<arcsine_distribution>();
    test_deduction_guide<arcsine_distribution>(0);
    test_deduction_guide<arcsine_distribution>(0, 1);
 
    test_deduction_guide<bernoulli_distribution>(0);
 
-   test_deduction_guide<beta_distribution>();
    test_deduction_guide<beta_distribution>(1);
    test_deduction_guide<beta_distribution>(1, 1);
 
-   test_deduction_guide<binomial_distribution>();
    test_deduction_guide<binomial_distribution>(1);
    test_deduction_guide<binomial_distribution>(1, 0);
 
-   test_deduction_guide<cauchy_distribution>();
    test_deduction_guide<cauchy_distribution>(0);
    test_deduction_guide<cauchy_distribution>(0, 1);
 
    test_deduction_guide<chi_squared_distribution>(2);
 
-   test_deduction_guide<exponential_distribution>();
    test_deduction_guide<exponential_distribution>(1);
 
-   test_deduction_guide<extreme_value_distribution>();
    test_deduction_guide<extreme_value_distribution>(0);
    test_deduction_guide<extreme_value_distribution>(0, 1);
 
@@ -92,29 +86,23 @@ int main()
 
    test_deduction_guide<geometric_distribution>(1);
 
-   test_deduction_guide<inverse_chi_squared_distribution>();
    test_deduction_guide<inverse_chi_squared_distribution>(1);
    test_deduction_guide<inverse_chi_squared_distribution>(1, 1);
 
-   test_deduction_guide<inverse_gamma_distribution>();
    test_deduction_guide<inverse_gamma_distribution>(1);
    test_deduction_guide<inverse_gamma_distribution>(1, 1);
 
-   test_deduction_guide<inverse_gaussian_distribution>();
    test_deduction_guide<inverse_gaussian_distribution>(1);
    test_deduction_guide<inverse_gaussian_distribution>(1, 1);
 
    test_deduction_guide<kolmogorov_smirnov_distribution>(1);
 
-   test_deduction_guide<laplace_distribution>();
    test_deduction_guide<laplace_distribution>(0);
    test_deduction_guide<laplace_distribution>(0, 1);
 
-   test_deduction_guide<logistic_distribution>();
    test_deduction_guide<logistic_distribution>(0);
    test_deduction_guide<logistic_distribution>(0, 1);
 
-   test_deduction_guide<lognormal_distribution>();
    test_deduction_guide<lognormal_distribution>(0);
    test_deduction_guide<lognormal_distribution>(0, 1);
 
@@ -128,33 +116,26 @@ int main()
 
    test_deduction_guide<non_central_t_distribution>(1, 1);
 
-   test_deduction_guide<normal_distribution>();
    test_deduction_guide<normal_distribution>(2);
    test_deduction_guide<normal_distribution>(2, 3);
 
-   test_deduction_guide<pareto_distribution>();
    test_deduction_guide<pareto_distribution>(2);
    test_deduction_guide<pareto_distribution>(2, 3);
 
-   test_deduction_guide<poisson_distribution>();
    test_deduction_guide<poisson_distribution>(1);
 
-   test_deduction_guide<rayleigh_distribution>();
    test_deduction_guide<rayleigh_distribution>(1);
 
-   test_deduction_guide<skew_normal_distribution>();
    test_deduction_guide<skew_normal_distribution>(0);
    test_deduction_guide<skew_normal_distribution>(0, 1);
    test_deduction_guide<skew_normal_distribution>(0, 1, 0);
 
    test_deduction_guide<students_t_distribution>(2);
 
-   test_deduction_guide<triangular_distribution>();
    test_deduction_guide<triangular_distribution>(-1);
    test_deduction_guide<triangular_distribution>(-1, 0);
    test_deduction_guide<triangular_distribution>(-1, 0, 1);
 
-   test_deduction_guide<uniform_distribution>();
    test_deduction_guide<uniform_distribution>(0);
    test_deduction_guide<uniform_distribution>(0, 1);
 
