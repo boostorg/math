@@ -16,6 +16,7 @@ namespace detail {
 template<typename Real>
 bool comparator(Real r1, Real r2) {
    using std::isnan;
+   if (isnan(r1)) { return false; }
    if (isnan(r2)) { return true; }
    return r1 < r2;
 }
