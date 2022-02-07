@@ -13,7 +13,30 @@
 #include <vector>
 #include <limits>
 #include <boost/math/tools/color_maps.hpp>
-#include <boost/math/constants/constants.hpp>
+
+#if !__has_include("lodepng.h")
+ #error "lodepng.h is required to run this example."
+#endif
+#include "lodepng.h"
+#include <iostream>
+#include <string>
+#include <vector>
+
+
+// In lodepng, the vector is expected to be row major, with the top row
+// specified first. Note that this is a bit confusing sometimes as it's more
+// natural to let y increase moving *up*.
+unsigned write_png(const std::string &filename,
+                   const std::vector<std::uint8_t> &img, std::size_t width,
+                   std::size_t height) {
+  unsigned error = lodepng::encode(filename, img, width, height,
+                                   LodePNGColorType::LCT_RGBA, 8);
+  if (error) {
+    std::cerr << "Error encoding png: " << lodepng_error_text(error) << "\n";
+  }
+  return error;
+}
+
 
 // Computes ab - cd.
 // See: https://pharr.org/matt/blog/2019/11/03/difference-of-floats.html
@@ -94,21 +117,49 @@ private:
     Real ymin_;
 };
 
-int main()
+int main(int argc, char** argv)
 {
-    using Real = long double;
+    using Real = double;
+    using boost::math::tools::viridis;
     using std::sqrt;
 
-    constexpr int64_t image_width = 4096;
-    constexpr int64_t image_height = 4096;
-    constexpr boost::math::tools::viridis_color_map<Real> viridis;
-    constexpr Real two_pi = boost::math::constants::two_pi<Real>();
+    std::function<std::array<Real, 3>(Real)> color_map = viridis<Real>;
+    std::string requested_color_map = "viridis";
+    if (argc == 2) {
+       requested_color_map = std::string(argv[1]);
+       if (requested_color_map == "smooth_cool_warm") {
+          color_map = boost::math::tools::smooth_cool_warm<Real>;
+       }
+       else if (requested_color_map == "plasma") {
+          color_map = boost::math::tools::plasma<Real>;
+       }
+       else if (requested_color_map == "black_body") {
+          color_map = boost::math::tools::black_body<Real>;
+       }
+       else if (requested_color_map == "inferno") {
+          color_map = boost::math::tools::inferno<Real>;
+       }
+       else if (requested_color_map == "kindlmann") {
+          color_map = boost::math::tools::kindlmann<Real>;
+       }
+       else if (requested_color_map == "extended_kindlmann") {
+          color_map = boost::math::tools::extended_kindlmann<Real>;
+       }
+       else {
+          std::cerr << "Could not recognize color map " << argv[1] << ".";
+	  return 1;
+       }
+    }
+    constexpr int64_t image_width = 1024;
+    constexpr int64_t image_height = 1024;
+    constexpr const Real two_pi = 6.28318530718;
 
     std::vector<std::uint8_t> img(4*image_width*image_height, 0);
     plane_pixel_map<Real> map(image_width, image_height, Real(-2), Real(-2));
 
     for (int64_t j = 0; j < image_height; ++j)
     {
+	std::cout << "j = " << j << "\n";
         for (int64_t i = 0; i < image_width; ++i)
         {
             std::complex<Real> z0 = map.to_complex(i,j);
@@ -123,7 +174,7 @@ int main()
             if (std::isnan(theta)) {
                 std::cerr << "Theta is a nan!\n";
             }
-            auto c = boost::math::tools::to_8bit_rgba(viridis(theta));
+            auto c = boost::math::tools::to_8bit_rgba(color_map(theta));
             int64_t idx = 4 * image_width * (image_height - 1 - j) + 4 * i;
             img[idx + 0] = c[0];
             img[idx + 1] = c[1];
@@ -166,5 +217,5 @@ int main()
 
     // Requires lodepng.h
     // See: https://github.com/lvandeve/lodepng for download and compilation instructions
-    boost::math::tools::write_png("viridis_newton_fractal.png", img, image_width, image_height);
+    write_png(requested_color_map + "_newton_fractal.png", img, image_width, image_height);
 }

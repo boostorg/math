@@ -14,62 +14,46 @@
 
 namespace boost::math::tools {
 
-  template <typename Real>
-  class plasma_color_map
-  {
-  public:
-      constexpr plasma_color_map();
-      constexpr std::array<Real, 3> operator()(Real x);
-  }
+template<typename Real>
+std::array<Real, 3> viridis(Real x);
+      
+template<typename Real>
+std::array<Real, 3> plasma(Real x);
 
-  template <typename Real>
-  class viridis_color_map;
+template<typename Real>
+std::array<Real, 3> black_body(Real x);
 
-  template <typename Real>
-  class inferno_color_map;
+template<typename Real>
+std::array<Real, 3> inferno(Real x);
 
-  template <typename Real>
-  class black_body_color_map;
+template<typename Real>
+std::array<Real, 3> smooth_cool_warm(Real x);
 
-  template <typename Real>
-  class kindlmann_color_map;
+template<typename Real>
+std::array<Real, 3> kindlmann(Real x);
 
-  template <typename Real>
-  class extended_kindlmann_color_map;
+template<typename Real>
+std::array<Real, 3> extended_kindlmann(Real x);
 
-  template <typename Real>
-  class smooth_cool_warm_color_map;
+template<typename Real>
+std::array<uint8_t, 4> to_8bit_rgba(std::array<Real, 3> const & color);
 
-  template <typename Real>
-  class grayscale_color_map;
-
-  template <typename Real = double, std::size_t N = 256>
-  class custom_color_map
-  {
-  public:
-      custom_color_map() = delete;
-
-      constexpr custom_color_map(const std::array<Real, N>& r, const std::array<Real, N>& g, const std::array<Real, N>& b);
-
-      constexpr custom_color_map(std::array<Real, N>&& r, std::array<Real, N>&& g, std::array<Real, N>&& b);
-
-      constexpr custom_color_map& operator=(const custom_color_map&) = default;
-
-      constexpr custom_color_map& operator=(custom_color_map&&) = default;
-
-      ~custom_color_map() = default;
-  };
- 
 } // namespaces
 ``
 
 [heading Description]
 
 Abstractly, a color map is any function which maps [0, 1] -> [0, 1]^3.
-As stated, this definition is too broad to be useful.
-Therefore, in Boost, we restrict our attention to the subset of color maps which are useful for the understanding of scientific data.
-[@https://www.kennethmoreland.com/color-advice/BadColorMaps.pdf Much research] has demonstrated that color maps differ wildly in their usefulness for interpreting quantitative data.
-The canonical reference is [@https://www.kennethmoreland.com/color-advice/ here].
+As stated, this definition is too broad to be useful, so in Boost, we restrict our attention to the subset of color maps which are useful for the understanding of scientific data.
+[@https://www.kennethmoreland.com/color-advice/BadColorMaps.pdf Much research] has demonstrated that color maps differ wildly in their usefulness for interpreting quantitative data; see [@https://www.kennethmoreland.com/color-advice/ here] for details.
+In addition, different color maps are useful in different contexts.
+For example, the `smooth_cool_warm` color map is useful for examining surfaces embedded in 3-space which have scalar fields defined on them, whereas the `inferno` color map is better for understanding 2D data.
+
+Despite the fact that a color map, per our definition, has a domain of [0, 1], we nonetheless do not throw an exception if the value provided falls outside this range.
+This is for two reasons: First, visualizations are themselves amazing debuggers, and if we threw an exception the calculation would not complete and visual debugging would be inaccessible.
+Second, often small changes in floating point rounding cause the value provided to be only slightly below zero, or just slightly above 1.
+Hence, we make a call to `std::clamp` before interpolating into the color table. 
+
 For an example of how to use these facilites please refer to `example/color_maps_example.cpp`
 Note: To compile the examples directly you will need to have [@https://github.com/lvandeve/lodepng lodepng].
 An example of the viridis color map using [@https://en.wikipedia.org/wiki/Newton_fractal the newton fractal] is shown below:
