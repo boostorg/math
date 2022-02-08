@@ -132,6 +132,5 @@ int main()
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_zero_coefficients<long double>();
 #endif
-
     return boost::math::test::report_errors();
 }
