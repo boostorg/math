@@ -19,7 +19,7 @@ void viridis_bm(benchmark::State& state)
     for (auto _ : state)
     {
         benchmark::DoNotOptimize(boost::math::tools::viridis(x));
-	x += std::numeric_limits<Real>::epsilon();
+        x += std::numeric_limits<Real>::epsilon();
     }
 }
 

@@ -147,7 +147,7 @@ int main(int argc, char** argv)
        }
        else {
           std::cerr << "Could not recognize color map " << argv[1] << ".";
-	  return 1;
+          return 1;
        }
     }
     constexpr int64_t image_width = 1024;
@@ -159,7 +159,7 @@ int main(int argc, char** argv)
 
     for (int64_t j = 0; j < image_height; ++j)
     {
-	std::cout << "j = " << j << "\n";
+        std::cout << "j = " << j << "\n";
         for (int64_t i = 0; i < image_width; ++i)
         {
             std::complex<Real> z0 = map.to_complex(i,j);
