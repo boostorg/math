@@ -8,17 +8,11 @@
 
 void compile_and_link_test()
 {
-    boost::math::tools::smooth_cool_warm_color_map cw;
-    check_result<double>(cw(0.5));
-
-    boost::math::tools::plasma_color_map<float> plasma;
-    check_result<float>(plasma(0.5f));
-
-    boost::math::tools::viridis_color_map<double> viridis;
-    check_result<double>(viridis(0.5));
-
-#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-    boost::math::tools::inferno_color_map<long double> inferno;
-    check_result<long double>(inferno(0.5l));
-#endif
+    check_result<float>(boost::math::tools::black_body<float>(0.5f)[0]);
+    check_result<float>(boost::math::tools::extended_kindlmann<float>(0.5f)[0]);
+    check_result<double>(boost::math::tools::inferno<double>(0.5)[0]);
+    check_result<double>(boost::math::tools::kindlmann<double>(0.5)[0]);
+    check_result<float>(boost::math::tools::plasma<float>(0.5f)[0]);
+    check_result<float>(boost::math::tools::smooth_cool_warm<float>(0.5f)[0]);
+    check_result<float>(boost::math::tools::viridis<float>(0.5f)[0]);
 }
