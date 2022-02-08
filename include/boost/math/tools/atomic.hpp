@@ -10,9 +10,7 @@
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/cxx03_warn.hpp>
 
-#ifdef __has_include
-#if __has_include(<atomic>)
-#include <atomic>
+#ifdef BOOST_HAS_THREADS
 
 namespace boost {
    namespace math {
@@ -46,7 +44,6 @@ namespace boost {
 
 #else
 #  define BOOST_MATH_NO_ATOMIC_INT
-#endif // __has_include(<atomic>)
-#endif // __has_include
+#endif // BOOST_HAS_THREADS
 
 #endif // BOOST_MATH_ATOMIC_DETAIL_HPP
