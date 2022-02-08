@@ -9,6 +9,7 @@
 #include <algorithm> // for std::clamp
 #include <array>     // for table data
 #include <cmath>     // for std::floor
+#include <cstdint>   // fixed width integer types
 
 #if __has_include("lodepng.h")
 
