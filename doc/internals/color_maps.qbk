@@ -60,6 +60,36 @@ An example of the viridis color map using [@https://en.wikipedia.org/wiki/Newton
 
 [$../images/viridis_newton_fractal.png]
 
+Swatches of each are listed below:
+
+[$../images/smooth_cool_warm_swatch.png]
+
+*Smooth cool warm*
+
+[$../images/viridis_swatch.png]
+
+*Viridis*
+
+[$../images/plasma_swatch.png]
+
+*Plasma*
+
+[$../images/black_body.png]
+
+*Black body*
+
+[$../images/inferno_swatch.png]
+
+*Inferno*
+
+[$../images/kindlmann.png]
+
+*Kindlmann*
+
+[$../images/extended_kindlmann.png]
+
+*Extended Kindlmann*
+
 [heading References]
 
 * Ken Moreland. ['Why We Use Bad Color Maps and What You Can Do About it] .
