@@ -73,7 +73,7 @@ void expected_results()
       "Cygwin*",                    // Platform
       largest_type,                 // test type(s)
       ".*",                         // test data group
-      ".*", 500, 200);              // test function
+      ".*", 3500, 1000);            // test function
    //
    // G++ on Linux, results vary a bit by processor type,
    // on Itanium results are *much* better than listed here,
