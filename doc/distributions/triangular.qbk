@@ -17,7 +17,7 @@
        typedef RealType value_type;
        typedef Policy   policy_type;
 
-       triangular_distribution(RealType lower = -1, RealType mode = 0) RealType upper = 1); // Constructor.
+       triangular_distribution(RealType lower = -1, RealType mode = 0, RealType upper = 1); // Constructor.
           : m_lower(lower), m_mode(mode), m_upper(upper) // Default is -1, 0, +1 symmetric triangular distribution.
        // Accessor functions.
        RealType lower()const;
