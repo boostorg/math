@@ -84,6 +84,31 @@ void expected_results()
       "real_concept",                // test type(s)
       "near.*",                      // test data group
       "tgamma", 200, 100);  // test function
+
+   //
+   // Cygwin:
+   //
+   add_expected_result(
+      "GNU.*",                       // compiler
+      ".*",                          // stdlib
+      "Cygwin*",                     // platform
+      largest_type,                  // test type(s)
+      "factorials",                  // test data group
+      "tgamma", 100, 15);            // test function
+   add_expected_result(
+      "GNU.*",                       // compiler
+      ".*",                          // stdlib
+      "Cygwin*",                     // platform
+      "real_concept",                // test type(s)
+      "factorials",                  // test data group
+      "tgamma", 600, 200);           // test function
+   add_expected_result(
+      "GNU.*",                       // compiler
+      ".*",                          // stdlib
+      "Cygwin*",                     // platform
+      "real_concept",                // test type(s)
+      "near.*",                      // test data group
+      "tgamma", 200, 100);           // test function
    //
    // G++ on Linux, result vary a bit by processor type,
    // on Itanium results are *much* better than listed here,

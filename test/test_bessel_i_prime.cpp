@@ -59,10 +59,21 @@ void expected_results()
       largest_type,                  // test type(s)
       ".*",                          // test data group
 #ifdef __aarch64__
+      // Error rates for M1 macs are higher than x86_64 macs
       ".*", 4000, 1500);               // test function
 #else
       ".*", 3500, 1500);               // test function
 #endif
+   //
+   // Cygwin:
+   //
+   add_expected_result(
+      "GNU.*",                      // Compiler
+      ".*",                         // Stdlib
+      "Cygwin*",                    // Platform
+      largest_type,                 // test type(s)
+      ".*",                         // test data group
+      ".*", 500, 200);              // test function
    //
    // G++ on Linux, results vary a bit by processor type,
    // on Itanium results are *much* better than listed here,

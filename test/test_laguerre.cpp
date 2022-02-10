@@ -82,6 +82,20 @@ void expected_results()
       ".*",                          // test data group
       ".*", 40000, 1000);            // test function
    add_expected_result(
+      "GNU.*",                       // compiler
+      ".*",                          // stdlib
+      "Cygwin*",                     // platform
+      largest_type,                  // test type(s)
+      ".*",                          // test data group
+      ".*", 40000, 1000);            // test function
+   add_expected_result(
+      "GNU.*",                       // compiler
+      ".*",                          // stdlib
+      "Cygwin*",                     // platform
+      "real_concept",                // test type(s)
+      ".*",                          // test data group
+      ".*", 40000, 1000);            // test function
+   add_expected_result(
       "GNU.*",                   // compiler
       ".*",                          // stdlib
       "Win32.*",                          // platform
