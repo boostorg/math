@@ -56,8 +56,6 @@ typedef fisher_f_distribution<double> fisher_f;
 
 #ifdef __cpp_deduction_guides
 template <class RealType>
-fisher_f_distribution(RealType)->fisher_f_distribution<typename boost::math::tools::promote_args<RealType>::type>;
-template <class RealType>
 fisher_f_distribution(RealType,RealType)->fisher_f_distribution<typename boost::math::tools::promote_args<RealType>::type>;
 #endif
 
