@@ -73,6 +73,13 @@ private:
 
 typedef extreme_value_distribution<double> extreme_value;
 
+#ifdef __cpp_deduction_guides
+template <class RealType>
+extreme_value_distribution(RealType)->extreme_value_distribution<typename boost::math::tools::promote_args<RealType>::type>;
+template <class RealType>
+extreme_value_distribution(RealType,RealType)->extreme_value_distribution<typename boost::math::tools::promote_args<RealType>::type>;
+#endif
+
 template <class RealType, class Policy>
 inline const std::pair<RealType, RealType> range(const extreme_value_distribution<RealType, Policy>& /*dist*/)
 { // Range of permissible values for random variable x.

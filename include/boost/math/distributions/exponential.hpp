@@ -78,6 +78,11 @@ private:
 
 typedef exponential_distribution<double> exponential;
 
+#ifdef __cpp_deduction_guides
+template <class RealType>
+exponential_distribution(RealType)->exponential_distribution<typename boost::math::tools::promote_args<RealType>::type>;
+#endif
+
 template <class RealType, class Policy>
 inline const std::pair<RealType, RealType> range(const exponential_distribution<RealType, Policy>& /*dist*/)
 { // Range of permissible values for random variable x.

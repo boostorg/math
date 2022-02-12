@@ -55,6 +55,11 @@ private:
 
 typedef chi_squared_distribution<double> chi_squared;
 
+#ifdef __cpp_deduction_guides
+template <class RealType>
+chi_squared_distribution(RealType)->chi_squared_distribution<typename boost::math::tools::promote_args<RealType>::type>;
+#endif
+
 #ifdef _MSC_VER
 #pragma warning(push)
 #pragma warning(disable:4127)

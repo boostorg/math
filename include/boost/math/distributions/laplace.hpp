@@ -80,6 +80,13 @@ private:
 // Convenient type synonym for double.
 typedef laplace_distribution<double> laplace;
 
+#ifdef __cpp_deduction_guides
+template <class RealType>
+laplace_distribution(RealType)->laplace_distribution<typename boost::math::tools::promote_args<RealType>::type>;
+template <class RealType>
+laplace_distribution(RealType,RealType)->laplace_distribution<typename boost::math::tools::promote_args<RealType>::type>;
+#endif
+
 //
 // Non-member functions.
 template <class RealType, class Policy>

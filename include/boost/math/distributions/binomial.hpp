@@ -414,6 +414,13 @@ namespace boost
       // IS now included since no longer a name clash with function binomial.
       //typedef binomial_distribution<double> binomial; // Reserved name of type double.
 
+      #ifdef __cpp_deduction_guides
+      template <class RealType>
+      binomial_distribution(RealType)->binomial_distribution<typename boost::math::tools::promote_args<RealType>::type>;
+      template <class RealType>
+      binomial_distribution(RealType,RealType)->binomial_distribution<typename boost::math::tools::promote_args<RealType>::type>;
+      #endif
+
       template <class RealType, class Policy>
       const std::pair<RealType, RealType> range(const binomial_distribution<RealType, Policy>& dist)
       { // Range of permissible values for random variable k.

@@ -115,6 +115,13 @@ private:
 
 typedef inverse_gaussian_distribution<double> inverse_gaussian;
 
+#ifdef __cpp_deduction_guides
+template <class RealType>
+inverse_gaussian_distribution(RealType)->inverse_gaussian_distribution<typename boost::math::tools::promote_args<RealType>::type>;
+template <class RealType>
+inverse_gaussian_distribution(RealType,RealType)->inverse_gaussian_distribution<typename boost::math::tools::promote_args<RealType>::type>;
+#endif
+
 template <class RealType, class Policy>
 inline const std::pair<RealType, RealType> range(const inverse_gaussian_distribution<RealType, Policy>& /*dist*/)
 { // Range of permissible values for random variable x, zero to max.

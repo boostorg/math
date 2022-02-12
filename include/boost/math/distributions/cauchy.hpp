@@ -176,6 +176,13 @@ private:
 
 typedef cauchy_distribution<double> cauchy;
 
+#ifdef __cpp_deduction_guides
+template <class RealType>
+cauchy_distribution(RealType)->cauchy_distribution<typename boost::math::tools::promote_args<RealType>::type>;
+template <class RealType>
+cauchy_distribution(RealType,RealType)->cauchy_distribution<typename boost::math::tools::promote_args<RealType>::type>;
+#endif
+
 template <class RealType, class Policy>
 inline const std::pair<RealType, RealType> range(const cauchy_distribution<RealType, Policy>&)
 { // Range of permissible values for random variable x.
