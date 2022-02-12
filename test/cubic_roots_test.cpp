@@ -15,6 +15,7 @@ using boost::multiprecision::float128;
 
 using boost::math::tools::cubic_roots;
 using boost::math::tools::cubic_root_residual;
+using boost::math::tools::cubic_root_condition_number;
 using std::cbrt;
 
 template<class Real>
@@ -107,11 +108,34 @@ void test_zero_coefficients()
         CHECK_ULP_CLOSE(r[2], roots[2], 25);
         for (auto root : roots) {
             auto res = cubic_root_residual(a, b,c,d, root);
-            CHECK_LE(abs(res[0]), 20*res[1]);
+            CHECK_LE(abs(res[0]), res[1]);
         }
     }
 }
 
+void test_ill_conditioned()
+{
+    // An ill-conditioned root reported by SATovstun:
+    // "Exact" roots produced with a high-precision calcuation on Wolfram Alpha:
+    // NSolve[x^3 + 10000*x^2 + 200*x +1==0,x]
+    std::array<double, 3> expected_roots{-9999.97999997, -0.010010015026300100757327057, -0.009990014973799899662674923};
+    auto roots = cubic_roots<double>(1, 10000, 200, 1);
+    CHECK_ABSOLUTE_ERROR(expected_roots[0], roots[0], std::numeric_limits<double>::epsilon());
+    CHECK_ABSOLUTE_ERROR(expected_roots[1], roots[1], 1.01e-5);
+    CHECK_ABSOLUTE_ERROR(expected_roots[2], roots[2], 1.01e-5);
+    double cond = cubic_root_condition_number<double>(1, 10000, 200, 1, roots[1]);
+    double r1 = expected_roots[1];
+    // The factor of 10 is a fudge factor to make the test pass.
+    // Nonetheless, it does show this is basically correct:
+    CHECK_LE(abs(r1 - roots[1])/abs(r1), 10*std::numeric_limits<double>::epsilon()*cond);
+
+    cond = cubic_root_condition_number<double>(1, 10000, 200, 1, roots[2]);
+    double r2 = expected_roots[2];
+    // The factor of 10 is a fudge factor to make the test pass.
+    // Nonetheless, it does show this is basically correct:
+    CHECK_LE(abs(r2 - roots[2])/abs(r2), 10*std::numeric_limits<double>::epsilon()*cond);
+    return;
+}
 
 int main()
 {
@@ -120,7 +144,7 @@ int main()
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_zero_coefficients<long double>();
 #endif
-
+    test_ill_conditioned();
 #ifdef BOOST_HAS_FLOAT128
     // For some reason, the quadmath is way less accurate than the float/double/long double:
     //test_zero_coefficients<float128>();
