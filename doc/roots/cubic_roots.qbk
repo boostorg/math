@@ -21,6 +21,10 @@ std::array<Real,3> cubic_roots(Real a, Real b, Real c, Real d);
 // Recall that for a numerically computed root r satisfying r = r⁎(1+ε) for the exact root r⁎ of a function p, |p(r)| ≲ ε|rṗ(r)|.
 template<typename Real>
 std::array<Real, 2> cubic_root_residual(Real a, Real b, Real c, Real d, Real root);
+
+// Computes the condition number of rootfinding. Computed via Corless, A Graduate Introduction to Numerical Methods, Section 3.2.1:
+template<typename Real>
+Real cubic_root_condition_number(Real a, Real b, Real c, Real d, Real root);
 }
 ```
 
