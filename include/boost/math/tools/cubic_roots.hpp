@@ -80,7 +80,7 @@ std::array<Real, 3> cubic_roots(Real a, Real b, Real c, Real d) {
         // (x+1)^2(x-2) = x^3 - 3x -2 as an example. This clearly has a double
         // root at x = -1, and it gets sent into this branch.
         Real arg = R * R - Q * Q * Q;
-        Real A = -boost::math::sign(R) * cbrt(abs(R) + sqrt(arg));
+        Real A = (R >= 0 ? -1 : 1) * cbrt(abs(R) + sqrt(arg));
         Real B = 0;
         if (A != 0) {
             B = Q / A;
