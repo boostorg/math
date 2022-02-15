@@ -367,6 +367,34 @@ namespace boost
     } // pdf
 
     template <class RealType, class Policy>
+    inline RealType logpdf(const arcsine_distribution<RealType, Policy>& dist, const RealType& xx)
+    {
+      BOOST_FPU_EXCEPTION_GUARD
+      BOOST_MATH_STD_USING // For ADL of std functions.
+
+      static const char* function = "boost::math::logpdf(arcsine_distribution<%1%> const&, %1%)";
+
+      RealType lo = dist.x_min();
+      RealType hi = dist.x_max();
+      RealType x = xx;
+
+      // Argument checks:
+      RealType result = 0; 
+      if (false == arcsine_detail::check_dist_and_x(
+        function,
+        lo, hi, x,
+        &result, Policy()))
+      {
+        return result;
+      }
+
+      using boost::math::constants::pi;
+      using boost::math::constants::half;
+      result = -half<RealType>() * log(-(x - 1) * x) - log(pi<RealType>());
+      return result;
+    } // logpdf
+
+    template <class RealType, class Policy>
     inline RealType cdf(const arcsine_distribution<RealType, Policy>& dist, const RealType& x)
     { // Cumulative Distribution Function arcsine.
       BOOST_MATH_STD_USING // For ADL of std functions.

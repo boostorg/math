@@ -110,6 +110,12 @@ inline typename Distribution::value_type pdf(const Distribution& dist, const Rea
    return pdf(dist, static_cast<value_type>(x));
 }
 template <class Distribution, class RealType>
+inline typename Distribution::value_type logpdf(const Distribution& dist, const RealType& x)
+{
+   typedef typename Distribution::value_type value_type;
+   return logpdf(dist, static_cast<value_type>(x));
+}
+template <class Distribution, class RealType>
 inline typename Distribution::value_type cdf(const Distribution& dist, const RealType& x)
 {
    typedef typename Distribution::value_type value_type;
