@@ -60,6 +60,16 @@ void expected_results()
       ".*",                          // test data group
       ".*", 400, 200);               // test function
    //
+   // Cygwin:
+   //
+   add_expected_result(
+      "GNU.*",                      // Compiler
+      ".*",                         // Stdlib
+      "Cygwin*",                    // Platform
+      largest_type,                 // test type(s)
+      ".*",                         // test data group
+      ".*", 400, 200);              // test function
+   //
    // G++ on Linux, results vary a bit by processor type,
    // on Itanium results are *much* better than listed here,
    // but x86 appears to have much less accurate std::pow

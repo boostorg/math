@@ -539,7 +539,12 @@ void test_daubechies_fails()
 template<class Real>
 void test_solve_real_quadratic()
 {
+    #ifndef __CYGWIN__
     Real tol = std::numeric_limits<Real>::epsilon();
+    #else
+    Real tol = 2*std::numeric_limits<Real>::epsilon();
+    #endif
+
     using boost::math::tools::quadratic_roots;
     auto [x0, x1] = quadratic_roots<Real>(1, 0, -1);
     BOOST_CHECK_CLOSE(x0, Real(-1), tol);
@@ -554,6 +559,10 @@ void test_solve_real_quadratic()
     BOOST_CHECK_CLOSE(p.first, Real(7), tol);
     BOOST_CHECK_CLOSE(p.second, Real(7), tol);
 
+    // The following tests do not pass with Cygwin as it makes no attempt at having a correct FMA
+    // https://sourceware.org/git/gitweb.cgi?p=newlib-cygwin.git;a=blob;f=newlib/libm/common/s_fma.c
+    #ifndef __CYGWIN__
+    
     // This test does not pass in multiprecision,
     // due to the fact it does not have an fma:
     if (std::is_floating_point<Real>::value)
@@ -575,6 +584,8 @@ void test_solve_real_quadratic()
         BOOST_CHECK_CLOSE_FRACTION(p.first, Real(1), tol);
         BOOST_CHECK_CLOSE_FRACTION(p.second, 1.000000028975958, 4*tol);
     }
+    
+    #endif // __CYGWIN__
 }
 
 template<class Z>

@@ -239,6 +239,44 @@ void expected_results()
       "real_concept",                   // test type(s)
       "[^|]*integer[^|]*",              // test data group
       ".*", 100, 50);                    // test function
+   //
+   // Cygwin:
+   //
+   add_expected_result(
+      "GNU[^|]*",                       // compiler
+      "[^|]*",                          // stdlib
+      "Cygwin*",                        // platform
+      "real_concept",                   // test type(s)
+      "[^|]*medium[^|]*",               // test data group
+      "[^|]*", 1300, 200);              // test function
+   add_expected_result(
+      "GNU[^|]*",                       // compiler
+      "[^|]*",                          // stdlib
+      "Cygwin*",                        // platform
+      largest_type,                     // test type(s)
+      "[^|]*medium[^|]*",               // test data group
+      "[^|]*", 700, 200);               // test function
+   add_expected_result(
+      "GNU[^|]*",                       // compiler
+      "[^|]*",                          // stdlib
+      "Cygwin*",                        // platform
+      largest_type,                     // test type(s)
+      "[^|]*small[^|]*",                // test data group
+      "[^|]*", 100, 50);                // test function
+   add_expected_result(
+      "GNU[^|]*",                       // compiler
+      "[^|]*",                          // stdlib
+      "Cygwin*",                        // platform
+      largest_type,                     // test type(s)
+      "[^|]*integer[^|]*",              // test data group
+      ".*", 120, 50);                   // test function
+   add_expected_result(
+      "GNU[^|]*",                       // compiler
+      "[^|]*",                          // stdlib
+      "Cygwin*",                        // platform
+      "real_concept",                   // test type(s)
+      "[^|]*integer[^|]*",              // test data group
+      ".*", 100, 50);                   // test function
 
    //
    // Large exponent range causes more extreme test cases to be evaluated:
