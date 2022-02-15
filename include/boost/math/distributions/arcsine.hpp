@@ -390,7 +390,7 @@ namespace boost
 
       using boost::math::constants::pi;
       using boost::math::constants::half;
-      result = -half<RealType>() * log(-(x - 1) * x) - log(pi<RealType>());
+      result = -half<RealType>() * log((hi - x)*(x - lo)) - log(pi<RealType>());
       return result;
     } // logpdf
 
