@@ -17,6 +17,7 @@
 #include <boost/math/distributions/complement.hpp>
 
 #include <utility>
+#include <type_traits>
 
 namespace boost{ namespace math
 {
@@ -146,6 +147,41 @@ inline RealType pdf(const gamma_distribution<RealType, Policy>& dist, const Real
    result = gamma_p_derivative(shape, x / scale, Policy()) / scale;
    return result;
 } // pdf
+
+template <class RealType, class Policy>
+inline RealType logpdf(const gamma_distribution<RealType, Policy>& dist, const RealType& x)
+{
+   BOOST_MATH_STD_USING  // for ADL of std functions
+   using boost::math::tgamma;
+
+   static const char* function = "boost::math::logpdf(const gamma_distribution<%1%>&, %1%)";
+
+   RealType k = dist.shape();
+   RealType theta = dist.scale();
+
+   RealType result = 0;
+   if(false == detail::check_gamma(function, theta, k, &result, Policy()))
+      return result;
+   if(false == detail::check_gamma_x(function, x, &result, Policy()))
+      return result;
+
+   if(x == 0)
+   {
+      return std::numeric_limits<RealType>::quiet_NaN();
+   }
+   
+   // The following calculation does not always work with float so take the naive road out
+   BOOST_IF_CONSTEXPR(std::is_same<RealType, float>::value)
+   {
+      result = log(pdf(dist, x));
+   }
+   else
+   {
+      result = -k*log(theta) + (k-1)*log(x) - log(tgamma(k)) - (x/theta);
+   }
+   
+   return result;
+} // logpdf
 
 template <class RealType, class Policy>
 inline RealType cdf(const gamma_distribution<RealType, Policy>& dist, const RealType& x)

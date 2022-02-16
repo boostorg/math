@@ -88,6 +88,14 @@ void check_gamma(RealType shape, RealType scale, RealType x, RealType p, RealTyp
          x),                                            // random variable.
          NaivePDF(shape, scale, x),                     // PDF
          tol);                                          // %tolerance.
+   
+   // LOGPDF:
+   BOOST_CHECK_CLOSE(
+      boost::math::logpdf(
+         gamma_distribution<RealType>(shape, scale),                             // distribution.
+         x),                                                                     // random variable.
+         log(boost::math::pdf(gamma_distribution<RealType>(shape, scale), x)),   // PDF
+         tol);                                                                   // %tolerance.
 }
 
 template <class RealType>
