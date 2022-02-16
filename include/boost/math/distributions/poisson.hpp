@@ -47,6 +47,7 @@
 #include <boost/math/distributions/detail/inv_discrete_quantile.hpp>
 
 #include <utility>
+#include <limits>
 
 namespace boost
 {
@@ -280,6 +281,42 @@ namespace boost
       }
       return boost::math::gamma_p_derivative(k+1, mean, Policy());
     } // pdf
+
+    template <class RealType, class Policy>
+    RealType logpdf(const poisson_distribution<RealType, Policy>& dist, const RealType& k)
+    {
+      BOOST_FPU_EXCEPTION_GUARD
+
+      BOOST_MATH_STD_USING // for ADL of std functions.
+      using boost::math::tgamma;
+
+      RealType mean = dist.mean();
+      // Error check:
+      RealType result = 0;
+      if(false == poisson_detail::check_dist_and_k(
+        "boost::math::pdf(const poisson_distribution<%1%>&, %1%)",
+        mean,
+        k,
+        &result, Policy()))
+      {
+        return result;
+      }
+
+      // Special case of mean zero, regardless of the number of events k.
+      if (mean == 0)
+      { // Probability for any k is zero.
+        return std::numeric_limits<RealType>::quiet_NaN();
+      }
+      
+      // Special case where k and lambda are both positive
+      if(k > 0 && mean > 0)
+      {
+        return -log(tgamma(k+1)) + k*log(mean) - mean;
+      }
+
+      result = log(pdf(dist, k));
+      return result;
+    }
 
     template <class RealType, class Policy>
     RealType cdf(const poisson_distribution<RealType, Policy>& dist, const RealType& k)
