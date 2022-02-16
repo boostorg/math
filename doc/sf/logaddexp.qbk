@@ -1,0 +1,54 @@
+[/
+  Copyright Matt Borland 2022
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+
+[section:logaddexp logaddexp]
+
+[h4 Synopsis]
+
+    #include <boost/math/special_functions/logaddexp.hpp>
+
+    namespace boost { namespace math {
+
+    template <typename Real>
+    Real logaddexp (Real x1, Real x2);
+
+    }} // namespaces
+
+
+The function `logaddexp` computes log(exp(x1) + exp(x2)).
+This function is useful in statistics where the calculated probabilities of events may be so small as to exceed the range of normal floating point numbers. 
+In such cases the logarithm of the calculated probability is stored.
+
+
+The use is
+
+    using std::log;
+    
+    double x1 = log(1e-50);
+    double x2 = log(2.5e-50);
+
+    double probability = boost::math::logaddexp(x1, x2);
+
+Performance:
+
+```
+Running ./logaddexp_performance
+Run on Apple M1 Pro
+CPU Caches:
+  L1 Data 64 KiB (x10)
+  L1 Instruction 128 KiB (x10)
+  L2 Unified 4096 KiB (x5)
+Load Average: 1.47, 1.55, 1.51
+-----------------------------------------------------------------------------
+Benchmark                                   Time             CPU   Iterations
+-----------------------------------------------------------------------------
+logaddexp_performance<float>             18.9 ns         18.9 ns     35904064
+logaddexp_performance<double>            19.2 ns         19.2 ns     36333060
+logaddexp_performance<long double>       18.6 ns         18.6 ns     37522044
+```
+
+[endsect]
