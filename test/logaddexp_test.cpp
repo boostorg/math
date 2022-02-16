@@ -41,7 +41,12 @@ void test()
     Real spot12 = logaddexp(spot1, spot2);
 
     CHECK_ULP_CLOSE(Real(-113.87649168120691620521145211223320721849348983622l), spot12, 1);
-    CHECK_ULP_CLOSE(Real(3.5e-50), exp(spot12), 1);
+
+    // GCCs ASAN does not like this test so suppress when active
+    // See: https://drone.cpp.al/boostorg/math/607/1/2 line 1508
+    #ifndef __SANITIZE_ADDRESS__
+    CHECK_ULP_CLOSE(Real(3.5e-50l), exp(spot12), 1);
+    #endif
 }
 
 int main (void)
