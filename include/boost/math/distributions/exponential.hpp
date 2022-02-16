@@ -128,6 +128,24 @@ inline RealType pdf(const exponential_distribution<RealType, Policy>& dist, cons
 } // pdf
 
 template <class RealType, class Policy>
+inline RealType logpdf(const exponential_distribution<RealType, Policy>& dist, const RealType& x)
+{
+   BOOST_MATH_STD_USING // for ADL of std functions
+
+   static const char* function = "boost::math::logpdf(const exponential_distribution<%1%>&, %1%)";
+
+   RealType lambda = dist.lambda();
+   RealType result = 0;
+   if(0 == detail::verify_lambda(function, lambda, &result, Policy()))
+      return result;
+   if(0 == detail::verify_exp_x(function, x, &result, Policy()))
+      return result;
+   
+   result = log(lambda) - lambda * x;
+   return result;
+} // logpdf
+
+template <class RealType, class Policy>
 inline RealType cdf(const exponential_distribution<RealType, Policy>& dist, const RealType& x)
 {
    BOOST_MATH_STD_USING // for ADL of std functions
