@@ -29,6 +29,7 @@
 #ifndef BOOST_MATH_DIST_ARCSINE_HPP
 #define BOOST_MATH_DIST_ARCSINE_HPP
 
+#include <cmath>
 #include <boost/math/distributions/fwd.hpp>
 #include <boost/math/distributions/complement.hpp> // complements.
 #include <boost/math/distributions/detail/common_error_handling.hpp> // error checks.
@@ -365,34 +366,6 @@ namespace boost
       result = static_cast<RealType>(1) / (pi<RealType>() * sqrt((x - lo) * (hi - x)));
       return result;
     } // pdf
-
-    template <class RealType, class Policy>
-    inline RealType logpdf(const arcsine_distribution<RealType, Policy>& dist, const RealType& xx)
-    {
-      BOOST_FPU_EXCEPTION_GUARD
-      BOOST_MATH_STD_USING // For ADL of std functions.
-
-      static const char* function = "boost::math::logpdf(arcsine_distribution<%1%> const&, %1%)";
-
-      RealType lo = dist.x_min();
-      RealType hi = dist.x_max();
-      RealType x = xx;
-
-      // Argument checks:
-      RealType result = 0; 
-      if (false == arcsine_detail::check_dist_and_x(
-        function,
-        lo, hi, x,
-        &result, Policy()))
-      {
-        return result;
-      }
-
-      using boost::math::constants::pi;
-      using boost::math::constants::half;
-      result = -half<RealType>() * log((hi - x)*(x - lo)) - log(pi<RealType>());
-      return result;
-    } // logpdf
 
     template <class RealType, class Policy>
     inline RealType cdf(const arcsine_distribution<RealType, Policy>& dist, const RealType& x)
