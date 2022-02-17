@@ -21,6 +21,7 @@
 #include <boost/math/distributions/detail/common_error_handling.hpp>
 
 #include <utility>
+#include <type_traits>
 
 namespace boost{ namespace math{
 
@@ -165,10 +166,12 @@ inline RealType pdf(const normal_distribution<RealType, Policy>& dist, const Rea
    return result;
 } // pdf
 
-template <class RealType, class Policy>
+template <class RealType, class Policy, typename std::enable_if<std::is_floating_point<RealType>::value, bool>::type = true>
 inline RealType logpdf(const normal_distribution<RealType, Policy>& dist, const RealType& x)
 {
    BOOST_MATH_STD_USING  // for ADL of std functions
+   using std::fma;
+   using std::pow;
 
    RealType sd = dist.standard_deviation();
    RealType mean = dist.mean();
@@ -193,10 +196,10 @@ inline RealType logpdf(const normal_distribution<RealType, Policy>& dist, const 
       return result;
    }
 
-   const RealType pi = boost::math::constants::pi<RealType>();
-   const RealType half = boost::math::constants::half<RealType>();
+   constexpr RealType two_pi = boost::math::constants::two_pi<RealType>();
+   constexpr RealType half = boost::math::constants::half<RealType>();
 
-   result = -log(sd) - half*log(2*pi) - (x-mean)*(x-mean)/(2*sd*sd);
+   result = fma(-half, log(two_pi), -log(sd)) - pow(x-mean, RealType(2))/(2*pow(sd, RealType(2)));
 
    return result;
 }
