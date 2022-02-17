@@ -5,7 +5,7 @@
   http://www.boost.org/LICENSE_1_0.txt).
 ]
 
-[section:logaddexp logaddexp]
+[section:logaddexp logaddexp and logsumexp]
 
 [h4 Synopsis]
 
@@ -18,8 +18,24 @@
 
     }} // namespaces
 
+    #include <boost/math/special_functions/logsumexp.hpp>
+
+    namespace boost { namespace math {
+
+    template <typename ForwardIterator, typename Real = std::iterator_traits<ForwardIterator>::value_type>
+    Real logsumexp (ForwardIterator first, ForwardIterator last);
+
+    template <typename ForwardContainer, typename Real = ForwardContainer::value_type>
+    Real logsumexp (const ForwardContainer& c);
+
+    template <typename... Args, typename Real = typename std::common_type<Args...>::type>
+    Real logsumexp(Args&& ...args)
+
+    }} // namespace
+
 
 The function `logaddexp` computes log(exp(x1) + exp(x2)).
+The function `logsumexp` is generalized to compute log(exp(x1) + exp(x2) + ...).
 This function is useful in statistics where the calculated probabilities of events may be so small as to exceed the range of normal floating point numbers. 
 In such cases the logarithm of the calculated probability is stored.
 
@@ -30,8 +46,13 @@ The use is
     
     double x1 = log(1e-50);
     double x2 = log(2.5e-50);
+    double x3 = log(3e-50);
+    std::vector<double> x = {x1, x2, x3};
 
-    double probability = boost::math::logaddexp(x1, x2);
+    double probability1 = boost::math::logaddexp(x1, x2);
+    double probability2 = boost::math::logsumexp(x1, x2, x3);
+    double probability3 = boost::math::logsumexp(x);
+    double probability4 = boost::math::logsumexp(x.begin(), x.end());
 
 Performance:
 
@@ -49,6 +70,15 @@ Benchmark                                   Time             CPU   Iterations
 logaddexp_performance<float>             18.9 ns         18.9 ns     35904064
 logaddexp_performance<double>            19.2 ns         19.2 ns     36333060
 logaddexp_performance<long double>       18.6 ns         18.6 ns     37522044
+```
+
+```
+Running ./logsumexp_performance
+Run on Apple M1 Pro
+CPU Caches:
+  L1 Data 64 KiB (x10)
+  L1 Instruction 128 KiB (x10)
+  L2 Unified 4096 KiB (x5)
 ```
 
 [endsect]
