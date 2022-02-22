@@ -21,29 +21,21 @@ Real logsumexp(ForwardIterator first, ForwardIterator last)
     using std::exp;
     using std::log1p;
     
-    const Real max_val = *std::max_element(first, last);
+    const auto elem = std::max_element(first, last);
+    const Real max_val = *elem;
 
-    Real result = 0;
-    bool skip_k = true; // Flag in case there are multiple of the same max value
+    Real arg = 0;
     while (first != last)
     {
-        if (*first != max_val)
+        if (first != elem) 
         {
-            result += exp(*first - max_val);
-        }
-        else if (!skip_k)
-        {
-            ++result;
-        }
-        else
-        {
-            skip_k = false;
+            arg += exp(*first - max_val);
         }
 
         ++first;
     }
 
-    return max_val + log1p(result);
+    return max_val + log1p(arg);
 }
 
 template <typename Container, typename Real = typename Container::value_type>

@@ -36,17 +36,13 @@ void test()
     // Spot check
     // https://numpy.org/doc/stable/reference/generated/numpy.logaddexp.html
     // Calculated at higher precision using wolfram alpha
-    Real spot1 = static_cast<Real>(log(1e-50l));
-    Real spot2 = static_cast<Real>(log(2.5e-50l));
-    Real spot12 = logaddexp(spot1, spot2);
+    Real x1 = 1e-50l;
+    Real x2 = 2.5e-50l;
+    Real spot1 = static_cast<Real>(exp(x1));
+    Real spot2 = static_cast<Real>(exp(x2));
+    Real spot12 = logaddexp(x1, x2);
 
-    CHECK_ULP_CLOSE(Real(-113.87649168120691620521145211223320721849348983622l), spot12, 1);
-
-    // GCCs ASAN does not like this test so suppress when active
-    // See: https://drone.cpp.al/boostorg/math/607/1/2 line 1508
-    #ifndef __SANITIZE_ADDRESS__
-    CHECK_ULP_CLOSE(Real(3.5e-50l), exp(spot12), 1);
-    #endif
+    CHECK_ULP_CLOSE(log(spot1 + spot2), spot12, 1);
 }
 
 int main (void)
