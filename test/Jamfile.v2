@@ -933,6 +933,7 @@ test-suite misc :
       ../build//boost_math_c99f
       ../../test/build//boost_unit_test_framework
       : : : #requirements
+      [ check-target-builds ../config//is_MSVC1930_or_newer_run "MSVC1930 or newer run" : <build>no ]
       :
       test_tr1_c
     ]
@@ -944,6 +945,7 @@ test-suite misc :
       : : :
       <define>TEST_LD=1
       [ check-target-builds ../config//has_long_double_support "long double support" : : <build>no ] 
+      [ check-target-builds ../config//is_MSVC1930_or_newer_run "MSVC1930 or newer run" : <build>no ] 
       :
       test_tr1_c_long_double
     ]
