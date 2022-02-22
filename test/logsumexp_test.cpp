@@ -7,6 +7,7 @@
 #include <cmath>
 #include <vector>
 #include <boost/math/special_functions/logsumexp.hpp>
+#include <boost/math/constants/constants.hpp>
 #include <boost/math/tools/random_vector.hpp>
 
 template <typename Real>
@@ -63,49 +64,17 @@ template<typename Real>
 void test_overflow() 
 {
     using boost::math::logsumexp;
+    using std::exp;
     using std::log;
-    int counter = 0;
 
-    Real x = log(std::numeric_limits<Real>::max()/2);
-    try
-    {
-        CHECK_ULP_CLOSE(log(std::numeric_limits<Real>::max()), logsumexp(x,x), 1);
-    }
-    catch(...)
-    {
-        ++counter;
-    }
-    
-    x = std::numeric_limits<Real>::max()/4;
-    try
-    {
-        CHECK_ULP_CLOSE(x, logsumexp(x,x,x,x), 1);
-    }
-    catch(...)
-    {
-        ++counter;
-    }
+    Real x = ((std::numeric_limits<Real>::max)()/2);
 
-    Real y = std::sqrt(std::numeric_limits<Real>::epsilon())*x;
-    try
-    {
-        CHECK_ULP_CLOSE(log(x+y), logsumexp(log(x),log(y)), 1);
-    }
-    catch(...)
-    {
-        ++counter;
-    }
+    Real naive_result = log(exp(x) + exp(x));
+    CHECK_EQUAL(std::isfinite(naive_result), false);
 
-    x = log(std::numeric_limits<Real>::max()/2);
-    try 
-    {   
-        CHECK_ULP_CLOSE(std::log1p(x), logsumexp(log(x), 0.0), 1);
-    }
-    catch(...)
-    {
-        ++counter;
-    }
-    CHECK_EQUAL(counter, 4);
+    Real result = logsumexp(x, x);
+    CHECK_EQUAL(std::isfinite(result), true);
+    CHECK_ULP_CLOSE(result, x + boost::math::constants::ln_two<Real>(), 1);
 }
 
 template <typename Real>
