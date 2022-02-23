@@ -29,11 +29,6 @@ Real logaddexp(Real x1, Real x2) noexcept
     }
 
     const Real temp = x1 - x2;
-    
-    if (abs(temp) < std::numeric_limits<Real>::epsilon())
-    {
-        return x1 + boost::math::constants::ln_two<Real>();
-    }
 
     if (temp > 0)
     {
