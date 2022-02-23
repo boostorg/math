@@ -57,81 +57,64 @@ The use is
 Performance Data:
 
 ```
-Run on (8 X 1992 MHz CPU s)
+Running ./logaddexp_performance
+Run on Apple M1 Pro
 CPU Caches:
-  L1 Data 32K (x4)
-  L1 Instruction 32K (x4)
-  L2 Unified 262K (x4)
-  L3 Unified 8388K (x1)
+  L1 Data 64 KiB (x10)
+  L1 Instruction 128 KiB (x10)
+  L2 Unified 4096 KiB (x5)
+Load Average: 2.23, 1.89, 1.88
 -----------------------------------------------------------------------------
 Benchmark                                   Time             CPU   Iterations
 -----------------------------------------------------------------------------
-logaddexp_performance<float>             1.58 ns         1.57 ns    448000000
-logaddexp_performance<double>            1.51 ns         1.51 ns    497777778
-logaddexp_performance<long double>       1.56 ns         1.57 ns    497777778
+logaddexp_performance<float>             1.05 ns         1.05 ns    597983940
+logaddexp_performance<double>            1.03 ns         1.03 ns    672682369
 ```
 
 ```
-Run on (8 X 1992 MHz CPU s)
+Running ./logsumexp_performance
+Run on Apple M1 Pro
 CPU Caches:
-  L1 Data 32K (x4)
-  L1 Instruction 32K (x4)
-  L2 Unified 262K (x4)
-  L3 Unified 8388K (x1)
+  L1 Data 64 KiB (x10)
+  L1 Instruction 128 KiB (x10)
+  L2 Unified 4096 KiB (x5)
+Load Average: 1.56, 1.67, 1.81
 -----------------------------------------------------------------------------------------------
 Benchmark                                                     Time             CPU   Iterations
 -----------------------------------------------------------------------------------------------
-logsumexp_performance<float>/64/real_time                   512 ns          516 ns      1000000
-logsumexp_performance<float>/128/real_time                 1003 ns          986 ns       728594
-logsumexp_performance<float>/256/real_time                 1963 ns         2001 ns       359132
-logsumexp_performance<float>/512/real_time                 3918 ns         3919 ns       179395
-logsumexp_performance<float>/1024/real_time                7703 ns         7723 ns        84969
-logsumexp_performance<float>/2048/real_time               15997 ns        15790 ns        44530
-logsumexp_performance<float>/4096/real_time               30915 ns        31473 ns        22837
-logsumexp_performance<float>/8192/real_time               63001 ns        62234 ns        10796
-logsumexp_performance<float>/16384/real_time             128639 ns       130672 ns         5620
-logsumexp_performance<float>/32768/real_time             268432 ns       269599 ns         2666
-logsumexp_performance<float>/65536/real_time             550086 ns       550365 ns         1164
-logsumexp_performance<float>/131072/real_time           1007520 ns      1021984 ns          688
-logsumexp_performance<float>/262144/real_time           1976225 ns      1958689 ns          351
-logsumexp_performance<float>/524288/real_time           4062535 ns      4083807 ns          176
-logsumexp_performance<float>/1048576/real_time          8363232 ns      8333333 ns           90
-logsumexp_performance<float>/real_time_BigO                7.91 N          7.90 N
-logsumexp_performance<float>/real_time_RMS                    4 %             3 %
-logsumexp_performance<double>/64/real_time                  582 ns          581 ns      1183702
-logsumexp_performance<double>/128/real_time                1200 ns         1191 ns       603378
-logsumexp_performance<double>/256/real_time                2547 ns         2550 ns       281847
-logsumexp_performance<double>/512/real_time                5312 ns         5307 ns       135435
-logsumexp_performance<double>/1024/real_time               9647 ns         9695 ns        69300
-logsumexp_performance<double>/2048/real_time              18521 ns        18386 ns        36542
-logsumexp_performance<double>/4096/real_time              37065 ns        37082 ns        18540
-logsumexp_performance<double>/8192/real_time              75715 ns        74801 ns         9400
-logsumexp_performance<double>/16384/real_time            156009 ns       154599 ns         4447
-logsumexp_performance<double>/32768/real_time            292937 ns       295307 ns         2381
-logsumexp_performance<double>/65536/real_time            584194 ns       582539 ns         1207
-logsumexp_performance<double>/131072/real_time          1175421 ns      1174428 ns          612
-logsumexp_performance<double>/262144/real_time          2382460 ns      2375422 ns          296
-logsumexp_performance<double>/524288/real_time          4720312 ns      4783163 ns          147
-logsumexp_performance<double>/1048576/real_time         9570338 ns      9457237 ns           76
-logsumexp_performance<double>/real_time_BigO               9.10 N          9.04 N
-logsumexp_performance<double>/real_time_RMS                   1 %             1 %
-logsumexp_performance<long double>/64/real_time             599 ns          599 ns      1147319
-logsumexp_performance<long double>/128/real_time           1163 ns         1166 ns       602863
-logsumexp_performance<long double>/256/real_time           2270 ns         2287 ns       307495
-logsumexp_performance<long double>/512/real_time           4523 ns         4491 ns       153067
-logsumexp_performance<long double>/1024/real_time          8833 ns         8845 ns        77731
-logsumexp_performance<long double>/2048/real_time         17855 ns        17582 ns        38214
-logsumexp_performance<long double>/4096/real_time         35755 ns        35488 ns        19813
-logsumexp_performance<long double>/8192/real_time         86561 ns        86875 ns         8813
-logsumexp_performance<long double>/16384/real_time       159225 ns       161993 ns         4244
-logsumexp_performance<long double>/32768/real_time       309235 ns       307948 ns         2334
-logsumexp_performance<long double>/65536/real_time       607855 ns       597465 ns         1203
-logsumexp_performance<long double>/131072/real_time     1164873 ns      1147023 ns          613
-logsumexp_performance<long double>/262144/real_time     2297293 ns      2297794 ns          306
-logsumexp_performance<long double>/524288/real_time     4664338 ns      4614094 ns          149
-logsumexp_performance<long double>/1048576/real_time    9226792 ns      9417808 ns           73
-logsumexp_performance<long double>/real_time_BigO          8.82 N          8.94 N
-logsumexp_performance<long double>/real_time_RMS              1 %             2 %
+logsumexp_performance<float>/64/real_time                   388 ns          388 ns      1797191
+logsumexp_performance<float>/128/real_time                  761 ns          761 ns       890017
+logsumexp_performance<float>/256/real_time                 1513 ns         1513 ns       460217
+logsumexp_performance<float>/512/real_time                 3026 ns         3026 ns       231454
+logsumexp_performance<float>/1024/real_time                6043 ns         6043 ns       113901
+logsumexp_performance<float>/2048/real_time               12084 ns        12084 ns        57590
+logsumexp_performance<float>/4096/real_time               24240 ns        24240 ns        28835
+logsumexp_performance<float>/8192/real_time               48326 ns        48323 ns        14478
+logsumexp_performance<float>/16384/real_time              96645 ns        96642 ns         7181
+logsumexp_performance<float>/32768/real_time             193351 ns       193351 ns         3607
+logsumexp_performance<float>/65536/real_time             386537 ns       386538 ns         1810
+logsumexp_performance<float>/131072/real_time            774055 ns       774056 ns          894
+logsumexp_performance<float>/262144/real_time           1548913 ns      1548847 ns          451
+logsumexp_performance<float>/524288/real_time           3092771 ns      3092770 ns          226
+logsumexp_performance<float>/1048576/real_time          6188087 ns      6188089 ns          112
+logsumexp_performance<float>/real_time_BigO                5.90 N          5.90 N
+logsumexp_performance<float>/real_time_RMS                    0 %             0 %
+logsumexp_performance<double>/64/real_time                  388 ns          388 ns      1806669
+logsumexp_performance<double>/128/real_time                 770 ns          770 ns       898340
+logsumexp_performance<double>/256/real_time                1534 ns         1534 ns       454768
+logsumexp_performance<double>/512/real_time                3063 ns         3063 ns       228057
+logsumexp_performance<double>/1024/real_time               6126 ns         6126 ns       112667
+logsumexp_performance<double>/2048/real_time              12243 ns        12243 ns        56963
+logsumexp_performance<double>/4096/real_time              24476 ns        24476 ns        28485
+logsumexp_performance<double>/8192/real_time              48979 ns        48978 ns        14215
+logsumexp_performance<double>/16384/real_time             97929 ns        97929 ns         7070
+logsumexp_performance<double>/32768/real_time            195826 ns       195826 ns         3560
+logsumexp_performance<double>/65536/real_time            391855 ns       391835 ns         1787
+logsumexp_performance<double>/131072/real_time           784119 ns       784110 ns          882
+logsumexp_performance<double>/262144/real_time          1566408 ns      1566386 ns          446
+logsumexp_performance<double>/524288/real_time          3151649 ns      3150955 ns          223
+logsumexp_performance<double>/1048576/real_time         6300578 ns      6299027 ns          110
+logsumexp_performance<double>/real_time_BigO               6.01 N          6.01 N
 ```
 
 [heading References]

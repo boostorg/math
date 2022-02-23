@@ -14,7 +14,7 @@
 namespace boost { namespace math {
 
 // https://nhigham.com/2021/01/05/what-is-the-log-sum-exp-function/
-// See equation #
+// See equation (#)
 template <typename ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type>
 Real logsumexp(ForwardIterator first, ForwardIterator last)
 {
