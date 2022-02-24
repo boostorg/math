@@ -72,6 +72,9 @@ void test_spot(
     BOOST_CHECK_CLOSE_FRACTION( // Compare to naive formula (might be less accurate).
       pdf(dist, x), naive_pdf(dist.shape(), dist.scale(), x), tol);
 
+    BOOST_CHECK_CLOSE_FRACTION( // Compare direct logpdf to naive log(pdf())
+      logpdf(dist, x), log(pdf(dist,x)), tol);
+
    BOOST_CHECK_CLOSE_FRACTION( // Compare to expected CDF.
       cdf(dist, x), P, tol);
 

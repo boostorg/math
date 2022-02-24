@@ -28,6 +28,7 @@
 #include <boost/math/distributions/complement.hpp>
 
 #include <utility>
+#include <cfenv>
 
 namespace boost{ namespace math
 {
@@ -193,6 +194,43 @@ inline RealType pdf(const inverse_gamma_distribution<RealType, Policy>& dist, co
    // better than naive
    // result = (pow(scale, shape) * pow(x, (-shape -1)) * exp(-scale/x) ) / tgamma(shape);
    return result;
+} // pdf
+
+template <class RealType, class Policy>
+inline RealType logpdf(const inverse_gamma_distribution<RealType, Policy>& dist, const RealType& x)
+{
+   BOOST_MATH_STD_USING  // for ADL of std functions
+   using boost::math::tgamma;
+
+   static const char* function = "boost::math::logpdf(const inverse_gamma_distribution<%1%>&, %1%)";
+
+   RealType shape = dist.shape();
+   RealType scale = dist.scale();
+
+   RealType result = 0;
+   if(false == detail::check_inverse_gamma(function, scale, shape, &result, Policy()))
+   { // distribution parameters bad.
+      return result;
+   } 
+   if(x == 0)
+   { // Treat random variate zero as a special case.
+      return 0;
+   }
+   else if(false == detail::check_inverse_gamma_x(function, x, &result, Policy()))
+   { // x bad.
+      return result;
+   }
+   result = scale / x;
+   if(result < tools::min_value<RealType>())
+      return 0;  // random variable is infinite or so close as to make no difference.
+      
+   // x * x may under or overflow, likewise our result
+   if (!boost::math::isfinite(x*x))
+   {
+      return policies::raise_overflow_error<RealType, Policy>(function, "PDF is infinite.", Policy());
+   }
+
+   return shape * log(scale) + (-shape-1)*log(x) - log(tgamma(shape)) - (scale/x);
 } // pdf
 
 template <class RealType, class Policy>
