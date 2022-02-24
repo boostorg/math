@@ -109,4 +109,5 @@ int main (void)
     test_random<float>();
     test_random<double>();
     test_random<long double>();
+    return boost::math::test::report_errors();
 }

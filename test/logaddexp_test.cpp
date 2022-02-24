@@ -50,4 +50,5 @@ int main (void)
     test<float>();
     test<double>();
     test<long double>();
+    return boost::math::test::report_errors();
 }
