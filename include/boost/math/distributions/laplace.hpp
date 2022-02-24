@@ -151,6 +151,44 @@ inline RealType pdf(const laplace_distribution<RealType, Policy>& dist, const Re
 } // pdf
 
 template <class RealType, class Policy>
+inline RealType logpdf(const laplace_distribution<RealType, Policy>& dist, const RealType& x)
+{
+   BOOST_MATH_STD_USING // for ADL of std functions
+
+   // Checking function argument
+   RealType result = 0;
+   const char* function = "boost::math::logpdf(const laplace_distribution<%1%>&, %1%))";
+
+   // Check scale and location.
+   if (false == dist.check_parameters(function, &result)) 
+      return result;
+   // Special pdf values.
+   if((boost::math::isinf)(x))
+   {
+      return 0; // pdf + and - infinity is zero.
+   }
+   if (false == detail::check_x(function, x, &result, Policy())) 
+      return result;
+
+   const RealType mu = dist.scale();
+   const RealType b = dist.location();
+
+   // if b is 0 avoid divde by 0 error
+   if(abs(b) < std::numeric_limits<RealType>::epsilon())
+   {
+      result = log(pdf(dist, x));
+   }
+   else
+   {
+      // General case
+      const RealType log2 = boost::math::constants::ln_two<RealType>();
+      result = -abs(x-mu)/b - log(b) - log2;
+   }
+
+   return result;
+} // logpdf
+
+template <class RealType, class Policy>
 inline RealType cdf(const laplace_distribution<RealType, Policy>& dist, const RealType& x)
 {
    BOOST_MATH_STD_USING  // For ADL of std functions.
