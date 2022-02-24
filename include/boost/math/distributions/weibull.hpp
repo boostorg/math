@@ -158,6 +158,40 @@ inline RealType pdf(const weibull_distribution<RealType, Policy>& dist, const Re
 }
 
 template <class RealType, class Policy>
+inline RealType logpdf(const weibull_distribution<RealType, Policy>& dist, const RealType& x)
+{
+   BOOST_MATH_STD_USING  // for ADL of std functions
+
+   static const char* function = "boost::math::logpdf(const weibull_distribution<%1%>, %1%)";
+
+   RealType shape = dist.shape();
+   RealType scale = dist.scale();
+
+   RealType result = 0;
+   if(false == detail::check_weibull(function, scale, shape, &result, Policy()))
+      return result;
+   if(false == detail::check_weibull_x(function, x, &result, Policy()))
+      return result;
+
+   if(x == 0)
+   {
+      if(shape == 1)
+      {
+         return log(1 / scale);
+      }
+      if(shape > 1)
+      {
+         return 0;
+      }
+      return policies::raise_overflow_error<RealType>(function, 0, Policy());
+   }
+   
+   result = log(shape * pow(scale, -shape) * pow(x, shape - 1)) - pow(x / scale, shape);
+
+   return result;
+}
+
+template <class RealType, class Policy>
 inline RealType cdf(const weibull_distribution<RealType, Policy>& dist, const RealType& x)
 {
    BOOST_MATH_STD_USING  // for ADL of std functions

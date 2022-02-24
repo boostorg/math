@@ -29,6 +29,8 @@
    using std::setprecision;
 #include <limits>
   using std::numeric_limits;
+#include <cmath>
+  using std::log;
 
 template <class RealType>
 void check_weibull(RealType shape, RealType scale, RealType x, RealType p, RealType q, RealType tol)
@@ -242,6 +244,50 @@ void test_spots(RealType)
    BOOST_CHECK_CLOSE(
       pdf(weibull_distribution<RealType>(3, 2), static_cast<RealType>(2)), 
       static_cast<RealType>(0.551819), 
+      tolerance);
+
+   //
+   // Tests for logpdf
+   //
+   BOOST_CHECK_CLOSE(
+      logpdf(weibull_distribution<RealType>(0.25, 0.5), static_cast<RealType>(0.1)), 
+      log(static_cast<RealType>(0.856579)), 
+      tolerance);
+   BOOST_CHECK_CLOSE(
+      logpdf(weibull_distribution<RealType>(0.25, 0.5), static_cast<RealType>(0.5)), 
+      log(static_cast<RealType>(0.183940)), 
+      tolerance);
+   BOOST_CHECK_CLOSE(
+      logpdf(weibull_distribution<RealType>(0.25, 0.5), static_cast<RealType>(5)), 
+      log(static_cast<RealType>(0.015020)), 
+      tolerance * 10); // fewer digits in test value
+   BOOST_CHECK_CLOSE(
+      logpdf(weibull_distribution<RealType>(0.5, 2), static_cast<RealType>(0.1)), 
+      log(static_cast<RealType>(0.894013)), 
+      tolerance);
+   BOOST_CHECK_CLOSE(
+      logpdf(weibull_distribution<RealType>(0.5, 2), static_cast<RealType>(0.5)), 
+      log(static_cast<RealType>(0.303265)), 
+      tolerance);
+   BOOST_CHECK_CLOSE(
+      logpdf(weibull_distribution<RealType>(0.5, 2), static_cast<RealType>(1)), 
+      log(static_cast<RealType>(0.174326)), 
+      tolerance);
+   BOOST_CHECK_CLOSE(
+      logpdf(weibull_distribution<RealType>(2, 0.25), static_cast<RealType>(0.1)), 
+      log(static_cast<RealType>(2.726860)), 
+      tolerance);
+   BOOST_CHECK_CLOSE(
+      logpdf(weibull_distribution<RealType>(2, 0.25), static_cast<RealType>(0.5)), 
+      log(static_cast<RealType>(0.293050)), 
+      tolerance);
+   BOOST_CHECK_CLOSE(
+      logpdf(weibull_distribution<RealType>(3, 2), static_cast<RealType>(1)), 
+      log(static_cast<RealType>(0.330936)), 
+      tolerance);
+   BOOST_CHECK_CLOSE(
+      logpdf(weibull_distribution<RealType>(3, 2), static_cast<RealType>(2)), 
+      log(static_cast<RealType>(0.551819)), 
       tolerance);
 
    //
