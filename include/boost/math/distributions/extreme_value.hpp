@@ -123,6 +123,31 @@ inline RealType pdf(const extreme_value_distribution<RealType, Policy>& dist, co
 } // pdf
 
 template <class RealType, class Policy>
+inline RealType logpdf(const extreme_value_distribution<RealType, Policy>& dist, const RealType& x)
+{
+   BOOST_MATH_STD_USING // for ADL of std functions
+
+   static const char* function = "boost::math::logpdf(const extreme_value_distribution<%1%>&, %1%)";
+
+   RealType a = dist.location();
+   RealType b = dist.scale();
+   RealType result = 0;
+   if(0 == detail::verify_scale_b(function, b, &result, Policy()))
+      return result;
+   if(0 == detail::check_finite(function, a, &result, Policy()))
+      return result;
+   if((boost::math::isinf)(x))
+      return 0.0f;
+   if(0 == detail::check_x(function, x, &result, Policy()))
+      return result;
+   RealType e = (a - x) / b;
+   if(e < tools::log_max_value<RealType>())
+      result = log(1/b) + e - exp(e);
+   // else.... result *must* be zero since exp(e) is infinite...
+   return result;
+} // pdf
+
+template <class RealType, class Policy>
 inline RealType cdf(const extreme_value_distribution<RealType, Policy>& dist, const RealType& x)
 {
    BOOST_MATH_STD_USING // for ADL of std functions
