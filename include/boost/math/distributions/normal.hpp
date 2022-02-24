@@ -167,6 +167,42 @@ inline RealType pdf(const normal_distribution<RealType, Policy>& dist, const Rea
 } // pdf
 
 template <class RealType, class Policy>
+inline RealType logpdf(const normal_distribution<RealType, Policy>& dist, const RealType& x)
+{
+   BOOST_MATH_STD_USING  // for ADL of std functions
+
+   RealType sd = dist.standard_deviation();
+   RealType mean = dist.mean();
+
+   static const char* function = "boost::math::logpdf(const normal_distribution<%1%>&, %1%)";
+
+   RealType result = 0;
+   if(false == detail::check_scale(function, sd, &result, Policy()))
+   {
+      return result;
+   }
+   if(false == detail::check_location(function, mean, &result, Policy()))
+   {
+      return result;
+   }
+   if((boost::math::isinf)(x))
+   {
+      return 0; // pdf + and - infinity is zero.
+   }
+   if(false == detail::check_x(function, x, &result, Policy()))
+   {
+      return result;
+   }
+
+   const RealType pi = boost::math::constants::pi<RealType>();
+   const RealType half = boost::math::constants::half<RealType>();
+
+   result = -log(sd) - half*log(2*pi) - (x-mean)*(x-mean)/(2*sd*sd);
+
+   return result;
+}
+
+template <class RealType, class Policy>
 inline RealType cdf(const normal_distribution<RealType, Policy>& dist, const RealType& x)
 {
    BOOST_MATH_STD_USING  // for ADL of std functions

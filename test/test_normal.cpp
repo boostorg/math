@@ -41,6 +41,8 @@
    using std::setprecision;
 #include <limits>
   using std::numeric_limits;
+#include <type_traits>
+  using std::log;
 
 template <class RealType>
 RealType NaivePDF(RealType mean, RealType sd, RealType x)
@@ -219,6 +221,13 @@ void test_spots(RealType)
    //
    // Tests for logpdf
    //
+   RealType temp_tol = tolerance;
+
+   BOOST_IF_CONSTEXPR (std::is_same<long double, RealType>::value)
+   {
+      tolerance *= 100;
+   }
+
    BOOST_CHECK_CLOSE(
       logpdf(normal_distribution<RealType>(), static_cast<RealType>(0)),
       log(static_cast<RealType>(0.3989422804014326779399460599343818684759L)), // 1/sqrt(2*pi)
@@ -231,6 +240,8 @@ void test_spots(RealType)
       logpdf(normal_distribution<RealType>(3, 5), static_cast<RealType>(3)),
       log(static_cast<RealType>(0.3989422804014326779399460599343818684759L / 5)),
       tolerance);
+
+   tolerance = temp_tol;
 
    //
    // Spot checks for mean = -5, sd = 6:
