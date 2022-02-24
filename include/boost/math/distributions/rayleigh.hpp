@@ -123,6 +123,32 @@ inline RealType pdf(const rayleigh_distribution<RealType, Policy>& dist, const R
 } // pdf
 
 template <class RealType, class Policy>
+inline RealType logpdf(const rayleigh_distribution<RealType, Policy>& dist, const RealType& x)
+{
+   BOOST_MATH_STD_USING // for ADL of std function exp.
+
+   const RealType sigma = dist.sigma();
+   RealType result = 0;
+   static const char* function = "boost::math::logpdf(const rayleigh_distribution<%1%>&, %1%)";
+
+   if(false == detail::verify_sigma(function, sigma, &result, Policy()))
+   {
+      return result;
+   }
+   if(false == detail::verify_rayleigh_x(function, x, &result, Policy()))
+   {
+      return result;
+   }
+   if((boost::math::isinf)(x))
+   {
+      return 0;
+   }
+
+   result = -(x*x)/(2*sigma*sigma) - 2*log(sigma) + log(x);
+   return result;
+} // logpdf
+
+template <class RealType, class Policy>
 inline RealType cdf(const rayleigh_distribution<RealType, Policy>& dist, const RealType& x)
 {
    BOOST_MATH_STD_USING // for ADL of std functions
