@@ -132,6 +132,47 @@ RealType pdf(const chi_squared_distribution<RealType, Policy>& dist, const RealT
 } // pdf
 
 template <class RealType, class Policy>
+RealType logpdf(const chi_squared_distribution<RealType, Policy>& dist, const RealType& chi_square)
+{
+   BOOST_MATH_STD_USING  // for ADL of std functions
+   RealType k = dist.degrees_of_freedom();
+   // Error check:
+   RealType error_result;
+
+   static const char* function = "boost::math::logpdf(const chi_squared_distribution<%1%>&, %1%)";
+
+   if(false == detail::check_df(function, k, &error_result, Policy()))
+   {
+      return error_result;
+   }
+
+   if((chi_square < 0) || !(boost::math::isfinite)(chi_square))
+   {
+      return policies::raise_domain_error<RealType>(
+         function, "Chi Square parameter was %1%, but must be > 0 !", chi_square, Policy());
+   }
+
+   if(chi_square == 0)
+   {
+      // Handle special cases:
+      if(k < 2)
+      {
+         return policies::raise_overflow_error<RealType>(function, 0, Policy());
+      }
+      else if(k == 2)
+      {
+         return -boost::math::constants::ln_two<RealType>();
+      }
+      else
+      {
+         return -std::numeric_limits<RealType>::infinity();
+      }
+   }
+
+   return log(pdf(dist, chi_square));
+} // logpdf
+
+template <class RealType, class Policy>
 inline RealType cdf(const chi_squared_distribution<RealType, Policy>& dist, const RealType& chi_square)
 {
    RealType degrees_of_freedom = dist.degrees_of_freedom();
