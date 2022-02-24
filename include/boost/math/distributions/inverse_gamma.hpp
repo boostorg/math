@@ -225,7 +225,7 @@ inline RealType logpdf(const inverse_gamma_distribution<RealType, Policy>& dist,
       return 0;  // random variable is infinite or so close as to make no difference.
       
    // x * x may under or overflow, likewise our result
-   if (!boost::math::isfinite(x*x))
+   if (!(boost::math::isfinite)(x*x))
    {
       return policies::raise_overflow_error<RealType, Policy>(function, "PDF is infinite.", Policy());
    }

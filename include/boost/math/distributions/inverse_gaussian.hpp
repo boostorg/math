@@ -175,6 +175,43 @@ inline RealType pdf(const inverse_gaussian_distribution<RealType, Policy>& dist,
 } // pdf
 
 template <class RealType, class Policy>
+inline RealType logpdf(const inverse_gaussian_distribution<RealType, Policy>& dist, const RealType& x)
+{ // Probability Density Function
+   BOOST_MATH_STD_USING  // for ADL of std functions
+
+   RealType scale = dist.scale();
+   RealType mean = dist.mean();
+   RealType result = 0;
+   static const char* function = "boost::math::logpdf(const inverse_gaussian_distribution<%1%>&, %1%)";
+   if(false == detail::check_scale(function, scale, &result, Policy()))
+   {
+      return result;
+   }
+   if(false == detail::check_location(function, mean, &result, Policy()))
+   {
+      return result;
+   }
+   if(false == detail::check_x_gt0(function, mean, &result, Policy()))
+   {
+      return result;
+   }
+   if(false == detail::check_positive_x(function, x, &result, Policy()))
+   {
+      return result;
+   }
+
+   if (x == 0)
+   {
+     return 0; // Convenient, even if not defined mathematically.
+   }
+
+   const RealType two_pi = boost::math::constants::two_pi<RealType>();
+   
+   result = (-scale*pow(mean - x, RealType(2))/(mean*mean*x) + log(scale) - 3*log(x) - log(two_pi)) / 2;
+   return result;
+} // pdf
+
+template <class RealType, class Policy>
 inline RealType cdf(const inverse_gaussian_distribution<RealType, Policy>& dist, const RealType& x)
 { // Cumulative Density Function.
    BOOST_MATH_STD_USING  // for ADL of std functions.
