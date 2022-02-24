@@ -35,6 +35,26 @@ std::vector<T> generate_random_vector(std::size_t size, std::size_t seed)
     return v;
 }
 
+template<typename T, typename std::enable_if<std::is_floating_point<T>::value, bool>::type = true>
+std::vector<T> generate_random_vector(std::size_t size, std::size_t seed, T mean, T stddev)
+{
+    if (seed == 0)
+    {
+        std::random_device rd;
+        seed = rd();
+    }
+    std::vector<T> v(size);
+
+    std::mt19937 gen(seed);
+
+    std::normal_distribution<T> dis(mean, stddev);
+    for (std::size_t i = 0; i < v.size(); ++i)
+    {
+        v[i] = dis(gen);
+    }
+    return v;
+}
+
 template<typename T, typename std::enable_if<std::is_integral<T>::value, bool>::type = true>
 std::vector<T> generate_random_vector(std::size_t size, std::size_t seed)
 {
