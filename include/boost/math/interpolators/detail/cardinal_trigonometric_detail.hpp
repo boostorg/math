@@ -8,11 +8,18 @@
 #include <cstddef>
 #include <cmath>
 #include <stdexcept>
-#include <fftw3.h>
 #include <boost/math/constants/constants.hpp>
 
 #ifdef BOOST_HAS_FLOAT128
 #include <quadmath.h>
+#endif
+
+#ifdef __has_include
+#  if __has_include(<fftw3.h>)
+#    include <fftw3.h>
+#  else
+#    error "This feature is unavailable without fftw3 installed"
+#endif
 #endif
 
 namespace boost { namespace math { namespace interpolators { namespace detail {
