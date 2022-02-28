@@ -6,6 +6,8 @@
 // A sanity check that this file
 // #includes all the files that it needs to.
 //
+#if __has_include(<fftw3.h>)
+
 #include <boost/math/interpolators/cardinal_trigonometric.hpp>
 //
 // Note this header includes no other headers, this is
@@ -23,3 +25,6 @@ void compile_and_link_test()
    boost::math::interpolators::cardinal_trigonometric<std::vector<double>> s(data, 3, 2);
    check_result<double>(s(1.0));
 }
+#else
+void compile_and_link_test() {}
+#endif // __has_include
