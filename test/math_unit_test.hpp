@@ -384,6 +384,8 @@ int report_errors()
 
 #define CHECK_ULP_CLOSE(X, Y, Z) boost::math::test::check_ulp_close((X), (Y), (Z), __FILE__, __func__, __LINE__)
 
+#define CHECK_GE(X, Y) boost::math::test::check_le((Y), (X), __FILE__, __func__, __LINE__)
+
 #define CHECK_LE(X, Y) boost::math::test::check_le((X), (Y), __FILE__, __func__, __LINE__)
 
 #define CHECK_NAN(X) boost::math::test::check_nan((X), __FILE__, __func__, __LINE__)

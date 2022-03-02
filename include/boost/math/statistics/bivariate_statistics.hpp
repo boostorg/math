@@ -482,12 +482,6 @@ inline Real correlation_coefficient(Container const & u, Container const & v)
 
 #endif
 
-template<typename Container, typename Real = typename Container::value_type, typename ReturnType = typename std::conditional<std::is_integral<Real>::value, double, Real>::type>
-inline ReturnType chaterjee_correlation(Container const & u, Container const & v)
-{
-    return detail::chatterjee_correlation(std::begin(u), std::end(u), std::begin(v), std::end(v));
-}
-
 }}} // namespace boost::math::statistics
 
 #endif
