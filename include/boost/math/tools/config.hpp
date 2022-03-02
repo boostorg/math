@@ -79,6 +79,12 @@
 
 #endif // BOOST_MATH_STANDALONE
 
+// Support compilers with P0024R2 implemented without linking TBB
+// https://en.cppreference.com/w/cpp/compiler_support
+#if !defined(BOOST_NO_CXX17_HDR_EXECUTION) && defined(BOOST_HAS_THREADS)
+#  define BOOST_MATH_EXEC_COMPATIBLE
+#endif
+
 #include <algorithm>  // for min and max
 #include <limits>
 #include <cmath>
