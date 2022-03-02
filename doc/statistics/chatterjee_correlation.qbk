@@ -37,7 +37,8 @@ The Chatterjee correlation is then given by
 
 [$../equations/chatterjee_correlation.svg]
 
-The statistic lies in [0, 1].
+In the limit of an infinite amount of i.i.d data, the statistic lies in [0, 1].
+However, if the data is not infinite, the statistic may be negative.
 If X and Y are independent, the value is zero, and if Y is a measurable function of X, then the statistic is unity.
 The complexity is O(n log n).
 
@@ -54,9 +55,11 @@ The implementation follows [@https://arxiv.org/pdf/1909.10140.pdf Chatterjee's p
 
 [heading Invariants]
 
-The function expects at least two samples, and a non-constant vector Y.
+The function expects at least two samples, a non-constant vector Y, and the same number of X's as Y's.
 If Y is constant, the result is a NaN.
-X is sorted by the call.
+X is modified in-place by the call, in particular it is sorted.
+If there are ties in the values of X, then the statistic is random due to the random breaking of ties.
+Of course, there is not random numbers used internally, but the result is not guaranteed to be identical on different systems.
 
 [heading References]
 
