@@ -7,9 +7,11 @@
 #define BOOST_MATH_STATISTICS_CHATTERJEE_CORRELATION_HPP
 
 #include <cstdint>
+#include <cmath>
 #include <algorithm>
 #include <iterator>
 #include <vector>
+#include <limits>
 #include <type_traits>
 #include <boost/math/tools/assert.hpp>
 #include <boost/math/tools/config.hpp>
@@ -22,6 +24,8 @@ namespace detail {
 template <typename ReturnType, typename ForwardIterator>
 ReturnType chatterjee_correlation_seq_impl(ForwardIterator u_begin, ForwardIterator u_end, ForwardIterator v_begin, ForwardIterator v_end)
 {
+    using std::abs;
+    
     BOOST_MATH_ASSERT_MSG(std::is_sorted(u_begin, u_end), "The x values must be sorted in order to use this funtionality");
 
     const std::vector<std::size_t> rank_vector = rank(v_begin, v_end);
@@ -40,7 +44,15 @@ ReturnType chatterjee_correlation_seq_impl(ForwardIterator u_begin, ForwardItera
         }
     }
 
-    return static_cast<ReturnType>(1) - (static_cast<ReturnType>(3 * sum) / static_cast<ReturnType>(rank_vector.size() * rank_vector.size() - 1));
+    ReturnType result = static_cast<ReturnType>(1) - (static_cast<ReturnType>(3 * sum) / static_cast<ReturnType>(rank_vector.size() * rank_vector.size() - 1));
+
+    // If the result is 1 then Y is constant and all of the elements must be ties
+    if (abs(result - static_cast<ReturnType>(1)) < std::numeric_limits<ReturnType>::epsilon())
+    {
+        return std::numeric_limits<ReturnType>::quiet_NaN();
+    }
+
+    return result;
 }
 
 } // Namespace detail

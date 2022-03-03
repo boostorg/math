@@ -15,8 +15,13 @@
 
 namespace boost::math::statistics {
 
-    template<typename ExecutionPolicy, typename Container>
-    auto chatterjee_correlation(ExecutionPolicy&& exec, Container const & u, Container const & v);
+    C++17:
+    template <typename ExecutionPolicy, typename Container>
+    auto chatterjee_correlation(ExecutionPolicy&& exec, const Container& u, const Container& v);
+
+    C++11:
+    template <typename Container>
+    auto chatterjee_correlation(const Container& u, const Container& v);
 }
 ``
 
@@ -56,8 +61,8 @@ The implementation follows [@https://arxiv.org/pdf/1909.10140.pdf Chatterjee's p
 [heading Invariants]
 
 The function expects at least two samples, a non-constant vector Y, and the same number of X's as Y's.
-If Y is constant, the result is a NaN.
-X is modified in-place by the call, in particular it is sorted.
+If Y is constant, the result is a quiet NaN.
+The data set must be sorted by x values.
 If there are ties in the values of X, then the statistic is random due to the random breaking of ties.
 Of course, there is not random numbers used internally, but the result is not guaranteed to be identical on different systems.
 

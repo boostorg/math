@@ -24,6 +24,7 @@ void properties()
     std::uniform_real_distribution<Real> unif(-1, 1);
     std::vector<Real> X(256);
     std::vector<Real> Y(256);
+
     for (std::size_t i = 0; i < X.size(); ++i) 
     {
         X[i] = unif(mt);
@@ -54,11 +55,36 @@ void properties()
     CHECK_ULP_CLOSE(coeff, Real(n-2)/Real(n+1), 1);
 }
 
+template <typename Real>
+void test_spots()
+{   
+    // Rank Order: Result will be 1 - 3*3 / (4^2 - 1) = 1 - 9/15 = 0.6
+    std::vector<Real> x = {1, 2, 3, 4};
+    std::vector<Real> y = {1, 2, 3, 4};
+    CHECK_ULP_CLOSE(chatterjee_correlation(x, y), 1 - Real(9)/15, 1);
+
+    // Reverse rank order should be the same as above
+    y = {4, 3, 2, 1};
+    CHECK_ULP_CLOSE(chatterjee_correlation(x, y), 1 - Real(9)/15, 1);
+
+    // Alternating order: 1 - 3*5 / (4^2 - 1) = 1 - 15/15 = 0
+    y = {1, 3, 2, 4};
+    CHECK_ULP_CLOSE(chatterjee_correlation(x, y), Real(0), 1);
+
+    // All ties will yield quiet NaN
+    y = {1, 1, 1, 1};
+    CHECK_NAN(chatterjee_correlation(x, y));
+}
+
 int main(void)
 {
     properties<float>();
     properties<double>();
     properties<long double>();
+
+    test_spots<float>();
+    test_spots<double>();
+    test_spots<long double>();
 
     return boost::math::test::report_errors();
 }
