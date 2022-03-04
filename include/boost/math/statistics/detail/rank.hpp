@@ -11,7 +11,21 @@
 #include <numeric>
 #include <utility>
 #include <iterator>
+#include <algorithm>
 #include <boost/math/tools/config.hpp>
+
+namespace boost { namespace math { namespace statistics { namespace detail {
+
+struct pair_equal
+{
+    template <typename T1, typename T2>
+    bool operator()(const std::pair<T1, T2>& a, const std::pair<T1, T2>& b) const
+    {
+        return a.first == b.first;
+    }
+};
+
+}}}} // Namespaces
 
 #ifndef BOOST_MATH_EXEC_COMPATIBLE
 
@@ -22,7 +36,7 @@ namespace boost { namespace math { namespace statistics { namespace detail {
 template <typename ForwardIterator, typename T = typename std::iterator_traits<ForwardIterator>::value_type>
 auto rank(ForwardIterator first, ForwardIterator last) -> std::vector<std::size_t>
 {
-    const auto elements = std::distance(first, last);
+    auto elements = std::distance(first, last);
 
     std::vector<std::pair<T, std::size_t>> rank_vector(elements);
     std::size_t i = 0;
@@ -34,6 +48,10 @@ auto rank(ForwardIterator first, ForwardIterator last) -> std::vector<std::size_
     }
 
     std::sort(rank_vector.begin(), rank_vector.end());
+
+    // Remove duplicates
+    rank_vector.erase(std::unique(rank_vector.begin(), rank_vector.end(), pair_equal()), rank_vector.end());
+    elements = rank_vector.size();
 
     std::pair<T, std::size_t> rank;
     std::vector<std::size_t> result(elements);
@@ -76,6 +94,10 @@ auto rank(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last)
     }
 
     std::sort(exec, rank_vector.begin(), rank_vector.end());
+
+    // Remove duplicates
+    rank_vector.erase(std::unique(exec, rank_vector.begin(), rank_vector.end(), pair_equal()), rank_vector.end());
+    elements = rank_vector.size();
 
     std::pair<T, std::size_t> rank;
     std::vector<std::size_t> result(elements);

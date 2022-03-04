@@ -19,6 +19,19 @@ void test()
     CHECK_EQUAL(static_cast<std::size_t>(1), rank_vector[2]);
     CHECK_EQUAL(static_cast<std::size_t>(4), rank_vector[3]);
     CHECK_EQUAL(static_cast<std::size_t>(3), rank_vector[4]);
+
+    // Remove duplicates
+    test_vals.push_back(T(4.1));
+    test_vals.push_back(T(2.4));
+    rank_vector = boost::math::statistics::detail::rank(test_vals.begin(), test_vals.end());
+
+    // Check the size is correct and the ordering is not disrupted
+    CHECK_EQUAL(static_cast<std::size_t>(5), rank_vector.size());
+    CHECK_EQUAL(static_cast<std::size_t>(0), rank_vector[0]);
+    CHECK_EQUAL(static_cast<std::size_t>(2), rank_vector[1]);
+    CHECK_EQUAL(static_cast<std::size_t>(1), rank_vector[2]);
+    CHECK_EQUAL(static_cast<std::size_t>(4), rank_vector[3]);
+    CHECK_EQUAL(static_cast<std::size_t>(3), rank_vector[4]);
 }
 
 template <typename T>
