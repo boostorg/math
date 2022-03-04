@@ -29,8 +29,6 @@ struct pair_equal
 
 #ifndef BOOST_MATH_EXEC_COMPATIBLE
 
-#include <execution>
-
 namespace boost { namespace math { namespace statistics { namespace detail {
 
 template <typename ForwardIterator, typename T = typename std::iterator_traits<ForwardIterator>::value_type>
@@ -76,6 +74,8 @@ inline auto rank(const Container& c) -> std::vector<std::size_t>
 }}}} // Namespaces
 
 #else
+
+#include <execution>
 
 namespace boost::math::statistics::detail {
 
