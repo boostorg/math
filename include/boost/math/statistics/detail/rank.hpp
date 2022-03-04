@@ -34,7 +34,7 @@ namespace boost { namespace math { namespace statistics { namespace detail {
 template <typename ForwardIterator, typename T = typename std::iterator_traits<ForwardIterator>::value_type>
 auto rank(ForwardIterator first, ForwardIterator last) -> std::vector<std::size_t>
 {
-    auto elements = std::distance(first, last);
+    std::size_t elements = std::distance(first, last);
 
     std::vector<std::pair<T, std::size_t>> rank_vector(elements);
     std::size_t i = 0;
@@ -82,7 +82,7 @@ namespace boost::math::statistics::detail {
 template <typename ExecutionPolicy, typename ForwardIterator, typename T = typename std::iterator_traits<ForwardIterator>::value_type>
 auto rank(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last)
 {
-    const auto elements = std::distance(first, last);
+    std::size_t elements = std::distance(first, last);
 
     std::vector<std::pair<T, std::size_t>> rank_vector(elements);
     std::size_t i = 0;
