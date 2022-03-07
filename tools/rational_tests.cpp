@@ -41,7 +41,7 @@ int main()
       }
       std::cout << " };\n";
       std::cout <<
-         "   static const boost::array<U, " << i << "> n" << i << "a = { ";
+         "   static const std::array<U, " << i << "> n" << i << "a = { ";
       for(unsigned j = 0; j < i; ++j)
       {
          if(j) 
@@ -280,7 +280,7 @@ int main()
       }
       std::cout << " };\n";
       std::cout <<
-         "   static const boost::array<U, " << i << "> d" << i << "a = { ";
+         "   static const std::array<U, " << i << "> d" << i << "a = { ";
       for(unsigned j = 0; j < i; ++j)
       {
          if(j) 

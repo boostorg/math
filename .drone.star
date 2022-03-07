@@ -17,6 +17,7 @@ def main(ctx):
 
   things_to_test = [ "special_fun", "distribution_tests", "mp", "misc", "interpolators", "quadrature", "autodiff", "long-running-tests", "float128_tests" ]
   sanitizer_test = [ "special_fun", "distribution_tests", "misc", "interpolators", "quadrature", "autodiff", "float128_tests" ]
+  gnu_5_stds = [ "gnu++11" ]
   gnu_6_stds = [ "gnu++11", "gnu++14" ]
   gnu_8_stds = [ "gnu++11", "gnu++14", "gnu++17" ]
   gnu_10_stds = [ "gnu++11", "gnu++14", "gnu++17", "gnu++20" ]
@@ -33,6 +34,8 @@ def main(ctx):
     result.append(linux_cxx("Ubunti clang++-10 C++2a ISAN" + " " + suite, "clang++-10", packages="clang-10", privileged=True, buildtype="boost", image="cppalliance/droneubuntu2004:1", environment={'TOOLSET': 'clang', 'COMPILER': 'clang++-10', 'CXXSTD': 'gnu++2a', 'TEST_SUITE': suite, 'OPTIONS': '<cxxflags>-fsanitize=integer <linkflags>-fsanitize=integer' }, globalenv=globalenv))
 
   for suite in things_to_test:
+    for cxx in gnu_5_stds:
+      result.append(linux_cxx("Ubunti g++-5 " + cxx + " " + suite, "g++-5", packages="g++-5", buildtype="boost", image="cppalliance/droneubuntu1804:1", environment={'TOOLSET': 'gcc', 'COMPILER': 'g++-5', 'CXXSTD': cxx, 'TEST_SUITE': suite, }, globalenv=globalenv))
     for cxx in gnu_6_stds:
       result.append(linux_cxx("Ubunti g++-6 " + cxx + " " + suite, "g++-6", packages="g++-6", buildtype="boost", image="cppalliance/droneubuntu1804:1", environment={'TOOLSET': 'gcc', 'COMPILER': 'g++-6', 'CXXSTD': cxx, 'TEST_SUITE': suite, }, globalenv=globalenv))
     for cxx in gnu_8_stds:

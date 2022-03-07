@@ -22,7 +22,9 @@
 #define BOOST_MATH_NO_REAL_CONCEPT_TESTS
 #define BOOST_MATH_NO_DISTRIBUTION_CONCEPT_TESTS
 #define BOOST_MATH_NO_LEXICAL_CAST
-#define TEST_STD
+
+// Since Boost.Multiprecision is in active development some tests do not fully cooperate yet.
+#define BOOST_MATH_NO_MP_TESTS
 
 #if (__cplusplus > 201400L || _MSVC_LANG > 201400L)
 #define BOOST_CXX14_CONSTEXPR constexpr
@@ -33,13 +35,20 @@
 
 #if (__cplusplus > 201700L || _MSVC_LANG > 201700L)
 #define BOOST_IF_CONSTEXPR if constexpr
-#if !__has_include(<execution>)
+
+// Clang on mac provides the execution header with none of the functionality. TODO: Check back on this
+// https://en.cppreference.com/w/cpp/compiler_support "Standardization of Parallelism TS"
+#if !__has_include(<execution>) || (defined(__APPLE__) && defined(__clang__))
 #define BOOST_NO_CXX17_HDR_EXECUTION
 #endif
 #else
 #define BOOST_IF_CONSTEXPR if
 #define BOOST_NO_CXX17_IF_CONSTEXPR
 #define BOOST_NO_CXX17_HDR_EXECUTION
+#endif
+
+#if __cpp_lib_gcd_lcm >= 201606L
+#define BOOST_MATH_HAS_CXX17_NUMERIC
 #endif
 
 #define BOOST_JOIN(X, Y) BOOST_DO_JOIN(X, Y)
@@ -81,10 +90,10 @@
 
 #include <boost/math/tools/user.hpp>
 
-#if (defined(__CYGWIN__) || defined(__FreeBSD__) || defined(__NetBSD__) || defined(__EMSCRIPTEN__)\
+#if (defined(__NetBSD__) || defined(__EMSCRIPTEN__)\
    || (defined(__hppa) && !defined(__OpenBSD__)) || (defined(__NO_LONG_DOUBLE_MATH) && (DBL_MANT_DIG != LDBL_MANT_DIG))) \
    && !defined(BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS)
-#  define BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+//#  define BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 #endif
 
 #ifdef __IBMCPP__

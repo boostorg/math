@@ -152,6 +152,31 @@ void expected_results()
          ".*Y'n.*",              // test data group
          ".*", 30000, 30000);         // test function
    //
+   // Cygwin:
+   // Use the same error rates as MinGW
+   //
+      add_expected_result(
+         "GNU.*",                       // compiler
+         ".*",                          // stdlib
+         "Cygwin*",                     // platform
+         largest_type,                  // test type(s)
+         ".*Y'v.*Random.*",             // test data group
+         ".*", 400000, 300000);         // test function
+      add_expected_result(
+         "GNU.*",                       // compiler
+         ".*",                          // stdlib
+         "Cygwin*",                     // platform
+         largest_type,                  // test type(s)
+         ".*Y'[01v].*",                 // test data group
+         ".*", 2000, 1000);             // test function
+      add_expected_result(
+         "GNU.*",                       // compiler
+         ".*",                          // stdlib
+         "Cygwin*",                     // platform
+         largest_type,                  // test type(s)
+         ".*Y'n.*",                     // test data group
+         ".*", 30000, 30000);           // test function
+   //
    // Solaris version of long double has it's own error rates,
    // again just a touch higher than msvc's 64-bit double:
    //

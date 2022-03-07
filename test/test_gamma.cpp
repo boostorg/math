@@ -84,6 +84,31 @@ void expected_results()
       "real_concept",                // test type(s)
       "near.*",                      // test data group
       "tgamma", 200, 100);  // test function
+
+   //
+   // Cygwin:
+   //
+   add_expected_result(
+      "GNU.*",                       // compiler
+      ".*",                          // stdlib
+      "Cygwin*",                     // platform
+      largest_type,                  // test type(s)
+      "factorials",                  // test data group
+      "tgamma", 100, 15);            // test function
+   add_expected_result(
+      "GNU.*",                       // compiler
+      ".*",                          // stdlib
+      "Cygwin*",                     // platform
+      "real_concept",                // test type(s)
+      "factorials",                  // test data group
+      "tgamma", 600, 200);           // test function
+   add_expected_result(
+      "GNU.*",                       // compiler
+      ".*",                          // stdlib
+      "Cygwin*",                     // platform
+      "real_concept",                // test type(s)
+      "near.*",                      // test data group
+      "tgamma", 200, 100);           // test function
    //
    // G++ on Linux, result vary a bit by processor type,
    // on Itanium results are *much* better than listed here,
@@ -313,7 +338,9 @@ BOOST_AUTO_TEST_CASE( test_main )
    test_spots(0.0, "double");
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_spots(0.0L, "long double");
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
    test_spots(boost::math::concepts::real_concept(0.1), "real_concept");
+#endif
 #endif
 
 #ifndef BOOST_MATH_BUGGY_LARGE_FLOAT_CONSTANTS
@@ -323,7 +350,7 @@ BOOST_AUTO_TEST_CASE( test_main )
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_gamma(0.1L, "long double");
 #ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
-#if !BOOST_WORKAROUND(BOOST_BORLANDC, BOOST_TESTED_AT(0x582))
+#if !BOOST_WORKAROUND(BOOST_BORLANDC, BOOST_TESTED_AT(0x582)) && !defined(BOOST_MATH_NO_REAL_CONCEPT_TESTS)
    test_gamma(boost::math::concepts::real_concept(0.1), "real_concept");
 #endif
 #endif

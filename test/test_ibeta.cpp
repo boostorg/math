@@ -202,6 +202,30 @@ void expected_results()
       largest_type,                     // test type(s)
       "(?i).*large.*",                      // test data group
       ".*", 200000, 10000);                 // test function
+   //
+   // Cygwin:
+   //
+   add_expected_result(
+      "GNU[^|]*",                       // compiler
+      "[^|]*",                          // stdlib
+      "Cygwin*",                        // platform
+      "real_concept",                   // test type(s)
+      "(?i).*medium.*",                 // test data group
+      ".*", 400, 50);                   // test function
+   add_expected_result(
+      "GNU.*",                          // compiler
+      ".*",                             // stdlib
+      "Cygwin*",                        // platform
+      "double",                         // test type(s)
+      "(?i).*large.*",                  // test data group
+      ".*", 20, 10);                    // test function
+   add_expected_result(
+      "GNU.*",                          // compiler
+      ".*",                             // stdlib
+      "Cygwin*",                        // platform
+      largest_type,                     // test type(s)
+      "(?i).*large.*",                  // test data group
+      ".*", 200000, 10000);             // test function
 
 #ifdef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    //
@@ -296,7 +320,7 @@ BOOST_AUTO_TEST_CASE( test_main )
    test_spots(0.0L);
 #endif
 #if !BOOST_WORKAROUND(BOOST_BORLANDC, BOOST_TESTED_AT(0x582))
-#ifdef TEST_REAL_CONCEPT
+#if defined(TEST_REAL_CONCEPT) && !defined(BOOST_MATH_NO_REAL_CONCEPT_TESTS)
    test_spots(boost::math::concepts::real_concept(0.1));
 #endif
 #endif

@@ -36,7 +36,9 @@
 #include <boost/math/bindings/detail/big_digamma.hpp>
 #include <boost/math/bindings/detail/big_lanczos.hpp>
 #include <boost/math/tools/config.hpp>
-#include <boost/math/tools/lexical_cast.hpp>
+#ifndef BOOST_MATH_STANDALONE
+#include <boost/lexical_cast.hpp>
+#endif
 
 namespace mpfr{
 

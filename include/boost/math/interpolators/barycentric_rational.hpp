@@ -40,7 +40,7 @@ public:
     barycentric_rational(std::vector<Real>&& x, std::vector<Real>&& y, size_t approximation_order = 3);
 
     template <class InputIterator1, class InputIterator2>
-    barycentric_rational(InputIterator1 start_x, InputIterator1 end_x, InputIterator2 start_y, size_t approximation_order = 3, typename std::enable_if<!std::is_integral<InputIterator2>::value>::type* = 0);
+    barycentric_rational(InputIterator1 start_x, InputIterator1 end_x, InputIterator2 start_y, size_t approximation_order = 3, typename std::enable_if<!std::is_integral<InputIterator2>::value>::type* = nullptr);
 
     Real operator()(Real x) const;
 

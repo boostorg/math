@@ -77,6 +77,11 @@ private:
 
 typedef rayleigh_distribution<double> rayleigh;
 
+#ifdef __cpp_deduction_guides
+template <class RealType>
+rayleigh_distribution(RealType)->rayleigh_distribution<typename boost::math::tools::promote_args<RealType>::type>;
+#endif
+
 template <class RealType, class Policy>
 inline const std::pair<RealType, RealType> range(const rayleigh_distribution<RealType, Policy>& /*dist*/)
 { // Range of permissible values for random variable x.

@@ -213,6 +213,11 @@ template <class RealType = double, class Policy = policies::policy<> >
 
 typedef kolmogorov_smirnov_distribution<double> kolmogorov_k; // Convenience typedef for double version.
 
+#ifdef __cpp_deduction_guides
+template <class RealType>
+kolmogorov_smirnov_distribution(RealType)->kolmogorov_smirnov_distribution<typename boost::math::tools::promote_args<RealType>::type>;
+#endif
+
 namespace detail {
 template <class RealType, class Policy>
 struct kolmogorov_smirnov_quantile_functor

@@ -37,7 +37,6 @@
 #include <boost/math/bindings/detail/big_lanczos.hpp>
 #include <boost/math/tools/big_constant.hpp>
 #include <boost/math/tools/config.hpp>
-#include <boost/math/tools/lexical_cast.hpp>
 
 inline mpfr_class fabs(const mpfr_class& v)
 {
@@ -460,7 +459,7 @@ inline mpfr_class skewness(const extreme_value_distribution<mpfr_class, Policy>&
    static_assert(sizeof(Policy) == 0, "mpfr skewness can not be calculated in standalone mode");
    #endif
 
-   return boost::lexical_cast<mpfr_class>("1.1395470994046486574927930193898461120875997958366");
+   return static_cast<mpfr_class>("1.1395470994046486574927930193898461120875997958366");
 }
 
 template <class Policy>
@@ -471,7 +470,7 @@ inline mpfr_class skewness(const rayleigh_distribution<mpfr_class, Policy>& /*di
   static_assert(sizeof(Policy) == 0, "mpfr skewness can not be calculated in standalone mode");
   #endif
 
-  return boost::lexical_cast<mpfr_class>("0.63111065781893713819189935154422777984404221106391");
+  return static_cast<mpfr_class>("0.63111065781893713819189935154422777984404221106391");
   // Computed using NTL at 150 bit, about 50 decimal digits.
   // return 2 * root_pi<RealType>() * pi_minus_three<RealType>() / pow23_four_minus_pi<RealType>();
 }
@@ -484,7 +483,7 @@ inline mpfr_class kurtosis(const rayleigh_distribution<mpfr_class, Policy>& /*di
   static_assert(sizeof(Policy) == 0, "mpfr kurtosis can not be calculated in standalone mode");
   #endif
 
-  return boost::lexical_cast<mpfr_class>("3.2450893006876380628486604106197544154170667057995");
+  return static_cast<mpfr_class>("3.2450893006876380628486604106197544154170667057995");
   // Computed using NTL at 150 bit, about 50 decimal digits.
   // return 3 - (6 * pi<RealType>() * pi<RealType>() - 24 * pi<RealType>() + 16) /
   // (four_minus_pi<RealType>() * four_minus_pi<RealType>());
@@ -499,7 +498,7 @@ inline mpfr_class kurtosis_excess(const rayleigh_distribution<mpfr_class, Policy
   static_assert(sizeof(Policy) == 0, "mpfr excess kurtosis can not be calculated in standalone mode");
   #endif
 
-  return boost::lexical_cast<mpfr_class>("0.2450893006876380628486604106197544154170667057995");
+  return static_cast<mpfr_class>("0.2450893006876380628486604106197544154170667057995");
   // return -(6 * pi<RealType>() * pi<RealType>() - 24 * pi<RealType>() + 16) /
   //   (four_minus_pi<RealType>() * four_minus_pi<RealType>());
 } // kurtosis
@@ -813,48 +812,48 @@ inline mpfr_class bessel_i0(mpfr_class x)
    #endif
     
     static const mpfr_class P1[] = {
-        boost::lexical_cast<mpfr_class>("-2.2335582639474375249e+15"),
-        boost::lexical_cast<mpfr_class>("-5.5050369673018427753e+14"),
-        boost::lexical_cast<mpfr_class>("-3.2940087627407749166e+13"),
-        boost::lexical_cast<mpfr_class>("-8.4925101247114157499e+11"),
-        boost::lexical_cast<mpfr_class>("-1.1912746104985237192e+10"),
-        boost::lexical_cast<mpfr_class>("-1.0313066708737980747e+08"),
-        boost::lexical_cast<mpfr_class>("-5.9545626019847898221e+05"),
-        boost::lexical_cast<mpfr_class>("-2.4125195876041896775e+03"),
-        boost::lexical_cast<mpfr_class>("-7.0935347449210549190e+00"),
-        boost::lexical_cast<mpfr_class>("-1.5453977791786851041e-02"),
-        boost::lexical_cast<mpfr_class>("-2.5172644670688975051e-05"),
-        boost::lexical_cast<mpfr_class>("-3.0517226450451067446e-08"),
-        boost::lexical_cast<mpfr_class>("-2.6843448573468483278e-11"),
-        boost::lexical_cast<mpfr_class>("-1.5982226675653184646e-14"),
-        boost::lexical_cast<mpfr_class>("-5.2487866627945699800e-18"),
+        static_cast<mpfr_class>("-2.2335582639474375249e+15"),
+        static_cast<mpfr_class>("-5.5050369673018427753e+14"),
+        static_cast<mpfr_class>("-3.2940087627407749166e+13"),
+        static_cast<mpfr_class>("-8.4925101247114157499e+11"),
+        static_cast<mpfr_class>("-1.1912746104985237192e+10"),
+        static_cast<mpfr_class>("-1.0313066708737980747e+08"),
+        static_cast<mpfr_class>("-5.9545626019847898221e+05"),
+        static_cast<mpfr_class>("-2.4125195876041896775e+03"),
+        static_cast<mpfr_class>("-7.0935347449210549190e+00"),
+        static_cast<mpfr_class>("-1.5453977791786851041e-02"),
+        static_cast<mpfr_class>("-2.5172644670688975051e-05"),
+        static_cast<mpfr_class>("-3.0517226450451067446e-08"),
+        static_cast<mpfr_class>("-2.6843448573468483278e-11"),
+        static_cast<mpfr_class>("-1.5982226675653184646e-14"),
+        static_cast<mpfr_class>("-5.2487866627945699800e-18"),
     };
     static const mpfr_class Q1[] = {
-        boost::lexical_cast<mpfr_class>("-2.2335582639474375245e+15"),
-        boost::lexical_cast<mpfr_class>("7.8858692566751002988e+12"),
-        boost::lexical_cast<mpfr_class>("-1.2207067397808979846e+10"),
-        boost::lexical_cast<mpfr_class>("1.0377081058062166144e+07"),
-        boost::lexical_cast<mpfr_class>("-4.8527560179962773045e+03"),
-        boost::lexical_cast<mpfr_class>("1.0"),
+        static_cast<mpfr_class>("-2.2335582639474375245e+15"),
+        static_cast<mpfr_class>("7.8858692566751002988e+12"),
+        static_cast<mpfr_class>("-1.2207067397808979846e+10"),
+        static_cast<mpfr_class>("1.0377081058062166144e+07"),
+        static_cast<mpfr_class>("-4.8527560179962773045e+03"),
+        static_cast<mpfr_class>("1.0"),
     };
     static const mpfr_class P2[] = {
-        boost::lexical_cast<mpfr_class>("-2.2210262233306573296e-04"),
-        boost::lexical_cast<mpfr_class>("1.3067392038106924055e-02"),
-        boost::lexical_cast<mpfr_class>("-4.4700805721174453923e-01"),
-        boost::lexical_cast<mpfr_class>("5.5674518371240761397e+00"),
-        boost::lexical_cast<mpfr_class>("-2.3517945679239481621e+01"),
-        boost::lexical_cast<mpfr_class>("3.1611322818701131207e+01"),
-        boost::lexical_cast<mpfr_class>("-9.6090021968656180000e+00"),
+        static_cast<mpfr_class>("-2.2210262233306573296e-04"),
+        static_cast<mpfr_class>("1.3067392038106924055e-02"),
+        static_cast<mpfr_class>("-4.4700805721174453923e-01"),
+        static_cast<mpfr_class>("5.5674518371240761397e+00"),
+        static_cast<mpfr_class>("-2.3517945679239481621e+01"),
+        static_cast<mpfr_class>("3.1611322818701131207e+01"),
+        static_cast<mpfr_class>("-9.6090021968656180000e+00"),
     };
     static const mpfr_class Q2[] = {
-        boost::lexical_cast<mpfr_class>("-5.5194330231005480228e-04"),
-        boost::lexical_cast<mpfr_class>("3.2547697594819615062e-02"),
-        boost::lexical_cast<mpfr_class>("-1.1151759188741312645e+00"),
-        boost::lexical_cast<mpfr_class>("1.3982595353892851542e+01"),
-        boost::lexical_cast<mpfr_class>("-6.0228002066743340583e+01"),
-        boost::lexical_cast<mpfr_class>("8.5539563258012929600e+01"),
-        boost::lexical_cast<mpfr_class>("-3.1446690275135491500e+01"),
-        boost::lexical_cast<mpfr_class>("1.0"),
+        static_cast<mpfr_class>("-5.5194330231005480228e-04"),
+        static_cast<mpfr_class>("3.2547697594819615062e-02"),
+        static_cast<mpfr_class>("-1.1151759188741312645e+00"),
+        static_cast<mpfr_class>("1.3982595353892851542e+01"),
+        static_cast<mpfr_class>("-6.0228002066743340583e+01"),
+        static_cast<mpfr_class>("8.5539563258012929600e+01"),
+        static_cast<mpfr_class>("-3.1446690275135491500e+01"),
+        static_cast<mpfr_class>("1.0"),
     };
     mpfr_class value, factor, r;
 

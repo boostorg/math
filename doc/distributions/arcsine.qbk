@@ -21,7 +21,7 @@
       typedef Policy    policy_type;
 
       // Constructor from two range parameters, x_min and x_max:
-      arcsine_distribution(RealType x_min, RealType x_max);
+      arcsine_distribution(RealType x_min = 0, RealType x_max = 1);
 
       // Range Parameter accessors:
       RealType x_min() const;

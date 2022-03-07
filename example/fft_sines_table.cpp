@@ -131,7 +131,7 @@ and a C++11 lambda function combined with `std::for_each()`.
 
 std::string fp_type = "double";
 
-std::cout << "Generating an `std::array` or `boost::array` for floating-point type: "
+std::cout << "Generating an `std::array` or `std::array` for floating-point type: "
   << fp_type << ". " << std::endl;
 
 /*`By default, output would only show the standard 6 decimal digits,

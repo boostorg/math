@@ -7,6 +7,7 @@
 
 #include "math_unit_test.hpp"
 #include <boost/math/tools/engel_expansion.hpp>
+#include <boost/core/demangle.hpp>
 #include <boost/math/constants/constants.hpp>
 #ifdef BOOST_HAS_FLOAT128
 #include <boost/multiprecision/float128.hpp>

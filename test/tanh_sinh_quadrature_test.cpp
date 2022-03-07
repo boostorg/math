@@ -6,7 +6,7 @@
 
 #define BOOST_TEST_MODULE tanh_sinh_quadrature_test
 
-#include <boost/config.hpp>
+#include <boost/math/tools/config.hpp>
 #include <boost/detail/workaround.hpp>
 
 #if !defined(BOOST_NO_CXX11_DECLTYPE) && !defined(BOOST_NO_CXX11_TRAILING_RESULT_TYPES) && !defined(BOOST_NO_SFINAE_EXPR)
@@ -14,6 +14,7 @@
 #include <boost/math/concepts/real_concept.hpp>
 #include <boost/test/included/unit_test.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
+#include <boost/math/tools/test_value.hpp>
 #include <boost/math/quadrature/tanh_sinh.hpp>
 #include <boost/math/special_functions/sinc.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
@@ -89,6 +90,17 @@ using boost::math::constants::ln_two;
 using boost::math::constants::root_two;
 using boost::math::constants::root_two_pi;
 using boost::math::constants::root_pi;
+
+template <class Real>
+inline Real cast_mp_to_real(const cpp_bin_float_100& arg)
+{
+   return static_cast<Real>(arg);
+}
+template <>
+inline boost::math::concepts::real_concept cast_mp_to_real<boost::math::concepts::real_concept>(const cpp_bin_float_100& arg)
+{
+   return static_cast<boost::math::concepts::real_concept>(static_cast<long double>(arg));
+}
 
 template <class T>
 void print_levels(const T& v, const char* suffix)
@@ -301,6 +313,12 @@ void test_ca()
     auto f7 = [](const Real& t) { return sqrt(tan(t)); };
     Q = integrator.integrate(f7, (Real) 0 , (Real) half_pi<Real>(), get_convergence_tolerance<Real>(), &error, &L1);
     Q_expected = pi<Real>()/root_two<Real>();
+    //
+    // Slightly higher tolerance for type float, this marginal change was
+    // caused by no more than changing the order in which the terms are summed:
+    //
+    if (std::is_same<Real, float>::value)
+        tol *= 1.5;
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
     BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
 
@@ -455,23 +473,28 @@ void test_left_limit_infinite()
 template<class Real>
 void test_horrible()
 {
-    std::cout << "Testing Trefenthen's horrible integral on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
-    // We only know the integral to double precision, so requesting a higher tolerance doesn't make sense.
-    Real tol = 10 * std::numeric_limits<float>::epsilon();
-    Real Q;
-    Real Q_expected;
-    Real error;
-    Real L1;
-    auto integrator = get_integrator<Real>();
+   #ifdef BOOST_MATH_STANDALONE
+   BOOST_IF_CONSTEXPR (std::is_fundamental<Real>::value)
+   #endif
+   {
+      std::cout << "Testing Trefenthen's horrible integral on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+      // We only know the integral to double precision, so requesting a higher tolerance doesn't make sense.
+      Real tol = 10 * std::numeric_limits<float>::epsilon();
+      Real Q;
+      Real Q_expected;
+      Real error;
+      Real L1;
+      auto integrator = get_integrator<Real>();
 
-    auto f = [](Real x)->Real { return x*sin(2*exp(2*sin(2*exp(2*x) ) ) ); };
-    Q = integrator.integrate(f, (Real) -1, (Real) 1, get_convergence_tolerance<Real>(), &error, &L1);
-    // NIntegrate[x*Sin[2*Exp[2*Sin[2*Exp[2*x]]]], {x, -1, 1}, WorkingPrecision -> 130, MaxRecursion -> 100]
-    Q_expected = boost::lexical_cast<Real>("0.33673283478172753598559003181355241139806404130031017259552729882281");
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
-    // Over again without specifying the bounds:
-    Q = integrator.integrate(f, get_convergence_tolerance<Real>(), &error, &L1);
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+      auto f = [](Real x)->Real { return x*sin(2*exp(2*sin(2*exp(2*x) ) ) ); };
+      Q = integrator.integrate(f, (Real) -1, (Real) 1, get_convergence_tolerance<Real>(), &error, &L1);
+      // NIntegrate[x*Sin[2*Exp[2*Sin[2*Exp[2*x]]]], {x, -1, 1}, WorkingPrecision -> 130, MaxRecursion -> 100]
+      Q_expected = BOOST_MATH_TEST_VALUE(Real, 0.33673283478172753598559003181355241139806404130031017259552729882281);
+      BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+      // Over again without specifying the bounds:
+      Q = integrator.integrate(f, get_convergence_tolerance<Real>(), &error, &L1);
+      BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+   }
 }
 
 // Some examples of tough integrals from NR, section 4.5.4:
@@ -541,26 +564,31 @@ void test_crc()
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
 
     // CRC 636:
-    auto f2 = [](Real x)->Real { return sqrt(cos(x)); };
-    Q = integrator.integrate(f2, (Real) 0, (Real) half_pi<Real>(), get_convergence_tolerance<Real>(), &error, &L1);
-    //Q_expected = pow(two_pi<Real>(), 3*half<Real>())/pow(boost::math::tgamma((Real) 1/ (Real) 4), 2);
-    Q_expected = boost::lexical_cast<Real>("1.198140234735592207439922492280323878227212663215651558263674952946405214143915670835885556489793389375907225");
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+    #ifdef BOOST_MATH_STANDALONE
+    BOOST_IF_CONSTEXPR (std::is_fundamental<Real>::value)
+    #endif
+    {
+      auto f2 = [](Real x)->Real { return sqrt(cos(x)); };
+      Q = integrator.integrate(f2, (Real) 0, (Real) half_pi<Real>(), get_convergence_tolerance<Real>(), &error, &L1);
+      //Q_expected = pow(two_pi<Real>(), 3*half<Real>())/pow(boost::math::tgamma((Real) 1/ (Real) 4), 2);
+      Q_expected = BOOST_MATH_TEST_VALUE(Real, 1.1981402347355922074399224922803238782272126632156515582636749529);
+      BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+    
 
-    // CRC Section 5.5, integral 585:
-    for (int n = 0; n < 3; ++n) {
-        for (int m = 0; m < 3; ++m) {
-            auto f = [&](Real x)->Real { return pow(x, Real(m))*pow(log(1/x), Real(n)); };
-            Q = integrator.integrate(f, (Real) 0, (Real) 1, get_convergence_tolerance<Real>(), &error, &L1);
-            // Calculation of the tgamma function is not exact, giving spurious failures.
-            // Casting to cpp_bin_float_100 beforehand fixes most of them.
-            cpp_bin_float_100 np1 = n + 1;
-            cpp_bin_float_100 mp1 = m + 1;
-            Q_expected = boost::lexical_cast<Real>((tgamma(np1)/pow(mp1, np1)).str());
-            BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
-        }
+      // CRC Section 5.5, integral 585:
+      for (int n = 0; n < 3; ++n) {
+         for (int m = 0; m < 3; ++m) {
+               auto f = [&](Real x)->Real { return pow(x, Real(m))*pow(log(1/x), Real(n)); };
+               Q = integrator.integrate(f, (Real) 0, (Real) 1, get_convergence_tolerance<Real>(), &error, &L1);
+               // Calculation of the tgamma function is not exact, giving spurious failures.
+               // Casting to cpp_bin_float_100 beforehand fixes most of them.
+               cpp_bin_float_100 np1 = n + 1;
+               cpp_bin_float_100 mp1 = m + 1;
+               Q_expected = cast_mp_to_real<Real>(tgamma(np1)/pow(mp1, np1));
+               BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+         }
+      }
     }
-
     // CRC Section 5.5, integral 591
     // The parameter p allows us to control the strength of the singularity.
     // Rapid convergence is not guaranteed for this function, as the branch cut makes it non-analytic on a disk.
@@ -816,27 +844,32 @@ void test_complex()
    //
    // Expected result computed from http://www.wolframalpha.com/input/?i=1F1%5B(2%2B3i),+(3%2B4i);+(0.5-2i)%5D+*+gamma(2%2B3i)+*+gamma(1%2Bi)+%2F+gamma(3%2B4i)
    //
-   Complex expected(boost::lexical_cast<value_type>("-0.2911081612888249710582867318081776512805281815037891183828405999609246645054069649838607112484426042883371996"),
-      boost::lexical_cast<value_type>("0.4507983563969959578849120188097153649211346293694903758252662015991543519595834937475296809912196906074655385"));
-
-   value_type error = abs(expected - Q);
-   BOOST_CHECK_LE(error, tol);
-
-   //
-   // Sin Integral https://dlmf.nist.gov/6.2#E9
-   //
-   auto f2 = [z](value_type t)
+   #ifdef BOOST_MATH_STANDALONE
+   BOOST_IF_CONSTEXPR (std::is_fundamental<Complex>::value)
+   #endif
    {
-      return -exp(-z * cos(t)) * cos(z * sin(t));
-   };
-   Q = integrator.integrate(f2, value_type(0), boost::math::constants::half_pi<value_type>(), get_convergence_tolerance<value_type>());
+      Complex expected(BOOST_MATH_TEST_VALUE(value_type, - 0.2911081612888249710582867318081776512805281815037891183828405999609246645054069649838607112484426042883371996),
+         BOOST_MATH_TEST_VALUE(value_type, 0.4507983563969959578849120188097153649211346293694903758252662015991543519595834937475296809912196906074655385));
 
-   expected = Complex(boost::lexical_cast<value_type>("0.8893822921008980697856313681734926564752476188106405688951257340480164694708337246829840859633322683740376134733"),
-      -boost::lexical_cast<value_type>("2.381380802906111364088958767973164614925936185337231718483495612539455538280372745733208000514737758457795502168"));
-   expected -= boost::math::constants::half_pi<value_type>();
+      value_type error = abs(expected - Q);
+      BOOST_CHECK_LE(error, tol);
 
-   error = abs(expected - Q);
-   BOOST_CHECK_LE(error, tol);
+      //
+      // Sin Integral https://dlmf.nist.gov/6.2#E9
+      //
+      auto f2 = [z](value_type t)
+      {
+         return -exp(-z * cos(t)) * cos(z * sin(t));
+      };
+      Q = integrator.integrate(f2, value_type(0), boost::math::constants::half_pi<value_type>(), get_convergence_tolerance<value_type>());
+
+      expected = Complex(BOOST_MATH_TEST_VALUE(value_type, 0.8893822921008980697856313681734926564752476188106405688951257340480164694708337246829840859633322683740376134733),
+         -BOOST_MATH_TEST_VALUE(value_type, 2.381380802906111364088958767973164614925936185337231718483495612539455538280372745733208000514737758457795502168));
+      expected -= boost::math::constants::half_pi<value_type>();
+
+      error = abs(expected - Q);
+      BOOST_CHECK_LE(error, tol);
+   }
 }
 
 
@@ -868,7 +901,9 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
     test_2_arg<float>();
 #endif
 #ifdef TEST1B
+    #ifndef BOOST_MATH_STANDALONE
     test_crc<float>();
+    #endif
 #endif
 #ifdef TEST2
     test_right_limit_infinite<double>();
@@ -886,7 +921,9 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
     test_2_arg<double>();
 #endif
 #ifdef TEST2A
+   #ifndef BOOST_MATH_STANDALONE
     test_crc<double>();
+   #endif
 #endif
 
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
@@ -907,12 +944,15 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
     test_2_arg<long double>();
 #endif
 #ifdef TEST3A
+   #ifndef BOOST_MATH_STANDALONE
     test_crc<long double>();
+   #endif
 
 #endif
 #endif
 
 #ifdef TEST4
+   #ifndef BOOST_MATH_NO_MP_TESTS
     test_right_limit_infinite<cpp_bin_float_quad>();
     test_left_limit_infinite<cpp_bin_float_quad>();
     test_linear<cpp_bin_float_quad>();
@@ -926,16 +966,17 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
     test_crc<cpp_bin_float_quad>();
     test_sf<cpp_bin_float_quad>();
     test_2_arg<cpp_bin_float_quad>();
-
+   #endif
 #endif
 #ifdef TEST5
-
+   #ifndef BOOST_MATH_NO_MP_TESTS
     test_sf<cpp_bin_float_50>();
     test_sf<cpp_bin_float_100>();
     test_sf<boost::multiprecision::number<boost::multiprecision::cpp_bin_float<150> > >();
+   #endif
 
 #endif
-#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+#if !defined(BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS) && !defined(BOOST_MATH_NO_REAL_CONCEPT_TESTS)
 #ifdef TEST6
 
     test_right_limit_infinite<boost::math::concepts::real_concept>();
@@ -958,9 +999,11 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
 #endif
 #endif
 #ifdef TEST7
+    #ifndef BOOST_MATH_NO_MP_TESTS
     test_sf<cpp_dec_float_50>();
+    #endif
 #endif
-#if defined(TEST8) && defined(BOOST_HAS_FLOAT128)
+#if defined(TEST8) && defined(BOOST_HAS_FLOAT128) && !defined(BOOST_MATH_NO_MP_TESTS)
 
     test_right_limit_infinite<boost::multiprecision::float128>();
     test_left_limit_infinite<boost::multiprecision::float128>();

@@ -85,7 +85,9 @@ BOOST_AUTO_TEST_CASE( test_main )
    test_polygamma(0.0, "double");
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_polygamma(0.0L, "long double");
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
    test_polygamma(boost::math::concepts::real_concept(0.1), "real_concept");
+#endif
 #endif
 #ifdef BOOST_FLOAT128_C
    //test_polygamma(BOOST_FLOAT128_C(0.0), "float128_t");

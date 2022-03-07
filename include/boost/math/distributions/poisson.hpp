@@ -167,6 +167,11 @@ namespace boost
 
     typedef poisson_distribution<double> poisson; // Reserved name of type double.
 
+    #ifdef __cpp_deduction_guides
+    template <class RealType>
+    poisson_distribution(RealType)->poisson_distribution<typename boost::math::tools::promote_args<RealType>::type>;
+    #endif
+
     // Non-member functions to give properties of the distribution.
 
     template <class RealType, class Policy>

@@ -707,6 +707,11 @@ namespace boost
 
       typedef non_central_beta_distribution<double> non_central_beta; // Reserved name of type double.
 
+      #ifdef __cpp_deduction_guides
+      template <class RealType>
+      non_central_beta_distribution(RealType,RealType,RealType)->non_central_beta_distribution<typename boost::math::tools::promote_args<RealType>::type>;
+      #endif
+
       // Non-member functions to give properties of the distribution.
 
       template <class RealType, class Policy>

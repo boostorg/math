@@ -6,6 +6,8 @@
 // Basic sanity check that header <boost/math/special_functions/chebyshev_transform.hpp>
 // #includes all the files that it needs to.
 //
+#if __has_include(<fftw3.h>)
+
 #include <boost/math/special_functions/chebyshev_transform.hpp>
 //
 // Note this header includes no other headers, this is
@@ -19,3 +21,7 @@ void compile_and_link_test()
     boost::math::chebyshev_transform<double> test(f, 0.0, 1.0);
     check_result<double>(test(1.0));
 }
+
+#else
+void compile_and_link_test() {}
+#endif // __has_include
