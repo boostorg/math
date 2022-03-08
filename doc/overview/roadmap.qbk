@@ -8,6 +8,19 @@ All old bug reports including closed ones can be viewed on Trac
 
 Recent issues on GitHub [@https://github.com/boostorg/math/issues?utf8=%E2%9C%93&q=is%3Aissue here].
 
+[h4 Math-3.3.0 (Boost-1.79)]
+
+* Added [link math_toolkit.powers.logaddexp `logaddexp` and `logsumexp`] to compute log(e[super x[sub 1]] + e[super x[sub 2]] + ... + e[super x[sub N]]).
+* Added [link math_toolkit.internals.color_maps color map visualization] as one of our internal tools.
+* Added [link math_toolkit.quartic_roots root finding of quartic polynomials].
+* Extended the list of std lib math functions available [link math_toolkit.ccmath for use in `constexpr` contexts].
+* Fixed pathological case in cubic root finding, see [@https://github.com/boostorg/math/pulls/759 #759].
+* Added deduction guides for the distribution classes to prevent erroneous deduction from constructors in C++17, see [@https://github.com/boostorg/math/issues/754 #754].
+* Fixed building of bernoulli.hpp on platforms with no std::thread etc, see [@https://github.com/boostorg/math/issues/748 #748].
+* Begin comprehensively removing C-style casts in favour of static_cast's (warning suppression).
+* Improved the performance of the Double-Exponential integrators, see [@https://github.com/boostorg/math/issues/706 #706].
+
+
 [h4 Math-3.2.0 (Boost-1.78)]
 
 * Add support for [link math_toolkit.cubic_roots cubic roots].

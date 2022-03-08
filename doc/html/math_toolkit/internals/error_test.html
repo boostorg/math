@@ -144,9 +144,9 @@
 <p>
         Parameter <span class="emphasis"><em>a</em></span> is a matrix of test data: and must be a
         standard library Sequence type, that contains another Sequence type: typically
-        it will be a two dimensional instance of <code class="literal">std::array</code>.
-        Each row of <span class="emphasis"><em>a</em></span> should contain all the parameters that
-        are passed to the function under test as well as the expected result.
+        it will be a two dimensional instance of <code class="literal">std::array</code>. Each
+        row of <span class="emphasis"><em>a</em></span> should contain all the parameters that are
+        passed to the function under test as well as the expected result.
       </p>
 <p>
         Parameter <span class="emphasis"><em>test_func</em></span> is the function under test, it is
@@ -176,7 +176,7 @@
         and contains three elements: the input value, and the expected results for
         the <code class="computeroutput"><span class="identifier">tgamma</span></code> and <code class="computeroutput"><span class="identifier">lgamma</span></code> functions respectively.
       </p>
-<pre class="programlisting"><span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">array</span><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">array</span><span class="special">&lt;</span><span class="identifier">TestType</span><span class="special">,</span> <span class="number">3</span><span class="special">&gt;,</span> <span class="identifier">NumberOfTests</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">array</span><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">array</span><span class="special">&lt;</span><span class="identifier">TestType</span><span class="special">,</span> <span class="number">3</span><span class="special">&gt;,</span> <span class="identifier">NumberOfTests</span><span class="special">&gt;</span>
    <span class="identifier">factorials</span> <span class="special">=</span> <span class="special">{</span>
       <span class="comment">/* big array of test data goes here */</span>
    <span class="special">};</span>

@@ -334,6 +334,7 @@ Otherwise the result is given by:
 
 [include pow.qbk]
 [include rsqrt.qbk]
+[include logaddexp.qbk]
 
 [endsect] [/section:powers Logs, Powers, Roots and Exponentials]
 
