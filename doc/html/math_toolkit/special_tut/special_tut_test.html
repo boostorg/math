@@ -4,7 +4,7 @@
 <title>Testing</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
-<link rel="home" href="../../index.html" title="Math Toolkit 3.1.0">
+<link rel="home" href="../../index.html" title="Math Toolkit 3.3.0">
 <link rel="up" href="../special_tut.html" title="Tutorial: How to Write a New Special Function">
 <link rel="prev" href="special_tut_impl.html" title="Implementation">
 <link rel="next" href="../relative_error.html" title="Relative Error">
@@ -74,7 +74,7 @@
         tabulate these like this:
       </p>
 <pre class="programlisting"><span class="comment">// function values calculated on http://functions.wolfram.com/</span>
-<span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">array</span><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">array</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="number">3</span><span class="special">&gt;,</span> <span class="number">10</span><span class="special">&gt;</span> <span class="identifier">my_special_data</span> <span class="special">=</span> <span class="special">{{</span>
+<span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">array</span><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">array</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="number">3</span><span class="special">&gt;,</span> <span class="number">10</span><span class="special">&gt;</span> <span class="identifier">my_special_data</span> <span class="special">=</span> <span class="special">{{</span>
     <span class="special">{{</span> <span class="identifier">SC_</span><span class="special">(</span><span class="number">0</span><span class="special">),</span> <span class="identifier">SC_</span><span class="special">(</span><span class="number">0</span><span class="special">),</span> <span class="identifier">SC_</span><span class="special">(</span><span class="number">1</span><span class="special">)</span> <span class="special">}},</span>
     <span class="special">{{</span> <span class="identifier">SC_</span><span class="special">(</span><span class="number">0</span><span class="special">),</span> <span class="identifier">SC_</span><span class="special">(</span><span class="number">1</span><span class="special">),</span> <span class="identifier">SC_</span><span class="special">(</span><span class="number">1.26606587775200833559824462521471753760767031135496220680814</span><span class="special">)</span> <span class="special">}},</span>
     <span class="comment">/* More values here... */</span>

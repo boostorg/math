@@ -4,7 +4,7 @@
 <title>Constexpr CMath</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
-<link rel="home" href="../index.html" title="Math Toolkit 3.1.0">
+<link rel="home" href="../index.html" title="Math Toolkit 3.3.0">
 <link rel="up" href="../special.html" title="Chapter 8. Special Functions">
 <link rel="prev" href="daubechies.html" title="Daubechies Wavelets and Scaling Functions">
 <link rel="next" href="../extern_c.html" title='Chapter 9. TR1 and C99 external "C" Functions'>
@@ -171,6 +171,45 @@
 
     <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Arithmetic1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Arithmetic2</span><span class="special">&gt;</span>
     <span class="keyword">inline</span> <span class="keyword">constexpr</span> <span class="identifier">Promoted</span> <span class="identifier">copysign</span><span class="special">(</span><span class="identifier">Arithmetic1</span> <span class="identifier">mag</span><span class="special">,</span> <span class="identifier">Arithmetic2</span> <span class="identifier">sgn</span><span class="special">)</span> <span class="keyword">noexcept</span>
+
+    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Real</span><span class="special">&gt;</span>
+    <span class="keyword">inline</span> <span class="keyword">constexpr</span> <span class="identifier">Real</span> <span class="identifier">hypot</span><span class="special">(</span><span class="identifier">Real</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">y</span><span class="special">)</span> <span class="keyword">noexcept</span>
+
+    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Arithmetic1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Arithmetic2</span><span class="special">&gt;</span>
+    <span class="keyword">inline</span> <span class="keyword">constexpr</span> <span class="identifier">Promoted</span> <span class="identifier">hypot</span><span class="special">(</span><span class="identifier">Arithmetic1</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">Arithmetic2</span> <span class="identifier">y</span><span class="special">)</span> <span class="keyword">noexcept</span>
+
+    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Real</span><span class="special">&gt;</span>
+    <span class="keyword">inline</span> <span class="keyword">constexpr</span> <span class="identifier">Real</span> <span class="identifier">fdim</span><span class="special">(</span><span class="identifier">Real</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">y</span><span class="special">)</span> <span class="keyword">noexcept</span>
+
+    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Arithmetic1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Arithmetic2</span><span class="special">&gt;</span>
+    <span class="keyword">inline</span> <span class="keyword">constexpr</span> <span class="identifier">Promoted</span> <span class="identifier">fdim</span><span class="special">(</span><span class="identifier">Arithmetic1</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">Arithmetic2</span> <span class="identifier">y</span><span class="special">)</span> <span class="keyword">noexcept</span>
+
+    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Real</span><span class="special">&gt;</span>
+    <span class="keyword">inline</span> <span class="keyword">constexpr</span> <span class="identifier">Real</span> <span class="identifier">fmax</span><span class="special">(</span><span class="identifier">Real</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">y</span><span class="special">)</span> <span class="keyword">noexcept</span>
+
+    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Arithmetic1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Arithmetic2</span><span class="special">&gt;</span>
+    <span class="keyword">inline</span> <span class="keyword">constexpr</span> <span class="identifier">Promoted</span> <span class="identifier">fmax</span><span class="special">(</span><span class="identifier">Arithmetic1</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">Arithmetic2</span> <span class="identifier">y</span><span class="special">)</span> <span class="keyword">noexcept</span>
+
+    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Real</span><span class="special">&gt;</span>
+    <span class="keyword">inline</span> <span class="keyword">constexpr</span> <span class="identifier">Real</span> <span class="identifier">fmin</span><span class="special">(</span><span class="identifier">Real</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">y</span><span class="special">)</span> <span class="keyword">noexcept</span>
+
+    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Arithmetic1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Arithmetic2</span><span class="special">&gt;</span>
+    <span class="keyword">inline</span> <span class="keyword">constexpr</span> <span class="identifier">Promoted</span> <span class="identifier">fmin</span><span class="special">(</span><span class="identifier">Arithmetic1</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">Arithmetic2</span> <span class="identifier">y</span><span class="special">)</span> <span class="keyword">noexcept</span>
+
+    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Arithmetic1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Arithmetic2</span> <span class="special">=</span> <span class="identifier">Arithmetic1</span><span class="special">&gt;</span>
+    <span class="keyword">inline</span> <span class="keyword">constexpr</span> <span class="keyword">bool</span> <span class="identifier">isgreater</span><span class="special">(</span><span class="identifier">Arithmetic1</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">Arithmetic2</span> <span class="identifier">y</span><span class="special">)</span> <span class="keyword">noexcept</span>
+
+    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Arithmetic1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Arithmetic2</span> <span class="special">=</span> <span class="identifier">Arithmetic1</span><span class="special">&gt;</span>
+    <span class="keyword">inline</span> <span class="keyword">constexpr</span> <span class="keyword">bool</span> <span class="identifier">isgreaterequal</span><span class="special">(</span><span class="identifier">Arithmetic1</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">Arithmetic2</span> <span class="identifier">y</span><span class="special">)</span> <span class="keyword">noexcept</span>
+
+    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Arithmetic1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Arithmetic2</span> <span class="special">=</span> <span class="identifier">Arithmetic1</span><span class="special">&gt;</span>
+    <span class="keyword">inline</span> <span class="keyword">constexpr</span> <span class="keyword">bool</span> <span class="identifier">isless</span><span class="special">(</span><span class="identifier">Arithmetic1</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">Arithmetic2</span> <span class="identifier">y</span><span class="special">)</span> <span class="keyword">noexcept</span>
+
+    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Arithmetic1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Arithmetic2</span> <span class="special">=</span> <span class="identifier">Arithmetic1</span><span class="special">&gt;</span>
+    <span class="keyword">inline</span> <span class="keyword">constexpr</span> <span class="keyword">bool</span> <span class="identifier">islessequal</span><span class="special">(</span><span class="identifier">Arithmetic1</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">Arithmetic2</span> <span class="identifier">y</span><span class="special">)</span> <span class="keyword">noexcept</span>
+
+    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
+    <span class="keyword">inline</span> <span class="keyword">constexpr</span> <span class="keyword">bool</span> <span class="identifier">isunordered</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">y</span><span class="special">)</span> <span class="keyword">noexcept</span>
 
 <span class="special">}</span> <span class="comment">// Namespaces</span>
 </pre>

@@ -4,10 +4,10 @@
 <title>Graphing, Profiling, and Generating Test Data for Special Functions</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
-<link rel="home" href="../../index.html" title="Math Toolkit 3.1.0">
+<link rel="home" href="../../index.html" title="Math Toolkit 3.3.0">
 <link rel="up" href="../internals.html" title="Internal tools">
 <link rel="prev" href="error_test.html" title="Relative Error and Testing">
-<link rel="next" href="../../using_udt.html" title="Chapter 20. Use with User-Defined Floating-Point Types - Boost.Multiprecision and others">
+<link rel="next" href="color_maps.html" title="Color Maps">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -20,7 +20,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="error_test.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../internals.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="../../using_udt.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="error_test.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../internals.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="color_maps.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h3 class="title">
@@ -347,7 +347,7 @@
         The format of the test data looks something like:
       </p>
 <pre class="programlisting"><span class="preprocessor">#define</span> <span class="identifier">SC_</span><span class="special">(</span><span class="identifier">x</span><span class="special">)</span> <span class="keyword">static_cast</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;(</span><span class="identifier">BOOST_JOIN</span><span class="special">(</span><span class="identifier">x</span><span class="special">,</span> <span class="identifier">L</span><span class="special">))</span>
-   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">array</span><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">array</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="number">3</span><span class="special">&gt;,</span> <span class="number">1830</span><span class="special">&gt;</span>
+   <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">array</span><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">array</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="number">3</span><span class="special">&gt;,</span> <span class="number">1830</span><span class="special">&gt;</span>
    <span class="identifier">beta_med_data</span> <span class="special">=</span> <span class="special">{</span>
       <span class="identifier">SC_</span><span class="special">(</span><span class="number">0.4883005917072296142578125</span><span class="special">),</span>
       <span class="identifier">SC_</span><span class="special">(</span><span class="number">0.4883005917072296142578125</span><span class="special">),</span>
@@ -559,7 +559,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="error_test.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../internals.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="../../using_udt.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="error_test.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../internals.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="color_maps.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>
