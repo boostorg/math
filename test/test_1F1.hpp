@@ -162,7 +162,7 @@ void test_spots5(T, const char* type_name)
 template <class T>
 void test_spots6(T, const char* type_name)
 {
-   static const std::array<std::array<T, 4>, 91> hypergeometric_1F1_bugs = { {
+   static const std::array<std::array<T, 4>, 93> hypergeometric_1F1_bugs = { {
         { { static_cast<double>(17955.561660766602), static_cast<double>(9.6968994205831605e-09), static_cast<double>(-82.406154185533524), SC_(6.98056008378736714088730927132364938220428678e-11) }},
         { { static_cast<double>(17955.561660766602), static_cast<double>(-9.6968994205831605e-09), static_cast<double>(-82.406154185533524), SC_(-6.98055306629610746072607353939306734740549551e-11) }},
         { { static_cast<double>(-17955.561660766602), static_cast<double>(-9.6968994205831605e-09), static_cast<double>(82.406154185533524), SC_(-42897094853118832762870100.8669248353530950866) }} ,
@@ -287,6 +287,11 @@ void test_spots6(T, const char* type_name)
         { { (T)std::ldexp((double)-9751199809536000, -45), (T)std::ldexp((double)-17654191685632000, -47), (T)std::ldexp((double)10587451850752000, -47), SC_(-1.9601415510439595625538337964298353914980331018955e+68) }},
         { { (T)std::ldexp((double)-15233620754432000, -45), (T)std::ldexp((double)-12708283072512000, -46), (T)std::ldexp((double)10255461007360000, -46), SC_(-5.4344106361679075861859567858016187271235441673635e+125) }},
         { { (T)std::ldexp((double)-11241354149888000, -45), (T)std::ldexp((double)-9580579905536000, -45), (T)std::ldexp((double)12224976846848000, -47), SC_(12046856548470067405870726490464935201150430438.035) }},
+        //
+        // Bugs found while testing color maps:
+        //
+        { { SC_(0.078125000000000000), SC_(-0.039062500000000000), SC_(0.5), SC_(-0.3371910410915676603577770246237158427221) }},
+        { { SC_(-19.492187500000000), SC_(0.50781250000000000), SC_(0.5), SC_(1.2551298228307647570646714060395253358015) }},
    } };
    static const std::array<std::array<T, 4>, 2> hypergeometric_1F1_big_bugs = { {
 #if DBL_MAX_EXP == LDBL_MAX_EXP

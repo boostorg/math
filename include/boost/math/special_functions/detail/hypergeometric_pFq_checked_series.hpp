@@ -132,6 +132,7 @@
         Real scaling_factor = exp(Real(log_scaling_factor));
         Real term_m1;
         long long local_scaling = 0;
+        bool have_no_correct_bits = false;
 
         if ((aj.size() == 1) && (bj.size() == 0))
         {
@@ -238,10 +239,20 @@
               break;
            if (abs_result * tol > abs(result))
            {
-              // We have no correct bits in the result... just give up!
-              result = boost::math::policies::raise_evaluation_error("boost::math::hypergeometric_pFq<%1%>", "Cancellation is so severe that no bits in the reuslt are correct, last result was %1%", Real(result * exp(Real(log_scale))), pol);
-              return std::make_pair(result, result);
+              // Check if result is so small compared to abs_resuslt that there are no longer any
+              // correct bits... we require two consecutive passes here before aborting to
+              // avoid false positives when result transiently drops to near zero then rebounds.
+              if (have_no_correct_bits)
+              {
+                 // We have no correct bits in the result... just give up!
+                 result = boost::math::policies::raise_evaluation_error("boost::math::hypergeometric_pFq<%1%>", "Cancellation is so severe that no bits in the reuslt are correct, last result was %1%", Real(result * exp(Real(log_scale))), pol);
+                 return std::make_pair(result, result);
+              }
+              else
+                 have_no_correct_bits = true;
            }
+           else
+              have_no_correct_bits = false;
            term0 = term;
         }
         //std::cout << "result = " << result << std::endl;
