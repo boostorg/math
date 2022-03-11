@@ -296,7 +296,7 @@
        // When ak - 1 == b are recursion coefficients dissappear to zero and
        // we end up with a NaN result.  Reduce the recursion steps by 1 to
        // avoid this.  We rely on |b| small and therefore no infinite recursion.
-       --ak;
+       ak -= 1;
        integer_part += 1;
     }
 
