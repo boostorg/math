@@ -373,7 +373,7 @@ namespace detail {
    {
       using std::fabs;
       if(count < 2)
-         return guess0 - (max + min) / 2; // Not enough counts left to do anything!!
+         return guess - (max + min) / 2; // Not enough counts left to do anything!!
       //
       // Move guess towards max until we bracket the root, updating min and max as we go:
       //
@@ -430,7 +430,7 @@ namespace detail {
    {
       using std::fabs;
       if (count < 2)
-         return guess0 - (max + min) / 2; // Not enough counts left to do anything!!
+         return guess - (max + min) / 2; // Not enough counts left to do anything!!
       //
       // Move guess towards min until we bracket the root, updating min and max as we go:
       //
