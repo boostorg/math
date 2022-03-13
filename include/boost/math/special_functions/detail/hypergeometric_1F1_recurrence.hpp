@@ -291,6 +291,14 @@
        ak += 2;
        integer_part -= 2;
     }
+    if (ak - 1 == b)
+    {
+       // When ak - 1 == b are recursion coefficients dissappear to zero and
+       // we end up with a NaN result.  Reduce the recursion steps by 1 to
+       // avoid this.  We rely on |b| small and therefore no infinite recursion.
+       ak -= 1;
+       integer_part += 1;
+    }
 
     if (-integer_part > static_cast<std::intmax_t>(policies::get_max_series_iterations<Policy>()))
        return policies::raise_evaluation_error<T>(function, "1F1 arguments sit in a range with a so negative that we have no evaluation method, got a = %1%", std::numeric_limits<T>::quiet_NaN(), pol);
