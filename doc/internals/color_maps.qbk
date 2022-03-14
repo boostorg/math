@@ -54,11 +54,16 @@ This is for two reasons: First, visualizations are themselves amazing debuggers,
 Second, often small changes in floating point rounding cause the value provided to be only slightly below zero, or just slightly above 1.
 Hence, we make a call to `std::clamp` before interpolating into the color table. 
 
-For an example of how to use these facilites please refer to `example/color_maps_example.cpp`
+For an example of how to use these facilites please refer to [@../../example/color_maps_example.cpp `example/color_maps_example.cpp`] 
+and [@../../example/color_maps_sf_example.cpp `example/color_maps_sf_example.cpp`]
 Note: To compile the examples directly you will need to have [@https://github.com/lvandeve/lodepng lodepng].
 An example of the viridis color map using [@https://en.wikipedia.org/wiki/Newton_fractal the newton fractal] is shown below:
 
 [$../images/viridis_newton_fractal.png]
+
+An example from [@../../example/color_maps_example.cpp `example/color_maps_example.cpp`] plots [sub 1]F[sub 1] on a logarithmic scale:
+
+[$../images/extended_kindlmann_1F1.png]
 
 Swatches of each are listed below:
 
