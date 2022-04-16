@@ -89,10 +89,10 @@ template <class RealType = double, class Policy = policies::policy<> >
 class inverse_gamma_distribution
 {
 public:
-   typedef RealType value_type;
-   typedef Policy policy_type;
+   using value_type = RealType;
+   using policy_type = Policy;
 
-   inverse_gamma_distribution(RealType l_shape = 1, RealType l_scale = 1)
+   explicit inverse_gamma_distribution(RealType l_shape = 1, RealType l_scale = 1)
       : m_shape(l_shape), m_scale(l_scale)
    {
       RealType result;
@@ -118,10 +118,9 @@ private:
    RealType m_scale;     // distribution scale
 };
 
-typedef inverse_gamma_distribution<double> inverse_gamma;
+using inverse_gamma = inverse_gamma_distribution<double>;
 // typedef - but potential clash with name of inverse gamma *function*.
-// but there is a typedef for gamma
-//   typedef boost::math::gamma_distribution<Type, Policy> gamma;
+// but there is a typedef for the gamma distribution (gamma)
 
 #ifdef __cpp_deduction_guides
 template <class RealType>
@@ -133,14 +132,14 @@ inverse_gamma_distribution(RealType,RealType)->inverse_gamma_distribution<typena
 // Allow random variable x to be zero, treated as a special case (unlike some definitions).
 
 template <class RealType, class Policy>
-inline const std::pair<RealType, RealType> range(const inverse_gamma_distribution<RealType, Policy>& /* dist */)
+inline std::pair<RealType, RealType> range(const inverse_gamma_distribution<RealType, Policy>& /* dist */)
 {  // Range of permissible values for random variable x.
    using boost::math::tools::max_value;
    return std::pair<RealType, RealType>(static_cast<RealType>(0), max_value<RealType>());
 }
 
 template <class RealType, class Policy>
-inline const std::pair<RealType, RealType> support(const inverse_gamma_distribution<RealType, Policy>& /* dist */)
+inline std::pair<RealType, RealType> support(const inverse_gamma_distribution<RealType, Policy>& /* dist */)
 {  // Range of supported values for random variable x.
    // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
    using boost::math::tools::max_value;
@@ -191,8 +190,7 @@ inline RealType pdf(const inverse_gamma_distribution<RealType, Policy>& dist, co
       }
       result /= (x * x);
    }
-   // better than naive
-   // result = (pow(scale, shape) * pow(x, (-shape -1)) * exp(-scale/x) ) / tgamma(shape);
+
    return result;
 } // pdf
 
@@ -207,14 +205,14 @@ inline RealType logpdf(const inverse_gamma_distribution<RealType, Policy>& dist,
    RealType shape = dist.shape();
    RealType scale = dist.scale();
 
-   RealType result = 0;
+   RealType result = -std::numeric_limits<RealType>::infinity();
    if(false == detail::check_inverse_gamma(function, scale, shape, &result, Policy()))
    { // distribution parameters bad.
       return result;
    } 
    if(x == 0)
    { // Treat random variate zero as a special case.
-      return 0;
+      return result;
    }
    else if(false == detail::check_inverse_gamma_x(function, x, &result, Policy()))
    { // x bad.
@@ -222,7 +220,7 @@ inline RealType logpdf(const inverse_gamma_distribution<RealType, Policy>& dist,
    }
    result = scale / x;
    if(result < tools::min_value<RealType>())
-      return 0;  // random variable is infinite or so close as to make no difference.
+      return result;  // random variable is infinite or so close as to make no difference.
       
    // x * x may under or overflow, likewise our result
    if (!(boost::math::isfinite)(x*x))
@@ -307,7 +305,6 @@ inline RealType cdf(const complemented2_type<inverse_gamma_distribution<RealType
    if(c.param == 0)
       return 1; // Avoid division by zero
 
-   //result = 1. - gamma_q(shape, c.param / scale, Policy());
    result = gamma_p(shape, scale/c.param, Policy());
    return result;
 }

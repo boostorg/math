@@ -53,10 +53,10 @@ template <class RealType = double, class Policy = policies::policy<> >
 class extreme_value_distribution
 {
 public:
-   typedef RealType value_type;
-   typedef Policy policy_type;
+   using value_type = RealType;
+   using policy_type = Policy;
 
-   extreme_value_distribution(RealType a = 0, RealType b = 1)
+   explicit extreme_value_distribution(RealType a = 0, RealType b = 1)
       : m_a(a), m_b(b)
    {
       RealType err;
@@ -68,10 +68,11 @@ public:
    RealType scale()const { return m_b; }
 
 private:
-   RealType m_a, m_b;
+   RealType m_a;
+   RealType m_b;
 };
 
-typedef extreme_value_distribution<double> extreme_value;
+using extreme_value = extreme_value_distribution<double>;
 
 #ifdef __cpp_deduction_guides
 template <class RealType>
@@ -81,7 +82,7 @@ extreme_value_distribution(RealType,RealType)->extreme_value_distribution<typena
 #endif
 
 template <class RealType, class Policy>
-inline const std::pair<RealType, RealType> range(const extreme_value_distribution<RealType, Policy>& /*dist*/)
+inline std::pair<RealType, RealType> range(const extreme_value_distribution<RealType, Policy>& /*dist*/)
 { // Range of permissible values for random variable x.
    using boost::math::tools::max_value;
    return std::pair<RealType, RealType>(
@@ -90,7 +91,7 @@ inline const std::pair<RealType, RealType> range(const extreme_value_distributio
 }
 
 template <class RealType, class Policy>
-inline const std::pair<RealType, RealType> support(const extreme_value_distribution<RealType, Policy>& /*dist*/)
+inline std::pair<RealType, RealType> support(const extreme_value_distribution<RealType, Policy>& /*dist*/)
 { // Range of supported values for random variable x.
    // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
    using boost::math::tools::max_value;
@@ -131,7 +132,7 @@ inline RealType logpdf(const extreme_value_distribution<RealType, Policy>& dist,
 
    RealType a = dist.location();
    RealType b = dist.scale();
-   RealType result = 0;
+   RealType result = -std::numeric_limits<RealType>::infinity();
    if(0 == detail::verify_scale_b(function, b, &result, Policy()))
       return result;
    if(0 == detail::check_finite(function, a, &result, Policy()))
@@ -145,7 +146,7 @@ inline RealType logpdf(const extreme_value_distribution<RealType, Policy>& dist,
       result = log(1/b) + e - exp(e);
    // else.... result *must* be zero since exp(e) is infinite...
    return result;
-} // pdf
+} // logpdf
 
 template <class RealType, class Policy>
 inline RealType cdf(const extreme_value_distribution<RealType, Policy>& dist, const RealType& x)
