@@ -21,7 +21,7 @@ using boost::math::policies::policy;
 using boost::math::policies::evaluation_error;
 using boost::math::policies::domain_error;
 using boost::math::policies::overflow_error;
-using boost::math::policies::domain_error;
+using boost::math::policies::underflow_error;
 using boost::math::policies::pole_error;
 // Actions on error (in enum error_policy_type):
 using boost::math::policies::errno_on_error;
