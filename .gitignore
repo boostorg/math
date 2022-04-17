@@ -26,3 +26,4 @@ DartConfiguration.tcl
 cmake-build-debug/*
 .cmake/*
 build.ninja
+.ninja*
