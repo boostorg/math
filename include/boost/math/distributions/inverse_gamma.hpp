@@ -198,7 +198,7 @@ template <class RealType, class Policy>
 inline RealType logpdf(const inverse_gamma_distribution<RealType, Policy>& dist, const RealType& x)
 {
    BOOST_MATH_STD_USING  // for ADL of std functions
-   using boost::math::tgamma;
+   using boost::math::lgamma;
 
    static const char* function = "boost::math::logpdf(const inverse_gamma_distribution<%1%>&, %1%)";
 
@@ -228,7 +228,7 @@ inline RealType logpdf(const inverse_gamma_distribution<RealType, Policy>& dist,
       return policies::raise_overflow_error<RealType, Policy>(function, "PDF is infinite.", Policy());
    }
 
-   return shape * log(scale) + (-shape-1)*log(x) - log(tgamma(shape)) - (scale/x);
+   return shape * log(scale) + (-shape-1)*log(x) - lgamma(shape) - (scale/x);
 } // pdf
 
 template <class RealType, class Policy>

@@ -152,7 +152,7 @@ template <class RealType, class Policy>
 inline RealType logpdf(const gamma_distribution<RealType, Policy>& dist, const RealType& x)
 {
    BOOST_MATH_STD_USING  // for ADL of std functions
-   using boost::math::tgamma;
+   using boost::math::lgamma;
 
    static const char* function = "boost::math::logpdf(const gamma_distribution<%1%>&, %1%)";
 
@@ -169,16 +169,8 @@ inline RealType logpdf(const gamma_distribution<RealType, Policy>& dist, const R
    {
       return std::numeric_limits<RealType>::quiet_NaN();
    }
-   
-   // The following calculation does not always work with float so take the naive road out
-   BOOST_IF_CONSTEXPR(std::is_same<RealType, float>::value)
-   {
-      result = log(pdf(dist, x));
-   }
-   else
-   {
-      result = -k*log(theta) + (k-1)*log(x) - log(tgamma(k)) - (x/theta);
-   }
+
+   result = -k*log(theta) + (k-1)*log(x) - lgamma(k) - (x/theta);
    
    return result;
 } // logpdf

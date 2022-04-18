@@ -279,7 +279,7 @@ namespace boost
       BOOST_FPU_EXCEPTION_GUARD
 
       BOOST_MATH_STD_USING // for ADL of std functions.
-      using boost::math::tgamma;
+      using boost::math::lgamma;
 
       RealType mean = dist.mean();
       // Error check:
@@ -302,7 +302,7 @@ namespace boost
       // Special case where k and lambda are both positive
       if(k > 0 && mean > 0)
       {
-        return -log(tgamma(k+1)) + k*log(mean) - mean;
+        return -lgamma(k+1) + k*log(mean) - mean;
       }
 
       result = log(pdf(dist, k));
