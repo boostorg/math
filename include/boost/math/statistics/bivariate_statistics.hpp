@@ -323,23 +323,6 @@ ReturnType correlation_coefficient_parallel_impl(ForwardIterator u_begin, Forwar
 
 #endif // BOOST_MATH_EXEC_COMPATIBLE
 
-template<typename ReturnType, typename ForwardIterator>
-ReturnType chatterjee_correlation(ForwardIterator u_begin, ForwardIterator u_end, ForwardIterator v_begin, ForwardIterator v_end)
-{
-    BOOST_MATH_ASSERT_MSG(std::is_sorted(u_begin, u_end), "Data set must be sorted in order to calculate the chatterjee correlation.");
-
-    const auto rank_vector = rank(v_begin, v_end);
-
-    std::size_t sum = 0;
-    for (std::size_t i = 1; i < rank_vector.size(); ++i)
-    {
-        // avoids unsigned underflow even though the result will always be >= 0
-        sum += rank_vector[i] > rank_vector[i-1] ? rank_vector[i] - rank_vector[i-1] : rank_vector[i-1] - rank_vector[i];
-    }
-
-    return static_cast<ReturnType>(1) - static_cast<ReturnType>(3 * sum) / static_cast<ReturnType>(rank_vector.size() - 1);
-}
-
 } // namespace detail
 
 #ifdef BOOST_MATH_EXEC_COMPATIBLE

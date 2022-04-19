@@ -14,6 +14,10 @@
 #include <algorithm>
 #include <boost/math/tools/config.hpp>
 
+#ifdef BOOST_MATH_EXEC_COMPATIBLE
+#include <execution>
+#endif
+
 namespace boost { namespace math { namespace statistics { namespace detail {
 
 struct pair_equal
@@ -74,8 +78,6 @@ inline auto rank(const Container& c) -> std::vector<std::size_t>
 }}}} // Namespaces
 
 #else
-
-#include <execution>
 
 namespace boost::math::statistics::detail {
 
