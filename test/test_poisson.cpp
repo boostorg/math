@@ -208,6 +208,31 @@ void test_spots(RealType)
       static_cast<RealType>(20)),   //  K>> mean 
       static_cast<RealType>(8.277463646553730E-009), // probability.
          tolerance);
+
+  // LOGPDF
+  BOOST_CHECK_CLOSE(
+     logpdf(poisson_distribution<RealType>(static_cast<RealType>(4)), // mean 4.
+      static_cast<RealType>(0)),   
+      log(static_cast<RealType>(1.831563888873410E-002)), // probability.
+         tolerance);
+
+  BOOST_CHECK_CLOSE(
+     logpdf(poisson_distribution<RealType>(static_cast<RealType>(4)), // mean 4.
+      static_cast<RealType>(2)),   
+      log(static_cast<RealType>(1.465251111098740E-001)), // probability.
+         tolerance);
+
+  BOOST_CHECK_CLOSE(
+     logpdf(poisson_distribution<RealType>(static_cast<RealType>(20)), // mean big.
+      static_cast<RealType>(1)),   //  k small
+      log(static_cast<RealType>(4.122307244877130E-008)), // probability.
+         tolerance);
+
+  BOOST_CHECK_CLOSE(
+     logpdf(poisson_distribution<RealType>(static_cast<RealType>(4)), // mean 4.
+      static_cast<RealType>(20)),   //  K>> mean 
+      log(static_cast<RealType>(8.277463646553730E-009)), // probability.
+         tolerance);
   
   // CDF
   BOOST_CHECK_CLOSE(

@@ -190,6 +190,31 @@ void test_spots(RealType T)
          tolerance); // %
 
    BOOST_CHECK_CLOSE(
+      ::boost::math::logpdf(
+         exponential_distribution<RealType>(0.5),
+         static_cast<RealType>(0.125)),              // x
+         log(static_cast<RealType>(0.46970653140673789305985541231115L)),                // probability.
+         tolerance); // %
+   BOOST_CHECK_CLOSE(
+      ::boost::math::logpdf(
+         exponential_distribution<RealType>(0.5),
+         static_cast<RealType>(5)),              // x
+         log(static_cast<RealType>(0.04104249931194939758476433723358L)),                // probability.
+         tolerance); // %
+   BOOST_CHECK_CLOSE(
+      ::boost::math::logpdf(
+         exponential_distribution<RealType>(2),
+         static_cast<RealType>(0.125)),              // x
+         log(static_cast<RealType>(1.5576015661428097364903405339566L)),                // probability.
+         tolerance); // %
+   BOOST_CHECK_CLOSE(
+      ::boost::math::logpdf(
+         exponential_distribution<RealType>(2),
+         static_cast<RealType>(5)),              // x
+         log(static_cast<RealType>(9.0799859524969703071183031121101e-5L)),                // probability.
+         tolerance); // %
+
+   BOOST_CHECK_CLOSE(
       ::boost::math::mean(
          exponential_distribution<RealType>(2)),
          static_cast<RealType>(0.5),

@@ -9,14 +9,12 @@
 // detect missing includes).
 //
 
-static const float f = 0;
-static const double d = 0;
-static const long double l = 0;
-static const unsigned u = 0;
-static const int i = 0;
-
-//template <class T>
-//inline void check_result_imp(T, T){}
+static constexpr float f = 0;
+static constexpr double d = 0;
+static constexpr long double l = 0;
+static constexpr unsigned u = 0;
+static constexpr int i = 0;
+static constexpr unsigned long li = 1;
 
 inline void check_result_imp(float, float){}
 inline void check_result_imp(double, double){}
@@ -38,12 +36,12 @@ inline void check_result_imp(bool, bool){}
 template <class T, class U>
 struct local_is_same 
 { 
-   enum{ value = false }; 
+   static constexpr bool value = false;
 };
 template <class T>
 struct local_is_same<T, T> 
 { 
-   enum{ value = true }; 
+   static constexpr bool value = true;
 };
 
 template <class T1, class T2>
@@ -54,7 +52,7 @@ inline void check_result_imp(T1, T2)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-local-typedefs"
 #endif
-   typedef BOOST_MATH_ASSERT_UNUSED_ATTRIBUTE int static_assertion[local_is_same<T1, T2>::value ? 1 : 0];
+    using static_assertion = int[local_is_same<T1, T2>::value ? 1 : 0];
 #if defined(__GNUC__) && ((__GNUC__ > 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 8)))
 #pragma GCC diagnostic pop
 #endif
@@ -68,23 +66,12 @@ inline void check_result(T2)
    return check_result_imp(a, b);
 }
 
-union max_align_type
-{
-   char c;
-   short s;
-   int i;
-   long l;
-   double d;
-   long double ld;
-   long long ll;
-};
-
 template <class Distribution>
 struct DistributionConcept
 {
    static void constraints()
    {
-      typedef typename Distribution::value_type value_type;
+      using value_type = typename Distribution::value_type;
 
       const Distribution& dist = DistributionConcept<Distribution>::get_object();
 
@@ -93,6 +80,7 @@ struct DistributionConcept
       check_result<value_type>(cdf(dist, x));
       check_result<value_type>(cdf(complement(dist, x)));
       check_result<value_type>(pdf(dist, x));
+      check_result<value_type>(logpdf(dist, x));
       check_result<value_type>(quantile(dist, x));
       check_result<value_type>(quantile(complement(dist, x)));
       check_result<value_type>(mean(dist));
@@ -116,6 +104,7 @@ struct DistributionConcept
       check_result<value_type>(cdf(dist, f));
       check_result<value_type>(cdf(complement(dist, f)));
       check_result<value_type>(pdf(dist, f));
+      check_result<value_type>(logpdf(dist, f));
       check_result<value_type>(quantile(dist, f));
       check_result<value_type>(quantile(complement(dist, f)));
       check_result<value_type>(hazard(dist, f));
@@ -123,6 +112,7 @@ struct DistributionConcept
       check_result<value_type>(cdf(dist, d));
       check_result<value_type>(cdf(complement(dist, d)));
       check_result<value_type>(pdf(dist, d));
+      check_result<value_type>(logpdf(dist, d));
       check_result<value_type>(quantile(dist, d));
       check_result<value_type>(quantile(complement(dist, d)));
       check_result<value_type>(hazard(dist, d));
@@ -130,6 +120,7 @@ struct DistributionConcept
       check_result<value_type>(cdf(dist, l));
       check_result<value_type>(cdf(complement(dist, l)));
       check_result<value_type>(pdf(dist, l));
+      check_result<value_type>(logpdf(dist, l));
       check_result<value_type>(quantile(dist, l));
       check_result<value_type>(quantile(complement(dist, l)));
       check_result<value_type>(hazard(dist, l));
@@ -137,20 +128,32 @@ struct DistributionConcept
       check_result<value_type>(cdf(dist, i));
       check_result<value_type>(cdf(complement(dist, i)));
       check_result<value_type>(pdf(dist, i));
+      check_result<value_type>(logpdf(dist, i));
       check_result<value_type>(quantile(dist, i));
       check_result<value_type>(quantile(complement(dist, i)));
       check_result<value_type>(hazard(dist, i));
       check_result<value_type>(chf(dist, i));
-      unsigned long li = 1;
       check_result<value_type>(cdf(dist, li));
       check_result<value_type>(cdf(complement(dist, li)));
       check_result<value_type>(pdf(dist, li));
+      check_result<value_type>(logpdf(dist, li));
       check_result<value_type>(quantile(dist, li));
       check_result<value_type>(quantile(complement(dist, li)));
       check_result<value_type>(hazard(dist, li));
       check_result<value_type>(chf(dist, li));
    }
 private:
+   union max_align_type
+   {
+       char c;
+       short s;
+       int i;
+       long l;
+       double d;
+       long double ld;
+       long long ll;
+   };
+
    static void* storage()
    {
       static max_align_type storage[sizeof(Distribution)];

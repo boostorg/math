@@ -26,6 +26,8 @@
    using std::cout;
    using std::endl;
    using std::setprecision;
+#include <cmath>
+   using std::log;
 
 template <class RealType>
 void test_spot(RealType s, RealType x, RealType p, RealType q, RealType tolerance)
@@ -160,6 +162,25 @@ void test_spots(RealType T)
          tolerance); // %
 
    BOOST_CHECK_CLOSE(
+      ::boost::math::logpdf(
+         rayleigh_distribution<RealType>(1.L),
+         static_cast<RealType>(1.L)),              // x
+         log(static_cast<RealType>(exp_minus_half<RealType>())), // probability.
+         tolerance); // %
+   BOOST_CHECK_CLOSE(
+      ::boost::math::logpdf(
+         rayleigh_distribution<RealType>(0.5L),
+         static_cast<RealType>(0.5L)),              // x
+         log(static_cast<RealType>(2 * exp_minus_half<RealType>())), // probability.
+         tolerance); // %
+   BOOST_CHECK_CLOSE(
+      ::boost::math::logpdf(
+         rayleigh_distribution<RealType>(2.L),
+         static_cast<RealType>(2.L)),              // x
+         log(static_cast<RealType>(exp_minus_half<RealType>() /2)),  // probability.
+         tolerance); // %
+
+   BOOST_CHECK_CLOSE(
       ::boost::math::mean(
          rayleigh_distribution<RealType>(1.L)),
          static_cast<RealType>(root_half_pi<RealType>()),
@@ -253,6 +274,27 @@ BOOST_AUTO_TEST_CASE( test_main )
       rayleigh_distribution<double>(2.),
       static_cast<double>(2)), // x
       static_cast<double>(exp_minus_half<double>() /2 ), // p
+         1e-15); // %
+
+   BOOST_CHECK_CLOSE_FRACTION(
+      ::boost::math::logpdf(
+      rayleigh_distribution<double>(1.),
+      static_cast<double>(1)), // x
+      log(static_cast<double>(exp_minus_half<double>())), // p
+         1e-15); // %
+
+   BOOST_CHECK_CLOSE_FRACTION(
+      ::boost::math::logpdf(
+      rayleigh_distribution<double>(0.5),
+      static_cast<double>(0.5)), // x
+      log(static_cast<double>(2 * exp_minus_half<double>())), // p
+         1e-15); // %
+
+   BOOST_CHECK_CLOSE_FRACTION(
+      ::boost::math::logpdf(
+      rayleigh_distribution<double>(2.),
+      static_cast<double>(2)), // x
+      log(static_cast<double>(exp_minus_half<double>() /2 )), // p
          1e-15); // %
 
    BOOST_CHECK_CLOSE_FRACTION(

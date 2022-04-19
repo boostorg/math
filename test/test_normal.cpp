@@ -41,6 +41,8 @@
    using std::setprecision;
 #include <limits>
   using std::numeric_limits;
+#include <type_traits>
+  using std::log;
 
 template <class RealType>
 RealType NaivePDF(RealType mean, RealType sd, RealType x)
@@ -126,6 +128,7 @@ void test_spots(RealType)
   {
     // No longer allow x to be NaN, then these tests should throw.
     BOOST_MATH_CHECK_THROW(pdf(N01, +std::numeric_limits<RealType>::quiet_NaN()), std::domain_error); // x = NaN
+    BOOST_MATH_CHECK_THROW(logpdf(N01, +std::numeric_limits<RealType>::quiet_NaN()), std::domain_error); // x = NaN
     BOOST_MATH_CHECK_THROW(cdf(N01, +std::numeric_limits<RealType>::quiet_NaN()), std::domain_error); // x = NaN
     BOOST_MATH_CHECK_THROW(cdf(complement(N01, +std::numeric_limits<RealType>::quiet_NaN())), std::domain_error); // x = + infinity
     BOOST_MATH_CHECK_THROW(quantile(N01, +std::numeric_limits<RealType>::quiet_NaN()), std::domain_error); // p = + infinity
@@ -214,6 +217,31 @@ void test_spots(RealType)
       pdf(normal_distribution<RealType>(3, 5), static_cast<RealType>(3)),
       static_cast<RealType>(0.3989422804014326779399460599343818684759L / 5),
       tolerance);
+
+   //
+   // Tests for logpdf
+   //
+   RealType temp_tol = tolerance;
+
+   BOOST_IF_CONSTEXPR (std::is_same<long double, RealType>::value)
+   {
+      tolerance *= 100;
+   }
+
+   BOOST_CHECK_CLOSE(
+      logpdf(normal_distribution<RealType>(), static_cast<RealType>(0)),
+      log(static_cast<RealType>(0.3989422804014326779399460599343818684759L)), // 1/sqrt(2*pi)
+      tolerance);
+   BOOST_CHECK_CLOSE(
+      logpdf(normal_distribution<RealType>(3), static_cast<RealType>(3)),
+      log(static_cast<RealType>(0.3989422804014326779399460599343818684759L)),
+      tolerance);
+   BOOST_CHECK_CLOSE(
+      logpdf(normal_distribution<RealType>(3, 5), static_cast<RealType>(3)),
+      log(static_cast<RealType>(0.3989422804014326779399460599343818684759L / 5)),
+      tolerance);
+
+   tolerance = temp_tol;
 
    //
    // Spot checks for mean = -5, sd = 6:
@@ -307,6 +335,8 @@ void test_spots(RealType)
     
     BOOST_MATH_CHECK_THROW(pdf(normal_distribution<RealType>(0, 0), 0), std::domain_error);
     BOOST_MATH_CHECK_THROW(pdf(normal_distribution<RealType>(0, -1), 0), std::domain_error);
+    BOOST_MATH_CHECK_THROW(logpdf(normal_distribution<RealType>(0, 0), 0), std::domain_error);
+    BOOST_MATH_CHECK_THROW(logpdf(normal_distribution<RealType>(0, -1), 0), std::domain_error);
     BOOST_MATH_CHECK_THROW(quantile(normal_distribution<RealType>(0, 1), -1), std::domain_error);
     BOOST_MATH_CHECK_THROW(quantile(normal_distribution<RealType>(0, 1), 2), std::domain_error);
 } // template <class RealType>void test_spots(RealType)
