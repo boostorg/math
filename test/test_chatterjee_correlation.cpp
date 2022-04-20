@@ -7,7 +7,9 @@
 #include <vector>
 #include <random>
 #include <algorithm>
+#include <utility>
 #include <boost/math/statistics/chatterjee_correlation.hpp>
+#include <boost/math/tools/random_vector.hpp>
 #include "math_unit_test.hpp"
 
 // The Chatterjee correlation is invariant under:
@@ -76,6 +78,24 @@ void test_spots()
     CHECK_NAN(chatterjee_correlation(x, y));
 }
 
+#ifdef BOOST_MATH_EXEC_COMPATIBLE
+
+template <typename Real, typename ExecutionPolicy>
+void test_threaded(ExecutionPolicy&& exec)
+{
+    std::vector<Real> x = boost::math::generate_random_vector<Real>(1024, 0);
+    std::vector<Real> y = boost::math::generate_random_vector<Real>(1024, 1);
+
+    std::sort(std::forward<ExecutionPolicy>(exec), x.begin(), x.end());
+
+    auto seq_ans = chatterjee_correlation(x, y);
+    auto par_ans = chatterjee_correlation(exec, x, y);
+
+    CHECK_ULP_CLOSE(seq_ans, par_ans, 1);
+};
+
+#endif // BOOST_MATH_EXEC_COMPATIBLE
+
 int main(void)
 {
     properties<float>();
@@ -85,6 +105,17 @@ int main(void)
     test_spots<float>();
     test_spots<double>();
     test_spots<long double>();
+
+    #ifdef BOOST_MATH_EXEC_COMPATIBLE
+
+    test_threaded<float>(std::execution::par);
+    test_threaded<double>(std::execution::par);
+    test_threaded<long double>(std::execution::par);
+    test_threaded<float>(std::execution::par_unseq);
+    test_threaded<double>(std::execution::par_unseq);
+    test_threaded<long double>(std::execution::par_unseq);
+
+    #endif // BOOST_MATH_EXEC_COMPATIBLE
 
     return boost::math::test::report_errors();
 }

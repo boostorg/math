@@ -79,22 +79,6 @@ namespace boost::math::statistics {
 
 namespace detail {
 
-template <typename Real>
-struct rank_compare_value
-{
-    Real operator()(Real val_i, Real val_im1)
-    {
-        if (val_i > val_im1)
-        {
-            return val_i - val_im1;
-        }
-        else
-        {
-            return val_im1 - val_i;
-        }
-    }
-};
-
 template <typename ReturnType, typename ExecutionPolicy, typename ForwardIterator>
 ReturnType chatterjee_correlation_par_impl(ExecutionPolicy&& exec, ForwardIterator u_begin, ForwardIterator u_end,
                                                                    ForwardIterator v_begin, ForwardIterator v_end)
@@ -103,7 +87,20 @@ ReturnType chatterjee_correlation_par_impl(ExecutionPolicy&& exec, ForwardIterat
     BOOST_MATH_ASSERT_MSG(std::is_sorted(std::forward<ExecutionPolicy>(exec), u_begin, u_end), "The x values must be sorted in order to use this functionality");
 
     const auto rank_vector = rank(std::forward<ExecutionPolicy>(exec), v_begin, v_end);
-    std::size_t sum = std::reduce(std::forward<ExecutionPolicy>(exec), rank_vector.cbegin() + 1, rank_vector.cend(), rank_compare_value<ReturnType>());
+
+    std::size_t sum = 0;
+    for (std::size_t i = 1; i < rank_vector.size(); ++i)
+    {
+        // Equivalent to abs(rank_vector[i] - rank_vector[i-1]) but avoids unsigned underflow in the intermediate step
+        if (rank_vector[i] > rank_vector[i-1])
+        {
+            sum += rank_vector[i] - rank_vector[i-1];
+        }
+        else
+        {
+            sum += rank_vector[i-1] - rank_vector[i];
+        }
+    }
 
     ReturnType result = static_cast<ReturnType>(1) - (static_cast<ReturnType>(3 * sum) / static_cast<ReturnType>(rank_vector.size() * rank_vector.size() - 1));
 
