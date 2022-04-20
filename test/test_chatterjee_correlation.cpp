@@ -22,27 +22,28 @@ using boost::math::statistics::chatterjee_correlation;
 template <typename Real>
 void properties()
 {
+    std::size_t vector_size = 256;
     std::mt19937_64 mt(123521);
     std::uniform_real_distribution<Real> unif(-1, 1);
-    std::vector<Real> X(256);
-    std::vector<Real> Y(256);
+    std::vector<Real> X(vector_size);
+    std::vector<Real> Y(vector_size);
 
-    for (std::size_t i = 0; i < X.size(); ++i) 
+    for (std::size_t i = 0; i < vector_size; ++i) 
     {
         X[i] = unif(mt);
-	    Y[i] = unif(mt);
+        Y[i] = unif(mt);
     }
     std::sort(X.begin(), X.end());
     Real coeff1 = chatterjee_correlation(X, Y);
-    // "it is not very hard to prove that the minimum possible value of ξn(X, Y) is −1/2 + O(1/n)"
+    // "it is not very hard to prove that the minimum possible value of En(X, Y) is −1/2 + O(1/n)"
     CHECK_GE(coeff1, Real(-0.5));
     CHECK_LE(coeff1, Real(1));
 
     // Now apply a monotone function to the data
-    for (std::size_t i = 0; i < X.size(); ++i) 
+    for (std::size_t i = 0; i < vector_size; ++i) 
     {
-        X[i] = 2.3*X[i] - 7.3;
-	    Y[i] = 7.6*Y[i] - 8.6;
+        X[i] = Real(2.3)*X[i] - Real(7.3);
+        Y[i] = Real(7.6)*Y[i] - Real(8.6);
     }
     auto coeff3 = chatterjee_correlation(X, Y);
     CHECK_EQUAL(coeff1, coeff3);
