@@ -59,7 +59,16 @@
 #pragma GCC system_header
 #endif
 
-namespace boost{ namespace math{ namespace detail{
+namespace boost{ namespace math{ 
+   
+#ifdef BOOST_MATH_AS_MODULE
+BOOST_MATH_MODULE_EXPORT template <class T>
+typename tools::promote_args<T>::type erf(T z);
+BOOST_MATH_MODULE_EXPORT template <class T>
+typename tools::promote_args<T>::type erfc(T z);
+#endif
+   
+namespace detail{
 
 // This version will never be called (at runtime), it's a stub used
 // when T is unsuitable to be passed to these routines:

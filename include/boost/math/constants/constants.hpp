@@ -7,11 +7,11 @@
 #ifndef BOOST_MATH_CONSTANTS_CONSTANTS_INCLUDED
 #define BOOST_MATH_CONSTANTS_CONSTANTS_INCLUDED
 
+#ifndef BOOST_MATH_AS_MODULE
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/cxx03_warn.hpp>
 #include <boost/math/policies/policy.hpp>
 #include <boost/math/tools/precision.hpp>
-#include <boost/math/tools/convert_from_string.hpp>
 #ifdef _MSC_VER
 #pragma warning(push)
 #pragma warning(disable: 4127 4701)
@@ -21,6 +21,8 @@
 #endif
 #include <utility>
 #include <type_traits>
+#endif
+#include <boost/math/tools/convert_from_string.hpp>
 
 #if defined(__GNUC__) && defined(BOOST_MATH_USE_FLOAT128)
 //
@@ -50,7 +52,7 @@ namespace boost{ namespace math
     // (This is necessary because you can't use a numeric constant
     // since even a long double might not have enough digits).
 
-   enum construction_method
+   BOOST_MATH_MODULE_EXPORT enum construction_method
    {
       construct_from_float = 1,
       construct_from_double = 2,
@@ -71,7 +73,11 @@ namespace boost{ namespace math
    //
    // Max number of binary digits in the string representations of our constants:
    //
+#ifndef BOOST_MATH_AS_MODULE
    static constexpr int max_string_digits = (101 * 1000L) / 301L;
+#else
+   inline constexpr int max_string_digits = (101 * 1000L) / 301L;
+#endif
 
    template <typename Real, typename Policy>
    struct construction_traits
@@ -231,16 +237,16 @@ namespace boost{ namespace math
    \
    \
    /* The actual forwarding function: */ \
-   template <typename T, typename Policy> inline constexpr typename detail::constant_return<T, Policy>::type name(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(T) BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(Policy)) BOOST_MATH_NOEXCEPT(T)\
+   BOOST_MATH_MODULE_EXPORT template <typename T, typename Policy> inline constexpr typename detail::constant_return<T, Policy>::type name(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(T) BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(Policy)) BOOST_MATH_NOEXCEPT(T)\
    { return detail:: BOOST_JOIN(constant_, name)<T>::get(typename construction_traits<T, Policy>::type()); }\
-   template <typename T> inline constexpr typename detail::constant_return<T>::type name(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(T)) BOOST_MATH_NOEXCEPT(T)\
+   BOOST_MATH_MODULE_EXPORT template <typename T> inline constexpr typename detail::constant_return<T>::type name(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(T)) BOOST_MATH_NOEXCEPT(T)\
    { return name<T, boost::math::policies::policy<> >(); }\
    \
    \
    /* Now the namespace specific versions: */ \
-   } namespace float_constants{ static constexpr float name = BOOST_JOIN(x, F); }\
-   namespace double_constants{ static constexpr double name = x; } \
-   namespace long_double_constants{ static constexpr long double name = BOOST_JOIN(x, L); }\
+   } BOOST_MATH_MODULE_EXPORT namespace float_constants{ BOOST_MATH_STATIC_CONST float name = BOOST_JOIN(x, F); }\
+   BOOST_MATH_MODULE_EXPORT namespace double_constants{ BOOST_MATH_STATIC_CONST double name = x; } \
+   BOOST_MATH_MODULE_EXPORT namespace long_double_constants{ BOOST_MATH_STATIC_CONST long double name = BOOST_JOIN(x, L); }\
    namespace constants{
 
   BOOST_DEFINE_MATH_CONSTANT(half, 5.000000000000000000000000000000000000e-01, "5.00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000e-01")
@@ -327,7 +333,7 @@ namespace boost{ namespace math
   BOOST_DEFINE_MATH_CONSTANT(laplace_limit, 0.662743419349181580974742097109252907056233549115022417, "0.66274341934918158097474209710925290705623354911502241752039253499097185308651127724965480259895818168")
 #endif
 
-template <typename T>
+BOOST_MATH_MODULE_EXPORT template <typename T>
 inline constexpr T tau() {  return two_pi<T>(); }
 
 } // namespace constants

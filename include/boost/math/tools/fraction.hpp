@@ -10,11 +10,13 @@
 #pragma once
 #endif
 
-#include <boost/math/tools/precision.hpp>
 #include <boost/math/tools/complex.hpp>
+#ifndef BOOST_MATH_AS_MODULE
+#include <boost/math/tools/precision.hpp>
 #include <type_traits>
 #include <cstdint>
 #include <cmath>
+#endif
 
 namespace boost{ namespace math{ namespace tools{
 

@@ -12,13 +12,15 @@
 #pragma warning(disable:4702) // Unreachable code (release mode only warning)
 #endif
 
+#ifndef BOOST_MATH_AS_MODULE
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/tools/rational.hpp>
-#include <boost/math/tools/series.hpp>
-#include <boost/math/tools/promotion.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/constants/constants.hpp>
+#endif
+#include <boost/math/tools/series.hpp>
 #include <boost/math/tools/big_constant.hpp>
+#include <boost/math/tools/promotion.hpp>
 
 #if defined(__GNUC__) && defined(BOOST_MATH_USE_FLOAT128)
 //
@@ -583,7 +585,7 @@ const typename digamma_initializer<T, Policy>::init digamma_initializer<T, Polic
 
 } // namespace detail
 
-template <class T, class Policy>
+BOOST_MATH_MODULE_EXPORT template <class T, class Policy>
 inline typename tools::promote_args<T>::type 
    digamma(T x, const Policy&)
 {
@@ -611,7 +613,7 @@ inline typename tools::promote_args<T>::type
       static_cast<const tag_type*>(0), forwarding_policy()), "boost::math::digamma<%1%>(%1%)");
 }
 
-template <class T>
+BOOST_MATH_MODULE_EXPORT template <class T>
 inline typename tools::promote_args<T>::type 
    digamma(T x)
 {

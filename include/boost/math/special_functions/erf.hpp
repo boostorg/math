@@ -10,11 +10,13 @@
 #pragma once
 #endif
 
+#ifndef BOOST_MATH_AS_MODULE
 #include <boost/math/special_functions/math_fwd.hpp>
-#include <boost/math/tools/config.hpp>
-#include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/tools/roots.hpp>
 #include <boost/math/policies/error_handling.hpp>
+#endif
+#include <boost/math/tools/config.hpp>
+#include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/tools/big_constant.hpp>
 
 #if defined(__GNUC__) && defined(BOOST_MATH_USE_FLOAT128)
@@ -1175,7 +1177,7 @@ const typename erf_initializer<T, Policy, tag>::init erf_initializer<T, Policy, 
 
 } // namespace detail
 
-template <class T, class Policy>
+BOOST_MATH_MODULE_EXPORT template <class T, class Policy>
 inline typename tools::promote_args<T>::type erf(T z, const Policy& /* pol */)
 {
    typedef typename tools::promote_args<T>::type result_type;
@@ -1210,7 +1212,7 @@ inline typename tools::promote_args<T>::type erf(T z, const Policy& /* pol */)
       tag_type()), "boost::math::erf<%1%>(%1%, %1%)");
 }
 
-template <class T, class Policy>
+BOOST_MATH_MODULE_EXPORT template <class T, class Policy>
 inline typename tools::promote_args<T>::type erfc(T z, const Policy& /* pol */)
 {
    typedef typename tools::promote_args<T>::type result_type;
@@ -1245,13 +1247,13 @@ inline typename tools::promote_args<T>::type erfc(T z, const Policy& /* pol */)
       tag_type()), "boost::math::erfc<%1%>(%1%, %1%)");
 }
 
-template <class T>
+BOOST_MATH_MODULE_EXPORT template <class T>
 inline typename tools::promote_args<T>::type erf(T z)
 {
    return boost::math::erf(z, policies::policy<>());
 }
 
-template <class T>
+BOOST_MATH_MODULE_EXPORT template <class T>
 inline typename tools::promote_args<T>::type erfc(T z)
 {
    return boost::math::erfc(z, policies::policy<>());

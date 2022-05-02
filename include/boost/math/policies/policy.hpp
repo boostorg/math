@@ -7,6 +7,7 @@
 #ifndef BOOST_MATH_POLICY_HPP
 #define BOOST_MATH_POLICY_HPP
 
+#ifndef BOOST_MATH_AS_MODULE
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/mp.hpp>
 #include <limits>
@@ -14,6 +15,7 @@
 #include <cmath>
 #include <cstdint>
 #include <cstddef>
+#endif
 
 namespace boost{ namespace math{ 
 
@@ -21,9 +23,9 @@ namespace mp = tools::meta_programming;
 
 namespace tools{
 
-template <class T>
+BOOST_MATH_MODULE_EXPORT template <class T>
 constexpr int digits(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T)) noexcept;
-template <class T>
+BOOST_MATH_MODULE_EXPORT template <class T>
 constexpr T epsilon(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T)) noexcept(std::is_floating_point<T>::value);
 
 }
@@ -106,7 +108,7 @@ namespace policies{
 #endif
 
 #define BOOST_MATH_META_INT(Type, name, Default)                                                \
-   template <Type N = Default>                                                                  \
+   BOOST_MATH_MODULE_EXPORT template <Type N = Default>                                                                  \
    class name : public std::integral_constant<int, N>{};                                        \
                                                                                                 \
    namespace detail{                                                                            \
@@ -135,7 +137,7 @@ namespace policies{
    };
 
 #define BOOST_MATH_META_BOOL(name, Default)                                                     \
-   template <bool N = Default>                                                                  \
+   BOOST_MATH_MODULE_EXPORT template <bool N = Default>                                                                  \
    class name : public std::integral_constant<bool, N>{};                                       \
                                                                                                 \
    namespace detail{                                                                            \
@@ -166,7 +168,7 @@ namespace policies{
 //
 // Begin by defining policy types for error handling:
 //
-enum error_policy_type
+BOOST_MATH_MODULE_EXPORT enum error_policy_type
 {
    throw_on_error = 0,
    errno_on_error = 1,
@@ -192,7 +194,7 @@ BOOST_MATH_META_BOOL(assert_undefined, BOOST_MATH_ASSERT_UNDEFINED_POLICY)
 //
 // Policy types for discrete quantiles:
 //
-enum discrete_quantile_policy_type
+BOOST_MATH_MODULE_EXPORT enum discrete_quantile_policy_type
 {
    real,
    integer_round_outwards,
@@ -220,7 +222,7 @@ BOOST_MATH_META_INT(unsigned long, max_root_iterations, BOOST_MATH_MAX_ROOT_ITER
    BOOST_PARAMETER_TEMPLATE_KEYWORD(name##_name)\
    BOOST_PARAMETER_NAME(name##_name)
 
-struct default_policy{};
+BOOST_MATH_MODULE_EXPORT struct default_policy{};
 
 namespace detail{
 //
@@ -342,7 +344,8 @@ typedef default_args<BOOST_MATH_PROMOTE_FLOAT_POLICY, BOOST_MATH_PROMOTE_DOUBLE_
 // Now define the policy type with enough arguments to handle all
 // the policies:
 //
-template <typename A1  = default_policy, 
+BOOST_MATH_MODULE_EXPORT 
+template <typename A1  = default_policy,
           typename A2  = default_policy, 
           typename A3  = default_policy,
           typename A4  = default_policy,
@@ -441,6 +444,7 @@ public:
 // template instantiations that have to take place when using the default
 // policies, they have quite a large impact on compile times:
 //
+BOOST_MATH_MODULE_EXPORT 
 template <>
 class policy<default_policy, default_policy, default_policy, default_policy, default_policy, default_policy, default_policy, default_policy, default_policy, default_policy, default_policy>
 {
@@ -466,6 +470,7 @@ public:
    using max_root_iterations_type = max_root_iterations<>;
 };
 
+BOOST_MATH_MODULE_EXPORT
 template <>
 struct policy<detail::forwarding_arg1, detail::forwarding_arg2, default_policy, default_policy, default_policy, default_policy, default_policy, default_policy, default_policy, default_policy, default_policy>
 {
@@ -491,7 +496,8 @@ public:
    using max_root_iterations_type = max_root_iterations<>;
 };
 
-template <typename Policy, 
+BOOST_MATH_MODULE_EXPORT 
+template <typename Policy,
           typename A1  = default_policy, 
           typename A2  = default_policy, 
           typename A3  = default_policy,
@@ -606,6 +612,7 @@ public:
 };
 
 // Full specialisation to speed up compilation of the common case:
+BOOST_MATH_MODULE_EXPORT 
 template <>
 struct normalise<policy<>, 
           promote_float<false>, 
@@ -623,6 +630,7 @@ struct normalise<policy<>,
    using type = policy<detail::forwarding_arg1, detail::forwarding_arg2>;
 };
 
+BOOST_MATH_MODULE_EXPORT 
 template <>
 struct normalise<policy<detail::forwarding_arg1, detail::forwarding_arg2>,
           promote_float<false>,
@@ -640,80 +648,80 @@ struct normalise<policy<detail::forwarding_arg1, detail::forwarding_arg2>,
    using type = policy<detail::forwarding_arg1, detail::forwarding_arg2>;
 };
 
-inline constexpr policy<> make_policy() noexcept
+BOOST_MATH_MODULE_EXPORT inline constexpr policy<> make_policy() noexcept
 { return policy<>(); }
 
-template <class A1>
+BOOST_MATH_MODULE_EXPORT template <class A1>
 inline constexpr typename normalise<policy<>, A1>::type make_policy(const A1&) noexcept
 { 
    typedef typename normalise<policy<>, A1>::type result_type;
    return result_type(); 
 }
 
-template <class A1, class A2>
+BOOST_MATH_MODULE_EXPORT template <class A1, class A2>
 inline constexpr typename normalise<policy<>, A1, A2>::type make_policy(const A1&, const A2&) noexcept
 { 
    typedef typename normalise<policy<>, A1, A2>::type result_type;
    return result_type(); 
 }
 
-template <class A1, class A2, class A3>
+BOOST_MATH_MODULE_EXPORT template <class A1, class A2, class A3>
 inline constexpr typename normalise<policy<>, A1, A2, A3>::type make_policy(const A1&, const A2&, const A3&) noexcept
 { 
    typedef typename normalise<policy<>, A1, A2, A3>::type result_type;
    return result_type(); 
 }
 
-template <class A1, class A2, class A3, class A4>
+BOOST_MATH_MODULE_EXPORT template <class A1, class A2, class A3, class A4>
 inline constexpr typename normalise<policy<>, A1, A2, A3, A4>::type make_policy(const A1&, const A2&, const A3&, const A4&) noexcept
 { 
    typedef typename normalise<policy<>, A1, A2, A3, A4>::type result_type;
    return result_type(); 
 }
 
-template <class A1, class A2, class A3, class A4, class A5>
+BOOST_MATH_MODULE_EXPORT template <class A1, class A2, class A3, class A4, class A5>
 inline constexpr typename normalise<policy<>, A1, A2, A3, A4, A5>::type make_policy(const A1&, const A2&, const A3&, const A4&, const A5&) noexcept
 { 
    typedef typename normalise<policy<>, A1, A2, A3, A4, A5>::type result_type;
    return result_type(); 
 }
 
-template <class A1, class A2, class A3, class A4, class A5, class A6>
+BOOST_MATH_MODULE_EXPORT template <class A1, class A2, class A3, class A4, class A5, class A6>
 inline constexpr typename normalise<policy<>, A1, A2, A3, A4, A5, A6>::type make_policy(const A1&, const A2&, const A3&, const A4&, const A5&, const A6&) noexcept
 { 
    typedef typename normalise<policy<>, A1, A2, A3, A4, A5, A6>::type result_type;
    return result_type(); 
 }
 
-template <class A1, class A2, class A3, class A4, class A5, class A6, class A7>
+BOOST_MATH_MODULE_EXPORT template <class A1, class A2, class A3, class A4, class A5, class A6, class A7>
 inline constexpr typename normalise<policy<>, A1, A2, A3, A4, A5, A6, A7>::type make_policy(const A1&, const A2&, const A3&, const A4&, const A5&, const A6&, const A7&) noexcept
 { 
    typedef typename normalise<policy<>, A1, A2, A3, A4, A5, A6, A7>::type result_type;
    return result_type(); 
 }
 
-template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
+BOOST_MATH_MODULE_EXPORT template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
 inline constexpr typename normalise<policy<>, A1, A2, A3, A4, A5, A6, A7, A8>::type make_policy(const A1&, const A2&, const A3&, const A4&, const A5&, const A6&, const A7&, const A8&) noexcept
 { 
    typedef typename normalise<policy<>, A1, A2, A3, A4, A5, A6, A7, A8>::type result_type;
    return result_type(); 
 }
 
-template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
+BOOST_MATH_MODULE_EXPORT template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
 inline constexpr typename normalise<policy<>, A1, A2, A3, A4, A5, A6, A7, A8, A9>::type make_policy(const A1&, const A2&, const A3&, const A4&, const A5&, const A6&, const A7&, const A8&, const A9&) noexcept
 { 
    typedef typename normalise<policy<>, A1, A2, A3, A4, A5, A6, A7, A8, A9>::type result_type;
    return result_type(); 
 }
 
-template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
+BOOST_MATH_MODULE_EXPORT template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
 inline constexpr typename normalise<policy<>, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10>::type make_policy(const A1&, const A2&, const A3&, const A4&, const A5&, const A6&, const A7&, const A8&, const A9&, const A10&) noexcept
 { 
    typedef typename normalise<policy<>, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10>::type result_type;
    return result_type(); 
 }
 
-template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
+BOOST_MATH_MODULE_EXPORT template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
 inline constexpr typename normalise<policy<>, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11>::type make_policy(const A1&, const A2&, const A3&, const A4&, const A5&, const A6&, const A7&, const A8&, const A9&, const A10&, const A11&) noexcept
 {
    typedef typename normalise<policy<>, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11>::type result_type;
@@ -723,25 +731,25 @@ inline constexpr typename normalise<policy<>, A1, A2, A3, A4, A5, A6, A7, A8, A9
 //
 // Traits class to handle internal promotion:
 //
-template <class Real, class Policy>
+BOOST_MATH_MODULE_EXPORT template <class Real, class Policy>
 struct evaluation
 {
    typedef Real type;
 };
 
-template <class Policy>
+BOOST_MATH_MODULE_EXPORT template <class Policy>
 struct evaluation<float, Policy>
 {
    using type = typename std::conditional<Policy::promote_float_type::value, double, float>::type;
 };
 
-template <class Policy>
+BOOST_MATH_MODULE_EXPORT template <class Policy>
 struct evaluation<double, Policy>
 {
    using type = typename std::conditional<Policy::promote_double_type::value, long double, double>::type;
 };
 
-template <class Real, class Policy>
+BOOST_MATH_MODULE_EXPORT template <class Real, class Policy>
 struct precision
 {
    static_assert((std::numeric_limits<Real>::radix == 2) || ((std::numeric_limits<Real>::is_specialized == 0) || (std::numeric_limits<Real>::digits == 0)),
@@ -782,7 +790,7 @@ struct precision
 
 #ifdef BOOST_MATH_USE_FLOAT128
 
-template <class Policy>
+BOOST_MATH_MODULE_EXPORT template <class Policy>
 struct precision<BOOST_MATH_FLOAT128_TYPE, Policy>
 {
    typedef std::integral_constant<int, 113> type;
@@ -808,26 +816,26 @@ inline constexpr int digits_imp(std::false_type const&) noexcept
 
 } // namespace detail
 
-template <class T, class Policy>
+BOOST_MATH_MODULE_EXPORT template <class T, class Policy>
 inline constexpr int digits(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T)) noexcept
 {
    typedef std::integral_constant<bool, std::numeric_limits<T>::is_specialized > tag_type;
    return detail::digits_imp<T, Policy>(tag_type());
 }
-template <class T, class Policy>
+BOOST_MATH_MODULE_EXPORT template <class T, class Policy>
 inline constexpr int digits_base10(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T)) noexcept
 {
    return boost::math::policies::digits<T, Policy>() * 301 / 1000L;
 }
 
-template <class Policy>
+BOOST_MATH_MODULE_EXPORT template <class Policy>
 inline constexpr unsigned long get_max_series_iterations() noexcept
 {
    typedef typename Policy::max_series_iterations_type iter_type;
    return iter_type::value;
 }
 
-template <class Policy>
+BOOST_MATH_MODULE_EXPORT template <class Policy>
 inline constexpr unsigned long get_max_root_iterations() noexcept
 {
    typedef typename Policy::max_root_iterations_type iter_type;
@@ -890,7 +898,7 @@ inline constexpr T get_epsilon_imp(std::false_type const&) noexcept(std::is_floa
 
 } // namespace detail
 
-template <class T, class Policy>
+BOOST_MATH_MODULE_EXPORT template <class T, class Policy>
 inline constexpr T get_epsilon(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T)) noexcept(std::is_floating_point<T>::value)
 {
    typedef std::integral_constant<bool, (std::numeric_limits<T>::is_specialized && (std::numeric_limits<T>::radix == 2)) > tag_type;
@@ -922,7 +930,7 @@ public:
 
 }
 
-template <typename P>
+BOOST_MATH_MODULE_EXPORT template <typename P>
 class is_policy
 {
 public:
@@ -933,7 +941,7 @@ public:
 //
 // Helper traits class for distribution error handling:
 //
-template <class Policy>
+BOOST_MATH_MODULE_EXPORT template <class Policy>
 struct constructor_error_check
 {
    using domain_error_type = typename Policy::domain_error_type;
@@ -943,7 +951,7 @@ struct constructor_error_check
       std::false_type>::type;
 };
 
-template <class Policy>
+BOOST_MATH_MODULE_EXPORT template <class Policy>
 struct method_error_check
 {
    using domain_error_type = typename Policy::domain_error_type;
@@ -955,7 +963,7 @@ struct method_error_check
 //
 // Does the Policy ever throw on error?
 //
-template <class Policy>
+BOOST_MATH_MODULE_EXPORT template <class Policy>
 struct is_noexcept_error_policy
 {
    typedef typename Policy::domain_error_type               t1;

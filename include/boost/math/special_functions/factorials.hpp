@@ -10,24 +10,19 @@
 #pragma once
 #endif
 
+#ifndef BOOST_MATH_AS_MODULE
 #include <boost/math/special_functions/math_fwd.hpp>
-#include <boost/math/special_functions/gamma.hpp>
-#include <boost/math/special_functions/detail/unchecked_factorial.hpp>
 #include <array>
-#ifdef _MSC_VER
-#pragma warning(push) // Temporary until lexical cast fixed.
-#pragma warning(disable: 4127 4701)
-#endif
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
 #include <type_traits>
 #include <cmath>
+#endif
+#include <boost/math/special_functions/gamma.hpp>
+#include <boost/math/special_functions/detail/unchecked_factorial.hpp>
 
 namespace boost { namespace math
 {
 
-template <class T, class Policy>
+BOOST_MATH_MODULE_EXPORT template <class T, class Policy>
 inline T factorial(unsigned i, const Policy& pol)
 {
    static_assert(!std::is_integral<T>::value, "Type T must not be an integral type");
@@ -48,7 +43,7 @@ inline T factorial(unsigned i, const Policy& pol)
    return floor(result + 0.5f);
 }
 
-template <class T>
+BOOST_MATH_MODULE_EXPORT template <class T>
 inline T factorial(unsigned i)
 {
    return factorial<T>(i, policies::policy<>());
@@ -71,7 +66,7 @@ inline double factorial<double>(unsigned i)
    return tools::overflow_error<double>(BOOST_CURRENT_FUNCTION);
 }
 */
-template <class T, class Policy>
+BOOST_MATH_MODULE_EXPORT template <class T, class Policy>
 T double_factorial(unsigned i, const Policy& pol)
 {
    static_assert(!std::is_integral<T>::value, "Type T must not be an integral type");
@@ -106,7 +101,7 @@ T double_factorial(unsigned i, const Policy& pol)
    return policies::raise_overflow_error<T>("boost::math::double_factorial<%1%>(unsigned)", 0, pol);
 }
 
-template <class T>
+BOOST_MATH_MODULE_EXPORT template <class T>
 inline T double_factorial(unsigned i)
 {
    return double_factorial<T>(i, policies::policy<>());
@@ -226,7 +221,7 @@ inline T falling_factorial_imp(T x, unsigned n, const Policy& pol)
 
 } // namespace detail
 
-template <class RT>
+BOOST_MATH_MODULE_EXPORT template <class RT>
 inline typename tools::promote_args<RT>::type
    falling_factorial(RT x, unsigned n)
 {
@@ -235,7 +230,7 @@ inline typename tools::promote_args<RT>::type
       static_cast<result_type>(x), n, policies::policy<>());
 }
 
-template <class RT, class Policy>
+BOOST_MATH_MODULE_EXPORT template <class RT, class Policy>
 inline typename tools::promote_args<RT>::type
    falling_factorial(RT x, unsigned n, const Policy& pol)
 {
@@ -244,7 +239,7 @@ inline typename tools::promote_args<RT>::type
       static_cast<result_type>(x), n, pol);
 }
 
-template <class RT>
+BOOST_MATH_MODULE_EXPORT template <class RT>
 inline typename tools::promote_args<RT>::type
    rising_factorial(RT x, int n)
 {
@@ -253,7 +248,7 @@ inline typename tools::promote_args<RT>::type
       static_cast<result_type>(x), n, policies::policy<>());
 }
 
-template <class RT, class Policy>
+BOOST_MATH_MODULE_EXPORT template <class RT, class Policy>
 inline typename tools::promote_args<RT>::type
    rising_factorial(RT x, int n, const Policy& pol)
 {

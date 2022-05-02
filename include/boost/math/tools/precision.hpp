@@ -10,14 +10,16 @@
 #pragma once
 #endif
 
+#ifndef BOOST_MATH_AS_MODULE
 #include <boost/math/tools/assert.hpp>
-#include <boost/math/policies/policy.hpp>
 #include <type_traits>
 #include <limits>
 #include <climits>
 #include <cmath>
 #include <cstdint>
 #include <cfloat> // LDBL_MANT_DIG
+#include <boost/math/policies/policy.hpp>
+#endif
 
 namespace boost{ namespace math
 {
@@ -35,7 +37,7 @@ namespace tools
 // template <> NTL::RR max_value<NTL::RR> ...
 // See  Conceptual Requirements for Real Number Types.
 
-template <class T>
+BOOST_MATH_MODULE_EXPORT template <class T>
 inline constexpr int digits(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(T)) noexcept
 {
    static_assert( ::std::numeric_limits<T>::is_specialized, "Type T must be specialized");
@@ -46,7 +48,7 @@ inline constexpr int digits(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(T)) noexcept
       : ((std::numeric_limits<T>::digits + 1) * 1000L) / 301L;
 }
 
-template <class T>
+BOOST_MATH_MODULE_EXPORT template <class T>
 inline constexpr T max_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T))  noexcept(std::is_floating_point<T>::value)
 {
    static_assert( ::std::numeric_limits<T>::is_specialized, "Type T must be specialized");
@@ -54,7 +56,7 @@ inline constexpr T max_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T))  noexcept(std
 } // Also used as a finite 'infinite' value for - and +infinity, for example:
 // -max_value<double> = -1.79769e+308, max_value<double> = 1.79769e+308.
 
-template <class T>
+BOOST_MATH_MODULE_EXPORT template <class T>
 inline constexpr T min_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T)) noexcept(std::is_floating_point<T>::value)
 {
    static_assert( ::std::numeric_limits<T>::is_specialized, "Type T must be specialized");
@@ -199,7 +201,7 @@ struct log_limit_noexcept_traits : public log_limit_noexcept_traits_imp<T, std::
 #pragma warning(disable:4309)
 #endif
 
-template <class T>
+BOOST_MATH_MODULE_EXPORT template <class T>
 inline constexpr T log_max_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T)) noexcept(detail::log_limit_noexcept_traits<T>::value)
 {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
@@ -212,7 +214,7 @@ inline constexpr T log_max_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T)) noexcept(
 #endif
 }
 
-template <class T>
+BOOST_MATH_MODULE_EXPORT template <class T>
 inline constexpr T log_min_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T)) noexcept(detail::log_limit_noexcept_traits<T>::value)
 {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
@@ -229,7 +231,7 @@ inline constexpr T log_min_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T)) noexcept(
 #pragma warning(pop)
 #endif
 
-template <class T>
+BOOST_MATH_MODULE_EXPORT template <class T>
 inline constexpr T epsilon(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(T)) noexcept(std::is_floating_point<T>::value)
 {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
@@ -369,19 +371,19 @@ struct root_epsilon_traits
 
 }
 
-template <class T>
+BOOST_MATH_MODULE_EXPORT template <class T>
 inline constexpr T root_epsilon() noexcept(std::is_floating_point<T>::value && detail::root_epsilon_traits<T>::has_noexcept)
 {
    return detail::root_epsilon_imp(static_cast<T const*>(0), typename detail::root_epsilon_traits<T>::tag_type());
 }
 
-template <class T>
+BOOST_MATH_MODULE_EXPORT template <class T>
 inline constexpr T cbrt_epsilon() noexcept(std::is_floating_point<T>::value && detail::root_epsilon_traits<T>::has_noexcept)
 {
    return detail::cbrt_epsilon_imp(static_cast<T const*>(0), typename detail::root_epsilon_traits<T>::tag_type());
 }
 
-template <class T>
+BOOST_MATH_MODULE_EXPORT template <class T>
 inline constexpr T forth_root_epsilon() noexcept(std::is_floating_point<T>::value && detail::root_epsilon_traits<T>::has_noexcept)
 {
    return detail::forth_root_epsilon_imp(static_cast<T const*>(0), typename detail::root_epsilon_traits<T>::tag_type());

@@ -12,12 +12,12 @@
 #ifndef BOOST_MATH_POW_HPP
 #define BOOST_MATH_POW_HPP
 
-
+#ifndef BOOST_MATH_AS_MODULE
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/policies/policy.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/tools/promotion.hpp>
-
+#endif
 
 namespace boost {
 namespace math {
@@ -119,14 +119,14 @@ struct select_power_if_positive
 }  // namespace detail
 
 
-template <int N, typename T, class Policy>
+BOOST_MATH_MODULE_EXPORT template <int N, typename T, class Policy>
 BOOST_CXX14_CONSTEXPR inline typename tools::promote_args<T>::type pow(T base, const Policy& policy)
 { 
    using result_type = typename tools::promote_args<T>::type;
    return detail::select_power_if_positive<N>::type::result(static_cast<result_type>(base), policy); 
 }
 
-template <int N, typename T>
+BOOST_MATH_MODULE_EXPORT template <int N, typename T>
 BOOST_CXX14_CONSTEXPR inline typename tools::promote_args<T>::type pow(T base)
 { return pow<N>(base, policies::policy<>()); }
 

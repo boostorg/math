@@ -13,8 +13,10 @@
 #pragma once
 #endif
 
+#ifndef BOOST_MATH_STANDALONE
 #include <boost/math/tools/config.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
+#endif
 #include <boost/math/special_functions/detail/fp_traits.hpp>
 
 namespace boost{ namespace math{ 
@@ -150,7 +152,7 @@ namespace detail {
 
 }   // namespace detail
 
-template<class T> int (signbit)(T x)
+BOOST_MATH_MODULE_EXPORT template<class T> int (signbit)(T x)
 { 
    typedef typename detail::fp_traits<T>::type traits;
    typedef typename traits::method method;
@@ -159,13 +161,13 @@ template<class T> int (signbit)(T x)
    return detail::signbit_impl(static_cast<result_type>(x), method());
 }
 
-template <class T>
+BOOST_MATH_MODULE_EXPORT template <class T>
 inline int sign BOOST_NO_MACRO_EXPAND(const T& z)
 {
    return (z == 0) ? 0 : (boost::math::signbit)(z) ? -1 : 1;
 }
 
-template <class T> typename tools::promote_args_permissive<T>::type (changesign)(const T& x)
+BOOST_MATH_MODULE_EXPORT template <class T> typename tools::promote_args_permissive<T>::type (changesign)(const T& x)
 { //!< \brief return unchanged binary pattern of x, except for change of sign bit. 
    typedef typename detail::fp_traits<T>::sign_change_type traits;
    typedef typename traits::method method;
@@ -175,7 +177,7 @@ template <class T> typename tools::promote_args_permissive<T>::type (changesign)
    return detail::changesign_impl(static_cast<result_type>(x), method());
 }
 
-template <class T, class U>
+BOOST_MATH_MODULE_EXPORT template <class T, class U>
 inline typename tools::promote_args_permissive<T, U>::type 
    copysign BOOST_NO_MACRO_EXPAND(const T& x, const U& y)
 {

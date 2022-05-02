@@ -10,16 +10,18 @@
 #pragma once
 #endif
 
+#ifndef BOOST_MATH_AS_MODULE
 #include <cmath>
 #include <cstdint>
 #include <limits>
-#include <boost/math/tools/config.hpp>
-#include <boost/math/tools/series.hpp>
-#include <boost/math/tools/precision.hpp>
-#include <boost/math/tools/big_constant.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/tools/rational.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
+#include <boost/math/tools/precision.hpp>
+#endif
+#include <boost/math/tools/config.hpp>
+#include <boost/math/tools/series.hpp>
+#include <boost/math/tools/big_constant.hpp>
 #include <boost/math/tools/assert.hpp>
 
 #if defined(__GNUC__) && defined(BOOST_MATH_USE_FLOAT128)
@@ -258,7 +260,7 @@ T expm1_imp(T x, const std::integral_constant<int, 113>&, const P& pol)
 
 } // namespace detail
 
-template <class T, class Policy>
+BOOST_MATH_MODULE_EXPORT template <class T, class Policy>
 inline typename tools::promote_args<T>::type expm1(T x, const Policy& /* pol */)
 {
    typedef typename tools::promote_args<T>::type result_type;
@@ -294,17 +296,17 @@ inline typename tools::promote_args<T>::type expm1(T x, const Policy& /* pol */)
 
 #if defined(BOOST_HAS_EXPM1) && !(defined(__osf__) && defined(__DECCXX_VER))
 #  ifdef BOOST_MATH_USE_C99
-inline float expm1(float x, const policies::policy<>&){ return ::expm1f(x); }
+BOOST_MATH_MODULE_EXPORT inline float expm1(float x, const policies::policy<>&){ return ::expm1f(x); }
 #     ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-inline long double expm1(long double x, const policies::policy<>&){ return ::expm1l(x); }
+BOOST_MATH_MODULE_EXPORT inline long double expm1(long double x, const policies::policy<>&){ return ::expm1l(x); }
 #     endif
 #  else
-inline float expm1(float x, const policies::policy<>&){ return static_cast<float>(::expm1(x)); }
+BOOST_MATH_MODULE_EXPORT inline float expm1(float x, const policies::policy<>&){ return static_cast<float>(::expm1(x)); }
 #  endif
-inline double expm1(double x, const policies::policy<>&){ return ::expm1(x); }
+BOOST_MATH_MODULE_EXPORT inline double expm1(double x, const policies::policy<>&){ return ::expm1(x); }
 #endif
 
-template <class T>
+BOOST_MATH_MODULE_EXPORT template <class T>
 inline typename tools::promote_args<T>::type expm1(T x)
 {
    return expm1(x, policies::policy<>());

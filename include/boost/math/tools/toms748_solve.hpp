@@ -14,9 +14,11 @@
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/tools/config.hpp>
 #include <boost/math/special_functions/sign.hpp>
+#ifndef BOOST_MATH_AS_MODULE
 #include <limits>
 #include <utility>
 #include <cstdint>
+#endif
 
 #ifdef BOOST_MATH_LOG_ROOT_ITERATIONS
 #  define BOOST_MATH_LOGGER_INCLUDE <boost/math/tools/iteration_logger.hpp>
@@ -28,7 +30,7 @@
 
 namespace boost{ namespace math{ namespace tools{
 
-template <class T>
+BOOST_MATH_MODULE_EXPORT template <class T>
 class eps_tolerance
 {
 public:
@@ -50,7 +52,7 @@ private:
    T eps;
 };
 
-struct equal_floor
+BOOST_MATH_MODULE_EXPORT struct equal_floor
 {
    equal_floor(){}
    template <class T>
@@ -61,7 +63,7 @@ struct equal_floor
    }
 };
 
-struct equal_ceil
+BOOST_MATH_MODULE_EXPORT struct equal_ceil
 {
    equal_ceil(){}
    template <class T>
@@ -72,7 +74,7 @@ struct equal_ceil
    }
 };
 
-struct equal_nearest_integer
+BOOST_MATH_MODULE_EXPORT struct equal_nearest_integer
 {
    equal_nearest_integer(){}
    template <class T>
@@ -292,7 +294,7 @@ T cubic_interpolate(const T& a, const T& b, const T& d,
 
 } // namespace detail
 
-template <class F, class T, class Tol, class Policy>
+BOOST_MATH_MODULE_EXPORT template <class F, class T, class Tol, class Policy>
 std::pair<T, T> toms748_solve(F f, const T& ax, const T& bx, const T& fax, const T& fbx, Tol tol, std::uintmax_t& max_iter, const Policy& pol)
 {
    //
@@ -475,13 +477,13 @@ std::pair<T, T> toms748_solve(F f, const T& ax, const T& bx, const T& fax, const
    return std::make_pair(a, b);
 }
 
-template <class F, class T, class Tol>
+BOOST_MATH_MODULE_EXPORT template <class F, class T, class Tol>
 inline std::pair<T, T> toms748_solve(F f, const T& ax, const T& bx, const T& fax, const T& fbx, Tol tol, std::uintmax_t& max_iter)
 {
    return toms748_solve(f, ax, bx, fax, fbx, tol, max_iter, policies::policy<>());
 }
 
-template <class F, class T, class Tol, class Policy>
+BOOST_MATH_MODULE_EXPORT template <class F, class T, class Tol, class Policy>
 inline std::pair<T, T> toms748_solve(F f, const T& ax, const T& bx, Tol tol, std::uintmax_t& max_iter, const Policy& pol)
 {
    if (max_iter <= 2)
@@ -492,13 +494,13 @@ inline std::pair<T, T> toms748_solve(F f, const T& ax, const T& bx, Tol tol, std
    return r;
 }
 
-template <class F, class T, class Tol>
+BOOST_MATH_MODULE_EXPORT template <class F, class T, class Tol>
 inline std::pair<T, T> toms748_solve(F f, const T& ax, const T& bx, Tol tol, std::uintmax_t& max_iter)
 {
    return toms748_solve(f, ax, bx, tol, max_iter, policies::policy<>());
 }
 
-template <class F, class T, class Tol, class Policy>
+BOOST_MATH_MODULE_EXPORT template <class F, class T, class Tol, class Policy>
 std::pair<T, T> bracket_and_solve_root(F f, const T& guess, T factor, bool rising, Tol tol, std::uintmax_t& max_iter, const Policy& pol)
 {
    BOOST_MATH_STD_USING
@@ -607,7 +609,7 @@ std::pair<T, T> bracket_and_solve_root(F f, const T& guess, T factor, bool risin
    return r;
 }
 
-template <class F, class T, class Tol>
+BOOST_MATH_MODULE_EXPORT template <class F, class T, class Tol>
 inline std::pair<T, T> bracket_and_solve_root(F f, const T& guess, const T& factor, bool rising, Tol tol, std::uintmax_t& max_iter)
 {
    return bracket_and_solve_root(f, guess, factor, rising, tol, max_iter, policies::policy<>());

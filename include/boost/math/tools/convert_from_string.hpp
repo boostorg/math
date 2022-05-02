@@ -10,9 +10,11 @@
 #pragma once
 #endif
 
+#ifndef BOOST_MATH_AS_MODULE
 #include <type_traits>
 #ifndef BOOST_MATH_STANDALONE
 #include <boost/lexical_cast.hpp>
+#endif
 #endif
 
 namespace boost{ namespace math{ namespace tools{

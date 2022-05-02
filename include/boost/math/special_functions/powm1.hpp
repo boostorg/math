@@ -12,10 +12,12 @@
 #pragma warning(disable:4702) // Unreachable code (release mode only warning)
 #endif
 
+#ifndef BOOST_MATH_AS_MODULE
+#include <boost/math/special_functions/trunc.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
+#endif
 #include <boost/math/special_functions/log1p.hpp>
 #include <boost/math/special_functions/expm1.hpp>
-#include <boost/math/special_functions/trunc.hpp>
 #include <boost/math/tools/assert.hpp>
 
 namespace boost{ namespace math{ namespace detail{
@@ -53,7 +55,7 @@ inline T powm1_imp(const T x, const T y, const Policy& pol)
 
 } // detail
 
-template <class T1, class T2>
+BOOST_MATH_MODULE_EXPORT template <class T1, class T2>
 inline typename tools::promote_args<T1, T2>::type 
    powm1(const T1 a, const T2 z)
 {
@@ -61,7 +63,7 @@ inline typename tools::promote_args<T1, T2>::type
    return detail::powm1_imp(static_cast<result_type>(a), static_cast<result_type>(z), policies::policy<>());
 }
 
-template <class T1, class T2, class Policy>
+BOOST_MATH_MODULE_EXPORT template <class T1, class T2, class Policy>
 inline typename tools::promote_args<T1, T2>::type 
    powm1(const T1 a, const T2 z, const Policy& pol)
 {

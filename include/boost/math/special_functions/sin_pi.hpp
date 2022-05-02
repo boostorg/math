@@ -10,13 +10,15 @@
 #pragma once
 #endif
 
+#ifndef BOOST_MATH_AS_MODULE
 #include <cmath>
 #include <limits>
-#include <boost/math/tools/config.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/trunc.hpp>
-#include <boost/math/tools/promotion.hpp>
 #include <boost/math/constants/constants.hpp>
+#endif
+#include <boost/math/tools/config.hpp>
+#include <boost/math/tools/promotion.hpp>
 
 namespace boost{ namespace math{ namespace detail{
 
@@ -55,7 +57,7 @@ inline T sin_pi_imp(T x, const Policy& pol)
 
 } // namespace detail
 
-template <class T, class Policy>
+BOOST_MATH_MODULE_EXPORT template <class T, class Policy>
 inline typename tools::promote_args<T>::type sin_pi(T x, const Policy&)
 {
    typedef typename tools::promote_args<T>::type result_type;
@@ -72,7 +74,7 @@ inline typename tools::promote_args<T>::type sin_pi(T x, const Policy&)
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(boost::math::detail::sin_pi_imp<value_type>(x, forwarding_policy()), "sin_pi");
 }
 
-template <class T>
+BOOST_MATH_MODULE_EXPORT template <class T>
 inline typename tools::promote_args<T>::type sin_pi(T x)
 {
    return boost::math::sin_pi(x, policies::policy<>());

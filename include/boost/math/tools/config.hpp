@@ -57,6 +57,7 @@
 
 #define BOOST_STRINGIZE(X) BOOST_DO_STRINGIZE(X)
 #define BOOST_DO_STRINGIZE(X) #X
+#define BOOST_NO_MACRO_EXPAND /**/
 
 #ifdef BOOST_DISABLE_THREADS // No threads, do nothing
 // Detect thread support via STL implementation
@@ -79,6 +80,7 @@
 
 #endif // BOOST_MATH_STANDALONE
 
+#ifndef BOOST_MATH_AS_MODULE
 #include <algorithm>  // for min and max
 #include <limits>
 #include <cmath>
@@ -86,6 +88,7 @@
 #include <cfloat>
 #if (defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__))
 #  include <math.h>
+#endif
 #endif
 
 #include <boost/math/tools/user.hpp>
@@ -280,7 +283,9 @@ struct non_type {};
 //
 // noexcept support:
 //
+#ifndef BOOST_MATH_AS_MODULE
 #include <type_traits>
+#endif
 #define BOOST_MATH_NOEXCEPT(T) noexcept(std::is_floating_point<T>::value)
 #define BOOST_MATH_IS_FLOAT(T) (std::is_floating_point<T>::value)
 
@@ -426,8 +431,9 @@ struct is_integer_for_rounding
 // on entrance to these functions.  This appears to have been fixed in Glibc 2.14 (May 2011).
 // Much more information in this message thread: https://groups.google.com/forum/#!topic/boost-list/ZT99wtIFlb4
 //
-
+#ifndef BOOST_MATH_AS_MODULE
 #include <cfenv>
+#endif
 
 #  ifdef FE_ALL_EXCEPT
 
@@ -510,6 +516,17 @@ namespace boost{ namespace math{
 #define BOOST_MATH_CONSTEXPR_TABLE_FUNCTION constexpr
 #else
 #define BOOST_MATH_CONSTEXPR_TABLE_FUNCTION
+#endif
+
+//
+// Module build support:
+//
+#ifdef BOOST_MATH_AS_MODULE
+#  define BOOST_MATH_MODULE_EXPORT export
+#  define BOOST_MATH_STATIC_CONST inline constexpr
+#else
+#  define BOOST_MATH_MODULE_EXPORT
+#  define BOOST_MATH_STATIC_CONST static constexpr
 #endif
 
 
