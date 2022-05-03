@@ -19,6 +19,7 @@
 #include <boost/math/special_functions/trunc.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/tools/precision.hpp>
+#include <boost/math/constants/constants.hpp>
 #endif
 
 #include <boost/math/tools/series.hpp>
