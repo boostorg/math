@@ -13,7 +13,7 @@
 #pragma once
 #endif
 
-#ifndef BOOST_MATH_STANDALONE
+#ifndef BOOST_MATH_AS_MODULE
 #include <boost/math/tools/config.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 #endif
