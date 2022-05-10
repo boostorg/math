@@ -1009,7 +1009,7 @@ struct max_factorial
 
 #ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
 template <class T>
-const unsigned max_factorial<T>::value;
+constexpr unsigned max_factorial<T>::value;
 #endif
 
 } // namespace math
