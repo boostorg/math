@@ -11,11 +11,13 @@
 #pragma once
 #endif
 
+#ifndef BOOST_MATH_AS_MODULE
 #include <limits>
 #include <type_traits>
 #include <cmath>
-#include <boost/math/tools/real_cast.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
+#endif
+#include <boost/math/tools/real_cast.hpp>
 #include <boost/math/special_functions/detail/fp_traits.hpp>
 /*!
   \file fpclassify.hpp
@@ -75,7 +77,7 @@ at compile time, then comparison with std::numeric_limits values
 is used.
 
 */
-
+#ifndef BOOST_MATH_AS_MODULE
 #if defined(_MSC_VER) || defined(BOOST_BORLANDC)
 #include <float.h>
 #endif
@@ -84,6 +86,7 @@ is used.
 #if  __has_include("quadmath.h")
 #include "quadmath.h"
 #define BOOST_MATH_HAS_QUADMATH_H
+#endif
 #endif
 #endif
 #endif
@@ -272,7 +275,7 @@ inline int fpclassify_imp BOOST_NO_MACRO_EXPAND(long double t, const native_tag&
 
 }  // namespace detail
 
-template <class T>
+BOOST_MATH_MODULE_EXPORT template <class T>
 inline int fpclassify BOOST_NO_MACRO_EXPAND(T t)
 {
    typedef typename detail::fp_traits<T>::type traits;
@@ -288,7 +291,7 @@ inline int fpclassify BOOST_NO_MACRO_EXPAND(T t)
 }
 
 #ifdef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-template <>
+BOOST_MATH_MODULE_EXPORT template <>
 inline int fpclassify<long double> BOOST_NO_MACRO_EXPAND(long double t)
 {
    typedef detail::fp_traits<long double>::type traits;
@@ -351,7 +354,7 @@ inline bool isfinite_impl BOOST_NO_MACRO_EXPAND(long double t, const native_tag&
 
 }
 
-template<class T>
+BOOST_MATH_MODULE_EXPORT template<class T>
 inline bool (isfinite)(T x)
 { //!< \brief return true if floating-point type t is finite.
    typedef typename detail::fp_traits<T>::type traits;
@@ -362,7 +365,7 @@ inline bool (isfinite)(T x)
 }
 
 #ifdef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-template<>
+BOOST_MATH_MODULE_EXPORT template<>
 inline bool (isfinite)(long double x)
 { //!< \brief return true if floating-point type t is finite.
    typedef detail::fp_traits<long double>::type traits;
@@ -422,7 +425,7 @@ inline bool isnormal_impl BOOST_NO_MACRO_EXPAND(long double t, const native_tag&
 
 }
 
-template<class T>
+BOOST_MATH_MODULE_EXPORT template<class T>
 inline bool (isnormal)(T x)
 {
    typedef typename detail::fp_traits<T>::type traits;
@@ -433,7 +436,7 @@ inline bool (isnormal)(T x)
 }
 
 #ifdef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-template<>
+BOOST_MATH_MODULE_EXPORT template<>
 inline bool (isnormal)(long double x)
 {
    typedef detail::fp_traits<long double>::type traits;
@@ -511,7 +514,7 @@ inline bool isinf_impl BOOST_NO_MACRO_EXPAND(long double t, const native_tag&)
 
 }   // namespace detail
 
-template<class T>
+BOOST_MATH_MODULE_EXPORT template<class T>
 inline bool (isinf)(T x)
 {
    typedef typename detail::fp_traits<T>::type traits;
@@ -522,7 +525,7 @@ inline bool (isinf)(T x)
 }
 
 #ifdef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-template<>
+BOOST_MATH_MODULE_EXPORT template<>
 inline bool (isinf)(long double x)
 {
    typedef detail::fp_traits<long double>::type traits;
@@ -533,7 +536,7 @@ inline bool (isinf)(long double x)
 }
 #endif
 #if defined(BOOST_MATH_USE_FLOAT128) && defined(BOOST_MATH_HAS_QUADMATH_H)
-template<>
+BOOST_MATH_MODULE_EXPORT template<>
 inline bool (isinf)(__float128 x)
 {
    return ::isinfq(x);
@@ -601,7 +604,7 @@ namespace detail {
 
 }   // namespace detail
 
-template<class T>
+BOOST_MATH_MODULE_EXPORT template<class T>
 inline bool (isnan)(T x)
 { //!< \brief return true if floating-point type t is NaN (Not A Number).
    typedef typename detail::fp_traits<T>::type traits;
@@ -611,11 +614,11 @@ inline bool (isnan)(T x)
 }
 
 #ifdef isnan
-template <> inline bool isnan BOOST_NO_MACRO_EXPAND<float>(float t){ return ::boost::math_detail::is_nan_helper(t, std::true_type()); }
-template <> inline bool isnan BOOST_NO_MACRO_EXPAND<double>(double t){ return ::boost::math_detail::is_nan_helper(t, std::true_type()); }
-template <> inline bool isnan BOOST_NO_MACRO_EXPAND<long double>(long double t){ return ::boost::math_detail::is_nan_helper(t, std::true_type()); }
+BOOST_MATH_MODULE_EXPORT template <> inline bool isnan BOOST_NO_MACRO_EXPAND<float>(float t){ return ::boost::math_detail::is_nan_helper(t, std::true_type()); }
+BOOST_MATH_MODULE_EXPORT template <> inline bool isnan BOOST_NO_MACRO_EXPAND<double>(double t){ return ::boost::math_detail::is_nan_helper(t, std::true_type()); }
+BOOST_MATH_MODULE_EXPORT template <> inline bool isnan BOOST_NO_MACRO_EXPAND<long double>(long double t){ return ::boost::math_detail::is_nan_helper(t, std::true_type()); }
 #elif defined(BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS)
-template<>
+BOOST_MATH_MODULE_EXPORT template<>
 inline bool (isnan)(long double x)
 { //!< \brief return true if floating-point type t is NaN (Not A Number).
    typedef detail::fp_traits<long double>::type traits;
@@ -625,7 +628,7 @@ inline bool (isnan)(long double x)
 }
 #endif
 #if defined(BOOST_MATH_USE_FLOAT128) && defined(BOOST_MATH_HAS_QUADMATH_H)
-template<>
+BOOST_MATH_MODULE_EXPORT template<>
 inline bool (isnan)(__float128 x)
 {
    return ::isnanq(x);

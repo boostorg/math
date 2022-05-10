@@ -23,7 +23,9 @@
 #endif
 
 #include <boost/math/tools/config.hpp>
+#ifndef BOOST_MATH_STANDALONE
 #include <type_traits>
+#endif
 
 namespace boost
 {

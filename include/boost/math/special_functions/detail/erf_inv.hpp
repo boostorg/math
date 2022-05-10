@@ -13,7 +13,9 @@
 #pragma warning(disable:4702) // Unreachable code: optimization warning
 #endif
 
+#ifndef BOOST_MATH_AS_MODULE
 #include <type_traits>
+#endif
 
 namespace boost{ namespace math{ 
 
@@ -394,7 +396,7 @@ bool erf_inv_initializer<T, Policy>::init::is_value_non_zero(T v)
 
 } // namespace detail
 
-template <class T, class Policy>
+BOOST_MATH_MODULE_EXPORT template <class T, class Policy>
 typename tools::promote_args<T>::type erfc_inv(T z, const Policy& pol)
 {
    typedef typename tools::promote_args<T>::type result_type;
@@ -457,7 +459,7 @@ typename tools::promote_args<T>::type erfc_inv(T z, const Policy& pol)
       detail::erf_inv_imp(static_cast<eval_type>(p), static_cast<eval_type>(q), forwarding_policy(), static_cast<tag_type const*>(0)), function);
 }
 
-template <class T, class Policy>
+BOOST_MATH_MODULE_EXPORT template <class T, class Policy>
 typename tools::promote_args<T>::type erf_inv(T z, const Policy& pol)
 {
    typedef typename tools::promote_args<T>::type result_type;
@@ -526,13 +528,13 @@ typename tools::promote_args<T>::type erf_inv(T z, const Policy& pol)
       detail::erf_inv_imp(static_cast<eval_type>(p), static_cast<eval_type>(q), forwarding_policy(), static_cast<tag_type const*>(0)), function);
 }
 
-template <class T>
+BOOST_MATH_MODULE_EXPORT template <class T>
 inline typename tools::promote_args<T>::type erfc_inv(T z)
 {
    return erfc_inv(z, policies::policy<>());
 }
 
-template <class T>
+BOOST_MATH_MODULE_EXPORT template <class T>
 inline typename tools::promote_args<T>::type erf_inv(T z)
 {
    return erf_inv(z, policies::policy<>());

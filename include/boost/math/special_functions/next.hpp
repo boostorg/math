@@ -10,20 +10,23 @@
 #pragma once
 #endif
 
+#ifndef BOOST_MATH_AS_MODULE
+#include <type_traits>
+#include <cfloat>
 #include <boost/math/special_functions/math_fwd.hpp>
+#endif
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/special_functions/sign.hpp>
 #include <boost/math/special_functions/trunc.hpp>
 #include <boost/math/tools/traits.hpp>
-#include <type_traits>
-#include <cfloat>
 
-
+#ifndef BOOST_MATH_AS_MODULE
 #if !defined(_CRAYC) && !defined(__CUDACC__) && (!defined(__GNUC__) || (__GNUC__ > 3) || ((__GNUC__ == 3) && (__GNUC_MINOR__ > 3)))
 #if (defined(_M_IX86_FP) && (_M_IX86_FP >= 2)) || defined(__SSE2__)
 #include "xmmintrin.h"
 #define BOOST_MATH_CHECK_SSE2
+#endif
 #endif
 #endif
 
@@ -35,6 +38,21 @@ namespace boost{ namespace math{
       class std_real_concept;
 
    }
+
+#ifdef BOOST_MATH_AS_MODULE
+BOOST_MATH_MODULE_EXPORT template <class T, class Policy>
+typename tools::promote_args<T>::type float_next(const T& val, const Policy& pol);
+BOOST_MATH_MODULE_EXPORT template <class T, class Policy>
+typename tools::promote_args<T>::type float_prior(const T& val, const Policy& pol);
+BOOST_MATH_MODULE_EXPORT template <class T, class U, class Policy>
+typename tools::promote_args<T, U>::type float_distance(const T& a, const U& b, const Policy& pol);
+BOOST_MATH_MODULE_EXPORT template <class T, class U>
+typename tools::promote_args<T, U>::type float_distance(const T& a, const U& b);
+BOOST_MATH_MODULE_EXPORT template <class T, class Policy>
+typename tools::promote_args<T>::type float_advance(T val, int distance, const Policy& pol);
+BOOST_MATH_MODULE_EXPORT template <class T>
+typename tools::promote_args<T>::type float_advance(const T& val, int distance);
+#endif
 
 namespace detail{
 
@@ -278,7 +296,7 @@ T float_next_imp(const T& val, const std::false_type&, const Policy& pol)
 
 } // namespace detail
 
-template <class T, class Policy>
+BOOST_MATH_MODULE_EXPORT template <class T, class Policy>
 inline typename tools::promote_args<T>::type float_next(const T& val, const Policy& pol)
 {
    typedef typename tools::promote_args<T>::type result_type;
@@ -308,7 +326,7 @@ inline double float_next(const double& val, const Policy& pol)
 }
 #endif
 
-template <class T>
+BOOST_MATH_MODULE_EXPORT template <class T>
 inline typename tools::promote_args<T>::type float_next(const T& val)
 {
    return float_next(val, policies::policy<>());
@@ -414,7 +432,7 @@ T float_prior_imp(const T& val, const std::false_type&, const Policy& pol)
 
 } // namespace detail
 
-template <class T, class Policy>
+BOOST_MATH_MODULE_EXPORT template <class T, class Policy>
 inline typename tools::promote_args<T>::type float_prior(const T& val, const Policy& pol)
 {
    typedef typename tools::promote_args<T>::type result_type;
@@ -444,20 +462,20 @@ inline double float_prior(const double& val, const Policy& pol)
 }
 #endif
 
-template <class T>
+BOOST_MATH_MODULE_EXPORT template <class T>
 inline typename tools::promote_args<T>::type float_prior(const T& val)
 {
    return float_prior(val, policies::policy<>());
 }
 
-template <class T, class U, class Policy>
+BOOST_MATH_MODULE_EXPORT template <class T, class U, class Policy>
 inline typename tools::promote_args<T, U>::type nextafter(const T& val, const U& direction, const Policy& pol)
 {
    typedef typename tools::promote_args<T, U>::type result_type;
    return val < direction ? boost::math::float_next<result_type>(val, pol) : val == direction ? val : boost::math::float_prior<result_type>(val, pol);
 }
 
-template <class T, class U>
+BOOST_MATH_MODULE_EXPORT template <class T, class U>
 inline typename tools::promote_args<T, U>::type nextafter(const T& val, const U& direction)
 {
    return nextafter(val, direction, policies::policy<>());
@@ -677,7 +695,7 @@ T float_distance_imp(const T& a, const T& b, const std::false_type&, const Polic
 
 } // namespace detail
 
-template <class T, class U, class Policy>
+BOOST_MATH_MODULE_EXPORT template <class T, class U, class Policy>
 inline typename tools::promote_args<T, U>::type float_distance(const T& a, const U& b, const Policy& pol)
 {
    //
@@ -711,7 +729,7 @@ inline typename tools::promote_args<T, U>::type float_distance(const T& a, const
    }
 }
 
-template <class T, class U>
+BOOST_MATH_MODULE_EXPORT template <class T, class U>
 typename tools::promote_args<T, U>::type float_distance(const T& a, const U& b)
 {
    return boost::math::float_distance(a, b, policies::policy<>());
@@ -888,14 +906,14 @@ T float_advance_imp(T val, int distance, const std::false_type&, const Policy& p
 
 } // namespace detail
 
-template <class T, class Policy>
+BOOST_MATH_MODULE_EXPORT template <class T, class Policy>
 inline typename tools::promote_args<T>::type float_advance(T val, int distance, const Policy& pol)
 {
    typedef typename tools::promote_args<T>::type result_type;
    return detail::float_advance_imp(detail::normalize_value(static_cast<result_type>(val), typename detail::has_hidden_guard_digits<result_type>::type()), distance, std::integral_constant<bool, !std::numeric_limits<result_type>::is_specialized || (std::numeric_limits<result_type>::radix == 2)>(), pol);
 }
 
-template <class T>
+BOOST_MATH_MODULE_EXPORT template <class T>
 inline typename tools::promote_args<T>::type float_advance(const T& val, int distance)
 {
    return boost::math::float_advance(val, distance, policies::policy<>());
