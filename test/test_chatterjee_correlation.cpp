@@ -35,7 +35,7 @@ void properties()
     }
     std::sort(X.begin(), X.end());
     Real coeff1 = chatterjee_correlation(X, Y);
-    // "it is not very hard to prove that the minimum possible value of En(X, Y) is −1/2 + O(1/n)"
+    // The minimum possible value of En(X, Y) is -1/2 + O(1/n)
     CHECK_GE(coeff1, Real(-0.5));
     CHECK_LE(coeff1, Real(1));
 
