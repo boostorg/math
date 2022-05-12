@@ -77,6 +77,25 @@
 #  define BOOST_NO_CXX11_THREAD_LOCAL
 #endif // BOOST_DISABLE_THREADS
 
+#ifdef __GNUC__
+#  if !defined(__EXCEPTIONS) && !defined(BOOST_NO_EXCEPTIONS)
+#     define BOOST_NO_EXCEPTIONS
+#  endif
+   //
+   // Make sure we have some std lib headers included so we can detect __GXX_RTTI:
+   //
+#  include <algorithm>  // for min and max
+#  include <limits>
+#  ifndef __GXX_RTTI
+#     ifndef BOOST_NO_TYPEID
+#        define BOOST_NO_TYPEID
+#     endif
+#     ifndef BOOST_NO_RTTI
+#        define BOOST_NO_RTTI
+#     endif
+#  endif
+#endif
+
 #endif // BOOST_MATH_STANDALONE
 
 #include <algorithm>  // for min and max
