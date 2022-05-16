@@ -1570,7 +1570,7 @@ alias no_eh_tests :
    sf_ulp_incl_test
    sf_zeta_incl_test
    sf_chebyshev_incl_test
-   sf_chebyshev_transform_incl_test
+   #sf_chebyshev_transform_incl_test
    sf_fibonacci_incl_test
    #sf_gegenbauer_incl_test
    sf_lambert_w_incl_test
