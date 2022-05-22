@@ -96,7 +96,32 @@ ReturnType chatterjee_correlation_par_impl(ExecutionPolicy&& exec, ForwardIterat
 
     auto rank_vector = rank(std::forward<ExecutionPolicy>(exec), v_begin, v_end);
 
-    std::size_t sum = chatterjee_transform(rank_vector.begin(), rank_vector.end());
+    const auto num_threads = std::thread::hardware_concurrency() == 0 ? 2u : std::thread::hardware_concurrency();
+    std::vector<std::future<std::size_t>> future_manager;
+    const auto elements_per_thread = std::ceil(static_cast<double>(rank_vector.size()) / num_threads);
+
+    auto it = rank_vector.begin();
+    auto end = rank_vector.end();
+    for(std::size_t i {}; i < num_threads - 1; ++i)
+    {
+        future_manager.emplace_back(std::async(std::launch::async | std::launch::deferred, [it, elements_per_thread]() -> std::size_t
+        {
+            return chatterjee_transform(it, std::next(it, elements_per_thread));
+        }));
+        it = std::next(it, elements_per_thread - 1);
+    }
+
+    future_manager.emplace_back(std::async(std::launch::async | std::launch::deferred, [it, end]() -> std::size_t
+    {
+        return chatterjee_transform(it, end);
+    }));
+
+    std::size_t sum {};
+    for(std::size_t i {}; i < future_manager.size(); ++i)
+    {
+        sum += future_manager[i].get();
+    }
+    
     ReturnType result = static_cast<ReturnType>(1) - (static_cast<ReturnType>(3 * sum) / static_cast<ReturnType>(rank_vector.size() * rank_vector.size() - 1));
 
     // If the result is 1 then Y is constant and all the elements must be ties
