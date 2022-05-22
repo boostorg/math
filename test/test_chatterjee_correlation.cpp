@@ -48,7 +48,7 @@ void properties()
     auto coeff3 = chatterjee_correlation(X, Y);
     CHECK_EQUAL(coeff1, coeff3);
 
-    // If there are no ties among the Yi’s, the maximum possible value of Xi(X, Y) is (n − 2)/(n + 1), which is attained if Yi = Xi for all i
+    // If there are no ties among the Yis, the maximum possible value of Xi(X, Y) is (n  2)/(n + 1), which is attained if Yi = Xi for all i
     auto coeff = chatterjee_correlation(X, X);
     // These floating point numbers are computed by two different methods, so we can expect some floating point error:
     const auto n = X.size();
