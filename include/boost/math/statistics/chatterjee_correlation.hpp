@@ -28,6 +28,26 @@ namespace boost { namespace math { namespace statistics {
 
 namespace detail {
 
+template <typename BDIter>
+std::size_t chatterjee_transform(BDIter begin, BDIter end)
+{
+    std::size_t sum = 0;
+
+    while(++begin != end)
+    {
+        if(*begin > *std::prev(begin))
+        {
+            sum += *begin - *std::prev(begin);
+        }
+        else
+        {
+            sum += *std::prev(begin) - *begin;
+        }
+    }
+
+    return sum;
+}
+
 template <typename ReturnType, typename ForwardIterator>
 ReturnType chatterjee_correlation_seq_impl(ForwardIterator u_begin, ForwardIterator u_end, ForwardIterator v_begin, ForwardIterator v_end)
 {
@@ -37,19 +57,7 @@ ReturnType chatterjee_correlation_seq_impl(ForwardIterator u_begin, ForwardItera
 
     const std::vector<std::size_t> rank_vector = rank(v_begin, v_end);
 
-    std::size_t sum = 0;
-    for (std::size_t i = 1; i < rank_vector.size(); ++i)
-    {
-        // Equivalent to abs(rank_vector[i] - rank_vector[i-1]) but avoids unsigned underflow in the intermediate step
-        if (rank_vector[i] > rank_vector[i-1])
-        {
-            sum += rank_vector[i] - rank_vector[i-1];
-        }
-        else
-        {
-            sum += rank_vector[i-1] - rank_vector[i];
-        }
-    }
+    std::size_t sum = chatterjee_transform(rank_vector.begin(), rank_vector.end());
 
     ReturnType result = static_cast<ReturnType>(1) - (static_cast<ReturnType>(3 * sum) / static_cast<ReturnType>(rank_vector.size() * rank_vector.size() - 1));
 
@@ -86,22 +94,9 @@ ReturnType chatterjee_correlation_par_impl(ExecutionPolicy&& exec, ForwardIterat
     using std::abs;
     BOOST_MATH_ASSERT_MSG(std::is_sorted(std::forward<ExecutionPolicy>(exec), u_begin, u_end), "The x values must be sorted in order to use this functionality");
 
-    const auto rank_vector = rank(std::forward<ExecutionPolicy>(exec), v_begin, v_end);
+    auto rank_vector = rank(std::forward<ExecutionPolicy>(exec), v_begin, v_end);
 
-    std::size_t sum = 0;
-    for (std::size_t i = 1; i < rank_vector.size(); ++i)
-    {
-        // Equivalent to abs(rank_vector[i] - rank_vector[i-1]) but avoids unsigned underflow in the intermediate step
-        if (rank_vector[i] > rank_vector[i-1])
-        {
-            sum += rank_vector[i] - rank_vector[i-1];
-        }
-        else
-        {
-            sum += rank_vector[i-1] - rank_vector[i];
-        }
-    }
-
+    std::size_t sum = chatterjee_transform(rank_vector.begin(), rank_vector.end());
     ReturnType result = static_cast<ReturnType>(1) - (static_cast<ReturnType>(3 * sum) / static_cast<ReturnType>(rank_vector.size() * rank_vector.size() - 1));
 
     // If the result is 1 then Y is constant and all the elements must be ties
