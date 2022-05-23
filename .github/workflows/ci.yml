@@ -19,7 +19,7 @@ jobs:
       fail-fast: false
       matrix:
         compiler: [ g++-9, g++-11, clang++-10 ]
-        standard: [ c++11, c++14, c++17, c++2a ]
+        standard: [ c++14, c++17, c++2a ]
         suite: [ float128_tests, special_fun, distribution_tests, misc, quadrature, mp, interpolators, autodiff, ../example//examples, ../tools ]
     steps:
       - uses: actions/checkout@v2
@@ -83,7 +83,7 @@ jobs:
       fail-fast: false
       matrix:
         compiler: [ g++-6, clang++-6.0, g++-7, g++-8, clang++-7, clang++-8 ]
-        standard: [ c++11, c++14, c++17 ]
+        standard: [ c++14, c++17 ]
         suite: [ float128_tests, special_fun, distribution_tests, misc, quadrature, mp, interpolators, autodiff, ../example//examples, ../tools ]
     steps:
       - uses: actions/checkout@v2
@@ -147,7 +147,7 @@ jobs:
       fail-fast: false
       matrix:
         toolset: [ clang ]
-        standard: [ 11, 14, 17, 2a ]
+        standard: [ 14, 17, 2a ]
         suite: [ float128_tests, special_fun, distribution_tests, misc, quadrature, mp, interpolators, autodiff, ../example//examples, ../tools ]
     steps:
       - uses: actions/checkout@v2
@@ -195,7 +195,7 @@ jobs:
       fail-fast: false
       matrix:
         toolset: [ gcc, msvc-14.0, msvc-14.2 ]
-        standard: [ 11, 14, 17 ]
+        standard: [ 14, 17 ]
         suite: [ float128_tests, special_fun, distribution_tests, misc, quadrature, mp, interpolators, autodiff, ../example//examples, ../tools ]
     steps:
       - uses: actions/checkout@v2
@@ -415,7 +415,7 @@ jobs:
       fail-fast: false
       matrix:
         compiler: [ g++-10 ]
-        standard: [ c++11, c++14, c++17, c++2a ]
+        standard: [ c++14, c++17, c++20 ]
         suite: [ float128_tests, special_fun, distribution_tests, misc, quadrature, interpolators, autodiff, ../example//examples, ../tools ]
     steps:
       - uses: actions/checkout@v2

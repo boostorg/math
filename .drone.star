@@ -17,10 +17,10 @@ def main(ctx):
 
   things_to_test = [ "special_fun", "distribution_tests", "mp", "misc", "interpolators", "quadrature", "autodiff", "long-running-tests", "float128_tests" ]
   sanitizer_test = [ "special_fun", "distribution_tests", "misc", "interpolators", "quadrature", "autodiff", "float128_tests" ]
-  gnu_5_stds = [ "gnu++11" ]
-  gnu_6_stds = [ "gnu++11", "gnu++14" ]
-  gnu_8_stds = [ "gnu++11", "gnu++14", "gnu++17" ]
-  gnu_10_stds = [ "gnu++11", "gnu++14", "gnu++17", "gnu++20" ]
+  gnu_5_stds = [ "gnu++14" ]
+  gnu_6_stds = [ "gnu++14" ]
+  gnu_8_stds = [ "gnu++14", "gnu++17" ]
+  gnu_10_stds = [ "gnu++14", "gnu++17", "gnu++20" ]
 
   result = []
 
