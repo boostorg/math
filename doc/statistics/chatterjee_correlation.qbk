@@ -37,7 +37,7 @@ noiseless function of the other, just as Pearson correlation is close to its max
 
 This is the problem Chatterjee's coefficient solves.
 Let X and Y be random variables, where Y is not constant, and let (X_i, Y_i) be samples from this distribution.
-Rearrange these samples so that X_(0) < X_{(1)} < ... X_{(n-1)} and create (X_{(i)}, Y_{(i)}).
+Rearrange these samples so that X_(0) < X_{(1)} < ... X_{(n-1)} and create (R(X_{(i)}), R(Y_{(i)})).
 The Chatterjee correlation is then given by
 
 [$../equations/chatterjee_correlation.svg]
@@ -62,9 +62,9 @@ The implementation follows [@https://arxiv.org/pdf/1909.10140.pdf Chatterjee's p
 
 The function expects at least two samples, a non-constant vector Y, and the same number of X's as Y's.
 If Y is constant, the result is a quiet NaN.
-The data set must be sorted by x values.
+The data set must be sorted by X values.
 If there are ties in the values of X, then the statistic is random due to the random breaking of ties.
-Of course, there is not random numbers used internally, but the result is not guaranteed to be identical on different systems.
+Of course, random numbers are not used internally, but the result is not guaranteed to be identical on different systems.
 
 [heading References]
 

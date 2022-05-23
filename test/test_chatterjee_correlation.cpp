@@ -4,6 +4,7 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <cstdint>
+#include <cmath>
 #include <vector>
 #include <random>
 #include <algorithm>
@@ -48,7 +49,7 @@ void properties()
     auto coeff3 = chatterjee_correlation(X, Y);
     CHECK_EQUAL(coeff1, coeff3);
 
-    // If there are no ties among the Yis, the maximum possible value of Xi(X, Y) is (n  2)/(n + 1), which is attained if Yi = Xi for all i
+    // If there are no ties among the Yis, the maximum possible value of Xi(X, Y) is (n - 2)/(n + 1), which is attained if Yi = Xi for all i
     auto coeff = chatterjee_correlation(X, X);
     // These floating point numbers are computed by two different methods, so we can expect some floating point error:
     const auto n = X.size();
@@ -97,6 +98,33 @@ void test_threaded(ExecutionPolicy&& exec)
 
 #endif // BOOST_MATH_EXEC_COMPATIBLE
 
+template <typename Real>
+void test_paper()
+{
+    std::vector<Real> x = boost::math::generate_random_vector<Real>(1024, 0);
+    std::sort(x.begin(), x.end());
+    
+    auto result = chatterjee_correlation(x, x);
+    CHECK_GE(result, Real(0.965));
+
+    std::vector<Real> y = x;
+    for(auto& i : y)
+    {
+        i *= i;
+    }
+
+    result = chatterjee_correlation(x, y);
+    CHECK_GE(result, Real(0.936));
+
+    for(std::size_t i {}; i < x.size(); ++i)
+    {
+        y[i] = std::sin(x[i]);
+    }
+
+    result = chatterjee_correlation(x, y);
+    CHECK_GE(result, Real(0.880));
+}
+
 int main(void)
 {
     properties<float>();
@@ -117,6 +145,10 @@ int main(void)
     test_threaded<long double>(std::execution::par_unseq);
 
     #endif // BOOST_MATH_EXEC_COMPATIBLE
+
+    test_paper<float>();
+    test_paper<double>();
+    test_paper<long double>();
 
     return boost::math::test::report_errors();
 }
