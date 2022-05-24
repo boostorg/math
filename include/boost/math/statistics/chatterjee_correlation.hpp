@@ -97,7 +97,7 @@ ReturnType chatterjee_correlation_par_impl(ExecutionPolicy&& exec, ForwardIterat
     auto rank_vector = rank(std::forward<ExecutionPolicy>(exec), v_begin, v_end);
 
     const auto num_threads = std::thread::hardware_concurrency() == 0 ? 2u : std::thread::hardware_concurrency();
-    std::vector<std::future<std::size_t>> future_manager;
+    std::vector<std::future<std::size_t>> future_manager {};
     const auto elements_per_thread = std::ceil(static_cast<double>(rank_vector.size()) / num_threads);
 
     auto it = rank_vector.begin();

@@ -11,6 +11,7 @@
 #include <utility>
 #include <boost/math/statistics/chatterjee_correlation.hpp>
 #include <boost/math/tools/random_vector.hpp>
+#include <boost/math/constants/constants.hpp>
 #include "math_unit_test.hpp"
 
 // The Chatterjee correlation is invariant under:
@@ -101,28 +102,32 @@ void test_threaded(ExecutionPolicy&& exec)
 template <typename Real>
 void test_paper()
 {
-    std::vector<Real> x = boost::math::generate_random_vector<Real>(1024, 0);
-    std::sort(x.begin(), x.end());
+    constexpr Real two_pi = boost::math::constants::two_pi<Real>();
     
+    // Page 9 figure (a) y = x
+    std::vector<Real> x = boost::math::generate_random_uniform_vector<Real>(100, 0, -two_pi, two_pi);
+    std::sort(x.begin(), x.end());
     auto result = chatterjee_correlation(x, x);
-    CHECK_GE(result, Real(0.965));
+    CHECK_MOLLIFIED_CLOSE(result, Real(0.970), 0.005);
 
+    // Page 9 figure (d) y = x^2
     std::vector<Real> y = x;
-    for(auto& i : y)
+    for (auto& i : y)
     {
         i *= i;
     }
 
     result = chatterjee_correlation(x, y);
-    CHECK_GE(result, Real(0.936));
+    CHECK_MOLLIFIED_CLOSE(result, Real(0.941), 0.005);
 
-    for(std::size_t i {}; i < x.size(); ++i)
+    // Page 9 figure (g) y = sin(x)
+    for (std::size_t i {}; i < x.size(); ++i)
     {
         y[i] = std::sin(x[i]);
     }
 
     result = chatterjee_correlation(x, y);
-    CHECK_GE(result, Real(0.880));
+    CHECK_MOLLIFIED_CLOSE(result, Real(0.885), 0.005);
 }
 
 int main(void)
