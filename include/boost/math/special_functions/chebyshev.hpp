@@ -271,7 +271,7 @@ inline Real chebyshev_clenshaw_recurrence(const Real* const c, size_t length, co
 {
     if (x < a || x > b)
     {
-        throw std::domain_error("x in [a, b] is required.");
+       BOOST_MATH_THROW_EXCEPTION(std::domain_error("x in [a, b] is required."));
     }
     if (length < 2)
     {
