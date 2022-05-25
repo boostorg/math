@@ -13,6 +13,11 @@
 #include <boost/math/ccmath/isinf.hpp>
 #include <boost/math/ccmath/isnan.hpp>
 
+#if __has_include("immintrin.h") && defined(__X86_64__) || defined(__amd64__)
+#   include "immintrin.h"
+#   define BOOST_MATH_HAS_IMMINTRIN_H
+#endif
+
 namespace boost::math::ccmath {
 
 namespace detail {
@@ -20,9 +25,7 @@ namespace detail {
 template <typename T>
 inline constexpr T fma_imp(const T x, const T y, const T z) noexcept
 {
-    #if __GNUC__ < 10
-        return (x * y) + z;
-    #else
+    #if defined(__GNUC__) && !defined(__clang__) && !defined(__INTEL_COMPILER) && !defined(__INTEL_LLVM_COMPILER)
     if constexpr (std::is_same_v<T, float>)
     {
         return __builtin_fmaf(x, y, z);
@@ -35,11 +38,23 @@ inline constexpr T fma_imp(const T x, const T y, const T z) noexcept
     {
         return __builtin_fmal(x, y, z);
     }
-    else // e.g. Boost.Multiprecision types where no built-in exists
+    #elif defined(BOOST_MATH_HAS_IMMINTRIN_H)
+    if constexpr (std::is_same_v<T, float>)
     {
-        return (x * y) + z;
+        return static_cast<float>(_mm_fmadd_ps(x, y, z));
+    }
+    else if constexpr (std::is_same_v<T, double>)
+    {
+        return static_cast<double>(_mm_fmadd_pd(x, y, z));
+    }
+    else if constexpr (std::is_same_v<T, long double>)
+    {
+        return static_cast<long double>(_mm256_fmadd_pd(x, y, z));
     }
     #endif
+    
+    // If we can't use compiler intrinsics hope that -fma flag optimizes this call to fma instruction
+    return (x * y) + z;
 }
 
 } // Namespace detail

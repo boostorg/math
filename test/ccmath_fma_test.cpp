@@ -17,6 +17,7 @@
 #include <boost/multiprecision/float128.hpp>
 #endif
 
+#if !defined(BOOST_MATH_NO_CONSTEXPR_DETECTION) && !defined(BOOST_MATH_USING_BUILTIN_CONSTANT_P)
 template <typename T>
 constexpr void test()
 {
@@ -49,7 +50,6 @@ constexpr void test()
     }
 }
 
-#if !defined(BOOST_MATH_NO_CONSTEXPR_DETECTION) && !defined(BOOST_MATH_USING_BUILTIN_CONSTANT_P)
 int main()
 {
     test<float>();
