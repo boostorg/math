@@ -97,8 +97,8 @@ BOOST_AUTO_TEST_CASE( test_main )
 #endif
 #endif
 
-#if defined(__GNUC__) && (__GNUC__ == 12) && (__cplusplus > 202000)
-   // gcc-12 runs the machine out of memory in C++20 mode:
+#if defined(__GNUC__) && (__GNUC__ == 12)
+   // gcc-12 runs the machine out of memory:
 #define BOOST_MATH_NO_MP_TESTS
 #endif
 
