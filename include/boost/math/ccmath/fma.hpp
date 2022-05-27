@@ -13,17 +13,12 @@
 #include <boost/math/ccmath/isinf.hpp>
 #include <boost/math/ccmath/isnan.hpp>
 
-#if __has_include("immintrin.h") && defined(__X86_64__) || defined(__amd64__)
-#   include "immintrin.h"
-#   define BOOST_MATH_HAS_IMMINTRIN_H
-#endif
-
 namespace boost::math::ccmath {
 
 namespace detail {
 
 template <typename T>
-inline constexpr T fma_imp(const T x, const T y, const T z) noexcept
+constexpr T fma_imp(const T x, const T y, const T z) noexcept
 {
     #if defined(__GNUC__) && !defined(__clang__) && !defined(__INTEL_COMPILER) && !defined(__INTEL_LLVM_COMPILER)
     if constexpr (std::is_same_v<T, float>)
@@ -38,19 +33,6 @@ inline constexpr T fma_imp(const T x, const T y, const T z) noexcept
     {
         return __builtin_fmal(x, y, z);
     }
-    #elif defined(BOOST_MATH_HAS_IMMINTRIN_H)
-    if constexpr (std::is_same_v<T, float>)
-    {
-        return static_cast<float>(_mm_fmadd_ps(x, y, z));
-    }
-    else if constexpr (std::is_same_v<T, double>)
-    {
-        return static_cast<double>(_mm_fmadd_pd(x, y, z));
-    }
-    else if constexpr (std::is_same_v<T, long double>)
-    {
-        return static_cast<long double>(_mm256_fmadd_pd(x, y, z));
-    }
     #endif
     
     // If we can't use compiler intrinsics hope that -fma flag optimizes this call to fma instruction
@@ -60,16 +42,32 @@ inline constexpr T fma_imp(const T x, const T y, const T z) noexcept
 } // Namespace detail
 
 template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
-inline constexpr Real fma(Real x, Real y, Real z) noexcept
+constexpr Real fma(Real x, Real y, Real z) noexcept
 {
     if (BOOST_MATH_IS_CONSTANT_EVALUATED(x))
     {
-        return x == 0 && boost::math::ccmath::isinf(y) ? std::numeric_limits<Real>::quiet_NaN() :
-               y == 0 && boost::math::ccmath::isinf(x) ? std::numeric_limits<Real>::quiet_NaN() :
-               boost::math::ccmath::isnan(x) ? std::numeric_limits<Real>::quiet_NaN() :
-               boost::math::ccmath::isnan(y) ? std::numeric_limits<Real>::quiet_NaN() :
-               boost::math::ccmath::isnan(z) ? std::numeric_limits<Real>::quiet_NaN() :
-               boost::math::ccmath::detail::fma_imp(x, y, z);
+        if (x == 0 && boost::math::ccmath::isinf(y))
+        {
+            return std::numeric_limits<Real>::quiet_NaN();
+        }
+        else if (y == 0 && boost::math::ccmath::isinf(x))
+        {
+            return std::numeric_limits<Real>::quiet_NaN();
+        }
+        else if (boost::math::ccmath::isnan(x))
+        {
+            return std::numeric_limits<Real>::quiet_NaN();
+        }
+        else if (boost::math::ccmath::isnan(y))
+        {
+            return std::numeric_limits<Real>::quiet_NaN();
+        }
+        else if (boost::math::ccmath::isnan(z))
+        {
+            return std::numeric_limits<Real>::quiet_NaN();
+        }
+
+        return boost::math::ccmath::detail::fma_imp(x, y, z);
     }
     else
     {
@@ -79,7 +77,7 @@ inline constexpr Real fma(Real x, Real y, Real z) noexcept
 }
 
 template <typename T1, typename T2, typename T3>
-inline constexpr auto fma(T1 x, T2 y, T3 z) noexcept
+constexpr auto fma(T1 x, T2 y, T3 z) noexcept
 {
     if (BOOST_MATH_IS_CONSTANT_EVALUATED(x))
     {
@@ -113,13 +111,13 @@ inline constexpr auto fma(T1 x, T2 y, T3 z) noexcept
     }
 }
 
-inline constexpr float fmaf(float x, float y, float z) noexcept
+constexpr float fmaf(float x, float y, float z) noexcept
 {
     return boost::math::ccmath::fma(x, y, z);
 }
 
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-inline constexpr long double fmal(long double x, long double y, long double z) noexcept
+constexpr long double fmal(long double x, long double y, long double z) noexcept
 {
     return boost::math::ccmath::fma(x, y, z);
 }
