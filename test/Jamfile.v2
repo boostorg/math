@@ -1017,6 +1017,8 @@ test-suite misc :
    [ run bivariate_statistics_test.cpp : : : [ requires cxx11_hdr_forward_list cxx11_hdr_atomic cxx11_hdr_thread cxx11_hdr_tuple cxx11_hdr_future cxx11_sfinae_expr ] [ check-target-builds ../config//is_cygwin_run "Cygwin CI run" : <build>no ] ]
    [ run linear_regression_test.cpp : : : [ requires cxx11_hdr_forward_list cxx11_hdr_atomic cxx11_hdr_thread cxx11_hdr_tuple cxx11_hdr_future cxx11_sfinae_expr ]  ]
    [ run test_runs_test.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
+   [ run test_chatterjee_correlation.cpp ../../test/build//boost_unit_test_framework ]
+   [ run test_rank.cpp ../../test/build//boost_unit_test_framework ]
    [ run lanczos_smoothing_test.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
    [ run condition_number_test.cpp ../../test/build//boost_unit_test_framework : : :  [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>"-Bstatic -lquadmath -Bdynamic" ] [ requires cxx17_if_constexpr cxx17_std_apply ] ]
    [ run test_real_concept.cpp ../../test/build//boost_unit_test_framework  ]
