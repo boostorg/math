@@ -38,5 +38,6 @@
 #include <boost/math/ccmath/isless.hpp>
 #include <boost/math/ccmath/islessequal.hpp>
 #include <boost/math/ccmath/isunordered.hpp>
+#include <boost/math/ccmath/fma.hpp>
 
 #endif // BOOST_MATH_CCMATH_HPP
