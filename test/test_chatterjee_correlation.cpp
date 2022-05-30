@@ -127,7 +127,7 @@ void test_paper()
     }
 
     result = chatterjee_correlation(x, y);
-    CHECK_MOLLIFIED_CLOSE(result, Real(0.885), 0.01);
+    CHECK_MOLLIFIED_CLOSE(result, Real(0.885), 0.012);
 }
 
 int main(void)
