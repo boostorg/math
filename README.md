@@ -2,8 +2,8 @@ Boost Math Library
 [![Build Status](https://drone.cpp.al/api/badges/boostorg/math/status.svg)](https://drone.cpp.al/boostorg/math)[![Build Status](https://github.com/boostorg/math/workflows/CI/badge.svg?branch=develop)](https://github.com/boostorg/math/actions)
 ==================
 
->ANNOUNCEMENT: Support for C++03 is now deprecated in this library and will be supported in existing features
->only until March 2021.  New features will require *at least* C++11, as will existing features from next year.
+>ANNOUNCEMENT: Support for C++11 will be deprecated in this library starting in July 2023 (Boost 1.82).  
+>New features will require *at least* C++14, as will existing features starting with the deprecation release.
 
 This library is divided into several interconnected parts:
 
