@@ -1465,14 +1465,18 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert,
             result = pow(x, a) / (a);
          else
          {
+#ifndef BOOST_NO_EXCEPTIONS
             try 
             {
+#endif
                result = pow(x, a) / boost::math::tgamma(a + 1, pol);
+#ifndef BOOST_NO_EXCEPTIONS
             }
             catch (const std::overflow_error&)
             {
                result = 0;
             }
+#endif
          }
          result *= 1 - a * x / (a + 1);
          if (p_derivative)

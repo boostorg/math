@@ -829,7 +829,7 @@ namespace boost
                val = owens_t_T6(h,a, pol);
                break;
             default:
-               BOOST_MATH_THROW_EXCEPTION(std::logic_error("selection routine in Owen's T function failed"));
+               val = policies::raise_evaluation_error<RealType>("boost::math::owens_t", "selection routine in Owen's T function failed with h = %1%", h, pol);
             }
             return val;
          }
