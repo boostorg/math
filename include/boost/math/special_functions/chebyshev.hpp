@@ -10,6 +10,7 @@
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/tools/promotion.hpp>
+#include <boost/math/tools/throw_exception.hpp>
 
 #if (__cplusplus > 201103) || (defined(_CPPLIB_VER) && (_CPPLIB_VER >= 610))
 #  define BOOST_MATH_CHEB_USE_STD_ACOSH
@@ -271,7 +272,7 @@ inline Real chebyshev_clenshaw_recurrence(const Real* const c, size_t length, co
 {
     if (x < a || x > b)
     {
-        throw std::domain_error("x in [a, b] is required.");
+       BOOST_MATH_THROW_EXCEPTION(std::domain_error("x in [a, b] is required."));
     }
     if (length < 2)
     {

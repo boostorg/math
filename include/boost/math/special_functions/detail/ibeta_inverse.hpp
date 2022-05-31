@@ -688,13 +688,17 @@ T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T* py)
       T bet = 0;
       T xg;
       bool overflow = false;
+#ifndef BOOST_NO_EXCEPTIONS
       try {
+#endif
          bet = boost::math::beta(a, b, pol);
+#ifndef BOOST_NO_EXCEPTIONS
       }
       catch (const std::runtime_error&)
       {
          overflow = true;
       }
+#endif
       if (overflow || !(boost::math::isfinite)(bet))
       {
          xg = exp((boost::math::lgamma(a + 1, pol) + boost::math::lgamma(b, pol) - boost::math::lgamma(a + b, pol) + log(p)) / a);

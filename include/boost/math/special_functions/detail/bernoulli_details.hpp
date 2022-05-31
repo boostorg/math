@@ -184,17 +184,22 @@ struct fixed_vector : private std::allocator<T>
    const T& operator[](unsigned n)const { BOOST_MATH_ASSERT(n < m_used); return m_data[n]; }
    unsigned size()const { return m_used; }
    unsigned size() { return m_used; }
-   void resize(unsigned n, const T& val)
+   bool resize(unsigned n, const T& val)
    {
       if(n > m_capacity)
       {
+#ifndef BOOST_NO_EXCEPTIONS
          BOOST_MATH_THROW_EXCEPTION(std::runtime_error("Exhausted storage for Bernoulli numbers."));
+#else
+         return false;
+#endif
       }
       for(unsigned i = m_used; i < n; ++i)
          new (m_data + i) T(val);
       m_used = n;
+      return true;
    }
-   void resize(unsigned n) { resize(n, T()); }
+   bool resize(unsigned n) { return resize(n, T()); }
    T* begin() { return m_data; }
    T* end() { return m_data + m_used; }
    T* begin()const { return m_data; }
@@ -217,10 +222,14 @@ public:
 
    typedef fixed_vector<T> container_type;
 
-   void tangent(std::size_t m)
+   bool tangent(std::size_t m)
    {
       static const std::size_t min_overflow_index = b2n_overflow_limit<T, Policy>() - 1;
-      tn.resize(static_cast<typename container_type::size_type>(m), T(0U));
+
+      if (!tn.resize(static_cast<typename container_type::size_type>(m), T(0U)))
+      {
+         return false;
+      }
 
       BOOST_MATH_INSTRUMENT_VARIABLE(min_overflow_index);
 
@@ -268,17 +277,20 @@ public:
          BOOST_MATH_INSTRUMENT_VARIABLE(i);
          BOOST_MATH_INSTRUMENT_VARIABLE(tn[static_cast<typename container_type::size_type>(i)]);
       }
+      return true;
    }
 
-   void tangent_numbers_series(const std::size_t m)
+   bool tangent_numbers_series(const std::size_t m)
    {
       BOOST_MATH_STD_USING
       static const std::size_t min_overflow_index = b2n_overflow_limit<T, Policy>() - 1;
 
       typename container_type::size_type old_size = bn.size();
 
-      tangent(m);
-      bn.resize(static_cast<typename container_type::size_type>(m));
+      if (!tangent(m))
+         return false;
+      if (!bn.resize(static_cast<typename container_type::size_type>(m)))
+         return false;
 
       if(!old_size)
       {
@@ -321,6 +333,7 @@ public:
 
          bn[static_cast<typename container_type::size_type>(i)] = ((!b_neg) ? b : T(-b));
       }
+      return true;
    }
 
    template <class OutputIterator>
@@ -379,7 +392,10 @@ public:
       if(start + n >= bn.size())
       {
          std::size_t new_size = (std::min)((std::max)((std::max)(std::size_t(start + n), std::size_t(bn.size() + 20)), std::size_t(50)), std::size_t(bn.capacity()));
-         tangent_numbers_series(new_size);
+         if (!tangent_numbers_series(new_size))
+         {
+            return std::fill_n(out, n, policies::raise_evaluation_error<T>("boost::math::bernoulli_b2n<%1%>(std::size_t)", "Unable to allocate Bernoulli numbers cache for %1% values", T(start + n), pol));
+         }
       }
 
       for(std::size_t i = (std::max)(std::size_t(max_bernoulli_b2n<T>::value + 1), start); i < start + n; ++i)
@@ -413,7 +429,8 @@ public:
             if(start + n >= bn.size())
             {
                std::size_t new_size = (std::min)((std::max)((std::max)(std::size_t(start + n), std::size_t(bn.size() + 20)), std::size_t(50)), std::size_t(bn.capacity()));
-               tangent_numbers_series(new_size);
+               if (!tangent_numbers_series(new_size))
+                  return std::fill_n(out, n, policies::raise_evaluation_error<T>("boost::math::bernoulli_b2n<%1%>(std::size_t)", "Unable to allocate Bernoulli numbers cache for %1% values", T(new_size), pol));
             }
             m_counter.store(static_cast<atomic_integer_type>(bn.size()), std::memory_order_release);
          }
@@ -483,7 +500,8 @@ public:
       if(start + n >= bn.size())
       {
          std::size_t new_size = (std::min)((std::max)((std::max)(start + n, std::size_t(bn.size() + 20)), std::size_t(50)), std::size_t(bn.capacity()));
-         tangent_numbers_series(new_size);
+         if (!tangent_numbers_series(new_size))
+            return std::fill_n(out, n, policies::raise_evaluation_error<T>("boost::math::bernoulli_b2n<%1%>(std::size_t)", "Unable to allocate Bernoulli numbers cache for %1% values", T(start + n), pol));
       }
 
       for(std::size_t i = start; i < start + n; ++i)
@@ -527,7 +545,8 @@ public:
             if(start + n >= bn.size())
             {
                std::size_t new_size = (std::min)((std::max)((std::max)(start + n, std::size_t(bn.size() + 20)), std::size_t(50)), std::size_t(bn.capacity()));
-               tangent_numbers_series(new_size);
+               if (!tangent_numbers_series(new_size))
+                  return std::fill_n(out, n, policies::raise_evaluation_error<T>("boost::math::bernoulli_b2n<%1%>(std::size_t)", "Unable to allocate Bernoulli numbers cache for %1% values", T(start + n), pol));
             }
             m_counter.store(static_cast<atomic_integer_type>(bn.size()), std::memory_order_release);
          }
