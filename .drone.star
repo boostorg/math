@@ -20,7 +20,8 @@ def main(ctx):
   gnu_5_stds = [ "gnu++11", "c++11", "gnu++14", "c++14" ]
   gnu_6_stds = [ "gnu++11", "c++11", "gnu++14", "c++14", "gnu++17", "c++17" ]
   clang_6_stds = [ "c++11", "c++14", "c++17" ]
-  gnu_10_stds = [ "gnu++11", "gnu++14", "gnu++17", "gnu++20" ]
+  gnu_9_stds = [ "gnu++14", "c++14", "gnu++17", "c++17", "gnu++2a", "c++2a" ]
+  clang_10_stds = [ "c++14", "c++17", "c++2a" ]
 
   result = []
 
@@ -46,8 +47,11 @@ def main(ctx):
       result.append(linux_cxx("Ubunti clang++-7 " + cxx + " " + suite, "clang++-7", packages="clang-7", llvm_os="xenial", llvm_ver="7", buildtype="boost", image="cppalliance/droneubuntu1804:1", environment={'TOOLSET': 'clang', 'COMPILER': 'clang++-7', 'CXXSTD': cxx, 'TEST_SUITE': suite, }, globalenv=globalenv))
       result.append(linux_cxx("Ubunti clang++-8 " + cxx + " " + suite, "clang++-8", packages="clang-8", llvm_os="xenial", llvm_ver="8", buildtype="boost", image="cppalliance/droneubuntu1804:1", environment={'TOOLSET': 'clang', 'COMPILER': 'clang++-8', 'CXXSTD': cxx, 'TEST_SUITE': suite, }, globalenv=globalenv))
       result.append(linux_cxx("Ubunti clang++-9 " + cxx + " " + suite, "clang++-9", packages="clang-9", llvm_os="xenial", llvm_ver="9", buildtype="boost", image="cppalliance/droneubuntu1904:1", environment={'TOOLSET': 'clang', 'COMPILER': 'clang++-9', 'CXXSTD': cxx, 'TEST_SUITE': suite, }, globalenv=globalenv))
-    for cxx in gnu_10_stds:
+    for cxx in gnu_9_stds:
+      result.append(linux_cxx("Ubunti g++-9 " + cxx + " " + suite, "g++-9", packages="g++-9", buildtype="boost", image="cppalliance/droneubuntu2004:1", environment={'TOOLSET': 'gcc', 'COMPILER': 'g++-9', 'CXXSTD': cxx, 'TEST_SUITE': suite, }, globalenv=globalenv))
       result.append(linux_cxx("Ubunti g++-10 " + cxx + " " + suite, "g++-10", packages="g++-10", buildtype="boost", image="cppalliance/droneubuntu2004:1", environment={'TOOLSET': 'gcc', 'COMPILER': 'g++-10', 'CXXSTD': cxx, 'TEST_SUITE': suite, }, globalenv=globalenv))
+      result.append(linux_cxx("Ubunti g++-11 " + cxx + " " + suite, "g++-11", packages="g++-11", buildtype="boost", image="cppalliance/droneubuntu2004:1", environment={'TOOLSET': 'gcc', 'COMPILER': 'g++-11', 'CXXSTD': cxx, 'TEST_SUITE': suite, }, globalenv=globalenv))
+    for cxx in clang_10_stds:
       result.append(linux_cxx("Ubunti clang++-10 " + cxx + " " + suite, "clang++-10", packages="clang-10", llvm_os="xenial", llvm_ver="10", buildtype="boost", image="cppalliance/droneubuntu1804:1", environment={'TOOLSET': 'clang', 'COMPILER': 'clang++-10', 'CXXSTD': cxx, 'TEST_SUITE': suite, }, globalenv=globalenv))
 
   return result
