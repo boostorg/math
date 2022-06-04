@@ -94,15 +94,18 @@ Real evaluation_condition_number(F const & f, Real const & x)
     }
     bool caught_exception = false;
     Real fp;
+#ifndef BOOST_NO_EXCEPTIONS
     try
     {
+#endif
         fp = finite_difference_derivative(f, x);
+#ifndef BOOST_NO_EXCEPTIONS
     }
     catch(...)
     {
         caught_exception = true;
     }
-
+#endif
     if (isnan(fp) || caught_exception)
     {
         // Check if the right derivative exists:

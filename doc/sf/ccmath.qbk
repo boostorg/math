@@ -182,6 +182,13 @@ All of the following functions require C++17 or greater.
         template <typename T>
         inline constexpr bool isunordered(T x, T y) noexcept
 
+        template <typename Real>
+        inline constexpr Real fma(Real x, Real y, Real z) noexcept
+        Requires compiling with fma flag
+
+        template <typename Arithmetic1, typename Arithmetic2, typename Arithmetic3>
+        inline constepxr Promoted fma(Arithmetic1 x, Arithmetic2 y, Arithmetic3 z) noexcept
+
     } // Namespaces
 
 [endsect] [/section:ccmath Constexpr CMath]

@@ -360,7 +360,7 @@ public:
    size_type degree() const
    {
        if (size() == 0)
-           throw std::logic_error("degree() is undefined for the zero polynomial.");
+          BOOST_MATH_THROW_EXCEPTION(std::logic_error("degree() is undefined for the zero polynomial."));
        return m_data.size() - 1;
    }
    value_type& operator[](size_type i)
