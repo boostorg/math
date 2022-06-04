@@ -12,6 +12,9 @@
 #include <cstdint>
 #include <limits>
 #include <type_traits>
+#include <stdexcept>
+#include <boost/math/tools/config.hpp>
+#include <boost/math/tools/is_constant_evaluated.hpp>
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/tools/traits.hpp>
 #include <boost/math/ccmath/ilogb.hpp>
@@ -23,14 +26,23 @@
 
 namespace boost::math::ccmath {
 
-// Forward declarations
-template <typename T>
-constexpr auto float_next(const T& val);
-
 namespace detail {
 
+// Forward declarations
 template <typename T>
-constexpr auto normalize_value(const T& val)
+constexpr T float_next(T val);
+
+template <typename T>
+constexpr T float_prior(T val);
+
+template <typename T>
+constexpr T float_distance(T a, T b);
+
+template <typename T, typename Integer, std::enable_if_t<std::is_integral_v<Integer>, bool> = true>
+constexpr T float_advance(T val, Integer distance);
+
+template <typename T>
+constexpr auto normalize_value(T val)
 {
     if constexpr (std::numeric_limits<T>::is_specialized && std::numeric_limits<T>::radix != 2)
     {
@@ -80,15 +92,20 @@ constexpr T get_min_shifted_value()
     }
 }
 
-template <typename T>
+template <typename T, bool b = boost::math::tools::detail::has_backend_type<T>::value>
 struct exponent_type
 {
-    using type = std::conditional_t<boost::math::tools::detail::has_backend_type<T>::value, 
-                                    typename T::backend_type::exponent_type, int>;
+    using type = int;
 };
 
 template <typename T>
-constexpr T float_next_impl(const T& val)
+struct exponent_type<T, true>
+{
+    using type = typename T::backend_type::exponent_type;
+};
+
+template <typename T>
+constexpr T float_next_impl(T val)
 {
     using exponent_type = typename exponent_type<T>::type;
 
@@ -104,13 +121,13 @@ constexpr T float_next_impl(const T& val)
         }
         else
         {
-            static_assert(sizeof(T) == 0, "Argument to float next must be finite");
+            BOOST_MATH_ASSERT_MSG(sizeof(T) == 0, "Argument to float next must be finite");
         }
     }
 
     if (val >= tools::max_value<T>())
     {
-        static_assert(sizeof(T) == 0, "Overflow in constexpr float_next");
+        BOOST_MATH_ASSERT_MSG(sizeof(T) == 0, "Overflow in constexpr float_next");
     }
 
     if (val == 0)
@@ -127,7 +144,7 @@ constexpr T float_next_impl(const T& val)
             // would not be a denorm, then shift the input, increment, and shift back.
             // This avoids issues with the Intel SSE2 registers when the FTZ or DAZ flags are set.
             //
-            return boost::math::ccmath::scalbn(boost::math::ccmath::float_next(T(boost::math::ccmath::scalbn(val, 2 * std::numeric_limits<T>::digits))), -2 * std::numeric_limits<T>::digits);
+            return boost::math::ccmath::scalbn(float_next(T(boost::math::ccmath::scalbn(val, 2 * std::numeric_limits<T>::digits))), -2 * std::numeric_limits<T>::digits);
         }
 
         expon = 1 + boost::math::ccmath::ilogb(val);
@@ -148,7 +165,7 @@ constexpr T float_next_impl(const T& val)
             // would not be a denorm, then shift the input, increment, and shift back.
             // This avoids issues with the Intel SSE2 registers when the FTZ or DAZ flags are set.
             //
-            return boost::math::ccmath::ldexp(boost::math::ccmath::float_next(T(boost::math::ccmath::ldexp(val, 2 * tools::digits<T>()))), -2 * tools::digits<T>());
+            return boost::math::ccmath::ldexp(float_next(T(boost::math::ccmath::ldexp(val, 2 * tools::digits<T>()))), -2 * tools::digits<T>());
         }
 
         if (boost::math::ccmath::frexp(val, &expon) == -0.5)
@@ -168,13 +185,59 @@ constexpr T float_next_impl(const T& val)
     return val + diff;
 }
 
-} // Namespace detail
-
 template <typename T>
-constexpr auto float_next(const T& val)
+constexpr T float_next(T val)
 {
     return detail::float_next_impl(detail::normalize_value(val));
 }
+
+template <typename T>
+constexpr T float_prior(T val)
+{
+
+}
+
+} // Namespace detail
+
+template <typename T, std::enable_if_t<std::is_floating_point_v<T>, bool> = true>
+constexpr auto nextafter(T from, T to)
+{
+    if (BOOST_MATH_IS_CONSTANT_EVALUATED(from))
+    {
+        if (from < to)
+        {
+            boost::math::ccmath::detail::float_next(from);
+        }
+        else if (from == to)
+        {
+            // IEC 60559 recommends that from is returned whenever from == to. 
+            // These functions return to instead, which makes the behavior around zero consistent: 
+            // std::nextafter(-0.0, +0.0) returns +0.0 and std::nextafter(+0.0, -0.0) returns -0.0.
+            return to;
+        }
+        else
+        {
+            return boost::math::ccmath::detail::float_prior(from);
+        }
+    }
+    else
+    {
+        using std::nextafter;
+        return nextafter(from, to);
+    }
+}
+
+constexpr float nextafterf(float from, float to)
+{
+    return nextafter(from, to);
+}
+
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+constexpr long double nextafterl(long double from, long double to)
+{
+    return nextafter(from, to);
+}
+#endif
 
 } // Namespace boost::math::ccmath
 
