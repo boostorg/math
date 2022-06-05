@@ -312,6 +312,38 @@ constexpr auto nextafter(T from, T to)
     }
 }
 
+template <typename T1, typename T2>
+constexpr auto nextafter(T1 from, T2 to)
+{
+    if(BOOST_MATH_IS_CONSTANT_EVALUATED(x))
+    {
+        // If the type is an integer (e.g. epsilon == 0) then set the epsilon value to 1 so that type is at a minimum 
+        // cast to double
+        constexpr auto T1p = std::numeric_limits<T1>::epsilon() > 0 ? std::numeric_limits<T1>::epsilon() : 1;
+        constexpr auto T2p = std::numeric_limits<T2>::epsilon() > 0 ? std::numeric_limits<T2>::epsilon() : 1;
+        
+        using promoted_type = 
+                              #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+                              std::conditional_t<T1p <= LDBL_EPSILON && T1p <= T2p, T1,
+                              std::conditional_t<T2p <= LDBL_EPSILON && T2p <= T1p, T2,
+                              #endif
+                              std::conditional_t<T1p <= DBL_EPSILON && T1p <= T2p, T1,
+                              std::conditional_t<T2p <= DBL_EPSILON && T2p <= T1p, T2, double
+                              #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+                              >>>>;
+                              #else
+                              >>;
+                              #endif
+
+        return boost::math::ccmath::fmod(promoted_type(x), promoted_type(y));
+    }
+    else
+    {
+        using std::nextafter;
+        return nextafter(from, to);
+    }
+}
+
 constexpr float nextafterf(float from, float to)
 {
     return nextafter(from, to);
@@ -322,6 +354,80 @@ constexpr long double nextafterl(long double from, long double to)
 {
     return nextafter(from, to);
 }
+
+template <typename T, std::enable_if_t<std::is_floating_point_v<T>, bool> = true>
+constexpr auto nexttoward(T from, long double to)
+{
+    if (BOOST_MATH_IS_CONSTANT_EVALUATED(from))
+    {
+        if (boost::math::ccmath::isnan(from) || boost::math::ccmath::isnan(to))
+        {
+            return std::numeric_limits<T>::quiet_NaN();
+        }
+        else if (from < to)
+        {
+            return static_cast<T>(boost::math::ccmath::detail::float_next<long double>(from));
+        }
+        else if (from == to)
+        {
+            // IEC 60559 recommends that from is returned whenever from == to. 
+            // These functions return to instead, which makes the behavior around zero consistent: 
+            // std::nexttoward(-0.0, +0.0) returns +0.0 and std::nexttoward(+0.0, -0.0) returns -0.0.
+            return static_cast<T>(to);
+        }
+        else
+        {
+            return static_cast<T>(boost::math::ccmath::detail::float_prior<long double>(from));
+        }
+    }
+    else
+    {
+        using std::nexttoward;
+        return std::nexttoward(from, to);
+    }
+}
+
+template <typename T, std::enable_if_t<!std::is_floating_point_v<T>, bool> = true>
+constexpr auto nexttoward(T from, long double to)
+{
+    constexpr auto Tp = std::numeric_limits<T1>::epsilon() > 0 ? std::numeric_limits<T1>::epsilon() : 1;
+
+    using promoted_type = std::conditional_t<Tp <= DBL_EPSILON, T, double>;
+
+    if (BOOST_MATH_IS_CONSTANT_EVALUATED(from))
+    {
+        if (boost::math::ccmath::isnan(from) || boost::math::ccmath::isnan(to))
+        {
+            return std::numeric_limits<T>::quiet_NaN();
+        }
+        else if (from < to)
+        {
+            return static_cast<T>(boost::math::ccmath::detail::float_next<promoted_type>(from));
+        }
+        else if (from == to)
+        {
+            // IEC 60559 recommends that from is returned whenever from == to. 
+            // These functions return to instead, which makes the behavior around zero consistent: 
+            // std::nexttoward(-0.0, +0.0) returns +0.0 and std::nexttoward(+0.0, -0.0) returns -0.0.
+            return to;
+        }
+        else
+        {
+            return static_cast<T>(boost::math::ccmath::detail::float_prior<promoted_type>(from));
+        }
+    }
+    else
+    {
+        using std::nexttoward;
+        return std::nexttoward(from, to);
+    }
+}
+
+constexpr float nexttowardf(float from, long double to)
+{
+    return nexttoward(from, to);
+}
+
 #endif
 
 } // Namespace boost::math::ccmath
