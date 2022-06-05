@@ -186,6 +186,87 @@ constexpr T float_next_impl(T val)
 }
 
 template <typename T>
+constexpr T float_prior_impl(T val)
+{
+    using exponent_type = typename exponent_type<T>::type;
+
+    exponent_type expon {};
+
+    const int fpclass = (boost::math::ccmath::fpclassify)(val);
+
+    if (fpclass == FP_NAN || fpclass == FP_INFINITE)
+    {
+        if (val < 0)
+        {
+            return -tools::max_value<T>();
+        }
+        else
+        {
+            BOOST_MATH_ASSERT_MSG(sizeof(T) == 0, "Argument to float next must be finite");
+        }
+    }
+
+    if (val >= tools::max_value<T>())
+    {
+        BOOST_MATH_ASSERT_MSG(sizeof(T) == 0, "Overflow in constexpr float_next");
+    }
+
+    if (val == 0)
+    {
+        return get_smallest_value<T>();
+    }
+
+    T diff {};
+    T remain {};
+    if constexpr (std::numeric_limits<T>::is_specialized && std::numeric_limits<T>::radix != 2)
+    {
+        if (fpclass != FP_SUBNORMAL && (fpclass != FP_ZERO) && (boost::math::ccmath::fabs(val) < detail::get_min_shifted_value<T>()) && (val != -tools::min_value<T>()))
+        {
+            // Special case: if the value of the least significant bit is a denorm, and the result
+            // would not be a denorm, then shift the input, increment, and shift back.
+            // This avoids issues with the Intel SSE2 registers when the FTZ or DAZ flags are set.
+            //
+            return boost::math::ccmath::scalbn(float_prior(T(boost::math::ccmath::scalbn(val, 2 * std::numeric_limits<T>::digits))), -2 * std::numeric_limits<T>::digits);
+        }
+
+        expon = 1 + boost::math::ccmath::ilogb(val);
+        
+        remain = boost::math::ccmath::scalbn(val, -expon);
+        if (remain * std::numeric_limits<T>::radix == 1)
+        {
+            // When val is a power of two we must rduce the exponent
+            --expon;
+        }
+        diff = boost::math::ccmath::scalbn(T(1), expon - std::numeric_limits<T>::digits);
+    }
+    else
+    {
+        if (fpclass != FP_SUBNORMAL && (fpclass != FP_ZERO) && (boost::math::ccmath::fabs(val) < detail::get_min_shifted_value<T>()) && (val != -tools::min_value<T>()))
+        {
+            // Special case: if the value of the least significant bit is a denorm, and the result
+            // would not be a denorm, then shift the input, increment, and shift back.
+            // This avoids issues with the Intel SSE2 registers when the FTZ or DAZ flags are set.
+            //
+            return boost::math::ccmath::ldexp(float_prior(T(boost::math::ccmath::ldexp(val, 2 * tools::digits<T>()))), -2 * tools::digits<T>());
+        }
+
+        remain = boost::math::ccmath::frexp(val, &expon);
+        if (remain == 0.5)
+        {
+            --expon;
+        }
+        diff = boost::math::ccmath::ldexp(T(1), expon - tools::digits<T>());
+    }
+
+    if (diff == 0)
+    {
+        diff = get_smallest_value<T>();
+    }
+
+    return val - diff;
+}
+
+template <typename T>
 constexpr T float_next(T val)
 {
     return detail::float_next_impl(detail::normalize_value(val));
@@ -194,7 +275,7 @@ constexpr T float_next(T val)
 template <typename T>
 constexpr T float_prior(T val)
 {
-
+    return detail::float_prior_impl(detail::normalize_value(val));
 }
 
 } // Namespace detail
@@ -204,9 +285,13 @@ constexpr auto nextafter(T from, T to)
 {
     if (BOOST_MATH_IS_CONSTANT_EVALUATED(from))
     {
-        if (from < to)
+        if (boost::math::ccmath::isnan(from) || boost::math::ccmath::isnan(to))
         {
-            boost::math::ccmath::detail::float_next(from);
+            return std::numeric_limits<T>::quiet_NaN();
+        }
+        else if (from < to)
+        {
+            return boost::math::ccmath::detail::float_next(from);
         }
         else if (from == to)
         {
