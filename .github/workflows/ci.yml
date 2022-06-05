@@ -20,7 +20,7 @@ jobs:
       matrix:
         compiler: [ g++-12, clang++-14 ]
         standard: [ c++14, c++17, c++20 ]
-        suite: [ float128_tests, special_fun, distribution_tests, misc, quadrature, mp, interpolators, autodiff, ../example//examples, ../tools ]
+        suite: [ github_ci_block_1, github_ci_block_2 ]
     steps:
       - uses: actions/checkout@v2
         with:
@@ -147,7 +147,7 @@ jobs:
       matrix:
         toolset: [ clang ]
         standard: [ 11, 14, 17, 20 ]
-        suite: [ float128_tests, special_fun, distribution_tests, misc, quadrature, mp, interpolators, autodiff, ../example//examples, ../tools ]
+        suite: [ github_ci_block_1, github_ci_block_2 ]
     steps:
       - uses: actions/checkout@v2
         with:
@@ -195,7 +195,7 @@ jobs:
       matrix:
         toolset: [ gcc, msvc-14.0, msvc-14.2 ]
         standard: [ 14, 17 ]
-        suite: [ float128_tests, special_fun, distribution_tests, misc, quadrature, mp, interpolators, autodiff, ../example//examples, ../tools ]
+        suite: [ github_ci_block_1, github_ci_block_2 ]
     steps:
       - uses: actions/checkout@v2
         with:
@@ -242,7 +242,7 @@ jobs:
       fail-fast: false
       matrix:
         standard: [ 14, 17, 20 ]
-        suite: [ float128_tests, special_fun, distribution_tests, misc, quadrature, mp, interpolators, autodiff, ../example//examples, ../tools ]
+        suite: [ github_ci_block_1, github_ci_block_2 ]
     steps:
       - uses: actions/checkout@v2
         with:
@@ -285,7 +285,7 @@ jobs:
       matrix:
         compiler: [ g++-11 ]
         standard: [ c++17 ]
-        suite: [ float128_tests, special_fun, distribution_tests, misc, quadrature, mp, interpolators, autodiff, ../example//examples, ../tools ]
+        suite: [ github_ci_block_1, github_ci_block_2 ]
     env:
       TOOLSET: gcc
     steps:
@@ -415,7 +415,7 @@ jobs:
       matrix:
         compiler: [ g++-10 ]
         standard: [ c++14, c++17, c++20 ]
-        suite: [ float128_tests, special_fun, distribution_tests, misc, quadrature, interpolators, autodiff, ../example//examples, ../tools ]
+        suite: [ github_ci_block_1, github_ci_block_2 ]
     steps:
       - uses: actions/checkout@v2
         with:
