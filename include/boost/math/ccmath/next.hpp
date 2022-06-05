@@ -17,12 +17,15 @@
 #include <boost/math/tools/is_constant_evaluated.hpp>
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/tools/traits.hpp>
+#include <boost/math/tools/promotion.hpp>
 #include <boost/math/ccmath/ilogb.hpp>
 #include <boost/math/ccmath/ldexp.hpp>
 #include <boost/math/ccmath/scalbln.hpp>
 #include <boost/math/ccmath/round.hpp>
 #include <boost/math/ccmath/fabs.hpp>
 #include <boost/math/ccmath/fpclassify.hpp>
+#include <boost/math/ccmath/isfinite.hpp>
+#include <boost/math/ccmath/fmod.hpp>
 
 namespace boost::math::ccmath {
 
@@ -111,7 +114,7 @@ constexpr T float_next_impl(T val)
 
     exponent_type expon {};
 
-    const int fpclass = (boost::math::ccmath::fpclassify)(val);
+    const int fpclass = boost::math::ccmath::fpclassify(val);
 
     if (fpclass == FP_NAN || fpclass == FP_INFINITE)
     {
@@ -192,7 +195,7 @@ constexpr T float_prior_impl(T val)
 
     exponent_type expon {};
 
-    const int fpclass = (boost::math::ccmath::fpclassify)(val);
+    const int fpclass = boost::math::ccmath::fpclassify(val);
 
     if (fpclass == FP_NAN || fpclass == FP_INFINITE)
     {
@@ -267,6 +270,12 @@ constexpr T float_prior_impl(T val)
 }
 
 template <typename T>
+constexpr T float_distance_impl(T a, T b)
+{
+
+}
+
+template <typename T>
 constexpr T float_next(T val)
 {
     return detail::float_next_impl(detail::normalize_value(val));
@@ -276,6 +285,40 @@ template <typename T>
 constexpr T float_prior(T val)
 {
     return detail::float_prior_impl(detail::normalize_value(val));
+}
+
+template <typename T, typename U>
+constexpr auto float_distance(T a, U b)
+{
+    //
+    // We allow ONE of a and b to be an integer type, otherwise both must be the SAME type.
+    //
+    static_assert(
+         (std::is_same_v<T, U>
+      || (std::is_integral_v<T> && !std::is_integral_v<U>)
+      || (!std::is_integral_v<T> && std::is_integral_v<U>)
+      || (std::numeric_limits<T>::is_specialized && std::numeric_limits<U>::is_specialized
+        && (std::numeric_limits<T>::digits == std::numeric_limits<U>::digits)
+        && (std::numeric_limits<T>::radix == std::numeric_limits<U>::radix)
+        && !std::numeric_limits<T>::is_integer && !std::numeric_limits<U>::is_integer)),
+      "Float distance between two different floating point types is undefined.");
+    
+    if constexpr (!std::is_same_v<T, U>)
+    {
+        if constexpr (std::is_integral_v<T>)
+        {
+            return float_distance(static_cast<U>(a), b);
+        }
+        else
+        {
+            return float_distance(a, static_cast<T>(b));
+        }
+    }
+    else
+    {
+        using return_type = tools::promote_args_t<T, U>;
+        return float_distance_impl(normalize_value(return_type(a)), normalize_value(return_type(b)));
+    }
 }
 
 } // Namespace detail
@@ -315,27 +358,10 @@ constexpr auto nextafter(T from, T to)
 template <typename T1, typename T2>
 constexpr auto nextafter(T1 from, T2 to)
 {
-    if(BOOST_MATH_IS_CONSTANT_EVALUATED(x))
+    if(BOOST_MATH_IS_CONSTANT_EVALUATED(from))
     {
-        // If the type is an integer (e.g. epsilon == 0) then set the epsilon value to 1 so that type is at a minimum 
-        // cast to double
-        constexpr auto T1p = std::numeric_limits<T1>::epsilon() > 0 ? std::numeric_limits<T1>::epsilon() : 1;
-        constexpr auto T2p = std::numeric_limits<T2>::epsilon() > 0 ? std::numeric_limits<T2>::epsilon() : 1;
-        
-        using promoted_type = 
-                              #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-                              std::conditional_t<T1p <= LDBL_EPSILON && T1p <= T2p, T1,
-                              std::conditional_t<T2p <= LDBL_EPSILON && T2p <= T1p, T2,
-                              #endif
-                              std::conditional_t<T1p <= DBL_EPSILON && T1p <= T2p, T1,
-                              std::conditional_t<T2p <= DBL_EPSILON && T2p <= T1p, T2, double
-                              #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-                              >>>>;
-                              #else
-                              >>;
-                              #endif
-
-        return boost::math::ccmath::fmod(promoted_type(x), promoted_type(y));
+        using promoted_type = tools::promote_args_2_t<T1, T2>;
+        return boost::math::ccmath::fmod(promoted_type(from), promoted_type(to));
     }
     else
     {
@@ -390,9 +416,7 @@ constexpr auto nexttoward(T from, long double to)
 template <typename T, std::enable_if_t<!std::is_floating_point_v<T>, bool> = true>
 constexpr auto nexttoward(T from, long double to)
 {
-    constexpr auto Tp = std::numeric_limits<T1>::epsilon() > 0 ? std::numeric_limits<T1>::epsilon() : 1;
-
-    using promoted_type = std::conditional_t<Tp <= DBL_EPSILON, T, double>;
+    using promoted_type = tools::promote_args_2_t<T, long double>;
 
     if (BOOST_MATH_IS_CONSTANT_EVALUATED(from))
     {
