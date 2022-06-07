@@ -1634,3 +1634,10 @@ alias no_eh_tests :
 ;
 
 explicit no_eh_tests ;
+
+# Some aliases which group blocks of tests for CI testing:
+
+alias github_ci_block_1 : special_fun float128_tests distribution_tests mp misc ;
+alias github_ci_block_2 : quadrature interpolators autodiff ../example//examples ../tools ;
+explicit github_ci_block_1 ;
+explicit github_ci_block_2 ;

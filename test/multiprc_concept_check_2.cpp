@@ -35,7 +35,8 @@ void foo()
 
 int main()
 {
-   BOOST_CONCEPT_ASSERT((boost::math::concepts::RealTypeConcept<test_type>));
+   boost::math::concepts::RealTypeConcept<test_type> checker;
+   checker.constraints();
 }
 
 
