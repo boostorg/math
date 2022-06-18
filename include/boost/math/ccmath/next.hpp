@@ -283,6 +283,9 @@ constexpr T float_distance_impl(T a, T b)
     BOOST_MATH_ASSERT_MSG(boost::math::ccmath::isfinite(a), "a must be finite.");
     BOOST_MATH_ASSERT_MSG(boost::math::ccmath::isfinite(b), "b must be finite.");
 
+    constexpr T smallest_value = detail::get_smallest_value<T>();
+    constexpr T digits = std::numeric_limits<T>::digits;
+
     if (a > b)
     {
         return -float_distance(b, a);
@@ -293,16 +296,16 @@ constexpr T float_distance_impl(T a, T b)
     }
     else if (a == 0)
     {
-        return 1 + boost::math::ccmath::fabs(static_cast<T>((b < 0) ? T(-get_smallest_value<T>()) : get_smallest_value<T>()), b);
+        return 1 + boost::math::ccmath::fabs(static_cast<T>((b < 0) ? T(-smallest_value) : smallest_value), b);
     }
     else if (b == 0)
     {
-        return 1 + boost::math::ccmath::fabs(float_distance(static_cast<T>((a < 0) ? T(-detail::get_smallest_value<T>()) : detail::get_smallest_value<T>()), a));
+        return 1 + boost::math::ccmath::fabs(float_distance(static_cast<T>((a < 0) ? T(-smallest_value) : smallest_value), a));
     }
     else if (sign(a) != sign(b))
     {
-        return 2 + boost::math::ccmath::fabs(float_distance(static_cast<T>((b < 0) ? T(-detail::get_smallest_value<T>()) : detail::get_smallest_value<T>()), b))
-        + boost::math::ccmath::fabs(float_distance(static_cast<T>((a < 0) ? T(-detail::get_smallest_value<T>()) : detail::get_smallest_value<T>()), a));
+        return 2 + boost::math::ccmath::fabs(float_distance(static_cast<T>((b < 0) ? T(-smallest_value) : smallest_value), b))
+        + boost::math::ccmath::fabs(float_distance(static_cast<T>((a < 0) ? T(-smallest_value) : smallest_value), a));
     }
 
     //
@@ -318,19 +321,19 @@ constexpr T float_distance_impl(T a, T b)
     BOOST_MATH_ASSERT(b >= a);
 
     std::intmax_t expon {};
+    T result {};
     
     if constexpr (!std::numeric_limits<T>::is_specialized || !std::numeric_limits<T>::radix != 2)
     {
         boost::math::ccmath::frexp((boost::math::ccmath::fpclassify(a) == FP_SUBNORMAL) ? tools::min_value<T>() : a, &expon);
         T upper = boost::math::ccmath::ldexp(static_cast<T>(1), expon);
-        auto result = static_cast<T>(0);
 
         // If b is greater than upper, then we must spith the calculation as the size of the ULP changes
         // with each order of magnitude change:
 
         if (b > upper)
         {
-            int expon2;
+            int expon2 {};
             boost::math::ccmath::frexp(b, &expon2);
             T upper2 = boost::math::ccmath::ldexp(static_cast<T>(0.5), expon2);
             result = float_distance(upper2, b);
@@ -372,11 +375,6 @@ constexpr T float_distance_impl(T a, T b)
             y = -y;
         }
         result += ldexp(x, expon) + ldexp(y, expon);
-        //
-        // Result must be an integer:
-        //
-        BOOST_MATH_ASSERT(result == boost::math::ccmath::floor(result));
-        return result;
     }
     else
     {
@@ -386,7 +384,63 @@ constexpr T float_distance_impl(T a, T b)
 
         // Note that if a is a denorm then the usual formula fails becasue we actually have fewer
         // than tools::digits<T>() significant bits in the represenation
+        expon = boost::math::ccmath::ilogb((boost::math::ccmath::fpclassify(a) == FP_SUBNORMAL) ? tools::min_value<T>() : a);
+        T upper = boost::math::ccmath::scalbn(static_cast<T>(1), expon);
+
+        // If be is greater than upper, then we must split the calculation as the size of the ULP changes
+        // with each order of magnitude
+        if (b > upper)
+        {
+            std::intmax_t expon2 = 1 + boost::math::ccmath::ilogb(b);
+            T upper2 = boost::math::ccmath::scalbn(static_cast<T>(1), expon2 - 1);
+            result = float_distance(upper2, b);
+            result += (expon2 - expon - 1) * boost::math::ccmath::scalbn(static_cast<T>(1), digits - 1);
+        }
+
+        // Use compensated double-double addition to avoid rounding erros in the subtraction
+        expon = digits - expon;
+        T mb {};
+        T x {};
+        T y {};
+        T z {};
+
+        if ((boost::math::ccmath::fpclassify(a) == FP_SUBNORMAL) || (b - a < tools::min_value<T>()))
+        {
+            // Special case - either one end of the range is a denormal, or else the difference is.
+            // The regular code will fail if we're using the SSE2 registers on Intel and either
+            // the FTZ or DAZ flags are set.
+
+            T a2 = boost::math::ccmath::scalbn(a, digits);
+            T b2 = boost::math::ccmath::scalbn(b, digits);
+            mb = min(static_cast<T>(boost::math::ccmath::scalbn(upper, digits)), b2);
+            x = a2 + mb;
+            z = x - a2;
+            y = (a2 - (x - z)) + (mb - z);
+
+            expon -= digits;
+        }
+        else
+        {
+            mb = min(upper, b);
+            x = a + mb;
+            z = x - a;
+            y = (a - (x - z)) + (mb - z);
+        }
+
+        if (x < 0)
+        {
+            x = -x;
+            y = -y;
+        }
+
+        result += scalbn(x, expon) + scalbn(y, expon);
     }
+
+    //
+    // Result must be an integer:
+    //
+    BOOST_MATH_ASSERT(result == boost::math::ccmath::floor(result));
+    return result;
 }
 
 template <typename T>
