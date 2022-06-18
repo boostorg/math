@@ -8,9 +8,9 @@
 
 void compile_and_link_test()
 {
-   check_result<float>(boost::math::ccmath::float_next(1.0f));
-   check_result<double>(boost::math::ccmath::float_next(1.0));
+   check_result<float>(boost::math::ccmath::nextafter(1.0F, 1.05F));
+   check_result<double>(boost::math::ccmath::nextafter(1.0, 1.0));
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-   check_result<long double>(boost::math::ccmath::float_next(1.0l));
+   check_result<long double>(boost::math::ccmath::nexttoward(1.0L, 1.0L));
 #endif
 }
