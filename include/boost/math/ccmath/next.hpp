@@ -286,6 +286,7 @@ constexpr T float_distance_impl(T a, T b)
     constexpr T smallest_value = detail::get_smallest_value<T>();
     constexpr T digits = std::numeric_limits<T>::digits;
 
+    // Special case handling
     if (a > b)
     {
         return -float_distance(b, a);
