@@ -372,6 +372,8 @@ namespace detail {
    T bracket_root_towards_max(F f, T guess, const T& f0, T& min, T& max, std::uintmax_t& count) noexcept(BOOST_MATH_IS_FLOAT(T) && noexcept(std::declval<F>()(std::declval<T>())))
    {
       using std::fabs;
+      if(count < 2)
+         return guess - (max + min) / 2; // Not enough counts left to do anything!!
       //
       // Move guess towards max until we bracket the root, updating min and max as we go:
       //
@@ -427,6 +429,8 @@ namespace detail {
    T bracket_root_towards_min(F f, T guess, const T& f0, T& min, T& max, std::uintmax_t& count) noexcept(BOOST_MATH_IS_FLOAT(T) && noexcept(std::declval<F>()(std::declval<T>())))
    {
       using std::fabs;
+      if (count < 2)
+         return guess - (max + min) / 2; // Not enough counts left to do anything!!
       //
       // Move guess towards min until we bracket the root, updating min and max as we go:
       //

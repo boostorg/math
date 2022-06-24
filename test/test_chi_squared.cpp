@@ -36,6 +36,8 @@ using std::cout;
 using std::endl;
 #include <limits>
 using std::numeric_limits;
+#include <cmath>
+using std::log;
 
 template <class RealType>
 RealType naive_pdf(RealType df, RealType x)
@@ -59,6 +61,8 @@ void test_spot(
       cdf(dist, cs), P, tol);
    BOOST_CHECK_CLOSE(
       pdf(dist, cs), naive_pdf(dist.degrees_of_freedom(), cs), tol);
+   BOOST_CHECK_CLOSE(
+      logpdf(dist, cs), log(pdf(dist, cs)), tol);
    if((P < 0.99) && (Q < 0.99))
    {
       //

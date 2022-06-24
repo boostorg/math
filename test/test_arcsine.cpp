@@ -105,6 +105,14 @@ void test_ignore_policy(RealType)
       BOOST_CHECK((boost::math::isnan)(pdf(ignore_error_arcsine(0, 1), static_cast <RealType>(+2))));  // x > x_max
       BOOST_CHECK((boost::math::isnan)(pdf(ignore_error_arcsine(-1, 1), static_cast <RealType>(+2)))); // x > x_max
 
+      // Logpdf
+      BOOST_CHECK((boost::math::isnan)(logpdf(ignore_error_arcsine(0, 1), std::numeric_limits<RealType>::infinity()))); // x == infinity
+      BOOST_CHECK((boost::math::isnan)(logpdf(ignore_error_arcsine(-1, 1), std::numeric_limits<RealType>::infinity()))); // x == infinity
+      BOOST_CHECK((boost::math::isnan)(logpdf(ignore_error_arcsine(0, 1), static_cast <RealType>(-2))));  // x < xmin
+      BOOST_CHECK((boost::math::isnan)(logpdf(ignore_error_arcsine(-1, 1), static_cast <RealType>(-2))));  // x < xmin
+      BOOST_CHECK((boost::math::isnan)(logpdf(ignore_error_arcsine(0, 1), static_cast <RealType>(+2))));  // x > x_max
+      BOOST_CHECK((boost::math::isnan)(logpdf(ignore_error_arcsine(-1, 1), static_cast <RealType>(+2)))); // x > x_max
+
       // Mean
       BOOST_CHECK((boost::math::isnan)(mean(ignore_error_arcsine(-nan, 0))));
       BOOST_CHECK((boost::math::isnan)(mean(ignore_error_arcsine(+nan, 0))));
@@ -239,6 +247,7 @@ void test_spots(RealType)
     using boost::math::arcsine_distribution;
     using  ::boost::math::cdf;
     using  ::boost::math::pdf;
+    using  ::boost::math::logpdf;
     using  ::boost::math::complement;
     using  ::boost::math::quantile;
 
@@ -291,6 +300,16 @@ void test_spots(RealType)
       1 /(sqrt(tolerance) * boost::math::constants::pi<RealType>()), 2 * tolerance); //
     BOOST_CHECK_CLOSE_FRACTION(pdf(arcsine_01, static_cast<RealType>(1) - tolerance),
       1 /(sqrt(tolerance) * boost::math::constants::pi<RealType>()), 2 * tolerance); //
+
+    // Log PDF
+    BOOST_CHECK_CLOSE_FRACTION(logpdf(arcsine_01, 0.000001), static_cast<RealType>(5.7630258931329868780772138043668005779060097243996L), tolerance);
+    BOOST_CHECK_CLOSE_FRACTION(logpdf(arcsine_01, 0.000005), static_cast<RealType>(4.9583089369219367114435788047327747268154560240604L), tolerance);
+    BOOST_CHECK_CLOSE_FRACTION(logpdf(arcsine_01, 0.05), static_cast<RealType>(0.37878289812137058928728250884555529541061717942415L), tolerance);
+    BOOST_CHECK_CLOSE_FRACTION(logpdf(arcsine_01, 0.5), static_cast<RealType>(-0.45158270528945486472619522989488214357179467855506L), tolerance);
+    // Note loss of significance when x is near x_max.
+    BOOST_CHECK_CLOSE_FRACTION(logpdf(arcsine_01, 0.95), static_cast<RealType>(0.37878289812137058928728250884555529541061717942415L), 8 * tolerance); // Less accurate.
+    BOOST_CHECK_CLOSE_FRACTION(logpdf(arcsine_01, 0.999995), static_cast<RealType>(4.9583089369219367114435788047327747268154560240604L), 50000 * tolerance); // Much less accurate.
+    BOOST_CHECK_CLOSE_FRACTION(logpdf(arcsine_01, 0.999999), static_cast<RealType>(5.7630258931329868780772138043668005779060097243996L), 100000 * tolerance);// Even less accurate.
 
     // CDF
     BOOST_CHECK_CLOSE_FRACTION(cdf(arcsine_01, 0.000001), static_cast<RealType>(0.00063661987847092448418377367957384866092127786060574L), tolerance);
@@ -352,6 +371,10 @@ void test_spots(RealType)
     BOOST_CHECK_CLOSE_FRACTION(pdf(as_m11, 0.05), static_cast<RealType>(0.31870852113797122803869876869296281629727218095644L), tolerance);
     BOOST_CHECK_CLOSE_FRACTION(pdf(as_m11, 0.5), static_cast<RealType>(0.36755259694786136634088433220864629426492432024443L), tolerance);
     BOOST_CHECK_CLOSE_FRACTION(pdf(as_m11, 0.95), static_cast<RealType>(1.0194074882503562519812229448639426942621591013381L), 2 * tolerance); // Less accurate.
+
+    BOOST_CHECK_CLOSE_FRACTION(logpdf(as_m11, 0.05), static_cast<RealType>(-1.1434783207403409089630164813372974217316704642782L), tolerance);
+    BOOST_CHECK_CLOSE_FRACTION(logpdf(as_m11, 0.5), static_cast<RealType>(-1.0008888496235097104238178483561449958955399574664L), tolerance);
+    BOOST_CHECK_CLOSE_FRACTION(logpdf(as_m11, 0.95), static_cast<RealType>(0.019221564639767605567429885545559909302927558782238L), 100 * tolerance); // Less accurate.
 
     BOOST_CHECK_CLOSE_FRACTION(cdf(as_m11, 0.05), static_cast<RealType>(0.51592213323666034437274347433261364289389772737836L), tolerance);
     BOOST_CHECK_CLOSE_FRACTION(cdf(as_m11, 0.5), static_cast<RealType>(0.66666666666666666666666666666666666666666666666667L), 2 * tolerance);
@@ -445,6 +468,31 @@ void test_spots(RealType)
       arcsine_distribution<RealType>(static_cast<RealType>(0), static_cast<RealType>(1)), // bad x > 1.
       static_cast<RealType>(999)), std::domain_error);
 
+    BOOST_MATH_CHECK_THROW( // For various bad arguments.
+      logpdf(
+      arcsine_distribution<RealType>(static_cast<RealType>(+1), static_cast<RealType>(-1)), // min_x > max_x
+      static_cast<RealType>(1)), std::domain_error);
+
+    BOOST_MATH_CHECK_THROW(
+      logpdf(
+      arcsine_distribution<RealType>(static_cast<RealType>(1), static_cast<RealType>(0)), // bad constructor parameters.
+      static_cast<RealType>(1)), std::domain_error);
+
+    BOOST_MATH_CHECK_THROW(
+      logpdf(
+      arcsine_distribution<RealType>(static_cast<RealType>(1), static_cast<RealType>(-1)), // bad constructor parameters.
+      static_cast<RealType>(1)), std::domain_error);
+
+    BOOST_MATH_CHECK_THROW(
+      logpdf(
+      arcsine_distribution<RealType>(static_cast<RealType>(1), static_cast<RealType>(1)), // equal constructor parameters.
+      static_cast<RealType>(-1)), std::domain_error);
+
+    BOOST_MATH_CHECK_THROW(
+      logpdf(
+      arcsine_distribution<RealType>(static_cast<RealType>(0), static_cast<RealType>(1)), // bad x > 1.
+      static_cast<RealType>(999)), std::domain_error);
+
     // Checks on things that are errors.
 
     // Construction with 'bad' parameters.
@@ -453,6 +501,7 @@ void test_spots(RealType)
 
     arcsine_distribution<> dist;
     BOOST_MATH_CHECK_THROW(pdf(dist, -1), std::domain_error);
+    BOOST_MATH_CHECK_THROW(logpdf(dist, -1), std::domain_error);
     BOOST_MATH_CHECK_THROW(cdf(dist, -1), std::domain_error);
     BOOST_MATH_CHECK_THROW(cdf(complement(dist, -1)), std::domain_error);
     BOOST_MATH_CHECK_THROW(quantile(dist, -1), std::domain_error);
@@ -463,6 +512,8 @@ void test_spots(RealType)
     // Various combinations of bad constructor and member function parameters.
     BOOST_MATH_CHECK_THROW(pdf(boost::math::arcsine_distribution<RealType>(0, 1), -1), std::domain_error);
     BOOST_MATH_CHECK_THROW(pdf(boost::math::arcsine_distribution<RealType>(-1, 1), +2), std::domain_error);
+    BOOST_MATH_CHECK_THROW(logpdf(boost::math::arcsine_distribution<RealType>(0, 1), -1), std::domain_error);
+    BOOST_MATH_CHECK_THROW(logpdf(boost::math::arcsine_distribution<RealType>(-1, 1), +2), std::domain_error);
     BOOST_MATH_CHECK_THROW(quantile(boost::math::arcsine_distribution<RealType>(1, 1), -1), std::domain_error);
     BOOST_MATH_CHECK_THROW(quantile(boost::math::arcsine_distribution<RealType>(1, 1), 2), std::domain_error);
 
@@ -484,6 +535,7 @@ void test_spots(RealType)
       arcsine_distribution<RealType> w(RealType(-1), RealType(+1));
       // NaN parameters to member functions should throw.
       BOOST_MATH_CHECK_THROW(pdf(w, +nan), std::domain_error); // x = NaN
+      BOOST_MATH_CHECK_THROW(logpdf(w, +nan), std::domain_error); // x = NaN
       BOOST_MATH_CHECK_THROW(cdf(w, +nan), std::domain_error); // x = NaN
       BOOST_MATH_CHECK_THROW(cdf(complement(w, +nan)), std::domain_error); // x = + nan
       BOOST_MATH_CHECK_THROW(quantile(w, +nan), std::domain_error); // p = + nan
@@ -511,6 +563,7 @@ void test_spots(RealType)
       BOOST_MATH_CHECK_THROW(arcsine_distribution<RealType>(1, inf), std::domain_error);
 #endif
       BOOST_MATH_CHECK_THROW(pdf(w, +inf), std::domain_error); // x = inf
+      BOOST_MATH_CHECK_THROW(logpdf(w, +inf), std::domain_error); // x = inf
       BOOST_MATH_CHECK_THROW(cdf(w, +inf), std::domain_error); // x = inf
       BOOST_MATH_CHECK_THROW(cdf(complement(w, +inf)), std::domain_error); // x = + inf
       BOOST_MATH_CHECK_THROW(quantile(w, +inf), std::domain_error); // p = + inf

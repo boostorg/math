@@ -13,6 +13,17 @@
 
 #include <boost/math/tools/is_standalone.hpp>
 
+// Minimum language standard transition
+#ifdef _MSVC_LANG
+#  if _MSVC_LANG < 201402L
+#    pragma warning("The minimum language standard to use Boost.Math will be C++14 starting in July 2023 (Boost 1.82 release)");
+#  endif
+#else
+#  if __cplusplus < 201402L
+#    warning "The minimum language standard to use Boost.Math will be C++14 starting in July 2023 (Boost 1.82 release)"
+#  endif
+#endif
+
 #ifndef BOOST_MATH_STANDALONE
 #include <boost/config.hpp>
 
@@ -77,7 +88,32 @@
 #  define BOOST_NO_CXX11_THREAD_LOCAL
 #endif // BOOST_DISABLE_THREADS
 
+#ifdef __GNUC__
+#  if !defined(__EXCEPTIONS) && !defined(BOOST_NO_EXCEPTIONS)
+#     define BOOST_NO_EXCEPTIONS
+#  endif
+   //
+   // Make sure we have some std lib headers included so we can detect __GXX_RTTI:
+   //
+#  include <algorithm>  // for min and max
+#  include <limits>
+#  ifndef __GXX_RTTI
+#     ifndef BOOST_NO_TYPEID
+#        define BOOST_NO_TYPEID
+#     endif
+#     ifndef BOOST_NO_RTTI
+#        define BOOST_NO_RTTI
+#     endif
+#  endif
+#endif
+
 #endif // BOOST_MATH_STANDALONE
+
+// Support compilers with P0024R2 implemented without linking TBB
+// https://en.cppreference.com/w/cpp/compiler_support
+#if !defined(BOOST_NO_CXX17_HDR_EXECUTION) && defined(BOOST_HAS_THREADS)
+#  define BOOST_MATH_EXEC_COMPATIBLE
+#endif
 
 #include <algorithm>  // for min and max
 #include <limits>

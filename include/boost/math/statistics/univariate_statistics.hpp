@@ -20,9 +20,7 @@
 #include <numeric>
 #include <list>
 
-// Support compilers with P0024R2 implemented without linking TBB
-// https://en.cppreference.com/w/cpp/compiler_support
-#if !defined(BOOST_NO_CXX17_HDR_EXECUTION) && defined(BOOST_HAS_THREADS)
+#ifdef BOOST_MATH_EXEC_COMPATIBLE
 #include <execution>
 
 namespace boost::math::statistics {
@@ -699,7 +697,7 @@ inline auto mode(Container & v)
 
 } // Namespace boost::math::statistics
 
-#else // Backwards compatible bindings for C++11
+#else // Backwards compatible bindings for C++11 or execution is not implemented
 
 namespace boost { namespace math { namespace statistics {
 

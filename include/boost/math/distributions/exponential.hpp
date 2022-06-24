@@ -60,10 +60,10 @@ template <class RealType = double, class Policy = policies::policy<> >
 class exponential_distribution
 {
 public:
-   typedef RealType value_type;
-   typedef Policy policy_type;
+   using value_type = RealType;
+   using policy_type = Policy;
 
-   exponential_distribution(RealType l_lambda = 1)
+   explicit exponential_distribution(RealType l_lambda = 1)
       : m_lambda(l_lambda)
    {
       RealType err;
@@ -76,7 +76,7 @@ private:
    RealType m_lambda;
 };
 
-typedef exponential_distribution<double> exponential;
+using exponential = exponential_distribution<double>;
 
 #ifdef __cpp_deduction_guides
 template <class RealType>
@@ -84,7 +84,7 @@ exponential_distribution(RealType)->exponential_distribution<typename boost::mat
 #endif
 
 template <class RealType, class Policy>
-inline const std::pair<RealType, RealType> range(const exponential_distribution<RealType, Policy>& /*dist*/)
+inline std::pair<RealType, RealType> range(const exponential_distribution<RealType, Policy>& /*dist*/)
 { // Range of permissible values for random variable x.
   if (std::numeric_limits<RealType>::has_infinity)
   { 
@@ -98,7 +98,7 @@ inline const std::pair<RealType, RealType> range(const exponential_distribution<
 }
 
 template <class RealType, class Policy>
-inline const std::pair<RealType, RealType> support(const exponential_distribution<RealType, Policy>& /*dist*/)
+inline std::pair<RealType, RealType> support(const exponential_distribution<RealType, Policy>& /*dist*/)
 { // Range of supported values for random variable x.
    // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
    using boost::math::tools::max_value;
@@ -126,6 +126,24 @@ inline RealType pdf(const exponential_distribution<RealType, Policy>& dist, cons
    result = lambda * exp(-lambda * x);
    return result;
 } // pdf
+
+template <class RealType, class Policy>
+inline RealType logpdf(const exponential_distribution<RealType, Policy>& dist, const RealType& x)
+{
+   BOOST_MATH_STD_USING // for ADL of std functions
+
+   static const char* function = "boost::math::logpdf(const exponential_distribution<%1%>&, %1%)";
+
+   RealType lambda = dist.lambda();
+   RealType result = -std::numeric_limits<RealType>::infinity();
+   if(0 == detail::verify_lambda(function, lambda, &result, Policy()))
+      return result;
+   if(0 == detail::verify_exp_x(function, x, &result, Policy()))
+      return result;
+   
+   result = log(lambda) - lambda * x;
+   return result;
+} // logpdf
 
 template <class RealType, class Policy>
 inline RealType cdf(const exponential_distribution<RealType, Policy>& dist, const RealType& x)

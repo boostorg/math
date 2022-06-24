@@ -92,8 +92,13 @@ cpp-pch pch_light : pch_light.hpp : <use>../../test/build//boost_unit_test_frame
 lib compile_test_main : compile_test/main.cpp ;
 
 test-suite special_fun :
-   [ run test_1F0.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_smart_ptr ] ] # hypergeometric_pFq_checked_series.hpp uses auto, the rest are from quadrature tests.
-   [ run test_2F0.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_smart_ptr ] [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <define>BOOST_MATH_TEST_FLOAT128 <linkflags>"-Bstatic -lquadmath -Bdynamic" ] ]
+   [ run test_1F0.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_smart_ptr ] <define>TEST=1 : test_1F0_1 ] # hypergeometric_pFq_checked_series.hpp uses auto, the rest are from quadrature tests.
+   [ run test_1F0.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_smart_ptr ] <define>TEST=2 : test_1F0_2 ] # hypergeometric_pFq_checked_series.hpp uses auto, the rest are from quadrature tests.
+   [ run test_1F0.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_smart_ptr ] <define>TEST=3 : test_1F0_3 ] # hypergeometric_pFq_checked_series.hpp uses auto, the rest are from quadrature tests.
+   [ run test_2F0.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_smart_ptr ] [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <define>BOOST_MATH_TEST_FLOAT128 <linkflags>"-Bstatic -lquadmath -Bdynamic" ] <define>TEST=1 : test_2F0_1 ]
+   [ run test_2F0.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_smart_ptr ] [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <define>BOOST_MATH_TEST_FLOAT128 <linkflags>"-Bstatic -lquadmath -Bdynamic" ] <define>TEST=2 : test_2F0_2 ]
+   [ run test_2F0.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_smart_ptr ] [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <define>BOOST_MATH_TEST_FLOAT128 <linkflags>"-Bstatic -lquadmath -Bdynamic" ] <define>TEST=3 : test_2F0_3 ]
+   [ run test_2F0.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_smart_ptr ] [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <define>BOOST_MATH_TEST_FLOAT128 <linkflags>"-Bstatic -lquadmath -Bdynamic" ] <define>TEST=4 : test_2F0_4 ]
 
    [ run test_0F1.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_smart_ptr ] <define>TEST=1 : test_0F1_1 ]
    [ run test_0F1.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_smart_ptr ] <define>TEST=2 : test_0F1_2 ]
@@ -154,6 +159,7 @@ test-suite special_fun :
    [ run ccmath_isless_test.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx17_if_constexpr ] ]
    [ run ccmath_islessequal_test.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx17_if_constexpr ] ]
    [ run ccmath_isunordered_test.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx17_if_constexpr ] ]
+   [ run ccmath_fma_test.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx17_if_constexpr ] ]
    [ run log1p_expm1_test.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
    [ run powm1_sqrtp1m1_test.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
    [ run git_issue_705.cpp ../../test/build//boost_unit_test_framework  ]
@@ -1012,6 +1018,8 @@ test-suite misc :
    [ run bivariate_statistics_test.cpp : : : [ requires cxx11_hdr_forward_list cxx11_hdr_atomic cxx11_hdr_thread cxx11_hdr_tuple cxx11_hdr_future cxx11_sfinae_expr ] [ check-target-builds ../config//is_cygwin_run "Cygwin CI run" : <build>no ] ]
    [ run linear_regression_test.cpp : : : [ requires cxx11_hdr_forward_list cxx11_hdr_atomic cxx11_hdr_thread cxx11_hdr_tuple cxx11_hdr_future cxx11_sfinae_expr ]  ]
    [ run test_runs_test.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
+   [ run test_chatterjee_correlation.cpp ../../test/build//boost_unit_test_framework ]
+   [ run test_rank.cpp ../../test/build//boost_unit_test_framework ]
    [ run lanczos_smoothing_test.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
    [ run condition_number_test.cpp ../../test/build//boost_unit_test_framework : : :  [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>"-Bstatic -lquadmath -Bdynamic" ] [ requires cxx17_if_constexpr cxx17_std_apply ] ]
    [ run test_real_concept.cpp ../../test/build//boost_unit_test_framework  ]
@@ -1504,3 +1512,132 @@ rule get_float128_tests
 }
 
 test-suite float128_tests : [ get_float128_tests ] ;
+
+#
+# Things that we can test with exceptions and RTTI turned off:
+#
+alias no_eh_tests : 
+   compl_abs_incl_test
+   compl_acos_incl_test
+   compl_acosh_incl_test
+   compl_asin_incl_test
+   compl_asinh_incl_test
+   compl_atan_incl_test
+   compl_atanh_incl_test
+   sf_acosh_incl_test
+   sf_asinh_incl_test
+   sf_atanh_incl_test
+   sf_beta_incl_test
+   sf_bernoulli_incl_test
+   sf_bessel_incl_test
+   sf_bessel_deriv_incl_test
+   sf_binomial_incl_test
+   sf_cbrt_incl_test
+   sf_cos_pi_incl_test
+   sf_digamma_incl_test
+   sf_polygamma_incl_test
+   sf_ellint_1_incl_test
+   sf_ellint_2_incl_test
+   sf_ellint_3_incl_test
+   sf_ellint_d_incl_test
+   sf_jacobi_theta_incl_test
+   sf_jacobi_zeta_incl_test
+   sf_heuman_lambda_incl_test
+   sf_ellint_rc_incl_test
+   sf_ellint_rd_incl_test
+   sf_ellint_rf_incl_test
+   sf_ellint_rj_incl_test
+   sf_ellint_rg_incl_test
+   sf_erf_incl_test
+   sf_expint_incl_test
+   sf_expm1_incl_test
+   sf_factorials_incl_test
+   sf_fpclassify_incl_test
+   sf_gamma_incl_test
+   sf_hermite_incl_test
+   sf_hypot_incl_test
+   sf_laguerre_incl_test
+   sf_lanczos_incl_test
+   sf_legendre_incl_test
+   #sf_legendre_stieltjes_incl_test
+   sf_log1p_incl_test
+   sf_math_fwd_incl_test
+   sf_modf_incl_test
+   sf_next_incl_test
+   sf_powm1_incl_test
+   sf_prime_incl_test
+   sf_relative_distance_incl_test
+   sf_round_incl_test
+   sf_sign_incl_test
+   sf_sin_pi_incl_test
+   sf_sinc_incl_test
+   sf_sinhc_incl_test
+   sf_sph_harm_incl_test
+   sf_sqrt1pm1_incl_test
+   sf_trunc_incl_test
+   sf_ulp_incl_test
+   sf_zeta_incl_test
+   sf_chebyshev_incl_test
+   #sf_chebyshev_transform_incl_test
+   sf_fibonacci_incl_test
+   #sf_gegenbauer_incl_test
+   sf_lambert_w_incl_test
+   sf_nonfinite_num_facets_incl_test
+   sf_airy_incl_test
+   sf_hankel_incl_test
+   sf_jacobi_incl_test
+   sf_owens_t_incl_test
+   dist_skew_norm_incl_test
+   constants_incl_test
+   quad_trapezoidal_incl_test
+   test_traits
+   tools_config_inc_test
+   tools_fraction_inc_test
+   tools_minima_inc_test
+   tools_polynomial_inc_test
+   tools_precision_inc_test
+   tools_rational_inc_test
+   tools_real_cast_inc_test
+   tools_remez_inc_test
+   tools_roots_inc_test
+   tools_series_inc_test
+   tools_solve_inc_test
+   tools_stats_inc_test
+   tools_test_data_inc_test
+   #tools_test_inc_test
+   tools_toms748_inc_test
+   tools_agm_incl_test
+   tools_assert_incl_test
+   tools_atomic_incl_test
+   tools_big_constant_incl_test
+   #tools_centered_continued_fraction_incl_test
+   tools_cohen_acceleration_incl_test
+   tools_complex_incl_test
+   tools_condition_numbers_incl_test
+   tools_convert_from_string_incl_test
+   tools_cxx03_warn_incl_test
+   #tools_engel_expansion_incl_test
+   tools_header_deprecated_incl_test
+   tools_is_detected_incl_test
+   #tools_luroth_expansion_incl_test
+   tools_mp_incl_test
+   tools_norms_incl_test
+   tools_polynomial_gcd_incl_test
+   tools_promotion_incl_test
+   tools_random_vector_incl_test
+   #tools_simple_continued_fraction_incl_test
+   tools_test_value_incl_test
+   tools_throw_exception_incl_test
+   tools_traits_incl_test
+   #tools_ulps_plot_incl_test
+   tools_workaround_incl_test
+;
+
+explicit no_eh_tests ;
+
+# Some aliases which group blocks of tests for CI testing:
+
+alias github_ci_block_1 : special_fun float128_tests distribution_tests mp misc ;
+alias github_ci_block_2 : quadrature interpolators autodiff ../example//examples ../tools ;
+explicit github_ci_block_1 ;
+explicit github_ci_block_2 ;

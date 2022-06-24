@@ -67,6 +67,8 @@ Test 8: test_extreme_function_arguments()
 #include <boost/math/distributions/laplace.hpp>
 #include "test_out_of_range.hpp"
 using boost::math::laplace_distribution;
+#include <cmath>
+using std::log;
 
 /*
 #include <iostream>
@@ -212,6 +214,12 @@ void test_pdf_cdf_ocatave()
    tolerance);
 
    BOOST_CHECK_CLOSE(
+      logpdf(laplace_distribution<RealType>(), static_cast<RealType>(-2.L)),
+     // static_cast<RealType>(0.06766764161831L),
+      log(static_cast<RealType>(0.067667641618306345946999747486242201703815773119812L)),
+   tolerance);
+
+   BOOST_CHECK_CLOSE(
       cdf(laplace_distribution<RealType>(), static_cast<RealType>(-2.L)),
       //static_cast<RealType>(0.06766764161831L),
       static_cast<RealType>(0.067667641618306345946999747486242201703815773119812L),
@@ -221,6 +229,12 @@ void test_pdf_cdf_ocatave()
       pdf(laplace_distribution<RealType>(), static_cast<RealType>(-1.L)),
       //static_cast<RealType>(0.18393972058572L),
       static_cast<RealType>(0.18393972058572116079776188508073043372290556554506L),
+   tolerance);
+
+   BOOST_CHECK_CLOSE(
+      logpdf(laplace_distribution<RealType>(), static_cast<RealType>(-1.L)),
+      //static_cast<RealType>(0.18393972058572L),
+      log(static_cast<RealType>(0.18393972058572116079776188508073043372290556554506L)),
    tolerance);
 
    BOOST_CHECK_CLOSE(
@@ -246,6 +260,11 @@ void test_pdf_cdf_ocatave()
    tolerance);
 
    BOOST_CHECK_CLOSE(
+      logpdf(laplace_distribution<RealType>(), static_cast<RealType>(0.0L)),
+      log(static_cast<RealType>(0.5L)),
+   tolerance);
+
+   BOOST_CHECK_CLOSE(
       cdf(laplace_distribution<RealType>(), static_cast<RealType>(0.0L)),
       static_cast<RealType>(0.5L),
    tolerance);
@@ -254,6 +273,11 @@ void test_pdf_cdf_ocatave()
       pdf(laplace_distribution<RealType>(), static_cast<RealType>(0.5L)),
       //static_cast<RealType>(0.30326532985632L),
       static_cast<RealType>(0.30326532985631671180189976749559022672095906778368L),
+   tolerance);
+
+   BOOST_CHECK_CLOSE(
+      logpdf(laplace_distribution<RealType>(), static_cast<RealType>(0.5L)),
+      log(static_cast<RealType>(0.30326532985631671180189976749559022672095906778368L)),
    tolerance);
 
    BOOST_CHECK_CLOSE(
@@ -269,6 +293,12 @@ void test_pdf_cdf_ocatave()
    tolerance);
 
    BOOST_CHECK_CLOSE(
+      logpdf(laplace_distribution<RealType>(), static_cast<RealType>(1.0L)),
+    //  static_cast<RealType>(0.18393972058572L),
+      log(static_cast<RealType>(0.18393972058572116079776188508073043372290556554506L)),
+   tolerance);
+
+   BOOST_CHECK_CLOSE(
       cdf(laplace_distribution<RealType>(), static_cast<RealType>(1.00000000000000L)),
      // static_cast<RealType>(0.81606027941428L),
       static_cast<RealType>(0.81606027941427883920223811491926956627709443427977L),
@@ -278,6 +308,12 @@ void test_pdf_cdf_ocatave()
       pdf(laplace_distribution<RealType>(), static_cast<RealType>(2.0L)),
     //  static_cast<RealType>(0.06766764161831L),
       static_cast<RealType>(0.067667641618306345946999747486242201703815772944649L),
+   tolerance);
+
+   BOOST_CHECK_CLOSE(
+      logpdf(laplace_distribution<RealType>(), static_cast<RealType>(2.0L)),
+    //  static_cast<RealType>(0.06766764161831L),
+      log(static_cast<RealType>(0.067667641618306345946999747486242201703815772944649L)),
    tolerance);
 
    BOOST_CHECK_CLOSE(
