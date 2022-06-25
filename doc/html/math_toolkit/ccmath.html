@@ -211,6 +211,13 @@
     <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
     <span class="keyword">inline</span> <span class="keyword">constexpr</span> <span class="keyword">bool</span> <span class="identifier">isunordered</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">y</span><span class="special">)</span> <span class="keyword">noexcept</span>
 
+    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Real</span><span class="special">&gt;</span>
+    <span class="keyword">inline</span> <span class="keyword">constexpr</span> <span class="identifier">Real</span> <span class="identifier">fma</span><span class="special">(</span><span class="identifier">Real</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">y</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">z</span><span class="special">)</span> <span class="keyword">noexcept</span>
+    <span class="identifier">Requires</span> <span class="identifier">compiling</span> <span class="identifier">with</span> <span class="identifier">fma</span> <span class="identifier">flag</span>
+
+    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Arithmetic1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Arithmetic2</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Arithmetic3</span><span class="special">&gt;</span>
+    <span class="keyword">inline</span> <span class="identifier">constepxr</span> <span class="identifier">Promoted</span> <span class="identifier">fma</span><span class="special">(</span><span class="identifier">Arithmetic1</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">Arithmetic2</span> <span class="identifier">y</span><span class="special">,</span> <span class="identifier">Arithmetic3</span> <span class="identifier">z</span><span class="special">)</span> <span class="keyword">noexcept</span>
+
 <span class="special">}</span> <span class="comment">// Namespaces</span>
 </pre>
 </div>
