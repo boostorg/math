@@ -29,81 +29,141 @@
 #include <boost/math/ccmath/fmod.hpp>
 #include <boost/math/ccmath/detail/minmax.hpp>
 
+namespace boost::math::concepts {
+    class real_concept;
+    class std_real_concept;
+}
+
 namespace boost::math::ccmath {
 
 namespace detail {
 
-// Forward declarations
 template <typename T>
-constexpr T float_next(T val);
+struct has_hidden_guard_digits;
+template <>
+struct has_hidden_guard_digits<float> : public std::false_type {};
+template <>
+struct has_hidden_guard_digits<double> : public std::false_type {};
+template <>
+struct has_hidden_guard_digits<long double> : public std::false_type {};
+#ifdef BOOST_HAS_FLOAT128
+template <>
+struct has_hidden_guard_digits<__float128> : public std::false_type {};
+#endif
+template <>
+struct has_hidden_guard_digits<boost::math::concepts::real_concept> : public std::false_type {};
+template <>
+struct has_hidden_guard_digits<boost::math::concepts::std_real_concept> : public std::false_type {};
+
+template <typename T, bool b>
+struct has_hidden_guard_digits_10 : public std::false_type {};
+template <typename T>
+struct has_hidden_guard_digits_10<T, true> : public std::integral_constant<bool, (std::numeric_limits<T>::digits10 != std::numeric_limits<T>::max_digits10)> {};
 
 template <typename T>
-constexpr T float_prior(T val);
+struct has_hidden_guard_digits 
+    : public has_hidden_guard_digits_10<T, 
+    std::numeric_limits<T>::is_specialized
+    && (std::numeric_limits<T>::radix == 10) >
+{};
 
 template <typename T>
-constexpr T float_distance(T a, T b);
-
-template <typename T, typename Integer, std::enable_if_t<std::is_integral_v<Integer>, bool> = true>
-constexpr T float_advance(T val, Integer distance);
-
+constexpr T& normalize_value(const T& val, const std::false_type&) { return val; }
 template <typename T>
-constexpr int sign(T val)
+constexpr T normalize_value(const T& val, const std::true_type&) 
 {
-    return val > 0 ? 1 : -1;
+    static_assert(std::numeric_limits<T>::is_specialized, "Type T must be specialized.");
+    static_assert(std::numeric_limits<T>::radix != 2, "Type T must be specialized.");
+
+    std::intmax_t shift = static_cast<std::intmax_t>(std::numeric_limits<T>::digits) - static_cast<std::intmax_t>(boost::math::ccmath::ilogb(val)) - 1;
+    T result = boost::math::ccmath::scalbn(val, shift);
+    result = boost::math::ccmath::round(result);
+    return boost::math::ccmath::scalbn(result, -shift); 
 }
 
 template <typename T>
-constexpr auto normalize_value(T val)
+constexpr T get_smallest_value(const std::true_type&)
 {
-    if constexpr (std::numeric_limits<T>::is_specialized && std::numeric_limits<T>::radix != 2)
-    {
-        std::intmax_t shift = static_cast<std::intmax_t>(std::numeric_limits<T>::digits) - 
-                              static_cast<std::intmax_t>(boost::math::ccmath::ilogb(val) - 1);
+    //
+    // numeric_limits lies about denorms being present - particularly
+    // when this can be turned on or off at runtime, as is the case
+    // when using the SSE2 registers in DAZ or FTZ mode.
+    //
+    static constexpr T m = std::numeric_limits<T>::denorm_min();
+    return ((tools::min_value<T>() / 2) == 0) ? tools::min_value<T>() : m;
+}
 
-        T result = boost::math::ccmath::scalbn(val, shift);
-        result = boost::math::ccmath::round(result);
-        return boost::math::ccmath::scalbn(result, -shift);
-    }
-    else
-    {
-        return val;
-    }
+template <typename T>
+constexpr T get_smallest_value(const std::false_type&)
+{
+    return tools::min_value<T>();
 }
 
 template <typename T>
 constexpr T get_smallest_value()
 {
-    if constexpr (std::numeric_limits<T>::is_specialized && (std::numeric_limits<T>::has_denorm == std::denorm_present))
+    return get_smallest_value<T>(std::integral_constant<bool, std::numeric_limits<T>::is_specialized && (std::numeric_limits<T>::has_denorm == std::denorm_present)>());
+}
+
+//
+// Returns the smallest value that won't generate denorms when
+// we calculate the value of the least-significant-bit:
+//
+template <typename T>
+constexpr T get_min_shift_value();
+
+template <typename T>
+struct min_shift_initializer
+{
+    struct init
     {
-        if (tools::min_value<T>() / 2 == 0)
+        init()
         {
-            return tools::min_value<T>();
-        } 
-        else 
-        {
-            return std::numeric_limits<T>::denorm_min();
+            do_init();
         }
-    }
-    else
+        static constexpr void do_init()
+        {
+            get_min_shift_value<T>();
+        }
+        constexpr void force_instantiate() const {}
+    };
+
+    static constexpr init initializer;
+    static constexpr void force_instantiate()
     {
-        return tools::min_value<T>();
+        initializer.force_instantiate();
     }
+};
+
+template <typename T>
+constexpr typename min_shift_initializer<T>::init min_shift_initializer<T>::initializer;
+
+template <typename T>
+constexpr T calc_min_shifted(const std::true_type&)
+{
+   return boost::math::ccmath::ldexp(tools::min_value<T>(), tools::digits<T>() + 1);
 }
 
 template <typename T>
-constexpr T get_min_shifted_value()
+constexpr T calc_min_shifted(const std::false_type&)
 {
-    if constexpr (std::numeric_limits<T>::is_specialized && std::numeric_limits<T>::radix != 2)
-    {
-        return boost::math::ccmath::scalbln(tools::min_value<T>(), std::numeric_limits<T>::digits + 1);
-    }
-    else
-    {
-        return boost::math::ccmath::ldexp(tools::min_value<T>(), tools::digits<T>() + 1);
-    }
+   static_assert(std::numeric_limits<T>::is_specialized, "Type T must be specialized.");
+   static_assert(std::numeric_limits<T>::radix != 2, "Type T must be specialized.");
+
+   return boost::math::ccmath::scalbn(tools::min_value<T>(), std::numeric_limits<T>::digits + 1);
 }
 
-template <typename T, bool b = boost::math::tools::detail::has_backend_type<T>::value>
+
+template <typename T>
+constexpr T get_min_shift_value()
+{
+   static const T val = calc_min_shifted<T>(std::integral_constant<bool, !std::numeric_limits<T>::is_specialized || std::numeric_limits<T>::radix == 2>());
+   min_shift_initializer<T>::force_instantiate();
+
+   return val;
+}
+
+template <typename T, bool b = boost::math::tools::detail::has_backend_type_v<T>>
 struct exponent_type
 {
     using type = int;
@@ -115,514 +175,356 @@ struct exponent_type<T, true>
     using type = typename T::backend_type::exponent_type;
 };
 
-template <typename T>
-constexpr T float_next_impl(T val)
+template <typename T, bool b = boost::math::tools::detail::has_backend_type_v<T>>
+using exponent_type_t = typename exponent_type<T>::type;
+
+template <typename T, typename Policy>
+constexpr T float_next_imp(const T& val, const std::true_type&, const Policy& pol)
 {
-    using exponent_type = typename exponent_type<T>::type;
-
+    using exponent_type = exponent_type_t<T>;
+    
     exponent_type expon {};
+    static const char* function = "float_next<%1%>(%1%)";
 
-    const int fpclass = boost::math::ccmath::fpclassify(val);
+    int fpclass = boost::math::ccmath::fpclassify(val);
 
-    if (fpclass == FP_NAN || fpclass == FP_INFINITE)
+    if ((fpclass == FP_NAN) || (fpclass == FP_INFINITE))
     {
         if (val < 0)
         {
             return -tools::max_value<T>();
         }
-        else
-        {
-            BOOST_MATH_ASSERT_MSG(sizeof(T) == 0, "Argument to float next must be finite");
-        }
+        return policies::raise_domain_error<T>(
+            function,
+            "Argument must be finite, but got %1%", val, pol);
     }
 
     if (val >= tools::max_value<T>())
     {
-        BOOST_MATH_ASSERT_MSG(sizeof(T) == 0, "Overflow in constexpr float_next");
+        return policies::raise_overflow_error<T>(function, 0, pol);
     }
 
     if (val == 0)
     {
-        return get_smallest_value<T>();
+        return detail::get_smallest_value<T>();
     }
 
-    T diff {};
-    if constexpr (std::numeric_limits<T>::is_specialized && std::numeric_limits<T>::radix != 2)
+    if ((fpclass != FP_SUBNORMAL) && (fpclass != FP_ZERO) 
+        && (boost::math::ccmath::fabs(val) < detail::get_min_shift_value<T>()) 
+        && (val != -tools::min_value<T>()))
     {
-        if (fpclass != FP_SUBNORMAL && (fpclass != FP_ZERO) && (boost::math::ccmath::fabs(val) < detail::get_min_shifted_value<T>()) && (val != -tools::min_value<T>()))
-        {
-            // Special case: if the value of the least significant bit is a denorm, and the result
-            // would not be a denorm, then shift the input, increment, and shift back.
-            // This avoids issues with the Intel SSE2 registers when the FTZ or DAZ flags are set.
-            //
-            return boost::math::ccmath::scalbn(float_next(T(boost::math::ccmath::scalbn(val, 2 * std::numeric_limits<T>::digits))), -2 * std::numeric_limits<T>::digits);
-        }
-
-        expon = 1 + boost::math::ccmath::ilogb(val);
-
-        if (boost::math::ccmath::scalbn(val, -expon) * std::numeric_limits<T>::radix)
-        {
-            // reduce expon when val is a power of base and negative
-            --expon;
-        }
-        
-        diff = boost::math::ccmath::scalbn(T(1), expon - std::numeric_limits<T>::digits);
-    }
-    else
-    {
-        if (fpclass != FP_SUBNORMAL && (fpclass != FP_ZERO) && (boost::math::ccmath::fabs(val) < detail::get_min_shifted_value<T>()) && (val != -tools::min_value<T>()))
-        {
-            // Special case: if the value of the least significant bit is a denorm, and the result
-            // would not be a denorm, then shift the input, increment, and shift back.
-            // This avoids issues with the Intel SSE2 registers when the FTZ or DAZ flags are set.
-            //
-            return boost::math::ccmath::ldexp(float_next(T(boost::math::ccmath::ldexp(val, 2 * tools::digits<T>()))), -2 * tools::digits<T>());
-        }
-
-        if (boost::math::ccmath::frexp(val, &expon) == -0.5)
-        {
-            // reduce exponent when val is a power of two, and negative.
-            --expon;
-        }
-
-        diff = boost::math::ccmath::ldexp(T(1), expon - tools::digits<T>());
+        //
+        // Special case: if the value of the least significant bit is a denorm, and the result
+        // would not be a denorm, then shift the input, increment, and shift back.
+        // This avoids issues with the Intel SSE2 registers when the FTZ or DAZ flags are set.
+        //
+        return boost::math::ccmath::ldexp(float_next(static_cast<T>(boost::math::ccmath::ldexp(val, 2 * tools::digits<T>())), pol), -2 * tools::digits<T>());
     }
 
-    if (diff == 0)
+    if (-0.5f == boost::math::ccmath::frexp(val, &expon))
     {
-        diff = get_smallest_value<T>();
+        --expon; // reduce exponent when val is a power of two, and negative.
+    }
+    T diff = boost::math::ccmath::ldexp(static_cast<T>(1), expon - tools::digits<T>());
+    if(diff == 0)
+    {
+        diff = detail::get_smallest_value<T>();
+    }
+    return val + diff;
+}
+
+//
+// Special version for some base other than 2:
+//
+template <typename T, typename Policy>
+constexpr T float_next_imp(const T& val, const std::false_type&, const Policy& pol)
+{
+    using exponent_type = exponent_type_t<T>;
+
+    static_assert(std::numeric_limits<T>::is_specialized, "Type T must be specialized.");
+    static_assert(std::numeric_limits<T>::radix != 2, "Type T must be specialized.");
+
+    exponent_type expon {};
+    static const char* function = "float_next<%1%>(%1%)";
+
+    int fpclass = boost::math::ccmath::fpclassify(val);
+
+    if ((fpclass == FP_NAN) || (fpclass == FP_INFINITE))
+    {
+        if (val < 0)
+        {
+            return -tools::max_value<T>();
+        }
+
+        return policies::raise_domain_error<T>(
+            function,
+            "Argument must be finite, but got %1%", val, pol);
+    }
+
+    if(val >= tools::max_value<T>())
+    {
+        return policies::raise_overflow_error<T>(function, 0, pol);
+    }
+
+    if(val == 0)
+    {
+        return detail::get_smallest_value<T>();
+    }
+
+    if ((fpclass != FP_SUBNORMAL) && (fpclass != FP_ZERO) 
+        && (boost::math::ccmath::fabs(val) < detail::get_min_shift_value<T>()) 
+        && (val != -tools::min_value<T>()))
+    {
+        //
+        // Special case: if the value of the least significant bit is a denorm, and the result
+        // would not be a denorm, then shift the input, increment, and shift back.
+        // This avoids issues with the Intel SSE2 registers when the FTZ or DAZ flags are set.
+        //
+        return boost::math::ccmath::scalbn(float_next(static_cast<T>(boost::math::ccmath::scalbn(val, 2 * std::numeric_limits<T>::digits)), pol), -2 * std::numeric_limits<T>::digits);
+    }
+
+    expon = 1 + boost::math::ccmath::ilogb(val);
+    if(-1 == boost::math::ccmath::scalbn(val, -expon) * std::numeric_limits<T>::radix)
+    {
+        --expon; // reduce exponent when val is a power of base, and negative.
+    }
+
+    T diff = boost::math::ccmath::scalbn(static_cast<T>(1), expon - std::numeric_limits<T>::digits);
+    if(diff == 0)
+    {
+        diff = detail::get_smallest_value<T>();
     }
 
     return val + diff;
 }
 
-template <typename T>
-constexpr T float_prior_impl(T val)
+} // namespace detail
+
+template <typename T, typename Policy>
+constexpr tools::promote_args_t<T> float_next(const T& val, const Policy& pol)
 {
-    using exponent_type = typename exponent_type<T>::type;
+    using result_type = tools::promote_args_t<T>;
+    return detail::float_next_imp(detail::normalize_value(static_cast<result_type>(val), typename detail::has_hidden_guard_digits<result_type>::type()), std::integral_constant<bool, !std::numeric_limits<result_type>::is_specialized || (std::numeric_limits<result_type>::radix == 2)>(), pol);
+}
+
+template <typename T>
+constexpr tools::promote_args_t<T> float_next(const T& val)
+{
+    return float_next(val, policies::policy<>());
+}
+
+namespace detail {
+
+template <typename T, typename Policy>
+constexpr T float_prior_imp(const T& val, const std::true_type&, const Policy& pol)
+{
+    using exponent_type = exponent_type_t<T>;
 
     exponent_type expon {};
+    static const char* function = "float_prior<%1%>(%1%)";
 
-    const int fpclass = boost::math::ccmath::fpclassify(val);
+    int fpclass = boost::math::ccmath::fpclassify(val);
 
-    if (fpclass == FP_NAN || fpclass == FP_INFINITE)
+    if ((fpclass == FP_NAN) || (fpclass == FP_INFINITE))
     {
-        if (val < 0)
+        if (val > 0)
         {
-            return -tools::max_value<T>();
+            return tools::max_value<T>();
         }
-        else
-        {
-            BOOST_MATH_ASSERT_MSG(sizeof(T) == 0, "Argument to float next must be finite");
-        }
+
+        return policies::raise_domain_error<T>(
+            function,
+            "Argument must be finite, but got %1%", val, pol);
     }
 
-    if (val >= tools::max_value<T>())
+    if (val <= -tools::max_value<T>())
     {
-        BOOST_MATH_ASSERT_MSG(sizeof(T) == 0, "Overflow in constexpr float_next");
+        return -policies::raise_overflow_error<T>(function, 0, pol);
     }
 
     if (val == 0)
     {
-        return get_smallest_value<T>();
+        return -detail::get_smallest_value<T>();
     }
 
-    T diff {};
-    T remain {};
-    if constexpr (std::numeric_limits<T>::is_specialized && std::numeric_limits<T>::radix != 2)
+    if ((fpclass != FP_SUBNORMAL) && (fpclass != FP_ZERO) 
+        && (boost::math::ccmath::fabs(val) < detail::get_min_shift_value<T>()) 
+        && (val != tools::min_value<T>()))
     {
-        if (fpclass != FP_SUBNORMAL && (fpclass != FP_ZERO) && (boost::math::ccmath::fabs(val) < detail::get_min_shifted_value<T>()) && (val != -tools::min_value<T>()))
-        {
-            // Special case: if the value of the least significant bit is a denorm, and the result
-            // would not be a denorm, then shift the input, increment, and shift back.
-            // This avoids issues with the Intel SSE2 registers when the FTZ or DAZ flags are set.
-            //
-            return boost::math::ccmath::scalbn(float_prior(T(boost::math::ccmath::scalbn(val, 2 * std::numeric_limits<T>::digits))), -2 * std::numeric_limits<T>::digits);
-        }
-
-        expon = 1 + boost::math::ccmath::ilogb(val);
-        
-        remain = boost::math::ccmath::scalbn(val, -expon);
-        if (remain * std::numeric_limits<T>::radix == 1)
-        {
-            // When val is a power of two we must rduce the exponent
-            --expon;
-        }
-        diff = boost::math::ccmath::scalbn(T(1), expon - std::numeric_limits<T>::digits);
-    }
-    else
-    {
-        if (fpclass != FP_SUBNORMAL && (fpclass != FP_ZERO) && (boost::math::ccmath::fabs(val) < detail::get_min_shifted_value<T>()) && (val != -tools::min_value<T>()))
-        {
-            // Special case: if the value of the least significant bit is a denorm, and the result
-            // would not be a denorm, then shift the input, increment, and shift back.
-            // This avoids issues with the Intel SSE2 registers when the FTZ or DAZ flags are set.
-            //
-            return boost::math::ccmath::ldexp(float_prior(T(boost::math::ccmath::ldexp(val, 2 * tools::digits<T>()))), -2 * tools::digits<T>());
-        }
-
-        remain = boost::math::ccmath::frexp(val, &expon);
-        if (remain == 0.5)
-        {
-            --expon;
-        }
-        diff = boost::math::ccmath::ldexp(T(1), expon - tools::digits<T>());
+        //
+        // Special case: if the value of the least significant bit is a denorm, and the result
+        // would not be a denorm, then shift the input, increment, and shift back.
+        // This avoids issues with the Intel SSE2 registers when the FTZ or DAZ flags are set.
+        //
+        return boost::math::ccmath::ldexp(float_prior(static_cast<T>(boost::math::ccmath::ldexp(val, 2 * tools::digits<T>())), pol), -2 * tools::digits<T>());
     }
 
-    if (diff == 0)
+    if(T remain = boost::math::ccmath::frexp(val, &expon); remain == 0.5f)
     {
-        diff = get_smallest_value<T>();
+        --expon; // when val is a power of two we must reduce the exponent
+    }
+
+    T diff = boost::math::ccmath::ldexp(static_cast<T>(1), expon - tools::digits<T>());
+    if(diff == 0)
+    {
+        diff = detail::get_smallest_value<T>();
     }
 
     return val - diff;
 }
 
-template <typename T>
-constexpr T float_distance_impl(T a, T b)
+//
+// Special version for bases other than 2:
+//
+template <typename T, typename Policy>
+constexpr T float_prior_imp(const T& val, const std::false_type&, const Policy& pol)
 {
-    BOOST_MATH_ASSERT_MSG(boost::math::ccmath::isfinite(a), "a must be finite.");
-    BOOST_MATH_ASSERT_MSG(boost::math::ccmath::isfinite(b), "b must be finite.");
+    using exponent_type = exponent_type_t<T>;
 
-    constexpr T smallest_value = detail::get_smallest_value<T>();
-    constexpr T digits = std::numeric_limits<T>::digits;
+    static_assert(std::numeric_limits<T>::is_specialized, "Type T must be specialized.");
+    static_assert(std::numeric_limits<T>::radix != 2, "Type T must be specialized.");
 
-    // Special case handling
-    if (a > b)
+    exponent_type expon {};
+    static const char* function = "float_prior<%1%>(%1%)";
+
+    int fpclass = boost::math::ccmath::fpclassify(val);
+
+    if ((fpclass == FP_NAN) || (fpclass == FP_INFINITE))
     {
-        return -float_distance(b, a);
-    }
-    else if (a == b)
-    {
-        return static_cast<T>(0);
-    }
-    else if (a == 0)
-    {
-        return 1 + boost::math::ccmath::fabs(static_cast<T>((b < 0) ? T(-smallest_value) : smallest_value), b);
-    }
-    else if (b == 0)
-    {
-        return 1 + boost::math::ccmath::fabs(float_distance(static_cast<T>((a < 0) ? T(-smallest_value) : smallest_value), a));
-    }
-    else if (sign(a) != sign(b))
-    {
-        return 2 + boost::math::ccmath::fabs(float_distance(static_cast<T>((b < 0) ? T(-smallest_value) : smallest_value), b))
-        + boost::math::ccmath::fabs(float_distance(static_cast<T>((a < 0) ? T(-smallest_value) : smallest_value), a));
+        if (val > 0)
+        {
+            return tools::max_value<T>();
+        }
+
+        return policies::raise_domain_error<T>(
+            function,
+            "Argument must be finite, but got %1%", val, pol);
     }
 
-    //
-    // By the time we get here, both a and b must have the same sign, we want
-    // b > a and both positive for the following logic:
-    //
-    if(a < 0)
+    if (val <= -tools::max_value<T>())
     {
-        return float_distance(static_cast<T>(-b), static_cast<T>(-a));
+        return -policies::raise_overflow_error<T>(function, 0, pol);
     }
 
-    BOOST_MATH_ASSERT(a >= 0);
-    BOOST_MATH_ASSERT(b >= a);
+    if (val == 0)
+    {
+        return -detail::get_smallest_value<T>();
+    }
 
-    std::intmax_t expon {};
-    T result {};
+    if ((fpclass != FP_SUBNORMAL) && (fpclass != FP_ZERO) 
+        && (boost::math::ccmath::fabs(val) < detail::get_min_shift_value<T>()) 
+        && (val != tools::min_value<T>()))
+    {
+        //
+        // Special case: if the value of the least significant bit is a denorm, and the result
+        // would not be a denorm, then shift the input, increment, and shift back.
+        // This avoids issues with the Intel SSE2 registers when the FTZ or DAZ flags are set.
+        //
+        return boost::math::ccmath::scalbn(float_prior(static_cast<T>(boost::math::ccmath::scalbn(val, 2 * std::numeric_limits<T>::digits)), pol), -2 * std::numeric_limits<T>::digits);
+    }
+
+    expon = 1 + boost::math::ccmath::ilogb(val);
     
-    if constexpr (!std::numeric_limits<T>::is_specialized || !std::numeric_limits<T>::radix != 2)
+    if (T remain = boost::math::ccmath::scalbn(val, -expon); remain * std::numeric_limits<T>::radix == 1)
     {
-        boost::math::ccmath::frexp((boost::math::ccmath::fpclassify(a) == FP_SUBNORMAL) ? tools::min_value<T>() : a, &expon);
-        T upper = boost::math::ccmath::ldexp(static_cast<T>(1), expon);
-
-        // If b is greater than upper, then we must spith the calculation as the size of the ULP changes
-        // with each order of magnitude change:
-
-        if (b > upper)
-        {
-            int expon2 {};
-            boost::math::ccmath::frexp(b, &expon2);
-            T upper2 = boost::math::ccmath::ldexp(static_cast<T>(0.5), expon2);
-            result = float_distance(upper2, b);
-            result += (expon2 - expon - 1) * boost::math::ccmath::ldexp(static_cast<T>(1), tools::digits<T>() - 1);
-        }
-        // Use compensated double-double addition to avoid rouding errors in the subtraction
-        expon = tools::digits<T>() - expon;
-        T mb {};
-        T x {};
-        T y {};
-        T z {};
-
-        if ((boost::math::ccmath::fpclassify(a) == FP_SUBNORMAL) || (b - a < tools::min_value<T>()))
-        {
-            //
-            // Special case - either one end of the range is a denormal, or else the difference is.
-            // The regular code will fail if we're using the SSE2 registers on Intel and either
-            // the FTZ or DAZ flags are set.
-            //
-            T a2 = boost::math::ccmath::ldexp(a, tools::digits<T>());
-            T b2 = boost::math::ccmath::ldexp(b, tools::digits<T>());
-            mb = - min(static_cast<T>(boost::math::ccmath::ldexp(upper, tools::digits<T>())), b2);
-            x = a2 + mb;
-            z = x - a2;
-            y = (a2 - (x - z)) + (mb - z);
-
-            expon -= tools::digits<T>();
-        }
-        else
-        {
-            mb = -min(upper, b);
-            x = a + mb;
-            z = x - a;
-            y = (a - (x - z)) + (mb - z);
-        }
-        if (x < 0)
-        {
-            x = -x;
-            y = -y;
-        }
-        result += ldexp(x, expon) + ldexp(y, expon);
-    }
-    else
-    {
-        // Special version for bases other than 2
-        static_assert(std::numeric_limits<T>::is_specialized, "Type T must be specialized.");
-        static_assert(std::numeric_limits<T>::radix != 2, "Type T must be specialized.");
-
-        // Note that if a is a denorm then the usual formula fails becasue we actually have fewer
-        // than tools::digits<T>() significant bits in the represenation
-        expon = boost::math::ccmath::ilogb((boost::math::ccmath::fpclassify(a) == FP_SUBNORMAL) ? tools::min_value<T>() : a);
-        T upper = boost::math::ccmath::scalbn(static_cast<T>(1), expon);
-
-        // If be is greater than upper, then we must split the calculation as the size of the ULP changes
-        // with each order of magnitude
-        if (b > upper)
-        {
-            std::intmax_t expon2 = 1 + boost::math::ccmath::ilogb(b);
-            T upper2 = boost::math::ccmath::scalbn(static_cast<T>(1), expon2 - 1);
-            result = float_distance(upper2, b);
-            result += (expon2 - expon - 1) * boost::math::ccmath::scalbn(static_cast<T>(1), digits - 1);
-        }
-
-        // Use compensated double-double addition to avoid rounding erros in the subtraction
-        expon = digits - expon;
-        T mb {};
-        T x {};
-        T y {};
-        T z {};
-
-        if ((boost::math::ccmath::fpclassify(a) == FP_SUBNORMAL) || (b - a < tools::min_value<T>()))
-        {
-            // Special case - either one end of the range is a denormal, or else the difference is.
-            // The regular code will fail if we're using the SSE2 registers on Intel and either
-            // the FTZ or DAZ flags are set.
-
-            T a2 = boost::math::ccmath::scalbn(a, digits);
-            T b2 = boost::math::ccmath::scalbn(b, digits);
-            mb = min(static_cast<T>(boost::math::ccmath::scalbn(upper, digits)), b2);
-            x = a2 + mb;
-            z = x - a2;
-            y = (a2 - (x - z)) + (mb - z);
-
-            expon -= digits;
-        }
-        else
-        {
-            mb = min(upper, b);
-            x = a + mb;
-            z = x - a;
-            y = (a - (x - z)) + (mb - z);
-        }
-
-        if (x < 0)
-        {
-            x = -x;
-            y = -y;
-        }
-
-        result += scalbn(x, expon) + scalbn(y, expon);
+        --expon; // when val is a power of two we must reduce the exponent
     }
 
-    //
-    // Result must be an integer:
-    //
-    BOOST_MATH_ASSERT(result == boost::math::ccmath::floor(result));
-    return result;
-}
-
-template <typename T>
-constexpr T float_next(T val)
-{
-    return detail::float_next_impl(detail::normalize_value(val));
-}
-
-template <typename T>
-constexpr T float_prior(T val)
-{
-    return detail::float_prior_impl(detail::normalize_value(val));
-}
-
-template <typename T, typename U>
-constexpr auto float_distance(T a, U b)
-{
-    //
-    // We allow ONE of a and b to be an integer type, otherwise both must be the SAME type.
-    //
-    static_assert(
-         (std::is_same_v<T, U>
-      || (std::is_integral_v<T> && !std::is_integral_v<U>)
-      || (!std::is_integral_v<T> && std::is_integral_v<U>)
-      || (std::numeric_limits<T>::is_specialized && std::numeric_limits<U>::is_specialized
-        && (std::numeric_limits<T>::digits == std::numeric_limits<U>::digits)
-        && (std::numeric_limits<T>::radix == std::numeric_limits<U>::radix)
-        && !std::numeric_limits<T>::is_integer && !std::numeric_limits<U>::is_integer)),
-      "Float distance between two different floating point types is undefined.");
-    
-    if constexpr (!std::is_same_v<T, U>)
+    T diff = boost::math::ccmath::scalbn(static_cast<T>(1), expon - std::numeric_limits<T>::digits);
+    if (diff == 0)
     {
-        if constexpr (std::is_integral_v<T>)
-        {
-            return float_distance(static_cast<U>(a), b);
-        }
-        else
-        {
-            return float_distance(a, static_cast<T>(b));
-        }
+        diff = detail::get_smallest_value<T>();
     }
-    else
-    {
-        using return_type = tools::promote_args_t<T, U>;
-        return float_distance_impl(normalize_value(return_type(a)), normalize_value(return_type(b)));
-    }
+    return val - diff;
+} // float_prior_imp
+
+} // namespace detail
+
+template <typename T, typename Policy, typename result_type = tools::promote_args_t<T>>
+constexpr result_type float_prior(const T& val, const Policy& pol)
+{
+    return detail::float_prior_imp(detail::normalize_value(static_cast<result_type>(val), typename detail::has_hidden_guard_digits<result_type>::type()), std::integral_constant<bool, !std::numeric_limits<result_type>::is_specialized || (std::numeric_limits<result_type>::radix == 2)>(), pol);
 }
 
-} // Namespace detail
-
-template <typename T, std::enable_if_t<std::is_floating_point_v<T>, bool> = true>
-constexpr auto nextafter(T from, T to)
+template <typename T, typename result_type = tools::promote_args_t<T>>
+constexpr result_type float_prior(const T& val)
 {
-    if (BOOST_MATH_IS_CONSTANT_EVALUATED(from))
+    return float_prior(val, policies::policy<>());
+}
+
+template <typename T, typename U, typename Policy, typename result_type = tools::promote_args_t<T, U>>
+constexpr result_type nextafter(const T& val, const U& direction, const Policy& pol)
+{
+    if (BOOST_MATH_IS_CONSTANT_EVALUATED(val))
     {
-        if (boost::math::ccmath::isnan(from) || boost::math::ccmath::isnan(to))
+        if (val < direction)
         {
-            return std::numeric_limits<T>::quiet_NaN();
+            return boost::math::ccmath::float_next<result_type>(val, pol);
         }
-        else if (from < to)
+        else if (val == direction)
         {
-            return boost::math::ccmath::detail::float_next(from);
+            // IEC 60559 recommends that from is returned whenever from == to. These functions return to instead, 
+            // which makes the behavior around zero consistent: std::nextafter(-0.0, +0.0) returns +0.0 and 
+            // std::nextafter(+0.0, -0.0) returns -0.0.
+            return direction;
         }
-        else if (from == to)
-        {
-            // IEC 60559 recommends that from is returned whenever from == to. 
-            // These functions return to instead, which makes the behavior around zero consistent: 
-            // std::nextafter(-0.0, +0.0) returns +0.0 and std::nextafter(+0.0, -0.0) returns -0.0.
-            return to;
-        }
-        else
-        {
-            return boost::math::ccmath::detail::float_prior(from);
-        }
+
+        return boost::math::ccmath::float_prior<result_type>(val, pol);
     }
     else
     {
         using std::nextafter;
-        return nextafter(from, to);
+        return nextafter(static_cast<result_type>(val), static_cast<result_type>(direction));
     }
 }
 
-template <typename T1, typename T2>
-constexpr auto nextafter(T1 from, T2 to)
+template <typename T, typename U, typename result_type = tools::promote_args_t<T, U>>
+constexpr result_type nextafter(const T& val, const U& direction)
 {
-    if(BOOST_MATH_IS_CONSTANT_EVALUATED(from))
-    {
-        using promoted_type = tools::promote_args_2_t<T1, T2>;
-        return boost::math::ccmath::fmod(promoted_type(from), promoted_type(to));
-    }
-    else
-    {
-        using std::nextafter;
-        return nextafter(from, to);
-    }
+    return boost::math::ccmath::nextafter(val, direction, policies::policy<>());
 }
 
-constexpr float nextafterf(float from, float to)
+constexpr float nextafterf(float val, float direction)
 {
-    return nextafter(from, to);
+    return boost::math::ccmath::nextafter(val, direction);
 }
 
-#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-constexpr long double nextafterl(long double from, long double to)
+constexpr long double nextafterl(long double val, long double direction)
 {
-    return nextafter(from, to);
+    return boost::math::ccmath::nextafter(val, direction);
 }
 
-template <typename T, std::enable_if_t<std::is_floating_point_v<T>, bool> = true>
-constexpr auto nexttoward(T from, long double to)
+constexpr float nexttoward(float val, long double direction)
 {
-    if (BOOST_MATH_IS_CONSTANT_EVALUATED(from))
-    {
-        if (boost::math::ccmath::isnan(from) || boost::math::ccmath::isnan(to))
-        {
-            return std::numeric_limits<T>::quiet_NaN();
-        }
-        else if (from < to)
-        {
-            return static_cast<T>(boost::math::ccmath::detail::float_next<long double>(from));
-        }
-        else if (from == to)
-        {
-            // IEC 60559 recommends that from is returned whenever from == to. 
-            // These functions return to instead, which makes the behavior around zero consistent: 
-            // std::nexttoward(-0.0, +0.0) returns +0.0 and std::nexttoward(+0.0, -0.0) returns -0.0.
-            return static_cast<T>(to);
-        }
-        else
-        {
-            return static_cast<T>(boost::math::ccmath::detail::float_prior<long double>(from));
-        }
-    }
-    else
-    {
-        using std::nexttoward;
-        return std::nexttoward(from, to);
-    }
+    return static_cast<float>(boost::math::ccmath::nextafter(val, direction));
 }
 
-template <typename T, std::enable_if_t<!std::is_floating_point_v<T>, bool> = true>
-constexpr auto nexttoward(T from, long double to)
+constexpr float nexttowardf(float val, long double direction)
 {
-    using promoted_type = tools::promote_args_2_t<T, long double>;
-
-    if (BOOST_MATH_IS_CONSTANT_EVALUATED(from))
-    {
-        if (boost::math::ccmath::isnan(from) || boost::math::ccmath::isnan(to))
-        {
-            return std::numeric_limits<T>::quiet_NaN();
-        }
-        else if (from < to)
-        {
-            return static_cast<T>(boost::math::ccmath::detail::float_next<promoted_type>(from));
-        }
-        else if (from == to)
-        {
-            // IEC 60559 recommends that from is returned whenever from == to. 
-            // These functions return to instead, which makes the behavior around zero consistent: 
-            // std::nexttoward(-0.0, +0.0) returns +0.0 and std::nexttoward(+0.0, -0.0) returns -0.0.
-            return to;
-        }
-        else
-        {
-            return static_cast<T>(boost::math::ccmath::detail::float_prior<promoted_type>(from));
-        }
-    }
-    else
-    {
-        using std::nexttoward;
-        return std::nexttoward(from, to);
-    }
+    return static_cast<float>(boost::math::ccmath::nextafter(val, direction));
 }
 
-constexpr float nexttowardf(float from, long double to)
+constexpr double nexttoward(double val, long double direction)
 {
-    return nexttoward(from, to);
+    return static_cast<double>(boost::math::ccmath::nextafter(val, direction));
 }
 
-#endif
+constexpr long double nexttoward(long double val, long double direction)
+{
+    return boost::math::ccmath::nextafter(val, direction);
+}
 
-} // Namespace boost::math::ccmath
+constexpr long double nexttowardl(long double val, long double direction)
+{
+    return boost::math::ccmath::nextafter(val, direction);
+}
 
-#endif // BOOST_MATH_CCMATH_NEXT_HPP
+template <typename T, typename result_type = tools::promote_args_t<T, long double>, typename return_type = std::conditional_t<std::is_integral_v<T>, double, result_type>>
+constexpr return_type nexttoward(T val, long double direction)
+{
+    return static_cast<return_type>(boost::math::ccmath::nextafter(static_cast<result_type>(val), direction));
+}
+
+} // Namespaces
+
+#endif // BOOST_MATH_SPECIAL_NEXT_HPP
