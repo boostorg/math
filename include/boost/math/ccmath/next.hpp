@@ -125,10 +125,10 @@ struct min_shift_initializer
         {
             get_min_shift_value<T>();
         }
-        constexpr void force_instantiate() const {}
+        constexpr void force_instantiate() const { return; }
     };
 
-    static constexpr init initializer;
+    static constexpr init initializer {};
     static constexpr void force_instantiate()
     {
         initializer.force_instantiate();
