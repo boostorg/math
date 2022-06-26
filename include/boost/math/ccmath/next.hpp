@@ -13,6 +13,8 @@
 #include <limits>
 #include <type_traits>
 #include <stdexcept>
+#include <boost/math/policies/policy.hpp>
+#include <boost/math/policies/error_handling.hpp>
 #include <boost/math/tools/assert.hpp>
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/is_constant_evaluated.hpp>
@@ -29,12 +31,21 @@
 #include <boost/math/ccmath/fmod.hpp>
 #include <boost/math/ccmath/detail/minmax.hpp>
 
-namespace boost::math::concepts {
-    class real_concept;
-    class std_real_concept;
-}
 
 namespace boost::math::ccmath {
+
+// Forward Declarations
+template <typename T, typename result_type>
+constexpr result_type float_prior(const T& val);
+
+template <typename T, typename Policy, typename result_type>
+constexpr result_type float_prior(const T& val, const Policy& pol);
+
+template <typename T, typename result_type>
+constexpr result_type float_next(const T& val);
+
+template <typename T, typename Policy, typename result_type>
+constexpr result_type float_next(const T& val, const Policy& pol);
 
 namespace detail {
 
@@ -50,10 +61,6 @@ struct has_hidden_guard_digits<long double> : public std::false_type {};
 template <>
 struct has_hidden_guard_digits<__float128> : public std::false_type {};
 #endif
-template <>
-struct has_hidden_guard_digits<boost::math::concepts::real_concept> : public std::false_type {};
-template <>
-struct has_hidden_guard_digits<boost::math::concepts::std_real_concept> : public std::false_type {};
 
 template <typename T, bool b>
 struct has_hidden_guard_digits_10 : public std::false_type {};
@@ -68,7 +75,7 @@ struct has_hidden_guard_digits
 {};
 
 template <typename T>
-constexpr T& normalize_value(const T& val, const std::false_type&) { return val; }
+constexpr T normalize_value(const T& val, const std::false_type&) { return val; }
 template <typename T>
 constexpr T normalize_value(const T& val, const std::true_type&) 
 {
@@ -89,7 +96,7 @@ constexpr T get_smallest_value(const std::true_type&)
     // when this can be turned on or off at runtime, as is the case
     // when using the SSE2 registers in DAZ or FTZ mode.
     //
-    static constexpr T m = std::numeric_limits<T>::denorm_min();
+    constexpr T m = std::numeric_limits<T>::denorm_min();
     return ((tools::min_value<T>() / 2) == 0) ? tools::min_value<T>() : m;
 }
 
@@ -104,39 +111,6 @@ constexpr T get_smallest_value()
 {
     return get_smallest_value<T>(std::integral_constant<bool, std::numeric_limits<T>::is_specialized && (std::numeric_limits<T>::has_denorm == std::denorm_present)>());
 }
-
-//
-// Returns the smallest value that won't generate denorms when
-// we calculate the value of the least-significant-bit:
-//
-template <typename T>
-constexpr T get_min_shift_value();
-
-template <typename T>
-struct min_shift_initializer
-{
-    struct init
-    {
-        init()
-        {
-            do_init();
-        }
-        static constexpr void do_init()
-        {
-            get_min_shift_value<T>();
-        }
-        constexpr void force_instantiate() const { return; }
-    };
-
-    static constexpr init initializer {};
-    static constexpr void force_instantiate()
-    {
-        initializer.force_instantiate();
-    }
-};
-
-template <typename T>
-constexpr typename min_shift_initializer<T>::init min_shift_initializer<T>::initializer;
 
 template <typename T>
 constexpr T calc_min_shifted(const std::true_type&)
@@ -153,13 +127,10 @@ constexpr T calc_min_shifted(const std::false_type&)
    return boost::math::ccmath::scalbn(tools::min_value<T>(), std::numeric_limits<T>::digits + 1);
 }
 
-
 template <typename T>
 constexpr T get_min_shift_value()
 {
-   static const T val = calc_min_shifted<T>(std::integral_constant<bool, !std::numeric_limits<T>::is_specialized || std::numeric_limits<T>::radix == 2>());
-   min_shift_initializer<T>::force_instantiate();
-
+   const T val = calc_min_shifted<T>(std::integral_constant<bool, !std::numeric_limits<T>::is_specialized || std::numeric_limits<T>::radix == 2>());
    return val;
 }
 
@@ -184,24 +155,20 @@ constexpr T float_next_imp(const T& val, const std::true_type&, const Policy& po
     using exponent_type = exponent_type_t<T>;
     
     exponent_type expon {};
-    static const char* function = "float_next<%1%>(%1%)";
 
     int fpclass = boost::math::ccmath::fpclassify(val);
 
-    if ((fpclass == FP_NAN) || (fpclass == FP_INFINITE))
+    if (fpclass == FP_NAN)
     {
-        if (val < 0)
-        {
-            return -tools::max_value<T>();
-        }
-        return policies::raise_domain_error<T>(
-            function,
-            "Argument must be finite, but got %1%", val, pol);
+        return val;
     }
-
-    if (val >= tools::max_value<T>())
+    else if (fpclass == FP_INFINITE)
     {
-        return policies::raise_overflow_error<T>(function, 0, pol);
+        return val;
+    }
+    else if (val <= -tools::max_value<T>())
+    {
+        return val;
     }
 
     if (val == 0)
@@ -245,28 +212,23 @@ constexpr T float_next_imp(const T& val, const std::false_type&, const Policy& p
     static_assert(std::numeric_limits<T>::radix != 2, "Type T must be specialized.");
 
     exponent_type expon {};
-    static const char* function = "float_next<%1%>(%1%)";
 
     int fpclass = boost::math::ccmath::fpclassify(val);
 
-    if ((fpclass == FP_NAN) || (fpclass == FP_INFINITE))
+    if (fpclass == FP_NAN)
     {
-        if (val < 0)
-        {
-            return -tools::max_value<T>();
-        }
-
-        return policies::raise_domain_error<T>(
-            function,
-            "Argument must be finite, but got %1%", val, pol);
+        return val;
+    }
+    else if (fpclass == FP_INFINITE)
+    {
+        return val;
+    }
+    else if (val <= -tools::max_value<T>())
+    {
+        return val;
     }
 
-    if(val >= tools::max_value<T>())
-    {
-        return policies::raise_overflow_error<T>(function, 0, pol);
-    }
-
-    if(val == 0)
+    if (val == 0)
     {
         return detail::get_smallest_value<T>();
     }
@@ -300,15 +262,14 @@ constexpr T float_next_imp(const T& val, const std::false_type&, const Policy& p
 
 } // namespace detail
 
-template <typename T, typename Policy>
-constexpr tools::promote_args_t<T> float_next(const T& val, const Policy& pol)
+template <typename T, typename Policy, typename result_type = tools::promote_args_t<T>>
+constexpr result_type float_next(const T& val, const Policy& pol)
 {
-    using result_type = tools::promote_args_t<T>;
     return detail::float_next_imp(detail::normalize_value(static_cast<result_type>(val), typename detail::has_hidden_guard_digits<result_type>::type()), std::integral_constant<bool, !std::numeric_limits<result_type>::is_specialized || (std::numeric_limits<result_type>::radix == 2)>(), pol);
 }
 
-template <typename T>
-constexpr tools::promote_args_t<T> float_next(const T& val)
+template <typename T, typename result_type = tools::promote_args_t<T>>
+constexpr result_type float_next(const T& val)
 {
     return float_next(val, policies::policy<>());
 }
@@ -321,25 +282,20 @@ constexpr T float_prior_imp(const T& val, const std::true_type&, const Policy& p
     using exponent_type = exponent_type_t<T>;
 
     exponent_type expon {};
-    static const char* function = "float_prior<%1%>(%1%)";
 
     int fpclass = boost::math::ccmath::fpclassify(val);
 
-    if ((fpclass == FP_NAN) || (fpclass == FP_INFINITE))
+    if (fpclass == FP_NAN)
     {
-        if (val > 0)
-        {
-            return tools::max_value<T>();
-        }
-
-        return policies::raise_domain_error<T>(
-            function,
-            "Argument must be finite, but got %1%", val, pol);
+        return val;
     }
-
-    if (val <= -tools::max_value<T>())
+    else if (fpclass == FP_INFINITE)
     {
-        return -policies::raise_overflow_error<T>(function, 0, pol);
+        return val;
+    }
+    else if (val <= -tools::max_value<T>())
+    {
+        return val;
     }
 
     if (val == 0)
@@ -385,25 +341,20 @@ constexpr T float_prior_imp(const T& val, const std::false_type&, const Policy& 
     static_assert(std::numeric_limits<T>::radix != 2, "Type T must be specialized.");
 
     exponent_type expon {};
-    static const char* function = "float_prior<%1%>(%1%)";
 
     int fpclass = boost::math::ccmath::fpclassify(val);
 
-    if ((fpclass == FP_NAN) || (fpclass == FP_INFINITE))
+    if (fpclass == FP_NAN)
     {
-        if (val > 0)
-        {
-            return tools::max_value<T>();
-        }
-
-        return policies::raise_domain_error<T>(
-            function,
-            "Argument must be finite, but got %1%", val, pol);
+        return val;
     }
-
-    if (val <= -tools::max_value<T>())
+    else if (fpclass == FP_INFINITE)
     {
-        return -policies::raise_overflow_error<T>(function, 0, pol);
+        return val;
+    }
+    else if (val <= -tools::max_value<T>())
+    {
+        return val;
     }
 
     if (val == 0)
@@ -457,7 +408,15 @@ constexpr result_type nextafter(const T& val, const U& direction, const Policy& 
 {
     if (BOOST_MATH_IS_CONSTANT_EVALUATED(val))
     {
-        if (val < direction)
+        if (boost::math::ccmath::isnan(val))
+        {
+            return val;
+        }
+        else if (boost::math::ccmath::isnan(direction))
+        {
+            return direction;
+        }
+        else if (val < direction)
         {
             return boost::math::ccmath::float_next<result_type>(val, pol);
         }
