@@ -8,6 +8,16 @@ All old bug reports including closed ones can be viewed on Trac
 
 Recent issues on GitHub [@https://github.com/boostorg/math/issues?utf8=%E2%9C%93&q=is%3Aissue here].
 
+[h4 Math-3.4.0 (Boost-1.80)]
+
+* [*Deprecated C++11 support]: from 2023 we will require C++14 as a minimum standard.
+This will mean GCC-5 or MSVC-14.1 as a minimal requirement.
+* Add `constexpr` fma support, see [@https://github.com/boostorg/math/pull/734 734].
+* Add support for the Chatterjee Correlation Coefficient, see [@https://github.com/boostorg/math/pull/770 770].
+* Added support for the logarithm of the PDF for all the distributions.
+* Improve support for building with no exception or RTTI support.
+* Some minor bug fixes for [sub 1]F[sub 1] corner cases, see [@https://github.com/boostorg/math/pull/778 778].
+
 [h4 Math-3.3.0 (Boost-1.79)]
 
 * Added [link math_toolkit.powers.logaddexp `logaddexp` and `logsumexp`] to compute log(e[super x[sub 1]] + e[super x[sub 2]] + ... + e[super x[sub N]]).
