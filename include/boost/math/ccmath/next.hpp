@@ -448,6 +448,8 @@ constexpr float nextafterf(float val, float direction)
     return boost::math::ccmath::nextafter(val, direction);
 }
 
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+
 constexpr long double nextafterl(long double val, long double direction)
 {
     return boost::math::ccmath::nextafter(val, direction);
@@ -483,6 +485,8 @@ constexpr return_type nexttoward(T val, long double direction)
 {
     return static_cast<return_type>(boost::math::ccmath::nextafter(static_cast<result_type>(val), direction));
 }
+
+#endif
 
 } // Namespaces
 

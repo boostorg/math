@@ -25,9 +25,15 @@ void test_next()
     static_assert(boost::math::ccmath::nextafter(T(0.0), T(-0.0)) == T(-0.0));
 
     // val = 1
-    constexpr T test_1 = boost::math::ccmath::nextafter(1, 1, boost::math::tools::max_value<T>());
-    T distance_1 = boost::math::float_distance(test_1, T(1));
-    assert(test_1 == distance_1);
+    constexpr T test_1 = boost::math::ccmath::nextafter(T(1), T(1.5));
+    static_assert(test_1 < 1 + 2*std::numeric_limits<T>::epsilon());
+    static_assert(test_1 > 1 - 2*std::numeric_limits<T>::epsilon());
+
+    constexpr T test_1_toward = boost::math::ccmath::nexttoward(T(1), T(1.5));
+    
+    // For T is long double nextafter is the same as nexttoward
+    // For T is not long double the answer will be either greater or equal when from > to depending on loss of precision
+    static_assert(test_1 >= test_1_toward);
 }
 
 int main(void)
