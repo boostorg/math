@@ -455,35 +455,28 @@ constexpr long double nextafterl(long double val, long double direction)
     return boost::math::ccmath::nextafter(val, direction);
 }
 
-constexpr float nexttoward(float val, long double direction)
+template <typename T, typename result_type = tools::promote_args_t<T, long double>, typename return_type = std::conditional_t<std::is_integral_v<T>, double, T>>
+constexpr return_type nexttoward(T val, long double direction)
 {
-    return static_cast<float>(boost::math::ccmath::nextafter(val, direction));
+    if (BOOST_MATH_IS_CONSTANT_EVALUATED(val))
+    {
+        return static_cast<return_type>(boost::math::ccmath::nextafter(static_cast<result_type>(val), direction));
+    }
+    else
+    {
+        using std::nexttoward;
+        return nexttoward(val, direction);
+    }
 }
 
 constexpr float nexttowardf(float val, long double direction)
 {
-    return static_cast<float>(boost::math::ccmath::nextafter(val, direction));
-}
-
-constexpr double nexttoward(double val, long double direction)
-{
-    return static_cast<double>(boost::math::ccmath::nextafter(val, direction));
-}
-
-constexpr long double nexttoward(long double val, long double direction)
-{
-    return boost::math::ccmath::nextafter(val, direction);
+    return boost::math::ccmath::nexttoward(val, direction);
 }
 
 constexpr long double nexttowardl(long double val, long double direction)
 {
-    return boost::math::ccmath::nextafter(val, direction);
-}
-
-template <typename T, typename result_type = tools::promote_args_t<T, long double>, typename return_type = std::conditional_t<std::is_integral_v<T>, double, result_type>>
-constexpr return_type nexttoward(T val, long double direction)
-{
-    return static_cast<return_type>(boost::math::ccmath::nextafter(static_cast<result_type>(val), direction));
+    return boost::math::ccmath::nexttoward(val, direction);
 }
 
 #endif
