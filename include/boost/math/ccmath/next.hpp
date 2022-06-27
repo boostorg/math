@@ -29,22 +29,20 @@
 #include <boost/math/ccmath/fpclassify.hpp>
 #include <boost/math/ccmath/isfinite.hpp>
 #include <boost/math/ccmath/fmod.hpp>
-#include <boost/math/ccmath/detail/minmax.hpp>
-
 
 namespace boost::math::ccmath {
 
 // Forward Declarations
-template <typename T, typename result_type>
+template <typename T, typename result_type = tools::promote_args_t<T>>
 constexpr result_type float_prior(const T& val);
 
-template <typename T, typename Policy, typename result_type>
+template <typename T, typename Policy, typename result_type = tools::promote_args_t<T>>
 constexpr result_type float_prior(const T& val, const Policy& pol);
 
-template <typename T, typename result_type>
+template <typename T, typename result_type = tools::promote_args_t<T>>
 constexpr result_type float_next(const T& val);
 
-template <typename T, typename Policy, typename result_type>
+template <typename T, typename Policy, typename result_type = tools::promote_args_t<T>>
 constexpr result_type float_next(const T& val, const Policy& pol);
 
 namespace detail {
@@ -185,7 +183,7 @@ constexpr T float_next_imp(const T& val, const std::true_type&, const Policy& po
         // would not be a denorm, then shift the input, increment, and shift back.
         // This avoids issues with the Intel SSE2 registers when the FTZ or DAZ flags are set.
         //
-        return boost::math::ccmath::ldexp(float_next(static_cast<T>(boost::math::ccmath::ldexp(val, 2 * tools::digits<T>())), pol), -2 * tools::digits<T>());
+        return boost::math::ccmath::ldexp(boost::math::ccmath::float_next(static_cast<T>(boost::math::ccmath::ldexp(val, 2 * tools::digits<T>())), pol), -2 * tools::digits<T>());
     }
 
     if (-0.5f == boost::math::ccmath::frexp(val, &expon))
@@ -242,7 +240,7 @@ constexpr T float_next_imp(const T& val, const std::false_type&, const Policy& p
         // would not be a denorm, then shift the input, increment, and shift back.
         // This avoids issues with the Intel SSE2 registers when the FTZ or DAZ flags are set.
         //
-        return boost::math::ccmath::scalbn(float_next(static_cast<T>(boost::math::ccmath::scalbn(val, 2 * std::numeric_limits<T>::digits)), pol), -2 * std::numeric_limits<T>::digits);
+        return boost::math::ccmath::scalbn(boost::math::ccmath::float_next(static_cast<T>(boost::math::ccmath::scalbn(val, 2 * std::numeric_limits<T>::digits)), pol), -2 * std::numeric_limits<T>::digits);
     }
 
     expon = 1 + boost::math::ccmath::ilogb(val);
@@ -262,13 +260,13 @@ constexpr T float_next_imp(const T& val, const std::false_type&, const Policy& p
 
 } // namespace detail
 
-template <typename T, typename Policy, typename result_type = tools::promote_args_t<T>>
+template <typename T, typename Policy, typename result_type>
 constexpr result_type float_next(const T& val, const Policy& pol)
 {
     return detail::float_next_imp(detail::normalize_value(static_cast<result_type>(val), typename detail::has_hidden_guard_digits<result_type>::type()), std::integral_constant<bool, !std::numeric_limits<result_type>::is_specialized || (std::numeric_limits<result_type>::radix == 2)>(), pol);
 }
 
-template <typename T, typename result_type = tools::promote_args_t<T>>
+template <typename T, typename result_type>
 constexpr result_type float_next(const T& val)
 {
     return float_next(val, policies::policy<>());
@@ -312,7 +310,7 @@ constexpr T float_prior_imp(const T& val, const std::true_type&, const Policy& p
         // would not be a denorm, then shift the input, increment, and shift back.
         // This avoids issues with the Intel SSE2 registers when the FTZ or DAZ flags are set.
         //
-        return boost::math::ccmath::ldexp(float_prior(static_cast<T>(boost::math::ccmath::ldexp(val, 2 * tools::digits<T>())), pol), -2 * tools::digits<T>());
+        return boost::math::ccmath::ldexp(boost::math::ccmath::float_prior(static_cast<T>(boost::math::ccmath::ldexp(val, 2 * tools::digits<T>())), pol), -2 * tools::digits<T>());
     }
 
     if(T remain = boost::math::ccmath::frexp(val, &expon); remain == 0.5f)
@@ -371,7 +369,7 @@ constexpr T float_prior_imp(const T& val, const std::false_type&, const Policy& 
         // would not be a denorm, then shift the input, increment, and shift back.
         // This avoids issues with the Intel SSE2 registers when the FTZ or DAZ flags are set.
         //
-        return boost::math::ccmath::scalbn(float_prior(static_cast<T>(boost::math::ccmath::scalbn(val, 2 * std::numeric_limits<T>::digits)), pol), -2 * std::numeric_limits<T>::digits);
+        return boost::math::ccmath::scalbn(boost::math::ccmath::float_prior(static_cast<T>(boost::math::ccmath::scalbn(val, 2 * std::numeric_limits<T>::digits)), pol), -2 * std::numeric_limits<T>::digits);
     }
 
     expon = 1 + boost::math::ccmath::ilogb(val);
@@ -391,13 +389,13 @@ constexpr T float_prior_imp(const T& val, const std::false_type&, const Policy& 
 
 } // namespace detail
 
-template <typename T, typename Policy, typename result_type = tools::promote_args_t<T>>
+template <typename T, typename Policy, typename result_type>
 constexpr result_type float_prior(const T& val, const Policy& pol)
 {
     return detail::float_prior_imp(detail::normalize_value(static_cast<result_type>(val), typename detail::has_hidden_guard_digits<result_type>::type()), std::integral_constant<bool, !std::numeric_limits<result_type>::is_specialized || (std::numeric_limits<result_type>::radix == 2)>(), pol);
 }
 
-template <typename T, typename result_type = tools::promote_args_t<T>>
+template <typename T, typename result_type>
 constexpr result_type float_prior(const T& val)
 {
     return float_prior(val, policies::policy<>());
@@ -418,7 +416,7 @@ constexpr result_type nextafter(const T& val, const U& direction, const Policy& 
         }
         else if (val < direction)
         {
-            return boost::math::ccmath::float_next<result_type>(val, pol);
+            return boost::math::ccmath::float_next<T, Policy, result_type>(val, pol);
         }
         else if (val == direction)
         {
@@ -428,7 +426,7 @@ constexpr result_type nextafter(const T& val, const U& direction, const Policy& 
             return direction;
         }
 
-        return boost::math::ccmath::float_prior<result_type>(val, pol);
+        return boost::math::ccmath::float_prior<T, Policy, result_type>(val, pol);
     }
     else
     {
