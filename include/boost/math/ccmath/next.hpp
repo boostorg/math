@@ -38,14 +38,8 @@ namespace detail {
 template <typename T, typename result_type = tools::promote_args_t<T>>
 constexpr result_type float_prior(const T& val);
 
-template <typename T, typename Policy, typename result_type = tools::promote_args_t<T>>
-constexpr result_type float_prior(const T& val, const Policy& pol);
-
 template <typename T, typename result_type = tools::promote_args_t<T>>
 constexpr result_type float_next(const T& val);
-
-template <typename T, typename Policy, typename result_type = tools::promote_args_t<T>>
-constexpr result_type float_next(const T& val, const Policy& pol);
 
 template <typename T>
 struct has_hidden_guard_digits;
@@ -147,8 +141,8 @@ struct exponent_type<T, true>
 template <typename T, bool b = boost::math::tools::detail::has_backend_type_v<T>>
 using exponent_type_t = typename exponent_type<T>::type;
 
-template <typename T, typename Policy>
-constexpr T float_next_imp(const T& val, const std::true_type&, const Policy& pol)
+template <typename T>
+constexpr T float_next_imp(const T& val, const std::true_type&)
 {
     using exponent_type = exponent_type_t<T>;
     
@@ -183,7 +177,7 @@ constexpr T float_next_imp(const T& val, const std::true_type&, const Policy& po
         // would not be a denorm, then shift the input, increment, and shift back.
         // This avoids issues with the Intel SSE2 registers when the FTZ or DAZ flags are set.
         //
-        return boost::math::ccmath::ldexp(boost::math::ccmath::detail::float_next(static_cast<T>(boost::math::ccmath::ldexp(val, 2 * tools::digits<T>())), pol), -2 * tools::digits<T>());
+        return boost::math::ccmath::ldexp(boost::math::ccmath::detail::float_next(static_cast<T>(boost::math::ccmath::ldexp(val, 2 * tools::digits<T>()))), -2 * tools::digits<T>());
     }
 
     if (-0.5f == boost::math::ccmath::frexp(val, &expon))
@@ -201,8 +195,8 @@ constexpr T float_next_imp(const T& val, const std::true_type&, const Policy& po
 //
 // Special version for some base other than 2:
 //
-template <typename T, typename Policy>
-constexpr T float_next_imp(const T& val, const std::false_type&, const Policy& pol)
+template <typename T>
+constexpr T float_next_imp(const T& val, const std::false_type&)
 {
     using exponent_type = exponent_type_t<T>;
 
@@ -240,7 +234,7 @@ constexpr T float_next_imp(const T& val, const std::false_type&, const Policy& p
         // would not be a denorm, then shift the input, increment, and shift back.
         // This avoids issues with the Intel SSE2 registers when the FTZ or DAZ flags are set.
         //
-        return boost::math::ccmath::scalbn(boost::math::ccmath::detail::float_next(static_cast<T>(boost::math::ccmath::scalbn(val, 2 * std::numeric_limits<T>::digits)), pol), -2 * std::numeric_limits<T>::digits);
+        return boost::math::ccmath::scalbn(boost::math::ccmath::detail::float_next(static_cast<T>(boost::math::ccmath::scalbn(val, 2 * std::numeric_limits<T>::digits))), -2 * std::numeric_limits<T>::digits);
     }
 
     expon = 1 + boost::math::ccmath::ilogb(val);
@@ -258,20 +252,14 @@ constexpr T float_next_imp(const T& val, const std::false_type&, const Policy& p
     return val + diff;
 }
 
-template <typename T, typename Policy, typename result_type>
-constexpr result_type float_next(const T& val, const Policy& pol)
-{
-    return detail::float_next_imp(detail::normalize_value(static_cast<result_type>(val), typename detail::has_hidden_guard_digits<result_type>::type()), std::integral_constant<bool, !std::numeric_limits<result_type>::is_specialized || (std::numeric_limits<result_type>::radix == 2)>(), pol);
-}
-
 template <typename T, typename result_type>
 constexpr result_type float_next(const T& val)
 {
-    return float_next(val, policies::policy<>());
+    return detail::float_next_imp(detail::normalize_value(static_cast<result_type>(val), typename detail::has_hidden_guard_digits<result_type>::type()), std::integral_constant<bool, !std::numeric_limits<result_type>::is_specialized || (std::numeric_limits<result_type>::radix == 2)>());
 }
 
-template <typename T, typename Policy>
-constexpr T float_prior_imp(const T& val, const std::true_type&, const Policy& pol)
+template <typename T>
+constexpr T float_prior_imp(const T& val, const std::true_type&)
 {
     using exponent_type = exponent_type_t<T>;
 
@@ -306,7 +294,7 @@ constexpr T float_prior_imp(const T& val, const std::true_type&, const Policy& p
         // would not be a denorm, then shift the input, increment, and shift back.
         // This avoids issues with the Intel SSE2 registers when the FTZ or DAZ flags are set.
         //
-        return boost::math::ccmath::ldexp(boost::math::ccmath::detail::float_prior(static_cast<T>(boost::math::ccmath::ldexp(val, 2 * tools::digits<T>())), pol), -2 * tools::digits<T>());
+        return boost::math::ccmath::ldexp(boost::math::ccmath::detail::float_prior(static_cast<T>(boost::math::ccmath::ldexp(val, 2 * tools::digits<T>()))), -2 * tools::digits<T>());
     }
 
     if(T remain = boost::math::ccmath::frexp(val, &expon); remain == 0.5f)
@@ -326,8 +314,8 @@ constexpr T float_prior_imp(const T& val, const std::true_type&, const Policy& p
 //
 // Special version for bases other than 2:
 //
-template <typename T, typename Policy>
-constexpr T float_prior_imp(const T& val, const std::false_type&, const Policy& pol)
+template <typename T>
+constexpr T float_prior_imp(const T& val, const std::false_type&)
 {
     using exponent_type = exponent_type_t<T>;
 
@@ -365,7 +353,7 @@ constexpr T float_prior_imp(const T& val, const std::false_type&, const Policy& 
         // would not be a denorm, then shift the input, increment, and shift back.
         // This avoids issues with the Intel SSE2 registers when the FTZ or DAZ flags are set.
         //
-        return boost::math::ccmath::scalbn(boost::math::ccmath::detail::float_prior(static_cast<T>(boost::math::ccmath::scalbn(val, 2 * std::numeric_limits<T>::digits)), pol), -2 * std::numeric_limits<T>::digits);
+        return boost::math::ccmath::scalbn(boost::math::ccmath::detail::float_prior(static_cast<T>(boost::math::ccmath::scalbn(val, 2 * std::numeric_limits<T>::digits))), -2 * std::numeric_limits<T>::digits);
     }
 
     expon = 1 + boost::math::ccmath::ilogb(val);
@@ -383,22 +371,16 @@ constexpr T float_prior_imp(const T& val, const std::false_type&, const Policy& 
     return val - diff;
 } // float_prior_imp
 
-template <typename T, typename Policy, typename result_type>
-constexpr result_type float_prior(const T& val, const Policy& pol)
-{
-    return detail::float_prior_imp(detail::normalize_value(static_cast<result_type>(val), typename detail::has_hidden_guard_digits<result_type>::type()), std::integral_constant<bool, !std::numeric_limits<result_type>::is_specialized || (std::numeric_limits<result_type>::radix == 2)>(), pol);
-}
-
 template <typename T, typename result_type>
 constexpr result_type float_prior(const T& val)
 {
-    return float_prior(val, policies::policy<>());
+    return detail::float_prior_imp(detail::normalize_value(static_cast<result_type>(val), typename detail::has_hidden_guard_digits<result_type>::type()), std::integral_constant<bool, !std::numeric_limits<result_type>::is_specialized || (std::numeric_limits<result_type>::radix == 2)>());
 }
 
 } // namespace detail
 
-template <typename T, typename U, typename Policy, typename result_type = tools::promote_args_t<T, U>>
-constexpr result_type nextafter(const T& val, const U& direction, const Policy& pol)
+template <typename T, typename U, typename result_type = tools::promote_args_t<T, U>>
+constexpr result_type nextafter(const T& val, const U& direction)
 {
     if (BOOST_MATH_IS_CONSTANT_EVALUATED(val))
     {
@@ -412,7 +394,7 @@ constexpr result_type nextafter(const T& val, const U& direction, const Policy& 
         }
         else if (val < direction)
         {
-            return boost::math::ccmath::detail::float_next(val, pol);
+            return boost::math::ccmath::detail::float_next(val);
         }
         else if (val == direction)
         {
@@ -422,19 +404,13 @@ constexpr result_type nextafter(const T& val, const U& direction, const Policy& 
             return direction;
         }
 
-        return boost::math::ccmath::detail::float_prior(val, pol);
+        return boost::math::ccmath::detail::float_prior(val);
     }
     else
     {
         using std::nextafter;
         return nextafter(static_cast<result_type>(val), static_cast<result_type>(direction));
     }
-}
-
-template <typename T, typename U, typename result_type = tools::promote_args_t<T, U>>
-constexpr result_type nextafter(const T& val, const U& direction)
-{
-    return boost::math::ccmath::nextafter(val, direction, policies::policy<>());
 }
 
 constexpr float nextafterf(float val, float direction)
