@@ -8,6 +8,7 @@
 #include <iomanip>
 #include <limits>
 #include <boost/math/tools/precision.hpp>
+#include <boost/math/special_functions/next.hpp>
 #include <boost/math/ccmath/next.hpp>
 #include <boost/math/ccmath/fpclassify.hpp>
 #include "math_unit_test.hpp"
@@ -34,6 +35,12 @@ void test_next()
     // For T is long double nextafter is the same as nexttoward
     // For T is not long double the answer will be either greater or equal when from > to depending on loss of precision
     static_assert(test_1 >= test_1_toward);
+
+    // Compare to existing implementation
+    // test_1 has already passed through static_asserts so we know it was calculated at compile time
+    // rather than farming out to std at run time.
+    const T existing_test_1 = boost::math::nextafter(T(1), T(1.5));
+    CHECK_EQUAL(test_1, existing_test_1);
 }
 
 int main(void)
@@ -45,7 +52,7 @@ int main(void)
     test_next<long double>();
     #endif
 
-    return 0;
+    return boost::math::test::report_errors();
 }
 #else
 int main(void)
