@@ -53,6 +53,16 @@ BOOST_MATH_HAS_NAMED_TRAIT(has_value_type, value_type)
 BOOST_MATH_HAS_NAMED_TRAIT(has_policy_type, policy_type)
 BOOST_MATH_HAS_NAMED_TRAIT(has_backend_type, backend_type)
 
+// C++17-esque helpers
+template <typename T>
+constexpr bool has_value_type_v = has_value_type<T>::value;
+
+template <typename T>
+constexpr bool has_policy_type_v = has_policy_type<T>::value;
+
+template <typename T>
+constexpr bool has_backend_type_v = has_backend_type<T>::value;
+
 template <typename D>
 char cdf(const D& ...);
 template <typename D>
