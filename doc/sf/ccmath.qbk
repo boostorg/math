@@ -195,6 +195,9 @@ All of the following functions require C++17 or greater.
         template <typename T>
         constexpr Promoted nexttoward(T from, long double to)
 
+        template <typename T>
+        constexpr bool signbit(T arg)
+
     } // Namespaces
 
 [endsect] [/section:ccmath Constexpr CMath]
