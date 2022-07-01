@@ -10,7 +10,6 @@
 #include <limits>
 #include <type_traits>
 #include <boost/math/tools/is_constant_evaluated.hpp>
-#include <boost/math/ccmath/abs.hpp>
 #include <boost/math/ccmath/isnan.hpp>
 
 namespace boost::math::ccmath {
@@ -25,6 +24,11 @@ namespace detail {
 template <typename T>
 constexpr bool signbit_impl(T arg)
 {
+    if (boost::math::ccmath::isnan(arg))
+    {
+        return false;
+    }
+    
     return arg < static_cast<T>(0);
 }
 
