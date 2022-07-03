@@ -335,7 +335,7 @@ private:
 
 // Must define the free function "size()":
 template<class Real>
-constexpr std::size_t size(const mypoint3d<Real>& c)
+constexpr std::size_t size(const mypoint3d<Real>&)
 {
     return 3;
 }

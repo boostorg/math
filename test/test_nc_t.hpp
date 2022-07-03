@@ -44,7 +44,7 @@
       }
 
 template <class RealType>
-RealType naive_pdf(RealType v, RealType delta, RealType x)
+RealType naive_pdf(RealType, RealType, RealType)
 {
 }
 

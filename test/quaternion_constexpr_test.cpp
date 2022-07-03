@@ -143,6 +143,11 @@ int main()
    (void)b8;
    (void)b9;
    (void)b10;
+   (void)q3;
+   (void)q4;
+   (void)q6;
+   (void)q7;
+   (void)q8;
 
 #endif
 
@@ -150,12 +155,12 @@ int main()
 
    constexpr qt q12 = c2 + q1;
    constexpr qt q13 = q1 + c2;
-   
+
    constexpr qt q17 = c2 - q1;
    constexpr qt q18 = q1 - c2;
-   
+
    constexpr qt q24 = full_constexpr_test(q5, q5 + 1, 3.2, q5.C_component_1());
-   
+
    (void)q12;
    (void)q13;
    (void)q17;
