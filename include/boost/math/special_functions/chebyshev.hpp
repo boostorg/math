@@ -22,8 +22,8 @@
 
 namespace boost { namespace math {
 
-template<class T1, class T2, class T3>
-inline typename tools::promote_args<T1, T2, T3>::type chebyshev_next(T1 const & x, T2 const & Tn, T3 const & Tn_1)
+template <class T1, class T2, class T3>
+inline tools::promote_args_t<T1, T2, T3> chebyshev_next(T1 const & x, T2 const & Tn, T3 const & Tn_1)
 {
     return 2*x*Tn - Tn_1;
 }
@@ -45,12 +45,13 @@ inline Real chebyshev_imp(unsigned n, Real const & x, const Policy&)
     using std::sqrt;
     Real T0 = 1;
     Real T1;
-    if (second)
+
+    BOOST_IF_CONSTEXPR (second)
     {
         if (x > 1 || x < -1)
         {
             Real t = sqrt(x*x -1);
-            return static_cast<Real>((pow(x+t, (int)(n+1)) - pow(x-t, (int)(n+1)))/(2*t));
+            return static_cast<Real>((pow(x+t, static_cast<int>(n+1)) - pow(x-t, static_cast<int>(n+1)))/(2*t));
         }
         T1 = 2*x;
     }
@@ -91,61 +92,58 @@ inline Real chebyshev_imp(unsigned n, Real const & x, const Policy&)
 } // namespace detail
 
 template <class Real, class Policy>
-inline typename tools::promote_args<Real>::type
-chebyshev_t(unsigned n, Real const & x, const Policy&)
+inline tools::promote_args_t<Real> chebyshev_t(unsigned n, Real const & x, const Policy&)
 {
-   typedef typename tools::promote_args<Real>::type result_type;
-   typedef typename policies::evaluation<result_type, Policy>::type value_type;
-   typedef typename policies::normalise<
-      Policy,
-      policies::promote_float<false>,
-      policies::promote_double<false>,
-      policies::discrete_quantile<>,
-      policies::assert_undefined<> >::type forwarding_policy;
+   using result_type = tools::promote_args_t<Real>;
+   using value_type = typename policies::evaluation<result_type, Policy>::type;
+   using forwarding_policy = typename policies::normalise<
+                                                            Policy,
+                                                            policies::promote_float<false>,
+                                                            policies::promote_double<false>,
+                                                            policies::discrete_quantile<>,
+                                                            policies::assert_undefined<> >::type;
 
    return policies::checked_narrowing_cast<result_type, Policy>(detail::chebyshev_imp<value_type, false>(n, static_cast<value_type>(x), forwarding_policy()), "boost::math::chebyshev_t<%1%>(unsigned, %1%)");
 }
 
-template<class Real>
-inline typename tools::promote_args<Real>::type chebyshev_t(unsigned n, Real const & x)
+template <class Real>
+inline tools::promote_args_t<Real> chebyshev_t(unsigned n, Real const & x)
 {
     return chebyshev_t(n, x, policies::policy<>());
 }
 
 template <class Real, class Policy>
-inline typename tools::promote_args<Real>::type
-chebyshev_u(unsigned n, Real const & x, const Policy&)
+inline tools::promote_args_t<Real> chebyshev_u(unsigned n, Real const & x, const Policy&)
 {
-   typedef typename tools::promote_args<Real>::type result_type;
-   typedef typename policies::evaluation<result_type, Policy>::type value_type;
-   typedef typename policies::normalise<
-      Policy,
-      policies::promote_float<false>,
-      policies::promote_double<false>,
-      policies::discrete_quantile<>,
-      policies::assert_undefined<> >::type forwarding_policy;
+   using result_type = tools::promote_args_t<Real>;
+   using value_type = typename policies::evaluation<result_type, Policy>::type;
+   using forwarding_policy =  typename policies::normalise<
+                                                            Policy,
+                                                            policies::promote_float<false>,
+                                                            policies::promote_double<false>,
+                                                            policies::discrete_quantile<>,
+                                                            policies::assert_undefined<> >::type;
 
    return policies::checked_narrowing_cast<result_type, Policy>(detail::chebyshev_imp<value_type, true>(n, static_cast<value_type>(x), forwarding_policy()), "boost::math::chebyshev_u<%1%>(unsigned, %1%)");
 }
 
-template<class Real>
-inline typename tools::promote_args<Real>::type chebyshev_u(unsigned n, Real const & x)
+template <class Real>
+inline tools::promote_args_t<Real> chebyshev_u(unsigned n, Real const & x)
 {
     return chebyshev_u(n, x, policies::policy<>());
 }
 
 template <class Real, class Policy>
-inline typename tools::promote_args<Real>::type
-chebyshev_t_prime(unsigned n, Real const & x, const Policy&)
+inline tools::promote_args_t<Real> chebyshev_t_prime(unsigned n, Real const & x, const Policy&)
 {
-   typedef typename tools::promote_args<Real>::type result_type;
-   typedef typename policies::evaluation<result_type, Policy>::type value_type;
-   typedef typename policies::normalise<
-      Policy,
-      policies::promote_float<false>,
-      policies::promote_double<false>,
-      policies::discrete_quantile<>,
-      policies::assert_undefined<> >::type forwarding_policy;
+   using result_type = tools::promote_args_t<Real>;
+   using value_type = typename policies::evaluation<result_type, Policy>::type;
+   using forwarding_policy = typename policies::normalise<
+                                                            Policy,
+                                                            policies::promote_float<false>,
+                                                            policies::promote_double<false>,
+                                                            policies::discrete_quantile<>,
+                                                            policies::assert_undefined<> >::type;
    if (n == 0)
    {
       return result_type(0);
@@ -153,8 +151,8 @@ chebyshev_t_prime(unsigned n, Real const & x, const Policy&)
    return policies::checked_narrowing_cast<result_type, Policy>(n * detail::chebyshev_imp<value_type, true>(n - 1, static_cast<value_type>(x), forwarding_policy()), "boost::math::chebyshev_t_prime<%1%>(unsigned, %1%)");
 }
 
-template<class Real>
-inline typename tools::promote_args<Real>::type chebyshev_t_prime(unsigned n, Real const & x)
+template <class Real>
+inline tools::promote_args_t<Real> chebyshev_t_prime(unsigned n, Real const & x)
 {
    return chebyshev_t_prime(n, x, policies::policy<>());
 }
@@ -167,7 +165,7 @@ inline typename tools::promote_args<Real>::type chebyshev_t_prime(unsigned n, Re
  * https://www.siam.org/books/ot99/OT99SampleChapter.pdf
  * However, our definition of c0 differs by a factor of 1/2, as stated in the docs. . .
  */
-template<class Real, class T2>
+template <class Real, class T2>
 inline Real chebyshev_clenshaw_recurrence(const Real* const c, size_t length, const T2& x)
 {
     using boost::math::constants::half;
@@ -193,7 +191,7 @@ inline Real chebyshev_clenshaw_recurrence(const Real* const c, size_t length, co
 
 
 namespace detail {
-template<class Real>
+template <class Real>
 inline Real unchecked_chebyshev_clenshaw_recurrence(const Real* const c, size_t length, const Real & a, const Real & b, const Real& x)
 {
     Real t;
@@ -221,16 +219,16 @@ inline Real unchecked_chebyshev_clenshaw_recurrence(const Real* const c, size_t 
         }
         else
         {
-            Real b = c[length -1];
-            Real d = b;
+            Real b1 = c[length - 1];
+            Real d = b1;
             Real b2 = 0;
             for (size_t r = length - 2; r >= 1; --r)
             {
-                d = 2*u*b - d + c[r];
-                b2 = b;
-                b = d - b;
+                d = 2*u*b1 - d + c[r];
+                b2 = b1;
+                b1 = d - b1;
             }
-            return t*b - b2 + c[0]/2;
+            return t*b1 - b2 + c[0]/2;
         }
     }
     else
@@ -251,23 +249,23 @@ inline Real unchecked_chebyshev_clenshaw_recurrence(const Real* const c, size_t 
         }
         else
         {
-            Real b = c[length -1];
-            Real d = b;
+            Real b1 = c[length - 1];
+            Real d = b1;
             Real b2 = 0;
             for (size_t r = length - 2; r >= 1; --r)
             {
-                d = 2*u*b + d + c[r];
-                b2 = b;
-                b = d + b;
+                d = 2*u*b1 + d + c[r];
+                b2 = b1;
+                b1 = d + b1;
             }
-            return t*b - b2 + c[0]/2;
+            return t*b1 - b2 + c[0]/2;
         }
     }
 }
 
 } // namespace detail
 
-template<class Real>
+template <class Real>
 inline Real chebyshev_clenshaw_recurrence(const Real* const c, size_t length, const Real & a, const Real & b, const Real& x)
 {
     if (x < a || x > b)
@@ -285,6 +283,6 @@ inline Real chebyshev_clenshaw_recurrence(const Real* const c, size_t length, co
     return detail::unchecked_chebyshev_clenshaw_recurrence(c, length, a, b, x);
 }
 
+}} // Namespace boost::math
 
-}}
-#endif
+#endif // BOOST_MATH_SPECIAL_CHEBYSHEV_HPP
