@@ -228,6 +228,42 @@ void test_quadratic_function()
 
 
 template<class Real>
+void test_circ_conic_function()
+{
+    using std::sqrt;
+    std::cout << "Testing that conic section of a circle is interpolated correctly by cubic b splines on type " << boost::typeindex::type_id<Real>().pretty_name() << '\n';
+    std::vector<Real> v(500);
+    Real cv = 0.1;
+    Real w = 2.0;
+    Real step = 2 * w / (v.size() - 1);
+
+    auto f = [cv](Real x) { return cv * x * x / (1 + sqrt(1 - cv * cv * x * x)); };
+    auto df = [cv](Real x) { return cv * x / sqrt(1 - cv * cv * x * x); };
+
+    for (size_t i = 0; i < v.size(); ++i)
+    {
+        v[i] = f(-w + i * step);
+    }
+
+    boost::math::interpolators::cardinal_cubic_b_spline<Real> spline(v.data(), v.size(), -w, step);
+
+    const Real tol = 100 * sqrt(std::numeric_limits<Real>::epsilon());
+    // First check derivatives exactly at end points
+    BOOST_CHECK_CLOSE(spline.prime(-w), df(-w), tol);
+    BOOST_CHECK_CLOSE(spline.prime(w), df(w), tol);
+
+    for (size_t i = 0; i < v.size() - 1; ++i)
+    {
+        Real arg = -w + i * step + 0.001;
+        Real y = spline(arg);
+        BOOST_CHECK_CLOSE(y, f(arg), 2.0);
+        Real y_prime = spline.prime(arg);
+        BOOST_CHECK_CLOSE(y_prime, df(arg), 1.0);
+    }
+}
+
+
+template<class Real>
 void test_trig_function()
 {
     std::cout << "Testing that sine functions are interpolated correctly by cubic b splines on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
@@ -349,7 +385,13 @@ BOOST_AUTO_TEST_CASE(test_cubic_b_spline)
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_quadratic_function<long double>();
 #endif
-    test_affine_function<cpp_bin_float_50>();
+    test_quadratic_function<cpp_bin_float_50>();
+
+    test_circ_conic_function<float>();
+    test_circ_conic_function<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+    test_circ_conic_function<long double>();
+#endif
 
     test_trig_function<float>();
     test_trig_function<double>();
