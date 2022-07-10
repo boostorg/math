@@ -64,7 +64,7 @@ T ellint_f_imp(T phi, T k, const Policy& pol)
     if(phi >= tools::max_value<T>())
     {
        // Need to handle infinity as a special case:
-       result = policies::raise_overflow_error<T>(function, 0, pol);
+       result = policies::raise_overflow_error<T>(function, nullptr, pol);
        BOOST_MATH_INSTRUMENT_VARIABLE(result);
     }
     else if(phi > 1 / tools::epsilon<T>())
@@ -145,7 +145,7 @@ T ellint_k_imp(T k, const Policy& pol)
     }
     if (abs(k) == 1)
     {
-       return policies::raise_overflow_error<T>(function, 0, pol);
+       return policies::raise_overflow_error<T>(function, nullptr, pol);
     }
 
     T x = 0;

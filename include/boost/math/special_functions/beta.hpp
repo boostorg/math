@@ -328,7 +328,7 @@ T ibeta_power_terms(T a,
          {
             l += log(result);
             if(l >= tools::log_max_value<T>())
-               return policies::raise_overflow_error<T>(function, 0, pol);
+               return policies::raise_overflow_error<T>(function, nullptr, pol);
             result = exp(l);
          }
          else
@@ -344,7 +344,7 @@ T ibeta_power_terms(T a,
          {
             l += log(result);
             if(l >= tools::log_max_value<T>())
-               return policies::raise_overflow_error<T>(function, 0, pol);
+               return policies::raise_overflow_error<T>(function, nullptr, pol);
             result = exp(l);
          }
          else
@@ -383,7 +383,7 @@ T ibeta_power_terms(T a,
             {
                l2 += l1 + log(result);
                if(l2 >= tools::log_max_value<T>())
-                  return policies::raise_overflow_error<T>(function, 0, pol);
+                  return policies::raise_overflow_error<T>(function, nullptr, pol);
                result = exp(l2);
             }
          }
@@ -400,7 +400,7 @@ T ibeta_power_terms(T a,
             {
                l2 += l1 + log(result);
                if(l2 >= tools::log_max_value<T>())
-                  return policies::raise_overflow_error<T>(function, 0, pol);
+                  return policies::raise_overflow_error<T>(function, nullptr, pol);
                result = exp(l2);
             }
          }
@@ -1414,12 +1414,12 @@ T ibeta_derivative_imp(T a, T b, T x, const Policy& pol)
    if(x == 0)
    {
       return (a > 1) ? 0 :
-         (a == 1) ? 1 / boost::math::beta(a, b, pol) : policies::raise_overflow_error<T>(function, 0, pol);
+         (a == 1) ? 1 / boost::math::beta(a, b, pol) : policies::raise_overflow_error<T>(function, nullptr, pol);
    }
    else if(x == 1)
    {
       return (b > 1) ? 0 :
-         (b == 1) ? 1 / boost::math::beta(a, b, pol) : policies::raise_overflow_error<T>(function, 0, pol);
+         (b == 1) ? 1 / boost::math::beta(a, b, pol) : policies::raise_overflow_error<T>(function, nullptr, pol);
    }
    //
    // Now the regular cases:
