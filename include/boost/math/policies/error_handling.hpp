@@ -132,10 +132,14 @@ inline const char* name_of<BOOST_MATH_FLOAT128_TYPE>()
 template <class E, class T>
 void raise_error(const char* pfunction, const char* message)
 {
-  if(pfunction == 0)
+  if(pfunction == nullptr)
+  {
      pfunction = "Unknown function operating on type %1%";
-  if(message == 0)
+  }
+  if(message == nullptr)
+  {
      message = "Cause unknown";
+  }
 
   std::string function(pfunction);
   std::string msg("Error in function ");

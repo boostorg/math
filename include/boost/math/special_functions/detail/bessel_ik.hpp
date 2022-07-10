@@ -427,7 +427,7 @@ int bessel_ik(T v, T x, T* I, T* K, int kind, const Policy& pol)
         if(fact == 0)
            *I = Iv;
         else if(tools::max_value<T>() * scale < fact)
-           *I = (org_kind & need_i) ? T(sign(fact) * scale_sign * policies::raise_overflow_error<T>(function, 0, pol)) : T(0);
+           *I = (org_kind & need_i) ? T(sign(fact) * scale_sign * policies::raise_overflow_error<T>(function, nullptr, pol)) : T(0);
         else
          *I = Iv + fact / scale;   // reflection formula
     }
@@ -436,7 +436,7 @@ int bessel_ik(T v, T x, T* I, T* K, int kind, const Policy& pol)
         *I = Iv;
     }
     if(tools::max_value<T>() * scale < Kv)
-       *K = (org_kind & need_k) ? T(sign(Kv) * scale_sign * policies::raise_overflow_error<T>(function, 0, pol)) : T(0);
+       *K = (org_kind & need_k) ? T(sign(Kv) * scale_sign * policies::raise_overflow_error<T>(function, nullptr, pol)) : T(0);
     else
       *K = Kv / scale;
     BOOST_MATH_INSTRUMENT_VARIABLE(*I);

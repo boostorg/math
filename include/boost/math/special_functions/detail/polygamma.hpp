@@ -213,7 +213,7 @@ namespace boost { namespace math { namespace detail{
      //
      if(prefix > 2 / policies::get_epsilon<T, Policy>())
         return ((n & 1) ? 1 : -1) *
-         (tools::max_value<T>() / prefix < scale ? policies::raise_overflow_error<T>(function, 0, pol) : prefix * scale);
+         (tools::max_value<T>() / prefix < scale ? policies::raise_overflow_error<T>(function, nullptr, pol) : prefix * scale);
      //
      // As this is an alternating series we could accelerate it using
      // "Convergence Acceleration of Alternating Series",

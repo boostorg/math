@@ -198,7 +198,7 @@ T gamma_imp(T z, const Policy& pol, const Lanczos& l)
 // lgamma(z) with Lanczos support:
 //
 template <class T, class Policy, class Lanczos>
-T lgamma_imp(T z, const Policy& pol, const Lanczos& l, int* sign = 0)
+T lgamma_imp(T z, const Policy& pol, const Lanczos& l, int* sign = nullptr)
 {
 #ifdef BOOST_MATH_INSTRUMENT
    static bool b = false;
@@ -1935,7 +1935,7 @@ inline typename tools::promote_args<T1, T2>::type
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(
       detail::gamma_incomplete_imp(static_cast<value_type>(a),
       static_cast<value_type>(z), false, true,
-      forwarding_policy(), static_cast<value_type*>(0)), "boost::math::tgamma<%1%>(%1%, %1%)");
+      forwarding_policy(), static_cast<value_type*>(nullptr)), "boost::math::tgamma<%1%>(%1%, %1%)");
 }
 
 template <class T1, class T2>
@@ -1986,14 +1986,14 @@ template <class T, class Policy>
 inline typename tools::promote_args<T>::type
    lgamma(T x, const Policy& pol)
 {
-   return ::boost::math::lgamma(x, 0, pol);
+   return ::boost::math::lgamma(x, nullptr, pol);
 }
 
 template <class T>
 inline typename tools::promote_args<T>::type
    lgamma(T x)
 {
-   return ::boost::math::lgamma(x, 0, policies::policy<>());
+   return ::boost::math::lgamma(x, nullptr, policies::policy<>());
 }
 
 template <class T, class Policy>
@@ -2064,7 +2064,7 @@ inline typename tools::promote_args<T1, T2>::type
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(
       detail::gamma_incomplete_imp(static_cast<value_type>(a),
       static_cast<value_type>(z), false, false,
-      forwarding_policy(), static_cast<value_type*>(0)), "tgamma_lower<%1%>(%1%, %1%)");
+      forwarding_policy(), static_cast<value_type*>(nullptr)), "tgamma_lower<%1%>(%1%, %1%)");
 }
 template <class T1, class T2>
 inline typename tools::promote_args<T1, T2>::type
@@ -2095,7 +2095,7 @@ inline typename tools::promote_args<T1, T2>::type
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(
       detail::gamma_incomplete_imp(static_cast<value_type>(a),
       static_cast<value_type>(z), true, true,
-      forwarding_policy(), static_cast<value_type*>(0)), "gamma_q<%1%>(%1%, %1%)");
+      forwarding_policy(), static_cast<value_type*>(nullptr)), "gamma_q<%1%>(%1%, %1%)");
 }
 template <class T1, class T2>
 inline typename tools::promote_args<T1, T2>::type
@@ -2126,7 +2126,7 @@ inline typename tools::promote_args<T1, T2>::type
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(
       detail::gamma_incomplete_imp(static_cast<value_type>(a),
       static_cast<value_type>(z), true, false,
-      forwarding_policy(), static_cast<value_type*>(0)), "gamma_p<%1%>(%1%, %1%)");
+      forwarding_policy(), static_cast<value_type*>(nullptr)), "gamma_p<%1%>(%1%, %1%)");
 }
 template <class T1, class T2>
 inline typename tools::promote_args<T1, T2>::type

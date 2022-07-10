@@ -243,7 +243,7 @@ T bessel_yn_small_z(int n, T z, T* scale, const Policy& pol)
          *scale /= div;
          if(p * tools::max_value<T>() < result)
          {
-            return -policies::raise_overflow_error<T>("bessel_yn_small_z<%1%>(%1%,%1%)", 0, pol);
+            return -policies::raise_overflow_error<T>("bessel_yn_small_z<%1%>(%1%,%1%)", nullptr, pol);
          }
       }
       return result / p;

@@ -1324,7 +1324,7 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
             {
                prefix = 1;
             }
-            fract = ibeta_a_step(bbar, a, y, x, n, pol, normalised, static_cast<T*>(0));
+            fract = ibeta_a_step(bbar, a, y, x, n, pol, normalised, static_cast<T*>(nullptr));
             fract = beta_small_b_large_a_series(a,  bbar, x, y, fract, T(1), pol, normalised);
             fract /= prefix;
             BOOST_MATH_INSTRUMENT_VARIABLE(fract);
@@ -1341,8 +1341,8 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
                --n;
                bbar += 1;
             }
-            fract = ibeta_a_step(bbar, a, y, x, n, pol, normalised, static_cast<T*>(0));
-            fract += ibeta_a_step(a, bbar, x, y, 20, pol, normalised, static_cast<T*>(0));
+            fract = ibeta_a_step(bbar, a, y, x, n, pol, normalised, static_cast<T*>(nullptr));
+            fract += ibeta_a_step(a, bbar, x, y, 20, pol, normalised, static_cast<T*>(nullptr));
             if(invert)
                fract -= 1;  // Note this line would need changing if we ever enable this branch in non-normalized case
             fract = beta_small_b_large_a_series(T(a+20),  bbar, x, y, fract, T(1), pol, normalised);
@@ -1392,7 +1392,7 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
 template <class T, class Policy>
 inline T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised)
 {
-   return ibeta_imp(a, b, x, pol, inv, normalised, static_cast<T*>(0));
+   return ibeta_imp(a, b, x, pol, inv, normalised, static_cast<T*>(nullptr));
 }
 
 template <class T, class Policy>
