@@ -452,7 +452,7 @@ T scaled_tgamma_no_lanczos(const T& z, const Policy& pol, bool islog = false)
 
 // Forward declaration of the lgamma_imp template specialization.
 template <class T, class Policy>
-T lgamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&, int* sign = 0);
+T lgamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&, int* sign = nullptr);
 
 template <class T, class Policy>
 T gamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&)
