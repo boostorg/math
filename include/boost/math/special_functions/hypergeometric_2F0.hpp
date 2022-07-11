@@ -73,7 +73,7 @@ namespace boost { namespace math { namespace detail {
       bool is_a2_integer = (a2 == floor(a2));
 
       if (!asymptotic && !is_a1_integer && !is_a2_integer)
-         return boost::math::policies::raise_overflow_error<T>(function, 0, pol);
+         return boost::math::policies::raise_overflow_error<T>(function, nullptr, pol);
       if (!is_a1_integer || (a1 > 0))
       {
          swap(a1, a2);
@@ -83,7 +83,7 @@ namespace boost { namespace math { namespace detail {
       // At this point a1 must be a negative integer:
       //
       if(!asymptotic && (!is_a1_integer || (a1 > 0)))
-         return boost::math::policies::raise_overflow_error<T>(function, 0, pol);
+         return boost::math::policies::raise_overflow_error<T>(function, nullptr, pol);
       //
       // Special cases first:
       //

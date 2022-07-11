@@ -36,7 +36,7 @@ inline T powm1_imp(const T x, const T y, const Policy& pol)
          if (l < 0.5)
             return boost::math::expm1(l, pol);
          if (l > boost::math::tools::log_max_value<T>())
-            return boost::math::policies::raise_overflow_error<T>(function, 0, pol);
+            return boost::math::policies::raise_overflow_error<T>(function, nullptr, pol);
          // fall through....
       }
    }
@@ -54,7 +54,7 @@ inline T powm1_imp(const T x, const T y, const Policy& pol)
 } // detail
 
 template <class T1, class T2>
-inline typename tools::promote_args<T1, T2>::type 
+inline typename tools::promote_args<T1, T2>::type
    powm1(const T1 a, const T2 z)
 {
    typedef typename tools::promote_args<T1, T2>::type result_type;
@@ -62,7 +62,7 @@ inline typename tools::promote_args<T1, T2>::type
 }
 
 template <class T1, class T2, class Policy>
-inline typename tools::promote_args<T1, T2>::type 
+inline typename tools::promote_args<T1, T2>::type
    powm1(const T1 a, const T2 z, const Policy& pol)
 {
    typedef typename tools::promote_args<T1, T2>::type result_type;

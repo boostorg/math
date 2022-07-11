@@ -304,7 +304,7 @@ void test_check_throw(Val v, boost::math::rounding_error const*)
   // but to keep things simple we really need it somewhere that's always included:
   //
 #ifdef BOOST_NO_EXCEPTIONS
-#  define BOOST_MATH_CHECK_THROW(x, ExceptionType) boost::math::tools::test_check_throw(x, static_cast<ExceptionType const*>(0));
+#  define BOOST_MATH_CHECK_THROW(x, ExceptionType) boost::math::tools::test_check_throw(x, static_cast<ExceptionType const*>(nullptr));
 #else
 #  define BOOST_MATH_CHECK_THROW(x, y) BOOST_CHECK_THROW(x, y)
 #endif

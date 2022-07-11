@@ -30,7 +30,7 @@ struct cyl_bessel_i_small_z
 {
    typedef T result_type;
 
-   cyl_bessel_i_small_z(T v_, T z_) : k(0), v(v_), mult(z_*z_/4) 
+   cyl_bessel_i_small_z(T v_, T z_) : k(0), v(v_), mult(z_*z_/4)
    {
       BOOST_MATH_STD_USING
       term = 1;
@@ -70,7 +70,7 @@ inline T bessel_i_small_z_series(T v, T x, const Policy& pol)
 
    cyl_bessel_i_small_z<T, Policy> s(v, x);
    std::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
-   
+
    T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
 
    policies::check_series_iterations<T>("boost::math::bessel_j_small_z_series<%1%>(%1%,%1%)", max_iter, pol);
@@ -141,9 +141,9 @@ int temme_ik(T v, T x, T* K, T* K1, const Policy& pol)
         coef *= x * x / (4 * k);
         sum += coef * f;
         sum1 += coef * h;
-        if (abs(coef * f) < abs(sum) * tolerance) 
-        { 
-           break; 
+        if (abs(coef * f) < abs(sum) * tolerance)
+        {
+           break;
         }
     }
     policies::check_series_iterations<T>("boost::math::bessel_ik<%1%>(%1%,%1%) in temme_ik", k, pol);
@@ -187,9 +187,9 @@ int CF1_ik(T v, T x, T* fv, const Policy& pol)
         delta = C * D;
         f *= delta;
         BOOST_MATH_INSTRUMENT_VARIABLE(delta-1);
-        if (abs(delta - 1) <= tolerance) 
-        { 
-           break; 
+        if (abs(delta - 1) <= tolerance)
+        {
+           break;
         }
     }
     BOOST_MATH_INSTRUMENT_VARIABLE(k);
@@ -271,9 +271,9 @@ int CF2_ik(T v, T x, T* Kv, T* Kv1, const Policy& pol)
         BOOST_MATH_INSTRUMENT_VARIABLE(Q * delta);
         BOOST_MATH_INSTRUMENT_VARIABLE(abs(S) * tolerance);
         BOOST_MATH_INSTRUMENT_VARIABLE(S);
-        if (abs(Q * delta) < abs(S) * tolerance) 
-        { 
-           break; 
+        if (abs(Q * delta) < abs(S) * tolerance)
+        {
+           break;
         }
     }
     policies::check_series_iterations<T>("boost::math::bessel_ik<%1%>(%1%,%1%) in CF2_ik", k, pol);
@@ -338,7 +338,7 @@ int bessel_ik(T v, T x, T* I, T* K, int kind, const Policy& pol)
        Iv = (v == 0) ? static_cast<T>(1) : static_cast<T>(0);
        if(kind & need_k)
        {
-         Kv = policies::raise_overflow_error<T>(function, 0, pol);
+         Kv = policies::raise_overflow_error<T>(function, nullptr, pol);
        }
        else
        {
@@ -348,9 +348,9 @@ int bessel_ik(T v, T x, T* I, T* K, int kind, const Policy& pol)
        if(reflect && (kind & need_i))
        {
            T z = (u + n % 2);
-           Iv = boost::math::sin_pi(z, pol) == 0 ? 
-               Iv : 
-               policies::raise_overflow_error<T>(function, 0, pol);   // reflection formula
+           Iv = boost::math::sin_pi(z, pol) == 0 ?
+               Iv :
+               policies::raise_overflow_error<T>(function, nullptr, pol);   // reflection formula
        }
 
        *I = Iv;
@@ -403,7 +403,7 @@ int bessel_ik(T v, T x, T* I, T* K, int kind, const Policy& pol)
           // x is huge compared to v, CF1 may be very slow
           // to converge so use asymptotic expansion for large
           // x case instead.  Note that the asymptotic expansion
-          // isn't very accurate - so it's deliberately very hard 
+          // isn't very accurate - so it's deliberately very hard
           // to get here - probably we're going to overflow:
           Iv = asymptotic_bessel_i_large_x(v, x, pol);
        }
@@ -427,7 +427,7 @@ int bessel_ik(T v, T x, T* I, T* K, int kind, const Policy& pol)
         if(fact == 0)
            *I = Iv;
         else if(tools::max_value<T>() * scale < fact)
-           *I = (org_kind & need_i) ? T(sign(fact) * scale_sign * policies::raise_overflow_error<T>(function, 0, pol)) : T(0);
+           *I = (org_kind & need_i) ? T(sign(fact) * scale_sign * policies::raise_overflow_error<T>(function, nullptr, pol)) : T(0);
         else
          *I = Iv + fact / scale;   // reflection formula
     }
@@ -436,7 +436,7 @@ int bessel_ik(T v, T x, T* I, T* K, int kind, const Policy& pol)
         *I = Iv;
     }
     if(tools::max_value<T>() * scale < Kv)
-       *K = (org_kind & need_k) ? T(sign(Kv) * scale_sign * policies::raise_overflow_error<T>(function, 0, pol)) : T(0);
+       *K = (org_kind & need_k) ? T(sign(Kv) * scale_sign * policies::raise_overflow_error<T>(function, nullptr, pol)) : T(0);
     else
       *K = Kv / scale;
     BOOST_MATH_INSTRUMENT_VARIABLE(*I);

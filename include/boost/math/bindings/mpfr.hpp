@@ -537,7 +537,7 @@ mpfr_class digamma_imp(mpfr_class x, const std::integral_constant<int, 0>* , con
       //
       if(remainder == 0)
       {
-         return policies::raise_pole_error<mpfr_class>("boost::math::digamma<%1%>(%1%)", 0, (1-x), pol);
+         return policies::raise_pole_error<mpfr_class>("boost::math::digamma<%1%>(%1%)", nullptr, (1-x), pol);
       }
       result = constants::pi<mpfr_class>() / tan(constants::pi<mpfr_class>() * remainder);
    }

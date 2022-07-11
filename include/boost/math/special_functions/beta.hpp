@@ -328,7 +328,7 @@ T ibeta_power_terms(T a,
          {
             l += log(result);
             if(l >= tools::log_max_value<T>())
-               return policies::raise_overflow_error<T>(function, 0, pol);
+               return policies::raise_overflow_error<T>(function, nullptr, pol);
             result = exp(l);
          }
          else
@@ -344,7 +344,7 @@ T ibeta_power_terms(T a,
          {
             l += log(result);
             if(l >= tools::log_max_value<T>())
-               return policies::raise_overflow_error<T>(function, 0, pol);
+               return policies::raise_overflow_error<T>(function, nullptr, pol);
             result = exp(l);
          }
          else
@@ -383,7 +383,7 @@ T ibeta_power_terms(T a,
             {
                l2 += l1 + log(result);
                if(l2 >= tools::log_max_value<T>())
-                  return policies::raise_overflow_error<T>(function, 0, pol);
+                  return policies::raise_overflow_error<T>(function, nullptr, pol);
                result = exp(l2);
             }
          }
@@ -400,7 +400,7 @@ T ibeta_power_terms(T a,
             {
                l2 += l1 + log(result);
                if(l2 >= tools::log_max_value<T>())
-                  return policies::raise_overflow_error<T>(function, 0, pol);
+                  return policies::raise_overflow_error<T>(function, nullptr, pol);
                result = exp(l2);
             }
          }
@@ -1324,7 +1324,7 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
             {
                prefix = 1;
             }
-            fract = ibeta_a_step(bbar, a, y, x, n, pol, normalised, static_cast<T*>(0));
+            fract = ibeta_a_step(bbar, a, y, x, n, pol, normalised, static_cast<T*>(nullptr));
             fract = beta_small_b_large_a_series(a,  bbar, x, y, fract, T(1), pol, normalised);
             fract /= prefix;
             BOOST_MATH_INSTRUMENT_VARIABLE(fract);
@@ -1341,8 +1341,8 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
                --n;
                bbar += 1;
             }
-            fract = ibeta_a_step(bbar, a, y, x, n, pol, normalised, static_cast<T*>(0));
-            fract += ibeta_a_step(a, bbar, x, y, 20, pol, normalised, static_cast<T*>(0));
+            fract = ibeta_a_step(bbar, a, y, x, n, pol, normalised, static_cast<T*>(nullptr));
+            fract += ibeta_a_step(a, bbar, x, y, 20, pol, normalised, static_cast<T*>(nullptr));
             if(invert)
                fract -= 1;  // Note this line would need changing if we ever enable this branch in non-normalized case
             fract = beta_small_b_large_a_series(T(a+20),  bbar, x, y, fract, T(1), pol, normalised);
@@ -1392,7 +1392,7 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
 template <class T, class Policy>
 inline T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised)
 {
-   return ibeta_imp(a, b, x, pol, inv, normalised, static_cast<T*>(0));
+   return ibeta_imp(a, b, x, pol, inv, normalised, static_cast<T*>(nullptr));
 }
 
 template <class T, class Policy>
@@ -1414,12 +1414,12 @@ T ibeta_derivative_imp(T a, T b, T x, const Policy& pol)
    if(x == 0)
    {
       return (a > 1) ? 0 :
-         (a == 1) ? 1 / boost::math::beta(a, b, pol) : policies::raise_overflow_error<T>(function, 0, pol);
+         (a == 1) ? 1 / boost::math::beta(a, b, pol) : policies::raise_overflow_error<T>(function, nullptr, pol);
    }
    else if(x == 1)
    {
       return (b > 1) ? 0 :
-         (b == 1) ? 1 / boost::math::beta(a, b, pol) : policies::raise_overflow_error<T>(function, 0, pol);
+         (b == 1) ? 1 / boost::math::beta(a, b, pol) : policies::raise_overflow_error<T>(function, nullptr, pol);
    }
    //
    // Now the regular cases:
@@ -1467,7 +1467,7 @@ inline typename tools::promote_args<RT1, RT2, A>::type
    beta(RT1 a, RT2 b, A arg)
 {
    typedef typename policies::is_policy<A>::type tag;
-   return boost::math::detail::beta(a, b, arg, static_cast<tag*>(0));
+   return boost::math::detail::beta(a, b, arg, static_cast<tag*>(nullptr));
 }
 
 template <class RT1, class RT2>

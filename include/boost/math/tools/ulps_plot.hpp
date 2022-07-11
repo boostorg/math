@@ -154,7 +154,7 @@ public:
             }
         }
 
-        int height = static_cast<int>(floor(double(plot.width_)/1.61803));
+        int height = static_cast<int>(floor(static_cast<double>(plot.width_)/1.61803));
         int margin_top = 40;
         int margin_left = 25;
         if (plot.title_.size() == 0)
@@ -509,7 +509,7 @@ ulps_plot<F, PreciseReal, CoarseReal>::ulps_plot(F hi_acc_impl, CoarseReal a, Co
     static_assert(std::numeric_limits<PreciseReal>::digits10 <= std::numeric_limits<long double>::digits10, "Standalone mode does not support types with precision that exceeds long double");
     std::uniform_real_distribution<PreciseReal> dis(static_cast<PreciseReal>(a), static_cast<PreciseReal>(b));
     #endif
-    
+
     precise_abscissas_.resize(samples);
     coarse_abscissas_.resize(samples);
 

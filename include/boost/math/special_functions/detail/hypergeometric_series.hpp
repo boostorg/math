@@ -209,7 +209,7 @@
   }
 
   template <class T, class Policy>
-  inline T log_pochhammer(T z, unsigned n, const Policy pol, int* s = 0)
+  inline T log_pochhammer(T z, unsigned n, const Policy pol, int* s = nullptr)
   {
      BOOST_MATH_STD_USING
 #if 0
@@ -339,7 +339,7 @@
         n = summit_location;
         term *= (b + (n - 1)) * n / ((a + (n - 1)) * z);
         --n;
-        
+
         do
         {
            sum += term;

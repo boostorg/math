@@ -332,7 +332,7 @@ auto lp_norm(ForwardIterator first, ForwardIterator last, unsigned p)
             double tmp = *it;
             lp += pow(abs(tmp), p);
         }
-        double result = pow(lp, 1.0/double(p));
+        double result = pow(lp, 1.0/static_cast<double>(p));
         if (!isfinite(result))
         {
             double a = boost::math::tools::sup_norm(first, last);
@@ -342,7 +342,7 @@ auto lp_norm(ForwardIterator first, ForwardIterator last, unsigned p)
                 double tmp = *it;
                 lp += pow(abs(tmp)/a, p);
             }
-            result = a*pow(lp, double(1)/double(p));
+            result = a*pow(lp, static_cast<double>(1)/static_cast<double>(p));
         }
         return result;
     }
@@ -400,7 +400,7 @@ auto lp_distance(ForwardIterator first1, ForwardIterator last1, ForwardIterator 
             //double tmp = *it1++ - *it2++;
             dist += pow(abs(tmp1 - tmp2), p);
         }
-        return pow(dist, 1.0/double(p));
+        return pow(dist, 1.0/static_cast<double>(p));
     }
 }
 

@@ -498,7 +498,7 @@ namespace boost
       {
         return 1;
       }
-      return ibeta_inv(a, b, p, static_cast<RealType*>(0), Policy());
+      return ibeta_inv(a, b, p, static_cast<RealType*>(nullptr), Policy());
     } // quantile
 
     template <class RealType, class Policy>
@@ -535,7 +535,7 @@ namespace boost
         return 1;
       }
 
-      return ibetac_inv(a, b, q, static_cast<RealType*>(0), Policy());
+      return ibetac_inv(a, b, q, static_cast<RealType*>(nullptr), Policy());
     } // Quantile Complement
 
   } // namespace math

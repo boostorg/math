@@ -34,7 +34,7 @@ T ulp_imp(const T& val, const std::true_type&, const Policy& pol)
    }
    else if((fpclass == (int)FP_INFINITE) || (fabs(val) >= tools::max_value<T>()))
    {
-      return (val < 0 ? -1 : 1) * policies::raise_overflow_error<T>(function, 0, pol);
+      return (val < 0 ? -1 : 1) * policies::raise_overflow_error<T>(function, nullptr, pol);
    }
    else if(fpclass == FP_ZERO)
       return detail::get_smallest_value<T>();
@@ -68,7 +68,7 @@ T ulp_imp(const T& val, const std::false_type&, const Policy& pol)
    }
    else if((fpclass == (int)FP_INFINITE) || (fabs(val) >= tools::max_value<T>()))
    {
-      return (val < 0 ? -1 : 1) * policies::raise_overflow_error<T>(function, 0, pol);
+      return (val < 0 ? -1 : 1) * policies::raise_overflow_error<T>(function, nullptr, pol);
    }
    else if(fpclass == FP_ZERO)
       return detail::get_smallest_value<T>();

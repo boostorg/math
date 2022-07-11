@@ -487,7 +487,7 @@ mpfr::mpreal digamma_imp(mpfr::mpreal x, const std::integral_constant<int, 0>* ,
       //
       if(remainder == 0)
       {
-         return policies::raise_pole_error<mpfr::mpreal>("boost::math::digamma<%1%>(%1%)", 0, (1-x), pol);
+         return policies::raise_pole_error<mpfr::mpreal>("boost::math::digamma<%1%>(%1%)", nullptr, (1-x), pol);
       }
       result = constants::pi<mpfr::mpreal>() / tan(constants::pi<mpfr::mpreal>() * remainder);
    }
