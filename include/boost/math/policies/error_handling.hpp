@@ -756,7 +756,7 @@ inline bool check_overflow(T val, R* result, const char* function, const Policy&
    BOOST_MATH_STD_USING
    if(fabs(val) > tools::max_value<R>())
    {
-      boost::math::policies::detail::raise_overflow_error<R>(function, 0, pol);
+      boost::math::policies::detail::raise_overflow_error<R>(function, nullptr, pol);
       *result = static_cast<R>(val);
       return true;
    }
@@ -777,7 +777,7 @@ inline bool check_underflow(T val, R* result, const char* function, const Policy
 {
    if((val != 0) && (static_cast<R>(val) == 0))
    {
-      *result = static_cast<R>(boost::math::policies::detail::raise_underflow_error<R>(function, 0, pol));
+      *result = static_cast<R>(boost::math::policies::detail::raise_underflow_error<R>(function, nullptr, pol));
       return true;
    }
    return false;

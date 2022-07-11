@@ -709,7 +709,7 @@ T lgamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&, int* sig
                         - log(t);
    }
 
-   if(sign != static_cast<int*>(0U)) { *sign = sign_of_result; }
+   if(sign != static_cast<int*>(nullptr)) { *sign = sign_of_result; }
 
    return log_gamma_value;
 }
@@ -1218,7 +1218,7 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert,
       return exp(result);
    }
 
-   BOOST_MATH_ASSERT((p_derivative == 0) || normalised);
+   BOOST_MATH_ASSERT((p_derivative == nullptr) || normalised);
 
    bool is_int, is_half_int;
    bool is_small_a = (a < 30) && (a <= x + 1) && (x < tools::log_max_value<T>());
@@ -1450,7 +1450,7 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert,
             precision_type::value <= 113 ? 113 : 0
          > tag_type;
 
-         result = igamma_temme_large(a, x, pol, static_cast<tag_type const*>(0));
+         result = igamma_temme_large(a, x, pol, static_cast<tag_type const*>(nullptr));
          if(x >= a)
             invert = !invert;
          if(p_derivative)
@@ -1787,7 +1787,7 @@ T gamma_p_derivative_imp(T a, T x, const Policy& pol)
    if(x == 0)
    {
       return (a > 1) ? 0 :
-         (a == 1) ? 1 : policies::raise_overflow_error<T>("boost::math::gamma_p_derivative<%1%>(%1%, %1%)", 0, pol);
+         (a == 1) ? 1 : policies::raise_overflow_error<T>("boost::math::gamma_p_derivative<%1%>(%1%, %1%)", nullptr, pol);
    }
    //
    // Normal case:
@@ -1797,7 +1797,7 @@ T gamma_p_derivative_imp(T a, T x, const Policy& pol)
    if((x < 1) && (tools::max_value<T>() * x < f1))
    {
       // overflow:
-      return policies::raise_overflow_error<T>("boost::math::gamma_p_derivative<%1%>(%1%, %1%)", 0, pol);
+      return policies::raise_overflow_error<T>("boost::math::gamma_p_derivative<%1%>(%1%, %1%)", nullptr, pol);
    }
    if(f1 == 0)
    {

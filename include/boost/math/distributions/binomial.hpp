@@ -335,8 +335,8 @@ namespace boost
         // NOTE!!! The Clopper Pearson formula uses "successes" not
         // "successes+1" as usual to get the lower bound,
         // see http://www.itl.nist.gov/div898/handbook/prc/section2/prc241.htm
-        return (t == clopper_pearson_exact_interval) ? ibeta_inv(successes, trials - successes + 1, probability, static_cast<RealType*>(0), Policy())
-           : ibeta_inv(successes + 0.5f, trials - successes + 0.5f, probability, static_cast<RealType*>(0), Policy());
+        return (t == clopper_pearson_exact_interval) ? ibeta_inv(successes, trials - successes + 1, probability, static_cast<RealType*>(nullptr), Policy())
+           : ibeta_inv(successes + 0.5f, trials - successes + 0.5f, probability, static_cast<RealType*>(nullptr), Policy());
       }
       static RealType find_upper_bound_on_p(
          RealType trials,
@@ -357,8 +357,8 @@ namespace boost
         if(trials == successes)
            return 1;
 
-        return (t == clopper_pearson_exact_interval) ? ibetac_inv(successes + 1, trials - successes, probability, static_cast<RealType*>(0), Policy())
-           : ibetac_inv(successes + 0.5f, trials - successes + 0.5f, probability, static_cast<RealType*>(0), Policy());
+        return (t == clopper_pearson_exact_interval) ? ibetac_inv(successes + 1, trials - successes, probability, static_cast<RealType*>(nullptr), Policy())
+           : ibetac_inv(successes + 0.5f, trials - successes + 0.5f, probability, static_cast<RealType*>(nullptr), Policy());
       }
       // Estimate number of trials parameter:
       //

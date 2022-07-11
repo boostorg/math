@@ -91,7 +91,7 @@ T log1p_imp(T const & x, const Policy& pol, const std::integral_constant<int, 0>
          function, "log1p(x) requires x > -1, but got x = %1%.", x, pol);
    if(x == -1)
       return -policies::raise_overflow_error<T>(
-         function, 0, pol);
+         function, nullptr, pol);
 
    result_type a = abs(result_type(x));
    if(a > result_type(0.5f))
@@ -121,7 +121,7 @@ T log1p_imp(T const& x, const Policy& pol, const std::integral_constant<int, 53>
          function, "log1p(x) requires x > -1, but got x = %1%.", x, pol);
    if(x == -1)
       return -policies::raise_overflow_error<T>(
-         function, 0, pol);
+         function, nullptr, pol);
 
    T a = fabs(x);
    if(a > 0.5f)
@@ -174,7 +174,7 @@ T log1p_imp(T const& x, const Policy& pol, const std::integral_constant<int, 64>
          function, "log1p(x) requires x > -1, but got x = %1%.", x, pol);
    if(x == -1)
       return -policies::raise_overflow_error<T>(
-         function, 0, pol);
+         function, nullptr, pol);
 
    T a = fabs(x);
    if(a > 0.5f)
@@ -229,7 +229,7 @@ T log1p_imp(T const& x, const Policy& pol, const std::integral_constant<int, 24>
          function, "log1p(x) requires x > -1, but got x = %1%.", x, pol);
    if(x == -1)
       return -policies::raise_overflow_error<T>(
-         function, 0, pol);
+         function, nullptr, pol);
 
    T a = fabs(x);
    if(a > 0.5f)
@@ -445,7 +445,7 @@ inline typename tools::promote_args<T>::type
          function, "log1pmx(x) requires x > -1, but got x = %1%.", x, pol);
    if(x == -1)
       return -policies::raise_overflow_error<T>(
-         function, 0, pol);
+         function, nullptr, pol);
 
    result_type a = abs(result_type(x));
    if(a > result_type(0.95f))
