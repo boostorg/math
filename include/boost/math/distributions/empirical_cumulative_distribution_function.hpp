@@ -32,10 +32,10 @@ public:
        if constexpr (std::is_integral_v<Real>)
        {
          if (x < m_v[0]) {
-           return double(0);
+           return static_cast<double>(0);
          }
          if (x >= m_v[m_v.size()-1]) {
-           return double(1);
+           return static_cast<double>(1);
          }
          auto it = std::upper_bound(m_v.begin(), m_v.end(), x);
          return static_cast<double>(std::distance(m_v.begin(), it))/static_cast<double>(m_v.size());
