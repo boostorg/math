@@ -87,7 +87,7 @@ inline long ltrunc(const T& v, const Policy& pol)
    result_type r = boost::math::trunc(v, pol);
    if(r > static_cast<result_type>((std::numeric_limits<long>::max)()) || r < static_cast<result_type>((std::numeric_limits<long>::min)()))
    {
-      return static_cast<long>(policies::raise_rounding_error("boost::math::ltrunc<%1%>(%1%)", 0, static_cast<result_type>(v), 0L, pol));
+      return static_cast<long>(policies::raise_rounding_error("boost::math::ltrunc<%1%>(%1%)", nullptr, static_cast<result_type>(v), 0L, pol));
    }
    return static_cast<long>(r);
 }
@@ -106,7 +106,7 @@ inline long long lltrunc(const T& v, const Policy& pol)
    if(r > static_cast<result_type>((std::numeric_limits<long long>::max)()) ||
       r < static_cast<result_type>((std::numeric_limits<long long>::min)()))
    {
-      return static_cast<long long>(policies::raise_rounding_error("boost::math::lltrunc<%1%>(%1%)", 0, v, static_cast<long long>(0), pol));
+      return static_cast<long long>(policies::raise_rounding_error("boost::math::lltrunc<%1%>(%1%)", nullptr, v, static_cast<long long>(0), pol));
    }
    return static_cast<long long>(r);
 }

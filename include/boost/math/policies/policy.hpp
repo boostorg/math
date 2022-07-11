@@ -917,7 +917,7 @@ template <typename P>
 class is_policy_imp
 {
 public:
-   static constexpr bool value = (sizeof(::boost::math::policies::detail::test_is_policy(static_cast<P*>(0))) == sizeof(char));
+   static constexpr bool value = (sizeof(::boost::math::policies::detail::test_is_policy(static_cast<P*>(nullptr))) == sizeof(char));
 };
 
 }
