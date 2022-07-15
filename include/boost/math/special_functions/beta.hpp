@@ -390,7 +390,7 @@ T ibeta_power_terms(T a,
          else
          {
             T p1 = pow(b1, a / b);
-            T l3 = (log(p1) + log(b2)) * b;
+            T l3 = (p1 != 0) && (b2 != 0) ? (log(p1) + log(b2)) * b : tools::max_value<T>();  // arbitrary large value if the logs would fail!
             if((l3 < tools::log_max_value<T>())
                && (l3 > tools::log_min_value<T>()))
             {
