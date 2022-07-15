@@ -416,6 +416,15 @@ T ibeta_power_terms(T a,
 
    BOOST_MATH_INSTRUMENT_VARIABLE(result);
 
+   if (0 == result)
+   {
+      if ((a > 1) && (x == 0))
+         return result;  // true zero
+      if ((b > 1) && (y == 0))
+         return result; // true zero
+      return boost::math::policies::raise_underflow_error<T>(function, nullptr, pol);
+   }
+
    return result;
 }
 //
