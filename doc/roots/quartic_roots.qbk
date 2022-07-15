@@ -10,7 +10,7 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 [heading Synopsis]
 
 ```
-#include <boost/math/roots/quartic_roots.hpp>
+#include <boost/math/tools/quartic_roots.hpp>
 
 namespace boost::math::tools {
 
