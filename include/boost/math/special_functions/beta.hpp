@@ -390,7 +390,7 @@ T ibeta_power_terms(T a,
          else
          {
             T p1 = pow(b1, a / b);
-            T l3 = (log(p1) + log(b2)) * b;
+            T l3 = (p1 != 0) && (b2 != 0) ? (log(p1) + log(b2)) * b : tools::max_value<T>();  // arbitrary large value if the logs would fail!
             if((l3 < tools::log_max_value<T>())
                && (l3 > tools::log_min_value<T>()))
             {
@@ -415,6 +415,15 @@ T ibeta_power_terms(T a,
    }
 
    BOOST_MATH_INSTRUMENT_VARIABLE(result);
+
+   if (0 == result)
+   {
+      if ((a > 1) && (x == 0))
+         return result;  // true zero
+      if ((b > 1) && (y == 0))
+         return result; // true zero
+      return boost::math::policies::raise_underflow_error<T>(function, nullptr, pol);
+   }
 
    return result;
 }
