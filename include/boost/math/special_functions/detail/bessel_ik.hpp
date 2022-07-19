@@ -377,7 +377,15 @@ int bessel_ik(T v, T x, T* I, T* K, int kind, const Policy& pol)
     for (k = 1; k <= n; k++)                   // forward recurrence for K
     {
         T fact = 2 * (u + k) / x;
-        if((tools::max_value<T>() - fabs(prev)) / fact < fabs(current))
+        // Check for overflow: if (max - |prev|) / fact > max, then overflow
+        // (max - |prev|) / fact > max
+        // max * (1 - fact) > |prev|
+        // if fact < 1: safe to compute overflow check
+        // if fact >= 1:  won't overflow
+        const bool will_overflow = (fact < 1)
+          ? tools::max_value<T>() * (1 - fact) > fabs(prev)
+          : false;
+        if(!will_overflow && ((tools::max_value<T>() - fabs(prev)) / fact < fabs(current)))
         {
            prev /= current;
            scale /= current;
