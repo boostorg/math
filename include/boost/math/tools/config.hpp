@@ -107,6 +107,26 @@
 #  endif
 #endif
 
+#if !defined(BOOST_NOINLINE)
+#  if defined(_MSC_VER)
+#    define BOOST_NOINLINE __declspec(noinline)
+#  elif defined(__GNUC__) && __GNUC__ > 3
+     // Clang also defines __GNUC__ (as 4)
+#    if defined(__CUDACC__)
+       // nvcc doesn't always parse __noinline__,
+       // see: https://svn.boost.org/trac/boost/ticket/9392
+#      define BOOST_NOINLINE __attribute__ ((noinline))
+#    elif defined(__HIP__)
+       // See https://github.com/boostorg/config/issues/392
+#      define BOOST_NOINLINE __attribute__ ((noinline))
+#    else
+#      define BOOST_NOINLINE __attribute__ ((__noinline__))
+#    endif
+#  else
+#    define BOOST_NOINLINE
+#  endif
+#endif
+
 #endif // BOOST_MATH_STANDALONE
 
 // Support compilers with P0024R2 implemented without linking TBB
