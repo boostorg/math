@@ -13,6 +13,7 @@
 #include <cmath>
 #include <cstdint>
 #include <boost/math/tools/series.hpp>
+#include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/special_functions/trunc.hpp>
 #include <boost/math/policies/error_handling.hpp>
 
