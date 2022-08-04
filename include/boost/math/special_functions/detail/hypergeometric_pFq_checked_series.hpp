@@ -280,7 +280,7 @@
            {
               for (auto ai = aj.begin(); ai != aj.end(); ++ai)
               {
-                 if ((*ai < 0) && (floor(*ai) == *ai) && (*ai > crossover_locations[n]))
+                 if ((*ai < 0) && (floor(*ai) == *ai) && (*ai > static_cast<decltype(*ai)>(crossover_locations[n])))
                     return std::make_pair(result, abs_result);  // b's will never cross the origin!
               }
               //
@@ -306,7 +306,7 @@
               term = 0;
               for (auto ai = aj.begin(); ai != aj.end(); ++ai)
               {
-                 if ((floor(*ai) == *ai) && (*ai < 0) && (-*ai <= s))
+                 if ((floor(*ai) == *ai) && (*ai < 0) && (-*ai <= static_cast<decltype(*ai)>(s)))
                  {
                     // One of the a terms has passed through zero and terminated the series:
                     terminate = true;
