@@ -18,6 +18,7 @@
 #include <boost/math/tools/traits.hpp>
 #include <type_traits>
 #include <cfloat>
+#include <cstdint>
 
 
 #if !defined(_CRAYC) && !defined(__CUDACC__) && (!defined(__GNUC__) || (__GNUC__ > 3) || ((__GNUC__ == 3) && (__GNUC_MINOR__ > 3)))
@@ -715,6 +716,36 @@ template <class T, class U>
 typename tools::promote_args<T, U>::type float_distance(const T& a, const U& b)
 {
    return boost::math::float_distance(a, b, policies::policy<>());
+}
+
+// https://randomascii.wordpress.com/2012/01/23/stupid-float-tricks-2/
+inline std::int32_t float_distance(float a, float b)
+{
+   using std::abs;
+   constexpr float tol = 2 * (std::numeric_limits<float>::min)();
+
+   // 0, very small, and large magnitude distances all need special handling
+   if (abs(a) == 0 || abs(b) == 0)
+   {
+      return static_cast<std::int32_t>(float_distance(a, b, policies::policy<>()));
+   }
+   else if (abs(a) < tol || abs(b) < tol)
+   {
+      return static_cast<std::int32_t>(float_distance(a, b, policies::policy<>()));
+   }
+
+   static_assert(sizeof(float) == sizeof(std::int32_t), "float is incorrect size.");
+
+   const auto ai = *reinterpret_cast<std::int32_t*>(&a);
+   const auto bi = *reinterpret_cast<std::int32_t*>(&b);
+   auto result = bi - ai;
+
+   if (ai < 0 || bi < 0)
+   {
+      result = -result;
+   }
+
+   return result;
 }
 
 namespace detail{
