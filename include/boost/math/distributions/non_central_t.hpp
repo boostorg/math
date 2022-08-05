@@ -578,11 +578,11 @@ namespace boost
             BOOST_MATH_STD_USING
             if ((boost::math::isinf)(v))
             {
-               return 3;
+               return 1;
             }
             if (delta == 0)
             { // == Student's t
-              return 3;
+              return 1;
             }
             T mean = boost::math::detail::mean(v, delta, pol);
             T l2 = delta * delta;
@@ -592,6 +592,7 @@ namespace boost
             result *= -mean * mean;
             result += v * v * (l2 * l2 + 6 * l2 + 3) / ((v - 4) * (v - 2));
             result /= var * var;
+            result -= static_cast<T>(3);
             return result;
          }
 
