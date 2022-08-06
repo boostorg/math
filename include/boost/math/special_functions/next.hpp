@@ -16,9 +16,11 @@
 #include <boost/math/special_functions/sign.hpp>
 #include <boost/math/special_functions/trunc.hpp>
 #include <boost/math/tools/traits.hpp>
+#include <boost/math/tools/config.hpp>
 #include <type_traits>
 #include <cfloat>
 #include <cstdint>
+#include <cstring>
 
 
 #if !defined(_CRAYC) && !defined(__CUDACC__) && (!defined(__GNUC__) || (__GNUC__ > 3) || ((__GNUC__ == 3) && (__GNUC_MINOR__ > 3)))
@@ -719,10 +721,11 @@ typename tools::promote_args<T, U>::type float_distance(const T& a, const U& b)
 }
 
 // https://randomascii.wordpress.com/2012/01/23/stupid-float-tricks-2/
+// https://blog.regehr.org/archives/959
 inline std::int32_t float_distance(float a, float b)
 {
    using std::abs;
-   constexpr float tol = 2 * (std::numeric_limits<float>::min)();
+   constexpr auto tol = 2 * (std::numeric_limits<float>::min)();
 
    // 0, very small, and large magnitude distances all need special handling
    if (abs(a) == 0 || abs(b) == 0)
@@ -736,8 +739,10 @@ inline std::int32_t float_distance(float a, float b)
 
    static_assert(sizeof(float) == sizeof(std::int32_t), "float is incorrect size.");
 
-   const auto ai = *reinterpret_cast<std::int32_t*>(&a);
-   const auto bi = *reinterpret_cast<std::int32_t*>(&b);
+   std::int32_t ai;
+   std::int32_t bi;
+   std::memcpy(&ai, &a, sizeof(float));
+   std::memcpy(&bi, &b, sizeof(float));
    auto result = bi - ai;
 
    if (ai < 0 || bi < 0)
