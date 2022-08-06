@@ -743,6 +743,39 @@ inline std::int32_t float_distance(float a, float b)
    std::int32_t bi;
    std::memcpy(&ai, &a, sizeof(float));
    std::memcpy(&bi, &b, sizeof(float));
+
+   auto result = bi - ai;
+
+   if (ai < 0 || bi < 0)
+   {
+      result = -result;
+   }
+
+   return result;
+}
+
+inline std::int64_t float_distance(double a, double b)
+{
+   using std::abs;
+   constexpr auto tol = 2 * (std::numeric_limits<double>::min)();
+
+   // 0, very small, and large magnitude distances all need special handling
+   if (abs(a) == 0 || abs(b) == 0)
+   {
+      return static_cast<std::int64_t>(float_distance(a, b, policies::policy<>()));
+   }
+   else if (abs(a) < tol || abs(b) < tol)
+   {
+      return static_cast<std::int64_t>(float_distance(a, b, policies::policy<>()));
+   }
+
+   static_assert(sizeof(double) == sizeof(std::int64_t), "double is incorrect size.");
+
+   std::int64_t ai;
+   std::int64_t bi;
+   std::memcpy(&ai, &a, sizeof(double));
+   std::memcpy(&bi, &b, sizeof(double));
+
    auto result = bi - ai;
 
    if (ai < 0 || bi < 0)
