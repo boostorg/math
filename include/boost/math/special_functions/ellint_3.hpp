@@ -294,11 +294,21 @@ T ellint_pi_imp(T v, T k, T vc, const Policy& pol)
 
     if(v == 0)
     {
-       return (k == 0) ? boost::math::constants::pi<T>() / 2 : ellint_k_imp(k, pol);
+       typedef std::integral_constant<int,
+          std::is_floating_point<T>::value&& std::numeric_limits<T>::digits && (std::numeric_limits<T>::digits <= 54) ? 0 :
+          std::is_floating_point<T>::value && std::numeric_limits<T>::digits && (std::numeric_limits<T>::digits <= 64) ? 1 : 2
+       > precision_tag_type;
+
+       return (k == 0) ? boost::math::constants::pi<T>() / 2 : ellint_k_imp(k, pol, precision_tag_type());
     }
 
     if(v < 0)
     {
+       typedef std::integral_constant<int,
+          std::is_floating_point<T>::value&& std::numeric_limits<T>::digits && (std::numeric_limits<T>::digits <= 54) ? 0 :
+          std::is_floating_point<T>::value && std::numeric_limits<T>::digits && (std::numeric_limits<T>::digits <= 64) ? 1 : 2
+       > precision_tag_type;
+
        // Apply A&S 17.7.17:
        T k2 = k * k;
        T N = (k2 - v) / (1 - v);
@@ -308,7 +318,7 @@ T ellint_pi_imp(T v, T k, T vc, const Policy& pol)
        // This next part is split in two to avoid spurious over/underflow:
        result *= -v / (1 - v);
        result *= (1 - k2) / (k2 - v);
-       result += ellint_k_imp(k, pol) * k2 / (k2 - v);
+       result += ellint_k_imp(k, pol, precision_tag_type()) * k2 / (k2 - v);
        return result;
     }
 
