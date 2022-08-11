@@ -224,7 +224,8 @@ T ellint_k_imp(T k, const Policy& pol, std::integral_constant<int, 0> const&)
          0.098853409871592910,
          0.091439629201749751,
          0.085842591595413900,
-         0.081541118718303215
+         0.081541118718303215,
+         0.078199656811256481910
       };
       return boost::math::tools::evaluate_polynomial(coef, m - 0.05);
    }

@@ -223,6 +223,7 @@ T ellint_e_imp(T k, const Policy& pol, std::integral_constant<int, 0> const&)
          -0.007246728512402157,
          -0.005807424012956090,
          -0.004809187786009338,
+         -0.004086399233255150
       };
       return boost::math::tools::evaluate_polynomial(coef, m - 0.05);
    }
@@ -242,7 +243,7 @@ T ellint_e_imp(T k, const Policy& pol, std::integral_constant<int, 0> const&)
          -0.014261960828842520,
          -0.012759847429264803,
          -0.011799303775587354,
-         0.011197445703074968
+         -0.011197445703074968
       };
       return boost::math::tools::evaluate_polynomial(coef, m - 0.15);
    }
@@ -707,7 +708,7 @@ T ellint_e_imp(T k, const Policy& pol, std::integral_constant<int, 1> const&)
       return boost::math::tools::evaluate_polynomial(coef, m - 0.875L);
    }
    default:
-      return boost::math::ellint_2(k);
+      return ellint_e_imp(k, pol, std::integral_constant<int, 2>());
    }
 }
 
