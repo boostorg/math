@@ -725,6 +725,7 @@ typename tools::promote_args<T, U>::type float_distance(const T& a, const U& b)
 inline std::int32_t float_distance(float a, float b)
 {
    using std::abs;
+   using std::isfinite;
    constexpr auto tol = 2 * (std::numeric_limits<float>::min)();
 
    // 0, very small, and large magnitude distances all need special handling
@@ -735,6 +736,20 @@ inline std::int32_t float_distance(float a, float b)
    else if (abs(a) < tol || abs(b) < tol)
    {
       return static_cast<std::int32_t>(float_distance(a, b, policies::policy<>()));
+   }
+
+   static const char* function = "float_distance<%1%>(%1%, %1%)";
+   if(!(boost::math::isfinite)(a))
+   {
+      return policies::raise_domain_error<float>(
+         function,
+         "Argument a must be finite, but got %1%", a, policies::policy<>());
+   }
+   if(!(boost::math::isfinite)(b))
+   {
+      return policies::raise_domain_error<float>(
+         function,
+         "Argument b must be finite, but got %1%", b, policies::policy<>());
    }
 
    static_assert(sizeof(float) == sizeof(std::int32_t), "float is incorrect size.");
@@ -757,6 +772,7 @@ inline std::int32_t float_distance(float a, float b)
 inline std::int64_t float_distance(double a, double b)
 {
    using std::abs;
+   using std::isfinite;
    constexpr auto tol = 2 * (std::numeric_limits<double>::min)();
 
    // 0, very small, and large magnitude distances all need special handling
@@ -768,6 +784,21 @@ inline std::int64_t float_distance(double a, double b)
    {
       return static_cast<std::int64_t>(float_distance(a, b, policies::policy<>()));
    }
+   
+   static const char* function = "float_distance<%1%>(%1%, %1%)";
+   if(!(boost::math::isfinite)(a))
+   {
+      return policies::raise_domain_error<double>(
+         function,
+         "Argument a must be finite, but got %1%", a, policies::policy<>());
+   }
+   if(!(boost::math::isfinite)(b))
+   {
+      return policies::raise_domain_error<double>(
+         function,
+         "Argument b must be finite, but got %1%", b, policies::policy<>());
+   }
+
 
    static_assert(sizeof(double) == sizeof(std::int64_t), "double is incorrect size.");
 
