@@ -845,6 +845,7 @@ test-suite distribution_tests :
    [ run test_triangular.cpp pch ../../test/build//boost_unit_test_framework  ]
    [ run test_uniform.cpp pch ../../test/build//boost_unit_test_framework  ]
    [ run test_weibull.cpp ../../test/build//boost_unit_test_framework  ]
+   [ run test_von_mises.cpp ../../test/build//boost_unit_test_framework ]
 
    [ run  compile_test/dist_bernoulli_incl_test.cpp compile_test_main : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ]  ]
    [ run  compile_test/dist_beta_incl_test.cpp compile_test_main : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ]  ]
