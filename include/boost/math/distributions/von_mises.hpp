@@ -107,7 +107,7 @@ template <typename RealType, typename Policy>
 inline std::pair<RealType, RealType> support(const von_mises_distribution<RealType, Policy>& dist)
 { // This is range values for random variable x where cdf rises from 0 to 1, and outside it, the pdf is zero.
     constexpr RealType pi = boost::math::constants::pi<RealType>();
-    return std::pair<RealType, RealType>(dist.mean() - pi, dist.mean() + pi); //    [µ-π, µ+π)
+    return std::pair<RealType, RealType>(dist.mean() - pi, dist.mean() + pi); //  u-pi, u+pi
 }
 
 #ifdef BOOST_MSVC

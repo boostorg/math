@@ -142,8 +142,8 @@ void test_spots(RealType)
       pdf(von_mises_distribution<RealType>(3, 25), static_cast<RealType>(3)),
       static_cast<RealType>(1.98455543847726689510475504795539869409664L),  // e^25/(2*pi*I0(25))
       tolerance);
-	// edge case for single point precision
-	BOOST_CHECK_CLOSE(
+    // edge case for single point precision
+    BOOST_CHECK_CLOSE(
       pdf(von_mises_distribution<RealType>(3, 86), static_cast<RealType>(3)),
       static_cast<RealType>(3.69423343123704539549725123346713237943413L),
       tolerance);
@@ -151,12 +151,12 @@ void test_spots(RealType)
       pdf(von_mises_distribution<RealType>(3, 87), static_cast<RealType>(3)),
       static_cast<RealType>(3.71571226458759536792289974309199255119626L),
       tolerance);
-	// edge case for double point precision
+    // edge case for double point precision
   BOOST_CHECK_CLOSE(
       pdf(von_mises_distribution<RealType>(3, 708), static_cast<RealType>(3)),
       static_cast<RealType>(10.6132883625399035032551439553585260831760L),
       tolerance);
-	BOOST_CHECK_CLOSE(
+    BOOST_CHECK_CLOSE(
       pdf(von_mises_distribution<RealType>(3, 709), static_cast<RealType>(3)),
       static_cast<RealType>(10.6207836264247647802343430545802569228891L),
       tolerance);
@@ -344,8 +344,8 @@ void test_spots(RealType)
 template <typename RealType>
 void test_symmetry(RealType)
 {
-	RealType const pi = boost::math::constants::pi<RealType>();
-	RealType delta = 1.0 / (1 << 4);
+    RealType const pi = boost::math::constants::pi<RealType>();
+    RealType delta = 1.0 / (1 << 4);
   for (RealType mean = 0; mean < pi; mean += delta) {
     for (RealType conc = 0; conc < 100; conc = (conc + 1) * 1.5 - 1) {
       von_mises_distribution<RealType> dist(mean, conc);
