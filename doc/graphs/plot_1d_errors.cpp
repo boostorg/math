@@ -43,7 +43,7 @@ void plot_errors_1d(F f, Real start, Real end, unsigned points, const char* func
    Real pos = start;
    Real interval = (end - start) / points;
 
-   std::map<Real, Real> points_upper, points_lower;
+   std::map<double, double> points_upper, points_lower;
 
    Real max_distance(0), min_distance(0), max_error(0), max_error_location(0);
 
@@ -60,19 +60,19 @@ void plot_errors_1d(F f, Real start, Real end, unsigned points, const char* func
          Real exact_value = static_cast<Real>(f(mp_type(pos)));
          Real distance = boost::math::sign(found_value - exact_value) * boost::math::epsilon_difference(found_value, exact_value);
          Real bin = start + ((end - start) / num_bins) * boost::math::itrunc(num_bins * (pos - start) / (end - start));
-         if (points_lower.find(bin) == points_lower.end())
-            points_lower[bin] = 0;
-         if (points_upper.find(bin) == points_upper.end())
-            points_upper[bin] = 0;
+         if (points_lower.find((double)bin) == points_lower.end())
+            points_lower[(double)bin] = 0;
+         if (points_upper.find((double)bin) == points_upper.end())
+            points_upper[(double)bin] = 0;
          if (distance > 0)
          {
-            if (points_upper[bin] < distance)
-               points_upper[bin] = (std::min)(distance, max_y_scale);
+            if (points_upper[(double)bin] < distance)
+               points_upper[(double)bin] = (double)(std::min)(distance, max_y_scale);
          }
          else
          {
-            if (points_lower[bin] > distance)
-               points_lower[bin] = (std::max)(distance, -max_y_scale);
+            if (points_lower[(double)bin] > distance)
+               points_lower[(double)bin] = (double)(std::max)(distance, -max_y_scale);
          }
          if (max_distance < distance)
             max_distance = (std::min)(distance, max_y_scale);

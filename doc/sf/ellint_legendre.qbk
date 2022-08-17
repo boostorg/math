@@ -97,7 +97,12 @@ NTL::RR at 1000-bit precision and this implementation.
 
 [heading Implementation]
 
-These functions are implemented in terms of Carlson's integrals using the relations:
+For up to 80-bit long double precision the complete versions of these functions
+are implemented as Taylor series expansions as in: 
+"Fast computation of complete elliptic integrals and Jacobian elliptic functions",
+Celestial Mechanics and Dynamical Astronomy, April 2012.
+
+Otherwise these functions are implemented in terms of Carlson's integrals using the relations:
 
 [equation ellint19]
 
@@ -198,7 +203,12 @@ NTL::RR at 1000-bit precision and this implementation.
 
 [heading Implementation]
 
-These functions are implemented in terms of Carlson's integrals
+For up to 80-bit long double precision the complete versions of these functions
+are implemented as Taylor series expansions as in: 
+"Fast computation of complete elliptic integrals and Jacobian elliptic functions",
+Celestial Mechanics and Dynamical Astronomy, April 2012.
+
+Otherwise these functions are implemented in terms of Carlson's integrals
 using the relations:
 
 [equation ellint21]

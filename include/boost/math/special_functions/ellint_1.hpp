@@ -187,22 +187,10 @@ T ellint_k_imp(T k, const Policy& pol, std::integral_constant<int, 2> const&)
 // archived in the code below), but was found to have slightly higher error rates.
 //
 template <typename T, typename Policy>
-T ellint_k_imp(T k, const Policy& pol, std::integral_constant<int, 0> const&)
+BOOST_FORCEINLINE T ellint_k_imp(T k, const Policy& pol, std::integral_constant<int, 0> const&)
 {
    using std::abs;
    using namespace boost::math::tools;
-
-   static const char* function = "boost::math::ellint_k<%1%>(%1%)";
-
-   if (abs(k) > 1)
-   {
-      return policies::raise_domain_error<T>(function,
-         "Got k = %1%, function requires |k| <= 1", k, pol);
-   }
-   if (abs(k) == 1)
-   {
-      return policies::raise_overflow_error<T>(function, nullptr, pol);
-   }
 
    T m = k * k;
 
@@ -448,6 +436,10 @@ T ellint_k_imp(T k, const Policy& pol, std::integral_constant<int, 0> const&)
       return boost::math::tools::evaluate_polynomial(coef, m - 0.875);
    }
    default:
+      //
+      // This handles all cases where m > 0.9, 
+      // including all error handling:
+      //
       return ellint_k_imp(k, pol, std::integral_constant<int, 2>());
 #if 0
    else
@@ -468,22 +460,10 @@ T ellint_k_imp(T k, const Policy& pol, std::integral_constant<int, 0> const&)
    }
 }
 template <typename T, typename Policy>
-T ellint_k_imp(T k, const Policy& pol, std::integral_constant<int, 1> const&)
+BOOST_FORCEINLINE T ellint_k_imp(T k, const Policy& pol, std::integral_constant<int, 1> const&)
 {
    using std::abs;
    using namespace boost::math::tools;
-
-   static const char* function = "boost::math::ellint_k<%1%>(%1%)";
-
-   if (abs(k) > 1)
-   {
-      return policies::raise_domain_error<T>(function,
-         "Got k = %1%, function requires |k| <= 1", k, pol);
-   }
-   if (abs(k) == 1)
-   {
-      return policies::raise_overflow_error<T>(function, nullptr, pol);
-   }
 
    T m = k * k;
    switch (static_cast<int>(m * 20))
@@ -757,28 +737,16 @@ T ellint_k_imp(T k, const Policy& pol, std::integral_constant<int, 1> const&)
       return boost::math::tools::evaluate_polynomial(coef, m - 0.875L);
    }
    default:
+      //
+      // All cases where m > 0.9
+      // including all error handling:
+      //
       return ellint_k_imp(k, pol, std::integral_constant<int, 2>());
-#if 0
-   default:
-   {
-      T lambda_prime = (1 - sqrt(k)) / (2 * (1 + sqrt(k)));
-      T k_prime = ellint_k(sqrt((1 - k) * (1 + k))); // K(m')
-      T lambda_prime_4th = boost::math::pow<4>(lambda_prime);
-      T q_prime = ((((((20910 * lambda_prime_4th) + 1707) * lambda_prime_4th + 150) * lambda_prime_4th + 15) * lambda_prime_4th + 2) * lambda_prime_4th + 1) * lambda_prime;
-      /*T q_prime_2 = lambda_prime
-         + 2 * boost::math::pow<5>(lambda_prime)
-         + 15 * boost::math::pow<9>(lambda_prime)
-         + 150 * boost::math::pow<13>(lambda_prime)
-         + 1707 * boost::math::pow<17>(lambda_prime)
-         + 20910 * boost::math::pow<21>(lambda_prime);*/
-      return -log(q_prime) * k_prime / boost::math::constants::pi<T>();
-   }
-#endif
    }
 }
 
 template <typename T, typename Policy>
-inline typename tools::promote_args<T>::type ellint_1(T k, const Policy& pol, const std::true_type&)
+BOOST_FORCEINLINE typename tools::promote_args<T>::type ellint_1(T k, const Policy& pol, const std::true_type&)
 {
    typedef typename tools::promote_args<T>::type result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
@@ -790,7 +758,7 @@ inline typename tools::promote_args<T>::type ellint_1(T k, const Policy& pol, co
 }
 
 template <class T1, class T2>
-inline typename tools::promote_args<T1, T2>::type ellint_1(T1 k, T2 phi, const std::false_type&)
+BOOST_FORCEINLINE typename tools::promote_args<T1, T2>::type ellint_1(T1 k, T2 phi, const std::false_type&)
 {
    return boost::math::ellint_1(k, phi, policies::policy<>());
 }
@@ -799,14 +767,14 @@ inline typename tools::promote_args<T1, T2>::type ellint_1(T1 k, T2 phi, const s
 
 // Complete elliptic integral (Legendre form) of the first kind
 template <typename T>
-inline typename tools::promote_args<T>::type ellint_1(T k)
+BOOST_FORCEINLINE typename tools::promote_args<T>::type ellint_1(T k)
 {
    return ellint_1(k, policies::policy<>());
 }
 
 // Elliptic integral (Legendre form) of the first kind
 template <class T1, class T2, class Policy>
-inline typename tools::promote_args<T1, T2>::type ellint_1(T1 k, T2 phi, const Policy& pol)
+BOOST_FORCEINLINE typename tools::promote_args<T1, T2>::type ellint_1(T1 k, T2 phi, const Policy& pol)
 {
    typedef typename tools::promote_args<T1, T2>::type result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
@@ -814,7 +782,7 @@ inline typename tools::promote_args<T1, T2>::type ellint_1(T1 k, T2 phi, const P
 }
 
 template <class T1, class T2>
-inline typename tools::promote_args<T1, T2>::type ellint_1(T1 k, T2 phi)
+BOOST_FORCEINLINE typename tools::promote_args<T1, T2>::type ellint_1(T1 k, T2 phi)
 {
    typedef typename policies::is_policy<T2>::type tag_type;
    return detail::ellint_1(k, phi, tag_type());
