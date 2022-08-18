@@ -106,7 +106,7 @@ inline std::pair<RealType, RealType> range(const von_mises_distribution<RealType
 template <typename RealType, typename Policy>
 inline std::pair<RealType, RealType> support(const von_mises_distribution<RealType, Policy>& dist)
 { // This is range values for random variable x where cdf rises from 0 to 1, and outside it, the pdf is zero.
-    constexpr RealType pi = boost::math::constants::pi<RealType>();
+    const RealType pi = boost::math::constants::pi<RealType>();
     return std::pair<RealType, RealType>(dist.mean() - pi, dist.mean() + pi); //  u-pi, u+pi
 }
 
@@ -292,6 +292,101 @@ inline RealType pdf(const von_mises_distribution<RealType, Policy>& dist, const 
 
 namespace detail {
 
+
+// We use the Fortran algorithm designed by Geoffrey W. Hill in
+// "Algorithm 518: Incomplete Bessel Function I0. The Von Mises Distribution", 1977, ACM
+// DOI: 10.1145/355744.355753
+template <typename RealType, typename Policy>
+RealType cdf_impl(const von_mises_distribution<RealType, Policy>& dist, const RealType& x)
+{
+    BOOST_MATH_STD_USING
+
+    const RealType conc = dist.concentration();
+    const RealType mean = dist.mean();
+    const RealType pi = boost::math::constants::pi<RealType>();
+    const RealType two_pi = boost::math::constants::two_pi<RealType>();
+
+    RealType u = x - mean;
+
+    if (u <= -pi)
+    {
+        return 0;
+    }
+    else if (u >= pi)
+    {
+        return 1;
+    }
+
+    constexpr auto digits = std::numeric_limits<RealType>::max_digits10 - 1;
+    constexpr auto digits_cubed = digits*digits*digits;
+    constexpr auto digits_sq = digits*digits;
+
+    // Interplation of critical kappa values described in the above paper
+    // https://www.wolframalpha.com/input?i=interpolate%5B%286%2C+6.5%29%2C+%287%2C+8.0%29%2C+%288%2C+10.5%29%2C+%289%2C+15%29%2C+%2810%2C+21%29%2C+%2811%2C+32%29%2C+%2812%2C+50%29%5D
+    constexpr auto critical_kappa = -0.0152778*digits_cubed*digits_cubed + 0.825*digits_cubed*digits_sq - 
+                                    18.3194*digits_sq*digits_sq + 214.25*digits_cubed - 1391.67*digits_sq 
+                                    + 4760.43*digits - 6694.5;
+
+    // We can use the pre-calculated values from the paper if the precision is less than twelve digits
+    // otherwise we are going to have to calulate ourselves. 
+    RealType result;
+    BOOST_IF_CONSTEXPR (digits <= 12)
+    {
+        if (conc > critical_kappa) 
+        {
+            RealType c = 24.0 * conc;
+            RealType v = c - 56;
+            RealType r = sqrt((54.0 / (347.0 / v + 26.0 - c) - 6.0 + c) / 12.0);
+            RealType z = sin(u / 2.0) * r;
+            RealType s = z * z * 2;
+            v = v - s + 3;
+            RealType y = (c - s - s - 16.0) / 3.0;
+            y = ((s + 1.75) * s + 83.5) / v - y;
+            result = boost::math::erf(z - s / (y * y) * z) / 2 + 0.5;
+        }
+        else 
+        {
+            RealType v = 0;
+            if (conc > 0) 
+            {
+                // extrapolation of the tables given in the paper
+                RealType a1 = (0.33 * digits - 2.6666) * digits + 12;
+                RealType a2 = (std::max)(0.5, (std::min)(1.5 - digits / 12, 1.0));
+                RealType a3 = 8; //digits <= 6 ? 3 : (1 << (digits - 5));
+                RealType a4 = digits <= 6 ? 1 : std::pow(1.5, digits - 8);
+
+                auto iterations = static_cast<int>(ceil(a1 + conc * a2 - a3 / (conc + a4)));
+                RealType r = 0;
+                RealType z = 2 / conc;
+                for (int j = iterations - 1; j > 0; --j) 
+                {
+                    RealType sj = sin(j * u);
+                    r = 1 / (j * z + r);
+                    v = (sj / j + v) * r;
+                }
+            }
+            result = (x - mean + boost::math::constants::pi<RealType>()) / 2;
+            result = (result + v) / boost::math::constants::pi<RealType>();
+        }
+    }
+    else
+    {
+        
+    }
+
+    if (result < 0)
+    {
+        result = 0;
+    }
+    else if (result > 1)
+    {
+        result = 1;
+    }
+
+    return result;
+}
+
+/*
 template <typename RealType, typename Policy>
 inline RealType cdf_impl(const von_mises_distribution<RealType, Policy>& dist, const RealType& x)
 {
@@ -316,7 +411,7 @@ inline RealType cdf_impl(const von_mises_distribution<RealType, Policy>& dist, c
     // DOI: 10.1145/355744.355753
     RealType result = 0;
 
-    int digits = std::numeric_limits<RealType>::max_digits10 - 1;
+    constexpr int digits = std::numeric_limits<RealType>::max_digits10 - 1;
     RealType ck = ((0.1611*digits - 2.8778)*digits + 18.45)*digits - 35.4;
     if (conc > ck) 
     {
@@ -355,6 +450,7 @@ inline RealType cdf_impl(const von_mises_distribution<RealType, Policy>& dist, c
 
     return result <= 0 ? 0 : (1 <= result ? 1 : result);
 }
+*/
 } // namespace detail
 
 template <typename RealType, typename Policy>
