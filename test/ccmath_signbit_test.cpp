@@ -11,9 +11,23 @@ template <typename T>
 void test()
 {
     // Edge cases
+    #ifdef BOOST_MATH_BIT_CAST
+    if constexpr (std::is_same_v<T, float>)
+    {
+        static_assert(boost::math::ccmath::signbit(T(0)) == false);
+        static_assert(boost::math::ccmath::signbit(T(0)*-1) == true);
+
+        static_assert(boost::math::ccmath::signbit(std::numeric_limits<T>::quiet_NaN()) == false);
+        static_assert(boost::math::ccmath::signbit(-std::numeric_limits<T>::quiet_NaN()) == true);
+
+        static_assert(boost::math::ccmath::signbit(std::numeric_limits<T>::signaling_NaN()) == false);
+        static_assert(boost::math::ccmath::signbit(-std::numeric_limits<T>::signaling_NaN()) == true);
+    }
+    #else
     static_assert(boost::math::ccmath::signbit(T(0)) == false);
     static_assert(boost::math::ccmath::signbit(std::numeric_limits<T>::quiet_NaN()) == false);
     static_assert(boost::math::ccmath::signbit(std::numeric_limits<T>::signaling_NaN()) == false);
+    #endif
 
     // Positive numbers
     static_assert(boost::math::ccmath::signbit(std::numeric_limits<T>::infinity()) == false);
