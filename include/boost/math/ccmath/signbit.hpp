@@ -48,7 +48,7 @@ namespace detail {
 
 #ifdef BOOST_MATH_BIT_CAST
 
-struct float_bits
+struct IEEEf2bits
 {
 #if BOOST_MATH_ENDIAN_LITTLE_BYTE
     unsigned mantissa : 23;
@@ -61,7 +61,7 @@ struct float_bits
 #endif 
 };
 
-struct double_bits
+struct IEEEd2bits
 {
 #if BOOST_MATH_ENDIAN_LITTLE_BYTE
     unsigned mantissa_l : 32;
@@ -76,19 +76,83 @@ struct double_bits
 #endif
 };
 
+#if LDBL_MANT_DIG == 64 && LDBL_MAX_EXP == 16384
+
+struct IEEEl2bits
+{
+#if BOOST_MATH_ENDIAN_LITTLE_BYTE
+    unsigned mantissa_l : 32;
+    unsigned mantissa_h : 32;
+    unsigned exponent : 15;
+    unsigned sign : 1;
+    unsigned pad : 16;
+#else // Big endian
+    unsigned pad : 16;
+    unsigned sign : 1;
+    unsigned exponent : 15;
+    unsigned mantissa_h : 32;
+    unsigned mantissa_l : 32;
+#endif
+};
+
+#elif LDBL_MANT_DIG == 113 && LDBL_MAX_EXP == 16384
+
+struct IEEEl2bits
+{
+#if BOOST_MATH_ENDIAN_LITTLE_BYTE
+    unsigned mantissa_l : 64;
+    unsigned mantissa_h : 48;
+    unsigned exponent : 15;
+    unsigned sign : 1;
+#else // Big endian
+    unsigned sign : 1;
+    unsigned exponent : 15;
+    unsigned mantissa_h : 48;
+    unsigned mantissa_l : 64;
+#endif
+};
+
+#elif LDBL_MANT_DIG == 53 && LDBL_MAX_EXP == 1024
+
+struct IEEEl2bits
+{
+#if BOOST_MATH_ENDIAN_LITTLE_BYTE
+    unsigned mantissa_l : 32;
+    unsigned mantissa_h : 20;
+    unsigned exponent : 11;
+    unsigned sign : 1;
+#else // Big endian
+    unsigned sign : 1;
+    unsigned exponent : 11;
+    unsigned mantissa_h : 20;
+    unsigned mantissa_l : 32;
+#endif
+};
+
+#else // Unsupported long double representation
+#  define BOOST_MATH_UNSUPPORTED_LONG_DOUBLE
+#endif
+
 template <typename T>
 constexpr bool signbit_impl(T arg)
 {
     if constexpr (std::is_same_v<T, float>)
     {   
-        const auto u = BOOST_MATH_BIT_CAST(float_bits, arg);
+        const auto u = BOOST_MATH_BIT_CAST(IEEEf2bits, arg);
         return u.sign;
     }
     else if constexpr (std::is_same_v<T, double>)
     {
-        const auto u = BOOST_MATH_BIT_CAST(double_bits, arg);
+        const auto u = BOOST_MATH_BIT_CAST(IEEEd2bits, arg);
         return u.sign;
     }
+    #ifndef BOOST_MATH_UNSUPPORTED_LONG_DOUBLE
+    else if constexpr (std::is_same_v<T, long double>)
+    {
+        const auto u = BOOST_MATH_BIT_CAST(IEEEl2bits, arg);
+        return u.sign;
+    }
+    #endif
     else
     {
         if (boost::math::ccmath::isnan(arg))
