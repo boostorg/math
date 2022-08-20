@@ -12,7 +12,7 @@ void test()
 {
     // Edge cases
     #ifdef BOOST_MATH_BIT_CAST
-    if constexpr (std::is_same_v<T, float>)
+    if constexpr (std::is_same_v<T, float> || std::is_same_v<T, double>)
     {
         static_assert(boost::math::ccmath::signbit(T(0)) == false);
         static_assert(boost::math::ccmath::signbit(T(0)*-1) == true);

@@ -61,6 +61,21 @@ struct float_bits
 #endif 
 };
 
+struct double_bits
+{
+#if BOOST_MATH_ENDIAN_LITTLE_BYTE
+    unsigned mantissa_l : 32;
+    unsigned mantissa_h : 20;
+    unsigned exponent : 11;
+    unsigned sign : 1;
+#else // Big endian
+    unsigned sign : 1;
+    unsigned exponent : 11;
+    unsigned mantissa_h : 20;
+    unsigned mantissa_l : 32;
+#endif
+};
+
 template <typename T>
 constexpr bool signbit_impl(T arg)
 {
@@ -69,13 +84,20 @@ constexpr bool signbit_impl(T arg)
         const auto u = BOOST_MATH_BIT_CAST(float_bits, arg);
         return u.sign;
     }
-
-    if (boost::math::ccmath::isnan(arg))
+    else if constexpr (std::is_same_v<T, double>)
     {
-        return false;
+        const auto u = BOOST_MATH_BIT_CAST(double_bits, arg);
+        return u.sign;
     }
-    
-    return arg < static_cast<T>(0);
+    else
+    {
+        if (boost::math::ccmath::isnan(arg))
+        {
+            return false;
+        }
+        
+        return arg < static_cast<T>(0);
+    }
 }
 
 #else
