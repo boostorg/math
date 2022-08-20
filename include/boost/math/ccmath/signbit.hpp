@@ -17,8 +17,10 @@
 #if __cpp_lib_bit_cast >= 201806L
 #include <bit>
 #  define BOOST_MATH_BIT_CAST(T, x) std::bit_cast<T>(x)
-#elif __has_builtin(__builtin_bit_cast)
-#  define BOOST_MATH_BIT_CAST(T, x) __builtin_bit_cast(T, x)
+#elif defined(__has_builtin)
+#  if __has_builtin(__builtin_bit_cast)
+#    define BOOST_MATH_BIT_CAST(T, x) __builtin_bit_cast(T, x)
+#  endif
 #endif
 
 /*
