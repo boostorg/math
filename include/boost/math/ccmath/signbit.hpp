@@ -7,6 +7,7 @@
 #define BOOST_MATH_CCMATH_SIGNBIT_HPP
 
 #include <cmath>
+#include <cstdint>
 #include <limits>
 #include <type_traits>
 #include <boost/math/tools/is_constant_evaluated.hpp>
@@ -51,81 +52,84 @@ namespace detail {
 struct IEEEf2bits
 {
 #if BOOST_MATH_ENDIAN_LITTLE_BYTE
-    unsigned mantissa : 23;
-    unsigned exponent : 8;
-    unsigned sign : 1;
+    std::uint32_t mantissa : 23;
+    std::uint32_t exponent : 8;
+    std::uint32_t sign : 1;
 #else // Big endian
-    unsigned sign : 1;
-    unsigned exponent : 8;
-    unsigned mantissa : 23;
+    std::uint32_t sign : 1;
+    std::uint32_t exponent : 8;
+    std::uint32_t mantissa : 23;
 #endif 
 };
 
 struct IEEEd2bits
 {
 #if BOOST_MATH_ENDIAN_LITTLE_BYTE
-    unsigned mantissa_l : 32;
-    unsigned mantissa_h : 20;
-    unsigned exponent : 11;
-    unsigned sign : 1;
+    std::uint32_t mantissa_l : 32;
+    std::uint32_t mantissa_h : 20;
+    std::uint32_t exponent : 11;
+    std::uint32_t sign : 1;
 #else // Big endian
-    unsigned sign : 1;
-    unsigned exponent : 11;
-    unsigned mantissa_h : 20;
-    unsigned mantissa_l : 32;
+    std::uint32_t sign : 1;
+    std::uint32_t exponent : 11;
+    std::uint32_t mantissa_h : 20;
+    std::uint32_t mantissa_l : 32;
 #endif
 };
 
+// 80 bit long double
 #if LDBL_MANT_DIG == 64 && LDBL_MAX_EXP == 16384
 
 struct IEEEl2bits
 {
 #if BOOST_MATH_ENDIAN_LITTLE_BYTE
-    unsigned mantissa_l : 32;
-    unsigned mantissa_h : 32;
-    unsigned exponent : 15;
-    unsigned sign : 1;
-    unsigned pad : 16;
+    std::uint32_t mantissa_l : 32;
+    std::uint32_t mantissa_h : 32;
+    std::uint32_t exponent : 15;
+    std::uint32_t sign : 1;
+    std::uint32_t pad : 32;
 #else // Big endian
-    unsigned pad : 16;
-    unsigned sign : 1;
-    unsigned exponent : 15;
-    unsigned mantissa_h : 32;
-    unsigned mantissa_l : 32;
+    std::uint32_t pad : 32;
+    std::uint32_t sign : 1;
+    std::uint32_t exponent : 15;
+    std::uint32_t mantissa_h : 32;
+    std::uint32_t mantissa_l : 32;
 #endif
 };
 
+// 128 bit long double
 #elif LDBL_MANT_DIG == 113 && LDBL_MAX_EXP == 16384
 
 struct IEEEl2bits
 {
 #if BOOST_MATH_ENDIAN_LITTLE_BYTE
-    unsigned mantissa_l : 64;
-    unsigned mantissa_h : 48;
-    unsigned exponent : 15;
-    unsigned sign : 1;
+    std::uint32_t mantissa_l : 64;
+    std::uint32_t mantissa_h : 48;
+    std::uint32_t exponent : 15;
+    std::uint32_t sign : 1;
 #else // Big endian
-    unsigned sign : 1;
-    unsigned exponent : 15;
-    unsigned mantissa_h : 48;
-    unsigned mantissa_l : 64;
+    std::uint32_t sign : 1;
+    std::uint32_t exponent : 15;
+    std::uint32_t mantissa_h : 48;
+    std::uint32_t mantissa_l : 64;
 #endif
 };
 
+// 64 bit long double (double == long double on ARM)
 #elif LDBL_MANT_DIG == 53 && LDBL_MAX_EXP == 1024
 
 struct IEEEl2bits
 {
 #if BOOST_MATH_ENDIAN_LITTLE_BYTE
-    unsigned mantissa_l : 32;
-    unsigned mantissa_h : 20;
-    unsigned exponent : 11;
-    unsigned sign : 1;
+    std::uint32_t mantissa_l : 32;
+    std::uint32_t mantissa_h : 20;
+    std::uint32_t exponent : 11;
+    std::uint32_t sign : 1;
 #else // Big endian
-    unsigned sign : 1;
-    unsigned exponent : 11;
-    unsigned mantissa_h : 20;
-    unsigned mantissa_l : 32;
+    std::uint32_t sign : 1;
+    std::uint32_t exponent : 11;
+    std::uint32_t mantissa_h : 20;
+    std::uint32_t mantissa_l : 32;
 #endif
 };
 
