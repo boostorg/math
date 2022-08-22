@@ -103,15 +103,15 @@ struct IEEEl2bits
 struct IEEEl2bits
 {
 #if BOOST_MATH_ENDIAN_LITTLE_BYTE
-    std::uint32_t mantissa_l : 64;
-    std::uint32_t mantissa_h : 48;
+    std::uint64_t mantissa_l : 64;
+    std::uint64_t mantissa_h : 48;
     std::uint32_t exponent : 15;
     std::uint32_t sign : 1;
 #else // Big endian
     std::uint32_t sign : 1;
     std::uint32_t exponent : 15;
-    std::uint32_t mantissa_h : 48;
-    std::uint32_t mantissa_l : 64;
+    std::uint64_t mantissa_h : 48;
+    std::uint64_t mantissa_l : 64;
 #endif
 };
 
