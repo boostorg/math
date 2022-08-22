@@ -9,6 +9,7 @@
 #include <boost/math/special_functions/next.hpp>
 #include <boost/math/special_functions/ulp.hpp>
 #include <boost/math/special_functions/fast_float_distance.hpp>
+#include <boost/math/tools/assert.hpp>
 #include <boost/multiprecision/float128.hpp>
 
 #include "math_unit_test.hpp"
@@ -19,16 +20,16 @@ void test_value(const T& val)
 {
     using namespace boost::math;
 
-    assert(fast_float_distance(float_next(val), val) == -1);
-    assert(float_next(val) > val);
-    assert(float_next(float_prior(val)) == val);
+    BOOST_MATH_ASSERT(fast_float_distance(float_next(val), val) == -1);
+    BOOST_MATH_ASSERT(float_next(val) > val);
+    BOOST_MATH_ASSERT(float_next(float_prior(val)) == val);
 
-    assert(fast_float_distance(float_advance(val, 4), val) == -4);
-    assert(fast_float_distance(float_advance(val, -4), val) == 4);
+    BOOST_MATH_ASSERT(fast_float_distance(float_advance(val, 4), val) == -4);
+    BOOST_MATH_ASSERT(fast_float_distance(float_advance(val, -4), val) == 4);
     if(std::numeric_limits<T>::is_specialized && (std::numeric_limits<T>::has_denorm == std::denorm_present))
     {
-        assert(fast_float_distance(float_advance(float_next(float_next(val)), 4), float_next(float_next(val))) == -4);
-        assert(fast_float_distance(float_advance(float_next(float_next(val)), -4), float_next(float_next(val))) == 4);
+        BOOST_MATH_ASSERT(fast_float_distance(float_advance(float_next(float_next(val)), 4), float_next(float_next(val))) == -4);
+        BOOST_MATH_ASSERT(fast_float_distance(float_advance(float_next(float_next(val)), -4), float_next(float_next(val))) == 4);
     }
 }
 
@@ -39,6 +40,8 @@ int main(void)
 
     #ifdef BOOST_MATH_USE_FAST_FLOAT128
     test_value(boost::multiprecision::float128_type(0));
+    test_value(__float128(0));
+    #elif defined(BOOST_MATH_USE_FAST_STANDALONE_FLOAT128)
     test_value(__float128(0));
     #endif
 }

@@ -9,11 +9,17 @@
 #include <boost/math/special_functions/next.hpp>
 #include <boost/math/tools/throw_exception.hpp>
 #include <stdexcept>
+#include <limits>
 
 #if defined(BOOST_MATH_USE_FLOAT128) && !defined(BOOST_MATH_STANDALONE)
 #include <boost/multiprecision/float128.hpp>
 #include <boost/multiprecision/detail/standalone_config.hpp>
 #define BOOST_MATH_USE_FAST_FLOAT128
+#elif defined(BOOST_MATH_USE_FLOAT128) && defined(BOOST_MATH_STANDALONE)
+#  if __has_include(<quadmath.h>)
+#    include <quadmath.h>
+#    define BOOST_MATH_USE_FAST_STANDALONE_FLOAT128
+#  endif
 #endif
 
 namespace boost { namespace math { 
@@ -36,7 +42,7 @@ boost::multiprecision::int128_type fast_float_distance(boost::multiprecision::fl
     using std::abs;
     using std::isfinite;
 
-    constexpr boost::multiprecision::float128_type tol = BOOST_MP_QUAD_MIN;
+    constexpr boost::multiprecision::float128_type tol = 2 * BOOST_MP_QUAD_MIN;
 
     // 0, very small, and large magnitude distances all need special handling
     if (abs(a) == 0 || abs(b) == 0)
@@ -74,6 +80,51 @@ boost::multiprecision::int128_type fast_float_distance(boost::multiprecision::fl
     return result;
 }
 
+#elif defined(BOOST_MATH_USE_FAST_STANDALONE_FLOAT128)
+__int128 fast_float_distance(__float128 a, __float128 b)
+{
+    constexpr __float128 tol = 2 * static_cast<float128_type>(1) * static_cast<float128_type>(DBL_MIN) * static_cast<float128_type>(DBL_MIN) * 
+                               static_cast<float128_type>(DBL_MIN) * static_cast<float128_type>(DBL_MIN) * static_cast<float128_type>(DBL_MIN) * 
+                               static_cast<float128_type>(DBL_MIN) * static_cast<float128_type>(DBL_MIN) * static_cast<float128_type>(DBL_MIN) * 
+                               static_cast<float128_type>(DBL_MIN) * static_cast<float128_type>(DBL_MIN) * static_cast<float128_type>(DBL_MIN) * 
+                               static_cast<float128_type>(DBL_MIN) * static_cast<float128_type>(DBL_MIN) * static_cast<float128_type>(DBL_MIN) * 
+                               static_cast<float128_type>(DBL_MIN) * static_cast<float128_type>(DBL_MIN) / 1073741824;
+
+    // 0, very small, and large magnitude distances all need special handling
+    if (::fabsq(a) == 0 || ::fabsq(b) == 0)
+    {
+        return 0;
+    }
+    else if (::fabsq(a) < tol || ::fabsq(b) < tol)
+    {
+        BOOST_MATH_THROW_EXCEPTION(std::domain_error("special handling is required for tiny distances. Please use boost::math::float_distance for a slower but safe solution"));
+    }
+
+    if (!(::isinfq)(a) && !(::isnanq)(a))
+    {  
+        BOOST_MATH_THROW_EXCEPTION(std::domain_error("Both arguments to fast_float_distnace must be finite"));
+    }
+    else if (!(::isinfq)(b) && !(::isnanq)(b))
+    {
+        BOOST_MATH_THROW_EXCEPTION(std::domain_error("Both arguments to fast_float_distnace must be finite"));
+    }
+
+    static_assert(sizeof(__int128) == sizeof(__float128));
+
+    __int128 ai;
+    __int128 bi;
+    std::memcpy(&ai, &a, sizeof(__float128));
+    std::memcpy(&bi, &b, sizeof(__float128));
+
+    __int128 result = bi - ai;
+
+    if (ai < 0 || bi < 0)
+    {
+        result = -result;
+    }
+
+    return result;
+}
 #endif
 
 }} // Namespaces
