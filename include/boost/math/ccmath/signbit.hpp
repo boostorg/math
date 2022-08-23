@@ -11,22 +11,27 @@
 #include <limits>
 #include <type_traits>
 #include <boost/math/tools/is_constant_evaluated.hpp>
+#include <boost/math/tools/assert.hpp>
 #include <boost/math/special_functions/detail/fp_traits.hpp>
 #include <boost/math/ccmath/isnan.hpp>
 #include <boost/math/ccmath/abs.hpp>
 
-#if __cpp_lib_bit_cast >= 201806L
-#include <bit>
-#  define BOOST_MATH_BIT_CAST(T, x) std::bit_cast<T>(x)
-#elif defined(__has_builtin)
-#  if __has_builtin(__builtin_bit_cast)
-#    define BOOST_MATH_BIT_CAST(T, x) __builtin_bit_cast(T, x)
+#ifdef __has_include
+#  if __has_include(<bit>)
+#    include <bit>
+#    if __cpp_lib_bit_cast >= 201806L
+#      define BOOST_MATH_BIT_CAST(T, x) std::bit_cast<T>(x)
+#    endif
+#  elif defined(__has_builtin)
+#    if __has_builtin(__builtin_bit_cast)
+#      define BOOST_MATH_BIT_CAST(T, x) __builtin_bit_cast(T, x)
+#    endif
 #  endif
 #endif
 
 /*
-The following error is given using Apple Clang version 13.1.6
-TODO: Remove the following undef when Clang supports
+The following error is given using Apple Clang version 13.1.6, and Clang 13, and 14 on Ubuntu 22.04.01
+TODO: Remove the following undef when Apple Clang supports
 
 ccmath_signbit_test.cpp:32:19: error: static_assert expression is not an integral constant expression
     static_assert(boost::math::ccmath::signbit(T(-1)) == true);
@@ -159,11 +164,9 @@ constexpr bool signbit_impl(T arg)
     #endif
     else
     {
-        if (boost::math::ccmath::isnan(arg))
-        {
-            return false;
-        }
-        
+        BOOST_MATH_ASSERT_MSG(!boost::math::ccmath::isnan(arg), "NAN is not supported with this type or platform");
+        BOOST_MATH_ASSERT_MSG(boost::math::ccmath::abs(arg) != 0, "Signed 0 is not support with this type or platform");
+
         return arg < static_cast<T>(0);
     }
 }
@@ -173,16 +176,14 @@ constexpr bool signbit_impl(T arg)
 // Typical implementations of signbit involve type punning via union and manipulating
 // overflow (see libc++ or musl). Neither of these are allowed in constexpr contexts
 // (technically type punning via union in general is UB in c++ but well defined in C) 
-// therefore NANs and 0s are treated as positive if bit cast is unavailable
+// therefore we static assert these cases.
 
 template <typename T>
 constexpr bool signbit_impl(T arg)
 {
-    if (boost::math::ccmath::isnan(arg))
-    {
-        return false;
-    }
-    
+    BOOST_MATH_ASSERT_MSG(!boost::math::ccmath::isnan(arg), "NAN is not supported without __builtin_bit_cast or std::bit_cast");
+    BOOST_MATH_ASSERT_MSG(boost::math::ccmath::abs(arg) != 0, "Signed 0 is not support without __builtin_bit_cast or std::bit_cast");
+
     return arg < static_cast<T>(0);
 }
 

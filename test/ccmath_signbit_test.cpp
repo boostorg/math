@@ -20,10 +20,6 @@ void test()
 
     static_assert(boost::math::ccmath::signbit(std::numeric_limits<T>::signaling_NaN()) == false);
     static_assert(boost::math::ccmath::signbit(-std::numeric_limits<T>::signaling_NaN()) == true);
-    #else
-    static_assert(boost::math::ccmath::signbit(T(0)) == false);
-    static_assert(boost::math::ccmath::signbit(std::numeric_limits<T>::quiet_NaN()) == false);
-    static_assert(boost::math::ccmath::signbit(std::numeric_limits<T>::signaling_NaN()) == false);
     #endif
 
     // Positive numbers
