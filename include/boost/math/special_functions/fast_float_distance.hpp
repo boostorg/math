@@ -63,7 +63,7 @@ boost::multiprecision::int128_type fast_float_distance(boost::multiprecision::fl
         BOOST_MATH_THROW_EXCEPTION(std::domain_error("Both arguments to fast_float_distnace must be finite"));
     }
 
-    static_assert(sizeof(boost::multiprecision::int128_type) == sizeof(boost::multiprecision::float128_type));
+    static_assert(sizeof(boost::multiprecision::int128_type) == sizeof(boost::multiprecision::float128_type), "float128 is the wrong size");
 
     boost::multiprecision::int128_type ai;
     boost::multiprecision::int128_type bi;
