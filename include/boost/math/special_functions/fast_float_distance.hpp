@@ -83,12 +83,12 @@ boost::multiprecision::int128_type fast_float_distance(boost::multiprecision::fl
 #elif defined(BOOST_MATH_USE_FAST_STANDALONE_FLOAT128)
 __int128 fast_float_distance(__float128 a, __float128 b)
 {
-    constexpr __float128 tol = 2 * static_cast<float128_type>(1) * static_cast<float128_type>(DBL_MIN) * static_cast<float128_type>(DBL_MIN) * 
-                               static_cast<float128_type>(DBL_MIN) * static_cast<float128_type>(DBL_MIN) * static_cast<float128_type>(DBL_MIN) * 
-                               static_cast<float128_type>(DBL_MIN) * static_cast<float128_type>(DBL_MIN) * static_cast<float128_type>(DBL_MIN) * 
-                               static_cast<float128_type>(DBL_MIN) * static_cast<float128_type>(DBL_MIN) * static_cast<float128_type>(DBL_MIN) * 
-                               static_cast<float128_type>(DBL_MIN) * static_cast<float128_type>(DBL_MIN) * static_cast<float128_type>(DBL_MIN) * 
-                               static_cast<float128_type>(DBL_MIN) * static_cast<float128_type>(DBL_MIN) / 1073741824;
+    constexpr __float128 tol = 2 * static_cast<__float128>(1) * static_cast<__float128>(DBL_MIN) * static_cast<__float128>(DBL_MIN) * 
+                               static_cast<__float128>(DBL_MIN) * static_cast<__float128>(DBL_MIN) * static_cast<__float128>(DBL_MIN) * 
+                               static_cast<__float128>(DBL_MIN) * static_cast<__float128>(DBL_MIN) * static_cast<__float128>(DBL_MIN) * 
+                               static_cast<__float128>(DBL_MIN) * static_cast<__float128>(DBL_MIN) * static_cast<__float128>(DBL_MIN) * 
+                               static_cast<__float128>(DBL_MIN) * static_cast<__float128>(DBL_MIN) * static_cast<__float128>(DBL_MIN) * 
+                               static_cast<__float128>(DBL_MIN) * static_cast<__float128>(DBL_MIN) / 1073741824;
 
     // 0, very small, and large magnitude distances all need special handling
     if (::fabsq(a) == 0 || ::fabsq(b) == 0)
