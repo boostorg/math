@@ -33,8 +33,8 @@ template <typename RealType = double, typename Policy = policies::policy<> >
 class von_mises_distribution
 {
 public:
-        using value_type = RealType;
-        using policy_type = Policy;
+    using value_type = RealType;
+    using policy_type = Policy;
 
     von_mises_distribution(RealType l_mean = 0, RealType concentration = 1)
         : m_mean {l_mean}, m_concentration {concentration}
@@ -275,16 +275,11 @@ inline RealType pdf(const von_mises_distribution<RealType, Policy>& dist, const 
     //    return 0;
     //}
     using tag_type = std::integral_constant<int,
-         ((std::numeric_limits<RealType>::digits == 0) || (std::numeric_limits<RealType>::radix != 2)) ?
-         0 :
-         std::numeric_limits<RealType>::digits <= 24 ?
-         24 :
-         std::numeric_limits<RealType>::digits <= 53 ?
-         53 :
-         std::numeric_limits<RealType>::digits <= 64 ?
-         64 :
-         std::numeric_limits<RealType>::digits <= 113 ?
-         113 : -1
+         ((std::numeric_limits<RealType>::digits == 0) || (std::numeric_limits<RealType>::radix != 2)) ? 0 :
+         std::numeric_limits<RealType>::digits <= 24 ? 24 :
+         std::numeric_limits<RealType>::digits <= 53 ? 53 :
+         std::numeric_limits<RealType>::digits <= 64 ? 64 :
+         std::numeric_limits<RealType>::digits <= 113 ? 113 : -1
          >;
 
     return detail::pdf_impl(dist, x, tag_type());
@@ -292,19 +287,18 @@ inline RealType pdf(const von_mises_distribution<RealType, Policy>& dist, const 
 
 namespace detail {
 
-
 // We use the Fortran algorithm designed by Geoffrey W. Hill in
 // "Algorithm 518: Incomplete Bessel Function I0. The Von Mises Distribution", 1977, ACM
 // DOI: 10.1145/355744.355753
 template <typename RealType, typename Policy>
-RealType cdf_impl(const von_mises_distribution<RealType, Policy>& dist, const RealType& x)
+inline RealType cdf_impl(const von_mises_distribution<RealType, Policy>& dist, const RealType& x)
 {
-    BOOST_MATH_STD_USING
+    BOOST_MATH_STD_USING    // for ADL of std functions
 
-    const RealType conc = dist.concentration();
-    const RealType mean = dist.mean();
-    const RealType pi = boost::math::constants::pi<RealType>();
-    const RealType two_pi = boost::math::constants::two_pi<RealType>();
+    constexpr RealType pi = boost::math::constants::pi<RealType>();
+
+    RealType conc = dist.concentration();
+    RealType mean = dist.mean();
 
     RealType u = x - mean;
 
@@ -312,66 +306,53 @@ RealType cdf_impl(const von_mises_distribution<RealType, Policy>& dist, const Re
     {
         return 0;
     }
-    else if (u >= pi)
+    if (u >= pi)
     {
         return 1;
     }
 
-    constexpr auto digits = std::numeric_limits<RealType>::max_digits10 - 1;
-    constexpr auto digits_cubed = digits*digits*digits;
-    constexpr auto digits_sq = digits*digits;
+    RealType result = 0;
 
-    // Interplation of critical kappa values described in the above paper
-    // https://www.wolframalpha.com/input?i=interpolate%5B%286%2C+6.5%29%2C+%287%2C+8.0%29%2C+%288%2C+10.5%29%2C+%289%2C+15%29%2C+%2810%2C+21%29%2C+%2811%2C+32%29%2C+%2812%2C+50%29%5D
-    constexpr auto critical_kappa = -0.0152778*digits_cubed*digits_cubed + 0.825*digits_cubed*digits_sq - 
-                                    18.3194*digits_sq*digits_sq + 214.25*digits_cubed - 1391.67*digits_sq 
-                                    + 4760.43*digits - 6694.5;
+    // Extrapolation of critical kappa value
+    constexpr int digits = std::numeric_limits<RealType>::max_digits10 - 1;
+    constexpr RealType ck = ((0.1611 * digits - 2.8778) * digits + 18.45) * digits - 35.4;
 
-    // We can use the pre-calculated values from the paper if the precision is less than twelve digits
-    // otherwise we are going to have to calulate ourselves. 
-    RealType result;
-    BOOST_IF_CONSTEXPR (digits <= 12)
+    if (conc > ck) 
     {
-        if (conc > critical_kappa) 
-        {
-            RealType c = 24.0 * conc;
-            RealType v = c - 56;
-            RealType r = sqrt((54.0 / (347.0 / v + 26.0 - c) - 6.0 + c) / 12.0);
-            RealType z = sin(u / 2.0) * r;
-            RealType s = z * z * 2;
-            v = v - s + 3;
-            RealType y = (c - s - s - 16.0) / 3.0;
-            y = ((s + 1.75) * s + 83.5) / v - y;
-            result = boost::math::erf(z - s / (y * y) * z) / 2 + 0.5;
-        }
-        else 
-        {
-            RealType v = 0;
-            if (conc > 0) 
-            {
-                // extrapolation of the tables given in the paper
-                RealType a1 = (0.33 * digits - 2.6666) * digits + 12;
-                RealType a2 = (std::max)(0.5, (std::min)(1.5 - digits / 12, 1.0));
-                RealType a3 = 8; //digits <= 6 ? 3 : (1 << (digits - 5));
-                RealType a4 = digits <= 6 ? 1 : std::pow(1.5, digits - 8);
-
-                auto iterations = static_cast<int>(ceil(a1 + conc * a2 - a3 / (conc + a4)));
-                RealType r = 0;
-                RealType z = 2 / conc;
-                for (int j = iterations - 1; j > 0; --j) 
-                {
-                    RealType sj = sin(j * u);
-                    r = 1 / (j * z + r);
-                    v = (sj / j + v) * r;
-                }
-            }
-            result = (x - mean + boost::math::constants::pi<RealType>()) / 2;
-            result = (result + v) / boost::math::constants::pi<RealType>();
-        }
+        RealType c = 24 * conc;
+        RealType v = c - 56;
+        RealType r = sqrt((54 / (347 / v + 26 - c) - 6 + c) / 12);
+        RealType z = sin(u / 2) * r;
+        RealType s = z * z * 2;
+        v = v - s + 3;
+        RealType y = (c - s - s - 16) / 3;
+        y = ((s + static_cast<RealType>(7)/4) * s + static_cast<RealType>(167)/2) / v - y;
+        result = (1 + boost::math::erf(z - s / (y * y) * z)) / 2;
     }
     else
     {
-        
+        RealType v = 0;
+        if(conc > 0) 
+        {
+            // Extrapolation of the tables given in the paper used to estimate the number of iterations needed
+            constexpr RealType a1 = 0.357143 * digits * digits - 3.13286 * digits + 13.9286;
+            constexpr RealType a2 = 1.53571 - 0.0857143 * digits;
+            constexpr RealType a3 = 1.01389 * digits * digits * digits - 23.1488 * digits * digits + 177.349 * digits - 448.19;
+            constexpr RealType a4 = 0.178571 * digits * digits - 2.55 * digits + 9.87143;
+
+            auto iterations = static_cast<int>(ceil(a1 + conc * a2 - a3 / (conc + a4)));
+
+            RealType r = 0;
+            RealType z = 2 / conc;
+            for (auto j = iterations - 1; j > 0; --j) 
+            {
+                RealType sj = sin(j * u);
+                r = 1 / (j * z + r);
+                v = (sj / j + v) * r;
+            }
+        }
+        result = (x - mean + pi) / 2;
+        result = (result + v) / pi;
     }
 
     if (result < 0)
@@ -386,71 +367,6 @@ RealType cdf_impl(const von_mises_distribution<RealType, Policy>& dist, const Re
     return result;
 }
 
-/*
-template <typename RealType, typename Policy>
-inline RealType cdf_impl(const von_mises_distribution<RealType, Policy>& dist, const RealType& x)
-{
-    BOOST_MATH_STD_USING    // for ADL of std functions
-
-    RealType conc = dist.concentration();
-    RealType mean = dist.mean();
-
-    RealType u = x - mean;
-
-    if (u <= -boost::math::constants::pi<RealType>())
-    {
-        return 0;
-    }
-    if (u >= +boost::math::constants::pi<RealType>())
-    {
-        return 1;
-    }
-
-    // We use the Fortran algorithm designed by Geoffrey W. Hill in
-    // "Algorithm 518: Incomplete Bessel Function I0. The Von Mises Distribution", 1977, ACM
-    // DOI: 10.1145/355744.355753
-    RealType result = 0;
-
-    constexpr int digits = std::numeric_limits<RealType>::max_digits10 - 1;
-    RealType ck = ((0.1611*digits - 2.8778)*digits + 18.45)*digits - 35.4;
-    if (conc > ck) 
-    {
-        RealType c = 24.0 * conc;
-        RealType v = c - 56;
-        RealType r = sqrt((54.0 / (347.0 / v + 26.0 - c) - 6.0 + c) / 12.0);
-        RealType z = sin(u / 2.0) * r;
-        RealType s = z * z * 2;
-        v = v - s + 3;
-        RealType y = (c - s - s - 16.0) / 3.0;
-        y = ((s + 1.75) * s + 83.5) / v - y;
-        result = boost::math::erf(z - s / (y * y) * z) / 2 + 0.5;
-    }
-    else 
-    {
-        RealType v = 0;
-        if(conc > 0) {
-            // extrapolation of the tables given in the paper
-            RealType a1 = (0.33 * digits - 2.6666) * digits + 12;
-            RealType a2 = (std::max)(0.5, (std::min)(1.5 - digits / 12, 1.0));
-            RealType a3 = 8; //digits <= 6 ? 3 : (1 << (digits - 5));
-            RealType a4 = digits <= 6 ? 1 : std::pow(1.5, digits - 8);
-
-            auto iterations = static_cast<int>(ceil(a1 + conc * a2 - a3 / (conc + a4)));
-            RealType r = 0;
-            RealType z = 2 / conc;
-            for (int j = iterations - 1; j > 0; --j) {
-                RealType sj = sin(j * u);
-                r = 1 / (j * z + r);
-                v = (sj / j + v) * r;
-            }
-        }
-        result = (x - mean + boost::math::constants::pi<RealType>()) / 2;
-        result = (result + v) / boost::math::constants::pi<RealType>();
-    }
-
-    return result <= 0 ? 0 : (1 <= result ? 1 : result);
-}
-*/
 } // namespace detail
 
 template <typename RealType, typename Policy>
@@ -509,13 +425,11 @@ inline RealType quantile(const von_mises_distribution<RealType, Policy>& dist, c
         return +boost::math::constants::pi<RealType>();
 
     using tag_type = std::integral_constant<int,
-            ((std::numeric_limits<RealType>::digits == 0)
-                    || (std::numeric_limits<RealType>::radix != 2)) ? 0 :
+            ((std::numeric_limits<RealType>::digits == 0) || (std::numeric_limits<RealType>::radix != 2)) ? 0 :
             std::numeric_limits<RealType>::digits <= 24 ? 24 :
             std::numeric_limits<RealType>::digits <= 53 ? 53 :
             std::numeric_limits<RealType>::digits <= 64 ? 64 :
-            std::numeric_limits<RealType>::digits <= 113 ? 113 :
-            -1
+            std::numeric_limits<RealType>::digits <= 113 ? 113 : -1
             >;
 
     struct step_func 
@@ -523,8 +437,8 @@ inline RealType quantile(const von_mises_distribution<RealType, Policy>& dist, c
         const von_mises_distribution<RealType, Policy>& dist;
         const RealType p;
         std::pair<RealType, RealType> operator()(RealType x) {
-            return std::make_pair(detail::cdf_impl(dist, x) - p,                        // f(x)
-                                                        detail::pdf_impl(dist, x, tag_type()));     // f'(x)
+            return std::make_pair(detail::cdf_impl(dist, x) - p,              // f(x)
+                                  detail::pdf_impl(dist, x, tag_type()));     // f'(x)
         }
     };
 
@@ -600,13 +514,11 @@ inline RealType quantile(const complemented2_type<von_mises_distribution<RealTyp
     }
 
     using tag_type = std::integral_constant<int,
-            ((std::numeric_limits<RealType>::digits == 0)
-                    || (std::numeric_limits<RealType>::radix != 2)) ? 0 :
+            ((std::numeric_limits<RealType>::digits == 0) || (std::numeric_limits<RealType>::radix != 2)) ? 0 :
             std::numeric_limits<RealType>::digits <= 24 ? 24 :
             std::numeric_limits<RealType>::digits <= 53 ? 53 :
             std::numeric_limits<RealType>::digits <= 64 ? 64 :
-            std::numeric_limits<RealType>::digits <= 113 ? 113 :
-            -1
+            std::numeric_limits<RealType>::digits <= 113 ? 113 : -1
             >;
 
     struct step_func 
@@ -964,13 +876,11 @@ inline RealType variance(const von_mises_distribution<RealType, Policy>& dist)
 {
 
     using tag_type = std::integral_constant<int,
-            ((std::numeric_limits<RealType>::digits == 0)
-                    || (std::numeric_limits<RealType>::radix != 2)) ? 0 :
+            ((std::numeric_limits<RealType>::digits == 0) || (std::numeric_limits<RealType>::radix != 2)) ? 0 :
             std::numeric_limits<RealType>::digits <= 24 ? 24 :
             std::numeric_limits<RealType>::digits <= 53 ? 53 :
             std::numeric_limits<RealType>::digits <= 64 ? 64 :
-            std::numeric_limits<RealType>::digits <= 113 ? 113 :
-            -1
+            std::numeric_limits<RealType>::digits <= 113 ? 113 : -1
             >;
 
     return detail::variance_impl(dist, tag_type());
