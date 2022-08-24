@@ -127,6 +127,17 @@
 #  endif
 #endif
 
+#if !defined(BOOST_FORCEINLINE)
+#  if defined(_MSC_VER)
+#    define BOOST_FORCEINLINE __forceinline
+#  elif defined(__GNUC__) && __GNUC__ > 3
+     // Clang also defines __GNUC__ (as 4)
+#    define BOOST_FORCEINLINE inline __attribute__ ((__always_inline__))
+#  else
+#    define BOOST_FORCEINLINE inline
+#  endif
+#endif
+
 #endif // BOOST_MATH_STANDALONE
 
 // Support compilers with P0024R2 implemented without linking TBB
