@@ -751,8 +751,12 @@ BOOST_FORCEINLINE typename tools::promote_args<T>::type ellint_1(T k, const Poli
    typedef typename tools::promote_args<T>::type result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
    typedef std::integral_constant<int, 
+#if defined(__clang_major__) && (__clang_major__ == 7)
+      2
+#else
       std::is_floating_point<T>::value && std::numeric_limits<T>::digits && (std::numeric_limits<T>::digits <= 54) ? 0 :
       std::is_floating_point<T>::value && std::numeric_limits<T>::digits && (std::numeric_limits<T>::digits <= 64) ? 1 : 2
+#endif
    > precision_tag_type;
    return policies::checked_narrowing_cast<result_type, Policy>(detail::ellint_k_imp(static_cast<value_type>(k), pol, precision_tag_type()), "boost::math::ellint_1<%1%>(%1%)");
 }
