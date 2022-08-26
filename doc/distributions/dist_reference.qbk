@@ -38,6 +38,7 @@
 [include students_t.qbk]
 [include triangular.qbk]
 [include uniform.qbk]
+[include von_mises.qbk]
 [include weibull.qbk]
 [endsect] [/section:dists Distributions]
 

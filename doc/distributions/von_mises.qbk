@@ -1,0 +1,102 @@
+[/ 
+  Copyright 2022 Matt Borland.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+
+[section:von_mises_dist Von Mises Distribution]
+
+
+``#include <boost/math/distributions/von_mises.hpp>``
+
+   namespace boost{ namespace math{
+    template <typename RealType = double, 
+              typename ``__Policy``   = ``__policy_class`` >
+    class von_mises_distribution;
+      
+    using von_mises = von_mises_distribution<>;
+
+    template <typename RealType, typename ``__Policy``>
+    class von_mises_distribution
+    {
+    public:
+       using value_type = RealType;
+       using policy_type = Policy;
+
+       von_mises_distribution(RealType mean = 0, RealType concentration = 1); // Constructor.
+          : m_mean {maen}, m_conc {concentration} // Default is standard von_mises distribution.
+       // Accessor functions.
+       RealType mean() const;
+       RealType concentration() const;
+       RealType location() const;
+       RealType scale() const;
+    }; // class von_mises_distribution
+   
+   }} // namespaces
+   
+The [@https://en.wikipedia.org/wiki/Von_Mises_distribution von Mises distribution], also known as a the circular normal distribution,
+is a continuous probability distribution on a circle.
+
+[h4 Member Functions]
+
+   von_mises_distribution(RealType mean = 0, RealType concentration = 1); ;
+   
+Constructs a [@https://en.wikipedia.org/wiki/Von_Mises_distribution 
+von Mises Distribution] with mean /mean/, and concentration /concentration/.
+
+Requires that the /mean/ and /concentration/ parameters are both finite;
+otherwise if infinity or NaN then calls __domain_error.
+
+   RealType mean() const;
+   
+Returns the /mean/ parameter of this distribution.
+   
+   RealType concentration() const;
+      
+Returns the /concentration/ parameter of this distribution.
+
+    RealType location() const;
+
+Returns the /mean/ parameter as the location is synonymous but used in some definitions.
+
+    RealType scale() const;
+
+Returns the /concentration/ parameter as the location is synonymous but used in some definitions.
+
+[h4 Non-member Accessors]
+
+All the [link math_toolkit.dist_ref.nmp usual non-member accessor functions]
+that are generic to all distributions are supported: __usual_accessors.
+
+The domain of the random variable is O <= x <= 2[pi].
+
+[h4 Accuracy]
+
+The CDF of this distribution is not analytic so an approximation is made.
+For the accuracy on your specific platform please run reporting/accuracy/von_mises_ulps.cpp
+
+An example on Apple M1 Pro is below using double precsision calculations:
+
+*PDF with concentration of 4*
+
+[$../images/von_mises_ulps_pdf_4d.svg]
+
+*PDF with concentration of 64*
+
+[$../images/von_mises_ulps_pdf_64d.svg]
+
+*CDF with concentration of 4*
+
+[$../images/von_mises_ulps_cdf_4d.svg]
+
+*CDF with concentration of 64*
+
+[$../images/von_mises_ulps_cdf_64d.svg]
+
+[h4 References]
+* [@https://en.wikipedia.org/wiki/Von_Mises_distribution Wikipedia von Mises distribution]
+* [@https://mathworld.wolfram.com/vonMisesDistribution.html Weisstein, Eric W. "von Mises Distribution." From MathWorld--A Wolfram Web Resource.]
+* [@https://dl.acm.org/doi/pdf/10.1145/355744.355753]
+
+[endsect] [/section:von_mises_dist Von Mises]
