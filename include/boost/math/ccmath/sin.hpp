@@ -10,7 +10,6 @@
 #include <type_traits>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/tools/is_constant_evaluated.hpp>
-#include <boost/math/tools/big_constant.hpp>
 #include <boost/math/tools/config.hpp>
 #include <boost/math/ccmath/abs.hpp>
 #include <boost/math/ccmath/isinf.hpp>
@@ -23,16 +22,16 @@ namespace detail {
 template <typename T>
 [[nodiscard]] constexpr T sin_impl(T x) noexcept
 {
-    // Precalculated coeffs from the minmax polynomial for up to __float128
+    // Precalculated coeffs from the minmax polynomial for up to 128 bit long doubles
     // error not to exceed 2e-16 in the range [-pi/2, pi/2]
-    constexpr T a0 = BOOST_MATH_LARGEST_FLOAT_C(+1);
-    constexpr T a1 = BOOST_MATH_LARGEST_FLOAT_C(-1.666666666666580809419428987894207e-1);
-    constexpr T a2 = BOOST_MATH_LARGEST_FLOAT_C(+8.333333333262716094425037738346873e-3);
-    constexpr T a3 = BOOST_MATH_LARGEST_FLOAT_C(-1.984126982005911439283646346964929e-4);
-    constexpr T a4 = BOOST_MATH_LARGEST_FLOAT_C(+2.755731607338689220657382272783309e-6);
-    constexpr T a5 = BOOST_MATH_LARGEST_FLOAT_C(-2.505185130214293595900283001271652e-8);
-    constexpr T a6 = BOOST_MATH_LARGEST_FLOAT_C(+1.604729591825977403374012010065495e-10);
-    constexpr T a7 = BOOST_MATH_LARGEST_FLOAT_C(-7.364589573262279913270651228486670e-13);
+    constexpr auto a0 = static_cast<T>(+1L);
+    constexpr auto a1 = static_cast<T>(-1.666666666666580809419428987894207e-1L);
+    constexpr auto a2 = static_cast<T>(+8.333333333262716094425037738346873e-3L);
+    constexpr auto a3 = static_cast<T>(-1.984126982005911439283646346964929e-4L);
+    constexpr auto a4 = static_cast<T>(+2.755731607338689220657382272783309e-6L);
+    constexpr auto a5 = static_cast<T>(-2.505185130214293595900283001271652e-8L);
+    constexpr auto a6 = static_cast<T>(+1.604729591825977403374012010065495e-10L);
+    constexpr auto a7 = static_cast<T>(-7.364589573262279913270651228486670e-13L);
     
     const T x2 = x * x;
     const T x3 = x2 * x;
