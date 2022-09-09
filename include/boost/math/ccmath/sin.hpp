@@ -14,6 +14,7 @@
 #include <boost/math/ccmath/abs.hpp>
 #include <boost/math/ccmath/isinf.hpp>
 #include <boost/math/ccmath/isnan.hpp>
+#include <boost/math/ccmath/fma.hpp>
 
 namespace boost::math::ccmath {
 
@@ -22,6 +23,8 @@ namespace detail {
 template <typename T>
 [[nodiscard]] constexpr T sin_impl(T x) noexcept
 {
+    using boost::math::ccmath::fma;
+
     // Precalculated coeffs from the minmax polynomial for up to 128 bit long doubles
     // error not to exceed 2e-16 in the range [-pi/2, pi/2]
     constexpr auto a0 = static_cast<T>(+1L);
@@ -39,11 +42,11 @@ template <typename T>
     const T x8 = x4 * x4;
     const T x9 = x8 * x;
 
-    const T A = x3 * (a1 + x2 * (a2 + x2 * a3));
-    const T B = a4 + x2 * (a5 + x2 * (a6 + x2 * a7));
+    const T A = x3 * (fma(fma(x2, a3, a2), x2, a1));
+    const T B = fma(fma(fma(x2, a7, a6), x2, a5), x2, a4);
     const T C = a0 * x;
 
-    return A + C + x9 * B;
+    return fma(x9, B, C) + A;
 }
 
 }
