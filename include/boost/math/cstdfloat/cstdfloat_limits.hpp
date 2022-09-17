@@ -37,7 +37,7 @@
     #endif
 
     // Forward declaration of the quadruple-precision square root function.
-    extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_SQRT(boost::math::cstdfloat::detail::float_internal128_t) throw();
+    extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_SQRT(boost::math::cstdfloat::detail::float_internal128_t) BOOST_NOEXCEPT_OR_NOTHROW;
 
     namespace std
     {
