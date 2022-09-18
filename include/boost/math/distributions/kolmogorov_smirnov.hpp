@@ -184,7 +184,7 @@ inline RealType kolmogorov_smirnov_pdf_large_x(RealType x, RealType n, const Pol
     return value * n;
 }
 
-}; // detail
+} // detail
 
 template <class RealType = double, class Policy = policies::policy<> >
     class kolmogorov_smirnov_distribution
