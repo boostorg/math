@@ -27,6 +27,7 @@
   #if defined(BOOST_CSTDFLOAT_HAS_INTERNAL_FLOAT128_T) && defined(BOOST_MATH_USE_FLOAT128) && !defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_SUPPORT)
 
     #include <limits>
+    #include <boost/math/tools/nothrow.hpp>
 
     // Define the name of the global quadruple-precision function to be used for
     // calculating quiet_NaN() in the specialization of std::numeric_limits<>.
