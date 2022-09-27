@@ -42,16 +42,16 @@ template<>
 struct numeric_limits<boost::math::concepts::std_real_concept>
 {
    static const bool is_specialized = true;
-   static boost::math::concepts::std_real_concept min NULL_MACRO() throw();
-   static boost::math::concepts::std_real_concept max NULL_MACRO() throw();
+   static boost::math::concepts::std_real_concept min NULL_MACRO() BOOST_NOEXCEPT_OR_NOTHROW;
+   static boost::math::concepts::std_real_concept max NULL_MACRO() BOOST_NOEXCEPT_OR_NOTHROW;
    static const int digits = 24;
    static const int digits10 = 6;
    static const bool is_signed = true;
    static const bool is_integer = false;
    static const bool is_exact = false;
    static const int radix = 2;
-   static boost::math::concepts::std_real_concept epsilon() throw();
-   static boost::math::concepts::std_real_concept round_error() throw();
+   static boost::math::concepts::std_real_concept epsilon() BOOST_NOEXCEPT_OR_NOTHROW;
+   static boost::math::concepts::std_real_concept round_error() BOOST_NOEXCEPT_OR_NOTHROW;
    static const int min_exponent = -125;
    static const int min_exponent10 = -37;
    static const int max_exponent = 128;
@@ -61,10 +61,10 @@ struct numeric_limits<boost::math::concepts::std_real_concept>
    static const bool has_signaling_NaN = true;
    static const float_denorm_style has_denorm = denorm_absent;
    static const bool has_denorm_loss = false;
-   static boost::math::concepts::std_real_concept infinity() throw();
-   static boost::math::concepts::std_real_concept quiet_NaN() throw();
-   static boost::math::concepts::std_real_concept signaling_NaN() throw();
-   static boost::math::concepts::std_real_concept denorm_min() throw();
+   static boost::math::concepts::std_real_concept infinity() BOOST_NOEXCEPT_OR_NOTHROW;
+   static boost::math::concepts::std_real_concept quiet_NaN() BOOST_NOEXCEPT_OR_NOTHROW;
+   static boost::math::concepts::std_real_concept signaling_NaN() BOOST_NOEXCEPT_OR_NOTHROW;
+   static boost::math::concepts::std_real_concept denorm_min() BOOST_NOEXCEPT_OR_NOTHROW;
    static const bool is_iec559 = true;
    static const bool is_bounded = false;
    static const bool is_modulo = false;
@@ -80,16 +80,16 @@ template<>
 struct numeric_limits<boost::math::concepts::std_real_concept>
 {
    static const bool is_specialized = true;
-   static boost::math::concepts::std_real_concept min NULL_MACRO() throw();
-   static boost::math::concepts::std_real_concept max NULL_MACRO() throw();
+   static boost::math::concepts::std_real_concept min NULL_MACRO() BOOST_NOEXCEPT_OR_NOTHROW;
+   static boost::math::concepts::std_real_concept max NULL_MACRO() BOOST_NOEXCEPT_OR_NOTHROW;
    static const int digits = 53;
    static const int digits10 = 15;
    static const bool is_signed = true;
    static const bool is_integer = false;
    static const bool is_exact = false;
    static const int radix = 2;
-   static boost::math::concepts::std_real_concept epsilon() throw();
-   static boost::math::concepts::std_real_concept round_error() throw();
+   static boost::math::concepts::std_real_concept epsilon() BOOST_NOEXCEPT_OR_NOTHROW;
+   static boost::math::concepts::std_real_concept round_error() BOOST_NOEXCEPT_OR_NOTHROW;
    static const int min_exponent = -1021;
    static const int min_exponent10 = -307;
    static const int max_exponent = 1024;
@@ -99,10 +99,10 @@ struct numeric_limits<boost::math::concepts::std_real_concept>
    static const bool has_signaling_NaN = true;
    static const float_denorm_style has_denorm = denorm_absent;
    static const bool has_denorm_loss = false;
-   static boost::math::concepts::std_real_concept infinity() throw();
-   static boost::math::concepts::std_real_concept quiet_NaN() throw();
-   static boost::math::concepts::std_real_concept signaling_NaN() throw();
-   static boost::math::concepts::std_real_concept denorm_min() throw();
+   static boost::math::concepts::std_real_concept infinity() BOOST_NOEXCEPT_OR_NOTHROW;
+   static boost::math::concepts::std_real_concept quiet_NaN() BOOST_NOEXCEPT_OR_NOTHROW;
+   static boost::math::concepts::std_real_concept signaling_NaN() BOOST_NOEXCEPT_OR_NOTHROW;
+   static boost::math::concepts::std_real_concept denorm_min() BOOST_NOEXCEPT_OR_NOTHROW;
    static const bool is_iec559 = true;
    static const bool is_bounded = false;
    static const bool is_modulo = false;
@@ -118,16 +118,16 @@ template<>
 struct numeric_limits<boost::math::concepts::std_real_concept>
 {
    static const bool is_specialized = true;
-   static boost::math::concepts::std_real_concept min NULL_MACRO() throw();
-   static boost::math::concepts::std_real_concept max NULL_MACRO() throw();
+   static boost::math::concepts::std_real_concept min NULL_MACRO() BOOST_NOEXCEPT_OR_NOTHROW;
+   static boost::math::concepts::std_real_concept max NULL_MACRO() BOOST_NOEXCEPT_OR_NOTHROW;
    static const int digits = 64;
    static const int digits10 = 18;
    static const bool is_signed = true;
    static const bool is_integer = false;
    static const bool is_exact = false;
    static const int radix = 2;
-   static boost::math::concepts::std_real_concept epsilon() throw();
-   static boost::math::concepts::std_real_concept round_error() throw();
+   static boost::math::concepts::std_real_concept epsilon() BOOST_NOEXCEPT_OR_NOTHROW;
+   static boost::math::concepts::std_real_concept round_error() BOOST_NOEXCEPT_OR_NOTHROW;
    static const int min_exponent = -16381;
    static const int min_exponent10 = -4931;
    static const int max_exponent = 16384;
@@ -137,10 +137,10 @@ struct numeric_limits<boost::math::concepts::std_real_concept>
    static const bool has_signaling_NaN = true;
    static const float_denorm_style has_denorm = denorm_absent;
    static const bool has_denorm_loss = false;
-   static boost::math::concepts::std_real_concept infinity() throw();
-   static boost::math::concepts::std_real_concept quiet_NaN() throw();
-   static boost::math::concepts::std_real_concept signaling_NaN() throw();
-   static boost::math::concepts::std_real_concept denorm_min() throw();
+   static boost::math::concepts::std_real_concept infinity() BOOST_NOEXCEPT_OR_NOTHROW;
+   static boost::math::concepts::std_real_concept quiet_NaN() BOOST_NOEXCEPT_OR_NOTHROW;
+   static boost::math::concepts::std_real_concept signaling_NaN() BOOST_NOEXCEPT_OR_NOTHROW;
+   static boost::math::concepts::std_real_concept denorm_min() BOOST_NOEXCEPT_OR_NOTHROW;
    static const bool is_iec559 = true;
    static const bool is_bounded = false;
    static const bool is_modulo = false;
@@ -156,16 +156,16 @@ template<>
 struct numeric_limits<boost::math::concepts::std_real_concept>
 {
    static const bool is_specialized = true;
-   static boost::math::concepts::std_real_concept min NULL_MACRO() throw();
-   static boost::math::concepts::std_real_concept max NULL_MACRO() throw();
+   static boost::math::concepts::std_real_concept min NULL_MACRO() BOOST_NOEXCEPT_OR_NOTHROW;
+   static boost::math::concepts::std_real_concept max NULL_MACRO() BOOST_NOEXCEPT_OR_NOTHROW;
    static const int digits = 113;
    static const int digits10 = 33;
    static const bool is_signed = true;
    static const bool is_integer = false;
    static const bool is_exact = false;
    static const int radix = 2;
-   static boost::math::concepts::std_real_concept epsilon() throw();
-   static boost::math::concepts::std_real_concept round_error() throw();
+   static boost::math::concepts::std_real_concept epsilon() BOOST_NOEXCEPT_OR_NOTHROW;
+   static boost::math::concepts::std_real_concept round_error() BOOST_NOEXCEPT_OR_NOTHROW;
    static const int min_exponent = -16381;
    static const int min_exponent10 = -4931;
    static const int max_exponent = 16384;
@@ -175,10 +175,10 @@ struct numeric_limits<boost::math::concepts::std_real_concept>
    static const bool has_signaling_NaN = true;
    static const float_denorm_style has_denorm = denorm_absent;
    static const bool has_denorm_loss = false;
-   static boost::math::concepts::std_real_concept infinity() throw();
-   static boost::math::concepts::std_real_concept quiet_NaN() throw();
-   static boost::math::concepts::std_real_concept signaling_NaN() throw();
-   static boost::math::concepts::std_real_concept denorm_min() throw();
+   static boost::math::concepts::std_real_concept infinity() BOOST_NOEXCEPT_OR_NOTHROW;
+   static boost::math::concepts::std_real_concept quiet_NaN() BOOST_NOEXCEPT_OR_NOTHROW;
+   static boost::math::concepts::std_real_concept signaling_NaN() BOOST_NOEXCEPT_OR_NOTHROW;
+   static boost::math::concepts::std_real_concept denorm_min() BOOST_NOEXCEPT_OR_NOTHROW;
    static const bool is_iec559 = true;
    static const bool is_bounded = false;
    static const bool is_modulo = false;
