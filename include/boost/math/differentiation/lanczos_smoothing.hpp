@@ -569,8 +569,8 @@ public:
     discrete_lanczos_derivative& operator=(const discrete_lanczos_derivative&) = delete;
 
     // Allow moves:
-    discrete_lanczos_derivative(discrete_lanczos_derivative&&) = default;
-    discrete_lanczos_derivative& operator=(discrete_lanczos_derivative&&) = default;
+    discrete_lanczos_derivative(discrete_lanczos_derivative&&) noexcept = default;
+    discrete_lanczos_derivative& operator=(discrete_lanczos_derivative&&) noexcept = default;
 
 private:
     std::vector<Real> m_f;

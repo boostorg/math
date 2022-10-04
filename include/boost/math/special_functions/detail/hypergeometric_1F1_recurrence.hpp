@@ -36,7 +36,7 @@
     {
     }
 
-    explicit hypergeometric_1F1_recurrence_a_coefficients(const hypergeometric_1F1_recurrence_a_coefficients&) = default;
+    hypergeometric_1F1_recurrence_a_coefficients(const hypergeometric_1F1_recurrence_a_coefficients&) = default;
 
     hypergeometric_1F1_recurrence_a_coefficients operator=(const hypergeometric_1F1_recurrence_a_coefficients&) = delete;
 
@@ -67,7 +67,7 @@
     {
     }
 
-    explicit hypergeometric_1F1_recurrence_b_coefficients(const hypergeometric_1F1_recurrence_b_coefficients&) = default;
+    hypergeometric_1F1_recurrence_b_coefficients(const hypergeometric_1F1_recurrence_b_coefficients&) = default;
 
     hypergeometric_1F1_recurrence_b_coefficients& operator=(const hypergeometric_1F1_recurrence_b_coefficients&) = delete;
 
@@ -100,7 +100,7 @@
      {
      }
 
-     explicit hypergeometric_1F1_recurrence_small_b_coefficients(const hypergeometric_1F1_recurrence_small_b_coefficients&) = default;
+     hypergeometric_1F1_recurrence_small_b_coefficients(const hypergeometric_1F1_recurrence_small_b_coefficients&) = default;
 
      hypergeometric_1F1_recurrence_small_b_coefficients operator=(const hypergeometric_1F1_recurrence_small_b_coefficients&) = delete;
 

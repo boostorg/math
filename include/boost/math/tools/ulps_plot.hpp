@@ -212,11 +212,11 @@ public:
         else
         {
             std::vector<double> ys{-3.0, -2.5, -2.0, -1.5, -1.0, -0.5, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0};
-            for (size_t i = 0; i < ys.size(); ++i)
+            for (double & i : ys)
             {
-                if (min_y <= ys[i] && ys[i] <= max_y)
+                if (min_y <= i && i <= max_y)
                 {
-                    PreciseReal y_cord_dataspace = ys[i];
+                    PreciseReal y_cord_dataspace = i;
                     PreciseReal y = y_scale(y_cord_dataspace);
                     fs << "<line x1='0' y1='" << y << "' x2='" << graph_width
                        << "' y2='" << y

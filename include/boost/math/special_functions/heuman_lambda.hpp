@@ -12,7 +12,6 @@
 
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/ellint_rj.hpp>
-#include <boost/math/special_functions/ellint_rj.hpp>
 #include <boost/math/special_functions/ellint_1.hpp>
 #include <boost/math/special_functions/jacobi_zeta.hpp>
 #include <boost/math/constants/constants.hpp>

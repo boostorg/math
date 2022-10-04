@@ -65,8 +65,8 @@ namespace detail
      int k;
      const T m_x;
      T m_term;
-     expm1_series(const expm1_series&);
-     expm1_series& operator=(const expm1_series&);
+     expm1_series(const expm1_series&) = delete;
+     expm1_series& operator=(const expm1_series&) = delete;
   };
 
 template <class T, class Policy, class tag>

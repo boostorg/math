@@ -50,7 +50,7 @@ namespace boost {
                }
 
             private:
-               function_ratio_from_backwards_recurrence_fraction operator=(const function_ratio_from_backwards_recurrence_fraction&);
+               function_ratio_from_backwards_recurrence_fraction operator=(const function_ratio_from_backwards_recurrence_fraction&) = delete;
 
                Recurrence r;
                int k;

@@ -641,7 +641,7 @@ struct normalise<policy<detail::forwarding_arg1, detail::forwarding_arg2>,
 };
 
 inline constexpr policy<> make_policy() noexcept
-{ return policy<>(); }
+{ return {}; }
 
 template <class A1>
 inline constexpr typename normalise<policy<>, A1>::type make_policy(const A1&) noexcept
@@ -948,7 +948,7 @@ struct method_error_check
 {
    using domain_error_type = typename Policy::domain_error_type;
    using type = typename std::conditional<
-      (domain_error_type::value == throw_on_error) && (domain_error_type::value != user_error),
+      (domain_error_type::value == throw_on_error),
       std::false_type,
       std::true_type>::type;
 };

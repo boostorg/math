@@ -23,7 +23,6 @@
 #include <numeric>
 #include <utility>
 #include <iterator>
-#include <type_traits>
 #include <boost/math/tools/assert.hpp>
 #include <boost/math/tools/config.hpp>
 
