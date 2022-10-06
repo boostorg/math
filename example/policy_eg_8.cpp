@@ -39,7 +39,7 @@ boost/math/policies/error_handling.hpp like this:
    template <class T>
    T user_evaluation_error(const char* function, const char* message, const T& val);
    template <class T, class TargetType>
-   T user_rounding_error(const char* function, const char* message, const T& val, const TargetType& t);
+   TargetType user_rounding_error(const char* function, const char* message, const T& val, const TargetType& t);
    template <class T>
    T user_indeterminate_result_error(const char* function, const char* message, const T& val);
 

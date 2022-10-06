@@ -74,7 +74,7 @@ T user_denorm_error(const char* function, const char* message, const T& val);
 template <class T>
 T user_evaluation_error(const char* function, const char* message, const T& val);
 template <class T, class TargetType>
-T user_rounding_error(const char* function, const char* message, const T& val, const TargetType& t);
+TargetType user_rounding_error(const char* function, const char* message, const T& val, const TargetType& t);
 template <class T>
 T user_indeterminate_result_error(const char* function, const char* message, const T& val);
 
@@ -561,7 +561,7 @@ inline constexpr TargetType raise_rounding_error(
 {
    // This may or may not do the right thing, but the user asked for the error
    // to be ignored so here we go anyway:
-   static_assert(std::numeric_limits<TargetType>::is_specialized, "The target type must be specialized.");
+   static_assert(std::numeric_limits<TargetType>::is_specialized, "The target type must have std::numeric_limits specialized.");
    return  val > 0 ? (std::numeric_limits<TargetType>::max)() : (std::numeric_limits<TargetType>::is_integer ? (std::numeric_limits<TargetType>::min)() : -(std::numeric_limits<TargetType>::max)());
 }
 
@@ -576,16 +576,16 @@ inline TargetType raise_rounding_error(
    errno = ERANGE;
    // This may or may not do the right thing, but the user asked for the error
    // to be silent so here we go anyway:
-   static_assert(std::numeric_limits<TargetType>::is_specialized, "The target type must be specialized.");
+   static_assert(std::numeric_limits<TargetType>::is_specialized, "The target type must have std::numeric_limits specialized.");
    return  val > 0 ? (std::numeric_limits<TargetType>::max)() : (std::numeric_limits<TargetType>::is_integer ? (std::numeric_limits<TargetType>::min)() : -(std::numeric_limits<TargetType>::max)());
 }
 
-template <class T>
-inline T raise_rounding_error(
+template <class T, class TargetType>
+inline TargetType raise_rounding_error(
            const char* ,
            const char* ,
            const T& val,
-           const T&,
+           const TargetType&,
            const  ::boost::math::policies::rounding_error< ::boost::math::policies::errno_on_error>&) BOOST_MATH_NOEXCEPT(T)
 {
    errno = ERANGE;
