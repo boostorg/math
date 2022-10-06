@@ -317,7 +317,12 @@ namespace boost { namespace math { namespace detail {
 
       // other checks:
       if (a == -1)
-         return 1 - (z / b);
+      {
+         T r = 1 - (z / b);
+         if (fabs(r) < 0.5)
+            r = (b - z) / b;
+         return r;
+      }
 
       const T b_minus_a = b - a;
 
