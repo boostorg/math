@@ -324,6 +324,17 @@ namespace boost { namespace math { namespace detail {
       // 0f0 a == b case;
       if (b_minus_a == 0)
       {
+         if ((a < 0) && (floor(a) == a))
+         {
+            // Special case, use the truncated series to match what Mathematica does.
+            if ((a < -20) && (z > 0) && (z < 1))
+            {
+               // https://functions.wolfram.com/HypergeometricFunctions/Hypergeometric1F1/03/01/04/02/0002/
+               return exp(z) * boost::math::gamma_q(1 - a, z, pol);
+            }
+            // https://functions.wolfram.com/HypergeometricFunctions/Hypergeometric1F1/03/01/04/02/0003/
+            return hypergeometric_1F1_checked_series_impl(a, b, z, pol, log_scaling);
+         }
          long long scale = lltrunc(z, pol);
          log_scaling += scale;
          return exp(z - scale);
