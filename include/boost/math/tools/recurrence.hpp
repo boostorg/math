@@ -209,7 +209,7 @@ namespace boost {
             {
                tie(a, b, c) = get_coefs(-static_cast<int>(k));
 
-               if ((log_scaling) &&
+               if ((log_scaling) && (second != 0) &&
                   ( (fabs(tools::max_value<T>() * (a / b) / 2048) < fabs(second))
                      || (fabs(tools::max_value<T>() * (a / c) / 2048) < fabs(first))
                      || (fabs(tools::min_value<T>() * (a / b) * 2048) > fabs(second))

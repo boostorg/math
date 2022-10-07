@@ -330,6 +330,8 @@
        first = 1;
        ak -= 1;
        second = 1 - z / b;
+       if (fabs(second) < 0.5)
+          second = (b - z) / b;  // cancellation avoidance
     }
     else
     {
