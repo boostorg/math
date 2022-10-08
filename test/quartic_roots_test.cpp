@@ -124,6 +124,23 @@ void test_zero_coefficients()
     }
 }
 
+void issue_825() {
+    using std::sqrt;
+    using std::cbrt;
+    double a = 1;
+    double b = 1;
+    double c = 1;
+    double d = 1;
+    double e = -4;
+    auto roots = boost::math::tools::quartic_roots(a, b, c, d, e);
+    // The real roots are 1 and -1.6506
+    // Wolfram alpha: Roots[x^4 + x^3 + x^2 + x == 4]
+    double expected = (-2  - cbrt(25/(3*sqrt(6.0) - 7)) + cbrt(5*(3*sqrt(6.0) - 7)))/3;
+    CHECK_ULP_CLOSE(expected, roots[0], 5);
+    CHECK_ULP_CLOSE(1, roots[1], 5);
+    CHECK_NAN(roots[2]);
+    CHECK_NAN(roots[3]);
+}
 
 int main()
 {
@@ -132,5 +149,6 @@ int main()
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_zero_coefficients<long double>();
 #endif
+    issue_825();
     return boost::math::test::report_errors();
 }
