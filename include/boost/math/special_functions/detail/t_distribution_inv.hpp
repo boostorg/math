@@ -204,7 +204,7 @@ T inverse_students_t_body_series(T df, T u, const Policy& pol)
 }
 
 template <class T, class Policy>
-T inverse_students_t(T df, T u, T v, const Policy& pol, bool* pexact = 0)
+T inverse_students_t(T df, T u, T v, const Policy& pol, bool* pexact = nullptr)
 {
    //
    // df = number of degrees of freedom.

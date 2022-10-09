@@ -152,8 +152,7 @@ void raise_error(const char* pfunction, const char* message)
   msg += ": ";
   msg += message;
 
-  E e(msg);
-  BOOST_MATH_THROW_EXCEPTION(e)
+  BOOST_MATH_THROW_EXCEPTION(E(msg))
 }
 
 template <class E, class T>
@@ -183,8 +182,7 @@ void raise_error(const char* pfunction, const char* pmessage, const T& val)
   replace_all_in_string(message, "%1%", sval.c_str());
   msg += message;
 
-  E e(msg);
-  BOOST_MATH_THROW_EXCEPTION(e)
+  BOOST_MATH_THROW_EXCEPTION(E(msg))
 }
 #endif
 

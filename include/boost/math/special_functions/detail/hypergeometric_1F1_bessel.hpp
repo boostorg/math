@@ -148,7 +148,7 @@
         int n, cache_offset;
         long long log_scale;
 
-        hypergeometric_1F1_AS_13_3_7_tricomi_series operator=(const hypergeometric_1F1_AS_13_3_7_tricomi_series&);
+        hypergeometric_1F1_AS_13_3_7_tricomi_series operator=(const hypergeometric_1F1_AS_13_3_7_tricomi_series&) = delete;
 
         void refill_cache()
         {
@@ -559,9 +559,9 @@
               *j *= ratio;
         }
 
-        hypergeometric_1F1_AS_13_3_6_series();
-        hypergeometric_1F1_AS_13_3_6_series(const hypergeometric_1F1_AS_13_3_6_series&);
-        hypergeometric_1F1_AS_13_3_6_series& operator=(const hypergeometric_1F1_AS_13_3_6_series&);
+        hypergeometric_1F1_AS_13_3_6_series() = delete;
+        hypergeometric_1F1_AS_13_3_6_series(const hypergeometric_1F1_AS_13_3_6_series&) = delete;
+        hypergeometric_1F1_AS_13_3_6_series& operator=(const hypergeometric_1F1_AS_13_3_6_series&) = delete;
      };
 
      template <class T, class Policy>

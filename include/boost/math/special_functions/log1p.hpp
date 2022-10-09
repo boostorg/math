@@ -65,8 +65,8 @@ namespace detail
      int k;
      const T m_mult;
      T m_prod;
-     log1p_series(const log1p_series&);
-     log1p_series& operator=(const log1p_series&);
+     log1p_series(const log1p_series&) = delete;
+     log1p_series& operator=(const log1p_series&) = delete;
   };
 
 // Algorithm log1p is part of C99, but is not yet provided by many compilers.
