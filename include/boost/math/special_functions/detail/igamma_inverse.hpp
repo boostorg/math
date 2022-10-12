@@ -362,10 +362,19 @@ struct gamma_p_inverse_func
       T f2;
       T div = (a - x - 1) / x;
       f2 = f1;
-      if((fabs(div) > 1) && (tools::max_value<T>() / fabs(div) < f2))
+      if(fabs(div) > 1)
       {
-         // overflow:
-         f2 = -tools::max_value<T>() / 2;
+         // split if statement to address M1 mac clang bug;
+         // see issue 826
+         if (tools::max_value<T>() / fabs(div) < f2)
+         {
+            // overflow:
+            f2 = -tools::max_value<T>() / 2;
+         }
+         else
+         {
+            f2 *= div;
+         }
       }
       else
       {
