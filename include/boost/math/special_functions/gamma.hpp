@@ -58,7 +58,7 @@ template <class T>
 inline bool is_odd(T v, const std::true_type&)
 {
    int i = static_cast<int>(v);
-   return i&1;
+   return (i & 1) == 1;
 }
 template <class T>
 inline bool is_odd(T v, const std::false_type&)
@@ -66,7 +66,7 @@ inline bool is_odd(T v, const std::false_type&)
    // Oh dear can't cast T to int!
    BOOST_MATH_STD_USING
    T modulus = v - 2 * floor(v/2);
-   return static_cast<bool>(modulus != 0);
+   return modulus != 0;
 }
 template <class T>
 inline bool is_odd(T v)
