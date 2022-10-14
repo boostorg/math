@@ -61,13 +61,10 @@ T legendre_imp(unsigned l, T x, const Policy& pol, bool second = false)
    if(l == 0)
       return p0;
 
-   unsigned n = 1;
-
-   while(n < l)
+   for (unsigned n = 1; n < l; ++n)
    {
       std::swap(p0, p1);
       p1 = boost::math::legendre_next(n, x, p0, p1);
-      ++n;
    }
    return p1;
 }
@@ -100,7 +97,7 @@ T legendre_p_prime_imp(unsigned l, T x, const Policy& pol, T* Pn
     T p0 = 1;
     T p1 = x;
     T p_prime;
-    bool odd = (l & 1 == 1);
+    bool odd = ((l & 1) == 1);
     // If the order is odd, we sum all the even polynomials:
     if (odd)
     {
