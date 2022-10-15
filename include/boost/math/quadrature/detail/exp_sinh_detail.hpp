@@ -21,7 +21,6 @@
 
 namespace boost{ namespace math{ namespace quadrature { namespace detail{
 
-
 // Returns the exp-sinh quadrature of a function f over the open interval (0, infinity)
 
 template<class Real, class Policy>
@@ -227,7 +226,7 @@ auto exp_sinh_detail<Real, Policy>::integrate(const F& f, Real* error, Real* L1,
         auto weight_row = get_weight_row(i);
 
         first_j = first_j == 0 ? 0 : 2 * first_j - 1;  // appoximate location to start looking for lowest meaningful abscissa value
-        Real abterm1 = 1;
+        BOOST_MATH_MAYBE_UNUSED Real abterm1 = 1;
         std::size_t j = first_j;
         while (abscissas_row[j] < min_abscissa)
            ++j;
