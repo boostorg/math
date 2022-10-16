@@ -146,6 +146,23 @@
 #  define BOOST_MATH_EXEC_COMPATIBLE
 #endif
 
+// Attributes from C++14 and newer
+#ifdef __has_cpp_attribute
+
+// C++17
+#if (__cplusplus >= 201703L || _MSVC_LANG >= 201703L)
+#  if __has_cpp_attribute(maybe_unused)
+#    define BOOST_MATH_MAYBE_UNUSED [[maybe_unused]]
+#  endif
+#endif
+
+#endif
+
+// If attributes are not defined make sure we don't have compiler errors
+#ifndef BOOST_MATH_MAYBE_UNUSED
+#  define BOOST_MATH_MAYBE_UNUSED 
+#endif
+
 #include <algorithm>  // for min and max
 #include <limits>
 #include <cmath>
