@@ -12,6 +12,7 @@
 #include <type_traits>
 #include <limits>
 #include <boost/math/tools/is_constant_evaluated.hpp>
+#include <boost/math/concepts/concepts.hpp>
 #include <boost/math/ccmath/isnan.hpp>
 #include <boost/math/ccmath/isinf.hpp>
 
@@ -19,7 +20,7 @@ namespace boost::math::ccmath {
 
 namespace detail {
 
-template <typename T> 
+template <BOOST_MATH_ARITHMETIC T> 
 inline constexpr T abs_impl(T x) noexcept
 {
     return boost::math::ccmath::isnan(x) ? std::numeric_limits<T>::quiet_NaN() : 
@@ -32,6 +33,7 @@ inline constexpr T abs_impl(T x) noexcept
 } // Namespace detail
 
 template <typename T, std::enable_if_t<!std::is_unsigned_v<T>, bool> = true>
+    BOOST_MATH_REQUIRES(BOOST_MATH_SIGNED_ARITHMETIC, T)
 inline constexpr T abs(T x) noexcept
 {
     if(BOOST_MATH_IS_CONSTANT_EVALUATED(x))
@@ -48,6 +50,7 @@ inline constexpr T abs(T x) noexcept
 // If abs() is called with an argument of type X for which is_unsigned_v<X> is true and if X
 // cannot be converted to int by integral promotion (7.3.7), the program is ill-formed.
 template <typename T, std::enable_if_t<std::is_unsigned_v<T>, bool> = true>
+    BOOST_MATH_REQUIRES(BOOST_MATH_UNSIGNED_ARITHMETIC, T)
 inline constexpr T abs(T x) noexcept
 {
     if constexpr (std::is_convertible_v<T, int>)

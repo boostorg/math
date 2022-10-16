@@ -1645,6 +1645,46 @@ alias no_eh_tests :
 
 explicit no_eh_tests ;
 
+# alias for the ccmath tests
+
+alias ccmath_tests :
+  ccmath_abs_test
+  ccmath_ceil_test
+  ccmath_copysign_test
+  ccmath_div_test
+  ccmath_fdim_test
+  ccmath_floor_test
+  ccmath_fma_test
+  ccmath_fmax_test
+  ccmath_fmin_test
+  ccmath_fmod_test
+  ccmath_fpclassify_test
+  ccmath_frexp_test
+  ccmath_hypot_test
+  ccmath_ilogb_test
+  ccmath_isfinite_test
+  ccmath_isgreater_test
+  ccmath_isgreaterequal_test
+  ccmath_isinf_test
+  ccmath_isless_test
+  ccmath_islessequal_test
+  ccmath_isnan_test
+  ccmath_isnormal_test
+  ccmath_isunordered_test
+  ccmath_ldexp_test
+  ccmath_logb_test
+  ccmath_modf_test
+  ccmath_next_test
+  ccmath_remainder_test
+  ccmath_round_test
+  ccmath_scalbln_test
+  ccmath_scalbn_test
+  ccmath_signbit_test
+  ccmath_sqrt_test
+;
+
+explicit ccmath_tests ;
+
 # Some aliases which group blocks of tests for CI testing:
 
 alias github_ci_block_1 : special_fun float128_tests distribution_tests mp misc ;
