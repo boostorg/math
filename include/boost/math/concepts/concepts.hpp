@@ -16,7 +16,6 @@
 #include <type_traits>
 #include <limits>
 #include <boost/math/tools/config.hpp>
-#include <boost/math/concepts/real_type_concept.hpp>
 
 namespace boost::math::concepts {
 
@@ -47,20 +46,19 @@ concept Integral = std::is_integral_v<T>
                    #endif
                    ;
 
-
 template <typename T>
-concept Signed_integral = std::is_integral_v<T> && std::is_signed_v<T>
+concept Signed_integral = std::is_integral_v<T> && (std::is_signed_v<T>
                           #ifdef __SIZEOF_INT128__
                           || std::is_same_v<__int128_t, T>
                           #endif
-                          ;
+                          );
 
 template <typename T>
-concept Unsigned_integral = std::is_integral_v<T> && std::is_unsigned_v<T>
+concept Unsigned_integral = std::is_integral_v<T> && (std::is_unsigned_v<T>
                             #ifdef __SIZEOF_INT128__
                             || std::is_same_v<__uint128_t, T>
                             #endif
-                            ;
+                            );
 
 template <typename T>
 concept Real = std::is_floating_point_v<T>
@@ -101,13 +99,13 @@ concept Arbitrary_unsigned_arithmetic_type = Unsigned_arithmetic<T> ||
                                               op_valid_v<T, T, std::plus<>> &&
                                               op_valid_v<T, T, std::minus<>> &&
                                               op_valid_v<T, T, std::multiplies<>> &&
-                                              op_valid_v<T, T, std::divides<>> &&
-                                              op_valid_v<T, T, std::modulus<>>);
+                                              op_valid_v<T, T, std::divides<>>);
 
 template <typename T>
 concept Arbitrary_signed_arithmetic_type = Signed_arithmetic<T> ||
                                            (Arbitrary_unsigned_arithmetic_type<T> &&
-                                            op_valid_v<T, T, std::negate<>>);
+                                            (op_valid_v<T, T, std::negate<>> ||
+                                             std::numeric_limits<T>::is_signed));
 
 template <typename T>
 concept Arbitrary_arithmetic_type = Arbitrary_unsigned_arithmetic_type<T> ||
@@ -125,6 +123,10 @@ template <typename T>
 concept Aribitrary_integer_type = Aribitrary_unsigned_integer_type<T> ||
                                   Aribitrary_signed_integer_type<T>;
 
+template <typename T>
+concept Aribitrary_real_type = Arbitrary_arithmetic_type<T> &&
+                               !std::numeric_limits<T>::is_integer;
+
 }
 
 #define BOOST_MATH_INTEGRAL boost::math::concepts::Integral
@@ -140,6 +142,7 @@ concept Aribitrary_integer_type = Aribitrary_unsigned_integer_type<T> ||
 #define BOOST_MATH_ARBITRARY_UNSIGNED_INTEGER boost::math::concepts::Aribitrary_unsigned_integer_type
 #define BOOST_MATH_ARBITRARY_SIGNED_INTEGER boost::math::concepts::Aribitrary_signed_integer_type
 #define BOOST_MATH_ARBITRARY_INTEGER boost::math::concepts::Aribitrary_integer_type
+#define BOOST_MATH_ARBITRARY_REAL boost::math::concepts::Aribitrary_real_type
 #define BOOST_MATH_REQUIRES(X, T) requires X<T>
 
 #endif
@@ -195,6 +198,10 @@ concept Aribitrary_integer_type = Aribitrary_unsigned_integer_type<T> ||
 
 #ifndef BOOST_MATH_ARBITRARY_INTEGER
 #  define BOOST_MATH_ARBITRARY_INTEGER typename
+#endif
+
+#ifndef BOOST_MATH_ARBITRARY_REAL
+#  define BOOST_MATH_ARBITRARY_REAL typename
 #endif
 
 #ifndef BOOST_MATH_REQUIRES
