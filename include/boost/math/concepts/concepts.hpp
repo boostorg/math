@@ -15,6 +15,7 @@
 #include <functional>
 #include <type_traits>
 #include <limits>
+#include <iterator>
 #include <boost/math/tools/config.hpp>
 #include <boost/math/policies/policy.hpp>
 
@@ -151,6 +152,7 @@ concept policy = boost::math::policies::is_policy<T>::value;
 #define BOOST_MATH_ARBITRARY_INTEGER boost::math::concepts::Aribitrary_integer_type
 #define BOOST_MATH_ARBITRARY_REAL boost::math::concepts::Aribitrary_real_type
 #define BOOST_MATH_POLICY boost::math::concepts::policy
+#define BOOST_MATH_FORWARD_ITER std::forward_iterator
 #define BOOST_MATH_REQUIRES(X, T) requires X<T>
 
 #endif
@@ -214,7 +216,10 @@ concept policy = boost::math::policies::is_policy<T>::value;
 
 #ifndef BOOST_MATH_POLICY
 #  define BOOST_MATH_POLICY typename
+#endif
 
+#ifndef BOOST_MATH_FORWARD_ITER
+#  define BOOST_MATH_FORWARD_ITER typename
 #endif
 
 #ifndef BOOST_MATH_REQUIRES
