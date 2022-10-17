@@ -16,6 +16,7 @@
 #include <type_traits>
 #include <limits>
 #include <boost/math/tools/config.hpp>
+#include <boost/math/policies/policy.hpp>
 
 namespace boost::math::concepts {
 
@@ -39,7 +40,7 @@ template <typename X, typename Y, typename Op>
 inline constexpr bool op_valid_v = op_valid<X, Y, Op>::value;
 
 template <typename T>
-concept Integral = std::is_integral_v<T>
+concept Integral = std::numeric_limits<T>::is_integer
                    #ifdef __SIZEOF_INT128__
                    || std::is_same_v<__int128_t, T>
                    || std::is_same_v<__uint128_t, T>
@@ -47,21 +48,24 @@ concept Integral = std::is_integral_v<T>
                    ;
 
 template <typename T>
-concept Signed_integral = std::is_integral_v<T> && (std::is_signed_v<T>
-                          #ifdef __SIZEOF_INT128__
-                          || std::is_same_v<__int128_t, T>
-                          #endif
-                          );
+concept Signed_integral = (std::numeric_limits<T>::is_integer && 
+                           std::numeric_limits<T>::is_signed)
+                           #ifdef __SIZEOF_INT128__
+                           || std::is_same_v<__int128_t, T>
+                           #endif
+                           ;
 
 template <typename T>
-concept Unsigned_integral = std::is_integral_v<T> && (std::is_unsigned_v<T>
-                            #ifdef __SIZEOF_INT128__
-                            || std::is_same_v<__uint128_t, T>
-                            #endif
-                            );
+concept Unsigned_integral = (std::numeric_limits<T>::is_integer && 
+                             !std::numeric_limits<T>::is_signed)
+                             #ifdef __SIZEOF_INT128__
+                             || std::is_same_v<__uint128_t, T>
+                             #endif
+                             ;
 
 template <typename T>
-concept Real = std::is_floating_point_v<T>
+concept Real = std::numeric_limits<T>::is_iec559 ||
+               std::is_floating_point_v<T>
                #ifdef BOOST_HAS_FLOAT128
                #if defined(__INTEL_LLVM_COMPILER) || defined(__INTEL_COMPILER)
                || std::is_same_v<_Quad, T>
@@ -75,18 +79,18 @@ template <typename T>
 concept Arithmetic = Integral<T> || Real<T>;
 
 template <typename T>
-concept Signed_arithmetic = Arithmetic<T> && (std::is_signed_v<T>
+concept Signed_arithmetic = (Arithmetic<T> && std::is_signed_v<T>)
                             #ifdef __SIZEOF_INT128__
                             || std::is_same_v<__int128_t, T>
                             #endif
-                            );
+                            ;
 
 template <typename T>
-concept Unsigned_arithmetic = Arithmetic<T> && (std::is_unsigned_v<T>
-                            #ifdef __SIZEOF_INT128__
-                            || std::is_same_v<__uint128_t, T>
-                            #endif
-                            );
+concept Unsigned_arithmetic = (Arithmetic<T> && std::is_unsigned_v<T>)
+                               #ifdef __SIZEOF_INT128__
+                               || std::is_same_v<__uint128_t, T>
+                               #endif
+                               ;
 
 template <typename T>
 concept Arbitrary_unsigned_arithmetic_type = Unsigned_arithmetic<T> ||
@@ -127,6 +131,9 @@ template <typename T>
 concept Aribitrary_real_type = Arbitrary_arithmetic_type<T> &&
                                !std::numeric_limits<T>::is_integer;
 
+template <typename T>
+concept policy = boost::math::policies::is_policy<T>::value;
+
 }
 
 #define BOOST_MATH_INTEGRAL boost::math::concepts::Integral
@@ -143,6 +150,7 @@ concept Aribitrary_real_type = Arbitrary_arithmetic_type<T> &&
 #define BOOST_MATH_ARBITRARY_SIGNED_INTEGER boost::math::concepts::Aribitrary_signed_integer_type
 #define BOOST_MATH_ARBITRARY_INTEGER boost::math::concepts::Aribitrary_integer_type
 #define BOOST_MATH_ARBITRARY_REAL boost::math::concepts::Aribitrary_real_type
+#define BOOST_MATH_POLICY boost::math::concepts::policy
 #define BOOST_MATH_REQUIRES(X, T) requires X<T>
 
 #endif
@@ -202,6 +210,11 @@ concept Aribitrary_real_type = Arbitrary_arithmetic_type<T> &&
 
 #ifndef BOOST_MATH_ARBITRARY_REAL
 #  define BOOST_MATH_ARBITRARY_REAL typename
+#endif
+
+#ifndef BOOST_MATH_POLICY
+#  define BOOST_MATH_POLICY typename
+
 #endif
 
 #ifndef BOOST_MATH_REQUIRES

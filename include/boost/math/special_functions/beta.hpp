@@ -31,7 +31,7 @@ namespace detail{
 //
 // Implementation of Beta(a,b) using the Lanczos approximation:
 //
-template <BOOST_MATH_ARBITRARY_REAL T, class Lanczos, class Policy>
+template <BOOST_MATH_ARBITRARY_REAL T, class Lanczos, BOOST_MATH_POLICY Policy>
 T beta_imp(T a, T b, const Lanczos&, const Policy& pol)
 {
    BOOST_MATH_STD_USING  // for ADL of std names
@@ -121,7 +121,7 @@ T beta_imp(T a, T b, const Lanczos&, const Policy& pol)
 // Generic implementation of Beta(a,b) without Lanczos approximation support
 // (Caution this is slow!!!):
 //
-template <BOOST_MATH_ARBITRARY_REAL T, class Policy>
+template <BOOST_MATH_ARBITRARY_REAL T, BOOST_MATH_POLICY Policy>
 T beta_imp(T a, T b, const lanczos::undefined_lanczos& l, const Policy& pol)
 {
    BOOST_MATH_STD_USING
@@ -204,7 +204,7 @@ T beta_imp(T a, T b, const lanczos::undefined_lanczos& l, const Policy& pol)
 // powers are *hard* though, and using logarithms just leads to
 // horrendous cancellation errors.
 //
-template <BOOST_MATH_ARBITRARY_REAL T, class Lanczos, class Policy>
+template <BOOST_MATH_ARBITRARY_REAL T, class Lanczos, BOOST_MATH_POLICY Policy>
 T ibeta_power_terms(T a,
                         T b,
                         T x,
@@ -441,7 +441,7 @@ T ibeta_power_terms(T a,
 //
 // This version is generic, slow, and does not use the Lanczos approximation.
 //
-template <BOOST_MATH_ARBITRARY_REAL T, class Policy>
+template <BOOST_MATH_ARBITRARY_REAL T, BOOST_MATH_POLICY Policy>
 T ibeta_power_terms(T a,
                         T b,
                         T x,
@@ -552,7 +552,7 @@ private:
    int n;
 };
 
-template <BOOST_MATH_ARBITRARY_REAL T, class Lanczos, class Policy>
+template <BOOST_MATH_ARBITRARY_REAL T, class Lanczos, BOOST_MATH_POLICY Policy>
 T ibeta_series(T a, T b, T x, T s0, const Lanczos&, bool normalised, T* p_derivative, T y, const Policy& pol)
 {
    BOOST_MATH_STD_USING
@@ -621,7 +621,7 @@ T ibeta_series(T a, T b, T x, T s0, const Lanczos&, bool normalised, T* p_deriva
 //
 // Incomplete Beta series again, this time without Lanczos support:
 //
-template <BOOST_MATH_ARBITRARY_REAL T, class Policy>
+template <BOOST_MATH_ARBITRARY_REAL T, BOOST_MATH_POLICY Policy>
 T ibeta_series(T a, T b, T x, T s0, const boost::math::lanczos::undefined_lanczos& l, bool normalised, T* p_derivative, T y, const Policy& pol)
 {
    BOOST_MATH_STD_USING
@@ -712,7 +712,7 @@ private:
 //
 // Evaluate the incomplete beta via the continued fraction representation:
 //
-template <BOOST_MATH_ARBITRARY_REAL T, class Policy>
+template <BOOST_MATH_ARBITRARY_REAL T, BOOST_MATH_POLICY Policy>
 inline T ibeta_fraction2(T a, T b, T x, T y, const Policy& pol, bool normalised, T* p_derivative)
 {
    typedef typename lanczos::lanczos<T, Policy>::type lanczos_type;
@@ -735,7 +735,7 @@ inline T ibeta_fraction2(T a, T b, T x, T y, const Policy& pol, bool normalised,
 //
 // Computes the difference between ibeta(a,b,x) and ibeta(a+k,b,x):
 //
-template <BOOST_MATH_ARBITRARY_REAL T, class Policy>
+template <BOOST_MATH_ARBITRARY_REAL T, BOOST_MATH_POLICY Policy>
 T ibeta_a_step(T a, T b, T x, T y, int k, const Policy& pol, bool normalised, T* p_derivative)
 {
    typedef typename lanczos::lanczos<T, Policy>::type lanczos_type;
@@ -826,7 +826,7 @@ struct Pn_size<long double>
    static_assert(::boost::math::max_factorial<long double>::value >= 100, "Type does not provide for ~35-50 digits of accuracy");
 };
 
-template <BOOST_MATH_ARBITRARY_REAL T, class Policy>
+template <BOOST_MATH_ARBITRARY_REAL T, BOOST_MATH_POLICY Policy>
 T beta_small_b_large_a_series(T a, T b, T x, T y, T s0, T mult, const Policy& pol, bool normalised)
 {
    typedef typename lanczos::lanczos<T, Policy>::type lanczos_type;
@@ -938,7 +938,7 @@ T beta_small_b_large_a_series(T a, T b, T x, T y, T s0, T mult, const Policy& po
 // For integer arguments we can relate the incomplete beta to the
 // complement of the binomial distribution cdf and use this finite sum.
 //
-template <BOOST_MATH_ARBITRARY_REAL T, class Policy>
+template <BOOST_MATH_ARBITRARY_REAL T, BOOST_MATH_POLICY Policy>
 T binomial_ccdf(T n, T k, T x, T y, const Policy& pol)
 {
    BOOST_MATH_STD_USING // ADL of std names
@@ -999,7 +999,7 @@ T binomial_ccdf(T n, T k, T x, T y, const Policy& pol)
 // input range and select the right implementation method for
 // each domain:
 //
-template <BOOST_MATH_ARBITRARY_REAL T, class Policy>
+template <BOOST_MATH_ARBITRARY_REAL T, BOOST_MATH_POLICY Policy>
 T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_derivative)
 {
    static const char* function = "boost::math::ibeta<%1%>(%1%, %1%, %1%)";
@@ -1399,13 +1399,13 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
    return invert ? (normalised ? 1 : boost::math::beta(a, b, pol)) - fract : fract;
 } // template <class T, class Lanczos>T ibeta_imp(T a, T b, T x, const Lanczos& l, bool inv, bool normalised)
 
-template <BOOST_MATH_ARBITRARY_REAL T, class Policy>
+template <BOOST_MATH_ARBITRARY_REAL T, BOOST_MATH_POLICY Policy>
 inline T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised)
 {
    return ibeta_imp(a, b, x, pol, inv, normalised, static_cast<T*>(nullptr));
 }
 
-template <BOOST_MATH_ARBITRARY_REAL T, class Policy>
+template <BOOST_MATH_ARBITRARY_REAL T, BOOST_MATH_POLICY Policy>
 T ibeta_derivative_imp(T a, T b, T x, const Policy& pol)
 {
    static const char* function = "ibeta_derivative<%1%>(%1%,%1%,%1%)";
@@ -1442,7 +1442,7 @@ T ibeta_derivative_imp(T a, T b, T x, const Policy& pol)
 //
 // Some forwarding functions that dis-ambiguate the third argument type:
 //
-template <class RT1, class RT2, class Policy>
+template <BOOST_MATH_ARBITRARY_REAL RT1, BOOST_MATH_ARBITRARY_REAL RT2, BOOST_MATH_POLICY Policy>
 inline typename tools::promote_args<RT1, RT2>::type
    beta(RT1 a, RT2 b, const Policy&, const std::true_type*)
 {
@@ -1459,7 +1459,7 @@ inline typename tools::promote_args<RT1, RT2>::type
 
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::beta_imp(static_cast<value_type>(a), static_cast<value_type>(b), evaluation_type(), forwarding_policy()), "boost::math::beta<%1%>(%1%,%1%)");
 }
-template <class RT1, class RT2, class RT3>
+template <BOOST_MATH_ARBITRARY_REAL RT1, BOOST_MATH_ARBITRARY_REAL RT2, BOOST_MATH_ARBITRARY_REAL RT3>
 inline typename tools::promote_args<RT1, RT2, RT3>::type
    beta(RT1 a, RT2 b, RT3 x, const std::false_type*)
 {
@@ -1472,7 +1472,7 @@ inline typename tools::promote_args<RT1, RT2, RT3>::type
 // which Lanczos approximation to use
 // and forward to the implementation functions:
 //
-template <class RT1, class RT2, class A>
+template <BOOST_MATH_ARBITRARY_REAL RT1, BOOST_MATH_ARBITRARY_REAL RT2, class A>
 inline typename tools::promote_args<RT1, RT2, A>::type
    beta(RT1 a, RT2 b, A arg)
 {
@@ -1480,14 +1480,14 @@ inline typename tools::promote_args<RT1, RT2, A>::type
    return boost::math::detail::beta(a, b, arg, static_cast<tag*>(nullptr));
 }
 
-template <class RT1, class RT2>
+template <BOOST_MATH_ARBITRARY_REAL RT1, BOOST_MATH_ARBITRARY_REAL RT2>
 inline typename tools::promote_args<RT1, RT2>::type
    beta(RT1 a, RT2 b)
 {
    return boost::math::beta(a, b, policies::policy<>());
 }
 
-template <class RT1, class RT2, class RT3, class Policy>
+template <BOOST_MATH_ARBITRARY_REAL RT1, BOOST_MATH_ARBITRARY_REAL RT2, BOOST_MATH_ARBITRARY_REAL RT3, BOOST_MATH_POLICY Policy>
 inline typename tools::promote_args<RT1, RT2, RT3>::type
    beta(RT1 a, RT2 b, RT3 x, const Policy&)
 {
@@ -1504,7 +1504,7 @@ inline typename tools::promote_args<RT1, RT2, RT3>::type
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::ibeta_imp(static_cast<value_type>(a), static_cast<value_type>(b), static_cast<value_type>(x), forwarding_policy(), false, false), "boost::math::beta<%1%>(%1%,%1%,%1%)");
 }
 
-template <class RT1, class RT2, class RT3, class Policy>
+template <BOOST_MATH_ARBITRARY_REAL RT1, BOOST_MATH_ARBITRARY_REAL RT2, BOOST_MATH_ARBITRARY_REAL RT3, BOOST_MATH_POLICY Policy>
 inline typename tools::promote_args<RT1, RT2, RT3>::type
    betac(RT1 a, RT2 b, RT3 x, const Policy&)
 {
@@ -1520,14 +1520,14 @@ inline typename tools::promote_args<RT1, RT2, RT3>::type
 
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::ibeta_imp(static_cast<value_type>(a), static_cast<value_type>(b), static_cast<value_type>(x), forwarding_policy(), true, false), "boost::math::betac<%1%>(%1%,%1%,%1%)");
 }
-template <class RT1, class RT2, class RT3>
+template <BOOST_MATH_ARBITRARY_REAL RT1, BOOST_MATH_ARBITRARY_REAL RT2, BOOST_MATH_ARBITRARY_REAL RT3>
 inline typename tools::promote_args<RT1, RT2, RT3>::type
    betac(RT1 a, RT2 b, RT3 x)
 {
    return boost::math::betac(a, b, x, policies::policy<>());
 }
 
-template <class RT1, class RT2, class RT3, class Policy>
+template <BOOST_MATH_ARBITRARY_REAL RT1, BOOST_MATH_ARBITRARY_REAL RT2, BOOST_MATH_ARBITRARY_REAL RT3, BOOST_MATH_POLICY Policy>
 inline typename tools::promote_args<RT1, RT2, RT3>::type
    ibeta(RT1 a, RT2 b, RT3 x, const Policy&)
 {
@@ -1543,14 +1543,14 @@ inline typename tools::promote_args<RT1, RT2, RT3>::type
 
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::ibeta_imp(static_cast<value_type>(a), static_cast<value_type>(b), static_cast<value_type>(x), forwarding_policy(), false, true), "boost::math::ibeta<%1%>(%1%,%1%,%1%)");
 }
-template <class RT1, class RT2, class RT3>
+template <BOOST_MATH_ARBITRARY_REAL RT1, BOOST_MATH_ARBITRARY_REAL RT2, BOOST_MATH_ARBITRARY_REAL RT3>
 inline typename tools::promote_args<RT1, RT2, RT3>::type
    ibeta(RT1 a, RT2 b, RT3 x)
 {
    return boost::math::ibeta(a, b, x, policies::policy<>());
 }
 
-template <class RT1, class RT2, class RT3, class Policy>
+template <BOOST_MATH_ARBITRARY_REAL RT1, BOOST_MATH_ARBITRARY_REAL RT2, BOOST_MATH_ARBITRARY_REAL RT3, BOOST_MATH_POLICY Policy>
 inline typename tools::promote_args<RT1, RT2, RT3>::type
    ibetac(RT1 a, RT2 b, RT3 x, const Policy&)
 {
@@ -1566,14 +1566,14 @@ inline typename tools::promote_args<RT1, RT2, RT3>::type
 
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::ibeta_imp(static_cast<value_type>(a), static_cast<value_type>(b), static_cast<value_type>(x), forwarding_policy(), true, true), "boost::math::ibetac<%1%>(%1%,%1%,%1%)");
 }
-template <class RT1, class RT2, class RT3>
+template <BOOST_MATH_ARBITRARY_REAL RT1, BOOST_MATH_ARBITRARY_REAL RT2, BOOST_MATH_ARBITRARY_REAL RT3>
 inline typename tools::promote_args<RT1, RT2, RT3>::type
    ibetac(RT1 a, RT2 b, RT3 x)
 {
    return boost::math::ibetac(a, b, x, policies::policy<>());
 }
 
-template <class RT1, class RT2, class RT3, class Policy>
+template <BOOST_MATH_ARBITRARY_REAL RT1, BOOST_MATH_ARBITRARY_REAL RT2, BOOST_MATH_ARBITRARY_REAL RT3, BOOST_MATH_POLICY Policy>
 inline typename tools::promote_args<RT1, RT2, RT3>::type
    ibeta_derivative(RT1 a, RT2 b, RT3 x, const Policy&)
 {
@@ -1589,7 +1589,7 @@ inline typename tools::promote_args<RT1, RT2, RT3>::type
 
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::ibeta_derivative_imp(static_cast<value_type>(a), static_cast<value_type>(b), static_cast<value_type>(x), forwarding_policy()), "boost::math::ibeta_derivative<%1%>(%1%,%1%,%1%)");
 }
-template <class RT1, class RT2, class RT3>
+template <BOOST_MATH_ARBITRARY_REAL RT1, BOOST_MATH_ARBITRARY_REAL RT2, BOOST_MATH_ARBITRARY_REAL RT3>
 inline typename tools::promote_args<RT1, RT2, RT3>::type
    ibeta_derivative(RT1 a, RT2 b, RT3 x)
 {
