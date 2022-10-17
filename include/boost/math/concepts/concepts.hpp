@@ -41,7 +41,11 @@ concept Unsigned_integral = std::is_integral_v<T> && std::is_unsigned_v<T>
 template <typename T>
 concept Real = std::is_floating_point_v<T>
                #ifdef BOOST_HAS_FLOAT128
+               #if defined(__INTEL_LLVM_COMPILER) || defined(__INTEL_COMPILER)
+               || std::is_same_v<_Quad, T>
+               #else
                || std::is_same_v<__float128, T>
+               #endif
                #endif
                ;
 
