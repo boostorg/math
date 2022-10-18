@@ -239,10 +239,26 @@ concept random_access_container = is_container<T> &&
 #define BOOST_MATH_BIDIRECTIONAL_ITER std::bidirectional_iterator
 #define BOOST_MATH_RANDOM_ACCESS_ITER std::random_access_iterator
 
-#endif
+#endif // Workaround for LIBCPP
 
-#endif
-#endif
+#ifdef BOOST_MATH_EXEC_COMPATIBLE
+#include <execution>
+
+namespace boost::math::concepts {
+
+template <typename T>
+concept execution_policy = std::is_execution_policy_v<std::remove_cvref_t<T>>;
+
+} // Namespace boost::math::concepts
+
+#define BOOST_MATH_EXECUTION_POLICY boost::math::concepts::execution_policy
+
+#endif // Has <execution>
+
+#endif // Has <concepts>
+#endif // C++20
+
+// If concepts are unavailable replace them with typename for compatibility
 
 #ifndef BOOST_MATH_INTEGRAL
 #  define BOOST_MATH_INTEGRAL typename
@@ -338,6 +354,10 @@ concept random_access_container = is_container<T> &&
 
 #ifndef BOOST_MATH_RANDOM_ACCESS_CONTAINER
 #  define BOOST_MATH_RANDOM_ACCESS_CONTAINER typename
+#endif
+
+#ifndef BOOST_MATH_EXECUTION_POLICY
+#  define BOOST_MATH_EXECUTION_POLICY typename
 #endif
 
 #ifndef BOOST_MATH_REQUIRES

@@ -26,7 +26,7 @@
 
 namespace boost::math::statistics {
 
-template<class ExecutionPolicy, BOOST_MATH_FORWARD_ITER ForwardIterator>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_FORWARD_ITER ForwardIterator>
 inline auto mean(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last)
 {
     using Real = typename std::iterator_traits<ForwardIterator>::value_type;
@@ -56,7 +56,7 @@ inline auto mean(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator 
     }
 }
 
-template<class ExecutionPolicy, BOOST_MATH_CONTAINER Container>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_CONTAINER Container>
 inline auto mean(ExecutionPolicy&& exec, Container const & v)
 {
     return mean(exec, std::cbegin(v), std::cend(v));
@@ -74,7 +74,7 @@ inline auto mean(Container const & v)
     return mean(std::execution::seq, std::cbegin(v), std::cend(v));
 }
 
-template<class ExecutionPolicy, BOOST_MATH_FORWARD_ITER ForwardIterator>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_FORWARD_ITER ForwardIterator>
 inline auto variance(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last)
 {
     using Real = typename std::iterator_traits<ForwardIterator>::value_type;
@@ -105,7 +105,7 @@ inline auto variance(ExecutionPolicy&& exec, ForwardIterator first, ForwardItera
     }
 }
 
-template<class ExecutionPolicy, BOOST_MATH_CONTAINER Container>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_CONTAINER Container>
 inline auto variance(ExecutionPolicy&& exec, Container const & v)
 {
     return variance(exec, std::cbegin(v), std::cend(v));
@@ -123,7 +123,7 @@ inline auto variance(Container const & v)
     return variance(std::execution::seq, std::cbegin(v), std::cend(v));
 }
 
-template<class ExecutionPolicy, BOOST_MATH_FORWARD_ITER ForwardIterator>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_FORWARD_ITER ForwardIterator>
 inline auto sample_variance(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last)
 {
     const auto n = std::distance(first, last);
@@ -131,7 +131,7 @@ inline auto sample_variance(ExecutionPolicy&& exec, ForwardIterator first, Forwa
     return n*variance(exec, first, last)/(n-1);
 }
 
-template<class ExecutionPolicy, BOOST_MATH_CONTAINER Container>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_CONTAINER Container>
 inline auto sample_variance(ExecutionPolicy&& exec, Container const & v)
 {
     return sample_variance(exec, std::cbegin(v), std::cend(v));
@@ -149,7 +149,7 @@ inline auto sample_variance(Container const & v)
     return sample_variance(std::execution::seq, std::cbegin(v), std::cend(v));
 }
 
-template<class ExecutionPolicy, BOOST_MATH_FORWARD_ITER ForwardIterator>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_FORWARD_ITER ForwardIterator>
 inline auto mean_and_sample_variance(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last)
 {
     using Real = typename std::iterator_traits<ForwardIterator>::value_type;
@@ -182,7 +182,7 @@ inline auto mean_and_sample_variance(ExecutionPolicy&& exec, ForwardIterator fir
     }
 }
 
-template<class ExecutionPolicy, BOOST_MATH_CONTAINER Container>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_CONTAINER Container>
 inline auto mean_and_sample_variance(ExecutionPolicy&& exec, Container const & v)
 {
     return mean_and_sample_variance(exec, std::cbegin(v), std::cend(v));
@@ -200,7 +200,7 @@ inline auto mean_and_sample_variance(Container const & v)
     return mean_and_sample_variance(std::execution::seq, std::cbegin(v), std::cend(v));
 }
 
-template<class ExecutionPolicy, BOOST_MATH_FORWARD_ITER ForwardIterator>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_FORWARD_ITER ForwardIterator>
 inline auto first_four_moments(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last)
 {
     using Real = typename std::iterator_traits<ForwardIterator>::value_type;
@@ -237,7 +237,7 @@ inline auto first_four_moments(ExecutionPolicy&& exec, ForwardIterator first, Fo
     }
 }
 
-template<class ExecutionPolicy, BOOST_MATH_CONTAINER Container>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_CONTAINER Container>
 inline auto first_four_moments(ExecutionPolicy&& exec, Container const & v)
 {
     return first_four_moments(exec, std::cbegin(v), std::cend(v));
@@ -256,7 +256,7 @@ inline auto first_four_moments(Container const & v)
 }
 
 // https://prod.sandia.gov/techlib-noauth/access-control.cgi/2008/086212.pdf
-template<class ExecutionPolicy, BOOST_MATH_FORWARD_ITER ForwardIterator>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_FORWARD_ITER ForwardIterator>
 inline auto skewness(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last)
 {
     using Real = typename std::iterator_traits<ForwardIterator>::value_type;
@@ -299,7 +299,7 @@ inline auto skewness(ExecutionPolicy&& exec, ForwardIterator first, ForwardItera
     }
 }
 
-template<class ExecutionPolicy, BOOST_MATH_CONTAINER Container>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_CONTAINER Container>
 inline auto skewness(ExecutionPolicy&& exec, Container & v)
 {
     return skewness(exec, std::cbegin(v), std::cend(v));
@@ -319,7 +319,7 @@ inline auto skewness(Container const & v)
 
 // Follows equation 1.6 of:
 // https://prod.sandia.gov/techlib-noauth/access-control.cgi/2008/086212.pdf
-template<class ExecutionPolicy, BOOST_MATH_FORWARD_ITER ForwardIterator>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_FORWARD_ITER ForwardIterator>
 inline auto kurtosis(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last)
 {
     const auto [M1, M2, M3, M4] = first_four_moments(exec, first, last);
@@ -330,7 +330,7 @@ inline auto kurtosis(ExecutionPolicy&& exec, ForwardIterator first, ForwardItera
     return M4/(M2*M2);
 }
 
-template<class ExecutionPolicy, BOOST_MATH_CONTAINER Container>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_CONTAINER Container>
 inline auto kurtosis(ExecutionPolicy&& exec, Container const & v)
 {
     return kurtosis(exec, std::cbegin(v), std::cend(v));
@@ -348,13 +348,13 @@ inline auto kurtosis(Container const & v)
     return kurtosis(std::execution::seq, std::cbegin(v), std::cend(v));
 }
 
-template<class ExecutionPolicy, BOOST_MATH_FORWARD_ITER ForwardIterator>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_FORWARD_ITER ForwardIterator>
 inline auto excess_kurtosis(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last)
 {
     return kurtosis(exec, first, last) - 3;
 }
 
-template<class ExecutionPolicy, BOOST_MATH_CONTAINER Container>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_CONTAINER Container>
 inline auto excess_kurtosis(ExecutionPolicy&& exec, Container const & v)
 {
     return excess_kurtosis(exec, std::cbegin(v), std::cend(v));
@@ -373,7 +373,7 @@ inline auto excess_kurtosis(Container const & v)
 }
 
 
-template<class ExecutionPolicy, class RandomAccessIterator>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, class RandomAccessIterator>
 auto median(ExecutionPolicy&& exec, RandomAccessIterator first, RandomAccessIterator last)
 {
     const auto num_elems = std::distance(first, last);
@@ -394,7 +394,7 @@ auto median(ExecutionPolicy&& exec, RandomAccessIterator first, RandomAccessIter
 }
 
 
-template<class ExecutionPolicy, class RandomAccessContainer>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_RANDOM_ACCESS_CONTAINER RandomAccessContainer>
 inline auto median(ExecutionPolicy&& exec, RandomAccessContainer & v)
 {
     return median(exec, std::begin(v), std::end(v));
@@ -406,13 +406,13 @@ inline auto median(RandomAccessIterator first, RandomAccessIterator last)
     return median(std::execution::seq, first, last);
 }
 
-template<class RandomAccessContainer>
+template<BOOST_MATH_RANDOM_ACCESS_CONTAINER RandomAccessContainer>
 inline auto median(RandomAccessContainer & v)
 {
     return median(std::execution::seq, std::begin(v), std::end(v));
 }
 
-template<class ExecutionPolicy, class RandomAccessIterator>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, class RandomAccessIterator>
 inline auto gini_coefficient(ExecutionPolicy&& exec, RandomAccessIterator first, RandomAccessIterator last)
 {
     using Real = typename std::iterator_traits<RandomAccessIterator>::value_type;
@@ -445,7 +445,7 @@ inline auto gini_coefficient(ExecutionPolicy&& exec, RandomAccessIterator first,
     }
 }
 
-template<class ExecutionPolicy, class RandomAccessContainer>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_RANDOM_ACCESS_CONTAINER RandomAccessContainer>
 inline auto gini_coefficient(ExecutionPolicy&& exec, RandomAccessContainer & v)
 {
     return gini_coefficient(exec, std::begin(v), std::end(v));
@@ -457,20 +457,20 @@ inline auto gini_coefficient(RandomAccessIterator first, RandomAccessIterator la
     return gini_coefficient(std::execution::seq, first, last);
 }
 
-template<class RandomAccessContainer>
+template<BOOST_MATH_RANDOM_ACCESS_CONTAINER RandomAccessContainer>
 inline auto gini_coefficient(RandomAccessContainer & v)
 {
     return gini_coefficient(std::execution::seq, std::begin(v), std::end(v));
 }
 
-template<class ExecutionPolicy, class RandomAccessIterator>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, class RandomAccessIterator>
 inline auto sample_gini_coefficient(ExecutionPolicy&& exec, RandomAccessIterator first, RandomAccessIterator last)
 {
     const auto n = std::distance(first, last);
     return n*gini_coefficient(exec, first, last)/(n-1);
 }
 
-template<class ExecutionPolicy, class RandomAccessContainer>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_RANDOM_ACCESS_CONTAINER RandomAccessContainer>
 inline auto sample_gini_coefficient(ExecutionPolicy&& exec, RandomAccessContainer & v)
 {
     return sample_gini_coefficient(exec, std::begin(v), std::end(v));
@@ -482,13 +482,13 @@ inline auto sample_gini_coefficient(RandomAccessIterator first, RandomAccessIter
     return sample_gini_coefficient(std::execution::seq, first, last);
 }
 
-template<class RandomAccessContainer>
+template<BOOST_MATH_RANDOM_ACCESS_CONTAINER RandomAccessContainer>
 inline auto sample_gini_coefficient(RandomAccessContainer & v)
 {
     return sample_gini_coefficient(std::execution::seq, std::begin(v), std::end(v));
 }
 
-template<class ExecutionPolicy, class RandomAccessIterator>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, class RandomAccessIterator>
 auto median_absolute_deviation(ExecutionPolicy&& exec, RandomAccessIterator first, RandomAccessIterator last,
     typename std::iterator_traits<RandomAccessIterator>::value_type center=std::numeric_limits<typename std::iterator_traits<RandomAccessIterator>::value_type>::quiet_NaN())
 {
@@ -517,7 +517,7 @@ auto median_absolute_deviation(ExecutionPolicy&& exec, RandomAccessIterator firs
     }
 }
 
-template<class ExecutionPolicy, class RandomAccessContainer>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_RANDOM_ACCESS_CONTAINER RandomAccessContainer>
 inline auto median_absolute_deviation(ExecutionPolicy&& exec, RandomAccessContainer & v,
     typename RandomAccessContainer::value_type center=std::numeric_limits<typename RandomAccessContainer::value_type>::quiet_NaN())
 {
@@ -531,14 +531,14 @@ inline auto median_absolute_deviation(RandomAccessIterator first, RandomAccessIt
     return median_absolute_deviation(std::execution::seq, first, last, center);
 }
 
-template<class RandomAccessContainer>
+template<BOOST_MATH_RANDOM_ACCESS_CONTAINER RandomAccessContainer>
 inline auto median_absolute_deviation(RandomAccessContainer & v,
     typename RandomAccessContainer::value_type center=std::numeric_limits<typename RandomAccessContainer::value_type>::quiet_NaN())
 {
     return median_absolute_deviation(std::execution::seq, std::begin(v), std::end(v), center);
 }
 
-template<class ExecutionPolicy, BOOST_MATH_FORWARD_ITER ForwardIterator>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_FORWARD_ITER ForwardIterator>
 auto interquartile_range(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last)
 {
     using Real = typename std::iterator_traits<ForwardIterator>::value_type;
@@ -579,7 +579,7 @@ auto interquartile_range(ExecutionPolicy&& exec, ForwardIterator first, ForwardI
     }
 }
 
-template<class ExecutionPolicy, class RandomAccessContainer>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_RANDOM_ACCESS_CONTAINER RandomAccessContainer>
 inline auto interquartile_range(ExecutionPolicy&& exec, RandomAccessContainer & v)
 {
     return interquartile_range(exec, std::begin(v), std::end(v));
@@ -591,13 +591,13 @@ inline auto interquartile_range(RandomAccessIterator first, RandomAccessIterator
     return interquartile_range(std::execution::seq, first, last);
 }
 
-template<class RandomAccessContainer>
+template<BOOST_MATH_RANDOM_ACCESS_CONTAINER RandomAccessContainer>
 inline auto interquartile_range(RandomAccessContainer & v)
 {
     return interquartile_range(std::execution::seq, std::begin(v), std::end(v));
 }
 
-template<class ExecutionPolicy, BOOST_MATH_FORWARD_ITER ForwardIterator, class OutputIterator>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_FORWARD_ITER ForwardIterator, class OutputIterator>
 inline OutputIterator mode(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last, OutputIterator output)
 {
     if(!std::is_sorted(exec, first, last))
@@ -615,7 +615,7 @@ inline OutputIterator mode(ExecutionPolicy&& exec, ForwardIterator first, Forwar
     return detail::mode_impl(first, last, output);
 }
 
-template<class ExecutionPolicy, BOOST_MATH_CONTAINER Container, class OutputIterator>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_CONTAINER Container, class OutputIterator>
 inline OutputIterator mode(ExecutionPolicy&& exec, Container & v, OutputIterator output)
 {
     return mode(exec, std::begin(v), std::end(v), output);
@@ -643,7 +643,7 @@ inline OutputIterator mode(Container & v, OutputIterator output)
 
 // std::list is the return type for the proposed STL stats library
 
-template<class ExecutionPolicy, BOOST_MATH_FORWARD_ITER ForwardIterator, class Real = typename std::iterator_traits<ForwardIterator>::value_type>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_FORWARD_ITER ForwardIterator, class Real = typename std::iterator_traits<ForwardIterator>::value_type>
 inline auto mode(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last)
 {
     std::list<Real> modes;
@@ -651,7 +651,7 @@ inline auto mode(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator 
     return modes;
 }
 
-template<class ExecutionPolicy, BOOST_MATH_CONTAINER Container>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_CONTAINER Container>
 inline auto mode(ExecutionPolicy&& exec, Container & v)
 {
     return mode(exec, std::begin(v), std::end(v));
@@ -953,7 +953,7 @@ Real median(RandomAccessIterator first, RandomAccessIterator last)
     }
 }
 
-template<class RandomAccessContainer, typename Real = typename RandomAccessContainer::value_type>
+template<BOOST_MATH_RANDOM_ACCESS_CONTAINER RandomAccessContainer, typename Real = typename RandomAccessContainer::value_type>
 inline Real median(RandomAccessContainer& c)
 {
     return median(std::begin(c), std::end(c));
@@ -971,7 +971,7 @@ inline double gini_coefficient(RandomAccessIterator first, RandomAccessIterator 
     return detail::gini_coefficient_sequential_impl<double>(first, last);
 }
 
-template<class RandomAccessContainer, typename Real = typename RandomAccessContainer::value_type,
+template<BOOST_MATH_RANDOM_ACCESS_CONTAINER RandomAccessContainer, typename Real = typename RandomAccessContainer::value_type,
          enable_if_t<std::is_integral<Real>::value, bool> = true>
 inline double gini_coefficient(RandomAccessContainer& c)
 {
@@ -990,7 +990,7 @@ inline Real gini_coefficient(RandomAccessIterator first, RandomAccessIterator la
     return detail::gini_coefficient_sequential_impl<Real>(first, last);
 }
 
-template<class RandomAccessContainer, typename Real = typename RandomAccessContainer::value_type,
+template<BOOST_MATH_RANDOM_ACCESS_CONTAINER RandomAccessContainer, typename Real = typename RandomAccessContainer::value_type,
          enable_if_t<!std::is_integral<Real>::value, bool> = true>
 inline Real gini_coefficient(RandomAccessContainer& c)
 {
@@ -1005,7 +1005,7 @@ inline double sample_gini_coefficient(RandomAccessIterator first, RandomAccessIt
     return n*gini_coefficient(first, last)/(n-1);
 }
 
-template<class RandomAccessContainer, typename Real = typename RandomAccessContainer::value_type,
+template<BOOST_MATH_RANDOM_ACCESS_CONTAINER RandomAccessContainer, typename Real = typename RandomAccessContainer::value_type,
          enable_if_t<std::is_integral<Real>::value, bool> = true>
 inline double sample_gini_coefficient(RandomAccessContainer& c)
 {
@@ -1020,7 +1020,7 @@ inline Real sample_gini_coefficient(RandomAccessIterator first, RandomAccessIter
     return n*gini_coefficient(first, last)/(n-1);
 }
 
-template<class RandomAccessContainer, typename Real = typename RandomAccessContainer::value_type,
+template<BOOST_MATH_RANDOM_ACCESS_CONTAINER RandomAccessContainer, typename Real = typename RandomAccessContainer::value_type,
          enable_if_t<!std::is_integral<Real>::value, bool> = true>
 inline Real sample_gini_coefficient(RandomAccessContainer& c)
 {
@@ -1055,7 +1055,7 @@ Real median_absolute_deviation(RandomAccessIterator first, RandomAccessIterator 
     }
 }
 
-template<class RandomAccessContainer, typename Real = typename RandomAccessContainer::value_type>
+template<BOOST_MATH_RANDOM_ACCESS_CONTAINER RandomAccessContainer, typename Real = typename RandomAccessContainer::value_type>
 inline Real median_absolute_deviation(RandomAccessContainer& c,
     typename RandomAccessContainer::value_type center=std::numeric_limits<typename RandomAccessContainer::value_type>::quiet_NaN())
 {
