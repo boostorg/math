@@ -41,57 +41,25 @@ template <typename X, typename Y, typename Op>
 inline constexpr bool op_valid_v = op_valid<X, Y, Op>::value;
 
 template <typename T>
-concept Integral = std::numeric_limits<T>::is_integer
-                   #ifdef __SIZEOF_INT128__
-                   || std::is_same_v<__int128_t, T>
-                   || std::is_same_v<__uint128_t, T>
-                   #endif
-                   ;
+concept Integral = std::is_integral_v<T>;
 
 template <typename T>
-concept Signed_integral = (std::numeric_limits<T>::is_integer && 
-                           std::numeric_limits<T>::is_signed)
-                           #ifdef __SIZEOF_INT128__
-                           || std::is_same_v<__int128_t, T>
-                           #endif
-                           ;
+concept Signed_integral = Integral<T> && std::is_signed_v<T>;
 
 template <typename T>
-concept Unsigned_integral = (std::numeric_limits<T>::is_integer && 
-                             !std::numeric_limits<T>::is_signed)
-                             #ifdef __SIZEOF_INT128__
-                             || std::is_same_v<__uint128_t, T>
-                             #endif
-                             ;
+concept Unsigned_integral = Integral<T> && std::is_unsigned_v<T>;
 
 template <typename T>
-concept Real = std::numeric_limits<T>::is_iec559 ||
-               std::is_floating_point_v<T>
-               #ifdef BOOST_HAS_FLOAT128
-               #if defined(__INTEL_LLVM_COMPILER) || defined(__INTEL_COMPILER)
-               || std::is_same_v<_Quad, T>
-               #else
-               || std::is_same_v<__float128, T>
-               #endif
-               #endif
-               ;
+concept Real = std::is_floating_point_v<T>;
 
 template <typename T>
 concept Arithmetic = Integral<T> || Real<T>;
 
 template <typename T>
-concept Signed_arithmetic = (Arithmetic<T> && std::is_signed_v<T>)
-                            #ifdef __SIZEOF_INT128__
-                            || std::is_same_v<__int128_t, T>
-                            #endif
-                            ;
+concept Signed_arithmetic = Arithmetic<T> && std::is_signed_v<T>;
 
 template <typename T>
-concept Unsigned_arithmetic = (Arithmetic<T> && std::is_unsigned_v<T>)
-                               #ifdef __SIZEOF_INT128__
-                               || std::is_same_v<__uint128_t, T>
-                               #endif
-                               ;
+concept Unsigned_arithmetic = Arithmetic<T> && std::is_unsigned_v<T>;
 
 template <typename T>
 concept Arbitrary_unsigned_arithmetic_type = Unsigned_arithmetic<T> ||
