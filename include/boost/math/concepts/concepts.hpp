@@ -112,6 +112,9 @@ template <typename T>
 concept arithmetic = std::is_arithmetic_v<T>;
 
 template <typename T>
+concept numerical = arithmetic<T> || real_or_complex<T>;
+
+template <typename T>
 concept signed_arithmetic = arithmetic<T> && std::is_signed_v<T>;
 
 template <typename T>
@@ -166,6 +169,10 @@ concept arbitrary_real_or_complex_type = arbitrary_real_type<T> ||
                                          arbitrary_complex_type<T>;
 
 template <typename T>
+concept arbitrary_numerical_type = arbitrary_real_or_complex_type<T> ||
+                                   arbitrary_arithmetic_type<T>;
+
+template <typename T>
 concept policy = boost::math::policies::is_policy<T>::value;
 
 // Workaround for LIBCPP versions that have <concepts> but have not implemented concepts in <iterator>
@@ -210,6 +217,7 @@ concept random_access_container = is_container<T> &&
 #define BOOST_MATH_COMPLEX boost::math::concepts::complex
 #define BOOST_MATH_REAL_OR_COMPLEX boost::math::concepts::real_or_complex
 #define BOOST_MATH_ARITHMETIC boost::math::concepts::arithmetic
+#define BOOST_MATH_NUMERICAL boost::math::concepts::numerical
 #define BOOST_MATH_SIGNED_ARITHMETIC boost::math::concepts::signed_arithmetic
 #define BOOST_MATH_UNSIGNED_ARITHMETIC boost::math::concepts::unsigned_arithmetic
 #define BOOST_MATH_ARBITRARY_UNSIGNED_ARITHMETIC boost::math::concepts::arbitrary_unsigned_arithmetic_type
@@ -221,6 +229,7 @@ concept random_access_container = is_container<T> &&
 #define BOOST_MATH_ARBITRARY_REAL boost::math::concepts::arbitrary_real_type
 #define BOOST_MATH_ARBITRARY_COMPLEX boost::math::concepts::arbitrary_complex_type
 #define BOOST_MATH_ARBITRARY_REAL_OR_COMPLEX boost::math::concepts::arbitrary_real_or_complex_type
+#define BOOST_MATH_ARBITRARY_NUMERICAL boost::math::concepts::arbitrary_numerical_type
 #define BOOST_MATH_POLICY boost::math::concepts::policy
 #define BOOST_MATH_CONTAINER boost::math::concepts::is_container
 #define BOOST_MATH_RANDOM_ACCESS_CONTAINER boost::math::concepts::random_access_container
@@ -288,6 +297,10 @@ concept execution_policy = std::is_execution_policy_v<std::remove_cvref_t<T>>;
 #  define BOOST_MATH_ARITHMETIC typename
 #endif
 
+#ifndef BOOST_MATH_NUMERICAL
+#  define BOOST_MATH_NUMERICAL typename
+#endif
+
 #ifndef BOOST_MATH_SIGNED_ARITHMETIC
 #  define BOOST_MATH_SIGNED_ARITHMETIC typename
 #endif
@@ -330,6 +343,10 @@ concept execution_policy = std::is_execution_policy_v<std::remove_cvref_t<T>>;
 
 #ifndef BOOST_MATH_ARBITRARY_REAL_OR_COMPLEX
 #  define BOOST_MATH_ARBITRARY_REAL_OR_COMPLEX typename
+#endif
+
+#ifndef BOOST_MATH_ARBITRARY_NUMERICAL
+#  define BOOST_MATH_ARBITRARY_NUMERICAL typename
 #endif
 
 #ifndef BOOST_MATH_POLICY
