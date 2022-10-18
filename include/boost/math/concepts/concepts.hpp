@@ -95,7 +95,7 @@ template <typename T>
 concept Real = std::is_floating_point_v<T>;
 
 template <typename T>
-concept Arithmetic = Integral<T> || Real<T>;
+concept Arithmetic = std::is_arithmetic_v<T>;
 
 template <typename T>
 concept Signed_arithmetic = Arithmetic<T> && std::is_signed_v<T>;
@@ -145,13 +145,38 @@ concept Aribitrary_real_type = Arbitrary_arithmetic_type<T> &&
 template <typename T>
 concept policy = boost::math::policies::is_policy<T>::value;
 
+// Workaround for LIBCPP versions that have <concepts> but have not implemented concepts in <iterator>
+#if defined(_LIBCPP_VERSION) && !defined(_LIBCPP___ITERATOR_CONCEPTS_H)
+
+template <typename T>
+concept forward_iterator = std::is_same_v<typename std::iterator_traits<T>::iterator_category(), std::forward_iterator_tag>;
+
+template <typename T>
+concept bidirectional_iterator = std::is_same_v<typename std::iterator_traits<T>::iterator_category(), std::bidirectional_iterator_tag>;
+
+template <typename T>
+concept random_access_iterator = std::is_same_v<typename std::iterator_traits<T>::iterator_category(), std::random_access_iterator_tag>;
+
+#else
+
+template <typename T>
+concept forward_iterator = std::forward_iterator<T>;
+
+template <typename T>
+concept bidirectional_iterator = std::bidirectional_iterator<T>;
+
+template <typename T>
+concept random_access_iterator = std::random_access_iterator<T>;
+
+#endif
+
 template <typename T>
 concept is_container = detail::has_begin_v<T> &&
                        detail::has_end_v<T>;
 
 template <typename T>
 concept random_access_container = is_container<T> &&
-                                  std::random_access_iterator<typename T::iterator>;
+                                  boost::math::concepts::random_access_iterator<typename T::iterator>;
 
 } // boost::math::concepts
 
@@ -170,13 +195,24 @@ concept random_access_container = is_container<T> &&
 #define BOOST_MATH_ARBITRARY_INTEGER boost::math::concepts::Aribitrary_integer_type
 #define BOOST_MATH_ARBITRARY_REAL boost::math::concepts::Aribitrary_real_type
 #define BOOST_MATH_POLICY boost::math::concepts::policy
-#define BOOST_MATH_FORWARD_ITER std::forward_iterator
-#define BOOST_MATH_BIDIRECTIONAL_ITER std::bidirectional_iterator
-#define BOOST_MATH_RANDOM_ACCESS_ITER std::random_access_iterator
-#define BOOST_MATH_OUTPUT_ITER std::output_iterator
 #define BOOST_MATH_CONTAINER boost::math::concepts::is_container
 #define BOOST_MATH_RANDOM_ACCESS_CONTAINER boost::math::concepts::random_access_container
 #define BOOST_MATH_REQUIRES(X, T) requires X<T>
+
+// Workaround for LIBCPP versions that have <concepts> but have not implemented concepts in <iterator>
+#if defined(_LIBCPP_VERSION) && !defined(_LIBCPP___ITERATOR_CONCEPTS_H)
+
+#define BOOST_MATH_FORWARD_ITER boost::math::concepts::forward_iterator
+#define BOOST_MATH_BIDIRECTIONAL_ITER boost::math::concepts::bidirectional_iterator
+#define BOOST_MATH_RANDOM_ACCESS_ITER boost::math::concepts::random_access_iterator
+
+#else
+
+#define BOOST_MATH_FORWARD_ITER std::forward_iterator
+#define BOOST_MATH_BIDIRECTIONAL_ITER std::bidirectional_iterator
+#define BOOST_MATH_RANDOM_ACCESS_ITER std::random_access_iterator
+
+#endif
 
 #endif
 #endif
