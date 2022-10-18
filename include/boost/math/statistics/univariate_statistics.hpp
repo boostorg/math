@@ -56,7 +56,7 @@ inline auto mean(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator 
     }
 }
 
-template<class ExecutionPolicy, class Container>
+template<class ExecutionPolicy, BOOST_MATH_CONTAINER Container>
 inline auto mean(ExecutionPolicy&& exec, Container const & v)
 {
     return mean(exec, std::cbegin(v), std::cend(v));
@@ -68,7 +68,7 @@ inline auto mean(ForwardIterator first, ForwardIterator last)
     return mean(std::execution::seq, first, last);
 }
 
-template<class Container>
+template<BOOST_MATH_CONTAINER Container>
 inline auto mean(Container const & v)
 {
     return mean(std::execution::seq, std::cbegin(v), std::cend(v));
@@ -105,7 +105,7 @@ inline auto variance(ExecutionPolicy&& exec, ForwardIterator first, ForwardItera
     }
 }
 
-template<class ExecutionPolicy, class Container>
+template<class ExecutionPolicy, BOOST_MATH_CONTAINER Container>
 inline auto variance(ExecutionPolicy&& exec, Container const & v)
 {
     return variance(exec, std::cbegin(v), std::cend(v));
@@ -117,7 +117,7 @@ inline auto variance(ForwardIterator first, ForwardIterator last)
     return variance(std::execution::seq, first, last);
 }
 
-template<class Container>
+template<BOOST_MATH_CONTAINER Container>
 inline auto variance(Container const & v)
 {
     return variance(std::execution::seq, std::cbegin(v), std::cend(v));
@@ -131,7 +131,7 @@ inline auto sample_variance(ExecutionPolicy&& exec, ForwardIterator first, Forwa
     return n*variance(exec, first, last)/(n-1);
 }
 
-template<class ExecutionPolicy, class Container>
+template<class ExecutionPolicy, BOOST_MATH_CONTAINER Container>
 inline auto sample_variance(ExecutionPolicy&& exec, Container const & v)
 {
     return sample_variance(exec, std::cbegin(v), std::cend(v));
@@ -143,7 +143,7 @@ inline auto sample_variance(ForwardIterator first, ForwardIterator last)
     return sample_variance(std::execution::seq, first, last);
 }
 
-template<class Container>
+template<BOOST_MATH_CONTAINER Container>
 inline auto sample_variance(Container const & v)
 {
     return sample_variance(std::execution::seq, std::cbegin(v), std::cend(v));
@@ -182,7 +182,7 @@ inline auto mean_and_sample_variance(ExecutionPolicy&& exec, ForwardIterator fir
     }
 }
 
-template<class ExecutionPolicy, class Container>
+template<class ExecutionPolicy, BOOST_MATH_CONTAINER Container>
 inline auto mean_and_sample_variance(ExecutionPolicy&& exec, Container const & v)
 {
     return mean_and_sample_variance(exec, std::cbegin(v), std::cend(v));
@@ -194,7 +194,7 @@ inline auto mean_and_sample_variance(ForwardIterator first, ForwardIterator last
     return mean_and_sample_variance(std::execution::seq, first, last);
 }
 
-template<class Container>
+template<BOOST_MATH_CONTAINER Container>
 inline auto mean_and_sample_variance(Container const & v)
 {
     return mean_and_sample_variance(std::execution::seq, std::cbegin(v), std::cend(v));
@@ -237,7 +237,7 @@ inline auto first_four_moments(ExecutionPolicy&& exec, ForwardIterator first, Fo
     }
 }
 
-template<class ExecutionPolicy, class Container>
+template<class ExecutionPolicy, BOOST_MATH_CONTAINER Container>
 inline auto first_four_moments(ExecutionPolicy&& exec, Container const & v)
 {
     return first_four_moments(exec, std::cbegin(v), std::cend(v));
@@ -249,7 +249,7 @@ inline auto first_four_moments(ForwardIterator first, ForwardIterator last)
     return first_four_moments(std::execution::seq, first, last);
 }
 
-template<class Container>
+template<BOOST_MATH_CONTAINER Container>
 inline auto first_four_moments(Container const & v)
 {
     return first_four_moments(std::execution::seq, std::cbegin(v), std::cend(v));
@@ -299,7 +299,7 @@ inline auto skewness(ExecutionPolicy&& exec, ForwardIterator first, ForwardItera
     }
 }
 
-template<class ExecutionPolicy, class Container>
+template<class ExecutionPolicy, BOOST_MATH_CONTAINER Container>
 inline auto skewness(ExecutionPolicy&& exec, Container & v)
 {
     return skewness(exec, std::cbegin(v), std::cend(v));
@@ -311,7 +311,7 @@ inline auto skewness(ForwardIterator first, ForwardIterator last)
     return skewness(std::execution::seq, first, last);
 }
 
-template<class Container>
+template<BOOST_MATH_CONTAINER Container>
 inline auto skewness(Container const & v)
 {
     return skewness(std::execution::seq, std::cbegin(v), std::cend(v));
@@ -330,7 +330,7 @@ inline auto kurtosis(ExecutionPolicy&& exec, ForwardIterator first, ForwardItera
     return M4/(M2*M2);
 }
 
-template<class ExecutionPolicy, class Container>
+template<class ExecutionPolicy, BOOST_MATH_CONTAINER Container>
 inline auto kurtosis(ExecutionPolicy&& exec, Container const & v)
 {
     return kurtosis(exec, std::cbegin(v), std::cend(v));
@@ -342,7 +342,7 @@ inline auto kurtosis(ForwardIterator first, ForwardIterator last)
     return kurtosis(std::execution::seq, first, last);
 }
 
-template<class Container>
+template<BOOST_MATH_CONTAINER Container>
 inline auto kurtosis(Container const & v)
 {
     return kurtosis(std::execution::seq, std::cbegin(v), std::cend(v));
@@ -354,7 +354,7 @@ inline auto excess_kurtosis(ExecutionPolicy&& exec, ForwardIterator first, Forwa
     return kurtosis(exec, first, last) - 3;
 }
 
-template<class ExecutionPolicy, class Container>
+template<class ExecutionPolicy, BOOST_MATH_CONTAINER Container>
 inline auto excess_kurtosis(ExecutionPolicy&& exec, Container const & v)
 {
     return excess_kurtosis(exec, std::cbegin(v), std::cend(v));
@@ -366,7 +366,7 @@ inline auto excess_kurtosis(ForwardIterator first, ForwardIterator last)
     return excess_kurtosis(std::execution::seq, first, last);
 }
 
-template<class Container>
+template<BOOST_MATH_CONTAINER Container>
 inline auto excess_kurtosis(Container const & v)
 {
     return excess_kurtosis(std::execution::seq, std::cbegin(v), std::cend(v));
@@ -615,7 +615,7 @@ inline OutputIterator mode(ExecutionPolicy&& exec, ForwardIterator first, Forwar
     return detail::mode_impl(first, last, output);
 }
 
-template<class ExecutionPolicy, class Container, class OutputIterator>
+template<class ExecutionPolicy, BOOST_MATH_CONTAINER Container, class OutputIterator>
 inline OutputIterator mode(ExecutionPolicy&& exec, Container & v, OutputIterator output)
 {
     return mode(exec, std::begin(v), std::end(v), output);
@@ -629,7 +629,7 @@ inline OutputIterator mode(ForwardIterator first, ForwardIterator last, OutputIt
 
 // Requires enable_if_t to not clash with impl that returns std::list
 // Very ugly. std::is_execution_policy_v returns false for the std::execution objects and decltype of the objects (e.g. std::execution::seq)
-template<class Container, class OutputIterator, std::enable_if_t<!std::is_convertible_v<std::execution::sequenced_policy, Container> &&
+template<BOOST_MATH_CONTAINER Container, class OutputIterator, std::enable_if_t<!std::is_convertible_v<std::execution::sequenced_policy, Container> &&
                                                                  !std::is_convertible_v<std::execution::parallel_unsequenced_policy, Container> &&
                                                                  !std::is_convertible_v<std::execution::parallel_policy, Container>
                                                                  #if __cpp_lib_execution > 201900
@@ -651,7 +651,7 @@ inline auto mode(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator 
     return modes;
 }
 
-template<class ExecutionPolicy, class Container>
+template<class ExecutionPolicy, BOOST_MATH_CONTAINER Container>
 inline auto mode(ExecutionPolicy&& exec, Container & v)
 {
     return mode(exec, std::begin(v), std::end(v));
@@ -663,7 +663,7 @@ inline auto mode(ForwardIterator first, ForwardIterator last)
     return mode(std::execution::seq, first, last);
 }
 
-template<class Container>
+template<BOOST_MATH_CONTAINER Container>
 inline auto mode(Container & v)
 {
     return mode(std::execution::seq, std::begin(v), std::end(v));
@@ -686,7 +686,7 @@ inline double mean(const ForwardIterator first, const ForwardIterator last)
     return detail::mean_sequential_impl<double>(first, last);
 }
 
-template<class Container, typename Real = typename Container::value_type,
+template<BOOST_MATH_CONTAINER Container, typename Real = typename Container::value_type,
          enable_if_t<std::is_integral<Real>::value, bool> = true>
 inline double mean(const Container& c)
 {
@@ -701,7 +701,7 @@ inline Real mean(const ForwardIterator first, const ForwardIterator last)
     return detail::mean_sequential_impl<Real>(first, last);
 }
 
-template<class Container, typename Real = typename Container::value_type,
+template<BOOST_MATH_CONTAINER Container, typename Real = typename Container::value_type,
          enable_if_t<!std::is_integral<Real>::value, bool> = true>
 inline Real mean(const Container& c)
 {
@@ -715,7 +715,7 @@ inline double variance(const ForwardIterator first, const ForwardIterator last)
     return std::get<2>(detail::variance_sequential_impl<std::tuple<double, double, double, double>>(first, last));
 }
 
-template<class Container, typename Real = typename Container::value_type,
+template<BOOST_MATH_CONTAINER Container, typename Real = typename Container::value_type,
          enable_if_t<std::is_integral<Real>::value, bool> = true>
 inline double variance(const Container& c)
 {
@@ -730,7 +730,7 @@ inline Real variance(const ForwardIterator first, const ForwardIterator last)
 
 }
 
-template<class Container, typename Real = typename Container::value_type,
+template<BOOST_MATH_CONTAINER Container, typename Real = typename Container::value_type,
          enable_if_t<!std::is_integral<Real>::value, bool> = true>
 inline Real variance(const Container& c)
 {
@@ -746,7 +746,7 @@ inline double sample_variance(const ForwardIterator first, const ForwardIterator
     return n*variance(first, last)/(n-1);
 }
 
-template<class Container, typename Real = typename Container::value_type,
+template<BOOST_MATH_CONTAINER Container, typename Real = typename Container::value_type,
          enable_if_t<std::is_integral<Real>::value, bool> = true>
 inline double sample_variance(const Container& c)
 {
@@ -762,7 +762,7 @@ inline Real sample_variance(const ForwardIterator first, const ForwardIterator l
     return n*variance(first, last)/(n-1);
 }
 
-template<class Container, typename Real = typename Container::value_type,
+template<BOOST_MATH_CONTAINER Container, typename Real = typename Container::value_type,
          enable_if_t<!std::is_integral<Real>::value, bool> = true>
 inline Real sample_variance(const Container& c)
 {
@@ -777,7 +777,7 @@ inline std::pair<double, double> mean_and_sample_variance(const ForwardIterator 
     return std::make_pair(std::get<0>(results), std::get<3>(results)*std::get<2>(results)/(std::get<3>(results)-1.0));
 }
 
-template<class Container, typename Real = typename Container::value_type,
+template<BOOST_MATH_CONTAINER Container, typename Real = typename Container::value_type,
          enable_if_t<std::is_integral<Real>::value, bool> = true>
 inline std::pair<double, double> mean_and_sample_variance(const Container& c)
 {
@@ -792,7 +792,7 @@ inline std::pair<Real, Real> mean_and_sample_variance(const ForwardIterator firs
     return std::make_pair(std::get<0>(results), std::get<3>(results)*std::get<2>(results)/(std::get<3>(results)-Real(1)));
 }
 
-template<class Container, typename Real = typename Container::value_type,
+template<BOOST_MATH_CONTAINER Container, typename Real = typename Container::value_type,
          enable_if_t<!std::is_integral<Real>::value, bool> = true>
 inline std::pair<Real, Real> mean_and_sample_variance(const Container& c)
 {
@@ -808,7 +808,7 @@ inline std::tuple<double, double, double, double> first_four_moments(const Forwa
                            std::get<3>(results) / std::get<4>(results));
 }
 
-template<class Container, typename Real = typename Container::value_type,
+template<BOOST_MATH_CONTAINER Container, typename Real = typename Container::value_type,
          enable_if_t<std::is_integral<Real>::value, bool> = true>
 inline std::tuple<double, double, double, double> first_four_moments(const Container& c)
 {
@@ -824,7 +824,7 @@ inline std::tuple<Real, Real, Real, Real> first_four_moments(const ForwardIterat
                            std::get<3>(results) / std::get<4>(results));
 }
 
-template<class Container, typename Real = typename Container::value_type,
+template<BOOST_MATH_CONTAINER Container, typename Real = typename Container::value_type,
          enable_if_t<!std::is_integral<Real>::value, bool> = true>
 inline std::tuple<Real, Real, Real, Real> first_four_moments(const Container& c)
 {
@@ -838,7 +838,7 @@ inline double skewness(const ForwardIterator first, const ForwardIterator last)
     return detail::skewness_sequential_impl<double>(first, last);
 }
 
-template<class Container, typename Real = typename Container::value_type,
+template<BOOST_MATH_CONTAINER Container, typename Real = typename Container::value_type,
          enable_if_t<std::is_integral<Real>::value, bool> = true>
 inline double skewness(const Container& c)
 {
@@ -852,7 +852,7 @@ inline Real skewness(const ForwardIterator first, const ForwardIterator last)
     return detail::skewness_sequential_impl<Real>(first, last);
 }
 
-template<class Container, typename Real = typename Container::value_type,
+template<BOOST_MATH_CONTAINER Container, typename Real = typename Container::value_type,
          enable_if_t<!std::is_integral<Real>::value, bool> = true>
 inline Real skewness(const Container& c)
 {
@@ -875,7 +875,7 @@ inline double kurtosis(const ForwardIterator first, const ForwardIterator last)
     }
 }
 
-template<class Container, typename Real = typename Container::value_type,
+template<BOOST_MATH_CONTAINER Container, typename Real = typename Container::value_type,
          enable_if_t<std::is_integral<Real>::value, bool> = true>
 inline double kurtosis(const Container& c)
 {
@@ -898,7 +898,7 @@ inline Real kurtosis(const ForwardIterator first, const ForwardIterator last)
     }
 }
 
-template<class Container, typename Real = typename Container::value_type,
+template<BOOST_MATH_CONTAINER Container, typename Real = typename Container::value_type,
          enable_if_t<!std::is_integral<Real>::value, bool> = true>
 inline Real kurtosis(const Container& c)
 {
@@ -912,7 +912,7 @@ inline double excess_kurtosis(const ForwardIterator first, const ForwardIterator
     return kurtosis(first, last) - 3;
 }
 
-template<class Container, typename Real = typename Container::value_type,
+template<BOOST_MATH_CONTAINER Container, typename Real = typename Container::value_type,
          enable_if_t<std::is_integral<Real>::value, bool> = true>
 inline double excess_kurtosis(const Container& c)
 {
@@ -926,7 +926,7 @@ inline Real excess_kurtosis(const ForwardIterator first, const ForwardIterator l
     return kurtosis(first, last) - 3;
 }
 
-template<class Container, typename Real = typename Container::value_type,
+template<BOOST_MATH_CONTAINER Container, typename Real = typename Container::value_type,
          enable_if_t<!std::is_integral<Real>::value, bool> = true>
 inline Real excess_kurtosis(const Container& c)
 {
@@ -1104,7 +1104,7 @@ Real interquartile_range(ForwardIterator first, ForwardIterator last)
     }
 }
 
-template<class Container, typename Real = typename Container::value_type>
+template<BOOST_MATH_CONTAINER Container, typename Real = typename Container::value_type>
 Real interquartile_range(Container& c)
 {
     return interquartile_range(std::begin(c), std::end(c));
@@ -1134,7 +1134,7 @@ inline OutputIterator mode(ForwardIterator first, ForwardIterator last, OutputIt
     return detail::mode_impl(first, last, output);
 }
 
-template<class Container, class OutputIterator>
+template<BOOST_MATH_CONTAINER Container, class OutputIterator>
 inline OutputIterator mode(Container& c, OutputIterator output)
 {
     return mode(std::begin(c), std::end(c), output);
@@ -1148,7 +1148,7 @@ inline std::list<Real> mode(ForwardIterator first, ForwardIterator last)
     return modes;
 }
 
-template<class Container, typename Real = typename Container::value_type>
+template<BOOST_MATH_CONTAINER Container, typename Real = typename Container::value_type>
 inline std::list<Real> mode(Container& c)
 {
     return mode(std::begin(c), std::end(c));

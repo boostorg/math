@@ -21,6 +21,8 @@
 
 namespace boost::math::concepts {
 
+namespace detail {
+
 template <typename X, typename Y, typename Op>
 struct op_valid_impl
 {
@@ -35,10 +37,50 @@ struct op_valid_impl
 };
 
 template <typename X, typename Y, typename Op> 
-using op_valid = typename op_valid_impl<X, Y, Op>::type;
+using op_valid_t = typename op_valid_impl<X, Y, Op>::type;
 
 template <typename X, typename Y, typename Op>
-inline constexpr bool op_valid_v = op_valid<X, Y, Op>::value;
+inline constexpr bool op_valid_v = op_valid_t<X, Y, Op>::value;
+
+// Detector for class member functions
+struct nonesuch 
+{
+    nonesuch(const nonesuch&) = delete;
+    ~nonesuch() = delete;
+    void operator=(const nonesuch&) = delete;
+};
+
+template <typename Default, typename AlwaysVoid, template<typename...> typename Op, typename... Args>
+struct detector 
+{
+    using value_t = std::false_type;
+    using type = Default;
+};
+ 
+template <typename Default, template<typename...> typename Op, typename... Args>
+struct detector<Default, std::void_t<Op<Args...>>, Op, Args...> 
+{
+    using value_t = std::true_type;
+    using type = Op<Args...>;
+};
+
+template <template<typename...> typename Op, typename... Args>
+using is_detected = typename detector<nonesuch, void, Op, Args...>::value_t;
+ 
+template <template<typename...> typename Op, typename... Args>
+using detected_t = typename detector<nonesuch, void, Op, Args...>::type;
+
+#define BOOST_MATH_HAS_MEMBER_FUNCTION(member)                                      \
+template <typename T>                                                               \
+using has_##member##_t = decltype(std::declval<T&>().member());                     \
+                                                                                    \
+template <typename T>                                                               \
+inline constexpr bool has_##member##_v = is_detected<has_##member##_t, T>::value;       
+
+BOOST_MATH_HAS_MEMBER_FUNCTION(begin)
+BOOST_MATH_HAS_MEMBER_FUNCTION(end)
+
+} // Namespace detail
 
 template <typename T>
 concept Integral = std::is_integral_v<T>;
@@ -63,21 +105,21 @@ concept Unsigned_arithmetic = Arithmetic<T> && std::is_unsigned_v<T>;
 
 template <typename T>
 concept Arbitrary_unsigned_arithmetic_type = Unsigned_arithmetic<T> ||
-                                             (op_valid_v<T, T, std::equal_to<>> &&
-                                              op_valid_v<T, T, std::not_equal_to<>> &&
-                                              op_valid_v<T, T, std::greater<>> &&
-                                              op_valid_v<T, T, std::less<>> &&
-                                              op_valid_v<T, T, std::greater_equal<>> &&
-                                              op_valid_v<T, T, std::less_equal<>> &&
-                                              op_valid_v<T, T, std::plus<>> &&
-                                              op_valid_v<T, T, std::minus<>> &&
-                                              op_valid_v<T, T, std::multiplies<>> &&
-                                              op_valid_v<T, T, std::divides<>>);
+                                             (detail::op_valid_v<T, T, std::equal_to<>> &&
+                                              detail::op_valid_v<T, T, std::not_equal_to<>> &&
+                                              detail::op_valid_v<T, T, std::greater<>> &&
+                                              detail::op_valid_v<T, T, std::less<>> &&
+                                              detail::op_valid_v<T, T, std::greater_equal<>> &&
+                                              detail::op_valid_v<T, T, std::less_equal<>> &&
+                                              detail::op_valid_v<T, T, std::plus<>> &&
+                                              detail::op_valid_v<T, T, std::minus<>> &&
+                                              detail::op_valid_v<T, T, std::multiplies<>> &&
+                                              detail::op_valid_v<T, T, std::divides<>>);
 
 template <typename T>
 concept Arbitrary_signed_arithmetic_type = Signed_arithmetic<T> ||
                                            (Arbitrary_unsigned_arithmetic_type<T> &&
-                                            (op_valid_v<T, T, std::negate<>> ||
+                                            (detail::op_valid_v<T, T, std::negate<>> ||
                                              std::numeric_limits<T>::is_signed));
 
 template <typename T>
@@ -103,7 +145,15 @@ concept Aribitrary_real_type = Arbitrary_arithmetic_type<T> &&
 template <typename T>
 concept policy = boost::math::policies::is_policy<T>::value;
 
-}
+template <typename T>
+concept is_container = detail::has_begin_v<T> &&
+                       detail::has_end_v<T>;
+
+template <typename T>
+concept random_access_container = is_container<T> &&
+                                  std::random_access_iterator<typename T::iterator>;
+
+} // boost::math::concepts
 
 #define BOOST_MATH_INTEGRAL boost::math::concepts::Integral
 #define BOOST_MATH_SIGNED_INTEGRAL boost::math::concepts::Signed_integral
@@ -121,6 +171,11 @@ concept policy = boost::math::policies::is_policy<T>::value;
 #define BOOST_MATH_ARBITRARY_REAL boost::math::concepts::Aribitrary_real_type
 #define BOOST_MATH_POLICY boost::math::concepts::policy
 #define BOOST_MATH_FORWARD_ITER std::forward_iterator
+#define BOOST_MATH_BIDIRECTIONAL_ITER std::bidirectional_iterator
+#define BOOST_MATH_RANDOM_ACCESS_ITER std::random_access_iterator
+#define BOOST_MATH_OUTPUT_ITER std::output_iterator
+#define BOOST_MATH_CONTAINER boost::math::concepts::is_container
+#define BOOST_MATH_RANDOM_ACCESS_CONTAINER boost::math::concepts::random_access_container
 #define BOOST_MATH_REQUIRES(X, T) requires X<T>
 
 #endif
@@ -188,6 +243,22 @@ concept policy = boost::math::policies::is_policy<T>::value;
 
 #ifndef BOOST_MATH_FORWARD_ITER
 #  define BOOST_MATH_FORWARD_ITER typename
+#endif
+
+#ifndef BOOST_MATH_BIDIRECTIONAL_ITER
+#  define BOOST_MATH_BIDIRECTIONAL_ITER typename
+#endif
+
+#ifndef BOOST_MATH_RANDOM_ACCESS_ITER
+#  define BOOST_MATH_RANDOM_ACCESS_ITER typename
+#endif
+
+#ifndef BOOST_MATH_CONTAINER
+#  define BOOST_MATH_CONTAINER typename
+#endif
+
+#ifndef BOOST_MATH_RANDOM_ACCESS_CONTAINER
+#  define BOOST_MATH_RANDOM_ACCESS_CONTAINER typename
 #endif
 
 #ifndef BOOST_MATH_REQUIRES
