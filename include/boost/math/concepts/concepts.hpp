@@ -16,6 +16,7 @@
 #include <type_traits>
 #include <limits>
 #include <iterator>
+#include <complex>
 #include <boost/math/tools/config.hpp>
 #include <boost/math/policies/policy.hpp>
 
@@ -79,32 +80,45 @@ inline constexpr bool has_##member##_v = is_detected<has_##member##_t, T>::value
 
 BOOST_MATH_HAS_MEMBER_FUNCTION(begin)
 BOOST_MATH_HAS_MEMBER_FUNCTION(end)
+BOOST_MATH_HAS_MEMBER_FUNCTION(real)
+BOOST_MATH_HAS_MEMBER_FUNCTION(imag)
 
 } // Namespace detail
 
 template <typename T>
-concept Integral = std::is_integral_v<T>;
+concept integral = std::is_integral_v<T>;
 
 template <typename T>
-concept Signed_integral = Integral<T> && std::is_signed_v<T>;
+concept signed_integral = integral<T> && std::is_signed_v<T>;
 
 template <typename T>
-concept Unsigned_integral = Integral<T> && std::is_unsigned_v<T>;
+concept unsigned_integral = integral<T> && std::is_unsigned_v<T>;
 
 template <typename T>
-concept Real = std::is_floating_point_v<T>;
+concept real = std::is_floating_point_v<T>;
 
 template <typename T>
-concept Arithmetic = std::is_arithmetic_v<T>;
+concept complex = std::is_same_v<T, std::complex<float>>
+                  || std::is_same_v<T, std::complex<double>>
+                  #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+                  || std::is_same_v<T, std::complex<long double>>
+                  #endif
+                  ;
 
 template <typename T>
-concept Signed_arithmetic = Arithmetic<T> && std::is_signed_v<T>;
+concept real_or_complex = real<T> || complex<T>;
 
 template <typename T>
-concept Unsigned_arithmetic = Arithmetic<T> && std::is_unsigned_v<T>;
+concept arithmetic = std::is_arithmetic_v<T>;
 
 template <typename T>
-concept Arbitrary_unsigned_arithmetic_type = Unsigned_arithmetic<T> ||
+concept signed_arithmetic = arithmetic<T> && std::is_signed_v<T>;
+
+template <typename T>
+concept unsigned_arithmetic = arithmetic<T> && std::is_unsigned_v<T>;
+
+template <typename T>
+concept arbitrary_unsigned_arithmetic_type = unsigned_arithmetic<T> ||
                                              (detail::op_valid_v<T, T, std::equal_to<>> &&
                                               detail::op_valid_v<T, T, std::not_equal_to<>> &&
                                               detail::op_valid_v<T, T, std::greater<>> &&
@@ -117,36 +131,45 @@ concept Arbitrary_unsigned_arithmetic_type = Unsigned_arithmetic<T> ||
                                               detail::op_valid_v<T, T, std::divides<>>);
 
 template <typename T>
-concept Arbitrary_signed_arithmetic_type = Signed_arithmetic<T> ||
-                                           (Arbitrary_unsigned_arithmetic_type<T> &&
+concept arbitrary_signed_arithmetic_type = signed_arithmetic<T> ||
+                                           (arbitrary_unsigned_arithmetic_type<T> &&
                                             (detail::op_valid_v<T, T, std::negate<>> ||
                                              std::numeric_limits<T>::is_signed));
 
 template <typename T>
-concept Arbitrary_arithmetic_type = Arbitrary_unsigned_arithmetic_type<T> ||
-                                    Arbitrary_signed_arithmetic_type<T>;
+concept arbitrary_arithmetic_type = arbitrary_unsigned_arithmetic_type<T> ||
+                                    arbitrary_signed_arithmetic_type<T>;
 
 template <typename T>
-concept Aribitrary_unsigned_integer_type = Arbitrary_unsigned_arithmetic_type<T> &&
+concept arbitrary_unsigned_integer_type = arbitrary_unsigned_arithmetic_type<T> &&
                                            std::numeric_limits<T>::is_integer;
 
 template <typename T>
-concept Aribitrary_signed_integer_type = Arbitrary_signed_arithmetic_type<T> &&
+concept arbitrary_signed_integer_type = arbitrary_signed_arithmetic_type<T> &&
                                          std::numeric_limits<T>::is_integer;
 
 template <typename T>
-concept Aribitrary_integer_type = Aribitrary_unsigned_integer_type<T> ||
-                                  Aribitrary_signed_integer_type<T>;
+concept arbitrary_integer_type = arbitrary_unsigned_integer_type<T> ||
+                                  arbitrary_signed_integer_type<T>;
 
 template <typename T>
-concept Aribitrary_real_type = Arbitrary_arithmetic_type<T> &&
+concept arbitrary_real_type = arbitrary_arithmetic_type<T> &&
                                !std::numeric_limits<T>::is_integer;
+
+template <typename T>
+concept arbitrary_complex_type = complex<T> ||
+                                 (detail::has_real_v<T> &&
+                                  detail::has_imag_v<T>);
+
+template <typename T>
+concept arbitrary_real_or_complex_type = arbitrary_real_type<T> ||
+                                         arbitrary_complex_type<T>;
 
 template <typename T>
 concept policy = boost::math::policies::is_policy<T>::value;
 
 // Workaround for LIBCPP versions that have <concepts> but have not implemented concepts in <iterator>
-#if defined(_LIBCPP_VERSION) && !defined(_LIBCPP___ITERATOR_CONCEPTS_H)
+#if defined(_LIBCPP_VERSION) && _LIBCPP_VERSION < 13000
 
 template <typename T>
 concept forward_iterator = std::is_same_v<typename std::iterator_traits<T>::iterator_category(), std::forward_iterator_tag>;
@@ -180,27 +203,31 @@ concept random_access_container = is_container<T> &&
 
 } // boost::math::concepts
 
-#define BOOST_MATH_INTEGRAL boost::math::concepts::Integral
-#define BOOST_MATH_SIGNED_INTEGRAL boost::math::concepts::Signed_integral
-#define BOOST_MATH_UNSIGNED_INTEGRAL boost::math::concepts::Unsigned_integral
-#define BOOST_MATH_REAL boost::math::concepts::Real
-#define BOOST_MATH_ARITHMETIC boost::math::concepts::Arithmetic
-#define BOOST_MATH_SIGNED_ARITHMETIC boost::math::concepts::Signed_arithmetic
-#define BOOST_MATH_UNSIGNED_ARITHMETIC boost::math::concepts::Unsigned_arithmetic
-#define BOOST_MATH_ARBITRARY_UNSIGNED_ARITHMETIC boost::math::concepts::Arbitrary_unsigned_arithmetic_type
-#define BOOST_MATH_ARBITRARY_SIGNED_ARITHMETIC boost::math::concepts::Arbitrary_signed_arithmetic_type
-#define BOOST_MATH_ARBITRARY_ARITHMETIC boost::math::concepts::Arbitrary_arithmetic_type
-#define BOOST_MATH_ARBITRARY_UNSIGNED_INTEGER boost::math::concepts::Aribitrary_unsigned_integer_type
-#define BOOST_MATH_ARBITRARY_SIGNED_INTEGER boost::math::concepts::Aribitrary_signed_integer_type
-#define BOOST_MATH_ARBITRARY_INTEGER boost::math::concepts::Aribitrary_integer_type
-#define BOOST_MATH_ARBITRARY_REAL boost::math::concepts::Aribitrary_real_type
+#define BOOST_MATH_INTEGRAL boost::math::concepts::integral
+#define BOOST_MATH_SIGNED_INTEGRAL boost::math::concepts::signed_integral
+#define BOOST_MATH_UNSIGNED_INTEGRAL boost::math::concepts::unsigned_integral
+#define BOOST_MATH_REAL boost::math::concepts::real
+#define BOOST_MATH_COMPLEX boost::math::concepts::complex
+#define BOOST_MATH_REAL_OR_COMPLEX boost::math::concepts::real_or_complex
+#define BOOST_MATH_ARITHMETIC boost::math::concepts::arithmetic
+#define BOOST_MATH_SIGNED_ARITHMETIC boost::math::concepts::signed_arithmetic
+#define BOOST_MATH_UNSIGNED_ARITHMETIC boost::math::concepts::unsigned_arithmetic
+#define BOOST_MATH_ARBITRARY_UNSIGNED_ARITHMETIC boost::math::concepts::arbitrary_unsigned_arithmetic_type
+#define BOOST_MATH_ARBITRARY_SIGNED_ARITHMETIC boost::math::concepts::arbitrary_signed_arithmetic_type
+#define BOOST_MATH_ARBITRARY_ARITHMETIC boost::math::concepts::arbitrary_arithmetic_type
+#define BOOST_MATH_ARBITRARY_UNSIGNED_INTEGER boost::math::concepts::arbitrary_unsigned_integer_type
+#define BOOST_MATH_ARBITRARY_SIGNED_INTEGER boost::math::concepts::arbitrary_signed_integer_type
+#define BOOST_MATH_ARBITRARY_INTEGER boost::math::concepts::arbitrary_integer_type
+#define BOOST_MATH_ARBITRARY_REAL boost::math::concepts::arbitrary_real_type
+#define BOOST_MATH_ARBITRARY_COMPLEX boost::math::concepts::arbitrary_complex_type
+#define BOOST_MATH_ARBITRARY_REAL_OR_COMPLEX boost::math::concepts::arbitrary_real_or_complex_type
 #define BOOST_MATH_POLICY boost::math::concepts::policy
 #define BOOST_MATH_CONTAINER boost::math::concepts::is_container
 #define BOOST_MATH_RANDOM_ACCESS_CONTAINER boost::math::concepts::random_access_container
 #define BOOST_MATH_REQUIRES(X, T) requires X<T>
 
 // Workaround for LIBCPP versions that have <concepts> but have not implemented concepts in <iterator>
-#if defined(_LIBCPP_VERSION) && !defined(_LIBCPP___ITERATOR_CONCEPTS_H)
+#if defined(_LIBCPP_VERSION) && _LIBCPP_VERSION < 13000
 
 #define BOOST_MATH_FORWARD_ITER boost::math::concepts::forward_iterator
 #define BOOST_MATH_BIDIRECTIONAL_ITER boost::math::concepts::bidirectional_iterator
@@ -231,6 +258,14 @@ concept random_access_container = is_container<T> &&
 
 #ifndef BOOST_MATH_REAL
 #  define BOOST_MATH_REAL typename
+#endif
+
+#ifndef BOOST_MATH_COMPLEX
+#  define BOOST_MATH_COMPLEX typename
+#endif
+
+#ifndef BOOST_MATH_REAL_OR_COMPLEX
+#  define BOOST_MATH_REAL_OR_COMPLEX typename
 #endif
 
 #ifndef BOOST_MATH_ARITHMETIC
@@ -271,6 +306,14 @@ concept random_access_container = is_container<T> &&
 
 #ifndef BOOST_MATH_ARBITRARY_REAL
 #  define BOOST_MATH_ARBITRARY_REAL typename
+#endif
+
+#ifndef BOOST_MATH_ARBITRARY_COMPLEX
+#  define BOOST_MATH_ARBITRARY_COMPLEX typename
+#endif
+
+#ifndef BOOST_MATH_ARBITRARY_REAL_OR_COMPLEX
+#  define BOOST_MATH_ARBITRARY_REAL_OR_COMPLEX typename
 #endif
 
 #ifndef BOOST_MATH_POLICY
