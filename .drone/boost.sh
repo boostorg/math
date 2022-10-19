@@ -15,7 +15,12 @@ echo '==================================> BEFORE_INSTALL'
 echo '==================================> INSTALL'
 
 cd ..
-git clone -b $TRAVIS_BRANCH --depth 1 https://github.com/boostorg/boost.git boost-root
+if [ "$DRONE_BRANCH" == "master" ] || [[ "$DRONE_BRANCH" == */master ]]; then
+    export BOOST_BRANCH="master"
+else
+    export BOOST_BRANCH="develop"
+fi
+git clone -b $BOOST_BRANCH --depth 1 https://github.com/boostorg/boost.git boost-root
 cd boost-root
 git submodule update --init tools/build
 git submodule update --init libs/config
