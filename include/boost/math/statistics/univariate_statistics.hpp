@@ -598,6 +598,7 @@ inline auto interquartile_range(RandomAccessContainer & v)
 }
 
 template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_FORWARD_ITER ForwardIterator, class OutputIterator>
+    BOOST_MATH_REQUIRES_ITER(BOOST_MATH_OUTPUT_ITER(ForwardIterator, OutputIterator))
 inline OutputIterator mode(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last, OutputIterator output)
 {
     if(!std::is_sorted(exec, first, last))
@@ -616,12 +617,14 @@ inline OutputIterator mode(ExecutionPolicy&& exec, ForwardIterator first, Forwar
 }
 
 template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_CONTAINER Container, class OutputIterator>
+    BOOST_MATH_REQUIRES_ITER(BOOST_MATH_OUTPUT_ITER(typename Container::iterator, OutputIterator))
 inline OutputIterator mode(ExecutionPolicy&& exec, Container & v, OutputIterator output)
 {
     return mode(exec, std::begin(v), std::end(v), output);
 }
 
 template<BOOST_MATH_FORWARD_ITER ForwardIterator, class OutputIterator>
+    BOOST_MATH_REQUIRES_ITER(BOOST_MATH_OUTPUT_ITER(ForwardIterator, OutputIterator))
 inline OutputIterator mode(ForwardIterator first, ForwardIterator last, OutputIterator output)
 {
     return mode(std::execution::seq, first, last, output);
@@ -636,6 +639,7 @@ template<BOOST_MATH_CONTAINER Container, class OutputIterator, std::enable_if_t<
                                                                  && !std::is_convertible_v<std::execution::unsequenced_policy, Container>
                                                                  #endif
                                                                  , bool> = true>
+    BOOST_MATH_REQUIRES_ITER(BOOST_MATH_OUTPUT_ITER(typename Container::iterator, OutputIterator))
 inline OutputIterator mode(Container & v, OutputIterator output)
 {
     return mode(std::execution::seq, std::begin(v), std::end(v), output);

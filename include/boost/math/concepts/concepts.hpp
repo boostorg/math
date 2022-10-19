@@ -175,30 +175,18 @@ concept arbitrary_numerical_type = arbitrary_real_or_complex_type<T> ||
 template <typename T>
 concept policy = boost::math::policies::is_policy<T>::value;
 
-// Workaround for LIBCPP versions that have <concepts> but have not implemented concepts in <iterator>
-#if defined(_LIBCPP_VERSION) && _LIBCPP_VERSION < 13000
+template <typename T>
+concept forward_iterator = std::derived_from<typename std::iterator_traits<T>::iterator_category, std::forward_iterator_tag>;
 
 template <typename T>
-concept forward_iterator = std::is_same_v<typename std::iterator_traits<T>::iterator_category(), std::forward_iterator_tag>;
+concept bidirectional_iterator = std::derived_from<typename std::iterator_traits<T>::iterator_category, std::bidirectional_iterator_tag>;
 
 template <typename T>
-concept bidirectional_iterator = std::is_same_v<typename std::iterator_traits<T>::iterator_category(), std::bidirectional_iterator_tag>;
+concept random_access_iterator = std::derived_from<typename std::iterator_traits<T>::iterator_category, std::random_access_iterator_tag>;
 
-template <typename T>
-concept random_access_iterator = std::is_same_v<typename std::iterator_traits<T>::iterator_category(), std::random_access_iterator_tag>;
-
-#else
-
-template <typename T>
-concept forward_iterator = std::forward_iterator<T>;
-
-template <typename T>
-concept bidirectional_iterator = std::bidirectional_iterator<T>;
-
-template <typename T>
-concept random_access_iterator = std::random_access_iterator<T>;
-
-#endif
+template <typename I, typename T>
+concept output_iterator = std::derived_from<typename std::iterator_traits<I>::iterator_category, std::input_iterator_tag> &&
+                          std::derived_from<typename std::iterator_traits<T>::iterator_category, std::output_iterator_tag>;
 
 template <typename T>
 concept is_container = detail::has_begin_v<T> &&
@@ -230,25 +218,19 @@ concept random_access_container = is_container<T> &&
 #define BOOST_MATH_ARBITRARY_COMPLEX boost::math::concepts::arbitrary_complex_type
 #define BOOST_MATH_ARBITRARY_REAL_OR_COMPLEX boost::math::concepts::arbitrary_real_or_complex_type
 #define BOOST_MATH_ARBITRARY_NUMERICAL boost::math::concepts::arbitrary_numerical_type
+
 #define BOOST_MATH_POLICY boost::math::concepts::policy
+
 #define BOOST_MATH_CONTAINER boost::math::concepts::is_container
 #define BOOST_MATH_RANDOM_ACCESS_CONTAINER boost::math::concepts::random_access_container
-#define BOOST_MATH_REQUIRES(X, T) requires X<T>
-
-// Workaround for LIBCPP versions that have <concepts> but have not implemented concepts in <iterator>
-#if defined(_LIBCPP_VERSION) && _LIBCPP_VERSION < 13000
 
 #define BOOST_MATH_FORWARD_ITER boost::math::concepts::forward_iterator
 #define BOOST_MATH_BIDIRECTIONAL_ITER boost::math::concepts::bidirectional_iterator
 #define BOOST_MATH_RANDOM_ACCESS_ITER boost::math::concepts::random_access_iterator
+#define BOOST_MATH_OUTPUT_ITER(I, T) boost::math::concepts::output_iterator<I, T>
+#define BOOST_MATH_REQUIRES_ITER(X) requires X
 
-#else
-
-#define BOOST_MATH_FORWARD_ITER std::forward_iterator
-#define BOOST_MATH_BIDIRECTIONAL_ITER std::bidirectional_iterator
-#define BOOST_MATH_RANDOM_ACCESS_ITER std::random_access_iterator
-
-#endif // Workaround for LIBCPP
+#define BOOST_MATH_REQUIRES(X, T) requires X<T>
 
 #ifdef BOOST_MATH_EXEC_COMPATIBLE
 #include <execution>
@@ -363,6 +345,14 @@ concept execution_policy = std::is_execution_policy_v<std::remove_cvref_t<T>>;
 
 #ifndef BOOST_MATH_RANDOM_ACCESS_ITER
 #  define BOOST_MATH_RANDOM_ACCESS_ITER typename
+#endif
+
+#ifndef BOOST_MATH_OUTPUT_ITER
+#  define BOOST_MATH_OUTPUT_ITER(I, T)
+#endif
+
+#ifndef BOOST_MATH_REQUIRES_ITER
+#  define BOOST_MATH_REQUIRES_ITER(X)
 #endif
 
 #ifndef BOOST_MATH_CONTAINER
