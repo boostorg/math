@@ -175,18 +175,22 @@ concept arbitrary_numerical_type = arbitrary_real_or_complex_type<T> ||
 template <typename T>
 concept policy = boost::math::policies::is_policy<T>::value;
 
-template <typename T>
-concept forward_iterator = std::derived_from<typename std::iterator_traits<T>::iterator_category, std::forward_iterator_tag>;
+template <typename Derived, typename Base>
+concept derived_from = std::is_base_of_v<Base, Derived> &&
+                       std::is_convertible_v<const volatile Derived*, const volatile Base*>;
 
 template <typename T>
-concept bidirectional_iterator = std::derived_from<typename std::iterator_traits<T>::iterator_category, std::bidirectional_iterator_tag>;
+concept forward_iterator = derived_from<typename std::iterator_traits<T>::iterator_category, std::forward_iterator_tag>;
 
 template <typename T>
-concept random_access_iterator = std::derived_from<typename std::iterator_traits<T>::iterator_category, std::random_access_iterator_tag>;
+concept bidirectional_iterator = derived_from<typename std::iterator_traits<T>::iterator_category, std::bidirectional_iterator_tag>;
+
+template <typename T>
+concept random_access_iterator = derived_from<typename std::iterator_traits<T>::iterator_category, std::random_access_iterator_tag>;
 
 template <typename I, typename T>
-concept output_iterator = std::derived_from<typename std::iterator_traits<I>::iterator_category, std::input_iterator_tag> &&
-                          std::derived_from<typename std::iterator_traits<T>::iterator_category, std::output_iterator_tag>;
+concept output_iterator = derived_from<typename std::iterator_traits<I>::iterator_category, std::input_iterator_tag> &&
+                          derived_from<typename std::iterator_traits<T>::iterator_category, std::output_iterator_tag>;
 
 template <typename T>
 concept is_container = detail::has_begin_v<T> &&
