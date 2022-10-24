@@ -283,8 +283,14 @@
         <span class="phrase"><a name="math_toolkit.ellint.ellint_2.implementation"></a></span><a class="link" href="ellint_2.html#math_toolkit.ellint.ellint_2.implementation">Implementation</a>
       </h5>
 <p>
-        These functions are implemented in terms of Carlson's integrals using the
-        relations:
+        For up to 80-bit long double precision the complete versions of these functions
+        are implemented as Taylor series expansions as in: "Fast computation
+        of complete elliptic integrals and Jacobian elliptic functions", Celestial
+        Mechanics and Dynamical Astronomy, April 2012.
+      </p>
+<p>
+        Otherwise these functions are implemented in terms of Carlson's integrals
+        using the relations:
       </p>
 <div class="blockquote"><blockquote class="blockquote"><p>
           <span class="inlinemediaobject"><img src="../../../equations/ellint21.svg"></span>

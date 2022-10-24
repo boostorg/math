@@ -8,6 +8,26 @@ All old bug reports including closed ones can be viewed on Trac
 
 Recent issues on GitHub [@https://github.com/boostorg/math/issues?utf8=%E2%9C%93&q=is%3Aissue here].
 
+[h4 Math-4.0.0 (Boost-1.81)]
+
+* [*BREAKING CHANGE:] Fix forward declaration of `user_rounding_error`, see [@https://github.com/boostorg/math/issues/834 834].
+* Fix cancellation error in binomial_distribution for extreme parameter ranges, see [@https://github.com/scipy/scipy/issues/17146 scipy#17146]
+* Fix spurious divide-by-zero in non-central-f PDF so that the FP error flags don't get set spuriously, see [@https://github.com/scipy/scipy/issues/17101 scipy#17101].
+* Lots of gcc and clang warning fixes, lots of small cast fixes, unreachable code, unused parameters, deprecated constructors etc.
+* Add workaround for apparent clang Mac M1 bug, see [@https://github.com/boostorg/math/issues/826 826].
+* Fix quartic root finder when depressed cubic only has single real root, see [@https://github.com/boostorg/math/issues/825 825].
+* Fix recursion routines to correctly handle [sub 1]F[sub 1](-n, -n, n), see [@https://github.com/boostorg/math/issues/829 829].
+* Modernize exception handling specifications, see [@https://github.com/boostorg/math/issues/822 822].
+* Improve ccmath signbit and copysign to correctly handle the sign of infinities and NaNs when `std::bitcast` is available.
+* Improve performance of the Complete Elliptic Integrals.
+* Add some missing #include's for the hypergeometric functions, see [@https://github.com/boostorg/math/issues/811 811].
+* Avoid setting spurious overflow flag in Bessel IK calculation.
+* Avoid spurious overflow in `ibeta_power_term` by avoiding taking the log of `0`.
+* Make sure `ibeta_power_terms` triggers an underflow error when required, see [@https://github.com/boostorg/math/issues/799 799].
+* Use `nullptr` rather than zeros.
+* Fix right-end-point derivative error in cubic B spline.
+
+
 [h4 Math-3.4.0 (Boost-1.80)]
 
 * [*Deprecated C++11 support]: from 2023 we will require C++14 as a minimum standard.
