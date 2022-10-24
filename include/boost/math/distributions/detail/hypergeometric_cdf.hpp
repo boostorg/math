@@ -27,7 +27,7 @@ namespace boost{ namespace math{ namespace detail{
       {
          result = hypergeometric_pdf<T>(x, r, n, N, pol);
          T diff = result;
-         unsigned lower_limit = static_cast<unsigned>((std::max)(0, (int)(n + r) - (int)(N)));
+         unsigned lower_limit = static_cast<unsigned>((std::max)(0, static_cast<int>(n + r) - static_cast<int>(N)));
          while(diff > (invert ? T(1) : result) * tools::epsilon<T>())
          {
             diff = T(x) * T((N + x) - n - r) * diff / (T(1 + n - x) * T(1 + r - x));
@@ -75,9 +75,9 @@ namespace boost{ namespace math{ namespace detail{
       typedef typename tools::promote_args<T>::type result_type;
       typedef typename policies::evaluation<result_type, Policy>::type value_type;
       typedef typename policies::normalise<
-         Policy, 
-         policies::promote_float<false>, 
-         policies::promote_double<false>, 
+         Policy,
+         policies::promote_float<false>,
+         policies::promote_double<false>,
          policies::discrete_quantile<>,
          policies::assert_undefined<> >::type forwarding_policy;
 

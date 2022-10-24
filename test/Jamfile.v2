@@ -159,10 +159,14 @@ test-suite special_fun :
    [ run ccmath_isless_test.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx17_if_constexpr ] ]
    [ run ccmath_islessequal_test.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx17_if_constexpr ] ]
    [ run ccmath_isunordered_test.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx17_if_constexpr ] ]
+   [ run ccmath_next_test.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx17_if_constexpr ] ]
    [ run ccmath_fma_test.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx17_if_constexpr ] ]
+   [ run ccmath_signbit_test.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx17_if_constexpr ] ]
    [ run log1p_expm1_test.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
    [ run powm1_sqrtp1m1_test.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
    [ run git_issue_705.cpp ../../test/build//boost_unit_test_framework  ]
+   [ run git_issue_810.cpp ../../test/build//boost_unit_test_framework  ]
+   [ run git_issue_826.cpp ../../test/build//boost_unit_test_framework  ]
    [ run special_functions_test.cpp ../../test/build//boost_unit_test_framework  ]
    [ run test_airy.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
    [ run test_bessel_j.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
@@ -886,7 +890,9 @@ test-suite distribution_tests :
    [ run complex_test.cpp ../../test/build//boost_unit_test_framework  ]
 
    [ compile test_dist_deduction_guides.cpp : [ requires cpp_deduction_guides cpp_variadic_templates ] ]
-
+   [ run git_issue_800.cpp ../../test/build//boost_unit_test_framework  ]
+   [ run git_issue_845.cpp ../../test/build//boost_unit_test_framework  ]
+   [ run scipy_issue_17146.cpp ../../test/build//boost_unit_test_framework  ]
 ;
 
 test-suite mp :
@@ -929,7 +935,7 @@ test-suite misc :
       ../../test/build//boost_unit_test_framework
       : : :
       <define>TEST_LD=1
-      [ check-target-builds ../config//has_long_double_support "long double support" : : <build>no ] 
+      [ check-target-builds ../config//has_long_double_support "long double support" : : <build>no ]
       :
       test_tr1_long_double
      ]
@@ -951,7 +957,7 @@ test-suite misc :
       ../../test/build//boost_unit_test_framework
       : : :
       <define>TEST_LD=1
-      [ check-target-builds ../config//has_long_double_support "long double support" : : <build>no ] 
+      [ check-target-builds ../config//has_long_double_support "long double support" : : <build>no ]
       :
       test_tr1_c_long_double
     ]
@@ -1044,6 +1050,12 @@ test-suite misc :
    [ run  compile_test/compl_asinh_incl_test.cpp compile_test_main  : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ run  compile_test/compl_atan_incl_test.cpp compile_test_main  : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ run  compile_test/compl_atanh_incl_test.cpp compile_test_main  : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
+
+   [ run  compile_test/sf_1f0_incl_test.cpp compile_test_main  : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
+   [ run  compile_test/sf_0f1_incl_test.cpp compile_test_main  : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
+   [ run  compile_test/sf_2f0_incl_test.cpp compile_test_main  : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
+   [ run  compile_test/sf_1f1_incl_test.cpp compile_test_main  : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
+   [ run  compile_test/sf_pfq_incl_test.cpp compile_test_main  : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ run  compile_test/sf_acosh_incl_test.cpp compile_test_main  : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ run  compile_test/sf_asinh_incl_test.cpp compile_test_main  : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ run  compile_test/sf_atanh_incl_test.cpp compile_test_main  : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
@@ -1280,7 +1292,7 @@ test-suite quadrature :
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] :
    tanh_sinh_quadrature_test_9 ]
 
-   [ run tanh_sinh_mpfr.cpp ../tools//mpfr ../tools//gmp : : : [ check-target-builds ../config//has_mpfr : : <build>no ] [ check-target-builds ../config//has_gmp : : <build>no ] [ check-target-builds ../config//is_cygwin_run "Cygwin CI run" : <build>no ] [ requires cxx11_hdr_initializer_list cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_smart_ptr ] release <toolset>clang:<cxxflags>-Wno-literal-range [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ] 
+   [ run tanh_sinh_mpfr.cpp ../tools//mpfr ../tools//gmp : : : [ check-target-builds ../config//has_mpfr : : <build>no ] [ check-target-builds ../config//has_gmp : : <build>no ] [ check-target-builds ../config//is_cygwin_run "Cygwin CI run" : <build>no ] [ requires cxx11_hdr_initializer_list cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_smart_ptr ] release <toolset>clang:<cxxflags>-Wno-literal-range [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ run sinh_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
      : : : release [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] ]
    [ run exp_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
@@ -1442,7 +1454,7 @@ test-suite quadrature :
    ]
    [ compile compile_test/quad_naive_monte_carlo_incl_test.cpp :
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
-     <target-os>linux:<linkflags>"-pthread" [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] 
+     <target-os>linux:<linkflags>"-pthread" [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ]
    ]
 
    [ compile compile_test/gauss_concept_test.cpp : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
@@ -1516,7 +1528,7 @@ test-suite float128_tests : [ get_float128_tests ] ;
 #
 # Things that we can test with exceptions and RTTI turned off:
 #
-alias no_eh_tests : 
+alias no_eh_tests :
    compl_abs_incl_test
    compl_acos_incl_test
    compl_acosh_incl_test

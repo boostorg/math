@@ -122,7 +122,7 @@ public:
 
     int64_t bytes() const
     {
-        return 2*y_.size()*sizeof(Real) + sizeof(this);
+        return 2*y_.size()*sizeof(Real) + sizeof(*this);
     }
 
 private:
@@ -165,7 +165,7 @@ public:
 
     int64_t bytes() const
     {
-        return data_.size()*data_[0].size()*sizeof(Real) + sizeof(this);
+        return data_.size()*data_[0].size()*sizeof(Real) + sizeof(*this);
     }
 
 private:
@@ -253,7 +253,7 @@ public:
 
     int64_t bytes() const
     {
-        return sizeof(this) + data_.size()*data_[0].size()*sizeof(Real);
+        return sizeof(*this) + data_.size()*data_[0].size()*sizeof(Real);
     }
 
 private:

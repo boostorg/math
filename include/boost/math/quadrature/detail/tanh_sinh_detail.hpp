@@ -177,9 +177,9 @@ private:
    mutable std::vector<std::vector<Real>> m_abscissas;
    mutable std::vector<std::vector<Real>> m_weights;
    mutable std::vector<std::size_t>       m_first_complements;
-   std::size_t                       m_max_refinements, m_inital_row_length;
+   std::size_t                       m_max_refinements, m_inital_row_length{};
 #if !defined(BOOST_MATH_NO_ATOMIC_INT) && defined(BOOST_HAS_THREADS)
-   mutable boost::math::detail::atomic_unsigned_type      m_committed_refinements;
+   mutable boost::math::detail::atomic_unsigned_type      m_committed_refinements{};
    mutable std::mutex m_mutex;
 #else
    mutable unsigned                  m_committed_refinements;

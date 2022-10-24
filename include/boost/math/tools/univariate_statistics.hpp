@@ -169,7 +169,7 @@ auto skewness(ForwardIterator first, ForwardIterator last)
         {
             // The limit is technically undefined, but the interpretation here is clear:
             // A constant dataset has no skewness.
-            return double(0);
+            return static_cast<double>(0);
         }
         double skew = M3/(M2*sqrt(var));
         return skew;
@@ -345,7 +345,7 @@ auto gini_coefficient(RandomAccessIterator first, RandomAccessIterator last)
         // If the l1 norm is zero, all elements are zero, so every element is the same.
         if (denom == 0)
         {
-            return double(0);
+            return static_cast<double>(0);
         }
 
         return ((2*num)/denom - i)/(i-1);

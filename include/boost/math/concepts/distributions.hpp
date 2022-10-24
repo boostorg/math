@@ -50,7 +50,7 @@ public:
    static distribution_archetype& get_object()
    {
       // will never get caled:
-      return *reinterpret_cast<distribution_archetype*>(0);
+      return *reinterpret_cast<distribution_archetype*>(nullptr);
    }
 }; // template <class RealType>class distribution_archetype
 

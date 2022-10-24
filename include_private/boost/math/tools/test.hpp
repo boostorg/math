@@ -133,7 +133,7 @@ test_result<typename calculate_result_type<A>::value_type> test(const A& a, F1 t
       }
       catch(const std::overflow_error&)
       {
-         point = std::numeric_limits<value_type>::has_infinity ? 
+         point = std::numeric_limits<value_type>::has_infinity ?
             std::numeric_limits<value_type>::infinity()
             : tools::max_value<value_type>();
       }
@@ -205,7 +205,7 @@ test_result<Real> test_hetero(const A& a, F1 test_func, F2 expect_func)
       }
       catch(const std::overflow_error&)
       {
-         point = std::numeric_limits<value_type>::has_infinity ? 
+         point = std::numeric_limits<value_type>::has_infinity ?
             std::numeric_limits<value_type>::infinity()
             : tools::max_value<value_type>();
       }
@@ -254,14 +254,14 @@ test_result<Real> test_hetero(const A& a, F1 test_func, F2 expect_func)
 }
 
 template <class Val, class Exception>
-void test_check_throw(Val v, Exception e)
+void test_check_throw(Val, Exception)
 {
    BOOST_CHECK(errno);
    errno = 0;
 }
 
 template <class Val>
-void test_check_throw(Val val, std::domain_error const* e)
+void test_check_throw(Val val, std::domain_error const*)
 {
    BOOST_CHECK(errno == EDOM);
    errno = 0;
@@ -272,7 +272,7 @@ void test_check_throw(Val val, std::domain_error const* e)
 }
 
 template <class Val>
-void test_check_throw(Val v, std::overflow_error const* e)
+void test_check_throw(Val v, std::overflow_error const*)
 {
    BOOST_CHECK(errno == ERANGE);
    errno = 0;
@@ -280,7 +280,7 @@ void test_check_throw(Val v, std::overflow_error const* e)
 }
 
 template <class Val>
-void test_check_throw(Val v, boost::math::rounding_error const* e)
+void test_check_throw(Val v, boost::math::rounding_error const*)
 {
    BOOST_CHECK(errno == ERANGE);
    errno = 0;
@@ -304,7 +304,7 @@ void test_check_throw(Val v, boost::math::rounding_error const* e)
   // but to keep things simple we really need it somewhere that's always included:
   //
 #ifdef BOOST_NO_EXCEPTIONS
-#  define BOOST_MATH_CHECK_THROW(x, ExceptionType) boost::math::tools::test_check_throw(x, static_cast<ExceptionType const*>(0));
+#  define BOOST_MATH_CHECK_THROW(x, ExceptionType) boost::math::tools::test_check_throw(x, static_cast<ExceptionType const*>(nullptr));
 #else
 #  define BOOST_MATH_CHECK_THROW(x, y) BOOST_CHECK_THROW(x, y)
 #endif

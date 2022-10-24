@@ -86,7 +86,7 @@ void test_spots()
 template <typename Real, typename ExecutionPolicy>
 void test_threaded(ExecutionPolicy&& exec)
 {
-    std::vector<Real> x = boost::math::generate_random_vector<Real>(1024, 0);
+    std::vector<Real> x = boost::math::generate_random_vector<Real>(1024, 2);
     std::vector<Real> y = boost::math::generate_random_vector<Real>(1024, 1);
 
     std::sort(std::forward<ExecutionPolicy>(exec), x.begin(), x.end());
@@ -105,7 +105,8 @@ void test_paper()
     constexpr Real two_pi = boost::math::constants::two_pi<Real>();
     
     // Page 9 figure (a) y = x
-    std::vector<Real> x = boost::math::generate_random_uniform_vector<Real>(100, 0, -two_pi, two_pi);
+    size_t seed = 3;
+    std::vector<Real> x = boost::math::generate_random_uniform_vector<Real>(100, seed, -two_pi, two_pi);
     std::sort(x.begin(), x.end());
     auto result = chatterjee_correlation(x, x);
     CHECK_MOLLIFIED_CLOSE(result, Real(0.970), 0.005);

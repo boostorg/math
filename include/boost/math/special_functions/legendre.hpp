@@ -100,7 +100,7 @@ T legendre_p_prime_imp(unsigned l, T x, const Policy& pol, T* Pn
     T p0 = 1;
     T p1 = x;
     T p_prime;
-    bool odd = l & 1;
+    bool odd = ((l & 1) == 1);
     // If the order is odd, we sum all the even polynomials:
     if (odd)
     {

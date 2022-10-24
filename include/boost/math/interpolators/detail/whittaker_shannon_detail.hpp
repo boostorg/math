@@ -40,7 +40,6 @@ public:
         auto end = m_y.end();
         while(it != end)
         {
-
             y += *it++/z;
             z -= 1;
         }
@@ -48,7 +47,7 @@ public:
         if (!isfinite(y))
         {
             BOOST_MATH_ASSERT_MSG(floor(x) == ceil(x), "Floor and ceiling should be equal.\n");
-            size_t i = static_cast<size_t>(floor(x));
+            auto i = static_cast<size_t>(floor(x));
             if (i & 1)
             {
                 return -m_y[i];
@@ -66,8 +65,8 @@ public:
         Real x = (t - m_t0)/m_h;
         if (ceil(x) == x) {
             Real s = 0;
-            long j = static_cast<long>(x);
-            long n = m_y.size();
+            auto j = static_cast<long>(x);
+            auto n = static_cast<long>(m_y.size());
             for (long i = 0; i < n; ++i)
             {
                 if (j - i != 0)

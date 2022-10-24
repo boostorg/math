@@ -66,8 +66,10 @@ void instantiate(RealType)
    using namespace boost::math::concepts;
 
    long l;
+   (void)l;
 #ifdef BOOST_HAS_LONG_LONG
    boost::long_long_type ll;
+   (void)ll;
 #endif
 #ifdef TEST_GROUP_1
    function_requires<DistributionConcept<arcsine_distribution<RealType> > >();

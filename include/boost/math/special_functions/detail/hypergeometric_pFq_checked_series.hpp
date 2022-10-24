@@ -13,6 +13,8 @@
 
 #include <array>
 #include <cstdint>
+#include <boost/math/special_functions/gamma.hpp>
+#include <boost/math/special_functions/expm1.hpp>
 #include <boost/math/special_functions/detail/hypergeometric_series.hpp>
 
   namespace boost { namespace math { namespace detail {
@@ -262,7 +264,7 @@
         // We have to be careful when one of the b's crosses the origin:
         //
         if(bj.size() > BOOST_MATH_PFQ_MAX_B_TERMS)
-           policies::raise_domain_error<Real>("boost::math::hypergeometric_pFq<%1%>(Seq, Seq, %1%)", 
+           policies::raise_domain_error<Real>("boost::math::hypergeometric_pFq<%1%>(Seq, Seq, %1%)",
               "The number of b terms must be less than the value of BOOST_MATH_PFQ_MAX_B_TERMS (" BOOST_STRINGIZE(BOOST_MATH_PFQ_MAX_B_TERMS)  "), but got %1%.",
               Real(bj.size()), pol);
 
@@ -278,7 +280,7 @@
            {
               for (auto ai = aj.begin(); ai != aj.end(); ++ai)
               {
-                 if ((*ai < 0) && (floor(*ai) == *ai) && (*ai > crossover_locations[n]))
+                 if ((*ai < 0) && (floor(*ai) == *ai) && (*ai > static_cast<decltype(*ai)>(crossover_locations[n])))
                     return std::make_pair(result, abs_result);  // b's will never cross the origin!
               }
               //
@@ -289,7 +291,7 @@
               long long loop_scale = 0;
               //
               // loop_error_scale will be used to increase the size of the error
-              // estimate (absolute sum), based on the errors inherent in calculating 
+              // estimate (absolute sum), based on the errors inherent in calculating
               // the pochhammer symbols.
               //
               Real loop_error_scale = 0;
@@ -304,7 +306,7 @@
               term = 0;
               for (auto ai = aj.begin(); ai != aj.end(); ++ai)
               {
-                 if ((floor(*ai) == *ai) && (*ai < 0) && (-*ai <= s))
+                 if ((floor(*ai) == *ai) && (*ai < 0) && (-*ai <= static_cast<decltype(*ai)>(s)))
                  {
                     // One of the a terms has passed through zero and terminated the series:
                     terminate = true;
@@ -434,7 +436,7 @@
                      // abort this part of the series.
                      //
                      trivial_small_series_check = true;
-                     Real d; 
+                     Real d;
                      if (loop_scale > local_scaling)
                      {
                         long long rescale = local_scaling - loop_scale;

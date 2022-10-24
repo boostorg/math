@@ -421,7 +421,7 @@ struct ibeta_roots
       BOOST_MATH_STD_USING // ADL of std names
 
       BOOST_FPU_EXCEPTION_GUARD
-      
+
       T f1;
       T y = 1 - x;
       T f = ibeta_imp(a, b, x, Policy(), invert, true, &f1) - target;
@@ -491,7 +491,7 @@ T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T* py)
    T x = 0; // Set to a safe zero to avoid a
    // MSVC 2005 warning C4701: potentially uninitialized local variable 'x' used
    // But code inspection appears to ensure that x IS assigned whatever the code path.
-   T y; 
+   T y;
 
    // For some of the methods we can put tighter bounds
    // on the result than simply [0,1]:
@@ -638,7 +638,7 @@ T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T* py)
                y = pow(b * q * bet, 1/b);
                x = 1 - y;
             }
-            else 
+            else
                y = 1;
             if(y > 1e-5)
             {
@@ -869,7 +869,7 @@ T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T* py)
       // thrash around and convergence may be slow in this case.
       // Try 3/4 of machine epsilon:
       //
-      digits *= 3;  
+      digits *= 3;
       digits /= 2;
    }
    //
@@ -899,7 +899,7 @@ T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T* py)
 } // namespace detail
 
 template <class T1, class T2, class T3, class T4, class Policy>
-inline typename tools::promote_args<T1, T2, T3, T4>::type  
+inline typename tools::promote_args<T1, T2, T3, T4>::type
    ibeta_inv(T1 a, T2 b, T3 p, T4* py, const Policy& pol)
 {
    static const char* function = "boost::math::ibeta_inv<%1%>(%1%,%1%,%1%)";
@@ -907,9 +907,9 @@ inline typename tools::promote_args<T1, T2, T3, T4>::type
    typedef typename tools::promote_args<T1, T2, T3, T4>::type result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
    typedef typename policies::normalise<
-      Policy, 
-      policies::promote_float<false>, 
-      policies::promote_double<false>, 
+      Policy,
+      policies::promote_float<false>,
+      policies::promote_double<false>,
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
 
@@ -934,30 +934,30 @@ inline typename tools::promote_args<T1, T2, T3, T4>::type
 }
 
 template <class T1, class T2, class T3, class T4>
-inline typename tools::promote_args<T1, T2, T3, T4>::type  
+inline typename tools::promote_args<T1, T2, T3, T4>::type
    ibeta_inv(T1 a, T2 b, T3 p, T4* py)
 {
    return ibeta_inv(a, b, p, py, policies::policy<>());
 }
 
 template <class T1, class T2, class T3>
-inline typename tools::promote_args<T1, T2, T3>::type 
+inline typename tools::promote_args<T1, T2, T3>::type
    ibeta_inv(T1 a, T2 b, T3 p)
 {
    typedef typename tools::promote_args<T1, T2, T3>::type result_type;
-   return ibeta_inv(a, b, p, static_cast<result_type*>(0), policies::policy<>());
+   return ibeta_inv(a, b, p, static_cast<result_type*>(nullptr), policies::policy<>());
 }
 
 template <class T1, class T2, class T3, class Policy>
-inline typename tools::promote_args<T1, T2, T3>::type 
+inline typename tools::promote_args<T1, T2, T3>::type
    ibeta_inv(T1 a, T2 b, T3 p, const Policy& pol)
 {
    typedef typename tools::promote_args<T1, T2, T3>::type result_type;
-   return ibeta_inv(a, b, p, static_cast<result_type*>(0), pol);
+   return ibeta_inv(a, b, p, static_cast<result_type*>(nullptr), pol);
 }
 
 template <class T1, class T2, class T3, class T4, class Policy>
-inline typename tools::promote_args<T1, T2, T3, T4>::type 
+inline typename tools::promote_args<T1, T2, T3, T4>::type
    ibetac_inv(T1 a, T2 b, T3 q, T4* py, const Policy& pol)
 {
    static const char* function = "boost::math::ibetac_inv<%1%>(%1%,%1%,%1%)";
@@ -965,9 +965,9 @@ inline typename tools::promote_args<T1, T2, T3, T4>::type
    typedef typename tools::promote_args<T1, T2, T3, T4>::type result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
    typedef typename policies::normalise<
-      Policy, 
-      policies::promote_float<false>, 
-      policies::promote_double<false>, 
+      Policy,
+      policies::promote_float<false>,
+      policies::promote_double<false>,
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
 
@@ -992,18 +992,18 @@ inline typename tools::promote_args<T1, T2, T3, T4>::type
 }
 
 template <class T1, class T2, class T3, class T4>
-inline typename tools::promote_args<T1, T2, T3, T4>::type 
+inline typename tools::promote_args<T1, T2, T3, T4>::type
    ibetac_inv(T1 a, T2 b, T3 q, T4* py)
 {
    return ibetac_inv(a, b, q, py, policies::policy<>());
 }
 
 template <class RT1, class RT2, class RT3>
-inline typename tools::promote_args<RT1, RT2, RT3>::type 
+inline typename tools::promote_args<RT1, RT2, RT3>::type
    ibetac_inv(RT1 a, RT2 b, RT3 q)
 {
    typedef typename tools::promote_args<RT1, RT2, RT3>::type result_type;
-   return ibetac_inv(a, b, q, static_cast<result_type*>(0), policies::policy<>());
+   return ibetac_inv(a, b, q, static_cast<result_type*>(nullptr), policies::policy<>());
 }
 
 template <class RT1, class RT2, class RT3, class Policy>
@@ -1011,7 +1011,7 @@ inline typename tools::promote_args<RT1, RT2, RT3>::type
    ibetac_inv(RT1 a, RT2 b, RT3 q, const Policy& pol)
 {
    typedef typename tools::promote_args<RT1, RT2, RT3>::type result_type;
-   return ibetac_inv(a, b, q, static_cast<result_type*>(0), pol);
+   return ibetac_inv(a, b, q, static_cast<result_type*>(nullptr), pol);
 }
 
 } // namespace math

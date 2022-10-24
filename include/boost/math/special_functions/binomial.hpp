@@ -26,7 +26,7 @@ T binomial_coefficient(unsigned n, unsigned k, const Policy& pol)
    static const char* function = "boost::math::binomial_coefficient<%1%>(unsigned, unsigned)";
    if(k > n)
       return policies::raise_domain_error<T>(
-         function, 
+         function,
          "The binomial coefficient is undefined for k > n, but got k = %1%.",
          static_cast<T>(k), pol);
    T result;
@@ -50,7 +50,7 @@ T binomial_coefficient(unsigned n, unsigned k, const Policy& pol)
       else
          result = (n - k) * beta(static_cast<T>(k+1), static_cast<T>(n-k), pol);
       if(result == 0)
-         return policies::raise_overflow_error<T>(function, 0, pol);
+         return policies::raise_overflow_error<T>(function, nullptr, pol);
       result = 1 / result;
    }
    // convert to nearest integer:
