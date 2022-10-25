@@ -71,51 +71,49 @@ namespace boost{
 
 #if (defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__)) && (LDBL_MAX_EXP <= DBL_MAX_EXP)
       template <>
-      inline boost::math::tools::promote_args<double, double>::type relative_difference(const double& arg_a, const double& arg_b)
+      inline boost::math::tools::promote_args<double, double>::type relative_difference(double arg_a, double arg_b)
       {
          BOOST_MATH_STD_USING
-         double a = arg_a;
-         double b = arg_b;
          //
          // On Mac OS X we evaluate "double" functions at "long double" precision,
          // but "long double" actually has a very slightly narrower range than "double"!  
          // Therefore use the range of "long double" as our limits since results outside
          // that range may have been truncated to 0 or INF:
          //
-         double min_val = (std::max)((double)tools::min_value<long double>(), tools::min_value<double>());
-         double max_val = (std::min)((double)tools::max_value<long double>(), tools::max_value<double>());
+         double min_val = (std::max)(static_cast<double>(tools::min_value<long double>()), tools::min_value<double>());
+         double max_val = (std::min)(static_cast<double>(tools::max_value<long double>()), tools::max_value<double>());
 
          // Screen out NaN's first, if either value is a NaN then the distance is "infinite":
-         if((boost::math::isnan)(a) || (boost::math::isnan)(b))
+         if((boost::math::isnan)(arg_a) || (boost::math::isnan)(arg_b))
             return max_val;
          // Screen out infinities:
-         if(fabs(b) > max_val)
+         if(fabs(arg_b) > max_val)
          {
-            if(fabs(a) > max_val)
+            if(fabs(arg_a) > max_val)
                return 0;  // one infinity is as good as another!
             else
                return max_val;  // one infinity and one finite value implies infinite difference
          }
-         else if(fabs(a) > max_val)
+         else if(fabs(arg_a) > max_val)
             return max_val;    // one infinity and one finite value implies infinite difference
 
          //
          // If the values have different signs, treat as infinite difference:
          //
-         if(((a < 0) != (b < 0)) && (a != 0) && (b != 0))
+         if(((arg_a < 0) != (arg_b < 0)) && (arg_a != 0) && (arg_b != 0))
             return max_val;
-         a = fabs(a);
-         b = fabs(b);
+         arg_a = fabs(arg_a);
+         arg_b = fabs(arg_b);
          //
          // Now deal with zero's, if one value is zero (or denorm) then treat it the same as
          // min_val for the purposes of the calculation that follows:
          //
-         if(a < min_val)
-            a = min_val;
-         if(b < min_val)
-            b = min_val;
+         if(arg_a < min_val)
+            arg_a = min_val;
+         if(arg_b < min_val)
+            arg_b = min_val;
 
-         return (std::max)(fabs((a - b) / a), fabs((a - b) / b));
+         return (std::max)(fabs((arg_a - arg_b) / arg_a), fabs((arg_a - arg_b) / arg_b));
       }
 #endif
 

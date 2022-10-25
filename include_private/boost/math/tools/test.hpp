@@ -90,7 +90,7 @@ void print_row(const Seq& row, std::ostream& os = std::cout)
 {
    try {
       set_output_precision(row[0], os);
-      for (unsigned i = 0; i < row.size(); ++i)
+      for (decltype(row.size()) i = 0; i < row.size(); ++i)
       {
          if (i)
             os << ", ";
@@ -116,7 +116,7 @@ test_result<typename calculate_result_type<A>::value_type> test(const A& a, F1 t
 
    test_result<value_type> result;
 
-   for(unsigned i = 0; i < a.size(); ++i)
+   for(decltype(a.size()) i = 0; i < a.size(); ++i)
    {
       const row_type& row = a[i];
       value_type point;
@@ -188,7 +188,7 @@ test_result<Real> test_hetero(const A& a, F1 test_func, F2 expect_func)
 
    test_result<value_type> result;
 
-   for(unsigned i = 0; i < a.size(); ++i)
+   for(decltype(a.size()) i = 0; i < a.size(); ++i)
    {
       const row_type& row = a[i];
       value_type point;

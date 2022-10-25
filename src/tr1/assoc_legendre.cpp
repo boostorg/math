@@ -13,7 +13,7 @@
 
 extern "C" double BOOST_MATH_TR1_DECL boost_assoc_legendre BOOST_PREVENT_MACRO_SUBSTITUTION(unsigned l, unsigned m, double x) BOOST_MATH_C99_THROW_SPEC
 {
-   return (m&1 ? -1 : 1) * c_policies::legendre_p BOOST_PREVENT_MACRO_SUBSTITUTION(l, m, x);
+   return ((m & 1 == 1) ? -1 : 1) * c_policies::legendre_p BOOST_PREVENT_MACRO_SUBSTITUTION(l, m, x);
 }
 
 

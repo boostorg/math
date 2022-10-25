@@ -61,13 +61,10 @@ T legendre_imp(unsigned l, T x, const Policy& pol, bool second = false)
    if(l == 0)
       return p0;
 
-   unsigned n = 1;
-
-   while(n < l)
+   for(unsigned n = 1; n < l; ++n)
    {
       std::swap(p0, p1);
       p1 = boost::math::legendre_next(n, x, p0, p1);
-      ++n;
    }
    return p1;
 }
@@ -170,8 +167,8 @@ std::vector<T> legendre_p_zeros_imp(int n, const Policy& pol)
         // There are no zeros of P_0(x) = 1.
         return zeros;
     }
-    int k;
-    if (n & 1)
+    decltype(zeros.size()) k;
+    if ((n & 1) == 1)
     {
         zeros.resize((n-1)/2 + 1, std::numeric_limits<T>::quiet_NaN());
         zeros[0] = 0;
@@ -184,7 +181,7 @@ std::vector<T> legendre_p_zeros_imp(int n, const Policy& pol)
     }
     T half_n = ceil(n*half<T>());
 
-    while (k < (int)zeros.size())
+    while (k < zeros.size())
     {
         // Bracket the root: Szego:
         // Gabriel Szego, Inequalities for the Zeros of Legendre Polynomials and Related Functions, Transactions of the American Mathematical Society, Vol. 39, No. 1 (1936)
@@ -326,8 +323,7 @@ T legendre_p_imp(int l, int m, T x, T sin_theta_power, const Policy& pol)
    }
    if(m < 0)
    {
-      int sign = (m&1) ? -1 : 1;
-      return sign * boost::math::tgamma_ratio(static_cast<T>(l+m+1), static_cast<T>(l+1-m), pol) * legendre_p_imp(l, -m, x, sin_theta_power, pol);
+      return (((m & 1) == 1) ? -1 : 1) * boost::math::tgamma_ratio(static_cast<T>(l+m+1), static_cast<T>(l+1-m), pol) * legendre_p_imp(l, -m, x, sin_theta_power, pol);
    }
    // Special cases:
    if(m > l)
@@ -337,7 +333,7 @@ T legendre_p_imp(int l, int m, T x, T sin_theta_power, const Policy& pol)
 
    T p0 = boost::math::double_factorial<T>(2 * m - 1, pol) * sin_theta_power;
 
-   if(m&1)
+   if ((m & 1) == 1)
       p0 *= -1;
    if(m == l)
       return p0;

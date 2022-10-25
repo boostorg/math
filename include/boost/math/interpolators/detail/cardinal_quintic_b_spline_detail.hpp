@@ -157,10 +157,10 @@ public:
 
         m_alpha[n+3] = rhs[n+3]/diagonal[n+3];
         m_alpha[n+2] = rhs[n+2] - first_superdiagonal[n+2]*m_alpha[n+3];
-        for (int64_t i = int64_t(n+1); i >= 0; --i) {
-            m_alpha[i] = rhs[i] - first_superdiagonal[i]*m_alpha[i+1] - second_superdiagonal[i]*m_alpha[i+2];
+        for (size_t i = n + 2; i > 0; --i)
+        {
+            m_alpha[i - 1] = rhs[i - 1] - first_superdiagonal[i - 1] * m_alpha[i] - second_superdiagonal[i - 1] * m_alpha[i + 1];
         }
-
     }
 
     Real operator()(Real t) const {

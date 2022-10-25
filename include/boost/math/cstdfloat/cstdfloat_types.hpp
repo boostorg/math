@@ -12,7 +12,7 @@
 #ifndef BOOST_MATH_CSTDFLOAT_TYPES_2014_01_09_HPP_
   #define BOOST_MATH_CSTDFLOAT_TYPES_2014_01_09_HPP_
 
-  #include <float.h>
+  #include <cfloat>
   #include <limits>
   #include <boost/math/tools/config.hpp>
 

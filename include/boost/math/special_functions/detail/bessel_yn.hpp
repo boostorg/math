@@ -45,7 +45,7 @@ T bessel_yn(int n, T x, const Policy& pol)
     //
     if (n < 0)
     {
-        factor = static_cast<T>((n & 0x1) ? -1 : 1);  // Y_{-n}(z) = (-1)^n Y_n(z)
+        factor = static_cast<T>(((n & 1) == 1) ? -1 : 1);  // Y_{-n}(z) = (-1)^n Y_n(z)
         n = -n;
     }
     else

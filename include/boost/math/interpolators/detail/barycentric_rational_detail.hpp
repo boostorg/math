@@ -22,16 +22,16 @@ class barycentric_rational_imp
 {
 public:
     template <class InputIterator1, class InputIterator2>
-    barycentric_rational_imp(InputIterator1 start_x, InputIterator1 end_x, InputIterator2 start_y, size_t approximation_order = 3);
+    barycentric_rational_imp(InputIterator1 start_x, InputIterator1 end_x, InputIterator2 start_y, std::size_t approximation_order = 3);
 
-    barycentric_rational_imp(std::vector<Real>&& x, std::vector<Real>&& y, size_t approximation_order = 3);
+    barycentric_rational_imp(std::vector<Real>&& x, std::vector<Real>&& y, std::size_t approximation_order = 3);
 
     Real operator()(Real x) const;
 
     Real prime(Real x) const;
 
     // The barycentric weights are not really that interesting; except to the unit tests!
-    Real weight(size_t i) const { return m_w[i]; }
+    Real weight(std::size_t i) const { return m_w[i]; }
 
     std::vector<Real>&& return_x()
     {
@@ -45,7 +45,7 @@ public:
 
 private:
 
-    void calculate_weights(size_t approximation_order);
+    void calculate_weights(std::size_t approximation_order);
 
     std::vector<Real> m_x;
     std::vector<Real> m_y;
@@ -54,11 +54,11 @@ private:
 
 template <class Real>
 template <class InputIterator1, class InputIterator2>
-barycentric_rational_imp<Real>::barycentric_rational_imp(InputIterator1 start_x, InputIterator1 end_x, InputIterator2 start_y, size_t approximation_order)
+barycentric_rational_imp<Real>::barycentric_rational_imp(InputIterator1 start_x, InputIterator1 end_x, InputIterator2 start_y, std::size_t approximation_order)
 {
     std::ptrdiff_t n = std::distance(start_x, end_x);
 
-    if (approximation_order >= (std::size_t)n)
+    if (approximation_order >= static_cast<std::size_t>(n))
     {
         throw std::domain_error("Approximation order must be < data length.");
     }
@@ -66,7 +66,7 @@ barycentric_rational_imp<Real>::barycentric_rational_imp(InputIterator1 start_x,
     // Big sad memcpy.
     m_x.resize(n);
     m_y.resize(n);
-    for(unsigned i = 0; start_x != end_x; ++start_x, ++start_y, ++i)
+    for(std::size_t i = 0; start_x != end_x; ++start_x, ++start_y, ++i)
     {
         // But if we're going to do a memcpy, we can do some error checking which is inexpensive relative to the copy:
         if(boost::math::isnan(*start_x))
@@ -88,7 +88,7 @@ barycentric_rational_imp<Real>::barycentric_rational_imp(InputIterator1 start_x,
 }
 
 template <class Real>
-barycentric_rational_imp<Real>::barycentric_rational_imp(std::vector<Real>&& x, std::vector<Real>&& y,size_t approximation_order) : m_x(std::move(x)), m_y(std::move(y))
+barycentric_rational_imp<Real>::barycentric_rational_imp(std::vector<Real>&& x, std::vector<Real>&& y,std::size_t approximation_order) : m_x(std::move(x)), m_y(std::move(y))
 {
     BOOST_MATH_ASSERT_MSG(m_x.size() == m_y.size(), "There must be the same number of abscissas and ordinates.");
     BOOST_MATH_ASSERT_MSG(approximation_order < m_x.size(), "Approximation order must be < data length.");
@@ -97,7 +97,7 @@ barycentric_rational_imp<Real>::barycentric_rational_imp(std::vector<Real>&& x, 
 }
 
 template<class Real>
-void barycentric_rational_imp<Real>::calculate_weights(size_t approximation_order)
+void barycentric_rational_imp<Real>::calculate_weights(std::size_t approximation_order)
 {
     using std::abs;
     int64_t n = m_x.size();
@@ -106,7 +106,7 @@ void barycentric_rational_imp<Real>::calculate_weights(size_t approximation_orde
     {
         int64_t i_min = (std::max)(k - static_cast<int64_t>(approximation_order), static_cast<int64_t>(0));
         int64_t i_max = k;
-        if (k >= n - (std::ptrdiff_t)approximation_order)
+        if (k >= n - static_cast<std::ptrdiff_t>(approximation_order))
         {
             i_max = n - approximation_order - 1;
         }
@@ -135,7 +135,7 @@ void barycentric_rational_imp<Real>::calculate_weights(size_t approximation_orde
                 }
                 inv_product *= diff;
             }
-            if (i % 2 == 0)
+            if ((i & 1) == 0)
             {
                 m_w[k] += 1/inv_product;
             }
@@ -153,7 +153,7 @@ Real barycentric_rational_imp<Real>::operator()(Real x) const
 {
     Real numerator = 0;
     Real denominator = 0;
-    for(size_t i = 0; i < m_x.size(); ++i)
+    for(std::size_t i = 0; i < m_x.size(); ++i)
     {
         // Presumably we should see if the accuracy is improved by using ULP distance of say, 5 here, instead of testing for floating point equality.
         // However, it has been shown that if x approx x_i, but x != x_i, then inaccuracy in the numerator cancels the inaccuracy in the denominator,
@@ -187,12 +187,12 @@ Real barycentric_rational_imp<Real>::prime(Real x) const
     Real rx = this->operator()(x);
     Real numerator = 0;
     Real denominator = 0;
-    for(size_t i = 0; i < m_x.size(); ++i)
+    for(std::size_t i = 0; i < m_x.size(); ++i)
     {
         if (x == m_x[i])
         {
             Real sum = 0;
-            for (size_t j = 0; j < m_x.size(); ++j)
+            for (std::size_t j = 0; j < m_x.size(); ++j)
             {
                 if (j == i)
                 {

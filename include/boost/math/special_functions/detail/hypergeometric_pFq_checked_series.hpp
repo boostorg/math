@@ -359,8 +359,8 @@
               //
               loop_error_scale /= tools::epsilon<Real>();
 
-              if (z < 0)
-                 s1 *= (s & 1 ? -1 : 1);
+              if (z < 0 && ((s & 1) == 1))
+                 s1 = -s1;
 
               if (term <= tools::log_min_value<Real>())
               {

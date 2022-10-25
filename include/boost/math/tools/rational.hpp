@@ -188,12 +188,12 @@ inline V evaluate_polynomial_c_imp(const T* a, const V& val, const Tag*) BOOST_M
 template <class T, class U>
 inline U evaluate_polynomial(const T* poly, U const& z, std::size_t count) BOOST_MATH_NOEXCEPT(U)
 {
-   BOOST_MATH_ASSERT(count > 0);
-   U sum = static_cast<U>(poly[count - 1]);
-   for(int i = static_cast<int>(count) - 2; i >= 0; --i)
+   BOOST_MATH_ASSERT(count != 0);
+   U sum = static_cast<U>(poly[--count]);
+   while (count)
    {
       sum *= z;
-      sum += static_cast<U>(poly[i]);
+      sum += static_cast<U>(poly[--count]);
    }
    return sum;
 }
@@ -240,6 +240,7 @@ inline V evaluate_even_polynomial(const std::array<T,N>& a, const V& z) BOOST_MA
 template <class T, class U>
 inline U evaluate_odd_polynomial(const T* poly, U z, std::size_t count) BOOST_MATH_NOEXCEPT(U)
 {
+   BOOST_MATH_ASSERT(count != 0);
    return poly[0] + z * evaluate_polynomial(poly+1, U(z*z), count-1);
 }
 
@@ -284,14 +285,17 @@ V evaluate_rational(const T* num, const U* denom, const V& z_, std::size_t count
    V s1, s2;
    if(z <= 1)
    {
-      s1 = static_cast<V>(num[count-1]);
-      s2 = static_cast<V>(denom[count-1]);
-      for(int i = (int)count - 2; i >= 0; --i)
+      BOOST_MATH_ASSERT(count != 0);
+      count--;
+      s1 = static_cast<V>(num[count]);
+      s2 = static_cast<V>(denom[count]);
+      while (count)
       {
+         count--;
          s1 *= z;
          s2 *= z;
-         s1 += num[i];
-         s2 += denom[i];
+         s1 += num[count];
+         s2 += denom[count];
       }
    }
    else
@@ -299,7 +303,7 @@ V evaluate_rational(const T* num, const U* denom, const V& z_, std::size_t count
       z = 1 / z;
       s1 = static_cast<V>(num[0]);
       s2 = static_cast<V>(denom[0]);
-      for(unsigned i = 1; i < count; ++i)
+      for(std::size_t i = 1; i < count; ++i)
       {
          s1 *= z;
          s2 *= z;

@@ -35,7 +35,7 @@ T bessel_jn(int n, T x, const Policy& pol)
     //
     if (n < 0)
     {
-        factor = static_cast<T>((n & 0x1) ? -1 : 1);  // J_{-n}(z) = (-1)^n J_n(z)
+        factor = static_cast<T>(((n & 1) == 1) ? -1 : 1);  // J_{-n}(z) = (-1)^n J_n(z)
         n = -n;
     }
     else
@@ -44,7 +44,7 @@ T bessel_jn(int n, T x, const Policy& pol)
     }
     if(x < 0)
     {
-        factor *= (n & 0x1) ? -1 : 1;  // J_{n}(-z) = (-1)^n J_n(z)
+        factor *= ((n & 1) == 1) ? -1 : 1;  // J_{n}(-z) = (-1)^n J_n(z)
         x = -x;
     }
     //

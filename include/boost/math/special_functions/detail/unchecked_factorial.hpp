@@ -947,7 +947,7 @@ inline T unchecked_factorial_imp(unsigned i, const std::integral_constant<int, 0
       if(digits != current_digits)
       {
          digits = current_digits;
-         for(unsigned k = 0; k < sizeof(factorials) / sizeof(factorials[0]); ++k)
+         for(std::size_t k = 0; k < sizeof(factorials) / sizeof(factorials[0]); ++k)
             factorials[k] = static_cast<T>(boost::math::tools::convert_from_string<T>(factorial_strings[k]));
       }
 

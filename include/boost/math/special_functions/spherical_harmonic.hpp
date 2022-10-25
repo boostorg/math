@@ -56,10 +56,10 @@ T spherical_harmonic_r(unsigned n, int m, T theta, T phi, const Policy& pol)
    if(m < 0)
    {
       // Reflect and adjust sign if m < 0:
-      sign = m&1;
-      m = abs(m);
+      sign = ((m & 1) == 1);
+      m = -m;
    }
-   if(m&1)
+   if((m & 1) == 1)
    {
       // Check phase if theta is outside [0, PI]:
       T mod = boost::math::tools::fmod_workaround(theta, T(2 * constants::pi<T>()));
@@ -83,10 +83,10 @@ T spherical_harmonic_i(unsigned n, int m, T theta, T phi, const Policy& pol)
    if(m < 0)
    {
       // Reflect and adjust sign if m < 0:
-      sign = !(m&1);
-      m = abs(m);
+      sign = ((m & 1) == 0);
+      m = -m;
    }
-   if(m&1)
+   if((m & 1) == 1)
    {
       // Check phase if theta is outside [0, PI]:
       T mod = boost::math::tools::fmod_workaround(theta, T(2 * constants::pi<T>()));
@@ -113,11 +113,11 @@ std::complex<T> spherical_harmonic(unsigned n, int m, U theta, U phi, const Poli
    if(m < 0)
    {
       // Reflect and adjust sign if m < 0:
-      r_sign = m&1;
-      i_sign = !(m&1);
-      m = abs(m);
+      r_sign = ((m & 1) == 1);
+      i_sign = !r_sign;
+      m = -m;
    }
-   if(m&1)
+   if((m & 1) == 1)
    {
       // Check phase if theta is outside [0, PI]:
       U mod = boost::math::tools::fmod_workaround(theta, U(2 * constants::pi<U>()));

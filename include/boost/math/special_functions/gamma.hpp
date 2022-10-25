@@ -59,7 +59,7 @@ template <class T>
 inline bool is_odd(T v, const std::true_type&)
 {
    int i = static_cast<int>(v);
-   return i&1;
+   return (i & 1) == 1;
 }
 template <class T>
 inline bool is_odd(T v, const std::false_type&)
@@ -67,7 +67,7 @@ inline bool is_odd(T v, const std::false_type&)
    // Oh dear can't cast T to int!
    BOOST_MATH_STD_USING
    T modulus = v - 2 * floor(v/2);
-   return static_cast<bool>(modulus != 0);
+   return modulus != 0;
 }
 template <class T>
 inline bool is_odd(T v)
@@ -137,7 +137,7 @@ T gamma_imp(T z, const Policy& pol, const Lanczos& l)
          result = -boost::math::constants::pi<T>() / result;
          if(result == 0)
             return policies::raise_underflow_error<T>(function, "Result of tgamma is too small to represent.", pol);
-         if((boost::math::fpclassify)(result) == (int)FP_SUBNORMAL)
+         if((boost::math::fpclassify)(result) == FP_SUBNORMAL)
             return policies::raise_denorm_error<T>(function, "Result of tgamma is denormalized.", result, pol);
          BOOST_MATH_INSTRUMENT_VARIABLE(result);
          return result;
@@ -370,7 +370,7 @@ int minimum_argument_for_bernoulli_recursion()
                                     ? (float) std::numeric_limits<T>::digits10
                                     : (float) (boost::math::tools::digits<T>() * 0.301F));
 
-   int min_arg = (int) (digits10_of_type * 1.7F);
+   int min_arg = static_cast<int>(digits10_of_type * 1.7F);
 
    if(digits10_of_type < 50.0F)
    {
@@ -389,7 +389,7 @@ int minimum_argument_for_bernoulli_recursion()
       const float d2_minus_one = ((digits10_of_type / 0.301F) - 1.0F);
       const float limit        = ceil(exp((d2_minus_one * log(2.0F)) / 20.0F));
 
-      min_arg = (int) ((std::min)(digits10_of_type * 1.7F, limit));
+      min_arg = static_cast<int>((std::min)(digits10_of_type * 1.7F, limit));
    }
 
    return min_arg;
@@ -852,7 +852,7 @@ T full_igamma_prefix(T a, T z, const Policy& pol)
    // This error handling isn't very good: it happens after the fact
    // rather than before it...
    //
-   if((boost::math::fpclassify)(prefix) == (int)FP_INFINITE)
+   if((boost::math::fpclassify)(prefix) == FP_INFINITE)
       return policies::raise_overflow_error<T>("boost::math::detail::full_igamma_prefix<%1%>(%1%, %1%)", "Result of incomplete gamma function is too large to represent.", pol);
 
    return prefix;

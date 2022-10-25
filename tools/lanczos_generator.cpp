@@ -4311,7 +4311,7 @@ mp_t factorial(unsigned n)
 }
 
 template <class T>
-T binomial(int n, int k, T)
+T binomial(unsigned n, unsigned k, T)
 {
    T result;
    if(k < 0) 
@@ -4686,12 +4686,12 @@ struct lanczos_rational
       {
          s1 = num[N-1];
          s2 = denom[N-1];
-         for(unsigned i = N-2; i >= 0; --i)
+         for(int i = N-2; i >= 0; --i)
          {
             s1 *= z;
             s2 *= z;
             s1 += num[i];
-            s2 += num[i];
+            s2 += denom[i];
          }
          s1 /= s2;
          return prefix * s1;
@@ -5055,7 +5055,7 @@ void find_best_lanczos(const char* name, T eps, int max_scan = 100)
 
       std::cout << std::setw(20) << std::right << "N" << std::setw(20) << std::right << "g" << std::setw(20) << std::right << "eps" << std::setw(20) << std::right << "c at 1" << std::setw(20) << std::right << "c at 2" << std::setw(20) << std::right << "time (ms)\n";
 
-      for (int i = 0; i < sizeof(sweet_spots) / sizeof(sweet_spots[0]); ++i)
+      for (size_t i = 0; i < sizeof(sweet_spots) / sizeof(sweet_spots[0]); ++i)
       {
          if ((sweet_spots[i].err < eps * 10) && (sweet_spots[i].N < max_scan))
          {
@@ -5065,8 +5065,8 @@ void find_best_lanczos(const char* name, T eps, int max_scan = 100)
             {
                std::cout << std::setprecision(14) << std::fixed << std::setw(20) << std::right << sweet_spots[i].N
                   << std::setw(20) << std::right << sweet_spots[i].g << std::setw(20) << std::right << static_cast<int>(err / eps)
-                  << std::setw(20) << std::right << (unsigned)lanczos_conditioning_near_1(info) << std::setw(20) << std::right << (unsigned)lanczos_conditioning_near_2(info)
-                  << std::setw(20) << std::right << (int)(exec_time * 1000) << std::endl;
+                  << std::setw(20) << std::right << static_cast<unsigned>lanczos_conditioning_near_1(info) << std::setw(20) << std::right << static_cast<unsigned>lanczos_conditioning_near_2(info)
+                  << std::setw(20) << std::right << static_cast<int>(exec_time * 1000) << std::endl;
             }
             else
                std::cout << "Skipping spot with error: " << std::setprecision(5) << err << std::endl;
@@ -5103,7 +5103,7 @@ void find_best_lanczos(const char* name, T eps, int max_scan = 100)
    }
 }
 
-void scan_for_sweet_spots(int N)
+void scan_for_sweet_spots(unsigned N)
 {
    mp_t r = N * 0.66;
    lanczos_info<mp_t> lower, upper(generate_lanczos(N + 1, r));

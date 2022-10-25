@@ -61,8 +61,7 @@ public:
         }
         Real C = f;
         Real D = 0;
-        int i = 0;
-        while (abs(f - x_) >= (1 + i++)*std::numeric_limits<Real>::epsilon()*abs(x_))
+        for (int i = 0; abs(f - x_) >= (1 + i)*std::numeric_limits<Real>::epsilon()*abs(x_); i++)
         {
             bj = round(x);
             b_.push_back(static_cast<Z>(bj));

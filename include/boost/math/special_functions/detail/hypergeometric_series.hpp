@@ -219,7 +219,7 @@
         if (n < -z)
         {
            if(s)
-            *s = (n & 1 ? -1 : 1);
+            *s = ((n & 1) == 1) ? -1 : 1;
            return log_pochhammer(T(-z + (1 - (int)n)), n, pol);
         }
         else
@@ -234,8 +234,8 @@
         if (z + n < 0)
         {
            T r = log_pochhammer(T(-z - n + 1), n, pol, s);
-           if (s)
-              *s *= (n & 1 ? -1 : 1);
+           if (s && ((n & 1) == 1))
+              *s *= -1;
            return r;
         }
         int s1, s2;

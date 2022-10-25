@@ -77,7 +77,7 @@ is used.
 */
 
 #if defined(_MSC_VER) || defined(BOOST_BORLANDC)
-#include <float.h>
+#include <cfloat>
 #endif
 #ifdef BOOST_MATH_USE_FLOAT128
 #ifdef __has_include
@@ -115,7 +115,7 @@ inline bool is_nan_helper(T t, const std::true_type&)
    (void)t;
    return false;
 #else // BOOST_HAS_FPCLASSIFY
-   return (BOOST_FPCLASSIFY_PREFIX fpclassify(t) == (int)FP_NAN);
+   return (BOOST_FPCLASSIFY_PREFIX fpclassify(t) == FP_NAN);
 #endif
 }
 

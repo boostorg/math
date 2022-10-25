@@ -28,11 +28,9 @@ template <typename T>
 inline constexpr bool isnormal(T x)
 {
     if(BOOST_MATH_IS_CONSTANT_EVALUATED(x))
-    {   
-        return x == T(0) ? false :
-               boost::math::ccmath::isinf(x) ? false :
-               boost::math::ccmath::isnan(x) ? false :
-               boost::math::ccmath::abs(x) < (std::numeric_limits<T>::min)() ? false : true;
+    {
+        return x != T(0) && !boost::math::ccmath::isinf(x) && !boost::math::ccmath::isnan(x) &&
+               boost::math::ccmath::abs(x) >= (std::numeric_limits<T>::min)();
     }
     else
     {
