@@ -156,9 +156,9 @@ public:
    void rescale(T a, T b)
    {
       T scale = (b - a) / (max - min);
-      for(unsigned i = 0; i < control_points.size(); ++i)
+      for(auto& i : control_points)
       {
-         control_points[i] = (control_points[i] - min) * scale + a;
+         i = (i - min) * scale + a;
       }
       min = a;
       max = b;
@@ -222,7 +222,7 @@ void remez_minimax<T>::init_chebyshev()
    matrix_type A(terms, terms);
    vector_type b(terms);
    // fill in the y values:
-   for(unsigned i = 0; i < b.size(); ++i)
+   for(decltype(b.size()) i = 0; i < b.size(); ++i)
    {
       b[i] = func(zeros[i+1]);
    }
@@ -230,13 +230,13 @@ void remez_minimax<T>::init_chebyshev()
    unsigned offsetN = pinned ? 0 : 1;
    unsigned offsetD = offsetN + orderN;
    unsigned maxorder = (std::max)(orderN, orderD);
-   for(unsigned i = 0; i < b.size(); ++i)
+   for(decltype(b.size()) i = 0; i < b.size(); ++i)
    {
       T x0 = zeros[i+1];
       T x = x0;
       if(!pinned)
          A(i, 0) = 1;
-      for(unsigned j = 0; j < maxorder; ++j)
+      for(decltype(b.size()) j = 0; j < maxorder; ++j)
       {
          if(j < orderN)
             A(i, j + offsetN) = x;
@@ -305,7 +305,7 @@ void remez_minimax<T>::reset(
    control_points[unknowns - 1] = max;
    T interval = (max - min) / (unknowns - 1);
    T spot = min + interval;
-   for(unsigned i = 1; i < control_points.size(); ++i)
+   for(decltype(control_points.size()) i = 1; i < control_points.size(); ++i)
    {
       control_points[i] = spot;
       spot += interval;
@@ -414,7 +414,7 @@ T remez_minimax<T>::iterate()
    vector_type b(unknowns);
 
    // fill in evaluation of f(x) at each of the control points:
-   for(unsigned i = 0; i < b.size(); ++i)
+   for(decltype(b.size()) i = 0; i < b.size(); ++i)
    {
       // take care that none of our control points are at the origin:
       if(pinned && (control_points[i] == 0))
@@ -437,13 +437,13 @@ T remez_minimax<T>::iterate()
       unsigned maxorder = (std::max)(orderN, orderD);
       T Elast = solution[unknowns - 1];
 
-      for(unsigned i = 0; i < b.size(); ++i)
+      for(decltype(b.size()) i = 0; i < b.size(); ++i)
       {
          T x0 = control_points[i];
          T x = x0;
          if(!pinned)
             A(i, 0) = 1;
-         for(unsigned j = 0; j < maxorder; ++j)
+         for(decltype(b.size()) j = 0; j < maxorder; ++j)
          {
             if(j < orderN)
                A(i, j + offsetN) = x;
@@ -462,12 +462,12 @@ T remez_minimax<T>::iterate()
       }
 
    #ifdef BOOST_MATH_INSTRUMENT
-      for(unsigned i = 0; i < b.size(); ++i)
-         std::cout << b[i] << " ";
+      for(const auto& i : b)
+         std::cout << i << " ";
       std::cout << "\n\n";
-      for(unsigned i = 0; i < b.size(); ++i)
+      for(decltype(b.size()) i = 0; i < b.size(); ++i)
       {
-         for(unsigned j = 0; j < b.size(); ++ j)
+         for(decltype(b.size()) j = 0; j < b.size(); ++ j)
             std::cout << A(i, j) << " ";
          std::cout << "\n";
       }
@@ -487,7 +487,7 @@ T remez_minimax<T>::iterate()
    // be very close to singular, so this can be a real problem.
    //
    vector_type sanity = prod(A, solution);
-   for(unsigned i = 0; i < b.size(); ++i)
+   for(decltype(b.size()) i = 0; i < b.size(); ++i)
    {
       T err = fabs((b[i] - sanity[i]) / fabs(b[i]));
       if(err > sqrt(epsilon<T>()))
@@ -510,7 +510,7 @@ T remez_minimax<T>::iterate()
 #ifdef BOOST_MATH_INSTRUMENT
    std::cout << e1;
 #endif
-   for(unsigned i = 1; i < b.size(); ++i)
+   for(size_t i = 1; i < b.size(); ++i)
    {
       T e2 = b[i] - num.evaluate(control_points[i]) / denom.evaluate(control_points[i]);
 #ifdef BOOST_MATH_INSTRUMENT
@@ -551,8 +551,8 @@ T remez_minimax<T>::iterate()
    }
 
 #ifdef BOOST_MATH_INSTRUMENT
-   for(unsigned i = 0; i < solution.size(); ++i)
-      std::cout << solution[i] << " ";
+   for(const auto& i : solution)
+      std::cout << i << " ";
    std::cout << std::endl << this->numerator() << std::endl;
    std::cout << this->denominator() << std::endl;
    std::cout << std::endl;
@@ -565,7 +565,7 @@ T remez_minimax<T>::iterate()
    detail::remez_error_function<T> Err(func, this->numerator(), this->denominator(), rel_error);
    zeros[0] = min;
    zeros[unknowns] = max;
-   for(unsigned i = 1; i < control_points.size(); ++i)
+   for(decltype(control_points.size()) i = 1; i < control_points.size(); ++i)
    {
       eps_tolerance<T> tol(m_precision);
       std::uintmax_t max_iter = 1000;
@@ -584,7 +584,7 @@ T remez_minimax<T>::iterate()
    detail::remez_max_error_function<T> Ex(Err);
    m_max_error = 0;
    //int max_err_location = 0;
-   for(unsigned i = 0; i < unknowns; ++i)
+   for(decltype(unknowns) i = 0; i < unknowns; ++i)
    {
       std::pair<T, T> r = brent_find_minima(Ex, zeros[i], zeros[i+1], m_precision);
       maxima[i] = r.first;
@@ -603,7 +603,7 @@ T remez_minimax<T>::iterate()
    swap(control_points, maxima);
    m_max_change = 0;
    //int max_change_location = 0;
-   for(unsigned i = 0; i < unknowns; ++i)
+   for(decltype(unknowns) i = 0; i < unknowns; ++i)
    {
       control_points[i] = (control_points[i] * (100 - m_brake) + maxima[i] * m_brake) / 100;
       T change = fabs((control_points[i] - maxima[i]) / control_points[i]);

@@ -63,7 +63,7 @@ inline Real chebyshev_imp(unsigned n, Real const & x, const Policy&)
         }
         if (x < -1)
         {
-            if (n & 1)
+            if ((n & 1) == 1)
             {
                 return -cosh(n*acosh(-x BOOST_MATH_ACOSH_POLICY));
             }

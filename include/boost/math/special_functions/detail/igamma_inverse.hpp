@@ -529,12 +529,12 @@ inline typename tools::promote_args<T1, T2>::type
 
 template <class T1, class T2, class Policy>
 inline typename tools::promote_args<T1, T2>::type
-   gamma_q_inv(T1 a, T2 p, const Policy& pol)
+   gamma_q_inv(T1 a, T2 q, const Policy& pol)
 {
    typedef typename tools::promote_args<T1, T2>::type result_type;
    return detail::gamma_q_inv_imp(
       static_cast<result_type>(a),
-      static_cast<result_type>(p), pol);
+      static_cast<result_type>(q), pol);
 }
 
 template <class T1, class T2>
@@ -546,9 +546,9 @@ inline typename tools::promote_args<T1, T2>::type
 
 template <class T1, class T2>
 inline typename tools::promote_args<T1, T2>::type
-   gamma_q_inv(T1 a, T2 p)
+   gamma_q_inv(T1 a, T2 q)
 {
-   return gamma_q_inv(a, p, policies::policy<>());
+   return gamma_q_inv(a, q, policies::policy<>());
 }
 
 } // namespace math

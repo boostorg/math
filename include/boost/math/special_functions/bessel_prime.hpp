@@ -61,7 +61,7 @@ inline T cyl_bessel_j_prime_imp(T v, T x, const Policy& pol)
       if (floor(v) == v && v < 0)
       {
          v = -v;
-         if (itrunc(v, pol) & 1)
+         if ((itrunc(v, pol) & 1) == 1)
             inversed = true;
       }
       T r = boost::math::detail::bessel_j_derivative_small_z_series(v, x, pol);

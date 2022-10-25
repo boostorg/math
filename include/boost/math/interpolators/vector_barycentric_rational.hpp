@@ -25,7 +25,7 @@ public:
     using Point = typename SpaceContainer::value_type;
     vector_barycentric_rational(TimeContainer&& times, SpaceContainer&& points, size_t approximation_order = 3);
 
-    void operator()(Point& x, Real t) const;
+    void operator()(Point& p, Real t) const;
 
     // I have validated using google benchmark that returning a value is no more expensive populating it,
     // at least for Eigen vectors with known size at compile-time.

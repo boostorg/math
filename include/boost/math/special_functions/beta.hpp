@@ -101,7 +101,7 @@ T beta_imp(T a, T b, const Lanczos&, const Policy& pol)
    }
    else
    {
-      result *= pow(agh / cgh, a - T(0.5) - b);
+      result *= pow(agh / cgh, a - static_cast<T>(0.5) - b);
    }
    if(cgh > 1e10f)
       // this avoids possible overflow, but appears to be marginally less accurate:
@@ -947,7 +947,7 @@ T binomial_ccdf(T n, T k, T x, T y, const Policy& pol)
    if(result > tools::min_value<T>())
    {
       T term = result;
-      for(unsigned i = itrunc(T(n - 1)); i > k; --i)
+      for(auto i = itrunc(T(n - 1)); i > k; --i)
       {
          term *= ((i + 1) * y) / ((n - i) * x);
          result += term;
@@ -965,22 +965,22 @@ T binomial_ccdf(T n, T k, T x, T y, const Policy& pol)
       {
          // OK, starting slightly above the mode didn't work,
          // we'll have to sum the terms the old fashioned way:
-         for(unsigned i = start - 1; i > k; --i)
+         for(auto i = start - 1; i > k; --i)
          {
-            result += pow(x, (int)i) * pow(y, n - i) * boost::math::binomial_coefficient<T>(itrunc(n), itrunc(i), pol);
+            result += pow(x, i) * pow(y, n - i) * boost::math::binomial_coefficient<T>(itrunc(n), itrunc(i), pol);
          }
       }
       else
       {
          T term = result;
          T start_term = result;
-         for(unsigned i = start - 1; i > k; --i)
+         for(auto i = start - 1; i > k; --i)
          {
             term *= ((i + 1) * y) / ((n - i) * x);
             result += term;
          }
          term = start_term;
-         for(unsigned i = start + 1; i <= n; ++i)
+         for(auto i = start + 1; i <= n; ++i)
          {
             term *= (n - i + 1) * x / (i * y);
             result += term;

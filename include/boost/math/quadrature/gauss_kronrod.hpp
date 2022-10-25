@@ -45,17 +45,17 @@ class gauss_kronrod_detail
    {
       std::vector<Real> result(abscissa().size(), 0);
       unsigned gauss_order = (N - 1) / 2;
-      unsigned gauss_start = gauss_order & 1 ? 0 : 1;
+      unsigned gauss_start = (gauss_order & 1) ^ 1;
       const legendre_stieltjes<Real>& E = get_legendre_stieltjes();
 
-      for (unsigned i = gauss_start; i < abscissa().size(); i += 2)
+      for (decltype(abscissa().size()) i = gauss_start; i < abscissa().size(); i += 2)
       {
          Real x = abscissa()[i];
          Real p = boost::math::legendre_p_prime(gauss_order, x);
          Real gauss_weight = 2 / ((1 - x * x) * p * p);
          result[i] = gauss_weight + static_cast<Real>(2) / (static_cast<Real>(gauss_order + 1) * legendre_p_prime(gauss_order, x) * E(x));
       }
-      for (unsigned i = gauss_start ? 0 : 1; i < abscissa().size(); i += 2)
+      for (decltype(abscissa().size()) i = gauss_start ^ 1; i < abscissa().size(); i += 2)
       {
          Real x = abscissa()[i];
          result[i] = static_cast<Real>(2) / (static_cast<Real>(gauss_order + 1) * legendre_p(gauss_order, x) * E.prime(x));
@@ -1784,7 +1784,7 @@ private:
       K kronrod_result = 0;
       K gauss_result = 0;
       K fp, fm;
-      if (gauss_order & 1)
+      if ((gauss_order & 1) == 1)
       {
          fp = f(value_type(0));
          kronrod_result = fp * base::weights()[0];
@@ -1798,7 +1798,7 @@ private:
          kronrod_start = 2;
       }
       Real L1 = abs(kronrod_result);
-      for (unsigned i = gauss_start; i < base::abscissa().size(); i += 2)
+      for (decltype(base::abscissa().size()) i = gauss_start; i < base::abscissa().size(); i += 2)
       {
          fp = f(base::abscissa()[i]);
          fm = f(-base::abscissa()[i]);
@@ -1806,7 +1806,7 @@ private:
          L1 += (abs(fp) + abs(fm)) *  base::weights()[i];
          gauss_result += (fp + fm) * gauss<Real, (N - 1) / 2>::weights()[i / 2];
       }
-      for (unsigned i = kronrod_start; i < base::abscissa().size(); i += 2)
+      for (decltype(base::abscissa().size()) i = kronrod_start; i < base::abscissa().size(); i += 2)
       {
          fp = f(base::abscissa()[i]);
          fm = f(-base::abscissa()[i]);

@@ -130,7 +130,7 @@ void print_fitted(ds_info const& ds)
    std::cout << "* Fitted Request Interarrival Time" << std::endl;
    std::cout << " - Mean (SD): " << boost::math::mean(ds.iat_he) << " (" << boost::math::standard_deviation(ds.iat_he) << ") seconds." << std::endl;
    std::cout << " - 99th Percentile: " << boost::math::quantile(ds.iat_he, 0.99) << " seconds." << std::endl;
-   std::cout << " - Probability that a VM will arrive within 30 minutes: " << boost::math::cdf(ds.iat_he, secs_in_a_hour / 2.0) << std::endl;
+   std::cout << " - Probability that a VM will arrive within 30 minutes: " << boost::math::cdf(ds.iat_he, secs_in_a_hour * 0.5) << std::endl;
    std::cout << " - Probability that a VM will arrive after 1 hour: " << boost::math::cdf(boost::math::complement(ds.iat_he, secs_in_a_hour)) << std::endl;
    std::cout << "* Fitted Multi-core VM Lifetime" << std::endl;
    std::cout << " - Mean (SD): " << boost::math::mean(ds.multi_lt_he) << " (" << boost::math::standard_deviation(ds.multi_lt_he) << ") seconds." << std::endl;

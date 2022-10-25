@@ -904,14 +904,14 @@ T zeta_imp_odd_integer(int s, const T& sc, const Policy& pol, const std::false_t
    {
       is_init = true;
       digits = current_digits;
-      for(unsigned k = 0; k < sizeof(results) / sizeof(results[0]); ++k)
+      for(std::size_t k = 0; k < sizeof(results) / sizeof(results[0]); ++k)
       {
          T arg = k * 2 + 3;
          T c_arg = 1 - arg;
          results[k] = zeta_polynomial_series(arg, c_arg, pol);
       }
    }
-   unsigned index = (s - 3) / 2;
+   unsigned index = static_cast<unsigned>((s - 3) / 2);
    return index >= sizeof(results) / sizeof(results[0]) ? zeta_polynomial_series(T(s), sc, pol): results[index];
 }
 
@@ -950,15 +950,15 @@ T zeta_imp(T s, T sc, const Policy& pol, const Tag& tag)
                if(((-v) & 1) == 0)
                   return 0;
                int n = (-v + 1) / 2;
-               if(n <= (int)boost::math::max_bernoulli_b2n<T>::value)
-                  return T((-v & 1) ? -1 : 1) * boost::math::unchecked_bernoulli_b2n<T>(n) / (1 - v);
+               if(n <= static_cast<int>(boost::math::max_bernoulli_b2n<T>::value))
+                  return T(((-v & 1) == 1) ? -1 : 1) * boost::math::unchecked_bernoulli_b2n<T>(n) / (1 - v);
             }
             else if((v & 1) == 0)
             {
-               if(((v / 2) <= (int)boost::math::max_bernoulli_b2n<T>::value) && (v <= (int)boost::math::max_factorial<T>::value))
-                  return T(((v / 2 - 1) & 1) ? -1 : 1) * ldexp(T(1), v - 1) * pow(constants::pi<T, Policy>(), v) *
+               if(((v / 2) <= static_cast<int>(boost::math::max_bernoulli_b2n<T>::value)) && (v <= static_cast<int>(boost::math::max_bernoulli_b2n<T>::value)))
+                  return T(((v & 2) == 0) ? -1 : 1) * ldexp(T(1), v - 1) * pow(constants::pi<T, Policy>(), v) *
                      boost::math::unchecked_bernoulli_b2n<T>(v / 2) / boost::math::unchecked_factorial<T>(v);
-               return T(((v / 2 - 1) & 1) ? -1 : 1) * ldexp(T(1), v - 1) * pow(constants::pi<T, Policy>(), v) *
+               return T(((v & 2) == 0) ? -1 : 1) * ldexp(T(1), v - 1) * pow(constants::pi<T, Policy>(), v) *
                   boost::math::bernoulli_b2n<T>(v / 2) / boost::math::factorial<T>(v, pol);
             }
             else

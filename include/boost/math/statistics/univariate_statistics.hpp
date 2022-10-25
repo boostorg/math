@@ -377,7 +377,7 @@ auto median(ExecutionPolicy&& exec, RandomAccessIterator first, RandomAccessIter
 {
     const auto num_elems = std::distance(first, last);
     BOOST_MATH_ASSERT_MSG(num_elems > 0, "The median of a zero length vector is undefined.");
-    if (num_elems & 1)
+    if ((num_elems & 1) == 1)
     {
         auto middle = first + (num_elems - 1)/2;
         std::nth_element(exec, first, middle, last);
@@ -501,7 +501,7 @@ auto median_absolute_deviation(ExecutionPolicy&& exec, RandomAccessIterator firs
     const auto num_elems = std::distance(first, last);
     BOOST_MATH_ASSERT_MSG(num_elems > 0, "The median of a zero-length vector is undefined.");
     auto comparator = [&center](Real a, Real b) { return abs(a-center) < abs(b-center);};
-    if (num_elems & 1)
+    if ((num_elems & 1) == 1)
     {
         auto middle = first + (num_elems - 1)/2;
         std::nth_element(exec, first, middle, last, comparator);
@@ -937,7 +937,7 @@ Real median(RandomAccessIterator first, RandomAccessIterator last)
 {
     const auto num_elems = std::distance(first, last);
     BOOST_MATH_ASSERT_MSG(num_elems > 0, "The median of a zero length vector is undefined.");
-    if (num_elems & 1)
+    if ((num_elems & 1) == 1)
     {
         auto middle = first + (num_elems - 1)/2;
         std::nth_element(first, middle, last);
@@ -1039,7 +1039,7 @@ Real median_absolute_deviation(RandomAccessIterator first, RandomAccessIterator 
     const auto num_elems = std::distance(first, last);
     BOOST_MATH_ASSERT_MSG(num_elems > 0, "The median of a zero-length vector is undefined.");
     auto comparator = [&center](Real a, Real b) { return abs(a-center) < abs(b-center);};
-    if (num_elems & 1)
+    if ((num_elems & 1) == 1)
     {
         auto middle = first + (num_elems - 1)/2;
         std::nth_element(first, middle, last, comparator);

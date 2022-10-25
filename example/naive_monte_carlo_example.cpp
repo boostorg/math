@@ -63,7 +63,7 @@ int main()
 
     auto task = mc.integrate();
 
-    int s = 0;
+    unsigned s = 0;
     std::cout << "Hit ctrl-c to cancel.\n";
     while (task.wait_for(std::chrono::seconds(1)) != std::future_status::ready)
     {
