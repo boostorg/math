@@ -135,10 +135,10 @@ T ellint_rd_imp(T x, T y, T z, const Policy& pol)
    T Q = pow(tools::epsilon<T>() / 4, -T(1) / 8) * (std::max)((std::max)(An - x, An - y), An - z) * 1.2f;
    BOOST_MATH_INSTRUMENT_VARIABLE(Q);
    T lambda, rx, ry, rz;
-   unsigned k = 0;
    T fn = 1;
    T RD_sum = 0;
 
+   decltype(policies::get_max_series_iterations<Policy>()) k = 0;
    for(; k < policies::get_max_series_iterations<Policy>(); ++k)
    {
       rx = sqrt(xn);

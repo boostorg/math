@@ -78,7 +78,7 @@ public:
       m_gamma[k][1] /= denom;
     }
 
-    if (length % 2 == 0)
+    if ((length & 1) == 0)
     {
       m_gamma[m_complex_vector_size -1][0] /= 2;
       // numerically, m_gamma[m_complex_vector_size -1][1] should be zero . . .
@@ -241,7 +241,7 @@ public:
       m_gamma[k][1] /= denom;
     }
 
-    if (length % 2 == 0)
+    if ((length & 1) == 0)
     {
       m_gamma[m_complex_vector_size -1][0] /= 2;
     }
@@ -399,7 +399,7 @@ public:
       m_gamma[k][1] /= denom;
     }
 
-    if (length % 2 == 0) {
+    if ((length & 1) == 0) {
       m_gamma[m_complex_vector_size -1][0] /= 2;
     }
   }
@@ -554,7 +554,7 @@ public:
       m_gamma[k][0] /= denom;
       m_gamma[k][1] /= denom;
     }
-    if (length % 2 == 0)
+    if ((length & 1) == 0)
     {
       m_gamma[m_complex_vector_size -1][0] /= 2;
     }

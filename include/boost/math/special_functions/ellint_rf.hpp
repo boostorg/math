@@ -116,7 +116,7 @@ namespace boost { namespace math { namespace detail{
 
 
       // duplication
-      unsigned k = 1;
+      decltype(boost::math::policies::get_max_series_iterations<Policy>()) k = 1;
       for(; k < boost::math::policies::get_max_series_iterations<Policy>(); ++k)
       {
          T root_x = sqrt(xn);

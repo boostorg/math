@@ -45,13 +45,12 @@ public:
     {
         using std::numeric_limits;
         using std::sqrt;
-        uint64_t n = bounds.size();
+        size_t n = bounds.size();
         m_lbs.resize(n);
         m_dxs.resize(n);
         m_limit_types.resize(n);
-
         static const char* function = "boost::math::quadrature::naive_monte_carlo<%1%>";
-        for (uint64_t i = 0; i < n; ++i)
+        for (size_t i = 0; i < n; ++i)
         {
             if (bounds[i].second <= bounds[i].first)
             {
@@ -115,7 +114,7 @@ public:
         m_integrand = [this, &integrand](std::vector<Real> & x)->Real
         {
             Real coeff = m_volume;
-            for (uint64_t i = 0; i < x.size(); ++i)
+            for (size_t i = 0; i < x.size(); ++i)
             {
                 // Variable transformation are listed at:
                 // https://en.wikipedia.org/wiki/Numerical_integration
@@ -171,7 +170,7 @@ public:
         Real avg = 0;
         for (uint64_t i = 0; i < m_num_threads; ++i)
         {
-            for (uint64_t j = 0; j < m_lbs.size(); ++j)
+            for (size_t j = 0; j < m_lbs.size(); ++j)
             {
                 x[j] = (gen()-(gen.min)())*inv_denom;
             }
@@ -277,10 +276,10 @@ private:
          seed = m_seed;
       }
       RandomNumberGenerator gen(seed);
-      int max_repeat_tries = 5;
+      unsigned max_repeat_tries = 6;
       do{
 
-         if (max_repeat_tries < 5)
+         if (max_repeat_tries < 6)
          {
             m_done = false;
 
@@ -300,7 +299,7 @@ private:
          }
 
          std::vector<std::thread> threads(m_num_threads);
-         for (uint64_t i = 0; i < threads.size(); ++i)
+         for (size_t i = 0; i < threads.size(); ++i)
          {
             threads[i] = std::thread(&naive_monte_carlo::m_thread_monte, this, i, gen());
          }
@@ -363,7 +362,7 @@ private:
          // Then the threads proceed to find the variance is much greater by the time they hear the message to stop.
          // This *WOULD* make sure that the final error estimate is within the error bounds.
       }
-      while ((--max_repeat_tries >= 0) && (this->current_error_estimate() > m_error_goal));
+      while ((--max_repeat_tries != 0) && (this->current_error_estimate() > m_error_goal));
 
       return m_avg.load(std::memory_order_consume);
     }
@@ -386,15 +385,15 @@ private:
             uint64_t k = m_thread_calls[thread_index].load(std::memory_order_consume);
             while (!m_done) // relaxed load
             {
-                int j = 0;
+                unsigned int j = 0;
                 // If we don't have a certain number of calls before an update, we can easily terminate prematurely
                 // because the variance estimate is way too low. This magic number is a reasonable compromise, as 1/sqrt(2048) = 0.02,
                 // so it should recover 2 digits if the integrand isn't poorly behaved, and if it is, it should discover that before premature termination.
                 // Of course if the user has 64 threads, then this number is probably excessive.
-                int magic_calls_before_update = 2048;
+                const unsigned int magic_calls_before_update = 2048;
                 while (j++ < magic_calls_before_update)
                 {
-                    for (uint64_t i = 0; i < m_lbs.size(); ++i)
+                    for (size_t i = 0; i < m_lbs.size(); ++i)
                     {
                         x[i] = (gen() - (gen.min)())*inv_denom;
                     }
@@ -405,7 +404,7 @@ private:
                         // The call to m_integrand transform x, so this error message states the correct node.
                         std::stringstream os;
                         os << "Your integrand was evaluated at {";
-                        for (uint64_t i = 0; i < x.size() -1; ++i)
+                        for (size_t i = 0; i < x.size() -1; ++i)
                         {
                              os << x[i] << ", ";
                         }

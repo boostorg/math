@@ -457,7 +457,7 @@
         eval_multiply(t, t2, x);
         eval_multiply(t, t2);
 
-        if((expon & 1) != 0)
+        if((expon & 1) == 1)
         {
           eval_multiply(t, ten);
         }
@@ -519,7 +519,7 @@
         {
           // Use simple bankers rounding.
 
-          if((static_cast<int>(*result.rbegin() - '0') & 1) != 0)
+          if(((*result.rbegin() - '0') & 1) == 1)
           {
             round_string_up_at(result, static_cast<int>(result.size() - 1U), expon);
           }

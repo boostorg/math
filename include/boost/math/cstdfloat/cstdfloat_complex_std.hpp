@@ -525,17 +525,17 @@
         else
         {
           // The variable xn stores the binary powers of x.
-          complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> result(((p % 2) != 0) ? x : complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>(BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(1)));
+          complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> result(((p & 1) == 1) ? x : complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>(BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(1)));
           complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> xn    (x);
 
           int p2 = p;
 
-          while((p2 /= 2) != 0)
+          while((p2 >>= 1) != 0)
           {
             // Square xn for each binary power.
             xn *= xn;
 
-            const bool has_binary_power = ((p2 % 2) != 0);
+            const bool has_binary_power = ((p2 & 1) == 1);
 
             if(has_binary_power)
             {

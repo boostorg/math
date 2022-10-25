@@ -91,7 +91,7 @@ T ibeta_inv_ab_imp(const T& b, const T& z, const T& p, const T& q, bool swap_ab,
    // Function object, this is the functor whose root
    // we have to solve:
    //
-   beta_inv_ab_t<T, Policy> f(b, z, (p < q) ? p : q, (p < q) ? false : true, swap_ab);
+   beta_inv_ab_t<T, Policy> f(b, z, (p < q) ? p : q, (p >= q), swap_ab);
    //
    // Tolerance: full precision.
    //
@@ -152,7 +152,7 @@ T ibeta_inv_ab_imp(const T& b, const T& z, const T& p, const T& q, bool swap_ab,
    // Max iterations permitted:
    //
    std::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
-   std::pair<T, T> r = bracket_and_solve_root(f, guess, factor, swap_ab ? true : false, tol, max_iter, pol);
+   std::pair<T, T> r = bracket_and_solve_root(f, guess, factor, swap_ab, tol, max_iter, pol);
    if(max_iter >= policies::get_max_root_iterations<Policy>())
       return policies::raise_evaluation_error<T>("boost::math::ibeta_invab_imp<%1%>(%1%,%1%,%1%)", "Unable to locate the root within a reasonable number of iterations, closest approximation so far was %1%", r.first, pol);
    return (r.first + r.second) / 2;

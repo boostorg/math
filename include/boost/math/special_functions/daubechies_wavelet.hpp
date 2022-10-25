@@ -38,13 +38,13 @@ namespace boost::math {
       for (size_t i = 0; i < d.size(); ++i)
       {
          d[i] *= scale;
-         if (!(i & 1))
+         if ((i & 1) == 0)
          {
             d[i] = -d[i];
          }
       }
 
-      std::vector<Real> v(2 * p + (2 * p - 1) * ((int64_t(1) << j_max) - 1), std::numeric_limits<Real>::quiet_NaN());
+      std::vector<Real> v(2 * p + (2 * p - 1) * ((static_cast<int64_t>(1) << j_max) - 1), std::numeric_limits<Real>::quiet_NaN());
       v[0] = 0;
       v[v.size() - 1] = 0;
 
@@ -53,7 +53,7 @@ namespace boost::math {
          Real term = 0;
          for (int64_t k = 0; k < static_cast<int64_t>(d.size()); ++k)
          {
-            int64_t idx = (int64_t(1) << (j_max - 1)) * (1 - 2 * p + k) + l;
+            int64_t idx = (static_cast<int64_t>(1) << (j_max - 1)) * (1 - 2 * p + k) + l;
             if (idx < 0 || idx >= static_cast<int64_t>(phijk.size()))
             {
                continue;

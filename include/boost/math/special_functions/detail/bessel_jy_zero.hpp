@@ -339,7 +339,7 @@
             return (boost::math::get<0>(guess_pair) + boost::math::get<1>(guess_pair)) / 2U;
           }
 
-          if(m == 1U)
+          if(m == 1)
           {
             // Get the initial estimate of the first root.
 
@@ -369,7 +369,7 @@
             if(v < 2.2F)
             {
               // Use Eq. 10.21.19 in the NIST Handbook.
-              const T a(((v + T(m * 2U)) - T(0.5)) * boost::math::constants::half_pi<T>());
+              const T a(((v + T(m * 2)) - T(0.5)) * boost::math::constants::half_pi<T>());
 
               guess = boost::math::detail::bessel_zero::equation_nist_10_21_19(v, a);
             }
@@ -574,7 +574,7 @@
             return (boost::math::get<0>(guess_pair) + boost::math::get<1>(guess_pair)) / 2U;
           }
 
-          if(m == 1U)
+          if(m == 1)
           {
             // Get the initial estimate of the first root.
 
@@ -604,7 +604,7 @@
             if(v < 2.2F)
             {
               // Use Eq. 10.21.19 in the NIST Handbook.
-              const T a(((v + T(m * 2U)) - T(1.5)) * boost::math::constants::half_pi<T>());
+              const T a(((v + T(m * 2)) - T(1.5)) * boost::math::constants::half_pi<T>());
 
               guess = boost::math::detail::bessel_zero::equation_nist_10_21_19(v, a);
             }

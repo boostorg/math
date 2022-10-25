@@ -52,7 +52,7 @@ namespace boost { namespace math { namespace detail{
         // x is crazy large, just concentrate on the first part of the expression and use logs:
         if(n == 1) return 1 / x;
         T nlx = n * log(x);
-        if((nlx < tools::log_max_value<T>()) && (n < (int)max_factorial<T>::value))
+        if((nlx < tools::log_max_value<T>()) && (n < static_cast<int>(max_factorial<T>::value)))
            return ((n & 1) ? 1 : -1) * boost::math::factorial<T>(n - 1, pol) * pow(x, -n);
         else
          return ((n & 1) ? 1 : -1) * exp(boost::math::lgamma(T(n), pol) - n * log(x));
@@ -102,7 +102,7 @@ namespace boost { namespace math { namespace detail{
      if(sum == 0)
         return sum;
 
-     for(unsigned k = 1;;)
+     for(int k = 1;;)
      {
         term = part_term * boost::math::bernoulli_b2n<T>(k, pol);
         sum += term;
@@ -121,13 +121,13 @@ namespace boost { namespace math { namespace detail{
         //
         // Emergency get out termination condition:
         //
-        if(k > policies::get_max_series_iterations<Policy>())
+        if(k > static_cast<int>(policies::get_max_series_iterations<Policy>()))
         {
            return policies::raise_evaluation_error(function, "Series did not converge, closest value was %1%", sum, pol);
         }
      }
 
-     if((n - 1) & 1)
+     if((n & 1) == 0)
         sum = -sum;
 
      return sum;
@@ -174,7 +174,7 @@ namespace boost { namespace math { namespace detail{
           z += 1;
        }
     }
-    if((n - 1) & 1)
+    if((n & 1) == 0)
        sum0 = -sum0;
 
     return sum0 + polygamma_atinfinityplus(n, z, pol, function);
@@ -212,7 +212,7 @@ namespace boost { namespace math { namespace detail{
      // ignore the sum if it will have no effect on the result anyway:
      //
      if(prefix > 2 / policies::get_epsilon<T, Policy>())
-        return ((n & 1) ? 1 : -1) *
+        return (((n & 1) == 1) ? 1 : -1) *
          (tools::max_value<T>() / prefix < scale ? policies::raise_overflow_error<T>(function, nullptr, pol) : prefix * scale);
      //
      // As this is an alternating series we could accelerate it using
@@ -222,7 +222,7 @@ namespace boost { namespace math { namespace detail{
      // required except in some edge cases which are filtered out anyway before we get here.
      //
      T sum = prefix;
-     for(unsigned k = 0;;)
+     for(int k = 0;;)
      {
         // Get the k'th term:
         T term = factorial_part * boost::math::zeta(T(k + n + 1), pol);
@@ -238,7 +238,7 @@ namespace boost { namespace math { namespace detail{
         //
         // Last chance exit:
         //
-        if(k > policies::get_max_series_iterations<Policy>())
+        if(k > static_cast<int>(policies::get_max_series_iterations<Policy>()))
            return policies::raise_evaluation_error<T>(function, "Series did not converge, best value is %1%", sum, pol);
      }
      //
@@ -247,7 +247,7 @@ namespace boost { namespace math { namespace detail{
      if(boost::math::tools::max_value<T>() / scale < sum)
         return boost::math::policies::raise_overflow_error<T>(function, nullptr, pol);
      sum *= scale;
-     return n & 1 ? sum : T(-sum);
+     return ((n & 1) == 1) ? sum : T(-sum);
   }
 
   //
@@ -449,7 +449,7 @@ namespace boost { namespace math { namespace detail{
 
      }
      T sum = boost::math::tools::evaluate_even_polynomial(&table[index][0], c, table[index].size());
-     if(index & 1)
+     if((index & 1) == 1)
         sum *= c;  // First coefficient is order 1, and really an odd polynomial.
      if(sum == 0)
         return sum;
@@ -467,7 +467,7 @@ namespace boost { namespace math { namespace detail{
      if(power_terms > boost::math::tools::log_max_value<T>())
         return sum * boost::math::policies::raise_overflow_error<T>(function, nullptr, pol);
 
-     return exp(power_terms) * ((s < 0) && ((n + 1) & 1) ? -1 : 1) * boost::math::sign(sum);
+     return exp(power_terms) * (((s < 0) && ((n & 1) == 0)) ? -1 : 1) * boost::math::sign(sum);
   }
 
   template <class T, class Policy>
@@ -514,7 +514,7 @@ namespace boost { namespace math { namespace detail{
        }
        T z = 1 - x;
        T result = polygamma_imp(n, z, pol) + constants::pi<T, Policy>() * poly_cot_pi(n, z, x, pol, function);
-       return n & 1 ? T(-result) : result;
+       return ((n & 1) == 1) ? T(-result) : result;
     }
     //
     // Limit for use of small-x-series is chosen
@@ -534,11 +534,11 @@ namespace boost { namespace math { namespace detail{
     }
     else if(x == 1)
     {
-       return (n & 1 ? 1 : -1) * boost::math::factorial<T>(n, pol) * boost::math::zeta(T(n + 1), pol);
+       return (((n & 1) == 1) ? 1 : -1) * boost::math::factorial<T>(n, pol) * boost::math::zeta(T(n + 1), pol);
     }
     else if(x == 0.5f)
     {
-       T result = (n & 1 ? 1 : -1) * boost::math::factorial<T>(n, pol) * boost::math::zeta(T(n + 1), pol);
+       T result = (((n & 1) == 1) ? 1 : -1) * boost::math::factorial<T>(n, pol) * boost::math::zeta(T(n + 1), pol);
        if(fabs(result) >= ldexp(tools::max_value<T>(), -n - 1))
           return boost::math::sign(result) * policies::raise_overflow_error<T>(function, nullptr, pol);
        result *= ldexp(T(1), n + 1) - 1;

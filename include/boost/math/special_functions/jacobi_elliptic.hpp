@@ -26,7 +26,7 @@ T jacobi_recurse(const T& x, const T& k, T anm1, T bnm1, unsigned N, T* pTn, con
    T an = (anm1 + bnm1) / 2;
    if(cn < policies::get_epsilon<T, Policy>())
    {
-      Tn = ldexp(T(1), (int)N) * x * an;
+      Tn = ldexp(T(1), static_cast<int>(N)) * x * an;
    }
    else
       Tn = jacobi_recurse<T>(x, k, an, sqrt(anm1 * bnm1), N, 0, pol);

@@ -51,24 +51,22 @@ boost::numeric::ublas::vector<T> solve(
    // iterate to reduce error:
    //
    boost::numeric::ublas::vector<T> delta(b.size());
-   for(unsigned k = 0; k < 1; ++k)
+
+   noalias(delta) = prod(A_, b);
+   delta -= b_;
+   lu_substitute(A, piv, delta);
+   b -= delta;
+
+   T max_error = 0;
+
+   for (std::size_t i = 0; i < delta.size(); ++i)
    {
-      noalias(delta) = prod(A_, b);
-      delta -= b_;
-      lu_substitute(A, piv, delta);
-      b -= delta;
-
-      T max_error = 0;
-
-      for(unsigned i = 0; i < delta.size(); ++i)
-      {
-         using std::abs;
-         T err = abs(delta[i] / b[i]);
-         if(err > max_error)
-            max_error = err;
-      }
-      //std::cout << "Max change in LU error correction: " << max_error << std::endl;
+      using std::abs;
+      T err = abs(delta[i] / b[i]);
+      if (err > max_error)
+         max_error = err;
    }
+   // std::cout << "Max change in LU error correction: " << max_error << std::endl;
 
    return b;
 }

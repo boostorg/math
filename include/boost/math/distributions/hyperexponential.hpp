@@ -59,8 +59,8 @@ namespace /*<unnamed>*/ { namespace hyperexp_detail {
 template <typename T>
 void normalize(std::vector<T>& v)
 {
-   if(!v.size())
-      return;  // Our error handlers will get this later
+    if (v.empty())
+        return; // Our error handlers will get this later
     const T sum = std::accumulate(v.begin(), v.end(), static_cast<T>(0));
     T final_sum = 0;
     const typename std::vector<T>::iterator end = --v.end();

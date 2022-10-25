@@ -61,13 +61,10 @@ T legendre_imp(unsigned l, T x, const Policy& pol, bool second = false)
    if(l == 0)
       return p0;
 
-   unsigned n = 1;
-
-   while(n < l)
+   for (unsigned n = 1; n < l; ++n)
    {
       std::swap(p0, p1);
       p1 = boost::math::legendre_next(n, x, p0, p1);
-      ++n;
    }
    return p1;
 }
@@ -170,8 +167,8 @@ std::vector<T> legendre_p_zeros_imp(int n, const Policy& pol)
         // There are no zeros of P_0(x) = 1.
         return zeros;
     }
-    int k;
-    if (n & 1)
+    decltype(zeros.size()) k;
+    if ((n & 1) == 1)
     {
         zeros.resize((n-1)/2 + 1, std::numeric_limits<T>::quiet_NaN());
         zeros[0] = 0;
@@ -184,7 +181,7 @@ std::vector<T> legendre_p_zeros_imp(int n, const Policy& pol)
     }
     T half_n = ceil(n*half<T>());
 
-    while (k < (int)zeros.size())
+    while (k < zeros.size())
     {
         // Bracket the root: Szego:
         // Gabriel Szego, Inequalities for the Zeros of Legendre Polynomials and Related Functions, Transactions of the American Mathematical Society, Vol. 39, No. 1 (1936)

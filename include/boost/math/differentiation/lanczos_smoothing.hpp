@@ -20,10 +20,7 @@ namespace detail {
 template <typename Real>
 class discrete_legendre {
   public:
-    explicit discrete_legendre(std::size_t n, Real x) : m_n{n}, m_r{2}, m_x{x},
-                                                        m_qrm2{1}, m_qrm1{x},
-                                                        m_qrm2p{0}, m_qrm1p{1},
-                                                        m_qrm2pp{0}, m_qrm1pp{0}
+    explicit discrete_legendre(std::size_t n, Real x) : m_n{n}, m_x{x}, m_qrm1{x}
     {
         using std::abs;
         BOOST_MATH_ASSERT_MSG(abs(m_x) <= 1, "Three term recurrence is stable only for |x| <=1.");
@@ -133,14 +130,14 @@ class discrete_legendre {
 
   private:
     std::size_t m_n;
-    std::size_t m_r;
+    std::size_t m_r{2};
     Real m_x;
-    Real m_qrm2;
+    Real m_qrm2{1};
     Real m_qrm1;
-    Real m_qrm2p;
-    Real m_qrm1p;
-    Real m_qrm2pp;
-    Real m_qrm1pp;
+    Real m_qrm2p{0};
+    Real m_qrm1p{1};
+    Real m_qrm2pp{0};
+    Real m_qrm1pp{0};
 };
 
 template <class Real>
@@ -403,7 +400,7 @@ public:
 
             if (i > std::size(v) - m_f.size() && i < std::size(v))
             {
-                int k = std::size(v) - 1 - i;
+                auto k = std::size(v) - 1 - i;
                 auto &bf = m_boundary_filters[k];
                 Real dvdt = bf[0]*v[std::size(v)-1];
                 for (std::size_t j = 1; j < bf.size(); ++j)
@@ -439,7 +436,7 @@ public:
 
             if (i > std::size(v) - m_f.size() && i < std::size(v))
             {
-                int k = std::size(v) - 1 - i;
+                auto k = std::size(v) - 1 - i;
                 auto &bf = m_boundary_filters[k];
                 Real d2vdt2 = bf[0] * v[std::size(v) - 1];
                 for (std::size_t j = 1; j < bf.size(); ++j)
@@ -507,7 +504,7 @@ public:
 
             for(std::size_t i = std::size(v) - m_f.size() + 1; i < std::size(v); ++i)
             {
-                int k = std::size(v) - 1 - i;
+                auto k = std::size(v) - 1 - i;
                 auto &f = m_boundary_filters[k];
                 Real dvdt = f[0] * v[std::size(v) - 1];;
                 for (std::size_t j = 1; j < f.size(); ++j)
@@ -543,7 +540,7 @@ public:
 
             for (std::size_t i = std::size(v) - m_f.size() + 1; i < std::size(v); ++i)
             {
-                int k = std::size(v) - 1 - i;
+                auto k = std::size(v) - 1 - i;
                 auto &bf = m_boundary_filters[k];
                 Real d2vdt2 = bf[0] * v[std::size(v) - 1];
                 for (std::size_t j = 1; j < bf.size(); ++j)

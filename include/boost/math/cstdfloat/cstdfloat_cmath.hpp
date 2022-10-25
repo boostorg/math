@@ -89,17 +89,17 @@ namespace boost {
                   else
                   {
                      // The variable xn stores the binary powers of x.
-                     float_type result(((p % integer_type(2)) != integer_type(0)) ? x : float_type(1));
+                     float_type result(((p & 1) == integer_type(1)) ? x : float_type(1));
                      float_type xn(x);
 
                      integer_type p2 = p;
 
-                     while (integer_type(p2 /= 2) != integer_type(0))
+                     while (integer_type(p2 >>= 1) != integer_type(0))
                      {
                         // Square xn for each binary power.
                         xn *= xn;
 
-                        const bool has_binary_power = (integer_type(p2 % integer_type(2)) != integer_type(0));
+                        const bool has_binary_power = (integer_type(p2 & 1) == integer_type(1));
 
                         if (has_binary_power)
                         {

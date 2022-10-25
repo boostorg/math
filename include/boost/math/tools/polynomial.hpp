@@ -47,7 +47,7 @@ T chebyshev_coefficient(unsigned n, unsigned m)
 
    BOOST_MATH_ASSERT(n - 2 * r == m);
 
-   if(r & 1)
+   if((r & 1) == 1)
       result = -result;
    result /= n - r;
    result *= boost::math::binomial_coefficient<T>(n - r, r);
@@ -63,8 +63,8 @@ Seq polynomial_to_chebyshev(const Seq& s)
    typedef typename Seq::difference_type difference_type;
    Seq result(s);
    difference_type order = s.size() - 1;
-   difference_type even_order = order & 1 ? order - 1 : order;
-   difference_type odd_order = order & 1 ? order : order - 1;
+   difference_type even_order = ((order & 1) == 1) ? order - 1 : order;
+   difference_type odd_order = ((order & 1) == 1) ? order : order - 1;
 
    for(difference_type i = even_order; i >= 0; i -= 2)
    {
@@ -151,7 +151,7 @@ T integer_power(T t, N n)
    }
    T result = integer_power(t, n / 2);
    result *= result;
-   if(n & 1)
+   if((n & 1) == 1)
       result *= t;
    return result;
 }
@@ -330,7 +330,7 @@ public:
    polynomial(const polynomial<U>& p)
    {
       m_data.resize(p.size());
-      for(unsigned i = 0; i < p.size(); ++i)
+      for(size_type i = 0; i < p.size(); ++i)
       {
          m_data[i] = boost::math::tools::real_cast<T>(p[i]);
       }
@@ -409,7 +409,7 @@ public:
       }
 
       std::vector<T> p_data(m_data.size() - 1);
-      for (size_t i = 0; i < p_data.size(); ++i) {
+      for (size_type i = 0; i < p_data.size(); ++i) {
           p_data[i] = m_data[i+1]*static_cast<T>(i+1);
       }
       return polynomial<T>(std::move(p_data));
@@ -423,7 +423,7 @@ public:
       std::vector<T> i_data(m_data.size() + 1);
       // Choose integration constant such that P(0) = 0.
       i_data[0] = T(0);
-      for (size_t i = 1; i < i_data.size(); ++i)
+      for (size_type i = 1; i < i_data.size(); ++i)
       {
           i_data[i] = m_data[i-1]/static_cast<T>(i);
       }
@@ -507,8 +507,8 @@ public:
            return;
        }
        std::vector<T> prod(a.size() + b.size() - 1, T(0));
-       for (unsigned i = 0; i < a.size(); ++i)
-           for (unsigned j = 0; j < b.size(); ++j)
+       for (size_type i = 0; i < a.size(); ++i)
+           for (size_type j = 0; j < b.size(); ++j)
                prod[i+j] += a.m_data[i] * b.m_data[j];
        m_data.swap(prod);
    }
@@ -825,13 +825,13 @@ polynomial<T> pow(polynomial<T> base, int exp)
         // will return std::numeric_limits<polynomial<T>>::quiet_NaN(), which
         // defaults to polynomial<T>(), which is the zero polynomial
     polynomial<T> result(T(1));
-    if (exp & 1)
+    if ((exp & 1) == 1)
         result = base;
     /* "Exponentiation by squaring" */
     while (exp >>= 1)
     {
         base *= base;
-        if (exp & 1)
+        if ((exp & 1) == 1)
             result *= base;
     }
     return result;
@@ -841,7 +841,7 @@ template <class charT, class traits, class T>
 inline std::basic_ostream<charT, traits>& operator << (std::basic_ostream<charT, traits>& os, const polynomial<T>& poly)
 {
    os << "{ ";
-   for(unsigned i = 0; i < poly.size(); ++i)
+   for(size_t i = 0; i < poly.size(); ++i)
    {
       if(i) os << ", ";
       os << poly[i];

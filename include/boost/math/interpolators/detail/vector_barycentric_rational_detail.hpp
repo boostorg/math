@@ -43,11 +43,9 @@ private:
 };
 
 template <class TimeContainer, class SpaceContainer>
-vector_barycentric_rational_imp<TimeContainer, SpaceContainer>::vector_barycentric_rational_imp(TimeContainer&& t, SpaceContainer&& y, size_t approximation_order)
+vector_barycentric_rational_imp<TimeContainer, SpaceContainer>::vector_barycentric_rational_imp(TimeContainer&& t, SpaceContainer&& y, size_t approximation_order) : t_(std::move(t)), y_(std::move(y))
 {
     using std::numeric_limits;
-    t_ = std::move(t);
-    y_ = std::move(y);
 
     BOOST_MATH_ASSERT_MSG(t_.size() == y_.size(), "There must be the same number of time points as space points.");
     BOOST_MATH_ASSERT_MSG(approximation_order < y_.size(), "Approximation order must be < data length.");
@@ -62,7 +60,6 @@ vector_barycentric_rational_imp<TimeContainer, SpaceContainer>::vector_barycentr
 template<class TimeContainer, class SpaceContainer>
 void vector_barycentric_rational_imp<TimeContainer, SpaceContainer>::calculate_weights(size_t approximation_order)
 {
-    using Real = typename TimeContainer::value_type;
     using std::abs;
     int64_t n = t_.size();
     w_.resize(n, Real(0));
@@ -70,7 +67,7 @@ void vector_barycentric_rational_imp<TimeContainer, SpaceContainer>::calculate_w
     {
         int64_t i_min = (std::max)(k - static_cast<int64_t>(approximation_order), static_cast<int64_t>(0));
         int64_t i_max = k;
-        if (k >= n - (std::ptrdiff_t)approximation_order)
+        if (k >= n - static_cast<std::ptrdiff_t>(approximation_order))
         {
             i_max = n - approximation_order - 1;
         }
@@ -88,7 +85,7 @@ void vector_barycentric_rational_imp<TimeContainer, SpaceContainer>::calculate_w
                 Real diff = t_[k] - t_[j];
                 inv_product *= diff;
             }
-            if (i % 2 == 0)
+            if ((i & 1) == 0)
             {
                 w_[k] += 1/inv_product;
             }
@@ -104,7 +101,6 @@ void vector_barycentric_rational_imp<TimeContainer, SpaceContainer>::calculate_w
 template<class TimeContainer, class SpaceContainer>
 void vector_barycentric_rational_imp<TimeContainer, SpaceContainer>::operator()(typename SpaceContainer::value_type& p, typename TimeContainer::value_type t) const
 {
-    using Real = typename TimeContainer::value_type;
     for (auto & x : p)
     {
         x = Real(0);
@@ -135,8 +131,6 @@ void vector_barycentric_rational_imp<TimeContainer, SpaceContainer>::operator()(
 template<class TimeContainer, class SpaceContainer>
 void vector_barycentric_rational_imp<TimeContainer, SpaceContainer>::eval_with_prime(typename SpaceContainer::value_type& x, typename SpaceContainer::value_type& dxdt, typename TimeContainer::value_type t) const
 {
-    using Point = typename SpaceContainer::value_type;
-    using Real = typename TimeContainer::value_type;
     this->operator()(x, t);
     Point numerator;
     for (decltype(x.size()) i = 0; i < x.size(); ++i)
@@ -149,9 +143,9 @@ void vector_barycentric_rational_imp<TimeContainer, SpaceContainer>::eval_with_p
         if (t == t_[i])
         {
             Point sum;
-            for (decltype(x.size()) i = 0; i < x.size(); ++i)
+            for (decltype(x.size()) j = 0; i < x.size(); ++j)
             {
-                sum[i] = 0;
+                sum[j] = 0;
             }
 
             for (decltype(t_.size()) j = 0; j < t_.size(); ++j)

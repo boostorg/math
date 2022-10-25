@@ -56,7 +56,7 @@ inline constexpr T abs(T x) noexcept
     }
     else
     {
-        static_assert(sizeof(T) == 0, "Taking the absolute value of an unsigned value not covertible to int is UB.");
+        static_assert(sizeof(T) == 0, "Taking the absolute value of an unsigned value not convertible to int is UB.");
         return T(0); // Unreachable, but suppresses warnings
     }
 }

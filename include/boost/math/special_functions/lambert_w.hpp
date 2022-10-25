@@ -68,7 +68,7 @@ BOOST_MATH_INSTRUMENT_LAMBERT_W_SMALL_Z_SERIES_ITERATIONS  // Show evaluation of
 
 #include <limits>
 #include <cmath>
-#include <limits>
+#include <climits>
 #include <exception>
 #include <type_traits>
 #include <cstdint>
@@ -1719,14 +1719,14 @@ inline T lambert_w0_imp(T z, const Policy& pol, const std::integral_constant<int
    // Phew!  If we get here we are in the normal range of the function,
    // so get a double precision approximation first, then iterate to full precision of T.
    // We define a tag_type that is:
-   // true_type if there are so many digits precision wanted that iteration is necessary.
-   // false_type if a single Halley step is sufficient.
+   // true_type if there are so many digits precision wanted that iteration is necessary,
+   // which can happen if the value is unknown at compile-time, variable/arbitrary, or more than float128 or cpp_bin_quad 128-bit precision.
+   // false_type if float, double, float128, cpp_bin_quad 128-bit, so a single Halley step is sufficient.
 
    using precision_type = typename policies::precision<T, Policy>::type;
    using tag_type = std::integral_constant<bool,
-      (precision_type::value == 0) || (precision_type::value > 113) ?
-      true // Unknown at compile-time, variable/arbitrary, or more than float128 or cpp_bin_quad 128-bit precision.
-      : false // float, double, float128, cpp_bin_quad 128-bit, so single Halley step.
+           (precision_type::value == 0) ||
+           (precision_type::value > 113)
    >;
 
    // For speed, we also cast z to type double when that is possible

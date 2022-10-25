@@ -47,7 +47,7 @@ class gauss_detail
    static std::vector<Real> calculate_weights()
    {
       std::vector<Real> result(abscissa().size(), 0);
-      for (unsigned i = 0; i < abscissa().size(); ++i)
+      for (decltype(abscissa().size()) i = 0; i < abscissa().size(); ++i)
       {
          Real x = abscissa()[i];
          Real p = boost::math::legendre_p_prime(N, x);
@@ -1182,17 +1182,18 @@ public:
       static_assert(!std::is_integral<K>::value,
                    "The return type cannot be integral, it must be either a real or complex floating point type.");
       using std::abs;
-      unsigned non_zero_start = 1;
+      unsigned non_zero_start;
       K result = Real(0);
-      if (N & 1) {
+      if ((N & 1) == 1) {
          result = f(Real(0)) * base::weights()[0];
+         non_zero_start = 1;
       }
       else {
          result = 0;
          non_zero_start = 0;
       }
       Real L1 = abs(result);
-      for (unsigned i = non_zero_start; i < base::abscissa().size(); ++i)
+      for (decltype(base::abscissa().size()) i = non_zero_start; i < base::abscissa().size(); ++i)
       {
          K fp = f(base::abscissa()[i]);
          K fm = f(-base::abscissa()[i]);

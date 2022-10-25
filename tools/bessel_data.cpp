@@ -123,7 +123,7 @@ int bessel_jy_bare(T v, T x, T* J, T* Y, int kind = need_j|need_y)
 
     if (reflect)
     {
-        T z = (u + n % 2) * pi<T>();
+        T z = (u + (n & 1)) * pi<T>();
         *J = cos(z) * Jv - sin(z) * Yv;     // reflection formula
         *Y = sin(z) * Jv + cos(z) * Yv;
     }

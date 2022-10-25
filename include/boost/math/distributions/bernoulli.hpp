@@ -77,7 +77,7 @@ namespace boost
         {
           return false;
         }
-        if(!(boost::math::isfinite)(k) || !((k == 0) || (k == 1)))
+        if(!(boost::math::isfinite)(k) || ((k != 0) && (k != 1)))
         {
           *result = policies::raise_domain_error<RealType>(
             function,

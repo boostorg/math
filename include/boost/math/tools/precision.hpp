@@ -182,7 +182,7 @@ struct log_limit_traits
       std::integral_constant<int, (std::numeric_limits<T>::max_exponent > INT_MAX ? INT_MAX : static_cast<int>(std::numeric_limits<T>::max_exponent))>,
       std::integral_constant<int, 0>
    >::type tag_type;
-   static constexpr bool value = tag_type::value ? true : false;
+   static constexpr bool value = tag_type::value;
    static_assert(::std::numeric_limits<T>::is_specialized || (value == 0), "Type T must be specialized or equal to 0");
 };
 

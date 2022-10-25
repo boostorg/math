@@ -25,12 +25,12 @@ std::vector<T> generate_random_vector(std::size_t size, std::size_t seed)
     }
     std::vector<T> v(size);
 
-    std::mt19937 gen(seed);
+    std::mt19937_64 gen(seed);
 
     std::normal_distribution<T> dis(0, 1);
-    for(std::size_t i = 0; i < v.size(); ++i)
+    for (auto& i : v)
     {
-        v[i] = dis(gen);
+        i = dis(gen);
     }
     return v;
 }
@@ -70,9 +70,9 @@ std::vector<T> generate_random_vector(std::size_t size, std::size_t seed, T mean
     std::mt19937 gen(seed);
 
     std::normal_distribution<T> dis(mean, stddev);
-    for (std::size_t i = 0; i < v.size(); ++i)
+    for (auto& i : v)
     {
-        v[i] = dis(gen);
+        i = dis(gen);
     }
     return v;
 }
@@ -87,13 +87,13 @@ std::vector<T> generate_random_vector(std::size_t size, std::size_t seed)
     }
     std::vector<T> v(size);
 
-    std::mt19937 gen(seed);
+    std::mt19937_64 gen(seed);
 
     // Rescaling by larger than 2 is UB!
     std::uniform_int_distribution<T> dis(std::numeric_limits<T>::lowest()/2, (std::numeric_limits<T>::max)()/2);
-    for (std::size_t i = 0; i < v.size(); ++i)
+    for (auto& i : v)
     {
-        v[i] = dis(gen);
+        i = dis(gen);
     }
     return v;
 }

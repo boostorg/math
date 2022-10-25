@@ -170,7 +170,7 @@ cardinal_cubic_b_spline_imp<Real>::cardinal_cubic_b_spline_imp(BidiIterator f, B
     m_beta.resize(length + 2, std::numeric_limits<Real>::quiet_NaN());
 
     // Since the splines have compact support, they decay to zero very fast outside the endpoints.
-    // This is often very annoying; we'd like to evaluate the interpolant a little bit outside the
+    // This is often very annoying; we'd like to evaluate the interpolant a little outside the
     // boundary [a,b] without massive error.
     // A simple way to deal with this is just to subtract the DC component off the signal, so we need the average.
     // This algorithm for computing the average is recommended in
@@ -192,7 +192,7 @@ cardinal_cubic_b_spline_imp<Real>::cardinal_cubic_b_spline_imp(BidiIterator f, B
     // There are, in fact 5 diagonals, but they only differ from zero on the first and last row,
     // so we can patch up the tridiagonal row reduction algorithm to deal with two special rows.
     // See Kress, equations 8.41
-    // The the "tridiagonal" matrix is:
+    // The "tridiagonal" matrix is:
     // 1  0 -1
     // 1  4  1
     //    1  4  1

@@ -76,13 +76,13 @@ T double_factorial(unsigned i, const Policy& pol)
 {
    static_assert(!std::is_integral<T>::value, "Type T must not be an integral type");
    BOOST_MATH_STD_USING  // ADL lookup of std names
-   if(i & 1)
+   if((i & 1) == 1)
    {
       // odd i:
       if(i < max_factorial<T>::value)
       {
          unsigned n = (i - 1) / 2;
-         return ceil(unchecked_factorial<T>(i) / (ldexp(T(1), (int)n) * unchecked_factorial<T>(n)) - 0.5f);
+         return ceil(unchecked_factorial<T>(i) / (ldexp(T(1), static_cast<int>(n)) * unchecked_factorial<T>(n)) - 0.5f);
       }
       //
       // Fallthrough: i is too large to use table lookup, try the
@@ -97,8 +97,8 @@ T double_factorial(unsigned i, const Policy& pol)
       // even i:
       unsigned n = i / 2;
       T result = factorial<T>(n, pol);
-      if(ldexp(tools::max_value<T>(), -(int)n) > result)
-         return result * ldexp(T(1), (int)n);
+      if(ldexp(tools::max_value<T>(), -static_cast<int>(n)) > result)
+         return result * ldexp(T(1), static_cast<int>(n));
    }
    //
    // If we fall through to here then the result is infinite:
@@ -152,7 +152,7 @@ T rising_factorial_imp(T x, int n, const Policy& pol)
    if((x < 1) && (x + n < 0))
    {
       T val = boost::math::tgamma_delta_ratio(1 - x, static_cast<T>(-n), pol);
-      return (n & 1) ? T(-val) : val;
+      return ((n & 1) == 1) ? T(-val) : val;
    }
    //
    // We don't optimise this for small n, because

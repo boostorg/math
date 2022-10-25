@@ -48,7 +48,7 @@ public:
         {
             BOOST_MATH_ASSERT_MSG(floor(x) == ceil(x), "Floor and ceiling should be equal.\n");
             auto i = static_cast<size_t>(floor(x));
-            if (i & 1)
+            if ((i & 1) == 1)
             {
                 return -m_y[i];
             }
@@ -75,7 +75,7 @@ public:
                 }
                 // else derivative of sinc at zero is zero.
             }
-            if (j & 1) {
+            if ((j & 1) == 1) {
                 s /= -m_h;
             } else {
                 s /= m_h;
@@ -101,7 +101,7 @@ public:
 
 
     Real operator[](size_t i) const {
-        if (i & 1)
+        if ((i & 1) == 1)
         {
             return -m_y[i];
         }

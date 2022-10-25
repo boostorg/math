@@ -400,8 +400,8 @@ class make_integer_sequence_impl_
 private:
     static_assert(N >= 0, "N must not be negative");
 
-    static constexpr T M = N / 2;
-    static constexpr T R = N % 2;
+    static constexpr T M = N >> 1;
+    static constexpr T R = N & 1;
 
     using seq1 = typename make_integer_sequence_impl<T, M>::type;
     using seq2 = typename append_integer_sequence<seq1, seq1>::type;

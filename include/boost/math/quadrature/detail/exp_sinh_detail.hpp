@@ -225,7 +225,8 @@ auto exp_sinh_detail<Real, Policy>::integrate(const F& f, Real* error, Real* L1,
         auto abscissas_row = get_abscissa_row(i);
         auto weight_row = get_weight_row(i);
 
-        first_j = first_j == 0 ? 0 : 2 * first_j - 1;  // appoximate location to start looking for lowest meaningful abscissa value
+        if (first_j != 0)
+            first_j = 2 * first_j - 1;  // approximate location to start looking for lowest meaningful abscissa value
         BOOST_MATH_MAYBE_UNUSED Real abterm1 = 1;
         std::size_t j = first_j;
         while (abscissas_row[j] < min_abscissa)

@@ -628,20 +628,21 @@ inline T constant_zeta_three<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(
       // int nn = (2 * n + 1);
       // T d = factorial(nn); // inline factorial.
       T d = 1;
-      for(unsigned int i = 1; i <= (n+n + 1); ++i) // (2n + 1)
+      for(unsigned int i = 1; i <= (2 * n + 1); ++i) // (2n + 1)
       {
         d *= i;
       }
       T den = d * d * d * d * d; // [(2n+1)!]^5
       //cout << "den = " << den << endl;
       T term = num/den;
-      if (n % 2 != 0)
-      { //term *= -1;
-        sum -= term;
+      if ((n & 1) == 0)
+      { 
+        sum += term;
       }
       else
       {
-        sum += term;
+        //term *= -1;
+        sum -= term;
       }
       //cout << "term = " << term << endl;
       //cout << "sum/64  = " << sum/64 << endl;

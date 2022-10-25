@@ -14,12 +14,10 @@ namespace boost::math::tools {
 template<class Real, bool kahan=true>
 class summation_condition_number {
 public:
-    summation_condition_number(Real const x = 0)
+    summation_condition_number(Real const x = 0) : m_sum(x)
     {
         using std::abs;
         m_l1 = abs(x);
-        m_sum = x;
-        m_c = 0;
     }
 
     void operator+=(Real const & x)
@@ -76,7 +74,7 @@ public:
 private:
     Real m_l1;
     Real m_sum;
-    Real m_c;
+    Real m_c{0};
 };
 
 template<class F, class Real>

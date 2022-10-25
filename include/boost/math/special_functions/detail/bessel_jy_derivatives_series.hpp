@@ -21,7 +21,7 @@ struct bessel_j_derivative_small_z_series_term
    typedef T result_type;
 
    bessel_j_derivative_small_z_series_term(T v_, T x)
-      : N(0), v(v_), term(1), mult(x / 2)
+       : v(v_), term(1), mult(x / 2)
    {
       mult *= -mult;
       // iterate if v == 0; otherwise result of
@@ -41,7 +41,7 @@ private:
       ++N;
       term *= mult / (N * (N + v));
    }
-   unsigned N;
+   unsigned N{0};
    T v;
    T term;
    T mult;
@@ -83,11 +83,9 @@ struct bessel_y_derivative_small_z_series_term_a
    typedef T result_type;
 
    bessel_y_derivative_small_z_series_term_a(T v_, T x)
-      : N(0), v(v_)
+       : v(v_), mult(x / 2), term(1)
    {
-      mult = x / 2;
       mult *= -mult;
-      term = 1;
    }
    T operator()()
    {
@@ -97,7 +95,7 @@ struct bessel_y_derivative_small_z_series_term_a
       return r;
    }
 private:
-   unsigned N;
+   unsigned N{0};
    T v;
    T mult;
    T term;
@@ -109,11 +107,9 @@ struct bessel_y_derivative_small_z_series_term_b
    typedef T result_type;
 
    bessel_y_derivative_small_z_series_term_b(T v_, T x)
-      : N(0), v(v_)
+       : v(v_), mult(x / 2), term(1)
    {
-      mult = x / 2;
       mult *= -mult;
-      term = 1;
    }
    T operator()()
    {
@@ -123,7 +119,7 @@ struct bessel_y_derivative_small_z_series_term_b
       return r;
    }
 private:
-   unsigned N;
+   unsigned N{0};
    T v;
    T mult;
    T term;

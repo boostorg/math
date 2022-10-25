@@ -193,7 +193,7 @@ T float_next_imp(const T& val, const std::true_type&, const Policy& pol)
 
    int fpclass = (boost::math::fpclassify)(val);
 
-   if((fpclass == (int)FP_NAN) || (fpclass == (int)FP_INFINITE))
+   if((fpclass == FP_NAN) || (fpclass == FP_INFINITE))
    {
       if(val < 0)
          return -tools::max_value<T>();
@@ -208,7 +208,7 @@ T float_next_imp(const T& val, const std::true_type&, const Policy& pol)
    if(val == 0)
       return detail::get_smallest_value<T>();
 
-   if((fpclass != (int)FP_SUBNORMAL) && (fpclass != (int)FP_ZERO) && (fabs(val) < detail::get_min_shift_value<T>()) && (val != -tools::min_value<T>()))
+   if((fpclass != FP_SUBNORMAL) && (fpclass != FP_ZERO) && (fabs(val) < detail::get_min_shift_value<T>()) && (val != -tools::min_value<T>()))
    {
       //
       // Special case: if the value of the least significant bit is a denorm, and the result
@@ -242,7 +242,7 @@ T float_next_imp(const T& val, const std::false_type&, const Policy& pol)
 
    int fpclass = (boost::math::fpclassify)(val);
 
-   if((fpclass == (int)FP_NAN) || (fpclass == (int)FP_INFINITE))
+   if((fpclass == FP_NAN) || (fpclass == FP_INFINITE))
    {
       if(val < 0)
          return -tools::max_value<T>();
@@ -257,7 +257,7 @@ T float_next_imp(const T& val, const std::false_type&, const Policy& pol)
    if(val == 0)
       return detail::get_smallest_value<T>();
 
-   if((fpclass != (int)FP_SUBNORMAL) && (fpclass != (int)FP_ZERO) && (fabs(val) < detail::get_min_shift_value<T>()) && (val != -tools::min_value<T>()))
+   if((fpclass != FP_SUBNORMAL) && (fpclass != FP_ZERO) && (fabs(val) < detail::get_min_shift_value<T>()) && (val != -tools::min_value<T>()))
    {
       //
       // Special case: if the value of the least significant bit is a denorm, and the result
@@ -327,7 +327,7 @@ T float_prior_imp(const T& val, const std::true_type&, const Policy& pol)
 
    int fpclass = (boost::math::fpclassify)(val);
 
-   if((fpclass == (int)FP_NAN) || (fpclass == (int)FP_INFINITE))
+   if((fpclass == FP_NAN) || (fpclass == FP_INFINITE))
    {
       if(val > 0)
          return tools::max_value<T>();
@@ -342,7 +342,7 @@ T float_prior_imp(const T& val, const std::true_type&, const Policy& pol)
    if(val == 0)
       return -detail::get_smallest_value<T>();
 
-   if((fpclass != (int)FP_SUBNORMAL) && (fpclass != (int)FP_ZERO) && (fabs(val) < detail::get_min_shift_value<T>()) && (val != tools::min_value<T>()))
+   if((fpclass != FP_SUBNORMAL) && (fpclass != FP_ZERO) && (fabs(val) < detail::get_min_shift_value<T>()) && (val != tools::min_value<T>()))
    {
       //
       // Special case: if the value of the least significant bit is a denorm, and the result
@@ -377,7 +377,7 @@ T float_prior_imp(const T& val, const std::false_type&, const Policy& pol)
 
    int fpclass = (boost::math::fpclassify)(val);
 
-   if((fpclass == (int)FP_NAN) || (fpclass == (int)FP_INFINITE))
+   if((fpclass == FP_NAN) || (fpclass == FP_INFINITE))
    {
       if(val > 0)
          return tools::max_value<T>();
@@ -392,7 +392,7 @@ T float_prior_imp(const T& val, const std::false_type&, const Policy& pol)
    if(val == 0)
       return -detail::get_smallest_value<T>();
 
-   if((fpclass != (int)FP_SUBNORMAL) && (fpclass != (int)FP_ZERO) && (fabs(val) < detail::get_min_shift_value<T>()) && (val != tools::min_value<T>()))
+   if((fpclass != FP_SUBNORMAL) && (fpclass != FP_ZERO) && (fabs(val) < detail::get_min_shift_value<T>()) && (val != tools::min_value<T>()))
    {
       //
       // Special case: if the value of the least significant bit is a denorm, and the result
@@ -511,7 +511,7 @@ T float_distance_imp(const T& a, const T& b, const std::true_type&, const Policy
    // because we actually have fewer than tools::digits<T>()
    // significant bits in the representation:
    //
-   (void)frexp(((boost::math::fpclassify)(a) == (int)FP_SUBNORMAL) ? tools::min_value<T>() : a, &expon);
+   (void)frexp(((boost::math::fpclassify)(a) == FP_SUBNORMAL) ? tools::min_value<T>() : a, &expon);
    T upper = ldexp(T(1), expon);
    T result = T(0);
    //
@@ -532,7 +532,7 @@ T float_distance_imp(const T& a, const T& b, const std::true_type&, const Policy
    //
    expon = tools::digits<T>() - expon;
    T mb, x, y, z;
-   if(((boost::math::fpclassify)(a) == (int)FP_SUBNORMAL) || (b - a < tools::min_value<T>()))
+   if(((boost::math::fpclassify)(a) == FP_SUBNORMAL) || (b - a < tools::min_value<T>()))
    {
       //
       // Special case - either one end of the range is a denormal, or else the difference is.
@@ -619,7 +619,7 @@ T float_distance_imp(const T& a, const T& b, const std::false_type&, const Polic
    // because we actually have fewer than tools::digits<T>()
    // significant bits in the representation:
    //
-   expon = 1 + ilogb(((boost::math::fpclassify)(a) == (int)FP_SUBNORMAL) ? tools::min_value<T>() : a);
+   expon = 1 + ilogb(((boost::math::fpclassify)(a) == FP_SUBNORMAL) ? tools::min_value<T>() : a);
    T upper = scalbn(T(1), expon);
    T result = T(0);
    //
@@ -639,7 +639,7 @@ T float_distance_imp(const T& a, const T& b, const std::false_type&, const Polic
    //
    expon = std::numeric_limits<T>::digits - expon;
    T mb, x, y, z;
-   if(((boost::math::fpclassify)(a) == (int)FP_SUBNORMAL) || (b - a < tools::min_value<T>()))
+   if(((boost::math::fpclassify)(a) == FP_SUBNORMAL) || (b - a < tools::min_value<T>()))
    {
       //
       // Special case - either one end of the range is a denormal, or else the difference is.
@@ -730,7 +730,7 @@ T float_advance_imp(T val, int distance, const std::true_type&, const Policy& po
 
    int fpclass = (boost::math::fpclassify)(val);
 
-   if((fpclass == (int)FP_NAN) || (fpclass == (int)FP_INFINITE))
+   if((fpclass == FP_NAN) || (fpclass == FP_INFINITE))
       return policies::raise_domain_error<T>(
          function,
          "Argument val must be finite, but got %1%", val, pol);
@@ -816,7 +816,7 @@ T float_advance_imp(T val, int distance, const std::false_type&, const Policy& p
 
    int fpclass = (boost::math::fpclassify)(val);
 
-   if((fpclass == (int)FP_NAN) || (fpclass == (int)FP_INFINITE))
+   if((fpclass == FP_NAN) || (fpclass == FP_INFINITE))
       return policies::raise_domain_error<T>(
          function,
          "Argument val must be finite, but got %1%", val, pol);
