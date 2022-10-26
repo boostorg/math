@@ -44,6 +44,7 @@
 # pragma warning(disable: 4702) // unreachable code (return after domain_error throw).
 # pragma warning(disable: 4127) // conditional expression is constant.
 # pragma warning(disable: 4100) // unreferenced formal parameter.
+# pragma warning(disable: 6326) // potential comparison of a constant with another constant
 // Several variables made comments,
 // but some difficulty as whether referenced on not may depend on macro values.
 // So to be safe, 4100 warnings suppressed.

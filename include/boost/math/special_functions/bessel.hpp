@@ -36,6 +36,11 @@
 #include <boost/math/tools/series.hpp>
 #include <boost/math/tools/roots.hpp>
 
+#ifdef _MSC_VER
+# pragma warning(push)
+# pragma warning(disable: 6326) // potential comparison of a constant with another constant
+#endif
+
 namespace boost{ namespace math{
 
 namespace detail{
@@ -753,6 +758,10 @@ inline OutputIterator cyl_neumann_zero(T v,
 
 } // namespace math
 } // namespace boost
+
+#ifdef _MSC_VER
+# pragma warning(pop)
+#endif
 
 #endif // BOOST_MATH_BESSEL_HPP
 
