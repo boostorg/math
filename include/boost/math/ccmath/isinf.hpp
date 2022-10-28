@@ -18,7 +18,7 @@ constexpr bool isinf(T x) noexcept
 {
     if(BOOST_MATH_IS_CONSTANT_EVALUATED(x))
     {
-        if constexpr (std::is_signed_v<T>)
+        if constexpr (std::numeric_limits<T>::is_signed)
         {
             return x == std::numeric_limits<T>::infinity() || -x == std::numeric_limits<T>::infinity();
         }
