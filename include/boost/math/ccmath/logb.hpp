@@ -29,7 +29,7 @@ inline constexpr T logb_impl(T arg) noexcept
     int exp = 0;
     boost::math::ccmath::frexp(arg, &exp);
 
-    return exp - 1;
+    return static_cast<T>(exp - 1);
 }
 
 } // Namespace detail
