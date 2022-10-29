@@ -311,8 +311,11 @@ jobs:
         with:
           fetch-depth: '0'
       - name: Install Cygwin
-        run: |
-          choco install git gcc-core gcc-g++ python39 libgmp-devel libmpfr-devel libfftw3-devel --source cygwin
+        run: choco install -y cygwin
+      - name: Install Package Manager
+        run: choco install -y cyg-get
+      - name: Install Packages
+        run: cyg-get git gcc-core gcc-g++ python39 libgmp-devel libmpfr-devel libfftw3-devel
       - name: Checkout main boost
         run: C:\\tools\\cygwin\\bin\\bash -l -c 'cd $(cygpath -u "$GITHUB_WORKSPACE") && git clone -b develop --depth 1 https://github.com/boostorg/boost.git ../boost-root'
       - name: Update tools/boostdep
