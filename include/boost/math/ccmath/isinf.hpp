@@ -14,11 +14,18 @@
 namespace boost::math::ccmath {
 
 template <typename T>
-inline constexpr bool isinf(T x)
+constexpr bool isinf(T x) noexcept
 {
     if(BOOST_MATH_IS_CONSTANT_EVALUATED(x))
     {
-        return x == std::numeric_limits<T>::infinity() || -x == std::numeric_limits<T>::infinity();
+        if constexpr (std::numeric_limits<T>::is_signed)
+        {
+            return x == std::numeric_limits<T>::infinity() || -x == std::numeric_limits<T>::infinity();
+        }
+        else
+        {
+            return x == std::numeric_limits<T>::infinity();
+        }
     }
     else
     {
