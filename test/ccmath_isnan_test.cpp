@@ -29,7 +29,7 @@ void test()
     {
         static_assert(boost::math::ccmath::isnan(std::numeric_limits<T>::signaling_NaN()), "Signaling NAN failed");
     }
-    static_assert(!boost::math::ccmath::isnan(std::numeric_limits<T>::infinity()), "Infininty failed");
+    static_assert(!boost::math::ccmath::isnan(std::numeric_limits<T>::infinity()), "Infinity failed");
     static_assert(!boost::math::ccmath::isnan(T(0)), "Real 0 failed");
 }
 

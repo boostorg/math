@@ -226,8 +226,8 @@
       digits). Again for consistency use scientific format with a signed exponent.
     </p>
 <p>
-      For types with precision greater than a long double, then if T is constructible
-      <code class="computeroutput"><span class="identifier">T</span> </code>is constructible from a
+      For types with precision greater than a long double, then if T is constructable
+      <code class="computeroutput"><span class="identifier">T</span> </code>is constructable from a
       <code class="computeroutput"><span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span></code> then it's directly constructed from the string,
       otherwise we fall back on lexical_cast to convert to type <code class="computeroutput"><span class="identifier">T</span></code>.
       (Using a string is necessary because you can't use a numeric constant since

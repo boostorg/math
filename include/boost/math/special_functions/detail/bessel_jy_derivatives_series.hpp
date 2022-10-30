@@ -213,4 +213,4 @@ inline T bessel_y_derivative_small_z_series(T v, T x, const Policy& pol)
 
 }}} // namespaces
 
-#endif // BOOST_MATH_BESSEL_JY_DERIVATVIES_SERIES_HPP
+#endif // BOOST_MATH_BESSEL_JY_DERIVATIVES_SERIES_HPP

@@ -42,14 +42,14 @@ class distribution_archetype
 public:
    typedef RealType value_type;
 
-   distribution_archetype(const distribution_archetype&); // Copy constructible.
+   distribution_archetype(const distribution_archetype&); // Copy constructable.
    distribution_archetype& operator=(const distribution_archetype&); // Assignable.
 
    // There is no default constructor,
    // but we need a way to instantiate the archetype:
    static distribution_archetype& get_object()
    {
-      // will never get caled:
+      // will never get called:
       return *reinterpret_cast<distribution_archetype*>(nullptr);
    }
 }; // template <class RealType>class distribution_archetype

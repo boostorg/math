@@ -1275,7 +1275,7 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert,
    else if(x < 1.1)
    {
       //
-      // Changover here occurs when P ~ 0.75 or Q ~ 0.25:
+      // Changeover here occurs when P ~ 0.75 or Q ~ 0.25:
       //
       if(x * 0.75f < a)
       {

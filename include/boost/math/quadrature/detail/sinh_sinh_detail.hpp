@@ -50,7 +50,7 @@ public:
     auto integrate(const F f, Real tolerance, Real* error, Real* L1, std::size_t* levels)->decltype(std::declval<F>()(std::declval<Real>())) const;
 
 private:
-private:
+
    const std::vector<Real>& get_abscissa_row(std::size_t n)const
    {
 #if !defined(BOOST_MATH_NO_ATOMIC_INT) && defined(BOOST_HAS_THREADS)
