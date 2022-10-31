@@ -960,14 +960,14 @@ T binomial_ccdf(T n, T k, T x, T y, const Policy& pol)
       int start = itrunc(n * x);
       if(start <= k + 1)
          start = itrunc(k + 2);
-      result = pow(x, start) * pow(y, n - start) * boost::math::binomial_coefficient<T>(itrunc(n), itrunc(start), pol);
+      result = static_cast<T>(pow(x, start) * pow(y, n - start) * boost::math::binomial_coefficient<T>(itrunc(n), itrunc(start), pol));
       if(result == 0)
       {
          // OK, starting slightly above the mode didn't work,
          // we'll have to sum the terms the old fashioned way:
          for(unsigned i = start - 1; i > k; --i)
          {
-            result += pow(x, (int)i) * pow(y, n - i) * boost::math::binomial_coefficient<T>(itrunc(n), itrunc(i), pol);
+            result += static_cast<T>(pow(x, static_cast<int>(i)) * pow(y, n - i) * boost::math::binomial_coefficient<T>(itrunc(n), itrunc(i), pol));
          }
       }
       else
