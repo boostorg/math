@@ -56,7 +56,7 @@ namespace boost{ namespace math{
 template <class Point, class RandomAccessContainer = std::vector<Point> >
 class catmull_rom
 {
-   typedef typename Point::value_type value_type;
+   using value_type = typename Point::value_type;
 public:
 
     catmull_rom(RandomAccessContainer&& points, bool closed = false, value_type alpha = (value_type) 1/ (value_type) 2);

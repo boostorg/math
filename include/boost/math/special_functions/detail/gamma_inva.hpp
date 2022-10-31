@@ -85,7 +85,7 @@ T gamma_inva_imp(const T& z, const T& p, const T& q, const Policy& pol)
    // Function object, this is the functor whose root
    // we have to solve:
    //
-   gamma_inva_t<T, Policy> f(z, (p < q) ? p : q, (p < q) ? false : true);
+   gamma_inva_t<T, Policy> f(z, (p < q) ? p : q, (p >= q));
    //
    // Tolerance: full precision.
    //

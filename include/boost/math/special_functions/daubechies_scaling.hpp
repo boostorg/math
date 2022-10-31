@@ -55,16 +55,16 @@ std::vector<Real> daubechies_scaling_dyadic_grid(int64_t j_max)
     v[0] = 0;
     v[v.size()-1] = 0;
     for (int64_t i = 0; i < static_cast<int64_t>(phik.size()); ++i) {
-        v[i*(1uLL<<j_max)] = phik[i];
+        v[i*(1LL<<j_max)] = phik[i];
     }
 
     for (int64_t j = 1; j <= j_max; ++j)
     {
-        int64_t k_max = v.size()/(int64_t(1) << (j_max-j));
+        int64_t k_max = v.size()/(static_cast<int64_t>(1) << (j_max-j));
         for (int64_t k = 1; k < k_max;  k += 2)
         {
             // Where this value will go:
-            int64_t delivery_idx = k*(1uLL << (j_max-j));
+            int64_t delivery_idx = k*(1LL << (j_max-j));
             // This is a nice check, but we've tested this exhaustively, and it's an expensive check:
             //if (delivery_idx >= static_cast<int64_t>(v.size())) {
             //    std::cerr << "Delivery index out of range!\n";
@@ -73,7 +73,7 @@ std::vector<Real> daubechies_scaling_dyadic_grid(int64_t j_max)
             Real term = 0;
             for (int64_t l = 0; l < static_cast<int64_t>(c.size()); ++l)
             {
-                int64_t idx = k*(int64_t(1) << (j_max - j + 1)) - l*(int64_t(1) << j_max);
+                int64_t idx = k*(static_cast<int64_t>(1) << (j_max - j + 1)) - l*(static_cast<int64_t>(1) << j_max);
                 if (idx < 0)
                 {
                     break;
@@ -101,9 +101,8 @@ class matched_holder {
 public:
     using Real = typename RandomAccessContainer::value_type;
 
-    matched_holder(RandomAccessContainer && y, RandomAccessContainer && dydx, int grid_refinements, Real x0) : x0_{x0}, y_{std::move(y)}, dy_{std::move(dydx)}
+    matched_holder(RandomAccessContainer && y, RandomAccessContainer && dydx, int grid_refinements, Real x0) : x0_{x0}, inv_h_(1 << grid_refinements), y_{std::move(y)}, dy_{std::move(dydx)}
     {
-        inv_h_ = (1 << grid_refinements);
         Real h = 1/inv_h_;
         for (auto & dy : dy_)
         {
@@ -146,11 +145,10 @@ public:
     using Point = typename RandomAccessContainer::value_type;
     using Real = typename Point::value_type;
 
-    matched_holder_aos(RandomAccessContainer && data, int grid_refinements, Real x0) : x0_{x0}, data_{std::move(data)}
+    matched_holder_aos(RandomAccessContainer && data, int grid_refinements, Real x0) : x0_{x0}, inv_h_(Real(1uLL << grid_refinements)), data_{std::move(data)}
     {
-        inv_h_ = Real(1uLL << grid_refinements);
-        Real h = 1/inv_h_;
-        for (auto & datum : data_)
+        Real h = 1 / inv_h_;
+        for (auto &datum : data_)
         {
             datum[1] *= h;
         }
@@ -188,9 +186,9 @@ class linear_interpolation {
 public:
     using Real = typename RandomAccessContainer::value_type;
 
-    linear_interpolation(RandomAccessContainer && y, RandomAccessContainer && dydx, int grid_refinements) : y_{std::move(y)}, dydx_{std::move(dydx)}
+    linear_interpolation(RandomAccessContainer && y, RandomAccessContainer && dydx, int grid_refinements) : s_(1 << grid_refinements), y_{std::move(y)}, dydx_{std::move(dydx)}
     {
-        s_ = (1 << grid_refinements);
+
     }
 
     inline Real operator()(Real x) const
@@ -232,9 +230,9 @@ public:
     using Point = typename RandomAccessContainer::value_type;
     using Real = typename Point::value_type;
 
-    linear_interpolation_aos(RandomAccessContainer && data, int grid_refinements, Real x0) : x0_{x0}, data_{std::move(data)}
+    linear_interpolation_aos(RandomAccessContainer && data, int grid_refinements, Real x0) : x0_{x0}, s_(Real(1uLL << grid_refinements)), data_{std::move(data)}
     {
-        s_ = Real(1uLL << grid_refinements);
+
     }
 
     inline Real operator()(Real x) const
@@ -287,7 +285,7 @@ struct daubechies_eval_type<float>
    inline static std::vector<float> vector_cast(const std::vector<double>& v)
    {
       std::vector<float> result(v.size());
-      for (unsigned i = 0; i < v.size(); ++i)
+      for (std::size_t i = 0; i < v.size(); ++i)
          result[i] = static_cast<float>(v[i]);
       return result;
    }
@@ -300,7 +298,7 @@ struct daubechies_eval_type<double>
    inline static std::vector<double> vector_cast(const std::vector<long double>& v)
    {
       std::vector<double> result(v.size());
-      for (unsigned i = 0; i < v.size(); ++i)
+      for (std::size_t i = 0; i < v.size(); ++i)
          result[i] = static_cast<double>(v[i]);
       return result;
    }

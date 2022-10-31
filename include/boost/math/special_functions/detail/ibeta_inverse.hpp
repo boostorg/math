@@ -878,7 +878,7 @@ T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T* py)
    //
    std::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
    x = boost::math::tools::halley_iterate(
-      boost::math::detail::ibeta_roots<T, Policy>(a, b, (p < q ? p : q), (p < q ? false : true)), x, lower, upper, digits, max_iter);
+       boost::math::detail::ibeta_roots<T, Policy>(a, b, (p < q ? p : q), p >= q), x, lower, upper, digits, max_iter);
    policies::check_root_iterations<T>("boost::math::ibeta<%1%>(%1%, %1%, %1%)", max_iter, pol);
    //
    // We don't really want these asserts here, but they are useful for sanity

@@ -30,10 +30,9 @@ struct cyl_bessel_i_small_z
 {
    typedef T result_type;
 
-   cyl_bessel_i_small_z(T v_, T z_) : k(0), v(v_), mult(z_*z_/4)
+   cyl_bessel_i_small_z(T v_, T z_) : k(0), v(v_), term(1), mult(z_*z_/4)
    {
-      BOOST_MATH_STD_USING
-      term = 1;
+
    }
 
    T operator()()
@@ -347,7 +346,7 @@ int bessel_ik(T v, T x, T* I, T* K, int kind, const Policy& pol)
 
        if(reflect && (kind & need_i))
        {
-           T z = (u + n % 2);
+           T z = (u + (n & 1));
            Iv = boost::math::sin_pi(z, pol) == 0 ?
                Iv :
                policies::raise_overflow_error<T>(function, nullptr, pol);   // reflection formula
@@ -382,9 +381,7 @@ int bessel_ik(T v, T x, T* I, T* K, int kind, const Policy& pol)
         // max * (1 - fact) > |prev|
         // if fact < 1: safe to compute overflow check
         // if fact >= 1:  won't overflow
-        const bool will_overflow = (fact < 1)
-          ? tools::max_value<T>() * (1 - fact) > fabs(prev)
-          : false;
+        const bool will_overflow = (fact < 1) && tools::max_value<T>() * (1 - fact) > fabs(prev);
         if(!will_overflow && ((tools::max_value<T>() - fabs(prev)) / fact < fabs(current)))
         {
            prev /= current;
@@ -430,7 +427,7 @@ int bessel_ik(T v, T x, T* I, T* K, int kind, const Policy& pol)
 
     if (reflect)
     {
-        T z = (u + n % 2);
+        T z = (u + (n & 1));
         T fact = (2 / pi<T>()) * (boost::math::sin_pi(z, pol) * Kv);
         if(fact == 0)
            *I = Iv;

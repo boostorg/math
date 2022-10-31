@@ -519,14 +519,14 @@
         {
           // Use simple bankers rounding.
 
-          if((static_cast<int>(*result.rbegin() - '0') & 1) != 0)
+          if(((*result.rbegin() - '0') & 1) != 0)
           {
             round_string_up_at(result, static_cast<int>(result.size() - 1U), expon);
           }
         }
         else if(cdigit >= 5)
         {
-          round_string_up_at(result, static_cast<int>(result.size() - 1), expon);
+          round_string_up_at(result, static_cast<int>(result.size() - 1U), expon);
         }
       }
     }

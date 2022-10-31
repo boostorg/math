@@ -51,10 +51,10 @@ struct sph_bessel_j_small_z_series_term
    typedef T result_type;
 
    sph_bessel_j_small_z_series_term(unsigned v_, T x)
-      : N(0), v(v_)
+      : N(0), v(v_), mult(x / 2)
    {
       BOOST_MATH_STD_USING
-      mult = x / 2;
+
       if(v + 3 > max_factorial<T>::value)
       {
          term = v * log(mult) - boost::math::lgamma(v+1+T(0.5f), Policy());

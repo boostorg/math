@@ -21,12 +21,12 @@ struct bessel_j_small_z_series_term
    typedef T result_type;
 
    bessel_j_small_z_series_term(T v_, T x)
-      : N(0), v(v_)
+      : v(v_), term(1)
    {
       BOOST_MATH_STD_USING
       mult = x / 2;
       mult *= -mult;
-      term = 1;
+
    }
    T operator()()
    {
@@ -36,7 +36,7 @@ struct bessel_j_small_z_series_term
       return r;
    }
 private:
-   unsigned N;
+   unsigned N{0};
    T v;
    T mult;
    T term;
@@ -78,23 +78,20 @@ struct bessel_y_small_z_series_term_a
    typedef T result_type;
 
    bessel_y_small_z_series_term_a(T v_, T x)
-      : N(0), v(v_)
+      : v(v_), term(1)
    {
-      BOOST_MATH_STD_USING
       mult = x / 2;
       mult *= -mult;
-      term = 1;
    }
    T operator()()
    {
-      BOOST_MATH_STD_USING
       T r = term;
       ++N;
       term *= mult / (N * (N - v));
       return r;
    }
 private:
-   unsigned N;
+   unsigned N{0};
    T v;
    T mult;
    T term;
@@ -106,12 +103,10 @@ struct bessel_y_small_z_series_term_b
    typedef T result_type;
 
    bessel_y_small_z_series_term_b(T v_, T x)
-      : N(0), v(v_)
+      : v(v_), term(1)
    {
-      BOOST_MATH_STD_USING
       mult = x / 2;
       mult *= -mult;
-      term = 1;
    }
    T operator()()
    {
@@ -121,7 +116,7 @@ struct bessel_y_small_z_series_term_b
       return r;
    }
 private:
-   unsigned N;
+   unsigned N{0};
    T v;
    T mult;
    T term;

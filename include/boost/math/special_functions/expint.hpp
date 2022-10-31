@@ -422,7 +422,7 @@ inline T expint_as_series(unsigned n, T z, const Policy& pol)
    T denom = T(1) - n;
    T fact = 1;
    unsigned k = 0;
-   for(; k < n - 1;)
+   while (k < n - 1)
    {
       result += x_k / (denom * fact);
       denom += 1;

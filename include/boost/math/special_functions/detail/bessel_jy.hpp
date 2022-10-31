@@ -294,7 +294,7 @@ namespace boost { namespace math {
 
          if(reflect)
          {
-            T z = (u + n % 2);
+            T z = (u + (n & 1));
             cp = boost::math::cos_pi(z, pol);
             sp = boost::math::sin_pi(z, pol);
             if(u != 0)
