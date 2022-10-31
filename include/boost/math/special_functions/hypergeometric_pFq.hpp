@@ -87,9 +87,9 @@ namespace boost {
       template <class T>
       struct scoped_precision
       {
-         scoped_precision(unsigned p)
+         scoped_precision(unsigned p) : old_p(T::default_precision())
          {
-            old_p = T::default_precision();
+
             T::default_precision(p);
          }
          ~scoped_precision()

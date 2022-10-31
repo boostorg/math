@@ -579,13 +579,13 @@ namespace boost
             if((p == 0) || (q == 0))
             {
                //
-               // Can't a thing if one of p and q is zero:
+               // Can't do a thing if one of p or q is zero:
                //
                return policies::raise_evaluation_error<RealType>(function,
                   "Can't find degrees of freedom when the probability is 0 or 1, only possible answer is %1%",
                   RealType(std::numeric_limits<RealType>::quiet_NaN()), Policy());
             }
-            degrees_of_freedom_finder<RealType, Policy> f(lam, x, p < q ? p : q, p < q ? false : true);
+            degrees_of_freedom_finder<RealType, Policy> f(lam, x, p < q ? p : q, p >= q);
             tools::eps_tolerance<RealType> tol(policies::digits<RealType, Policy>());
             std::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
             //
@@ -641,7 +641,7 @@ namespace boost
                   "Can't find non centrality parameter when the probability is 0 or 1, only possible answer is %1%",
                   RealType(std::numeric_limits<RealType>::quiet_NaN()), Policy());
             }
-            non_centrality_finder<RealType, Policy> f(v, x, p < q ? p : q, p < q ? false : true);
+            non_centrality_finder<RealType, Policy> f(v, x, p < q ? p : q, p >= q);
             tools::eps_tolerance<RealType> tol(policies::digits<RealType, Policy>());
             std::uintmax_t max_iter = policies::get_max_root_iterations<Policy>();
             //

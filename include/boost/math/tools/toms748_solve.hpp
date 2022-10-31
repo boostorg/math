@@ -36,10 +36,10 @@ public:
    {
 
    }
-   eps_tolerance(unsigned bits)
+   eps_tolerance(unsigned bits) : eps((std::max)(T(ldexp(1.0F, 1-bits)), T(4 * tools::epsilon<T>())))
    {
       BOOST_MATH_STD_USING
-      eps = (std::max)(T(ldexp(1.0F, 1-bits)), T(4 * tools::epsilon<T>()));
+
    }
    bool operator()(const T& a, const T& b)
    {

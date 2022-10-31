@@ -422,7 +422,7 @@ inline T expint_as_series(unsigned n, T z, const Policy& pol)
    T denom = T(1) - n;
    T fact = 1;
    unsigned k = 0;
-   for(; k < n - 1;)
+   while (k < n - 1)
    {
       result += x_k / (denom * fact);
       denom += 1;
@@ -450,7 +450,7 @@ T expint_imp(unsigned n, T z, const Policy& pol, const Tag& tag)
    if(z < 0)
       return policies::raise_domain_error<T>(function, "Function requires z >= 0 but got %1%.", z, pol);
    if(z == 0)
-      return n == 1 ? policies::raise_overflow_error<T>(function, nullptr, pol) : T(1 / (static_cast<T>(n - 1)));
+      return (n == 1) ? policies::raise_overflow_error<T>(function, nullptr, pol) : T(1 / (static_cast<T>(n - 1)));
 
    T result;
 

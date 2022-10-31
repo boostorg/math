@@ -39,7 +39,7 @@ T b2n_asymptotic(int n)
         + ((boost::math::constants::half<T>() - nx) * log(boost::math::constants::pi<T>()))
         + (((T(3) / 2) - nx) * boost::math::constants::ln_two<T>())
         + ((nx * (T(2) - (nx2 * 7) * (1 + ((nx2 * 30) * ((nx2 * 12) - 1))))) / (((nx2 * nx2) * nx2) * 2520));
-   return ((n / 2) & 1 ? 1 : -1) * (approximate_log_of_bernoulli_bn > tools::log_max_value<T>()
+   return ((n & 2) == 2 ? 1 : -1) * (approximate_log_of_bernoulli_bn > tools::log_max_value<T>()
       ? policies::raise_overflow_error<T>("boost::math::bernoulli_b2n<%1%>(std::size_t)", nullptr, nx, Policy())
       : static_cast<T>(exp(approximate_log_of_bernoulli_bn)));
 }
@@ -112,7 +112,7 @@ inline std::size_t find_bernoulli_overflow_limit(const std::false_type&)
    max_bernoulli_root_functor fun(t);
    boost::math::tools::equal_floor tol;
    std::uintmax_t max_iter = boost::math::policies::get_max_root_iterations<Policy>();
-   double result = boost::math::tools::toms748_solve(fun, sqrt(static_cast<double>(t)), static_cast<double>(t), tol, max_iter).first / 2;
+   double result = boost::math::tools::toms748_solve(fun, sqrt(static_cast<double>(t)), static_cast<double>(t), tol, max_iter).first / 2.0;
    if (result > max_result)
    {
       result = max_result;
@@ -171,7 +171,7 @@ struct fixed_vector : private std::allocator<T>
    using size_type = unsigned;
    using iterator = T*;
    using const_iterator = const T*;
-   fixed_vector() : m_used(0)
+   fixed_vector()
    {
       std::size_t overflow_limit = 5 + b2n_overflow_limit<T, policies::policy<> >();
       m_capacity = static_cast<unsigned>((std::min)(overflow_limit, static_cast<std::size_t>(100000u)));
@@ -317,17 +317,16 @@ public:
          // the calculation, but we also need to avoid overflow altogether in case
          // we're calculating with a type where "bad things" happen in that case:
          //
-         b  = b / (power_two * tangent_scale_factor<T>());
-         b /= (power_two - 1);
+         b = b / (power_two * tangent_scale_factor<T>());
+         b = b / (power_two - 1);
          bool overflow_check = (i >= min_overflow_index) && (tools::max_value<T>() / tn[static_cast<typename container_type::size_type>(i)] < b);
          if(overflow_check)
          {
             m_overflow_limit = i;
-            while(i < m)
+            for (; i < m; ++i)
             {
                b = std::numeric_limits<T>::has_infinity ? std::numeric_limits<T>::infinity() : tools::max_value<T>();
-               bn[static_cast<typename container_type::size_type>(i)] = ((i % 2U) ? b : T(-b));
-               ++i;
+               bn[static_cast<typename container_type::size_type>(i)] = (((i & 1) == 1) ? b : T(-b));
             }
             break;
          }
@@ -338,9 +337,7 @@ public:
 
          power_two = ldexp(power_two, 2);
 
-         const bool b_neg = i % 2 == 0;
-
-         bn[static_cast<typename container_type::size_type>(i)] = ((!b_neg) ? b : T(-b));
+         bn[static_cast<typename container_type::size_type>(i)] = ((i & 1) == 1) ? b : T(-b);
       }
       return true;
    }

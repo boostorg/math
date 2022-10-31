@@ -62,10 +62,10 @@ public:
          m_scale, &result,  Policy());
    } // inverse_chi_squared_distribution constructor 
 
-   inverse_chi_squared_distribution(RealType df = 1) : m_df(df)
+   // Default scale = 1 / degrees of freedom (Wikipedia definition 1).
+   inverse_chi_squared_distribution(RealType df = 1) : m_df(df), m_scale(1 / m_df)
    {
       RealType result;
-      m_scale = 1 / m_df ; // Default scale = 1 / degrees of freedom (Wikipedia definition 1).
       detail::check_df(
          "boost::math::inverse_chi_squared_distribution<%1%>::inverse_chi_squared_distribution",
          m_df, &result, Policy());
