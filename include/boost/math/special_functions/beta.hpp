@@ -21,6 +21,8 @@
 #include <boost/math/special_functions/trunc.hpp>
 #include <boost/math/tools/roots.hpp>
 #include <boost/math/tools/assert.hpp>
+#include <boost/math/concepts/concepts.hpp>
+#include <limits>
 #include <cmath>
 
 namespace boost{ namespace math{
@@ -30,7 +32,7 @@ namespace detail{
 //
 // Implementation of Beta(a,b) using the Lanczos approximation:
 //
-template <class T, class Lanczos, class Policy>
+template <BOOST_MATH_ARBITRARY_REAL T, class Lanczos, BOOST_MATH_POLICY Policy>
 T beta_imp(T a, T b, const Lanczos&, const Policy& pol)
 {
    BOOST_MATH_STD_USING  // for ADL of std names
@@ -120,7 +122,7 @@ T beta_imp(T a, T b, const Lanczos&, const Policy& pol)
 // Generic implementation of Beta(a,b) without Lanczos approximation support
 // (Caution this is slow!!!):
 //
-template <class T, class Policy>
+template <BOOST_MATH_ARBITRARY_REAL T, BOOST_MATH_POLICY Policy>
 T beta_imp(T a, T b, const lanczos::undefined_lanczos& l, const Policy& pol)
 {
    BOOST_MATH_STD_USING
@@ -203,7 +205,7 @@ T beta_imp(T a, T b, const lanczos::undefined_lanczos& l, const Policy& pol)
 // powers are *hard* though, and using logarithms just leads to
 // horrendous cancellation errors.
 //
-template <class T, class Lanczos, class Policy>
+template <BOOST_MATH_ARBITRARY_REAL T, class Lanczos, BOOST_MATH_POLICY Policy>
 T ibeta_power_terms(T a,
                         T b,
                         T x,
@@ -440,7 +442,7 @@ T ibeta_power_terms(T a,
 //
 // This version is generic, slow, and does not use the Lanczos approximation.
 //
-template <class T, class Policy>
+template <BOOST_MATH_ARBITRARY_REAL T, BOOST_MATH_POLICY Policy>
 T ibeta_power_terms(T a,
                         T b,
                         T x,
@@ -532,7 +534,7 @@ T ibeta_power_terms(T a,
 //
 // Series approximation to the incomplete beta:
 //
-template <class T>
+template <BOOST_MATH_ARBITRARY_REAL T>
 struct ibeta_series_t
 {
    typedef T result_type;
@@ -551,7 +553,7 @@ private:
    int n;
 };
 
-template <class T, class Lanczos, class Policy>
+template <BOOST_MATH_ARBITRARY_REAL T, class Lanczos, BOOST_MATH_POLICY Policy>
 T ibeta_series(T a, T b, T x, T s0, const Lanczos&, bool normalised, T* p_derivative, T y, const Policy& pol)
 {
    BOOST_MATH_STD_USING
@@ -620,7 +622,7 @@ T ibeta_series(T a, T b, T x, T s0, const Lanczos&, bool normalised, T* p_deriva
 //
 // Incomplete Beta series again, this time without Lanczos support:
 //
-template <class T, class Policy>
+template <BOOST_MATH_ARBITRARY_REAL T, BOOST_MATH_POLICY Policy>
 T ibeta_series(T a, T b, T x, T s0, const boost::math::lanczos::undefined_lanczos& l, bool normalised, T* p_derivative, T y, const Policy& pol)
 {
    BOOST_MATH_STD_USING
@@ -682,7 +684,7 @@ T ibeta_series(T a, T b, T x, T s0, const boost::math::lanczos::undefined_lanczo
 //
 // Continued fraction for the incomplete beta:
 //
-template <class T>
+template <BOOST_MATH_ARBITRARY_REAL T>
 struct ibeta_fraction2_t
 {
    typedef std::pair<T, T> result_type;
@@ -711,7 +713,7 @@ private:
 //
 // Evaluate the incomplete beta via the continued fraction representation:
 //
-template <class T, class Policy>
+template <BOOST_MATH_ARBITRARY_REAL T, BOOST_MATH_POLICY Policy>
 inline T ibeta_fraction2(T a, T b, T x, T y, const Policy& pol, bool normalised, T* p_derivative)
 {
    typedef typename lanczos::lanczos<T, Policy>::type lanczos_type;
@@ -734,7 +736,7 @@ inline T ibeta_fraction2(T a, T b, T x, T y, const Policy& pol, bool normalised,
 //
 // Computes the difference between ibeta(a,b,x) and ibeta(a+k,b,x):
 //
-template <class T, class Policy>
+template <BOOST_MATH_ARBITRARY_REAL T, BOOST_MATH_POLICY Policy>
 T ibeta_a_step(T a, T b, T x, T y, int k, const Policy& pol, bool normalised, T* p_derivative)
 {
    typedef typename lanczos::lanczos<T, Policy>::type lanczos_type;
@@ -768,7 +770,7 @@ T ibeta_a_step(T a, T b, T x, T y, int k, const Policy& pol, bool normalised, T*
 // beta(a,b,x) = prefix + delta * beta(a+k,b,x)
 // it is currently only called for small k.
 //
-template <class T>
+template <BOOST_MATH_ARBITRARY_REAL T>
 inline T rising_factorial_ratio(T a, T b, int k)
 {
    // calculate:
@@ -795,7 +797,7 @@ inline T rising_factorial_ratio(T a, T b, int k)
 // Note that the table size should never exceed the size of our
 // tables of factorials.
 //
-template <class T>
+template <BOOST_MATH_ARBITRARY_REAL T>
 struct Pn_size
 {
    // This is likely to be enough for ~35-50 digit accuracy
@@ -825,7 +827,7 @@ struct Pn_size<long double>
    static_assert(::boost::math::max_factorial<long double>::value >= 100, "Type does not provide for ~35-50 digits of accuracy");
 };
 
-template <class T, class Policy>
+template <BOOST_MATH_ARBITRARY_REAL T, BOOST_MATH_POLICY Policy>
 T beta_small_b_large_a_series(T a, T b, T x, T y, T s0, T mult, const Policy& pol, bool normalised)
 {
    typedef typename lanczos::lanczos<T, Policy>::type lanczos_type;
@@ -937,7 +939,7 @@ T beta_small_b_large_a_series(T a, T b, T x, T y, T s0, T mult, const Policy& po
 // For integer arguments we can relate the incomplete beta to the
 // complement of the binomial distribution cdf and use this finite sum.
 //
-template <class T, class Policy>
+template <BOOST_MATH_ARBITRARY_REAL T, BOOST_MATH_POLICY Policy>
 T binomial_ccdf(T n, T k, T x, T y, const Policy& pol)
 {
    BOOST_MATH_STD_USING // ADL of std names
@@ -998,7 +1000,7 @@ T binomial_ccdf(T n, T k, T x, T y, const Policy& pol)
 // input range and select the right implementation method for
 // each domain:
 //
-template <class T, class Policy>
+template <BOOST_MATH_ARBITRARY_REAL T, BOOST_MATH_POLICY Policy>
 T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_derivative)
 {
    static const char* function = "boost::math::ibeta<%1%>(%1%, %1%, %1%)";
@@ -1398,13 +1400,13 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
    return invert ? (normalised ? 1 : boost::math::beta(a, b, pol)) - fract : fract;
 } // template <class T, class Lanczos>T ibeta_imp(T a, T b, T x, const Lanczos& l, bool inv, bool normalised)
 
-template <class T, class Policy>
+template <BOOST_MATH_ARBITRARY_REAL T, BOOST_MATH_POLICY Policy>
 inline T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised)
 {
    return ibeta_imp(a, b, x, pol, inv, normalised, static_cast<T*>(nullptr));
 }
 
-template <class T, class Policy>
+template <BOOST_MATH_ARBITRARY_REAL T, BOOST_MATH_POLICY Policy>
 T ibeta_derivative_imp(T a, T b, T x, const Policy& pol)
 {
    static const char* function = "ibeta_derivative<%1%>(%1%,%1%,%1%)";
