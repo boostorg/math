@@ -22,7 +22,7 @@ def main(ctx):
   clang_6_stds = [ "c++11", "c++14", "c++17" ]
   gnu_9_stds = [ "gnu++14", "c++14", "gnu++17", "c++17", "gnu++2a", "c++2a" ]
   clang_10_stds = [ "c++14", "c++17", "c++2a" ]
-  mac_arm_tests = [ "17", "20" ]
+  mac_arm_tests = [ "c++17", "c++20" ]
 
   result = []
 
@@ -54,8 +54,8 @@ def main(ctx):
     for cxx in clang_10_stds:
       result.append(linux_cxx("Ubuntu clang++-10 " + cxx + " " + suite, "clang++-10", packages="clang-10", llvm_os="xenial", llvm_ver="10", buildtype="boost", image="cppalliance/droneubuntu1804:1", environment={'TOOLSET': 'clang', 'COMPILER': 'clang++-10', 'CXXSTD': cxx, 'TEST_SUITE': suite, }, globalenv=globalenv))
     for cxx in mac_arm_tests:
-      result.append(osx_cxx("Clang", "clang++", buildscript="drone", buildtype="boost", xcode_version="14.1", environment={'B2_TOOLSET': 'clang', 'B2_CXXSTD': cxx}, globalenv=globalenv))
-      result.append(osx_cxx("gcc-12", "g++-12", buildscript="drone", buildtype="boost", xcode_version="14.1", environment={'B2_TOOLSET': 'gcc-12', 'B2_CXXSTD': cxx}, globalenv=globalenv))
+      result.append(osx_cxx("M1 Clang " + cxx + " " + suite, "clang++", buildscript="drone", buildtype="boost", xcode_version="14.1", environment={'B2_TOOLSET': 'clang', 'CXXSTD': cxx, 'TEST_SUITE': suite, }, globalenv=globalenv))
+      result.append(osx_cxx("M1 GCC " + cxx + " " + suite, "g++-12", buildscript="drone", buildtype="boost", xcode_version="14.1", environment={'B2_TOOLSET': 'gcc-12', 'CXXSTD': cxx, 'TEST_SUITE': suite, }, globalenv=globalenv))
 
   return result
 
