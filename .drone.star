@@ -28,7 +28,7 @@ def main(ctx):
   result = []
 
   for suite in nonx86_things_to_test:
-    for cxx in mac_arm_tests:
+    for cxx in nonx86_tests:
       result.append(osx_cxx("M1 Clang " + cxx + " " + suite, "clang++", buildscript="drone", buildtype="boost", xcode_version="14.1", environment={'TOOLSET': 'clang', 'CXXSTD': cxx, 'TEST_SUITE': suite, }, globalenv=globalenv))
       result.append(osx_cxx("M1 GCC " + cxx + " " + suite, "g++-12", buildscript="drone", buildtype="boost", xcode_version="14.1", environment={'TOOLSET': 'gcc-12', 'CXXSTD': cxx, 'TEST_SUITE': suite, }, globalenv=globalenv))
 
