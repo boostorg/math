@@ -43,7 +43,7 @@ int main(int, char* [])
       "static const std::array<std::array<typename table_type<T>::type, 4>, " << ibeta_int_data.size() << "> ibeta_derivative_small_data = { {\n";
      
 
-   for(unsigned i = 0; i < ibeta_int_data.size(); ++i)
+   for(std::size_t i = 0; i < ibeta_int_data.size(); ++i)
    {
       mp_t a(ibeta_int_data[i][0]);
       mp_t b(ibeta_int_data[i][1]);

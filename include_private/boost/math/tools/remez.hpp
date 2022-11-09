@@ -262,7 +262,7 @@ void remez_minimax<T>::init_chebyshev()
    detail::remez_max_error_function<T> Ex(Err);
    m_max_error = 0;
    //int max_err_location = 0;
-   for(unsigned i = 0; i < unknowns; ++i)
+   for(decltype(unknowns) i = 0; i < unknowns; ++i)
    {
       std::pair<T, T> r = brent_find_minima(Ex, zeros[i], zeros[i+1], m_precision);
       maxima[i] = r.first;

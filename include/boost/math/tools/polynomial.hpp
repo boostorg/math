@@ -330,7 +330,7 @@ public:
    polynomial(const polynomial<U>& p)
    {
       m_data.resize(p.size());
-      for(unsigned i = 0; i < p.size(); ++i)
+      for(std::size_t i = 0; i < p.size(); ++i)
       {
          m_data[i] = boost::math::tools::real_cast<T>(p[i]);
       }

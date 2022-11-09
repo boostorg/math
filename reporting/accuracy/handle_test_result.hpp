@@ -183,7 +183,7 @@ void add_cell(const std::string& cell_name, const std::string& table_name, const
       // Figure out which column we're on:
       //
       unsigned column_id = 1001u;
-      for(unsigned i = 0; i < table_data[0].size(); ++i)
+      for(std::size_t i = 0; i < table_data[0].size(); ++i)
       {
          if(table_data[0][i] == column_heading)
          {
@@ -197,15 +197,15 @@ void add_cell(const std::string& cell_name, const std::string& table_name, const
          // Need a new column, must be adding a new compiler to the table!
          //
          table_data[0].push_back(column_heading);
-         for(unsigned i = 1; i < table_data.size(); ++i)
+         for(std::size_t i = 1; i < table_data.size(); ++i)
             table_data[i].push_back(std::string());
          column_id = table_data[0].size() - 1;
       }
       //
       // Figure out the row:
       //
-      unsigned row_id = 1001;
-      for(unsigned i = 1; i < table_data.size(); ++i)
+      std::size_t row_id = 1001;
+      for(std::size_t i = 1; i < table_data.size(); ++i)
       {
          if(table_data[i][0] == row_name)
          {
@@ -220,7 +220,7 @@ void add_cell(const std::string& cell_name, const std::string& table_name, const
          //
          table_data.push_back(std::vector<std::string>());
          table_data.back().push_back(row_name);
-         for(unsigned i = 1; i < table_data[0].size(); ++i)
+         for(std::size_t i = 1; i < table_data[0].size(); ++i)
             table_data.back().push_back(std::string());
          row_id = table_data.size() - 1;
       }

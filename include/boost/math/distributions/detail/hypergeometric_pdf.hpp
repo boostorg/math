@@ -138,10 +138,10 @@ T hypergeometric_pdf_lanczos_imp(T /*dummy*/, unsigned x, unsigned r, unsigned n
    // Combine equal powers:
    //
    int j = 8;
-   while(exponents[sorted_indexes[j]] == 0) --j;
-   while(j)
+   while(exponents[sorted_indexes[j]] == 0 && j > 0) --j;
+   while(j > 0)
    {
-      while(j && (exponents[sorted_indexes[j-1]] == exponents[sorted_indexes[j]]))
+      while(j > 0 && (exponents[sorted_indexes[j-1]] == exponents[sorted_indexes[j]]))
       {
          bases[sorted_indexes[j-1]] *= bases[sorted_indexes[j]];
          exponents[sorted_indexes[j]] = 0;

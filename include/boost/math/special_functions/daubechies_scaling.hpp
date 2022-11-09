@@ -287,7 +287,7 @@ struct daubechies_eval_type<float>
    inline static std::vector<float> vector_cast(const std::vector<double>& v)
    {
       std::vector<float> result(v.size());
-      for (unsigned i = 0; i < v.size(); ++i)
+      for (std::size_t i = 0; i < v.size(); ++i)
          result[i] = static_cast<float>(v[i]);
       return result;
    }
@@ -300,7 +300,7 @@ struct daubechies_eval_type<double>
    inline static std::vector<double> vector_cast(const std::vector<long double>& v)
    {
       std::vector<double> result(v.size());
-      for (unsigned i = 0; i < v.size(); ++i)
+      for (std::size_t i = 0; i < v.size(); ++i)
          result[i] = static_cast<double>(v[i]);
       return result;
    }

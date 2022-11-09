@@ -25,6 +25,7 @@ void thread_proc()
    std::default_random_engine rnd;
    std::uniform_real_distribution<> dist;
 
+   list.reserve(1000);
    for (unsigned i = 0; i < 1000; ++i)
    {
       list.push_back(dist(rnd));
