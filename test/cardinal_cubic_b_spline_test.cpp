@@ -279,11 +279,11 @@ void test_trig_function()
 
     boost::math::interpolators::cardinal_cubic_b_spline<Real> spline(v.data(), v.size(), x0, step);
 
-    boost::random::uniform_real_distribution<Real> absissa(x0, x0 + 499 * step);
+    boost::random::uniform_real_distribution<Real> abscissa(x0, x0 + 499 * step);
 
     for (size_t i = 0; i < v.size(); ++i)
     {
-        Real x = absissa(gen);
+        Real x = abscissa(gen);
         Real y = spline(x);
         BOOST_CHECK_CLOSE(y, sin(x), 1.0);
         auto y_prime = spline.prime(x);

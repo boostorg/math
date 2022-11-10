@@ -21,7 +21,7 @@ static RealType zs[450];
 template <typename RealType>
 static RealType ws[450];
 // The values are defined using the macro BOOST_MATH_TEST_VALUE to ensure
-// that both built-in and multiprecision types are correctly initialiased with full precision.
+// that both built-in and multiprecision types are correctly initialized with full precision.
 // built-in types like float, double require a floating-point literal like 3.14,
 // but multiprecision types require a decimal digit string like "3.14".
 // Numerical values are chosen to avoid exactly representable values.

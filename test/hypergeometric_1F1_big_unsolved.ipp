@@ -21,9 +21,9 @@
 
       // These next 2 should be solvable by A&S 13.3.6 (which does converge nicely for these inputs) but gives the wrong results:
 
-      // Unexpected exception : Error in function boost::math::hypergeometric_pFq<long double> : Cancellation is so severe that no bits in the reuslt are correct, last result was 3.0871891698197084e+73
+      // Unexpected exception : Error in function boost::math::hypergeometric_pFq<long double> : Cancellation is so severe that no bits in the result are correct, last result was 3.0871891698197084e+73
       { { SC_(-5.9981750131794866e-15), SC_(0.499999999999994), SC_(-240.42092034220695), SC_(1.00000000000004464930530925572237133417488137) }},
-      // Unexpected exception : Error in function boost::math::hypergeometric_pFq<long double> : Cancellation is so severe that no bits in the reuslt are correct, last result was 3.0871891698197084e+73
+      // Unexpected exception : Error in function boost::math::hypergeometric_pFq<long double> : Cancellation is so severe that no bits in the result are correct, last result was 3.0871891698197084e+73
       { { SC_(-5.9981750131794866e-15), SC_(-0.500000000000006), SC_(-240.42092034220695), SC_(1.00000000000003262784934420226963147689063665) }},
 
       // This one is not too awful, we simply have no better method to improve the error rate:

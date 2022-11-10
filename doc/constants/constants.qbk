@@ -610,7 +610,7 @@ accurate to at least 100 decimal digits (in practice that means at least 102 dig
 Again for consistency use scientific format with a signed exponent.
 
 For types with precision greater than a long double,
-then if T is constructible `T `is constructible from a `const char*`
+then if T is constructable `T `is constructable from a `const char*`
 then it's directly constructed from the string,
 otherwise we fall back on lexical_cast to convert to type `T`.
 (Using a string is necessary because you can't use a numeric constant
