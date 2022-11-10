@@ -42,7 +42,7 @@ class distribution_archetype
 public:
    typedef RealType value_type;
 
-   distribution_archetype(const distribution_archetype&); // Copy constructable.
+   distribution_archetype(const distribution_archetype&); // Copy constructible.
    distribution_archetype& operator=(const distribution_archetype&); // Assignable.
 
    // There is no default constructor,

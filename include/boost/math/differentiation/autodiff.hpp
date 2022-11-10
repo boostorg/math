@@ -136,14 +136,14 @@ class fvar {
   // Initialize a variable or constant.
   fvar(root_type const&, bool const is_variable);
 
-  // RealType(cr) | RealType | RealType is copy constructable.
+  // RealType(cr) | RealType | RealType is copy constructible.
   fvar(fvar const&) = default;
 
   // Be aware of implicit casting from one fvar<> type to another by this copy constructor.
   template <typename RealType2, size_t Order2>
   fvar(fvar<RealType2, Order2> const&);
 
-  // RealType(ca) | RealType | RealType is copy constructable from the arithmetic types.
+  // RealType(ca) | RealType | RealType is copy constructible from the arithmetic types.
   explicit fvar(root_type const&);  // Initialize a constant. (No epsilon terms.)
 
   template <typename RealType2>

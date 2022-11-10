@@ -26,7 +26,7 @@ further analysis.
 then it is treated as if it were of type `double` for the purposes of
 further analysis.
 # If any of the arguments is a user-defined class type, then the result type
-is the first such class type that is constructable from all of the other
+is the first such class type that is constructible from all of the other
 argument types.
 # If any of the arguments is of type `long double`, then the result is of type
 `long double`.
