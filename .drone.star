@@ -29,9 +29,9 @@ def main(ctx):
 
   for suite in nonx86_things_to_test:
     for cxx in nonx86_tests:
-      result.append(osx_cxx("M1 Clang " + cxx + " " + suite, "clang++", buildscript="drone", buildtype="boost", xcode_version="14.1", environment={'TOOLSET': 'clang', 'CXXSTD': cxx, 'TEST_SUITE': suite, }, globalenv=globalenv))
-      result.append(linux_cxx("ARM64: GCC 11" + cxx + " " + suite, "g++-11", packages="g++-11", buildscript="drone", buildtype="boost", image="cppalliance/droneubuntu2004:multiarch", environment={'TOOLSET': 'gcc', 'CXXSTD': cxx, 'TEST_SUITE': suite, }, arch="arm64", globalenv=globalenv))
-      result.append(linux_cxx("S390X: GCC 11" + cxx + " " + suite, "g++-11", packages="g++-11", buildscript="drone", buildtype="boost", image="cppalliance/droneubuntu2004:multiarch", environment={'TOOLSET': 'gcc', 'CXXSTD': cxx, 'TEST_SUITE': suite, }, arch="s390x", globalenv=globalenv))
+      result.append(osx_cxx("M1 Clang " + cxx + " " + suite, "clang++", buildscript="drone", buildtype="boost", xcode_version="14.1", environment={'TOOLSET': 'clang', 'CXXSTD': cxx, 'TEST_SUITE': suite, 'DEFINE': 'BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS,BOOST_MATH_NO_REAL_CONCEPT_TESTS', }, globalenv=globalenv))
+      result.append(linux_cxx("ARM64: GCC 11" + cxx + " " + suite, "g++-11", packages="g++-11", buildscript="drone", buildtype="boost", image="cppalliance/droneubuntu2004:multiarch", environment={'TOOLSET': 'gcc', 'CXXSTD': cxx, 'TEST_SUITE': suite, 'DEFINE': 'BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS,BOOST_MATH_NO_REAL_CONCEPT_TESTS', }, arch="arm64", globalenv=globalenv))
+      result.append(linux_cxx("S390X: GCC 11" + cxx + " " + suite, "g++-11", packages="g++-11", buildscript="drone", buildtype="boost", image="cppalliance/droneubuntu2004:multiarch", environment={'TOOLSET': 'gcc', 'CXXSTD': cxx, 'TEST_SUITE': suite, 'DEFINE': 'BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS,BOOST_MATH_NO_REAL_CONCEPT_TESTS', }, arch="s390x", globalenv=globalenv))
 
 
   return result
