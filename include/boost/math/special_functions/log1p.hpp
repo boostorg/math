@@ -23,6 +23,7 @@
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/tools/assert.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
+#include <boost/math/concepts/concepts.hpp>
 
 #if defined(__GNUC__) && defined(BOOST_MATH_USE_FLOAT128)
 //
@@ -293,7 +294,7 @@ const typename log1p_initializer<T, Policy, tag>::init log1p_initializer<T, Poli
 
 } // namespace detail
 
-template <class T, class Policy>
+template <BOOST_MATH_ARBITRARY_REAL T, BOOST_MATH_POLICY Policy>
 inline typename tools::promote_args<T>::type log1p(T x, const Policy&)
 {
    typedef typename tools::promote_args<T>::type result_type;
@@ -327,7 +328,7 @@ inline typename tools::promote_args<T>::type log1p(T x, const Policy&)
 
 #if defined(BOOST_HAS_LOG1P) && !(defined(__osf__) && defined(__DECCXX_VER))
 #  ifdef BOOST_MATH_USE_C99
-template <class Policy>
+template <BOOST_MATH_POLICY Policy>
 inline float log1p(float x, const Policy& pol)
 {
    if(x < -1)
@@ -339,7 +340,7 @@ inline float log1p(float x, const Policy& pol)
    return ::log1pf(x);
 }
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-template <class Policy>
+template <BOOST_MATH_POLICY Policy>
 inline long double log1p(long double x, const Policy& pol)
 {
    if(x < -1)
@@ -352,7 +353,7 @@ inline long double log1p(long double x, const Policy& pol)
 }
 #endif
 #else
-template <class Policy>
+template <BOOST_MATH_POLICY Policy>
 inline float log1p(float x, const Policy& pol)
 {
    if(x < -1)
@@ -364,7 +365,7 @@ inline float log1p(float x, const Policy& pol)
    return ::log1p(x);
 }
 #endif
-template <class Policy>
+template <BOOST_MATH_POLICY Policy>
 inline double log1p(double x, const Policy& pol)
 {
    if(x < -1)
@@ -381,7 +382,7 @@ inline double log1p(double x, const Policy& pol)
 // that your compilers optimizer won't mess this code up!!
 // Currently tested with VC8 and Intel 9.1.
 //
-template <class Policy>
+template <BOOST_MATH_POLICY Policy>
 inline double log1p(double x, const Policy& pol)
 {
    if(x < -1)
@@ -396,7 +397,7 @@ inline double log1p(double x, const Policy& pol)
    else
       return ::log(u)*(x/(u-1.0));
 }
-template <class Policy>
+template <BOOST_MATH_POLICY Policy>
 inline float log1p(float x, const Policy& pol)
 {
    return static_cast<float>(boost::math::log1p(static_cast<double>(x), pol));
@@ -406,7 +407,7 @@ inline float log1p(float x, const Policy& pol)
 // For some reason this fails to compile under WinCE...
 // Needs more investigation.
 //
-template <class Policy>
+template <BOOST_MATH_POLICY Policy>
 inline long double log1p(long double x, const Policy& pol)
 {
    if(x < -1)
@@ -424,7 +425,7 @@ inline long double log1p(long double x, const Policy& pol)
 #endif
 #endif
 
-template <class T>
+template <BOOST_MATH_ARBITRARY_REAL T>
 inline typename tools::promote_args<T>::type log1p(T x)
 {
    return boost::math::log1p(x, policies::policy<>());
@@ -432,7 +433,7 @@ inline typename tools::promote_args<T>::type log1p(T x)
 //
 // Compute log(1+x)-x:
 //
-template <class T, class Policy>
+template <BOOST_MATH_ARBITRARY_REAL T, BOOST_MATH_POLICY Policy>
 inline typename tools::promote_args<T>::type
    log1pmx(T x, const Policy& pol)
 {
@@ -464,7 +465,7 @@ inline typename tools::promote_args<T>::type
    return result;
 }
 
-template <class T>
+template <BOOST_MATH_ARBITRARY_REAL T>
 inline typename tools::promote_args<T>::type log1pmx(T x)
 {
    return log1pmx(x, policies::policy<>());
