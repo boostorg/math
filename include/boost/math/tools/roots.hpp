@@ -615,6 +615,8 @@ namespace detail {
                }
                delta = bracket_root_towards_min(f, guess, f0, min, max, count);
                result = guess - delta;
+               if (result <= min)
+                  result = float_next(min);
                guess = min;
                continue;
             }
@@ -641,6 +643,8 @@ namespace detail {
                }
                delta = bracket_root_towards_max(f, guess, f0, min, max, count);
                result = guess - delta;
+               if (result >= max)
+                  result = float_prior(max);
                guess = min;
                continue;
             }
