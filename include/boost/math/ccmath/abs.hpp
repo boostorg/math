@@ -13,6 +13,7 @@
 #include <limits>
 #include <cassert>
 #include <boost/math/tools/is_constant_evaluated.hpp>
+#include <boost/math/tools/assert.hpp>
 #include <boost/math/ccmath/isnan.hpp>
 #include <boost/math/ccmath/isinf.hpp>
 
@@ -33,7 +34,7 @@ constexpr T abs_impl(T x) noexcept
 {
     if (boost::math::ccmath::isnan(x))
     {
-        return x;
+        return std::numeric_limits<T>::quiet_NaN();
     }
     else if (x == static_cast<T>(-0))
     {
@@ -42,7 +43,7 @@ constexpr T abs_impl(T x) noexcept
 
     if constexpr (std::is_integral_v<T>)
     {
-        assert(x != (std::numeric_limits<T>::min)());
+        BOOST_MATH_ASSERT(x != (std::numeric_limits<T>::min)());
     }
     
     return x > 0 ? x : -x;
