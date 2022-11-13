@@ -115,7 +115,7 @@ template <class Real> void test_zero_coefficients() {
 
 void test_ill_conditioned() {
     // An ill-conditioned root reported by SATovstun:
-    // "Exact" roots produced with a high-precision calcuation on Wolfram Alpha:
+    // "Exact" roots produced with a high-precision calculation on Wolfram Alpha:
     // NSolve[x^3 + 10000*x^2 + 200*x +1==0,x]
     std::array<double, 3> expected_roots{-9999.97999997,
                                          -0.010010015026300100757327057,
