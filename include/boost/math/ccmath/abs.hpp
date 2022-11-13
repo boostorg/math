@@ -11,7 +11,6 @@
 #include <cmath>
 #include <type_traits>
 #include <limits>
-#include <cassert>
 #include <boost/math/tools/is_constant_evaluated.hpp>
 #include <boost/math/tools/assert.hpp>
 #include <boost/math/ccmath/isnan.hpp>
@@ -46,7 +45,7 @@ constexpr T abs_impl(T x) noexcept
         BOOST_MATH_ASSERT(x != (std::numeric_limits<T>::min)());
     }
     
-    return x > 0 ? x : -x;
+    return x >= 0 ? x : -x;
 }
 
 } // Namespace detail
