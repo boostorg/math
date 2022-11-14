@@ -72,7 +72,7 @@ int main()
     r[3.56] = 2.0002;
     r[3.72] = 2.0001;
 
-    // Let's discover the absissa that will generate a potential of exactly 3.0,
+    // Let's discover the abscissa that will generate a potential of exactly 3.0,
     // start by creating 2 ranges for the x and y values:
     auto x_range = boost::adaptors::keys(r);
     auto y_range = boost::adaptors::values(r);

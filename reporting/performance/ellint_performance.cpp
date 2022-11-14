@@ -29,10 +29,10 @@
 // basic_ellint_rational_performance<double>        1.6
 //
 // We can in fact get basic_ellint_rational_performance to much the same performance as log
-// ONLY if we remove all error hangling for cases with m > 0.9.  In particular the code appears
+// ONLY if we remove all error handling for cases with m > 0.9.  In particular the code appears
 // to be ultra-sensitive to the presence of "if" statements which significantly hamper optimisation.
 // 
-// Performance with gcc-cygwin appears to be broasly similar.
+// Performance with gcc-cygwin appears to be broadly similar.
 //
 #include <vector>
 #include <benchmark/benchmark.h>

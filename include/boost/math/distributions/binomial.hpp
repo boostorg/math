@@ -483,11 +483,6 @@ namespace boost
         {
           return 1; // Probability = 1 = certainty.
         }
-        if (k == 0)
-        { // binomial coeffic (n 0) = 1,
-          // n ^ 0 = 1
-          return pow(1 - dist.success_fraction(), n);
-        }
         if (k == n)
         { // binomial coeffic (n n) = 1,
           // n ^ 0 = 1

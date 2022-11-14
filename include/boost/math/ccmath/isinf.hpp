@@ -11,14 +11,29 @@
 #include <type_traits>
 #include <boost/math/tools/is_constant_evaluated.hpp>
 
+#include <boost/math/tools/is_standalone.hpp>
+#ifndef BOOST_MATH_STANDALONE
+#include <boost/config.hpp>
+#ifdef BOOST_NO_CXX17_IF_CONSTEXPR
+#error "The header <boost/math/norms.hpp> can only be used in C++17 and later."
+#endif
+#endif
+
 namespace boost::math::ccmath {
 
 template <typename T>
-inline constexpr bool isinf(T x)
+constexpr bool isinf(T x) noexcept
 {
     if(BOOST_MATH_IS_CONSTANT_EVALUATED(x))
     {
-        return x == std::numeric_limits<T>::infinity() || -x == std::numeric_limits<T>::infinity();
+        if constexpr (std::numeric_limits<T>::is_signed)
+        {
+            return x == std::numeric_limits<T>::infinity() || -x == std::numeric_limits<T>::infinity();
+        }
+        else
+        {
+            return x == std::numeric_limits<T>::infinity();
+        }
     }
     else
     {

@@ -13,8 +13,17 @@
 #include <limits>
 #include <boost/math/tools/is_constant_evaluated.hpp>
 #include <boost/math/concepts/concepts.hpp>
+#include <boost/math/tools/assert.hpp>
 #include <boost/math/ccmath/isnan.hpp>
 #include <boost/math/ccmath/isinf.hpp>
+
+#include <boost/math/tools/is_standalone.hpp>
+#ifndef BOOST_MATH_STANDALONE
+#include <boost/config.hpp>
+#ifdef BOOST_NO_CXX17_IF_CONSTEXPR
+#error "The header <boost/math/norms.hpp> can only be used in C++17 and later."
+#endif
+#endif
 
 namespace boost::math::ccmath {
 
@@ -23,11 +32,21 @@ namespace detail {
 template <BOOST_MATH_ARBITRARY_SIGNED_ARITHMETIC T> 
 inline constexpr T abs_impl(T x) noexcept
 {
-    return boost::math::ccmath::isnan(x) ? std::numeric_limits<T>::quiet_NaN() : 
-           boost::math::ccmath::isinf(x) ? std::numeric_limits<T>::infinity() : 
-           x == -0 ? T(0) :
-           x == (std::numeric_limits<T>::min)() ? std::numeric_limits<T>::quiet_NaN() : 
-           x > 0 ? x : -x;
+    if (boost::math::ccmath::isnan(x))
+    {
+        return std::numeric_limits<T>::quiet_NaN();
+    }
+    else if (x == static_cast<T>(-0))
+    {
+        return static_cast<T>(0);
+    }
+
+    if constexpr (std::is_integral_v<T>)
+    {
+        BOOST_MATH_ASSERT(x != (std::numeric_limits<T>::min)());
+    }
+    
+    return x >= 0 ? x : -x;
 }
 
 } // Namespace detail
@@ -59,17 +78,17 @@ inline constexpr T abs(T x) noexcept
     }
     else
     {
-        static_assert(sizeof(T) == 0, "Taking the absolute value of an unsigned value not covertible to int is UB.");
+        static_assert(sizeof(T) == 0, "Taking the absolute value of an unsigned value not convertible to int is UB.");
         return T(0); // Unreachable, but suppresses warnings
     }
 }
 
-inline constexpr long int labs(long int j) noexcept
+constexpr long int labs(long int j) noexcept
 {
     return boost::math::ccmath::abs(j);
 }
 
-inline constexpr long long int llabs(long long int j) noexcept
+constexpr long long int llabs(long long int j) noexcept
 {
     return boost::math::ccmath::abs(j);
 }

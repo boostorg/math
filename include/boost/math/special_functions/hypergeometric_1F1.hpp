@@ -114,7 +114,7 @@ namespace boost { namespace math { namespace detail {
             // At higher than double precision we need to be further away from the crossover location to
             // get full converge, but it's not clear how much further - indeed at quad precision it's
             // basically impossible to ever get forwards iteration to work.  Backwards seems to work
-            // OK as long as a > 1 whatever the precision tbough.
+            // OK as long as a > 1 whatever the precision though.
             //
             int domain = hypergeometric_1F1_negative_b_recurrence_region(a, b, z);
             if ((domain < 0) && ((a > 1) || (boost::math::policies::digits<T, Policy>() <= 64)))

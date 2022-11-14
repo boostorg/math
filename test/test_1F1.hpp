@@ -207,13 +207,13 @@ void test_spots6(T, const char* type_name)
          { { static_cast<double>(5.9981750131794866e-15), static_cast<double>(-230.70702263712883), static_cast<double>(240.42092034220695), SC_(-1.74381782591884817018404492963109914357365958e+193) }},
          // Unexpected high error : 1.79769313486231570814527423731704356798070568e+308 Found : -9.61305077326281580724540507004198316499661687e+268 Expected : 1.74381782591870724567837900957146707932623893e+193
          { { static_cast<double>(-5.9981750131794866e-15), static_cast<double>(-230.70702263712883), static_cast<double>(240.42092034220695), SC_(1.74381782591870734495565763481520223752372107e+193) }},
-         //Unexpected exception : Error in function boost::math::hypergeometric_pFq<long double> : Cancellation is so severe that no bits in the reuslt are correct, last result was - 13497.312248525042
+         //Unexpected exception : Error in function boost::math::hypergeometric_pFq<long double> : Cancellation is so severe that no bits in the result are correct, last result was - 13497.312248525042
          { { static_cast<double>(-0.00023636552788275367), static_cast<double>(0.49976363447211725), static_cast<double>(-55.448519088327885), SC_(1.00141219419064760011631555641142295011268795) }},
-         // Unexpected exception: Error in function boost::math::hypergeometric_pFq<long double>: Cancellation is so severe that no bits in the reuslt are correct, last result was -13497.312248525042
+         // Unexpected exception: Error in function boost::math::hypergeometric_pFq<long double>: Cancellation is so severe that no bits in the result are correct, last result was -13497.312248525042
          {{ static_cast<double>(-0.00023636552788275367), static_cast<double>(-0.50023636552788275), static_cast<double>(-55.448519088327885), SC_(1.00093463146763986302362749764017215184711625) }},
-         // Unexpected exception : Error in function boost::math::hypergeometric_pFq<long double> : Cancellation is so severe that no bits in the reuslt are correct, last result was - 1.3871133003351527e+47
+         // Unexpected exception : Error in function boost::math::hypergeometric_pFq<long double> : Cancellation is so severe that no bits in the result are correct, last result was - 1.3871133003351527e+47
          { { static_cast<double>(-1.6548533913638905e-10), static_cast<double>(0.49999999983451465), static_cast<double>(-169.20843148231506), SC_(1.00000000117356793527360151094991866549128017) }},
-         // Unexpected exception: Error in function boost::math::hypergeometric_pFq<long double>: Cancellation is so severe that no bits in the reuslt are correct, last result was -1.3871133003351527e+47
+         // Unexpected exception: Error in function boost::math::hypergeometric_pFq<long double>: Cancellation is so severe that no bits in the result are correct, last result was -1.3871133003351527e+47
          {{ static_cast<double>(-1.6548533913638905e-10), static_cast<double>(-0.50000000016548529), static_cast<double>(-169.20843148231506), SC_(1.00000000084161045914716192484600809610013447) }},
          // Unexpected high error : 17825.7893791562892147339880466461181640625 Found : -0.000253525216373273569459012577453904668800532818 Expected : -0.000253525216374277052779756536082800266740377992
          { { static_cast<double>(-2.0211181797563725e-14), static_cast<double>(-1.0000000000000202), static_cast<double>(-25.653068032115698), SC_(-0.000253525216374277055047768086884693917115210113) }},
@@ -225,9 +225,9 @@ void test_spots6(T, const char* type_name)
          { { static_cast<double>(5.9981750131794866e-15), static_cast<double>(-230.70702263712883), static_cast<double>(240.42092034220695), SC_(-1.74381782591884817018404492963109914357365958e+193) }},
          // Unexpected high error : 1.79769313486231570814527423731704356798070568e+308 Found : -9.61305077326281580724540507004198316499661687e+268 Expected : 1.74381782591870724567837900957146707932623893e+193
          { { static_cast<double>(-5.9981750131794866e-15), static_cast<double>(-230.70702263712883), static_cast<double>(240.42092034220695), SC_(1.74381782591870734495565763481520223752372107e+193) }},
-         // Unexpected exception : Error in function boost::math::hypergeometric_pFq<long double> : Cancellation is so severe that no bits in the reuslt are correct, last result was 3.0871891698197084e+73
+         // Unexpected exception : Error in function boost::math::hypergeometric_pFq<long double> : Cancellation is so severe that no bits in the result are correct, last result was 3.0871891698197084e+73
          { { static_cast<double>(-5.9981750131794866e-15), static_cast<double>(0.499999999999994), static_cast<double>(-240.42092034220695), SC_(1.00000000000004464930530925572237133417488137) }},
-         // Unexpected exception : Error in function boost::math::hypergeometric_pFq<long double> : Cancellation is so severe that no bits in the reuslt are correct, last result was 3.0871891698197084e+73
+         // Unexpected exception : Error in function boost::math::hypergeometric_pFq<long double> : Cancellation is so severe that no bits in the result are correct, last result was 3.0871891698197084e+73
          { { static_cast<double>(-5.9981750131794866e-15), static_cast<double>(-0.500000000000006), static_cast<double>(-240.42092034220695), SC_(1.00000000000003262784934420226963147689063665) }},
          // Unexpected high error : 18466.4373304979599197395145893096923828125 Found : 1.32865406167486480872551302123696359558380209e-08 Expected : 1.3286540616694168317751162703647255236560909e-08
          { { static_cast<double>(6.772927684190258e-10), static_cast<double>(-0.99999999932270722), static_cast<double>(-483.69576895236969), SC_(1.32865406166941679958876322759721528297325713e-08) }},

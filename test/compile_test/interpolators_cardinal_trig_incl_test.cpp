@@ -15,7 +15,7 @@
 //
 #include "test_compile_result.hpp"
 //
-// This test includes <vector> becasue many of the interpolators are not compatible with pointers/c-style arrays
+// This test includes <vector> because many of the interpolators are not compatible with pointers/c-style arrays
 //
 #include <vector>
 

@@ -1441,7 +1441,7 @@ T ibeta_derivative_imp(T a, T b, T x, const Policy& pol)
    return f1;
 }
 //
-// Some forwarding functions that dis-ambiguate the third argument type:
+// Some forwarding functions that disambiguate the third argument type:
 //
 template <class RT1, class RT2, class Policy>
 inline typename tools::promote_args<RT1, RT2>::type

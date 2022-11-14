@@ -32,10 +32,12 @@
     </h4>
 <p>
       <code class="computeroutput"><span class="identifier">Constexpr</span></code> implementations of
-      the functionality found in <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">cmath</span><span class="special">&gt;</span></code>.
-      In a <code class="computeroutput"><span class="keyword">constexpr</span></code> context the functions
-      will use an implementation defined in boost. If the context is not <code class="computeroutput"><span class="keyword">constexpr</span></code> the functionality will be directly
-      from the STL implementation of <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">cmath</span><span class="special">&gt;</span></code>
+      the functionality found in <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">cmath</span><span class="special">&gt;</span></code>
+      and <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">cstdlib</span><span class="special">&gt;</span></code> <a href="https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2021/p0533r9.pdf" target="_top">proposed
+      for C++23</a>. In a <code class="computeroutput"><span class="keyword">constexpr</span></code>
+      context the functions will use an implementation defined in boost. If the context
+      is not <code class="computeroutput"><span class="keyword">constexpr</span></code> the functionality
+      will be directly from the STL implementation of <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">cmath</span><span class="special">&gt;</span></code>
       used by the compiler. All functions that take an <code class="computeroutput"><span class="identifier">Integer</span></code>
       type and return a <code class="computeroutput"><span class="keyword">double</span></code> simply
       cast the <code class="computeroutput"><span class="identifier">Integer</span></code> argument to
@@ -216,7 +218,16 @@
     <span class="identifier">Requires</span> <span class="identifier">compiling</span> <span class="identifier">with</span> <span class="identifier">fma</span> <span class="identifier">flag</span>
 
     <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Arithmetic1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Arithmetic2</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Arithmetic3</span><span class="special">&gt;</span>
-    <span class="keyword">inline</span> <span class="identifier">constepxr</span> <span class="identifier">Promoted</span> <span class="identifier">fma</span><span class="special">(</span><span class="identifier">Arithmetic1</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">Arithmetic2</span> <span class="identifier">y</span><span class="special">,</span> <span class="identifier">Arithmetic3</span> <span class="identifier">z</span><span class="special">)</span> <span class="keyword">noexcept</span>
+    <span class="keyword">inline</span> <span class="keyword">constexpr</span> <span class="identifier">Promoted</span> <span class="identifier">fma</span><span class="special">(</span><span class="identifier">Arithmetic1</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">Arithmetic2</span> <span class="identifier">y</span><span class="special">,</span> <span class="identifier">Arithmetic3</span> <span class="identifier">z</span><span class="special">)</span> <span class="keyword">noexcept</span>
+
+    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Arithmetic1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Arithmetic2</span><span class="special">&gt;</span>
+    <span class="keyword">constexpr</span> <span class="identifier">Promoted</span> <span class="identifier">nextafter</span><span class="special">(</span><span class="identifier">Arithmetic1</span> <span class="identifier">from</span><span class="special">,</span> <span class="identifier">Arithmetic2</span> <span class="identifier">to</span><span class="special">)</span>
+
+    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
+    <span class="keyword">constexpr</span> <span class="identifier">Promoted</span> <span class="identifier">nexttoward</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">from</span><span class="special">,</span> <span class="keyword">long</span> <span class="keyword">double</span> <span class="identifier">to</span><span class="special">)</span>
+
+    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
+    <span class="keyword">constexpr</span> <span class="keyword">bool</span> <span class="identifier">signbit</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">arg</span><span class="special">)</span>
 
 <span class="special">}</span> <span class="comment">// Namespaces</span>
 </pre>
