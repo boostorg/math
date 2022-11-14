@@ -29,6 +29,7 @@
 #include <boost/math/special_functions/detail/round_fwd.hpp>
 #include <boost/math/tools/promotion.hpp> // for argument promotion.
 #include <boost/math/policies/policy.hpp>
+#include <boost/math/concepts/concepts.hpp>
 
 #define BOOST_NO_MACRO_EXPAND /**/
 
@@ -567,17 +568,17 @@ namespace boost
    typename tools::promote_args<RT>::type cbrt(RT z, const Policy&);
 
    // log1p is log(x + 1)
-   template <class T>
+   template <BOOST_MATH_ARBITRARY_REAL T>
    typename tools::promote_args<T>::type log1p(T);
 
-   template <class T, class Policy>
+   template <BOOST_MATH_ARBITRARY_REAL T, BOOST_MATH_POLICY Policy>
    typename tools::promote_args<T>::type log1p(T, const Policy&);
 
    // log1pmx is log(x + 1) - x
-   template <class T>
+   template <BOOST_MATH_ARBITRARY_REAL T>
    typename tools::promote_args<T>::type log1pmx(T);
 
-   template <class T, class Policy>
+   template <BOOST_MATH_ARBITRARY_REAL T, BOOST_MATH_POLICY Policy>
    typename tools::promote_args<T>::type log1pmx(T, const Policy&);
 
    // Exp (x) minus 1 functions.
