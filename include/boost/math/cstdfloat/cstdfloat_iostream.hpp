@@ -96,7 +96,7 @@
         // So we have to use dynamic memory allocation for the output
         // string buffer.
 
-        char* my_buffer2 = static_cast<char*>(0U);
+        char* my_buffer2 = nullptr;
 
 #ifndef BOOST_NO_EXCEPTIONS
         try
@@ -265,18 +265,18 @@
     else if(!fixed || (my_exp >= 0))
     {
       // Pad out the end with zero's if we need to.
+      auto chars = str.size();
 
-      int chars = static_cast<int>(str.size());
-      chars = digits - chars;
-
-      if(scientific)
+      if(digits >= chars)
       {
-        ++chars;
-      }
+        chars = digits - chars;
 
-      if(chars > 0)
-      {
-        str.append(static_cast<size_type>(chars), '0');
+        if(scientific)
+        {
+          ++chars;
+        }
+
+        str.append(chars, '0');
       }
     }
 
@@ -518,15 +518,14 @@
         if((cdigit == 5) && (t == 0))
         {
           // Use simple bankers rounding.
-
-          if((static_cast<int>(*result.rbegin() - '0') & 1) != 0)
+          if(((*result.rbegin() - '0') & 1) != 0)
           {
             round_string_up_at(result, static_cast<int>(result.size() - 1U), expon);
           }
         }
         else if(cdigit >= 5)
         {
-          round_string_up_at(result, static_cast<int>(result.size() - 1), expon);
+          round_string_up_at(result, static_cast<int>(result.size() - 1U), expon);
         }
       }
     }
@@ -569,7 +568,7 @@
   {
     value = 0;
 
-    if((p == static_cast<const char*>(0U)) || (*p == static_cast<char>(0)))
+    if((p == nullptr) || (*p == '\0'))
     {
       return false;
     }
@@ -584,11 +583,11 @@
 
     constexpr int max_digits = std::numeric_limits<float_type>::max_digits10 + 1;
 
-    if(*p == static_cast<char>('+'))
+    if(*p == '+')
     {
       ++p;
     }
-    else if(*p == static_cast<char>('-'))
+    else if(*p == '-')
     {
       is_neg = true;
       ++p;
@@ -632,7 +631,7 @@
       ++digits_seen;
     }
 
-    if(*p == static_cast<char>('.'))
+    if(*p == '.')
     {
       // Grab everything after the point, stop when we've seen
       // enough digits, even if there are actually more available.
@@ -659,15 +658,15 @@
     }
 
     // Parse the exponent.
-    if((*p == static_cast<char>('e')) || (*p == static_cast<char>('E')))
+    if((*p == 'e') || (*p == 'E'))
     {
       ++p;
 
-      if(*p == static_cast<char>('+'))
+      if(*p == '+')
       {
         ++p;
       }
-      else if(*p == static_cast<char>('-'))
+      else if(*p == '-')
       {
         is_neg_expon = true;
         ++p;
@@ -684,10 +683,12 @@
 
       if(is_neg_expon)
       {
-        e2 = -e2;
+        expon -= e2;
       }
-
-      expon += e2;
+      else
+      {
+        expon += e2;
+      }
     }
 
     if(expon)
@@ -718,7 +719,7 @@
       value = -value;
     }
 
-    return (*p == static_cast<char>(0));
+    return (*p == '\0');
   }
   } } } } // boost::math::cstdfloat::detail
 
