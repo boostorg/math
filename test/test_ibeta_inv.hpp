@@ -270,5 +270,23 @@ void test_spots(T)
          static_cast<T>(0.125),
          static_cast<T>(0.125)),
       static_cast<T>(0.99999994039535522460937500000000000000000000000L), tolerance);
+   //
+   // Bug cases, issue 873:
+   //
+   if ((std::numeric_limits<T>::max)() > static_cast<T>(1e50))
+   {
+      BOOST_CHECK_CLOSE(
+         ::boost::math::ibeta_inv(
+            static_cast<T>(1e50L),
+            static_cast<T>(10),
+            static_cast<T>(1) / static_cast<T>(10)),
+         static_cast<T>(1), tolerance);
+      BOOST_CHECK_CLOSE(
+         ::boost::math::ibetac_inv(
+            static_cast<T>(1e50L),
+            static_cast<T>(10),
+            static_cast<T>(1) / static_cast<T>(10)),
+         static_cast<T>(1), tolerance);
+   }
 }
 
