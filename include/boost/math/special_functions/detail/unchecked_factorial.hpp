@@ -45,9 +45,9 @@ template <>
 inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION float unchecked_factorial<float>(unsigned i BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(float))
 {
 #ifdef BOOST_MATH_HAVE_CONSTEXPR_TABLES
-   constexpr std::array<float, 35> factorials = { {
+   constexpr std::array<float, 35> factorials {
 #else
-   static const std::array<float, 35> factorials = {{
+   static const std::array<float, 35> factorials {
 #endif
       1.0F,
       1.0F,
@@ -83,8 +83,8 @@ inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION float unchecked_factorial<float>(unsi
       0.822283865417792281772556288e34F,
       0.26313083693369353016721801216e36F,
       0.868331761881188649551819440128e37F,
-      0.29523279903960414084761860964352e39F,
-   }};
+      0.29523279903960414084761860964352e39F
+   };
 
    return factorials[i];
 }
