@@ -294,7 +294,7 @@ const typename log1p_initializer<T, Policy, tag>::init log1p_initializer<T, Poli
 
 } // namespace detail
 
-template <BOOST_MATH_ARBITRARY_REAL T, BOOST_MATH_POLICY Policy>
+template <BOOST_MATH_ARBITRARY_ARITHMETIC T, BOOST_MATH_POLICY Policy>
 inline typename tools::promote_args<T>::type log1p(T x, const Policy&)
 {
    typedef typename tools::promote_args<T>::type result_type;
@@ -425,7 +425,7 @@ inline long double log1p(long double x, const Policy& pol)
 #endif
 #endif
 
-template <BOOST_MATH_ARBITRARY_REAL T>
+template <BOOST_MATH_ARBITRARY_ARITHMETIC T>
 inline typename tools::promote_args<T>::type log1p(T x)
 {
    return boost::math::log1p(x, policies::policy<>());
@@ -433,7 +433,7 @@ inline typename tools::promote_args<T>::type log1p(T x)
 //
 // Compute log(1+x)-x:
 //
-template <BOOST_MATH_ARBITRARY_REAL T, BOOST_MATH_POLICY Policy>
+template <BOOST_MATH_ARBITRARY_ARITHMETIC T, BOOST_MATH_POLICY Policy>
 inline typename tools::promote_args<T>::type
    log1pmx(T x, const Policy& pol)
 {
@@ -465,7 +465,7 @@ inline typename tools::promote_args<T>::type
    return result;
 }
 
-template <BOOST_MATH_ARBITRARY_REAL T>
+template <BOOST_MATH_ARBITRARY_ARITHMETIC T>
 inline typename tools::promote_args<T>::type log1pmx(T x)
 {
    return log1pmx(x, policies::policy<>());

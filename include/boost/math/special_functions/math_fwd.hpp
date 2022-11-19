@@ -568,17 +568,17 @@ namespace boost
    typename tools::promote_args<RT>::type cbrt(RT z, const Policy&);
 
    // log1p is log(x + 1)
-   template <BOOST_MATH_ARBITRARY_REAL T>
+   template <BOOST_MATH_ARBITRARY_ARITHMETIC T>
    typename tools::promote_args<T>::type log1p(T);
 
-   template <BOOST_MATH_ARBITRARY_REAL T, BOOST_MATH_POLICY Policy>
+   template <BOOST_MATH_ARBITRARY_ARITHMETIC T, BOOST_MATH_POLICY Policy>
    typename tools::promote_args<T>::type log1p(T, const Policy&);
 
    // log1pmx is log(x + 1) - x
-   template <BOOST_MATH_ARBITRARY_REAL T>
+   template <BOOST_MATH_ARBITRARY_ARITHMETIC T>
    typename tools::promote_args<T>::type log1pmx(T);
 
-   template <BOOST_MATH_ARBITRARY_REAL T, BOOST_MATH_POLICY Policy>
+   template <BOOST_MATH_ARBITRARY_ARITHMETIC T, BOOST_MATH_POLICY Policy>
    typename tools::promote_args<T>::type log1pmx(T, const Policy&);
 
    // Exp (x) minus 1 functions.
