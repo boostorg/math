@@ -16,6 +16,7 @@
 #include <boost/math/special_functions/log1p.hpp>
 #include <boost/math/special_functions/expm1.hpp>
 #include <boost/math/special_functions/trunc.hpp>
+#include <boost/math/special_functions/sign.hpp>
 #include <boost/math/tools/assert.hpp>
 
 namespace boost{ namespace math{ namespace detail{
@@ -40,7 +41,7 @@ inline T powm1_imp(const T x, const T y, const Policy& pol)
          // fall through....
       }
    }
-   else if (x < 0)
+   else if (boost::math::signbit(x)) // Need to error check -0 here as well
    {
       // y had better be an integer:
       if (boost::math::trunc(y) != y)
@@ -48,7 +49,12 @@ inline T powm1_imp(const T x, const T y, const Policy& pol)
       if (boost::math::trunc(y / 2) == y / 2)
          return powm1_imp(T(-x), y, pol);
    }
-   return pow(x, y) - 1;
+   T result = pow(x, y) - 1;
+   if((boost::math::isinf)(result))
+      return result < 0 ? -boost::math::policies::raise_overflow_error<T>(function, nullptr, pol) : boost::math::policies::raise_overflow_error<T>(function, nullptr, pol);
+   if((boost::math::isnan)(result))
+      return boost::math::policies::raise_domain_error<T>(function, "Result of pow is complex or undefined", x, pol);
+   return result;
 }
 
 } // detail
