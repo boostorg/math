@@ -26,7 +26,6 @@ inline T powm1_imp(const T x, const T y, const Policy& pol)
 {
    BOOST_MATH_STD_USING
    static const char* function = "boost::math::powm1<%1%>(%1%, %1%)";
-
    if (x > 0)
    {
       if ((fabs(y * (x - 1)) < 0.5) || (fabs(y) < 0.2))
@@ -41,7 +40,7 @@ inline T powm1_imp(const T x, const T y, const Policy& pol)
          // fall through....
       }
    }
-   else if (boost::math::signbit(x)) // Need to error check -0 here as well
+   else if ((boost::math::signbit)(x)) // Need to error check -0 here as well
    {
       // y had better be an integer:
       if (boost::math::trunc(y) != y)

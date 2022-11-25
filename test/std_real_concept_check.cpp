@@ -71,6 +71,9 @@ struct numeric_limits<boost::math::concepts::std_real_concept>
    static const bool traps = false;
    static const bool tinyness_before = false;
    static const float_round_style round_style = round_toward_zero;
+#ifndef BOOST_NO_CXX11_NUMERIC_LIMITS
+   static const int max_digits10 = digits10 + 2;
+#endif
 };
 }
 #endif
