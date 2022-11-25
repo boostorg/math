@@ -543,7 +543,15 @@ namespace detail {
          last_f0 = f0;
          delta2 = delta1;
          delta1 = delta;
-         detail::unpack_tuple(f(result), f0, f1, f2);
+         try
+         {
+            detail::unpack_tuple(f(result), f0, f1, f2);
+         }
+         catch (const std::overflow_error&)
+         {
+            f0 = max > 0 ? tools::max_value<T>() : -tools::min_value<T>();
+            f1 = f2 = 0;
+         }
          --count;
 
          BOOST_MATH_INSTRUMENT_VARIABLE(f0);
