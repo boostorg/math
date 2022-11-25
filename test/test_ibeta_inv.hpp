@@ -288,5 +288,22 @@ void test_spots(T)
             static_cast<T>(1) / static_cast<T>(10)),
          static_cast<T>(1), tolerance);
    }
+   if (std::numeric_limits<T>::has_quiet_NaN)
+   {
+      T n = std::numeric_limits<T>::quiet_NaN();
+      BOOST_MATH_CHECK_THROW(::boost::math::ibeta_inv(n, static_cast<T>(2.125), static_cast<T>(0.125)), std::domain_error);
+      BOOST_MATH_CHECK_THROW(::boost::math::ibeta_inv(static_cast<T>(2.125), n, static_cast<T>(0.125)), std::domain_error);
+      BOOST_MATH_CHECK_THROW(::boost::math::ibeta_inv(static_cast<T>(2.125), static_cast<T>(1.125), n), std::domain_error);
+   }
+   if (std::numeric_limits<T>::has_infinity)
+   {
+      T n = std::numeric_limits<T>::infinity();
+      BOOST_MATH_CHECK_THROW(::boost::math::ibeta_inv(n, static_cast<T>(2.125), static_cast<T>(0.125)), std::domain_error);
+      BOOST_MATH_CHECK_THROW(::boost::math::ibeta_inv(static_cast<T>(2.125), n, static_cast<T>(0.125)), std::domain_error);
+      BOOST_MATH_CHECK_THROW(::boost::math::ibeta_inv(static_cast<T>(2.125), static_cast<T>(1.125), n), std::domain_error);
+      BOOST_MATH_CHECK_THROW(::boost::math::ibeta_inv(-n, static_cast<T>(2.125), static_cast<T>(0.125)), std::domain_error);
+      BOOST_MATH_CHECK_THROW(::boost::math::ibeta_inv(static_cast<T>(2.125), -n, static_cast<T>(0.125)), std::domain_error);
+      BOOST_MATH_CHECK_THROW(::boost::math::ibeta_inv(static_cast<T>(2.125), static_cast<T>(1.125), -n), std::domain_error);
+   }
 }
 
