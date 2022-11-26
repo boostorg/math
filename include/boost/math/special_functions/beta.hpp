@@ -1017,6 +1017,13 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
 
    BOOST_MATH_ASSERT((p_derivative == 0) || normalised);
 
+   if(!(boost::math::isfinite)(a))
+      return policies::raise_domain_error<T>(function, "The argument a to the incomplete beta function must be >= zero (got a=%1%).", a, pol);
+   if(!(boost::math::isfinite)(b))
+      return policies::raise_domain_error<T>(function, "The argument b to the incomplete beta function must be >= zero (got b=%1%).", b, pol);
+   if(!(boost::math::isfinite)(x))
+      return policies::raise_domain_error<T>(function, "The argument x to the incomplete beta function must be in [0,1] (got x=%1%).", x, pol);
+
    if(p_derivative)
       *p_derivative = -1; // value not set.
 
@@ -1411,6 +1418,13 @@ T ibeta_derivative_imp(T a, T b, T x, const Policy& pol)
    //
    // start with the usual error checks:
    //
+   if (!(boost::math::isfinite)(a))
+      return policies::raise_domain_error<T>(function, "The argument a to the incomplete beta function must be >= zero (got a=%1%).", a, pol);
+   if (!(boost::math::isfinite)(b))
+      return policies::raise_domain_error<T>(function, "The argument b to the incomplete beta function must be >= zero (got b=%1%).", b, pol);
+   if (!(boost::math::isfinite)(x))
+      return policies::raise_domain_error<T>(function, "The argument x to the incomplete beta function must be in [0,1] (got x=%1%).", x, pol);
+
    if(a <= 0)
       return policies::raise_domain_error<T>(function, "The argument a to the incomplete beta function must be greater than zero (got a=%1%).", a, pol);
    if(b <= 0)

@@ -130,5 +130,23 @@ void test_spots(T)
             static_cast<T>(4.5),
             ldexp(static_cast<T>(1), -557)),
          static_cast<T>(5.24647512910420109893867082626308082567071751558842352760e-167L), tolerance * 4);
+
+      if (std::numeric_limits<T>::has_quiet_NaN)
+      {
+         T n = std::numeric_limits<T>::quiet_NaN();
+         BOOST_MATH_CHECK_THROW(::boost::math::ibeta_derivative(n, static_cast<T>(2.125), static_cast<T>(0.125)), std::domain_error);
+         BOOST_MATH_CHECK_THROW(::boost::math::ibeta_derivative(static_cast<T>(2.125), n, static_cast<T>(0.125)), std::domain_error);
+         BOOST_MATH_CHECK_THROW(::boost::math::ibeta_derivative(static_cast<T>(2.125), static_cast<T>(1.125), n), std::domain_error);
+      }
+      if (std::numeric_limits<T>::has_infinity)
+      {
+         T n = std::numeric_limits<T>::infinity();
+         BOOST_MATH_CHECK_THROW(::boost::math::ibeta_derivative(n, static_cast<T>(2.125), static_cast<T>(0.125)), std::domain_error);
+         BOOST_MATH_CHECK_THROW(::boost::math::ibeta_derivative(static_cast<T>(2.125), n, static_cast<T>(0.125)), std::domain_error);
+         BOOST_MATH_CHECK_THROW(::boost::math::ibeta_derivative(static_cast<T>(2.125), static_cast<T>(1.125), n), std::domain_error);
+         BOOST_MATH_CHECK_THROW(::boost::math::ibeta_derivative(-n, static_cast<T>(2.125), static_cast<T>(0.125)), std::domain_error);
+         BOOST_MATH_CHECK_THROW(::boost::math::ibeta_derivative(static_cast<T>(2.125), -n, static_cast<T>(0.125)), std::domain_error);
+         BOOST_MATH_CHECK_THROW(::boost::math::ibeta_derivative(static_cast<T>(2.125), static_cast<T>(1.125), -n), std::domain_error);
+      }
 }
 

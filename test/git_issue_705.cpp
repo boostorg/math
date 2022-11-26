@@ -3,6 +3,8 @@
 // Boost Software License, Version 1.0. (See accompanying file
 // LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
+
 #include "math_unit_test.hpp"
 #include <cmath>
 #include <boost/math/special_functions/powm1.hpp>

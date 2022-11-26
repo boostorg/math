@@ -631,8 +631,21 @@ T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T* py)
             // Try and compute the easy way first:
             //
             T bet = 0;
-            if(b < 2)
-               bet = boost::math::beta(a, b, pol);
+            if (b < 2)
+            {
+#ifndef BOOST_NO_EXCEPTIONS
+               try
+#endif
+               {
+                  bet = boost::math::beta(a, b, pol);
+               }
+#ifndef BOOST_NO_EXCEPTIONS
+               catch (const std::overflow_error&)
+               {
+                  bet = tools::max_value<T>();
+               }
+#endif
+            }
             if(bet != 0)
             {
                y = pow(b * q * bet, 1/b);
