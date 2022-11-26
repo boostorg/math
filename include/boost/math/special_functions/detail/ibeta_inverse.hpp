@@ -633,14 +633,18 @@ T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T* py)
             T bet = 0;
             if (b < 2)
             {
+#ifndef BOOST_NO_EXCEPTIONS
                try
+#endif
                {
                   bet = boost::math::beta(a, b, pol);
                }
+#ifndef BOOST_NO_EXCEPTIONS
                catch (const std::overflow_error&)
                {
                   bet = tools::max_value<T>();
                }
+#endif
             }
             if(bet != 0)
             {
