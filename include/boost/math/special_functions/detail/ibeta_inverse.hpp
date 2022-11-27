@@ -638,6 +638,12 @@ T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T* py)
 #endif
                {
                   bet = boost::math::beta(a, b, pol);
+
+                  typedef typename Policy::overflow_error_type overflow_type;
+
+                  BOOST_IF_CONSTEXPR(overflow_type::value != boost::math::policies::throw_on_error)
+                     if(bet > tools::max_value<T>())
+                        bet = tools::max_value<T>();
                }
 #ifndef BOOST_NO_EXCEPTIONS
                catch (const std::overflow_error&)
@@ -686,7 +692,7 @@ T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T* py)
          invert = !invert;
          xs = 1 - xs;
       }
-      if (a < tools::min_value<T>())
+      if ((a < tools::min_value<T>()) && (b > tools::min_value<T>()))
       {
          if (py)
          {
@@ -715,6 +721,8 @@ T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T* py)
       if (overflow || !(boost::math::isfinite)(bet))
       {
          xg = exp((boost::math::lgamma(a + 1, pol) + boost::math::lgamma(b, pol) - boost::math::lgamma(a + b, pol) + log(p)) / a);
+         if (xg > 2 / tools::epsilon<T>())
+            xg = 2 / tools::epsilon<T>();
       }
       else
          xg = pow(a * p * bet, 1/a);
@@ -814,7 +822,20 @@ T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T* py)
       }
       if(pow(p, 1/a) < 0.5)
       {
-         x = pow(p * a * boost::math::beta(a, b, pol), 1 / a);
+#ifndef BOOST_NO_EXCEPTIONS
+         try 
+         {
+#endif
+            x = pow(p * a * boost::math::beta(a, b, pol), 1 / a);
+            if ((x > 1) || !(boost::math::isfinite)(x))
+               x = 1;
+#ifndef BOOST_NO_EXCEPTIONS
+         }
+         catch (const std::overflow_error&)
+         {
+            x = 1;
+         }
+#endif
          if(x == 0)
             x = boost::math::tools::min_value<T>();
          y = 1 - x;
@@ -822,7 +843,20 @@ T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T* py)
       else /*if(pow(q, 1/b) < 0.1)*/
       {
          // model a distorted quarter circle:
-         y = pow(1 - pow(p, b * boost::math::beta(a, b, pol)), 1/b);
+#ifndef BOOST_NO_EXCEPTIONS
+         try 
+         {
+#endif
+            y = pow(1 - pow(p, b * boost::math::beta(a, b, pol)), 1/b);
+            if ((y > 1) || !(boost::math::isfinite)(y))
+               y = 1;
+#ifndef BOOST_NO_EXCEPTIONS
+         }
+         catch (const std::overflow_error&)
+         {
+            y = 1;
+         }
+#endif
          if(y == 0)
             y = boost::math::tools::min_value<T>();
          x = 1 - y;

@@ -570,6 +570,9 @@ T ibeta_series(T a, T b, T x, T s0, const Lanczos&, bool normalised, T* p_deriva
       T cgh = static_cast<T>(c + Lanczos::g() - 0.5f);
       result = Lanczos::lanczos_sum_expG_scaled(c) / (Lanczos::lanczos_sum_expG_scaled(a) * Lanczos::lanczos_sum_expG_scaled(b));
 
+      if (!(boost::math::isfinite)(result))
+         result = 0;
+
       T l1 = log(cgh / bgh) * (b - 0.5f);
       T l2 = log(x * cgh / agh) * a;
       //

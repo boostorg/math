@@ -882,7 +882,7 @@ T regularised_gamma_prefix(T a, T z, const Policy& pol, const Lanczos& l)
       //
       // TODO: is this still required?  Lanczos approx should be better now?
       //
-      if(z <= tools::log_min_value<T>())
+      if((z <= tools::log_min_value<T>()) || (a < 1 / tools::max_value<T>()))
       {
          // Oh dear, have to use logs, should be free of cancellation errors though:
          return exp(a * log(z) - z - lgamma_imp(a, pol, l));
