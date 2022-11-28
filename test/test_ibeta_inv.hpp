@@ -305,5 +305,16 @@ void test_spots(T)
       BOOST_MATH_CHECK_THROW(::boost::math::ibeta_inv(static_cast<T>(2.125), -n, static_cast<T>(0.125)), std::domain_error);
       BOOST_MATH_CHECK_THROW(::boost::math::ibeta_inv(static_cast<T>(2.125), static_cast<T>(1.125), -n), std::domain_error);
    }
+   if (std::numeric_limits<T>::has_denorm)
+   {
+      T m = std::numeric_limits<T>::denorm_min();
+      T small = 2 * (std::numeric_limits<T>::min)();
+      BOOST_CHECK((boost::math::isfinite)(boost::math::ibeta_inv(m, static_cast<T>(2.125), static_cast<T>(0.125))));
+      BOOST_CHECK((boost::math::isfinite)(boost::math::ibeta_inv(m, m, static_cast<T>(0.125))));
+      BOOST_CHECK_LT(boost::math::ibeta_inv(m, static_cast<T>(12.125), static_cast<T>(0.125)), small);
+      BOOST_CHECK((boost::math::isfinite)(boost::math::ibeta_inv(static_cast<T>(2.125), m, static_cast<T>(0.125))));
+      BOOST_CHECK((boost::math::isfinite)(boost::math::ibeta_inv(static_cast<T>(12.125), m, static_cast<T>(0.125))));
+      BOOST_CHECK((boost::math::isfinite)(boost::math::ibeta_inv(m, m, static_cast<T>(0.125))));
+   }
 }
 
