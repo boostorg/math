@@ -231,9 +231,9 @@ void test_beta(T, const char* name)
       BOOST_MATH_CHECK_THROW(::boost::math::ibeta_invb(n, static_cast<T>(2.125), static_cast<T>(0.125)), std::domain_error);
       BOOST_MATH_CHECK_THROW(::boost::math::ibeta_invb(static_cast<T>(2.125), n, static_cast<T>(0.125)), std::domain_error);
       BOOST_MATH_CHECK_THROW(::boost::math::ibeta_invb(static_cast<T>(2.125), static_cast<T>(1.125), n), std::domain_error);
-      BOOST_MATH_CHECK_THROW(::boost::math::ibeta_invb(-n, static_cast<T>(2.125), static_cast<T>(0.125)), std::domain_error);
-      BOOST_MATH_CHECK_THROW(::boost::math::ibeta_invb(static_cast<T>(2.125), -n, static_cast<T>(0.125)), std::domain_error);
-      BOOST_MATH_CHECK_THROW(::boost::math::ibeta_invb(static_cast<T>(2.125), static_cast<T>(1.125), -n), std::domain_error);
+      BOOST_MATH_CHECK_THROW(::boost::math::ibeta_invb(static_cast<T>(-n), static_cast<T>(2.125), static_cast<T>(0.125)), std::domain_error);
+      BOOST_MATH_CHECK_THROW(::boost::math::ibeta_invb(static_cast<T>(2.125), static_cast<T>(-n), static_cast<T>(0.125)), std::domain_error);
+      BOOST_MATH_CHECK_THROW(::boost::math::ibeta_invb(static_cast<T>(2.125), static_cast<T>(1.125), static_cast<T>(-n)), std::domain_error);
    }
 
 }
