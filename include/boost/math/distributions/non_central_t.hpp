@@ -74,7 +74,7 @@ namespace boost
                T term = beta * pois;
                sum += term;
                // Don't terminate on first term in case we "fixed" k above:
-               if((fabs(last_term) > fabs(term)) && fabs(term/sum) < errtol)
+               if(((fabs(last_term) > fabs(term)) && fabs(term/sum) < errtol) || (v == 2 && i == 0))
                   break;
                last_term = term;
                pois *= (i + 0.5f) / d2;
