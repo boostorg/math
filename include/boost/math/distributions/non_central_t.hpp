@@ -183,7 +183,8 @@ namespace boost
                   term += beta * pois;
                   pois *= (j + 0.5f) / d2;
                   beta -= xterm;
-                  xterm *= (j) / (x * (v / 2 + j - 1));
+                  if(!(v == 2 && j == 0))
+                     xterm *= (j) / (x * (v / 2 + j - 1));
                }
 
                sum += term;

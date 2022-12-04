@@ -43,7 +43,7 @@ int main()
     }
 
     const auto quantile1 = boost::math::quantile(nct1, 0.5);
-    //CHECK_ULP_CLOSE(quantile1, 2.33039025947198741, 20);
+    CHECK_ULP_CLOSE(quantile1, 2.33039025947198741, 20);
 
     if (std::fetestexcept(FE_INVALID) || std::fetestexcept(FE_DIVBYZERO))
     {
