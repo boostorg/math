@@ -169,7 +169,7 @@ auto tanh_sinh<Real, Policy>::integrate(const F f, Real a, Real b, Real toleranc
           bool have_small_left = fabs(a) < 0.5f;
           bool have_small_right = fabs(b) < 0.5f;
           Real left_min_complement = float_next(avg_over_diff_m1) - avg_over_diff_m1;
-          Real min_complement_limit = (std::max)(tools::min_value<Real>(), Real(tools::min_value<Real>() / diff));
+          Real min_complement_limit = (std::max)(tools::min_value<Real>(), float_next(Real(tools::min_value<Real>() / diff)));
           if (left_min_complement < min_complement_limit)
              left_min_complement = min_complement_limit;
           Real right_min_complement = avg_over_diff_p1 - float_prior(avg_over_diff_p1);
