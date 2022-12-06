@@ -17,16 +17,16 @@ using boost::math::quadrature::tanh_sinh;
 #include <iostream>
 
 BOOST_AUTO_TEST_CASE(issue893) {
-	typedef boost::multiprecision::cpp_bin_float_100 real;
+   typedef boost::multiprecision::cpp_bin_float_100 real;
 
-	auto fun = [](real x) -> real {
-		return 1.0;
-	};
+   auto fun = [](real x) -> real {
+      return 1.0;
+   };
 
-	tanh_sinh<real> integrator;
-	const real a = 0.0;
-	const real b = -0.9999995515592481132478776023609116290187750667053638330158486516399489191171270344610533516275817076;
-	real y = integrator.integrate(fun, -b, a);
-	
-	BOOST_CHECK(y < 1);
+   tanh_sinh<real> integrator;
+   const real a = 0.0;
+   const real b = -0.9999995515592481132478776023609116290187750667053638330158486516399489191171270344610533516275817076;
+   real y = integrator.integrate(fun, -b, a);
+   
+   BOOST_CHECK(y < 1);
 }
