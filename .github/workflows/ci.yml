@@ -223,7 +223,7 @@ jobs:
       matrix:
         toolset: [ gcc ]
         standard: [ 14, 17 ]
-        suite: [ float128_tests, special_fun, distribution_tests, misc, quadrature, mp, interpolators, autodiff, ../example//examples, ../tools ]
+        suite: [ github_ci_block_1, github_ci_block_2 ]
     steps:
       - uses: actions/checkout@v3
         with:
@@ -303,7 +303,7 @@ jobs:
       matrix:
         compiler: [ g++-11 ]
         standard: [ c++17 ]
-        suite: [ float128_tests, special_fun, distribution_tests, misc, quadrature, mp, interpolators, autodiff, ../example//examples, ../tools ]
+        suite: [ github_ci_block_1, github_ci_block_2 ]
     env:
       TOOLSET: gcc
     steps:
