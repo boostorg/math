@@ -21,7 +21,7 @@ Real StefanBoltzmann()
 
     constexpr auto c1 = Real(2) * boost::math::constants::pi<Real>() * h * c * c ;
     constexpr auto c2 = h * c / kB;
-    constexpr auto T = 1000.;
+    constexpr auto T = 1000;
 
     auto integrand = [&](const Real l) 
     {
