@@ -349,6 +349,10 @@ decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) tanh_sin
         // Thus, we filter which abscissa values generate a call to f(x_i), with a single
         // floating point comparison per loop.  Everything else is integer logic.
         //
+        if (max_left_position == 0)
+        {
+           ++max_left_position;
+        }
         max_left_index = max_left_position - 1;
         max_left_position *= 2;
         max_right_index = max_right_position - 1;
