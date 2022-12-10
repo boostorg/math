@@ -21,15 +21,15 @@ Real StefanBoltzmann()
 
     constexpr auto c1 = Real(2) * boost::math::constants::pi<Real>() * h * c * c ;
     constexpr auto c2 = h * c / kB;
-    constexpr auto T = 1000;
+    constexpr auto T = 1000.;
 
-    auto integrand = [](const Real l) 
+    auto integrand = [&](const Real l) 
     {
         return c1 / (std::pow(l, Real(5)) * (std::exp(c2 / (T * l)) - Real(1)));
     };
 
-    auto integrator = boost::math::quadrature::tanh_sinh<Real>{};
-    return integrator.integrate(integrand, Real(0.0), std::numeric_limits<Real>::infinity());
+    auto integrator = boost::math::quadrature::tanh_sinh<Real>(15);
+    return static_cast<Real>(integrator.integrate(integrand, Real(0.0), std::numeric_limits<Real>::infinity()));
 }
 
 int main() {
