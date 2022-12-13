@@ -3,7 +3,10 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#include <cmath>
 #include <limits>
+#include <type_traits>
+#include <boost/math/tools/assert.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/ccmath/sin.hpp>
 #include <boost/math/ccmath/isinf.hpp>
@@ -35,7 +38,18 @@ void test()
 
     // sin(-pi/4) = -1/sqrt(2)
     static_assert(boost::math::ccmath::abs(boost::math::ccmath::sin(-quarter_pi) + one_sqrt2) < tol);
-    
+
+    // sin(3pi/2) == -sin(pi/2) == -1
+    static_assert(boost::math::ccmath::abs(boost::math::ccmath::sin(3 * half_pi) + T(1)) < tol);
+
+    // Compare to non-constexpr
+    if constexpr (std::is_same_v<T, double>)
+    {
+        constexpr double v = boost::math::ccmath::sin(3.1277929220348599);
+        static_assert(v > 0); // Force constexpr calculation
+        double x = std::sin(3.1277929220348599);
+        BOOST_ASSERT(std::abs(v - x) < tol);
+    }
 }
 
 int main(void)

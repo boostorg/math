@@ -15,6 +15,8 @@
 #include <boost/math/ccmath/isinf.hpp>
 #include <boost/math/ccmath/isnan.hpp>
 #include <boost/math/ccmath/fma.hpp>
+#include <boost/math/ccmath/fmin.hpp>
+#include <boost/math/ccmath/fmax.hpp>
 
 namespace boost::math::ccmath {
 
@@ -69,6 +71,12 @@ template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = tru
             return x;
         }
 
+        // Use argument reduction since [-pi/2, pi/2] is the calculated range
+        constexpr auto pi = boost::math::constants::pi<Real>();
+        x = boost::math::ccmath::fmin(x, pi - x);
+        x = boost::math::ccmath::fmax(x, -pi - x);
+        x = boost::math::ccmath::fmin(x, pi - x);
+        
         return boost::math::ccmath::detail::sin_impl(x);
     }
     else
