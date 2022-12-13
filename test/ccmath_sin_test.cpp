@@ -43,13 +43,11 @@ void test()
     static_assert(boost::math::ccmath::abs(boost::math::ccmath::sin(3 * half_pi) + T(1)) < tol);
 
     // Compare to non-constexpr
-    if constexpr (std::is_same_v<T, double>)
-    {
-        constexpr double v = boost::math::ccmath::sin(3.1277929220348599);
-        static_assert(v > 0); // Force constexpr calculation
-        double x = std::sin(3.1277929220348599);
-        BOOST_ASSERT(std::abs(v - x) < tol);
-    }
+    constexpr T v = boost::math::ccmath::sin(T(3.1277929220348599L));
+    static_assert(v > 0); // Force constexpr calculation
+    const T x = std::sin(T(3.1277929220348599L));
+    BOOST_MATH_ASSERT(std::abs(v - x) < tol);
+
 }
 
 int main(void)
