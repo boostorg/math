@@ -636,7 +636,7 @@ void test_crc()
 
     // CRC Section 5.5, integral 635
     for (int m = 0; m < 10; ++m) {
-        auto f = [&](Real x)->Real { return 1/(1 + pow(tan(x), m)); };
+        auto f = [&](Real x)->Real { return Real(1)/(Real(1) + pow(tan(x), m)); };
         Q = integrator.integrate(f, (Real) 0, half_pi<Real>(), get_convergence_tolerance<Real>(), &error, &L1);
         Q_expected = half_pi<Real>()/2;
         BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
