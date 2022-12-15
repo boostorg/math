@@ -426,7 +426,7 @@ void test_right_limit_infinite()
     Real Q_expected;
     Real error;
     Real L1;
-    auto integrator = get_integrator<Real>();
+    const auto& integrator = get_integrator<Real>();
 
     // Example 11:
     auto f1 = [](const Real& t) { return 1/(1+t*t);};
@@ -458,7 +458,7 @@ void test_left_limit_infinite()
     Real tol = 10 * boost::math::tools::epsilon<Real>();
     Real Q;
     Real Q_expected;
-    auto integrator = get_integrator<Real>();
+    const auto& integrator = get_integrator<Real>();
 
     // Example 11:
     auto f1 = [](const Real& t) { return 1/(1+t*t);};
@@ -484,7 +484,7 @@ void test_horrible()
       Real Q_expected;
       Real error;
       Real L1;
-      auto integrator = get_integrator<Real>();
+      const auto& integrator = get_integrator<Real>();
 
       auto f = [](Real x)->Real { return x*sin(2*exp(2*sin(2*exp(2*x) ) ) ); };
       Q = integrator.integrate(f, (Real) -1, (Real) 1, get_convergence_tolerance<Real>(), &error, &L1);
@@ -507,7 +507,7 @@ void test_nr_examples()
     Real Q_expected;
     Real error;
     Real L1;
-    auto integrator = get_integrator<Real>();
+    const auto& integrator = get_integrator<Real>();
 
     auto f1 = [](Real x)->Real
     {
@@ -534,7 +534,7 @@ void test_early_termination()
     Real Q_expected;
     Real error;
     Real L1;
-    auto integrator = get_integrator<Real>();
+    const auto& integrator = get_integrator<Real>();
 
     auto f1 = [](Real x)->Real { return 23*cosh(x)/ (Real) 25 - cos(x) ; };
     Q = integrator.integrate(f1, (Real) -1, (Real) 1, get_convergence_tolerance<Real>(), &error, &L1);
@@ -555,7 +555,7 @@ void test_crc()
     Real Q_expected;
     Real error;
     Real L1;
-    auto integrator = get_integrator<Real>();
+    const auto& integrator = get_integrator<Real>();
 
     // CRC Definite integral 585
     auto f1 = [](Real x)->Real { Real t = log(1/x); return x*x*t*t*t; };
@@ -718,7 +718,7 @@ void test_sf()
    // Test some special functions that we already know how to evaluate:
    std::cout << "Testing special functions on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
    Real tol = 10 * boost::math::tools::epsilon<Real>();
-   auto integrator = get_integrator<Real>();
+   const auto& integrator = get_integrator<Real>();
 
    // incomplete beta:
    if (std::numeric_limits<Real>::digits10 < 37) // Otherwise too slow
@@ -765,7 +765,7 @@ void test_2_arg()
    std::cout << "Testing 2 argument functors on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
    Real tol = 10 * boost::math::tools::epsilon<Real>();
 
-   auto integrator = get_integrator<Real>();
+   const auto& integrator = get_integrator<Real>();
 
    //
    // There are a whole family of integrals of the general form
@@ -839,7 +839,7 @@ void test_complex()
       return exp(z * t) * pow(t, a - value_type(1)) * pow(value_type(1) - t, b - a - value_type(1));
    };
 
-   auto integrator = get_integrator<value_type>();
+   const auto& integrator = get_integrator<value_type>();
    auto Q = integrator.integrate(f, value_type(0), value_type(1), get_convergence_tolerance<value_type>());
    //
    // Expected result computed from http://www.wolframalpha.com/input/?i=1F1%5B(2%2B3i),+(3%2B4i);+(0.5-2i)%5D+*+gamma(2%2B3i)+*+gamma(1%2Bi)+%2F+gamma(3%2B4i)
