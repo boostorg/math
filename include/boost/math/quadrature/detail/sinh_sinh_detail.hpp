@@ -47,7 +47,7 @@ public:
     sinh_sinh_detail(size_t max_refinements);
 
     template<class F>
-    auto integrate(const F f, Real tolerance, Real* error, Real* L1, std::size_t* levels)->decltype(std::declval<F>()(std::declval<Real>())) const;
+    auto integrate(const F f, Real tolerance, Real* error, Real* L1, std::size_t* levels) const ->decltype(std::declval<F>()(std::declval<Real>()));
 
 private:
 
@@ -148,7 +148,7 @@ sinh_sinh_detail<Real, Policy>::sinh_sinh_detail(size_t max_refinements)
 
 template<class Real, class Policy>
 template<class F>
-auto sinh_sinh_detail<Real, Policy>::integrate(const F f, Real tolerance, Real* error, Real* L1, std::size_t* levels)->decltype(std::declval<F>()(std::declval<Real>())) const
+auto sinh_sinh_detail<Real, Policy>::integrate(const F f, Real tolerance, Real* error, Real* L1, std::size_t* levels) const ->decltype(std::declval<F>()(std::declval<Real>()))
 {
     using std::abs;
     using std::sqrt;

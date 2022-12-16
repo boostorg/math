@@ -236,13 +236,15 @@ decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) tanh_sin
     //
     // Check for non-finite values at the end points:
     // 
-    result_type yp, ym, tail_tolerance((std::max)(boost::math::tools::epsilon<Real>(), Real(tolerance * tolerance)));
+    result_type yp{ f(-1 - m_abscissas[0][max_left_position], m_abscissas[0][max_left_position]) };
+    result_type ym{ f(1 + m_abscissas[0][max_right_position], -m_abscissas[0][max_right_position]) };
+    result_type tail_tolerance{ (std::max)(boost::math::tools::epsilon<Real>(), Real(tolerance * tolerance)) };
     while (max_left_position)
     {
-       yp = f(-1 - m_abscissas[0][max_left_position], m_abscissas[0][max_left_position]);
        if ((boost::math::isfinite)(yp))
           break;
        --max_left_position;
+       yp = f(-1 - m_abscissas[0][max_left_position], m_abscissas[0][max_left_position]);
     }
     //
     // Also remove points which are insignificant or zero:
@@ -259,10 +261,10 @@ decltype(std::declval<F>()(std::declval<Real>(), std::declval<Real>())) tanh_sin
     //
     while (max_right_position)
     {
-       ym = f(1 + m_abscissas[0][max_right_position], -m_abscissas[0][max_right_position]);
        if ((boost::math::isfinite)(ym))
           break;
        --max_right_position;
+       ym = f(1 + m_abscissas[0][max_right_position], -m_abscissas[0][max_right_position]);
     }
     while (max_right_position > 1)
     {

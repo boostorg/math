@@ -184,7 +184,7 @@ void test_right_limit_infinite()
     Real Q_expected;
     Real error;
     Real L1;
-    auto integrator = get_integrator<Real>();
+    const auto& integrator = get_integrator<Real>();
 
     // Example 12
     const auto f2 = [](const Real& t)->Real { return exp(-t)/sqrt(t); };
@@ -241,7 +241,7 @@ void test_left_limit_infinite()
     Real Q_expected;
     Real error;
     Real L1;
-    auto integrator = get_integrator<Real>();
+    const auto& integrator = get_integrator<Real>();
 
     // Example 11:
     #ifdef BOOST_MATH_STANDALONE
@@ -281,7 +281,7 @@ void test_nr_examples()
     Real Q_expected;
     Real L1;
     Real error;
-    auto integrator = get_integrator<Real>();
+    const auto& integrator = get_integrator<Real>();
 
     auto f0 = [] (Real)->Real { return (Real) 0; };
     Q = integrator.integrate(f0, get_convergence_tolerance<Real>(), &error, &L1);
@@ -371,7 +371,7 @@ void test_crc()
     Real Q_expected;
     Real L1;
     Real error;
-    auto integrator = get_integrator<Real>();
+    const auto& integrator = get_integrator<Real>();
 
     auto f0 = [](const Real& x)->Real { return x > boost::math::tools::log_max_value<Real>() ? Real(0) : Real(log(x)*exp(-x)); };
     Q = integrator.integrate(f0, get_convergence_tolerance<Real>(), &error, &L1);
@@ -502,7 +502,7 @@ void test_complex_modified_bessel()
     Real tol = 100 * boost::math::tools::epsilon<Real>();
     Real error;
     Real L1;
-    auto integrator = get_integrator<Real>();
+    const auto& integrator = get_integrator<Real>();
 
     // Integral Representation of Modified Complex Bessel function:
     // https://en.wikipedia.org/wiki/Bessel_function#Modified_Bessel_functions
@@ -542,7 +542,7 @@ void test_complex_exponential_integral_E1(){
     Real tol = 100 * boost::math::tools::epsilon<Real>();
     Real error;
     Real L1;
-    auto integrator = get_integrator<Real>();
+    const auto& integrator = get_integrator<Real>();
 
     Complex z{1.5,0.5};
 
