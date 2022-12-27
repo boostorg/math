@@ -78,7 +78,7 @@ jobs:
       fail-fast: false
       matrix:
         compiler: [ g++-9, g++-11, clang++-10 ]
-        standard: [ c++11, c++14, c++17, c++2a ]
+        standard: [ c++14, c++17, c++2a ]
     steps:
       - uses: actions/checkout@v3
         with:
@@ -136,7 +136,7 @@ jobs:
       fail-fast: false
       matrix:
         toolset: [ clang ]
-        standard: [ 11, 14, 17, 20 ]
+        standard: [ 14, 17, 20 ]
         suite: [ github_ci_block_1, github_ci_block_2 ]
     steps:
       - uses: actions/checkout@v3
