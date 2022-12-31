@@ -56,7 +56,7 @@ boost::multiprecision::int128_type fast_float_distance(boost::multiprecision::fl
 
     if (!(isfinite)(a))
     {  
-        BOOST_MATH_THROW_EXCEPTION(std::domain_error("Both arguments to fast_float_distnace must be finite"));
+        BOOST_MATH_THROW_EXCEPTION(std::domain_error("Both arguments to fast_float_distance must be finite"));
     }
     else if (!(isfinite)(b))
     {
