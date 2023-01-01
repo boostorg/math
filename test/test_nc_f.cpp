@@ -182,7 +182,7 @@ void test_spots(RealType)
      RealType(105),                 // F statistic
      RealType(0.99996207325249555786258005958906310L),            // CDF
      RealType(0.000037926747504442137419940410936905407L),          // Complement of CDF
-     RealType(8.9562292619539161551049126260104435e-7),         // PDF
+     RealType(8.9562292619539161551049126260104435e-7L),         // PDF
      RealType(tolerance * 10));
    test_spot(
      RealType(100),                 // alpha

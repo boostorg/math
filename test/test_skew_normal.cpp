@@ -349,6 +349,8 @@ void test_spots(RealType)
       BOOST_MATH_STD_USING // ADL of std math lib names.
 
       // Test values from R = see skew_normal_drv.cpp which included the R code used.
+      // Note test values have limited precision.
+      if(boost::math::tools::digits<RealType>() <= 64)
       {
         dist = skew_normal_distribution<RealType>(static_cast<RealType>(1.1l), static_cast<RealType>(2.2l), static_cast<RealType>(-3.3l));
 
