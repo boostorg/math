@@ -83,6 +83,16 @@ void expected_results()
          largest_type,                     // test type(s)
          "[^|]*Large.*",                   // test data group
          ".*", 80000, 5000);               // test function
+      if (std::numeric_limits<long double>::digits > 100)
+      {
+         add_expected_result(
+            "[^|]*",                          // compiler
+            "[^|]*",                          // stdlib
+            "[^|]*",                          // platform
+            largest_type,                     // test type(s)
+            "[^|]*Integer.*",                 // test data group
+            ".*", 4000000, 100000);               // test function
+      }
       add_expected_result(
          "[^|]*",                          // compiler
          "[^|]*",                          // stdlib
