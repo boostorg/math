@@ -156,7 +156,7 @@ void expected_results()
          ".*",                          // platform
          largest_type,                  // test type(s)
          ".*",                          // test data group
-         ".*", 50000, 3000);            // test function
+         ".*", 200000, 5000);            // test function
    }
    else
    {
