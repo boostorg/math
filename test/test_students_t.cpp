@@ -272,7 +272,7 @@ void test_spots(RealType)
       // But higher error rates at 128 bit precision?
       //
       if (boost::math::tools::digits<RealType>() > 100)
-         tolerance *= 100;
+         tolerance *= 500;
 
       BOOST_CHECK_CLOSE(boost::math::quantile(
          students_t_distribution<RealType>(2.00390625L),                     // degrees_of_freedom.

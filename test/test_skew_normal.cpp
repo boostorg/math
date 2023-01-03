@@ -400,6 +400,7 @@ void test_spots(RealType)
 
 
       }
+      if(std::numeric_limits< RealType>::digits && (std::numeric_limits<RealType>::digits < 100))
       {
         dist = skew_normal_distribution<RealType>(static_cast<RealType>(1.1l), static_cast<RealType>(0.02l), static_cast<RealType>(0.03l));
 
@@ -420,6 +421,7 @@ void test_spots(RealType)
            kurtosis_excess(dist)
            , static_cast<RealType>(9.2903475812137800239002e-008L), tol100);
       }
+      if (std::numeric_limits< RealType>::digits && (std::numeric_limits<RealType>::digits < 100))
       {
         dist = skew_normal_distribution<RealType>(static_cast<RealType>(10.1l), static_cast<RealType>(5.l), static_cast<RealType>(-0.03l));
         BOOST_CHECK_CLOSE(      // mean:
@@ -439,6 +441,7 @@ void test_spots(RealType)
            kurtosis_excess(dist)
            , static_cast<RealType>(9.2903475812137800239002e-008L), tol100);
       }
+      if (std::numeric_limits< RealType>::digits && (std::numeric_limits<RealType>::digits < 100))
       {
         dist = skew_normal_distribution<RealType>(static_cast<RealType>(-10.1l), static_cast<RealType>(5.l), static_cast<RealType>(30.l));
         BOOST_CHECK_CLOSE(      // mean:

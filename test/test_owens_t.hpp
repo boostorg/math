@@ -166,7 +166,7 @@ void test_owens_t(T, const char* name)
 
    do_test_owens_t<T>(owens_t, name, "Owens T (medium small values)");
 
-   if (!std::numeric_limits<RealType>::digits || (std::numeric_limits<RealType>::digits > 100))
+   if (!std::numeric_limits<T>::digits || (std::numeric_limits<T>::digits > 100))
       return; // can't be precise enough for next test
 
 #include "owens_t_large_data.ipp"

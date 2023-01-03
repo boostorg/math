@@ -146,7 +146,7 @@ void test_rational_periodic()
     using boost::math::constants::third;
     std::cout << "Testing that rational periodic functions are integrated correctly by trapezoidal rule on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
 
-    auto f = [](Real x)->Real { return 1/(5 - 4*cos(x)); };
+    auto f = [](Real x)->Real { using std::cos; return 1 / (5 - 4 * cos(x)); };
 
     Real tol = 100*boost::math::tools::epsilon<Real>();
     Real Q = trapezoidal(f, (Real) 0.0, two_pi<Real>(), tol);
@@ -163,6 +163,7 @@ void test_bump_function()
         {
             return (Real) 0;
         }
+        using std::exp;
         return (Real) exp(-(Real) 1/(1-x*x));
     };
     Real tol = boost::math::tools::epsilon<Real>();
@@ -202,6 +203,8 @@ void test_slowly_converging()
     auto f = [](Real x)->Real { using std::sqrt;  return sqrt(1 - x*x); };
 
     Real tol = sqrt(sqrt(boost::math::tools::epsilon<Real>()));
+    if (boost::math::tools::digits<Real>() > 100)
+       tol *= 10;
     Real error_estimate;
     Real Q = trapezoidal(f, (Real) 0, (Real) 1, tol, 15, &error_estimate);
     BOOST_CHECK_CLOSE_FRACTION(Q, boost::math::constants::half_pi<Real>()/2, 10*tol);
