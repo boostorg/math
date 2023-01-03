@@ -187,7 +187,7 @@ template<class Real>
 void test_sinsq()
 {
     std::cout << "Testing that sin(x)^2 is integrated correctly by the trapezoidal rule on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
-    auto f = [](Real x)->Real { return sin(10*x)*sin(10*x); };
+    auto f = [](Real x)->Real { using std::sin; return sin(10 * x) * sin(10 * x); };
     Real tol = 100* boost::math::tools::epsilon<Real>();
     Real Q = trapezoidal(f, (Real) 0, (Real) boost::math::constants::pi<Real>(), tol);
     BOOST_CHECK_CLOSE_FRACTION(Q, boost::math::constants::half_pi<Real>(), tol);

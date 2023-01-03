@@ -70,7 +70,7 @@ void test_bump()
     using std::exp;
     using std::abs;
     using std::sqrt;
-    auto bump = [](Real x) { if (abs(x) >= 1) { return Real(0); } return exp(-Real(1)/(Real(1)-x*x)); };
+    auto bump = [](Real x) { using std::exp; using std::abs; if (abs(x) >= 1) { return Real(0); } return exp(-Real(1)/(Real(1)-x*x)); };
 
     auto bump_prime = [&bump](Real x) { Real z = 1-x*x; return -2*x*bump(x)/(z*z); };
 
