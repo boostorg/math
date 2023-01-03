@@ -20,19 +20,19 @@ namespace boost::math::ccmath {
 namespace detail {
 
 template <typename Real>
-inline constexpr Real sqrt_impl_2(Real x, Real s, Real s2)
+constexpr Real sqrt_impl_2(Real x, Real s, Real s2)
 {
     return !(s < s2) ? s2 : sqrt_impl_2(x, (x / s + s) / 2, s);
 }
 
 template <typename Real>
-inline constexpr Real sqrt_impl_1(Real x, Real s)
+constexpr Real sqrt_impl_1(Real x, Real s)
 {
     return sqrt_impl_2(x, (x / s + s) / 2, s);
 }
 
 template <typename Real>
-inline constexpr Real sqrt_impl(Real x)
+constexpr Real sqrt_impl(Real x)
 {
     return sqrt_impl_1(x, x > 1 ? x : Real(1));
 }
@@ -40,13 +40,16 @@ inline constexpr Real sqrt_impl(Real x)
 } // namespace detail
 
 template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
-inline constexpr Real sqrt(Real x)
+constexpr Real sqrt(Real x)
 {
     if(BOOST_MATH_IS_CONSTANT_EVALUATED(x))
     {
-        return boost::math::ccmath::isnan(x) ? std::numeric_limits<Real>::quiet_NaN() : 
-               boost::math::ccmath::isinf(x) ? std::numeric_limits<Real>::infinity() : 
-               detail::sqrt_impl<Real>(x);
+        if (boost::math::ccmath::isnan(x) || boost::math::ccmath::isinf(x))
+        {
+            return x;
+        }
+
+        return detail::sqrt_impl<Real>(x);
     }
     else
     {
@@ -56,7 +59,7 @@ inline constexpr Real sqrt(Real x)
 }
 
 template <typename Z, std::enable_if_t<std::is_integral_v<Z>, bool> = true>
-inline constexpr double sqrt(Z x)
+constexpr double sqrt(Z x)
 {
     return detail::sqrt_impl<double>(static_cast<double>(x));
 }
