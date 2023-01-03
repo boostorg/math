@@ -17,7 +17,7 @@ namespace boost::math::ccmath {
 namespace detail {
 
 template <typename T>
-inline constexpr T fmin_impl(const T x, const T y) noexcept
+constexpr T fmin_impl(const T x, const T y) noexcept
 {
     if (x < y)
     {
@@ -32,14 +32,20 @@ inline constexpr T fmin_impl(const T x, const T y) noexcept
 } // Namespace detail
 
 template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
-inline constexpr Real fmin(Real x, Real y) noexcept
+constexpr Real fmin(Real x, Real y) noexcept
 {
     if (BOOST_MATH_IS_CONSTANT_EVALUATED(x))
     {
-        return boost::math::ccmath::isnan(x) && boost::math::ccmath::isnan(y) ? std::numeric_limits<Real>::quiet_NaN() :
-               boost::math::ccmath::isnan(x) ? y :
-               boost::math::ccmath::isnan(y) ? x :
-               boost::math::ccmath::detail::fmin_impl(x, y);
+        if (boost::math::ccmath::isnan(x))
+        {
+            return y;
+        }
+        else if (boost::math::ccmath::isnan(y))
+        {
+            return x;
+        }
+        
+        return boost::math::ccmath::detail::fmin_impl(x, y);
     }
     else
     {
@@ -49,7 +55,7 @@ inline constexpr Real fmin(Real x, Real y) noexcept
 }
 
 template <typename T1, typename T2>
-inline constexpr auto fmin(T1 x, T2 y) noexcept
+constexpr auto fmin(T1 x, T2 y) noexcept
 {
     if (BOOST_MATH_IS_CONSTANT_EVALUATED(x))
     {
@@ -80,13 +86,13 @@ inline constexpr auto fmin(T1 x, T2 y) noexcept
     }
 }
 
-inline constexpr float fminf(float x, float y) noexcept
+float fminf(float x, float y) noexcept
 {
     return boost::math::ccmath::fmin(x, y);
 }
 
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-inline constexpr long double fminl(long double x, long double y) noexcept
+long double fminl(long double x, long double y) noexcept
 {
     return boost::math::ccmath::fmin(x, y);
 }
