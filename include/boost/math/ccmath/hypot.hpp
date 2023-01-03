@@ -24,7 +24,7 @@ namespace boost::math::ccmath {
 namespace detail {
 
 template <typename T>
-inline constexpr T hypot_impl(T x, T y) noexcept
+constexpr T hypot_impl(T x, T y) noexcept
 {
     x = boost::math::ccmath::abs(x);
     y = boost::math::ccmath::abs(y);
@@ -46,17 +46,28 @@ inline constexpr T hypot_impl(T x, T y) noexcept
 } // Namespace detail
 
 template <typename Real, std::enable_if_t<!std::is_integral_v<Real>, bool> = true>
-inline constexpr Real hypot(Real x, Real y) noexcept
+constexpr Real hypot(Real x, Real y) noexcept
 {
     if(BOOST_MATH_IS_CONSTANT_EVALUATED(x))
     {
-        return boost::math::ccmath::abs(x) == Real(0) ? boost::math::ccmath::abs(y) :
-               boost::math::ccmath::abs(y) == Real(0) ? boost::math::ccmath::abs(x) :
-               boost::math::ccmath::isinf(x) ? std::numeric_limits<Real>::infinity() :
-               boost::math::ccmath::isinf(y) ? std::numeric_limits<Real>::infinity() :
-               boost::math::ccmath::isnan(x) ? std::numeric_limits<Real>::quiet_NaN() :
-               boost::math::ccmath::isnan(y) ? std::numeric_limits<Real>::quiet_NaN() :
-               boost::math::ccmath::detail::hypot_impl(x, y);
+        if (boost::math::ccmath::abs(x) == static_cast<Real>(0))
+        {
+            return boost::math::ccmath::abs(y);
+        }
+        else if (boost::math::ccmath::abs(y) == static_cast<Real>(0))
+        {
+            return boost::math::ccmath::abs(x);
+        }
+        else if (boost::math::ccmath::isinf(x) || boost::math::ccmath::isnan(x))
+        {
+            return x;
+        }
+        else if (boost::math::ccmath::isinf(y) || boost::math::ccmath::isnan(y))
+        {
+            return y;
+        }
+        
+        return boost::math::ccmath::detail::hypot_impl(x, y);
     }
     else
     {
@@ -66,7 +77,7 @@ inline constexpr Real hypot(Real x, Real y) noexcept
 }
 
 template <typename T1, typename T2>
-inline constexpr auto hypot(T1 x, T2 y) noexcept
+constexpr auto hypot(T1 x, T2 y) noexcept
 {
     if(BOOST_MATH_IS_CONSTANT_EVALUATED(x))
     {
@@ -97,13 +108,13 @@ inline constexpr auto hypot(T1 x, T2 y) noexcept
     }
 }
 
-inline constexpr float hypotf(float x, float y) noexcept
+constexpr float hypotf(float x, float y) noexcept
 {
     return boost::math::ccmath::hypot(x, y);
 }
 
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-inline constexpr long double hypotl(long double x, long double y) noexcept
+constexpr long double hypotl(long double x, long double y) noexcept
 {
     return boost::math::ccmath::hypot(x, y);
 }
