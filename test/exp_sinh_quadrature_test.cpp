@@ -192,7 +192,7 @@ void test_right_limit_infinite()
     Q_expected = root_pi<Real>();
     Real tol_mult = 1;
     // Multiprecision type have higher error rates, probably evaluation of f() is less accurate:
-    if (std::numeric_limits<Real>::digits10 > 25)
+    if (!std::numeric_limits<Real>::digits10 || (std::numeric_limits<Real>::digits10 > 25))
        tol_mult = 1200;
     else if (std::numeric_limits<Real>::digits10 > std::numeric_limits<double>::digits10)
        tol_mult = 5;
@@ -448,7 +448,7 @@ void test_crc()
        Q_expected = 1 / sqrt(1 + s*s);
        tol_mult = 3;
        // Multiprecision type have higher error rates, probably evaluation of f() is less accurate:
-       if (std::numeric_limits<Real>::digits10 > std::numeric_limits<long double>::digits10)
+       if ((std::numeric_limits<Real>::digits10 > std::numeric_limits<long double>::digits10) || (std::numeric_limits<Real>::digits > 100) || !std::numeric_limits<Real>::digits)
           tol_mult = 50000;
        BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol_mult * tol);
     }

@@ -247,7 +247,7 @@ void test_circ_conic_function()
 
     boost::math::interpolators::cardinal_cubic_b_spline<Real> spline(v.data(), v.size(), -w, step);
 
-    const Real tol = 100 * sqrt(std::numeric_limits<Real>::epsilon());
+    Real tol = 100 * sqrt(std::numeric_limits<Real>::epsilon());
     if (std::numeric_limits<Real>::digits > 100)
        tol *= 100;
     // First check derivatives exactly at end points
