@@ -10,6 +10,8 @@
 #include <forward_list>
 #include <algorithm>
 #include <random>
+#include <cmath>
+#include <cfloat>
 #include <boost/core/lightweight_test.hpp>
 #include <boost/numeric/ublas/vector.hpp>
 #include <boost/math/constants/constants.hpp>

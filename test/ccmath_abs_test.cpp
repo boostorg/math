@@ -36,7 +36,7 @@ void gpp_test()
     
     constexpr T sin_1 = boost::math::ccmath::abs(std::sin(T(-1)));
     static_assert(sin_1 > 0);
-    static_assert(sin_1 == T(0.8414709848078965066525l));
+    static_assert(sin_1 == T(0.841470984807896506652502321630298999622563060798371065672751709L));
 }
 
 template <typename T>
@@ -76,7 +76,9 @@ int main()
 
     // Types that are convertible to int
     test<short>();
+#if CHAR_MIN != 0
     test<char>();
+#endif
 
     // fabs
     fabs_test<float>();

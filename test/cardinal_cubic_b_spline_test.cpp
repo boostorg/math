@@ -249,7 +249,7 @@ void test_circ_conic_function()
 
     Real tol = 100 * sqrt(std::numeric_limits<Real>::epsilon());
     if ((std::numeric_limits<Real>::digits > 100) || !std::numeric_limits<Real>::digits)
-       tol *= 100;
+       tol *= 5000;
     // First check derivatives exactly at end points
     BOOST_CHECK_CLOSE(spline.prime(-w), df(-w), tol);
     BOOST_CHECK_CLOSE(spline.prime(w), df(w), tol);

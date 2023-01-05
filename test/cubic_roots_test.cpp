@@ -8,6 +8,8 @@
 #include "math_unit_test.hpp"
 #include <boost/math/tools/cubic_roots.hpp>
 #include <random>
+#include <cmath>
+#include <cfloat>
 #ifdef BOOST_HAS_FLOAT128
 #include <boost/multiprecision/float128.hpp>
 using boost::multiprecision::float128;
