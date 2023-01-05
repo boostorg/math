@@ -259,11 +259,11 @@ BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
     test_left_limit_infinite<double, 17>();
 #endif
 #ifdef TEST1A
+#if LDBL_MANT_DIG < 100 // If we have too many digits in a long double, we get build errors due to a constexpr issue.
     std::cout << "Testing with 21 point Gauss-Kronrod rule:\n";
     test_linear<cpp_bin_float_quad, 21>();
     test_quadratic<cpp_bin_float_quad, 21>();
     test_ca<cpp_bin_float_quad, 21>();
-#if LDBL_MANT_DIG < 100 // If we have too many digits in a long double, we get build errors due to a constexpr issue.
     test_three_quadrature_schemes_examples<cpp_bin_float_quad, 21>();
     test_integration_over_real_line<cpp_bin_float_quad, 21>();
     test_right_limit_infinite<cpp_bin_float_quad, 21>();
@@ -280,11 +280,11 @@ BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
 #endif
 #endif
 #ifdef TEST2
+#if LDBL_MANT_DIG < 100 // If we have too many digits in a long double, we get build errors due to a constexpr issue.
     std::cout << "Testing with 41 point Gauss-Kronrod rule:\n";
     test_linear<cpp_bin_float_quad, 41>();
     test_quadratic<cpp_bin_float_quad, 41>();
     test_ca<cpp_bin_float_quad, 41>();
-#if LDBL_MANT_DIG < 100 // If we have too many digits in a long double, we get build errors due to a constexpr issue.
     test_three_quadrature_schemes_examples<cpp_bin_float_quad, 41>();
     test_integration_over_real_line<cpp_bin_float_quad, 41>();
     test_right_limit_infinite<cpp_bin_float_quad, 41>();

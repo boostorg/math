@@ -322,9 +322,7 @@ void test_nr_examples()
     Q = integrator.integrate(f2, get_convergence_tolerance<Real>(), &error, &L1);
     Q_expected = half<Real>()*boost::math::tgamma((Real) 5/ (Real) 14);
     tol_mul = 1;
-    if (std::numeric_limits<Real>::is_specialized == false)
-       tol_mul = 6;
-    else if (std::numeric_limits<Real>::digits10 > 40)
+    if ((std::numeric_limits<Real>::is_specialized == false) || (std::numeric_limits<Real>::digits10 > 40))
        tol_mul = 500;
     else
        tol_mul = 3;

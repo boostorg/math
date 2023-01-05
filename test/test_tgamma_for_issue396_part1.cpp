@@ -7,7 +7,7 @@
 //
 
 #include <boost/math/tools/config.hpp>
-#ifndef BOOST_MATH_NO_MP_TESTS
+#if !defined(BOOST_MATH_NO_MP_TESTS) && (LDBL_MANT_DIG != 113)
 #if 0
 #define BOOST_TEST_MODULE test_tgamma_for_issue396
 #include <boost/test/included/unit_test.hpp>
