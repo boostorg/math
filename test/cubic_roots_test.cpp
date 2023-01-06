@@ -19,6 +19,7 @@ using boost::math::tools::cubic_root_condition_number;
 using boost::math::tools::cubic_root_residual;
 using boost::math::tools::cubic_roots;
 using std::cbrt;
+using std::abs;
 
 template <class Real> void test_zero_coefficients() {
     Real a = 0;
