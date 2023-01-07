@@ -11,6 +11,7 @@
 #include <cmath>
 #include <limits>
 #include <type_traits>
+#include <boost/math/ccmath/abs.hpp>
 #include <boost/math/ccmath/isnan.hpp>
 #include <boost/math/ccmath/isinf.hpp>
 #include <boost/math/tools/is_constant_evaluated.hpp>
@@ -44,9 +45,16 @@ constexpr Real sqrt(Real x)
 {
     if(BOOST_MATH_IS_CONSTANT_EVALUATED(x))
     {
-        if (boost::math::ccmath::isnan(x) || boost::math::ccmath::isinf(x))
+        if (boost::math::ccmath::isnan(x) || 
+           (boost::math::ccmath::isinf(x) && x > 0) ||
+            boost::math::ccmath::abs(x) == Real(0))
         {
             return x;
+        }
+        // Domain error is implementation defined so return NAN
+        else if (boost::math::ccmath::isinf(x) && x < 0)
+        {
+            return std::numeric_limits<Real>::quiet_NaN();
         }
 
         return detail::sqrt_impl<Real>(x);
