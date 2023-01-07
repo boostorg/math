@@ -43,7 +43,11 @@ constexpr Real logb(Real arg) noexcept
         {
             return -std::numeric_limits<Real>::infinity();
         }
-        else if (boost::math::ccmath::isinf(arg) || boost::math::ccmath::isnan(arg))
+        else if (boost::math::ccmath::isinf(arg))
+        {
+            return std::numeric_limits<Real>::infinity();
+        }
+        else if (boost::math::ccmath::isnan(arg))
         {
             return arg;
         }
