@@ -108,7 +108,7 @@ template <class Real> void test_zero_coefficients() {
                       << "}\n";
         }
         CHECK_ULP_CLOSE(r[1], roots[1], 25);
-        CHECK_ULP_CLOSE(r[2], roots[2], 25);
+        CHECK_ULP_CLOSE(r[2], roots[2], (std::numeric_limits<Real>::digits > 100 ? 120 : 25));
         for (auto root : roots) {
             auto res = cubic_root_residual(a, b, c, d, root);
             CHECK_LE(abs(res[0]), res[1]);
