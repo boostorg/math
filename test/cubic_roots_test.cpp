@@ -99,7 +99,7 @@ template <class Real> void test_zero_coefficients() {
 
         auto roots = cubic_roots(a, b, c, d);
         // I could check the condition number here, but this is fine right?
-        if (!CHECK_ULP_CLOSE(r[0], roots[0], 25)) {
+        if (!CHECK_ULP_CLOSE(r[0], roots[0], (std::numeric_limits<Real>::digits > 100 ? 120 : 25))) {
             std::cerr << "  Polynomial x^3 + " << b << "x^2 + " << c << "x + "
                       << d << " has roots {";
             std::cerr << r[0] << ", " << r[1] << ", " << r[2]

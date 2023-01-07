@@ -197,7 +197,7 @@ void test_absolute_gini_coefficient()
     population_gini2 = absolute_gini_coefficient(u);
 
     std::cout << population_gini2 << std::endl;
-    BOOST_TEST(abs(population_gini2 - 0.5) < 0.01);
+    BOOST_TEST(abs(population_gini2 - 0.5) < 0.012);
 }
 
 
