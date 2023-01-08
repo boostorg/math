@@ -13,6 +13,7 @@
 #include <type_traits>
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/is_constant_evaluated.hpp>
+#include <boost/math/tools/promotion.hpp>
 #include <boost/math/ccmath/sqrt.hpp>
 #include <boost/math/ccmath/abs.hpp>
 #include <boost/math/ccmath/isinf.hpp>
@@ -58,11 +59,16 @@ constexpr Real hypot(Real x, Real y) noexcept
         {
             return boost::math::ccmath::abs(x);
         }
-        else if (boost::math::ccmath::isinf(x) || boost::math::ccmath::isnan(x))
+        // Return +inf even if the other argument is NaN
+        else if (boost::math::ccmath::isinf(x) || boost::math::ccmath::isinf(y))
+        {
+            return std::numeric_limits<Real>::infinity();
+        }
+        else if (boost::math::ccmath::isnan(x))
         {
             return x;
         }
-        else if (boost::math::ccmath::isinf(y) || boost::math::ccmath::isnan(y))
+        else if (boost::math::ccmath::isnan(y))
         {
             return y;
         }
@@ -81,25 +87,8 @@ constexpr auto hypot(T1 x, T2 y) noexcept
 {
     if(BOOST_MATH_IS_CONSTANT_EVALUATED(x))
     {
-        // If the type is an integer (e.g. epsilon == 0) then set the epsilon value to 1 so that type is at a minimum 
-        // cast to double
-        constexpr auto T1p = std::numeric_limits<T1>::epsilon() > 0 ? std::numeric_limits<T1>::epsilon() : 1;
-        constexpr auto T2p = std::numeric_limits<T2>::epsilon() > 0 ? std::numeric_limits<T2>::epsilon() : 1;
-        
-        using promoted_type = 
-                              #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-                              std::conditional_t<T1p <= LDBL_EPSILON && T1p <= T2p, T1,
-                              std::conditional_t<T2p <= LDBL_EPSILON && T2p <= T1p, T2,
-                              #endif
-                              std::conditional_t<T1p <= DBL_EPSILON && T1p <= T2p, T1,
-                              std::conditional_t<T2p <= DBL_EPSILON && T2p <= T1p, T2, double
-                              #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-                              >>>>;
-                              #else
-                              >>;
-                              #endif
-
-        return boost::math::ccmath::hypot(promoted_type(x), promoted_type(y));
+        using promoted_type = boost::math::tools::promote_args_2_t<T1, T2>;
+        return boost::math::ccmath::hypot(static_cast<promoted_type>(x), static_cast<promoted_type>(y));
     }
     else
     {
