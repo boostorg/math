@@ -8,6 +8,8 @@
 #include <type_traits>
 #include <boost/math/ccmath/sqrt.hpp>
 #include <boost/core/lightweight_test.hpp>
+#include <boost/math/tools/assert.hpp>
+#include <boost/math/special_functions/fpclassify.hpp>
 
 #ifdef BOOST_HAS_FLOAT128
 #include <boost/multiprecision/float128.hpp>
@@ -61,6 +63,12 @@ void test_float_sqrt()
     // inf
     constexpr Real test_inf = boost::math::ccmath::sqrt(std::numeric_limits<Real>::infinity());
     static_assert(test_inf == std::numeric_limits<Real>::infinity(), "Not infinity");
+
+    // neg inf
+    constexpr Real neg_inf = boost::math::ccmath::sqrt(-std::numeric_limits<Real>::infinity());
+    static_assert(boost::math::ccmath::isnan(neg_inf));
+    Real stl_neg_inf = std::sqrt(-std::numeric_limits<Real>::infinity());
+    BOOST_MATH_ASSERT(boost::math::fpclassify(neg_inf) == boost::math::fpclassify(stl_neg_inf));
 
     // NAN
     constexpr Real test_nan = boost::math::ccmath::sqrt(std::numeric_limits<Real>::quiet_NaN());
