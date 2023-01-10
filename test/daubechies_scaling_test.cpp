@@ -33,6 +33,8 @@ using std::sqrt;
 template<class Real, unsigned p>
 void test_daubechies_filters()
 {
+    using std::sqrt;
+
     std::cout << "Testing Daubechies filters with " << p << " vanishing moments on type " << boost::core::demangle(typeid(Real).name()) << "\n";
     Real tol = 3*std::numeric_limits<Real>::epsilon();
     using boost::math::filters::daubechies_scaling_filter;
