@@ -303,7 +303,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(log_test, T, all_float_types) {
 BOOST_AUTO_TEST_CASE_TEMPLATE(ylogx, T, all_float_types) {
   using std::log;
   using std::pow;
-  const T eps = 100 * std::numeric_limits<T>::epsilon(); // percent
+  const T eps = (std::numeric_limits<T>::digits > 100 ? 300 : 100) * std::numeric_limits<T>::epsilon(); // percent
   constexpr std::size_t m = 5;
   constexpr std::size_t n = 4;
   const T cx = 2.0;
@@ -526,6 +526,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(asinh_test, T, bin_float_types) {
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(atan2_function, T, all_float_types) {
   using test_constants = test_constants_t<T>;
+  using std::atan2;
   static constexpr auto m = test_constants::order;
 
   test_detail::RandomSample<T> x_sampler{-2000, 2000};

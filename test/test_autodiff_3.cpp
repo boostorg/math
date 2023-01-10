@@ -10,6 +10,7 @@
 BOOST_AUTO_TEST_SUITE(test_autodiff_3)
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(atanh_test, T, all_float_types) {
+  using boost::math::atanh;
   const T eps = 3000 * test_constants_t<T>::pct_epsilon(); // percent
   constexpr unsigned m = 5;
   const T cx = 0.5;
@@ -44,6 +45,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(atan_test, T, all_float_types) {
 BOOST_AUTO_TEST_CASE_TEMPLATE(erf_test, T, all_float_types) {
   BOOST_MATH_STD_USING
   using namespace boost;
+  using boost::math::erf;
 
   const T eps = 300 * 100 * boost::math::tools::epsilon<T>(); // percent
   const T cx = 1.0;
