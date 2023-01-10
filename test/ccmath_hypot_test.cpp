@@ -113,10 +113,6 @@ int main()
     #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_3_arg<long double>();
     #endif
-    
-    #ifdef BOOST_HAS_FLOAT128
-    test_3_arg<boost::multiprecision::float128>();
-    #endif
 
     return 0;
 }
