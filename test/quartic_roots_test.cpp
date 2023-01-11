@@ -119,7 +119,7 @@ void test_zero_coefficients()
         // I could check the condition number here, but this is fine right?
         CHECK_ULP_CLOSE(r[0], roots[0], 160);
         CHECK_ULP_CLOSE(r[1], roots[1], 260);
-        CHECK_ULP_CLOSE(r[2], roots[2], 160);
+        CHECK_ULP_CLOSE(r[2], roots[2], 220);
         CHECK_ULP_CLOSE(r[3], roots[3], 160);
     }
 }

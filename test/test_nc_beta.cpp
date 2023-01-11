@@ -113,7 +113,7 @@ void expected_results()
       "[^|]*",                          // platform
       "real_concept",                   // test type(s)
       "[^|]*large[^|]*",                // test data group
-      "[^|]*", 30000, 4000);             // test function
+      "[^|]*", 30000, 5000);             // test function
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib

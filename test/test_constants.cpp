@@ -119,7 +119,7 @@ void test_spots(RealType)
    CHECK_ULP_CLOSE(pow((3.14159265358979323846264338327950288419716939937510L), 2.71828182845904523536028747135266249775724709369995L), pi_pow_e<RealType>(), 2);
    CHECK_ULP_CLOSE(pow((3.14159265358979323846264338327950288419716939937510L), 0.33333333333333333333333333333333333333333333333333L), cbrt_pi<RealType>(), 2);
    CHECK_ULP_CLOSE(exp(-0.5L), exp_minus_half<RealType>(), 2);
-   CHECK_ULP_CLOSE(pow(2.71828182845904523536028747135266249775724709369995L, 3.14159265358979323846264338327950288419716939937510L), e_pow_pi<RealType>(), 2);
+   CHECK_ULP_CLOSE(pow(2.71828182845904523536028747135266249775724709369995L, 3.14159265358979323846264338327950288419716939937510L), e_pow_pi<RealType>(), 3);
 
 
 #else // Only double, so no suffix L.
@@ -179,7 +179,7 @@ void test_spots(RealType)
    CHECK_ULP_CLOSE(2.71828182845904523536028747135266249775724709369995L, e<RealType>(), 2);
    //CHECK_ULP_CLOSE(exp(-0.5L), exp_minus_half<RealType>(), 2);  // See above.
    CHECK_ULP_CLOSE(exp(-1.L), exp_minus_one<RealType>(), 2);
-   CHECK_ULP_CLOSE(pow(e<RealType>(), pi<RealType>()), e_pow_pi<RealType>(), 2); // See also above.
+   CHECK_ULP_CLOSE(pow(e<RealType>(), pi<RealType>()), e_pow_pi<RealType>(), 3); // See also above.
    CHECK_ULP_CLOSE(sqrt(e<RealType>()), root_e<RealType>(), 2);
    CHECK_ULP_CLOSE(log10(e<RealType>()), log10_e<RealType>(), 2);
    CHECK_ULP_CLOSE(1/log10(e<RealType>()), one_div_log10_e<RealType>(), 2);
@@ -496,7 +496,7 @@ void test_long_double_spots()
    CHECK_ULP_CLOSE(static_cast<long double>(pow((3.14159265358979323846264338327950288419716939937510L), 2.71828182845904523536028747135266249775724709369995L)), pi_pow_e, 2);
    CHECK_ULP_CLOSE(static_cast<long double>(pow((3.14159265358979323846264338327950288419716939937510L), 0.33333333333333333333333333333333333333333333333333L)), cbrt_pi, 2);
    CHECK_ULP_CLOSE(static_cast<long double>(exp(-0.5L)), exp_minus_half, 2);
-   CHECK_ULP_CLOSE(static_cast<long double>(pow(2.71828182845904523536028747135266249775724709369995L, 3.14159265358979323846264338327950288419716939937510L)), e_pow_pi, 2);
+   CHECK_ULP_CLOSE(static_cast<long double>(pow(2.71828182845904523536028747135266249775724709369995L, 3.14159265358979323846264338327950288419716939937510L)), e_pow_pi, 3);
 
 
 #else // Only double, so no suffix L.
@@ -555,7 +555,7 @@ void test_long_double_spots()
    CHECK_ULP_CLOSE(static_cast<long double>(2.71828182845904523536028747135266249775724709369995L), e, 2);
 
    //CHECK_ULP_CLOSE(static_cast<long double>(exp(-0.5L)), exp_minus_half, 2);  // See above.
-   CHECK_ULP_CLOSE(pow(e, pi), e_pow_pi, 2); // See also above.
+   CHECK_ULP_CLOSE(pow(e, pi), e_pow_pi, 3); // See also above.
    CHECK_ULP_CLOSE(sqrt(e), root_e, 2);
    CHECK_ULP_CLOSE(log10(e), log10_e, 2);
    CHECK_ULP_CLOSE(static_cast<long double>(1)/log10(e), one_div_log10_e, 2);

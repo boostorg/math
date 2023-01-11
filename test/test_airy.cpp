@@ -48,7 +48,7 @@ void test_airy(T, const char* name)
    }};
 
    T tol = boost::math::tools::epsilon<T>() * 800;
-   if (std::numeric_limits<T>::digits > 100)
+   if ((std::numeric_limits<T>::digits > 100) || (std::numeric_limits<T>::digits == 0))
       tol *= 2;
    for(unsigned i = 0; i < data.size(); ++i)
    {

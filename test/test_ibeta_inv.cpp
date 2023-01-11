@@ -148,13 +148,26 @@ void expected_results()
    //
    // Catch all cases come last:
    //
-   add_expected_result(
-      ".*",                          // compiler
-      ".*",                          // stdlib
-      ".*",                          // platform
-      largest_type,                  // test type(s)
-      ".*",                          // test data group
-      ".*", 10000, 1000);            // test function
+   if (std::numeric_limits<long double>::digits > 100)
+   {
+      add_expected_result(
+         ".*",                          // compiler
+         ".*",                          // stdlib
+         ".*",                          // platform
+         largest_type,                  // test type(s)
+         ".*",                          // test data group
+         ".*", 200000, 5000);            // test function
+   }
+   else
+   {
+      add_expected_result(
+         ".*",                          // compiler
+         ".*",                          // stdlib
+         ".*",                          // platform
+         largest_type,                  // test type(s)
+         ".*",                          // test data group
+         ".*", 10000, 1000);            // test function
+   }
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib

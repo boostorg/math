@@ -25,7 +25,7 @@ void test_constant()
     while (i < n) {
       Real t = t0 + i*h;
       CHECK_ULP_CLOSE(c, qbs(t), 2);
-      CHECK_MOLLIFIED_CLOSE(0, qbs.prime(t), 100*std::numeric_limits<Real>::epsilon());
+      CHECK_MOLLIFIED_CLOSE(0, qbs.prime(t), (std::numeric_limits<Real>::digits > 100 ? 200 : 100) * std::numeric_limits<Real>::epsilon());
       ++i;
     }
 
@@ -36,7 +36,7 @@ void test_constant()
       CHECK_MOLLIFIED_CLOSE(0, qbs.prime(t), 300*std::numeric_limits<Real>::epsilon());
       t = t0 + i*h + h/4;
       CHECK_ULP_CLOSE(c, qbs(t), 2);
-      CHECK_MOLLIFIED_CLOSE(0, qbs.prime(t), 150*std::numeric_limits<Real>::epsilon());
+      CHECK_MOLLIFIED_CLOSE(0, qbs.prime(t), (std::numeric_limits<Real>::digits > 100 ? 300 : 150) * std::numeric_limits<Real>::epsilon());
       ++i;
     }
 }

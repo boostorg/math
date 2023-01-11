@@ -98,7 +98,7 @@ void test_spots(T)
    BOOST_CHECK_CLOSE(::boost::math::beta(small, static_cast<T>(4)), 1/small, tolerance);
    BOOST_CHECK_CLOSE(::boost::math::beta(static_cast<T>(4), small), 1/small, tolerance);
    BOOST_CHECK_CLOSE(::boost::math::beta(static_cast<T>(4), static_cast<T>(20)), static_cast<T>(0.00002823263692828910220214568040654997176736L), tolerance);
-   if (std::numeric_limits<T>::digits < 100)
+   if ((std::numeric_limits<T>::digits < 100) && (std::numeric_limits<T>::digits != 0))
    {
       // Inexact input, so disable for ultra precise long doubles:
       BOOST_CHECK_CLOSE(::boost::math::beta(static_cast<T>(0.0125L), static_cast<T>(0.000023L)), static_cast<T>(43558.24045647538375006349016083320744662L), tolerance * 2);

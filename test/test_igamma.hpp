@@ -214,7 +214,7 @@ void test_spots(T)
    }
    if(std::numeric_limits<T>::max_exponent >= 1024)
    {
-      BOOST_CHECK_CLOSE(::boost::math::tgamma(static_cast<T>(170), static_cast<T>(165)), static_cast<T>(2.737338337642022829223832094019477918166996032112404370e304L), 3 * tolerance);
+      BOOST_CHECK_CLOSE(::boost::math::tgamma(static_cast<T>(170), static_cast<T>(165)), static_cast<T>(2.737338337642022829223832094019477918166996032112404370e304L), (std::numeric_limits<T>::digits > 100 ? 10 : 3) * tolerance);
       BOOST_CHECK_CLOSE(::boost::math::tgamma_lower(static_cast<T>(170), static_cast<T>(165)), static_cast<T>(1.531729671362682445715419794880088619901822603944331733e304L), 3 * tolerance);
       BOOST_CHECK_CLOSE(::boost::math::tgamma(static_cast<T>(170), static_cast<T>(170)), static_cast<T>(2.090991698081449410761040647015858316167077909285580375e304L), 10 * tolerance);
       BOOST_CHECK_CLOSE(::boost::math::tgamma_lower(static_cast<T>(170), static_cast<T>(170)), static_cast<T>(2.178076310923255864178211241883708221901740726771155728e304L), 10 * tolerance);

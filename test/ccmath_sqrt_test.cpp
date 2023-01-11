@@ -48,7 +48,7 @@ void test_float_sqrt()
     constexpr Real tol = 2*std::numeric_limits<Real>::epsilon();
     
     constexpr Real test_val = boost::math::ccmath::sqrt(Real(2));
-    constexpr Real sqrt2 = Real(1.4142135623730950488016887l);
+    constexpr Real sqrt2 = Real(1.4142135623730950488016887242096980785696718753769480731766797379L);
     constexpr Real abs_test_error = (test_val - sqrt2) > 0 ? (test_val - sqrt2) : (sqrt2 - test_val);
     static_assert(abs_test_error < tol, "Out of tolerance");
 
