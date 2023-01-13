@@ -22,6 +22,7 @@ def main(ctx):
   clang_6_stds = [ "c++14", "c++17" ]
   gnu_9_stds = [ "gnu++14", "c++14", "gnu++17", "c++17", "gnu++2a", "c++2a" ]
   clang_10_stds = [ "c++14", "c++17", "c++2a" ]
+  gnu_non_native = [ "gnu++17" ]
 
   result = []
 
@@ -52,9 +53,9 @@ def main(ctx):
       result.append(linux_cxx("Ubuntu g++-11 " + cxx + " " + suite, "g++-11", packages="g++-11", buildtype="boost", image="cppalliance/droneubuntu2004:1", environment={'TOOLSET': 'gcc', 'COMPILER': 'g++-11', 'CXXSTD': cxx, 'TEST_SUITE': suite, }, globalenv=globalenv))
     for cxx in clang_10_stds:
       result.append(linux_cxx("Ubuntu clang++-10 " + cxx + " " + suite, "clang++-10", packages="clang-10", llvm_os="xenial", llvm_ver="10", buildtype="boost", image="cppalliance/droneubuntu1804:1", environment={'TOOLSET': 'clang', 'COMPILER': 'clang++-10', 'CXXSTD': cxx, 'TEST_SUITE': suite, }, globalenv=globalenv))
-    for cxx in gnu_9_stds:
+    for cxx in gnu_non_native:
       result.append(linux_cxx("Ubuntu g++ s390s " + cxx + " " + suite, "g++", packages="g++", buildtype="boost", image="cppalliance/droneubuntu2204:multiarch", arch="s390x", environment={'TOOLSET': 'gcc', 'COMPILER': 'g++', 'CXXSTD': cxx, 'TEST_SUITE': suite, }, globalenv=globalenv))
-    for cxx in gnu_9_stds:
+    for cxx in gnu_non_native:
       result.append(linux_cxx("Ubuntu g++ ARM64" + cxx + " " + suite, "g++", packages="g++", buildtype="boost", image="cppalliance/droneubuntu2204:multiarch", arch="arm64", environment={'TOOLSET': 'gcc', 'COMPILER': 'g++', 'CXXSTD': cxx, 'TEST_SUITE': suite, }, globalenv=globalenv))
 
   return result
