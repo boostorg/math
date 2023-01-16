@@ -247,7 +247,7 @@
               if (have_no_correct_bits)
               {
                  // We have no correct bits in the result... just give up!
-                 result = boost::math::policies::raise_evaluation_error("boost::math::hypergeometric_pFq<%1%>", "Cancellation is so severe that no bits in the reuslt are correct, last result was %1%", Real(result * exp(Real(log_scale))), pol);
+                 result = boost::math::policies::raise_evaluation_error("boost::math::hypergeometric_pFq<%1%>", "Cancellation is so severe that no bits in the result are correct, last result was %1%", Real(result * exp(Real(log_scale))), pol);
                  return std::make_pair(result, result);
               }
               else

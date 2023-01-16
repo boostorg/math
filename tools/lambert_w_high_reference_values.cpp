@@ -103,7 +103,7 @@ int main()
       << std::endl;
 
     fout << "// The values are defined using the macro BOOST_MATH_TEST_VALUE to ensure\n"
-      "// that both built-in and multiprecision types are correctly initialiased with full precision.\n"
+      "// that both built-in and multiprecision types are correctly initialized with full precision.\n"
       "// built-in types like float, double require a floating-point literal like 3.14,\n"
       "// but multiprecision types require a decimal digit string like \"3.14\".\n"
       "// Numerical values are chosen to avoid exactly representable values."

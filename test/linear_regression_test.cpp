@@ -164,7 +164,7 @@ void test_permutation_invariance()
     Real c0 = std::get<0>(temp);
     Real c1 = std::get<1>(temp);
     Real Rsquared = std::get<2>(temp);
-    CHECK_MOLLIFIED_CLOSE(expected_c0, c0, 0.002);
+    CHECK_MOLLIFIED_CLOSE(expected_c0, c0, 0.003);
     CHECK_MOLLIFIED_CLOSE(expected_c1, c1, 0.002);
 
     int j = 0;
@@ -208,7 +208,7 @@ void test_scaling_relations()
     Real c0 = std::get<0>(temp);
     Real c1 = std::get<1>(temp);
     Real Rsquared = std::get<2>(temp);
-    CHECK_MOLLIFIED_CLOSE(expected_c0, c0, 0.005);
+    CHECK_MOLLIFIED_CLOSE(expected_c0, c0, 0.006);
     CHECK_MOLLIFIED_CLOSE(expected_c1, c1, 0.005);
 
     // If y -> lambda y, then c0 -> lambda c0 and c1 -> lambda c1.

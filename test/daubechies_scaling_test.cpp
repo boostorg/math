@@ -33,6 +33,8 @@ using std::sqrt;
 template<class Real, unsigned p>
 void test_daubechies_filters()
 {
+    using std::sqrt;
+
     std::cout << "Testing Daubechies filters with " << p << " vanishing moments on type " << boost::core::demangle(typeid(Real).name()) << "\n";
     Real tol = 3*std::numeric_limits<Real>::epsilon();
     using boost::math::filters::daubechies_scaling_filter;
@@ -287,6 +289,9 @@ void test_dyadic_grid()
 // "Direct algorithm for computation of derivatives of the Daubechies basis functions"
 void test_first_derivative()
 {
+#if LDBL_MANT_DIG > 64
+   // Limited precision test data means we can't test long double here...
+#else
     auto phi1_3 = boost::math::detail::daubechies_scaling_integer_grid<long double, 3, 1>();
     std::array<long double, 6> lin_3{0.0L, 1.638452340884085725014976L, -2.232758190463137395017742L,
                                      0.5501593582740176149905562L, 0.04414649130503405501220997L, 0.0L};
@@ -320,6 +325,7 @@ void test_first_derivative()
             std::cerr << "  Index " << i << " is incorrect\n";
         }
     }
+#endif
 }
 
 template<typename Real, int p>

@@ -11,6 +11,7 @@
 #include <iomanip>
 #include <iostream>
 #include <cmath>
+#include <cfloat>
 #include <boost/core/demangle.hpp>
 #include <boost/hana/for_each.hpp>
 #include <boost/hana/ext/std/integer_sequence.hpp>
@@ -32,6 +33,7 @@ using boost::math::quadrature::trapezoidal;
 template<typename Real, int p>
 void test_wavelet_transform()
 {
+    using std::abs;
     std::cout << "Testing wavelet transform of " << p << " vanishing moment Daubechies wavelet on type " << boost::core::demangle(typeid(Real).name()) << "\n";
     auto psi = boost::math::daubechies_wavelet<Real, p>();
 

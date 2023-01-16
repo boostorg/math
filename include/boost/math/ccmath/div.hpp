@@ -28,7 +28,7 @@ template <typename ReturnType, typename Z>
 inline constexpr ReturnType div_impl(const Z x, const Z y) noexcept
 {
     // std::div_t/ldiv_t/lldiv_t/imaxdiv_t can be defined as either { Z quot; Z rem; }; or { Z rem; Z quot; };
-    // so don't use braced initialziation to guarantee compatibility
+    // so don't use braced initialization to guarantee compatibility
     ReturnType ans {0, 0};
 
     ans.quot = x / y;

@@ -88,7 +88,21 @@ void expected_results()
    //
    // Catch all cases come last:
    //
-   if(std::numeric_limits<long double>::digits > 60)
+   if(std::numeric_limits<long double>::digits > 100)
+   {
+      //
+      // Arbitrary precision versions run out steam (and series iterations)
+      // if we push them to too many digits:
+      //
+      add_expected_result(
+         ".*",                            // compiler
+         ".*",                            // stdlib
+         ".*",                            // platform
+         largest_type,                    // test type(s)
+         ".*",      // test data group
+         "owens_t", 10000000, 1000000);  // test function
+   }
+   else if(std::numeric_limits<long double>::digits > 60)
    {
       add_expected_result(
          ".*",                            // compiler

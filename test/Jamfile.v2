@@ -74,6 +74,7 @@ project
       <search>$(mpfr_path)
       <search>$(mpfr_path)/build.vc10/lib/Win32/Debug
       [ requires cxx11_noexcept cxx11_rvalue_references sfinae_expr cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_tuple cxx11_hdr_initializer_list cxx11_hdr_chrono cxx11_thread_local cxx11_constexpr cxx11_nullptr cxx11_numeric_limits cxx11_decltype cxx11_hdr_array cxx11_hdr_atomic cxx11_hdr_type_traits cxx11_allocator cxx11_explicit_conversion_operators ]
+      [ requires cxx14_decltype_auto cxx14_generic_lambdas cxx14_return_type_deduction cxx14_variable_templates cxx14_decltype_auto cxx14_generic_lambdas cxx14_return_type_deduction ]
     ;
 
 if $(ntl-path)
@@ -892,7 +893,9 @@ test-suite distribution_tests :
    [ compile test_dist_deduction_guides.cpp : [ requires cpp_deduction_guides cpp_variadic_templates ] ]
    [ run git_issue_800.cpp ../../test/build//boost_unit_test_framework  ]
    [ run git_issue_845.cpp ../../test/build//boost_unit_test_framework  ]
+   [ run scipy_issue_14901.cpp ../../test/build//boost_unit_test_framework ]
    [ run scipy_issue_17146.cpp ../../test/build//boost_unit_test_framework  ]
+   [ run scipy_issue_17388.cpp ../../test/build//boost_unit_test_framework  ]
 ;
 
 test-suite mp :
@@ -916,6 +919,7 @@ test-suite mp :
    [ compile ntl_concept_check.cpp : [ check-target-builds ../config//has_ntl_rr : : <build>no ] <debug-symbols>off [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ compile mpfr_concept_check.cpp : [ check-target-builds ../config//has_mpfr_class : : <build>no ] <debug-symbols>off [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ compile mpreal_concept_check.cpp : [ check-target-builds ../config//has_mpreal : : <build>no ] <debug-symbols>off [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
+   [ run issue893.cpp ]
 ;
 
 test-suite misc :
@@ -1459,7 +1463,7 @@ test-suite quadrature :
 
    [ compile compile_test/gauss_concept_test.cpp : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ compile compile_test/gauss_kronrod_concept_test.cpp : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
-
+   [ run git_issue_898.cpp ]
 ;
 
 test-suite autodiff :

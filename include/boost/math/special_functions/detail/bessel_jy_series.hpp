@@ -12,6 +12,8 @@
 
 #include <cmath>
 #include <cstdint>
+#include <boost/math/tools/config.hpp>
+#include <boost/math/tools/assert.hpp>
 
 namespace boost { namespace math { namespace detail{
 
@@ -234,7 +236,7 @@ T bessel_yn_small_z(int n, T z, T* scale, const Policy& pol)
    }
    else
    {
-      T p = pow(z / 2, n);
+      auto p = static_cast<T>(pow(z / 2, n));
       T result = -((boost::math::factorial<T>(n - 1, pol) / constants::pi<T>()));
       if(p * tools::max_value<T>() < result)
       {

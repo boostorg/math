@@ -21,7 +21,7 @@
 
 // Weisstein, Eric W. "Bessel Function Zeros." From MathWorld--A Wolfram Web Resource.
 // http://mathworld.wolfram.com/BesselFunctionZeros.html
-// Test values can be calculated using [@wolframalpha.com WolframAplha]
+// Test values can be calculated using [@wolframalpha.com WolframAlpha]
 // See also http://dlmf.nist.gov/10.21
 
 //[bessel_zeros_example_1

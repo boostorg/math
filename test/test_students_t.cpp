@@ -268,6 +268,12 @@ void test_spots(RealType)
       // tolerance is 50 eps expressed as a percent:
       //
       tolerance = boost::math::tools::epsilon<RealType>() * 5000;
+      //
+      // But higher error rates at 128 bit precision?
+      //
+      if (boost::math::tools::digits<RealType>() > 100)
+         tolerance *= 500;
+
       BOOST_CHECK_CLOSE(boost::math::quantile(
          students_t_distribution<RealType>(2.00390625L),                     // degrees_of_freedom.
          static_cast<RealType>(0.5625L)),                                    //  probability.

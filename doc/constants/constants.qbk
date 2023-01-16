@@ -163,17 +163,17 @@ However, since the precision of the user-defined type may be much greater than t
 of the built-in floating point types, how the value returned is created is as follows:
 
 * If the precision of the type is known at compile time:
-   * If the precision is less than or equal to that of a `float` and the type is constructable from a `float`
+   * If the precision is less than or equal to that of a `float` and the type is constructible from a `float`
      then our code returns a `float` literal.  If the user-defined type is a literal type
      then the function call that returns the constant will be a `constexp`.
-   * If the precision is less than or equal to that of a `double` and the type is constructable from a `double`
+   * If the precision is less than or equal to that of a `double` and the type is constructible from a `double`
      then our code returns a `double` literal.  If the user-defined type is a literal type
      then the function call that returns the constant will be a `constexp`.
-   * If the precision is less than or equal to that of a `long double` and the type is constructable from a `long double`
+   * If the precision is less than or equal to that of a `long double` and the type is constructible from a `long double`
      then our code returns a `long double` literal.  If the user-defined type is a literal type
      then the function call that returns the constant will be a `constexp`.
    * If the precision is less than or equal to that of a `__float128` (and the compiler supports such a type)
-     and the type is constructable from a `__float128`
+     and the type is constructible from a `__float128`
      then our code returns a `__float128` literal.  If the user-defined type is a literal type
      then the function call that returns the constant will be a `constexp`.
    * If the precision is less than 100 decimal digits, then the constant will be constructed
