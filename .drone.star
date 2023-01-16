@@ -57,6 +57,8 @@ def main(ctx):
       result.append(linux_cxx("Ubuntu g++ s390s " + cxx + " " + suite, "g++", packages="g++", buildtype="boost", image="cppalliance/droneubuntu2204:multiarch", arch="s390x", environment={'TOOLSET': 'gcc', 'COMPILER': 'g++', 'CXXSTD': cxx, 'TEST_SUITE': suite, }, globalenv=globalenv))
     for cxx in gnu_non_native:
       result.append(linux_cxx("Ubuntu g++ ARM64" + cxx + " " + suite, "g++", packages="g++", buildtype="boost", image="cppalliance/droneubuntu2204:multiarch", arch="arm64", environment={'TOOLSET': 'gcc', 'COMPILER': 'g++', 'CXXSTD': cxx, 'TEST_SUITE': suite, }, globalenv=globalenv))
+    for cxx in gnu_non_native:
+      result.append(osx_cxx("M1 Clang " + cxx + " " + suite, "clang++", buildscript="drone", buildtype="boost", xcode_version="14.1", environment={'TOOLSET': 'clang', 'CXXSTD': cxx, 'TEST_SUITE': suite, 'DEFINE': 'BOOST_MATH_NO_REAL_CONCEPT_TESTS,BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS,BOOST_MATH_MULTI_ARCH_CI_RUN', }, globalenv=globalenv))
 
   return result
 
