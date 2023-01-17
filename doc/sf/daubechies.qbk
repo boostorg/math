@@ -127,6 +127,23 @@ The 2 vanishing moment scaling function.
 [$../graphs/daubechies_8_scaling.svg]
 The 8 vanishing moment scaling function.
 
+Boost.Math also provides numerical evaluation of the Fourier transform of these functions.
+This is useful in sparse recovery problems where the measurements are taken in the Fourier basis.
+The usage is exhibited below:
+
+    #include <boost/math/special_functions/fourier_transform_daubechies_scaling.hpp>
+    using boost::math::fourier_transform_daubechies_scaling;
+    // Evaluate the Fourier transform of the 4-vanishing moment Daubechies scaling function at ω=1.8:
+    std::complex<float> hat_phi = fourier_transform_daubechies_scaling<float, 4>(1.8f);
+
+The Fourier transform convention is unitary with the sign of the imaginary unit being given in Daubechies Ten Lectures.
+In particular, this means that `fourier_transform_daubechies_scaling<float, p>(0.0)` returns 1/sqrt(2π).
+
+The implementation computes an infinite product of trigonometric polynomials as can be found from recursive application of the identity 𝓕[φ](ω) = m(ω/2)𝓕[φ](ω/2).
+This is neither particularly fast nor accurate, but there appears to be no literature on this extremely useful topic, and hence the naive method must suffice.
+
+[$../graphs/fourier_transform_daubechies.png]
+
 [heading References]
 
 * Daubechies, Ingrid. ['Ten Lectures on Wavelets.] Vol. 61. Siam, 1992.
