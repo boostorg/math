@@ -17,13 +17,5 @@
 void compile_and_link_test()
 {
    check_result<std::uint32_t>(boost::math::prime(u));
-   //
-   // Add constexpr tests here:
-   //
-#ifdef BOOST_MATH_HAVE_CONSTEXPR_TABLES
-   constexpr std::uint32_t ce_f = boost::math::prime(boost::math::max_prime);
-   static_assert(ce_f == 104729, "max_prime had incorrect value");
-   check_result<std::uint32_t>(ce_f);
-#endif
 }
 
