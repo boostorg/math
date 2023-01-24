@@ -14,22 +14,9 @@
 
 namespace boost{ namespace math{
 
-   template <class Policy>
-   inline std::uint32_t prime(unsigned n, const Policy& pol)
+   struct a1_helper
    {
-      //
-      // This is basically three big tables which together
-      // occupy 19946 bytes, we use the smallest type which
-      // will handle each value, and store the final set of 
-      // values in a uint16_t with the values offset by 0xffff.
-      // That gives us the first 10000 primes with the largest
-      // being 104729:
-      //
-      constexpr unsigned b1 = 53;
-      constexpr unsigned b2 = 6541;
-      constexpr unsigned b3 = 10000;
-
-      static const unsigned char a1[] = {
+      static constexpr unsigned char a1[] = {
          2u, 3u, 5u, 7u, 11u, 13u, 17u, 19u, 23u, 29u, 31u, 
          37u, 41u, 43u, 47u, 53u, 59u, 61u, 67u, 71u, 73u, 
          79u, 83u, 89u, 97u, 101u, 103u, 107u, 109u, 113u, 
@@ -37,8 +24,11 @@ namespace boost{ namespace math{
          167u, 173u, 179u, 181u, 191u, 193u, 197u, 199u, 
          211u, 223u, 227u, 229u, 233u, 239u, 241u, 251u
       };
+   };
 
-      static const std::uint16_t a2[] = {
+   struct a2_helper
+   {
+      static constexpr std::uint16_t a2[] = {
          257u, 263u, 269u, 271u, 277u, 281u, 283u, 293u, 
          307u, 311u, 313u, 317u, 331u, 337u, 347u, 349u, 353u, 
          359u, 367u, 373u, 379u, 383u, 389u, 397u, 401u, 409u, 
@@ -761,8 +751,11 @@ namespace boost{ namespace math{
          65323u, 65327u, 65353u, 65357u, 65371u, 65381u, 65393u, 65407u, 65413u, 
          65419u, 65423u, 65437u, 65447u, 65449u, 65479u, 65497u, 65519u, 65521u
       };
-
-      static const std::uint16_t a3[] = {
+   };
+   
+   struct a3_helper
+   {
+      static constexpr std::uint16_t a3[] = {
          2u, 4u, 8u, 16u, 22u, 28u, 44u, 
          46u, 52u, 64u, 74u, 82u, 94u, 98u, 112u, 
          116u, 122u, 142u, 152u, 164u, 166u, 172u, 178u, 
@@ -1197,20 +1190,36 @@ namespace boost{ namespace math{
          39124u, 39142u, 39146u, 39148u, 39158u, 39166u, 39172u, 39176u, 
          39182u, 39188u, 39194u
       };
+   };
 
+   template <class Policy>
+   constexpr std::uint32_t prime(unsigned n, const Policy& pol)
+   {
+      //
+      // This is basically three big tables which together
+      // occupy 19946 bytes, we use the smallest type which
+      // will handle each value, and store the final set of 
+      // values in a uint16_t with the values offset by 0xffff.
+      // That gives us the first 10000 primes with the largest
+      // being 104729:
+      //
+      constexpr unsigned b1 = 53;
+      constexpr unsigned b2 = 6541;
+      constexpr unsigned b3 = 10000;   
+      
       if(n <= b1)
-         return a1[n];
+         return a1_helper::a1[n];
       if(n <= b2)
-         return a2[n - b1 - 1];
+         return a2_helper::a2[n - b1 - 1];
       if(n >= b3)
       {
          return boost::math::policies::raise_domain_error<std::uint32_t>(
             "boost::math::prime<%1%>", "Argument n out of range: got %1%", n, pol);
       }
-      return static_cast<std::uint32_t>(a3[n - b2 - 1]) + 0xFFFFu;
+      return static_cast<std::uint32_t>(a3_helper::a3[n - b2 - 1]) + 0xFFFFu;
    }
 
-   inline std::uint32_t prime(unsigned n)
+   constexpr std::uint32_t prime(unsigned n)
    {
       return boost::math::prime(n, boost::math::policies::policy<>());
    }
