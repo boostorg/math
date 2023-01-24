@@ -1192,6 +1192,13 @@ namespace boost{ namespace math{
       };
    };
 
+   // ODR issues were fixed in C++17 where static constexpr members are now implicity inlined
+   #if !(defined(__cpp_inline_variables) && __cpp_inline_variables >= 201606L)
+   constexpr unsigned char a1_helper::a1[];
+   constexpr std::uint16_t a2_helper::a2[];
+   constexpr std::uint16_t a3_helper::a3[];
+   #endif
+
    template <class Policy>
    constexpr std::uint32_t prime(unsigned n, const Policy& pol)
    {
@@ -1224,7 +1231,7 @@ namespace boost{ namespace math{
       return boost::math::prime(n, boost::math::policies::policy<>());
    }
 
-   constexpr unsigned max_prime = 9999;
+   static constexpr unsigned max_prime = 9999;
 
 }} // namespace boost and math
 
