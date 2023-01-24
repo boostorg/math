@@ -14,6 +14,7 @@
 
 namespace boost{ namespace math{
 
+   template <typename T = unsigned char>
    struct a1_helper
    {
       static constexpr unsigned char a1[] = {
@@ -26,6 +27,7 @@ namespace boost{ namespace math{
       };
    };
 
+   template <typename T = std::uint16_t>
    struct a2_helper
    {
       static constexpr std::uint16_t a2[] = {
@@ -753,6 +755,7 @@ namespace boost{ namespace math{
       };
    };
    
+   template <typename T = std::uint16_t>
    struct a3_helper
    {
       static constexpr std::uint16_t a3[] = {
@@ -1192,14 +1195,6 @@ namespace boost{ namespace math{
       };
    };
 
-   // ODR issues were fixed in C++17 where static constexpr members are now implicity inlined
-   // MSVC doesn't like this workaround but has no linker issues to start with
-   #if !(defined(__cpp_inline_variables) && __cpp_inline_variables >= 201606L) && !defined(_MSVC_LANG)
-   constexpr unsigned char a1_helper::a1[];
-   constexpr std::uint16_t a2_helper::a2[];
-   constexpr std::uint16_t a3_helper::a3[];
-   #endif
-
    template <class Policy>
    constexpr std::uint32_t prime(unsigned n, const Policy& pol)
    {
@@ -1216,15 +1211,15 @@ namespace boost{ namespace math{
       constexpr unsigned b3 = 10000;   
       
       if(n <= b1)
-         return a1_helper::a1[n];
+         return a1_helper<unsigned char>::a1[n];
       if(n <= b2)
-         return a2_helper::a2[n - b1 - 1];
+         return a2_helper<std::uint16_t>::a2[n - b1 - 1];
       if(n >= b3)
       {
          return boost::math::policies::raise_domain_error<std::uint32_t>(
             "boost::math::prime<%1%>", "Argument n out of range: got %1%", n, pol);
       }
-      return static_cast<std::uint32_t>(a3_helper::a3[n - b2 - 1]) + 0xFFFFu;
+      return static_cast<std::uint32_t>(a3_helper<std::uint16_t>::a3[n - b2 - 1]) + 0xFFFFu;
    }
 
    constexpr std::uint32_t prime(unsigned n)
