@@ -1201,7 +1201,7 @@ namespace boost{ namespace math{
 
    // Static constexpr members are implicity inlined onces inline variables are allowed (C++17)
    // See: https://en.cppreference.com/w/cpp/language/static#Constant_static_members
-   #ifndef __cpp_inline_variables
+   #if !((__cplusplus >= 201703L || _MSVC_LANG >= 201703L) && (__cpp_inline_variables >= 201606L))
    constexpr std::array<unsigned char, 54> a_helper<1>::a1;
    constexpr std::array<std::uint16_t, 6488> a_helper<2>::a2;
    constexpr std::array<std::uint16_t, 3458> a_helper<3>::a3;
