@@ -1193,7 +1193,8 @@ namespace boost{ namespace math{
    };
 
    // ODR issues were fixed in C++17 where static constexpr members are now implicity inlined
-   #if !(defined(__cpp_inline_variables) && __cpp_inline_variables >= 201606L)
+   // MSVC doesn't like this workaround but has no linker issues to start with
+   #if !(defined(__cpp_inline_variables) && __cpp_inline_variables >= 201606L) && !defined(_MSVC_LANG)
    constexpr unsigned char a1_helper::a1[];
    constexpr std::uint16_t a2_helper::a2[];
    constexpr std::uint16_t a3_helper::a3[];
