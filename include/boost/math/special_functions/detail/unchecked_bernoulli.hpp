@@ -83,14 +83,10 @@ struct max_bernoulli_b2n : public detail::max_bernoulli_index<detail::bernoulli_
 
 namespace detail{
 
-template <class T>
-inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION T unchecked_bernoulli_imp(std::size_t n, const std::integral_constant<int, 0>& )
+template <typename T>
+struct numerators_helper
 {
-#ifdef BOOST_MATH_HAVE_CONSTEXPR_TABLES
-   constexpr std::array<std::int64_t, 1 + max_bernoulli_b2n<T>::value> numerators =
-#else
-   static const std::array<std::int64_t, 1 + max_bernoulli_b2n<T>::value> numerators =
-#endif
+   static constexpr std::array<std::int64_t, 1 + max_bernoulli_b2n<T>::value> numerators =
    {{
       std::int64_t(            +1LL),
       std::int64_t(            +1LL),
@@ -111,12 +107,12 @@ inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION T unchecked_bernoulli_imp(std::size_t
       std::int64_t(-7709321041217LL),
       std::int64_t(+2577687858367LL)
    }};
+};
 
-#ifdef BOOST_MATH_HAVE_CONSTEXPR_TABLES
-   constexpr std::array<std::int64_t, 1 + max_bernoulli_b2n<T>::value> denominators =
-#else
-   static const std::array<std::int64_t, 1 + max_bernoulli_b2n<T>::value> denominators =
-#endif
+template <typename T>
+struct denominators_helper
+{
+   static constexpr std::array<std::int64_t, 1 + max_bernoulli_b2n<T>::value> denominators =
    {{
       std::int64_t(      1LL),
       std::int64_t(      6LL),
@@ -137,17 +133,28 @@ inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION T unchecked_bernoulli_imp(std::size_t
       std::int64_t(    510LL),
       std::int64_t(      6LL)
    }};
-   return T(numerators[n]) / denominators[n];
-}
+};
+
+#ifndef __cpp_inline_variables
+template <typename T>
+constexpr std::array<std::int64_t, 1 + max_bernoulli_b2n<T>::value> numerators_helper<T>::numerators;
+template <typename T>
+constexpr std::array<std::int64_t, 1 + max_bernoulli_b2n<T>::value> denominators_helper<T>::denominators;
+#endif
 
 template <class T>
-inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION T unchecked_bernoulli_imp(std::size_t n, const std::integral_constant<int, 1>& )
+constexpr T unchecked_bernoulli_imp(std::size_t n, const std::integral_constant<int, 0>& )
 {
-#ifdef BOOST_MATH_HAVE_CONSTEXPR_TABLES
-   constexpr std::array<float, 1 + max_bernoulli_b2n<T>::value> bernoulli_data =
-#else
-   static const std::array<float, 1 + max_bernoulli_b2n<T>::value> bernoulli_data =
-#endif
+   return T(numerators_helper<T>::numerators[n]) / denominators_helper<T>::denominators[n];
+}
+
+template <typename T, int N>
+struct bernoulli_data_helper;
+
+template <typename T>
+struct bernoulli_data_helper<T, 1>
+{
+   static constexpr std::array<float, 1 + max_bernoulli_b2n<T>::value> bernoulli_data =
    {{
       +1.00000000000000000000000000000000000000000F,
       +0.166666666666666666666666666666666666666667F,
@@ -183,19 +190,23 @@ inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION T unchecked_bernoulli_imp(std::size_t
       +2.05009757234780975699217330956723102516667e36F,
       -2.09380059113463784090951852900279701847092e38F,
    }};
+};
 
-   return bernoulli_data[n];
-}
-
+#ifndef __cpp_inline_variables
+template <typename T>
+constexpr std::array<float, 1 + max_bernoulli_b2n<T>::value> bernoulli_data_helper<T, 1>::bernoulli_data;
+#endif
 
 template <class T>
-inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION T unchecked_bernoulli_imp(std::size_t n, const std::integral_constant<int, 2>& )
+inline constexpr T unchecked_bernoulli_imp(std::size_t n, const std::integral_constant<int, 1>& )
 {
-#ifdef BOOST_MATH_HAVE_CONSTEXPR_TABLES
-   constexpr std::array<double, 1 + max_bernoulli_b2n<T>::value> bernoulli_data =
-#else
-   static const std::array<double, 1 + max_bernoulli_b2n<T>::value> bernoulli_data =
-#endif
+   return bernoulli_data_helper<T, 1>::bernoulli_data[n];
+}
+
+template <typename T>
+struct bernoulli_data_helper<T, 2>
+{
+   static constexpr std::array<double, 1 + max_bernoulli_b2n<T>::value> bernoulli_data =
    {{
       +1.00000000000000000000000000000000000000000,
       +0.166666666666666666666666666666666666666667,
@@ -328,18 +339,23 @@ inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION T unchecked_bernoulli_imp(std::size_t
       -7.95021250458852528538243631671158693036798e302,
       +1.33527841873546338750122832017820518292039e306
    }};
+};
 
-   return bernoulli_data[n];
-}
+#ifndef __cpp_inline_variables
+template <typename T>
+constexpr std::array<double, 1 + max_bernoulli_b2n<T>::value> bernoulli_data_helper<T, 2>::bernoulli_data;
+#endif
 
 template <class T>
-inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION T unchecked_bernoulli_imp(std::size_t n, const std::integral_constant<int, 3>& )
+inline constexpr T unchecked_bernoulli_imp(std::size_t n, const std::integral_constant<int, 2>& )
 {
-#ifdef BOOST_MATH_HAVE_CONSTEXPR_TABLES
-   constexpr std::array<long double, 1 + max_bernoulli_b2n<T>::value> bernoulli_data =
-#else
-   static const std::array<long double, 1 + max_bernoulli_b2n<T>::value> bernoulli_data =
-#endif
+   return bernoulli_data_helper<T, 2>::bernoulli_data[n];
+}
+
+template <typename T>
+struct bernoulli_data_helper<T, 3>
+{
+   static constexpr std::array<long double, 1 + max_bernoulli_b2n<T>::value> bernoulli_data =
    {{
       +1.00000000000000000000000000000000000000000L,
       +0.166666666666666666666666666666666666666667L,
@@ -661,8 +677,17 @@ inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION T unchecked_bernoulli_imp(std::size_t
       2.222043594325228980916360265527780300093e4649L, -2.732869701246338361699515268224049951411e4654L, 3.367233945421922463553518272642397177145e4659L, -4.156377225041273602431272489314020150392e4664L, 5.139764368092890466235162431795350591151e4669L, -6.367329693760865476879589228002216011370e4674L, 7.902356742934106007362514378717026407839e4679L, -9.825176966314431712897976595483070301406e4684L, 1.223792760178593282435724837135946867088e4690L, -1.527068151452750404853140815207477555192e4695L, 1.908935682572268829496101580401263597905e4700L, -2.390593888616966248780378941331847473699e4705L, 2.999171106576893833644521002894489856321e4710L, -3.769440655453736670024798444784356437578e4715L, 4.746047769851891438576002047529258107351e4720L, -5.986405469241447720766576164546767533359e4725L, 7.564466155536872051712519119999711534616e4730L, -9.575641408047918720040356745796976488951e4735L, 1.214322951835035451699619713803395497423e4741L, -1.542682591979864353012093794301924196234e4746L, 1.963334539793192183270983986567556358603e4751L, -2.503148969013901182572118121398034622584e4756L, 3.197076711250102964526567664729089847162e4761L, -4.090653552025822488578293526174572934858e4766L, 5.243302769651520536759521264615159906699e4771L, -6.732697170903775309261288127044088674182e4776L, 8.660529543801770516930589210020128142543e4781L, -1.116015823611149634592870112730519454113e4787L, 1.440675306432920129218036927923030695520e4792L, -1.863078034853256227415397798026969938881e4797L, 2.413595413458810442409656314019115041699e4802L, -3.132317029597258599678590012779717945144e4807L, 4.072246763371584312534474102756137619716e4812L, -5.303577511521827157146305369181950467569e4817L, 6.919417518688636032335131253584331645491e4822L, -9.043473312934241153732087612484569398979e4827L, 1.184037400265044213826044590639924237359e4833L, -1.552956685415800894409743993367334099777e4838L, 2.040404893052952221581694807126473204625e4843L, -2.685565763841580219033402331219206776210e4848L, 3.540927057361929050327811875290025248120e4853L, -4.676912607538885419407656762767991163574e4858L, 6.188165903566760647569323704623433330229e4863L, -8.202087471895029964699042637255411806373e4868L, 1.089045274355389654614196651761310970580e4874L, -1.448524684976553869119447042300206226148e4879L, 1.930028100376784839502387280956424581974e4884L, -2.576074799096023589462128312524664980682e4889L, 3.444369635011990347297134928452972402038e4894L, -4.613354441299253694113609154769978684993e4899L, 6.189834306866879018555349507257537840922e4904L, -8.319470760665157534580593571258276368233e4909L, 1.120124240070996761986102680587384813245e4915L, -1.510740451399746828351090108638980398124e4920L, 2.041108231091323198877509959371257503819e4925L, -2.762447751447012472733302936575873838539e4930L,
 #endif
    }};
+};
 
-   return bernoulli_data[n];
+#ifndef __cpp_inline_variables
+template <typename T>
+constexpr std::array<long double, 1 + max_bernoulli_b2n<T>::value> bernoulli_data_helper<T, 3>::bernoulli_data;
+#endif
+
+template <class T>
+inline constexpr T unchecked_bernoulli_imp(std::size_t n, const std::integral_constant<int, 3>& )
+{
+   return bernoulli_data_helper<T, 3>::bernoulli_data[n];
 }
 
 template <class T>
@@ -709,7 +734,7 @@ inline T unchecked_bernoulli_imp(std::size_t n, const std::integral_constant<int
 } // namespace detail
 
 template<class T>
-inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION T unchecked_bernoulli_b2n(const std::size_t n)
+constexpr T unchecked_bernoulli_b2n(const std::size_t n)
 {
    typedef std::integral_constant<int, detail::bernoulli_imp_variant<T>::value> tag_type;
 
