@@ -11,13 +11,17 @@
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <cstdint>
+#include <array>
 
 namespace boost{ namespace math{
 
-   template <typename T = unsigned char>
-   struct a1_helper
+   template <int N>
+   struct a_helper;
+
+   template <>
+   struct a_helper<1>
    {
-      static constexpr unsigned char a1[] = {
+      static constexpr std::array<unsigned char, 54> a1 {
          2u, 3u, 5u, 7u, 11u, 13u, 17u, 19u, 23u, 29u, 31u, 
          37u, 41u, 43u, 47u, 53u, 59u, 61u, 67u, 71u, 73u, 
          79u, 83u, 89u, 97u, 101u, 103u, 107u, 109u, 113u, 
@@ -27,10 +31,10 @@ namespace boost{ namespace math{
       };
    };
 
-   template <typename T = std::uint16_t>
-   struct a2_helper
+   template <>
+   struct a_helper<2>
    {
-      static constexpr std::uint16_t a2[] = {
+      static constexpr std::array<std::uint16_t, 6488> a2 {
          257u, 263u, 269u, 271u, 277u, 281u, 283u, 293u, 
          307u, 311u, 313u, 317u, 331u, 337u, 347u, 349u, 353u, 
          359u, 367u, 373u, 379u, 383u, 389u, 397u, 401u, 409u, 
@@ -755,10 +759,10 @@ namespace boost{ namespace math{
       };
    };
    
-   template <typename T = std::uint16_t>
-   struct a3_helper
+   template <>
+   struct a_helper<3>
    {
-      static constexpr std::uint16_t a3[] = {
+      static constexpr std::array<std::uint16_t, 3458> a3 {
          2u, 4u, 8u, 16u, 22u, 28u, 44u, 
          46u, 52u, 64u, 74u, 82u, 94u, 98u, 112u, 
          116u, 122u, 142u, 152u, 164u, 166u, 172u, 178u, 
@@ -1195,6 +1199,14 @@ namespace boost{ namespace math{
       };
    };
 
+   // Static constexpr members are implicity inlined onces inline variables are allowed (C++17)
+   // See: https://en.cppreference.com/w/cpp/language/static#Constant_static_members
+   #ifndef __cpp_inline_variables
+   constexpr std::array<unsigned char, 54> a_helper<1>::a1;
+   constexpr std::array<std::uint16_t, 6488> a_helper<2>::a2;
+   constexpr std::array<std::uint16_t, 3458> a_helper<3>::a3;
+   #endif
+
    template <class Policy>
    constexpr std::uint32_t prime(unsigned n, const Policy& pol)
    {
@@ -1211,15 +1223,15 @@ namespace boost{ namespace math{
       constexpr unsigned b3 = 10000;   
       
       if(n <= b1)
-         return a1_helper<unsigned char>::a1[n];
+         return a_helper<1>::a1[n];
       if(n <= b2)
-         return a2_helper<std::uint16_t>::a2[n - b1 - 1];
+         return a_helper<2>::a2[n - b1 - 1];
       if(n >= b3)
       {
          return boost::math::policies::raise_domain_error<std::uint32_t>(
             "boost::math::prime<%1%>", "Argument n out of range: got %1%", n, pol);
       }
-      return static_cast<std::uint32_t>(a3_helper<std::uint16_t>::a3[n - b2 - 1]) + 0xFFFFu;
+      return static_cast<std::uint32_t>(a_helper<3>::a3[n - b2 - 1]) + 0xFFFFu;
    }
 
    constexpr std::uint32_t prime(unsigned n)
