@@ -40,15 +40,13 @@ namespace boost { namespace math
 template <class T>
 struct max_factorial;
 
-// Definitions:
+template <typename T>
+struct factorial_helper;
+
 template <>
-inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION float unchecked_factorial<float>(unsigned i BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(float))
+struct factorial_helper<float>
 {
-#ifdef BOOST_MATH_HAVE_CONSTEXPR_TABLES
-   constexpr std::array<float, 35> factorials = { {
-#else
-   static const std::array<float, 35> factorials = {{
-#endif
+   static constexpr std::array<float, 35> factorials {
       1.0F,
       1.0F,
       2.0F,
@@ -84,9 +82,18 @@ inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION float unchecked_factorial<float>(unsi
       0.26313083693369353016721801216e36F,
       0.868331761881188649551819440128e37F,
       0.29523279903960414084761860964352e39F,
-   }};
+   };
+};
 
-   return factorials[i];
+#ifndef __cpp_inline_variables
+constexpr std::array<float, 35> factorial_helper<float>::factorials;
+#endif
+
+// Definitions:
+template <>
+constexpr float unchecked_factorial<float>(unsigned i BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(float))
+{
+   return factorial_helper<float>::factorials[i];
 }
 
 template <>
@@ -96,13 +103,9 @@ struct max_factorial<float>
 };
 
 template <>
-inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION double unchecked_factorial<double>(unsigned i BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(double))
+struct factorial_helper<double>
 {
-#ifdef BOOST_MATH_HAVE_CONSTEXPR_TABLES
-   constexpr std::array<double, 171> factorials = { {
-#else
-   static const std::array<double, 171> factorials = {{
-#endif
+   static constexpr std::array<double, 171> factorials {
       1.0,
       1.0,
       2.0,
@@ -274,9 +277,17 @@ inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION double unchecked_factorial<double>(un
       0.2526075744973198387538018869171341146786e303,
       0.4269068009004705274939251888899566538069e305,
       0.7257415615307998967396728211129263114717e307,
-   }};
+   };
+};
 
-   return factorials[i];
+#ifndef __cpp_inline_variables
+constexpr std::array<double, 171> factorial_helper<double>::factorials;
+#endif
+
+template <>
+constexpr double unchecked_factorial<double>(unsigned i BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(double))
+{
+   return factorial_helper<double>::factorials[i];
 }
 
 template <>
@@ -286,13 +297,9 @@ struct max_factorial<double>
 };
 
 template <>
-inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION long double unchecked_factorial<long double>(unsigned i BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(long double))
+struct factorial_helper<long double>
 {
-#ifdef BOOST_MATH_HAVE_CONSTEXPR_TABLES
-   constexpr std::array<long double, 171> factorials = { {
-#else
-   static const std::array<long double, 171> factorials = {{
-#endif
+   static constexpr std::array<long double, 171> factorials {
       1L,
       1L,
       2L,
@@ -464,9 +471,17 @@ inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION long double unchecked_factorial<long 
       0.2526075744973198387538018869171341146786e303L,
       0.4269068009004705274939251888899566538069e305L,
       0.7257415615307998967396728211129263114717e307L,
-   }};
+   };
+};
 
-   return factorials[i];
+#ifndef __cpp_inline_variables
+constexpr std::array<long double, 171> factorial_helper<long double>::factorials;
+#endif
+
+template <>
+constexpr long double unchecked_factorial<long double>(unsigned i BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(long double))
+{
+   return factorial_helper<long double>::factorials[i];
 }
 
 template <>
@@ -478,13 +493,9 @@ struct max_factorial<long double>
 #ifdef BOOST_MATH_USE_FLOAT128
 
 template <>
-inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION BOOST_MATH_FLOAT128_TYPE unchecked_factorial<BOOST_MATH_FLOAT128_TYPE>(unsigned i)
+struct factorial_helper<BOOST_MATH_FLOAT128_TYPE>
 {
-#ifdef BOOST_MATH_HAVE_CONSTEXPR_TABLES
-   constexpr std::array<BOOST_MATH_FLOAT128_TYPE, 171> factorials = { {
-#else
-   static const std::array<BOOST_MATH_FLOAT128_TYPE, 171> factorials = { {
-#endif
+   static constexpr std::array<BOOST_MATH_FLOAT128_TYPE, 171> factorials {
       1,
       1,
       2,
@@ -656,9 +667,17 @@ inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION BOOST_MATH_FLOAT128_TYPE unchecked_fa
       0.2526075744973198387538018869171341146786e303Q,
       0.4269068009004705274939251888899566538069e305Q,
       0.7257415615307998967396728211129263114717e307Q,
-   } };
+   };
+};
 
-   return factorials[i];
+#ifndef __cpp_inline_variables
+constexpr std::array<BOOST_MATH_FLOAT128_TYPE, 171> factorial_helper<BOOST_MATH_FLOAT128_TYPE>::factorials;
+#endif
+
+template <>
+constexpr BOOST_MATH_FLOAT128_TYPE unchecked_factorial<BOOST_MATH_FLOAT128_TYPE>(unsigned i)
+{
+   return factorial_helper<BOOST_MATH_FLOAT128_TYPE>::factorials[i];
 }
 
 template <>
