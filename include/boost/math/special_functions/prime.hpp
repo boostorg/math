@@ -15,11 +15,10 @@
 
 namespace boost{ namespace math{
 
-   template <int N>
-   struct a_helper;
+namespace detail {
 
-   template <>
-   struct a_helper<1>
+   template <bool>
+   struct prime_data_imp
    {
       static constexpr std::array<unsigned char, 54> a1 {
          2u, 3u, 5u, 7u, 11u, 13u, 17u, 19u, 23u, 29u, 31u, 
@@ -29,11 +28,7 @@ namespace boost{ namespace math{
          167u, 173u, 179u, 181u, 191u, 193u, 197u, 199u, 
          211u, 223u, 227u, 229u, 233u, 239u, 241u, 251u
       };
-   };
 
-   template <>
-   struct a_helper<2>
-   {
       static constexpr std::array<std::uint16_t, 6488> a2 {
          257u, 263u, 269u, 271u, 277u, 281u, 283u, 293u, 
          307u, 311u, 313u, 317u, 331u, 337u, 347u, 349u, 353u, 
@@ -757,11 +752,7 @@ namespace boost{ namespace math{
          65323u, 65327u, 65353u, 65357u, 65371u, 65381u, 65393u, 65407u, 65413u, 
          65419u, 65423u, 65437u, 65447u, 65449u, 65479u, 65497u, 65519u, 65521u
       };
-   };
    
-   template <>
-   struct a_helper<3>
-   {
       static constexpr std::array<std::uint16_t, 3458> a3 {
          2u, 4u, 8u, 16u, 22u, 28u, 44u, 
          46u, 52u, 64u, 74u, 82u, 94u, 98u, 112u, 
@@ -1199,13 +1190,9 @@ namespace boost{ namespace math{
       };
    };
 
-   // Static constexpr members are implicity inlined onces inline variables are allowed (C++17)
-   // See: https://en.cppreference.com/w/cpp/language/static#Constant_static_members
-   #if !((__cplusplus >= 201703L || _MSVC_LANG >= 201703L) && (__cpp_inline_variables >= 201606L))
-   constexpr std::array<unsigned char, 54> a_helper<1>::a1;
-   constexpr std::array<std::uint16_t, 6488> a_helper<2>::a2;
-   constexpr std::array<std::uint16_t, 3458> a_helper<3>::a3;
-   #endif
+} // Namespace Detail
+
+   using prime_data = detail::prime_data_imp<true>;
 
    template <class Policy>
    constexpr std::uint32_t prime(unsigned n, const Policy& pol)
@@ -1223,15 +1210,15 @@ namespace boost{ namespace math{
       constexpr unsigned b3 = 10000;   
       
       if(n <= b1)
-         return a_helper<1>::a1[n];
+         return prime_data::a1[n];
       if(n <= b2)
-         return a_helper<2>::a2[n - b1 - 1];
+         return prime_data::a2[n - b1 - 1];
       if(n >= b3)
       {
          return boost::math::policies::raise_domain_error<std::uint32_t>(
             "boost::math::prime<%1%>", "Argument n out of range: got %1%", n, pol);
       }
-      return static_cast<std::uint32_t>(a_helper<3>::a3[n - b2 - 1]) + 0xFFFFu;
+      return static_cast<std::uint32_t>(prime_data::a3[n - b2 - 1]) + 0xFFFFu;
    }
 
    constexpr std::uint32_t prime(unsigned n)
