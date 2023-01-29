@@ -1,5 +1,5 @@
 /*
- * Copyright Thomas Dybdahl Ahle, Nick Thompson, Matt Borland, 2023
+ * Copyright Thomas Dybdahl Ahle, Nick Thompson, Matt Borland, John Maddock, 2023
  * Use, modification and distribution are subject to the
  * Boost Software License, Version 1.0. (See accompanying file
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)

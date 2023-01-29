@@ -40,7 +40,8 @@ template<typename Real, typename Complex>
 void test_polynomial_properties(size_t seed) {
    std::mt19937_64 gen(seed);
    std::uniform_real_distribution<Real> dis(0, 1);
-   size_t n = seed % 128;
+   // We're already testing the n=0 case above:
+   size_t n = (seed % 128) + 1;
    std::vector<Real> coeffs(n);
    for (auto& c : coeffs) {
         c = dis(gen);
