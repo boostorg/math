@@ -9,6 +9,7 @@
 
 #include <array>
 #include <vector>
+#include <type_traits>
 
 namespace boost {
 namespace math {
