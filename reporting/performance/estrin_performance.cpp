@@ -161,6 +161,28 @@ void EstrinRealCoeffsRealArgStdArray(benchmark::State& state)
 }
 
 template<class Real, size_t n>
+void HornerRealCoeffsRealArgStdArray(benchmark::State& state)
+{
+    std::random_device rd;
+    auto seed = rd();
+    std::mt19937_64 mt(seed);
+    std::uniform_real_distribution<Real> unif(-10, 10);
+
+    std::array<Real, n> c;
+    for (auto& d : c) {
+       d = unif(mt);
+    }
+    Real x = unif(mt);
+    Real fudge = std::sqrt(std::numeric_limits<Real>::epsilon());
+    for (auto _ : state)
+    {
+        Real output = boost::math::tools::evaluate_polynomial(c, x);
+        benchmark::DoNotOptimize(output);
+        x += fudge;
+    }
+}
+
+template<class Real, size_t n>
 void EstrinRealCoeffsComplexArgStdArray(benchmark::State& state)
 {
     std::random_device rd;
@@ -185,6 +207,7 @@ void EstrinRealCoeffsComplexArgStdArray(benchmark::State& state)
 
 BENCHMARK_TEMPLATE(HornerRealCoeffsRealArg, float)->RangeMultiplier(2)->Range(1, 1<<15)->Complexity(benchmark::oN);
 BENCHMARK_TEMPLATE(EstrinRealCoeffsRealArgWithScratch, float)->RangeMultiplier(2)->Range(1, 1<<15)->Complexity(benchmark::oN);
+
 BENCHMARK_TEMPLATE(EstrinRealCoeffsRealArgStdArray, float, 2);
 BENCHMARK_TEMPLATE(EstrinRealCoeffsRealArgStdArray, float, 3);
 BENCHMARK_TEMPLATE(EstrinRealCoeffsRealArgStdArray, float, 4);
@@ -198,9 +221,23 @@ BENCHMARK_TEMPLATE(EstrinRealCoeffsRealArgStdArray, float, 33);
 BENCHMARK_TEMPLATE(EstrinRealCoeffsRealArgStdArray, float, 64);
 BENCHMARK_TEMPLATE(EstrinRealCoeffsRealArgStdArray, float, 65);
 
+BENCHMARK_TEMPLATE(HornerRealCoeffsRealArgStdArray, float, 2);
+BENCHMARK_TEMPLATE(HornerRealCoeffsRealArgStdArray, float, 3);
+BENCHMARK_TEMPLATE(HornerRealCoeffsRealArgStdArray, float, 4);
+BENCHMARK_TEMPLATE(HornerRealCoeffsRealArgStdArray, float, 5);
+BENCHMARK_TEMPLATE(HornerRealCoeffsRealArgStdArray, float, 8);
+BENCHMARK_TEMPLATE(HornerRealCoeffsRealArgStdArray, float, 9);
+BENCHMARK_TEMPLATE(HornerRealCoeffsRealArgStdArray, float, 16);
+BENCHMARK_TEMPLATE(HornerRealCoeffsRealArgStdArray, float, 17);
+BENCHMARK_TEMPLATE(HornerRealCoeffsRealArgStdArray, float, 32);
+BENCHMARK_TEMPLATE(HornerRealCoeffsRealArgStdArray, float, 33);
+BENCHMARK_TEMPLATE(HornerRealCoeffsRealArgStdArray, float, 64);
+BENCHMARK_TEMPLATE(HornerRealCoeffsRealArgStdArray, float, 65);
+
 
 BENCHMARK_TEMPLATE(HornerRealCoeffsRealArg, double)->RangeMultiplier(2)->Range(1, 1<<15)->Complexity(benchmark::oN);
 BENCHMARK_TEMPLATE(EstrinRealCoeffsRealArgWithScratch, double)->RangeMultiplier(2)->Range(1, 1<<15)->Complexity(benchmark::oN);
+
 BENCHMARK_TEMPLATE(EstrinRealCoeffsRealArgStdArray, double, 2);
 BENCHMARK_TEMPLATE(EstrinRealCoeffsRealArgStdArray, double, 3);
 BENCHMARK_TEMPLATE(EstrinRealCoeffsRealArgStdArray, double, 4);
@@ -213,6 +250,19 @@ BENCHMARK_TEMPLATE(EstrinRealCoeffsRealArgStdArray, double, 32);
 BENCHMARK_TEMPLATE(EstrinRealCoeffsRealArgStdArray, double, 33);
 BENCHMARK_TEMPLATE(EstrinRealCoeffsRealArgStdArray, double, 64);
 BENCHMARK_TEMPLATE(EstrinRealCoeffsRealArgStdArray, double, 65);
+
+BENCHMARK_TEMPLATE(HornerRealCoeffsRealArgStdArray, double, 2);
+BENCHMARK_TEMPLATE(HornerRealCoeffsRealArgStdArray, double, 3);
+BENCHMARK_TEMPLATE(HornerRealCoeffsRealArgStdArray, double, 4);
+BENCHMARK_TEMPLATE(HornerRealCoeffsRealArgStdArray, double, 5);
+BENCHMARK_TEMPLATE(HornerRealCoeffsRealArgStdArray, double, 8);
+BENCHMARK_TEMPLATE(HornerRealCoeffsRealArgStdArray, double, 9);
+BENCHMARK_TEMPLATE(HornerRealCoeffsRealArgStdArray, double, 16);
+BENCHMARK_TEMPLATE(HornerRealCoeffsRealArgStdArray, double, 17);
+BENCHMARK_TEMPLATE(HornerRealCoeffsRealArgStdArray, double, 32);
+BENCHMARK_TEMPLATE(HornerRealCoeffsRealArgStdArray, double, 33);
+BENCHMARK_TEMPLATE(HornerRealCoeffsRealArgStdArray, double, 64);
+BENCHMARK_TEMPLATE(HornerRealCoeffsRealArgStdArray, double, 65);
 
 
 
