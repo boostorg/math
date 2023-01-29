@@ -1,4 +1,4 @@
-[section:polynomials Estrin's method for polynomial evaluation]
+[section:estrin Estrin's method for polynomial evaluation]
 
 [h4 Synopsis]
 
@@ -38,6 +38,7 @@ To measure the performance on your system, refer to the google benchmark file `r
 
 * Muller, Jean-Michel (2005). Elementary Functions: Algorithms and Implementation (2nd ed.). Birkhäuser. p. 58. ISBN 0-8176-4372-9.
 
+[endsect] [/section:estrin]
 [/
   Copyright 2023 Thomas Dybdahl Alhe, Nicholas Thompson, Matt Borland
 
