@@ -10,11 +10,14 @@
 #include <array>
 #include <vector>
 
-namespace boost::math::tools {
+namespace boost { namespace math { namespace tools {
 
 template<typename RandomAccessContainer1, typename RandomAccessContainer2, typename RealOrComplex>
-inline auto estrin(RandomAccessContainer1 const & coeffs, RandomAccessContainer2& scratch, RealOrComplex z) {
-  static_assert(std::is_same_v<typename RandomAccessContainer2::value_type, RealOrComplex>, "The value type of the scratch space must be the same as the abscissa.");
+inline RealOrComplex estrin(RandomAccessContainer1 const & coeffs, RandomAccessContainer2& scratch, RealOrComplex z) {
+  // Does anyone care about the complex coefficients, real argument case?
+  // I've never seen it used, and this static assert makes the error messages much better:
+  static_assert(std::is_same<typename RandomAccessContainer2::value_type, RealOrComplex>::value,
+	        "The value type of the scratch space must be the same as the abscissa.");
   auto n = coeffs.size();
   for (decltype(n) i = 0; i < n / 2; i++) {
     scratch[i] = coeffs[2 * i] + coeffs[2 * i + 1] * z;
@@ -54,6 +57,6 @@ inline RealOrComplex estrin(const RandomAccessContainer &coeffs, RealOrComplex z
   std::vector<RealOrComplex> ds((n+1)/2);
   return estrin(coeffs, ds, z);
 }
-}
 
+}}} //namespace boost::math::tools
 #endif

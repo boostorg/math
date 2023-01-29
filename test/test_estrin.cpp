@@ -37,7 +37,10 @@ void test_polynomial_properties(size_t seed = 0) {
 
    auto p1_computed = estrin(coeffs, Complex(1));
    // Might want to consider using Kahan summation so the expected value is super accurate:
-   auto p1_expected = std::reduce(coeffs.begin(), coeffs.end());
+   Real p1_expected{0};
+   for (auto c : coeffs) {
+      p1_expected += c;
+   }
    if (!CHECK_ULP_CLOSE(p1_expected, p1_computed.real(), coeffs.size())) {
        std::cerr << " p(1) != sum(coeffs) with seed " << seed << "\n";
    }
@@ -69,7 +72,10 @@ void test_std_array_overload(size_t seed = 0) {
    }
 
    auto p1_computed = estrin(coeffs, Real(1));
-   auto p1_expected = std::reduce(coeffs.begin(), coeffs.end());
+   Real p1_expected{0};
+   for (auto c : coeffs) {
+       p1_expected += c;
+   }
    if (!CHECK_ULP_CLOSE(p1_expected, p1_computed, coeffs.size())) {
        std::cerr << " p(1) != sum(coeffs) with seed " << seed << "\n";
    }

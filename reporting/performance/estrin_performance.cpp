@@ -264,8 +264,6 @@ BENCHMARK_TEMPLATE(HornerRealCoeffsRealArgStdArray, double, 33);
 BENCHMARK_TEMPLATE(HornerRealCoeffsRealArgStdArray, double, 64);
 BENCHMARK_TEMPLATE(HornerRealCoeffsRealArgStdArray, double, 65);
 
-
-
 BENCHMARK_TEMPLATE(HornerRealCoeffsRealArg, double)->DenseRange(64, 128, 8)->Complexity(benchmark::oN);
 BENCHMARK_TEMPLATE(EstrinRealCoeffsRealArgWithScratch, double)->DenseRange(64, 128, 8)->Complexity(benchmark::oN);
 
