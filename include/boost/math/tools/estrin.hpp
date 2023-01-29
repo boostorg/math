@@ -10,17 +10,19 @@
 #include <array>
 #include <vector>
 
-namespace boost { namespace math { namespace tools {
+namespace boost {
+namespace math {
+namespace tools {
 
-template<typename RandomAccessContainer1, typename RandomAccessContainer2, typename RealOrComplex>
-inline RealOrComplex estrin(RandomAccessContainer1 const & coeffs, RandomAccessContainer2& scratch, RealOrComplex z) {
+template <typename RandomAccessContainer1, typename RandomAccessContainer2, typename RealOrComplex>
+inline RealOrComplex estrin(RandomAccessContainer1 const &coeffs, RandomAccessContainer2 &scratch, RealOrComplex z) {
   // Does anyone care about the complex coefficients, real argument case?
   // I've never seen it used, and this static assert makes the error messages much better:
   static_assert(std::is_same<typename RandomAccessContainer2::value_type, RealOrComplex>::value,
-	        "The value type of the scratch space must be the same as the abscissa.");
+                "The value type of the scratch space must be the same as the abscissa.");
   auto n = coeffs.size();
   if (n == 0) {
-       return static_cast<RealOrComplex>(0);
+    return static_cast<RealOrComplex>(0);
   }
   for (decltype(n) i = 0; i < n / 2; i++) {
     scratch[i] = coeffs[2 * i] + coeffs[2 * i + 1] * z;
@@ -43,7 +45,6 @@ inline RealOrComplex estrin(RandomAccessContainer1 const & coeffs, RandomAccessC
   return scratch[0];
 }
 
-
 // The std::array template specialization doesn't need to allocate:
 template <typename RealOrComplex1, size_t n, typename RealOrComplex2>
 inline RealOrComplex2 estrin(const std::array<RealOrComplex1, n> &coeffs, RealOrComplex2 z) {
@@ -57,9 +58,11 @@ inline RealOrComplex estrin(const RandomAccessContainer &coeffs, RealOrComplex z
   // Normally, I'd make `ds` a RandomAccessContainer, but its value type needs to be RealOrComplex,
   // and the value_type of the passed RandomAccessContainer can just be Real.
   // Allocation of the std::vector is not ideal, but I have no other ideas at the moment:
-  std::vector<RealOrComplex> ds((n+1)/2);
+  std::vector<RealOrComplex> ds((n + 1) / 2);
   return estrin(coeffs, ds, z);
 }
 
-}}} //namespace boost::math::tools
+} // namespace tools
+} // namespace math
+} // namespace boost
 #endif
