@@ -19,6 +19,9 @@ inline RealOrComplex estrin(RandomAccessContainer1 const & coeffs, RandomAccessC
   static_assert(std::is_same<typename RandomAccessContainer2::value_type, RealOrComplex>::value,
 	        "The value type of the scratch space must be the same as the abscissa.");
   auto n = coeffs.size();
+  if (n == 0) {
+       return static_cast<RealOrComplex>(0);
+  }
   for (decltype(n) i = 0; i < n / 2; i++) {
     scratch[i] = coeffs[2 * i] + coeffs[2 * i + 1] * z;
   }
