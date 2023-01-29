@@ -27,6 +27,14 @@
 #include "handle_test_result.hpp"
 #include "table_type.hpp"
 
+#ifdef _MSC_VER
+#pragma warning (disable:4127 4512)
+#elif __GNUC__ >= 5
+#  pragma GCC diagnostic ignored "-Woverflow"
+#elif defined(__clang__)
+#  pragma clang diagnostic ignored "-Wliteral-range"
+#endif
+
 #define BOOST_CHECK_EX(a) \
    {\
       unsigned int failures = boost::unit_test::results_collector.results( boost::unit_test::framework::current_test_case().p_id ).p_assertions_failed;\
