@@ -1031,7 +1031,7 @@ test-suite misc :
    [ run test_chatterjee_correlation.cpp ../../test/build//boost_unit_test_framework ]
    [ run test_rank.cpp ../../test/build//boost_unit_test_framework ]
    [ run lanczos_smoothing_test.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
-   [ run condition_number_test.cpp ../../test/build//boost_unit_test_framework : : :  [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>"-Bstatic -lquadmath -Bdynamic" ] [ requires cxx17_if_constexpr cxx17_std_apply ] ]
+   [ run condition_number_test.cpp ../../test/build//boost_unit_test_framework : : :  [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>"-Bstatic -lquadmath -Bdynamic" ] ]
    [ run test_real_concept.cpp ../../test/build//boost_unit_test_framework  ]
    [ run test_remez.cpp pch ../../test/build//boost_unit_test_framework  ]
    [ run test_roots.cpp pch ../../test/build//boost_unit_test_framework  ]
