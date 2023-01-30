@@ -33,6 +33,7 @@ These numbers are highly dependent on compiler flags; ensure the compiler is all
 
 To measure the performance on your system, refer to the google benchmark file `reporting/performance/estrin_performance.cpp`.
 
+N.B.: Estrin's method is less accurate that Horner's method. Refer to `example/estrin_vs_horner_accuracy.cpp` for details.
 
 [h4 References]
 
