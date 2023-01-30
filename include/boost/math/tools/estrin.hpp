@@ -10,6 +10,7 @@
 #include <array>
 #include <vector>
 #include <type_traits>
+#include <boost/math/tools/assert.hpp>
 
 namespace boost {
 namespace math {
@@ -22,6 +23,8 @@ inline RealOrComplex estrin(RandomAccessContainer1 const &coeffs, RandomAccessCo
   static_assert(std::is_same<typename RandomAccessContainer2::value_type, RealOrComplex>::value,
                 "The value type of the scratch space must be the same as the abscissa.");
   auto n = coeffs.size();
+  BOOST_MATH_ASSERT_MSG(std::size(scratch) >= (n + 1) / 2, "The scratch space must be at least N+1/2");
+
   if (n == 0) {
     return static_cast<RealOrComplex>(0);
   }
