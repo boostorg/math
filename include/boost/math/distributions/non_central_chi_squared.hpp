@@ -294,7 +294,7 @@ namespace boost
             T n2 = n / 2;
             T l2 = lambda / 2;
             T sum = 0;
-            int k = itrunc(l2);
+            long long k = lltrunc(l2);
             T pois = gamma_p_derivative(static_cast<T>(k + 1), l2, pol) * gamma_p_derivative(static_cast<T>(n2 + k), x2);
             if(pois == 0)
                return 0;
