@@ -15,7 +15,7 @@ windowsglobalimage="cppalliance/dronevs2019"
 
 def main(ctx):
 
-  things_to_test = [ git_issue_935 ]
+  things_to_test = [ "git_issue_935" ]
   sanitizer_test = [ "special_fun", "distribution_tests", "misc", "interpolators", "quadrature", "float128_tests" ]
   gnu_5_stds = [ "gnu++14", "c++14" ]
   gnu_6_stds = [ "gnu++14", "c++14", "gnu++17", "c++17" ]
