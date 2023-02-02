@@ -12,10 +12,12 @@ int main(void)
 {
     auto dist = boost::math::non_central_chi_squared(2.0, 4820232647677555.0);
     double test_pdf;
+    double test_cdf;
 
     try
     {
         test_pdf = boost::math::pdf(dist, 2.0);
+        test_cdf = boost::math::cdf(dist, 2.0);
     }
     catch (...)
     {
@@ -23,6 +25,7 @@ int main(void)
     }
 
     CHECK_ULP_CLOSE(test_pdf, 0.0, 1);
+    CHECK_ULP_CLOSE(test_cdf, 0.0, 1);
 
     return boost::math::test::report_errors();
 }
