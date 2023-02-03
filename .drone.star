@@ -37,7 +37,7 @@ def main(ctx):
 
   for suite in things_to_test:
     for cxx in gnu_non_native:
-      result.append(osx_cxx("M1 Clang " + cxx + " " + suite, "clang++", buildscript="drone", buildtype="boost", xcode_version="13.3.1", environment={'TOOLSET': 'clang', 'CXXSTD': cxx, 'TEST_SUITE': suite, 'DEFINE': 'BOOST_MATH_MULTI_ARCH_CI_RUN', }, globalenv=globalenv))
+      result.append(osx_cxx("M1 Clang " + cxx + " " + suite, "clang++", buildscript="drone", buildtype="boost", xcode_version="13.3.1", environment={'TOOLSET': 'clang', 'CXXSTD': 'c++14', 'TEST_SUITE': suite, 'DEFINE': 'BOOST_MATH_MULTI_ARCH_CI_RUN', }, globalenv=globalenv))
 
   return result
 
