@@ -5,7 +5,7 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #define BOOST_MATH_DOMAIN_ERROR_POLICY ignore_error
-#define BOOST_MATH_OVERFLOW_ERROR_POLICY #ignore_error
+#define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
 #define BOOST_MATH_PROMOTE_DOUBLE_POLICY false
 
 #include <cmath>
