@@ -11,7 +11,7 @@
 #include <random>
 #include <vector>
 
-using boost::math::tools::estrin;
+using boost::math::tools::evaluate_polynomial_estrin;
 using boost::math::tools::evaluate_polynomial;
 
 template <class Real> void HornerRealCoeffsRealArg(benchmark::State &state) {
@@ -71,7 +71,7 @@ template <class Real> void EstrinRealCoeffsRealArg(benchmark::State &state) {
   Real x = unif(mt);
   Real fudge = std::sqrt(std::numeric_limits<Real>::epsilon());
   for (auto _ : state) {
-    Real output = estrin(c, x);
+    Real output = evaluate_polynomial_estrin(c, x);
     benchmark::DoNotOptimize(output);
     x += fudge;
   }
@@ -93,7 +93,7 @@ template <class Real> void EstrinRealCoeffsRealArgWithScratch(benchmark::State &
   Real x = unif(mt);
   Real fudge = std::sqrt(std::numeric_limits<Real>::epsilon());
   for (auto _ : state) {
-    Real output = boost::math::tools::estrin(c, scratch, x);
+    Real output = evaluate_polynomial_estrin(c, scratch, x);
     benchmark::DoNotOptimize(output);
     x += fudge;
   }
@@ -115,7 +115,7 @@ template <class Real> void EstrinRealCoeffsComplexArgWithScratch(benchmark::Stat
   std::complex<Real> z{unif(mt), unif(mt)};
   Real fudge = std::sqrt(std::numeric_limits<Real>::epsilon());
   for (auto _ : state) {
-    auto output = boost::math::tools::estrin(c, scratch, z);
+    auto output = evaluate_polynomial_estrin(c, scratch, z);
     benchmark::DoNotOptimize(output);
     z += fudge;
   }
@@ -135,7 +135,7 @@ template <class Real, size_t n> void EstrinRealCoeffsRealArgStdArray(benchmark::
   Real x = unif(mt);
   Real fudge = std::sqrt(std::numeric_limits<Real>::epsilon());
   for (auto _ : state) {
-    Real output = boost::math::tools::estrin(c, x);
+    Real output = evaluate_polynomial_estrin(c, x);
     benchmark::DoNotOptimize(output);
     x += fudge;
   }
@@ -173,7 +173,7 @@ template <class Real, size_t n> void EstrinRealCoeffsComplexArgStdArray(benchmar
   std::complex<Real> z{unif(mt), unif(mt)};
   Real fudge = std::sqrt(std::numeric_limits<Real>::epsilon());
   for (auto _ : state) {
-    auto output = boost::math::tools::estrin(c, z);
+    auto output = evaluate_polynomial_estrin(c, z);
     benchmark::DoNotOptimize(output);
     z += fudge;
   }

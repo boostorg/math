@@ -8,7 +8,7 @@
 #include <boost/math/tools/rational.hpp>
 #include <boost/math/tools/ulps_plot.hpp>
 
-using boost::math::tools::estrin;
+using boost::math::tools::evaluate_polynomial_estrin;
 using boost::math::tools::evaluate_polynomial;
 using boost::math::tools::ulps_plot;
 
@@ -27,7 +27,7 @@ void estrin_vs_horner(size_t n) {
   auto hi_acc = [&](double x) {
     return evaluate_polynomial(coeffs_double.data(), x, coeffs_double.size());
   };
-  auto estrin_float = [&](float x) { return estrin(coeffs_float, x); };
+  auto estrin_float = [&](float x) { return evaluate_polynomial_estrin(coeffs_float, x); };
   auto horner_float = [&](float x) {
     return evaluate_polynomial(coeffs_float.data(), x, coeffs_float.size());
   };
@@ -37,7 +37,7 @@ void estrin_vs_horner(size_t n) {
   plot.add_fn(estrin_float, "steelblue");
   plot.add_fn(horner_float, "orange");
   plot.clip(10);
-  plot.title("Horner (orange) vs Estrin (blue) accuracy");
+  plot.title("Horner (orange) vs Estrin (blue) accuracy for a polynomial of degree " + std::to_string(n));
   plot.write("horner_vs_estrin.svg");
 }
 

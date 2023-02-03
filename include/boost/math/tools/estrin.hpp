@@ -17,7 +17,7 @@ namespace math {
 namespace tools {
 
 template <typename RandomAccessContainer1, typename RandomAccessContainer2, typename RealOrComplex>
-inline RealOrComplex estrin(RandomAccessContainer1 const &coeffs, RandomAccessContainer2 &scratch, RealOrComplex z) {
+inline RealOrComplex evaluate_polynomial_estrin(RandomAccessContainer1 const &coeffs, RandomAccessContainer2 &scratch, RealOrComplex z) {
   // Does anyone care about the complex coefficients, real argument case?
   // I've never seen it used, and this static assert makes the error messages much better:
   static_assert(std::is_same<typename RandomAccessContainer2::value_type, RealOrComplex>::value,
@@ -51,19 +51,19 @@ inline RealOrComplex estrin(RandomAccessContainer1 const &coeffs, RandomAccessCo
 
 // The std::array template specialization doesn't need to allocate:
 template <typename RealOrComplex1, size_t n, typename RealOrComplex2>
-inline RealOrComplex2 estrin(const std::array<RealOrComplex1, n> &coeffs, RealOrComplex2 z) {
+inline RealOrComplex2 evaluate_polynomial_estrin(const std::array<RealOrComplex1, n> &coeffs, RealOrComplex2 z) {
   std::array<RealOrComplex2, (n + 1) / 2> ds;
-  return estrin(coeffs, ds, z);
+  return evaluate_polynomial_estrin(coeffs, ds, z);
 }
 
 template <typename RandomAccessContainer, typename RealOrComplex>
-inline RealOrComplex estrin(const RandomAccessContainer &coeffs, RealOrComplex z) {
+inline RealOrComplex evaluate_polynomial_estrin(const RandomAccessContainer &coeffs, RealOrComplex z) {
   auto n = coeffs.size();
   // Normally, I'd make `ds` a RandomAccessContainer, but its value type needs to be RealOrComplex,
   // and the value_type of the passed RandomAccessContainer can just be Real.
   // Allocation of the std::vector is not ideal, but I have no other ideas at the moment:
   std::vector<RealOrComplex> ds((n + 1) / 2);
-  return estrin(coeffs, ds, z);
+  return evaluate_polynomial_estrin(coeffs, ds, z);
 }
 
 } // namespace tools

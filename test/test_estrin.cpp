@@ -11,7 +11,7 @@
 #include <boost/multiprecision/float128.hpp>
 #endif
 
-using boost::math::tools::estrin;
+using boost::math::tools::evaluate_polynomial_estrin;
 using boost::math::tools::summation_condition_number;
 
 template <typename Real, typename Complex> void test_symmetric_coefficients(size_t seed) {
@@ -19,7 +19,7 @@ template <typename Real, typename Complex> void test_symmetric_coefficients(size
   std::uniform_real_distribution<Real> dis(0, 1);
   std::vector<Real> coeffs(0);
   for (int i = 0; i < 10; ++i) {
-    auto p = estrin(coeffs, Complex(dis(gen)));
+    auto p = evaluate_polynomial_estrin(coeffs, Complex(dis(gen)));
     if (!CHECK_LE(std::norm(p), Real(0))) {
       std::cerr << "  If there are zero coefficients, the polynomial should evaluate to zero; seed = " << seed << "\n";
     }
@@ -28,7 +28,7 @@ template <typename Real, typename Complex> void test_symmetric_coefficients(size
   coeffs.resize(1);
   coeffs[0] = dis(gen);
   for (int i = 0; i < 10; ++i) {
-    auto p = estrin(coeffs, Complex(dis(gen)));
+    auto p = evaluate_polynomial_estrin(coeffs, Complex(dis(gen)));
     if (!CHECK_ULP_CLOSE(p.real(), coeffs[0], 0)) {
       std::cerr << "  For a polynomial with 1 coefficient, the polynomial should evaluate to c0 for all z; seed = " << seed << "\n";
     }
@@ -45,7 +45,7 @@ template <typename Real, typename Complex> void test_polynomial_properties(size_
     c = dis(gen);
   }
   // Test evaluation at zero:
-  auto p0 = estrin(coeffs, Complex(0));
+  auto p0 = evaluate_polynomial_estrin(coeffs, Complex(0));
   if (!CHECK_ULP_CLOSE(p0.real(), coeffs[0], 0)) {
     std::cerr << "  p(0) != c0 with seed " << seed << "\n";
   }
@@ -54,7 +54,7 @@ template <typename Real, typename Complex> void test_polynomial_properties(size_
     std::cerr << "  p(0) != c0 with seed " << seed << "\n";
   }
 
-  auto p1_computed = estrin(coeffs, Complex(1));
+  auto p1_computed = evaluate_polynomial_estrin(coeffs, Complex(1));
   // The recursive nature of Estrin's method makes it more accurate than a naive sum.
   // Use Kahan summation to make sure the expected value is accurate:
   auto s = summation_condition_number<Real>(0);
@@ -77,16 +77,16 @@ template <typename Real> void test_std_array_overload(size_t seed) {
     c = dis(gen);
   }
   // Test evaluation at zero:
-  auto p0 = estrin(coeffs, Real(0));
+  auto p0 = evaluate_polynomial_estrin(coeffs, Real(0));
   if (!CHECK_ULP_CLOSE(p0, coeffs[0], 0)) {
     std::cerr << "  p(0) != c0 with seed " << seed << "\n";
   }
-  auto p0_real = estrin(coeffs, Real(0));
+  auto p0_real = evaluate_polynomial_estrin(coeffs, Real(0));
   if (!CHECK_ULP_CLOSE(p0_real, coeffs[0], 0)) {
     std::cerr << "  p(0) != c0 with seed " << seed << "\n";
   }
 
-  auto p1_computed = estrin(coeffs, Real(1));
+  auto p1_computed = evaluate_polynomial_estrin(coeffs, Real(1));
   auto s = summation_condition_number<Real>(0);
   for (auto c : coeffs) {
     s += c;
