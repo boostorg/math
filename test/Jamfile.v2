@@ -1204,6 +1204,7 @@ test-suite misc :
    [ compile bernoulli_no_atomic_d.cpp ]
    [ compile bernoulli_no_atomic_mp.cpp ]
    [ compile-fail bernoulli_no_atomic_fail.cpp ]
+   [ run test_constexpr_real_concept.cpp ]
 ;
 
 test-suite interpolators :
