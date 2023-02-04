@@ -15,6 +15,8 @@ module;
 #include <cstdint>
 #include <limits>
 #include <mutex>
+#include <vector>
+#include <string>
 #include <boost/math/tools/promotion.hpp>
 
 
