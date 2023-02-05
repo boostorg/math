@@ -41,7 +41,7 @@ echo '==================================> SCRIPT'
 
 echo "using $TOOLSET : : $COMPILER : <cxxflags>-std=$CXXSTD $OPTIONS ;" > ~/user-config.jam
 uname -a
-(cd libs/config/test && ../../../b2 print_config_info print_math_info toolset=$TOOLSET)
+(cd libs/config/test && ../../../b2 -d2 print_config_info print_math_info toolset=$TOOLSET)
 (cd libs/math/test && ../../../b2 -j3 toolset=$TOOLSET $TEST_SUITE)
 
 echo '==================================> AFTER_SUCCESS'
