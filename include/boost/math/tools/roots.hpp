@@ -652,7 +652,9 @@ namespace detail {
          }
          else if (result > max)
          {
-            T diff = ((fabs(max) < 1) && (fabs(result) > 1) && (tools::max_value<T>() / fabs(result) < fabs(max))) ? T(1000) : T(result / max);
+            const T amax = fabs(max);
+            volatile const T aresult = fabs(result); // volatile: force compiler to honor data-dependency in chained bool exprs below
+            T diff = ((amax < 1) && (aresult > 1) && (tools::max_value<T>() / aresult < amax)) ? T(1000) : T(result / max);
             if (fabs(diff) < 1)
                diff = 1 / diff;
             if (!out_of_bounds_sentry && (diff > 0) && (diff < 3))
