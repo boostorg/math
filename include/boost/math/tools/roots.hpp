@@ -354,7 +354,12 @@ namespace detail {
          BOOST_MATH_INSTRUMENT_VARIABLE(denom);
          BOOST_MATH_INSTRUMENT_VARIABLE(num);
 
-         if ((fabs(num) < 1) && (fabs(denom) >= fabs(num) * tools::max_value<T>()))
+         // denom/num overflows if:
+         //     |denom| >= |num| * max_value
+         // RHS may overflow on Apple M1, so rearrange:
+         //     |denom| * 1/max_value >= |num|
+         static const T inv_max_value = 1.0 / tools::max_value<T>();
+         if ((fabs(num) < 1) && (inv_max_value * fabs(denom) >= fabs(num)))
          {
             // possible overflow, use Newton step:
             delta = f0 / f1;
