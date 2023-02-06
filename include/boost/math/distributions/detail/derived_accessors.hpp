@@ -151,6 +151,14 @@ inline typename Distribution::value_type cdf(const complemented2_type<Distributi
 }
 
 template <class Distribution, class RealType>
+inline typename Distribution::value_type logcdf(const complemented2_type<Distribution, RealType>& c)
+{
+   using std::log;
+   typedef typename Distribution::value_type value_type;
+   return log(cdf(complement(c.dist, static_cast<value_type>(c.param))));
+}
+
+template <class Distribution, class RealType>
 inline typename Distribution::value_type quantile(const complemented2_type<Distribution, RealType>& c)
 {
    typedef typename Distribution::value_type value_type;
