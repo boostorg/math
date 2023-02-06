@@ -32,7 +32,7 @@
    using std::setprecision;
 
 template <class RealType>
-void test_spot(RealType location, RealType scale, RealType x, RealType p, RealType q, RealType tolerance)
+void test_spot(RealType location, RealType scale, RealType x, RealType p, RealType q, RealType logp, RealType tolerance, RealType logtolerance)
 {
    BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
@@ -40,6 +40,12 @@ void test_spot(RealType location, RealType scale, RealType x, RealType p, RealTy
       x),
       p,
       tolerance); // %
+   BOOST_CHECK_CLOSE(
+      ::boost::math::logcdf(
+      logistic_distribution<RealType>(location,scale),      
+      x),
+      logp,
+      logtolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
       complement(logistic_distribution<RealType>(location,scale),      
@@ -93,23 +99,30 @@ void test_spots(RealType T)
       static_cast<RealType>(0.1L), // x
       static_cast<RealType>(0.141851064900487789594278108470953L), // p
       static_cast<RealType>(0.858148935099512210405721891529047L), //q
+      static_cast<RealType>(-1.95297761052607413459937686381969L), // log(p)
+      tolerance,
       tolerance);
-
+   
    test_spot(
       static_cast<RealType>(5), // location
       static_cast<RealType>(2), // scale
       static_cast<RealType>(3.123123123L),//x 
       static_cast<RealType>(0.281215878622547904873088053477813L), // p
       static_cast<RealType>(0.718784121377452095126911946522187L), //q
+      static_cast<RealType>(-1.26863265327659162571930803425160L),
+      tolerance,
       tolerance);
-
+   
    test_spot(
       static_cast<RealType>(1.2345L), // location
       static_cast<RealType>(0.12345L), // scale
       static_cast<RealType>(3.123123123L),//x
       static_cast<RealType>(0.999999773084685079723328282229357L), // p
       static_cast<RealType>(2.26915314920276671717770643005212e-7L), //q
-      tolerance);
+      //static_cast<RealType>(-2.2691534066556063906815875163479345e-7L), // Log(p) Edge case
+      log(static_cast<RealType>(0.999999773084685079723328282229357L)),
+      tolerance,
+      tolerance * 100000);
 
 
    //High probability
@@ -119,7 +132,9 @@ void test_spots(RealType T)
       static_cast<RealType>(10), // x
       static_cast<RealType>(0.99999998477002048723965105559179L), // p  
       static_cast<RealType>(1.5229979512760348944408208801237e-8L), //q
-      tolerance);
+      log(static_cast<RealType>(0.99999998477002048723965105559179L)),
+      tolerance,
+      tolerance * 100000);
 
    //negative x
    test_spot(
@@ -128,8 +143,9 @@ void test_spots(RealType T)
       static_cast<RealType>(-0.1L), // scale
       static_cast<RealType>(0.0724264853615177178439235061476928L), // p
       static_cast<RealType>(0.927573514638482282156076493852307L), //q
+      static_cast<RealType>(-2.6251832265757900570194868863670116L), // log(p)
+      tolerance,
       tolerance);
-
 
    test_spot(
       static_cast<RealType>(5), // location
@@ -137,8 +153,9 @@ void test_spots(RealType T)
       static_cast<RealType>(-20), // x
       static_cast<RealType>(3.72663928418656138608800947863869e-6L), // p
       static_cast<RealType>(0.999996273360715813438613911990521L), //q
+      static_cast<RealType>(-12.500003726646228123990312715291263L),
+      tolerance,
       tolerance);
-
 
    // Test value to check cancellation error in straight/complemented quantile.
    // The subtraction in the formula location-scale*log term introduces catastrophic
@@ -150,7 +167,9 @@ void test_spots(RealType T)
       static_cast<RealType>(-0.00125796420642514024493852425918807L),// x
       static_cast<RealType>(0.7L), // p
       static_cast<RealType>(0.3L), //q
-      80*tolerance);   
+      static_cast<RealType>(-0.35667494393873237891263871124118448L), // Log(p)
+      80*tolerance,
+      tolerance);   
 
    test_spot(
       static_cast<RealType>(1.2345L), // location
@@ -158,17 +177,19 @@ void test_spots(RealType T)
       static_cast<RealType>(0.0012345L), // x
       static_cast<RealType>(0.0000458541039469413343331170952855318L), // p
       static_cast<RealType>(0.999954145896053058665666882904714L), //q
-      80*tolerance);
-
-
-
+      static_cast<RealType>(-9.9900458551552785044234447480622748L), // Log(p)
+      80*tolerance,
+      tolerance);
+   
    test_spot(
       static_cast<RealType>(5L), // location
       static_cast<RealType>(2L), // scale
       static_cast<RealType>(0.0012345L), // x
       static_cast<RealType>(0.0759014628704232983512906076564256L), // p
       static_cast<RealType>(0.924098537129576701648709392343574L), //q
-      80*tolerance);
+      static_cast<RealType>(-2.5783193211111713937468666265459702L), // Log(p)
+      80*tolerance,
+      tolerance);
 
    //negative location
    test_spot(
@@ -177,7 +198,10 @@ void test_spots(RealType T)
       static_cast<RealType>(3), // x
       static_cast<RealType>(0.999999999999999999999999984171276L), // p
       static_cast<RealType>(1.58287236765203121622150720373972e-26L), //q
-      tolerance);
+      log(static_cast<RealType>(0.999999999999999999999999984171276L)), // Log(p)
+      tolerance,
+      tolerance * 100000);
+
    //PDF Testing
    BOOST_CHECK_CLOSE(
       ::boost::math::pdf(

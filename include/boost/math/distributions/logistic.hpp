@@ -146,6 +146,49 @@ namespace boost { namespace math {
        if(power < -tools::log_max_value<RealType>())
           return 1;
        return 1 / (1 + exp(power)); 
+    }
+
+    template <class RealType, class Policy>
+    inline RealType logcdf(const logistic_distribution<RealType, Policy>& dist, const RealType& x)
+    {
+       RealType scale = dist.scale();
+       RealType location = dist.location();
+       RealType result = 0; // of checks.
+       static const char* function = "boost::math::cdf(const logistic_distribution<%1%>&, %1%)";
+       if(false == detail::check_scale(function, scale, &result, Policy()))
+       {
+          return result;
+       }
+       if(false == detail::check_location(function, location, &result, Policy()))
+       {
+          return result;
+       }
+
+       if((boost::math::isinf)(x))
+       {
+          if(x < 0) 
+          {
+            return 0; // -infinity
+          }
+          return 1; // + infinity
+       }
+
+       if(false == detail::check_x(function, x, &result, Policy()))
+       {
+          return result;
+       }
+       BOOST_MATH_STD_USING
+       RealType power = (location - x) / scale;
+       if(power > tools::log_max_value<RealType>())
+       {
+          return 0;
+       }
+       if(power < -tools::log_max_value<RealType>())
+       {
+          return 1;
+       }
+
+       return -log(1 + exp(power));
     } 
     
     template <class RealType, class Policy>
