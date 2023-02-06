@@ -226,6 +226,12 @@ void test_pdf_cdf_ocatave()
    tolerance);
 
    BOOST_CHECK_CLOSE(
+      logcdf(laplace_distribution<RealType>(), static_cast<RealType>(-2.L)),
+      //static_cast<RealType>(0.06766764161831L),
+      static_cast<RealType>(-2.6931471805599453094172321214581765680755001319215L),
+   tolerance);
+
+   BOOST_CHECK_CLOSE(
       pdf(laplace_distribution<RealType>(), static_cast<RealType>(-1.L)),
       //static_cast<RealType>(0.18393972058572L),
       static_cast<RealType>(0.18393972058572116079776188508073043372290556554506L),
@@ -239,7 +245,14 @@ void test_pdf_cdf_ocatave()
 
    BOOST_CHECK_CLOSE(
       cdf(laplace_distribution<RealType>(), static_cast<RealType>(-1.L)),
-      static_cast<RealType>(0.18393972058572L),
+      //static_cast<RealType>(0.18393972058572L),
+      static_cast<RealType>(0.18393972058572116079776188508073043372290556554506L),
+   tolerance);
+
+   BOOST_CHECK_CLOSE(
+      logcdf(laplace_distribution<RealType>(), static_cast<RealType>(-1.L)),
+      //log(static_cast<RealType>(0.18393972058572L)),
+      static_cast<RealType>(-1.6931471805599453094172321214581765680755001342016L),
    tolerance);
 
    BOOST_CHECK_CLOSE(
@@ -255,6 +268,12 @@ void test_pdf_cdf_ocatave()
    tolerance);
 
    BOOST_CHECK_CLOSE(
+      logcdf(laplace_distribution<RealType>(), static_cast<RealType>(-0.5L)),
+      //static_cast<RealType>(0.30326532985632L),
+      static_cast<RealType>(-1.1931471805599453094172321214581765680755001342281L),
+   tolerance);
+
+   BOOST_CHECK_CLOSE(
       pdf(laplace_distribution<RealType>(), static_cast<RealType>(0.0L)),
       static_cast<RealType>(0.5L),
    tolerance);
@@ -267,6 +286,12 @@ void test_pdf_cdf_ocatave()
    BOOST_CHECK_CLOSE(
       cdf(laplace_distribution<RealType>(), static_cast<RealType>(0.0L)),
       static_cast<RealType>(0.5L),
+   tolerance);
+
+   BOOST_CHECK_CLOSE(
+      logcdf(laplace_distribution<RealType>(), static_cast<RealType>(0.0L)),
+      //log(static_cast<RealType>(0.5L)),
+      static_cast<RealType>(-0.69314718055994530941723212145817656807550013436026L),
    tolerance);
 
    BOOST_CHECK_CLOSE(
@@ -287,6 +312,12 @@ void test_pdf_cdf_ocatave()
    tolerance);
 
    BOOST_CHECK_CLOSE(
+      logcdf(laplace_distribution<RealType>(), static_cast<RealType>(0.5L)),
+      // static_cast<RealType>(0.69673467014368L),
+      static_cast<RealType>(-0.36135061480875908299180460835979393734587166765723L),
+   tolerance);
+
+   BOOST_CHECK_CLOSE(
       pdf(laplace_distribution<RealType>(), static_cast<RealType>(1.0L)),
     //  static_cast<RealType>(0.18393972058572L),
       static_cast<RealType>(0.18393972058572116079776188508073043372290556554506L),
@@ -303,6 +334,14 @@ void test_pdf_cdf_ocatave()
      // static_cast<RealType>(0.81606027941428L),
       static_cast<RealType>(0.81606027941427883920223811491926956627709443427977L),
    tolerance);
+
+   // Tolerance of naive implementation requires tol * 1e6
+   BOOST_CHECK_CLOSE(
+      logcdf(laplace_distribution<RealType>(), static_cast<RealType>(1.00000000000000L)),
+     // static_cast<RealType>(0.81606027941428L),
+      static_cast<RealType>(-0.2032670549151953327040710243903843274153282048153L),
+      //log(static_cast<RealType>(0.81606027941427883920223811491926956627709443427977L)),
+   tolerance*1e5);
 
    BOOST_CHECK_CLOSE(
       pdf(laplace_distribution<RealType>(), static_cast<RealType>(2.0L)),
@@ -321,6 +360,13 @@ void test_pdf_cdf_ocatave()
    //   static_cast<RealType>(0.93233235838169L),
       static_cast<RealType>(0.93233235838169365405300025251375779829618422688019L),
    tolerance);
+
+   BOOST_CHECK_CLOSE(
+      logcdf(laplace_distribution<RealType>(), static_cast<RealType>(2.0L)),
+   //   static_cast<RealType>(0.93233235838169L),
+      static_cast<RealType>(-0.07006592016028141016812825150355188141186366978811L),
+      //log(static_cast<RealType>(0.93233235838169365405300025251375779829618422688019L)),
+   tolerance*1e6);
 
    check_out_of_range<laplace_distribution<RealType> >(0, 1);
    BOOST_MATH_CHECK_THROW(laplace_distribution<RealType>(0, 0), std::domain_error);

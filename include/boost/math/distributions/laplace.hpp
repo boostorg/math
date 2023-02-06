@@ -226,6 +226,50 @@ inline RealType cdf(const laplace_distribution<RealType, Policy>& dist, const Re
    return result;
 } // cdf
 
+template <class RealType, class Policy>
+inline RealType logcdf(const laplace_distribution<RealType, Policy>& dist, const RealType& x)
+{
+   BOOST_MATH_STD_USING  // For ADL of std functions.
+
+   RealType result = 0;
+   // Checking function argument.
+   const char* function = "boost::math::logcdf(const laplace_distribution<%1%>&, %1%)";
+   // Check scale and location.
+   if (false == dist.check_parameters(function, &result)) 
+   {
+      return result;
+   }
+
+   // Special cdf values:
+   if((boost::math::isinf)(x))
+   {
+      if(x < 0) 
+      {
+         return 0; // -infinity.
+      }
+      return 1; // + infinity.
+   }
+
+   if (false == detail::check_x(function, x, &result, Policy())) 
+   {
+      return result;
+   }
+
+   // General cdf  values
+   RealType scale( dist.scale() );
+   RealType location( dist.location() );
+
+   if (x < location)
+   {
+      result = ((x - location) / scale) - boost::math::constants::ln_two<RealType>();
+   }
+   else
+   {
+      result = log(2 - exp((location - x) / scale)) - boost::math::constants::ln_two<RealType>();
+   }
+
+   return result;
+} // logcdf
 
 template <class RealType, class Policy>
 inline RealType quantile(const laplace_distribution<RealType, Policy>& dist, const RealType& p)
