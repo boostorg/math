@@ -17,6 +17,7 @@
 #ifndef BOOST_STATS_LAPLACE_HPP
 #define BOOST_STATS_LAPLACE_HPP
 
+#include <boost/math/special_functions/log1p.hpp>
 #include <boost/math/distributions/detail/common_error_handling.hpp>
 #include <boost/math/distributions/complement.hpp>
 #include <boost/math/constants/constants.hpp>
@@ -265,7 +266,7 @@ inline RealType logcdf(const laplace_distribution<RealType, Policy>& dist, const
    }
    else
    {
-      result = log(2 - exp((location - x) / scale)) - boost::math::constants::ln_two<RealType>();
+      result = log1p(-exp((location - x) / scale) / 2);
    }
 
    return result;
