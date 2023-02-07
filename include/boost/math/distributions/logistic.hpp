@@ -188,7 +188,7 @@ namespace boost { namespace math {
           return 1;
        }
 
-       return -log(1 + exp(power));
+       return -log1p(exp(power));
     } 
     
     template <class RealType, class Policy>

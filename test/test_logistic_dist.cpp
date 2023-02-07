@@ -119,8 +119,7 @@ void test_spots(RealType T)
       static_cast<RealType>(3.123123123L),//x
       static_cast<RealType>(0.999999773084685079723328282229357L), // p
       static_cast<RealType>(2.26915314920276671717770643005212e-7L), //q
-      //static_cast<RealType>(-2.2691534066556063906815875163479345e-7L), // Log(p) Edge case
-      log(static_cast<RealType>(0.999999773084685079723328282229357L)),
+      static_cast<RealType>(-2.2691534066556063906815875163479345e-7L), // Log(p) Edge case
       tolerance,
       tolerance * 100000);
 
@@ -132,7 +131,7 @@ void test_spots(RealType T)
       static_cast<RealType>(10), // x
       static_cast<RealType>(0.99999998477002048723965105559179L), // p  
       static_cast<RealType>(1.5229979512760348944408208801237e-8L), //q
-      log(static_cast<RealType>(0.99999998477002048723965105559179L)),
+      static_cast<RealType>(-1.5229979628736488101501003766470705e-8),
       tolerance,
       tolerance * 100000);
 
@@ -198,7 +197,7 @@ void test_spots(RealType T)
       static_cast<RealType>(3), // x
       static_cast<RealType>(0.999999999999999999999999984171276L), // p
       static_cast<RealType>(1.58287236765203121622150720373972e-26L), //q
-      log(static_cast<RealType>(0.999999999999999999999999984171276L)), // Log(p)
+      static_cast<RealType>(-1.58287236765203121622150720373972e-26L), // Log(p)
       tolerance,
       tolerance * 100000);
 
