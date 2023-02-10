@@ -21,10 +21,8 @@
 #include <cstdint>
 #include <boost/math/policies/policy.hpp>
 #include <boost/math/tools/precision.hpp>
-#ifndef BOOST_NO_EXCEPTIONS
 #include <stdexcept>
 #include <boost/math/tools/throw_exception.hpp>
-#endif
 
 #ifdef _MSC_VER
 #  pragma warning(push) // Quiet warnings in boost/format.hpp
@@ -40,8 +38,6 @@
 
 namespace boost{ namespace math{
 
-#ifndef BOOST_NO_EXCEPTIONS
-
 class evaluation_error : public std::runtime_error
 {
 public:
@@ -53,8 +49,6 @@ class rounding_error : public std::runtime_error
 public:
    explicit rounding_error(const std::string& s) : std::runtime_error(s){}
 };
-
-#endif
 
 namespace policies{
 //
@@ -128,7 +122,6 @@ inline const char* name_of<BOOST_MATH_FLOAT128_TYPE>()
 }
 #endif
 
-#ifndef BOOST_NO_EXCEPTIONS
 template <class E, class T>
 void raise_error(const char* pfunction, const char* message)
 {
@@ -184,7 +177,6 @@ void raise_error(const char* pfunction, const char* pmessage, const T& val)
 
   BOOST_MATH_THROW_EXCEPTION(E(msg))
 }
-#endif
 
 template <class T>
 inline T raise_domain_error(
