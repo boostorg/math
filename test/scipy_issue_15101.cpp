@@ -22,7 +22,7 @@ int main()
     const auto binom_dist = boost::math::binomial_distribution<double>(n, p);
     const auto pdf1 = boost::math::pdf(binom_dist, 3);
 
-    CHECK_ULP_CLOSE(pdf1, 0, 1);
+    CHECK_ULP_CLOSE(pdf1, 0.0, 1);
 
     if (std::fetestexcept(FE_DIVBYZERO)) 
     {
