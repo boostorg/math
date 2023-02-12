@@ -95,7 +95,7 @@ void test_spots(RealType T)
       static_cast<RealType>(1e-33L),
       boost::math::tools::epsilon<RealType>());
 
-   #if defined(__arm__) || defined(__aarch64__)
+   #if !(defined(__amd64__) || defined(__x86_64__) || defined(_M_AMD64))
    if (std::is_same<RealType, long double>::value || std::is_same<RealType, boost::math::concepts::real_concept>::value)
    {
       tolerance = std::numeric_limits<double>::epsilon();
