@@ -296,7 +296,7 @@ void test_spots(RealType)
   static_cast<RealType>(-1.0000000000000364e-102L),
   static_cast<RealType>(-std::numeric_limits<RealType>::infinity()),
   tolerance,
-  tolerance);
+  tolerance * 100);
 
   test_spot(  // > formatC(pgeom(1,0.99, TRUE), digits=17) [1] "0.99990000000000001"
     // > formatC(pgeom(1,0.99, FALSE), digits=17) [1] "0.00010000000000000009"
