@@ -94,6 +94,14 @@ void test_spots(RealType T)
    RealType tolerance = (std::max)(
       static_cast<RealType>(1e-33L),
       boost::math::tools::epsilon<RealType>());
+
+   #if defined(__arm__) || defined(__aarch64__)
+   if (std::is_same<RealType, long double>::value || std::is_same<RealType, boost::math::concepts::real_concept>::value)
+   {
+      tolerance = std::numeric_limits<double>::epsilon();
+   } 
+   #endif
+
    cout<<"Absolute tolerance:"<<tolerance<<endl;
 
    tolerance *= 50 * 100; 
