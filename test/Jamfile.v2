@@ -497,6 +497,7 @@ test-suite special_fun :
           <toolset>intel:<pch>off
         : test_igamma_inva_real_concept  ]
    [ run test_instantiate1.cpp test_instantiate2.cpp  ]
+   [ run test_instantiate1.cpp test_instantiate2.cpp  : : : <exception-handling>off : test_instantiate_no_eh ]
    [ run test_jacobi.cpp pch_light ../../test/build//boost_unit_test_framework  ]
    [ run test_laguerre.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
 
