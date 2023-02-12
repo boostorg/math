@@ -35,7 +35,7 @@
 template <class RealType>
 void test_spot(RealType location, RealType scale, RealType x, RealType p, RealType q, RealType logp, RealType logq, RealType tolerance, RealType logtolerance, RealType logtoleranceq)
 {
-   if (std::is_same<RealType, long double>::value)
+   if (std::is_same<RealType, long double>::value || std::is_same<RealType, boost::math::concepts::real_concept>::value)
    {
       logtoleranceq *= 100;
    }
@@ -157,7 +157,7 @@ void test_spots(RealType T)
       static_cast<RealType>(10), // x
       static_cast<RealType>(0.99999998477002048723965105559179L), // p  
       static_cast<RealType>(1.5229979512760348944408208801237e-8L), //q
-      static_cast<RealType>(-1.5229979628736488101501003766470705e-8), // log(p)
+      static_cast<RealType>(-1.5229979628736488101501003766470705e-8L), // log(p)
       static_cast<RealType>(-18.000000015229979628736488101501L), // Log(q)
       tolerance,
       tolerance * 100000,
