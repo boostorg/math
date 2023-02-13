@@ -895,6 +895,7 @@ test-suite distribution_tests :
    [ run git_issue_800.cpp ../../test/build//boost_unit_test_framework  ]
    [ run git_issue_845.cpp ../../test/build//boost_unit_test_framework  ]
    [ run scipy_issue_14901.cpp ../../test/build//boost_unit_test_framework ]
+   [ run scipy_issue_15101.cpp ../../test/build//boost_unit_test_framework ]
    [ run scipy_issue_17146.cpp ../../test/build//boost_unit_test_framework  ]
    [ run scipy_issue_17388.cpp ../../test/build//boost_unit_test_framework  ]
    [ run scipy_issue_17916.cpp ../../test/build//boost_unit_test_framework  ]
