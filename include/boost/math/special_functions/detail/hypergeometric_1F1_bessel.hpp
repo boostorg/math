@@ -339,15 +339,19 @@
         if(b == 2 * a)
            return hypergeometric_1F1_divergent_fallback(a, b, z, pol, log_scale);
 
+#ifndef BOOST_NO_EXCEPTIONS
         try
+#endif
         {
            prefix = boost::math::tgamma(b, pol);
            prefix *= exp(z / 2);
         }
+#ifndef BOOST_NO_EXCEPTIONS
         catch (const std::runtime_error&)
         {
            use_logs = true;
         }
+#endif
         if (use_logs || (prefix == 0) || !(boost::math::isfinite)(prefix) || (!std::numeric_limits<T>::has_infinity && (fabs(prefix) >= tools::max_value<T>())))
         {
            use_logs = true;
@@ -360,12 +364,16 @@
         std::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
         bool retry = false;
         long long series_scale = 0;
+#ifndef BOOST_NO_EXCEPTIONS
         try
+#endif
         {
            hypergeometric_1F1_AS_13_3_7_tricomi_series<T, Policy> s(a, b, z, pol);
            series_scale = s.scale();
            log_scale += s.scale();
+#ifndef BOOST_NO_EXCEPTIONS
            try
+#endif
            {
               T norm = 0;
               result = 0;
@@ -378,6 +386,7 @@
               if (norm / fabs(result) > 1 / boost::math::tools::root_epsilon<T>())
                  retry = true;  // fatal cancellation
            }
+#ifndef BOOST_NO_EXCEPTIONS
            catch (const std::overflow_error&)
            {
               retry = true;
@@ -386,7 +395,9 @@
            {
               retry = true;
            }
+#endif
         }
+#ifndef BOOST_NO_EXCEPTIONS
         catch (const std::overflow_error&)
         {
            log_scale -= scale;
@@ -397,6 +408,7 @@
            log_scale -= scale;
            return hypergeometric_1F1_divergent_fallback(a, b, z, pol, log_scale);
         }
+#endif
         if (retry)
         {
            log_scale -= scale;
