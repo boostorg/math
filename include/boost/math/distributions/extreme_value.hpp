@@ -252,6 +252,30 @@ inline RealType cdf(const complemented2_type<extreme_value_distribution<RealType
 }
 
 template <class RealType, class Policy>
+inline RealType logcdf(const complemented2_type<extreme_value_distribution<RealType, Policy>, RealType>& c)
+{
+   BOOST_MATH_STD_USING // for ADL of std functions
+
+   static const char* function = "boost::math::logcdf(const extreme_value_distribution<%1%>&, %1%)";
+
+   if((boost::math::isinf)(c.param))
+      return c.param < 0 ? 1.0f : 0.0f;
+   RealType a = c.dist.location();
+   RealType b = c.dist.scale();
+   RealType result = 0;
+   if(0 == detail::verify_scale_b(function, b, &result, Policy()))
+      return result;
+   if(0 == detail::check_finite(function, a, &result, Policy()))
+      return result;
+   if(0 == detail::check_x(function, c.param, &result, Policy()))
+      return result;
+
+   result = log1p(-exp(-exp((a-c.param)/b)), Policy());
+
+   return result;
+}
+
+template <class RealType, class Policy>
 RealType quantile(const complemented2_type<extreme_value_distribution<RealType, Policy>, RealType>& c)
 {
    BOOST_MATH_STD_USING // for ADL of std functions
