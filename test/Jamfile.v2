@@ -1196,7 +1196,7 @@ test-suite misc :
        ../../test/build//boost_unit_test_framework ]
    [ run quaternion_constexpr_test.cpp ]
    [ run quaternion_test.cpp
-       ../../test/build//boost_unit_test_framework : : : [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] ]
+       ../../test/build//boost_unit_test_framework : : : <toolset>msvc-14.0:<debug-symbols>off [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] ]
    [ run quaternion_mult_incl_test.cpp
        quaternion_mi1.cpp
        quaternion_mi2.cpp
