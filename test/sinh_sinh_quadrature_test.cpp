@@ -14,6 +14,7 @@
 #include <boost/math/special_functions/sinc.hpp>
 #include <boost/math/tools/test_value.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
+#include <boost/type_index.hpp>
 
 #if !BOOST_WORKAROUND(BOOST_MSVC, < 1900)
 // MSVC-12 has problems if we include 2 different multiprecision types in the same program,

@@ -23,6 +23,7 @@
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/special_functions/sinc.hpp>
 #include <boost/type_traits/is_class.hpp>
+#include <boost/type_index.hpp>
 
 #ifdef BOOST_HAS_FLOAT128
 #include <boost/multiprecision/complex128.hpp>

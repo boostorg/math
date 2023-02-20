@@ -17,6 +17,7 @@
 #include <boost/math/quadrature/gauss_kronrod.hpp>
 #include <boost/math/special_functions/sinc.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
+#include <boost/type_index.hpp>
 
 #if !defined(TEST1) && !defined(TEST1A) && !defined(TEST2) && !defined(TEST3)
 #  define TEST1

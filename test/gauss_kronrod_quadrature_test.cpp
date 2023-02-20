@@ -13,6 +13,7 @@
 #if !defined(BOOST_NO_CXX11_DECLTYPE) && !defined(BOOST_NO_CXX11_TRAILING_RESULT_TYPES) && !defined(BOOST_NO_SFINAE_EXPR)
 
 #include <boost/math/concepts/real_concept.hpp>
+#include <boost/type_index.hpp>
 #include <boost/math/tools/test_value.hpp>
 #include <boost/test/included/unit_test.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>

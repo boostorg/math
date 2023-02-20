@@ -21,6 +21,7 @@
 #include <boost/math/tools/test_value.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/multiprecision/cpp_complex.hpp>
+#include <boost/type_index.hpp>
 
 #ifdef BOOST_HAS_FLOAT128
 #include <boost/multiprecision/complex128.hpp>

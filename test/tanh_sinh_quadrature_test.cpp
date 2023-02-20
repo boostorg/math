@@ -24,6 +24,7 @@
 #include <boost/math/special_functions/beta.hpp>
 #include <boost/math/special_functions/ellint_rc.hpp>
 #include <boost/math/special_functions/ellint_rj.hpp>
+#include <boost/type_index.hpp>
 
 #ifdef BOOST_HAS_FLOAT128
 #include <boost/multiprecision/float128.hpp>
