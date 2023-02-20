@@ -8,7 +8,8 @@
 
 #include <complex>
 #include <boost/config.hpp>
-//#include <boost/multiprecision/mpc.hpp>
+#include <boost/type_index.hpp>
+ //#include <boost/multiprecision/mpc.hpp>
 #include <boost/test/included/unit_test.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/tools/test_value.hpp>
