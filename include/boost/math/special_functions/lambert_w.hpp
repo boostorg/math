@@ -519,19 +519,11 @@ template <typename T, typename Policy>
 T lambert_w0_small_z(T x, const Policy& pol)
 { //std::numeric_limits<T>::max_digits10 == 36 ? 3 : // 128-bit long double.
   using tag_type = std::integral_constant<int,
-     std::numeric_limits<T>::is_specialized == 0 ? 5 :
-#ifndef BOOST_NO_CXX11_NUMERIC_LIMITS
+    std::numeric_limits<T>::is_specialized == 0 ? 5 :
     std::numeric_limits<T>::max_digits10 <=  9 ? 0 : // for float 32-bit.
     std::numeric_limits<T>::max_digits10 <= 17 ? 1 : // for double 64-bit.
     std::numeric_limits<T>::max_digits10 <= 22 ? 2 : // for 80-bit double extended.
     std::numeric_limits<T>::max_digits10 <  37 ? 4  // for both 128-bit long double (3) and 128-bit quad suffix Q type (4).
-#else
-     std::numeric_limits<T>::radix != 2 ? 5 :
-     std::numeric_limits<T>::digits <= 24 ? 0 : // for float 32-bit.
-     std::numeric_limits<T>::digits <= 53 ? 1 : // for double 64-bit.
-     std::numeric_limits<T>::digits <= 64 ? 2 : // for 80-bit double extended.
-     std::numeric_limits<T>::digits <= 113 ? 4  // for both 128-bit long double (3) and 128-bit quad suffix Q type (4).
-#endif
       :  5>;                                           // All Generic multiprecision types.
   // std::cout << "\ntag type = " << tag_type << std::endl; // error C2275: 'tag_type': illegal use of this type as an expression.
   return lambert_w0_small_z(x, pol, tag_type());
