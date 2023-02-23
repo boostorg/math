@@ -17,6 +17,7 @@
 #include <boost/math/quadrature/gauss_kronrod.hpp>
 #include <boost/math/special_functions/sinc.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
+#include <boost/type_index.hpp>
 
 #if !defined(TEST1) && !defined(TEST1A) && !defined(TEST2) && !defined(TEST3)
 #  define TEST1
@@ -259,6 +260,7 @@ BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
     test_left_limit_infinite<double, 17>();
 #endif
 #ifdef TEST1A
+#if LDBL_MANT_DIG < 100 // If we have too many digits in a long double, we get build errors due to a constexpr issue.
     std::cout << "Testing with 21 point Gauss-Kronrod rule:\n";
     test_linear<cpp_bin_float_quad, 21>();
     test_quadratic<cpp_bin_float_quad, 21>();
@@ -277,7 +279,9 @@ BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
     test_right_limit_infinite<cpp_bin_float_quad, 31>();
     test_left_limit_infinite<cpp_bin_float_quad, 31>();
 #endif
+#endif
 #ifdef TEST2
+#if LDBL_MANT_DIG < 100 // If we have too many digits in a long double, we get build errors due to a constexpr issue.
     std::cout << "Testing with 41 point Gauss-Kronrod rule:\n";
     test_linear<cpp_bin_float_quad, 41>();
     test_quadratic<cpp_bin_float_quad, 41>();
@@ -296,7 +300,9 @@ BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
     test_right_limit_infinite<cpp_bin_float_quad, 51>();
     test_left_limit_infinite<cpp_bin_float_quad, 51>();
 #endif
+#endif
 #ifdef TEST3
+#if LDBL_MANT_DIG < 100 // If we have too many digits in a long double, we get build errors due to a constexpr issue.
     std::cout << "Testing with 61 point Gauss-Kronrod rule:\n";
     test_linear<cpp_bin_float_quad, 61>();
     test_quadratic<cpp_bin_float_quad, 61>();
@@ -305,6 +311,7 @@ BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
     test_integration_over_real_line<cpp_bin_float_quad, 61>();
     test_right_limit_infinite<cpp_bin_float_quad, 61>();
     test_left_limit_infinite<cpp_bin_float_quad, 61>();
+#endif
 #endif
 }
 

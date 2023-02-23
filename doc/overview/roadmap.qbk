@@ -8,6 +8,31 @@ All old bug reports including closed ones can be viewed on Trac
 
 Recent issues on GitHub [@https://github.com/boostorg/math/issues?utf8=%E2%9C%93&q=is%3Aissue here].
 
+[h4 Math-4.1.0 (Boost-1.82)]
+
+* Added Estrin's method for polynomial evaluation.
+* Fix various issues in non-central distributions to allow for larger non-centralities see [@https://github.com/boostorg/math/pull/939 939].
+* Added CMake install target.
+* Fix special_functions.hpp to disable anything which can't be used in an exception-free environment.
+* Get condition number calculation working in C++14.
+* Fix `constexpr` table driven functions to avoid massive slowdown when the code is not actually `constexpr`, see [@https://github.com/boostorg/math/issues/923 923].
+* Improve tanh_sinh boundary handling, see [@https://github.com/boostorg/math/pull/894 894].
+* Add Linux arm64, s390x and Apple M1 testing, fix up test cases to handle 128-bit long doubles.
+* Improve `constexpr` math functions to better handle infinities and NaN's.
+* Make the integrators const-correct.
+* Fix tanh_sinh integrator in case the function underflows, see [@https://github.com/boostorg/math/issues/898 898].
+* Don't use `std::cbrt` as some platforms still don't support it.
+* Stop non-central T from raising spurious FE_INVALID exceptions, see [@https://github.com/boostorg/math/pull/892 892].
+* Fix binomial distribution edge case.
+* Improve ibeta handling of very small arguments, see [@https://github.com/boostorg/math/pull/884 884].
+* Improve ibeta handling of infinities and NaN's, see [@https://github.com/boostorg/math/issues/878 874].
+* Improve error handling in powm1, see [@https://github.com/boostorg/math/issues/781 781].
+* Improve root-finder bracketing to bracket faster when the exponent is super-large or small.
+* Fix root finding edge cases, see [@https://github.com/boostorg/math/issues/873 873].
+* Lot's of miscellaneous warning fixes.
+* Add assertions when using features which require C++17 for better error messages when invoking the compiler in a lower std version.
+
+
 [h4 Math-4.0.0 (Boost-1.81)]
 
 * [*BREAKING CHANGE:] Fix forward declaration of `user_rounding_error`, see [@https://github.com/boostorg/math/issues/834 834].

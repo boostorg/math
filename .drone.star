@@ -17,11 +17,12 @@ def main(ctx):
 
   things_to_test = [ "special_fun", "distribution_tests", "mp", "misc", "interpolators", "quadrature", "autodiff", "long-running-tests", "float128_tests" ]
   sanitizer_test = [ "special_fun", "distribution_tests", "misc", "interpolators", "quadrature", "float128_tests" ]
-  gnu_5_stds = [ "gnu++11", "c++11", "gnu++14", "c++14" ]
-  gnu_6_stds = [ "gnu++11", "c++11", "gnu++14", "c++14", "gnu++17", "c++17" ]
-  clang_6_stds = [ "c++11", "c++14", "c++17" ]
+  gnu_5_stds = [ "gnu++14", "c++14" ]
+  gnu_6_stds = [ "gnu++14", "c++14", "gnu++17", "c++17" ]
+  clang_6_stds = [ "c++14", "c++17" ]
   gnu_9_stds = [ "gnu++14", "c++14", "gnu++17", "c++17", "gnu++2a", "c++2a" ]
   clang_10_stds = [ "c++14", "c++17", "c++2a" ]
+  gnu_non_native = [ "gnu++17" ]
 
   result = []
 
@@ -52,6 +53,12 @@ def main(ctx):
       result.append(linux_cxx("Ubuntu g++-11 " + cxx + " " + suite, "g++-11", packages="g++-11", buildtype="boost", image="cppalliance/droneubuntu2004:1", environment={'TOOLSET': 'gcc', 'COMPILER': 'g++-11', 'CXXSTD': cxx, 'TEST_SUITE': suite, }, globalenv=globalenv))
     for cxx in clang_10_stds:
       result.append(linux_cxx("Ubuntu clang++-10 " + cxx + " " + suite, "clang++-10", packages="clang-10", llvm_os="xenial", llvm_ver="10", buildtype="boost", image="cppalliance/droneubuntu1804:1", environment={'TOOLSET': 'clang', 'COMPILER': 'clang++-10', 'CXXSTD': cxx, 'TEST_SUITE': suite, }, globalenv=globalenv))
+    for cxx in gnu_non_native:
+      result.append(linux_cxx("Ubuntu g++ s390s " + cxx + " " + suite, "g++", packages="g++", buildtype="boost", image="cppalliance/droneubuntu2204:multiarch", arch="s390x", environment={'TOOLSET': 'gcc', 'COMPILER': 'g++', 'CXXSTD': cxx, 'TEST_SUITE': suite, }, globalenv=globalenv))
+    for cxx in gnu_non_native:
+      result.append(linux_cxx("Ubuntu g++ ARM64" + cxx + " " + suite, "g++", packages="g++", buildtype="boost", image="cppalliance/droneubuntu2204:multiarch", arch="arm64", environment={'TOOLSET': 'gcc', 'COMPILER': 'g++', 'CXXSTD': cxx, 'TEST_SUITE': suite, }, globalenv=globalenv))
+    for cxx in gnu_non_native:
+      result.append(osx_cxx("M1 Clang " + cxx + " " + suite, "clang++", buildscript="drone", buildtype="boost", xcode_version="14.1", environment={'TOOLSET': 'clang', 'CXXSTD': cxx, 'TEST_SUITE': suite, 'DEFINE': 'BOOST_MATH_NO_REAL_CONCEPT_TESTS,BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS,BOOST_MATH_MULTI_ARCH_CI_RUN', }, globalenv=globalenv))
 
   return result
 

@@ -106,6 +106,36 @@ void expected_results()
    //
    // Linux:
    //
+   if (std::numeric_limits<long double>::digits > 100)
+   {
+      // Some input test values use symbolic constants like PI, sensitity
+      // of the function means that 0.5ulp error in the input has a 
+      // non-zero output error.  
+      // Typical case is cyl_neumann_prime(8.5, boost::math::constants::pi<T>() * 4);
+      add_expected_result(
+         ".*",                          // compiler
+         ".*",                          // stdlib
+         "linux",                       // platform
+         "double",                      // test type(s)
+         ".*",                          // test data group
+         ".*", 30, 20);                  // test function
+      add_expected_result(
+            ".*",                          // compiler
+            ".*",                          // stdlib
+            "linux",                          // platform
+            largest_type,                  // test type(s)
+            ".*Y'v.*Random.*",              // test data group
+            ".*", 7000000, 700000);         // test function
+         add_expected_result(
+            ".*",                          // compiler
+            ".*",                          // stdlib
+            "linux",                          // platform
+            largest_type,                  // test type(s)
+            ".*Y'[01v].*",              // test data group
+            ".*", 7000, 3000);         // test function
+      }
+      else
+      {
       add_expected_result(
          ".*",                          // compiler
          ".*",                          // stdlib
@@ -114,12 +144,13 @@ void expected_results()
          ".*Y'v.*Random.*",              // test data group
          ".*", 400000, 200000);         // test function
       add_expected_result(
-         ".*",                          // compiler
-         ".*",                          // stdlib
-         "linux",                          // platform
-         largest_type,                  // test type(s)
-         ".*Y'[01v].*",              // test data group
-         ".*", 2000, 1000);         // test function
+            ".*",                          // compiler
+            ".*",                          // stdlib
+            "linux",                          // platform
+            largest_type,                  // test type(s)
+            ".*Y'[01v].*",              // test data group
+            ".*", 2000, 1000);         // test function
+      }
       add_expected_result(
          ".*",                          // compiler
          ".*",                          // stdlib
@@ -253,7 +284,7 @@ void expected_results()
       ".*",                          // compiler
       ".*",                          // stdlib
       ".*",                          // platform
-      "float",                       // test type(s)
+      "float|double",                // test type(s)
       "Y'v: Mathworld Data",    // test data group
       ".*", 30, 20);                 // test function
    //

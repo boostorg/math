@@ -13,6 +13,7 @@
 #if !defined(BOOST_NO_CXX11_DECLTYPE) && !defined(BOOST_NO_CXX11_TRAILING_RESULT_TYPES) && !defined(BOOST_NO_SFINAE_EXPR)
 
 #include <boost/math/concepts/real_concept.hpp>
+#include <boost/type_index.hpp>
 #include <boost/math/tools/test_value.hpp>
 #include <boost/test/included/unit_test.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
@@ -476,6 +477,7 @@ BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
     test_complex_lambert_w<std::complex<long double>>();
 #endif
 #ifdef TEST1A
+#if LDBL_MANT_DIG < 100 // If we have too many digits in a long double, we get build errors due to a constexpr issue.
     std::cout << "Testing 21 point approximation:\n";
     test_linear<cpp_bin_float_quad, 21>();
     test_quadratic<cpp_bin_float_quad, 21>();
@@ -494,7 +496,9 @@ BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
     test_right_limit_infinite<cpp_bin_float_quad, 31>();
     test_left_limit_infinite<cpp_bin_float_quad, 31>();
 #endif
+#endif
 #ifdef TEST2
+#if LDBL_MANT_DIG < 100 // If we have too many digits in a long double, we get build errors due to a constexpr issue.
     std::cout << "Testing 41 point approximation:\n";
     test_linear<cpp_bin_float_quad, 41>();
     test_quadratic<cpp_bin_float_quad, 41>();
@@ -513,6 +517,7 @@ BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
     test_right_limit_infinite<cpp_bin_float_quad, 51>();
     test_left_limit_infinite<cpp_bin_float_quad, 51>();
 #endif
+#endif
 #ifdef TEST3
     // Need at least one set of tests with expression templates turned on:
     std::cout << "Testing 61 point approximation:\n";
@@ -524,7 +529,9 @@ BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
     test_right_limit_infinite<cpp_dec_float_50, 61>();
     test_left_limit_infinite<cpp_dec_float_50, 61>();
 #ifdef BOOST_HAS_FLOAT128
+#if LDBL_MANT_DIG < 100 // If we have too many digits in a long double, we get build errors due to a constexpr issue.
     test_complex_lambert_w<boost::multiprecision::complex128>();
+#endif
 #endif
 #endif
 }

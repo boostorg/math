@@ -286,10 +286,10 @@ void test_spots(T, const char* type_name)
         // {{ SC_(0.0), SC_(0.9921875), SC_(0.0) }},
     }};
 
-    do_test_jacobi_theta1<T>(data1, type_name, "Jacobi Theta 1: Wolfrom Alpha Data");
-    do_test_jacobi_theta2<T>(data2, type_name, "Jacobi Theta 2: Wolfram Alpha Data");
-    do_test_jacobi_theta3<T>(data3, type_name, "Jacobi Theta 3: Wolfram Alpha Data");
-    do_test_jacobi_theta4<T>(data4, type_name, "Jacobi Theta 4: Wolfram Alpha Data");
+    do_test_jacobi_theta1<T>(data1, type_name, "Jacobi Theta 1: WolframAlpha Data");
+    do_test_jacobi_theta2<T>(data2, type_name, "Jacobi Theta 2: WolframAlpha Data");
+    do_test_jacobi_theta3<T>(data3, type_name, "Jacobi Theta 3: WolframAlpha Data");
+    do_test_jacobi_theta4<T>(data4, type_name, "Jacobi Theta 4: WolframAlpha Data");
 
 #include "jacobi_theta_data.ipp"
 

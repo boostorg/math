@@ -24,6 +24,7 @@
 #include <boost/math/special_functions/beta.hpp>
 #include <boost/math/special_functions/ellint_rc.hpp>
 #include <boost/math/special_functions/ellint_rj.hpp>
+#include <boost/type_index.hpp>
 
 #ifdef BOOST_HAS_FLOAT128
 #include <boost/multiprecision/float128.hpp>
@@ -426,7 +427,7 @@ void test_right_limit_infinite()
     Real Q_expected;
     Real error;
     Real L1;
-    auto integrator = get_integrator<Real>();
+    const auto& integrator = get_integrator<Real>();
 
     // Example 11:
     auto f1 = [](const Real& t) { return 1/(1+t*t);};
@@ -458,7 +459,7 @@ void test_left_limit_infinite()
     Real tol = 10 * boost::math::tools::epsilon<Real>();
     Real Q;
     Real Q_expected;
-    auto integrator = get_integrator<Real>();
+    const auto& integrator = get_integrator<Real>();
 
     // Example 11:
     auto f1 = [](const Real& t) { return 1/(1+t*t);};
@@ -484,7 +485,7 @@ void test_horrible()
       Real Q_expected;
       Real error;
       Real L1;
-      auto integrator = get_integrator<Real>();
+      const auto& integrator = get_integrator<Real>();
 
       auto f = [](Real x)->Real { return x*sin(2*exp(2*sin(2*exp(2*x) ) ) ); };
       Q = integrator.integrate(f, (Real) -1, (Real) 1, get_convergence_tolerance<Real>(), &error, &L1);
@@ -507,7 +508,7 @@ void test_nr_examples()
     Real Q_expected;
     Real error;
     Real L1;
-    auto integrator = get_integrator<Real>();
+    const auto& integrator = get_integrator<Real>();
 
     auto f1 = [](Real x)->Real
     {
@@ -520,7 +521,7 @@ void test_nr_examples()
     auto f2 = [](Real x)->Real { return pow(x, -(Real) 2/(Real) 7)*exp(-x*x); };
     Q = integrator.integrate(f2, 0, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>());
     Q_expected = half<Real>()*boost::math::tgamma((Real) 5/ (Real) 14);
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol * 6);
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol * 10);
 
 }
 
@@ -534,7 +535,7 @@ void test_early_termination()
     Real Q_expected;
     Real error;
     Real L1;
-    auto integrator = get_integrator<Real>();
+    const auto& integrator = get_integrator<Real>();
 
     auto f1 = [](Real x)->Real { return 23*cosh(x)/ (Real) 25 - cos(x) ; };
     Q = integrator.integrate(f1, (Real) -1, (Real) 1, get_convergence_tolerance<Real>(), &error, &L1);
@@ -555,7 +556,7 @@ void test_crc()
     Real Q_expected;
     Real error;
     Real L1;
-    auto integrator = get_integrator<Real>();
+    const auto& integrator = get_integrator<Real>();
 
     // CRC Definite integral 585
     auto f1 = [](Real x)->Real { Real t = log(1/x); return x*x*t*t*t; };
@@ -636,7 +637,7 @@ void test_crc()
 
     // CRC Section 5.5, integral 635
     for (int m = 0; m < 10; ++m) {
-        auto f = [&](Real x)->Real { return 1/(1 + pow(tan(x), m)); };
+        auto f = [&](Real x)->Real { return Real(1)/(Real(1) + pow(tan(x), m)); };
         Q = integrator.integrate(f, (Real) 0, half_pi<Real>(), get_convergence_tolerance<Real>(), &error, &L1);
         Q_expected = half_pi<Real>()/2;
         BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
@@ -718,7 +719,7 @@ void test_sf()
    // Test some special functions that we already know how to evaluate:
    std::cout << "Testing special functions on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
    Real tol = 10 * boost::math::tools::epsilon<Real>();
-   auto integrator = get_integrator<Real>();
+   const auto& integrator = get_integrator<Real>();
 
    // incomplete beta:
    if (std::numeric_limits<Real>::digits10 < 37) // Otherwise too slow
@@ -765,7 +766,7 @@ void test_2_arg()
    std::cout << "Testing 2 argument functors on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
    Real tol = 10 * boost::math::tools::epsilon<Real>();
 
-   auto integrator = get_integrator<Real>();
+   const auto& integrator = get_integrator<Real>();
 
    //
    // There are a whole family of integrals of the general form
@@ -782,7 +783,7 @@ void test_2_arg()
    {
       return tc < 0 ? 1 / boost::math::cbrt(t * (1-t)) : 1 / boost::math::cbrt(t * tc);
    }, 0, 1);
-   BOOST_CHECK_CLOSE_FRACTION(Q, boost::math::pow<2>(boost::math::tgamma(Real(2) / 3)) / boost::math::tgamma(Real(4) / 3), tol * 4);
+   BOOST_CHECK_CLOSE_FRACTION(Q, boost::math::pow<2>(boost::math::tgamma(Real(2) / 3)) / boost::math::tgamma(Real(4) / 3), tol * 20);
    //
    // We can do the same thing with ((1+x)(1-x))^-N ; N < 1
    //
@@ -839,7 +840,7 @@ void test_complex()
       return exp(z * t) * pow(t, a - value_type(1)) * pow(value_type(1) - t, b - a - value_type(1));
    };
 
-   auto integrator = get_integrator<value_type>();
+   const auto& integrator = get_integrator<value_type>();
    auto Q = integrator.integrate(f, value_type(0), value_type(1), get_convergence_tolerance<value_type>());
    //
    // Expected result computed from http://www.wolframalpha.com/input/?i=1F1%5B(2%2B3i),+(3%2B4i);+(0.5-2i)%5D+*+gamma(2%2B3i)+*+gamma(1%2Bi)+%2F+gamma(3%2B4i)

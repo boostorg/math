@@ -14,6 +14,10 @@
 
 #ifdef _MSC_VER
 #pragma warning (disable:4127 4512)
+#elif __GNUC__ >= 5
+#  pragma GCC diagnostic ignored "-Woverflow"
+#elif defined(__clang__)
+#  pragma clang diagnostic ignored "-Wliteral-range"
 #endif
 
 #if !defined(TEST_FLOAT) && !defined(TEST_DOUBLE) && !defined(TEST_LDOUBLE) && !defined(TEST_REAL_CONCEPT)
@@ -113,7 +117,7 @@ void expected_results()
       "[^|]*",                          // platform
       "real_concept",                   // test type(s)
       "[^|]*large[^|]*",                // test data group
-      "[^|]*", 30000, 4000);             // test function
+      "[^|]*", 30000, 5000);             // test function
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib

@@ -313,7 +313,7 @@ void wolfram_test_near_singularity<double>()
    double tolerance = boost::math::tools::epsilon<double>() * 5;
    if (std::numeric_limits<double>::digits >= std::numeric_limits<long double>::digits)
       tolerance *= 1e5;
-   else if (std::numeric_limits<double>::digits * 2 >= std::numeric_limits<long double>::digits)
+   else
       tolerance *= 5e4;
    double endpoint = -boost::math::constants::exp_minus_one<double>();
    for (unsigned i = 0; i < wolfram_test_near_singularity_data.size(); ++i)

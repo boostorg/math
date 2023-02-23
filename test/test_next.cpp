@@ -22,7 +22,7 @@
 
 #if !defined(_CRAYC) && !defined(__CUDACC__) && (!defined(__GNUC__) || (__GNUC__ > 3) || ((__GNUC__ == 3) && (__GNUC_MINOR__ > 3)))
 #if (defined(_M_IX86_FP) && (_M_IX86_FP >= 2)) || defined(__SSE2__) || defined(TEST_SSE2)
-#include <float.h>
+#include <cfloat>
 #include "xmmintrin.h"
 #define TEST_SSE2
 #endif

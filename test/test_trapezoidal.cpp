@@ -8,7 +8,8 @@
 
 #include <complex>
 #include <boost/config.hpp>
-//#include <boost/multiprecision/mpc.hpp>
+#include <boost/type_index.hpp>
+ //#include <boost/multiprecision/mpc.hpp>
 #include <boost/test/included/unit_test.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/math/tools/test_value.hpp>
@@ -146,7 +147,7 @@ void test_rational_periodic()
     using boost::math::constants::third;
     std::cout << "Testing that rational periodic functions are integrated correctly by trapezoidal rule on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
 
-    auto f = [](Real x)->Real { return 1/(5 - 4*cos(x)); };
+    auto f = [](Real x)->Real { using std::cos; return 1 / (5 - 4 * cos(x)); };
 
     Real tol = 100*boost::math::tools::epsilon<Real>();
     Real Q = trapezoidal(f, (Real) 0.0, two_pi<Real>(), tol);
@@ -163,6 +164,7 @@ void test_bump_function()
         {
             return (Real) 0;
         }
+        using std::exp;
         return (Real) exp(-(Real) 1/(1-x*x));
     };
     Real tol = boost::math::tools::epsilon<Real>();
@@ -186,7 +188,7 @@ template<class Real>
 void test_sinsq()
 {
     std::cout << "Testing that sin(x)^2 is integrated correctly by the trapezoidal rule on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
-    auto f = [](Real x)->Real { return sin(10*x)*sin(10*x); };
+    auto f = [](Real x)->Real { using std::sin; return sin(10 * x) * sin(10 * x); };
     Real tol = 100* boost::math::tools::epsilon<Real>();
     Real Q = trapezoidal(f, (Real) 0, (Real) boost::math::constants::pi<Real>(), tol);
     BOOST_CHECK_CLOSE_FRACTION(Q, boost::math::constants::half_pi<Real>(), tol);
@@ -202,6 +204,8 @@ void test_slowly_converging()
     auto f = [](Real x)->Real { using std::sqrt;  return sqrt(1 - x*x); };
 
     Real tol = sqrt(sqrt(boost::math::tools::epsilon<Real>()));
+    if (boost::math::tools::digits<Real>() > 100)
+       tol *= 10;
     Real error_estimate;
     Real Q = trapezoidal(f, (Real) 0, (Real) 1, tol, 15, &error_estimate);
     BOOST_CHECK_CLOSE_FRACTION(Q, boost::math::constants::half_pi<Real>()/2, 10*tol);

@@ -150,7 +150,6 @@ void calculate_terms(double sigma, double a, unsigned bits)
    cout << "Print code [0|1]? ";
    cin >> code;
 
-   int prec = 2 + (static_cast<double>(bits) * 3010LL)/10000;
    std::cout << std::scientific << std::setprecision(40);
 
    if(code)

@@ -270,5 +270,51 @@ void test_spots(T)
          static_cast<T>(0.125),
          static_cast<T>(0.125)),
       static_cast<T>(0.99999994039535522460937500000000000000000000000L), tolerance);
+   //
+   // Bug cases, issue 873:
+   //
+   if ((std::numeric_limits<T>::max)() > static_cast<T>(1e50))
+   {
+      BOOST_CHECK_CLOSE(
+         ::boost::math::ibeta_inv(
+            static_cast<T>(1e50L),
+            static_cast<T>(10),
+            static_cast<T>(1) / static_cast<T>(10)),
+         static_cast<T>(1), tolerance);
+      BOOST_CHECK_CLOSE(
+         ::boost::math::ibetac_inv(
+            static_cast<T>(1e50L),
+            static_cast<T>(10),
+            static_cast<T>(1) / static_cast<T>(10)),
+         static_cast<T>(1), tolerance);
+   }
+   if (std::numeric_limits<T>::has_quiet_NaN)
+   {
+      T n = std::numeric_limits<T>::quiet_NaN();
+      BOOST_MATH_CHECK_THROW(::boost::math::ibeta_inv(n, static_cast<T>(2.125), static_cast<T>(0.125)), std::domain_error);
+      BOOST_MATH_CHECK_THROW(::boost::math::ibeta_inv(static_cast<T>(2.125), n, static_cast<T>(0.125)), std::domain_error);
+      BOOST_MATH_CHECK_THROW(::boost::math::ibeta_inv(static_cast<T>(2.125), static_cast<T>(1.125), n), std::domain_error);
+   }
+   if (std::numeric_limits<T>::has_infinity)
+   {
+      T n = std::numeric_limits<T>::infinity();
+      BOOST_MATH_CHECK_THROW(::boost::math::ibeta_inv(n, static_cast<T>(2.125), static_cast<T>(0.125)), std::domain_error);
+      BOOST_MATH_CHECK_THROW(::boost::math::ibeta_inv(static_cast<T>(2.125), n, static_cast<T>(0.125)), std::domain_error);
+      BOOST_MATH_CHECK_THROW(::boost::math::ibeta_inv(static_cast<T>(2.125), static_cast<T>(1.125), n), std::domain_error);
+      BOOST_MATH_CHECK_THROW(::boost::math::ibeta_inv(-n, static_cast<T>(2.125), static_cast<T>(0.125)), std::domain_error);
+      BOOST_MATH_CHECK_THROW(::boost::math::ibeta_inv(static_cast<T>(2.125), -n, static_cast<T>(0.125)), std::domain_error);
+      BOOST_MATH_CHECK_THROW(::boost::math::ibeta_inv(static_cast<T>(2.125), static_cast<T>(1.125), -n), std::domain_error);
+   }
+   if (std::numeric_limits<T>::has_denorm)
+   {
+      T m = std::numeric_limits<T>::denorm_min();
+      T small = 2 * (std::numeric_limits<T>::min)();
+      BOOST_CHECK((boost::math::isfinite)(boost::math::ibeta_inv(m, static_cast<T>(2.125), static_cast<T>(0.125))));
+      BOOST_CHECK((boost::math::isfinite)(boost::math::ibeta_inv(m, m, static_cast<T>(0.125))));
+      BOOST_CHECK_LT(boost::math::ibeta_inv(m, static_cast<T>(12.125), static_cast<T>(0.125)), small);
+      BOOST_CHECK((boost::math::isfinite)(boost::math::ibeta_inv(static_cast<T>(2.125), m, static_cast<T>(0.125))));
+      BOOST_CHECK((boost::math::isfinite)(boost::math::ibeta_inv(static_cast<T>(12.125), m, static_cast<T>(0.125))));
+      BOOST_CHECK((boost::math::isfinite)(boost::math::ibeta_inv(m, m, static_cast<T>(0.125))));
+   }
 }
 

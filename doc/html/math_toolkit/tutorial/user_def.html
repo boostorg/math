@@ -57,14 +57,14 @@
             If the precision of the type is known at compile time:
             <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
 <li class="listitem">
-                  If the precision is less than or equal to that of a <code class="computeroutput"><span class="keyword">float</span></code> and the type is constructable
+                  If the precision is less than or equal to that of a <code class="computeroutput"><span class="keyword">float</span></code> and the type is constructible
                   from a <code class="computeroutput"><span class="keyword">float</span></code> then
                   our code returns a <code class="computeroutput"><span class="keyword">float</span></code>
                   literal. If the user-defined type is a literal type then the function
                   call that returns the constant will be a <code class="computeroutput"><span class="identifier">constexp</span></code>.
                 </li>
 <li class="listitem">
-                  If the precision is less than or equal to that of a <code class="computeroutput"><span class="keyword">double</span></code> and the type is constructable
+                  If the precision is less than or equal to that of a <code class="computeroutput"><span class="keyword">double</span></code> and the type is constructible
                   from a <code class="computeroutput"><span class="keyword">double</span></code> then
                   our code returns a <code class="computeroutput"><span class="keyword">double</span></code>
                   literal. If the user-defined type is a literal type then the function
@@ -72,7 +72,7 @@
                 </li>
 <li class="listitem">
                   If the precision is less than or equal to that of a <code class="computeroutput"><span class="keyword">long</span> <span class="keyword">double</span></code>
-                  and the type is constructable from a <code class="computeroutput"><span class="keyword">long</span>
+                  and the type is constructible from a <code class="computeroutput"><span class="keyword">long</span>
                   <span class="keyword">double</span></code> then our code returns
                   a <code class="computeroutput"><span class="keyword">long</span> <span class="keyword">double</span></code>
                   literal. If the user-defined type is a literal type then the function
@@ -80,7 +80,7 @@
                 </li>
 <li class="listitem">
                   If the precision is less than or equal to that of a <code class="computeroutput"><span class="identifier">__float128</span></code> (and the compiler
-                  supports such a type) and the type is constructable from a <code class="computeroutput"><span class="identifier">__float128</span></code> then our code returns
+                  supports such a type) and the type is constructible from a <code class="computeroutput"><span class="identifier">__float128</span></code> then our code returns
                   a <code class="computeroutput"><span class="identifier">__float128</span></code> literal.
                   If the user-defined type is a literal type then the function call
                   that returns the constant will be a <code class="computeroutput"><span class="identifier">constexp</span></code>.

@@ -8,6 +8,7 @@
 #include <cmath>
 #include <limits>
 #include <iostream>
+#include <type_traits>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/lambert_w.hpp>
 #include <boost/test/included/unit_test.hpp>
@@ -99,7 +100,7 @@ void test_evaluation_condition_number()
     using boost::math::constants::e;
     auto f4 = [](Real x) { return boost::math::lambert_w0(x); };
     Real cond = evaluation_condition_number(f4, -1/e<Real>());
-    if (std::is_same_v<Real, float>)
+    if (std::is_same<Real, float>::value)
     {
         BOOST_CHECK_GE(cond, 30);
     }

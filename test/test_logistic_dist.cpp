@@ -62,7 +62,7 @@ void test_spot(RealType location, RealType scale, RealType x, RealType p, RealTy
          complement(logistic_distribution<RealType>(location,scale),      
          q)),
          x,
-         2 * tolerance); // %
+         3 * tolerance); // %
    }
 }
 

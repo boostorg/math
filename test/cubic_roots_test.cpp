@@ -8,6 +8,8 @@
 #include "math_unit_test.hpp"
 #include <boost/math/tools/cubic_roots.hpp>
 #include <random>
+#include <cmath>
+#include <cfloat>
 #ifdef BOOST_HAS_FLOAT128
 #include <boost/multiprecision/float128.hpp>
 using boost::multiprecision::float128;
@@ -17,6 +19,7 @@ using boost::math::tools::cubic_root_condition_number;
 using boost::math::tools::cubic_root_residual;
 using boost::math::tools::cubic_roots;
 using std::cbrt;
+using std::abs;
 
 template <class Real> void test_zero_coefficients() {
     Real a = 0;
@@ -96,7 +99,7 @@ template <class Real> void test_zero_coefficients() {
 
         auto roots = cubic_roots(a, b, c, d);
         // I could check the condition number here, but this is fine right?
-        if (!CHECK_ULP_CLOSE(r[0], roots[0], 25)) {
+        if (!CHECK_ULP_CLOSE(r[0], roots[0], (std::numeric_limits<Real>::digits > 100 ? 120 : 25))) {
             std::cerr << "  Polynomial x^3 + " << b << "x^2 + " << c << "x + "
                       << d << " has roots {";
             std::cerr << r[0] << ", " << r[1] << ", " << r[2]
@@ -105,7 +108,7 @@ template <class Real> void test_zero_coefficients() {
                       << "}\n";
         }
         CHECK_ULP_CLOSE(r[1], roots[1], 25);
-        CHECK_ULP_CLOSE(r[2], roots[2], 25);
+        CHECK_ULP_CLOSE(r[2], roots[2], (std::numeric_limits<Real>::digits > 100 ? 120 : 25));
         for (auto root : roots) {
             auto res = cubic_root_residual(a, b, c, d, root);
             CHECK_LE(abs(res[0]), res[1]);
@@ -115,7 +118,7 @@ template <class Real> void test_zero_coefficients() {
 
 void test_ill_conditioned() {
     // An ill-conditioned root reported by SATovstun:
-    // "Exact" roots produced with a high-precision calcuation on Wolfram Alpha:
+    // "Exact" roots produced with a high-precision calculation on Wolfram Alpha:
     // NSolve[x^3 + 10000*x^2 + 200*x +1==0,x]
     std::array<double, 3> expected_roots{-9999.97999997,
                                          -0.010010015026300100757327057,

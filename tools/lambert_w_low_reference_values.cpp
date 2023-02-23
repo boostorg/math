@@ -163,7 +163,7 @@ int main()
 
   fout << "// Declare arrays of arguments z and Lambert W(z)" << std::endl;
   fout << "// The values are defined using the macro BOOST_MATH_TEST_VALUE to ensure\n"
-    "// that both built-in and multiprecision types are correctly initialiased with full precision.\n"
+    "// that both built-in and multiprecision types are correctly initialized with full precision.\n"
     "// built-in types like double require a floating-point literal like 3.14,\n"
     "// but multiprecision types require a decimal digit string like \"3.14\".\n"
     << std::endl;
@@ -224,7 +224,7 @@ int main()
 
 /*
 
-start and finish checks again Wolfram Alpha:
+start and finish checks again WolframAlpha:
 ws<RealType>[0] = BOOST_MATH_TEST_VALUE(RealType, -0.7166388164560738505881698000038650406110575701385055261614344530078353170171071547711151137001759321);
 Wolfram N[productlog(-0.35), 100]                 -0.7166388164560738505881698000038650406110575701385055261614344530078353170171071547711151137001759321
 

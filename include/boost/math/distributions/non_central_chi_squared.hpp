@@ -13,7 +13,7 @@
 #include <boost/math/distributions/fwd.hpp>
 #include <boost/math/special_functions/gamma.hpp> // for incomplete gamma. gamma_q
 #include <boost/math/special_functions/bessel.hpp> // for cyl_bessel_i
-#include <boost/math/special_functions/round.hpp> // for iround
+#include <boost/math/special_functions/round.hpp> // for llround
 #include <boost/math/distributions/complement.hpp> // complements
 #include <boost/math/distributions/chi_squared.hpp> // central distribution
 #include <boost/math/distributions/detail/common_error_handling.hpp> // error checks
@@ -71,7 +71,7 @@ namespace boost
             // k is chosen as the peek of the Poisson weights, which
             // will occur *before* the largest term.
             //
-            int k = iround(lambda, pol);
+            long long k = llround(lambda, pol);
             // Forwards and backwards Poisson weights:
             T poisf = boost::math::gamma_p_derivative(static_cast<T>(1 + k), lambda, pol);
             T poisb = poisf * k / lambda;
@@ -215,7 +215,7 @@ namespace boost
             // function, which ocurrs *after* the largest term in the
             // sum.
             //
-            int k = iround(del, pol);
+            long long k = llround(del, pol);
             T a = n / 2 + k;
             // Central chi squared term for forward iteration:
             T gamkf = boost::math::gamma_p(a, x, pol);
@@ -294,7 +294,7 @@ namespace boost
             T n2 = n / 2;
             T l2 = lambda / 2;
             T sum = 0;
-            int k = itrunc(l2);
+            long long k = lltrunc(l2);
             T pois = gamma_p_derivative(static_cast<T>(k + 1), l2, pol) * gamma_p_derivative(static_cast<T>(n2 + k), x2);
             if(pois == 0)
                return 0;

@@ -267,13 +267,13 @@ void do_test(T, const char* name)
       // Do the tests at the zeros:
       //
       std::cout << "Starting tests at " << name << " precision...\n";
-      std::cout << "Absissa        Error (Poly)   Error (Cheb)\n";
+      std::cout << "Abscissa        Error (Poly)   Error (Cheb)\n";
       for(unsigned i = 0; i < zeros.size(); ++i)
       {
          mp_type true_result = the_function(zeros[i]);
-         T absissa = boost::math::tools::real_cast<T>(zeros[i]);
-         mp_type test_result = convert_to_rr(n.evaluate(absissa) / d.evaluate(absissa));
-         mp_type cheb_result = convert_to_rr(boost::math::tools::evaluate_chebyshev(cn, absissa) / boost::math::tools::evaluate_chebyshev(cd, absissa));
+         T abscissa = boost::math::tools::real_cast<T>(zeros[i]);
+         mp_type test_result = convert_to_rr(n.evaluate(abscissa) / d.evaluate(abscissa));
+         mp_type cheb_result = convert_to_rr(boost::math::tools::evaluate_chebyshev(cn, abscissa) / boost::math::tools::evaluate_chebyshev(cd, abscissa));
          mp_type err, cheb_err;
          if(rel_error)
          {
@@ -289,7 +289,7 @@ void do_test(T, const char* name)
             max_error = err;
          if(cheb_err > cheb_max_error)
             cheb_max_error = cheb_err;
-         std::cout << std::setprecision(6) << std::setw(15) << std::left << absissa
+         std::cout << std::setprecision(6) << std::setw(15) << std::left << abscissa
             << std::setw(15) << std::left << boost::math::tools::real_cast<T>(err) << boost::math::tools::real_cast<T>(cheb_err) << std::endl;
       }
       //
@@ -298,9 +298,9 @@ void do_test(T, const char* name)
       for(unsigned i = 0; i < cheb.size(); ++i)
       {
          mp_type true_result = the_function(cheb[i]);
-         T absissa = boost::math::tools::real_cast<T>(cheb[i]);
-         mp_type test_result = convert_to_rr(n.evaluate(absissa) / d.evaluate(absissa));
-         mp_type cheb_result = convert_to_rr(boost::math::tools::evaluate_chebyshev(cn, absissa) / boost::math::tools::evaluate_chebyshev(cd, absissa));
+         T abscissa = boost::math::tools::real_cast<T>(cheb[i]);
+         mp_type test_result = convert_to_rr(n.evaluate(abscissa) / d.evaluate(abscissa));
+         mp_type cheb_result = convert_to_rr(boost::math::tools::evaluate_chebyshev(cn, abscissa) / boost::math::tools::evaluate_chebyshev(cd, abscissa));
          mp_type err, cheb_err;
          if(rel_error)
          {
@@ -314,7 +314,7 @@ void do_test(T, const char* name)
          }
          if(err > max_error)
             max_error = err;
-         std::cout << std::setprecision(6) << std::setw(15) << std::left << absissa
+         std::cout << std::setprecision(6) << std::setw(15) << std::left << abscissa
             << std::setw(15) << std::left << boost::math::tools::real_cast<T>(err) << 
             boost::math::tools::real_cast<T>(cheb_err) << std::endl;
       }
@@ -401,15 +401,15 @@ void do_test_n(T, const char* name, unsigned count)
       // Do the tests at the zeros:
       //
       std::cout << "Starting tests at " << name << " precision...\n";
-      std::cout << "Absissa        Error (poly)   Error (Cheb)\n";
+      std::cout << "Abscissa        Error (poly)   Error (Cheb)\n";
       for(mp_type x = a; x <= b; x += step)
       {
          mp_type true_result = the_function(x);
          //std::cout << true_result << std::endl;
-         T absissa = boost::math::tools::real_cast<T>(x);
-         mp_type test_result = convert_to_rr(n.evaluate(absissa) / d.evaluate(absissa));
+         T abscissa = boost::math::tools::real_cast<T>(x);
+         mp_type test_result = convert_to_rr(n.evaluate(abscissa) / d.evaluate(abscissa));
          //std::cout << test_result << std::endl;
-         mp_type cheb_result = convert_to_rr(boost::math::tools::evaluate_chebyshev(cn, absissa) / boost::math::tools::evaluate_chebyshev(cd, absissa));
+         mp_type cheb_result = convert_to_rr(boost::math::tools::evaluate_chebyshev(cn, abscissa) / boost::math::tools::evaluate_chebyshev(cd, abscissa));
          //std::cout << cheb_result << std::endl;
          mp_type err, cheb_err;
          if(rel_error)
@@ -426,7 +426,7 @@ void do_test_n(T, const char* name, unsigned count)
             max_error = err;
          if(cheb_err > max_cheb_error)
             max_cheb_error = cheb_err;
-         std::cout << std::setprecision(6) << std::setw(15) << std::left << boost::math::tools::real_cast<double>(absissa)
+         std::cout << std::setprecision(6) << std::setw(15) << std::left << boost::math::tools::real_cast<double>(abscissa)
             << (test_result < true_result ? "-" : "") << std::setw(20) << std::left 
             << boost::math::tools::real_cast<double>(err) 
             << boost::math::tools::real_cast<double>(cheb_err) << std::endl;

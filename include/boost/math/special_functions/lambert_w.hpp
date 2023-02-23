@@ -683,7 +683,7 @@ z * (2.154990206091088289321708745358647e6L // z^20 distance -5 without term 20
 // N[InverseSeries[Series[z Exp[z],{z,0,34}]],50],
 // and are suffixed by L as they are assumed of type long double.
 // (This is NOT used for 128-bit quad boost::multiprecision::float128 type which required a suffix Q
-// nor multiprecision type cpp_bin_float_quad that can only be initialised at full precision of the type
+// nor multiprecision type cpp_bin_float_quad that can only be initialized at full precision of the type
 // constructed with a decimal digit string like "2.6666666666666666666666666666666666666666666666667".)
 
 template <typename T, typename Policy>

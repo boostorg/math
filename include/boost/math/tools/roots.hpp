@@ -372,13 +372,19 @@ namespace detail {
    T bracket_root_towards_max(F f, T guess, const T& f0, T& min, T& max, std::uintmax_t& count) noexcept(BOOST_MATH_IS_FLOAT(T) && noexcept(std::declval<F>()(std::declval<T>())))
    {
       using std::fabs;
+      using std::ldexp;
+      using std::abs;
+      using std::frexp;
       if(count < 2)
          return guess - (max + min) / 2; // Not enough counts left to do anything!!
       //
       // Move guess towards max until we bracket the root, updating min and max as we go:
       //
+      int e;
+      frexp(max / guess, &e);
+      e = abs(e);
       T guess0 = guess;
-      T multiplier = 2;
+      T multiplier = e < 64 ? static_cast<T>(2) : static_cast<T>(ldexp(T(1), e / 32));
       T f_current = f0;
       if (fabs(min) < fabs(max))
       {
@@ -392,7 +398,7 @@ namespace detail {
                f_current = -f_current;  // There must be a change of sign!
                break;
             }
-            multiplier *= 2;
+            multiplier *= e > 1024 ? 8 : 2;
             unpack_0(f(guess), f_current);
          }
       }
@@ -411,7 +417,7 @@ namespace detail {
                f_current = -f_current;  // There must be a change of sign!
                break;
             }
-            multiplier *= 2;
+            multiplier *= e > 1024 ? 8 : 2;
             unpack_0(f(guess), f_current);
          }
       }
@@ -429,13 +435,19 @@ namespace detail {
    T bracket_root_towards_min(F f, T guess, const T& f0, T& min, T& max, std::uintmax_t& count) noexcept(BOOST_MATH_IS_FLOAT(T) && noexcept(std::declval<F>()(std::declval<T>())))
    {
       using std::fabs;
+      using std::ldexp;
+      using std::abs;
+      using std::frexp;
       if (count < 2)
          return guess - (max + min) / 2; // Not enough counts left to do anything!!
       //
       // Move guess towards min until we bracket the root, updating min and max as we go:
       //
+      int e;
+      frexp(guess / min, &e);
+      e = abs(e);
       T guess0 = guess;
-      T multiplier = 2;
+      T multiplier = e < 64 ? static_cast<T>(2) : static_cast<T>(ldexp(T(1), e / 32));
       T f_current = f0;
 
       if (fabs(min) < fabs(max))
@@ -450,7 +462,7 @@ namespace detail {
                f_current = -f_current;  // There must be a change of sign!
                break;
             }
-            multiplier *= 2;
+            multiplier *= e > 1024 ? 8 : 2;
             unpack_0(f(guess), f_current);
          }
       }
@@ -469,7 +481,7 @@ namespace detail {
                f_current = -f_current;  // There must be a change of sign!
                break;
             }
-            multiplier *= 2;
+            multiplier *= e > 1024 ? 8 : 2;
             unpack_0(f(guess), f_current);
          }
       }
@@ -531,7 +543,19 @@ namespace detail {
          last_f0 = f0;
          delta2 = delta1;
          delta1 = delta;
-         detail::unpack_tuple(f(result), f0, f1, f2);
+#ifndef BOOST_NO_EXCEPTIONS
+         try
+#endif
+         {
+            detail::unpack_tuple(f(result), f0, f1, f2);
+         }
+#ifndef BOOST_NO_EXCEPTIONS
+         catch (const std::overflow_error&)
+         {
+            f0 = max > 0 ? tools::max_value<T>() : -tools::min_value<T>();
+            f1 = f2 = 0;
+         }
+#endif
          --count;
 
          BOOST_MATH_INSTRUMENT_VARIABLE(f0);
@@ -615,6 +639,8 @@ namespace detail {
                }
                delta = bracket_root_towards_min(f, guess, f0, min, max, count);
                result = guess - delta;
+               if (result <= min)
+                  result = float_next(min);
                guess = min;
                continue;
             }
@@ -641,6 +667,8 @@ namespace detail {
                }
                delta = bracket_root_towards_max(f, guess, f0, min, max, count);
                result = guess - delta;
+               if (result >= max)
+                  result = float_prior(max);
                guess = min;
                continue;
             }

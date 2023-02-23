@@ -16,6 +16,14 @@
 #include <boost/math/ccmath/isnan.hpp>
 #include <boost/math/ccmath/isinf.hpp>
 
+#include <boost/math/tools/is_standalone.hpp>
+#ifndef BOOST_MATH_STANDALONE
+#include <boost/config.hpp>
+#ifdef BOOST_NO_CXX17_IF_CONSTEXPR
+#error "The header <boost/math/norms.hpp> can only be used in C++17 and later."
+#endif
+#endif
+
 namespace boost::math::ccmath {
 
 namespace detail {
@@ -67,7 +75,7 @@ constexpr T abs(T x) noexcept
     }
     else
     {
-        static_assert(sizeof(T) == 0, "Taking the absolute value of an unsigned value not covertible to int is UB.");
+        static_assert(sizeof(T) == 0, "Taking the absolute value of an unsigned value not convertible to int is UB.");
         return T(0); // Unreachable, but suppresses warnings
     }
 }

@@ -580,7 +580,7 @@ int main(int argc, char** argv)
     if (debug)
     {
        for (int64_t i = image_width / 2; i < image_width; ++i)
-          points[image_width * (image_height - 1) + i] = i & 1 ? 1 : 0;
+          points[image_width * (image_height - 1) + i] = i & 1;
     }
 
     //

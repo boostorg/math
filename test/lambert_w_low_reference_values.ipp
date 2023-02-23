@@ -13,7 +13,7 @@
 static const unsigned int noof_tests = 100;
 // Declare arrays of arguments z and Lambert W(z)
 // The values are defined using the macro BOOST_MATH_TEST_VALUE to ensure
-// that both built-in and multiprecision types are correctly initialiased with full precision.
+// that both built-in and multiprecision types are correctly initialized with full precision.
 // built-in types like double require a floating-point literal like 3.14,
 // but multiprecision types require a decimal digit string like "3.14".
 

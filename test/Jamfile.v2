@@ -74,6 +74,7 @@ project
       <search>$(mpfr_path)
       <search>$(mpfr_path)/build.vc10/lib/Win32/Debug
       [ requires cxx11_noexcept cxx11_rvalue_references sfinae_expr cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_tuple cxx11_hdr_initializer_list cxx11_hdr_chrono cxx11_thread_local cxx11_constexpr cxx11_nullptr cxx11_numeric_limits cxx11_decltype cxx11_hdr_array cxx11_hdr_atomic cxx11_hdr_type_traits cxx11_allocator cxx11_explicit_conversion_operators ]
+      [ requires cxx14_decltype_auto cxx14_generic_lambdas cxx14_return_type_deduction cxx14_variable_templates cxx14_decltype_auto cxx14_generic_lambdas cxx14_return_type_deduction ]
     ;
 
 if $(ntl-path)
@@ -496,6 +497,7 @@ test-suite special_fun :
           <toolset>intel:<pch>off
         : test_igamma_inva_real_concept  ]
    [ run test_instantiate1.cpp test_instantiate2.cpp  ]
+   [ run test_instantiate1.cpp test_instantiate2.cpp  : : : <exception-handling>off : test_instantiate_no_eh ]
    [ run test_jacobi.cpp pch_light ../../test/build//boost_unit_test_framework  ]
    [ run test_laguerre.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
 
@@ -892,7 +894,12 @@ test-suite distribution_tests :
    [ compile test_dist_deduction_guides.cpp : [ requires cpp_deduction_guides cpp_variadic_templates ] ]
    [ run git_issue_800.cpp ../../test/build//boost_unit_test_framework  ]
    [ run git_issue_845.cpp ../../test/build//boost_unit_test_framework  ]
+   [ run scipy_issue_14901.cpp ../../test/build//boost_unit_test_framework ]
+   [ run scipy_issue_15101.cpp ../../test/build//boost_unit_test_framework ]
    [ run scipy_issue_17146.cpp ../../test/build//boost_unit_test_framework  ]
+   [ run scipy_issue_17388.cpp ../../test/build//boost_unit_test_framework  ]
+   [ run scipy_issue_17916.cpp ../../test/build//boost_unit_test_framework  ]
+   [ run scipy_issue_17916_nct.cpp ../../test/build//boost_unit_test_framework  ]
 ;
 
 test-suite mp :
@@ -901,6 +908,7 @@ test-suite mp :
    [ run test_polynomial.cpp ../../test/build//boost_unit_test_framework : : : <define>TEST1 : test_polynomial_1  ]
    [ run test_polynomial.cpp ../../test/build//boost_unit_test_framework : : : <define>TEST2 : test_polynomial_2  ]
    [ run test_polynomial.cpp ../../test/build//boost_unit_test_framework : : : <define>TEST3 : test_polynomial_3  ]
+   [ run test_estrin.cpp ]
    [ run polynomial_concept_check.cpp ]
 
    [ compile multiprc_concept_check_1.cpp : <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release <exception-handling>off:<build>no [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ]  ]
@@ -916,6 +924,7 @@ test-suite mp :
    [ compile ntl_concept_check.cpp : [ check-target-builds ../config//has_ntl_rr : : <build>no ] <debug-symbols>off [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ compile mpfr_concept_check.cpp : [ check-target-builds ../config//has_mpfr_class : : <build>no ] <debug-symbols>off [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ compile mpreal_concept_check.cpp : [ check-target-builds ../config//has_mpreal : : <build>no ] <debug-symbols>off [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
+   [ run issue893.cpp ]
 ;
 
 test-suite misc :
@@ -1027,7 +1036,7 @@ test-suite misc :
    [ run test_chatterjee_correlation.cpp ../../test/build//boost_unit_test_framework ]
    [ run test_rank.cpp ../../test/build//boost_unit_test_framework ]
    [ run lanczos_smoothing_test.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
-   [ run condition_number_test.cpp ../../test/build//boost_unit_test_framework : : :  [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>"-Bstatic -lquadmath -Bdynamic" ] [ requires cxx17_if_constexpr cxx17_std_apply ] ]
+   [ run condition_number_test.cpp ../../test/build//boost_unit_test_framework : : : <toolset>msvc:<cxxflags>/bigobj [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>"-Bstatic -lquadmath -Bdynamic" ] ]
    [ run test_real_concept.cpp ../../test/build//boost_unit_test_framework  ]
    [ run test_remez.cpp pch ../../test/build//boost_unit_test_framework  ]
    [ run test_roots.cpp pch ../../test/build//boost_unit_test_framework  ]
@@ -1188,7 +1197,7 @@ test-suite misc :
        ../../test/build//boost_unit_test_framework ]
    [ run quaternion_constexpr_test.cpp ]
    [ run quaternion_test.cpp
-       ../../test/build//boost_unit_test_framework : : : [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] ]
+       ../../test/build//boost_unit_test_framework : : : <toolset>msvc-14.0:<debug-symbols>off [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] ]
    [ run quaternion_mult_incl_test.cpp
        quaternion_mi1.cpp
        quaternion_mi2.cpp
@@ -1459,7 +1468,7 @@ test-suite quadrature :
 
    [ compile compile_test/gauss_concept_test.cpp : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ compile compile_test/gauss_kronrod_concept_test.cpp : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
-
+   [ run git_issue_898.cpp ]
 ;
 
 test-suite autodiff :

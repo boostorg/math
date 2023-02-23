@@ -8,6 +8,8 @@
 
 [section:norms Norms]
 
+[note All of the functions below require at least C++17]
+
 [heading Synopsis]
 
 ``

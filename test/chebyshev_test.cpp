@@ -166,7 +166,7 @@ void test_translated_clenshaw_recurrence()
         // it shows they are doing roughly the same thing.
         Real computed = chebyshev_clenshaw_recurrence(c.data(), c.size(), Real(-1), Real(1), x);
         if (!CHECK_ULP_CLOSE(expected, computed, 1000)) {
-            std::cerr << "  Problem occured at x = " << x << "\n";
+            std::cerr << "  Problem occurred at x = " << x << "\n";
         }
     }
 }

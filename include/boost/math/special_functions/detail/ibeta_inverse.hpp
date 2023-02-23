@@ -368,11 +368,11 @@ T temme_method_3_ibeta_inverse(T a, T b, T p, T q, const Policy& pol)
    T e2 = (28 * w_4 + 131 * w_3 + 402 * w_2 + 581 * w + 208) * (w - 1) / (1620 * w1 * w_3);
    e2 -= (35 * w_6 - 154 * w_5 - 623 * w_4 - 1636 * w_3 - 3983 * w_2 - 3514 * w - 925) * d / (12960 * w1_2 * w_4);
    e2 -= (2132 * w_7 + 7915 * w_6 + 16821 * w_5 + 35066 * w_4 + 87490 * w_3 + 141183 * w_2 + 95993 * w + 21640) * d_2  / (816480 * w_5 * w1_3);
-   e2 -= (11053 * w_8 + 53308 * w_7 + 117010 * w_6 + 163924 * w_5 + 116188 * w_4 - 258428 * w_3 - 677042 * w_2 - 481940 * w - 105497) * d_3 / (14696640 * w1_4 * w_6);
+   e2 -= (11053 * w_8 + 53308 * w_7 + 117010 * w_6 + 163924 * w_5 + 116188 * w_4 - 258428 * w_3 - 677042 * w_2 - 481940 * w - 105497) * d_3 / (T(14696640) * w1_4 * w_6);
 
    T e3 = -((3592 * w_7 + 8375 * w_6 - 1323 * w_5 - 29198 * w_4 - 89578 * w_3 - 154413 * w_2 - 116063 * w - 29632) * (w - 1)) / (816480 * w_5 * w1_2);
-   e3 -= (442043 * w_9 + 2054169 * w_8 + 3803094 * w_7 + 3470754 * w_6 + 2141568 * w_5 - 2393568 * w_4 - 19904934 * w_3 - 34714674 * w_2 - 23128299 * w - 5253353) * d / (146966400 * w_6 * w1_3);
-   e3 -= (116932 * w_10 + 819281 * w_9 + 2378172 * w_8 + 4341330 * w_7 + 6806004 * w_6 + 10622748 * w_5 + 18739500 * w_4 + 30651894 * w_3 + 30869976 * w_2 + 15431867 * w + 2919016) * d_2 / (146966400 * w1_4 * w_7);
+   e3 -= (442043 * w_9 + T(2054169) * w_8 + T(3803094) * w_7 + T(3470754) * w_6 + T(2141568) * w_5 - T(2393568) * w_4 - T(19904934) * w_3 - T(34714674) * w_2 - T(23128299) * w - T(5253353)) * d / (T(146966400) * w_6 * w1_3);
+   e3 -= (116932 * w_10 + 819281 * w_9 + T(2378172) * w_8 + T(4341330) * w_7 + T(6806004) * w_6 + T(10622748) * w_5 + T(18739500) * w_4 + T(30651894) * w_3 + T(30869976) * w_2 + T(15431867) * w + T(2919016)) * d_2 / (T(146966400) * w1_4 * w_7);
    //
    // Combine eta0 and the error terms to compute eta (Second equation p155):
    //
@@ -631,8 +631,27 @@ T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T* py)
             // Try and compute the easy way first:
             //
             T bet = 0;
-            if(b < 2)
-               bet = boost::math::beta(a, b, pol);
+            if (b < 2)
+            {
+#ifndef BOOST_NO_EXCEPTIONS
+               try
+#endif
+               {
+                  bet = boost::math::beta(a, b, pol);
+
+                  typedef typename Policy::overflow_error_type overflow_type;
+
+                  BOOST_IF_CONSTEXPR(overflow_type::value != boost::math::policies::throw_on_error)
+                     if(bet > tools::max_value<T>())
+                        bet = tools::max_value<T>();
+               }
+#ifndef BOOST_NO_EXCEPTIONS
+               catch (const std::overflow_error&)
+               {
+                  bet = tools::max_value<T>();
+               }
+#endif
+            }
             if(bet != 0)
             {
                y = pow(b * q * bet, 1/b);
@@ -673,7 +692,7 @@ T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T* py)
          invert = !invert;
          xs = 1 - xs;
       }
-      if (a < tools::min_value<T>())
+      if ((a < tools::min_value<T>()) && (b > tools::min_value<T>()))
       {
          if (py)
          {
@@ -702,6 +721,8 @@ T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T* py)
       if (overflow || !(boost::math::isfinite)(bet))
       {
          xg = exp((boost::math::lgamma(a + 1, pol) + boost::math::lgamma(b, pol) - boost::math::lgamma(a + b, pol) + log(p)) / a);
+         if (xg > 2 / tools::epsilon<T>())
+            xg = 2 / tools::epsilon<T>();
       }
       else
          xg = pow(a * p * bet, 1/a);
@@ -801,7 +822,20 @@ T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T* py)
       }
       if(pow(p, 1/a) < 0.5)
       {
-         x = pow(p * a * boost::math::beta(a, b, pol), 1 / a);
+#ifndef BOOST_NO_EXCEPTIONS
+         try 
+         {
+#endif
+            x = pow(p * a * boost::math::beta(a, b, pol), 1 / a);
+            if ((x > 1) || !(boost::math::isfinite)(x))
+               x = 1;
+#ifndef BOOST_NO_EXCEPTIONS
+         }
+         catch (const std::overflow_error&)
+         {
+            x = 1;
+         }
+#endif
          if(x == 0)
             x = boost::math::tools::min_value<T>();
          y = 1 - x;
@@ -809,7 +843,20 @@ T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T* py)
       else /*if(pow(q, 1/b) < 0.1)*/
       {
          // model a distorted quarter circle:
-         y = pow(1 - pow(p, b * boost::math::beta(a, b, pol)), 1/b);
+#ifndef BOOST_NO_EXCEPTIONS
+         try 
+         {
+#endif
+            y = pow(1 - pow(p, b * boost::math::beta(a, b, pol)), 1/b);
+            if ((y > 1) || !(boost::math::isfinite)(y))
+               y = 1;
+#ifndef BOOST_NO_EXCEPTIONS
+         }
+         catch (const std::overflow_error&)
+         {
+            y = 1;
+         }
+#endif
          if(y == 0)
             y = boost::math::tools::min_value<T>();
          x = 1 - y;

@@ -281,6 +281,8 @@ when T1 and T2 are different types.
 There are two domains where this is useful: when /y/ is very small, or when
 /x/ is close to 1.
 
+Note that for invalid input this function may raise a __domain_error or __overflow_error as appropriate.
+
 Implemented in terms of `expm1`.
 
 The following graph illustrates the behaviour of powm1:
