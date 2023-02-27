@@ -13,7 +13,7 @@
             "Hubert Holin <Hubert.Holin -at- meteo.fr>",
             "John Maddock <john -at- johnmaddock.co.uk>"
         ],
-        "cxxstd": "11"
+        "cxxstd": "14"
     },
     {
         "key": "math/common_factor",
@@ -26,7 +26,7 @@
         "category": [
             "Math"
         ],
-        "cxxstd": "11"
+        "cxxstd": "14"
     },
     {
         "key": "math/octonion",
@@ -39,7 +39,7 @@
         "category": [
             "Math"
         ],
-        "cxxstd": "11"
+        "cxxstd": "14"
     },
     {
         "key": "math/quaternion",
@@ -52,7 +52,7 @@
         "category": [
             "Math"
         ],
-        "cxxstd": "11"
+        "cxxstd": "14"
     },
     {
         "key": "math/special_functions",
@@ -68,7 +68,7 @@
         "category": [
             "Math"
         ],
-        "cxxstd": "11"
+        "cxxstd": "14"
     },
     {
         "key": "math/statistical_distributions",
@@ -82,6 +82,6 @@
         "category": [
             "Math"
         ],
-        "cxxstd": "11"
+        "cxxstd": "14"
     }
 ]
