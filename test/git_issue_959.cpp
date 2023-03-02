@@ -14,29 +14,29 @@ using tControlPoints = std::vector<std::array<double, 3>>;
 void interpolateWithPoints(tControlPoints cp)
 {
     const auto cpSize = cp.size();
-	auto bp = boost::math::interpolators::bezier_polynomial(std::move(cp));
+    auto bp = boost::math::interpolators::bezier_polynomial(std::move(cp));
 
-	// Interpolate at t = 0.5:
-	std::array<double, 3> point = bp(0.5);
+    // Interpolate at t = 0.5:
+    std::array<double, 3> point = bp(0.5);
     std::cout << cpSize << " points, t = 0.5:\n";
 
-	for (const auto& c : point) 
+    for (const auto& c : point) 
     {
-		std::cout << "  " << c << "\n";
-	}
+        std::cout << "  " << c << "\n";
+    }
 }
 
 
 int main(void)
 {
-	auto cp3 = tControlPoints{{0,0,0}, {1,0,0}, {0,1,0}};
-	interpolateWithPoints(cp3);
+    auto cp3 = tControlPoints{{0,0,0}, {1,0,0}, {0,1,0}};
+    interpolateWithPoints(cp3);
 
-	auto cp4 = tControlPoints{{0,0,0}, {1,0,0}, {0,1,0}, {0,0,1}};
-	interpolateWithPoints(cp4);
+    auto cp4 = tControlPoints{{0,0,0}, {1,0,0}, {0,1,0}, {0,0,1}};
+    interpolateWithPoints(cp4);
 
-	auto cp3b = tControlPoints{{0,0,0}, {1,0,0}, {0,1,0}};
-	interpolateWithPoints(cp3b);
+    auto cp3b = tControlPoints{{0,0,0}, {1,0,0}, {0,1,0}};
+    interpolateWithPoints(cp3b);
 
-	return 0;
+    return 0;
 }
