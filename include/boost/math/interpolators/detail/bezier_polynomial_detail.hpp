@@ -73,7 +73,7 @@ public:
             }
         }
 
-        decasteljau_recursion(scratch_space, scratch_space.size(), t);
+        decasteljau_recursion(scratch_space, control_points_.size() - 1, t);
         return scratch_space[0];
     }
 
