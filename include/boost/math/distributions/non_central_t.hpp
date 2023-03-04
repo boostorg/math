@@ -307,9 +307,9 @@ namespace boost
                   function,
                   v, &r, Policy())
                   ||
-               !detail::check_finite(
+               !detail::check_non_centrality(
                   function,
-                  delta,
+                  static_cast<T>(delta * delta),
                   &r,
                   Policy())
                   ||
@@ -730,9 +730,9 @@ namespace boost
             detail::check_df_gt0_to_inf(
                function,
                v, &r, Policy());
-            detail::check_finite(
+            detail::check_non_centrality(
                function,
-               lambda,
+               static_cast<value_type>(lambda * lambda),
                &r,
                Policy());
          } // non_central_t_distribution constructor.
@@ -874,12 +874,12 @@ namespace boost
             function,
             v, &r, Policy())
             ||
-         !detail::check_finite(
+         !detail::check_non_centrality(
             function,
-            l,
+            static_cast<RealType>(l * l),
             &r,
             Policy()))
-               return (RealType)r;
+               return static_cast<RealType>(r);
 
          BOOST_MATH_STD_USING
 
@@ -912,12 +912,12 @@ namespace boost
             function,
             v, &r, Policy())
             ||
-         !detail::check_finite(
+         !detail::check_non_centrality(
             function,
-            l,
+            static_cast<RealType>(l * l),
             &r,
             Policy()))
-               return (RealType)r;
+               return static_cast<RealType>(r);
          if(v <= 1)
             return policies::raise_domain_error<RealType>(
                function,
@@ -947,12 +947,12 @@ namespace boost
             function,
             v, &r, Policy())
             ||
-         !detail::check_finite(
+         !detail::check_non_centrality(
             function,
-            l,
+            static_cast<RealType>(l * l),
             &r,
             Policy()))
-               return (RealType)r;
+               return static_cast<RealType>(r);
          if(v <= 2)
             return policies::raise_domain_error<RealType>(
                function,
@@ -982,12 +982,12 @@ namespace boost
             function,
             v, &r, Policy())
             ||
-         !detail::check_finite(
+         !detail::check_non_centrality(
             function,
-            l,
+            static_cast<RealType>(l * l),
             &r,
             Policy()))
-               return (RealType)r;
+               return static_cast<RealType>(r);
          if(v <= 3)
             return policies::raise_domain_error<RealType>(
                function,
@@ -1014,12 +1014,12 @@ namespace boost
             function,
             v, &r, Policy())
             ||
-         !detail::check_finite(
+         !detail::check_non_centrality(
             function,
-            l,
+            static_cast<RealType>(l * l),
             &r,
             Policy()))
-               return (RealType)r;
+               return static_cast<RealType>(r);
          if(v <= 4)
             return policies::raise_domain_error<RealType>(
                function,
@@ -1053,9 +1053,9 @@ namespace boost
             function,
             v, &r, Policy())
             ||
-         !detail::check_finite(
+         !detail::check_non_centrality(
             function,
-            l,
+            static_cast<RealType>(l * l), // we need l^2 to be countable.
             &r,
             Policy())
             ||
@@ -1064,7 +1064,7 @@ namespace boost
             t,
             &r,
             Policy()))
-               return (RealType)r;
+               return static_cast<RealType>(r);
          return policies::checked_narrowing_cast<RealType, forwarding_policy>(
             detail::non_central_t_pdf(static_cast<value_type>(v),
                static_cast<value_type>(l),
@@ -1093,9 +1093,9 @@ namespace boost
             function,
             v, &r, Policy())
             ||
-         !detail::check_finite(
+         !detail::check_non_centrality(
             function,
-            l,
+            static_cast<RealType>(l * l),
             &r,
             Policy())
             ||
@@ -1104,8 +1104,8 @@ namespace boost
             x,
             &r,
             Policy()))
-               return (RealType)r;
-          if ((boost::math::isinf)(v))
+               return static_cast<RealType>(r);
+         if ((boost::math::isinf)(v))
           { // Infinite degrees of freedom, so use normal distribution located at delta.
              normal_distribution<RealType, Policy> n(l, 1);
              cdf(n, x);
@@ -1147,9 +1147,9 @@ namespace boost
             function,
             v, &r, Policy())
             ||
-         !detail::check_finite(
+         !detail::check_non_centrality(
             function,
-            l,
+            static_cast<RealType>(l * l),
             &r,
             Policy())
             ||
@@ -1158,7 +1158,7 @@ namespace boost
             x,
             &r,
             Policy()))
-               return (RealType)r;
+               return static_cast<RealType>(r);
 
          if ((boost::math::isinf)(v))
          { // Infinite degrees of freedom, so use normal distribution located at delta.
