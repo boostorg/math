@@ -586,8 +586,8 @@ namespace detail {
                   // we can jump way out of bounds if we're not careful.
                   // See https://svn.boost.org/trac/boost/ticket/8314.
                   delta = f0 / f1;
-                  if (fabs(delta) > 2 * fabs(guess))
-                     delta = (delta < 0 ? -1 : 1) * 2 * fabs(guess);
+                  if (fabs(delta) > 2 * fabs(result))
+                     delta = (delta < 0 ? -1 : 1) * 2 * fabs(result);
                }
             }
             else
@@ -600,9 +600,19 @@ namespace detail {
          if ((convergence > 0.8) && (convergence < 2))
          {
             // last two steps haven't converged.
-            delta = (delta > 0) ? (result - min) / 2 : (result - max) / 2;
-            if ((result != 0) && (fabs(delta) > result))
-               delta = sign(delta) * fabs(result) * 0.9f; // protect against huge jumps!
+            if (fabs(min) < 1 ? fabs(1000 * min) < fabs(max) : fabs(max / min) > 1000)
+            {
+               if(delta > 0)
+                  delta = bracket_root_towards_min(f, result, f0, min, max, count);
+               else
+                  delta = bracket_root_towards_max(f, result, f0, min, max, count);
+            }
+            else
+            {
+               delta = (delta > 0) ? (result - min) / 2 : (result - max) / 2;
+               if ((result != 0) && (fabs(delta) > result))
+                  delta = sign(delta) * fabs(result) * 0.9f; // protect against huge jumps!
+            }
             // reset delta2 so that this branch will *not* be taken on the
             // next iteration:
             delta2 = delta * 3;
@@ -641,6 +651,8 @@ namespace detail {
                result = guess - delta;
                if (result <= min)
                   result = float_next(min);
+               if (result >= max)
+                  result = float_prior(max);
                guess = min;
                continue;
             }
@@ -669,6 +681,8 @@ namespace detail {
                result = guess - delta;
                if (result >= max)
                   result = float_prior(max);
+               if (result <= min)
+                  result = float_next(min);
                guess = min;
                continue;
             }
