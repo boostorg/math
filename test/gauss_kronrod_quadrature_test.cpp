@@ -477,7 +477,7 @@ BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
     test_complex_lambert_w<std::complex<long double>>();
 #endif
 #ifdef TEST1A
-#if LDBL_MANT_DIG < 100 // If we have too many digits in a long double, we get build errors due to a constexpr issue.
+#if LDBL_MANT_DIG < 100 && defined(BOOST_MATH_RUN_MP_TESTS) // If we have too many digits in a long double, we get build errors due to a constexpr issue.
     std::cout << "Testing 21 point approximation:\n";
     test_linear<cpp_bin_float_quad, 21>();
     test_quadratic<cpp_bin_float_quad, 21>();
@@ -498,7 +498,7 @@ BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
 #endif
 #endif
 #ifdef TEST2
-#if LDBL_MANT_DIG < 100 // If we have too many digits in a long double, we get build errors due to a constexpr issue.
+#if LDBL_MANT_DIG < 100 && defined(BOOST_MATH_RUN_MP_TESTS) // If we have too many digits in a long double, we get build errors due to a constexpr issue.
     std::cout << "Testing 41 point approximation:\n";
     test_linear<cpp_bin_float_quad, 41>();
     test_quadratic<cpp_bin_float_quad, 41>();
@@ -518,7 +518,7 @@ BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
     test_left_limit_infinite<cpp_bin_float_quad, 51>();
 #endif
 #endif
-#ifdef TEST3
+#if defined(TEST3) && defined(BOOST_MATH_RUN_MP_TESTS)
     // Need at least one set of tests with expression templates turned on:
     std::cout << "Testing 61 point approximation:\n";
     test_linear<cpp_dec_float_50, 61>();

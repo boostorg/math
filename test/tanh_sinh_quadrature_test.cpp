@@ -953,7 +953,7 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
 #endif
 
 #ifdef TEST4
-   #ifndef BOOST_MATH_NO_MP_TESTS
+   #ifdef BOOST_MATH_RUN_MP_TESTS
     test_right_limit_infinite<cpp_bin_float_quad>();
     test_left_limit_infinite<cpp_bin_float_quad>();
     test_linear<cpp_bin_float_quad>();
@@ -970,7 +970,7 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
    #endif
 #endif
 #ifdef TEST5
-   #ifndef BOOST_MATH_NO_MP_TESTS
+   #ifdef BOOST_MATH_RUN_MP_TESTS
     test_sf<cpp_bin_float_50>();
     test_sf<cpp_bin_float_100>();
     test_sf<boost::multiprecision::number<boost::multiprecision::cpp_bin_float<150> > >();
@@ -1000,9 +1000,9 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
 #endif
 #endif
 #ifdef TEST7
-    #ifndef BOOST_MATH_NO_MP_TESTS
+   #ifdef BOOST_MATH_RUN_MP_TESTS
     test_sf<cpp_dec_float_50>();
-    #endif
+   #endif
 #endif
 #if defined(TEST8) && defined(BOOST_HAS_FLOAT128) && !defined(BOOST_MATH_NO_MP_TESTS)
 
