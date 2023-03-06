@@ -249,8 +249,11 @@ BOOST_AUTO_TEST_CASE(trapezoidal_quadrature)
 #ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
     test_rational_periodic<boost::math::concepts::real_concept>();
 #endif
+
+    #ifdef BOOST_MATH_RUN_MP_TESTS
     test_rational_periodic<cpp_bin_float_50>();
     test_rational_periodic<cpp_bin_float_100>();
+    #endif
 
     test_bump_function<float>();
     test_bump_function<double>();
@@ -260,7 +263,10 @@ BOOST_AUTO_TEST_CASE(trapezoidal_quadrature)
 #ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
     test_rational_periodic<boost::math::concepts::real_concept>();
 #endif
+
+    #ifdef BOOST_MATH_RUN_MP_TESTS
     test_rational_periodic<cpp_bin_float_50>();
+    #endif
 
     test_zero_function<float>();
     test_zero_function<double>();
@@ -270,8 +276,11 @@ BOOST_AUTO_TEST_CASE(trapezoidal_quadrature)
 #ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
     test_zero_function<boost::math::concepts::real_concept>();
 #endif
+
+    #ifdef BOOST_MATH_RUN_MP_TESTS
     test_zero_function<cpp_bin_float_50>();
     test_zero_function<cpp_bin_float_100>();
+    #endif
 
     test_sinsq<float>();
     test_sinsq<double>();
@@ -281,8 +290,11 @@ BOOST_AUTO_TEST_CASE(trapezoidal_quadrature)
 #ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
     test_sinsq<boost::math::concepts::real_concept>();
 #endif
+
+    #ifdef BOOST_MATH_RUN_MP_TESTS
     test_sinsq<cpp_bin_float_50>();
     test_sinsq<cpp_bin_float_100>();
+    #endif
 
     test_slowly_converging<float>();
     test_slowly_converging<double>();
@@ -299,7 +311,9 @@ BOOST_AUTO_TEST_CASE(trapezoidal_quadrature)
     test_rational_sin<long double>();
 #endif
     //test_rational_sin<boost::math::concepts::real_concept>();
+    #ifdef BOOST_MATH_RUN_MP_TESTS
     test_rational_sin<cpp_bin_float_50>();
+    #endif
 
     test_complex_bessel<std::complex<float>>();
     test_complex_bessel<std::complex<double>>();
