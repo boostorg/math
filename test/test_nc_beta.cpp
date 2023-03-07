@@ -257,6 +257,22 @@ void test_spots(RealType)
    BOOST_MATH_CHECK_THROW(skewness(dist), boost::math::evaluation_error);
    BOOST_MATH_CHECK_THROW(kurtosis(dist), boost::math::evaluation_error);
    BOOST_MATH_CHECK_THROW(kurtosis_excess(dist), boost::math::evaluation_error);
+   //
+   // Some special error handling tests, if the non-centrality param is too large
+   // then we have no evaluation method and should get a domain_error:
+   //
+   using std::ldexp;
+   using distro1 = boost::math::non_central_beta_distribution<RealType>;
+   using distro2 = boost::math::non_central_beta_distribution<RealType, boost::math::policies::policy<boost::math::policies::domain_error<boost::math::policies::ignore_error>>>;
+   using de = std::domain_error;
+   BOOST_MATH_CHECK_THROW(distro1(2, 3, ldexp(RealType(1), 100)), de);
+   if (std::numeric_limits<RealType>::has_quiet_NaN)
+   {
+      distro2 d2(2, 3, ldexp(RealType(1), 100));
+      BOOST_CHECK(boost::math::isnan(pdf(d2, 0.5)));
+      BOOST_CHECK(boost::math::isnan(cdf(d2, 0.5)));
+      BOOST_CHECK(boost::math::isnan(cdf(complement(d2, 0.5))));
+   }
 } // template <class RealType>void test_spots(RealType)
 
 

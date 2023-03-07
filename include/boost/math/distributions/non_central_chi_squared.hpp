@@ -88,7 +88,7 @@ namespace boost
             // stable direction for the gamma function
             // recurrences:
             //
-            int i;
+            long long i;
             for(i = k; static_cast<std::uintmax_t>(i-k) < max_iter; ++i)
             {
                T term = poisf * gamf;
@@ -299,7 +299,7 @@ namespace boost
             if(pois == 0)
                return 0;
             T poisb = pois;
-            for(int i = k; ; ++i)
+            for(long long i = k; ; ++i)
             {
                sum += pois;
                if(pois / sum < errtol)
@@ -310,7 +310,7 @@ namespace boost
                      "Series did not converge, closest value was %1%", sum, pol);
                pois *= l2 * x2 / ((i + 1) * (n2 + i));
             }
-            for(int i = k - 1; i >= 0; --i)
+            for(long long i = k - 1; i >= 0; --i)
             {
                poisb *= (i + 1) * (n2 + i) / (l2 * x2);
                sum += poisb;
@@ -428,7 +428,7 @@ namespace boost
                static_cast<value_type>(p),
                &r,
                Policy()))
-                  return (RealType)r;
+                  return static_cast<RealType>(r);
             //
             // Special cases get short-circuited first:
             //
@@ -519,7 +519,7 @@ namespace boost
                (value_type)x,
                &r,
                Policy()))
-                  return (RealType)r;
+                  return static_cast<RealType>(r);
 
          if(l == 0)
             return pdf(boost::math::chi_squared_distribution<RealType, forwarding_policy>(dist.degrees_of_freedom()), x);
@@ -821,7 +821,7 @@ namespace boost
             l,
             &r,
             Policy()))
-               return r;
+               return static_cast<RealType>(r);
          return k + l;
       } // mean
 
@@ -842,7 +842,7 @@ namespace boost
             l,
             &r,
             Policy()))
-               return (RealType)r;
+               return static_cast<RealType>(r);
          bool asymptotic_mode = k < l/4;
          RealType starting_point = asymptotic_mode ? k + l - RealType(3) : RealType(1) + k;
          return detail::generic_find_mode(dist, starting_point, function);
@@ -864,7 +864,7 @@ namespace boost
             l,
             &r,
             Policy()))
-               return r;
+               return static_cast<RealType>(r);
          return 2 * (2 * l + k);
       }
 
@@ -887,7 +887,7 @@ namespace boost
             l,
             &r,
             Policy()))
-               return r;
+               return static_cast<RealType>(r);
          BOOST_MATH_STD_USING
             return pow(2 / (k + 2 * l), RealType(3)/2) * (k + 3 * l);
       }
@@ -908,7 +908,7 @@ namespace boost
             l,
             &r,
             Policy()))
-               return r;
+               return static_cast<RealType>(r);
          return 12 * (k + 4 * l) / ((k + 2 * l) * (k + 2 * l));
       } // kurtosis_excess
 
@@ -946,7 +946,7 @@ namespace boost
             x,
             &r,
             Policy()))
-               return r;
+               return static_cast<RealType>(r);
 
          return detail::non_central_chi_squared_cdf(x, k, l, false, Policy());
       } // cdf
@@ -975,7 +975,7 @@ namespace boost
             x,
             &r,
             Policy()))
-               return r;
+               return static_cast<RealType>(r);
 
          return detail::non_central_chi_squared_cdf(x, k, l, true, Policy());
       } // ccdf
