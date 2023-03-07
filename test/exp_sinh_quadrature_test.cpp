@@ -607,7 +607,7 @@ BOOST_AUTO_TEST_CASE(exp_sinh_quadrature_test)
 #endif
 #endif
 #endif
-#if defined(TEST4) && !defined(BOOST_MATH_NO_MP_TESTS)
+#if defined(TEST4) && defined(BOOST_MATH_RUN_MP_TESTS)
     test_left_limit_infinite<cpp_bin_float_quad>();
     test_right_limit_infinite<cpp_bin_float_quad>();
     test_nr_examples<cpp_bin_float_quad>();
@@ -622,13 +622,13 @@ BOOST_AUTO_TEST_CASE(exp_sinh_quadrature_test)
     test_crc<boost::math::concepts::real_concept>();
 #endif
 #endif
-#if defined(TEST6) && !defined(BOOST_MATH_NO_MP_TESTS)
+#if defined(TEST6) && defined(BOOST_MATH_RUN_MP_TESTS)
     test_left_limit_infinite<boost::multiprecision::cpp_bin_float_50>();
     test_right_limit_infinite<boost::multiprecision::cpp_bin_float_50>();
     test_nr_examples<boost::multiprecision::cpp_bin_float_50>();
     test_crc<boost::multiprecision::cpp_bin_float_50>();
 #endif
-#if defined(TEST7) && !defined(BOOST_MATH_NO_MP_TESTS)
+#if defined(TEST7) && defined(BOOST_MATH_RUN_MP_TESTS)
     test_left_limit_infinite<boost::multiprecision::cpp_dec_float_50>();
     test_right_limit_infinite<boost::multiprecision::cpp_dec_float_50>();
     test_nr_examples<boost::multiprecision::cpp_dec_float_50>();
@@ -636,7 +636,7 @@ BOOST_AUTO_TEST_CASE(exp_sinh_quadrature_test)
     // This one causes stack overflows on the CI machine, but not locally,
     // assume it's due to restricted resources on the server, and <shrug> for now...
     //
-#if ! BOOST_WORKAROUND(BOOST_MSVC, == 1900) && !defined(BOOST_MATH_NO_MP_TESTS)
+#if ! BOOST_WORKAROUND(BOOST_MSVC, == 1900) && defined(BOOST_MATH_RUN_MP_TESTS)
     test_crc<boost::multiprecision::cpp_dec_float_50>();
 #endif
 #endif
@@ -656,7 +656,7 @@ BOOST_AUTO_TEST_CASE(exp_sinh_quadrature_test)
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_complex_exponential_integral_E1<std::complex<long double>>();
 #endif
-#ifndef BOOST_MATH_NO_MP_TESTS
+#if defined(BOOST_MATH_RUN_MP_TESTS)
     test_complex_exponential_integral_E1<boost::multiprecision::cpp_complex_quad>();
 #endif
 #endif

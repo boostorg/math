@@ -461,7 +461,7 @@ BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
     test_right_limit_infinite<double, 9>();
     test_left_limit_infinite<double, 9>();
 
-#if LDBL_MANT_DIG < 100
+#if LDBL_MANT_DIG < 100 && defined(BOOST_MATH_RUN_MP_TESTS)
     test_linear<cpp_bin_float_quad, 10>();
     test_quadratic<cpp_bin_float_quad, 10>();
     test_ca<cpp_bin_float_quad, 10>();
@@ -472,7 +472,7 @@ BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
 #endif
 #endif
 #ifdef TEST2
-#if LDBL_MANT_DIG < 100
+#if LDBL_MANT_DIG < 100 && defined(BOOST_MATH_RUN_MP_TESTS)
     test_linear<cpp_bin_float_quad, 15>();
     test_quadratic<cpp_bin_float_quad, 15>();
     test_ca<cpp_bin_float_quad, 15>();
@@ -508,7 +508,7 @@ BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
 #endif
 #endif
 #ifdef TEST3
-#if LDBL_MANT_DIG < 100
+#if LDBL_MANT_DIG < 100 && defined(BOOST_MATH_RUN_MP_TESTS)
     test_left_limit_infinite<cpp_bin_float_quad, 30>();
 #endif
     test_complex_lambert_w<std::complex<double>>();
@@ -517,7 +517,7 @@ BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
     test_left_limit_infinite<boost::multiprecision::float128, 30>();
     test_complex_lambert_w<boost::multiprecision::complex128>();
 #endif
-#if LDBL_MANT_DIG < 100
+#if LDBL_MANT_DIG < 100 && defined(BOOST_MATH_RUN_MP_TESTS)
     test_complex_lambert_w<boost::multiprecision::cpp_complex_quad>();
 #endif
 #endif
