@@ -430,7 +430,7 @@ namespace boost
                static_cast<value_type>(p),
                &r,
                Policy()))
-                  return (RealType)r;
+                  return static_cast<RealType>(r);
             //
             // Special cases first:
             //
@@ -624,7 +624,7 @@ namespace boost
                static_cast<value_type>(x),
                &r,
                Policy()))
-                  return (RealType)r;
+                  return static_cast<RealType>(r);
 
             if(l == 0)
                return pdf(boost::math::beta_distribution<RealType, Policy>(dist.alpha(), dist.beta()), x);
@@ -761,7 +761,7 @@ namespace boost
                l,
                &r,
                Policy()))
-                  return (RealType)r;
+                  return static_cast<RealType>(r);
          RealType c = a + b + l / 2;
          RealType mean = 1 - (b / c) * (1 + l / (2 * c * c));
          return detail::generic_find_mode_01(
@@ -872,7 +872,7 @@ namespace boost
                x,
                &r,
                Policy()))
-                  return (RealType)r;
+                  return static_cast<RealType>(r);
 
          if(l == 0)
             return cdf(beta_distribution<RealType, Policy>(a, b), x);
@@ -909,7 +909,7 @@ namespace boost
                x,
                &r,
                Policy()))
-                  return (RealType)r;
+                  return static_cast<RealType>(r);
 
          if(l == 0)
             return cdf(complement(beta_distribution<RealType, Policy>(a, b), x));
