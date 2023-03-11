@@ -193,7 +193,7 @@ inline T bessel_y_small_z_series(T v, T x, T* pscale, const Policy& pol)
    }
    else
    {
-      int sgn;
+      int sgn {};
       prefix = boost::math::lgamma(-v, &sgn, pol) + p;
       prefix = exp(prefix) * sgn / constants::pi<T>();
    }
