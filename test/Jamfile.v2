@@ -890,6 +890,7 @@ test-suite distribution_tests :
    [ run complex_test.cpp ../../test/build//boost_unit_test_framework  ]
 
    [ compile test_dist_deduction_guides.cpp : [ requires cpp_deduction_guides cpp_variadic_templates ] ]
+   [ run git_issue_430.cpp ../../test/build//boost_unit_test_framework ]
    [ run git_issue_800.cpp ../../test/build//boost_unit_test_framework  ]
    [ run git_issue_845.cpp ../../test/build//boost_unit_test_framework  ]
    [ run scipy_issue_14901.cpp ../../test/build//boost_unit_test_framework ]
