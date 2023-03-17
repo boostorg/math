@@ -41,7 +41,7 @@ inline ResultType float_to_int(T x)
       return (std::numeric_limits<ResultType>::max)();
    }
 
-   return y;
+   return static_cast<ResultType>(y);
 }
 
 template <typename T, typename TargetType>
