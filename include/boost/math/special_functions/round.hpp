@@ -45,7 +45,7 @@ template <typename T, typename TargetType>
 inline bool is_representable(T x)
 {
    BOOST_MATH_STD_USING
-   return (floor(x) == x && x >= static_cast<T>(0.0L) && x < ldexp(1.0, sizeof(TargetType) * CHAR_BIT));
+   return (floor(x) == x && x >= static_cast<T>(0.0L) && x < ldexp(static_cast<T>(1.0L), sizeof(TargetType) * CHAR_BIT));
 }
 
 template <class T, class Policy>
@@ -162,7 +162,8 @@ inline long long llround(const T& v, const Policy& pol)
    bool representable = boost::math::detail::is_representable<result_type, long long>(r);
 
    if (r < static_cast<result_type>((std::numeric_limits<long long>::min)()) ||
-       (return_val == LLONG_MAX && !representable))
+       (return_val == (std::numeric_limits<long long>::max)() && !representable) ||
+       r > static_cast<result_type>((std::numeric_limits<long long>::max)()))
    {
       return static_cast<long long>(policies::raise_rounding_error("boost::math::llround<%1%>(%1%)", nullptr, v, static_cast<long long>(0), pol));
    }
