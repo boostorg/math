@@ -535,6 +535,7 @@ test-suite special_fun :
    [ run test_polygamma.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
    [ run test_trigamma.cpp test_instances//test_instances ../../test/build//boost_unit_test_framework  ]
    [ run test_round.cpp pch ../../test/build//boost_unit_test_framework  ]
+   [ run git_issue_430.cpp pch ../../test/build//boost_unit_test_framework ]
    [ run test_spherical_harmonic.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
    [ run test_sign.cpp ../../test/build//boost_unit_test_framework  ]
    [ run test_tgamma_for_issue396_part1.cpp ../../test/build//boost_unit_test_framework : : : [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>"-Bstatic -lquadmath -Bdynamic" ] <toolset>gcc-mingw:<cxxflags>-Wa,-mbig-obj <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj [ check-target-builds ../config//is_cygwin_run "Cygwin CI run" : <build>no ] ]
@@ -890,7 +891,6 @@ test-suite distribution_tests :
    [ run complex_test.cpp ../../test/build//boost_unit_test_framework  ]
 
    [ compile test_dist_deduction_guides.cpp : [ requires cpp_deduction_guides cpp_variadic_templates ] ]
-   [ run git_issue_430.cpp ../../test/build//boost_unit_test_framework ]
    [ run git_issue_800.cpp ../../test/build//boost_unit_test_framework  ]
    [ run git_issue_845.cpp ../../test/build//boost_unit_test_framework  ]
    [ run scipy_issue_14901.cpp ../../test/build//boost_unit_test_framework ]

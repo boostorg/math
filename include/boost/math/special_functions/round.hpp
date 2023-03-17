@@ -14,6 +14,7 @@
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
+#include <type_traits>
 #include <limits>
 #include <cmath>
 
@@ -27,13 +28,15 @@ inline ResultType float_to_int(T x)
 {
    BOOST_MATH_STD_USING
 
+   constexpr int sign = std::is_signed<ResultType>::value ? -1 : 0;
+
    T y = floor(x);
    if (y < static_cast<T>(0.0L))
    {
       return 0;
    }
    
-   if (y > ldexp(static_cast<T>(1.0L), sizeof(ResultType) * CHAR_BIT))
+   if (y >= ldexp(static_cast<T>(1.0L), (sizeof(ResultType) * CHAR_BIT) + sign) + sign)
    {
       return (std::numeric_limits<ResultType>::max)();
    }
@@ -161,8 +164,8 @@ inline long long llround(const T& v, const Policy& pol)
    long long return_val = boost::math::detail::float_to_int<result_type, long long>(r);
    bool representable = boost::math::detail::is_representable<result_type, long long>(r);
 
-   if (r < static_cast<result_type>((std::numeric_limits<long long>::min)()) ||
-       (return_val == (std::numeric_limits<long long>::max)() && !representable) ||
+   if ((return_val == (std::numeric_limits<long long>::max)() && !representable) ||
+       r < static_cast<result_type>((std::numeric_limits<long long>::min)()) ||
        r > static_cast<result_type>((std::numeric_limits<long long>::max)()))
    {
       return static_cast<long long>(policies::raise_rounding_error("boost::math::llround<%1%>(%1%)", nullptr, v, static_cast<long long>(0), pol));
