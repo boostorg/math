@@ -18,38 +18,16 @@
 #include <limits>
 #include <cmath>
 
+#if __cplusplus >= 201703L || _MSVC_LANG >= 201703L
+#include <boost/math/ccmath/ldexp.hpp>
+#  ifndef BOOST_MATH_NO_CONSTEXPR_DETECTION
+#    define BOOST_MATH_HAS_CONSTEXPR_LDEXP
+#  endif
+#endif
+
 namespace boost{ namespace math{
 
 namespace detail{
-
-// https://stackoverflow.com/questions/8905246/how-to-check-if-float-can-be-exactly-represented-as-an-integer/17822304#17822304
-template <typename T, typename ResultType>
-inline ResultType float_to_int(T x)
-{
-   BOOST_MATH_STD_USING
-
-   constexpr int sign = std::is_signed<ResultType>::value ? -1 : 0;
-
-   T y = floor(x);
-   if (y < static_cast<T>(0.0L))
-   {
-      return 0;
-   }
-   
-   if (y >= ldexp(static_cast<T>(1.0L), (sizeof(ResultType) * CHAR_BIT) + sign) + sign)
-   {
-      return (std::numeric_limits<ResultType>::max)();
-   }
-
-   return static_cast<ResultType>(y);
-}
-
-template <typename T, typename TargetType>
-inline bool is_representable(T x)
-{
-   BOOST_MATH_STD_USING
-   return (floor(x) == x && x >= static_cast<T>(0.0L) && x < ldexp(static_cast<T>(1.0L), sizeof(TargetType) * CHAR_BIT));
-}
 
 template <class T, class Policy>
 inline tools::promote_args_t<T> round(const T& v, const Policy& pol, const std::false_type&)
@@ -158,25 +136,21 @@ template <class T, class Policy>
 inline long long llround(const T& v, const Policy& pol)
 {
    BOOST_MATH_STD_USING
-   using result_type = tools::promote_args_t<T>;
+   using result_type = boost::math::tools::promote_args_t<T>;
 
-   T r = boost::math::round(v, pol);
-   long long return_val = boost::math::detail::float_to_int<result_type, long long>(r);
-   bool representable = boost::math::detail::is_representable<result_type, long long>(r);
+   result_type r = boost::math::round(v, pol);
 
-   if ((return_val == (std::numeric_limits<long long>::max)() && !representable) ||
-       r < static_cast<result_type>((std::numeric_limits<long long>::min)()) ||
-       r > static_cast<result_type>((std::numeric_limits<long long>::max)()))
+   #ifdef BOOST_MATH_HAS_CONSTEXPR_LDEXP
+   constexpr result_type max_val = boost::math::ccmath::ldexp(static_cast<result_type>(1), std::numeric_limits<long long>::digits);
+   #else
+   static const result_type max_val = std::ldexp(static_cast<result_type>(1), std::numeric_limits<long long>::digits);
+   #endif
+
+   if (r >= max_val || r < -max_val)
    {
-      return static_cast<long long>(policies::raise_rounding_error("boost::math::llround<%1%>(%1%)", nullptr, v, static_cast<long long>(0), pol));
+      return static_cast<long long>(boost::math::policies::raise_rounding_error("boost::math::llround<%1%>(%1%)", nullptr, v, static_cast<long long>(0), pol));
    }
-
-   if (r < 0)
-   {
-      return_val = static_cast<long long>(r);
-   }
-
-   return return_val;
+   return static_cast<long long>(r);
 }
 template <class T>
 inline long long llround(const T& v)
