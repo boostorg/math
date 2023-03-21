@@ -22,7 +22,7 @@
 namespace boost::math::ccmath {
 
 template <typename T>
-constexpr bool isinf(T x) noexcept
+constexpr bool isinf BOOST_PREVENT_MACRO_SUBSTITUTION(T x) noexcept
 {
     if(BOOST_MATH_IS_CONSTANT_EVALUATED(x))
     {
@@ -41,11 +41,11 @@ constexpr bool isinf(T x) noexcept
         
         if constexpr (!std::is_integral_v<T>)
         {
-            return isinf(x);
+            return (isinf)(x);
         }
         else
         {
-            return isinf(static_cast<double>(x));
+            return (isinf)(static_cast<double>(x));
         }
     }
 }

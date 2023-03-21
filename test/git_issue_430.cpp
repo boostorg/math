@@ -7,9 +7,11 @@
 // See: https://godbolt.org/z/Ev4ManrsW
 
 #include <boost/math/special_functions/round.hpp>
+#include <boost/math/special_functions/next.hpp>
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
 #include <cstdint>
+#include <cmath>
 
 template <typename Real>
 void test_llround_near_boundary()

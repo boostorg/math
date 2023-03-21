@@ -21,7 +21,7 @@
 namespace boost::math::ccmath {
 
 template <typename T>
-inline constexpr bool isnan(T x)
+inline constexpr bool isnan BOOST_PREVENT_MACRO_SUBSTITUTION(T x)
 {
     if(BOOST_MATH_IS_CONSTANT_EVALUATED(x))
     {
@@ -33,11 +33,11 @@ inline constexpr bool isnan(T x)
 
         if constexpr (!std::is_integral_v<T>)
         {
-            return isnan(x);
+            return (isnan)(x);
         }
         else
         {
-            return isnan(static_cast<double>(x));
+            return (isnan)(static_cast<double>(x));
         }
     }
 }
