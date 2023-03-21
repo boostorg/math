@@ -24,14 +24,7 @@ void test_llround_near_boundary()
 
    for (value = boundary, i = 0; i < 100; value = boost::math::float_next(value), ++i)
    {
-      if (value == boundary)
-      {
-         BOOST_CHECK_EQUAL(static_cast<Real>(boost::math::llround(value)), boost::math::round(value));
-      }
-      else
-      {
-         BOOST_CHECK_THROW(boost::math::llround(value), boost::math::rounding_error);
-      }
+      BOOST_CHECK_THROW(boost::math::llround(value), boost::math::rounding_error);
    }
    for (value = boost::math::float_prior(boundary), i = 0; i < 1000; value = boost::math::float_prior(value), ++i)
    {

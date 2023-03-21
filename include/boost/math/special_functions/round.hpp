@@ -146,7 +146,7 @@ inline long long llround(const T& v, const Policy& pol)
    static const result_type max_val = std::ldexp(static_cast<result_type>(1), std::numeric_limits<long long>::digits);
    #endif
 
-   if (r > max_val || r < -max_val)
+   if (r >= max_val || r < -max_val)
    {
       return static_cast<long long>(boost::math::policies::raise_rounding_error("boost::math::llround<%1%>(%1%)", nullptr, v, static_cast<long long>(0), pol));
    }
