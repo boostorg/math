@@ -20,7 +20,7 @@
 
 #if __cplusplus >= 201703L || _MSVC_LANG >= 201703L
 #include <boost/math/ccmath/ldexp.hpp>
-#  ifndef BOOST_MATH_NO_CONSTEXPR_DETECTION
+#  if !defined(BOOST_MATH_NO_CONSTEXPR_DETECTION) && !defined(TEST_GROUP_7) // Concept tests throw off constexpr ldexp
 #    define BOOST_MATH_HAS_CONSTEXPR_LDEXP
 #  endif
 #endif
@@ -146,7 +146,7 @@ inline long long llround(const T& v, const Policy& pol)
    static const result_type max_val = std::ldexp(static_cast<result_type>(1), std::numeric_limits<long long>::digits);
    #endif
 
-   if (r >= max_val || r < -max_val)
+   if (r > max_val || r < -max_val)
    {
       return static_cast<long long>(boost::math::policies::raise_rounding_error("boost::math::llround<%1%>(%1%)", nullptr, v, static_cast<long long>(0), pol));
    }
