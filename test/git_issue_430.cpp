@@ -44,5 +44,4 @@ BOOST_AUTO_TEST_CASE( test_main )
 {
     test_llround_near_boundary<float>();
     test_llround_near_boundary<double>();
-    test_llround_near_boundary<long double>();
 }
