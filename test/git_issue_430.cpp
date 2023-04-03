@@ -22,26 +22,84 @@ void test_llround_near_boundary()
    Real value;
    int i;
 
-   for (value = boundary, i = 0; i < 100; value = boost::math::float_next(value), ++i)
-   {
-      BOOST_CHECK_THROW(boost::math::llround(value), boost::math::rounding_error);
-   }
-   for (value = boost::math::float_prior(boundary), i = 0; i < 1000; value = boost::math::float_prior(value), ++i)
-   {
-      BOOST_CHECK_EQUAL(static_cast<Real>(boost::math::llround(value)), boost::math::round(value));
-   }
-   for (value = boost::math::float_prior(-boundary), i = 0; i < 100; value = boost::math::float_prior(value), ++i)
-   {
-      BOOST_CHECK_THROW(boost::math::llround(value), boost::math::rounding_error);
-   }
-   for (value = -boundary, i = 0; i < 1000; value = boost::math::float_next(value), ++i)
-   {
-      BOOST_CHECK_EQUAL(static_cast<Real>(boost::math::llround(value)), boost::math::round(value));
-   }
+    for (value = boundary, i = 0; i < 100; value = boost::math::float_next(value), ++i)
+    {
+        BOOST_CHECK_THROW(boost::math::llround(value), boost::math::rounding_error);
+    }
+    for (value = boost::math::float_prior(boundary), i = 0; i < 1000; value = boost::math::float_prior(value), ++i)
+    {
+        BOOST_CHECK_EQUAL(static_cast<Real>(boost::math::llround(value)), boost::math::round(value));
+    }
+    for (value = boost::math::float_prior(-boundary), i = 0; i < 100; value = boost::math::float_prior(value), ++i)
+    {
+        BOOST_CHECK_THROW(boost::math::llround(value), boost::math::rounding_error);
+    }
+    for (value = -boundary, i = 0; i < 1000; value = boost::math::float_next(value), ++i)
+    {
+        BOOST_CHECK_EQUAL(static_cast<Real>(boost::math::llround(value)), boost::math::round(value));
+    }
+}
+
+template <typename Real>
+void test_lround_near_boundary()
+{
+   using std::ldexp;
+   Real boundary = ldexp(static_cast<Real>(1), std::numeric_limits<long>::digits);
+
+   Real value;
+   int i;
+
+    for (value = boundary, i = 0; i < 100; value = boost::math::float_next(value), ++i)
+    {
+        BOOST_CHECK_THROW(boost::math::lround(value), boost::math::rounding_error);
+    }
+    for (value = boost::math::float_prior(boundary), i = 0; i < 1000; value = boost::math::float_prior(value), ++i)
+    {
+        BOOST_CHECK_EQUAL(static_cast<Real>(boost::math::lround(value)), boost::math::round(value));
+    }
+    for (value = boost::math::float_prior(-boundary), i = 0; i < 100; value = boost::math::float_prior(value), ++i)
+    {
+        BOOST_CHECK_THROW(boost::math::lround(value), boost::math::rounding_error);
+    }
+    for (value = -boundary, i = 0; i < 1000; value = boost::math::float_next(value), ++i)
+    {
+        BOOST_CHECK_EQUAL(static_cast<Real>(boost::math::lround(value)), boost::math::round(value));
+    }
+}
+
+template <typename Real>
+void test_iround_near_boundary()
+{
+   using std::ldexp;
+   Real boundary = ldexp(static_cast<Real>(1), std::numeric_limits<int>::digits);
+
+   Real value;
+   int i;
+
+    for (value = boundary, i = 0; i < 100; value = boost::math::float_next(value), ++i)
+    {
+        BOOST_CHECK_THROW(boost::math::iround(value), boost::math::rounding_error);
+    }
+    for (value = boost::math::float_prior(boundary), i = 0; i < 1000; value = boost::math::float_prior(value), ++i)
+    {
+        BOOST_CHECK_EQUAL(static_cast<Real>(boost::math::iround(value)), boost::math::round(value));
+    }
+    for (value = boost::math::float_prior(-boundary), i = 0; i < 100; value = boost::math::float_prior(value), ++i)
+    {
+        BOOST_CHECK_THROW(boost::math::iround(value), boost::math::rounding_error);
+    }
+    for (value = -boundary, i = 0; i < 1000; value = boost::math::float_next(value), ++i)
+    {
+        BOOST_CHECK_EQUAL(static_cast<Real>(boost::math::iround(value)), boost::math::round(value));
+    }  
 }
 
 BOOST_AUTO_TEST_CASE( test_main )
 {
     test_llround_near_boundary<float>();
     test_llround_near_boundary<double>();
+
+    test_lround_near_boundary<float>();
+
+    test_iround_near_boundary<float>();
 }
