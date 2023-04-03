@@ -1,4 +1,5 @@
 //  Copyright John Maddock 2007.
+//  Copyright Matt Borland 2023.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -15,6 +16,13 @@
 #include <boost/math/tools/config.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
+
+#if __cplusplus >= 201703L || _MSVC_LANG >= 201703L
+#include <boost/math/ccmath/ldexp.hpp>
+#  if !defined(BOOST_MATH_NO_CONSTEXPR_DETECTION) && !defined(TEST_GROUP_7) // Concept tests throw off constexpr ldexp
+#    define BOOST_MATH_HAS_CONSTEXPR_LDEXP
+#  endif
+#endif
 
 namespace boost{ namespace math{ namespace detail{
 
@@ -67,7 +75,14 @@ inline int itrunc(const T& v, const Policy& pol)
    BOOST_MATH_STD_USING
    using result_type = tools::promote_args_t<T>;
    result_type r = boost::math::trunc(v, pol);
-   if(r > static_cast<result_type>((std::numeric_limits<int>::max)()) || r < static_cast<result_type>((std::numeric_limits<int>::min)()))
+
+   #ifdef BOOST_MATH_HAS_CONSTEXPR_LDEXP
+   constexpr result_type max_val = boost::math::ccmath::ldexp(static_cast<result_type>(1), std::numeric_limits<int>::digits);
+   #else
+   static const result_type max_val = ldexp(static_cast<result_type>(1), std::numeric_limits<int>::digits);
+   #endif   
+
+   if(r >= max_val || r < -max_val)
    {
       return static_cast<int>(policies::raise_rounding_error("boost::math::itrunc<%1%>(%1%)", nullptr, static_cast<result_type>(v), 0, pol));
    }
@@ -85,7 +100,14 @@ inline long ltrunc(const T& v, const Policy& pol)
    BOOST_MATH_STD_USING
    using result_type = tools::promote_args_t<T>;
    result_type r = boost::math::trunc(v, pol);
-   if(r > static_cast<result_type>((std::numeric_limits<long>::max)()) || r < static_cast<result_type>((std::numeric_limits<long>::min)()))
+
+   #ifdef BOOST_MATH_HAS_CONSTEXPR_LDEXP
+   constexpr result_type max_val = boost::math::ccmath::ldexp(static_cast<result_type>(1), std::numeric_limits<long>::digits);
+   #else
+   static const result_type max_val = ldexp(static_cast<result_type>(1), std::numeric_limits<long>::digits);
+   #endif
+
+   if(r >= max_val || r < -max_val)
    {
       return static_cast<long>(policies::raise_rounding_error("boost::math::ltrunc<%1%>(%1%)", nullptr, static_cast<result_type>(v), 0L, pol));
    }
@@ -103,8 +125,14 @@ inline long long lltrunc(const T& v, const Policy& pol)
    BOOST_MATH_STD_USING
    using result_type = tools::promote_args_t<T>;
    result_type r = boost::math::trunc(v, pol);
-   if(r > static_cast<result_type>((std::numeric_limits<long long>::max)()) ||
-      r < static_cast<result_type>((std::numeric_limits<long long>::min)()))
+
+   #ifdef BOOST_MATH_HAS_CONSTEXPR_LDEXP
+   constexpr result_type max_val = boost::math::ccmath::ldexp(static_cast<result_type>(1), std::numeric_limits<long long>::digits);
+   #else
+   static const result_type max_val = ldexp(static_cast<result_type>(1), std::numeric_limits<long long>::digits);
+   #endif
+
+   if(r >= max_val || r < -max_val)
    {
       return static_cast<long long>(policies::raise_rounding_error("boost::math::lltrunc<%1%>(%1%)", nullptr, v, static_cast<long long>(0), pol));
    }
