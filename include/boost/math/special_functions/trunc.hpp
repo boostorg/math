@@ -77,15 +77,33 @@ inline int itrunc(const T& v, const Policy& pol)
    result_type r = boost::math::trunc(v, pol);
 
    #ifdef BOOST_MATH_HAS_CONSTEXPR_LDEXP
-   constexpr result_type max_val = boost::math::ccmath::ldexp(static_cast<result_type>(1), std::numeric_limits<int>::digits);
+   if constexpr (std::is_arithmetic_v<result_type>)
+   {
+      constexpr result_type max_val = boost::math::ccmath::ldexp(static_cast<result_type>(1), std::numeric_limits<int>::digits);
+      
+      if (r >= max_val || r < -max_val)
+      {
+         return static_cast<int>(boost::math::policies::raise_rounding_error("boost::math::itrunc<%1%>(%1%)", nullptr, v, static_cast<int>(0), pol));
+      }
+   }
+   else
+   {
+      static const result_type max_val = ldexp(static_cast<result_type>(1), std::numeric_limits<int>::digits);
+   
+      if (r >= max_val || r < -max_val)
+      {
+         return static_cast<int>(boost::math::policies::raise_rounding_error("boost::math::itrunc<%1%>(%1%)", nullptr, v, static_cast<int>(0), pol));
+      }
+   }
    #else
    static const result_type max_val = ldexp(static_cast<result_type>(1), std::numeric_limits<int>::digits);
-   #endif   
 
-   if(r >= max_val || r < -max_val)
+   if (r >= max_val || r < -max_val)
    {
-      return static_cast<int>(policies::raise_rounding_error("boost::math::itrunc<%1%>(%1%)", nullptr, static_cast<result_type>(v), 0, pol));
+      return static_cast<int>(boost::math::policies::raise_rounding_error("boost::math::itrunc<%1%>(%1%)", nullptr, v, static_cast<int>(0), pol));
    }
+   #endif
+
    return static_cast<int>(r);
 }
 template <class T>
@@ -102,15 +120,33 @@ inline long ltrunc(const T& v, const Policy& pol)
    result_type r = boost::math::trunc(v, pol);
 
    #ifdef BOOST_MATH_HAS_CONSTEXPR_LDEXP
-   constexpr result_type max_val = boost::math::ccmath::ldexp(static_cast<result_type>(1), std::numeric_limits<long>::digits);
+   if constexpr (std::is_arithmetic_v<result_type>)
+   {
+      constexpr result_type max_val = boost::math::ccmath::ldexp(static_cast<result_type>(1), std::numeric_limits<long>::digits);
+      
+      if (r >= max_val || r < -max_val)
+      {
+         return static_cast<long>(boost::math::policies::raise_rounding_error("boost::math::ltrunc<%1%>(%1%)", nullptr, v, static_cast<long>(0), pol));
+      }
+   }
+   else
+   {
+      static const result_type max_val = ldexp(static_cast<result_type>(1), std::numeric_limits<long>::digits);
+   
+      if (r >= max_val || r < -max_val)
+      {
+         return static_cast<long>(boost::math::policies::raise_rounding_error("boost::math::ltrunc<%1%>(%1%)", nullptr, v, static_cast<long>(0), pol));
+      }
+   }
    #else
    static const result_type max_val = ldexp(static_cast<result_type>(1), std::numeric_limits<long>::digits);
+
+   if (r >= max_val || r < -max_val)
+   {
+      return static_cast<long>(boost::math::policies::raise_rounding_error("boost::math::ltrunc<%1%>(%1%)", nullptr, v, static_cast<long>(0), pol));
+   }
    #endif
 
-   if(r >= max_val || r < -max_val)
-   {
-      return static_cast<long>(policies::raise_rounding_error("boost::math::ltrunc<%1%>(%1%)", nullptr, static_cast<result_type>(v), 0L, pol));
-   }
    return static_cast<long>(r);
 }
 template <class T>
@@ -127,15 +163,33 @@ inline long long lltrunc(const T& v, const Policy& pol)
    result_type r = boost::math::trunc(v, pol);
 
    #ifdef BOOST_MATH_HAS_CONSTEXPR_LDEXP
-   constexpr result_type max_val = boost::math::ccmath::ldexp(static_cast<result_type>(1), std::numeric_limits<long long>::digits);
+   if constexpr (std::is_arithmetic_v<result_type>)
+   {
+      constexpr result_type max_val = boost::math::ccmath::ldexp(static_cast<result_type>(1), std::numeric_limits<long long>::digits);
+      
+      if (r >= max_val || r < -max_val)
+      {
+         return static_cast<long long>(boost::math::policies::raise_rounding_error("boost::math::lltrunc<%1%>(%1%)", nullptr, v, static_cast<long long>(0), pol));
+      }
+   }
+   else
+   {
+      static const result_type max_val = ldexp(static_cast<result_type>(1), std::numeric_limits<long long>::digits);
+   
+      if (r >= max_val || r < -max_val)
+      {
+         return static_cast<long long>(boost::math::policies::raise_rounding_error("boost::math::lltrunc<%1%>(%1%)", nullptr, v, static_cast<long long>(0), pol));
+      }
+   }
    #else
    static const result_type max_val = ldexp(static_cast<result_type>(1), std::numeric_limits<long long>::digits);
+
+   if (r >= max_val || r < -max_val)
+   {
+      return static_cast<long long>(boost::math::policies::raise_rounding_error("boost::math::lltrunc<%1%>(%1%)", nullptr, v, static_cast<long long>(0), pol));
+   }
    #endif
 
-   if(r >= max_val || r < -max_val)
-   {
-      return static_cast<long long>(policies::raise_rounding_error("boost::math::lltrunc<%1%>(%1%)", nullptr, v, static_cast<long long>(0), pol));
-   }
    return static_cast<long long>(r);
 }
 template <class T>
