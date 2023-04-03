@@ -105,7 +105,11 @@ inline int iround(const T& v, const Policy& pol)
    result_type r = boost::math::round(v, pol);
 
    #ifdef BOOST_MATH_HAS_CONSTEXPR_LDEXP
-   if constexpr (std::is_arithmetic_v<result_type>)
+   if constexpr (std::is_arithmetic_v<result_type>
+                 #ifdef BOOST_MATH_FLOAT128_TYPE
+                 && !std::is_same_v<BOOST_MATH_FLOAT128_TYPE, result_type>
+                 #endif
+                )
    {
       constexpr result_type max_val = boost::math::ccmath::ldexp(static_cast<result_type>(1), std::numeric_limits<int>::digits);
       
@@ -149,7 +153,11 @@ inline long lround(const T& v, const Policy& pol)
    result_type r = boost::math::round(v, pol);
    
    #ifdef BOOST_MATH_HAS_CONSTEXPR_LDEXP
-   if constexpr (std::is_arithmetic_v<result_type>)
+   if constexpr (std::is_arithmetic_v<result_type>
+                 #ifdef BOOST_MATH_FLOAT128_TYPE
+                 && !std::is_same_v<BOOST_MATH_FLOAT128_TYPE, result_type>
+                 #endif
+                )
    {
       constexpr result_type max_val = boost::math::ccmath::ldexp(static_cast<result_type>(1), std::numeric_limits<long>::digits);
       
@@ -193,7 +201,11 @@ inline long long llround(const T& v, const Policy& pol)
    result_type r = boost::math::round(v, pol);
 
    #ifdef BOOST_MATH_HAS_CONSTEXPR_LDEXP
-   if constexpr (std::is_arithmetic_v<result_type>)
+   if constexpr (std::is_arithmetic_v<result_type>
+                 #ifdef BOOST_MATH_FLOAT128_TYPE
+                 && !std::is_same_v<BOOST_MATH_FLOAT128_TYPE, result_type>
+                 #endif
+                )
    {
       constexpr result_type max_val = boost::math::ccmath::ldexp(static_cast<result_type>(1), std::numeric_limits<long long>::digits);
       
