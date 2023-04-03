@@ -9,6 +9,7 @@
 #include <cmath>
 #include <type_traits>
 #include <boost/math/tools/is_constant_evaluated.hpp>
+#include <boost/math/special_functions/fpclassify.hpp>
 
 #include <boost/math/tools/is_standalone.hpp>
 #ifndef BOOST_MATH_STANDALONE
@@ -29,7 +30,7 @@ inline constexpr bool isnan BOOST_PREVENT_MACRO_SUBSTITUTION(T x)
     }
     else
     {
-        using std::isnan;
+        using boost::math::isnan;
 
         if constexpr (!std::is_integral_v<T>)
         {

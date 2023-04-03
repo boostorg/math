@@ -10,6 +10,7 @@
 #include <limits>
 #include <type_traits>
 #include <boost/math/tools/is_constant_evaluated.hpp>
+#include <boost/math/special_functions/fpclassify.hpp>
 
 #include <boost/math/tools/is_standalone.hpp>
 #ifndef BOOST_MATH_STANDALONE
@@ -37,7 +38,7 @@ constexpr bool isinf BOOST_PREVENT_MACRO_SUBSTITUTION(T x) noexcept
     }
     else
     {
-        using std::isinf;
+        using boost::math::isinf;
         
         if constexpr (!std::is_integral_v<T>)
         {

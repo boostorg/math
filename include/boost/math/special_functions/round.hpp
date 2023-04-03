@@ -21,7 +21,7 @@
 
 #if __cplusplus >= 201703L || _MSVC_LANG >= 201703L
 #include <boost/math/ccmath/ldexp.hpp>
-#  if !defined(BOOST_MATH_NO_CONSTEXPR_DETECTION) && !defined(TEST_GROUP_7) // Concept tests throw off constexpr ldexp
+#  if !defined(BOOST_MATH_NO_CONSTEXPR_DETECTION) && !defined(BOOST_LIBS_MATH_TEST_INSTANTIATE_HPP) // Concept tests throw off constexpr ldexp
 #    define BOOST_MATH_HAS_CONSTEXPR_LDEXP
 #  endif
 #endif
@@ -107,7 +107,7 @@ inline int iround(const T& v, const Policy& pol)
    #ifdef BOOST_MATH_HAS_CONSTEXPR_LDEXP
    constexpr result_type max_val = boost::math::ccmath::ldexp(static_cast<result_type>(1), std::numeric_limits<int>::digits);
    #else
-   static const result_type max_val = std::ldexp(static_cast<result_type>(1), std::numeric_limits<int>::digits);
+   static const result_type max_val = ldexp(static_cast<result_type>(1), std::numeric_limits<int>::digits);
    #endif   
 
    if(r >= max_val || r < -max_val)
@@ -133,7 +133,7 @@ inline long lround(const T& v, const Policy& pol)
    #ifdef BOOST_MATH_HAS_CONSTEXPR_LDEXP
    constexpr result_type max_val = boost::math::ccmath::ldexp(static_cast<result_type>(1), std::numeric_limits<long>::digits);
    #else
-   static const result_type max_val = std::ldexp(static_cast<result_type>(1), std::numeric_limits<long>::digits);
+   static const result_type max_val = ldexp(static_cast<result_type>(1), std::numeric_limits<long>::digits);
    #endif
 
    if(r >= max_val || r < -max_val)
@@ -159,7 +159,7 @@ inline long long llround(const T& v, const Policy& pol)
    #ifdef BOOST_MATH_HAS_CONSTEXPR_LDEXP
    constexpr result_type max_val = boost::math::ccmath::ldexp(static_cast<result_type>(1), std::numeric_limits<long long>::digits);
    #else
-   static const result_type max_val = std::ldexp(static_cast<result_type>(1), std::numeric_limits<long long>::digits);
+   static const result_type max_val = ldexp(static_cast<result_type>(1), std::numeric_limits<long long>::digits);
    #endif
 
    if (r >= max_val || r < -max_val)

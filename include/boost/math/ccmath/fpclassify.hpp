@@ -10,6 +10,7 @@
 #include <limits>
 #include <type_traits>
 #include <boost/math/tools/is_constant_evaluated.hpp>
+#include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/ccmath/abs.hpp>
 #include <boost/math/ccmath/isinf.hpp>
 #include <boost/math/ccmath/isnan.hpp>
@@ -18,7 +19,7 @@
 namespace boost::math::ccmath {
 
 template <typename T, std::enable_if_t<!std::is_integral_v<T>, bool> = true>
-inline constexpr int fpclassify(T x)
+inline constexpr int fpclassify BOOST_PREVENT_MACRO_SUBSTITUTION(T x)
 {
     if(BOOST_MATH_IS_CONSTANT_EVALUATED(x))
     {
@@ -29,8 +30,8 @@ inline constexpr int fpclassify(T x)
     }
     else
     {
-        using std::fpclassify;
-        return fpclassify(x);
+        using boost::math::fpclassify;
+        return (fpclassify)(x);
     }
 }
 
