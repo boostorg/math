@@ -1,4 +1,5 @@
 //  (C) Copyright Nick Thompson 2020.
+//  (C) Copyright Matt Borland 2023.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -14,12 +15,14 @@
 #include <limits>
 #include <stdexcept>
 #include <sstream>
+#include <utility>
+#include <cstdint>
 
 #include <boost/math/tools/is_standalone.hpp>
 #ifndef BOOST_MATH_STANDALONE
 #include <boost/config.hpp>
 #ifdef BOOST_NO_CXX17_IF_CONSTEXPR
-#error "The header <boost/math/norms.hpp> can only be used in C++17 and later."
+#error "The header <boost/math/simple_continued_fraction.hpp> can only be used in C++17 and later."
 #endif
 #endif
 
@@ -108,7 +111,7 @@ public:
          // Precompute the most probable logarithms. See the Gauss-Kuzmin distribution for details.
          // Example: b_i = 1 has probability -log_2(3/4) ~ .415:
          // A random partial denominator has ~80% chance of being in this table:
-         const std::array<Real, 7> logs{std::numeric_limits<Real>::quiet_NaN(), Real(0), log(static_cast<Real>(2)), log(static_cast<Real>(3)), log(static_cast<Real>(4)), log(static_cast<Real>(5)), log(static_cast<Real>(6))};
+         const std::array<Real, 7> logs{std::numeric_limits<Real>::quiet_NaN(), static_cast<Real>(0), log(static_cast<Real>(2)), log(static_cast<Real>(3)), log(static_cast<Real>(4)), log(static_cast<Real>(5)), log(static_cast<Real>(6))};
          Real log_prod = 0;
          for (size_t i = 1; i < b_.size(); ++i) {
             if (b_[i] < static_cast<Z>(logs.size())) {
@@ -137,6 +140,11 @@ public:
     
     const std::vector<Z>& partial_denominators() const {
       return b_;
+    }
+
+    inline std::vector<Z>&& get_data() noexcept
+    {
+        return std::move(b_);
     }
     
     template<typename T, typename Z2>
@@ -171,6 +179,12 @@ std::ostream& operator<<(std::ostream& out, simple_continued_fraction<Real, Z2>&
    return out;
 }
 
+template<typename Real, typename Z = std::int64_t>
+inline auto simple_continued_fraction_coefficients(Real x)
+{
+    auto temp = simple_continued_fraction(x);
+    return temp.get_data();
+}
 
 }
 #endif
