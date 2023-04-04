@@ -159,10 +159,9 @@ void test_git_issue_970()
     }
 
     // Result is [3; 7, 16]
-    CHECK_EQUAL(coefs.size(), 3UL);
-    CHECK_EQUAL(coefs[0], INT64_C(3));
-    CHECK_EQUAL(coefs[1], INT64_C(7));
-    CHECK_EQUAL(coefs[2], INT64_C(16));
+    CHECK_EQUAL(coefs[0], static_cast<std::int64_t>(3));
+    CHECK_EQUAL(coefs[1], static_cast<std::int64_t>(7));
+    CHECK_EQUAL(coefs[2], static_cast<std::int64_t>(16));
 }
 
 int main()
