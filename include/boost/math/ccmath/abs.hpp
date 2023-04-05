@@ -31,7 +31,7 @@ namespace detail {
 template <typename T> 
 constexpr T abs_impl(T x) noexcept
 {
-    if (boost::math::ccmath::isnan(x))
+    if ((boost::math::ccmath::isnan)(x))
     {
         return std::numeric_limits<T>::quiet_NaN();
     }
