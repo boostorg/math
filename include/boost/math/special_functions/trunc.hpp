@@ -17,9 +17,9 @@
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 
-#if __cplusplus >= 201703L || _MSVC_LANG >= 201703L
+#ifndef BOOST_NO_CXX17_IF_CONSTEXPR
 #include <boost/math/ccmath/ldexp.hpp>
-#  if !defined(BOOST_MATH_NO_CONSTEXPR_DETECTION) && !defined(BOOST_LIBS_MATH_TEST_INSTANTIATE_HPP) // Concept tests throw off constexpr ldexp
+#  if !defined(BOOST_MATH_NO_CONSTEXPR_DETECTION)
 #    define BOOST_MATH_HAS_CONSTEXPR_LDEXP
 #  endif
 #endif
