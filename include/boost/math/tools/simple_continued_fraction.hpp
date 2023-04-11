@@ -37,21 +37,34 @@ class simple_continued_fraction {
 public:
     typedef Z int_type;
 
-    simple_continued_fraction(Real x) {
+    simple_continued_fraction(std::vector<Z> data) : b_{std::move(data)} {
+        const size_t size_ = b_.size();
+        if (size_ == 0) {
+            throw std::length_error("Array of coefficients is empty.");
+        }
+
+        for (size_t i = 1; i < size_; ++i) {
+            if (b_[i] <= 0) {
+                std::ostringstream oss;
+                oss << "Found a negative partial denominator: b[" << i << "] = " << b_[i] << ".";
+                throw std::domain_error(oss.str());
+            }
+        }
+
+        canonicalize();
+    }
+
+    simple_continued_fraction(Real x) : b_{} {
         using std::floor;
         using std::abs;
         using std::sqrt;
         using std::isfinite;
-        const Real orig_x = x;
         if (!isfinite(x)) {
             throw std::domain_error("Cannot convert non-finites into continued fractions.");
         }
 
-        constexpr int p = std::numeric_limits<Real>::max_digits10;
-        if constexpr (p == 2147483647) {
-           precision_ = orig_x.backend().precision();
-        } else {
-           precision_ = p;
+        if constexpr (std_precision == 2147483647) {
+           precision_ = x.backend().precision();
         }
 
         b_.reserve(50);
@@ -61,6 +74,8 @@ public:
            b_.shrink_to_fit();
            return;
         }
+
+        const Real orig_x = x;
         x = 1/(x-bj);
         Real f = bj;
         if (bj == 0) {
@@ -87,14 +102,7 @@ public:
           D = 1/D;
           f *= (C*D);
        }
-       // Deal with non-uniqueness of continued fractions: [a0; a1, ..., an, 1] = a0; a1, ..., an + 1].
-       // The shorter representation is considered the canonical representation,
-       // so if we compute a non-canonical representation, change it to canonical:
-       if (b_.size() > 2 && b_.back() == 1) {
-          b_.pop_back();
-          b_.back() += 1;
-       }
-       b_.shrink_to_fit();
+       canonicalize();
 
        const size_t size_ = b_.size();
        for (size_t i = 1; i < size_; ++i) {
@@ -163,9 +171,22 @@ public:
     template<typename T, typename Z2>
     friend std::ostream& operator<<(std::ostream& out, simple_continued_fraction<T, Z2>& scf);
 private:
-    std::vector<Z> b_{};
+    static constexpr int std_precision = std::numeric_limits<Real>::max_digits10;
 
-    int precision_{};
+    void canonicalize() {
+        // Deal with non-uniqueness of continued fractions: [a0; a1, ..., an, 1] = a0; a1, ..., an + 1].
+        // The shorter representation is considered the canonical representation,
+        // so if we compute a non-canonical representation, change it to canonical:
+        if (b_.size() > 2 && b_.back() == 1) {
+            b_.pop_back();
+            b_.back() += 1;
+        }
+        b_.shrink_to_fit();
+    }
+
+    std::vector<Z> b_;
+
+    int precision_{std_precision};
 };
 
 
@@ -189,7 +210,7 @@ std::ostream& operator<<(std::ostream& out, simple_continued_fraction<Real, Z2>&
 template<typename Real, typename Z = std::int64_t>
 inline auto simple_continued_fraction_coefficients(Real x)
 {
-    auto temp = simple_continued_fraction(x);
+    auto temp = simple_continued_fraction<Real, Z>(x);
     return temp.get_data();
 }
 
