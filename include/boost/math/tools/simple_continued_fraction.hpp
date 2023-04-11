@@ -35,14 +35,25 @@ namespace boost::math::tools {
 template<typename Real, typename Z = int64_t>
 class simple_continued_fraction {
 public:
-    simple_continued_fraction(Real x) : x_{x} {
+    typedef Z int_type;
+
+    simple_continued_fraction(Real x) {
         using std::floor;
         using std::abs;
         using std::sqrt;
         using std::isfinite;
+        const Real orig_x = x;
         if (!isfinite(x)) {
-            throw std::domain_error("Cannot convert non-finites into continued fractions.");  
+            throw std::domain_error("Cannot convert non-finites into continued fractions.");
         }
+
+        constexpr int p = std::numeric_limits<Real>::max_digits10;
+        if constexpr (p == 2147483647) {
+           precision_ = orig_x.backend().precision();
+        } else {
+           precision_ = p;
+        }
+
         b_.reserve(50);
         Real bj = floor(x);
         b_.push_back(static_cast<Z>(bj));
@@ -57,12 +68,11 @@ public:
         }
         Real C = f;
         Real D = 0;
-        int i = 0;
-        // the "1 + i++" lets the error bound grow slowly with the number of convergents.
+        // the "1 + i" lets the error bound grow slowly with the number of convergents.
         // I have not worked out the error propagation of the Modified Lentz's method to see if it does indeed grow at this rate.
         // Numerical Recipes claims that no one has worked out the error analysis of the modified Lentz's method.
-        while (abs(f - x_) >= (1 + i++)*std::numeric_limits<Real>::epsilon()*abs(x_))
-        {
+        const Real eps_abs_orig_x = std::numeric_limits<Real>::epsilon()*abs(orig_x);
+        for (int i = 0; abs(f - orig_x) >= (1 + i)*eps_abs_orig_x; ++i) {
           bj = floor(x);
           b_.push_back(static_cast<Z>(bj));
           x = 1/(x-bj);
@@ -81,12 +91,13 @@ public:
        // The shorter representation is considered the canonical representation,
        // so if we compute a non-canonical representation, change it to canonical:
        if (b_.size() > 2 && b_.back() == 1) {
-          b_[b_.size() - 2] += 1;
-          b_.resize(b_.size() - 1);
+          b_.pop_back();
+          b_.back() += 1;
        }
        b_.shrink_to_fit();
-       
-       for (size_t i = 1; i < b_.size(); ++i) {
+
+       const size_t size_ = b_.size();
+       for (size_t i = 1; i < size_; ++i) {
          if (b_[i] <= 0) {
             std::ostringstream oss;
             oss << "Found a negative partial denominator: b[" << i << "] = " << b_[i] << "."
@@ -101,9 +112,10 @@ public:
          }
        }
     }
-    
+
     Real khinchin_geometric_mean() const {
-        if (b_.size() == 1) { 
+        const size_t size_ = b_.size();
+        if (size_ == 1) {
          return std::numeric_limits<Real>::quiet_NaN();
         }
          using std::log;
@@ -113,7 +125,7 @@ public:
          // A random partial denominator has ~80% chance of being in this table:
          const std::array<Real, 7> logs{std::numeric_limits<Real>::quiet_NaN(), static_cast<Real>(0), log(static_cast<Real>(2)), log(static_cast<Real>(3)), log(static_cast<Real>(4)), log(static_cast<Real>(5)), log(static_cast<Real>(6))};
          Real log_prod = 0;
-         for (size_t i = 1; i < b_.size(); ++i) {
+         for (size_t i = 1; i < size_; ++i) {
             if (b_[i] < static_cast<Z>(logs.size())) {
                log_prod += logs[b_[i]];
             }
@@ -122,49 +134,44 @@ public:
                log_prod += log(static_cast<Real>(b_[i]));
             }
          }
-         log_prod /= (b_.size()-1);
+         log_prod /= (size_-1);
          return exp(log_prod);
     }
-    
+
     Real khinchin_harmonic_mean() const {
-        if (b_.size() == 1) {
+        const size_t size_ = b_.size();
+        if (size_ == 1) {
           return std::numeric_limits<Real>::quiet_NaN();
         }
-        Real n = b_.size() - 1;
+        Real n = size_ - 1;
         Real denom = 0;
-        for (size_t i = 1; i < b_.size(); ++i) {
+        for (size_t i = 1; i < size_; ++i) {
             denom += 1/static_cast<Real>(b_[i]);
         }
         return n/denom;
     }
-    
+
+    // Note that this also includes the integer part (i.e. all the coefficients)
     const std::vector<Z>& partial_denominators() const {
       return b_;
     }
 
-    inline std::vector<Z>&& get_data() noexcept
-    {
+    inline std::vector<Z>&& get_data() noexcept {
         return std::move(b_);
     }
-    
+
     template<typename T, typename Z2>
     friend std::ostream& operator<<(std::ostream& out, simple_continued_fraction<T, Z2>& scf);
-
 private:
-    const Real x_;
-    std::vector<Z> b_;
+    std::vector<Z> b_{};
+
+    int precision_{};
 };
 
 
 template<typename Real, typename Z2>
 std::ostream& operator<<(std::ostream& out, simple_continued_fraction<Real, Z2>& scf) {
-   constexpr const int p = std::numeric_limits<Real>::max_digits10;
-   if constexpr (p == 2147483647) {
-      out << std::setprecision(scf.x_.backend().precision());
-   } else {
-      out << std::setprecision(p);
-   }
-   
+   out << std::setprecision(scf.precision_);
    out << "[" << scf.b_.front();
    if (scf.b_.size() > 1)
    {
