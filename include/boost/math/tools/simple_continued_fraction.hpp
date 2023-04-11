@@ -17,6 +17,7 @@
 #include <sstream>
 #include <utility>
 #include <cstdint>
+#include <cassert>
 
 #include <boost/math/tools/is_standalone.hpp>
 #ifndef BOOST_MATH_STANDALONE
@@ -212,6 +213,35 @@ inline auto simple_continued_fraction_coefficients(Real x)
 {
     auto temp = simple_continued_fraction<Real, Z>(x);
     return temp.get_data();
+}
+
+// Can be used with `boost::rational` from <boost/rational.hpp>
+template <typename Rational, typename Real, typename Z = std::int64_t>
+inline Rational to_rational(const simple_continued_fraction<Real, Z>& scf)
+{
+    using int_t = typename Rational::int_type;
+
+    auto& coefs = scf.partial_denominators();
+    const size_t size_ = coefs.size();
+    assert(size_ >= 1);
+    if (size_ == 1) return static_cast<int_t>(coefs[0]);
+
+    // p0 = a0, p1 = a1.a0 + 1, pn = an.pn-1 + pn-2 for 2 <= n
+    // q0 = 1,  q1 = a1,        qn = an.qn-1 + qn-2 for 2 <= n
+
+    int_t p0 = coefs[0];
+    int_t p1 = p0*coefs[1] + 1;
+    int_t q0 = 1;
+    int_t q1 = coefs[1];
+    for (size_t i = 2; i < size_; ++i) {
+        const Z cn = coefs[i];
+        const int_t pn = cn*p1 + p0;
+        const int_t qn = cn*q1 + q0;
+        p0 = std::exchange(p1, pn);
+        q0 = std::exchange(q1, qn);
+    }
+
+    return {p1, q1};
 }
 
 }
