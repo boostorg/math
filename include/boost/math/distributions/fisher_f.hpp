@@ -309,7 +309,7 @@ inline RealType mode(const fisher_f_distribution<RealType, Policy>& dist)
    if(df1 <= 2)
    {
       return policies::raise_domain_error<RealType>(
-         function, "First degree of freedom was %1% but must be > 2 in order for the distribution to have a mode.", df2, Policy());
+         function, "First degree of freedom was %1% but must be > 2 in order for the distribution to have a mode.", df1, Policy());
    }
    return df2 * (df1 - 2) / (df1 * (df2 + 2));
 }
