@@ -390,13 +390,47 @@ namespace boost
       }
       using boost::math::beta;
 
-      // Corner case: check_x ensures x element of [0, 1], but PDF is 0 for x = 0 and x = 1. PDF EQN:
+      // Corner cases: check_x ensures x element of [0, 1], but PDF is 0 for x = 0 and x = 1. PDF EQN:
       // https://wikimedia.org/api/rest_v1/media/math/render/svg/125fdaa41844a8703d1a8610ac00fbf3edacc8e7
-      if(x == 0 || x == 1)
+      if(x == 0)
       {
-        return RealType(0);
+        if (a == 1)
+        {
+          return 1 / beta(a, b);
+        }
+        else if (a < 1)
+        {
+          policies::raise_overflow_error<RealType>(function, nullptr, Policy());
+        }
+        else
+        {
+          return RealType(0);
+        }
       }
-      return ibeta_derivative(a, b, x, Policy());
+      else if (x == 1)
+      {
+        if (b == 1)
+        {
+          return 1 / beta(a, b);
+        }
+        else if (b < 1)
+        {
+          policies::raise_overflow_error<RealType>(function, nullptr, Policy());
+        }
+        else
+        {
+          return RealType(0);
+        }
+      }
+      
+      // Bounds checking
+      RealType return_val = ibeta_derivative(a, b, x, Policy());
+      if (return_val > b)
+      {
+        return_val = b;
+      }
+
+      return return_val;
     } // pdf
 
     template <class RealType, class Policy>
