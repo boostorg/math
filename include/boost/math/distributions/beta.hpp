@@ -423,14 +423,7 @@ namespace boost
         }
       }
       
-      // Bounds checking
-      RealType return_val = ibeta_derivative(a, b, x, Policy());
-      if (return_val > b)
-      {
-        return_val = b;
-      }
-
-      return return_val;
+      return ibeta_derivative(a, b, x, Policy());
     } // pdf
 
     template <class RealType, class Policy>
