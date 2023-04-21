@@ -1452,7 +1452,16 @@ T ibeta_derivative_imp(T a, T b, T x, const Policy& pol)
    //
    typedef typename lanczos::lanczos<T, Policy>::type lanczos_type;
    T y = (1 - x) * x;
-   T f1 = ibeta_power_terms<T>(a, b, x, 1 - x, lanczos_type(), true, pol, 1 / y, function);
+   T f1;
+   if (!(boost::math::isinf)(1 / y))
+   {
+      f1 = ibeta_power_terms<T>(a, b, x, 1 - x, lanczos_type(), true, pol, 1 / y, function);
+   }
+   else
+   {
+      return (a > 1) ? 0 : (a == 1) ? 1 / boost::math::beta(a, b, pol) : policies::raise_overflow_error<T>(function, nullptr, pol);
+   }
+
    return f1;
 }
 //
