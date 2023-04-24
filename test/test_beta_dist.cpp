@@ -52,6 +52,10 @@ using std::endl;
 #include <limits>
 using std::numeric_limits;
 
+#if __has_include(<stdfloat>)
+# include <stdfloat>
+#endif
+
 template <class RealType>
 void test_spot(
      RealType a,    // alpha a
@@ -135,6 +139,14 @@ void test_spots(RealType)
    cout << "epsilon = " << tolerance;
 
    tolerance *= 100000; // Note: NO * 100 because is fraction, NOT %.
+
+   #ifdef __STDCPP_FLOAT16_T__
+   if constexpr (std::is_same_v<RealType, std::float16_t>)
+   {
+      tolerance *= 100;
+   }
+   #endif
+
    cout  << ", Tolerance = " << tolerance * 100 << "%." << endl;
 
   // RealType teneps = boost::math::tools::epsilon<RealType>() * 10;
@@ -527,7 +539,14 @@ void test_spots(RealType)
    } // has_infinity
 
    // Error handling checks:
+   #ifdef __STDCPP_FLOAT16_T__
+   if constexpr (!std::is_same_v<std::float16_t, RealType>)
+   {
+      check_out_of_range<boost::math::beta_distribution<RealType> >(1, 1); // (All) valid constructor parameter values.
+   }
+   #else
    check_out_of_range<boost::math::beta_distribution<RealType> >(1, 1); // (All) valid constructor parameter values.
+   #endif
    // and range and non-finite.
 
    // Not needed??????
@@ -631,6 +650,17 @@ BOOST_AUTO_TEST_CASE( test_main )
    test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
 #endif
 #endif
+
+#ifdef __STDCPP_FLOAT64_T__
+   test_spots(0.0F64);
+#endif
+#ifdef __STDCPP_FLOAT32_T__
+   test_spots(0.0F32);
+#endif
+#ifdef __STDCPP_FLOAT16_T__
+   test_spots(0.0F16);
+#endif
+
 } // BOOST_AUTO_TEST_CASE( test_main )
 
 /*

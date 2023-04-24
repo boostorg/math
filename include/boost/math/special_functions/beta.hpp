@@ -1501,8 +1501,9 @@ template <class RT1, class RT2, class A>
 inline typename tools::promote_args<RT1, RT2, A>::type
    beta(RT1 a, RT2 b, A arg)
 {
-   typedef typename policies::is_policy<A>::type tag;
-   return boost::math::detail::beta(a, b, arg, static_cast<tag*>(nullptr));
+   using tag = typename policies::is_policy<A>::type;
+   using ReturnType = tools::promote_args_t<RT1, RT2, A>;
+   return static_cast<ReturnType>(boost::math::detail::beta(a, b, arg, static_cast<tag*>(nullptr)));
 }
 
 template <class RT1, class RT2>
