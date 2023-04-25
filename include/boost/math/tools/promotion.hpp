@@ -90,16 +90,15 @@ namespace boost
         // for both parameter types, if integral promote to double.
         using T1P = typename promote_arg<T1>::type; // T1 perhaps promoted.
         using T2P = typename promote_arg<T2>::type; // T2 perhaps promoted.
-
-        using type = typename std::conditional<
+        using intermediate_type = typename std::conditional<
           std::is_floating_point<T1P>::value && std::is_floating_point<T2P>::value, // both T1P and T2P are floating-point?
-#ifdef BOOST_MATH_USE_FLOAT128
-           typename std::conditional<std::is_same<__float128, T1P>::value || std::is_same<__float128, T2P>::value, // either long double?
-            __float128,
-#endif 
 #ifdef __STDCPP_FLOAT128_T__
            typename std::conditional<std::is_same<std::float128_t, T1P>::value || std::is_same<std::float128_t, T2P>::value, // either long double?
             std::float128_t,
+#endif 
+#ifdef BOOST_MATH_USE_FLOAT128
+           typename std::conditional<std::is_same<__float128, T1P>::value || std::is_same<__float128, T2P>::value, // either long double?
+            __float128,
 #endif 
              typename std::conditional<std::is_same<long double, T1P>::value || std::is_same<long double, T2P>::value, // either long double?
                long double, // then result type is long double.
@@ -116,7 +115,7 @@ namespace boost
                   float // else result type is float.
              >::type
 #ifdef BOOST_MATH_USE_FLOAT128
-             >::type,
+             >::type
 #endif
 #ifdef __STDCPP_FLOAT128_T__
              >::type
@@ -130,6 +129,13 @@ namespace boost
              >::type,
           // else one or the other is a user-defined type:
           typename std::conditional<!std::is_floating_point<T2P>::value && std::is_convertible<T1P, T2P>::value, T2P, T1P>::type>::type;
+
+#ifdef __STDCPP_FLOAT64_T__
+          // If long doubles are doubles then we should prefer to use std::float64_t when available
+          using type = std::conditional_t<(sizeof(double) == sizeof(long double) && std::is_same<intermediate_type, long double>::value), std::float64_t, intermediate_type>;
+#else
+          using type = intermediate_type;
+#endif
       }; // promote_arg2
       // These full specialisations reduce std::conditional usage and speed up
       // compilation:
