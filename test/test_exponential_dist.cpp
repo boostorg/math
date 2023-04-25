@@ -26,6 +26,10 @@
    using std::setprecision;
    using std::log;
 
+#if __has_include(<stdfloat>)
+#  include <stdfloat>
+#endif
+
 template <class RealType>
 void test_spot(RealType l, RealType x, RealType p, RealType q, RealType logp, RealType logq, RealType tolerance, RealType logtolerance)
 {
@@ -208,7 +212,11 @@ void test_spots(RealType T)
       static_cast<RealType>(-9.210390371559516069440021374287500922116L), // log(p),
       static_cast<RealType>(-0.000100000000000000000000000000000000000L), // log(q)
       tolerance,
-      std::is_same<RealType, float>::value ? tolerance * 10 : tolerance);
+      std::is_same<RealType, float>::value
+      #ifdef __STDCPP_FLOAT32_T__
+      || std::is_same<RealType, std::float32_t>::value
+      #endif
+       ? tolerance * 10 : tolerance);
    /*
    // This test data appears to be erroneous, MathCad appears
    // to suffer from cancellation error as x -> 0
@@ -374,6 +382,13 @@ BOOST_AUTO_TEST_CASE( test_main )
       "not available at all, or because they are too inaccurate for these tests "
       "to pass.</note>" << std::endl;
 #endif
+
+   #ifdef __STDCPP_FLOAT32_T__
+   test_spots(0.0F32);
+   #endif
+   #ifdef __STDCPP_FLOAT64_T__
+   test_spots(0.0F64);
+   #endif 
 
 } // BOOST_AUTO_TEST_CASE( test_main )
 

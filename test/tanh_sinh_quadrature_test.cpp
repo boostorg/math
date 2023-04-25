@@ -26,6 +26,10 @@
 #include <boost/math/special_functions/ellint_rj.hpp>
 #include <boost/type_index.hpp>
 
+#if __has_include(<stdfloat>)
+#  include <stdfloat>
+#endif
+
 #ifdef BOOST_HAS_FLOAT128
 #include <boost/multiprecision/float128.hpp>
 #endif
@@ -318,8 +322,14 @@ void test_ca()
     // Slightly higher tolerance for type float, this marginal change was
     // caused by no more than changing the order in which the terms are summed:
     //
-    if (std::is_same<Real, float>::value)
-        tol *= 1.5;
+    BOOST_IF_CONSTEXPR (std::is_same<Real, float>::value 
+                       #ifdef __STDCPP_FLOAT32_T__
+                       || std::is_same<Real, std::float32_t>::value
+                       #endif
+                       )
+    {
+        tol *= static_cast<Real>(1.5);
+    }
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
     BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
 
@@ -896,6 +906,20 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
     test_horrible<float>();
     test_integration_over_real_line<float>();
     test_nr_examples<float>();
+
+    #ifdef __STDCPP_FLOAT32_T__
+    test_right_limit_infinite<std::float32_t>();
+    test_left_limit_infinite<std::float32_t>();
+    test_linear<std::float32_t>();
+    test_quadratic<std::float32_t>();
+    test_singular<std::float32_t>();
+    test_ca<std::float32_t>();
+    test_three_quadrature_schemes_examples<std::float32_t>();
+    test_horrible<std::float32_t>();
+    test_integration_over_real_line<std::float32_t>();
+    test_nr_examples<std::float32_t>();
+    #endif
+
 #endif
 #ifdef TEST1A
     test_early_termination<float>();
