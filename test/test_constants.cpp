@@ -198,6 +198,7 @@ void test_spots(RealType)
    CHECK_ULP_CLOSE((1.L + sqrt(5.L)) /2, phi<RealType>(), 2);
    CHECK_ULP_CLOSE(log((1.L + sqrt(5.L)) /2), ln_phi<RealType>(), 2);
    CHECK_ULP_CLOSE(1.L / log((1.L + sqrt(5.L)) /2), one_div_ln_phi<RealType>(), 2);
+   CHECK_ULP_CLOSE((1.L - sqrt(5.L)) /2, conjugate_phi<RealType>(), 2);
 
    //Euler's Gamma
    CHECK_ULP_CLOSE(0.57721566490153286060651209008240243104215933593992L, euler<RealType>(), 2); // (sequence A001620 in OEIS).
@@ -331,6 +332,7 @@ void test_float_spots()
    CHECK_ULP_CLOSE((1.F + sqrt(5.F)) /2, phi, 2);
    CHECK_ULP_CLOSE(log((1.F + sqrt(5.F)) /2), ln_phi, 2);
    CHECK_ULP_CLOSE(1.F / log((1.F + sqrt(5.F)) /2), one_div_ln_phi, 2);
+   CHECK_ULP_CLOSE((1.F - sqrt(5.F)) /2, conjugate_phi, 2);
 
    // Euler's Gamma
    CHECK_ULP_CLOSE(0.57721566490153286060651209008240243104215933593992F, euler, 2); // (sequence A001620 in OEIS).
@@ -450,6 +452,7 @@ void test_double_spots()
    CHECK_ULP_CLOSE((1. + sqrt(5.)) /2, phi, 2);
    CHECK_ULP_CLOSE(log((1. + sqrt(5.)) /2), ln_phi, 2);
    CHECK_ULP_CLOSE(1. / log((1. + sqrt(5.)) /2), one_div_ln_phi, 2);
+   CHECK_ULP_CLOSE((1. - sqrt(5.)) /2, conjugate_phi, 2);
 
    //Euler's Gamma
    CHECK_ULP_CLOSE(0.57721566490153286060651209008240243104215933593992, euler, 2); // (sequence A001620 in OEIS).
@@ -576,6 +579,7 @@ void test_long_double_spots()
    CHECK_ULP_CLOSE((1.L + sqrt(5.L)) /2, phi, 2);
    CHECK_ULP_CLOSE(log((1.L + sqrt(5.L)) /2), ln_phi, 2);
    CHECK_ULP_CLOSE(1.L / log((1.L + sqrt(5.L)) /2), one_div_ln_phi, 2);
+   CHECK_ULP_CLOSE((1.L - sqrt(5.L)) /2, conjugate_phi, 2);
 
    //Euler's Gamma
    CHECK_ULP_CLOSE(0.57721566490153286060651209008240243104215933593992L, euler, 2); // (sequence A001620 in OEIS).
@@ -702,6 +706,7 @@ void test_real_concept_policy(const Policy&)
    CHECK_ULP_CLOSE((1.L + sqrt(5.L)) /2, (phi<real_concept, Policy>)(), 2);
    CHECK_ULP_CLOSE(log((1.L + sqrt(5.L)) /2), (ln_phi<real_concept, Policy>)(), 2);
    CHECK_ULP_CLOSE(1.L / log((1.L + sqrt(5.L)) /2), (one_div_ln_phi<real_concept, Policy>)(), 2);
+   CHECK_ULP_CLOSE((1.L - sqrt(5.L)) /2, (conjugate_phi<real_concept, Policy>)(), 2);
 
    //Euler's Gamma
    CHECK_ULP_CLOSE(0.57721566490153286060651209008240243104215933593992L, (euler<real_concept, Policy>)(), 2); // (sequence A001620 in OEIS).

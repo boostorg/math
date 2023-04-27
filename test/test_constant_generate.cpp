@@ -91,6 +91,7 @@ int main()
    BOOST_CONSTANTS_GENERATE(phi);
    BOOST_CONSTANTS_GENERATE(ln_phi);
    BOOST_CONSTANTS_GENERATE(one_div_ln_phi);
+   BOOST_CONSTANTS_GENERATE(conjugate_phi);
    
 // Euler's Gamma constant http://en.wikipedia.org/wiki/Euler%E2%80%93Mascheroni_constant
    // gamma name deprecated - see euler above

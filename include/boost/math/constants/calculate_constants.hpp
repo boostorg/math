@@ -588,6 +588,14 @@ inline T constant_one_div_ln_phi<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_S
      log((static_cast<T>(1) + sqrt(static_cast<T>(5)) )/static_cast<T>(2) );
 }
 
+template <class T>
+template<int N>
+inline T constant_conjugate_phi<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC((std::integral_constant<int, N>)))
+{
+   BOOST_MATH_STD_USING
+   return (static_cast<T>(1) - sqrt(static_cast<T>(5)) )/static_cast<T>(2) ;
+}
+
 // Zeta
 
 template <class T>
