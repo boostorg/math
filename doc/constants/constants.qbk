@@ -304,6 +304,7 @@ This section lists the mathematical constants, their use(s) (and sometimes ratio
 [[[*two and related]] [] [] [] ]
 [[root_two] [[radic]2] [1.41421] [Equivalent to POSIX constant M_SQRT2] ]
 [[root_three] [[radic]3] [1.73205] [] ]
+[[root_five] [[radic]5] [2.23606] [] ]
 [[half_root_two] [[radic]2 /2] [0.707106] [] ]
 [[ln_two] [ln(2)] [0.693147] [Equivalent to POSIX constant M_LN2] ]
 [[ln_ten] [ln(10)] [2.30258] [Equivalent to POSIX constant M_LN10] ]
@@ -363,6 +364,7 @@ This section lists the mathematical constants, their use(s) (and sometimes ratio
 [[phi] [(1 + [radic]5) /2] [1.61803] [finance] ]
 [[ln_phi] [ln([phi])] [0.48121] [] ]
 [[one_div_ln_phi] [1/ln([phi])] [2.07808] [] ]
+[[conjugate_phi] [1 - phi] [-0.61803] [[@https://en.wikipedia.org/wiki/Fibonacci_sequence#Closed-form_expression Fibonacci sequence]] ]
 
 [[[*Euler's Gamma]] [] [] [] ]
 [[euler] [euler] [0.577215] [[@http://en.wikipedia.org/wiki/Euler%E2%80%93Mascheroni_constant Euler-Mascheroni gamma constant]] ]
