@@ -228,6 +228,14 @@ inline T constant_root_three<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(
 
 template <class T>
 template<int N>
+inline T constant_root_five<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC((std::integral_constant<int, N>)))
+{
+   BOOST_MATH_STD_USING
+   return sqrt(static_cast<T>(5));
+}
+
+template <class T>
+template<int N>
 inline T constant_half_root_two<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC((std::integral_constant<int, N>)))
 {
    BOOST_MATH_STD_USING

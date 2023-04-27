@@ -31,6 +31,7 @@ int main()
    // two and related.
    BOOST_CONSTANTS_GENERATE(root_two);
    BOOST_CONSTANTS_GENERATE(root_three);
+   BOOST_CONSTANTS_GENERATE(root_five);
    BOOST_CONSTANTS_GENERATE(half_root_two);
    BOOST_CONSTANTS_GENERATE(ln_two);
    BOOST_CONSTANTS_GENERATE(ln_ten);

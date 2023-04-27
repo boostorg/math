@@ -136,6 +136,7 @@ void test_spots(RealType)
    // Two and related.
    CHECK_ULP_CLOSE(sqrt(2.L), root_two<RealType>(), 2);
    CHECK_ULP_CLOSE(sqrt(3.L), root_three<RealType>(), 2);
+   CHECK_ULP_CLOSE(sqrt(5.L), root_five<RealType>(), 2);
    CHECK_ULP_CLOSE(sqrt(2.L)/2, half_root_two<RealType>(), 2);
    CHECK_ULP_CLOSE(log(2.L), ln_two<RealType>(), 2);
    CHECK_ULP_CLOSE(log(log(2.0L)), ln_ln_two<RealType>(), 2);
@@ -271,6 +272,7 @@ void test_float_spots()
    // Two and related.
    CHECK_ULP_CLOSE(static_cast<float>(sqrt(2.F)), root_two, 2);
    CHECK_ULP_CLOSE(static_cast<float>(sqrt(3.F)), root_three, 2);
+   CHECK_ULP_CLOSE(static_cast<float>(sqrt(5.F)), root_five, 2);
    CHECK_ULP_CLOSE(static_cast<float>(sqrt(2.F)/2), half_root_two, 2);
    CHECK_ULP_CLOSE(static_cast<float>(log(2.F)), ln_two, 2);
    CHECK_ULP_CLOSE(static_cast<float>(log(log(2.0F))), ln_ln_two, 2);
@@ -389,6 +391,7 @@ void test_double_spots()
    // Two and related.
    CHECK_ULP_CLOSE(static_cast<double>(sqrt(2.)), root_two, 2);
    CHECK_ULP_CLOSE(static_cast<double>(sqrt(3.)), root_three, 2);
+   CHECK_ULP_CLOSE(static_cast<double>(sqrt(5.)), root_five, 2);
    CHECK_ULP_CLOSE(static_cast<double>(sqrt(2.)/2), half_root_two, 2);
    CHECK_ULP_CLOSE(static_cast<double>(log(2.)), ln_two, 2);
    CHECK_ULP_CLOSE(static_cast<double>(log(log(2.0))), ln_ln_two, 2);
@@ -511,6 +514,7 @@ void test_long_double_spots()
    // Two and related.
    CHECK_ULP_CLOSE(static_cast<long double>(sqrt(2.L)), root_two, 2);
    CHECK_ULP_CLOSE(static_cast<long double>(sqrt(3.L)), root_three, 2);
+   CHECK_ULP_CLOSE(static_cast<long double>(sqrt(5.L)), root_five, 2);
    CHECK_ULP_CLOSE(static_cast<long double>(sqrt(2.L)/2), half_root_two, 2);
    CHECK_ULP_CLOSE(static_cast<long double>(log(2.L)), ln_two, 2);
    CHECK_ULP_CLOSE(static_cast<long double>(log(log(2.0L))), ln_ln_two, 2);
@@ -638,6 +642,7 @@ void test_real_concept_policy(const Policy&)
    // Two and related.
    CHECK_ULP_CLOSE(sqrt(2.L), (root_two<real_concept, Policy>)(), 2);
    CHECK_ULP_CLOSE(sqrt(3.L), (root_three<real_concept, Policy>)(), 2);
+   CHECK_ULP_CLOSE(sqrt(5.L), (root_five<real_concept, Policy>)(), 2);
    CHECK_ULP_CLOSE(sqrt(2.L)/2, (half_root_two<real_concept, Policy>)(), 2);
    CHECK_ULP_CLOSE(log(2.L), (ln_two<real_concept, Policy>)(), 2);
    CHECK_ULP_CLOSE(log(log(2.0L)), (ln_ln_two<real_concept, Policy>)(), 2);
