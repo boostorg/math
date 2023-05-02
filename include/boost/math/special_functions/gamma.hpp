@@ -1917,11 +1917,11 @@ template <class T, class Policy>
 const typename lgamma_initializer<T, Policy>::init lgamma_initializer<T, Policy>::initializer;
 
 template <class T1, class T2, class Policy>
-inline typename tools::promote_args<T1, T2>::type
+inline tools::promote_args_t<T1, T2>
    tgamma(T1 a, T2 z, const Policy&, const std::false_type)
 {
    BOOST_FPU_EXCEPTION_GUARD
-   typedef typename tools::promote_args<T1, T2>::type result_type;
+   typedef tools::promote_args_t<T1, T2> result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
    // typedef typename lanczos::lanczos<value_type, Policy>::type evaluation_type;
    typedef typename policies::normalise<
@@ -1940,7 +1940,7 @@ inline typename tools::promote_args<T1, T2>::type
 }
 
 template <class T1, class T2>
-inline typename tools::promote_args<T1, T2>::type
+inline tools::promote_args_t<T1, T2>
    tgamma(T1 a, T2 z, const std::false_type& tag)
 {
    return tgamma(a, z, policies::policy<>(), tag);
@@ -2026,31 +2026,33 @@ inline typename tools::promote_args<T>::type
 // Full upper incomplete gamma:
 //
 template <class T1, class T2>
-inline typename tools::promote_args<T1, T2>::type
+inline tools::promote_args_t<T1, T2>
    tgamma(T1 a, T2 z)
 {
    //
    // Type T2 could be a policy object, or a value, select the
    // right overload based on T2:
    //
-   typedef typename policies::is_policy<T2>::type maybe_policy;
-   return detail::tgamma(a, z, maybe_policy());
+   using maybe_policy = typename policies::is_policy<T2>::type;
+   using result_type = tools::promote_args_t<T1, T2>;
+   return static_cast<result_type>(detail::tgamma(a, z, maybe_policy()));
 }
 template <class T1, class T2, class Policy>
-inline typename tools::promote_args<T1, T2>::type
+inline tools::promote_args_t<T1, T2>
    tgamma(T1 a, T2 z, const Policy& pol)
 {
-   return detail::tgamma(a, z, pol, std::false_type());
+   using result_type = tools::promote_args_t<T1, T2>;
+   return static_cast<result_type>(detail::tgamma(a, z, pol, std::false_type()));
 }
 //
 // Full lower incomplete gamma:
 //
 template <class T1, class T2, class Policy>
-inline typename tools::promote_args<T1, T2>::type
+inline tools::promote_args_t<T1, T2>
    tgamma_lower(T1 a, T2 z, const Policy&)
 {
    BOOST_FPU_EXCEPTION_GUARD
-   typedef typename tools::promote_args<T1, T2>::type result_type;
+   typedef tools::promote_args_t<T1, T2> result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
    // typedef typename lanczos::lanczos<value_type, Policy>::type evaluation_type;
    typedef typename policies::normalise<
@@ -2068,7 +2070,7 @@ inline typename tools::promote_args<T1, T2>::type
       forwarding_policy(), static_cast<value_type*>(nullptr)), "tgamma_lower<%1%>(%1%, %1%)");
 }
 template <class T1, class T2>
-inline typename tools::promote_args<T1, T2>::type
+inline tools::promote_args_t<T1, T2>
    tgamma_lower(T1 a, T2 z)
 {
    return tgamma_lower(a, z, policies::policy<>());
@@ -2077,11 +2079,11 @@ inline typename tools::promote_args<T1, T2>::type
 // Regularised upper incomplete gamma:
 //
 template <class T1, class T2, class Policy>
-inline typename tools::promote_args<T1, T2>::type
+inline tools::promote_args_t<T1, T2>
    gamma_q(T1 a, T2 z, const Policy& /* pol */)
 {
    BOOST_FPU_EXCEPTION_GUARD
-   typedef typename tools::promote_args<T1, T2>::type result_type;
+   typedef tools::promote_args_t<T1, T2> result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
    // typedef typename lanczos::lanczos<value_type, Policy>::type evaluation_type;
    typedef typename policies::normalise<
@@ -2099,7 +2101,7 @@ inline typename tools::promote_args<T1, T2>::type
       forwarding_policy(), static_cast<value_type*>(nullptr)), "gamma_q<%1%>(%1%, %1%)");
 }
 template <class T1, class T2>
-inline typename tools::promote_args<T1, T2>::type
+inline tools::promote_args_t<T1, T2>
    gamma_q(T1 a, T2 z)
 {
    return gamma_q(a, z, policies::policy<>());
@@ -2108,11 +2110,11 @@ inline typename tools::promote_args<T1, T2>::type
 // Regularised lower incomplete gamma:
 //
 template <class T1, class T2, class Policy>
-inline typename tools::promote_args<T1, T2>::type
+inline tools::promote_args_t<T1, T2>
    gamma_p(T1 a, T2 z, const Policy&)
 {
    BOOST_FPU_EXCEPTION_GUARD
-   typedef typename tools::promote_args<T1, T2>::type result_type;
+   typedef tools::promote_args_t<T1, T2> result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
    // typedef typename lanczos::lanczos<value_type, Policy>::type evaluation_type;
    typedef typename policies::normalise<
@@ -2130,7 +2132,7 @@ inline typename tools::promote_args<T1, T2>::type
       forwarding_policy(), static_cast<value_type*>(nullptr)), "gamma_p<%1%>(%1%, %1%)");
 }
 template <class T1, class T2>
-inline typename tools::promote_args<T1, T2>::type
+inline tools::promote_args_t<T1, T2>
    gamma_p(T1 a, T2 z)
 {
    return gamma_p(a, z, policies::policy<>());
@@ -2138,11 +2140,11 @@ inline typename tools::promote_args<T1, T2>::type
 
 // ratios of gamma functions:
 template <class T1, class T2, class Policy>
-inline typename tools::promote_args<T1, T2>::type
+inline tools::promote_args_t<T1, T2>
    tgamma_delta_ratio(T1 z, T2 delta, const Policy& /* pol */)
 {
    BOOST_FPU_EXCEPTION_GUARD
-   typedef typename tools::promote_args<T1, T2>::type result_type;
+   typedef tools::promote_args_t<T1, T2> result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
    typedef typename policies::normalise<
       Policy,
@@ -2154,16 +2156,16 @@ inline typename tools::promote_args<T1, T2>::type
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::tgamma_delta_ratio_imp(static_cast<value_type>(z), static_cast<value_type>(delta), forwarding_policy()), "boost::math::tgamma_delta_ratio<%1%>(%1%, %1%)");
 }
 template <class T1, class T2>
-inline typename tools::promote_args<T1, T2>::type
+inline tools::promote_args_t<T1, T2>
    tgamma_delta_ratio(T1 z, T2 delta)
 {
    return tgamma_delta_ratio(z, delta, policies::policy<>());
 }
 template <class T1, class T2, class Policy>
-inline typename tools::promote_args<T1, T2>::type
+inline tools::promote_args_t<T1, T2>
    tgamma_ratio(T1 a, T2 b, const Policy&)
 {
-   typedef typename tools::promote_args<T1, T2>::type result_type;
+   typedef tools::promote_args_t<T1, T2> result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
    typedef typename policies::normalise<
       Policy,
@@ -2175,18 +2177,18 @@ inline typename tools::promote_args<T1, T2>::type
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::tgamma_ratio_imp(static_cast<value_type>(a), static_cast<value_type>(b), forwarding_policy()), "boost::math::tgamma_delta_ratio<%1%>(%1%, %1%)");
 }
 template <class T1, class T2>
-inline typename tools::promote_args<T1, T2>::type
+inline tools::promote_args_t<T1, T2>
    tgamma_ratio(T1 a, T2 b)
 {
    return tgamma_ratio(a, b, policies::policy<>());
 }
 
 template <class T1, class T2, class Policy>
-inline typename tools::promote_args<T1, T2>::type
+inline tools::promote_args_t<T1, T2>
    gamma_p_derivative(T1 a, T2 x, const Policy&)
 {
    BOOST_FPU_EXCEPTION_GUARD
-   typedef typename tools::promote_args<T1, T2>::type result_type;
+   typedef tools::promote_args_t<T1, T2> result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
    typedef typename policies::normalise<
       Policy,
@@ -2198,7 +2200,7 @@ inline typename tools::promote_args<T1, T2>::type
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::gamma_p_derivative_imp(static_cast<value_type>(a), static_cast<value_type>(x), forwarding_policy()), "boost::math::gamma_p_derivative<%1%>(%1%, %1%)");
 }
 template <class T1, class T2>
-inline typename tools::promote_args<T1, T2>::type
+inline tools::promote_args_t<T1, T2>
    gamma_p_derivative(T1 a, T2 x)
 {
    return gamma_p_derivative(a, x, policies::policy<>());

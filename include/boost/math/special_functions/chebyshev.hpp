@@ -84,7 +84,7 @@ inline Real chebyshev_imp(unsigned n, Real const & x, const Policy&)
     while(l < n)
     {
        std::swap(T0, T1);
-       T1 = boost::math::chebyshev_next(x, T0, T1);
+       T1 = static_cast<Real>(boost::math::chebyshev_next(x, T0, T1));
        ++l;
     }
     return T1;

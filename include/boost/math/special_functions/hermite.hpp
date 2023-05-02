@@ -43,7 +43,7 @@ T hermite_imp(unsigned n, T x)
    while(c < n)
    {
       std::swap(p0, p1);
-      p1 = hermite_next(c, x, p0, p1);
+      p1 = static_cast<T>(hermite_next(c, x, p0, p1));
       ++c;
    }
    return p1;
