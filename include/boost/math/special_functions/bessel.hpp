@@ -680,7 +680,7 @@ inline OutputIterator cyl_bessel_j_zero(T v,
 
    for(int i = 0; i < static_cast<int>(number_of_zeros); ++i)
    {
-      *out_it = boost::math::cyl_bessel_j_zero(v, start_index + i, pol);
+      *out_it = static_cast<T>(boost::math::cyl_bessel_j_zero(v, start_index + i, pol));
       ++out_it;
    }
    return out_it;
@@ -741,7 +741,7 @@ inline OutputIterator cyl_neumann_zero(T v,
 
    for(int i = 0; i < static_cast<int>(number_of_zeros); ++i)
    {
-      *out_it = boost::math::cyl_neumann_zero(v, start_index + i, pol);
+      *out_it = static_cast<T>(boost::math::cyl_neumann_zero(v, start_index + i, pol));
       ++out_it;
    }
    return out_it;
