@@ -154,6 +154,13 @@ void expected_results()
       largest_type,                  // test type(s)
       "Bug cases.*",                 // test data group
       ".*", 1500000, 430000);        // test function
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      ".*",                          // platform
+      largest_type,                  // test type(s)
+      ".*negative.*",                // test data group
+      ".*", 200, 100);               // test function
 
    //
    // Finish off by printing out the compiler/stdlib/platform names,
