@@ -416,7 +416,7 @@ void test_spots6(T, const char* type_name)
 template <class T>
 void test_spots7(T, const char* type_name)
 {
-#include "hypergeometric_1F1_neg_int.ipp"
+#include "hypergeometric_1f1_neg_int.ipp"
 
    do_test_1F1<T>(hypergeometric_1f1_neg_int, type_name, "Both parameters negative integers.");
 }
