@@ -29,6 +29,10 @@
 #include <boost/multiprecision/complex128.hpp>
 #endif
 
+#if __has_include(<stdfloat>)
+#  include <stdfloat>
+#endif
+
 using std::exp;
 using std::cos;
 using std::tan;
@@ -586,16 +590,34 @@ BOOST_AUTO_TEST_CASE(exp_sinh_quadrature_test)
    */
 
 #ifdef TEST1
+
+#ifdef __STDCPP_FLOAT32_T__
+    test_left_limit_infinite<std::float32_t>();
+    test_right_limit_infinite<std::float32_t>();
+    test_nr_examples<std::float32_t>();
+    test_crc<std::float32_t>();
+#else
     test_left_limit_infinite<float>();
     test_right_limit_infinite<float>();
     test_nr_examples<float>();
     test_crc<float>();
 #endif
+
+#endif
 #ifdef TEST2
+
+#ifdef __STDCPP_FLOAT64_T__
+    test_left_limit_infinite<std::float64_t>();
+    test_right_limit_infinite<std::float64_t>();
+    test_nr_examples<std::float64_t>();
+    test_crc<std::float64_t>();
+#else
     test_left_limit_infinite<double>();
     test_right_limit_infinite<double>();
     test_nr_examples<double>();
     test_crc<double>();
+#endif
+
 #endif
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 #ifdef TEST3

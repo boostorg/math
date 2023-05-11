@@ -16,6 +16,10 @@
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/quadrature/naive_monte_carlo.hpp>
 
+#if __has_include(<stdfloat>)
+#  include <stdfloat>
+#endif
+
 using std::abs;
 using std::vector;
 using std::pair;
@@ -452,93 +456,249 @@ BOOST_AUTO_TEST_CASE(naive_monte_carlo_test)
 {
    std::cout << "Default hardware concurrency = " << std::thread::hardware_concurrency() << std::endl;
 #if !defined(TEST) || TEST == 1
+
+#if defined(__STDCPP_FLOAT32_T__) && defined(__STDCPP_FLOAT64_T__)
+    test_finite_singular_boundary<std::float64_t>();
+    test_finite_singular_boundary<std::float32_t>();
+#else
     test_finite_singular_boundary<double>();
     test_finite_singular_boundary<float>();
 #endif
+
+#endif
 #if !defined(TEST) || TEST == 2
+
+#if defined(__STDCPP_FLOAT32_T__) && defined(__STDCPP_FLOAT64_T__)
+    test_pi<std::float32_t>();
+    test_pi<std::float64_t>();
+#else
     test_pi<float>();
     test_pi<double>();
 #endif
+
+#endif
 #if !defined(TEST) || TEST == 3
+
+#ifdef __STDCPP_FLOAT32_T__
+    test_pi_multithreaded<std::float32_t>();
+    test_constant<std::float32_t>();
+#else
     test_pi_multithreaded<float>();
     test_constant<float>();
 #endif
+
+#endif
     //test_pi<long double>();
 #if !defined(TEST) || TEST == 4
+
+#if defined(__STDCPP_FLOAT32_T__) && defined(__STDCPP_FLOAT64_T__)
+    test_constant<std::float64_t>();
+    test_cancel_and_restart<std::float32_t>();
+#else
     test_constant<double>();
     //test_constant<long double>();
     test_cancel_and_restart<float>();
 #endif
+
+#endif
 #if !defined(TEST) || TEST == 5
+
+#ifdef __STDCPP_FLOAT32_T__
+    test_exception_from_integrand<std::float32_t>();
+    test_variance<std::float32_t>();
+#else
     test_exception_from_integrand<float>();
     test_variance<float>();
 #endif
+
+#endif
 #if !defined(TEST) || TEST == 6
+
+#ifdef __STDCPP_FLOAT64_T__
+    test_variance<std::float64_t>();
+    test_multithreaded_variance<std::float64_t>();
+#else
     test_variance<double>();
     test_multithreaded_variance<double>();
 #endif
+
+#endif
 #if !defined(TEST) || TEST == 7
+
+#ifdef __STDCPP_FLOAT32_T__
+    test_product<std::float32_t, 1>();
+    test_product<std::float32_t, 2>();
+#else
     test_product<float, 1>();
     test_product<float, 2>();
 #endif
+
+#endif
 #if !defined(TEST) || TEST == 8
+
+#ifdef __STDCPP_FLOAT32_T__
+    test_product<std::float32_t, 3>();
+    test_product<std::float32_t, 4>();
+    test_product<std::float32_t, 5>();
+#else
     test_product<float, 3>();
     test_product<float, 4>();
     test_product<float, 5>();
 #endif
+
+#endif
 #if !defined(TEST) || TEST == 9
+
+#if defined(__STDCPP_FLOAT32_T__) && defined(__STDCPP_FLOAT64_T__)
+    test_product<std::float32_t, 6>();
+    test_product<std::float64_t, 1>();
+#else
     test_product<float, 6>();
     test_product<double, 1>();
 #endif
+
+#endif
 #if !defined(TEST) || TEST == 10
+
+#ifdef __STDCPP_FLOAT64_T__
+    test_product<std::float64_t, 2>();
+#else
     test_product<double, 2>();
 #endif
+
+#endif
 #if !defined(TEST) || TEST == 11
+
+#ifdef __STDCPP_FLOAT64_T__
+    test_product<std::float64_t, 3>();
+    test_product<std::float64_t, 4>();
+#else
     test_product<double, 3>();
     test_product<double, 4>();
 #endif
+
+#endif
 #if !defined(TEST) || TEST == 12
+
+#if defined(__STDCPP_FLOAT32_T__) && defined(__STDCPP_FLOAT64_T__)
+    test_upper_bound_infinite<std::float32_t>();
+    test_upper_bound_infinite<std::float64_t>();
+#else
     test_upper_bound_infinite<float>();
     test_upper_bound_infinite<double>();
 #endif
+
+#endif
 #if !defined(TEST) || TEST == 13
+
+#if defined(__STDCPP_FLOAT32_T__) && defined(__STDCPP_FLOAT64_T__)
+    test_lower_bound_infinite<std::float32_t>();
+    test_lower_bound_infinite<std::float64_t>();
+#else
     test_lower_bound_infinite<float>();
     test_lower_bound_infinite<double>();
 #endif
+
+#endif
 #if !defined(TEST) || TEST == 14
+
+#ifdef __STDCPP_FLOAT32_T__
+    test_lower_bound_infinite2<std::float32_t>();
+#else
     test_lower_bound_infinite2<float>();
 #endif
+
+#endif
 #if !defined(TEST) || TEST == 15
+
+#if defined(__STDCPP_FLOAT32_T__) && defined(__STDCPP_FLOAT64_T__)
+    test_double_infinite<std::float32_t>();
+    test_double_infinite<std::float64_t>();
+#else
     test_double_infinite<float>();
     test_double_infinite<double>();
 #endif
+
+#endif
 #if !defined(TEST) || TEST == 16
+
+#ifdef __STDCPP_FLOAT32_T__
+    test_radovic<std::float32_t, 1>();
+    test_radovic<std::float32_t, 2>();
+#else
     test_radovic<float, 1>();
     test_radovic<float, 2>();
 #endif
+
+#endif
 #if !defined(TEST) || TEST == 17
+
+#if defined(__STDCPP_FLOAT32_T__) && defined(__STDCPP_FLOAT64_T__)
+    test_radovic<std::float32_t, 3>();
+    test_radovic<std::float64_t, 1>();
+#else
     test_radovic<float, 3>();
     test_radovic<double, 1>();
 #endif
+
+#endif
 #if !defined(TEST) || TEST == 18
+
+#ifdef __STDCPP_FLOAT64_T__
+    test_radovic<std::float64_t, 2>();
+    test_radovic<std::float64_t, 3>();
+#else
     test_radovic<double, 2>();
     test_radovic<double, 3>();
 #endif
+
+#endif
 #if !defined(TEST) || TEST == 19
+
+#ifdef __STDCPP_FLOAT64_T__
+    test_radovic<std::float64_t, 4>();
+    test_radovic<std::float64_t, 5>();
+#else
     test_radovic<double, 4>();
     test_radovic<double, 5>();
 #endif
+
+#endif
 #if !defined(TEST) || TEST == 20
+
+#ifdef __STDCPP_FLOAT32_T__
+    test_alternative_rng_1<std::float32_t, 3>();
+#else
     test_alternative_rng_1<float, 3>();
 #endif
+
+#endif
 #if !defined(TEST) || TEST == 21
+
+#ifdef __STDCPP_FLOAT64_T__
+    test_alternative_rng_1<std::float64_t, 3>();
+#else
     test_alternative_rng_1<double, 3>();
 #endif
+
+#endif
 #if !defined(TEST) || TEST == 22
+
+#ifdef __STDCPP_FLOAT32_T__
+    test_alternative_rng_2<std::float32_t, 3>();
+#else
     test_alternative_rng_2<float, 3>();
 #endif
+
+#endif
 #if !defined(TEST) || TEST == 23
+
+#ifdef __STDCPP_FLOAT64_T__
+    test_alternative_rng_2<std::float64_t, 3>();
+#else
     test_alternative_rng_2<double, 3>();
+#endif
+
 #endif
 
 }
