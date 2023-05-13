@@ -135,13 +135,13 @@ void test_constant()
     std::cout << "Testing constants are integrated correctly by the adaptive trapezoidal routine on type " << boost::typeindex::type_id<Real>().pretty_name()  << "\n";
 
     auto f = [](Real)->Real { return boost::math::constants::half<Real>(); };
-    Real Q = trapezoidal<decltype(f), Real>(f, (Real) 0.0, (Real) 10.0);
-    BOOST_CHECK_CLOSE(Q, 5.0, 100*std::numeric_limits<Real>::epsilon());
-    Q = trapezoidal<decltype(f), Real>(f, (Real) 10.0, (Real) 0.0);
-    BOOST_CHECK_CLOSE(Q, -5.0, 100*std::numeric_limits<Real>::epsilon());
+    Real Q = trapezoidal<decltype(f), Real>(f, static_cast<Real>(0.0), static_cast<Real>(10.0));
+    BOOST_CHECK_CLOSE(Q, static_cast<Real>(5.0), 100*std::numeric_limits<Real>::epsilon());
+    Q = trapezoidal<decltype(f), Real>(f, static_cast<Real>(10.0), static_cast<Real>(0.0));
+    BOOST_CHECK_CLOSE(Q, static_cast<Real>(-5.0), 100*std::numeric_limits<Real>::epsilon());
 
-    Q = trapezoidal<decltype(f), Real>(f, (Real) 10.0, (Real) 10.0);
-    BOOST_CHECK_CLOSE(Q, Real(0), 100*std::numeric_limits<Real>::epsilon());
+    Q = trapezoidal<decltype(f), Real>(f, static_cast<Real>(10.0), static_cast<Real>(10.0));
+    BOOST_CHECK_CLOSE(Q, static_cast<Real>(0), 100*std::numeric_limits<Real>::epsilon());
 }
 
 

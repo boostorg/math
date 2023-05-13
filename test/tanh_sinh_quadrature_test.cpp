@@ -233,12 +233,12 @@ void test_linear()
     Real error;
     Real L1;
     Real Q = integrator.integrate(f, (Real) 0, (Real) 1, get_convergence_tolerance<Real>(), &error, &L1);
-    BOOST_CHECK_CLOSE_FRACTION(Q, 9.5, tol);
-    BOOST_CHECK_CLOSE_FRACTION(L1, 9.5, tol);
-    Q = integrator.integrate(f, (Real) 1, (Real) 0, get_convergence_tolerance<Real>(), &error, &L1);
-    BOOST_CHECK_CLOSE_FRACTION(Q, -9.5, tol);
-    BOOST_CHECK_CLOSE_FRACTION(L1, 9.5, tol);
-    Q = integrator.integrate(f, (Real) 1, (Real) 1, get_convergence_tolerance<Real>(), &error, &L1);
+    BOOST_CHECK_CLOSE_FRACTION(Q, static_cast<Real>(9.5), tol);
+    BOOST_CHECK_CLOSE_FRACTION(L1, static_cast<Real>(9.5), tol);
+    Q = integrator.integrate(f, static_cast<Real>(1), static_cast<Real>(0), get_convergence_tolerance<Real>(), &error, &L1);
+    BOOST_CHECK_CLOSE_FRACTION(Q, static_cast<Real>(-9.5), tol);
+    BOOST_CHECK_CLOSE_FRACTION(L1, static_cast<Real>(9.5), tol);
+    Q = integrator.integrate(f, static_cast<Real>(1), static_cast<Real>(1), get_convergence_tolerance<Real>(), &error, &L1);
     BOOST_CHECK_EQUAL(Q, Real(0));
 }
 

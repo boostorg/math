@@ -152,9 +152,9 @@ void test_cancel_and_restart()
 
     auto task = mc.integrate();
     mc.cancel();
-    double y = task.get();
+    Real y = task.get();
     // Super low tolerance; because it got canceled so fast:
-    BOOST_CHECK_CLOSE_FRACTION(y, exact, 1.0);
+    BOOST_CHECK_CLOSE_FRACTION(y, exact, static_cast<Real>(1.0));
 
     mc.update_target_error((Real) 0.01);
     task = mc.integrate();
@@ -215,7 +215,7 @@ void test_variance()
 
     auto task = mc.integrate();
     Real y = task.get();
-    BOOST_CHECK_CLOSE_FRACTION(y, 0.5, 0.01);
+    BOOST_CHECK_CLOSE_FRACTION(y, static_cast<Real>(0.5), static_cast<Real>(0.01));
     BOOST_CHECK_CLOSE_FRACTION(mc.variance(), exact_variance, 0.05);
 }
 
