@@ -222,7 +222,7 @@ namespace boost
       template <> struct promote_args_2<std::float16_t, std::float32_t> { using type = std::float32_t; };
       #endif
 
-      template <> struct promote_args_2<std::float32_t, std::float32_t> { using type = std::float64_t; };
+      template <> struct promote_args_2<std::float32_t, std::float32_t> { using type = std::float32_t; };
       #endif
 
       #ifdef __STDCPP_FLOAT16_T__
