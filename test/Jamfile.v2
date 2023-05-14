@@ -882,6 +882,7 @@ test-suite distribution_tests :
    [ run  compile_test/dist_arcsine_incl_test.cpp compile_test_main : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ]  ]
    [ compile  compile_test/dist_empirical_cumulative_dist_func_incl_test.cpp : [ requires cxx17_if_constexpr cxx17_std_apply ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ]  ]
    [ run  compile_test/dist_inv_gaussian_incl_test.cpp compile_test_main : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ]  ]
+   [ compile compile_test/test_promote_args.cpp : [ requires cpp_lib_type_trait_variable_templates ] ]
 
    [ run test_legacy_nonfinite.cpp ../../test/build//boost_unit_test_framework ]
    [ run test_basic_nonfinite.cpp ../../test/build//boost_unit_test_framework  ]
