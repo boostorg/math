@@ -993,7 +993,7 @@ namespace boost
             const RealType fabs_a = fabs(a);
             const RealType fabs_ah = fabs_a*h;
 
-            RealType val = 0.0; // avoid compiler warnings, 0.0 will be overwritten in any case
+            RealType val = static_cast<RealType>(0.0f); // avoid compiler warnings, 0.0 will be overwritten in any case
 
             if(fabs_a <= 1)
             {

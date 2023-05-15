@@ -53,7 +53,7 @@ namespace boost { namespace math { namespace detail{
         if(n == 1) return 1 / x;
         T nlx = n * log(x);
         if((nlx < tools::log_max_value<T>()) && (n < (int)max_factorial<T>::value))
-           return ((n & 1) ? 1 : -1) * boost::math::factorial<T>(n - 1, pol) * pow(x, -n);
+           return ((n & 1) ? 1 : -1) * boost::math::factorial<T>(n - 1, pol) * static_cast<T>(pow(x, -n));
         else
          return ((n & 1) ? 1 : -1) * exp(boost::math::lgamma(T(n), pol) - n * log(x));
      }
@@ -159,7 +159,7 @@ namespace boost { namespace math { namespace detail{
     {
        for(int k = 1; k <= iter; ++k)
        {
-          z_plus_k_pow_minus_m_minus_one = pow(z, minus_m_minus_one);
+          z_plus_k_pow_minus_m_minus_one = static_cast<T>(pow(z, minus_m_minus_one));
           sum0 += z_plus_k_pow_minus_m_minus_one;
           z += 1;
        }
@@ -203,7 +203,7 @@ namespace boost { namespace math { namespace detail{
      // be n! / z^(n+1), but since we're scaling by n! it's just
      // 1 / z^(n+1) for now:
      //
-     T prefix = pow(x, n + 1);
+     T prefix = static_cast<T>(pow(x, n + 1));  // Warning supression: Integer power returns at least a double
      if(prefix == 0)
         return boost::math::policies::raise_overflow_error<T>(function, nullptr, pol);
      prefix = 1 / prefix;

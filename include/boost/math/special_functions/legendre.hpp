@@ -322,7 +322,7 @@ T legendre_p_imp(int l, int m, T x, T sin_theta_power, const Policy& pol)
    }
    if (-m == l)
    {
-      return pow((1 - x * x) / 4, T(l) / 2) / boost::math::tgamma(l + 1, pol);
+      return pow((1 - x * x) / 4, T(l) / 2) / boost::math::tgamma<T>(l + 1, pol);
    }
    if(m < 0)
    {

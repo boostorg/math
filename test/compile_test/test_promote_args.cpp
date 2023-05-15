@@ -5,7 +5,9 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/math/tools/promotion.hpp>
+#ifndef BOOST_MATH_STANDALONE
 #include <boost/multiprecision/cpp_bin_float.hpp>
+#endif
 #include <type_traits>
 
 #if __has_include(<stdfloat>)
@@ -16,7 +18,7 @@ int main()
 {
    using boost::math::tools::promote_args_t;
 
-#if defined(__cpp_lib_type_trait_variable_templates)
+#if defined(__cpp_lib_type_trait_variable_templates) && (__cpp_lib_type_trait_variable_templates >= 201510L) && defined(__cpp_static_assert) && (__cpp_static_assert >= 201411L)
 
    static_assert(std::is_same_v<promote_args_t<long double, float>, long double>);
    static_assert(std::is_same_v<promote_args_t<long double, double>, long double>);
@@ -162,6 +164,7 @@ int main()
 #endif
 #endif   
 
+#ifndef BOOST_MATH_STANDALONE
    static_assert(std::is_same_v<promote_args_t<float, boost::multiprecision::cpp_bin_float_50>, boost::multiprecision::cpp_bin_float_50>);
    static_assert(std::is_same_v<promote_args_t<double, boost::multiprecision::cpp_bin_float_50>, boost::multiprecision::cpp_bin_float_50>);
    static_assert(std::is_same_v<promote_args_t<long double, boost::multiprecision::cpp_bin_float_50>, boost::multiprecision::cpp_bin_float_50>);
@@ -177,6 +180,7 @@ int main()
 #ifdef __STDCPP_FLOAT128_T__
    static_assert(std::is_same_v<promote_args_t<std::float128_t, boost::multiprecision::cpp_bin_float_50>, boost::multiprecision::cpp_bin_float_50>);
 #endif
+#endif // BOOST_MATH_STANDALONE
 
 #endif
 
