@@ -28,7 +28,7 @@ def main(ctx):
 
   result = []
 
-  for suite in things_to_test:
+  for suite in gcc13_things_to_test:
     for cxx in gcc13_stds:
       result.append(linux_cxx("Ubuntu g++-13 " + cxx + " " + suite, "g++-13", packages="g++-13", buildtype="boost", image="cppalliance/droneubuntu2304:1", environment={'TOOLSET': 'gcc', 'COMPILER': 'g++-13', 'CXXSTD': cxx, 'TEST_SUITE': suite, }, globalenv=globalenv))
 
