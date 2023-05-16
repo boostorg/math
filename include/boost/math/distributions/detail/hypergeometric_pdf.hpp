@@ -260,7 +260,7 @@ inline T integer_power(const T& x, int ex)
 #ifdef __SUNPRO_CC
    return pow(x, T(ex));
 #else
-   return pow(x, ex);
+   return static_cast<T>(pow(x, ex));
 #endif
 }
 template <class T>

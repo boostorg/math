@@ -184,7 +184,7 @@
                     //
                     if ((j < cache_size - 2) && (tools::max_value<T>() / fabs(64 * bessel_cache[j] / bessel_cache[j + 1]) < fabs(bessel_cache[j])))
                     {
-                       T rescale = pow(fabs(bessel_cache[j] / bessel_cache[j + 1]), j + 1) * 2;
+                       T rescale = static_cast<T>(pow(fabs(bessel_cache[j] / bessel_cache[j + 1]), j + 1) * 2);
                        if (!((boost::math::isfinite)(rescale)))
                           rescale = tools::max_value<T>();
                        for (int k = j; k < cache_size; ++k)
@@ -259,7 +259,7 @@
                     //
                     if ((j < cache_size - 2) && (tools::max_value<T>() / fabs(64 * bessel_cache[j] / bessel_cache[j + 1]) < fabs(bessel_cache[j])))
                     {
-                       T rescale = pow(fabs(bessel_cache[j] / bessel_cache[j + 1]), j + 1) * 2;
+                       T rescale = static_cast<T>(pow(fabs(bessel_cache[j] / bessel_cache[j + 1]), j + 1) * 2);
                        if (!((boost::math::isfinite)(rescale)))
                           rescale = tools::max_value<T>();
                        for (int k = j; k < cache_size; ++k)
@@ -558,7 +558,7 @@
               //
               if((j < cache_size - 2) && (bessel_i_cache[j + 1] != 0) && (tools::max_value<T>() / fabs(64 * bessel_i_cache[j] / bessel_i_cache[j + 1]) < fabs(bessel_i_cache[j])))
               {
-                 T rescale = pow(fabs(bessel_i_cache[j] / bessel_i_cache[j + 1]), j + 1) * 2;
+                 T rescale = static_cast<T>(pow(fabs(bessel_i_cache[j] / bessel_i_cache[j + 1]), j + 1) * 2);
                  if (rescale > tools::max_value<T>())
                     rescale = tools::max_value<T>();
                  for (int k = j; k < cache_size; ++k)
