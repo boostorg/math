@@ -48,6 +48,7 @@ BOOST_MATH_INSTRUMENT_LAMBERT_W_SMALL_Z_SERIES_ITERATIONS  // Show evaluation of
 //] [/boost_math_instrument_lambert_w_macros]
 */
 
+#include <boost/math/tools/config.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/policies/policy.hpp>
 #include <boost/math/tools/promotion.hpp>
@@ -184,7 +185,25 @@ template <typename T>
 inline double must_reduce_to_double(const T& z, const std::false_type&)
 { // try a lexical_cast and hope for the best:
 #ifndef BOOST_MATH_STANDALONE
+
+   #ifdef BOOST_MATH_USE_CHARCONV_FOR_CONVERSION
+
+   // Catches the C++23 floating point types
+   if constexpr (std::is_arithmetic_v<T>)
+   {
+      return static_cast<double>(z);
+   }
+   else
+   {
+      return boost::lexical_cast<double>(z);
+   }
+
+   #else
+   
    return boost::lexical_cast<double>(z);
+   
+   #endif
+
 #else
    static_assert(sizeof(T) == 0, "Unsupported in standalone mode: don't know how to cast your number type to a double.");
    return 0.0;
@@ -1918,7 +1937,7 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
     using boost::math::policies::digits2;
     using boost::math::policies::policy;
     // Compute a 50-bit precision approximate W0 in a double (no Halley refinement).
-    T double_approx(static_cast<T>(lambert_wm1_imp(must_reduce_to_double(z, std::is_convertible<double, T>()), policy<digits2<50>>())));
+    T double_approx(static_cast<T>(lambert_wm1_imp(must_reduce_to_double(z, std::is_constructible<double, T>()), policy<digits2<50>>())));
 #ifdef BOOST_MATH_INSTRUMENT_LAMBERT_WM1_NOT_BUILTIN
     std::streamsize saved_precision = std::cout.precision(std::numeric_limits<T>::max_digits10);
     std::cout << "Lambert_wm1 Argument Type " << typeid(T).name() << " approximation double = " << double_approx << std::endl;
