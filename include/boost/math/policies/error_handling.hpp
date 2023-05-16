@@ -26,6 +26,13 @@
 #include <boost/math/tools/throw_exception.hpp>
 #endif
 
+// TODO: Update as other implmentations become available
+#if __GNUC__ >= 13
+#  define BOOST_MATH_USE_CHARCONV_FLOAT128_T
+#  include <charconv>
+#  include <stdfloat>
+#endif
+
 #ifdef _MSC_VER
 #  pragma warning(push) // Quiet warnings in boost/format.hpp
 #  pragma warning(disable: 4996) // _SCL_SECURE_NO_DEPRECATE
@@ -94,6 +101,16 @@ std::string prec_format(const T& val)
    ss << val;
    return ss.str();
 }
+
+#if defined(BOOST_MATH_USE_CHARCONV_FLOAT128_T) && defined(__STDCPP_FLOAT128_T__)
+template <>
+std::string prec_format<std::float128_t>(const std::float128_t& val)
+{
+   char buffer[128] {};
+   const auto r = std::to_chars(buffer, buffer + sizeof(buffer), val);
+   return std::string(buffer, r.ptr);
+}
+#endif
 
 inline void replace_all_in_string(std::string& result, const char* what, const char* with)
 {

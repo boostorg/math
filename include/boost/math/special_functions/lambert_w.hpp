@@ -1918,7 +1918,7 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
     using boost::math::policies::digits2;
     using boost::math::policies::policy;
     // Compute a 50-bit precision approximate W0 in a double (no Halley refinement).
-    T double_approx(static_cast<T>(lambert_wm1_imp(must_reduce_to_double(z, std::is_constructible<double, T>()), policy<digits2<50>>())));
+    T double_approx(static_cast<T>(lambert_wm1_imp(must_reduce_to_double(z, std::is_convertible<double, T>()), policy<digits2<50>>())));
 #ifdef BOOST_MATH_INSTRUMENT_LAMBERT_WM1_NOT_BUILTIN
     std::streamsize saved_precision = std::cout.precision(std::numeric_limits<T>::max_digits10);
     std::cout << "Lambert_wm1 Argument Type " << typeid(T).name() << " approximation double = " << double_approx << std::endl;
