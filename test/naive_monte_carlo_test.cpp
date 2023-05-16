@@ -168,11 +168,13 @@ void test_finite_singular_boundary()
     std::cout << "Testing that finite singular boundaries work on naive Monte-Carlo integration on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
     using std::pow;
     using std::log;
+    using std::log1p;
+
     auto g = [](std::vector<Real> const & x)->Real
     {
         // The first term is singular at x = 0.
         // The second at x = 1:
-        return pow(log(1.0/x[0]), 2) + log1p(-x[0]);
+        return pow(log(Real(1)/x[0]), Real(2)) + log1p(-x[0]);
     };
     vector<pair<Real, Real>> bounds{{Real(0), Real(1)}};
     naive_monte_carlo<Real, decltype(g)> mc(g, bounds, (Real) 0.01, true, 1, 1922);
