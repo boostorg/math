@@ -156,11 +156,21 @@
 #  endif
 #endif
 
-#endif
+#endif // Standalone config
 
 // If attributes are not defined make sure we don't have compiler errors
 #ifndef BOOST_MATH_MAYBE_UNUSED
 #  define BOOST_MATH_MAYBE_UNUSED 
+#endif
+
+// C++23
+#if __cplusplus > 202002L || _MSVC_LANG > 202002L
+#  if __GNUC__ >= 13
+#    include <cstring> // std::strlen is used with from_chars
+#    include <charconv>
+#    include <stdfloat>
+#    define BOOST_MATH_USE_CHARCONV_FOR_CONVERSION
+#  endif
 #endif
 
 #include <algorithm>  // for min and max
