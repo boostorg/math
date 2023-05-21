@@ -166,10 +166,14 @@
 // C++23
 #if __cplusplus > 202002L || _MSVC_LANG > 202002L
 #  if __GNUC__ >= 13
+     // libstdc++3 only defines to/from_chars for std::float128_t when one of these defines are set
+     // otherwise we're right out of luck...
+#    if defined(_GLIBCXX_LDOUBLE_IS_IEEE_BINARY128) || defined(_GLIBCXX_HAVE_FLOAT128_MATH)
 #    include <cstring> // std::strlen is used with from_chars
 #    include <charconv>
 #    include <stdfloat>
 #    define BOOST_MATH_USE_CHARCONV_FOR_CONVERSION
+#endif
 #  endif
 #endif
 
