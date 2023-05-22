@@ -7,9 +7,12 @@
 
 #ifndef BOOST_MATH_SPECIAL_DAUBECHIES_SCALING_HPP
 #define BOOST_MATH_SPECIAL_DAUBECHIES_SCALING_HPP
+
+#include <cstdint>
+#include <cstring>
+#include <cmath>
 #include <vector>
 #include <array>
-#include <cmath>
 #include <thread>
 #include <future>
 #include <iostream>
@@ -208,12 +211,13 @@ public:
     inline Real prime(Real x) const
     {
         using std::floor;
+
         Real y = x*s_;
         Real k = floor(y);
 
         int64_t kk = static_cast<int64_t>(k);
         Real t = y - k;
-        return (1-t)*dydx_[kk] + t*dydx_[kk+1];
+        return static_cast<Real>((Real(1)-t)*dydx_[kk] + t*dydx_[kk+1]);
     }
 
     int64_t bytes() const
@@ -372,13 +376,13 @@ public:
                 }
                 else if (std::is_same_v<Real, double>)
                 {
-                //                          p= 2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19
-                std::array<int, 20> r{ -1, -1, 21, 21, 21, 21, 21, 21, 21, 21, 20, 20, 19, 19, 18, 18, 18, 18, 18, 18 };
-                grid_refinements = r[p];
+                    //                          p= 2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19
+                    std::array<int, 20> r{ -1, -1, 21, 21, 21, 21, 21, 21, 21, 21, 20, 20, 19, 19, 18, 18, 18, 18, 18, 18 };
+                    grid_refinements = r[p];
                 }
                 else
                 {
-                grid_refinements = 21;
+                    grid_refinements = 21;
                 }
             }
 
@@ -423,17 +427,17 @@ public:
                 vector_type data(y.size());
                 for (size_t i = 0; i < y.size(); ++i)
                 {
-                data[i][0] = y[i];
-                data[i][1] = dydx[i];
-                if constexpr (p >= 6)
-                    data[i][2] = d2ydx2[i];
-                if constexpr (p >= 10)
-                    data[i][3] = d3ydx3[i];
+                    data[i][0] = y[i];
+                    data[i][1] = dydx[i];
+                    if constexpr (p >= 6)
+                        data[i][2] = d2ydx2[i];
+                    if constexpr (p >= 10)
+                        data[i][3] = d3ydx3[i];
                 }
                 if constexpr (p <= 3)
-                m_interpolator = std::make_shared<interpolator_type>(std::move(data), grid_refinements, Real(0));
+                    m_interpolator = std::make_shared<interpolator_type>(std::move(data), grid_refinements, Real(0));
                 else
-                m_interpolator = std::make_shared<interpolator_type>(std::move(data), Real(0), Real(1) / (1 << grid_refinements));
+                    m_interpolator = std::make_shared<interpolator_type>(std::move(data), Real(0), Real(1) / (1 << grid_refinements));
             }
             else
                 m_interpolator = std::make_shared<detail::null_interpolator>();
@@ -452,7 +456,7 @@ public:
     inline Real prime(Real x) const
     {
         static_assert(p > 2, "The 3-vanishing moment Daubechies scaling function is the first which is continuously differentiable.");
-        if (x <= 0 || x >= 2*p-1)
+        if (x <= Real(0) || x >= 2*p-1)
         {
             return 0;
         }
