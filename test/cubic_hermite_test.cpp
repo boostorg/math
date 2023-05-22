@@ -19,6 +19,9 @@
 using boost::multiprecision::float128;
 #endif
 
+#if __has_include(<stdfloat>)
+#  include <stdfloat>
+#endif
 
 using boost::math::interpolators::cubic_hermite;
 using boost::math::interpolators::cardinal_cubic_hermite;
@@ -74,7 +77,7 @@ void test_constant()
 
     auto circular_hermite_spline = cubic_hermite(std::move(x_buf), std::move(y_buf), std::move(dydx_buf));
 
-    for (Real t = x[0]; t <= x.back(); t += 0.25) {
+    for (Real t = x[0]; t <= x.back(); t += Real(0.25)) {
         CHECK_ULP_CLOSE(Real(7), circular_hermite_spline(t), 2);
         CHECK_ULP_CLOSE(Real(0), circular_hermite_spline.prime(t), 2);
     }
@@ -117,7 +120,7 @@ void test_linear()
     y_copy = y;
     dydx_copy = dydx;
     hermite_spline = cubic_hermite(std::move(x_copy), std::move(y_copy), std::move(dydx_copy));
-    for (Real t = 0; t < x.back(); t += 0.5) {
+    for (Real t = 0; t < x.back(); t += Real(0.5)) {
         CHECK_ULP_CLOSE(t, hermite_spline(t), 0);
         CHECK_ULP_CLOSE(Real(1), hermite_spline.prime(t), 0);
     }
@@ -139,7 +142,7 @@ void test_linear()
 
     auto circular_hermite_spline = cubic_hermite(std::move(x_buf), std::move(y_buf), std::move(dydx_buf));
 
-    for (Real t = x[0]; t <= x.back(); t += 0.25) {
+    for (Real t = x[0]; t <= x.back(); t += Real(0.25)) {
         CHECK_ULP_CLOSE(t, circular_hermite_spline(t), 2);
         CHECK_ULP_CLOSE(Real(1), circular_hermite_spline.prime(t), 2);
     }
@@ -156,7 +159,7 @@ void test_quadratic()
 {
     std::vector<Real> x(50);
     std::default_random_engine rd;
-    std::uniform_real_distribution<Real> dis(0.1,1);
+    std::uniform_real_distribution<Real> dis(Real(0.1), Real(1));
     Real x0 = dis(rd);
     x[0] = x0;
     for (size_t i = 1; i < x.size(); ++i) {
@@ -172,7 +175,7 @@ void test_quadratic()
     }
 
     auto s = cubic_hermite(std::move(x), std::move(y), std::move(dydx));
-    for (Real t = x0; t <= xmax; t+= 0.0125)
+    for (Real t = x0; t <= xmax; t+= Real(0.0125))
     {
         CHECK_ULP_CLOSE(t*t/2, s(t), 5);
         CHECK_ULP_CLOSE(t, s.prime(t), 138);
@@ -223,7 +226,7 @@ void test_cardinal_constant()
 
     auto hermite_spline = cardinal_cubic_hermite(std::move(y), std::move(dydx), x0, dx);
 
-    for (Real t = x0; t <= x0 + 24*dx; t += 0.25) {
+    for (Real t = x0; t <= x0 + 24*dx; t += Real(0.25)) {
         CHECK_ULP_CLOSE(Real(7), hermite_spline(t), 2);
         CHECK_ULP_CLOSE(Real(0), hermite_spline.prime(t), 2);
     }
@@ -237,7 +240,7 @@ void test_cardinal_constant()
     }
     auto hermite_spline_aos = cardinal_cubic_hermite_aos(std::move(data), x0, dx);
 
-    for (Real t = x0; t <= x0 + 24*dx; t += 0.25) {
+    for (Real t = x0; t <= x0 + 24*dx; t += Real(0.25)) {
         if (!CHECK_ULP_CLOSE(Real(7), hermite_spline_aos(t), 2)) {
             std::cerr << "  Wrong evaluation at t = " << t << "\n";
         }
@@ -297,7 +300,7 @@ void test_cardinal_linear()
     }
 
     hermite_spline = cardinal_cubic_hermite(std::move(y), std::move(dydx), x0, dx);
-    for (Real t = 0; t < 44; t += 0.5) {
+    for (Real t = 0; t < 44; t += Real(0.5)) {
         CHECK_ULP_CLOSE(t, hermite_spline(t), 0);
         CHECK_ULP_CLOSE(Real(1), hermite_spline.prime(t), 0);
     }
@@ -309,7 +312,7 @@ void test_cardinal_linear()
     }
 
     auto hermite_spline_aos = cardinal_cubic_hermite_aos(std::move(data), x0, dx);
-    for (Real t = 0; t < 44; t += 0.5) {
+    for (Real t = 0; t < 44; t += Real(0.5)) {
         CHECK_ULP_CLOSE(t, hermite_spline_aos(t), 0);
         CHECK_ULP_CLOSE(Real(1), hermite_spline_aos.prime(t), 0);
     }
@@ -352,7 +355,7 @@ void test_cardinal_quadratic()
     }
 
     auto s = cardinal_cubic_hermite(std::move(y), std::move(dydx), x0, dx);
-    for (Real t = x0; t <= x0 + 49*dx; t+= 0.0125)
+    for (Real t = x0; t <= x0 + 49*dx; t+= Real(0.0125))
     {
         CHECK_ULP_CLOSE(t*t/2, s(t), 12);
         CHECK_ULP_CLOSE(t, s.prime(t), 70);
@@ -367,7 +370,7 @@ void test_cardinal_quadratic()
 
 
     auto saos = cardinal_cubic_hermite_aos(std::move(data), x0, dx);
-    for (Real t = x0; t <= x0 + 49*dx; t+= 0.0125)
+    for (Real t = x0; t <= x0 + 49*dx; t+= Real(0.0125))
     {
         CHECK_ULP_CLOSE(t*t/2, saos(t), 12);
         CHECK_ULP_CLOSE(t, saos.prime(t), 70);
@@ -400,7 +403,7 @@ void test_cardinal_interpolation_condition()
         std::vector<Real> y(n);
         std::vector<Real> dydx(n);
         std::default_random_engine rd;
-        std::uniform_real_distribution<Real> dis(0.1,1);
+        std::uniform_real_distribution<Real> dis(Real(0.1), Real(1));
         Real x0 = Real(2);
         Real dx = Real(1)/Real(128);
         for (size_t i = 0; i < n; ++i) {
@@ -422,6 +425,16 @@ void test_cardinal_interpolation_condition()
 
 int main()
 {
+    #ifdef __STDCPP_FLOAT32_T__
+    test_constant<std::float32_t>();
+    test_linear<std::float32_t>();
+    test_quadratic<std::float32_t>();
+    test_interpolation_condition<std::float32_t>();
+    test_cardinal_constant<std::float32_t>();
+    test_cardinal_linear<std::float32_t>();
+    test_cardinal_quadratic<std::float32_t>();
+    test_cardinal_interpolation_condition<std::float32_t>();
+    #else
     test_constant<float>();
     test_linear<float>();
     test_quadratic<float>();
@@ -430,7 +443,18 @@ int main()
     test_cardinal_linear<float>();
     test_cardinal_quadratic<float>();
     test_cardinal_interpolation_condition<float>();
+    #endif
 
+    #ifdef __STDCPP_FLOAT64_T__
+    test_constant<std::float64_t>();
+    test_linear<std::float64_t>();
+    test_quadratic<std::float64_t>();
+    test_interpolation_condition<std::float64_t>();
+    test_cardinal_constant<std::float64_t>();
+    test_cardinal_linear<std::float64_t>();
+    test_cardinal_quadratic<std::float64_t>();
+    test_cardinal_interpolation_condition<std::float64_t>();
+    #else
     test_constant<double>();
     test_linear<double>();
     test_quadratic<double>();
@@ -439,6 +463,7 @@ int main()
     test_cardinal_linear<double>();
     test_cardinal_quadratic<double>();
     test_cardinal_interpolation_condition<double>();
+    #endif
 
     test_constant<long double>();
     test_linear<long double>();
@@ -450,12 +475,12 @@ int main()
     test_cardinal_interpolation_condition<long double>();
 
 
-#ifdef BOOST_HAS_FLOAT128
+    #ifdef BOOST_HAS_FLOAT128
     test_constant<float128>();
     test_linear<float128>();
     test_cardinal_constant<float128>();
     test_cardinal_linear<float128>();
-#endif
+    #endif
 
     return boost::math::test::report_errors();
 }
