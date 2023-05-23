@@ -470,8 +470,8 @@ void test_spots(RealType /*T*/, const char* type_name)
    test_spot(40, 70, 89, 170, static_cast<T>(0.0721901023798991), static_cast<T>(0.885447799131944), static_cast<T>(1 - 0.885447799131944), tolerance);
 
    boost::math::hypergeometric_distribution<RealType> d(50, 200, 500);
-   BOOST_CHECK_EQUAL(range(d).first, 0u);
-   BOOST_CHECK_EQUAL(range(d).second, 50u);
+   BOOST_CHECK_EQUAL(range(d).first, UINT64_C(0));
+   BOOST_CHECK_EQUAL(range(d).second, UINT64_C(50));
    BOOST_CHECK_CLOSE(mean(d), static_cast<RealType>(20), tolerance);
    BOOST_CHECK_CLOSE(mode(d), static_cast<RealType>(20), tolerance);
    // Test values and code revised to correct kurtosis using Mathematica algorithm and test values.
