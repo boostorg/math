@@ -100,12 +100,12 @@ namespace boost { namespace math {
 #  pragma warning(push)
 #  pragma warning(disable:4267)
 #endif
-      std::uint64_t r = dist.defective();
-      std::uint64_t n = dist.sample_count();
-      std::uint64_t N = dist.total();
-      std::uint64_t l = static_cast<std::uint64_t>((std::max)(INT64_C(0), static_cast<std::int64_t>(n + r) - static_cast<std::int64_t>(N)));
-      std::uint64_t u = (std::min)(r, n);
-      return std::pair<std::uint64_t, std::uint64_t>(l, u);
+      const auto r = dist.defective();
+      const auto n = dist.sample_count();
+      const auto N = dist.total();
+      const auto l = static_cast<std::uint64_t>((std::max)(INT64_C(0), static_cast<std::int64_t>(n + r) - static_cast<std::int64_t>(N)));
+      const auto u = (std::min)(r, n);
+      return std::make_pair(l, u);
 #ifdef _MSC_VER
 #  pragma warning(pop)
 #endif
@@ -137,7 +137,7 @@ namespace boost { namespace math {
       BOOST_MATH_STD_USING
       static const char* function = "boost::math::pdf(const hypergeometric_distribution<%1%>&, const %1%&)";
       RealType r = static_cast<RealType>(x);
-      auto u = lltrunc(r, typename policies::normalise<Policy, policies::rounding_error<policies::ignore_error> >::type());
+      auto u = static_cast<std::uint64_t>(lltrunc(r, typename policies::normalise<Policy, policies::rounding_error<policies::ignore_error> >::type()));
       if(u != r)
       {
          return boost::math::policies::raise_domain_error<RealType>(
@@ -166,7 +166,7 @@ namespace boost { namespace math {
       BOOST_MATH_STD_USING
       static const char* function = "boost::math::cdf(const hypergeometric_distribution<%1%>&, const %1%&)";
       RealType r = static_cast<RealType>(x);
-      auto u = lltrunc(r, typename policies::normalise<Policy, policies::rounding_error<policies::ignore_error> >::type());
+      auto u = static_cast<std::uint64_t>(lltrunc(r, typename policies::normalise<Policy, policies::rounding_error<policies::ignore_error> >::type()));
       if(u != r)
       {
          return boost::math::policies::raise_domain_error<RealType>(
@@ -195,7 +195,7 @@ namespace boost { namespace math {
       BOOST_MATH_STD_USING
       static const char* function = "boost::math::cdf(const hypergeometric_distribution<%1%>&, const %1%&)";
       RealType r = static_cast<RealType>(c.param);
-      std::uint64_t u = lltrunc(r, typename policies::normalise<Policy, policies::rounding_error<policies::ignore_error> >::type());
+      auto u = static_cast<std::uint64_t>(lltrunc(r, typename policies::normalise<Policy, policies::rounding_error<policies::ignore_error> >::type()));
       if(u != r)
       {
          return boost::math::policies::raise_domain_error<RealType>(
@@ -248,9 +248,9 @@ namespace boost { namespace math {
    template <class RealType, class Policy>
    inline RealType variance(const hypergeometric_distribution<RealType, Policy>& dist)
    {
-      RealType r = static_cast<RealType>(dist.defective());
-      RealType n = static_cast<RealType>(dist.sample_count());
-      RealType N = static_cast<RealType>(dist.total());
+      const auto r = static_cast<RealType>(dist.defective());
+      const auto n = static_cast<RealType>(dist.sample_count());
+      const auto N = static_cast<RealType>(dist.total());
       return n * r  * (N - r) * (N - n) / (N * N * (N - 1));
    } // RealType variance(const hypergeometric_distribution<RealType, Policy>& dist)
 
@@ -258,9 +258,9 @@ namespace boost { namespace math {
    inline RealType mode(const hypergeometric_distribution<RealType, Policy>& dist)
    {
       BOOST_MATH_STD_USING
-      RealType r = static_cast<RealType>(dist.defective());
-      RealType n = static_cast<RealType>(dist.sample_count());
-      RealType N = static_cast<RealType>(dist.total());
+      const auto r = static_cast<RealType>(dist.defective());
+      const auto n = static_cast<RealType>(dist.sample_count());
+      const auto N = static_cast<RealType>(dist.total());
       return floor((r + 1) * (n + 1) / (N + 2));
    }
 
@@ -268,9 +268,9 @@ namespace boost { namespace math {
    inline RealType skewness(const hypergeometric_distribution<RealType, Policy>& dist)
    {
       BOOST_MATH_STD_USING
-      RealType r = static_cast<RealType>(dist.defective());
-      RealType n = static_cast<RealType>(dist.sample_count());
-      RealType N = static_cast<RealType>(dist.total());
+      const auto r = static_cast<RealType>(dist.defective());
+      const auto n = static_cast<RealType>(dist.sample_count());
+      const auto N = static_cast<RealType>(dist.total());
       return (N - 2 * r) * sqrt(N - 1) * (N - 2 * n) / (sqrt(n * r * (N - r) * (N - n)) * (N - 2));
    } // RealType skewness(const hypergeometric_distribution<RealType, Policy>& dist)
 
@@ -284,11 +284,11 @@ namespace boost { namespace math {
       //  skewness | (sqrt(N - 1) (N - 2 m) (N - 2 n))/((N - 2) sqrt(m n(N - m) (N - n)))
       //  kurtosis | ((N - 1) N^2 ((3 m(N - m) (n^2 (-N) + (n - 2) N^2 + 6 n(N - n)))/N^2 - 6 n(N - n) + N(N + 1)))/(m n(N - 3) (N - 2) (N - m) (N - n))
      // Kurtosis[HypergeometricDistribution[n, m, N]]
-      RealType m = static_cast<RealType>(dist.defective()); // Failures or success events. (Also symbols K or M are used).
-      RealType n = static_cast<RealType>(dist.sample_count()); // draws or trials.
-      RealType n2 = n * n; // n^2
-      RealType N = static_cast<RealType>(dist.total()); // Total population from which n draws or trials are made.
-      RealType N2 = N * N; // N^2
+      const auto m = static_cast<RealType>(dist.defective()); // Failures or success events. (Also symbols K or M are used).
+      const auto n = static_cast<RealType>(dist.sample_count()); // draws or trials.
+      const auto n2 = n * n; // n^2
+      const auto N = static_cast<RealType>(dist.total()); // Total population from which n draws or trials are made.
+      const auto N2 = N * N; // N^2
       // result = ((N - 1) N^2 ((3 m(N - m) (n^2 (-N) + (n - 2) N^2 + 6 n(N - n)))/N^2 - 6 n(N - n) + N(N + 1)))/(m n(N - 3) (N - 2) (N - m) (N - n));
       RealType result = ((N-1)*N2*((3*m*(N-m)*(n2*(-N)+(n-2)*N2+6*n*(N-n)))/N2-6*n*(N-n)+N*(N+1)))/(m*n*(N-3)*(N-2)*(N-m)*(N-n));
       // Agrees with kurtosis hypergeometric distribution(50,200,500) kurtosis = 2.96917

@@ -26,6 +26,7 @@
 #include "functor.hpp"
 #include "handle_test_result.hpp"
 #include "table_type.hpp"
+#include <cstdint>
 
 #ifdef _MSC_VER
 #pragma warning (disable:4127 4512)
@@ -115,14 +116,14 @@ void expected_results()
 }
 
 template <class T>
-inline unsigned make_unsigned(T x)
+inline std::uint64_t make_unsigned(T x)
 {
-   return static_cast<unsigned>(x);
+   return static_cast<std::uint64_t>(x);
 }
 template<>
-inline unsigned make_unsigned(boost::math::concepts::real_concept x)
+inline std::uint64_t make_unsigned(boost::math::concepts::real_concept x)
 {
-   return static_cast<unsigned>(x.value());
+   return static_cast<std::uint64_t>(x.value());
 }
 
 template <class T>
