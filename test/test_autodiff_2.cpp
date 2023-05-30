@@ -15,9 +15,9 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(one_over_one_plus_x_squared, T, all_float_types) {
   f *= f;
   f += T(1);
   f = f.inverse();
-  BOOST_CHECK_EQUAL(f.derivative(0u), 0.5);
-  BOOST_CHECK_EQUAL(f.derivative(1u), -0.5);
-  BOOST_CHECK_EQUAL(f.derivative(2u), 0.5);
+  BOOST_CHECK_EQUAL(f.derivative(0u), T(0.5));
+  BOOST_CHECK_EQUAL(f.derivative(1u), T(-0.5));
+  BOOST_CHECK_EQUAL(f.derivative(2u), T(0.5));
   BOOST_CHECK_EQUAL(f.derivative(3u), 0);
   BOOST_CHECK_EQUAL(f.derivative(4u), -3);
 }
@@ -25,14 +25,14 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(one_over_one_plus_x_squared, T, all_float_types) {
 BOOST_AUTO_TEST_CASE_TEMPLATE(exp_test, T, all_float_types) {
   using std::exp;
   constexpr std::size_t m = 4;
-  const T cx = 2.0;
+  const T cx = 2;
   const auto x = make_fvar<T, m>(cx);
   auto y = exp(x);
   for (auto i : boost::irange(m + 1)) {
     // std::cout.precision(100);
     // std::cout << "y.derivative("<<i<<") = " << y.derivative(i) << ",
     // std::exp(cx) = " << std::exp(cx) << std::endl;
-    BOOST_CHECK_CLOSE_FRACTION(y.derivative(i), exp(cx),
+    BOOST_CHECK_CLOSE_FRACTION(static_cast<T>(y.derivative(i)), static_cast<T>(exp(cx)),
                                std::numeric_limits<T>::epsilon());
   }
 }
@@ -43,8 +43,8 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(pow, T, bin_float_types) {
   using std::pow;
   constexpr std::size_t m = 5;
   constexpr std::size_t n = 4;
-  const T cx = 2.0;
-  const T cy = 3.0;
+  const T cx = 2;
+  const T cy = 3;
   const auto x = make_fvar<T, m>(cx);
   const auto y = make_fvar<T, m, n>(cy);
   auto z0 = pow(x, cy);
@@ -98,13 +98,11 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(pow, T, bin_float_types) {
 }
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(pow0, T, bin_float_types) {
-  const T eps = 201 * std::numeric_limits<T>::epsilon(); // percent
   using std::pow;
   constexpr std::size_t m = 5;
-  constexpr std::size_t n = 4;
-  const T cx = 0.0;
+  const T cx = 0;
   {
-    const T cy = 3.0;
+    const T cy = 3;
     const auto x = make_fvar<T, m>(cx);
     auto z0 = pow(x, cy);
     BOOST_CHECK_EQUAL(z0.derivative(0u), pow(cx, cy));
@@ -116,7 +114,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(pow0, T, bin_float_types) {
     BOOST_CHECK_EQUAL(z0.derivative(5u), 0u);
   }
   {
-    const T cy = 3.5;
+    const T cy = T(3.5);
     const auto x = make_fvar<T, m>(cx);
     auto z0 = pow(x, cy);
     BOOST_CHECK_EQUAL(z0.derivative(0u), pow(cx, cy));
@@ -138,7 +136,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(pow2, T, bin_float_types) {
   constexpr std::size_t m = 5;
   constexpr std::size_t n = 5;
   const T cx = 2;
-  const T cy = 5 / 2.0;
+  const T cy = 5 / T(2);
   const auto x = make_fvar<T, m>(cx);
   const auto y = make_fvar<T, 0, n>(cy);
   const auto z = pow(x, y);
@@ -244,22 +242,22 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(sqrt_test, T, all_float_types) {
   using std::pow;
   using std::sqrt;
   constexpr std::size_t m = 5;
-  const T cx = 4.0;
+  const T cx = 4;
   auto x = make_fvar<T, m>(cx);
   auto y = sqrt(x);
-  BOOST_CHECK_CLOSE_FRACTION(y.derivative(0u), sqrt(cx),
+  BOOST_CHECK_CLOSE_FRACTION(y.derivative(0u), static_cast<T>(sqrt(cx)),
                              std::numeric_limits<T>::epsilon());
-  BOOST_CHECK_CLOSE_FRACTION(y.derivative(1u), 0.5 * pow(cx, -0.5),
+  BOOST_CHECK_CLOSE_FRACTION(y.derivative(1u), static_cast<T>(0.5 * pow(cx, T(-0.5))),
                              std::numeric_limits<T>::epsilon());
-  BOOST_CHECK_CLOSE_FRACTION(y.derivative(2u), -0.5 * 0.5 * pow(cx, -1.5),
+  BOOST_CHECK_CLOSE_FRACTION(y.derivative(2u), static_cast<T>(-0.5 * 0.5 * pow(cx, -1.5)),
                              std::numeric_limits<T>::epsilon());
-  BOOST_CHECK_CLOSE_FRACTION(y.derivative(3u), 0.5 * 0.5 * 1.5 * pow(cx, -2.5),
+  BOOST_CHECK_CLOSE_FRACTION(y.derivative(3u), static_cast<T>(0.5 * 0.5 * 1.5 * pow(cx, -2.5)),
                              std::numeric_limits<T>::epsilon());
   BOOST_CHECK_CLOSE_FRACTION(y.derivative(4u),
-                             -0.5 * 0.5 * 1.5 * 2.5 * pow(cx, -3.5),
+                             static_cast<T>(-0.5 * 0.5 * 1.5 * 2.5 * pow(cx, -3.5)),
                              std::numeric_limits<T>::epsilon());
   BOOST_CHECK_CLOSE_FRACTION(y.derivative(5u),
-                             0.5 * 0.5 * 1.5 * 2.5 * 3.5 * pow(cx, -4.5),
+                             static_cast<T>(0.5 * 0.5 * 1.5 * 2.5 * 3.5 * pow(cx, -4.5)),
                              std::numeric_limits<T>::epsilon());
   x = make_fvar<T, m>(0);
   y = sqrt(x);
@@ -275,7 +273,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(log_test, T, all_float_types) {
   using std::log;
   using std::pow;
   constexpr std::size_t m = 5;
-  const T cx = 2.0;
+  const T cx = 2;
   auto x = make_fvar<T, m>(cx);
   auto y = log(x);
   BOOST_CHECK_CLOSE_FRACTION(y.derivative(0u), log(cx),
@@ -306,8 +304,8 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(ylogx, T, all_float_types) {
   const T eps = (std::numeric_limits<T>::digits > 100 ? 300 : 100) * std::numeric_limits<T>::epsilon(); // percent
   constexpr std::size_t m = 5;
   constexpr std::size_t n = 4;
-  const T cx = 2.0;
-  const T cy = 3.0;
+  const T cx = 2;
+  const T cy = 3;
   const auto x = make_fvar<T, m>(cx);
   const auto y = make_fvar<T, m, n>(cy);
   auto z = y * log(x);
@@ -342,7 +340,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(frexp_test, T, all_float_types) {
   using std::exp2;
   using std::frexp;
   constexpr std::size_t m = 3;
-  const T cx = 3.5;
+  const T cx = T(3.5);
   const auto x = make_fvar<T, m>(cx);
   int exp, testexp;
   auto y = frexp(x, &exp);
@@ -357,7 +355,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(ldexp_test, T, all_float_types) {
   BOOST_MATH_STD_USING
   using boost::multiprecision::ldexp;
   constexpr auto m = 3u;
-  const T cx = 3.5;
+  const T cx = T(3.5);
   const auto x = make_fvar<T, m>(cx);
   constexpr auto exponent = 3;
   auto y = ldexp(x, exponent);
@@ -401,18 +399,18 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(acos_test, T, bin_float_types) {
   using std::pow;
   using std::sqrt;
   constexpr std::size_t m = 5;
-  const T cx = 0.5;
+  const T cx = T(0.5);
   auto x = make_fvar<T, m>(cx);
   auto y = acos(x);
   BOOST_CHECK_CLOSE(y.derivative(0u), acos(cx), eps);
   BOOST_CHECK_CLOSE(y.derivative(1u), -1 / sqrt(1 - cx * cx), eps);
-  BOOST_CHECK_CLOSE(y.derivative(2u), -cx / pow(1 - cx * cx, 1.5), eps);
+  BOOST_CHECK_CLOSE(y.derivative(2u), static_cast<T>(-cx / pow(1 - cx * cx, 1.5)), eps);
   BOOST_CHECK_CLOSE(y.derivative(3u),
-                    -(2 * cx * cx + 1) / pow(1 - cx * cx, 2.5), eps);
+                    static_cast<T>(-(2 * cx * cx + 1) / pow(1 - cx * cx, 2.5)), eps);
   BOOST_CHECK_CLOSE(y.derivative(4u),
-                    -3 * cx * (2 * cx * cx + 3) / pow(1 - cx * cx, 3.5), eps);
+                    static_cast<T>(-3 * cx * (2 * cx * cx + 3) / pow(1 - cx * cx, 3.5)), eps);
   BOOST_CHECK_CLOSE(y.derivative(5u),
-                    -(24 * (cx * cx + 3) * cx * cx + 9) / pow(1 - cx * cx, 4.5),
+                    static_cast<T>(-(24 * (cx * cx + 3) * cx * cx + 9) / pow(1 - cx * cx, 4.5)),
                     eps);
 }
 
@@ -445,18 +443,18 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(asin_test, T, bin_float_types) {
   using std::pow;
   using std::sqrt;
   constexpr std::size_t m = 5;
-  const T cx = 0.5;
+  const T cx = T(0.5);
   auto x = make_fvar<T, m>(cx);
   auto y = asin(x);
   BOOST_CHECK_CLOSE(y.derivative(0u), asin(static_cast<T>(x)), eps);
   BOOST_CHECK_CLOSE(y.derivative(1u), 1 / sqrt(1 - cx * cx), eps);
-  BOOST_CHECK_CLOSE(y.derivative(2u), cx / pow(1 - cx * cx, 1.5), eps);
-  BOOST_CHECK_CLOSE(y.derivative(3u), (2 * cx * cx + 1) / pow(1 - cx * cx, 2.5),
+  BOOST_CHECK_CLOSE(y.derivative(2u), cx / pow(1 - cx * cx, T(1.5)), eps);
+  BOOST_CHECK_CLOSE(y.derivative(3u), (2 * cx * cx + 1) / pow(1 - cx * cx, T(2.5)),
                     eps);
   BOOST_CHECK_CLOSE(y.derivative(4u),
-                    3 * cx * (2 * cx * cx + 3) / pow(1 - cx * cx, 3.5), eps);
+                    3 * cx * (2 * cx * cx + 3) / pow(1 - cx * cx, T(3.5)), eps);
   BOOST_CHECK_CLOSE(y.derivative(5u),
-                    (24 * (cx * cx + 3) * cx * cx + 9) / pow(1 - cx * cx, 4.5),
+                    (24 * (cx * cx + 3) * cx * cx + 9) / pow(1 - cx * cx, T(4.5)),
                     eps);
 }
 
@@ -477,7 +475,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(asin_derivative, T, bin_float_types) {
   using std::pow;
   using std::sqrt;
   constexpr std::size_t m = 4;
-  const T cx(0.5);
+  const T cx = T(0.5);
   auto x = make_fvar<T, m>(cx);
   auto y = T(1) - x * x;
   BOOST_CHECK_EQUAL(y.derivative(0u), 1 - cx * cx);
@@ -488,19 +486,19 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(asin_derivative, T, bin_float_types) {
   y = sqrt(y);
   BOOST_CHECK_EQUAL(y.derivative(0u), sqrt(1 - cx * cx));
   BOOST_CHECK_CLOSE(y.derivative(1u), -cx / sqrt(1 - cx * cx), eps);
-  BOOST_CHECK_CLOSE(y.derivative(2u), -1 / pow(1 - cx * cx, 1.5), eps);
-  BOOST_CHECK_CLOSE(y.derivative(3u), -3 * cx / pow(1 - cx * cx, 2.5), eps);
+  BOOST_CHECK_CLOSE(y.derivative(2u), -1 / pow(1 - cx * cx, T(1.5)), eps);
+  BOOST_CHECK_CLOSE(y.derivative(3u), -3 * cx / pow(1 - cx * cx, T(2.5)), eps);
   BOOST_CHECK_CLOSE(y.derivative(4u),
-                    -(12 * cx * cx + 3) / pow(1 - cx * cx, 3.5), eps);
+                    -(12 * cx * cx + 3) / pow(1 - cx * cx, T(3.5)), eps);
   y = y.inverse(); // asin'(x) = 1 / sqrt(1-x*x).
   BOOST_CHECK_CLOSE(y.derivative(0u), 1 / sqrt(1 - cx * cx), eps);
-  BOOST_CHECK_CLOSE(y.derivative(1u), cx / pow(1 - cx * cx, 1.5), eps);
-  BOOST_CHECK_CLOSE(y.derivative(2u), (2 * cx * cx + 1) / pow(1 - cx * cx, 2.5),
+  BOOST_CHECK_CLOSE(y.derivative(1u), cx / pow(1 - cx * cx, T(1.5)), eps);
+  BOOST_CHECK_CLOSE(y.derivative(2u), (2 * cx * cx + 1) / pow(1 - cx * cx, T(2.5)),
                     eps);
   BOOST_CHECK_CLOSE(y.derivative(3u),
-                    3 * cx * (2 * cx * cx + 3) / pow(1 - cx * cx, 3.5), eps);
+                    3 * cx * (2 * cx * cx + 3) / pow(1 - cx * cx, T(3.5)), eps);
   BOOST_CHECK_CLOSE(y.derivative(4u),
-                    (24 * (cx * cx + 3) * cx * cx + 9) / pow(1 - cx * cx, 4.5),
+                    (24 * (cx * cx + 3) * cx * cx + 9) / pow(1 - cx * cx, T(4.5)),
                     eps);
 }
 
