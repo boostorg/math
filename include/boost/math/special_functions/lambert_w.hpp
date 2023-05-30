@@ -1267,10 +1267,8 @@ inline T lambert_w0_imp(T z, const Policy& pol, const std::integral_constant<int
          return boost::math::policies::raise_domain_error<T>(function, "Expected z >= -e^-1 (-0.367879...) but got %1%.", z, pol);
       return -1;
    }
-   else // z < 0.05
-   {
-      return lambert_w_negative_rational_float(z, pol);
-   }
+
+   return lambert_w_negative_rational_float(z, pol);
 } // T lambert_w0_imp(T z, const Policy& pol, const std::integral_constant<int, 1>&) for 32-bit usually float.
 
 template <typename T>
