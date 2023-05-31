@@ -412,7 +412,7 @@ T digamma_imp(T x, const Tag* t, const Policy& pol)
       // Argument reduction for tan:
       T remainder = x - floor(x);
       // Shift to negative if > 0.5:
-      if(remainder > 0.5)
+      if(remainder > T(0.5))
       {
          remainder -= 1;
       }
@@ -478,7 +478,7 @@ T digamma_imp(T x, const std::integral_constant<int, 0>* t, const Policy& pol)
       // Argument reduction for tan:
       T remainder = x - floor(x);
       // Shift to negative if > 0.5:
-      if(remainder > 0.5)
+      if(remainder > T(0.5))
       {
          remainder -= 1;
       }
