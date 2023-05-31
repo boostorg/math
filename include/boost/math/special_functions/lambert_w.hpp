@@ -426,8 +426,7 @@ T lambert_w_singularity_series(const T p)
                         p * q[10]
                         )))))))));
   }
-  else
-  { // Use all 20 near-singularity series terms.
+   // Use all 20 near-singularity series terms.
     return
       -1 +
       p * (1 +
@@ -459,7 +458,7 @@ T lambert_w_singularity_series(const T p)
     //                                                p*q[24] +
     //                                                 p*q[25]
     //                                         )))))))))))))))))));
-  }
+
 } // template<typename T = double> T lambert_w_singularity_series(const T p)
 
 

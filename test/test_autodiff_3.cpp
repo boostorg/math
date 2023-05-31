@@ -13,7 +13,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(atanh_test, T, all_float_types) {
   using boost::math::atanh;
   const T eps = 3000 * test_constants_t<T>::pct_epsilon(); // percent
   constexpr unsigned m = 5;
-  const T cx = 0.5;
+  const T cx = T(0.5);
   auto x = make_fvar<T, m>(cx);
   auto y = atanh(x);
   // BOOST_CHECK_EQUAL(y.derivative(0) , atanh(cx)); // fails due to overload
