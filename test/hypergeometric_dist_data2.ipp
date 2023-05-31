@@ -8,6 +8,15 @@
 // (5) are commented out as they are too close to numeric_limits<double>::min(), to expect
 // our implementation to cope :-(
 //
+
+#ifdef _MSC_VER
+#pragma warning (disable:4127 4512)
+#elif __GNUC__ >= 5
+#  pragma GCC diagnostic ignored "-Woverflow"
+#elif defined(__clang__)
+#  pragma clang diagnostic ignored "-Wliteral-range"
+#endif
+
 #define SC_(x) static_cast<typename table_type<T>::type>(BOOST_JOIN(x, L))
    static const std::array<std::array<T, 7>, 1542-5> hypergeometric_dist_data2 = {{
       {{ SC_(3.0), SC_(3.0), SC_(4.0), SC_(3.0), SC_(0.25), SC_(1.0), SC_(0.0) }}, 
