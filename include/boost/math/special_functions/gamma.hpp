@@ -264,7 +264,7 @@ T lgamma_imp(T z, const Policy& pol, const Lanczos& l, int* sign = nullptr)
    else
    {
       // regular evaluation:
-      T zgh = static_cast<T>(z + Lanczos::g() - boost::math::constants::half<T>());
+      T zgh = static_cast<T>(z + T(Lanczos::g()) - boost::math::constants::half<T>());
       result = log(zgh) - 1;
       result *= z - 0.5f;
       //

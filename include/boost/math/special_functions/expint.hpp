@@ -457,7 +457,7 @@ T expint_imp(unsigned n, T z, const Policy& pol, const Tag& tag)
    bool f;
    if(n < 3)
    {
-      f = z < 0.5;
+      f = z < T(0.5);
    }
    else
    {

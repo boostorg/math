@@ -98,7 +98,7 @@ T ellint_f_imp(T phi, T k, const Policy& pol)
        T m = boost::math::round((phi - rphi) / constants::half_pi<T>());
        BOOST_MATH_INSTRUMENT_VARIABLE(m);
        int s = 1;
-       if(boost::math::tools::fmod_workaround(m, T(2)) > 0.5)
+       if(boost::math::tools::fmod_workaround(m, T(2)) > T(0.5))
        {
           m += 1;
           s = -1;

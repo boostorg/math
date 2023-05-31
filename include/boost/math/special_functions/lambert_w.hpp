@@ -398,7 +398,7 @@ T lambert_w_singularity_series(const T p)
   }
 #endif // BOOST_MATH_INSTRUMENT_LAMBERT_W_TERMS
 
-  if (absp < 0.01159)
+  if (absp < T(0.01159))
   { // Only 6 near-singularity series terms are useful.
     return
       -1 +
@@ -410,7 +410,7 @@ T lambert_w_singularity_series(const T p)
                 p * q[6]
                 )))));
   }
-  else if (absp < 0.0766) // Use 10 near-singularity series terms.
+  else if (absp < T(0.0766)) // Use 10 near-singularity series terms.
   { // Use 10 near-singularity series terms.
     return
       -1 +
@@ -1159,26 +1159,25 @@ T lambert_w_positive_rational_float(T z)
       T log_w = log(z);
       return log_w + Y + boost::math::tools::evaluate_polynomial(P, log_w) / boost::math::tools::evaluate_polynomial(Q, log_w);
    }
-   else // 32 < log(z) < 100
-   {
-      // Max error in interpolated form: 1.491e-08
-      static const T Y = -4.012863159e+00f;
-      static const T P[] = {
-         4.431629226e+00f,
-         2.756690487e-01f,
-         -2.992956930e-03f,
-         -4.912259384e-05f,
-      };
-      static const T Q[] = {
-         1.000000000e+00f,
-         2.015434591e-01f,
-         4.949426142e-03f,
-         1.609659944e-05f,
-         -5.111523436e-09f,
-      };
-      T log_w = log(z);
-      return log_w + Y + boost::math::tools::evaluate_polynomial(P, log_w) / boost::math::tools::evaluate_polynomial(Q, log_w);
-   }
+
+    // Max error in interpolated form: 1.491e-08
+    static const T Y = -4.012863159e+00f;
+    static const T P[] = {
+        4.431629226e+00f,
+        2.756690487e-01f,
+        -2.992956930e-03f,
+        -4.912259384e-05f,
+    };
+    static const T Q[] = {
+        1.000000000e+00f,
+        2.015434591e-01f,
+        4.949426142e-03f,
+        1.609659944e-05f,
+        -5.111523436e-09f,
+    };
+    T log_w = log(z);
+    return log_w + Y + boost::math::tools::evaluate_polynomial(P, log_w) / boost::math::tools::evaluate_polynomial(Q, log_w);
+
 }
 
 template <typename T, typename Policy>
@@ -1255,7 +1254,7 @@ inline T lambert_w0_imp(T z, const Policy& pol, const std::integral_constant<int
     return boost::math::policies::raise_overflow_error<T>(function, "Expected a finite value but got %1%.", z, pol);
   }
 
-   if (z >= 0.05) // Fukushima switch point.
+   if (z >= T(0.05)) // Fukushima switch point.
    // if (z >= 0.045) // 34 terms makes 128-bit 'exact' below 0.045.
    { // Normal ranges using several rational polynomials.
       return lambert_w_positive_rational_float(z);
@@ -1871,7 +1870,7 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
   // Check that z argument value is not smaller than lookup_table G[64]
   // std::cout << "(z > wm1zs[63]) = " << std::boolalpha << (z > wm1zs[63]) << std::endl;
 
-  if (z >= wm1zs[63]) // wm1zs[63]  = -1.0264389699511282259046957018510946438e-26L  W = 64.00000000000000000
+  if (z >= T(wm1zs[63])) // wm1zs[63]  = -1.0264389699511282259046957018510946438e-26L  W = 64.00000000000000000
   {  // z >= -1.0264389699511303e-26 (but z != 0 and z >= std::numeric_limits<T>::min() and so NOT denormalized).
 
     // Some info on Lambert W-1 values for extreme values of z.
@@ -1956,14 +1955,14 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
     // Bracketing sequence  n = (2, 4, 8, 16, 32, 64) for W-1 branch. (0 is -infinity)
     // Since z is probably quite small, start with lowest n (=2).
     int n = 2;
-    if (wm1zs[n - 1] > z)
+    if (T(wm1zs[n - 1]) > z)
     {
       goto bisect;
     }
     for (int j = 1; j <= 5; ++j)
     {
       n *= 2;
-      if (wm1zs[n - 1] > z)
+      if (T(wm1zs[n - 1]) > z)
       {
         goto overshot;
       }
@@ -1983,7 +1982,7 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
         {
           break; // goto bisect;
         }
-        if (wm1zs[n - nh - 1] > z)
+        if (T(wm1zs[n - nh - 1]) > z)
         {
           n -= nh;
         }
@@ -2027,7 +2026,7 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
     using calc_type = typename std::conditional<std::is_constructible<lookup_t, T>::value, lookup_t, T>::type;
 
     calc_type w = -static_cast<calc_type>(n); // Equation 25,
-    calc_type y = static_cast<calc_type>(z * wm1es[n - 1]); // Equation 26,
+    calc_type y = static_cast<calc_type>(z * T(wm1es[n - 1])); // Equation 26,
                                                           // Perform the bisections fractional bisections for necessary precision.
     for (int j = 0; j < bisections; ++j)
     { // Equation 27.

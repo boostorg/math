@@ -949,7 +949,7 @@ namespace boost
             // Now look back at the results from T1 and T2 and see if either gave better
             // results than we could get from the 64-bit precision versions.
             //
-            if((std::min)(p1.second, p2.second) < 1e-20)
+            if((std::min)(p1.second, p2.second) < RealType(1e-20))
             {
                return p1.second < p2.second ? p1.first : p2.first;
             }
@@ -1001,7 +1001,7 @@ namespace boost
             } // if(fabs_a <= 1.0)
             else 
             {
-               if( h <= 0.67 )
+               if( h <= RealType(0.67) )
                {
                   const RealType normh = owens_t_znorm1(h, pol);
                   const RealType normah = owens_t_znorm1(fabs_ah, pol);

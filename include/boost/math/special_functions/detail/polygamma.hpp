@@ -85,7 +85,7 @@ namespace boost { namespace math { namespace detail{
      {
         // Either n is very large, or the power term underflows,
         // set the initial values of part_term, term and sum via logs:
-        part_term = static_cast<T>(boost::math::lgamma(n, pol) - (n + 1) * log(x));
+        part_term = static_cast<T>(T(boost::math::lgamma(n, pol)) - (n + 1) * log(x));
         sum = exp(part_term + log(n + 2 * x) - boost::math::constants::ln_two<T>());
         part_term += log(T(n) * (n + 1)) - boost::math::constants::ln_two<T>() - log(x);
         part_term = exp(part_term);
