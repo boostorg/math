@@ -205,7 +205,7 @@
 //
 #  define BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 #endif
-#if !defined(BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS) && (LDBL_MANT_DIG == 106) && (LDBL_MIN_EXP > DBL_MIN_EXP)
+#if !defined(BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS) && (LDBL_MANT_DIG == 106) && (LDBL_MIN_EXP > DBL_MIN_EXP) && !(defined(__powerpc__) && defined(__LONG_DOUBLE_IBM128__))
 //
 // Generic catch all case for gcc's "double-double" long double type.
 // We do not support this as it's not even remotely IEEE conforming:
