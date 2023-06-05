@@ -1043,7 +1043,7 @@ T lambert_w_positive_rational_float(T z)
    BOOST_MATH_STD_USING
    if (z < 2)
    {
-      if (z < 0.5)
+      if (z < T(0.5))
       { // 0.05 < z < 0.5
         // Maximum Deviation Found:                     2.993e-08
         // Expected Error Term : 2.993e-08
@@ -1119,7 +1119,7 @@ T lambert_w_positive_rational_float(T z)
       };
       return Y + boost::math::tools::evaluate_rational(P, Q, z);
    }
-   else if (z < 9897.12905874)  // 2.8 < log(z) < 9.2
+   else if (z < T(9897.12905874))  // 2.8 < log(z) < 9.2
    {
       // Max error in interpolated form: 1.771e-08
       static const T Y = -1.402973175e+00f;
@@ -1139,7 +1139,7 @@ T lambert_w_positive_rational_float(T z)
       T log_w = log(z);
       return log_w + Y + boost::math::tools::evaluate_polynomial(P, log_w) / boost::math::tools::evaluate_polynomial(Q, log_w);
    }
-   else if (z < 7.896296e+13)  // 9.2 < log(z) <= 32
+   else if (z < T(7.896296e+13))  // 9.2 < log(z) <= 32
    {
       // Max error in interpolated form: 5.821e-08
       static const T Y = -2.735729218e+00f;
@@ -1184,9 +1184,9 @@ template <typename T, typename Policy>
 T lambert_w_negative_rational_float(T z, const Policy& pol)
 {
    BOOST_MATH_STD_USING
-   if (z > -0.27)
+   if (z > T(-0.27))
    {
-      if (z < -0.051)
+      if (z < T(-0.051))
       {
          // -0.27 < z < -0.051
          // Max error in interpolated form: 5.080e-08
@@ -1211,7 +1211,7 @@ T lambert_w_negative_rational_float(T z, const Policy& pol)
          return lambert_w0_small_z(z, pol);
       }
    }
-   else if (z > -0.3578794411714423215955237701)
+   else if (z > T(-0.3578794411714423215955237701))
    { // Very close to branch singularity.
      // Max error in interpolated form: 5.269e-08
       static const T Y = 1.220928431e-01f;
