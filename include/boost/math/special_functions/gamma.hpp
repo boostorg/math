@@ -99,7 +99,7 @@ T sinpx(T z)
       dist = z - fl;
    }
    BOOST_MATH_ASSERT(fl >= 0);
-   if(dist > 0.5)
+   if(dist > T(0.5))
       dist = 1 - dist;
    T result = sin(dist*boost::math::constants::pi<T>());
    return sign*z*result;
@@ -175,7 +175,7 @@ T gamma_imp(T z, const Policy& pol, const Lanczos& l)
          BOOST_MATH_INSTRUMENT_VARIABLE(zgh);
          if(lzgh * z / 2 > tools::log_max_value<T>())
             return boost::math::sign(result) * policies::raise_overflow_error<T>(function, "Result of tgamma is too large to represent.", pol);
-         T hp = pow(zgh, (z / 2) - T(0.25));
+         T hp = pow(zgh, T((z / 2) - T(0.25)));
          BOOST_MATH_INSTRUMENT_VARIABLE(hp);
          result *= hp / exp(zgh);
          BOOST_MATH_INSTRUMENT_VARIABLE(result);
@@ -187,9 +187,9 @@ T gamma_imp(T z, const Policy& pol, const Lanczos& l)
       else
       {
          BOOST_MATH_INSTRUMENT_VARIABLE(zgh);
-         BOOST_MATH_INSTRUMENT_VARIABLE(pow(zgh, z - boost::math::constants::half<T>()));
+         BOOST_MATH_INSTRUMENT_VARIABLE(pow(zgh, T(z - boost::math::constants::half<T>())));
          BOOST_MATH_INSTRUMENT_VARIABLE(exp(zgh));
-         result *= pow(zgh, z - boost::math::constants::half<T>()) / exp(zgh);
+         result *= pow(zgh, T(z - boost::math::constants::half<T>())) / exp(zgh);
          BOOST_MATH_INSTRUMENT_VARIABLE(result);
       }
    }
@@ -735,7 +735,7 @@ T tgammap1m1_imp(T dz, Policy const& pol, const Lanczos& l)
    T result;
    if(dz < 0)
    {
-      if(dz < -0.5)
+      if(dz < T(-0.5))
       {
          // Best method is simply to subtract 1 from tgamma:
          result = boost::math::tgamma(1+dz, pol) - 1;
@@ -774,7 +774,7 @@ inline T tgammap1m1_imp(T z, Policy const& pol,
 {
    BOOST_MATH_STD_USING // ADL of std names
 
-   if(fabs(z) < 0.55)
+   if(fabs(z) < T(0.55))
    {
       return boost::math::expm1(log_gamma_near_1(z, pol));
    }
@@ -826,7 +826,7 @@ T full_igamma_prefix(T a, T z, const Policy& pol)
       }
       else if(a >= 1)
       {
-         prefix = pow(z / exp(z/a), a);
+         prefix = pow(T(z / exp(z/a)), a);
       }
       else
       {
@@ -841,7 +841,7 @@ T full_igamma_prefix(T a, T z, const Policy& pol)
       }
       else if(z/a < tools::log_max_value<T>())
       {
-         prefix = pow(z / exp(z/a), a);
+         prefix = pow(T(z / exp(z/a)), a);
       }
       else
       {
@@ -927,7 +927,7 @@ T regularised_gamma_prefix(T a, T z, const Policy& pol, const Lanczos& l)
          }
          else if((amza > tools::log_min_value<T>()) && (amza < tools::log_max_value<T>()))
          {
-            prefix = pow((z * exp(amza)) / agh, a);
+            prefix = pow(T((z * exp(amza)) / agh), a);
          }
          else
          {
@@ -936,7 +936,7 @@ T regularised_gamma_prefix(T a, T z, const Policy& pol, const Lanczos& l)
       }
       else
       {
-         prefix = pow(z / agh, a) * exp(amz);
+         prefix = pow(T(z / agh), a) * exp(amz);
       }
    }
    prefix *= sqrt(agh / boost::math::constants::e<T>()) / Lanczos::lanczos_sum_expG_scaled(a);
@@ -993,8 +993,8 @@ T regularised_gamma_prefix(T a, T z, const Policy& pol, const lanczos::undefined
          // as we go.  And again recurse down to the result.
          //
          T scaled_gamma = scaled_tgamma_no_lanczos(T(a + shift), pol);
-         T power_term_1 = pow(z / (a + shift), a);
-         T power_term_2 = pow(a + shift, -shift);
+         T power_term_1 = pow(T(z / (a + shift)), a);
+         T power_term_2 = pow(T(a + shift), T(-shift));
          T power_term_3 = exp(a + shift - z);
          if ((0 == power_term_1) || (0 == power_term_2) || (0 == power_term_3) || (fabs(a + shift - z) > tools::log_max_value<T>()))
          {
@@ -1258,12 +1258,12 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert,
       invert = !invert;
       eval_method = 7;
    }
-   else if(x < 0.5)
+   else if(x < T(0.5))
    {
       //
       // Changeover criterion chosen to give a changeover at Q ~ 0.33
       //
-      if(-0.4 / log(x) < a)
+      if(T(-0.4) / log(x) < a)
       {
          eval_method = 2;
       }
@@ -1272,7 +1272,7 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert,
          eval_method = 3;
       }
    }
-   else if(x < 1.1)
+   else if(x < T(1.1))
    {
       //
       // Changeover here occurs when P ~ 0.75 or Q ~ 0.25:
@@ -1552,7 +1552,7 @@ T tgamma_delta_ratio_imp_lanczos(T z, T delta, const Policy& pol, const Lanczos&
          return 1 / (z * boost::math::tgamma(z + delta, pol));
       }
    }
-   T zgh = static_cast<T>(z + Lanczos::g() - constants::half<T>());
+   T zgh = static_cast<T>(z + T(Lanczos::g()) - constants::half<T>());
    T result;
    if(z + delta == z)
    {
@@ -1577,12 +1577,12 @@ T tgamma_delta_ratio_imp_lanczos(T z, T delta, const Policy& pol, const Lanczos&
       }
       else
       {
-         result = pow(zgh / (zgh + delta), z - constants::half<T>());
+         result = pow(T(zgh / (zgh + delta)), T(z - constants::half<T>()));
       }
       // Split the calculation up to avoid spurious overflow:
       result *= Lanczos::lanczos_sum(z) / Lanczos::lanczos_sum(T(z + delta));
    }
-   result *= pow(constants::e<T>() / (zgh + delta), delta);
+   result *= pow(T(constants::e<T>() / (zgh + delta)), delta);
    return result;
 }
 //
@@ -1617,7 +1617,7 @@ T tgamma_delta_ratio_imp_lanczos(T z, T delta, const Policy& pol, const lanczos:
       T scaled_tgamma_num = scaled_tgamma_no_lanczos(z, pol);
       T scaled_tgamma_denom = scaled_tgamma_no_lanczos(T(z + delta), pol);
       T result = scaled_tgamma_num / scaled_tgamma_denom;
-      result *= exp(z * boost::math::log1p(-delta / (z + delta), pol)) * pow((delta + z) / constants::e<T>(), -delta);
+      result *= exp(z * boost::math::log1p(-delta / (z + delta), pol)) * pow(T((delta + z) / constants::e<T>()), -delta);
       return result;
    }
    //

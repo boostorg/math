@@ -1231,11 +1231,8 @@ T lambert_w_negative_rational_float(T z, const Policy& pol)
       T d = z + 0.367879441171442321595523770161460867445811f;
       return -d / (Y + boost::math::tools::evaluate_polynomial(P, d) / boost::math::tools::evaluate_polynomial(Q, d));
    }
-   else
-   {
-      // z is very close (within 0.01) of the singularity at e^-1.
-      return lambert_w_singularity_series(get_near_singularity_param(z, pol));
-   }
+
+    return lambert_w_singularity_series(get_near_singularity_param(z, pol));
 }
 
 //! Lambert_w0 @b 'float' implementation, selected when T is 32-bit precision.

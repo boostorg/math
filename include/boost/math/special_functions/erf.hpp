@@ -322,7 +322,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
             BOOST_MATH_BIG_CONSTANT(T, 53, 0.0563921837420478160373),
             BOOST_MATH_BIG_CONSTANT(T, 53, 0.00410369723978904575884),
          };
-         result = Y + tools::evaluate_polynomial(P, T(z - 1.5)) / tools::evaluate_polynomial(Q, T(z - 1.5));
+         result = Y + tools::evaluate_polynomial(P, T(z - 1.5)) / tools::evaluate_polynomial(Q, z - T(1.5));
          T hi, lo;
          int expon;
          hi = floor(ldexp(frexp(z, &expon), 26));
@@ -355,7 +355,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
             BOOST_MATH_BIG_CONSTANT(T, 53, 0.0105982906484876531489),
             BOOST_MATH_BIG_CONSTANT(T, 53, 0.000479411269521714493907),
          };
-         result = Y + tools::evaluate_polynomial(P, T(z - 3.5)) / tools::evaluate_polynomial(Q, T(z - 3.5));
+         result = Y + tools::evaluate_polynomial(P, T(z - 3.5)) / tools::evaluate_polynomial(Q, z - T(3.5));
          T hi, lo;
          int expon;
          hi = floor(ldexp(frexp(z, &expon), 26));

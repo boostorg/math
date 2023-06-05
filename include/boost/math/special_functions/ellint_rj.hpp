@@ -62,7 +62,7 @@ T ellint_rc1p_imp(T y, const Policy& pol)
    }
    else
    {
-      if(y > -0.5)
+      if(y > T(-0.5))
       {
          T arg = sqrt(-y);
          result = (boost::math::log1p(arg, pol) - boost::math::log1p(-arg, pol)) / (2 * sqrt(-y));
@@ -180,7 +180,7 @@ T ellint_rj_imp(T x, T y, T z, T p, const Policy& pol)
          // y = z = p:
          return ellint_rd_imp(x, y, y, pol);
       }
-      else if((std::max)(y, p) / (std::min)(y, p) > 1.2)
+      else if((std::max)(y, p) / (std::min)(y, p) > T(1.2))
       {
          // y = z:
          return 3 * (ellint_rc_imp(x, y, pol) - ellint_rc_imp(x, p, pol)) / (p - y);
