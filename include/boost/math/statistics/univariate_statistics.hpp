@@ -10,6 +10,7 @@
 #include <boost/math/statistics/detail/single_pass.hpp>
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/assert.hpp>
+#include <boost/math/concepts/concepts.hpp>
 #include <algorithm>
 #include <iterator>
 #include <tuple>
@@ -25,7 +26,7 @@
 
 namespace boost::math::statistics {
 
-template<class ExecutionPolicy, class ForwardIterator>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_FORWARD_ITER ForwardIterator>
 inline auto mean(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last)
 {
     using Real = typename std::iterator_traits<ForwardIterator>::value_type;
@@ -55,25 +56,25 @@ inline auto mean(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator 
     }
 }
 
-template<class ExecutionPolicy, class Container>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_CONTAINER Container>
 inline auto mean(ExecutionPolicy&& exec, Container const & v)
 {
     return mean(exec, std::cbegin(v), std::cend(v));
 }
 
-template<class ForwardIterator>
+template<BOOST_MATH_FORWARD_ITER ForwardIterator>
 inline auto mean(ForwardIterator first, ForwardIterator last)
 {
     return mean(std::execution::seq, first, last);
 }
 
-template<class Container>
+template<BOOST_MATH_CONTAINER Container>
 inline auto mean(Container const & v)
 {
     return mean(std::execution::seq, std::cbegin(v), std::cend(v));
 }
 
-template<class ExecutionPolicy, class ForwardIterator>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_FORWARD_ITER ForwardIterator>
 inline auto variance(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last)
 {
     using Real = typename std::iterator_traits<ForwardIterator>::value_type;
@@ -104,25 +105,25 @@ inline auto variance(ExecutionPolicy&& exec, ForwardIterator first, ForwardItera
     }
 }
 
-template<class ExecutionPolicy, class Container>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_CONTAINER Container>
 inline auto variance(ExecutionPolicy&& exec, Container const & v)
 {
     return variance(exec, std::cbegin(v), std::cend(v));
 }
 
-template<class ForwardIterator>
+template<BOOST_MATH_FORWARD_ITER ForwardIterator>
 inline auto variance(ForwardIterator first, ForwardIterator last)
 {
     return variance(std::execution::seq, first, last);
 }
 
-template<class Container>
+template<BOOST_MATH_CONTAINER Container>
 inline auto variance(Container const & v)
 {
     return variance(std::execution::seq, std::cbegin(v), std::cend(v));
 }
 
-template<class ExecutionPolicy, class ForwardIterator>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_FORWARD_ITER ForwardIterator>
 inline auto sample_variance(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last)
 {
     const auto n = std::distance(first, last);
@@ -130,25 +131,25 @@ inline auto sample_variance(ExecutionPolicy&& exec, ForwardIterator first, Forwa
     return n*variance(exec, first, last)/(n-1);
 }
 
-template<class ExecutionPolicy, class Container>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_CONTAINER Container>
 inline auto sample_variance(ExecutionPolicy&& exec, Container const & v)
 {
     return sample_variance(exec, std::cbegin(v), std::cend(v));
 }
 
-template<class ForwardIterator>
+template<BOOST_MATH_FORWARD_ITER ForwardIterator>
 inline auto sample_variance(ForwardIterator first, ForwardIterator last)
 {
     return sample_variance(std::execution::seq, first, last);
 }
 
-template<class Container>
+template<BOOST_MATH_CONTAINER Container>
 inline auto sample_variance(Container const & v)
 {
     return sample_variance(std::execution::seq, std::cbegin(v), std::cend(v));
 }
 
-template<class ExecutionPolicy, class ForwardIterator>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_FORWARD_ITER ForwardIterator>
 inline auto mean_and_sample_variance(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last)
 {
     using Real = typename std::iterator_traits<ForwardIterator>::value_type;
@@ -181,25 +182,25 @@ inline auto mean_and_sample_variance(ExecutionPolicy&& exec, ForwardIterator fir
     }
 }
 
-template<class ExecutionPolicy, class Container>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_CONTAINER Container>
 inline auto mean_and_sample_variance(ExecutionPolicy&& exec, Container const & v)
 {
     return mean_and_sample_variance(exec, std::cbegin(v), std::cend(v));
 }
 
-template<class ForwardIterator>
+template<BOOST_MATH_FORWARD_ITER ForwardIterator>
 inline auto mean_and_sample_variance(ForwardIterator first, ForwardIterator last)
 {
     return mean_and_sample_variance(std::execution::seq, first, last);
 }
 
-template<class Container>
+template<BOOST_MATH_CONTAINER Container>
 inline auto mean_and_sample_variance(Container const & v)
 {
     return mean_and_sample_variance(std::execution::seq, std::cbegin(v), std::cend(v));
 }
 
-template<class ExecutionPolicy, class ForwardIterator>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_FORWARD_ITER ForwardIterator>
 inline auto first_four_moments(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last)
 {
     using Real = typename std::iterator_traits<ForwardIterator>::value_type;
@@ -236,26 +237,26 @@ inline auto first_four_moments(ExecutionPolicy&& exec, ForwardIterator first, Fo
     }
 }
 
-template<class ExecutionPolicy, class Container>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_CONTAINER Container>
 inline auto first_four_moments(ExecutionPolicy&& exec, Container const & v)
 {
     return first_four_moments(exec, std::cbegin(v), std::cend(v));
 }
 
-template<class ForwardIterator>
+template<BOOST_MATH_FORWARD_ITER ForwardIterator>
 inline auto first_four_moments(ForwardIterator first, ForwardIterator last)
 {
     return first_four_moments(std::execution::seq, first, last);
 }
 
-template<class Container>
+template<BOOST_MATH_CONTAINER Container>
 inline auto first_four_moments(Container const & v)
 {
     return first_four_moments(std::execution::seq, std::cbegin(v), std::cend(v));
 }
 
 // https://prod.sandia.gov/techlib-noauth/access-control.cgi/2008/086212.pdf
-template<class ExecutionPolicy, class ForwardIterator>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_FORWARD_ITER ForwardIterator>
 inline auto skewness(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last)
 {
     using Real = typename std::iterator_traits<ForwardIterator>::value_type;
@@ -298,19 +299,19 @@ inline auto skewness(ExecutionPolicy&& exec, ForwardIterator first, ForwardItera
     }
 }
 
-template<class ExecutionPolicy, class Container>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_CONTAINER Container>
 inline auto skewness(ExecutionPolicy&& exec, Container & v)
 {
     return skewness(exec, std::cbegin(v), std::cend(v));
 }
 
-template<class ForwardIterator>
+template<BOOST_MATH_FORWARD_ITER ForwardIterator>
 inline auto skewness(ForwardIterator first, ForwardIterator last)
 {
     return skewness(std::execution::seq, first, last);
 }
 
-template<class Container>
+template<BOOST_MATH_CONTAINER Container>
 inline auto skewness(Container const & v)
 {
     return skewness(std::execution::seq, std::cbegin(v), std::cend(v));
@@ -318,7 +319,7 @@ inline auto skewness(Container const & v)
 
 // Follows equation 1.6 of:
 // https://prod.sandia.gov/techlib-noauth/access-control.cgi/2008/086212.pdf
-template<class ExecutionPolicy, class ForwardIterator>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_FORWARD_ITER ForwardIterator>
 inline auto kurtosis(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last)
 {
     const auto [M1, M2, M3, M4] = first_four_moments(exec, first, last);
@@ -329,50 +330,50 @@ inline auto kurtosis(ExecutionPolicy&& exec, ForwardIterator first, ForwardItera
     return M4/(M2*M2);
 }
 
-template<class ExecutionPolicy, class Container>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_CONTAINER Container>
 inline auto kurtosis(ExecutionPolicy&& exec, Container const & v)
 {
     return kurtosis(exec, std::cbegin(v), std::cend(v));
 }
 
-template<class ForwardIterator>
+template<BOOST_MATH_FORWARD_ITER ForwardIterator>
 inline auto kurtosis(ForwardIterator first, ForwardIterator last)
 {
     return kurtosis(std::execution::seq, first, last);
 }
 
-template<class Container>
+template<BOOST_MATH_CONTAINER Container>
 inline auto kurtosis(Container const & v)
 {
     return kurtosis(std::execution::seq, std::cbegin(v), std::cend(v));
 }
 
-template<class ExecutionPolicy, class ForwardIterator>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_FORWARD_ITER ForwardIterator>
 inline auto excess_kurtosis(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last)
 {
     return kurtosis(exec, first, last) - 3;
 }
 
-template<class ExecutionPolicy, class Container>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_CONTAINER Container>
 inline auto excess_kurtosis(ExecutionPolicy&& exec, Container const & v)
 {
     return excess_kurtosis(exec, std::cbegin(v), std::cend(v));
 }
 
-template<class ForwardIterator>
+template<BOOST_MATH_FORWARD_ITER ForwardIterator>
 inline auto excess_kurtosis(ForwardIterator first, ForwardIterator last)
 {
     return excess_kurtosis(std::execution::seq, first, last);
 }
 
-template<class Container>
+template<BOOST_MATH_CONTAINER Container>
 inline auto excess_kurtosis(Container const & v)
 {
     return excess_kurtosis(std::execution::seq, std::cbegin(v), std::cend(v));
 }
 
 
-template<class ExecutionPolicy, class RandomAccessIterator>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_RANDOM_ACCESS_ITER RandomAccessIterator>
 auto median(ExecutionPolicy&& exec, RandomAccessIterator first, RandomAccessIterator last)
 {
     const auto num_elems = std::distance(first, last);
@@ -393,25 +394,25 @@ auto median(ExecutionPolicy&& exec, RandomAccessIterator first, RandomAccessIter
 }
 
 
-template<class ExecutionPolicy, class RandomAccessContainer>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_RANDOM_ACCESS_CONTAINER RandomAccessContainer>
 inline auto median(ExecutionPolicy&& exec, RandomAccessContainer & v)
 {
     return median(exec, std::begin(v), std::end(v));
 }
 
-template<class RandomAccessIterator>
+template<BOOST_MATH_RANDOM_ACCESS_ITER RandomAccessIterator>
 inline auto median(RandomAccessIterator first, RandomAccessIterator last)
 {
     return median(std::execution::seq, first, last);
 }
 
-template<class RandomAccessContainer>
+template<BOOST_MATH_RANDOM_ACCESS_CONTAINER RandomAccessContainer>
 inline auto median(RandomAccessContainer & v)
 {
     return median(std::execution::seq, std::begin(v), std::end(v));
 }
 
-template<class ExecutionPolicy, class RandomAccessIterator>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_RANDOM_ACCESS_ITER RandomAccessIterator>
 inline auto gini_coefficient(ExecutionPolicy&& exec, RandomAccessIterator first, RandomAccessIterator last)
 {
     using Real = typename std::iterator_traits<RandomAccessIterator>::value_type;
@@ -444,50 +445,50 @@ inline auto gini_coefficient(ExecutionPolicy&& exec, RandomAccessIterator first,
     }
 }
 
-template<class ExecutionPolicy, class RandomAccessContainer>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_RANDOM_ACCESS_CONTAINER RandomAccessContainer>
 inline auto gini_coefficient(ExecutionPolicy&& exec, RandomAccessContainer & v)
 {
     return gini_coefficient(exec, std::begin(v), std::end(v));
 }
 
-template<class RandomAccessIterator>
+template<BOOST_MATH_RANDOM_ACCESS_ITER RandomAccessIterator>
 inline auto gini_coefficient(RandomAccessIterator first, RandomAccessIterator last)
 {
     return gini_coefficient(std::execution::seq, first, last);
 }
 
-template<class RandomAccessContainer>
+template<BOOST_MATH_RANDOM_ACCESS_CONTAINER RandomAccessContainer>
 inline auto gini_coefficient(RandomAccessContainer & v)
 {
     return gini_coefficient(std::execution::seq, std::begin(v), std::end(v));
 }
 
-template<class ExecutionPolicy, class RandomAccessIterator>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_RANDOM_ACCESS_ITER RandomAccessIterator>
 inline auto sample_gini_coefficient(ExecutionPolicy&& exec, RandomAccessIterator first, RandomAccessIterator last)
 {
     const auto n = std::distance(first, last);
     return n*gini_coefficient(exec, first, last)/(n-1);
 }
 
-template<class ExecutionPolicy, class RandomAccessContainer>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_RANDOM_ACCESS_CONTAINER RandomAccessContainer>
 inline auto sample_gini_coefficient(ExecutionPolicy&& exec, RandomAccessContainer & v)
 {
     return sample_gini_coefficient(exec, std::begin(v), std::end(v));
 }
 
-template<class RandomAccessIterator>
+template<BOOST_MATH_RANDOM_ACCESS_ITER RandomAccessIterator>
 inline auto sample_gini_coefficient(RandomAccessIterator first, RandomAccessIterator last)
 {
     return sample_gini_coefficient(std::execution::seq, first, last);
 }
 
-template<class RandomAccessContainer>
+template<BOOST_MATH_RANDOM_ACCESS_CONTAINER RandomAccessContainer>
 inline auto sample_gini_coefficient(RandomAccessContainer & v)
 {
     return sample_gini_coefficient(std::execution::seq, std::begin(v), std::end(v));
 }
 
-template<class ExecutionPolicy, class RandomAccessIterator>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_RANDOM_ACCESS_ITER RandomAccessIterator>
 auto median_absolute_deviation(ExecutionPolicy&& exec, RandomAccessIterator first, RandomAccessIterator last,
     typename std::iterator_traits<RandomAccessIterator>::value_type center=std::numeric_limits<typename std::iterator_traits<RandomAccessIterator>::value_type>::quiet_NaN())
 {
@@ -516,28 +517,28 @@ auto median_absolute_deviation(ExecutionPolicy&& exec, RandomAccessIterator firs
     }
 }
 
-template<class ExecutionPolicy, class RandomAccessContainer>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_RANDOM_ACCESS_CONTAINER RandomAccessContainer>
 inline auto median_absolute_deviation(ExecutionPolicy&& exec, RandomAccessContainer & v,
     typename RandomAccessContainer::value_type center=std::numeric_limits<typename RandomAccessContainer::value_type>::quiet_NaN())
 {
     return median_absolute_deviation(exec, std::begin(v), std::end(v), center);
 }
 
-template<class RandomAccessIterator>
+template<BOOST_MATH_RANDOM_ACCESS_ITER RandomAccessIterator>
 inline auto median_absolute_deviation(RandomAccessIterator first, RandomAccessIterator last,
     typename RandomAccessIterator::value_type center=std::numeric_limits<typename RandomAccessIterator::value_type>::quiet_NaN())
 {
     return median_absolute_deviation(std::execution::seq, first, last, center);
 }
 
-template<class RandomAccessContainer>
+template<BOOST_MATH_RANDOM_ACCESS_CONTAINER RandomAccessContainer>
 inline auto median_absolute_deviation(RandomAccessContainer & v,
     typename RandomAccessContainer::value_type center=std::numeric_limits<typename RandomAccessContainer::value_type>::quiet_NaN())
 {
     return median_absolute_deviation(std::execution::seq, std::begin(v), std::end(v), center);
 }
 
-template<class ExecutionPolicy, class ForwardIterator>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_FORWARD_ITER ForwardIterator>
 auto interquartile_range(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last)
 {
     using Real = typename std::iterator_traits<ForwardIterator>::value_type;
@@ -578,25 +579,26 @@ auto interquartile_range(ExecutionPolicy&& exec, ForwardIterator first, ForwardI
     }
 }
 
-template<class ExecutionPolicy, class RandomAccessContainer>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_RANDOM_ACCESS_CONTAINER RandomAccessContainer>
 inline auto interquartile_range(ExecutionPolicy&& exec, RandomAccessContainer & v)
 {
     return interquartile_range(exec, std::begin(v), std::end(v));
 }
 
-template<class RandomAccessIterator>
+template<BOOST_MATH_RANDOM_ACCESS_ITER RandomAccessIterator>
 inline auto interquartile_range(RandomAccessIterator first, RandomAccessIterator last)
 {
     return interquartile_range(std::execution::seq, first, last);
 }
 
-template<class RandomAccessContainer>
+template<BOOST_MATH_RANDOM_ACCESS_CONTAINER RandomAccessContainer>
 inline auto interquartile_range(RandomAccessContainer & v)
 {
     return interquartile_range(std::execution::seq, std::begin(v), std::end(v));
 }
 
-template<class ExecutionPolicy, class ForwardIterator, class OutputIterator>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_FORWARD_ITER ForwardIterator, class OutputIterator>
+    BOOST_MATH_REQUIRES_ITER(BOOST_MATH_OUTPUT_ITER(ForwardIterator, OutputIterator))
 inline OutputIterator mode(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last, OutputIterator output)
 {
     if(!std::is_sorted(exec, first, last))
@@ -614,13 +616,15 @@ inline OutputIterator mode(ExecutionPolicy&& exec, ForwardIterator first, Forwar
     return detail::mode_impl(first, last, output);
 }
 
-template<class ExecutionPolicy, class Container, class OutputIterator>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_CONTAINER Container, class OutputIterator>
+    BOOST_MATH_REQUIRES_ITER(BOOST_MATH_OUTPUT_ITER(typename Container::iterator, OutputIterator))
 inline OutputIterator mode(ExecutionPolicy&& exec, Container & v, OutputIterator output)
 {
     return mode(exec, std::begin(v), std::end(v), output);
 }
 
-template<class ForwardIterator, class OutputIterator>
+template<BOOST_MATH_FORWARD_ITER ForwardIterator, class OutputIterator>
+    BOOST_MATH_REQUIRES_ITER(BOOST_MATH_OUTPUT_ITER(ForwardIterator, OutputIterator))
 inline OutputIterator mode(ForwardIterator first, ForwardIterator last, OutputIterator output)
 {
     return mode(std::execution::seq, first, last, output);
@@ -628,13 +632,14 @@ inline OutputIterator mode(ForwardIterator first, ForwardIterator last, OutputIt
 
 // Requires enable_if_t to not clash with impl that returns std::list
 // Very ugly. std::is_execution_policy_v returns false for the std::execution objects and decltype of the objects (e.g. std::execution::seq)
-template<class Container, class OutputIterator, std::enable_if_t<!std::is_convertible_v<std::execution::sequenced_policy, Container> &&
+template<BOOST_MATH_CONTAINER Container, class OutputIterator, std::enable_if_t<!std::is_convertible_v<std::execution::sequenced_policy, Container> &&
                                                                  !std::is_convertible_v<std::execution::parallel_unsequenced_policy, Container> &&
                                                                  !std::is_convertible_v<std::execution::parallel_policy, Container>
                                                                  #if __cpp_lib_execution > 201900
                                                                  && !std::is_convertible_v<std::execution::unsequenced_policy, Container>
                                                                  #endif
                                                                  , bool> = true>
+    BOOST_MATH_REQUIRES_ITER(BOOST_MATH_OUTPUT_ITER(typename Container::iterator, OutputIterator))
 inline OutputIterator mode(Container & v, OutputIterator output)
 {
     return mode(std::execution::seq, std::begin(v), std::end(v), output);
@@ -642,27 +647,28 @@ inline OutputIterator mode(Container & v, OutputIterator output)
 
 // std::list is the return type for the proposed STL stats library
 
-template<class ExecutionPolicy, class ForwardIterator, class Real = typename std::iterator_traits<ForwardIterator>::value_type>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_FORWARD_ITER ForwardIterator, 
+         BOOST_MATH_ARBITRARY_NUMERICAL T = typename std::iterator_traits<ForwardIterator>::value_type>
 inline auto mode(ExecutionPolicy&& exec, ForwardIterator first, ForwardIterator last)
 {
-    std::list<Real> modes;
+    std::list<T> modes;
     mode(exec, first, last, std::inserter(modes, modes.begin()));
     return modes;
 }
 
-template<class ExecutionPolicy, class Container>
+template<BOOST_MATH_EXECUTION_POLICY ExecutionPolicy, BOOST_MATH_CONTAINER Container>
 inline auto mode(ExecutionPolicy&& exec, Container & v)
 {
     return mode(exec, std::begin(v), std::end(v));
 }
 
-template<class ForwardIterator>
+template<BOOST_MATH_FORWARD_ITER ForwardIterator>
 inline auto mode(ForwardIterator first, ForwardIterator last)
 {
     return mode(std::execution::seq, first, last);
 }
 
-template<class Container>
+template<BOOST_MATH_CONTAINER Container>
 inline auto mode(Container & v)
 {
     return mode(std::execution::seq, std::begin(v), std::end(v));
@@ -677,7 +683,7 @@ namespace boost { namespace math { namespace statistics {
 template<bool B, class T = void>
 using enable_if_t = typename std::enable_if<B, T>::type;
 
-template<class ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type,
+template<BOOST_MATH_FORWARD_ITER ForwardIterator, BOOST_MATH_ARBITRARY_NUMERICAL Real = typename std::iterator_traits<ForwardIterator>::value_type,
          enable_if_t<std::is_integral<Real>::value, bool> = true>
 inline double mean(const ForwardIterator first, const ForwardIterator last)
 {
@@ -685,14 +691,14 @@ inline double mean(const ForwardIterator first, const ForwardIterator last)
     return detail::mean_sequential_impl<double>(first, last);
 }
 
-template<class Container, typename Real = typename Container::value_type,
+template<BOOST_MATH_CONTAINER Container, BOOST_MATH_ARBITRARY_NUMERICAL Real = typename Container::value_type,
          enable_if_t<std::is_integral<Real>::value, bool> = true>
 inline double mean(const Container& c)
 {
     return mean(std::begin(c), std::end(c));
 }
 
-template<class ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type,
+template<BOOST_MATH_FORWARD_ITER ForwardIterator, BOOST_MATH_ARBITRARY_NUMERICAL Real = typename std::iterator_traits<ForwardIterator>::value_type,
          enable_if_t<!std::is_integral<Real>::value, bool> = true>
 inline Real mean(const ForwardIterator first, const ForwardIterator last)
 {
@@ -700,28 +706,28 @@ inline Real mean(const ForwardIterator first, const ForwardIterator last)
     return detail::mean_sequential_impl<Real>(first, last);
 }
 
-template<class Container, typename Real = typename Container::value_type,
+template<BOOST_MATH_CONTAINER Container, BOOST_MATH_ARBITRARY_NUMERICAL Real = typename Container::value_type,
          enable_if_t<!std::is_integral<Real>::value, bool> = true>
 inline Real mean(const Container& c)
 {
     return mean(std::begin(c), std::end(c));
 }
 
-template<class ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type,
+template<BOOST_MATH_FORWARD_ITER ForwardIterator, BOOST_MATH_ARBITRARY_NUMERICAL Real = typename std::iterator_traits<ForwardIterator>::value_type,
          enable_if_t<std::is_integral<Real>::value, bool> = true>
 inline double variance(const ForwardIterator first, const ForwardIterator last)
 {
     return std::get<2>(detail::variance_sequential_impl<std::tuple<double, double, double, double>>(first, last));
 }
 
-template<class Container, typename Real = typename Container::value_type,
+template<BOOST_MATH_CONTAINER Container, BOOST_MATH_ARBITRARY_NUMERICAL Real = typename Container::value_type,
          enable_if_t<std::is_integral<Real>::value, bool> = true>
 inline double variance(const Container& c)
 {
     return variance(std::begin(c), std::end(c));
 }
 
-template<class ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type,
+template<BOOST_MATH_FORWARD_ITER ForwardIterator, BOOST_MATH_ARBITRARY_NUMERICAL Real = typename std::iterator_traits<ForwardIterator>::value_type,
          enable_if_t<!std::is_integral<Real>::value, bool> = true>
 inline Real variance(const ForwardIterator first, const ForwardIterator last)
 {
@@ -729,14 +735,14 @@ inline Real variance(const ForwardIterator first, const ForwardIterator last)
 
 }
 
-template<class Container, typename Real = typename Container::value_type,
+template<BOOST_MATH_CONTAINER Container, BOOST_MATH_ARBITRARY_NUMERICAL Real = typename Container::value_type,
          enable_if_t<!std::is_integral<Real>::value, bool> = true>
 inline Real variance(const Container& c)
 {
     return variance(std::begin(c), std::end(c));
 }
 
-template<class ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type,
+template<BOOST_MATH_FORWARD_ITER ForwardIterator, BOOST_MATH_ARBITRARY_NUMERICAL Real = typename std::iterator_traits<ForwardIterator>::value_type,
          enable_if_t<std::is_integral<Real>::value, bool> = true>
 inline double sample_variance(const ForwardIterator first, const ForwardIterator last)
 {
@@ -745,14 +751,14 @@ inline double sample_variance(const ForwardIterator first, const ForwardIterator
     return n*variance(first, last)/(n-1);
 }
 
-template<class Container, typename Real = typename Container::value_type,
+template<BOOST_MATH_CONTAINER Container, BOOST_MATH_ARBITRARY_NUMERICAL Real = typename Container::value_type,
          enable_if_t<std::is_integral<Real>::value, bool> = true>
 inline double sample_variance(const Container& c)
 {
     return sample_variance(std::begin(c), std::end(c));
 }
 
-template<class ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type,
+template<BOOST_MATH_FORWARD_ITER ForwardIterator, BOOST_MATH_ARBITRARY_NUMERICAL Real = typename std::iterator_traits<ForwardIterator>::value_type,
          enable_if_t<!std::is_integral<Real>::value, bool> = true>
 inline Real sample_variance(const ForwardIterator first, const ForwardIterator last)
 {
@@ -761,14 +767,14 @@ inline Real sample_variance(const ForwardIterator first, const ForwardIterator l
     return n*variance(first, last)/(n-1);
 }
 
-template<class Container, typename Real = typename Container::value_type,
+template<BOOST_MATH_CONTAINER Container, BOOST_MATH_ARBITRARY_NUMERICAL Real = typename Container::value_type,
          enable_if_t<!std::is_integral<Real>::value, bool> = true>
 inline Real sample_variance(const Container& c)
 {
     return sample_variance(std::begin(c), std::end(c));
 }
 
-template<class ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type,
+template<BOOST_MATH_FORWARD_ITER ForwardIterator, BOOST_MATH_ARBITRARY_NUMERICAL Real = typename std::iterator_traits<ForwardIterator>::value_type,
          enable_if_t<std::is_integral<Real>::value, bool> = true>
 inline std::pair<double, double> mean_and_sample_variance(const ForwardIterator first, const ForwardIterator last)
 {
@@ -776,14 +782,14 @@ inline std::pair<double, double> mean_and_sample_variance(const ForwardIterator 
     return std::make_pair(std::get<0>(results), std::get<3>(results)*std::get<2>(results)/(std::get<3>(results)-1.0));
 }
 
-template<class Container, typename Real = typename Container::value_type,
+template<BOOST_MATH_CONTAINER Container, BOOST_MATH_ARBITRARY_NUMERICAL Real = typename Container::value_type,
          enable_if_t<std::is_integral<Real>::value, bool> = true>
 inline std::pair<double, double> mean_and_sample_variance(const Container& c)
 {
     return mean_and_sample_variance(std::begin(c), std::end(c));
 }
 
-template<class ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type,
+template<BOOST_MATH_FORWARD_ITER ForwardIterator, BOOST_MATH_ARBITRARY_NUMERICAL Real = typename std::iterator_traits<ForwardIterator>::value_type,
          enable_if_t<!std::is_integral<Real>::value, bool> = true>
 inline std::pair<Real, Real> mean_and_sample_variance(const ForwardIterator first, const ForwardIterator last)
 {
@@ -791,14 +797,14 @@ inline std::pair<Real, Real> mean_and_sample_variance(const ForwardIterator firs
     return std::make_pair(std::get<0>(results), std::get<3>(results)*std::get<2>(results)/(std::get<3>(results)-Real(1)));
 }
 
-template<class Container, typename Real = typename Container::value_type,
+template<BOOST_MATH_CONTAINER Container, BOOST_MATH_ARBITRARY_NUMERICAL Real = typename Container::value_type,
          enable_if_t<!std::is_integral<Real>::value, bool> = true>
 inline std::pair<Real, Real> mean_and_sample_variance(const Container& c)
 {
     return mean_and_sample_variance(std::begin(c), std::end(c));
 }
 
-template<class ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type,
+template<BOOST_MATH_FORWARD_ITER ForwardIterator, BOOST_MATH_ARBITRARY_NUMERICAL Real = typename std::iterator_traits<ForwardIterator>::value_type,
          enable_if_t<std::is_integral<Real>::value, bool> = true>
 inline std::tuple<double, double, double, double> first_four_moments(const ForwardIterator first, const ForwardIterator last)
 {
@@ -807,14 +813,14 @@ inline std::tuple<double, double, double, double> first_four_moments(const Forwa
                            std::get<3>(results) / std::get<4>(results));
 }
 
-template<class Container, typename Real = typename Container::value_type,
+template<BOOST_MATH_CONTAINER Container, BOOST_MATH_ARBITRARY_NUMERICAL Real = typename Container::value_type,
          enable_if_t<std::is_integral<Real>::value, bool> = true>
 inline std::tuple<double, double, double, double> first_four_moments(const Container& c)
 {
     return first_four_moments(std::begin(c), std::end(c));
 }
 
-template<class ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type,
+template<BOOST_MATH_FORWARD_ITER ForwardIterator, BOOST_MATH_ARBITRARY_NUMERICAL Real = typename std::iterator_traits<ForwardIterator>::value_type,
          enable_if_t<!std::is_integral<Real>::value, bool> = true>
 inline std::tuple<Real, Real, Real, Real> first_four_moments(const ForwardIterator first, const ForwardIterator last)
 {
@@ -823,42 +829,42 @@ inline std::tuple<Real, Real, Real, Real> first_four_moments(const ForwardIterat
                            std::get<3>(results) / std::get<4>(results));
 }
 
-template<class Container, typename Real = typename Container::value_type,
+template<BOOST_MATH_CONTAINER Container, BOOST_MATH_ARBITRARY_NUMERICAL Real = typename Container::value_type,
          enable_if_t<!std::is_integral<Real>::value, bool> = true>
 inline std::tuple<Real, Real, Real, Real> first_four_moments(const Container& c)
 {
     return first_four_moments(std::begin(c), std::end(c));
 }
 
-template<class ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type,
+template<BOOST_MATH_FORWARD_ITER ForwardIterator, BOOST_MATH_ARBITRARY_NUMERICAL Real = typename std::iterator_traits<ForwardIterator>::value_type,
          enable_if_t<std::is_integral<Real>::value, bool> = true>
 inline double skewness(const ForwardIterator first, const ForwardIterator last)
 {
     return detail::skewness_sequential_impl<double>(first, last);
 }
 
-template<class Container, typename Real = typename Container::value_type,
+template<BOOST_MATH_CONTAINER Container, BOOST_MATH_ARBITRARY_NUMERICAL Real = typename Container::value_type,
          enable_if_t<std::is_integral<Real>::value, bool> = true>
 inline double skewness(const Container& c)
 {
     return skewness(std::begin(c), std::end(c));
 }
 
-template<class ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type,
+template<BOOST_MATH_FORWARD_ITER ForwardIterator, BOOST_MATH_ARBITRARY_NUMERICAL Real = typename std::iterator_traits<ForwardIterator>::value_type,
          enable_if_t<!std::is_integral<Real>::value, bool> = true>
 inline Real skewness(const ForwardIterator first, const ForwardIterator last)
 {
     return detail::skewness_sequential_impl<Real>(first, last);
 }
 
-template<class Container, typename Real = typename Container::value_type,
+template<BOOST_MATH_CONTAINER Container, BOOST_MATH_ARBITRARY_NUMERICAL Real = typename Container::value_type,
          enable_if_t<!std::is_integral<Real>::value, bool> = true>
 inline Real skewness(const Container& c)
 {
     return skewness(std::begin(c), std::end(c));
 }
 
-template<class ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type,
+template<BOOST_MATH_FORWARD_ITER ForwardIterator, BOOST_MATH_ARBITRARY_NUMERICAL Real = typename std::iterator_traits<ForwardIterator>::value_type,
          enable_if_t<std::is_integral<Real>::value, bool> = true>
 inline double kurtosis(const ForwardIterator first, const ForwardIterator last)
 {
@@ -874,14 +880,14 @@ inline double kurtosis(const ForwardIterator first, const ForwardIterator last)
     }
 }
 
-template<class Container, typename Real = typename Container::value_type,
+template<BOOST_MATH_CONTAINER Container, BOOST_MATH_ARBITRARY_NUMERICAL Real = typename Container::value_type,
          enable_if_t<std::is_integral<Real>::value, bool> = true>
 inline double kurtosis(const Container& c)
 {
     return kurtosis(std::begin(c), std::end(c));
 }
 
-template<class ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type,
+template<BOOST_MATH_FORWARD_ITER ForwardIterator, BOOST_MATH_ARBITRARY_NUMERICAL Real = typename std::iterator_traits<ForwardIterator>::value_type,
          enable_if_t<!std::is_integral<Real>::value, bool> = true>
 inline Real kurtosis(const ForwardIterator first, const ForwardIterator last)
 {
@@ -897,42 +903,42 @@ inline Real kurtosis(const ForwardIterator first, const ForwardIterator last)
     }
 }
 
-template<class Container, typename Real = typename Container::value_type,
+template<BOOST_MATH_CONTAINER Container, BOOST_MATH_ARBITRARY_NUMERICAL Real = typename Container::value_type,
          enable_if_t<!std::is_integral<Real>::value, bool> = true>
 inline Real kurtosis(const Container& c)
 {
     return kurtosis(std::begin(c), std::end(c));
 }
 
-template<class ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type,
+template<BOOST_MATH_FORWARD_ITER ForwardIterator, BOOST_MATH_ARBITRARY_NUMERICAL Real = typename std::iterator_traits<ForwardIterator>::value_type,
          enable_if_t<std::is_integral<Real>::value, bool> = true>
 inline double excess_kurtosis(const ForwardIterator first, const ForwardIterator last)
 {
     return kurtosis(first, last) - 3;
 }
 
-template<class Container, typename Real = typename Container::value_type,
+template<BOOST_MATH_CONTAINER Container, BOOST_MATH_ARBITRARY_NUMERICAL Real = typename Container::value_type,
          enable_if_t<std::is_integral<Real>::value, bool> = true>
 inline double excess_kurtosis(const Container& c)
 {
     return excess_kurtosis(std::begin(c), std::end(c));
 }
 
-template<class ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type,
+template<BOOST_MATH_FORWARD_ITER ForwardIterator, BOOST_MATH_ARBITRARY_NUMERICAL Real = typename std::iterator_traits<ForwardIterator>::value_type,
          enable_if_t<!std::is_integral<Real>::value, bool> = true>
 inline Real excess_kurtosis(const ForwardIterator first, const ForwardIterator last)
 {
     return kurtosis(first, last) - 3;
 }
 
-template<class Container, typename Real = typename Container::value_type,
+template<BOOST_MATH_CONTAINER Container, BOOST_MATH_ARBITRARY_NUMERICAL Real = typename Container::value_type,
          enable_if_t<!std::is_integral<Real>::value, bool> = true>
 inline Real excess_kurtosis(const Container& c)
 {
     return excess_kurtosis(std::begin(c), std::end(c));
 }
 
-template<class RandomAccessIterator, typename Real = typename std::iterator_traits<RandomAccessIterator>::value_type>
+template<BOOST_MATH_RANDOM_ACCESS_ITER RandomAccessIterator, BOOST_MATH_ARBITRARY_NUMERICAL Real = typename std::iterator_traits<RandomAccessIterator>::value_type>
 Real median(RandomAccessIterator first, RandomAccessIterator last)
 {
     const auto num_elems = std::distance(first, last);
@@ -952,13 +958,13 @@ Real median(RandomAccessIterator first, RandomAccessIterator last)
     }
 }
 
-template<class RandomAccessContainer, typename Real = typename RandomAccessContainer::value_type>
+template<BOOST_MATH_RANDOM_ACCESS_CONTAINER RandomAccessContainer, BOOST_MATH_ARBITRARY_NUMERICAL Real = typename RandomAccessContainer::value_type>
 inline Real median(RandomAccessContainer& c)
 {
     return median(std::begin(c), std::end(c));
 }
 
-template<class RandomAccessIterator, typename Real = typename std::iterator_traits<RandomAccessIterator>::value_type,
+template<BOOST_MATH_RANDOM_ACCESS_ITER RandomAccessIterator, BOOST_MATH_ARBITRARY_NUMERICAL Real = typename std::iterator_traits<RandomAccessIterator>::value_type,
          enable_if_t<std::is_integral<Real>::value, bool> = true>
 inline double gini_coefficient(RandomAccessIterator first, RandomAccessIterator last)
 {
@@ -970,14 +976,14 @@ inline double gini_coefficient(RandomAccessIterator first, RandomAccessIterator 
     return detail::gini_coefficient_sequential_impl<double>(first, last);
 }
 
-template<class RandomAccessContainer, typename Real = typename RandomAccessContainer::value_type,
+template<BOOST_MATH_RANDOM_ACCESS_CONTAINER RandomAccessContainer, BOOST_MATH_ARBITRARY_NUMERICAL Real = typename RandomAccessContainer::value_type,
          enable_if_t<std::is_integral<Real>::value, bool> = true>
 inline double gini_coefficient(RandomAccessContainer& c)
 {
     return gini_coefficient(std::begin(c), std::end(c));
 }
 
-template<class RandomAccessIterator, typename Real = typename std::iterator_traits<RandomAccessIterator>::value_type,
+template<BOOST_MATH_RANDOM_ACCESS_ITER RandomAccessIterator, BOOST_MATH_ARBITRARY_NUMERICAL Real = typename std::iterator_traits<RandomAccessIterator>::value_type,
          enable_if_t<!std::is_integral<Real>::value, bool> = true>
 inline Real gini_coefficient(RandomAccessIterator first, RandomAccessIterator last)
 {
@@ -989,14 +995,14 @@ inline Real gini_coefficient(RandomAccessIterator first, RandomAccessIterator la
     return detail::gini_coefficient_sequential_impl<Real>(first, last);
 }
 
-template<class RandomAccessContainer, typename Real = typename RandomAccessContainer::value_type,
+template<BOOST_MATH_RANDOM_ACCESS_CONTAINER RandomAccessContainer, BOOST_MATH_ARBITRARY_NUMERICAL Real = typename RandomAccessContainer::value_type,
          enable_if_t<!std::is_integral<Real>::value, bool> = true>
 inline Real gini_coefficient(RandomAccessContainer& c)
 {
     return gini_coefficient(std::begin(c), std::end(c));
 }
 
-template<class RandomAccessIterator, typename Real = typename std::iterator_traits<RandomAccessIterator>::value_type,
+template<BOOST_MATH_RANDOM_ACCESS_ITER RandomAccessIterator, BOOST_MATH_ARBITRARY_NUMERICAL Real = typename std::iterator_traits<RandomAccessIterator>::value_type,
          enable_if_t<std::is_integral<Real>::value, bool> = true>
 inline double sample_gini_coefficient(RandomAccessIterator first, RandomAccessIterator last)
 {
@@ -1004,14 +1010,14 @@ inline double sample_gini_coefficient(RandomAccessIterator first, RandomAccessIt
     return n*gini_coefficient(first, last)/(n-1);
 }
 
-template<class RandomAccessContainer, typename Real = typename RandomAccessContainer::value_type,
+template<BOOST_MATH_RANDOM_ACCESS_CONTAINER RandomAccessContainer, BOOST_MATH_ARBITRARY_NUMERICAL Real = typename RandomAccessContainer::value_type,
          enable_if_t<std::is_integral<Real>::value, bool> = true>
 inline double sample_gini_coefficient(RandomAccessContainer& c)
 {
     return sample_gini_coefficient(std::begin(c), std::end(c));
 }
 
-template<class RandomAccessIterator, typename Real = typename std::iterator_traits<RandomAccessIterator>::value_type,
+template<BOOST_MATH_RANDOM_ACCESS_ITER RandomAccessIterator, BOOST_MATH_ARBITRARY_NUMERICAL Real = typename std::iterator_traits<RandomAccessIterator>::value_type,
          enable_if_t<!std::is_integral<Real>::value, bool> = true>
 inline Real sample_gini_coefficient(RandomAccessIterator first, RandomAccessIterator last)
 {
@@ -1019,14 +1025,14 @@ inline Real sample_gini_coefficient(RandomAccessIterator first, RandomAccessIter
     return n*gini_coefficient(first, last)/(n-1);
 }
 
-template<class RandomAccessContainer, typename Real = typename RandomAccessContainer::value_type,
+template<BOOST_MATH_RANDOM_ACCESS_CONTAINER RandomAccessContainer, BOOST_MATH_ARBITRARY_NUMERICAL Real = typename RandomAccessContainer::value_type,
          enable_if_t<!std::is_integral<Real>::value, bool> = true>
 inline Real sample_gini_coefficient(RandomAccessContainer& c)
 {
     return sample_gini_coefficient(std::begin(c), std::end(c));
 }
 
-template<class RandomAccessIterator, typename Real = typename std::iterator_traits<RandomAccessIterator>::value_type>
+template<BOOST_MATH_RANDOM_ACCESS_ITER RandomAccessIterator, BOOST_MATH_ARBITRARY_NUMERICAL Real = typename std::iterator_traits<RandomAccessIterator>::value_type>
 Real median_absolute_deviation(RandomAccessIterator first, RandomAccessIterator last,
     typename std::iterator_traits<RandomAccessIterator>::value_type center=std::numeric_limits<typename std::iterator_traits<RandomAccessIterator>::value_type>::quiet_NaN())
 {
@@ -1054,14 +1060,14 @@ Real median_absolute_deviation(RandomAccessIterator first, RandomAccessIterator 
     }
 }
 
-template<class RandomAccessContainer, typename Real = typename RandomAccessContainer::value_type>
+template<BOOST_MATH_RANDOM_ACCESS_CONTAINER RandomAccessContainer, BOOST_MATH_ARBITRARY_NUMERICAL Real = typename RandomAccessContainer::value_type>
 inline Real median_absolute_deviation(RandomAccessContainer& c,
     typename RandomAccessContainer::value_type center=std::numeric_limits<typename RandomAccessContainer::value_type>::quiet_NaN())
 {
     return median_absolute_deviation(std::begin(c), std::end(c), center);
 }
 
-template<class ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type>
+template<BOOST_MATH_FORWARD_ITER ForwardIterator, BOOST_MATH_ARBITRARY_NUMERICAL Real = typename std::iterator_traits<ForwardIterator>::value_type>
 Real interquartile_range(ForwardIterator first, ForwardIterator last)
 {
     static_assert(!std::is_integral<Real>::value, "Integer values have not yet been implemented.");
@@ -1103,13 +1109,13 @@ Real interquartile_range(ForwardIterator first, ForwardIterator last)
     }
 }
 
-template<class Container, typename Real = typename Container::value_type>
+template<BOOST_MATH_CONTAINER Container, BOOST_MATH_ARBITRARY_NUMERICAL Real = typename Container::value_type>
 Real interquartile_range(Container& c)
 {
     return interquartile_range(std::begin(c), std::end(c));
 }
 
-template<class ForwardIterator, class OutputIterator,
+template<BOOST_MATH_FORWARD_ITER ForwardIterator, class OutputIterator,
     enable_if_t<std::is_same<typename std::iterator_traits<ForwardIterator>::iterator_category(), std::random_access_iterator_tag>::value, bool> = true>
 inline OutputIterator mode(ForwardIterator first, ForwardIterator last, OutputIterator output)
 {
@@ -1121,7 +1127,7 @@ inline OutputIterator mode(ForwardIterator first, ForwardIterator last, OutputIt
     return detail::mode_impl(first, last, output);
 }
 
-template<class ForwardIterator, class OutputIterator,
+template<BOOST_MATH_FORWARD_ITER ForwardIterator, class OutputIterator,
     enable_if_t<!std::is_same<typename std::iterator_traits<ForwardIterator>::iterator_category(), std::random_access_iterator_tag>::value, bool> = true>
 inline OutputIterator mode(ForwardIterator first, ForwardIterator last, OutputIterator output)
 {
@@ -1133,13 +1139,13 @@ inline OutputIterator mode(ForwardIterator first, ForwardIterator last, OutputIt
     return detail::mode_impl(first, last, output);
 }
 
-template<class Container, class OutputIterator>
+template<BOOST_MATH_CONTAINER Container, class OutputIterator>
 inline OutputIterator mode(Container& c, OutputIterator output)
 {
     return mode(std::begin(c), std::end(c), output);
 }
 
-template<class ForwardIterator, typename Real = typename std::iterator_traits<ForwardIterator>::value_type>
+template<BOOST_MATH_FORWARD_ITER ForwardIterator, BOOST_MATH_ARBITRARY_NUMERICAL Real = typename std::iterator_traits<ForwardIterator>::value_type>
 inline std::list<Real> mode(ForwardIterator first, ForwardIterator last)
 {
     std::list<Real> modes;
@@ -1147,7 +1153,7 @@ inline std::list<Real> mode(ForwardIterator first, ForwardIterator last)
     return modes;
 }
 
-template<class Container, typename Real = typename Container::value_type>
+template<BOOST_MATH_CONTAINER Container, BOOST_MATH_ARBITRARY_NUMERICAL Real = typename Container::value_type>
 inline std::list<Real> mode(Container& c)
 {
     return mode(std::begin(c), std::end(c));
