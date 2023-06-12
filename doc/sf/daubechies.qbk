@@ -144,6 +144,31 @@ This is neither particularly fast nor accurate, but there appears to be no liter
 
 [$../graphs/fourier_transform_daubechies.png]
 
+A benchmark can be found in `reporting/performance/fourier_transform_daubechies_performance.cpp`; the results on a ~2021 M1 Macbook pro are presented below:
+
+
+Run on (10 X 24.1212 MHz CPU s)
+CPU Caches:
+  L1 Data 64 KiB (x10)
+  L1 Instruction 128 KiB (x10)
+  L2 Unified 4096 KiB (x5)
+Load Average: 1.33, 1.52, 1.62
+-----------------------------------------------------------
+Benchmark                                              Time 
+-----------------------------------------------------------
+FourierTransformDaubechiesScaling<double, 1>        70.3 ns
+FourierTransformDaubechiesScaling<double, 2>         330 ns
+FourierTransformDaubechiesScaling<double, 3>         335 ns
+FourierTransformDaubechiesScaling<double, 4>         364 ns
+FourierTransformDaubechiesScaling<double, 5>         386 ns
+FourierTransformDaubechiesScaling<double, 6>         436 ns
+FourierTransformDaubechiesScaling<double, 7>         447 ns
+FourierTransformDaubechiesScaling<double, 8>         473 ns
+FourierTransformDaubechiesScaling<double, 9>         503 ns
+FourierTransformDaubechiesScaling<double, 10>        554 ns
+
+Due to the low accuracy of this method, `float` precision is arg-promoted to `double`, and hence takes just as long as `double` precision to execute.
+
 [heading References]
 
 * Daubechies, Ingrid. ['Ten Lectures on Wavelets.] Vol. 61. Siam, 1992.

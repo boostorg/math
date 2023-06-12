@@ -8,7 +8,7 @@
 #include <vector>
 #include <iostream>
 #include <benchmark/benchmark.h>
-#include <boost/math/special_functions/fourier_transform_daubechies_scaling.hpp>
+#include <boost/math/special_functions/fourier_transform_daubechies.hpp>
 
 using boost::math::fourier_transform_daubechies_scaling;
 
