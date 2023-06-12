@@ -1,3 +1,4 @@
+// boost-no-inspect
 //  (C) Copyright Nick Thompson 2023.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file

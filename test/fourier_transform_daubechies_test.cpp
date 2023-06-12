@@ -1,3 +1,4 @@
+// boost-no-inspect
 /*
  * Copyright Nick Thompson, 2023
  * Use, modification and distribution are subject to the
