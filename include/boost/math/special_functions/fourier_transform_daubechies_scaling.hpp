@@ -238,7 +238,7 @@ template <class Real, unsigned p> std::complex<Real> fourier_transform_daubechie
   // as well as Table 6.2:
   auto z = phase; // strange coincidence.
   //auto z = exp(std::complex<Real>(0, -omega/2 - boost::math::constants::pi<Real>()));
-  auto const constexpr lxi = detail::ft_daubechies_scaling_polynomial_coefficients<Real, p>();
+  auto constexpr lxi = detail::ft_daubechies_scaling_polynomial_coefficients<Real, p>();
   auto m0 = std::complex<Real>(pow((Real(1) + z)/Real(2), p))*boost::math::tools::evaluate_polynomial_estrin(lxi, z);
   return Fphi*std::conj(m0)*phase;
 }
