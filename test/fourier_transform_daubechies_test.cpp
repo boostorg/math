@@ -16,7 +16,7 @@
 #include <boost/math/quadrature/trapezoidal.hpp>
 #include <boost/math/special_functions/daubechies_scaling.hpp>
 #include <boost/math/special_functions/daubechies_wavelet.hpp>
-#include <boost/math/special_functions/fourier_transform_daubechies_scaling.hpp>
+#include <boost/math/special_functions/fourier_transform_daubechies.hpp>
 
 #ifdef BOOST_HAS_FLOAT128
 #include <boost/multiprecision/float128.hpp>
@@ -213,7 +213,6 @@ int main()
   test_ten_lectures_eq_5_1_38<float, 5>();
   test_ten_lectures_eq_5_1_38<float, 6>();
 
-  // Phase convention still failing fml:
   test_wavelet_quadrature<9>();
  
   return boost::math::test::report_errors();
