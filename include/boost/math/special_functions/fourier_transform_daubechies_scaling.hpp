@@ -24,7 +24,7 @@ namespace detail {
 // These constants are precisely those divided by 1/sqrt(2), because otherwise
 // we'd immediately just have to divide through by 1/sqrt(2).
 // These numbers agree with Table 6.2, but are generated via example/calculate_fourier_transform_daubechies_constants.cpp
-template <typename Real, unsigned N> constexpr const std::array<Real, N> ft_daubechies_scaling_polynomial_coefficients() {
+template <typename Real, unsigned N> constexpr std::array<Real, N> ft_daubechies_scaling_polynomial_coefficients() {
   static_assert(N >= 1 && N <= 10, "Scaling function only implemented for 1-10 vanishing moments.");
   if constexpr (N == 1) {
     return std::array<Real, 1>{static_cast<Real>(1)};
