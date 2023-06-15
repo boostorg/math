@@ -25,7 +25,7 @@ jobs:
           name: install pre dependencies
           command: |
             apt-get update -yqq
-            apt-get install git xsltproc docbook-xsl docbook-xml g++-11 -y
+            apt-get install git xsltproc docbook-xsl docbook-xml libstdc++6 -y
       - run:
           name: Initializing git repo for boost
           command: |
