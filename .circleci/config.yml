@@ -4,9 +4,9 @@ jobs:
   inspect:
     environment:
       - BOOST_LIBRARY=math
-      - CXX_STANDARD=gnu++11
+      - CXX_STANDARD=gnu++14
     docker:
-      - image: gcc:9
+      - image: gcc:11
     steps:
       - checkout
       - run:
@@ -25,7 +25,7 @@ jobs:
           name: install pre dependencies
           command: |
             apt-get update -yqq
-            apt-get install git xsltproc docbook-xsl docbook-xml -y
+            apt-get install git xsltproc docbook-xsl docbook-xml g++-11 -y
       - run:
           name: Initializing git repo for boost
           command: |
