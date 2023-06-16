@@ -146,7 +146,7 @@
                  return std::make_pair(r, r);
               }
               std::pair<Real, Real> r = hypergeometric_pFq_checked_series_impl(aj, bj, Real(1 / z), pol, termination, log_scale);
-              Real mul = pow(-z, -*aj.begin());
+              Real mul = pow(-z, Real(-*aj.begin()));
               r.first *= mul;
               r.second *= mul;
               return r;

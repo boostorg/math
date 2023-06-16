@@ -588,7 +588,7 @@ namespace boost
             }
 #endif
             n = (std::min)(n, 1500);
-            T d = pow(3 + sqrt(T(8)), n);
+            T d = pow(3 + sqrt(T(8)), T(n));
             d = (d + 1 / d) / 2;
             T b = -1;
             T c = -d;
@@ -706,7 +706,7 @@ namespace boost
             }
 #endif
             n = (std::min)(n, 1500);
-            RealType d = pow(3 + sqrt(RealType(8)), n);
+            RealType d = pow(3 + sqrt(RealType(8)), RealType(n));
             d = (d + 1 / d) / 2;
             RealType b = -1;
             RealType c = -d;

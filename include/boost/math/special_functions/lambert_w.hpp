@@ -835,7 +835,7 @@ struct lambert_w0_small_z_series_term
     ++k;
     term *= -z / k;
     //T t = pow(z, k) * pow(T(k), -1 + k) / factorial<T>(k); // (z^k * k(k-1)^k) / k!
-    T result = term * pow(T(k), -1 + k); // term * k^(k-1)
+    T result = term * pow(T(k), T(-1 + k)); // term * k^(k-1)
                                          // std::cout << " k = " << k << ", term = " << term << ", result = " << result << std::endl;
     return result; //
   }

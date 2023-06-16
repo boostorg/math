@@ -586,7 +586,7 @@ T ibeta_series(T a, T b, T x, T s0, const Lanczos&, bool normalised, T* p_deriva
          if(a * b < bgh * 10)
             result *= exp((b - 0.5f) * boost::math::log1p(a / bgh, pol));
          else
-            result *= pow(cgh / bgh, b - 0.5f);
+            result *= pow(cgh / bgh, T(b - 0.5f));
          result *= pow(x * cgh / agh, a);
          result *= sqrt(agh / boost::math::constants::e<T>());
 
@@ -963,14 +963,14 @@ T binomial_ccdf(T n, T k, T x, T y, const Policy& pol)
       int start = itrunc(n * x);
       if(start <= k + 1)
          start = itrunc(k + 2);
-      result = static_cast<T>(pow(x, start) * pow(y, n - start) * boost::math::binomial_coefficient<T>(itrunc(n), itrunc(start), pol));
+      result = static_cast<T>(pow(x, T(start)) * pow(y, n - T(start)) * boost::math::binomial_coefficient<T>(itrunc(n), itrunc(start), pol));
       if(result == 0)
       {
          // OK, starting slightly above the mode didn't work,
          // we'll have to sum the terms the old fashioned way:
          for(unsigned i = start - 1; i > k; --i)
          {
-            result += static_cast<T>(pow(x, static_cast<int>(i)) * pow(y, n - i) * boost::math::binomial_coefficient<T>(itrunc(n), itrunc(i), pol));
+            result += static_cast<T>(pow(x, static_cast<T>(i)) * pow(y, n - i) * boost::math::binomial_coefficient<T>(itrunc(n), itrunc(i), pol));
          }
       }
       else
