@@ -6,6 +6,7 @@
 #ifndef BOOST_MATH_SPECIAL_CHEBYSHEV_HPP
 #define BOOST_MATH_SPECIAL_CHEBYSHEV_HPP
 #include <cmath>
+#include <type_traits>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/constants/constants.hpp>
@@ -31,7 +32,7 @@ inline tools::promote_args_t<T1, T2, T3> chebyshev_next(T1 const & x, T2 const &
 namespace detail {
 
 // https://stackoverflow.com/questions/5625431/efficient-way-to-compute-pq-exponentiation-where-q-is-an-integer
-template <typename T>
+template <typename T, typename std::enable_if<std::is_arithmetic<T>::value, bool>::type = true>
 T expt(T p, unsigned q)
 {
     T r = 1;
@@ -46,6 +47,13 @@ T expt(T p, unsigned q)
     }
 
     return r;
+}
+
+template <typename T, typename std::enable_if<!std::is_arithmetic<T>::value, bool>::type = true>
+T expt(T p, unsigned q)
+{
+    using std::pow;
+    return static_cast<T>(pow(p, q));
 }
 
 template<class Real, bool second, class Policy>
