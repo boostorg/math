@@ -53,7 +53,7 @@ template <typename T, typename std::enable_if<!std::is_arithmetic<T>::value, boo
 T expt(T p, unsigned q)
 {
     using std::pow;
-    return static_cast<T>(pow(p, q));
+    return pow(p, static_cast<int>(q));
 }
 
 template<class Real, bool second, class Policy>
