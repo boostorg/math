@@ -77,7 +77,7 @@ inline Real chebyshev_imp(unsigned n, Real const & x, const Policy&)
         if (x > 1 || x < -1)
         {
             Real t = sqrt(x*x -1);
-            return static_cast<Real>((expt(x+t, n+1) - expt(x-t, n+1))/(2*t));
+            return static_cast<Real>((expt(static_cast<Real>(x+t), n+1) - expt(static_cast<Real>(x-t), n+1))/(2*t));
         }
         T1 = 2*x;
     }
