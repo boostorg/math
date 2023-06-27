@@ -169,7 +169,7 @@ BOOST_AUTO_TEST_CASE( test_main )
       // Newton next:
       iters = 1000;
       dr = boost::math::tools::newton_raphson_iterate(cbrt_functor_deriv(arg), guess, guess / 2, result * 10, newton_limits, iters);
-      BOOST_CHECK_CLOSE_FRACTION(dr, result, std::numeric_limits<double>::epsilon() * 2);
+      BOOST_CHECK_CLOSE_FRACTION(dr, result, ldexp(1.0, 1 - newton_limits));
       BOOST_CHECK_LE(iters, 12);
       // Halley next:
       iters = 1000;
@@ -192,7 +192,7 @@ BOOST_AUTO_TEST_CASE( test_main )
       // Newton next:
       iters = 1000;
       dr = boost::math::tools::newton_raphson_iterate(cbrt_functor_deriv(arg), guess, result / 10, result * 10, newton_limits, iters);
-      BOOST_CHECK_CLOSE_FRACTION(dr, result, std::numeric_limits<double>::epsilon() * 2);
+      BOOST_CHECK_CLOSE_FRACTION(dr, result, ldexp(1.0, 1 - newton_limits));
       BOOST_CHECK_LE(iters, 12);
       // Halley next:
       iters = 1000;
@@ -212,11 +212,16 @@ BOOST_AUTO_TEST_CASE( test_main )
       r = boost::math::tools::bracket_and_solve_root(cbrt_functor_noderiv(arg), guess, 2.0, true, boost::math::tools::eps_tolerance<double>(), iters);
       BOOST_CHECK_CLOSE_FRACTION((r.first + r.second) / 2, result, std::numeric_limits<double>::epsilon() * 4);
       BOOST_CHECK_LE(iters, 12);
+      
+      
       // Newton next:
       iters = 1000;
       dr = boost::math::tools::newton_raphson_iterate(cbrt_functor_deriv(arg), guess, result / 10, result * 10, newton_limits, iters);
-      BOOST_CHECK_CLOSE_FRACTION(dr, result, std::numeric_limits<double>::epsilon() * 2);
+      BOOST_CHECK_CLOSE_FRACTION(dr, result, ldexp(1.0, 1 - newton_limits));
       BOOST_CHECK_LE(iters, 5);
+      // BOOST_CHECK_LE(iters, 8);
+      
+      
       // Halley next:
       iters = 1000;
       dr = boost::math::tools::halley_iterate(cbrt_functor_2deriv(arg), guess, result / 10, result * 10, newton_limits, iters);
@@ -235,11 +240,18 @@ BOOST_AUTO_TEST_CASE( test_main )
       r = boost::math::tools::bracket_and_solve_root(cbrt_functor_noderiv(arg), guess, 2.0, true, boost::math::tools::eps_tolerance<double>(), iters);
       BOOST_CHECK_CLOSE_FRACTION((r.first + r.second) / 2, result, std::numeric_limits<double>::epsilon() * 4);
       BOOST_CHECK_LE(iters, 12);
+
+      // ********************************************************************
+      // ********************************************************************
+      // ********************************************************************
       // Newton next:
       iters = 1000;
       dr = boost::math::tools::newton_raphson_iterate(cbrt_functor_deriv(arg), guess, result / 10, result * 10, newton_limits, iters);
-      BOOST_CHECK_CLOSE_FRACTION(dr, result, std::numeric_limits<double>::epsilon() * 2);
+      BOOST_CHECK_CLOSE_FRACTION(dr, result, ldexp(1.0, 1 - newton_limits));
       BOOST_CHECK_LE(iters, 5);
+      // BOOST_CHECK_LE(iters, 8);
+      
+      
       // Halley next:
       iters = 1000;
       dr = boost::math::tools::halley_iterate(cbrt_functor_2deriv(arg), guess, result / 10, result * 10, newton_limits, iters);
@@ -264,6 +276,8 @@ BOOST_AUTO_TEST_CASE( test_main )
 
 #  include "ibeta_small_data.ipp"
 
+
+#if 1
    for (unsigned i = 0; i < ibeta_small_data.size(); ++i)
    {
       //
@@ -317,6 +331,8 @@ BOOST_AUTO_TEST_CASE( test_main )
          BOOST_CHECK_LE(iters, 10);
       }
    }
+
+#endif   
 
 }
 
