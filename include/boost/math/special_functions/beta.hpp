@@ -586,7 +586,7 @@ T ibeta_series(T a, T b, T x, T s0, const Lanczos&, bool normalised, T* p_deriva
          if(a * b < bgh * 10)
             result *= exp((b - 0.5f) * boost::math::log1p(a / bgh, pol));
          else
-            result *= pow(cgh / bgh, T(b - 0.5f));
+            result *= pow(cgh / bgh, T(b - T(0.5)));
          result *= pow(x * cgh / agh, a);
          result *= sqrt(agh / boost::math::constants::e<T>());
 
