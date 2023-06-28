@@ -216,395 +216,178 @@ inline std::pair<T, T> bisect(F f, T min, T max, Tol tol) noexcept(policies::is_
    return bisect(f, min, max, tol, m, policies::policy<>());
 }
 
+namespace detail {
+   // Stores x, f(x), and f'(x)
+   template <class T>
+   class CacheOrder1 {
+   public:
+      template <class F>
+      CacheOrder1(F f, T x) : x_(x) { detail::unpack_tuple(f(x_), f0_, f1_); }
 
+      T x() const { return x_; }
+      T f0() const { return f0_; }  // f(x)
+      T f1() const { return f1_; }  // f'(x)
 
-#if 1
+   private:
+      T x_;
+      T f0_;  // f(x)
+      T f1_;  // f'(x)
+   };
 
+   // Calculates the step with Newton's method
+   template <class T>
+   class StepNewton {
+   public:
+      T calc_dx(const CacheOrder1<T>& cache) {
+         return cache.f0() / cache.f1();
+      }
+   };
 
-#if 0    
-         // Newton's method says that:
-         //   dx = f(x)/f'(x)
-         //   x_next = x - dx
-         //
-         // Consider f(x) = x, ... f'(x) = 1, so f(x) / f'(x) = x
-         //   x = 1/1, dx = 1/1, x_next = 1/1 - 1/1 = 0
-         //   x = 0,   dx = 0,   x_next = 0 - 0     = 0
-         //
-         // Consider f(x) = x^2,... f'(x) = 2x, so f(x) / f'(x) = x/2
-         //   x = 1/1, dx = 1/2, x_next = 1/1 - 1/2 = 1/2
-         //   x = 1/2, dx = 1/4, x_next = 1/2 - 1/4 = 1/4
-         // This is a double root
-         //
-         // Consider f(x) = x^3,... f'(x) = 3x^2, so f(x) / f'(x) = x/3
-         //   x = 1/1, dx = 1/3,  x_next = 1/1 - 1/3 = 2/3
-         //   x = 2/3, dx = 2/9,  x_next = 2/3 - 2/9 = 4/9
-         //
-         // Consider f(x) = x^n, ... f'(x) = n * x^(n-1), so f(x) / f'(x) = x/n
-         //   x = 1/1,     dx = 1/n,       x_next = 1/1 - 1/n           = (n-1)/n
-         //   x = (n-1)/n, dx = (n-1)/n^2, x_next = (n-1)/n - (n-1)/n^2 = (n-1)^2/n^2
-         //
-         // Ratio of two consecutive dx:
-         //   f(x) = x,   ratio = 0
-         //   f(x) = x^2, ratio = 1/2
-         //   f(x) = x^3, ratio = 2/3
-         //
-         // Ratio of two consecutive dx:
-         //   dx_1 = 1/n
-         //   dx_2 = (n-1)/n^2
-         //   dx_2 / dx_1 = (n-1) / n
-         //
+   // Enforces bracketing when root finding with Newton's method
+   template <class F, class T, class Step>
+   class BracketHelper {
+      public:
+      static T solve(F f, T x, T xl, T xh, int digits, std::uintmax_t& max_iter) noexcept(policies::is_noexcept_error_policy<policies::policy<> >::value&& BOOST_MATH_IS_FLOAT(T) && noexcept(std::declval<F>()(std::declval<T>()))) {
+         BracketHelper helper(f, x, xl, xh, digits, max_iter);
+         T x_sol = helper.solve_impl();
+         max_iter -= helper.count();  // Make max_iter the number of iterations used.
+         return x_sol;
+      }
 
-         if (is_last_newton_reg) {
-            if (sign(dx) == sign(dx_prev)) {
-               // Estimate multiplicity n
-               T ratio = fabs(dx) / fabs(dx_prev);
-               T n = 1 / (1 - ratio);
+   private:
+      // Stores the last two Newton step sizes
+      class StepSizeHistory {
+      public:
+         StepSizeHistory() { reset(); }
 
-               if (1 < n) {
-                  T dx_want = dx * n;
-                  T x_want = x - dx_want;
-                  if (xl < x_want && x_want < xh) {
-                     is_last_newton_reg = false;
-                     if (is_print) {
-                        std::cout << "TRIGGER -- ";
-                        std::cout << "n: " << n;
-                        std::cout << ", dx: " << dx << ", dx_prev: " << dx_prev;
-                        std::cout << std::endl;
-                     }
-                     dx = dx_want;
-                     x = x_want;
-                  } 
-               } 
+         void reset() {
+            dx_p_ = (std::numeric_limits<T>::max)();
+            dx_pp_ = (std::numeric_limits<T>::max)();
+         }
+
+         void push(T input) {
+            dx_pp_ = dx_p_;
+            dx_p_ = input;
+         }
+
+         T dx_p() const { return dx_p_; }
+         T dx_pp() const { return dx_pp_; }
+
+      private:
+         T dx_p_;
+         T dx_pp_;
+      };
+
+      // Same as the inputs to newton_raphson_iterate
+      BracketHelper(F f, T x, T xl, T xh, int digits, std::uintmax_t& max_iter)
+         : f_(f)
+         , cache_x_(f, x)
+         , cache_xl_(f, xl)
+         , cache_xh_(f, xh)
+         , count_(max_iter)
+         , factor_(static_cast<T>(ldexp(1.0, 1 - digits)))  // factor_ = 1.0 * 2^(1-digits)
+      {
+         if (xh < xl) {
+            static const char* function = "boost::math::tools::detail::BracketHelper<%1%>";
+            policies::raise_evaluation_error(function, "Range arguments in wrong order in boost::math::tools::detail::BracketHelper(first arg=%1%)", xl, boost::math::policies::policy<>());
+         }
+      }
+
+      T solve_impl() {
+         if (0 == f0()) return x();  // Solved at initial x
+
+         // Calculate direction towards root
+         const T dx = Step().calc_dx(cache_x_);
+         const T x_next = x() - dx;  // x_next calculated with step dx
+
+         const bool can_bracket_l = f0() * f0_l() <= 0;  // Sign flip between x and xl
+         const bool can_bracket_h = f0() * f0_h() <= 0;  // Sign flip between x and xh
+         const bool want_to_go_l = 0 <= dx;  // Because of negative sign in update formula x_next = x() - dx
+
+         if (can_bracket_l && (want_to_go_l || !can_bracket_h)) {
+            set_cache_H_to_cache_x();  // Evaluated point x becomes new high bound
+            return solve_bracket(x_next);
+         } else if (can_bracket_h) {
+            set_cache_L_to_cache_x();  // Evaluated point x becomes new low bound
+            return solve_bracket(x_next);
+         } else {
+            static const char* function = "boost::math::tools::detail::BracketHelper<%1%>";
+            return policies::raise_evaluation_error(function, "There appears to be no root to be found in boost::math::tools::detail::BracketHelper, perhaps we have a local minima near current best guess of %1%", x(), boost::math::policies::policy<>());
+         }
+      }
+
+      T solve_bracket(T x_next) {
+         BOOST_MATH_STD_USING
+         static const char* function = "boost::math::tools::detail::BracketHelper<%1%>";
+
+         if (f0_l() == 0.0) {  // Low bound is root
+            return xl();
+         } else if (f0_h() == 0.0) {  // High bound is root
+            return xh();
+         } else if (0 < f0_l() * f0_h()) { // Bounds do not bracket root
+            return policies::raise_evaluation_error(function, "Does not bracket boost::math::tools::detail::BracketHelper %1%", xl(), boost::math::policies::policy<>());
+         }
+         
+         // Orient cache_l and cache_h so that f0_l is negative and f0_h is positive
+         if (0 < f0_l()) std::swap(cache_xl_, cache_xh_);
+
+         do {
+            count_--;
+
+            // Calculate Newton step
+            const T dx_newton = Step().calc_dx(cache_x_);
+            x_next = x() - dx_newton;  // Checked against bracket bounds below
+
+            if (!is_x_between_l_and_h(x_next) ||
+               fabs(dx_pp()) < fabs(dx_newton * 4)) {  // Bisection halves step size each iteration
+               x_next = (xl() + xh()) / 2;  // Midpoint
+               dx_history_.reset();  // Invalitade step size history
             }
-         } else {
-            is_last_newton_reg = true; 
-         }
-#endif  
 
+            const T dx = x_next - x();
+            cache_x_ = detail::CacheOrder1<T>(f_, x_next);  // Update cache_x_ with x_next
 
+            if (fabs(dx) < fabs(x() * factor_)) { break; }  // Tolerance met
+            if (x_next == xl() || x_next == xh() || dx == 0) { break; }
+            
+            // Update bracket
+            (f0() < 0.0) ? set_cache_L_to_cache_x() : set_cache_H_to_cache_x();
 
+            dx_history_.push(dx);  // Store step size
+         } while (count_);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// =  =  = =   =  = =   =  = =   =  = =   =  = =   =  = =   =  = =   =  = = 
-// =  =  = =   =  = =   =  = =   =  = =   =  = =   =  = =   =  = =   =  = = 
-// =  =  = =   =  = =   =  = =   =  = =   =  = =   =  = =   =  = =   =  = = 
-template <class F, class T>
-T newton_bracket(F f, T x, T xl, T xh, int digits, std::uintmax_t& max_iter) noexcept(policies::is_noexcept_error_policy<policies::policy<> >::value&& BOOST_MATH_IS_FLOAT(T) && noexcept(std::declval<F>()(std::declval<T>())))
-{
-   BOOST_MATH_STD_USING
-   static const char* function = "boost::math::tools::newton_bracket<%1%>";
-   T factor = static_cast<T>(ldexp(1.0, 1 - digits));
-
-   std::uintmax_t count(max_iter);
-
-   T f0(0), f1;
-   T f0_l, f0_h;
-   detail::unpack_tuple(f(xl), f0_l, f1);
-   detail::unpack_tuple(f(xh), f0_h, f1);
-   // count -= 2;
-
-   if (f0_l == 0.0) {  // Left bound is solution
-      return xl;
-   } else if (f0_h == 0.0) {  // Right bound is solution
-      return xh;
-   } else if (0 < f0_l * f0_h) { // Root not bracketed
-      return policies::raise_evaluation_error(function, "Does not bracket boost::math::tools::newton_raphson_iterate %1%", xl, boost::math::policies::policy<>());
-   }
-
-   // Set to middle if out of range
-   if (x < std::min(xl, xh) || std::max(xl, xh) < x) {
-      x = (xl + xh) / 2;
-   }
-   
-   // Flip l and h if required
-   if (0 < f0_l) {
-      std::swap(xl, xh);
-      std::swap(f0_l, f0_h);
-   }
-
-   T dx = fabs(xh - xl);
-   T dx_p = dx * 3;
-   T dx_pp = dx_p * 3;
-
-   const bool is_print = false;
-   // const bool is_print = true;
-   if (is_print) std::cout << "=========================================================" << std::endl;
-
-   do {
-      if (is_print) std::cout << std::endl;
-
-      // Evaluate
-      detail::unpack_tuple(f(x), f0, f1);
-      count--;
-
-      // Exit success
-      if (fabs(dx) < fabs(x * factor)) {
-         max_iter -= count;
-         return x;
+         return x();
       }
 
-      // Update brackets
-      if (f0 < 0.0) {
-         xl = x;
-         f0_l = f0;
-      } else {
-         xh = x;
-         f0_h = f0;
-      }
+      bool is_x_between_l_and_h(T x) const { return (std::min(xl(), xh()) <= x && x <= std::max(xl(), xh())); }
 
-      // Calculate dx
-      dx_pp = dx_p;
-      dx_p = dx;
-      dx = f0 / f1;
+      void set_cache_L_to_cache_x() { cache_xl_ = cache_x_; }
+      void set_cache_H_to_cache_x() { cache_xh_ = cache_x_; }
 
-      // Last two steps haven't converged.
-      if (fabs(dx_pp) < fabs(dx * 2)) {
-         if (is_print) std::cout << "hack -- ";
-         T shift = (0 < dx) ? (x - xl) / 2 : (x - xh) / 2;
-         T dx_des;
-         if ((x != 0) && (fabs(shift) > fabs(x))) {
-            dx_des = copysign(x, dx);  // Protect against huge jumps!
-         } else {
-            dx_des = shift;
-         }
-         dx = dx_des;
-         dx_p = 3 * dx;
-         dx_pp = 3 * dx;
-      }
+      T x() const { return cache_x_.x(); }
+      T f0() const { return cache_x_.f0(); }
+      T xl() const { return cache_xl_.x(); }
+      T f0_l() const { return cache_xl_.f0(); }
+      T xh() const { return cache_xh_.x(); }
+      T f0_h() const { return cache_xh_.f0(); }
+      T dx_pp() const { return dx_history_.dx_pp(); }
+      std::uintmax_t count() const { return count_; }
 
-      T x_newton = x - dx;  // Calculate x_newton      
+      F f_;
+      detail::CacheOrder1<T> cache_x_;
+      detail::CacheOrder1<T> cache_xl_;
+      detail::CacheOrder1<T> cache_xh_;
+      std::uintmax_t count_;
+      T factor_;
+      StepSizeHistory dx_history_;
+   };
+}  // namespace detail
 
-      const bool is_too_L = x_newton < xl;
-      const bool is_too_H = x_newton > xh;
-      if (is_too_L || is_too_H ) {  // Out of bounds
-         if (is_print) std::cout << "bisect -- " << is_too_L << is_too_H << ", ";
-         dx = (xh - xl) / 2;
-         x = xl + dx;
-      } else {  // Newton step
-         if (is_print) std::cout << "newton -- ";
-         if (x == x_newton || x_newton == xl || x_newton == xh) {
-            max_iter -= count;
-            return x;
-         }
-         x = x_newton;
-      }
-
-      if (is_print)  {
-         // std::cout << std::setprecision(21) << std::fixed;
-         std::cout << "x:  " << x <<  ", f0:   " << f0 << ", f1:   " << f1 << ", f0/f1: " << f0 / f1 << std::endl;
-         std::cout << "xl: " << xl << ", f0_l: " << f0_l << std::endl;
-         std::cout << "xh: " << xh << ", f0_h: " << f0_h << std::endl;
-         std::cout << "dx: " << dx << ", " << "xh - xl: " << fabs(xh - xl) << ", ";
-         std::cout << std::endl;
-      }
-   } while (count);
-
-   max_iter -= count;
-   return x;
-}
-
-
-// NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
-// NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
-// NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
 template <class F, class T>
 T newton_raphson_iterate(F f, T x, T xl, T xh, int digits, std::uintmax_t& max_iter) noexcept(policies::is_noexcept_error_policy<policies::policy<> >::value&& BOOST_MATH_IS_FLOAT(T) && noexcept(std::declval<F>()(std::declval<T>())))
 {
-   BOOST_MATH_STD_USING
-
-   static const char* function = "boost::math::tools::newton_raphson_iterate<%1%>";
-   if (xl > xh) {
-      return policies::raise_evaluation_error(function, "Range arguments in wrong order in boost::math::tools::newton_raphson_iterate(first arg=%1%)", xl, boost::math::policies::policy<>());
-   }
-
-   T f0(0), f1, last_f0(0);
-   T x_prev = x;
-
-   T delta = 0.0;
-   
-   T f0_max;
-   T f0_min;
-   detail::unpack_tuple(f(xh), f0_max, f1);
-   detail::unpack_tuple(f(xl), f0_min, f1);
-
-   std::uintmax_t count(max_iter);
-
-   // delta1 = delta;
-   detail::unpack_tuple(f(x), f0, f1);
-   --count;
-
-   // Exit success
-   if (0 == f0) {
-      max_iter -= count;
-      return x;
-   // Oops zero derivative!!!
-   } else if (f1 == 0) {
-      detail::handle_zero_derivative(f, last_f0, f0, delta, x, x_prev, xl, xh);
-   // Normal case
-   } else {
-      delta = f0 / f1;
-   }
-
-   // Update x
-   x_prev = x;
-   x -= delta;
-
-   if (delta < 0) {
-      if (0 < f0 * f0_max) {
-         // TODO: bracket other side if possible
-         return policies::raise_evaluation_error(function, "There appears to be no root to be found in boost::math::tools::newton_raphson_iterate, perhaps we have a local minima near current best guess of %1%", x_prev, boost::math::policies::policy<>());
-      } else {
-         return newton_bracket(f, x, x_prev, xh, digits, max_iter);
-      }
-   } else {
-      if (0 < f0 * f0_min) {
-         // TODO: bracket other side if possible
-         return policies::raise_evaluation_error(function, "There appears to be no root to be found in boost::math::tools::newton_raphson_iterate, perhaps we have a local minima near current best guess of %1%", x_prev, boost::math::policies::policy<>());
-      } else {
-         return newton_bracket(f, x, xl, x_prev, digits, max_iter);
-      }
-   }
+   return detail::BracketHelper<F, T, detail::StepNewton<T>>::solve(f, x, xl, xh, digits, max_iter);
 }
-
-
-
-
-
-#else
-template <class F, class T>
-T newton_raphson_iterate(F f, T guess, T min, T max, int digits, std::uintmax_t& max_iter) noexcept(policies::is_noexcept_error_policy<policies::policy<> >::value&& BOOST_MATH_IS_FLOAT(T) && noexcept(std::declval<F>()(std::declval<T>())))
-{
-   BOOST_MATH_STD_USING
-
-   static const char* function = "boost::math::tools::newton_raphson_iterate<%1%>";
-   if (min > max)
-   {
-      return policies::raise_evaluation_error(function, "Range arguments in wrong order in boost::math::tools::newton_raphson_iterate(first arg=%1%)", min, boost::math::policies::policy<>());
-   }
-
-   T f0(0), f1, last_f0(0);
-   T result = guess;
-
-   T factor = static_cast<T>(ldexp(1.0, 1 - digits));
-   T delta = tools::max_value<T>();
-   T delta1 = tools::max_value<T>();
-   T delta2 = tools::max_value<T>();
-
-   //
-   // We use these to sanity check that we do actually bracket a root,
-   // we update these to the function value when we update the endpoints
-   // of the range.  Then, provided at some point we update both endpoints
-   // checking that max_range_f * min_range_f <= 0 verifies there is a root
-   // to be found somewhere.  Note that if there is no root, and we approach 
-   // a local minima, then the derivative will go to zero, and hence the next
-   // step will jump out of bounds (or at least past the minima), so this
-   // check *should* happen in pathological cases.
-   //
-   T max_range_f = 0;
-   T min_range_f = 0;
-
-   std::uintmax_t count(max_iter);
-
-#ifdef BOOST_MATH_INSTRUMENT
-   std::cout << "Newton_raphson_iterate, guess = " << guess << ", min = " << min << ", max = " << max
-      << ", digits = " << digits << ", max_iter = " << max_iter << "\n";
-#endif
-
-   do {
-      last_f0 = f0;
-      delta2 = delta1;
-      delta1 = delta;
-      detail::unpack_tuple(f(result), f0, f1);
-      --count;
-      if (0 == f0)
-         break;
-      if (f1 == 0)
-      {
-         // Oops zero derivative!!!
-         detail::handle_zero_derivative(f, last_f0, f0, delta, result, guess, min, max);
-      }
-      else
-      {
-         delta = f0 / f1;
-      }
-#ifdef BOOST_MATH_INSTRUMENT
-      std::cout << "Newton iteration " << max_iter - count << ", delta = " << delta << ", residual = " << f0 << "\n";
-#endif
-      if (fabs(delta * 2) > fabs(delta2))
-      {
-         // Last two steps haven't converged.
-         T shift = (delta > 0) ? (result - min) / 2 : (result - max) / 2;
-         if ((result != 0) && (fabs(shift) > fabs(result)))
-         {
-            delta = sign(delta) * fabs(result) * 1.1f; // Protect against huge jumps!
-            //delta = sign(delta) * result; // Protect against huge jumps! Failed for negative result. https://github.com/boostorg/math/issues/216
-         }
-         else
-            delta = shift;
-         // reset delta1/2 so we don't take this branch next time round:
-         delta1 = 3 * delta;
-         delta2 = 3 * delta;
-      }
-      guess = result;
-      result -= delta;
-      if (result <= min)
-      {
-         delta = 0.5F * (guess - min);
-         result = guess - delta;
-         if ((result == min) || (result == max))
-            break;
-      }
-      else if (result >= max)
-      {
-         delta = 0.5F * (guess - max);
-         result = guess - delta;
-         if ((result == min) || (result == max))
-            break;
-      }
-      // Update brackets:
-      if (delta > 0)
-      {
-         max = guess;
-         max_range_f = f0;
-      }
-      else
-      {
-         min = guess;
-         min_range_f = f0;
-      }
-      //
-      // Sanity check that we bracket the root:
-      //
-      if (max_range_f * min_range_f > 0)
-      {
-         return policies::raise_evaluation_error(function, "There appears to be no root to be found in boost::math::tools::newton_raphson_iterate, perhaps we have a local minima near current best guess of %1%", guess, boost::math::policies::policy<>());
-      }
-   }while(count && (fabs(result * factor) < fabs(delta)));
-
-   max_iter -= count;
-
-#ifdef BOOST_MATH_INSTRUMENT
-   std::cout << "Newton Raphson required " << max_iter << " iterations\n";
-#endif
-
-   return result;
-}
-#endif 
 
 template <class F, class T>
 inline T newton_raphson_iterate(F f, T guess, T min, T max, int digits) noexcept(policies::is_noexcept_error_policy<policies::policy<> >::value&& BOOST_MATH_IS_FLOAT(T) && noexcept(std::declval<F>()(std::declval<T>())))
