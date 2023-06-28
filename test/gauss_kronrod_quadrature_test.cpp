@@ -38,6 +38,10 @@
 #pragma warning(disable:4127)  // Conditional expression is constant
 #endif
 
+#if __has_include(<stdfloat>)
+#  include <stdfloat>
+#endif
+
 using std::expm1;
 using std::atan;
 using std::tan;
@@ -456,6 +460,16 @@ BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
 {
 #ifdef TEST1
     std::cout << "Testing 15 point approximation:\n";
+
+#ifdef __STDCPP_FLOAT64_T__
+    test_linear<std::float64_t, 15>();
+    test_quadratic<std::float64_t, 15>();
+    test_ca<std::float64_t, 15>();
+    test_three_quadrature_schemes_examples<std::float64_t, 15>();
+    test_integration_over_real_line<std::float64_t, 15>();
+    test_right_limit_infinite<std::float64_t, 15>();
+    test_left_limit_infinite<std::float64_t, 15>();
+#else
     test_linear<double, 15>();
     test_quadratic<double, 15>();
     test_ca<double, 15>();
@@ -463,9 +477,20 @@ BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
     test_integration_over_real_line<double, 15>();
     test_right_limit_infinite<double, 15>();
     test_left_limit_infinite<double, 15>();
+#endif
 
     //  test one case where we do not have pre-computed constants:
     std::cout << "Testing 17 point approximation:\n";
+
+#ifdef __STDCPP_FLOAT64_T__
+    test_linear<std::float64_t, 17>();
+    test_quadratic<std::float64_t, 17>();
+    test_ca<std::float64_t, 17>();
+    test_three_quadrature_schemes_examples<std::float64_t, 17>();
+    test_integration_over_real_line<std::float64_t, 17>();
+    test_right_limit_infinite<std::float64_t, 17>();
+    test_left_limit_infinite<std::float64_t, 17>();
+#else
     test_linear<double, 17>();
     test_quadratic<double, 17>();
     test_ca<double, 17>();
@@ -473,11 +498,13 @@ BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
     test_integration_over_real_line<double, 17>();
     test_right_limit_infinite<double, 17>();
     test_left_limit_infinite<double, 17>();
+#endif
+
     test_complex_lambert_w<std::complex<double>>();
     test_complex_lambert_w<std::complex<long double>>();
 #endif
 #ifdef TEST1A
-#if LDBL_MANT_DIG < 100 // If we have too many digits in a long double, we get build errors due to a constexpr issue.
+#if LDBL_MANT_DIG < 100 && defined(BOOST_MATH_RUN_MP_TESTS) // If we have too many digits in a long double, we get build errors due to a constexpr issue.
     std::cout << "Testing 21 point approximation:\n";
     test_linear<cpp_bin_float_quad, 21>();
     test_quadratic<cpp_bin_float_quad, 21>();
@@ -498,7 +525,7 @@ BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
 #endif
 #endif
 #ifdef TEST2
-#if LDBL_MANT_DIG < 100 // If we have too many digits in a long double, we get build errors due to a constexpr issue.
+#if LDBL_MANT_DIG < 100 && defined(BOOST_MATH_RUN_MP_TESTS) // If we have too many digits in a long double, we get build errors due to a constexpr issue.
     std::cout << "Testing 41 point approximation:\n";
     test_linear<cpp_bin_float_quad, 41>();
     test_quadratic<cpp_bin_float_quad, 41>();
@@ -518,7 +545,7 @@ BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
     test_left_limit_infinite<cpp_bin_float_quad, 51>();
 #endif
 #endif
-#ifdef TEST3
+#if defined(TEST3) && defined(BOOST_MATH_RUN_MP_TESTS)
     // Need at least one set of tests with expression templates turned on:
     std::cout << "Testing 61 point approximation:\n";
     test_linear<cpp_dec_float_50, 61>();

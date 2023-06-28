@@ -15,11 +15,11 @@
       typedef RealType value_type;
       typedef Policy   policy_type;
       // Construct:
-      hypergeometric_distribution(unsigned r, unsigned n, unsigned N); // r=defective/failures/success, n=trials/draws, N=total population.
+      hypergeometric_distribution(uint64_t r, uint64_t n, uint64_t N); // r=defective/failures/success, n=trials/draws, N=total population.
       // Accessors:
-      unsigned total()const;
-      unsigned defective()const;
-      unsigned sample_count()const;
+      uint64_t total()const;
+      uint64_t defective()const;
+      uint64_t sample_count()const;
    };
 
    typedef hypergeometric_distribution<> hypergeometric;
@@ -56,20 +56,20 @@ then we obtain basically the same graphs:
 
 [h4 Member Functions]
 
-   hypergeometric_distribution(unsigned r, unsigned n, unsigned N);
+   hypergeometric_distribution(uint64_t r, uint64_t n, uint64_t N);
 
 Constructs a hypergeometric distribution with a population of /N/ objects,
 of which /r/ are defective, and from which /n/ are sampled.
 
-   unsigned total()const;
+   uint64_t total()const;
 
 Returns the total number of objects /N/.
 
-   unsigned defective()const;
+   uint64_t defective()const;
 
 Returns the number of objects /r/ in population /N/ which are defective.
 
-   unsigned sample_count()const;
+   uint64_t sample_count()const;
 
 Returns the number of objects /n/ which are sampled from the population /N/.
 
@@ -87,7 +87,7 @@ and Python
 All the [link math_toolkit.dist_ref.nmp usual non-member accessor functions]
 that are generic to all distributions are supported: __usual_accessors.
 
-The domain of the random variable is the unsigned integers in the range
+The domain of the random variable are the 64-bit unsigned integers in the range
 \[max(0, n + r - N), min(n, r)\].  A __domain_error is raised if the
 random variable is outside this range, or is not an integral value.
 

@@ -27,6 +27,10 @@
 #include <limits>
 #include <cmath>
 
+#if __has_include(<stdfloat>)
+#  include <stdfloat>
+#endif
+
 #if __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1900)
 #include <boost/math/tools/agm.hpp>
 // Check at compile time that the construction method for constants of type float, is "construct from a float", or "construct from a double", ...
@@ -347,6 +351,128 @@ void test_float_spots()
    CHECK_ULP_CLOSE(4.66920160910299067185320382046620161725F, first_feigenbaum, 1);
 } // template <typename RealType>void test_spots(RealType)
 
+#ifdef __STDCPP_FLOAT32_T__
+
+void test_f32_spots()
+{
+   // Basic sanity checks for constants in boost::math::float_constants::
+   // for example: boost::math::float_constants::pi
+   // (rather than boost::math::constants::pi<float>() ).
+   using namespace boost::math::float_constants;
+   BOOST_MATH_STD_USING
+
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(3.14159265358979323846264338327950288419716939937510F32), pi, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(sqrt(3.14159265358979323846264338327950288419716939937510F32)), root_pi, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(sqrt(3.14159265358979323846264338327950288419716939937510F32/2)), root_half_pi, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(sqrt(3.14159265358979323846264338327950288419716939937510F32 * 2)), root_two_pi, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(sqrt(log(4.0F32))), root_ln_four, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(2.71828182845904523536028747135266249775724709369995F32), e, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(0.5), half, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(0.57721566490153286060651209008240243104259335F32), euler, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(sqrt(2.0F32)), root_two, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(log(2.0F32)), ln_two, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(log(log(2.0F32))), ln_ln_two, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(1)/3, third, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(2)/3, twothirds, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(0.14159265358979323846264338327950288419716939937510F32), pi_minus_three, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(4.F32 - 3.14159265358979323846264338327950288419716939937510F32), four_minus_pi, 2);
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(pow((3.14159265358979323846264338327950288419716939937510F32), 2.71828182845904523536028747135266249775724709369995F32)), pi_pow_e, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(pow((3.14159265358979323846264338327950288419716939937510F32), 0.33333333333333333333333333333333333333333333333333F32)), cbrt_pi, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(exp(-0.5F32)), exp_minus_half, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(pow(2.71828182845904523536028747135266249775724709369995F32, 3.14159265358979323846264338327950288419716939937510F32)), e_pow_pi, 2);
+
+
+#else // Only double, so no suffix F32.
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(pow((3.14159265358979323846264338327950288419716939937510), 2.71828182845904523536028747135266249775724709369995)), pi_pow_e, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(pow((3.14159265358979323846264338327950288419716939937510), 0.33333333333333333333333333333333333333333333333333)), cbrt_pi, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(exp(-0.5)), exp_minus_half, 2);
+#endif
+   // Rational fractions.
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(0.333333333333333333333333333333333333333F32), third, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(0.666666666666666666666666666666666666667F32), two_thirds, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(0.75F32), three_quarters, 2);
+   // Two and related.
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(sqrt(2.F32)), root_two, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(sqrt(3.F32)), root_three, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(sqrt(2.F32)/2), half_root_two, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(log(2.F32)), ln_two, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(log(log(2.0F32))), ln_ln_two, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(sqrt(log(4.0F32))), root_ln_four, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(1/sqrt(2.0F32)), one_div_root_two, 2);
+
+   // pi.
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(3.14159265358979323846264338327950288419716939937510F32), pi, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(3.14159265358979323846264338327950288419716939937510F32/2), half_pi, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(3.14159265358979323846264338327950288419716939937510F32/4), quarter_pi, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(3.14159265358979323846264338327950288419716939937510F32/3), third_pi, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(3.14159265358979323846264338327950288419716939937510F32/6), sixth_pi, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(2 * 3.14159265358979323846264338327950288419716939937510F32), two_pi, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(3 * 3.14159265358979323846264338327950288419716939937510F32 / 4), three_quarters_pi, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(4 * 3.14159265358979323846264338327950288419716939937510F32 / 3), four_thirds_pi, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(1 / (3.14159265358979323846264338327950288419716939937510F32)), one_div_pi, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(2 / (3.14159265358979323846264338327950288419716939937510F32)), two_div_pi, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(1 / (2 * 3.14159265358979323846264338327950288419716939937510F32)), one_div_two_pi, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(sqrt(3.14159265358979323846264338327950288419716939937510F32)), root_pi, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(sqrt(3.14159265358979323846264338327950288419716939937510F32 / 2)), root_half_pi, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(sqrt(2 * 3.14159265358979323846264338327950288419716939937510F32)), root_two_pi, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(1 / sqrt(3.14159265358979323846264338327950288419716939937510F32)), one_div_root_pi, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(2 / sqrt(3.14159265358979323846264338327950288419716939937510F32)), two_div_root_pi, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(1 / sqrt(2 * 3.14159265358979323846264338327950288419716939937510F32)), one_div_root_two_pi, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(sqrt(1. / 3.14159265358979323846264338327950288419716939937510F32)), root_one_div_pi, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(3.14159265358979323846264338327950288419716939937510L - 3.L), pi_minus_three, 4 * 2 ); // 4 * 2 because of cancellation loss.
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(4.L - 3.14159265358979323846264338327950288419716939937510L), four_minus_pi, 4 );
+   //
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(pow((3.14159265358979323846264338327950288419716939937510F32), 2.71828182845904523536028747135266249775724709369995F32)), pi_pow_e, 2);  // See above.
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(3.14159265358979323846264338327950288419716939937510F32 * 3.14159265358979323846264338327950288419716939937510F32), pi_sqr, 2);  // See above.
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(3.14159265358979323846264338327950288419716939937510F32 * 3.14159265358979323846264338327950288419716939937510F32/6), pi_sqr_div_six, 2);  // See above.
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(3.14159265358979323846264338327950288419716939937510F32 * 3.14159265358979323846264338327950288419716939937510F32 * 3.14159265358979323846264338327950288419716939937510F32), pi_cubed, 2);  // See above.
+
+   // CHECK_ULP_CLOSE(static_cast<std::float32_t>(3.14159265358979323846264338327950288419716939937510F32 * 3.14159265358979323846264338327950288419716939937510F32), cbrt_pi, 2);  // See above.
+   CHECK_ULP_CLOSE(cbrt_pi * cbrt_pi * cbrt_pi, pi, 2);
+   CHECK_ULP_CLOSE((static_cast<std::float32_t>(1)/cbrt_pi), one_div_cbrt_pi, 2);
+
+   // Euler
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(2.71828182845904523536028747135266249775724709369995F32), e, 2);
+
+   //CHECK_ULP_CLOSE(static_cast<std::float32_t>(exp(-0.5F32)), exp_minus_half, 2);  // See above.
+   CHECK_ULP_CLOSE(pow(e, pi), e_pow_pi, 2); // See also above.
+   CHECK_ULP_CLOSE(sqrt(e), root_e, 2);
+   CHECK_ULP_CLOSE(log10(e), log10_e, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float32_t>(1)/log10(e), one_div_log10_e, 2);
+
+   // Trigonometric
+   CHECK_ULP_CLOSE(pi/180, degree, 2);
+   CHECK_ULP_CLOSE(180 / pi, radian, 2);
+   CHECK_ULP_CLOSE(sin(1.F32), sin_one, 2);
+   CHECK_ULP_CLOSE(cos(1.F32), cos_one, 2);
+   CHECK_ULP_CLOSE(sinh(1.F32), sinh_one, 2);
+   CHECK_ULP_CLOSE(cosh(1.F32), cosh_one, 2);
+
+   // Phi
+   CHECK_ULP_CLOSE((1.F32 + sqrt(5.F32)) /2, phi, 2);
+   CHECK_ULP_CLOSE(log((1.F32 + sqrt(5.F32)) /2), ln_phi, 2);
+   CHECK_ULP_CLOSE(1.F32 / log((1.F32 + sqrt(5.F32)) /2), one_div_ln_phi, 2);
+
+   // Euler's Gamma
+   CHECK_ULP_CLOSE(0.57721566490153286060651209008240243104215933593992F32, euler, 2); // (sequence A001620 in OEIS).
+   CHECK_ULP_CLOSE(1.F32/ 0.57721566490153286060651209008240243104215933593992F32, one_div_euler, 2); // (from sequence A001620 in OEIS).
+   CHECK_ULP_CLOSE(0.57721566490153286060651209008240243104215933593992F32 * 0.57721566490153286060651209008240243104215933593992F32, euler_sqr, 2); // (from sequence A001620 in OEIS).
+
+   // Misc
+   CHECK_ULP_CLOSE(1.644934066848226436472415166646025189218949901206F32, zeta_two, 2); // A013661 as a constant (usually base 10) in OEIS.
+   CHECK_ULP_CLOSE(1.20205690315959428539973816151144999076498629234049888179227F32, zeta_three, 2); // (sequence A002117 in OEIS)
+   CHECK_ULP_CLOSE(.91596559417721901505460351493238411077414937428167213F32, catalan, 2); // A006752 as a constant in OEIS.
+   CHECK_ULP_CLOSE(1.1395470994046486574927930193898461120875997958365518247216557100852480077060706857071875468869385150F32, extreme_value_skewness, 2); //  Mathematica: N[12 Sqrt[6]  Zeta[3]/Pi^3, 1101]
+   CHECK_ULP_CLOSE(0.6311106578189371381918993515442277798440422031347194976580945856929268196174737254599050270325373067F32, rayleigh_skewness, 2); // Mathematica: N[2 Sqrt[Pi] (Pi - 3)/((4 - Pi)^(3/2)), 1100]
+   CHECK_ULP_CLOSE(2.450893006876380628486604106197544154e-01F32, rayleigh_kurtosis_excess, 2);
+   CHECK_ULP_CLOSE(2.68545200106530644530971483548179569382038229399446295305115234555721885953715200280114117493184769799515F32, khinchin, 4 ); // A002210 as a constant https://oeis.org/A002210/constant
+   CHECK_ULP_CLOSE(1.2824271291006226368753425688697917277676889273250011F32, glaisher, 4 ); // https://oeis.org/A074962/constant
+   CHECK_ULP_CLOSE(4.66920160910299067185320382046620161725F32, first_feigenbaum, 1);
+} // template <typename RealType>void test_spots(RealType)
+
+#endif
+
 void test_double_spots()
 {
    // Basic sanity checks for constants in boost::math::double_constants::
@@ -464,6 +590,126 @@ void test_double_spots()
    CHECK_ULP_CLOSE(1.2824271291006226368753425688697917277676889273250011, glaisher, 4 ); // https://oeis.org/A074962/constant
 
 } // template <typename RealType>void test_spots(RealType)
+
+#ifdef __STDCPP_FLOAT64_T__
+void test_f64_spots()
+{
+   // Basic sanity checks for constants in boost::math::double_constants::
+   // for example: boost::math::double_constants::pi
+   // (rather than boost::math::constants::pi<double>() ).
+   using namespace boost::math::double_constants;
+   BOOST_MATH_STD_USING
+
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(3.14159265358979323846264338327950288419716939937510F64), pi, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(sqrt(3.14159265358979323846264338327950288419716939937510F64)), root_pi, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(sqrt(3.14159265358979323846264338327950288419716939937510F64/2)), root_half_pi, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(sqrt(3.14159265358979323846264338327950288419716939937510F64 * 2)), root_two_pi, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(sqrt(log(4.0F64))), root_ln_four, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(2.71828182845904523536028747135266249775724709369995F64), e, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(0.5F64), half, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(0.57721566490153286060651209008240243104259335F64), euler, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(sqrt(2.0F64)), root_two, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(log(2.0F64)), ln_two, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(log(log(2.0F64))), ln_ln_two, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(1)/3, third, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(2)/3, twothirds, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(0.14159265358979323846264338327950288419716939937510F64), pi_minus_three, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(4.F64 - 3.14159265358979323846264338327950288419716939937510F64), four_minus_pi, 2);
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(pow((3.14159265358979323846264338327950288419716939937510F64), 2.71828182845904523536028747135266249775724709369995F64)), pi_pow_e, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(pow((3.14159265358979323846264338327950288419716939937510F64), 0.33333333333333333333333333333333333333333333333333F64)), cbrt_pi, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(exp(-0.5F64)), exp_minus_half, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(pow(2.71828182845904523536028747135266249775724709369995F64, 3.14159265358979323846264338327950288419716939937510F64)), e_pow_pi, 2);
+
+
+#else // Only double, so no suffix .
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(pow((3.14159265358979323846264338327950288419716939937510F64), 2.71828182845904523536028747135266249775724709369995F64)), pi_pow_e, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(pow((3.14159265358979323846264338327950288419716939937510F64), 0.33333333333333333333333333333333333333333333333333F64)), cbrt_pi, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(exp(-0.5)), exp_minus_half, 2);
+#endif
+   // Rational fractions.
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(0.333333333333333333333333333333333333333F64), third, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(0.666666666666666666666666666666666666667F64), two_thirds, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(0.75), three_quarters, 2);
+   // Two and related.
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(sqrt(2.F64)), root_two, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(sqrt(3.F64)), root_three, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(sqrt(2.F64)/2), half_root_two, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(log(2.F64)), ln_two, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(log(log(2.0F64))), ln_ln_two, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(sqrt(log(4.0F64))), root_ln_four, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(1/sqrt(2.0F64)), one_div_root_two, 2);
+
+   // pi.
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(3.14159265358979323846264338327950288419716939937510F64), pi, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(3.14159265358979323846264338327950288419716939937510F64/2), half_pi, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(3.14159265358979323846264338327950288419716939937510F64/4), quarter_pi, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(3.14159265358979323846264338327950288419716939937510F64/3), third_pi, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(3.14159265358979323846264338327950288419716939937510F64/6), sixth_pi, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(2 * 3.14159265358979323846264338327950288419716939937510F64), two_pi, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(3 * 3.14159265358979323846264338327950288419716939937510F64 / 4), three_quarters_pi, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(4 * 3.14159265358979323846264338327950288419716939937510F64 / 3), four_thirds_pi, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(1 / (3.14159265358979323846264338327950288419716939937510F64)), one_div_pi, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(2 / (3.14159265358979323846264338327950288419716939937510F64)), two_div_pi, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(1 / (2 * 3.14159265358979323846264338327950288419716939937510F64)), one_div_two_pi, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(sqrt(3.14159265358979323846264338327950288419716939937510F64)), root_pi, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(sqrt(3.14159265358979323846264338327950288419716939937510F64 / 2)), root_half_pi, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(sqrt(2 * 3.14159265358979323846264338327950288419716939937510F64)), root_two_pi, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(1 / sqrt(3.14159265358979323846264338327950288419716939937510F64)), one_div_root_pi, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(2 / sqrt(3.14159265358979323846264338327950288419716939937510F64)), two_div_root_pi, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(1 / sqrt(2 * 3.14159265358979323846264338327950288419716939937510F64)), one_div_root_two_pi, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(sqrt(1. / 3.14159265358979323846264338327950288419716939937510F64)), root_one_div_pi, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(3.14159265358979323846264338327950288419716939937510F64 - 3.F64), pi_minus_three, 4 * 2 ); // 4 * 2 because of cancellation loss.
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(4.F64 - 3.14159265358979323846264338327950288419716939937510F64), four_minus_pi, 4 );
+   //
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(pow((3.14159265358979323846264338327950288419716939937510F64), 2.71828182845904523536028747135266249775724709369995F64)), pi_pow_e, 2);  // See above.
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(3.14159265358979323846264338327950288419716939937510F64 * 3.14159265358979323846264338327950288419716939937510F64), pi_sqr, 2);  // See above.
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(3.14159265358979323846264338327950288419716939937510F64 * 3.14159265358979323846264338327950288419716939937510F64/6), pi_sqr_div_six, 2);  // See above.
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(3.14159265358979323846264338327950288419716939937510F64 * 3.14159265358979323846264338327950288419716939937510F64 * 3.14159265358979323846264338327950288419716939937510F64), pi_cubed, 2);  // See above.
+
+   // CHECK_ULP_CLOSE(static_cast<std::float64_t>(3.14159265358979323846264338327950288419716939937510 * 3.14159265358979323846264338327950288419716939937510), cbrt_pi, 2);  // See above.
+   CHECK_ULP_CLOSE(cbrt_pi * cbrt_pi * cbrt_pi, pi, 2);
+   CHECK_ULP_CLOSE((static_cast<std::float64_t>(1)/cbrt_pi), one_div_cbrt_pi, 2);
+
+   // Euler
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(2.71828182845904523536028747135266249775724709369995), e, 2);
+
+   //CHECK_ULP_CLOSE(static_cast<std::float64_t>(exp(-0.5)), exp_minus_half, 2);  // See above.
+   CHECK_ULP_CLOSE(pow(e, pi), e_pow_pi, 2); // See also above.
+   CHECK_ULP_CLOSE(sqrt(e), root_e, 2);
+   CHECK_ULP_CLOSE(log10(e), log10_e, 2);
+   CHECK_ULP_CLOSE(static_cast<std::float64_t>(1)/log10(e), one_div_log10_e, 2);
+
+   // Trigonometric
+   CHECK_ULP_CLOSE(pi/180, degree, 2);
+   CHECK_ULP_CLOSE(180 / pi, radian, 2);
+   CHECK_ULP_CLOSE(sin(1.F64), sin_one, 2);
+   CHECK_ULP_CLOSE(cos(1.F64), cos_one, 2);
+   CHECK_ULP_CLOSE(sinh(1.F64), sinh_one, 2);
+   CHECK_ULP_CLOSE(cosh(1.F64), cosh_one, 2);
+
+   // Phi
+   CHECK_ULP_CLOSE((1.F64 + sqrt(5.F64)) /2, phi, 2);
+   CHECK_ULP_CLOSE(log((1.F64 + sqrt(5.F64)) /2), ln_phi, 2);
+   CHECK_ULP_CLOSE(1.F64 / log((1.F64 + sqrt(5.F64)) /2), one_div_ln_phi, 2);
+
+   //Euler's Gamma
+   CHECK_ULP_CLOSE(0.57721566490153286060651209008240243104215933593992F64, euler, 2); // (sequence A001620 in OEIS).
+   CHECK_ULP_CLOSE(1.F64/ 0.57721566490153286060651209008240243104215933593992F64, one_div_euler, 2); // (from sequence A001620 in OEIS).
+   CHECK_ULP_CLOSE(0.57721566490153286060651209008240243104215933593992F64 * 0.57721566490153286060651209008240243104215933593992F64, euler_sqr, 2); // (from sequence A001620 in OEIS).
+
+   // Misc
+   CHECK_ULP_CLOSE(1.644934066848226436472415166646025189218949901206F64, zeta_two, 2); // A013661 as a constant (usually base 10) in OEIS.
+   CHECK_ULP_CLOSE(1.20205690315959428539973816151144999076498629234049888179227F64, zeta_three, 2); // (sequence A002117 in OEIS)
+   CHECK_ULP_CLOSE(.91596559417721901505460351493238411077414937428167213F64, catalan, 2); // A006752 as a constant in OEIS.
+   CHECK_ULP_CLOSE(1.1395470994046486574927930193898461120875997958365518247216557100852480077060706857071875468869385150F64, extreme_value_skewness, 2); //  Mathematica: N[12 Sqrt[6]  Zeta[3]/Pi^3, 1101]
+   CHECK_ULP_CLOSE(0.6311106578189371381918993515442277798440422031347194976580945856929268196174737254599050270325373067F64, rayleigh_skewness, 2); // Mathematica: N[2 Sqrt[Pi] (Pi - 3)/((4 - Pi)^(3/2)), 1100]
+   CHECK_ULP_CLOSE(2.450893006876380628486604106197544154e-01F64, rayleigh_kurtosis_excess, 2);
+   CHECK_ULP_CLOSE(2.68545200106530644530971483548179569382038229399446295305115234555721885953715200280114117493184769799515F64, khinchin, 4 ); // A002210 as a constant https://oeis.org/A002210/constant
+   CHECK_ULP_CLOSE(1.2824271291006226368753425688697917277676889273250011F64, glaisher, 4 ); // https://oeis.org/A074962/constant
+
+} // template <typename RealType>void test_spots(RealType)
+#endif
 
 void test_long_double_spots()
 {
@@ -829,9 +1075,20 @@ void test_laplace_limit()
 int main()
 {
    // Basic sanity-check spot values.
+   #ifdef __STDCPP_FLOAT32_T__
+   test_f32_spots();
+   #else
    test_float_spots(); // Test float_constants, like boost::math::float_constants::pi;
+   #endif
+   
+   #ifdef __STDCPP_FLOAT64_T__
+   test_f64_spots();
+   #else
    test_double_spots(); // Test double_constants.
+   #endif
+
    test_long_double_spots(); // Test long_double_constants.
+
 #ifdef BOOST_MATH_HAS_FLOAT128
    test_float128();
 #endif
@@ -841,6 +1098,12 @@ int main()
    test_spots(0.0F); // Test float.
    test_spots(0.0); // Test double.
    test_spots(0.0L); // Test long double.
+   #ifdef __STDCPP_FLOAT32_T__
+   test_spots(0.0F32);
+   #endif
+   #ifdef __STDCPP_FLOAT64_T__
+   test_spots(0.0F64);
+   #endif
 
 #if __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1900)
    test_feigenbaum();

@@ -9,6 +9,7 @@ on:
     branches:
       - master
       - develop
+      - feature/**
   pull_request:
   release:
     types: [published, created, edited]
@@ -47,7 +48,7 @@ jobs:
         if: steps.retry1.outcome=='failure'
         run: sudo apt-add-repository -y "ppa:ubuntu-toolchain-r/test"
       - name: Install packages
-        run: sudo apt install g++-12 clang-14 libgmp-dev libmpfr-dev libfftw3-dev
+        run: sudo apt-get install -y g++-12 clang-14 libgmp-dev libmpfr-dev libfftw3-dev
       - name: Checkout main boost
         run: git clone -b develop --depth 1 https://github.com/boostorg/boost.git ../boost-root
       - name: Update tools/boostdep
@@ -75,7 +76,7 @@ jobs:
         run: ./config_info_travis
         working-directory: ../boost-root/libs/config/test
       - name: Test
-        run: ../../../b2 toolset=$TOOLSET ${{ matrix.suite }} define=CI_SUPPRESS_KNOWN_ISSUES define=SLOW_COMPILER
+        run: ../../../b2 toolset=$TOOLSET ${{ matrix.suite }} define=CI_SUPPRESS_KNOWN_ISSUES define=SLOW_COMPILER define=BOOST_MATH_RUN_MP_TESTS
         working-directory: ../boost-root/libs/math/test
   ubuntu-focal-no-eh:
     runs-on: ubuntu-20.04
@@ -105,7 +106,7 @@ jobs:
         if: steps.retry1.outcome=='failure'
         run: sudo apt-add-repository -y "ppa:ubuntu-toolchain-r/test"
       - name: Install packages
-        run: sudo apt install g++-9 g++-11 clang-9 clang-10 libgmp-dev libmpfr-dev libfftw3-dev
+        run: sudo apt-get install -y g++-9 g++-11 clang-9 clang-10 libgmp-dev libmpfr-dev libfftw3-dev
       - name: Checkout main boost
         run: git clone -b develop --depth 1 https://github.com/boostorg/boost.git ../boost-root
       - name: Update tools/boostdep
@@ -214,7 +215,7 @@ jobs:
         run: config_info_travis
         working-directory: ../boost-root/libs/config/test
       - name: Test
-        run: ..\..\..\b2 --hash %ARGS% define=CI_SUPPRESS_KNOWN_ISSUES debug-symbols=off ${{ matrix.suite }}
+        run: ..\..\..\b2 --hash %ARGS% define=CI_SUPPRESS_KNOWN_ISSUES debug-symbols=off ${{ matrix.suite }} pch=off
         working-directory: ../boost-root/libs/math/test
   windows_gcc:
     runs-on: windows-2019
@@ -299,7 +300,7 @@ jobs:
         run: config_info_travis
         working-directory: ../boost-root/libs/config/test
       - name: Test
-        run: ..\..\..\b2 --hash %ARGS% define=CI_SUPPRESS_KNOWN_ISSUES ${{ matrix.suite }}
+        run: ..\..\..\b2 --hash %ARGS% define=CI_SUPPRESS_KNOWN_ISSUES ${{ matrix.suite }} pch=off
         working-directory: ../boost-root/libs/math/test
   cygwin:
     runs-on: windows-latest
@@ -364,7 +365,7 @@ jobs:
         if: steps.retry1.outcome=='failure'
         run: sudo apt-add-repository -y "ppa:ubuntu-toolchain-r/test"
       - name: Install packages
-        run: sudo apt install g++-10 libgmp-dev libmpfr-dev libfftw3-dev
+        run: sudo apt-get install -y g++-10 libgmp-dev libmpfr-dev libfftw3-dev
       - name: Checkout main boost
         run: git clone -b develop --depth 1 https://github.com/boostorg/boost.git ../boost-root
       - name: Update tools/boostdep
@@ -404,7 +405,7 @@ jobs:
         if: steps.retry1.outcome=='failure'
         run: sudo apt-add-repository -y "ppa:ubuntu-toolchain-r/test"
       - name: Install packages
-        run: sudo apt install clang-10 libgmp-dev libmpfr-dev libfftw3-dev
+        run: sudo apt-get install -y clang-10 libgmp-dev libmpfr-dev libfftw3-dev libtbb-dev
       - name: Checkout main boost
         run: git clone -b develop --depth 1 https://github.com/boostorg/boost.git ../boost-root
       - name: Update tools/boostdep
@@ -448,7 +449,7 @@ jobs:
         if: steps.retry1.outcome=='failure'
         run: sudo apt-add-repository -y "ppa:ubuntu-toolchain-r/test"
       - name: Install packages
-        run: sudo apt install g++-10 libgmp-dev libmpfr-dev libfftw3-dev
+        run: sudo apt-get install -y g++-10 libgmp-dev libmpfr-dev libfftw3-dev
       - name: Checkout main boost
         run: git clone -b develop --depth 1 https://github.com/boostorg/boost.git ../boost-root
       - name: Update tools/boostdep

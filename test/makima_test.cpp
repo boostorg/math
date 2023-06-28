@@ -16,6 +16,9 @@
 using boost::multiprecision::float128;
 #endif
 
+#if __has_include(<stdfloat>)
+#  include <stdfloat>
+#endif
 
 using boost::math::interpolators::makima;
 
@@ -33,7 +36,7 @@ void test_constant()
     auto y_copy = y;
     auto akima = makima(std::move(x_copy), std::move(y_copy));
 
-    for (Real t = x[0]; t <= x.back(); t += 0.25) {
+    for (Real t = x[0]; t <= x.back(); t += Real(0.25)) {
         CHECK_ULP_CLOSE(Real(7), akima(t), 2);
         CHECK_ULP_CLOSE(Real(0), akima.prime(t), 2);
     }
@@ -50,7 +53,7 @@ void test_constant()
 
     auto circular_akima = makima(std::move(x_buf), std::move(y_buf));
 
-    for (Real t = x[0]; t <= x.back(); t += 0.25) {
+    for (Real t = x[0]; t <= x.back(); t += Real(0.25)) {
         CHECK_ULP_CLOSE(Real(7), circular_akima(t), 2);
         CHECK_ULP_CLOSE(Real(0), akima.prime(t), 2);
     }
@@ -88,7 +91,7 @@ void test_linear()
     x_copy = x;
     y_copy = y;
     akima = makima(std::move(x_copy), std::move(y_copy));
-    for (Real t = 0; t < x.back(); t += 0.5) {
+    for (Real t = 0; t < x.back(); t += Real(0.5)) {
         CHECK_ULP_CLOSE(t, akima(t), 0);
         CHECK_ULP_CLOSE(Real(1), akima.prime(t), 0);
     }
@@ -97,7 +100,7 @@ void test_linear()
     y_copy = y;
     // Test endpoint derivatives:
     akima = makima(std::move(x_copy), std::move(y_copy), Real(1), Real(1));
-    for (Real t = 0; t < x.back(); t += 0.5) {
+    for (Real t = 0; t < x.back(); t += Real(0.5)) {
         CHECK_ULP_CLOSE(t, akima(t), 0);
         CHECK_ULP_CLOSE(Real(1), akima.prime(t), 0);
     }
@@ -115,7 +118,7 @@ void test_linear()
 
     auto circular_akima = makima(std::move(x_buf), std::move(y_buf));
 
-    for (Real t = x[0]; t <= x.back(); t += 0.25) {
+    for (Real t = x[0]; t <= x.back(); t += Real(0.25)) {
         CHECK_ULP_CLOSE(t, circular_akima(t), 2);
         CHECK_ULP_CLOSE(Real(1), circular_akima.prime(t), 2);
     }
@@ -166,13 +169,26 @@ void test_interpolation_condition()
 int main()
 {
 #if (__GNUC__ > 7) || defined(_MSC_VER) || defined(__clang__)
+    
+    #ifdef __STDCPP_FLOAT32_T__
+    test_constant<std::float32_t>();
+    test_linear<std::float32_t>();
+    test_interpolation_condition<std::float32_t>();
+    #else
     test_constant<float>();
     test_linear<float>();
     test_interpolation_condition<float>();
+    #endif
 
+    #ifdef __STDCPP_FLOAT64_T__
+    test_constant<std::float64_t>();
+    test_linear<std::float64_t>();
+    test_interpolation_condition<std::float64_t>();
+    #else
     test_constant<double>();
     test_linear<double>();
     test_interpolation_condition<double>();
+    #endif
 
     test_constant<long double>();
     test_linear<long double>();

@@ -31,6 +31,10 @@
 #pragma warning(disable:4127)  // Conditional expression is constant
 #endif
 
+#if __has_include(<stdfloat>)
+#  include <stdfloat>
+#endif
+
 #if !defined(TEST1) && !defined(TEST2) && !defined(TEST3)
 #  define TEST1
 #  define TEST2
@@ -445,6 +449,24 @@ BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
 {
   
 #ifdef TEST1
+
+#ifdef __STDCPP_FLOAT64_T__
+    test_linear<std::float64_t, 7>();
+    test_quadratic<std::float64_t, 7>();
+    test_ca<std::float64_t, 7>();
+    test_three_quadrature_schemes_examples<std::float64_t, 7>();
+    test_integration_over_real_line<std::float64_t, 7>();
+    test_right_limit_infinite<std::float64_t, 7>();
+    test_left_limit_infinite<std::float64_t, 7>();
+
+    test_linear<std::float64_t, 9>();
+    test_quadratic<std::float64_t, 9>();
+    test_ca<std::float64_t, 9>();
+    test_three_quadrature_schemes_examples<std::float64_t, 9>();
+    test_integration_over_real_line<std::float64_t, 9>();
+    test_right_limit_infinite<std::float64_t, 9>();
+    test_left_limit_infinite<std::float64_t, 9>();
+#else
     test_linear<double, 7>();
     test_quadratic<double, 7>();
     test_ca<double, 7>();
@@ -460,8 +482,9 @@ BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
     test_integration_over_real_line<double, 9>();
     test_right_limit_infinite<double, 9>();
     test_left_limit_infinite<double, 9>();
+#endif
 
-#if LDBL_MANT_DIG < 100
+#if LDBL_MANT_DIG < 100 && defined(BOOST_MATH_RUN_MP_TESTS)
     test_linear<cpp_bin_float_quad, 10>();
     test_quadratic<cpp_bin_float_quad, 10>();
     test_ca<cpp_bin_float_quad, 10>();
@@ -472,7 +495,7 @@ BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
 #endif
 #endif
 #ifdef TEST2
-#if LDBL_MANT_DIG < 100
+#if LDBL_MANT_DIG < 100 && defined(BOOST_MATH_RUN_MP_TESTS)
     test_linear<cpp_bin_float_quad, 15>();
     test_quadratic<cpp_bin_float_quad, 15>();
     test_ca<cpp_bin_float_quad, 15>();
@@ -508,7 +531,7 @@ BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
 #endif
 #endif
 #ifdef TEST3
-#if LDBL_MANT_DIG < 100
+#if LDBL_MANT_DIG < 100 && defined(BOOST_MATH_RUN_MP_TESTS)
     test_left_limit_infinite<cpp_bin_float_quad, 30>();
 #endif
     test_complex_lambert_w<std::complex<double>>();
@@ -517,7 +540,7 @@ BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
     test_left_limit_infinite<boost::multiprecision::float128, 30>();
     test_complex_lambert_w<boost::multiprecision::complex128>();
 #endif
-#if LDBL_MANT_DIG < 100
+#if LDBL_MANT_DIG < 100 && defined(BOOST_MATH_RUN_MP_TESTS)
     test_complex_lambert_w<boost::multiprecision::cpp_complex_quad>();
 #endif
 #endif

@@ -42,12 +42,25 @@ void check_weibull(RealType shape, RealType scale, RealType x, RealType p, RealT
          p,                                             // probability.
          tol);                                          // %tolerance.
    BOOST_CHECK_CLOSE(
+      ::boost::math::logcdf(
+         weibull_distribution<RealType>(shape, scale),       // distribution.
+         x),                                            // random variable.
+         log(p),                                             // probability.
+         tol);   
+   BOOST_CHECK_CLOSE(
       ::boost::math::cdf(
          complement(
             weibull_distribution<RealType>(shape, scale),    // distribution.
             x)),                                        // random variable.
          q,                                             // probability complement.
          tol);                                          // %tolerance.
+   BOOST_CHECK_CLOSE(
+      ::boost::math::logcdf(
+         complement(
+            weibull_distribution<RealType>(shape, scale),    // distribution.
+            x)),                                        // random variable.
+         log(q),                                             // probability complement.
+         tol);   
    BOOST_CHECK_CLOSE(
       ::boost::math::quantile(
          weibull_distribution<RealType>(shape, scale),       // distribution.

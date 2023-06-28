@@ -13,6 +13,11 @@
 #include <boost/math/tools/test_value.hpp>
 #include <boost/core/demangle.hpp>
 #include <boost/math/tools/agm.hpp>
+
+#if __has_include(<stdfloat>)
+#  include <stdfloat>
+#endif
+
 #ifdef BOOST_HAS_FLOAT128
 #include <boost/multiprecision/float128.hpp>
 using boost::multiprecision::float128;
@@ -91,13 +96,24 @@ void test_scaling()
 
 int main()
 {
+    #ifdef __STDCPP_FLOAT32_T__
+    test_gauss_constant<std::float32_t>();
+    test_scaling<std::float32_t>();
+    #else
     test_gauss_constant<float>();
-    test_gauss_constant<double>();
-    test_gauss_constant<long double>();
-
     test_scaling<float>();
+    #endif
+
+    #ifdef __STDCPP_FLOAT64_T__
+    test_scaling<std::float64_t>();
+    test_gauss_constant<std::float64_t>();
+    #else
     test_scaling<double>();
+    test_gauss_constant<double>();
+    #endif
+
     test_scaling<long double>();
+    test_gauss_constant<long double>();
 
     #ifdef BOOST_HAS_FLOAT128
     test_gauss_constant<float128>();

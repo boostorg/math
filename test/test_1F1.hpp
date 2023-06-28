@@ -414,6 +414,14 @@ void test_spots6(T, const char* type_name)
 }
 
 template <class T>
+void test_spots7(T, const char* type_name)
+{
+#include "hypergeometric_1f1_neg_int.ipp"
+
+   do_test_1F1<T>(hypergeometric_1f1_neg_int, type_name, "Both parameters negative integers.");
+}
+
+template <class T>
 void test_spots(T z, const char* type_name)
 {
    test_spots1(z, type_name);
@@ -434,6 +442,7 @@ void test_spots(T z, const char* type_name)
    //
    if(std::numeric_limits<T>::digits >= std::numeric_limits<double>::digits && std::numeric_limits<T>::digits <= 128)
       test_spots6(z, type_name);
+   test_spots7(z, type_name);
 }
 
 

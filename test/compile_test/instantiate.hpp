@@ -181,7 +181,9 @@ void instantiate(RealType)
    int i = 1;
    // Deal with unused variable warnings:
    (void)i;
-   RealType v1(0.5), v2(0.5), v3(0.5);
+   auto v1(static_cast<RealType>(0.5)); 
+   auto v2(static_cast<RealType>(0.5)); 
+   auto v3(static_cast<RealType>(0.5));
    boost::detail::dummy_constructor dc;
    boost::output_iterator_archetype<RealType> oi(dc);
 #ifdef TEST_GROUP_4

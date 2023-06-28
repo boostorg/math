@@ -21,6 +21,11 @@
 #ifdef BOOST_HAS_FLOAT128
 #include <boost/multiprecision/complex128.hpp>
 #endif
+
+#if __has_include(<stdfloat>)
+#  include <stdfloat>
+#endif
+
 using boost::multiprecision::cpp_bin_float_50;
 using boost::multiprecision::cpp_bin_float_100;
 using boost::math::quadrature::trapezoidal;
@@ -130,13 +135,13 @@ void test_constant()
     std::cout << "Testing constants are integrated correctly by the adaptive trapezoidal routine on type " << boost::typeindex::type_id<Real>().pretty_name()  << "\n";
 
     auto f = [](Real)->Real { return boost::math::constants::half<Real>(); };
-    Real Q = trapezoidal<decltype(f), Real>(f, (Real) 0.0, (Real) 10.0);
-    BOOST_CHECK_CLOSE(Q, 5.0, 100*std::numeric_limits<Real>::epsilon());
-    Q = trapezoidal<decltype(f), Real>(f, (Real) 10.0, (Real) 0.0);
-    BOOST_CHECK_CLOSE(Q, -5.0, 100*std::numeric_limits<Real>::epsilon());
+    Real Q = trapezoidal<decltype(f), Real>(f, static_cast<Real>(0.0), static_cast<Real>(10.0));
+    BOOST_CHECK_CLOSE(Q, static_cast<Real>(5.0), 100*std::numeric_limits<Real>::epsilon());
+    Q = trapezoidal<decltype(f), Real>(f, static_cast<Real>(10.0), static_cast<Real>(0.0));
+    BOOST_CHECK_CLOSE(Q, static_cast<Real>(-5.0), 100*std::numeric_limits<Real>::epsilon());
 
-    Q = trapezoidal<decltype(f), Real>(f, (Real) 10.0, (Real) 10.0);
-    BOOST_CHECK_CLOSE(Q, Real(0), 100*std::numeric_limits<Real>::epsilon());
+    Q = trapezoidal<decltype(f), Real>(f, static_cast<Real>(10.0), static_cast<Real>(10.0));
+    BOOST_CHECK_CLOSE(Q, static_cast<Real>(0), 100*std::numeric_limits<Real>::epsilon());
 }
 
 
@@ -230,8 +235,14 @@ void test_rational_sin()
 
 BOOST_AUTO_TEST_CASE(trapezoidal_quadrature)
 {
+
+#if defined(__STDCPP_FLOAT32_T__) && defined(__STDCPP_FLOAT64_T__)
+    test_constant<std::float32_t>();
+    test_constant<std::float64_t>();
+#else
     test_constant<float>();
     test_constant<double>();
+#endif
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_constant<long double>();
 #endif
@@ -241,51 +252,88 @@ BOOST_AUTO_TEST_CASE(trapezoidal_quadrature)
     test_constant<cpp_bin_float_50>();
     test_constant<cpp_bin_float_100>();
 
+#if defined(__STDCPP_FLOAT32_T__) && defined(__STDCPP_FLOAT64_T__)
+    test_rational_periodic<std::float32_t>();
+    test_rational_periodic<std::float64_t>();
+#else
     test_rational_periodic<float>();
     test_rational_periodic<double>();
+#endif
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_rational_periodic<long double>();
 #endif
 #ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
     test_rational_periodic<boost::math::concepts::real_concept>();
 #endif
+
+    #ifdef BOOST_MATH_RUN_MP_TESTS
     test_rational_periodic<cpp_bin_float_50>();
     test_rational_periodic<cpp_bin_float_100>();
+    #endif
 
+#if defined(__STDCPP_FLOAT32_T__) && defined(__STDCPP_FLOAT64_T__)
+    test_bump_function<std::float32_t>();
+    test_bump_function<std::float64_t>();
+#else
     test_bump_function<float>();
     test_bump_function<double>();
+#endif
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_bump_function<long double>();
 #endif
 #ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
     test_rational_periodic<boost::math::concepts::real_concept>();
 #endif
-    test_rational_periodic<cpp_bin_float_50>();
 
+    #ifdef BOOST_MATH_RUN_MP_TESTS
+    test_rational_periodic<cpp_bin_float_50>();
+    #endif
+
+#if defined(__STDCPP_FLOAT32_T__) && defined(__STDCPP_FLOAT64_T__)
+    test_zero_function<std::float32_t>();
+    test_zero_function<std::float64_t>();
+#else
     test_zero_function<float>();
     test_zero_function<double>();
+#endif
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_zero_function<long double>();
 #endif
 #ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
     test_zero_function<boost::math::concepts::real_concept>();
 #endif
+
+    #ifdef BOOST_MATH_RUN_MP_TESTS
     test_zero_function<cpp_bin_float_50>();
     test_zero_function<cpp_bin_float_100>();
+    #endif
 
+#if defined(__STDCPP_FLOAT32_T__) && defined(__STDCPP_FLOAT64_T__)
+    test_sinsq<std::float32_t>();
+    test_sinsq<std::float64_t>();
+#else
     test_sinsq<float>();
     test_sinsq<double>();
+#endif
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_sinsq<long double>();
 #endif
 #ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
     test_sinsq<boost::math::concepts::real_concept>();
 #endif
+
+    #ifdef BOOST_MATH_RUN_MP_TESTS
     test_sinsq<cpp_bin_float_50>();
     test_sinsq<cpp_bin_float_100>();
+    #endif
 
+#if defined(__STDCPP_FLOAT32_T__) && defined(__STDCPP_FLOAT64_T__)
+    test_slowly_converging<std::float32_t>();
+    test_slowly_converging<std::float64_t>();
+#else
     test_slowly_converging<float>();
     test_slowly_converging<double>();
+#endif
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_slowly_converging<long double>();
 #endif
@@ -293,13 +341,20 @@ BOOST_AUTO_TEST_CASE(trapezoidal_quadrature)
     test_slowly_converging<boost::math::concepts::real_concept>();
 #endif
 
+#if defined(__STDCPP_FLOAT32_T__) && defined(__STDCPP_FLOAT64_T__)
+    test_rational_sin<std::float32_t>();
+    test_rational_sin<std::float64_t>();
+#else
     test_rational_sin<float>();
     test_rational_sin<double>();
+#endif
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_rational_sin<long double>();
 #endif
     //test_rational_sin<boost::math::concepts::real_concept>();
+    #ifdef BOOST_MATH_RUN_MP_TESTS
     test_rational_sin<cpp_bin_float_50>();
+    #endif
 
     test_complex_bessel<std::complex<float>>();
     test_complex_bessel<std::complex<double>>();

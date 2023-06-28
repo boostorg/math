@@ -38,7 +38,7 @@ The triangular distribution is often used where the distribution is only vaguely
 but, like the [@http://en.wikipedia.org/wiki/Uniform_distribution_%28continuous%29 uniform distribution],
 upper and limits are 'known', but a 'best guess', the mode or center point, is also added.
 It has been recommended as a
-[@http://www.worldscibooks.com/mathematics/etextbook/5720/5720_chap1.pdf proxy for the beta distribution.]
+[@https://www.jstor.org/stable/2988573 proxy for the beta distribution.]
 The distribution is used in business decision making and project planning.
 
 The [@http://en.wikipedia.org/wiki/Triangular_distribution triangular distribution]

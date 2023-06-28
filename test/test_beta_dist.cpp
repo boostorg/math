@@ -52,6 +52,10 @@ using std::endl;
 #include <limits>
 using std::numeric_limits;
 
+#if __has_include(<stdfloat>)
+# include <stdfloat>
+#endif
+
 template <class RealType>
 void test_spot(
      RealType a,    // alpha a
@@ -135,6 +139,14 @@ void test_spots(RealType)
    cout << "epsilon = " << tolerance;
 
    tolerance *= 100000; // Note: NO * 100 because is fraction, NOT %.
+
+   #ifdef __STDCPP_FLOAT16_T__
+   if constexpr (std::is_same_v<RealType, std::float16_t>)
+   {
+      tolerance *= 100;
+   }
+   #endif
+
    cout  << ", Tolerance = " << tolerance * 100 << "%." << endl;
 
   // RealType teneps = boost::math::tools::epsilon<RealType>() * 10;
@@ -197,11 +209,11 @@ void test_spots(RealType)
   BOOST_CHECK_EQUAL( // a = b = 1 is uniform distribution.
      pdf(beta_distribution<RealType>(static_cast<RealType>(1), static_cast<RealType>(1)),
      static_cast<RealType>(1)),  // x
-     static_cast<RealType>(0));
+     static_cast<RealType>(1));
   BOOST_CHECK_EQUAL(
      pdf(beta_distribution<RealType>(static_cast<RealType>(1), static_cast<RealType>(1)),
      static_cast<RealType>(0)),  // x
-     static_cast<RealType>(0));
+     static_cast<RealType>(1));
   BOOST_CHECK_CLOSE_FRACTION(
      pdf(beta_distribution<RealType>(static_cast<RealType>(1), static_cast<RealType>(1)),
      static_cast<RealType>(0.5)),  // x
@@ -527,7 +539,14 @@ void test_spots(RealType)
    } // has_infinity
 
    // Error handling checks:
+   #ifdef __STDCPP_FLOAT16_T__
+   if constexpr (!std::is_same_v<std::float16_t, RealType>)
+   {
+      check_out_of_range<boost::math::beta_distribution<RealType> >(1, 1); // (All) valid constructor parameter values.
+   }
+   #else
    check_out_of_range<boost::math::beta_distribution<RealType> >(1, 1); // (All) valid constructor parameter values.
+   #endif
    // and range and non-finite.
 
    // Not needed??????
@@ -561,8 +580,8 @@ BOOST_AUTO_TEST_CASE( test_main )
    beta_distribution<> mybetaH3(0.5, 3.); //
 
    // Check a few values using double.
-   BOOST_CHECK_EQUAL(pdf(mybeta11, 1), 0);   // is uniform unity over (0, 1) 
-   BOOST_CHECK_EQUAL(pdf(mybeta11, 0), 0);   // https://www.wolframalpha.com/input/?i=beta+distribution+pdf+alpha+%3D+1%2C+beta+%3D+1
+   BOOST_CHECK_EQUAL(pdf(mybeta11, 1), 1);   // is uniform unity over (0, 1) 
+   BOOST_CHECK_EQUAL(pdf(mybeta11, 0), 1);
    // Although these next three have an exact result, internally they're
    // *not* treated as special cases, and may be out by a couple of eps:
    BOOST_CHECK_CLOSE_FRACTION(pdf(mybeta11, 0.5), 1.0, 5*std::numeric_limits<double>::epsilon());
@@ -631,6 +650,17 @@ BOOST_AUTO_TEST_CASE( test_main )
    test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
 #endif
 #endif
+
+#ifdef __STDCPP_FLOAT64_T__
+   test_spots(0.0F64);
+#endif
+#ifdef __STDCPP_FLOAT32_T__
+   test_spots(0.0F32);
+#endif
+#ifdef __STDCPP_FLOAT16_T__
+   test_spots(0.0F16);
+#endif
+
 } // BOOST_AUTO_TEST_CASE( test_main )
 
 /*
