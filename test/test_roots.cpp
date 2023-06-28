@@ -437,6 +437,38 @@ void test_beta(T, const char* /* name */)
    test_inverses<T>(ibeta_large_data);
 }
 
+void test_newton_bracket() {
+   int newton_limits = static_cast<int>(std::numeric_limits<double>::digits * 0.6);
+   const auto tol = ldexp(1, 1 - newton_limits);
+   
+   // Function from #808
+   const auto quartic_pos = [](const double x) {
+      const auto y = (x * x - 1) * (x * x + 0.1);
+      const auto dy = 2 * x * ((x * x - 1) + (x * x + 0.1));
+      return std::make_pair(y, dy);
+   };
+
+   // Negation of the above
+   const auto quartic_neg = [&](const double x) {
+      const auto p = quartic_pos(x);
+      return std::make_pair(-p.first, -p.second);
+   };
+
+   const auto fn_test_bracket = [&](const auto fn_quartic) {
+      // Initial search direction has no root
+      BOOST_CHECK_CLOSE(1, boost::math::tools::newton_raphson_iterate(fn_quartic, 0.5, 0.1, 1.1, newton_limits), tol);
+      // Initial search direction has root
+      BOOST_CHECK_CLOSE(1, boost::math::tools::newton_raphson_iterate(fn_quartic, 0.8, 0.1, 1.1, newton_limits), tol);
+      // Initial search direction has root
+      BOOST_CHECK_CLOSE(-1, boost::math::tools::newton_raphson_iterate(fn_quartic, 0.5, -1.1, 1.1, newton_limits), tol);
+      // Initial search direction has root
+      BOOST_CHECK_CLOSE(1, boost::math::tools::newton_raphson_iterate(fn_quartic, 0.8, -1.1, 1.1, newton_limits), tol);
+   };
+
+   fn_test_bracket(quartic_pos);
+   fn_test_bracket(quartic_neg);
+}
+
 #if !defined(BOOST_NO_CXX11_AUTO_DECLARATIONS) && !defined(BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX) && !defined(BOOST_NO_CXX11_LAMBDAS)
 template <class Complex>
 void test_complex_newton()
@@ -653,6 +685,8 @@ BOOST_AUTO_TEST_CASE( test_main )
 {
 
    test_beta(0.1, "double");
+
+   test_newton_bracket();
 
 #if !defined(BOOST_NO_CXX11_AUTO_DECLARATIONS) && !defined(BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX) && !defined(BOOST_NO_CXX11_LAMBDAS)
    test_complex_newton<std::complex<float>>();

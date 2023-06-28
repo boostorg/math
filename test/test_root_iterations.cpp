@@ -276,8 +276,6 @@ BOOST_AUTO_TEST_CASE( test_main )
 
 #  include "ibeta_small_data.ipp"
 
-
-#if 1
    for (unsigned i = 0; i < ibeta_small_data.size(); ++i)
    {
       //
@@ -331,8 +329,5 @@ BOOST_AUTO_TEST_CASE( test_main )
          BOOST_CHECK_LE(iters, 10);
       }
    }
-
-#endif   
-
 }
 
