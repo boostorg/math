@@ -19,6 +19,10 @@
 #include <boost/multiprecision/float128.hpp>
 #endif
 
+#if __has_include(<stdfloat>)
+#  include <stdfloat>
+#endif
+
 using std::sqrt;
 using std::abs;
 using std::numeric_limits;
@@ -258,30 +262,53 @@ BOOST_AUTO_TEST_CASE(barycentric_rational)
     // The tests took too long at the higher precisions.
     // They still pass, but the CI system is starting to time out,
     // so I figured it'd be polite to comment out the most expensive tests.
-    test_weights<double>();
-
+    
+    #ifdef __STDCPP_FLOAT32_T__
+    
+    test_constant<std::float32_t>();
+    //test_constant_high_order<std::float32_t>();
+    test_interpolation_condition<std::float32_t>();
+    //test_interpolation_condition_high_order<std::float32_t>();
+    
+    #else
+    
     test_constant<float>();
-    //test_constant<double>();
-    test_constant<long double>();
-    //test_constant<cpp_bin_float_50>();
-
     //test_constant_high_order<float>();
-    test_constant_high_order<double>();
-    //test_constant_high_order<long double>();
-    //test_constant_high_order<cpp_bin_float_50>();
-
     test_interpolation_condition<float>();
-    test_interpolation_condition<double>();
-    //test_interpolation_condition<long double>();
-    //test_interpolation_condition<cpp_bin_float_50>();
-
     //test_interpolation_condition_high_order<float>();
+    
+    #endif
+    
+    #ifdef __STDCPP_FLOAT64_T__
+    
+    test_weights<std::float64_t>();
+    //test_constant<std::float64_t>();
+    test_constant_high_order<std::float64_t>();
+    test_interpolation_condition<std::float64_t>();
+    test_interpolation_condition_high_order<std::float64_t>();
+    test_runge<std::float64_t>();
+    
+    #else
+    
+    test_weights<double>();
+    //test_constant<double>();
+    test_constant_high_order<double>();
+    test_interpolation_condition<double>();
     test_interpolation_condition_high_order<double>();
-    //test_interpolation_condition_high_order<long double>();
-    //test_interpolation_condition_high_order<cpp_bin_float_50>();
-
     test_runge<double>();
+    
+    #endif
+
+    test_constant<long double>();
+    //test_constant_high_order<long double>();
+    //test_interpolation_condition<long double>();
+    //test_interpolation_condition_high_order<long double>();
     //test_runge<long double>();
+
+    //test_constant<cpp_bin_float_50>();
+    //test_constant_high_order<cpp_bin_float_50>();
+    //test_interpolation_condition<cpp_bin_float_50>();
+    //test_interpolation_condition_high_order<cpp_bin_float_50>();
     //test_runge<cpp_bin_float_50>();
 
 #ifdef BOOST_HAS_FLOAT128

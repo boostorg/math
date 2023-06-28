@@ -236,7 +236,12 @@ T bessel_yn_small_z(int n, T z, T* scale, const Policy& pol)
    }
    else
    {
+      #if (defined(__GNUC__) && __GNUC__ == 13)
+      auto p = static_cast<T>(pow(z / 2, T(n)));
+      #else
       auto p = static_cast<T>(pow(z / 2, n));
+      #endif
+      
       T result = -((boost::math::factorial<T>(n - 1, pol) / constants::pi<T>()));
       if(p * tools::max_value<T>() < result)
       {

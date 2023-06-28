@@ -17,6 +17,9 @@
 using boost::multiprecision::float128;
 #endif
 
+#if __has_include(<stdfloat>)
+#  include <stdfloat>
+#endif
 
 using boost::math::interpolators::pchip;
 
@@ -35,7 +38,7 @@ void test_constant()
     auto pchip_spline = pchip(std::move(x_copy), std::move(y_copy));
     //std::cout << "Constant value pchip spline = " << pchip_spline << "\n";
 
-    for (Real t = x[0]; t <= x.back(); t += 0.25) {
+    for (Real t = x[0]; t <= x.back(); t += Real(0.25)) {
         CHECK_ULP_CLOSE(Real(7), pchip_spline(t), 2);
         CHECK_ULP_CLOSE(Real(0), pchip_spline.prime(t), 2);
     }
@@ -52,7 +55,7 @@ void test_constant()
 
     auto circular_pchip_spline = pchip(std::move(x_buf), std::move(y_buf));
 
-    for (Real t = x[0]; t <= x.back(); t += 0.25) {
+    for (Real t = x[0]; t <= x.back(); t += Real(0.25)) {
         CHECK_ULP_CLOSE(Real(7), circular_pchip_spline(t), 2);
         CHECK_ULP_CLOSE(Real(0), pchip_spline.prime(t), 2);
     }
@@ -90,7 +93,7 @@ void test_linear()
     x_copy = x;
     y_copy = y;
     pchip_spline = pchip(std::move(x_copy), std::move(y_copy));
-    for (Real t = 0; t < x.back(); t += 0.5) {
+    for (Real t = 0; t < x.back(); t += Real(0.5)) {
         CHECK_ULP_CLOSE(t, pchip_spline(t), 0);
         CHECK_ULP_CLOSE(Real(1), pchip_spline.prime(t), 0);
     }
@@ -99,7 +102,7 @@ void test_linear()
     y_copy = y;
     // Test endpoint derivatives:
     pchip_spline = pchip(std::move(x_copy), std::move(y_copy), Real(1), Real(1));
-    for (Real t = 0; t < x.back(); t += 0.5) {
+    for (Real t = 0; t < x.back(); t += Real(0.5)) {
         CHECK_ULP_CLOSE(t, pchip_spline(t), 0);
         CHECK_ULP_CLOSE(Real(1), pchip_spline.prime(t), 0);
     }
@@ -117,7 +120,7 @@ void test_linear()
 
     auto circular_pchip_spline = pchip(std::move(x_buf), std::move(y_buf));
 
-    for (Real t = x[0]; t <= x.back(); t += 0.25) {
+    for (Real t = x[0]; t <= x.back(); t += Real(0.25)) {
         CHECK_ULP_CLOSE(t, circular_pchip_spline(t), 2);
         CHECK_ULP_CLOSE(Real(1), circular_pchip_spline.prime(t), 2);
     }
@@ -230,25 +233,40 @@ void test_monotonicity()
 int main()
 {
 #if (__GNUC__ > 7) || defined(_MSC_VER) || defined(__clang__)
+    
+    #ifdef __STDCPP_FLOAT32_T__
+    test_constant<std::float32_t>();
+    test_linear<std::float32_t>();
+    test_interpolation_condition<std::float32_t>();
+    test_monotonicity<std::float32_t>();
+    #else
     test_constant<float>();
     test_linear<float>();
     test_interpolation_condition<float>();
     test_monotonicity<float>();
+    #endif
 
+    #ifdef __STDCPP_FLOAT64_T__
+    test_constant<std::float64_t>();
+    test_linear<std::float64_t>();
+    test_interpolation_condition<std::float64_t>();
+    test_monotonicity<std::float64_t>();
+    #else
     test_constant<double>();
     test_linear<double>();
     test_interpolation_condition<double>();
     test_monotonicity<double>();
+    #endif
 
     test_constant<long double>();
     test_linear<long double>();
     test_interpolation_condition<long double>();
     test_monotonicity<long double>();
 
-#ifdef BOOST_HAS_FLOAT128
+    #ifdef BOOST_HAS_FLOAT128
     test_constant<float128>();
     test_linear<float128>();
-#endif
+    #endif
 #endif
     return boost::math::test::report_errors();
 }

@@ -18,6 +18,10 @@
 #include <boost/math/interpolators/barycentric_rational.hpp>
 #include <boost/math/interpolators/vector_barycentric_rational.hpp>
 
+#if __has_include(<stdfloat>)
+#  include <stdfloat>
+#endif
+
 using std::sqrt;
 using std::abs;
 using std::numeric_limits;
@@ -373,6 +377,20 @@ void test_weights()
 
 BOOST_AUTO_TEST_CASE(vector_barycentric_rational)
 {
+    #ifdef __STDCPP_FLOAT64_T__
+
+    test_weights<std::float64_t>();
+    test_constant_eigen<std::float64_t>();
+    test_constant_std_array<std::float64_t>();
+    test_constant_high_order<std::float64_t>();
+    test_interpolation_condition_eigen<std::float64_t>();
+    test_interpolation_condition_ublas<std::float64_t>();
+    test_interpolation_condition_std_array<std::float64_t>();
+    test_interpolation_condition_high_order<std::float64_t>();
+    test_agreement_with_1d<std::float64_t>();
+
+    #else
+
     test_weights<double>();
     test_constant_eigen<double>();
     test_constant_std_array<double>();
@@ -382,4 +400,6 @@ BOOST_AUTO_TEST_CASE(vector_barycentric_rational)
     test_interpolation_condition_std_array<double>();
     test_interpolation_condition_high_order<double>();
     test_agreement_with_1d<double>();
+
+    #endif
 }

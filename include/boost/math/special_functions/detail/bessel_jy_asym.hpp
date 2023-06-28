@@ -175,7 +175,7 @@ void temme_asymptotic_y_small_x(T v, T x, T* Y, T* Y1, const Policy& pol)
       p /= k - v;
       q /= k + v;
       c *= c_mult / k;
-      T c1 = pow(-x * x / 4, k) / factorial<T>(k, pol);
+      T c1 = pow(-x * x / 4, T(k)) / factorial<T>(k, pol);
       g = f + g_prefix * q;
       h = -k * g + p;
       y += c * g;

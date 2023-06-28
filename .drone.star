@@ -16,6 +16,7 @@ windowsglobalimage="cppalliance/dronevs2019"
 def main(ctx):
 
   things_to_test = [ "special_fun", "distribution_tests", "mp", "misc", "interpolators", "quadrature", "autodiff", "long-running-tests", "float128_tests" ]
+  gcc13_things_to_test = [ "special_fun", "distribution_tests", "mp", "misc", "interpolators", "quadrature", "autodiff", "long-running-tests", "float128_tests", "new_floats" ]
   sanitizer_test = [ "special_fun", "distribution_tests", "misc", "interpolators", "quadrature", "float128_tests" ]
   gnu_5_stds = [ "gnu++14", "c++14" ]
   gnu_6_stds = [ "gnu++14", "c++14", "gnu++17", "c++17" ]
@@ -23,6 +24,7 @@ def main(ctx):
   gnu_9_stds = [ "gnu++14", "c++14", "gnu++17", "c++17", "gnu++2a", "c++2a" ]
   clang_10_stds = [ "c++14", "c++17", "c++2a" ]
   gnu_non_native = [ "gnu++17" ]
+  gcc13_stds = [ "c++23" ]
 
   result = []
 
@@ -59,6 +61,9 @@ def main(ctx):
       result.append(linux_cxx("Ubuntu g++ ARM64" + cxx + " " + suite, "g++", packages="g++", buildtype="boost", image="cppalliance/droneubuntu2204:multiarch", arch="arm64", environment={'TOOLSET': 'gcc', 'COMPILER': 'g++', 'CXXSTD': cxx, 'TEST_SUITE': suite, }, globalenv=globalenv))
     for cxx in gnu_non_native:
       result.append(osx_cxx("M1 Clang " + cxx + " " + suite, "clang++", buildscript="drone", buildtype="boost", xcode_version="14.1", environment={'TOOLSET': 'clang', 'CXXSTD': cxx, 'TEST_SUITE': suite, 'DEFINE': 'BOOST_MATH_NO_REAL_CONCEPT_TESTS,BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS,BOOST_MATH_MULTI_ARCH_CI_RUN', }, globalenv=globalenv))
+  for suite in gcc13_things_to_test:
+    for cxx in gcc13_stds:
+      result.append(linux_cxx("Ubuntu g++-13 " + cxx + " " + suite, "g++-13", packages="g++-13", buildtype="boost", image="cppalliance/droneubuntu2304:1", environment={'TOOLSET': 'gcc', 'COMPILER': 'g++-13', 'CXXSTD': cxx, 'TEST_SUITE': suite, }, globalenv=globalenv))
 
   return result
 

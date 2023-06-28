@@ -12,6 +12,10 @@
 #include <boost/core/demangle.hpp>
 #include <boost/math/interpolators/whittaker_shannon.hpp>
 
+#if __has_include(<stdfloat>)
+#  include <stdfloat>
+#endif
+
 using boost::math::interpolators::whittaker_shannon;
 
 template<class Real>
@@ -19,7 +23,7 @@ void test_trivial()
 {
     Real t0 = 0;
     Real h = Real(1)/Real(16);
-    std::vector<Real> v{1.5};
+    std::vector<Real> v{Real(1.5)};
     std::vector<Real> v_copy = v;
     auto ws = whittaker_shannon<decltype(v)>(std::move(v), t0, h);
 
@@ -43,7 +47,7 @@ void test_knots()
     size_t n = 512;
     std::vector<Real> v(n);
     std::mt19937 gen(323723);
-    std::uniform_real_distribution<Real> dis(1.0, 2.0);
+    std::uniform_real_distribution<Real> dis(Real(1.0), Real(2.0));
 
     for(size_t i = 0;  i < n; ++i) {
       v[i] = static_cast<Real>(dis(gen));
@@ -125,21 +129,32 @@ void test_bump()
 
 int main()
 {
+    #ifdef __STDCPP_FLOAT32_T__
+    test_trivial<std::float32_t>();
+    test_knots<std::float32_t>();
+    #else
+    test_trivial<float>();
     test_knots<float>();
+    #endif
+    
+    #ifdef __STDCPP_FLOAT64_T__
+    test_trivial<std::float64_t>();
+    test_knots<std::float64_t>();
+    test_bump<std::float64_t>();
+    #else
+    test_trivial<double>();
     test_knots<double>();
+    test_bump<double>();
+    #endif
+
+
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_knots<long double>();
-#endif
-
-    test_bump<double>();
-#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 #if LDBL_MANT_DIG <= 64
     // Anything more precise than this fails for unknown reasons
     test_bump<long double>();
 #endif
 #endif
 
-    test_trivial<float>();
-    test_trivial<double>();
     return boost::math::test::report_errors();
 }
