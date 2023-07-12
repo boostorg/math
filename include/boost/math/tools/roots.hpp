@@ -24,9 +24,6 @@
 #include <boost/math/tools/toms748_solve.hpp>
 #include <boost/math/policies/error_handling.hpp>
 
-#include <boost/math/tools/minima.hpp>
-#include <iostream>
-
 namespace boost {
 namespace math {
 namespace tools {
@@ -296,8 +293,10 @@ namespace detail {
          return CaseFlag::failure;
       }
 
+#ifdef BOOST_MATH_INSTRUMENT
       // Makes debugging easier if required
       void print() const { std::cout << "x: " << x_ << ", f0: " << f0_ << ", f1: " << f1_ << std::endl; }
+#endif
 
       T x() const { return x_; }
       T f0() const { return f0_; }  // f(x)
@@ -305,7 +304,7 @@ namespace detail {
 
    private:
       bool is_sorted_x(const Data_X01<T, Step>& h) const { return x() <= h.x(); }
-      
+
       // Returns true if *this and h form a U shape.
       bool is_U(const Data_X01<T, Step>& h) const {
          const auto& l = *this;
@@ -313,7 +312,7 @@ namespace detail {
          return (sign(l.f0()) * sign(l.f1()) == -1) &&  // Above zero and sloping down OR below zero and sloping up
                 (sign(h.f0()) * sign(h.f1()) == +1);    // Above zero and sloping up OR below zero and sloping down
       }
-      
+
       T x_;
       T f0_;  // f(x)
       T f1_;  // f'(x)
@@ -340,10 +339,8 @@ namespace detail {
       T calc_dx(const Data_X01<T, StepNewton>& z) const { return -z.f0() / z.f1(); }
    };
 
-////////////////////////////////////////////////////////////////////////////////////////
-
    // The state of the 1D root finding problem. This state is acted upon by one of
-   // several solvers 
+   // several solvers
    template <class F, class T, class Step>
    class Root1D_State {
    private:
@@ -353,62 +350,61 @@ namespace detail {
                               l,         // Updates the low bound
                               h };       // Updates the high bound
 
-      // Allows template dispatch of update_cache
+      // Allows template dispatch of update_eval
       template <SideSelect ValType>
       class Val {};
 
    public:
-      Root1D_State(F f, T x, T xl, T xh, int digits, std::uintmax_t& max_iter) 
+      Root1D_State(F f, T x, T xl, T xh, int digits, std::uintmax_t& max_iter)
          : data_(xl, xh)
          , flag_(CaseFlag::case_1)
-         , evaluator_(f, digits, max_iter) 
-      { 
-         update_cache_sign_dx(x);
+         , evaluator_(f, digits, max_iter)
+      {
+         update_eval_sign_dx(x);
       }
 
-      // Syntactic sugar for type dispatch of update_cache
+      // Syntactic sugar for type dispatch of update_eval
       template <typename... Args>
-      void update_cache_sign_f0(Args... args) { update_cache(Val<SideSelect::sign_f0>(), args...); }
+      void update_eval_sign_f0(Args... args) { update_eval(Val<SideSelect::sign_f0>(), args...); }
       template <typename... Args>
-      void update_cache_sign_dx(Args... args) { update_cache(Val<SideSelect::sign_dx>(), args...); }
+      void update_eval_sign_dx(Args... args) { update_eval(Val<SideSelect::sign_dx>(), args...); }
       template <typename... Args>
-      void update_cache_not_last(Args... args) { update_cache(Val<SideSelect::not_last>(), args...); }
+      void update_eval_not_last(Args... args) { update_eval(Val<SideSelect::not_last>(), args...); }
       template <typename... Args>
-      void update_cache_l(Args... args) { update_cache(Val<SideSelect::l>(), args...); }
+      void update_eval_l(Args... args) { update_eval(Val<SideSelect::l>(), args...); }
       template <typename... Args>
-      void update_cache_h(Args... args) { update_cache(Val<SideSelect::h>(), args...); }
+      void update_eval_h(Args... args) { update_eval(Val<SideSelect::h>(), args...); }
 
       // Filter arguments into preferred format
       template <SideSelect S>
-      void update_cache(Val<S> vs, const T x) { update_cache(vs, calc_x_dx(x)); }
+      void update_eval(Val<S> vs, const T x) { update_eval(vs, calc_x_dx(x)); }
       template <SideSelect S>
-      void update_cache(Val<S> vs, const X_DX<T, Step>& x_dx) { update_cache(vs, eval_next(x_dx), x_dx.dx()); }
+      void update_eval(Val<S> vs, const X_DX<T, Step>& x_dx) { update_eval(vs, eval_next(x_dx), x_dx.dx()); }
       template <SideSelect S>
-      void update_cache(Val<S> vs, const Data_X01<T, Step>& cx) { update_cache(vs, cx, calc_dx_true(cx)); }
+      void update_eval(Val<S> vs, const Data_X01<T, Step>& cx) { update_eval(vs, cx, calc_dx_true(cx)); }
 
       // Resolve SideSelect
-      void update_cache(Val<SideSelect::sign_f0>, const Data_X01<T, Step>& cx, const T dx) {
-         const bool is_bound_h = cx.is_same_sign_f0(cache_h());  // Updates high bound if f0 is same sign as f0_h
-         // TODO: change to update_cache
-         update_cache_dispatch(is_bound_h, cx, dx);
+      void update_eval(Val<SideSelect::sign_f0>, const Data_X01<T, Step>& cx, const T dx) {
+         const bool is_bound_h = cx.is_same_sign_f0(eval_h());  // Updates high bound if f0 is same sign as f0_h
+         update_eval(is_bound_h, cx, dx);
       }
-      void update_cache(Val<SideSelect::sign_dx>, const Data_X01<T, Step>& cx, const T dx) {
+      void update_eval(Val<SideSelect::sign_dx>, const Data_X01<T, Step>& cx, const T dx) {
          const bool is_bound_h = cx.is_bound_h();  // Updates high bound if dx is negative
-         update_cache_dispatch(is_bound_h, cx, dx);
+         update_eval(is_bound_h, cx, dx);
       }
-      void update_cache(Val<SideSelect::not_last>, const Data_X01<T, Step>& cx, const T dx) {
+      void update_eval(Val<SideSelect::not_last>, const Data_X01<T, Step>& cx, const T dx) {
          const bool is_bound_h = !data_.ind_last();  // Updates high bound if last eval was not high
-         update_cache_dispatch(is_bound_h, cx, dx);
+         update_eval(is_bound_h, cx, dx);
       }
-      void update_cache(Val<SideSelect::l>, const Data_X01<T, Step>& cx, const T dx) {
-         update_cache_dispatch(false, cx, dx);  // Updates low bound
+      void update_eval(Val<SideSelect::l>, const Data_X01<T, Step>& cx, const T dx) {
+         update_eval(false, cx, dx);  // Updates low bound
       }
-      void update_cache(Val<SideSelect::h>, const Data_X01<T, Step>& cx, const T dx) {
-         update_cache_dispatch(true, cx, dx);  // Updates high bound
+      void update_eval(Val<SideSelect::h>, const Data_X01<T, Step>& cx, const T dx) {
+         update_eval(true, cx, dx);  // Updates high bound
       }
 
-      // Update the cache
-      void update_cache_dispatch(const bool is_bound_h, const Data_X01<T, Step>& cx, const T dx) {
+      // Update the eval
+      void update_eval(const bool is_bound_h, const Data_X01<T, Step>& cx, const T dx) {
          dx_history_.push(dx);
          data_.set(cx, is_bound_h);
          if (cx.f0() == 0) { flag_ = CaseFlag::success; }
@@ -417,30 +413,30 @@ namespace detail {
       void update_case_flag() {
          if (flag() == CaseFlag::success) { return; }  // Don't update if already successful
 
-         // Find status flag if both caches are valid
-         if (num_valid_caches() == 2) { 
-            flag_ = cache_l().identify_status_flag(cache_h());
+         // Find status flag if both evals are valid
+         if (num_valid_evals() == 2) {
+            flag_ = eval_l().identify_status_flag(eval_h());
          }
       }
 
-      T midpoint() const { return (cache_l().x() + cache_h().x()) / 2; }
+      T midpoint() const { return (eval_l().x() + eval_h().x()) / 2; }
       bool is_inbounds(T x) const { return (x_l() <= x) && (x <= x_h()); }
 
-      // NOTE: caches always contain valid x data, as both caches are initalized with the
+      // NOTE: evals always contain valid x data, as both evals are initalized with the
       //       bounds of the root finding problem.
-      T x_l() const { return cache_l().x(); }
-      T x_h() const { return cache_h().x(); }
+      T x_l() const { return eval_l().x(); }
+      T x_h() const { return eval_h().x(); }
 
-      // Returns the last cache that was evaluated
-      const Data_X01<T, Step>& cache_last() const { return data_.cache_last(); }  
-      
+      // Returns the last eval that was evaluated
+      const Data_X01<T, Step>& eval_last() const { return data_.eval_last(); }
+
       int num_x_only() const { return data_.num_x_only(); }
-      int num_valid_caches() const { return 2 - num_x_only(); }
+      int num_valid_evals() const { return 2 - num_x_only(); }
 
       // Extrapolates the last evaluation to calculate a next x value, and the distance dx
       // between the last x and this next x.
-      X_DX<T, Step> extrapolate_last_to_calc_x_dx() const { 
-         const auto& cx = cache_last();
+      X_DX<T, Step> extrapolate_last_to_calc_x_dx() const {
+         const auto& cx = eval_last();
          const T x_next = cx.x() + cx.calc_dx();
          return calc_x_dx(x_next);
          // NOTE: the code below is incorrect because (x + dx) - x != dx
@@ -450,11 +446,11 @@ namespace detail {
       }
       X_DX<T, Step> calc_x_dx(T x) const { return X_DX<T, Step>(x, calc_dx_true(x)); }
 
-      // Calculates the x and dx for the next step by subtracting the current x from the next x.
-      // This approach to calculating dx is aware of floating point precision issues for small dx.
+      // Calculates dx by evaluating x_next - x_prev. This is the actual floating point dx.
       T calc_dx_true(const Data_X01<T, Step>& cx) const { return calc_dx_true(cx.x()); }
-      T calc_dx_true(const T& x) const { return x - cache_last().x(); }
+      T calc_dx_true(const T& x) const { return x - eval_last().x(); }
 
+#ifdef BOOST_MATH_INSTRUMENT
       // Makes debugging easier if required
       void print_status_flag() const {
          switch (flag()) {
@@ -465,9 +461,10 @@ namespace detail {
             case CaseFlag::failure: std::cout << "failure" << std::endl; break;
          }
       }
+#endif
 
-      // Returns true if the two caches bracket a root where the sign of f(x) changes
-      bool is_B() const { return cache_l().is_B(cache_h()); }
+      // Returns true if the two evals bracket a root where the sign of f(x) changes
+      bool is_B() const { return eval_l().is_B(eval_h()); }
 
       void set_flag(CaseFlag flag) { flag_ = flag; }
       Data_X01<T, Step> eval_next(const X_DX<T, Step>& x_dx) { return evaluator_(x_dx); }
@@ -478,46 +475,46 @@ namespace detail {
       T dx_pp() const { return dx_history_.dx_pp(); }
       std::uintmax_t num_fn_evals() const { return evaluator_.num_fn_evals(); }
 
-      T get_active_bound() const { return data_.get_bound_from_unused_cache(); }
+      T get_active_bound() const { return data_.get_bound_from_unused_eval(); }
 
-      const Data_X01<T, Step>& cache_l() const { return data_.cache_l(); }
-      const Data_X01<T, Step>& cache_h() const { return data_.cache_h(); }
+      const Data_X01<T, Step>& eval_l() const { return data_.eval_l(); }
+      const Data_X01<T, Step>& eval_h() const { return data_.eval_h(); }
       CaseFlag flag() const { return flag_; }
 
    private:
       // Holds Evaluation Data
       class Root1D_Data {
       public:
-         // Creates two caches whose x values are initialized with the bounds of the root finding
+         // Creates two evals whose x values are initialized with the bounds of the root finding
          // problem, but whose f0 and f1 values are invalid.
          Root1D_Data(T xl, T xh)
-            : v_cache_({Data_X01<T, Step>(xl), Data_X01<T, Step>(xh)})
+            : v_eval_({Data_X01<T, Step>(xl), Data_X01<T, Step>(xh)})
             , v_is_x_only_({true, true})
             , ind_last_(true) {}
 
-         // Updates the cache using the bool is_h as an index.
+         // Updates the eval using the bool is_h as an index.
          void set(const Data_X01<T, Step>& cx, bool is_h) {
-            v_cache_[is_h] = cx;
+            v_eval_[is_h] = cx;
             v_is_x_only_[is_h] = false;
             ind_last_ = is_h;
          }
 
-         // Returns the x value of the only cache that contains an original bound
-         T get_bound_from_unused_cache() const {
+         // Returns the x value of the only eval that contains an original bound
+         T get_bound_from_unused_eval() const {
             assert(num_x_only() == 1);
-            return v_is_x_only_[0] ? cache_l().x() : cache_h().x();
+            return v_is_x_only_[0] ? eval_l().x() : eval_h().x();
          }
 
-         const Data_X01<T, Step>& cache_last() const { return v_cache_[ind_last_]; }
-         const Data_X01<T, Step>& cache_l() const { return v_cache_[0]; }
-         const Data_X01<T, Step>& cache_h() const { return v_cache_[1]; }
+         const Data_X01<T, Step>& eval_last() const { return v_eval_[ind_last_]; }
+         const Data_X01<T, Step>& eval_l() const { return v_eval_[0]; }
+         const Data_X01<T, Step>& eval_h() const { return v_eval_[1]; }
          
          int num_x_only() const { return v_is_x_only_[0] + v_is_x_only_[1]; }
 
          bool ind_last() const { return ind_last_; }  // Last evaluated index
 
       private:
-         std::array<Data_X01<T, Step>, 2> v_cache_;
+         std::array<Data_X01<T, Step>, 2> v_eval_;
          std::array<bool, 2> v_is_x_only_;
          bool ind_last_;
       };
@@ -583,8 +580,6 @@ namespace detail {
       Root1D_Evaluator evaluator_;
    };
 
-////////////////////////////////////////////////////////////////////////////////////////
-
    // The abstract base class for the 1D root finding algorithm
    template <class F, class T, class Step>
    class SolverBase {
@@ -601,9 +596,11 @@ namespace detail {
                x_dx = calc_next_bisection(b);
             }
 
+            // Maybe exit
             if (is_exit_case_now(b, x_dx)) { break; }
 
-            this->update_cache(b, x_dx);
+            // Update eval
+            this->update_eval(b, x_dx);
          }
 
          return x_dx.x();
@@ -624,25 +621,24 @@ namespace detail {
 
       virtual bool is_exit_case_now(Root1D_State<F, T, Step>& b, const X_DX<T, Step> x_dx) const = 0;
       virtual X_DX<T, Step> calc_next_bisection(Root1D_State<F, T, Step>& b) const = 0;
-      virtual void update_cache(Root1D_State<F, T, Step>& b, const X_DX<T, Step>& x_dx) const = 0;
+      virtual void update_eval(Root1D_State<F, T, Step>& b, const X_DX<T, Step>& x_dx) const = 0;
       virtual CaseFlag flag_this() const = 0;
    };
 
-   // The solver for the case where only a single bracted (either low or high) has been
-   // evaluated.
+   // The solver for the case where only a single evulation (either low or high) exists.
    template <class F, class T, class Step>
    class SolverCase1 : public SolverBase<F, T, Step> {
    public:
       X_DX<T, Step> calc_next_bisection(Root1D_State<F, T, Step>& b) const override {
          const T x_limit = b.get_active_bound();
          const auto next_limit = b.calc_x_dx(x_limit);
-         b.update_cache_not_last(next_limit);
+         b.update_eval_not_last(next_limit);
          b.update_case_flag();
          return next_limit;
       }
 
-      void update_cache(Root1D_State<F, T, Step>&b, const X_DX<T, Step>& x_dx) const override {
-         b.update_cache_sign_dx(x_dx);
+      void update_eval(Root1D_State<F, T, Step>&b, const X_DX<T, Step>& x_dx) const override {
+         b.update_eval_sign_dx(x_dx);
          b.update_case_flag();
       }
 
@@ -674,26 +670,26 @@ namespace detail {
    template <class F, class T, class Step>
    class SolverCase2U : public SolverCase2Base<F, T, Step> {
    public:
-      void update_cache(Root1D_State<F, T, Step>& b, const X_DX<T, Step>& x_dx) const override {
+      void update_eval(Root1D_State<F, T, Step>& b, const X_DX<T, Step>& x_dx) const override {
          const auto cx = b.eval_next(x_dx);
 
          // Transition to Case 2B because will bracket a root with the new evaluation
-         if (b.cache_last().is_B(cx)) {
+         if (b.eval_last().is_B(cx)) {
             b.set_flag(CaseFlag::case_2B);
-         
+
          // If the newton step is increasing this suggests that the solver is converging toward a
          // local minimum that is not a root. This suggests failure.
          } else if (is_newton_dx_bigger_than_prev(b, cx)) {
             b.set_flag(CaseFlag::failure);
          }
 
-         b.update_cache_sign_dx(cx, x_dx.dx());
+         b.update_eval_sign_dx(cx, x_dx.dx());
       }
 
       bool is_newton_dx_bigger_than_prev(Root1D_State<F, T, Step>& b, const Data_X01<T, Step>& cx) const {
          using std::fabs;
-         // NOTE: b.cache_last() isn't generally on the same side of the root as cx
-         const auto& cx_prev_side_eval = cx.is_bound_h() ? b.cache_h() : b.cache_l();
+         // NOTE: b.eval_last() isn't generally on the same side of the root as cx
+         const auto& cx_prev_side_eval = cx.is_bound_h() ? b.eval_h() : b.eval_l();
          return fabs(cx_prev_side_eval.calc_dx_newton()) < fabs(cx.calc_dx_newton());  // Uses Newton step
       }
 
@@ -712,13 +708,12 @@ namespace detail {
    template <class F, class T, class Step>
    class SolverCase2B : public SolverCase2Base<F, T, Step> {
    public:
-      void update_cache(Root1D_State<F, T, Step>& b, const X_DX<T, Step>& x_dx) const override {
-         b.update_cache_sign_f0(x_dx);
+      void update_eval(Root1D_State<F, T, Step>& b, const X_DX<T, Step>& x_dx) const override {
+         b.update_eval_sign_f0(x_dx);
       }
 
       bool is_exit_case_now(Root1D_State<F, T, Step>& b, const X_DX<T, Step> x_dx) const override {
          if (this->is_dx_small(b, x_dx)) {
-            std::cout << "dx is small --> success" << std::endl;
             b.set_flag(CaseFlag::success); return true; }
          return b.flag() != flag_this();
       }
@@ -727,14 +722,12 @@ namespace detail {
       CaseFlag flag_stall() const override { return CaseFlag::success; }
    };
 
-////////////////////////////////////////////////////////////////////////////////////////
-  
    // Iterates on the root finding problem using the solver associated with the current case flag.
    // Returns the result.
    template <class F, class T, class Step>
    std::pair<bool, T> solve_for_state(Root1D_State<F, T, Step>& state, T x_final) {
       switch (state.flag()) {
-         case CaseFlag::case_1: return solve_for_state(state, SolverCase1<F, T, Step>().solve(state)); 
+         case CaseFlag::case_1: return solve_for_state(state, SolverCase1<F, T, Step>().solve(state));
          case CaseFlag::case_2B: return solve_for_state(state, SolverCase2B<F, T, Step>().solve(state));
          case CaseFlag::case_2U: return solve_for_state(state, SolverCase2U<F, T, Step>().solve(state));
          case CaseFlag::failure: return std::make_pair(false, 0);
@@ -744,10 +737,8 @@ namespace detail {
    }
    template <class F, class T, class Step>
    std::pair<bool, T> solve_for_state(Root1D_State<F, T, Step>& state) {
-      return solve_for_state(state, state.cache_last().x());
+      return solve_for_state(state, state.eval_last().x());
    }
-
-////////////////////////////////////////////////////////////////////////////////////////
 
    // Makes three attempts to find a root:
    //   1. Local minimization starting with the initial x
@@ -765,17 +756,17 @@ namespace detail {
       Root1D_State<F, T, Step> state(f, x, xl, xh, digits, max_iter);
 
       // Get CacheX
-      const auto cache_x_orig = state.cache_last();
+      const auto eval_x_orig = state.eval_last();
 
       auto fn_form_bracket_with_side = [&](const bool ind_bound){
          if (ind_bound) {
             // NOTE: These two lines cannot be swapped in case xh is a solution. This is tested.
-            state.update_cache_l(cache_x_orig);  // First to original cache
-            state.update_cache_h(xh);            // Then set bound
+            state.update_eval_l(eval_x_orig);  // First to original eval
+            state.update_eval_h(xh);           // Then set bound
          } else {
             // NOTE: These two lines cannot be swapped in case xl is a solution. This is tested.
-            state.update_cache_h(cache_x_orig);  // First to original cache
-            state.update_cache_l(xl);            // Then set bound
+            state.update_eval_h(eval_x_orig);  // First to original eval
+            state.update_eval_l(xl);           // Then set bound
          }
 
          // state.reset_dx_history();  // Not required for correctness
@@ -791,20 +782,20 @@ namespace detail {
       const auto p = solve_for_state(state);
 
       // If local minimization was successful, return root
-      if (p.first) { return fn_return(state, p); } 
+      if (p.first) { return fn_return(state, p); }
 
       // Attempt to bracket root in the direction of the initial guess
-      fn_form_bracket_with_side(!cache_x_orig.is_bound_h());
+      fn_form_bracket_with_side(!eval_x_orig.is_bound_h());
       if (state.is_B()) { return fn_return(state, solve_for_state(state)); }
 
       // Attempt to bracket root in the opposite direction of the initial guess
-      fn_form_bracket_with_side(cache_x_orig.is_bound_h());
+      fn_form_bracket_with_side(eval_x_orig.is_bound_h());
       if (state.is_B()) { return fn_return(state, solve_for_state(state)); }
 
       static const char* function = "boost::math::tools::detail::solve<%3%>";
-      const T x_last = state.cache_last().x();
+      const T x_last = state.eval_last().x();
       return policies::raise_evaluation_error(function, "Unable to bracket root in boost::math::tools::detail::solve, last closest guess was %1%", x_last, boost::math::policies::policy<>());
-   };
+   }
 }  // namespace detail
 
 template <class F, class T>
@@ -819,7 +810,6 @@ inline T newton_raphson_iterate(F f, T guess, T min, T max, int digits) noexcept
    std::uintmax_t m = (std::numeric_limits<std::uintmax_t>::max)();
    return newton_raphson_iterate(f, guess, min, max, digits, m);
 }
-
 
 namespace detail {
 

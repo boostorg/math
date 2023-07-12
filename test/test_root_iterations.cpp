@@ -169,7 +169,7 @@ BOOST_AUTO_TEST_CASE( test_main )
       // Newton next:
       iters = 1000;
       dr = boost::math::tools::newton_raphson_iterate(cbrt_functor_deriv(arg), guess, guess / 2, result * 10, newton_limits, iters);
-      BOOST_CHECK_CLOSE_FRACTION(dr, result, ldexp(1.0, 1 - newton_limits));
+      BOOST_CHECK_CLOSE_FRACTION(dr, result, std::numeric_limits<double>::epsilon() * 2);
       BOOST_CHECK_LE(iters, 12);
       // Halley next:
       iters = 1000;
@@ -192,7 +192,7 @@ BOOST_AUTO_TEST_CASE( test_main )
       // Newton next:
       iters = 1000;
       dr = boost::math::tools::newton_raphson_iterate(cbrt_functor_deriv(arg), guess, result / 10, result * 10, newton_limits, iters);
-      BOOST_CHECK_CLOSE_FRACTION(dr, result, ldexp(1.0, 1 - newton_limits));
+      BOOST_CHECK_CLOSE_FRACTION(dr, result, std::numeric_limits<double>::epsilon() * 2);
       BOOST_CHECK_LE(iters, 12);
       // Halley next:
       iters = 1000;
@@ -238,7 +238,7 @@ BOOST_AUTO_TEST_CASE( test_main )
       // Newton next:
       iters = 1000;
       dr = boost::math::tools::newton_raphson_iterate(cbrt_functor_deriv(arg), guess, result / 10, result * 10, newton_limits, iters);
-      BOOST_CHECK_CLOSE_FRACTION(dr, result, ldexp(1.0, 1 - newton_limits));
+      BOOST_CHECK_CLOSE_FRACTION(dr, result, std::numeric_limits<double>::epsilon() * 2);
       BOOST_CHECK_LE(iters, 5);
       // Halley next:
       iters = 1000;
@@ -261,7 +261,6 @@ BOOST_AUTO_TEST_CASE( test_main )
 #define SC_(x) x
 #endif
 #define T double
-
 
 #  include "ibeta_small_data.ipp"
 
