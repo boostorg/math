@@ -11,6 +11,7 @@
 #endif
 #include <boost/math/tools/complex.hpp> // test for multiprecision types in complex Newton
 
+#include <array>
 #include <utility>
 #include <cmath>
 #include <tuple>
@@ -525,10 +526,9 @@ namespace detail {
             StepSizeHistory() { reset(); }
 
             void reset() {
-               // NOTE: for T = boost::math::concepts::real_concept, the following evaluate to 0:
-               // std::numeric_limits<T>::infinity() and std::numeric_limits<T>::infinity()
-               dx_p_ = static_cast<T>(1) / 0;
-               dx_pp_ = static_cast<T>(1) / 0;
+               // Need to static cast double infinity because for T = boost::math::concepts::real_concept, 
+               // std::numeric_limits<T>::infinity() evaluates to 0.
+               dx_p_ = dx_pp_ = static_cast<T>(std::numeric_limits<double>::infinity());
             }
 
             void push(T input) {
