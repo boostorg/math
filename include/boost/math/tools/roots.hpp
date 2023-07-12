@@ -490,7 +490,7 @@ namespace detail {
          // problem, but whose f0 and f1 values are invalid.
          Root1D_Data(T xl, T xh)
             : v_eval_({Data_X01<T, Step>(xl), Data_X01<T, Step>(xh)})
-            , v_is_x_only_({true, true})
+            , v_is_x_only_({{true, true}})
             , ind_last_(true) {}
 
          // Updates the eval using the bool is_h as an index.
