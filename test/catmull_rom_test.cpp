@@ -18,6 +18,10 @@
 #include <boost/multiprecision/cpp_dec_float.hpp>
 #include <boost/numeric/ublas/vector.hpp>
 
+#if __has_include(<stdfloat>)
+#  include <stdfloat>
+#endif
+
 using std::abs;
 using boost::multiprecision::cpp_bin_float_50;
 using boost::math::catmull_rom;
@@ -158,7 +162,7 @@ void test_circle()
     }
 
     Real max_s = circle.max_parameter();
-    for(Real s = 0; s < max_s; s += 0.01)
+    for(Real s = 0; s < max_s; s += Real(0.01))
     {
         auto p = circle(s);
         Real x = p[0];
@@ -259,11 +263,11 @@ void test_helix()
         Real y = p[1];
         if (abs(x) < tol)
         {
-            BOOST_CHECK_SMALL(cos(t), tol);
+            BOOST_CHECK_SMALL(Real(cos(t)), tol);
         }
         if (abs(y) < tol)
         {
-            BOOST_CHECK_SMALL(sin(t), tol);
+            BOOST_CHECK_SMALL(Real(sin(t)), tol);
         }
         else
         {
@@ -282,16 +286,16 @@ void test_helix()
         BOOST_CHECK_CLOSE_FRACTION(x*x+y*y, (Real) 1, (Real) 0.01);
         if (abs(x) < 0.01)
         {
-            BOOST_CHECK_SMALL(cos(t),  (Real) 0.05);
+            BOOST_CHECK_SMALL(Real(cos(t)),  (Real) 0.05);
         }
         if (abs(y) < 0.01)
         {
-            BOOST_CHECK_SMALL(sin(t), (Real) 0.05);
+            BOOST_CHECK_SMALL(Real(sin(t)), (Real) 0.05);
         }
         else
         {
-            BOOST_CHECK_CLOSE_FRACTION(x, cos(t), (Real) 0.05);
-            BOOST_CHECK_CLOSE_FRACTION(y, sin(t), (Real) 0.05);
+            BOOST_CHECK_CLOSE_FRACTION(x, Real(cos(t)), (Real) 0.05);
+            BOOST_CHECK_CLOSE_FRACTION(y, Real(sin(t)), (Real) 0.05);
         }
     }
 }
@@ -344,18 +348,18 @@ template<class Real>
 void test_data_representations()
 {
     std::cout << "Testing that the Catmull-Rom spline works with multiple data representations.\n";
-    mypoint3d<Real> p0(0.1, 0.2, 0.3);
-    mypoint3d<Real> p1(0.2, 0.3, 0.4);
-    mypoint3d<Real> p2(0.3, 0.4, 0.5);
-    mypoint3d<Real> p3(0.4, 0.5, 0.6);
-    mypoint3d<Real> p4(0.5, 0.6, 0.7);
-    mypoint3d<Real> p5(0.6, 0.7, 0.8);
+    mypoint3d<Real> p0(Real(0.1), Real(0.2), Real(0.3));
+    mypoint3d<Real> p1(Real(0.2), Real(0.3), Real(0.4));
+    mypoint3d<Real> p2(Real(0.3), Real(0.4), Real(0.5));
+    mypoint3d<Real> p3(Real(0.4), Real(0.5), Real(0.6));
+    mypoint3d<Real> p4(Real(0.5), Real(0.6), Real(0.7));
+    mypoint3d<Real> p5(Real(0.6), Real(0.7), Real(0.8));
 
 
     // Tests initializer_list:
     catmull_rom<mypoint3d<Real>> cat({p0, p1, p2, p3, p4, p5});
 
-    Real tol = 0.001;
+    Real tol = Real(0.001);
     auto p = cat(cat.parameter_at_point(0));
     BOOST_CHECK_CLOSE_FRACTION(p[0], p0[0], tol);
     BOOST_CHECK_CLOSE_FRACTION(p[1], p0[1], tol);
@@ -388,7 +392,7 @@ void test_random_access_container()
     // Tests initializer_list:
     catmull_rom<mypoint3d<Real>, decltype(u)> cat(std::move(u));
 
-    Real tol = 0.001;
+    Real tol = Real(0.001);
     auto p = cat(cat.parameter_at_point(0));
     BOOST_CHECK_CLOSE_FRACTION(p[0], p0[0], tol);
     BOOST_CHECK_CLOSE_FRACTION(p[1], p0[1], tol);
@@ -402,27 +406,51 @@ void test_random_access_container()
 BOOST_AUTO_TEST_CASE(catmull_rom_test)
 {
 #if !defined(TEST) || (TEST == 1)
-    test_data_representations<float>();
-    test_alpha_distance<double>();
 
-    test_linear<double>();
-#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-    test_linear<long double>();
-#endif
-
+    #ifdef __STDCPP_FLOAT32_T__
+    test_circle<std::float32_t>();
+    test_data_representations<std::float32_t>();
+    #else
     test_circle<float>();
-    test_circle<double>();
-#endif
-#if !defined(TEST) || (TEST == 2)
-    test_helix<double>();
+    test_data_representations<float>();
+    #endif
 
+    #ifdef __STDCPP_FLOAT64_T__
+    test_alpha_distance<std::float64_t>();
+    test_linear<std::float64_t>();
+    test_circle<std::float64_t>();
+    #else
+    test_alpha_distance<double>();
+    test_linear<double>();
+    test_circle<double>();
+    #endif
+    
+    #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+    test_linear<long double>();
+    #endif
+
+#endif
+
+#if !defined(TEST) || (TEST == 2)
+
+    #ifdef __STDCPP_FLOAT64_T__
+    test_helix<std::float64_t>();
+    test_affine_invariance<std::float64_t, 1>();
+    test_affine_invariance<std::float64_t, 2>();
+    test_affine_invariance<std::float64_t, 3>();
+    test_affine_invariance<std::float64_t, 4>();
+    test_random_access_container<std::float64_t>();
+    #else
+    test_helix<double>();
     test_affine_invariance<double, 1>();
     test_affine_invariance<double, 2>();
     test_affine_invariance<double, 3>();
     test_affine_invariance<double, 4>();
-
     test_random_access_container<double>();
+    #endif
+
 #endif
+
 #if !defined(TEST) || (TEST == 3)
     test_affine_invariance<cpp_bin_float_50, 4>();
 #endif

@@ -13,7 +13,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(atanh_test, T, all_float_types) {
   using boost::math::atanh;
   const T eps = 3000 * test_constants_t<T>::pct_epsilon(); // percent
   constexpr unsigned m = 5;
-  const T cx = 0.5;
+  const T cx = T(0.5);
   auto x = make_fvar<T, m>(cx);
   auto y = atanh(x);
   // BOOST_CHECK_EQUAL(y.derivative(0) , atanh(cx)); // fails due to overload
@@ -29,7 +29,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(atan_test, T, all_float_types) {
   BOOST_MATH_STD_USING
   using namespace boost;
 
-  const T cx = 1.0;
+  const T cx = 1;
   constexpr unsigned m = 5;
   const auto x = make_fvar<T, m>(cx);
   auto y = atan(x);
@@ -48,7 +48,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(erf_test, T, all_float_types) {
   using boost::math::erf;
 
   const T eps = 300 * 100 * boost::math::tools::epsilon<T>(); // percent
-  const T cx = 1.0;
+  const T cx = 1;
   constexpr unsigned m = 5;
   const auto x = make_fvar<T, m>(cx);
   auto y = erf(x);
@@ -158,8 +158,8 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(tan_test, T, bin_float_types) {
 BOOST_AUTO_TEST_CASE_TEMPLATE(fmod_test, T, bin_float_types) {
   BOOST_MATH_STD_USING
   constexpr unsigned m = 3;
-  const T cx = 3.25;
-  const T cy = 0.5;
+  const T cx = T(3.25);
+  const T cy = T(0.5);
   auto x = make_fvar<T, m>(cx);
   auto y = fmod(x, autodiff_fvar<T, m>(cy));
   BOOST_CHECK_EQUAL(y.derivative(0u), T(0.25));
@@ -171,7 +171,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(fmod_test, T, bin_float_types) {
 BOOST_AUTO_TEST_CASE_TEMPLATE(round_and_trunc, T, all_float_types) {
   BOOST_MATH_STD_USING
   constexpr unsigned m = 3;
-  const T cx = 3.25;
+  const T cx = T(3.25);
   auto x = make_fvar<T, m>(cx);
   auto y = round(x);
   BOOST_CHECK_EQUAL(y.derivative(0u), round(cx));
@@ -189,7 +189,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(iround_and_itrunc, T, all_float_types) {
   BOOST_MATH_STD_USING
   using namespace boost::math;
   constexpr unsigned m = 3;
-  const T cx = 3.25;
+  const T cx = T(3.25);
   auto x = make_fvar<T, m>(cx);
   int y = iround(x);
   BOOST_CHECK_EQUAL(y, iround(cx));
@@ -308,7 +308,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(tgamma2_test, T, all_float_types) {
   //const T eps = 5000 * boost::math::tools::epsilon<T>(); // ok for non-multiprecision
   const T eps = 500000 * boost::math::tools::epsilon<T>(); // percent
   constexpr unsigned m = 10;
-  const T cx = -1.5;
+  const T cx = T(-1.5);
   // Mathematica: N[Table[D[Gamma[x],{x,n}] /. x->-3/2, {n, 0, 10}], 52]
   std::array<T, m + 1> answers{
     {BOOST_MATH_TEST_VALUE(T, 2.363271801207354703064223311121526910396732608163183)

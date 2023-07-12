@@ -9,6 +9,10 @@
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
 
+#if __has_include(<stdfloat>)
+# include <stdfloat>
+#endif
+
 #if !defined(BOOST_NO_CXX11_DECLTYPE) && !defined(BOOST_NO_CXX11_TRAILING_RESULT_TYPES) && !defined(BOOST_NO_SFINAE_EXPR)
 
 #include <boost/math/concepts/real_concept.hpp>
@@ -258,6 +262,17 @@ BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
     test_integration_over_real_line<double, 17>();
     test_right_limit_infinite<double, 17>();
     test_left_limit_infinite<double, 17>();
+
+    #ifdef __STDCPP_FLOAT64_T__
+    test_linear<std::float64_t, 15>();
+    test_quadratic<std::float64_t, 15>();
+    test_ca<std::float64_t, 15>();
+    test_three_quadrature_schemes_examples<std::float64_t, 15>();
+    test_integration_over_real_line<std::float64_t, 15>();
+    test_right_limit_infinite<std::float64_t, 15>();
+    test_left_limit_infinite<std::float64_t, 15>();
+    #endif
+
 #endif
 #ifdef TEST1A
 #if LDBL_MANT_DIG < 100 // If we have too many digits in a long double, we get build errors due to a constexpr issue.

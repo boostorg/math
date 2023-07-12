@@ -44,7 +44,7 @@ inline tools::promote_args_t<T> round(const T& v, const Policy& pol, const std::
    // The logic here is rather convoluted, but avoids a number of traps,
    // see discussion here https://github.com/boostorg/math/pull/8
    //
-   if (-0.5 < v && v < 0.5)
+   if (T(-0.5) < v && v < T(0.5))
    {
       // special case to avoid rounding error on the direct
       // predecessor of +0.5 resp. the direct successor of -0.5 in
@@ -56,13 +56,13 @@ inline tools::promote_args_t<T> round(const T& v, const Policy& pol, const std::
       // subtract v from ceil(v) first in order to avoid rounding
       // errors on largest representable integer numbers
       result_type c(ceil(v));
-      return 0.5 < c - v ? c - 1 : c;
+      return T(0.5) < c - v ? c - 1 : c;
    }
    else
    {
       // see former branch
       result_type f(floor(v));
-      return 0.5 < v - f ? f + 1 : f;
+      return T(0.5) < v - f ? f + 1 : f;
    }
 }
 template <class T, class Policy>

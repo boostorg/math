@@ -19,6 +19,10 @@
 #include <boost/math/tools/minima.hpp>
 #include <boost/math/quadrature/trapezoidal.hpp>
 
+#if __has_include(<stdfloat>)
+#  include <stdfloat>
+#endif
+
 #ifdef BOOST_HAS_FLOAT128
 #include <boost/multiprecision/float128.hpp>
 using boost::multiprecision::float128;
@@ -118,7 +122,7 @@ void test_wavelet_transform()
             for (double t = -10; t < 10; t+= 0.1)
             {
                 Real w = Wg(s, t);
-                if (!CHECK_LE(abs(w), 10*sqrt(std::numeric_limits<Real>::epsilon())))
+                if (!CHECK_LE(abs(w), Real(10*sqrt(std::numeric_limits<Real>::epsilon()))))
                 {
                     std::cerr << "  Wavelet transform of constant with respect to " << p << " vanishing moment Daubechies wavelet is insufficiently small\n";
                 }
@@ -127,7 +131,7 @@ void test_wavelet_transform()
         }
         // Wavelet transform of psi evaluated at s = 1, t = 0 is L2 norm of psi:
         auto Wpsi = daubechies_wavelet_transform(psi, psi);
-        CHECK_MOLLIFIED_CLOSE(Real(1), Wpsi(1,0), 2*sqrt(std::numeric_limits<Real>::epsilon()));
+        CHECK_MOLLIFIED_CLOSE(Real(1), Wpsi(1,0), Real(2*sqrt(std::numeric_limits<Real>::epsilon())));
     }
 
 }
@@ -135,9 +139,15 @@ void test_wavelet_transform()
 int main()
 {
     try{
+       #ifdef __STDCPP_FLOAT64_T__
+       test_wavelet_transform<std::float64_t, 2>();
+       test_wavelet_transform<std::float64_t, 8>();
+       test_wavelet_transform<std::float64_t, 16>();
+       #else
        test_wavelet_transform<double, 2>();
        test_wavelet_transform<double, 8>();
        test_wavelet_transform<double, 16>();
+       #endif
        // All these tests pass, but the compilation takes too long on CI:
        //boost::hana::for_each(std::make_index_sequence<17>(), [&](auto i) {
        //    test_wavelet_transform<double, i+3>();
