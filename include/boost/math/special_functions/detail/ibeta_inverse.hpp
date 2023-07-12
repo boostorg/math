@@ -27,7 +27,7 @@ struct temme_root_finder
 {
    temme_root_finder(const T t_, const T a_) : t(t_), a(a_) {
       const T x_extrema = 1 / (1 + a);
-      assert(0 < x_extrema && x_extrema < 1);
+      BOOST_MATH_ASSERT(0 < x_extrema && x_extrema < 1);
    }
 
    boost::math::tuple<T, T> operator()(T x)

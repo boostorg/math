@@ -501,7 +501,7 @@ namespace detail {
 
          // Returns the x value of the only eval that contains an original bound
          T get_bound_from_unused_eval() const {
-            assert(num_x_only() == 1);
+            BOOST_MATH_ASSERT(num_x_only() == 1);
             return v_is_x_only_[0] ? eval_l().x() : eval_h().x();
          }
 

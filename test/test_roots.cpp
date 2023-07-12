@@ -519,8 +519,8 @@ void test_cusp() {
 
          // Two roots exist (One is picked arbitrarily)
          } else {
-            // x_root = x_center ± ye^2
-            // x_root - x_center = ± ye^2
+            // x_root = x_center +- ye^2
+            // x_root - x_center = +- ye^2
             // abs(x_root - x_center) = ye^2
             BOOST_CHECK_CLOSE_FRACTION(fabs(x_root - x_center), ye * ye, tol);
          }
