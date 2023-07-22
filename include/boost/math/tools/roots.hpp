@@ -273,7 +273,10 @@ namespace detail {
       Data_X01(F f, T x) : x_(x) { detail::unpack_tuple(f(x_), f0_, f1_); }
 
       // Store just a constant x value
-      Data_X01(T x) : x_(x), f0_(static_cast<T>(1) / 0), f1_(static_cast<T>(1) / 0) {}
+      Data_X01(T x)
+         : x_(x)
+         , f0_(static_cast<T>(std::numeric_limits<double>::infinity()))
+         , f1_(static_cast<T>(std::numeric_limits<double>::infinity())) {}
 
       T calc_dx() const { return Step().calc_dx(*this); }
       T calc_dx_newton() const { return -f0_ / f1_; }
