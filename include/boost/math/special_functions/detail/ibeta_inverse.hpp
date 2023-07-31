@@ -404,13 +404,9 @@ T temme_method_3_ibeta_inverse(T a, T b, T p, T q, const Policy& pol)
    T upper = eta < mu ? 1 : cross;
    T x = (lower + upper) / 2;
 
-   // Special cases due to lack of numerical precision
-   if (cross == 1) {
-      return 1;
-   } else if (cross == 0) {
-      return 0;
-   }
-
+   // Early exit for cases with numerical precision issues.
+   if (cross == 0 || cross == 1) { return cross; }
+   
    x = tools::newton_raphson_iterate(
       temme_root_finder<T>(u, mu), x, lower, upper, policies::digits<T, Policy>() / 2);
 #ifdef BOOST_INSTRUMENT
