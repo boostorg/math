@@ -431,7 +431,7 @@ namespace detail {
       template <typename T, typename = void>
       struct has_value_function : std::false_type {};
       template <typename T>
-      struct has_value_function<T, std::void_t<decltype(std::declval<T>().value())>> : std::true_type {};
+      struct has_value_function<T, decltype(void(std::declval<T>().value()))> : std::true_type {};
 
       // Cast type T to double if T is a boost::concepts::real_concept type.
       template <typename T>
