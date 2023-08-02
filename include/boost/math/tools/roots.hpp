@@ -25,6 +25,8 @@
 #include <boost/math/tools/toms748_solve.hpp>
 #include <boost/math/policies/error_handling.hpp>
 
+#include <iostream>
+
 namespace boost {
 namespace math {
 namespace tools {
@@ -343,6 +345,155 @@ namespace detail {
       T calc_dx(const Data_X01<T, StepNewton>& z) const { return -z.f0() / z.f1(); }
    };
 
+   ////// Motivation for the BitSpace class. //////
+   //
+   // What's the best way to bisect between a lower bound (lb) and an upper
+   // bound (ub) during root finding? Let's consider options...
+   //
+   // Arithmetic bisection:
+   //   - The natural choice, but it doesn't always work well. For example, if
+   //     lb = 1.0 and ub = std::numeric_limits<float>::max(), many bisections
+   //     may be needed to converge if the root is near 1.
+   //
+   // Geometric bisection:
+   //   - This approach performs much better for the example above, but it
+   //     too has issues. For example, if lb = 0.0, it gets stuck at 0.0.
+   //     It also fails if lb and ub have different signs.
+   //
+   // In addition to the limitations outlined above, neither of these approaches
+   // works if ub is infinity. We want a more robust way to handle bisection
+   // for general root finding problems. The BitSpace class does this.
+   //
+   //
+   ////// The BitSpace class. //////
+   //
+   // On a conceptual level, the BitSpace class is designed to solve the
+   // following root finding problem.
+   //   - A function f(x) has a single root x_solution somewhere in the interval
+   //     [-infinity, +infinity]. For all values below x_solution f(x) is -1. 
+   //     For all values above x_solution f(x) is +1. The best way to root find
+   //     this problem is to bisect in bit space.
+   //
+   // Efficient bit space bisection is possible because of the IEEE 754 standard.
+   // According to the standard, the bits in floating point numbers are partitioned
+   // into three parts: sign, exponent, and mantissa. Assuming constant sign,
+   // increasing numbers in bit space have increasing floating point values
+   // starting at zero, and ending at infinity!
+   //
+   // 0            |  0 00000000 00000000000000000000000  |  positive zero
+   // 1.4013e-45   |  0 00000000 00000000000000000000001  |  std::numeric_limits<float>::denorm_min()
+   // 1.17549e-38  |  0 00000001 00000000000000000000000  |  std::numeric_limits<float>::min()
+   // 1.19209e-07  |  0 01101000 00000000000000000000000  |  std::numeric_limits<float>::epsilon()
+   // 1            |  0 01111111 00000000000000000000000  |  positive one
+   // 3.40282e+38  |  0 11111110 11111111111111111111111  |  std::numeric_limits<float>::max()
+   // inf          |  0 11111111 00000000000000000000000  |  std::numeric_limits<float>::infinity()
+   // nan          |  0 11111111 10000000000000000000000  |  std::numeric_limits<float>::quiet_NaN()
+   // 
+   // This class interprets the bits as either a float or a uint, depending on
+   // the context.
+   //
+   class BitSpace {
+   public:
+      BitSpace() = delete;
+
+      template <typename T>
+      static T calc_midpoint(T x, T X) {
+         // Sort x and X by magnitude
+         using std::fabs;
+         if (fabs(X) < fabs(x)) {
+            std::swap(x, X);
+         }
+
+         // Return the arithmetic mean if x and X have the same sign and are within a factor of 2 of each other
+         if (sign(x) == sign(X) && fabs(X) < 2 * fabs(x)) {
+            return (x + X) / 2;
+         }
+
+         return do_bit_space_mean_754(x, X);
+      }
+
+   private:
+      static float do_bit_space_mean_754(float x, float X) {
+         return BitSpaceMidpoint754<float, uint32_t>(x, X)();
+      }
+      
+      template <typename T>
+      static T do_bit_space_mean_754(T x, T X) {
+         double x_double = cast_to_double(x);
+         double X_double = cast_to_double(X);
+         return BitSpaceMidpoint754<double, uint64_t>(x_double, X_double)();
+      }
+
+      // Static casting the float type T to double is not possible for T =
+      // boost::concepts::real_concept types. This helper template detects
+      // if T is a real_concept type indirectly through the presence of a
+      // value() member function.
+      template <typename T, typename = void>
+      struct has_value_function : std::false_type {};
+      template <typename T>
+      struct has_value_function<T, std::void_t<decltype(std::declval<T>().value())>> : std::true_type {};
+
+      // Cast type T to double if T is a boost::concepts::real_concept type.
+      template <typename T>
+      static typename std::enable_if<has_value_function<T>::value, double>::type cast_to_double(T x) {
+          return static_cast<double>(x.value());
+      }
+      template <typename T>
+      static typename std::enable_if<!has_value_function<T>::value, double>::type cast_to_double(T x) {
+          return static_cast<double>(x);
+      }
+
+      // Does the bisection in bit space for IEEE 754 floating point numbers.
+      template <typename T, typename U>
+      class BitSpaceMidpoint754 {
+      public:
+         // NOTE: x and X must be sorted by magnitude
+         BitSpaceMidpoint754(T x, T X) : x_(x), X_(X) {
+            static_assert(std::numeric_limits<T>::is_iec559, "Type must be IEEE 754 floating point.");
+            static_assert(std::is_unsigned<U>::value, "U must be an unsigned integer type.");
+            static_assert(sizeof(T) == sizeof(U), "Type and uint size must be the same.");
+         }
+
+         T operator()() const {
+            // Convert x_ and X_ to magnitude and sign
+            using std::fabs;
+            const T x_mag = fabs(x_);
+            const T X_mag = fabs(X_);
+            const T sign_x = sign(x_);
+            const T sign_X = sign(X_);
+
+            // Convert the magnitudes to bits
+            U bits_mag_x = float_to_uint(x_mag);
+            U bits_mag_X = float_to_uint(X_mag);
+
+            // Calculate the average magnitude in bits
+            U bits_mag = (sign_x == sign_X) ? (bits_mag_X + bits_mag_x) : (bits_mag_X - bits_mag_x);
+            bits_mag = bits_mag >> 1;  // Divide by 2
+
+            // Reconstruct upl_mean from average magnitude and sign of X
+            return uint_to_float(bits_mag) * sign_X;
+         }
+         
+      private:
+         // Convert a float to bits
+         static U float_to_uint(T x) {
+            U bits;
+            std::memcpy(&bits, &x, sizeof(U));
+            return bits;
+         }
+
+         // Convert bits to a float
+         static T uint_to_float(U bits) {
+            T x;
+            std::memcpy(&x, &bits, sizeof(T));
+            return x;
+         }
+
+         T x_;
+         T X_;  // Has a larger magnitude than x_
+      };
+   };
+
    // The state of the 1D root finding problem. This state is acted upon by one of
    // several solvers
    template <class F, class T, class Step>
@@ -423,7 +574,7 @@ namespace detail {
          }
       }
 
-      T midpoint() const { return (eval_l().x() + eval_h().x()) / 2; }
+      // T midpoint() const { return (eval_l().x() + eval_h().x()) / 2; }
       bool is_inbounds(T x) const { return (x_l() <= x) && (x <= x_h()); }
 
       // NOTE: evals always contain valid x data, as both evals are initalized with the
@@ -485,6 +636,8 @@ namespace detail {
       const Data_X01<T, Step>& eval_h() const { return data_.eval_h(); }
       CaseFlag flag() const { return flag_; }
 
+      void print_step_size_history() const { dx_history_.print(); }
+
    private:
       // Holds Evaluation Data
       class Root1D_Data {
@@ -539,6 +692,10 @@ namespace detail {
                dx_p_ = input;
             }
 
+            void print() const {
+               std::cout << "dx_p: " << dx_p_ << ", dx_pp: " << dx_pp_ << std::endl;
+            }
+
             T dx_pp() const { return dx_pp_; }
 
          private:
@@ -561,7 +718,16 @@ namespace detail {
                policies::raise_evaluation_error(function, "Ran out of iterations when finding root in boost::math::tools::detail::Root1D_Evaluator, attempted to evalutate %1%", x_dx.x(), boost::math::policies::policy<>());
             }
             --count_;
-            return Data_X01<T, Step>(f_, x_dx.x());
+
+            // Set precision of cout to 20 digits
+            std::cout.precision(20);
+
+            std::cout << "evaluated at x: " << x_dx.x() << "-- with dx: " << x_dx.dx() << " -- count: " << count_ << std::endl;\
+            const auto data_out = Data_X01<T, Step>(f_, x_dx.x());
+
+            std::cout << "f0: " << data_out.f0() << ", f1: " << data_out.f1() << std::endl;
+
+            return data_out;
          }
 
          std::uintmax_t num_fn_evals() const { return max_iter_ - count_; }
@@ -599,6 +765,8 @@ namespace detail {
                x_dx = calc_next_bisection(b);
             }
 
+            b.print_step_size_history();
+
             // Maybe exit
             if (is_exit_case_now(b, x_dx)) { break; }
 
@@ -628,7 +796,7 @@ namespace detail {
       virtual CaseFlag flag_this() const = 0;
    };
 
-   // The solver for the case where only a single evulation (either low or high) exists.
+   // The solver for the case where only a single evaluation (either low or high) exists.
    template <class F, class T, class Step>
    class SolverCase1 : public SolverBase<F, T, Step> {
    public:
@@ -659,10 +827,21 @@ namespace detail {
    class SolverCase2Base : public SolverBase<F, T, Step> {
    public:
       X_DX<T, Step> calc_next_bisection(Root1D_State<F, T, Step>& b) const override {
-         const auto x_mid = b.midpoint();
+         const auto x_mid = BitSpace::calc_midpoint(b.x_l(), b.x_h());
+
+         // const auto x_mid = b.midpoint();
          if (x_mid == b.x_l() || x_mid == b.x_h()) {
             b.set_flag(this->flag_stall());
          }
+         
+         // Assert that x_mid is in bounds
+         if (!b.is_inbounds(x_mid)) {
+            std::cout << "x_mid: " << x_mid << std::endl;
+            std::cout << "x_l:   " << b.x_l() << std::endl;
+            std::cout << "x_h:   " << b.x_h() << std::endl;
+            assert(false);
+         }
+
          return b.calc_x_dx(x_mid);
       }
 
@@ -755,6 +934,8 @@ namespace detail {
    //
    template <class F, class T, class Step>
    T solve_3_attempts(F f, T x, T xl, T xh, int digits, std::uintmax_t& max_iter) noexcept(policies::is_noexcept_error_policy<policies::policy<> >::value&& BOOST_MATH_IS_FLOAT(T) && noexcept(std::declval<F>()(std::declval<T>()))) {
+      std::cout << "CONSTRUCTED" << std::endl;
+
       // Create Root1D_State
       Root1D_State<F, T, Step> state(f, x, xl, xh, digits, max_iter);
 
