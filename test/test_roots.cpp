@@ -24,7 +24,9 @@
 #include <iomanip>
 
 #include <boost/multiprecision/cpp_bin_float.hpp>
+#include <boost/multiprecision/cpp_dec_float.hpp>
 #include <boost/multiprecision/cpp_complex.hpp>
+#include <boost/math/concepts/real_concept.hpp>
 
 #define BOOST_CHECK_CLOSE_EX(a, b, prec, i) \
    {\
@@ -771,6 +773,86 @@ void test_failures()
 #endif
 }
 
+template <typename T>
+void test_bisect() {
+   // Creates a vector of test values that include: zero, denorm_min, min, epsilon, max,
+   // and infinity. Also includes powers of 2 ranging from 2^-15 to 2^+15 by powers of 3.
+   const auto fn_create_test_ladder = [](){
+      std::vector<T> v;
+
+      const auto fn_push_back_x_scaled = [&v](const T& x) {
+         const auto fn_add_if_non_zero_and_finite = [&v](const T& x) {
+            if (x != 0 && boost::math::isfinite(x)) {  // Avoids most duplications
+               v.push_back(x);
+            }
+         };
+
+         const T two_thirds = T(2) / T(3);
+         const T four_thirds = T(4) / T(3);
+
+         v.push_back(x);
+         fn_add_if_non_zero_and_finite(x * T(0.5));
+         fn_add_if_non_zero_and_finite(x * two_thirds);
+         fn_add_if_non_zero_and_finite(x * four_thirds);
+         fn_add_if_non_zero_and_finite(x * T(2.0));
+      };
+
+      const auto fn_push_back_pm = [&](std::vector<T>& v, const T& x) {
+         fn_push_back_x_scaled( x);
+         fn_push_back_x_scaled(-x);
+      };
+
+      fn_push_back_pm(v, T(0.0));
+      fn_push_back_pm(v, std::numeric_limits<T>::denorm_min());
+      fn_push_back_pm(v, std::numeric_limits<T>::min());
+      fn_push_back_pm(v, std::numeric_limits<T>::epsilon());
+      const int test_exp_range = 5;
+      for (int i = -test_exp_range; i < (test_exp_range + 1); ++i) {
+         const int exponent = i * 3;
+         const T x = std::ldexp(1.0, exponent);
+         fn_push_back_pm(v, x);
+      }
+      fn_push_back_pm(v, std::numeric_limits<T>::max());
+
+      // Real_concept doesn't have infinity
+      if (std::numeric_limits<T>::has_infinity) {
+         fn_push_back_pm(v, std::numeric_limits<T>::infinity());
+      }
+
+      std::sort(v.begin(), v.end());
+
+      const int num_zeros = std::count(v.begin(), v.end(), T(0.0));
+      BOOST_CHECK_LE(2, num_zeros);  // Positive and negative zero 
+
+      return v;
+   };
+
+   // Test for all combinations from the ladder
+   const auto v = fn_create_test_ladder();
+   for (const T& x_i: v) {
+      for (const T& x_j: v) {
+         const T x_mid_ij = boost::math::tools::detail::Bisection::calc_midpoint(x_i, x_j);
+
+         const T x_lo = std::min(x_i, x_j);
+         const T x_hi = std::max(x_i, x_j);
+
+         BOOST_CHECK_LE(x_lo, x_mid_ij);
+         BOOST_CHECK_LE(x_mid_ij, x_hi);
+      }
+   }
+}
+
+void test_bisect_all_cases() {
+   test_bisect<float>();
+   test_bisect<double>();
+   test_bisect<long double>();
+   test_bisect<boost::math::concepts::real_concept>();
+   test_bisect<boost::multiprecision::cpp_bin_float_50>();
+   test_bisect<boost::multiprecision::cpp_bin_float_100>();
+   test_bisect<boost::multiprecision::cpp_dec_float_50>();
+   test_bisect<boost::multiprecision::cpp_dec_float_100>();
+}
+
 BOOST_AUTO_TEST_CASE( test_main )
 {
 
@@ -779,6 +861,8 @@ BOOST_AUTO_TEST_CASE( test_main )
    test_3_attempt();
    test_cusp();
    test_solved_at_bound();
+
+   test_bisect_all_cases();
 
    // bug reports:
    boost::math::skew_normal_distribution<> dist(2.0, 1.0, -2.5);
