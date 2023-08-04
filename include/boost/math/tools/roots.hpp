@@ -523,7 +523,7 @@ namespace detail {
       template <typename U = T>
       static typename std::enable_if<std::numeric_limits<U>::is_specialized, T>::type
       do_solve(PosFinite x, EqInf X) {
-          return do_solve(x, PosFinite(std::numeric_limits<U>::max()));
+          return do_solve(x, PosFinite((std::numeric_limits<U>::max)()));
       }
       template <typename U = T>
       static typename std::enable_if<!std::numeric_limits<U>::is_specialized, T>::type
@@ -539,7 +539,7 @@ namespace detail {
             const U denorm_min = std::numeric_limits<U>::denorm_min();
             if (denorm_min != 0) { return denorm_min; }
 
-            const U min = std::numeric_limits<U>::min();
+            const U min = (std::numeric_limits<U>::min)();
             if (min != 0) { return min; }
 
             BOOST_MATH_ASSERT(false && "denorm_min and min are both zero.");

@@ -804,7 +804,7 @@ void test_bisect() {
 
       fn_push_back_pm(v, T(0.0));
       fn_push_back_pm(v, std::numeric_limits<T>::denorm_min());
-      fn_push_back_pm(v, std::numeric_limits<T>::min());
+      fn_push_back_pm(v, (std::numeric_limits<T>::min)());
       fn_push_back_pm(v, std::numeric_limits<T>::epsilon());
       const int test_exp_range = 5;
       for (int i = -test_exp_range; i < (test_exp_range + 1); ++i) {
@@ -812,7 +812,7 @@ void test_bisect() {
          const T x = std::ldexp(1.0, exponent);
          fn_push_back_pm(v, x);
       }
-      fn_push_back_pm(v, std::numeric_limits<T>::max());
+      fn_push_back_pm(v, (std::numeric_limits<T>::max)());
 
       // Real_concept doesn't have infinity
       if (std::numeric_limits<T>::has_infinity) {
@@ -833,8 +833,8 @@ void test_bisect() {
       for (const T& x_j: v) {
          const T x_mid_ij = boost::math::tools::detail::Bisection::calc_midpoint(x_i, x_j);
 
-         const T x_lo = std::min(x_i, x_j);
-         const T x_hi = std::max(x_i, x_j);
+         const T x_lo = (std::min)(x_i, x_j);
+         const T x_hi = (std::max)(x_i, x_j);
 
          BOOST_CHECK_LE(x_lo, x_mid_ij);
          BOOST_CHECK_LE(x_mid_ij, x_hi);
