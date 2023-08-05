@@ -731,11 +731,39 @@ void test_bisect_all_cases() {
    test_bisect<boost::multiprecision::cpp_dec_float_100>();
 }
 
+void test_count() {
+   const auto fn_newton = [](std::uintmax_t& i_max) {
+      return boost::math::tools::newton_raphson_iterate(
+         [](double x) { return std::make_pair(x * x - 3, 2 * x); },
+         10.0  /* x_initial */,
+         0.0   /* bound lower*/,
+         100.0 /* bound upper */, 52, i_max);
+   };
+
+   // Find the minimum number of iterations to find the solution
+   std::uintmax_t iter_find_solution = 100;
+   fn_newton(iter_find_solution);
+   BOOST_CHECK_EQUAL(iter_find_solution, std::uintmax_t(8));  // Confirm is 8
+
+   for (std::uintmax_t count = 0; count < (iter_find_solution * 2); count++) {
+      std::uintmax_t iters = count;
+      if (iter_find_solution <= count) {  // Finds correct answer
+         using std::sqrt;
+         BOOST_CHECK_EQUAL(fn_newton(iters), sqrt(3.0));
+         BOOST_CHECK_EQUAL(iters, iter_find_solution);
+      }
+      else {  // Throws error for running out of iterations
+         BOOST_CHECK_THROW(fn_newton(iters), boost::math::evaluation_error);
+      }
+   }
+}
+
 BOOST_AUTO_TEST_CASE( test_main )
 {
 
    test_beta(0.1, "double");
 
+   test_count();
    test_bisect_all_cases();
 #if 0
    // bug reports:
