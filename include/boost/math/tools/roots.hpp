@@ -495,12 +495,12 @@ T newton_raphson_iterate(F f, T guess, T min, T max, int digits, std::uintmax_t&
       last_f0 = f0;
       delta2 = delta1;
       delta1 = delta;
-      detail::unpack_tuple(f(result), f0, f1);
       if (count == 0) {
          return policies::raise_evaluation_error(function, "Ran out of iterations in boost::math::tools::newton_raphson_iterate, perhaps we have a local minima near current best guess of %1%", guess, boost::math::policies::policy<>());
       } else {
          --count;
       }
+      detail::unpack_tuple(f(result), f0, f1);
 
       if (0 == f0)
          break;
