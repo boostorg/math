@@ -18,6 +18,7 @@
 
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/cxx03_warn.hpp>
+#include <boost/math/tools/throw_exception.hpp>
 
 #include <boost/math/special_functions/sign.hpp>
 #include <boost/math/special_functions/next.hpp>
