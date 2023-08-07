@@ -27,6 +27,10 @@
 #include <boost/multiprecision/cpp_complex.hpp>
 #include <boost/math/concepts/real_concept.hpp>
 
+#if __has_include(<stdfloat>)
+#  include <stdfloat>
+#endif
+
 #define BOOST_CHECK_CLOSE_EX(a, b, prec, i) \
    {\
       unsigned int failures = boost::unit_test::results_collector.results( boost::unit_test::framework::current_test_case().p_id ).p_assertions_failed;\
@@ -729,6 +733,15 @@ void test_bisect_all_cases() {
    test_bisect<boost::multiprecision::cpp_bin_float_100>();
    test_bisect<boost::multiprecision::cpp_dec_float_50>();
    test_bisect<boost::multiprecision::cpp_dec_float_100>();
+
+#if __has_include(<stdfloat>)
+#ifdef __STDCPP_FLOAT32_T__
+   test_bisect<std::float32_t>();
+#endif
+#ifdef __STDCPP_FLOAT64_T__
+   test_bisect<std::float64_t>();
+#endif 
+#endif
 }
 
 void test_count() {
@@ -765,7 +778,7 @@ BOOST_AUTO_TEST_CASE( test_main )
 
    test_count();
    test_bisect_all_cases();
-#if 0
+
    // bug reports:
    boost::math::skew_normal_distribution<> dist(2.0, 1.0, -2.5);
    BOOST_CHECK(boost::math::isfinite(quantile(dist, 0.075)));
@@ -787,5 +800,4 @@ BOOST_AUTO_TEST_CASE( test_main )
     test_solve_complex_quadratic<std::complex<double>>();
 #endif
     test_failures();
-#endif
 }

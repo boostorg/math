@@ -260,14 +260,14 @@ namespace Bisection {
    // inf          |  0 11111111 00000000000000000000000  |  std::numeric_limits<float>::infinity()
    // nan          |  0 11111111 10000000000000000000000  |  std::numeric_limits<float>::quiet_NaN()
    // 
-   // Negative values are similar, but the sign bit is set to 1. My keeping track of the possible
+   // Negative values are similar, but the sign bit is set to 1. By keeping track of the possible
    // sign flip, it can bisect numbers with different signs.
    //
    template <typename T, typename U>
    class Midpoint754 {
    private:
       // Does the bisection in bit space for IEEE 754 floating point numbers.
-      // Infinities are allowed. It's assumed that neither x nor X is NaN.
+      // Infinities are allowed. It's assumed that neither x nor y is NaN.
       static_assert(std::numeric_limits<T>::is_iec559, "Type must be IEEE 754 floating point.");
       static_assert(std::is_unsigned<U>::value, "U must be an unsigned integer type.");
       static_assert(sizeof(T) == sizeof(U), "Type and uint size must be the same.");
@@ -287,29 +287,29 @@ namespace Bisection {
       }
 
    public:
-      static T solve(T x, T X) {
+      static T solve(T x, T y) {
          using std::fabs;
          
-         // Sort so that X has the larger magnitude
-         if (fabs(X) < fabs(x)) {
-            std::swap(x, X);
+         // Sort so that y has the larger magnitude
+         if (fabs(y) < fabs(x)) {
+            std::swap(x, y);
          }
          
          const T x_mag = std::fabs(x);
-         const T X_mag = std::fabs(X);
+         const T y_mag = std::fabs(y);
          const T sign_x = sign(x);
-         const T sign_X = sign(X);
+         const T sign_y = sign(y);
 
          // Convert the magnitudes to bits
          U bits_mag_x = float_to_uint(x_mag);
-         U bits_mag_X = float_to_uint(X_mag);
+         U bits_mag_y = float_to_uint(y_mag);
 
          // Calculate the average magnitude in bits
-         U bits_mag = (sign_x == sign_X) ? (bits_mag_X + bits_mag_x) : (bits_mag_X - bits_mag_x);
+         U bits_mag = (sign_x == sign_y) ? (bits_mag_y + bits_mag_x) : (bits_mag_y - bits_mag_x);
          bits_mag = bits_mag >> 1;  // Divide by 2
 
-         // Reconstruct upl_mean from average magnitude and sign of X
-         return uint_to_float(bits_mag) * sign_X;
+         // Reconstruct upl_mean from average magnitude and sign of y
+         return uint_to_float(bits_mag) * sign_y;
       }
    };  // class Midpoint754
 
@@ -317,38 +317,49 @@ namespace Bisection {
    template <typename T>
    class MidpointNon754 {
    private:
+      // NOTE: The Midpoint754 solver is faster than this solver and should be used when possible.
+      //       To use the Midpoint754 solver, two criteria must be satisfied:
+      //         1. The type T must conform to the IEEE 754 standard and
+      //         2. There must exist a corresponding unsigned integer type with the same number of bits.
+      //       Currently, this limits the use of the Midpoint754 solver to `float` and `double`. The
+      //       lack of a 128 bit unsigned integer type prevents the Midpoint754 solver being used for
+      //       `long double`.
       static_assert(!std::is_same<T, float>::value, "Need to use Midpoint754 solver when T is float");
       static_assert(!std::is_same<T, double>::value, "Need to use Midpoint754 solver when T is double");
+      // static_assert(!std::is_same<T, long double>::value -- (See NOTE above)
 
    public:
-      static T solve(T x, T X) {
-         const T sx = sign(x);
-         const T sX = sign(X);
+      static T solve(T x, T y) {
+         const T sign_x = sign(x);
+         const T sign_y = sign(y);
          
          // Sign flip return zero
-         if (sx * sX == -1) { return T(0.0); }
+         if (sign_x * sign_y == -1) { return T(0.0); }
 
          // At least one is positive
-         if (0 < sx + sX) { return do_solve(x, X); }
+         if (0 < sign_x + sign_y) { return do_solve(x, y); }
 
          // At least one is negative
-         return -do_solve(-x, -X);
+         return -do_solve(-x, -y);
       }
 
    private:      
       struct EqZero {
-         EqZero(T x) { BOOST_MATH_ASSERT(x == 0 && "x must be zero."); }
+         EqZero(T x) { BOOST_MATH_ASSERT_MSG(x == 0, "x must be zero.");}
       };
 
       struct EqInf {
-         EqInf(T x) { BOOST_MATH_ASSERT(x == static_cast<T>(std::numeric_limits<double>::infinity()) && "x must be infinity."); }
+         // NOTE: (x == infinity) is checked this way to support types (e.g., boost::math::concepts::real_concept)
+         //       that have infinity, but for which this the query std::numeric_limits<T>::infinity() returns
+         //       0 due to the std::numeric_limits interface not being implemented.
+         EqInf(T x) { BOOST_MATH_ASSERT_MSG(0 < x && !(boost::math::isfinite)(x), "x must be positive infinity."); }
       };
 
       class PosFinite {
       public:
          PosFinite(T x) : x_(x) {
-            BOOST_MATH_ASSERT(0 < x && "x must be positive.");
-            BOOST_MATH_ASSERT(x < std::numeric_limits<float>::infinity() && "x must be less than infinity.");
+            BOOST_MATH_ASSERT_MSG(0 < x, "x must be positive.");
+            BOOST_MATH_ASSERT_MSG((boost::math::isfinite)(x), "x must be finite.");
          }
 
          T value() const { return x_; }
@@ -358,54 +369,54 @@ namespace Bisection {
       };
 
       // Two unknowns
-      static T do_solve(T x, T X) {
-         if (X < x) {
-            return do_solve(X, x);
+      static T do_solve(T x, T y) {
+         if (y < x) {
+            return do_solve(y, x);
          }
 
          if (x == 0) {
-            return do_solve(EqZero(x), X);
-         } else if (x == static_cast<T>(std::numeric_limits<double>::infinity())) {
-            return static_cast<T>(std::numeric_limits<double>::infinity());
+            return do_solve(EqZero(x), y);  // Zero and ???
+         } else if ((boost::math::isfinite)(x)) {
+            return do_solve(PosFinite(x), y);  // Finite and ???
          } else {
-            return do_solve(PosFinite(x), X);
+            return x;  // Infinity and infinity
          }
       }
 
       // One unknowns
-      static T do_solve(EqZero x, T X) {
-         if (X == 0) {
-            return T(0.0);
-         } else if (X == static_cast<T>(std::numeric_limits<double>::infinity())) {
-            return T(1.0);
+      static T do_solve(EqZero x, T y) {
+         if (y == 0) {
+            return T(0.0);  // Zero and zero
+         } else if ((boost::math::isfinite)(y)) {
+            return do_solve(x, PosFinite(y));  // Zero and finite
          } else {
-            return do_solve(x, PosFinite(X));
+            return T(1.5);  // Zero and infinity
          }
       }
-      static T do_solve(PosFinite x, T X) {
-         if (X == static_cast<T>(std::numeric_limits<double>::infinity())) {
-            return do_solve(x, EqInf(X));
+      static T do_solve(PosFinite x, T y) {
+         if ((boost::math::isfinite)(y)) {
+            return do_solve(x, PosFinite(y));  // Finite and finite
          } else {
-            return do_solve(x, PosFinite(X));
+            return do_solve(x, EqInf(y));  // Finite and infinity
          }
       }
 
       // Zero unknowns
       template <typename U = T>
       static typename std::enable_if<std::numeric_limits<U>::is_specialized, T>::type
-      do_solve(PosFinite x, EqInf X) {
+      do_solve(PosFinite x, EqInf y) {
           return do_solve(x, PosFinite((std::numeric_limits<U>::max)()));
       }
       template <typename U = T>
       static typename std::enable_if<!std::numeric_limits<U>::is_specialized, T>::type
-      do_solve(PosFinite x, EqInf X) {
-          BOOST_MATH_ASSERT(false && "infinite bounds support requires specialization.");
-          return static_cast<T>(std::numeric_limits<T>::signaling_NaN());
+      do_solve(PosFinite x, EqInf y) {
+         BOOST_MATH_THROW_EXCEPTION(std::runtime_error("infinite bounds support requires specialization"));
+         return T(0); // Unreachable, but suppresses warnings
       }
 
       template <typename U = T>
       static typename std::enable_if<std::numeric_limits<U>::is_specialized, U>::type
-      do_solve(EqZero x, PosFinite X) { 
+      do_solve(EqZero x, PosFinite y) { 
          const auto get_smallest_value = []() {
             const U denorm_min = std::numeric_limits<U>::denorm_min();
             if (denorm_min != 0) { return denorm_min; }
@@ -413,40 +424,57 @@ namespace Bisection {
             const U min = (std::numeric_limits<U>::min)();
             if (min != 0) { return min; }
 
-            BOOST_MATH_ASSERT(false && "denorm_min and min are both zero.");
-            return static_cast<T>(std::numeric_limits<T>::signaling_NaN());
+            BOOST_MATH_THROW_EXCEPTION(std::runtime_error("This type probably isn't actually specialized."));
+            return T(0); // Unreachable, but suppresses warnings
          };
 
-         return do_solve(PosFinite(get_smallest_value()), X);
+         return do_solve(PosFinite(get_smallest_value()), y);
       }
       template <typename U = T>
       static typename std::enable_if<!std::numeric_limits<U>::is_specialized, U>::type
-      do_solve(EqZero x, PosFinite X) { return X.value() / U(2); }
-      
-      static T do_solve(PosFinite x, PosFinite X) {
-         BOOST_MATH_ASSERT(x.value() <= X.value() && "x must be less than or equal to X.");
+      do_solve(EqZero x, PosFinite y) {
+         // This function quickly gets a value that is small relative to y.
+         const auto fn_appx_denorm_min = [](U y){
+            T accumulator = T(0.5);
+            for (int i = 1; i < 100; ++i) {
+               if (y * accumulator == 0) {
+                  return y;
+               } else {
+                  y = y * accumulator;
+                  accumulator = accumulator * T(0.5);
+               }
+            }
+            return y;
+         };
 
-         const T xv = x.value();
-         const T Xv = X.value();
+         const U denorm_min = fn_appx_denorm_min(y.value());
+         return do_solve(PosFinite(denorm_min), y);
+      }
+
+      static T do_solve(PosFinite x, PosFinite y) {
+         BOOST_MATH_ASSERT_MSG(x.value() <= y.value(), "x must be less than or equal to y.");
+
+         const T value_x = x.value();
+         const T value_y = y.value();
          
          // Take arithmetic mean if they are close enough
-         if (Xv < xv * 8) { return (Xv - xv) / 2 + xv; }  // NOTE: avoids overflow
+         if (value_y < value_x * 8) { return (value_y - value_x) / 2 + value_x; }  // NOTE: avoids overflow
 
          // Take geometric mean if they are far apart
          using std::sqrt;
-         return sqrt(xv) * sqrt(Xv);  // NOTE: avoids overflow
+         return sqrt(value_x) * sqrt(value_y);  // NOTE: avoids overflow
       }
    }; // class MidpointNon754
 
    template <typename T>                                                
-   static T calc_midpoint(T x, T X) {
-      return MidpointNon754<T>::solve(x, X);
+   static T calc_midpoint(T x, T y) {
+      return MidpointNon754<T>::solve(x, y);
    }
-   static float calc_midpoint(float x, float X) {
-      return Midpoint754<float, std::uint32_t>::solve(x, X);
+   static float calc_midpoint(float x, float y) {
+      return Midpoint754<float, std::uint32_t>::solve(x, y);
    }
-   static double calc_midpoint(double x, double X) {
-      return Midpoint754<double, std::uint64_t>::solve(x, X);
+   static double calc_midpoint(double x, double y) {
+      return Midpoint754<double, std::uint64_t>::solve(x, y);
    }
 
 }  // namespace Bisection
