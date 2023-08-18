@@ -745,11 +745,6 @@ void test_bisect_754() {
    test_bisect_754(solver);
 }
 
-void test_long_double_fail() {
-   const auto solver = boost::math::tools::detail::Bisection::Midpoint754<long double,boost::uint128_type>();
-   BOOST_CHECK(!solver.is_one_plus_max_bits_inf());
-}
-
 void test_bisect_all_cases() {
    test_bisect_754<float>();
    test_bisect_754<double>();
@@ -775,7 +770,8 @@ void test_bisect_all_cases() {
 #endif
 
 #if LDBL_MANT_DIG == 64 && LDBL_MAX_EXP == 16384 && defined(BOOST_HAS_INT128)
-   test_long_double_fail();
+   const auto solver = boost::math::tools::detail::Bisection::Midpoint754<long double,boost::uint128_type>();
+   BOOST_CHECK(!solver.is_one_plus_max_bits_inf());
 #endif
 }
 
