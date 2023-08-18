@@ -27,6 +27,10 @@
 #include <boost/multiprecision/cpp_complex.hpp>
 #include <boost/math/concepts/real_concept.hpp>
 
+#ifdef BOOST_HAS_FLOAT128
+#include <boost/multiprecision/float128.hpp>
+#endif
+
 #if __has_include(<stdfloat>)
 #  include <stdfloat>
 #endif
@@ -655,92 +659,123 @@ void test_failures()
 #endif
 }
 
+// Creates a vector of test values that include: zero, denorm_min, min, epsilon, max,
+// and infinity. Also includes powers of 2 ranging from 2^-15 to 2^+15 by powers of 3.
 template <typename T>
-void test_bisect() {
-   // Creates a vector of test values that include: zero, denorm_min, min, epsilon, max,
-   // and infinity. Also includes powers of 2 ranging from 2^-15 to 2^+15 by powers of 3.
-   const auto fn_create_test_ladder = [](){
-      std::vector<T> v;
+std::vector<T> create_test_ladder() {
+   std::vector<T> v;
 
-      const auto fn_push_back_x_scaled = [&v](const T& x) {
-         const auto fn_add_if_non_zero_and_finite = [&v](const T& x) {
-            if (x != 0 && boost::math::isfinite(x)) {  // Avoids most duplications
-               v.push_back(x);
-            }
-         };
+   const auto fn_push_back_x_scaled = [&v](const T& x) {
+      const T two_thirds = T(2) / T(3);
+      const T four_thirds = T(4) / T(3);
 
-         const T two_thirds = T(2) / T(3);
-         const T four_thirds = T(4) / T(3);
-
-         v.push_back(x);
-         fn_add_if_non_zero_and_finite(x * T(0.5));
-         fn_add_if_non_zero_and_finite(x * two_thirds);
-         fn_add_if_non_zero_and_finite(x * four_thirds);
-         fn_add_if_non_zero_and_finite(x * T(2.0));
-      };
-
-      const auto fn_push_back_pm = [&](std::vector<T>& v, const T& x) {
-         fn_push_back_x_scaled( x);
-         fn_push_back_x_scaled(-x);
-      };
-
-      fn_push_back_pm(v, T(0.0));
-      fn_push_back_pm(v, std::numeric_limits<T>::denorm_min());
-      fn_push_back_pm(v, (std::numeric_limits<T>::min)());
-      fn_push_back_pm(v, std::numeric_limits<T>::epsilon());
-      const int test_exp_range = 5;
-      for (int i = -test_exp_range; i < (test_exp_range + 1); ++i) {
-         const int exponent = i * 3;
-         const T x = std::ldexp(1.0, exponent);
-         fn_push_back_pm(v, x);
-      }
-      fn_push_back_pm(v, (std::numeric_limits<T>::max)());
-
-      // Real_concept doesn't have infinity
-      if (std::numeric_limits<T>::has_infinity) {
-         fn_push_back_pm(v, std::numeric_limits<T>::infinity());
-      }
-
-      std::sort(v.begin(), v.end());
-
-      const int num_zeros = std::count(v.begin(), v.end(), T(0.0));
-      BOOST_CHECK_LE(2, num_zeros);  // Positive and negative zero 
-
-      return v;
+      v.push_back(x);
+      v.push_back(x * T(0.5));
+      v.push_back(x * two_thirds);
+      v.push_back(x * four_thirds);
+      v.push_back(x * T(2.0));
    };
 
+   const auto fn_push_back_pm = [&](std::vector<T>& v, const T& x) {
+      fn_push_back_x_scaled( x);
+      fn_push_back_x_scaled(-x);
+   };
+
+   fn_push_back_pm(v, std::numeric_limits<T>::denorm_min());
+   fn_push_back_pm(v, (std::numeric_limits<T>::min)());
+   fn_push_back_pm(v, std::numeric_limits<T>::epsilon());
+
+   const int test_exp_range = 5;
+   for (int i = -test_exp_range; i < (test_exp_range + 1); ++i) {
+      const int exponent = i * 3;
+      const T x = std::ldexp(1.0, exponent);
+      fn_push_back_pm(v, x);
+   }
+   fn_push_back_pm(v, (std::numeric_limits<T>::max)());
+   fn_push_back_pm(v, std::numeric_limits<T>::infinity());
+
+   // Take unique elements of v
+   std::sort(v.begin(), v.end());
+   v.erase(std::unique(v.begin(), v.end()), v.end());
+
+   // Add both positive and negative zero
+   v.push_back(T(-0.0));
+   v.push_back(T(+0.0));
+
+   const int num_zeros = std::count(v.begin(), v.end(), T(0.0));
+   BOOST_CHECK_LE(2, num_zeros);  // Check for both positive and negative zero 
+
+   return v;
+};
+
+template <typename T, typename S>
+void test_bisect_non(S solver) {
    // Test for all combinations from the ladder
-   auto v = fn_create_test_ladder();
+   auto v = create_test_ladder<T>();
+
    for (const T& x_i: v) {
       for (const T& x_j: v) {
-         const T x_mid_ij = boost::math::tools::detail::Bisection::calc_midpoint(x_i, x_j);
+         const T x_mid_ij = solver.solve(x_i, x_j);
 
          const T x_lo = (std::min)(x_i, x_j);
          const T x_hi = (std::max)(x_i, x_j);
 
-         BOOST_CHECK_LE(x_lo, x_mid_ij);
-         BOOST_CHECK_LE(x_mid_ij, x_hi);
+         BOOST_CHECK(x_lo <= x_mid_ij);  // NOTE: BOOST_CHECK_LE(x_lo, x_mid_ij) fails to link
+         BOOST_CHECK(x_mid_ij <= x_hi);  // NOTE: BOOST_CHECK_LE(x_mid_ij, x_hi) fails to link
       }
    }
 }
 
+template <typename T>
+void test_bisect_non() {
+   const auto solver = boost::math::tools::detail::Bisection::CalcMidpoint::get_solver(T(1));  // Input value unused
+   test_bisect_non<T,decltype(solver)>(solver);
+}
+
+template <typename S>
+void test_bisect_754(S solver) {
+   BOOST_MATH_ASSERT(solver.is_one_plus_max_bits_inf());  // Catch infinity misbehavior for 80 bit `long double`
+                                                          // before it causes downstream failures
+   test_bisect_non<typename S::type_float,S>(solver);
+}
+
+template <typename T>
+void test_bisect_754() {
+   const auto solver = boost::math::tools::detail::Bisection::CalcMidpoint::get_solver(T(1));  // Input value unused
+   test_bisect_754(solver);
+}
+
+void test_long_double_fail() {
+   const auto solver = boost::math::tools::detail::Bisection::Midpoint754<long double,boost::uint128_type>();
+   BOOST_CHECK(!solver.is_one_plus_max_bits_inf());
+}
+
 void test_bisect_all_cases() {
-   test_bisect<float>();
-   test_bisect<double>();
-   test_bisect<long double>();
-   test_bisect<boost::math::concepts::real_concept>();
-   test_bisect<boost::multiprecision::cpp_bin_float_50>();
-   test_bisect<boost::multiprecision::cpp_bin_float_100>();
-   test_bisect<boost::multiprecision::cpp_dec_float_50>();
-   test_bisect<boost::multiprecision::cpp_dec_float_100>();
+   test_bisect_754<float>();
+   test_bisect_754<double>();
+   test_bisect_non<long double>();
+   test_bisect_non<boost::math::concepts::real_concept>();
+   test_bisect_non<boost::multiprecision::cpp_bin_float_50>();
+   test_bisect_non<boost::multiprecision::cpp_bin_float_100>();
+   test_bisect_non<boost::multiprecision::cpp_dec_float_50>();
+   test_bisect_non<boost::multiprecision::cpp_dec_float_100>();
+
+#if defined(BOOST_HAS_FLOAT128) && defined(BOOST_HAS_INT128)
+   test_bisect_754<boost::multiprecision::float128>();
+   test_bisect_754<__float128>();
+#endif 
 
 #if __has_include(<stdfloat>)
 #ifdef __STDCPP_FLOAT32_T__
-   test_bisect<std::float32_t>();
+   test_bisect_754<std::float32_t>();
 #endif
 #ifdef __STDCPP_FLOAT64_T__
-   test_bisect<std::float64_t>();
+   test_bisect_754<std::float64_t>();
 #endif 
+#endif
+
+#if LDBL_MANT_DIG == 64 && LDBL_MAX_EXP == 16384 && defined(BOOST_HAS_INT128)
+   test_long_double_fail();
 #endif
 }
 

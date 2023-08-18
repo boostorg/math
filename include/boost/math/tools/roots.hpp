@@ -25,6 +25,11 @@
 #include <boost/math/tools/toms748_solve.hpp>
 #include <boost/math/policies/error_handling.hpp>
 
+#ifdef BOOST_HAS_FLOAT128
+#include <boost/multiprecision/float128.hpp>
+using boost::multiprecision::float128;
+#endif
+
 namespace boost {
 namespace math {
 namespace tools {
@@ -273,6 +278,9 @@ namespace Bisection {
       static_assert(std::is_unsigned<U>::value, "U must be an unsigned integer type.");
       static_assert(sizeof(T) == sizeof(U), "Type and uint size must be the same.");
 
+      // The sign bit is 1, all other bits are 0
+      static constexpr U sign_mask() { return U(1) << (sizeof(U) * 8 - 1); }
+
       // Convert float to bits
       static U float_to_uint(T x) {
          U bits;
@@ -287,47 +295,73 @@ namespace Bisection {
          return x;
       }
 
+      // Avoids linking against libquadmath for __float128
+      static T fabs_imp(T x) {
+         U bits_x = float_to_uint(x);
+         bits_x = bits_x & ~sign_mask();  // Zero the sign bit
+         return uint_to_float(bits_x);
+      }
+
    public:
       static T solve(T x, T y) {
-         using std::fabs;
-         
          // Sort so that y has the larger magnitude
-         if (fabs(y) < fabs(x)) {
+         if (fabs_imp(y) < fabs_imp(x)) {
             std::swap(x, y);
          }
-         
-         const T x_mag = std::fabs(x);
-         const T y_mag = std::fabs(y);
-         const T sign_x = sign(x);
-         const T sign_y = sign(y);
 
-         // Convert the magnitudes to bits
-         U bits_mag_x = float_to_uint(x_mag);
-         U bits_mag_y = float_to_uint(y_mag);
+         const U bits_x = float_to_uint(x);
+         const U bits_y = float_to_uint(y);
+
+         const U sign_x = bits_x & sign_mask();
+         const U sign_y = bits_y & sign_mask();
+
+         const U mag_x = bits_x & ~sign_mask();
+         const U mag_y = bits_y & ~sign_mask();
 
          // Calculate the average magnitude in bits
-         U bits_mag = (sign_x == sign_y) ? (bits_mag_y + bits_mag_x) : (bits_mag_y - bits_mag_x);
+         U bits_mag = (sign_x == sign_y) ? (mag_y + mag_x) : (mag_y - mag_x);
          bits_mag = bits_mag >> 1;  // Divide by 2
 
-         // Reconstruct upl_mean from average magnitude and sign of y
-         return uint_to_float(bits_mag) * sign_y;
+         bits_mag = bits_mag | sign_y;  // Make the sign of bits_mag match the sign of y
+
+         return uint_to_float(bits_mag);
       }
+
+      // NOTE: boost::multiprecision::float128 is cast to __float128
+      template <typename V>
+      static V solve(V x, V y) { return solve(static_cast<T>(x), static_cast<T>(y)); }
+
+      // Must evaluate to true in order to bisect correctly with infinity
+      // Ideally this should be a static assert.
+      static bool is_one_plus_max_bits_inf() {
+         const U bits_max = float_to_uint((std::numeric_limits<T>::max)());
+         const U bits_one_plus_max = bits_max + 1;
+         return uint_to_float(bits_one_plus_max) == std::numeric_limits<T>::infinity();
+      }
+
+      using type_float = T;  // Used for unit tests
    };  // class Midpoint754
 
 
    template <typename T>
    class MidpointNon754 {
    private:
-      // NOTE: The Midpoint754 solver is faster than this solver and should be used when possible.
-      //       To use the Midpoint754 solver, two criteria must be satisfied:
-      //         1. The type T must conform to the IEEE 754 standard and
-      //         2. There must exist a corresponding unsigned integer type with the same number of bits.
-      //       Currently, this limits the use of the Midpoint754 solver to `float` and `double`. The
-      //       lack of a 128 bit unsigned integer type prevents the Midpoint754 solver being used for
-      //       `long double`.
+      // NOTE: The Midpoint754 solver should be used when possible because it is faster
+      //       than this solver. The two criteria below must be satifsied to use the Midpoint754
+      //       solver:
+      //           1. The type T must conform to the IEEE 754 standard and
+      //           2. The following sequence of steps must produce `numeric_limits<T>::infinity`.
+      //              Start with `numeric_limits<T>::max()`. Then reinterpret this value as an
+      //              unsigned integer. Next add one to this unsigned integer. Finally reinterpret
+      //              the result as type T. This result must equal infinity.
+      //       The above two criteria are true for the following datatypes: `float`, `double`,
+      //       and `__float128`. The 80 bit variation of `long double` does not satisfy the
+      //       second criteria.
       static_assert(!std::is_same<T, float>::value, "Need to use Midpoint754 solver when T is float");
       static_assert(!std::is_same<T, double>::value, "Need to use Midpoint754 solver when T is double");
-      // static_assert(!std::is_same<T, long double>::value -- (See NOTE above)
+#if defined(BOOST_HAS_INT128) && defined(BOOST_HAS_FLOAT128)
+      static_assert(!std::is_same<T, __float128>::value, "Need to use Midpoint754 solver when T is __float128");
+#endif
 
    public:
       static T solve(T x, T y) {
@@ -422,6 +456,9 @@ namespace Bisection {
             const U denorm_min = std::numeric_limits<U>::denorm_min();
             if (denorm_min != 0) { return denorm_min; }
 
+            // NOTE: the two lines below can be removed when
+            //       https://github.com/boostorg/multiprecision/pull/562
+            //       gets merged.
             const U min = (std::numeric_limits<U>::min)();
             if (min != 0) { return min; }
 
@@ -467,16 +504,32 @@ namespace Bisection {
       }
    }; // class MidpointNon754
 
-   template <typename T>                                                
-   static T calc_midpoint(T x, T y) {
-      return MidpointNon754<T>::solve(x, y);
-   }
-   static float calc_midpoint(float x, float y) {
-      return Midpoint754<float, std::uint32_t>::solve(x, y);
-   }
-   static double calc_midpoint(double x, double y) {
-      return Midpoint754<double, std::uint64_t>::solve(x, y);
-   }
+   // The purposes of this class is to not cause compiler warnings from unused functions.
+   class CalcMidpoint {
+   public:
+      template <typename T>
+      static MidpointNon754<T> get_solver(T) {
+         return MidpointNon754<T>();
+      }
+      static Midpoint754<float, std::uint32_t> get_solver(float) {
+         return Midpoint754<float, std::uint32_t>();
+      }
+      static Midpoint754<double, std::uint64_t> get_solver(double) {
+         return Midpoint754<double, std::uint64_t>();
+      }
+#if defined(BOOST_HAS_INT128) && defined(BOOST_HAS_FLOAT128)
+      static Midpoint754<__float128, boost::uint128_type> get_solver(__float128) {
+         return Midpoint754<__float128, boost::uint128_type>();
+      }
+      static Midpoint754<__float128, boost::uint128_type> get_solver(boost::multiprecision::float128) {
+         return Midpoint754<__float128, boost::uint128_type>();
+      }
+#endif
+      template <typename T>
+      static T calc_midpoint(T x, T y) {
+         return get_solver(x).solve(x, y);
+      }
+   };
 
 }  // namespace Bisection
 }  // namespace detail
@@ -549,7 +602,7 @@ T newton_raphson_iterate(F f, T guess, T min, T max, int digits, std::uintmax_t&
       {
          // Last two steps haven't converged.
          const T x_other = (delta > 0) ? min : max;
-         delta = result - detail::Bisection::calc_midpoint(result, x_other);
+         delta = result - detail::Bisection::CalcMidpoint::calc_midpoint(result, x_other);
          // reset delta1/2 so we don't take this branch next time round:
          delta1 = 3 * delta;
          delta2 = 3 * delta;
