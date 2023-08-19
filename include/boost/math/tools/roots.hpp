@@ -367,18 +367,6 @@ namespace Bisection {
          return solve(StaticCast::value<T, V>(x), StaticCast::value<T, V>(y));
       }
 
-#if 0
-      // NOTE: needed to cast boost::multiprecision::float128 to __float128
-      template <typename V>
-      static V solve(V x, V y) { return solve(static_cast<T>(x), static_cast<T>(y)); }
-
-      // NOTE: needed to cast boost::math::concepts::real_concept to T for real_concept
-      static boost::math::concepts::real_concept solve(boost::math::concepts::real_concept x,
-                                                       boost::math::concepts::real_concept y) {
-         return solve(x.value(), y.value());
-      }
-#endif
-
       // In order to bisect correctly with infinity, this function must return true.
       //
       // NOTE: Ideally this should be a static assert, but I don't see a way to
@@ -603,13 +591,24 @@ namespace Bisection {
       template <typename T>
       static typename std::enable_if<IsFloat128::value<T>(), Midpoint754<__float128, boost::uint128_type>>::type
       get_solver() { return Midpoint754<__float128, boost::uint128_type>(); }
+
+      template <typename T>
+      static constexpr bool use_default_solver() {
+         return !IsFloat32::value<T>() &&
+                !IsFloat64::value<T>() &&
+                !IsFloat128::value<T>();
+      }
+#else
+      template <typename T>
+      static constexpr bool use_default_solver() {
+         return !IsFloat32::value<T>() &&
+                !IsFloat64::value<T>();
+      }
 #endif
       
       // Default --> *** MidpointNon754 ***
       template <typename T>
-      static typename std::enable_if<!IsFloat32::value<T>() && 
-                                     !IsFloat64::value<T>() &&
-                                     !IsFloat128::value<T>(), MidpointNon754<T>>::type
+      static typename std::enable_if<use_default_solver<T>(), MidpointNon754<T>>::type
       get_solver() { return MidpointNon754<T>(); }
 
       // NOTE: 

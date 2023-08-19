@@ -19,7 +19,6 @@
 #include <boost/array.hpp>
 #include <boost/type_index.hpp>
 #include "table_type.hpp"
-#include <iostream>
 #include <iomanip>
 #include <type_traits>
 
