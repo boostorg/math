@@ -309,12 +309,15 @@ namespace Bisection {
             std::swap(x, y);
          }
 
+         // Recast as unsigned integers
          const U bits_x = float_to_uint(x);
          const U bits_y = float_to_uint(y);
 
+         // Get just the sign bit
          const U sign_x = bits_x & sign_mask();
          const U sign_y = bits_y & sign_mask();
 
+         // Get everything but the sign bit
          const U mag_x = bits_x & ~sign_mask();
          const U mag_y = bits_y & ~sign_mask();
 
