@@ -746,19 +746,6 @@ void test_bisect_754() {
    test_bisect_754(solver);
 }
 
-template <bool>
-struct CompileTimeLongDoubleChecker {
-   static void check() {}
-};
-
-template <>
-struct CompileTimeLongDoubleChecker<true> {
-   static void check() {
-      const auto solver = boost::math::tools::detail::Bisection::Midpoint754<long double,boost::uint128_type>();
-      BOOST_CHECK(!solver.is_one_plus_max_bits_inf());
-   }
-};
-
 void test_bisect_all_cases() {
    test_bisect_754<float>();
    test_bisect_754<double>();
@@ -787,9 +774,7 @@ void test_bisect_all_cases() {
    // CI says this fails to compile sometimes because the static_assert
    // in `Midpoint754` that `std::is_unsigned<boost::uint128_type>::value is
    // true is not met. This occurs despite the preprocessor assertion that
-   // `BOOST_HAS_INT128` is defined and being compile time dispatched based
-   // on `std::is_unsigned<boost::uint128_type>::value` being true. I'm not
-   // sure why this occurs.
+   // `BOOST_HAS_INT128` is defined. I'm not sure why this occurs.
    //
    // That being said, this test is mostly pedogogical. It shows that
    // `long double` does not possess the property that increasing values in
@@ -797,7 +782,8 @@ void test_bisect_all_cases() {
    // correctness, only for completeness. If you can compile this locally
    // this test should pass.
 #if 0
-   CompileTimeLongDoubleChecker<std::is_unsigned<boost::uint128_type>::value>::check();
+   const auto solver = boost::math::tools::detail::Bisection::Midpoint754<long double,boost::uint128_type>();
+   BOOST_CHECK(!solver.is_one_plus_max_bits_inf());
 #endif   
 #endif
 }
