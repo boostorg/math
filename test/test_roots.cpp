@@ -710,7 +710,7 @@ std::vector<T> create_test_ladder() {
 };
 
 template <typename T, typename S>
-void test_bisect_non(S solver) {
+void test_bisect(S solver) {
    // Test for all combinations from the ladder
    auto v = create_test_ladder<T>();
 
@@ -729,21 +729,18 @@ void test_bisect_non(S solver) {
 
 template <typename T>
 void test_bisect_non() {
-   const auto solver = boost::math::tools::detail::Bisection::CalcMidpoint::get_solver(T(1));  // Input value unused
-   test_bisect_non<T,decltype(solver)>(solver);
-}
-
-template <typename S>
-void test_bisect_754(S solver) {
-   BOOST_MATH_ASSERT(solver.is_one_plus_max_bits_inf());  // Catch infinity misbehavior for 80 bit `long double`
-                                                          // before it causes downstream failures
-   test_bisect_non<typename S::type_float,S>(solver);
+   const auto solver = boost::math::tools::detail::Bisection::CalcMidpoint::get_solver<T>();
+   test_bisect<T,decltype(solver)>(solver);
 }
 
 template <typename T>
 void test_bisect_754() {
-   const auto solver = boost::math::tools::detail::Bisection::CalcMidpoint::get_solver(T(1));  // Input value unused
-   test_bisect_754(solver);
+   const auto solver = boost::math::tools::detail::Bisection::CalcMidpoint::get_solver<T>();
+   BOOST_MATH_ASSERT(solver.is_one_plus_max_bits_inf());  // Catch infinity misbehavior for 80 bit `long double`
+                                                          // before it causes downstream failures
+   // We need to use the float type associated with the solver to avoid needing to link with libquadmath
+   using S = decltype(solver);
+   test_bisect<typename S::type_float,S>(solver);
 }
 
 void test_bisect_all_cases() {

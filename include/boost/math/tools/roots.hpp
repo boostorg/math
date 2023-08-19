@@ -240,6 +240,33 @@ inline std::pair<T, T> bisect(F f, T min, T max, Tol tol) noexcept(policies::is_
 //
 namespace detail {
 namespace Bisection {
+   // Check if T has a member function named "value"
+   template <typename T>
+   class has_value_member
+   {
+      template <typename U>
+      static auto test(int) -> decltype(std::declval<U>().value(), std::true_type());
+
+      template <typename U>
+      static std::false_type test(...);
+
+   public:
+      static constexpr bool value = decltype(test<T>(0))::value;
+   };
+
+   // 
+   class StaticCast {
+   public:
+      template <typename T, typename V>
+      static typename std::enable_if<has_value_member<V>::value, T>::type value(V x) {
+         return static_cast<T>(x.value());
+      }
+
+      template <typename T, typename V>
+      static typename std::enable_if<!has_value_member<V>::value, T>::type value(V x) {
+         return static_cast<T>(x);
+      }
+   };
 
    ////// The Midpoint754 class //////
    //
@@ -250,12 +277,12 @@ namespace Bisection {
    //     For all values above x_solution f(x) is +1. The best way to root find
    //     this problem is to bisect in bit space.
    //
-   // Efficient bit space bisection is possible because of the IEEE 754 standard.
-   // According to the standard, the bits in floating point numbers are partitioned
-   // into three parts: sign, exponent, and mantissa. As long as the sign of the
-   // of the number stays the same, increasing numbers in bit space have increasing
-   // floating point values starting at zero, and ending at infinity! The table
-   // below shows select numbers for float (single precision).
+   // Efficient bit space bisection is possible for floating point types whose
+   // representation in memory is partitioned into three parts: sign, exponent,
+   // and mantissa. As long as the sign of the of the number stays the same,
+   // increasing numbers in bit space have increasing floating point values
+   // starting at zero, and ending at infinity! The table below shows select
+   // numbers for float (single precision).
    //
    // 0            |  0 00000000 00000000000000000000000  |  positive zero
    // 1.4013e-45   |  0 00000000 00000000000000000000001  |  std::numeric_limits<float>::denorm_min()
@@ -268,6 +295,11 @@ namespace Bisection {
    // 
    // Negative values are similar, but the sign bit is set to 1. By keeping track of the possible
    // sign flip, it can bisect numbers with different signs.
+   //
+   // Other floating point types that share this memory representation include 64
+   // and 128 bit floating point types. The 80 bit variation of `long double` does
+   // not share this memory representation see:
+   //   https://en.wikipedia.org/wiki/Extended_precision#x86_extended_precision_format
    //
    template <typename T, typename U>
    class Midpoint754 {
@@ -330,16 +362,31 @@ namespace Bisection {
          return uint_to_float(bits_mag);
       }
 
-      // NOTE: boost::multiprecision::float128 is cast to __float128
+      template <typename V>
+      static V solve(V x, V y) {
+         return solve(StaticCast::value<T, V>(x), StaticCast::value<T, V>(y));
+      }
+
+#if 0
+      // NOTE: needed to cast boost::multiprecision::float128 to __float128
       template <typename V>
       static V solve(V x, V y) { return solve(static_cast<T>(x), static_cast<T>(y)); }
 
-      // Must evaluate to true in order to bisect correctly with infinity
-      // Ideally this should be a static assert.
+      // NOTE: needed to cast boost::math::concepts::real_concept to T for real_concept
+      static boost::math::concepts::real_concept solve(boost::math::concepts::real_concept x,
+                                                       boost::math::concepts::real_concept y) {
+         return solve(x.value(), y.value());
+      }
+#endif
+
+      // In order to bisect correctly with infinity, this function must return true.
+      //
+      // NOTE: Ideally this should be a static assert, but I don't see a way to
+      // emulate the memcpy operation at compile time.
       static bool is_one_plus_max_bits_inf() {
          const U bits_max = float_to_uint((std::numeric_limits<T>::max)());
-         const U bits_one_plus_max = bits_max + 1;
-         return uint_to_float(bits_one_plus_max) == std::numeric_limits<T>::infinity();
+         const U bits_inf = float_to_uint(std::numeric_limits<T>::infinity());
+         return bits_max + 1 == bits_inf;
       }
 
       using type_float = T;  // Used for unit tests
@@ -350,16 +397,8 @@ namespace Bisection {
    class MidpointNon754 {
    private:
       // NOTE: The Midpoint754 solver should be used when possible because it is faster
-      //       than this solver. The two criteria below must be satifsied to use the Midpoint754
-      //       solver:
-      //           1. The type T must conform to the IEEE 754 standard and
-      //           2. The following sequence of steps must produce `numeric_limits<T>::infinity`.
-      //              Start with `numeric_limits<T>::max()`. Then reinterpret this value as an
-      //              unsigned integer. Next add one to this unsigned integer. Finally reinterpret
-      //              the result as type T. This result must equal infinity.
-      //       The above two criteria are true for the following datatypes: `float`, `double`,
-      //       and `__float128`. The 80 bit variation of `long double` does not satisfy the
-      //       second criteria.
+      //       than this solver. The Midpoint754 solver supports 32, 64, and 128 bit floats.
+      //       The 80 bit `long double` type is not supported for the reasons described above.
       static_assert(!std::is_same<T, float>::value, "Need to use Midpoint754 solver when T is float");
       static_assert(!std::is_same<T, double>::value, "Need to use Midpoint754 solver when T is double");
 #if defined(BOOST_HAS_INT128) && defined(BOOST_HAS_FLOAT128)
@@ -507,30 +546,76 @@ namespace Bisection {
       }
    }; // class MidpointNon754
 
-   // The purposes of this class is to not cause compiler warnings from unused functions.
-   class CalcMidpoint {
+   // NOTE: `float` and `_Float32` are not type aliases
+   class IsFloat32 {
    public:
       template <typename T>
-      static MidpointNon754<T> get_solver(T) {
-         return MidpointNon754<T>();
+      static constexpr bool value() {
+         return std::numeric_limits<T>::is_iec559 &&
+                std::numeric_limits<T>::radix == 2 &&
+                std::numeric_limits<T>::digits == 24 &&  // Mantissa has 23 bits + 1 implicit bit
+                sizeof(T) == 4;
       }
-      static Midpoint754<float, std::uint32_t> get_solver(float) {
-         return Midpoint754<float, std::uint32_t>();
+   };
+
+   // NOTE: `double` and `_Float64` are not type aliases
+   class IsFloat64 {
+   public:
+      template <typename T>
+      static constexpr bool value() {
+         return std::numeric_limits<T>::is_iec559 &&
+                std::numeric_limits<T>::radix == 2 &&
+                std::numeric_limits<T>::digits == 53 &&  // Mantissa has 52 bits + 1 implicit bit
+                sizeof(T) == 8;
       }
-      static Midpoint754<double, std::uint64_t> get_solver(double) {
-         return Midpoint754<double, std::uint64_t>();
+   };
+
+   // NOTE: 128 bit `long double` and `_Float128` are not type aliases
+   class IsFloat128 {
+   public:
+      template <typename T>
+      static constexpr bool value() {
+         return std::numeric_limits<T>::is_iec559 &&
+                std::numeric_limits<T>::radix == 2 &&
+                std::numeric_limits<T>::digits == 113 &&  // Mantissa has 112 bits + 1 implicit bit
+                sizeof(T) == 16;
       }
+   };
+
+   // This class prevents compiler warnings from unused functions.
+   class CalcMidpoint {
+   public:
+      // IsFloat32 --> Midpoint754
+      template <typename T>
+      static typename std::enable_if<IsFloat32::value<T>(), Midpoint754<T, std::uint32_t>>::type
+      get_solver() { return Midpoint754<T, std::uint32_t>(); }
+
+      // IsFloat64 --> Midpoint754
+      template <typename T>
+      static typename std::enable_if<IsFloat64::value<T>(), Midpoint754<T, std::uint64_t>>::type
+      get_solver() { return Midpoint754<T, std::uint64_t>(); }
+
+      // IsFloat128 --> Midpoint754
 #if defined(BOOST_HAS_INT128) && defined(BOOST_HAS_FLOAT128)
-      static Midpoint754<__float128, boost::uint128_type> get_solver(__float128) {
-         return Midpoint754<__float128, boost::uint128_type>();
-      }
-      static Midpoint754<__float128, boost::uint128_type> get_solver(boost::multiprecision::float128) {
-         return Midpoint754<__float128, boost::uint128_type>();
-      }
+      // NOTE: returns Midpoint754<__float128, ...> instead of Midpoint754<T, ...> because
+      //       in order to work with boost::multiprecision::float128, which is a wrapper
+      //       around __float128.
+      template <typename T>
+      static typename std::enable_if<IsFloat128::value<T>(), Midpoint754<__float128, boost::uint128_type>>::type
+      get_solver() { return Midpoint754<__float128, boost::uint128_type>(); }
 #endif
+      
+      // Default --> *** MidpointNon754 ***
+      template <typename T>
+      static typename std::enable_if<!IsFloat32::value<T>() && 
+                                     !IsFloat64::value<T>() &&
+                                     !IsFloat128::value<T>(), MidpointNon754<T>>::type
+      get_solver() { return MidpointNon754<T>(); }
+
+      // NOTE: 
       template <typename T>
       static T calc_midpoint(T x, T y) {
-         return get_solver(x).solve(x, y);
+         return get_solver<T>().solve(x, y);
       }
    };
 
