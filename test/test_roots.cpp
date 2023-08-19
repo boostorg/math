@@ -21,6 +21,7 @@
 #include "table_type.hpp"
 #include <iostream>
 #include <iomanip>
+#include <type_traits>
 
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/multiprecision/cpp_dec_float.hpp>
@@ -745,6 +746,19 @@ void test_bisect_754() {
    test_bisect_754(solver);
 }
 
+template <bool>
+struct CompileTimeLongDoubleChecker {
+   static void check() {}
+};
+
+template <>
+struct CompileTimeLongDoubleChecker<true> {
+   static void check() {
+      const auto solver = boost::math::tools::detail::Bisection::Midpoint754<long double,boost::uint128_type>();
+      BOOST_CHECK(!solver.is_one_plus_max_bits_inf());
+   }
+};
+
 void test_bisect_all_cases() {
    test_bisect_754<float>();
    test_bisect_754<double>();
@@ -770,10 +784,9 @@ void test_bisect_all_cases() {
 #endif
 
 #if LDBL_MANT_DIG == 64 && LDBL_MAX_EXP == 16384 && defined(BOOST_HAS_INT128)
-   if (std::is_unsigned<boost::uint128_type>::value) {
-      const auto solver = boost::math::tools::detail::Bisection::Midpoint754<long double,boost::uint128_type>();
-      BOOST_CHECK(!solver.is_one_plus_max_bits_inf());
-   }
+   // NOTE: this is necessary because BOOST_HAS_INT128 deing befined does not
+   //       guarantee that std::is_unsigned<boost::uint128_type>::value is true
+   CompileTimeLongDoubleChecker<std::is_unsigned<boost::uint128_type>::value>::check();
 #endif
 }
 
