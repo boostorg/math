@@ -53,12 +53,22 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(fpclassify_hpp, T, all_float_types) {
       BOOST_CHECK_EQUAL(
           fpclassify(make_fvar<T, m>(std::numeric_limits<T>::denorm_min())),
           FP_SUBNORMAL);
+    } else {
+#if 0
+      // TODO: use when the following gets merged:
+      //       https://github.com/boostorg/multiprecision/pull/562
+      BOOST_CHECK(make_fvar<T, m>(std::numeric_limits<T>::denorm_min() == make_fvar<T, m>((std::numeric_limits<T>::min)());
+#else
+      // Temporary fix to work irrespective of the above PR
+      BOOST_CHECK(
+        (make_fvar<T, m>(0) <= make_fvar<T, m>(std::numeric_limits<T>::denorm_min())) && 
+        (make_fvar<T, m>(std::numeric_limits<T>::denorm_min()) <= make_fvar<T, m>((std::numeric_limits<T>::min)()))
+      );
+#endif      
     }
 
     BOOST_CHECK(isfinite(make_fvar<T, m>(0)));
     BOOST_CHECK(isnormal(make_fvar<T, m>((std::numeric_limits<T>::min)())));
-    BOOST_CHECK(
-        !isnormal(make_fvar<T, m>(std::numeric_limits<T>::denorm_min())));
     BOOST_CHECK(isinf(make_fvar<T, m>(std::numeric_limits<T>::infinity())));
     BOOST_CHECK(isnan(make_fvar<T, m>(std::numeric_limits<T>::quiet_NaN())));
   }
