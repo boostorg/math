@@ -180,12 +180,14 @@ jobs:
       run:
         shell: cmd
     env:
-      ARGS: toolset=${{ matrix.toolset }} address-model=64 cxxstd=${{ matrix.standard }}
+      ARGS0: toolset=${{ matrix.toolset }} address-model=64 cxxstd=${{ matrix.standard0 }}
+      ARGS2: toolset=${{ matrix.toolset }} address-model=64 cxxstd=${{ matrix.standard2 }}
     strategy:
       fail-fast: false
       matrix:
         toolset: [ msvc-14.0, msvc-14.2 ]
-        standard: [ 14, 17 ]
+        standard0: [ 14, latest ]
+        standard2: [ 14, 17 ]
         suite: [ github_ci_block_1, github_ci_block_2 ]
     steps:
       - uses: actions/checkout@v3
@@ -214,8 +216,12 @@ jobs:
       - name: Config info
         run: config_info_travis
         working-directory: ../boost-root/libs/config/test
-      - name: Test
-        run: ..\..\..\b2 --hash %ARGS% define=CI_SUPPRESS_KNOWN_ISSUES debug-symbols=off ${{ matrix.suite }} pch=off
+      - name: Test0
+        if: ${{ matrix.toolset == 'msvc-14.0' }}
+        run: ..\..\..\b2 --hash %ARGS0% define=CI_SUPPRESS_KNOWN_ISSUES debug-symbols=off ${{ matrix.suite }} pch=off
+      - name: Test2
+        if: ${{ matrix.toolset == 'msvc-14.2' }}
+        run: ..\..\..\b2 --hash %ARGS2% define=CI_SUPPRESS_KNOWN_ISSUES debug-symbols=off ${{ matrix.suite }} pch=off
         working-directory: ../boost-root/libs/math/test
   windows_gcc:
     runs-on: windows-2019
