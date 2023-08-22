@@ -26,10 +26,10 @@
 #include <boost/math/tools/config.hpp>
 #include <type_traits>
 
-#if !(defined(_MSC_VER) && (_MSC_VER <= 1900))
-#if __has_include(<stdfloat>)
-#include <stdfloat>
-#endif
+#if defined __has_include
+#  if __has_include (<stdfloat>)
+#    include <stdfloat>
+#  endif
 #endif
 
 namespace boost
