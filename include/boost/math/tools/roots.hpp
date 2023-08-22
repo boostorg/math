@@ -22,6 +22,7 @@
 
 #include <boost/math/special_functions/sign.hpp>
 #include <boost/math/special_functions/next.hpp>
+#include <boost/math/tools/ieee754_linear.hpp>
 #include <boost/math/tools/toms748_solve.hpp>
 #include <boost/math/policies/error_handling.hpp>
 
@@ -240,159 +241,9 @@ inline std::pair<T, T> bisect(F f, T min, T max, Tol tol) noexcept(policies::is_
 //
 namespace detail {
 namespace Bisection {
-   // Check if T has a member function named "value"
+   // Midpoint calculation for floating point types that are not `Layout_IEEE754Linear`
    template <typename T>
-   class has_value_member
-   {
-      template <typename U>
-      static auto test(int) -> decltype(std::declval<U>().value(), std::true_type());
-
-      template <typename U>
-      static std::false_type test(...);
-
-   public:
-      static constexpr bool value = decltype(test<T>(0))::value;
-   };
-
-   // 
-   class StaticCast {
-   public:
-      template <typename T, typename V>
-      static typename std::enable_if<has_value_member<V>::value, T>::type value(V x) {
-         return static_cast<T>(x.value());
-      }
-
-      template <typename T, typename V>
-      static typename std::enable_if<!has_value_member<V>::value, T>::type value(V x) {
-         return static_cast<T>(x);
-      }
-   };
-
-   ////// The Midpoint754 class //////
-   //
-   // On a conceptual level, this class is designed to solve the following root
-   // finding problem.
-   //   - A function f(x) has a single root x_solution somewhere in the interval
-   //     [-infinity, +infinity]. For all values below x_solution f(x) is -1. 
-   //     For all values above x_solution f(x) is +1. The best way to root find
-   //     this problem is to bisect in bit space.
-   //
-   // Efficient bit space bisection is possible for floating point types whose
-   // representation in memory is partitioned into three parts: sign, exponent,
-   // and mantissa. As long as the sign of the of the number stays the same,
-   // increasing numbers in bit space have increasing floating point values
-   // starting at zero, and ending at infinity! The table below shows select
-   // numbers for float (single precision).
-   //
-   // 0            |  0 00000000 00000000000000000000000  |  positive zero
-   // 1.4013e-45   |  0 00000000 00000000000000000000001  |  std::numeric_limits<float>::denorm_min()
-   // 1.17549e-38  |  0 00000001 00000000000000000000000  |  std::numeric_limits<float>::min()
-   // 1.19209e-07  |  0 01101000 00000000000000000000000  |  std::numeric_limits<float>::epsilon()
-   // 1            |  0 01111111 00000000000000000000000  |  positive one
-   // 3.40282e+38  |  0 11111110 11111111111111111111111  |  std::numeric_limits<float>::max()
-   // inf          |  0 11111111 00000000000000000000000  |  std::numeric_limits<float>::infinity()
-   // nan          |  0 11111111 10000000000000000000000  |  std::numeric_limits<float>::quiet_NaN()
-   // 
-   // Negative values are similar, but the sign bit is set to 1. By keeping track of the possible
-   // sign flip, it can bisect numbers with different signs.
-   //
-   // Other floating point types that share this memory representation include 64
-   // and 128 bit floating point types. The 80 bit variation of `long double` does
-   // not share this memory representation see:
-   //   https://en.wikipedia.org/wiki/Extended_precision#x86_extended_precision_format
-   //
-   template <typename T, typename U>
-   class Midpoint754 {
-   private:
-      // Does the bisection in bit space for IEEE 754 floating point numbers.
-      // Infinities are allowed. It's assumed that neither x nor y is NaN.
-      static_assert(std::numeric_limits<T>::is_iec559, "Type must be IEEE 754 floating point.");
-      static_assert(std::is_unsigned<U>::value, "U must be an unsigned integer type.");
-      static_assert(sizeof(T) == sizeof(U), "Type and uint size must be the same.");
-
-      // The sign bit is 1, all other bits are 0
-      static constexpr U sign_mask() { return U(1) << (sizeof(U) * 8 - 1); }
-
-      // Convert float to bits
-      static U float_to_uint(T x) {
-         U bits;
-         std::memcpy(&bits, &x, sizeof(U));
-         return bits;
-      }
-
-      // Convert bits to float
-      static T uint_to_float(U bits) {
-         T x;
-         std::memcpy(&x, &bits, sizeof(T));
-         return x;
-      }
-
-      // Avoids linking against libquadmath for __float128
-      static T fabs_imp(T x) {
-         U bits_x = float_to_uint(x);
-         bits_x = bits_x & ~sign_mask();  // Zero the sign bit
-         return uint_to_float(bits_x);
-      }
-
-   public:
-      static T solve(T x, T y) {
-         // Sort so that y has the larger magnitude
-         if (fabs_imp(y) < fabs_imp(x)) {
-            std::swap(x, y);
-         }
-
-         // Recast as unsigned integers
-         const U bits_x = float_to_uint(x);
-         const U bits_y = float_to_uint(y);
-
-         // Get just the sign bit
-         const U sign_x = bits_x & sign_mask();
-         const U sign_y = bits_y & sign_mask();
-
-         // Get everything but the sign bit
-         const U mag_x = bits_x & ~sign_mask();
-         const U mag_y = bits_y & ~sign_mask();
-
-         // Calculate the average magnitude in bits
-         U bits_mag = (sign_x == sign_y) ? (mag_y + mag_x) : (mag_y - mag_x);
-         bits_mag = bits_mag >> 1;  // Divide by 2
-
-         bits_mag = bits_mag | sign_y;  // Make the sign of bits_mag match the sign of y
-
-         return uint_to_float(bits_mag);
-      }
-
-      template <typename V>
-      static V solve(V x, V y) {
-         return solve(StaticCast::value<T, V>(x), StaticCast::value<T, V>(y));
-      }
-
-      // In order to bisect correctly with infinity, this function must return true.
-      //
-      // NOTE: Ideally this should be a static assert, but I don't see a way to
-      // emulate the memcpy operation at compile time.
-      static bool is_one_plus_max_bits_inf() {
-         const U bits_max = float_to_uint((std::numeric_limits<T>::max)());
-         const U bits_inf = float_to_uint(std::numeric_limits<T>::infinity());
-         return bits_max + 1 == bits_inf;
-      }
-
-      using type_float = T;  // Used for unit tests
-   };  // class Midpoint754
-
-
-   template <typename T>
-   class MidpointNon754 {
-   private:
-      // NOTE: The Midpoint754 solver should be used when possible because it is faster
-      //       than this solver. The Midpoint754 solver supports 32, 64, and 128 bit floats.
-      //       The 80 bit `long double` type is not supported for the reasons described above.
-      static_assert(!std::is_same<T, float>::value, "Need to use Midpoint754 solver when T is float");
-      static_assert(!std::is_same<T, double>::value, "Need to use Midpoint754 solver when T is double");
-#if defined(BOOST_HAS_INT128) && defined(BOOST_HAS_FLOAT128)
-      static_assert(!std::is_same<T, __float128>::value, "Need to use Midpoint754 solver when T is __float128");
-#endif
-
+   class MidpointFallback {
    public:
       static T solve(T x, T y) {
          const T sign_x = sign(x);
@@ -532,92 +383,113 @@ namespace Bisection {
          using std::sqrt;
          return sqrt(value_x) * sqrt(value_y);  // NOTE: avoids overflow
       }
-   }; // class MidpointNon754
+   }; // class MidpointFallback
 
-   // NOTE: `float` and `_Float32` are not type aliases
-   class IsFloat32 {
-   public:
-      template <typename T>
-      static constexpr bool value() {
-         return std::numeric_limits<T>::is_iec559 &&
-                std::numeric_limits<T>::radix == 2 &&
-                std::numeric_limits<T>::digits == 24 &&  // Mantissa has 23 bits + 1 implicit bit
-                sizeof(T) == 4;
-      }
-   };
-
-   // NOTE: `double` and `_Float64` are not type aliases
-   class IsFloat64 {
-   public:
-      template <typename T>
-      static constexpr bool value() {
-         return std::numeric_limits<T>::is_iec559 &&
-                std::numeric_limits<T>::radix == 2 &&
-                std::numeric_limits<T>::digits == 53 &&  // Mantissa has 52 bits + 1 implicit bit
-                sizeof(T) == 8;
-      }
-   };
-
-   // NOTE: 128 bit `long double` and `_Float128` are not type aliases
-   class IsFloat128 {
-   public:
-      template <typename T>
-      static constexpr bool value() {
-         return std::numeric_limits<T>::is_iec559 &&
-                std::numeric_limits<T>::radix == 2 &&
-                std::numeric_limits<T>::digits == 113 &&  // Mantissa has 112 bits + 1 implicit bit
-                sizeof(T) == 16;
-      }
-   };
-
-   // This class prevents compiler warnings from unused functions.
+   // Calculates the midpoint in bitspace for numbers `x` and `y`.
    class CalcMidpoint {
    public:
-      // IsFloat32 --> Midpoint754
       template <typename T>
-      static typename std::enable_if<IsFloat32::value<T>(), Midpoint754<T, std::uint32_t>>::type
-      get_solver() { return Midpoint754<T, std::uint32_t>(); }
-
-      // IsFloat64 --> Midpoint754
-      template <typename T>
-      static typename std::enable_if<IsFloat64::value<T>(), Midpoint754<T, std::uint64_t>>::type
-      get_solver() { return Midpoint754<T, std::uint64_t>(); }
-
-      // IsFloat128 --> Midpoint754
-#if defined(BOOST_HAS_INT128) && defined(BOOST_HAS_FLOAT128)
-      // NOTE: returns Midpoint754<__float128, ...> instead of Midpoint754<T, ...> because
-      //       in order to work with boost::multiprecision::float128, which is a wrapper
-      //       around __float128.
-      template <typename T>
-      static typename std::enable_if<IsFloat128::value<T>(), Midpoint754<__float128, boost::uint128_type>>::type
-      get_solver() { return Midpoint754<__float128, boost::uint128_type>(); }
-
-      template <typename T>
-      static constexpr bool use_default_solver() {
-         return !IsFloat32::value<T>() &&
-                !IsFloat64::value<T>() &&
-                !IsFloat128::value<T>();
+      static T solve(T x, T y) {
+         return solve(x, y, boost::math::tools::detail::ieee754_linear::LayoutIdentifier::get_layout<T>());
       }
-#else
-      template <typename T>
-      static constexpr bool use_default_solver() {
-         return !IsFloat32::value<T>() &&
-                !IsFloat64::value<T>();
-      }
-#endif
-      
-      // Default --> *** MidpointNon754 ***
-      template <typename T>
-      static typename std::enable_if<use_default_solver<T>(), MidpointNon754<T>>::type
-      get_solver() { return MidpointNon754<T>(); }
+   
+   private:
+      // For types `T` associated with the layout type `Layout_IEEE754Linear`, increasing
+      // values in bit space result in increasing values in floating point space. The lowest
+      // representable value is -Inf and the highest is +Inf as shown below.
+      //
+      //      |--------------------|---|---|--------------------|
+      //    -Inf                 -min  0  min                 +Inf 
+      //
+      // When denorm support is enabled, bisecting values in bitspace is straightforward
+      // because the bit values of the numbers can be averaged. When denorm support is
+      // disabled, bisecting in bitspace is more complicated. The locations of denormal
+      // numbers are shown below with ***.
+      //
+      //      |--------------------|***|***|--------------------|
+      //    -Inf                 -min  0  min                 +Inf
+      //
+      // The tools in the `ieee754_linear.hpp` file allow us to calculate the midpoint
+      // even when denorm support is disabled. To illustrate this algorithm, consider
+      // a cartoon floating point type with 17 possible discrete values from -Inf to +Inf
+      // and denorms marked by *** as shown below:
+      //
+      //    -Inf  |  -8
+      //    -2.0  |  -6
+      //    -1.0  |  -4
+      //    -min  |  -2
+      //     ***  |  -1
+      //     0.0  |   0
+      //     ***  |  +1
+      //    +min  |  +2
+      //     1.0  |  +4
+      //     2.0  |  +6
+      //    +Inf  |  +8
+      //
+      // Goal: find the midpoint of `x=-min` and `y=+Inf` in bitspace.
+      //
+      // Step 1 -- Calculate inflated representations
+      //   negative | positive
+      //   -8-6-4-2 0 2 4 6 8         | float value | inflated bit value
+      //    |-----|*|*|-----|       x |    -min     |       -2
+      //          x         y       y |    +Inf     |       +8
+      //
+      // Step 2 -- Calculate deflated representations.
+      //  negative | positive
+      //  -8-6-4-2 0 2 4 6 8          | deflated bit value
+      //    |-----|||-----|         x |       -1
+      //          x       y         y |       +7
+      //
+      // Step 3 -- Calculate the midpoint in deflated representation 
+      //  negative | positive
+      //  -8-6-4-2 0 2 4 6 8          | deflated bit value
+      //    |-----|||-----|         x |       -1
+      //          x   m   y         y |       +7
+      //                            m |       +3  <-- (x + y) / 2 where x = -1 and y = +7
+      //
+      // Step 4 -- Calculate the midpoint in inflated representation
+      //  negative | positive
+      //  -8-6-4-2 0 2 4 6 8          | inflated bit value
+      //   |-----|*|*|-----|        m |       +4
+      //               m
+      //
+      // Step 5 -- Convert the midpoint from bits to float giving the floating point answer
+      //
+      template <typename T, typename U>
+      static T solve(T x, T y, boost::math::tools::detail::ieee754_linear::Layout_IEEE754Linear<T, U>) {
+         using boost::math::tools::detail::ieee754_linear::BitsInflated;
+         using boost::math::tools::detail::ieee754_linear::Denormflator;
+         const auto df = Denormflator<T, U>();  // Calculates if `has_denorm` is true at this instant
 
-      // NOTE: 
+         // Step 1 -- Calculate inflated representations
+         const BitsInflated<T, U> y_inflated(y);
+         const BitsInflated<T, U> x_inflated(x);
+
+         // Step 2 -- Calculate deflated representations
+         const auto y_def = df.deflate(y_inflated);
+         const auto x_def = df.deflate(x_inflated);
+
+         // Step 3 -- Calculate the midpoint in deflated representation
+         const auto xy_def_midpoint = (y_def + x_def) >> 1;  // Add then divide by 2
+
+         // Step 4 -- Calculate the midpoint in inflated representation
+         const auto xy_midpoint = df.inflate(xy_def_midpoint);
+
+         // Step 5 -- Convert the midpoint from bits to float
+         return xy_midpoint.reinterpret_as_float();
+      }
+
+      template <typename T, typename T2, typename U>
+      static T solve(T x, T y, boost::math::tools::detail::ieee754_linear::Layout_IEEE754Linear<T2, U> layout) {
+         using boost::math::tools::detail::ieee754_linear::StaticCast;
+         return solve(StaticCast::value<T2,T>(x), StaticCast::value<T2,T>(y), layout);
+      }
+
       template <typename T>
-      static T calc_midpoint(T x, T y) {
-         return get_solver<T>().solve(x, y);
+      static T solve(T x, T y, boost::math::tools::detail::ieee754_linear::Layout_Unspecified<T>) {
+         return MidpointFallback<T>::solve(x, y);
       }
    };
-
 }  // namespace Bisection
 }  // namespace detail
 
@@ -689,7 +561,7 @@ T newton_raphson_iterate(F f, T guess, T min, T max, int digits, std::uintmax_t&
       {
          // Last two steps haven't converged.
          const T x_other = (delta > 0) ? min : max;
-         delta = result - detail::Bisection::CalcMidpoint::calc_midpoint(result, x_other);
+         delta = result - detail::Bisection::CalcMidpoint::solve(result, x_other);
          // reset delta1/2 so we don't take this branch next time round:
          delta1 = 3 * delta;
          delta2 = 3 * delta;

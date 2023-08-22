@@ -708,79 +708,63 @@ std::vector<T> create_test_ladder() {
    return v;
 };
 
-template <typename T, typename S>
-void test_bisect(S solver) {
-   // Test for all combinations from the ladder
-   auto v = create_test_ladder<T>();
+template <typename W, typename T>
+class TestBisect {
+public:
+   static void run() {
+      auto v = create_test_ladder<T>();
 
-   for (const T& x_i: v) {
-      for (const T& x_j: v) {
-         const T x_mid_ij = solver.solve(x_i, x_j);
-
-         const T x_lo = (std::min)(x_i, x_j);
-         const T x_hi = (std::max)(x_i, x_j);
-
-         BOOST_CHECK(x_lo <= x_mid_ij);  // NOTE: BOOST_CHECK_LE(x_lo, x_mid_ij) fails to link
-         BOOST_CHECK(x_mid_ij <= x_hi);  // NOTE: BOOST_CHECK_LE(x_mid_ij, x_hi) fails to link
+      for (const W& x_i: v) {
+         for (const W& x_j: v) {
+            const W x_mid_ij = boost::math::tools::detail::Bisection::CalcMidpoint::solve(x_i, x_j);
+            test_order(static_cast<T>(x_i), static_cast<T>(x_mid_ij), static_cast<T>(x_j));
+         }
       }
    }
-}
 
-template <typename T>
-void test_bisect_non() {
-   const auto solver = boost::math::tools::detail::Bisection::CalcMidpoint::get_solver<T>();
-   test_bisect<T,decltype(solver)>(solver);
-}
+   static void test_order(const T& x_i, const T& x_mid_ij, const T& x_j) {
+      const T x_lo = (std::min)(x_i, x_j);
+      const T x_hi = (std::max)(x_i, x_j);
 
-template <typename T>
-void test_bisect_754() {
-   const auto solver = boost::math::tools::detail::Bisection::CalcMidpoint::get_solver<T>();
-   BOOST_MATH_ASSERT(solver.is_one_plus_max_bits_inf());  // Catch infinity misbehavior for 80 bit `long double`
-                                                          // before it causes downstream failures
-   // We need to use the float type associated with the solver to avoid needing to link with libquadmath
-   using S = decltype(solver);
-   test_bisect<typename S::type_float,S>(solver);
+      BOOST_CHECK(x_lo <= x_mid_ij);  // NOTE: BOOST_CHECK_LE(x_lo, x_mid_ij) fails to link
+      BOOST_CHECK(x_mid_ij <= x_hi);  // NOTE: BOOST_CHECK_LE(x_mid_ij, x_hi) fails to link
+   }
+};
+
+template <typename W>
+void test_bisect() {
+   // Get layout
+   const auto layout = boost::math::tools::detail::ieee754_linear::LayoutIdentifier::get_layout<W>();
+
+   // `T` and `W` are usually the same. In the case where `W` is 
+   // `boost::multiprecision::float128`, then `W` is a wrapper and around
+   // the datatype `T = __float128`.
+   using T = typename decltype(layout)::type_float;  // Get layout float type
+   TestBisect<W, T>::run();
 }
 
 void test_bisect_all_cases() {
-   test_bisect_754<float>();
-   test_bisect_754<double>();
-   test_bisect_non<long double>();
-   test_bisect_non<boost::math::concepts::real_concept>();
-   test_bisect_non<boost::multiprecision::cpp_bin_float_50>();
-   test_bisect_non<boost::multiprecision::cpp_bin_float_100>();
-   test_bisect_non<boost::multiprecision::cpp_dec_float_50>();
-   test_bisect_non<boost::multiprecision::cpp_dec_float_100>();
+   test_bisect<float>();
+   test_bisect<double>();
+   test_bisect<long double>();
+   test_bisect<boost::math::concepts::real_concept>();
+   test_bisect<boost::multiprecision::cpp_bin_float_50>();
+   test_bisect<boost::multiprecision::cpp_bin_float_100>();
+   test_bisect<boost::multiprecision::cpp_dec_float_50>();
+   test_bisect<boost::multiprecision::cpp_dec_float_100>();
 
 #if defined(BOOST_HAS_FLOAT128) && defined(BOOST_HAS_INT128)
-   test_bisect_754<boost::multiprecision::float128>();
-   test_bisect_754<__float128>();
+   test_bisect<boost::multiprecision::float128>();
+   test_bisect<__float128>();
 #endif 
 
 #if __has_include(<stdfloat>)
 #ifdef __STDCPP_FLOAT32_T__
-   test_bisect_754<std::float32_t>();
+   test_bisect<std::float32_t>();
 #endif
 #ifdef __STDCPP_FLOAT64_T__
-   test_bisect_754<std::float64_t>();
+   test_bisect<std::float64_t>();
 #endif 
-#endif
-
-#if LDBL_MANT_DIG == 64 && LDBL_MAX_EXP == 16384 && defined(BOOST_HAS_INT128)
-   // CI says this fails to compile sometimes because the static_assert
-   // in `Midpoint754` that `std::is_unsigned<boost::uint128_type>::value is
-   // true is not met. This occurs despite the preprocessor assertion that
-   // `BOOST_HAS_INT128` is defined. I'm not sure why this occurs.
-   //
-   // That being said, this test is mostly pedogogical. It shows that
-   // `long double` does not possess the property that increasing values in
-   // bitspace result in increasing float values. It is not required for
-   // correctness, only for completeness. If you can compile this locally
-   // this test should pass.
-#if 0
-   const auto solver = boost::math::tools::detail::Bisection::Midpoint754<long double,boost::uint128_type>();
-   BOOST_CHECK(!solver.is_one_plus_max_bits_inf());
-#endif   
 #endif
 }
 

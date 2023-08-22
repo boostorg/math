@@ -1048,6 +1048,7 @@ test-suite misc :
    [ run test_real_concept.cpp ../../test/build//boost_unit_test_framework  ]
    [ run test_remez.cpp pch ../../test/build//boost_unit_test_framework  ]
    [ run test_roots.cpp pch ../../test/build//boost_unit_test_framework  ]
+   [ run ieee754_linear_test.cpp pch ../../test/build//boost_unit_test_framework  ]
    [ run test_root_iterations.cpp pch ../../test/build//boost_unit_test_framework : : : [ requires cxx11_hdr_tuple ]  ]
    [ run test_root_finding_concepts.cpp ../../test/build//boost_unit_test_framework  ]
    [ run test_toms748_solve.cpp pch ../../test/build//boost_unit_test_framework  ]
