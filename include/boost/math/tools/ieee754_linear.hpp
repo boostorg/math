@@ -342,8 +342,8 @@ namespace ieee754_linear {
       static constexpr bool value = decltype(test<T>(0))::value;
    };
 
-   // Allows one to static_cast from ‘boost::math::concepts::std_real_concept’ to
-   // type ‘__float128’
+   // Allows one to static_cast from `boost::math::concepts::std_real_concept` to
+   // type `__float`
    class StaticCast {
    public:
       template <typename T, typename V>
