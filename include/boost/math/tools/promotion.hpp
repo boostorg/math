@@ -26,8 +26,10 @@
 #include <boost/math/tools/config.hpp>
 #include <type_traits>
 
-#if __has_include(<stdfloat>)
-#  include <stdfloat>
+#if defined __has_include
+#  if __has_include (<stdfloat>)
+#    include <stdfloat>
+#  endif
 #endif
 
 namespace boost
