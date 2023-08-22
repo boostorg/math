@@ -1,5 +1,10 @@
-#ifndef BOOST_MATH_TOOLS_IEEE754_BITSPACE_HPP
-#define BOOST_MATH_TOOLS_IEEE754_BITSPACE_HPP
+//  (C) Copyright Ryan Elandt 2023.
+//  Use, modification and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
+//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+#ifndef BOOST_MATH_TOOLS_IEEE754_LINEAR_HPP
+#define BOOST_MATH_TOOLS_IEEE754_LINEAR_HPP
 
 #ifdef _MSC_VER
 #pragma once
@@ -363,4 +368,4 @@ namespace ieee754_linear {
 }  // namespace math
 }  // namespace boost   
 
-#endif  // BOOST_MATH_TOOLS_IEEE754_BITSPACE_HPP
+#endif  // BOOST_MATH_TOOLS_IEEE754_LINEAR_HPP
