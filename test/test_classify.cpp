@@ -16,6 +16,8 @@
 #include <iostream>
 #include <iomanip>
 
+#include "test_autodiff.hpp"
+
 #ifdef _MSC_VER
 #pragma warning(disable: 4127 4146) //  conditional expression is constant
 #endif
@@ -256,6 +258,9 @@ void test_classify(T t, const char* type)
 #endif
 }
 
+
+BOOST_AUTO_TEST_SUITE(test_fpclassify)
+
 BOOST_AUTO_TEST_CASE( test_main )
 {
    BOOST_MATH_CONTROL_FP;
@@ -287,6 +292,16 @@ BOOST_AUTO_TEST_CASE( test_main )
    test_classify(int(0), "int");
    test_classify(unsigned(0), "unsigned");
 }
+
+BOOST_AUTO_TEST_CASE_TEMPLATE(fpclassify_autodiff, T, all_float_types) {
+   test_classify(boost::math::differentiation::make_fvar<T, 1>(0), "autodiff float");
+   test_classify(boost::math::differentiation::make_fvar<T, 2>(0), "autodiff float");
+   test_classify(boost::math::differentiation::make_fvar<T, 3>(0), "autodiff float");
+   test_classify(boost::math::differentiation::make_fvar<T, 7>(0), "autodiff float");
+   test_classify(boost::math::differentiation::make_fvar<T, 12>(0), "autodiff float");
+}
+
+BOOST_AUTO_TEST_SUITE_END()
 
 /*
 Autorun "i:\Boost-sandbox\math_toolkit\libs\math\test\MSVC80\debug\test_classify.exe"
