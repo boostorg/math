@@ -34,8 +34,10 @@ bool is_paired_with_uint32_t(Layout_IEEE754Linear<T, uint32_t>, T) { return true
 template <typename T>
 bool is_paired_with_uint64_t(Layout_IEEE754Linear<T, uint64_t>, T) { return true; }
 
+#if defined(BOOST_HAS_FLOAT128) && defined(BOOST_HAS_INT128)
 template <typename T>
 bool is_paired_with_uint128_t(Layout_IEEE754Linear<T, boost::uint128_type>, T) { return true; }
+#endif
 
 void test_layout() {
    using boost::math::tools::detail::ieee754_linear::LayoutIdentifier;
