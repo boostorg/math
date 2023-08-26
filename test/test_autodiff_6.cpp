@@ -252,9 +252,9 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(erf_hpp, T, all_float_types) {
     std::ignore = i;
     auto x = x_sampler.next();
 
-    BOOST_CHECK(isNearZero(erf(make_fvar<T, m>(x)).derivative(0u) -
+    BOOST_CHECK(isNearZero<T>(erf(make_fvar<T, m>(x)).derivative(0u) -
                            boost::math::erf(x)));
-    BOOST_CHECK(isNearZero(erfc(make_fvar<T, m>(x)).derivative(0u) -
+    BOOST_CHECK(isNearZero<T>(erfc(make_fvar<T, m>(x)).derivative(0u) -
                            boost::math::erfc(x)));
   }
 }

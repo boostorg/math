@@ -134,7 +134,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(tanh_test, T, all_float_types) {
   auto x = make_fvar<T, m>(cx);
   auto t = tanh(x);
   for (auto i : boost::irange(tanh_derivatives.size())) {
-    BOOST_TEST_WARN(isNearZero(t.derivative(i) - tanh_derivatives[i]));
+    BOOST_TEST_WARN(isNearZero<T>(t.derivative(i) - tanh_derivatives[i]));
   }
 }
 #endif

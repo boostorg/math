@@ -3,6 +3,7 @@
 // Copyright John Maddock 2006.
 // Copyright Paul A. Bristow 2006.
 // Copyright Matt Borland 2023.
+// Copyright Ryan Elandt 2023.
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
