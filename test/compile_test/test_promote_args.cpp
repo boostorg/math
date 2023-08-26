@@ -89,7 +89,7 @@ int main()
    static_assert(std::is_same_v<promote_args_t<std::float16_t, double>, double>);
    static_assert(std::is_same_v<promote_args_t<std::float16_t, long double>, long double>);
 #ifdef __STDCPP_FLOAT16_T__
-   static_assert(std::is_same_v<promote_args_t<std::float16_t, std::float16_t>, float>);
+   static_assert(std::is_same_v<promote_args_t<std::float16_t, std::float16_t>, std::float16_t>);
 #endif
 #ifdef __STDCPP_FLOAT32_T__
    static_assert(std::is_same_v<promote_args_t<std::float16_t, std::float32_t>, std::float32_t>);

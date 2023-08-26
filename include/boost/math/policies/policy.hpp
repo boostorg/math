@@ -9,6 +9,7 @@
 
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/mp.hpp>
+#include <boost/math/tools/promotion.hpp>
 #include <limits>
 #include <type_traits>
 #include <cmath>
@@ -723,22 +724,35 @@ inline constexpr typename normalise<policy<>, A1, A2, A3, A4, A5, A6, A7, A8, A9
 //
 // Traits class to handle internal promotion:
 //
+
 template <class Real, class Policy>
-struct evaluation
-{
-   typedef Real type;
-};
+struct evaluation {
+   // Operation specific minimum float type
+   struct min_policy_allowed_float_type {
+      using type = float;
+   };
 
-template <class Policy>
-struct evaluation<float, Policy>
-{
-   using type = typename std::conditional<Policy::promote_float_type::value, double, float>::type;
-};
+   // Minimum type returned after applying double promotion rules
+   struct min_promote_with_float_type {
+      using type = typename std::conditional<Policy::promote_float_type::value,
+         double, typename min_policy_allowed_float_type::type>::type;
+   };
 
-template <class Policy>
-struct evaluation<double, Policy>
-{
-   using type = typename std::conditional<Policy::promote_double_type::value, long double, double>::type;
+   // Minimum type returned after applying long double promotion rules
+   struct min_promote_with_double_type {
+      using type = typename std::conditional<Policy::promote_double_type::value,
+         long double, typename min_policy_allowed_float_type::type>::type;
+   };
+
+   // Minimum type returned after applying double and long double promotion rules 
+   struct min_evaluation_float_type {
+      using type = typename tools::promote_args<typename min_policy_allowed_float_type::type,
+                                                typename min_promote_with_float_type::type,
+                                                typename min_promote_with_double_type::type>::type;   
+   };
+  
+  using type = typename tools::promote_args<Real, 
+                                            typename min_evaluation_float_type::type>::type;
 };
 
 template <class Real, class Policy>
