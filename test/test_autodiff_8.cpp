@@ -16,7 +16,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(hermite_hpp, T, all_float_types) {
     auto x = x_sampler.next();
     auto autodiff_v = boost::math::hermite(i, make_fvar<T, m>(x));
     auto anchor_v = boost::math::hermite(i, x);
-    BOOST_CHECK(isNearZero<T>(autodiff_v.derivative(0u) - anchor_v));
+    BOOST_CHECK(isNearZero(autodiff_v.derivative(0u) - anchor_v));
   }
 }
 
@@ -33,7 +33,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(heuman_lambda_hpp, T, all_float_types) {
     auto autodiff_v =
         boost::math::heuman_lambda(make_fvar<T, m>(x), make_fvar<T, m>(phi));
     auto anchor_v = boost::math::heuman_lambda(x, phi);
-    BOOST_CHECK(isNearZero<T>(autodiff_v.derivative(0u) - anchor_v));
+    BOOST_CHECK(isNearZero(autodiff_v.derivative(0u) - anchor_v));
   }
 }
 
@@ -49,7 +49,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(hypot_hpp, T, all_float_types) {
     auto autodiff_v =
         boost::math::hypot(make_fvar<T, m>(x), make_fvar<T, m>(y));
     auto anchor_v = boost::math::hypot(x, y);
-    BOOST_CHECK(isNearZero<T>(autodiff_v.derivative(0u) - anchor_v));
+    BOOST_CHECK(isNearZero(autodiff_v.derivative(0u) - anchor_v));
   }
 }
 
@@ -62,51 +62,51 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(jacobi_elliptic_hpp, T, all_float_types) {
     std::ignore = i;
     auto k = k_sampler.next();
     auto theta = theta_sampler.next();
-    BOOST_CHECK(isNearZero<T>(
+    BOOST_CHECK(isNearZero(
         boost::math::jacobi_cd(make_fvar<T, m>(k), make_fvar<T, m>(theta))
             .derivative(0u) -
         boost::math::jacobi_cd(k, theta)));
-    BOOST_CHECK(isNearZero<T>(
+    BOOST_CHECK(isNearZero(
         boost::math::jacobi_cn(make_fvar<T, m>(k), make_fvar<T, m>(theta))
             .derivative(0u) -
         boost::math::jacobi_cn(k, theta)));
-    BOOST_CHECK(isNearZero<T>(
+    BOOST_CHECK(isNearZero(
         boost::math::jacobi_cs(make_fvar<T, m>(k), make_fvar<T, m>(theta))
             .derivative(0u) -
         boost::math::jacobi_cs(k, theta)));
-    BOOST_CHECK(isNearZero<T>(
+    BOOST_CHECK(isNearZero(
         boost::math::jacobi_dc(make_fvar<T, m>(k), make_fvar<T, m>(theta))
             .derivative(0u) -
         boost::math::jacobi_dc(k, theta)));
-    BOOST_CHECK(isNearZero<T>(
+    BOOST_CHECK(isNearZero(
         boost::math::jacobi_dn(make_fvar<T, m>(k), make_fvar<T, m>(theta))
             .derivative(0u) -
         boost::math::jacobi_dn(k, theta)));
-    BOOST_CHECK(isNearZero<T>(
+    BOOST_CHECK(isNearZero(
         boost::math::jacobi_ds(make_fvar<T, m>(k), make_fvar<T, m>(theta))
             .derivative(0u) -
         boost::math::jacobi_ds(k, theta)));
-    BOOST_CHECK(isNearZero<T>(
+    BOOST_CHECK(isNearZero(
         boost::math::jacobi_nc(make_fvar<T, m>(k), make_fvar<T, m>(theta))
             .derivative(0u) -
         boost::math::jacobi_nc(k, theta)));
-    BOOST_CHECK(isNearZero<T>(
+    BOOST_CHECK(isNearZero(
         boost::math::jacobi_nd(make_fvar<T, m>(k), make_fvar<T, m>(theta))
             .derivative(0u) -
         boost::math::jacobi_nd(k, theta)));
-    BOOST_CHECK(isNearZero<T>(
+    BOOST_CHECK(isNearZero(
         boost::math::jacobi_ns(make_fvar<T, m>(k), make_fvar<T, m>(theta))
             .derivative(0u) -
         boost::math::jacobi_ns(k, theta)));
-    BOOST_CHECK(isNearZero<T>(
+    BOOST_CHECK(isNearZero(
         boost::math::jacobi_sc(make_fvar<T, m>(k), make_fvar<T, m>(theta))
             .derivative(0u) -
         boost::math::jacobi_sc(k, theta)));
-    BOOST_CHECK(isNearZero<T>(
+    BOOST_CHECK(isNearZero(
         boost::math::jacobi_sd(make_fvar<T, m>(k), make_fvar<T, m>(theta))
             .derivative(0u) -
         boost::math::jacobi_sd(k, theta)));
-    BOOST_CHECK(isNearZero<T>(
+    BOOST_CHECK(isNearZero(
         boost::math::jacobi_sn(make_fvar<T, m>(k), make_fvar<T, m>(theta))
             .derivative(0u) -
         boost::math::jacobi_sn(k, theta)));
@@ -123,7 +123,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(jacobi_zeta_hpp, T, all_float_types) {
     std::ignore = i;
     auto x = x_sampler.next();
     auto phi = phi_sampler.next();
-    BOOST_CHECK(isNearZero<T>(
+    BOOST_CHECK(isNearZero(
         boost::math::jacobi_zeta(make_fvar<T, m>(x), make_fvar<T, m>(phi))
             .derivative(0u) -
         boost::math::jacobi_zeta(x, phi)));
@@ -149,12 +149,12 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(laguerre_hpp, T, all_float_types) {
     {
       auto autodiff_v = boost::math::laguerre(n, make_fvar<T, m>(x));
       auto anchor_v = boost::math::laguerre(n, x);
-      BOOST_CHECK(isNearZero<T>(autodiff_v.derivative(0u) - anchor_v));
+      BOOST_CHECK(isNearZero(autodiff_v.derivative(0u) - anchor_v));
     }
     {
       auto autodiff_v = boost::math::laguerre(n, r, make_fvar<T, m>(x));
       auto anchor_v = boost::math::laguerre(n, r, x);
-      BOOST_CHECK(isNearZero<T>(autodiff_v.derivative(0u) - anchor_v));
+      BOOST_CHECK(isNearZero(autodiff_v.derivative(0u) - anchor_v));
     }
   }
 }
@@ -185,12 +185,12 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(lambert_w_hpp, T, all_float_types) {
       {
         auto autodiff_v = boost::math::lambert_w0(make_fvar<T, m>(x_));
         auto anchor_v = boost::math::lambert_w0(x_);
-        BOOST_CHECK(isNearZero<T>(autodiff_v.derivative(0u) - anchor_v));
+        BOOST_CHECK(isNearZero(autodiff_v.derivative(0u) - anchor_v));
       }
       {
         auto autodiff_v = boost::math::lambert_w0_prime(make_fvar<T, m>(x_));
         auto anchor_v = boost::math::lambert_w0_prime(x_);
-        BOOST_CHECK(isNearZero<T>(autodiff_v.derivative(0u) - anchor_v));
+        BOOST_CHECK(isNearZero(autodiff_v.derivative(0u) - anchor_v));
       }
     }
 
@@ -201,10 +201,10 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(lambert_w_hpp, T, all_float_types) {
               ((std::numeric_limits<promoted_t>::max))())),
           ((std::numeric_limits<T>::max))());
       x_ = (max)(static_cast<T>(-0.36), x_);
-      BOOST_CHECK(isNearZero<T>(
+      BOOST_CHECK(isNearZero(
           boost::math::lambert_wm1(make_fvar<T, m>(x_)).derivative(0u) -
           boost::math::lambert_wm1(x_)));
-      BOOST_CHECK(isNearZero<T>(
+      BOOST_CHECK(isNearZero(
           boost::math::lambert_wm1_prime(make_fvar<T, m>(x_)).derivative(0u) -
           boost::math::lambert_wm1_prime(x_)));
     }
@@ -222,7 +222,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(log1p_hpp, T, all_float_types) {
     std::ignore = i;
     auto x = x_sampler.next();
     BOOST_CHECK(
-        isNearZero<T>(log1p(make_fvar<T, m>(x)).derivative(0u) - log1p(x)));
+        isNearZero(log1p(make_fvar<T, m>(x)).derivative(0u) - log1p(x)));
   }
 }
 
@@ -239,59 +239,59 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(next_hpp, T, all_float_types) {
   for (auto i : boost::irange(test_constants::n_samples)) {
     const auto j = static_cast<T>(i);
     auto fvar_j = make_fvar<T, m>(j);
-    BOOST_CHECK(isNearZero<T>(float_next(fvar_j).derivative(0u) - float_next(j)));
+    BOOST_CHECK(isNearZero(float_next(fvar_j).derivative(0u) - float_next(j)));
     BOOST_CHECK(
-        isNearZero<T>(float_prior(fvar_j).derivative(0u) - float_prior(j)));
+        isNearZero(float_prior(fvar_j).derivative(0u) - float_prior(j)));
 
-    BOOST_CHECK(isNearZero<T>(
+    BOOST_CHECK(isNearZero(
         nextafter(fvar_j, make_fvar<T, m>(static_cast<T>(1))).derivative(0u) -
         nextafter(j, static_cast<T>(1))));
     BOOST_CHECK(
-        isNearZero<T>(nextafter(fvar_j, make_fvar<T, m>(static_cast<T>(i + 2))) -
+        isNearZero(nextafter(fvar_j, make_fvar<T, m>(static_cast<T>(i + 2))) -
                    nextafter(j, static_cast<T>(i + 2))));
     BOOST_CHECK(
-        isNearZero<T>(nextafter(fvar_j, make_fvar<T, m>(static_cast<T>(i + 1)))
+        isNearZero(nextafter(fvar_j, make_fvar<T, m>(static_cast<T>(i + 1)))
                        .derivative(0u) -
                    nextafter(j, static_cast<T>(i + 2))));
-    BOOST_CHECK(isNearZero<T>(
+    BOOST_CHECK(isNearZero(
         nextafter(fvar_j, make_fvar<T, m>(static_cast<T>(-1))).derivative(0u) -
         nextafter(j, static_cast<T>(-1))));
-    BOOST_CHECK(isNearZero<T>(
+    BOOST_CHECK(isNearZero(
         nextafter(fvar_j, make_fvar<T, m>(static_cast<T>(-1 * (i + 2))))
             .derivative(0u) -
         nextafter(j, -1 * static_cast<T>(i + 2))));
 
-    BOOST_CHECK(isNearZero<T>(
+    BOOST_CHECK(isNearZero(
         nextafter(fvar_j, make_fvar<T, m>(static_cast<T>(-1 * (i + 1))))
             .derivative(0u) -
         nextafter(j, -1 * static_cast<T>(i + 2))));
 
-    BOOST_CHECK(isNearZero<T>(nextafter(fvar_j, fvar_j) - fvar_j));
+    BOOST_CHECK(isNearZero(nextafter(fvar_j, fvar_j) - fvar_j));
 
-    BOOST_CHECK(isNearZero<T>(float_advance(fvar_j, 1).derivative(0u) -
+    BOOST_CHECK(isNearZero(float_advance(fvar_j, 1).derivative(0u) -
                            float_advance(j, 1)));
-    BOOST_CHECK(isNearZero<T>(float_advance(fvar_j, i + 2).derivative(0u) -
+    BOOST_CHECK(isNearZero(float_advance(fvar_j, i + 2).derivative(0u) -
                            float_advance(j, i + 2)));
-    BOOST_CHECK(isNearZero<T>(
+    BOOST_CHECK(isNearZero(
         float_advance(fvar_j, i + 1).derivative(0u) -
         float_advance(float_advance(fvar_j, i + 2), -1).derivative(0u)));
 
-    BOOST_CHECK(isNearZero<T>(float_advance(fvar_j, -1).derivative(0u) -
+    BOOST_CHECK(isNearZero(float_advance(fvar_j, -1).derivative(0u) -
                            float_advance(j, -1)));
 
-    BOOST_CHECK(isNearZero<T>(
+    BOOST_CHECK(isNearZero(
         float_advance(fvar_j, -i - 1).derivative(0u) -
         float_advance(float_advance(fvar_j, -i - 2), 1).derivative(0u)));
 
-    BOOST_CHECK(isNearZero<T>(float_advance(fvar_j, 0) - fvar_j));
+    BOOST_CHECK(isNearZero(float_advance(fvar_j, 0) - fvar_j));
 
-    BOOST_CHECK(isNearZero<T>(float_distance(fvar_j, j).derivative(0u) -
+    BOOST_CHECK(isNearZero(float_distance(fvar_j, j).derivative(0u) -
                            static_cast<T>(0)));
     BOOST_CHECK(
-        isNearZero<T>(float_distance(float_next(fvar_j), fvar_j).derivative(0u) -
+        isNearZero(float_distance(float_next(fvar_j), fvar_j).derivative(0u) -
                    ((make_fvar<T, m>(-1))).derivative(0u)));
     BOOST_CHECK(
-        isNearZero<T>(float_distance(float_prior(fvar_j), fvar_j).derivative(0u) -
+        isNearZero(float_distance(float_prior(fvar_j), fvar_j).derivative(0u) -
                    (make_fvar<T, m>(1)).derivative(0u)));
   }
 }
@@ -309,7 +309,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(owens_t_hpp, T, bin_float_types) {
     auto autodiff_v =
         boost::math::owens_t(make_fvar<T, m>(h), make_fvar<T, m>(a));
     auto anchor_v = boost::math::owens_t(h, a);
-    BOOST_CHECK(isNearZero<T>(autodiff_v.derivative(0u) - anchor_v));
+    BOOST_CHECK(isNearZero(autodiff_v.derivative(0u) - anchor_v));
   }
 }
 
@@ -360,7 +360,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(polygamma_hpp, T, all_float_types) {
     try {
       auto autodiff_v = boost::math::polygamma(i, make_fvar<T, m>(x));
       auto anchor_v = boost::math::polygamma(i, x);
-      BOOST_CHECK(isNearZero<T>(autodiff_v.derivative(0u) - anchor_v));
+      BOOST_CHECK(isNearZero(autodiff_v.derivative(0u) - anchor_v));
     } catch (const std::overflow_error &) {
       std::cout << "Overflow Error thrown with inputs i: " << i << " x: " << x
                 << std::endl;
@@ -406,7 +406,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(powm1_hpp, T, all_float_types) {
     auto autodiff_v =
         boost::math::powm1(make_fvar<T, m>(x), make_fvar<T, m>(y));
     auto anchor_v = boost::math::powm1(x, y);
-    BOOST_CHECK(isNearZero<T>(autodiff_v.derivative(0u) - anchor_v));
+    BOOST_CHECK(isNearZero(autodiff_v.derivative(0u) - anchor_v));
   }
 }
 
@@ -420,7 +420,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(sin_pi_hpp, T, all_float_types) {
     std::ignore = i;
     auto x = x_sampler.next();
     BOOST_CHECK(
-        isNearZero<T>(boost::math::sin_pi(make_fvar<T, m>(x)).derivative(0u) -
+        isNearZero(boost::math::sin_pi(make_fvar<T, m>(x)).derivative(0u) -
                    boost::math::sin_pi(x)));
   }
 }
@@ -459,23 +459,23 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(spherical_harmonic_hpp, T, all_float_types) {
           n, r, make_fvar<T, m>(theta), make_fvar<T, m>(phi));
       auto anchor_v = boost::math::spherical_harmonic(n, r, theta, phi);
       BOOST_CHECK(
-          isNearZero<T>(autodiff_v.real().derivative(0u) - anchor_v.real()));
+          isNearZero(autodiff_v.real().derivative(0u) - anchor_v.real()));
       BOOST_CHECK(
-          isNearZero<T>(autodiff_v.imag().derivative(0u) - anchor_v.imag()));
+          isNearZero(autodiff_v.imag().derivative(0u) - anchor_v.imag()));
     }
 
     {
       auto autodiff_v = boost::math::spherical_harmonic_r(
           n, r, make_fvar<T, m>(theta), make_fvar<T, m>(phi));
       auto anchor_v = boost::math::spherical_harmonic_r(n, r, theta, phi);
-      BOOST_CHECK(isNearZero<T>(autodiff_v.derivative(0u) - anchor_v));
+      BOOST_CHECK(isNearZero(autodiff_v.derivative(0u) - anchor_v));
     }
 
     {
       auto autodiff_v = boost::math::spherical_harmonic_i(
           n, r, make_fvar<T, m>(theta), make_fvar<T, m>(phi));
       auto anchor_v = boost::math::spherical_harmonic_i(n, r, theta, phi);
-      BOOST_CHECK(isNearZero<T>(autodiff_v.derivative(0u) - anchor_v));
+      BOOST_CHECK(isNearZero(autodiff_v.derivative(0u) - anchor_v));
     }
   }
 }
@@ -488,7 +488,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(sqrt1pm1_hpp, T, all_float_types) {
     std::ignore = i;
     auto x = x_sampler.next();
     BOOST_CHECK(
-        isNearZero<T>(boost::math::sqrt1pm1(make_fvar<T, m>(x)).derivative(0u) -
+        isNearZero(boost::math::sqrt1pm1(make_fvar<T, m>(x)).derivative(0u) -
                    boost::math::sqrt1pm1(x)));
   }
 }
@@ -501,7 +501,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(trigamma_hpp, T, all_float_types) {
     std::ignore = i;
     auto x = x_sampler.next();
     BOOST_CHECK(
-        isNearZero<T>(boost::math::trigamma(make_fvar<T, m>(x)).derivative(0u) -
+        isNearZero(boost::math::trigamma(make_fvar<T, m>(x)).derivative(0u) -
                    boost::math::trigamma(x)));
   }
 }

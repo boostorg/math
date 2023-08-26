@@ -129,17 +129,6 @@ namespace boost
       template <class... Args>
       using promote_args_t = typename promote_args<Args...>::type;
 
-
-      // Used by autodiff and files in ccmath
-      template <class T1, class T2>
-      struct promote_args_2 {
-         using type = typename promote_args_permissive<T1, T2>::type;
-      };
-
-      template <typename T, typename U>
-      using promote_args_2_t = typename promote_args_2<T, U>::type;
-
-
     } // namespace tools
   } // namespace math
 } // namespace boost

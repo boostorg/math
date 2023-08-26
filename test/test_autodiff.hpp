@@ -161,8 +161,8 @@ static_assert(std::is_same<RandomSample<bmp::cpp_bin_float_50>::dist_t,
 
 }  // namespace test_detail
 
-template<typename T1, typename T2>
-auto isNearZero(const T2& t) noexcept -> typename std::enable_if<!diff::is_fvar<T2>::value, bool>::type
+template<typename T>
+auto isNearZero(const T& t) noexcept -> typename std::enable_if<!diff::is_fvar<T>::value, bool>::type
 {
   using std::sqrt;
   using bmp::sqrt;
@@ -172,14 +172,14 @@ auto isNearZero(const T2& t) noexcept -> typename std::enable_if<!diff::is_fvar<
   using detail::fabs;
   using boost::math::fpclassify;
   using std::sqrt;
-  return fpclassify(fabs(t)) == FP_ZERO || fpclassify(fabs(t)) == FP_SUBNORMAL || boost::math::fpc::is_small(fabs(t), sqrt(std::numeric_limits<T1>::epsilon()));
+  return fpclassify(fabs(t)) == FP_ZERO || fpclassify(fabs(t)) == FP_SUBNORMAL || boost::math::fpc::is_small(fabs(t), sqrt(std::numeric_limits<T>::epsilon()));
 }
 
-template<typename T1, typename T2>
-auto isNearZero(const T2& t) noexcept -> typename std::enable_if<diff::is_fvar<T2>::value, bool>::type
+template<typename T>
+auto isNearZero(const T& t) noexcept -> typename std::enable_if<diff::is_fvar<T>::value, bool>::type
 {
-  using root_type = typename T2::root_type;
-  return isNearZero<T1>(static_cast<root_type>(t));
+  using root_type = typename T::root_type;
+  return isNearZero(static_cast<root_type>(t));
 }
 
 template <typename T, std::size_t Order = 5>
