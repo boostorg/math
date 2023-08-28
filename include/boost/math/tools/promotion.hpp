@@ -27,7 +27,6 @@
 #include <boost/math/tools/config.hpp>
 #include <type_traits>
 
-
 namespace boost
 {
   namespace math
