@@ -147,7 +147,7 @@ typename Dist::value_type
    // we're assuming that "guess" is likely to be accurate
    // to the nearest int or so:
    //
-   else if(adder != 0)
+   else if((adder != 0) && (a + adder != a))
    {
       //
       // If we're looking for a large result, then bump "adder" up
