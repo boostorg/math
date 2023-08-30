@@ -181,6 +181,7 @@ jobs:
         shell: cmd
     env:
       ARGS: toolset=${{ matrix.toolset }} address-model=64 cxxstd=${{ matrix.standard }}
+      ARGSLATEST: toolset=${{ matrix.toolset }} address-model=64 cxxstd=latest
     strategy:
       fail-fast: false
       matrix:
@@ -214,8 +215,13 @@ jobs:
       - name: Config info
         run: config_info_travis
         working-directory: ../boost-root/libs/config/test
-      - name: Test
+      - name: Test std-14 vc140 and std-14-17 vc142
+        if: ${{ matrix.toolset != 'msvc-14.0' || matrix.standard != '17' }}
         run: ..\..\..\b2 --hash %ARGS% define=CI_SUPPRESS_KNOWN_ISSUES debug-symbols=off ${{ matrix.suite }} pch=off
+        working-directory: ../boost-root/libs/math/test
+      - name: Test std-latest vc140
+        if: ${{ matrix.toolset == 'msvc-14.0' && matrix.standard == '17' }}
+        run: ..\..\..\b2 --hash %ARGSLATEST% define=CI_SUPPRESS_KNOWN_ISSUES debug-symbols=off ${{ matrix.suite }} pch=off
         working-directory: ../boost-root/libs/math/test
   windows_gcc:
     runs-on: windows-2019
