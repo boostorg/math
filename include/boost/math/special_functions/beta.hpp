@@ -557,7 +557,7 @@ T ibeta_power_terms(T a,
          //
          T xc_a = x * c / a;
          T yc_b = y * c / b;
-         if ((x == 1) || (y == 1) || ((fabs(xc_a - 1) > 0.25) && (fabs(yc_b - 1) > 0.25)))
+         if ((x == 1) || (y == 1) || (fabs(xc_a - 1) > 0.25) || (fabs(yc_b - 1) > 0.25))
          {
             // The above logic fails, the result is almost certainly zero:
             power1 = exp(log(xc_a) * a + log(yc_b) * b);
