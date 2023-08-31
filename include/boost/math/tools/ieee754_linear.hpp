@@ -13,7 +13,7 @@
 #include <type_traits>
 
 #include <boost/math/tools/config.hpp>  // For BOOST_MATH_FLOAT128_TYPE
-
+#include <boost/cstdfloat.hpp>  // For numeric_limits support for 128 bit floats
 
 namespace boost {
 namespace math {
@@ -96,12 +96,6 @@ namespace ieee754_linear {
    //
    template <typename T, typename U>
    class Layout_IEEE754Linear {
-#if defined(BOOST_HAS_INT128) && defined(BOOST_HAS_FLOAT128)
-      static_assert(std::numeric_limits<T>::is_iec559 || std::is_same<T, BOOST_MATH_FLOAT128_TYPE>::value,
-         "Attempting to compile Layout_IEEE754Linear with 128 bit floating point type without IEEE 754 "
-         "support for this type. Consider including a header file containing the required "
-         "`std::numeric_limits` specializations such as: #include <boost/multiprecision/float128.hpp>");
-#endif
       static_assert(std::numeric_limits<T>::is_iec559, "Type must be IEEE 754 floating point.");
       static_assert(std::is_unsigned<U>::value, "U must be an unsigned integer type.");
       static_assert(sizeof(T) == sizeof(U), "Type and uint size must be the same.");

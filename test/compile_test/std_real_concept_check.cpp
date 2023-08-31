@@ -16,10 +16,6 @@
 
 #include "instantiate.hpp"
 
-#ifdef BOOST_HAS_FLOAT128
-#include <boost/multiprecision/float128.hpp>
-#endif
-
 //
 // The purpose of this test is to verify that our code compiles
 // cleanly with a type whose std lib functions are in namespace
