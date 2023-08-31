@@ -26,10 +26,6 @@
 #include <boost/math/tools/toms748_solve.hpp>
 #include <boost/math/policies/error_handling.hpp>
 
-#ifdef BOOST_HAS_FLOAT128
-#include <boost/multiprecision/float128.hpp>
-using boost::multiprecision::float128;
-#endif
 
 namespace boost {
 namespace math {

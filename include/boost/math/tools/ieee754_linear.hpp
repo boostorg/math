@@ -12,10 +12,7 @@
 
 #include <type_traits>
 
-
-#ifdef BOOST_HAS_FLOAT128
-#include <boost/multiprecision/float128.hpp>
-#endif
+#include <boost/math/tools/config.hpp>  // For BOOST_MATH_FLOAT128_TYPE
 
 
 namespace boost {
@@ -99,6 +96,12 @@ namespace ieee754_linear {
    //
    template <typename T, typename U>
    class Layout_IEEE754Linear {
+#if defined(BOOST_HAS_INT128) && defined(BOOST_HAS_FLOAT128)
+      static_assert(std::numeric_limits<T>::is_iec559 || std::is_same<T, BOOST_MATH_FLOAT128_TYPE>::value,
+         "Attempting to compile Layout_IEEE754Linear with 128 bit floating point type without IEEE 754 "
+         "support for this type. Consider including a header file containing the required "
+         "`std::numeric_limits` specializations such as: #include <boost/multiprecision/float128.hpp>");
+#endif
       static_assert(std::numeric_limits<T>::is_iec559, "Type must be IEEE 754 floating point.");
       static_assert(std::is_unsigned<U>::value, "U must be an unsigned integer type.");
       static_assert(sizeof(T) == sizeof(U), "Type and uint size must be the same.");
@@ -133,12 +136,11 @@ namespace ieee754_linear {
 
       // Layout: 128 bit linear
 #if defined(BOOST_HAS_INT128) && defined(BOOST_HAS_FLOAT128)
-      // NOTE: returns Layout_IEEE754Linear<__float128, ...> instead of Layout_IEEE754Linear<T, ...>
-      //       in order to work with boost::multiprecision::float128, which is a wrapper
-      //       around __float128.
+      // NOTE: returns Layout_IEEE754Linear<BOOST_MATH_FLOAT128_TYPE, ...> instead of Layout_IEEE754Linear<T, ...>
+      //       in order to work with non-trivial types that wrap trivial 128 bit floating point types.
       template <typename T>
-      static typename std::enable_if<IsFloat128::value<T>(), Layout_IEEE754Linear<__float128, boost::uint128_type>>::type
-      get_layout() { return Layout_IEEE754Linear<__float128, boost::uint128_type>(); }
+      static typename std::enable_if<IsFloat128::value<T>(), Layout_IEEE754Linear<BOOST_MATH_FLOAT128_TYPE, boost::uint128_type>>::type
+      get_layout() { return Layout_IEEE754Linear<BOOST_MATH_FLOAT128_TYPE, boost::uint128_type>(); }
 
       template <typename T>
       static constexpr bool is_layout_nonlinear() {
