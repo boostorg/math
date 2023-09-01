@@ -393,14 +393,14 @@ T ibeta_power_terms(T a,
          else
          {
             // This protects against spurious overflow in a/b:
-            T p1 = (b1 < 1) && (b < 1) && (tools::max_value<T>() * b < a) ? 0 : pow(b1, a / b);
+            T p1 = (b1 < 1) && (b < 1) && (tools::max_value<T>() * b < a) ? static_cast<T>(0) : static_cast<T>(pow(b1, a / b));
             T l3 = (p1 != 0) && (b2 != 0) ? (log(p1) + log(b2)) * b : tools::max_value<T>();  // arbitrary large value if the logs would fail!
             if((l3 < tools::log_max_value<T>())
                && (l3 > tools::log_min_value<T>()))
             {
                result *= pow(p1 * b2, b);
             }
-            else if(result)  // we can elude the calculation below if we're already going to be zero
+            else if(result != 0)  // we can elude the calculation below if we're already going to be zero
             {
                l2 += l1 + log(result);
                if(l2 >= tools::log_max_value<T>())
@@ -696,7 +696,7 @@ T ibeta_series(T a, T b, T x, T s0, const Lanczos&, bool normalised, T* p_deriva
          //
          // Oh dear, we need logs, and this *will* cancel:
          //
-         if (result)  // elude calculation when result will be zero.
+         if (result != 0)  // elude calculation when result will be zero.
          {
             result = log(result) + l1 + l2 + (log(agh) - 1) / 2;
             if (p_derivative)
