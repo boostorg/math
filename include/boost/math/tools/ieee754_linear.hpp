@@ -13,7 +13,14 @@
 #include <type_traits>
 
 #include <boost/math/tools/config.hpp>  // For BOOST_MATH_FLOAT128_TYPE
-#include <boost/cstdfloat.hpp>  // For numeric_limits support for 128 bit floats
+
+// Support a specialization of std::numeric_limits<> for the wrapped quadmath library
+// (if available) and required for the 128 bit version to function.
+#if defined(BOOST_HAS_INT128) && defined(BOOST_HAS_FLOAT128)
+#if !defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_LIMITS)
+  #include <boost/math/cstdfloat/cstdfloat_limits.hpp>
+#endif
+#endif
 
 namespace boost {
 namespace math {
