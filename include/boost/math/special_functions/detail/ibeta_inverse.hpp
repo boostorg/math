@@ -825,7 +825,21 @@ T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T* py)
          std::swap(p, q);
          invert = !invert;
       }
-      if(pow(p, 1/a) < 0.5)
+      if (a < tools::min_value<T>())
+      {
+         // Avoid spurious overflows for denorms:
+         if (p < 1)
+         {
+            x = 1;
+            y = 0;
+         }
+         else
+         {
+            x = 0;
+            y = 1;
+         }
+      }
+      else if(pow(p, 1/a) < 0.5)
       {
 #ifndef BOOST_NO_EXCEPTIONS
          try 

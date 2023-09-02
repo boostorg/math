@@ -589,7 +589,8 @@ namespace detail {
    #ifdef BOOST_MATH_INSTRUMENT
          std::cout << "Second order root iteration, delta = " << delta << ", residual = " << f0 << "\n";
    #endif
-         T convergence = fabs(delta / delta2);
+         // We need to avoid delta/delta2 overflowing here:
+         T convergence = (fabs(delta2) > 1) || (fabs(tools::max_value<T>() * delta2) > fabs(delta)) ? fabs(delta / delta2) : tools::max_value<T>();
          if ((convergence > 0.8) && (convergence < 2))
          {
             // last two steps haven't converged.
