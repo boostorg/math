@@ -11,6 +11,7 @@
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
+#include <boost/math/special_functions/next.hpp>  // for has_denorm_now
 #include <boost/math/tools/stats.hpp>
 #include <boost/math/tools/test.hpp>
 #include <boost/math/constants/constants.hpp>
@@ -319,7 +320,7 @@ void test_spots(T, const char* name)
       BOOST_CHECK(sign == -1);
    }
 
-   if(std::numeric_limits<T>::has_denorm && std::numeric_limits<T>::has_infinity && (boost::math::isinf)(1 / std::numeric_limits<T>::denorm_min()))
+   if(boost::math::detail::has_denorm_now<T>() && std::numeric_limits<T>::has_infinity && (boost::math::isinf)(1 / std::numeric_limits<T>::denorm_min()))
    {
       BOOST_CHECK_EQUAL(boost::math::tgamma(-std::numeric_limits<T>::denorm_min()), -std::numeric_limits<T>::infinity());
       BOOST_CHECK_EQUAL(boost::math::tgamma(std::numeric_limits<T>::denorm_min()), std::numeric_limits<T>::infinity());
@@ -336,7 +337,7 @@ void test_spots(T, const char* name)
    //
    // Super small values may cause spurious overflow:
    //
-   if (std::numeric_limits<T>::is_specialized && std::numeric_limits<T>::has_denorm)
+   if (std::numeric_limits<T>::is_specialized && boost::math::detail::has_denorm_now<T>())
    {
       T value = (std::numeric_limits<T>::min)();
       while (value != 0)

@@ -491,7 +491,7 @@ void test_spots(RealType)
   }
 
   // denorm - but might be == min or zero?
-  if (std::numeric_limits<RealType>::has_denorm == true)
+  if (boost::math::detail::has_denorm_now<RealType>())
   { // Might also return infinity like z == 0?
     BOOST_CHECK_THROW(lambert_wm1(std::numeric_limits<RealType>::denorm_min()), std::overflow_error);
   }
