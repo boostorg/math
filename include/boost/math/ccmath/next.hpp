@@ -101,7 +101,7 @@ constexpr T get_smallest_value(const std::false_type&)
 template <typename T>
 constexpr T get_smallest_value()
 {
-    return get_smallest_value<T>(std::integral_constant<bool, std::numeric_limits<T>::is_specialized)>());
+    return get_smallest_value<T>(std::integral_constant<bool, std::numeric_limits<T>::is_specialized>());
 }
 
 template <typename T>
