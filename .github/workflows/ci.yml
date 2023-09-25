@@ -276,7 +276,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        standard: [ 14, 17, 20 ]
+        toolset: [ msvc-14.3, clang-win ]
+        standard: [ 14, 17, latest ]
         suite: [ github_ci_block_1, github_ci_block_2 ]
     steps:
       - uses: actions/checkout@v3
