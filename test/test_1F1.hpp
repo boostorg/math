@@ -162,7 +162,7 @@ void test_spots5(T, const char* type_name)
 template <class T>
 void test_spots6(T, const char* type_name)
 {
-   static const std::array<std::array<T, 4>, 183> hypergeometric_1F1_bugs = { {
+   static const std::array<std::array<T, 4>, 186> hypergeometric_1F1_bugs = { {
         { { static_cast<double>(17955.561660766602), static_cast<double>(9.6968994205831605e-09), static_cast<double>(-82.406154185533524), SC_(6.98056008378736714088730927132364938220428678e-11) }},
         { { static_cast<double>(17955.561660766602), static_cast<double>(-9.6968994205831605e-09), static_cast<double>(-82.406154185533524), SC_(-6.98055306629610746072607353939306734740549551e-11) }},
         { { static_cast<double>(-17955.561660766602), static_cast<double>(-9.6968994205831605e-09), static_cast<double>(82.406154185533524), SC_(-42897094853118832762870100.8669248353530950866) }} ,
@@ -390,6 +390,11 @@ void test_spots6(T, const char* type_name)
       { { -28, 28, 28, SC_(-6.2125286411657869483728921158018766e-9) } }, 
       { { -29, 29, 29, SC_(-1.3521578972057573423569167878458172e-9) } }, 
       {{ -30, 30, 30, SC_(8.2238878884841599031462003461115991e-10) } },
+
+      // https://github.com/boostorg/math/issues/1034
+      {{ 13, 1.5f, 61, SC_(1.35508577094765660270265300640877455638098585524020525369044e39)}},
+      {{ 13, 1.5f - T(1)/128, 61, SC_(1.40067238333701986992154961431485209677766220602448290643906e39)}},
+      {{ 13, 1.5f + T(1)/128, 61, SC_(1.31105748771677778012064837998217769289913724450105998963999e39)}},
    } };
    static const std::array<std::array<T, 4>, 2> hypergeometric_1F1_big_bugs = { {
 #if DBL_MAX_EXP == LDBL_MAX_EXP
