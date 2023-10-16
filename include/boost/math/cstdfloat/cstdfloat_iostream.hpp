@@ -442,7 +442,7 @@
       if(isneg) { x = -x; }
 
       float_type t;
-      float_type ten = 10;
+      constexpr float_type ten = 10;
 
       eval_log10(t, x);
       eval_floor(t, t);
@@ -571,7 +571,7 @@
 
     if((p == static_cast<const char*>(0U)) || (*p == static_cast<char>(0)))
     {
-      return;
+      return false;
     }
 
     bool is_neg       = false;
