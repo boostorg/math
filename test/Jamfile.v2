@@ -909,6 +909,8 @@ test-suite new_floats :
    [ compile compile_test/float32.cpp ]
    [ compile compile_test/float64.cpp ]
    [ compile compile_test/float128.cpp ]
+   [ run test_float_io.cpp : : : [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <define>BOOST_MATH_TEST_FLOAT128 <linkflags>"-Bstatic -lquadmath -Bdynamic" ] ]
+   [ run test_float_io.cpp : : : <define>BOOST_MATH_TEST_IO_AS_INTEL_QUAD=1 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <define>BOOST_MATH_TEST_FLOAT128 <linkflags>"-Bstatic -lquadmath -Bdynamic" ] : test_float_io_quad ]
 ;
 
 test-suite mp :
