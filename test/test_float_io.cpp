@@ -19,11 +19,13 @@
 #include <sstream>
 #include <iomanip>
 
+#ifdef BOOST_FLOAT128_C
 #if defined(__INTEL_COMPILER) || defined(BOOST_MATH_TEST_IO_AS_INTEL_QUAD)
 bool has_bad_bankers_rounding(const boost::float128_t&)
 {
    return true;
 }
+#endif
 #endif
 
 template <class T>
