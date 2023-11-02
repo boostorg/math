@@ -570,13 +570,13 @@ T ibeta_power_terms(T a,
          else if (b > a)
          {
             T p = boost::math::expm1((b / a) * boost::math::log1p((y * a - x * b) / b));
-            power1 = exp(a * log1p((x * b - y * a) / a + p * (x * c / a)));
+            power1 = exp(a * boost::math::log1p((x * b - y * a) / a + p * (x * c / a)));
             power2 = 1;
          }
          else
          {
             T p = boost::math::expm1((a / b) * boost::math::log1p((x * b - y * a) / a));
-            power1 = exp(b * log1p((y * a - x * b) / b + p * (y * c / b)));
+            power1 = exp(b * boost::math::log1p((y * a - x * b) / b + p * (y * c / b)));
             power2 = 1;
          }
       }
