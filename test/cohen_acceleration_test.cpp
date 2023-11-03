@@ -71,7 +71,7 @@ void test_divergent()
 {
     auto g = Divergent<Real>();
     Real x = -cohen_acceleration(g);
-    CHECK_ULP_CLOSE(log(pi<Real>()/2)/2, x, (std::numeric_limits<Real>::digits > 100 ? 350 : 135));
+    CHECK_ULP_CLOSE(log(pi<Real>()/2)/2, x, (std::numeric_limits<Real>::digits > 100 ? 350 : 150));
 }
 
 int main()

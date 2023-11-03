@@ -16,10 +16,11 @@
 #include <boost/math/tools/config.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
+#include <boost/math/tools/is_constant_evaluated.hpp>
 
 #ifndef BOOST_NO_CXX17_IF_CONSTEXPR
-#include <boost/math/ccmath/ldexp.hpp>
 #  if !defined(BOOST_MATH_NO_CONSTEXPR_DETECTION)
+#    include <boost/math/ccmath/ldexp.hpp>
 #    define BOOST_MATH_HAS_CONSTEXPR_LDEXP
 #  endif
 #endif
