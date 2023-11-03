@@ -5,8 +5,8 @@
 //
 //  Core configuration for ccmath functions, basically will they work or not?
 
-#ifndef BOOST_MATH_CCMATH_ABS
-#define BOOST_MATH_CCMATH_ABS
+#ifndef BOOST_MATH_CCMATH_DETAIL_CONFIG
+#define BOOST_MATH_CCMATH_DETAIL_CONFIG
 
 #include <cmath>
 #include <type_traits>
