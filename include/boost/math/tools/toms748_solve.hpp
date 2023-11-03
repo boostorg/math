@@ -160,7 +160,8 @@ inline T safe_div(T num, T denom, T r)
 
    if(fabs(denom) < 1)
    {
-      if(fabs(denom * tools::max_value<T>()) <= fabs(num))
+      static const T inv_max_value = 1.0 / tools::max_value<T>();
+      if(fabs(denom) <= inv_max_value * fabs(num))
          return r;
    }
    return num / denom;

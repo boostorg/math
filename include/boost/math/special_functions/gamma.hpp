@@ -1795,7 +1795,8 @@ T gamma_p_derivative_imp(T a, T x, const Policy& pol)
    //
    typedef typename lanczos::lanczos<T, Policy>::type lanczos_type;
    T f1 = detail::regularised_gamma_prefix(a, x, pol, lanczos_type());
-   if((x < 1) && (tools::max_value<T>() * x < f1))
+   static const T inv_max_value = 1.0 / tools::max_value<T>();
+   if((x < 1) && (x < inv_max_value * f1))
    {
       // overflow:
       return policies::raise_overflow_error<T>("boost::math::gamma_p_derivative<%1%>(%1%, %1%)", nullptr, pol);
