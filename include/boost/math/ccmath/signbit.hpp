@@ -8,8 +8,8 @@
 
 #include <cstdint>
 #include <boost/math/tools/assert.hpp>
-#include <boost/math/special_functions/detail/fp_traits.hpp>
 #include <boost/math/ccmath/detail/config.hpp>
+#include <boost/math/special_functions/detail/fp_traits.hpp>
 #include <boost/math/ccmath/isnan.hpp>
 #include <boost/math/ccmath/abs.hpp>
 
