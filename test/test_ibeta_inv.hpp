@@ -8,6 +8,7 @@
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
 #include <boost/test/tools/floating_point_comparison.hpp>
+#include <boost/math/special_functions/next.hpp>  // for has_denorm_now
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/tools/stats.hpp>
 #include <boost/math/tools/test.hpp>
@@ -305,7 +306,7 @@ void test_spots(T)
       BOOST_MATH_CHECK_THROW(::boost::math::ibeta_inv(static_cast<T>(2.125), -n, static_cast<T>(0.125)), std::domain_error);
       BOOST_MATH_CHECK_THROW(::boost::math::ibeta_inv(static_cast<T>(2.125), static_cast<T>(1.125), -n), std::domain_error);
    }
-   if (std::numeric_limits<T>::has_denorm)
+   if (boost::math::detail::has_denorm_now<T>())
    {
       T m = std::numeric_limits<T>::denorm_min();
       T small = 2 * (std::numeric_limits<T>::min)();

@@ -320,6 +320,15 @@ void test_spots(RealType)
       BOOST_CHECK(boost::math::isnan(pdf(d2, 0.5)));
       BOOST_CHECK(boost::math::isnan(cdf(d2, 0.5)));
    }
+
+   // Bug cases, 
+   // https://github.com/scipy/scipy/issues/19348
+   //
+   {
+      distro1 d(8.0f, 8.5f);
+      BOOST_CHECK_CLOSE(pdf(d, -1), static_cast<RealType>(6.1747948083757028903541988987716621647020752431287e-20), 2e-5);  // Can we do better on accuracy here?
+   }
+
 } // template <class RealType>void test_spots(RealType)
 
 template <class T>

@@ -169,6 +169,7 @@ test-suite special_fun :
    [ run git_issue_810.cpp ../../test/build//boost_unit_test_framework  ]
    [ run git_issue_826.cpp ../../test/build//boost_unit_test_framework  ]
    [ run git_issue_961.cpp ]
+   [ run git_issue_1006.cpp ]
    [ run special_functions_test.cpp ../../test/build//boost_unit_test_framework  ]
    [ run test_airy.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
    [ run test_bessel_j.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
@@ -908,6 +909,8 @@ test-suite new_floats :
    [ compile compile_test/float32.cpp ]
    [ compile compile_test/float64.cpp ]
    [ compile compile_test/float128.cpp ]
+   [ run test_float_io.cpp : : : [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <define>BOOST_MATH_TEST_FLOAT128 <linkflags>"-Bstatic -lquadmath -Bdynamic" ] ]
+   [ run test_float_io.cpp : : : <define>BOOST_MATH_TEST_IO_AS_INTEL_QUAD=1 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <define>BOOST_MATH_TEST_FLOAT128 <linkflags>"-Bstatic -lquadmath -Bdynamic" ] : test_float_io_quad ]
 ;
 
 test-suite mp :
@@ -983,7 +986,7 @@ test-suite misc :
    [ run centered_continued_fraction_test.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] ]
    [ run luroth_expansion_test.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] ]
    [ run engel_expansion_test.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] ]
-   [ run test_classify.cpp pch ../../test/build//boost_unit_test_framework  ]
+   [ run test_classify.cpp pch ../../test/build//boost_unit_test_framework : : : <toolset>msvc:<cxxflags>/bigobj ]
    [ run test_error_handling.cpp ../../test/build//boost_unit_test_framework  ]
    [ run legendre_stieltjes_test.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_range_based_for ] [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]  ]
    [ run test_minima.cpp pch ../../test/build//boost_unit_test_framework  ]

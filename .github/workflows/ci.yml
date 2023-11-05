@@ -25,7 +25,7 @@ jobs:
       fail-fast: false
       matrix:
         compiler: [ g++-12, clang++-14 ]
-        standard: [ c++14, c++17, c++20 ]
+        standard: [ c++14, c++17 ]
         suite: [ github_ci_block_1, github_ci_block_2 ]
     steps:
       - uses: actions/checkout@v3
@@ -181,6 +181,7 @@ jobs:
         shell: cmd
     env:
       ARGS: toolset=${{ matrix.toolset }} address-model=64 cxxstd=${{ matrix.standard }}
+      ARGSLATEST: toolset=${{ matrix.toolset }} address-model=64 cxxstd=latest
     strategy:
       fail-fast: false
       matrix:
@@ -214,8 +215,13 @@ jobs:
       - name: Config info
         run: config_info_travis
         working-directory: ../boost-root/libs/config/test
-      - name: Test
+      - name: Test std-14 vc140 and std-14-17 vc142
+        if: ${{ matrix.toolset != 'msvc-14.0' || matrix.standard != '17' }}
         run: ..\..\..\b2 --hash %ARGS% define=CI_SUPPRESS_KNOWN_ISSUES debug-symbols=off ${{ matrix.suite }} pch=off
+        working-directory: ../boost-root/libs/math/test
+      - name: Test std-latest vc140
+        if: ${{ matrix.toolset == 'msvc-14.0' && matrix.standard == '17' }}
+        run: ..\..\..\b2 --hash %ARGSLATEST% define=CI_SUPPRESS_KNOWN_ISSUES debug-symbols=off ${{ matrix.suite }} pch=off
         working-directory: ../boost-root/libs/math/test
   windows_gcc:
     runs-on: windows-2019
@@ -270,7 +276,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        standard: [ 14, 17, 20 ]
+        toolset: [ msvc-14.3, clang-win ]
+        standard: [ 14, 17, latest ]
         suite: [ github_ci_block_1, github_ci_block_2 ]
     steps:
       - uses: actions/checkout@v3

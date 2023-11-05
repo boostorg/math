@@ -654,6 +654,10 @@ BOOST_AUTO_TEST_CASE( test_main )
 
    test_beta(0.1, "double");
 
+   // bug reports:
+   boost::math::skew_normal_distribution<> dist(2.0, 1.0, -2.5);
+   BOOST_CHECK(boost::math::isfinite(quantile(dist, 0.075)));
+
 #if !defined(BOOST_NO_CXX11_AUTO_DECLARATIONS) && !defined(BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX) && !defined(BOOST_NO_CXX11_LAMBDAS)
    test_complex_newton<std::complex<float>>();
    test_complex_newton<std::complex<double>>();
