@@ -58,7 +58,7 @@ jobs:
         run: cp -r $GITHUB_WORKSPACE/* libs/math
         working-directory: ../boost-root
       - name: Install deps
-        run: python tools/boostdep/depinst/depinst.py math
+        run: python tools/boostdep/depinst/depinst.py math -I libs/math/example -I libs/math/tools
         working-directory: ../boost-root
       - name: Bootstrap
         run: ./bootstrap.sh
@@ -116,7 +116,7 @@ jobs:
         run: cp -r $GITHUB_WORKSPACE/* libs/math
         working-directory: ../boost-root
       - name: Install deps
-        run: python tools/boostdep/depinst/depinst.py math
+        run: python tools/boostdep/depinst/depinst.py math -I libs/math/example -I libs/math/tools
         working-directory: ../boost-root
       - name: Bootstrap
         run: ./bootstrap.sh
@@ -157,7 +157,7 @@ jobs:
         run: cp -r $GITHUB_WORKSPACE/* libs/math
         working-directory: ../boost-root
       - name: Install deps
-        run: python tools/boostdep/depinst/depinst.py math
+        run: python tools/boostdep/depinst/depinst.py math -I libs/math/example -I libs/math/tools
         working-directory: ../boost-root
       - name: Bootstrap
         run: ./bootstrap.sh
@@ -201,7 +201,7 @@ jobs:
         run: xcopy /s /e /q %GITHUB_WORKSPACE% libs\math
         working-directory: ../boost-root
       - name: Install deps
-        run: python tools/boostdep/depinst/depinst.py math
+        run: python tools/boostdep/depinst/depinst.py math -I libs/math/example -I libs/math/tools
         working-directory: ../boost-root
       - name: Bootstrap
         run: bootstrap
@@ -249,7 +249,7 @@ jobs:
         run: xcopy /s /e /q %GITHUB_WORKSPACE% libs\math
         working-directory: ../boost-root
       - name: Install deps
-        run: python tools/boostdep/depinst/depinst.py math
+        run: python tools/boostdep/depinst/depinst.py math -I libs/math/example -I libs/math/tools
         working-directory: ../boost-root
       - name: Bootstrap
         run: bootstrap
@@ -292,7 +292,7 @@ jobs:
         run: xcopy /s /e /q %GITHUB_WORKSPACE% libs\math
         working-directory: ../boost-root
       - name: Install deps
-        run: python tools/boostdep/depinst/depinst.py math
+        run: python tools/boostdep/depinst/depinst.py math -I libs/math/example -I libs/math/tools
         working-directory: ../boost-root
       - name: Bootstrap
         run: bootstrap
@@ -336,7 +336,7 @@ jobs:
       - name: Copy files
         run: C:\\tools\\cygwin\\bin\\bash -l -c 'cd $(cygpath -u "$GITHUB_WORKSPACE") && cp -r * ../boost-root/libs/math'
       - name: Install deps
-        run: C:\\tools\\cygwin\\bin\\bash -l -c 'cd $(cygpath -u "$GITHUB_WORKSPACE")/../boost-root && python tools/boostdep/depinst/depinst.py math'
+        run: C:\\tools\\cygwin\\bin\\bash -l -c 'cd $(cygpath -u "$GITHUB_WORKSPACE")/../boost-root && python tools/boostdep/depinst/depinst.py math -I libs/math/example -I libs/math/tools'
       - name: Bootstrap
         run: C:\\tools\\cygwin\\bin\\bash -l -c 'cd $(cygpath -u "$GITHUB_WORKSPACE")/../boost-root && ./bootstrap.sh'
       - name: Generate headers
@@ -466,7 +466,7 @@ jobs:
         run: cp -r $GITHUB_WORKSPACE/* libs/math
         working-directory: ../boost-root
       - name: Install deps
-        run: python tools/boostdep/depinst/depinst.py math
+        run: python tools/boostdep/depinst/depinst.py math -I libs/math/example -I libs/math/tools
         working-directory: ../boost-root
       - name: Bootstrap
         run: ./bootstrap.sh
