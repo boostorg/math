@@ -8,14 +8,15 @@
 #ifndef BOOST_MATH_CCMATH_ABS
 #define BOOST_MATH_CCMATH_ABS
 
-#include <boost/math/tools/assert.hpp>
 #include <boost/math/ccmath/detail/config.hpp>
-#include <boost/math/ccmath/isnan.hpp>
-#include <boost/math/ccmath/isinf.hpp>
 
 #ifdef BOOST_MATH_NO_CCMATH
 #error "The header <boost/math/abs.hpp> can only be used in C++17 and later."
 #endif
+
+#include <boost/math/tools/assert.hpp>
+#include <boost/math/ccmath/isnan.hpp>
+#include <boost/math/ccmath/isinf.hpp>
 
 namespace boost::math::ccmath {
 

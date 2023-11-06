@@ -7,13 +7,14 @@
 #define BOOST_MATH_ISNORMAL_HPP
 
 #include <boost/math/ccmath/detail/config.hpp>
+
+#ifdef BOOST_MATH_NO_CCMATH
+#error "The header <boost/math/isnormal.hpp> can only be used in C++17 and later."
+#endif
+
 #include <boost/math/ccmath/abs.hpp>
 #include <boost/math/ccmath/isinf.hpp>
 #include <boost/math/ccmath/isnan.hpp>
-
-#ifdef BOOST_MATH_NO_CCMATH
-#error "The header <boost/math/abs.hpp> can only be used in C++17 and later."
-#endif
 
 namespace boost::math::ccmath {
 

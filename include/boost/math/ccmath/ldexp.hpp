@@ -7,8 +7,13 @@
 #ifndef BOOST_MATH_CCMATH_LDEXP_HPP
 #define BOOST_MATH_CCMATH_LDEXP_HPP
 
-#include <stdexcept>
 #include <boost/math/ccmath/detail/config.hpp>
+
+#ifdef BOOST_MATH_NO_CCMATH
+#error "The header <boost/math/ldexp.hpp> can only be used in C++17 and later."
+#endif
+
+#include <stdexcept>
 #include <boost/math/ccmath/abs.hpp>
 #include <boost/math/ccmath/isinf.hpp>
 #include <boost/math/ccmath/isnan.hpp>
