@@ -15,10 +15,28 @@
 #include <boost/math/tools/is_standalone.hpp>
 
 #ifndef BOOST_MATH_STANDALONE
+
 #include <boost/config.hpp>
 #ifdef BOOST_NO_CXX17_IF_CONSTEXPR
 #  define BOOST_MATH_NO_CCMATH
 #endif
+
+#else // BOOST_MATH_STANDALONE
+
+#if defined(_MSC_VER)
+
+#if defined(_MSVC_LANG) && (_MSVC_LANG < 201703)
+#  define BOOST_MATH_NO_CCMATH
+#endif
+
+#else // _MSC_VER
+
+#if (__cplusplus < 201703)
+#  define BOOST_MATH_NO_CCMATH
+#endif
+
+#endif
+
 #endif
 
 #ifndef _MSC_VER

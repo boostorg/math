@@ -8,14 +8,15 @@
 
 #include <stdexcept>
 #include <boost/math/ccmath/detail/config.hpp>
-#include <boost/math/ccmath/abs.hpp>
-#include <boost/math/ccmath/isinf.hpp>
-#include <boost/math/ccmath/isnan.hpp>
-#include <boost/math/ccmath/modf.hpp>
 
 #ifdef BOOST_MATH_NO_CCMATH
 #error "The header <boost/math/round.hpp> can only be used in C++17 and later."
 #endif
+
+#include <boost/math/ccmath/abs.hpp>
+#include <boost/math/ccmath/isinf.hpp>
+#include <boost/math/ccmath/isnan.hpp>
+#include <boost/math/ccmath/modf.hpp>
 
 namespace boost::math::ccmath {
 
