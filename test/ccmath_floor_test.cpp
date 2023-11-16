@@ -45,6 +45,10 @@ constexpr void test()
     constexpr T third_max_floor = boost::math::ccmath::floor(T((std::numeric_limits<T>::max)() / 3));
     static_assert(third_max_floor == (std::numeric_limits<T>::max)() / 3);
     assert(third_max_floor == std::floor((std::numeric_limits<T>::max)() / 3));
+
+    constexpr T one_over_eps = boost::math::ccmath::floor(1 / T(std::numeric_limits<T>::epsilon()));
+    static_assert(one_over_eps == 1 / T(std::numeric_limits<T>::epsilon()));
+    assert(one_over_eps == std::floor(1 / T(std::numeric_limits<T>::epsilon())));
 }
 
 #if !defined(BOOST_MATH_NO_CONSTEXPR_DETECTION) && !defined(BOOST_MATH_USING_BUILTIN_CONSTANT_P)
