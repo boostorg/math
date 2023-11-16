@@ -212,7 +212,10 @@ namespace boost
                }
                pois *= i / l2;
                beta -= xterm;
-               xterm *= (a + i - 1) / (x * (a + b + i - 2));
+               if (a + b + i - 2 != 0)
+               {
+                   xterm *= (a + i - 1) / (x * (a + b + i - 2));
+               }
             }
             return sum;
          }
