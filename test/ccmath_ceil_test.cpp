@@ -37,6 +37,14 @@ constexpr void test()
     static_assert(boost::math::ccmath::ceil(T(2.9)) == T(3));
     static_assert(boost::math::ccmath::ceil(T(-2.7)) == T(-2));
     static_assert(boost::math::ccmath::ceil(T(-2)) == T(-2));
+
+    constexpr T half_max_ceil = boost::math::ccmath::ceil(T((std::numeric_limits<T>::max)() / 2));
+    static_assert(half_max_ceil == (std::numeric_limits<T>::max)() / 2);
+    assert(half_max_ceil == std::ceil((std::numeric_limits<T>::max)() / 2));
+
+    constexpr T third_max_ceil = boost::math::ccmath::ceil(T((std::numeric_limits<T>::max)() / 3));
+    static_assert(third_max_ceil == (std::numeric_limits<T>::max)() / 3);
+    assert(third_max_ceil == std::ceil((std::numeric_limits<T>::max)() / 3));
 }
 
 #if !defined(BOOST_MATH_NO_CONSTEXPR_DETECTION) && !defined(BOOST_MATH_USING_BUILTIN_CONSTANT_P)
