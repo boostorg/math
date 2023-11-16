@@ -40,15 +40,15 @@ constexpr void test()
 
     constexpr T half_max_ceil = boost::math::ccmath::ceil(T((std::numeric_limits<T>::max)() / 2));
     static_assert(half_max_ceil == (std::numeric_limits<T>::max)() / 2);
-    assert(half_max_ceil == std::ceil((std::numeric_limits<T>::max)() / 2));
+    BOOST_MATH_ASSERT(half_max_ceil == std::ceil((std::numeric_limits<T>::max)() / 2));
 
     constexpr T third_max_ceil = boost::math::ccmath::ceil(T((std::numeric_limits<T>::max)() / 3));
     static_assert(third_max_ceil == (std::numeric_limits<T>::max)() / 3);
-    assert(third_max_ceil == std::ceil((std::numeric_limits<T>::max)() / 3));
+    BOOST_MATH_ASSERT(third_max_ceil == std::ceil((std::numeric_limits<T>::max)() / 3));
 
     constexpr T one_over_eps = boost::math::ccmath::ceil(1 / T(std::numeric_limits<T>::epsilon()));
     static_assert(one_over_eps == 1 / T(std::numeric_limits<T>::epsilon()));
-    assert(one_over_eps != std::ceil(1 / T(std::numeric_limits<T>::epsilon())))
+    BOOST_MATH_ASSERT(one_over_eps == std::ceil(1 / T(std::numeric_limits<T>::epsilon())));
 }
 
 #if !defined(BOOST_MATH_NO_CONSTEXPR_DETECTION) && !defined(BOOST_MATH_USING_BUILTIN_CONSTANT_P)
