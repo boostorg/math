@@ -21,37 +21,37 @@ namespace boost
    { 
 
    template <class T, class Policy>
-   typename tools::promote_args<T>::type trunc(const T& v, const Policy& pol);
+   constexpr typename tools::promote_args<T>::type trunc(const T& v, const Policy& pol);
    template <class T>
-   typename tools::promote_args<T>::type trunc(const T& v);
+   constexpr typename tools::promote_args<T>::type trunc(const T& v);
    template <class T, class Policy>
-   int itrunc(const T& v, const Policy& pol);
+   constexpr int itrunc(const T& v, const Policy& pol);
    template <class T>
-   int itrunc(const T& v);
+   constexpr int itrunc(const T& v);
    template <class T, class Policy>
-   long ltrunc(const T& v, const Policy& pol);
+   constexpr long ltrunc(const T& v, const Policy& pol);
    template <class T>
-   long ltrunc(const T& v);
+   constexpr long ltrunc(const T& v);
    template <class T, class Policy>
-   long long lltrunc(const T& v, const Policy& pol);
+   constexpr long long lltrunc(const T& v, const Policy& pol);
    template <class T>
-   long long lltrunc(const T& v);
+   constexpr long long lltrunc(const T& v);
    template <class T, class Policy>
-   typename tools::promote_args<T>::type round(const T& v, const Policy& pol);
+   constexpr typename tools::promote_args<T>::type round(const T& v, const Policy& pol);
    template <class T>
-   typename tools::promote_args<T>::type round(const T& v);
+   constexpr typename tools::promote_args<T>::type round(const T& v);
    template <class T, class Policy>
-   int iround(const T& v, const Policy& pol);
+   constexpr int iround(const T& v, const Policy& pol);
    template <class T>
-   int iround(const T& v);
+   constexpr int iround(const T& v);
    template <class T, class Policy>
-   long lround(const T& v, const Policy& pol);
+   constexpr long lround(const T& v, const Policy& pol);
    template <class T>
-   long lround(const T& v);
+   constexpr long lround(const T& v);
    template <class T, class Policy>
-   long long llround(const T& v, const Policy& pol);
+   constexpr long long llround(const T& v, const Policy& pol);
    template <class T>
-   long long llround(const T& v);
+   constexpr long long llround(const T& v);
    template <class T, class Policy>
    T modf(const T& v, T* ipart, const Policy& pol);
    template <class T>

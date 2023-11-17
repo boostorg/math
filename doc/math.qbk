@@ -9,7 +9,7 @@
     ]
     [authors [Agrawal, Nikhar], [Bikineev, Anton], [Borland, Matthew], [Bristow, Paul A.], [Holin, Hubert], [Guazzone, Marco], [Kormanyos, Christopher], [Lalande, Bruno], [Maddock, John], [Miller, Evan], [Murphy, Jeremy W.], [Pulver, Matthew], [Råde, Johan], [Sobotta, Benjamin], [Sewani, Gautam], [Thompson, Nicholas], [van den Berg, Thijs], [Walker, Daryle], [Zhang, Xiaogang]]
     [/last-revision $Date$]
-    [version 4.1.0]
+    [version 4.1.1]
 ]
 
 [template mathpart[id title]
