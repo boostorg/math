@@ -15,6 +15,7 @@
 #include <boost/math/ccmath/abs.hpp>
 #include <boost/math/ccmath/isinf.hpp>
 #include <boost/math/ccmath/isnan.hpp>
+#include <limits>
 
 namespace boost::math::ccmath {
 
@@ -23,6 +24,13 @@ namespace detail {
 template <typename T>
 inline constexpr T floor_pos_impl(T arg) noexcept
 {
+    constexpr auto max_comp_val = T(1) / std::numeric_limits<T>::epsilon();
+
+    if (arg >= max_comp_val)
+    {
+        return arg;
+    }
+
     T result = 1;
 
     if(result < arg)
