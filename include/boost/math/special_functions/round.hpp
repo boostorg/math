@@ -12,7 +12,7 @@
 #endif
 
 #include <boost/math/tools/config.hpp>
-#include <boost/math/tools/constexpr_workarounds.hpp>
+#include <boost/math/ccmath/detail/config.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
@@ -30,12 +30,12 @@ namespace boost{ namespace math{
 namespace detail{
 
 template <class T, class Policy>
-constexpr inline tools::promote_args_t<T> round(const T& v, const Policy& pol, const std::false_type&)
+inline tools::promote_args_t<T> round(const T& v, const Policy& pol, const std::false_type&)
 {
    BOOST_MATH_STD_USING
    using result_type = tools::promote_args_t<T>;
 
-   if(!BOOST_MATH_CONSTEXPR_ISFINITE(v))
+   if(!(boost::math::isfinite)(v))
    {
       return policies::raise_rounding_error("boost::math::round<%1%>(%1%)", nullptr, static_cast<result_type>(v), static_cast<result_type>(v), pol);
    }
@@ -54,18 +54,18 @@ constexpr inline tools::promote_args_t<T> round(const T& v, const Policy& pol, c
    {
       // subtract v from ceil(v) first in order to avoid rounding
       // errors on largest representable integer numbers
-      result_type c(BOOST_MATH_CONSTEXPR_CEIL(v));
+      result_type c(ceil(v));
       return T(0.5) < c - v ? c - 1 : c;
    }
    else
    {
       // see former branch
-      result_type f(BOOST_MATH_CONSTEXPR_FLOOR(v));
+      result_type f(floor(v));
       return T(0.5) < v - f ? f + 1 : f;
    }
 }
 template <class T, class Policy>
-constexpr inline tools::promote_args_t<T> round(const T& v, const Policy&, const std::true_type&)
+inline tools::promote_args_t<T> round(const T& v, const Policy&, const std::true_type&)
 {
    return v;
 }
@@ -73,12 +73,12 @@ constexpr inline tools::promote_args_t<T> round(const T& v, const Policy&, const
 } // namespace detail
 
 template <class T, class Policy>
-constexpr inline tools::promote_args_t<T> round(const T& v, const Policy& pol)
+inline tools::promote_args_t<T> round(const T& v, const Policy& pol)
 {
    return detail::round(v, pol, std::integral_constant<bool, detail::is_integer_for_rounding<T>::value>());
 }
 template <class T>
-constexpr inline tools::promote_args_t<T> round(const T& v)
+inline tools::promote_args_t<T> round(const T& v)
 {
    return round(v, policies::policy<>());
 }
@@ -96,7 +96,7 @@ constexpr inline tools::promote_args_t<T> round(const T& v)
 // https://stackoverflow.com/questions/27442885/syntax-error-with-stdnumeric-limitsmax
 //
 template <class T, class Policy>
-constexpr inline int iround(const T& v, const Policy& pol)
+inline int iround(const T& v, const Policy& pol)
 {
    BOOST_MATH_STD_USING
    using result_type = tools::promote_args_t<T>;
@@ -138,13 +138,13 @@ constexpr inline int iround(const T& v, const Policy& pol)
    return static_cast<int>(r);
 }
 template <class T>
-constexpr inline int iround(const T& v)
+inline int iround(const T& v)
 {
    return iround(v, policies::policy<>());
 }
 
 template <class T, class Policy>
-constexpr inline long lround(const T& v, const Policy& pol)
+inline long lround(const T& v, const Policy& pol)
 {
    BOOST_MATH_STD_USING
    using result_type = tools::promote_args_t<T>;
@@ -186,13 +186,13 @@ constexpr inline long lround(const T& v, const Policy& pol)
    return static_cast<long>(r);
 }
 template <class T>
-constexpr inline long lround(const T& v)
+inline long lround(const T& v)
 {
    return lround(v, policies::policy<>());
 }
 
 template <class T, class Policy>
-constexpr inline long long llround(const T& v, const Policy& pol)
+inline long long llround(const T& v, const Policy& pol)
 {
    BOOST_MATH_STD_USING
    using result_type = boost::math::tools::promote_args_t<T>;
@@ -234,7 +234,7 @@ constexpr inline long long llround(const T& v, const Policy& pol)
    return static_cast<long long>(r);
 }
 template <class T>
-constexpr inline long long llround(const T& v)
+inline long long llround(const T& v)
 {
    return llround(v, policies::policy<>());
 }

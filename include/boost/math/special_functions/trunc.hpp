@@ -14,7 +14,7 @@
 #include <type_traits>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/tools/config.hpp>
-#include <boost/math/tools/constexpr_workarounds.hpp>
+#include <boost/math/ccmath/detail/config.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/tools/is_constant_evaluated.hpp>
@@ -27,19 +27,19 @@
 namespace boost{ namespace math{ namespace detail{
 
 template <class T, class Policy>
-constexpr inline tools::promote_args_t<T> trunc(const T& v, const Policy& pol, const std::false_type&)
+inline tools::promote_args_t<T> trunc(const T& v, const Policy& pol, const std::false_type&)
 {
    BOOST_MATH_STD_USING
    using result_type = tools::promote_args_t<T>;
-   if(!BOOST_MATH_CONSTEXPR_ISFINITE(v))
+   if(!(boost::math::isfinite)(v))
    {
       return policies::raise_rounding_error("boost::math::trunc<%1%>(%1%)", nullptr, static_cast<result_type>(v), static_cast<result_type>(v), pol);
    }
-   return (v >= 0) ? static_cast<result_type>(BOOST_MATH_CONSTEXPR_FLOOR(v)) : static_cast<result_type>(BOOST_MATH_CONSTEXPR_CEIL(v));
+   return (v >= 0) ? static_cast<result_type>(floor(v)) : static_cast<result_type>(ceil(v));
 }
 
 template <class T, class Policy>
-constexpr inline tools::promote_args_t<T> trunc(const T& v, const Policy&, const std::true_type&)
+inline tools::promote_args_t<T> trunc(const T& v, const Policy&, const std::true_type&)
 {
    return v;
 }
@@ -47,12 +47,12 @@ constexpr inline tools::promote_args_t<T> trunc(const T& v, const Policy&, const
 }
 
 template <class T, class Policy>
-constexpr inline tools::promote_args_t<T> trunc(const T& v, const Policy& pol)
+inline tools::promote_args_t<T> trunc(const T& v, const Policy& pol)
 {
    return detail::trunc(v, pol, std::integral_constant<bool, detail::is_integer_for_rounding<T>::value>());
 }
 template <class T>
-constexpr inline tools::promote_args_t<T> trunc(const T& v)
+inline tools::promote_args_t<T> trunc(const T& v)
 {
    return trunc(v, policies::policy<>());
 }
@@ -70,7 +70,7 @@ constexpr inline tools::promote_args_t<T> trunc(const T& v)
 // https://stackoverflow.com/questions/27442885/syntax-error-with-stdnumeric-limitsmax
 //
 template <class T, class Policy>
-constexpr inline int itrunc(const T& v, const Policy& pol)
+inline int itrunc(const T& v, const Policy& pol)
 {
    BOOST_MATH_STD_USING
    using result_type = tools::promote_args_t<T>;
@@ -111,13 +111,13 @@ constexpr inline int itrunc(const T& v, const Policy& pol)
    return static_cast<int>(r);
 }
 template <class T>
-constexpr inline int itrunc(const T& v)
+inline int itrunc(const T& v)
 {
    return itrunc(v, policies::policy<>());
 }
 
 template <class T, class Policy>
-constexpr inline long ltrunc(const T& v, const Policy& pol)
+inline long ltrunc(const T& v, const Policy& pol)
 {
    BOOST_MATH_STD_USING
    using result_type = tools::promote_args_t<T>;
@@ -158,13 +158,13 @@ constexpr inline long ltrunc(const T& v, const Policy& pol)
    return static_cast<long>(r);
 }
 template <class T>
-constexpr inline long ltrunc(const T& v)
+inline long ltrunc(const T& v)
 {
    return ltrunc(v, policies::policy<>());
 }
 
 template <class T, class Policy>
-constexpr inline long long lltrunc(const T& v, const Policy& pol)
+inline long long lltrunc(const T& v, const Policy& pol)
 {
    BOOST_MATH_STD_USING
    using result_type = tools::promote_args_t<T>;
@@ -205,20 +205,20 @@ constexpr inline long long lltrunc(const T& v, const Policy& pol)
    return static_cast<long long>(r);
 }
 template <class T>
-constexpr inline long long lltrunc(const T& v)
+inline long long lltrunc(const T& v)
 {
    return lltrunc(v, policies::policy<>());
 }
 
 template <class T, class Policy>
-constexpr inline typename std::enable_if<std::is_constructible<int, T>::value, int>::type
+inline typename std::enable_if<std::is_constructible<int, T>::value, int>::type
    iconvert(const T& v, const Policy&)
 {
    return static_cast<int>(v);
 }
 
 template <class T, class Policy>
-constexpr inline typename std::enable_if<!std::is_constructible<int, T>::value, int>::type
+inline typename std::enable_if<!std::is_constructible<int, T>::value, int>::type
    iconvert(const T& v, const Policy& pol)
 {
    using boost::math::itrunc;
@@ -226,14 +226,14 @@ constexpr inline typename std::enable_if<!std::is_constructible<int, T>::value, 
 }
 
 template <class T, class Policy>
-constexpr inline typename std::enable_if<std::is_constructible<long, T>::value, long>::type
+inline typename std::enable_if<std::is_constructible<long, T>::value, long>::type
    lconvert(const T& v, const Policy&)
 {
    return static_cast<long>(v);
 }
 
 template <class T, class Policy>
-constexpr inline typename std::enable_if<!std::is_constructible<long, T>::value, long>::type
+inline typename std::enable_if<!std::is_constructible<long, T>::value, long>::type
    lconvert(const T& v, const Policy& pol)
 {
    using boost::math::ltrunc;
@@ -241,14 +241,14 @@ constexpr inline typename std::enable_if<!std::is_constructible<long, T>::value,
 }
 
 template <class T, class Policy>
-constexpr inline typename std::enable_if<std::is_constructible<long long, T>::value, long long>::type
+inline typename std::enable_if<std::is_constructible<long long, T>::value, long long>::type
    llconvertert(const T& v, const Policy&)
 {
    return static_cast<long long>(v);
 }
 
 template <class T, class Policy>
-constexpr inline typename std::enable_if<!std::is_constructible<long long, T>::value, long long>::type
+inline typename std::enable_if<!std::is_constructible<long long, T>::value, long long>::type
    llconvertert(const T& v, const Policy& pol)
 {
    using boost::math::lltrunc;
