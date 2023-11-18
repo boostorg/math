@@ -8,6 +8,22 @@ All old bug reports including closed ones can be viewed on Trac
 
 Recent issues on GitHub [@https://github.com/boostorg/math/issues?utf8=%E2%9C%93&q=is%3Aissue here].
 
+[h4 Math-4.1.1 (Boost-1.84)]
+
+* Improve ccmath error detection.
+* Remove use of deprecated std::numeric_limits<>::has_denorm, see [@https://github.com/boostorg/math/issues/1028 1028].
+* Correct non-convergence bug in non-central-t distribution, see [@https://github.com/boostorg/math/issues/1035 1035].
+* Adjust Bessel function approximation to [sub 1]F[sub 1] to avoid taking tgamma at a negative integer, see [@https://github.com/boostorg/math/issues/1034 1034].
+* Avoid spurious overflow and divide by zero in ibeta, see [@https://github.com/boostorg/math/issues/1006 1006].
+* Improve accuracy when using Sterling's approximation to tgamma, completes work started in [@https://github.com/boostorg/math/pull/1007 1007].
+* Fix inverse_discrete_quantile for large initial guesses, see [@https://github.com/boostorg/math/pull/1007 1007].
+* Improve Newton root finding, see [@https://github.com/boostorg/math/pull/1000 1000].
+* Fix median_absolute_deviation for non-zero centre, see [@https://github.com/boostorg/math/pull/997 997].
+* Fix up cstdfloat.hpp for gcc-14.
+* Update to work for the new types declared in <stdfloat>.
+* Change hypergeometric_distribution to use 64 rather than 32 bit integers to avoid unnecessary overflow and restrictions on use.
+
+
 [h4 Math-4.1.0 (Boost-1.82)]
 
 * Added Estrin's method for polynomial evaluation.
