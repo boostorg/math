@@ -162,6 +162,7 @@ math_toolkit/z_test.html
 math_toolkit/runs_test.html
 math_toolkit/ljung_box.html
 math_toolkit/linear_regression.html
+math_toolkit/chatterjee_correlation.html
 vector_functionals.html
 math_toolkit/norms.html
 special.html
