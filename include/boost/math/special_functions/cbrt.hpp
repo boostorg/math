@@ -92,9 +92,9 @@ T cbrt_imp(T z, const Policy& pol)
    if(abs(i_exp3) < std::numeric_limits<shift_type>::digits)
    {
       if(i_exp3 > 0)
-         guess *= shift_type(1u) << i_exp3;
+         guess << i_exp3;
       else
-         guess /= shift_type(1u) << -i_exp3;
+         guess >> -i_exp3;
    }
    else
    {
