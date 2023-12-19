@@ -11,6 +11,7 @@
 #include <boost/limits.hpp>
 #include <boost/math/concepts/real_concept.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
+#include <boost/math/special_functions/next.hpp>  // for has_denorm_now
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
 #include <iostream>
@@ -105,7 +106,7 @@ void test_classify(T t, const char* type)
          }
       }
    }
-   if(std::numeric_limits<T>::has_denorm)
+   if(boost::math::detail::has_denorm_now<T>())
    {
       t = (std::numeric_limits<T>::min)();
       t /= 2;

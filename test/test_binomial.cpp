@@ -716,10 +716,7 @@ void test_spots(RealType T)
 
    check_out_of_range<boost::math::binomial_distribution<RealType> >(1, 1); // (All) valid constructor parameter values.
 
-   // TODO: Generic ibeta_power_terms has accuracy issue when long
-   // double is not precise enough, causing overflow in this case.
-   if(!std::is_same<RealType, real_concept>::value ||
-      sizeof(boost::math::concepts::real_concept_base_type) > 8)
+   // See bug reported here: https://github.com/boostorg/math/pull/1007
    {
       using namespace boost::math::policies;
       typedef policy<discrete_quantile<integer_round_outwards> > Policy;

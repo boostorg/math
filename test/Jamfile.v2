@@ -169,6 +169,7 @@ test-suite special_fun :
    [ run git_issue_810.cpp ../../test/build//boost_unit_test_framework  ]
    [ run git_issue_826.cpp ../../test/build//boost_unit_test_framework  ]
    [ run git_issue_961.cpp ]
+   [ run git_issue_1006.cpp ]
    [ run special_functions_test.cpp ../../test/build//boost_unit_test_framework  ]
    [ run test_airy.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
    [ run test_bessel_j.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
@@ -895,6 +896,7 @@ test-suite distribution_tests :
    [ run git_issue_800.cpp ../../test/build//boost_unit_test_framework  ]
    [ run git_issue_845.cpp ../../test/build//boost_unit_test_framework  ]
    [ run scipy_issue_14901.cpp ../../test/build//boost_unit_test_framework ]
+   [ run scipy_issue_14901_ncf.cpp ../../test/build//boost_unit_test_framework ]
    [ run scipy_issue_15101.cpp ../../test/build//boost_unit_test_framework ]
    [ run scipy_issue_17146.cpp ../../test/build//boost_unit_test_framework  ]
    [ run scipy_issue_17388.cpp ../../test/build//boost_unit_test_framework  ]
@@ -908,6 +910,8 @@ test-suite new_floats :
    [ compile compile_test/float32.cpp ]
    [ compile compile_test/float64.cpp ]
    [ compile compile_test/float128.cpp ]
+   [ run test_float_io.cpp : : : [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <define>BOOST_MATH_TEST_FLOAT128 <linkflags>"-Bstatic -lquadmath -Bdynamic" ] ]
+   [ run test_float_io.cpp : : : <define>BOOST_MATH_TEST_IO_AS_INTEL_QUAD=1 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <define>BOOST_MATH_TEST_FLOAT128 <linkflags>"-Bstatic -lquadmath -Bdynamic" ] : test_float_io_quad ]
 ;
 
 test-suite mp :
