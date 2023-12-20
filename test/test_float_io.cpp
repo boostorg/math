@@ -14,7 +14,7 @@
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/random/uniform_int.hpp>
 #include <boost/detail/lightweight_test.hpp>
-#include <boost/array.hpp>
+#include <array>
 #include <iostream>
 #include <sstream>
 #include <iomanip>
@@ -295,12 +295,12 @@ template <class T>
 void test()
 {
    typedef T                                mp_t;
-   boost::array<std::ios_base::fmtflags, 9> f =
+   std::array<std::ios_base::fmtflags, 9> f =
        {{std::ios_base::fmtflags(0), std::ios_base::showpoint, std::ios_base::showpos, std::ios_base::scientific, std::ios_base::scientific | std::ios_base::showpos,
          std::ios_base::scientific | std::ios_base::showpoint, std::ios_base::fixed, std::ios_base::fixed | std::ios_base::showpoint,
          std::ios_base::fixed | std::ios_base::showpos}};
 
-   boost::array<boost::array<const char*, 13 * 9>, 40> string_data = {{
+   std::array<std::array<const char*, 13 * 9>, 40> string_data = {{
 #include "libs/math/test/string_data.ipp"
    }};
 
@@ -343,7 +343,7 @@ void test()
       val = num / denom;
    }
 
-   boost::array<const char*, 13 * 9> zeros =
+   std::array<const char*, 13 * 9> zeros =
        {{"0", "0.", "+0", "0.0e+00", "+0.0e+00", "0.0e+00", "0.0", "0.0", "+0.0", "0", "0.0", "+0", "0.00e+00", "+0.00e+00", "0.00e+00", "0.00", "0.00", "+0.00", "0", "0.00", "+0", "0.000e+00", "+0.000e+00", "0.000e+00", "0.000", "0.000", "+0.000", "0", "0.000", "+0", "0.0000e+00", "+0.0000e+00", "0.0000e+00", "0.0000", "0.0000", "+0.0000", "0", "0.0000", "+0", "0.00000e+00", "+0.00000e+00", "0.00000e+00", "0.00000", "0.00000", "+0.00000", "0", "0.00000", "+0", "0.000000e+00", "+0.000000e+00", "0.000000e+00", "0.000000", "0.000000", "+0.000000", "0", "0.000000", "+0", "0.0000000e+00", "+0.0000000e+00", "0.0000000e+00", "0.0000000", "0.0000000", "+0.0000000", "0", "0.0000000", "+0", "0.00000000e+00", "+0.00000000e+00", "0.00000000e+00", "0.00000000", "0.00000000", "+0.00000000", "0", "0.00000000", "+0", "0.000000000e+00", "+0.000000000e+00", "0.000000000e+00", "0.000000000", "0.000000000", "+0.000000000", "0", "0.000000000", "+0", "0.0000000000e+00", "+0.0000000000e+00", "0.0000000000e+00", "0.0000000000", "0.0000000000", "+0.0000000000", "0", "0.0000000000", "+0", "0.00000000000e+00", "+0.00000000000e+00", "0.00000000000e+00", "0.00000000000", "0.00000000000", "+0.00000000000", "0", "0.00000000000", "+0", "0.000000000000e+00", "+0.000000000000e+00", "0.000000000000e+00", "0.000000000000", "0.000000000000", "+0.000000000000", "0", "0.000000000000", "+0", "0.0000000000000e+00", "+0.0000000000000e+00", "0.0000000000000e+00", "0.0000000000000", "0.0000000000000", "+0.0000000000000"}};
 
    unsigned col = 0;
