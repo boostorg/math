@@ -15,6 +15,10 @@
 #include <cstddef>
 #include <utility>
 
+#ifdef _MSC_VER
+#  pragma push_macro("I")
+#endif
+
 namespace boost { namespace math { namespace tools { namespace meta_programming {
 
 // Types:
@@ -435,5 +439,9 @@ using index_sequence_for = make_integer_sequence<std::size_t, sizeof...(T)>;
 #endif 
 
 }}}} // namespaces
+
+#ifdef _MSC_VER
+#  pragma pop_macro("I")
+#endif
 
 #endif // BOOST_MATH_TOOLS_MP
