@@ -17,6 +17,7 @@
 
 #ifdef _MSC_VER
 #  pragma push_macro("I")
+#  undef I
 #endif
 
 namespace boost { namespace math { namespace tools { namespace meta_programming {
