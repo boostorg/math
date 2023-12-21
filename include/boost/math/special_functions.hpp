@@ -12,6 +12,14 @@
 #ifndef BOOST_MATH_SPECIAL_FUNCTIONS_HPP
 #define BOOST_MATH_SPECIAL_FUNCTIONS_HPP
 
+#ifdef _MSC_VER
+#  ifdef I
+#    pragma push_macro("I")
+#    define BOOST_MATH_PUSHED_I
+#    undef I 
+#  endif
+#endif
+
 #include <boost/math/special_functions/airy.hpp>
 #include <boost/math/special_functions/acosh.hpp>
 #include <boost/math/special_functions/asinh.hpp>
@@ -82,4 +90,9 @@
 #ifndef BOOST_NO_EXCEPTIONS
 #include <boost/math/special_functions/legendre_stieltjes.hpp>
 #endif
+
+#ifdef BOOST_MATH_PUSHED_I
+#  pragma push_macro("I")
+#endif
+
 #endif // BOOST_MATH_SPECIAL_FUNCTIONS_HPP
