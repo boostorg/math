@@ -40,7 +40,7 @@ jobs:
       matrix:
         include:
           - { name: Collect coverage, coverage: yes,
-              compiler: gcc-12,     cxxstd: '20',          os: ubuntu-22.04, install: 'g++-12-multilib', address-model: '32,64' }
+              compiler: gcc-12,     cxxstd: '20',          os: ubuntu-22.04, install: 'g++-12-multilib', address-model: '64' }
 
     timeout-minutes: 120
     runs-on: ${{matrix.os}}
