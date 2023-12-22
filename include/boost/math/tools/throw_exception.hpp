@@ -10,8 +10,17 @@
 
 #ifndef BOOST_MATH_STANDALONE
 
+#if defined(_MSC_VER) || defined(__GNUC__)
+# pragma push_macro( "I" )
+# undef I
+#endif
+
 #include <boost/throw_exception.hpp>
 #define BOOST_MATH_THROW_EXCEPTION(expr) boost::throw_exception(expr);
+
+#if defined(_MSC_VER) || defined(__GNUC__)
+# pragma pop_macro( "I" )
+#endif
 
 #else // Standalone mode - use standard library facilities
 
