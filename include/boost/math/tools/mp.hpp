@@ -388,7 +388,7 @@ struct append_integer_sequence {};
 template<typename T, T... Index, T... J>
 struct append_integer_sequence<integer_sequence<T, Index...>, integer_sequence<T, J...>>
 {
-    using type = integer_sequence<T, Index..., (J + sizeof...(I))...>;
+    using type = integer_sequence<T, Index..., (J + sizeof...(Index))...>;
 };
 
 template<typename T, T N>
