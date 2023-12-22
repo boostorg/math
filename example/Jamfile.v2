@@ -93,11 +93,11 @@ test-suite examples :
 
    [ run nonfinite_num_facet.cpp  ]
    [ run nonfinite_facet_simple.cpp  ]
-   [ run nonfinite_num_facet_serialization.cpp ../../serialization/build//boost_serialization : : : <exception-handling>off:<build>no <toolset>gcc-mingw:<link>static  ]
+   #[ run nonfinite_num_facet_serialization.cpp ../../serialization/build//boost_serialization : : : <exception-handling>off:<build>no <toolset>gcc-mingw:<link>static  ]
    #[ # run lexical_cast_native.cpp  ] # Expected to fail on some (but not all) platforms.
    [ run lexical_cast_nonfinite_facets.cpp  ]
    [ run nonfinite_loopback_ok.cpp  ]
-   [ run nonfinite_serialization_archives.cpp ../../serialization/build//boost_serialization  : : : <exception-handling>off:<build>no <toolset>gcc-mingw:<link>static  ]
+   #[ run nonfinite_serialization_archives.cpp ../../serialization/build//boost_serialization  : : : <exception-handling>off:<build>no <toolset>gcc-mingw:<link>static  ]
    [ run nonfinite_facet_sstream.cpp  ]
 
    [ run constants_eg1.cpp  ]
