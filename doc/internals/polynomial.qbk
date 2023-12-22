@@ -21,7 +21,7 @@
       polynomial(){}
       template <class U>
       polynomial(const U* data, unsigned order);
-      template <class I>
+      template <class Iterator>
       polynomial(I first, I last);
       template <class U>
       explicit polynomial(const U& point, 

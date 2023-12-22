@@ -7,6 +7,7 @@
 
 #include <complex.h>
 #include <boost/math/special_functions.hpp>
+#include <boost/math/distributions.hpp>
 
 int main()
 {

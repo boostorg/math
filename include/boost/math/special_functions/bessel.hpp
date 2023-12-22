@@ -112,9 +112,9 @@ T cyl_bessel_j_imp(T v, T x, const bessel_no_int_tag& t, const Policy& pol)
             "Got x = %1%, but we need x >= 0", x, pol);
    }
 
-   T j, y;
-   bessel_jy(v, x, &j, &y, need_j, pol);
-   return j;
+   T result_J, y;
+   bessel_jy(v, x, &result_J, &y, need_j, pol);
+   return result_J;
 }
 
 template <class T, class Policy>
@@ -221,9 +221,9 @@ T cyl_bessel_i_imp(T v, T x, const Policy& pol)
    }
    if((v > 0) && (x / v < 0.25))
       return bessel_i_small_z_series(v, x, pol);
-   T I, K;
-   bessel_ik(v, x, &I, &K, need_i, pol);
-   return I;
+   T result_I, result_K;
+   bessel_ik(v, x, &result_I, &result_K, need_i, pol);
+   return result_I;
 }
 
 template <class T, class Policy>
@@ -244,9 +244,9 @@ inline T cyl_bessel_k_imp(T v, T x, const bessel_no_int_tag& /* t */, const Poli
          function,
          "Got x = %1%, but we need x > 0", x, pol);
    }
-   T I, K;
-   bessel_ik(v, x, &I, &K, need_k, pol);
-   return K;
+   T result_I, result_K;
+   bessel_ik(v, x, &result_I, &result_K, need_k, pol);
+   return result_K;
 }
 
 template <class T, class Policy>
@@ -282,8 +282,8 @@ inline T cyl_neumann_imp(T v, T x, const bessel_no_int_tag&, const Policy& pol)
                function,
                "Got x = %1%, but result is complex for x <= 0", x, pol);
    }
-   T j, y;
-   bessel_jy(v, x, &j, &y, need_y, pol);
+   T result_J, y;
+   bessel_jy(v, x, &result_J, &y, need_y, pol);
    //
    // Post evaluation check for internal overflow during evaluation,
    // can occur when x is small and v is large, in which case the result
