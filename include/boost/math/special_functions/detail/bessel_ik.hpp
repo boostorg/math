@@ -77,7 +77,7 @@ inline T bessel_i_small_z_series(T v, T x, const Policy& pol)
    return prefix * result;
 }
 
-// Calculate result_K(v, x) and result_K(v+1, x) by method analogous to
+// Calculate K(v, x) and K(v+1, x) by method analogous to
 // Temme, Journal of Computational Physics, vol 21, 343 (1976)
 template <typename T, typename Policy>
 int temme_ik(T v, T x, T* result_K, T* K1, const Policy& pol)
@@ -200,7 +200,7 @@ int CF1_ik(T v, T x, T* fv, const Policy& pol)
     return 0;
 }
 
-// Calculate result_K(v, x) and result_K(v+1, x) by evaluating continued fraction
+// Calculate K(v, x) and K(v+1, x) by evaluating continued fraction
 // z1 / z0 = U(v+1.5, 2v+1, 2x) / U(v+0.5, 2v+1, 2x), see
 // Thompson and Barnett, Computer Physics Communications, vol 47, 245 (1987)
 template <typename T, typename Policy>
@@ -374,7 +374,7 @@ int bessel_ik(T v, T x, T* result_I, T* result_K, int kind, const Policy& pol)
     current = Ku1;
     T scale = 1;
     T scale_sign = 1;
-    for (k = 1; k <= n; k++)                   // forward recurrence for result_K
+    for (k = 1; k <= n; k++)                   // forward recurrence for K
     {
         T fact = 2 * (u + k) / x;
         // Check for overflow: if (max - |prev|) / fact > max, then overflow

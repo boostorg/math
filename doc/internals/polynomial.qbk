@@ -22,7 +22,7 @@
       template <class U>
       polynomial(const U* data, unsigned order);
       template <class Iterator>
-      polynomial(I first, I last);
+      polynomial(Iterator first, Iterator last);
       template <class U>
       explicit polynomial(const U& point, 
             typename std::enable_if<std::is_convertible<U, T> >::type* = nullptr);
