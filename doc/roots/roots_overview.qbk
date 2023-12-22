@@ -21,6 +21,7 @@ There are several fully-worked __root_finding_examples, including:
 [include quartic_roots.qbk]
 [include root_finding_examples.qbk]
 [include minima.qbk]
+[include differential_evolution.qbk]
 [include root_comparison.qbk]
 
 [/ roots_overview.qbk
