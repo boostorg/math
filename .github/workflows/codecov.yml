@@ -181,7 +181,8 @@ jobs:
 
       - name: Run tests
         if: '!matrix.coverity'
-        run: ci/build.sh
+        run: ../../../b2 toolset=${{ matrix.compiler }} cxxstd=${{ matrix.cxxstd }} ${{ matrix.suite }} define=CI_SUPPRESS_KNOWN_ISSUES define=SLOW_COMPILER cxxflags=-fkeep-static-functions --coverage' linkflags=--coverage address-model=64 link=shared variant=debug -j5
+        working-directory: ../boost-root/libs/math/test
 
       - name: Upload coverage
         if: matrix.coverage
