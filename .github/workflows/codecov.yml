@@ -39,8 +39,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { name: Collect coverage, coverage: yes,
-              compiler: gcc-12,     cxxstd: '20',          os: ubuntu-22.04, install: 'g++-12-multilib', address-model: '64' }
+          - { name: Collect coverage 1, coverage: yes,
+              compiler: gcc-12,     cxxstd: '20',          os: ubuntu-22.04, install: 'g++-12-multilib', address-model: '64', suite: 'github_ci_block_1' }
+          - { name: Collect coverage 2, coverage: yes,
+            compiler: gcc-12,     cxxstd: '20',          os: ubuntu-22.04, install: 'g++-12-multilib', address-model: '64', suite: 'github_ci_block_2' }
 
     timeout-minutes: 360
     runs-on: ${{matrix.os}}
@@ -170,7 +172,7 @@ jobs:
           # B2_VARIANT: ${{matrix.variant}}
           # Set the (B2) target(s) to build, defaults to the test folder of the current library
           # Can alternatively be done like this in the build step or in the build command of the build step, e.g. `run: B2_TARGETS=libs/$SELF/doc ci/build.sh`
-          # B2_TARGETS: libs/foo/test//bar
+          B2_TARGETS: ${{ matrix.suite }}
         run: source ci/github/install.sh
 
       - name: Setup coverage collection
