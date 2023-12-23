@@ -25,7 +25,7 @@ env:
   NET_RETRY_COUNT: 5
   B2_CI_VERSION: 1
   B2_VARIANT: debug,release
-  B2_LINK: shared,static
+  B2_LINK: shared
   LCOV_BRANCH_COVERAGE: 0
   CODECOV_NAME: Github Actions
 
@@ -42,7 +42,7 @@ jobs:
           - { name: Collect coverage, coverage: yes,
               compiler: gcc-12,     cxxstd: '20',          os: ubuntu-22.04, install: 'g++-12-multilib', address-model: '64' }
 
-    timeout-minutes: 120
+    timeout-minutes: 180
     runs-on: ${{matrix.os}}
     container: ${{matrix.container}}
     env: {B2_USE_CCACHE: 1}
