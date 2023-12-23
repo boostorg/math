@@ -20,4 +20,7 @@ comment:
 # See https://docs.codecov.com/docs/ignoring-paths
 ignore:
   - extra/**/*
-  # - test/**/*
+  - reporting/**/*
+  - example/**/*
+  - include_private/**/*
+  - tools/**/*
