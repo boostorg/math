@@ -39,11 +39,20 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { name: Collect coverage 1, coverage: yes,
-              compiler: gcc-12,     cxxstd: '20',          os: ubuntu-22.04, install: 'g++-12-multilib', address-model: '64', suite: 'github_ci_block_1' }
-          - { name: Collect coverage 2, coverage: yes,
-            compiler: gcc-12,     cxxstd: '20',          os: ubuntu-22.04, install: 'g++-12-multilib', address-model: '64', suite: 'github_ci_block_2' }
-
+          - { name: Collect coverage special_fun, coverage: yes,
+              compiler: gcc-12,     cxxstd: '20',          os: ubuntu-22.04, install: 'g++-12-multilib', address-model: '64', suite: 'special_fun' }
+          - { name: Collect coverage distribution_tests, coverage: yes,
+              compiler: gcc-12,     cxxstd: '20',          os: ubuntu-22.04, install: 'g++-12-multilib', address-model: '64', suite: 'distribution_tests' }
+          - { name: Collect coverage mp, coverage: yes,
+              compiler: gcc-12,     cxxstd: '20',          os: ubuntu-22.04, install: 'g++-12-multilib', address-model: '64', suite: 'mp' }
+          - { name: Collect coverage misc, coverage: yes,
+              compiler: gcc-12,     cxxstd: '20',          os: ubuntu-22.04, install: 'g++-12-multilib', address-model: '64', suite: 'misc' }
+          - { name: Collect coverage quadrature, coverage: yes,
+              compiler: gcc-12,     cxxstd: '20',          os: ubuntu-22.04, install: 'g++-12-multilib', address-model: '64', suite: 'quadrature' }
+          - { name: Collect coverage interpolators, coverage: yes,
+              compiler: gcc-12,     cxxstd: '20',          os: ubuntu-22.04, install: 'g++-12-multilib', address-model: '64', suite: 'interpolators' }
+          - { name: Collect coverage autodiff, coverage: yes,
+              compiler: gcc-12,     cxxstd: '20',          os: ubuntu-22.04, install: 'g++-12-multilib', address-model: '64', suite: 'autodiff' }
     timeout-minutes: 360
     runs-on: ${{matrix.os}}
     container: ${{matrix.container}}
