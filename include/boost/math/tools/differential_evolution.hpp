@@ -24,6 +24,19 @@
 
 namespace boost::math::tools {
 
+namespace detail {
+
+template <typename T, typename = void>
+struct has_resize : std::false_type {};
+
+template <typename T>
+struct has_resize<T, std::void_t<decltype(std::declval<T>().resize(size_t{}))>> : std::true_type {};
+
+template <typename T>
+constexpr bool has_resize_v = has_resize<T>::value;
+
+} //namespace detail
+
 // Storn, R., Price, K. (1997). Differential evolution-a simple and efficient heuristic for global optimization over
 // continuous spaces.
 // Journal of global optimization, 11, 341-359.
@@ -32,8 +45,8 @@ namespace boost::math::tools {
 template <typename BoundsContainer>
 class differential_evolution {
 public:
-  using BoundType = BoundsContainer::value_type;
-  using Real = BoundType::value_type;
+  using BoundType = typename BoundsContainer::value_type;
+  using Real = typename BoundType::value_type;
   differential_evolution(BoundsContainer bounds, Real F = 0.65, double crossover_ratio = 0.5, size_t NP = 200,
                          size_t max_generations = 1000, size_t threads = std::thread::hardware_concurrency())
       : bounds_{bounds}, F_{F}, CR_{crossover_ratio}, NP_{NP}, max_generations_{max_generations}, threads_{threads} {
@@ -112,9 +125,8 @@ public:
                *queries = nullptr,
           std::atomic<std::invoke_result_t<Func, ArgumentContainer>>* current_minimum_cost = nullptr
          ) {
-    constexpr bool has_resize = requires(ArgumentContainer& t) {
-        t.resize(std::declval<typename ArgumentContainer::size_type>());
-    };
+    constexpr bool has_resize = detail::has_resize_v<ArgumentContainer>;
+
     using ResultType = std::invoke_result_t<Func, ArgumentContainer>;
     using std::clamp;
     using std::round;
