@@ -1255,6 +1255,7 @@ test-suite interpolators :
    [ run compile_test/interpolators_catmull_rom_incl_test.cpp compile_test_main  : : : [ requires cxx11_hdr_array cxx11_hdr_initializer_list ] ]
    [ run compile_test/interpolators_catmull_rom_concept_test.cpp compile_test_main   : : : [ requires cxx11_hdr_array cxx11_hdr_initializer_list ] ]
    [ run test_standalone_asserts.cpp ]
+   [ run differential_evolution_test.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
 ;
 
 test-suite quadrature :
