@@ -176,7 +176,7 @@ jobs:
           B2_SANITIZE: ${{matrix.sanitize}}
           B2_STDLIB: ${{matrix.stdlib}}
           # More entries can be added in the same way, see the B2_ARGS assignment in ci/enforce.sh for the possible keys.
-          B2_DEFINES: CI_SUPPRESS_KNOWN_ISSUES=1 SLOW_COMPILER=1
+          B2_DEFINES: CI_SUPPRESS_KNOWN_ISSUES=1 SLOW_COMPILER=1 BOOST_MATH_NO_REAL_CONCEPT_TESTS=1
           # Variables set here (to non-empty) will override the top-level environment variables, e.g.
           # B2_VARIANT: ${{matrix.variant}}
           # Set the (B2) target(s) to build, defaults to the test folder of the current library
