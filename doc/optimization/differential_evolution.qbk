@@ -10,16 +10,16 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 [heading Synopsis]
 
 ``
-    #include <boost/math/tools/differential_evolution.hpp>
+    #include <boost/math/optimization/differential_evolution.hpp>
     
-    namespace boost::math::tools {
+    namespace boost::math::optimization {
 
     template <typename ArgumentContainer> struct differential_evolution_parameters {
         using Real = typename ArgumentContainer::value_type;
         ArgumentContainer lower_bounds;
         ArgumentContainer upper_bounds;
-        Real F = static_cast<Real>(0.65);
-        double crossover_ratio = 0.5;
+        Real mutation_factor = static_cast<Real>(0.65);
+        double crossover_probability = 0.5;
         // Population in each generation:
         size_t NP = 200;
         size_t max_generations = 1000;
@@ -47,8 +47,8 @@ We justify this design choice by reference to the "No free lunch" theorem of Wol
 
     `lower_bounds`: A container representing the lower bounds of the optimization space along each dimension. The `.size()` of the bounds should return the dimension of the problem.
     `upper_bounds`: A container representing the upper bounds of the optimization space along each dimension. It should have the same size of `lower_bounds`, and each element should be >= the corresponding element of `lower_bounds`.
-    `F`: The scale factor controlling the rate at which the population evolves (default is 0.65).
-    `crossover_ratio`: The crossover ratio determining the trade-off between exploration and exploitation (default is 0.5).
+    `mutation_factor`: The F or scale factor controlling the rate at which the population evolves (default is 0.65).
+    `crossover_probability`: The crossover probability determining the trade-off between exploration and exploitation (default is 0.5).
     `NP`: The population size (default is 200). Parallelization occurs over the population, so this should be "large".
     `max_generations`: The maximum number of generations for the optimization (default is 1000).
     `threads`: The number of threads to use for parallelization (default is the hardware concurrency). If the objective function is already multithreaded, then this should be set to 1 to prevent oversubscription.
@@ -64,7 +64,7 @@ The most robust way of decreasing the probability of getting stuck in a local mi
 template <typename ArgumentContainer, class Func, class URBG>
 ArgumentContainer differential_evolution(const Func cost_function,
     differential_evolution_parameters<ArgumentContainer> const &de_params,
-    URBG &g,
+    URBG &gen,
     std::invoke_result_t<Func, ArgumentContainer> value_to_reach = std::numeric_limits<std::invoke_result_t<Func, ArgumentContainer>>::quiet_NaN(),
     std::atomic<bool> *cancellation = nullptr,
     std::vector<std::pair<ArgumentContainer, std::invoke_result_t<Func, ArgumentContainer>>> *queries = nullptr,
@@ -101,6 +101,12 @@ If a compelling usecase is provided, support for the `de/x/y/z` variants can be 
 Supported termination criteria are explicit requests for termination, value-to-reach, and max generations.
 Price, Storn, and Lampinen, Section 2.8 also list population statistics and lack of accepted trials over many generations as sensible termination criteria.
 These could be supported if there is demand.
+
+Parallelization with `std::thread` does have overhead-especially for very fast function calls.
+We found that the function call needs to be roughly a microsecond for unambigous parallelization wins.
+However, we have not provided conditional parallelization as computationally inexpensive cost functions are the exception; not the rule.
+If there is a clear use case for conditional parallelization (cheap cost function in very high dimensions is a good example),
+we can provide it.
 
 [h4:references References]
 

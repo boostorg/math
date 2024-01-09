@@ -6,29 +6,72 @@
  */
 
 #include "math_unit_test.hpp"
-#include <boost/math/constants/constants.hpp>
-#include <boost/math/tools/differential_evolution.hpp>
+#include "test_functions_for_optimization.hpp"
+#include <boost/math/optimization/differential_evolution.hpp>
 #include <random>
 
-using boost::math::constants::e;
-using boost::math::constants::two_pi;
-using boost::math::tools::differential_evolution;
-using boost::math::tools::differential_evolution_parameters;
-using std::cbrt;
-using std::cos;
-using std::exp;
-using std::sqrt;
+using boost::math::optimization::differential_evolution;
+using boost::math::optimization::differential_evolution_parameters;
+using boost::math::optimization::validate_differential_evolution_parameters;
+using boost::math::optimization::detail::best_indices;
+using boost::math::optimization::detail::random_initial_population;
+using boost::math::optimization::detail::validate_initial_guess;
 
-// Taken from: https://en.wikipedia.org/wiki/Test_functions_for_optimization
-template <typename Real> Real ackley(std::array<Real, 2> const &v) {
-  Real x = v[0];
-  Real y = v[1];
-  Real arg1 = -sqrt((x * x + y * y) / 2) / 5;
-  Real arg2 = cos(two_pi<Real>() * x) + cos(two_pi<Real>() * y);
-  return -20 * exp(arg1) - exp(arg2 / 2) + 20 + e<Real>();
+void test_random_initial_population() {
+  std::array<double, 2> lower_bounds = {-5, -5};
+  std::array<double, 2> upper_bounds = {5, 5};
+  size_t n = 500;
+  std::mt19937_64 gen(12345);
+  auto population = random_initial_population(lower_bounds, upper_bounds, n, gen);
+  CHECK_EQUAL(population.size(), n);
+  for (auto const & individual : population) {
+    validate_initial_guess(individual, lower_bounds, upper_bounds);
+  }
+  // Reproducibility:
+  gen.seed(12345);
+  auto population2 = random_initial_population(lower_bounds, upper_bounds, n, gen);
+  for (size_t i = 0; i < n; ++i) {
+    for (size_t j = 0; j < 2; ++j) {
+      CHECK_EQUAL(population[i][j], population2[i][j]);
+    }
+  }
+}
+void test_nan_sorting() {
+  auto nan = std::numeric_limits<double>::quiet_NaN();
+  std::vector<double> v{-1.2, nan, -3.5, 2.3, nan, 8.7, -4.2};
+  auto indices = best_indices(v);
+  CHECK_EQUAL(indices[0], size_t(6));
+  CHECK_EQUAL(indices[1], size_t(2));
+  CHECK_EQUAL(indices[2], size_t(0));
+  CHECK_EQUAL(indices[3], size_t(3));
+  CHECK_EQUAL(indices[4], size_t(5));
+  CHECK_NAN(v[indices[5]]);
+  CHECK_NAN(v[indices[6]]);
 }
 
+void test_parameter_checks() {
+  using ArgType = std::array<double, 2>;
+  auto de_params = differential_evolution_parameters<ArgType>();
+  de_params.threads = 0;
+  bool caught = false;
+  try {
+    validate_differential_evolution_parameters(de_params);
+  } catch(std::exception const & e) {
+    caught = true;
+  }
+  CHECK_TRUE(caught);
+  caught = false;
+  de_params = differential_evolution_parameters<ArgType>();
+  de_params.NP = 1;
+  try {
+    validate_differential_evolution_parameters(de_params);
+  } catch(std::exception const & e) {
+    caught = true;
+  }
+  CHECK_TRUE(caught);
+}
 template <class Real> void test_ackley() {
+  std::cout << "Testing differential evolution on the Ackley function . . .\n";
   using ArgType = std::array<Real, 2>;
   auto de_params = differential_evolution_parameters<ArgType>();
   de_params.lower_bounds = {-5, -5};
@@ -53,13 +96,8 @@ template <class Real> void test_ackley() {
   CHECK_EQUAL(local_minima[1], Real(0));
 }
 
-template <typename Real> auto rosenbrock_saddle(std::array<Real, 2> const &v) {
-  auto x = v[0];
-  auto y = v[1];
-  return 100 * (x * x - y) * (x * x - y) + (1 - x) * (1 - x);
-}
-
 template <class Real> void test_rosenbrock_saddle() {
+  std::cout << "Testing differential evolution on the Rosenbrock saddle . . .\n";
   using ArgType = std::array<Real, 2>;
   auto de_params = differential_evolution_parameters<ArgType>();
   de_params.lower_bounds = {0.5, 0.5};
@@ -78,16 +116,8 @@ template <class Real> void test_rosenbrock_saddle() {
   CHECK_GE(std::abs(local_minima[0] - Real(1)), std::sqrt(std::numeric_limits<Real>::epsilon()));
 }
 
-template <class Real> Real rastrigin(std::vector<Real> const &v) {
-  Real A = 10;
-  Real y = 10 * v.size();
-  for (auto x : v) {
-    y += x * x - A * cos(two_pi<Real>() * x);
-  }
-  return y;
-}
-
 template <class Real> void test_rastrigin() {
+  std::cout << "Testing differential evolution on the Rastrigin function . . .\n";
   using ArgType = std::vector<Real>;
   auto de_params = differential_evolution_parameters<ArgType>();
   de_params.lower_bounds.resize(8, static_cast<Real>(-5.12));
@@ -104,44 +134,71 @@ template <class Real> void test_rastrigin() {
   CHECK_LE(rastrigin(local_minima), target_value);
 }
 
-double sphere(std::vector<float> const &v) {
-  double r = 0.0;
-  for (auto x : v) {
-    double x_ = static_cast<double>(x);
-    r += x_ * x_;
-  }
-  if (r >= 1) {
-    return std::numeric_limits<double>::quiet_NaN();
-  }
-  return r;
-}
-
 // Tests NaN return types and return type != input type:
 void test_sphere() {
+  std::cout << "Testing differential evolution on the sphere function . . .\n";
   using ArgType = std::vector<float>;
   auto de_params = differential_evolution_parameters<ArgType>();
-  de_params.lower_bounds.resize(8, -1);
-  de_params.upper_bounds.resize(8, 1);
+  de_params.lower_bounds.resize(3, -1);
+  de_params.upper_bounds.resize(3, 1);
   de_params.NP *= 10;
   de_params.max_generations *= 10;
+  de_params.crossover_probability = 0.9;
+  double target_value = 1e-8;
+  de_params.threads = 1;
   std::mt19937_64 gen(56789);
-  auto local_minima = differential_evolution(sphere, de_params, gen);
+  auto local_minima = differential_evolution(sphere, de_params, gen, target_value);
+  CHECK_LE(sphere(local_minima), target_value);
+  // Check computational reproducibility:
+  gen.seed(56789);
+  auto local_minima_2 = differential_evolution(sphere, de_params, gen, target_value);
+  for (size_t i = 0; i < local_minima.size(); ++i) {
+    CHECK_EQUAL(local_minima[i], local_minima_2[i]);
+  }
+}
+
+template<typename Real>
+void test_three_hump_camel() {
+  std::cout << "Testing differential evolution on the three hump camel . . .\n";
+  using ArgType = std::array<Real, 2>;
+  auto de_params = differential_evolution_parameters<ArgType>();
+  de_params.lower_bounds[0] = -5.0;
+  de_params.lower_bounds[1] = -5.0;
+  de_params.upper_bounds[0] = 5.0;
+  de_params.upper_bounds[1] = 5.0;
+  std::mt19937_64 gen(56789);
+  auto local_minima = differential_evolution(three_hump_camel<Real>, de_params, gen);
   for (auto x : local_minima) {
     CHECK_ABSOLUTE_ERROR(0.0f, x, 2e-4f);
   }
 }
 
-#define GCC_COMPILER (defined(__GNUC__) && !defined(__clang__))
+template<typename Real>
+void test_beale() {
+  std::cout << "Testing differential evolution on the Beale function . . .\n";
+  using ArgType = std::array<Real, 2>;
+  auto de_params = differential_evolution_parameters<ArgType>();
+  de_params.lower_bounds[0] = -5.0;
+  de_params.lower_bounds[1] = -5.0;
+  de_params.upper_bounds[0]= 5.0;
+  de_params.upper_bounds[1]= 5.0;
+  std::mt19937_64 gen(56789);
+  auto local_minima = differential_evolution(beale<Real>, de_params, gen);
+  CHECK_ABSOLUTE_ERROR(Real(3), local_minima[0], Real(2e-4));
+  CHECK_ABSOLUTE_ERROR(Real(1)/Real(2), local_minima[1], Real(2e-4));
+}
 
 int main() {
-  // GCC<=8 rejects the function call syntax we use here.
-  // Just do a workaround:
-#if !defined(GCC_COMPILER) || (defined(GCC_COMPILER) && __GNUC__ >= 9)
+
+#if defined(__clang__) || defined(_MSC_VER)
   test_ackley<float>();
   test_ackley<double>();
   test_rosenbrock_saddle<double>();
   test_rastrigin<float>();
+  test_three_hump_camel<float>();
+  test_beale<double>();
 #endif
   test_sphere();
+  test_parameter_checks();
   return boost::math::test::report_errors();
 }

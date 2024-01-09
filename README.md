@@ -38,11 +38,13 @@ All the implementations are fully generic and support the use of arbitrary "real
 
 These functions also provide the basis of support for the TR1 special functions.
 
-### Root Finding and Function Minimisation
+### Root Finding
 
 A comprehensive set of root-finding algorithms over the real line, both with derivatives and derivative free.
 
-Also function minimisation via Brent's Method.
+### Optimization
+
+Minimization of cost functions via Brent's method and differential evolution.
 
 ### Polynomials and Rational Functions
 
