@@ -361,6 +361,19 @@ bool check_equal(Real x, Real y, std::string const & filename, std::string const
 }
 
 
+bool check_true(bool condition, std::string const & filename, std::string const & function, int line)
+{
+  if (!condition) {
+    std::ios_base::fmtflags f( std::cerr.flags() );
+    std::cerr << "\033[0;31mError at " << filename << ":" << function << ":" << line << "\n";
+    std::cerr << "\033[0m  Boolean condition is not satisfied:\n";
+    std::cerr.flags(f);
+    ++detail::global_error_count;
+    return false;
+  }
+  return true;
+}
+
 int report_errors()
 {
     if (detail::global_error_count > 0)
@@ -399,5 +412,7 @@ int report_errors()
 #define CHECK_CONDITIONED_ERROR(V, W, X, Y, Z) boost::math::test::check_conditioned_error((V), (W), (X), (Y), (Z), __FILE__, __func__, __LINE__)
 
 #define CHECK_ABSOLUTE_ERROR(X, Y, Z) boost::math::test::check_absolute_error((X), (Y), (Z), __FILE__, __func__, __LINE__)
+
+#define CHECK_TRUE(X) boost::math::test::check_true((X), __FILE__, __func__, __LINE__)
 
 #endif

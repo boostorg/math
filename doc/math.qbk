@@ -724,6 +724,9 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [mathpart root_finding Root Finding \& Minimization Algorithms]
 [include roots/roots_overview.qbk]
 [endmathpart] [/mathpart roots Root Finding Algorithms]
+[mathpart optimization Optimization]
+[include optimization/differential_evolution.qbk]
+[endmathpart] [/mathpart optimization Optimization]
 
 [mathpart poly Polynomials and Rational Functions]
 [include internals/polynomial.qbk]

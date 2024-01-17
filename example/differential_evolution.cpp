@@ -5,10 +5,10 @@
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  */
 #include <iostream>
-#include <boost/math/tools/differential_evolution.hpp>
+#include <boost/math/optimization/differential_evolution.hpp>
 
-using boost::math::tools::differential_evolution_parameters;
-using boost::math::tools::differential_evolution;
+using boost::math::optimization::differential_evolution_parameters;
+using boost::math::optimization::differential_evolution;
 
 double rosenbrock(std::vector<double> const & x) {
    double result = 0;
