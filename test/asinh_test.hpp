@@ -65,6 +65,11 @@ BOOST_TEST_CASE_TEMPLATE_FUNCTION(asinh_test, T)
        BOOST_CHECK_EQUAL(boost::math::asinh(inf, pol), inf);
        BOOST_CHECK_EQUAL(boost::math::asinh(-inf, pol), -inf);
     }
+    if(std::numeric_limits<T>::has_quiet_NaN)
+    {
+       T n = std::numeric_limits<T>::quiet_NaN();
+       BOOST_CHECK_THROW(boost::math::asinh(n), std::domain_error);
+    }
 }
 
 
