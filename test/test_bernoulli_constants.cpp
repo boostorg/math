@@ -199,6 +199,11 @@ void test(const char* name)
    BOOST_MATH_CHECK_THROW(boost::math::bernoulli_b2n<T>(overflow_index, boost::math::policies::make_policy(boost::math::policies::overflow_error<boost::math::policies::throw_on_error>())), std::overflow_error);
    BOOST_MATH_CHECK_THROW(boost::math::tangent_t2n<T>(overflow_index, boost::math::policies::make_policy(boost::math::policies::overflow_error<boost::math::policies::throw_on_error>())), std::overflow_error);
 #endif
+   BOOST_MATH_CHECK_THROW(boost::math::bernoulli_b2n<T>(-1), std::domain_error);
+   BOOST_MATH_CHECK_THROW(boost::math::tangent_t2n<T>(-1), std::domain_error);
+   std::vector<T> v;
+   BOOST_MATH_CHECK_THROW(boost::math::bernoulli_b2n<T>(-1, 5, std::back_inserter(v)), std::domain_error);
+   BOOST_MATH_CHECK_THROW(boost::math::tangent_t2n<T>(-1, 5, std::back_inserter(v)), std::domain_error);
 }
 
 void test_real_concept_extra()

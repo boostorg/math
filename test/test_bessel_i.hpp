@@ -176,5 +176,15 @@ void test_bessel(T, const char* name)
 
     if(0 != static_cast<T>(ldexp(0.5, -700)))
       do_test_cyl_bessel_i<T>(iv_large_data, name, "Bessel Iv: Mathworld Data (large values)");
+
+    //
+    // Special cases for full coverage:
+    //
+    BOOST_CHECK_THROW(boost::math::cyl_bessel_i(T(-2.5), T(-2.5)), std::domain_error);
+    T tolerance = boost::math::tools::epsilon<T>() * 100;
+    if ((boost::math::tools::digits<T>() <= std::numeric_limits<double>::digits) && (std::numeric_limits<T>::max_exponent > 1000))
+    {
+       BOOST_CHECK_CLOSE_FRACTION(boost::math::cyl_bessel_i(T(0.5), T(710)), static_cast<T>(3.3447452278080108123142599104927325061327359278058601201179e306L), tolerance);
+    }
 }
 

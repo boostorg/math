@@ -214,5 +214,22 @@ void test_bessel(T, const char* name)
 
 #include "sph_neumann_data.ipp"
     do_test_sph_neumann_y<T>(sph_neumann_data, name, "y: Random Data");
+
+    //
+    // Additional test coverage:
+    //
+    if (std::numeric_limits<T>::has_infinity)
+    {
+       BOOST_CHECK_EQUAL(boost::math::cyl_neumann(T(0), T(0)), -std::numeric_limits<T>::infinity());
+       BOOST_CHECK_EQUAL(boost::math::sph_neumann(2, (std::numeric_limits<T>::min)() * 1.5f), -std::numeric_limits<T>::infinity());
+       T small = 5.69289e-1645L;
+       if (small != 0)
+       {
+          BOOST_CHECK_EQUAL(boost::math::sph_neumann(2, small), -std::numeric_limits<T>::infinity());
+       }
+    }
+    BOOST_CHECK_THROW(boost::math::cyl_neumann(T(0), T(-1)), std::domain_error);
+    BOOST_CHECK_THROW(boost::math::cyl_neumann(T(2), T(0)), std::domain_error);
+    BOOST_CHECK_THROW(boost::math::sph_neumann(2, T(-2)), std::domain_error);
 }
 

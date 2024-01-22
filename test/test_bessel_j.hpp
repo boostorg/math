@@ -270,5 +270,11 @@ void test_bessel(T, const char* name)
     BOOST_MATH_CHECK_THROW(boost::math::cyl_bessel_j(T(-2.5), T(0)), std::domain_error);
     BOOST_MATH_CHECK_THROW(boost::math::cyl_bessel_j(T(-2.5), T(-2)), std::domain_error);
     BOOST_MATH_CHECK_THROW(boost::math::cyl_bessel_j(T(2.5), T(-2)), std::domain_error);
+
+    //
+    // special cases for code coverage:
+    //
+    BOOST_CHECK_EQUAL(boost::math::sph_bessel(200, T(0.5)), T(3.070403008048099934928128420285169174541102108657574230431e-497L));
+    BOOST_MATH_CHECK_THROW(boost::math::sph_bessel(2, T(-2.0)), std::domain_error);
 }
 
