@@ -161,5 +161,36 @@ template <typename Real> std::vector<size_t> best_indices(std::vector<Real> cons
   return indices;
 }
 
+template<typename RandomAccessContainer>
+auto weighted_lehmer_mean(RandomAccessContainer const & values, RandomAccessContainer const & weights) {
+  if (values.size() != weights.size()) {
+    std::ostringstream oss;
+    oss << __FILE__ << ":" << __LINE__ << ":" << __func__;
+    oss << ": There must be the same number of weights as values, but got " << values.size() << " values and " << weights.size() << " weights.";
+    throw std::logic_error(oss.str());
+  }
+  if (values.size() == 0) {
+    std::ostringstream oss;
+    oss << __FILE__ << ":" << __LINE__ << ":" << __func__;
+    oss << ": There must at least one value provided.";
+    throw std::logic_error(oss.str());
+  }
+  using Real = typename RandomAccessContainer::value_type;
+  Real numerator = 0;
+  Real denominator = 0;
+  for (size_t i = 0; i < values.size(); ++i) {
+    if (weights[i] < 0 || !std::isfinite(weights[i])) {
+      std::ostringstream oss;
+      oss << __FILE__ << ":" << __LINE__ << ":" << __func__;
+      oss << ": All weights must be positive and finite, but got received weight " << weights[i] << " at index " << i << " of " << weights.size() << ".";
+      throw std::domain_error(oss.str());
+    }
+    Real tmp = weights[i]*values[i];
+    numerator += tmp*values[i];
+    denominator += tmp;
+  }
+  return numerator/denominator;
+}
+
 } // namespace boost::math::optimization::detail
 #endif
