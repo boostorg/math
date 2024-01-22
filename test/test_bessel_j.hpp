@@ -275,7 +275,7 @@ void test_bessel(T, const char* name)
     // special cases for code coverage:
     //
     T tolerance = boost::math::tools::epsilon<T>() * 2000;
-    BOOST_CHECK_CLOSE_FRACTION(boost::math::sph_bessel(200, T(0.5)), T(3.070403008048099934928128420285169174541102108657574230431e-497L), tolerance);
+    BOOST_CHECK_CLOSE_FRACTION(boost::math::sph_bessel(200, T(0.5)), SC_(3.070403008048099934928128420285169174541102108657574230431e-497), tolerance);
     BOOST_MATH_CHECK_THROW(boost::math::sph_bessel(2, T(-2.0)), std::domain_error);
 }
 

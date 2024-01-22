@@ -221,7 +221,7 @@ void test_bessel(T, const char* name)
     if (std::numeric_limits<T>::has_infinity)
     {
        BOOST_CHECK_EQUAL(boost::math::cyl_neumann(T(0), T(0)), -std::numeric_limits<T>::infinity());
-       BOOST_CHECK_EQUAL(boost::math::sph_neumann(2, (std::numeric_limits<T>::min)() * 1.5f), -std::numeric_limits<T>::infinity());
+       BOOST_CHECK_EQUAL(boost::math::sph_neumann(2, boost::math::tools::min_value<T>() * 1.5f), -std::numeric_limits<T>::infinity());
        T small = 5.69289e-1645L;
        if (small != 0)
        {
