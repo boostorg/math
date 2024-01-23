@@ -274,7 +274,7 @@ inline T cyl_neumann_imp(T v, T x, const bessel_no_int_tag&, const Policy& pol)
    if(x <= 0)
    {
       return (v == 0) && (x == 0) ?
-         policies::raise_overflow_error<T>(function, nullptr, pol)
+         -policies::raise_overflow_error<T>(function, nullptr, pol)
          : policies::raise_domain_error<T>(function, "Got x = %1%, but result is complex for x <= 0", x, pol);
    }
    T result_J, y; // LCOV_EXCL_LINE
