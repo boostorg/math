@@ -1257,6 +1257,7 @@ test-suite interpolators :
    [ run test_standalone_asserts.cpp ]
    [ run differential_evolution_test.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
    [ run jso_test.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
+   [ run random_search_test.cpp : : : [ requires cxx17_if_constexpr cxx17_std_apply ] ]
 ;
 
 test-suite quadrature :

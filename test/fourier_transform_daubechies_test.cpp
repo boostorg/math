@@ -142,7 +142,6 @@ void test_ten_lectures_eq_5_1_19() {
 
            sum += tpl;
            sum += tml;
-           Real term = tpl + tml;
            ++l;
        }
        // With arg promotion, I can get this to 13 ULPS:
