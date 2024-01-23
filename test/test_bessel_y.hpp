@@ -229,6 +229,7 @@ void test_bessel(T, const char* name)
        }
     }
     BOOST_CHECK_THROW(boost::math::cyl_neumann(T(0), T(-1)), std::domain_error);
+    BOOST_CHECK_THROW(boost::math::cyl_neumann(T(0.2), T(-1)), std::domain_error);
     BOOST_CHECK_THROW(boost::math::cyl_neumann(T(2), T(0)), std::domain_error);
     BOOST_CHECK_THROW(boost::math::sph_neumann(2, T(-2)), std::domain_error);
 }

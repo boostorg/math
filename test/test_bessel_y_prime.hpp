@@ -217,5 +217,13 @@ void test_bessel_prime(T, const char* name)
 
 #include "sph_neumann_prime_data.ipp"
     do_test_sph_neumann_y_prime<T>(sph_neumann_prime_data, name, "y': Random Data");
+
+    //
+    // More cases for full test coverage:
+    //
+    BOOST_CHECK_THROW(boost::math::cyl_neumann_prime(T(2.5), T(0)), std::domain_error);
+    BOOST_CHECK_THROW(boost::math::cyl_neumann_prime(T(2.5), T(-1)), std::domain_error);
+    BOOST_CHECK_THROW(boost::math::sph_neumann_prime(2, T(0)), std::domain_error);
+    BOOST_CHECK_THROW(boost::math::sph_neumann_prime(2, T(-1)), std::domain_error);
 }
 

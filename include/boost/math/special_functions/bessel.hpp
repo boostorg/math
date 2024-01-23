@@ -232,9 +232,7 @@ inline T cyl_bessel_k_imp(T v, T x, const bessel_no_int_tag& /* t */, const Poli
    BOOST_MATH_STD_USING
    if(x < 0)
    {
-      return policies::raise_domain_error<T>(
-         function,
-         "Got x = %1%, but we need x > 0", x, pol);
+      return policies::raise_domain_error<T>(function, "Got x = %1%, but we need x > 0", x, pol);
    }
    if(x == 0)
    {
@@ -274,7 +272,7 @@ inline T cyl_neumann_imp(T v, T x, const bessel_no_int_tag&, const Policy& pol)
    if(x <= 0)
    {
       return (v == 0) && (x == 0) ?
-         -policies::raise_overflow_error<T>(function, nullptr, pol)
+         -policies::raise_overflow_error<T>(function, nullptr, pol) // LCOV_EXCL_LINE MP case only here, not tested in code coverage as it takes too long.
          : policies::raise_domain_error<T>(function, "Got x = %1%, but result is complex for x <= 0", x, pol);
    }
    T result_J, y; // LCOV_EXCL_LINE
@@ -488,8 +486,7 @@ inline T cyl_neumann_zero_imp(T v, int m, const Policy& pol)
 
    if(number_of_iterations >= policies::get_max_root_iterations<Policy>())
    {
-      return policies::raise_evaluation_error<T>(function, "Unable to locate root in a reasonable time:"
-         "  Current best guess is %1%", yvm, Policy());
+      return policies::raise_evaluation_error<T>(function, "Unable to locate root in a reasonable time: Current best guess is %1%", yvm, Policy()); //LCOV_EXCL_LINE
    }
 
    return yvm;

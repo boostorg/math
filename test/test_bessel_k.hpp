@@ -176,6 +176,7 @@ void test_bessel(T, const char* name)
     // Extra test coverage:
     //
     BOOST_CHECK_THROW(boost::math::cyl_bessel_k(T(2), T(-1)), std::domain_error);
+    BOOST_CHECK_THROW(boost::math::cyl_bessel_k(T(2.2), T(-1)), std::domain_error);
     if (std::numeric_limits<T>::has_infinity)
     {
        BOOST_CHECK_EQUAL(boost::math::cyl_bessel_k(T(0), T(0)), std::numeric_limits<T>::infinity());
