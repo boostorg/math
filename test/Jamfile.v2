@@ -1066,12 +1066,6 @@ test-suite misc :
    [ compile  compile_test/interpolators_vector_barycentric_rational_incl_test.cpp :  [ requires cxx11_smart_ptr cxx11_defaulted_functions cxx11_auto_declarations ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ compile  compile_test/interpolators_whittaker_shannon_incl_test.cpp :  [ requires cxx11_smart_ptr cxx11_defaulted_functions cxx11_auto_declarations ] [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ run  compile_test/compl_abs_incl_test.cpp compile_test_main  : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
-   [ run  compile_test/compl_acos_incl_test.cpp compile_test_main  : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
-   [ run  compile_test/compl_acosh_incl_test.cpp compile_test_main  : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
-   [ run  compile_test/compl_asin_incl_test.cpp compile_test_main  : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
-   [ run  compile_test/compl_asinh_incl_test.cpp compile_test_main  : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
-   [ run  compile_test/compl_atan_incl_test.cpp compile_test_main  : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
-   [ run  compile_test/compl_atanh_incl_test.cpp compile_test_main  : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
 
    [ run  compile_test/sf_1f0_incl_test.cpp compile_test_main  : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
    [ run  compile_test/sf_0f1_incl_test.cpp compile_test_main  : : : [ check-target-builds ../config//is_ci_sanitizer_run "Sanitizer CI run" : <build>no ] ]
@@ -1560,12 +1554,6 @@ test-suite float128_tests : [ get_float128_tests ] ;
 #
 alias no_eh_tests :
    compl_abs_incl_test
-   compl_acos_incl_test
-   compl_acosh_incl_test
-   compl_asin_incl_test
-   compl_asinh_incl_test
-   compl_atan_incl_test
-   compl_atanh_incl_test
    sf_acosh_incl_test
    sf_asinh_incl_test
    sf_atanh_incl_test

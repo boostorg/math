@@ -40,7 +40,7 @@ void test_pi_multithreaded()
     };
 
     std::vector<std::pair<Real, Real>> bounds{{Real(0), Real(1)}, {Real(0), Real(1)}};
-    Real error_goal = 0.0002;
+    auto error_goal = static_cast<Real>(0.0002);
     naive_monte_carlo<Real, decltype(g)> mc(g, bounds, error_goal,
                                           /*singular =*/ false,/* threads = */ 2, /* seed = */ 18012);
     auto task = mc.integrate();
@@ -110,14 +110,17 @@ void test_exception_from_integrand()
     std::cout << "Testing that a reasonable action is performed by the Monte-Carlo integrator when the integrand throws an exception on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
     auto g = [](std::vector<Real> const & x)->Real
     {
-        if (x[0] > 0.5 && x[0] < 0.5001)
+        if (x[0] > 0.5 && x[0] < 0.6)
         {
-            throw std::domain_error("You have done something wrong.\n");
+            std::ostringstream oss;
+            oss << __FILE__ << ":" << __LINE__ << ":" << __func__;
+            oss << ": This exception is being thrown to check exception handling in threads. If you see it, the thread did not handle it correctly!";
+            throw std::domain_error(oss.str());
         }
         return (Real) 1;
     };
 
-    std::vector<std::pair<Real, Real>> bounds{{ Real(0), Real(1)}, { Real(0), Real(1)}};
+    std::vector<std::pair<Real, Real>> bounds{{ Real(0.5), Real(0.6)}, { Real(0), Real(1)}};
     naive_monte_carlo<Real, decltype(g)> mc(g, bounds, (Real) 0.0001);
 
     bool caught_exception = false;
@@ -227,7 +230,7 @@ void test_product()
     std::cout << "Testing that product functions are integrated correctly by naive Monte-Carlo on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
     auto g = [&](std::vector<Real> const & x)->Real
     {
-        double y = 1;
+        Real y = 1;
         for (uint64_t i = 0; i < x.size(); ++i)
         {
             y *= 2*x[i];
@@ -246,7 +249,7 @@ void test_product()
     Real y = task.get();
     BOOST_CHECK_CLOSE_FRACTION(y, 1, 0.01);
     using std::pow;
-    Real exact_variance = pow(4.0/3.0, dimension) - 1;
+    Real exact_variance = pow(Real(4)/Real(3), dimension) - 1;
     BOOST_CHECK_CLOSE_FRACTION(mc.variance(), exact_variance, 0.1);
 }
 
@@ -256,7 +259,7 @@ void test_alternative_rng_1()
     std::cout << "Testing that alternative RNGs work correctly using naive Monte-Carlo on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
     auto g = [&](std::vector<Real> const & x)->Real
     {
-        double y = 1;
+        Real y = 1;
         for (uint64_t i = 0; i < x.size(); ++i)
         {
             y *= 2*x[i];
@@ -299,7 +302,7 @@ void test_alternative_rng_2()
     std::cout << "Testing that alternative RNGs work correctly using naive Monte-Carlo on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
     auto g = [&](std::vector<Real> const & x)->Real
     {
-        double y = 1;
+        Real y = 1;
         for (uint64_t i = 0; i < x.size(); ++i)
         {
             y *= 2*x[i];
@@ -339,7 +342,7 @@ void test_upper_bound_infinite()
     std::cout << "Testing that infinite upper bounds are integrated correctly by naive Monte-Carlo on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
     auto g = [](std::vector<Real> const & x)->Real
     {
-        return 1.0/(x[0]*x[0] + 1.0);
+        return Real(1)/(x[0]*x[0] + Real(1));
     };
 
     vector<pair<Real, Real>> bounds(1);
