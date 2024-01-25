@@ -728,6 +728,7 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [include optimization/differential_evolution.qbk]
 [include optimization/jso.qbk]
 [include optimization/random_search.qbk]
+[include optimization/cma_es.qbk]
 [endmathpart] [/mathpart optimization Optimization]
 
 [mathpart poly Polynomials and Rational Functions]
