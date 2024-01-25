@@ -11,6 +11,7 @@
 #include <iomanip>
 #include <cmath> // for std::isnan
 #include <string>
+#include <type_traits>
 #include <boost/math/tools/assert.hpp>
 #include <boost/math/special_functions/next.hpp>
 #include <boost/math/special_functions/trunc.hpp>
@@ -155,26 +156,28 @@ bool check_le(Real lesser, Real greater, std::string const & filename, std::stri
     using std::abs;
     using std::isnan;
 
-    if (isnan(lesser))
-    {
-        std::ios_base::fmtflags f( std::cerr.flags() );
-        std::cerr << std::setprecision(3);
-        std::cerr << "\033[0;31mError at " << filename << ":" << function << ":" << line << ":\n"
-                  << " \033[0m Lesser value is a nan\n";
-        std::cerr.flags(f);
-        ++detail::global_error_count;
-        return false;
-    }
+    if (std::is_floating_point<Real>::value) {
+        if (boost::math::isnan(lesser))
+        {
+            std::ios_base::fmtflags f( std::cerr.flags() );
+            std::cerr << std::setprecision(3);
+            std::cerr << "\033[0;31mError at " << filename << ":" << function << ":" << line << ":\n"
+                    << " \033[0m Lesser value is a nan\n";
+            std::cerr.flags(f);
+            ++detail::global_error_count;
+            return false;
+        }
 
-    if (isnan(greater))
-    {
-        std::ios_base::fmtflags f( std::cerr.flags() );
-        std::cerr << std::setprecision(3);
-        std::cerr << "\033[0;31mError at " << filename << ":" << function << ":" << line << ":\n"
-                  << " \033[0m Greater value is a nan\n";
-        std::cerr.flags(f);
-        ++detail::global_error_count;
-        return false;
+        if (boost::math::isnan(greater))
+        {
+            std::ios_base::fmtflags f( std::cerr.flags() );
+            std::cerr << std::setprecision(3);
+            std::cerr << "\033[0;31mError at " << filename << ":" << function << ":" << line << ":\n"
+                    << " \033[0m Greater value is a nan\n";
+            std::cerr.flags(f);
+            ++detail::global_error_count;
+            return false;
+        }
     }
 
     if (lesser > greater)

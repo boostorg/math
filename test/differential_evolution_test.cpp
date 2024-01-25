@@ -56,7 +56,7 @@ void test_parameter_checks() {
   bool caught = false;
   try {
     validate_differential_evolution_parameters(de_params);
-  } catch(std::exception const & e) {
+  } catch(std::exception const &) {
     caught = true;
   }
   CHECK_TRUE(caught);
@@ -65,7 +65,7 @@ void test_parameter_checks() {
   de_params.NP = 1;
   try {
     validate_differential_evolution_parameters(de_params);
-  } catch(std::exception const & e) {
+  } catch(std::exception const &) {
     caught = true;
   }
   CHECK_TRUE(caught);
@@ -129,7 +129,7 @@ template <class Real> void test_rastrigin() {
   }
 
   // By definition, the value of the function which a target value is provided must be <= target_value.
-  Real target_value = 1e-3;
+  auto target_value = static_cast<Real>(1e-3);
   local_minima = differential_evolution(rastrigin<Real>, de_params, gen, target_value);
   CHECK_LE(rastrigin(local_minima), target_value);
 }

@@ -173,10 +173,10 @@ jso(const Func cost_function, jso_parameters<ArgumentContainer> &jso_params,
   // last bullet, which claims this should be set to 0.3. The reference
   // implementation also does 0.3:
   size_t H = 5;
-  std::vector<Real> M_F(H, 0.3);
+  std::vector<Real> M_F(H, static_cast<Real>(0.3));
   // Algorithm 1: jSO algorithm, Line 4:
   // "Set all values in M_CR to 0.8":
-  std::vector<Real> M_CR(H, 0.8);
+  std::vector<Real> M_CR(H, static_cast<Real>(0.8));
 
   std::uniform_real_distribution<Real> unif01(Real(0), Real(1));
   bool keep_going = !target_attained;
@@ -203,17 +203,17 @@ jso(const Func cost_function, jso_parameters<ArgumentContainer> &jso_params,
       // I confess I find it weird to store the historical memory if we're just
       // gonna ignore it, but that's what the paper and the reference
       // implementation says!
-      Real mu_F = 0.9;
-      Real mu_CR = 0.9;
+      Real mu_F = static_cast<Real>(0.9);
+      Real mu_CR = static_cast<Real>(0.9);
       if (ri != H - 1) {
         mu_F = M_F[ri];
         mu_CR = M_CR[ri];
       }
       // Algorithm 1, jSO, Line 14-18:
-      Real crossover_probability = 0.0;
+      Real crossover_probability = static_cast<Real>(0);
       if (mu_CR >= 0) {
         using std::normal_distribution;
-        normal_distribution<Real> normal(mu_CR, 0.1);
+        normal_distribution<Real> normal(mu_CR, static_cast<Real>(0.1));
         crossover_probability = normal(gen);
         // Clamp comes from L-SHADE description:
         crossover_probability = clamp(crossover_probability, Real(0), Real(1));
@@ -233,7 +233,7 @@ jso(const Func cost_function, jso_parameters<ArgumentContainer> &jso_params,
       // Algorithm 1, jSO, Line 24-27:
       // Note the adjustments to the pseudocode given in the reference
       // implementation.
-      cauchy_distribution<Real> cauchy(mu_F, 0.1);
+      cauchy_distribution<Real> cauchy(mu_F, static_cast<Real>(0.1));
       Real F;
       do {
         F = cauchy(gen);
@@ -253,13 +253,13 @@ jso(const Func cost_function, jso_parameters<ArgumentContainer> &jso_params,
       Real p = Real(0.25) * (1 - static_cast<Real>(function_evaluations) /
                                      (2 * jso_params.max_function_evaluations));
       // Equation (4) of the reference:
-      Real Fw = 1.2 * F;
+      Real Fw = static_cast<Real>(1.2) * F;
       if (10 * function_evaluations < 4 * jso_params.max_function_evaluations) {
         if (10 * function_evaluations <
             2 * jso_params.max_function_evaluations) {
-          Fw = 0.7 * F;
+          Fw = static_cast<Real>(0.7) * F;
         } else {
-          Fw = 0.8 * F;
+          Fw = static_cast<Real>(0.8) * F;
         }
       }
       // Algorithm 1, jSO, Line 28:

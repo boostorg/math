@@ -134,7 +134,7 @@ void calculate_terms(double sigma, double a, unsigned bits)
    }
    cout << "Max n required:  " << max_n << endl;
 
-   unsigned max_k;
+   unsigned max_k = 0;
    for(unsigned k = 1; k < 10000; ++k)
    {
       double term = tools::real_cast<double>(Coeff(0, k) * pow(a, -((double)k)));
