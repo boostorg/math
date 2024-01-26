@@ -131,7 +131,7 @@ T bessel_j0(T x)
     using namespace boost::math::tools;
     using namespace boost::math::constants;
 
-    BOOST_ASSERT(x >= 0); // reflection handled elsewhere.
+    BOOST_MATH_ASSERT(x >= 0); // reflection handled elsewhere.
 
     if (x == 0)
     {

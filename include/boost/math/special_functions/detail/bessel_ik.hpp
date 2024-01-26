@@ -327,7 +327,7 @@ int bessel_ik(T v, T x, T* result_I, T* result_K, int kind, const Policy& pol)
     BOOST_MATH_INSTRUMENT_VARIABLE(n);
     BOOST_MATH_INSTRUMENT_VARIABLE(u);
 
-    BOOST_ASSERT(x > 0); // Error handling for x <= 0 handled in cyl_bessel_i and cyl_bessel_k
+    BOOST_MATH_ASSERT(x > 0); // Error handling for x <= 0 handled in cyl_bessel_i and cyl_bessel_k
 
     // x is positive until reflection
     W = 1 / x;                                 // Wronskian
