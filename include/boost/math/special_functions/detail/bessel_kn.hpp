@@ -31,12 +31,13 @@ T bessel_kn(int n, T x, const Policy& pol)
 
     if (x < 0)
     {
-       return policies::raise_domain_error<T>(function,
-            "Got x = %1%, but argument x must be non-negative, complex number result not supported.", x, pol);
+       return policies::raise_domain_error<T>(function, "Got x = %1%, but argument x must be non-negative, complex number result not supported.", x, pol);
     }
     if (x == 0)
     {
-       return policies::raise_overflow_error<T>(function, nullptr, pol);
+       return (n == 0) ? 
+          policies::raise_overflow_error<T>(function, nullptr, pol) 
+          : policies::raise_domain_error<T>(function, "Got x = %1%, but argument x must be positive, complex number result not supported.", x, pol);
     }
 
     if (n < 0)

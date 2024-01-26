@@ -180,6 +180,7 @@ T cyl_bessel_i_imp(T v, T x, const Policy& pol)
    // case has better error handling too).
    //
    BOOST_MATH_STD_USING
+   static const char* function = "boost::math::cyl_bessel_i<%1%>(%1%,%1%)";
    if(x < 0)
    {
       // better have integer v:
@@ -191,10 +192,12 @@ T cyl_bessel_i_imp(T v, T x, const Policy& pol)
          return r;
       }
       else
-         return policies::raise_domain_error<T>("boost::math::cyl_bessel_i<%1%>(%1%,%1%)", "Got x = %1%, but we need x >= 0", x, pol);
+         return policies::raise_domain_error<T>(function, "Got x = %1%, but we need x >= 0", x, pol);
    }
    if(x == 0)
    {
+      if(v < 0) 
+         return floor(v) == v ? static_cast<T>(0) : policies::raise_overflow_error<T>(function, nullptr, pol);
       return (v == 0) ? static_cast<T>(1) : static_cast<T>(0);
    }
    if(v == 0.5f)
