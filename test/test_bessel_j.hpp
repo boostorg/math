@@ -279,5 +279,6 @@ void test_bessel(T, const char* name)
     BOOST_MATH_CHECK_THROW(boost::math::sph_bessel(2, T(-2.0)), std::domain_error);
     BOOST_CHECK_EQUAL(boost::math::cyl_bessel_j(T(0), T(2.5)), boost::math::cyl_bessel_j(T(0), T(-2.5)));
     BOOST_CHECK_EQUAL(boost::math::cyl_bessel_j(T(1), T(2.5)), -boost::math::cyl_bessel_j(T(1), T(-2.5)));
+    BOOST_CHECK_CLOSE_FRACTION(boost::math::cyl_bessel_j(364, T(38.5)), SC_(1.793940496519190500748409872348034004417458734118663909894e-309), tolerance);
 }
 
