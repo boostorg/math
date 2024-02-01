@@ -218,7 +218,7 @@ void test_bessel(T, const char* name)
     //
     // Additional test coverage:
     //
-    if (std::numeric_limits<T>::has_infinity)
+    BOOST_IF_CONSTEXPR (std::numeric_limits<T>::has_infinity)
     {
        BOOST_CHECK_EQUAL(boost::math::cyl_neumann(T(0), T(0)), -std::numeric_limits<T>::infinity());
        BOOST_CHECK_EQUAL(boost::math::sph_neumann(2, boost::math::tools::min_value<T>() * 1.5f), -std::numeric_limits<T>::infinity());
@@ -227,10 +227,21 @@ void test_bessel(T, const char* name)
        {
           BOOST_CHECK_EQUAL(boost::math::sph_neumann(2, small), -std::numeric_limits<T>::infinity());
        }
+       BOOST_IF_CONSTEXPR (std::numeric_limits<T>::max_exponent <= 1024)
+       {
+          BOOST_CHECK_EQUAL(boost::math::cyl_neumann(T(121.25), T(0.25)), -std::numeric_limits<T>::infinity());
+       }
     }
     BOOST_CHECK_THROW(boost::math::cyl_neumann(T(0), T(-1)), std::domain_error);
     BOOST_CHECK_THROW(boost::math::cyl_neumann(T(0.2), T(-1)), std::domain_error);
     BOOST_CHECK_THROW(boost::math::cyl_neumann(T(2), T(0)), std::domain_error);
     BOOST_CHECK_THROW(boost::math::sph_neumann(2, T(-2)), std::domain_error);
+#if LDBL_MAX_EXP > 1024
+    if (std::numeric_limits<T>::max_exponent > 1024)
+    {
+       T tolerance = std::numeric_limits<T>::epsilon() * 400;
+       BOOST_CHECK_CLOSE_FRACTION(boost::math::cyl_neumann(T(121.25), T(0.25)), SC_(-2.230082612409607659174017669618188190008214736253939486007e308), tolerance);
+    }
+#endif
 }
 
