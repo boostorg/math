@@ -1787,13 +1787,13 @@ private:
       if (gauss_order & 1)
       {
          fp = f(value_type(0));
-         kronrod_result = fp * base::weights()[0];
-         gauss_result += fp * gauss<Real, (N - 1) / 2>::weights()[0];
+         kronrod_result = fp * static_cast<Real>(base::weights()[0]);
+         gauss_result += fp * static_cast<Real>(gauss<Real, (N - 1) / 2>::weights()[0]);
       }
       else
       {
          fp = f(value_type(0));
-         kronrod_result = fp * base::weights()[0];
+         kronrod_result = fp * static_cast<Real>(base::weights()[0]);
          gauss_start = 1;
          kronrod_start = 2;
       }
@@ -1802,16 +1802,16 @@ private:
       {
          fp = f(base::abscissa()[i]);
          fm = f(-base::abscissa()[i]);
-         kronrod_result += (fp + fm) * base::weights()[i];
-         L1 += (abs(fp) + abs(fm)) *  base::weights()[i];
-         gauss_result += (fp + fm) * gauss<Real, (N - 1) / 2>::weights()[i / 2];
+         kronrod_result += (fp + fm) * static_cast<Real>(base::weights()[i]);
+         L1 += (abs(fp) + abs(fm)) * static_cast<Real>(base::weights()[i]);
+         gauss_result += (fp + fm) * static_cast<Real>(gauss<Real, (N - 1) / 2>::weights()[i / 2]);
       }
       for (unsigned i = kronrod_start; i < base::abscissa().size(); i += 2)
       {
          fp = f(base::abscissa()[i]);
          fm = f(-base::abscissa()[i]);
-         kronrod_result += (fp + fm) * base::weights()[i];
-         L1 += (abs(fp) + abs(fm)) *  base::weights()[i];
+         kronrod_result += (fp + fm) * static_cast<Real>(base::weights()[i]);
+         L1 += (abs(fp) + abs(fm)) * static_cast<Real>(base::weights()[i]);
       }
       if (pL1)
          *pL1 = L1;

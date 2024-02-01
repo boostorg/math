@@ -1185,7 +1185,7 @@ public:
       unsigned non_zero_start = 1;
       K result = Real(0);
       if (N & 1) {
-         result = f(Real(0)) * base::weights()[0];
+         result = f(Real(0)) * static_cast<Real>(base::weights()[0]);
       }
       else {
          result = 0;
@@ -1196,8 +1196,8 @@ public:
       {
          K fp = f(base::abscissa()[i]);
          K fm = f(-base::abscissa()[i]);
-         result += (fp + fm) * base::weights()[i];
-         L1 += (abs(fp) + abs(fm)) *  base::weights()[i];
+         result += (fp + fm) * static_cast<Real>(base::weights()[i]);
+         L1 += (abs(fp) + abs(fm)) * static_cast<Real>(base::weights()[i]);
       }
       if (pL1)
          *pL1 = L1;
