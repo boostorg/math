@@ -86,9 +86,9 @@ template <class T>
 class gauss_kronrod_detail<T, 15, 0>
 {
 public:
-   static std::array<T, 8> const & abscissa()
+   static std::array<float, 8> const & abscissa()
    {
-      static constexpr std::array<T, 8> data = {
+      static constexpr std::array<float, 8> data = {
          0.000000000e+00f,
          2.077849550e-01f,
          4.058451514e-01f,
@@ -100,9 +100,9 @@ public:
       };
       return data;
    }
-   static std::array<T, 8> const & weights()
+   static std::array<float, 8> const & weights()
    {
-      static constexpr std::array<T, 8> data = {
+      static constexpr std::array<float, 8> data = {
          2.094821411e-01f,
          2.044329401e-01f,
          1.903505781e-01f,
@@ -120,9 +120,9 @@ template <class T>
 class gauss_kronrod_detail<T, 15, 1>
 {
 public:
-   static std::array<T, 8> const & abscissa()
+   static std::array<double, 8> const & abscissa()
    {
-      static constexpr std::array<T, 8> data = {
+      static constexpr std::array<double, 8> data = {
          0.00000000000000000e+00,
          2.07784955007898468e-01,
          4.05845151377397167e-01,
@@ -134,9 +134,9 @@ public:
       };
       return data;
    }
-   static std::array<T, 8> const & weights()
+   static std::array<double, 8> const & weights()
    {
-      static constexpr std::array<T, 8> data = {
+      static constexpr std::array<double, 8> data = {
          2.09482141084727828e-01,
          2.04432940075298892e-01,
          1.90350578064785410e-01,
@@ -154,9 +154,9 @@ template <class T>
 class gauss_kronrod_detail<T, 15, 2>
 {
 public:
-   static std::array<T, 8> const & abscissa()
+   static std::array<long double, 8> const & abscissa()
    {
-      static constexpr std::array<T, 8> data = {
+      static constexpr std::array<long double, 8> data = {
          0.00000000000000000000000000000000000e+00L,
          2.07784955007898467600689403773244913e-01L,
          4.05845151377397166906606412076961463e-01L,
@@ -168,9 +168,9 @@ public:
       };
       return data;
    }
-   static std::array<T, 8> const & weights()
+   static std::array<long double, 8> const & weights()
    {
-      static constexpr std::array<T, 8> data = {
+      static constexpr std::array<long double, 8> data = {
          2.09482141084727828012999174891714264e-01L,
          2.04432940075298892414161999234649085e-01L,
          1.90350578064785409913256402421013683e-01L,
@@ -189,9 +189,9 @@ template <class T>
 class gauss_kronrod_detail<T, 15, 3>
 {
 public:
-   static std::array<T, 8> const & abscissa()
+   static std::array<__float128, 8> const & abscissa()
    {
-      static const std::array<T, 8> data = {
+      static const std::array<__float128, 8> data = {
          0.00000000000000000000000000000000000e+00Q,
          2.07784955007898467600689403773244913e-01Q,
          4.05845151377397166906606412076961463e-01Q,
@@ -203,9 +203,9 @@ public:
       };
       return data;
    }
-   static std::array<T, 8> const & weights()
+   static std::array<__float128, 8> const & weights()
    {
-      static const std::array<T, 8> data = {
+      static const std::array<__float128, 8> data = {
          2.09482141084727828012999174891714264e-01Q,
          2.04432940075298892414161999234649085e-01Q,
          1.90350578064785409913256402421013683e-01Q,
@@ -258,9 +258,9 @@ template <class T>
 class gauss_kronrod_detail<T, 21, 0>
 {
 public:
-   static std::array<T, 11> const & abscissa()
+   static std::array<float, 11> const & abscissa()
    {
-      static constexpr std::array<T, 11> data = {
+      static constexpr std::array<float, 11> data = {
          0.000000000e+00f,
          1.488743390e-01f,
          2.943928627e-01f,
@@ -275,9 +275,9 @@ public:
       };
       return data;
    }
-   static std::array<T, 11> const & weights()
+   static std::array<float, 11> const & weights()
    {
-      static constexpr std::array<T, 11> data = {
+      static constexpr std::array<float, 11> data = {
          1.494455540e-01f,
          1.477391049e-01f,
          1.427759386e-01f,
@@ -298,9 +298,9 @@ template <class T>
 class gauss_kronrod_detail<T, 21, 1>
 {
 public:
-   static std::array<T, 11> const & abscissa()
+   static std::array<double, 11> const & abscissa()
    {
-      static constexpr std::array<T, 11> data = {
+      static constexpr std::array<double, 11> data = {
          0.00000000000000000e+00,
          1.48874338981631211e-01,
          2.94392862701460198e-01,
@@ -315,9 +315,9 @@ public:
       };
       return data;
    }
-   static std::array<T, 11> const & weights()
+   static std::array<double, 11> const & weights()
    {
-      static constexpr std::array<T, 11> data = {
+      static constexpr std::array<double, 11> data = {
          1.49445554002916906e-01,
          1.47739104901338491e-01,
          1.42775938577060081e-01,
@@ -338,9 +338,9 @@ template <class T>
 class gauss_kronrod_detail<T, 21, 2>
 {
 public:
-   static std::array<T, 11> const & abscissa()
+   static std::array<long double, 11> const & abscissa()
    {
-      static constexpr std::array<T, 11> data = {
+      static constexpr std::array<long double, 11> data = {
          0.00000000000000000000000000000000000e+00L,
          1.48874338981631210884826001129719985e-01L,
          2.94392862701460198131126603103865566e-01L,
@@ -355,9 +355,9 @@ public:
       };
       return data;
    }
-   static std::array<T, 11> const & weights()
+   static std::array<long double, 11> const & weights()
    {
-      static constexpr std::array<T, 11> data = {
+      static constexpr std::array<long double, 11> data = {
          1.49445554002916905664936468389821204e-01L,
          1.47739104901338491374841515972068046e-01L,
          1.42775938577060080797094273138717061e-01L,
@@ -379,9 +379,9 @@ template <class T>
 class gauss_kronrod_detail<T, 21, 3>
 {
 public:
-   static std::array<T, 11> const & abscissa()
+   static std::array<__float128, 11> const & abscissa()
    {
-      static const std::array<T, 11> data = {
+      static const std::array<__float128, 11> data = {
          0.00000000000000000000000000000000000e+00Q,
          1.48874338981631210884826001129719985e-01Q,
          2.94392862701460198131126603103865566e-01Q,
@@ -396,9 +396,9 @@ public:
       };
       return data;
    }
-   static std::array<T, 11> const & weights()
+   static std::array<__float128, 11> const & weights()
    {
-      static const std::array<T, 11> data = {
+      static const std::array<__float128, 11> data = {
          1.49445554002916905664936468389821204e-01Q,
          1.47739104901338491374841515972068046e-01Q,
          1.42775938577060080797094273138717061e-01Q,
@@ -460,9 +460,9 @@ template <class T>
 class gauss_kronrod_detail<T, 31, 0>
 {
 public:
-   static std::array<T, 16> const & abscissa()
+   static std::array<float, 16> const & abscissa()
    {
-      static constexpr std::array<T, 16> data = {
+      static constexpr std::array<float, 16> data = {
          0.000000000e+00f,
          1.011420669e-01f,
          2.011940940e-01f,
@@ -482,9 +482,9 @@ public:
       };
       return data;
    }
-   static std::array<T, 16> const & weights()
+   static std::array<float, 16> const & weights()
    {
-      static constexpr std::array<T, 16> data = {
+      static constexpr std::array<float, 16> data = {
          1.013300070e-01f,
          1.007698455e-01f,
          9.917359872e-02f,
@@ -510,9 +510,9 @@ template <class T>
 class gauss_kronrod_detail<T, 31, 1>
 {
 public:
-   static std::array<T, 16> const & abscissa()
+   static std::array<double, 16> const & abscissa()
    {
-      static constexpr std::array<T, 16> data = {
+      static constexpr std::array<double, 16> data = {
          0.00000000000000000e+00,
          1.01142066918717499e-01,
          2.01194093997434522e-01,
@@ -532,9 +532,9 @@ public:
       };
       return data;
    }
-   static std::array<T, 16> const & weights()
+   static std::array<double, 16> const & weights()
    {
-      static constexpr std::array<T, 16> data = {
+      static constexpr std::array<double, 16> data = {
          1.01330007014791549e-01,
          1.00769845523875595e-01,
          9.91735987217919593e-02,
@@ -560,9 +560,9 @@ template <class T>
 class gauss_kronrod_detail<T, 31, 2>
 {
 public:
-   static std::array<T, 16> const & abscissa()
+   static std::array<long double, 16> const & abscissa()
    {
-      static constexpr std::array<T, 16> data = {
+      static constexpr std::array<long double, 16> data = {
          0.00000000000000000000000000000000000e+00L,
          1.01142066918717499027074231447392339e-01L,
          2.01194093997434522300628303394596208e-01L,
@@ -582,9 +582,9 @@ public:
       };
       return data;
    }
-   static std::array<T, 16> const & weights()
+   static std::array<long double, 16> const & weights()
    {
-      static constexpr std::array<T, 16> data = {
+      static constexpr std::array<long double, 16> data = {
          1.01330007014791549017374792767492547e-01L,
          1.00769845523875595044946662617569722e-01L,
          9.91735987217919593323931734846031311e-02L,
@@ -611,9 +611,9 @@ template <class T>
 class gauss_kronrod_detail<T, 31, 3>
 {
 public:
-   static std::array<T, 16> const & abscissa()
+   static std::array<__float128, 16> const & abscissa()
    {
-      static const std::array<T, 16> data = {
+      static const std::array<__float128, 16> data = {
          0.00000000000000000000000000000000000e+00Q,
          1.01142066918717499027074231447392339e-01Q,
          2.01194093997434522300628303394596208e-01Q,
@@ -633,9 +633,9 @@ public:
       };
       return data;
    }
-   static std::array<T, 16> const & weights()
+   static std::array<__float128, 16> const & weights()
    {
-      static const std::array<T, 16> data = {
+      static const std::array<__float128, 16> data = {
          1.01330007014791549017374792767492547e-01Q,
          1.00769845523875595044946662617569722e-01Q,
          9.91735987217919593323931734846031311e-02Q,
@@ -712,9 +712,9 @@ template <class T>
 class gauss_kronrod_detail<T, 41, 0>
 {
 public:
-   static std::array<T, 21> const & abscissa()
+   static std::array<float, 21> const & abscissa()
    {
-      static constexpr std::array<T, 21> data = {
+      static constexpr std::array<float, 21> data = {
          0.000000000e+00f,
          7.652652113e-02f,
          1.526054652e-01f,
@@ -739,9 +739,9 @@ public:
       };
       return data;
    }
-   static std::array<T, 21> const & weights()
+   static std::array<float, 21> const & weights()
    {
-      static constexpr std::array<T, 21> data = {
+      static constexpr std::array<float, 21> data = {
          7.660071192e-02f,
          7.637786767e-02f,
          7.570449768e-02f,
@@ -772,9 +772,9 @@ template <class T>
 class gauss_kronrod_detail<T, 41, 1>
 {
 public:
-   static std::array<T, 21> const & abscissa()
+   static std::array<double, 21> const & abscissa()
    {
-      static constexpr std::array<T, 21> data = {
+      static constexpr std::array<double, 21> data = {
          0.00000000000000000e+00,
          7.65265211334973338e-02,
          1.52605465240922676e-01,
@@ -799,9 +799,9 @@ public:
       };
       return data;
    }
-   static std::array<T, 21> const & weights()
+   static std::array<double, 21> const & weights()
    {
-      static constexpr std::array<T, 21> data = {
+      static constexpr std::array<double, 21> data = {
          7.66007119179996564e-02,
          7.63778676720807367e-02,
          7.57044976845566747e-02,
@@ -832,9 +832,9 @@ template <class T>
 class gauss_kronrod_detail<T, 41, 2>
 {
 public:
-   static std::array<T, 21> const & abscissa()
+   static std::array<long double, 21> const & abscissa()
    {
-      static constexpr std::array<T, 21> data = {
+      static constexpr std::array<long double, 21> data = {
          0.00000000000000000000000000000000000e+00L,
          7.65265211334973337546404093988382110e-02L,
          1.52605465240922675505220241022677528e-01L,
@@ -859,9 +859,9 @@ public:
       };
       return data;
    }
-   static std::array<T, 21> const & weights()
+   static std::array<long double, 21> const & weights()
    {
-      static constexpr std::array<T, 21> data = {
+      static constexpr std::array<long double, 21> data = {
          7.66007119179996564450499015301017408e-02L,
          7.63778676720807367055028350380610018e-02L,
          7.57044976845566746595427753766165583e-02L,
@@ -893,9 +893,9 @@ template <class T>
 class gauss_kronrod_detail<T, 41, 3>
 {
 public:
-   static std::array<T, 21> const & abscissa()
+   static std::array<__float128, 21> const & abscissa()
    {
-      static const std::array<T, 21> data = {
+      static const std::array<__float128, 21> data = {
          0.00000000000000000000000000000000000e+00Q,
          7.65265211334973337546404093988382110e-02Q,
          1.52605465240922675505220241022677528e-01Q,
@@ -920,9 +920,9 @@ public:
       };
       return data;
    }
-   static std::array<T, 21> const & weights()
+   static std::array<__float128, 21> const & weights()
    {
-      static const std::array<T, 21> data = {
+      static const std::array<__float128, 21> data = {
          7.66007119179996564450499015301017408e-02Q,
          7.63778676720807367055028350380610018e-02Q,
          7.57044976845566746595427753766165583e-02Q,
@@ -1014,9 +1014,9 @@ template <class T>
 class gauss_kronrod_detail<T, 51, 0>
 {
 public:
-   static std::array<T, 26> const & abscissa()
+   static std::array<float, 26> const & abscissa()
    {
-      static constexpr std::array<T, 26> data = {
+      static constexpr std::array<float, 26> data = {
          0.000000000e+00f,
          6.154448301e-02f,
          1.228646926e-01f,
@@ -1046,9 +1046,9 @@ public:
       };
       return data;
    }
-   static std::array<T, 26> const & weights()
+   static std::array<float, 26> const & weights()
    {
-      static constexpr std::array<T, 26> data = {
+      static constexpr std::array<float, 26> data = {
          6.158081807e-02f,
          6.147118987e-02f,
          6.112850972e-02f,
@@ -1084,9 +1084,9 @@ template <class T>
 class gauss_kronrod_detail<T, 51, 1>
 {
 public:
-   static std::array<T, 26> const & abscissa()
+   static std::array<double, 26> const & abscissa()
    {
-      static constexpr std::array<T, 26> data = {
+      static constexpr std::array<double, 26> data = {
          0.00000000000000000e+00,
          6.15444830056850789e-02,
          1.22864692610710396e-01,
@@ -1116,9 +1116,9 @@ public:
       };
       return data;
    }
-   static std::array<T, 26> const & weights()
+   static std::array<double, 26> const & weights()
    {
-      static constexpr std::array<T, 26> data = {
+      static constexpr std::array<double, 26> data = {
          6.15808180678329351e-02,
          6.14711898714253167e-02,
          6.11285097170530483e-02,
@@ -1154,9 +1154,9 @@ template <class T>
 class gauss_kronrod_detail<T, 51, 2>
 {
 public:
-   static std::array<T, 26> const & abscissa()
+   static std::array<long double, 26> const & abscissa()
    {
-      static constexpr std::array<T, 26> data = {
+      static constexpr std::array<long double, 26> data = {
          0.00000000000000000000000000000000000e+00L,
          6.15444830056850788865463923667966313e-02L,
          1.22864692610710396387359818808036806e-01L,
@@ -1186,9 +1186,9 @@ public:
       };
       return data;
    }
-   static std::array<T, 26> const & weights()
+   static std::array<long double, 26> const & weights()
    {
-      static constexpr std::array<T, 26> data = {
+      static constexpr std::array<long double, 26> data = {
          6.15808180678329350787598242400645532e-02L,
          6.14711898714253166615441319652641776e-02L,
          6.11285097170530483058590304162927119e-02L,
@@ -1225,9 +1225,9 @@ template <class T>
 class gauss_kronrod_detail<T, 51, 3>
 {
 public:
-   static std::array<T, 26> const & abscissa()
+   static std::array<__float128, 26> const & abscissa()
    {
-      static const std::array<T, 26> data = {
+      static const std::array<__float128, 26> data = {
          0.00000000000000000000000000000000000e+00Q,
          6.15444830056850788865463923667966313e-02Q,
          1.22864692610710396387359818808036806e-01Q,
@@ -1257,9 +1257,9 @@ public:
       };
       return data;
    }
-   static std::array<T, 26> const & weights()
+   static std::array<__float128, 26> const & weights()
    {
-      static const std::array<T, 26> data = {
+      static const std::array<__float128, 26> data = {
          6.15808180678329350787598242400645532e-02Q,
          6.14711898714253166615441319652641776e-02Q,
          6.11285097170530483058590304162927119e-02Q,
@@ -1366,9 +1366,9 @@ template <class T>
 class gauss_kronrod_detail<T, 61, 0>
 {
 public:
-   static std::array<T, 31> const & abscissa()
+   static std::array<float, 31> const & abscissa()
    {
-      static constexpr std::array<T, 31> data = {
+      static constexpr std::array<float, 31> data = {
          0.000000000e+00f,
          5.147184256e-02f,
          1.028069380e-01f,
@@ -1403,9 +1403,9 @@ public:
       };
       return data;
    }
-   static std::array<T, 31> const & weights()
+   static std::array<float, 31> const & weights()
    {
-      static constexpr std::array<T, 31> data = {
+      static constexpr std::array<float, 31> data = {
          5.149472943e-02f,
          5.142612854e-02f,
          5.122154785e-02f,
@@ -1446,9 +1446,9 @@ template <class T>
 class gauss_kronrod_detail<T, 61, 1>
 {
 public:
-   static std::array<T, 31> const & abscissa()
+   static std::array<double, 31> const & abscissa()
    {
-      static constexpr std::array<T, 31> data = {
+      static constexpr std::array<double, 31> data = {
          0.00000000000000000e+00,
          5.14718425553176958e-02,
          1.02806937966737030e-01,
@@ -1483,9 +1483,9 @@ public:
       };
       return data;
    }
-   static std::array<T, 31> const & weights()
+   static std::array<double, 31> const & weights()
    {
-      static constexpr std::array<T, 31> data = {
+      static constexpr std::array<double, 31> data = {
          5.14947294294515676e-02,
          5.14261285374590259e-02,
          5.12215478492587722e-02,
@@ -1526,9 +1526,9 @@ template <class T>
 class gauss_kronrod_detail<T, 61, 2>
 {
 public:
-   static std::array<T, 31> const & abscissa()
+   static std::array<long double, 31> const & abscissa()
    {
-      static constexpr std::array<T, 31> data = {
+      static constexpr std::array<long double, 31> data = {
          0.00000000000000000000000000000000000e+00L,
          5.14718425553176958330252131667225737e-02L,
          1.02806937966737030147096751318000592e-01L,
@@ -1563,9 +1563,9 @@ public:
       };
       return data;
    }
-   static std::array<T, 31> const & weights()
+   static std::array<long double, 31> const & weights()
    {
-      static constexpr std::array<T, 31> data = {
+      static constexpr std::array<long double, 31> data = {
          5.14947294294515675583404336470993075e-02L,
          5.14261285374590259338628792157812598e-02L,
          5.12215478492587721706562826049442083e-02L,
@@ -1607,9 +1607,9 @@ template <class T>
 class gauss_kronrod_detail<T, 61, 3>
 {
 public:
-   static std::array<T, 31> const & abscissa()
+   static std::array<__float128, 31> const & abscissa()
    {
-      static const std::array<T, 31> data = {
+      static const std::array<__float128, 31> data = {
          0.00000000000000000000000000000000000e+00Q,
          5.14718425553176958330252131667225737e-02Q,
          1.02806937966737030147096751318000592e-01Q,
@@ -1644,9 +1644,9 @@ public:
       };
       return data;
    }
-   static std::array<T, 31> const & weights()
+   static std::array<__float128, 31> const & weights()
    {
-      static const std::array<T, 31> data = {
+      static const std::array<__float128, 31> data = {
          5.14947294294515675583404336470993075e-02Q,
          5.14261285374590259338628792157812598e-02Q,
          5.12215478492587721706562826049442083e-02Q,
