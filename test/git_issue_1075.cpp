@@ -7,27 +7,24 @@
 #include <boost/math/quadrature/gauss_kronrod.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
 
-template <typename T>
-auto f1(T t) {
-   return exp(-t * t / 2);
-};
-
 template <class T>
 void test()
 {
+   auto f = [](const T& x){ return exp(-x * x / 2); };
+
    T error = 0;
 
-   auto r = boost::math::quadrature::gauss_kronrod<T, 15>::integrate(&f1<T>, 0, 1, 0, 0, &error);
+   auto r = boost::math::quadrature::gauss_kronrod<T, 15>::integrate(f, 0, 1, 0, 0, &error);
    std::cout << r << std::endl;
-   r = boost::math::quadrature::gauss_kronrod<T, 21>::integrate(&f1<T>, 0, 1, 0, 0, &error);
+   r = boost::math::quadrature::gauss_kronrod<T, 21>::integrate(f, 0, 1, 0, 0, &error);
    std::cout << r << std::endl;
-   r = boost::math::quadrature::gauss_kronrod<T, 31>::integrate(&f1<T>, 0, 1, 0, 0, &error);
+   r = boost::math::quadrature::gauss_kronrod<T, 31>::integrate(f, 0, 1, 0, 0, &error);
    std::cout << r << std::endl;
-   r = boost::math::quadrature::gauss_kronrod<T, 41>::integrate(&f1<T>, 0, 1, 0, 0, &error);
+   r = boost::math::quadrature::gauss_kronrod<T, 41>::integrate(f, 0, 1, 0, 0, &error);
    std::cout << r << std::endl;
-   r = boost::math::quadrature::gauss_kronrod<T, 51>::integrate(&f1<T>, 0, 1, 0, 0, &error);
+   r = boost::math::quadrature::gauss_kronrod<T, 51>::integrate(f, 0, 1, 0, 0, &error);
    std::cout << r << std::endl;
-   r = boost::math::quadrature::gauss_kronrod<T, 61>::integrate(&f1<T>, 0, 1, 0, 0, &error);
+   r = boost::math::quadrature::gauss_kronrod<T, 61>::integrate(f, 0, 1, 0, 0, &error);
    std::cout << r << std::endl;
 }
 
