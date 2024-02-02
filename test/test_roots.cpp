@@ -19,11 +19,21 @@
 #include <boost/array.hpp>
 #include <boost/type_index.hpp>
 #include "table_type.hpp"
-#include <iostream>
 #include <iomanip>
+#include <type_traits>
 
 #include <boost/multiprecision/cpp_bin_float.hpp>
+#include <boost/multiprecision/cpp_dec_float.hpp>
 #include <boost/multiprecision/cpp_complex.hpp>
+#include <boost/math/concepts/real_concept.hpp>
+
+#ifdef BOOST_HAS_FLOAT128
+#include <boost/multiprecision/float128.hpp>
+#endif
+
+#if __has_include(<stdfloat>)
+#  include <stdfloat>
+#endif
 
 #define BOOST_CHECK_CLOSE_EX(a, b, prec, i) \
    {\
@@ -649,10 +659,149 @@ void test_failures()
 #endif
 }
 
+// Creates a vector of test values that include: zero, denorm_min, min, epsilon, max,
+// and infinity. Also includes powers of 2 ranging from 2^-15 to 2^+15 by powers of 3.
+template <typename T>
+std::vector<T> create_test_ladder() {
+   std::vector<T> v;
+
+   const auto fn_push_back_x_scaled = [&v](const T& x) {
+      const T two_thirds = T(2) / T(3);
+      const T four_thirds = T(4) / T(3);
+
+      v.push_back(x);
+      v.push_back(x * T(0.5));
+      v.push_back(x * two_thirds);
+      v.push_back(x * four_thirds);
+      v.push_back(x * T(2.0));
+   };
+
+   const auto fn_push_back_pm = [&](std::vector<T>& v, const T& x) {
+      fn_push_back_x_scaled( x);
+      fn_push_back_x_scaled(-x);
+   };
+
+   fn_push_back_pm(v, std::numeric_limits<T>::denorm_min());
+   fn_push_back_pm(v, (std::numeric_limits<T>::min)());
+   fn_push_back_pm(v, std::numeric_limits<T>::epsilon());
+
+   const int test_exp_range = 5;
+   for (int i = -test_exp_range; i < (test_exp_range + 1); ++i) {
+      const int exponent = i * 3;
+      const T x = std::ldexp(1.0, exponent);
+      fn_push_back_pm(v, x);
+   }
+   fn_push_back_pm(v, (std::numeric_limits<T>::max)());
+   fn_push_back_pm(v, std::numeric_limits<T>::infinity());
+
+   // Take unique elements of v
+   std::sort(v.begin(), v.end());
+   v.erase(std::unique(v.begin(), v.end()), v.end());
+
+   // Add both positive and negative zero
+   v.push_back(T(-0.0));
+   v.push_back(T(+0.0));
+
+   const int num_zeros = std::count(v.begin(), v.end(), T(0.0));
+   BOOST_CHECK_LE(2, num_zeros);  // Check for both positive and negative zero 
+
+   return v;
+};
+
+template <typename W, typename T>
+class TestBisect {
+public:
+   static void run() {
+      auto v = create_test_ladder<T>();
+
+      for (const W& x_i: v) {
+         for (const W& x_j: v) {
+            const W x_mid_ij = boost::math::tools::detail::Bisection::CalcMidpoint::solve(x_i, x_j);
+            test_order(static_cast<T>(x_i), static_cast<T>(x_mid_ij), static_cast<T>(x_j));
+         }
+      }
+   }
+
+   static void test_order(const T& x_i, const T& x_mid_ij, const T& x_j) {
+      const T x_lo = (std::min)(x_i, x_j);
+      const T x_hi = (std::max)(x_i, x_j);
+
+      BOOST_CHECK(x_lo <= x_mid_ij);  // NOTE: BOOST_CHECK_LE(x_lo, x_mid_ij) fails to link
+      BOOST_CHECK(x_mid_ij <= x_hi);  // NOTE: BOOST_CHECK_LE(x_mid_ij, x_hi) fails to link
+   }
+};
+
+template <typename W>
+void test_bisect() {
+   // Get layout
+   const auto layout = boost::math::tools::detail::ieee754_linear::LayoutIdentifier::get_layout<W>();
+
+   // `T` and `W` are usually the same. In the case where `W` is 
+   // `boost::multiprecision::float128`, then `W` is a wrapper and around
+   // the datatype `T = __float128`.
+   using T = typename decltype(layout)::type_float;  // Get layout float type
+   TestBisect<W, T>::run();
+}
+
+void test_bisect_all_cases() {
+   test_bisect<float>();
+   test_bisect<double>();
+   test_bisect<long double>();
+   test_bisect<boost::math::concepts::real_concept>();
+   test_bisect<boost::multiprecision::cpp_bin_float_50>();
+   test_bisect<boost::multiprecision::cpp_bin_float_100>();
+   test_bisect<boost::multiprecision::cpp_dec_float_50>();
+   test_bisect<boost::multiprecision::cpp_dec_float_100>();
+
+#if defined(BOOST_HAS_FLOAT128) && defined(BOOST_HAS_INT128)
+   test_bisect<boost::multiprecision::float128>();
+   test_bisect<__float128>();
+#endif 
+
+#if __has_include(<stdfloat>)
+#ifdef __STDCPP_FLOAT32_T__
+   test_bisect<std::float32_t>();
+#endif
+#ifdef __STDCPP_FLOAT64_T__
+   test_bisect<std::float64_t>();
+#endif 
+#endif
+}
+
+void test_count() {
+   const auto fn_newton = [](std::uintmax_t& i_max) {
+      return boost::math::tools::newton_raphson_iterate(
+         [](double x) { return std::make_pair(x * x - 3, 2 * x); },
+         10.0  /* x_initial */,
+         0.0   /* bound lower*/,
+         100.0 /* bound upper */, 52, i_max);
+   };
+
+   // Find the minimum number of iterations to find the solution
+   std::uintmax_t iter_find_solution = 100;
+   fn_newton(iter_find_solution);
+   BOOST_CHECK_EQUAL(iter_find_solution, std::uintmax_t(8));  // Confirm is 8
+
+   for (std::uintmax_t count = 0; count < (iter_find_solution * 2); count++) {
+      std::uintmax_t iters = count;
+      if (iter_find_solution <= count) {  // Finds correct answer
+         using std::sqrt;
+         BOOST_CHECK_EQUAL(fn_newton(iters), sqrt(3.0));
+         BOOST_CHECK_EQUAL(iters, iter_find_solution);
+      }
+      else {  // Throws error for running out of iterations
+         BOOST_CHECK_THROW(fn_newton(iters), boost::math::evaluation_error);
+      }
+   }
+}
+
 BOOST_AUTO_TEST_CASE( test_main )
 {
 
    test_beta(0.1, "double");
+
+   test_count();
+   test_bisect_all_cases();
 
    // bug reports:
    boost::math::skew_normal_distribution<> dist(2.0, 1.0, -2.5);

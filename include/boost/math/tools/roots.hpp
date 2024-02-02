@@ -18,11 +18,14 @@
 
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/cxx03_warn.hpp>
+#include <boost/math/tools/throw_exception.hpp>
 
 #include <boost/math/special_functions/sign.hpp>
 #include <boost/math/special_functions/next.hpp>
+#include <boost/math/tools/ieee754_linear.hpp>
 #include <boost/math/tools/toms748_solve.hpp>
 #include <boost/math/policies/error_handling.hpp>
+
 
 namespace boost {
 namespace math {
@@ -213,6 +216,279 @@ inline std::pair<T, T> bisect(F f, T min, T max, Tol tol) noexcept(policies::is_
 }
 
 
+////// Motivation for the Bisection namespace. //////
+//
+// What's the best way to bisect between a lower bound (lb) and an upper
+// bound (ub) during root finding? Let's consider options...
+//
+// Arithmetic bisection:
+//   - The natural choice, but it doesn't always work well. For example, if
+//     lb = 1.0 and ub = std::numeric_limits<float>::max(), many bisections
+//     may be needed to converge if the root is near 1.
+//
+// Geometric bisection:
+//   - This approach performs much better for the example above, but it
+//     too has issues. For example, if lb = 0.0, it gets stuck at 0.0.
+//     It also fails if lb and ub have different signs.
+//
+// In addition to the limitations outlined above, neither of these approaches
+// works if ub is infinity. We want a more robust way to handle bisection
+// for general root finding problems. That's what this namespace is for.
+//
+namespace detail {
+namespace Bisection {
+   // Midpoint calculation for floating point types that are not `Layout_IEEE754Linear`
+   template <typename T>
+   class MidpointFallback {
+   public:
+      static T solve(T x, T y) {
+         const T sign_x = sign(x);
+         const T sign_y = sign(y);
+         
+         // Sign flip return zero
+         if (sign_x * sign_y == -1) { return T(0.0); }
+
+         // At least one is positive
+         if (0 < sign_x + sign_y) { return do_solve(x, y); }
+
+         // At least one is negative
+         return -do_solve(-x, -y);
+      }
+
+   private:      
+      struct EqZero {
+         EqZero(T x) { BOOST_MATH_ASSERT_MSG(x == 0, "x must be zero.");}
+      };
+
+      struct EqInf {
+         // NOTE: (x == infinity) is checked this way to support types (e.g., boost::math::concepts::real_concept)
+         //       that have infinity, but for which this the query std::numeric_limits<T>::infinity() returns
+         //       0 due to the std::numeric_limits interface not being implemented.
+         EqInf(T x) { BOOST_MATH_ASSERT_MSG(0 < x && !(boost::math::isfinite)(x), "x must be positive infinity."); }
+      };
+
+      class PosFinite {
+      public:
+         PosFinite(T x) : x_(x) {
+            BOOST_MATH_ASSERT_MSG(0 < x, "x must be positive.");
+            BOOST_MATH_ASSERT_MSG((boost::math::isfinite)(x), "x must be finite.");
+         }
+
+         T value() const { return x_; }
+
+      private:
+         T x_;
+      };
+
+      // Two unknowns
+      static T do_solve(T x, T y) {
+         if (y < x) {
+            return do_solve(y, x);
+         }
+
+         if (x == 0) {
+            return do_solve(EqZero(x), y);  // Zero and ???
+         } else if ((boost::math::isfinite)(x)) {
+            return do_solve(PosFinite(x), y);  // Finite and ???
+         } else {
+            return x;  // Infinity and infinity
+         }
+      }
+
+      // One unknowns
+      static T do_solve(EqZero x, T y) {
+         if (y == 0) {
+            return T(0.0);  // Zero and zero
+         } else if ((boost::math::isfinite)(y)) {
+            return do_solve(x, PosFinite(y));  // Zero and finite
+         } else {
+            return T(1.5);  // Zero and infinity
+         }
+      }
+      static T do_solve(PosFinite x, T y) {
+         if ((boost::math::isfinite)(y)) {
+            return do_solve(x, PosFinite(y));  // Finite and finite
+         } else {
+            return do_solve(x, EqInf(y));  // Finite and infinity
+         }
+      }
+
+      // Zero unknowns
+      template <typename U = T>
+      static typename std::enable_if<std::numeric_limits<U>::is_specialized, T>::type
+      do_solve(PosFinite x, EqInf y) {
+          return do_solve(x, PosFinite((std::numeric_limits<U>::max)()));
+      }
+      template <typename U = T>
+      static typename std::enable_if<!std::numeric_limits<U>::is_specialized, T>::type
+      do_solve(PosFinite x, EqInf y) {
+         BOOST_MATH_THROW_EXCEPTION(std::runtime_error("infinite bounds support requires specialization"));
+         return T(0); // Unreachable, but suppresses warnings
+      }
+
+      template <typename U = T>
+      static typename std::enable_if<std::numeric_limits<U>::is_specialized, U>::type
+      do_solve(EqZero x, PosFinite y) { 
+         const auto get_smallest_value = []() {
+            const U denorm_min = std::numeric_limits<U>::denorm_min();
+            if (denorm_min != 0) { return denorm_min; }
+
+            // NOTE: the two lines below can be removed when
+            //       https://github.com/boostorg/multiprecision/pull/562
+            //       gets merged.
+            const U min = (std::numeric_limits<U>::min)();
+            if (min != 0) { return min; }
+
+            BOOST_MATH_THROW_EXCEPTION(std::runtime_error("This type probably isn't actually specialized."));
+            return T(0); // Unreachable, but suppresses warnings
+         };
+
+         return do_solve(PosFinite(get_smallest_value()), y);
+      }
+      template <typename U = T>
+      static typename std::enable_if<!std::numeric_limits<U>::is_specialized, U>::type
+      do_solve(EqZero x, PosFinite y) {
+         // This function quickly gets a value that is small relative to y.
+         const auto fn_appx_denorm_min = [](U y){
+            T accumulator = T(0.5);
+            for (int i = 1; i < 100; ++i) {
+               if (y * accumulator == 0) {
+                  return y;
+               } else {
+                  y = y * accumulator;
+                  accumulator = accumulator * T(0.5);
+               }
+            }
+            return y;
+         };
+
+         const U denorm_min = fn_appx_denorm_min(y.value());
+         return do_solve(PosFinite(denorm_min), y);
+      }
+
+      static T do_solve(PosFinite x, PosFinite y) {
+         BOOST_MATH_ASSERT_MSG(x.value() <= y.value(), "x must be less than or equal to y.");
+
+         const T value_x = x.value();
+         const T value_y = y.value();
+         
+         // Take arithmetic mean if they are close enough
+         if (value_y < value_x * 8) { return (value_y - value_x) / 2 + value_x; }  // NOTE: avoids overflow
+
+         // Take geometric mean if they are far apart
+         using std::sqrt;
+         return sqrt(value_x) * sqrt(value_y);  // NOTE: avoids overflow
+      }
+   }; // class MidpointFallback
+
+   // Calculates the midpoint in bitspace for numbers `x` and `y`.
+   class CalcMidpoint {
+   public:
+      template <typename T>
+      static T solve(T x, T y) {
+         return solve(x, y, boost::math::tools::detail::ieee754_linear::LayoutIdentifier::get_layout<T>());
+      }
+   
+   private:
+      // For types `T` associated with the layout type `Layout_IEEE754Linear`, increasing
+      // values in bit space result in increasing values in floating point space. The lowest
+      // representable value is -Inf and the highest is +Inf as shown below.
+      //
+      //      |--------------------|---|---|--------------------|
+      //    -Inf                 -min  0  min                 +Inf 
+      //
+      // When denorm support is enabled, bisecting values in bitspace is straightforward
+      // because the bit values of the numbers can be averaged. When denorm support is
+      // disabled, bisecting in bitspace is more complicated. The locations of denormal
+      // numbers are shown below with ***.
+      //
+      //      |--------------------|***|***|--------------------|
+      //    -Inf                 -min  0  min                 +Inf
+      //
+      // The tools in the `ieee754_linear.hpp` file allow us to calculate the midpoint
+      // even when denorm support is disabled. To illustrate this algorithm, consider
+      // a cartoon floating point type with 17 possible discrete values from -Inf to +Inf
+      // and denorms marked by *** as shown below:
+      //
+      //    -Inf  |  -8
+      //    -2.0  |  -6
+      //    -1.0  |  -4
+      //    -min  |  -2
+      //     ***  |  -1
+      //     0.0  |   0
+      //     ***  |  +1
+      //    +min  |  +2
+      //     1.0  |  +4
+      //     2.0  |  +6
+      //    +Inf  |  +8
+      //
+      // Goal: find the midpoint of `x=-min` and `y=+Inf` in bitspace.
+      //
+      // Step 1 -- Calculate inflated representations
+      //   negative | positive
+      //   -8-6-4-2 0 2 4 6 8         | float value | inflated bit value
+      //    |-----|*|*|-----|       x |    -min     |       -2
+      //          x         y       y |    +Inf     |       +8
+      //
+      // Step 2 -- Calculate deflated representations.
+      //  negative | positive
+      //  -8-6-4-2 0 2 4 6 8          | deflated bit value
+      //    |-----|||-----|         x |       -1
+      //          x       y         y |       +7
+      //
+      // Step 3 -- Calculate the midpoint in deflated representation 
+      //  negative | positive
+      //  -8-6-4-2 0 2 4 6 8          | deflated bit value
+      //    |-----|||-----|         x |       -1
+      //          x   m   y         y |       +7
+      //                            m |       +3  <-- (x + y) / 2 where x = -1 and y = +7
+      //
+      // Step 4 -- Calculate the midpoint in inflated representation
+      //  negative | positive
+      //  -8-6-4-2 0 2 4 6 8          | inflated bit value
+      //   |-----|*|*|-----|        m |       +4
+      //               m
+      //
+      // Step 5 -- Convert the midpoint from bits to float giving the floating point answer
+      //
+      template <typename T, typename U>
+      static T solve(T x, T y, boost::math::tools::detail::ieee754_linear::Layout_IEEE754Linear<T, U>) {
+         using boost::math::tools::detail::ieee754_linear::BitsInflated;
+         using boost::math::tools::detail::ieee754_linear::Denormflator;
+         const auto df = Denormflator<T, U>();  // Calculates if `has_denorm` is true at this instant
+
+         // Step 1 -- Calculate inflated representations
+         const BitsInflated<T, U> y_inflated(y);
+         const BitsInflated<T, U> x_inflated(x);
+
+         // Step 2 -- Calculate deflated representations
+         const auto y_def = df.deflate(y_inflated);
+         const auto x_def = df.deflate(x_inflated);
+
+         // Step 3 -- Calculate the midpoint in deflated representation
+         const auto xy_def_midpoint = (y_def + x_def) >> 1;  // Add then divide by 2
+
+         // Step 4 -- Calculate the midpoint in inflated representation
+         const auto xy_midpoint = df.inflate(xy_def_midpoint);
+
+         // Step 5 -- Convert the midpoint from bits to float
+         return xy_midpoint.reinterpret_as_float();
+      }
+
+      template <typename T, typename T2, typename U>
+      static T solve(T x, T y, boost::math::tools::detail::ieee754_linear::Layout_IEEE754Linear<T2, U> layout) {
+         using boost::math::tools::detail::ieee754_linear::StaticCast;
+         return solve(StaticCast::value<T2,T>(x), StaticCast::value<T2,T>(y), layout);
+      }
+
+      template <typename T>
+      static T solve(T x, T y, boost::math::tools::detail::ieee754_linear::Layout_Unspecified<T>) {
+         return MidpointFallback<T>::solve(x, y);
+      }
+   };
+}  // namespace Bisection
+}  // namespace detail
+
 template <class F, class T>
 T newton_raphson_iterate(F f, T guess, T min, T max, int digits, std::uintmax_t& max_iter) noexcept(policies::is_noexcept_error_policy<policies::policy<> >::value&& BOOST_MATH_IS_FLOAT(T) && noexcept(std::declval<F>()(std::declval<T>())))
 {
@@ -256,8 +532,13 @@ T newton_raphson_iterate(F f, T guess, T min, T max, int digits, std::uintmax_t&
       last_f0 = f0;
       delta2 = delta1;
       delta1 = delta;
+      if (count == 0) {
+         return policies::raise_evaluation_error(function, "Ran out of iterations in boost::math::tools::newton_raphson_iterate, guess: %1%", guess, boost::math::policies::policy<>());
+      } else {
+         --count;
+      }
       detail::unpack_tuple(f(result), f0, f1);
-      --count;
+
       if (0 == f0)
          break;
       if (f1 == 0)
@@ -275,7 +556,8 @@ T newton_raphson_iterate(F f, T guess, T min, T max, int digits, std::uintmax_t&
       if (fabs(delta * 2) > fabs(delta2))
       {
          // Last two steps haven't converged.
-         delta = (delta > 0) ? (result - min) / 2 : (result - max) / 2;
+         const T x_other = (delta > 0) ? min : max;
+         delta = result - detail::Bisection::CalcMidpoint::solve(result, x_other);
          // reset delta1/2 so we don't take this branch next time round:
          delta1 = 3 * delta;
          delta2 = 3 * delta;
@@ -302,7 +584,7 @@ T newton_raphson_iterate(F f, T guess, T min, T max, int digits, std::uintmax_t&
          max = guess;
          max_range_f = f0;
       }
-      else
+      else if (delta < 0)  // Cannot have "else" here, as delta being zero is not indicative of failure
       {
          min = guess;
          min_range_f = f0;
@@ -314,7 +596,7 @@ T newton_raphson_iterate(F f, T guess, T min, T max, int digits, std::uintmax_t&
       {
          return policies::raise_evaluation_error(function, "There appears to be no root to be found in boost::math::tools::newton_raphson_iterate, perhaps we have a local minima near current best guess of %1%", guess, boost::math::policies::policy<>());
       }
-   }while(count && (fabs(result * factor) < fabs(delta)));
+   } while (fabs(result * factor) < fabs(delta) || result == 0);
 
    max_iter -= count;
 
