@@ -11,6 +11,7 @@
 #include <boost/test/results_collector.hpp>
 #include <boost/math/special_functions/beta.hpp>
 #include <boost/math/distributions/skew_normal.hpp>
+#include <boost/math/special_functions/sign.hpp>
 #include <boost/math/tools/polynomial.hpp>
 #include <boost/math/tools/roots.hpp>
 #include <boost/math/constants/constants.hpp>
@@ -23,7 +24,9 @@
 #include <iomanip>
 
 #include <boost/multiprecision/cpp_bin_float.hpp>
+#include <boost/multiprecision/cpp_dec_float.hpp>
 #include <boost/multiprecision/cpp_complex.hpp>
+#include <boost/math/concepts/real_concept.hpp>
 
 #define BOOST_CHECK_CLOSE_EX(a, b, prec, i) \
    {\
@@ -437,6 +440,129 @@ void test_beta(T, const char* /* name */)
    test_inverses<T>(ibeta_large_data);
 }
 
+void test_3_attempt() {
+   int newton_limits = static_cast<int>(std::numeric_limits<double>::digits * 0.6);
+   const auto tol = ldexp(1, 1 - newton_limits);
+   
+   // Function from #808
+   const auto quartic_pos = [](const double x) {
+      const auto y = (x * x - 1) * (x * x + 0.1);
+      const auto dy = 2 * x * ((x * x - 1) + (x * x + 0.1));
+      return std::make_pair(y, dy);
+   };
+
+   // Negation of the above
+   const auto quartic_neg = [&](const double x) {
+      const auto p = quartic_pos(x);
+      return std::make_pair(-p.first, -p.second);
+   };
+
+   const auto fn_test_bracket = [&](const auto fn_quartic) {
+      // Local minimization finds root
+      BOOST_CHECK_CLOSE_FRACTION(1, boost::math::tools::newton_raphson_iterate(fn_quartic, 0.8, 0.1, 1.1, newton_limits), tol);
+      
+      // Local minimization fails to find root. But, the initial search direction points to the left.
+      // And f(x_initial) and f(x_left_bound) have opposite signs. So, we can left bracket and find
+      // a root.
+      BOOST_CHECK_CLOSE_FRACTION(-1, boost::math::tools::newton_raphson_iterate(fn_quartic, 0.5, -1.1, 1.1, newton_limits), tol);
+      
+      // Local minimization fails to find root. Left bracketing is not attempted because f(x_initial)
+      // and f(x_left_bound) have the same sign. But, f(x_initial) and f(x_right_bound) have opposite
+      // signs. So, we can right bracket and find a root.
+      BOOST_CHECK_CLOSE_FRACTION(1, boost::math::tools::newton_raphson_iterate(fn_quartic, 0.5, 0.1, 1.1, newton_limits), tol);
+
+      // Two roots exist (-1 and 1). The return root is the one found with local minimization.
+      BOOST_CHECK_CLOSE_FRACTION(1, boost::math::tools::newton_raphson_iterate(fn_quartic, 0.8, -1.1, 1.1, newton_limits), tol);
+   };
+
+   fn_test_bracket(quartic_pos);
+   fn_test_bracket(quartic_neg);
+}
+
+
+void test_cusp() {
+   std::cout << std::endl;
+   std::cout << std::endl;
+
+   // Returns a lambda with an extrema at x_center and a y offset ye
+   const auto fn_make_cusp = [](const double x_center, const double ye, const double scale) {
+      return [=](const double x) -> std::pair<double, double> {
+         BOOST_MATH_STD_USING
+         const auto x_shift = x - x_center;
+         const auto y = sqrt(fabs(x_shift)) + ye;
+         const auto y_dot = boost::math::sign(x_shift) / (2 * sqrt(fabs(x_shift)));
+         return std::make_pair(y * scale, y_dot * scale);
+      };
+   };
+
+   const auto fn_test_case = [&](const double x_center, const double ye, const double scale) {
+      const auto fn_case = fn_make_cusp(x_center, ye, scale);
+
+      int newton_limits = static_cast<int>(std::numeric_limits<double>::digits * 0.6);
+      const auto tol = ldexp(1, 1 - newton_limits);
+
+      // Bounds
+      const double ye_sqr = ye * ye;
+      const double xl = x_center - ye_sqr * 2.0;
+      const double xh = x_center + ye_sqr * 2.0;
+      const double x = xh - 1.0;
+      
+      using std::fabs;
+
+      // No roots exist
+      if (0 < ye) {
+         BOOST_CHECK_THROW(boost::math::tools::newton_raphson_iterate(fn_case, x, xl, xh, newton_limits), boost::math::evaluation_error);
+      } else {
+         const auto x_root = boost::math::tools::newton_raphson_iterate(fn_case, x, xl, xh, newton_limits);
+
+         // One root exists
+         if (ye == 0.0) {
+            BOOST_CHECK_CLOSE_FRACTION(x_center, x_root, tol);
+
+         // Two roots exist (One is picked arbitrarily)
+         } else {
+            // x_root = x_center +- ye^2
+            // x_root - x_center = +- ye^2
+            // abs(x_root - x_center) = ye^2
+            BOOST_CHECK_CLOSE_FRACTION(fabs(x_root - x_center), ye * ye, tol);
+         }
+      }
+   };
+
+   for (const double scale : {-1.0, +1.0}) {
+      for (double x_center = -4.0; x_center < 4.0; x_center += static_cast<double>(1) / 7) {
+         for (double ye = -5.0; ye < 5.0; ye += 0.25) {
+            fn_test_case(x_center, ye, scale);
+         }
+      }
+   }
+}
+
+
+void test_solved_at_bound() {
+   const auto fn_unsolved = [](const double x) -> std::pair<double, double> {
+      return std::make_pair(x * x + 1, 2 * x);
+   };
+   const auto fn_solved_at_neg_1 = [&](const double x) -> std::pair<double, double> {
+      if (x == -1) { return std::make_pair(0.0, 0.0); }
+      return fn_unsolved(x);
+   };
+   const auto fn_solved_at_pos_1 = [&](const double x) -> std::pair<double, double> {
+      if (x == +1) { return std::make_pair(0.0, 0.0); }
+      return fn_unsolved(x);
+   };
+
+   const double x_start = 0.5;
+
+   BOOST_CHECK_NE(x_start,  0.0);
+   BOOST_CHECK_NE(x_start, -1.0);
+   BOOST_CHECK_NE(x_start, +1.0);
+
+   BOOST_CHECK_EQUAL(-1, boost::math::tools::newton_raphson_iterate(fn_solved_at_neg_1, x_start, -1.0, 1.0, 100));
+   BOOST_CHECK_EQUAL(+1, boost::math::tools::newton_raphson_iterate(fn_solved_at_pos_1, x_start, -1.0, 1.0, 100));
+}
+
+
 #if !defined(BOOST_NO_CXX11_AUTO_DECLARATIONS) && !defined(BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX) && !defined(BOOST_NO_CXX11_LAMBDAS)
 template <class Complex>
 void test_complex_newton()
@@ -638,8 +764,6 @@ void test_failures()
    // There is no root:
    BOOST_CHECK_THROW(boost::math::tools::newton_raphson_iterate([](double x) { return std::make_pair(x * x + 1, 2 * x); }, 10.0, -12.0, 12.0, 52), boost::math::evaluation_error);
    BOOST_CHECK_THROW(boost::math::tools::newton_raphson_iterate([](double x) { return std::make_pair(x * x + 1, 2 * x); }, -10.0, -12.0, 12.0, 52), boost::math::evaluation_error);
-   // There is a root, but a bad guess takes us into a local minima:
-   BOOST_CHECK_THROW(boost::math::tools::newton_raphson_iterate([](double x) { return std::make_pair(boost::math::pow<6>(x) - 2 * boost::math::pow<4>(x) + x + 0.5, 6 * boost::math::pow<5>(x) - 8 * boost::math::pow<3>(x) + 1); }, 0.75, -20., 20., 52), boost::math::evaluation_error);
 
    // There is no root:
    BOOST_CHECK_THROW(boost::math::tools::halley_iterate([](double x) { return std::make_tuple(x * x + 1, 2 * x, 2); }, 10.0, -12.0, 12.0, 52), boost::math::evaluation_error);
@@ -649,10 +773,96 @@ void test_failures()
 #endif
 }
 
+template <typename T>
+void test_bisect() {
+   // Creates a vector of test values that include: zero, denorm_min, min, epsilon, max,
+   // and infinity. Also includes powers of 2 ranging from 2^-15 to 2^+15 by powers of 3.
+   const auto fn_create_test_ladder = [](){
+      std::vector<T> v;
+
+      const auto fn_push_back_x_scaled = [&v](const T& x) {
+         const auto fn_add_if_non_zero_and_finite = [&v](const T& x) {
+            if (x != 0 && boost::math::isfinite(x)) {  // Avoids most duplications
+               v.push_back(x);
+            }
+         };
+
+         const T two_thirds = T(2) / T(3);
+         const T four_thirds = T(4) / T(3);
+
+         v.push_back(x);
+         fn_add_if_non_zero_and_finite(x * T(0.5));
+         fn_add_if_non_zero_and_finite(x * two_thirds);
+         fn_add_if_non_zero_and_finite(x * four_thirds);
+         fn_add_if_non_zero_and_finite(x * T(2.0));
+      };
+
+      const auto fn_push_back_pm = [&](std::vector<T>& v, const T& x) {
+         fn_push_back_x_scaled( x);
+         fn_push_back_x_scaled(-x);
+      };
+
+      fn_push_back_pm(v, T(0.0));
+      fn_push_back_pm(v, std::numeric_limits<T>::denorm_min());
+      fn_push_back_pm(v, (std::numeric_limits<T>::min)());
+      fn_push_back_pm(v, std::numeric_limits<T>::epsilon());
+      const int test_exp_range = 5;
+      for (int i = -test_exp_range; i < (test_exp_range + 1); ++i) {
+         const int exponent = i * 3;
+         const T x = std::ldexp(1.0, exponent);
+         fn_push_back_pm(v, x);
+      }
+      fn_push_back_pm(v, (std::numeric_limits<T>::max)());
+
+      // Real_concept doesn't have infinity
+      if (std::numeric_limits<T>::has_infinity) {
+         fn_push_back_pm(v, std::numeric_limits<T>::infinity());
+      }
+
+      std::sort(v.begin(), v.end());
+
+      const int num_zeros = std::count(v.begin(), v.end(), T(0.0));
+      BOOST_CHECK_LE(2, num_zeros);  // Positive and negative zero 
+
+      return v;
+   };
+
+   // Test for all combinations from the ladder
+   const auto v = fn_create_test_ladder();
+   for (const T& x_i: v) {
+      for (const T& x_j: v) {
+         const T x_mid_ij = boost::math::tools::detail::Bisection::calc_midpoint(x_i, x_j);
+
+         const T x_lo = (std::min)(x_i, x_j);
+         const T x_hi = (std::max)(x_i, x_j);
+
+         BOOST_CHECK_LE(x_lo, x_mid_ij);
+         BOOST_CHECK_LE(x_mid_ij, x_hi);
+      }
+   }
+}
+
+void test_bisect_all_cases() {
+   test_bisect<float>();
+   test_bisect<double>();
+   test_bisect<long double>();
+   test_bisect<boost::math::concepts::real_concept>();
+   test_bisect<boost::multiprecision::cpp_bin_float_50>();
+   test_bisect<boost::multiprecision::cpp_bin_float_100>();
+   test_bisect<boost::multiprecision::cpp_dec_float_50>();
+   test_bisect<boost::multiprecision::cpp_dec_float_100>();
+}
+
 BOOST_AUTO_TEST_CASE( test_main )
 {
 
    test_beta(0.1, "double");
+
+   test_3_attempt();
+   test_cusp();
+   test_solved_at_bound();
+
+   test_bisect_all_cases();
 
    // bug reports:
    boost::math::skew_normal_distribution<> dist(2.0, 1.0, -2.5);
