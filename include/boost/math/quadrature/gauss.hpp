@@ -30,36 +30,36 @@ struct gauss_constant_category
       (std::numeric_limits<T>::radix == 2) ?
       (
 #ifdef BOOST_HAS_FLOAT128
-         (std::numeric_limits<T>::digits <= 113) && std::is_constructible<__float128, T>::value ? 0 :
+         (std::numeric_limits<T>::digits <= 113) && std::is_constructible<T, __float128>::value ? 0 :
 #else
-         (std::numeric_limits<T>::digits <= std::numeric_limits<long double>::digits) && std::is_convertible<long double, T>::value ? 0 :
+         (std::numeric_limits<T>::digits <= std::numeric_limits<long double>::digits) && std::is_constructible<T, long double>::value ? 0 :
 #endif
-         (std::numeric_limits<T>::digits10 <= 110) ? 4 : 999
-      ) : (std::numeric_limits<T>::digits10 <= 110) ? 4 : 999;
+         (std::numeric_limits<T>::digits10 <= 110) && std::is_constructible<T, const char*>::value ? 4 : 999
+      ) : (std::numeric_limits<T>::digits10 <= 110) && std::is_constructible<T, const char*>::value ? 4 : 999;
    
    using storage_type =
-      typename std::conditional<(std::numeric_limits<T>::is_specialized == 0), T,
-         typename std::conditional<(std::numeric_limits<T>::radix == 2),
-            typename std::conditional< ((std::numeric_limits<T>::digits <= std::numeric_limits<float>::digits) && std::is_convertible<float, T>::value),
+      std::conditional_t<(std::numeric_limits<T>::is_specialized == 0), T,
+         std::conditional_t<(std::numeric_limits<T>::radix == 2),
+            std::conditional_t< ((std::numeric_limits<T>::digits <= std::numeric_limits<float>::digits) && std::is_constructible<T, float>::value),
                float,
-               typename std::conditional<((std::numeric_limits<T>::digits <= std::numeric_limits<double>::digits) && std::is_convertible<double, T>::value),
+               std::conditional_t<((std::numeric_limits<T>::digits <= std::numeric_limits<double>::digits) && std::is_constructible<T, double>::value),
                   double,
-                  typename std::conditional<((std::numeric_limits<T>::digits <= std::numeric_limits<long double>::digits) && std::is_convertible<long double, T>::value),
+                  std::conditional_t<((std::numeric_limits<T>::digits <= std::numeric_limits<long double>::digits) && std::is_constructible<T, long double>::value),
                      long double,
 #ifdef BOOST_HAS_FLOAT128
-                     typename std::conditional<((std::numeric_limits<T>::digits <= 113) && std::is_constructible<__float128, T>::value),
+                     std::conditional_t<((std::numeric_limits<T>::digits <= 113) && std::is_constructible<T, __float128>::value),
                         __float128,
                         T
-                     >::type
-                  >::type
+                     >
+                  >
 #else
                      T
-                  >::type
+                  >
 #endif
-               >::type
-            >::type, T
-         >::type
-      >::type;
+               >
+            >, T
+         >
+      >;
 };
 
 #ifndef BOOST_MATH_GAUSS_NO_COMPUTE_ON_DEMAND
