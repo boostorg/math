@@ -15,6 +15,8 @@
 #include <boost/math/special_functions/erf.hpp>
 #include <boost/math/tools/roots.hpp>
 #include <boost/math/special_functions/detail/t_distribution_inv.hpp>
+#include <boost/math/special_functions/fpclassify.hpp>
+#include <boost/math/tools/precision.hpp>
 
 namespace boost{ namespace math{ namespace detail{
 
@@ -26,8 +28,8 @@ template <class T>
 struct temme_root_finder
 {
    temme_root_finder(const T t_, const T a_) : t(t_), a(a_) {
-      const T x_extrema = 1 / (1 + a);
-      BOOST_MATH_ASSERT(0 < x_extrema && x_extrema < 1);
+      BOOST_MATH_ASSERT(
+         math::tools::epsilon<T>() <= a && !(boost::math::isinf)(a));
    }
 
    boost::math::tuple<T, T> operator()(T x)
