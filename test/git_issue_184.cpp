@@ -16,12 +16,12 @@ void test()
    const T y = boost::math::quantile(skew, 0.00285612015554149);
    const T z = boost::math::quantile(skew, 0.00285612015554150);
 
-   BOOST_ASSERT(boost::math::isnormal(x));
-   BOOST_ASSERT(boost::math::isnormal(y));
-   BOOST_ASSERT(boost::math::isnormal(z));
+   BOOST_MATH_ASSERT(boost::math::isnormal(x));
+   BOOST_MATH_ASSERT(boost::math::isnormal(y));
+   BOOST_MATH_ASSERT(boost::math::isnormal(z));
 
-   BOOST_ASSERT(x <= y);
-   BOOST_ASSERT(y <= z);
+   BOOST_MATH_ASSERT(x <= y);
+   BOOST_MATH_ASSERT(y <= z);
 }
 
 
